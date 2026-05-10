@@ -96,10 +96,15 @@ When the task concerns the OpenAI App to MCP Apps migration, also read:
 | `.agent/plans/sdk-and-mcp-enhancements/roadmap.md` | Migration sequencing, Domain C ordering, and non-goals |
 | `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` | Primary session-anchor plan for MCP Apps migration (WS1–WS4) |
 | `.agent/plans/sdk-and-mcp-enhancements/mcp-apps-support.research.md` | MCP Apps standards evidence and host compatibility findings |
-| `.agents/skills/migrate-oai-app/SKILL.md` | Upstream MCP Apps migration skill |
-| `.agents/skills/create-mcp-app/SKILL.md` | Upstream MCP App creation skill |
-| `.agents/skills/add-app-to-server/SKILL.md` | Upstream skill: add UI to existing tool |
-| `.agents/skills/convert-web-app/SKILL.md` | Upstream skill: convert web app to MCP App |
+
+If the upstream `modelcontextprotocol/ext-apps` skills are installed
+locally (via `npx skills add modelcontextprotocol/ext-apps`), they
+appear at `.agents/skills/{create-mcp-app,add-app-to-server,convert-web-app,migrate-oai-app}/SKILL.md`
+and provide the canonical SDK workflows for each task. They are not
+vendored into this repo; see
+`.agent/skills/mcp-expert/installation-and-integration.md` for the
+install command. When absent, fall back to the official MCP Apps API
+docs listed in the live-spec table above.
 
 ## Core Philosophy
 
@@ -194,7 +199,7 @@ relevant workspaces:
 - `RESOURCE_MIME_TYPE` — canonical MIME constant
 - Widget data flows through the MCP bridge, never via `window.openai.*`
 - `connect()` is async — widget render must not run before it resolves
-- See upstream MCP App skills at `.agents/skills/{create-mcp-app,add-app-to-server,convert-web-app,migrate-oai-app}/SKILL.md` for SDK workflows
+- When the upstream MCP App skills are installed (see `.agent/skills/mcp-expert/installation-and-integration.md`), they live at `.agents/skills/{create-mcp-app,add-app-to-server,convert-web-app,migrate-oai-app}/SKILL.md` and document the canonical SDK workflows; otherwise consult the official MCP Apps API docs directly
 
 ### Primitives Strategy
 

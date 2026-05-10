@@ -32,26 +32,24 @@ Use this skill when the working agent needs to:
 
 ## Capability Routing
 
-This skill is the entry point for MCP expertise. For narrower
-workflows, route to the official upstream MCP App skills (installed
-via `npx skills add modelcontextprotocol/ext-apps`):
+This skill is the entry point for MCP expertise. The
+`modelcontextprotocol/ext-apps` repository ships four narrower
+upstream skills — `create-mcp-app`, `add-app-to-server`,
+`convert-web-app`, and `migrate-oai-app` — that cover the common
+MCP App workflows.
 
-| Task | Route to |
-|------|----------|
-| Create a new MCP App (tool + HTML resource) | `.agents/skills/create-mcp-app/SKILL.md` |
-| Add MCP App UI to an existing MCP tool | `.agents/skills/add-app-to-server/SKILL.md` |
-| Convert a web app into an MCP App resource | `.agents/skills/convert-web-app/SKILL.md` |
-| Migrate from OpenAI Apps SDK to MCP Apps | `.agents/skills/migrate-oai-app/SKILL.md` |
-
-These are the official skills from the `modelcontextprotocol/ext-apps`
-repository. See [`installation-and-integration.md`](./installation-and-integration.md)
-(co-located with this skill) for installation and integration documentation.
+Those skills are not vendored into this repo. They are installed
+on-demand via the open skills CLI; if they are present, they live
+at `.agents/skills/<id>/SKILL.md`. See
+[`installation-and-integration.md`](./installation-and-integration.md)
+(co-located with this skill) for the install command and the
+matching task-to-skill table.
 
 Use this skill (`mcp-expert`) for cross-cutting MCP work that does
 not fit a single narrower skill — protocol planning, transport design,
 auth model decisions, primitives strategy, and general MCP
-implementation support. When the task clearly maps to one of the
-narrower skills above, route directly to it.
+implementation support. When a task clearly maps to one of the
+upstream skills and that skill is installed, route directly to it.
 
 ## Overlap Boundaries
 
@@ -96,25 +94,19 @@ Before any MCP planning or implementation, consult live official documentation:
 
 Use WebFetch or WebSearch to consult these. The URLs are starting points — follow links for specific areas.
 
-### Upstream MCP App Skills (installed)
+### Upstream MCP App Skills (install on demand)
 
-The upstream MCP Apps repository provides 4 installable skills
-at `.agents/skills/` (installed via `npx skills add modelcontextprotocol/ext-apps`):
+The `modelcontextprotocol/ext-apps` repository publishes four
+installable skills covering the common MCP App workflows. They are
+not vendored into this repo. Install them via the open skills CLI
+when needed; see
+[`installation-and-integration.md`](./installation-and-integration.md)
+(co-located with this skill) for the install command and the full
+skill-to-task mapping.
 
-| Skill | Path | Purpose |
-|---|---|---|
-| `create-mcp-app` | `.agents/skills/create-mcp-app/` | Scaffold a new MCP App with interactive UI |
-| `add-app-to-server` | `.agents/skills/add-app-to-server/` | Add UI to an existing MCP tool |
-| `convert-web-app` | `.agents/skills/convert-web-app/` | Convert a web component to MCP App |
-| `migrate-oai-app` | `.agents/skills/migrate-oai-app/` | Migrate from OpenAI Apps SDK |
-
-These are the canonical versions. Custom Oak-specific skills were
-removed in favour of the upstream versions. For Oak-specific migration
-context (coupling inventory, CSP field mapping), consult the archived
-migration plans at `.agent/plans/sdk-and-mcp-enhancements/archive/completed/`.
-
-See [`installation-and-integration.md`](./installation-and-integration.md)
-(co-located with this skill) for installation and integration documentation.
+For Oak-specific migration context (coupling inventory, CSP field
+mapping), consult the archived migration plans at
+`.agent/plans/sdk-and-mcp-enhancements/archive/completed/`.
 
 ## Required Local Reading
 
@@ -176,4 +168,4 @@ If current MCP specification capabilities could improve the implementation beyon
 - **Never recommend approaches that violate the MCP specification** without explicitly flagging the deviation and its rationale.
 - **Never make product commitments** about adopting MCP capabilities. Flag opportunities; the team decides.
 - **Never substitute for the reviewer.** After implementation, invoke `mcp-reviewer` for independent assessment.
-- **Never bypass the narrower skills.** When a task cleanly maps to create-mcp-app, add-app-to-server, convert-web-app, or migrate-oai-app, route to the upstream skill.
+- **Never bypass the narrower skills when they are installed.** When a task cleanly maps to one of the upstream `modelcontextprotocol/ext-apps` skills (`create-mcp-app`, `add-app-to-server`, `convert-web-app`, `migrate-oai-app`) and that skill is present at `.agents/skills/<id>/SKILL.md`, route to it. If the skill is not installed, see `installation-and-integration.md` for the install command before working from this skill alone.

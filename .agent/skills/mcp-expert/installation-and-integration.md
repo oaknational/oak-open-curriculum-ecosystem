@@ -1,66 +1,55 @@
 # Official MCP App Skills
 
-How to install and integrate the official MCP App skills from the
-`modelcontextprotocol/ext-apps` repository into this monorepo's
-multi-platform skill system.
+How to install and use the official MCP App skills from the
+`modelcontextprotocol/ext-apps` repository.
 
 ## Installation
 
-Install all 4 official MCP App skills:
+Install all four official MCP App skills via the open skills CLI:
 
 ```bash
 npx skills add modelcontextprotocol/ext-apps --yes
 ```
 
-This installs to `.agents/skills/` (the portable `.agents` adapter path).
-The installer auto-detects supported agent platforms (Claude Code, Cursor,
-Codex, Gemini CLI, etc.) and creates platform-appropriate entries.
+This installs to `.agents/skills/<id>/` (the portable cross-tool path,
+unprefixed). The installer auto-detects supported agent platforms
+(Claude Code, Cursor, Codex, Gemini CLI, etc.) and surfaces each skill
+through whichever discovery path that platform reads.
 
-## Installed Skills
+Do **not** vendor these into `.agent/skills/` or generate `jc-`
+prefixed adapters for them. Per PDR-051, ingested skills retain their
+upstream identity in adapters and receive no local prefix; the
+`skills-adapter-generate` pipeline is owned-skill-only.
 
-| Skill | Path | Purpose |
-|-------|------|---------|
-| `create-mcp-app` | `.agents/skills/create-mcp-app/` | Scaffold a new MCP App with interactive UI |
-| `add-app-to-server` | `.agents/skills/add-app-to-server/` | Add MCP App UI to an existing MCP tool |
-| `convert-web-app` | `.agents/skills/convert-web-app/` | Convert a web app to MCP App resource |
-| `migrate-oai-app` | `.agents/skills/migrate-oai-app/` | Migrate from OpenAI Apps SDK to MCP Apps |
+## Available skills
 
-## Multi-Platform Integration
+| Skill | Purpose |
+|-------|---------|
+| `create-mcp-app` | Scaffold a new MCP App with interactive UI |
+| `add-app-to-server` | Add MCP App UI to an existing MCP tool |
+| `convert-web-app` | Convert a web app to an MCP App resource |
+| `migrate-oai-app` | Migrate from the OpenAI Apps SDK to MCP Apps |
 
-This repo uses a three-layer agent artefact architecture (ADR-125):
+## Routing
 
-1. **Canonical content** in `.agent/` (portable, platform-agnostic)
-2. **Platform adapters** in `.cursor/`, `.claude/`, `.agents/`, etc.
-3. **Entry points** (`CLAUDE.md`, `AGENTS.md`, etc.)
+The `mcp-expert` skill (`.agent/skills/mcp-expert/SKILL-CANONICAL.md`)
+remains the entry point for active MCP expertise in this repo. It does
+not duplicate the upstream skills' content; when an upstream skill
+covers the task, the working agent invokes it directly via its
+unprefixed slash name.
 
-The official MCP App skills are canonicalised into `.agent/skills/` with
-`classification: passive`, recorded in `skills-lock.json`, and exposed through
-thin wrappers in `.agents/skills/`, `.claude/skills/`, and `.cursor/skills/`.
-This keeps upstream content reviewable under the canonical-first portability
-model while preserving cross-platform activation.
+## Updating
 
-### Routing
-
-The `mcp-expert` skill (`.agent/skills/mcp-expert/SKILL.md`) is the
-entry point for all MCP expertise. Its capability routing table
-directs to the official upstream skills for specific MCP App tasks.
-
-### Updating
-
-To update to the latest version of the official skills:
+Re-run the installer:
 
 ```bash
 npx skills add modelcontextprotocol/ext-apps --yes
 ```
 
-This overwrites the existing `.agents/skills/` entries with the latest upstream
-content. After updating, move the full content back into `.agent/skills/`,
-refresh `skills-lock.json`, restore thin platform wrappers, and run
-`pnpm portability:check`.
+It overwrites the `.agents/skills/<id>/` entries with the latest
+upstream content. No further wrapper-restoration step is required.
 
-## API Documentation
-
-The official MCP Apps SDK documentation is at:
+## API documentation
 
 - API reference: <https://apps.extensions.modelcontextprotocol.io/api/>
 - React hooks: <https://apps.extensions.modelcontextprotocol.io/api/modules/_modelcontextprotocol_ext-apps_react.html>
@@ -71,11 +60,9 @@ The official MCP Apps SDK documentation is at:
 
 ## History
 
-This repo previously maintained 4 custom Oak-specific skill variants
-(`mcp-create-app`, `mcp-add-ui`, `mcp-convert-web`, `mcp-migrate-oai`)
-in `.agent/skills/`. These were removed in favour of the official
-upstream skills because the upstream versions are more comprehensive,
-more current, and maintained by the MCP Apps team. Oak-specific
-migration context (coupling inventory, CSP field mapping) is preserved
-in the archived migration plans at
-`.agent/plans/sdk-and-mcp-enhancements/archive/completed/`.
+A previous attempt managed these skills by canonicalising them into
+`.agent/skills/`, recording entries in `skills-lock.json`, and emitting
+`jc-`-prefixed adapters. That pattern was removed: it duplicated
+upstream content statically, drifted under the unprefixed-ingested
+rule of PDR-051, and required a custom installer that was never built.
+The current path is `npx skills add` directly into `.agents/skills/`.
