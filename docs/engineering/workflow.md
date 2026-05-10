@@ -123,16 +123,16 @@ During development, the AI agent working on the code invokes specialist sub-agen
 
 ### What the sub-agents do
 
-| Sub-agent                 | Focus                                                     |
-| ------------------------- | --------------------------------------------------------- |
-| `code-reviewer`           | Gateway reviewer: code quality, security, maintainability |
-| `architecture-reviewer-*` | Structural boundaries, dependency direction, coupling     |
-| `test-reviewer`           | TDD compliance, test quality, mock simplicity             |
-| `type-reviewer`           | Type safety, generics, schema-to-type flow                |
-| `config-reviewer`         | Tooling config consistency, quality gate alignment        |
-| `security-reviewer`       | Auth, secrets, PII, injection risks                       |
-| `docs-adr-reviewer`       | Documentation completeness, ADR accuracy                  |
-| `sentry-reviewer`         | Sentry SDK usage, OTel observability, MCP Insights        |
+| Sub-agent               | Focus                                                     |
+| ----------------------- | --------------------------------------------------------- |
+| `code-expert`           | Gateway reviewer: code quality, security, maintainability |
+| `architecture-expert-*` | Structural boundaries, dependency direction, coupling     |
+| `test-expert`           | TDD compliance, test quality, mock simplicity             |
+| `type-expert`           | Type safety, generics, schema-to-type flow                |
+| `config-expert`         | Tooling config consistency, quality gate alignment        |
+| `security-expert`       | Auth, secrets, PII, injection risks                       |
+| `docs-adr-expert`       | Documentation completeness, ADR accuracy                  |
+| `sentry-expert`         | Sentry SDK usage, OTel observability, MCP Insights        |
 
 ### When they run
 

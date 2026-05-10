@@ -11,9 +11,9 @@ Invoke this agent whenever the onboarding experience for human contributors or A
 
 ### Not This Agent When
 
-- The concern is ADR content quality or documentation drift in non-onboarding docs — use `docs-adr-reviewer` instead
-- The issue is tooling configuration correctness — use `config-reviewer` instead
-- The question is about code or architecture quality in implementation files — use the `code-reviewer` or `architecture-reviewer` family instead
+- The concern is ADR content quality or documentation drift in non-onboarding docs — use `docs-adr-expert` instead
+- The issue is tooling configuration correctness — use `config-expert` instead
+- The question is about code or architecture quality in implementation files — use the `code-expert` or `architecture-expert` family instead
 
 ---
 
@@ -117,9 +117,9 @@ Review onboarding for:
 
 This agent reviews onboarding paths and documentation. It does NOT:
 
-- Review ADR content quality (that is `docs-adr-reviewer`)
-- Review code quality in implementation files (that is `code-reviewer`)
-- Review tooling configuration correctness (that is `config-reviewer`)
+- Review ADR content quality (that is `docs-adr-expert`)
+- Review code quality in implementation files (that is `code-expert`)
+- Review tooling configuration correctness (that is `config-expert`)
 - Modify any files (observe and report only)
 
 When onboarding documentation references ADRs, configs, or code, this agent validates the reference (link resolves, context is appropriate), not the referenced content itself.
@@ -178,12 +178,12 @@ When onboarding documentation references ADRs, configs, or code, this agent vali
 
 | Issue Type | Recommended Specialist |
 |------------|------------------------|
-| Stale or missing ADRs referenced in onboarding paths | `docs-adr-reviewer` |
-| Broken quality-gate commands or config drift | `config-reviewer` |
-| Onboarding paths touching auth/OAuth/secrets setup | `security-reviewer` |
-| Structural onboarding improvements requiring boundary changes | `architecture-reviewer-barney` |
-| Onboarding code examples with type-safety concerns | `type-reviewer` |
-| Test setup instructions or TDD onboarding guidance | `test-reviewer` |
+| Stale or missing ADRs referenced in onboarding paths | `docs-adr-expert` |
+| Broken quality-gate commands or config drift | `config-expert` |
+| Onboarding paths touching auth/OAuth/secrets setup | `security-expert` |
+| Structural onboarding improvements requiring boundary changes | `architecture-expert-barney` |
+| Onboarding code examples with type-safety concerns | `type-expert` |
+| Test setup instructions or TDD onboarding guidance | `test-expert` |
 
 ## Success Metrics
 

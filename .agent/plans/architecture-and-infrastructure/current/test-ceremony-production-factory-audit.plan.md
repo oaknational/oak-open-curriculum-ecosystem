@@ -193,7 +193,7 @@ where needed. Order by leverage: largest cohort first.
 2. All tests in the cohort pass the ESLint rules at `error` severity.
 3. Tests in the cohort still pass (`pnpm check` green in the touched
    workspace).
-4. Test-reviewer audit of a representative sample confirms the tests
+4. Test-expert audit of a representative sample confirms the tests
    still prove what they did before.
 
 **GREEN**: ESLint backlog count for that pattern reaches zero.
@@ -232,9 +232,9 @@ seams added, list of `eslint.config.ts` overrides removed.
 
 ## Adversarial Review
 
-- `test-reviewer` — applies `.agent/rules/test-immediate-fails.md` to
+- `test-expert` — applies `.agent/rules/test-immediate-fails.md` to
   each migrated cohort.
-- `architecture-reviewer-fred` — reviews every new product-code DI
+- `architecture-expert-fred` — reviews every new product-code DI
   seam added to satisfy a test-migration cohort.
 
 ---
@@ -243,7 +243,7 @@ seams added, list of `eslint.config.ts` overrides removed.
 
 | Risk | Mitigation |
 |------|------------|
-| Migrating a `vi.mock` away breaks a test's intended coverage | Test-reviewer audit per cohort before/after; keep the same assertions, only change the seam. |
+| Migrating a `vi.mock` away breaks a test's intended coverage | Test-expert audit per cohort before/after; keep the same assertions, only change the seam. |
 | Product-code DI refactor introduces a regression | Each seam change is TDD — add the new test first (injected fake), then refactor product code to accept the seam. |
 | Pattern extraction is over-generalised | Validate against at least two independent cohorts before naming a pattern. |
 | The audit stalls mid-pattern | WS4 is cohort-at-a-time; each cohort closes independently; partial completion is fine between sessions. |

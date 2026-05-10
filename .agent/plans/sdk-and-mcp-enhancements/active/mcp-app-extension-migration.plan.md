@@ -4,7 +4,7 @@ overview: "Umbrella plan for completing Oak's MCP Apps migration. WS1 and WS2 ar
 source_research:
   - "../roadmap.md"
   - "../mcp-apps-support.research.md"
-specialist_reviewer: "mcp-reviewer"
+specialist_reviewer: "mcp-expert"
 skills:
   - "migrate-oai-app"
   - "create-mcp-app"
@@ -155,7 +155,7 @@ Explicit rule:
 
 ### Specialist-capability dependency (separate collection)
 
-`mcp-reviewer` upgrade work is intentionally tracked
+`mcp-expert` upgrade work is intentionally tracked
 outside this product migration collection at:
 
 - `.agent/plans/agentic-engineering-enhancements/archive/completed/mcp-specialist-upgrade.plan.md`

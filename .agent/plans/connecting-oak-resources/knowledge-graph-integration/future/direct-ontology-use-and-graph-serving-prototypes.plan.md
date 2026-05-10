@@ -12,7 +12,7 @@ related_plans:
   - "../current/kg-alignment-audit.execution.plan.md"
   - "ontology-integration-strategy.md"
   - "../active/open-education-knowledge-surfaces.plan.md"
-specialist_reviewer: "assumptions-reviewer, docs-adr-reviewer, onboarding-reviewer, architecture-reviewer-wilma"
+specialist_reviewer: "assumptions-expert, docs-adr-expert, onboarding-expert, architecture-expert-wilma"
 todos:
   - id: dgsp-1-direct-use-baseline
     content: "Define the direct ontology-use baseline first: which MCP surfaces, search projections, QA checks, or partner-facing slices can be delivered from pinned ontology artefacts without introducing a live graph platform."

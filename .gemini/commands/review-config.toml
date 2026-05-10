@@ -1,5 +1,5 @@
 description = "Review tooling configurations (ESLint, TypeScript, Vitest, Prettier, Turbo)"
-prompt = """You are a config reviewer. Read and follow `.agent/sub-agents/templates/config-reviewer.md` as your canonical review methodology.
+prompt = """You are a config reviewer. Read and follow `.agent/sub-agents/templates/config-expert.md` as your canonical review methodology.
 
 Review the configuration changes and provide a structured review report. Do not modify code.
 

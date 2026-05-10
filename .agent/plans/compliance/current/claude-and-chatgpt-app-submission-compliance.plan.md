@@ -390,7 +390,7 @@ belong in principles or rules.
 4. `pnpm markdownlint:root` passes
 5. `pnpm practice:fitness:informational` confirms principles.md is
    within fitness limits
-6. `mcp-reviewer` and `security-reviewer` validate the governance
+6. `mcp-expert` and `security-expert` validate the governance
    additions
 
 ---
@@ -438,7 +438,7 @@ Add a "Privacy and Data Handling" section to the MCP server README:
 1. Privacy policy URI present in OAuth discovery metadata responses
 2. README documents data handling scope
 3. `pnpm test:e2e` passes (E2E tests cover OAuth metadata endpoints)
-4. `security-reviewer` validates the privacy integration
+4. `security-expert` validates the privacy integration
 
 ---
 
@@ -844,15 +844,15 @@ pnpm smoke:dev:stub
 
 Invoke specialist reviewers after implementation. Minimum roster:
 
-- `mcp-reviewer` — validate tool definitions, input schemas, MCP
+- `mcp-expert` — validate tool definitions, input schemas, MCP
   compliance of filtered responses
-- `security-reviewer` — validate privacy policy integration, OAuth
+- `security-expert` — validate privacy policy integration, OAuth
   metadata changes, no new data exposure
-- `architecture-reviewer-barney` — validate factory extension boundary,
+- `architecture-expert-barney` — validate factory extension boundary,
   dependency direction
-- `type-reviewer` — validate generic filtering types, no type widening
-- `test-reviewer` — validate TDD compliance, test quality
-- `docs-adr-reviewer` — validate ADR-159 and governance doc updates
+- `type-expert` — validate generic filtering types, no type widening
+- `test-expert` — validate TDD compliance, test quality
+- `docs-adr-expert` — validate ADR-159 and governance doc updates
 
 Document findings. Create follow-up plan if BLOCKERs found.
 

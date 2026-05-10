@@ -10,7 +10,7 @@ overview: >
   cleanly.
 todos:
   - id: ws0-pre-execution-plan-review
-    content: "WS0 (MANDATORY before any implementation): dispatch assumptions-reviewer + test-reviewer + architecture-reviewer-fred + docs-adr-reviewer in parallel on this plan and the kept attempt-1 documents. Address findings before WS1.1. No code edits in this todo."
+    content: "WS0 (MANDATORY before any implementation): dispatch assumptions-expert + test-expert + architecture-expert-fred + docs-adr-expert in parallel on this plan and the kept attempt-1 documents. Address findings before WS1.1. No code edits in this todo."
     status: pending
   - id: ws1-cycle-1-lock-loader
     content: "WS1.1: Ajv schema + loader for skills-lock.json. Test: schema rejects malformed; valid lock returns id set. Product: src/skills-adapter-generate/lock.ts. One commit."
@@ -45,7 +45,7 @@ todos:
     status: pending
     depends_on: [ws1-cycle-7-cli]
   - id: ws1-mid-review
-    content: "WS1 mid-review: dispatch code-reviewer + type-reviewer + test-reviewer in parallel on the generator module. Address findings in a follow-up commit if needed."
+    content: "WS1 mid-review: dispatch code-expert + type-expert + test-expert in parallel on the generator module. Address findings in a follow-up commit if needed."
     status: pending
     depends_on: [ws1-cycle-8-bin-shim]
   - id: ws2-cycle-1-canonical-filename
@@ -73,11 +73,11 @@ todos:
     status: pending
     depends_on: [ws2-cycle-5-drift]
   - id: ws2-mid-review
-    content: "WS2 mid-review: code-reviewer + test-reviewer on validator extension. Address findings."
+    content: "WS2 mid-review: code-expert + test-expert on validator extension. Address findings."
     status: pending
     depends_on: [ws2-cycle-6-pdr-portability]
   - id: ws2-5-pre-migration-direction-check
-    content: "WS2.5 plan-direction review: dispatch architecture-reviewer-fred + assumptions-reviewer on the post-WS2 plan state. Confirm WS3 migration shape, command-audit policy, and validator strict-flip sequencing are still right before destructive migration begins."
+    content: "WS2.5 plan-direction review: dispatch architecture-expert-fred + assumptions-expert on the post-WS2 plan state. Confirm WS3 migration shape, command-audit policy, and validator strict-flip sequencing are still right before destructive migration begins."
     status: pending
     depends_on: [ws2-mid-review]
   - id: ws3-cycle-1-rename
@@ -157,7 +157,7 @@ todos:
     status: pending
     depends_on: [ws5-cycle-8-skills-ref-validate-pointer]
   - id: ws6-adversarial-review
-    content: "WS6: docs-adr-reviewer on PDR-051 + ADR-125 + engineering doc + research corrections; architecture-reviewer-fred on boundary compliance + ADR amendment shape. Address BLOCKERs in follow-up commits."
+    content: "WS6: docs-adr-expert on PDR-051 + ADR-125 + engineering doc + research corrections; architecture-expert-fred on boundary compliance + ADR amendment shape. Address BLOCKERs in follow-up commits."
     status: pending
     depends_on: [ws5-cycle-9-adr-125-historical-clarifier]
   - id: ws6-consolidation
@@ -260,7 +260,7 @@ This plan implements the generator, validator extensions, mass migration, and do
 
 **Bespoke wrapper**: the generator core (~300 LOC) and CLI (~150 LOC). No first-party tool multi-platform-emits adapters from a canonical-with-non-discoverable-filename source. The bespoke surface is small, aligned with existing CLI conventions, and replaces no first-party capability.
 
-**Reviewer**: `assumptions-reviewer` POST WS1.8 to verify the build-vs-buy posture survives implementation and that no first-party capability would have done the job.
+**Reviewer**: `assumptions-expert` POST WS1.8 to verify the build-vs-buy posture survives implementation and that no first-party capability would have done the job.
 
 ---
 
@@ -270,14 +270,14 @@ Reviews fire in three classes: **plan-direction reviews** (does the plan still p
 
 | Phase | Class | Reviewer | Trigger |
 |---|---|---|---|
-| **WS0 — pre-execution** | plan-direction | `assumptions-reviewer`, `test-reviewer`, `architecture-reviewer-fred`, `docs-adr-reviewer` (parallel) | **MANDATORY before any implementation.** See §WS0 below for briefs. |
-| WS1 mid-review (after WS1.8) | work | `code-reviewer`, `type-reviewer`, `test-reviewer` (parallel) | Generator + CLI complete; before WS2 begins. |
-| WS1 mid-review (after WS1.8) | plan-direction | `assumptions-reviewer` | Build-vs-buy survival check. Has implementation surfaced any first-party capability that would have done the job? |
-| WS2 mid-review (after WS2.6) | work | `code-reviewer`, `test-reviewer` | Validator extension complete; before WS2.5-direction-check. |
-| **WS2.5 pre-migration direction check** | plan-direction | `architecture-reviewer-fred`, `assumptions-reviewer` | **MANDATORY before WS3 destructive migration.** See §WS2.5 below for briefs. |
+| **WS0 — pre-execution** | plan-direction | `assumptions-expert`, `test-expert`, `architecture-expert-fred`, `docs-adr-expert` (parallel) | **MANDATORY before any implementation.** See §WS0 below for briefs. |
+| WS1 mid-review (after WS1.8) | work | `code-expert`, `type-expert`, `test-expert` (parallel) | Generator + CLI complete; before WS2 begins. |
+| WS1 mid-review (after WS1.8) | plan-direction | `assumptions-expert` | Build-vs-buy survival check. Has implementation surfaced any first-party capability that would have done the job? |
+| WS2 mid-review (after WS2.6) | work | `code-expert`, `test-expert` | Validator extension complete; before WS2.5-direction-check. |
+| **WS2.5 pre-migration direction check** | plan-direction | `architecture-expert-fred`, `assumptions-expert` | **MANDATORY before WS3 destructive migration.** See §WS2.5 below for briefs. |
 | During WS3 (cycles 3.1–3.9) | (none) | — | Mechanical migration; reviewer overhead would not pay. |
-| WS6 post-execution | work + release | `docs-adr-reviewer`, `architecture-reviewer-fred` | All product behaviour landed; documents stabilised; gate passing. |
-| Pre-merge | release | `release-readiness-reviewer` | Optional, before merge to main. |
+| WS6 post-execution | work + release | `docs-adr-expert`, `architecture-expert-fred` | All product behaviour landed; documents stabilised; gate passing. |
+| Pre-merge | release | `release-readiness-expert` | Optional, before merge to main. |
 
 If a reviewer surfaces a question about a closed decision, the brief was misframed — note it and re-brief on execution legitimacy only (per `feedback_reviewer_brief_respects_decided_scope`). The owner-locked decisions are: two-surface contract; `SKILL-CANONICAL.md` filename; bytewise supporting-file copies; configurable `jc-` prefix; commands subsumed into skills; `.cursor/skills`/`.gemini/skills`/`.codex/skills`/`.windsurf/skills` retired.
 
@@ -291,7 +291,7 @@ If a reviewer surfaces a question about a closed decision, the brief was misfram
 
 **Dispatch**: all four reviewers in parallel via the Agent tool. Each gets a self-contained brief; none reads the others' findings. The session synthesises after.
 
-### Brief — `assumptions-reviewer`
+### Brief — `assumptions-expert`
 
 **Read first**: this plan; PDR-051; ADR-125 (especially the 2026-05-09 amendment); friction register F-16; `.agent/plans/agent-tooling/archive/failed-skills-standardisation-attempt-1-2026-05-09.plan.md` (the failure note in particular).
 
@@ -306,7 +306,7 @@ If a reviewer surfaces a question about a closed decision, the brief was misfram
 
 **Expected severity range**: WARN (proportionality nudges) up to BLOCKER (a load-bearing dependency is wrong).
 
-### Brief — `test-reviewer`
+### Brief — `test-expert`
 
 **Read first**: this plan, especially every WS1 cycle's test section; the failure note in `archive/failed-skills-standardisation-attempt-1-2026-05-09.plan.md` describing the audit-shaped test that was written after the code.
 
@@ -319,7 +319,7 @@ If a reviewer surfaces a question about a closed decision, the brief was misfram
 
 **Expected severity range**: WARN (cycle-shape nudges) up to BLOCKER (a cycle as written is audit-shaped and would be rejected at landing).
 
-### Brief — `architecture-reviewer-fred`
+### Brief — `architecture-expert-fred`
 
 **Read first**: this plan; PDR-051; ADR-125 (amended); ADR-125's pre-amendment Layer-2 contract for context; existing `agent-tools/` workspace structure; `scripts/validate-portability.ts`.
 
@@ -334,7 +334,7 @@ If a reviewer surfaces a question about a closed decision, the brief was misfram
 
 **Expected severity range**: WARN up to BLOCKER (a structural violation that must reshape WS2 or WS3 before they execute).
 
-### Brief — `docs-adr-reviewer`
+### Brief — `docs-adr-expert`
 
 **Read first**: PDR-051; ADR-125 (with all amendments, especially 2026-05-09); the `.agent/research/agentic-engineering/standardising-skills.md` corrections planned in WS5.4; the existing `.agent/practice-index.md` PDR map; the practice-core-portability rule.
 
@@ -360,10 +360,10 @@ Only after WS0 acceptance does WS1.1 begin.
 
 **Reviewers run** (all four in parallel via the Agent tool):
 
-- `assumptions-reviewer` — verdict: WS1.1 may begin; 3 WARN, no BLOCKER. Findings: false `depends_on` between WS1.1↔WS1.2; deferred skills-ref-validate adoption needs a forward pointer; WS3.4↔WS3.5 lacks human-eyeball gate.
-- `test-reviewer` — verdict: WS1 not landable as written. 2 BLOCKER, 3 WARN, 1 NOTE. BLOCKERs: WS1.4/WS1.5 literal body-string assertions are audit-shaped; WS1.7 "FULL help text on stderr" couples to literal text. WARNs: WS1.1 schema literal pre-spec, WS1.6 missing unit-level coverage, WS2.3 underspecified shorthand. NOTE: WS1.8 wrong test classification (.integration.test.ts → .e2e.test.ts).
-- `architecture-reviewer-fred` — verdict: WS2 not ready. 1 BLOCKER, 2 WARN. BLOCKER: WS2.3 deferred boundary decision (import-from-workspace vs duplicate XOR). WARNs: WS2.4 same boundary risk; WS3.1 ordering risk against legacy `SKILL.md` reads in `validate-portability.ts`. WS3 structurally sound subject to the WARN remediations.
-- `docs-adr-reviewer` — verdict: PDR-051 + ADR-125 landed-coherent (no BLOCKER). WS5 propagation list incomplete: 5 surfaces missing (cross-platform-agent-surface-matrix.md, artefact-inventory.md, .agent/README.md:82, .agent/practice-index.md:257-258, operating-model research doc). ADR-125 line 12 historical-clarifier needed (NOTE).
+- `assumptions-expert` — verdict: WS1.1 may begin; 3 WARN, no BLOCKER. Findings: false `depends_on` between WS1.1↔WS1.2; deferred skills-ref-validate adoption needs a forward pointer; WS3.4↔WS3.5 lacks human-eyeball gate.
+- `test-expert` — verdict: WS1 not landable as written. 2 BLOCKER, 3 WARN, 1 NOTE. BLOCKERs: WS1.4/WS1.5 literal body-string assertions are audit-shaped; WS1.7 "FULL help text on stderr" couples to literal text. WARNs: WS1.1 schema literal pre-spec, WS1.6 missing unit-level coverage, WS2.3 underspecified shorthand. NOTE: WS1.8 wrong test classification (.integration.test.ts → .e2e.test.ts).
+- `architecture-expert-fred` — verdict: WS2 not ready. 1 BLOCKER, 2 WARN. BLOCKER: WS2.3 deferred boundary decision (import-from-workspace vs duplicate XOR). WARNs: WS2.4 same boundary risk; WS3.1 ordering risk against legacy `SKILL.md` reads in `validate-portability.ts`. WS3 structurally sound subject to the WARN remediations.
+- `docs-adr-expert` — verdict: PDR-051 + ADR-125 landed-coherent (no BLOCKER). WS5 propagation list incomplete: 5 surfaces missing (cross-platform-agent-surface-matrix.md, artefact-inventory.md, .agent/README.md:82, .agent/practice-index.md:257-258, operating-model research doc). ADR-125 line 12 historical-clarifier needed (NOTE).
 
 **Remediations landed in this commit** (plan amendments only; no implementation):
 
@@ -684,7 +684,7 @@ pnpm agent-tools:skills-adapter-generate --help
 
 **Trigger**: cycles 1.1–1.8 landed.
 
-**Reviewers**: `code-reviewer`, `type-reviewer`, `test-reviewer`, `assumptions-reviewer` (build-vs-buy survival check). Dispatched in parallel.
+**Reviewers**: `code-expert`, `type-expert`, `test-expert`, `assumptions-expert` (build-vs-buy survival check). Dispatched in parallel.
 
 **Output**: any BLOCKERs land as a follow-up commit before WS2 begins. Document findings in the cycle todo for traceability.
 
@@ -803,7 +803,7 @@ Each cycle: one commit. After every cycle: `pnpm portability:check` exits 0 agai
 
 ### WS2 mid-review
 
-`code-reviewer` + `test-reviewer` on the validator extension. BLOCKERs landed before WS3 begins.
+`code-expert` + `test-expert` on the validator extension. BLOCKERs landed before WS3 begins.
 
 ---
 
@@ -815,7 +815,7 @@ Each cycle: one commit. After every cycle: `pnpm portability:check` exits 0 agai
 
 **Dispatch**: in parallel.
 
-### Brief — `architecture-reviewer-fred`
+### Brief — `architecture-expert-fred`
 
 **Read first**: the plan as it stands at this point (post-WS2 commits applied); the actual generator code as it landed (does it match the plan?); the actual validator extension as it landed.
 
@@ -825,7 +825,7 @@ Each cycle: one commit. After every cycle: `pnpm portability:check` exits 0 agai
 - Is WS3.9 strict-flip still the right shape, or did WS2 land a check that needs a different removal pattern?
 - Is the per-command audit (WS3.6) still appropriately scoped? Has any context emerged that suggests a command should be retained as a command (i.e. the commands-to-skills decision needs revisiting)?
 
-### Brief — `assumptions-reviewer`
+### Brief — `assumptions-expert`
 
 **Read first**: same as above plus this plan's risk register.
 
@@ -975,7 +975,7 @@ Single-clause edit to `docs/architecture/architectural-decisions/125-agent-artef
 
 ## WS6 — Adversarial review and consolidation
 
-`docs-adr-reviewer` on PDR-051 + ADR-125 amendment + `docs/engineering/skills-adapter-generation.md` + research-doc corrections. `architecture-reviewer-fred` on boundary compliance, ADR amendment shape, generator placement under `agent-tools/`. Findings → follow-up commits or follow-up plans depending on severity.
+`docs-adr-expert` on PDR-051 + ADR-125 amendment + `docs/engineering/skills-adapter-generation.md` + research-doc corrections. `architecture-expert-fred` on boundary compliance, ADR amendment shape, generator placement under `agent-tools/`. Findings → follow-up commits or follow-up plans depending on severity.
 
 After review passes: `/jc-consolidate-docs`. Update `.agent/memory/operational/repo-continuity.md`. Mark this plan completed and archive to `archive/completed/`.
 

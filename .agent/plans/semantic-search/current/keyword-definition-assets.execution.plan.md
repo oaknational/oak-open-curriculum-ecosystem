@@ -135,10 +135,10 @@ Acceptance criteria:
 
 Minimum reviewers:
 
-- `docs-adr-reviewer`
-- `architecture-reviewer-betty`
-- `architecture-reviewer-fred`
-- `code-reviewer`
+- `docs-adr-expert`
+- `architecture-expert-betty`
+- `architecture-expert-fred`
+- `code-expert`
 
 ---
 

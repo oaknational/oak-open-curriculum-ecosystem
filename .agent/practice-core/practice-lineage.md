@@ -142,17 +142,17 @@ This process is universal. It costs nothing and prevents shallow execution.
 ### Agent Pattern
 
 The Practice can use specialist sub-agents for review. When a repo installs a reviewer layer, the
-minimum viable roster is **code-reviewer** (gateway -- correctness, security, performance, test
-coverage; triages to specialists), **test-reviewer** (classification, mock simplicity, TDD
-compliance; recommends deletion for tests that test mocks or types), and **type-reviewer** (type
+minimum viable roster is **code-expert** (gateway -- correctness, security, performance, test
+coverage; triages to specialists), **test-expert** (classification, mock simplicity, TDD
+compliance; recommends deletion for tests that test mocks or types), and **type-expert** (type
 flow tracing, widening detection; "why solve at runtime what you can embed at compile time?"). Each
 reads directives first, applies the First Question, and reports with severity levels and actionable
 fixes. A repo may stage this layer after the Core itself is installed; until then, `AGENT.md` should
 say explicitly that reviewer infrastructure is not yet installed.
 
-For production, expand: security-reviewer, config-reviewer,
-architecture-reviewer(s). UI-heavy projects may add a small browser-facing
-cluster routed by the gateway code-reviewer. Use layered composition at scale;
+For production, expand: security-expert, config-expert,
+architecture-expert(s). UI-heavy projects may add a small browser-facing
+cluster routed by the gateway code-expert. Use layered composition at scale;
 inline for short-lived projects.
 
 ### Workflow Commands
@@ -257,8 +257,8 @@ Practice is applied at session start.
 ## Adaptation Levels
 
 **POC (days to weeks)**: Inline agents. Simplified gates. No layered composition, no ADR
-infrastructure, no full learning loop. Metacognition and napkin retained. 3 agents: code-reviewer,
-test-reviewer, type-reviewer.
+infrastructure, no full learning loop. Metacognition and napkin retained. 3 agents: code-expert,
+test-expert, type-expert.
 
 **Production (months to years)**: Layered agent architecture. Full specialist roster. Learning loop
 (napkin -> distilled -> rules). ADR infrastructure. Full quality gate sequence.

@@ -49,7 +49,7 @@ it is broader than this collection.
 ## Why This Collection Exists
 
 Agent tooling work has a different change-cost profile than practice
-doctrine, governance, or specialist-reviewer work:
+doctrine, governance, or specialist-expert work:
 
 - **Tooling changes are code** — they move through TDD cycles, type-check,
   lint, tests, and build gates. Doctrine and governance changes are

@@ -250,10 +250,10 @@ Run the relevant quality gates and invoke specialist review.
 
 Minimum reviewers:
 
-- `docs-adr-reviewer`
-- `architecture-reviewer-barney`
-- `architecture-reviewer-fred`
-- `code-reviewer`
+- `docs-adr-expert`
+- `architecture-expert-barney`
+- `architecture-expert-fred`
+- `code-expert`
 
 ---
 

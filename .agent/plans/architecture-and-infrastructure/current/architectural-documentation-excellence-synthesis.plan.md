@@ -498,7 +498,7 @@ operations). Also add a one-line note explaining intentionally skipped ADR
 numbers (039, 090 were never assigned; 020, 021, 023 are archived).
 
 **Why**: Navigation at 152 ADRs requires structure beyond chronological listing.
-ISO 42010 recommends organising by stakeholder concerns. The docs-adr-reviewer
+ISO 42010 recommends organising by stakeholder concerns. The docs-adr-expert
 confirmed the skipped-number note would prevent contributors from assuming a
 file was lost.
 

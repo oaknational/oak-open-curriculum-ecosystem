@@ -8,7 +8,7 @@ sibling_plans:
   - "../active/graph-resource-factory.plan.md"
   - "../active/misconception-graph-mcp-surface.plan.md"
   - "../../sector-engagement/eef/current/eef-evidence-corpus.plan.md"
-specialist_reviewer: "mcp-reviewer, code-reviewer, type-reviewer, test-reviewer, architecture-reviewer-betty"
+specialist_reviewer: "mcp-expert, code-expert, type-expert, test-expert, architecture-expert-betty"
 status: current
 isProject: false
 todos:
@@ -426,7 +426,7 @@ unsupported ones; they are not silently dropped.
 
 **find_by_tag × prerequisite**
 
-- **NO TRACER** — reason: `PriorKnowledgeNode` has no `tags` field and the source data has no tag taxonomy. The synthetic-compound `${subject}-${keyStage}` initially drafted here was, in the plan body's own words, "architecturally equivalent to `enumerate_nodes` with a fixed-shape filter" — i.e., a different operation wearing the tag-search surface. Per the *stop inventing optionality* doctrine (assumptions-reviewer round, 2026-04-30): an agent that wants subject+keyStage filtering uses `enumerate_nodes` with `{subject: {equals: ...}, keyStage: {equals: ...}}` — that path already exists, ships, and is honest about what it does. Inventing a synthetic-tag wrapper is the surface-cohesion anti-pattern.
+- **NO TRACER** — reason: `PriorKnowledgeNode` has no `tags` field and the source data has no tag taxonomy. The synthetic-compound `${subject}-${keyStage}` initially drafted here was, in the plan body's own words, "architecturally equivalent to `enumerate_nodes` with a fixed-shape filter" — i.e., a different operation wearing the tag-search surface. Per the *stop inventing optionality* doctrine (assumptions-expert round, 2026-04-30): an agent that wants subject+keyStage filtering uses `enumerate_nodes` with `{subject: {equals: ...}, keyStage: {equals: ...}}` — that path already exists, ships, and is honest about what it does. Inventing a synthetic-tag wrapper is the surface-cohesion anti-pattern.
 - ≥2-of-3 rule applied: `find_by_tag` ships for **eef-strands ✓ only = 1-of-3** under this revised reading. Below the threshold; the operation does NOT ship for prerequisite or misconception.
 
 **find_by_tag × misconception**
@@ -511,7 +511,7 @@ here because each is a real Increment 1 work item, not a punt.
 - The four carve-outs are the structural enforcement of the
   ≥2-of-3 rule. Two were caught by the round-1 first-principles
   check (`MisconceptionGraph` has no edges); two were caught by the
-  round-2 assumptions-reviewer check (no tag taxonomy in
+  round-2 assumptions-expert check (no tag taxonomy in
   prerequisite or misconception source data; the synthetic-compound
   proxy was the *invented optionality* anti-pattern). Both rounds
   found gaps the prior round had missed. Doctrine candidate
@@ -705,7 +705,7 @@ derive edge type names by removing the trailing `s`. Tags: from the
 (e.g. `eef-tl-metacognition-and-self-regulation`); the `id →
 strand_id` rename happens at the corpus boundary, not here.
 
-**Sparse-relations surface** (per assumptions-reviewer round,
+**Sparse-relations surface** (per assumptions-expert round,
 2026-04-30): the `manifest()` and `summary()` operations on this
 adapter MUST surface `strands_without_relations: readonly string[]` —
 the list of strand IDs whose `related_strands` field is absent
@@ -902,7 +902,7 @@ not achieve the user value the plan exists for.
    `${subject}-${keyStage}` tag and a Risk-#5 mitigation requiring
    tool descriptions to state "the parameter is not really a tag" —
    classic invented-optionality / surface-cohesion shape.
-   Resolved (assumptions-reviewer round, 2026-04-30): `find_by_tag`
+   Resolved (assumptions-expert round, 2026-04-30): `find_by_tag`
    does NOT register for prerequisite or misconception. Agents
    wanting subject+keyStage filtering on those graphs use
    `enumerate_nodes`, which is honest about what it does. EEF

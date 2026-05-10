@@ -21,7 +21,7 @@ time can appear in prose when helpful, but the state clock is UTC.
 | 3 | **Decision thread** `state/collaboration/conversations/<id>.json` | Structured per-topic JSON, async | Concrete overlap discussion, sidebars, joint decisions, decisions, resolutions, and evidence |
 | 4 | **Sidebar entries** inside a decision thread | Short-lived focused exchange by mutual agreement | Tighter peer/owner exchange; expiry is stale-reporting only |
 | 4b | **Escalation file** `state/collaboration/escalations/<id>.json` | Live owner-facing unresolved case record | Owner tiebreaker; durable resolution is written back to the conversation |
-| 5 | **Reviewer dispatch** | Fork-blocking-rejoin within ONE agent's session | Specialist review of a draft (`docs-adr-reviewer`, `assumptions-reviewer`, etc.) - **not** peer collaboration |
+| 5 | **Reviewer dispatch** | Fork-blocking-rejoin within ONE agent's session | Specialist review of a draft (`docs-adr-expert`, `assumptions-expert`, etc.) - **not** peer collaboration |
 | 5b | **Owner question** via `AskUserQuestion` | Hard-blocking sync to human | Final tiebreaker; missing information that only the owner can supply |
 
 (Channels 5 and 5b are pre-existing and named here so agents pick the
@@ -86,5 +86,5 @@ as `Codex` / `unknown`.
   — decision-thread, sidebar, and joint-decision schema.
 - [`escalation.schema.json`](../../state/collaboration/escalation.schema.json)
   — owner-escalation schema.
-- [`invoke-code-reviewers.md`](invoke-code-reviewers.md) — reviewer
+- [`invoke-code-experts.md`](invoke-code-experts.md) — reviewer
   dispatch routing.

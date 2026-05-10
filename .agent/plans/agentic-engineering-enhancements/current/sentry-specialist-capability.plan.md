@@ -40,9 +40,9 @@ Without a dedicated specialist, agents risk:
 
 ### Out of scope
 
-- Generic logging concerns (covered by existing code-reviewer + ADR-051)
-- Security vulnerability assessment (covered by security-reviewer)
-- MCP protocol compliance (covered by mcp-reviewer)
+- Generic logging concerns (covered by existing code-expert + ADR-051)
+- Security vulnerability assessment (covered by security-expert)
+- MCP protocol compliance (covered by mcp-expert)
 - Infrastructure/deployment beyond Sentry-specific configuration
 - Client-side/browser Sentry (no browser runtimes in this monorepo)
 
@@ -67,7 +67,7 @@ Without a dedicated specialist, agents risk:
 
 ## Capability Split
 
-- **`sentry-reviewer`**: read-only specialist reviewer assessing Sentry/OTel
+- **`sentry-expert`**: read-only specialist reviewer assessing Sentry/OTel
   correctness against official documentation
 - **`sentry-expert`**: active workflow skill for planning, research, and
   implementation of Sentry/OTel features
@@ -76,11 +76,11 @@ Without a dedicated specialist, agents risk:
 
 Following the ADR-129 triplet pattern:
 
-1. Canonical reviewer template: `.agent/sub-agents/templates/sentry-reviewer.md`
+1. Canonical reviewer template: `.agent/sub-agents/templates/sentry-expert.md`
 2. Canonical skill: `.agent/skills/sentry-expert/SKILL.md`
-3. Canonical situational rule: `.agent/rules/invoke-sentry-reviewer.md`
+3. Canonical situational rule: `.agent/rules/invoke-sentry-expert.md`
 4. Platform adapters (Claude, Cursor, Codex) for reviewer, skill, and rule
-5. Discoverability updates (AGENT.md, invoke-code-reviewers.md, collection indexes)
+5. Discoverability updates (AGENT.md, invoke-code-experts.md, collection indexes)
 6. Validation (`subagents:check`, `portability:check`, `markdownlint:root`)
 
 ### Must-Read (always loaded)
@@ -102,10 +102,10 @@ Following the ADR-129 triplet pattern:
 
 | Specialist | Owns | Does NOT own |
 |-----------|------|-------------|
-| **sentry-reviewer** | Sentry SDK usage, OTel instrumentation, MCP Insights config, alerting, tracing | Exploitability, MCP spec compliance, generic logging |
-| **security-reviewer** | Exploitability of error handling, PII exposure via Sentry | Sentry SDK configuration correctness |
-| **mcp-reviewer** | MCP protocol compliance, transport, session | MCP Insights dashboard, Sentry wrapping |
-| **code-reviewer** | General code quality, gateway triage | Sentry/OTel domain knowledge |
+| **sentry-expert** | Sentry SDK usage, OTel instrumentation, MCP Insights config, alerting, tracing | Exploitability, MCP spec compliance, generic logging |
+| **security-expert** | Exploitability of error handling, PII exposure via Sentry | Sentry SDK configuration correctness |
+| **mcp-expert** | MCP protocol compliance, transport, session | MCP Insights dashboard, Sentry wrapping |
+| **code-expert** | General code quality, gateway triage | Sentry/OTel domain knowledge |
 
 ## Dependencies and Sequencing
 

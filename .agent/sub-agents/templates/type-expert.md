@@ -1,6 +1,6 @@
 ## Delegation Triggers
 
-Invoke this agent whenever TypeScript's type system is under pressure: type assertions appear, generics grow complex, external data enters the system without schema-driven validation, or a developer cannot resolve a type error cleanly. The type-reviewer specialises in the compilation-time revolution — moving all knowable validation out of runtime and into generation time. Call it when the code-reviewer flags assertion pressure or type widening.
+Invoke this agent whenever TypeScript's type system is under pressure: type assertions appear, generics grow complex, external data enters the system without schema-driven validation, or a developer cannot resolve a type error cleanly. The type-expert specialises in the compilation-time revolution — moving all knowable validation out of runtime and into generation time. Call it when the code-expert flags assertion pressure or type widening.
 
 ### Triggering Scenarios
 
@@ -11,9 +11,9 @@ Invoke this agent whenever TypeScript's type system is under pressure: type asse
 
 ### Not This Agent When
 
-- The concern is a straightforward type annotation mistake with no systemic implication — code-reviewer can handle it inline
-- The concern is a security vulnerability at a type boundary rather than a type design problem — use `security-reviewer`
-- The concern is architectural coupling expressed through types — use `architecture-reviewer-barney` or `architecture-reviewer-fred`
+- The concern is a straightforward type annotation mistake with no systemic implication — code-expert can handle it inline
+- The concern is a security vulnerability at a type boundary rather than a type design problem — use `security-expert`
+- The concern is architectural coupling expressed through types — use `architecture-expert-barney` or `architecture-expert-fred`
 
 ---
 
@@ -200,9 +200,9 @@ See `.agent/rules/unknown-is-type-destruction.md` for the canonical rule.
 
 This agent reviews type safety and compilation-time type embedding. It does NOT:
 
-- Review code quality or style (that is `code-reviewer`)
+- Review code quality or style (that is `code-expert`)
 - Review architecture compliance or boundary violations (that is the architecture reviewers)
-- Review test quality or TDD compliance (that is `test-reviewer`)
+- Review test quality or TDD compliance (that is `test-expert`)
 - Modify any files (observe and report only)
 
 When type safety issues stem from architectural decisions, this agent flags the need for architectural review but does not prescribe the architectural solution.
@@ -296,10 +296,10 @@ Structure your review as:
 
 | Issue Type | Recommended Specialist |
 |------------|------------------------|
-| Architectural boundary violations affecting type flow | `architecture-reviewer-barney` or `architecture-reviewer-fred` |
-| Test type safety concerns | `test-reviewer` |
-| Code quality or maintainability | `code-reviewer` |
-| Type safety at security boundaries | `security-reviewer` |
+| Architectural boundary violations affecting type flow | `architecture-expert-barney` or `architecture-expert-fred` |
+| Test type safety concerns | `test-expert` |
+| Code quality or maintainability | `code-expert` |
+| Type safety at security boundaries | `security-expert` |
 
 ## Success Metrics
 

@@ -13,15 +13,15 @@ todos:
   - id: phase-1b-integrate-and-delete
     content: "Phase 1B: integrate 8 paired `<domain>-expert` skill bodies into the renamed templates (active workflow + read-only review combined), update body H1 + frontmatter description per template, delete 8 standalone `.agent/skills/<domain>-expert/` skill directories, remove the 8 corresponding `Skill(<name>-expert)` permissions from `.claude/settings.json`, and inline the `mcp-expert` companion `installation-and-integration.md` (Option C). Resolved: 8 of 8 merges landed (sentry/clerk/mcp at 52c139c7; accessibility/assumptions/design-system/elasticsearch templates at 57de914f; elasticsearch adapters at 16c10cea; react-component at 31a2a9e1). Cleanup pass landed at ae36670a: 24 standalone-skill directories deleted (8 canonical + 8 .claude jc- adapters + 8 .agents jc- adapters), the mcp-expert companion file deleted alongside, and 8 `Skill()` permissions removed from `.claude/settings.json`."
     status: completed
-  - id: phase-1b-reviewer-dispatch
+  - id: phase-1b-expert-dispatch
     content: "Phase 1B reviewer dispatch: code-expert (gateway), docs-adr-expert (8 substantive content merges + role-broadening), config-expert (.claude/settings.json permission removals + skills-lock interaction), mcp-expert + clerk-expert + sentry-expert (each on their own paired domain), architecture-expert-fred (PDR-051 alignment of the unified expert role)."
     status: pending
     depends_on: [phase-1b-integrate-and-delete]
   - id: phase-2-cross-repo-sweep
-    content: "Phase 2: sweep ~590 cross-repo references (`grep -rln` count from Phase 1A scoping, excluding archives + reference-local). Most consequential: `.agent/rules/invoke-code-reviewers.md` and `.agent/memory/executive/invoke-code-reviewers.md` (the canonical reviewer-routing rule); `AGENT.md`; ADRs that name reviewers; current/future plans; READMEs; `agent-tools/src/bin/codex-reviewer-resolve.ts` HELP_TEXT examples; `validate-portability-helpers.ts` + `validate-no-stale-script-invocations.ts` if they encode reviewer names."
+    content: "Phase 2: sweep ~590 cross-repo references (`grep -rln` count from Phase 1A scoping, excluding archives + reference-local). Most consequential: `.agent/rules/invoke-code-experts.md` and `.agent/memory/executive/invoke-code-experts.md` (the canonical reviewer-routing rule); `AGENT.md`; ADRs that name reviewers; current/future plans; READMEs; `agent-tools/src/bin/codex-reviewer-resolve.ts` HELP_TEXT examples; `validate-portability-helpers.ts` + `validate-no-stale-script-invocations.ts` if they encode reviewer names."
     status: pending
-    depends_on: [phase-1b-reviewer-dispatch]
-  - id: phase-2-reviewer-dispatch
+    depends_on: [phase-1b-expert-dispatch]
+  - id: phase-2-expert-dispatch
     content: "Phase 2 reviewer dispatch: code-expert (gateway), docs-adr-expert (rule + ADR + permanent-doc rewrites), config-expert (any settings/lint/codex-config touch), onboarding-expert (ensure onboarding paths still point to current names), test-expert (any test fixture updates needed)."
     status: pending
     depends_on: [phase-2-cross-repo-sweep]
@@ -30,10 +30,10 @@ related:
   - .agent/practice-core/decision-records/PDR-009-canonical-first-cross-platform-architecture.md
   - .agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md
   - .agent/sub-agents/README.md
-  - .agent/rules/invoke-code-reviewers.md
+  - .agent/rules/invoke-code-experts.md
 anchored_commits:
   - 153e960b — third-party skill vendoring cleanup (precondition)
-  - 261d50fe — reviewer feedback follow-up (mcp-reviewer WARN + fred latent BLOCKER note)
+  - 261d50fe — reviewer feedback follow-up (mcp-expert WARN + fred latent BLOCKER note)
   - ce054100 — Phase 1A mechanical rename (templates + adapters + frontmatter + paths)
   - 52c139c7 — Phase 1B partial: sentry/clerk/mcp templates merged + adapters updated
   - 57de914f — Phase 1B continuation: accessibility/assumptions/design-system/elasticsearch templates + changed adapters updated
@@ -41,7 +41,7 @@ anchored_commits:
   - 31a2a9e1 — Phase 1B continuation: react-component template + adapters merged
   - ae36670a — Phase 1B.2-4 cleanup: 24 standalone-skill dirs deleted + 8 Skill() permissions removed + plan updated
   - c31eb492 — Phase 1B reviewer follow-ups: plan-drift fix + dead Style Dictionary URL fix
-  - PENDING — Phase 1B closeout extended scope (owner-directed pull-forward): 8 invoke-<domain>-reviewer rule files renamed to invoke-<domain>-expert across 4 surfaces (.agent/rules/, .claude/rules/, .cursor/rules/.mdc, .agents/rules/); invoke-code-reviewers gateway renamed to invoke-code-experts across 4 surfaces + executive memory; RULES_INDEX.md, AGENT.md, practice-index.md, executive README, .codex/README cross-references updated
+  - PENDING — Phase 1B closeout extended scope (owner-directed pull-forward): 8 invoke-<domain>-reviewer rule files renamed to invoke-<domain>-expert across 4 surfaces (.agent/rules/, .claude/rules/, .cursor/rules/.mdc, .agents/rules/); invoke-code-experts gateway renamed to invoke-code-experts across 4 surfaces + executive memory; RULES_INDEX.md, AGENT.md, practice-index.md, executive README, .codex/README cross-references updated
 ---
 
 # Sub-agent rename to `*-expert` + skill integration
@@ -65,9 +65,9 @@ The repo previously kept two parallel surfaces for domain expertise:
   `mcp-expert`, `sentry-expert`, etc. (8 skills total, all owner-authored).
 - A **read-only reviewer sub-agent** at
   `.agent/sub-agents/templates/<domain>-reviewer.md`, spawned via the Agent
-  tool for independent assessment. Examples: `clerk-reviewer`, `mcp-reviewer`,
-  `sentry-reviewer`. (17 templates total, including the 8 paired with experts
-  and 9 unpaired roles like `code-reviewer`, `security-reviewer`, etc.)
+  tool for independent assessment. Examples: `clerk-expert`, `mcp-expert`,
+  `sentry-expert`. (17 templates total, including the 8 paired with experts
+  and 9 unpaired roles like `code-expert`, `security-expert`, etc.)
 
 The two surfaces had overlapping live-doc references and converging substance
 but split naming. The owner directed consolidation under a single `*-expert`
@@ -152,7 +152,7 @@ deleted as part of the same pass.
 
 **Cross-references inside merged templates**: every merged template
 updated internal references to sibling sub-agents from `*-reviewer` to
-`*-expert` for self-consistency (e.g. "use `code-reviewer`" → "use
+`*-expert` for self-consistency (e.g. "use `code-expert`" → "use
 `code-expert`"). This is Phase 2 sweep substance pre-empted within the
 bounds of the touched files only; the remaining ~590 cross-repo sites
 stay queued for Phase 2.
@@ -367,11 +367,11 @@ returned ~596 sites at Phase 1A scoping time. Each must update to
 
 Highest-leverage targets:
 
-- `.agent/rules/invoke-code-reviewers.md` (10 lines; canonical reviewer
+- `.agent/rules/invoke-code-experts.md` (10 lines; canonical reviewer
   routing rule). The rule's filename references `code-reviewers` plurally —
   consider whether the rule itself should be renamed to
   `invoke-code-experts.md` (and the matching `.claude/rules/` adapter pointer).
-- `.agent/memory/executive/invoke-code-reviewers.md` (219 lines; the rule's
+- `.agent/memory/executive/invoke-code-experts.md` (219 lines; the rule's
   detailed roster, timing tiers, depth matrix, copy-paste examples).
 - `.agent/directives/AGENT.md` "Reviewers And Tools" section — points at the
   rule.
@@ -401,7 +401,7 @@ templates for cross-references.
 ### 2.6 — agent-tools CLI examples
 
 `agent-tools/src/bin/codex-reviewer-resolve.ts` HELP_TEXT examples currently
-say `code-reviewer` and `architecture-reviewer-fred`. Update to `code-expert`
+say `code-expert` and `architecture-expert-fred`. Update to `code-expert`
 and `architecture-expert-fred`. The CLI binary name itself
 (`codex-reviewer-resolve`) is a tool name not a sub-agent name — owner
 direction did not call for tool-name rename, so leave that alone unless
@@ -427,7 +427,7 @@ Phase 1B reviewers run; the dispatch invocations use the new names.
 3. **Description drift**: frontmatter `description:` strings are read by the
    Claude Code agent dispatcher; rewriting them changes invocation matching.
    Manual QA pass after Phase 1B is recommended.
-4. **Architecture-reviewer-fred latent BLOCKER**: per `261d50fe`, the skills
+4. **Architecture-expert-fred latent BLOCKER**: per `261d50fe`, the skills
    generator at `agent-tools/src/skills-adapter-generate/generator.ts:191-199`
    still applies `jc-` prefix unconditionally. Not blocking this plan but
    relevant if Phase 1B re-introduces any ingested-skill content under

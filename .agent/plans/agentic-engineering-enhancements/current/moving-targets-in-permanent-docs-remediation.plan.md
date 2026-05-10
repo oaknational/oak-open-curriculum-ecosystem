@@ -179,11 +179,11 @@ Not applicable. Detection extends existing first-party tooling
 
 ## Reviewer Scheduling (phase-aligned)
 
-- **Pre-execution**: `assumptions-reviewer` (challenge: is the
+- **Pre-execution**: `assumptions-expert` (challenge: is the
   detection scope right? Is the cure menu sufficient?).
-- **During**: `code-reviewer` gateway; `docs-adr-reviewer` during
+- **During**: `code-expert` gateway; `docs-adr-expert` during
   Phase 3 (cure application).
-- **Post**: `release-readiness-reviewer` before declaring closure.
+- **Post**: `release-readiness-expert` before declaring closure.
 
 ---
 

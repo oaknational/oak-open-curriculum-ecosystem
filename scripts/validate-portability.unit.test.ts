@@ -242,21 +242,21 @@ describe('getReviewerAdapterParityIssues', () => {
   it('reports missing Codex reviewer adapters when another platform defines them', () => {
     expect(
       getReviewerAdapterParityIssues({
-        cursorAgentFiles: ['.cursor/agents/code-reviewer.md'],
-        claudeAgentFiles: ['.claude/agents/code-reviewer.md'],
+        cursorAgentFiles: ['.cursor/agents/code-expert.md'],
+        claudeAgentFiles: ['.claude/agents/code-expert.md'],
         codexAgentFiles: [],
       }),
     ).toContain(
-      '.codex/agents/code-reviewer.toml: missing reviewer adapter required for cross-platform parity',
+      '.codex/agents/code-expert.toml: missing reviewer adapter required for cross-platform parity',
     );
   });
 
   it('returns no issues when reviewer adapters are present on all supported platforms', () => {
     expect(
       getReviewerAdapterParityIssues({
-        cursorAgentFiles: ['.cursor/agents/code-reviewer.md'],
-        claudeAgentFiles: ['.claude/agents/code-reviewer.md'],
-        codexAgentFiles: ['.codex/agents/code-reviewer.toml'],
+        cursorAgentFiles: ['.cursor/agents/code-expert.md'],
+        claudeAgentFiles: ['.claude/agents/code-expert.md'],
+        codexAgentFiles: ['.codex/agents/code-expert.toml'],
       }),
     ).toStrictEqual([]);
   });

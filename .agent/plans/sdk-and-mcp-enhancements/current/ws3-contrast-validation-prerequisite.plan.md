@@ -2,7 +2,7 @@
 name: "WS3 Contrast Validation Prerequisite"
 overview: "Build WCAG contrast ratio validation into the design token pipeline as a blocking quality gate, fix the two known token contrast violations, and establish the pairing/triad model for all future colour work."
 parent_plan: "ws3-widget-clean-break-rebuild.plan.md"
-specialist_reviewer: "design-system-reviewer, accessibility-reviewer"
+specialist_reviewer: "design-system-expert, accessibility-expert"
 isProject: false
 todos:
   - id: core-pure-functions
@@ -211,4 +211,4 @@ Update `docs/governance/design-token-practice.md`:
 4. Dark-theme error passes ≥4.5:1
 5. Button triad passes all three pairwise checks
 6. `pnpm check` passes
-7. design-system-reviewer and accessibility-reviewer approve
+7. design-system-expert and accessibility-expert approve

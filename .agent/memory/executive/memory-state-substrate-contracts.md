@@ -27,7 +27,7 @@ specification and the adjacent strict JSON manifest/schema.
 | --- | --- |
 | Inventory owner | This executive-memory file |
 | Primary writers | Substrate-contract adoption work, consolidation, and doctor-plan implementation |
-| Reviewer route | `docs-adr-reviewer`, `assumptions-reviewer`, `architecture-reviewer-fred`; add `test-reviewer` when executable checks change |
+| Reviewer route | `docs-adr-expert`, `assumptions-expert`, `architecture-expert-fred`; add `test-expert` when executable checks change |
 | Doctrine source | PDR-050 for substrate contracts; PDR-049 for merge classes |
 | Implementation owner | Repo-local `agent-tools` doctor plan |
 | Boundary | Practice Core names portable doctrine only; this file names local roots and commands |

@@ -8,7 +8,7 @@ sibling_plans:
   - "../current/graph-query-layer.plan.md"
   - "../../sector-engagement/eef/current/eef-evidence-corpus.plan.md"
   - "../active/agent-guidance-consolidation.plan.md"
-specialist_reviewer: "mcp-reviewer, code-reviewer, architecture-reviewer-betty, docs-adr-reviewer"
+specialist_reviewer: "mcp-expert, code-expert, architecture-expert-betty, docs-adr-expert"
 status: future
 isProject: false
 todos:

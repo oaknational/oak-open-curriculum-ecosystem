@@ -3,7 +3,7 @@ related_pdr: PDR-015
 name: Reviewer Widening Is Always Wrong
 category: agent
 status: proven
-emerged_from: "Session 2026-04-06 — type-reviewer recommended z.unknown()"
+emerged_from: "Session 2026-04-06 — type-expert recommended z.unknown()"
 cross_session: true
 ---
 
@@ -39,9 +39,9 @@ When a reviewer flags a type construct:
 
 ## Origin
 
-Phase 5 E2E test: type-reviewer recommended `z.unknown()`, then we
+Phase 5 E2E test: type-expert recommended `z.unknown()`, then we
 hand-crafted `JsonSchemaPropertySchema`, then we used
 `getToolFromToolName().inputSchema` directly. Each iteration was
-caught by human review. The type-reviewer template was upgraded to
+caught by human review. The type-expert template was upgraded to
 prevent recurrence (Commandments 11-12, Zod Schema Integrity
 checklist).

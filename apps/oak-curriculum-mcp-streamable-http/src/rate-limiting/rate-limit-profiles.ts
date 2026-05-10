@@ -63,7 +63,7 @@ export const OAUTH_RATE_LIMIT = {
  * abusive traffic. The message uses the OAuth error shape since these
  * routes are OAuth-protocol-adjacent.
  *
- * @see [architecture-reviewer-betty MAJOR-A absorption in PR-87 plan]
+ * @see [architecture-expert-betty MAJOR-A absorption in PR-87 plan]
  *   for the cohesion rationale separating this profile from
  *   {@link OAUTH_RATE_LIMIT}.
  */

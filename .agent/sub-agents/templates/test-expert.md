@@ -20,10 +20,10 @@ friction without paying their way in design value.
 
 ### Not This Agent When
 
-- The failing test reveals a product code bug, not a test quality problem — use `code-reviewer` or the relevant implementing agent
-- The concern is TypeScript type safety in the product code being tested — use `type-reviewer`
-- The concern is architectural placement of test files or boundary violations — use `architecture-reviewer-barney` or `architecture-reviewer-fred`
-- The issue is a test configuration file (vitest.config.ts, coverage thresholds) rather than test logic — use `config-reviewer`
+- The failing test reveals a product code bug, not a test quality problem — use `code-expert` or the relevant implementing agent
+- The concern is TypeScript type safety in the product code being tested — use `type-expert`
+- The concern is architectural placement of test files or boundary violations — use `architecture-expert-barney` or `architecture-expert-fred`
+- The issue is a test configuration file (vitest.config.ts, coverage thresholds) rather than test logic — use `config-expert`
 
 ---
 
@@ -204,8 +204,8 @@ For every issue found:
   finding. Generic advice ("simplify this test") is a failure of
   this step.
 - **If the fix is in product code rather than test code**, say so
-  explicitly and recommend the relevant specialist (`code-reviewer`,
-  `architecture-reviewer-fred`).
+  explicitly and recommend the relevant specialist (`code-expert`,
+  `architecture-expert-fred`).
 
 ### Step 8: Report Findings
 
@@ -372,8 +372,8 @@ const service = createService({ apiKey: 'test-key' });
 This agent reviews test quality, TDD compliance, and the describe-vs-audit
 shape. It does NOT:
 
-- Refactor product code (use `code-reviewer`)
-- Review type safety in product code (use `type-reviewer`)
+- Refactor product code (use `code-expert`)
+- Review type safety in product code (use `type-expert`)
 - Review architectural compliance (use the architecture reviewers)
 - Modify any files (observe and report only)
 
@@ -492,10 +492,10 @@ For each test (or test group), state:
 
 | Issue Type | Recommended Specialist |
 |------------|------------------------|
-| Product code needs refactoring for testability | `code-reviewer` |
-| Type safety issues in test boundaries | `type-reviewer` |
-| Architectural violations forcing audit-shaped tests | `architecture-reviewer-fred` |
-| Security-critical test gaps | `security-reviewer` |
+| Product code needs refactoring for testability | `code-expert` |
+| Type safety issues in test boundaries | `type-expert` |
+| Architectural violations forcing audit-shaped tests | `architecture-expert-fred` |
+| Security-critical test gaps | `security-expert` |
 
 ## Success Metrics
 

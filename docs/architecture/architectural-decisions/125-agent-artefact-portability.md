@@ -169,7 +169,7 @@ Rules have two conceptually distinct layers:
 
 2. **Activation triggers** (`.cursor/rules/*.mdc`, entry-point chains) — platform-specific mechanisms that determine _when_ and _how_ policies surface during a session. These are not thin wrappers for `principles.md` in the way command wrappers point at commands. They are a separate artefact type: a trigger mechanism that activates specific policies, directives, or skills at the right moment.
 
-Some triggers activate policies from `principles.md` via a canonical rule (e.g., `apply-architectural-principles.mdc` → `.agent/rules/apply-architectural-principles.md` → `principles.md`). Others activate standalone directives (e.g., `invoke-code-reviewers.mdc` → `.agent/memory/executive/invoke-code-reviewers.md`). Others activate skills through generated adapters (e.g., `napkin-always-active.mdc` → `.agents/skills/jc-napkin/SKILL.md` backed by `.agent/skills/napkin/SKILL-CANONICAL.md`). The trigger is not the policy — it is the mechanism that surfaces the policy.
+Some triggers activate policies from `principles.md` via a canonical rule (e.g., `apply-architectural-principles.mdc` → `.agent/rules/apply-architectural-principles.md` → `principles.md`). Others activate standalone directives (e.g., `invoke-code-experts.mdc` → `.agent/memory/executive/invoke-code-experts.md`). Others activate skills through generated adapters (e.g., `napkin-always-active.mdc` → `.agents/skills/jc-napkin/SKILL.md` backed by `.agent/skills/napkin/SKILL-CANONICAL.md`). The trigger is not the policy — it is the mechanism that surfaces the policy.
 
 #### Many-to-One Consolidation Pattern
 
@@ -220,7 +220,7 @@ directly.
 | `napkin-always-active`           | `.agents/skills/jc-napkin/SKILL.md` -> `.agent/skills/napkin/SKILL-CANONICAL.md`                  |
 | `use-start-right-skills`         | `.agents/skills/jc-start-right-quick/SKILL.md`, `.agents/skills/jc-start-right-thorough/SKILL.md` |
 | `follow-the-practice`            | Practice reading, which leads to skills                                                           |
-| `invoke-code-reviewers`          | All registered reviewers via `.agent/memory/executive/invoke-code-reviewers.md`                   |
+| `invoke-code-experts`            | All registered reviewers via `.agent/memory/executive/invoke-code-experts.md`                     |
 | `lint-after-edit`                | Lint checking (file-scoped to `*.ts`)                                                             |
 
 #### Trigger Content Contract

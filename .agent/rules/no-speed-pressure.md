@@ -81,7 +81,7 @@ if anything even more care and thoughtfulness is needed"*.
   whose bypass is the most common expression of this failure mode.
 - `.agent/rules/stage-by-explicit-pathspec.md` — named source
   incident class produced by speed-pressure-driven shortcuts.
-- `.agent/rules/invoke-code-reviewers.md` — reviewer dispatch is
+- `.agent/rules/invoke-code-experts.md` — reviewer dispatch is
   not optional under speed pressure (because there is none).
 - `.agent/rules/dont-break-build-without-fix-plan.md` — gate
   recovery is not deferrable under speed pressure (because there

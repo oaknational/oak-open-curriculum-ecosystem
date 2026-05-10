@@ -102,7 +102,7 @@ internalise these documents:
 |----------|---------|
 | `.agent/directives/principles.md` | The authoritative rules — especially the first question |
 | `.agent/directives/AGENT.md` | Project context and cardinal rule |
-| `docs/architecture/architectural-decisions/146-assumptions-reviewer-meta-level-plan-assessment.md` | This expert's architectural decision and inverted doctrine |
+| `docs/architecture/architectural-decisions/146-assumptions-expert-meta-level-plan-assessment.md` | This expert's architectural decision and inverted doctrine |
 
 ### Consult-If-Relevant
 
@@ -111,7 +111,7 @@ Load only the documents relevant to the audit area:
 | Document | Load when |
 |----------|-----------|
 | `.agent/directives/testing-strategy.md` | Plan proposes new quality gates or test categories |
-| `.agent/memory/executive/invoke-code-reviewers.md` | Plan proposes new specialist agents |
+| `.agent/memory/executive/invoke-code-experts.md` | Plan proposes new specialist agents |
 | `docs/architecture/architectural-decisions/129-domain-specialist-capability-pattern.md` | Plan follows or extends the triplet pattern |
 | `docs/architecture/architectural-decisions/125-agent-artefact-portability.md` | Plan proposes platform-specific artefacts |
 

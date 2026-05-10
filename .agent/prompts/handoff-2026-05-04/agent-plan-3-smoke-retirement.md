@@ -130,11 +130,11 @@ helper files.
 
 ## Reviewer dispatch
 
-- `test-reviewer` (per cycle, especially 1c's replacement test and
+- `test-expert` (per cycle, especially 1c's replacement test and
   cycle 2's audit fixes).
-- `architecture-reviewer-fred` (boundary discipline).
-- `config-reviewer` (cycle 3 ESLint rule + plugin registration).
-- `code-reviewer` gateway.
+- `architecture-expert-fred` (boundary discipline).
+- `config-expert` (cycle 3 ESLint rule + plugin registration).
+- `code-expert` gateway.
 
 ## Coordination
 

@@ -98,9 +98,9 @@ with a named consumer, or blocking with non-zero failure behaviour.
 
 ## Review Cadence
 
-- Before promotion: `assumptions-reviewer`, `config-reviewer`,
-  `architecture-reviewer-wilma`, `release-readiness-reviewer`
-- During implementation: `test-reviewer`, `config-reviewer`,
+- Before promotion: `assumptions-expert`, `config-expert`,
+  `architecture-expert-wilma`, `release-readiness-expert`
+- During implementation: `test-expert`, `config-expert`,
   relevant architecture reviewers
-- Before completion: `code-reviewer`, `docs-adr-reviewer`,
-  `config-reviewer`, `test-reviewer`
+- Before completion: `code-expert`, `docs-adr-expert`,
+  `config-expert`, `test-expert`

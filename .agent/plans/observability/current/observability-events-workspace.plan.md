@@ -46,7 +46,7 @@ todos:
     content: "WS4: pnpm check from repo root exit 0, no filtering."
     status: pending
   - id: ws5-adversarial-review
-    content: "WS5: docs-adr-reviewer (schema/contract completeness); type-reviewer (Zod 4 usage; io='input' v 'output' semantics); sentry-reviewer (schema/emission fit)."
+    content: "WS5: docs-adr-expert (schema/contract completeness); type-expert (Zod 4 usage; io='input' v 'output' semantics); sentry-expert (schema/emission fit)."
     status: pending
   - id: ws6-doc-propagation
     content: "WS6: update observability high-level plan, ADR-162 Open Questions closure for enforcement mechanism #3, and cross-references from every consuming workspace's README."
@@ -303,11 +303,11 @@ Phase-boundary criterion: exit 0, no filtering.
 
 Reviewer matrix:
 
-- `docs-adr-reviewer` — schema/contract completeness; ADR-162
+- `docs-adr-expert` — schema/contract completeness; ADR-162
   alignment.
-- `type-reviewer` — Zod 4 usage; `io: 'input'` vs `io: 'output'`
+- `type-expert` — Zod 4 usage; `io: 'input'` vs `io: 'output'`
   semantics per distilled.md edge case on `.meta()`.
-- `sentry-reviewer` — schema/emission fit for Sentry's event and
+- `sentry-expert` — schema/emission fit for Sentry's event and
   metric surfaces; categorical-vs-value redaction boundary.
 
 ---

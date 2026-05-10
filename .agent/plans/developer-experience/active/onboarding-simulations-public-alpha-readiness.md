@@ -37,10 +37,10 @@ Historical source snapshots are preserved for traceability:
 
 Methodology:
 
-- 8 independent onboarding reviews via the `onboarding-reviewer` sub-agent
+- 8 independent onboarding reviews via the `onboarding-expert` sub-agent
 - persona lenses: junior dev, mid-level dev, lead dev, principal engineer,
   engineering manager, product owner, CTO, CEO
-- plan restructuring reviewed by `architecture-reviewer-barney`
+- plan restructuring reviewed by `architecture-expert-barney`
 
 ## Why Guardrails Exist
 
@@ -270,7 +270,7 @@ Notes:
   G1–G3 gates complete with evidence. Commit `274a8245` on
   `feat/semantic_search_deployment`.
 - **Personas**: Junior developer, principal engineer, CTO, CEO.
-- **Method**: Read-only `onboarding-reviewer` simulations — no commands run,
+- **Method**: Read-only `onboarding-expert` simulations — no commands run,
   no files modified, only reading and reporting.
 - **Reduced scope rationale**: The four personas were chosen to stress-test the
   four dimensions most critical for public-alpha readiness: discoverability
@@ -934,7 +934,7 @@ For each persona, capture:
   acronyms expanded, licence naming standardised.
 - **Personas**: Junior developer, lead developer, engineering manager, product
   owner.
-- **Method**: Read-only `onboarding-reviewer` simulations. Each persona started
+- **Method**: Read-only `onboarding-expert` simulations. Each persona started
   at `README.md` and followed whatever paths the documentation offered. No
   prescribed reading list. Reviewers did not have access to this plan or the
   onboarding rerun prompt — this was a genuine discovery-based shakedown.

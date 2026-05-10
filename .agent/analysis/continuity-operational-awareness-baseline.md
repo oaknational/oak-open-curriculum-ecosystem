@@ -133,8 +133,8 @@ addendum only records the new context.
    `tsup` → `esbuild` with the plugin. Bespoke commits kept in history as
    signal.
 2. **Six metacognition lessons installed as process guardrails**
-   (commit `4bccba71`) across `assumptions-reviewer`, `code-reviewer`,
-   `docs-adr-reviewer`, and three plan templates. The hard invariants added
+   (commit `4bccba71`) across `assumptions-expert`, `code-expert`,
+   `docs-adr-expert`, and three plan templates. The hard invariants added
    — build-vs-buy attestation required pre-ExitPlanMode; friction-ratchet
    counter; sunk-cost phrase detector; ADRs state WHAT not HOW; phase-aligned
    reviewer scheduling — are now in effect across all vendor-integration work.

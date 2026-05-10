@@ -220,11 +220,11 @@ produced them — the generator is the source of truth.
 
 ## Sub-agent Reviews
 
-Invoke sub-agent reviewers per the `invoke-code-reviewers` rule after
+Invoke sub-agent reviewers per the `invoke-code-experts` rule after
 making changes. The full invocation matrix, timing tiers, quick-triage
 checklist, worked examples, and copy/paste-ready platform-specific
 invocation examples live in executive memory:
-[`.agent/memory/executive/invoke-code-reviewers.md`](../../../memory/executive/invoke-code-reviewers.md).
+[`.agent/memory/executive/invoke-code-experts.md`](../../../memory/executive/invoke-code-experts.md).
 
 ## Process
 

@@ -227,11 +227,11 @@ Acceptance criteria:
 
 Minimum reviewer set:
 
-- `architecture-reviewer-barney`
-- `elasticsearch-reviewer`
-- `test-reviewer`
-- `docs-adr-reviewer`
-- `type-reviewer` if type or capability-surface changes expand
+- `architecture-expert-barney`
+- `elasticsearch-expert`
+- `test-expert`
+- `docs-adr-expert`
+- `type-expert` if type or capability-surface changes expand
 
 Run the canonical quality gate chain from
 [roadmap.md](../roadmap.md#quality-gates) once the implementation lands.

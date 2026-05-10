@@ -165,7 +165,7 @@ A given workstream promotes from `future/` to `current/` when:
   2026-05-04 owner-named pattern that produced PDR-018 §Beneficial
   prerequisites.
 - A draft canonical template for `practice-applied` exists and has
-  been reviewed by `assumptions-reviewer` for proportionality.
+  been reviewed by `assumptions-expert` for proportionality.
 
 ### For the adaptive-immunity surveillance agent
 
@@ -282,7 +282,7 @@ sub-agent template directory:
 - `practice` — broad gateway, must-read tier: `index.md`,
   `AGENT.md`, the artefact inventory overview.
 - `practice-applied` — deep, this-repo doctrine consultant.
-  Must-read tier: ADR index, `invoke-code-reviewers.md`, the artefact
+  Must-read tier: ADR index, `invoke-code-experts.md`, the artefact
   inventory, quality-gate configuration, the fingerprint registry.
 - `practice-core` — deep, Practice lifecycle. Must-read tier: the
   six practice-core files, ADR-124, ADR-131.

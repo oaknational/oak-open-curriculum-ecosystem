@@ -79,7 +79,7 @@ owner.
 
 ## Worked Example
 
-A type-reviewer's bucket-(c) finding flagged "is
+A type-expert's bucket-(c) finding flagged "is
 `school_context_schema.properties` genuinely open-ended, or does it
 have a closed shape?". The answer was in `eef-toolkit.json` — a
 closed JSON Schema document with nine named properties. Reading the

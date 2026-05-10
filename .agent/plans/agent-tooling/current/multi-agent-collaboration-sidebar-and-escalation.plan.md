@@ -289,11 +289,11 @@ Operational seed:
 
 ## Reviewer Routing
 
-- `assumptions-reviewer` - promotion legitimacy, timeout
+- `assumptions-expert` - promotion legitimacy, timeout
   proportionality, and whether sidebar demand is real.
-- `docs-adr-reviewer` - schema, state-vs-memory boundary, and
+- `docs-adr-expert` - schema, state-vs-memory boundary, and
   owner-escalation discoverability.
-- `architecture-reviewer-wilma` - deadlock and hidden-coupling risks
+- `architecture-expert-wilma` - deadlock and hidden-coupling risks
   around parallel sidebars, timeouts, and escalation visibility.
 
 ## Risks

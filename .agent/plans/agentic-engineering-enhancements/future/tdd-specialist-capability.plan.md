@@ -16,7 +16,7 @@ The repo has a testing strategy directive, but agents still:
 - Skip levels (write unit tests but forget integration/E2E for medium+ work)
 - Don't scale their testing approach to the size of the task
 
-The existing `test-reviewer` checks test quality after the fact. What's
+The existing `test-expert` checks test quality after the fact. What's
 missing is a **TDD expert** that guides the testing approach at the START of
 work — choosing the right test levels, defining the Red-Green-Refactor
 sequence, and ensuring multi-level coverage proportional to task size.
@@ -111,21 +111,21 @@ The skill should guide agents through the multi-level TDD sequence:
 
 ### Out of scope
 
-- Test infrastructure and tooling (Vitest config, Playwright setup — config-reviewer)
-- Code quality within tests (code-reviewer)
-- Test file naming and structure auditing after the fact (test-reviewer)
+- Test infrastructure and tooling (Vitest config, Playwright setup — config-expert)
+- Code quality within tests (code-expert)
+- Test file naming and structure auditing after the fact (test-expert)
 - Domain-specific test patterns (each domain specialist owns its own testing advice)
 
-## Relationship to test-reviewer
+## Relationship to test-expert
 
-| Concern | test-reviewer | tdd-specialist |
+| Concern | test-expert | tdd-specialist |
 |---------|--------------|----------------|
 | **When** | After tests are written | Before/during test writing |
 | **Focus** | Quality audit: naming, mock quality, TDD compliance evidence | Workflow guidance: which levels, what sequence, how to Red-Green-Refactor |
 | **Mode** | Review (read-only assessment) | Active guidance (skill during implementation) |
 | **Output** | Findings and violations | Test plan and TDD sequence |
 
-The tdd-specialist GUIDES the approach. The test-reviewer AUDITS the result.
+The tdd-specialist GUIDES the approach. The test-expert AUDITS the result.
 
 ## Sub-Specialist: Mutation Testing (Stryker)
 
@@ -183,9 +183,9 @@ mutation-specific test is needed.
 
 ### Deliverables
 
-1. Canonical reviewer template: `.agent/sub-agents/templates/mutation-testing-reviewer.md`
+1. Canonical reviewer template: `.agent/sub-agents/templates/mutation-testing-expert.md`
 2. Canonical skill: `.agent/skills/mutation-testing-expert/SKILL.md`
-3. Canonical situational rule: `.agent/rules/invoke-mutation-testing-reviewer.md`
+3. Canonical situational rule: `.agent/rules/invoke-mutation-testing-expert.md`
 4. Platform adapters (Claude, Cursor, Codex)
 
 ### Doctrine Hierarchy (Mutation-Specific)
@@ -206,10 +206,10 @@ mutation-specific test is needed.
 
 ## Deliverables
 
-1. Canonical reviewer template: `.agent/sub-agents/templates/tdd-reviewer.md`
+1. Canonical reviewer template: `.agent/sub-agents/templates/tdd-expert.md`
    (or `tdd-specialist.md` — naming TBD with taxonomy plan)
 2. Canonical skill: `.agent/skills/tdd-expert/SKILL.md`
-3. Canonical situational rule: `.agent/rules/invoke-tdd-reviewer.md`
+3. Canonical situational rule: `.agent/rules/invoke-tdd-expert.md`
 4. Platform adapters (Claude, Cursor, Codex)
 5. Discoverability updates
 6. Validation

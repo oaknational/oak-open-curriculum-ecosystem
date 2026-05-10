@@ -9,7 +9,7 @@ sibling_plans:
   - "../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md"
   - "../../../connecting-oak-resources/knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md"
   - "../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md"
-specialist_reviewer: "mcp-reviewer, code-reviewer, test-reviewer, type-reviewer, sentry-reviewer"
+specialist_reviewer: "mcp-expert, code-expert, test-expert, type-expert, sentry-expert"
 status: current
 isProject: false
 todos:
@@ -410,7 +410,7 @@ the loader's Zod schema must mirror the actual data shape including
 absent-field optionality, not an idealised "every strand has every
 field" shape.
 
-**Closed schema typing** (resolves the type-reviewer's bucket-(c)
+**Closed schema typing** (resolves the type-expert's bucket-(c)
 finding by reading the actual data): `school_context_schema` in
 `eef-toolkit.json` is itself a JSON Schema document with a known
 closed shape — `{ description: string; properties: { phase, key_stage,

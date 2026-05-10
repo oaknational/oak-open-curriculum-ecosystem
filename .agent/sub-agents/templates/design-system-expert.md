@@ -124,7 +124,7 @@ repo-specific documents:
 |----------|---------|
 | `docs/architecture/architectural-decisions/148-design-token-architecture.md` | This expert's architectural decision — DTCG JSON, three-tier model, CSS custom properties, `packages/design/` |
 | `docs/governance/design-token-practice.md` | Source format, tier model, build pipeline, consumption patterns, theming, oak-components relationship |
-| `docs/architecture/architectural-decisions/149-frontend-specialist-reviewer-gateway-cluster.md` | Cluster definition, overlap boundaries, MCP boundary rule |
+| `docs/architecture/architectural-decisions/149-frontend-specialist-expert-gateway-cluster.md` | Cluster definition, overlap boundaries, MCP boundary rule |
 
 ### Consult-If-Relevant
 

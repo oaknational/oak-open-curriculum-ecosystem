@@ -13,10 +13,10 @@ todos:
     content: "Commit 3: Update 5 ADRs (historical-vs-normative discipline) + 15 live docs (orientation, practice-index, practice-bootstrap, practice.md, practice-core CHANGELOG, codex/state/prompts/templates READMEs, no-warning-toleration rule, foundation doc)."
     status: pending
   - id: reviewer-dispatch
-    content: "Post-landing reviewer dispatch: code-reviewer + architecture-reviewer-fred + docs-adr-reviewer + test-reviewer + config-reviewer."
+    content: "Post-landing reviewer dispatch: code-expert + architecture-expert-fred + docs-adr-expert + test-expert + config-expert."
     status: pending
   - id: follow-ups-tracked
-    content: "Tracked follow-ups from plan-time code-reviewer pass: (1) two-validator contract documentation, (2) live-plan + memory drift sweep (~50 references), (3) ADR-125 historical-vs-normative paragraph distinction, (4) verify exhaustiveness of grep before final commit."
+    content: "Tracked follow-ups from plan-time code-expert pass: (1) two-validator contract documentation, (2) live-plan + memory drift sweep (~50 references), (3) ADR-125 historical-vs-normative paragraph distinction, (4) verify exhaustiveness of grep before final commit."
     status: pending
 ---
 
@@ -32,9 +32,9 @@ todos:
 
 PDR-051 + ADR-125 §2026-05-09 amendment retire `.agent/commands/` ("custom command surfaces retired; canonical commands subsumed into skills as the unified user-and-model-invokable workflow surface"). Wave 2 Item 1 (commit `fae57312`, 2026-05-10) created six SKILL-CANONICAL.md files for the six adapter-only skills, but landed them as **thin pointers to `.agent/commands/<id>.md`** rather than inlining the substantive content. This perpetuates the very surface the doctrine retires.
 
-The architecture-reviewer-fred plan-time observation (post-fae57312): "PDR-051/ADR-125 retire `.agent/commands/`, but `.agent/commands/` still exists with live content. Doctrine/state mismatch." Originally flagged as out-of-scope per the brief; owner has since reframed as in-scope.
+The architecture-expert-fred plan-time observation (post-fae57312): "PDR-051/ADR-125 retire `.agent/commands/`, but `.agent/commands/` still exists with live content. Doctrine/state mismatch." Originally flagged as out-of-scope per the brief; owner has since reframed as in-scope.
 
-Plan-time code-reviewer dispatch surfaced five critical issues that shape this plan; see Reviewer Findings below.
+Plan-time code-expert dispatch surfaced five critical issues that shape this plan; see Reviewer Findings below.
 
 ### Issue 1: Validator + runtime probe still treat `.agent/commands/` as canonical
 
@@ -58,7 +58,7 @@ Plan-time code-reviewer dispatch surfaced five critical issues that shape this p
 
 **Root Cause**: Same as Issue 1 — Wave 1 changes were not propagated to all dependent validators.
 
-**Per code-reviewer plan-time review**: "no-warning-toleration" + "ground-state-before-planning" standing rules require fixing these pre-existing failures in the same commit as the validator refactor, not deferring.
+**Per code-expert plan-time review**: "no-warning-toleration" + "ground-state-before-planning" standing rules require fixing these pre-existing failures in the same commit as the validator refactor, not deferring.
 
 ### Issue 3: 12 `.agent/commands/*.md` files contain substantive content
 
@@ -69,7 +69,7 @@ Plan-time code-reviewer dispatch surfaced five critical issues that shape this p
 | plan.md | 154 | Inline into `.agent/skills/plan/SKILL-CANONICAL.md` |
 | review.md | 96 | Inline into `.agent/skills/review/SKILL-CANONICAL.md` |
 | session-handoff.md | 438 | Inline into `.agent/skills/session-handoff/SKILL-CANONICAL.md` |
-| chatgpt-report-normalisation.md | 46 | **Inline** (NOT delete-only — code-reviewer caught misclassification; canonical lacks PUA character table + positional mapping rule + output contract) |
+| chatgpt-report-normalisation.md | 46 | **Inline** (NOT delete-only — code-expert caught misclassification; canonical lacks PUA character table + positional mapping rule + output contract) |
 | metacognition.md | 3 | Fix `.agent/skills/metacognition/SKILL-CANONICAL.md` to point at `.agent/directives/metacognition.md` directly; delete commands file |
 | ephemeral-to-permanent-homing.md | 130 | Create new `.agent/skills/ephemeral-to-permanent-homing/SKILL-CANONICAL.md` (classification: passive); update referrers |
 | go.md | 3 | Already-thin pointer; canonical already authoritative; delete commands file |
@@ -98,7 +98,7 @@ ADR text requires careful **historical-vs-normative** discipline: do not rewrite
 
 ### Issue 7: Two-validator contract not documented
 
-`validate-portability.ts` and `pnpm skills:check` (skills-adapter generator's `--check`) have diverging contracts and overlapping responsibilities. Code-reviewer plan-time follow-up: document or consolidate.
+`validate-portability.ts` and `pnpm skills:check` (skills-adapter generator's `--check`) have diverging contracts and overlapping responsibilities. Code-expert plan-time follow-up: document or consolidate.
 
 **Disposition**: Track as follow-up; out of scope for this plan.
 
@@ -126,7 +126,7 @@ After Commit 1 specifically: `pnpm portability:check` must transition from curre
 
 ### Commit 1: Validator + runtime probe + pre-existing drift
 
-**Order**: This commit lands FIRST so the gate is never red on a committed state (per code-reviewer plan-time review §4).
+**Order**: This commit lands FIRST so the gate is never red on a committed state (per code-expert plan-time review §4).
 
 **Files**:
 
@@ -230,21 +230,21 @@ After Commit 1 specifically: `pnpm portability:check` must transition from curre
 
 ## Reviewer Dispatch (post-landing)
 
-Per code-reviewer plan-time review §"Specialist Coverage":
+Per code-expert plan-time review §"Specialist Coverage":
 
 | Specialist | Required | Reason |
 |---|---|---|
-| `code-reviewer` | Yes — gateway | Standard post-change review |
-| `architecture-reviewer-fred` | Yes — mandatory | Doctrine boundary cure (PDR-051 + ADR-125 amendment); his prior WARN cures here |
-| `docs-adr-reviewer` | Yes — mandatory | 5 ADRs + ~10 live docs touched; permanent docs with historical-vs-normative distinction |
-| `test-reviewer` | Yes — focused | `validate-fitness-vocabulary.unit.test.ts` fixture update; TDD evidence for any validator behaviour changes |
-| `config-reviewer` | Yes — focused | `validate-portability.ts` is a quality gate; line 247/264 fixes change gate correctness semantics |
+| `code-expert` | Yes — gateway | Standard post-change review |
+| `architecture-expert-fred` | Yes — mandatory | Doctrine boundary cure (PDR-051 + ADR-125 amendment); his prior WARN cures here |
+| `docs-adr-expert` | Yes — mandatory | 5 ADRs + ~10 live docs touched; permanent docs with historical-vs-normative distinction |
+| `test-expert` | Yes — focused | `validate-fitness-vocabulary.unit.test.ts` fixture update; TDD evidence for any validator behaviour changes |
+| `config-expert` | Yes — focused | `validate-portability.ts` is a quality gate; line 247/264 fixes change gate correctness semantics |
 
 ---
 
 ## Reviewer Findings (Plan-Time)
 
-Code-reviewer dispatch on this plan returned APPROVED WITH SUGGESTIONS. Five critical findings:
+Code-expert dispatch on this plan returned APPROVED WITH SUGGESTIONS. Five critical findings:
 
 1. **`chatgpt-report-normalisation.md` was misclassified** as already-thin pointer; actually contains 45 lines of substantive content (PUA character table, positional mapping rule, output contract). Reclassified to Group A (inline) above.
 2. **Commit ordering reversed** — validator refactor lands FIRST so the gate is never red on a committed state.
@@ -286,7 +286,7 @@ Plus four tracked follow-ups (see todo `follow-ups-tracked`).
 | Risk | Mitigation |
 |---|---|
 | Commit 1 health-probe changes break `pnpm health-probe` for other agents mid-flight | Run health probe before/after; verify no other parity check regresses |
-| ADR text edits accidentally rewrite history (Commit 3) | docs-adr-reviewer specifically briefed on historical-vs-normative; show diff before commit |
+| ADR text edits accidentally rewrite history (Commit 3) | docs-adr-expert specifically briefed on historical-vs-normative; show diff before commit |
 | Inline of 582-line consolidate-docs into canonical hits markdown lint or generator-format expectations | Run `pnpm markdownlint:root` + `pnpm skills:check` after each inline; canonical body length is unbounded by generator |
 | `.claude/settings.json` permission additions cause unintended permission grants | Only add `Skill()` and `Skill(:*)` for adapters that already exist; review diff carefully |
 

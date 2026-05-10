@@ -603,7 +603,7 @@ Adjacent:
 - Strategic plan:
   [mcp-specialist-upgrade.plan.md](archive/completed/mcp-specialist-upgrade.plan.md)
 - Goal:
-  - upgrade existing `mcp-reviewer` from a general reviewer to a full ADR-129
+  - upgrade existing `mcp-expert` from a general reviewer to a full ADR-129
     triplet (add skill, situational rule, live-spec-first doctrine)
   - include `@modelcontextprotocol/ext-apps` coverage (App Extensions, widget
     preview, iframe/CSP, host-specific behaviour)
@@ -613,7 +613,7 @@ Adjacent:
 - Delivered:
   - `.agent/skills/mcp-expert/SKILL.md` — canonical active workflow skill with doctrine hierarchy, tiered context, capability routing
   - `.cursor/skills/mcp-expert/SKILL.md` and `.agents/skills/mcp-expert/SKILL.md` — platform wrappers
-  - MCP quick-triage (#9) and worked example added to `invoke-code-reviewers.md`
+  - MCP quick-triage (#9) and worked example added to `invoke-code-experts.md`
   - Full wrapper parity audit across Cursor/Claude/Codex surfaces
   - Validation evidence: `subagents:check`, `portability:check`, `markdownlint:root` all passing
 - Notes:
@@ -649,13 +649,13 @@ Adjacent:
   - broad-remit security capability for threat models, defence in depth,
     supply-chain posture, secret lifecycle, and cross-system security trade-offs
   - explicitly complements rather than replaces the existing
-    `security-reviewer`, which remains the practical default security specialist
+    `security-expert`, which remains the practical default security specialist
 - Status: 📋 PLANNED (future/)
 - Notes:
   - intentionally outside the numbered phase sequence
   - broad-remit vs narrow-remit is a scope distinction, not a review-depth
     distinction
-  - complements `security-reviewer` by taking the deeper doctrine and posture
+  - complements `security-expert` by taking the deeper doctrine and posture
     lens rather than the default exploitability-first pass
 
 ### Adjacent — Web/API Security Specialist Capability
@@ -668,7 +668,7 @@ Adjacent:
   - narrow-remit security capability for HTTP trust boundaries, endpoint
     security, callbacks, sessions, CORS/CSRF, and API attack surfaces
   - explicitly complements the broad cyber security specialist, the practical
-    `security-reviewer`, and framework specialists such as Express, Clerk, and
+    `security-expert`, and framework specialists such as Express, Clerk, and
     MCP
 - Status: 📋 PLANNED (future/)
 - Notes:
@@ -693,7 +693,7 @@ Adjacent:
   - intentionally outside the numbered phase sequence
   - broad-remit vs narrow-remit is a scope distinction, not a review-depth
     distinction
-  - complements `security-reviewer` by taking privacy-governance correctness as
+  - complements `security-expert` by taking privacy-governance correctness as
     the primary lens
 
 ### Adjacent — Web/API GDPR Specialist Capability
@@ -766,7 +766,7 @@ Adjacent:
   - owner approved promotion
 - Notes:
   - intentionally outside the numbered phase sequence
-  - complements docs-adr-reviewer (which owns ADR content) — this specialist
+  - complements docs-adr-expert (which owns ADR content) — this specialist
     owns plan structure and lifecycle
 
 ### Adjacent — TDD Specialist Capability
@@ -780,15 +780,15 @@ Adjacent:
   - refined test level definitions aligned with industry terminology while
     keeping the "if it runs in CI, no IO" rule
   - the skill guides the testing approach at the START of work; the existing
-    test-reviewer audits the result AFTER
+    test-expert audits the result AFTER
   - covers the Red-Green-Refactor sequence at every level, anti-patterns
     (vi.mock, vi.stubGlobal, skipped tests), and test-level selection
 - Status: 📋 PLANNED (future/)
 - Notes:
   - intentionally outside the numbered phase sequence
   - refines and operationalises `.agent/directives/testing-strategy.md`
-  - relationship to test-reviewer: TDD specialist guides approach,
-    test-reviewer audits compliance
+  - relationship to test-expert: TDD specialist guides approach,
+    test-expert audits compliance
   - includes a **mutation testing sub-specialist** (Stryker JS) — focused on
     surviving mutant triage and remediation through better architecture and
     better tests, NOT through mutation-specific test hacks
@@ -813,7 +813,7 @@ Adjacent:
 - Status: 📋 PLANNED (future/)
 - Notes:
   - intentionally outside the numbered phase sequence
-  - complements OOCE (correctness) and onboarding-reviewer (first-time
+  - complements OOCE (correctness) and onboarding-expert (first-time
     journey) with an ongoing daily friction lens
   - the repo's users include both humans and AI agents — DX applies to both
 
@@ -822,7 +822,7 @@ Adjacent:
 - Strategic plan:
   [reviewer-gateway-upgrade.plan.md](current/reviewer-gateway-upgrade.plan.md)
 - Goal:
-  - upgrade `code-reviewer` from a code quality reviewer that also triages
+  - upgrade `code-expert` from a code quality reviewer that also triages
     to a Reviewer Gateway that also does baseline code quality
   - redesign the triage model from a flat checklist to a layered model
     (change category → domain signal → cross-cutting concerns) that scales
@@ -832,7 +832,7 @@ Adjacent:
   - rename directive, rule, and adapters (coordinated with taxonomy plan)
 - Status: ⏭️ QUEUED (current/)
 - Notes:
-  - the gateway's role has outgrown its `code-reviewer` name
+  - the gateway's role has outgrown its `code-expert` name
   - execution shares rename mechanics with the Agent Classification Taxonomy
     plan — should be coordinated
   - triage model redesign can be drafted independently of the rename
@@ -858,8 +858,8 @@ Adjacent:
     Cursor, Codex, future packs not yet authored
   - complementary to AGN below (internal wrappers via manifest) — both
     populate the same Layer-2 directories without overlapping concerns
-  - reviewer set: `assumptions-reviewer`,
-    `architecture-reviewer-fred|betty|barney|wilma`
+  - reviewer set: `assumptions-expert`,
+    `architecture-expert-fred|betty|barney|wilma`
 
 ### Adjacent — Manifest-Driven Adapter Generation (AGN)
 
@@ -997,13 +997,13 @@ specialists, not deferred.
 | Zod 4.x patterns (env, OpenAPI, SDK, CLI) | OOCE | Internal validation pattern, not external service |
 | Codegen pipeline (OpenAPI → types → Zod → SDK → vocab → MCP) | OOCE | Internal composition pattern |
 | TypeDoc API doc generation | OOCE | Generated files concern |
-| CI/CD config (GitHub Actions, semantic-release) | config-reviewer | CI config is tooling config |
+| CI/CD config (GitHub Actions, semantic-release) | config-expert | CI config is tooling config |
 | Vercel deployment specifics | Express specialist | Already in Express scope |
 | Broad security posture and threat modelling | Cyber security specialist | Distinct from exploitability-first security review |
 | HTTP/API boundary hardening | Web/API security specialist | Narrow trust-boundary and attack-surface expertise |
 | Broad privacy-by-design posture | Privacy specialist | Distinct from exploitability-focused security review |
 | Personal-data obligations at API boundaries | Web/API GDPR specialist | Narrow data-rights and retention-semantics expertise |
-| Secrets lifecycle/rotation | security-reviewer | Security concern |
+| Secrets lifecycle/rotation | security-expert | Security concern |
 | Commander CLI framework | DevX specialist | CLI ergonomics (area 4) |
 
 ### No specialist needed
@@ -1029,20 +1029,20 @@ specialists, not deferred.
 - agents are **not** synonymous with reviewers — the future taxonomy also
   supports advisory, research, and process-enabling roles
 - the four new security/privacy additions are best understood as additive
-  future specialist capabilities, not replacements for `security-reviewer`
+  future specialist capabilities, not replacements for `security-expert`
 
 **Always-on (invoked for every non-trivial change):**
 
-- Reviewer Gateway (upgraded from code-reviewer)
+- Reviewer Gateway (upgraded from code-expert)
 
 **Standard roster (invoked when change profile matches):**
 
-- type-reviewer, test-reviewer, docs-adr-reviewer, config-reviewer,
-  security-reviewer, architecture reviewers (fred/barney/betty/wilma)
+- type-expert, test-expert, docs-adr-expert, config-expert,
+  security-expert, architecture reviewers (fred/barney/betty/wilma)
 
 **Domain specialists (ADR-129 triplets, invoked on domain signal):**
 
-- elasticsearch-reviewer ✅, clerk-reviewer ✅, mcp-reviewer ✅ (triplet complete),
+- elasticsearch-expert ✅, clerk-expert ✅, mcp-expert ✅ (triplet complete),
   sentry specialist 🔄, express specialist 📋, cyber security specialist 📋,
   web/API security specialist 📋, privacy specialist 📋,
   web/API GDPR specialist 📋, ooce specialist 📋
@@ -1059,8 +1059,8 @@ specialists, not deferred.
 
 **Situational (on-demand, not tied to change profile):**
 
-- release-readiness-reviewer, ground-truth-designer, subagent-architect,
-  onboarding-reviewer
+- release-readiness-expert, ground-truth-designer, subagent-architect,
+  onboarding-expert
 
 ---
 

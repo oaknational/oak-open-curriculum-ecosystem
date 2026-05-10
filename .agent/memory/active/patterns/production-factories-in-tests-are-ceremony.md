@@ -97,7 +97,7 @@ Not just production factories. Any complex function imported into a
 test that isn't the directly-tested unit is suspect. A "simple helper
 function" that happens to be in product code and happens to be
 convenient to call from a test is a candidate ceremony case. The
-test-reviewer applies this broadly.
+test-expert applies this broadly.
 
 ## Related
 

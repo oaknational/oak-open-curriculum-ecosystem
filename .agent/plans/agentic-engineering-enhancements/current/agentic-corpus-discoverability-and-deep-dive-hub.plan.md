@@ -127,7 +127,7 @@ Create the new index surfaces first:
   research README, and practice index
 
 **Execution checkpoint**:
-run `docs-adr-reviewer` after this mesh exists, before broader `/docs/**`
+run `docs-adr-expert` after this mesh exists, before broader `/docs/**`
 changes.
 
 ### Phase 2: Human-facing docs discovery surfaces
@@ -146,11 +146,11 @@ documentation sync log.
 
 ### Phase 3: Review, sync, and validation
 
-- `docs-adr-reviewer` execution checkpoint (local mesh)
-- `docs-adr-reviewer` mid-execution checkpoint (`/docs/**` surfaces)
-- `onboarding-reviewer` paired mid-execution review because root/foundation
+- `docs-adr-expert` execution checkpoint (local mesh)
+- `docs-adr-expert` mid-execution checkpoint (`/docs/**` surfaces)
+- `onboarding-expert` paired mid-execution review because root/foundation
   docs are updated
-- final `docs-adr-reviewer` pass on the full diff plus the documentation sync
+- final `docs-adr-expert` pass on the full diff plus the documentation sync
   entry
 - documentation sync log update with explicit ADR-119/practice.md/no-change
   rationale where appropriate
@@ -182,10 +182,10 @@ documentation sync log.
 
 ## Reviewer Matrix
 
-- **Planning checkpoint**: completed with `docs-adr-reviewer`
-- **Execution checkpoint**: `docs-adr-reviewer`
-- **Mid-execution checkpoint**: `docs-adr-reviewer` + `onboarding-reviewer`
-- **Final checkpoint**: `docs-adr-reviewer`
+- **Planning checkpoint**: completed with `docs-adr-expert`
+- **Execution checkpoint**: `docs-adr-expert`
+- **Mid-execution checkpoint**: `docs-adr-expert` + `onboarding-expert`
+- **Final checkpoint**: `docs-adr-expert`
 
 ## Deterministic Validation
 

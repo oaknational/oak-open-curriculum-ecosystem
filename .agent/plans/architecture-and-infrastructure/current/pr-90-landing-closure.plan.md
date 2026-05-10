@@ -167,9 +167,9 @@ This exemplifies the first question from `principles.md`: **"Could it be simpler
 ## Reviewer Scheduling (phase-aligned)
 
 - **Pre-execution**: skipped — work is mechanical fixes against established patterns; no design-class question to challenge.
-- **During Phase 1**: `code-reviewer` gateway after the TS-invocation commit.
-- **During Phase 2**: `test-reviewer` if any test-file Sonar fix changes test behaviour; otherwise `code-reviewer` only.
-- **Post**: `release-readiness-reviewer` once all gates green and MCP manual validation is owner-confirmed.
+- **During Phase 1**: `code-expert` gateway after the TS-invocation commit.
+- **During Phase 2**: `test-expert` if any test-file Sonar fix changes test behaviour; otherwise `code-expert` only.
+- **Post**: `release-readiness-expert` once all gates green and MCP manual validation is owner-confirmed.
 
 ---
 

@@ -75,7 +75,7 @@ original four-commit, plans-only EEF restructure:
 - It says **"plans-only architectural restructure across 27 files"**.
 - It lists four commits (`0224429b`, `e70bbc73`, `c7e4828c`, `c7063541`).
 - It frames the main remaining work as owner direction on nine architectural
-  planning findings and type-reviewer escalation for future implementation.
+  planning findings and type-expert escalation for future implementation.
 
 The PR branch currently contains:
 
@@ -188,7 +188,7 @@ the tested source surface. Sonar PR 93 now reports 0 hotspots.
 
 ### P2: Stale Clerk version comment in auth-info-schema.ts
 
-Source: clerk-reviewer step 10 dispatch (2026-05-06).
+Source: clerk-expert step 10 dispatch (2026-05-06).
 
 `apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/auth-info-schema.ts:34-36`
 contains a comment citing `@clerk/mcp-tools@0.3.1` behaviour. `package.json` pins
@@ -200,7 +200,7 @@ and keep only the behavioural assertion ("does not set `resource`").
 
 ### P2: .env.example missing local-dev DSN-pollution warning
 
-Source: sentry-reviewer step 10 dispatch (2026-05-06).
+Source: sentry-expert step 10 dispatch (2026-05-06).
 
 Running `SENTRY_MODE=sentry` locally with a production DSN emits events tagged
 `environment=development` to the shared Sentry project. `.env.example:39-44`
@@ -212,7 +212,7 @@ personal DSN or `SENTRY_MODE=fixture` for local capture testing.
 
 ### P2: Missing contract test for local-dev release identifier shape
 
-Source: sentry-reviewer step 10 dispatch (2026-05-06).
+Source: sentry-expert step 10 dispatch (2026-05-06).
 
 ADR-163 §1 states that `VERCEL_ENV` unset (local dev) should produce a
 `dev-<shortSha>` release tag. `config-resolution.ts` runtime resolver may return

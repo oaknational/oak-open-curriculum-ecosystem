@@ -287,10 +287,10 @@ pnpm test:e2e
 
 At each phase completion checkpoint, record reviewer outcomes and required follow-ups:
 
-1. Always: `code-reviewer`, `docs-adr-reviewer`
-2. Structural/config phases (2, 4, 5): `architecture-reviewer-barney`, `architecture-reviewer-fred`, `architecture-reviewer-betty`, `config-reviewer`
-3. Test and type remediation phases (1, 3): `test-reviewer`, `type-reviewer`
-4. Auth-sensitive changes: `security-reviewer`
+1. Always: `code-expert`, `docs-adr-expert`
+2. Structural/config phases (2, 4, 5): `architecture-expert-barney`, `architecture-expert-fred`, `architecture-expert-betty`, `config-expert`
+3. Test and type remediation phases (1, 3): `test-expert`, `type-expert`
+4. Auth-sensitive changes: `security-expert`
 
 Do not mark a phase as complete until required reviewer findings are either fixed or explicitly carried as dated follow-up debt.
 

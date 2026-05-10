@@ -106,7 +106,7 @@ Three converging reasons:
 
 ## Pre-condition for any future re-import
 
-Per `architecture-reviewer-fred`'s post-cleanup review of commit
+Per `architecture-expert-fred`'s post-cleanup review of commit
 `153e960b`: the open `npx skills add` flow lands skills directly at
 `.agents/skills/<id>/SKILL.md` (unprefixed) and is safe in isolation.
 But the repo's existing
@@ -157,7 +157,7 @@ and do not re-vendor into `.agent/skills/`.
   (a surface retired in Wave 1 of skills standardisation). Out of
   scope for this cleanup; archive when the remediation plan
   completes.
-- `docs-adr-reviewer` (post-cleanup review) flagged six current-tier
+- `docs-adr-expert` (post-cleanup review) flagged six current-tier
   plans/reports whose narrative still describes `skills-lock.json` as
   containing 12 entries: `agent-artefact-load-pressure-relief.plan.md`,
   `agent-artefact-portability-audit-2026-05-06.report.md`,

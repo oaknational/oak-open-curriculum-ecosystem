@@ -21,7 +21,7 @@ Load `.agent/skills/start-right-thorough/shared/start-right-thorough.md` and enf
 3. Convert the workflow content into active commitments for this session:
    - use one-gate-at-a-time quality validation for non-trivial work
    - include explicit re-grounding points in any long-running execution plan
-   - enforce reviewer invocation discipline per `invoke-code-reviewers`
+   - enforce reviewer invocation discipline per `invoke-code-experts`
 4. Post a concise grounding summary to the user that confirms the thorough workflow is active.
 5. Continue the user task while enforcing these commitments.
 

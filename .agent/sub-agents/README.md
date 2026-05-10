@@ -35,7 +35,7 @@ Before finalising changes to templates or wrappers:
 - [ ] Templates include the shared identity declaration component (`.agent/sub-agents/components/behaviours/subagent-identity.md`).
 - [ ] Shared governance references are present and current (`.agent/directives/AGENT.md`, `.agent/directives/principles.md`).
 - [ ] Domain-specific references are explicit and all paths resolve.
-- [ ] Legacy generic agent names are not used in active guidance (for example, `architecture-reviewer`).
+- [ ] Legacy generic agent names are not used in active guidance (for example, `architecture-expert`).
 - [ ] Architecture reviewer wrapper descriptions are distinct and lens-specific.
 - [ ] Standard quality roster and specialist on-demand roster are clearly separated in coordination docs.
 - [ ] Consumer wrappers keep template loading as the first action.

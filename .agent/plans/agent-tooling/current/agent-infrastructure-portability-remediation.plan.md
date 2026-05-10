@@ -78,11 +78,11 @@ Before any non-planning edits:
    - `.agent/directives/schema-first-execution.md`
 2. **Build-vs-Buy attestation**: not applicable — this plan
    remediates existing infrastructure, no new vendor adoption.
-3. **Reviewer phase-alignment**: `assumptions-reviewer` PRE
-   (validate audit claims); `architecture-reviewer-barney` and
-   `architecture-reviewer-fred` MID (boundary and ADR
-   compliance); `config-reviewer` MID (validator script
-   changes); `docs-adr-reviewer` and `onboarding-reviewer`
+3. **Reviewer phase-alignment**: `assumptions-expert` PRE
+   (validate audit claims); `architecture-expert-barney` and
+   `architecture-expert-fred` MID (boundary and ADR
+   compliance); `config-expert` MID (validator script
+   changes); `docs-adr-expert` and `onboarding-expert`
    POST (documentation updates).
 
 ---

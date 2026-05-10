@@ -13,7 +13,7 @@ todos:
   - id: p1-prompt-integration
     content: "Integrate claim requirements into start-right and review prompts."
     status: pending
-  - id: p1-reviewer-integration
+  - id: p1-expert-integration
     content: "Integrate claim checks into reviewer templates."
     status: pending
   - id: p1-pilot
@@ -51,10 +51,10 @@ rg -n "non-trivial claim|verified|partially verified|unverified|claim-to-evidenc
   .agent/skills/start-right-quick/shared/start-right.md \
   .agent/skills/start-right-thorough/shared/start-right-thorough.md \
   .agent/prompts/archive/gt-review.md \
-  .agent/sub-agents/templates/code-reviewer.md \
-  .agent/sub-agents/templates/architecture-reviewer.md \
-  .agent/sub-agents/templates/test-reviewer.md \
-  .agent/sub-agents/templates/security-reviewer.md
+  .agent/sub-agents/templates/code-expert.md \
+  .agent/sub-agents/templates/architecture-expert.md \
+  .agent/sub-agents/templates/test-expert.md \
+  .agent/sub-agents/templates/security-expert.md
 ```
 
 Expected initial baseline: little/no explicit hallucination-guard vocabulary.
@@ -73,10 +73,10 @@ cp .agent/plans/agentic-engineering-enhancements/evidence-bundle.template.md \
    - `.agent/skills/start-right-thorough/shared/start-right-thorough.md`
    - `.agent/prompts/archive/gt-review.md`
 2. Reviewer template integration second:
-   - `.agent/sub-agents/templates/code-reviewer.md`
-   - `.agent/sub-agents/templates/test-reviewer.md`
-   - `.agent/sub-agents/templates/architecture-reviewer.md`
-   - `.agent/sub-agents/templates/security-reviewer.md`
+   - `.agent/sub-agents/templates/code-expert.md`
+   - `.agent/sub-agents/templates/test-expert.md`
+   - `.agent/sub-agents/templates/architecture-expert.md`
+   - `.agent/sub-agents/templates/security-expert.md`
 3. Calibration and pilot evidence third:
    - `.agent/plans/agentic-engineering-enhancements/evidence/*.evidence.md`
    - `.agent/plans/agentic-engineering-enhancements/documentation-sync-log.md` (Phase 1 section)
@@ -120,10 +120,10 @@ cp .agent/plans/agentic-engineering-enhancements/evidence-bundle.template.md \
 ### Task 1.3: Reviewer Template Integration
 
 - Target files:
-  - `.agent/sub-agents/templates/code-reviewer.md`
-  - `.agent/sub-agents/templates/architecture-reviewer.md`
-  - `.agent/sub-agents/templates/test-reviewer.md`
-  - `.agent/sub-agents/templates/security-reviewer.md`
+  - `.agent/sub-agents/templates/code-expert.md`
+  - `.agent/sub-agents/templates/architecture-expert.md`
+  - `.agent/sub-agents/templates/test-expert.md`
+  - `.agent/sub-agents/templates/security-expert.md`
 - Deterministic validation:
   - `rg -n "claim|evidence|unsupported" .agent/sub-agents/templates/*reviewer*.md`
 

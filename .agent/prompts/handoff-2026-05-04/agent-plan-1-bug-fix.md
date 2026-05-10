@@ -68,11 +68,11 @@ still raise it. Only the dev path stops raising it.
 
 ## Reviewer dispatch
 
-- `type-reviewer` (Result-typed function, discriminated unions, no
+- `type-expert` (Result-typed function, discriminated unions, no
   `as`/`!`/`unknown`).
-- `test-reviewer` (TDD-as-pairs cycle correctness; the regression-
+- `test-expert` (TDD-as-pairs cycle correctness; the regression-
   guard cases prove the dev fall-through is environment-bounded).
-- `code-reviewer` gateway.
+- `code-expert` gateway.
 
 ## Coordination
 

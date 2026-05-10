@@ -43,14 +43,14 @@ Before any non-planning edits:
    name why bespoke was chosen OR which first-party option was
    adopted. Sunk-cost reasoning is not a valid answer. See
    `feature-workstream-template.md` §Build-vs-Buy Attestation for the
-   canonical prose. `assumptions-reviewer` must run against this
+   canonical prose. `assumptions-expert` must run against this
    attestation before the plan is marked READY FOR EXECUTION.
 3. **Reviewer phase-alignment**: plan-phase reviewers
-   (`assumptions-reviewer`, vendor specialist) fire PRE-execution;
-   mid-cycle reviewers (`test-reviewer`, `type-reviewer`, architecture
-   family, `code-reviewer`) fire DURING; close reviewers
-   (`docs-adr-reviewer`, `onboarding-reviewer`,
-   `release-readiness-reviewer`) fire POST. Scheduling all reviewers
+   (`assumptions-expert`, vendor specialist) fire PRE-execution;
+   mid-cycle reviewers (`test-expert`, `type-expert`, architecture
+   family, `code-expert`) fire DURING; close reviewers
+   (`docs-adr-expert`, `onboarding-expert`,
+   `release-readiness-expert`) fire POST. Scheduling all reviewers
    at close is a phase-misalignment anti-pattern.
 4. **Lifecycle triggers**: apply
    [`lifecycle-triggers.md`](components/lifecycle-triggers.md). Record

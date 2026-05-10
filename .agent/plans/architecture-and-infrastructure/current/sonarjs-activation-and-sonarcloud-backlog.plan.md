@@ -174,11 +174,11 @@ The gate itself is the lasting artefact. The fixes are a one-time cost. Activati
 
 ## Reviewer Scheduling (phase-aligned)
 
-- **Pre-execution (Phase 0 close)**: `assumptions-reviewer` on the Phase 0 baseline — challenges the tranche design before fixing begins. `code-reviewer` gateway.
-- **Per-phase**: `code-reviewer` after each phase's commits. `test-reviewer` if any fix touches test code (many auto-fixes will). `type-reviewer` if any fix involves assertions or Record widening.
-- **Phase 3 (security)**: `security-reviewer` on every commit that changes trust-boundary code or touches publicly-writable-directory patterns.
-- **Post (Phase 5 close)**: `docs-adr-reviewer` on the final commit's ADR/readme updates; `release-readiness-reviewer` as the final go/no-go.
-- **On gate-out**: `assumptions-reviewer` re-runs on the deferral rationale to catch convenience phrasing (PDR-026).
+- **Pre-execution (Phase 0 close)**: `assumptions-expert` on the Phase 0 baseline — challenges the tranche design before fixing begins. `code-expert` gateway.
+- **Per-phase**: `code-expert` after each phase's commits. `test-expert` if any fix touches test code (many auto-fixes will). `type-expert` if any fix involves assertions or Record widening.
+- **Phase 3 (security)**: `security-expert` on every commit that changes trust-boundary code or touches publicly-writable-directory patterns.
+- **Post (Phase 5 close)**: `docs-adr-expert` on the final commit's ADR/readme updates; `release-readiness-expert` as the final go/no-go.
+- **On gate-out**: `assumptions-expert` re-runs on the deferral rationale to catch convenience phrasing (PDR-026).
 
 Scheduling every reviewer at close would be phase-misalignment. See `feature-workstream-template.md` §Reviewer Scheduling for rationale.
 
@@ -276,7 +276,7 @@ ls .agent/plans/architecture-and-infrastructure/current/sonarcloud-baseline.md
 grep -E "Phase [1-4] targets" .agent/plans/architecture-and-infrastructure/current/sonarjs-activation-and-sonarcloud-backlog.plan.md
 ```
 
-**Gate after Phase 0** (`assumptions-reviewer` run required): do the tranche counts match the severity-ordered phase shape, or does the data suggest a different order? Reviewer may recommend reordering or re-tranching before Phase 1.
+**Gate after Phase 0** (`assumptions-expert` run required): do the tranche counts match the severity-ordered phase shape, or does the data suggest a different order? Reviewer may recommend reordering or re-tranching before Phase 1.
 
 ---
 
@@ -298,7 +298,7 @@ Temporarily re-enable full sonarjs rules; run `pnpm lint:fix`; commit the auto-f
 4. ✅ Residual violation count (non-autofixable) recorded — this is the manual budget for Phases 2–4.
 5. ✅ Residual count committed into the baseline file.
 
-**Risk**: some autofixes for rules like `prefer-regex-literals` or `no-nested-template-literals` change code structure. `test-reviewer` must spot-check autofixed test files; `code-reviewer` gateway confirms no behaviour regression in autofixed product code.
+**Risk**: some autofixes for rules like `prefer-regex-literals` or `no-nested-template-literals` change code structure. `test-expert` must spot-check autofixed test files; `code-expert` gateway confirms no behaviour regression in autofixed product code.
 
 **Deterministic Validation**:
 
@@ -336,7 +336,7 @@ Concurrent: SonarCloud BUG-severity issues without a local sonarjs equivalent ar
 4. ✅ `pnpm test` exits 0.
 5. ✅ Every bug fix in product code has a regression test (TDD compliance per `.agent/directives/testing-strategy.md`).
 
-**Reviewer**: `test-reviewer` on every commit that touches a test file (ADR-078 compliance); `code-reviewer` gateway on every commit.
+**Reviewer**: `test-expert` on every commit that touches a test file (ADR-078 compliance); `code-expert` gateway on every commit.
 
 **Gate after Phase 2**: correctness floor reached. If Phase 3's security work is expected to exceed 20h and the current branch has drifted significantly from main, legitimate gate-out point — open a follow-up plan for Phases 3–5 and ship Phase 2 as a standalone PR.
 
@@ -356,7 +356,7 @@ The one `vulnerabilities` entry from SonarCloud is identified in Phase 0, audite
 
 1. ✅ `vulnerabilities` metric = 0.
 2. ✅ `security_rating` improves from 5.0 (E) — target 1.0 (A).
-3. ✅ `security-reviewer` sub-agent reviewed the fix before commit.
+3. ✅ `security-expert` sub-agent reviewed the fix before commit.
 
 #### Task 3.2: Triage and resolve the 169 security hotspots
 
@@ -370,7 +370,7 @@ Walk the hotspot list from Phase 0. For each:
 
 1. ✅ Every hotspot is in one of states: FIXED (code changed), ACCEPTED (rationale recorded), FALSE_POSITIVE (rationale recorded). No hotspot left in `TO_REVIEW`.
 2. ✅ Each accepted/false-positive rationale satisfies PDR-026 deferral-honesty shape (named constraint OR named trade-off + evidence + falsifiability).
-3. ✅ `security-reviewer` sub-agent reviewed the triage results.
+3. ✅ `security-expert` sub-agent reviewed the triage results.
 
 **Gate after Phase 3**: security floor reached. Second legitimate gate-out point. Phase 4 (smells) is pure maintainability; deferring it to a follow-up plan ships the correctness+security win while deferring the style tail.
 
@@ -454,7 +454,7 @@ Remove the "pending activation" comment block. Rebuild `@oaknational/eslint-plug
 
 ### Unit Tests
 
-Autofixes that change test code (void-use removal, ternary extraction) must be spot-checked by `test-reviewer`. No new unit tests are inherently required by sonarjs rule fixes, but bug fixes in product code during Phase 2 must have regression coverage.
+Autofixes that change test code (void-use removal, ternary extraction) must be spot-checked by `test-expert`. No new unit tests are inherently required by sonarjs rule fixes, but bug fixes in product code during Phase 2 must have regression coverage.
 
 ### Integration Tests
 
@@ -529,9 +529,9 @@ Autofixes that change test code (void-use removal, ternary extraction) must be s
 
 | Risk | Likelihood | Impact | Mitigation |
 |---|---|---|---|
-| Autofix changes test behaviour silently | Medium | High | `test-reviewer` spot-checks autofixed test files; `pnpm test` gates every commit in Phase 1. |
-| A bug fix in Phase 2 breaks a passing (but incorrect) test | Medium | High | TDD compliance — rewrite the test first, then the product code; `test-reviewer` enforces. |
-| Security hotspot triage misses a real risk via over-aggressive FALSE_POSITIVE | Low | Very High | `security-reviewer` sub-agent reviews every ACCEPTED / FALSE_POSITIVE rationale. |
+| Autofix changes test behaviour silently | Medium | High | `test-expert` spot-checks autofixed test files; `pnpm test` gates every commit in Phase 1. |
+| A bug fix in Phase 2 breaks a passing (but incorrect) test | Medium | High | TDD compliance — rewrite the test first, then the product code; `test-expert` enforces. |
+| Security hotspot triage misses a real risk via over-aggressive FALSE_POSITIVE | Low | Very High | `security-expert` sub-agent reviews every ACCEPTED / FALSE_POSITIVE rationale. |
 | Phase 4 code-smell fixes destabilise large files via cognitive-complexity rewrites | Medium | Medium | Prefer inline suppression with rationale over contorted rewrites; the rule is secondary to the code's readability. |
 | Plan stalls mid-flight | High | Medium | Explicit gate-out points at phase boundaries; each gate-out produces a defensible shippable invariant (correctness floor, security floor) and opens a follow-up plan. |
 | SonarCloud analysis drifts from local during the long Phase 4 | Medium | Low | Don't merge to main mid-flight; run local gates against the baseline; check SonarCloud after final merge only. |
@@ -553,7 +553,7 @@ Autofixes that change test code (void-use removal, ternary extraction) must be s
 
 **Sunk-cost check**: this repo has no prior bespoke implementation to preserve. No sunk cost in play.
 
-`assumptions-reviewer` validates this attestation at Phase 0 close.
+`assumptions-expert` validates this attestation at Phase 0 close.
 
 ---
 

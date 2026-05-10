@@ -47,9 +47,9 @@ specialist's grounded assessment wins.
 
 ## Evidence
 
-Sentry canonical alignment plan (2026-04-12): architecture-reviewer-betty
+Sentry canonical alignment plan (2026-04-12): architecture-expert-betty
 proposed `withScope()` callback pattern to prevent scope leakage.
-The sentry-reviewer checked official docs and found `@sentry/node` v8+
+The sentry-expert checked official docs and found `@sentry/node` v8+
 isolation scopes already prevent the leakage. Similarly,
-architecture-reviewer-wilma assumed `setupExpressErrorHandler` is
-terminal — sentry-reviewer verified it passes control onward.
+architecture-expert-wilma assumed `setupExpressErrorHandler` is
+terminal — sentry-expert verified it passes control onward.

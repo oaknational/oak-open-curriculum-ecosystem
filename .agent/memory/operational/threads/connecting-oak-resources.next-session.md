@@ -114,10 +114,10 @@ commit `82b3a792`) + Phase 3 (3 slice plans authored, commit
 `oak-misconceptions-eef-cross-corpus-surface.plan.md`) + Phase 4
 (2 BLOCKERs remediated, 6 FINDINGS deferred, commit `0899ba93`) +
 Phase 5 (spine + thread record updates). Reviewer scope reduced per
-owner direction: `code-reviewer` + `assumptions-reviewer` in series
-across phases 1 + 4; `architecture-reviewer-betty` for topology in
-parallel; out-of-scope reviewers (`mcp-reviewer`, `docs-adr-reviewer`,
-`architecture-reviewer-fred`) explicitly skipped this session.
+owner direction: `code-expert` + `assumptions-expert` in series
+across phases 1 + 4; `architecture-expert-betty` for topology in
+parallel; out-of-scope reviewers (`mcp-expert`, `docs-adr-expert`,
+`architecture-expert-fred`) explicitly skipped this session.
 **Next session = decision-completeness closeout (per owner direction
 2026-05-07; implementation OUT of scope for this branch)**: absorb
 topology BLOCKERs into `graph-stack.plan.md` and ADR-173, absorb
@@ -283,7 +283,7 @@ gate.
 **MVP-arc PLANNING is CLOSED on substance**. Spine + three slice
 plans + topology review + reviewer-driven BLOCKER remediation all
 landed 2026-05-07 in a single session (Breezy Navigating Sail). The
-2026-05-07 opener for parallel specialist-reviewer pass is
+2026-05-07 opener for parallel specialist-expert pass is
 **superseded** — that pass ran in Phase 1 of the closure session; do
 NOT re-run. The slice-2 / slice-3a / slice-3b plan-authoring work is
 **complete** in `current/`; do NOT re-author.
@@ -327,7 +327,7 @@ on a separate branch):
 ## Topology Findings Surfaced 2026-05-07 (Closed Dispositions)
 
 Phase 1 of the single-session planning closure (Breezy Navigating Sail
-/ cursor / claude-opus-4.7 / `9edbd1`) ran `architecture-reviewer-betty`
+/ cursor / claude-opus-4.7 / `9edbd1`) ran `architecture-expert-betty`
 in parallel with the MVP-arc reviewer batch. The topology surface
 itself was out of scope for that session per owner direction. PR #102 closeout
 absorbed the planning-doc side of both findings without promoting graph-stack
@@ -357,8 +357,8 @@ execution-prep blockers.
 
 ## Phase 4 FINDINGS for Execution-Prep Absorption (Surfaced 2026-05-07)
 
-Phase 4 of the single-session planning closure ran `code-reviewer` +
-`assumptions-reviewer` in parallel over the three slice plans
+Phase 4 of the single-session planning closure ran `code-expert` +
+`assumptions-expert` in parallel over the three slice plans
 authored at `776df6b7`. Two BLOCKERs were remediated same-session
 (commit `0899ba93` — slice-3b composition-by-name conceptual mistake
 across slices 2, 3a, and 3b). Two trivial FINDINGS were absorbed by
@@ -399,8 +399,8 @@ decision-completeness.
 
 ## Closeout Reviewer Pass 2026-05-07
 
-Tidal Surfing Lighthouse ran `docs-adr-reviewer`, `code-reviewer`, and
-`assumptions-reviewer` after the initial closeout fixes. Actionable
+Tidal Surfing Lighthouse ran `docs-adr-expert`, `code-expert`, and
+`assumptions-expert` after the initial closeout fixes. Actionable
 follow-ups absorbed in the same pass:
 
 - ADR-173 made self-contained: no permanent ADR links to ephemeral

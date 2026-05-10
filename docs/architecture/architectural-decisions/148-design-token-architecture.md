@@ -2,7 +2,7 @@
 
 **Status**: Accepted
 **Date**: 2026-04-02
-**Related**: [ADR-041 (Workspace Structure)](041-workspace-structure-option-a.md), [ADR-129 (Domain Specialist Capability Pattern)](129-domain-specialist-capability-pattern.md), [ADR-141 (MCP Apps Standard)](141-mcp-apps-standard-primary.md), [ADR-149 (Frontend Specialist Expert Gateway Cluster)](149-frontend-specialist-reviewer-gateway-cluster.md)
+**Related**: [ADR-041 (Workspace Structure)](041-workspace-structure-option-a.md), [ADR-129 (Domain Specialist Capability Pattern)](129-domain-specialist-capability-pattern.md), [ADR-141 (MCP Apps Standard)](141-mcp-apps-standard-primary.md), [ADR-149 (Frontend Specialist Expert Gateway Cluster)](149-frontend-specialist-expert-gateway-cluster.md)
 
 ## Context
 

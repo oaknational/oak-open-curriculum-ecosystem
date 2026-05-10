@@ -11,9 +11,9 @@ Invoke this agent whenever documentation may have drifted from the current state
 
 ### Not This Agent When
 
-- The question is about onboarding path quality or contributor journey flow — use `onboarding-reviewer` instead
-- The concern is an architectural boundary or compliance issue in the code itself — use the `architecture-reviewer` family instead
-- The issue is test quality or TDD compliance — use `test-reviewer` instead
+- The question is about onboarding path quality or contributor journey flow — use `onboarding-expert` instead
+- The concern is an architectural boundary or compliance issue in the code itself — use the `architecture-expert` family instead
+- The issue is test quality or TDD compliance — use `test-expert` instead
 
 ---
 
@@ -104,8 +104,8 @@ Review for:
 
 This agent reviews documentation quality and drift. It does NOT:
 
-- Review code quality or style (that is `code-reviewer`)
-- Review test quality or TDD compliance (that is `test-reviewer`)
+- Review code quality or style (that is `code-expert`)
+- Review test quality or TDD compliance (that is `test-expert`)
 - Review architecture compliance or boundary violations (that is the architecture reviewers)
 - Modify any files (observe and report only)
 
@@ -157,10 +157,10 @@ Structure your review as:
 
 | Issue Type | Recommended Specialist |
 |------------|------------------------|
-| Architecture decision ambiguity or boundary concerns | `architecture-reviewer-barney` or `architecture-reviewer-fred` |
-| Security guidance missing or incorrect in docs | `security-reviewer` |
-| Behaviour change lacks tests to back documentation claims | `test-reviewer` |
-| Code quality issues discovered during docs review | `code-reviewer` |
+| Architecture decision ambiguity or boundary concerns | `architecture-expert-barney` or `architecture-expert-fred` |
+| Security guidance missing or incorrect in docs | `security-expert` |
+| Behaviour change lacks tests to back documentation claims | `test-expert` |
+| Code quality issues discovered during docs review | `code-expert` |
 
 ## Success Metrics
 

@@ -18,10 +18,10 @@ related_indices:
 adr_amendments_required:
   - "ADR-123: record `curriculum://oak-kg-threads` resource + `oak-kg-get-thread-content` tool"
 specialist_reviewers:
-  - mcp-reviewer
-  - test-reviewer
-  - type-reviewer
-  - code-reviewer
+  - mcp-expert
+  - test-expert
+  - type-expert
+  - code-expert
 foundation_alignment:
   - .agent/directives/principles.md
   - .agent/directives/testing-strategy.md
@@ -65,7 +65,7 @@ todos:
     status: pending
     depends_on: [ws4-adr-123-update]
   - id: ws6-adversarial-review
-    content: "WS6: dispatch `mcp-reviewer` (MCP spec + tool shape + namespace conformance) + `test-reviewer` (TDD pair audit, no audit-shaped tests, no skipped tests) + `code-reviewer` (gateway). Document findings; remediate or queue."
+    content: "WS6: dispatch `mcp-expert` (MCP spec + tool shape + namespace conformance) + `test-expert` (TDD pair audit, no audit-shaped tests, no skipped tests) + `code-expert` (gateway). Document findings; remediate or queue."
     status: pending
     depends_on: [ws5-quality-gates]
   - id: ws7-spine-gate-2-close
@@ -179,7 +179,7 @@ discipline, not a downstream-composition dependency.
    verified (Thread is a forward edge from Unit; resolution requires
    inverse lookup).
 4. ADR-123 records the new primitives.
-5. Specialist review by `mcp-reviewer` (mid-cycle and at WS6 close).
+5. Specialist review by `mcp-expert` (mid-cycle and at WS6 close).
 
 ## Workstreams
 
@@ -293,11 +293,11 @@ pnpm test && pnpm test:ui && pnpm test:e2e
 
 Dispatch:
 
-- `mcp-reviewer` — MCP spec + tool/resource shape + namespace
+- `mcp-expert` — MCP spec + tool/resource shape + namespace
   conformance + descriptor + NL guidance quality
-- `test-reviewer` — TDD pair audit; no audit-shaped tests; no skipped
+- `test-expert` — TDD pair audit; no audit-shaped tests; no skipped
   tests
-- `code-reviewer` — gateway; routes to additional specialists if
+- `code-expert` — gateway; routes to additional specialists if
   warranted
 
 ### WS7 — Spine gate-2 close
@@ -316,7 +316,7 @@ This does not gate slice 3b, which composes EEF and misconceptions only.
 | `graph-corpus-sdk` Oak Curriculum Ontology adapter API drifts before slice-2 execution | Plan locks against named substrate primitives, not signatures; cycles re-validate when substrate lands. |
 | Inverse-edge primitive in `graph-corpus-sdk`/`graph-project` ships in a shape that surprises the tool projection | Cycle 2.1 is a contract test — any drift surfaces immediately, before grouping/error cycles consume the contract. |
 | `threads.ttl` shape evolves in `oak-curriculum-ontology` between plan-write and execution | Fixture-based unit tests pin the expected shape; any drift surfaces at execution time. |
-| MCP descriptor / NL guidance regression breaks downstream agent comprehension | Descriptor tests + `mcp-reviewer` gate at WS6. |
+| MCP descriptor / NL guidance regression breaks downstream agent comprehension | Descriptor tests + `mcp-expert` gate at WS6. |
 
 ## Foundation Alignment
 
@@ -338,7 +338,7 @@ This does not gate slice 3b, which composes EEF and misconceptions only.
 - Spine `gate-1-eef-ships` (STRICT, owner direction).
 - Graph-stack Inc.1 Oak Curriculum Ontology Threads foundation (substrate;
   topology must reach ACTIVE before this slice can execute, with the
-  topology BLOCKERs surfaced by `architecture-reviewer-betty` 2026-05-07
+  topology BLOCKERs surfaced by `architecture-expert-betty` 2026-05-07
   absorbed).
 
 **Parallel-safe with**:

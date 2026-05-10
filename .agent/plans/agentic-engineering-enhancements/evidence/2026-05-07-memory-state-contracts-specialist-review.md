@@ -14,10 +14,10 @@ contract bundle. The review has now run, so the opener must not land as a live
 
 ## Reviewers
 
-- `docs-adr-reviewer` — approve with fixes.
-- `assumptions-reviewer` — approve with fixes.
-- `architecture-reviewer-fred` — approve with fixes.
-- `test-reviewer` — hold until the doctor plan's test/validator contract is
+- `docs-adr-expert` — approve with fixes.
+- `assumptions-expert` — approve with fixes.
+- `architecture-expert-fred` — approve with fixes.
+- `test-expert` — hold until the doctor plan's test/validator contract is
   tightened.
 
 ## Consensus

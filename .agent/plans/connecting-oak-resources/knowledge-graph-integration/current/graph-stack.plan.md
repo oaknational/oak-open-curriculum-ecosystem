@@ -13,7 +13,7 @@ sibling_plans:
   - "../active/misconception-graph-mcp-surface.plan.md"
   - "../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md"
   - "../../../agentic-engineering-enhancements/future/graphify-and-graph-memory-exploration.plan.md"
-specialist_reviewer: "architecture-reviewer-betty, architecture-reviewer-fred, architecture-reviewer-barney, type-reviewer, code-reviewer, test-reviewer, docs-adr-reviewer, assumptions-reviewer"
+specialist_reviewer: "architecture-expert-betty, architecture-expert-fred, architecture-expert-barney, type-expert, code-expert, test-expert, docs-adr-expert, assumptions-expert"
 isProject: true
 todos:
   - id: ws0-topology-adr
@@ -181,7 +181,7 @@ No bespoke wrappers. The adapter-shape discipline (research §12) keeps every de
 
 **RDF/JS data-model alignment risk (tracked under tripwire #2)**: our internal `TripleTerm` shape (research §4) is authored ahead of an RDF/JS WG formalisation of RDF 1.2 data-model types. If the eventual published spec differs from ours, `graph-core`'s `Term` union migrates to match — a typed refactor confined to a single workspace, with no cross-workspace blast radius by design. Mitigation today: keep `TripleTerm` minimal (matches the RDF 1.2 abstract syntax exactly, no extras) so divergence is structurally impossible to amplify. See [research §19 — tripwire #2](../../../../research/graph-library.research.md#tripwire-2--rdfjs-wg-formalises-an-rdf-12-data-model-extension).
 
-`assumptions-reviewer` runs against this attestation pre-ExitPlanMode (see Reviewer Scheduling).
+`assumptions-expert` runs against this attestation pre-ExitPlanMode (see Reviewer Scheduling).
 
 ---
 
@@ -314,7 +314,7 @@ The cycle-by-cycle TDD breakdown is the YAML `todos` block at the head of this p
 - **WS5 — Coordination amendments** (1 batch): amend `graph-query-layer.plan.md`, `oak-kg-threads-surface.plan.md`, `practice-graph-payoff-peak-pilot.plan.md`, and the parent `open-education-knowledge-surfaces.plan.md`.
 - **WS6 — Documentation propagation** (1 batch): collection README, monorepo README, CONTRIBUTING, `LICENCE-DATA.md` ontology section, Mark Hodierne author addition, research filename typo fix. ADR-123 is not amended by this increment because no MCP primitives are added or changed.
 - **WS7 — Quality gates** (1 batch): full chain (`pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && pnpm test && pnpm test:ui && pnpm test:e2e`).
-- **WS8 — Adversarial review** (1 batch): assumptions-reviewer, architecture-reviewer-betty/fred/barney, type-reviewer, docs-adr-reviewer.
+- **WS8 — Adversarial review** (1 batch): assumptions-expert, architecture-expert-betty/fred/barney, type-expert, docs-adr-expert.
 
 ### Cycle dependencies and parallelisation
 
@@ -389,24 +389,24 @@ This is named here so the substrate is built for that future from day one — no
 
 ### Plan-phase (PRE-ExitPlanMode)
 
-- `assumptions-reviewer` — proportionality check (does the seven-active-plus-one-deferred graph topology fit the value claim?), build-vs-buy attestation, blocking legitimacy of the foundation-first sequencing
-- `architecture-reviewer-betty` — cohesion and change-cost trade-offs of the seven-active-plus-one-deferred graph shape; long-term evolution path
-- `architecture-reviewer-fred` — ADR-154 framework-vs-consumer compliance across the layer boundaries; dependency direction
-- `architecture-reviewer-barney` — boundary simplification; whether any workspace can be safely collapsed without losing layer discipline
+- `assumptions-expert` — proportionality check (does the seven-active-plus-one-deferred graph topology fit the value claim?), build-vs-buy attestation, blocking legitimacy of the foundation-first sequencing
+- `architecture-expert-betty` — cohesion and change-cost trade-offs of the seven-active-plus-one-deferred graph shape; long-term evolution path
+- `architecture-expert-fred` — ADR-154 framework-vs-consumer compliance across the layer boundaries; dependency direction
+- `architecture-expert-barney` — boundary simplification; whether any workspace can be safely collapsed without losing layer discipline
 
-(`mcp-reviewer` is deliberately not engaged for the foundation increment because no MCP code is produced. It runs only when a consumer chooses MCP surfacing.)
+(`mcp-expert` is deliberately not engaged for the foundation increment because no MCP code is produced. It runs only when a consumer chooses MCP surfacing.)
 
 ### Mid-cycle (DURING execution)
 
-- `test-reviewer` — after each RED/GREEN cycle in WS1–WS4
-- `type-reviewer` — after `graph-core`'s RDF Term + Quad + Dataset types land; after `graph-corpus-sdk` GraphView lands
-- `code-reviewer` — gateway after each WS lands; routes to specialists
-- `architecture-reviewer-betty` — re-engaged after WS1.8 (GraphDocument surface) and after WS4.2 (graph-corpus-sdk scaffold); explicit check that no MCP-shaped types or surfaces have leaked into the graph workspaces
+- `test-expert` — after each RED/GREEN cycle in WS1–WS4
+- `type-expert` — after `graph-core`'s RDF Term + Quad + Dataset types land; after `graph-corpus-sdk` GraphView lands
+- `code-expert` — gateway after each WS lands; routes to specialists
+- `architecture-expert-betty` — re-engaged after WS1.8 (GraphDocument surface) and after WS4.2 (graph-corpus-sdk scaffold); explicit check that no MCP-shaped types or surfaces have leaked into the graph workspaces
 
 ### Close (POST-execution)
 
-- `docs-adr-reviewer` — ADR-vs-implementation alignment; coordination amendments coherent
-- `release-readiness-reviewer` — GO / GO-WITH-CONDITIONS / NO-GO before Increment 2 promotion
+- `docs-adr-expert` — ADR-vs-implementation alignment; coordination amendments coherent
+- `release-readiness-expert` — GO / GO-WITH-CONDITIONS / NO-GO before Increment 2 promotion
 
 ---
 
@@ -500,4 +500,4 @@ Promote when:
 1. Owner has approved the topology decision.
 2. WS0 ADR is drafted and reviewed (not necessarily merged).
 3. The pinned `oak-curriculum-ontology` revision is identified for the Oak Ontology Threads adapter.
-4. `assumptions-reviewer`, `architecture-reviewer-betty`, `architecture-reviewer-fred`, and `architecture-reviewer-barney` have run against this plan body and findings are addressed.
+4. `assumptions-expert`, `architecture-expert-betty`, `architecture-expert-fred`, and `architecture-expert-barney` have run against this plan body and findings are addressed.

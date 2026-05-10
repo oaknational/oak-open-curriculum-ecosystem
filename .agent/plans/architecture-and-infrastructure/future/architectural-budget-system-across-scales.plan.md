@@ -82,26 +82,26 @@ Out of scope:
 
 Planning-session reviews:
 
-- before edits: `assumptions-reviewer`, `docs-adr-reviewer`,
-  `architecture-reviewer-fred`, `architecture-reviewer-betty`,
-  `config-reviewer`
-- after ADR changes: `docs-adr-reviewer`, `architecture-reviewer-fred`
-- after plan/index changes: `assumptions-reviewer`,
-  `architecture-reviewer-barney`
-- after visibility/enforcement plan changes: `config-reviewer`,
-  `test-reviewer`
-- before completion: `code-reviewer`, `docs-adr-reviewer`,
-  `assumptions-reviewer`, and an adversarial pass from
-  `architecture-reviewer-wilma`
+- before edits: `assumptions-expert`, `docs-adr-expert`,
+  `architecture-expert-fred`, `architecture-expert-betty`,
+  `config-expert`
+- after ADR changes: `docs-adr-expert`, `architecture-expert-fred`
+- after plan/index changes: `assumptions-expert`,
+  `architecture-expert-barney`
+- after visibility/enforcement plan changes: `config-expert`,
+  `test-expert`
+- before completion: `code-expert`, `docs-adr-expert`,
+  `assumptions-expert`, and an adversarial pass from
+  `architecture-expert-wilma`
 
 Later complexity implementation reviews:
 
-- baseline/visibility phase: `config-reviewer`, `test-reviewer`,
-  `architecture-reviewer-betty`
-- pre-enforcement phase: `assumptions-reviewer`,
-  `architecture-reviewer-wilma`, `release-readiness-reviewer`
-- post-enforcement phase: `code-reviewer`, `docs-adr-reviewer`,
-  `config-reviewer`, `test-reviewer`
+- baseline/visibility phase: `config-expert`, `test-expert`,
+  `architecture-expert-betty`
+- pre-enforcement phase: `assumptions-expert`,
+  `architecture-expert-wilma`, `release-readiness-expert`
+- post-enforcement phase: `code-expert`, `docs-adr-expert`,
+  `config-expert`, `test-expert`
 
 ## Success Signals
 

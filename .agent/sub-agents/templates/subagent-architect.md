@@ -12,7 +12,7 @@ Invoke the subagent-architect when work involves creating, reviewing, upgrading,
 
 ### Not This Agent When
 
-- The work is on product code, not agent files — use `code-reviewer` or the relevant specialist
+- The work is on product code, not agent files — use `code-expert` or the relevant specialist
 - A single wrapper field needs a trivial fix (e.g., adding `model: sonnet`) — handle inline
 - The question is about Claude Code features or SDK usage — use `claude-code-guide`
 
@@ -66,7 +66,7 @@ For each quality criterion in the Checklist for Subagent Excellence (below), ass
 - Score each criterion (1-5)
 - Identify strengths worth preserving
 - Identify gaps requiring improvement
-- Compare against established templates (e.g. code-reviewer, test-reviewer) for structural parity
+- Compare against established templates (e.g. code-expert, test-expert) for structural parity
 
 ### Step 4: Provide Recommendations or Implement Changes
 
@@ -107,7 +107,7 @@ Before finalising any template or wrapper change, verify every item:
 - [ ] Templates include the shared identity declaration component (`.agent/sub-agents/components/behaviours/subagent-identity.md`)
 - [ ] Shared governance references are present and current (`.agent/directives/AGENT.md`, `.agent/directives/principles.md`)
 - [ ] Domain-specific references are explicit and all paths resolve
-- [ ] Legacy generic agent names are not used in active guidance (e.g. `architecture-reviewer` without a persona suffix)
+- [ ] Legacy generic agent names are not used in active guidance (e.g. `architecture-expert` without a persona suffix)
 - [ ] Architecture reviewer wrapper descriptions are distinct and lens-specific
 - [ ] Standard quality roster and specialist on-demand roster are clearly separated in coordination docs
 - [ ] Consumer wrappers keep template loading as the first action
@@ -121,16 +121,16 @@ Design new agents to complement, not duplicate, the existing roster. Each agent 
 
 | Agent | Scope |
 |-------|-------|
-| `code-reviewer` | Gateway reviewer; quality, security, maintainability; flags missing specialists |
-| `architecture-reviewer-barney` | Simplification-first; boundary and dependency mapping |
-| `architecture-reviewer-fred` | ADR compliance and boundary discipline |
-| `architecture-reviewer-betty` | Cohesion, coupling, and long-term change-cost trade-offs |
-| `architecture-reviewer-wilma` | Adversarial resilience, failure modes, hidden coupling |
-| `test-reviewer` | Test quality, TDD compliance, mock simplicity |
-| `type-reviewer` | Type-system complexity, assertion pressure, schema flow |
-| `config-reviewer` | Tooling config consistency, quality-gate alignment |
-| `security-reviewer` | Auth/authz, OAuth, secrets, PII, injection risk |
-| `docs-adr-reviewer` | README/TSDoc/ADR completeness and documentation drift |
+| `code-expert` | Gateway reviewer; quality, security, maintainability; flags missing specialists |
+| `architecture-expert-barney` | Simplification-first; boundary and dependency mapping |
+| `architecture-expert-fred` | ADR compliance and boundary discipline |
+| `architecture-expert-betty` | Cohesion, coupling, and long-term change-cost trade-offs |
+| `architecture-expert-wilma` | Adversarial resilience, failure modes, hidden coupling |
+| `test-expert` | Test quality, TDD compliance, mock simplicity |
+| `type-expert` | Type-system complexity, assertion pressure, schema flow |
+| `config-expert` | Tooling config consistency, quality-gate alignment |
+| `security-expert` | Auth/authz, OAuth, secrets, PII, injection risk |
+| `docs-adr-expert` | README/TSDoc/ADR completeness and documentation drift |
 
 ### Specialist On-Demand Roster (situational triggers)
 
@@ -138,8 +138,8 @@ Design new agents to complement, not duplicate, the existing roster. Each agent 
 |-------|---------|
 | `subagent-architect` | Agent design, review, migration, or optimisation |
 | `ground-truth-designer` | Semantic search ground-truth design/review |
-| `release-readiness-reviewer` | Release go/no-go checks at release boundaries |
-| `onboarding-reviewer` | Onboarding path audits (human and AI agent flows) |
+| `release-readiness-expert` | Release go/no-go checks at release boundaries |
+| `onboarding-expert` | Onboarding path audits (human and AI agent flows) |
 
 ## Quality Criteria for Subagents
 
@@ -163,7 +163,7 @@ description: >-
 
 ### System Prompt Structure
 
-An excellent system prompt follows this structure (matching the patterns established by code-reviewer and architecture-reviewer):
+An excellent system prompt follows this structure (matching the patterns established by code-expert and architecture-expert):
 
 1. **Title and Identity** -- Who is this agent? What is its expertise?
 2. **Mode** -- Read-only observer, or permitted to modify?
@@ -225,7 +225,7 @@ Cursor wrappers live in `.cursor/agents/*.md` with YAML frontmatter:
 
 **Tool selection guidance:**
 
-- **Read-only reviewers** (code-reviewer, test-reviewer): Use `readonly: true` and exclude `Write`, `Delete`
+- **Read-only reviewers** (code-expert, test-expert): Use `readonly: true` and exclude `Write`, `Delete`
 - **Creators/modifiers** (subagent-architect): Include `Write`, `Delete`, omit `readonly`
 - **Research agents**: Include `WebSearch`, `WebFetch` for external lookups
 
@@ -377,13 +377,13 @@ Add cross-references to related subagents:
 
 | Issue Type | Recommended Specialist |
 |------------|------------------------|
-| Architecture/boundary concerns | `architecture-reviewer-barney` / `-fred` / `-betty` / `-wilma` |
-| Type safety, generics, schema flow | `type-reviewer` |
-| Test quality, TDD compliance | `test-reviewer` |
-| Tooling/config changes | `config-reviewer` |
-| Security, auth, secrets, PII | `security-reviewer` |
-| Documentation/ADR drift | `docs-adr-reviewer` |
-| Release readiness | `release-readiness-reviewer` |
+| Architecture/boundary concerns | `architecture-expert-barney` / `-fred` / `-betty` / `-wilma` |
+| Type safety, generics, schema flow | `type-expert` |
+| Test quality, TDD compliance | `test-expert` |
+| Tooling/config changes | `config-expert` |
+| Security, auth, secrets, PII | `security-expert` |
+| Documentation/ADR drift | `docs-adr-expert` |
+| Release readiness | `release-readiness-expert` |
 ```
 
 ### Pattern 4: Success Metrics Addition
@@ -494,11 +494,11 @@ The sub-agent system is itself a feedback loop. The architect reviews agents, im
 
 | Issue Type | Recommended Specialist |
 |------------|------------------------|
-| Agent prompt touches security-sensitive logic | `security-reviewer` |
-| Agent boundaries affect module architecture | `architecture-reviewer-barney` or `architecture-reviewer-fred` |
-| Agent template references documentation or ADRs | `docs-adr-reviewer` |
-| Agent design affects onboarding paths | `onboarding-reviewer` |
-| Agent definition involves complex type constraints | `type-reviewer` |
+| Agent prompt touches security-sensitive logic | `security-expert` |
+| Agent boundaries affect module architecture | `architecture-expert-barney` or `architecture-expert-fred` |
+| Agent template references documentation or ADRs | `docs-adr-expert` |
+| Agent design affects onboarding paths | `onboarding-expert` |
+| Agent definition involves complex type constraints | `type-expert` |
 
 ## Success Metrics
 

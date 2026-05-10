@@ -251,7 +251,7 @@ at `.agent/memory/active/patterns/`. Inbound exchange uses
 ## The Review System
 
 Specialist sub-agents provide targeted review after non-trivial changes. The
-canonical `invoke-code-reviewers` rule owns the roster, triage, timing, and
+canonical `invoke-code-experts` rule owns the roster, triage, timing, and
 depth model. Larger rosters should use a gateway pattern: route by change
 profile, state `focused` vs `deep`, and reintegrate delegated findings before
 completion. `AGENT.md` should list installed roles or say the layer is absent.

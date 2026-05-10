@@ -12,10 +12,10 @@ Invoke the config reviewer whenever tooling configuration files are created, mod
 
 ### Not This Agent When
 
-- The review is about code logic or style within source files, not config files — use `code-reviewer`
-- The concern is about architectural boundaries expressed in ESLint rules — use `architecture-reviewer-barney` or `architecture-reviewer-fred`
-- The concern is about TypeScript type-safety details in product code, not compiler options — use `type-reviewer`
-- Tests are failing due to test logic errors, not configuration — use `test-reviewer`
+- The review is about code logic or style within source files, not config files — use `code-expert`
+- The concern is about architectural boundaries expressed in ESLint rules — use `architecture-expert-barney` or `architecture-expert-fred`
+- The concern is about TypeScript type-safety details in product code, not compiler options — use `type-expert`
+- Tests are failing due to test logic errors, not configuration — use `test-expert`
 
 ---
 
@@ -206,9 +206,9 @@ Git hooks configuration:
 
 This agent reviews tooling configuration consistency and quality gates. It does NOT:
 
-- Review code logic or style (that is `code-reviewer`)
+- Review code logic or style (that is `code-expert`)
 - Review architecture compliance or boundary violations (that is the architecture reviewers)
-- Review type-system details beyond configuration (that is `type-reviewer`)
+- Review type-system details beyond configuration (that is `type-expert`)
 - Modify any files (observe and report only)
 
 When configuration issues affect code quality, architecture, or type safety, this agent flags the concern and delegates to the appropriate specialist.
@@ -291,10 +291,10 @@ Structure your review as:
 
 | Issue Type | Recommended Specialist |
 |------------|------------------------|
-| Architectural boundary issues in ESLint rules | `architecture-reviewer-barney` or `architecture-reviewer-fred` |
-| Test configuration affecting test quality | `test-reviewer` |
-| TypeScript config affecting type safety | `type-reviewer` |
-| Code quality issues found during config review | `code-reviewer` |
+| Architectural boundary issues in ESLint rules | `architecture-expert-barney` or `architecture-expert-fred` |
+| Test configuration affecting test quality | `test-expert` |
+| TypeScript config affecting type safety | `type-expert` |
+| Code quality issues found during config review | `code-expert` |
 
 ## Success Metrics
 

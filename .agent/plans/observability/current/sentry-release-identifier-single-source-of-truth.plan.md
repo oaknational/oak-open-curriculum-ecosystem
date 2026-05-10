@@ -30,7 +30,7 @@ related_plans:
   - ".agent/plans/observability/current/multi-sink-vendor-independence-conformance.plan.md (downstream consumer of release attribution)"
 todos:
   - id: ws0-amend-adr-and-document-direction
-    content: "WS0 (DECIDE → DOCUMENT): owner direction collapses the option space (semver for prod, branch-URL for preview, build-cancellation outside semantic-release on main). Land an ADR-163 amendment that records both rules with full truth tables BEFORE WS1 begins. Run assumptions-reviewer + sentry-reviewer + architecture-reviewer-fred against the proposed amendment."
+    content: "WS0 (DECIDE → DOCUMENT): owner direction collapses the option space (semver for prod, branch-URL for preview, build-cancellation outside semantic-release on main). Land an ADR-163 amendment that records both rules with full truth tables BEFORE WS1 begins. Run assumptions-expert + sentry-expert + architecture-expert-fred against the proposed amendment."
     status: completed
   - id: ws1-pre-flight-audit
     content: "WS1 (PRE-FLIGHT AUDIT): exhaustively enumerate every consumer of the obsolete `preview-<slug>-<sha>` shape and the `slugifyBranch` helper across code, tests, and docs (`rg 'preview-' --type ts --type tsx --type md` etc.). Confirmed-known consumers (will be widened by the audit): `packages/core/build-metadata/tests/build-time-release.unit.test.ts`, `packages/libs/sentry-node/src/config.unit.test.ts`, `packages/libs/sentry-node/src/config-resolution.unit.test.ts`, `apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-plugin.unit.test.ts`, `apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-configured-build-gate.unit.test.ts` and its source `sentry-configured-build-gate.ts`, `apps/oak-curriculum-mcp-streamable-http/build-scripts/run-sentry-configured-build.ts`, `packages/core/build-metadata/tests/build-info.unit.test.ts`, `apps/oak-curriculum-mcp-streamable-http/src/runtime-config.ts`, `apps/oak-curriculum-mcp-streamable-http/src/env.ts`, `apps/oak-curriculum-mcp-streamable-http/src/security-config.ts`, `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`, `apps/oak-curriculum-mcp-streamable-http/docs/deployment-architecture.md`, `apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md`, `docs/operations/sentry-deployment-runbook.md`, `docs/operations/sentry-cli-usage.md`. Output: a concrete deletion/edit checklist that drives WS2/WS3 — execution does NOT proceed until the audit is complete and the checklist is reviewed."
@@ -39,7 +39,7 @@ todos:
     content: "WS2 (COLLAPSE + IMPLEMENT): land the architecture in a SINGLE commit (no committed RED state — `*.unit.test.ts` files cannot be red on commit per repo pre-commit hook). Steps: (a) Define `ReleaseInput` type and `resolveRelease(input)` function in `@oaknational/build-metadata` per the §Truth Tables. Replace `resolveBuildTimeRelease`'s body with delegation to `resolveRelease`. (b) Add `@oaknational/build-metadata` as a runtime `dependency` of `@oaknational/sentry-node`. Make `SentryConfigEnvironment extends ReleaseInput` (structural composition). Reduce `resolveSentryRelease` to a thin adapter that delegates to `resolveRelease` and re-maps `ReleaseError` → `ObservabilityConfigError`. (c) Per the WS1 audit checklist, atomically replace EVERY old-shape `preview-<slug>-<sha>` assertion with branch-URL-host assertions; delete `slugifyBranch` and its tests; delete obsolete `preview_branch_sha` from the `BuildTimeReleaseSource` union; rename or repurpose the `missing_branch_in_preview` error kind to `missing_branch_url_in_preview`. (d) Correct `isValidReleaseName` to MATCH Sentry's documented denylist EXACTLY (no newlines, no tabs, no `/`, no `\\`, not exact `.`, not exact `..`, not exact single space, ≤200 chars) — drop any Oak-local additions OR explicitly mark them as Oak-local tightening (decision recorded in TSDoc). (e) Remove or update consumers identified in WS1 audit (sentry-build-plugin, sentry-configured-build-gate, build-info.unit.test.ts, etc.). All tests pass. LANDED: WS2 §2.0 in a4e8facb (resolveGitSha module split); WS2 §2.1-§2.7 in f5a009ab (unified resolveRelease, sentry-node thin adapter, atomic test-fixture replacement, isValidReleaseName denylist alignment, snapshot-env at composition root)."
     status: completed
   - id: ws3-cancellation-rewrite-and-relocate
-    content: "WS3 (REWRITE + RELOCATE): (a) Move `vercel-ignore-production-non-release-build.mjs` AND its `*.unit.test.mjs` from `packages/core/build-metadata/build-scripts/` INTO `apps/oak-curriculum-mcp-streamable-http/build-scripts/`, REPLACING the existing thin ~17-line shim AND DELETING its companion `.d.ts` declaration file. Add `semver` as a `devDependency` of the app workspace (NOT a runtime dep of build-metadata — the script is build-time tooling, not part of any published artefact). `vercel.json`'s `ignoreCommand` keeps its existing `node build-scripts/vercel-ignore-production-non-release-build.mjs` path — no upward traversal, no Vercel deploy-probe contingency, no fallback. (b) Replace the script body with a ~50-line implementation using `semver.lte` and the simpler `VERCEL_GIT_COMMIT_REF === main AND semver.lte(current, previous)` rule. Add the missing branch gate. Asymmetric handling: current undefined → SKIP DEPLOYMENT (Vercel-correct semantics: `ignoreCommand` exit 0 = skip, NOT a failed build) with loud stderr; previous undefined → continue (first build). (c) Rewrite unit tests one-per-truth-table-row (5 rows); preserve coverage of fetch-fallback recovery on resolvable previous SHA. (d) Re-amend ADR-163 §10 with the FULL retraction enumeration: drop the truth table's fail-open row, drop the `Workspace invocation shim` prose, drop `Enforcement §6 wiring integration test` + its in-text reference, update the canonical script path text to its new in-app location, retract assumptions-reviewer Disposition #5 (two-file shim no longer exists), update History."
+    content: "WS3 (REWRITE + RELOCATE): (a) Move `vercel-ignore-production-non-release-build.mjs` AND its `*.unit.test.mjs` from `packages/core/build-metadata/build-scripts/` INTO `apps/oak-curriculum-mcp-streamable-http/build-scripts/`, REPLACING the existing thin ~17-line shim AND DELETING its companion `.d.ts` declaration file. Add `semver` as a `devDependency` of the app workspace (NOT a runtime dep of build-metadata — the script is build-time tooling, not part of any published artefact). `vercel.json`'s `ignoreCommand` keeps its existing `node build-scripts/vercel-ignore-production-non-release-build.mjs` path — no upward traversal, no Vercel deploy-probe contingency, no fallback. (b) Replace the script body with a ~50-line implementation using `semver.lte` and the simpler `VERCEL_GIT_COMMIT_REF === main AND semver.lte(current, previous)` rule. Add the missing branch gate. Asymmetric handling: current undefined → SKIP DEPLOYMENT (Vercel-correct semantics: `ignoreCommand` exit 0 = skip, NOT a failed build) with loud stderr; previous undefined → continue (first build). (c) Rewrite unit tests one-per-truth-table-row (5 rows); preserve coverage of fetch-fallback recovery on resolvable previous SHA. (d) Re-amend ADR-163 §10 with the FULL retraction enumeration: drop the truth table's fail-open row, drop the `Workspace invocation shim` prose, drop `Enforcement §6 wiring integration test` + its in-text reference, update the canonical script path text to its new in-app location, retract assumptions-expert Disposition #5 (two-file shim no longer exists), update History."
     status: completed
   - id: ws4-refactor-docs
     content: "WS4 (REFACTOR): TSDoc on every changed symbol; rewrite release resolution section in observability.md and sentry-deployment-runbook.md; update napkin if a generalisable pattern emerges."
@@ -48,7 +48,7 @@ todos:
     content: "WS5: pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && pnpm doc-gen && pnpm lint:fix && pnpm format:root && pnpm markdownlint:root && pnpm test && pnpm test:e2e && pnpm smoke:dev:stub. Exit 0, no filtering."
     status: in_progress
   - id: ws6-adversarial-review
-    content: "WS6: post-execution reviewers — sentry-reviewer (vendor-canonical idiom), docs-adr-reviewer (ADR-163 amendment fidelity), release-readiness-reviewer (preview AND production attribution proven via Sentry MCP find_releases + search_events on a fresh deploy)."
+    content: "WS6: post-execution reviewers — sentry-expert (vendor-canonical idiom), docs-adr-expert (ADR-163 amendment fidelity), release-readiness-expert (preview AND production attribution proven via Sentry MCP find_releases + search_events on a fresh deploy)."
     status: pending
   - id: ws7-doc-propagation
     content: "WS7: propagate the amended ADR-163 outcomes — observability.md, sentry-deployment-runbook.md, README, queued observability plans referencing release shape; verify Sentry UI shows correctly-tagged events for the next preview deploy."
@@ -381,21 +381,21 @@ that:
 
 ### 0.2 Reviewer scheduling — PRE-decision
 
-Per `invoke-code-reviewers` and the workstream-template Plan-phase
+Per `invoke-code-experts` and the workstream-template Plan-phase
 reviewers, fire against the proposed amendment text BEFORE it lands:
 
-- `assumptions-reviewer` — proportionality of the chosen shape; does the
+- `assumptions-expert` — proportionality of the chosen shape; does the
   branch-URL choice introduce assumptions that need checking
   (e.g. branch-URL stability across Vercel project renames, branch-URL
   collisions between forks, host-suffix changes if Oak migrates the
   preview domain)?
-- `sentry-reviewer` — vendor-canonical posture: does Sentry's release
+- `sentry-expert` — vendor-canonical posture: does Sentry's release
   model accept arbitrary host-string release identifiers? What happens
   to release health metrics when previews use long-host strings? Are
   there length/character constraints on release identifiers we must
   respect (the existing `SENTRY_RELEASE_NAME_PATTERN` ≤200 chars
   suggests yes)?
-- `architecture-reviewer-fred` — principles-first: does the amendment
+- `architecture-expert-fred` — principles-first: does the amendment
   preserve §5 _"one release → many deploys"_ at the per-branch grain
   (yes — multiple commits on the same branch produce the same release
   identifier, which IS one-release-many-deploys at branch scope)? Does
@@ -734,7 +734,7 @@ export const resolveBuildTimeRelease = resolveRelease;
 ```
 
 `SENTRY_RELEASE_OVERRIDE` validation runs once here (per §2.5);
-runtime callers automatically inherit it via the adapter (sentry-reviewer
+runtime callers automatically inherit it via the adapter (sentry-expert
 finding: this closes today's runtime-validation gap structurally).
 
 ### 2.3 Make `@oaknational/sentry-node` a thin adapter
@@ -950,8 +950,8 @@ WS3 landed three changes in `2822e525`, preceded by the
 pre-landing reviewer dispatch:
 
 0. **Pre-landing reviewer dispatch** (§3.0): draft the §3.4
-   amendment text and dispatch `docs-adr-reviewer` (and
-   `assumptions-reviewer` if scope warrants) BEFORE the WS3 commit.
+   amendment text and dispatch `docs-adr-expert` (and
+   `assumptions-expert` if scope warrants) BEFORE the WS3 commit.
    Same discipline as WS0.2.
 1. **Relocate** the canonical cancellation script (and its unit-test
    file) from `packages/core/build-metadata/build-scripts/` into
@@ -979,7 +979,7 @@ the ADR text describing it move atomically. There is no intermediate
 state in which the ADR points to the old path, the shim has been
 deleted, or the new script body executes without `semver` declared.
 
-### 3.0 Pre-landing reviewer dispatch — DRAFT amendment text reviewed BEFORE WS3 commit (per docs-adr-reviewer rev2 M5)
+### 3.0 Pre-landing reviewer dispatch — DRAFT amendment text reviewed BEFORE WS3 commit (per docs-adr-expert rev2 M5)
 
 **Trigger.** The §3.4 amendment is a load-bearing retraction touching
 ADR-163's §1, §10, top-level `## Enforcement` list, Reviewer
@@ -992,11 +992,11 @@ discipline applies.
 **Action.** Before opening the WS3 commit, draft the §3.4 amendment
 text inline as part of WS3's prep, then dispatch:
 
-- `docs-adr-reviewer` — validate the 13-item enumeration against the
+- `docs-adr-expert` — validate the 13-item enumeration against the
   current ADR-163 surface (does every retracted clause actually exist
   at the line cited? does every NEW clause cite WS2's commit hash
   correctly?).
-- `assumptions-reviewer` if the amendment text introduces or revises
+- `assumptions-expert` if the amendment text introduces or revises
   ACCEPTED dispositions (it MUST cover the rev2 B2 retraction of
   Disposition #4 at minimum).
 
@@ -1035,7 +1035,7 @@ Actions (single commit):
    The relocate REPLACES the shim — net effect is one `.mjs` file and
    one `.unit.test.mjs` file in the app's `build-scripts/`, where the
    shim used to live and the canonical implementation now lives
-   directly. (Per docs-adr-reviewer rev1 Mi3: prior plan-body wording
+   directly. (Per docs-adr-expert rev1 Mi3: prior plan-body wording
    "one-line shim" understated the replacement scope.)
 
 3. **Delete the `.d.ts` companion file** at
@@ -1049,7 +1049,7 @@ Actions (single commit):
    §Refactoring `Removing unused code`, the `.d.ts` is dead and
    must be deleted in the same commit as the relocate. `knip` will
    flag it post-commit; deleting it pre-empts the gate. Per
-   docs-adr-reviewer rev1 M1: leaving the `.d.ts` either ships dead
+   docs-adr-expert rev1 M1: leaving the `.d.ts` either ships dead
    code or breaks an unstated TypeScript consumer.
 
 4. Add `semver` as a `devDependency` of the
@@ -1181,7 +1181,7 @@ that no longer exists.
 
 Land a second amendment block in
 `docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md`
-§10 that performs ALL of the following (per architecture-reviewer-fred
+§10 that performs ALL of the following (per architecture-expert-fred
 finding I1: incomplete WS3.4 amendment lists are exactly the process
 gap that caused the ADR-163 §1 drift in the first place):
 
@@ -1215,7 +1215,7 @@ gap that caused the ADR-163 §1 drift in the first place):
    decision logic and therefore needs no separate unit test (the
    wiring integration test covers its existence and import
    resolution)")_ — both the shim and the wiring integration test it
-   references no longer exist post-WS3. Per docs-adr-reviewer rev2 B1:
+   references no longer exist post-WS3. Per docs-adr-expert rev2 B1:
    the singular "the path" framing is exactly the drift class this
    plan repairs; enumerate ALL path occurrences atomically.
 6. **Refer to `vercel.json`'s `ignoreCommand` symbolically** in §10's
@@ -1224,14 +1224,14 @@ gap that caused the ADR-163 §1 drift in the first place):
    field (`ignoreCommand`); do NOT quote the literal command string in
    the ADR. Note that the field value is unchanged by WS3 (previously
    resolved to the shim, now resolves directly to the canonical
-   implementation). Per docs-adr-reviewer NIT N1 (rev1) and template
+   implementation). Per docs-adr-expert NIT N1 (rev1) and template
    §3 (`ADRs that prescribe HOW instead of WHAT`): literal command
    strings are owned by the executable file, not the ADR; copying them
    in is the same drift class this plan exists to repair.
 7. **Note** that the rule is enforced via the npm `semver` package
    rather than hand-rolled comparison; names the canonical
    comparator (`semver.lte`).
-8. **Retract** the assumptions-reviewer Disposition #5 recorded in
+8. **Retract** the assumptions-expert Disposition #5 recorded in
    the first amendment (the SUGGESTION about softening the two-file
    shim explanation). Either retract with a follow-up note (the
    suggestion is moot — the shim no longer exists) or move it to the
@@ -1240,7 +1240,7 @@ gap that caused the ADR-163 §1 drift in the first place):
    second amendment. **PRESERVE** the existing first-amendment
    History entry verbatim — it is historical record of what the
    first amendment did, including its now-superseded shim framing.
-   Per docs-adr-reviewer rev2 M1: the singular "Update the History
+   Per docs-adr-expert rev2 M1: the singular "Update the History
    entry" framing risks an executor over-correcting and rewriting
    the first-amendment entry; ADR-amendment precedent (e.g. ADR-053)
    is to ADD new dated entries, not rewrite old ones. The new entry
@@ -1256,7 +1256,7 @@ gap that caused the ADR-163 §1 drift in the first place):
     with `SentryConfigEnvironment extends ReleaseInput` and
     `@oaknational/sentry-node` delegating at runtime, making
     shape divergence impossible by construction. Cite the WS2
-    commit by hash once landed. Per docs-adr-reviewer rev1 B3:
+    commit by hash once landed. Per docs-adr-expert rev1 B3:
     leaving §1's prose unchanged would have ADR-163 point at a
     non-existent contract test as the primary anti-drift gate.
 11. **Retract Enforcement §5** (the cross-resolver contract test
@@ -1264,10 +1264,10 @@ gap that caused the ADR-163 §1 drift in the first place):
     with an Enforcement note about the structural composition
     (`SentryConfigEnvironment extends ReleaseInput`) and the
     dep-cruise edge `libs ← core` as the structural gate. Per
-    docs-adr-reviewer rev1 B3: the top-level Enforcement §5 entry
+    docs-adr-expert rev1 B3: the top-level Enforcement §5 entry
     is a parallel surface to §1 — both must be retracted in the
     same amendment.
-12. **Retract `assumptions-reviewer` Disposition #4** (the
+12. **Retract `assumptions-expert` Disposition #4** (the
     ACCEPTED finding about the §10 unresolvable row as a fail-open
     trade-off). Disposition #4's quoted rationale references §10
     text being dropped by item 2 of this enumeration; without
@@ -1278,14 +1278,14 @@ gap that caused the ADR-163 §1 drift in the first place):
     the new framing addresses the same concern (resolution-failure
     tolerance) more precisely"_; OR (b) move it under a "Retracted
     by 2026-04-24 (second amendment)" subheading. Per
-    docs-adr-reviewer rev2 B2.
+    docs-adr-expert rev2 B2.
 13. **Update the ADR index** at
     `docs/architecture/architectural-decisions/README.md` (the
     ADR-163 entry, currently reading "Accepted 2026-04-19" only)
     to flag the amendment lineage per ADR-053 precedent. Append
     `(amended 2026-04-20, 2026-04-21, 2026-04-23, 2026-04-24 §1+§10,
     2026-04-24 §10 retraction — see History block)`. Per
-    docs-adr-reviewer rev2 M3: ADR-163 has had multiple amendment
+    docs-adr-expert rev2 M3: ADR-163 has had multiple amendment
     dates but the index entry shows none of them — readers
     scanning the index get no signal that the ADR has been
     substantially restructured.
@@ -1453,26 +1453,26 @@ sign off.
 
 Reviewers fire against the landed code AND deployed-state evidence:
 
-- `sentry-reviewer` — does the implemented shape match the vendor-
+- `sentry-expert` — does the implemented shape match the vendor-
   canonical idiom captured in WS0 by the same reviewer? Are Debug-IDs +
   release + deploy correctly threaded? Does `isValidReleaseName` match
   Sentry's documented denylist (or explicitly mark Oak-local
   tightenings per WS2 §2.5)? Does `@sentry/esbuild-plugin` consume
   the unified `resolveRelease` output transparently (per WS2 §2.6)?
-- `docs-adr-reviewer` — does the ADR-163 second amendment land all
+- `docs-adr-expert` — does the ADR-163 second amendment land all
   13 items in WS3.4's retraction enumeration (expanded from the
-  original 9 per docs-adr-reviewer rev1 + rev2 findings)? Are all touched docs
+  original 9 per docs-adr-expert rev1 + rev2 findings)? Are all touched docs
   internally consistent (the `## Documentation Propagation` table
   is the checklist)? Is the process-gap finding (§0.1 #3) recorded
   in a way that prevents recurrence?
-- `architecture-reviewer-barney` — re-validate the collapse
+- `architecture-expert-barney` — re-validate the collapse
   architecture against `Single source of truth for types` and
   `Don't extract single-consumer abstractions`: does the landed
   code actually achieve structural single-source-of-truth, or did
   the implementation re-introduce parallel resolvers under a
   different name? Does the relocated cancellation script live
   exactly where its single consumer needs it?
-- `release-readiness-reviewer` — preview AND production attribution
+- `release-readiness-expert` — preview AND production attribution
   proven end-to-end via Sentry MCP `find_releases` + `search_events`
   AND cancellation rule proven by either a captured cancellation event
   or a controlled rehearsal. GO / GO-WITH-CONDITIONS / NO-GO.
@@ -1494,7 +1494,7 @@ rejections recorded with rationale per principles §Reviewer findings.
 | Single-resolver collapse misses a consumer of the old `preview-<slug>-<sha>` shape and ships drift.    | WS1 is a dedicated **pre-flight audit workstream** that exhaustively enumerates every consumer (code, tests, docs) via `rg` for the obsolete shape pattern AND for the `slugifyBranch` helper. Output is a structured checklist that drives WS2's atomic replacement and WS4's documentation propagation. WS5's quality-gate chain (`pnpm build && type-check && lint && knip && dependency-cruiser && test && test:e2e`) is the second-line gate. |
 | Atomic single-commit WS2 means a large diff that's harder to review.                                   | WS1's audit checklist makes the blast radius visible BEFORE the commit. The commit message MUST list each affected file with a one-line rationale tied to the audit checklist. WS6 adversarial review (post-execution) explicitly inspects WS2's commit for completeness against the audit. |
 | `@oaknational/sentry-node` adds `@oaknational/build-metadata` as a runtime dep, dragging eager `readFileSync` of root `package.json` into runtime via the existing `runtime-metadata.ts → @oaknational/env → ROOT_PACKAGE_VERSION` import chain. **This is real, validated against code**: `packages/core/env/src/root-package-version.ts:36` initialises `ROOT_PACKAGE_VERSION` at module-evaluation time via `readFileSync(ROOT_PACKAGE_JSON_URL)`; `runtime-metadata.ts:1` imports it; `build-time-release.ts:15` imports `resolveGitSha` from `runtime-metadata.js` — so importing the resolver triggers the eager fs read before any `Result`-based error handling runs. After WS2, every `sentry-node` consumer inherits this cold-init exposure on Vercel runtimes (read-only fs, bundled paths that don't preserve `import.meta.url`'s `../../../../package.json` resolution, etc.). | **WS2 §2.0 (NEW — must run BEFORE §2.1)** structurally splits `resolveGitSha` out of `runtime-metadata.ts` into a no-fs module (e.g. `git-sha.ts`) and re-points `build-time-release.ts:15` at the new module. `ROOT_PACKAGE_VERSION`'s eager init stays where it is (it's only consumed by `resolveApplicationVersion`, which IS used at build time intentionally — but that path is build-only). The unified `resolveRelease` MUST NOT import any module that transitively pulls `ROOT_PACKAGE_VERSION` at module-init. After the split, the only runtime side effect from importing `@oaknational/build-metadata`'s `resolveRelease` is module evaluation of pure functions. WS6 verification step explicitly probes a Vercel preview cold-start to confirm no module-init throw. |
-| `@oaknational/sentry-node` runtime dep on `@oaknational/build-metadata` widens the bundle's transitive surface (zod, `@oaknational/env`, `@oaknational/result`). | Bundle size impact is bounded — `zod` is already in many transitive paths via Vercel/Next adapters. Verify with `pnpm why zod` post-install. The _security review surface_ widens, however: future changes to `@oaknational/env`'s root-version logic now affect runtime Sentry init. WS6 `release-readiness-reviewer` checks the bundle size delta as part of GO/NO-GO. |
+| `@oaknational/sentry-node` runtime dep on `@oaknational/build-metadata` widens the bundle's transitive surface (zod, `@oaknational/env`, `@oaknational/result`). | Bundle size impact is bounded — `zod` is already in many transitive paths via Vercel/Next adapters. Verify with `pnpm why zod` post-install. The _security review surface_ widens, however: future changes to `@oaknational/env`'s root-version logic now affect runtime Sentry init. WS6 `release-readiness-expert` checks the bundle size delta as part of GO/NO-GO. |
 | Production cancellation script regresses (file move / rename / vercel.json drift).                     | WS3 structurally eliminates the shim by relocating the canonical script in-place over it — no shim left to drift against. `vercel.json` is unchanged. ADR-163 amendment (WS3.4) names the canonical path; the next preview deploy proves the wiring (Vercel itself is the gate). Any future move/rename is caught by Vercel's deploy probe AND by `dependency-cruiser` / `knip`. |
 | WS3 rewrite changes script behaviour silently (unit-test gaps let a buggy semver comparison ship).     | One unit test per row of the §Truth Tables / Production build cancellation table; tests assert exit code AND stream output AND (for the branch-gate row) that no I/O occurred at the injected dependency seam. `semver.lte` is the canonical comparator — the rewrite delegates correctness to a well-tested external package rather than re-deriving it. |
 | `VERCEL_GIT_PREVIOUS_SHA` is stale or wrong under concurrent main builds (Wilma MAJOR #3) — `semver.lte(current, previous)` compares against the wrong baseline. Asymmetric "previous unresolvable → continue" amplifies exposure: any systematic "unresolvable previous" looks like "first build" and ALWAYS continues. | Vercel populates `VERCEL_GIT_PREVIOUS_SHA` per build invocation; on the first build of a branch it is undefined; on subsequent builds it points at the immediately-preceding commit on the same branch. Concurrency: two near-simultaneous main pushes can produce two builds where each sees the other's `previous` as either the merge-base or itself — but in either case the rule "current advances semver" is correct. The asymmetric fail-open is intentional: a missing baseline means we cannot prove non-advancement, so we continue (the worst case is one extra build, not a missed deploy). Documented in WS3.4's ADR amendment under "Asymmetric input handling". |
@@ -1504,8 +1504,8 @@ rejections recorded with rationale per principles §Reviewer findings.
 | ADR-163 second amendment lands in the same commit as WS3 code; cherry-pick / partial revert / commit amend breaks the "ADR says X, repo at hash Y" pairing (Wilma MINOR #14). | Standard branching discipline: WS3 lands as a single non-amended commit; cherry-picks must include the ADR change. WS3.4's amendment notes the commit hash explicitly. If a hot-fix to ADR-163 lands between WS0 and WS3, the WS3 amendment authors a three-way reconciliation paragraph in the History entry. |
 | Relocating the cancellation script into the app workspace breaks Vercel's build (path resolution).    | `vercel.json`'s `ignoreCommand` already references `./build-scripts/vercel-ignore-production-non-release-build.mjs` (the in-app path). Relocate replaces the shim file in-place; the `ignoreCommand` string is unchanged. Vercel resolves from the app's `rootDirectory` exactly as today. |
 | Adding `semver` as a workspace devDependency drags in deep transitive risk.                            | `semver` is a tiny, single-purpose package maintained by the Node.js team; it is already in many transitive dep chains. Verify with `pnpm why semver` post-install; if the resolved version aligns with an existing transitive copy, deduplication is automatic. |
-| End-to-end Sentry verification (WS6) cannot be run because no fresh preview deploy has shipped post-fix. | Trigger a preview deploy explicitly (push a no-op commit on the working branch) before invoking release-readiness-reviewer; verification requires real Sentry data, not local rehearsal. |
-| ADR-163 §10 retraction enumeration (WS3.4) is incomplete and the amendment leaves stale prose.        | WS3.4 specifies a **13-item full retraction enumeration** explicitly (expanded from an original 9-item draft after docs-adr-reviewer rev1 + rev2 caught three classes of missed retractions: §1's parallel structural-fix paragraph, the top-level Enforcement §5, the orphaned Disposition #4, the second §10 path bullet, and the ADR index entry) — the same kind of incomplete-amendment process gap that this plan's WS0 was set up to repair. WS3.0 (NEW per rev2 M5) dispatches `docs-adr-reviewer` against the proposed amendment text BEFORE landing; WS6 `docs-adr-reviewer` validates the amendment lands all 13 items post-WS3. |
+| End-to-end Sentry verification (WS6) cannot be run because no fresh preview deploy has shipped post-fix. | Trigger a preview deploy explicitly (push a no-op commit on the working branch) before invoking release-readiness-expert; verification requires real Sentry data, not local rehearsal. |
+| ADR-163 §10 retraction enumeration (WS3.4) is incomplete and the amendment leaves stale prose.        | WS3.4 specifies a **13-item full retraction enumeration** explicitly (expanded from an original 9-item draft after docs-adr-expert rev1 + rev2 caught three classes of missed retractions: §1's parallel structural-fix paragraph, the top-level Enforcement §5, the orphaned Disposition #4, the second §10 path bullet, and the ADR index entry) — the same kind of incomplete-amendment process gap that this plan's WS0 was set up to repair. WS3.0 (NEW per rev2 M5) dispatches `docs-adr-expert` against the proposed amendment text BEFORE landing; WS6 `docs-adr-expert` validates the amendment lands all 13 items post-WS3. |
 | Owner-direction recording happens in this plan body but not in ADR-163 promptly enough.                | WS0 lands the first ADR amendment as its first artefact, in a single commit, before WS1 starts. The collapse decision (post-Tier-1) is recorded in the second ADR amendment in WS3, atomically with the code that implements it. |
 
 ---
@@ -1582,9 +1582,9 @@ rejections recorded with rationale per principles §Reviewer findings.
 
 | Surface                                                                              | Update                                                                                          |
 | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
-| `docs/architecture/architectural-decisions/163-…release-identifier….md`              | First amendment (WS0 — landed): per-environment release identifier truth table + initial §10 cancellation rule + reviewer dispositions. Second amendment (WS3.4): **13-item full retraction enumeration** — §10 truth-table replacement; fail-open paragraph dropped; workspace-shim subsection dropped; named §6 wiring integration test dropped from both §10 prose and the top-level `## Enforcement` list; ALL §10 path bullets (canonical impl + unit tests) updated to the new in-app location with the dependent parenthetical rewritten; `vercel.json`'s `ignoreCommand` referred to symbolically rather than quoted; `semver.lte` named as canonical comparator; **§1 amendment "structural fix" paragraph retracted** (replaced by single-resolver structural-collapse note); **top-level Enforcement §5 entry retracted** (cross-resolver contract test no longer exists post-WS2); `assumptions-reviewer` Disposition #4 + Disposition #5 retracted; new History entry ADDED (first-amendment History entry preserved verbatim). Pre-landing `docs-adr-reviewer` dispatch in WS3.0 protects the amendment. |
-| `docs/architecture/architectural-decisions/README.md` (line 185, ADR-163 entry)      | Index entry updated to reflect the amendment lineage per ADR-053 precedent. Append `(amended 2026-04-20, 2026-04-21, 2026-04-23, 2026-04-24 §1+§10, 2026-04-24 §10 retraction — see History block)`. Per docs-adr-reviewer rev2 M3: the index currently shows "Accepted 2026-04-19" only despite multiple amendment dates. |
-| `docs/operations/sentry-cli-usage.md`                                                | `$RELEASE` / `$VERSION` framing rewritten to per-environment shape (semver for production, branch-URL host for preview); references to "the release identifier is the same value (also the root semver)" updated to point at the unified `resolveRelease` per-environment table. Per docs-adr-reviewer rev2 M2: the runbook currently asserts `$RELEASE = "root package.json semver"` which becomes wrong for previews after WS2. |
+| `docs/architecture/architectural-decisions/163-…release-identifier….md`              | First amendment (WS0 — landed): per-environment release identifier truth table + initial §10 cancellation rule + reviewer dispositions. Second amendment (WS3.4): **13-item full retraction enumeration** — §10 truth-table replacement; fail-open paragraph dropped; workspace-shim subsection dropped; named §6 wiring integration test dropped from both §10 prose and the top-level `## Enforcement` list; ALL §10 path bullets (canonical impl + unit tests) updated to the new in-app location with the dependent parenthetical rewritten; `vercel.json`'s `ignoreCommand` referred to symbolically rather than quoted; `semver.lte` named as canonical comparator; **§1 amendment "structural fix" paragraph retracted** (replaced by single-resolver structural-collapse note); **top-level Enforcement §5 entry retracted** (cross-resolver contract test no longer exists post-WS2); `assumptions-expert` Disposition #4 + Disposition #5 retracted; new History entry ADDED (first-amendment History entry preserved verbatim). Pre-landing `docs-adr-expert` dispatch in WS3.0 protects the amendment. |
+| `docs/architecture/architectural-decisions/README.md` (line 185, ADR-163 entry)      | Index entry updated to reflect the amendment lineage per ADR-053 precedent. Append `(amended 2026-04-20, 2026-04-21, 2026-04-23, 2026-04-24 §1+§10, 2026-04-24 §10 retraction — see History block)`. Per docs-adr-expert rev2 M3: the index currently shows "Accepted 2026-04-19" only despite multiple amendment dates. |
+| `docs/operations/sentry-cli-usage.md`                                                | `$RELEASE` / `$VERSION` framing rewritten to per-environment shape (semver for production, branch-URL host for preview); references to "the release identifier is the same value (also the root semver)" updated to point at the unified `resolveRelease` per-environment table. Per docs-adr-expert rev2 M2: the runbook currently asserts `$RELEASE = "root package.json semver"` which becomes wrong for previews after WS2. |
 | `packages/core/build-metadata/src/build-time-release.ts` (or new `release.ts`)       | Hosts the new single `resolveRelease` function returning `Result<ResolvedRelease, ReleaseError>`. `resolveBuildTimeRelease` becomes a re-export alias for back-compat at the package boundary. |
 | `packages/core/build-metadata/src/build-time-release-types.ts`                       | Replaced by (or renamed to) the new unified `ReleaseInput`, `ReleaseSource`, `ReleaseEnvironment`, `ResolvedRelease`, `ReleaseError` types. Old `BuildTimeReleaseEnvironmentInput` deleted or aliased to `ReleaseInput`. |
 | `packages/libs/sentry-node/src/config-resolution.ts`                                 | `resolveSentryRelease` collapsed to a 3-line delegation to `resolveRelease`. Old branching logic (preview/production/development arms; old `preview-<slug>-<sha>` shape) deleted. |

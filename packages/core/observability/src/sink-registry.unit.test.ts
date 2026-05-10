@@ -9,7 +9,7 @@
  * The remaining describe blocks construct minimal fakes solely to give
  * the TypeScript compiler a target for structural conformance — those
  * blocks are deliberately small so the file does not over-test the
- * compiler. Addresses test-reviewer 2026-05-02 finding 6 (reduce
+ * compiler. Addresses test-expert 2026-05-02 finding 6 (reduce
  * tautological fake-vs-fake assertions; lean on the compiler).
  *
  * No `expectType<...>` — in line with the patterns the rest of this

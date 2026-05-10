@@ -29,9 +29,9 @@ contains the Phase 1 blocker-clearance slice plus the follow-up
 doc-coherence refresh, and the bundle is now restart-cleared. The first
 owner-requested rerun surfaced follow-up architecture, onboarding,
 doc-coherence, security, and config-wiring findings; those fixes are now on
-the branch. The committed-state refresh then reran `code-reviewer`,
-`docs-adr-reviewer`, `onboarding-reviewer`, all four architecture reviewers,
-`config-reviewer`, and `security-reviewer` against the refreshed bundle, and no
+the branch. The committed-state refresh then reran `code-expert`,
+`docs-adr-expert`, `onboarding-expert`, all four architecture reviewers,
+`config-expert`, and `security-expert` against the refreshed bundle, and no
 new findings were recorded. Runtime adoption may now resume from Phase 3.
 The purpose of that restart clearance is to resume supportability-driven
 runtime adoption, not to reopen the shared-foundation work already closed in
@@ -158,35 +158,35 @@ bundle (`44d8d74d`):
 
 | Reviewer lens | Status |
 |---|---|
-| `test-reviewer` | Earlier rerun was clean after wrapper coverage/proof-wording fixes; no newer findings recorded yet |
-| `type-reviewer` | Earlier rerun was clean after literal-union/doc-example fixes; no newer findings recorded yet |
-| `config-reviewer` | Committed-state refresh rerun reported no findings |
-| `security-reviewer` | Committed-state refresh rerun reported no findings |
-| `mcp-reviewer` | Earlier rerun was clean after stdio MCP wording/doc-link fixes; no newer findings recorded yet |
-| `sentry-reviewer` | Earlier rerun was clean after final blocker cleanup; no newer findings recorded yet |
+| `test-expert` | Earlier rerun was clean after wrapper coverage/proof-wording fixes; no newer findings recorded yet |
+| `type-expert` | Earlier rerun was clean after literal-union/doc-example fixes; no newer findings recorded yet |
+| `config-expert` | Committed-state refresh rerun reported no findings |
+| `security-expert` | Committed-state refresh rerun reported no findings |
+| `mcp-expert` | Earlier rerun was clean after stdio MCP wording/doc-link fixes; no newer findings recorded yet |
+| `sentry-expert` | Earlier rerun was clean after final blocker cleanup; no newer findings recorded yet |
 
 Historical committed-state handover confirmation rerun results:
 
 | Reviewer lens | Status |
 |---|---|
-| `code-reviewer` | Committed-state refresh rerun reported no findings |
-| `docs-adr-reviewer` | Committed-state refresh rerun reported no findings |
-| `onboarding-reviewer` | Committed-state refresh rerun reported no findings |
-| `architecture-reviewer-barney` | Committed-state refresh rerun reported no findings |
-| `architecture-reviewer-fred` | Committed-state refresh rerun reported no findings |
-| `architecture-reviewer-betty` | Committed-state refresh rerun reported no findings |
-| `architecture-reviewer-wilma` | Committed-state refresh rerun reported no findings |
+| `code-expert` | Committed-state refresh rerun reported no findings |
+| `docs-adr-expert` | Committed-state refresh rerun reported no findings |
+| `onboarding-expert` | Committed-state refresh rerun reported no findings |
+| `architecture-expert-barney` | Committed-state refresh rerun reported no findings |
+| `architecture-expert-fred` | Committed-state refresh rerun reported no findings |
+| `architecture-expert-betty` | Committed-state refresh rerun reported no findings |
+| `architecture-expert-wilma` | Committed-state refresh rerun reported no findings |
 
 Current local implementation reviewer sweep (2026-03-28, working tree only):
 
 | Reviewer lens | Status |
 |---|---|
-| `mcp-reviewer` | Clean — no MCP-facing regression found in the current local HTTP Phase 3 diff |
-| `config-reviewer` | Findings — local `@oaknational/sentry-node` type-check is currently red; direct `@sentry/node` dependency missing in the HTTP app; docs had drifted from the real local validation state |
-| `test-reviewer` | Findings — `check-mcp-client-auth.unit.test.ts` still uses `vi.mock(...)`; the new startup seam and observability tests still violate the DI-only testing bar; the new Sentry-node redaction tests remain implementation-coupled |
-| `code-reviewer` | Findings — the local slice is not yet approvable because of the broken Sentry-node test file, missing bootstrap handled-error capture, stale phase-completion wording, and non-compliant tests |
-| `security-reviewer` | Findings — `/mcp` sanitisation still fails open in one transaction-derived path; the docs had overstated local security cleanliness before this consolidation refresh |
-| `sentry-reviewer` | Findings — non-throwing failure spans are still marked OK; later async route errors can bypass handled-error capture; bootstrap failures still are not captured; init order may weaken auto-instrumentation |
+| `mcp-expert` | Clean — no MCP-facing regression found in the current local HTTP Phase 3 diff |
+| `config-expert` | Findings — local `@oaknational/sentry-node` type-check is currently red; direct `@sentry/node` dependency missing in the HTTP app; docs had drifted from the real local validation state |
+| `test-expert` | Findings — `check-mcp-client-auth.unit.test.ts` still uses `vi.mock(...)`; the new startup seam and observability tests still violate the DI-only testing bar; the new Sentry-node redaction tests remain implementation-coupled |
+| `code-expert` | Findings — the local slice is not yet approvable because of the broken Sentry-node test file, missing bootstrap handled-error capture, stale phase-completion wording, and non-compliant tests |
+| `security-expert` | Findings — `/mcp` sanitisation still fails open in one transaction-derived path; the docs had overstated local security cleanliness before this consolidation refresh |
+| `sentry-expert` | Findings — non-throwing failure spans are still marked OK; later async route errors can bypass handled-error capture; bootstrap failures still are not captured; init order may weaken auto-instrumentation |
 
 Current local implementation issues to keep visible:
 
@@ -292,8 +292,8 @@ Current local implementation validation state (2026-03-28, working tree only):
    - `pnpm practice:fitness`
    - `git diff --check`
 4. The full implementation reviewer set has now returned active findings from
-   `sentry-reviewer`, `security-reviewer`, `config-reviewer`,
-   `test-reviewer`, and `code-reviewer`; only `mcp-reviewer` is currently
+   `sentry-expert`, `security-expert`, `config-expert`,
+   `test-expert`, and `code-expert`; only `mcp-expert` is currently
    clean on the local diff.
 5. Therefore this checkpoint still clears the pushed handover bundle for
    restart, but it does **not** certify the current local HTTP runtime

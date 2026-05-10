@@ -70,7 +70,7 @@ Each layer catches a different class of defect; the layers compose:
 Reviewer findings are action items by default. Accepted findings are
 implementation work; rejected findings need written rationale; non-blocking
 deferrals need owner-visible next action. Full invocation and disposition
-policy lives at `.agent/memory/executive/invoke-code-reviewers.md`.
+policy lives at `.agent/memory/executive/invoke-code-experts.md`.
 
 ## Problem-Hiding Patterns
 

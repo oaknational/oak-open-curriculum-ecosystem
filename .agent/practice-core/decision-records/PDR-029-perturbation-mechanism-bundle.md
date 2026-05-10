@@ -87,7 +87,7 @@ accumulation signal).
      says "consult and decide X" without specifying the
      consultation artefact is post-hoc indistinguishable from a
      rule that was never read. Three instances in evidence:
-     - 2026-04-25 WS0 landing: `assumptions-reviewer` flagged
+     - 2026-04-25 WS0 landing: `assumptions-expert` flagged
        `respect-active-agent-claims.md` for unobservable firing;
        absorbed by adding a "log your decision" clause.
      - 2026-04-25 WS1 landing: same reviewer applied the same
@@ -136,7 +136,7 @@ accumulation signal).
      implicit Layer 2*") are **absorbed into the Decision
      section** — the body now states the decisions as-settled
      rather than as overrides of an earlier draft. Journey
-     context (five-reviewer intent-review miss; platform-
+     context (five-expert intent-review miss; platform-
      coupling critique; pattern candidates surfaced) is preserved
      in git history (`git log -p`) and in the 2026-04-21 napkin
      entries; the PDR body no longer carries it.

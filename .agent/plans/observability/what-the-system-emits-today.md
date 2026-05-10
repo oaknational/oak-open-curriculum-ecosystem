@@ -189,9 +189,9 @@ Planned (not yet landed):
     the redaction policy and the primitives that compose it; browser-
     safety invariant (`zero @sentry/*`, `zero node:*` in runtime src)
     structurally enforced. Reverting would re-introduce all four.
-  - **Reviewer matrix**: `architecture-reviewer-barney` confirmed
+  - **Reviewer matrix**: `architecture-expert-barney` confirmed
     simplification realised (P2: README clarification applied; P3:
-    two pre-existing-shape observations deferred). `type-reviewer`
+    two pre-existing-shape observations deferred). `type-expert`
     confirmed type unification structurally equivalent + requireJsonObject
     elimination type-safe (P3: `isTelemetryObject` renamed to
     `isJsonObject`; redundant post-redaction guard in express-middleware

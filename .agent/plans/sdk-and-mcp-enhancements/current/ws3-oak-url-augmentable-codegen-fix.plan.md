@@ -2,7 +2,7 @@
 name: "OakUrlAugmentable Codegen Fix and Type Predicate ADR"
 overview: "Replace widening Record<string, unknown> alias with schema-derived GET response body union; document the constant → type → predicate pattern in a new ADR."
 parent_plan: "ws3-widget-clean-break-rebuild.plan.md"
-specialist_reviewer: "type-reviewer, architecture-reviewer-fred, code-reviewer"
+specialist_reviewer: "type-expert, architecture-expert-fred, code-expert"
 isProject: false
 todos:
   - id: phase-0-verify
@@ -123,7 +123,7 @@ pnpm test:e2e
 
 #### Task 6.2: Specialist review cycle
 
-Invoke: `type-reviewer`, `architecture-reviewer-fred`, `code-reviewer`
+Invoke: `type-expert`, `architecture-expert-fred`, `code-expert`
 
 #### Task 6.3: Foundation compliance checklist
 

@@ -401,10 +401,10 @@ Minimum test coverage:
 
 Minimum reviewers:
 
-1. `mcp-reviewer`
-2. `code-reviewer`
-3. `docs-adr-reviewer`
-4. `test-reviewer` if test files change materially
+1. `mcp-expert`
+2. `code-expert`
+3. `docs-adr-expert`
+4. `test-expert` if test files change materially
 
 ## Dependencies and Sequencing
 

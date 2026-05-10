@@ -122,7 +122,7 @@ const subagentTemplateNames = (await listFiles('.agent/sub-agents/templates', '.
 );
 
 function isSubagentAdapter(name) {
-  // Match exact template name or persona variants (e.g., "architecture-reviewer-barney" matches "architecture-reviewer")
+  // Match exact template name or persona variants (e.g., "architecture-expert-barney" matches "architecture-expert")
   return subagentTemplateNames.some((t) => name === t || name.startsWith(`${t}-`));
 }
 

@@ -22,11 +22,11 @@ adr_amendments_required:
   - "ADR-123: record `oak-misconceptions-subgraph-for-thread` (and `-for-unit` if shipped), recalculate primitive counts, and capture `_meta` legacy-substrate disclosure as non-contractual metadata"
   - "ADR-157: confirm `oak-misconceptions-*` prefix is recorded (already amended Phase 0 of MVP-arc spine)"
 specialist_reviewers:
-  - mcp-reviewer
-  - test-reviewer
-  - type-reviewer
-  - code-reviewer
-  - architecture-reviewer-betty
+  - mcp-expert
+  - test-expert
+  - type-expert
+  - code-expert
+  - architecture-expert-betty
 foundation_alignment:
   - .agent/directives/principles.md
   - .agent/directives/testing-strategy.md
@@ -70,7 +70,7 @@ todos:
     status: pending
     depends_on: [ws4-adr-123-and-157-update]
   - id: ws6-adversarial-review
-    content: "WS6: dispatch `mcp-reviewer` (MCP spec + tool shape + `_meta` legacy disclosure + namespace) + `test-reviewer` (TDD pair audit) + `architecture-reviewer-betty` (legacy-factory boundary — ensure the surface does not couple to legacy internals beyond the disclosed `_meta` path) + `code-reviewer` (gateway). Document findings; remediate or queue."
+    content: "WS6: dispatch `mcp-expert` (MCP spec + tool shape + `_meta` legacy disclosure + namespace) + `test-expert` (TDD pair audit) + `architecture-expert-betty` (legacy-factory boundary — ensure the surface does not couple to legacy internals beyond the disclosed `_meta` path) + `code-expert` (gateway). Document findings; remediate or queue."
     status: pending
     depends_on: [ws5-quality-gates]
   - id: ws7-spine-gate-3a-close-and-migration-followup
@@ -318,15 +318,15 @@ pnpm test && pnpm test:ui && pnpm test:e2e
 
 Dispatch:
 
-- `mcp-reviewer` — MCP spec, tool shape, `_meta` legacy disclosure,
+- `mcp-expert` — MCP spec, tool shape, `_meta` legacy disclosure,
   and namespace conformance
-- `test-reviewer` — TDD pair audit; no audit-shaped tests; no skipped
+- `test-expert` — TDD pair audit; no audit-shaped tests; no skipped
   tests
-- `architecture-reviewer-betty` — legacy-factory boundary; ensure the
+- `architecture-expert-betty` — legacy-factory boundary; ensure the
   tool does not couple to legacy internals beyond the disclosed
   `_meta` path; the substrate-migration follow-up plan should replace
   a small surface, not a wide one
-- `code-reviewer` — gateway
+- `code-expert` — gateway
 
 ### WS7 — Spine gate-3a close + migration follow-up plan
 
@@ -345,7 +345,7 @@ Dispatch:
 |---|---|
 | Empirical bound default poorly chosen; manifest coverage drifts as misconception data evolves | Cycle 1.2's default constant carries the empirical basis in a comment + committed `20`-context fixture manifest; substrate-migration plan re-validates the default. |
 | Legacy graph factory has surprising completeness edges that the bounded traversal misses | Cycle 1.3's small literal graph behaviour tests describe the traversal contract without a second full traversal implementation in the test. |
-| Tool `_meta` legacy disclosure omitted by reviewer or by drift, breaking the replatform contract | WS6 `mcp-reviewer` gate; substrate-migration plan re-validates `_meta` shape. |
+| Tool `_meta` legacy disclosure omitted by reviewer or by drift, breaking the replatform contract | WS6 `mcp-expert` gate; substrate-migration plan re-validates `_meta` shape. |
 | Slice 3b authoring (parallel) ends up coupled to a tool name we rename here | Tool name is locked from spine; renaming requires spine + slice-3b amendment. |
 
 ## Foundation Alignment

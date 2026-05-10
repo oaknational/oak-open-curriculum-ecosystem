@@ -126,17 +126,17 @@ state vendor + first-party integrations surveyed + why bespoke was
 chosen or which first-party option was adopted. Sunk-cost reasoning is
 not a valid answer. Canonical prose lives in
 `feature-workstream-template.md` §Build-vs-Buy Attestation.
-`assumptions-reviewer` runs against this attestation pre-ExitPlanMode.
+`assumptions-expert` runs against this attestation pre-ExitPlanMode.
 
 ---
 
 ## Reviewer Scheduling (phase-aligned)
 
-- **Pre-execution**: `assumptions-reviewer` + vendor specialist
+- **Pre-execution**: `assumptions-expert` + vendor specialist
   (challenges solution-class: "should this fix take this shape?").
-- **During**: `test-reviewer`, `type-reviewer`, architecture family,
-  `code-reviewer` gateway.
-- **Post**: `docs-adr-reviewer`, `release-readiness-reviewer`.
+- **During**: `test-expert`, `type-expert`, architecture family,
+  `code-expert` gateway.
+- **Post**: `docs-adr-expert`, `release-readiness-expert`.
 
 Scheduling all reviewers at close is phase-misalignment. See
 `feature-workstream-template.md` §Reviewer Scheduling for rationale.

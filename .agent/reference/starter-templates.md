@@ -14,13 +14,13 @@ implementation guide.
 The gateway reviewer. Runs on every change. Identifies which
 specialists are needed.
 
-### Template: `.agent/sub-agents/templates/code-reviewer.md`
+### Template: `.agent/sub-agents/templates/code-expert.md`
 
 ```markdown
 ## Delegation Triggers
 
 Invoke this agent after any code is written or modified. The
-code-reviewer is the always-on gateway reviewer: it reviews every
+code-expert is the always-on gateway reviewer: it reviews every
 change for quality, correctness, and maintainability, and it is
 responsible for identifying which specialist reviewers also need
 to be called.
@@ -34,11 +34,11 @@ to be called.
 ### Not This Agent When
 
 - The concern is exclusively about type system complexity — use
-  `type-reviewer` instead
+  `type-expert` instead
 - The concern is exclusively a deep security audit — use
-  `security-reviewer` instead
+  `security-expert` instead
 - The concern is exclusively about test structure — use
-  `test-reviewer` instead
+  `test-expert` instead
 
 ---
 
@@ -143,8 +143,8 @@ This agent reviews code quality and provides feedback. It does NOT:
 
 - Make architectural decisions (use architecture reviewers)
 - Fix issues directly (observe and report by default)
-- Review type-system details in depth (use `type-reviewer`)
-- Review test quality in depth (use `test-reviewer`)
+- Review type-system details in depth (use `type-expert`)
+- Review test quality in depth (use `test-expert`)
 
 ## Output Format
 
@@ -184,11 +184,11 @@ should be invoked:
 | Change Signal | Required Specialist |
 |---------------|---------------------|
 | Module boundaries, imports, public APIs | architecture reviewers |
-| Auth, OAuth, secrets, PII, injection risk | `security-reviewer` |
-| Test additions or modifications | `test-reviewer` |
-| Type complexity, generics, schema flow | `type-reviewer` |
-| Tooling configs, quality gates | `config-reviewer` |
-| README, TSDoc, ADR changes or drift | `docs-adr-reviewer` |
+| Auth, OAuth, secrets, PII, injection risk | `security-expert` |
+| Test additions or modifications | `test-expert` |
+| Type complexity, generics, schema flow | `type-expert` |
+| Tooling configs, quality gates | `config-expert` |
+| README, TSDoc, ADR changes or drift | `docs-adr-expert` |
 ```
 
 ---
@@ -197,7 +197,7 @@ should be invoked:
 
 Enforces TDD discipline, naming conventions, and mock simplicity.
 
-### Template: `.agent/sub-agents/templates/test-reviewer.md`
+### Template: `.agent/sub-agents/templates/test-expert.md`
 
 ```markdown
 ## Delegation Triggers
@@ -268,7 +268,7 @@ For each test file, classify:
 
 This agent reviews test quality. It does NOT:
 
-- Review product code quality (use `code-reviewer`)
+- Review product code quality (use `code-expert`)
 - Review architecture (use architecture reviewers)
 - Run tests or execute code
 - Fix tests directly
@@ -308,7 +308,7 @@ This agent reviews test quality. It does NOT:
 
 Shared by all persona variants. Guards structural integrity.
 
-### Template: `.agent/sub-agents/templates/architecture-reviewer.md`
+### Template: `.agent/sub-agents/templates/architecture-expert.md`
 
 ```markdown
 ## Delegation Triggers
@@ -400,9 +400,9 @@ core  <--  libs  <--  apps
 
 This agent reviews architecture. It does NOT:
 
-- Review code quality or style (use `code-reviewer`)
-- Review test quality (use `test-reviewer`)
-- Review type-system details (use `type-reviewer`)
+- Review code quality or style (use `code-expert`)
+- Review test quality (use `test-expert`)
+- Review type-system details (use `type-expert`)
 - Modify any files
 
 ## Output Format
@@ -529,7 +529,7 @@ If any answer is no, prefer the simpler option.
 ```markdown
 # Architectural Review Team
 
-You are part of a four-reviewer architecture team with complementary lenses:
+You are part of a four-expert architecture team with complementary lenses:
 
 - **Barney** — Simplification and dependency/boundary cartography
 - **Fred** — Rigorous ADR/boundary enforcement and standards discipline
@@ -649,11 +649,11 @@ Before finalising changes:
 
 After copying these templates into your repo:
 
-- [ ] Adapt the code-reviewer checklist to your project's standards
+- [ ] Adapt the code-expert checklist to your project's standards
 - [ ] Replace `<!-- ADD YOUR ... -->` comments with your actual doc paths
 - [ ] Set up the import direction rules for your module structure
 - [ ] Create Claude wrappers in `.claude/agents/`
 - [ ] Create Cursor wrappers in `.cursor/agents/`
 - [ ] (Optional) Create Gemini commands in `.gemini/commands/`
 - [ ] Run `pnpm portability:check` to validate
-- [ ] Add the code-reviewer to your "after every change" workflow
+- [ ] Add the code-expert to your "after every change" workflow

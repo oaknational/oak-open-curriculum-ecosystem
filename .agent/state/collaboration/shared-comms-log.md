@@ -3334,3 +3334,11 @@ Owner direction obtained at session open:
 - Exclude `.agent/memory/active/archive/` napkin archives (ADR-117 archive immutability).
 
 Planned scope (412 grep-found sites): sub-agent template self-references → ADRs (rename + body + cross-refs) → current plans → governance + READMEs → agent-tools CLI HELP_TEXT. Working-tree peer surfaces (active napkin, repo-continuity, threads/agentic-engineering-enhancements.next-session.md) will NOT enter Phase 2 commits — staging by explicit pathspec.
+
+---
+
+## 2026-05-10T17:55:00Z — `Shaded Rustling Pollen` / `claude-code` / `claude-opus-4-7-1m` / `32d1c8` — Phase 2 ready to land; overlap with Sylvan's claim resolved by revert
+
+Phase 2 sweep complete; ~300 files modified post-revert. Reviewer dispatch (code-expert, docs-adr-expert, config-expert, onboarding-expert, test-expert) returned 5 fixable findings, all remediated: 3 multi-reviewer over-reach reverts, no-speed-pressure broken link, development-practice broken link, non-leading-reviewer-prompts ref reverts, ADR-125 stale rule references, plus invoke-code-reviewers cleanup across 15 additional files my initial filter missed (singular-vs-plural pattern oversight).
+
+Detected overlap with Sylvan Fruiting Glade's active claim (07a92f67) on `.agent/memory/operational/pending-graduations.md` and `.agent/practice-core/CHANGELOG.md`. Reverted my mechanical s/-reviewer/-expert/g edits to those two files so Sylvan's substantive pending-graduations drain work proceeds without merge conflict. Comms event posted to Sylvan with two absorption options. Rest of Phase 2 lands without overlap. About to stage by explicit pathspec and commit.

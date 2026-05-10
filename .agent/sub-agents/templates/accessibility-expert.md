@@ -134,7 +134,7 @@ repo-specific documents:
 |----------|---------|
 | `docs/architecture/architectural-decisions/147-browser-accessibility-as-blocking-quality-gate.md` | This expert's architectural decision — zero-tolerance, Playwright + axe-core, two-level MCP App testing |
 | `docs/governance/accessibility-practice.md` | WCAG 2.2 AA target, tooling, rule configuration, theme-aware testing, MCP App testing levels |
-| `docs/architecture/architectural-decisions/149-frontend-specialist-reviewer-gateway-cluster.md` | Cluster definition, overlap boundaries, MCP boundary rule |
+| `docs/architecture/architectural-decisions/149-frontend-specialist-expert-gateway-cluster.md` | Cluster definition, overlap boundaries, MCP boundary rule |
 
 ### Consult-If-Relevant
 

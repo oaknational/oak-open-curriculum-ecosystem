@@ -322,12 +322,12 @@ pnpm smoke:dev:stub
 
 Run specialist reviews after implementation:
 
-1. `architecture-reviewer-betty` — boundary and change-cost sanity check for
+1. `architecture-expert-betty` — boundary and change-cost sanity check for
    release pipeline additions
-2. `security-reviewer` — artefact integrity, checksum, and supply-chain
+2. `security-expert` — artefact integrity, checksum, and supply-chain
    concerns
-3. `config-reviewer` — semantic-release and workflow config correctness
-4. `test-reviewer` — release-contract test rigour and determinism
+3. `config-expert` — semantic-release and workflow config correctness
+4. `test-expert` — release-contract test rigour and determinism
 
 Document findings in this plan; create follow-up plan for blockers.
 

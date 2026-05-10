@@ -87,7 +87,7 @@ describe('session tools', () => {
     const subagents: SubagentSummary[] = [
       {
         agentId: 'agent-a1',
-        agentType: 'code-reviewer',
+        agentType: 'code-expert',
         assistantTurns: 9,
         lastMessage: 'done',
       },

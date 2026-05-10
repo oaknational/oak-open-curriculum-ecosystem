@@ -304,22 +304,22 @@ Plan-specific amendments:
 
 ### Plan-Phase (PRE-execution)
 
-- `assumptions-reviewer` — validate that this is truly the payoff-peak slice,
+- `assumptions-expert` — validate that this is truly the payoff-peak slice,
   not a disguised platform build
-- `architecture-reviewer-fred` — validate workspace boundaries and ADR-154
+- `architecture-expert-fred` — validate workspace boundaries and ADR-154
   discipline
 
 ### Mid-Cycle (DURING execution)
 
-- `test-reviewer` — after RED fixtures and contracts are written
-- `architecture-reviewer-betty` — after workspace scaffold and extraction
+- `test-expert` — after RED fixtures and contracts are written
+- `architecture-expert-betty` — after workspace scaffold and extraction
   boundary land
-- `code-reviewer` — after CLI/report/query/path wiring
+- `code-expert` — after CLI/report/query/path wiring
 
 ### Close (POST-execution)
 
-- `docs-adr-reviewer` — documentation/acknowledgement/drift coherence
-- `onboarding-reviewer` — confirm the graph outputs actually help first-contact
+- `docs-adr-expert` — documentation/acknowledgement/drift coherence
+- `onboarding-expert` — confirm the graph outputs actually help first-contact
   discovery
 
 ---

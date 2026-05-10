@@ -54,7 +54,7 @@ pnpm agent-tools:collaboration-state -- identity preflight --platform codex --mo
 pnpm agent-tools:claude-agent-ops status
 pnpm agent-tools:claude-agent-ops health
 pnpm agent-tools:cursor-session-from-claude-session find --last-hours 2
-pnpm agent-tools:codex-reviewer-resolve code-reviewer
+pnpm agent-tools:codex-reviewer-resolve code-expert
 ```
 
 ## `agent-identity` quick reference
@@ -195,8 +195,8 @@ registration plus a self-describing `.codex/agents/*.toml` adapter whose
 Examples:
 
 ```bash
-pnpm agent-tools:codex-reviewer-resolve sentry-reviewer
-pnpm agent-tools:codex-reviewer-resolve architecture-reviewer-fred --json
+pnpm agent-tools:codex-reviewer-resolve sentry-expert
+pnpm agent-tools:codex-reviewer-resolve architecture-expert-fred --json
 ```
 
 ## Repo gate status

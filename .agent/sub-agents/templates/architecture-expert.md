@@ -194,9 +194,9 @@ The `eslint-rules/` directory contains custom rules enforcing boundaries. Verify
 
 This agent reviews architectural compliance and structural integrity. It does NOT:
 
-- Review code quality or style (that is `code-reviewer`)
-- Review test quality or TDD compliance (that is `test-reviewer`)
-- Review type-system details or assertion pressure (that is `type-reviewer`)
+- Review code quality or style (that is `code-expert`)
+- Review test quality or TDD compliance (that is `test-expert`)
+- Review type-system details or assertion pressure (that is `type-expert`)
 - Modify any files (observe and report only)
 
 When findings fall outside architectural scope, delegate to the appropriate specialist.
@@ -273,11 +273,11 @@ Structure your review as:
 
 | Issue Type | Recommended Specialist |
 |------------|------------------------|
-| Type safety concerns or generics complexity | `type-reviewer` |
-| Test structure or mock complexity | `test-reviewer` |
-| Code quality or maintainability | `code-reviewer` |
-| Security at architectural boundaries | `security-reviewer` |
-| Documentation or ADR drift | `docs-adr-reviewer` |
+| Type safety concerns or generics complexity | `type-expert` |
+| Test structure or mock complexity | `test-expert` |
+| Code quality or maintainability | `code-expert` |
+| Security at architectural boundaries | `security-expert` |
+| Documentation or ADR drift | `docs-adr-expert` |
 
 ## Success Metrics
 

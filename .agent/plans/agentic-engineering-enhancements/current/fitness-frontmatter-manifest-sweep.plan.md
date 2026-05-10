@@ -191,11 +191,11 @@ Not applicable. Extends existing first-party fitness infrastructure.
 
 ## Reviewer Scheduling (phase-aligned)
 
-- **Pre-execution**: `assumptions-reviewer` (challenge: is the
+- **Pre-execution**: `assumptions-expert` (challenge: is the
   inclusion criterion the right shape?).
-- **During**: `code-reviewer` gateway during Phase 3; `docs-adr-reviewer`
+- **During**: `code-expert` gateway during Phase 3; `docs-adr-expert`
   during Phase 1 (convention doc).
-- **Post**: `release-readiness-reviewer` before declaring closure.
+- **Post**: `release-readiness-expert` before declaring closure.
 
 ---
 

@@ -14,8 +14,8 @@ todos:
   - id: pdr-author-draft
     content: "Author the Build-vs-Buy Attestation PDR body (Decision, Rationale, Consequences, Notes). Include the six guardrails verbatim from L-8 §Self-Test."
     status: pending
-  - id: pdr-reviewer-pass
-    content: "Dispatch assumptions-reviewer to challenge whether the doctrine is over-fitted to the L-8 context, and docs-adr-reviewer to check coherence with sibling PDRs (PDR-007, PDR-018, PDR-026)."
+  - id: pdr-expert-pass
+    content: "Dispatch assumptions-expert to challenge whether the doctrine is over-fitted to the L-8 context, and docs-adr-expert to check coherence with sibling PDRs (PDR-007, PDR-018, PDR-026)."
     status: pending
   - id: adr-163-section-6-rewrite
     content: "Rewrite ADR-163 §6 from the six-step sentry-cli prescription to the outcome statement (\"the Sentry UI MUST reflect (a) a release keyed by the per-environment release identifier, (b) the build commit attached to that release, (c) a deploy event recorded under the appropriate environment\"). Existing prescription stays in §History as historical block."
@@ -86,7 +86,7 @@ the source plan cites the new homes and stops restating the doctrine.
    (PDR / pattern Core contract), PDR-018 (planning discipline),
    PDR-019 (ADR scope by reusability), PDR-026 (per-session landing
    commitment), PDR-029 (perturbation mechanism bundle).
-3. Brief assumptions-reviewer with the proposed PDR scope: "is the
+3. Brief assumptions-expert with the proposed PDR scope: "is the
    build-vs-buy doctrine over-fitted to the Sentry-plugin context,
    or genuinely portable across vendors?"
 
@@ -180,12 +180,12 @@ doctrine"): change `status: pending` to
 
 ## Reviewers
 
-- `assumptions-reviewer` — challenge whether the build-vs-buy
+- `assumptions-expert` — challenge whether the build-vs-buy
   doctrine is portable or over-fitted (PRE-execution in this plan;
   matches PDR-015 reviewer-phasing amendment 2026-04-29).
-- `docs-adr-reviewer` — verify PDR-036 + ADR-163 amendment coherence
+- `docs-adr-expert` — verify PDR-036 + ADR-163 amendment coherence
   with sibling PDRs and existing ADR.
-- `code-reviewer` — final pass on any documentation file edits.
+- `code-expert` — final pass on any documentation file edits.
 
 ## Risk
 

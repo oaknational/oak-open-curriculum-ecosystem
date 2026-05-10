@@ -500,16 +500,16 @@ Invoke the full gate sequence and specialist reviewers after implementation.
 
 Required reviewers:
 
-- `architecture-reviewer-barney`
-- `architecture-reviewer-betty`
-- `architecture-reviewer-fred`
-- `architecture-reviewer-wilma`
-- `code-reviewer`
-- `test-reviewer`
-- `type-reviewer`
-- `elasticsearch-reviewer`
-- `security-reviewer`
-- `docs-adr-reviewer`
+- `architecture-expert-barney`
+- `architecture-expert-betty`
+- `architecture-expert-fred`
+- `architecture-expert-wilma`
+- `code-expert`
+- `test-expert`
+- `type-expert`
+- `elasticsearch-expert`
+- `security-expert`
+- `docs-adr-expert`
 
 Acceptance criteria:
 

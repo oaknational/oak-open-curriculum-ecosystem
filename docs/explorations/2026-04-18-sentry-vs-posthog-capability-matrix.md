@@ -150,8 +150,8 @@ and the L-15 reframe in
   read to be load-bearing.
 - Stream D — seven assumption stress tests, run in the overlay
   companion §10 with method and verdict per test.
-- Reviewer choreography — two rounds (`assumptions-reviewer` +
-  `docs-adr-reviewer` in parallel each round). Round 1 dispositions
+- Reviewer choreography — two rounds (`assumptions-expert` +
+  `docs-adr-expert` in parallel each round). Round 1 dispositions
   recorded in overlay companion §14.1. Round 2 (against this
   exploration body) follows.
 

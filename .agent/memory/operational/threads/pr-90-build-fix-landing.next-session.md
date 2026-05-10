@@ -172,7 +172,7 @@ None.
 - If Phase 0 audit finds additional drift sites beyond the three named,
   scope expansion is in-plan (one commit covers all sites consistently).
 - If Sonar fixes change behaviour (not purely mechanical), pause and
-  invoke `code-reviewer` before committing — fix is not mechanical and
+  invoke `code-expert` before committing — fix is not mechanical and
   warrants individual TDD treatment.
 - If CI surfaces additional `.mjs`-pattern failures after Phase 1 push,
   treat as in-scope sibling drift and fix in a follow-up commit before

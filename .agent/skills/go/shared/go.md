@@ -93,7 +93,7 @@ says deep convergence is due.
   1. Stepping back and reflecting on the action
   2. Checking alignment with the plan and rules
   3. **Invoking the appropriate sub-agent(s)** per the
-     `invoke-code-reviewers` rule (full matrix, timing, triage, and examples)
+     `invoke-code-experts` rule (full matrix, timing, triage, and examples)
 - Make sure your todo list includes running the quality gates. These
   items should be prefixed with `QUALITY-GATE:` and happen reasonably
   often.

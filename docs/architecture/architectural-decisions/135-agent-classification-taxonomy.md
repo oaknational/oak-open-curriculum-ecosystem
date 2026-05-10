@@ -11,7 +11,7 @@ The repository has 17 sub-agents across 4 platforms. All are named with a `-revi
 
 Three concrete problems:
 
-1. **Review is treated as an identity, not a mode.** `architecture-reviewer-fred` _is_ a reviewer by name, but AGENT.md already says "Reviewers can review intentions, not just code" — acknowledging that these agents explore and advise as well as review. The naming prevents this from being a first-class capability.
+1. **Review is treated as an identity, not a mode.** `architecture-expert-fred` _is_ a reviewer by name, but AGENT.md already says "Reviewers can review intentions, not just code" — acknowledging that these agents explore and advise as well as review. The naming prevents this from being a first-class capability.
 
 2. **No classification metadata.** Skills have `classification: active | passive` in frontmatter. Sub-agents have no equivalent. This means there is no machine-readable way to determine an agent's purpose, model policy, or invocation pattern. Every agent is treated identically in validation, documentation, and invocation guidance.
 
@@ -105,11 +105,11 @@ Gateway responsibility is declared in the agent's template, not in a separate ar
 
 The Practice domain splits into three agents matching the existing conceptual boundary between Practice Core (portable blueprint) and Practice (applied operationalisation):
 
-| Agent              | Domain                         | Depth           | Must-Read Tier                                                                        |
-| ------------------ | ------------------------------ | --------------- | ------------------------------------------------------------------------------------- |
-| `practice`         | The whole practice             | Broad (gateway) | `index.md`, `AGENT.md`, artefact inventory overview                                   |
-| `practice-core`    | Practice Core lifecycle        | Deep            | The 6 practice-core files, ADR-124, ADR-131                                           |
-| `practice-applied` | This repo's operationalisation | Deep            | ADR index, `invoke-code-reviewers.md`, artefact inventory, quality gate configuration |
+| Agent              | Domain                         | Depth           | Must-Read Tier                                                                      |
+| ------------------ | ------------------------------ | --------------- | ----------------------------------------------------------------------------------- |
+| `practice`         | The whole practice             | Broad (gateway) | `index.md`, `AGENT.md`, artefact inventory overview                                 |
+| `practice-core`    | Practice Core lifecycle        | Deep            | The 6 practice-core files, ADR-124, ADR-131                                         |
+| `practice-applied` | This repo's operationalisation | Deep            | ADR index, `invoke-code-experts.md`, artefact inventory, quality gate configuration |
 
 - `practice` is the entry point for practice-related questions and the gateway for process executors.
 - `practice-core` handles propagation, hydration, consolidation, fitness functions, and the learning loop mechanism.
@@ -130,27 +130,27 @@ capability, not mode: an expert may explore, advise, or review.
 
 #### Current Naming
 
-| Current Name                   | New Name                     | Classification                   |
-| ------------------------------ | ---------------------------- | -------------------------------- |
-| `code-reviewer`                | `code-expert`                | `domain_expert` (broad, gateway) |
-| `architecture-reviewer-barney` | `architecture-expert-barney` | `domain_expert` (deep)           |
-| `architecture-reviewer-fred`   | `architecture-expert-fred`   | `domain_expert` (deep)           |
-| `architecture-reviewer-betty`  | `architecture-expert-betty`  | `domain_expert` (deep)           |
-| `architecture-reviewer-wilma`  | `architecture-expert-wilma`  | `domain_expert` (deep)           |
-| `test-reviewer`                | `test-expert`                | `domain_expert` (deep)           |
-| `type-reviewer`                | `type-expert`                | `domain_expert` (deep)           |
-| `config-reviewer`              | `config-expert`              | `domain_expert` (deep)           |
-| `security-reviewer`            | `security-expert`            | `domain_expert` (deep)           |
-| `docs-adr-reviewer`            | `docs-adr-expert`            | `domain_expert` (deep)           |
-| `onboarding-reviewer`          | `onboarding-expert`          | `domain_expert` (deep)           |
-| `elasticsearch-reviewer`       | `elasticsearch-expert`       | `domain_expert` (deep)           |
-| `mcp-reviewer`                 | `mcp-expert`                 | `domain_expert` (deep)           |
-| `ground-truth-designer`        | `ground-truth`               | `domain_expert` (deep)           |
-| `release-readiness-reviewer`   | `release-readiness-expert`   | `domain_expert` (deep)           |
-| `subagent-architect`           | `subagent-architect`         | `process_executor`               |
-| — (new)                        | `practice`                   | `domain_expert` (broad, gateway) |
-| — (new)                        | `practice-core`              | `domain_expert` (deep)           |
-| — (new)                        | `practice-applied`           | `domain_expert` (deep)           |
+| Current Name                 | New Name                     | Classification                   |
+| ---------------------------- | ---------------------------- | -------------------------------- |
+| `code-expert`                | `code-expert`                | `domain_expert` (broad, gateway) |
+| `architecture-expert-barney` | `architecture-expert-barney` | `domain_expert` (deep)           |
+| `architecture-expert-fred`   | `architecture-expert-fred`   | `domain_expert` (deep)           |
+| `architecture-expert-betty`  | `architecture-expert-betty`  | `domain_expert` (deep)           |
+| `architecture-expert-wilma`  | `architecture-expert-wilma`  | `domain_expert` (deep)           |
+| `test-expert`                | `test-expert`                | `domain_expert` (deep)           |
+| `type-expert`                | `type-expert`                | `domain_expert` (deep)           |
+| `config-expert`              | `config-expert`              | `domain_expert` (deep)           |
+| `security-expert`            | `security-expert`            | `domain_expert` (deep)           |
+| `docs-adr-expert`            | `docs-adr-expert`            | `domain_expert` (deep)           |
+| `onboarding-expert`          | `onboarding-expert`          | `domain_expert` (deep)           |
+| `elasticsearch-expert`       | `elasticsearch-expert`       | `domain_expert` (deep)           |
+| `mcp-expert`                 | `mcp-expert`                 | `domain_expert` (deep)           |
+| `ground-truth-designer`      | `ground-truth`               | `domain_expert` (deep)           |
+| `release-readiness-expert`   | `release-readiness-expert`   | `domain_expert` (deep)           |
+| `subagent-architect`         | `subagent-architect`         | `process_executor`               |
+| — (new)                      | `practice`                   | `domain_expert` (broad, gateway) |
+| — (new)                      | `practice-core`              | `domain_expert` (deep)           |
+| — (new)                      | `practice-applied`           | `domain_expert` (deep)           |
 
 Architecture personas remain separate agents to preserve model diversity across providers.
 
@@ -199,7 +199,7 @@ Modes describe _how_ an agent is invoked on a given occasion. Classification des
 
 ### Why full rename rather than metadata only
 
-Metadata-only classification creates naming dissonance: `code-reviewer` with `classification: domain_expert` is confusing. A clean rename aligns names with the conceptual model. The cost is a coordinated change across 4 platforms; the benefit is permanent conceptual clarity for humans and agents.
+Metadata-only classification creates naming dissonance: `code-expert` with `classification: domain_expert` is confusing. A clean rename aligns names with the conceptual model. The cost is a coordinated change across 4 platforms; the benefit is permanent conceptual clarity for humans and agents.
 
 ### Why specialists are agent-to-agent only
 
@@ -222,7 +222,7 @@ The Practice Core (portable blueprint) and the applied Practice (this repo's ope
 
 ### Trade-offs
 
-- The full rename is a substantial coordinated change across 4 platforms, 17+ agents, validation scripts, all documentation references, and the invoke-code-reviewers directive.
+- The full rename is a substantial coordinated change across 4 platforms, 17+ agents, validation scripts, all documentation references, and the invoke-code-experts directive.
 - Three new agents (practice trio) add to the roster size and platform adapter file count.
 - The specialist input contract is new and will need iteration as real specialist agents are built.
 - Mode components add a new axis of composition to the template layer, increasing the number of components.
@@ -241,6 +241,6 @@ The Practice Core (portable blueprint) and the applied Practice (this repo's ope
 - `.agent/sub-agents/README.md` — three-layer prompt composition
 - `.agent/sub-agents/templates/` — canonical agent templates
 - `.agent/sub-agents/components/` — reusable prompt components
-- `.agent/memory/executive/invoke-code-reviewers.md` — invocation guidance (to be renamed)
+- `.agent/memory/executive/invoke-code-experts.md` — invocation guidance (to be renamed)
 - `.agent/practice-core/` — Practice Core files
 - `scripts/validate-subagents.ts` — sub-agent validation script

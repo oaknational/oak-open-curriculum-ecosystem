@@ -59,8 +59,8 @@ The forbidden response is to skip understanding and go straight to
 The 2026-04-29 TS6-migration session captured five distinct
 manifestations of the same instinct in one continuous arc:
 
-1. **Reviewer findings as grounding** — code-reviewer +
-   config-reviewer findings became the picture of "what's broken"
+1. **Reviewer findings as grounding** — code-expert +
+   config-expert findings became the picture of "what's broken"
    without independent grounding. Captured as
    [`ground-before-framing.md`](ground-before-framing.md). The
    reviewer was treated as a prosthetic for direct observation.

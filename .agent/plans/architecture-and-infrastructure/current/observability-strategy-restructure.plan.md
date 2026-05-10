@@ -30,16 +30,16 @@ todos:
   - id: phase-4-executable-plan-revision
     content: "Phase 4: revise sentry-observability-maximisation-mcp.plan.md — swap L-4a/L-4b priorities (metrics.* primary, span-metrics transitional); mark lanes MVP vs MVP-deferred; cross-reference new MVP lanes (events workspace, synthetic, a11y, security, vendor-independence). Risk row update for metrics.* beta-API shift."
     status: completed
-    note: "Executed 2026-04-18 (commit 2e0be715). Maximisation plan revised per §P4.1–P4.4: (1) L-4a/L-4b priority swap in frontmatter, headings, objectives, Phase 2 dependency graph (L-4b → L-4a), and Risk Assessment (new Phase 2 row with concrete changelog-review trigger covering closure milestones, monthly dependency audits, and @sentry/node 10.x minor/major bumps); (2) new §MVP Classification section at plan head with three-column table citing ADR-162 §Principle's 'Omission is explicit and justified, not incidental' clause for every MVP-deferred lane (L-4a, L-5, L-6, L-10, L-11, L-14); (3) §Foundation Alignment extended with ADR-160 and ADR-162 per §P4.2b; (4) eight cross-references added in lane bodies AND new Cross-plan propagation sub-section of §Documentation Propagation. Three-reviewer matrix (sentry-reviewer, architecture-reviewer-fred, docs-adr-reviewer) dispatched at phase close per §P4.4: three TO-ACTIONs applied. pnpm check exit 0 both before and after the reviewer corrections. Post-Phase-4 hardening landed 2026-04-19 across three further commits: f1f2c259 (status markers on forward-pointing references to planned-not-yet-code workspaces), 7f5b18e7 (5-wave execution reshape — authored §Post-Phase-5 Execution Plan in this plan + §Execution Waves in high-level-observability-plan.md), 2e8a140d (physical reorder of the maximisation plan's lane sections to match execution-wave order single-frame)."
+    note: "Executed 2026-04-18 (commit 2e0be715). Maximisation plan revised per §P4.1–P4.4: (1) L-4a/L-4b priority swap in frontmatter, headings, objectives, Phase 2 dependency graph (L-4b → L-4a), and Risk Assessment (new Phase 2 row with concrete changelog-review trigger covering closure milestones, monthly dependency audits, and @sentry/node 10.x minor/major bumps); (2) new §MVP Classification section at plan head with three-column table citing ADR-162 §Principle's 'Omission is explicit and justified, not incidental' clause for every MVP-deferred lane (L-4a, L-5, L-6, L-10, L-11, L-14); (3) §Foundation Alignment extended with ADR-160 and ADR-162 per §P4.2b; (4) eight cross-references added in lane bodies AND new Cross-plan propagation sub-section of §Documentation Propagation. Three-reviewer matrix (sentry-expert, architecture-expert-fred, docs-adr-expert) dispatched at phase close per §P4.4: three TO-ACTIONs applied. pnpm check exit 0 both before and after the reviewer corrections. Post-Phase-4 hardening landed 2026-04-19 across three further commits: f1f2c259 (status markers on forward-pointing references to planned-not-yet-code workspaces), 7f5b18e7 (5-wave execution reshape — authored §Post-Phase-5 Execution Plan in this plan + §Execution Waves in high-level-observability-plan.md), 2e8a140d (physical reorder of the maximisation plan's lane sections to match execution-wave order single-frame)."
   - id: phase-5-adr-162-acceptance
     content: "Phase 5: lock down ADR-162 enforcement mechanics (ESLint rule scope, reviewer-matrix question, conformance test API, vendor-independence test); flip status Proposed → Accepted. Land the ESLint rule as part of the acceptance (even if initially warning-severity while Phase 2 new plans ramp up)."
     status: completed
-    note: "Executed 2026-04-19. require-observability-emission authored at packages/core/oak-eslint/src/rules/require-observability-emission.ts (core Rule.RuleModule typing to fit ESLint.Plugin slot; export-anchor tracking to avoid MaybeNamedFunctionDeclaration subtyping friction) + 20 valid + 6 invalid RuleTester cases in require-observability-emission.unit.test.ts. Emission predicate covers logger.* / Sentry.* / delegate-pattern including span/tracer verbs (withSpan, startSpan, startActiveSpan, setAttribute, setAttributes, recordException, addEvent) per architecture-reviewer-fred TO-ACTION — avoids false-positives on trace-only emitters like fetchUpstreamMetadata and proxyUpstreamAsset. Rule registered in the inline @oaknational plugin at recommended.ts and activated at warn in each of the 5 workspaces: apps/oak-curriculum-mcp-streamable-http (2 warns), apps/oak-search-cli (46 warns), packages/sdks/oak-curriculum-sdk (7 warns), packages/sdks/oak-search-sdk (27 warns), packages/sdks/oak-sdk-codegen (14 warns) — 96 total observability-gap warns surface; each is a coverage surface for Wave 3+ emitter lanes. Reviewer-matrix axis-coverage question added at .agent/memory/executive/invoke-code-reviewers.md §Coverage Tracking (adapters are thin pointers; no propagation edits). ADR-162 status flipped Proposed → Accepted (2026-04-19) with a History block recording wave-1 enforcement scope and wave-2 deferrals (schema-usage detection path, vendor-independence conformance test, no-vendor-observability-import lint). Wave-2 cases NOT stubbed as it.skip per .agent/rules/no-skipped-tests.md — schema-usage cases deferred from the test file entirely until the events workspace lands. Reviewer matrix (architecture-reviewer-fred + type-reviewer): 4 TO-ACTION findings all ACTIONED in-place — span-predicate extension, defensive id null-guard on named FunctionDeclaration path, absolute-path RuleTester coverage, delegate-pattern span RuleTester coverage."
+    note: "Executed 2026-04-19. require-observability-emission authored at packages/core/oak-eslint/src/rules/require-observability-emission.ts (core Rule.RuleModule typing to fit ESLint.Plugin slot; export-anchor tracking to avoid MaybeNamedFunctionDeclaration subtyping friction) + 20 valid + 6 invalid RuleTester cases in require-observability-emission.unit.test.ts. Emission predicate covers logger.* / Sentry.* / delegate-pattern including span/tracer verbs (withSpan, startSpan, startActiveSpan, setAttribute, setAttributes, recordException, addEvent) per architecture-expert-fred TO-ACTION — avoids false-positives on trace-only emitters like fetchUpstreamMetadata and proxyUpstreamAsset. Rule registered in the inline @oaknational plugin at recommended.ts and activated at warn in each of the 5 workspaces: apps/oak-curriculum-mcp-streamable-http (2 warns), apps/oak-search-cli (46 warns), packages/sdks/oak-curriculum-sdk (7 warns), packages/sdks/oak-search-sdk (27 warns), packages/sdks/oak-sdk-codegen (14 warns) — 96 total observability-gap warns surface; each is a coverage surface for Wave 3+ emitter lanes. Reviewer-matrix axis-coverage question added at .agent/memory/executive/invoke-code-experts.md §Coverage Tracking (adapters are thin pointers; no propagation edits). ADR-162 status flipped Proposed → Accepted (2026-04-19) with a History block recording wave-1 enforcement scope and wave-2 deferrals (schema-usage detection path, vendor-independence conformance test, no-vendor-observability-import lint). Wave-2 cases NOT stubbed as it.skip per .agent/rules/no-skipped-tests.md — schema-usage cases deferred from the test file entirely until the events workspace lands. Reviewer matrix (architecture-expert-fred + type-expert): 4 TO-ACTION findings all ACTIONED in-place — span-predicate extension, defensive id null-guard on named FunctionDeclaration path, absolute-path RuleTester coverage, delegate-pattern span RuleTester coverage."
   - id: ws-quality-gates
     content: "Full quality gate chain after each phase (pnpm check from repo root, exit 0, no filtering)."
     status: pending
   - id: ws-adversarial-review
-    content: "Specialist reviewer passes per phase: Phase 1 docs-adr-reviewer + architecture-reviewer-fred (boundary correctness of new directory structure); Phase 2 docs-adr-reviewer + assumptions-reviewer (plan proportionality + promotion-trigger legitimacy); Phase 3 docs-adr-reviewer; Phase 4 sentry-reviewer + architecture-reviewer-fred; Phase 5 architecture-reviewer-fred + type-reviewer (ESLint rule shape)."
+    content: "Specialist reviewer passes per phase: Phase 1 docs-adr-expert + architecture-expert-fred (boundary correctness of new directory structure); Phase 2 docs-adr-expert + assumptions-expert (plan proportionality + promotion-trigger legitimacy); Phase 3 docs-adr-expert; Phase 4 sentry-expert + architecture-expert-fred; Phase 5 architecture-expert-fred + type-expert (ESLint rule shape)."
     status: pending
   - id: ws-doc-propagation
     content: "Propagate: session-continuation prompt; high-level-plan references; crosswalk plan; ADR index; AGENT.md (owner-only edit at close; exact text in §Documentation Propagation)."
@@ -161,7 +161,7 @@ the text shape in §4.2 of the session report.
 
 **Location**: `docs/architecture/architectural-decisions/162-observability-first.md`.
 
-**RED**: docs-adr-reviewer pass on the ADR text asserts closure property
+**RED**: docs-adr-expert pass on the ADR text asserts closure property
 is present and testable, vendor-independence clause is testable, and
 enforcement mechanisms are at least named (if not yet concrete).
 
@@ -282,9 +282,9 @@ architecture-and-infrastructure collection prior to 2026-04-18):
 
 **Reviewer matrix**:
 
-- `docs-adr-reviewer` — ADR-162 Proposed text correctness; plan-directory
+- `docs-adr-expert` — ADR-162 Proposed text correctness; plan-directory
   ADR-117 compliance; cross-reference completeness.
-- `architecture-reviewer-fred` — directory boundary correctness;
+- `architecture-expert-fred` — directory boundary correctness;
   vendor-independence clause testability in ADR-162.
 
 **Phase 1 commit**: single commit with subject
@@ -308,7 +308,7 @@ the MVP definition, launch criteria, plan map, and promotion triggers.
    - Post-MVP deliverable names + owning future plan.
    - Explorations informing scope.
 3. **Launch criteria** — the data-scientist / engineer / product-owner /
-   a11y-reviewer test ("can each answer first-order questions from
+   a11y-expert test ("can each answer first-order questions from
    telemetry alone").
 4. **MVP gate summary** — which lanes must close before public-beta
    launch vs which can close post-launch.
@@ -419,9 +419,9 @@ The eleven plans with their triggers (per session report §6.5):
 
 **Reviewer matrix**:
 
-- `docs-adr-reviewer` — plan shape compliance with ADR-117;
+- `docs-adr-expert` — plan shape compliance with ADR-117;
   documentation-propagation completeness across the 17 new plan files.
-- `assumptions-reviewer` — proportionality (17 new plan files is a lot;
+- `assumptions-expert` — proportionality (17 new plan files is a lot;
   verify the MVP six are truly MVP and the future eleven are truly
   post-MVP with legitimate triggers); promotion-trigger testability
   (each trigger must be observable — "first data-science request" is
@@ -489,7 +489,7 @@ filled in as work progresses.
 
 **Quality gate**: `pnpm check` exit 0 (markdown-only; light gate).
 
-**Reviewer matrix**: `docs-adr-reviewer` — exploration shape
+**Reviewer matrix**: `docs-adr-expert` — exploration shape
 compliance; clarity of informed-plan linkage.
 
 **Phase 3 commit**: single commit with subject
@@ -611,13 +611,13 @@ bodies to cross-reference:
 
 **Reviewer matrix**:
 
-- `sentry-reviewer` — `metrics.*` priority swap correctness; beta-API
+- `sentry-expert` — `metrics.*` priority swap correctness; beta-API
   risk mitigation sufficiency; `beforeSendMetric` shape compatibility
   with the changelog-watch trigger named in §P4.1.
-- `architecture-reviewer-fred` — MVP classification boundary;
+- `architecture-expert-fred` — MVP classification boundary;
   axis-applicability rationale correctness; cross-reference
   completeness including the three additions in §P4.3.
-- `docs-adr-reviewer` — Foundation Alignment list completeness after
+- `docs-adr-expert` — Foundation Alignment list completeness after
   §P4.2b; MVP classification section presence at plan head; ADR
   cross-reference health across the revised plan.
 
@@ -645,7 +645,7 @@ Refine ADR-162's § Enforcement section to concrete, testable mechanics:
      once the six new MVP plans land their first emission sites).
 2. **Reviewer-matrix question** at every phase close: "Does each new
    capability have a loop across each applicable axis?" Codify in the
-   existing `.claude/rules/invoke-code-reviewers.md` or equivalent.
+   existing `.claude/rules/invoke-code-experts.md` or equivalent.
 3. **Conformance test** in `packages/core/observability-events/`: the
    `conformance.ts` helper exported in Phase 2 provides the structural
    gate; each consuming workspace imports it to validate emitted events.
@@ -675,7 +675,7 @@ RuleTester cases:
 `warn`. Document the sentinel-comment opt-out for legitimate non-
 emission cases.
 
-**Wave-2 dependency** (2026-04-18 reshape, per sentry-reviewer
+**Wave-2 dependency** (2026-04-18 reshape, per sentry-expert
 TO-ACTION): the rule's "schema usage" acceptance path depends on
 `@oaknational/observability-events` existing as a workspace. Wave 1
 authors the rule and its `logger.*` / `Sentry.*` detection paths;
@@ -703,7 +703,7 @@ enforcement mechanisms are concrete and at least two (ESLint rule at
 2. `require-observability-emission` rule authored and green in
    `pnpm lint`.
 3. Reviewer-matrix question present in
-   `.agent/rules/invoke-code-reviewers.md` or equivalent.
+   `.agent/rules/invoke-code-experts.md` or equivalent.
 4. Conformance test helper and vendor-independence test named as
    deliverables in their respective Phase 2 plans.
 
@@ -714,9 +714,9 @@ check, and test-pass).
 
 **Reviewer matrix**:
 
-- `architecture-reviewer-fred` — enforcement-mechanism completeness;
+- `architecture-expert-fred` — enforcement-mechanism completeness;
   ADR-162 Accepted-status readiness.
-- `type-reviewer` — ESLint rule type correctness; `RuleTester` case
+- `type-expert` — ESLint rule type correctness; `RuleTester` case
   coverage.
 
 **Phase 5 commit**: single commit with subject
@@ -801,12 +801,12 @@ Per phase, invoke reviewers with non-leading prompts. Matrix:
 
 | Phase | Reviewers |
 |-------|-----------|
-| 1 | docs-adr-reviewer, architecture-reviewer-fred |
-| 2 | docs-adr-reviewer, assumptions-reviewer |
-| 3 | docs-adr-reviewer |
-| 4 | sentry-reviewer, architecture-reviewer-fred |
-| 5 | architecture-reviewer-fred, type-reviewer |
-| Final | code-reviewer (gateway), assumptions-reviewer, docs-adr-reviewer |
+| 1 | docs-adr-expert, architecture-expert-fred |
+| 2 | docs-adr-expert, assumptions-expert |
+| 3 | docs-adr-expert |
+| 4 | sentry-expert, architecture-expert-fred |
+| 5 | architecture-expert-fred, type-expert |
+| Final | code-expert (gateway), assumptions-expert, docs-adr-expert |
 
 Findings route per `patterns/findings-route-to-lane-or-rejection.md` —
 ACTIONED, TO-ACTION (named lane + specific edit), or REJECTED (written
@@ -821,7 +821,7 @@ rationale). No deferred block.
 | 1 | Move breaks cross-references; stale paths accumulate silently | Comprehensive grep for old paths returns zero matches before Phase 1 close. |
 | 1 | ADR-162 Proposed text drifts from session report framing | Session report is the authoritative rationale; reviewer checks alignment. |
 | 2 | 17 new plan files overwhelm future readers and rot | High-level plan is the single index; every plan has a promotion trigger; fitness limits apply. |
-| 2 | Future-plan promotion triggers written as vague intent | assumptions-reviewer gates triggers for testability at Phase 2 close. |
+| 2 | Future-plan promotion triggers written as vague intent | assumptions-expert gates triggers for testability at Phase 2 close. |
 | 3 | Explorations 3 and 4 block Phase 2 MVP plan detail | Allow Phase 2 to author `current/` plans at skeleton-level; full detail waits on Phase 3 outputs; Phase 4 revision absorbs if needed. |
 | 4 | `metrics.*` beta API shifts during the work | Adapter insulates consumers; version-pin conservatively; a named changelog-watch task in the risk table. |
 | 5 | `require-observability-emission` rule fires too aggressively | Initial severity `warn` not `error`; sentinel-comment opt-out documented; escalation to `error` is a separate decision. |

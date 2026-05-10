@@ -407,7 +407,7 @@ improvements only.
 Apply the PDR-028 design to the three executive-memory surfaces:
 
 - `artefact-inventory.md`
-- `invoke-code-reviewers.md`
+- `invoke-code-experts.md`
 - `cross-platform-agent-surface-matrix.md`
 
 Intended impact:

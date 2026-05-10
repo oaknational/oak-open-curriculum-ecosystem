@@ -11,8 +11,8 @@ Resolve a repo-local Codex project-agent definition and print the exact
 .codex adapter and canonical .agent files that should ground the review.
 
 Examples:
-  pnpm agent-tools:codex-reviewer-resolve code-reviewer
-  pnpm agent-tools:codex-reviewer-resolve architecture-reviewer-fred --json`;
+  pnpm agent-tools:codex-reviewer-resolve code-expert
+  pnpm agent-tools:codex-reviewer-resolve architecture-expert-fred --json`;
 
 interface CommandLineOptions {
   readonly helpRequested: boolean;

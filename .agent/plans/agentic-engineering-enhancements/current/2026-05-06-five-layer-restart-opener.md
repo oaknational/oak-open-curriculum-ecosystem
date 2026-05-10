@@ -146,7 +146,7 @@ in priority order for next session:
    arc; first instance landed 2026-05-04; awaiting second instance OR
    owner direction.
 2. **Reviewers carry doctrine, not just audit it** — sibling to PDR-007
-   reviewer lineage; first instance is test-reviewer; awaiting second
+   reviewer lineage; first instance is test-expert; awaiting second
    reviewer-upgrade.
 3. **Atomic independent cycles for parallel-agent dispatch** — new PDR
    candidate; substance lives in plan-template surfaces; awaiting N≥2
@@ -332,8 +332,8 @@ every Practice-bearing repo with directive files.
 6. **Polling discipline applied** — check comms-events directory
    at session-open AND at workflow-boundary moments, not only when
    sending. The async-comms-first-class doctrine requires this.
-7. **Reviewer dispatch on every commit** — docs-adr-reviewer +
-   code-reviewer at minimum; specialists per the invocation matrix.
+7. **Reviewer dispatch on every commit** — docs-adr-expert +
+   code-expert at minimum; specialists per the invocation matrix.
 
 ## Pre-session reading (in order)
 

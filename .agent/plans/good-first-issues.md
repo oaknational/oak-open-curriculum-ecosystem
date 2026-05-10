@@ -41,7 +41,7 @@ contribution you want to make first.
 - **Why this is a good first issue**: Reading and lightly correcting docs is
   the fastest way to internalise the system without committing to deep code
   changes. Pairs naturally with the
-  [docs-adr-reviewer](../../.claude/agents/docs-adr-reviewer.md) sub-agent.
+  [docs-adr-expert](../../.claude/agents/docs-adr-expert.md) sub-agent.
 - **Definition of done**: Drift identified, corrected in place, no parallel
   copies introduced, all cross-links still resolve.
 

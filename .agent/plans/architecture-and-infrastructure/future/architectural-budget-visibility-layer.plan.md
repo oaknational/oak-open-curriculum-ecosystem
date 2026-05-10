@@ -110,8 +110,8 @@ When promoted, the executable plan must prove:
 
 ## Review Cadence
 
-- Before implementation: `assumptions-reviewer`, `config-reviewer`,
-  `architecture-reviewer-betty`
-- After report contract design: `test-reviewer`, `config-reviewer`
-- Before completion: `code-reviewer`, `docs-adr-reviewer`,
-  `architecture-reviewer-wilma`
+- Before implementation: `assumptions-expert`, `config-expert`,
+  `architecture-expert-betty`
+- After report contract design: `test-expert`, `config-expert`
+- Before completion: `code-expert`, `docs-adr-expert`,
+  `architecture-expert-wilma`

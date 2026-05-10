@@ -281,8 +281,8 @@ Run before final closeout:
   provide direct focused evidence for changed tests.
 - `pnpm portability:check` if script, adapter, identity, or skills surfaces
   changed.
-- Specialist reviewers: `code-reviewer`, `test-reviewer`,
-  `docs-adr-reviewer`, and `architecture-reviewer-fred` for
+- Specialist reviewers: `code-expert`, `test-expert`,
+  `docs-adr-expert`, and `architecture-expert-fred` for
   PDR-027/build-isolation changes.
 
 ## Risks

@@ -34,7 +34,7 @@ decomposition) is captured here.
 |------|------|
 | `future/sdk-codegen-workspace-decomposition.md` | Strategic plan: decompose into two workspaces |
 | `sdk-codegen-architecture-analysis.md` | Research: complete structural analysis |
-| `sdk-codegen-reviewer-findings.md` | Research: reviewer findings and owner corrections |
+| `sdk-codegen-expert-findings.md` | Research: reviewer findings and owner corrections |
 
 ## Key Decision
 

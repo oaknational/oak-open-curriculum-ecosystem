@@ -139,34 +139,34 @@ latest owner clarification resolves the contradiction:
 
 | Reviewer | Finding | Disposition |
 |---|---|---|
-| `architecture-reviewer-betty` | WS4 query proof could run before NC adapter | **ACTIONED** — `ws4-query-proof` now depends on `ws4-skos-extractor`. |
-| `architecture-reviewer-betty` / `docs-adr-reviewer` | Practice plan still treated `graph-core` as conditional | **ACTIONED** — Practice plan now consumes graph-stack `packages/core/graph-core/` and lists graph-stack as blocking dependency. |
-| `architecture-reviewer-betty` / `docs-adr-reviewer` | Graph-stack still implied ADR-123 amendment | **ACTIONED** — WS6 now states ADR-123 is not amended by this MCP-free increment. |
-| `docs-adr-reviewer` | ADR-173 proposed status used binding/ratification wording | **ACTIONED** — ADR language and portfolio index now say proposed/intended until owner approval. |
-| `docs-adr-reviewer` | ADR-173 embedded increment routing | **ACTIONED** — durable ADR wording now points routing back to the executable graph-stack plan. |
-| `docs-adr-reviewer` | Portfolio index omitted `agent-tooling/` and stale status date | **ACTIONED / FOLLOW-ON** — index metadata includes `agent-tooling/`; broader status refresh is explicitly routed to consolidation follow-on. |
-| `test-reviewer` | Integration behaviour was labelled `unit.test.ts` | **ACTIONED** — substrate/adapter cycles now use `integration.test.ts`. |
-| `test-reviewer` | Slice 3b still widened to Unit IRI | **ACTIONED** — slice 3b is Thread IRI only; Unit IRI is follow-on/optional outside this slice. |
-| `test-reviewer` | Slice 3a fixture manifest lacked deterministic path/schema/tie-break | **ACTIONED** — slice 3a names manifest path, schema, bucket allocation, ordering, and tie-break rule. |
-| `mcp-reviewer` | Residual slice-3b runtime dependency wording | **ACTIONED** — slice 3b consumes `graph-corpus-sdk` only at runtime; slice 1/3a are naming/shape prerequisites. |
-| `mcp-reviewer` | EEF dangling `get-eef-strand` name | **ACTIONED** — replaced with `eef-explain-evidence-strand`. |
-| `mcp-reviewer` | MCP response envelope underspecified | **ACTIONED** — tool plans now require `content`, serialized JSON, `structuredContent`, `outputSchema`, and `isError` behaviour. |
-| `mcp-reviewer` | Token budget measurement ambiguous | **ACTIONED** — budget is measured against serialized model-visible `content` text payload. |
-| `assumptions-reviewer` | EEF outcome follow-on was unnamed | **ACTIONED** — created `eef-outcome-evaluation-infrastructure.plan.md` and linked it. |
-| `assumptions-reviewer` | `agent-graphs/` path convention still open for ADR promotion | **ROUTED** — blocker for ADR-173 ratification / graph-stack ACTIVE promotion, not this planning-doc closeout. |
-| `assumptions-reviewer` / `code-reviewer` | Branch divergence and live PR review thread still block merge | **ACTIONED / ROUTED** — the live PR review thread was fixed and resolved; branch divergence remains routed as the final clean-worktree pre-merge blocker. |
-| `code-reviewer` | Historical next-session records reopened closed findings | **ACTIONED** — thread record now marks topology/slice findings as closed dispositions. |
-| `code-reviewer` | Evidence covered last pushed head, not local closeout edits | **ACTIONED** — closeout bundle was committed/pushed and PR checks now cover `309d9e5e44cebecb1be2478d2fb084a54f39b6b2`. |
-| `code-reviewer` | Continuity claimed no active claims remained | **ACTIONED** — continuity now states live closeout claims remain until final handoff. |
-| Final `code-reviewer` gateway | Graph-stack still used ratification/binding language while ADR-173 remains Proposed | **ACTIONED** — graph-stack now says proposed/intended and reserves ratification for the owner gate. |
-| Final `code-reviewer` gateway | Follow-on routes were bare future filenames | **ACTIONED** — created and indexed named future plan stubs for slice-2 cuts, slice-3a substrate/topic cuts, and slice-3b extended contexts. |
-| Final `code-reviewer` gateway / `assumptions-reviewer` | Thread handoff still asked the next session to redo closed topology/slice absorption | **ACTIONED** — immediate next task now names final verification/merge blockers only; historical findings stay in closed-disposition sections. |
-| Final `code-reviewer` gateway | EEF top-line provability duplicated telemetry text | **ACTIONED** — duplicate sentence removed. |
-| Final `assumptions-reviewer` | EEF snapshot age was date-fragile | **ACTIONED** — replaced fixed age with promotion-time recalculation from `last_updated`. |
-| Final `assumptions-reviewer` | Outcome follow-on was narrower than teacher-trust/SENCO routed outcomes | **ACTIONED / ROUTED** — follow-on now owns the pre-ACTIVE split decision for teacher-trust and SENCO workflow-time measurement. |
-| `release-readiness-reviewer` | PR body stale against local structural-only EEF stance | **ACTIONED** — PR body refreshed 2026-05-08 to describe structural-only EEF evaluation and named follow-ons. |
-| `release-readiness-reviewer` | Local closeout bundle not covered by remote PR checks/Sonar; live Copilot thread and 107-file divergence remain | **ACTIONED / ROUTED** — closeout bundle is pushed/rechecked and the live thread is resolved; the 107-file clean-worktree merge workflow remains routed below. |
-| `code-reviewer` | Live closeout claim count mismatched continuity | **ACTIONED** — both Opalescent Shimmering Orbit closeout claims were closed; active claim count is now zero. |
+| `architecture-expert-betty` | WS4 query proof could run before NC adapter | **ACTIONED** — `ws4-query-proof` now depends on `ws4-skos-extractor`. |
+| `architecture-expert-betty` / `docs-adr-expert` | Practice plan still treated `graph-core` as conditional | **ACTIONED** — Practice plan now consumes graph-stack `packages/core/graph-core/` and lists graph-stack as blocking dependency. |
+| `architecture-expert-betty` / `docs-adr-expert` | Graph-stack still implied ADR-123 amendment | **ACTIONED** — WS6 now states ADR-123 is not amended by this MCP-free increment. |
+| `docs-adr-expert` | ADR-173 proposed status used binding/ratification wording | **ACTIONED** — ADR language and portfolio index now say proposed/intended until owner approval. |
+| `docs-adr-expert` | ADR-173 embedded increment routing | **ACTIONED** — durable ADR wording now points routing back to the executable graph-stack plan. |
+| `docs-adr-expert` | Portfolio index omitted `agent-tooling/` and stale status date | **ACTIONED / FOLLOW-ON** — index metadata includes `agent-tooling/`; broader status refresh is explicitly routed to consolidation follow-on. |
+| `test-expert` | Integration behaviour was labelled `unit.test.ts` | **ACTIONED** — substrate/adapter cycles now use `integration.test.ts`. |
+| `test-expert` | Slice 3b still widened to Unit IRI | **ACTIONED** — slice 3b is Thread IRI only; Unit IRI is follow-on/optional outside this slice. |
+| `test-expert` | Slice 3a fixture manifest lacked deterministic path/schema/tie-break | **ACTIONED** — slice 3a names manifest path, schema, bucket allocation, ordering, and tie-break rule. |
+| `mcp-expert` | Residual slice-3b runtime dependency wording | **ACTIONED** — slice 3b consumes `graph-corpus-sdk` only at runtime; slice 1/3a are naming/shape prerequisites. |
+| `mcp-expert` | EEF dangling `get-eef-strand` name | **ACTIONED** — replaced with `eef-explain-evidence-strand`. |
+| `mcp-expert` | MCP response envelope underspecified | **ACTIONED** — tool plans now require `content`, serialized JSON, `structuredContent`, `outputSchema`, and `isError` behaviour. |
+| `mcp-expert` | Token budget measurement ambiguous | **ACTIONED** — budget is measured against serialized model-visible `content` text payload. |
+| `assumptions-expert` | EEF outcome follow-on was unnamed | **ACTIONED** — created `eef-outcome-evaluation-infrastructure.plan.md` and linked it. |
+| `assumptions-expert` | `agent-graphs/` path convention still open for ADR promotion | **ROUTED** — blocker for ADR-173 ratification / graph-stack ACTIVE promotion, not this planning-doc closeout. |
+| `assumptions-expert` / `code-expert` | Branch divergence and live PR review thread still block merge | **ACTIONED / ROUTED** — the live PR review thread was fixed and resolved; branch divergence remains routed as the final clean-worktree pre-merge blocker. |
+| `code-expert` | Historical next-session records reopened closed findings | **ACTIONED** — thread record now marks topology/slice findings as closed dispositions. |
+| `code-expert` | Evidence covered last pushed head, not local closeout edits | **ACTIONED** — closeout bundle was committed/pushed and PR checks now cover `309d9e5e44cebecb1be2478d2fb084a54f39b6b2`. |
+| `code-expert` | Continuity claimed no active claims remained | **ACTIONED** — continuity now states live closeout claims remain until final handoff. |
+| Final `code-expert` gateway | Graph-stack still used ratification/binding language while ADR-173 remains Proposed | **ACTIONED** — graph-stack now says proposed/intended and reserves ratification for the owner gate. |
+| Final `code-expert` gateway | Follow-on routes were bare future filenames | **ACTIONED** — created and indexed named future plan stubs for slice-2 cuts, slice-3a substrate/topic cuts, and slice-3b extended contexts. |
+| Final `code-expert` gateway / `assumptions-expert` | Thread handoff still asked the next session to redo closed topology/slice absorption | **ACTIONED** — immediate next task now names final verification/merge blockers only; historical findings stay in closed-disposition sections. |
+| Final `code-expert` gateway | EEF top-line provability duplicated telemetry text | **ACTIONED** — duplicate sentence removed. |
+| Final `assumptions-expert` | EEF snapshot age was date-fragile | **ACTIONED** — replaced fixed age with promotion-time recalculation from `last_updated`. |
+| Final `assumptions-expert` | Outcome follow-on was narrower than teacher-trust/SENCO routed outcomes | **ACTIONED / ROUTED** — follow-on now owns the pre-ACTIVE split decision for teacher-trust and SENCO workflow-time measurement. |
+| `release-readiness-expert` | PR body stale against local structural-only EEF stance | **ACTIONED** — PR body refreshed 2026-05-08 to describe structural-only EEF evaluation and named follow-ons. |
+| `release-readiness-expert` | Local closeout bundle not covered by remote PR checks/Sonar; live Copilot thread and 107-file divergence remain | **ACTIONED / ROUTED** — closeout bundle is pushed/rechecked and the live thread is resolved; the 107-file clean-worktree merge workflow remains routed below. |
+| `code-expert` | Live closeout claim count mismatched continuity | **ACTIONED** — both Opalescent Shimmering Orbit closeout claims were closed; active claim count is now zero. |
 
 ## Execution Plan
 

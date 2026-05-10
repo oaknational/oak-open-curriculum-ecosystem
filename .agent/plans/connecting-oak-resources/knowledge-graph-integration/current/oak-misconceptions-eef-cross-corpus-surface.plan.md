@@ -22,12 +22,12 @@ adr_amendments_required:
   - "ADR-123: record `oak-misconceptions-eef-recommend-for-thread` (compound-prefix tool)"
   - "ADR-157: confirm compound-prefix convention is recorded (already amended Phase 0 of MVP-arc spine)"
 specialist_reviewers:
-  - mcp-reviewer
-  - test-reviewer
-  - type-reviewer
-  - architecture-reviewer-betty
-  - elasticsearch-reviewer
-  - code-reviewer
+  - mcp-expert
+  - test-expert
+  - type-expert
+  - architecture-expert-betty
+  - elasticsearch-expert
+  - code-expert
 foundation_alignment:
   - .agent/directives/principles.md
   - .agent/directives/testing-strategy.md
@@ -67,7 +67,7 @@ todos:
     status: pending
     depends_on: [ws3-adr-123-update]
   - id: ws5-adversarial-review
-    content: "WS5: dispatch `mcp-reviewer` (MCP spec + compound-prefix tool shape + source-attribution discipline + namespace) + `architecture-reviewer-betty` (substrate-only enforcement + cross-corpus join primitive boundary; tool body should be thin) + `elasticsearch-reviewer` (if EEF strand ranking touches Elasticsearch retrieval; otherwise note scope and skip) + `test-reviewer` (TDD pair audit + cross-corpus integration coverage) + `code-reviewer` (gateway). Lint/depcruise/architecture gates, not TDD cycles, enforce no legacy imports, thin-body expectations, file size, and complexity bounds. Document findings; remediate or queue."
+    content: "WS5: dispatch `mcp-expert` (MCP spec + compound-prefix tool shape + source-attribution discipline + namespace) + `architecture-expert-betty` (substrate-only enforcement + cross-corpus join primitive boundary; tool body should be thin) + `elasticsearch-expert` (if EEF strand ranking touches Elasticsearch retrieval; otherwise note scope and skip) + `test-expert` (TDD pair audit + cross-corpus integration coverage) + `code-expert` (gateway). Lint/depcruise/architecture gates, not TDD cycles, enforce no legacy imports, thin-body expectations, file size, and complexity bounds. Document findings; remediate or queue."
     status: pending
     depends_on: [ws4-quality-gates]
   - id: ws6-spine-gate-3b-close-and-arc-archive
@@ -103,7 +103,7 @@ ADR-157 explicit-source-attribution discipline).
 
 The MVP-arc spine previously listed slice 3b as blocked by
 `gate-2-threads-ships + gate-3a + graph-stack Inc.3`. Phase 2 of the
-single-session planning closure (assumptions-reviewer FINDING #4)
+single-session planning closure (assumptions-expert FINDING #4)
 corrected this: the cross-corpus payload composes EEF (slice 1) and
 misconceptions (slice 3a); the Oak Threads MCP surface is **not** part
 of the payload. Slice 3b is now blocked by `gate-1-eef-ships +
@@ -320,17 +320,17 @@ pnpm test && pnpm test:ui && pnpm test:e2e
 
 Dispatch:
 
-- `mcp-reviewer` — MCP spec + compound-prefix tool shape +
+- `mcp-expert` — MCP spec + compound-prefix tool shape +
   source-attribution discipline + namespace conformance
-- `architecture-reviewer-betty` — substrate-only enforcement; tool
+- `architecture-expert-betty` — substrate-only enforcement; tool
   body thinness (cross-corpus join primitive carries the composition
   responsibility); cross-corpus boundary durability
-- `elasticsearch-reviewer` — applies if EEF strand ranking touches
+- `elasticsearch-expert` — applies if EEF strand ranking touches
   Elasticsearch retrieval; if not (the EEF strand corpus is small
   enough for in-process ranking), note scope and skip
-- `test-reviewer` — TDD pair audit; cross-corpus integration coverage;
+- `test-expert` — TDD pair audit; cross-corpus integration coverage;
   no audit-shaped tests; no skipped tests
-- `code-reviewer` — gateway
+- `code-expert` — gateway
 
 Structural enforcement gates at WS5:
 

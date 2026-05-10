@@ -103,7 +103,7 @@ export function checkMcpClientAuth(
     );
   }
 
-  // Access userId from AuthInfo.extra via Zod parse (type-reviewer obligation:
+  // Access userId from AuthInfo.extra via Zod parse (type-expert obligation:
   // AuthInfo.extra is Record<string, unknown>, never access .userId directly)
   const extraResult = authInfoExtraSchema.safeParse(authInfo.extra);
   const userId = extraResult.success ? extraResult.data.userId : undefined;

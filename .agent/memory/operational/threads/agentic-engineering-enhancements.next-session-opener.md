@@ -84,15 +84,15 @@ output IS the falsifiability check.
 
 ## Reviewer dispatch (post-Commit 1)
 
-- `code-reviewer` — gateway (mandatory)
-- `architecture-reviewer-fred` — doctrine boundary cure (mandatory; his
+- `code-expert` — gateway (mandatory)
+- `architecture-expert-fred` — doctrine boundary cure (mandatory; his
   prior WARN cures here)
-- `config-reviewer` — `validate-portability.ts` is a quality gate; line
+- `config-expert` — `validate-portability.ts` is a quality gate; line
   247/264 + Check 1/2/12 fixes change gate correctness semantics
-- `test-reviewer` — focused; `validate-fitness-vocabulary.unit.test.ts`
+- `test-expert` — focused; `validate-fitness-vocabulary.unit.test.ts`
   fixture update
 
-`docs-adr-reviewer` is not yet relevant — that triggers in Commit 3.
+`docs-adr-expert` is not yet relevant — that triggers in Commit 3.
 
 ## Pause-and-assess after Commit 1
 
@@ -104,7 +104,7 @@ and `feedback_ground_state_before_planning` rules apply.
 
 ## Auxiliary context
 
-- Plan-time code-reviewer dispatch transcript was at agentId
+- Plan-time code-expert dispatch transcript was at agentId
   `a49d706db87f87853` (cached at
   `~/.claude/projects/<project>/<session>/subagents/agent-a49d706db87f87853.jsonl`
   if recovery needed).

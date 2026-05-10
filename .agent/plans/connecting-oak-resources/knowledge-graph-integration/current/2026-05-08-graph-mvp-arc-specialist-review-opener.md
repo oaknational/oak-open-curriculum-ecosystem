@@ -32,7 +32,7 @@ instead.
 **Thread**: `connecting-oak-resources` (primary), with `eef`
 subthread coordination for the EEF-shaped artefacts.
 
-**Sole target this session**: a parallel specialist-reviewer pass
+**Sole target this session**: a parallel specialist-expert pass
 over the artefacts authored on 2026-05-07, synthesise findings,
 record verdicts. Slice-2 / slice-3a / slice-3b authoring is
 deliberately blocked until review settles — the spine's
@@ -85,7 +85,7 @@ All five are parallel-safe (different specialisms; no shared
 artefact-write expectation since this is read-only review). Dispatch
 all five in a single tool-call batch with `readonly: true`.
 
-### 1. `assumptions-reviewer`
+### 1. `assumptions-expert`
 
 **Focus**: proportionality, dependency validity, blocking
 legitimacy, the MVP discipline shape.
@@ -110,7 +110,7 @@ legitimacy, the MVP discipline shape.
 **Expected output**: PASS / FINDINGS / BLOCKERS, each finding a
 sentence; do not author corrections.
 
-### 2. `architecture-reviewer-betty`
+### 2. `architecture-expert-betty`
 
 **Focus**: cohesion, coupling, long-term change cost.
 
@@ -135,7 +135,7 @@ sentence; do not author corrections.
 
 **Expected output**: PASS / FINDINGS / BLOCKERS.
 
-### 3. `architecture-reviewer-fred`
+### 3. `architecture-expert-fred`
 
 **Focus**: strict ADR compliance, principles-first review.
 
@@ -161,7 +161,7 @@ sentence; do not author corrections.
 
 **Expected output**: PASS / FINDINGS / BLOCKERS.
 
-### 4. `mcp-reviewer`
+### 4. `mcp-expert`
 
 **Focus**: MCP spec compliance, namespace discipline, proposed tool
 shapes for the three slices.
@@ -194,7 +194,7 @@ shapes for the three slices.
 
 **Expected output**: PASS / FINDINGS / BLOCKERS.
 
-### 5. `docs-adr-reviewer`
+### 5. `docs-adr-expert`
 
 **Focus**: documentation completeness, ADR quality, cross-reference
 integrity, internal consistency.
@@ -277,8 +277,8 @@ decision-completeness closeout before slice execution starts.
   none share file scope.
 - Synthesis is the dispatching agent's job, not a sixth reviewer's.
 - If a reviewer surfaces a domain outside its specialism, route the
-  finding rather than expanding scope — e.g. mcp-reviewer noting an
-  Elasticsearch concern routes to `elasticsearch-reviewer` next pass.
+  finding rather than expanding scope — e.g. mcp-expert noting an
+  Elasticsearch concern routes to `elasticsearch-expert` next pass.
 
 ## Cross-references
 

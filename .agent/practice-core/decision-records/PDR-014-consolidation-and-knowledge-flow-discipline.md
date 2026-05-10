@@ -488,7 +488,7 @@ to five Pending-band candidates: `deferral-honesty-rule` (3/3),
 graduation decisions (Phases B.2 lost-substance re-home, E
 PDR-012 amendment for the most-overdue Due-band item).
 
-**Reviewer**. `docs-adr-reviewer` close-pass at Session 6 close
+**Reviewer**. `docs-adr-expert` close-pass at Session 6 close
 per plan §Reviewer discipline.
 
 ### 2026-04-24 — Bidirectional knowledge-flow clarification

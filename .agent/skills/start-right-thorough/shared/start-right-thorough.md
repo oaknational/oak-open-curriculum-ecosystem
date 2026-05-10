@@ -152,7 +152,7 @@ All plans must include instructions to create:
 
 ## Sub-agent Reviews
 
-Invoke sub-agent reviewers per the `invoke-code-reviewers` rule after making changes. The rule contains the full invocation matrix, timing tiers, quick-triage checklist, worked examples, and copy/paste-ready platform-specific invocation examples.
+Invoke sub-agent reviewers per the `invoke-code-experts` rule after making changes. The rule contains the full invocation matrix, timing tiers, quick-triage checklist, worked examples, and copy/paste-ready platform-specific invocation examples.
 
 ## Process
 

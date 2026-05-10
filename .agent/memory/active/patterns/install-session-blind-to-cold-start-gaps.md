@@ -3,7 +3,7 @@ name: Install-Session Blind to Cold-Start Gaps
 category: process
 status: provisional
 discovered: 2026-04-29
-proven_in: "Experience-audit cross-session scan. ≥6 instances: 2026-04-21-the-reviewer-found-the-gaps-i-installed (explicit naming as candidate), 2026-04-21-the-recursive-session (owner caught 4 separate drifts), 2026-04-22-the-plan-was-not-the-conversation (owner reading the diff caught the protocol violation), 2026-04-29-the-quietly-off-grid-session (owner closing message made off-grid texture visible), 2026-04-24-frodo-evasion-called-out (owner caught the evasion), 2026-04-24-pippin-the-spiral-i-could-not-see (owner intervention broke the spiral)."
+proven_in: "Experience-audit cross-session scan. ≥6 instances: 2026-04-21-the-expert-found-the-gaps-i-installed (explicit naming as candidate), 2026-04-21-the-recursive-session (owner caught 4 separate drifts), 2026-04-22-the-plan-was-not-the-conversation (owner reading the diff caught the protocol violation), 2026-04-29-the-quietly-off-grid-session (owner closing message made off-grid texture visible), 2026-04-24-frodo-evasion-called-out (owner caught the evasion), 2026-04-24-pippin-the-spiral-i-could-not-see (owner intervention broke the spiral)."
 related_pdr: PDR-027
 ---
 
@@ -11,7 +11,7 @@ related_pdr: PDR-027
 
 The session that authors a rule, plan, or surface has perfect context
 and is structurally blind to what a fresh reader would miss. Only an
-externally-grounded check — owner question, onboarding-reviewer,
+externally-grounded check — owner question, onboarding-expert,
 deliberately context-reset reviewer — surfaces the gaps the install
 session cannot see.
 
@@ -53,7 +53,7 @@ Three valid external-grounding moves:
 1. **Owner question.** Before shipping a substantive new surface,
    ask the owner a question that requires them to read the surface
    cold. Their answer surfaces gaps the install session cannot see.
-2. **Onboarding-reviewer dispatch.** Dispatch a reviewer with an
+2. **Onboarding-expert dispatch.** Dispatch a reviewer with an
    *uninformed brief* — "read this surface as if you have never seen
    the context that produced it; what is missing?" The reviewer's
    findings reveal context-blindness.

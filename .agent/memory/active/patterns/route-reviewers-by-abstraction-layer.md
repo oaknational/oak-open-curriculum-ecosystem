@@ -36,8 +36,8 @@ overlap as a warning sign that scope was under-specified.
 ## Anti-pattern
 
 Picking reviewers by file list: "this lane touches ADRs and shell
-scripts and one markdown doc, so book docs-adr-reviewer and
-code-reviewer." The reviewers over-read the files they recognise,
+scripts and one markdown doc, so book docs-adr-expert and
+code-expert." The reviewers over-read the files they recognise,
 both flag the same obvious lint-level issues, and neither catches
 the domain-semantics class (wrong UI surface, incorrect preflight
 shape, claim that is true in prose but false in-tree). A critical
@@ -56,14 +56,14 @@ governance surfaces:
    sequentially. Overlap in outputs = scope error; escalate and
    re-specify rather than deduplicating after the fact.
 3. Name the reviewer's layer in the delegation snapshot, not just
-   its specialty. `docs-adr-reviewer` and `sentry-reviewer` can both
+   its specialty. `docs-adr-expert` and `sentry-expert` can both
    read ADR-159 — the former is routed to the *mesh* layer, the
    latter to the *semantics* layer.
 
 ## Evidence
 
 **Session 2026-04-17** — the Sentry CLI hygiene finishing pass
-dispatched sentry-reviewer, docs-adr-reviewer, and code-reviewer in
+dispatched sentry-expert, docs-adr-expert, and code-expert in
 parallel on an updated diff that spanned ADR-159, a runbook, an
 operations doc, a shell script, a root README, and a plan file. The
 three reviewers returned **almost entirely disjoint** findings at

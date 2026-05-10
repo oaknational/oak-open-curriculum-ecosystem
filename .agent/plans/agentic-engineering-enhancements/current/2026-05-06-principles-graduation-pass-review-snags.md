@@ -5,7 +5,7 @@ created: 2026-05-06
 authored_by: "Hidden Slipping Moth (claude-code, 4be7b5)"
 thread: agentic-engineering-enhancements
 overview: >
-  Snagging list from the parallel docs-adr-reviewer + code-reviewer
+  Snagging list from the parallel docs-adr-expert + code-expert
   dispatch over the 2026-05-06 napkin/distilled graduation pass and
   strategic-plan landing. Captures findings deferred to the next
   session because they require owner judgement, scope decisions, or
@@ -27,8 +27,8 @@ captured here.
 
 | Finding | Reviewer | Fix |
 |---|---|---|
-| P0: Broken `PDR-014-knowledge-roles.md` link in strategic plan | docs-adr-reviewer | Replaced with the actual filename `PDR-014-consolidation-and-knowledge-flow-discipline.md` |
-| P1: `no-moving-targets-in-permanent-docs.md` `## Source Landing` footer cited a plan + workstream identifier, directly violating the rule's own newly-added Citation Directionality clause | code-reviewer + docs-adr-reviewer | Removed the `## Source Landing` section; provenance lives in git history |
+| P0: Broken `PDR-014-knowledge-roles.md` link in strategic plan | docs-adr-expert | Replaced with the actual filename `PDR-014-consolidation-and-knowledge-flow-discipline.md` |
+| P1: `no-moving-targets-in-permanent-docs.md` `## Source Landing` footer cited a plan + workstream identifier, directly violating the rule's own newly-added Citation Directionality clause | code-expert + docs-adr-expert | Removed the `## Source Landing` section; provenance lives in git history |
 
 Both fixes land in the same commit as this snagging document.
 
@@ -37,13 +37,13 @@ Both fixes land in the same commit as this snagging document.
 2026-05-06 compiler-time types extraction moved TypeScript operational
 detail from `principles.md` to `docs/governance/typescript-practice.md`.
 That lane did not resolve any S-numbered or P-numbered snags here; the
-deferred specialist-reviewer recommendations remain out of scope.
+deferred specialist-expert recommendations remain out of scope.
 
 ## Open Snags — P1 (next-session candidates)
 
 ### S1 — Rule scope vs file name mismatch in `no-moving-targets-in-permanent-docs.md`
 
-**Source**: docs-adr-reviewer P1 #1.
+**Source**: docs-adr-expert P1 #1.
 
 The new "Citation Directionality" section subsumes plan-name citation
 under the moving-targets rule, but the rule's title and original
@@ -70,7 +70,7 @@ plan's Phase 0 contract is the natural place to settle this.
 
 ### S2 — Plan-to-plan citation explicit-permission note
 
-**Source**: docs-adr-reviewer P1 #2.
+**Source**: docs-adr-expert P1 #2.
 
 `principles-entrypoint-content-homing.plan.md` cites peer plans heavily.
 A `future/` plan is itself ephemeral, and the new Citation
@@ -85,7 +85,7 @@ is forbidden. Pre-empts the misreading.
 
 ### S3 — Frontmatter `session_id_prefix` is a moving-target token
 
-**Source**: docs-adr-reviewer P1 #3.
+**Source**: docs-adr-expert P1 #3.
 
 The strategic plan's frontmatter includes
 `authored_by: "Hidden Slipping Moth (claude-code, claude-opus-4-7-1m, 4be7b5)"`.
@@ -106,7 +106,7 @@ list.
 
 ### S4 — Archive header editorial commentary
 
-**Source**: docs-adr-reviewer P1 #4.
+**Source**: docs-adr-expert P1 #4.
 
 `napkin-2026-05-06-evening.md:9-13` opens with editorial framing about
 the archiver's verification act ("Hidden Slipping Moth (`4be7b5`)
@@ -121,7 +121,7 @@ S5 below also touches this file.)
 
 ### S5 — Worked-instance grounding lost from `no-speed-pressure` graduation
 
-**Source**: docs-adr-reviewer P1 #5.
+**Source**: docs-adr-expert P1 #5.
 
 The original distilled "Severity is not urgency" entry carried a
 worked instance: at session open a fitness signal was framed as a
@@ -136,7 +136,7 @@ the empirical anchor without re-inflating the rule body.
 
 ### S6 — Strategic plan does not link the active remediation plan
 
-**Source**: docs-adr-reviewer P1 #7.
+**Source**: docs-adr-expert P1 #7.
 
 `principles-entrypoint-content-homing.plan.md` does not cite
 `moving-targets-in-permanent-docs-remediation.plan.md` (in `current/`),
@@ -148,7 +148,7 @@ even though they share doctrinal substrate.
 
 ### P-1 — Line-pinned destinations in archive use moving-target line numbers
 
-**Source**: docs-adr-reviewer P2 #1.
+**Source**: docs-adr-expert P2 #1.
 
 `napkin-2026-05-06-evening.md:14-28` cites `pending-graduations.md
 (line 1932 entry)` etc. Line numbers are themselves moving targets
@@ -156,7 +156,7 @@ within actively-edited files. Cite by anchor (entry headline) instead.
 
 ### P-2 — Owner-quote dating in permanent rule bodies
 
-**Source**: code-reviewer P2.
+**Source**: code-expert P2.
 
 Both rules carry `Owner sharpening 2026-05-05:` prefixes before
 verbatim quotes. The date-stamp is a transient instance against the
@@ -170,7 +170,7 @@ contract is the natural place to settle this.
 
 ### P-3 — Cross-plan dependency coupling
 
-**Source**: code-reviewer P2.
+**Source**: code-expert P2.
 
 `principles-entrypoint-content-homing.plan.md` declares three
 `Related efforts` cross-plan references. If any peer plan (especially
@@ -181,29 +181,29 @@ to avoid coupling debt.
 
 ## Specialist-Reviewer Recommendations (deferred until Phase 0 alignment)
 
-`code-reviewer` recommended three further specialist dispatches before
+`code-expert` recommended three further specialist dispatches before
 the strategic plan is promoted to `current/`. These are NOT needed
 this session because the plan is at `future/` status and Phase 0 owner
 alignment is the gate.
 
 | Specialist | Depth | Focus |
 |---|---|---|
-| `architecture-reviewer-fred` | Focused | PDR alignment of the three-level model against PDR-014 (knowledge roles), PDR-029 (perturbation-mechanism bundle), PDR-044 (memetic immune system), PDR-046 (layered knowledge processing) |
-| `architecture-reviewer-wilma` | Focused | Failure modes of partial extraction from a session-open-loaded directive |
-| `assumptions-reviewer` | Focused | Proportionality of the plan scope; validity of the 11 surfaced unstated aspects |
+| `architecture-expert-fred` | Focused | PDR alignment of the three-level model against PDR-014 (knowledge roles), PDR-029 (perturbation-mechanism bundle), PDR-044 (memetic immune system), PDR-046 (layered knowledge processing) |
+| `architecture-expert-wilma` | Focused | Failure modes of partial extraction from a session-open-loaded directive |
+| `assumptions-expert` | Focused | Proportionality of the plan scope; validity of the 11 surfaced unstated aspects |
 
-`architecture-reviewer-betty` deferred to pre-Phase-1 (cohesion/coupling
+`architecture-expert-betty` deferred to pre-Phase-1 (cohesion/coupling
 analysis is premature before contract alignment).
 
-`architecture-reviewer-barney` not needed for the strategic-brief
+`architecture-expert-barney` not needed for the strategic-brief
 status (no boundaries drawn yet).
 
 ## Verification
 
 Reviewer-coverage status for the change set:
 
-- docs-adr-reviewer — completed.
-- code-reviewer — completed.
+- docs-adr-expert — completed.
+- code-expert — completed.
 - specialist reviewers above — deferred behind plan promotion gate.
 
 Both reviewer reports are referenced in this session's commit-window

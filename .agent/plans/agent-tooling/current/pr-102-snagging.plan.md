@@ -420,10 +420,10 @@ pnpm check
 
 Reviewer scheduling:
 
-1. Run `assumptions-reviewer` before implementation if Phase 0 changes the
+1. Run `assumptions-expert` before implementation if Phase 0 changes the
    solution shape.
-2. Run `code-reviewer` after implementation.
-3. Run `docs-adr-reviewer` only if the taxonomy fix changes an ADR, index
+2. Run `code-expert` after implementation.
+3. Run `docs-adr-expert` only if the taxonomy fix changes an ADR, index
    contract, or documentation rule beyond the three review-thread snags.
 
 PR verification:

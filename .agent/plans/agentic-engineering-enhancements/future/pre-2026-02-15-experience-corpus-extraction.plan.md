@@ -192,9 +192,9 @@ and may have promotion criteria met after the cross-scan.
 
 ## Reviewers
 
-- `docs-adr-reviewer` — verify the citations to canonical homes are
+- `docs-adr-expert` — verify the citations to canonical homes are
   accurate.
-- `code-reviewer` — final pass.
+- `code-expert` — final pass.
 
 ## Risk
 

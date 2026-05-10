@@ -2,7 +2,7 @@
 name: "WS3: Local Widget Development Infrastructure"
 overview: "SUPERSEDED — absorbed into archive/completed/ws3-branding-alignment-and-merge.plan.md (P0)."
 parent_plan: "ws3-widget-clean-break-rebuild.plan.md"
-specialist_reviewer: "mcp-reviewer"
+specialist_reviewer: "mcp-expert"
 superseded_by: "../archive/completed/ws3-branding-alignment-and-merge.plan.md"
 isProject: false
 todos:

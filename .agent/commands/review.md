@@ -35,18 +35,18 @@ pnpm smoke:dev:stub
 ## Step 2: Triage Specialists
 
 Answer these five questions to identify which specialists
-are needed (from the invoke-code-reviewers directive):
+are needed (from the invoke-code-experts directive):
 
-1. Does this touch auth, secrets, PII, or OAuth? -> `security-reviewer`
+1. Does this touch auth, secrets, PII, or OAuth? -> `security-expert`
 2. Does this change module boundaries, imports, or public APIs? -> architecture reviewer(s)
-3. Does this add or modify tests? -> `test-reviewer`
-4. Does this change types, generics, or schema flow? -> `type-reviewer`
-5. Does this change tooling configs or quality gates? -> `config-reviewer`
+3. Does this add or modify tests? -> `test-expert`
+4. Does this change types, generics, or schema flow? -> `type-expert`
+5. Does this change tooling configs or quality gates? -> `config-expert`
 
-Documentation drift (`docs-adr-reviewer`) applies whenever
+Documentation drift (`docs-adr-expert`) applies whenever
 behaviour or architecture changes, even if no docs are edited.
 
-Always invoke `code-reviewer`. Only invoke other specialists
+Always invoke `code-expert`. Only invoke other specialists
 when the triage questions indicate they are relevant.
 
 ## Step 3: Invoke Specialists

@@ -92,7 +92,7 @@ did not?" If yes, it is broader than the workspace and belongs here.
 | `future/pr-lifecycle-skill.plan.md` | Plan (Future) | Future PR lifecycle skill covering creation, reviewer-facing descriptions, unresolved comments, reviewer waits, CI/Sonar/Bugbot feedback, and gate-honest closeout |
 | `archive/completed/codex-session-identity-plumbing.plan.md` | Plan (Completed) | Codex SessionStart identity context, shared preflight guidance for thread rows/state writes, report-only anonymous Codex record audit, and ADR/PDR propagation |
 | `current/sentry-specialist-capability.plan.md` | Plan | Sentry/OpenTelemetry reviewer, skill, and situational rule (ADR-129 triplet) — covers SDK config, distributed tracing, MCP Insights, alerting |
-| `archive/completed/mcp-specialist-upgrade.plan.md` | Plan (Completed) | Upgrade `mcp-reviewer` to full ADR-129 triplet; add `@modelcontextprotocol/ext-apps` coverage |
+| `archive/completed/mcp-specialist-upgrade.plan.md` | Plan (Completed) | Upgrade `mcp-expert` to full ADR-129 triplet; add `@modelcontextprotocol/ext-apps` coverage |
 | `future/express-specialist-capability.plan.md` | Plan (Future) | Express 5.x reviewer, skill, and situational rule (ADR-129 triplet) — middleware, error handling, Vercel deployment |
 | `future/cyber-security-specialist-capability.plan.md` | Plan (Future) | Broad-remit cyber security capability — posture, threat models, defence in depth, and security-architecture doctrine |
 | `future/web-api-security-specialist-capability.plan.md` | Plan (Future) | Narrow-remit web/API security capability — HTTP trust boundaries, endpoint security, sessions, callbacks, and API attack surfaces |
@@ -105,7 +105,7 @@ did not?" If yes, it is broader than the workspace and belongs here.
 | `future/tdd-specialist-capability.plan.md` | Plan (Future) | TDD specialist — multi-level TDD guidance scaled to task size; refined test level definitions |
 | `future/devx-specialist-capability.plan.md` | Plan (Future) | Developer experience specialist — code, repo, SDK, and CLI ergonomics and friction |
 | `future/repair-workflow-wording-hazard-detection.plan.md` | Plan (Future) | Detect ambiguous wording and missing output contracts in multi-artefact repair workflows before they trigger rewrite or promotion drift |
-| `current/reviewer-gateway-upgrade.plan.md` | Plan | Upgrade code-reviewer gateway to a full Reviewer Gateway with layered triage, depth selection, and coverage tracking |
+| `current/reviewer-gateway-upgrade.plan.md` | Plan | Upgrade code-expert gateway to a full Reviewer Gateway with layered triage, depth selection, and coverage tracking |
 | `current/learning-loop-negative-feedback-tightening.plan.md` | Plan | Tight incremental tranche: install live executive-memory drift detection and make consolidation-time memory-quality review explicit and auditable |
 | `current/agent-entrypoint-content-homing.plan.md` | Plan | Queued lossless homing of non-entrypoint `AGENT.md` content into durable homes while preserving discovery parity |
 | `current/practice-graph-payoff-peak-pilot.plan.md` | Plan | Queued executable pilot for the highest-value derived Practice graph slice: bounded TypeScript/esbuild workspace cluster, explicit-edge extraction, local graph/report outputs, and CLI build/query/path surfaces |

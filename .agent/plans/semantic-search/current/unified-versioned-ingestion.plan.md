@@ -232,30 +232,30 @@ which is how every violation went undetected.
 
 Present this plan's strategic approach to all reviewers below:
 
-- `code-reviewer` — gateway review of the approach for correctness and
+- `code-expert` — gateway review of the approach for correctness and
   feasibility before any code is written
-- `docs-adr-reviewer` — verify the plan aligns with ADR-130, ADR-078,
+- `docs-adr-expert` — verify the plan aligns with ADR-130, ADR-078,
   ADR-093 and that documentation propagation is planned
-- `architecture-reviewer-barney` — boundary and dependency mapping: is the
+- `architecture-expert-barney` — boundary and dependency mapping: is the
   resolver threading the simplest approach? Is the layer boundary correct?
-- `architecture-reviewer-betty` — cohesion/coupling trade-offs: does
+- `architecture-expert-betty` — cohesion/coupling trade-offs: does
   parameterising `collectPhaseResults` increase coupling unacceptably?
-- `architecture-reviewer-fred` — ADR compliance: does the approach respect
+- `architecture-expert-fred` — ADR compliance: does the approach respect
   ADR-130 (blue/green), ADR-078 (DI), ADR-029 (no manual API data), ADR-093
   (bulk-first)?
-- `architecture-reviewer-wilma` — resilience: what failure modes exist if
+- `architecture-expert-wilma` — resilience: what failure modes exist if
   the refactored pipeline errors mid-ingest with versioned indexes?
 
 ### After Writing Code (Review the Implementation)
 
-- `code-reviewer` — gateway review for correctness and quality
-- `type-reviewer` — verify `BulkDownloadFile` types flow through without
+- `code-expert` — gateway review for correctness and quality
+- `type-expert` — verify `BulkDownloadFile` types flow through without
   assertion pressure; no `unknown`, no `as`, no loose type guards
-- `test-reviewer` — verify TDD was followed at all levels
-- `elasticsearch-reviewer` — verify bulk operations, NDJSON format,
+- `test-expert` — verify TDD was followed at all levels
+- `elasticsearch-expert` — verify bulk operations, NDJSON format,
   versioned index targeting are correct
-- `docs-adr-reviewer` — verify TSDoc, README updates, ADR compliance
-- `config-reviewer` — if any config files changed
+- `docs-adr-expert` — verify TSDoc, README updates, ADR compliance
+- `config-expert` — if any config files changed
 
 **Key question for all reviewers**: Does the implementation use the existing
 typed infrastructure (`BulkDownloadFile`, `parseBulkFile`, `bulkDownloadFileSchema`,
@@ -273,17 +273,17 @@ below. All blocking findings must be addressed during implementation.
 
 | Reviewer | Verdict |
 |----------|---------|
-| `architecture-reviewer-barney` | APPROACH SOUND — boundary and claims verified |
-| `architecture-reviewer-betty` | ISSUES FOUND — directionally sound, one step needs sharper analysis |
-| `architecture-reviewer-fred` | COMPLIANT — all ADRs respected |
-| `architecture-reviewer-wilma` | CRITICAL ISSUES — failure modes and hidden coupling identified |
-| `code-reviewer` | APPROVED WITH SUGGESTIONS |
-| `docs-adr-reviewer` | GAPS FOUND |
-| `architecture-reviewer-barney` (background) | APPROACH SOUND — hidden consumers and competing patterns found |
-| `architecture-reviewer-betty` (background) | ISSUES FOUND — confirmed approach, flagged constant duplication |
-| `architecture-reviewer-wilma` (background) | CRITICAL ISSUES — post-swap validation gap identified |
-| `architecture-reviewer-fred` (background) | COMPLIANT — all ADRs respected, batch dispatch clarification needed |
-| `code-reviewer` (background) | APPROVED WITH SUGGESTIONS — dryRun mismatch, OakClient closure pattern |
+| `architecture-expert-barney` | APPROACH SOUND — boundary and claims verified |
+| `architecture-expert-betty` | ISSUES FOUND — directionally sound, one step needs sharper analysis |
+| `architecture-expert-fred` | COMPLIANT — all ADRs respected |
+| `architecture-expert-wilma` | CRITICAL ISSUES — failure modes and hidden coupling identified |
+| `code-expert` | APPROVED WITH SUGGESTIONS |
+| `docs-adr-expert` | GAPS FOUND |
+| `architecture-expert-barney` (background) | APPROACH SOUND — hidden consumers and competing patterns found |
+| `architecture-expert-betty` (background) | ISSUES FOUND — confirmed approach, flagged constant duplication |
+| `architecture-expert-wilma` (background) | CRITICAL ISSUES — post-swap validation gap identified |
+| `architecture-expert-fred` (background) | COMPLIANT — all ADRs respected, batch dispatch clarification needed |
+| `code-expert` (background) | APPROVED WITH SUGGESTIONS — dryRun mismatch, OakClient closure pattern |
 
 ### Blocking Findings
 
@@ -299,7 +299,7 @@ directly and dispatches via `dispatchBulk()`. It does NOT go through
 Doc counts come from `BulkIngestionStats` returned by `prepareBulkIngestion()`,
 not from the harness layer. Added as Phase 0 validation (Task 0.6).
 
-**2. ADR-130 does not document `remove_index`** (docs-adr-reviewer)
+**2. ADR-130 does not document `remove_index`** (docs-adr-expert)
 
 The `remove_index` action for bare-index migration is implemented in code
 (`alias-operations.ts`, `lifecycle-swap-builders.ts`) but not in ADR-130's
@@ -307,13 +307,13 @@ The `remove_index` action for bare-index migration is implemented in code
 
 **Resolution**: Added to Phase 4 documentation propagation — update ADR-130.
 
-**3. Documentation propagation uses hedging language** (docs-adr-reviewer)
+**3. Documentation propagation uses hedging language** (docs-adr-expert)
 
 Phase 4 tasks use "if", "consider" for changes that are certain.
 
 **Resolution**: Phase 4 tasks rewritten with explicit, checkable deliverables.
 
-**4. "Done When" criteria missing documentation deliverables** (docs-adr-reviewer)
+**4. "Done When" criteria missing documentation deliverables** (docs-adr-expert)
 
 **Resolution**: Added documentation criteria to "Done When".
 
@@ -384,7 +384,7 @@ With ~200k documents across 6 indexes, a monolithic request would violate
 ADR-087's batch-atomic guarantee and cause memory pressure. **Addressed**:
 Task 0.5 expanded to verify batching behaviour.
 
-**15. `IngestOptions.dryRun` semantic mismatch** (code-reviewer, background
+**15. `IngestOptions.dryRun` semantic mismatch** (code-expert, background
 review) — `IndexLifecycleDeps.runVersionedIngest` accepts `IngestOptions`,
 which includes `dryRun`. In the lifecycle context, a dry-run ingest
 silently produces zero documents with no error — the lifecycle service
@@ -395,7 +395,7 @@ error.
 
 ### Process Refinements (Addressed in Phase 4)
 
-**16. Diagnosis clarity** (code-reviewer, Betty) — The problem is a
+**16. Diagnosis clarity** (code-expert, Betty) — The problem is a
 **format mismatch** (SDK expects flat `{doc_type}` arrays, bulk files
 are `BulkDownloadFile` objects), not merely an `unknown[]` type issue.
 **Addressed**: Task 4.2 item 5 — commit messages and documentation must
@@ -514,7 +514,7 @@ Phase 2 core (commit `1e159d32`):
 
 Specialist reviews (commit `502cd410`):
 
-- code-reviewer, type-reviewer, test-reviewer, docs-adr-reviewer all invoked
+- code-expert, type-expert, test-expert, docs-adr-expert all invoked
 - Eliminated `as unknown as OakClient` double-cast with structural fake pattern
 - Replaced `as BulkOperationEntry[]` with `satisfies BulkOperationEntry[]`
 - Fixed stale TSDoc and README (removed references to deleted `AdminService.ingest()`)
@@ -767,7 +767,7 @@ The CLI provides a `runVersionedIngest` **closure** that captures the
 `OakClient` (needed for KS4 supplementation via `HybridDataSource`)
 and other CLI-layer dependencies. `buildLifecycleDeps` does NOT gain
 an `OakClient` parameter — the CLI provides the complete ingest
-function as a closure (Finding 14, code-reviewer).
+function as a closure (Finding 14, code-expert).
 
 The closure:
 
@@ -782,7 +782,7 @@ The closure:
 `dryRun` — a lifecycle ingest is always live. Either define a narrower
 `VersionedIngestOptions` (omitting `dryRun`), or reject `dryRun: true`
 at the function boundary with a fail-fast error (Finding 14,
-code-reviewer).
+code-expert).
 
 **TDD Sequence**:
 

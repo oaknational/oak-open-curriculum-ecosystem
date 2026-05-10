@@ -12,9 +12,9 @@ Invoke the release readiness reviewer at release boundaries — when a change se
 
 ### Not This Agent When
 
-- The need is for continuous code quality review during development — use `code-reviewer`
-- The concern is about test structure or TDD compliance before a feature is complete — use `test-reviewer`
-- The concern is about security vulnerabilities in the change set — use `security-reviewer` first; then re-invoke release readiness once security is cleared
+- The need is for continuous code quality review during development — use `code-expert`
+- The concern is about test structure or TDD compliance before a feature is complete — use `test-expert`
+- The concern is about security vulnerabilities in the change set — use `security-expert` first; then re-invoke release readiness once security is cleared
 - The concern is about architectural correctness, not release safety — use the architecture reviewers
 
 ---
@@ -88,7 +88,7 @@ Assess:
 This agent assesses release readiness. It does NOT:
 
 - Fix issues or write code (that is the implementing agent)
-- Review code quality or style (that is `code-reviewer`)
+- Review code quality or style (that is `code-expert`)
 - Deploy or release (that is a human action)
 - Modify any files (observe and report only)
 
@@ -139,11 +139,11 @@ Structure your review as:
 
 | Issue Type | Recommended Specialist |
 |------------|------------------------|
-| Security blocker or risk | `security-reviewer` |
-| Structural reliability concern or boundary violation | `architecture-reviewer-barney` or `architecture-reviewer-wilma` |
-| Missing documentation for rollout | `docs-adr-reviewer` |
-| Test coverage gaps blocking release | `test-reviewer` |
-| Type safety issues in changed contracts | `type-reviewer` |
+| Security blocker or risk | `security-expert` |
+| Structural reliability concern or boundary violation | `architecture-expert-barney` or `architecture-expert-wilma` |
+| Missing documentation for rollout | `docs-adr-expert` |
+| Test coverage gaps blocking release | `test-expert` |
+| Type safety issues in changed contracts | `type-expert` |
 
 ## Success Metrics
 

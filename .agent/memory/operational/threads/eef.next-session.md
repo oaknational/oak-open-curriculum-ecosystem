@@ -15,8 +15,8 @@ measurement.)
 claude-opus-4-7-1m / session seed `696765` — drafted the 7×3 T1
 tracer matrix into `graph-query-layer.plan.md § Phase 1` with
 verification footnotes against real generator output and data files;
-ran three review rounds (in-session first-principles, code-reviewer,
-assumptions-reviewer); applied 6 findings across rounds plus 3
+ran three review rounds (in-session first-principles, code-expert,
+assumptions-expert); applied 6 findings across rounds plus 3
 operation-design corrections (drop `find_by_tag` for prerequisite +
 misconception under the *stop inventing optionality* doctrine, add
 sparse-relations manifest surface, reframe outcome condition);
@@ -44,7 +44,7 @@ under the ≥2-of-3 rule (`neighbours × misconception`,
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
 | `Iridescent Soaring Planet` | `claude-code` | `claude-opus-4-7-1m` | `b38261` | `architecture-restructure-and-handoff` | 2026-04-30 | 2026-04-30 |
-| `Fragrant Sheltering Petal` | `claude-code` | `claude-opus-4-7-1m` | `360064` | `type-reviewer-round` | 2026-04-30 | 2026-04-30 |
+| `Fragrant Sheltering Petal` | `claude-code` | `claude-opus-4-7-1m` | `360064` | `type-expert-round` | 2026-04-30 | 2026-04-30 |
 | `Vining Whispering Root` | `claude-code` | `claude-opus-4-7-1m` | `696765` | `tracer-matrix-and-promotion-packet` | 2026-04-30 | 2026-05-01 |
 | `Gnarled Fruiting Root` | `claude-code` | `claude-opus-4-7-1m` | `e18e2c` | `cross-ref-path-updates-from-thread-restructure-only` | 2026-05-01 | 2026-05-01 |
 | `Windward Darting Horizon` | `cursor` | `claude-opus-4.7` | `dd084d` | `eef-tool-rename-eef-prefix-per-adr-157-and-mvp-arc-cross-ref` | 2026-05-07 | 2026-05-07 |
@@ -140,9 +140,9 @@ real interface when it lands. See Increment 2 § Risks.
 
 ---
 
-## Type-Reviewer Round Outcome (2026-04-30, Fragrant Sheltering Petal)
+## Type-Expert Round Outcome (2026-04-30, Fragrant Sheltering Petal)
 
-**Status**: type-reviewer round complete. Verdict: AT-RISK with concrete
+**Status**: type-expert round complete. Verdict: AT-RISK with concrete
 remediations applied. Of 11 findings:
 
 - **Bucket (a) principles-decided** — applied: Result<T, E> on fallible
@@ -223,7 +223,7 @@ under the ≥2-of-3 rule:
 
 - `neighbours × misconception` — no edges in current `MisconceptionGraph` data (round-1 finding).
 - `subgraph × misconception` — same root cause (round-1 finding).
-- `find_by_tag × prerequisite` — no tag taxonomy in source data (round-2 finding from assumptions-reviewer); the synthetic-compound `${subject}-${keyStage}` proxy initially drafted was the *invented optionality* anti-pattern. Agents wanting subject+keyStage filtering use `enumerate_nodes`.
+- `find_by_tag × prerequisite` — no tag taxonomy in source data (round-2 finding from assumptions-expert); the synthetic-compound `${subject}-${keyStage}` proxy initially drafted was the *invented optionality* anti-pattern. Agents wanting subject+keyStage filtering use `enumerate_nodes`.
 - `find_by_tag × misconception` — same root cause (round-2 finding).
 
 Final MCP tool count: **17**, not 21. Per-graph: prerequisite 6 +
@@ -247,7 +247,7 @@ Inline location: `.agent/plans/connecting-oak-resources/knowledge-graph-integrat
 Status: **complete.**
 
 Each tracer was drafted with the actual generator-source or data file
-open. Initial pass surfaced four findings; a code-reviewer round
+open. Initial pass surfaced four findings; a code-expert round
 (2026-04-30) caught two more genuine data-shape gaps that the initial
 pass had missed. All six findings have been applied to the plan body
 in this session:
@@ -302,7 +302,7 @@ Verified against `.agent/plans/sector-engagement/eef/current/eef-evidence-corpus
 
 1. ✓ Status `current`; `parent_plan` and all four `sibling_plans`
    references resolve to existing files.
-2. ✓ T1, T2, T5, T8, T12 are in their post-type-reviewer form
+2. ✓ T1, T2, T5, T8, T12 are in their post-type-expert form
    (`EvidenceCorpus` wrapping shape with `Result<T, E>`; precise Zod
    for `last_updated` and `data_version`; non-empty tuple types on
    `caveats` and `citations`; `ComparisonDimension` literal union;
@@ -317,7 +317,7 @@ Verified against `.agent/plans/sector-engagement/eef/current/eef-evidence-corpus
    not block Increment 2; finding #4 is the carve-out that is
    already explicit in T6).
 
-### Plan-body diff summary (since type-reviewer round)
+### Plan-body diff summary (since type-expert round)
 
 Modifications to `.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`
 this session, across two review rounds:
@@ -360,16 +360,16 @@ the gate, not to invent optionality around it.
 
 ## Previous First Task (resolved)
 
-**Run the type-reviewer over the current plan estate** — code-reviewer
+**Run the type-expert over the current plan estate** — code-expert
 explicitly recommended this in its session-close report; the
 NodeProjection deep-path types and the EvidenceCorpus wrapping shape
 are the load-bearing review questions. Owner direction (2026-04-30):
 "this isn't something that needs my intervention, the code reviewer
 suggested type reviewer follow up, stop inventing optionality and do
-it." **Status**: complete (this session, see Type-Reviewer Round Outcome
+it." **Status**: complete (this session, see Type-Expert Round Outcome
 above).
 
-Brief the type-reviewer with:
+Brief the type-expert with:
 
 - Branch: `feat/eef_exploration` at HEAD.
 - Primary files: `graph-query-layer.plan.md` (NodeProjection recursive
@@ -419,7 +419,7 @@ been settled by owner direction on 2026-04-30:
    boxes.
 8. **Outcome operationalisation (named rubric/owner/cadence)** →
    REMOVED. Speculative fantasy without infrastructure to back it.
-9. **Type-reviewer escalation** → first task of next session (see
+9. **Type-expert escalation** → first task of next session (see
    above).
 10. **Parent plan child_plans drift** → fixed in this session.
 11. **Refresh script location** → relocated to SDK workspace.

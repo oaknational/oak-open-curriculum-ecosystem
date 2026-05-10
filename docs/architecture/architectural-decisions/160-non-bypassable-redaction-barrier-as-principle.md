@@ -37,7 +37,7 @@ by default until §6 is updated." That is the wrong default. The
 **intent** of ADR-143 §6 is that **any** fan-out path is inside
 the barrier; the enumeration is incidental to the intent.
 
-Additionally, during review of the maximisation plan, sentry-reviewer
+Additionally, during review of the maximisation plan, sentry-expert
 pointed out that the existing hook contracts are **not uniform**:
 
 - `beforeSend` and `beforeSendTransaction` may be `async`

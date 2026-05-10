@@ -86,7 +86,7 @@ is absolute.
 >   pending-graduations as a candidate; the directive-file edit
 >   itself is a subsequent-session concern.
 > - Substance-preservation absolute (PDR-046 §per-write rule).
-> - Reviewer dispatch per `invoke-code-reviewers` rule.
+> - Reviewer dispatch per `invoke-code-experts` rule.
 > - Stage-by-explicit-pathspec discipline on every commit.
 > - Comms-event polling at workflow-boundary moments (no
 >   permission needed for inter-agent communication).
@@ -170,7 +170,7 @@ Anchor authors to scan (non-exhaustive):
 5. **30%-context rule honoured** — directive-file edits remain
    gated. Directive-shaped substance routes to
    pending-graduations as a candidate.
-6. **Reviewer dispatch per the rule** — docs-adr-reviewer at
+6. **Reviewer dispatch per the rule** — docs-adr-expert at
    minimum on every commit; specialists per the invocation
    matrix.
 7. **Polling discipline applied** — comms-events directory at

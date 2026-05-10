@@ -1,7 +1,7 @@
 ---
 name: "Schema Resilience and Response Architecture"
 overview: "Address the upstream schema validation fragility exposed by a third-party MCP consumer: response schema strictness policy, schema drift monitoring, additionalContext request flag, and API-direct guidance."
-specialist_reviewer: "code-reviewer, type-reviewer, mcp-reviewer, architecture-reviewer-betty"
+specialist_reviewer: "code-expert, type-expert, mcp-expert, architecture-expert-betty"
 isProject: false
 todos:
   - id: strict-or-strip

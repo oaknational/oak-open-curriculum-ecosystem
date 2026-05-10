@@ -71,9 +71,9 @@ journey, and friction points. Without a dedicated specialist, agents:
 
 - Internal package API correctness (OOCE specialist owns this)
 - Dependency direction and boundary structure (architecture reviewers own this)
-- Security implications of error messages (security-reviewer owns this)
-- Test structure and TDD compliance (test-reviewer / TDD specialist own this)
-- Generic code quality (code-reviewer owns this)
+- Security implications of error messages (security-expert owns this)
+- Test structure and TDD compliance (test-expert / TDD specialist own this)
+- Generic code quality (code-expert owns this)
 
 ## Doctrine Hierarchy
 
@@ -114,9 +114,9 @@ DevX is the avatar of the repo's *users*.
 
 ## Deliverables
 
-1. Canonical reviewer template: `.agent/sub-agents/templates/devx-reviewer.md`
+1. Canonical reviewer template: `.agent/sub-agents/templates/devx-expert.md`
 2. Canonical skill: `.agent/skills/devx-expert/SKILL.md`
-3. Canonical situational rule: `.agent/rules/invoke-devx-reviewer.md`
+3. Canonical situational rule: `.agent/rules/invoke-devx-expert.md`
 4. Platform adapters (Claude, Cursor, Codex)
 5. Discoverability updates
 6. Validation
@@ -155,10 +155,10 @@ DevX is the avatar of the repo's *users*.
 
 | Specialist | Owns | Does NOT own |
 |-----------|------|-------------|
-| **devx-reviewer** | Ergonomics, discoverability, feedback loops, error quality, CLI/SDK usability | Correctness of internal API usage, boundary structure, security |
-| **ooce-reviewer** | Internal API correctness, composition patterns | How pleasant those APIs are to use |
-| **onboarding-reviewer** | First-time onboarding journey | Ongoing daily DX friction |
-| **code-reviewer** | General code quality, gateway triage | DX-specific ergonomic assessment |
+| **devx-expert** | Ergonomics, discoverability, feedback loops, error quality, CLI/SDK usability | Correctness of internal API usage, boundary structure, security |
+| **ooce-expert** | Internal API correctness, composition patterns | How pleasant those APIs are to use |
+| **onboarding-expert** | First-time onboarding journey | Ongoing daily DX friction |
+| **code-expert** | General code quality, gateway triage | DX-specific ergonomic assessment |
 | **architecture reviewers** | Structural correctness, dependency direction | Whether the structure is pleasant to navigate |
 
 ## Promotion Trigger

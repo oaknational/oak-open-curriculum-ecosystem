@@ -94,7 +94,7 @@ Newly added to scope (absent from the superseded plan):
   installed but unused until an MCP tool calls an LLM).
 - Shared delegates extraction: `createSentryDelegates` moves from the MCP
   app into `@oaknational/sentry-node`, deleting the CLI's duplicated
-  delegation seam (per architecture-reviewer-betty's finding).
+  delegation seam (per architecture-expert-betty's finding).
 - Bundler-side source maps: evaluate `@sentry/esbuild-plugin` for tsup and
   `@sentry/vite-plugin` for the widget as replacements for the shell
   script.

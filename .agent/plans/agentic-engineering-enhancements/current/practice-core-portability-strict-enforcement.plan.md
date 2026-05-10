@@ -250,16 +250,16 @@ adoption.
 
 ## Reviewer Scheduling (phase-aligned)
 
-- **Pre-execution**: `assumptions-reviewer` (challenge: is the strict
+- **Pre-execution**: `assumptions-expert` (challenge: is the strict
   rule the right shape, or is a softer "minimise outbound" form
   preferable? Owner has stated; the reviewer challenges the
   *implementation shape*, not the rule).
-- **During**: `test-reviewer` (Phase 1 RED tests prove the right
-  things), `code-reviewer` gateway, `architecture-reviewer-fred`
+- **During**: `test-expert` (Phase 1 RED tests prove the right
+  things), `code-expert` gateway, `architecture-expert-fred`
   (principles-first; the strict-portability rule is principle-shaped)
   during Phases 2 and 3.
-- **Post**: `docs-adr-reviewer` (Core prose now portable;
-  practice-index updated coherently); `release-readiness-reviewer`
+- **Post**: `docs-adr-expert` (Core prose now portable;
+  practice-index updated coherently); `release-readiness-expert`
   before declaring closure.
 
 Scheduling all reviewers at close is phase-misalignment.

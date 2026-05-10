@@ -41,7 +41,7 @@ the additions are intentional.
 |---|---|---|
 | `parent_plan: open-education-knowledge-surfaces.plan.md` | unchanged in `eef-evidence-corpus.plan.md` | preserved |
 | sibling: misconception-graph-mcp-surface | unchanged | preserved |
-| specialist_reviewer: mcp-reviewer, code-reviewer, test-reviewer | expanded to also include `type-reviewer, sentry-reviewer` in new plan | preserved + expanded (citation type discipline + telemetry warrant the additions) |
+| specialist_reviewer: mcp-expert, code-expert, test-expert | expanded to also include `type-expert, sentry-expert` in new plan | preserved + expanded (citation type discipline + telemetry warrant the additions) |
 | `isProject: false` | unchanged | preserved |
 | Status: QUEUED — all 12 findings resolved | new plan: CURRENT — predecessor superseded; resolutions inlined into todo bodies | preserved (resolutions still bind) |
 | Branch field: `planning/kg_eef_integration` | new plan: `feat/eef_exploration` originating session, ACTIVE branch TBD | updated (was already drift; the previous branch may have been merged) |

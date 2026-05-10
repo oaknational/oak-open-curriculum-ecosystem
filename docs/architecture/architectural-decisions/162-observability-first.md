@@ -162,7 +162,7 @@ Phase 5 implementation work.
 2. **Reviewer-matrix question** at every phase close:
    "Does this capability have a loop across each applicable axis?"
    Codified in
-   [`.agent/rules/invoke-code-reviewers.md`](../../../.agent/rules/invoke-code-reviewers.md)
+   [`.agent/rules/invoke-code-experts.md`](../../../.agent/rules/invoke-code-experts.md)
    (or its canonical counterpart) so it is asked routinely, not
    remembered ad-hoc.
 3. **Conformance test** in
@@ -245,7 +245,7 @@ through ADR-160's barrier before reaching any sink.
 2. **Retain the single-axis engineering framing and treat other axes
    as per-plan concerns.** Rejected: the MVP is a function of launch
    context (public beta, long-lived, important); a single-axis frame
-   cannot answer data-scientist / a11y-reviewer / product-owner
+   cannot answer data-scientist / a11y-expert / product-owner
    questions without forcing each subsequent plan to re-derive the
    gap. The direction-setting session report derives this rejection
    in full.
@@ -332,7 +332,7 @@ Phased execution remains implementation follow-through. In summary:
   specified. Phase 5 authors the rule implementation and RuleTester
   cases; the opt-out comment format is decided there.
 - Whether the reviewer-matrix question should live in
-  `.agent/rules/invoke-code-reviewers.md` directly or in a dedicated
+  `.agent/rules/invoke-code-experts.md` directly or in a dedicated
   `.agent/rules/axis-coverage-interrogation.md` file is a Phase 5
   structural choice. Either placement satisfies this ADR.
 - Whether the vendor-independence conformance test should run in CI
@@ -360,7 +360,7 @@ Phased execution remains implementation follow-through. In summary:
   and wired at `warn` into every `apps/*` and `packages/sdks/*`
   workspace's `eslint.config.ts`. Reviewer-matrix axis-coverage
   question codified at
-  [`.agent/memory/executive/invoke-code-reviewers.md §Coverage Tracking`](../../../.agent/memory/executive/invoke-code-reviewers.md).
+  [`.agent/memory/executive/invoke-code-experts.md §Coverage Tracking`](../../../.agent/memory/executive/invoke-code-experts.md).
   Wave-1 enforcement covers `logger.*` / `Sentry.*` / delegate-pattern
   emission sites; the schema-usage detection path (Enforcement
   Mechanism #3) remains deferred to Wave 2 when the

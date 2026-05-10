@@ -122,7 +122,7 @@ actual value. The test can never fail unless the framework breaks.
 
 ## Execution Approach
 
-Use the `test-reviewer` sub-agent across each workspace in parallel.
+Use the `test-expert` sub-agent across each workspace in parallel.
 Focus on the five categories above. Produce a workspace-level report
 with specific delete/rewrite/keep recommendations.
 

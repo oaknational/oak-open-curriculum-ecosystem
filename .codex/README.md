@@ -25,21 +25,21 @@ documentation.
 .codex/
 ├── config.toml           # Agent roster and feature flags
 ├── README.md             # This file
-└── agents/               # Thin per-reviewer adapter TOMLs
-    ├── code-reviewer.toml
-    ├── test-reviewer.toml
+└── agents/               # Thin per-expert adapter TOMLs
+    ├── code-expert.toml
+    ├── test-expert.toml
     ├── ...
-    └── architecture-reviewer-wilma.toml
+    └── architecture-expert-wilma.toml
 ```
 
 ## Reviewer Roster
 
 All reviewer adapters are registered in `config.toml`, alongside the
-non-reviewer helper agents `ground-truth-designer` and `subagent-architect`.
+non-expert helper agents `ground-truth-designer` and `subagent-architect`.
 Each `.toml` adapter in `agents/` is a self-describing project-scoped custom
 agent: it declares `name`, `description`, the required Codex execution
 settings, and `developer_instructions` that point to the canonical reviewer
-template in `.agent/sub-agents/templates/`. The architecture-reviewer variants
+template in `.agent/sub-agents/templates/`. The architecture-expert variants
 additionally reference an individual persona component in
 `.agent/sub-agents/components/personas/`.
 
@@ -54,7 +54,7 @@ For the full reviewer invocation matrix and timing guidance, see `.agent/memory/
 When reviewing from Codex, do not assume the runtime has automatically loaded the repo-local reviewer adapter. Resolve the reviewer first:
 
 ```bash
-pnpm agent-tools:codex-reviewer-resolve code-reviewer
+pnpm agent-tools:codex-reviewer-resolve code-expert
 ```
 
 That command prints the exact `.codex/agents/*.toml` adapter and canonical `.agent` files that should ground the review, and `--json` is available for audit or automation.

@@ -130,7 +130,7 @@ these repo-specific documents:
 
 | Document | Purpose |
 |----------|---------|
-| `docs/architecture/architectural-decisions/149-frontend-specialist-reviewer-gateway-cluster.md` | Cluster definition, overlap boundaries, MCP boundary rule |
+| `docs/architecture/architectural-decisions/149-frontend-specialist-expert-gateway-cluster.md` | Cluster definition, overlap boundaries, MCP boundary rule |
 | `docs/architecture/architectural-decisions/147-browser-accessibility-as-blocking-quality-gate.md` | Components must produce accessible HTML — zero-tolerance |
 | `docs/architecture/architectural-decisions/148-design-token-architecture.md` | Components consume tokens via CSS custom properties |
 

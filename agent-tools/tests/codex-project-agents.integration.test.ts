@@ -26,27 +26,27 @@ function writeFixtureRepo(repoRoot: string): void {
 
   writeFileSync(
     join(repoRoot, '.codex', 'config.toml'),
-    `[agents."code-reviewer"]
+    `[agents."code-expert"]
 description = "Gateway reviewer."
-config_file = "agents/code-reviewer.toml"
+config_file = "agents/code-expert.toml"
 
-[agents."architecture-reviewer-fred"]
+[agents."architecture-expert-fred"]
 description = "Principles-first architecture reviewer."
-config_file = "agents/architecture-reviewer-fred.toml"
+config_file = "agents/architecture-expert-fred.toml"
 `,
     'utf8',
   );
 
   writeFileSync(
-    join(repoRoot, '.codex', 'agents', 'code-reviewer.toml'),
-    `name = "code-reviewer"
+    join(repoRoot, '.codex', 'agents', 'code-expert.toml'),
+    `name = "code-expert"
 description = "Gateway reviewer."
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 approval_policy = "never"
 
 developer_instructions = """
-Read and follow \`.agent/sub-agents/templates/code-reviewer.md\`.
+Read and follow \`.agent/sub-agents/templates/code-expert.md\`.
 
 Mode: Observe, analyse and report. Do not modify code.
 """
@@ -55,8 +55,8 @@ Mode: Observe, analyse and report. Do not modify code.
   );
 
   writeFileSync(
-    join(repoRoot, '.codex', 'agents', 'architecture-reviewer-fred.toml'),
-    `name = "architecture-reviewer-fred"
+    join(repoRoot, '.codex', 'agents', 'architecture-expert-fred.toml'),
+    `name = "architecture-expert-fred"
 description = "Principles-first architecture reviewer."
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
@@ -65,7 +65,7 @@ approval_policy = "never"
 developer_instructions = """
 Read and apply \`.agent/sub-agents/components/personas/fred.md\` for your persona identity and review lens.
 
-Your first action MUST be to read and internalise \`.agent/sub-agents/templates/architecture-reviewer.md\`.
+Your first action MUST be to read and internalise \`.agent/sub-agents/templates/architecture-expert.md\`.
 
 Mode: Observe, analyse and report. Do not modify code.
 """
@@ -74,12 +74,12 @@ Mode: Observe, analyse and report. Do not modify code.
   );
 
   writeFileSync(
-    join(repoRoot, '.agent', 'sub-agents', 'templates', 'code-reviewer.md'),
+    join(repoRoot, '.agent', 'sub-agents', 'templates', 'code-expert.md'),
     '# code reviewer\n',
     'utf8',
   );
   writeFileSync(
-    join(repoRoot, '.agent', 'sub-agents', 'templates', 'architecture-reviewer.md'),
+    join(repoRoot, '.agent', 'sub-agents', 'templates', 'architecture-expert.md'),
     '# architecture reviewer\n',
     'utf8',
   );
@@ -100,15 +100,15 @@ afterEach(() => {
 describe('parseCodexAgentRegistrations', () => {
   it('extracts registered agent names and adapter paths from .codex/config.toml text', () => {
     expect(
-      parseCodexAgentRegistrations(`[agents."code-reviewer"]
+      parseCodexAgentRegistrations(`[agents."code-expert"]
 description = "Gateway reviewer."
-config_file = "agents/code-reviewer.toml"
+config_file = "agents/code-expert.toml"
 `),
     ).toStrictEqual([
       {
-        name: 'code-reviewer',
+        name: 'code-expert',
         description: 'Gateway reviewer.',
-        configFile: 'agents/code-reviewer.toml',
+        configFile: 'agents/code-expert.toml',
       },
     ]);
   });
@@ -119,16 +119,16 @@ describe('resolveCodexProjectAgent', () => {
     const repoRoot = createTempRepoRoot();
     writeFixtureRepo(repoRoot);
 
-    const resolvedAgent = resolveCodexProjectAgent(repoRoot, 'architecture-reviewer-fred');
+    const resolvedAgent = resolveCodexProjectAgent(repoRoot, 'architecture-expert-fred');
 
-    expect(resolvedAgent.name).toBe('architecture-reviewer-fred');
-    expect(resolvedAgent.adapterPath).toBe('.codex/agents/architecture-reviewer-fred.toml');
+    expect(resolvedAgent.name).toBe('architecture-expert-fred');
+    expect(resolvedAgent.adapterPath).toBe('.codex/agents/architecture-expert-fred.toml');
     expect(resolvedAgent.modelReasoningEffort).toBe('high');
     expect(resolvedAgent.sandboxMode).toBe('read-only');
     expect(resolvedAgent.approvalPolicy).toBe('never');
     expect(resolvedAgent.referencedCanonicalFiles).toStrictEqual([
       '.agent/sub-agents/components/personas/fred.md',
-      '.agent/sub-agents/templates/architecture-reviewer.md',
+      '.agent/sub-agents/templates/architecture-expert.md',
     ]);
   });
 
@@ -137,15 +137,15 @@ describe('resolveCodexProjectAgent', () => {
     writeFixtureRepo(repoRoot);
     writeFileSync(
       join(repoRoot, '.codex', 'config.toml'),
-      `[agents."code-reviewer"]
+      `[agents."code-expert"]
 description = "Gateway reviewer."
-config_file = ".codex/agents/code-reviewer.toml"
+config_file = ".codex/agents/code-expert.toml"
 `,
       'utf8',
     );
 
-    expect(() => resolveCodexProjectAgent(repoRoot, 'code-reviewer')).toThrow(
-      /missing adapter \.codex\/\.codex\/agents\/code-reviewer\.toml/u,
+    expect(() => resolveCodexProjectAgent(repoRoot, 'code-expert')).toThrow(
+      /missing adapter \.codex\/\.codex\/agents\/code-expert\.toml/u,
     );
   });
 
@@ -153,20 +153,20 @@ config_file = ".codex/agents/code-reviewer.toml"
     const repoRoot = createTempRepoRoot();
     writeFixtureRepo(repoRoot);
     writeFileSync(
-      join(repoRoot, '.codex', 'agents', 'code-reviewer.toml'),
-      `name = "code-reviewer"
+      join(repoRoot, '.codex', 'agents', 'code-expert.toml'),
+      `name = "code-expert"
 description = "Wrong description."
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 approval_policy = "never"
 
 developer_instructions = """
-Read and follow \`.agent/sub-agents/templates/code-reviewer.md\`.
+Read and follow \`.agent/sub-agents/templates/code-expert.md\`.
 """`,
       'utf8',
     );
 
-    expect(() => resolveCodexProjectAgent(repoRoot, 'code-reviewer')).toThrow(
+    expect(() => resolveCodexProjectAgent(repoRoot, 'code-expert')).toThrow(
       /adapter description does not match the registry description/u,
     );
   });

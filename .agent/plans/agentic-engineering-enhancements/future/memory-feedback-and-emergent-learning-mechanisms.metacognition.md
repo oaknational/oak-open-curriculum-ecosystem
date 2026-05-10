@@ -404,7 +404,7 @@ execution plan's shape.
 3. **Executive memory has three lookup surfaces + a README, and
    the README explicitly says "not refreshed per session."** This
    is the loop-absence fingerprint. Three concrete target surfaces:
-   `artefact-inventory.md`, `invoke-code-reviewers.md`,
+   `artefact-inventory.md`, `invoke-code-experts.md`,
    `cross-platform-agent-surface-matrix.md`. Sketch A's drift-
    detection surface is three additions of one section each, not
    diffuse design work.

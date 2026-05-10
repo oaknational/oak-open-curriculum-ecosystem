@@ -332,7 +332,7 @@ At natural session boundaries:
 
 - Update the master plan with progress.
 - Append a mid-session entry to `shared-comms-log.md`.
-- Dispatch reviewers (`code-reviewer` + relevant specialists) on the substantive commits. Run them in parallel.
+- Dispatch reviewers (`code-expert` + relevant specialists) on the substantive commits. Run them in parallel.
 
 ### 10. Push
 

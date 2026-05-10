@@ -245,13 +245,13 @@ beyond what is already declared in the relevant packages.
 
 ## Reviewer Scheduling (phase-aligned)
 
-- **Pre-execution**: `assumptions-reviewer` reviews the plan body
+- **Pre-execution**: `assumptions-expert` reviews the plan body
   for proportionality and prerequisite classification (per
   PDR-018 §Beneficial prerequisites).
-- **During**: `test-reviewer` after each cycle's test is written;
-  `config-reviewer` for WS1, WS2, WS5, WS6; `code-reviewer` gateway
+- **During**: `test-expert` after each cycle's test is written;
+  `config-expert` for WS1, WS2, WS5, WS6; `code-expert` gateway
   after each cycle.
-- **Post**: `docs-adr-reviewer` confirms PDR-038 / PDR-044
+- **Post**: `docs-adr-expert` confirms PDR-038 / PDR-044
   citation consistency in the plan and any documentation updates.
 
 ---

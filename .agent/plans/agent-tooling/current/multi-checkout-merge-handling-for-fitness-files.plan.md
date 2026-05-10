@@ -281,25 +281,25 @@ Bespoke drivers + a focused first-party reconcile command, both built
 on top of native git's `gitattributes` extension point. Sunk-cost
 reasoning is *not* the rationale: the alternatives genuinely do not
 fit (markdown-with-fitness-semantics is not a shape vendor tools
-target). `assumptions-reviewer` runs against this attestation
+target). `assumptions-expert` runs against this attestation
 pre-ExitPlanMode at Phase 0.
 
 ---
 
 ## Reviewer Scheduling (phase-aligned)
 
-- **Pre-execution (Phase 0)**: `assumptions-reviewer` (challenge:
+- **Pre-execution (Phase 0)**: `assumptions-expert` (challenge:
   is the layered shape right? Are there valid options not surveyed?
   Should some files leave git entirely?). Vendor specialist *not*
   applicable — bespoke first-party.
-- **During Phases 2–3**: `test-reviewer` (RED proves the right
-  thing); `architecture-reviewer-betty` (cohesion / coupling of the
-  driver shape); `code-reviewer` gateway.
-- **During Phases 4–5**: `architecture-reviewer-fred` (principles-
-  first; reconcile must not silently mutate); `test-reviewer`.
-- **During Phase 6**: `architecture-reviewer-wilma` (adversarial:
+- **During Phases 2–3**: `test-expert` (RED proves the right
+  thing); `architecture-expert-betty` (cohesion / coupling of the
+  driver shape); `code-expert` gateway.
+- **During Phases 4–5**: `architecture-expert-fred` (principles-
+  first; reconcile must not silently mutate); `test-expert`.
+- **During Phase 6**: `architecture-expert-wilma` (adversarial:
   what hides under "in-fitness" or "no broken cross-refs"?).
-- **Post**: `docs-adr-reviewer`, `release-readiness-reviewer`.
+- **Post**: `docs-adr-expert`, `release-readiness-expert`.
 
 Scheduling all reviewers at close is phase-misalignment.
 
@@ -389,7 +389,7 @@ to make the trade-offs visible.
 5. ✅ Pre-commit warning scope: every fitness file, or only those
    already touched by another active claim?
 
-**Build-vs-buy attestation review**: assumptions-reviewer challenges
+**Build-vs-buy attestation review**: assumptions-expert challenges
 the bespoke choice; owner confirms or redirects.
 
 **Task Complete When**: Owner has confirmed the architectural shape;

@@ -1,7 +1,7 @@
 # Test Immediate-Fails Checklist
 
 Any single item below is an **immediate fail** — the test is rejected
-without further analysis. This is the fast gate test-reviewer applies
+without further analysis. This is the fast gate test-expert applies
 first; tests that pass it then receive the full checklist.
 
 Rooted in `.agent/directives/testing-strategy.md` and
@@ -109,7 +109,7 @@ seam, extract a pure function, inject a dependency).
 
 ## When to Apply
 
-- As the **first pass** on any test-reviewer invocation.
+- As the **first pass** on any test-expert invocation.
 - Before any deeper analysis of test value or TDD compliance.
 - Findings here block approval; all 22 items must be clean before
   the test suite is considered compliant.
@@ -126,7 +126,7 @@ problems:
 - "Integration test has complex mock" → the dependency surface is too
   wide; split the responsibility in product code.
 
-The test-reviewer flags the symptom. The fix is usually upstream.
+The test-expert flags the symptom. The fix is usually upstream.
 
 ## Related Rules
 

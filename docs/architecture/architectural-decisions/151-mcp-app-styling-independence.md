@@ -152,7 +152,7 @@ why. The ADR-148 architecture is the correct fit because it:
 
 - [ADR-148](148-design-token-architecture.md) — defines the token
   architecture that MCP App views consume
-- [ADR-149](149-frontend-specialist-reviewer-gateway-cluster.md) —
+- [ADR-149](149-frontend-specialist-expert-gateway-cluster.md) —
   `design-system-expert` enforces token governance including palette
   alignment
 - [ADR-045](045-hybrid-theming-bridge-for-oak-components.md) —

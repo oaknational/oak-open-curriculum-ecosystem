@@ -21,7 +21,7 @@ sits below `principles.md` for any question about repository-wide rules.
 > them separately, in either order, is a category error.
 
 This is the load-bearing definition. Every other rule in this directive,
-and every check the test-reviewer applies, derives from it.
+and every check the test-expert applies, derives from it.
 
 ## Three Corollaries
 
@@ -149,11 +149,11 @@ refactoring. They should be deleted or rewritten as descriptions.
   `no-global-state-in-tests.md`, `test-immediate-fails.md` — the
   rule surface operationalising this directive.
 - `docs/engineering/testing-tdd-recipes.md` — recipe-level worked
-  examples of the cycle at each scale; loaded by the test-reviewer
+  examples of the cycle at each scale; loaded by the test-expert
   on every invocation.
 - `docs/engineering/testing-patterns.md` — composition and DI
   patterns that make tests describable rather than audit-shaped;
-  loaded by the test-reviewer on every invocation.
+  loaded by the test-expert on every invocation.
 
 ## What This Directive Is Not
 

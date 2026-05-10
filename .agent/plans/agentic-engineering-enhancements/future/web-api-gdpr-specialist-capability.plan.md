@@ -27,7 +27,7 @@ That narrowness is separate from review depth.
 
 This is a future **agent capability**, not a reviewer-only construct.
 
-- **`web-api-gdpr-reviewer`** would provide read-only assessment of
+- **`web-api-gdpr-expert`** would provide read-only assessment of
   personal-data handling and GDPR/UK GDPR concerns at web/API boundaries.
 - **`web-api-gdpr-expert`** would support planning, research, and advisory work
   during implementation.
@@ -60,12 +60,12 @@ situational rule makes the capability discoverable.
 ### Out of scope
 
 - Broad privacy-by-design and organisation-wide privacy posture
-  (`privacy-reviewer`)
+  (`privacy-expert`)
 - Broad security posture or exploitability doctrine
-  (`cyber-security-reviewer`, `security-reviewer`)
-- General web/API attack-surface hardening (`web-api-security-reviewer`)
-- Framework-specific implementation correctness (`express-reviewer`,
-  `clerk-reviewer`, `mcp-reviewer`)
+  (`cyber-security-expert`, `security-expert`)
+- General web/API attack-surface hardening (`web-api-security-expert`)
+- Framework-specific implementation correctness (`express-expert`,
+  `clerk-expert`, `mcp-expert`)
 - Generic legal review beyond engineering-facing GDPR/UK GDPR implementation
   concerns at the boundary
 
@@ -92,29 +92,29 @@ situational rule makes the capability discoverable.
 ## Deliverables
 
 1. Canonical reviewer template:
-   `.agent/sub-agents/templates/web-api-gdpr-reviewer.md`
+   `.agent/sub-agents/templates/web-api-gdpr-expert.md`
 2. Canonical skill: `.agent/skills/web-api-gdpr-expert/SKILL.md`
 3. Canonical situational rule:
-   `.agent/rules/invoke-web-api-gdpr-reviewer.md`
+   `.agent/rules/invoke-web-api-gdpr-expert.md`
 4. Platform adapters (Claude, Cursor, Gemini CLI, Codex)
 5. Discoverability updates
 6. Validation
 
 ## Overlap Boundaries
 
-- **`web-api-gdpr-reviewer`** owns narrow personal-data obligations and
+- **`web-api-gdpr-expert`** owns narrow personal-data obligations and
   GDPR/UK GDPR implementation concerns at web/API boundaries. It does **not**
   own broad privacy posture, exploitability posture, or general web/API
   attack-surface hardening.
-- **`privacy-reviewer`** owns broad privacy-by-design, retention,
+- **`privacy-expert`** owns broad privacy-by-design, retention,
   minimisation, and trust posture. It does **not** own boundary-specific
   GDPR/UK GDPR implementation detail.
-- **`web-api-security-reviewer`** owns general HTTP/API attack surface and
+- **`web-api-security-expert`** owns general HTTP/API attack surface and
   endpoint hardening. It does **not** own personal-data compliance semantics.
-- **`security-reviewer`** owns the practical default security/privacy
+- **`security-expert`** owns the practical default security/privacy
   exploitability review. It does **not** own the narrow API/data-rights and
   retention-semantics focus.
-- **`express-reviewer`**, **`clerk-reviewer`**, and **`mcp-reviewer`** own
+- **`express-expert`**, **`clerk-expert`**, and **`mcp-expert`** own
   framework or protocol correctness. They do **not** own boundary-level
   personal-data obligations and semantics.
 

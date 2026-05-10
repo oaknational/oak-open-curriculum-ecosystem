@@ -955,7 +955,7 @@ intact.
    - `apps/oak-curriculum-mcp-streamable-http/docs/operational-debugging.md`
      (local deploy-boundary diagnostics via `pnpm prod:harness`).
      Drift against this ADR in any of those surfaces is caught by
-     `docs-adr-reviewer` at lane close.
+     `docs-adr-expert` at lane close.
 4. **Cross-reference from ADR-161** — ADR-161 pipeline-boundary table
    already names the Vercel deploy pipeline as the correct home for
    the release/deploy realisation. This ADR now names the esbuild
@@ -1122,11 +1122,11 @@ ReleaseInput` so that `@oaknational/sentry-node` delegates at
   impossible by construction, and the anti-drift gate is the type
   system and the dep-cruise `libs ← core` edge rather than a runtime
   contract test. Enforcement §5 (cross-resolver contract test) is
-  retracted accordingly. The assumptions-reviewer Dispositions #4
+  retracted accordingly. The assumptions-expert Dispositions #4
   (fail-open row), #5 (two-file shim explanation), and #6 (cross-
   resolver contract test as primary anti-drift gate) are retracted
   because the text they confirmed has been replaced, along with
-  architecture-reviewer-fred Disposition #3 (the contract test's
+  architecture-expert-fred Disposition #3 (the contract test's
   devDep edge) and two sub-clauses of its positive note #4 (boundary
   discipline for the cross-resolver and wiring integration test
   placements). Reviewer dispositions for this second amendment are
@@ -1181,7 +1181,7 @@ the §1 + §10 amendments above were dispatched to three reviewers
 §Reviewer findings; acceptances and rejections are recorded inline
 below with rationale.
 
-### `assumptions-reviewer`
+### `assumptions-expert`
 
 **Recommendation**: BLOCK ON FINDINGS #1, #2 (factual / assumption
 precision). Other findings: IMPORTANT #3, #4, #6; SUGGESTION #5.
@@ -1246,7 +1246,7 @@ precision). Other findings: IMPORTANT #3, #4, #6; SUGGESTION #5.
    structural collapse supersedes the tightening this finding
    requested.
 
-### `sentry-reviewer`
+### `sentry-expert`
 
 **Recommendation**: BLOCK ON FINDINGS #1, #2 (vendor-canonical
 corrections). Other findings: SUGGESTION #3, #4.
@@ -1292,7 +1292,7 @@ corrections). Other findings: SUGGESTION #3, #4.
    session data to it, hiding regressions introduced by the merge
    commit from the release-introduced-by view.
 
-### `architecture-reviewer-fred`
+### `architecture-expert-fred`
 
 **Recommendation**: ACCEPT WITH SUGGESTED EDITS — block on Finding #1,
 suggested follow-ups for Findings #2 and #3. Findings #4–#10 are
@@ -1346,16 +1346,16 @@ ReleaseInput` and `resolveSentryRelease` delegation). The dep
 
 Per the §3.0 step of
 `.agent/plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md`,
-the §10 retraction above was dispatched to `docs-adr-reviewer` and
-`assumptions-reviewer` BEFORE landing. Reviewer findings are action
+the §10 retraction above was dispatched to `docs-adr-expert` and
+`assumptions-expert` BEFORE landing. Reviewer findings are action
 items per principles §Reviewer findings; acceptances and rejections are
 recorded inline below with rationale.
 
-### `docs-adr-reviewer`
+### `docs-adr-expert`
 
 **Recommendation**: BLOCK ON two findings (incomplete enumeration —
-`assumptions-reviewer` Disposition #6 and
-`architecture-reviewer-fred` Disposition #3 + positive-note #4
+`assumptions-expert` Disposition #6 and
+`architecture-expert-fred` Disposition #3 + positive-note #4
 sub-clauses). Other findings: MAJOR on two line-range items; MINOR on
 three prose / placeholder items; NITs and POSITIVE NOTES noted for
 information.
@@ -1364,12 +1364,12 @@ information.
 
 1. **BLOCKING (Cross-check Matrix missed Disposition #6)** —
    **ACCEPTED**. Enumeration expanded from 13 → 14 items to add an
-   explicit retraction of `assumptions-reviewer` Disposition #6
+   explicit retraction of `assumptions-expert` Disposition #6
    (parallel to Items 8 and 12 for Dispositions #4 and #5). Without
    this, Disposition #6 would remain as a dangling reference to
    §1/Enforcement-§5 text retracted elsewhere in this amendment — the
    same drift class this amendment exists to repair.
-2. **BLOCKING (Cross-check Matrix missed architecture-reviewer-fred
+2. **BLOCKING (Cross-check Matrix missed architecture-expert-fred
    Disposition #3 + positive-note #4 sub-clauses)** — **ACCEPTED**.
    Enumeration expanded further to Item 15 covering both Fred
    sub-surfaces. Item 15a retracts Disposition #3 (devDep edge — now
@@ -1383,7 +1383,7 @@ information.
    preserve the trailing blockquote separator before the preserved
    historical-record sentence intact.
 5. **MINOR (Item 11 retract-with-replacement-note framing)** —
-   **ACCEPTED**; merged with assumptions-reviewer I1.
+   **ACCEPTED**; merged with assumptions-expert I1.
 6. **MINOR (Item 9 placeholder → grep-friendly token)** —
    **ACCEPTED**; placeholder installed for pre-commit review and filled
    with `2822e525` after WS3 landed.
@@ -1392,7 +1392,7 @@ information.
    Comparator → Wiring-integration-test-removed.
 8. **NITs and POSITIVE NOTES** — acknowledged; no action.
 
-### `assumptions-reviewer`
+### `assumptions-expert`
 
 **Recommendation**: BLOCK on B1 (Disposition #6 dangling reference).
 IMPORTANT I1 (retract-with-note uniformity), I2 (atomic-commit
@@ -1432,7 +1432,7 @@ softening). SUGGESTIONS and NOTES for information.
    amendment if a third reader reports friction. Rejecting preserves
    the current-amendment scope discipline.
 6. **SUGGESTION (S2 — fill-at-landing sanity check records three
-   assumptions-reviewer dispositions)** — **ACCEPTED**; this
+   assumptions-expert dispositions)** — **ACCEPTED**; this
    dispositions block records Dispositions #4, #5, #6 as retracted.
 7. **NOTES (N1–N3)** — acknowledged; no action.
 

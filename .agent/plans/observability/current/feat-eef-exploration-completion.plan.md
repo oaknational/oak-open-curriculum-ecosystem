@@ -25,30 +25,30 @@ status: current
 isProject: true
 todos:
   - id: 01-comprehensive-plan-review-round-1
-    content: "DONE 2026-05-04 (Pelagic Diving Atoll). Architecture-led review pass dispatched in parallel: code-reviewer (gateway) + architecture-reviewer-{barney,betty,fred,wilma} + assumptions-reviewer. Six reviewers ran on plan body AND code surface (commits fd4eabaa..b226670d, no-speed-pressure rule, observability/env package areas). Findings captured in §Plan Review Findings (Round 1)."
+    content: "DONE 2026-05-04 (Pelagic Diving Atoll). Architecture-led review pass dispatched in parallel: code-expert (gateway) + architecture-expert-{barney,betty,fred,wilma} + assumptions-expert. Six reviewers ran on plan body AND code surface (commits fd4eabaa..b226670d, no-speed-pressure rule, observability/env package areas). Findings captured in §Plan Review Findings (Round 1)."
     status: completed
   - id: 02-apply-round-1-findings-and-second-review
-    content: "Apply Round 1 findings to refine this plan body. Then dispatch a second review round on the revised plan body (same six reviewers; owner-directed pre-execution gate). Apply any Round 2 findings. Commit the refined plan via full commit-skill protocol (single atomic commit with code-reviewer dispatch at close). After this step the plan body is the contract for the rest of execution. Findings explicitly rejected get written rationale per principles.md. CLOSED 2026-05-04 (Lacustrine Navigating Rudder, `dd239f`); commit 75dbcdb6."
+    content: "Apply Round 1 findings to refine this plan body. Then dispatch a second review round on the revised plan body (same six reviewers; owner-directed pre-execution gate). Apply any Round 2 findings. Commit the refined plan via full commit-skill protocol (single atomic commit with code-expert dispatch at close). After this step the plan body is the contract for the rest of execution. Findings explicitly rejected get written rationale per principles.md. CLOSED 2026-05-04 (Lacustrine Navigating Rudder, `dd239f`); commit 75dbcdb6."
     status: completed
     depends_on: [01-comprehensive-plan-review-round-1]
   - id: 03-integrate-no-speed-pressure-rule
-    content: "Integrate the already-authored .agent/rules/no-speed-pressure.md across the rule estate in one commit: add to RULES_INDEX.md (canonical platform-independent enumeration); create thin adapters at .claude/rules/no-speed-pressure.md, .cursor/rules/no-speed-pressure.mdc, .agents/rules/no-speed-pressure.md; add one-line cross-reference from principles.md §Architectural Excellence Over Expediency; add one distilled.md entry; write a single user-memory feedback file feedback_no_speed_pressure.md with MEMORY.md index update. The other three speculative failure-mode feedback files originally proposed (performed-grounding-vs-practised, rule-conflict-is-signal, auto-mode-not-permission-slip) are NOT authored at this step — graduate them only when a second instance is observed in the field. Post-commit: verify all four adapter paths exist and resolve identically (`.agent/rules/no-speed-pressure.md`, `.claude/rules/no-speed-pressure.md`, `.cursor/rules/no-speed-pressure.mdc`, `.agents/rules/no-speed-pressure.md`). Land via full commit-skill protocol with code-reviewer dispatch. CLOSED 2026-05-04 (Lacustrine Navigating Rudder, `dd239f`); commit SHA recorded in §Sequence Summary post-commit."
+    content: "Integrate the already-authored .agent/rules/no-speed-pressure.md across the rule estate in one commit: add to RULES_INDEX.md (canonical platform-independent enumeration); create thin adapters at .claude/rules/no-speed-pressure.md, .cursor/rules/no-speed-pressure.mdc, .agents/rules/no-speed-pressure.md; add one-line cross-reference from principles.md §Architectural Excellence Over Expediency; add one distilled.md entry; write a single user-memory feedback file feedback_no_speed_pressure.md with MEMORY.md index update. The other three speculative failure-mode feedback files originally proposed (performed-grounding-vs-practised, rule-conflict-is-signal, auto-mode-not-permission-slip) are NOT authored at this step — graduate them only when a second instance is observed in the field. Post-commit: verify all four adapter paths exist and resolve identically (`.agent/rules/no-speed-pressure.md`, `.claude/rules/no-speed-pressure.md`, `.cursor/rules/no-speed-pressure.mdc`, `.agents/rules/no-speed-pressure.md`). Land via full commit-skill protocol with code-expert dispatch. CLOSED 2026-05-04 (Lacustrine Navigating Rudder, `dd239f`); commit SHA recorded in §Sequence Summary post-commit."
     status: completed
     depends_on: [02-apply-round-1-findings-and-second-review]
   - id: 04-reviewer-backfill-scoped-by-commit-risk
-    content: "Backfill reviewer dispatch on the four already-landed plan-3 commits (fd4eabaa..b226670d), scoped by per-commit risk surface (not blanket specialist coverage): (a) 8fa339f4 (cycle 1d, scripts retire + foreign-stage absorption incident): code-reviewer gateway, AND read the commit message + stage log to verify the commit-skill protocol shape (peer-stage absorption was a discipline failure, not a code miss; gateway code review alone does not validate that the commit-skill substrate ran); (b) 7620fefd (cycle 1b, vitest.smoke.config.ts retire): code-reviewer gateway only; (c) d4fb9a8f (cycle 1a, smoke-tests directory retire): code-reviewer gateway + docs-adr-reviewer for stranded references in TESTING.md / dev-server-management.md / vercel-environment-config.md / playwright.config.ts; (d) b226670d (cycle 1c, in-process invariant test): code-reviewer gateway + test-reviewer (conditional-branch test-immediate-fail at lines 57-59, 70-72 + 22-item checklist) + architecture-reviewer-fred (boundary-crossing import at line 7: src/ -> e2e-tests/helpers/). Capture findings under §Backfill Findings. CLOSED 2026-05-05 (Lacustrine Navigating Rudder, `dd239f`); full findings under §Backfill Findings."
+    content: "Backfill reviewer dispatch on the four already-landed plan-3 commits (fd4eabaa..b226670d), scoped by per-commit risk surface (not blanket specialist coverage): (a) 8fa339f4 (cycle 1d, scripts retire + foreign-stage absorption incident): code-expert gateway, AND read the commit message + stage log to verify the commit-skill protocol shape (peer-stage absorption was a discipline failure, not a code miss; gateway code review alone does not validate that the commit-skill substrate ran); (b) 7620fefd (cycle 1b, vitest.smoke.config.ts retire): code-expert gateway only; (c) d4fb9a8f (cycle 1a, smoke-tests directory retire): code-expert gateway + docs-adr-expert for stranded references in TESTING.md / dev-server-management.md / vercel-environment-config.md / playwright.config.ts; (d) b226670d (cycle 1c, in-process invariant test): code-expert gateway + test-expert (conditional-branch test-immediate-fail at lines 57-59, 70-72 + 22-item checklist) + architecture-expert-fred (boundary-crossing import at line 7: src/ -> e2e-tests/helpers/). Capture findings under §Backfill Findings. CLOSED 2026-05-05 (Lacustrine Navigating Rudder, `dd239f`); full findings under §Backfill Findings."
     status: completed
     depends_on: [03-integrate-no-speed-pressure-rule]
   - id: 05-apply-backfill-findings
-    content: "For each Round-2-confirmed Round-1 finding and each backfill finding from step 04: implement the fix as its own atomic commit via full commit-skill protocol OR record explicit written rejection rationale. The boundary-crossing import (apps/oak-curriculum-mcp-streamable-http/src/dev-boot-without-observability.integration.test.ts line 7) is a NAMED OUTSTANDING VIOLATION that MUST close at this step (not 'may close'); its closing commit MUST be reviewed by architecture-reviewer-fred (the specialist who identified it) — not the gateway alone. The conditional-branch pattern at lines 57-59, 70-72 is a NAMED test-immediate-fail that MUST close; its closing commit MUST be reviewed by test-reviewer (the specialist who identified it). Reviewer findings are action items by default per principles.md §Compiler Time Types and Runtime Validation. CLOSED 2026-05-05 (Lacustrine Navigating Rudder, `dd239f`; Dawnlit Transiting Galaxy, `0ddc89`); commit SHAs recorded in §Sequence Summary row 5 and §Backfill Findings entries."
+    content: "For each Round-2-confirmed Round-1 finding and each backfill finding from step 04: implement the fix as its own atomic commit via full commit-skill protocol OR record explicit written rejection rationale. The boundary-crossing import (apps/oak-curriculum-mcp-streamable-http/src/dev-boot-without-observability.integration.test.ts line 7) is a NAMED OUTSTANDING VIOLATION that MUST close at this step (not 'may close'); its closing commit MUST be reviewed by architecture-expert-fred (the specialist who identified it) — not the gateway alone. The conditional-branch pattern at lines 57-59, 70-72 is a NAMED test-immediate-fail that MUST close; its closing commit MUST be reviewed by test-expert (the specialist who identified it). Reviewer findings are action items by default per principles.md §Compiler Time Types and Runtime Validation. CLOSED 2026-05-05 (Lacustrine Navigating Rudder, `dd239f`; Dawnlit Transiting Galaxy, `0ddc89`); commit SHAs recorded in §Sequence Summary row 5 and §Backfill Findings entries."
     status: completed
     depends_on: [04-reviewer-backfill-scoped-by-commit-risk]
   - id: 06-author-no-real-io-in-tests-rule
-    content: "Author packages/core/oak-eslint/src/rules/no-real-io-in-tests.ts as the structural guard against NEW real-IO in tests. **Severity: error** (not warn) — per no-warning-toleration; pnpm lint must exit non-zero on any new violation. Trigger surface: any *.test.ts | *.spec.ts file (matching ESLint's existing test glob), excluding allowlist below. **Denylist (comprehensive Node.js IO surface)**: (i) child_process: spawn, exec, fork, execFile, spawnSync, execSync, execFileSync; (ii) worker_threads: Worker constructor; (iii) fs: ALL named imports (readFile, writeFile, readFileSync, writeFileSync, mkdtemp, stat, etc.) AND default imports (`import fs from 'fs'` / `import fs from 'node:fs'`) AND fs/promises module (`import { readFile } from 'fs/promises'`) AND dynamic forms (`await import('fs')`, `await import('node:fs')`, `await import('fs/promises')`, `require('fs')`); (iv) process: read OR mutation of process.env (also `globalThis.process.env`), process.cwd(), process.chdir(); (v) network: fetch() / http.* / https.* / net.* / dgram.* to non-localhost. **Both** unprefixed (`fs`) AND `node:`-prefixed (`node:fs`) specifiers must be caught. **Allowlist (path-shape only, NOT 'designated' adjective)**: vitest.config.ts | vitest.*.config.ts | vitest.setup.ts at workspace roots; **/test-helpers/** | **/test-fakes/** structurally-marked directories. Pair with no-real-io-in-tests.unit.test.ts (RuleTester cases) — RuleTester MUST cover negative cases for every denylist sub-form above (one negative case per Sync variant; one per fs API entry point; one per node: prefix; one for default import; one for fs/promises; one for globalThis.process.env; one per child_process factory; one for Worker constructor) AND positive cases for every allowlist sub-glob. Plugin registration in plugin.ts. **Do NOT yet wire into root eslint.config.ts.** Land via full commit-skill protocol with config-reviewer dispatch (allowlist-shape correctness) + test-reviewer dispatch (RuleTester describe-vs-audit shape AND surface coverage exhaustiveness against Node.js IO API enumeration). Acceptance: pnpm test --filter @oaknational/eslint-plugin-standards exits 0; the rule is registered but inactive at root. CLOSED 2026-05-05 (Twilit Beaming Aurora, `7cf730`); closing commit SHA recorded in §Sequence Summary row 6."
+    content: "Author packages/core/oak-eslint/src/rules/no-real-io-in-tests.ts as the structural guard against NEW real-IO in tests. **Severity: error** (not warn) — per no-warning-toleration; pnpm lint must exit non-zero on any new violation. Trigger surface: any *.test.ts | *.spec.ts file (matching ESLint's existing test glob), excluding allowlist below. **Denylist (comprehensive Node.js IO surface)**: (i) child_process: spawn, exec, fork, execFile, spawnSync, execSync, execFileSync; (ii) worker_threads: Worker constructor; (iii) fs: ALL named imports (readFile, writeFile, readFileSync, writeFileSync, mkdtemp, stat, etc.) AND default imports (`import fs from 'fs'` / `import fs from 'node:fs'`) AND fs/promises module (`import { readFile } from 'fs/promises'`) AND dynamic forms (`await import('fs')`, `await import('node:fs')`, `await import('fs/promises')`, `require('fs')`); (iv) process: read OR mutation of process.env (also `globalThis.process.env`), process.cwd(), process.chdir(); (v) network: fetch() / http.* / https.* / net.* / dgram.* to non-localhost. **Both** unprefixed (`fs`) AND `node:`-prefixed (`node:fs`) specifiers must be caught. **Allowlist (path-shape only, NOT 'designated' adjective)**: vitest.config.ts | vitest.*.config.ts | vitest.setup.ts at workspace roots; **/test-helpers/** | **/test-fakes/** structurally-marked directories. Pair with no-real-io-in-tests.unit.test.ts (RuleTester cases) — RuleTester MUST cover negative cases for every denylist sub-form above (one negative case per Sync variant; one per fs API entry point; one per node: prefix; one for default import; one for fs/promises; one for globalThis.process.env; one per child_process factory; one for Worker constructor) AND positive cases for every allowlist sub-glob. Plugin registration in plugin.ts. **Do NOT yet wire into root eslint.config.ts.** Land via full commit-skill protocol with config-expert dispatch (allowlist-shape correctness) + test-expert dispatch (RuleTester describe-vs-audit shape AND surface coverage exhaustiveness against Node.js IO API enumeration). Acceptance: pnpm test --filter @oaknational/eslint-plugin-standards exits 0; the rule is registered but inactive at root. CLOSED 2026-05-05 (Twilit Beaming Aurora, `7cf730`); closing commit SHA recorded in §Sequence Summary row 6."
     status: completed
     depends_on: [05-apply-backfill-findings]
   - id: 07-capture-inventory-and-freeze-allowlist
-    content: "Run the rule in dry-run mode and freeze its allowlist atomically in one commit. (a) Invoke ESLint with the rule registered (one-off lint command per package) using `--format json` (or equivalent structured output). Pipe to a temporary capture file. (b) Count violations from the structured output. (c) Populate §IO Inventory in this plan body: one entry per violation with absolute path, violation kind (spawn / exec-sync / fs / fs-promises / dynamic-import-fs / process-env / process-cwd / fetch / worker), one-sentence rationale for current presence, follow-up disposition (in-scope-of-named-follow-up-plan / structural-ambiguity-to-investigate / accept-and-document). (d) Validate Inventory entry count matches the rule's output count; spot-check 5 random Inventory entries against the rule output for accuracy; if either check fails, re-run capture before proceeding. (e) Configure the rule's path-allowlist as an option block in `packages/core/oak-eslint/src/configs/recommended.ts` (the shared config every workspace inherits via `configs.strict` / `configs.recommended`), listing exactly the paths captured in (c). Per-file ESLint disable comments are FORBIDDEN (never-disable-checks). Owner direction (2026-05-05) supersedes the original R2-4 finding: rule wires at `warn` severity during its development phase per the new-eslint-rules-start-warn principle (recorded in user-memory `feedback_new_eslint_rules_start_warn.md`); escalation to `error` is a separate post-merge decision. (f) **If `apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/test-config.ts` appears in the captured set, append a cross-reference into the paused plan's resumption preconditions (`.agent/plans/observability/future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md`) before committing** — the file sits at the intersection of this Inventory and that plan's WS4–WS5 file list (Round 1 finding C6). The §IO Inventory and the allowlist start identical; the **allowlist is the canonical live enforcement surface** going forward, the §IO Inventory is the **historical snapshot** at merge time and is NOT updated by post-merge migrations (follow-up plans remove paths only from the allowlist). Land via full commit-skill protocol with config-reviewer (allowlist shape) + docs-adr-reviewer (Inventory completeness + cross-reference discipline) dispatch. CLOSED 2026-05-05 (Silvered Hiding Silhouette, `924167`); architecture-reviewer-fred + architecture-reviewer-betty dispatched on the wiring-location design (Option A: shared `recommended.ts`) — both verdicts Option A, citing principles.md §Tooling, ADR-121 §Design Principles #5, and the established peer-rule precedent (`no-eslint-disable`, `no-dynamic-import`); 24 violations across 23 unique files; `e2e-tests/helpers/test-config.ts` NOT in captured set (no cross-reference needed); allowlist absorbs all violations; `pnpm lint` exits 0; closing commit SHA recorded in §Sequence Summary row 7 post-commit."
+    content: "Run the rule in dry-run mode and freeze its allowlist atomically in one commit. (a) Invoke ESLint with the rule registered (one-off lint command per package) using `--format json` (or equivalent structured output). Pipe to a temporary capture file. (b) Count violations from the structured output. (c) Populate §IO Inventory in this plan body: one entry per violation with absolute path, violation kind (spawn / exec-sync / fs / fs-promises / dynamic-import-fs / process-env / process-cwd / fetch / worker), one-sentence rationale for current presence, follow-up disposition (in-scope-of-named-follow-up-plan / structural-ambiguity-to-investigate / accept-and-document). (d) Validate Inventory entry count matches the rule's output count; spot-check 5 random Inventory entries against the rule output for accuracy; if either check fails, re-run capture before proceeding. (e) Configure the rule's path-allowlist as an option block in `packages/core/oak-eslint/src/configs/recommended.ts` (the shared config every workspace inherits via `configs.strict` / `configs.recommended`), listing exactly the paths captured in (c). Per-file ESLint disable comments are FORBIDDEN (never-disable-checks). Owner direction (2026-05-05) supersedes the original R2-4 finding: rule wires at `warn` severity during its development phase per the new-eslint-rules-start-warn principle (recorded in user-memory `feedback_new_eslint_rules_start_warn.md`); escalation to `error` is a separate post-merge decision. (f) **If `apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/test-config.ts` appears in the captured set, append a cross-reference into the paused plan's resumption preconditions (`.agent/plans/observability/future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md`) before committing** — the file sits at the intersection of this Inventory and that plan's WS4–WS5 file list (Round 1 finding C6). The §IO Inventory and the allowlist start identical; the **allowlist is the canonical live enforcement surface** going forward, the §IO Inventory is the **historical snapshot** at merge time and is NOT updated by post-merge migrations (follow-up plans remove paths only from the allowlist). Land via full commit-skill protocol with config-expert (allowlist shape) + docs-adr-expert (Inventory completeness + cross-reference discipline) dispatch. CLOSED 2026-05-05 (Silvered Hiding Silhouette, `924167`); architecture-expert-fred + architecture-expert-betty dispatched on the wiring-location design (Option A: shared `recommended.ts`) — both verdicts Option A, citing principles.md §Tooling, ADR-121 §Design Principles #5, and the established peer-rule precedent (`no-eslint-disable`, `no-dynamic-import`); 24 violations across 23 unique files; `e2e-tests/helpers/test-config.ts` NOT in captured set (no cross-reference needed); allowlist absorbs all violations; `pnpm lint` exits 0; closing commit SHA recorded in §Sequence Summary row 7 post-commit."
     status: completed
     depends_on: [06-author-no-real-io-in-tests-rule]
   - id: 08-verify-rule-active-and-discipline-recorded
@@ -60,7 +60,7 @@ todos:
     status: completed
     depends_on: [08-verify-rule-active-and-discipline-recorded]
   - id: 10-mcp-server-live-exercise
-    content: "Boot the dev server locally, exercise MCP tools through the protocol, then shut down cleanly. (a) From apps/oak-curriculum-mcp-streamable-http/, run `env -u VERCEL_ENV -u VERCEL_BRANCH_URL -u VERCEL_GIT_COMMIT_SHA -u VERCEL_GIT_COMMIT_REF -u SENTRY_RELEASE_OVERRIDE SENTRY_MODE=sentry pnpm dev` and capture output to /tmp/dev-boot.log. Expect 'Oak Curriculum MCP Server listening on port 3333' within ~10s; if not, SIGTERM and record boot failure as a named finding (Sentry-network unavailability is operational evidence, not strictly merge-blocking). Note: legacy SENTRY_MODE consumer path is the live contract per the paused rename plan. (b) Issue an MCP `tools/list` against http://localhost:3333/mcp; record the count and full list of tool names to /tmp/mcp-tool-exercise.log. (c) Issue an MCP `tools/call` against three representative tools — at least one curriculum-data tool (search or get-key-stages), one MCP-app/UI tool, one prompt or sequence tool. Each response is validated against the tool's registered schema in the tool catalogue (ADR-123) — not just HTTP 200. Capture exchanges to the same log. (d) If any tool's response surface includes UI/widget content per ADR-141, invoke accessibility-reviewer over the captured response payload. (e) SIGTERM the dev server; confirm port 3333 is free. **Reviewer dispatch ordering**: invoke mcp-reviewer (protocol probe sufficiency) FIRST; if it returns a P1 blocker, halt step and surface to owner before further dispatch. On clean mcp-reviewer return: invoke security-reviewer (auth path coverage), clerk-reviewer (Clerk middleware), sentry-reviewer (observability surface) in parallel; accessibility-reviewer conditional on (d) and runs LAST against captured payloads. Acceptance: 'listening' log line present (or named operational-evidence note); tools/list returns >0 tools; three tools/call exchanges return schema-valid responses; all dispatched reviewers return clean or with absorbed findings."
+    content: "Boot the dev server locally, exercise MCP tools through the protocol, then shut down cleanly. (a) From apps/oak-curriculum-mcp-streamable-http/, run `env -u VERCEL_ENV -u VERCEL_BRANCH_URL -u VERCEL_GIT_COMMIT_SHA -u VERCEL_GIT_COMMIT_REF -u SENTRY_RELEASE_OVERRIDE SENTRY_MODE=sentry pnpm dev` and capture output to /tmp/dev-boot.log. Expect 'Oak Curriculum MCP Server listening on port 3333' within ~10s; if not, SIGTERM and record boot failure as a named finding (Sentry-network unavailability is operational evidence, not strictly merge-blocking). Note: legacy SENTRY_MODE consumer path is the live contract per the paused rename plan. (b) Issue an MCP `tools/list` against http://localhost:3333/mcp; record the count and full list of tool names to /tmp/mcp-tool-exercise.log. (c) Issue an MCP `tools/call` against three representative tools — at least one curriculum-data tool (search or get-key-stages), one MCP-app/UI tool, one prompt or sequence tool. Each response is validated against the tool's registered schema in the tool catalogue (ADR-123) — not just HTTP 200. Capture exchanges to the same log. (d) If any tool's response surface includes UI/widget content per ADR-141, invoke accessibility-expert over the captured response payload. (e) SIGTERM the dev server; confirm port 3333 is free. **Reviewer dispatch ordering**: invoke mcp-expert (protocol probe sufficiency) FIRST; if it returns a P1 blocker, halt step and surface to owner before further dispatch. On clean mcp-expert return: invoke security-expert (auth path coverage), clerk-expert (Clerk middleware), sentry-expert (observability surface) in parallel; accessibility-expert conditional on (d) and runs LAST against captured payloads. Acceptance: 'listening' log line present (or named operational-evidence note); tools/list returns >0 tools; three tools/call exchanges return schema-valid responses; all dispatched reviewers return clean or with absorbed findings."
     status: pending
     depends_on: [09-pnpm-check-green]
   - id: 11-pre-merge-divergence-analysis
@@ -68,7 +68,7 @@ todos:
     status: pending
     depends_on: [10-mcp-server-live-exercise]
   - id: 12-merge-readiness-declaration
-    content: "Owner-gated merge readiness declaration. Required evidence bundle: Round 1 + Round 2 review findings + applied amendments (steps 1–2), no-speed-pressure rule integration with four-adapter-path verification (step 3), reviewer-backfill findings + fixes (steps 4–5), no-real-io-in-tests rule + IO Inventory + frozen allowlist + wired (steps 6–8), pnpm check green at HEAD (step 9), MCP server live exercise log (step 10), divergence analysis (step 11). Invoke release-readiness-reviewer over the bundle to synthesise GO / GO-WITH-CONDITIONS / NO-GO recommendation. Owner reviews and authorises the merge action. Merge mechanics (PR open, squash-or-merge-commit, target branch) are owner-directed; this plan does not pre-decide them."
+    content: "Owner-gated merge readiness declaration. Required evidence bundle: Round 1 + Round 2 review findings + applied amendments (steps 1–2), no-speed-pressure rule integration with four-adapter-path verification (step 3), reviewer-backfill findings + fixes (steps 4–5), no-real-io-in-tests rule + IO Inventory + frozen allowlist + wired (steps 6–8), pnpm check green at HEAD (step 9), MCP server live exercise log (step 10), divergence analysis (step 11). Invoke release-readiness-expert over the bundle to synthesise GO / GO-WITH-CONDITIONS / NO-GO recommendation. Owner reviews and authorises the merge action. Merge mechanics (PR open, squash-or-merge-commit, target branch) are owner-directed; this plan does not pre-decide them."
     status: pending
     depends_on: [11-pre-merge-divergence-analysis]
 ---
@@ -193,8 +193,8 @@ Branch state at refresh (`feat/eef_exploration` HEAD `b539c7c5`):
 
 ## Plan Review Findings (Round 1, 2026-05-04 Pelagic Diving Atoll)
 
-Six reviewers ran in parallel: code-reviewer (gateway),
-architecture-reviewer-{barney,betty,fred,wilma}, assumptions-reviewer.
+Six reviewers ran in parallel: code-expert (gateway),
+architecture-expert-{barney,betty,fred,wilma}, assumptions-expert.
 Specialist nominations driven by findings, not pre-dispatched.
 
 **Cross-reviewer consensus (≥2 reviewers):**
@@ -206,7 +206,7 @@ Specialist nominations driven by findings, not pre-dispatched.
   Layer Role Topology). Six pre-existing consumers of the same import
   path. **Step 5 MUST close (not "may close").** Resolution shape:
   relocate `upstream-metadata-fixture.ts` to `src/test-helpers/`, update
-  consumers. *(code-reviewer P1, betty P1, fred P1-2)*
+  consumers. *(code-expert P1, betty P1, fred P1-2)*
 - **C2 (P1)** §Discipline previously restated the no-speed-pressure
   substrate (`claim → queue → skill-gates → verify-staged → commit`),
   creating a second authority that drifts. **Applied in this revision**:
@@ -216,7 +216,7 @@ Specialist nominations driven by findings, not pre-dispatched.
 - **C3 (P1)** Step 1's reviewer set originally front-loaded execution-step
   specialists (config / mcp / security / clerk / sentry / release-readiness).
   **Applied**: those specialists moved into the steps where they have
-  work to review (config-reviewer at steps 6, 7, 8; mcp / security /
+  work to review (config-expert at steps 6, 7, 8; mcp / security /
   clerk / sentry / accessibility at step 10; release-readiness at
   step 12; step numbers reflect post-Round-2 collapse). The plan-meta
   dispatch is the architecture-quartet + code +
@@ -229,7 +229,7 @@ Specialist nominations driven by findings, not pre-dispatched.
   second instance is observed. *(fred P3-1, assumptions critical-#4)*
 - **C5 (P2)** Plan body HEAD SHA was stale (`b226670d`); actual is
   `b539c7c5`. **Applied**: refreshed in §Context and the front-matter
-  `Last Updated`. *(code-reviewer P2)*
+  `Last Updated`. *(code-expert P2)*
 - **C6 (P2)** `e2e-tests/helpers/test-config.ts` sits at the intersection
   of cycle-2 real-IO surface AND the paused SENTRY_MODE rename's WS4–WS5
   file list. Under the new capture-not-clean shape this file's IO (if
@@ -270,17 +270,17 @@ Specialist nominations driven by findings, not pre-dispatched.
   Clerk release-tag integrity. **Recorded** in §Risk Register and
   §Out-of-Scope Follow-ups for post-merge staging validation; not in
   scope of this branch.
-- **CR1 (P1)** *code-reviewer*: Conditional-branch test-immediate-fail
+- **CR1 (P1)** *code-expert*: Conditional-branch test-immediate-fail
   in `dev-boot-without-observability.integration.test.ts:57-59, 70-72`:
   `if (!result.ok) return;` early-returns silently. Item 16 of
   test-immediate-fails. **Applied**: step 5 closes this as a NAMED
-  test-immediate-fail (test-reviewer dispatch in step 4(d)).
-- **CR2 (P2)** *code-reviewer*: `apps/.../TESTING.md:134-135` references
-  `pnpm qg` (no such script). **Applied**: step 4(c) docs-adr-reviewer
+  test-immediate-fail (test-expert dispatch in step 4(d)).
+- **CR2 (P2)** *code-expert*: `apps/.../TESTING.md:134-135` references
+  `pnpm qg` (no such script). **Applied**: step 4(c) docs-adr-expert
   brief + step 5 closure.
-- **CR3 (P2)** *code-reviewer*: `apps/.../docs/vercel-environment-config.md:26`
+- **CR3 (P2)** *code-expert*: `apps/.../docs/vercel-environment-config.md:26`
   retains "smoke harness diagnostics" note. **Applied**: same as CR2.
-- **A1** *assumptions-reviewer*: Reviewer-backfill regress lacks a stop
+- **A1** *assumptions-expert*: Reviewer-backfill regress lacks a stop
   rule. **Applied**: step 4 scopes specialist dispatch by per-commit
   risk surface (gateway-only on mechanical retirements; specialists on
   substantive commits).
@@ -296,12 +296,12 @@ Specialist nominations driven by findings, not pre-dispatched.
 ## Plan Review Findings (Round 2, 2026-05-04 Pelagic Diving Atoll)
 
 Six reviewers ran in parallel over the revised plan body and code surface:
-code-reviewer (gateway), architecture-reviewer-{barney,betty,fred,wilma},
-assumptions-reviewer.
+code-expert (gateway), architecture-expert-{barney,betty,fred,wilma},
+assumptions-expert.
 
 **Verdicts:**
 
-- **code-reviewer**: absorption-clean / absorption-defects-named (all 21
+- **code-expert**: absorption-clean / absorption-defects-named (all 21
   Round 1 findings absorbed correctly; new defects named).
 - **barney**: simpler-than-Round-1 (conditional on step 7+8 collapse).
 - **betty**: cohesive (two P2 items; one closes before step 7).
@@ -310,7 +310,7 @@ assumptions-reviewer.
   frozen-debt gate, not a fallback option).
 - **wilma**: more-robust (Round 1 six absorbed; three new structural gaps
   named: denylist completeness, allowlist mutability, Inventory drift).
-- **assumptions-reviewer**: PROPORTIONATE (one Round 2 pass sufficient;
+- **assumptions-expert**: PROPORTIONATE (one Round 2 pass sufficient;
   no Round 3).
 
 **Findings absorbed into this revision:**
@@ -327,7 +327,7 @@ assumptions-reviewer.
 - **R2-3 (P1)** *wilma + fred + code*: Step 5 NAMED VIOLATIONS closing
   commits need re-review by the specialist who identified the violation,
   not gateway alone. **Applied**: step 5 brief names fred for C1
-  closure, test-reviewer for CR1 closure.
+  closure, test-expert for CR1 closure.
 - **R2-4 (P1)** *code*: Step 6 must specify rule wired as `error`
   severity (not `warn`) per no-warning-toleration. **Applied**: step 6
   brief names "Severity: error" explicitly.
@@ -336,8 +336,8 @@ assumptions-reviewer.
   step 7 places the allowlist in the shared
   `packages/core/oak-eslint/src/configs/recommended.ts` rule-options block
   (PR-reviewed; the location was upgraded from the originally-specified
-  root `eslint.config.ts` after architecture-reviewer-fred and
-  architecture-reviewer-betty both verdicted Option A on the wiring-location
+  root `eslint.config.ts` after architecture-expert-fred and
+  architecture-expert-betty both verdicted Option A on the wiring-location
   design — root-only would not have propagated to per-workspace lint runs);
   the comment-discipline above the rule activation block names the
   allowlist-ADD requirement ("any PR adding a path must cite an Inventory
@@ -365,13 +365,13 @@ assumptions-reviewer.
   protocol shape" to the gateway dispatch.
 - **R2-10 (P2)** *betty*: Step 11 (now step 10) reviewer-dispatch
   ordering ambiguity — five reviewers in one step. **Applied**: step 10
-  brief specifies dispatch order (mcp-reviewer first; halt on P1;
+  brief specifies dispatch order (mcp-expert first; halt on P1;
   security/clerk/sentry parallel on clean; accessibility last on
   captured payloads).
 - **R2-11 (P2)** *code + fred*: §Sub-agent Reviewers table did not
   include fred at step 5 for C1 closure. **Applied**: §Sub-agent
   Reviewers table updated; step 5 brief explicitly names
-  fred + test-reviewer.
+  fred + test-expert.
 - **R2-12 (P2)** *code*: §Acceptance missing four-adapter-path
   verification criterion for step 3. **Applied**: §Acceptance updated.
 - **R2-13 (P3)** *code*: §Sequence Summary said "3 adapters"; should
@@ -562,9 +562,9 @@ separate, deliberate post-merge decision once the rule is stable.
 
 ## Backfill Findings (step 04, 2026-05-05 Lacustrine Navigating Rudder)
 
-Reviewers dispatched: code-reviewer (gateway, all four commits),
-docs-adr-reviewer (d4fb9a8f), test-reviewer (b226670d),
-architecture-reviewer-fred (b226670d). Four parallel agent runs.
+Reviewers dispatched: code-expert (gateway, all four commits),
+docs-adr-expert (d4fb9a8f), test-expert (b226670d),
+architecture-expert-fred (b226670d). Four parallel agent runs.
 
 ### Commit `8fa339f4` — chore(scripts): retire smoke:* scripts and turbo tasks
 
@@ -577,7 +577,7 @@ landed correctly; misattribution is under Moonlit's commit subject. This is
 the named foreign-stage absorption failure mode. Cure codified in §Discipline;
 no code action needed on this finding.
 
-**Code findings (code-reviewer):**
+**Code findings (code-expert):**
 
 - **BF-1a (P1)**: `.husky/pre-push:73` — `turbo run ... smoke:dev:stub`
   still present. `smoke:dev:stub` task was deleted from `turbo.json`; this
@@ -608,7 +608,7 @@ no code action needed on this finding.
 
 ### Commit `7620fefd` — chore(test-config): retire vitest.smoke.config.ts
 
-**Code findings (code-reviewer):** Clean. Deletion is correct and complete:
+**Code findings (code-expert):** Clean. Deletion is correct and complete:
 file gone, corresponding ESLint process.env allowlist entry removed,
 `vitest.config.ts` has no dependency on the deleted file. No stranded
 references to `vitest.smoke.config.ts` remain in surviving workspace files.
@@ -616,7 +616,7 @@ The ESLint `no-restricted-syntax` block remains coherent.
 
 ### Commit `d4fb9a8f` — chore(test-infra): retire smoke-tests directory and all references
 
-**Code findings (code-reviewer):** All four questions clean — remaining
+**Code findings (code-expert):** All four questions clean — remaining
 workspace configs free of `smoke-tests/` paths; `commander`/`dotenv`
 devDependencies correctly removed (no surviving imports); `playwright` correctly
 retained (still consumed by `tests/` Playwright suites, smoke description in
@@ -628,7 +628,7 @@ coherent.
   documentation.` That file was deleted by this commit. Dead link.
   **Step 05 MUST close.**
 
-**Docs findings (docs-adr-reviewer, combined with pre-confirmed items):**
+**Docs findings (docs-adr-expert, combined with pre-confirmed items):**
 
 - **BF-6 (P2)**: Three e2e test files contain stale `smoke-dev-auth`
   references in inline comments:
@@ -650,7 +650,7 @@ coherent.
 
 ### Commit `b226670d` — test(http-mcp): replace retired dev-boot e2e with in-process invariant
 
-**Architecture findings (architecture-reviewer-fred):**
+**Architecture findings (architecture-expert-fred):**
 
 - **C1 (P1, NAMED VIOLATION — CLOSED at commit `36102937`)**: Line 7:
   `import { TEST_UPSTREAM_METADATA } from '../e2e-tests/helpers/upstream-metadata-fixture.js'`
@@ -668,9 +668,9 @@ coherent.
   commit `36102937` via foreign-stage absorption (peer commit subject
   reads `chore(continuity): handoff + metacognition` rather than the
   authored `refactor(http-mcp): relocate upstream-metadata-fixture to
-  src/test-helpers`). Reviewer chain: architecture-reviewer-fred CLEAN
+  src/test-helpers`). Reviewer chain: architecture-expert-fred CLEAN
   on diff pre-landing — "C1 closes per Round 1 resolution shape"; also
-  code-reviewer APPROVED WITH SUGGESTIONS (informational only). Boundary
+  code-expert APPROVED WITH SUGGESTIONS (informational only). Boundary
   grep audit clean at HEAD: zero matches for the old `e2e-tests/helpers/upstream-metadata-fixture`
   path. Foreign-stage absorption pattern recurrence (second instance after
   Lacustrine→Moonlit `8fa339f4` on 2026-05-04) surfaced for owner direction.
@@ -682,22 +682,22 @@ coherent.
   is well past the threshold for structural enforcement. Fred recommends in-scope
   of the same step-05 pass. Recorded here; disposition decided at step-05 apply.
 
-**Test findings (test-reviewer):**
+**Test findings (test-expert):**
 
 - **CR1 (P2, downgraded from P1, NAMED VIOLATION — CLOSED at this commit)**:
   Lines 57-59 and 70-72: `if (!result.ok) { return; }` after
-  `expect(result.ok).toBe(true)`. Test-reviewer confirmed Vitest throws on the
+  `expect(result.ok).toBe(true)`. Test-expert confirmed Vitest throws on the
   `toBe(true)` assertion failure before the guard is reached, so this is **dead
   code, not a silent-pass**. However, it is a categorical immediate-fail per
   `test-immediate-fails.md` item 16 (runtime branching in test body) regardless
   of reachability. **Resolution applied** (this commit): substituted the canonical
   `unwrap` from `@oaknational/result` for both occurrences in
   `dev-boot-without-observability.integration.test.ts` and the matching pattern at
-  `runtime-config.integration.test.ts:21-23`. Test-reviewer at closing review
+  `runtime-config.integration.test.ts:21-23`. Test-expert at closing review
   confirmed the substitution is "strictly better than the inline shape I
   originally named" — DRY, project-canonical, throws with stringified Err
   diagnostic, preserves TypeScript narrowing via `T` return, removes the
-  conditional entirely. Reviewer chain: test-reviewer CLEAN, code-reviewer
+  conditional entirely. Reviewer chain: test-expert CLEAN, code-expert
   APPROVED. Conditional-pattern grep audit clean: zero matches for
   `if (!result.ok` or `if (!runtimeConfig.ok` in either file.
 - **BF-T1 (P2)**: Test 2 asserts `result.value.useStubTools` and
@@ -737,11 +737,11 @@ in commit messages); substance is correct for each cycle.
 
 | ID | Finding | Closing commit | Specialist re-review |
 |---|---|---|---|
-| C1 | `src/dev-boot-without-observability.integration.test.ts:7` boundary-crossing import | `36102937` (peer-commit absorption; substance correct) | architecture-reviewer-fred CLEAN |
-| CR1 | `src/dev-boot-without-observability.integration.test.ts:57-59,70-72` conditional-branch test-immediate-fail (also `runtime-config.integration.test.ts:21-23`) | this commit | test-reviewer CLEAN |
-| BF-1a | `.husky/pre-push:73` retired turbo task | `ef593be9` | code-reviewer |
-| BF-1b | `.github/workflows/ci.yml:79` retired turbo task | `ef593be9` | code-reviewer |
-| BF-5 | `apps/oak-curriculum-mcp-streamable-http/README.md:317` dead link | `434cf6f6` | code-reviewer |
+| C1 | `src/dev-boot-without-observability.integration.test.ts:7` boundary-crossing import | `36102937` (peer-commit absorption; substance correct) | architecture-expert-fred CLEAN |
+| CR1 | `src/dev-boot-without-observability.integration.test.ts:57-59,70-72` conditional-branch test-immediate-fail (also `runtime-config.integration.test.ts:21-23`) | this commit | test-expert CLEAN |
+| BF-1a | `.husky/pre-push:73` retired turbo task | `ef593be9` | code-expert |
+| BF-1b | `.github/workflows/ci.yml:79` retired turbo task | `ef593be9` | code-expert |
+| BF-5 | `apps/oak-curriculum-mcp-streamable-http/README.md:317` dead link | `434cf6f6` | code-expert |
 
 ## Out of Scope
 
@@ -817,14 +817,14 @@ consolidation pass.
 | 2 | Apply Round 1 + Round 2 findings; commit refined plan | DONE — commit 75dbcdb6; Round 2 findings under §Plan Review Findings (Round 2) |
 | 3 | Integrate no-speed-pressure rule across estate | DONE — commit `2b78aa93`; RULES_INDEX entry, **4 adapters** (`.agent/`, `.claude/`, `.cursor/`, `.agents/`), principles cross-ref, distilled entry, 1 memory feedback file; post-commit four-adapter-path verification clean |
 | 4 | Reviewer backfill scoped per-commit on `fd4eabaa..b226670d` | DONE 2026-05-05 — full findings under §Backfill Findings; 5 MUST-CLOSE violations (C1, CR1, BF-1a, BF-1b, BF-5) + 8 P2 items + 4 P3 items |
-| 5 | Apply backfill findings | DONE 2026-05-05 — BF-1a/b CI hook + workflow at commit `ef593be9` (Lacustrine Navigating Rudder, `dd239f`); BF-2 through BF-8 stale-smoke-reference doc cleanup at commit `434cf6f6` (Lacustrine, `dd239f`); C1 boundary-crossing import substance at commit `36102937` (Dawnlit Transiting Galaxy, `0ddc89` — substance landed at peer commit via foreign-stage absorption; architecture-reviewer-fred CLEAN + code-reviewer APPROVED WITH SUGGESTIONS pre-landing; substance correct under misleading peer-subject; documented foreign-stage absorption recurrence to surface to owner); CR1 conditional-branch test-immediate-fail × 2 integration tests at this commit (Dawnlit, `0ddc89` — test-reviewer CLEAN + code-reviewer APPROVED, used `unwrap` from `@oaknational/result` rather than inline throw per test-reviewer's confirmation that this shape is "strictly better"). Out-of-scope follow-ups (recorded in §Out-of-Scope Follow-ups, not closed in this branch): BF-T1 (duplicated assertions), P3 dispositions (BF-9, BF-T2, BF-T3), BF-C1-ESLint structural guard for `src/* → e2e-tests/*` boundary. |
-| 6 | Author `no-real-io-in-tests` rule (error severity, comprehensive denylist) | DONE 2026-05-05 — rule + RuleTester (78 cases covering full Node.js IO surface incl. node:-prefixed network family, dynamic + require + bracket-notation forms, localhost lookalike hostnames, and `global.process` aliases) + plugin registration; not yet wired (Twilit Beaming Aurora, `7cf730`; Opalescent Eclipsing Asteroid, `0c263b` takeover hardening); closing commit SHA recorded post-commit; reviewer dispatch parallel (code-reviewer APPROVED WITH SUGGESTIONS + config-reviewer ISSUES FOUND no-P1 + test-reviewer ISSUES FOUND P1-gating); P1 + P2 findings closed in same commit (test gaps, bracket-notation hardening, plan-citation removal, defence-in-depth allowlist comment); P3 dispositions deferred (config-reviewer dual-enforcement with `testRules` is step-08 territory; schema `minItems: 1` is informational-only, not adopted) |
-| 7 | Capture inventory + freeze allowlist atomically | DONE 2026-05-05 (Silvered Hiding Silhouette, `924167`) — closing commit `483a9e32`; §IO Inventory populated (24 violations across 23 files); allowlist option configured in shared `packages/core/oak-eslint/src/configs/recommended.ts` at `warn` severity (per owner-directed new-eslint-rules-start-warn principle, supersedes original R2-4 `error`-severity finding); architecture-reviewer-fred + architecture-reviewer-betty dispatched on wiring-location design — both Option A (shared `recommended.ts`); `test-config.ts` NOT captured (no cross-reference needed); `pnpm lint` exits 0 |
+| 5 | Apply backfill findings | DONE 2026-05-05 — BF-1a/b CI hook + workflow at commit `ef593be9` (Lacustrine Navigating Rudder, `dd239f`); BF-2 through BF-8 stale-smoke-reference doc cleanup at commit `434cf6f6` (Lacustrine, `dd239f`); C1 boundary-crossing import substance at commit `36102937` (Dawnlit Transiting Galaxy, `0ddc89` — substance landed at peer commit via foreign-stage absorption; architecture-expert-fred CLEAN + code-expert APPROVED WITH SUGGESTIONS pre-landing; substance correct under misleading peer-subject; documented foreign-stage absorption recurrence to surface to owner); CR1 conditional-branch test-immediate-fail × 2 integration tests at this commit (Dawnlit, `0ddc89` — test-expert CLEAN + code-expert APPROVED, used `unwrap` from `@oaknational/result` rather than inline throw per test-expert's confirmation that this shape is "strictly better"). Out-of-scope follow-ups (recorded in §Out-of-Scope Follow-ups, not closed in this branch): BF-T1 (duplicated assertions), P3 dispositions (BF-9, BF-T2, BF-T3), BF-C1-ESLint structural guard for `src/* → e2e-tests/*` boundary. |
+| 6 | Author `no-real-io-in-tests` rule (error severity, comprehensive denylist) | DONE 2026-05-05 — rule + RuleTester (78 cases covering full Node.js IO surface incl. node:-prefixed network family, dynamic + require + bracket-notation forms, localhost lookalike hostnames, and `global.process` aliases) + plugin registration; not yet wired (Twilit Beaming Aurora, `7cf730`; Opalescent Eclipsing Asteroid, `0c263b` takeover hardening); closing commit SHA recorded post-commit; reviewer dispatch parallel (code-expert APPROVED WITH SUGGESTIONS + config-expert ISSUES FOUND no-P1 + test-expert ISSUES FOUND P1-gating); P1 + P2 findings closed in same commit (test gaps, bracket-notation hardening, plan-citation removal, defence-in-depth allowlist comment); P3 dispositions deferred (config-expert dual-enforcement with `testRules` is step-08 territory; schema `minItems: 1` is informational-only, not adopted) |
+| 7 | Capture inventory + freeze allowlist atomically | DONE 2026-05-05 (Silvered Hiding Silhouette, `924167`) — closing commit `483a9e32`; §IO Inventory populated (24 violations across 23 files); allowlist option configured in shared `packages/core/oak-eslint/src/configs/recommended.ts` at `warn` severity (per owner-directed new-eslint-rules-start-warn principle, supersedes original R2-4 `error`-severity finding); architecture-expert-fred + architecture-expert-betty dispatched on wiring-location design — both Option A (shared `recommended.ts`); `test-config.ts` NOT captured (no cross-reference needed); `pnpm lint` exits 0 |
 | 8 | Verify rule active + discipline recorded | DONE 2026-05-05 (Silvered Hiding Silhouette, `924167`) — no separate code commit required; rule active at `warn` severity per step 07's supersession of R2-4 (escalation to `error` is a separate post-merge decision, NOT in scope of this branch); `pnpm lint` exits 0 (owner-confirmed); allowlist-ADD discipline in the comment block above the rule activation in `recommended.ts` (commit `483a9e32`); step 07 reviewer P2 findings absorbed (commit `6dc7a622`) |
 | 9 | `pnpm check` green at HEAD | DONE 2026-05-05 (Silvered Hiding Silhouette, `924167`) — exit 0 at HEAD `5ed92747`; gate-set cross-check in §Step 09 evidence; covers seven of nine §Gate Taxonomy layers (formatting, type, lint, static analysis, testing, build, accessibility); layers 6 (mutation testing, separate `pnpm mutate`) and 8 (specialist review, dispatched per-step) deliberately out of scope of `pnpm check` |
-| 10 | Dev boot + MCP tool exercise + schema validation + ordered reviewer dispatch + shutdown | DONE 2026-05-06 (Silvered Hiding Silhouette, `924167`, claude-code / sonnet-4-6) — exercise log at `/tmp/mcp-tool-exercise.log`; reviewer dispatch complete: mcp-reviewer CLEAN (non-blocking follow-ups, 2026-05-05), security-reviewer CLEAN/LOW RISK, clerk-reviewer CLEAN, sentry-reviewer COMPLIANT (all 2026-05-06); step 10 verdict ACCEPTED; three P2 snags added to `pr-93-merge-snagging-2026-05-05.md`; port 3333 shutdown owner-managed |
+| 10 | Dev boot + MCP tool exercise + schema validation + ordered reviewer dispatch + shutdown | DONE 2026-05-06 (Silvered Hiding Silhouette, `924167`, claude-code / sonnet-4-6) — exercise log at `/tmp/mcp-tool-exercise.log`; reviewer dispatch complete: mcp-expert CLEAN (non-blocking follow-ups, 2026-05-05), security-expert CLEAN/LOW RISK, clerk-expert CLEAN, sentry-expert COMPLIANT (all 2026-05-06); step 10 verdict ACCEPTED; three P2 snags added to `pr-93-merge-snagging-2026-05-05.md`; port 3333 shutdown owner-managed |
 | 11 | Pre-merge baseline check vs `origin/main` | Commit-list diffs; conflict-potential findings |
-| 12 | Owner-gated merge readiness declaration | Evidence bundle; release-readiness-reviewer call; owner authorisation |
+| 12 | Owner-gated merge readiness declaration | Evidence bundle; release-readiness-expert call; owner authorisation |
 
 ### Step 09 evidence — `pnpm check` green at HEAD (2026-05-05)
 
@@ -899,9 +899,9 @@ step 10 todo body.
 | The shared-index foreign-stage-absorption that damaged commit `8fa339f4` recurs | Low | Medium | Mandatory `git commit -- <pathspec>` filter on every commit per §Discipline; peer-index cure named in §Discipline |
 | Step 3 cross-platform adapter asymmetry (Claude/Cursor/Codex don't auto-load adapters) | Medium | Low | Post-commit verification of all four adapter paths (`.agent/`, `.claude/`, `.cursor/`, `.agents/`); §Discipline note that adapter loading is platform-cadence, not lint-gated |
 | `e2e-tests/helpers/test-config.ts` sits at intersection of capture-not-clean §IO Inventory AND paused rename's WS4–WS5 file list | Low | Low | If file appears on §IO Inventory at step 7, resumption of paused rename will consume the Inventory entry; record in paused plan's resumption preconditions if observed |
-| Step 5's NAMED VIOLATIONS (C1 boundary-crossing import + CR1 conditional-branch) are not actually closed under the apply discipline | Low | High | Acceptance gate: step 5 cannot mark complete until both NAMED violations have closing commits referenced in this plan body, AND each closing commit is specialist-reviewed by the originator of the finding (fred for C1, test-reviewer for CR1) |
+| Step 5's NAMED VIOLATIONS (C1 boundary-crossing import + CR1 conditional-branch) are not actually closed under the apply discipline | Low | High | Acceptance gate: step 5 cannot mark complete until both NAMED violations have closing commits referenced in this plan body, AND each closing commit is specialist-reviewed by the originator of the finding (fred for C1, test-expert for CR1) |
 | Step 5's closing commit for C1 introduces a NEW architectural violation while closing the named one | Low | Medium | Specialist re-review on closing commits (R2-3) catches this; fred reviews the relocate target's boundary shape, not just the absence of the original violation |
-| Step 6 denylist misses a real-IO form (e.g. `execSync`, `node:fs` prefix) so step 7's dry-run is a false-negative | Medium | High | Step 6 brief enumerates the comprehensive Node.js IO surface; RuleTester required to cover each sub-form (R2-1); test-reviewer dispatch at step 6 validates exhaustiveness |
+| Step 6 denylist misses a real-IO form (e.g. `execSync`, `node:fs` prefix) so step 7's dry-run is a false-negative | Medium | High | Step 6 brief enumerates the comprehensive Node.js IO surface; RuleTester required to cover each sub-form (R2-1); test-expert dispatch at step 6 validates exhaustiveness |
 | Allowlist drifts post-merge — a developer adds a path without citing an Inventory entry or follow-up plan | Medium | Medium | Allowlist lives in shared `packages/core/oak-eslint/src/configs/recommended.ts` (PR-reviewed); the comment block above the rule activation names the allowlist-ADD discipline (step 7 landed it); per-file `eslint-disable` stays forbidden; structural lint-gate for ADDs is a future Practice item recorded in §Out-of-Scope Follow-ups |
 | §IO Inventory and live allowlist drift apart over time as follow-up plans land migrations | High (over time) | Low | Documented separation: allowlist is canonical live enforcement; §IO Inventory is historical snapshot at merge time, not updated post-merge; migration plans touch only the allowlist |
 | Step 7 capture process is lossy (rule output ambiguous; entries missed) | Low | Medium | Structured-output capture (`--format json`); count cross-check; 5-entry spot-check; re-run if either fails (R2-7) |
@@ -914,22 +914,22 @@ specialists dispatch in the steps where they have work.
 
 | Reviewer | Lens | Step(s) where invoked |
 |---|---|---|
-| `code-reviewer` | Gateway | Steps 1, 2, 3, 4, 5, every commit's pre-commit gate |
-| `architecture-reviewer-barney` | Simplification-first | Steps 1, 2 (plan-meta, both rounds) |
-| `architecture-reviewer-betty` | Cohesion + change-cost | Steps 1, 2 (plan-meta, both rounds) |
-| `architecture-reviewer-fred` | ADR/principles compliance | Steps 1, 2 (plan-meta, both rounds), 4(d) (boundary-crossing import identification), 5 (C1 closing commit re-review) |
-| `architecture-reviewer-wilma` | Adversarial / failure modes | Steps 1, 2 (plan-meta, both rounds) |
-| `assumptions-reviewer` | Proportionality, blocking legitimacy | Steps 1, 2 (plan-meta, both rounds) |
-| `test-reviewer` | Test discipline integrity | Steps 4(d) (b226670d conditional-branch identification), 5 (CR1 closing commit re-review), 6 (RuleTester describe-vs-audit + Node.js IO API surface coverage) |
-| `config-reviewer` | Tooling-config correctness | Steps 6 (allowlist shape), 7 (allowlist config), 8 (wire-up) |
-| `docs-adr-reviewer` | Doc alignment | Steps 4(c) (stranded references), 7 (Inventory completeness + cross-reference discipline) |
-| `mcp-reviewer` | MCP protocol | Step 10 (first in dispatch order; halt on P1) |
-| `security-reviewer` | Auth + trust-boundary | Step 10 (parallel with clerk + sentry on clean mcp return) |
-| `clerk-reviewer` | Clerk middleware | Step 10 (parallel) |
-| `sentry-reviewer` | Observability surface | Step 10 (parallel) |
-| `accessibility-reviewer` | a11y over UI/widget responses | Step 10 (last; conditional on UI/widget content in captured payloads) |
-| `onboarding-reviewer` | Plan readability | Step 2 if Round 2 surfaces readability concern (none did) |
-| `release-readiness-reviewer` | GO/GO-WITH-CONDITIONS/NO-GO synthesis | Step 12 |
+| `code-expert` | Gateway | Steps 1, 2, 3, 4, 5, every commit's pre-commit gate |
+| `architecture-expert-barney` | Simplification-first | Steps 1, 2 (plan-meta, both rounds) |
+| `architecture-expert-betty` | Cohesion + change-cost | Steps 1, 2 (plan-meta, both rounds) |
+| `architecture-expert-fred` | ADR/principles compliance | Steps 1, 2 (plan-meta, both rounds), 4(d) (boundary-crossing import identification), 5 (C1 closing commit re-review) |
+| `architecture-expert-wilma` | Adversarial / failure modes | Steps 1, 2 (plan-meta, both rounds) |
+| `assumptions-expert` | Proportionality, blocking legitimacy | Steps 1, 2 (plan-meta, both rounds) |
+| `test-expert` | Test discipline integrity | Steps 4(d) (b226670d conditional-branch identification), 5 (CR1 closing commit re-review), 6 (RuleTester describe-vs-audit + Node.js IO API surface coverage) |
+| `config-expert` | Tooling-config correctness | Steps 6 (allowlist shape), 7 (allowlist config), 8 (wire-up) |
+| `docs-adr-expert` | Doc alignment | Steps 4(c) (stranded references), 7 (Inventory completeness + cross-reference discipline) |
+| `mcp-expert` | MCP protocol | Step 10 (first in dispatch order; halt on P1) |
+| `security-expert` | Auth + trust-boundary | Step 10 (parallel with clerk + sentry on clean mcp return) |
+| `clerk-expert` | Clerk middleware | Step 10 (parallel) |
+| `sentry-expert` | Observability surface | Step 10 (parallel) |
+| `accessibility-expert` | a11y over UI/widget responses | Step 10 (last; conditional on UI/widget content in captured payloads) |
+| `onboarding-expert` | Plan readability | Step 2 if Round 2 surfaces readability concern (none did) |
+| `release-readiness-expert` | GO/GO-WITH-CONDITIONS/NO-GO synthesis | Step 12 |
 
 ## Quality Gates
 
@@ -967,7 +967,7 @@ documentation. All exit 0.
 - MCP tools exercise via protocol succeeds: `tools/list` returns >0
   tools; three `tools/call` exchanges return tool-catalogue-schema-valid
   responses (step 10b/c).
-- If any tool response surfaces UI/widget content, accessibility-reviewer
+- If any tool response surfaces UI/widget content, accessibility-expert
   pass clean (step 10d).
 - Pre-merge divergence analysis clean (step 11).
 - `no-real-io-in-tests` ESLint rule wired into the shared
@@ -988,7 +988,7 @@ documentation. All exit 0.
   VIOLATIONS C1 (boundary-crossing import) and CR1 (conditional-branch
   test-immediate-fail) closed with commit references in this plan body
   AND specialist re-review on the closing commits (fred for C1;
-  test-reviewer for CR1).
+  test-expert for CR1).
 - Owner authorises merge (step 12).
 
 ## Plan Exit

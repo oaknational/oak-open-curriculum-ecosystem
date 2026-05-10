@@ -88,7 +88,7 @@ Disposition codes:
 | 8  | Branch time-share                                 | 03     | DISCARD     | Week-scale decay; current branch already different from report's dominant share.                                                                                |
 | 9  | Course-correct phrase corpus                      | 08     | INTEGRATE   | Net-new. Land as a new pattern entry under `.agent/memory/active/patterns/owner-course-correct-vocabulary.md`. Pattern shape: phrase → meaning → re-grounding action. |
 | 10 | Affirmation phrase corpus                         | 08     | CANDIDATE   | How to read positive feedback weight is observational; pending-graduation entry for owner review.                                                                |
-| 11 | Six-theme technical map                           | 04     | DISCARD     | Theme-to-reviewer mapping is already authoritative in `.agent/memory/executive/invoke-code-experts.md` (renamed from `invoke-code-reviewers.md` mid-2026-05-10) and per-collection roadmaps.                            |
+| 11 | Six-theme technical map                           | 04     | DISCARD     | Theme-to-expert mapping is already authoritative in `.agent/memory/executive/invoke-code-experts.md` (renamed from `invoke-code-experts.md` mid-2026-05-10) and per-collection roadmaps.                            |
 | 12 | Cross-repo sibling list                           | 01,04  | CANDIDATE   | Static cross-repo map has potential value; verify against `practice-lineage.md` first. If absent, propose. Pending-graduation entry pending check.                |
 | 13 | Closed/paused work ledger                         | 04     | DISCARD     | Threads/next-session records carry this authoritatively; the report version is a stale snapshot.                                                                 |
 | 14 | Layer-cake ASCII tree of `.agent/`                | 05     | DISCARD     | Already discoverable via `ls`; AGENT.md and `practice-index.md` provide the orienting links. No permanent home needed.                                          |
@@ -113,7 +113,7 @@ Disposition codes:
 
 **Phase 0 audit outcome (2026-05-10, Windswept Sweeping Gale)**:
 
-- Item 11 (six-theme map): DISCARD confirmed. `.agent/memory/executive/invoke-code-experts.md` exists (11462 B, freshly renamed from `invoke-code-reviewers.md` 2026-05-10 during the in-flight reviewer→expert rename) and carries the canonical theme/reviewer mapping with category lanes and review depth. Initial audit cited the pre-rename path; reviewer (assumptions-expert) flagged the citation drift; updated to current path.
+- Item 11 (six-theme map): DISCARD confirmed. `.agent/memory/executive/invoke-code-experts.md` exists (11462 B, freshly renamed from `invoke-code-experts.md` 2026-05-10 during the in-flight reviewer→expert rename) and carries the canonical theme/reviewer mapping with category lanes and review depth. Initial audit cited the pre-rename path; reviewer (assumptions-expert) flagged the citation drift; updated to current path.
 - Item 17 (anti-pattern table): DISCARD confirmed structurally. Sample spot-check trust applies; the ledger row's structural argument holds (every entry restates `MEMORY.md` or a rule).
 - Item 24 (hedging vocabulary): DISCARD confirmed. `.agent/rules/no-hedging-vocabulary.md` exists (4078 B).
 - Item 16 (key terminology glossary): VERIFY-INTEGRATE → CANDIDATE. The three terms are well-used in context but not glossary entries in the named surfaces; the natural home is a memory/skills glossary, not the planning surface. Phase 1 Task 1.2 is a no-op; the question routes to the Phase 2 batch as item 16.
@@ -183,7 +183,7 @@ For items 11, 17, 24 (technical-theme map / anti-pattern table / hedging vocabul
 
 **Acceptance Criteria**:
 
-1. ✅ `.agent/memory/executive/invoke-code-experts.md` exists and names the six themes (or the relevant theme-to-reviewer mapping), confirming item 11's discard rationale. (File was `invoke-code-reviewers.md` until the 2026-05-10 reviewer→expert rename.)
+1. ✅ `.agent/memory/executive/invoke-code-experts.md` exists and names the six themes (or the relevant theme-to-expert mapping), confirming item 11's discard rationale. (File was `invoke-code-experts.md` until the 2026-05-10 reviewer→expert rename.)
 2. ✅ Five randomly-chosen rows from the 30+ anti-pattern table (item 17) are each verifiable as restatements of `MEMORY.md` entries or `.agent/rules/*.md` files.
 3. ✅ `.agent/rules/no-hedging-vocabulary.md` exists and covers the hedging set in item 24.
 4. ✅ If any spot-check fails, the affected row moves from DISCARD to VERIFY-INTEGRATE and routes through Phase 1 instead.

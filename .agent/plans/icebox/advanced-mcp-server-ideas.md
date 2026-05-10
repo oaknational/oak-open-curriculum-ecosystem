@@ -210,7 +210,7 @@ interface Review {
 ### Example: Lint Reviewer
 
 ```typescript
-// tools/lint-reviewer.ts
+// tools/lint-expert.ts
 export async function reviewLint(request: ReviewRequest): Promise<ReviewResponse> {
   // Run eslint
   const lintResults = await runESLint(request.files);

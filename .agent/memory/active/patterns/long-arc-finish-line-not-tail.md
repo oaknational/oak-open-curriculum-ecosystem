@@ -80,7 +80,7 @@ treating "1 hour, tighten it up" as a quality-discipline signal
 instead of a scope signal — 700 LOC of product code in one pass
 without tests. Code reverted. Attempt-2 plan opens with three
 explicit decision boundaries: WS0 (mandatory pre-execution
-four-reviewer plan-direction review), WS2.5 (mandatory pre-migration
+four-expert plan-direction review), WS2.5 (mandatory pre-migration
 plan-direction check), WS6 (post-execution adversarial review +
 consolidation). Each boundary is finish-shaped: criteria stated,
 acceptance defined, what carries to the next workstream named.

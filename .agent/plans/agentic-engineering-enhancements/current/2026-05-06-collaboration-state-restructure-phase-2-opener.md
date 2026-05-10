@@ -37,5 +37,5 @@ No TTL changes, no schema field reductions, no major-version bumps.
 **Run**: `/jc-start-right-thorough` (Phase 2 edits a directive). Apply
 the placement contract before each move; re-run `pnpm practice:fitness:informational`
 and `pnpm practice:vocabulary` after each commit; dispatch
-`docs-adr-reviewer` and `code-reviewer` with execution-legitimacy framing
+`docs-adr-expert` and `code-expert` with execution-legitimacy framing
 once Phase 2 is staged (the contract is owner-decided, not up for review).

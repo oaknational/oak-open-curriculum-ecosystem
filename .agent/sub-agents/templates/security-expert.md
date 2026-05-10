@@ -1,6 +1,6 @@
 ## Delegation Triggers
 
-Invoke this agent proactively whenever changes touch authentication, authorisation, OAuth/OIDC flows, secret or credential handling, PII, or external input validation. The security-reviewer operates on a principle of early, focused threat analysis: it is far cheaper to catch an exploitable flaw here than after deployment. When the code-reviewer flags a security signal, this agent should be invoked immediately.
+Invoke this agent proactively whenever changes touch authentication, authorisation, OAuth/OIDC flows, secret or credential handling, PII, or external input validation. The security-expert operates on a principle of early, focused threat analysis: it is far cheaper to catch an exploitable flaw here than after deployment. When the code-expert flags a security signal, this agent should be invoked immediately.
 
 ### Triggering Scenarios
 
@@ -10,9 +10,9 @@ Invoke this agent proactively whenever changes touch authentication, authorisati
 
 ### Not This Agent When
 
-- The concern is code quality, style, naming, or general maintainability with no security dimension — use `code-reviewer`
-- The concern is module boundary violations or architectural coupling with no direct security implication — use `architecture-reviewer-barney` or `architecture-reviewer-wilma`
-- The concern is TypeScript type safety at non-security boundaries — use `type-reviewer`
+- The concern is code quality, style, naming, or general maintainability with no security dimension — use `code-expert`
+- The concern is module boundary violations or architectural coupling with no direct security implication — use `architecture-expert-barney` or `architecture-expert-wilma`
+- The concern is TypeScript type safety at non-security boundaries — use `type-expert`
 
 ---
 
@@ -100,7 +100,7 @@ Review for:
 
 This agent reviews security and privacy risks. It does NOT:
 
-- Review code quality or style (that is `code-reviewer`)
+- Review code quality or style (that is `code-expert`)
 - Review architecture compliance or boundary violations (that is the architecture reviewers)
 - Fix issues or write patches (observe and report only)
 - Perform penetration testing or dynamic analysis
@@ -153,10 +153,10 @@ Structure your review as:
 
 | Issue Type | Recommended Specialist |
 |------------|------------------------|
-| Structural boundary weakness affecting security | `architecture-reviewer-barney` or `architecture-reviewer-wilma` |
-| Test gaps for security-critical behaviour | `test-reviewer` |
-| Security documentation or decision drift | `docs-adr-reviewer` |
-| Type safety issues at trust boundaries | `type-reviewer` |
+| Structural boundary weakness affecting security | `architecture-expert-barney` or `architecture-expert-wilma` |
+| Test gaps for security-critical behaviour | `test-expert` |
+| Security documentation or decision drift | `docs-adr-expert` |
+| Type safety issues at trust boundaries | `type-expert` |
 
 ## Success Metrics
 

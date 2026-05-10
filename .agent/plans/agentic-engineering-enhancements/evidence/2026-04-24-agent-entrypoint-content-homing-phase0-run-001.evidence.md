@@ -93,7 +93,7 @@
 - Concept: critical thinking, intention review, repeated reviewer use, roster,
   and platform invocation notes.
 - Disposition: move/merge.
-- Target: `.agent/memory/executive/invoke-code-reviewers.md`.
+- Target: `.agent/memory/executive/invoke-code-experts.md`.
 - Discovery path: AGENT links the reviewer catalogue instead of repeating it.
 
 ### L-009: Agent Tools

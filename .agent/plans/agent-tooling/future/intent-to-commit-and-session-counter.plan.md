@@ -426,30 +426,30 @@ When promoted, follow the standard three-phase reviewer rhythm:
 
 ### Plan-phase (PRE-ExitPlanMode in `current/`) — challenges solution-class
 
-- `assumptions-reviewer` — race-condition assumptions (lossy counter
+- `assumptions-expert` — race-condition assumptions (lossy counter
   increment if retained, last-write-wins on registry); TTL-semantics assumptions;
   proportionality (do we genuinely need a fifth structured surface, or
   is shared-log free-form sufficient?).
-- `architecture-reviewer-fred` — boundary discipline: does the
+- `architecture-expert-fred` — boundary discipline: does the
   intent_to_commit field belong on `active-claims.json` or in a dedicated
   `commit-intents.json`? Does the session counter belong on the registry
   root or in its own file?
 
 ### Mid-cycle (DURING execution) — challenges solution-execution
 
-- `architecture-reviewer-wilma` — adversarial failure modes: agent
+- `architecture-expert-wilma` — adversarial failure modes: agent
   crashes between phase=staging and phase=pre_commit; two agents
   increment the counter simultaneously; intent left behind by SIGKILL;
   registry write race during high-contention windows.
-- `test-reviewer` — RED fixtures for the new schema validation, the
+- `test-expert` — RED fixtures for the new schema validation, the
   intent lifecycle phases, and the stale-intent § 7e report.
-- `code-reviewer` — gateway routing.
+- `code-expert` — gateway routing.
 
 ### Close (POST-execution) — verifies coherence
 
-- `docs-adr-reviewer` — directive, rule, and command updates align with
+- `docs-adr-expert` — directive, rule, and command updates align with
   the schema.
-- `release-readiness-reviewer` — GO / GO-WITH-CONDITIONS / NO-GO with
+- `release-readiness-expert` — GO / GO-WITH-CONDITIONS / NO-GO with
   explicit migration note (v1.2.0 → v1.3.0 schema bump).
 
 ---

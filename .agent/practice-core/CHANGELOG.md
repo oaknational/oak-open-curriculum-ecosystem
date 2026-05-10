@@ -4,6 +4,20 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-05-10 — pending-graduations full drain (knowledge graduation session)
+
+Owner-invoked deep consolidation pass (Sylvan Fruiting Glade / claude-code /
+claude-opus-4-7-1m). Owner reframed the pending-graduations register's
+self-deferral vocabulary as fabricated avoidance and directed full drain in
+session. Practice Core changes:
+
+- **Added**: `PDR-052 directive-file-context-budget`. Standing rule:
+  directive-file work (editing `.agent/directives/*` and host equivalents)
+  runs only when context usage is below 30% of the active session's budget.
+  Sequencing corollary fixes directive-file work as the FINAL step of any
+  consolidation pass. Self-applying clause: this PDR is itself directive-
+  shape doctrine and the rule applies to its own edits.
+
 ## [oak-open-curriculum-ecosystem] 2026-05-09 — focused distilled.md graduation pass
 
 Owner-directed focused consolidation pass on `distilled.md` (Woodland
