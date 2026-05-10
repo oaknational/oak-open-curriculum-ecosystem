@@ -146,34 +146,55 @@ boundary in its adapter and output metadata.
 The foundation wave targets the smallest end-to-end attached corpus:
 
 1. **Oak Curriculum Ontology Threads graph** — Turtle + SHACL, ingested
-   directly from the sibling `oak-curriculum-ontology` repo. TTL is
-   canonical; the repo's PG-JSONL, Neo4j-export, SQL, and WIDOCO projections
+   directly from the upstream GitHub source files in
+   `oaknational/oak-curriculum-ontology`. TTL and SHACL are canonical; the
+   repo's PG-JSONL, Neo4j-export, SQL, release bundles, and WIDOCO projections
    are _not_ first-wave ingestion targets. Round-trip equivalence between TTL
-   and the derived projections is asserted upstream and not re-verified by
-   the graph stack. `graph-ingest` owns generic Turtle/SKOS parsing;
+   and the derived projections is asserted upstream and not re-verified by the
+   graph stack. `graph-ingest` owns generic Turtle/SKOS parsing;
+   `graph-enhance` owns derived graph enrichments and IRI/link records;
    `graph-corpus-sdk` owns the `curric:Thread` enumeration and
    `curric:includesThread` inverse-edge typed adapter.
 
 ### Raw ontology import policy
 
-The Turtle files are upstream source inputs, not new authored source in this
-repository. The implementation must not rely on a developer's machine-local
-`../oak-curriculum-ontology` checkout, a symlink, or hand-copied files with no
-provenance.
+The Turtle and SHACL files are upstream source inputs: the raw material to
+ingest and enhance, not new authored source in this repository. The
+implementation must not rely on a developer's machine-local
+`../oak-curriculum-ontology` checkout, a symlink, a reduced hand-curated subset,
+or hand-copied files with no provenance.
 
-If the graph stack needs the ontology data available in this repository for
-deterministic builds, tests, or CI, it may commit a **tool-generated pinned
-snapshot** of the minimal required Turtle / SHACL files. That snapshot must be
-created by a refresh/import command from a named upstream revision and must
-carry a manifest recording at least: upstream repository, commit or release
-identifier, source file list, content hashes, licence, attribution, generation
-timestamp, and the generated output paths.
+The import source is GitHub. A refresh/import command downloads straight-copy
+source files from the canonical raw URL form:
 
-Normal graph code consumes the generated snapshot or generated typed artefacts,
-not a sibling checkout. The sibling checkout is a developer convenience for the
-refresh command only. Small literal Turtle fixtures remain valid for unit and
-integration tests when they describe behaviour better than importing the full
-corpus.
+```text
+https://raw.githubusercontent.com/oaknational/oak-curriculum-ontology/<revision>/<path>
+```
+
+`<revision>` must be an immutable commit SHA or release tag recorded in the
+import manifest. `main` may be used only for discovery while preparing an
+update. The first-wave source set is the full upstream Turtle / SHACL source
+corpus needed by the ontology graph, not a minimal fixture:
+
+- `ontology/oak-curriculum-ontology.ttl`
+- `ontology/oak-curriculum-constraints.ttl`
+- `data/programme-structure.ttl`
+- `data/temporal-structure.ttl`
+- `data/threads.ttl`
+- `data/subjects/**/*.ttl`
+
+The generated raw import in this repository is a byte-for-byte copy of those
+upstream files at the pinned revision. Its manifest records at least: upstream
+repository, pinned revision, source file list, source raw URLs, content hashes,
+licence, attribution, generation timestamp, and generated output paths. The raw
+copy is not edited after import. Any cleanup, indexing, join records, graph
+enhancements, JSON-LD projections, or typed SDK surfaces are generated as
+separate derived artefacts from the raw copy.
+
+Normal graph code consumes the generated raw import or generated derived
+artefacts, not a sibling checkout and not live network URLs. Small literal
+Turtle fixtures remain valid for unit tests when they describe parser behaviour
+better than importing the full corpus.
 
 Pre-requisite, misconception, and EEF strand adapters are outside the foundation
 topology decision and are sequenced by the executable graph-stack plan. Other
@@ -196,14 +217,14 @@ work separately.
 - The RDF 1.2-native internal stance minimises the JSON-LD 1.2 upgrade
   cost: when JSON-LD 1.2 reaches Recommendation (tripwire #1), we add an
   emit/parse adapter rather than reshape the canonical model.
-- The foundation ingestion scope is small enough to ship while still proving
-  ontology IRI identity and generic Turtle/SKOS parsing through one real Oak
-  ontology attached corpus.
+- The foundation ingestion scope is bounded to one attached corpus while still
+  importing that corpus as full straight-copy source files, proving ontology
+  IRI identity and generic Turtle/SKOS parsing against real Oak ontology data.
 - The API/bulk/ontology split prevents a new graph adapter from becoming a
   shadow schema layer for thread or unit data. Joins are explicit and
   inspectable instead of hidden behind shared names.
-- A pinned generated snapshot gives reproducible CI without making the
-  ontology repository a machine-local runtime dependency.
+- A pinned straight-copy raw import gives reproducible CI without making the
+  ontology repository or GitHub network access a runtime dependency.
 
 **Negative / cost accepted**:
 
@@ -217,7 +238,7 @@ work separately.
   formalisation. If the eventual published spec differs, `graph-core`
   migrates the `Term` union — a typed refactor confined to one workspace.
   Tripwire #2 covers this.
-- The pinned snapshot introduces a provenance-maintenance obligation. The
+- The pinned raw import introduces a provenance-maintenance obligation. The
   refresh command and manifest become part of the validation surface; a copied
   Turtle file without manifest evidence is documentation/data drift, not an
   acceptable import.

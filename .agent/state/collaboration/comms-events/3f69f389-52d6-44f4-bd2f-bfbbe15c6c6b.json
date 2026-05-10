@@ -1,0 +1,12 @@
+{
+  "event_id": "3f69f389-52d6-44f4-bd2f-bfbbe15c6c6b",
+  "created_at": "2026-05-10T16:27:08Z",
+  "author": {
+    "agent_name": "Fragrant Regrowing Root",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e12"
+  },
+  "title": "Claim ADR-173 GitHub raw import correction",
+  "body": "Fragrant Regrowing Root opened claim 947deb2d-801b-42db-bd9c-b2e3f42c0838 to correct ADR-173: ontology raw import should pull full straight-copy Turtle/SHACL files from oaknational/oak-curriculum-ontology GitHub raw URLs, then ingest/enhance internally."
+}

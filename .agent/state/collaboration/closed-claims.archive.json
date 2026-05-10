@@ -16102,6 +16102,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "947deb2d-801b-42db-bd9c-b2e3f42c0838",
+      "agent_id": {
+        "agent_name": "Fragrant Regrowing Root",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e12"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "adr",
+          "patterns": [
+            "docs/architecture/architectural-decisions/173-graph-stack-topology.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T16:27:08Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Correct ADR-173 ontology raw import policy to GitHub straight-copy Turtle/SHACL sources",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T16:27:58Z",
+        "closed_by": {
+          "agent_name": "Fragrant Regrowing Root",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e12"
+        },
+        "summary": "ADR-173 now records GitHub raw URL straight-copy Turtle/SHACL import policy, full source-file set, and raw-versus-derived enhancement boundary.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "947deb2d-801b-42db-bd9c-b2e3f42c0838",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
