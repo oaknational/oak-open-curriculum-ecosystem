@@ -1,10 +1,8 @@
 ---
 name: jc-session-handoff
-description: >-
-  Lightweight end-of-session continuity update with a conditional
-  consolidation gate.
+description: Lightweight end-of-session continuity update with a conditional consolidation gate.
 ---
 
-# Session Handoff (Codex)
+# Session Handoff (Cross-tool)
 
-Read and follow `.agent/commands/session-handoff.md`.
+Read and follow `.agent/skills/session-handoff/SKILL-CANONICAL.md`.

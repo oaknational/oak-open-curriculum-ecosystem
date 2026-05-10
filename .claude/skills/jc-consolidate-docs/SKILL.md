@@ -1,10 +1,8 @@
 ---
 name: jc-consolidate-docs
-description: >-
-  Consolidate documentation, extract patterns, verify plan hygiene, and check
-  fitness functions.
+description: Consolidate documentation, extract patterns, verify plan hygiene, and check fitness functions.
 ---
 
-# Consolidate Docs (Codex)
+# Consolidate Docs (Claude Code)
 
-Read and follow `.agent/commands/consolidate-docs.md`.
+Read and follow `.agent/skills/consolidate-docs/SKILL-CANONICAL.md`.

@@ -1,9 +1,8 @@
 ---
 name: jc-metacognition
-description: >-
-  Reflective thinking — read and apply the metacognition directive.
+description: Reflective thinking — read and apply the metacognition directive.
 ---
 
-# Metacognition (Codex)
+# Metacognition (Cross-tool)
 
-Read and follow `.agent/commands/metacognition.md`.
+Read and follow `.agent/skills/metacognition/SKILL-CANONICAL.md`.

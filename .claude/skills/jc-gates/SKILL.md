@@ -1,9 +1,8 @@
 ---
 name: jc-gates
-description: >-
-  Run all quality gates and fix issues.
+description: Run all quality gates and fix issues.
 ---
 
-# Quality Gates (Codex)
+# Gates (Claude Code)
 
-Read and follow `.agent/commands/gates.md`.
+Read and follow `.agent/skills/gates/SKILL-CANONICAL.md`.

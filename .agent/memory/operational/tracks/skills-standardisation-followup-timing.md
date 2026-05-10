@@ -38,3 +38,14 @@ Three reviewers ran in parallel on generator.ts, checker.ts, lock.ts, bin shim, 
 Session end: 2026-05-09T18:31:25Z
 Session end (local): Sat May  9 19:31:25 BST 2026
 Elapsed wall-clock: 82 minutes (budget: 60)
+
+## Wave 2
+
+Session: Iridescent Dancing Nebula (claude-opus-4-7-1m / 04cca8)
+Branch: feat/mcp-graph-support-foundation
+Session start: 2026-05-10T09:58:01Z
+Realistic budget: 90–120 min full set; 30–45 min canonicalisation alone.
+
+### Items
+
+- [item-1-canonicalise-six] start 2026-05-10T09:58:01Z — pending

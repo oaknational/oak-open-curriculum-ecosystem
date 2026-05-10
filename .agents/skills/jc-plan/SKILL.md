@@ -1,9 +1,8 @@
 ---
 name: jc-plan
-description: >-
-  Create or promote a plan following the plan architecture.
+description: Create or promote a plan following the plan architecture.
 ---
 
-# Plan (Codex)
+# Plan (Cross-tool)
 
-Read and follow `.agent/commands/plan.md`.
+Read and follow `.agent/skills/plan/SKILL-CANONICAL.md`.
