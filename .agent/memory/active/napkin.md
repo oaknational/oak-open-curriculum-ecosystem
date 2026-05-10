@@ -22,6 +22,35 @@ The most recent rotation is archived at
 [archive-pass]: archive/napkin-2026-05-09.md
 [previous-pass]: archive/napkin-2026-05-07-doctor-safe-merge.md
 
+## 2026-05-10 — Foamy Navigating Hull / codex / GPT-5 / `019e12`
+
+### Graph MVP plan boundary review
+
+- **Findings**: the graph MVP plan estate had fundamental drift after the
+  previous closeout. `graph-stack.plan.md` and ADR-173 still made the NC
+  knowledge taxonomy the foundation corpus, while `graph-mvp-arc.plan.md`
+  expected an Oak Curriculum Ontology Thread adapter that did not exist in the
+  graph-stack increments. The same pass also found a stale slice-1 substrate
+  diagram implying graph-stack Inc.1+2+3 before gate-0, inconsistent
+  `graph-query-layer` ownership across Inc.2/Inc.3, a stale gate-3b wording
+  path through gate-2, and slice-plan MCP wording that still needs exact
+  runtime registration paths before execution.
+- **Owner correction absorbed**: the MVP must not do anything with the NC
+  graph or NC taxonomy. The amended direction is Oak ontology/graph only:
+  graph-stack Inc.1 proves the Oak Curriculum Ontology Threads graph
+  (`curric:Thread` enumeration + inverse `curric:includesThread` lookup);
+  NC taxonomy remains outside the MVP and requires separate owner promotion.
+- **Behaviour change**: for graph MVP reviews, run a focused drift scan across
+  the spine, topology, ADR, portfolio index, and slice plans before declaring
+  planning closure:
+  `rg "\\bNC\\b|knowledge taxonomy|graph-query-layer|Inc\\.2|Inc\\.3|gate-3b" ...`.
+  Treat any foundation-corpus mismatch or gate-owned substrate mismatch as a
+  blocker, not as copy-edit debt.
+- **Tooling mistake**: my first `claims open` invocation omitted the required
+  `--now` timestamp and failed. Correction: use the helper's required
+  timestamp form when opening claims in this repo.
+  Source plane: active planning / collaboration operations.
+
 ## 2026-05-10 — Salty Rolling Compass / codex / GPT-5 / `019e12`
 
 ### Surprise
@@ -41,6 +70,14 @@ The most recent rotation is archived at
   collaboration-state commit. Treat missing peer claims as a blocker to repair,
   not as stale cleanup.
   Source plane: operational
+
+### Commit-message checker invocation
+
+- **Mistake**: I invoked `./scripts/check-commit-message.sh` with a bare
+  subject argument. The script mirrors `git commit` and requires `-m` paragraphs
+  or stdin, so the bare argument exits with usage code 2.
+- **Correction**: use `./scripts/check-commit-message.sh -m "<subject>"`
+  for single-paragraph checks.
 
 ## 2026-05-10 — Gilded Eclipsing Meteor ADR expansion / codex / GPT-5 / `019e12`
 

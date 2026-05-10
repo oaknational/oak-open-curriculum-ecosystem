@@ -15065,6 +15065,49 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "1435de15-1c1e-4f7c-b062-b562fb5c2614",
+      "agent_id": {
+        "agent_name": "Gilded Eclipsing Meteor",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e12"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            "docs/architecture/architectural-decisions/README.md",
+            "docs/architecture/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T13:40:00Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "ADR gap analysis: read current ADR corpus against recent repo work; write only session memory/collaboration state unless owner asks for follow-up edits.",
+      "archived_at": "2026-05-10",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-10T14:10:00Z",
+        "closed_by": {
+          "agent_name": "Gilded Eclipsing Meteor",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e12"
+        },
+        "summary": "Superseded by implementation pass; closing old read-only ADR review claim.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1435de15-1c1e-4f7c-b062-b562fb5c2614",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
