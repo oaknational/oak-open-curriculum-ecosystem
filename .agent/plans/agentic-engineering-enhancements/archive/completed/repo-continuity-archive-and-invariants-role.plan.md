@@ -10,18 +10,45 @@ overview: >
 todos:
   - id: phase-1-archive-sweep
     content: "Phase 1: archive 14 stale session-close blocks + 8 stale Deep Consolidation Status entries to repo-continuity-session-history-2026-05-10.md."
-    status: pending
+    status: completed
   - id: phase-2-invariants-role
     content: "Phase 2: surface 3 role options for §Repo-Wide Invariants to owner; implement chosen shape."
-    status: pending
+    status: completed
 ---
 
 # Repo-Continuity Archive Sweep + Invariants-List Role Decision
 
-**Status**: 🔴 NOT STARTED
+**Status**: ✅ COMPLETED 2026-05-10 (Woodland Growing Leaf / claude-code / Opus 4.7 / `0844d9`)
 **Opened by**: 2026-05-10 `jc-session-handoff` analysis (Blooming Ripening Glade / claude-code / Opus 4.7 / `0730a8`)
 **Owner**: Jim
 **Thread**: `agentic-engineering-enhancements`
+
+## Resolution Note (2026-05-10)
+
+- **Group A** (cure-naming + plan landing): commit `d981b2b3` —
+  directive-layer foreign-stage cure named in `agent-collaboration.md`
+  §c, plan landed, handoff state captured.
+- **Phase 1** (archive sweep): commit `6d7d5ee3` — 13 session-close
+  blocks + 9 Deep-Consolidation entries archived verbatim to
+  `.agent/memory/operational/archive/repo-continuity-session-history-2026-05-10.md`.
+  Live file 555 → 270 lines. Three retained 2026-05-10 same-day blocks
+  per substance preservation (PDR-026); plan target ≤220 was based on
+  one most-recent block, now updated by reality.
+- **Phase 2** (invariants-role decision): commit `09b513ae` — owner
+  chose **Option A** (keep §Repo-Wide Invariants in
+  `repo-continuity.md`, role-justify with cross-references). Section
+  header now states the curation role explicitly; each of the 12
+  invariants annotated with its canonical home reference (rule path,
+  ADR, PDR, or directive). All 13 referenced files verified to exist.
+- **Coordination**: parallel agent activity from Iridescent Dancing
+  Nebula (Wave 2 + agent-commands-retirement plan), Midnight Stealing
+  Candle (codex /rename surprise), and Riverine Drifting Lighthouse
+  (third-party skills cleanup). Phase 2 commit was briefly blocked by
+  Riverine's in-flight markdownlint state; resolved via comms-event
+  exchange (`9344adf1` query → `05ccefb8` reply within 15 min →
+  `5bff4178` clearance). The directive-layer cure named in this plan
+  was applied throughout: explicit `git add -- <paths>` and `git
+  commit -- <paths>` for every commit.
 
 ## Trigger
 
