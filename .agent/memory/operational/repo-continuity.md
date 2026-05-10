@@ -166,25 +166,45 @@ not implementation.
 
 ## Repo-Wide Invariants / Non-Goals
 
-Foundational invariants live in directives, rules, ADRs, and PDRs.
-Resume with these branch-relevant constraints:
+**Role**: curated branch-relevant session-resume card. Each invariant
+below has a canonical home in directives, rules, ADRs, or PDRs (cited
+inline); the curation here is the value — at session resume an agent
+gets the branch-relevant subset without reading every directive.
+Drift is mitigated by the cross-references and consolidate-docs
+sweeps; canonical homes always win on conflict.
 
-- no compatibility layers; replace, do not bridge;
-- distinct architectural layers live in distinct workspaces; folders/modules
-inside one workspace do not satisfy layer separation;
-- TDD at all levels;
-- tests prove product behaviour, not configuration or file presence;
-- strict boundary validation only;
-- no `process.env` read/write in test files or setup files;
-- `--no-verify` requires fresh per-invocation owner authorisation;
-- no warning toleration;
-- owner direction beats plan;
+- no compatibility layers; replace, do not bridge —
+  [`replace-dont-bridge`](../../rules/replace-dont-bridge.md);
+- distinct architectural layers live in distinct workspaces;
+  folders/modules inside one workspace do not satisfy layer separation —
+  [ADR-154](../../../docs/architecture/architectural-decisions/154-separate-framework-from-consumer.md)
+  - [`principles.md`](../../directives/principles.md);
+- TDD at all levels —
+  [`tdd-as-design.md`](../../directives/tdd-as-design.md);
+- tests prove product behaviour, not configuration or file presence —
+  [`testing-strategy.md`](../../directives/testing-strategy.md);
+- strict boundary validation only —
+  [`strict-validation-at-boundary`](../../rules/strict-validation-at-boundary.md);
+- no `process.env` read/write in test files or setup files —
+  [`no-global-state-in-tests`](../../rules/no-global-state-in-tests.md);
+- `--no-verify` requires fresh per-invocation owner authorisation —
+  [`no-verify-requires-fresh-authorisation`](../../rules/no-verify-requires-fresh-authorisation.md);
+- no warning toleration —
+  [`no-warning-toleration`](../../rules/no-warning-toleration.md);
+- owner direction beats plan —
+  [`AGENT.md`](../../directives/AGENT.md) +
+  [`directive-file-context-budget`](../../rules/directive-file-context-budget.md);
 - curriculum data in this monorepo comes only through the published Oak Open
-Curriculum HTTP API and generated SDK, not direct Hasura/materialised views;
+  Curriculum HTTP API and generated SDK, not direct Hasura/materialised views —
+  [`principles.md`](../../directives/principles.md) (branch-direction
+  invariant; no ADR home yet);
 - **knowledge preservation is absolute** — writing to shared-state
-knowledge surfaces is never blocked by fitness limits;
+  knowledge surfaces is never blocked by fitness limits —
+  [PDR-026](../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md);
 - **shared-state files are always writable and always commit-includable**
-regardless of any active claim (deliberate anti-log-jam tradeoff).
+  regardless of any active claim (deliberate anti-log-jam tradeoff) —
+  [PDR-026](../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md)
+  - [`respect-active-agent-claims`](../../rules/respect-active-agent-claims.md).
 
 Current branch non-goals:
 
