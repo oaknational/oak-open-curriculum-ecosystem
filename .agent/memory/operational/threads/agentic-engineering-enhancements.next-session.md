@@ -2,7 +2,51 @@
 
 ## Active arc — Skills standardisation and adapter generator (attempt 2)
 
-**Last refreshed**: 2026-05-10 (`cursor` / GPT-5.5 / Open Lifting Gale / `e4ad13`, agent-tooling friction closeout Workstream 1 completed in working tree).
+**Last refreshed**: 2026-05-10 (`codex` / GPT-5 / Salty Rolling Compass /
+`019e12`, owner-requested commit safety sweep landed).
+
+### 2026-05-10 session record — commit safety sweep landed (Salty Rolling Compass)
+
+**Landed outcome**: owner-requested safety sweep committed all dirty in-flight
+files in logical groups on `feat/mcp-graph-support-foundation`.
+
+**Commits landed**:
+
+- `57de914f` — `feat(sub-agents): extend experts with active-workflow guidance`
+  — accessibility, assumptions, design-system, and elasticsearch expert
+  templates plus the changed Claude/Cursor/Codex adapters and
+  `.codex/config.toml` description sync.
+- `1cc83d62` — `docs(practice): recalibrate practice core fitness budget` —
+  `practice.md` fitness metadata recalibration only.
+- `b96b7e48` — `chore(collaboration): preserve commit safety sweep state` —
+  napkin, active claims, closed-claim archive, comms events, and rendered
+  shared comms log for the sweep.
+
+**Validation**: pre-commit hooks passed on all three commits
+(format-check, markdownlint, knip, depcruise, turbo type-check/lint/test).
+`pnpm subagents:check` passed before the expert bundle commit.
+`pnpm agent-tools:collaboration-state -- check` passed after the final state
+commit. The working tree was clean at session completion.
+
+**Collaboration lifecycle**: Stormbound Floating Current's Phase 1B claim
+`d526f5d3-eed0-46e8-aee9-0a6bcf8739ff` and Gilded Eclipsing Meteor's
+ADR-review claim `1435de15-1c1e-4f7c-b062-b562fb5c2614` remain active for
+their offline sessions to resume. Salty Rolling Compass's broad safety-sweep
+claim `1e7a0dd3-3f02-4c5a-8467-8b74dbe1a4e1` and short git-window claims
+were explicitly closed. During closeout, Gilded's fresh claim briefly
+disappeared from `active-claims.json`; it was restored before the final state
+commit and captured as a napkin surprise.
+
+**Advisory gate state**: the commit-skill strict-hard pre-screen remains
+blocked by the active `napkin.md` critical fitness signal. Per the knowledge
+preservation rule, the sweep preserved the capture and routed the pressure to
+consolidation instead of trimming shared memory.
+
+**Next safe step**: resume Phase 1B of
+`.agent/plans/agent-tooling/current/sub-agent-rename-and-skill-integration.plan.md`
+from the real post-sweep state: seven of eight paired expert merges have
+landed; only `react-component-expert` remains before the standalone skill
+deletion / `Skill()` permission cleanup / reviewer-dispatch pass.
 
 ### 2026-05-10 session record — agent-tooling friction closeout Workstream 1 completed (Open Lifting Gale)
 
@@ -2373,6 +2417,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Salty Rolling Compass` | `codex` | `GPT-5` | `019e12` | `owner-requested-commit-safety-sweep; committed-expert-active-workflow-bundle-57de914f; committed-practice-core-fitness-budget-1cc83d62; committed-collaboration-state-bundle-b96b7e48; restored-peer-Gilded-active-claim-after-commit-queue-lifecycle-loss; working-tree-clean; handoff-updated-plan-to-one-remaining-react-component-merge` | 2026-05-10 | 2026-05-10 |
 | `Open Lifting Gale` | `cursor` | `GPT-5.5` | `e4ad13` | `agent-tooling-friction-closeout-workstream-1; collaboration-state-cli-discoverability; invalid-option-help; closure-summary-alias-and-conflict; area-kind-enumeration; comms-send-json-output-with-resolved-paths; pure-helper-tests-after-no-real-io-review; README-and-frictions-register-evidence; claim-d7a76b78-closed; no-commit-owner-boundary` | 2026-05-10 | 2026-05-10 |
 | `Woodland Growing Leaf` | `claude-code` | `claude-opus-4-7-1m` | `0844d9` | `repo-continuity-archive-plan-end-to-end-execution; group-A-directive-foreign-stage-cure-naming-d981b2b3; phase-1-archive-sweep-13-session-close-blocks-and-9-deep-consolidation-entries-relocated-verbatim-to-2026-05-10-archive-companion-6d7d5ee3-live-file-555-to-270-lines; phase-2-invariants-role-justified-option-A-with-12-canonical-home-cross-references-09b513ae; plan-archived-current-to-archive-completed-c3061935; inter-agent-comms-event-coordination-with-Riverine-Drifting-Lighthouse-9344adf1-to-05ccefb8-to-5bff4178-resolved-pre-commit-blockage; cure-named-and-applied-to-its-own-landing` | 2026-05-10 | 2026-05-10 |
 | `Blooming Ripening Glade` | `claude-code` | `claude-opus-4-7-1m` | `0730a8` | `agent-collaboration-directive-evolution; re-parent-coordination-surface-discipline-and-inter-agent-comms-first-class-primitive-from-communication-channels-to-working-model; heading-count-correction-three-to-four-foundational-rules; c-amendment-naming-git-add-and-git-commit-explicit-pathspec-with-five-instance-evidence-and-rule-link; frontmatter-split-strategy-rewrite-per-channel-detail-vs-cross-channel-governance; owner-approved-fitness-line-target-240-to-280-limit-320-to-360; repo-continuity-archive-and-invariants-role-plan-drafted-current-lifecycle-two-phase-archive-sweep-then-owner-gated-invariants-role-decision; markdownlint-clean-no-commit-in-session` | 2026-05-10 | 2026-05-10 |
@@ -3012,6 +3057,13 @@ nl -ba .agent/directives/AGENT.md
   Reviews are blocking later but not required now.
 
 ### Current Objective
+
+**2026-05-10 update (Salty Rolling Compass)**: the immediate owner-requested
+commit-safety sweep is complete and the working tree was clean at session
+completion. The active sub-agent rename / skill-integration lane now has seven
+of eight paired expert merges landed; resume with the single remaining
+`react-component-expert` merge, then standalone skill deletion, permission
+cleanup, and reviewer dispatch.
 
 **WS4A lifecycle integration, coordination consolidation, deterministic
 identity, collaboration-doc fitness remediation, cross-vendor shared-log

@@ -9,6 +9,25 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-10 — Salty Rolling Compass / `codex` / GPT-5 /
+`019e12`, owner-requested commit safety sweep completed)**: landed all dirty
+in-flight files in three logical commits on
+`feat/mcp-graph-support-foundation`: `57de914f` (expert
+active-workflow bundle for accessibility, assumptions, design-system, and
+elasticsearch templates plus changed adapters), `1cc83d62` (`practice.md`
+fitness metadata recalibration only), and `b96b7e48` (napkin,
+active-claims, closed-claim archive, comms events, rendered shared log).
+Pre-commit hooks passed on all three commits; `pnpm subagents:check` passed
+before `57de914f`; `pnpm agent-tools:collaboration-state -- check` passed
+after `b96b7e48`. The commit-skill strict-hard pre-screen remains blocked by
+active `napkin.md` critical fitness pressure, preserved per the knowledge-
+capture rule. **Next safe step**: resume Phase 1B of the sub-agent rename /
+skill integration plan from the real post-sweep state: seven of eight paired
+expert merges have landed; only `react-component-expert` remains before
+standalone skill deletion, `Skill()` permission cleanup, and reviewer
+dispatch. Stormbound Floating Current's Phase 1B claim and Gilded Eclipsing
+Meteor's ADR-review claim remain active for their offline sessions.
+
 **Session close (2026-05-10 — Open Lifting Gale / `cursor` /
 GPT-5.5 / `e4ad13`, agent-tooling friction closeout Workstream 1
 completed in working tree)**: implemented the shared
@@ -186,7 +205,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Twilit -> Ashen / `claude-code` / `7cf730` / 2026-05-05 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Open Lifting Gale / `cursor` / GPT-5.5 / `e4ad13` / 2026-05-10 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Salty Rolling Compass / `codex` / GPT-5 / `019e12` / 2026-05-10 |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Fronded Bending Blossom / `cursor` / Composer / `60775a` / 2026-05-09 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -213,13 +232,15 @@ This branch also depends on the Practice/tooling substrate work from main in
 
 ## Current Session Focus
 
-**Latest focus (2026-05-10 — Open Lifting Gale)**: agent-tooling
-friction closeout Workstream 1 completed in the working tree; continue
-with Workstream 2 (`comms list/show` and `claims list` filters) if the
-owner resumes this closeout lane. Branch-primary graph MVP focus below
-still controls the product branch once PR #102 merge blockers are
-cleared. **Deferred**: monorepo topology ADR / stage-matrix work
-(strategic plan remains in `future/` until re-opened).
+**Latest focus (2026-05-10 — Salty Rolling Compass)**: owner-requested
+commit safety sweep completed and committed all dirty in-flight files in
+logical groups. The sub-agent rename / skill-integration lane is the live
+Practice/tooling lane on this branch: seven of eight paired expert merges
+have landed; resume with `react-component-expert`, then standalone skill
+deletion, `Skill()` permission cleanup, gates, and reviewer dispatch.
+Branch-primary graph MVP focus below still controls the product branch once
+PR #102 merge blockers are cleared. **Deferred**: monorepo topology ADR /
+stage-matrix work (strategic plan remains in `future/` until re-opened).
 
 *Historical context:*
 
@@ -293,15 +314,22 @@ evidence.
 
 ## Next Safe Step
 
-**Status update (2026-05-10 — Open Lifting Gale close)**:
-Workstream 1 of the agent-tooling friction closeout is complete in the
-working tree and uncommitted by owner boundary. The next safe step on
-this lane is Workstream 2 from
-`.agent/plans/agent-tooling/current/primary-agent-tooling-enhancements.plan.md`:
-add `comms list/show` and `claims list` filters. Before edits, refresh
-status/diffs, re-check collaboration state, and open a new exact file
-claim for the Workstream 2 file set. Do not edit the plan file unless
-the owner explicitly asks.
+**Status update (2026-05-10 — Salty Rolling Compass close)**:
+the commit-safety sweep landed `57de914f`, `1cc83d62`, and `b96b7e48`;
+working tree was clean at session completion. The next safe step on the
+agentic-engineering lane is Phase 1B continuation in
+`.agent/plans/agent-tooling/current/sub-agent-rename-and-skill-integration.plan.md`:
+merge the remaining `react-component-expert` skill body into its template,
+run `pnpm subagents:check`, then perform the standalone skill deletion,
+`Skill()` permission cleanup, required gates, and reviewer dispatch.
+Stormbound Floating Current and Gilded Eclipsing Meteor claims remain active;
+consult and coordinate before touching their areas.
+
+**Prior status (2026-05-10 — Open Lifting Gale close)**:
+Workstream 1 of the agent-tooling friction closeout is complete and now
+landed in commit `05adba87`. Workstream 2 from
+`.agent/plans/agent-tooling/current/primary-agent-tooling-enhancements.plan.md`
+remains a later lane if the owner resumes that closeout.
 
 **Status update (2026-05-10 — Stratospheric Sweeping Plume close)**:
 the practice.md examination lane was opened this session; an agent
@@ -386,6 +414,17 @@ Visible owner-appetite items, not blockers for the current branch state:
    candidate remains in `pending-graduations.md` for a later drafting slot.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-10 Salty Rolling Compass, codex, GPT-5, `019e12`,
+commit safety sweep completed): `due — dirty in-flight state was made
+durable in three commits, Phase 1B expert integration advanced from 3/8 to
+7/8 merges, and a fresh napkin surprise captured commit-queue lifecycle
+loss of an unrelated fresh peer claim. Not well-bounded for this lightweight
+handoff: active napkin.md is critical, prior due consolidation pressure
+remains, and the sub-agent integration lane still has the react-component
+merge plus cleanup/review open. Next deliberate consolidation should mine the
+commit-queue claim-preservation surprise and route the accumulated napkin
+fitness pressure without trimming capture substance`.**
 
 **Status (2026-05-10 Open Lifting Gale, cursor, GPT-5.5, `e4ad13`,
 agent-tooling friction closeout Workstream 1 completed in working

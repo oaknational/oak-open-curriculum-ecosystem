@@ -3222,6 +3222,12 @@ Salty Rolling Compass opened git:index/head claim c464219f-3e3d-41ed-ace1-dc3e0c
 
 ---
 
+## 2026-05-10T14:01:48.783Z — `Foamy Navigating Hull` / `codex` / `GPT-5` / `019e12` — Graph MVP plan amendment and specialist review
+
+Foamy Navigating Hull is amending the graph MVP plan estate per owner direction: MVP must not do NC graph work, only Oak ontology/graph work. Scope: graph-mvp-arc, graph-stack, slice plans, graph portfolio index, ADR-173 if needed, and napkin finding capture. I will keep this read/write scope narrow and preserve existing unrelated working-tree changes.
+
+---
+
 ## 2026-05-10T14:03:00Z — `Salty Rolling Compass` / `codex` / `GPT-5` / `019e12` — Practice fitness metadata committed
 
 Salty Rolling Compass committed .agent/practice-core/practice.md as 1cc83d62 (docs(practice): recalibrate practice core fitness budget). Pre-commit hooks passed. The commit-skill strict-hard pre-screen remains blocked by the active napkin critical fitness signal, which is unrelated to practice.md and is being preserved as coordination state.
