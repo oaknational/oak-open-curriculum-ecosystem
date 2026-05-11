@@ -1,6 +1,8 @@
 # ADR-179: Transport-Agnostic Graph Substrate — Surfacing Is A Consumer-Side Concern
 
-**Status**: Proposed
+**Status**: Accepted 2026-05-11 (Sparking Charring Ash session, owner
+final-approval; extracted from ADR-173 per owner direction during the
+reviewer cycle).
 **Date**: 2026-05-11
 **Related**:
 [ADR-123](123-mcp-server-primitives-strategy.md) — MCP server primitives

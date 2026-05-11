@@ -1,7 +1,7 @@
 ---
 name: "Graph Stack — Topology and Foundation Increment"
 overview: "Establish a layered, standards-based graph capability for Oak — seven active graph workspaces plus one deferred — with the foundation increment ingesting the Oak Curriculum Ontology Threads graph end-to-end as the first attached corpus. Reserves space for every layer in `.agent/research/graph-library.research.md` and provides the spine that subsequent graph-shaped work attaches to."
-status: current
+status: active
 graph_layer: substrate
 graph_portfolio_index: "../../../graph-portfolio-index.md"
 parent_plan: "../active/open-education-knowledge-surfaces.plan.md"
@@ -17,10 +17,10 @@ specialist_reviewer: "architecture-expert-betty, architecture-expert-fred, archi
 isProject: true
 todos:
   - id: ws0-topology-adr
-    content: "WS0: Drive ADR-173 (Status: Proposed) through reviewer absorption (architecture-expert-betty, architecture-expert-fred, assumptions-expert) and owner final-approval to Accepted; record supersession/coordination map for adjacent plans inside ADR-173"
-    status: pending
+    content: "WS0: ADR-173 + ADR-179 ratified Accepted 2026-05-11 (Sparking Charring Ash session). Reviewer absorption complete (architecture-expert-betty, architecture-expert-fred, assumptions-expert, architecture-expert-barney PROMOTION-READY verdict). Supersession/coordination map recorded inside ADR-173."
+    status: completed
   - id: ws1-graph-core-scaffold
-    content: "WS1.1: Scaffold packages/core/graph-core workspace (TS, esbuild, vitest, README, exports skeleton). One commit, tree green."
+    content: "WS1.1: Scaffold packages/core/graph-core workspace (TS via tsup wrapping esbuild, vitest config, eslint with coreBoundaryRules on src/**/*.ts, README citing ADR-173/ADR-179 by number only). package.json exports map pre-declares sub-paths `./term`, `./dataset`, `./jsonld`, `./canon`, `./vocab` (each pointing to a stub `src/<module>/index.ts` containing `export {};`); index.ts is also an empty barrel. Zero tests in WS1.1 (test-expert verdict: vitest wiring is verified by WS1.2's first real test running; atomic-landing invariant means no test without product code). ADR-179 enforcement at WS1.1 is structurally trivial via the empty barrel; reviewer-enforced at each export boundary in WS1.2 onward (no transport-shaped types in exports). 'Tree green' = pnpm install resolves, type-check/lint/build pass, repo-wide knip/depcruise/format-check/markdownlint show no new failures. One commit."
     status: pending
     sub_increment: 1a
   - id: ws1-rdf-term-quad

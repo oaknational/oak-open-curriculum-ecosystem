@@ -1,8 +1,12 @@
 # ADR-173: Graph Stack Topology — Standards-First, Layered, MCP-Agnostic
 
-**Status**: Proposed (skeleton 2026-05-07; NC-boundary amendment
-2026-05-10; reviewer-absorption amendment 2026-05-11) — pending owner
-final-approval before ratification.
+**Status**: Accepted 2026-05-11 (Sparking Charring Ash session, owner
+final-approval following reviewer absorption against
+architecture-expert-betty, architecture-expert-fred,
+assumptions-expert, and architecture-expert-barney
+PROMOTION-READY verdict on `graph-stack.plan.md`). Skeleton 2026-05-07;
+NC-boundary amendment 2026-05-10; reviewer-absorption amendment
+2026-05-11.
 
 **Date**: 2026-05-07; amended 2026-05-10; amended 2026-05-11
 
