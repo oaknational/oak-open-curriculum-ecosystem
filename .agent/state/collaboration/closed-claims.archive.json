@@ -16837,6 +16837,60 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "b1302a12-153a-4959-ab72-eee99f8faac4",
+      "agent_id": {
+        "agent_name": "Soaring Darting Kite",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "01db95"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/**",
+            "agent-tools/src/practice-substrate/**",
+            "agent-tools/tests/collaboration-state/**",
+            "agent-tools/tests/practice-substrate/**",
+            ".agent/state/collaboration/comms-events/fe4acc7e-*.json",
+            ".agent/state/collaboration/comms-events/3882213c-a6b1-4661-a1cd-a261f50ea5e8.json",
+            ".agent/state/collaboration/comms-events/b0353884-4026-4a24-b2a3-b6b7fca846d4.json",
+            ".agent/state/collaboration/comms-lifecycle/**",
+            ".agent/state/collaboration/comms-messages/**",
+            ".agent/state/collaboration/comms-event.schema.json",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/plans/agentic-engineering-enhancements/current/primary-agent-tooling-enhancements.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/2026-05-12-collaboration-protocol-hardening-r1b-opener.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-11T14:15:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "R1.b collaboration-protocol-hardening: replace flat CommsEvent with three parsers + three types per canonical comms-event schema $defs; migrate 5 lifecycle + 2 directed events out of comms-events/ into comms-lifecycle/ and comms-messages/ (with timestamp -> created_at rename on directed pair); update consumers in agent-tools/src/practice-substrate/. Single atomic test-first commit. Sidebar 2e1a886f resolved by Fronded (claim 1ccfa79c narrowed/closed). PDR-059 + ADR-177 amendment internalised — post-hook eyeball discipline applies.",
+      "archived_at": "2026-05-11",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-11T17:09:30Z",
+        "closed_by": {
+          "agent_name": "Soaring Darting Kite",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "01db95"
+        },
+        "summary": "R1.b atomic landing complete: three parsers + three types + 7 file moves + consumer updates + 16 parser/render tests. Commit b529fa6e. PDR-059 Class C post-hook eyeball: no foreign-stage absorption. Tail items (R2/R3/R4b/R4-new/R5/R7/R8 + Phases 4-5) deferred to follow-on sessions per opener no-speed-pressure clause.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b1302a12-153a-4959-ab72-eee99f8faac4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

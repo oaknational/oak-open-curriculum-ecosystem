@@ -3474,3 +3474,66 @@ Closing the graduation-candidates-drain session. Full closure summary at event `
 **Transient register inconsistency at session-open**: a stale entry for Smouldering Crackling Pyre's `059291ea` lingered in active-claims.json `.claims` at first read despite being already archived in closed-claims (closed 14:15Z). Self-cleared between reads. Single observation; not a graduation candidate; recorded in napkin in case the pattern recurs.
 
 Claim `1ccfa79c-5bb9-49f9-811f-3fbf00587638` closing cleanly at this session-close. ADR-173 ratification is now unblocked (D-4a closed); subsequent graph work can proceed when owner ratifies ADR-173.
+
+---
+
+## 2026-05-11T14:15:00Z — `Soaring Darting Kite` / `claude-code` / `claude-opus-4-7-1m` / `01db95` — R1.b session open; claim `5d…` opened; opener artefact landed
+
+Opening R1.b session per opener artefact saved at `.agent/plans/agentic-engineering-enhancements/current/2026-05-12-collaboration-protocol-hardening-r1b-opener.md`. Thread: `agentic-engineering-enhancements`. Branch `feat/mcp-graph-support-foundation` at HEAD `6f2f2b4d` (R1.a `f7560339` confirmed as ancestor).
+
+Sidebar with Fronded Flowering Seed resolved cleanly: their reply at `544bf9bf` confirmed `comms-events/**` is read-only for their drain, claim was narrowed/closed in 10 minutes, no owner mediation required. Inter-agent coordination via comms-events worked as the doctrine predicts.
+
+**Pre-flight fingerprint scan**: three families confirmed unchanged from R1.a — narrative 312, lifecycle 5 (all `fe4acc7e-*` from 2026-04-29), directed 2 (`3882213c-*`, `b0353884-*`). No new shape since `f7560339`.
+
+**Claim opened** with explicit file/glob scope (NOT broad `comms-events/**`): collaboration-state source + tests, practice-substrate source + tests, the 7 specific event files being moved, the 2 new sibling directories, the canonical schema, active-claims, shared-comms-log, primary-agent-tooling-enhancements plan, and this opener artefact.
+
+**R1.b discipline carried in**:
+
+- Single atomic test-first commit (test + product + 7 file moves + field renames atomic).
+- Stage by explicit pathspec; manual post-hook eyeball per PDR-059 + ADR-177 amendment (classification gates not yet implemented; Class A/B/C discrimination by hand at the post-hook-pre-commit window).
+- No speed pressure — R1.b consumes this session; tail items (R2/R3/R4b/R4-new/R5/R7/R8 + Phases 4-5) deferred to follow-on sessions.
+- Reviewer dispatch matrix: code/test/type/docs-adr per the opener.
+
+**PDR-059 internalised**: any post-hook absorption during R1.b commit aborts and captures as comms-event + napkin entry (third-instance trigger for classification-gate implementation plan). The two foreign-staged events Fronded named (`2e1a886f` — sidebar to Fronded; `c09300be` — unfamiliar to me, will inspect) are pre-existing in working tree; my staging will be explicit pathspec for R1.b's files only.
+
+Beginning Phase 1: ground in existing collaboration-state and practice-substrate source surface.
+
+---
+
+## 2026-05-11T17:10:00Z — `Soaring Darting Kite` / `claude-code` / `claude-opus-4-7-1m` / `01db95` — Session close: R1.b landed atomically at `b529fa6e`
+
+Closing R1.b session. Claim `b1302a12` closed in `closed-claims.archive.json` with explicit closure kind.
+
+**R1.b atomic commit `b529fa6e`** (`feat(collaboration-state): project canonical comms-event schema into three kinds`): 24 files changed (990+/115-). Single test-first commit per `tdd-as-design.md`. Touched:
+
+- 8 collaboration-state source files (types, state-parsers, state-io, comms, cli-comms-commands, cli-json-commands, index, json) — replaced flat `CommsEvent` with three readonly interfaces and three single-schema parsers; `createCommsEvent` renamed to `createNarrativeCommsEvent`; `readCommsEvents` split into three kind-named readers via generic `readEventDirectory<TEvent>`; `renderSharedCommsLog` takes three explicit arrays and merges chronologically across kinds (deterministic lexical event_id tie-break per `code-expert` review).
+- 5 practice-substrate source files — new `live-comms-events.ts` (extracted to keep `live-json.ts` under 250 lines) walks all three canonical directories via `readKindDirectory<TEvent>` generic; `collaborationAjv` now loads `comms-event.schema.json`; retired-path scan excludes the two new directories and treats their paths as historical.
+- 3 test files — new `state-parsers.unit.test.ts` (14 tests; test-first; strengthened `.toThrow()` patterns per `test-expert` review); new `comms-render.unit.test.ts` (3 tests; extracted from `collaboration-state.unit.test.ts` after the consumer-test refactor pushed the parent over 700-line cap; rendering and merge-ordering split into separate tests per `test-expert` review); `collaboration-state.unit.test.ts` updated (createCommsEvent → createNarrativeCommsEvent, commsSendDefaults now includes lifecycle-dir + messages-dir keys).
+- 7 event file moves — 5 lifecycle (`fe4acc7e-*`) into `comms-lifecycle/`; 2 directed (`3882213c-*`, `b0353884-*`) into `comms-messages/` with `timestamp` → `created_at` field rename.
+- 1 new opener artefact at `.agent/plans/agentic-engineering-enhancements/current/2026-05-12-collaboration-protocol-hardening-r1b-opener.md`.
+
+**Reviewer dispatch (parallel)**: `code-expert` APPROVED WITH SUGGESTIONS (3 actionable, 2 in-scope fixed); `test-expert` IMPROVEMENTS RECOMMENDED (2 in-scope fixed, 1 architectural deferral noted); `type-expert` SAFE (no critical issues; pre-existing `parseClaim` spread flagged for future cleanup, not R1.b scope); `docs-adr-expert` COMPLIANT (no required updates; schema is the permanent doc layer; naming consistent).
+
+**PDR-059 Class C post-hook eyeball — PASS**: queued bundle matched committed bundle exactly (24 files). No husky-chain absorption of `pending-graduations.md`, `repo-continuity.md`, `graph-mvp-arc.plan.md`, or the two foreign sidebar comms events. The pre-hook fingerprint-divergence cure and post-hook classification gate are both still implementation-deferred per ADR-177 amendment; today's discipline (stage by explicit pathspec + eyeball) held this commit clean.
+
+**Inter-agent coordination evidence**: opened with sidebar `2e1a886f` to Fronded Flowering Seed (claim `1ccfa79c` was overlapping `comms-events/**`). Fronded replied at `544bf9bf` within 10 minutes, confirmed read-only intent and narrowed their claim proactively. No owner mediation required. The "inter-agent comms is a first-class option" pattern (memory) worked end-to-end.
+
+**Closed re-decisions preserved**: three families (narrative 312 / lifecycle 5 / directed 2); Shape A′ (single canonical schema + three sibling directories); architectural-excellence-only options.
+
+**Pre-existing critical fitness signals** unchanged by R1.b: `napkin.md` prose-line-width 158; `pending-graduations.md` 2677 lines / 168744 chars / 669-line prose width; `repo-continuity.md` 1071 lines / 64647 chars; `practice-bootstrap.md` 41035 chars. All Out of Scope per the opener.
+
+**Tail items DEFERRED to follow-on sessions** per opener no-speed-pressure clause:
+
+- R2: B-10 shell-mangling investigation
+- R3: Identity caching for wordlist drift
+- R4b: Commit-skill mandates pathspec (doc amendment)
+- R4-new: Native git pre-commit hook (PDR-059 host implementation)
+- R5: Path β migration (5 sub-steps)
+- R7: B9 follow-on plan stub
+- R8: Pattern capture for claim-overlap-revert-and-handoff
+- Phase 4: Four-probe validation matrix
+- Phase 5: Arc closure
+
+Working tree at session-close: 3 modified (graph-mvp-arc.plan.md from Fronded — not absorbed; active-claims.json — claim closed; shared-comms-log.md — this narrative); 2 untracked sidebar events (`2e1a886f`, `c09300be` — the B-10 orphan duplicate). Leaving these for separate session-continuity commit per ADR + plan ephemeral boundary.
+
+Next session re-launches the tail per the opener at `.agent/plans/agentic-engineering-enhancements/current/2026-05-12-collaboration-protocol-hardening-r1b-opener.md` (tail-only mode; R1.b is fixed).
