@@ -729,14 +729,15 @@ thread record.
 | **D-1** | **AI-client adoption tracking owner.** AI-client adoption is currently un-tracked anywhere in the repo; the executive summary names it as a load-bearing downstream dependency for teacher value. Tracking owner needs naming. | Before any MVP-arc gate ships |
 | **D-2** | **Per-unit misconception variant (`oak-misconceptions-subgraph-for-unit`)**. Default is skip per slice 3a plan WS2 cycle 1; gate at owner direction or T0 check. | At slice 3a opening (current → active) |
 | **D-3** | **`oak-misconceptions-substrate-migration.plan.md` promotion trigger** — currently implicit ("when Inc.3 ships"); owner confirmation needed to convert implication into sequenced commitment vs admit-not-doing per the no-deferral doctrine. | Before gate-3a ships |
-| **D-4** | **Topology BLOCKERs from 2026-05-07 architecture-expert-betty review** — `graph-stack.plan.md` WS4 sequence (`ws4-skos-extractor` before `ws4-graph-corpus-sdk-scaffold` leaks Oak-specific extraction into substrate) + `practice-graph` workspace tier placement. Must land before graph-stack ACTIVE / ADR-173 ratification. | **Next graph session** — these block Inc.1 implementation |
+| **D-4** | **Topology BLOCKERs from 2026-05-07 architecture-expert-betty review** — Resolved 2026-05-11. Both BLOCKERs (WS4 sequencing leak; `practice-graph` tier placement) verified CLOSED in `graph-stack.plan.md` (last-updated 2026-05-10) and ADR-173: WS4.1 `graph-corpus-sdk-scaffold` is sequenced first with Oak extraction confined inside the SDK boundary (graph-stack.plan.md:77-88; ADR-173:89); `practice-graph` is placed under `agent-graphs/` outside substrate package tiers (graph-stack.plan.md:215, 220-225, Design Principle 6 line 172; ADR-173:93-95). Reviewer attestations: `architecture-expert-betty` (both CLOSED, 2026-05-11) and `assumptions-expert` (verified). **Sub-task D-4a (open)**: ADR-041 needs an amendment to add `agent-graphs/` (and regularise the already-shipped `agent-tools/`) as top-level workspace tiers in the dependency-direction matrix before ADR-173 can move from Proposed to Accepted — surfaced by `assumptions-expert` 2026-05-11; an ADR-041 amendment (no new ADR number) is the indicated shape. | D-4 closed; D-4a routes to ADR-041 amendment before ADR-173 ratification |
 | **D-5** | **Phase 4 FINDINGS** deferred for execution-prep absorption (slice 2 adapter timing; slice 3a topic-context wording; slice 3a budget/fixture concretisation; (former) slice-3b implementation-audit test shape). | Slice-by-slice at promotion to active |
 | **D-6** | **gate-cross-corpus-1 design-stability evaluator event** — `architecture-expert-betty` is named as the evaluator at Inc.3 design close; "design close" needs operational definition (a specific Inc.3 todo, or a separate graph-stack lifecycle event). | At Inc.3 design phase |
 | **D-7** | **`future-compositions-exploration` decision deliverable** — bounded to "within one consolidation cycle of gate-cross-corpus-1 close"; could harden to a concrete forcing function. | At gate-cross-corpus-1 close |
 
-D-1 (AI-client adoption tracking) and D-4 (topology BLOCKERs) are the
-most urgent; they affect the entire teacher-value chain (D-1) and
-block the next executable graph work (D-4).
+D-1 (AI-client adoption tracking) is the most urgent open decision; it
+affects the entire teacher-value chain. D-4 is resolved; its open sub-task
+D-4a (ADR-041 amendment) routes to a dedicated ADR-amendment session and
+blocks ADR-173 ratification rather than Inc.1 implementation.
 
 ## Non-Goals (YAGNI)
 
