@@ -241,8 +241,8 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Burnished Crackling Pyre / `claude-code` / opus-4-7-1m / `e517c9` / 2026-05-11 |
-| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Fragrant Regrowing Root / `codex` / GPT-5 / `019e12` / 2026-05-10 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11; Burnished Crackling Pyre / `claude-code` / opus-4-7-1m / `e517c9` / 2026-05-11 |
+| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11; Fragrant Regrowing Root / `codex` / GPT-5 / `019e12` / 2026-05-10 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / `codex` / 2026-04-28 |
@@ -268,7 +268,42 @@ This branch also depends on the Practice/tooling substrate work from main in
 
 ## Current Session Focus
 
-**Latest focus (2026-05-10 — Tempestuous Darting Zephyr,
+**Latest focus (2026-05-11 — Blooming Growing Thicket / `claude-code` /
+opus-4-7-1m / `756c60`, graph MVP arc reshape)**: reshape the graph MVP
+arc per owner direction. Four-dimension value model (substrate /
+shape-understanding / surfacing-exploration / partnership-or-
+combinatorial) replaces the per-slice "user value triplet" framing;
+teacher value named as downstream of AI-client adoption. Slice 3b
+moves OUT of MVP arc; new
+[`graph-combinatorial-arc.plan.md`](../../plans/graph-combinatorial-arc.plan.md)
+authored to `current/` owns substrate-layer cross-corpus composition;
+slice-3b executable plan migrated `current/` → `future/` with spine
+repointed. gate-1 → gate-3a strict gate relaxed to PARALLEL-SAFE.
+graph-stack Inc.3 carries downstream-consumer cross-ref to combinatorial
+arc. Five commits: `4881e767` (reshape, 22 files), `fd8c9cee` (comms-log
+landing), `ac765955` (B-01 bug record in agent-tooling enhancements),
+`9547bb69` (next-session openers, Team-of-Agents Execution section,
+architectural-excellence commitment, and skillListingBudgetFraction
+bump). Plan-time + post-edit reviewer findings (assumptions-expert,
+architecture-expert-betty, docs-adr-expert) absorbed across reviews.
+**Discoverable next-session entry points authored**:
+[`2026-05-11-graph-execution-prep-opener.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-11-graph-execution-prep-opener.md)
+(four definite steps before graph execution) and
+[`2026-05-11-collaboration-protocol-hardening-opener.md`](../../plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-opener.md)
+(separate session for the real ceiling on safe N-agent work).
+**Bug B-01** recorded against `pnpm agent-tools:collaboration-state --
+comms send` (`--now <iso>` does not populate `created_at`); test-first
+discipline named in the parent enhancements plan's new `## Bugs`
+section. **Surprises**: (a) my first parallelisability instinct
+collapsed slice 2 + 3a into substrate increments; owner clarified
+substrate-building IS the value, slices stay surfaced — reframe was
+value-articulation, not structural; (b) reviewer divergence on
+folding slice 3b into cross-source-journeys vs keeping
+combinatorial-arc separate resolved via architectural-layering
+argument (Betty); (c) `comms send` CLI bug B-01 surfaced and worked
+around via direct shared-comms-log append per bootstrap fast-path.
+
+**Prior focus (2026-05-10 — Tempestuous Darting Zephyr,
 .agent/commands retirement)**: PDR-051 / ADR-125 §2026-05-09
 retirement loop closed end-to-end on `feat/mcp-graph-support-foundation`.
 Five commits landed (`a098d709` sweep-bundled, `b92a99e6` inline+delete,
@@ -400,7 +435,25 @@ evidence.
 
 ## Next Safe Step
 
-**Status update (2026-05-10 — Fragrant Regrowing Root close)**:
+**Status update (2026-05-11 — Blooming Growing Thicket close)**: next
+graph session entry point is
+[`2026-05-11-graph-execution-prep-opener.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-11-graph-execution-prep-opener.md)
+— four definite steps in order (D-4 topology BLOCKERs; Inc.1
+decomposition; EEF WS restructure; collaboration-protocol Workstreams
+2–5). Steps 1, 2, 3 are parallel-safe planning sessions and can be
+fire-and-forget to parallel agents. Step 4 is test-first
+implementation (B-01 included). A separate dedicated session is
+opened for collaboration-protocol hardening — see
+[`2026-05-11-collaboration-protocol-hardening-opener.md`](../../plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-opener.md).
+Open-decisions D-1 through D-7 are tracked in
+[`graph-mvp-arc.plan.md`](../../plans/graph-mvp-arc.plan.md) §
+Team-of-Agents Execution; D-1 (AI-client adoption tracking owner)
+and D-4 (topology BLOCKERs) are the most urgent. Architectural-
+excellence commitment carried into both openers explicitly — we
+only ever choose long-term architectural excellence; we never
+compromise for the sake of expediency.
+
+**Prior status (2026-05-10 — Fragrant Regrowing Root close)**:
 commit the source-authority/handoff bundle, then resume the branch-primary
 graph lane at graph-stack Inc.1's Oak Ontology Threads proof in
 `graph-corpus-sdk`. Do not start NC taxonomy work. Do not start EEF adapter
@@ -551,7 +604,94 @@ Visible owner-appetite items, not blockers for the current branch state:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-11 Burnished Crackling Pyre, claude-code,
+**Status (2026-05-11 Blooming Growing Thicket, claude-code, opus-4-7-1m,
+`756c60`, graph MVP arc reshape — /jc-consolidate-docs run)**:
+`completed this handoff — proportional thread-scoped pass`.
+
+Pattern extraction (step 5): two pattern candidates routed to
+pending-graduations register with `trigger: second-instance`:
+(a) "value-articulation can be wrong while structural shape is right"
+(target `candidate-pattern OR amend:PDR-026 OR new-PDR`);
+(b) "downstream-consumer cross-reference preserves forcing function
+when scope splits between plans" (target `candidate-pattern OR new-rule`).
+Single-instance this session; pending until second observation.
+
+ADR/PDR scan (step 7a): three candidates considered. (a) Architectural-
+excellence reinforcement applied at opener level — already aligned with
+PDR-044 and `principles.md` §Architectural Excellence Over Expediency,
+no Core amendment needed. (b) Collaboration-protocol-bounds-MVP-arc-
+parallelism observation — already routed via the collaboration-hardening
+opener, that session will surface PDR candidates from its friction
+audit. (c) Bug-section-with-test-first-discipline — operational
+discipline named at the receiving plan surface; PDR-shape would require
+≥2 plans needing the pattern (no second instance yet).
+
+Thread-register freshness (7c): all 9 active threads have
+`last_session` within 14 days; orphan file
+`threads/pr-90-build-fix-landing.next-session.md` persists (same
+orphan Burnished Crackling Pyre flagged 2026-05-11 — owner-direction
+candidate to retire or restore). No duplicate identity rows, no
+missing required fields.
+
+Bidirectional rule/plan citations (7d): named pair
+(`dont-break-build-without-fix-plan` ↔ `gate-recovery-cadence.plan.md`)
+not touched this session; no validation needed.
+
+Collaboration state (7e): one fresh foreign claim (`Deciduous Twining
+Dew` 718035aa, executing the collaboration-protocol-hardening opener
+Phase 0 ground-state) — not mine, not blocking. My own claim closed
+explicitly to archive earlier this session. 17 stale `abandoned`
+commit-queue entries persist (known from prior consolidations; not
+auto-cleared per consolidate-docs §7e #2).
+
+Practice exchange (step 10): `.agent/practice-core/incoming/` empty;
+`.agent/practice-context/outgoing/` empty. Nothing to integrate or
+clear.
+
+Practice Core upstream refinement (step 8): nothing qualifies. Session
+substance is graph-plan reshape + opener authoring; no Core
+contradiction, extension, refinement, or supersession surfaced.
+
+Fitness (step 9): 1 critical + 3 hard + 14 soft, ALL pre-existing.
+napkin.md critical (585 lines / 33,003 chars). Constraint on
+non-rotation this pass: a full distillation rotation would touch
+napkin entries outside this session's substance scope (older entries
+authored across multiple prior sessions including the carried-forward
+owner-direction-needed posture from Quiet Lurking Mask 2026-05-10);
+treating those as in-scope here would be a substantive distillation
+without the owner-direction the prior sessions named as required.
+Falsifiability: a future agent can check that this consolidation
+touched only napkin entries authored 2026-05-11 (my own session's
+additions, which are correctly preserved as pending-graduations
+candidates rather than distilled). Routing: napkin distillation
+remains owner-direction-gated; the substantive learning from this
+session is already routed to pending-graduations.
+
+repo-continuity.md hard (726 lines / 44,162 chars) — known
+remediation lane already named in § Next Safe Step (2026-05-10 Sylvan
+Sprouting Grove close). pending-graduations.md hard chars (156,067 /
+150,000) — within architecture's lifecycle-queue-depth calibration,
+drains via graduation passes. practice-bootstrap.md hard chars
+(41,035 / 40,500) — owner-decision-gated edit per Core care-and-consult
+rule.
+
+Loop-Health post-mortem on napkin critical:
+
+1. Earlier zones did fire — Burnished Crackling Pyre 2026-05-11 and
+   Quiet Lurking Mask 2026-05-10 both observed critical state and
+   flagged owner-direction need. Not silent; carried-forward owner
+   gate.
+2. Limits are calibrated for ≤2-session capture rotation; napkin
+   accumulates across sessions when distillation is owner-gated.
+   Limit shape is correct; the gating is the source of pressure.
+3. The capture-vs-distillation gating IS the missing graduation
+   path — when the napkin grows past critical, the standard cure is
+   graduation to distilled.md / patterns / PDR. Owner-direction on
+   how to drain accumulated entries is what unblocks the loop.
+   Currently routed to thread next-session record as a standing
+   open item.
+
+**Prior status (2026-05-11 Burnished Crackling Pyre, claude-code,
 opus-4-7-1m, `e517c9`, Claude skill-listing-budget bump)**: `completed
 this handoff — proportional pass given small session substrate. ADR/PDR
 scan (7a): the elevated-skill-floor observation is PDR-shaped (Practice

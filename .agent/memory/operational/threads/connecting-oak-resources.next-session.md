@@ -271,6 +271,7 @@ promotion.)
 | `Fronded Bending Blossom` | `cursor` | `Composer` | `60775a` | `owner-sequencing-graph-mvp-next-topology-parked` | 2026-05-09 | 2026-05-09 |
 | `Foamy Navigating Hull` | `codex` | `GPT-5` | `019e12` | `graph-mvp-plan-amendment-and-first-implementation-handoff` | 2026-05-10 | 2026-05-10 |
 | `Fragrant Regrowing Root` | `codex` | `GPT-5` | `019e12` | `source-authority-clarification-and-handoff` | 2026-05-10 | 2026-05-10 |
+| `Blooming Growing Thicket` | `claude-code` | `claude-opus-4-7-1m` | `756c60` | `mvp-arc-reshape-author-and-execution-prep-opener-author` | 2026-05-11 | 2026-05-11 |
 
 ## Plan Locations
 

@@ -168,6 +168,40 @@ the queue churns.
 
 ## Entries
 
++ 2026-05-11; **Value-articulation can be wrong while structural shape
+  is right** (Blooming Growing Thicket 2026-05-11, observed during
+  graph MVP arc reshape).
+  `[captured: 2026-05-11 | source: napkin-2026-05-11 | target: candidate-pattern:.agent/memory/active/patterns/ OR amend:PDR-026 OR new-PDR | trigger: second-instance | size: S | status: pending]`
+  Pre-reshape, the MVP arc's 4-slice structure was correct; the wrong
+  thing was the per-slice "user value triplet" framing (teacher-asks-X)
+  that was retrofitted onto substrate-and-shape-learning slices. My
+  first instinct was to collapse slices 2 + 3a into substrate
+  increments; owner clarified substrate-building IS the value. The
+  reframe was value-articulation, not structural. Pattern shape:
+  *"when a plan's structure resists trimming, check whether the
+  value-articulation layer is the actual defect before reshaping the
+  work."* Graduation-target: candidate pattern note (with second
+  instance) or PDR-026 amendment naming this as a planning anti-
+  pattern. Trigger: second instance observed.
+
++ 2026-05-11; **Downstream-consumer cross-reference preserves
+  forcing-function when scope splits between plans** (Blooming Growing
+  Thicket 2026-05-11, observed during graph-stack Inc.3 cross-ref to
+  combinatorial-arc plan).
+  `[captured: 2026-05-11 | source: napkin-2026-05-11 | target: candidate-pattern:.agent/memory/active/patterns/ OR new-rule | trigger: second-instance OR owner-direction | size: S | status: pending]`
+  When a downstream consumer (slice 3b) moves out of an upstream plan
+  (MVP arc), the upstream-producing artefact (graph-stack Inc.3) loses
+  its named forcing function unless the new consumer-plan's pointer is
+  installed reciprocally on the producer. Without it, the producer
+  becomes "design pressure-less work" and risks indefinite deferral.
+  Cure observed: `architecture-expert-betty` Condition 2 forced the
+  Inc.3 row to carry `graph-combinatorial-arc.plan.md` as the named
+  downstream consumer. Pattern shape: *"when splitting scope across
+  plans, install the consumer-pointer reciprocally on the producer or
+  lose the forcing function."* Graduation-target: candidate pattern
+  note (with second instance) or new rule. Trigger: second instance OR
+  owner direction.
+
 + 2026-05-11; **Practice-adopting repos exhibit an elevated skill-
   listing budget floor by construction** (Burnished Crackling Pyre
   2026-05-11, observed during Claude `skillListingBudgetFraction` bump
