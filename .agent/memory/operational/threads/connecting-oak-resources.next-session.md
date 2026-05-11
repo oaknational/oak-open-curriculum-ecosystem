@@ -1,22 +1,39 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
-**Next anticipated work**: **First** — land the pending 12-file
-markdown-only stage (ADR-173 reviewer absorption, ADR-179 extraction,
-verdict-not-menu rule) that was blocked by serial peer-file
-pre-commit gate failures in the Flamebright Burning Lava session
-(see broadcast event `47c5a7db` and napkin evidence). Stage remains
-intact by explicit pathspec; commit message drafted in the napkin
-entry. The commit will land cleanly once the working-tree
-coordination has settled (Galactic's B-10 commits, Wooded's sidebar
-docs gate-clean, or the cli-comms-inbox / B-02 / B-03 architectural
-work lands and breaks the stale-gate-sweep race). **Then** — owner
-final-approval of ADR-173 (Proposed → Accepted) and ADR-179
-(Proposed → Accepted); `graph-stack.plan.md` lifecycle promotion
-CURRENT → ACTIVE; Inc.1a WS1.1 (`packages/core/graph-core` scaffold)
-opens for test-first execution. Optional `architecture-expert-barney`
-run against the plan body to close §Promotion Trigger Gate 4.
+**Next anticipated work**: Inc.1a WS1.1 — scaffold
+`packages/core/graph-core` per the refined WS1.1 row in
+`graph-stack.plan.md` (now lifecycle `active`). Acceptance:
+package.json with pre-declared sub-path exports (`./term`,
+`./dataset`, `./jsonld`, `./canon`, `./vocab`) pointing to stub
+`src/<module>/index.ts` files (`export {};`), index.ts also empty
+barrel, eslint config with `coreBoundaryRules` on `src/**/*.ts`,
+tsup + vitest configs as 3-line re-exports of the repo-base helpers,
+tsconfig{,.build,.lint}.json mirroring `packages/core/result/`,
+README citing ADR-173/179 by number only. **Zero tests in WS1.1**
+(test-expert verdict: atomic-landing invariant — no test without
+product code; vitest wiring is verified by WS1.2's first real
+test). 'Tree green' = `pnpm install` resolves; type-check/lint/build
+pass; repo-wide knip/depcruise/format-check/markdownlint show no new
+failures. One commit, full commit-queue protocol from active-claims
+read forward.
 
-**Last refreshed**: 2026-05-11 (Flamebright Burning Lava /
+**Last refreshed**: 2026-05-11 (Sparking Charring Ash /
+`claude-code` / `claude-opus-4-7-1m` / `caf5e1` — landed the prior
+session's orphan markdown bundle (`dbe7321c`) plus ADR ratification +
+plan promotion + WS1.1 refinement (`5ec5004d`). ADR-173 + ADR-179
+Status: Proposed → Accepted 2026-05-11. `graph-stack.plan.md`
+promoted `current/` → `active/`. WS0 marked completed; WS1.1 row
+refined per holistic review by Fred (ADR-179 enforcement language
+correction), type-expert (sub-path exports pre-declaration), and
+test-expert (zero tests in WS1.1). architecture-expert-barney
+returned PROMOTION-READY verdict on the plan body before
+ratification. Session also surfaced two doctrine corrections —
+commit-queue-skip mistake (skipped pre-stage active-claims read and
+queue enqueue before first `git add`) and knowledge-preservation-
+over-mechanical-fitness-warnings (owner-stated repo doctrine,
+captured to feedback memory).)
+
+**Prior refresh**: 2026-05-11 (Flamebright Burning Lava /
 `claude-code` / `claude-opus-4-7-1m` / `b1202e` — question-
 assumptions pass on the WS0 ADR brief. Three assumption-breaks
 identified and verdicted (ADR-173 already exists; §Genuine Open
@@ -429,6 +446,7 @@ promotion.)
 | `Mistbound Watching Lantern` | `claude-code` | `claude-opus-4-7-1m` | `8fdb8b` | `graph-mvp-arc-review-absorption-and-doctrine-ratification` | 2026-05-11 | 2026-05-11 |
 | `Shaded Ripening Copse` | `claude-code` | `claude-opus-4-7-1m` | `c13bdf` | `graph-stack-and-combinatorial-arc-schedule-not-trigger-sweep` | 2026-05-11 | 2026-05-11 |
 | `Flamebright Burning Lava` | `claude-code` | `claude-opus-4-7-1m` | `b1202e` | `question-assumptions-adr-173-promotion-and-verdict-not-menu-nudges` | 2026-05-11 | 2026-05-11 |
+| `Sparking Charring Ash` | `claude-code` | `claude-opus-4-7-1m` | `caf5e1` | `orphan-bundle-land-and-adr-173-179-ratification-plan-promotion-ws1-1-refinement` | 2026-05-11 | 2026-05-11 |
 
 ## Plan Locations
 

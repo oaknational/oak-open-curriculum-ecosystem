@@ -17447,6 +17447,88 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "b98f9871-37e6-490a-b7f3-5cf9f74baffc",
+      "agent_id": {
+        "agent_name": "Sparking Charring Ash",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "caf5e1"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-11T21:01:21Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Land orphan markdown-only bundle (ADR-173 reviewer absorption + ADR-179 + verdict-not-menu rule + graph-stack plan updates + session napkin)",
+      "archived_at": "2026-05-11",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-11T21:04:35Z",
+        "closed_by": {
+          "agent_name": "Sparking Charring Ash",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "caf5e1"
+        },
+        "summary": "Landed dbe7321c — orphan markdown bundle + session napkin; proceeding to ADR ratification + plan promotion",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b98f9871-37e6-490a-b7f3-5cf9f74baffc",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "bfb5b816-fd51-47c0-b436-dd6addb322fe",
+      "agent_id": {
+        "agent_name": "Sparking Charring Ash",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "caf5e1"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-11T21:06:48Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Ratify ADR-173 + ADR-179 Accepted; promote graph-stack.plan.md current → active; refine WS1.1 row per Fred/type-expert/test-expert findings",
+      "archived_at": "2026-05-11",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-11T21:10:21Z",
+        "closed_by": {
+          "agent_name": "Sparking Charring Ash",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "caf5e1"
+        },
+        "summary": "Landed 5ec5004d — ADR-173/179 Accepted; graph-stack.plan.md promoted current→active; WS1.1 refined",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "bfb5b816-fd51-47c0-b436-dd6addb322fe",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
