@@ -9,6 +9,26 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-11 — Dusky Masking Cloak / `claude-code` /
+opus-4-7-1m / `c5ff7f`, graph execution-prep steps 1+2+3 landed)**:
+ran `2026-05-11-graph-execution-prep-opener.md` steps 1 (D-4 BLOCKER
+verification), 2 (graph-stack Inc.1 sub-increment decomposition), and
+3 (EEF plan 9-WS overlay). Three atomic commits: `66d4f0fb` (D-4
+closure entry — both 2026-05-07 BLOCKERs verified closed by 2026-05-10
+graph-stack edit; sub-task D-4a routed: ADR-041 needs amendment to add
+`agent-graphs/` + regularise `agent-tools/` before ADR-173
+ratification); `579cde34` (Inc.1 split into 1a-substrate / 1b-Threads-
+adapter / 1c-query-proof / closure; absorbed code-expert's WS2.1+WS3.1
+root-file-conflict finding); `85bcbc41` (EEF 9 capability WS + 1
+coordination WS overlay; cross_cuts semantics clarified). Reviewer
+dispatch followed opener prescription throughout — `architecture-
+expert-betty`, `assumptions-expert`, `code-expert`, `docs-adr-expert`,
+each on its own scope. Full pre-commit gates green on every commit
+(format, markdownlint, knip, depcruise, type-check, lint, test).
+**Next safe step**: opener step 4 — primary-agent-tooling-enhancements
+WS 2–5 implementation + B-01 fix (test-first, atomic TDD pairs). Not
+this session.
+
 **Session close (2026-05-11 — Burnished Crackling Pyre / `claude-code` /
 opus-4-7-1m / `e517c9`, Claude skill-listing-budget bump)**: lightweight
 session. Owner directed bump of Claude's `skillListingBudgetFraction`
@@ -242,7 +262,7 @@ each thread record; this table is the repo-level index.
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
 | `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Deciduous Twining Dew / `claude-code` / opus-4-7-1m / `a12c90` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11; Burnished Crackling Pyre / `claude-code` / opus-4-7-1m / `e517c9` / 2026-05-11 |
-| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11; Fragrant Regrowing Root / `codex` / GPT-5 / `019e12` / 2026-05-10 |
+| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Dusky Masking Cloak / `claude-code` / opus-4-7-1m / `c5ff7f` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11; Fragrant Regrowing Root / `codex` / GPT-5 / `019e12` / 2026-05-10 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / `codex` / 2026-04-28 |

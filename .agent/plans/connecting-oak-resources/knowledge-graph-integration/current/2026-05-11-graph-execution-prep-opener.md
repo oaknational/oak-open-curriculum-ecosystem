@@ -10,14 +10,20 @@ isProject: false
 todos:
   - id: step-1-topology-blockers
     content: "Resolve D-4: absorb the two 2026-05-07 architecture-expert-betty topology BLOCKERs into graph-stack.plan.md before ACTIVE promotion / ADR-173 ratification. Single scoped session."
-    status: pending
+    status: completed
+    completed: 2026-05-11
+    landed_in: "66d4f0fb — D-4 closed; both BLOCKERs verified closed in-place by 2026-05-10 graph-stack edit via architecture-expert-betty + assumptions-expert; sub-task D-4a routed (ADR-041 amendment for agent-graphs/ + agent-tools/)"
   - id: step-2-inc-1-decompose
     content: "Decompose graph-stack Inc.1 (Oak Ontology Threads foundation) into file-scope-non-overlapping sub-streams so two agents can work it in parallel. Single planning session, no implementation."
-    status: pending
+    status: completed
+    completed: 2026-05-11
+    landed_in: "579cde34 — Inc.1 split into 1a/1b/1c/closure with sub_increment frontmatter tags + parallel-safety annotations; code-expert surfaced WS2.1+WS3.1 root-file conflict, absorbed"
     depends_on: [step-1-topology-blockers]
   - id: step-3-eef-ws-restructure
     content: "Restructure the EEF plan's 20 flat todos into workstream groupings (corpus loading, recommend, explain, compare, prompt-A, prompt-B, freshness, telemetry, credits) to expose intra-slice parallelism. Single planning session."
-    status: pending
+    status: completed
+    completed: 2026-05-11
+    landed_in: "85bcbc41 — 9 capability WS + 1 coordination WS overlay; cross_cuts semantics clarified; docs-adr-expert + assumptions-expert CLOSED"
   - id: step-4-collab-workstreams
     content: "Land Workstreams 2–5 of primary-agent-tooling-enhancements.plan.md (collaboration read APIs, comms render resilience, commit-queue safety, identity/build isolation). This is implementation, not planning, and must follow test-first discipline. B-01 (comms send created_at) is included in this scope."
     status: pending

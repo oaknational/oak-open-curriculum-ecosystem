@@ -160,13 +160,77 @@ the queue churns.
 
 | Status | Count | Notes |
 | --- | --- | --- |
-| due | 0 | all drained 2026-05-10 — fabricated-gate vocabulary retired |
+| due | 2 | hook-chain re-staging (2026-05-10); ADR-041 workspace-tier amendment (2026-05-11, blocks ADR-173 ratification) |
 | partially-graduated | 0 | both completed 2026-05-10 |
 | quarantined | 0 | apply-don't-ask + stop-inventing-optionality reformulations graduated 2026-05-10 to PDR-057 + PDR-058 (Quiet Lurking Mask session) |
-| pending | ~82 | second-instance or owner-direction gated |
-| **total** | **~82** | down from ~93 (10 + 2 graduated entries retained inline as audit trail; archive snapshot scheduled this session to clear HARD char zone) |
+| pending | ~84 | second-instance or owner-direction gated (added 2 from 2026-05-11 graph execution-prep: opener-vs-substrate divergence; different-lens reviewer divergence) |
+| **total** | **~86** | up from ~82 by 4 entries during 2026-05-11 graph execution-prep work |
 
 ## Entries
+
++ 2026-05-11; **ADR-041 amendment needed: top-level workspace tiers**
+  (Dusky Masking Cloak 2026-05-11, surfaced by `assumptions-expert`
+  during graph execution-prep step 1 D-4 verification).
+  `[captured: 2026-05-11 | source: thread:connecting-oak-resources, comment:assumptions-expert-review-on-ADR-041 | target: amend:ADR-041 | trigger: blocks:ADR-173-ratification | size: M | status: due]`
+  ADR-041 (workspace structure) enumerates exactly five tiers: `apps/`,
+  `packages/core/`, `packages/libs/`, `packages/sdks/`, `packages/design/`
+  with an importer/importee matrix. The repo has already shipped a
+  sixth top-level tier (`agent-tools/`, referenced by ADR-165 / ADR-168 /
+  ADR-178 without amending ADR-041 — a latent gap). ADR-173 adds a
+  seventh top-level tier (`agent-graphs/`) for `agent-graphs/practice-graph/`.
+  Before ADR-173 can move from Proposed to Accepted, ADR-041 must be
+  amended to (a) add `agent-graphs/` as a top-level tier with permitted
+  importer/importee rows in the dependency-direction matrix, and (b)
+  regularise the already-shipped `agent-tools/` tier in the same matrix
+  (closing the latent gap). ADR-041 status update: "Accepted (Revised)"
+  with a dated revision note. No new ADR number required. Recorded as
+  D-4a in `graph-mvp-arc.plan.md § Open Decisions`. Trigger: blocks ADR-173
+  ratification — must land before graph-stack moves to ACTIVE.
+
++ 2026-05-11; **Opener-vs-substrate divergence — planning artefacts
+  can be overtaken by execution before deferral closes**
+  (Dusky Masking Cloak 2026-05-11, observed during graph execution-prep
+  step 1 BLOCKER verification).
+  `[captured: 2026-05-11 | source: napkin-2026-05-11 | target: candidate-pattern:.agent/memory/active/patterns/ OR amend:start-right-quick OR amend:PDR-026 | trigger: second-instance | size: S | status: pending]`
+  The 2026-05-11 execution-prep opener prescribed "absorb topology
+  BLOCKERs into graph-stack.plan.md before ACTIVE." Verification at
+  session open showed both BLOCKERs already remediated in-place by the
+  2026-05-10 graph-stack edit — opener was authored presuming outstanding
+  work; substrate had moved past it. Pattern shape: *"when an opener
+  prescribes 'amend X to absorb Y from review Z', the first action of
+  the next session must be to verify whether Y has already been absorbed
+  into the canonical surface, then reshape the step accordingly."* The
+  "Ground state before constructing plans" feedback memory already
+  applies; this is a planning-artefact-specific instance. Cure observed
+  in this session: re-read the source-of-truth review artefact directly
+  (not via the opener summary) and dispatch reviewers to attest closure
+  — surfaced a real third concern (D-4a above) the inspection-only path
+  would have missed. Graduation-target: candidate pattern note (with
+  second instance) or amendment to start-right-quick to add an opener-
+  verification step. Trigger: second instance observed.
+
++ 2026-05-11; **Different-lens reviewers catch different gaps —
+  multi-reviewer dispatch is not redundancy** (Dusky Masking Cloak
+  2026-05-11, observed during graph execution-prep step 2 Inc.1
+  decomposition).
+  `[captured: 2026-05-11 | source: napkin-2026-05-11 | target: candidate-pattern:.agent/memory/active/patterns/ OR amend:invoke-code-experts | trigger: second-instance OR owner-direction | size: S | status: pending]`
+  Opener prescribed `architecture-expert-betty + code-expert` for Inc.1
+  decomposition review. Betty returned CLOSED with a minor follow-up
+  (WS4.2 earliest-start nuance — boundary-correctness lens). `code-expert`
+  independently surfaced a structurally distinct finding: WS2.1+WS3.1
+  scaffold pair is NOT parallel-safe (root-file write conflicts on
+  `pnpm-workspace.yaml`, root `tsconfig.json`, root `package.json`) —
+  file-conflict-surface lens. The plan body had masked this by grouping
+  WS2.1+WS3.1 alongside WS2.2+WS3.2 / WS2.3+WS3.3 in the "parallel-safe
+  pairs" list. Pattern shape: *"when reviewers operate with different
+  lenses (boundary correctness vs file-conflict surface), each surfaces
+  gaps the other does not see; treat multi-reviewer dispatch as
+  multi-lens coverage, not redundant validation."* Already partly captured
+  in 2026-05-07 napkin "two reviewers converged on the same BLOCKER" —
+  that was about convergence as deeper-signal marker; this is the
+  divergence corollary. Graduation-target: candidate pattern note or
+  amendment to `invoke-code-experts` doctrine. Trigger: second instance
+  OR owner direction.
 
 + 2026-05-11; **Value-articulation can be wrong while structural shape
   is right** (Blooming Growing Thicket 2026-05-11, observed during

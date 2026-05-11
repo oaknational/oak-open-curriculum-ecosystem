@@ -1,6 +1,28 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
-**Last refreshed**: 2026-05-11 (Blooming Growing Thicket / `claude-code` /
+**Last refreshed**: 2026-05-11 (Dusky Masking Cloak / `claude-code` /
+`claude-opus-4-7-1m` / `c5ff7f` — graph execution-prep steps 1+2+3
+landed. Step 1: D-4 topology BLOCKERs verified closed in-place by the
+2026-05-10 graph-stack edit; surfaced sub-task D-4a — ADR-041 needs
+an amendment to add `agent-graphs/` (and regularise `agent-tools/`) as
+top-level workspace tiers before ADR-173 can move from Proposed to
+Accepted. D-4 closed in graph-mvp-arc Open Decisions; D-4a routed.
+Step 2: graph-stack Inc.1 decomposed into Inc.1a (substrate scaffolding —
+WS1+WS2+WS3, three disjoint workspace trees) / Inc.1b (Threads adapter —
+WS4.1+WS4.2) / Inc.1c (query proof — WS4.3) / closure (WS0+WS5–WS8);
+code-expert surfaced and absorbed: WS2.1+WS3.1 are NOT parallel-safe
+(root-file conflicts on `pnpm-workspace.yaml`, root `tsconfig.json`,
+root `package.json`) — only WS2.2+WS3.2 and WS2.3+WS3.3 are.
+WS4.2's earliest-start refinement: depends on WS1.7 + WS4.1, not on
+all of Inc.1a. Step 3: EEF plan gains 9 capability workstreams + 1
+coordination workstream as a dispatch lens; 20 todos byte-preserved.
+Three atomic commits: `66d4f0fb`, `579cde34`, `85bcbc41`. Full pre-
+commit gates green on every commit. **Next graph session entry point
+unchanged**: opener step 4 — primary-agent-tooling-enhancements WS 2–5
+implementation + B-01 fix; test-first atomic TDD. First Inc.1
+implementation work still gated on opener step 4 closing.)
+
+**Prior refresh**: 2026-05-11 (Blooming Growing Thicket / `claude-code` /
 `claude-opus-4-7-1m` / `756c60` — MVP arc reshape, execution-prep opener,
 and collaboration hardening opener. **Next graph session entry point**:
 [`2026-05-11-graph-execution-prep-opener.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-11-graph-execution-prep-opener.md)
@@ -272,6 +294,7 @@ promotion.)
 | `Foamy Navigating Hull` | `codex` | `GPT-5` | `019e12` | `graph-mvp-plan-amendment-and-first-implementation-handoff` | 2026-05-10 | 2026-05-10 |
 | `Fragrant Regrowing Root` | `codex` | `GPT-5` | `019e12` | `source-authority-clarification-and-handoff` | 2026-05-10 | 2026-05-10 |
 | `Blooming Growing Thicket` | `claude-code` | `claude-opus-4-7-1m` | `756c60` | `mvp-arc-reshape-author-and-execution-prep-opener-author` | 2026-05-11 | 2026-05-11 |
+| `Dusky Masking Cloak` | `claude-code` | `claude-opus-4-7-1m` | `c5ff7f` | `graph-execution-prep-steps-1-2-3-author` | 2026-05-11 | 2026-05-11 |
 
 ## Plan Locations
 
