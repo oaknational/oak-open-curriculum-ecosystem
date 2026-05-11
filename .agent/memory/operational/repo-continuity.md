@@ -261,7 +261,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Fronded Flowering Seed / `claude-code` / opus-4-7-1m / `19ecd5` / 2026-05-11 (graduation-candidates-drain — both due items graduated, commit `53995192`); Soaring Darting Kite / `claude-code` / opus-4-7-1m / `01db95` / 2026-05-11 (R1.b in-flight, claim `b1302a12`); Smouldering Crackling Pyre / `claude-code` / opus-4-7-1m / `ab76ef` / 2026-05-11; Deciduous Twining Dew / `claude-code` / opus-4-7-1m / `a12c90` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Soaring Darting Kite / `claude-code` / opus-4-7-1m / `01db95` / 2026-05-11 (R1.b landed `b529fa6e` + third-instance peer-commit-absorption record `5aa91a76`; tail plan reshaped into 6 sequenced waves); Fronded Flowering Seed / `claude-code` / opus-4-7-1m / `19ecd5` / 2026-05-11 (graduation-candidates-drain — both due items graduated, commit `53995192`); Smouldering Crackling Pyre / `claude-code` / opus-4-7-1m / `ab76ef` / 2026-05-11; Deciduous Twining Dew / `claude-code` / opus-4-7-1m / `a12c90` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11 |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Mistbound Watching Lantern / `claude-code` / opus-4-7-1m / `8fdb8b` / 2026-05-11 (graph-mvp-arc review-absorption + doctrine ratification, commit `67885e3f`); Dusky Masking Cloak / `claude-code` / opus-4-7-1m / `c5ff7f` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11; Fragrant Regrowing Root / `codex` / GPT-5 / `019e12` / 2026-05-10 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -569,22 +569,36 @@ evidence.
 
 ## Next Safe Step
 
-**Status update (2026-05-11 — Fronded Flowering Seed close,
-graduation-candidates-drain)**: both `due` items in
-`pending-graduations.md` graduated this session (commit `53995192`).
-Phase 1 = PDR-059 (regenerator-output-classification) + ADR-177
-2026-05-11 amendment + PDR-054 §Related cross-ref. Phase 2 = ADR-041
-amendment (agent-tools/ + agent-graphs/ tiers; 8×8 matrix;
-Decision-list libs-split note; status Accepted (Revised)) + ADR-173
-§Open Questions:1 cross-link + D-4a closed on
-`graph-mvp-arc.plan.md:732`. **ADR-173 ratification gate now
-unblocked.** Soaring Darting Kite has opened claim `b1302a12` for
-R1.b collaboration-protocol hardening (comms-events directory
-migration + type splits) — claim explicitly internalises PDR-059
-post-hook eyeball discipline. **Next safe step**: (a) owner
-ratification of ADR-173 to unblock `graph-stack.plan.md` CURRENT →
-ACTIVE; or (b) Soaring's R1.b atomic landing, in flight. Choice is
-owner-shape.
+**Status update (2026-05-11 — Soaring Darting Kite close, R1.b
+landed)**: R1.b atomic commit `b529fa6e` lands the three-parser /
+three-type / 7-file-migration refactor of the inter-agent
+communication protocol per Shape A′. All four reviewers (code, test,
+type, docs-adr) reported; three in-scope improvements actioned.
+Final session-close commit `5aa91a76` records the third-instance
+peer-commit-absorption signal (Mistbound `67885e3f` absorbed six
+session-lifecycle files via non-pathspec staging) as working
+evidence for the next session.
+
+Owner direction set this session: next session in
+`agentic-engineering-enhancements` works on **commit-queue UX
+hardening** (discoverability, ease-of-use, harder-to-bypass
+enforcement). Sharpened by this session's friction surface; one of
+six dependency-ordered tail-waves named in the reshaped tail plan
+at
+[`.agent/plans/agentic-engineering-enhancements/current/2026-05-12-collaboration-protocol-hardening-r1b-opener.md`](../../plans/agentic-engineering-enhancements/current/2026-05-12-collaboration-protocol-hardening-r1b-opener.md).
+
+**Next safe step**: pick from Wave 1 (any of R8 pattern capture /
+R4b commit-skill amendment / R7 B-9 stub / R2 B-10 investigation)
+for a small parallel-safe entry, OR open the Wave 3 commit-queue UX
+work as the structural focus the owner direction names. Wave 2 (R3
+identity caching) follows Wave 1; Wave 3 (commit-queue UX +
+R4-new native pre-commit hook) is the structural cure pair; Wave 4
+(R5 Path β migration, 5 sub-steps) is sequential; Wave 5 (Phase 4
+adversarial validation) depends on Wave 3 + Wave 4; Wave 6 (Phase 5
+arc closure) is the final step.
+
+ADR-173 ratification gate remains unblocked from Fronded's
+2026-05-11 session (commit `53995192`).
 
 **Prior status (2026-05-11 — Deciduous Twining Dew close)**: the
 collaboration-protocol-hardening opener has been executed through
@@ -774,7 +788,33 @@ Visible owner-appetite items, not blockers for the current branch state:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-11 Mistbound Watching Lantern, claude-code,
+**Status (2026-05-11 Soaring Darting Kite, claude-code, opus-4-7-1m,
+`01db95`, R1.b landed + tail plan reshape — /jc-consolidate-docs
+run at owner direction)**: `completed this handoff — focused
+thread-scoped pass on agentic-engineering-enhancements`. Pattern
+graduations (step 5): two new pattern files —
+`inter-agent-sidebar-with-default-action.md` (proven this session
+via Fronded Flowering Seed sidebar `2e1a886f` → reply `544bf9bf`
+in ~10 min) and `peer-commit-absorption-third-direction.md`
+(third-direction failure mode beyond PDR-054 and PDR-059, working
+evidence at comms event `e0a17465`). Pending-graduations register
+refreshed: two new entries (peer-commit-absorption-third-direction;
+commit-queue-UX-as-structural-cure-surface; the latter due at
+owner direction set this session). R1.b tail plan reshaped into 6
+sequenced waves at
+`.agent/plans/agentic-engineering-enhancements/current/2026-05-12-collaboration-protocol-hardening-r1b-opener.md`.
+Pre-existing fitness pressure on
+`pending-graduations.md` / `repo-continuity.md` /
+`practice-bootstrap.md` / `napkin.md` prose-width acknowledged
+unchanged — symptom of accumulated substance ready for upward
+graduation per PDR-046 §Move 3, not over-budget capture.
+Practice Core: no contradict/extend/refine/supersede candidates
+surfaced this pass. Practice exchange incoming/: empty.
+Practice exchange outgoing/: empty. Napkin: 271 lines, no
+rotation due. Owner direction: next session works on commit-queue
+UX hardening (Wave 3 of the tail plan).
+
+**Prior status (2026-05-11 Mistbound Watching Lantern, claude-code,
 opus-4-7-1m, `8fdb8b`, graph-mvp-arc review-absorption +
 doctrine ratification — /jc-consolidate-docs run at owner
 direction)**: `completed this handoff — focused thread-scoped

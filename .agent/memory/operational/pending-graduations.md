@@ -2685,3 +2685,54 @@ Older graduated entries (PDR-018, PDR-026, PDR-029, PDR-033, PDR-034,
 ADR-153, ADR-164, etc.) are preserved in
 [`archive/repo-continuity-session-history-2026-04-29.md`](archive/repo-continuity-session-history-2026-04-29.md)
 and earlier archive files for full audit trail.
+
+### 2026-05-11 — Peer-commit absorption (third-direction failure mode)
+
+`[captured-date: 2026-05-11 | source-surface: comms-event
+e0a17465-fd5a-4c7d-979d-89696247de0a + napkin entry | graduation-
+target: PDR amendment to PDR-054 / PDR-059 OR new PDR for peer-
+commit-direction asymmetric-cure failure mode | trigger: third
+observed instance of asymmetric-cure failure at the commit boundary,
+in a structurally new direction beyond the husky-chain
+(PDR-059) and pre-hook foreign-stage (PDR-054) directions | size:
+M | status: pending]`
+
+Mistbound Watching Lantern's commit `67885e3f` (2026-05-11) used
+non-pathspec staging and swept six of Soaring Darting Kite's
+session-lifecycle working-tree files into Mistbound's commit. Same
+root cause as PDR-054 / PDR-059 (non-pathspec staging); same cure
+(mechanical pathspec enforcement at the commit boundary); different
+direction of damage (peer's commit absorbs my files, vs husky-chain
+absorbing peer files into my commit, vs my pre-stage absorbing
+peer's index). The three-direction symmetry is the new substance.
+Graduation-target should name the three directions and a single
+unified cure: commit-queue verify-staged enforcement at the husky
+boundary, refusing any commit whose staged set extends beyond the
+queued bundle regardless of which agent invoked. The Wave 3
+commit-queue UX work + R4-new pre-commit hook in
+[`2026-05-12-collaboration-protocol-hardening-r1b-opener.md`](../../plans/agentic-engineering-enhancements/current/2026-05-12-collaboration-protocol-hardening-r1b-opener.md)
+implements this cure; the graduation closes when both land and the
+Wilma four-probe matrix passes.
+
+### 2026-05-11 — Commit-queue UX as a structural cure surface
+
+`[captured-date: 2026-05-11 | source-surface: this session's
+friction profile (R1.b atomic commit bypassed queue; verify-staged
+exit-code conflation; CLI on separate binary not surfaced in
+collaboration-state --help; six-command lifecycle; claim-close-cycle
+recursion) | graduation-target: dedicated PDR for commit-queue UX
+contract OR amendment to ADR-118 (commit-skill as canonical
+pre-commit flow) plus ADR-177 (asymmetric-cure enforcement) | trigger:
+owner direction set 2026-05-11 — next session in
+agentic-engineering-enhancements works on commit-queue
+discoverability + ease-of-use + harder-to-bypass | size: L (multi-
+session arc) | status: due (owner-direction-triggered)]`
+
+The friction profile names five concrete deficiencies (discoverability;
+ease-of-use; verify-staged error-message clarity; harder-to-bypass
+hook integration; claim-close-cycle recursion). Each is a structural
+property the commit-queue could carry; today the discipline is
+documented-but-bypassable. Wave 3 of the tail plan owns the
+implementation; this graduation entry tracks the doctrine that
+emerges from that implementation work. Withdrawal-trigger: Wave 3
+landed + retrospective PDR/ADR captures the doctrine.
