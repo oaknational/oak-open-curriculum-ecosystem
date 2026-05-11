@@ -2736,3 +2736,10 @@ documented-but-bypassable. Wave 3 of the tail plan owns the
 implementation; this graduation entry tracks the doctrine that
 emerges from that implementation work. Withdrawal-trigger: Wave 3
 landed + retrospective PDR/ADR captures the doctrine.
+
+Session evidence update 2026-05-11: Embered Burning Magma landed the
+first Wave 3 implementation slice at `e298723c` (`commit-queue list`
+/ `show` read inspection plus strict time validation). The entry stays
+`due`: read inspection closes F-11 but does not yet settle the doctrine
+for discoverability, lifecycle ergonomics, harder-to-bypass enforcement,
+or claim-close-cycle recursion.

@@ -285,9 +285,9 @@ TDD cycles:
 
 - Add `commit-queue list` filters for `--prefix`, `--phase`,
   `--agent-name`, and `--queue-status`, preserving `status` as the
-  aggregate view. **Completed in working tree 2026-05-11.**
+  aggregate view. **Landed 2026-05-11 at `e298723c`.**
 - Add `commit-queue show --intent-id <id>` for exact queue entry inspection.
-  **Completed in working tree 2026-05-11.**
+  **Landed 2026-05-11 at `e298723c`.**
 - Fix fingerprint recursion either by moving the staged fingerprint outside the
   staged registry payload or by adding an explicit verifier guard and documented
   `stage -> record -> do not re-stage` contract.

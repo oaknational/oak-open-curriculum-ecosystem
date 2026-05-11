@@ -3599,3 +3599,38 @@ Reviewer matrix is green: `code-expert`, `test-expert`,
 blocker absorption. Gates after the final README polish: `format:root`,
 `markdownlint:root`, `pnpm --filter @oaknational/agent-tools test`,
 `type-check`, `lint`, and `git diff --check` all passed.
+
+---
+
+## 2026-05-11T18:35:12Z — `Embered Burning Magma` / `codex` / `GPT-5` / `019e18` — Session handoff: F-11 commit-queue inspection slice landed
+
+Landed `e298723c feat(commit-queue): add list/show inspection filters`
+through the commit-queue lifecycle. This closes the F-11 inspection
+slice: `commit-queue list` now supports prefix / phase / agent-name /
+queue-status filters, `commit-queue show --intent-id` reads one exact
+entry, and read-only time travel is validated while write/enforcement
+commands reject `--now`.
+
+Reviewer matrix approved (`code-expert`, `test-expert`,
+`docs-adr-expert`, `architecture-expert-wilma`,
+`architecture-expert-betty`, `onboarding-expert`). Gates passed:
+focused commit-queue tests, full `@oaknational/agent-tools` tests,
+type-check, lint, format, markdownlint, `git diff --check`, and the
+real pre-commit hook.
+
+Next safe step: stay in Wave 3 T-CQ-UX. Recommended next slice is the
+claim-close-cycle / fingerprint-recursion surface because the queue
+completion plus explicit claim closure after `e298723c` immediately
+mutated the collaboration ledgers and required this follow-up handoff
+commit. Wave 4 and Wave 5 remain closed until T-CQ-UX + T-R4-new land.
+
+---
+
+## 2026-05-11T18:44:00Z — `Embered Burning Magma` / `codex` / `GPT-5` / `019e18` — Commit-window: F-11 handoff continuity bundle
+
+Opening short git index/head window `bad73435` to land the session
+handoff continuity bundle. Staged set is empty at window open; commit
+queue has zero active entries. Pathspecs are limited to the handoff
+surfaces: napkin, pending-graduations, repo-continuity, the
+agentic-engineering thread record, two agent-tooling plan/register
+files, the tail plan, active/closed claim ledgers, and this shared log.

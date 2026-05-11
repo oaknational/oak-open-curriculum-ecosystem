@@ -301,6 +301,23 @@ this session generated, named in the next-session starting statement.
   incompatibility. Until fixed, failed `comms send` may still leave a
   valid event JSON and require manual shared-log rendering.
 
+### Observation — claim-close recursion is not hypothetical
+
+- **Surface**: commit-queue lifecycle + `claims close`
+- **Signal**: worked instance for existing Wave 3 deficiency
+- **Observation**: after `e298723c` landed cleanly through the
+  commit-queue lifecycle, `commit-queue complete` and explicit closure
+  of the work/index claims removed the live queue/claims from
+  `active-claims.json` and appended both claims to
+  `closed-claims.archive.json`. That made the session state correct,
+  but it happened after the product commit and therefore required this
+  separate continuity commit to make the closure durable.
+- **Behaviour change / candidate follow-up**: treat claim-close-cycle
+  recursion as the recommended next T-CQ-UX slice. The target is not
+  another reminder to commit closure files; the cure should make the
+  closure path batch with the parent queue lifecycle or otherwise avoid
+  post-commit state debt.
+
 ## 2026-05-11 — Shaded Ripening Copse / claude-code / opus-4-7-1m / `c13bdf`
 
 ### Observation — schedule-not-trigger doctrine sweep is mostly mechanical

@@ -321,11 +321,11 @@ below is a cross-reference index, not a second source of truth.
     lifecycle phase.
 - **Candidate cure**: Add the two commands above.
 - **Target surface**: `agent-tools/src/commit-queue/cli.ts`
-- **Status**: addressed-in-working-tree-2026-05-11
+- **Status**: fixed-2026-05-11-commit-e298723c
 - **Review 2026-05-10**: `commit-queue status` exists and emits the
   machine-readable queue with entries. Dedicated `list` / `show`
   commands and `--prefix` / `--phase` filters are still absent.
-- **Review 2026-05-11**: fixed in working tree. `commit-queue list`
+- **Review 2026-05-11**: fixed at `e298723c`. `commit-queue list`
   emits filtered queue entries with `--prefix`, `--phase`,
   `--agent-name`, and `--queue-status` filters, while
   `commit-queue show --intent-id <id>` emits one exact entry and fails

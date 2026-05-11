@@ -10,6 +10,8 @@ landed_commits:
     label: Third-instance peer-commit absorption record
   - sha: 8f0dacd5
     label: Pattern graduations + tail-plan reshape; completed T-R8
+  - sha: e298723c
+    label: T-CQ-UX F-11 commit-queue list/show inspection slice
 todos:
   - id: T-R8
     wave: 1
@@ -38,7 +40,7 @@ todos:
     depends_on: []
   - id: T-CQ-UX
     wave: 3
-    content: Commit-queue UX hardening — discoverability (surface in `collaboration-state --help`, in commit-skill canonical); ease-of-use (collapse 6-command lifecycle to fewer ergonomic invocations); clearer `verify-staged` error messages (distinguish queue-ordering signal from staged-set divergence); make harder-to-bypass (husky pre-commit calls verify-staged; refuse commit absent queue evidence)
+    content: Commit-queue UX hardening — discoverability (surface in `collaboration-state --help`, in commit-skill canonical); ease-of-use (collapse 6-command lifecycle to fewer ergonomic invocations); clearer `verify-staged` error messages (distinguish queue-ordering signal from staged-set divergence); make harder-to-bypass (husky pre-commit calls verify-staged; refuse commit absent queue evidence). Partial landing: F-11 list/show inspection slice at `e298723c`.
     status: pending
     depends_on: []
   - id: T-R4-new
@@ -168,6 +170,11 @@ working evidence is the third-instance peer-commit absorption at
 
 - **T-CQ-UX — Commit-queue UX hardening.** Sharpened by this
   session's friction surface:
+  - **Read-side inspection landed**: `e298723c` added
+    `commit-queue list` filters (`--prefix`, `--phase`,
+    `--agent-name`, `--queue-status`) and `commit-queue show
+    --intent-id`, plus strict `--now` validation. This closes the
+    F-11 read-inspection slice only; the rest of T-CQ-UX remains open.
   - **Discoverability**: surface `commit-queue` in
     `collaboration-state --help`, in the commit-skill canonical,
     and in the bootstrap fast-path guidance. The CLI on a separate

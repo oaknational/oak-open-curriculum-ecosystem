@@ -261,7 +261,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Shaded Ripening Copse / `claude-code` / opus-4-7-1m / `c13bdf` / 2026-05-11 (commit-queue UX brief — B-02/B-03 + Workstream 4 architectural seam, commit `5c299ed5`); Soaring Darting Kite / `claude-code` / opus-4-7-1m / `01db95` / 2026-05-11 (R1.b landed `b529fa6e` + third-instance peer-commit-absorption record `5aa91a76`; tail plan reshaped into 6 sequenced waves); Fronded Flowering Seed / `claude-code` / opus-4-7-1m / `19ecd5` / 2026-05-11 (graduation-candidates-drain — both due items graduated, commit `53995192`); Smouldering Crackling Pyre / `claude-code` / opus-4-7-1m / `ab76ef` / 2026-05-11; Deciduous Twining Dew / `claude-code` / opus-4-7-1m / `a12c90` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Embered Burning Magma / `codex` / GPT-5 / `019e18` / 2026-05-11 (Wave 3 F-11 commit-queue list/show inspection slice, commit `e298723c`); Shaded Ripening Copse / `claude-code` / opus-4-7-1m / `c13bdf` / 2026-05-11 (commit-queue UX brief — B-02/B-03 + Workstream 4 architectural seam, commit `5c299ed5`); Soaring Darting Kite / `claude-code` / opus-4-7-1m / `01db95` / 2026-05-11 (R1.b landed `b529fa6e` + third-instance peer-commit-absorption record `5aa91a76`; tail plan reshaped into 6 sequenced waves); Fronded Flowering Seed / `claude-code` / opus-4-7-1m / `19ecd5` / 2026-05-11 (graduation-candidates-drain — both due items graduated, commit `53995192`) |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Shaded Ripening Copse / `claude-code` / opus-4-7-1m / `c13bdf` / 2026-05-11 (schedule-not-trigger sweep — graph-stack `5c1cd339` + combinatorial-arc D-6 absorption `ff3ab004`); Mistbound Watching Lantern / `claude-code` / opus-4-7-1m / `8fdb8b` / 2026-05-11 (graph-mvp-arc review-absorption + doctrine ratification, commit `67885e3f`); Dusky Masking Cloak / `claude-code` / opus-4-7-1m / `c5ff7f` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11; Fragrant Regrowing Root / `codex` / GPT-5 / `019e12` / 2026-05-10 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -287,6 +287,23 @@ This branch also depends on the Practice/tooling substrate work from main in
 [threads/agentic-engineering-enhancements.next-session.md](threads/agentic-engineering-enhancements.next-session.md).
 
 ## Current Session Focus
+
+**Latest focus (2026-05-11 — Embered Burning Magma / `codex` /
+GPT-5 / `019e18`, commit-queue UX hardening F-11 slice)**:
+Wave 3 opened under the owner-named commit-queue UX focus. Landed
+`e298723c feat(commit-queue): add list/show inspection filters`.
+Scope: `commit-queue list` and `commit-queue show --intent-id`, filters
+for prefix / phase / agent-name / queue-status, strict `--now`
+validation, write-command rejection of `--now`, shared freshness
+calculation, README examples, integration coverage, frictions-register
+status, and tail-plan T-R8 reconciliation. Reviewers approved:
+code-expert, test-expert, docs-adr-expert, architecture-expert-wilma,
+architecture-expert-betty, onboarding-expert. Gates passed:
+focused commit-queue tests, full `@oaknational/agent-tools` test,
+type-check, lint, format, markdownlint, `git diff --check`, and the
+real pre-commit hook. The chosen entry landed through the commit-queue
+lifecycle; post-commit claim close reproduced the known claim-close
+cycle recursion and is being captured in this handoff commit.
 
 **Latest focus (2026-05-11 — Smouldering Crackling Pyre /
 `claude-code` / opus-4-7-1m / `ab76ef`, collaboration-protocol
@@ -568,6 +585,23 @@ acceptance work;
 evidence.
 
 ## Next Safe Step
+
+**Status update (2026-05-11 — Embered Burning Magma close, F-11
+landed)**: commit-queue inspection is now available through
+`commit-queue list` and `commit-queue show --intent-id`; F-11 is fixed
+at `e298723c`. The broader Wave 3 T-CQ-UX item remains open: F-15
+fingerprint/claim-recursion hardening, B-02 build-prelude decoupling,
+B-03 record/verify determinism, lifecycle ergonomics, verify-staged
+error taxonomy, and husky enforcement still need focused atomic
+landings.
+
+**Next safe step**: stay in Wave 3 on one small T-CQ-UX slice. The
+recommended opener is claim-close-cycle / fingerprint-recursion
+hardening because this session ended with a worked instance: completing
+the queue and closing claims mutated the collaboration ledgers after
+the product commit, requiring another commit cycle to make the session
+state durable. Keep Wave 4 Path beta and Wave 5 validation closed until
+T-CQ-UX + T-R4-new land.
 
 **Status update (2026-05-11 — Shaded Ripening Copse close, doctrine
 sweep landed)**: graph-stack + graph-combinatorial-arc swept under
@@ -1088,6 +1122,18 @@ Loop-Health post-mortem on napkin critical:
    how to drain accumulated entries is what unblocks the loop.
    Currently routed to thread next-session record as a standing
    open item.
+
+**Status (2026-05-11 Embered Burning Magma, codex, GPT-5, `019e18`,
+commit-queue F-11 closeout)**: `not due — session handoff only`.
+The session surfaced no new ADR/PDR candidate beyond the existing due
+entry "Commit-queue UX as a structural cure surface"; this session adds
+implementation evidence (`e298723c`) and a worked claim-close recursion
+instance. Entry-point drift sweep: `AGENTS.md`, `CLAUDE.md`, and
+`GEMINI.md` preserve the canonical pointer shape; no `.codex/AGENTS.md`
+is present. Remember/Codex memory surfaces add no new behaviour-changing
+handoff beyond the already-recorded owner request. Active commit queue
+after completion: zero active entries. No open decision-thread or
+escalation handoff needed.
 
 **Prior status (2026-05-11 Burnished Crackling Pyre, claude-code,
 opus-4-7-1m, `e517c9`, Claude skill-listing-budget bump)**: `completed
