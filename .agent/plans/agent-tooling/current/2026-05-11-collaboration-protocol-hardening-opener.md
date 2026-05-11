@@ -41,7 +41,7 @@ todos:
     status: pending
     depends_on: [phase-2-remediation-design]
   - id: phase-4-validate-at-scale
-    content: "Synthetic multi-agent dry-run: spawn 3+ concurrent agents on overlapping but file-scope-disjoint surfaces; observe whether the protocols hold. Capture residual friction; queue for follow-on if any. Success criterion: no foreign-stage incidents, no claim conflicts, no comms render breakage across the dry-run window."
+    content: "Synthetic multi-agent validation across a four-probe matrix that exercises the load shapes where friction actually occurred: (a) file-scope-overlap probe (two agents on overlapping workspace files, format-loop exposure); (b) commit-discipline violation probe (deliberate bare `git commit` against a populated index to verify the foreign-stage cure holds); (c) injected red-gate probe (peer file deliberately RED to verify staged-set-aware behaviour at pre-commit); (d) session-end-mid-flight probe (one agent ends session leaving pre-staged files; next agent's commit window). Success criterion: no foreign-stage incidents, no claim conflicts, no comms render breakage, no identity drift, no fitness-gate-blocks-on-peer-files surprises across the matrix. The earlier 3-agent disjoint-scope dry-run is a smoke-test prelude, not the validation itself."
     status: pending
     depends_on: [phase-3-land]
   - id: phase-5-closeout
@@ -59,15 +59,35 @@ todos:
 ## Why this session exists
 
 The 2026-05-11 graph MVP arc reshape session surfaced an honest
-finding: **the MVP arc's parallelism ceiling is not set by its own plan
-structure but by the multi-agent collaboration protocol's current
-maturity.** Cross-slice parallel work, intra-slice 2-agent execution,
-and combinatorial-arc activation all depend on a substrate the MVP arc
-cannot fix from within.
+finding: **the MVP arc's parallelism *ramp* — from 1–2 to 4–5
+concurrent agents post-Inc.1 — is bounded by the maturity of the
+substrate that operationalises the multi-agent collaboration
+protocol.** Cross-slice parallel work, intra-slice 2-agent execution,
+and combinatorial-arc activation all depend on that substrate. Slice
+1 at N=1–2 agents is **not** blocked by this session and may proceed
+in parallel with phases 0–3 here, with the standard rule discipline
+(stage-by-explicit-pathspec, commit-by-explicit-pathspec, register
+active areas at session open) carried in.
 
-That substrate is the multi-agent collaboration protocol and the
-agent-tooling CLI surfaces (`collaboration-state`, claims, comms,
-commit-queue, identity) that operationalise it.
+That substrate is **four distinct sub-systems**, conflated in earlier
+framing as "the collaboration protocol":
+
+1. **Protocol-contract genuine gaps** — session-close enforcement,
+   generated-log discoverability, coordinator-role formalisation (Gaps
+   E1, E5, E6 in `/tmp/phase-0-ground-state.md`).
+2. **Commit-discipline enforcement** — stage-by-pathspec rule names
+   the cure but pathspec-at-commit enforcement is absent; foreign-stage
+   absorption is the recurring instance (Gaps E7, E8).
+3. **Gate/build-coupling model** — whole-tree pre-commit hooks block
+   on peer files; not addressed by claims or comms (Gap E2).
+4. **CLI implementation maturity** — `agent-tools` surfaces:
+   `collaboration-state`, claims, comms, commit-queue, identity. B-01
+   (`comms send --now` does not populate `created_at`), shell-escape
+   handling, identity-cache absence (Gap E4, Incidents B6/B7/B10).
+
+Different sub-systems take different remediation shape (rule
+amendment, hook enforcement, ADR/PDR graduation, CLI test-first fix).
+Phase 2 remediation design names the layer for each friction.
 
 Observed friction at 1–2 concurrent agents already includes:
 
@@ -89,8 +109,15 @@ Observed friction at 1–2 concurrent agents already includes:
   feedback memory captures the discipline.
 
 Scaling from 1–2 to 4–5 concurrent agents — the post-Inc.1 MVP arc
-ramp — will multiply these incidents unless the protocols and tooling
-are hardened first. This session does that work.
+ramp — multiplies the **subset of incidents that scale super-linearly
+with concurrency** (file-scope overlap / format-drift, foreign-stage
+absorption on shared index, claim overlap on shared files,
+fitness-gate cross-blocking on peer files). The remaining incidents
+(CLI bugs, identity wordlist drift, shell-escape handling) are
+agent-count-independent and are addressed on their own merits. This
+session does both: hardens the super-linear surface so the ramp is
+structurally safe, and fixes the agent-count-independent items
+because they are bugs.
 
 ## Scope
 
@@ -113,14 +140,19 @@ In scope:
   rather than an implementation, propose ADR amendment or PDR
   graduation; route through `architecture-expert-betty` +
   `assumptions-expert` + owner-direction before landing.
-- **Validation at scale** — synthetic multi-agent dry-run (3+
-  concurrent agents on file-scope-disjoint surfaces) to verify the
-  hardened protocols hold before the MVP arc ramps post-Inc.1.
+- **Validation at scale** — four-probe synthetic-multi-agent matrix
+  exercising the load shapes where friction actually occurred:
+  (a) file-scope-overlap, (b) commit-discipline violation,
+  (c) injected red-gate, (d) session-end-mid-flight. A 3-agent
+  disjoint-scope dry-run is a smoke-test prelude; the matrix is the
+  validation gate. See Phase 4 in the workflow.
 
 Out of scope:
 
-- **MVP arc execution.** This session does not start slice 1 / 2 / 3a
-  implementation.
+- **MVP arc post-Inc.1 ramp.** This session must complete before the
+  MVP arc ramps from 1–2 to 4–5 concurrent agents. Slice 1 at N=1–2
+  agents is **not blocked** and may proceed in parallel with phases
+  0–3 here. The session blocks the *ramp*, not the *start*.
 - **Combinatorial arc.** Not in this session's scope.
 - **Practice Core graduations.** Doctrine-level PDR work outside the
   observed collaboration-friction surface is not in this session.
@@ -159,9 +191,12 @@ Before doing anything substantive:
    in one atomic commit; bug table updated to fixed with the SHA.
 3. **Workstreams 2–5 landed** (or explicitly partially landed with
    the remaining workstreams queued).
-4. **Synthetic dry-run passes** — 3+ concurrent agents working
-   file-scope-disjoint surfaces complete without foreign-stage,
-   claim conflict, comms render breakage, or identity drift.
+4. **Four-probe validation matrix passes** — file-scope-overlap,
+   commit-discipline violation, injected red-gate, and
+   session-end-mid-flight probes each complete without foreign-stage,
+   claim conflict, comms render breakage, identity drift, or
+   fitness-gate-blocks-on-peer-files surprise. The 3-agent
+   disjoint-scope dry-run is a smoke-test prelude, run first.
 5. **No regression in fitness gates** — informational fitness shows
    no new critical or hard violations attributable to this session's
    changes.
@@ -204,7 +239,7 @@ Before doing anything substantive:
 |---|---|---|
 | `assumptions-expert` | Phase 1 + Phase 2 + each remediation | Validate the protocol-vs-observed framing; validate proposed remediations against the directive contract |
 | `architecture-expert-betty` | Phase 2 (remediation design) + Phase 4 (dry-run) | Cohesion/coupling of protocol surfaces; long-term change-cost of remediations |
-| `architecture-expert-wilma` | Phase 4 (dry-run) | Adversarial probing of hardened protocols under concurrent load |
+| `architecture-expert-wilma` | Phase 4 (four-probe matrix) | Adversarial probing across the four load shapes where friction occurred: overlap, commit-discipline, red-gate, session-end-mid-flight |
 | `code-expert` | Every implementation commit | Gateway; routes type-expert / security-expert as warranted |
 | `test-expert` | Every implementation commit | TDD pair audit; no audit-shaped tests; no skipped tests |
 | `docs-adr-expert` | Phase 5 closeout | Permanent-doc updates; ADR / PDR amendments coherent |

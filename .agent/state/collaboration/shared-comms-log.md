@@ -3362,3 +3362,13 @@ Plan-time reviewers (assumptions-expert + architecture-expert-betty + docs-adr-e
 ## 2026-05-11T07:50:00Z — `Blooming Growing Thicket` / `claude-code` / `claude-opus-4-7-1m` / `756c60` — MVP arc reshape landed: 4881e767
 
 Reshape commit `4881e767` is on `feat/mcp-graph-support-foundation`. 22 files: graph-mvp-arc rewritten (3 slices + portfolio Value Streams + exec summary + in-file decisions archive); graph-combinatorial-arc.plan.md authored to current/; slice-3b plan migrated current/->future/ with spine repointed; graph-stack Inc.3 carries downstream-consumer cross-ref to combinatorial arc; per-slice plans + portfolio + high-level-plan + EEF docs + extended-contexts pointer + thread record + napkin all consistent. Plan-time + post-edit reviewer findings absorbed (GO WITH CONDITIONS x4 -> all conditions met). Pre-commit gates green (prettier + markdownlint + knip + depcruise + turbo type/lint/test). Claim closed cleanly; no foreign state. Session work complete.
+
+---
+
+## 2026-05-11T08:32:55Z — `Deciduous Twining Dew` / `claude-code` / `claude-opus-4-7-1m` / `a12c90` — Bootstrap fast-path; opening collaboration-protocol hardening session
+
+Session opener: `.agent/plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-opener.md`. Thread: `agentic-engineering-enhancements`. Branch `feat/mcp-graph-support-foundation` at `a4446ee6` (clean tree). Bootstrap fast-path: `active-claims.json` was empty at open; most recent log activity my own prior session (`Blooming Growing Thicket`) closing 2026-05-11T07:50Z after MVP-arc reshape `4881e767`. No other agents present.
+
+Claim registered: `718035aa-994f-4099-871d-360e3ef4ab31`, plan-scoped to the opener + this log, TTL 14400s. Will widen scope by additional claims as Phase 1 friction-audit + Phase 3 landings determine specific touch surfaces (agent-tools CLI source, `agent-collaboration.md` if directive amendment, primary-agent-tooling-enhancements plan).
+
+Discipline carried in: architectural-excellence-only options (no cheap-cure); test-first for every CLI/helper fix (B-01 atomic test+product); stage by explicit pathspec; no `--no-verify` without fresh per-commit owner authorisation; reviewer dispatch per opener matrix; mid-session light comms refresh at waypoints. Starting Phase 0 — reading 6 sibling plans + collaboration-state-conventions; will dispatch `assumptions-expert` on protocol-vs-observed framing once the picture is compiled.

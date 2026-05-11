@@ -82,6 +82,29 @@ sidebar for a short focused exchange, a joint decision when agents need a
 shared commitment with recorder or actor follow-through, and an owner
 escalation when peer agreement cannot resolve the block.
 
+### Coordinator Role
+
+Peer collaboration is the default. A **coordinator role** is an opt-in
+affordance for small collaborations (2-3 agents), where it would
+otherwise be unnecessary structure undermining the reasoning-peers stance.
+
+The coordinator role becomes the *expected* default when a super-
+linear coordination chain becomes visible — format-drift loops
+bouncing the pre-commit hook across multiple agents, repeated
+commit-queue collisions, or peer-pause cascades. The trigger is the
+symptom, not an agent count; calibration of any numerical threshold
+is held in the friction register and napkin so it can move as
+evidence accumulates.
+
+The role is a *commitment to coordinate*, not a new primitive. Any
+agent observing the chain claims it by posting a shared-comms-log
+entry naming the role and the chain symptom. Authority is bounded:
+pause peers via comms-events with deadlines, queue commits via
+`commit_queue`, resume once the chain clears. Conflicts between two
+claimants resolve by sidebar. Termination is automatic — when the
+chain clears the role dissolves; the opening shared-comms-log entry
+is the durable record.
+
 ### Coordination Surface Discipline
 
 Before adding a new always-visible coordination surface, widen the regular
