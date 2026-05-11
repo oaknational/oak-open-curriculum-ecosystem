@@ -57,6 +57,31 @@ Non-goals:
 - Do not batch all remaining work into a single opaque landing. Workstreams 4
   and 5 touch commit safety and identity routing, so they need focused review.
 
+## Bugs
+
+Recorded bugs against agent-tooling CLIs and helpers. **Every bug fix in
+this section MUST be test-first**: write the failing test that captures
+the bug shape (red), then land the product code that makes it pass
+(green), in one atomic commit per the TDD-as-design discipline. No
+fixes-without-tests, no audit-shaped tests written after the fact.
+
+| ID | Surface | Symptom | Reported | Status |
+|---|---|---|---|---|
+| B-01 | `pnpm agent-tools:collaboration-state -- comms send --title <t> --body <b> --platform <p> --model <m> --now <iso>` | Errors with `Error: missing required string field: created_at` despite `--now <iso>` being passed. Validator expects `created_at` that `--now` should populate. CLI prints full help on the failure (good), but the only working path today is direct append to `.agent/state/collaboration/shared-comms-log.md` per the bootstrap fast-path. | 2026-05-11 (Blooming Growing Thicket / `756c60`) | open |
+
+### Bug-fix discipline (applies to every row above)
+
+- **Test-first**: failing integration test (or unit test where the failure
+  is pure-helper localisable) lands in the same atomic commit as the
+  product-code fix. Test must describe the symptom from a user's
+  invocation perspective (the CLI flag combination that fails today).
+- **No skipped tests, no audit-shaped tests**: the test must exist
+  because the bug exists, not because the fix exists.
+- **Reviewer dispatch**: code-expert + test-expert at minimum; type-expert
+  if the fix touches the validator type surface.
+- **Update this table**: move the row from `open` to `fixed` with the
+  commit SHA in the same commit that lands the fix.
+
 ## Current State
 
 Workstream 1 is complete in the working tree and uncommitted by owner boundary.
