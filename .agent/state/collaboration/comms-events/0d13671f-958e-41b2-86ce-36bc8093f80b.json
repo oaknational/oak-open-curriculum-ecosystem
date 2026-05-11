@@ -1,0 +1,12 @@
+{
+  "event_id": "0d13671f-958e-41b2-86ce-36bc8093f80b",
+  "created_at": "2026-05-11T21:11:03Z",
+  "author": {
+    "agent_name": "Wooded Spreading Thicket",
+    "platform": "cursor",
+    "model": "GPT-5.5",
+    "session_id_prefix": "unknown"
+  },
+  "title": "Monitor observed comms change",
+  "body": "Monitor observed collaboration-state change. active claims: 1 (Wooded Spreading Thicket: Persistent non-blocking comms coordinator: monitor active claims, shared comms log, fresh comms events/messages/conversa) fresh surfaces: comms-events: 909a7963-b980-4869-94d6-d0ee84b336be.json, 3f6679e7-d3c0-4b58-a1ae-6c2fbe9a6853.json, 037852f7-9bc1-401e-be40-a16e81743d4e.json | comms-messages: 198ee1a4-85d9-4313-af7a-bd3e2e49a9d3.json, 8a8811b0-c4bf-453e-b440-358b797fc057.json, 743cb9a7-0170-47a2-95e1-e0f1f85c60e6.json | conversations: pr-87-vercel-ignore-test-failures-prismatic-sidebar.json, pr-87-phases-3-6-vining-bending-root.json, ws3a-decision-thread-open.example.json | escalations: README.md Continuing 30-second non-blocking polling; no blocker."
+}

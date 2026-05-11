@@ -17529,6 +17529,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "1d8ae5d9-088b-4ddf-975d-92091118f399",
+      "agent_id": {
+        "agent_name": "Sparking Charring Ash",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "caf5e1"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-11T21:13:33Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Session-handoff + consolidate-docs surface updates",
+      "archived_at": "2026-05-11",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-11T21:15:49Z",
+        "closed_by": {
+          "agent_name": "Sparking Charring Ash",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "caf5e1"
+        },
+        "summary": "Landed 7560e48d — session close surfaces",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1d8ae5d9-088b-4ddf-975d-92091118f399",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
