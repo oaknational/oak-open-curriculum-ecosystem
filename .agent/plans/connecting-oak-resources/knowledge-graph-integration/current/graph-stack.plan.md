@@ -310,7 +310,7 @@ Per the schedule-not-trigger doctrine (owner direction 2026-05-11: *"schedule it
 
 | # | Decision | Decision-holder | Effect on scheduling | Status |
 |---|---|---|---|---|
-| O-1 | **WS0 topology ADR approval.** Does the owner approve the seven-active-plus-one-deferred graph topology as proposed? | Owner | Blocks Inc.1 promotion from CURRENT → ACTIVE; gates 1 + 2 of §Promotion Trigger cannot close without it. | Open. The WS0 ADR is not yet drafted; this plan is the proposal. |
+| O-1 | **WS0 topology ADR approval.** Does the owner approve the seven-active-plus-one-deferred graph topology as proposed? | Owner | Blocks Inc.1 promotion from CURRENT → ACTIVE; gates 1 + 2 of §Promotion Trigger cannot close without it. | **Approved in principle 2026-05-11** pending reviewer input on the WS0 ADR draft. Next sequence is definite: author ADR as `Proposed`; dispatch architecture-expert-betty + architecture-expert-fred + assumptions-expert in parallel; absorb findings; surface refined ADR for final approval; on final approval gates 1 + 2 close and graph-stack promotes to ACTIVE. |
 | O-2 | **Increment promotion ownership.** Who promotes each subsequent Inc.N from "scheduled after predecessor closes" to an active plan, at the moment the predecessor closes? | Owner (default) | Schedule positions in §Increments name "owner promotion" as the trigger; this names the actor. If a delegate or review checkpoint is preferred over case-by-case owner promotion, this changes the trigger wording. | Open assumption: owner promotes at each predecessor-close review. Confirm or amend. |
 
 Two prior open items are now closed and recorded here for audit:

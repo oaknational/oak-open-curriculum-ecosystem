@@ -33,13 +33,19 @@ cross-plan trigger removed from graph-stack and reshaped only in
 combinatorial-arc. Parallel peer `Soaring Darting Kite` consolidate
 commit `8f0dacd5` landed cleanly via explicit-pathspec staging on
 both sides; no foreign-state absorption. **Next graph-engineering
-entry point**: WS0 topology ADR draft in
-`docs/architecture/architectural-decisions/`. Gate 1 of
-graph-stack's §Promotion Trigger requires owner topology approval
-(O-1); gate 2 requires WS0 ADR drafted with reviewer findings
-returned. Once O-1 closes the plan promotes CURRENT → ACTIVE and
-Inc.1a WS1.1 (`graph-core` workspace scaffold) opens for
-test-first execution.)
+entry point — definite sequence**: owner approved the topology in
+principle 2026-05-11 pending reviewer input. Next session: (1)
+author WS0 topology ADR in
+`docs/architecture/architectural-decisions/` as `Status: Proposed`
+sourcing from `graph-stack.plan.md` §Topology Decision + §Design
+Principles + §Build-vs-Buy Attestation + §Risk Assessment, citing
+ADR-041 / ADR-154 / ADR-157 / ADR-173 as Accepted neighbours; (2)
+dispatch architecture-expert-betty + architecture-expert-fred +
+assumptions-expert in parallel; (3) absorb findings into the ADR;
+(4) surface refined ADR for final approval; (5) on final approval
+O-1 closes, gates 1+2 of §Promotion Trigger close, graph-stack
+moves CURRENT → ACTIVE, Inc.1a WS1.1 (`graph-core` workspace
+scaffold) opens for test-first execution.)
 
 **Prior refresh**: 2026-05-11 (Mistbound Watching Lantern /
 `claude-code` / `claude-opus-4-7-1m` / `8fdb8b` —

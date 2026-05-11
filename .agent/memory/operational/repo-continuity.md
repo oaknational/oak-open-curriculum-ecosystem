@@ -588,17 +588,38 @@ dispatches; all GO WITH CONDITIONS; conditions absorbed.
 
 **Next safe step**: branch-primary `connecting-oak-resources` lane —
 **author the WS0 topology ADR draft** in
-`docs/architecture/architectural-decisions/` (proposed status). This
-is the first concrete graph engineering task: gate 1 of graph-stack's
-§Promotion Trigger requires owner approval of the topology, gate 2
-requires the WS0 ADR drafted with reviewer findings returned. The ADR
-records the seven-active-plus-one-deferred graph topology proposed in
-`graph-stack.plan.md` §Topology Decision. Dispatch
-architecture-expert-betty + architecture-expert-fred + assumptions-expert
-on the draft, absorb findings, then surface to owner for the topology
-approval decision (O-1 in graph-stack's §Genuine Open Decisions).
-Once O-1 closes, graph-stack moves CURRENT → ACTIVE and Inc.1a WS1.1
-(`graph-core` workspace scaffold) opens for test-first execution.
+`docs/architecture/architectural-decisions/` as `Status: Proposed`.
+Owner approved the topology in principle 2026-05-11 (O-1 in
+graph-stack's §Genuine Open Decisions) pending reviewer input on the
+draft. Definite sequence (no conditionals):
+
+1. Pick the next free ADR number under
+   `docs/architecture/architectural-decisions/`.
+2. Author the ADR sourcing decision/context/consequences directly
+   from `graph-stack.plan.md` §Topology Decision + §Design Principles
+   - §Build-vs-Buy Attestation + §Risk Assessment. Cite ADR-041
+   (workspace tiers, recently amended), ADR-154 (framework-vs-consumer),
+   ADR-157 (multi-source open education), ADR-173 (ontology source
+   authority) as already-Accepted neighbours.
+3. Dispatch three reviewers in parallel: `architecture-expert-betty`
+   (cohesion / change-cost across the layer count and long-term
+   evolution), `architecture-expert-fred` (ADR-154 compliance +
+   dependency direction across the seven tiers), `assumptions-expert`
+   (proportionality of the topology vs the value claim, build-vs-buy
+   attestation legitimacy).
+4. Absorb findings into the ADR body; surface refined ADR to owner
+   for final approval.
+5. On final approval: O-1 closes; gates 1 + 2 of §Promotion Trigger
+   close; `graph-stack.plan.md` moves CURRENT → ACTIVE; Inc.1a WS1.1
+   (`graph-core` workspace scaffold) opens for test-first execution
+   per TDD-as-design.
+
+Parallel-safe agentic-engineering lane work remains as named in
+Soaring Darting Kite's close: Wave 1 (R8 pattern capture / R4b
+commit-skill amendment / R7 B-9 stub / R2 B-10 investigation) is
+small-and-fast; Wave 3 (commit-queue UX + B-02/B-03 fixes per the
+brief landed this session) is now under active Codex
+implementation by Embered Burning Magma.
 
 Parallel-safe agentic-engineering lane work remains as named in
 Soaring Darting Kite's close: Wave 1 (R8 pattern capture / R4b
