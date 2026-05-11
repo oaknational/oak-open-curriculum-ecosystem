@@ -16645,6 +16645,121 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "059291ea-ea07-44d8-aa4d-b727266ef662",
+      "agent_id": {
+        "agent_name": "Smouldering Crackling Pyre",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "ab76ef"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/comms-event.schema.json",
+            ".agent/state/collaboration/comms-events/**",
+            ".agent/state/collaboration/comms-lifecycle/**",
+            ".agent/state/collaboration/comms-messages/**",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            "agent-tools/src/collaboration-state/**",
+            "agent-tools/src/practice-substrate/**",
+            "agent-tools/src/agent-identity/**",
+            ".agent/skills/commit/SKILL-CANONICAL.md",
+            ".husky/**",
+            ".agent/directives/agent-collaboration.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/active/patterns/**",
+            ".agent/plans/agent-tooling/current/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-11T12:52:05Z",
+      "freshness_seconds": 14400,
+      "intent": "FINAL session of collaboration-protocol hardening arc: R1 schema-mix fix (Shape A' three-family directory-projected protocol per refuted-premise re-decision), R2-R8 queued remediations, Phase 4 four-probe validation, Phase 5 arc closure.",
+      "archived_at": "2026-05-11T14:15:00Z",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-11T14:15:00Z",
+        "closed_by": {
+          "agent_name": "Smouldering Crackling Pyre",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "ab76ef"
+        },
+        "summary": "Session closing. Landed R1.a only (canonical comms-event.schema.json + 12 Ajv-validated tests at f7560339). Phase 0 + R1.a executed; R1.b and all downstream landings deferred to a fresh opener per honest scope re-framing after the refuted-premise event (three families discovered, not two). Live foreign-stage absorption event from peer Dusky Masking Cloak handled cleanly via verify-staged + commit-by-explicit-pathspec; peer's parallel commit 7250e807 landed alongside. Pending-graduations updated with three new entries.",
+        "evidence": [
+          {
+            "kind": "commit",
+            "ref": "f7560339",
+            "summary": "R1.a canonical schema + tests landing."
+          },
+          {
+            "kind": "log_entry",
+            "ref": "shared-comms-log:2026-05-11T12:52:05Z",
+            "summary": "Bootstrap fast-path entry recording refuted-premise event and Shape A' owner direction."
+          },
+          {
+            "kind": "thread_record",
+            "ref": "threads/agentic-engineering-enhancements.next-session.md",
+            "summary": "Identity row added; next-opener pointer refreshed for R1.b."
+          },
+          {
+            "kind": "continuity",
+            "ref": "repo-continuity.md § Current Session Focus",
+            "summary": "Latest-focus block authored for the R1.a session."
+          },
+          {
+            "kind": "claim",
+            "ref": "059291ea-ea07-44d8-aa4d-b727266ef662",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a262d432-8446-4214-995f-30d1f74b1b6d",
+      "agent_id": {
+        "agent_name": "Mistbound Watching Lantern",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "8fdb8b"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/architecture/architectural-decisions/173-graph-stack-topology.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-11T13:17:00Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Land ADR-173 Inc.1/Inc.2 topology annotation per Betty 2026-05-11 FINDING",
+      "archived_at": "2026-05-11",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-11T13:18:18Z",
+        "closed_by": {
+          "agent_name": "Mistbound Watching Lantern",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "8fdb8b"
+        },
+        "summary": "ADR-173 Inc.1/Inc.2 annotation landed at ae8cce2a; closes betty 2026-05-11 new FINDING",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a262d432-8446-4214-995f-30d1f74b1b6d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

@@ -1,34 +1,70 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-## Next opener — collaboration protocol + tooling hardening FINAL (2026-05-11)
+## Next opener — collaboration protocol hardening R1.b + tail (2026-05-12+)
 
-[`2026-05-11-collaboration-protocol-hardening-final-opener.md`](../../../plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-final-opener.md)
-is the FINAL session opener for the collaboration-protocol hardening
-arc. The predecessor session (Deciduous Twining Dew, `a12c90`,
-2026-05-11) executed Phases 0-3 partial: ground-state + friction audit
+The 2026-05-11 R1.a session (Smouldering Crackling Pyre, `ab76ef`)
+landed only the canonical schema authority + tests at `f7560339`. The
+arc closure originally targeted by the 2026-05-11-…-final-opener.md
+remains incomplete; R1.b (parsers + types + 7-file migration + 6+
+consumer-file updates) and R2/R3/R4b/R4-new/R5/Phase 4/Phase 5 are
+queued. A fresh opener is to be authored as
+`2026-05-12-collaboration-protocol-hardening-r1b-opener.md`.
 
-+ remediation design crystallised (5 reviewer dispatches; 3 OD items
-and 2 ORD re-decisions resolved); R6 §Coordinator Role doctrine
-landed at `9b619a05` with the integer threshold held in ephemeral
-state per assumptions-expert. Commits `9b619a05` (R6 doctrine),
-`70507d72` (session close), `4186d761` (handoff + consolidation).
+### What R1.a (2026-05-11 Smouldering Crackling Pyre / `ab76ef`) landed
 
-**Owner-direction-needed FIRST in the final session**: R1 schema-mix
-fix shape. B-01 was misdiagnosed by Blooming Growing Thicket; the
-real cause is `comms-events/` carrying two incompatible schemas
-without a discriminator. Three architecturally-excellent options
-(split directories / widen parser / deprecate directed-message
-schema); owner picks before any code lands.
+`f7560339 feat(collaboration): author canonical comms-event schema
+with three $defs`. The canonical schema authority
+(`comms-event.schema.json`, three `$defs`: narrative / lifecycle /
+directed) plus 12 Ajv-validated unit tests + test-fakes fixture
+module.
 
-**Queued landings** (final session): R1 (per owner shape), R2 (B-10),
-R3 (identity cache), R4b (commit-skill mandates pathspec), R4-new
-(native git pre-commit hook — R4a dropped per ORD-2), R5 Path β
-migration in 5 sub-steps (5.0 retire `evaluateSharedCommsLog`; 5.1
-round-trip 299 entries; 5.2 reconcile 6 B-01-damaged; 5.3 delete
-markdown; 5.4 agent-collaboration.md doc-sweep), R7 (B9 plan stub),
-R8 (pattern capture), Phase 4 four-probe matrix (overlap /
-commit-discipline / red-gate / session-end-mid-flight), Phase 5
-closeout (consolidation + arc closure announcement).
+### Refuted-premise event captured this session
+
+Pre-flight field-set fingerprint scan refuted the predecessor's
+two-family diagnosis: `comms-events/` actually contains **three
+families** (narrative 311 / lifecycle 5 / directed 2) with five
+accreted narrative variants on optional routing/threading affordances.
+Owner directed Shape A′: ONE canonical schema with three `$defs`,
+projected to three sibling directories (`comms-events/`,
+`comms-lifecycle/`, `comms-messages/`). R1.a landed the schema
+authority; R1.b will land the directory projection + parser
+refactor + 7-file migration.
+
+### Live foreign-stage absorption captured this session
+
+A peer agent (`Dusky Masking Cloak` / `c5ff7f`, committing as Jim
+Cresswell on the graph thread) was active in parallel. Their
+pre-staged handoff files (napkin, thread-record, graduation-opener)
+appeared in my index when I `git add`-ed my pathspec. The
+commit-queue `verify-staged` check structurally caught the foreign
+stage; the cure was `git commit -F - -- <pathspec>` which committed
+only my five files, leaving the peer's pre-staged files in the
+index for them to commit (which they did in `7250e807`). This is
+literally R4-new's motivating use-case landing in real-time during
+the session designed to fix it.
+
+### Queued landings for the next session
+
+- **R1.b** (load-bearing): three parsers (`parseNarrativeCommsEvent`,
+  `parseLifecycleCommsEvent`, `parseDirectedCommsMessage`); three
+  TypeScript types replacing flat `CommsEvent`; new directories
+  `comms-lifecycle/` and `comms-messages/` with the 5+2 file
+  migration (rename `timestamp`→`created_at` in directed); update 6+
+  consumers (state-io.ts, cli-comms-commands.ts, comms.ts,
+  live-json.ts, live-json-support.ts, live-types.ts); extend
+  `collaborationAjv` to load `comms-event.schema.json`; integration
+  test for `evaluateCollaborationJsonSurfaces` reading all 3 dirs.
+  One atomic test-first commit.
+- **R2** (B-10 shell-mangling), **R3** (identity caching), **R4b**
+  (commit-skill mandates pathspec), **R4-new** (native git
+  pre-commit hook — proven necessary by this session's live
+  absorption event), **R5 Path β** (5 sub-steps after R1.b),
+  **R7** (B9 plan stub), **R8** (pattern capture for
+  claim-overlap-revert-and-handoff).
+- **Phase 4 four-probe matrix** + **Phase 5 closeout**.
+
+The 2026-05-11-…-final-opener.md is superseded by the R1.b opener
+but kept on disk with the four-probe matrix spec preserved.
 
 The original predecessor opener
 [`2026-05-11-collaboration-protocol-hardening-opener.md`](../../../plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-opener.md)
@@ -50,23 +86,23 @@ which routes step 4 here.
 Closed the PDR-051 / ADR-125 §2026-05-09 retirement loop end-to-end.
 Five commits on `feat/mcp-graph-support-foundation`:
 
-+ `a098d709` (sweep-bundled by parallel Quiet Lurking Mask session;
+- `a098d709` (sweep-bundled by parallel Quiet Lurking Mask session;
   primary substance: validator + probe refactor + missing rule
   surface generation + .claude/settings.json jc-* permissions)
-+ `b92a99e6` — inlined 6 substantive command bodies into
+- `b92a99e6` — inlined 6 substantive command bodies into
   `.agent/skills/<name>/SKILL-CANONICAL.md` (consolidate-docs 582L,
   session-handoff 438L, plan 154L, review 96L, gates 64L; new passive
   skill `ephemeral-to-permanent-homing` 130L; metacognition pointer
   fix; finishing-branch cross-ref repair). Deleted 12 `.agent/commands/`
   plus 3 experiments, 10 `.cursor/commands/jc-*`, and 10
   `.gemini/commands/jc-*` (preserved `.gemini/commands/review-*.toml`).
-+ `90363d08` — docs sweep (ADR-125 amendment chain + 11 live docs).
-+ `58910fe6` — reviewer fixes from architecture-expert-fred +
+- `90363d08` — docs sweep (ADR-125 amendment chain + 11 live docs).
+- `58910fe6` — reviewer fixes from architecture-expert-fred +
   docs-adr-expert + config-expert (practice.md mermaid, bootstrap
   §Required Skills, ADR-125 body, ADR-117 References,
   build-system.md, prompts/README.md, artefact-inventory.md,
   stripFrontmatter placement).
-+ `b00ad5a5` — final code-expert + docs-adr-expert findings
+- `b00ad5a5` — final code-expert + docs-adr-expert findings
   (.agent/README.md directory map, practice-index §Memory and
   Patterns, practice-bootstrap §SKILL-CANONICAL.md Format).
 
@@ -141,17 +177,17 @@ archive snapshot).
 QUAR-1 owner-decision carried over from the prior Sylvan Fruiting
 Glade session. Three commits:
 
-+ `1bd9a18b` — graduated quarantined `apply-don't-ask` /
+- `1bd9a18b` — graduated quarantined `apply-don't-ask` /
   `stop-inventing-optionality` to PDR-057 (empirical-answerability
   pre-question gate) and PDR-058 (three-tier optionality
   decomposition). 9 files: 2 new PDRs, README index, CHANGELOG,
   quarantine clear, pending-graduations status flip,
   read-before-asking + consolidate-at-third-consumer back-cites,
   distilled.md graduation entry.
-+ `67350e82` — retired 4 dead-doctrine references in live-operative
+- `67350e82` — retired 4 dead-doctrine references in live-operative
   surfaces (eef.next-session, agentic-engineering-enhancements.next-session
   itself, graph-query-layer.plan.md, undo-change SKILL-CANONICAL).
-+ `a098d709` — archive snapshot moved 3 graduated entry bodies
+- `a098d709` — archive snapshot moved 3 graduated entry bodies
   (pattern polarity, 30% context budget, orchestrator-vs-gate) to
   `.agent/memory/operational/archive/pending-graduations-archive-2026-05-10.md`.
   pending-graduations.md dropped 157,255 → 149,079 chars (cleared
@@ -159,14 +195,14 @@ Glade session. Three commits:
 
 **Reviewer dispatch**:
 
-+ `docs-adr-expert` (PDR-057/058): GAPS FOUND (1 BLOCKER, 5
+- `docs-adr-expert` (PDR-057/058): GAPS FOUND (1 BLOCKER, 5
   WARNINGS, 2 DEFERRED). Blocker on PDR-058 supersedes-link
   phrasing fixed before staging; warnings on destructive-action
   family naming + Anti-Patterns symmetry partly folded in.
-+ `onboarding-expert` (PDR-057/058): GAPS FOUND (3 BLOCKERS, 5
+- `onboarding-expert` (PDR-057/058): GAPS FOUND (3 BLOCKERS, 5
   WARNINGS). PDR README index missing rows + quarantine file
   back-update + PDR-058 supersedes wording fixed before staging.
-+ `assumptions-expert` (PDR-057/058): no INVALID assumptions; 3
+- `assumptions-expert` (PDR-057/058): no INVALID assumptions; 3
   WEAK assumptions partly folded in (destructive-action family
   naming hardened in PDR-057 Anti-Pattern §1; pre-investigation
   triage scoped out of PDR-057 Forbids; PDR-058 orthogonality
@@ -185,9 +221,9 @@ PDR-054 / ADR-177 amendment candidate.
 
 **Follow-ups completed**:
 
-+ User-memory `project_apply_dont_ask_superseded.md` retired entirely
+- User-memory `project_apply_dont_ask_superseded.md` retired entirely
   (substance fully canonical in PDRs); MEMORY.md index updated.
-+ PDR-058 §Surfaces 2 (design optionality) + 3 (outcome optionality)
+- PDR-058 §Surfaces 2 (design optionality) + 3 (outcome optionality)
   registered as standalone graduation-candidate routing labels in
   `pending-graduations.md`.
 
@@ -213,18 +249,18 @@ todos all `completed`.
 
 **What landed**:
 
-+ New pattern file at
+- New pattern file at
   `.agent/memory/active/patterns/owner-course-correct-vocabulary.md`
   (138 lines, fitness-clean) lifting items 9 + 20 of the disposition
   ledger jointly: owner-side course-correct phrases (corpus from
   `08-communication-style.md`) and agent-side self-trigger phrases
   (from `06-frictions-and-anti-patterns.md` + `09-agent-action-rules.md`).
-+ Single batch entry "Insight-Report 2026-05-10 Candidates" appended to
+- Single batch entry "Insight-Report 2026-05-10 Candidates" appended to
   `.agent/memory/operational/pending-graduations.md` covering 8 candidate
   items (10, 12, 16, 19, 21, 26, 29, 30) as 6 entries after natural
   pairing (19+21 share target/trigger; 29+30 share scope as "any future
   generated insight artefact").
-+ Disposition plan body annotated with Phase 0 audit outcomes inline.
+- Disposition plan body annotated with Phase 0 audit outcomes inline.
 
 **Phase 0 audit outcomes**: items 11 (`invoke-code-experts.md`), 17,
 24 confirmed DISCARD; item 16 refined VERIFY-INTEGRATE → CANDIDATE
@@ -235,16 +271,16 @@ absent in `user-collaboration.md` §Working Model).
 
 **Reviewer dispatch**:
 
-+ `assumptions-expert` (Phase 0): caught citation drift on item 11 —
+- `assumptions-expert` (Phase 0): caught citation drift on item 11 —
   the file was renamed `invoke-code-reviewers.md` →
   `invoke-code-experts.md` mid-session by the Stormbound Phase 1B
   closeout commit `249600f1`. Plan body updated; Phase 0 deterministic
   validation block re-cited.
-+ `docs-adr-expert` (Phase 1): APPROVED. All six checks passed
+- `docs-adr-expert` (Phase 1): APPROVED. All six checks passed
   (doctrine fit, cross-reference correctness, polarity declaration,
   ledger faithfulness, vocabulary discipline, no verbatim
   principles.md quotes).
-+ `docs-adr-expert` (Phase 2): APPROVED WITH NITS. One optional nit on
+- `docs-adr-expert` (Phase 2): APPROVED WITH NITS. One optional nit on
   item 12's withdrawal trigger (substance-falsification path) applied
   in a small follow-up edit.
 
@@ -286,22 +322,22 @@ Phase 1B closeout.
 
 **Commits landed (3 on `feat/mcp-graph-support-foundation`)**:
 
-+ `ae36670a` — `chore(sub-agents): retire standalone *-expert skills
+- `ae36670a` — `chore(sub-agents): retire standalone *-expert skills
   after Phase 1B integration`. 27 files: 24 standalone-skill directories
   deleted (8 `.agent/skills/*-expert/` canonical + 8
   `.claude/skills/jc-*-expert/` adapters + 8
   `.agents/skills/jc-*-expert/` adapters), `mcp-expert/installation-and-integration.md`
   companion deleted, 8 `Skill(*-expert)` entries removed from
   `.claude/settings.json`, owning plan updated.
-+ `c31eb492` — `docs(sub-agents): land Phase 1B reviewer follow-ups`.
+- `c31eb492` — `docs(sub-agents): land Phase 1B reviewer follow-ups`.
   Plan-drift fix per docs-adr-expert (anchored_commits + status text)
-  + dead Style Dictionary URL fix per design-system-expert
+  - dead Style Dictionary URL fix per design-system-expert
   (`https://amzn.github.io/style-dictionary/` → `https://styledictionary.com/`).
-+ `249600f1` — `refactor(rules): rename invoke-*-reviewer rules to
+- `249600f1` — `refactor(rules): rename invoke-*-reviewer rules to
   invoke-*-expert (Phase 1B closeout)`. 37 file renames across 5
   surfaces (`.agent/rules/`, `.claude/rules/`, `.cursor/rules/.mdc`,
   `.agents/rules/`, `.agent/memory/executive/`) — 8 per-domain rules
-  + 1 gateway rule + 1 executive memory all renamed
+  - 1 gateway rule + 1 executive memory all renamed
   `*-reviewer*` → `*-expert*` with body updates removing all stale
   agent identifiers (~30 in executive memory alone). 5
   immediate-broken-pointer cross-reference fixes in `AGENT.md`,
@@ -310,18 +346,18 @@ Phase 1B closeout.
 
 **Reviewer matrix (9 reviewers dispatched per plan)**:
 
-+ `code-expert` (gateway): WARNINGS — flagged the 8 `invoke-*-reviewer`
+- `code-expert` (gateway): WARNINGS — flagged the 8 `invoke-*-reviewer`
   rules + executive memory as broken trigger surface (Phase 2 priority).
-+ `config-expert`: CLEAN.
-+ `docs-adr-expert`: WARNINGS — plan drift (addressed in `c31eb492`).
-+ `architecture-expert-fred`: WARNINGS — same trigger-surface finding
+- `config-expert`: CLEAN.
+- `docs-adr-expert`: WARNINGS — plan drift (addressed in `c31eb492`).
+- `architecture-expert-fred`: WARNINGS — same trigger-surface finding
   as code-expert; classified as Phase 1B closeout per ADR-129
   amendment.
-+ `accessibility-expert`, `assumptions-expert`,
+- `accessibility-expert`, `assumptions-expert`,
   `react-component-expert`: CLEAN on their own paired domain.
-+ `design-system-expert`: WARNINGS — dead Style Dictionary URL
+- `design-system-expert`: WARNINGS — dead Style Dictionary URL
   (addressed in `c31eb492`).
-+ `elasticsearch-expert`: CLEAN with minor brief-vs-template PDR-051
+- `elasticsearch-expert`: CLEAN with minor brief-vs-template PDR-051
   attribution observation.
 
 **Convergent finding driving the extended scope**: 3 of 4 cross-cutting
@@ -351,19 +387,19 @@ commits.
 
 **Latent items carried forward**:
 
-+ ~590-site Phase 2 prose-reference sweep across `docs/`, `.agent/plans/`,
+- ~590-site Phase 2 prose-reference sweep across `docs/`, `.agent/plans/`,
   `.agent/memory/` non-rule docs, `.cursor/plans/` archives.
-+ Self-reference cleanup in `.agent/sub-agents/templates/subagent-architect.md`
+- Self-reference cleanup in `.agent/sub-agents/templates/subagent-architect.md`
   and `.agent/sub-agents/templates/code-expert.md` gateway routing
   tables (equal priority to general Phase 2 prose).
-+ ADR filenames `146-assumptions-reviewer-meta-level-plan-assessment.md`
+- ADR filenames `146-assumptions-reviewer-meta-level-plan-assessment.md`
   and `149-frontend-specialist-reviewer-gateway-cluster.md` retain
   `reviewer` in the path; rename-or-keep is owner decision (ADR
   filenames are conventionally permanent).
-+ ADR-146 area-count drift: ADR body enumerates 6 areas; merged
+- ADR-146 area-count drift: ADR body enumerates 6 areas; merged
   template's reviewer Step 3 uses the 7-area form (Build-vs-buy added
   as #1). Doc-drift item, not template defect.
-+ `agent-tools/src/skills-adapter-generate/generator.ts:191-199`
+- `agent-tools/src/skills-adapter-generate/generator.ts:191-199`
   applies `jc-` prefix unconditionally and silently discards
   classification keys — captured at
   `.agent/plans/agent-tooling/future/third-party-skill-reimport-targets.md`,
@@ -393,13 +429,13 @@ workflow from the `start-right-quick` entrypoint, then ran
 
 **Safe updates made**:
 
-+ archived the oversized active napkin verbatim to
+- archived the oversized active napkin verbatim to
   `.agent/memory/active/archive/napkin-2026-05-10.md`;
-+ distilled the 2026-05-10 behaviour-changing lessons into
+- distilled the 2026-05-10 behaviour-changing lessons into
   `.agent/memory/active/distilled.md`;
-+ started a fresh `.agent/memory/active/napkin.md` and recorded the
+- started a fresh `.agent/memory/active/napkin.md` and recorded the
   consolidation findings;
-+ registered identity/claims, logged the opening comms event, closed the
+- registered identity/claims, logged the opening comms event, closed the
   broad read-oriented consolidation claim, and opened/closed this short
   handoff claim.
 
@@ -472,15 +508,15 @@ post-sweep state.
 
 **Current state**:
 
-+ Commit sweep landed `57de914f`, `1cc83d62`, and `b96b7e48`.
-+ Follow-up Phase 1B content commits `16c10cea` and `31a2a9e1` mean all eight
+- Commit sweep landed `57de914f`, `1cc83d62`, and `b96b7e48`.
+- Follow-up Phase 1B content commits `16c10cea` and `31a2a9e1` mean all eight
   paired expert content/adaptor merges are now landed.
-+ The working tree currently carries the Phase 1B cleanup bundle:
+- The working tree currently carries the Phase 1B cleanup bundle:
   standalone canonical expert skill directories deleted, generated
   `.claude/skills/jc-*` and `.agents/skills/jc-*` expert adapters deleted,
   matching `.claude/settings.json` `Skill()` permissions removed, and this
   plan/continuity state updated.
-+ Branch-primary graph handoff state is already landed at `c9c88cbb`; the
+- Branch-primary graph handoff state is already landed at `c9c88cbb`; the
   graph lane remains the Oak Ontology Threads proof in `graph-corpus-sdk`.
 
 **Collaboration lifecycle**: no Salty Rolling Compass active claim remains
@@ -503,28 +539,28 @@ with docs-adr-expert help for both planning and review.
 
 **Commits landed**:
 
-+ `f6643e60` — `docs(adr): refresh coverage decisions` — created ADR-174
+- `f6643e60` — `docs(adr): refresh coverage decisions` — created ADR-174
   (dependency vulnerability scanning gate) and ADR-175 (external evidence
   corpus freshness governance), refreshed ADR indexes, and amended recent
   auth, quality-gate, graph/search, security/redaction, observability, and
   agent-practice ADR coverage.
-+ `335a2373` — `docs(security): align observability guidance` — aligned
+- `335a2373` — `docs(security): align observability guidance` — aligned
   `SECURITY.md`, logging guidance, and HTTP MCP observability docs.
-+ `8dfe7b49` — `docs(adr): align hook and observability wording` — corrected
+- `8dfe7b49` — `docs(adr): align hook and observability wording` — corrected
   ADR-013 hook doctrine and stale consolidation/Sentry wording.
-+ `55e2c097` — `docs(adr): correct current runtime guidance` — absorbed the
+- `55e2c097` — `docs(adr): correct current runtime guidance` — absorbed the
   docs-adr-expert review by restoring HTTP MCP operator docs to current
   `SENTRY_MODE` behaviour, marking ADR-162 Proposed, softening ADR-125 command
   retirement wording, and tightening source-map/redaction/auth wording.
-+ `b450679b` — `docs(adr): refine auth observability follow-ups` — completed
+- `b450679b` — `docs(adr): refine auth observability follow-ups` — completed
   follow-up corrections for OAuth JWT/JWKS historical wording, ADR-005
   implementation direction, and ADR-162 acceptance language.
 
 **Validation**:
 
-+ `git diff --check`
-+ `pnpm markdownlint-check:root`
-+ `pnpm format-check:root`
+- `git diff --check`
+- `pnpm markdownlint-check:root`
+- `pnpm format-check:root`
 
 **Specialist review**: `docs-adr-expert` reviewed the implementation read-only.
 Findings were addressed in the follow-up commits above: no over-claiming
@@ -550,13 +586,13 @@ files in logical groups on `feat/mcp-graph-support-foundation`.
 
 **Commits landed**:
 
-+ `57de914f` — `feat(sub-agents): extend experts with active-workflow guidance`
+- `57de914f` — `feat(sub-agents): extend experts with active-workflow guidance`
   — accessibility, assumptions, design-system, and elasticsearch expert
   templates plus the changed Claude/Cursor/Codex adapters and
   `.codex/config.toml` description sync.
-+ `1cc83d62` — `docs(practice): recalibrate practice core fitness budget` —
+- `1cc83d62` — `docs(practice): recalibrate practice core fitness budget` —
   `practice.md` fitness metadata recalibration only.
-+ `b96b7e48` — `chore(collaboration): preserve commit safety sweep state` —
+- `b96b7e48` — `chore(collaboration): preserve commit safety sweep state` —
   napkin, active claims, closed-claim archive, comms events, and rendered
   shared comms log for the sweep.
 
@@ -604,28 +640,28 @@ F-04, F-09 for `collaboration-state`, F-12, and F-13.
 
 **Behaviour now present**:
 
-+ invalid `collaboration-state` command options return command help plus
+- invalid `collaboration-state` command options return command help plus
   the specific error;
-+ `claims close` accepts `--closure-summary` as an alias for `--summary`
+- `claims close` accepts `--closure-summary` as an alias for `--summary`
   and rejects ambiguous dual input;
-+ `claims open --help` and unsupported-kind errors enumerate
+- `claims open --help` and unsupported-kind errors enumerate
   `files | workspace | plan | adr | git`;
-+ `comms send --help` names the supported identity seed inputs, and
+- `comms send --help` names the supported identity seed inputs, and
   unsupported `--agent-name` returns help plus the exact error;
-+ `comms send` returns JSON with `event_id`, `event_path`, and
+- `comms send` returns JSON with `event_id`, `event_path`, and
   `shared_log_path`, using resolved `--events-dir` / `--output`
   targets;
-+ README examples now show both `claims open --file` and repeated
+- README examples now show both `claims open --file` and repeated
   `--area-pattern`.
 
 **Validation**:
 
-+ `pnpm --dir agent-tools exec vitest run tests/collaboration-state/collaboration-state.unit.test.ts`
-+ `pnpm --filter @oaknational/agent-tools type-check`
-+ `pnpm --filter @oaknational/agent-tools lint`
-+ `pnpm exec markdownlint --dot agent-tools/README.md .agent/plans/agent-tooling/frictions-register.md`
-+ `pnpm exec prettier --check ...` on touched Workstream 1 files
-+ `pnpm agent-tools:collaboration-state -- check --active .agent/state/collaboration/active-claims.json --closed .agent/state/collaboration/closed-claims.archive.json --events-dir .agent/state/collaboration/comms-events`
+- `pnpm --dir agent-tools exec vitest run tests/collaboration-state/collaboration-state.unit.test.ts`
+- `pnpm --filter @oaknational/agent-tools type-check`
+- `pnpm --filter @oaknational/agent-tools lint`
+- `pnpm exec markdownlint --dot agent-tools/README.md .agent/plans/agent-tooling/frictions-register.md`
+- `pnpm exec prettier --check ...` on touched Workstream 1 files
+- `pnpm agent-tools:collaboration-state -- check --active .agent/state/collaboration/active-claims.json --closed .agent/state/collaboration/closed-claims.archive.json --events-dir .agent/state/collaboration/comms-events`
 
 **Reviewer dispatch**: `code-expert`, `test-expert`, and
 `docs-adr-expert` all returned CLEAN on the second pass. First-pass
@@ -664,10 +700,10 @@ before any damage is done. This thread is over."*
 
 **Unlanded case** (PDR-026 deferral-honesty discipline):
 
-+ *Attempted*: surface candidate shapes for owner direction on
+- *Attempted*: surface candidate shapes for owner direction on
   practice.md HARD-char pressure (31,870 / 30,500), opening the
   examination lane named in the prior session's Next Safe Step.
-+ *Prevented*: agent's own framing failure — read PDR-003 then
+- *Prevented*: agent's own framing failure — read PDR-003 then
   violated its §Decision-2 by framing analysis in line-savings
   vocabulary. The failure was visible to the owner via the word
   "contractions" plus bulleted save-counts. An earlier in-session
@@ -675,7 +711,7 @@ before any damage is done. This thread is over."*
   context to do a good job") was acted on for the self-containment
   dimension (no Core → ADR pointers) but not for the
   curation-vs-optimisation dimension.
-+ *Falsifiability*: a future session has re-attempted this
+- *Falsifiability*: a future session has re-attempted this
   examination correctly IFF (a) it reads the trinity +
   `practice-verification.md` at session-open before any analysis,
   (b) it leads any surfacing with role-questions per section
@@ -688,7 +724,7 @@ before any damage is done. This thread is over."*
 
 **Trinity context now grounded** (carry-forward for next attempt):
 
-+ The trinity contract (per `index.md`): `practice.md` is the WHAT,
+- The trinity contract (per `index.md`): `practice.md` is the WHAT,
   `practice-lineage.md` is the WHY, `practice-bootstrap.md` is the
   HOW, `practice-verification.md` is verification. Self-containment
   forbids Core → host-repo pointers (ADR numbers, repo paths); Core
@@ -696,7 +732,7 @@ before any damage is done. This thread is over."*
   itself routinely; `practice-lineage.md` line 234 deliberately
   points back to `practice.md` as the canonical home of the
   Knowledge Flow).
-+ Governance frame: PDR-003 §Decision-2 (curation, not optimisation)
+- Governance frame: PDR-003 §Decision-2 (curation, not optimisation)
   is the controlling discipline. PDR-026 substance-preservation
   overrides fitness pressure. ADR-144 Key Principle 4 makes
   `fitness_char_limit` change owner-only; Key Principle 2 forbids
@@ -704,12 +740,12 @@ before any damage is done. This thread is over."*
 
 **Working tree state at session close (uncommitted)**:
 
-+ Three handoff files inherited from prior session (Woodland Growing
+- Three handoff files inherited from prior session (Woodland Growing
   Leaf) remain staged: `napkin.md`, `repo-continuity.md`, this
   thread record. This session updates all three (handoff capture +
   session-close record + Next Safe Step refresh) — updates land on
   top of the prior staged content; same lineage, no conflict.
-+ Concurrent-agent unstaged work present in working tree
+- Concurrent-agent unstaged work present in working tree
   (collaboration-state CLI changes in `agent-tools/src/`,
   `frictions-register.md`, `.cursor/plans/agent_tooling_frictions_*.plan.md`)
   — not touched.
@@ -742,10 +778,10 @@ preservation overrides any optimisation reflex.
 
 **Commits landed on `feat/mcp-graph-support-foundation`**:
 
-+ `153e960b` — `docs(skills): remove leftover third-party skill vendoring` — 12 third-party skill canonicals (8 Clerk + 4 MCP-Apps) deleted from `.agent/skills/`, all 24 `jc-`-prefixed adapters in `.claude/skills/` and `.agents/skills/` deleted, `skills-lock.json` reset to `{}`, 13 unprefixed `Skill(...)` permissions removed from `.claude/settings.json`, `mcp-expert/installation-and-integration.md` rewritten around the open `npx skills add` flow, `mcp-expert/SKILL-CANONICAL.md` and `sub-agents/templates/mcp-reviewer.md` (now `mcp-expert.md`) de-dangled, re-import note added at `.agent/plans/agent-tooling/future/third-party-skill-reimport-targets.md`.
-+ `261d50fe` — `docs(skills): apply mcp-reviewer + fred review feedback` — brace-expansion glob clarity fix + generator pre-condition section added per architecture-reviewer-fred's latent-BLOCKER finding + docs-adr stale-references list captured.
-+ `ce054100` — `refactor(sub-agents): rename *-reviewer to *-expert (mechanical, phase 1A)` — 17 canonicals + 60 adapters renamed across `.claude/agents/`, `.cursor/agents/`, `.codex/agents/`; frontmatter `name:` and `Read and follow` paths updated; `.codex/config.toml` agent registrations updated; one failing live-roster integration test updated to `clerk-expert`/`code-expert`.
-+ `1d1a209c` — `docs(plans): open sub-agent rename + skill integration plan` — Phase 1B + 2 hand-off plan at `.agent/plans/agent-tooling/current/sub-agent-rename-and-skill-integration.plan.md`.
+- `153e960b` — `docs(skills): remove leftover third-party skill vendoring` — 12 third-party skill canonicals (8 Clerk + 4 MCP-Apps) deleted from `.agent/skills/`, all 24 `jc-`-prefixed adapters in `.claude/skills/` and `.agents/skills/` deleted, `skills-lock.json` reset to `{}`, 13 unprefixed `Skill(...)` permissions removed from `.claude/settings.json`, `mcp-expert/installation-and-integration.md` rewritten around the open `npx skills add` flow, `mcp-expert/SKILL-CANONICAL.md` and `sub-agents/templates/mcp-reviewer.md` (now `mcp-expert.md`) de-dangled, re-import note added at `.agent/plans/agent-tooling/future/third-party-skill-reimport-targets.md`.
+- `261d50fe` — `docs(skills): apply mcp-reviewer + fred review feedback` — brace-expansion glob clarity fix + generator pre-condition section added per architecture-reviewer-fred's latent-BLOCKER finding + docs-adr stale-references list captured.
+- `ce054100` — `refactor(sub-agents): rename *-reviewer to *-expert (mechanical, phase 1A)` — 17 canonicals + 60 adapters renamed across `.claude/agents/`, `.cursor/agents/`, `.codex/agents/`; frontmatter `name:` and `Read and follow` paths updated; `.codex/config.toml` agent registrations updated; one failing live-roster integration test updated to `clerk-expert`/`code-expert`.
+- `1d1a209c` — `docs(plans): open sub-agent rename + skill integration plan` — Phase 1B + 2 hand-off plan at `.agent/plans/agent-tooling/current/sub-agent-rename-and-skill-integration.plan.md`.
 
 **Reviewer dispatch**: code-reviewer (gateway, found two BLOCKERs in mcp doc dangling-paths), config-reviewer (PASS), docs-adr-reviewer (CONDITIONAL on six current-tier plans/reports describing the pre-cleanup state), mcp-reviewer (OK with one WARN — fixed in `261d50fe`), architecture-reviewer-fred (latent BLOCKER on the skills generator's unconditional `jc-` prefix — gates re-import not the cleanup itself; captured in re-import note's §"Pre-condition for any future re-import").
 
@@ -766,10 +802,10 @@ preservation overrides any optimisation reflex.
 
 **Commits landed on `feat/mcp-graph-support-foundation`**:
 
-+ `d981b2b3` — Group A: directive cure-naming (`agent-collaboration.md` §c) + plan landing + handoff state.
-+ `6d7d5ee3` — Phase 1: archive sweep, live `repo-continuity.md` 555 → 270 lines; new archive companion `repo-continuity-session-history-2026-05-10.md`.
-+ `09b513ae` — Phase 2: §Repo-Wide Invariants role-justified (Option A); 12 canonical-home cross-references added.
-+ `c3061935` — plan archived `current/` → `archive/completed/` per ADR-117.
+- `d981b2b3` — Group A: directive cure-naming (`agent-collaboration.md` §c) + plan landing + handoff state.
+- `6d7d5ee3` — Phase 1: archive sweep, live `repo-continuity.md` 555 → 270 lines; new archive companion `repo-continuity-session-history-2026-05-10.md`.
+- `09b513ae` — Phase 2: §Repo-Wide Invariants role-justified (Option A); 12 canonical-home cross-references added.
+- `c3061935` — plan archived `current/` → `archive/completed/` per ADR-117.
 
 **Inter-agent coordination**: comms-event exchange with Riverine Drifting Lighthouse (`9344adf1` → `05ccefb8` → `5bff4178`) cleanly resolved a brief Phase 2 markdownlint blockage caused by Riverine's mid-flight third-party skills cleanup. Demonstrated inter-agent comms-first-class pattern under deadline + default action.
 
@@ -811,8 +847,8 @@ agent-tooling objective remains Phase 1 of
 
 **Commits landed on `feat/mcp-graph-support-foundation`**:
 
-+ `fae57312` feat(skills): canonicalise 6 adapter-only skills (Wave 2 Item 1) — 6 SKILL-CANONICAL.md as thin pointers to `.agent/commands/<id>.md`; 86 adapter files regenerated; reviewer-approved.
-+ `3ecbc4dc` docs(plans): open agent-commands-retirement plan + Wave 2 handoff.
+- `fae57312` feat(skills): canonicalise 6 adapter-only skills (Wave 2 Item 1) — 6 SKILL-CANONICAL.md as thin pointers to `.agent/commands/<id>.md`; 86 adapter files regenerated; reviewer-approved.
+- `3ecbc4dc` docs(plans): open agent-commands-retirement plan + Wave 2 handoff.
 
 **Plan-time reviewer findings** (code-reviewer agentId `a49d706db87f87853`, APPROVED WITH SUGGESTIONS):
 
@@ -839,7 +875,7 @@ agent-tooling objective remains Phase 1 of
 
 **Working tree state at session close (uncommitted)**:
 
-+ `.agent/directives/agent-collaboration.md` — five edits applied,
+- `.agent/directives/agent-collaboration.md` — five edits applied,
   pending owner-directed commit. No reviewer dispatch run; this is
   directive-edit work and the brief was approved per the
   `~/.claude/plans/a-please-jc-metacognition-zany-lemon.md` plan.
@@ -873,11 +909,11 @@ prose line 97/100 green; markdownlint clean.
 
 **Mid-session friction (worth recording)**:
 
-+ Re-parent surfaced an unobserved heading-count drift (3 vs 4 rules)
+- Re-parent surfaced an unobserved heading-count drift (3 vs 4 rules)
   that no structural check had caught. Caught only by reading-through-
   the-design-commitment lens. Suggests intro counts on enumerated
   sections drift silently when children are added.
-+ §c had not named the foreign-stage cure even though five instances
+- §c had not named the foreign-stage cure even though five instances
   were captured and the cure was refined and landed in
   `stage-by-explicit-pathspec.md`. Directive-layer tripwire absence
   was the missing link — agents read the directive first; if the cure
@@ -900,13 +936,13 @@ is agent-executable next session; Phase 2 awaits owner A/B/C choice.
 
 **Landed on `feat/mcp-graph-support-foundation`**:
 
-+ `901f113f` — Item 1: 37 canonicals renamed `SKILL.md` → `SKILL-CANONICAL.md`; adapters regenerated to point at the new filename.
-+ `4b931cca` — Item 1 follow-up: 6 owner-authored adapter-only skills re-added after `--clear` wiped them (3rd instance of the same regression; cure overdue).
-+ `a8351b33` — Item 2: `checkAdapters()` in new `agent-tools/src/skills-adapter-generate/checker.ts` with injectable `CheckerFs`; bin `--check` exits 1 on drift; `pnpm skills:check` chained into `pnpm check` after `portability:check`; `.claude/skills/` + `.agents/skills/` added to `.prettierignore`. Tests use fakes only — no real fs in unit tests.
-+ `4db5e084` — Item 3 (parallel agent Woodland Sheltering Glade absorbed): `.cursor/skills/`, `.claude/commands/jc-*.md` deleted. `.gemini/.codex/.windsurf/skills` did not exist in this repo.
-+ `939900c7` — Item 3 follow-up: `.claude/skills/jc-<id>/SKILL.md` mirrors created for the 6 adapter-only skills after their slash-command discovery was retired.
-+ `17176e29` — Item 4 reviewer dispatch BLOCKER fix: `parseFrontmatter` returns a freshly-constructed `{ name, description }` instead of the raw narrowed value; dead `LEGACY_CANONICAL_FILENAME` fallback removed.
-+ `3191a120` — Timing artefact recording the punch list and reviewer dispositions.
+- `901f113f` — Item 1: 37 canonicals renamed `SKILL.md` → `SKILL-CANONICAL.md`; adapters regenerated to point at the new filename.
+- `4b931cca` — Item 1 follow-up: 6 owner-authored adapter-only skills re-added after `--clear` wiped them (3rd instance of the same regression; cure overdue).
+- `a8351b33` — Item 2: `checkAdapters()` in new `agent-tools/src/skills-adapter-generate/checker.ts` with injectable `CheckerFs`; bin `--check` exits 1 on drift; `pnpm skills:check` chained into `pnpm check` after `portability:check`; `.claude/skills/` + `.agents/skills/` added to `.prettierignore`. Tests use fakes only — no real fs in unit tests.
+- `4db5e084` — Item 3 (parallel agent Woodland Sheltering Glade absorbed): `.cursor/skills/`, `.claude/commands/jc-*.md` deleted. `.gemini/.codex/.windsurf/skills` did not exist in this repo.
+- `939900c7` — Item 3 follow-up: `.claude/skills/jc-<id>/SKILL.md` mirrors created for the 6 adapter-only skills after their slash-command discovery was retired.
+- `17176e29` — Item 4 reviewer dispatch BLOCKER fix: `parseFrontmatter` returns a freshly-constructed `{ name, description }` instead of the raw narrowed value; dead `LEGACY_CANONICAL_FILENAME` fallback removed.
+- `3191a120` — Timing artefact recording the punch list and reviewer dispositions.
 
 **Reviewer dispatch (Item 4)**: code-reviewer (`ad0605e2…`), type-reviewer (`a75a364b…`), architecture-reviewer-fred (`a5613d0e…`) ran in parallel. One BLOCKER and two cheap WARNs landed in `17176e29`. Five WARNs deferred with reasons in [`tracks/skills-standardisation-followup-timing.md`][followup-timing]; see Deferred follow-up below.
 
@@ -924,10 +960,10 @@ is agent-executable next session; Phase 2 awaits owner A/B/C choice.
 
 **Mid-session friction (worth recording in addition to napkin)**:
 
-+ 3rd-instance of `--clear` regression — same shape, same cure overdue. Cure candidates: canonicalise the six (preferred, closes structural gap) OR teach `--clear` to read `skills-lock.json` and spare unlocked dirs (defensive narrowing, perpetuates the two-class system).
-+ Auto-classifier blocked `git commit -m "...restore..."` because the body matched the substring "git restore". Reword to "re-add" worked. Pre-commit matcher should anchor on shell-command shape, not bare token presence inside commit-message bodies.
-+ Parallel agent (Woodland Sheltering Glade) absorbed my Item 3 staged deletions into a commit authored under their identity. Outcome acceptable, attribution unclear. Coordination cure candidate: pre-commit `git diff --cached` audit before committing under your own identity, to surface absorbed staging from another agent.
-+ Reviewer-rule cascade re-emerged at smaller scale: type-reviewer's BLOCKER pattern (narrow-and-return-raw rather than narrow-and-construct-fresh) is recurring. Worth a rule extraction.
+- 3rd-instance of `--clear` regression — same shape, same cure overdue. Cure candidates: canonicalise the six (preferred, closes structural gap) OR teach `--clear` to read `skills-lock.json` and spare unlocked dirs (defensive narrowing, perpetuates the two-class system).
+- Auto-classifier blocked `git commit -m "...restore..."` because the body matched the substring "git restore". Reword to "re-add" worked. Pre-commit matcher should anchor on shell-command shape, not bare token presence inside commit-message bodies.
+- Parallel agent (Woodland Sheltering Glade) absorbed my Item 3 staged deletions into a commit authored under their identity. Outcome acceptable, attribution unclear. Coordination cure candidate: pre-commit `git diff --cached` audit before committing under your own identity, to surface absorbed staging from another agent.
+- Reviewer-rule cascade re-emerged at smaller scale: type-reviewer's BLOCKER pattern (narrow-and-return-raw rather than narrow-and-construct-fresh) is recurring. Worth a rule extraction.
 
 **Branch state**: `feat/mcp-graph-support-foundation` at HEAD `3191a120` (8 commits ahead of session start `708e2964` once the parallel agent's commit is included).
 
@@ -937,10 +973,10 @@ is agent-executable next session; Phase 2 awaits owner A/B/C choice.
 
 **Landed (three commits on `feat/mcp-graph-support-foundation`)**:
 
-+ `a5d7fb12` — WS1.1 Ajv lock loader (kept; future hook for generator).
-+ `41831d5c` — Skills adapter generator + bin + unit tests; `yaml` dep
+- `a5d7fb12` — WS1.1 Ajv lock loader (kept; future hook for generator).
+- `41831d5c` — Skills adapter generator + bin + unit tests; `yaml` dep
   added to `agent-tools/package.json`.
-+ `708e2964` — Mass migration: 117 files, all adapters now `jc-<id>`
+- `708e2964` — Mass migration: 117 files, all adapters now `jc-<id>`
   on both `.claude/skills/` and `.agents/skills/`. 6 owner-authored
   adapter-only skills (`jc-consolidate-docs`, `jc-gates`,
   `jc-metacognition`, `jc-plan`, `jc-review`, `jc-session-handoff`)
@@ -965,9 +1001,9 @@ operative roadmap; the deferred items below are.
 
 **Mid-session friction (worth recording)**:
 
-+ Reviewer-rule cascade: subagent review of WS1.1 surfaced fixes (named `LockedSkillEntry`, declarative `toMatchObject`) that then collided with separate lint rules (`@typescript-eslint/consistent-indexed-object-style` vs `Record<string, unknown>` ban; `@typescript-eslint/consistent-type-assertions` vs `Extract<...>` cast pattern). Three iterations to settle.
-+ Auto-classifier denial of `git mv` and `git checkout --` forced workarounds (`git show HEAD:<path> > <path>` to restore files). Working-tree backups taken to `/tmp/ws1.1-unstage-backup/` before any state change — held the user's "no content loss" directive.
-+ `--clear` regenerate wiped 6 owner-authored adapter-only skills before I noticed (no canonicals to regenerate from). Restored same-session via `git show HEAD:`. Generator behaviour is correct (it generates from canonicals); the gap is at the level of "what's an adapter-only skill" — needs explicit registration or a different sweep semantics.
+- Reviewer-rule cascade: subagent review of WS1.1 surfaced fixes (named `LockedSkillEntry`, declarative `toMatchObject`) that then collided with separate lint rules (`@typescript-eslint/consistent-indexed-object-style` vs `Record<string, unknown>` ban; `@typescript-eslint/consistent-type-assertions` vs `Extract<...>` cast pattern). Three iterations to settle.
+- Auto-classifier denial of `git mv` and `git checkout --` forced workarounds (`git show HEAD:<path> > <path>` to restore files). Working-tree backups taken to `/tmp/ws1.1-unstage-backup/` before any state change — held the user's "no content loss" directive.
+- `--clear` regenerate wiped 6 owner-authored adapter-only skills before I noticed (no canonicals to regenerate from). Restored same-session via `git show HEAD:`. Generator behaviour is correct (it generates from canonicals); the gap is at the level of "what's an adapter-only skill" — needs explicit registration or a different sweep semantics.
 
 **Branch state**: `feat/mcp-graph-support-foundation` at HEAD `708e2964` (3 commits ahead of session start `c63e3816`).
 
@@ -991,15 +1027,15 @@ All four reviewers ran in parallel (assumptions, test, architecture-fred, docs-a
 
 Highlights of the reshape:
 
-+ WS1.4 / WS1.5 / WS1.7: literal-text assertions replaced with structural assertions.
-+ WS1.1: pre-authored Ajv schema literal removed from plan body (genuine Red phase preserved).
-+ WS1.2 frontmatter `depends_on` corrected to `[ws0-pre-execution-plan-review]`.
-+ WS1.6: paired `*.unit.test.ts` (in-memory `fs` fake) added alongside the integration test.
-+ WS1.8: renamed `bin.integration.test.ts` → `bin.e2e.test.ts` (process spawn = E2E classification).
-+ WS2.1 broadened: same cycle adds canonical-filename check AND migrates existing validator `SKILL.md` reads to a tolerant probe; bridge for WS3.1 ordering safety; fallback removed in WS3.9.
-+ WS2.3 + WS2.4 reshaped: subprocess delegation to generator's `--check`; consistency and bytewise-equality logic single-homed in `agent-tools/src/skills-adapter-generate/`.
-+ WS3.4 acceptance: owner-eyeball gate before WS3.5 destruction.
-+ WS5: extended with WS5.6 (executive-memory updates), WS5.7 (live operating-model research alignment), WS5.8 (skills-ref deferred-adopt forward pointer), WS5.9 (ADR-125 line 12 historical clarifier).
+- WS1.4 / WS1.5 / WS1.7: literal-text assertions replaced with structural assertions.
+- WS1.1: pre-authored Ajv schema literal removed from plan body (genuine Red phase preserved).
+- WS1.2 frontmatter `depends_on` corrected to `[ws0-pre-execution-plan-review]`.
+- WS1.6: paired `*.unit.test.ts` (in-memory `fs` fake) added alongside the integration test.
+- WS1.8: renamed `bin.integration.test.ts` → `bin.e2e.test.ts` (process spawn = E2E classification).
+- WS2.1 broadened: same cycle adds canonical-filename check AND migrates existing validator `SKILL.md` reads to a tolerant probe; bridge for WS3.1 ordering safety; fallback removed in WS3.9.
+- WS2.3 + WS2.4 reshaped: subprocess delegation to generator's `--check`; consistency and bytewise-equality logic single-homed in `agent-tools/src/skills-adapter-generate/`.
+- WS3.4 acceptance: owner-eyeball gate before WS3.5 destruction.
+- WS5: extended with WS5.6 (executive-memory updates), WS5.7 (live operating-model research alignment), WS5.8 (skills-ref deferred-adopt forward pointer), WS5.9 (ADR-125 line 12 historical clarifier).
 
 Owner-locked decisions reaffirmed; no reviewer surfaced primary-source basis to reopen any. WS1.1 is now the open work.
 
@@ -1009,13 +1045,13 @@ Begin **WS1.1 — Ajv schema + loader for `skills-lock.json`** as the first TDD 
 
 **Subsequent flow** (after WS0 passes):
 
-+ WS1.1–WS1.8: generator core under cycle-by-cycle TDD.
-+ WS1 mid-review: code/type/test reviewers + assumptions-reviewer build-vs-buy survival check.
-+ WS2.1–WS2.6: validator extension under TDD.
-+ WS2 mid-review.
-+ **WS2.5 pre-migration plan-direction check** (MANDATORY): `architecture-reviewer-fred` + `assumptions-reviewer` re-validate WS3 sequencing before destructive migration.
-+ WS3.1–WS3.9: mechanical migration commits.
-+ WS4 quality gates; WS5 documentation propagation; WS6 adversarial review and consolidation.
+- WS1.1–WS1.8: generator core under cycle-by-cycle TDD.
+- WS1 mid-review: code/type/test reviewers + assumptions-reviewer build-vs-buy survival check.
+- WS2.1–WS2.6: validator extension under TDD.
+- WS2 mid-review.
+- **WS2.5 pre-migration plan-direction check** (MANDATORY): `architecture-reviewer-fred` + `assumptions-reviewer` re-validate WS3 sequencing before destructive migration.
+- WS3.1–WS3.9: mechanical migration commits.
+- WS4 quality gates; WS5 documentation propagation; WS6 adversarial review and consolidation.
 
 **Branch state**: `feat/mcp-graph-support-foundation` at HEAD `989375a8`. WS0 commit landed this session.
 
@@ -1030,9 +1066,9 @@ Begin **WS1.1 — Ajv schema + loader for `skills-lock.json`** as the first TDD 
 
 **Owning plans**:
 
-+ [Memory/state substrate portable contracts][memory-state-portable-plan]
+- [Memory/state substrate portable contracts][memory-state-portable-plan]
   under `agentic-engineering-enhancements/current/`.
-+ [Memory/state contract doctor][memory-state-doctor-plan] under
+- [Memory/state contract doctor][memory-state-doctor-plan] under
   `agent-tooling/archive/completed/`.
 
 **Current objective**: turn the PR 97 memory/state merge lesson into
@@ -1142,23 +1178,23 @@ consolidation integration are future arcs.
 
 **Key doctrine points now recorded**:
 
-+ The Practice is a philosophy and commitment, not merely a specification
+- The Practice is a philosophy and commitment, not merely a specification
   repository. Its specification layer is a powerful portability tool: fully
   specify the portable concept in Practice Core, then bind it to repo-local
   surfaces as host implementation and current instance.
-+ Semantic content union is necessary but insufficient for
+- Semantic content union is necessary but insufficient for
   memory/state merges; the integration must still be a real git merge
   so git ancestry and parent topology are preserved.
-+ Surface contracts must declare purpose, authority, lifecycle, write
+- Surface contracts must declare purpose, authority, lifecycle, write
   API, merge class, parser/schema, generated outputs, validator,
   repair path, severity, and portability tier.
-+ Doctrine without an executable immune layer becomes operational
+- Doctrine without an executable immune layer becomes operational
   debt. The reusable pattern is
   `contract -> checker -> repair path -> consolidation feedback -> portable doctrine`.
-+ Host-specific TypeScript tooling is implementation, not Practice
+- Host-specific TypeScript tooling is implementation, not Practice
   Core doctrine. Portable doctrine names equivalent prevention,
   detection, mitigation, and repair loops.
-+ The transferable-vs-host split may be useful for other agentic engineering
+- The transferable-vs-host split may be useful for other agentic engineering
   processes and support systems once their substance proves Practice-level.
 
 **Owner correction captured 2026-05-07**: never strip captured
@@ -1185,32 +1221,32 @@ or Practice Core content to make the report greener.
 
 **Validation already run**:
 
-+ `pnpm agent-tools:collaboration-state -- check` — passed as the then-current
+- `pnpm agent-tools:collaboration-state -- check` — passed as the then-current
   narrow parser check. Future evidence should use explicit `--active`,
   `--closed`, and `--events-dir` paths until the substrate doctor exists.
-+ `pnpm portability:check` — passed.
-+ `pnpm practice:vocabulary` — passed.
-+ `pnpm markdownlint:root` — passed.
-+ `pnpm test:root-scripts` — passed.
-+ `git diff --check` — passed.
-+ Follow-up local slice updated `scripts/validate-practice-fitness.ts` so
+- `pnpm portability:check` — passed.
+- `pnpm practice:vocabulary` — passed.
+- `pnpm markdownlint:root` — passed.
+- `pnpm test:root-scripts` — passed.
+- `git diff --check` — passed.
+- Follow-up local slice updated `scripts/validate-practice-fitness.ts` so
   non-healthy output includes a non-reactive response-discipline reminder;
   landed in `dc04d80b` with
   `pnpm exec vitest run scripts/validate-practice-fitness.unit.test.ts`
   passing.
-+ `pnpm practice:fitness:informational` — exits 0 with critical
+- `pnpm practice:fitness:informational` — exits 0 with critical
   `repo-continuity.md` pressure and hard `napkin.md` pressure.
   The napkin pressure now includes the intentional owner-correction
   capture from this session; do not use this as permission to delete
   substance.
-+ Strict local instance checks passed before commit: manifest/schema contract
+- Strict local instance checks passed before commit: manifest/schema contract
   check reported 22 surfaces and no schema-contract failures; migration ledger
   reported 114 entries and no hash/byte-count failures; canonical
   `comms-events` JSON parse check reported 236 files and no parse failures;
   explicit collaboration-state check against canonical `comms-events` passed.
-+ Commit/migration state landed in `47028fc3`; `origin/main` merged cleanly in
+- Commit/migration state landed in `47028fc3`; `origin/main` merged cleanly in
   `bf3211ac`.
-+ Doctor Phase 0 gates passed after ledger drafting: explicit
+- Doctor Phase 0 gates passed after ledger drafting: explicit
   `collaboration-state -- check`, `git diff --check`, `pnpm test:root-scripts`,
   `pnpm portability:check`, `pnpm practice:vocabulary`,
   `pnpm practice:fitness:informational` (expected routed pressure, exit 0),
@@ -1218,7 +1254,7 @@ or Practice Core content to make the report greener.
   confirmed 22 surfaces and 114 migration rows with no duplicate IDs, duplicate
   original/target paths, or byte/hash mismatches. The dedicated Phase 1
   no-match validation probe failed as required.
-+ Doctor Phase 1 fixture gates passed after implementation:
+- Doctor Phase 1 fixture gates passed after implementation:
   `pnpm --filter @oaknational/agent-tools exec vitest run tests/practice-substrate --passWithNoTests=false`
   (17 tests), `pnpm --filter @oaknational/agent-tools type-check`,
   `pnpm --filter @oaknational/agent-tools lint`,
@@ -1226,7 +1262,7 @@ or Practice Core content to make the report greener.
   `git diff --check`. Guard searches found no root `practice:substrate:*`
   aliases and no forbidden test imports or live `process.env`/`process.cwd()`
   access in the Phase 1 source/test tree.
-+ Doctor Phase 2 report-mode gates passed after implementation:
+- Doctor Phase 2 report-mode gates passed after implementation:
   `pnpm --filter @oaknational/agent-tools exec vitest run tests/practice-substrate --passWithNoTests=false`
   (32 tests), `pnpm --filter @oaknational/agent-tools type-check`,
   `pnpm --filter @oaknational/agent-tools lint`,
@@ -1238,7 +1274,7 @@ or Practice Core content to make the report greener.
   `pnpm markdownlint-check:root`, and `git diff --check`. Guard checks found no
   root `practice:substrate:*` aliases, and the legacy-tree absence check
   passed.
-+ Doctor safe-merge closure gates passed during implementation:
+- Doctor safe-merge closure gates passed during implementation:
   `pnpm --filter @oaknational/agent-tools exec vitest run tests/practice-substrate --passWithNoTests=false`
   (35 tests), `pnpm --filter @oaknational/agent-tools type-check`,
   `pnpm --filter @oaknational/agent-tools lint`,
@@ -1275,14 +1311,14 @@ Runtime readers and CLI wiring must keep live access outside the fixture tests.
 
 **Future-arc boundaries**:
 
-+ Do not add repair mode, `--apply`, `--dry-run`, or deterministic repair
+- Do not add repair mode, `--apply`, `--dry-run`, or deterministic repair
   flows without a fresh follow-on arc.
-+ Do not integrate doctor output into consolidation in this safe-merge gate;
+- Do not integrate doctor output into consolidation in this safe-merge gate;
   that remains a separate follow-on arc.
-+ Do not trim memory/state content for fitness.
-+ Do not drop the residual merge autostash without explicit owner
+- Do not trim memory/state content for fitness.
+- Do not drop the residual merge autostash without explicit owner
   approval.
-+ Do not rewrite branch history.
+- Do not rewrite branch history.
 
 [memory-state-review-evidence]: ../../plans/agentic-engineering-enhancements/evidence/2026-05-07-memory-state-contracts-specialist-review.md
 [memory-state-portable-plan]: ../../plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md
@@ -1307,7 +1343,7 @@ the lifecycle, recalibrate the limits, don't elide substance.
 
 Two atomic commits in this arc:
 
-+ `b0b7cec3` — recalibration. Frontmatter line target 1000→2000,
+- `b0b7cec3` — recalibration. Frontmatter line target 1000→2000,
   line limit 1400→2500, char limit 90000→150000, line length
   200→300 (per-entry tag lines are machine-readable, not prose).
   Three new descriptive frontmatter fields (`lifecycle_model`,
@@ -1326,16 +1362,16 @@ Two atomic commits in this arc:
   Phase B backfill sweep. New `pending` entry captures the
   access-rhythm-as-fitness-axis insight with graduation target =
   ADR-144 amendment + possible cross-repo PDR.
-+ `b1a8536b` — claim close. Recalibration claim closed with
+- `b1a8536b` — claim close. Recalibration claim closed with
   evidence summary in `closed-claims.archive.json`.
 
 **Reviewer dispatch outcome (execution-legitimacy framing)**:
 
-+ `docs-adr-reviewer` — COMPLIANT, 3 P2 (target-vocabulary
+- `docs-adr-reviewer` — COMPLIANT, 3 P2 (target-vocabulary
   extensibility for `multi:` lists, composite-value convention
   for `source`/`trigger`, quarantine-target sentinel undefined).
   All addressed in same commit.
-+ `code-reviewer` — APPROVED WITH SUGGESTIONS, 1 P1 (missing
+- `code-reviewer` — APPROVED WITH SUGGESTIONS, 1 P1 (missing
   `## Entries` heading after the index leaving entry list inside
   the `## Index` section; fixed) plus the same `target` /
   composite-value notes; 2 nits on count-table alignment and
@@ -1344,14 +1380,14 @@ Two atomic commits in this arc:
 
 **Validation gate state (post-session)**:
 
-+ `pnpm practice:fitness:informational` —
+- `pnpm practice:fitness:informational` —
   `pending-graduations.md` HARD cleared. Now SOFT (2070 lines,
   10 over target 2000, well under hard 2500). The substance >
   destination boundary held: no truncation; the recalibration
   was the structural fix.
-+ `pnpm practice:vocabulary` — green.
-+ `pnpm markdownlint:root` — clean.
-+ `pnpm agent-tools:collaboration-state -- check` — ok.
+- `pnpm practice:vocabulary` — green.
+- `pnpm markdownlint:root` — clean.
+- `pnpm agent-tools:collaboration-state -- check` — ok.
 
 **Metacognitive insight captured (not landed in-band)**: every
 fitness-tracked file implicitly encodes an access-rhythm theory
@@ -1366,13 +1402,13 @@ Captured as a new `pending` entry with explicit graduation target.
 
 **Next-session candidates (this arc)**:
 
-+ **Phase B backfill sweep** — apply inline metadata tag lines to
+- **Phase B backfill sweep** — apply inline metadata tag lines to
   the ~76 pre-2026-05-07 `pending` entries. Mechanical,
   drainable opportunistically, no dedicated session needed.
-+ **ADR-144 amendment** for access-rhythm axis — substance
+- **ADR-144 amendment** for access-rhythm axis — substance
   available now from this session's recalibration evidence;
   graduation gated on second-instance OR owner-direction.
-+ **Cross-repo PDR candidate** for fitness-limit-as-access-rhythm
+- **Cross-repo PDR candidate** for fitness-limit-as-access-rhythm
   doctrine — gated on emergence of the same access-rhythm
   miscalibration pattern in a second Practice-bearing repo.
 
@@ -1385,18 +1421,18 @@ claude-code / claude-opus-4-7-1m / `58a9ad`).
 [2026-05-07 dedicated-drain opener][drain-opener] end-to-end.
 Single atomic commit `cc084c67`:
 
-+ **Phase 1 — `due` queue execution**:
-  + Lacustrine commit-queue fingerprint entry archived as
+- **Phase 1 — `due` queue execution**:
+  - Lacustrine commit-queue fingerprint entry archived as
     [archive entry 8][archive-2026-05-06] (already graduated
     2026-05-06 via F-15; archive close per audit-trail discipline).
-  + Polarity-discipline entry marked `partially graduated 2026-05-07`:
+  - Polarity-discipline entry marked `partially graduated 2026-05-07`:
     option (a) `patterns/README.md §Polarity (required, every pattern)`
     plus the frontmatter schema `polarity` field already landed;
     option (b) bulk sweep across ~70 pre-2026-05-05 pattern files
     remains deferred (README itself names the backfill state and
     points at the shape-of-the-art template); option (c) PDR-014
     amendment queued pending second Practice-bearing repo evidence.
-  + Four entries left `due` with **Sequenced-deferral pointers**
+  - Four entries left `due` with **Sequenced-deferral pointers**
     naming concrete phases (per PDR-026 §Deferral-honesty
     discipline, not "for later"):
     1. **30%-context PDR** (L137) — dedicated PDR-authoring
@@ -1411,7 +1447,7 @@ Single atomic commit `cc084c67`:
        distinction in `scripts/check-blocked-content.ts` + rule-body
        rewrite.
 
-+ **Phase 1.5 — vaporware-trigger flagging**: three entries whose
+- **Phase 1.5 — vaporware-trigger flagging**: three entries whose
   triggers gate on unmet plan executions flagged with
   **Vaporware-trigger flag** notes citing `distilled.md`
   §Sequenced-Deferral Discipline as the structural diagnosis:
@@ -1426,7 +1462,7 @@ Single atomic commit `cc084c67`:
      cures are awaiting empirical N≥3 validation per the entry's
      own framing regardless of CLI carrier.
 
-+ **Phase 2 — `pending` re-evaluation**: spot-check only, not the
+- **Phase 2 — `pending` re-evaluation**: spot-check only, not the
   full ~76-entry walk. Quarantined entry (`apply-don't-ask` /
   `stop inventing optionality`, L1597) confirmed quarantine
   remains correct (rethink owed; user-memory
@@ -1439,17 +1475,17 @@ Single atomic commit `cc084c67`:
 
 **Reviewer dispatch outcome (execution-legitimacy framing)**:
 
-+ `docs-adr-reviewer` — GAPS FOUND: P1 (two broken relative paths
+- `docs-adr-reviewer` — GAPS FOUND: P1 (two broken relative paths
   in archived Lacustrine entry from depth shift, fixed in same
   commit); P2 (false positive — reviewer conflated opener
   procedural text with my edits; my edits cite `distilled.md` not
   PDR-026, no fix needed).
-+ `code-reviewer` — CHANGES REQUESTED: same P1 (broken paths,
+- `code-reviewer` — CHANGES REQUESTED: same P1 (broken paths,
   fixed); no other findings.
 
 **Validation gate state (post-session)**:
 
-+ `pnpm practice:fitness:informational` — pending-graduations.md
+- `pnpm practice:fitness:informational` — pending-graduations.md
   HARD persists: **1909 lines / 116994 chars** (against 1400 /
   90000 hard, 2100 / — critical). Net +33 lines this session
   (started 1876; Lacustrine archive removed ~30 lines; 7
@@ -1457,9 +1493,9 @@ Single atomic commit `cc084c67`:
   boundary rule: substance > destination fitness; sequenced-
   deferral pointers are legitimate audit-trail substance and
   should not be elided to satisfy the limit.
-+ `pnpm practice:vocabulary` — green.
-+ `pnpm markdownlint:root` — clean.
-+ `pnpm agent-tools:collaboration-state -- check` — ok.
+- `pnpm practice:vocabulary` — green.
+- `pnpm markdownlint:root` — clean.
+- `pnpm agent-tools:collaboration-state -- check` — ok.
 
 **Phase 3 — residual shape surfacing for owner direction**:
 
@@ -1477,11 +1513,11 @@ the opener (no unilateral pick):
    file is structurally a register of cross-session waits and its
    size is proportional to the cross-session cadence.
 2. **Split by domain** — three registers:
-   + `pending-graduations-tooling.md` (CLI affordances, hook
+   - `pending-graduations-tooling.md` (CLI affordances, hook
      tightening, agent-tools work)
-   + `pending-graduations-doctrine.md` (PDR/rule candidates,
+   - `pending-graduations-doctrine.md` (PDR/rule candidates,
      pattern entries, framing-correction substance)
-   + `pending-graduations-plan-amendments.md` (ADR amendments,
+   - `pending-graduations-plan-amendments.md` (ADR amendments,
      plan WS triggers, vaporware-shaped entries)
 3. **Escalate the queue draining cadence** — owner-direction
    schedule (e.g. monthly dedicated drain sessions; or after each
@@ -1496,16 +1532,16 @@ discipline.
 
 **Next-session candidates**:
 
-+ **Owner-direction response on Phase 3 options** — required
+- **Owner-direction response on Phase 3 options** — required
   before any future drain session can sustainably reduce the queue.
-+ **Sequenced-deferral entries waiting on context budget** —
+- **Sequenced-deferral entries waiting on context budget** —
   four PDR/ADR/hook-tightening entries flagged for dedicated
   fresh sessions; each names its phase plan in the entry body.
-+ **Doctrine-reviewer rule re-route option** — observability
+- **Doctrine-reviewer rule re-route option** — observability
   WS11.3 reviewer doctrine substance is owner-standing-doctrine
   in operational effect; consider direct rule landing without
   WS11.3 gating in the next agent-rules pass.
-+ **Companion items still deferred from prior opener**:
+- **Companion items still deferred from prior opener**:
   `agent-collaboration.md` extraction question;
   `practice-bootstrap.md` recalibration question;
   `testing-patterns.md` stub question;
@@ -1524,7 +1560,7 @@ claude-opus-4-7-1m / `1e2244`).
 [2026-05-06 napkin + pending-graduations processing opener][opener]
 authored by Embered Melting Kiln. Two atomic commits:
 
-+ `d12912dc` — Step 1 napkin graduation pass. Routed substance from
+- `d12912dc` — Step 1 napkin graduation pass. Routed substance from
   the prior rotation's five 2026-05-06 napkin sessions (Embered, Briny,
   Cindery, Umbral, Hidden) to permanent homes. Three new patterns
   authored (`consolidation-output-shape-pattern-vs-report.md`,
@@ -1536,7 +1572,7 @@ authored by Embered Melting Kiln. Two atomic commits:
   Napkin archived to
   `archive/napkin-2026-05-06-evening-graduation-pass.md`; rotation
   shell at 119 lines summarises routing destinations.
-+ `b4d7ddff` — Step 2 pending-graduations register triage. Archived
+- `b4d7ddff` — Step 2 pending-graduations register triage. Archived
   7 entries (6 graduated, 1 withdrawn) to
   `archive/pending-graduations-archive-2026-05-06.md`. Marked
   Lacustrine commit-queue fingerprint entry `graduated 2026-05-06`
@@ -1546,26 +1582,26 @@ authored by Embered Melting Kiln. Two atomic commits:
 
 **Reviewer dispatch outcome (execution-legitimacy framing)**:
 
-+ `docs-adr-reviewer` — APPROVED with one P1 (broken commit SHA in
+- `docs-adr-reviewer` — APPROVED with one P1 (broken commit SHA in
   napkin.md:101, fixed in handoff commit) and two P2/nit notes about
   the `learning-before-fitness.md` vs `substance-before-fitness.md`
   filename divergence (out-of-scope per opener; opportunity flagged).
-+ `code-reviewer` — APPROVED WITH SUGGESTIONS, no P0/P1; six P2
+- `code-reviewer` — APPROVED WITH SUGGESTIONS, no P0/P1; six P2
   long-link lines (worst three in archive file refactored via
   reference-link form; the remaining three sit inside preserved-
   original entries in a fitness-excluded archive path).
 
 **Validation gate state (post-session)**:
 
-+ `pnpm practice:fitness:informational` — napkin.md HARD cleared
+- `pnpm practice:fitness:informational` — napkin.md HARD cleared
   (was 382 lines hard, now 119 ok). pending-graduations.md HARD
   persists (1870 lines / 1400 hard; 114575 chars / 90000 hard) —
   this is the diagnostic substrate the opener anticipated; the
   residual ~76 `pending` entries genuinely await second-instance
   triggers. Surface for next-audit input rather than session brake.
-+ `pnpm practice:vocabulary` — green.
-+ `pnpm markdownlint:root` — clean.
-+ `pnpm agent-tools:collaboration-state -- check` — ok.
+- `pnpm practice:vocabulary` — green.
+- `pnpm markdownlint:root` — clean.
+- `pnpm agent-tools:collaboration-state -- check` — ok.
 
 **Boundary applied per opener**: substance > destination fitness.
 No truncation; every legitimate graduation landed at its proper home.
@@ -1576,7 +1612,7 @@ input rather than this session's brake.
 
 **Next-session candidates**:
 
-+ **pending-graduations.md continued drainage** — 8 `due` entries
+- **pending-graduations.md continued drainage** — 8 `due` entries
   remain flagged for execution (entries at lines 103, 137, 543, 598,
   720, 1097, 1123, 1202 of the post-session file). Each names its
   graduation target; most require a substantive doc/PDR/CLI edit
@@ -1584,15 +1620,15 @@ input rather than this session's brake.
   action: another walk dedicated to executing the `due` queue, with
   the directive-context-budget rule applied to any directive-touching
   entries.
-+ **Companion items from this opener (deferred per opener "do not
+- **Companion items from this opener (deferred per opener "do not
   pull in")**: `agent-collaboration.md` extraction question (raise
   hard limit vs extract Communication Channels); `practice-bootstrap.md`
   recalibration question; `testing-patterns.md` stub question.
-+ **`learning-before-fitness.md` vs `substance-before-fitness.md`
+- **`learning-before-fitness.md` vs `substance-before-fitness.md`
   filename rename** — reviewer-noted divergence between displayed
   pattern name and file basename. Out of scope this session; small
   follow-up for any future patterns-pass.
-+ **Pending-graduations register split-by-domain consideration** —
+- **Pending-graduations register split-by-domain consideration** —
   if the residual queue substance still exceeds the limit after the
   next `due`-execution pass, surface for owner direction on whether
   to enlarge the queue file, split by domain, or escalate the queue
@@ -1607,21 +1643,21 @@ claude-opus-4-7-1m / `4044d1`).
 
 **Phase 2 landings (this session, 5 commits)**:
 
-+ `13e2db28` — schema-field provenance co-located with the four
+- `13e2db28` — schema-field provenance co-located with the four
   collaboration-state schemas via `$comment_provenance` annotations
   (15 per-property on active-claims; schema-level on closed-claims,
   conversation, escalation). Lifecycle.md and conventions.md updated to
   point at the schemas as the canonical home.
-+ `e072b67e` — doctrine paragraphs relocated to `agent-collaboration.md`:
+- `e072b67e` — doctrine paragraphs relocated to `agent-collaboration.md`:
   Shared-State Posture (under §Knowledge and Communication), identity-
   preflight extension (under §Identity vs Liveness), and §d Cleanup
   Ethics (under §Scope Discipline). Lifecycle keeps recipe halves.
-+ `b7e3f1fc` — vocabulary normalised to four-term taxonomy (stale,
+- `b7e3f1fc` — vocabulary normalised to four-term taxonomy (stale,
   fresh-but-quiet, orphaned, expired) across the surface family;
   §Vocabulary section added to conventions.md as canonical.
-+ `07e9274c` — lifecycle.md re-taglined to "Operational recipes for
+- `07e9274c` — lifecycle.md re-taglined to "Operational recipes for
   `.agent/state/collaboration/`"; recipe-shape audit complete.
-+ `8f388592` — docs-adr-reviewer review-fix (P1.2: race-rationale
+- `8f388592` — docs-adr-reviewer review-fix (P1.2: race-rationale
   re-added to lifecycle, exception-not-routine framing added to
   directive §d; P2.1: "expire mid-work" → "go stale mid-work";
   P2.2: vocabulary cite to link form).
@@ -1652,30 +1688,30 @@ wrong-file landing in a subsequent graduation, per plan §6 lifecycle.
 
 **Phase 1 landings (prior session, commit `c014ad2a`)**:
 
-+ New executive-memory file:
+- New executive-memory file:
   `.agent/memory/executive/collaboration-state-placement-contract.md`
   (110 lines) — names the substance-kind → canonical-home routing
   for the collaboration-state surface family (lifecycle / conventions
   / directive / schemas / consolidate-docs reporting). Includes a
   placement audit checklist and the "wrong-file-by-adjacency"
   failure mode this contract exists to prevent.
-+ New plan file:
+- New plan file:
   `.agent/plans/agentic-engineering-enhancements/current/collaboration-state-surface-restructure.plan.md`
   — Phase 1 (contract authored) marked complete; Phases 2–4
   (substance moves, vocabulary normalisation, validation, reviewer
   dispatch) pending and explicitly out-of-scope for this session
   per the standing 30%-context-budget rule.
-+ One-line pointer added to
+- One-line pointer added to
   `collaboration-state-conventions.md` introducing the contract
   surface.
-+ Deep-exploration opener
+- Deep-exploration opener
   (`2026-05-06-collaboration-state-lifecycle-deep-exploration-opener.md`)
   marked `status: superseded` with frontmatter pointer; preserved as
   historical context, will archive at next consolidation.
-+ Napkin entry capturing the recurring pattern: *graduation-flow
+- Napkin entry capturing the recurring pattern: *graduation-flow
   inertia produces wrong-file landings; the cure is a placement
   contract authored before the next graduation, not after.*
-+ Comms-event posted as discovery seed (no overlap at session open;
+- Comms-event posted as discovery seed (no overlap at session open;
   active claims empty).
 
 **Decision shape**: deep-exploration step folded into a contract
@@ -1696,12 +1732,12 @@ now sits at 280 lines / soft / in growth headroom.
 
 **Companions deferred to fresh session(s)**:
 
-+ Distilled.md "Queued for Next Directive-Edit Session" items
+- Distilled.md "Queued for Next Directive-Edit Session" items
   (coordination surface discipline, inter-agent comms first-class,
   per-session-closure-discipline-owns-the-loop, hypothesis-layer
   routing) — natural pairing with Phase 2 since both edit
   `agent-collaboration.md` under the same context budget.
-+ PDR-026 amendment §"Sequenced-deferral discipline" without the
+- PDR-026 amendment §"Sequenced-deferral discipline" without the
   doctrine-scanner-CLI vaporware gating — independent, runs anytime.
 
 ---
@@ -1713,7 +1749,7 @@ claude-opus-4-7-1m / `aeebab`).
 
 **Landings**:
 
-+ `b9bae574` — `docs(practice): graduate distilled.md to rules and
+- `b9bae574` — `docs(practice): graduate distilled.md to rules and
   governance docs`. Four new rules
   (`practice-core-portability.md`,
   `directive-file-context-budget.md`,
@@ -1722,12 +1758,12 @@ claude-opus-4-7-1m / `aeebab`).
   claim policy added to
   `collaboration-state-lifecycle.md`; distilled.md trimmed
   314 → 152 lines, all three hard-zone metrics cleared.
-+ `cc8866a8` (parallel agent's commit, foreign-stage absorption):
+- `cc8866a8` (parallel agent's commit, foreign-stage absorption):
   discoverable+actionable plans, parent-reconciliation, narrative-
   drift, plan-following-vs-principle-following landed in
   `docs/governance/development-practice.md` under the typescript-
   extraction subject.
-+ `d9aab409` — `docs(distilled): reframe learning-loop and
+- `d9aab409` — `docs(distilled): reframe learning-loop and
   sequenced-deferral entries`. Owner-corrected mid-session: the
   doctrine-scanner CLI gating cited in the held Sequenced-Deferral
   Discipline entry is vaporware-shaped (`future/` plan with
@@ -1758,31 +1794,31 @@ GPT-5 / `019dfd`).
 
 **Landing**:
 
-+ Implemented Phase 0 + Phase 1 of
+- Implemented Phase 0 + Phase 1 of
   `.agent/plans/agent-tooling/current/agent-artefact-load-pressure-relief.plan.md`.
   `.claude/settings.json` now disables the duplicate/unused project
   plugins `mcp-apps@mcp-apps`, `cloudflare@claude-plugins-official`,
   and `linear@claude-plugins-official`. Retained plugins are Sentry,
   remember, MCP server dev, SonarQube, and Vercel.
-+ Out-of-tree backup recorded at
+- Out-of-tree backup recorded at
   `/tmp/oak-claude-settings.pre-prune-20260506T121741Z.json`.
-+ Validation green from Codex: `pnpm portability:check`,
+- Validation green from Codex: `pnpm portability:check`,
   `pnpm subagents:check`, and `pnpm type-check` (36 successful Turbo
   tasks). `jq '.enabledPlugins' .claude/settings.json` confirms only
   the retained plugins are enabled.
 
 **Optional owner-supplied evidence**:
 
-+ Owner clarified that `/doctor` reports on the active Claude Code
+- Owner clarified that `/doctor` reports on the active Claude Code
   session's loaded skills and is not useful as a command-line
   invocation from Codex. Treat `/doctor` and system-reminder counts as
   owner-supplied session-local evidence only, not a blocking executor
   gate.
-+ If owner supplies evidence, confirm bare canonical MCP Apps skills
+- If owner supplies evidence, confirm bare canonical MCP Apps skills
   still surface:
   `add-app-to-server`, `convert-web-app`, `create-mcp-app`,
   `migrate-oai-app`.
-+ If owner supplies evidence, confirm removed namespaces no longer
+- If owner supplies evidence, confirm removed namespaces no longer
   surface:
   `mcp-apps:*`, `cloudflare:*`, and the Linear plugin presence.
 
@@ -1800,14 +1836,14 @@ GPT-5 / `019dfc`).
 
 **Landings**:
 
-+ `ad03f276` — `docs(agent-tooling): record artefact portability audit and plans`.
+- `ad03f276` — `docs(agent-tooling): record artefact portability audit and plans`.
   Committed Umbral Cloaking Silhouette's quota-paused audit/report/plans
   bundle with attribution.
-+ `8bf55080` — `chore(collaboration): close quota-recovery claims`.
+- `8bf55080` — `chore(collaboration): close quota-recovery claims`.
   Closed the stale quota-recovery collaboration surfaces, regenerated the
   shared comms log, and repaired the legacy comms-event shape that blocked
   rendering.
-+ Owner-requested `/jc-session-handoff` plus light `/jc-consolidate-docs`
+- Owner-requested `/jc-session-handoff` plus light `/jc-consolidate-docs`
   pass completed after the two commits. Findings: entry points clean, no
   track cards, no escalations, active claims empty before the closeout
   claim, one unchanged open example decision thread, vocabulary green,
@@ -1816,9 +1852,9 @@ GPT-5 / `019dfc`).
 
 **Boundary**:
 
-+ This was a stewardship and closeout session, not a doctrine-promotion
+- This was a stewardship and closeout session, not a doctrine-promotion
   session. No new ADR/PDR candidate qualifies from the closeout itself.
-+ `.cursor/mcp.json` has an unrelated dirty preview-URL change and was left
+- `.cursor/mcp.json` has an unrelated dirty preview-URL change and was left
   untouched.
 
 **Next safe step for fresh session**: execute the urgent
@@ -1835,21 +1871,21 @@ claude-opus-4-7-1m / `a70b57`).
 
 **Landings**:
 
-+ **Audit report**:
+- **Audit report**:
   `.agent/plans/agent-tooling/current/agent-artefact-portability-audit-2026-05-06.report.md`
   — durable analytical artefact. Contract source-of-truth pointers
   (PDR-009 + ADR-125 + validator + agentskills.io spec); findings
   P0–P4 with conform-vs-diverge breakdown; root-cause analysis
   ("design surface governed; operational surface ungoverned"); three
   graduation-candidate patterns; metacognition reflection.
-+ **Urgent companion plan**:
+- **Urgent companion plan**:
   `.agent/plans/agent-tooling/current/agent-artefact-load-pressure-relief.plan.md`
   — decision-complete; 13 cycles; disable
   `mcp-apps@mcp-apps` + `cloudflare@claude-plugins-official` +
   `linear@claude-plugins-official` (−12 skills); Vercel triage
   recorded as friction. Highest-impact single item: Phase 1.2
   (cloudflare removal, −8 skills).
-+ **Strategic remediation plan**:
+- **Strategic remediation plan**:
   `.agent/plans/agent-tooling/current/agent-artefact-lifecycle-cli.plan.md`
   — decision-complete; 30 cycles across 9 phases; supersedes
   `future/canonical-first-skill-pack-ingestion-tooling.plan.md`. The
@@ -1859,7 +1895,7 @@ claude-opus-4-7-1m / `a70b57`).
   `runVerify(opts)` injection, authoring CLI for skills/rules/commands/hooks,
   spec compliance checks, skill-load budget (rule: `claude /doctor` × 0.85),
   plugin-audit, ADR-125 amendment.
-+ **Reviewer dispatch (this session)**: docs-adr-reviewer +
+- **Reviewer dispatch (this session)**: docs-adr-reviewer +
   code-reviewer (P1 fixes applied: machine-local path, per-cycle
   YAML, build-ordering, helper-cycle independence, plugin-audit
   signal expansion, risk register additions, predecessor-link
@@ -1868,29 +1904,29 @@ claude-opus-4-7-1m / `a70b57`).
   `feedback_reviewer_brief_respects_decided_scope.md`; substantive
   finding accepted: `npx skills` already ships full lifecycle, plan
   re-positioned as wrapper around it).
-+ **Memory captures (user-memory, not in repo)**:
-  + `feedback_skill_load_budget.md` — active-skill discovery has a
+- **Memory captures (user-memory, not in repo)**:
+  - `feedback_skill_load_budget.md` — active-skill discovery has a
     measurable context budget; `claude /doctor` is the authoritative
     measurement source.
-  + `project_vendor_plugin_redundancy_after_canonicalisation.md` —
+  - `project_vendor_plugin_redundancy_after_canonicalisation.md` —
     default = remove plugin once content canonicalised + locked.
-  + `feedback_reviewer_brief_respects_decided_scope.md` — never
+  - `feedback_reviewer_brief_respects_decided_scope.md` — never
     re-open closed decisions via reviewer questions.
-  + Updated existing `feedback_no_moving_targets_in_permanent_docs.md`
+  - Updated existing `feedback_no_moving_targets_in_permanent_docs.md`
     with the explicit "plans are an acceptable home for moving
     targets" nuance (owner clarification this session).
-+ **Pending-graduations**: new entry `inventory-as-output, not
+- **Pending-graduations**: new entry `inventory-as-output, not
   as-document` registered as a PDR-009 amendment candidate (Phase 8
   of the strategic plan is the trigger).
-+ **Skill-discovery measurement**: owner confirmed `claude /doctor`
+- **Skill-discovery measurement**: owner confirmed `claude /doctor`
   is the truth source; the budget is a measured ceiling, not a
   hypothesis.
 
 **Validation**:
 
-+ `pnpm portability:check` green throughout (12 commands, 37 skills,
+- `pnpm portability:check` green throughout (12 commands, 37 skills,
   52 rules, 22 reviewers, 40 command adapters).
-+ No code changed; only plan/report/memory text added.
+- No code changed; only plan/report/memory text added.
 
 **Next safe step for fresh session**: execute the urgent plan's
 recommended bundle (Phase 0.1 + 0.2 + 1.1 + 1.2 + 1.3 + 1.4) in a
@@ -1909,20 +1945,20 @@ GPT-5.5 / `512682`).
 
 **Landings**:
 
-+ **Comms**: immutable event `512682-oak-local-mcp-landmark-2026-05-05`
+- **Comms**: immutable event `512682-oak-local-mcp-landmark-2026-05-05`
   under `.agent/state/collaboration/comms-events/`; rendered into
   `shared-comms-log.md`.
-+ **Plan**: `.agent/plans/observability/current/feat-eef-exploration-completion.plan.md`
+- **Plan**: `.agent/plans/observability/current/feat-eef-exploration-completion.plan.md`
   gained § Step 10 precursor — end-to-end Cursor MCP exercise against
   `project-0-oak-open-curriculum-ecosystem-oak-local` (thread tools,
   discovery search, progression / prior-knowledge graphs, resources).
   Sequence Summary row 10 states explicitly that this precursor does **not**
   satisfy step 10 acceptance.
-+ **Boundary**: preparatory evidence only. Unified plan step 10 still
+- **Boundary**: preparatory evidence only. Unified plan step 10 still
   requires dev boot, HTTP MCP `tools/list` and `tools/call` to
   `http://localhost:3333/mcp`, tool-catalogue schema validation, ordered
   specialist reviewer dispatch, and clean shutdown.
-+ **Session handoff** (same date, owner `/jc-session-handoff`): immutable
+- **Session handoff** (same date, owner `/jc-session-handoff`): immutable
   comms `512682-session-handoff-close-2026-05-05`; `repo-continuity.md`
   Session close paragraph, Last refreshed chain, Active threads cell,
   Current Session Focus lead entry, Deep consolidation status `not due`;
@@ -1947,31 +1983,31 @@ the approved documentation-only first pass.
 
 **Landings**:
 
-+ **PDR-014 amendment**:
+- **PDR-014 amendment**:
   `.agent/practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md`
   now names archive-scale historical synthesis as a distinct
   consolidation cadence, separate from ordinary current-rotation
   cross-session scans.
-+ **Command workflow**: `.agent/commands/consolidate-docs.md` now has
+- **Command workflow**: `.agent/commands/consolidate-docs.md` now has
   a triggered step after napkin rotation for archive-scale synthesis,
   with bounded corpus selection, report shape, processed-marker
   ledger, and routing rules.
-+ **Register status**:
+- **Register status**:
   `.agent/memory/operational/pending-graduations.md` captured the
   candidate from the owner message and marked it `graduated
   2026-05-05` against the PDR-014 and `consolidate-docs` landing.
-+ **Routing hygiene**: stale `practice-core/patterns/` destination
+- **Routing hygiene**: stale `practice-core/patterns/` destination
   references in the touched surfaces were aligned to PDRs with
   `pdr_kind: pattern` for ecosystem-agnostic Practice patterns.
 
 **Validation**:
 
-+ `ReadLints` clean after markdown style fixes.
-+ `docs-adr-reviewer` and `code-reviewer` reviewed the doctrine
+- `ReadLints` clean after markdown style fixes.
+- `docs-adr-reviewer` and `code-reviewer` reviewed the doctrine
   changes; critical and important findings were addressed, including
   marker persistence, ordering after napkin rotation, corpus alignment,
   and pattern-routing drift.
-+ Claim `fa89cc58-0fb9-454e-8c8b-db28f41950f4` was explicitly closed
+- Claim `fa89cc58-0fb9-454e-8c8b-db28f41950f4` was explicitly closed
   after implementation; final commit was delayed by an unrelated
   pre-existing staged takeover bundle in the shared git index.
 
@@ -1995,11 +2031,11 @@ unprocessed substance is the active layer).
 
 **Landings**:
 
-+ **Archive**: full pre-rotation napkin preserved verbatim at
+- **Archive**: full pre-rotation napkin preserved verbatim at
   `.agent/memory/active/archive/napkin-2026-05-05.md` (463 lines,
   six session entries: 4× 2026-05-04 Lacustrine-Step-3 / Pelagic /
   Fronded / Ferny; 2× 2026-05-05 Ethereal / Lacustrine).
-+ **Distilled.md additions** (4 cross-session refinements): severity
+- **Distilled.md additions** (4 cross-session refinements): severity
   is not urgency (sharpens no-speed-pressure block); diagnose
   enforcer-tier before reaching for bypass (script-tier discipline-
   checker vs git-hook-tier blocking gate); inter-agent comms is a
@@ -2007,7 +2043,7 @@ unprocessed substance is the active layer).
   resolver); plans cite ADRs never the reverse (sharpens moving-
   targets rule at coarser granularity). Distilled grew from 296 →
   386 lines; resolution deferred to Move 3 pass.
-+ **Fresh napkin** keyed on this session, recording the rotation
+- **Fresh napkin** keyed on this session, recording the rotation
   itself plus the explicit deferral of items not yet ready for
   distilled (capture-at-moment-validates-PDR-048 empirical
   confirmation; recursive-exclusion fourth-mechanism-shape
@@ -2021,17 +2057,17 @@ unprocessed substance is the active layer).
 
 **Discipline applied**:
 
-+ PDR-027 identity row added to thread record at session open.
-+ Active claim opened on rotation files; no overlap with Dawnlit
+- PDR-027 identity row added to thread record at session open.
+- Active claim opened on rotation files; no overlap with Dawnlit
   (observability) or Moonlit (smoke-tests retirement).
-+ PDR-046 §Move 2 honoured: no in-pass form-keeping on the active
+- PDR-046 §Move 2 honoured: no in-pass form-keeping on the active
   layer; Layer 1 fitness pressure (distilled growth) deliberately
   not addressed in this pass.
-+ PDR-046 §Move 3 honoured: substance graduation upward, not
+- PDR-046 §Move 3 honoured: substance graduation upward, not
   compression of existing entries.
-+ Substance preservation absolute: archive is verbatim; new
+- Substance preservation absolute: archive is verbatim; new
   entries land at full weight.
-+ `git commit -- <pathspec>` for the rotation commit (third-
+- `git commit -- <pathspec>` for the rotation commit (third-
   instance worked example of `stage-by-explicit-pathspec`).
 
 **Next safe step for fresh session**: a Layer 1 → 2 pass per
@@ -2063,7 +2099,7 @@ pending-graduations register graduated as a single atomic landing
 
 **Landings**:
 
-+ **Pattern**: `.agent/memory/active/patterns/structural-enforcer-recursive-exclusion.md`
+- **Pattern**: `.agent/memory/active/patterns/structural-enforcer-recursive-exclusion.md`
   (agent-tier, `related_pdr: PDR-044`). Names how a structural enforcer
   (hook, scanner, lint rule, regex matcher) handles its own cataloguing
   documents through three concrete mechanism shapes — explicit
@@ -2073,15 +2109,15 @@ pending-graduations register graduated as a single atomic landing
   PDR-047 first-write fire (new-doctrine cataloguing). Pattern composes
   with PDR-047 §Test 3 by distinguishing exclusion-list-as-mechanism
   from hedge-as-substance.
-+ **Rule extension**: `.agent/commands/consolidate-docs.md § Learning
+- **Rule extension**: `.agent/commands/consolidate-docs.md § Learning
   Preservation Overrides Fitness Pressure` now opens with a pointer to
   PDR-046 (layered knowledge processing) as the layer-orchestration
   discipline that the per-write rule composes with, and closes with a
   PDR-046 §Move 3 reference describing graduation-upward as the
   structural cure for residual fitness pressure at rest.
-+ **Register status flips**: two `due` entries flipped to `graduated
+- **Register status flips**: two `due` entries flipped to `graduated
   2026-05-05` with landing-target paths recorded.
-+ **Forward link**: `.agent/rules/no-hedging-vocabulary.md § Excluded
+- **Forward link**: `.agent/rules/no-hedging-vocabulary.md § Excluded
   Surfaces` extended with pointer to the new pattern (host-local;
   Practice-Core portability allows it).
 
@@ -2098,12 +2134,12 @@ Core PDR §Notes) is the architecturally correct outcome.
 
 **Mid-session sharpenings saved as feedback memories**:
 
-+ **Severity is not urgency** (sharpening of `feedback_no_speed_pressure.md`).
+- **Severity is not urgency** (sharpening of `feedback_no_speed_pressure.md`).
   Owner-corrected at session open: "CRITICAL means important, but it
   does not mean rush, if anything even more care and thoughtfulness is
   needed". Saved as additional paragraph encoding severity ≠ urgency
   for all escalation-tier labels (CRITICAL, HARD, P1, etc.).
-+ **Diagnostic over assumption** (worked instance, no graduation
+- **Diagnostic over assumption** (worked instance, no graduation
   candidate yet — single instance). Owner's question "why do we need
   --no-verify?" forced inspection of `.husky/pre-commit` rather than
   assuming the commit-skill orchestrator's strict-hard gate would also
@@ -2154,25 +2190,25 @@ that the plan's "Documentation Propagation Commitment" required.
 
 **Landings:**
 
-+ WS6 — Bash hook now blocks `git add -A` / `--all` / `.` with
+- WS6 — Bash hook now blocks `git add -A` / `--all` / `.` with
   per-pattern citations surfaced in the deny payload. Schema
   extended: `preToolUse.blocked_patterns` accepts string-or-object
   entries; matcher returns the matched `BlockedEntry`.
-+ WS3 — `preToolUseContent.scoped_blocks` carries thirteen
+- WS3 — `preToolUseContent.scoped_blocks` carries thirteen
   hedging-vocabulary literals scoped to PDRs / plans / ADRs /
   governance, with recursive exclusion of the documents that
   catalogue the trip-list (principles.md, distilled.md, PDR-043,
   PDR-044). Path-scope mechanism: substring includes plus
   `**/*.suffix` endsWith.
-+ WS4 — `kind: "regex"` scoped block with three line-level
+- WS4 — `kind: "regex"` scoped block with three line-level
   exclusions (fenced code blocks, inline-code spans,
   `(historical reference)` markers) plus a hex-with-letter
   lookahead so pure-decimal tokens do not trip the matcher.
   Initial citation referenced a distilled.md section that
   Fronded's parallel layer-2 rotation removed in the same arc;
   citation repaired in the same session.
-+ Plan status flipped to COMPLETE.
-+ Three rule files authored as canonical-plus-adapters triples
+- Plan status flipped to COMPLETE.
+- Three rule files authored as canonical-plus-adapters triples
   (`stage-by-explicit-pathspec`, `no-hedging-vocabulary`,
   `no-moving-targets-in-permanent-docs`). `RULES_INDEX.md`
   preamble reframed from Codex-only fallback to canonical
@@ -2198,18 +2234,18 @@ follow-up workstream.
 **Worked-instance lessons surfaced (graduation candidates,
 recorded in napkin):**
 
-+ Peer-staged renames in the index bleed into your staging area
+- Peer-staged renames in the index bleed into your staging area
   via `git add`; cure is `git commit -- <pathspec>` to
   commit-by-path regardless of index state.
-+ Pre-commit hooks scan the whole working tree, not just the
+- Pre-commit hooks scan the whole working tree, not just the
   staged set; mechanical formatting fixes to peer-WIP files are
   documented gate-honest unblocking, not interference.
-+ The trip-list-defines-itself recursion: any structural
+- The trip-list-defines-itself recursion: any structural
   enforcer that names its own pathogen must exclude the
   documents that define the pathogen.
-+ Hex-class regexes match decimals; `(?=[0-9a-f]*[a-f])`
+- Hex-class regexes match decimals; `(?=[0-9a-f]*[a-f])`
   lookahead is the cure when SHA-shape detection is wanted.
-+ `agent-tools:collaboration-state` CLI flag conventions
+- `agent-tools:collaboration-state` CLI flag conventions
   (`--file` singular, `--area-kind`, `--active`, `--now`,
   `comms append --events-dir`/`--title`/`--body`/`--created-at`).
 
@@ -2246,32 +2282,32 @@ claude-code / claude-opus-4-7-1m / `d0d13f`). Layer-2 second pass
 complete. The three highest-leverage candidates from the Fronded
 handoff are now Practice-Core doctrine, landed in commit `54560f84`:
 
-+ **PDR-046 (layered knowledge processing — preserve first,
+- **PDR-046 (layered knowledge processing — preserve first,
   restructure second)** — three Moves: process layers bottom-up;
   suspend in-process form-keeping on the active layer; address
   residual fitness pressure by graduating substance upward, not by
   compression.
-+ **PDR-047 (rule applies always — doctrine-authoring discipline)**
+- **PDR-047 (rule applies always — doctrine-authoring discipline)**
   — three tests at authorship time: substance test (clause-by-
   clause for "rule does not apply here" intent); vocabulary test
   (host hedging trip-list); re-frame test (ban the bad shape).
-+ **PDR-048 (insight capture at moment of occurrence)** — three
+- **PDR-048 (insight capture at moment of occurrence)** — three
   moves: capture before closure; capture between primary actions;
   capture the partial form.
 
 **Companion remediation work landed in the same commit:**
 
-+ Pending-graduations.md substance-led prune: ten already-graduated
+- Pending-graduations.md substance-led prune: ten already-graduated
   entries archived to `archive/repo-continuity-session-history-2026-05-04.md`.
   Three new candidates added (substance from this session's drafting,
   captured at moment of occurrence per PDR-048). Frontmatter limits
   raised under owner authorisation to reflect the register's
   sustainable size.
-+ Napkin rotation under owner-directed curation-first priority:
+- Napkin rotation under owner-directed curation-first priority:
   full archive to `napkin-2026-05-04-evening.md` (no compression).
   Worked-instance lessons from PDR-046 drafting graduated to
   PDR-046 Notes section + three new pending-graduations candidates.
-+ Principles.md extraction: §Architectural Excellence Over
+- Principles.md extraction: §Architectural Excellence Over
   Expediency three-cues elaboration moved to PDR-043 + ADR-172
   pointers; worked failure-mode example relocated to
   `docs/governance/development-practice.md § Architecture Level`;
@@ -2279,22 +2315,22 @@ handoff are now Practice-Core doctrine, landed in commit `54560f84`:
   `unknown` is type destruction permitted/forbidden list moved to
   `.agent/rules/unknown-is-type-destruction.md`; gate taxonomy
   moved to `development-practice.md § Quality Gates`.
-+ Hook `policy.json` extended to include PDR-047 in
+- Hook `policy.json` extended to include PDR-047 in
   trip-list-defines-itself exclusion lists (the structural cure
   from Briny's WS3 worked instance, applied for the new file).
 
 **Open candidates from the original Layer-2 list (deliberately
 deferred to next pass)**:
 
-+ **5 PDR-shaped candidates** not yet drafted: tests-describe-the-
+- **5 PDR-shaped candidates** not yet drafted: tests-describe-the-
   system (Dewy session — owner-led foundational reframing);
   reviewers-carry-doctrine; plan-vs-principle; question-shape;
   multi-agent-cures-as-hypothesis formalisation.
-+ **1 ADR-shaped candidate**: validation-strategy-as-umbrella
+- **1 ADR-shaped candidate**: validation-strategy-as-umbrella
   (ADR-121 refresh, sequenced behind P1 of the
   validation-and-tdd-doctrine-restructure index plan).
-+ **3 rule candidates** gated on underlying decision records.
-+ **4 stable-but-no-natural-home items** requiring owner
+- **3 rule candidates** gated on underlying decision records.
+- **4 stable-but-no-natural-home items** requiring owner
   conversation: ADR/PDR citation discipline; sequenced-deferral
   discipline (PDR-026 amendment, sequenced behind enforcement
   infrastructure); hash-recompute-drift (workspace TSDoc);
@@ -2352,22 +2388,22 @@ operational consequence. Graduation-only breadcrumbs pruned.
 **Layer-2 (distilled → permanent doctrine) first deliverable
 landed this session:**
 
-+ **PDR-045 (Workspace-First Investigation Discipline)** authored
+- **PDR-045 (Workspace-First Investigation Discipline)** authored
   with three moves (artefact search before remote retry; shared-
   package survey before parallel infrastructure; live-state check
   before brief enumeration). Composes with PDR-033 (vendor-platform
   variant of Move 2).
-+ Three host-rules now cite PDR-045: `validate-full-target-estate`
+- Three host-rules now cite PDR-045: `validate-full-target-estate`
   Move 1; `read-diagnostic-artefacts-in-full` Move 1;
   `consolidate-at-third-consumer` Move 2. Pre-existing PDR-016
   stale-filename fixed in passing.
-+ PDR README index drift fixed (PDR-043, PDR-044, PDR-045 added).
-+ Practice CHANGELOG entry added for PDR-045 graduation.
-+ Three patterns added to `.agent/memory/active/patterns/`:
+- PDR README index drift fixed (PDR-043, PDR-044, PDR-045 added).
+- Practice CHANGELOG entry added for PDR-045 graduation.
+- Three patterns added to `.agent/memory/active/patterns/`:
   `parallel-worktree-dispatch-unreliable.md`,
   `templates-encode-failure-modes.md`,
   `plan-as-artefact-gravity.md` (substance moved from distilled).
-+ Distilled.md ended Layer-2 first pass at 308 lines (down from 458
+- Distilled.md ended Layer-2 first pass at 308 lines (down from 458
   at Layer-2 start; net −93 from Layer-1 close; net −150 from full
   pass start). Substance preservation absolute — every removal had
   a permanent home.
@@ -2403,13 +2439,13 @@ sequenced in the existing index plan.
 
 **Stable-but-no-natural-home items requiring owner conversation:**
 
-+ ADR/PDR citation discipline (waiting for evidence accumulation).
-+ Sequenced-deferral discipline (sequenced behind enforcement
+- ADR/PDR citation discipline (waiting for evidence accumulation).
+- Sequenced-deferral discipline (sequenced behind enforcement
   infrastructure landing — authoring the PDR-026 amendment without
   enforcement would itself be the failure mode the amendment names).
-+ Hash-recompute-drift (workspace-specific; TSDoc candidate on
+- Hash-recompute-drift (workspace-specific; TSDoc candidate on
   `validate-portability.ts`).
-+ Practice-Core portability is by construction (verify whether
+- Practice-Core portability is by construction (verify whether
   this is already absorbed into PDR-007 amendment or warrants its
   own dedicated PDR).
 
@@ -2943,17 +2979,18 @@ and
 
 ## Thread Identity
 
-+ **Thread**: `agentic-engineering-enhancements`
-+ **Thread purpose**: Practice and documentation-structure improvements,
+- **Thread**: `agentic-engineering-enhancements`
+- **Thread purpose**: Practice and documentation-structure improvements,
   especially knowledge-flow roles, directive fitness pressure, and durable
   homing of agent-entrypoint content.
-+ **Branch**: `fix/sonar-fixes-20260506` (current memory/state substrate
+- **Branch**: `fix/sonar-fixes-20260506` (current memory/state substrate
   closure and doctor-preflight lane)
 
 ## Participating Agent Identities
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Smouldering Crackling Pyre` | `claude-code` | `claude-opus-4-7-1m` | `ab76ef` | `executed-collaboration-protocol-hardening-final-opener-phase-0-and-R1a-only; bootstrap-fast-path-claim-059291ea-comms-event-shared-comms-log-entry; pre-flight-fingerprint-scan-refuted-two-family-premise-three-families-confirmed-narrative-311-lifecycle-5-directed-2; owner-direction-Shape-A-prime-three-directories-one-canonical-schema-with-three-defs; R1a-landed-f7560339-canonical-comms-event-schema-json-plus-12-Ajv-validated-tests-plus-test-fakes-fixture-module; assumptions-expert-and-architecture-expert-betty-GO-WITH-CONDITIONS-reviews-pre-execution; live-foreign-stage-absorption-event-from-peer-Dusky-Masking-Cloak-c5ff7f-pre-staged-handoff-files-caught-by-commit-queue-verify-staged-cured-by-git-commit-by-explicit-pathspec; R1b-and-R2-through-Phase-5-deferred-to-fresh-opener; arc-closure-honestly-deferred-not-this-session; commits-f7560339-R1a` | 2026-05-11 | 2026-05-11 |
 | `Deciduous Twining Dew` | `claude-code` | `claude-opus-4-7-1m` | `a12c90` | `executed-collaboration-protocol-hardening-opener-phases-0-through-3-partial; phase-0-ground-state-compiled-13-promises-10-incidents-8-gaps; phase-1-friction-audit-categorised-by-remediation-layer-CLI-BUG-CLI-AFFORDANCE-CONTRACT-GAP-HOOK-ENFORCEMENT; phase-2-remediation-design-crystallised-with-architecturally-excellent-shapes-only; assumptions-expert-x2-architecture-expert-betty-architecture-expert-wilma-docs-adr-expert-dispatched; opener-framing-amended-on-five-axes-sub-system-framing-super-linear-scaling-ramp-not-start-four-probe-matrix-wilma-seat-earned; owner-re-decisions-ORD-1-Path-beta-round-trip-and-delete-markdown-and-ORD-2-Shape-B-skill-plus-native-git-hook-drop-R4a; R6-coordinator-role-doctrine-landed-with-threshold-held-in-ephemeral-state-not-directive; B-01-corrected-diagnosis-schema-mix-in-comms-events-not-now-iso-bug; commits-9b619a05-doctrine-and-70507d72-session-close; remaining-work-queued-R1-schema-mix-owner-direction-R2-R3-CLI-test-first-R4b-skill-R4-new-native-git-hook-R5-Path-beta-migration-R7-B9-plan-stub-R8-pattern-capture-Phase-4-four-probe-matrix` | 2026-05-11 | 2026-05-11 |
 | `Blooming Growing Thicket` | `claude-code` | `claude-opus-4-7-1m` | `756c60` | `authored-collaboration-protocol-hardening-opener-as-dedicated-session-for-the-real-ceiling-on-safe-N-agent-work-six-phases-ground-state-friction-audit-remediation-design-land-validate-at-scale-closeout; recorded-B-01-comms-send-created-at-bug-in-primary-agent-tooling-enhancements-plan-with-test-first-discipline-named; thread-record-next-opener-pointer-added-at-top; commits-ac765955-bug-record-and-9547bb69-openers-plus-team-of-agents-section` | 2026-05-11 | 2026-05-11 |
 | `Burnished Crackling Pyre` | `claude-code` | `claude-opus-4-7-1m` | `e517c9` | `claude-skill-listing-budget-bumped-1pct-to-3pct-in-claude-settings-json; napkin-entry-records-architectural-rationale-practice-adopters-exhibit-elevated-skill-count-floor-by-construction-per-pdr-009-and-pdr-051; pending-graduations-entry-added-target-amend-practice-md-or-pdr-051-trigger-second-platform-or-owner-direction; commit-9547bb69-landed-by-parallel-or-owner` | 2026-05-11 | 2026-05-11 |
@@ -3041,88 +3078,88 @@ new sessions add rows; matching platform/model/agent_name updates
 **Latest session landed canonical-first skill pack ingestion future plan
 (2026-04-30 Dewy Budding Sapling):**
 
-+ Investigated current skill-portability pipeline (canonical at
+- Investigated current skill-portability pipeline (canonical at
   `.agent/skills/`, thin wrappers under `.claude/`, `.cursor/`, `.agents/`,
   plus `skills-lock.json` and `pnpm portability:check`); confirmed manual
   canonicalisation flow and the unbuilt
   `pnpm agent-tools:canonicalise-vendor-skills` mitigation flagged at the
   close of the portability-remediation plan.
-+ Drafted vendor-agnostic future strategic plan
+- Drafted vendor-agnostic future strategic plan
   [`canonical-first-skill-pack-ingestion-tooling.plan.md`](../../../plans/agent-tooling/future/canonical-first-skill-pack-ingestion-tooling.plan.md)
   — never names a delivery vendor; ecosystems referenced as illustrative
   only (Anthropic / Vercel / Cloudflare / Clerk / ModelContextProtocol /
   Cursor / Codex / future-not-yet-authored). Plan body forbids
   vendor-keyed conditionals in tool source as a validator-enforceable rule.
-+ Promotion gated on PASS from the deep sub-agent review set
+- Promotion gated on PASS from the deep sub-agent review set
   (assumptions-reviewer + architecture-reviewer-fred|betty|barney|wilma).
   Reviews are blocking later but not required now per owner direction.
-+ Discovery surfaces wired: future/README.md table row, collection
+- Discovery surfaces wired: future/README.md table row, collection
   README.md Documents row, roadmap.md Adjacent section + status header,
   forward-link from sibling adapter-generation plan, forward-link from
   Phase 6 mitigation note in current portability-remediation plan.
-+ Validators green: `pnpm portability:check` (12 commands, 36 skills,
+- Validators green: `pnpm portability:check` (12 commands, 36 skills,
   45 rules, 22 reviewer adapters, 47 Cursor triggers, 45 Claude rules,
   45 .agents rules, 40 command adapters across 4 platforms);
   markdownlint clean across all touched files.
-+ No production code, schema, or runtime configuration touched.
-+ Branch (`fix/sentry-identity-from-env`, PR #91) is observability work
+- No production code, schema, or runtime configuration touched.
+- Branch (`fix/sentry-identity-from-env`, PR #91) is observability work
   by a different identity in a different thread; this session did not
   modify it.
 
 **Prior session landed commit-gate doctrine correction (2026-04-28 Glassy
 Ebbing Reef):**
 
-+ owner clarified that `.agent/` is shared Practice/coordination state and is
+- owner clarified that `.agent/` is shared Practice/coordination state and is
   always safe to include in commits when it belongs to the live bundle;
-+ owner clarified that the commit queue protects the staged authorial bundle,
+- owner clarified that the commit queue protects the staged authorial bundle,
   while the commit hooks protect whole-repo integrity;
-+ minor whole-repo hook failures are repaired immediately, including in
+- minor whole-repo hook failures are repaired immediately, including in
   peer-owned WIP when the repair is mechanical and gate-honest;
-+ larger whole-repo failures are planned as the highest-priority next item,
+- larger whole-repo failures are planned as the highest-priority next item,
   without narrowing hooks, bypassing verification, or introducing compatibility
   layers;
-+ commit `7c589a0a` landed this doctrine plus the Cloudflare MCP handoff state
+- commit `7c589a0a` landed this doctrine plus the Cloudflare MCP handoff state
   after the full pre-commit chain passed.
 
 **Latest handoff verified Codex identity archive state (2026-04-28 Coastal
 Mooring Atoll):**
 
-+ the completed
+- the completed
   [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/codex-session-identity-plumbing.plan.md)
   remains archived, and the old `current/` path is deleted;
-+ the leftover archive claim is closed with evidence in collaboration state
+- the leftover archive claim is closed with evidence in collaboration state
   (`ac0fe90f-e773-4415-940b-6c8c9e074a7a`, closed by Mossy Creeping Branch);
-+ entrypoints remain pointer-only, `.remember/` added no new next-session
+- entrypoints remain pointer-only, `.remember/` added no new next-session
   behaviour, and real conversations/escalations required no handoff action;
-+ the brief consolidation trigger from active napkin hard pressure was handled
+- the brief consolidation trigger from active napkin hard pressure was handled
   by Mossy Creeping Branch's overflow rotation; current
   `pnpm practice:fitness:strict-hard` is soft-only.
 
 **Prior session implemented Codex identity plumbing (2026-04-28 Mossy
 Creeping Branch):**
 
-+ promoted the future Codex identity brief into
+- promoted the future Codex identity brief into
   [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/codex-session-identity-plumbing.plan.md);
-+ added a soft Codex `SessionStart` hook adapter that emits the full PDR-027
+- added a soft Codex `SessionStart` hook adapter that emits the full PDR-027
   identity block as additional context when Codex supplies `session_id`;
-+ added report-only identity audit over active claims, closed claims, thread
+- added report-only identity audit over active claims, closed claims, thread
   records, and the rendered shared comms log;
-+ updated start-right, identity, plan, continuation, ADR, and PDR surfaces so
+- updated start-right, identity, plan, continuation, ADR, and PDR surfaces so
   thread registration and shared-state writes use the same identity preflight
   path.
 
 **Prior session landed hook test IO remediation (2026-04-28 Verdant
 Flowering Blossom):**
 
-+ retained hook tests now prove policy parsing, content extraction,
+- retained hook tests now prove policy parsing, content extraction,
   added-pattern matching, hook-health formatting, CLI arg parsing, and
   guard composition at the lowest viable layer;
-+ PreToolUse command/content guards accept injected blocked patterns and prior
+- PreToolUse command/content guards accept injected blocked patterns and prior
   readers, keeping policy-file and prior-file IO in runtime composition roots;
-+ agent-tools CLI E2E tests that only proved `pnpm tsx` process startup,
+- agent-tools CLI E2E tests that only proved `pnpm tsx` process startup,
   help text, health output, cursor filtering, or invalid agent-id behaviour
   were deleted or lowered to pure unit coverage;
-+ validation passed for `pnpm test:root-scripts`, `pnpm agent-tools:test`,
+- validation passed for `pnpm test:root-scripts`, `pnpm agent-tools:test`,
   `pnpm agent-tools:test:e2e`, `pnpm type-check`, `pnpm lint`, `pnpm knip`,
   `pnpm depcruise`, `pnpm test`, `pnpm format-check:root`,
   `pnpm markdownlint-check:root`, `pnpm practice:vocabulary`, and
@@ -3133,81 +3170,81 @@ Flowering Blossom):**
 **Latest session is implementing collaboration-state write safety
 (2026-04-28 Woodland Creeping Petal):**
 
-+ promoted the collaboration-state domain-model/comms-reliability brief into
+- promoted the collaboration-state domain-model/comms-reliability brief into
   [`collaboration-state-write-safety.plan.md`](../../../plans/agent-tooling/current/collaboration-state-write-safety.plan.md);
-+ added `pnpm agent-tools:collaboration-state -- ...` for identity preflight,
+- added `pnpm agent-tools:collaboration-state -- ...` for identity preflight,
   comms append/render, claims open/heartbeat/close/archive-stale,
   conversation append, escalation open/close, and state checks;
-+ added transaction-guarded JSON writes for active claims, closed claims,
+- added transaction-guarded JSON writes for active claims, closed claims,
   conversations, escalations, and commit queue mutations;
-+ kept hook/session-exit work as later polish and retained TTL cleanup as the
+- kept hook/session-exit work as later polish and retained TTL cleanup as the
   portable baseline.
 
 **Prior session preserved collaboration-state session-close semantics
 (2026-04-28 Ethereal Threading Supernova):**
 
-+ corrected the Codex platform classification after owner supplied the
+- corrected the Codex platform classification after owner supplied the
   official hooks docs: Codex hooks are supported, but no `SessionEnd` event is
   documented; `Stop` is turn-scoped and should not be treated as full
   session-exit cleanup;
-+ captured owner decisions that old claims are not picked up on terminal
+- captured owner decisions that old claims are not picked up on terminal
   resume, session close should close claims, and missed claim closes are
   handled by stale/orphan TTL cleanup rather than success-marking;
-+ expanded the shared-state reliability plan from shared comms only to every
+- expanded the shared-state reliability plan from shared comms only to every
   shared inter-agent state record once the domain boundaries are defined;
-+ added the rolling archive requirement for shared comms history so the live
+- added the rolling archive requirement for shared comms history so the live
   log stays usable without losing past context;
-+ updated the future plan, lifecycle/conventions docs, state README,
+- updated the future plan, lifecycle/conventions docs, state README,
   cross-platform matrix, hooks portability plan, napkin, repo-continuity, and
   this thread record.
 
 **Latest session graduated queue governance (2026-04-27 Coastal Washing
 Rudder):**
 
-+ owner-directed governance pass treated commit `5c39d1d4` as the evidence
+- owner-directed governance pass treated commit `5c39d1d4` as the evidence
   trigger, not as current HEAD; current HEAD was verified as `0b8af81f` during
   the edit pass;
-+ amended PDR-029 with Family A Class A.3 for shared git transaction /
+- amended PDR-029 with Family A Class A.3 for shared git transaction /
   authorial-bundle discipline: advisory FIFO queue artefact, exact staged
   bundle verification, and non-mechanical enforcement;
-+ kept operational detail in
+- kept operational detail in
   [`collaboration-state-conventions.md`](../collaboration-state-conventions.md)
   and
   [`collaboration-state-lifecycle.md`](../collaboration-state-lifecycle.md);
-+ archived the completed
+- archived the completed
   [`intent-to-commit-queue.execution.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/intent-to-commit-queue.execution.plan.md)
   and updated current/future indexes, roadmap, completed-plan index,
   repo-continuity, and this thread record;
-+ no queue implementation code, schema change, `agent-tools` edit, or
+- no queue implementation code, schema change, `agent-tools` edit, or
   `session_counter` primitive was added. `session_counter` remains future-only
   unless a real primitive is deliberately implemented later.
 
 **Prior latest session landed queue implementation and self-application
 (2026-04-27 Prismatic Waxing Constellation, commit `5c39d1d4`):**
 
-+ owner-directed queue work landed as
+- owner-directed queue work landed as
   `feat(agent-tools): add commit queue workflow`. The landing used a fresh
   `git:index/head` claim, queued the exact staged file bundle, recorded the
   staged fingerprint, verified it before commit, and completed the queue entry;
-+ promoted
+- promoted
   [`intent-to-commit-queue.execution.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/intent-to-commit-queue.execution.plan.md)
   as the executable queue plan, then later archived it after governance
   graduation; the future source plan carries the `2ccefad4` turn-race
   evidence and now keeps only the residual `session_counter` slice future-only;
-+ added active-claims schema v1.3.0 with root `commit_queue`, optional claim
+- added active-claims schema v1.3.0 with root `commit_queue`, optional claim
   `intent_to_commit` pointer, and local helper
   `pnpm agent-tools:commit-queue --` for enqueue, phase, staged-fingerprint capture,
   exact staged-bundle verification, and completion cleanup;
-+ updated commit, start-right, active-claim, collaboration, consolidation, and
+- updated commit, start-right, active-claim, collaboration, consolidation, and
   cross-vendor wrapper guidance. The queue is advisory FIFO discovery, not a
   lock or refusal mechanism, and session-count TTL remains future-only;
-+ validation passed: `pnpm agent-tools:build`, `pnpm agent-tools:test`,
+- validation passed: `pnpm agent-tools:build`, `pnpm agent-tools:test`,
   `pnpm agent-tools:lint`, `pnpm knip`, `pnpm test:root-scripts`,
   `pnpm portability:check`, `pnpm markdownlint-check:root`,
   `pnpm practice:vocabulary`, `pnpm practice:fitness:strict-hard`, and
   `git diff --check`; the real commit hook also passed Prettier format check,
   markdownlint, knip, depcruise, and turbo type-check/lint/test;
-+ the root `scripts/commit-queue.mjs` file is absent from both the working tree
+- the root `scripts/commit-queue.mjs` file is absent from both the working tree
   and staged index. Active claims and `commit_queue` are empty after handoff;
   the next index action must still re-check active claims, queue order, and
   `git diff --cached --name-status`.
@@ -3216,19 +3253,19 @@ Rudder):**
 (2026-04-27 Fragrant Sheltering Pollen, Codex rollback and queue-evidence
 handoff):**
 
-+ owner corrected the previous direction: drop the experimental Codex
+- owner corrected the previous direction: drop the experimental Codex
   app-server title-mutation approach because stable names from
   `CODEX_THREAD_ID` provide the load-bearing value;
-+ removed the app-server implementation scope from the working tree and kept
+- removed the app-server implementation scope from the working tree and kept
   the stable identity documentation row. `@oaknational/agent-tools` gates
   passed: build, type-check, lint, lint:fix, unit tests, e2e tests, plus an
   identity smoke test printing `Fragrant Sheltering Pollen`;
-+ a short-lived `index/head` commit-window claim still collided with live
+- a short-lived `index/head` commit-window claim still collided with live
   shared-index activity. Commit `2ccefad4` contains the Codex stable-name doc
   row under another agent's scripts-fix message, and `HEAD` advanced again to
   `21abd2d4` during inspection. The session did not amend or rewrite shared
   history;
-+ owner directed this collision to be recorded as evidence for the
+- owner directed this collision to be recorded as evidence for the
   intent-to-commit queue. Next implementation re-attempts by adding ordered
   `commit_queue` mechanics plus exact staged-bundle verification. Falsifiability:
   inspect `intent-to-commit-and-session-counter.plan.md`, the shared log entry
@@ -3237,16 +3274,16 @@ handoff):**
 **Prior latest session landed as closeout and next-session opener
 (2026-04-27 Pelagic Washing Sail, Codex handoff/consolidation):**
 
-+ `jc-session-handoff` and `jc-consolidate-docs` ran before serious
+- `jc-session-handoff` and `jc-consolidate-docs` ran before serious
   commit-queue implementation, per owner direction;
-+ active claim `72b0e57c-4167-4407-b2ac-db1e4231619a` was opened for
+- active claim `72b0e57c-4167-4407-b2ac-db1e4231619a` was opened for
   closeout surfaces and closed explicitly in collaboration state;
-+ strict-hard fitness pressure in `napkin.md` and `repo-continuity.md` was
+- strict-hard fitness pressure in `napkin.md` and `repo-continuity.md` was
   remediated without deleting live learning;
-+ Vining did not visibly pick up the shared-log vocabulary TTL/examples note
+- Vining did not visibly pick up the shared-log vocabulary TTL/examples note
   at the first heartbeat check, which is now recorded as WS5 evidence that
   broadcast logs need directed channel/ack protocols for targeted requests;
-+ no queue schema, API, workflow, staging, or commit work was started.
+- no queue schema, API, workflow, staging, or commit work was started.
   Next session re-attempts by promoting/updating the intent-to-commit plan
   around a first-class ordered advisory queue, then implementing schema and
   workflow v1.3. Falsifiability: inspect active/closed claims, the shared log,
@@ -3255,15 +3292,15 @@ handoff):**
 **Latest session landed as committed identity support plus handoff evidence
 (2026-04-27 Celestial Waxing Eclipse, Codex display-surface handoff):**
 
-+ deterministic Codex identity seeding from `CODEX_THREAD_ID` already landed
+- deterministic Codex identity seeding from `CODEX_THREAD_ID` already landed
   in `ff119d44` and collaboration claim closeouts landed in `701c3185`;
-+ this handoff set the current Codex thread title to
+- this handoff set the current Codex thread title to
   `Celestial Waxing Eclipse`, and `~/.codex/session_index.jsonl` carries the
   same thread name;
-+ official CLI/TUI title/statusline configuration exists, but no supported
+- official CLI/TUI title/statusline configuration exists, but no supported
   IDE-extension setting for a deterministic custom session name was found in
   local extension settings;
-+ owner asked to use the CLI/TUI surfaces anyway. `~/.codex/config.toml` now
+- owner asked to use the CLI/TUI surfaces anyway. `~/.codex/config.toml` now
   sets `terminal_title = ["spinner", "project-name", "thread-title",
   "git-branch"]` and `status_line = ["model-with-reasoning", "git-branch",
   "thread-title", "session-id", "context-remaining", "five-hour-limit",
@@ -3274,15 +3311,15 @@ handoff):**
 **Latest session landed as uncommitted documentation/state edits
 (2026-04-27 Pelagic Washing Sail, pre-commit-queue handoff):**
 
-+ collaboration-doc fitness remediation is implemented in the working tree:
+- collaboration-doc fitness remediation is implemented in the working tree:
   high-frequency doctrine stays in the directive/conventions files while
   detailed lifecycle recipes live in `collaboration-state-lifecycle.md`;
-+ `practice:vocabulary` was fixed by translating the shared-log ADR-144
+- `practice:vocabulary` was fixed by translating the shared-log ADR-144
   phrase from retired wording to the current three-zone vocabulary;
-+ a cross-vendor shared-log note to Vining Bending Root records the
+- a cross-vendor shared-log note to Vining Bending Root records the
   vocabulary-transition TTL/examples idea; a thread heartbeat checks
   periodically for pickup evidence;
-+ serious `intent_to_commit` implementation was deliberately paused for this
+- serious `intent_to_commit` implementation was deliberately paused for this
   handoff. Next session re-attempts by amending/promoting the existing plan
   around an explicit ordered commit queue, then implementing schema/workflow
   v1.3. Falsifiability: inspect `active-claims.json` for no remaining
@@ -3292,162 +3329,162 @@ handoff):**
 **Latest session landed as uncommitted documentation/state edits
 (2026-04-26 Codex, same-branch friction handoff):**
 
-+ owner corrected Codex's initial safety framing: separate worktrees /
+- owner corrected Codex's initial safety framing: separate worktrees /
   branches would hide the same-branch coordination friction this experiment is
   meant to reveal;
-+ napkin, repo-continuity, this thread record, the observability thread
+- napkin, repo-continuity, this thread record, the observability thread
   record, and the shared communication log now capture the operating
   principle: same-branch overlap is allowed, but commit windows, path
   ownership, and shared-surface handoffs must be visible before staging /
   committing;
-+ Frolicking Toast's active commit-steward claim
+- Frolicking Toast's active commit-steward claim
   `4535f2ff-0420-4bde-bfb8-af0db656e359` remains open; Codex had no matching
   active claim to close; no decision-thread update was needed.
 
 **Prior latest session landed as uncommitted documentation/state edits
 (2026-04-26 Codex, session handoff):**
 
-+ repo-continuity and this thread record now reflect current HEAD
+- repo-continuity and this thread record now reflect current HEAD
   `e4705169`, the WS3B gate-satisfied / not-implemented state, and this
   session's handoff;
-+ collaboration lifecycle is closed explicitly into
+- collaboration lifecycle is closed explicitly into
   `closed-claims.archive.json`;
-+ consolidation gate is marked due for hard `distilled.md` fitness pressure
+- consolidation gate is marked due for hard `distilled.md` fitness pressure
   and pattern / phase-transition convergence, but `jc-consolidate-docs` was
   not run inside this lightweight handoff.
 
 **Prior latest session landed as uncommitted documentation/state edits
 (2026-04-26 Codex, WS3B and joint-decision status reconciliation):**
 
-+ current README, roadmap, parent MAC plan, repo-continuity, and this thread
+- current README, roadmap, parent MAC plan, repo-continuity, and this thread
   record now reflect that WS3B's promotion gate is satisfied but
   implementation has not started;
-+ future README now lists the newly recorded
+- future README now lists the newly recorded
   `joint-agent-decision-protocol.plan.md`;
-+ no staging, commit, hook automation, or WS3B mechanism was started.
+- no staging, commit, hook automation, or WS3B mechanism was started.
 
 **Prior latest session landed as uncommitted documentation/state edits
 (2026-04-26 Codex, commit-bundle evidence taxonomy):**
 
-+ future intent-to-commit plan now treats three staged-bundle integrity
+- future intent-to-commit plan now treats three staged-bundle integrity
   failures as promotion-threshold evidence: substitution, disappearance, and
   accretion;
-+ napkin captures that the durable unit is the full bundle: agent intent,
+- napkin captures that the durable unit is the full bundle: agent intent,
   intended pathspecs, staged diff, and commit subject;
-+ no staging, commit, hook automation, or WS3B mechanism was started.
+- no staging, commit, hook automation, or WS3B mechanism was started.
 
 **Prior latest session landed as uncommitted documentation/state edits
 (2026-04-26 Codex, lock-wait nuance):**
 
-+ commit skill now states Claude may use Monitor to wait for
+- commit skill now states Claude may use Monitor to wait for
   `.git/index.lock`, while Codex/Cursor should use a bounded shell wait unless
   a custom monitor exists;
-+ the note explicitly preserves the distinction: lock waits are physical
+- the note explicitly preserves the distinction: lock waits are physical
   guards, while `git:index/head` active claims and shared-log entries are the
   coordination layer;
-+ no staging, commit, hook automation, or WS3B mechanism was started.
+- no staging, commit, hook automation, or WS3B mechanism was started.
 
 **Prior latest session landed as uncommitted documentation/state edits
 (2026-04-26 Codex, commit-window protocol refinement):**
 
-+ git index/head is now an explicit short-lived active-claim area
+- git index/head is now an explicit short-lived active-claim area
   (`git:index/head`) before staging or committing;
-+ the commit skill, start-right workflows, collaboration rules, state
+- the commit skill, start-right workflows, collaboration rules, state
   schemas, state README, consolidation audit, channel card, founding
   collaboration pattern, repo-continuity, and napkin carry the protocol;
-+ platform commit adapters now point agents at the same canonical
+- platform commit adapters now point agents at the same canonical
   commit-window-aware skill;
-+ no WS3B sidebar/timeout/owner-escalation mechanics or hook automation
+- no WS3B sidebar/timeout/owner-escalation mechanics or hook automation
   were started.
 
 **Prior latest session landed as uncommitted documentation/state edits
 (2026-04-26 Codex, learning-first correction after WS4A closeout):**
 
-+ owner correction applied: fitness limits, including hard and critical
+- owner correction applied: fitness limits, including hard and critical
   signals, must never suppress capture, distillation, graduation, or useful
   writing;
-+ outgoing napkin archived to
+- outgoing napkin archived to
   [`napkin-2026-04-26.md`](../../active/archive/napkin-2026-04-26.md), and
   high-signal entries distilled into `distilled.md`;
-+ `consolidate-docs`, PDR-014, ADR-144, Practice Core, repo-continuity, and
+- `consolidate-docs`, PDR-014, ADR-144, Practice Core, repo-continuity, and
   this thread record now say learning comes first and fitness pressure routes
   follow-up structure work.
 
 **Prior latest session landed as uncommitted documentation/state edits
 (2026-04-26 Codex, WS4A plan-state cleanup and consolidation closeout):**
 
-+ parent MAC plan and roadmap now distinguish the completed WS3 evidence
+- parent MAC plan and roadmap now distinguish the completed WS3 evidence
   harvest from remaining post-WS4A observation / seed harvest work;
-+ stale WS3/WS4 wording, per-WS seed counts, and stale-conversation wording
+- stale WS3/WS4 wording, per-WS seed counts, and stale-conversation wording
   were corrected after `docs-adr-reviewer` findings;
-+ reviewer governance now says specialist sub-agent review is preferred
+- reviewer governance now says specialist sub-agent review is preferred
   evidence for substantive work, while findings require disposition and
   only blocking findings / hard gate failures block closure;
-+ `agent-collaboration.md` now says existing owner questions are distinct
+- `agent-collaboration.md` now says existing owner questions are distinct
   from the deferred WS3B file-backed owner-escalation surface;
-+ napkin date hygiene corrected the future-dated Composer entry from
+- napkin date hygiene corrected the future-dated Composer entry from
   2026-04-27 to 2026-04-26.
 
 **Prior latest session landed as uncommitted documentation/state edits
 (2026-04-26 Codex, WS4A lifecycle integration):**
 
-+ start-right quick/thorough now explicitly read active claims, the
+- start-right quick/thorough now explicitly read active claims, the
   shared communication log, and WS3A decision-thread files before edits;
-+ session-handoff now closes own active claims into the closed-claims
+- session-handoff now closes own active claims into the closed-claims
   archive and updates relevant decision threads before the consolidation
   gate;
-+ plan templates now include a lifecycle-trigger component and tiered
+- plan templates now include a lifecycle-trigger component and tiered
   simple-plan/work-shape requirement;
-+ Practice Core, PDR-024, ADR-119, ADR-124, practice-index, roadmap,
+- Practice Core, PDR-024, ADR-119, ADR-124, practice-index, roadmap,
   current-plan index, and documentation-sync log now treat collaboration
   state as a first-class Practice surface;
-+ `invoke-code-reviewers.md` now distinguishes reviewer dispatch from
+- `invoke-code-reviewers.md` now distinguishes reviewer dispatch from
   peer collaboration state;
-+ WS3B sidebar, timeout, and owner-escalation gate is satisfied;
+- WS3B sidebar, timeout, and owner-escalation gate is satisfied;
   implementation remains a separate pass.
 
 **Prior session landed as uncommitted documentation/state edits
 (2026-04-26 Codex, WS3A complete):**
 
-+ codified the WS5 harvest baseline and RED fixtures for claim-history
+- codified the WS5 harvest baseline and RED fixtures for claim-history
   and decision-thread surfaces;
-+ added `closed-claims.schema.json`, migrated `closed-claims.archive.json`
+- added `closed-claims.schema.json`, migrated `closed-claims.archive.json`
   to v1.1.0 with structured `closure` metadata, and updated claim-close
   guidance across the directive, rules, state conventions, and
   `consolidate-docs`;
-+ self-applied the new closure path: the WS3A claim-history claim is in
+- self-applied the new closure path: the WS3A claim-history claim is in
   `closed-claims.archive.json` with `closure.kind: "explicit"`;
-+ validation: claim-history JSON/Ajv/closure checks and decision-thread
+- validation: claim-history JSON/Ajv/closure checks and decision-thread
   jq/file-dir/Ajv checks passed, along with targeted markdownlint,
   `git diff --check`, and `pnpm practice:fitness:informational`. The only
   hard fitness finding remains `repo-continuity.md`, already marked for
   separate deep consolidation.
-+ added `conversation.schema.json`,
+- added `conversation.schema.json`,
   `.agent/state/collaboration/conversations/`, open/closed examples, and
   GREEN conversation fixtures preserving the RED filenames as history;
-+ updated collaboration guidance for when to use the shared log, an
+- updated collaboration guidance for when to use the shared log, an
   active claim, a decision thread, the napkin, and the thread record;
-+ wired `consolidate-docs § 7e` to report active/stale claims, recent
+- wired `consolidate-docs § 7e` to report active/stale claims, recent
   closures, open/stale decision threads, unresolved decision requests,
   evidence-bundle gaps, and schema validation;
-+ marked `ws3a-refactor-observability` and `ws3a-validation-and-handoff`
+- marked `ws3a-refactor-observability` and `ws3a-validation-and-handoff`
   complete in the WS3A plan and refreshed current-plan/roadmap status;
-+ WS3B sidebar, timeout, and owner-escalation surfaces remain unimplemented;
+- WS3B sidebar, timeout, and owner-escalation surfaces remain unimplemented;
   their promotion gate is satisfied.
 
 **Prior session landed as uncommitted documentation/state edits
 (2026-04-26 Codex):**
 
-+ renamed the live "embryo" terminology to **shared communication log/system**
+- renamed the live "embryo" terminology to **shared communication log/system**
   across the plan, directive, rules, state docs, memory cards, and handoff
   surfaces;
-+ integrated owner direction on platform independence into the protocol plan,
+- integrated owner direction on platform independence into the protocol plan,
   `agent-collaboration.md`, `distilled.md`, and the napkin;
-+ refreshed the collaboration plan, roadmap, current-plan index, and this
+- refreshed the collaboration plan, roadmap, current-plan index, and this
   thread record from "evidence still accumulating" to "evidence threshold
   appears met; owner-directed harvest required";
-+ superseded the stale `temp-agent-collaboration-continuation.md` note;
-+ validation: `jq empty .agent/state/collaboration/active-claims.json` passed;
+- superseded the stale `temp-agent-collaboration-continuation.md` note;
+- validation: `jq empty .agent/state/collaboration/active-claims.json` passed;
   `git diff --check` passed; `pnpm practice:fitness:informational` has only
   the unrelated/claimed `repo-continuity.md` hard finding remaining;
   `pnpm markdownlint-check:root` passed once, then a final rerun picked up
@@ -3455,46 +3492,46 @@ handoff):**
 
 **Prior session landed as artefacts, not a commit**:
 
-+ separated continuity strategy/process from operational state:
+- separated continuity strategy/process from operational state:
   [`continuity-practice.md`](../../../directives/continuity-practice.md)
   now carries doctrine; [`repo-continuity.md`](../repo-continuity.md)
   carries active state;
-+ updated [`session-handoff.md`](../../../commands/session-handoff.md)
+- updated [`session-handoff.md`](../../../commands/session-handoff.md)
   with the role-boundary check that prevents those surfaces from
   muddying again;
-+ clarified testing-family roles by making
+- clarified testing-family roles by making
   [`testing-patterns.md`](../../../../docs/engineering/testing-patterns.md)
   the governed recipe companion to
   [`testing-strategy.md`](../../../directives/testing-strategy.md);
-+ amended
+- amended
   [PDR-014](../../../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md)
   with knowledge-artefact roles and bidirectional knowledge flow;
-+ updated [`patterns/README.md`](../../active/patterns/README.md) to name
+- updated [`patterns/README.md`](../../active/patterns/README.md) to name
   the empirical-to-normative flow from observed practice into recipes,
   rules, principles, scanners, and decision records;
-+ created the two queued plans listed in the header.
+- created the two queued plans listed in the header.
 
 **Latest session landed as grouped commits**:
 
-+ `9c866634` — `test(search-cli): inject smoke env through vitest context`;
-+ `fa069efe` — `chore(agents): update cursor reviewer model metadata`;
-+ `ccc2ca46` — `docs(practice): home agent directives and testing doctrine`;
-+ `015ac99b` — `docs(continuity): record plan handoff state`;
-+ implemented the AGENT homing plan and marked its todos complete;
-+ added the AGENT source-to-target ledger under plan evidence;
-+ moved durable reviewer, agent-tool, artefact, command, and commit detail to
+- `9c866634` — `test(search-cli): inject smoke env through vitest context`;
+- `fa069efe` — `chore(agents): update cursor reviewer model metadata`;
+- `ccc2ca46` — `docs(practice): home agent directives and testing doctrine`;
+- `015ac99b` — `docs(continuity): record plan handoff state`;
+- implemented the AGENT homing plan and marked its todos complete;
+- added the AGENT source-to-target ledger under plan evidence;
+- moved durable reviewer, agent-tool, artefact, command, and commit detail to
   their role homes and slimmed AGENT to an entrypoint;
-+ cleared `principles.md` hard pressure by delegating detailed testing doctrine
+- cleared `principles.md` hard pressure by delegating detailed testing doctrine
   and repo topology to their durable homes;
-+ cleared `testing-strategy.md` hard pressure by moving worked TDD examples to
+- cleared `testing-strategy.md` hard pressure by moving worked TDD examples to
   [`testing-tdd-recipes.md`](../../../../docs/engineering/testing-tdd-recipes.md);
-+ aligned `no-global-state-in-tests.md` with the no-read/no-write
+- aligned `no-global-state-in-tests.md` with the no-read/no-write
   `process.env` contract.
-+ review follow-up removed the remaining smoke-test `process.env` read by
+- review follow-up removed the remaining smoke-test `process.env` read by
   injecting validated smoke config from `vitest.smoke.config.ts`, restored the
   "assert effects, not constants" testing principle, and corrected the moved
   TDD recipe examples.
-+ after analysing the streamable-http `pnpm check` blocker, created
+- after analysing the streamable-http `pnpm check` blocker, created
   [`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/active/mcp-local-startup-release-boundary.plan.md)
   and removed the arbitrary observability plan-density limit that had
   misrouted the plan on first placement. The plan has since been promoted to
@@ -3535,36 +3572,36 @@ nl -ba .agent/directives/AGENT.md
 
 ### Owning Plans
 
-+ Primary (active multi-workstream lane):
+- Primary (active multi-workstream lane):
   [`multi-agent-collaboration-protocol.plan.md`](../../../plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md)
   — WS0 landed `63c66c88`; WS1 landed `a5d33519`; WS2 landed
   `293742cd`. WS3 is split: WS3A is complete and archived, WS3B sidebar /
   escalation is implemented, WS4A lifecycle integration is complete, and WS5
   remains observation/harvest work.
-+ Completed split plan:
+- Completed split plan:
   [`multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
   — WS3A evidence provision, protocol observability, durable claim-closure
   history, and lightweight decision threads.
-+ Implemented sibling plan:
+- Implemented sibling plan:
   [`multi-agent-collaboration-sidebar-and-escalation.plan.md`](../../../plans/agent-tooling/current/multi-agent-collaboration-sidebar-and-escalation.plan.md)
   — WS3B sidebar, timeout, owner-escalation, and joint-decision mechanics.
-+ Completed identity plan:
+- Completed identity plan:
   [`agent-identity-derivation.plan.md`](../../../plans/architecture-and-infrastructure/archive/completed/agent-identity-derivation.plan.md)
   — repo-owned core/CLI/docs landed in `3a5e3d81`+`ed256e6f`; Phase 8
   Claude Code statusline wiring landed in this session; archived 2026-04-27.
-+ Fitness remediation:
+- Fitness remediation:
   [`collaboration-doc-fitness-remediation.plan.md`](../../../plans/agent-tooling/current/collaboration-doc-fitness-remediation.plan.md)
   — implemented in the working tree; validate/land separately from queue
   work.
-+ Completed queue implementation plan:
+- Completed queue implementation plan:
   [`intent-to-commit-queue.execution.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/intent-to-commit-queue.execution.plan.md)
   — landed in `5c39d1d4`, self-applied the queue, graduated governance to
   PDR-029 Family A Class A.3, and is now archived.
-+ Strategic source / follow-up:
+- Strategic source / follow-up:
   [`intent-to-commit-and-session-counter.plan.md`](../../../plans/agent-tooling/future/intent-to-commit-and-session-counter.plan.md)
   — queue slice complete; residual `session_counter` work remains future-only
   unless a real primitive is deliberately promoted later.
-+ Strategic source / follow-up:
+- Strategic source / follow-up:
   [`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../../plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md)
   — preserves the shared-log collision analysis, the requirement that all
   shared inter-agent state records get multi-agent-safe write paths after the
@@ -3573,25 +3610,25 @@ nl -ba .agent/directives/AGENT.md
   verification gap, and identity-preflight requirement. Owner priority update
   2026-04-28: promotion trigger is satisfied; clashing writes to shared state
   are pressing, while hooks/session-exit cleanup are refinements.
-+ Implemented current slice:
+- Implemented current slice:
   [`collaboration-state-write-safety.plan.md`](../../../plans/agent-tooling/current/collaboration-state-write-safety.plan.md)
   — landed as `11f0320f` with immutable comms events, transaction-guarded
   JSON state writes, Codex identity preflight, and TTL archival baseline.
   Closure remains pending the documented hard-fitness disposition.
-+ Implemented current slice:
+- Implemented current slice:
   [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/codex-session-identity-plumbing.plan.md)
   — Codex `SessionStart` identity context, canonical identity preflight,
   report-only anonymous identity audit, and coordination/platform-tooling
   doctrine propagation. Historical `Codex` / `unknown` rows remain
   evidence-preserving audit findings unless a later manual repair has stronger
   evidence.
-+ Earlier completed work:
+- Earlier completed work:
   [`agent-entrypoint-content-homing.plan.md`](../../../plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md)
-+ Follow-on:
+- Follow-on:
   [`knowledge-role-documentation-restructure.plan.md`](../../../plans/agentic-engineering-enhancements/current/knowledge-role-documentation-restructure.plan.md)
-+ Context:
+- Context:
   [`practice-and-process-structural-improvements.plan.md`](../../../plans/agentic-engineering-enhancements/current/practice-and-process-structural-improvements.plan.md)
-+ Strategic source / future (drafted 2026-04-30):
+- Strategic source / future (drafted 2026-04-30):
   [`canonical-first-skill-pack-ingestion-tooling.plan.md`](../../../plans/agent-tooling/future/canonical-first-skill-pack-ingestion-tooling.plan.md)
   — vendor-agnostic CLI for ingesting any external skill pack into the
   canonical-first three-layer model; closes the unbuilt mitigation option 1
@@ -3664,21 +3701,21 @@ validation.
 
 ### Current State
 
-+ WS3A RED, claim-history GREEN, decision-thread GREEN, protocol-observability
+- WS3A RED, claim-history GREEN, decision-thread GREEN, protocol-observability
   refactor, and validation/handoff are complete.
-+ WS4A lifecycle integration is complete across start-right,
+- WS4A lifecycle integration is complete across start-right,
   session-handoff, plan templates, Practice Core, ADR-119, ADR-124, and
   practice-index surfaces.
-+ Commit-window coordination is implemented across commit skill, start-right,
+- Commit-window coordination is implemented across commit skill, start-right,
   collaboration rules, active/closed-claim schemas, state README,
   consolidation audit, channel card, founding pattern, and continuity
   surfaces.
-+ WS3B sidebar/escalation and joint-agent decision integration is
+- WS3B sidebar/escalation and joint-agent decision integration is
   implemented across conversation schema v1.1.0, escalation schema,
   fixtures, start-right, session-handoff, consolidate-docs,
   collaboration rules, directives, channel card, state README, and state
   conventions.
-+ Deterministic identity is implemented in `agent-tools` with a built
+- Deterministic identity is implemented in `agent-tools` with a built
   `agent-identity` CLI, tests, docs, PDR-027 amendment, start-right guidance,
   and platform-wrapper status table. Phase 8 Claude Code platform alignment
   review is complete: `.claude/settings.json` →
@@ -3688,124 +3725,124 @@ validation.
   seeding landed in `ff119d44`. Cursor composer uses experimental project
   `sessionStart` hook wiring (`OAK_AGENT_SEED`, mirror file, docs); official
   Hooks output still lacks a programmatic Composer tab-title field.
-+ Collaboration-doc fitness remediation landed in `5c39d1d4`. Later
+- Collaboration-doc fitness remediation landed in `5c39d1d4`. Later
   strict-hard checks should distinguish those target docs from any unrelated
   concurrent WIP pressure.
-+ Intent-to-commit queue v1.3.0 landed as `5c39d1d4`:
+- Intent-to-commit queue v1.3.0 landed as `5c39d1d4`:
   active-claims carries root `commit_queue`, `pnpm agent-tools:commit-queue --` can
   enqueue/phase/record/verify/complete intents, and commit/start-right/docs
   surface advisory FIFO order plus exact staged-bundle verification.
-+ Queue governance graduated after `5c39d1d4`: PDR-029 Family A Class A.3 is
+- Queue governance graduated after `5c39d1d4`: PDR-029 Family A Class A.3 is
   the durable Practice home, collaboration-state conventions/lifecycle are the
   operational home, and the completed execution plan is archived at
   [`archive/completed/intent-to-commit-queue.execution.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/intent-to-commit-queue.execution.plan.md).
-+ Practice/tooling feedback capture is now explicit: portable rule in
+- Practice/tooling feedback capture is now explicit: portable rule in
   `.agent/rules/capture-practice-tool-feedback.md`, platform adapters in
   `.agents/`, `.claude/`, and `.cursor/`, and napkin guidance naming
   `agent-tools` as this repo's TypeScript-specific implementation surface.
-+ Agent-work ownership is now settled explicitly: PDR-035 says collaboration,
+- Agent-work ownership is now settled explicitly: PDR-035 says collaboration,
   coordination, work management, direction, lifecycle, identity, claims,
   handoff, review routing, and adjacent mechanisms belong to the portable
   Practice; ADR-165 records this repo's phenotype boundary for `.agent/state`,
   operational memory, platform adapters, plans, and `agent-tools`.
-+ Communication-channel discoverability now points to
+- Communication-channel discoverability now points to
   [`agent-collaboration-channels.md`](../../../memory/executive/agent-collaboration-channels.md)
   from executive, operational, and Practice index surfaces.
-+ Collaboration-state timestamps are documented as UTC ISO 8601 with trailing
+- Collaboration-state timestamps are documented as UTC ISO 8601 with trailing
   `Z`; Europe/London belongs in prose context, not state clocks.
-+ Strategic future plan
+- Strategic future plan
   [`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../../plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md)
   is the durable holding point for shared-log collision analysis, sidebar
   polling/attention/push questions, identity preflight, and stale/phantom
   active-participant reconciliation. Its promotion trigger is satisfied by
   owner direction; do not wait for another collision before creating the
   executable plan.
-+ Session-close semantics are owner-settled for current terminal-based
+- Session-close semantics are owner-settled for current terminal-based
   agents: do not reclaim old claims on resume; close claims when the agent
   closes the session; if cleanup is missed, mark stale/orphaned after the
   type-specific TTL. A future SDK one-turn invocation model may reopen the
   external shared-session-state design space.
-+ Shared communication history now needs hot-plus-archive retention: keep the
+- Shared communication history now needs hot-plus-archive retention: keep the
   live file small enough for scan/start-right use, and roll older context into
   a durable archive rather than deleting it.
-+ Codex hook support is no longer unknown: upstream hooks exist, but no
+- Codex hook support is no longer unknown: upstream hooks exist, but no
   documented `SessionEnd` parity exists yet. This is secondary to the pressing
   shared-state write-collision work; use standard TTL cleanup for Codex missed
   exits unless a future Codex session-exit event appears.
-+ Collaboration-state write safety is implemented and landed in `11f0320f`.
+- Collaboration-state write safety is implemented and landed in `11f0320f`.
   `pnpm agent-tools:collaboration-state -- ...` now provides identity
   preflight, immutable comms append/render, transaction-safe claims and
   archive operations, conversation/escalation writes, TTL archival, and a
   validation check. The old rendered shared-comms history is archived and the
   live markdown log is generated from event files.
-+ Codex-wide identity parity beyond shared-state writes is now implemented for
+- Codex-wide identity parity beyond shared-state writes is now implemented for
   the high-impact path in
   [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/codex-session-identity-plumbing.plan.md).
   New Codex sessions get identity context when `SessionStart` supplies
   `session_id`; legacy `Codex` / `unknown` rows are audit findings, not
   automatic rewrites.
-+ Owner override on 2026-04-28 allowed crossing claim boundaries to fix the
+- Owner override on 2026-04-28 allowed crossing claim boundaries to fix the
   closeout blocker. The live blocker was resolved by current WIP before a new
   source edit: `pnpm --filter @oaknational/agent-tools build` passes. Future
   agents should re-run stale blocker commands before editing active WIP.
-+ Cross-vendor shared-log communication has a live proof point and a limit:
+- Cross-vendor shared-log communication has a live proof point and a limit:
   Codex left Vining a repo-context-specific future-design note with no
   platform bridge, but the first heartbeat found no visible pickup. Treat the
   log as durable discovery; use sidebars, decision threads,
   acknowledgements, or queue mechanics for directed obligations.
-+ `intent_to_commit` is now implemented as a minimal ordered advisory queue,
+- `intent_to_commit` is now implemented as a minimal ordered advisory queue,
   not only claim metadata. The first self-application commit fired the
   queue-doctrine consolidation trigger, and that trigger is now resolved.
-+ Codex display-surface investigation is complete for this session:
+- Codex display-surface investigation is complete for this session:
   repo-owned identity derivation uses `CODEX_THREAD_ID`. The experimental
   app-server title-mutation adapter was dropped because stable session names
   already provide the useful identity value.
-+ A live commit-window collision on 2026-04-27 proved the current
+- A live commit-window collision on 2026-04-27 proved the current
   `git:index/head` claim protocol is observable but not ordering. The queue
   implementation adds advisory turn order before staging/hooks.
-+ The completed WS3A split plan lives in
+- The completed WS3A split plan lives in
   [`archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md).
-+ `repo-continuity.md` has been compacted from an overgrown historical surface
+- `repo-continuity.md` has been compacted from an overgrown historical surface
   into a live-state index; the pre-compaction body is archived at
   `../archive/repo-continuity-session-history-2026-04-26.md`.
-+ The owner-requested Practice-integration / lifecycle-automation
+- The owner-requested Practice-integration / lifecycle-automation
   exploration has been implemented as the narrow WS4A lifecycle pass; no
   automation hooks were started.
 
 ### Blockers / Low-Confidence Areas
 
-+ Full branch gates are not claimed green beyond the real pre-commit hook that
+- Full branch gates are not claimed green beyond the real pre-commit hook that
   passed for `5c39d1d4`; current repo state may still include product-lane debt
   outside the completed practice-thread passes.
-+ The strict `--exactOptionalPropertyTypes` probe is clean for identity files
+- The strict `--exactOptionalPropertyTypes` probe is clean for identity files
   but still reports the pre-existing optional typing issue in
   `agent-tools/src/bin/codex-reviewer-resolve.ts`.
-+ Re-check active claims before staging or follow-on edits. Same-branch
+- Re-check active claims before staging or follow-on edits. Same-branch
   overlap is allowed for the experiment, but silent staging / committing over
   another fresh claim is the failure mode being studied.
-+ `pnpm practice:fitness:strict-hard` currently passes with soft findings only.
+- `pnpm practice:fitness:strict-hard` currently passes with soft findings only.
   The earlier hard findings in `principles.md`,
   `collaboration-state-conventions.md`, `repo-continuity.md`, and the active
   napkin have been structurally routed; do not reopen them as write-safety
   blockers without fresh evidence.
-+ The owner corrected the live participant set to Codex, Estuarine, and
+- The owner corrected the live participant set to Codex, Estuarine, and
   Prismatic. Treat `Luminous Dancing Quasar` as a stale/phantom claim or
   identity mismatch unless a sub-agent registration is found; claim existence
   alone does not prove a reachable participant.
-+ Anonymous `Codex` / `unknown` records are now report-only audit findings.
+- Anonymous `Codex` / `unknown` records are now report-only audit findings.
   Treat fresh active entries as live risk; treat historical entries as evidence
   unless a later repair has stronger source evidence.
-+ Codex upstream hooks are supported, but no Codex session-exit hook is
+- Codex upstream hooks are supported, but no Codex session-exit hook is
   documented. Do not rely on turn-scoped `Stop` for post-session claim cleanup;
   use explicit handoff or TTL janitor semantics.
-+ Active claims and `commit_queue` are not trustworthy from memory; re-check
+- Active claims and `commit_queue` are not trustworthy from memory; re-check
   them directly before any index work. At this handoff, Prismatic had a fresh
   agent-identity queue entry, while the `Luminous` claim was owner-corrected as
   likely phantom/stale unless a sub-agent registration exists.
-+ Do not continue into soft-fitness work unless the owner asks for it.
-+ Keep using PDR-014 role boundaries; do not answer soft pressure with
+- Do not continue into soft-fitness work unless the owner asks for it.
+- Keep using PDR-014 role boundaries; do not answer soft pressure with
   opportunistic trimming.
-+ Assumptions review already challenged the implementation plan. Future
+- Assumptions review already challenged the implementation plan. Future
   refinements should use `docs-adr-reviewer` for schema/docs coherence
   and `architecture-reviewer-wilma` for deadlock/hidden-coupling risks.
 
@@ -3884,40 +3921,40 @@ Choose the lane deliberately:
 
 ### Active Track Links
 
-+ None. No tactical track card is active for this thread.
+- None. No tactical track card is active for this thread.
 
 ### Promotion Watchlist
 
-+ If the AGENT implementation reveals a new stable rule for platform
+- If the AGENT implementation reveals a new stable rule for platform
   entrypoints, update the existing pending PDR-014 register item rather
   than creating a duplicate candidate.
-+ If hard-fitness remediation uncovers a general compression discipline
+- If hard-fitness remediation uncovers a general compression discipline
   beyond the existing pending item, route it through ADR-144,
   practice-verification, or `consolidate-docs` step 9 as appropriate.
-+ Treat Codex-to-Vining pickup through the shared communication log as WS5
+- Treat Codex-to-Vining pickup through the shared communication log as WS5
   collaboration evidence. If Vining replies or acts, record it in the parent
   multi-agent collaboration plan rather than creating a new surface.
-+ Queue governance is no longer due: the self-application trigger in
+- Queue governance is no longer due: the self-application trigger in
   `5c39d1d4` graduated to PDR-029 Family A Class A.3, with collaboration-state
   docs as the operational home. Future queue evidence should feed WS5
   refinement, not reopen the completed execution plan.
-+ If another shared-log collision, missed sidebar, future-dated timestamp,
+- If another shared-log collision, missed sidebar, future-dated timestamp,
   or anonymous/unknown identity mutation occurs, run the identity audit and
   preserve evidence first. Promote the collaboration-state domain-model plan
   only if the incident reveals a new design gap beyond the current
   write-safety and Codex identity slices.
-+ If Codex documents a true session-exit event, update the hooks portability
+- If Codex documents a true session-exit event, update the hooks portability
   plan and the collaboration-state lifecycle doc before wiring claim cleanup
   to it.
-+ If agent-tools communication primitives resume, keep the implementation
+- If agent-tools communication primitives resume, keep the implementation
   TypeScript-specific but document the capability contract as portable
   Practice behaviour under PDR-035, with this repo's implementation choices
   treated as ADR-165 phenotype.
-+ If PR closeout friction recurs, promote the PR lifecycle skill before adding
+- If PR closeout friction recurs, promote the PR lifecycle skill before adding
   more ad hoc PR instructions to existing skills. The skill must preserve
   gate-honest quality improvement and reviewer-facing communication as its
   first principles.
-+ If a second instance of manual external-skill-pack canonicalisation friction
+- If a second instance of manual external-skill-pack canonicalisation friction
   occurs, OR an external pack with general value is requested for canonical
   inclusion and the manual flow blocks Cursor/Codex uptake, OR drift is
   detected in a vendored canonical skill that the current validator does not

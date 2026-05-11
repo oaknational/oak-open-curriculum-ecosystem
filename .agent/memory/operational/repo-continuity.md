@@ -261,7 +261,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Deciduous Twining Dew / `claude-code` / opus-4-7-1m / `a12c90` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11; Burnished Crackling Pyre / `claude-code` / opus-4-7-1m / `e517c9` / 2026-05-11 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Smouldering Crackling Pyre / `claude-code` / opus-4-7-1m / `ab76ef` / 2026-05-11; Deciduous Twining Dew / `claude-code` / opus-4-7-1m / `a12c90` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11 |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Dusky Masking Cloak / `claude-code` / opus-4-7-1m / `c5ff7f` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11; Fragrant Regrowing Root / `codex` / GPT-5 / `019e12` / 2026-05-10 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -288,7 +288,59 @@ This branch also depends on the Practice/tooling substrate work from main in
 
 ## Current Session Focus
 
-**Latest focus (2026-05-11 — Deciduous Twining Dew / `claude-code` /
+**Latest focus (2026-05-11 — Smouldering Crackling Pyre /
+`claude-code` / opus-4-7-1m / `ab76ef`, collaboration-protocol
+hardening R1.a)**: executed only Phase 0 + R1.a of the "FINAL"
+session opener; arc closure honestly deferred to a fresh opener.
+Phase 0: bootstrap fast-path claim `059291ea` registered against
+R1-R8 surfaces; bootstrap comms-log entry recording refuted-premise
+event. **Refuted-premise event**: pre-flight field-set fingerprint
+scan across `comms-events/*.json` returned seven distinct shapes
+collapsing to **three families** — narrative (311 with five
+accreted optional-field variants), lifecycle (5 — already carrying
+an `event_type` discriminator), directed (2). Predecessor's binary
+two-family diagnosis was incomplete. Owner direction received:
+**Shape A′** — three sibling directories projected from one
+canonical schema with three `$defs`. R1.a landed `f7560339`:
+`comms-event.schema.json` (one schema, three `$defs`:
+narrative/lifecycle/directed) + 12 Ajv-validated unit tests in
+`agent-tools/tests/collaboration-state/comms-event-schema.unit.test.ts`
+
+- test-fakes fixture module so `node:fs` stays out of test files
+directly per ADR-078. Plan-time reviewers
+(assumptions-expert + architecture-expert-betty) returned GO WITH
+CONDITIONS pre-execution; both surfaced material findings absorbed
+into the plan body. **Live foreign-stage absorption event**: peer
+agent `Dusky Masking Cloak` / `c5ff7f` (committing as Jim Cresswell
+on the graph thread) was active in parallel; their pre-staged
+handoff files (napkin / thread-record /
+graduation-candidates-drain-opener) appeared in my index when I
+`git add`-ed my pathspec. The commit-queue `verify-staged` check
+structurally caught the absorption; cure was `git commit -F - --
+<pathspec>` which committed only my five files. This is literally
+R4-new's motivating use-case landing in real-time during the
+session designed to fix it. Peer's parallel commit `7250e807`
+landed cleanly alongside mine; `git restore --staged` blocked by
+hook policy (reinforces explicit-pathspec discipline as canonical).
+**R1.b** (parsers / types / 7-file migration / 6+ consumer-file
+updates) + **R2/R3/R4b/R4-new/R5/Phase 4/Phase 5** deferred to a
+fresh opener — R1.b is a full-session atomic landing on its own.
+Deferral honesty per PDR-026: named constraint is session-capacity
+vs. realistic per-landing care requirement; falsifiability: future
+agent attempts R1.b in one session and observes whether it fits
+honestly. Session claim `059291ea` to be closed at handoff.
+**Reviewers**: assumptions-expert, architecture-expert-betty.
+**Surprises** queued for napkin: (a) refuted-premise event — two
+families became three at pre-flight; (b) live foreign-stage
+absorption from peer's parallel commit window; (c) hook policy
+blocks `git restore --staged` even with semantically safe intent;
+(d) advisory orchestrator caught pre-existing fitness violations
+in peer-committed surfaces (napkin, repo-continuity,
+pending-graduations, practice-bootstrap) — pre-existing per
+catalogue, not blockers for my commit, but surfaces consolidation
+work.
+
+**Prior focus (2026-05-11 — Deciduous Twining Dew / `claude-code` /
 opus-4-7-1m / `a12c90`, collaboration-protocol hardening Phases 0-3
 partial)**: executed the collaboration-protocol-hardening opener
 end-to-end through ground-state, friction audit, remediation design,
@@ -705,10 +757,28 @@ Visible owner-appetite items, not blockers for the current branch state:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-11 Deciduous Twining Dew, claude-code, opus-4-7-1m,
-`a12c90`, collaboration-protocol hardening Phases 0-3 partial —
-/jc-consolidate-docs run at user direction)**: `completed this handoff —
-proportional thread-scoped pass`.
+**Status (2026-05-11 Smouldering Crackling Pyre, claude-code, opus-4-7-1m,
+`ab76ef`, collaboration-protocol hardening R1.a — /jc-consolidate-docs
+run at user direction)**: `completed this handoff — focused thread-scoped
+pass`. Entry-point sweep clean (CLAUDE.md / AGENTS.md / GEMINI.md all at
+canonical pointer shape; AGENTS.md retains RULES_INDEX named extension).
+Practice-box incoming has only `.gitkeep` (empty); outgoing absent.
+Pattern extraction routed three new candidates to pending-graduations
+(pre-flight-fingerprint-scan-before-shape-decisions; schema-as-protocol-
+authority-with-directory-projection; R4-new native git pre-commit hook
+moved queued → due on second instance). Fitness signals on
+peer-touched surfaces (napkin critical line-width, repo-continuity
+critical lines+chars, pending-graduations HARD lines+chars,
+practice-bootstrap HARD chars) acknowledged — substance-preserved
+writes per PDR-046 per-write rule; rotation/promotion candidates
+deferred to next thread-scoped consolidation. ADR/PDR scan: no
+immediate-graduation candidates this session beyond the three
+pending-graduations entries above.
+
+**Prior status (2026-05-11 Deciduous Twining Dew, claude-code,
+opus-4-7-1m, `a12c90`, collaboration-protocol hardening Phases 0-3
+partial — /jc-consolidate-docs run at user direction)**: `completed
+this handoff — proportional thread-scoped pass`.
 
 Pattern extraction (step 5): two candidates routed to
 pending-graduations: (a) cross-schema-events-in-single-directory

@@ -2604,6 +2604,66 @@ Withdrawal-trigger: the protocol is named in `principles.md` §Owner
 Direction Beats Plan amendment OR a second instance fails to surface
 the refuted premise cleanly.
 
+### 2026-05-11 — Pre-flight fingerprint scan before shape decisions
+
+`[captured: 2026-05-11 | source: session:Smouldering-Crackling-Pyre |
+target: rule:pre-flight-fingerprint-scan-before-shape-decisions OR
+pattern:fingerprint-the-data-before-shaping-the-fix | trigger: second
+distinct instance where a stated premise about a data corpus is
+refuted at execution time | size: S | status: pending]`
+
+Worked instance 2026-05-11 (Smouldering Crackling Pyre): R1 plan
+landed in plan mode with a two-family premise (narrative + directed).
+At pre-flight, a 30-second `jq + awk` fingerprint scan returned
+**three families with five accreted optional-field variants**. Owner
+re-directed Shape B → Shape A′ before any code landed. Generalisation:
+any bug-fix or migration plan resting on a premise about *what's in
+the data* must run a fingerprint pass BEFORE shape decision, reviewer
+dispatch, or owner direction — not after. Cost is trivial; value is
+catching premise errors upstream.
+
+Graduation-target: portable rule
+`pre-flight-fingerprint-scan-before-shape-decisions` OR pattern
+`fingerprint-the-data-before-shaping-the-fix`. Withdrawal-trigger:
+second instance.
+
+### 2026-05-11 — Schema-as-protocol-authority-with-directory-projection
+
+`[captured: 2026-05-11 | source: session:Smouldering-Crackling-Pyre |
+target: PDR:schema-as-protocol-authority-with-directory-projection
+OR pattern:single-schema-multiple-applications | trigger: second
+distinct multi-kind event-stream instance | size: M | status: pending]`
+
+Owner-articulated framing 2026-05-11: *"single source of truth for
+the communication protocol, that is not the same as only having a
+single application for that protocol"*. Names a clean architectural
+shape — ONE canonical schema file holds the protocol contract; multiple
+physical projections (directories) hold the applications. Worked
+instance: `comms-event.schema.json` with three `$defs`
+(narrative / lifecycle / directed) projected to three sibling
+directories. Parsers stay single-schema; new kinds add additively.
+Withdrawal-trigger: second instance (claim-event vs claim-history,
+escalation vs sidebar, etc.).
+
+### 2026-05-11 — R4-new native git pre-commit hook (due, was queued)
+
+`[captured: 2026-05-11 | source: session:Smouldering-Crackling-Pyre |
+target: rule:R4-new-native-git-pre-commit-hook (already queued in
+collaboration-protocol-hardening arc) | trigger: this session counts as
+second cross-session foreign-stage event after Tempestuous Darting
+Zephyr sweep-bundling 2026-05-10; status moved from queued to due |
+size: M | status: due]`
+
+Live worked instance 2026-05-11 (Smouldering Crackling Pyre): peer
+agent `Dusky Masking Cloak` / `c5ff7f` was committing in parallel on
+the graph thread. Their pre-staged handoff files appeared in my index
+when I ran explicit-pathspec `git add`. `verify-staged` caught the
+foreign stage (3 extra files, 0 missing); cure was `git commit -F - --
+<pathspec>`. R4-new's authorship is no longer hypothetical.
+Graduation-target: rule + native git hook landing per the
+`primary-agent-tooling-enhancements.plan.md` queued landings.
+Withdrawal-trigger: hook lands and passes Wilma adversarial probe.
+
 Older graduated entries (PDR-018, PDR-026, PDR-029, PDR-033, PDR-034,
 ADR-153, ADR-164, etc.) are preserved in
 [`archive/repo-continuity-session-history-2026-04-29.md`](archive/repo-continuity-session-history-2026-04-29.md)

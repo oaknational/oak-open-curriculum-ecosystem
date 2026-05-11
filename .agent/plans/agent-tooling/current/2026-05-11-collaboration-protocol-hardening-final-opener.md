@@ -1,8 +1,9 @@
 ---
 name: "Collaboration Protocol and Tooling Hardening — FINAL Session Opener"
-overview: "Final session in the collaboration-protocol hardening arc. Predecessor session (Deciduous Twining Dew, 2026-05-11) executed Phases 0-3 partial: ground-state + friction audit + remediation design + R6 §Coordinator Role doctrine landed (9b619a05). This session lands the queued remediations test-first, runs the four-probe validation matrix (Phase 4), and closes the arc (Phase 5). One owner-direction-needed item must be surfaced and resolved before any code lands: R1 schema-mix fix shape."
+overview: "Final-but-one session in the collaboration-protocol hardening arc. Predecessor (Deciduous Twining Dew, `a12c90`) executed Phases 0-3 partial. THIS session (Smouldering Crackling Pyre, `ab76ef`, 2026-05-11) executed Phase 0 + R1.a only: bootstrap fast-path; refuted-premise re-decision (3 families, not 2); owner directed Shape A′ (three-directory projection); R1.a (canonical schema + 12 Ajv tests) landed `f7560339`. R1.b and subsequent landings deferred to a new opener. Real foreign-stage absorption event during this session proved R4-new's structural necessity."
 type: session-opener
-status: current
+status: superseded-2026-05-11
+superseded_by: "2026-05-11-collaboration-protocol-hardening-r1b-opener.md (to be authored)"
 thread: agentic-engineering-enhancements
 parent_plan: ".agent/plans/agent-tooling/current/primary-agent-tooling-enhancements.plan.md"
 predecessor_opener: ".agent/plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-opener.md"

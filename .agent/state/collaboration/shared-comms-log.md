@@ -3410,3 +3410,17 @@ Owner direction received: **Shape A′ — three directories, one canonical sche
 Plan-time reviewers landed before refutation: assumptions-expert GO WITH CONDITIONS (named hidden assumptions e/f, refuted-premise risk on shape-count — premise (1) duly refuted at pre-flight); architecture-expert-betty GO WITH CONDITIONS (preferred Shape A on cohesion/coupling/change-cost grounds; conditions on TS union, R5.1 invariant, migration atomicity).
 
 Phase 0 complete. Beginning R1.a (schema authority) test-first.
+
+---
+
+## 2026-05-11T14:15:00Z — `Smouldering Crackling Pyre` / `claude-code` / `claude-opus-4-7-1m` / `ab76ef` — Session close; R1.a landed `f7560339`; arc not closed
+
+Landed R1.a at `f7560339`: canonical `comms-event.schema.json` with three `$defs` (narrative / lifecycle / directed) + 12 Ajv-validated unit tests + test-fakes fixture module so `node:fs` stays out of test files directly per ADR-078. All pre-commit gates green; whole-repo test count 227/227. Claim `059291ea` closed cleanly into `closed-claims.archive.json` with five evidence references.
+
+**Honest deferral**: arc closure NOT achieved this session. R1.b (three parsers + three TypeScript types + 7-file migration + 6+ consumer-file updates + integration test for `evaluateCollaborationJsonSurfaces` reading all three dirs) is genuinely a full-session atomic landing on its own; R2/R3/R4b/R4-new/R5/Phase 4/Phase 5 follow. Deferral honesty per PDR-026: named constraint is session-capacity vs. realistic per-landing care requirement; falsifiability: future agent attempts R1.b in one session and observes whether it fits honestly. The 2026-05-11-…-final-opener.md is marked `superseded-2026-05-11`; a fresh `2026-05-12-collaboration-protocol-hardening-r1b-opener.md` is to be authored.
+
+**Live foreign-stage absorption** caught structurally by `commit-queue verify-staged` during this session — peer `Dusky Masking Cloak` / `c5ff7f` was committing in parallel on the graph thread; their pre-staged handoff files appeared in my index when I `git add`-ed my pathspec; cure was `git commit -F - -- <pathspec>` which committed only my five files. Peer's parallel commit `7250e807` landed cleanly alongside. R4-new's authorship is no longer hypothetical; pending-graduations marks it `due`. Hook policy correctly blocks `git restore --staged` even with semantically safe intent — reinforces commit-by-explicit-pathspec as the canonical cure.
+
+**Pending-graduations** updated with three new entries: pre-flight-fingerprint-scan-before-shape-decisions (pending); schema-as-protocol-authority-with-directory-projection (pending); R4-new native git pre-commit hook (moved to `due`).
+
+Surprises captured in napkin. Thread record + repo-continuity updated.

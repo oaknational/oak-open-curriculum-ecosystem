@@ -695,69 +695,10 @@
       "updated_at": "2026-05-11T13:04:35.018Z",
       "expires_at": "2026-05-11T13:17:58.814Z",
       "phase": "abandoned",
-      "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/threads/connecting-oak-resources.next-session.md\nA\t.agent/plans/agentic-engineering-enhancements/current/2026-05-11-graduation-candidates-drain-opener.md\nM\t.agent/state/collaboration/active-claims.json\nA\t.agent/state/collaboration/comms-event.schema.json\nM\t.agent/state/collaboration/shared-comms-log.md\nA\tagent-tools/tests/collaboration-state/comms-event-schema-fixture.ts\nA\tagent-tools/tests/collaboration-state/comms-event-schema.unit.test.ts\n",
       "staged_bundle_fingerprint": "7de4d2ed4502a981703fd7be46ef1231175063cc75e50899b576fd6e032c2ff4",
+      "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/threads/connecting-oak-resources.next-session.md\nA\t.agent/plans/agentic-engineering-enhancements/current/2026-05-11-graduation-candidates-drain-opener.md\nM\t.agent/state/collaboration/active-claims.json\nA\t.agent/state/collaboration/comms-event.schema.json\nM\t.agent/state/collaboration/shared-comms-log.md\nA\tagent-tools/tests/collaboration-state/comms-event-schema-fixture.ts\nA\tagent-tools/tests/collaboration-state/comms-event-schema.unit.test.ts\n",
       "notes": "Foreign-stage detected; peer Dusky Masking Cloak handoff files absorbed via git add; verify-staged caught it; awaiting owner direction on unstaging."
-    },
-    {
-      "intent_id": "a9e82677-c56c-4f58-9527-87fb9abf583c",
-      "claim_id": "059291ea-ea07-44d8-aa4d-b727266ef662",
-      "agent_id": {
-        "agent_name": "Smouldering Crackling Pyre",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "ab76ef"
-      },
-      "files": [
-        ".agent/state/collaboration/comms-event.schema.json",
-        ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/shared-comms-log.md",
-        "agent-tools/tests/collaboration-state/comms-event-schema-fixture.ts",
-        "agent-tools/tests/collaboration-state/comms-event-schema.unit.test.ts"
-      ],
-      "commit_subject": "feat(collaboration): author canonical comms-event schema with three $defs",
-      "queued_at": "2026-05-11T13:05:09.945Z",
-      "updated_at": "2026-05-11T13:05:09.945Z",
-      "expires_at": "2026-05-11T13:20:09.945Z",
-      "phase": "queued"
     }
   ],
-  "claims": [
-    {
-      "claim_id": "059291ea-ea07-44d8-aa4d-b727266ef662",
-      "agent_id": {
-        "agent_name": "Smouldering Crackling Pyre",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "ab76ef"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/state/collaboration/comms-event.schema.json",
-            ".agent/state/collaboration/comms-events/**",
-            ".agent/state/collaboration/comms-lifecycle/**",
-            ".agent/state/collaboration/comms-messages/**",
-            ".agent/state/collaboration/active-claims.json",
-            ".agent/state/collaboration/shared-comms-log.md",
-            "agent-tools/src/collaboration-state/**",
-            "agent-tools/src/practice-substrate/**",
-            "agent-tools/src/agent-identity/**",
-            ".agent/skills/commit/SKILL-CANONICAL.md",
-            ".husky/**",
-            ".agent/directives/agent-collaboration.md",
-            ".agent/memory/operational/pending-graduations.md",
-            ".agent/memory/active/patterns/**",
-            ".agent/plans/agent-tooling/current/**"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-11T12:52:05Z",
-      "freshness_seconds": 14400,
-      "intent": "FINAL session of collaboration-protocol hardening arc: R1 schema-mix fix (Shape A' three-family directory-projected protocol per refuted-premise re-decision), R2-R8 queued remediations, Phase 4 four-probe validation, Phase 5 arc closure.",
-      "intent_to_commit": "a9e82677-c56c-4f58-9527-87fb9abf583c"
-    }
-  ]
+  "claims": []
 }
