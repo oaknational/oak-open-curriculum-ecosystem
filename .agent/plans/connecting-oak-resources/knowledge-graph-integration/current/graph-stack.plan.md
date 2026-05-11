@@ -123,8 +123,8 @@ todos:
 
 # Graph Stack — Topology and Foundation Increment
 
-**Last Updated**: 2026-05-11 — Inc.1 decomposed into sub-increments 1a (substrate scaffolding) / 1b (Threads adapter) / 1c (query proof) plus closure, with file-scope-non-overlapping boundaries and explicit parallel-safety annotations; D-4 BLOCKERs verified closed (see graph-mvp-arc.plan.md § Open Decisions D-4).
-**Status**: 🟡 PLANNING — queued; depends on owner approval of the topology decision (WS0 ADR) and on the ADR-041 amendment routed via D-4a (graph-mvp-arc.plan.md § Open Decisions).
+**Last Updated**: 2026-05-11 — Schedule-not-trigger doctrine sweep applied to §Increments table (Inc.2–7 trigger framings converted to scheduled positions or named open decisions), Status block (D-4a strike), Promotion Trigger intro, Surfacing prose, Layer Map row §6, Coordination map graph-query-layer cell; new §Genuine Open Decisions section added (O-1 topology ADR approval; O-2 increment promotion ownership); combinatorial-arc cross-plan "design stability" trigger removed (relocated to `graph-combinatorial-arc.plan.md`'s own Promotion Trigger). Prior 2026-05-11 update: Inc.1 decomposed into sub-increments 1a (substrate scaffolding) / 1b (Threads adapter) / 1c (query proof) plus closure, with file-scope-non-overlapping boundaries and explicit parallel-safety annotations; D-4 BLOCKERs verified closed.
+**Status**: 🟡 PLANNING — opens to ACTIVE when the gates listed in §Promotion Trigger close. D-4a (ADR-041 workspace-tiers amendment) was closed 2026-05-11 by the graduation-candidates-drain session and is no longer a blocker; the remaining gate is owner approval of the WS0 topology ADR (see §Genuine Open Decisions).
 **Scope**: Establish a layered, standards-based graph capability for Oak as a backbone of seven active graph workspaces plus one deferred, then ship the foundation increment ingesting the Oak Curriculum Ontology Threads graph end-to-end as the first attached corpus.
 
 ---
@@ -254,8 +254,8 @@ Possible surfaces, none privileged by the topology:
 - **In-process library imports** — application code imports `graph-corpus-sdk` directly. Always available; the default for any same-runtime consumer.
 - **CLI** — the existing `agent-tools/` workspace exposes commands over `agent-graphs/practice-graph` (per the Practice pilot's existing plan). A future curriculum-side CLI could do the same over `graph-corpus-sdk`.
 - **MCP** — at most one consumer surface owns each graph MCP primitive. If Oak chooses MCP exposure, it lives in the existing curriculum SDK MCP module plus the curriculum MCP HTTP app, or in a new sibling that imports `graph-corpus-sdk`. The graph workspaces themselves stay MCP-clean.
-- **HTTP/JSON-LD export** — `graph-project` will eventually emit JSON-LD profiles for cross-organisation consumption (Increment 5).
-- **Search-augmentation** — Oak's Elasticsearch integration may consume `graph-corpus-sdk` to project graph-derived signals into search indices (a future plan, not committed here).
+- **HTTP/JSON-LD export** — `graph-project` emits JSON-LD profiles for cross-organisation consumption as part of Inc.5 (see §Increments).
+- **Search-augmentation** — Oak's Elasticsearch integration may consume `graph-corpus-sdk` to project graph-derived signals into search indices. If the search team requests this, the owner authors a new plan at that point; this plan does not schedule the work.
 
 **Discipline**: no graph workspace ships MCP-shaped code. Tool definitions, resource constants, and registration helpers live with the existing curriculum MCP consumer surface (the SDK MCP module plus HTTP app) or a future app-facing adapter, not with the graph SDK that produces the data. If a graph workspace starts wanting an MCP type or factory, that is the signal to extract a thin consumer adapter workspace — not to leak MCP into the substrate.
 
@@ -274,7 +274,7 @@ The mapping is exhaustive against [`.agent/research/graph-library.research.md`](
 | §3 core design position | Plan-level: encoded in §Design Principles above. | Every workspace inherits the stable-first commitment. |
 | §4 canonical internal model (Term/Quad/Dataset; GraphNode/GraphEdge/GraphDocument) | `graph-core` | The core types are foundation-increment WS1 deliverables. |
 | §5 vocabulary layer | `graph-core/vocab` module | Default registries + Oak Curriculum Ontology + EEF + extension API. |
-| §6 ingestion modes | `graph-ingest` | All six modes are supported; the foundation increment ships `jsonld-compatible` plus generic Turtle/SKOS parsing and reserves the other modes for Increment 2. Oak ontology Thread mapping remains in `graph-corpus-sdk`. |
+| §6 ingestion modes | `graph-ingest` | All six modes are supported; the foundation increment ships `jsonld-compatible` plus generic Turtle/SKOS parsing and schedules the other modes into Increment 2 (see §Increments). Oak ontology Thread mapping remains in `graph-corpus-sdk`. |
 | §7 enhancement model | `graph-enhance` | `EnhancementRecord` is first-class; `id → strand_id`-style transformations carry provenance. |
 | §8 relationship records as migration bridge | `graph-enhance` | `RelationshipRecord` is first-class today; RDF 1.2 triple-term annotation is a `graph-future` adapter target. |
 | §9 validation model | `graph-validate` | JSON Schema + SHACL, distinct concerns, both supported. |
@@ -293,14 +293,32 @@ The full topology activates over seven increments. This plan ships **Increment 1
 | # | Increment | Activates | Status |
 |---|---|---|---|
 | 1 | **Foundation** (this plan) | `graph-core`, minimal `graph-ingest` (jsonld-compatible mode + generic Turtle/SKOS parsing), minimal `graph-project` (property-graph + adjacency), `graph-corpus-sdk` scaffold + Oak Curriculum Ontology Threads graph as first attached corpus | **CURRENT** — pending owner approval of topology |
-| 2 | **Build-pipeline completion** | `graph-ingest` (remaining five modes), `graph-enhance` (full EnhancementRecord + RelationshipRecord), `graph-validate` (JSON Schema + SHACL); rewrites of existing `oak-curriculum-sdk` graph code onto the new stack | future |
-| 3 | **Oak corpus backbone** | `graph-corpus-sdk` adapters for prerequisite, misconception, and the EEF strand adapter required for cross-corpus joins; misconception adapter consumes the bulk-derived graph generated by this repository; EEF adapter consumes the repository-held canonical snapshot until EEF clarifies refresh mechanics; cross-corpus join primitives; sunsets the bespoke factory in `oak-curriculum-sdk`. **Downstream consumer**: [`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md) — the cross-corpus join primitive's first concrete consumer is the EEF × Oak misconceptions tool migrated there from the (former) MVP slice 3b; the combinatorial arc's promotion trigger fires on Inc.3 design stability, so Inc.3 carries a named consumer signal even before it ships in production. | future (depends on Increment 2; subsumes the work currently in [`graph-query-layer.plan.md`](graph-query-layer.plan.md)) |
-| 4 | **Practice proof point** | `agent-graphs/practice-graph` workspace as the second consumer; markdown-corpus ingestion; CLI/report surface through `agent-tools` | future (depends on Increment 2 + the `agent-graphs/` organisation plan; consumes [`practice-graph-payoff-peak-pilot.plan.md`](../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md)) |
-| 5 | **Projection + export** | Full `graph-project` surface — visualisation export hooks, JSON-LD export profiles, GQL-friendly property-graph shapes; cross-corpus journey tooling | future |
-| 6 | **Public-asset positioning** | Publishing discipline, external-org adoption documentation, ontology IRI alignment guarantees, contribution model | future |
-| 7 | **Future-standards adapters** | `graph-future` workspace activated; first concrete adapter (likely RDF 1.2 statement-annotation export, or SPARQL 1.2 query) | future (consumer-driven) |
+| 2 | **Build-pipeline completion** | `graph-ingest` (remaining five modes), `graph-enhance` (full EnhancementRecord + RelationshipRecord), `graph-validate` (JSON Schema + SHACL); rewrites of existing `oak-curriculum-sdk` graph code onto the new stack | opens by owner promotion after Inc.1 closes |
+| 3 | **Oak corpus backbone** | `graph-corpus-sdk` adapters for prerequisite, misconception, and the EEF strand adapter required for cross-corpus joins; misconception adapter consumes the bulk-derived graph generated by this repository; EEF adapter consumes the repository-held canonical snapshot until EEF clarifies refresh mechanics; cross-corpus join primitives; sunsets the bespoke factory in `oak-curriculum-sdk`. **Downstream consumer**: [`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md) — the cross-corpus join primitive's first concrete consumer is the EEF × Oak misconceptions tool migrated there from the (former) MVP slice 3b. The cross-plan scheduling relationship is owned by `graph-combinatorial-arc.plan.md`'s own Promotion Trigger (no "design stability" intermediate state); this row records the consumer pointer only. | opens by owner promotion after Inc.2 closes (subsumes the work currently in [`graph-query-layer.plan.md`](graph-query-layer.plan.md)) |
+| 4 | **Practice proof point** | `agent-graphs/practice-graph` workspace as the second consumer; markdown-corpus ingestion; CLI/report surface through `agent-tools` | opens by owner promotion after **both** Inc.2 closes **and** the `agent-graphs/` workspace organisation plan lands; the later of the two predecessors is the schedule signal (consumes [`practice-graph-payoff-peak-pilot.plan.md`](../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md)) |
+| 5 | **Projection + export** | Full `graph-project` surface — visualisation export hooks, JSON-LD export profiles, GQL-friendly property-graph shapes; cross-corpus journey tooling | opens by owner promotion after Inc.3 closes |
+| 6 | **Public-asset positioning** | Publishing discipline, external-org adoption documentation, ontology IRI alignment guarantees, contribution model | opens by owner promotion after Inc.4 closes (hard predecessor per §Risk Assessment) |
+| 7 | **Future-standards adapters** | `graph-future` workspace activated; first concrete adapter (likely RDF 1.2 statement-annotation export, or SPARQL 1.2 query) | opens when a consumer workspace opens a PR that requires one of {RDF 1.2, JSON-LD 1.2/1.3, SPARQL 1.2, SHACL 1.2} and the existing adapter seam in `graph-core`/`graph-validate`/`graph-project` is insufficient. The consumer PR is the concrete observable signal; monitoring responsibility sits with the owner at PR-review time. |
 
 Each increment is a separate plan when promoted. The foundation increment is the only executable plan today.
+
+---
+
+## Genuine Open Decisions
+
+Per the schedule-not-trigger doctrine (owner direction 2026-05-11: *"schedule it, sequence it, no imaginary flows, simple and definite is the only way anything happens"*), the items below are genuine open decisions that block scheduling. They are not deferred triggers; they are choices waiting on a named decision-holder.
+
+| # | Decision | Decision-holder | Effect on scheduling | Status |
+|---|---|---|---|---|
+| O-1 | **WS0 topology ADR approval.** Does the owner approve the seven-active-plus-one-deferred graph topology as proposed? | Owner | Blocks Inc.1 promotion from CURRENT → ACTIVE; gates 1 + 2 of §Promotion Trigger cannot close without it. | Open. The WS0 ADR is not yet drafted; this plan is the proposal. |
+| O-2 | **Increment promotion ownership.** Who promotes each subsequent Inc.N from "scheduled after predecessor closes" to an active plan, at the moment the predecessor closes? | Owner (default) | Schedule positions in §Increments name "owner promotion" as the trigger; this names the actor. If a delegate or review checkpoint is preferred over case-by-case owner promotion, this changes the trigger wording. | Open assumption: owner promotes at each predecessor-close review. Confirm or amend. |
+
+Two prior open items are now closed and recorded here for audit:
+
+- **D-4a (ADR-041 workspace-tiers amendment)** — closed 2026-05-11 by the graduation-candidates-drain session (`Fronded Flowering Seed`); `agent-graphs/` regularised + `agent-tools/` formalised in the 8×8 dependency-direction matrix.
+- **D-4 (graph-stack topology BLOCKERs)** — closed 2026-05-11 by the graph-execution-prep session (`Dusky Masking Cloak`).
+
+The combinatorial-arc cross-plan scheduling relationship (previously phrased here as "Inc.3 design stability fires the combinatorial arc's promotion trigger") is owned by [`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md)'s own Promotion Trigger and is not an open decision in this plan.
 
 ---
 
@@ -471,7 +489,7 @@ This plan does **not** wholesale supersede adjacent plans; it provides the spine
 | Plan | Coordination |
 |---|---|
 | [`../active/nc-knowledge-taxonomy-surface.plan.md`](../active/nc-knowledge-taxonomy-surface.plan.md) | **Outside this MVP foundation increment.** The NC taxonomy plan is not amended or subsumed here. If the owner later promotes NC taxonomy work, it can attach to the substrate as a separate corpus adapter and consumer surface. |
-| [`graph-query-layer.plan.md`](graph-query-layer.plan.md) | **Substrate subsumed into Increment 3.** The `GraphView<TNode, TEdgeType>` interface, the seven operations, projection discipline, and the tracer-matrix work all migrate into `graph-corpus-sdk` over the new substrate. **Whether and how those operations are exposed via MCP is no longer this plan's concern**; the 17-MCP-tool count and per-operation tool definitions become a separate consumer-side decision. The plan file is amended to declare the substrate home and to mark MCP exposure as an independent follow-on. |
+| [`graph-query-layer.plan.md`](graph-query-layer.plan.md) | **Substrate subsumed into Increment 3.** The `GraphView<TNode, TEdgeType>` interface, the seven operations, projection discipline, and the tracer-matrix work all migrate into `graph-corpus-sdk` over the new substrate. MCP exposure of those operations is a consumer-side decision, tracked outside this plan; the 17-MCP-tool count and per-operation tool definitions are owned by the consumer surface (curriculum SDK MCP module + HTTP app) at the point of exposure. `graph-query-layer.plan.md` is amended at WS5 to record this boundary. |
 | [`../active/graph-resource-factory.plan.md`](../active/graph-resource-factory.plan.md) | **Status remains DONE.** The factory currently lives in the curriculum MCP app's surface layer; it stays where it is and continues to work. If MCP exposure of new graph capabilities is later chosen, the factory may be revisited then. No retroactive amendment needed. |
 | [`../active/misconception-graph-mcp-surface.plan.md`](../active/misconception-graph-mcp-surface.plan.md) | **Status remains DONE.** The current misconception MCP tool stays live and unchanged. If the misconception adapter is later rewritten onto `graph-corpus-sdk`, the MCP tool is a thin re-wrapping the owner can do at any point — independent of the substrate. |
 | [`../active/open-education-knowledge-surfaces.plan.md`](../active/open-education-knowledge-surfaces.plan.md) | **WS5 amendment target.** The graph substrate and Oak Ontology Threads foundation will be referenced through this spine plan. The parent retains its multi-source narrative role; this spine becomes a named child plan. |
@@ -613,9 +631,9 @@ fitness, and update the practice exchange. Candidate graduations:
 
 ## Promotion Trigger from CURRENT to ACTIVE
 
-Promote when:
+This plan moves to ACTIVE at a named session when all four gates below are closed, in the order listed:
 
-1. Owner has approved the topology decision.
-2. WS0 ADR is drafted and reviewed (not necessarily merged).
+1. Owner has approved the topology decision (the §Genuine Open Decision below).
+2. WS0 ADR is drafted and reviewers have returned findings (not necessarily merged).
 3. The pinned `oak-curriculum-ontology` revision is identified for the Oak Ontology Threads adapter.
 4. `assumptions-expert`, `architecture-expert-betty`, `architecture-expert-fred`, and `architecture-expert-barney` have run against this plan body and findings are addressed.
