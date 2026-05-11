@@ -33,6 +33,7 @@ index in the same commit.
 ## Canonical Rules
 
 - `.agent/rules/apply-architectural-principles.md`
+- `.agent/rules/broken-code-stays-local.md`
 - `.agent/rules/capture-practice-tool-feedback.md`
 - `.agent/rules/consolidate-at-third-consumer.md`
 - `.agent/rules/directive-file-context-budget.md`

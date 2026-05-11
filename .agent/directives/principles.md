@@ -323,6 +323,18 @@ paths, setup files) don't apply.
   Sentry runtime/uptime surfaces).
 - **Fix things** - All quality gates are blocking at all times,
   regardless of location, cause, or context.
+- **Broken code stays local** — Code that does not work does not
+  leave the local environment. No `git push` until the change is
+  proven to work — built, gated, and observed running in the form
+  it is supposed to run (test passing, dev server returning the
+  expected response, CLI exiting clean, UI rendering the expected
+  state). "It compiles" is not "it works"; the proof is observed
+  behaviour, not the absence of red. Pushing broken code burns
+  peer-agent and reviewer cycles on diagnosis the author could
+  have closed with one more local check, and pollutes the shared
+  branch with state nobody can trust. See
+  [`broken-code-stays-local.md`](../rules/broken-code-stays-local.md)
+  for the operational discipline.
 - **Never weaken a gate to solve a testing problem** - If a test
   needs content that a gate forbids (e.g. an `eslint-disable`
   comment to test the `no-eslint-disable` rule), solve via string

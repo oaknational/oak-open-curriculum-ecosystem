@@ -1,0 +1,6 @@
+---
+description: Broken code does not leave the local environment. No git push until the change is proven to work via observed behaviour, not absence of red.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/broken-code-stays-local.md`.
