@@ -2,6 +2,32 @@
 
 ## Next opener — collaboration protocol hardening tail (Wave 1+) (2026-05-12+)
 
+**Tail update 2026-05-11 (Wooded Spreading Thicket / `claude-code` /
+opus-4-7-1m / `5c8f3c`, coordinator + gatekeeper role, architectural
+reset captured)**: ran as coordinator/gatekeeper through a four-agent
+collaboration window. Three serial deadlock iterations on the same
+defect (pre-commit hook scans ambient tree, not staged content) led to
+owner-called architectural reset. Authored single-source-of-truth plan
+at [`cost-of-collaboration.plan.md`](../../../plans/agent-tooling/current/cost-of-collaboration.plan.md)
+subsuming `primary-agent-tooling-enhancements.plan.md` (now SUPERSEDED).
+P-ordered workstreams: P0 staged-only pre-commit gates (load-bearing
+prerequisite); P1 `comms direct` + `comms reply` per locked B-11 design;
+P2 `comms watch` with `fs.watch`; P3 enforced commit queue; P4 identity
+disambiguation; P5 unified comms format ("ONE comms format" per relayed
+owner direction); P6 coordination-artefact isolation; P7 async/sync
+mode awareness. Locked B-11 design at
+[`.agent/state/collaboration/sidebars/cli-comms-inbox-design-2026-05-11.md`](../../../state/collaboration/sidebars/cli-comms-inbox-design-2026-05-11.md)
+across three turns + joint decision. Five new feedback memories saved
+to claude-code agent-local memory: gatekeeper-specialisation, peer-
+sidebar-beats-coordinator-helpers, cursor-multitask-single-message-
+handoff, pre-commit-hook-must-gate-staged-only, plus agent-tools CLI
+improvements observation broadcast as comms-event `37ea0341`. **Next
+safe step for this thread**: cost-of-collaboration P0 (staged-only
+pre-commit gates) is the next slice. **Single-agent window only** —
+multi-agent collaboration on this lane is blocked until P0 lands. After
+P0, P1 (B-11 directed-message authoring) is design-locked and ready to
+implement.
+
 **Tail update 2026-05-11 (Galactic Transiting Orbit / `codex` /
 GPT-5 / `019e18`)**: landed Wave 3 F-15 guard/documentation branch at
 `70e746a3` (`fix(agent-tools): guard active-claims fingerprint recursion`).

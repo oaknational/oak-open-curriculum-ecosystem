@@ -2744,6 +2744,89 @@ first Wave 3 implementation slice at `e298723c` (`commit-queue list`
 for discoverability, lifecycle ergonomics, harder-to-bypass enforcement,
 or claim-close-cycle recursion.
 
+### 2026-05-11 — Pre-commit hook must gate staged content only (load-bearing)
+
+`[captured-date: 2026-05-11 | source-surface: napkin Wooded 5c8f3c +
+feedback_pre_commit_hook_must_gate_staged_only |
+graduation-target: adr:pre-commit-hook-staged-only +
+rule:pre-commit-gates-staged-only + plan:cost-of-collaboration.plan.md
+P0 | trigger: four-agent convergent evidence in single session (three
+serial deadlock iterations on same defect); status: due | size: L]`
+
+Pre-commit hook scans the entire working tree (staged + unstaged +
+untracked) at hook-fire time via repo-wide tools (`prettier --check .`,
+`markdownlint --dot .`, `knip`, `depcruise`, `turbo type-check lint
+test`). In any multi-agent window with ≥2 simultaneously-writing
+agents, this is **structurally fatal** to every coordination protocol
+layered on top of it — gatekeeper specialisation, commit queue, claim
+discipline, peer sidebars all fail because the gate-sweep snapshot
+goes stale at the next file write. Fix shape: `lint-staged` or
+equivalent staged-list-derived runner; turbo full-suite moved to CI.
+Graduates to an ADR (host architectural decision) + an enforcement
+rule + the P0 workstream in the cost-of-collaboration plan, in one
+slice. Block all multi-agent collaboration windows on this landing.
+
+### 2026-05-11 — Peer-pair sidebar > coordinator+helpers for design work
+
+`[captured-date: 2026-05-11 | source-surface: napkin Wooded 5c8f3c +
+feedback_peer_sidebar_beats_coordinator_helpers + experience file
+2026-05-11-coordinator-deadlock-and-peer-sidebar.md |
+graduation-target: pdr:peer-sidebar-for-design OR amendment to
+PDR-027 (threads-sessions-agent-identity) §collaboration-shape |
+trigger: owner-observed convergent evidence in same session ("the
+intense partner sidebar is going a lot better than the coordinator
+and helpers topology"); status: due | size: M]`
+
+For design and decision work, peer-pair sidebars in a shared append-
+only markdown file produce materially better collaboration than
+coordinator+helpers hub-and-spoke topology. Helpers are for parallel
+execution of decided work; design needs dialogue between comparable
+agents. Numbered turns + single shared file + joint-decision closure
+section. Cursor Multitask single-message handoff is the helper-pool
+delivery shape (see [[cursor-multitask-single-message-handoff]]); the
+peer sidebar is the design-collaboration shape. PDR or PDR amendment
+should encode the choice rule and the cost-curve diagnosis.
+
+### 2026-05-11 — Coordination-artefact isolation from gate-visible state
+
+`[captured-date: 2026-05-11 | source-surface: napkin Wooded 5c8f3c
+
++ experience file 2026-05-11-coordinator-deadlock-and-peer-sidebar.md |
+graduation-target: adr:coordination-artefact-isolation +
+plan:cost-of-collaboration.plan.md P6 | trigger: same-session evidence
+that coordinator role is structurally the largest source of timing-
+coupled gate trips; status: pending | size: L]`
+
+The coordinator role necessarily writes coordination artefacts
+(broadcasts, briefs, comms-messages, sidebars, monitor telemetry).
+Under repo-wide pre-commit gates these become the role's largest
+source of timing-coupled gate trips. Iteration 3 of the 2026-05-11
+deadlock was triggered by the coordinator's own sidebar file. Fix
+shape: isolate coordination artefacts from gate-visible repo state
+(separate branch/worktree, gitignored space, or directory-blind gate
+config). ADR captures the architectural choice. Trigger to graduate:
+cost-of-collaboration P0 landed (so the immediate cure is in place)
+AND a second-instance observation that confirms the isolation shape
+under the new gate regime.
+
+### 2026-05-11 — Advisory protocols decay under pressure; enforcement required
+
+`[captured-date: 2026-05-11 | source-surface: napkin Wooded 5c8f3c
+
++ napkin Sparking Charring Ash caf5e1 (.git/index.lock on first
+git add) | graduation-target:
+rule:commit-queue-enforced-pre-stage + plan:cost-of-collaboration.plan.md
+P3 | trigger: same-session evidence from multiple agents skipping the
+advisory queue under pressure; status: due | size: M]`
+
+Anything that can be skipped will be skipped under pressure.
+Sparking Charring Ash skipped the commit queue at staging step;
+their immediate next action hit the collision the queue would have
+predicted. Fix shape: structural enforcement at the pre-stage hook
+level — refuse `git add` if no active intent in `active-claims.json`
+matches the staged file set. Rule captures the constraint; cost-of-
+collaboration P3 captures the implementation.
+
 ### 2026-05-11 — Gatekeeper green-light stale-sweep race
 
 `[captured-date: 2026-05-11 | source-surface: comms-message

@@ -1,6 +1,6 @@
 ---
-name: primary agent tooling enhancements
-overview: Complete the remaining primary agent-tooling enhancements by grouping collaboration, commit-queue, identity, build-isolation, and closeout work into coherent TDD workstreams. These are infrastructure improvements to the core tool set agents rely on during everyday repo work, not sideline friction fixes.
+name: primary agent tooling enhancements (SUPERSEDED 2026-05-11)
+overview: SUPERSEDED 2026-05-11 by [`cost-of-collaboration.plan.md`](cost-of-collaboration.plan.md). The completed shared-CLI-discoverability workstream (F-01/F-02/F-04/F-09/F-12/F-13) remains landed in working tree; all remaining workstreams are re-homed inside the cost-of-collaboration plan under its P-order. Retained here as a back-pointer for any agent reading older napkin/comms references; archive to `archive/` after the cost-of-collaboration plan's first review pass.
 todos:
   - id: shared-cli-discoverability
     content: Implement shared help/error conventions and close discoverability frictions F-01, F-02, F-04, F-09, F-12, and F-13.
