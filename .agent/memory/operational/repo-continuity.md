@@ -261,8 +261,8 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Soaring Darting Kite / `claude-code` / opus-4-7-1m / `01db95` / 2026-05-11 (R1.b landed `b529fa6e` + third-instance peer-commit-absorption record `5aa91a76`; tail plan reshaped into 6 sequenced waves); Fronded Flowering Seed / `claude-code` / opus-4-7-1m / `19ecd5` / 2026-05-11 (graduation-candidates-drain — both due items graduated, commit `53995192`); Smouldering Crackling Pyre / `claude-code` / opus-4-7-1m / `ab76ef` / 2026-05-11; Deciduous Twining Dew / `claude-code` / opus-4-7-1m / `a12c90` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11 |
-| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Mistbound Watching Lantern / `claude-code` / opus-4-7-1m / `8fdb8b` / 2026-05-11 (graph-mvp-arc review-absorption + doctrine ratification, commit `67885e3f`); Dusky Masking Cloak / `claude-code` / opus-4-7-1m / `c5ff7f` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11; Fragrant Regrowing Root / `codex` / GPT-5 / `019e12` / 2026-05-10 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Shaded Ripening Copse / `claude-code` / opus-4-7-1m / `c13bdf` / 2026-05-11 (commit-queue UX brief — B-02/B-03 + Workstream 4 architectural seam, commit `5c299ed5`); Soaring Darting Kite / `claude-code` / opus-4-7-1m / `01db95` / 2026-05-11 (R1.b landed `b529fa6e` + third-instance peer-commit-absorption record `5aa91a76`; tail plan reshaped into 6 sequenced waves); Fronded Flowering Seed / `claude-code` / opus-4-7-1m / `19ecd5` / 2026-05-11 (graduation-candidates-drain — both due items graduated, commit `53995192`); Smouldering Crackling Pyre / `claude-code` / opus-4-7-1m / `ab76ef` / 2026-05-11; Deciduous Twining Dew / `claude-code` / opus-4-7-1m / `a12c90` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11 |
+| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Shaded Ripening Copse / `claude-code` / opus-4-7-1m / `c13bdf` / 2026-05-11 (schedule-not-trigger sweep — graph-stack `5c1cd339` + combinatorial-arc D-6 absorption `ff3ab004`); Mistbound Watching Lantern / `claude-code` / opus-4-7-1m / `8fdb8b` / 2026-05-11 (graph-mvp-arc review-absorption + doctrine ratification, commit `67885e3f`); Dusky Masking Cloak / `claude-code` / opus-4-7-1m / `c5ff7f` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11; Fragrant Regrowing Root / `codex` / GPT-5 / `019e12` / 2026-05-10 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / `codex` / 2026-04-28 |
@@ -569,7 +569,47 @@ evidence.
 
 ## Next Safe Step
 
-**Status update (2026-05-11 — Soaring Darting Kite close, R1.b
+**Status update (2026-05-11 — Shaded Ripening Copse close, doctrine
+sweep landed)**: graph-stack + graph-combinatorial-arc swept under
+the schedule-not-trigger doctrine; commit-queue UX brief landed in
+the agent-tooling plan. Three atomic commits: `5c1cd339` (graph-stack
+sweep — broad scope per owner; Inc.2–7 trigger framings converted to
+scheduled positions or named open decisions; new §Genuine Open
+Decisions section with O-1 WS0 topology ADR approval + O-2 increment
+promotion ownership; Inc.4 written as hard predecessor on Inc.2 AND
+agent-graphs org plan; combinatorial-arc cross-plan trigger relocated
+out of this plan); `ff3ab004` (combinatorial-arc sweep + D-6
+absorption as concrete todo `d6-inc3-join-api-review`;
+`predecessor_substrate` frontmatter field added; §Decisions Absorbed
+section); `5c299ed5` (commit-queue UX brief: B-02 build-prelude
+coupling, B-03 record/verify divergence, Workstream 4 architectural
+seam — decouple queue CLI from build health). Four reviewer
+dispatches; all GO WITH CONDITIONS; conditions absorbed.
+
+**Next safe step**: branch-primary `connecting-oak-resources` lane —
+**author the WS0 topology ADR draft** in
+`docs/architecture/architectural-decisions/` (proposed status). This
+is the first concrete graph engineering task: gate 1 of graph-stack's
+§Promotion Trigger requires owner approval of the topology, gate 2
+requires the WS0 ADR drafted with reviewer findings returned. The ADR
+records the seven-active-plus-one-deferred graph topology proposed in
+`graph-stack.plan.md` §Topology Decision. Dispatch
+architecture-expert-betty + architecture-expert-fred + assumptions-expert
+on the draft, absorb findings, then surface to owner for the topology
+approval decision (O-1 in graph-stack's §Genuine Open Decisions).
+Once O-1 closes, graph-stack moves CURRENT → ACTIVE and Inc.1a WS1.1
+(`graph-core` workspace scaffold) opens for test-first execution.
+
+Parallel-safe agentic-engineering lane work remains as named in
+Soaring Darting Kite's close: Wave 1 (R8 pattern capture / R4b
+commit-skill amendment / R7 B-9 stub / R2 B-10 investigation) is
+small-and-fast; Wave 3 (commit-queue UX + B-02/B-03 fixes per the
+brief landed this session) is the named structural focus.
+
+ADR-173 ratification gate remains unblocked from Fronded's
+`53995192`.
+
+**Prior status (2026-05-11 — Soaring Darting Kite close, R1.b
 landed)**: R1.b atomic commit `b529fa6e` lands the three-parser /
 three-type / 7-file-migration refactor of the inter-agent
 communication protocol per Shape A′. All four reviewers (code, test,

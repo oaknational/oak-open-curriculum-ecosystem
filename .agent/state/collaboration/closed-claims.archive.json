@@ -17026,6 +17026,99 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "53e084b3-e423-4551-90c8-f79291faa9f7",
+      "agent_id": {
+        "agent_name": "Soaring Darting Kite",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "01db95"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/plans/agentic-engineering-enhancements/current/2026-05-12-collaboration-protocol-hardening-r1b-opener.md",
+            ".agent/memory/active/patterns/inter-agent-sidebar-with-default-action.md",
+            ".agent/memory/active/patterns/peer-commit-absorption-third-direction.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-11T17:41:34Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Consolidate-docs commit: pattern graduations (2 new pattern files) + pending-graduations register entries (2 new) + plan reshape + repo-continuity status + thread record refresh. Through commit-queue lifecycle.",
+      "archived_at": "2026-05-11",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-11T17:44:36Z",
+        "closed_by": {
+          "agent_name": "Soaring Darting Kite",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "01db95"
+        },
+        "summary": "Consolidation commit 8f0dacd5 landed through full commit-queue lifecycle. Pattern graduations + register refresh + plan reshape complete.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "53e084b3-e423-4551-90c8-f79291faa9f7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1e77d9cc-b30f-4ce4-b24f-b2f0a80684d9",
+      "agent_id": {
+        "agent_name": "Shaded Ripening Copse",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "c13bdf"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md",
+            ".agent/plans/graph-combinatorial-arc.plan.md",
+            ".agent/plans/agent-tooling/current/primary-agent-tooling-enhancements.plan.md",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-11T17:41:03Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "schedule-not-trigger sweep: graph-stack + combinatorial-arc; commit-queue UX brief",
+      "archived_at": "2026-05-11",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-11T17:54:34Z",
+        "closed_by": {
+          "agent_name": "Shaded Ripening Copse",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "c13bdf"
+        },
+        "summary": "Three atomic commits landed: 5c1cd339 (graph-stack sweep), ff3ab004 (combinatorial-arc sweep + D-6 absorption as todo d6-inc3-join-api-review), 5c299ed5 (commit-queue UX brief B-02/B-03 + Workstream 4 architectural seam). Four reviewer dispatches GO WITH CONDITIONS; conditions absorbed. Owner direction applied: broad scope; Inc.4 hard predecessor; cross-plan trigger relocated. Pre-commit gates green every commit. Peer 8f0dacd5 landed cleanly in parallel via explicit-pathspec staging.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1e77d9cc-b30f-4ce4-b24f-b2f0a80684d9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

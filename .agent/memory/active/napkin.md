@@ -269,3 +269,100 @@ this session generated, named in the next-session starting statement.
   other agent; gendered pronouns require self-declaration. Applies
   everywhere — chat output, commit messages, napkin, claims. Captured
   as a feedback memory.
+
+## 2026-05-11 — Embered Burning Magma / codex / GPT-5 / `019e18`
+
+### Practice/tooling feedback
+
+- **Surface**: `agent-tools:collaboration-state comms send`
+- **Signal**: surprise
+- **Observation**: session-open `comms send` wrote the event JSON for
+  `670c54f3` but exited 2 before rendering `shared-comms-log.md`, with
+  `Error: optional field addressed_to must be a non-empty string when
+  present`, even though the caller did not pass `--addressed-to`.
+- **Behaviour change / candidate follow-up**: treat this as fresh B-10
+  evidence: optional CLI fields must be omitted from the payload when
+  absent, not forwarded as empty strings. Until fixed, inspect whether
+  a failed `comms send` left a valid event file before retrying, to
+  avoid orphan or duplicate events.
+
+### Correction — `comms send` render failure is legacy-shape input, not caller empty-field forwarding
+
+- **Surface**: `agent-tools:collaboration-state comms send`
+- **Signal**: correction to my earlier hypothesis
+- **Observation**: peer reply event `62b5ad1b` reproduced the same
+  exit-2 shape. Inspecting the freshly written event showed no
+  `addressed_to` field at all. `rg addressed_to` instead found older
+  narrative events with object-shaped `addressed_to`; the current parser
+  expects a non-empty string. The write step succeeds, then render fails
+  while reading legacy corpus events.
+- **Behaviour change / candidate follow-up**: B-10 should distinguish
+  shell/CLI optional-field handling from render-time legacy-data
+  incompatibility. Until fixed, failed `comms send` may still leave a
+  valid event JSON and require manual shared-log rendering.
+
+## 2026-05-11 — Shaded Ripening Copse / claude-code / opus-4-7-1m / `c13bdf`
+
+### Observation — schedule-not-trigger doctrine sweep is mostly mechanical
+
+- **Expected**: applying the schedule-not-trigger doctrine to
+  `graph-stack.plan.md` + `graph-combinatorial-arc.plan.md` would
+  surface multiple genuine open decisions needing owner input
+  (Inc.4 dep shape, Inc.7 trigger type, cross-plan trigger location).
+- **Actual**: only one genuine open decision survived owner direction
+  — O-1 WS0 topology ADR approval (which was already named as a gate
+  in §Promotion Trigger; the sweep made it visible as an Open Decision
+  rather than buried in the Status block). Inc.4 was decided by owner
+  as concrete hard predecessor; Inc.7 retained Betty's D-class
+  external-signal framing; cross-plan trigger relocated to combinatorial
+  arc. The sweep produced **smaller schedule-position rewordings than
+  expected** because the prior session (Mistbound) had already absorbed
+  most of the doctrine into the MVP arc, leaving only the two satellite
+  plans to catch up.
+- **Behaviour change**: doctrine sweeps that follow another session's
+  ratification are predominantly mechanical; reviewer dispatch is still
+  worth the cost because they catch the one or two C-class items that
+  do need owner input. Cost-efficient: do not skip reviewers on
+  follow-on sweeps, but do not budget for major reshape either.
+
+### Observation — reviewer scope disagreement (Betty broad vs assumptions narrow) is a useful signal
+
+- **Expected**: both reviewers would agree on the sweep scope since
+  they were given the same doctrine.
+- **Actual**: Betty proposed broad (rewording across §Increments,
+  §Surfacing, §Layer Map, §Coordination map, §Non-Goals); assumptions
+  proposed narrow (§Increments Status column only, leaving owner-gated
+  deferrals and observed-execution gates alone). Both were defensible
+  applications of the same doctrine; the divergence was about *what
+  counts as an imaginary flow*.
+- **Behaviour change / value**: when reviewers diverge on scope under
+  shared premise, the divergence itself is information — present BOTH
+  views to the owner with the trade-off named. Owner picked Betty's
+  broad scope; the divergence write-up made the choice possible.
+  Pattern instance: "Different-lens reviewers catch different gaps"
+  (substance-ripe per Fronded's earlier napkin entry; this is a second
+  instance under a fresh dispatch).
+
+### Observation — parallel-agent commit coordination worked cleanly via stage-by-pathspec
+
+- **Expected**: with two agents committing in parallel (mine + Soaring
+  Darting Kite's consolidate-docs commit), some friction or absorption
+  risk would surface.
+- **Actual**: zero friction. Both agents staged by explicit pathspec;
+  Soaring Darting Kite's pre-staged consolidate-docs files were visible
+  in my git status (peer's abandoned commit-queue cycle residue) but
+  did not absorb into my commit because I used `git commit -- <pathspec>`.
+  Their fresh commit cycle landed cleanly between my two commits.
+- **Behaviour change**: the stage-by-pathspec + `git commit -- <pathspec>`
+  pattern is operationally proven under parallel-agent conditions. The
+  documented cure (Smouldering Crackling Pyre's pattern from this
+  morning) works. The B-02/B-03 brief I authored this session is the
+  upstream cure — when commit-queue is decoupled from build prelude,
+  parallel-agent operation becomes the default instead of a careful
+  fallback.
+
+### Observation — pending claim CLI signature surprised on first call
+
+- **Expected**: `pnpm agent-tools:collaboration-state claims open --files X,Y,Z --subject "..."` would work per common-sense CLI patterns.
+- **Actual**: the CLI requires `--active <path> --thread <slug> --area-kind files --intent <text> --now <iso> --platform <p> --model <m> --file X --file Y --file Z` — multiple repeated `--file` flags rather than a comma-separated list; no `--subject` flag, just `--intent`. Got it right on second call after CLI emitted full help text on the invalid invocation (validating the existing memory `feedback_agent_tool_help_on_invalid_flags.md` is being honoured).
+- **Behaviour change**: this is the kind of friction the commit-queue UX brief (just landed) is aimed at — once Workstream 4 lands, repeated-flag-vs-comma-separated should be discoverable from the help text by default. No new graduation candidate; this is already in scope of the open work.

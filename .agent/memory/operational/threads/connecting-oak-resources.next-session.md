@@ -4,7 +4,44 @@
 doctrine sweep (schedule-not-trigger framings) — see the next-session
 starting statement at the end of this record.
 
-**Last refreshed**: 2026-05-11 (Mistbound Watching Lantern /
+**Last refreshed**: 2026-05-11 (Shaded Ripening Copse /
+`claude-code` / `claude-opus-4-7-1m` / `c13bdf` —
+schedule-not-trigger sweep of `graph-stack.plan.md` and
+`graph-combinatorial-arc.plan.md` per the doctrine ratified by the
+prior `Mistbound Watching Lantern` session. Three atomic commits:
+`5c1cd339` (graph-stack: Inc.2–7 trigger framings converted to
+scheduled positions or named open decisions; new §Genuine Open
+Decisions with O-1 WS0 topology ADR approval + O-2 increment
+promotion ownership; Inc.4 written as hard predecessor on Inc.2 AND
+agent-graphs org plan; cross-plan trigger relocated out of this
+plan); `ff3ab004` (combinatorial-arc: design-stability wording
+removed from frontmatter promotion_trigger + body echoes; concrete
+todo `d6-inc3-join-api-review` absorbs D-6 from graph-mvp-arc Open
+Decisions; `predecessor_substrate` frontmatter field added making
+graph-stack coupling machine-discoverable; new §Decisions Absorbed
+section); `5c299ed5` (agent-tooling: B-02 + B-03 + Workstream 4
+architectural seam — the third commit lands in the
+`agentic-engineering-enhancements` thread per opener routing, but
+captured here because its substance is the commit-queue UX brief
+explicitly named in this session's opener). Four reviewer
+dispatches (architecture-expert-betty + assumptions-expert against
+graph-stack; architecture-expert-betty + docs-adr-expert against
+combinatorial-arc); all GO WITH CONDITIONS; conditions absorbed.
+Owner direction applied at decision boundary: broad-scope sweep
+(Betty) over narrow (assumptions); Inc.4 concrete hard predecessor;
+cross-plan trigger removed from graph-stack and reshaped only in
+combinatorial-arc. Parallel peer `Soaring Darting Kite` consolidate
+commit `8f0dacd5` landed cleanly via explicit-pathspec staging on
+both sides; no foreign-state absorption. **Next graph-engineering
+entry point**: WS0 topology ADR draft in
+`docs/architecture/architectural-decisions/`. Gate 1 of
+graph-stack's §Promotion Trigger requires owner topology approval
+(O-1); gate 2 requires WS0 ADR drafted with reviewer findings
+returned. Once O-1 closes the plan promotes CURRENT → ACTIVE and
+Inc.1a WS1.1 (`graph-core` workspace scaffold) opens for
+test-first execution.)
+
+**Prior refresh**: 2026-05-11 (Mistbound Watching Lantern /
 `claude-code` / `claude-opus-4-7-1m` / `8fdb8b` —
 graph-mvp-arc review-absorption + doctrine ratification. Three-reviewer
 fresh-eyes review of `graph-mvp-arc.plan.md` (architecture-expert-betty +
@@ -335,6 +372,7 @@ promotion.)
 | `Blooming Growing Thicket` | `claude-code` | `claude-opus-4-7-1m` | `756c60` | `mvp-arc-reshape-author-and-execution-prep-opener-author` | 2026-05-11 | 2026-05-11 |
 | `Dusky Masking Cloak` | `claude-code` | `claude-opus-4-7-1m` | `c5ff7f` | `graph-execution-prep-steps-1-2-3-author` | 2026-05-11 | 2026-05-11 |
 | `Mistbound Watching Lantern` | `claude-code` | `claude-opus-4-7-1m` | `8fdb8b` | `graph-mvp-arc-review-absorption-and-doctrine-ratification` | 2026-05-11 | 2026-05-11 |
+| `Shaded Ripening Copse` | `claude-code` | `claude-opus-4-7-1m` | `c13bdf` | `graph-stack-and-combinatorial-arc-schedule-not-trigger-sweep` | 2026-05-11 | 2026-05-11 |
 
 ## Plan Locations
 
