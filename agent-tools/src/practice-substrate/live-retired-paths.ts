@@ -4,6 +4,8 @@ import { join, relative } from 'node:path';
 import {
   ACTIVE_CLAIMS_PATH,
   CANONICAL_EVENTS_ROOT,
+  CANONICAL_LIFECYCLE_ROOT,
+  CANONICAL_MESSAGES_ROOT,
   CLOSED_CLAIMS_PATH,
   LEGACY_EVENTS_ROOT,
   MANIFEST_PATH,
@@ -62,6 +64,8 @@ function retiredPathExclusions(manifest: ManifestDocument): readonly string[] {
     MANIFEST_PATH,
     SHARED_COMMS_LOG,
     CANONICAL_EVENTS_ROOT,
+    CANONICAL_LIFECYCLE_ROOT,
+    CANONICAL_MESSAGES_ROOT,
   ];
 }
 
@@ -141,6 +145,8 @@ function isKnownHistoricalPath(path: string, text: string): boolean {
     path === CLOSED_CLAIMS_PATH ||
     path.includes('/archive/') ||
     path.includes('/comms-events/') ||
+    path.includes('/comms-lifecycle/') ||
+    path.includes('/comms-messages/') ||
     (path === ACTIVE_CLAIMS_PATH && activeClaimMentionsAreAbandonedEvidence(text))
   );
 }
@@ -206,16 +212,11 @@ function isHistoricalDiscussion(text: string): boolean {
   return contexts.length > 0 && contexts.every(isHistoricalContext);
 }
 
+const HISTORICAL_CONTEXT_PATTERN =
+  /historical|legacy|migration|migrated|source evidence|provenance/;
+
 function isHistoricalContext(context: string): boolean {
-  return (
-    !context.includes('.gitkeep') &&
-    (context.includes('historical') ||
-      context.includes('legacy') ||
-      context.includes('migration') ||
-      context.includes('migrated') ||
-      context.includes('source evidence') ||
-      context.includes('provenance'))
-  );
+  return !context.includes('.gitkeep') && HISTORICAL_CONTEXT_PATTERN.test(context);
 }
 
 function retiredPathContexts(text: string): readonly string[] {

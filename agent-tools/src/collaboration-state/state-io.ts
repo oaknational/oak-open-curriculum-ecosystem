@@ -1,18 +1,26 @@
 import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { createCommsEvent } from './comms.js';
+import { createNarrativeCommsEvent } from './comms.js';
 import {
   parseClosedClaimsArchive,
   parseCollaborationRegistry,
-  parseCommsEvent,
+  parseDirectedCommsMessage,
+  parseLifecycleCommsEvent,
+  parseNarrativeCommsEvent,
 } from './state-parsers.js';
 import {
   runJsonStateTransaction,
   updateJsonFileWithRetry,
   writeJsonFileWithinTransaction,
 } from './transaction.js';
-import { type ClosedClaimsArchive, type CollaborationRegistry, type CommsEvent } from './types.js';
+import {
+  type ClosedClaimsArchive,
+  type CollaborationRegistry,
+  type DirectedCommsMessage,
+  type LifecycleCommsEvent,
+  type NarrativeCommsEvent,
+} from './types.js';
 
 export { parseClosedClaimsArchive, parseCollaborationRegistry } from './state-parsers.js';
 
@@ -24,16 +32,19 @@ export async function readActiveClaimsFile(activePath: string): Promise<Collabor
 }
 
 /**
- * Append an immutable communication event by exclusive file create.
+ * Append an immutable narrative communication event to the narrative
+ * directory by exclusive file create. Narrative events are the only kind
+ * authored at runtime; lifecycle and directed events are produced by other
+ * workflows and migrated historically, so this is the only writer.
  */
-export async function writeCommsEvent(input: {
+export async function writeNarrativeCommsEvent(input: {
   readonly eventsDir: string;
-  readonly event: CommsEvent;
+  readonly event: NarrativeCommsEvent;
   readonly nowIso: string;
 }): Promise<void> {
   await mkdir(input.eventsDir, { recursive: true });
   const existingIds = await listCommsEventIds(input.eventsDir);
-  const event = createCommsEvent(input.event, {
+  const event = createNarrativeCommsEvent(input.event, {
     nowIso: input.nowIso,
     existingEventIds: existingIds,
   });
@@ -42,19 +53,34 @@ export async function writeCommsEvent(input: {
 }
 
 /**
- * Read all immutable communication events from an event directory.
+ * Read all immutable narrative communication events from the narrative
+ * directory. Each file is parsed against `$defs.narrative` via the
+ * single-schema narrative parser.
  */
-export async function readCommsEvents(eventsDir: string): Promise<readonly CommsEvent[]> {
-  const filenames = await readdir(eventsDir);
-  const events: CommsEvent[] = [];
+export async function readNarrativeCommsEvents(
+  eventsDir: string,
+): Promise<readonly NarrativeCommsEvent[]> {
+  return readEventDirectory(eventsDir, parseNarrativeCommsEvent);
+}
 
-  for (const filename of filenames
-    .filter((entry) => entry.endsWith('.json'))
-    .toSorted((left, right) => left.localeCompare(right))) {
-    events.push(parseCommsEvent(await readFile(join(eventsDir, filename), 'utf8')));
-  }
+/**
+ * Read all immutable lifecycle communication events from the lifecycle
+ * directory. Each file is parsed against `$defs.lifecycle`.
+ */
+export async function readLifecycleCommsEvents(
+  lifecycleDir: string,
+): Promise<readonly LifecycleCommsEvent[]> {
+  return readEventDirectory(lifecycleDir, parseLifecycleCommsEvent);
+}
 
-  return events;
+/**
+ * Read all immutable directed communication messages from the directed
+ * directory. Each file is parsed against `$defs.directed`.
+ */
+export async function readDirectedCommsMessages(
+  messagesDir: string,
+): Promise<readonly DirectedCommsMessage[]> {
+  return readEventDirectory(messagesDir, parseDirectedCommsMessage);
 }
 
 /**
@@ -99,6 +125,22 @@ export async function updateClaimStateFiles(input: {
   });
 }
 
+async function readEventDirectory<TEvent>(
+  directory: string,
+  parser: (text: string) => TEvent,
+): Promise<readonly TEvent[]> {
+  const filenames: readonly string[] = await readdir(directory).catch(() => []);
+  const events: TEvent[] = [];
+
+  for (const filename of filenames
+    .filter((entry) => entry.endsWith('.json'))
+    .toSorted((left, right) => left.localeCompare(right))) {
+    events.push(parser(await readFile(join(directory, filename), 'utf8')));
+  }
+
+  return events;
+}
+
 function listCommsEventIds(eventsDir: string): Promise<readonly string[]> {
   return readdir(eventsDir)
     .then((entries) =>
@@ -113,6 +155,6 @@ function eventPath(eventsDir: string, eventId: string): string {
   return join(eventsDir, `${eventId}.json`);
 }
 
-function eventJson(event: CommsEvent): string {
+function eventJson(event: NarrativeCommsEvent): string {
   return `${JSON.stringify(event, null, 2)}\n`;
 }

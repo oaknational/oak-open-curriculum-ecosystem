@@ -1,4 +1,12 @@
-import { getJsonValue, isJsonObject, parseStringArray, requireString } from './json.js';
+import {
+  getJsonValue,
+  isJsonObject,
+  optionalString,
+  optionalStringArray,
+  parseStringArray,
+  requirePossiblyEmptyString,
+  requireString,
+} from './json.js';
 import {
   type ClosedClaimsArchive,
   type CollaborationAgentId,
@@ -6,7 +14,9 @@ import {
   type CollaborationClaim,
   type CollaborationCommitQueueEntry,
   type CollaborationRegistry,
-  type CommsEvent,
+  type DirectedCommsMessage,
+  type LifecycleCommsEvent,
+  type NarrativeCommsEvent,
 } from './types.js';
 
 /**
@@ -49,17 +59,84 @@ export function parseClosedClaimsArchive(text: string): ClosedClaimsArchive {
   };
 }
 
-export function parseCommsEvent(text: string): CommsEvent {
+/**
+ * Parse a narrative communication event from JSON text. Projects
+ * `$defs.narrative` in `comms-event.schema.json`. Required fields: event_id,
+ * created_at, author, title, body. Optional routing/threading affordances:
+ * audience, addressed_to, in_response_to, in_reply_to.
+ */
+export function parseNarrativeCommsEvent(text: string): NarrativeCommsEvent {
   const parsed: unknown = JSON.parse(text);
   if (!isJsonObject(parsed)) {
-    throw new Error('communication event must be a JSON object');
+    throw new Error('narrative communication event must be a JSON object');
   }
+
+  const audience = optionalStringArray(parsed, 'audience');
+  const addressedTo = optionalString(parsed, 'addressed_to');
+  const inResponseTo = optionalString(parsed, 'in_response_to');
+  const inReplyTo = optionalString(parsed, 'in_reply_to');
 
   return {
     event_id: requireString(parsed, 'event_id'),
     created_at: requireString(parsed, 'created_at'),
     author: parseAgentId(getJsonValue(parsed, 'author')),
     title: requireString(parsed, 'title'),
+    body: requireString(parsed, 'body'),
+    ...(audience === undefined ? {} : { audience }),
+    ...(addressedTo === undefined ? {} : { addressed_to: addressedTo }),
+    ...(inResponseTo === undefined ? {} : { in_response_to: inResponseTo }),
+    ...(inReplyTo === undefined ? {} : { in_reply_to: inReplyTo }),
+  };
+}
+
+/**
+ * Parse a lifecycle communication event from JSON text. Projects
+ * `$defs.lifecycle` in `comms-event.schema.json`. All twelve fields are
+ * required; `claim_id` may be an empty string when the event is not
+ * claim-scoped.
+ */
+export function parseLifecycleCommsEvent(text: string): LifecycleCommsEvent {
+  const parsed: unknown = JSON.parse(text);
+  if (!isJsonObject(parsed)) {
+    throw new Error('lifecycle communication event must be a JSON object');
+  }
+
+  return {
+    schema_version: requireString(parsed, 'schema_version'),
+    event_id: requireString(parsed, 'event_id'),
+    created_at: requireString(parsed, 'created_at'),
+    event_type: requireString(parsed, 'event_type'),
+    occurred_at: requireString(parsed, 'occurred_at'),
+    author: parseAgentId(getJsonValue(parsed, 'author')),
+    agent_id: parseAgentId(getJsonValue(parsed, 'agent_id')),
+    thread: requireString(parsed, 'thread'),
+    claim_id: requirePossiblyEmptyString(parsed, 'claim_id'),
+    title: requireString(parsed, 'title'),
+    subject: requireString(parsed, 'subject'),
+    body: requireString(parsed, 'body'),
+  };
+}
+
+/**
+ * Parse a directed communication message from JSON text. Projects
+ * `$defs.directed` in `comms-event.schema.json`. The post-migration shape
+ * uses `created_at`; the legacy `timestamp` field is renamed on migration
+ * and is no longer accepted by this parser.
+ */
+export function parseDirectedCommsMessage(text: string): DirectedCommsMessage {
+  const parsed: unknown = JSON.parse(text);
+  if (!isJsonObject(parsed)) {
+    throw new Error('directed communication message must be a JSON object');
+  }
+
+  return {
+    schema_version: requireString(parsed, 'schema_version'),
+    event_id: requireString(parsed, 'event_id'),
+    created_at: requireString(parsed, 'created_at'),
+    kind: requireString(parsed, 'kind'),
+    from: parseAgentId(getJsonValue(parsed, 'from')),
+    to: parseAgentId(getJsonValue(parsed, 'to')),
+    subject: requireString(parsed, 'subject'),
     body: requireString(parsed, 'body'),
   };
 }

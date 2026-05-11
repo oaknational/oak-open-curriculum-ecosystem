@@ -7,11 +7,9 @@ import {
   parseClosedClaimsArchive,
   parseCollaborationRegistry,
 } from '../collaboration-state/state-io.js';
-import { parseCommsEvent } from '../collaboration-state/state-parsers.js';
-import { type CommsEvent } from '../collaboration-state/types.js';
+import { readCommsEventFiles } from './live-comms-events.js';
 import {
   ACTIVE_CLAIMS_PATH,
-  CANONICAL_EVENTS_ROOT,
   CLOSED_CLAIMS_PATH,
   CONVERSATIONS_ROOT,
   ESCALATIONS_ROOT,
@@ -112,7 +110,11 @@ export async function evaluateSharedCommsLog(
     surface: 'collaboration-shared-comms-log',
     outputPath: SHARED_COMMS_LOG,
     committedText,
-    regeneratedText: renderSharedCommsLog({ events: events.events }),
+    regeneratedText: renderSharedCommsLog({
+      narrative: events.narrative,
+      lifecycle: events.lifecycle,
+      directed: events.directed,
+    }),
   });
 }
 
@@ -176,24 +178,6 @@ async function evaluateMigrationLedger(
 
 async function evaluateCommsEvents(repoRoot: string): Promise<readonly SubstrateFinding[]> {
   return (await readCommsEventFiles(repoRoot)).findings;
-}
-
-async function readCommsEventFiles(repoRoot: string): Promise<{
-  readonly events: readonly CommsEvent[];
-  readonly findings: readonly SubstrateFinding[];
-}> {
-  const events: CommsEvent[] = [];
-  const findings: SubstrateFinding[] = [];
-
-  for (const path of await listJsonFiles(repoRoot, CANONICAL_EVENTS_ROOT)) {
-    try {
-      events.push(parseCommsEvent(await readFile(absolutePath(repoRoot, path), 'utf8')));
-    } catch (error) {
-      findings.push(parseFailureFinding('collaboration-comms-events', path, error));
-    }
-  }
-
-  return { events, findings };
 }
 
 async function evaluateJsonFileWithSchema(input: {

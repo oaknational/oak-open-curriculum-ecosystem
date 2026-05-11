@@ -6,11 +6,18 @@ import { renderSharedCommsLog } from './comms.js';
 import { resolveIdentity } from './cli-identity.js';
 import { optional, required, valueOrDefault, type Options } from './cli-options.js';
 import { validateSharedStateAgentId } from './identity.js';
-import { readCommsEvents, writeCommsEvent } from './state-io.js';
+import {
+  readDirectedCommsMessages,
+  readLifecycleCommsEvents,
+  readNarrativeCommsEvents,
+  writeNarrativeCommsEvent,
+} from './state-io.js';
 import { writeTextFileAtomically } from './transaction.js';
 import { type CollaborationStateEnvironment } from './types.js';
 
 const DEFAULT_EVENTS_DIR = '.agent/state/collaboration/comms-events';
+const DEFAULT_LIFECYCLE_DIR = '.agent/state/collaboration/comms-lifecycle';
+const DEFAULT_MESSAGES_DIR = '.agent/state/collaboration/comms-messages';
 const DEFAULT_SHARED_LOG = '.agent/state/collaboration/shared-comms-log.md';
 
 export async function appendComms(
@@ -23,7 +30,7 @@ export async function appendComms(
     throw new Error(validation.reason);
   }
 
-  await writeCommsEvent({
+  await writeNarrativeCommsEvent({
     eventsDir: required(options, 'events-dir'),
     nowIso: required(options, 'now'),
     event: {
@@ -39,10 +46,12 @@ export async function appendComms(
 }
 
 export async function renderComms(options: Options): Promise<string> {
-  const events = await readCommsEvents(required(options, 'events-dir'));
+  const narrative = await readNarrativeCommsEvents(required(options, 'events-dir'));
+  const lifecycle = await readLifecycleCommsEvents(required(options, 'lifecycle-dir'));
+  const directed = await readDirectedCommsMessages(required(options, 'messages-dir'));
   await writeTextFileAtomically({
     filePath: required(options, 'output'),
-    text: renderSharedCommsLog({ events }),
+    text: renderSharedCommsLog({ narrative, lifecycle, directed }),
   });
 
   return '';
@@ -70,6 +79,8 @@ export function commsSendDefaults(
   const repoRoot = collaborationRepoRoot(options);
   return {
     'events-dir': join(repoRoot, DEFAULT_EVENTS_DIR),
+    'lifecycle-dir': join(repoRoot, DEFAULT_LIFECYCLE_DIR),
+    'messages-dir': join(repoRoot, DEFAULT_MESSAGES_DIR),
     now: nowIso,
     'created-at': nowIso,
     'event-id': eventId,

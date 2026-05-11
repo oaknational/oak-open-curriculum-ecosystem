@@ -6,9 +6,8 @@ import { describe, expect, it } from 'vitest';
 
 import {
   archiveStaleClaims,
-  createCommsEvent,
+  createNarrativeCommsEvent,
   deriveCollaborationIdentity,
-  renderSharedCommsLog,
   runCollaborationStateCli,
   updateJsonFileWithRetry,
   updateJsonStateWithRetry,
@@ -414,6 +413,8 @@ describe('claim CLI reports', () => {
     expect(commsSendDefaults(options({ 'repo-root': '/repo' }), nowIso, 'event-one')).toStrictEqual(
       {
         'events-dir': '/repo/.agent/state/collaboration/comms-events',
+        'lifecycle-dir': '/repo/.agent/state/collaboration/comms-lifecycle',
+        'messages-dir': '/repo/.agent/state/collaboration/comms-messages',
         now: nowIso,
         'created-at': nowIso,
         'event-id': 'event-one',
@@ -438,10 +439,10 @@ describe('claim CLI reports', () => {
   });
 });
 
-describe('createCommsEvent', () => {
+describe('createNarrativeCommsEvent', () => {
   it('rejects malformed and future UTC timestamps', () => {
     expect(() =>
-      createCommsEvent(
+      createNarrativeCommsEvent(
         {
           event_id: 'event-one',
           created_at: '2026-04-28T10:00:00Z',
@@ -454,7 +455,7 @@ describe('createCommsEvent', () => {
     ).toThrow('created_at must not be in the future');
 
     expect(() =>
-      createCommsEvent(
+      createNarrativeCommsEvent(
         {
           event_id: 'event-two',
           created_at: '2026-04-28 09:37:11',
@@ -469,7 +470,7 @@ describe('createCommsEvent', () => {
 
   it('rejects duplicate immutable communication event ids', () => {
     expect(() =>
-      createCommsEvent(
+      createNarrativeCommsEvent(
         {
           event_id: 'event-one',
           created_at: nowIso,
@@ -480,41 +481,6 @@ describe('createCommsEvent', () => {
         { nowIso, existingEventIds: ['event-one'] },
       ),
     ).toThrow('communication event already exists: event-one');
-  });
-});
-
-describe('renderSharedCommsLog', () => {
-  it('renders immutable communication events chronologically', () => {
-    const rendered = renderSharedCommsLog({
-      events: [
-        createCommsEvent(
-          {
-            event_id: 'event-two',
-            created_at: '2026-04-28T09:05:00Z',
-            author: woodland,
-            title: 'second event',
-            body: 'Rendered second.',
-          },
-          { nowIso },
-        ),
-        createCommsEvent(
-          {
-            event_id: 'event-one',
-            created_at: '2026-04-28T09:00:00Z',
-            author: woodland,
-            title: 'first event',
-            body: 'Rendered first.',
-          },
-          { nowIso },
-        ),
-      ],
-    });
-
-    expect(rendered.indexOf('first event')).toBeLessThan(rendered.indexOf('second event'));
-    expect(rendered).toContain('merge_class: append-only-narrative');
-    expect(rendered).toContain('Generated from `.agent/state/collaboration/comms-events/`');
-    expect(rendered).toContain('# Agent-to-Agent Shared Communication Log');
-    expect(rendered).toContain('Rendered first.\n\n---\n\n## 2026-04-28T09:05:00Z');
   });
 });
 

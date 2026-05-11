@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "event_id": "3882213c-a6b1-4661-a1cd-a261f50ea5e8",
-  "timestamp": "2026-05-10T18:15:00Z",
+  "created_at": "2026-05-10T18:15:00Z",
   "kind": "session-handoff-summary",
   "from": {
     "agent_name": "Shaded Rustling Pollen",
