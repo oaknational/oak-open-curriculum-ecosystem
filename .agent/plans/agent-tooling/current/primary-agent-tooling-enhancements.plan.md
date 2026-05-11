@@ -68,6 +68,8 @@ fixes-without-tests, no audit-shaped tests written after the fact.
 | ID | Surface | Symptom | Reported | Status |
 |---|---|---|---|---|
 | B-01 | `pnpm agent-tools:collaboration-state -- comms send …` | Errors with `Error: missing required string field: created_at` during the re-render step. **Corrected diagnosis 2026-05-11 (Deciduous Twining Dew / `a12c90`)**: the `comms-events/` directory contains two events using a *different* schema — inter-agent directed-message shape with `timestamp/from/to/subject/body/kind/schema_version` and no `created_at` (events `3882213c-…` and `b0353884-…`). `sendComms` writes the new event fine, then calls `renderComms` which invokes `readCommsEvents` → `parseCommsEvent` on every file in the directory; the message-shape events trip `requireString(parsed, 'created_at')`. The original "`--now` not populating `created_at`" diagnosis was wrong; the write path is sound. Fix shape requires a design choice (architecturally-excellent options): (a) split into `comms-events/` for narrative + `comms-messages/` for inter-agent directed messages — owner-direction-needed; (b) widen the parser to handle both schemas with a discriminator; (c) deprecate the directed-message schema. Reproduce by reading the two malformed JSONs against `parseCommsEvent`. | 2026-05-11 (Blooming Growing Thicket / `756c60`); corrected diagnosis 2026-05-11 (Deciduous Twining Dew / `a12c90`); **further refuted 2026-05-11 (Smouldering Crackling Pyre / `ab76ef`)**: pre-flight fingerprint scan returned **three families, not two** (narrative 311 / lifecycle 5 / directed 2). Owner directed Shape A′: one canonical `comms-event.schema.json` with three `$defs`, projected to three sibling directories. R1.a (schema authority + 12 Ajv-validated tests) landed `f7560339`; R1.b (three parsers + three types + 7 file moves + consumer updates + 16 new parser/render tests across two new test files) landed `b529fa6e` (2026-05-11, Soaring Darting Kite / `01db95`). | fixed — R1.a `f7560339` + R1.b `b529fa6e` |
+| B-02 | `pnpm agent-tools:commit-queue …` (every sub-command) | Sub-commands run `pnpm build` for `@oaknational/agent-tools` as a prelude. When a peer agent has in-flight unstaged edits that break the build (e.g. type imports removed mid-refactor before commit), every commit-queue invocation fails with the peer's TypeScript errors — the queue is unusable for the duration of the peer's editing window. The queue is a small JSON state machine; coupling its CLI to ambient agent-tools build health is the architectural defect. Workaround: stage-by-explicit-pathspec + direct `git commit` (the always-active commit skill's documented fallback). | 2026-05-11 (Mistbound Watching Lantern / `8fdb8b`; instance 1 of two failures in one session) | open |
+| B-03 | `pnpm agent-tools:commit-queue -- record-staged …` followed by `verify-staged` | After a successful `git add <pathspec>` and a successful `record-staged`, `verify-staged` reports the just-staged file as `missing`. Two candidate causes: (a) the `record-staged` step also runs `pnpm build`, which under certain workspace conditions clears or invalidates the index between stage and verify; (b) the staged-bundle fingerprint captured by `record-staged` does not survive a subsequent agent-tools rebuild. Workaround: stage-by-explicit-pathspec + direct `git commit -- <pathspec>`. | 2026-05-11 (Mistbound Watching Lantern / `8fdb8b`; instance 2 of two failures in one session) | open |
 
 ### Bug-fix discipline (applies to every row above)
 
@@ -210,7 +212,56 @@ Acceptance:
 
 ## Workstream 4: Commit-Queue Safety And Read APIs
 
-Issues covered: `F-11`, `F-15`.
+Issues covered: `F-11`, `F-15`. Bugs covered: `B-02`, `B-03`.
+
+### Architectural seam — decouple commit-queue from agent-tools build health
+
+The commit-queue is a small JSON state machine over
+`active-claims.json` and per-claim records. Today every sub-command
+invocation runs `pnpm build` for `@oaknational/agent-tools` as a
+prelude (B-02). Under parallel-agent conditions this produces two
+distinct failure modes:
+
+1. **B-02 — peer-build-break**: a peer agent's in-flight unstaged
+   edits that fail type-check make every commit-queue invocation
+   fail with the peer's errors. The queue is unusable for the
+   duration of the peer's editing window. The queue itself is sound;
+   the build coupling is the defect.
+2. **B-03 — record/verify divergence**: `record-staged` runs the
+   build before recording; under certain workspace conditions the
+   intervening rebuild appears to invalidate the index state that
+   `verify-staged` then reads, producing a false-negative "missing"
+   on a file that is in fact staged. Workaround is the fallback
+   path (stage-by-pathspec + direct commit); the protocol failure
+   itself indicates structural fragility.
+
+The doctrine-compliant cure is to **decouple the queue CLI from the
+build step**: the queue operates only on JSON state and git index
+queries, neither of which require an agent-tools rebuild. A built
+binary on `PATH` (per Workstream 5's build-isolation work) suffices.
+Build the agent-tools dist once at install/setup, then every queue
+invocation runs against the built artefact.
+
+### Third-direction peer-commit absorption (PDR-059 trigger)
+
+Three distinct directions of cross-agent commit interference are now
+observed in this thread; the third lands the named "third-instance"
+trigger for the PDR-059 classification-gate plan:
+
+- **PDR-054 direction**: pre-hook absorption (one agent's hook stages
+  another's unstaged work).
+- **PDR-059 direction**: post-hook (husky-chain) absorption (hook
+  output classified at the post-hook gate, captured 2026-05-11
+  Fronded Flowering Seed).
+- **New (third) direction — peer-commit absorption**: a peer agent
+  using non-pathspec staging sweeps another agent's session-lifecycle
+  files into their commit (2026-05-11 Mistbound Watching Lantern's
+  `67df85f`-style sweep; Soaring Darting Kite's napkin entry confirms
+  this as the third-instance trigger).
+
+The classification-gate plan (separate, follow-on) is the natural
+home for the third-direction cure; this workstream wires the
+commit-queue UX changes that surface the failure mode earlier.
 
 Target files:
 
@@ -231,14 +282,37 @@ TDD cycles:
   `stage -> record -> do not re-stage` contract.
 - If choosing the guard/documentation approach, add a test that detects an
   invalid re-stage shape and reports the corrective action.
+- **B-02 — decouple queue CLI from build prelude**: write a failing
+  test that invokes a queue sub-command from a working tree with a
+  deliberately-broken peer-edit shape (e.g. an unstaged file
+  containing an unresolvable type import). Expect: the queue command
+  succeeds against the built dist; the peer's editing-window state
+  does not affect it. Then land the product change that removes the
+  build prelude from every queue sub-command and points invocations
+  at the dist instead.
+- **B-03 — record-staged/verify-staged determinism under rebuild**:
+  write a failing test that (a) stages a pathspec, (b) runs
+  `record-staged`, (c) triggers an agent-tools rebuild, (d) runs
+  `verify-staged`. Expect: the verify result matches the recorded
+  fingerprint exactly. If the test surfaces a real index-clearing
+  side-effect from the rebuild, the cure is the same as B-02 — no
+  build inside queue lifecycle steps. If the divergence is
+  fingerprint-only, fix the fingerprint capture/verify path to be
+  rebuild-stable.
 
 Acceptance:
 
 - Agents can inspect queue state without parsing the whole registry manually.
 - The active-claims fingerprint loop is either structurally impossible or
   detected with an actionable error before repeated attempts.
-- `F-11` and `F-15` are closed or split only if the structural
-  fingerprint-store change needs its own migration plan.
+- B-02 closed: every queue sub-command runs against the built dist with
+  no `pnpm build` prelude. Peer-edit-induced build failures cannot break
+  the queue lifecycle.
+- B-03 closed: `record-staged` followed by `verify-staged` produces
+  identical results regardless of whether agent-tools is rebuilt
+  between them.
+- `F-11`, `F-15`, `B-02`, `B-03` are closed (or `F-15`/`B-02` split
+  if the build-decoupling needs its own migration plan).
 
 ## Workstream 5: Identity And Build Isolation
 
