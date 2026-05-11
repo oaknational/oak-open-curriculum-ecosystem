@@ -1,15 +1,45 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
-**Next anticipated identity** (per owner direction 2026-05-11):
-**Mistbound Watching Lantern** is anticipated to take up the graph
-thread on opener step 4 (primary-agent-tooling-enhancements WS 2–5
-implementation + B-01 fix; test-first atomic TDD pairs). Step 4 file
-scope is disjoint from the parallel graduation-candidates drain in
-the `agentic-engineering-enhancements` thread (see
-[`2026-05-11-graduation-candidates-drain-opener.md`](../../../plans/agentic-engineering-enhancements/current/2026-05-11-graduation-candidates-drain-opener.md))
-so both threads can progress concurrently.
+**Next anticipated work**: graph-stack + graph-combinatorial-arc
+doctrine sweep (schedule-not-trigger framings) — see the next-session
+starting statement at the end of this record.
 
-**Last refreshed**: 2026-05-11 (Dusky Masking Cloak / `claude-code` /
+**Last refreshed**: 2026-05-11 (Mistbound Watching Lantern /
+`claude-code` / `claude-opus-4-7-1m` / `8fdb8b` —
+graph-mvp-arc review-absorption + doctrine ratification. Three-reviewer
+fresh-eyes review of `graph-mvp-arc.plan.md` (architecture-expert-betty +
+assumptions-expert + docs-adr-expert) absorbed into one atomic commit
+`67885e3f` plus the prior ADR-173 topology annotation `ae8cce2a`. Nine
+owner-directed findings landed: D-3 resolved as concrete sequence
+position (migration plan opens after Inc.3 misconception-adapter,
+precedes combinatorial Phase 1); D-1 forcing function added as spine
+todo `name-ai-client-adoption-owner` (gate-1 blocked until owner +
+mechanism named); shape-understanding evidence templated to five
+named questions per slice; partnership-conversation opener added to
+slice 1 acceptance; D-6 routed to combinatorial arc as Inc.3
+design-phase todo; D-7 marked resolved; EEF source-authority kept as
+repo-held JSON (no premature seam); ADR-157 amendment section
+collapsed to link + summary; sub-increment naming applied to gates
+2 + 3a (Inc.1b specifically); gate-0 status reconciled from "in
+place" to "pending" against empirical state. **Doctrine ratified
+(owner 2026-05-11)**: schedule it, sequence it, no imaginary flows —
+trigger framings ("when X ships," "depends on Y future," "activates
+when") are imaginary flows that quietly stall; plans must commit to
+concrete scheduled sequence positions. Captured as feedback memory.
+Doctrine applied across the MVP arc; **graph-stack.plan.md and
+graph-combinatorial-arc.plan.md sweeps remain pending** as the
+next-session work. **Surprises captured this session**: opener
+premise stale (steps 1–3 already done by parallel session by session
+open); foreign-stage absorption swept 23 of Smouldering Crackling
+Pyre's R1.b files into my MVP arc commit attempt — owner accepted
+the bundle; commit-queue protocol failed twice this session (broken
+build from in-flight schema refactor; record-staged step clearing
+the index). **Memory captured**: feedback_simple_definite_no_imaginary_flows
+
++ feedback_agents_default_no_gender (agents have no gender by
+default; use they/them unless self-declared).)
+
+**Prior refresh**: 2026-05-11 (Dusky Masking Cloak / `claude-code` /
 `claude-opus-4-7-1m` / `c5ff7f` — graph execution-prep steps 1+2+3
 landed. Step 1: D-4 topology BLOCKERs verified closed in-place by the
 2026-05-10 graph-stack edit; surfaced sub-task D-4a — ADR-041 needs
@@ -304,6 +334,7 @@ promotion.)
 | `Fragrant Regrowing Root` | `codex` | `GPT-5` | `019e12` | `source-authority-clarification-and-handoff` | 2026-05-10 | 2026-05-10 |
 | `Blooming Growing Thicket` | `claude-code` | `claude-opus-4-7-1m` | `756c60` | `mvp-arc-reshape-author-and-execution-prep-opener-author` | 2026-05-11 | 2026-05-11 |
 | `Dusky Masking Cloak` | `claude-code` | `claude-opus-4-7-1m` | `c5ff7f` | `graph-execution-prep-steps-1-2-3-author` | 2026-05-11 | 2026-05-11 |
+| `Mistbound Watching Lantern` | `claude-code` | `claude-opus-4-7-1m` | `8fdb8b` | `graph-mvp-arc-review-absorption-and-doctrine-ratification` | 2026-05-11 | 2026-05-11 |
 
 ## Plan Locations
 

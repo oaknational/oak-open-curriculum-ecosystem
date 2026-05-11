@@ -176,3 +176,96 @@ OBSERVATION: the work was preserved (HEAD has my narratives + B-01 fix + comms e
 OBSERVATION: this is exactly the third-instance trigger Fronded named in `544bf9bf` for the PDR-059 classification-gate implementation plan. Plus the new peer-commit-direction failure mode that should be considered when scoping that plan.
 
 OBSERVATION (owner direction, 2026-05-11): next session in this thread will work on commit-queue UX (discoverability, ease-of-use, harder-to-bypass enforcement). The friction profile this session generated is the brief.
+
+## 2026-05-11 — Mistbound Watching Lantern / claude-code / opus-4-7-1m / `8fdb8b`
+
+### Surprise — opener premise stale by session-open (parallel-session race)
+
+- **Expected**: the start-right-thorough opener (graph-execution-prep
+  steps 1+2+3+4) describes work I would do, in the order described.
+- **Actual**: by the time I checked `git log` past the initial system
+  context snapshot, steps 1+2+3 had already been executed by a parallel
+  session (Dusky Masking Cloak commits `66d4f0fb`, `579cde34`,
+  `85bcbc41`, handoff `aae150a1` all within the hour before my session
+  opened) and step 4 was in flight under Smouldering Crackling Pyre's
+  session. My reviewer dispatch on step 1 was redundant — though it
+  independently confirmed the absorption was correct and surfaced one
+  new actionable item (ADR-173 topology Inc.1/Inc.2 annotation).
+- **Why expectation failed**: the system-prompt git status snapshot is
+  taken at session bootstrap; it does not refresh against parallel
+  commits that land between snapshot time and my first git read. A
+  start-right opener that names steps as if they were unclaimed work
+  is implicitly a snapshot-time claim, not a live-state claim.
+- **Behaviour change**: after reading any opener, run a fresh `git log`
+  before claiming work; check `shared-comms-log.md` for parallel
+  session activity; reconcile against the live tree state before
+  dispatching reviewers or making edits. The opener is a hypothesis;
+  the live state is the truth.
+
+### Confirmation — Soaring Darting Kite's third-instance peer-commit absorption note
+
+Soaring Darting Kite's preceding napkin entry correctly names this
+session's `67885e3f` as the third-direction absorption beyond
+PDR-054/PDR-059. Their attribution holds: my MVP arc commit's
+explicit pathspec was a single file; six of their session-lifecycle
+files joined the bundle through the husky hook chain's auto-staging
+seam. Owner accepted the bundle and named the next-session brief as
+commit-queue UX (discoverability + ease-of-use + harder-to-bypass
+enforcement) — that brief is the right home for the queue-friction
+this session generated, named in the next-session starting statement.
+
+### Surprise — commit-queue protocol failed twice in one session
+
+- **Expected**: `pnpm agent-tools:commit-queue -- enqueue / phase /
+  record-staged / verify-staged / complete` runs the canonical commit
+  protocol per the always-active commit skill.
+- **Actual, instance 1**: enqueue invocation failed with TypeScript
+  build errors in `agent-tools/src/practice-substrate/live-json.ts`
+  importing `parseCommsEvent` / `CommsEvent` / `createCommsEvent` —
+  types that Smouldering Crackling Pyre's in-flight schema refactor
+  had removed but not yet committed. The queue tool runs `pnpm build`
+  as a prelude; when peer agents have incompatible unstaged edits, the
+  build fails and the queue is unusable.
+- **Actual, instance 2**: after Smouldering's commit landed
+  (`b529fa6e`) and the build passed, retried the protocol. The
+  `record-staged` step (which also runs `pnpm build`) appeared to
+  clear the index between my `git add` and verify-staged — verify
+  reported "missing: graph-mvp-arc.plan.md" despite my having staged
+  it moments earlier.
+- **Behaviour change**: when the queue tool fails due to ambient
+  workspace state, stage-by-explicit-pathspec + direct `git commit`
+  is the documented fallback per the skill's "queue is advisory"
+  framing. Surface the friction (this entry); do not silently work
+  around. Architectural candidate: the queue should not run the full
+  agent-tools build on every command — the queue is a small JSON state
+  machine; coupling it to ambient build health makes it fragile under
+  parallel-agent conditions. Captured for the next-session
+  commit-queue-UX brief.
+
+### Doctrine ratified — schedule it, sequence it, no imaginary flows
+
+- **Owner direction 2026-05-11 (verbatim)**: *"schedule it, sequence
+  it, no imaginary flows, simple and definite is the only way anything
+  happens."*
+- **Context**: I asked about Betty's combinatorial-arc latency tripwire
+  finding (3 options including "tripwire on Inc.2/3 slip"). Owner
+  rejected the conditional-trigger framing entirely.
+- **Generalisation**: plans should commit to concrete scheduled
+  sequence positions ("after gate-1 lands, next is X, then Y"), not
+  conditional triggers ("when X ships," "depends on Y future," "trigger
+  fires on Z"). Work doesn't happen on the basis of imagined event
+  chains — it happens on the basis of scheduled sequence positions.
+- **Behaviour change**: applied across MVP arc this session; pending
+  for graph-stack and graph-combinatorial-arc (next session). Captured
+  as a feedback memory.
+
+### Correction — agents default to no gender
+
+- **Owner correction 2026-05-11 (verbatim)**: *"no agents have gender,
+  unless they decide they do."*
+- **Context**: I used "her" referring to Smouldering Crackling Pyre.
+  Names are evocative phrase-pairs with no inherent gender.
+- **Behaviour change**: default to they/them when referring to any
+  other agent; gendered pronouns require self-declaration. Applies
+  everywhere — chat output, commit messages, napkin, claims. Captured
+  as a feedback memory.

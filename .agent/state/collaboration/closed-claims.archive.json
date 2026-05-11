@@ -16938,6 +16938,94 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "773391ec-9672-41a4-a461-65f1204e3475",
+      "agent_id": {
+        "agent_name": "Soaring Darting Kite",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "01db95"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/comms-events/e0a17465-fd5a-4c7d-979d-89696247de0a.json",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-11T17:17:06Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "R1.b session-final close: capture peer-commit absorption pattern (third-instance evidence) + final session-end narrative + napkin entry. Through commit-queue lifecycle per owner direction.",
+      "archived_at": "2026-05-11",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-11T17:18:22Z",
+        "closed_by": {
+          "agent_name": "Soaring Darting Kite",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "01db95"
+        },
+        "summary": "Final session-close commit 5aa91a76 landed through full commit-queue lifecycle (enqueue → staging → record-staged → verify-staged exit 0 → commit → complete). Session ends; next session in this thread works on commit-queue UX per owner direction.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "773391ec-9672-41a4-a461-65f1204e3475",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a7118ec2-efbe-428f-8540-1df334f1ad3b",
+      "agent_id": {
+        "agent_name": "Mistbound Watching Lantern",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "8fdb8b"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/graph-mvp-arc.plan.md",
+            ".agent/plans/graph-combinatorial-arc.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-11T15:44:38Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Sweep MVP arc + graph-stack + combinatorial arc per 9 owner-direction findings + simple-definite-no-imaginary-flows doctrine",
+      "archived_at": "2026-05-11",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-11T17:20:59Z",
+        "closed_by": {
+          "agent_name": "Mistbound Watching Lantern",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "8fdb8b"
+        },
+        "summary": "MVP arc review-absorption + doctrine ratification landed at 67885e3f; graph-stack + combinatorial sweeps carried to next session per next-session starting statement; commit-queue friction (two protocol failures) captured in napkin + thread record",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a7118ec2-efbe-428f-8540-1df334f1ad3b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

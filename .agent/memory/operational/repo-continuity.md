@@ -262,7 +262,7 @@ each thread record; this table is the repo-level index.
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
 | `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Fronded Flowering Seed / `claude-code` / opus-4-7-1m / `19ecd5` / 2026-05-11 (graduation-candidates-drain — both due items graduated, commit `53995192`); Soaring Darting Kite / `claude-code` / opus-4-7-1m / `01db95` / 2026-05-11 (R1.b in-flight, claim `b1302a12`); Smouldering Crackling Pyre / `claude-code` / opus-4-7-1m / `ab76ef` / 2026-05-11; Deciduous Twining Dew / `claude-code` / opus-4-7-1m / `a12c90` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11 |
-| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Dusky Masking Cloak / `claude-code` / opus-4-7-1m / `c5ff7f` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11; Fragrant Regrowing Root / `codex` / GPT-5 / `019e12` / 2026-05-10 |
+| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Mistbound Watching Lantern / `claude-code` / opus-4-7-1m / `8fdb8b` / 2026-05-11 (graph-mvp-arc review-absorption + doctrine ratification, commit `67885e3f`); Dusky Masking Cloak / `claude-code` / opus-4-7-1m / `c5ff7f` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11; Fragrant Regrowing Root / `codex` / GPT-5 / `019e12` / 2026-05-10 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / `codex` / 2026-04-28 |
@@ -774,7 +774,28 @@ Visible owner-appetite items, not blockers for the current branch state:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-11 Fronded Flowering Seed, claude-code, opus-4-7-1m,
+**Status (2026-05-11 Mistbound Watching Lantern, claude-code,
+opus-4-7-1m, `8fdb8b`, graph-mvp-arc review-absorption +
+doctrine ratification — /jc-consolidate-docs run at owner
+direction)**: `completed this handoff — focused thread-scoped
+pass on connecting-oak-resources`. Pattern candidates surfaced:
+schedule-not-trigger doctrine + agents-default-no-gender, both
+captured as feedback memories (owner-managed auto-memory);
+one-session evidence — keep in distilled state until second
+session demonstrates re-application before PDR promotion.
+Commit-queue UX friction profile captured (two protocol failures
+this session: build-broken-by-in-flight-refactor; record-staged
+index-clearing) — routed to next-session brief per owner
+direction. Third-instance peer-commit absorption noted by
+Soaring Darting Kite (their napkin entry) as the third-instance
+trigger for PDR-059 classification-gate plan; routing complete.
+Napkin: 264 lines (SOFT), no rotation. Practice Core: no
+contradict/extend/refine/supersede candidates. Practice exchange
+incoming/: empty. Pre-existing fitness pressure on
+pending-graduations.md / repo-continuity.md acknowledged
+unchanged.
+
+**Prior status (2026-05-11 Fronded Flowering Seed, claude-code, opus-4-7-1m,
 `19ecd5`, graduation-candidates-drain — /jc-consolidate-docs run at
 user direction)**: `completed this handoff — focused thread-scoped
 pass on agentic-engineering-enhancements`. Pattern graduation (step
