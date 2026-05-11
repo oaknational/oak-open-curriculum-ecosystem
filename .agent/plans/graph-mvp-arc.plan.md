@@ -648,6 +648,96 @@ After **gate-3a** ships (MVP arc closeout):
 4. Archive this plan to `archive/completed/` per ADR-117.
 5. Update `completed-plans.md`.
 
+## Team-of-Agents Execution
+
+Findings from the 2026-05-11 reshape session on how this arc can be
+worked by a team of agents in parallel. Recorded here for use at each
+gate's promotion-to-active moment; treat as a planning input, not a
+delivery commitment.
+
+### Cross-slice parallelism (post-reshape)
+
+| Phase | Concurrent agents | What each owns |
+|---|---|---|
+| **Pre-Inc.1** | **2** | (a) Slice 1 EEF — entire `eef-evidence-corpus.plan.md` (no Inc.1 dependency); (b) graph-stack Inc.1 Oak Ontology Threads foundation + the two 2026-05-07 topology BLOCKERs (D-4) |
+| **Post-Inc.1** | **3–4** | (a) Slice 1 EEF (if still in flight); (b) Slice 2 Threads (gate-2); (c) Slice 3a misconception sub-graph (gate-3a); optional (d) graph-stack Inc.2 to unblock combinatorial-arc earlier |
+| **Combinatorial-arc activation** | **+1** | First combinatorial tool (the migrated slice-3b plan) once graph-stack Inc.3 design-stable |
+
+The gate-1 → gate-3a relaxation to parallel-safe (this reshape) unlocks
+slices 2 and 3a running concurrently once gate-0 + Inc.1 are in place.
+
+### Within-slice parallelism
+
+Each slice plan is a chain of TDD-pair atomic commits — the foundational
+TDD doctrine forces test + product code to land together in one commit,
+so within a cycle there is no parallelism. **Across cycles within a
+slice**, two agents can work in parallel only when file scopes don't
+overlap (typical for slice 2 WS1+WS2 cycle 1; slice 3a cycles 1.1, 1.3,
+1.4). Realistic intra-slice ceiling: **2 agents per slice**, with a
+natural serialisation point at the integration-wiring workstream.
+
+### What would raise the ceiling
+
+The MVP arc's parallelism ceiling is set by three structural facts. The
+remediations below would lift each one; each remediation is itself a
+scoped planning session.
+
+1. **Decompose Inc.1 into sub-streams.** Inc.1 is currently a single
+   "foundation" increment; the topology BLOCKERs surface that it is
+   substrate scaffolding + Threads adapter + Thread→Unit lookup as
+   distinct concerns. With file-scope-non-overlapping sub-increments,
+   two agents could share Inc.1 instead of one bottlenecking the
+   post-Inc.1 ramp.
+2. **Restructure the EEF plan's 20 flat todos into workstream
+   groupings.** It is currently the only slice without explicit WS
+   structure. Grouping (corpus loading, recommend tool, explain tool,
+   compare tool, prompt-A, prompt-B, freshness gate, telemetry,
+   credits) would expose intra-slice parallelism cleanly.
+3. **Author shape-understanding evidence templates.** The new
+   gate-close acceptance criterion (a written paragraph naming what
+   each slice taught us about its corpus's shape) is free-form;
+   templating it speeds the gate-close agent work and prevents the
+   deliverable from dissolving under delivery pressure.
+
+### The real ceiling — collaboration protocol maturity
+
+The honest constraint is **not the MVP plan's structure**. The
+multi-agent collaboration protocol's current state — foreign-stage
+incidents in the comms-log, claim overlaps, fitness-gate orchestrator
+not staged-set-aware, the B-01 `comms send` bug — already shows friction
+at 1–2 concurrent agents. Scaling to 4–5 will stress those protocols
+hard.
+
+The leverage for safe N-agent work on this arc lives in
+[`agent-tooling/current/primary-agent-tooling-enhancements.plan.md`](agent-tooling/current/primary-agent-tooling-enhancements.plan.md)
+Workstreams 2–5 (collaboration read APIs, comms render resilience,
+commit-queue safety, identity/build isolation) and in the standing
+[`agent-tooling/current/multi-agent-collaboration-protocol.plan.md`](agent-tooling/current/multi-agent-collaboration-protocol.plan.md).
+**Until those mature, the MVP arc's effective parallelism ceiling stays
+near the lower bound of each phase's range above.**
+
+### Open decisions (resolve before next graph session)
+
+These named decisions affect MVP arc execution and were surfaced during
+the reshape session. They are tracked here for discoverability; the
+authoritative resolution surface is the
+[`connecting-oak-resources`](../memory/operational/threads/connecting-oak-resources.next-session.md)
+thread record.
+
+| ID | Decision | Resolution needed by |
+|---|---|---|
+| **D-1** | **AI-client adoption tracking owner.** AI-client adoption is currently un-tracked anywhere in the repo; the executive summary names it as a load-bearing downstream dependency for teacher value. Tracking owner needs naming. | Before any MVP-arc gate ships |
+| **D-2** | **Per-unit misconception variant (`oak-misconceptions-subgraph-for-unit`)**. Default is skip per slice 3a plan WS2 cycle 1; gate at owner direction or T0 check. | At slice 3a opening (current → active) |
+| **D-3** | **`oak-misconceptions-substrate-migration.plan.md` promotion trigger** — currently implicit ("when Inc.3 ships"); owner confirmation needed to convert implication into sequenced commitment vs admit-not-doing per the no-deferral doctrine. | Before gate-3a ships |
+| **D-4** | **Topology BLOCKERs from 2026-05-07 architecture-expert-betty review** — `graph-stack.plan.md` WS4 sequence (`ws4-skos-extractor` before `ws4-graph-corpus-sdk-scaffold` leaks Oak-specific extraction into substrate) + `practice-graph` workspace tier placement. Must land before graph-stack ACTIVE / ADR-173 ratification. | **Next graph session** — these block Inc.1 implementation |
+| **D-5** | **Phase 4 FINDINGS** deferred for execution-prep absorption (slice 2 adapter timing; slice 3a topic-context wording; slice 3a budget/fixture concretisation; (former) slice-3b implementation-audit test shape). | Slice-by-slice at promotion to active |
+| **D-6** | **gate-cross-corpus-1 design-stability evaluator event** — `architecture-expert-betty` is named as the evaluator at Inc.3 design close; "design close" needs operational definition (a specific Inc.3 todo, or a separate graph-stack lifecycle event). | At Inc.3 design phase |
+| **D-7** | **`future-compositions-exploration` decision deliverable** — bounded to "within one consolidation cycle of gate-cross-corpus-1 close"; could harden to a concrete forcing function. | At gate-cross-corpus-1 close |
+
+D-1 (AI-client adoption tracking) and D-4 (topology BLOCKERs) are the
+most urgent; they affect the entire teacher-value chain (D-1) and
+block the next executable graph work (D-4).
+
 ## Non-Goals (YAGNI)
 
 Spine-level non-goals — spine does **not**:

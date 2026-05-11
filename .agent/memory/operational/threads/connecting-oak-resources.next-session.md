@@ -1,7 +1,18 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
 **Last refreshed**: 2026-05-11 (Blooming Growing Thicket / `claude-code` /
-`claude-opus-4-7-1m` / `756c60` — MVP arc reshape. Owner direction:
+`claude-opus-4-7-1m` / `756c60` — MVP arc reshape, execution-prep opener,
+and collaboration hardening opener. **Next graph session entry point**:
+[`2026-05-11-graph-execution-prep-opener.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-11-graph-execution-prep-opener.md)
+naming the four definite steps before graph execution begins (D-4
+topology BLOCKERs; Inc.1 decomposition; EEF WS restructure;
+collaboration-protocol Workstreams 2–5). Parallelisability findings and
+open decisions D-1 through D-7 are discoverable in
+[`graph-mvp-arc.plan.md`](../../../plans/graph-mvp-arc.plan.md) §
+Team-of-Agents Execution. Separate
+[`collaboration-protocol hardening opener`](../../../plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-opener.md)
+authored for the agentic-engineering-enhancements thread to address the
+real ceiling on safe N-agent work. Owner direction:
 substrate-for-three-sources establishes before combinatorial exploration;
 each of the three corpora (EEF, Oak ontology, Oak misconceptions)
 carries co-primary value as substrate + shape-understanding +
@@ -226,10 +237,10 @@ promotion.)
 
 ## Thread Identity
 
-- **Thread**: `connecting-oak-resources`
-- **Thread purpose**: Connect Oak's own resources into this repo.
++ **Thread**: `connecting-oak-resources`
++ **Thread purpose**: Connect Oak's own resources into this repo.
   Two complementary streams:
-  - **Internal Oak knowledge-graph work** — the existing
+  + **Internal Oak knowledge-graph work** — the existing
     knowledge-graph-integration plans (graph-query-layer,
     graph-resource-factory, misconception/NC/open-education
     surfaces, kg-integration-quick-wins, kg-alignment-audit,
@@ -237,11 +248,11 @@ promotion.)
     ontology-repo-fresh-perspective-review, oak-curriculum-ontology-
     workspace-reassessment, direct-ontology-use-and-graph-serving-
     prototypes, agent-guidance-consolidation).
-  - **External Oak references** — research and selective adoption
+  + **External Oak references** — research and selective adoption
     from Oak's other public repos (oak-curriculum-ontology, Aila /
     oak-ai-lesson-assistant) plus concepts-only learning from Oak's
     private repos (oak-ai-moderation-service, aila-atomic-concepts).
-- **Branch**: `planning/graph-tooling` for the current MVP-arc planning
++ **Branch**: `planning/graph-tooling` for the current MVP-arc planning
   closeout branch.
 
 ## Participating Agent Identities
@@ -263,18 +274,18 @@ promotion.)
 
 ## Plan Locations
 
-- `.agent/plans/connecting-oak-resources/knowledge-graph-integration/`
++ `.agent/plans/connecting-oak-resources/knowledge-graph-integration/`
   — internal Oak KG work (was `.agent/plans/knowledge-graph-integration/`
   pre-2026-05-01 restructure).
-- `.agent/plans/connecting-oak-resources/external-oak-references/` —
++ `.agent/plans/connecting-oak-resources/external-oak-references/` —
   external Oak repo research and selective adoption.
 
 ## Cross-Plan Links
 
-- **EEF subthread** (`sector-engagement/eef/`) consumes the graph
++ **EEF subthread** (`sector-engagement/eef/`) consumes the graph
   layer (Increment 1: graph-query-layer.plan.md). EEF is *not* part
   of this thread (it is open-education evidence, not Oak-internal).
-- **External (third-party) knowledge sources** live in the sibling
++ **External (third-party) knowledge sources** live in the sibling
   thread `exploring-open-education-resources/` —
   `.agent/memory/operational/threads/exploring-open-education-resources.next-session.md`.
 
@@ -282,17 +293,17 @@ promotion.)
 
 For external Oak repos:
 
-- **Public repo + permissive license + attribution**: adoption-eligible.
++ **Public repo + permissive license + attribution**: adoption-eligible.
   Acknowledgement mechanism approved (per-file header + repo-level
   NOTICE + README acknowledgement of Oak National Academy).
-- **Private repo**: concepts-only. We can learn patterns and apply
++ **Private repo**: concepts-only. We can learn patterns and apply
   them in our own implementation, but cannot copy code, prompts,
   schemas, or distinctive content into this public repo —
   doing so would bypass the upstream privacy choice.
 
 ## Light-Scan Findings (2026-05-01)
 
-- `oaknational/oak-curriculum-ontology` — public, dual MIT/OGL-3.
++ `oaknational/oak-curriculum-ontology` — public, dual MIT/OGL-3.
   OWL ontology with classes including `Misconception`, `Thread`,
   `Programme`, `Unit`, `Lesson`, etc. Vocabulary overlap with
   Increment 1's adapter names (e.g. `MisconceptionGraphView`),
@@ -300,14 +311,14 @@ For external Oak repos:
   misconceptions; this repo's data has no misconception edges
   either — already a Phase B finding). Adoption-eligible.
   Alignment is informational, not blocking.
-- `oaknational/oak-ai-lesson-assistant` (Aila) — public, MIT.
++ `oaknational/oak-ai-lesson-assistant` (Aila) — public, MIT.
   Monorepo with `apps/` and `packages/`. Likely contains prompts
   relevant to Increment 3 (cross-source-journeys). Adoption-eligible.
   Highest plan-altering potential of the three.
-- `oaknational/oak-ai-moderation-service` — **private**. Concepts-
++ `oaknational/oak-ai-moderation-service` — **private**. Concepts-
   only. Relevant to plans that produce LLM prose (none of the
   current Increment 1/2 plans).
-- Adjacent (private, concepts-only): `oaknational/aila-atomic-
++ Adjacent (private, concepts-only): `oaknational/aila-atomic-
   concepts` — "prerequisite derivation, and curriculum graph
   construction. Science KS3 pilot." Direct conceptual relevance
   to Increment 1's PrerequisiteGraph.
@@ -351,10 +362,10 @@ sections below as history.
 
 **Out of scope for this branch (per owner direction 2026-05-07)**:
 
-- Slice 1 execution; slice 2/3a/3b execution.
-- `graph-stack.plan.md` CURRENT → ACTIVE transition.
-- ADR-173 ratification.
-- Any production code changes.
++ Slice 1 execution; slice 2/3a/3b execution.
++ `graph-stack.plan.md` CURRENT → ACTIVE transition.
++ ADR-173 ratification.
++ Any production code changes.
 
 Queued (not blocked by MVP arc; appropriate for a separate session
 on a separate branch):
@@ -444,19 +455,19 @@ Tidal Surfing Lighthouse ran `docs-adr-expert`, `code-expert`, and
 `assumptions-expert` after the initial closeout fixes. Actionable
 follow-ups absorbed in the same pass:
 
-- ADR-173 made self-contained: no permanent ADR links to ephemeral
++ ADR-173 made self-contained: no permanent ADR links to ephemeral
   `.agent/` plan or research surfaces.
-- Superseded 2026-05-08 specialist-review opener marked historical, with
++ Superseded 2026-05-08 specialist-review opener marked historical, with
   the broken thread link corrected and the `53698ce0` ADR-168/ADR-173
   history clarified.
-- Collaboration claim corrected to cover the deleted ADR-168 path plus
++ Collaboration claim corrected to cover the deleted ADR-168 path plus
   the added template/napkin/comms surfaces.
-- Active napkin memory now points namespace/topology checks to ADR-173.
-- Plan templates no longer generate `pnpm smoke:dev:stub`.
-- `graph-stack.plan.md` no longer depends on nonexistent
++ Active napkin memory now points namespace/topology checks to ADR-173.
++ Plan templates no longer generate `pnpm smoke:dev:stub`.
++ `graph-stack.plan.md` no longer depends on nonexistent
   `ws4-mcp-wiring`; `ws5-coordination-amendments` depends on
   `ws4-query-proof`.
-- The Phase 4 findings note now says these findings belong before slice
++ The Phase 4 findings note now says these findings belong before slice
   execution, while not retroactively blocking Breezy's planning closure.
 
 The old EEF plan contradiction note is superseded by the 2026-05-08
@@ -465,7 +476,7 @@ load-bearing now; LLM/outcome evaluation is follow-on infrastructure.
 
 ## References
 
-- Plan: `.agent/plans/connecting-oak-resources/external-oak-references/future/external-oak-references-deep-research.plan.md`
-- Existing strategy: `.agent/plans/connecting-oak-resources/knowledge-graph-integration/oak-ontology-graph-opportunities.strategy.md`
-- Related thread record: `.agent/memory/operational/threads/eef.next-session.md`
-- Sibling thread record: `.agent/memory/operational/threads/exploring-open-education-resources.next-session.md`
++ Plan: `.agent/plans/connecting-oak-resources/external-oak-references/future/external-oak-references-deep-research.plan.md`
++ Existing strategy: `.agent/plans/connecting-oak-resources/knowledge-graph-integration/oak-ontology-graph-opportunities.strategy.md`
++ Related thread record: `.agent/memory/operational/threads/eef.next-session.md`
++ Sibling thread record: `.agent/memory/operational/threads/exploring-open-education-resources.next-session.md`

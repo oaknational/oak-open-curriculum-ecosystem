@@ -576,3 +576,17 @@ parity is not a default. Cure: feedback memory landed
   honest: the spine ships substrate + surfaces; teacher value depends
   on AI clients adopting those surfaces and reaching teachers; AI-client
   adoption is **not** a spine deliverable and is currently un-tracked.
+- **Practice repos need a higher skill-listing budget than platform
+  defaults assume.** Claude's default `skillListingBudgetFraction` is
+  1%; Practice repos hit that ceiling because the framework's vendor-
+  agnostic strategy *deliberately* leverages skills (and equivalent
+  per-platform surfaces) as the canonical integration point. Bumped to
+  3% in `.claude/settings.json` 2026-05-11. **Practice Core relevance:**
+  any repo adopting the Practice will exhibit the same elevated skill
+  count by construction — this is a structural property of the
+  vendor-agnostic architecture (PDR-009, PDR-051), not a smell. Worth a
+  one-line note in practice.md or PDR-051 that per-platform skill-
+  listing budgets may need raising on adoption, with Claude's 3% as
+  the current reference point. Already-captured rule that the skill-
+  load budget is real (`feedback_skill_load_budget.md`) governs the
+  *ceiling*; this entry names the *floor implied by the architecture*.

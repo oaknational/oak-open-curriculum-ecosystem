@@ -184,6 +184,7 @@
     "type": "command",
     "command": "node .claude/scripts/statusline-identity.mjs"
   },
+  "skillListingBudgetFraction": 0.03,
   "enabledPlugins": {
     "sentry@claude-plugins-official": true,
     "remember@claude-plugins-official": true,

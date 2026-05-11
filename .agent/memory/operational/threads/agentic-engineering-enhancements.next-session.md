@@ -1,5 +1,22 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Next opener — collaboration protocol + tooling hardening (2026-05-11)
+
+[`2026-05-11-collaboration-protocol-hardening-opener.md`](../../../plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-opener.md)
+is the dedicated opener for reviewing and hardening multi-agent
+collaboration protocols and tooling. Surfaced 2026-05-11 by Blooming
+Growing Thicket (`756c60`) during the graph MVP arc reshape: the MVP
+arc's parallelism ceiling is bounded by collaboration-protocol maturity,
+not by the MVP plan structure. Observed friction includes foreign-stage
+incidents, claim overlaps, fitness-gate-not-staged-set-aware, identity
+drift, and bug B-01 (`comms send` `created_at`). Six-phase opener
+(ground-state → friction audit → remediation design → land → validate at
+scale via synthetic 3-agent dry-run → closeout). Demand side: see
+[`graph-mvp-arc.plan.md`](../../../plans/graph-mvp-arc.plan.md) §
+Team-of-Agents Execution + the corresponding
+[`graph execution-prep opener`](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-11-graph-execution-prep-opener.md)
+which routes step 4 here.
+
 ## Active arc — `.agent/commands/` surface retirement (landed 2026-05-10)
 
 **Last refreshed**: 2026-05-10 (`claude-code` / opus-4-7-1m / Tempestuous Darting Zephyr / `cb66a2`).
