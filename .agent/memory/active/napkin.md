@@ -366,3 +366,25 @@ this session generated, named in the next-session starting statement.
 - **Expected**: `pnpm agent-tools:collaboration-state claims open --files X,Y,Z --subject "..."` would work per common-sense CLI patterns.
 - **Actual**: the CLI requires `--active <path> --thread <slug> --area-kind files --intent <text> --now <iso> --platform <p> --model <m> --file X --file Y --file Z` — multiple repeated `--file` flags rather than a comma-separated list; no `--subject` flag, just `--intent`. Got it right on second call after CLI emitted full help text on the invalid invocation (validating the existing memory `feedback_agent_tool_help_on_invalid_flags.md` is being honoured).
 - **Behaviour change**: this is the kind of friction the commit-queue UX brief (just landed) is aimed at — once Workstream 4 lands, repeated-flag-vs-comma-separated should be discoverable from the help text by default. No new graduation candidate; this is already in scope of the open work.
+
+### Observation — applied doctrine I helped land, against myself
+
+- **Expected**: having just authored a session's worth of
+  schedule-not-trigger doctrine sweeps across two plans, my own
+  next-session statement would carry the doctrine cleanly.
+- **Actual**: emitted "Parallel-safe alternative if topology approval
+  is owner-blocked: ..." — a conditional-trigger framing in my own
+  output, exactly the failure mode the day's work was designed to
+  prevent. Owner caught it immediately: *"what do you mean 'if'? There
+  is no uncertainty here, if you have questions ask them."*
+- **Behaviour change / pattern**: applying a doctrine to documents is
+  not the same as carrying it into one's own outputs. The doctrine
+  bites in the second register — speech, planning summaries, opener
+  drafting — even when the document-application is clean. The cure
+  the owner named is the always-available one: **when uncertain, ask
+  the question directly instead of hedging the next step on the
+  unknown**. Asked O-1 (topology approval) explicitly; owner gave a
+  definite answer; the next-session statement became a definite
+  five-step sequence with no conditionals. Captured because the next
+  doctrine application is almost certainly going to surface the same
+  kind of secondary-register slip, and the cure is the same: ask.
