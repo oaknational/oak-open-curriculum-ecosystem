@@ -493,11 +493,18 @@ below is a cross-reference index, not a second source of truth.
 - **Target surface**: `agent-tools/src/commit-queue/`;
   `.agent/skills/commit/SKILL-CANONICAL.md`; commit-queue CLI help
   text.
-- **Status**: open
 - **Review 2026-05-10**: still open. `record-staged` still writes the
   fingerprint into the registry entry and `verify-staged` still verifies
   against staged content; no sibling fingerprint store or `MM` guard is
   present.
+- **Review 2026-05-11**: guard/documentation slice landed in the current
+  Wave 3 F-15 work. `verify-staged` now warns when the expected `MM`
+  split is present after `record-staged` and reports a recursion-specific
+  corrective if `active-claims.json` was re-staged after the fingerprint
+  write. The fingerprint still lives in the working-tree registry entry;
+  this closes the guard/documentation branch of the expected cure, not the
+  sibling-fingerprint-store branch.
+- **Status**: fixed — guard/documentation branch
 - **Severity**: high (every commit that includes active-claims.json
   in its staged bundle hits this; the workflow-that-works is not
   documented anywhere agents would find it before failing)

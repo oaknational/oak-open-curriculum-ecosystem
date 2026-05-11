@@ -290,7 +290,10 @@ TDD cycles:
   **Landed 2026-05-11 at `e298723c`.**
 - Fix fingerprint recursion either by moving the staged fingerprint outside the
   staged registry payload or by adding an explicit verifier guard and documented
-  `stage -> record -> do not re-stage` contract.
+  `stage -> record -> do not re-stage` contract. **Guard/documentation branch
+  landed 2026-05-11 in the Wave 3 F-15 slice; sibling fingerprint-store
+  refactor remains unnecessary unless fresh evidence shows the guard is
+  insufficient.**
 - If choosing the guard/documentation approach, add a test that detects an
   invalid re-stage shape and reports the corrective action.
 - **B-02 — decouple queue CLI from build prelude**: write a failing
@@ -314,8 +317,8 @@ TDD cycles:
 Acceptance:
 
 - Agents can inspect queue state without parsing the whole registry manually.
-- The active-claims fingerprint loop is either structurally impossible or
-  detected with an actionable error before repeated attempts.
+- The active-claims fingerprint loop is detected with an actionable warning or
+  error before repeated attempts.
 - B-02 closed: every queue sub-command runs against the built dist with
   no `pnpm build` prelude. Peer-edit-induced build failures cannot break
   the queue lifecycle.

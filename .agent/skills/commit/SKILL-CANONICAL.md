@@ -195,6 +195,12 @@ the advisory queue and the short-lived git transaction claim:
    pnpm agent-tools:commit-queue -- record-staged --intent-id "<intent-id>"
    ```
 
+   If `.agent/state/collaboration/active-claims.json` is in the staged
+   bundle, do not re-stage it after `record-staged`. The command writes the
+   fingerprint into the working tree so `verify-staged` can compare that
+   fingerprint with the already-staged payload. Re-staging the registry changes
+   the payload being verified and creates the fingerprint-recursion loop.
+
 8. Run the commit-skill gate orchestrator and verify the staged bundle
    immediately before committing:
 

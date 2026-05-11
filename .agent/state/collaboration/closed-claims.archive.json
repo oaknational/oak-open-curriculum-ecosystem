@@ -17266,6 +17266,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "bad73435-649f-423e-84e7-141b05320fee",
+      "agent_id": {
+        "agent_name": "Embered Burning Magma",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e18"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-11T18:44:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Stage and commit the Embered Burning Magma F-11 session handoff continuity bundle.",
+      "archived_at": "2026-05-11",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-11T18:48:00Z",
+        "closed_by": {
+          "agent_name": "Embered Burning Magma",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e18"
+        },
+        "summary": "Committed F-11 handoff continuity bundle at 504925f3 through commit-queue lifecycle; pre-commit hook passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "bad73435-649f-423e-84e7-141b05320fee",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

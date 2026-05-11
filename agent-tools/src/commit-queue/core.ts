@@ -8,6 +8,8 @@ import {
   type CommitQueueRegistry,
 } from './types.js';
 import { secondsUntilExpiry } from './time.js';
+import { activeClaimsRestagedReason, activeClaimsSplitWarning } from './active-claims-recursion.js';
+import { formatFileList, normalizeFileList } from './path-list.js';
 
 /**
  * Compute the staged-bundle fingerprint used by the commit queue.
@@ -57,9 +59,10 @@ export function verifyStagedBundle(input: {
   readonly stagedNameOnly: string;
   readonly stagedNameStatus: string;
   readonly stagedPatch: string;
+  readonly worktreeShortStatus?: string;
   readonly commitSubject: string;
 }):
-  | { readonly ok: true; readonly fingerprint: string }
+  | { readonly ok: true; readonly fingerprint: string; readonly warning?: string }
   | { readonly ok: false; readonly reason: string } {
   if (input.commitSubject !== input.intent.commit_subject) {
     return {
@@ -160,10 +163,6 @@ function normalizeGitOutput(text: string): string {
   return text.replace(/\r\n/gu, '\n').replace(/\r/gu, '\n');
 }
 
-export function normalizeRepoPath(repoPath: string): string {
-  return repoPath.replaceAll('\\', '/');
-}
-
 function stagedFileMismatch(stagedNameOnly: string, files: readonly string[]): string | undefined {
   const stagedFiles = normalizeFileList(stagedNameOnly);
   const intendedFiles = normalizeFileList(files.join('\n'));
@@ -174,18 +173,18 @@ function stagedFileMismatch(stagedNameOnly: string, files: readonly string[]): s
     return undefined;
   }
 
-  return (
-    'staged files do not exactly match intent files; extra: ' +
-    `${formatList(extra)}; missing: ${formatList(missing)}`
-  );
+  return `staged files do not exactly match intent files; extra: ${formatFileList(
+    extra,
+  )}; missing: ${formatFileList(missing)}`;
 }
 
 function verifyFingerprint(input: {
   readonly intent: CommitIntent;
   readonly stagedNameStatus: string;
   readonly stagedPatch: string;
+  readonly worktreeShortStatus?: string;
 }):
-  | { readonly ok: true; readonly fingerprint: string }
+  | { readonly ok: true; readonly fingerprint: string; readonly warning?: string }
   | { readonly ok: false; readonly reason: string } {
   const fingerprint = createStagedBundleFingerprint({
     nameStatus: input.stagedNameStatus,
@@ -196,26 +195,25 @@ function verifyFingerprint(input: {
     typeof input.intent.staged_bundle_fingerprint === 'string' &&
     input.intent.staged_bundle_fingerprint !== fingerprint
   ) {
+    const reason = activeClaimsRestagedReason(input.intent.files);
+    if (reason !== undefined) {
+      return { ok: false, reason };
+    }
     return {
       ok: false,
       reason: 'staged bundle fingerprint changed since it was recorded',
     };
   }
 
+  const warning = activeClaimsSplitWarning({
+    intentFiles: input.intent.files,
+    worktreeShortStatus: input.worktreeShortStatus,
+  });
+  if (warning !== undefined) {
+    return { ok: true, fingerprint, warning };
+  }
+
   return { ok: true, fingerprint };
-}
-
-function normalizeFileList(text: string): readonly string[] {
-  const files = text
-    .split(/\r?\n/u)
-    .map((line) => normalizeRepoPath(line.trim()))
-    .filter(Boolean);
-
-  return [...new Set(files)].toSorted((a, b) => a.localeCompare(b));
-}
-
-function formatList(files: readonly string[]): string {
-  return files.length === 0 ? 'none' : files.join(', ');
 }
 
 function clearClaimIntent(claim: CommitQueueClaim, intentId: string): CommitQueueClaim {

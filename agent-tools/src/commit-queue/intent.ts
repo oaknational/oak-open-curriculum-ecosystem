@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 
 import { nowIso, requireOption } from './args.js';
-import { normalizeRepoPath } from './core.js';
+import { normalizeRepoPath } from './path-list.js';
 import { type CommitIntent, type CommitQueueCliOptions } from './types.js';
 
 const DEFAULT_TTL_SECONDS = 900;

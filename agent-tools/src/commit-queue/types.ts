@@ -67,6 +67,7 @@ export interface StagedBundle {
   readonly stagedNameOnly: string;
   readonly stagedNameStatus: string;
   readonly stagedPatch: string;
+  readonly worktreeShortStatus: string;
 }
 
 /**

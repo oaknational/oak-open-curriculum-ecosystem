@@ -405,3 +405,34 @@ this session generated, named in the next-session starting statement.
   five-step sequence with no conditionals. Captured because the next
   doctrine application is almost certainly going to surface the same
   kind of secondary-register slip, and the cure is the same: ask.
+
+## 2026-05-11 — Galactic Transiting Orbit / codex / GPT-5 / `019e18`
+
+### Practice/tooling feedback
+
+- **Surface**: `agent-tools:collaboration-state comms send`
+- **Signal**: surprise
+- **Observation**: session-open `comms send` wrote valid event JSON
+  `0bbf3594-fc8c-4f1b-a4b4-52008f70e9b0` and then exited 2 while
+  rendering `shared-comms-log.md` with the known
+  `optional field addressed_to must be a non-empty string when present`
+  failure.
+- **Behaviour change / candidate follow-up**: continue treating this as
+  B-10 render-time legacy-data incompatibility evidence, not a caller
+  quoting failure. Verify whether an event was written before retrying
+  so the session does not create duplicate bootstrap events.
+
+- **Surface**: commit message drafting
+- **Signal**: mistake
+- **Observation**: first F-15 commit body draft failed
+  `body-max-line-length`; the pre-draft check caught it before `git commit`.
+- **Behaviour change / candidate follow-up**: wrap commit body prose at
+  roughly 80 columns even when the repo allows 100, because nearby inline
+  code and hyphenated phrases make exact visual length easy to misread.
+
+- **Surface**: pre-commit formatting
+- **Signal**: mistake
+- **Observation**: first commit attempt failed because the new
+  `active-claims-recursion.ts` helper was not Prettier-clean.
+- **Behaviour change / candidate follow-up**: run Prettier on any new
+  TypeScript module before the commit-window retry, even when eslint passes.

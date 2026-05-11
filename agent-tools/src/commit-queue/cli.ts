@@ -178,6 +178,7 @@ function writeVerificationResult(input: {
     stagedNameOnly: input.staged.stagedNameOnly,
     stagedNameStatus: input.staged.stagedNameStatus,
     stagedPatch: input.staged.stagedPatch,
+    worktreeShortStatus: input.staged.worktreeShortStatus,
     commitSubject: input.commitSubject,
   });
 
@@ -186,6 +187,9 @@ function writeVerificationResult(input: {
     return 1;
   }
 
+  if (result.warning !== undefined) {
+    process.stderr.write(`${result.warning}\n`);
+  }
   process.stdout.write(`${result.fingerprint}\n`);
   return 0;
 }

@@ -12,6 +12,7 @@ export function getStagedBundle(repoRoot: string): StagedBundle {
     stagedNameOnly: runGit(repoRoot, ['diff', '--cached', '--name-only']),
     stagedNameStatus: runGit(repoRoot, ['diff', '--cached', '--name-status']),
     stagedPatch: runGit(repoRoot, ['diff', '--cached', '--full-index', '--binary']),
+    worktreeShortStatus: runGit(repoRoot, ['status', '--short']),
   };
 }
 

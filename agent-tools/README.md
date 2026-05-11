@@ -155,6 +155,13 @@ pnpm agent-tools:commit-queue -- list --agent-name "Embered" --queue-status acti
 pnpm agent-tools:commit-queue -- show --intent-id 11111111-1111-4111-8111-111111111111
 ```
 
+When `.agent/state/collaboration/active-claims.json` is part of the staged
+bundle, run `record-staged` once and do not re-stage that file afterwards.
+`record-staged` writes the staged fingerprint into the working tree so
+`verify-staged` can compare it with the already-staged payload. Re-staging the
+registry after that changes the payload being verified and `verify-staged`
+reports the recursion with corrective guidance.
+
 ## `claude-agent-ops` quick reference
 
 - `status [--watch]` — list known background agents and their current phase

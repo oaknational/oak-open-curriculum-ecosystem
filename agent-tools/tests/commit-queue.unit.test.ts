@@ -168,6 +168,69 @@ describe('verifyStagedBundle', () => {
       reason: 'staged bundle fingerprint changed since it was recorded',
     });
   });
+
+  it('warns when active-claims keeps the fingerprint as an unstaged split', () => {
+    const stagedNameStatus = 'M\t.agent/state/collaboration/active-claims.json\n';
+    const stagedPatch =
+      'diff --git a/.agent/state/collaboration/active-claims.json ' +
+      'b/.agent/state/collaboration/active-claims.json\n';
+    const stagedBundleFingerprint = createStagedBundleFingerprint({
+      nameStatus: stagedNameStatus,
+      patch: stagedPatch,
+    });
+
+    const result = verifyStagedBundle({
+      intent: intent({
+        files: ['.agent/state/collaboration/active-claims.json'],
+        staged_bundle_fingerprint: stagedBundleFingerprint,
+      }),
+      stagedNameOnly: '.agent/state/collaboration/active-claims.json\n',
+      stagedNameStatus,
+      stagedPatch,
+      worktreeShortStatus: 'MM .agent/state/collaboration/active-claims.json\n',
+      commitSubject: 'feat(queue): add commit queue helper',
+    });
+
+    expect(result).toStrictEqual({
+      ok: true,
+      fingerprint: stagedBundleFingerprint,
+      warning:
+        '.agent/state/collaboration/active-claims.json has an unstaged ' +
+        'commit-queue fingerprint after record-staged; do not re-stage it.',
+    });
+  });
+
+  it('rejects a re-staged active-claims fingerprint with corrective guidance', () => {
+    const originalFingerprint = createStagedBundleFingerprint({
+      nameStatus: 'M\t.agent/state/collaboration/active-claims.json\n',
+      patch:
+        'diff --git a/.agent/state/collaboration/active-claims.json ' +
+        'b/.agent/state/collaboration/active-claims.json\n',
+    });
+
+    const result = verifyStagedBundle({
+      intent: intent({
+        files: ['.agent/state/collaboration/active-claims.json'],
+        staged_bundle_fingerprint: originalFingerprint,
+      }),
+      stagedNameOnly: '.agent/state/collaboration/active-claims.json\n',
+      stagedNameStatus: 'M\t.agent/state/collaboration/active-claims.json\n',
+      stagedPatch:
+        'diff --git a/.agent/state/collaboration/active-claims.json ' +
+        'b/.agent/state/collaboration/active-claims.json\n' +
+        '+      "staged_bundle_fingerprint": "abc",\n',
+      worktreeShortStatus: 'M  .agent/state/collaboration/active-claims.json\n',
+      commitSubject: 'feat(queue): add commit queue helper',
+    });
+
+    expect(result).toStrictEqual({
+      ok: false,
+      reason:
+        'active-claims.json was re-staged after record-staged; the queue ' +
+        'fingerprint changes its own staged payload. Leave the working-tree ' +
+        'fingerprint unstaged and rerun verify-staged.',
+    });
+  });
 });
 
 describe('completeCommitIntent', () => {
