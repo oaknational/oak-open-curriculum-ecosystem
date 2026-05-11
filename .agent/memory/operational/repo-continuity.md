@@ -9,6 +9,27 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-11 — Burnished Crackling Pyre / `claude-code` /
+opus-4-7-1m / `e517c9`, Claude skill-listing-budget bump)**: lightweight
+session. Owner directed bump of Claude's `skillListingBudgetFraction`
+from default 1% → 3% in `.claude/settings.json` to accommodate the
+elevated skill count that is structural to Practice-adopting repos
+(vendor-agnostic skills-as-integration-point per PDR-009/PDR-051).
+Napkin entry records the architectural rationale and flags the
+Practice-Core relevance: any repo adopting the Practice will exhibit
+the same elevated floor by construction. Pending-graduations entry
+added — target `amend:practice.md OR amend:PDR-051`, trigger
+`owner-direction OR second-platform-instance`. **Landed**: bump plus
+napkin plus thread-record plus pending-graduations bundled into commit
+`9547bb69` (landed by parallel session or owner; working tree was
+clean when this session-handoff ran, so the additions made during
+handoff itself — pending-graduations entry, thread-record row,
+this entry, active-threads column refresh — are uncommitted at the
+time this is written and will be committed by the user-requested
+end-of-handoff commit). **Next safe step**: unchanged — branch-primary
+graph lane remains at graph-stack Inc.1 Oak Ontology Threads proof in
+`graph-corpus-sdk` per the 2026-05-10 status updates below.
+
 **Session close (2026-05-10 — Quiet Lurking Mask / `claude-code` /
 opus-4-7-1m / `88b0a5`, QUAR-1 reformulation, dead-doctrine
 retirement, archive snapshot)**: owner authorised (a)
@@ -220,7 +241,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Tempestuous Darting Zephyr / `claude-code` / opus-4-7-1m / `cb66a2` / 2026-05-10 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Burnished Crackling Pyre / `claude-code` / opus-4-7-1m / `e517c9` / 2026-05-11 |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Fragrant Regrowing Root / `codex` / GPT-5 / `019e12` / 2026-05-10 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -529,6 +550,39 @@ Visible owner-appetite items, not blockers for the current branch state:
    candidate remains in `pending-graduations.md` for a later drafting slot.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-11 Burnished Crackling Pyre, claude-code,
+opus-4-7-1m, `e517c9`, Claude skill-listing-budget bump)**: `completed
+this handoff — proportional pass given small session substrate. ADR/PDR
+scan (7a): the elevated-skill-floor observation is PDR-shaped (Practice
+governance: how Practice-adopting repos calibrate platform skill-
+listing budgets); already routed to pending-graduations register with
+target amend:practice.md OR amend:PDR-051 and trigger second-platform-
+instance OR owner-direction. Nothing else surfaces ADR/PDR shape this
+session. Thread-register freshness (7c): all 9 active threads have
+last_session within 14 days; no orphans, no duplicate identity rows,
+no missing required fields. Finding: thread file
+threads/pr-90-build-fix-landing.next-session.md exists but is not
+listed in § Active threads — orphan-file candidate for owner review
+(retire or restore). Track cards: skills-standardisation-followup-
+timing.md has no expires_at frontmatter — informational. Collaboration
+state (7e): 17 stale "abandoned" commit-queue entries persist (already
+known per § Current State; not auto-cleared per consolidate-docs §7e #2).
+Zero active claims. Fitness (step 9): napkin.md remains CRITICAL (585
+lines, 33,003 chars vs 450/27,000 thresholds) — same pressure
+Tempestuous flagged 2026-05-10, owner-direction still required on
+drain/rotation per the napkin substance-preservation discipline. repo-
+continuity.md remains HARD (now 631 lines / 37,603 chars after this
+session's session-close entries) — known remediation lane already
+named in § Next safe step (2026-05-10 Sylvan Sprouting Grove close).
+pending-graduations.md returned to HARD chars (153,782 / 150,000) after
+this session's entry — within architecture's lifecycle-queue-depth
+calibration, drains via consolidation graduation passes. practice-
+bootstrap.md remains HARD chars (41,035 / 40,500) — owner-decision
+domain. Core review (step 8): no Core amendments surfaced this session
+beyond the pending-graduation candidate already captured. Practice
+exchange (step 10): incoming/ empty, practice-context/outgoing/ does
+not exist. No incoming integration needed.`
 
 **Status (2026-05-10 Tempestuous Darting Zephyr, claude-code,
 opus-4-7-1m, `cb66a2`, commands retirement)**: `completed this

@@ -168,6 +168,29 @@ the queue churns.
 
 ## Entries
 
++ 2026-05-11; **Practice-adopting repos exhibit an elevated skill-
+  listing budget floor by construction** (Burnished Crackling Pyre
+  2026-05-11, observed during Claude `skillListingBudgetFraction` bump
+  from 1% → 3%).
+  `[captured: 2026-05-11 | source: napkin-2026-05-11 | target: amend:practice.md OR amend:PDR-051 | trigger: owner-direction OR second-platform-instance | size: S | status: pending]`
+  The Practice's vendor-agnostic strategy deliberately uses platform
+  skill surfaces (and equivalents) as the canonical integration point
+  per PDR-009 (canonical-first cross-platform architecture) and PDR-051
+  (vendor-agnostic skills standardisation). Repos adopting the Practice
+  will therefore exhibit a structurally higher skill count than
+  platform defaults assume. Claude's default `skillListingBudgetFraction`
+  is 1%; this repo bumped to 3% in `.claude/settings.json` 2026-05-11
+  (commit `9547bb69`). Graduation-target: a one-line note in
+  `practice.md` (adoption section) or in PDR-051 stating that
+  per-platform skill-listing budgets may need raising on Practice
+  adoption, with Claude's 3% as the current reference. The existing
+  feedback rule `feedback_skill_load_budget.md` governs the *ceiling*
+  (skill-load context budget is real); this entry names the *floor
+  implied by the architecture* — they are complementary, not duplicate.
+  Trigger: a second platform exhibits the same need (Cursor / Codex
+  equivalent budget hits), OR owner direction to land the practice.md /
+  PDR-051 amendment.
+
 + 2026-05-09; **`src/bulk/generators/` and `vocab-gen/generators/`
   duplication routed to SDK codegen workspace decomposition plan**
   (Woodland Sheltering Glade 2026-05-09; converted from `distilled.md`
