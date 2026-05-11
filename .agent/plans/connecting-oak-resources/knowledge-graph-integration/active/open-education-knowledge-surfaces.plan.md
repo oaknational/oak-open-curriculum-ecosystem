@@ -9,6 +9,8 @@ child_plans:
   - "misconception-graph-mcp-surface.plan.md"
   - "../../sector-engagement/eef/current/eef-evidence-corpus.plan.md"
   - "../current/graph-query-layer.plan.md"
+  - "../../../graph-mvp-arc.plan.md"
+  - "../../../graph-combinatorial-arc.plan.md"
   - "../future/cross-source-journeys.plan.md"
   - "nc-knowledge-taxonomy-surface.plan.md"
   - "../../sector-engagement/external-knowledge-sources/future/education-skills-mcp-surface.plan.md"

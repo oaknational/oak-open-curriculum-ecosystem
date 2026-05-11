@@ -10,8 +10,8 @@ spine_slice: 2
 namespace: "oak-kg-*"
 substrate_floor:
   - "graph-stack Inc.1 (Oak Curriculum Ontology Threads foundation: generic Turtle/SKOS ingestion, graph-project adjacency, graph-corpus-sdk curric:Thread adapter)"
-sequencing_gate: "STRICT after gate-1-eef-ships per owner direction"
-last_updated: 2026-05-10
+sequencing_gate: "PARALLEL-SAFE with slice 3a after MVP-arc gate-0 + graph-stack Inc.1 are in place. The 2026-05-11 reshape relaxed the previous strict gate-1 → gate-2 ordering: substrate streams are co-primary."
+last_updated: 2026-05-11
 related_indices:
   - ".agent/plans/graph-portfolio-index.md"
   - ".agent/plans/connecting-oak-resources/knowledge-graph-integration/README.md"
@@ -69,7 +69,7 @@ todos:
     status: pending
     depends_on: [ws5-quality-gates]
   - id: ws7-spine-gate-2-close
-    content: "WS7: update spine `gate-2-threads-ships` todo to `completed`; record acceptance evidence; refresh thread next-session record. This does not gate slice 3b, which composes EEF and misconceptions only."
+    content: "WS7: update spine `gate-2-threads-ships` todo to `completed`; record acceptance evidence (including the shape-understanding paragraph required by the MVP-arc gate-2 acceptance criterion); refresh thread next-session record. This does not gate the combinatorial-arc cross-corpus tool, which composes EEF and misconceptions only."
     status: pending
     depends_on: [ws6-adversarial-review]
 ---
@@ -105,9 +105,12 @@ scheduling.
 
 Tool/resource names are **locked** by the spine — they're named in
 the MVP-arc spine and any rename requires a spine amendment, not just
-this plan. Note: slice 3b does **not** consume this slice's tool at
-runtime (see "Consumed by" below); the lock is a spine-naming
-discipline, not a downstream-composition dependency.
+this plan. Note: the combinatorial-arc cross-corpus tool (formerly MVP
+slice 3b, now in
+[`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md))
+does **not** consume this slice's tool at runtime (see "Consumed by"
+below); the lock is a spine-naming discipline, not a downstream-composition
+dependency.
 
 ### Existing capabilities consumed
 
@@ -304,10 +307,12 @@ Dispatch:
 
 Update spine
 [`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md)
-`gate-2-threads-ships` todo to `completed`; record acceptance evidence;
-refresh
+`gate-2-threads-ships` todo to `completed`; record acceptance evidence
+(including the shape-understanding paragraph required by the MVP-arc
+gate-2 acceptance criterion); refresh
 [`connecting-oak-resources.next-session.md`](../../../../memory/operational/threads/connecting-oak-resources.next-session.md).
-This does not gate slice 3b, which composes EEF and misconceptions only.
+This does not gate the combinatorial-arc cross-corpus tool, which
+composes EEF and misconceptions only.
 
 ## Risks
 
@@ -335,7 +340,7 @@ This does not gate slice 3b, which composes EEF and misconceptions only.
 
 **Blocking**:
 
-- Spine `gate-1-eef-ships` (STRICT, owner direction).
+- Spine `gate-0-substrate-floor` (MVP arc).
 - Graph-stack Inc.1 Oak Curriculum Ontology Threads foundation (substrate;
   topology must reach ACTIVE before this slice can execute, with the
   topology BLOCKERs surfaced by `architecture-expert-betty` 2026-05-07
@@ -345,14 +350,18 @@ This does not gate slice 3b, which composes EEF and misconceptions only.
 
 - [`oak-misconceptions-subgraph-mcp-surface.plan.md`](oak-misconceptions-subgraph-mcp-surface.plan.md)
   (slice 3a) — different substrate path, different namespace, different
-  files. Both wait on gate-1 only.
+  files. Both wait on graph-stack Inc.1 + MVP-arc gate-0; per the
+  2026-05-11 reshape, the previous strict gate-1 → slice-3a ordering is
+  relaxed: substrate streams are co-primary.
 
 **Consumed by**:
 
-- [`oak-misconceptions-eef-cross-corpus-surface.plan.md`](oak-misconceptions-eef-cross-corpus-surface.plan.md)
-  (slice 3b) **does not** consume this slice's tool. The MVP-arc spine
-  Phase 2 remediation corrected the previous gate-2 → gate-3b assertion;
-  slice 3b composes EEF (slice 1) + misconceptions (slice 3a) only.
+- [`../future/oak-misconceptions-eef-cross-corpus-surface.plan.md`](../future/oak-misconceptions-eef-cross-corpus-surface.plan.md)
+  (formerly MVP slice 3b, now first concrete combinatorial-arc
+  exploration) **does not** consume this slice's tool. The cross-corpus
+  tool composes EEF (slice 1) + misconceptions (slice 3a) through
+  `graph-corpus-sdk` directly; the Oak Threads surface is not part of
+  that composition.
 
 **Related plans**:
 

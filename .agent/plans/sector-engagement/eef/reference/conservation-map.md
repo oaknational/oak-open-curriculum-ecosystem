@@ -248,10 +248,14 @@ restructure:
   neighbours, subgraph, find_by_tag)** — now in
   [`../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md).
   EEF strands becomes a `GraphView` adapter (T5 of that plan).
-- **Cross-source journeys** (search × misconception × EEF) — now in
-  [`../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md).
-  Out of scope for the EEF corpus plan; the journey primitive is
-  generic.
+- **Cross-source primitives + journeys** — split across two layers:
+  substrate-layer cross-corpus primitives in
+  [`../../../graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md)
+  (first concrete tool: EEF × Oak misconceptions for a Thread IRI);
+  feature-layer journey orchestration in
+  [`../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md)
+  (consumes the substrate-layer primitives). Out of scope for the EEF
+  corpus plan in both cases.
 - **R1/R7 structural enforcement** — the *citation type* is in this
   plan (T12), but the propagation discipline through journeys is in
   the journeys plan (T4 of that plan).
@@ -276,7 +280,8 @@ restructure:
   in git history.
 - [`../current/eef-evidence-corpus.plan.md`](../current/eef-evidence-corpus.plan.md) — successor
 - [`../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md) — Increment 1 (foundation)
-- [`../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) — Increment 3 (journeys)
+- [`../../../graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md) — Increment 3 substrate-layer cross-corpus primitives (combinatorial arc, authored 2026-05-11)
+- [`../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) — Increment 3b feature-layer journey orchestration
 - [`../../../../memory/active/napkin.md` § 2026-04-30 EEF graph-and-corpus architecture session](../../../../memory/active/napkin.md) — full session insight
 
 ## N. Verification log (the "double check" the owner asked for)

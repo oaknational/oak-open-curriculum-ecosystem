@@ -43,11 +43,18 @@ Plans across the portfolio carry a `graph_layer:` YAML field with one of
 recoverable mechanically.
 
 The portfolio's first committed delivery commitment across all three goals
-is captured in the **MVP vertical-slice arc**:
-[`graph-mvp-arc.plan.md`](graph-mvp-arc.plan.md) — three-slice spine
-(EEF evidence corpus → Oak Threads → misconception sub-graph + cross-corpus
-sequencing) under MVP discipline (ship soon at full quality, explicit
-follow-up for everything cut).
+is captured in two sequential arcs:
+
+- **MVP arc**
+  ([`graph-mvp-arc.plan.md`](graph-mvp-arc.plan.md)) — three-slice spine
+  establishing substrate, shape-understanding, and MCP surface for each
+  of the three MVP corpora (EEF, Oak ontology Threads, Oak
+  misconceptions), under MVP discipline (ship soon at full quality,
+  explicit follow-up for everything cut).
+- **Combinatorial arc** ([`graph-combinatorial-arc.plan.md`](graph-combinatorial-arc.plan.md))
+  — follow-on arc owning substrate-layer cross-corpus composition.
+  Activates when MVP arc gate-1 + gate-3a ship and graph-stack Inc.3
+  cross-corpus join primitive is design-stable.
 
 ---
 
@@ -92,7 +99,7 @@ silently skipped; each becomes a named follow-on plan when triggered.
 |---|---|---|---|
 | 1 | **Oak Curriculum Ontology Threads graph** | Turtle/SKOS + SHACL source, ingested directly from sibling `oak-curriculum-ontology` repo | Foundation attached corpus for the MVP. `graph-ingest` owns generic Turtle/SKOS parsing; `graph-corpus-sdk` owns `curric:Thread` enumeration and inverse `curric:includesThread` Unit lookup. PG-JSONL, Neo4j export, SQL projections, WIDOCO docs, and NC taxonomy work are out of foundation scope. |
 | 2 | **Pre-requisite graph** | Oak-controlled (recommend JSON-LD 1.1 with stable Oak context) | Sequenced into graph-stack Increment 3. |
-| 3 | **Misconception graph** | Oak-controlled (recommend JSON-LD 1.1 with stable Oak context) | Sequenced into graph-stack Increment 3; required before slice 3b. |
+| 3 | **Misconception graph** | Oak-controlled (recommend JSON-LD 1.1 with stable Oak context) | Sequenced into graph-stack Increment 3; required before the combinatorial arc's first cross-corpus tool. |
 | 4 | **EEF Toolkit corpus** | EEF-controlled (currently structured JSON) | External; EEF strand adapter is explicit graph-stack Increment 3 scope before cross-corpus joins. |
 
 ---
@@ -135,7 +142,8 @@ follow-on consolidation task.
 | **Multi-source umbrella** (coordinates Oak API + Oak Ontology + EEF as MCP surfaces) | [`connecting-oak-resources/.../active/open-education-knowledge-surfaces.plan.md`](connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md) | ACTIVE — WS-0/1/2 done; WS-3+ pending |
 | **Agent guidance over graph surfaces** | [`connecting-oak-resources/.../active/agent-guidance-consolidation.plan.md`](connecting-oak-resources/knowledge-graph-integration/active/agent-guidance-consolidation.plan.md) | active — runs after surfaces ship |
 | **Cross-source journeys** (search × misconception × EEF; prerequisite traces) | [`connecting-oak-resources/.../future/cross-source-journeys.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) | future |
-| **Oak misconceptions × EEF extended contexts** | [`connecting-oak-resources/.../future/oak-misconceptions-eef-extended-contexts.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-eef-extended-contexts.plan.md) | future — slice 3b non-Thread context follow-on |
+| **Oak misconceptions × EEF cross-corpus (first concrete combinatorial-arc exploration)** | [`connecting-oak-resources/.../future/oak-misconceptions-eef-cross-corpus-surface.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-eef-cross-corpus-surface.plan.md) | future — combinatorial arc, formerly MVP slice 3b; awaits combinatorial-arc promotion trigger |
+| **Oak misconceptions × EEF extended contexts** | [`connecting-oak-resources/.../future/oak-misconceptions-eef-extended-contexts.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-eef-extended-contexts.plan.md) | future — combinatorial-arc non-Thread context follow-on |
 | **Graphify-style memory navigation** (Practice memory layer) | [`agentic-engineering-enhancements/future/graphify-and-graph-memory-exploration.plan.md`](agentic-engineering-enhancements/future/graphify-and-graph-memory-exploration.plan.md) | future — strategic parent of the Practice graph pilot |
 | **External adoption of Oak KG assets** | [`sector-engagement/knowledge-graph-adoption/future/oak-knowledge-graph-external-adoption.plan.md`](sector-engagement/knowledge-graph-adoption/future/oak-knowledge-graph-external-adoption.plan.md) | future |
 
@@ -188,29 +196,56 @@ fold or cross-link when consolidation runs.
 - **Consolidating later**: the naming-scheme overlap notes section is the
   starting point. Update there as overlaps are folded.
 
-## Vertical-slice arc
+## Vertical-slice arcs
 
-The MVP vertical-slice arc threads a single delivery commitment through
-all three goals:
-[`graph-mvp-arc.plan.md`](graph-mvp-arc.plan.md). The arc sequences three
-slices — EEF evidence corpus (goal 2/3), Oak ontology Threads (goal 2),
-misconception sub-graph + cross-corpus sequencing (goal 3) — with explicit
-namespacing per ADR-157, named follow-ups for every cut, and gates that
-honor the substrate-floor dependencies named in `graph-stack.plan.md`.
+The graph portfolio's first vertical commitment ships across two sequential
+arcs.
+
+### MVP arc — substrate, shape-understanding, and surface for each of three corpora
+
+[`graph-mvp-arc.plan.md`](graph-mvp-arc.plan.md). Three slices, each
+co-primary in value: substrate built and proven, corpus shape understood
+through surfacing it, surfacing-design lessons recorded. Slice 1 also
+opens the EEF partnership conversation. Combinatorial composition is the
+follow-on arc, not this one. Teacher value is downstream of AI-client
+adoption.
 
 | Slice | Goal | Namespace | Status |
 |---|---|---|---|
 | 1 — EEF evidence corpus MCP surface | 2 (Oak graph surface) + 3 (feature) | `eef-*` | pending substrate floor; structural eval only now |
-| 2 — Oak ontology Threads MCP surface | 2 (Oak graph surface) | `oak-kg-*` | blocked by slice 1 |
-| 3a — Misconception sub-graph query | 2 (Oak graph surface) + 3 (feature) | `oak-misconceptions-*` | parallel-safe with slice 2 |
-| 3b — EEF × misconceptions cross-corpus sequencing | 3 (feature) | `oak-misconceptions-eef-*` | blocked by slice 1 + slice 3a + graph-stack Inc.3 |
+| 2 — Oak ontology Threads MCP surface | 2 (Oak graph surface) | `oak-kg-*` | pending graph-stack Inc.1; parallel-safe with slice 3a |
+| 3a — Misconception sub-graph query | 2 (Oak graph surface) + 3 (feature) | `oak-misconceptions-*` | pending graph-stack Inc.1; parallel-safe with slice 2 |
+
+### Combinatorial arc — substrate-layer cross-corpus composition
+
+[`graph-combinatorial-arc.plan.md`](graph-combinatorial-arc.plan.md).
+Authored to `current/` 2026-05-11; activates when MVP arc gate-1 +
+gate-3a ship and graph-stack Inc.3 cross-corpus join primitive is
+design-stable. First concrete exploration: cross-corpus tool composing
+EEF strands and bounded misconception sub-graph for a Thread IRI
+(formerly MVP slice 3b; executable plan migrated from
+`current/` to `future/` during the 2026-05-11 reshape). Subsequent
+compositions decided after the first tool ships.
+
+| Composition | Namespace | Status |
+|---|---|---|
+| EEF × Misconceptions (first concrete exploration) | `oak-misconceptions-eef-*` | pending combinatorial arc promotion trigger (MVP gate-1 + gate-3a + Inc.3 design-stable) |
+
+This arc is distinct from [`cross-source-journeys.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md):
+combinatorial-arc ships substrate-layer cross-corpus *primitives* (MCP
+tools whose body composes corpora through `graph-corpus-sdk`);
+cross-source-journeys is feature-layer *journey orchestration* (playbook
+primitive or rich prompts) consuming those primitives. Two layers, two
+plans.
 
 ## Related strategic indices
 
 - [`high-level-plan.md`](high-level-plan.md) — repository strategic index;
   links to this portfolio index from the Cross-cutting Threads section.
-- [`graph-mvp-arc.plan.md`](graph-mvp-arc.plan.md) — first vertical-slice
-  delivery spine consuming this portfolio's plans.
+- [`graph-mvp-arc.plan.md`](graph-mvp-arc.plan.md) — MVP vertical-slice
+  delivery spine; consumes this portfolio's plans.
+- [`graph-combinatorial-arc.plan.md`](graph-combinatorial-arc.plan.md) —
+  follow-on arc; substrate-layer cross-corpus composition.
 - [`connecting-oak-resources/knowledge-graph-integration/README.md`](connecting-oak-resources/knowledge-graph-integration/README.md)
   — the knowledge-graph-integration collection README, which covers a subset
   of this index in more depth.

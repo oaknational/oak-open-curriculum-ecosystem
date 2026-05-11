@@ -97,6 +97,16 @@ acceptance criteria require the `eef-*` prefix and the explicit-source-
 attribution discipline addendum to ADR-157. Both are coordination
 amendments that landed alongside the spine plan on 2026-05-07.
 
+**Partnership-value framing (2026-05-11 reshape)**: slice 1 opens the
+EEF partnership conversation as a co-primary value stream alongside
+substrate, shape-understanding, and surfacing-exploration. The cross-
+corpus EEF × Oak misconceptions tool that strengthens the partnership
+case lives in the follow-on
+[graph-combinatorial-arc](../../../graph-combinatorial-arc.plan.md);
+LLM/outcome evaluation lives in
+[`../future/eef-outcome-evaluation-infrastructure.plan.md`](../future/eef-outcome-evaluation-infrastructure.plan.md).
+Teacher value is downstream of AI-client adoption.
+
 ## 2026-05-07 amendment — `eef-*` prefix applied per ADR-157
 
 ADR-157's namespace convention has always required the `eef-*` prefix

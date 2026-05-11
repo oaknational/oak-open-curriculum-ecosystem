@@ -537,3 +537,42 @@ parity is not a default. Cure: feedback memory landed
   structurally identical but has different intent: hook-staged
   files are *meant* to land. Telling them apart is the design
   question.
+
+## 2026-05-11 — MVP arc reshape session — observations
+
+- **Value-articulation layer can be wrong while structural shape is
+  right.** The MVP arc plan's 4-slice shape was correct as work; what
+  was wrong was the per-slice "user value triplet" framing pitched at
+  teacher-asks-X. Reframing as four portfolio-level value streams
+  (substrate / shape-understanding / surfacing-exploration /
+  partnership-or-combinatorial) with 1-to-many slice mapping was less
+  disruptive than the original instinct to "fold slices 2 and 3a into
+  graph-stack increments." Plan-time reviewers caught the
+  over-engineering risk in the four-axis-per-slice variant; portfolio-
+  level streams + 1-to-many mapping is more proportional.
+- **Reviewer divergence is information.** docs-adr-expert recommended
+  folding slice 3b into existing cross-source-journeys.plan.md;
+  architecture-expert-betty explicitly opposed (substrate vs feature
+  layer). The architectural-layering argument won — they really are
+  two layers. Reviewer disagreement is a signal to think more carefully,
+  not a tie to break by majority. Confirming with the existing
+  cross-source-journeys plan body (feature-layer journey orchestration)
+  validated Betty's call.
+- **Naming a downstream-consumer signal explicitly is load-bearing.**
+  When slice 3b moved out of the MVP arc, graph-stack Inc.3 lost the
+  named consumer that justified its design pressure. Betty caught this.
+  Authoring graph-combinatorial-arc.plan.md to `current/` (not future/)
+  and updating graph-stack Inc.3's row to cross-reference it as the
+  named downstream consumer was the cure. Without that explicit
+  reciprocal link, Inc.3 would have been quietly de-prioritised.
+- **`pnpm agent-tools:collaboration-state comms send` mis-builds.**
+  Errored with "missing required string field: created_at" despite
+  `--now <iso>` being passed. Fell back to direct shared-comms-log.md
+  append per bootstrap fast-path. Worth investigating the build before
+  the next session that needs a comms event programmatically.
+- **The "downstream of AI-client adoption" qualifier was load-bearing
+  and unstated.** assumptions-expert flagged it as a hidden assumption.
+  Surfacing it in the MVP arc executive summary made the value chain
+  honest: the spine ships substrate + surfaces; teacher value depends
+  on AI clients adopting those surfaces and reaching teachers; AI-client
+  adoption is **not** a spine deliverable and is currently un-tracked.

@@ -1,6 +1,31 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
-**Last refreshed**: 2026-05-10 (Fragrant Regrowing Root / `codex` / GPT-5 /
+**Last refreshed**: 2026-05-11 (Blooming Growing Thicket / `claude-code` /
+`claude-opus-4-7-1m` / `756c60` — MVP arc reshape. Owner direction:
+substrate-for-three-sources establishes before combinatorial exploration;
+each of the three corpora (EEF, Oak ontology, Oak misconceptions)
+carries co-primary value as substrate + shape-understanding +
+surfacing-exploration; teacher value is downstream of AI-client
+adoption. Four-dimension value model (substrate / shape-understanding /
+surfacing-exploration / partnership-or-combinatorial) replaces the
+per-slice "user value triplet" framing. Slice 3b moves OUT of MVP arc;
+new [`graph-combinatorial-arc.plan.md`](../../../plans/graph-combinatorial-arc.plan.md)
+authored in `current/` owns substrate-layer cross-corpus composition;
+its promotion trigger fires on MVP arc gate-1 + gate-3a shipped +
+graph-stack Inc.3 design-stable. Slice-3b executable plan migrated from
+`current/` to `future/` with spine pointer repointed. gate-1 → gate-3a
+strict gate relaxed to parallel-safe with gate-2 (substrate streams are
+co-primary). graph-stack Inc.3 now carries downstream-consumer
+cross-reference to the combinatorial arc — Inc.3 retains its forcing
+function. Plan-time reviewers (assumptions-expert, architecture-expert-
+betty, docs-adr-expert) GO-WITH-CONDITIONS — all conditions absorbed
+into the reshape. First graph engineering work remains graph-stack
+Inc.1's Oak Ontology Threads proof in `graph-corpus-sdk` — that is
+unchanged. The next-session action is to land the reshape commit, then
+the focus returns to graph-stack Inc.1 once the topology BLOCKERs
+surfaced 2026-05-07 are absorbed.)
+
+**Prior refresh**: 2026-05-10 (Fragrant Regrowing Root / `codex` / GPT-5 /
 `019e12` — source-authority clarification + handoff. Owner clarified the
 three corpus sources: EEF uses the repository-held JSON snapshot as canonical
 for implementation until EEF clarifies provenance/refresh; Oak ontology raw

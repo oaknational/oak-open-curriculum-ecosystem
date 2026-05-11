@@ -16551,6 +16551,58 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "d0f0a6a3-3aca-4d6c-9b02-c005372da1c7",
+      "agent_id": {
+        "agent_name": "Blooming Growing Thicket",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "756c60"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/graph-mvp-arc.plan.md",
+            ".agent/plans/graph-portfolio-index.md",
+            ".agent/plans/high-level-plan.md",
+            ".agent/plans/graph-combinatorial-arc.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-kg-threads-surface.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-subgraph-mcp-surface.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/oak-misconceptions-eef-cross-corpus-surface.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-eef-cross-corpus-surface.plan.md",
+            ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md",
+            ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-10T20:21:03.000Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Reshape graph MVP arc to 4-dimension value model; move slice 3b out as combinatorial-arc seed; rewrite plan body for decision-clarity (per owner direction 2026-05-10)",
+      "archived_at": "2026-05-11",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-11T07:48:18.000Z",
+        "closed_by": {
+          "agent_name": "Blooming Growing Thicket",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "756c60"
+        },
+        "summary": "MVP arc reshape complete: graph-mvp-arc.plan.md rewritten (3 slices, portfolio-level value streams, exec summary, in-file decisions archive, gate-1->gate-3a relaxed parallel-safe); graph-combinatorial-arc.plan.md authored to current/ with promotion trigger keyed to MVP gate-1+gate-3a+Inc.3 design-stable; slice-3b plan migrated current/->future/ with spine repointed; graph-stack Inc.3 carries downstream-consumer cross-ref to combinatorial arc; per-slice plans + portfolio + high-level-plan + EEF README/conservation-map + cross-source-journeys + extended-contexts parent-pointer updated; thread record refreshed; napkin session entry appended. All plan-time + post-edit reviewer findings absorbed. Markdownlint + format gates green; informational fitness shows only pre-existing violations.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d0f0a6a3-3aca-4d6c-9b02-c005372da1c7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

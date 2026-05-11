@@ -102,8 +102,13 @@ corpus.
 
 - **Index (all graph plans + research)**:
   [graph-portfolio-index.md](graph-portfolio-index.md)
-- **MVP vertical-slice arc** (three-slice delivery spine):
+- **MVP vertical-slice arc** (three-slice substrate-and-surface spine
+  for EEF, Oak ontology Threads, and Oak misconceptions):
   [graph-mvp-arc.plan.md](graph-mvp-arc.plan.md)
+- **Combinatorial arc** (follow-on; substrate-layer cross-corpus
+  composition; activates when MVP arc gate-1 + gate-3a ship +
+  graph-stack Inc.3 design-stable):
+  [graph-combinatorial-arc.plan.md](graph-combinatorial-arc.plan.md)
 - **Research direction**:
   [graph-library.research.md](../research/graph-library.research.md)
 - **Topology spine plan**:
@@ -126,9 +131,14 @@ sector-engagement story.
 
 - **Canonical plan**:
   [sector-engagement/eef/current/eef-evidence-corpus.plan.md](sector-engagement/eef/current/eef-evidence-corpus.plan.md)
-- **MVP vertical-slice arc** (slice 1 + slice 3b consume EEF):
+- **MVP vertical-slice arc** (slice 1 ships the EEF surface and opens the
+  EEF partnership conversation):
   [graph-mvp-arc.plan.md](graph-mvp-arc.plan.md)
-- **Cross-source journeys** (search × misconception × EEF):
+- **Combinatorial arc** (cross-corpus EEF × Oak misconceptions
+  strengthens the EEF partnership case):
+  [graph-combinatorial-arc.plan.md](graph-combinatorial-arc.plan.md)
+- **Cross-source journeys** (feature-layer journey orchestration over
+  multiple cross-corpus primitives):
   [connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md](connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md)
 - **External-source intake** (generalised model for future sector partners
   beyond EEF):

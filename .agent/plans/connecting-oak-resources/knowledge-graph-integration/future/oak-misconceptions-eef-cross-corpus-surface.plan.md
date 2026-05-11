@@ -1,20 +1,19 @@
 ---
-name: "Oak Misconceptions × EEF Cross-Corpus MCP Surface (Slice 3b of MVP arc)"
-overview: "Author the executable plan for the slice-3b cross-corpus MCP surface: `oak-misconceptions-eef-recommend-for-thread` composes repository-held EEF strands (slice 1) and the bounded bulk-derived misconception sub-graph (slice 3a) through the `graph-corpus-sdk` cross-corpus join primitive (graph-stack Inc.3). Substance inherited from the MVP-arc spine; this plan adds TDD cycle structure, file scopes, and reviewer dispatch. Gate-3b waits on slice 1 + slice 3a + Inc.3; **not** on slice 2."
+name: "Oak Misconceptions × EEF Cross-Corpus MCP Surface (first concrete combinatorial-arc exploration)"
+overview: "Executable plan for the cross-corpus MCP tool `oak-misconceptions-eef-recommend-for-thread` — composes repository-held EEF strands and the bounded bulk-derived misconception sub-graph for a Thread IRI through the `graph-corpus-sdk` cross-corpus join primitive (graph-stack Inc.3). Migrated from current/ to future/ during the 2026-05-11 MVP-arc reshape; spine moved from graph-mvp-arc to graph-combinatorial-arc. TDD cycles, file scopes, and reviewer dispatch unchanged."
 plan_id: oak-misconceptions-eef-cross-corpus-surface
 type: feature-workstream
-status: current
+status: future
 graph_layer: oak-graph-surface
-spine_plan: ".agent/plans/graph-mvp-arc.plan.md"
-spine_slice: 3b
+spine_plan: ".agent/plans/graph-combinatorial-arc.plan.md"
 namespace: "oak-misconceptions-eef-*"
 substrate_path: "graph-corpus-sdk EEF + misconception adapters via graph-stack Inc.3 cross-corpus join primitive"
 substrate_floor:
   - "graph-stack Inc.3 (cross-corpus join primitive + bulk-derived misconception adapter + repository-held EEF strand adapter on graph-corpus-sdk)"
-  - "gate-1-eef-ships as naming/response-shape prerequisite only; no runtime MCP tool dependency"
-  - "gate-3a-mcg-subgraph-ships as bounded-sub-graph response-shape prerequisite only; no runtime MCP tool dependency"
-sequencing_gate: "gate-1 + gate-3a + Inc.3 (Phase 2 spine correction 2026-05-07: gate-2 is NOT a dependency)"
-last_updated: 2026-05-10
+  - "graph-mvp-arc gate-1-eef-ships as naming/response-shape prerequisite only; no runtime MCP tool dependency"
+  - "graph-mvp-arc gate-3a-mcg-subgraph-ships as bounded-sub-graph response-shape prerequisite only; no runtime MCP tool dependency"
+sequencing_gate: "graph-combinatorial-arc promotion trigger: MVP-arc gate-1 + gate-3a shipped + graph-stack Inc.3 design stable. Slice 2 (Oak Threads) is NOT a dependency."
+last_updated: 2026-05-11
 related_indices:
   - ".agent/plans/graph-portfolio-index.md"
   - ".agent/plans/connecting-oak-resources/knowledge-graph-integration/README.md"
@@ -76,39 +75,56 @@ todos:
     depends_on: [ws5-adversarial-review]
 ---
 
-# Oak Misconceptions × EEF Cross-Corpus MCP Surface — Slice 3b of the MVP Arc
+# Oak Misconceptions × EEF Cross-Corpus MCP Surface — first concrete combinatorial-arc exploration
 
-**Last Updated**: 2026-05-10
-**Status**: 🟡 PLANNING (current/) — pending gate-1-eef-ships +
-gate-3a-mcg-subgraph-ships + graph-stack Inc.3.
-**Scope**: Slice 3b of the
-[`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md) — author and
-ship `oak-misconceptions-eef-recommend-for-thread`, the cross-corpus
-tool that composes EEF evidence strands (slice 1) and the bounded
-misconception sub-graph (slice 3a) into a single structured response
-for teacher / agent consumers planning lessons or sequences.
+**Last Updated**: 2026-05-11
+**Status**: 🟡 PLANNING (future/) — queued behind the
+[`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md)
+promotion trigger: MVP-arc gate-1 + gate-3a shipped + graph-stack Inc.3
+design stable.
+**Scope**: First concrete combinatorial exploration of the
+[`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md)
+— author and ship `oak-misconceptions-eef-recommend-for-thread`, the
+cross-corpus tool that composes EEF evidence strands and the bounded
+misconception sub-graph for a Thread IRI into a single structured response.
+
+**Reshape note (2026-05-11)**: this plan was formerly Slice 3b of the
+[`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md). The MVP arc
+reshape moved it out of the MVP scope and into the follow-on
+combinatorial arc, on the principle that substrate-for-three-sources
+must establish before combinatorial exploration begins. TDD cycles,
+substrate floor, ADR amendments, and reviewer dispatch are unchanged.
 
 ## Context
 
-Slice 3b is the user-value framing on top of slice 3a's blocking
-primitive. Teachers sequencing lessons need both *what works*
-(evidence-backed approaches) and *what to plan for* (common
-misconceptions) in one structured response — not two separate calls.
-The compound prefix `oak-misconceptions-eef-*` makes both source
-corpora explicit so source attribution is trivially clear during
+This plan delivers the cross-corpus tool composing EEF strands and a
+bounded Oak misconception sub-graph for a Thread IRI. Teachers sequencing
+lessons need both *what works* (evidence-backed approaches) and *what to
+plan for* (common misconceptions) in one structured response — not two
+separate calls. The compound prefix `oak-misconceptions-eef-*` makes both
+source corpora explicit so source attribution is trivially clear during
 assessment, observability, debugging, and licensing audit (per the
 ADR-157 explicit-source-attribution discipline).
 
-### Spine Phase 2 correction (2026-05-07)
+> **Naming note (2026-05-11 reshape)**: throughout this document,
+> body-prose references to "slice 3b" / "the spine" reflect this plan's
+> authoring history as Slice 3b of the MVP arc. After the 2026-05-11
+> reshape this plan is the **first concrete exploration** of the
+> [`graph-combinatorial-arc`](../../../graph-combinatorial-arc.plan.md).
+> The executable detail (TDD cycles, file scopes, reviewer briefs) is
+> unchanged.
 
-The MVP-arc spine previously listed slice 3b as blocked by
-`gate-2-threads-ships + gate-3a + graph-stack Inc.3`. Phase 2 of the
-single-session planning closure (assumptions-expert FINDING #4)
-corrected this: the cross-corpus payload composes EEF (slice 1) and
-misconceptions (slice 3a); the Oak Threads MCP surface is **not** part
-of the payload. Slice 3b is now blocked by `gate-1-eef-ships +
-gate-3a + Inc.3`. Slice 3b can ship before, after, or in parallel with
-slice 2 once gate-1, gate-3a, and Inc.3 have landed.
+### Historical spine dependency correction (2026-05-07)
+
+When this plan was Slice 3b of the MVP arc, the MVP-arc spine briefly
+listed slice 3b as blocked by `gate-2-threads-ships + gate-3a + graph-stack
+Inc.3`. Phase 2 of the single-session planning closure (assumptions-expert
+FINDING #4) corrected this: the cross-corpus payload composes EEF and
+misconceptions; the Oak Threads MCP surface is **not** part of the payload.
+This historical context survives in the body as it shaped the substrate-floor
+list now carried in frontmatter (`graph-mvp-arc gate-1-eef-ships` and
+`graph-mvp-arc gate-3a-mcg-subgraph-ships` as response-shape prerequisites
+only; graph-stack Inc.3 as the substrate floor).
 
 ### What ships (locked from spine)
 

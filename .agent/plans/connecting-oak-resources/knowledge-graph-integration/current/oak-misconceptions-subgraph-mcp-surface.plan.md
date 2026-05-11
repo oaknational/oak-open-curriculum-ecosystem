@@ -13,8 +13,8 @@ substrate_floor:
   - "bulk-derived legacy graph factory (already shipped; see existing `misconception-graph-resource.ts` + `aggregated-misconception-graph.ts`)"
   - "graph-stack Inc.1 Oak Ontology Threads foundation (Thread IRI -> Unit lookup)"
   - "ADR-157 amendment for `oak-misconceptions-*` prefix (landed Phase 0 of MVP-arc spine)"
-sequencing_gate: "STRICT after gate-1-eef-ships + graph-stack Inc.1 (owner sequencing + Thread lookup); PARALLEL-SAFE with gate-2-threads-ships after those gates"
-last_updated: 2026-05-10
+sequencing_gate: "PARALLEL-SAFE with slice 2 after MVP-arc gate-0 + graph-stack Inc.1 are in place. The 2026-05-11 reshape relaxed the previous strict gate-1 → gate-3a ordering: substrate streams are co-primary. Thread IRI input still requires Thread → Unit lookup from Inc.1; misconception traversal remains on the legacy factory."
+last_updated: 2026-05-11
 related_indices:
   - ".agent/plans/graph-portfolio-index.md"
   - ".agent/plans/connecting-oak-resources/knowledge-graph-integration/README.md"
@@ -74,7 +74,7 @@ todos:
     status: pending
     depends_on: [ws5-quality-gates]
   - id: ws7-spine-gate-3a-close-and-migration-followup
-    content: "WS7: update spine `gate-3a-mcg-subgraph-ships` todo to `completed`; record acceptance evidence; refresh thread next-session record; refresh/verify the existing named follow-up plan `oak-misconceptions-substrate-migration.plan.md` (future/) per spine cut-scope row 3a (migration onto graph-corpus-sdk + GraphView when graph-stack Inc.3 misconception adapter ships). Triggers gate-3b execution readiness check with gate-1 + Inc.3."
+    content: "WS7: update spine `gate-3a-mcg-subgraph-ships` todo to `completed`; record acceptance evidence (including the shape-understanding paragraph required by the MVP-arc gate-3a acceptance criterion — graph-from-bulk-data design lessons + token-sensitive sub-graph extraction lessons); refresh thread next-session record; refresh/verify the existing named follow-up plan `oak-misconceptions-substrate-migration.plan.md` (future/) per spine cut-scope row 3a (migration onto graph-corpus-sdk + GraphView when graph-stack Inc.3 misconception adapter ships). This gate contributes to the combinatorial-arc promotion trigger (combinatorial arc activates when MVP-arc gate-1 + gate-3a ship + Inc.3 design-stable)."
     status: pending
     depends_on: [ws6-adversarial-review]
 ---
@@ -99,10 +99,12 @@ Owner direction, 2026-05-07: *"slice 3 the misconception graph, but it
 requires the ability to query sub-graphs as the misconception graph is
 too large to use without using an impractical amount of context."* The
 sub-graph query primitive is the BLOCKING problem to fix; cross-corpus
-composition (slice 3b) is the user-value framing on top. This slice
-solves the blocking problem on the substrate available **today**
-(bulk-derived legacy graph factory), with the substrate-replatform
-follow-up named explicitly.
+composition (now in the follow-on
+[`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md))
+will consume the bounded-sub-graph response shape this slice establishes.
+This slice solves the blocking problem on the substrate available
+**today** (bulk-derived legacy graph factory), with the
+substrate-replatform follow-up named explicitly.
 
 ### Source authority
 
@@ -171,12 +173,14 @@ contract is named, and the migration is sequenced.
 
 1. **Spine-locked names** — `oak-misconceptions-subgraph-for-thread`
    is named in the MVP-arc spine. Renaming requires a spine amendment,
-   not just this plan. Note: slice 3b does NOT call this tool at
-   runtime — slice 3b reaches misconception data through
-   `graph-corpus-sdk` directly (per slice 3b Design Principle 1) once
-   graph-stack Inc.3 has replatformed the misconception substrate.
-   Slice 3a's contribution to slice 3b is the bounded-sub-graph SHAPE,
-   not a runtime MCP composition.
+   not just this plan. Note: the combinatorial-arc cross-corpus tool
+   (formerly slice 3b, now in
+   [`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md))
+   does NOT call this tool at runtime — that tool reaches misconception
+   data through `graph-corpus-sdk` directly once graph-stack Inc.3 has
+   replatformed the misconception substrate. Slice 3a's contribution to
+   the combinatorial-arc is the bounded-sub-graph SHAPE, not a runtime
+   MCP composition.
 2. **Bounded by parameter, defaulted by data** — the bound is exposed
    to callers; the default is chosen empirically so every committed manifest
    response fits `maxResponseTokens = 16000`.
@@ -199,8 +203,9 @@ contract is named, and the migration is sequenced.
   `misconception-graph-mcp-surface.plan.md`).
 - Topic-string sub-graph without IRI (cut-scope; future plan
   `oak-misconceptions-topic-extraction.plan.md`).
-- Cross-corpus composition with EEF (slice 3b
-  [`oak-misconceptions-eef-cross-corpus-surface.plan.md`](oak-misconceptions-eef-cross-corpus-surface.plan.md)).
+- Cross-corpus composition with EEF (combinatorial arc;
+  [`../future/oak-misconceptions-eef-cross-corpus-surface.plan.md`](../future/oak-misconceptions-eef-cross-corpus-surface.plan.md),
+  spine [`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md)).
 
 ## Acceptance Criteria (inherited from spine §"Acceptance — Slice 3a")
 
@@ -281,7 +286,10 @@ variant on the same legacy substrate, OR skip and capture as a
 post-arc follow-up. Default is **skip** — the per-thread tool covers
 the slice-3b composition use case; per-unit is incremental value.
 
-If shipped, mirrors WS1 cycles 1.1 + 1.4 over a Unit IRI surface.
+If shipped, mirrors WS1 cycles 1.1 + 1.4 over a Unit IRI surface. (The
+"slice-3b composition use case" referenced above is now the
+combinatorial-arc cross-corpus tool — see
+[`../future/oak-misconceptions-eef-cross-corpus-surface.plan.md`](../future/oak-misconceptions-eef-cross-corpus-surface.plan.md).)
 
 ### WS3 — MCP wiring + `_meta` legacy disclosure
 
@@ -356,7 +364,7 @@ Dispatch:
 | Empirical bound default poorly chosen; manifest coverage drifts as misconception data evolves | Cycle 1.2's default constant carries the empirical basis in a comment + committed `20`-context fixture manifest; substrate-migration plan re-validates the default. |
 | Legacy graph factory has surprising completeness edges that the bounded traversal misses | Cycle 1.3's small literal graph behaviour tests describe the traversal contract without a second full traversal implementation in the test. |
 | Tool `_meta` legacy disclosure omitted by reviewer or by drift, breaking the replatform contract | WS6 `mcp-expert` gate; substrate-migration plan re-validates `_meta` shape. |
-| Slice 3b authoring (parallel) ends up coupled to a tool name we rename here | Tool name is locked from spine; renaming requires spine + slice-3b amendment. |
+| Combinatorial-arc plan ends up coupled to a tool name we rename here | Tool name is locked from spine; renaming requires spine + combinatorial-arc amendment. |
 
 ## Foundation Alignment
 
@@ -377,8 +385,7 @@ Dispatch:
 
 **Blocking**:
 
-- Spine `gate-1-eef-ships` (STRICT — owner sequencing; slice 1 first
-  establishes the MVP-arc spine pattern + namespace discipline).
+- Spine `gate-0-substrate-floor` (MVP arc).
 - Graph-stack Inc.1 Oak Ontology Threads foundation for Thread→Unit lookup.
 
 **Parallel-safe with**:
@@ -387,13 +394,16 @@ Dispatch:
   (slice 2) — shared Inc.1 Thread lookup but different implementation path
   after lookup (legacy misconception factory vs Oak Ontology Threads surface),
   different namespace (`oak-misconceptions-*` vs `oak-kg-*`), different
-  tool / resource files.
+  tool / resource files. The 2026-05-11 MVP-arc reshape relaxed the
+  previous strict gate-1 → gate-3a ordering: substrate streams are
+  co-primary.
 
 **Consumed by**:
 
-- [`oak-misconceptions-eef-cross-corpus-surface.plan.md`](oak-misconceptions-eef-cross-corpus-surface.plan.md)
-  (slice 3b) reuses the bounded-sub-graph response SHAPE established
-  here, but reaches misconception data through `graph-corpus-sdk`
+- [`../future/oak-misconceptions-eef-cross-corpus-surface.plan.md`](../future/oak-misconceptions-eef-cross-corpus-surface.plan.md)
+  (first concrete combinatorial-arc exploration, formerly MVP slice 3b)
+  reuses the bounded-sub-graph response SHAPE established here, but
+  reaches misconception data through `graph-corpus-sdk`
   directly once Inc.3 has replatformed the misconception substrate;
   it does NOT call this tool at runtime.
 

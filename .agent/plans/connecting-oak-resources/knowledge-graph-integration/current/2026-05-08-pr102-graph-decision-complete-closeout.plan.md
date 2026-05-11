@@ -49,6 +49,16 @@ todos:
 
 # PR 102 Graph Decision-Complete Closeout
 
+> **Historical context note (added 2026-05-11)**: this plan is a session-
+> scoped record of the 2026-05-08 PR #102 decision-complete closeout. Paths
+> and slice numbers captured below reflect the planning state at that time.
+> The 2026-05-11 MVP arc reshape moved the slice-3b plan from
+> `.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/`
+> to `.../future/` and migrated its spine to
+> [`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md).
+> This file is retained as historical evidence of PR #102 state; do not
+> retro-edit. For current state see the spine plans directly.
+
 ## Session Intent
 
 PR #102 is technically close to merge-ready, but owner direction on

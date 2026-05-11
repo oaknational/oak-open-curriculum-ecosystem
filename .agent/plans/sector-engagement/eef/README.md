@@ -57,14 +57,17 @@ Out of scope:
 The EEF integration is delivered across five increments, of which this
 subthread owns Increment 2 plus the EEF-side of Increments 3 and 4. The
 foundation (Increment 1) and the cross-source journey primitive design
-(Increment 3) live in `knowledge-graph-integration/`.
+(Increment 3, split between substrate-layer combinatorial primitives and
+feature-layer journey orchestration — see table below) live in
+`knowledge-graph-integration/`.
 
 | Inc | Plan home | Owns |
 |---|---|---|
 | 0 | already landed | misconception graph as JSON dump (baseline) |
 | 1 | [`../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md) | 7-operation graph layer with progressive disclosure, polymorphic over prerequisite + misconception + EEF strands |
 | 2 | [`current/eef-evidence-corpus.plan.md`](current/eef-evidence-corpus.plan.md) | Evidence corpus extension on top of graph layer; `recommend`, `explain`, `compare` tools; two prompts; structural citation discipline; freshness gate; telemetry |
-| 3 | [`../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) | Cross-source journey primitive (search × misconception × EEF); first journey = `evidence-aware-lesson-sequencing` |
+| 3 | [`../../graph-combinatorial-arc.plan.md`](../../graph-combinatorial-arc.plan.md) | Substrate-layer cross-corpus tooling (first concrete tool: EEF × Oak misconceptions for a Thread IRI). Authored 2026-05-11 as the follow-on arc to the MVP arc. |
+| 3b | [`../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) | Feature-layer journey orchestration (search × misconception × EEF); first journey = `evidence-aware-lesson-sequencing`. Downstream of Inc 3's substrate-layer primitives. |
 | 4 | within Inc 2 + Inc 1 | Telemetry + freshness + provenance (EEF-specific lives in Inc 2; graph-layer telemetry lives in Inc 1) |
 | 5 | deferred | School-context overlay (gated on multi-tenant identity) |
 
@@ -90,9 +93,13 @@ foundation (Increment 1) and the cross-source journey primitive design
 5. [`reference/conservation-map.md`](reference/conservation-map.md)
    — *what was preserved and what was added* in the 2026-04-30
    restructure (read this if you want to know that nothing was lost)
-6. [`../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md)
-   — *future* (Increment 3): the journey primitive that cross-composes
-   EEF with search and misconception data
+6. [`../../graph-combinatorial-arc.plan.md`](../../graph-combinatorial-arc.plan.md)
+   — *follow-on arc* (Increment 3, substrate layer): the combinatorial
+   arc owning cross-corpus primitives; the first concrete tool composes
+   EEF × Oak misconceptions for a Thread IRI.
+7. [`../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md)
+   — *future feature layer* (Increment 3b): journey orchestration
+   consuming substrate-layer primitives.
 7. [`reference/oak-eef-technical-comparison.md`](reference/oak-eef-technical-comparison.md)
    — comparative context for the EEF prototype design choices
 8. [`reference/eef-toolkit.json`](reference/eef-toolkit.json) — the data itself
