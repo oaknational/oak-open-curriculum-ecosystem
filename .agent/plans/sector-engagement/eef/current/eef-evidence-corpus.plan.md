@@ -16,63 +16,86 @@ todos:
   - id: t1-corpus-shape
     content: "Define EvidenceCorpus { readonly view: GraphView<...>; rank; explain; compare } wrapping shape with Result<T, E> returns; sketch ExplainOptions (TNode-independent), CompareOptions with ComparisonDimension literal union, RankOptions context shape. EEF strands becomes the first concrete corpus."
     status: pending
+    workstream: corpus-loading
   - id: t2-zod-loader
     content: "Zod-validated loader for the repository-held canonical eef-toolkit.json snapshot (preserves F1, F4, F7; revises F2/F3 to remove the school_context_schema.properties carve-out — typed concretely as SchoolContextSchema with the 9 closed properties, each a JsonSchemaProperty). Validate meta.last_updated as z.string().date() and meta.data_version as z.string().regex(semver) — not bare z.string()."
     status: pending
+    workstream: corpus-loading
   - id: t3-methodology-resource
     content: "Methodology+caveats resource via graph factory (preserves F6 + F11 resolutions)."
     status: pending
+    workstream: corpus-loading
   - id: t4-strands-resource
     content: "Strands resource via graph factory; default projection avoids dumping deep fields (F11)."
     status: pending
+    workstream: corpus-loading
   - id: t5-scoring-engine
     content: "ScoringEngine with composite weighting (40/30/20/10), null-impact guard (F5), and rationale generation (R1, R2, R7). RankedResult uses non-empty tuple types: caveats: readonly [string, ...string[]], citations: readonly [Citation, ...Citation[]]."
     status: pending
+    workstream: recommend
   - id: t6-recommend-tool
     content: "eef-recommend-evidence-for-context tool composing GraphView.enumerate_nodes + ScoringEngine.rank, with explicit data_coverage in response (F8, R8)."
     status: pending
+    workstream: recommend
   - id: t7-explain-tool
     content: "eef-explain-evidence-strand tool: returns full strand context with citations, caveats, provenance, and update_history."
     status: pending
+    workstream: explain
   - id: t8-compare-tool
     content: "eef-compare-evidence-strands tool: side-by-side comparison across user-selected dimensions, typed as ComparisonDimension literal union (no string[] widening)."
     status: pending
+    workstream: compare
   - id: t9-guidance-constant
     content: "eef-evidence-guidance.ts with AGGREGATED_EEF_EVIDENCE_GUIDANCE (preserves R1, R3, R7 prescriptions)."
     status: pending
+    workstream: corpus-loading
+    cross_cuts: [recommend, explain, compare, prompt-a, prompt-b]
   - id: t10-lesson-plan-prompt
     content: "eef-evidence-grounded-lesson-plan prompt (preserves F8, F9, F10 resolutions; KS-to-phase mapping inline)."
     status: pending
+    workstream: prompt-a
   - id: t11-pp-review-prompt
     content: "eef-pupil-premium-strategy-review prompt (Workflow B from strategy doc; previously not in executable plan)."
     status: pending
+    workstream: prompt-b
   - id: t12-citation-shape
     content: "Citation discipline: every recommendation/explain/compare response carries {strand_id, data_version, last_updated, caveats: non-empty tuple} as structured fields. Non-empty tuple types enforce the ≥1 caveat and ≥1 citation invariants at compile time; Zod .min(1) re-asserts at runtime."
     status: pending
+    workstream: corpus-loading
+    cross_cuts: [recommend, explain, compare, prompt-a, prompt-b]
   - id: t13-freshness-gate
     content: "CI gate that fails when the SDK eef-toolkit.json copy is >180 days old. Until EEF clarifies provenance/refresh mechanics, the refresh workflow validates and copies a reviewed replacement from the repo-held reference snapshot rather than reconstructing from scraped EEF pages; if EEF later confirms a public download/API or direct-supply process, the SDK refresh script implements that acquisition path."
     status: pending
+    workstream: freshness
   - id: t14-telemetry
     content: "Sentry spans on every corpus operation; named metrics for recommendations served, distinct contexts, citation-presence rate."
     status: pending
+    workstream: telemetry
   - id: t15-negative-space-doc
     content: "Document fields deliberately not exposed in default projections (and why)."
     status: pending
+    workstream: corpus-loading
   - id: t16-public-export
     content: "Export EvidenceCorpus type + EEF resource constants from public/mcp-tools.ts."
     status: pending
+    workstream: corpus-loading
+    cross_cuts: [recommend, explain, compare]
   - id: t17-register-resources
     content: "Register EEF resources via existing registerGraphResource() helper."
     status: pending
+    workstream: corpus-loading
   - id: t18-adr-123-update
     content: "ADR-123: add EEF resources (curriculum://eef-methodology, curriculum://eef-strands), eef-recommend/explain/compare tools, eef-evidence-grounded-lesson-plan and eef-pupil-premium-strategy-review prompts (all eef-* prefixed per ADR-157). Document corpus-vs-graph layering."
     status: pending
+    workstream: coordination
   - id: t19-e2e
     content: "E2E shape conditions: tools/resources/prompts listed; declared types match; Citation has non-empty caveats tuple and the response carries a non-empty citations tuple at compile time, re-asserted at runtime via Zod .min(1). Outcome verification (LLM-paraphrasing) is honestly out of scope until evaluation infrastructure exists."
     status: pending
+    workstream: coordination
   - id: t20-credits
     content: "Add John Roberts to repo authors; record in ATTRIBUTION.md and root README per the strategy doc's standing requirement."
     status: pending
+    workstream: credits
 ---
 
 # EEF Evidence Corpus Surface
@@ -83,10 +106,7 @@ the restructure for an independent verification pass; after that pass
 confirmed no semantic loss (see [`../reference/conservation-map.md`](../reference/conservation-map.md)
 §N), `originals/` was deleted. The pre-session predecessor remains
 permanently recoverable via `git show e2796757:<path>`.
-**Last Updated**: 2026-05-10 (tool/prompt names re-prefixed `eef-*` per
-ADR-157; structural-only evaluation stance applied per PR #102 closeout;
-repository-held EEF snapshot treated as canonical for implementation pending
-EEF provenance/refresh clarification).
+**Last Updated**: 2026-05-11 (workstream overlay added: 20 todos grouped into 9 capability workstreams + 1 coordination workstream to expose intra-slice parallelism; underlying todo content preserved verbatim).
 **Branch**: `feat/eef_exploration` (originating session); execution branch
 TBD when promoted to ACTIVE.
 **Increment**: 2 (with EEF-side of 3 and 4) of the EEF graph-and-corpus
@@ -277,6 +297,33 @@ notes.
   `<john.roberts@thenational.academy>`. **JR must be added to the
   repo's authors list (root README + ATTRIBUTION.md) when this plan
   ships its first commit.** See **T20**.
+
+## Workstreams (2026-05-11 overlay)
+
+The 20 implementation todos are grouped into nine capability workstreams plus one coordination workstream. Workstream tagging is recorded in the `workstream` and (where applicable) `cross_cuts` fields on each todo in the frontmatter. The phase-A-to-L breakdown under `## Implementation` is preserved verbatim as implementation narrative; the workstream overlay names dispatch-friendly groupings without restructuring the underlying work.
+
+The grouping exposes intra-slice parallelism: when slice 1 is promoted to ACTIVE, two agents can share the slice (for example, one driving WS-recommend/explain/compare, another driving WS-prompt-a/prompt-b/freshness/telemetry/credits) after WS-corpus-loading lands the substrate the other workstreams build on.
+
+| Workstream | Todos | File scope (indicative) |
+|---|---|---|
+| **corpus-loading** | t1-corpus-shape, t2-zod-loader, t3-methodology-resource, t4-strands-resource, t9-guidance-constant, t12-citation-shape, t15-negative-space-doc, t16-public-export, t17-register-resources | `oak-curriculum-sdk/src/mcp/evidence-corpus/` (corpus types, loader, resources, citation shape, guidance constant, public exports, registration) |
+| **recommend** | t5-scoring-engine, t6-recommend-tool | `oak-curriculum-sdk/src/mcp/evidence-corpus/scoring/`, recommend tool surface |
+| **explain** | t7-explain-tool | explain tool surface |
+| **compare** | t8-compare-tool | compare tool surface |
+| **prompt-a** | t10-lesson-plan-prompt | `eef-evidence-grounded-lesson-plan` prompt |
+| **prompt-b** | t11-pp-review-prompt | `eef-pupil-premium-strategy-review` prompt |
+| **freshness** | t13-freshness-gate | refresh script + CI gate |
+| **telemetry** | t14-telemetry | Sentry spans + named metrics |
+| **credits** | t20-credits | root README + ATTRIBUTION.md |
+| **coordination** | t18-adr-123-update, t19-e2e | ADR-123; cross-cutting E2E shape proofs |
+
+Cross-cutting todos within `corpus-loading` carry an explicit `cross_cuts` field naming the surfaces that consume them — **t9-guidance-constant** and **t12-citation-shape** are consumed by all three tools and both prompts; **t16-public-export** is consumed by the three tools. They live in `corpus-loading` because that workstream is the structural dependency floor for the surfaces that consume them; lifting them into a separate WS would split a coupled concern into two coupled workstreams and obscure parallelism rather than expose it.
+
+**`cross_cuts` semantics**: the field denotes *consumer surfaces*, not blocking direction. T9 and T12 land before their consumers (corpus-loading is upstream); T16 lands after its consumers (the public export wires up the tool surfaces — see Sequencing). Treat `cross_cuts` as "is referenced by", not "blocks".
+
+**Coordination workstream timing**: T18-adr-123-update (in `coordination`) must serialise after the tool/prompt set substantially completes — ADR-123 records the final shipped surface, so it cannot land until that surface is stable. T19-e2e likewise lands at the end of the slice. The `coordination` workstream is therefore the slice's closure phase, even though its file scope is disjoint from the capability workstreams.
+
+The workstream overlay does not change exit criteria, promotion triggers, R1–R8 mapping, or dependency direction. It is a dispatch lens over the existing plan.
 
 ## Impact-Preserving Requirements (R1–R8 from strategy doc)
 
