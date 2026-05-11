@@ -8,6 +8,7 @@ export interface Options {
 
 const KNOWN_OPTION_KEYS = new Set([
   'active',
+  'agent-name',
   'area-kind',
   'area-pattern',
   'body',
@@ -22,6 +23,8 @@ const KNOWN_OPTION_KEYS = new Set([
   'file',
   'help',
   'intent',
+  'lifecycle-dir',
+  'messages-dir',
   'model',
   'notes',
   'now',
@@ -29,6 +32,7 @@ const KNOWN_OPTION_KEYS = new Set([
   'platform',
   'repo-root',
   'shared-log',
+  'seen-file',
   'summary',
   'thread',
   'thread-record',

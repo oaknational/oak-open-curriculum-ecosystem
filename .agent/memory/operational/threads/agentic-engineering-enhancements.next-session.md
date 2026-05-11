@@ -2,6 +2,36 @@
 
 ## Next opener — collaboration protocol hardening tail (Wave 1+) (2026-05-12+)
 
+**Tail update 2026-05-11 (Galactic Transiting Orbit / `codex` /
+GPT-5 / `019e18`)**: landed Wave 3 F-15 guard/documentation branch at
+`70e746a3` (`fix(agent-tools): guard active-claims fingerprint recursion`).
+Then opened B-10 renderer compatibility work: parser tolerates legacy
+narrative `addressed_to` agent-reference objects and null threading fields,
+`comms render` accepts all three R1.b directories, and a new TS
+`comms inbox` command can poll directed messages by recipient or wildcard.
+This B-10 bundle is **unlanded**. Named blocker: Flamebright Burning Lava's
+12-file strategic-doc bundle remained staged in the shared index, and the
+owner stopped retrying after three repo-wide pre-commit gate failures caused
+by ambient peer/uncommitted files. Falsifiability: `git diff --cached
+--name-only` still shows the Flamebright staged set; `git log -3 --oneline`
+does not contain their graph/verdict commit. Sidebar with Wooded locked B-11
+as a later atomic slice: `comms direct` + `comms reply` in a new
+`cli-comms-messages.ts`, subject-convention reply threading only, no directed
+schema change. Claim `8b00cc0c` closed with the unlanded-case summary.
+
+**Tail update 2026-05-11 (Gilded Shimmering Dawn / `cursor` /
+GPT-5.5 / `3869cd`)**: owner closed the Cursor helper-coordination
+session with the finding that Cursor comms only started working once a
+fresh session received a simple, linear, parallelisable plan. This
+session introduced to Wooded Spreading Thicket as sub-coordinator,
+picked up brief `e6f3113e-8270-4d66-a7c4-a8139ae959be`, delegated the
+read-only legacy comms-event audit by directory to three lower-powered
+helpers, and synthesized result
+`3869cd-cursor-result-1-legacy-comms-audit`. Result: only four
+narrative files need migration-out normalisation before B-10 compat
+helpers can retire; `comms-lifecycle/` and `comms-messages/` are clean
+for this question. No implementation edits landed.
+
 **Tail update 2026-05-11 (Embered Burning Magma / `codex` /
 GPT-5 / `019e18`)**: Wave 3 opened and the F-11 inspection slice
 landed at `e298723c`. `commit-queue list` now supports `--prefix`,
@@ -12,15 +42,15 @@ calendar timestamps fail. Full agent-tools gates and the real
 pre-commit hook passed. T-CQ-UX remains open; this was the read-side
 inspection slice, not the whole Wave 3 cure.
 
-**Next safe step for this thread**: continue Wave 3 with one atomic
-commit-queue UX hardening slice. Recommended: fix the claim-close-cycle
-/ fingerprint-recursion surface first, because this session produced a
-worked instance immediately after `e298723c`: queue completion and
-claim closure mutated `active-claims.json` plus
-`closed-claims.archive.json`, forcing a follow-up continuity commit.
-Then proceed to B-02 build-prelude decoupling / B-03 record-verify
-determinism, verify-staged error taxonomy, lifecycle ergonomics, and
-the T-R4-new husky enforcement pair. Do not open Wave 4 or Wave 5 yet.
+**Next safe step for this thread**: do not stage or commit B-10 until the
+shared index is clear or the owner authorises an isolation path. Re-open a
+fresh B-10 claim, preserve the current working-tree implementation, register a
+`pre_commit` queue entry, and let Wooded run the gatekeeper checks before
+staging. After B-10 lands, run the four-file migration-out normaliser identified
+by the Cursor audit, then remove the temporary tolerant parser helpers. Only
+after that should B-11 (`comms direct` + `comms reply`) stage as its own atomic
+commit. Keep B-02/B-03 and T-R4-new behind these commit-window repairs. Do not
+open Wave 4 or Wave 5 yet.
 
 **Tail update 2026-05-11 (Shaded Ripening Copse / `claude-code` /
 opus-4-7-1m / `c13bdf`)**: commit-queue UX brief landed as commit
@@ -3035,6 +3065,8 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Gilded Shimmering Dawn` | `cursor` | `GPT-5.5` | `3869cd` | `owner-directed-sub-coordinator-for-Cursor-helper-work; introduced-to-Wooded-Spreading-Thicket; delegated-brief-e6f3113e-legacy-comms-event-audit-by-directory-to-three-read-only-lower-powered-helpers; synthesized-result-3869cd-cursor-result-1-legacy-comms-audit; captured-Cursor-comms-lesson-fresh-session-plus-simple-linear-parallelisable-plan` | 2026-05-11 | 2026-05-11 |
+| `Wooded Spreading Thicket` | `cursor` | `GPT-5.5` | `unknown` | `persistent-comms-coordinator-for-session; monitors-active-claims-shared-comms-log-and-fresh-comms-surfaces-every-30s; updateCurrentStep-telemetry-triage-external-tool-not-in-repo; writes-only-on-change-milestone-blocker-or-quiet-interval; all-agents-introduce-to-Wooded-Spreading-Thicket` | 2026-05-11 | 2026-05-11 |
 | `Galactic Transiting Orbit` | `codex` | `GPT-5` | `019e18` | `Wave-3-commit-queue-UX-hardening-claim-close-cycle-fingerprint-recursion-slice-in-progress; preserving-post-commit-ledger-residue-from-Embered-Burning-Magma-as-evidence; scope-agent-tools-commit-queue-collaboration-state-tests-plan-status-and-session-lifecycle-surfaces; Wave-4-and-Wave-5-remain-closed` | 2026-05-11 | 2026-05-11 |
 | `Shaded Ripening Copse` | `claude-code` | `claude-opus-4-7-1m` | `c13bdf` | `commit-queue-UX-brief-author-B-02-B-03-Workstream-4-architectural-seam-and-third-direction-peer-commit-absorption-subsection-commit-5c299ed5; primary-thread-was-connecting-oak-resources-but-the-commit-queue-UX-brief-landed-here-per-opener-routing` | 2026-05-11 | 2026-05-11 |
 | `Embered Burning Magma` | `codex` | `GPT-5` | `019e18` | `Wave-3-commit-queue-UX-hardening-F11-list-show-inspection-slice-landed-e298723c; list-filters-prefix-phase-agent-name-queue-status; show-by-intent-id; strict-now-validation-read-only-commands-accept-write-enforcement-reject; README-plus-plan-register-updates; reviewers-code-test-docs-adr-wilma-betty-onboarding-approved; focused-and-full-agent-tools-gates-plus-real-pre-commit-hook-passed; claim-close-cycle-recursion-reproduced-as-post-commit-ledger-mutation-and-captured-for-next-slice` | 2026-05-11 | 2026-05-11 |

@@ -1,6 +1,7 @@
 import { archiveClaims, closeClaim, heartbeatClaim, openClaim } from './cli-claim-commands.js';
 import { listClaims, mineClaims, showClaim, statusClaims } from './cli-claim-query-commands.js';
 import { appendComms, renderComms, sendComms } from './cli-comms-commands.js';
+import { inboxComms } from './cli-comms-inbox.js';
 import { resolveIdentity } from './cli-identity.js';
 import { auditIdentity } from './cli-identity-audit.js';
 import { type Options } from './cli-options.js';
@@ -60,9 +61,16 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
     handler: sendComms,
   }),
   'comms:render': commandSpec({
-    help: 'comms render --events-dir <dir> --output <path>',
-    options: ['events-dir', 'output'],
+    help:
+      'comms render --events-dir <dir> --lifecycle-dir <dir> ' +
+      '--messages-dir <dir> --output <path>',
+    options: ['events-dir', 'lifecycle-dir', 'messages-dir', 'output'],
     handler: (options) => renderComms(options),
+  }),
+  'comms:inbox': commandSpec({
+    help: 'comms inbox --messages-dir <dir> --agent-name <name> --seen-file <path>',
+    options: ['messages-dir', 'agent-name', 'seen-file'],
+    handler: (options) => inboxComms(options),
   }),
   'claims:open': commandSpec({
     help:

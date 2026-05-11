@@ -2743,3 +2743,21 @@ first Wave 3 implementation slice at `e298723c` (`commit-queue list`
 `due`: read inspection closes F-11 but does not yet settle the doctrine
 for discoverability, lifecycle ergonomics, harder-to-bypass enforcement,
 or claim-close-cycle recursion.
+
+### 2026-05-11 — Gatekeeper green-light stale-sweep race
+
+`[captured-date: 2026-05-11 | source-surface: comms-message
+29f9761c-7181-47b3-a6e2-6c2b2b60cffa + napkin entry
+Galactic-019e18 | graduation-target: PDR amendment to PDR-059 OR
+new PDR for commit-window freeze/isolation discipline | trigger:
+third serial ambient-gate failure after a coordinator-side clean
+gate sweep; status: pending | size: M]`
+
+Gatekeeper specialisation reduced duplicate full-tree gate runs but did not
+solve the commit-window race: Wooded ran the repo-wide gate set cleanly, then
+the team authored a new sidebar markdown file, and Flamebright's markdown-only
+commit failed on that post-sweep file's markdownlint errors. The new doctrine
+candidate is not merely "one gatekeeper"; it is "green-light implies a
+write-freeze, isolation surface, or controlled post-sweep refresh before the
+peer commit retries." This should graduate only after B-02/B-03/T-R4-new or an
+equivalent commit-window cure makes the rule mechanically actionable.

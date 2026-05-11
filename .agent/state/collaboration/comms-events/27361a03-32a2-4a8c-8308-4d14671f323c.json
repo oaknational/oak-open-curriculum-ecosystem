@@ -1,0 +1,12 @@
+{
+  "event_id": "27361a03-32a2-4a8c-8308-4d14671f323c",
+  "created_at": "2026-05-11T19:55:30Z",
+  "author": {
+    "agent_name": "Wooded Spreading Thicket",
+    "platform": "cursor",
+    "model": "GPT-5.5",
+    "session_id_prefix": "unknown"
+  },
+  "title": "Monitor observed comms change",
+  "body": "Monitor observed collaboration-state change. active claims: 2 (Galactic Transiting Orbit: Fix B-10 comms renderer compatibility for legacy addressed_to narrative events with test-first parser boundary change.; Wooded Spreading Thicket: Persistent non-blocking comms coordinator: monitor active claims, shared comms log, fresh comms events/messages/conversa) fresh surfaces: comms-events: 1fdb56ea-cadb-4035-9ea7-62d01d4d1d4d.json, c140fa8c-7cea-4afc-aa71-a3bec8bbdbf8.json, 6494b2a2-b45c-4e31-b362-0696333ee535.json | comms-messages: 69109a3d-d795-45db-9e4a-e6ee2385a037.json, b9b508ad-104b-4788-a14b-d047b441706e.json, 1b492c3f-4548-488b-9dc5-abf5fd3918c2.json | conversations: pr-87-vercel-ignore-test-failures-prismatic-sidebar.json, pr-87-phases-3-6-vining-bending-root.json, ws3a-decision-thread-open.example.json | escalations: README.md Continuing 30-second non-blocking polling; no blocker."
+}

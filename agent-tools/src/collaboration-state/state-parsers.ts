@@ -1,7 +1,8 @@
 import {
   getJsonValue,
   isJsonObject,
-  optionalString,
+  optionalNullableString,
+  optionalStringOrLegacyAgentName,
   optionalStringArray,
   parseStringArray,
   requirePossiblyEmptyString,
@@ -72,9 +73,9 @@ export function parseNarrativeCommsEvent(text: string): NarrativeCommsEvent {
   }
 
   const audience = optionalStringArray(parsed, 'audience');
-  const addressedTo = optionalString(parsed, 'addressed_to');
-  const inResponseTo = optionalString(parsed, 'in_response_to');
-  const inReplyTo = optionalString(parsed, 'in_reply_to');
+  const addressedTo = optionalStringOrLegacyAgentName(parsed, 'addressed_to');
+  const inResponseTo = optionalNullableString(parsed, 'in_response_to');
+  const inReplyTo = optionalNullableString(parsed, 'in_reply_to');
 
   return {
     event_id: requireString(parsed, 'event_id'),

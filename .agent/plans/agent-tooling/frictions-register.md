@@ -146,10 +146,20 @@ below is a cross-reference index, not a second source of truth.
 - **Candidate cure**: `--skip-malformed` flag (default on) plus
   per-file try/catch with error summary at the end.
 - **Target surface**: `agent-tools/src/collaboration-state/cli-comms-commands.ts`
-- **Status**: open
+- **Status**: open — legacy optional-field compatibility partially fixed;
+  malformed-file skip/reporting remains
 - **Review 2026-05-10**: still open. `readCommsEvents` parses each JSON
   file directly in sequence; one parse or schema error still aborts the
   entire render.
+- **Review 2026-05-11**: current B-10 compatibility slice fixed two live
+  legacy-schema blockers discovered in the repo event directory:
+  narrative `addressed_to` agent-reference objects now normalize to the
+  referenced `agent_name`, and `in_response_to: null` / `in_reply_to: null`
+  are treated as absent. `comms render` also now accepts and documents the
+  required post-R1.b `--lifecycle-dir` and `--messages-dir` options. Live
+  render against the repo's three comms directories exits 0 to a temp output.
+  The broader F-05 contract remains open: one truly malformed file should be
+  skipped/reported without blocking the rest of the rendered log.
 - **Severity**: high (substrate-wide blocker when triggered)
 - **Related shape**: 2026-05-06 (Hidden Slipping Moth, `4be7b5`) —
   `comms send` succeeded in writing the new event but then failed
@@ -225,7 +235,63 @@ below is a cross-reference index, not a second source of truth.
 - **Status**: open
 - **Review 2026-05-10**: still open. `comms append`, `send`, and
   `render` exist; `comms list`, `show`, and `watch` do not.
+- **Review 2026-05-11**: B-10 working tree adds a narrow
+  `comms inbox` command for directed messages under `comms-messages/`.
+  It can print unseen messages for one `--agent-name` or wildcard `*`
+  and record seen IDs in a caller-supplied `--seen-file`. This is useful
+  evidence for the eventual watch/list shape but does **not** close F-07:
+  narrative `comms list/show` and a non-rebuild watch surface remain open.
 - **Owner direction**: standing
+
+### F-17 — No first-class directed-message authoring CLI
+
+- **Source**: 2026-05-11 owner direction during multi-agent coordination;
+  Wooded/Galactic sidebar
+  `.agent/state/collaboration/sidebars/cli-comms-inbox-design-2026-05-11.md`;
+  directed closeout message `198ee1a4`.
+- **Surface**: `agent-tools/src/collaboration-state/` directed comms
+  authoring.
+- **Observed**: Directed messages currently require hand-authored JSON with
+  UUID, timestamp, full sender identity, full recipient identity, kind,
+  subject, and body. This made replies slow enough that coordination behaved
+  like memo exchange rather than conversation.
+- **Expected**: A TypeScript CLI path can author directed messages and replies
+  with generated IDs/timestamps and validated readback.
+- **Candidate cure**: B-11: add `comms direct` and `comms reply` under the
+  existing `comms` namespace in a new `cli-comms-messages.ts`. Auto-fill
+  sender from existing identity resolution; require explicit recipient fields
+  in B-11; default reply subject to `re: <source-subject>`; do not add a
+  schema threading field in this slice.
+- **Target surface**: `agent-tools/src/collaboration-state/cli-comms-messages.ts`;
+  `agent-tools/src/collaboration-state/cli-specs.ts`;
+  `agent-tools/tests/collaboration-state/collaboration-state.integration.test.ts`
+- **Status**: addressed-in-plan-B-11; implementation waits for B-10 landing and
+  a clear/isolated shared index.
+- **Owner direction**: standing (useful comms improvements belong in
+  agent-tools TypeScript).
+
+### F-18 — Coordinator gate sweep stales when agents keep writing
+
+- **Source**: 2026-05-11 Flamebright Burning Lava gate-failure evidence
+  `29f9761c`; Wooded/Galactic coordination closeout `198ee1a4`.
+- **Surface**: multi-agent commit window protocol, repo-wide pre-commit hooks,
+  and advisory gatekeeper workflow.
+- **Observed**: Gatekeeper specialisation reduced duplicate full-tree gates but
+  did not solve the stale-sweep race. Wooded ran a clean repo-wide gate sweep,
+  then a new sidebar markdown file appeared and failed markdownlint during
+  Flamebright's commit hook. Flamebright's markdown-only staged bundle failed
+  three times on three different ambient peer/coordinating files.
+- **Expected**: Once a gatekeeper issues a commit green-light, subsequent
+  ambient coordination writes either freeze, route outside the checked tree, or
+  are absorbed into a controlled pre-commit refresh before any peer retries.
+- **Candidate cure**: Extend the commit-window protocol beyond "one gatekeeper"
+  with a write-freeze or isolation rule for repo-tracked coordination artefacts
+  during a peer's commit attempt; pair with B-02/B-03 build-prelude decoupling
+  and B-11 directed-message authoring to reduce hand-authored file churn.
+- **Target surface**: commit protocol docs / `.agent/skills/commit/` /
+  collaboration-state comms tooling / possible PDR-059 follow-on.
+- **Status**: open — evidence captured; no cure landed.
+- **Owner direction**: standing.
 
 ### F-08 — No `claims list/show` CLIs
 

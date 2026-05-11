@@ -101,6 +101,36 @@ describe('parseNarrativeCommsEvent', () => {
     expect(event.in_reply_to).toBe('another-earlier-event-id');
   });
 
+  it('normalizes a legacy addressed_to agent reference on a narrative event', () => {
+    const event = parseNarrativeCommsEvent(
+      JSON.stringify({
+        ...canonicalNarrative,
+        addressed_to: {
+          agent_name: 'Riverine Drifting Lighthouse',
+          session_id_prefix: 'd1105c',
+        },
+      }),
+    );
+
+    expect(event.addressed_to).toBe('Riverine Drifting Lighthouse');
+  });
+
+  it('treats a legacy null in_response_to value as absent', () => {
+    const event = parseNarrativeCommsEvent(
+      JSON.stringify({ ...canonicalNarrative, in_response_to: null }),
+    );
+
+    expect(event.in_response_to).toBeUndefined();
+  });
+
+  it('treats a legacy null in_reply_to value as absent', () => {
+    const event = parseNarrativeCommsEvent(
+      JSON.stringify({ ...canonicalNarrative, in_reply_to: null }),
+    );
+
+    expect(event.in_reply_to).toBeUndefined();
+  });
+
   it('rejects a narrative event missing the required body field', () => {
     const withoutBody = {
       event_id: canonicalNarrative.event_id,

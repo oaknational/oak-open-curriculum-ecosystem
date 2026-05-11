@@ -1,7 +1,7 @@
 type JsonPrimitive = string | number | boolean | null;
 type JsonValue = JsonPrimitive | JsonObject | readonly JsonValue[];
 
-interface JsonObject {
+export interface JsonObject {
   readonly [key: string]: JsonValue | undefined;
 }
 
@@ -42,7 +42,7 @@ export function requirePossiblyEmptyString(record: JsonObject, key: string): str
  * Read an optional string field. Returns `undefined` when the field is absent;
  * throws when the field is present but not a non-empty string.
  */
-export function optionalString(record: JsonObject, key: string): string | undefined {
+function optionalString(record: JsonObject, key: string): string | undefined {
   const value = getJsonValue(record, key);
   if (value === undefined) {
     return undefined;
@@ -52,6 +52,37 @@ export function optionalString(record: JsonObject, key: string): string | undefi
   }
 
   return value;
+}
+
+export function optionalNullableString(record: JsonObject, key: string): string | undefined {
+  if (getJsonValue(record, key) === null) {
+    return undefined;
+  }
+
+  // Empty strings remain invalid: the legacy shape found on disk used null for
+  // absent threading, and blank IDs would hide a different data-quality issue.
+  return optionalString(record, key);
+}
+
+export function optionalStringOrLegacyAgentName(
+  record: JsonObject,
+  key: string,
+): string | undefined {
+  const value = getJsonValue(record, key);
+  if (value === null) {
+    return undefined;
+  }
+  if (value === undefined || typeof value === 'string') {
+    return optionalString(record, key);
+  }
+  if (isJsonObject(value)) {
+    const agentName = getJsonValue(value, 'agent_name');
+    if (typeof agentName === 'string' && agentName.length > 0) {
+      return agentName;
+    }
+  }
+
+  throw new Error(`optional field ${key} must be a non-empty string or legacy agent reference`);
 }
 
 /**

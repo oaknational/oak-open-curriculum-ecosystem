@@ -90,6 +90,18 @@ Workstream 1 is complete in the working tree and uncommitted by owner boundary.
 It added shared `collaboration-state` CLI discoverability improvements, pure
 helper tests, README/register evidence, and clean specialist review.
 
+2026-05-11 closeout: Wave 3 F-15 guard/documentation landed at `70e746a3`.
+B-10 renderer compatibility work is in the working tree but **unlanded**:
+legacy narrative routing/threading tolerance, `comms render` three-directory
+support, and a small TS `comms inbox` polling command. Named blocker is the
+shared-index commit window, not product uncertainty: Flamebright's 12-file
+strategic-doc bundle remained staged while three successive repo-wide
+pre-commit failures fired on ambient peer/coordinating files. Next session must
+clear or isolate that staged bundle before staging B-10. Wooded/Galactic
+sidebar locked B-11 as a later atomic slice: `comms direct` + `comms reply` in
+`cli-comms-messages.ts`, with subject-convention reply threading only and no
+directed schema change.
+
 The remaining work is important infrastructure work, grouped as follows:
 
 1. **Workstream 2 — collaboration read APIs**: make comms events and claims
@@ -173,6 +185,13 @@ TDD cycles:
 - Add optional `comms watch` as a polling command only if it can be implemented
   without long-running service assumptions; otherwise promote watch to a future
   plan and close the list/show part now.
+- **B-11 follow-on after B-10**: add directed-message authoring commands
+  `comms direct` and `comms reply` under the existing `comms` namespace.
+  Implement in new `agent-tools/src/collaboration-state/cli-comms-messages.ts`;
+  auto-fill `from` from the existing identity resolver; require explicit
+  recipient identity fields for B-11; validate input and parser-readback;
+  default reply subject to `re: <source-subject>` without adding a directed
+  schema threading field.
 - Extend `claims list` filters for `--prefix`, `--name`, `--thread`, and
   `--kind`.
 
@@ -181,6 +200,8 @@ Acceptance:
 - Agents no longer need ad hoc Python to inspect comms events or filtered
   claims.
 - `claims show` remains intact.
+- Agents can send and reply to directed messages without hand-authoring JSON
+  once B-11 lands.
 - `F-07` and `F-08` are closed or split into closed list/show plus deferred
   watch with an explicit future-plan trigger.
 
@@ -190,12 +211,31 @@ Issue covered: `F-05`.
 
 Target files:
 
+- [`agent-tools/src/collaboration-state/cli-options.ts`](/agent-tools/src/collaboration-state/cli-options.ts)
+- [`agent-tools/src/collaboration-state/cli-specs.ts`](/agent-tools/src/collaboration-state/cli-specs.ts)
+- [`agent-tools/src/collaboration-state/json.ts`](/agent-tools/src/collaboration-state/json.ts)
 - [`agent-tools/src/collaboration-state/state-io.ts`](/agent-tools/src/collaboration-state/state-io.ts)
 - [`agent-tools/src/collaboration-state/state-parsers.ts`](/agent-tools/src/collaboration-state/state-parsers.ts)
 - [`agent-tools/src/collaboration-state/cli-comms-commands.ts`](/agent-tools/src/collaboration-state/cli-comms-commands.ts)
+- [`agent-tools/tests/collaboration-state/collaboration-state.unit.test.ts`](/agent-tools/tests/collaboration-state/collaboration-state.unit.test.ts)
+- [`agent-tools/tests/collaboration-state/state-parsers.unit.test.ts`](/agent-tools/tests/collaboration-state/state-parsers.unit.test.ts)
 
 TDD cycles:
 
+- **Compatibility slice landed in working tree 2026-05-11**: normalize
+  legacy narrative `addressed_to` agent-reference objects, treat legacy
+  `in_response_to: null` / `in_reply_to: null` as absent, and make
+  `comms render` accept/document all three post-R1.b event directories.
+  Live verification: render against current repo comms directories now exits
+  0 to a temp output.
+- **Migration-out cycle required after compatibility slice lands**:
+  1. Run a one-shot normalizer over `.agent/state/collaboration/comms-events/`
+     that rewrites legacy `addressed_to` agent-reference objects to string
+     agent names and deletes null `in_response_to` / `in_reply_to` fields.
+  2. Delete the tolerant parser helpers
+     `optionalStringOrLegacyAgentName` and `optionalNullableString`.
+  3. Restore the narrative parser call sites to strict `optionalString`
+     handling for `addressed_to`, `in_response_to`, and `in_reply_to`.
 - Prove render can continue past one malformed JSON file while surfacing the
   offending path.
 - Prove legacy-schema event files are reported distinctly from syntax errors.
