@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "comms-event.schema.json",
+  "title": "Communication Protocol Event",
+  "description": "Single source of truth for the inter-agent communication protocol. The protocol is one canonical schema; the application is three event kinds expressed as $defs and projected to three sibling directories (comms-events/ narrative, comms-lifecycle/ lifecycle, comms-messages/ directed). Each directory is single-kind; readers infer the $def from the directory and validate against the named branch. Governed by .agent/directives/agent-collaboration.md.",
+  "$comment_compatibility": "Additive-only schema evolution within a major version. v1.x readers preserve unrecognised fields on write-back; major-version mismatch causes the reader to bail out. The $defs are deliberately strict (additionalProperties false) so an authoring agent cannot accidentally introduce a fourth shape under an existing $def; new event kinds are introduced as new $defs + new directories. Field provenance is documented inline against each $def.",
+  "oneOf": [
+    { "$ref": "#/$defs/narrative" },
+    { "$ref": "#/$defs/lifecycle" },
+    { "$ref": "#/$defs/directed" }
+  ],
+  "$defs": {
+    "agent_id": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agent_name", "platform", "model", "session_id_prefix"],
+      "properties": {
+        "agent_name": { "type": "string", "minLength": 1 },
+        "platform": { "type": "string", "minLength": 1 },
+        "model": { "type": "string", "minLength": 1 },
+        "session_id_prefix": { "type": "string", "minLength": 1 }
+      },
+      "description": "PDR-027 agent identity block. Reused across all event kinds."
+    },
+    "narrative": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_id", "created_at", "author", "title", "body"],
+      "properties": {
+        "event_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable identifier for the event. UUID v4 or stable slug; must be unique across the comms-events/ directory."
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 UTC timestamp at which the event was authored. Canonical time field across all event kinds."
+        },
+        "author": {
+          "$ref": "#/$defs/agent_id",
+          "description": "Single authoring agent for the narrative event."
+        },
+        "title": { "type": "string", "minLength": 1 },
+        "body": { "type": "string", "minLength": 1 },
+        "audience": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Optional broadcast routing. Use '*' for all-agents broadcast; specific agent_name strings for targeted broadcast."
+        },
+        "addressed_to": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional single-recipient soft routing (advisory; not enforced). Mutually exclusive in practice with audience but not formally."
+        },
+        "in_response_to": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional reference to an earlier event_id this event responds to. Threading affordance."
+        },
+        "in_reply_to": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional reference to an earlier event_id this event replies to. Threading affordance (variant of in_response_to)."
+        }
+      },
+      "description": "Default narrative event: an authored, titled, bodied communication addressed to the team. The canonical and dominant shape (~311 of 318 events as of 2026-05-11). Lives in .agent/state/collaboration/comms-events/."
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "event_id",
+        "created_at",
+        "event_type",
+        "occurred_at",
+        "author",
+        "agent_id",
+        "thread",
+        "claim_id",
+        "title",
+        "subject",
+        "body"
+      ],
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Semantic version of the lifecycle event payload. Authored events use the latest supported version."
+        },
+        "event_id": { "type": "string", "minLength": 1 },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 UTC authoring timestamp."
+        },
+        "event_type": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Lifecycle-event sub-kind. Examples: comms_event, consolidation_open, consolidation_close, claim_lifecycle. Not a top-level protocol discriminator (the directory does that); a lifecycle-specific category."
+        },
+        "occurred_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 UTC timestamp when the lifecycle moment occurred. May differ from created_at when an event is recorded after the fact."
+        },
+        "author": { "$ref": "#/$defs/agent_id" },
+        "agent_id": {
+          "$ref": "#/$defs/agent_id",
+          "description": "The agent whose lifecycle this event records. Often the same as author."
+        },
+        "thread": { "type": "string", "minLength": 1 },
+        "claim_id": {
+          "type": "string",
+          "description": "Reference to an active or closed claim entry. Empty string permitted when the event is not claim-scoped."
+        },
+        "title": { "type": "string", "minLength": 1 },
+        "subject": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Short summary line. Often duplicates title."
+        },
+        "body": { "type": "string", "minLength": 1 }
+      },
+      "description": "Lifecycle event: a structured event recording a session, claim, or consolidation lifecycle moment. Carries explicit thread and claim_id context. Lives in .agent/state/collaboration/comms-lifecycle/."
+    },
+    "directed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "event_id",
+        "created_at",
+        "kind",
+        "from",
+        "to",
+        "subject",
+        "body"
+      ],
+      "properties": {
+        "schema_version": { "type": "string", "minLength": 1 },
+        "event_id": { "type": "string", "minLength": 1 },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 UTC authoring timestamp. Canonical time field across all event kinds; the legacy 'timestamp' field is renamed to created_at on migration."
+        },
+        "kind": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Directed-message kind. Examples: session-handoff-summary, coordination-notice, sidebar-request."
+        },
+        "from": {
+          "$ref": "#/$defs/agent_id",
+          "description": "Sending agent identity."
+        },
+        "to": {
+          "$ref": "#/$defs/agent_id",
+          "description": "Intended recipient agent identity. Advisory routing; not enforced."
+        },
+        "subject": { "type": "string", "minLength": 1 },
+        "body": { "type": "string", "minLength": 1 }
+      },
+      "description": "Directed message: a point-to-point communication from one agent to another, carrying explicit from/to identities and a kind discriminator. Lives in .agent/state/collaboration/comms-messages/."
+    }
+  }
+}

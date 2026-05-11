@@ -3392,3 +3392,21 @@ Reviewer dispatch this session: assumptions-expert (framing Q5), architecture-ex
 - **Phase 4 four-probe matrix**: synthetic multi-agent validation (overlap / commit-discipline / red-gate / session-end-mid-flight); pre-req on R4-new + R5 first.
 
 Friction audit + remediation design captured at `/tmp/phase-0-ground-state.md`, `/tmp/phase-1-friction-audit.md`, `/tmp/phase-2-remediation-design.md` (ephemeral — should consolidate into the parent plan body or named friction register in follow-on session). Self-discovered protocol violations this session: my session-open log entry was direct Edit, not `comms append` (recorded in OD-2 evidence; root-caused by B-01 making the CLI unreliable). Claim 718035aa closed cleanly with closure summary; no foreign state.
+
+---
+
+## 2026-05-11T12:52:05Z — `Smouldering Crackling Pyre` / `claude-code` / `claude-opus-4-7-1m` / `ab76ef` — Bootstrap fast-path; FINAL collab-protocol hardening session open; R1 premise REFUTED
+
+Bootstrap fast-path: `active-claims.json` empty at open; most recent log entry my predecessor `Deciduous Twining Dew` session-close 2026-05-11T10:45:50Z. No other agents present. Claim `059291ea-ea07-44d8-aa4d-b727266ef662` registered against R1/R2/R3/R4b/R4-new/R5/R7/R8 surfaces. Direct Edit to shared-comms-log + active-claims per B-01 CLI-unreliable workaround.
+
+**Refuted-premise event — R1 picture revised.** Pre-flight field-set fingerprint scan across `comms-events/*.json` returned **seven distinct shapes collapsing to THREE families**, not two as predecessor diagnosed:
+
+- **Family A — Narrative** (311 files): canonical 5-field shape (292) + accreted optional fields (audience / addressed_to / in_response_to / in_reply_to: 19 files across 4 variants).
+- **Family B — Lifecycle** (5 files): `agent_id, claim_id, occurred_at, schema_version, subject, thread, event_type` plus narrative fields. Already carries an `event_type` discriminator — prior schema-evolution attempt visible.
+- **Family C — Directed-message** (2 files): `body, from, to, kind, subject, schema_version, timestamp`. No author/title/created_at.
+
+Owner direction received: **Shape A′ — three directories, one canonical schema with three `$defs`.** `comms-events/` (narrative, ~311 unchanged), `comms-lifecycle/` (lifecycle, 5 migrated), `comms-messages/` (directed, 2 migrated). Protocol SoT = `comms-event.schema.json`; application SoT = directory layout (projection of `$defs`). Three single-schema parsers; no dispatch.
+
+Plan-time reviewers landed before refutation: assumptions-expert GO WITH CONDITIONS (named hidden assumptions e/f, refuted-premise risk on shape-count — premise (1) duly refuted at pre-flight); architecture-expert-betty GO WITH CONDITIONS (preferred Shape A on cohesion/coupling/change-cost grounds; conditions on TS union, R5.1 invariant, migration atomicity).
+
+Phase 0 complete. Beginning R1.a (schema authority) test-first.
