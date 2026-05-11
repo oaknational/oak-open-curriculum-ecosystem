@@ -17,7 +17,7 @@ specialist_reviewer: "architecture-expert-betty, architecture-expert-fred, archi
 isProject: true
 todos:
   - id: ws0-topology-adr
-    content: "WS0: Author ADR for the Graph Stack topology decision; record supersession/coordination map for adjacent plans"
+    content: "WS0: Drive ADR-173 (Status: Proposed) through reviewer absorption (architecture-expert-betty, architecture-expert-fred, assumptions-expert) and owner final-approval to Accepted; record supersession/coordination map for adjacent plans inside ADR-173"
     status: pending
   - id: ws1-graph-core-scaffold
     content: "WS1.1: Scaffold packages/core/graph-core workspace (TS, esbuild, vitest, README, exports skeleton). One commit, tree green."
@@ -123,8 +123,8 @@ todos:
 
 # Graph Stack — Topology and Foundation Increment
 
-**Last Updated**: 2026-05-11 — Schedule-not-trigger doctrine sweep applied to §Increments table (Inc.2–7 trigger framings converted to scheduled positions or named open decisions), Status block (D-4a strike), Promotion Trigger intro, Surfacing prose, Layer Map row §6, Coordination map graph-query-layer cell; new §Genuine Open Decisions section added (O-1 topology ADR approval; O-2 increment promotion ownership); combinatorial-arc cross-plan "design stability" trigger removed (relocated to `graph-combinatorial-arc.plan.md`'s own Promotion Trigger). Prior 2026-05-11 update: Inc.1 decomposed into sub-increments 1a (substrate scaffolding) / 1b (Threads adapter) / 1c (query proof) plus closure, with file-scope-non-overlapping boundaries and explicit parallel-safety annotations; D-4 BLOCKERs verified closed.
-**Status**: 🟡 PLANNING — opens to ACTIVE when the gates listed in §Promotion Trigger close. D-4a (ADR-041 workspace-tiers amendment) was closed 2026-05-11 by the graduation-candidates-drain session and is no longer a blocker; the remaining gate is owner approval of the WS0 topology ADR (see §Genuine Open Decisions).
+**Last Updated**: 2026-05-11 (Flamebright Burning Lava session) — Question-assumptions pass corrected three framings: (i) removed inaccurate "approved in principle 2026-05-11" claim from Status block (owner clarified the topology was not owner-approved on that date); (ii) deleted §Genuine Open Decisions section in full — O-1 was execution sequencing, O-2 was documenting existing practice, retained closure audit notes; (iii) rewrote WS0 todo + closure description + §Promotion Trigger Gate 2 + §Dependencies blocking to reference ADR-173 promotion (Proposed → Accepted in place) rather than authoring a parallel ADR. Prior 2026-05-11 entries retained below. Earlier 2026-05-11 update: Schedule-not-trigger doctrine sweep applied to §Increments table, Status block (D-4a strike), Promotion Trigger intro, Surfacing prose, Layer Map row §6, Coordination map graph-query-layer cell; combinatorial-arc cross-plan "design stability" trigger removed (relocated to `graph-combinatorial-arc.plan.md`'s own Promotion Trigger). Prior 2026-05-11 update: Inc.1 decomposed into sub-increments 1a (substrate scaffolding) / 1b (Threads adapter) / 1c (query proof) plus closure, with file-scope-non-overlapping boundaries and explicit parallel-safety annotations; D-4 BLOCKERs verified closed.
+**Status**: 🟡 PLANNING — opens to ACTIVE when the gates listed in §Promotion Trigger close. D-4a (ADR-041 workspace-tiers amendment) was closed 2026-05-11 by the graduation-candidates-drain session and is no longer a blocker. The topology decision is not yet owner-approved; [ADR-173](../../../../../docs/architecture/architectural-decisions/173-graph-stack-topology.md) (Status: Proposed, 2026-05-07, amended 2026-05-10) is the artefact, and the remaining gate is reviewer absorption plus owner final-approval of ADR-173 (see §Promotion Trigger).
 **Scope**: Establish a layered, standards-based graph capability for Oak as a backbone of seven active graph workspaces plus one deferred, then ship the foundation increment ingesting the Oak Curriculum Ontology Threads graph end-to-end as the first attached corpus.
 
 ---
@@ -203,11 +203,11 @@ paths:
 
 The substrate depends on three external libraries; each is a deliberate buy.
 
-| Concern | First-party option surveyed | Decision |
+| Concern | Options surveyed | Decision |
 |---|---|---|
-| JSON-LD 1.1 processing | [`jsonld.js`](https://github.com/digitalbazaar/jsonld.js) (W3C reference, MIT) | **Adopt as default processor inside `graph-core`'s versioned adapter.** Bespoke JSON-LD is not warranted; the spec is large and the reference implementation is canonical. The adapter shape (research §12) lets a leaner alternative slot in later. |
-| RDF dataset canonicalisation | [`rdf-canonize`](https://github.com/digitalbazaar/rdf-canonize) (BSD-3) | **Adopt inside `graph-core/canon` module.** Canonicalisation is a precise spec; bespoke is high-risk for a substrate primitive. |
-| SHACL validation | [`rdf-validate-shacl`](https://github.com/zazuko/rdf-validate-shacl) (Comunica family) | **Adopt inside `graph-validate` behind the `ShapeValidator` adapter (research §12 SHACL seam).** Bespoke SHACL is forbidden. |
+| JSON-LD 1.1 processing | (a) [`jsonld.js`](https://github.com/digitalbazaar/jsonld.js) — W3C reference, MIT, full 1.1 spec coverage including framing; (b) `@digitalbazaar/jsonld-document-loader` variants — narrower scope, suitable only when full processor not required; (c) bespoke — rejected. | **Adopt `jsonld.js` as default processor inside `graph-core`'s versioned adapter.** Reference implementation is canonical; the framing operation we need is unique to the full processor. Adapter shape (research §12) lets a leaner alternative slot in later if framing leaves the requirement set. |
+| RDF dataset canonicalisation | (a) [`rdf-canonize`](https://github.com/digitalbazaar/rdf-canonize) — Digital Bazaar, BSD-3, URDNA2015 spec-aligned; (b) `@rdfjs/dataset` + bespoke URDNA2015 implementation — rejected because URDNA2015 is a precise normative algorithm with subtle hashing/lexical-ordering invariants; (c) other Comunica canonicalisers — single-author packages with narrower spec coverage. | **Adopt `rdf-canonize` inside `graph-core/canon` module.** Canonicalisation is a precise spec primitive; bespoke is high-risk for a substrate-level invariant on which dataset equivalence depends. |
+| SHACL validation | (a) [`rdf-validate-shacl`](https://github.com/zazuko/rdf-validate-shacl) — Comunica family, broad SHACL Core + SHACL-AF support; (b) `shacl-engine` — alternative SHACL processor, narrower constraint coverage at survey time; (c) Comunica's other SHACL packages — overlapping coverage but less production maturity; (d) bespoke SHACL — forbidden by the rule (specification scope is intractable). | **Adopt `rdf-validate-shacl` inside `graph-validate` behind the `ShapeValidator` adapter (research §12 SHACL seam).** Re-evaluate against `shacl-engine` if SHACL 1.2 lands (tripwire #3 in ADR-173). |
 
 No bespoke wrappers. The adapter-shape discipline (research §12) keeps every dependency replaceable behind a versioned interface.
 
@@ -241,7 +241,7 @@ owned by the agent-tooling/practice plan estate. The future organisation/wiring
 plan is
 [`../../../agent-tooling/future/agent-graphs-workspace-organisation.plan.md`](../../../agent-tooling/future/agent-graphs-workspace-organisation.plan.md).
 
-**Every graph workspace in the topology is MCP-agnostic.** None of the graph substrate workspaces ship MCP tool definitions, MCP resource constants, or MCP-server registration code. Surfacing graph capability through MCP — if Oak chooses to do so — is a *consumer-side* concern handled by the existing curriculum SDK MCP module plus the curriculum MCP HTTP app, or by a future consumer workspace that imports `graph-corpus-sdk`. See §Surfacing.
+**Every graph workspace in the topology is transport-agnostic per [ADR-179](../../../../../docs/architecture/architectural-decisions/179-transport-agnostic-graph-substrate.md).** None of the graph substrate workspaces ship MCP tool definitions, MCP resource constants, MCP-server registration code, or any HTTP/CLI/transport-shaped code. Surfacing graph capability through any transport — if Oak chooses to do so — is a *consumer-side* concern handled by the existing curriculum SDK MCP module plus the curriculum MCP HTTP app, or by a future consumer workspace that imports `graph-corpus-sdk`. See §Surfacing.
 
 ---
 
@@ -304,16 +304,16 @@ Each increment is a separate plan when promoted. The foundation increment is the
 
 ---
 
-## Genuine Open Decisions
+## Closed Audit Notes
 
-Per the schedule-not-trigger doctrine (owner direction 2026-05-11: *"schedule it, sequence it, no imaginary flows, simple and definite is the only way anything happens"*), the items below are genuine open decisions that block scheduling. They are not deferred triggers; they are choices waiting on a named decision-holder.
+The previously-tracked open decisions O-1 and O-2 have been removed: O-1
+("topology approval") is execution sequencing owned by §Promotion Trigger
+plus the reviewer absorption flow against ADR-173, not a separable
+decision; O-2 ("increment promotion ownership") documented existing
+practice (owner promotes each plan at predecessor-close), not a
+decision-needing-resolution.
 
-| # | Decision | Decision-holder | Effect on scheduling | Status |
-|---|---|---|---|---|
-| O-1 | **WS0 topology ADR approval.** Does the owner approve the seven-active-plus-one-deferred graph topology as proposed? | Owner | Blocks Inc.1 promotion from CURRENT → ACTIVE; gates 1 + 2 of §Promotion Trigger cannot close without it. | **Approved in principle 2026-05-11** pending reviewer input on the WS0 ADR draft. Next sequence is definite: author ADR as `Proposed`; dispatch architecture-expert-betty + architecture-expert-fred + assumptions-expert in parallel; absorb findings; surface refined ADR for final approval; on final approval gates 1 + 2 close and graph-stack promotes to ACTIVE. |
-| O-2 | **Increment promotion ownership.** Who promotes each subsequent Inc.N from "scheduled after predecessor closes" to an active plan, at the moment the predecessor closes? | Owner (default) | Schedule positions in §Increments name "owner promotion" as the trigger; this names the actor. If a delegate or review checkpoint is preferred over case-by-case owner promotion, this changes the trigger wording. | Open assumption: owner promotes at each predecessor-close review. Confirm or amend. |
-
-Two prior open items are now closed and recorded here for audit:
+Two prior items are recorded here for audit only:
 
 - **D-4a (ADR-041 workspace-tiers amendment)** — closed 2026-05-11 by the graduation-candidates-drain session (`Fronded Flowering Seed`); `agent-graphs/` regularised + `agent-tools/` formalised in the 8×8 dependency-direction matrix.
 - **D-4 (graph-stack topology BLOCKERs)** — closed 2026-05-11 by the graph-execution-prep session (`Dusky Masking Cloak`).
@@ -433,7 +433,7 @@ The cycle-by-cycle TDD breakdown is the YAML `todos` block at the head of this p
 
 #### Inc.1 closure (file scope: cross-plan + repo-wide docs + gates)
 
-- **WS0 — Topology ADR**: author the proposed ADR that records the intended topology decision and supersession/coordination map for owner review (see §Coordination with Existing Plans). May land at the head of Inc.1a alongside WS1.1.
+- **WS0 — Topology ADR promotion**: drive [ADR-173](../../../../../docs/architecture/architectural-decisions/173-graph-stack-topology.md) (Status: Proposed) through reviewer absorption (architecture-expert-betty, architecture-expert-fred, assumptions-expert) and owner final-approval to Accepted. The ADR already records the topology decision and supersession/coordination map; WS0 edits ADR-173 in place rather than authoring a parallel ADR. May land at the head of Inc.1a alongside WS1.1.
 - **WS5 — Coordination amendments** (1 batch): amend `graph-query-layer.plan.md`, `oak-kg-threads-surface.plan.md`, `practice-graph-payoff-peak-pilot.plan.md`, and the parent `open-education-knowledge-surfaces.plan.md`.
 - **WS6 — Documentation propagation** (1 batch): collection README, monorepo README, CONTRIBUTING, `LICENCE-DATA.md` ontology section, Mark Hodierne author addition, research filename typo fix. ADR-123 is not amended by this increment because no MCP primitives are added or changed.
 - **WS7 — Quality gates** (1 batch): full chain (`pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && pnpm test && pnpm test:ui && pnpm test:e2e`).
@@ -470,6 +470,8 @@ The foundation increment lands tests for the load-bearing invariants from resear
 4. **Enhancement traceable**: every derived attribute carries an `EnhancementRecord` (even where the foundation increment only emits one or two enhancement kinds).
 5. **JSON-LD 1.1 only at the public surface**: no draft-only syntax leaks (compile-time check on the `JsonLdProcessor` adapter; runtime check on emitted `@context`).
 6. **Property-graph projection is derived, not canonical**: a smoke test asserts that `dataset.toPropertyGraph()` is reconstructable from the canonical dataset.
+7. **Triple-term ingestion round-trip (continuous contract test)**: `graph-ingest` asserts triple-term inputs round-trip preserving annotations. Implements ADR-173 tripwire #6 as continuous validation rather than deferred tripwire (assumptions-expert 2026-05-11).
+8. **JSON-LD framing determinism on real Oak Threads corpus**: a contract test that `jsonld.js` framing produces deterministic output on the pinned Oak Ontology Threads raw import; surfaces performance characteristics before they become an Inc.2 surprise (assumptions-expert 2026-05-11).
 
 ### Acceptance
 
@@ -518,6 +520,73 @@ The eventual public-asset move (Increment 6) is to publish `graph-core`, `graph-
 - Contribute back vocabulary mappings for the Oak ontology Thread graph and EEF strands.
 
 This is named here so the substrate is built for that future from day one — no Oak-specific shortcuts in the layered packages.
+
+---
+
+## Reviewer Absorption (2026-05-11)
+
+Findings from architecture-expert-betty + architecture-expert-fred +
+assumptions-expert run against ADR-173 in the Flamebright Burning Lava
+session. Absorbed amendments (this section is audit-and-route, not
+duplicate doctrine).
+
+**Absorbed into ADR-173 directly**:
+
+- Tripwire #2 ↔ #5 cross-reference fix (RDF 1.2 REC may land before
+  RDF/JS WG publishes data-model extension).
+- Tripwire #6 reformulated from deferred-tripwire to continuous
+  contract test on `graph-ingest`.
+- Tripwire #8 added: upstream `oaknational/oak-curriculum-ontology`
+  breaking-change tripwire.
+- Open Question 2 (MCP-agnostic principle as separate ADR vs in-place
+  in ADR-173) — **Resolved 2026-05-11**: extracted to
+  [ADR-179](../../../../../docs/architecture/architectural-decisions/179-transport-agnostic-graph-substrate.md)
+  per owner direction; ADR-173 references ADR-179 in §"Transport
+  discipline (see ADR-179)". Rule substance unchanged.
+
+**Pre-Inc.2 design precondition (Betty)** — *not blocking Inc.1
+ratification, blocking Inc.2 implementation start*:
+
+The `graph-enhance` ↔ `graph-validate` seam needs an explicit
+dependency-direction and result-type protocol recorded before Inc.2
+implementation begins. The protocol is: validation results are plain
+records (data structures), not callbacks into enhancement. Direction
+is `graph-validate → graph-enhance` (validate imports enhancement
+record types to annotate failures); enhancement does not import
+validation. If enhancement logic accumulates conditional paths
+driven by validation outcomes, the boundary is leaking and the
+protocol has failed.
+
+**Pre-Inc.3 design precondition (Betty)** — *not blocking Inc.1
+ratification, blocking Inc.3 implementation start*:
+
+The `graph-ingest` ↔ `graph-corpus-sdk` boundary needs a
+corpus-local parse extension protocol. Corpus-local parse quirks
+(namespace collisions, non-standard SKOS uses, EEF-specific JSON
+shapes) MUST land in `graph-corpus-sdk` adapters, not in
+`graph-ingest`. The protocol: `graph-ingest` exposes parse-primitive
+extension points (visitor / parse-callback) that adapters can
+specialise without re-implementing or reaching back. Document
+before Inc.3 prerequisite/misconception/EEF adapters land.
+
+**Absorbed into §Test discipline above**:
+
+- Triple-term ingestion round-trip continuous contract test (test
+  invariant #7).
+- JSON-LD framing determinism contract test on pinned Oak Ontology
+  Threads raw import (test invariant #8).
+
+**Absorbed into §Build-vs-Buy Attestation above**:
+
+- Named-alternative rows expanded per library (`jsonld.js`,
+  `rdf-canonize`, `rdf-validate-shacl`) so the attestation is
+  evidenced rather than categorical.
+
+**Sequencing observation (assumptions-expert)**: `agent-graphs/`
+top-level organisation plan is a sequencing dependency for Inc.4
+practice-graph consumer activation, not a topology dependency. The
+organisation plan does not yet exist; tracked as schedule
+dependency in §Increments table row 4.
 
 ---
 
@@ -577,14 +646,14 @@ First question: **Could it be simpler without compromising quality?** The seven-
 
 Required handling before close:
 
-1. New proposed ADR records the topology and supersession map (WS0). The ADR includes the MCP-agnostic principle as an intended topology constraint pending owner ratification.
+1. [ADR-173](../../../../../docs/architecture/architectural-decisions/173-graph-stack-topology.md) records the topology and supersession map (WS0); promotion from Proposed → Accepted is the WS0 work. [ADR-179](../../../../../docs/architecture/architectural-decisions/179-transport-agnostic-graph-substrate.md) records the transport-discipline principle (extracted from ADR-173 on 2026-05-11 per owner direction); both ADRs are promoted together at the final-approval gate.
 2. ADR-154 (framework-vs-consumer) reference: the topology is a worked application of the rule.
 3. ADR-157 (multi-source open education) amendment: the spine is now the structural carrier of multi-source integration.
 4. Collection README ([`../README.md`](../README.md)) — add this plan to Current Queue, update Read Order.
 5. Monorepo root `README.md` — Data Sources section to mention the graph stack as the structural integration layer.
 6. `LICENCE-DATA.md` — confirm ontology section reflects direct ingestion.
 7. `package.json` contributors — add Mark Hodierne (per existing parent-plan attribution requirement).
-8. Per-workspace READMEs (seven active graph workspace files, plus one deferred `graph-future` README when activated) — each names its layer, its public surface, its non-goals, its adapter seams, and its MCP-agnostic posture.
+8. Per-workspace READMEs (seven active graph workspace files, plus one deferred `graph-future` README when activated) — each names its layer, its public surface, its non-goals, its adapter seams, and its transport-agnostic posture per [ADR-179](../../../../../docs/architecture/architectural-decisions/179-transport-agnostic-graph-substrate.md).
 9. ~~Filename typo correction: `.agent/research/graph-iibrary.md` → `.agent/research/graph-library.md`.~~ **DONE 2026-05-07** — file renamed to `.agent/research/graph-library.research.md` with the `.research.md` suffix to mark it as one researched direction rather than a plan; references in this plan, the collection README, and operational memory updated.
 10. First-wave ingestion scope amendment: confirm the foundation ships generic Turtle/SKOS parsing plus the Oak Curriculum Ontology Threads adapter as the first attached corpus. Prerequisite, misconception, and EEF strand adapters are sequenced into Increment 3. NC taxonomy adapter/surface work and other Oak Ontology projection formats (PG-JSONL, Neo4j export, SQL) remain out of scope until a downstream consumer requires them and the owner promotes that work separately.
 
@@ -609,7 +678,7 @@ fitness, and update the practice exchange. Candidate graduations:
 
 **Blocking**:
 
-- Owner approval of the topology decision (WS0 ADR is the artefact).
+- Owner final-approval of [ADR-173](../../../../../docs/architecture/architectural-decisions/173-graph-stack-topology.md) (Status: Proposed → Accepted) after reviewer absorption.
 - Pinned `oak-curriculum-ontology` revision for Oak Ontology Threads extraction (foundation-increment WS4 dependency).
 
 **Related Plans**:
@@ -633,7 +702,7 @@ fitness, and update the practice exchange. Candidate graduations:
 
 This plan moves to ACTIVE at a named session when all four gates below are closed, in the order listed:
 
-1. Owner has approved the topology decision (the §Genuine Open Decision below).
-2. WS0 ADR is drafted and reviewers have returned findings (not necessarily merged).
+1. Reviewer findings (architecture-expert-betty, architecture-expert-fred, assumptions-expert) absorbed into [ADR-173](../../../../../docs/architecture/architectural-decisions/173-graph-stack-topology.md) in place.
+2. Owner final-approves the refined ADR-173; Status flips Proposed → Accepted.
 3. The pinned `oak-curriculum-ontology` revision is identified for the Oak Ontology Threads adapter.
-4. `assumptions-expert`, `architecture-expert-betty`, `architecture-expert-fred`, and `architecture-expert-barney` have run against this plan body and findings are addressed.
+4. `architecture-expert-barney` has run against this plan body and findings are addressed.

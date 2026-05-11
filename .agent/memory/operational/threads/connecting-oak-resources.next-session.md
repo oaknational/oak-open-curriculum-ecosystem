@@ -1,10 +1,59 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
-**Next anticipated work**: graph-stack + graph-combinatorial-arc
-doctrine sweep (schedule-not-trigger framings) — see the next-session
-starting statement at the end of this record.
+**Next anticipated work**: **First** — land the pending 12-file
+markdown-only stage (ADR-173 reviewer absorption, ADR-179 extraction,
+verdict-not-menu rule) that was blocked by serial peer-file
+pre-commit gate failures in the Flamebright Burning Lava session
+(see broadcast event `47c5a7db` and napkin evidence). Stage remains
+intact by explicit pathspec; commit message drafted in the napkin
+entry. The commit will land cleanly once the working-tree
+coordination has settled (Galactic's B-10 commits, Wooded's sidebar
+docs gate-clean, or the cli-comms-inbox / B-02 / B-03 architectural
+work lands and breaks the stale-gate-sweep race). **Then** — owner
+final-approval of ADR-173 (Proposed → Accepted) and ADR-179
+(Proposed → Accepted); `graph-stack.plan.md` lifecycle promotion
+CURRENT → ACTIVE; Inc.1a WS1.1 (`packages/core/graph-core` scaffold)
+opens for test-first execution. Optional `architecture-expert-barney`
+run against the plan body to close §Promotion Trigger Gate 4.
 
-**Last refreshed**: 2026-05-11 (Shaded Ripening Copse /
+**Last refreshed**: 2026-05-11 (Flamebright Burning Lava /
+`claude-code` / `claude-opus-4-7-1m` / `b1202e` — question-
+assumptions pass on the WS0 ADR brief. Three assumption-breaks
+identified and verdicted (ADR-173 already exists; §Genuine Open
+Decisions table was theatre; "deferrals" conflated three mechanics).
+Plan body corrected: removed inaccurate "approved in principle
+2026-05-11" claim, deleted §Genuine Open Decisions, rewrote WS0 +
+§Promotion Trigger + §Dependencies to reference ADR-173 promotion
+in place. Three reviewers dispatched in parallel against ADR-173:
+architecture-expert-fred (COMPLIANT, one advisory amendment —
+extract MCP-agnostic principle to separate ADR); architecture-
+expert-betty (structurally fit, two pre-Inc.2/3 design preconditions
+on graph-enhance/validate seam + graph-ingest/sdk parse extension
+protocol); assumptions-expert (sound, build-vs-buy attestation
+needed evidence depth, tripwire #6 reformulation, missing upstream-
+ontology-change tripwire). Findings absorbed: ADR-173 tripwire
+matrix updated (#2↔#5 cross-ref, #6 reformulated as continuous
+contract test, #8 added for upstream ontology breaking changes);
+plan body §Build-vs-Buy expanded with named alternatives per
+library, §Test discipline gained tests 7 + 8, new §Reviewer
+Absorption section records pre-Inc.2/3 design preconditions. Owner
+resolved Open Question 2: extracted MCP-agnostic principle to
+ADR-179 (Transport-Agnostic Graph Substrate — Surfacing Is A
+Consumer-Side Concern); ADR-173 §"Transport discipline (see
+ADR-179)" cross-references it; ADR-173 Related + 2026-05-11
+amendment header updated. Secondary systemic landing: verdict-not-
+menu pattern (recurred mid-session despite in-context feedback
+memories) landed structurally — new canonical rule
+`.agent/rules/present-verdicts-not-menus.md`, Claude + Cursor
+adapters, RULES_INDEX entry, `jc-plan` skill SKILL-CANONICAL.md
+§Before Writing item 1 rewritten with unknown-design-intent vs
+analysed-and-have-verdict distinction, distilled.md entry, napkin
+observation. **Next-session entry point**: surface ADR-173 +
+ADR-179 to owner for final approval; on approval flip both
+Proposed → Accepted, promote graph-stack CURRENT → ACTIVE, open
+Inc.1a WS1.1.)
+
+**Prior refresh**: 2026-05-11 (Shaded Ripening Copse /
 `claude-code` / `claude-opus-4-7-1m` / `c13bdf` —
 schedule-not-trigger sweep of `graph-stack.plan.md` and
 `graph-combinatorial-arc.plan.md` per the doctrine ratified by the
@@ -379,6 +428,7 @@ promotion.)
 | `Dusky Masking Cloak` | `claude-code` | `claude-opus-4-7-1m` | `c5ff7f` | `graph-execution-prep-steps-1-2-3-author` | 2026-05-11 | 2026-05-11 |
 | `Mistbound Watching Lantern` | `claude-code` | `claude-opus-4-7-1m` | `8fdb8b` | `graph-mvp-arc-review-absorption-and-doctrine-ratification` | 2026-05-11 | 2026-05-11 |
 | `Shaded Ripening Copse` | `claude-code` | `claude-opus-4-7-1m` | `c13bdf` | `graph-stack-and-combinatorial-arc-schedule-not-trigger-sweep` | 2026-05-11 | 2026-05-11 |
+| `Flamebright Burning Lava` | `claude-code` | `claude-opus-4-7-1m` | `b1202e` | `question-assumptions-adr-173-promotion-and-verdict-not-menu-nudges` | 2026-05-11 | 2026-05-11 |
 
 ## Plan Locations
 

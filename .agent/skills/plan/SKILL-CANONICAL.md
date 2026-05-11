@@ -15,9 +15,27 @@ defined in [ADR-117](../../../docs/architecture/architectural-decisions/117-plan
    with the project owner? If the scope is ambiguous or the approach
    has multiple valid paths, run `jc-metacognition` first to explore
    intent, constraints, and trade-offs before committing to a plan
-   structure. Ask one question at a time; prefer multiple-choice
-   options when possible; propose 2–3 approaches with trade-offs.
-   Do not skip this step for non-trivial work.
+   structure. Do not skip this step for non-trivial work.
+
+   **Verdict-vs-menu discipline** (per
+   [`.agent/rules/present-verdicts-not-menus.md`](../../rules/present-verdicts-not-menus.md)):
+
+   - *Unknown-to-agent design intent* — the agent has no strong basis
+     for a verdict: surface 2–3 approaches with trade-offs via
+     `AskUserQuestion`. One question at a time; this is the case this
+     design-gate step is written for.
+   - *Agent has analysed and has a verdict* — present the verdict
+     with cited evidence. Do not convert completed findings into a
+     multiple-choice form. `AskUserQuestion` is for genuine permission
+     gates and decisions only the owner can make, not for offloading
+     synthesis the agent has already done. The diagnostic is: *could
+     the agent rank these options by evidence already in context?* If
+     yes, the quiz is evasion.
+
+   Doctrinal anchors: `feedback_no_responsibility_passback` (origin
+   2026-05-09), `feedback_answer_verification_questions_directly`
+   (origin 2026-04-24), PDR-057 (apply-don't-ask doctrine), PDR-058
+   (stop-inventing-optionality).
 
 2. Read the directives:
    - `../../directives/principles.md`

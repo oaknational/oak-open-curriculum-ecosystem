@@ -1,9 +1,37 @@
 # ADR-173: Graph Stack Topology — Standards-First, Layered, MCP-Agnostic
 
-**Status**: Proposed (skeleton, 2026-05-07; NC-boundary amendment
-2026-05-10) — pending owner approval before ratification.
+**Status**: Proposed (skeleton 2026-05-07; NC-boundary amendment
+2026-05-10; reviewer-absorption amendment 2026-05-11) — pending owner
+final-approval before ratification.
 
-**Date**: 2026-05-07; amended 2026-05-10
+**Date**: 2026-05-07; amended 2026-05-10; amended 2026-05-11
+
+**2026-05-11 amendment summary** (Flamebright Burning Lava session,
+reviewer absorption against architecture-expert-betty,
+architecture-expert-fred, assumptions-expert):
+
+- Tripwire #2 ↔ #5 cross-reference: explicit note that #5 review must
+  re-check #2 status (RDF 1.2 REC may land before RDF/JS WG publishes
+  the data-model extension).
+- Tripwire #6 reformulated from "deferred tripwire awaiting first
+  triple-term corpus" to "continuous contract test on `graph-ingest`
+  asserts triple-term inputs round-trip" — reframes a structurally-
+  ambiguous deferred tripwire as named continuous validation.
+- Tripwire #8 added: upstream `oaknational/oak-curriculum-ontology`
+  breaking-change tripwire. Higher-probability near-term risk than
+  spec REC tripwires given ontology IRIs are canonical identity.
+- Open Question 2 (MCP-agnostic principle as separate ADR) —
+  **Resolved 2026-05-11**: extracted to
+  [ADR-179](179-transport-agnostic-graph-substrate.md) per owner
+  direction; ADR-173 §"Transport discipline (see ADR-179)" now
+  references ADR-179 rather than restating the rule inline.
+- Plan-body routed findings (graph-enhance/graph-validate seam
+  protocol, graph-ingest/graph-corpus-sdk corpus-local parse
+  extension protocol, build-vs-buy attestation expansion, JSON-LD
+  framing performance contract test) absorbed into
+  [`graph-stack.plan.md`](../../../.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md)
+  rather than this ADR — they are sequencing and test-discipline
+  concerns, not topology decisions.
 
 **Related**:
 [ADR-123](123-mcp-server-primitives-strategy.md) — MCP server primitives
@@ -17,6 +45,10 @@ graph workspaces plus one deferred future-standards workspace;
 open education integration; this ADR is the structural carrier for that
 integration (Oak API + Oak Curriculum Ontology + EEF, with the EEF
 cross-cutting thread fully named);
+[ADR-179](179-transport-agnostic-graph-substrate.md) — transport-agnostic
+graph substrate; the cross-cutting transport-discipline rule that the
+substrate ships no MCP/HTTP/CLI/transport-shaped code (extracted from
+ADR-173 on 2026-05-11);
 [`graph-mvp-arc.plan.md`](../../../.agent/plans/graph-mvp-arc.plan.md) —
 first vertical-slice consumer of this topology, keeping EEF and misconception
 cross-source value in scope while excluding NC graph/taxonomy work from the
@@ -112,19 +144,20 @@ once. Increment sequencing is owned by the implementing plan.
    adapters; the adapter seams ship from day one in the active workspaces.
    **Tripwire-gated (not increment-sequenced).**
 
-### MCP-agnostic principle (proposed)
+### Transport discipline (see ADR-179)
 
-**No graph workspace ships MCP-shaped code.** Tool definitions, resource
-constants, and registration helpers live with the existing curriculum MCP
-consumer surface (the SDK MCP module plus HTTP app) or a future app-facing
-adapter, not with the graph SDK that produces the data. If a graph workspace
-starts wanting an MCP type or factory, that is the signal to extract a thin
-consumer adapter workspace — not to leak MCP into the substrate. ADR-123 is
-therefore unaffected by this ADR; future graph-derived MCP primitives amend
-ADR-123 at the point a consumer surfaces them.
+The transport-agnostic principle (no graph substrate workspace ships
+MCP/HTTP/CLI/transport-shaped code; surfacing is a consumer-side concern with
+at most one home per transport) is recorded as
+[ADR-179](179-transport-agnostic-graph-substrate.md) following the
+2026-05-11 reviewer absorption (architecture-expert-fred's advisory
+amendment). ADR-173 references ADR-179 rather than restating the principle
+inline so transport-discipline doctrine and topology doctrine evolve
+independently.
 
-The same discipline applies to HTTP, CLI, and JSON-LD export: each transport
-is a consumer-side concern with at most one home per transport.
+ADR-123 (MCP server primitives strategy) is unaffected by either ADR. Future
+graph-derived MCP primitives amend ADR-123 at the point a consumer surfaces
+them, and live in the home named by ADR-179.
 
 ### Corpus source authority
 
@@ -253,15 +286,16 @@ the ecosystem catches up. This ADR proposes seven tripwires by name.
 **Each tripwire becomes a named follow-on plan when triggered, not an inline
 sweep.**
 
-| #   | Tripwire                                               | Trigger signal                                                                                                                                     | Modules affected                                                  | What changes (high-level)                                                                                                                                                           |
-| --- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | **JSON-LD 1.2 reaches W3C Recommendation**             | <https://www.w3.org/TR/json-ld12/> CR → REC (WG charter target Q4 2027)                                                                            | `graph-core/jsonld`; `graph-future` activates                     | JSON-LD 1.2 emit/parse adapter; default version may shift from `"1.1"` to `"1.2"` after consumer-compat check; RelationshipRecord becomes one wire profile, not the canonical shape |
-| 2   | **RDF/JS WG formalises RDF 1.2 data-model extension**  | RDF/JS spec publishes `TripleTerm` as a canonical type                                                                                             | `graph-core` only                                                 | Migrate `Term` union if our shape differs from the published spec (typed refactor confined to `graph-core`)                                                                         |
-| 3   | **SHACL 1.2 reaches W3C Recommendation**               | SHACL 1.2 Core / Rules WD → REC                                                                                                                    | `graph-validate`; `graph-future` may activate                     | Add `shacl-1.2` profile to ShapeValidator adapter; re-evaluate `rdf-validate-shacl` for SHACL 1.2 conformance                                                                       |
-| 4   | **SPARQL 1.2 reaches W3C Recommendation**              | SPARQL 1.2 Query Language WD → REC                                                                                                                 | `graph-future` activates                                          | Author SPARQL 1.2 export/query adapter behind versioned interface                                                                                                                   |
-| 5   | **RDF 1.2 itself reaches W3C Recommendation**          | RDF 1.2 Concepts / Semantics CR → REC                                                                                                              | Documentation and package metadata                                | Update declared spec version; pre-Recommendation risk window closes                                                                                                                 |
-| 6   | **First triple-term-using corpus enters ingestion**    | Any first-wave corpus or future corpus emits triple-term-shaped data (none do today)                                                               | `graph-ingest`, `graph-validate`, `graph-enhance`, contract tests | Verify ingestion preserves triple terms; verify SHACL shape constraints; verify provenance for triple-term derivations                                                              |
-| 7   | **Adapter implementation diverges from targeted spec** | Contract test failure on `jsonld.js`, `rdf-canonize`, `rdf-validate-shacl`, or any future adapter; includes RDF Dataset Canonicalization 1.0 → 2.0 | The diverging adapter only                                        | Pin to last-known-good version, file upstream issue, evaluate alternatives; intervention point is always the version/profile discriminator                                          |
+| #   | Tripwire                                                                      | Trigger signal                                                                                                                                                                   | Modules affected                                                                                                      | What changes (high-level)                                                                                                                                                                                                                                                                                                         |
+| --- | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **JSON-LD 1.2 reaches W3C Recommendation**                                    | <https://www.w3.org/TR/json-ld12/> CR → REC (WG charter target Q4 2027)                                                                                                          | `graph-core/jsonld`; `graph-future` activates                                                                         | JSON-LD 1.2 emit/parse adapter; default version may shift from `"1.1"` to `"1.2"` after consumer-compat check; RelationshipRecord becomes one wire profile, not the canonical shape                                                                                                                                               |
+| 2   | **RDF/JS WG formalises RDF 1.2 data-model extension**                         | RDF/JS spec publishes `TripleTerm` as a canonical type. **Cross-reference tripwire #5**: any review of #5 must check #2 status, and vice versa.                                  | `graph-core` only                                                                                                     | Migrate `Term` union if our shape differs from the published spec (typed refactor confined to `graph-core`)                                                                                                                                                                                                                       |
+| 3   | **SHACL 1.2 reaches W3C Recommendation**                                      | SHACL 1.2 Core / Rules WD → REC                                                                                                                                                  | `graph-validate`; `graph-future` may activate                                                                         | Add `shacl-1.2` profile to ShapeValidator adapter; re-evaluate `rdf-validate-shacl` for SHACL 1.2 conformance                                                                                                                                                                                                                     |
+| 4   | **SPARQL 1.2 reaches W3C Recommendation**                                     | SPARQL 1.2 Query Language WD → REC                                                                                                                                               | `graph-future` activates                                                                                              | Author SPARQL 1.2 export/query adapter behind versioned interface                                                                                                                                                                                                                                                                 |
+| 5   | **RDF 1.2 itself reaches W3C Recommendation**                                 | RDF 1.2 Concepts / Semantics CR → REC. **Cross-reference tripwire #2**: REC may land before RDF/JS WG publishes the data-model extension; #5 review must explicitly re-check #2. | Documentation and package metadata; revisit `graph-core` `TripleTerm` shape against finalised RDF 1.2 abstract syntax | Update declared spec version; pre-Recommendation risk window closes; if RDF/JS WG has not yet acted, retain bespoke `TripleTerm` and continue watching #2                                                                                                                                                                         |
+| 6   | **Triple-term ingestion contract test fails**                                 | Continuous contract test in `graph-ingest` asserts triple-term inputs round-trip preserving annotations; test failure is the trigger                                             | `graph-ingest`, `graph-validate`, `graph-enhance`                                                                     | Diagnose ingestion regression; verify SHACL shape constraints; verify provenance for triple-term derivations. Reformulated 2026-05-11 from deferred-tripwire to continuous-contract-test per assumptions-expert review.                                                                                                           |
+| 7   | **Adapter implementation diverges from targeted spec**                        | Contract test failure on `jsonld.js`, `rdf-canonize`, `rdf-validate-shacl`, or any future adapter; includes RDF Dataset Canonicalization 1.0 → 2.0                               | The diverging adapter only                                                                                            | Pin to last-known-good version, file upstream issue, evaluate alternatives; intervention point is always the version/profile discriminator                                                                                                                                                                                        |
+| 8   | **`oaknational/oak-curriculum-ontology` upstream introduces breaking change** | Upstream commit between pinned revisions renames a predicate, deprecates an IRI, or restructures the source-file globs `graph-corpus-sdk` relies on                              | `graph-corpus-sdk` Threads adapter; `graph-core/vocab` registry; pinned-import manifest                               | Re-pin revision; map the breaking change inside the adapter (or refuse migration with a named plan); surface in the import manifest; assess downstream cross-corpus joins. Added 2026-05-11 per assumptions-expert review — higher-probability near-term risk than spec REC tripwires given ontology IRIs are canonical identity. |
 
 **Tripwire discipline (proposed for ratification)**:
 
@@ -312,8 +346,12 @@ sweep.**
    permitted importer/importee rows; `practice-graph` is the first
    occupant. The `agent-graphs/` physical organisation is sequenced
    outside this ADR.
-2. Confirm the ADR is the right artefact for the MCP-agnostic principle, or
-   whether it should be a separate ADR with this one referencing it.
+2. ~~Confirm the ADR is the right artefact for the MCP-agnostic principle~~
+   **Resolved 2026-05-11**: extracted to
+   [ADR-179](179-transport-agnostic-graph-substrate.md) per owner
+   direction (Flamebright Burning Lava session). ADR-173 references
+   ADR-179 in §"Transport discipline (see ADR-179)". Rule substance
+   unchanged; only the home moved.
 3. Confirm Mark Hodierne's author addition is required at ratification or
    only on first ontology ingestion.
 

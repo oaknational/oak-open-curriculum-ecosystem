@@ -262,7 +262,7 @@ each thread record; this table is the repo-level index.
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
 | `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Embered Burning Magma / `codex` / GPT-5 / `019e18` / 2026-05-11 (Wave 3 F-11 commit-queue list/show inspection slice, commit `e298723c`); Shaded Ripening Copse / `claude-code` / opus-4-7-1m / `c13bdf` / 2026-05-11 (commit-queue UX brief — B-02/B-03 + Workstream 4 architectural seam, commit `5c299ed5`); Soaring Darting Kite / `claude-code` / opus-4-7-1m / `01db95` / 2026-05-11 (R1.b landed `b529fa6e` + third-instance peer-commit-absorption record `5aa91a76`; tail plan reshaped into 6 sequenced waves); Fronded Flowering Seed / `claude-code` / opus-4-7-1m / `19ecd5` / 2026-05-11 (graduation-candidates-drain — both due items graduated, commit `53995192`) |
-| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Shaded Ripening Copse / `claude-code` / opus-4-7-1m / `c13bdf` / 2026-05-11 (schedule-not-trigger sweep — graph-stack `5c1cd339` + combinatorial-arc D-6 absorption `ff3ab004`); Mistbound Watching Lantern / `claude-code` / opus-4-7-1m / `8fdb8b` / 2026-05-11 (graph-mvp-arc review-absorption + doctrine ratification, commit `67885e3f`); Dusky Masking Cloak / `claude-code` / opus-4-7-1m / `c5ff7f` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11; Fragrant Regrowing Root / `codex` / GPT-5 / `019e12` / 2026-05-10 |
+| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Flamebright Burning Lava / `claude-code` / opus-4-7-1m / `b1202e` / 2026-05-11 (question-assumptions pass — ADR-173 reviewer absorption + ADR-179 extraction + plan body correction + verdict-not-menu rule); Shaded Ripening Copse / `claude-code` / opus-4-7-1m / `c13bdf` / 2026-05-11 (schedule-not-trigger sweep — graph-stack `5c1cd339` + combinatorial-arc D-6 absorption `ff3ab004`); Mistbound Watching Lantern / `claude-code` / opus-4-7-1m / `8fdb8b` / 2026-05-11 (graph-mvp-arc review-absorption + doctrine ratification, commit `67885e3f`); Dusky Masking Cloak / `claude-code` / opus-4-7-1m / `c5ff7f` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / `codex` / 2026-04-28 |
@@ -586,6 +586,31 @@ evidence.
 
 ## Next Safe Step
 
+**Status update (2026-05-11 — Flamebright Burning Lava close,
+ADR-173 + ADR-179 surfaced for owner final approval)**:
+question-assumptions pass corrected three framings in
+`graph-stack.plan.md` (removed inaccurate "approved in principle"
+claim; deleted §Genuine Open Decisions table; rewrote WS0 +
+§Promotion Trigger + §Dependencies to reference ADR-173 promotion
+in place). Three reviewers dispatched against ADR-173 (Betty +
+Fred + assumptions-expert); findings absorbed into ADR-173
+tripwire matrix (#2↔#5 cross-ref, #6 reformulated, #8 added) and
+plan body (build-vs-buy expanded with named alternatives, test
+discipline 7+8 added, pre-Inc.2/3 design preconditions recorded).
+Owner resolved Open Question 2: extracted MCP-agnostic principle
+to ADR-179 (Transport-Agnostic Graph Substrate). Verdict-not-menu
+pattern landed structurally (new canonical rule, Claude+Cursor
+adapters, RULES_INDEX entry, jc-plan skill amendment, distilled
+entry, napkin observation) after mid-session recurrence.
+
+**Next safe step (branch-primary lane connecting-oak-resources)**:
+owner final-approval of ADR-173 (Proposed → Accepted) and ADR-179
+(Proposed → Accepted). On approval: flip both ADRs to Accepted;
+promote `graph-stack.plan.md` lifecycle CURRENT → ACTIVE; open
+Inc.1a WS1.1 (`packages/core/graph-core` scaffold) for test-first
+execution. Optional `architecture-expert-barney` run against the
+plan body to close §Promotion Trigger Gate 4 before WS1.1 lands.
+
 **Status update (2026-05-11 — Embered Burning Magma close, F-11
 landed)**: commit-queue inspection is now available through
 `commit-queue list` and `commit-queue show --intent-id`; F-11 is fixed
@@ -883,7 +908,26 @@ Visible owner-appetite items, not blockers for the current branch state:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-11 Soaring Darting Kite, claude-code, opus-4-7-1m,
+**Status (2026-05-11 Flamebright Burning Lava, claude-code,
+opus-4-7-1m, `b1202e`, ADR-173 reviewer absorption + ADR-179
+extraction + verdict-not-menu landing)**: `completed this handoff
+— focused session-scoped pass, most consolidation landed in-session`.
+7a ADR/PDR scan: ADR-179 authored and landed this session; no
+further candidates surfaced. 7b distilled graduation: new
+verdict-not-menu entry is not-yet-stable (one session of evidence);
+left in distilled for further validation. 7c thread register:
+connecting-oak-resources identity rows clean; my row complete;
+no orphans/duplicates. 7e collaboration state: 1 unrelated active
+claim (Galactic Transiting Orbit `019e18`); 19 abandoned
+commit-queue entries pre-existing. Practice Core review (step 8):
+nothing qualifies — verdict-not-menu rule cites existing PDR-057
+and PDR-058 without Core amendment. Fitness (step 9): napkin.md
+CRITICAL at 476 lines — at rotation threshold (~500), flagged for
+next-session owner-cadenced rotation; distilled.md SOFT at 239
+lines within 275 limit; repo-continuity.md + pending-graduations.md
+CRITICAL/HARD long-standing (not changed materially this session).
+
+**Prior status (2026-05-11 Soaring Darting Kite, claude-code, opus-4-7-1m,
 `01db95`, R1.b landed + tail plan reshape — /jc-consolidate-docs
 run at owner direction)**: `completed this handoff — focused
 thread-scoped pass on agentic-engineering-enhancements`. Pattern

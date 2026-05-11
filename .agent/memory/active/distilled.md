@@ -65,6 +65,25 @@ independence paragraphs were subsumed by existing directive content
 (`testing-strategy.md`, `tdd-as-design.md`,
 `agent-collaboration.md`) and deleted here.
 
+**Verdict, not menu (2026-05-11 Flamebright Burning Lava)**: when
+analysis is complete and a verdict exists in the agent's own
+reasoning, the agent **presents the verdict** — not as a multiple-
+choice quiz. Converting completed findings into `AskUserQuestion`
+form is responsibility-passback; the diagnostic is *could the agent
+rank these options by evidence already in context?* If yes, the quiz
+is evasion. `AskUserQuestion` is reserved for: (a) genuine permission
+gates, (b) decisions only the owner can make, (c) exploration when
+the agent has no strong basis for verdict. Landed structurally:
+`.agent/rules/present-verdicts-not-menus.md`, RULES_INDEX entry,
+Claude + Cursor adapters, `jc-plan` skill §Before Writing item 1
+amendment. Doctrinal anchors:
+`feedback_no_responsibility_passback` (2026-05-09),
+`feedback_answer_verification_questions_directly` (2026-04-24),
+PDR-057 (apply-don't-ask), PDR-058 (stop-inventing-optionality).
+Origin: the pattern recurred this session *despite* both feedback
+memories being in context — evidence that user-memory alone is
+insufficient and rule + skill structural surfacing is needed.
+
 **Meta-observation (2026-05-09 historical-napkin-synthesis)**: the
 fitness-as-trim impulse is doctrine-resistant under context
 pressure. Three independent corrections in 2026-05-06 → 2026-05-09
