@@ -590,3 +590,61 @@ parity is not a default. Cure: feedback memory landed
   the current reference point. Already-captured rule that the skill-
   load budget is real (`feedback_skill_load_budget.md`) governs the
   *ceiling*; this entry names the *floor implied by the architecture*.
+
+- 2026-05-11 — **SURPRISE — bug diagnosis depends on which event in the
+  pipeline trips first; "missing required string field: created_at"
+  was misdiagnosed for an entire session.** I (Deciduous Twining Dew)
+  inherited B-01 from Blooming Growing Thicket's friction note framing
+  it as "`--now <iso>` does not populate `created_at`". The actual
+  failure is `parseCommsEvent` choking on TWO PRE-EXISTING events
+  (`3882213c-…`, `b0353884-…`) that use a different schema —
+  directed-message shape (`timestamp / from / to / subject / kind /
+  schema_version`, no `created_at`) — when `renderComms` reads the
+  events directory after `sendComms` writes. The write path was sound
+  the whole time. **Generalisation**: when a CLI surface composes
+  write + read (write event → parse-back for render), bug reports
+  must distinguish *which* parse failed. The `comms-events/`
+  directory carries two incompatible schemas WITHOUT a discriminator
+  — that's the deeper architectural seam. **Worth a pattern entry**
+  on cross-schema-in-shared-directory once a second instance lands;
+  not at n=1.
+
+- 2026-05-11 — **SURPRISE — self-discovered protocol violation: I
+  authored my session-open shared-comms-log entry as direct `Edit`,
+  not `comms append`.** Recorded in OD-2 evidence at Phase 1 audit.
+  Root cause: B-01 (the comms CLI fails on every invocation) made the
+  CLI unreliable, so I fell back to direct edit without noticing the
+  pattern. **The fact that a working agent has now violated the
+  same discoverability gap** B8 names (Gnarled before me, now me)
+  promotes the gap from n=1 to n=2. **Action**: when ORD-2 Path β
+  lands and deletes the markdown, this failure mode disappears
+  structurally — no markdown to edit. Worth recording that I cured
+  the symptom by re-deciding the architecture rather than by
+  remembering harder.
+
+- 2026-05-11 — **SURPRISE — assumptions-expert review caught
+  load-bearing premise refuted by evidence at Phase 2; owner
+  re-decision loop preserved authority while honouring "evidence over
+  precedent".** Owner's original OD-2 picked Shape C with Path α
+  shape; assumptions-expert's spot-check found 299/305 timestamps had
+  JSON siblings (98% coverage) refuting the "fidelity loss" premise.
+  Surfaced as ORD-1 with the corrected evidence; owner re-decided to
+  Path β cleanly. **The architectural shape of this exchange** —
+  owner direction → reviewer evidence-check → re-surface → owner
+  re-decide — is healthy: owner authority preserved, evidence-honouring
+  preserved, no silent override. Worth recording as a coordination
+  pattern when a second instance appears. Comparable for ORD-2:
+  Wilma found 6 critical R4a bypasses → re-surfaced → owner picked
+  Shape B (drop R4a).
+
+- 2026-05-11 — **SURPRISE — directive line-limit breach at edit
+  time; tightening loop took 4 trim iterations to hit exactly 360.**
+  Added §Coordinator Role at 370 lines vs `fitness_line_limit: 360`.
+  docs-adr-expert flagged with concrete trim suggestions; my four
+  trim passes were each ~2-3 lines, plus one final ~1-line tightening.
+  **Generalisation**: when authoring a load-bearing doctrine section
+  into a file near its limit, draft compact-first; the "draft full,
+  then tighten" approach is iterative-trimming inefficient. Better
+  shape: start with the load-bearing 4-5 sentences and elaborate only
+  where evidence warrants. Worth applying to all directive
+  authoring; doesn't yet warrant a rule.

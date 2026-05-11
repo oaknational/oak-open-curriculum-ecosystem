@@ -241,7 +241,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11; Burnished Crackling Pyre / `claude-code` / opus-4-7-1m / `e517c9` / 2026-05-11 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Deciduous Twining Dew / `claude-code` / opus-4-7-1m / `a12c90` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11; Burnished Crackling Pyre / `claude-code` / opus-4-7-1m / `e517c9` / 2026-05-11 |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11; Fragrant Regrowing Root / `codex` / GPT-5 / `019e12` / 2026-05-10 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -268,7 +268,69 @@ This branch also depends on the Practice/tooling substrate work from main in
 
 ## Current Session Focus
 
-**Latest focus (2026-05-11 — Blooming Growing Thicket / `claude-code` /
+**Latest focus (2026-05-11 — Deciduous Twining Dew / `claude-code` /
+opus-4-7-1m / `a12c90`, collaboration-protocol hardening Phases 0-3
+partial)**: executed the collaboration-protocol-hardening opener
+end-to-end through ground-state, friction audit, remediation design,
+and first doctrine landing. Phase 0 compiled 13 protocol promises + 10
+30-day frictions + 8 gaps at `/tmp/phase-0-ground-state.md`.
+assumptions-expert review found opener spine sound, framing overreached
+on 3 of 5 axes: opener amended on sub-system framing (four sub-systems
+replace monolithic "collaboration protocol"), scaling claim (narrowed
+to super-linear subset), out-of-scope ("blocks ramp, not start"), and
+Phase 4 (expanded from 3-agent disjoint-scope dry-run to four-probe
+matrix: overlap / commit-discipline / red-gate / session-end-mid-flight)
+so architecture-expert-wilma's adversarial seat is earned. Phase 1
+categorised frictions by remediation layer (CLI-BUG / CLI-AFFORDANCE /
+CONTRACT-GAP / HOOK-ENFORCEMENT); three owner-direction items surfaced
+and resolved: OD-1 composed A+B commit-pathspec enforcement; OD-2 Shape
+C delete the markdown; OD-3 directive amendment with ≤3-agent
+peer-collab default. Phase 2 remediation design absorbed
+architecture-expert-betty (R5 coupling concern on
+`evaluateSharedCommsLog` evaluator + constants in `live-types.ts:13`
+and `cli-comms-commands.ts:14` requires R5.0 prereq) + assumptions-expert
+(Path α premise refuted at 98% JSON coverage of markdown; threshold
+n=1 at n=5 cannot calibrate integer) + architecture-expert-wilma (R4a
+Bash-hook has 6 critical/major bypasses, not structurally sound alone).
+Two owner re-decisions taken: ORD-1 → Path β (round-trip 299
+timestamp-matched entries + reconcile 6 B-01-damaged + delete markdown);
+ORD-2 → Shape B (R4b commit-skill + native git pre-commit hook; drop
+R4a entirely). Phase 3 partial: R6 §Coordinator Role doctrine landed
+at `9b619a05` (`docs(collaboration): coordinator-role amendment +
+opener and B-01 fixes`) with the integer threshold held in ephemeral
+state per assumptions-expert, role using existing claims + comms +
+commit_queue primitives, automatic termination on chain-symptom clear.
+docs-adr-expert reviewed the §Coordinator Role addition and surfaced one
+fitness-limit breach (370 lines vs 360 limit); tightened to 360 exactly
+before commit. **B-01 diagnosis corrected**: the bug is NOT
+"`--now <iso>` not populating `created_at`" — root cause is mixed-schema
+events in `comms-events/` (2 pre-existing directed-message events with
+`timestamp/from/to/subject/kind/schema_version` shape trip
+`parseCommsEvent` during `renderComms`); write path is sound. Fix
+shape requires owner direction (split directories / widen parser /
+deprecate directed-message schema); R5 Path β reconciliation step
+depends on R1 fix. Session claim `718035aa-994f-4099-871d-360e3ef4ab31`
+opened plan-scoped to opener + shared-comms-log, closed cleanly at
+`70507d72` (`chore(collaboration): close session claim`). Remaining
+work queued: R1 (schema-mix), R2 (B-10 shell-mangling), R3 (identity
+cache), R4b (commit-skill mandates pathspec), R4-new (native git
+pre-commit hook), R5 Path β migration, R7 (B9 fitness-gate plan stub),
+R8 (claim-overlap pattern capture), Phase 4 four-probe validation
+matrix. Phase 5 closeout (friction register, plan statuses, doctrine
+mining) deferred to follow-on session. **Reviewers**: assumptions-expert
+(×2), architecture-expert-betty, architecture-expert-wilma,
+docs-adr-expert. **New memory**: `feedback_coordinator_role_threshold.md`
+captures the owner-stated peer-collab-first-for-≤3-agents principle.
+**Surprises** queued for napkin: (a) B-01 misdiagnosis revealed that
+shared `comms-events/` directory carries two incompatible schemas
+without a discriminator; (b) self-discovered protocol violation —
+session-open shared-comms-log entry was direct Edit not `comms append`
+because B-01 made the CLI fail; (c) assumptions-expert review at Phase
+2 found the original owner-direction premise refuted by evidence,
+clean re-decide loop preserved owner authority while honouring
+"evidence over precedent".
+
+**Prior focus (2026-05-11 — Blooming Growing Thicket / `claude-code` /
 opus-4-7-1m / `756c60`, graph MVP arc reshape)**: reshape the graph MVP
 arc per owner direction. Four-dimension value model (substrate /
 shape-understanding / surfacing-exploration / partnership-or-
@@ -435,7 +497,26 @@ evidence.
 
 ## Next Safe Step
 
-**Status update (2026-05-11 — Blooming Growing Thicket close)**: next
+**Status update (2026-05-11 — Deciduous Twining Dew close)**: the
+collaboration-protocol-hardening opener has been executed through
+Phases 0-3 partial. R6 §Coordinator Role doctrine landed at
+`9b619a05`. Two owner re-decisions taken (ORD-1 Path β; ORD-2 Shape B
+drops R4a). B-01 diagnosis corrected to schema-mix root cause.
+**Next safe step is the FINAL session in the collaboration-protocol
+hardening arc** — see
+[`2026-05-11-collaboration-protocol-hardening-final-opener.md`](../../plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-final-opener.md)
+(authored at session close). The follow-on must surface ONE
+owner-direction-needed item first (R1 schema-mix fix shape: split
+directories / widen parser / deprecate directed-message schema), then
+land the remaining design-resolved items test-first: R1, R2 (B-10),
+R3 (identity cache), R4b + R4-new (commit-skill + native git
+pre-commit hook), R5 Path β migration (depends on R1), R7 (B9 plan
+stub), R8 (pattern capture), then Phase 4 four-probe matrix and Phase
+5 closeout. Ephemeral design docs at `/tmp/phase-{0,1,2}-*.md` must
+be homed into the parent plan body or named friction-register entry
+on the follow-on session per ephemeral-to-permanent-homing.
+
+**Prior status (2026-05-11 — Blooming Growing Thicket close)**: next
 graph session entry point is
 [`2026-05-11-graph-execution-prep-opener.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-11-graph-execution-prep-opener.md)
 — four definite steps in order (D-4 topology BLOCKERs; Inc.1
@@ -604,7 +685,72 @@ Visible owner-appetite items, not blockers for the current branch state:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-11 Blooming Growing Thicket, claude-code, opus-4-7-1m,
+**Status (2026-05-11 Deciduous Twining Dew, claude-code, opus-4-7-1m,
+`a12c90`, collaboration-protocol hardening Phases 0-3 partial —
+/jc-consolidate-docs run at user direction)**: `completed this handoff —
+proportional thread-scoped pass`.
+
+Pattern extraction (step 5): two candidates routed to
+pending-graduations: (a) cross-schema-events-in-single-directory
+discriminator discipline (target ADR or PDR on
+single-schema-per-directory / explicit-discriminator-when-mixed;
+trigger second instance in another directory); (b) owner-re-decision-
+on-evidence-refuted-premise protocol (target PDR; trigger second
+distinct instance in another review type). Both `status: pending`.
+
+ADR/PDR scan (step 7a): one substantive doctrine landed inline —
+§Coordinator Role in `agent-collaboration.md` (commit `9b619a05`)
+per OD-3, with assumptions-expert calibration applied (integer
+threshold held in ephemeral state). Two pending-graduations entries
+captured above. Nothing else qualifies for immediate graduation;
+B-01 corrected diagnosis is implementation-bound and owner-direction-
+needed for the fix shape, not yet doctrine.
+
+Ephemeral-to-permanent homing (step 3): three /tmp/phase-{0,1,2}-*.md
+design artefacts — phase-0-ground-state.md (13 promises / 10
+incidents / 8 gaps), phase-1-friction-audit.md (categorisation +
+owner-direction items), phase-2-remediation-design.md (final design
+with two ORD re-decisions). Distilled discoverably into the FINAL
+session opener for this thread (next-session destination); raw /tmp
+files left for the follow-on agent to read if depth is needed but
+the opener carries the load-bearing substance. Parent plan
+`primary-agent-tooling-enhancements.plan.md` already carries the
+B-01 corrected diagnosis and the queued work via the bug table.
+
+Napkin rotation (step 6): napkin at ~635 lines after this session's
+5 SURPRISE entries; over the ~500 trigger threshold. **NOT
+rotating this pass** — distillation is owner-direction-gated per
+prior consolidation discipline; rotating now would touch entries
+authored across multiple prior sessions including the owner-direction-
+needed posture from Quiet Lurking Mask 2026-05-10. Falsifiability:
+future agent can verify napkin entries authored 2026-05-11 by
+Deciduous Twining Dew are preserved verbatim in `napkin.md` and
+NOT yet present in `distilled.md`. Routing: napkin distillation
+remains owner-direction-gated; the substantive learning is already
+in pending-graduations.
+
+Thread-register freshness (7c): identity row for `Deciduous Twining
+Dew` (`claude-code` / `claude-opus-4-7-1m` / `a12c90`) added to
+`threads/agentic-engineering-enhancements.next-session.md`
+Participating Agent Identities table; `Active identities` column in
+§Active threads above refreshed to include Dew alongside Blooming
+Growing Thicket + Burnished Crackling Pyre. Other thread records
+untouched (this session was thread-scoped to
+`agentic-engineering-enhancements`).
+
+Collaboration state (7e): one claim opened (`718035aa-…`,
+`Deciduous Twining Dew`), closed explicitly at session close to
+archive with closure summary and evidence ref (commit `9b619a05`).
+Active claims: 0. No foreign claims to audit.
+
+Entry-point drift sweep (step 3, backstop): CLAUDE.md, AGENTS.md,
+GEMINI.md all at canonical pointer shape; AGENTS.md carries the
+named RULES_INDEX extension. No drift.
+
+Practice exchange (step 10): `.agent/practice-core/incoming/` and
+`.agent/practice-context/outgoing/` empty. Nothing to integrate.
+
+**Prior status (2026-05-11 Blooming Growing Thicket, claude-code, opus-4-7-1m,
 `756c60`, graph MVP arc reshape — /jc-consolidate-docs run)**:
 `completed this handoff — proportional thread-scoped pass`.
 

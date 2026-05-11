@@ -2492,6 +2492,54 @@ consolidation to triage.
    in practice OR commit-window claims protocol (PDR-054 / ADR-177)
    absorbs the discipline.
 
+### 2026-05-11 — Cross-schema events in single directory (without discriminator)
+
+The `comms-events/` directory carries two schemas simultaneously
+without a discriminator: append-only-narrative log events
+(`created_at / author / title / body`) and inter-agent directed
+messages (`timestamp / from / to / subject / kind / schema_version`).
+`renderComms` reads ALL events through `parseCommsEvent` (narrative
+schema), so the 2 message-shape events trip the parser. B-01 was
+misdiagnosed for an entire session because of this. Cure shape
+choices (one architecturally-excellent option to be picked):
+**split directories** (`comms-events/` for narrative,
+`comms-messages/` for directed messages), **widen the parser with a
+discriminator field**, or **deprecate the directed-message schema**
+in favour of narrative.
+
+`[captured: 2026-05-11 | source: investigation:B-01-corrected-diagnosis |
+target: ADR-or-PDR:cross-schema-directory-discriminator-discipline OR
+rule:single-schema-per-directory | trigger: owner-direction needed on
+fix shape, then second instance lands the doctrine | size: S |
+status: pending — owner-direction required for fix shape first]`
+
+Graduation-target: doctrine on single-schema-per-directory OR
+explicit-discriminator-field-when-mixed. Withdrawal-trigger: the chosen
+fix shape (split / widen / deprecate) lands and the pattern doesn't
+recur in any other directory.
+
+### 2026-05-11 — Owner re-decision loop on evidence-refuted premise
+
+Pattern: owner direction → reviewer evidence-check at the next phase
+boundary → re-surface with corrected evidence → owner re-decide. Two
+instances this session (ORD-1 Path α premise refuted at 98% JSON
+coverage → owner picked Path β; ORD-2 R4a Bash hook found 6 critical
+bypasses → owner picked Shape B drops R4a). Architectural shape is
+healthy: owner authority preserved, evidence-honouring preserved, no
+silent override. The reviewer must surface the refuted premise as an
+explicit re-decide item, never silently re-shape the design.
+
+`[captured: 2026-05-11 | source: session:Deciduous-Twining-Dew | target:
+PDR:owner-re-decision-on-evidence-refuted-premise OR
+rule:re-surface-don't-override-on-evidence-correction | trigger: second
+distinct instance in a different review type | size: S | status: pending]`
+
+Graduation-target: portable Practice PDR on the re-decision protocol;
+sibling to `inter-agent-decisions-belong-to-agents` feedback memory.
+Withdrawal-trigger: the protocol is named in `principles.md` §Owner
+Direction Beats Plan amendment OR a second instance fails to surface
+the refuted premise cleanly.
+
 Older graduated entries (PDR-018, PDR-026, PDR-029, PDR-033, PDR-034,
 ADR-153, ADR-164, etc.) are preserved in
 [`archive/repo-continuity-session-history-2026-04-29.md`](archive/repo-continuity-session-history-2026-04-29.md)
