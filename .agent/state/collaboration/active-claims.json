@@ -675,29 +675,5 @@
       "notes": "Re-enqueuing with full coordination bundle"
     }
   ],
-  "claims": [
-    {
-      "claim_id": "718035aa-994f-4099-871d-360e3ef4ab31",
-      "agent_id": {
-        "agent_name": "Deciduous Twining Dew",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "a12c90"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "plan",
-          "patterns": [
-            ".agent/plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-opener.md",
-            ".agent/state/collaboration/shared-comms-log.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-11T08:32:55Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Execute collaboration-protocol-hardening opener: Phase 0 ground-state through Phase 5 closeout. Friction audit, B-01 test-first fix, Workstreams 2-5 from primary-agent-tooling-enhancements, synthetic dry-run, doctrine mining."
-    }
-  ]
+  "claims": []
 }

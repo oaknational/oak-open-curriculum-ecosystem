@@ -3372,3 +3372,23 @@ Session opener: `.agent/plans/agent-tooling/current/2026-05-11-collaboration-pro
 Claim registered: `718035aa-994f-4099-871d-360e3ef4ab31`, plan-scoped to the opener + this log, TTL 14400s. Will widen scope by additional claims as Phase 1 friction-audit + Phase 3 landings determine specific touch surfaces (agent-tools CLI source, `agent-collaboration.md` if directive amendment, primary-agent-tooling-enhancements plan).
 
 Discipline carried in: architectural-excellence-only options (no cheap-cure); test-first for every CLI/helper fix (B-01 atomic test+product); stage by explicit pathspec; no `--no-verify` without fresh per-commit owner authorisation; reviewer dispatch per opener matrix; mid-session light comms refresh at waypoints. Starting Phase 0 — reading 6 sibling plans + collaboration-state-conventions; will dispatch `assumptions-expert` on protocol-vs-observed framing once the picture is compiled.
+
+---
+
+## 2026-05-11T10:45:50Z — `Deciduous Twining Dew` / `claude-code` / `claude-opus-4-7-1m` / `a12c90` — Session close; doctrine landed at 9b619a05
+
+Phases 0-2 complete + first doctrine landing at `9b619a05` (`docs(collaboration): coordinator-role amendment + opener and B-01 fixes`). Five files: agent-collaboration.md §Coordinator Role addition (R6 OD-3); session opener five framing amendments per assumptions-expert (sub-system framing, super-linear-only scaling, ramp-not-start, four-probe matrix, Wilma seat earned); primary-agent-tooling-enhancements B-01 diagnosis corrected (schema-mix not `--now` bug — owner-direction-needed); session claim + bootstrap fast-path comms-log entry rode along. Pre-commit gates green.
+
+Reviewer dispatch this session: assumptions-expert (framing Q5), architecture-expert-betty (R4/R5 cohesion Q5), assumptions-expert (migration + threshold Q2), architecture-expert-wilma (R4a adversarial Q1), docs-adr-expert (§Coordinator Role review Q5 + one needs-edit applied). Two owner re-decisions: ORD-1 → Path β (round-trip + delete); ORD-2 → Shape B (R4b skill + native git pre-commit hook; drop R4a). Coordinator-role threshold feedback memory saved.
+
+**Remaining work queued** (not landed; in scope of follow-on sessions, all design crystallised in `/tmp/phase-2-remediation-design.md` and parent plan):
+
+- **R1 (revised)**: schema-mix fix in `comms-events/` — owner-direction-needed (split dirs / widen parser / deprecate directed-message schema). Two pre-existing message-shape events trip `parseCommsEvent` during `renderComms`.
+- **R2/R3**: B-10 shell-mangling + B-6 identity caching (CLI test-first).
+- **R4b + R4-new**: commit-skill mandates pathspec + native git pre-commit hook (drop R4a entirely per ORD-2).
+- **R5 Path β**: migrate 299 timestamp-matched markdown entries → JSON (round-trip script + golden test); reconcile 6 B-01-damaged entries (depends on R1 fix); delete markdown; sweep references; depends on R6 already landing.
+- **R7**: B9 fitness-gate staged-set-awareness plan stub authorship.
+- **R8**: claim-overlap-revert-and-handoff pattern capture.
+- **Phase 4 four-probe matrix**: synthetic multi-agent validation (overlap / commit-discipline / red-gate / session-end-mid-flight); pre-req on R4-new + R5 first.
+
+Friction audit + remediation design captured at `/tmp/phase-0-ground-state.md`, `/tmp/phase-1-friction-audit.md`, `/tmp/phase-2-remediation-design.md` (ephemeral — should consolidate into the parent plan body or named friction register in follow-on session). Self-discovered protocol violations this session: my session-open log entry was direct Edit, not `comms append` (recorded in OD-2 evidence; root-caused by B-01 making the CLI unreliable). Claim 718035aa closed cleanly with closure summary; no foreign state.
