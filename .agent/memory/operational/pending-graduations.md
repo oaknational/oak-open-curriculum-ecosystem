@@ -163,8 +163,8 @@ the queue churns.
 | due | 0 | both prior `due` entries graduated this session (hook-chain re-staging → PDR-059 + ADR-177 amendment + PDR-054 cross-ref; ADR-041 workspace-tier amendment landed with `agent-tools/` + `agent-graphs/` rows; ADR-173 ratification unblocked) |
 | partially-graduated | 0 | unchanged |
 | quarantined | 0 | unchanged |
-| pending | ~84 | unchanged this session; one entry ("Different-lens reviewers catch different gaps") is substance-ripe and flagged in this session's napkin for owner-direction review at next consolidation |
-| **total** | **~84** | down from ~86 by 2 graduations |
+| pending | ~83 | down by 1: "Different-lens reviewers catch different gaps" graduated to repo-local pattern instance at /jc-consolidate-docs close |
+| **total** | **~83** | down from ~86 by 3 graduations |
 
 ### 2026-05-11 graduations log (Fronded Flowering Seed — graduation-candidates-drain session)
 
@@ -216,6 +216,16 @@ the queue churns.
   second instance) or amendment to start-right-quick to add an opener-
   verification step. Trigger: second instance observed.
 
++ 2026-05-11; **Different-lens reviewers catch different gaps —**
+  *Graduated 2026-05-11 (Fronded Flowering Seed consolidate-docs pass)*
+  to repo-local pattern instance at
+  `.agent/memory/active/patterns/different-lens-reviewer-divergence.md`.
+  Substance-ripeness evidence: graduation-candidates-drain session ran
+  6 multi-reviewer dispatches (3 per phase) and observed zero
+  finding-overlap across pairs — each lens (betty/fred boundary +
+  principles, assumptions-expert premises, docs-adr-expert documentation
+  quality) caught structurally distinct gaps. Original capture below
+  preserved for provenance:
 + 2026-05-11; **Different-lens reviewers catch different gaps —
   multi-reviewer dispatch is not redundancy** (Dusky Masking Cloak
   2026-05-11, observed during graph execution-prep step 2 Inc.1

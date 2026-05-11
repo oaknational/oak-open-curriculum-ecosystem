@@ -261,7 +261,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Smouldering Crackling Pyre / `claude-code` / opus-4-7-1m / `ab76ef` / 2026-05-11; Deciduous Twining Dew / `claude-code` / opus-4-7-1m / `a12c90` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11 |
+| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Fronded Flowering Seed / `claude-code` / opus-4-7-1m / `19ecd5` / 2026-05-11 (graduation-candidates-drain — both due items graduated, commit `53995192`); Soaring Darting Kite / `claude-code` / opus-4-7-1m / `01db95` / 2026-05-11 (R1.b in-flight, claim `b1302a12`); Smouldering Crackling Pyre / `claude-code` / opus-4-7-1m / `ab76ef` / 2026-05-11; Deciduous Twining Dew / `claude-code` / opus-4-7-1m / `a12c90` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11 |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Dusky Masking Cloak / `claude-code` / opus-4-7-1m / `c5ff7f` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11; Fragrant Regrowing Root / `codex` / GPT-5 / `019e12` / 2026-05-10 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -569,13 +569,30 @@ evidence.
 
 ## Next Safe Step
 
-**Status update (2026-05-11 — Deciduous Twining Dew close)**: the
+**Status update (2026-05-11 — Fronded Flowering Seed close,
+graduation-candidates-drain)**: both `due` items in
+`pending-graduations.md` graduated this session (commit `53995192`).
+Phase 1 = PDR-059 (regenerator-output-classification) + ADR-177
+2026-05-11 amendment + PDR-054 §Related cross-ref. Phase 2 = ADR-041
+amendment (agent-tools/ + agent-graphs/ tiers; 8×8 matrix;
+Decision-list libs-split note; status Accepted (Revised)) + ADR-173
+§Open Questions:1 cross-link + D-4a closed on
+`graph-mvp-arc.plan.md:732`. **ADR-173 ratification gate now
+unblocked.** Soaring Darting Kite has opened claim `b1302a12` for
+R1.b collaboration-protocol hardening (comms-events directory
+migration + type splits) — claim explicitly internalises PDR-059
+post-hook eyeball discipline. **Next safe step**: (a) owner
+ratification of ADR-173 to unblock `graph-stack.plan.md` CURRENT →
+ACTIVE; or (b) Soaring's R1.b atomic landing, in flight. Choice is
+owner-shape.
+
+**Prior status (2026-05-11 — Deciduous Twining Dew close)**: the
 collaboration-protocol-hardening opener has been executed through
 Phases 0-3 partial. R6 §Coordinator Role doctrine landed at
 `9b619a05`. Two owner re-decisions taken (ORD-1 Path β; ORD-2 Shape B
 drops R4a). B-01 diagnosis corrected to schema-mix root cause.
-**Next safe step is the FINAL session in the collaboration-protocol
-hardening arc** — see
+**Original next safe step pointed to the FINAL session in the
+collaboration-protocol hardening arc** — see
 [`2026-05-11-collaboration-protocol-hardening-final-opener.md`](../../plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-final-opener.md)
 (authored at session close). The follow-on must surface ONE
 owner-direction-needed item first (R1 schema-mix fix shape: split
@@ -757,7 +774,30 @@ Visible owner-appetite items, not blockers for the current branch state:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-11 Smouldering Crackling Pyre, claude-code, opus-4-7-1m,
+**Status (2026-05-11 Fronded Flowering Seed, claude-code, opus-4-7-1m,
+`19ecd5`, graduation-candidates-drain — /jc-consolidate-docs run at
+user direction)**: `completed this handoff — focused thread-scoped
+pass on agentic-engineering-enhancements`. Pattern graduation (step
+5): "Different-lens reviewers catch different gaps" graduated to
+repo-local pattern instance at
+`.agent/memory/active/patterns/different-lens-reviewer-divergence.md`
+with falsifiability + worked-instance evidence from the six
+parallel-reviewer dispatches in this session. Pending-graduations
+register refreshed: 0 due, ~83 pending (was ~84 — one item
+graduated), total ~83 (down from ~86 by three graduations across
+the day). Entry-point sweep clean (CLAUDE.md + AGENTS.md at
+canonical pointer shape; AGENTS.md retains RULES_INDEX named
+extension). Practice-box incoming empty (`.gitkeep`-only).
+Practice-Core trinity scan: no contradict/extend/refine/supersede
+candidates this session; PDR-059 is a downstream graduation (step
+7b shape), not Core trinity refinement. Fitness signals: all
+critical-zone items pre-existing and explicitly Out of Scope per
+the opener (repo-continuity archive sweep; pending-graduations
+size; practice-bootstrap chars); no new pressure introduced beyond
+flagged. Wider register drain remains its own sequenced-deferral
+lane (2026-05-07 dedicated-drain opener).
+
+**Prior status (2026-05-11 Smouldering Crackling Pyre, claude-code, opus-4-7-1m,
 `ab76ef`, collaboration-protocol hardening R1.a — /jc-consolidate-docs
 run at user direction)**: `completed this handoff — focused thread-scoped
 pass`. Entry-point sweep clean (CLAUDE.md / AGENTS.md / GEMINI.md all at
