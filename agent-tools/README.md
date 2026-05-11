@@ -142,6 +142,18 @@ pnpm agent-tools:commit-queue -- status
 - `complete` — remove a landed intent and clear the owning claim pointer.
 - `status` — print queued, active, expired, and abandoned entries as JSON
   without parsing `active-claims.json` manually.
+- `list [--prefix <intent-prefix>]
+[--phase <queued|staging|pre_commit|abandoned>]
+[--agent-name <prefix>] [--queue-status <active|expired|abandoned>]` —
+  print matching queue entries only.
+- `show --intent-id <uuid>` — print one exact queue entry.
+
+Example:
+
+```bash
+pnpm agent-tools:commit-queue -- list --agent-name "Embered" --queue-status active
+pnpm agent-tools:commit-queue -- show --intent-id 11111111-1111-4111-8111-111111111111
+```
 
 ## `claude-agent-ops` quick reference
 

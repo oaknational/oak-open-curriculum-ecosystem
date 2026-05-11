@@ -10,6 +10,7 @@ import {
   type JsonObject,
   isCommitQueuePhase,
 } from './types.js';
+import { requireIsoDateTime } from './time.js';
 
 /**
  * Read and minimally validate the active-claims registry for queue writes.
@@ -71,9 +72,9 @@ function parseIntent(value: unknown): CommitIntent {
     agent_id: value.agent_id,
     files: value.files,
     commit_subject: requireStringField(value, 'commit_subject'),
-    queued_at: requireStringField(value, 'queued_at'),
-    updated_at: requireStringField(value, 'updated_at'),
-    expires_at: requireStringField(value, 'expires_at'),
+    queued_at: requireIsoDateTime(requireStringField(value, 'queued_at'), 'queued_at'),
+    updated_at: requireIsoDateTime(requireStringField(value, 'updated_at'), 'updated_at'),
+    expires_at: requireIsoDateTime(requireStringField(value, 'expires_at'), 'expires_at'),
     phase: value.phase,
   };
 }

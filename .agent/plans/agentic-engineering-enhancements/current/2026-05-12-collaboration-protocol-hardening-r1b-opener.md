@@ -8,11 +8,13 @@ landed_commits:
     label: R1.b three parsers + three types + 7 file moves + consumer updates + 16 tests
   - sha: 5aa91a76
     label: Third-instance peer-commit absorption record
+  - sha: 8f0dacd5
+    label: Pattern graduations + tail-plan reshape; completed T-R8
 todos:
   - id: T-R8
     wave: 1
     content: Pattern capture for claim-overlap-revert-and-handoff (and the new peer-commit-absorption direction) in `.agent/memory/active/patterns/`
-    status: pending
+    status: completed
     depends_on: []
   - id: T-R4b
     wave: 1

@@ -256,7 +256,7 @@ trigger for the PDR-059 classification-gate plan:
 - **New (third) direction — peer-commit absorption**: a peer agent
   using non-pathspec staging sweeps another agent's session-lifecycle
   files into their commit (2026-05-11 Mistbound Watching Lantern's
-  `67df85f`-style sweep; Soaring Darting Kite's napkin entry confirms
+  `67885e3f`-style sweep; Soaring Darting Kite's napkin entry confirms
   this as the third-instance trigger).
 
 The classification-gate plan (separate, follow-on) is the natural
@@ -267,16 +267,27 @@ Target files:
 
 - [`agent-tools/src/commit-queue/cli.ts`](/agent-tools/src/commit-queue/cli.ts)
 - [`agent-tools/src/commit-queue/core.ts`](/agent-tools/src/commit-queue/core.ts)
+- [`agent-tools/src/commit-queue/index.ts`](/agent-tools/src/commit-queue/index.ts)
+- [`agent-tools/src/commit-queue/intent.ts`](/agent-tools/src/commit-queue/intent.ts)
+- [`agent-tools/src/commit-queue/options.ts`](/agent-tools/src/commit-queue/options.ts)
+- [`agent-tools/src/commit-queue/read-commands.ts`](/agent-tools/src/commit-queue/read-commands.ts)
+- [`agent-tools/src/commit-queue/registry.ts`](/agent-tools/src/commit-queue/registry.ts)
 - [`agent-tools/src/commit-queue/status.ts`](/agent-tools/src/commit-queue/status.ts)
 - [`agent-tools/src/commit-queue/args.ts`](/agent-tools/src/commit-queue/args.ts)
+- [`agent-tools/src/commit-queue/time.ts`](/agent-tools/src/commit-queue/time.ts)
+- [`agent-tools/src/commit-queue/types.ts`](/agent-tools/src/commit-queue/types.ts)
+- [`agent-tools/tests/commit-queue.integration.test.ts`](/agent-tools/tests/commit-queue.integration.test.ts)
 - [`agent-tools/tests/commit-queue.unit.test.ts`](/agent-tools/tests/commit-queue.unit.test.ts)
-- [`.agent/skills/commit/SKILL.md`](/.agent/skills/commit/SKILL.md)
+- [`agent-tools/README.md`](/agent-tools/README.md)
+- [`.agent/skills/commit/SKILL-CANONICAL.md`](/.agent/skills/commit/SKILL-CANONICAL.md)
 
 TDD cycles:
 
-- Add `commit-queue list` filters for `--prefix` and `--phase`, preserving
-  `status` as the aggregate view.
+- Add `commit-queue list` filters for `--prefix`, `--phase`,
+  `--agent-name`, and `--queue-status`, preserving `status` as the
+  aggregate view. **Completed in working tree 2026-05-11.**
 - Add `commit-queue show --intent-id <id>` for exact queue entry inspection.
+  **Completed in working tree 2026-05-11.**
 - Fix fingerprint recursion either by moving the staged fingerprint outside the
   staged registry payload or by adding an explicit verifier guard and documented
   `stage -> record -> do not re-stage` contract.

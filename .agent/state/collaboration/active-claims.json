@@ -723,6 +723,44 @@
       "phase": "abandoned",
       "staged_bundle_fingerprint": "c4e70674957c7b2c2920065175ebe1ad0465af47457e3dd0cc029360e1feba50",
       "staged_name_status": "M\t.agent/state/collaboration/active-claims.json\n"
+    },
+    {
+      "intent_id": "0fe26b91-20ec-4ef6-af65-e267a20a3c3c",
+      "claim_id": "bb55a0ea-9d71-4f8f-9177-3ef2990364b7",
+      "agent_id": {
+        "agent_name": "Embered Burning Magma",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e18"
+      },
+      "files": [
+        ".agent/plans/agent-tooling/current/primary-agent-tooling-enhancements.plan.md",
+        ".agent/plans/agent-tooling/frictions-register.md",
+        ".agent/plans/agentic-engineering-enhancements/current/2026-05-12-collaboration-protocol-hardening-r1b-opener.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/shared-comms-log.md",
+        ".agent/state/collaboration/comms-events/62b5ad1b-10c4-4d32-8464-29c2ed190a8f.json",
+        ".agent/state/collaboration/comms-events/670c54f3-69c3-4bbe-bfb4-1954ab5d7c42.json",
+        "agent-tools/README.md",
+        "agent-tools/src/commit-queue/args.ts",
+        "agent-tools/src/commit-queue/cli.ts",
+        "agent-tools/src/commit-queue/core.ts",
+        "agent-tools/src/commit-queue/index.ts",
+        "agent-tools/src/commit-queue/intent.ts",
+        "agent-tools/src/commit-queue/options.ts",
+        "agent-tools/src/commit-queue/read-commands.ts",
+        "agent-tools/src/commit-queue/registry.ts",
+        "agent-tools/src/commit-queue/status.ts",
+        "agent-tools/src/commit-queue/time.ts",
+        "agent-tools/src/commit-queue/types.ts",
+        "agent-tools/tests/commit-queue.integration.test.ts",
+        "agent-tools/tests/commit-queue.unit.test.ts"
+      ],
+      "commit_subject": "feat(commit-queue): add list/show inspection filters",
+      "queued_at": "2026-05-11T18:24:27.110Z",
+      "updated_at": "2026-05-11T18:24:32.915Z",
+      "expires_at": "2026-05-11T18:39:27.110Z",
+      "phase": "staging"
     }
   ],
   "claims": [
@@ -741,6 +779,8 @@
           "patterns": [
             "agent-tools/src/commit-queue/**",
             "agent-tools/tests/commit-queue.unit.test.ts",
+            "agent-tools/tests/commit-queue.integration.test.ts",
+            "agent-tools/README.md",
             ".husky/pre-commit",
             ".agent/skills/commit/SKILL-CANONICAL.md",
             ".agent/plans/agentic-engineering-enhancements/current/2026-05-12-collaboration-protocol-hardening-r1b-opener.md",
@@ -759,7 +799,30 @@
       "claimed_at": "2026-05-11T18:03:15Z",
       "freshness_seconds": 14400,
       "sidebar_open": false,
-      "intent": "Wave 3 commit-queue UX hardening: reconcile landed UX brief, select and implement next atomic queue-safety slice test-first, update tail plan status, and land through commit-queue lifecycle with explicit pathspec staging."
+      "intent": "Wave 3 commit-queue UX hardening: reconcile landed UX brief, select and implement next atomic queue-safety slice test-first, update tail plan status, and land through commit-queue lifecycle with explicit pathspec staging.",
+      "intent_to_commit": "0fe26b91-20ec-4ef6-af65-e267a20a3c3c"
+    },
+    {
+      "claim_id": "4c12958f-236e-45a8-af84-f8c8e0fbdcbe",
+      "agent_id": {
+        "agent_name": "Embered Burning Magma",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e18"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-11T18:23:15Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit commit-queue list/show UX slice with explicit pathspecs after reviewer approval and green gates."
     }
   ]
 }

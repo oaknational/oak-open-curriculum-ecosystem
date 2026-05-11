@@ -1,8 +1,10 @@
 const ACTIVE_COMMIT_QUEUE_PHASES = ['queued', 'staging', 'pre_commit'] as const;
 const COMMIT_QUEUE_PHASES = [...ACTIVE_COMMIT_QUEUE_PHASES, 'abandoned'] as const;
+const COMMIT_QUEUE_ENTRY_STATUSES = ['active', 'expired', 'abandoned'] as const;
 
 type ActiveCommitQueuePhase = (typeof ACTIVE_COMMIT_QUEUE_PHASES)[number];
 export type CommitQueuePhase = (typeof COMMIT_QUEUE_PHASES)[number];
+export type CommitQueueEntryStatus = (typeof COMMIT_QUEUE_ENTRY_STATUSES)[number];
 type JsonPrimitive = string | number | boolean | null;
 type JsonValue = JsonPrimitive | JsonObject | readonly JsonValue[];
 
@@ -104,10 +106,18 @@ export function isCommitQueuePhase(value: unknown): value is CommitQueuePhase {
   return typeof value === 'string' && allPhaseSet().has(value);
 }
 
+export function isCommitQueueEntryStatus(value: unknown): value is CommitQueueEntryStatus {
+  return typeof value === 'string' && statusSet().has(value);
+}
+
 function activePhaseSet(): ReadonlySet<string> {
   return new Set<ActiveCommitQueuePhase>(ACTIVE_COMMIT_QUEUE_PHASES);
 }
 
 function allPhaseSet(): ReadonlySet<string> {
   return new Set<CommitQueuePhase>(COMMIT_QUEUE_PHASES);
+}
+
+function statusSet(): ReadonlySet<string> {
+  return new Set<CommitQueueEntryStatus>(COMMIT_QUEUE_ENTRY_STATUSES);
 }

@@ -7,6 +7,7 @@ import {
   type CommitQueuePhase,
   type CommitQueueRegistry,
 } from './types.js';
+import { secondsUntilExpiry } from './time.js';
 
 /**
  * Compute the staged-bundle fingerprint used by the commit queue.
@@ -244,6 +245,6 @@ function updateIntentPhase(
 
 function isFreshActiveEntry(entry: CommitIntent, nowIsoValue: string): boolean {
   return (
-    isActiveCommitQueuePhase(entry.phase) && Date.parse(entry.expires_at) >= Date.parse(nowIsoValue)
+    isActiveCommitQueuePhase(entry.phase) && secondsUntilExpiry(entry.expires_at, nowIsoValue) >= 0
   );
 }

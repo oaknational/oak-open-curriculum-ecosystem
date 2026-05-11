@@ -313,14 +313,24 @@ below is a cross-reference index, not a second source of truth.
   exists for this.
 - **Expected**:
   - `commit-queue list [--prefix <p>]
-    [--phase <queued|staging|pre_commit|abandoned|complete>]`
-  - `commit-queue show <intent-id>`
+    [--phase <queued|staging|pre_commit|abandoned>]
+    [--agent-name <agent-name-prefix>]
+    [--queue-status <active|expired|abandoned>]`
+  - `commit-queue show --intent-id <intent-id>`
+  - Completed intents leave the active queue and are not filterable by
+    lifecycle phase.
 - **Candidate cure**: Add the two commands above.
 - **Target surface**: `agent-tools/src/commit-queue/cli.ts`
-- **Status**: partially-addressed-by-commit-queue-status
+- **Status**: addressed-in-working-tree-2026-05-11
 - **Review 2026-05-10**: `commit-queue status` exists and emits the
   machine-readable queue with entries. Dedicated `list` / `show`
   commands and `--prefix` / `--phase` filters are still absent.
+- **Review 2026-05-11**: fixed in working tree. `commit-queue list`
+  emits filtered queue entries with `--prefix`, `--phase`,
+  `--agent-name`, and `--queue-status` filters, while
+  `commit-queue show --intent-id <id>` emits one exact entry and fails
+  clearly for an unknown intent. `commit-queue status` remains the
+  aggregate view.
 
 ### F-12 — `claims open --area-kind` accepted values not discoverable
 
@@ -477,11 +487,12 @@ below is a cross-reference index, not a second source of truth.
 - **Candidate cure**: (a) refactor fingerprint storage to a sibling
   file (`active-claims.fingerprint`) that is gitignored or carries
   its own claim-window discipline; (b) failing that, add explicit
-  protocol documentation in `.agent/skills/commit/SKILL.md`
+  protocol documentation in `.agent/skills/commit/SKILL-CANONICAL.md`
   Pre-Commit Validation section and a CLI warning in `verify-staged`
   if active-claims.json shows `MM` after `record-staged`.
 - **Target surface**: `agent-tools/src/commit-queue/`;
-  `.agent/skills/commit/SKILL.md`; commit-queue CLI help text.
+  `.agent/skills/commit/SKILL-CANONICAL.md`; commit-queue CLI help
+  text.
 - **Status**: open
 - **Review 2026-05-10**: still open. `record-staged` still writes the
   fingerprint into the registry entry and `verify-staged` still verifies
