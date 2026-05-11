@@ -1,5 +1,14 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
+**Next anticipated identity** (per owner direction 2026-05-11):
+**Mistbound Watching Lantern** is anticipated to take up the graph
+thread on opener step 4 (primary-agent-tooling-enhancements WS 2–5
+implementation + B-01 fix; test-first atomic TDD pairs). Step 4 file
+scope is disjoint from the parallel graduation-candidates drain in
+the `agentic-engineering-enhancements` thread (see
+[`2026-05-11-graduation-candidates-drain-opener.md`](../../../plans/agentic-engineering-enhancements/current/2026-05-11-graduation-candidates-drain-opener.md))
+so both threads can progress concurrently.
+
 **Last refreshed**: 2026-05-11 (Dusky Masking Cloak / `claude-code` /
 `claude-opus-4-7-1m` / `c5ff7f` — graph execution-prep steps 1+2+3
 landed. Step 1: D-4 topology BLOCKERs verified closed in-place by the
