@@ -33,7 +33,6 @@ index in the same commit.
 ## Canonical Rules
 
 - `.agent/rules/apply-architectural-principles.md`
-- `.agent/rules/broken-code-stays-local.md`
 - `.agent/rules/capture-practice-tool-feedback.md`
 - `.agent/rules/consolidate-at-third-consumer.md`
 - `.agent/rules/directive-file-context-budget.md`
@@ -55,6 +54,7 @@ index in the same commit.
 - `.agent/rules/invoke-react-component-expert.md`
 - `.agent/rules/invoke-sentry-expert.md`
 - `.agent/rules/lint-after-edit.md`
+- `.agent/rules/local-broken-code-never-leaves.md`
 - `.agent/rules/markdown-code-blocks-must-have-language.md`
 - `.agent/rules/monitor-branch-touched-files.md`
 - `.agent/rules/never-disable-checks.md`

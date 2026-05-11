@@ -323,17 +323,23 @@ paths, setup files) don't apply.
   Sentry runtime/uptime surfaces).
 - **Fix things** - All quality gates are blocking at all times,
   regardless of location, cause, or context.
-- **Broken code stays local** — Code that does not work does not
-  leave the local environment. No `git push` until the change is
-  proven to work — built, gated, and observed running in the form
-  it is supposed to run (test passing, dev server returning the
-  expected response, CLI exiting clean, UI rendering the expected
-  state). "It compiles" is not "it works"; the proof is observed
-  behaviour, not the absence of red. Pushing broken code burns
-  peer-agent and reviewer cycles on diagnosis the author could
-  have closed with one more local check, and pollutes the shared
-  branch with state nobody can trust. See
-  [`broken-code-stays-local.md`](../rules/broken-code-stays-local.md)
+- **Local broken code never leaves** — Broken code is never
+  acceptable. The local-only constraint is not an excuse to tolerate
+  brokenness; it is the discipline that prevents brokenness from
+  reaching other agents, reviewers, CI, and production before you
+  finish fixing it. Two halves, both held: (1) broken code must be
+  fixed, not tolerated — "it's just broken locally" is not a stable
+  resting position, it is an in-progress fix that has not yet landed;
+  (2) local broken code never leaves the local environment — no
+  `git push` until the change is proven to work, built, gated, and
+  observed running in the form it is supposed to run (test passing,
+  dev server returning the expected response, CLI exiting clean, UI
+  rendering the expected state). "It compiles" is not "it works";
+  the proof is observed behaviour, not the absence of red. Pushing
+  broken code burns peer-agent and reviewer cycles on diagnosis the
+  author could have closed with one more local check, and pollutes
+  the shared branch with state nobody can trust. See
+  [`local-broken-code-never-leaves.md`](../rules/local-broken-code-never-leaves.md)
   for the operational discipline.
 - **Never weaken a gate to solve a testing problem** - If a test
   needs content that a gate forbids (e.g. an `eslint-disable`

@@ -1,23 +1,35 @@
-# Broken Code Stays Local
+# Local Broken Code Never Leaves
 
-Operationalises the **Broken code stays local** principle in
+Operationalises the **Local broken code never leaves** principle in
 [`.agent/directives/principles.md § Code Quality`](../directives/principles.md#code-quality).
 
-## The Rule
+## The Invariant
 
-Code that does not work does not leave the local environment. No
-`git push`, no PR open, no MR push, no remote-branch update until
-the change is **proven to work** in the form it is supposed to run.
+Broken code is **never acceptable**. The local-only constraint is not
+an excuse to tolerate brokenness; it is the discipline that prevents
+brokenness from reaching other agents, reviewers, CI, and production
+before you finish fixing it.
 
-Local commits are fine — committing is for the local snapshot history
-and is reversible. **Pushing is the public act** that publishes state
-to peer agents and reviewers. Pushing broken code:
+The principle has two halves and both must be held:
+
+1. **Broken code must be fixed, not tolerated.** Even locally,
+   broken state is not a working state. "It's just broken locally"
+   is not a stable resting position; it is an in-progress fix that
+   has not yet landed.
+2. **Local broken code never leaves the local environment.** No
+   `git push`, no PR open, no MR push, no remote-branch update until
+   the change is **proven to work** in the form it is supposed to
+   run.
+
+Local commits are fine — they are local snapshots and reversible.
+**Pushing is the public act** that publishes state to peer agents
+and reviewers. Pushing broken code:
 
 - burns peer-agent and reviewer cycles on diagnosis the author could
   have closed with one more local check,
 - pollutes the shared branch with state nobody can trust,
-- destroys the load-bearing invariant that "the remote branch is in a
-  state we can run against."
+- destroys the load-bearing invariant that "the remote branch is in
+  a state we can run against."
 
 ## What counts as "proven to work"
 
@@ -62,7 +74,9 @@ Some changes are hard to prove locally:
 In these cases the proof can be **a documented plan for how the proof
 will land** (e.g., "the CI run on the PR will exercise this code path
 because X, Y, Z"). This is a deliberate handoff to a downstream gate;
-it is NOT a licence to push first and hope.
+it is NOT a licence to push first and hope, and it is NOT permission
+to leave the code broken locally. The local state must still be
+broken-only-in-the-named-axis; everything else must be working.
 
 If neither local proof nor a clear downstream-proof path exists, the
 change is not ready to push.
@@ -98,7 +112,8 @@ There are none. Common rationalisations and their refusals:
 
 ## Owner-direction status
 
-Standing. Established 2026-05-11 in response to repeated patterns of
-broken or untested code reaching shared branches and burning peer
-cycles. Applies to every push, on every branch, by every agent on
+Standing. Established 2026-05-11 (initial framing as "broken code
+stays local" sharpened immediately by owner: the stays-framing
+implies broken code is okay while local, and broken code is never
+okay). Applies to every push, on every branch, by every agent on
 every platform.
