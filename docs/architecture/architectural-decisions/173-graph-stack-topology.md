@@ -71,31 +71,46 @@ packages.
 
 ### Topology
 
-Seven active graph workspaces plus one deferred:
+Seven active graph workspaces plus one deferred. Each item carries its
+sequenced activation increment; the topology decision commits the full
+set, but workspaces are stood up in increment order rather than all at
+once. Increment sequencing is owned by the implementing plan.
 
 1. `packages/core/graph-core/` — RDF/JS-aligned terms/quads/datasets,
    JSON-LD 1.1 expansion+compaction+framing, canonicalisation, vocabulary
-   registry. Pure, no I/O.
+   registry. Pure, no I/O. **Activates in Inc.1 (foundation).**
 2. `packages/libs/graph-ingest/` — JSON-LD-compatible, record, generic
    Turtle/SKOS parse-to-dataset support, and other consumer-agnostic
    ingestion modes. Oak-specific corpus mapping does not live here.
+   **Activates in Inc.1 with `jsonld-compatible` plus generic
+   Turtle/SKOS parsing; remaining ingestion modes in Inc.2.**
 3. `packages/libs/graph-enhance/` — stable IRI minting, predicate mapping,
    type inference, link detection, `EnhancementRecord` and
-   `RelationshipRecord` discipline.
+   `RelationshipRecord` discipline. **Activates in Inc.2 (second-wave
+   substrate); the adapter seam ships from Inc.1 inside `graph-core`.**
 4. `packages/libs/graph-validate/` — JSON Schema (raw shape) + SHACL
-   (graph meaning).
+   (graph meaning). **Activates in Inc.2 (second-wave substrate); the
+   adapter seam ships from Inc.1 inside `graph-core`.**
 5. `packages/libs/graph-project/` — property-graph projection, adjacency,
    neighbours/match/traverse primitives, visualisation/export hooks.
+   **Activates in Inc.1 with property-graph projection plus adjacency
+   primitives; full traversal and visualisation surface in later
+   increments.**
 6. `packages/sdks/graph-corpus-sdk/` — Oak's typed corpus adapters (Oak
    Curriculum Ontology Threads graph, prerequisite, misconception, EEF
    strands, future corpora). Cross-corpus join primitives. Ontology IRIs as
-   canonical identity.
+   canonical identity. **Activates in Inc.1 with the Oak Curriculum
+   Ontology Threads adapter; prerequisite, misconception, and EEF
+   adapters activate in Inc.3.**
 7. `agent-graphs/practice-graph/` — markdown-corpus graph for Oak's
    engineering practice. It is an agent-tooling-adjacent consumer, not a
    substrate library, and proves the substrate works for non-curriculum data.
+   **Activates in Inc.4 (second-consumer proof); the `agent-graphs/`
+   organisation plan unblocks it.**
 8. `packages/libs/graph-future/` — _deferred_. Workspace not created until
    a consumer needs RDF 1.2 / JSON-LD 1.2 / SPARQL 1.2 / SHACL 1.2
    adapters; the adapter seams ship from day one in the active workspaces.
+   **Tripwire-gated (not increment-sequenced).**
 
 ### MCP-agnostic principle (proposed)
 
