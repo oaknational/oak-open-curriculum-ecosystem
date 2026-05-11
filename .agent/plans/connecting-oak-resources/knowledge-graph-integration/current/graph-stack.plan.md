@@ -22,70 +22,87 @@ todos:
   - id: ws1-graph-core-scaffold
     content: "WS1.1: Scaffold packages/core/graph-core workspace (TS, esbuild, vitest, README, exports skeleton). One commit, tree green."
     status: pending
+    sub_increment: 1a
   - id: ws1-rdf-term-quad
     content: "WS1.2: RDF Term hierarchy (NamedNode/BlankNode/Literal/DefaultGraph) + Quad type; type tests + equality. One commit, tree green."
     status: pending
     depends_on: [ws1-graph-core-scaffold]
+    sub_increment: 1a
   - id: ws1-dataset-core
     content: "WS1.3: DatasetCore-compatible interface (RDF/JS aligned); add/has/match unit tests. One commit, tree green."
     status: pending
     depends_on: [ws1-rdf-term-quad]
+    sub_increment: 1a
   - id: ws1-jsonld-expand
     content: "WS1.4: JSON-LD 1.1 expand wrapper (versioned adapter); test against a known SKOS document fixture."
     status: pending
     depends_on: [ws1-dataset-core]
+    sub_increment: 1a
   - id: ws1-jsonld-compact-frame
     content: "WS1.5: JSON-LD 1.1 compact + frame wrappers; round-trip test."
     status: pending
     depends_on: [ws1-jsonld-expand]
+    sub_increment: 1a
   - id: ws1-canon
     content: "WS1.6: RDF dataset canonicalisation; deterministic output for equivalent datasets."
     status: pending
     depends_on: [ws1-dataset-core]
+    sub_increment: 1a
   - id: ws1-vocab-registry
     content: "WS1.7: Vocabulary registry data tables (schema.org, RDFS, SKOS, PROV-O, DCMI, OWL, SHACL, Oak Curriculum Ontology, EEF custom IRIs); lookup + reverse-lookup tests."
     status: pending
     depends_on: [ws1-graph-core-scaffold]
+    sub_increment: 1a
   - id: ws1-graph-document
     content: "WS1.8: GraphDocument + GraphNode + GraphEdge ergonomic surface over Dataset; unit tests against a fixture dataset."
     status: pending
     depends_on: [ws1-dataset-core, ws1-vocab-registry]
+    sub_increment: 1a
   - id: ws2-ingest-scaffold
     content: "WS2.1: Scaffold packages/libs/graph-ingest workspace."
     status: pending
     depends_on: [ws1-graph-document]
+    sub_increment: 1a
   - id: ws2-jsonld-compatible
     content: "WS2.2: jsonld-compatible ingestion mode (JSON with @context/@id/@type or inferable LD shape) plus generic Turtle/SKOS parse-to-dataset support; test against a generic SKOS fixture."
     status: pending
     depends_on: [ws2-ingest-scaffold]
+    sub_increment: 1a
   - id: ws2-source-mapping
     content: "WS2.3: SourceMapping primitives (JSON Pointer + JSONPath); source path preserved end-to-end."
     status: pending
     depends_on: [ws2-jsonld-compatible]
+    sub_increment: 1a
   - id: ws3-project-scaffold
     content: "WS3.1: Scaffold packages/libs/graph-project workspace."
     status: pending
     depends_on: [ws1-graph-document]
+    sub_increment: 1a
   - id: ws3-property-graph
     content: "WS3.2: toPropertyGraph projection (nodes/edges with labels/properties); round-trip test."
     status: pending
     depends_on: [ws3-project-scaffold]
+    sub_increment: 1a
   - id: ws3-adjacency
     content: "WS3.3: adjacency primitives — incoming/outgoing/neighbours/match; tests against fixture."
     status: pending
     depends_on: [ws3-property-graph]
+    sub_increment: 1a
   - id: ws4-graph-corpus-sdk-scaffold
     content: "WS4.1: Scaffold packages/sdks/graph-corpus-sdk workspace with a typed corpus-adapter boundary; no Oak-specific ontology mapping before the SDK boundary exists."
     status: pending
     depends_on: [ws3-adjacency, ws2-source-mapping]
+    sub_increment: 1b
   - id: ws4-oak-ontology-thread-adapter
     content: "WS4.2: Oak Curriculum Ontology Threads adapter inside graph-corpus-sdk (generic Turtle/RDF/SKOS parsing via graph-ingest; curric:Thread enumeration and curric:includesThread inverse-edge mapping here); deterministic extraction test against the pinned straight-copy ontology raw import."
     status: pending
     depends_on: [ws4-graph-corpus-sdk-scaffold, ws1-vocab-registry]
+    sub_increment: 1b
   - id: ws4-query-proof
     content: "WS4.3: Prove the Oak Curriculum Ontology Threads adapter end-to-end via graph-corpus-sdk's typed query surface (Thread enumeration plus Unit->Thread inverse-edge lookup; no MCP wiring in this cycle — surfacing is a consumer decision, see §Surfacing)."
     status: pending
     depends_on: [ws4-oak-ontology-thread-adapter]
+    sub_increment: 1c
   - id: ws5-coordination-amendments
     content: "WS5: Amend graph-query-layer.plan.md, oak-kg-threads-surface.plan.md, practice-graph-payoff-peak-pilot.plan.md, and the parent open-education-knowledge-surfaces.plan.md to reference this spine."
     status: pending
@@ -106,8 +123,8 @@ todos:
 
 # Graph Stack — Topology and Foundation Increment
 
-**Last Updated**: 2026-05-10
-**Status**: 🟡 PLANNING — queued; depends on owner approval of the topology decision (WS0 ADR).
+**Last Updated**: 2026-05-11 — Inc.1 decomposed into sub-increments 1a (substrate scaffolding) / 1b (Threads adapter) / 1c (query proof) plus closure, with file-scope-non-overlapping boundaries and explicit parallel-safety annotations; D-4 BLOCKERs verified closed (see graph-mvp-arc.plan.md § Open Decisions D-4).
+**Status**: 🟡 PLANNING — queued; depends on owner approval of the topology decision (WS0 ADR) and on the ADR-041 amendment routed via D-4a (graph-mvp-arc.plan.md § Open Decisions).
 **Scope**: Establish a layered, standards-based graph capability for Oak as a backbone of seven active graph workspaces plus one deferred, then ship the foundation increment ingesting the Oak Curriculum Ontology Threads graph end-to-end as the first attached corpus.
 
 ---
@@ -373,13 +390,32 @@ deterministic extraction proof runs against the pinned raw import.
 
 ### Workstream decomposition
 
-The cycle-by-cycle TDD breakdown is the YAML `todos` block at the head of this plan. The summary:
+The cycle-by-cycle TDD breakdown is the YAML `todos` block at the head of this plan. Inc.1 is decomposed into three sub-increments (1a / 1b / 1c) plus a closure phase, by file-scope-non-overlapping boundaries; the `sub_increment` field on each todo records the assignment.
 
-- **WS0 — Topology ADR**: author the proposed ADR that records the intended topology decision and supersession/coordination map for owner review (see §Coordination with Existing Plans).
+#### Inc.1a — Substrate scaffolding (file scope: `packages/core/graph-core/`, `packages/libs/graph-ingest/`, `packages/libs/graph-project/`)
+
 - **WS1 — `graph-core`** (8 cycles): scaffold; RDF Term + Quad; DatasetCore; JSON-LD expand; JSON-LD compact + frame; canonicalisation; vocabulary registry; GraphDocument ergonomic surface.
 - **WS2 — minimal `graph-ingest`** (3 cycles): scaffold; `jsonld-compatible` mode + generic Turtle/SKOS parsing; SourceMapping primitives.
 - **WS3 — minimal `graph-project`** (3 cycles): scaffold; `toPropertyGraph` projection; adjacency primitives.
-- **WS4 — Oak Ontology Threads as first attached corpus** (3 cycles): `graph-corpus-sdk` scaffold + typed adapter boundary; GitHub raw-import fixture/manifest against the pinned `oaknational/oak-curriculum-ontology` revision; Thread adapter/extractor inside the SDK (generic Turtle/SKOS parse via `graph-ingest`, `curric:Thread` and inverse `curric:includesThread` mapping here); typed query proof (in-process; no surfacing).
+
+**Inc.1a exit**: WS1 + WS2 + WS3 cycles land green; `graph-core`, `graph-ingest`, `graph-project` expose stable public surfaces; `graph-corpus-sdk` can compile against them.
+
+#### Inc.1b — Threads adapter (file scope: `packages/sdks/graph-corpus-sdk/`)
+
+- **WS4.1 — `graph-corpus-sdk` scaffold**: typed corpus-adapter boundary; no Oak-specific ontology mapping before the SDK boundary exists.
+- **WS4.2 — Oak Ontology Threads adapter**: GitHub raw-import fixture/manifest against the pinned `oaknational/oak-curriculum-ontology` revision; Thread adapter inside the SDK (generic Turtle/SKOS parse via `graph-ingest`; `curric:Thread` and inverse `curric:includesThread` mapping); deterministic extraction test against the pinned straight-copy ontology raw import.
+
+**Inc.1b exit**: Threads adapter extracts `curric:Thread` from pinned ontology raw import; deterministic extraction test passes.
+
+#### Inc.1c — Thread→Unit query proof (file scope: `packages/sdks/graph-corpus-sdk/`)
+
+- **WS4.3 — typed query proof**: end-to-end query through `graph-corpus-sdk`'s typed surface (Thread enumeration + inverse Unit lookup); in-process only; no MCP wiring.
+
+**Inc.1c exit**: Thread→Unit inverse-edge lookup is queryable in-process via the typed surface; ontology IRIs are canonical identity end-to-end.
+
+#### Inc.1 closure (file scope: cross-plan + repo-wide docs + gates)
+
+- **WS0 — Topology ADR**: author the proposed ADR that records the intended topology decision and supersession/coordination map for owner review (see §Coordination with Existing Plans). May land at the head of Inc.1a alongside WS1.1.
 - **WS5 — Coordination amendments** (1 batch): amend `graph-query-layer.plan.md`, `oak-kg-threads-surface.plan.md`, `practice-graph-payoff-peak-pilot.plan.md`, and the parent `open-education-knowledge-surfaces.plan.md`.
 - **WS6 — Documentation propagation** (1 batch): collection README, monorepo README, CONTRIBUTING, `LICENCE-DATA.md` ontology section, Mark Hodierne author addition, research filename typo fix. ADR-123 is not amended by this increment because no MCP primitives are added or changed.
 - **WS7 — Quality gates** (1 batch): full chain (`pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && pnpm test && pnpm test:ui && pnpm test:e2e`).
@@ -389,7 +425,22 @@ The cycle-by-cycle TDD breakdown is the YAML `todos` block at the head of this p
 
 `graph-core` cycles are mostly sequential (WS1.1 → WS1.2 → WS1.3 → ...). Within the lib tier, `graph-ingest` (WS2) and `graph-project` (WS3) are *parallel-safe after WS1.8 lands*; both depend only on `graph-core`'s public surface. WS4 depends on both WS2's `jsonld-compatible` mode and WS3's adjacency primitives.
 
-The parallel-safe pairs (`WS2.1+WS3.1`, `WS2.2+WS3.2`, `WS2.3+WS3.3`) can be dispatched concurrently *if* worktree isolation is verified per the [worktree-isolation-unreliable](../../../../memory/active/distilled.md) guidance — in practice, sequential dispatch is preferred unless the orchestrator confirms isolation.
+The parallel-safe pairs are **`WS2.2+WS3.2` and `WS2.3+WS3.3` only** — they touch disjoint workspace source trees after both scaffolds exist. The scaffold pair **`WS2.1+WS3.1` is NOT parallel-safe**: both write to repo-root monorepo registration files (`pnpm-workspace.yaml`, root `tsconfig.json` project references, root `package.json`), which have no merge-friendly concurrent-write story. Serialise WS2.1 and WS3.1 (either order; or batch their root-file edits into one preparatory commit). The later pairs may then be dispatched concurrently *if* worktree isolation is verified per the [worktree-isolation-unreliable](../../../../memory/active/distilled.md) guidance — in practice, sequential dispatch is preferred unless the orchestrator confirms isolation.
+
+**WS4.2 earliest-start refinement**: WS4.2 (`ws4-oak-ontology-thread-adapter`) declares `depends_on: [ws4-graph-corpus-sdk-scaffold, ws1-vocab-registry]`. Its earliest possible start is therefore *after WS1.7 + WS4.1*, not after all of Inc.1a. The Inc.1a-then-Inc.1b sub-increment framing is correct for the explicitly preferred single-agent shape; this note is for any future brief that revisits finer-granularity parallelism.
+
+**Sub-increment dependency direction**:
+
+- Inc.1a → Inc.1b: Inc.1b cannot begin until Inc.1a complete (WS4.1 `depends_on: [ws3-adjacency, ws2-source-mapping]`).
+- Inc.1b → Inc.1c: Inc.1c cannot begin until Inc.1b complete (WS4.3 `depends_on: [ws4-oak-ontology-thread-adapter]`).
+- Inc.1c → Inc.1 closure: WS5+ require Inc.1c green.
+
+**Multi-agent parallelism within Inc.1**:
+
+- Two agents can share Inc.1 only at the Inc.1a substrate level — one agent on `graph-ingest` (WS2), one on `graph-project` (WS3), after `graph-core`'s public surface (WS1.8) is on `main`. Their file scopes are disjoint workspace trees.
+- Inc.1b is single-workspace by design (`packages/sdks/graph-corpus-sdk/`); single-agent.
+- Inc.1c is single-workspace and single-cycle; single-agent.
+- Inc.1 closure is sequential coordination work; single-agent.
 
 ### Test discipline
 
@@ -406,12 +457,10 @@ The foundation increment lands tests for the load-bearing invariants from resear
 
 The foundation increment is done when:
 
-1. The foundation-tier cycles land green.
-2. Oak Curriculum Ontology Threads are queryable in-process via `graph-corpus-sdk`'s typed surface, including Unit-to-Thread inverse-edge lookup; ontology IRIs are canonical identity end-to-end. No surfacing (MCP, CLI, HTTP) is required for completeness.
-3. The full quality-gate chain passes.
-4. ADR for the topology decision is merged.
-5. Coordination amendments are applied to the named plans.
-6. Mark Hodierne is in the authors list.
+1. **Inc.1a** — substrate scaffolding cycles (WS1 + WS2 + WS3) land green.
+2. **Inc.1b** — `graph-corpus-sdk` scaffold and Oak Ontology Threads adapter (WS4.1 + WS4.2) land green.
+3. **Inc.1c** — Oak Curriculum Ontology Threads are queryable in-process via `graph-corpus-sdk`'s typed surface, including Unit-to-Thread inverse-edge lookup; ontology IRIs are canonical identity end-to-end (WS4.3). No surfacing (MCP, CLI, HTTP) is required for completeness.
+4. **Inc.1 closure** — the full quality-gate chain passes (WS7); ADR for the topology decision is merged (WS0); coordination amendments are applied to the named plans (WS5); Mark Hodierne is in the authors list (WS6).
 
 ---
 
