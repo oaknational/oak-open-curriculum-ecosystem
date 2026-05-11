@@ -4,6 +4,32 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-05-11 — PDR-059 regenerator-output-classification graduated (Fronded Flowering Seed session)
+
+Graduated the 2026-05-10 Quiet Lurking Mask pending-graduations entry
+"Hook-chain re-staging absorbs files post-verify-staged" to a new PDR
+on owner-direction trigger. Cure-shape selected by owner at session
+open: option iii (classification by intent), authored as a
+structurally distinct PDR rather than an amendment to PDR-054 because
+the taxonomy over hook-staged files is a new concept not present in
+the PDR-054 asymmetric-cure framing.
+
+Practice Core changes:
+
+- **Authored**: `PDR-059-regenerator-output-classification.md`. Three-
+  class taxonomy (Class A intentional regenerator output; Class B
+  intentional auto-fix of already-queued files; Class C arbitrary
+  peer-work absorption — forbidden). Enumeratively-bounded Class A
+  producer manifest as the structural gate. Post-hook-pre-commit
+  classification gate as the trailing complement to PDR-054's
+  pre-hook `verify-staged` fingerprint check.
+- **Amended**: `decision-records/README.md` index — PDR-059 row added.
+- **Cross-reference**: PDR-054 §Related extended with PDR-059
+  pointer (the post-hook absorption case is governed by PDR-059's
+  classification doctrine).
+- **Host-repo operational application**: amendment to ADR-177
+  authored separately (host phenotype; PDR substance is portable).
+
 ## [oak-open-curriculum-ecosystem] 2026-05-10 — `.agent/commands/` retirement (Tempestuous Darting Zephyr session)
 
 Closed the PDR-051 / ADR-125 §2026-05-09 commands-retirement loop on

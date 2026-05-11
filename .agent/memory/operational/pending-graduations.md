@@ -98,7 +98,7 @@ not a verdict.
 + 2026-05-10; **hook-chain re-staging absorbs files post-verify-staged
   — PDR-054 / ADR-177 amendment candidate (asymmetric-cure symmetry
   re-imported)**.
-  `[captured: 2026-05-10 | source: napkin (Quiet Lurking Mask 2026-05-10) | target: amendment:PDR-054+ADR-177 OR new-PDR:post-hook-verify-staged | trigger: second-instance OR owner-direction | size: M | status: due]`
+  `[captured: 2026-05-10 | graduated: 2026-05-11 (Fronded Flowering Seed) | source: napkin (Quiet Lurking Mask 2026-05-10) | target-resolved: new-PDR-059-regenerator-output-classification + amend:ADR-177 (2026-05-11) + amend:PDR-054-related-cross-ref | reviewers: architecture-expert-betty GO-WITH-CONDITIONS (2 doctrine edits applied) + docs-adr-expert GO + assumptions-expert GO-WITH-CONDITIONS (2 plan-level conditions recorded in ADR-177 amendment) | trigger-fired: owner-direction (cure-shape iii selected at session open) | size: M | status: graduated]`
   Observed instance: commit `a098d709` landed 11 files when verify-
   staged confirmed a 2-file bundle. Between verify-staged returning OK
   and `git commit` invoking the hook chain, the pre-commit hook
@@ -156,22 +156,29 @@ the queue churns.
 | apply-don't-ask reformulation (empirical-answerability) | PDR-057 | L1988–2036 (quarantine entry) |
 | stop-inventing-optionality reformulation (three-tier decomposition) | PDR-058 | L1988–2036 (quarantine entry) |
 
-### Entry counts (2026-05-10 — post-Sylvan-Fruiting-Glade drain)
+### Entry counts (2026-05-11 — post-graduation-candidates-drain — Fronded Flowering Seed)
 
 | Status | Count | Notes |
 | --- | --- | --- |
-| due | 2 | hook-chain re-staging (2026-05-10); ADR-041 workspace-tier amendment (2026-05-11, blocks ADR-173 ratification) |
-| partially-graduated | 0 | both completed 2026-05-10 |
-| quarantined | 0 | apply-don't-ask + stop-inventing-optionality reformulations graduated 2026-05-10 to PDR-057 + PDR-058 (Quiet Lurking Mask session) |
-| pending | ~84 | second-instance or owner-direction gated (added 2 from 2026-05-11 graph execution-prep: opener-vs-substrate divergence; different-lens reviewer divergence) |
-| **total** | **~86** | up from ~82 by 4 entries during 2026-05-11 graph execution-prep work |
+| due | 0 | both prior `due` entries graduated this session (hook-chain re-staging → PDR-059 + ADR-177 amendment + PDR-054 cross-ref; ADR-041 workspace-tier amendment landed with `agent-tools/` + `agent-graphs/` rows; ADR-173 ratification unblocked) |
+| partially-graduated | 0 | unchanged |
+| quarantined | 0 | unchanged |
+| pending | ~84 | unchanged this session; one entry ("Different-lens reviewers catch different gaps") is substance-ripe and flagged in this session's napkin for owner-direction review at next consolidation |
+| **total** | **~84** | down from ~86 by 2 graduations |
+
+### 2026-05-11 graduations log (Fronded Flowering Seed — graduation-candidates-drain session)
+
+| Entry | Graduated to | Reviewers |
+| --- | --- | --- |
+| Hook-chain re-staging absorbs files post-verify-staged | PDR-059 (regenerator-output-classification) + ADR-177 amendment (2026-05-11) + PDR-054 §Related cross-ref | architecture-expert-betty GO WITH CONDITIONS (2 doctrine edits applied); docs-adr-expert GO; assumptions-expert GO WITH CONDITIONS (2 plan-level pre-conditions recorded in ADR-177) |
+| ADR-041 amendment needed: top-level workspace tiers | ADR-041 amendment (2026-05-11) — `agent-tools/` + `agent-graphs/` tiers added; 8 × 8 dependency-direction matrix; D-4a closed in graph-mvp-arc.plan.md:732; ADR-173 §Open Questions:1 cross-linked | architecture-expert-fred GO; architecture-expert-betty GO WITH CONDITIONS (2 matrix-cell precision edits applied); docs-adr-expert GO WITH CONDITIONS (3 housekeeping items applied) |
 
 ## Entries
 
 + 2026-05-11; **ADR-041 amendment needed: top-level workspace tiers**
   (Dusky Masking Cloak 2026-05-11, surfaced by `assumptions-expert`
   during graph execution-prep step 1 D-4 verification).
-  `[captured: 2026-05-11 | source: thread:connecting-oak-resources, comment:assumptions-expert-review-on-ADR-041 | target: amend:ADR-041 | trigger: blocks:ADR-173-ratification | size: M | status: due]`
+  `[captured: 2026-05-11 | graduated: 2026-05-11 (Fronded Flowering Seed) | source: thread:connecting-oak-resources, comment:assumptions-expert-review-on-ADR-041 | target-resolved: amend:ADR-041-2026-05-11 (agent-tools/ + agent-graphs/ tiers added; matrix expanded to 8 rows × 8 columns; status Accepted (Revised); D-4a closed in graph-mvp-arc.plan.md; ADR-173 §Open Questions:1 cross-linked) | reviewers: architecture-expert-fred GO + architecture-expert-betty GO-WITH-CONDITIONS (2 precision edits applied) + docs-adr-expert GO-WITH-CONDITIONS (3 housekeeping items applied) | trigger-fired: blocks:ADR-173-ratification (now unblocked) | size: M | status: graduated]`
   ADR-041 (workspace structure) enumerates exactly five tiers: `apps/`,
   `packages/core/`, `packages/libs/`, `packages/sdks/`, `packages/design/`
   with an importer/importee matrix. The repo has already shipped a

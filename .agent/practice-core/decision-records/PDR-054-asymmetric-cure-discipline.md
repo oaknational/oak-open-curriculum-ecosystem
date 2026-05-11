@@ -12,7 +12,13 @@ pdr_kind: governance
 the doctrine for the case where a behavioural cure exists but its
 structural enforcement is one-sided);
 [PDR-044](PDR-044-memetic-immune-system.md) (memetic immune system —
-asymmetric cures are the failure mode innate-immunity layers must close).
+asymmetric cures are the failure mode innate-immunity layers must close);
+[PDR-059](PDR-059-regenerator-output-classification.md) (Regenerator-
+Output Classification Discipline — the post-hook-pre-commit
+classification gate that brackets the hook chain on the trailing side;
+the pre-hook `verify-staged` cure named by this PDR's §Implementation
+governs the leading side, classification governs the trailing side,
+together they close the asymmetry).
 
 ## Context
 

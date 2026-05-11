@@ -126,3 +126,41 @@ per ADR-144 §Loop Health; no substance was compressed.
   state; no inter-agent comms-event was needed. The protocol's
   bare-minimum primitives (staged index + pathspec discipline)
   carried it.
+
+## 2026-05-11 — Fronded Flowering Seed (graduation-candidates-drain session)
+
+- **OBSERVATION — transient register inconsistency at session
+  open**. At bootstrap fast-path scan `active-claims.json` `.claims`
+  contained a stale entry for `059291ea` (Smouldering Crackling
+  Pyre) even though that claim was already in
+  `closed-claims.archive.json` with `closed_at: 2026-05-11T14:15Z`.
+  Self-cleared between reads (likely periodic expiry sweep). Single
+  observation; not a graduation candidate; record for awareness.
+  If observed again at next session-open, treat as persistent drift
+  and graduate to a register-self-cleanup gap.
+- **OBSERVATION — different-lens reviewer divergence pattern at
+  substance ripeness**. Six reviewer dispatches this session (3 per
+  phase) each surfaced structurally distinct concerns — never
+  redundant convergence. Phase 1: betty (Class A/B precedence +
+  open-set overstatement); docs-adr (clean); assumptions (enumeration
+  bounds + hook-staged-file definition). Phase 2: fred (clean
+  principles); betty (matrix-cell scope precision); docs-adr
+  (housekeeping). The pending entry "Different-lens reviewers catch
+  different gaps" (captured 2026-05-11) is at substance-ripe state
+  per the "triggers register on substance not instance count"
+  memory; flagged for owner direction at next consolidation.
+- **OBSERVATION — option-shape pre-selection at session open is
+  efficient**. Opener author enumerated three architectural-
+  excellence cure shapes for the hook-chain item; owner selected
+  shape (iii) at session open via AskUserQuestion before any
+  authoring work began. Let reviewer dispatch focus exclusively on
+  execution-legitimacy, not shape-selection re-litigation. Pattern
+  worth naming if a second instance shows the same pre-selection
+  efficiency.
+- **CORRECTED — forward-looking reviewer attestation in plan-state
+  is a doc-quality violation**. I authored a "Reviewer attestations:
+  ... (dispatched in parallel)" line in `graph-mvp-arc.plan.md:732`
+  *before* reviewers had returned. docs-adr-expert flagged this
+  correctly. Cure: name attestations only after they return;
+  forward-looking claims fabricate evidence. Already corrected this
+  session; record for discipline.

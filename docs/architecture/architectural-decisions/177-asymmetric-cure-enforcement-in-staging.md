@@ -1,7 +1,11 @@
 # ADR-177: Asymmetric-Cure Enforcement for `git commit -- <pathspec>` (Staging Boundary)
 
-**Status**: Proposed
+**Status**: Accepted (Revised)
 **Date**: 2026-05-10
+**Updated**: 2026-05-11 — post-hook classification gate added as the
+trailing complement to the pre-hook `verify-staged` cure; cites
+PDR-059 (Regenerator-Output Classification Discipline) as the
+governing portable doctrine.
 **Related**:
 [ADR-118](118-commit-skill-as-canonical-pre-commit-flow.md) — commit
 skill as canonical pre-commit flow;
@@ -9,7 +13,10 @@ skill as canonical pre-commit flow;
 advisory orchestrator naming and surface polarity;
 PDR-054 (Asymmetric-Cure Discipline) — this ADR is the host-repo
 operational application of PDR-054's symmetric-cure discipline for the
-specific case of foreign-stage absorption at `git commit`.
+specific case of foreign-stage absorption at `git commit`;
+PDR-059 (Regenerator-Output Classification Discipline) — the post-
+hook-pre-commit classification gate; this ADR's 2026-05-11 amendment
+records the host-repo operational application of PDR-059.
 
 ## Context
 
@@ -133,11 +140,134 @@ plan body owns the implementation slices.
   This ADR holds the question open; the answer is owner-direction-
   shaped.
 
+## 2026-05-11 amendment — Post-hook classification gate (PDR-059 host application)
+
+The pre-hook fingerprint-divergence cure described above closes the
+asymmetric-cure failure mode for files staged _before_ the pre-commit
+hook chain runs. A contiguous surface remains: files staged _by_ the
+hook chain itself (regenerator output, formatter auto-fixes,
+markdownlint auto-fixes, etc.) bypass the pre-hook check by
+construction — they appear in the index only after `verify-staged`
+has passed.
+
+The 2026-05-10 Quiet Lurking Mask session observed the second
+instance of post-hook absorption (the first having been latent
+behind hook chains that historically had narrow auto-fix surface).
+The asymmetric-cure framing's third-instance trigger is reached
+contiguously (the pre-hook surface is already at three observed
+instances; the post-hook surface is contiguous with it and shares
+the failure mode shape), so the symmetric-cure obligation is
+inherited.
+
+PDR-059 (Regenerator-Output Classification Discipline) names the
+portable doctrine: classify every hook-staged file by intent as
+Class A (intentional regenerator output, declared in an
+enumeratively-bounded producer manifest), Class B (intentional
+auto-fix of already-queued files), or Class C (arbitrary peer-work
+absorption — forbidden, aborts the commit).
+
+This amendment adopts the **post-hook classification gate** as the
+host-repo operational application of PDR-059. The implementation
+surface is the `agent-tools` commit-orchestrator (the same
+workspace that owns the pre-hook `verify-staged` cure), extended
+with a post-hook classification step that runs after the husky
+pre-commit chain completes and before `git commit` writes the
+commit object.
+
+Implementation outline (the executable plan lives in `.agent/plans/`
+and owns the slice-by-slice rollout; this amendment records the
+_decision shape_):
+
+1. **Class A producer manifest** lives at a versioned host path
+   (`.agent/hooks/regenerator-output-manifest.json` or equivalent;
+   exact location is a plan-time choice). Each entry names the
+   producer (hook id or tool name), the output path or path glob
+   it owns, and a one-line rationale for landing the output.
+2. **Classification logic** runs at the post-hook-pre-commit window.
+   Hook-staged files are computed by diffing the staged index
+   against the queued-intent file list. Each file is classified
+   against the manifest plus the auto-fix tool set:
+   - matched against a Class A manifest entry by (producer, target
+     path) → Class A;
+   - matched against the auto-fix tool set AND target file is in
+     the queued bundle → Class B;
+   - otherwise → Class C.
+3. **Failure path** (Class C absorption detected): the
+   commit-orchestrator aborts with a structured error message
+   naming the absorbed files, the class they were mis-classified as
+   (e.g. "would have been Class A but no manifest entry for path X"),
+   and the corrective action (manifest entry, queue inclusion, or
+   investigate cross-agent absorption).
+4. **Manifest discipline**: new regenerator-producing hooks declare
+   their manifest entry as part of their landing bundle; the entry
+   is reviewed alongside the hook itself. Manifest entries for
+   retired hooks are removed in the retirement bundle.
+
+The two gates together bracket the hook chain:
+
+| Window               | Gate                                                                               | Host implementation                                                   |
+| -------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| Pre-hook             | Fingerprint-divergence check at `verify-staged` (shape b, original decision above) | `agent-tools` commit-queue `verify-staged` command                    |
+| Post-hook-pre-commit | Three-class classification gate (new, PDR-059 host application)                    | `agent-tools` commit-orchestrator post-hook step + versioned manifest |
+
+The shape-(c) escalation criterion from the original decision is
+unchanged: if a fourth pre-hook foreign-stage absorption fires
+after shape (b) lands, the pre-hook cure is still asymmetric and
+shape (c) is the symmetric closure for the pre-hook surface. The
+post-hook gate is shape-(c)-independent; it closes the post-hook
+asymmetry regardless of whether the pre-hook cure has moved from
+(b) to (c).
+
+**Additional consequences from this amendment**:
+
+- _Required_: every regenerator-producing hook in the pre-commit
+  chain has a manifest entry; new hooks declare their entry as part
+  of their landing bundle; the classification gate is non-bypassable
+  once landed.
+- _Forbidden_: treating any hook-staged file as Class A by default;
+  inferring intent from output volume; bypassing the classification
+  gate to land a commit with Class C content.
+- _Costs_: one-time implementation in the commit-orchestrator;
+  ongoing manifest maintenance; authoring discipline for new hooks
+  to declare their producer-output contract.
+
+**Implementation status**: deferred to a follow-on plan in the
+`agent-tools` workspace. The PDR substance + the ADR amendment land
+in the 2026-05-11 graduation-candidates-drain session as doctrine;
+the executable rollout (manifest schema, classification step,
+producer enumeration, test surface, integration with the
+commit-orchestrator) is sequenced separately with its own reviewer
+dispatch and atomic-landing TDD discipline.
+
+**Pre-conditions on the follow-on executable plan** (from
+`assumptions-expert` review of the doctrine landing, 2026-05-11):
+
+1. _Producer inventory_. The plan must include an inventory step
+   that enumerates the current pre-commit hook chain's working-tree-
+   writing producers and lists candidate Class A manifest entries.
+   If the inventory exceeds approximately ten producers or contains
+   ad-hoc tools without stable identity, the manifest-bounded-cost
+   assumption needs revisiting before the gate lands as non-
+   bypassable. The inventory is a falsifiable input to the
+   manifest-design decision, not a rubber-stamp.
+2. _Hook-staged-file definition_. The plan must adopt the PDR §
+   Decision Class B definition verbatim — classification is
+   computed against (post-hook staged set) minus (queued-intent
+   file list), not against (post-hook staged set) minus (pre-hook
+   staged set). The two definitions classify peer-mid-flight cases
+   differently; only the queued-intent baseline gives the
+   asymmetric-cure semantics PDR-059 requires.
+
 ## Source
 
 This ADR is the host-repo operational application of PDR-054
-(Asymmetric-Cure Discipline). The substance of the asymmetric-cure
-failure mode is portable; the choice of (a)/(b)/(c) is host-architectural
-and lands here. The earlier prose-only graduation of the cure landed at
+(Asymmetric-Cure Discipline) for the pre-hook surface and, as
+amended 2026-05-11, of PDR-059 (Regenerator-Output Classification
+Discipline) for the post-hook surface. The substance of both
+failure modes is portable; the host-architectural choices land
+here. The earlier prose-only graduation of the pre-hook cure
+landed at
 [`stage-by-explicit-pathspec.md § Cure Asymmetry`](../../.agent/rules/stage-by-explicit-pathspec.md);
-this ADR closes the asymmetry the rule's body explicitly named.
+this ADR closes the asymmetry the rule's body explicitly named on
+the pre-hook surface and extends the closure to the post-hook
+surface in the 2026-05-11 amendment.

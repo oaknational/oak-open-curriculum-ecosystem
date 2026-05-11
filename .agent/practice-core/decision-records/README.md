@@ -182,3 +182,4 @@ Practice-Core portability ratifies both — see the bridge index
 | [PDR-056](PDR-056-inter-agent-collaboration-protocol.md) | Inter-Agent Collaboration Protocol — Ten Named Cures | Accepted |
 | [PDR-057](PDR-057-empirical-answerability.md) | Empirical-Answerability Pre-Question Gate | Accepted (supersedes quarantined `apply-don't-ask`) |
 | [PDR-058](PDR-058-three-tier-optionality-decomposition.md) | Three-Tier Optionality Decomposition | Accepted (supersedes quarantined `stop-inventing-optionality`) |
+| [PDR-059](PDR-059-regenerator-output-classification.md) | Regenerator-Output Classification Discipline | Accepted |

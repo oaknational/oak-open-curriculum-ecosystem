@@ -302,11 +302,16 @@ sweep.**
 
 ## Open questions to resolve before promotion
 
-1. Confirm the workspace path conventions
+1. ~~Confirm the workspace path conventions~~ **Resolved 2026-05-11**:
+   the workspace path conventions
    (`packages/core/graph-core/`, `packages/libs/...`,
-   `packages/sdks/graph-corpus-sdk/`, `agent-graphs/practice-graph/`) match
-   repository workspace policy. The `agent-graphs/` physical organisation is
-   sequenced outside this ADR.
+   `packages/sdks/graph-corpus-sdk/`, `agent-graphs/practice-graph/`)
+   are matrix-recorded in
+   [ADR-041](041-workspace-structure-option-a.md) (2026-05-11
+   amendment). `agent-graphs/` is a distinct top-level tier with
+   permitted importer/importee rows; `practice-graph` is the first
+   occupant. The `agent-graphs/` physical organisation is sequenced
+   outside this ADR.
 2. Confirm the ADR is the right artefact for the MCP-agnostic principle, or
    whether it should be a separate ADR with this one referencing it.
 3. Confirm Mark Hodierne's author addition is required at ratification or

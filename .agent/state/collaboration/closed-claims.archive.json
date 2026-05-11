@@ -16760,6 +16760,83 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "1ccfa79c-5bb9-49f9-811f-3fbf00587638",
+      "agent_id": {
+        "agent_name": "Fronded Flowering Seed",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "19ecd5"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-*regenerator-output-classification*.md",
+            ".agent/practice-core/decision-records/README.md",
+            ".agent/practice-core/decision-records/PDR-054-asymmetric-cure-discipline.md",
+            ".agent/practice-core/CHANGELOG.md",
+            "docs/architecture/architectural-decisions/177-asymmetric-cure-enforcement-in-staging.md",
+            "docs/architecture/architectural-decisions/041-workspace-structure-option-a.md",
+            "docs/architecture/architectural-decisions/173-graph-stack-topology.md",
+            ".agent/plans/graph-mvp-arc.plan.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/comms-events/076cfe79-e1e1-4c3f-913c-c7b6a57f03d4.json",
+            ".agent/state/collaboration/comms-events/544bf9bf-1c19-432e-96a2-d99c2b4a77c2.json",
+            ".agent/state/collaboration/comms-events/89d26c68-70ad-4154-8171-b439d390488e.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-11T13:20:16Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Graduation candidates drain: resolve two `due` items in pending-graduations.md (hook-chain re-staging cure shape iii + ADR-041 workspace-tiers amendment); read-only triage of recent `pending` additions; standard handoff.",
+      "archived_at": "2026-05-11",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-11T14:10:00Z",
+        "closed_by": {
+          "agent_name": "Fronded Flowering Seed",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "19ecd5"
+        },
+        "summary": "Both `due` items graduated this session. Phase 1: PDR-059 (regenerator-output-classification) authored + ADR-177 2026-05-11 amendment (post-hook classification gate) + PDR-054 §Related cross-ref + PDR index + CHANGELOG. Phase 1 reviewers: betty GO WITH CONDITIONS (2 doctrine edits applied), docs-adr-expert GO, assumptions-expert GO WITH CONDITIONS (2 plan-level pre-conditions recorded in ADR-177). Phase 2: ADR-041 amended (Accepted (Revised); 8×8 dependency-direction matrix with agent-tools/ + agent-graphs/ rows + Decision-list libs-split note) + ADR-173 §Open Questions:1 cross-linked + D-4a closed on graph-mvp-arc.plan.md:732. Phase 2 reviewers: fred GO, betty GO WITH CONDITIONS (2 matrix-cell precision edits applied), docs-adr-expert GO WITH CONDITIONS (3 housekeeping items applied). Phase 3 read-only triage: no promotions; one item flagged substance-ripe in napkin for owner direction. Phase 4: pending-graduations Entry counts refreshed (0 due, ~84 pending); quality gates green (markdownlint/format/vocabulary/fitness — only pre-existing Out-of-Scope criticals). Mid-session coordination: replied to Soaring Darting Kite (R1.b sidebar 2e1a886f) confirming comms-events/** read-only; claim narrowed to three explicit event UUIDs to unblock R1.b. ADR-173 ratification gate now unblocked.",
+        "evidence": [
+          {
+            "kind": "event",
+            "ref": "076cfe79-e1e1-4c3f-913c-c7b6a57f03d4",
+            "summary": "Session-open narrative event."
+          },
+          {
+            "kind": "event",
+            "ref": "544bf9bf-1c19-432e-96a2-d99c2b4a77c2",
+            "summary": "Reply to Soaring Darting Kite sidebar; comms-events/** read-only confirmation."
+          },
+          {
+            "kind": "event",
+            "ref": "89d26c68-70ad-4154-8171-b439d390488e",
+            "summary": "Session-close summary event."
+          },
+          {
+            "kind": "graduation",
+            "ref": "PDR-059-regenerator-output-classification",
+            "summary": "Phase 1 graduation: hook-chain re-staging → PDR-059 + ADR-177 amendment."
+          },
+          {
+            "kind": "graduation",
+            "ref": "ADR-041-amendment-2026-05-11",
+            "summary": "Phase 2 graduation: D-4a closed; agent-tools/ + agent-graphs/ tiers added; ADR-173 unblocked."
+          }
+        ]
+      }
     }
   ]
 }
