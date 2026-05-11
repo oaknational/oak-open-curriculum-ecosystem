@@ -7,18 +7,19 @@ status: current
 graph_layer: cross-cutting
 graph_portfolio_index: "graph-portfolio-index.md"
 predecessor_arc: "graph-mvp-arc.plan.md"
+predecessor_substrate: "connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md"
 owner_thread: "connecting-oak-resources"
 related_indices:
   - "high-level-plan.md"
   - "graph-portfolio-index.md"
 substrate_floor:
-  - "graph-mvp-arc.plan.md gate-1 (EEF surface) shipped — names + response shapes for EEF strands stable"
-  - "graph-mvp-arc.plan.md gate-3a (Oak misconception sub-graph surface) shipped — bounded sub-graph response shape stable"
-  - "graph-stack.plan.md Inc.3 — `graph-corpus-sdk` cross-corpus join primitive + EEF strand adapter + misconception adapter"
+  - "graph-mvp-arc.plan.md gate-1 (EEF surface) closed — names + response shapes for EEF strands stable"
+  - "graph-mvp-arc.plan.md gate-3a (Oak misconception sub-graph surface) closed — bounded sub-graph response shape stable"
+  - "graph-stack.plan.md Inc.3 closed — `graph-corpus-sdk` cross-corpus join primitive + EEF strand adapter + misconception adapter in production"
 promotion_trigger:
-  - "graph-mvp-arc.plan.md gate-1 and gate-3a have shipped (their naming + response-shape contracts are stable)"
-  - "graph-stack Inc.3 cross-corpus join primitive design is stable enough to exercise (does not require Inc.3 fully in production — design stability suffices to start the first concrete exploration). Design stability is attested by `architecture-expert-betty` review of the join API surface at Inc.3 design close; named evaluator avoids a fuzzy gate."
-  - "When all conditions hold, this arc activates without further owner approval; it is `current/` from authoring, queued behind its substrate floor by the trigger above"
+  - "graph-mvp-arc.plan.md gate-1 and gate-3a have closed — EEF naming + response-shape contracts and misconception sub-graph response shape are stable"
+  - "graph-stack.plan.md Inc.3 has closed; the cross-corpus join primitive is in production (no 'design stability' intermediate state — Inc.3 close is the schedule signal)"
+  - "Opens by owner promotion when all three substrate-floor items are true; queued in `current/` from authoring"
 specialist_reviewers:
   - mcp-expert
   - architecture-expert-betty
@@ -31,10 +32,14 @@ foundation_alignment:
   - .agent/directives/schema-first-execution.md
 isProject: false
 todos:
+  - id: d6-inc3-join-api-review
+    content: "Inc.3 design-phase review (D-6, routed here from graph-mvp-arc.plan.md Open Decisions 2026-05-11): architecture-expert-betty reviews the `graph-corpus-sdk` cross-corpus join API surface at Inc.3 design phase — join semantics, citation-threading contract, error contract, adapter interface for EEF strand + misconception adapters — before the first combinatorial tool (gate-cross-corpus-1) attempts to consume the primitive. Verdict required: API surface is fit for consumption OR named changes required before gate-cross-corpus-1 proceeds. Verdict recorded inline in this plan. This is a plan-time review event, not a promotion gate; promotion remains gated on Inc.3 close per the substrate floor."
+    status: pending
+    depends_on: ["graph-stack Inc.3 design phase opens"]
   - id: gate-cross-corpus-1-eef-misconceptions
     content: "First concrete combinatorial exploration: cross-corpus tool `oak-misconceptions-eef-recommend-for-thread` composes EEF strands and a bounded misconception sub-graph for a Thread IRI through `graph-corpus-sdk` + cross-corpus join primitive (graph-stack Inc.3). Executable detail lives in the migrated slice-3b plan at `connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-eef-cross-corpus-surface.plan.md` (moved from current/ during MVP-arc reshape 2026-05-11). Acceptance: per-call response carries non-empty EEF strand list AND non-empty misconception sub-graph for a curated 10-Thread-IRI manifest where both corpora are known to have content; both corpora flow through `graph-corpus-sdk` + GraphView (no legacy factory); cross-corpus join verified end-to-end; ADR-123 records the compound-prefix tool."
     status: pending
-    depends_on: []
+    depends_on: [d6-inc3-join-api-review]
   - id: future-compositions-exploration
     content: "After gate-cross-corpus-1 ships, evaluate which further compositions (EEF × Threads, Threads × misconceptions, three-way joins) yield combinatorial value worth surfacing. Output is a short authored decision: which compositions to pursue, which to drop, which to fold into the higher-layer `cross-source-journeys.plan.md`. Exploration not delivery — the deliverable is the decision, plus authored follow-on plans for any composition kept. **Bounded by**: decision authored within one consolidation cycle of gate-cross-corpus-1 close (prevents pretend-follow-up drift)."
     status: pending
@@ -47,8 +52,9 @@ todos:
 
 # Graph Combinatorial Arc — Cross-Corpus Substrate Composition Spine
 
-**Status**: CURRENT — authored 2026-05-11; queued behind MVP arc gate-1 +
-gate-3a + graph-stack Inc.3 design stability per the promotion trigger.
+**Status**: CURRENT — authored 2026-05-11; opens by owner promotion after
+MVP arc gate-1, MVP arc gate-3a, and graph-stack Inc.3 have all closed
+(see the substrate floor and promotion trigger in frontmatter).
 **Type**: Cross-collection coordination spine. Owns the substrate-level
 combinatorial exploration that begins after the MVP arc establishes three
 independent corpora.
@@ -97,19 +103,20 @@ the portfolio index already names. Both stay; both cross-link.
 The promotion trigger above is mechanical: the arc activates when its
 named substrate floor is in place. Three pieces:
 
-1. **MVP arc gate-1 (EEF) shipped**. Names + response shapes for EEF
+1. **MVP arc gate-1 (EEF) closed**. Names + response shapes for EEF
    strands are stable; the compound-prefix tool can reuse them without
    re-deciding their shape.
-2. **MVP arc gate-3a (misconception sub-graph) shipped**. Bounded
+2. **MVP arc gate-3a (misconception sub-graph) closed**. Bounded
    sub-graph response shape is stable; the compound tool composes that
    shape rather than redefining it.
-3. **graph-stack Inc.3 cross-corpus join primitive — design stability**.
-   The primitive does not have to be fully in production for this arc to
-   start the first concrete exploration; design stability (the join API's
-   key semantics, citation threading, error contract are settled) is
-   sufficient to exercise it through one concrete tool. Full production
-   readiness is required before that tool ships, but design feedback from
-   exercising the API is one of the deliverables of this arc.
+3. **graph-stack Inc.3 has closed**. The cross-corpus join primitive is
+   in production. Inc.3 close is the only schedule signal for this arc;
+   there is no "design stability" intermediate state. The plan-time
+   review event that previously sat behind a design-stability framing is
+   now todo `d6-inc3-join-api-review` — architecture-expert-betty
+   reviews the join API surface at Inc.3 design phase, with verdict
+   recorded inline; that verdict is a hard predecessor of
+   gate-cross-corpus-1 but not a promotion gate for this arc.
 
 Slice 2 (Oak ontology Threads) shipping is **not** a substrate floor for
 this arc's first gate. Slice 2 ships an Oak-graph surface; it does not
@@ -182,7 +189,7 @@ authoring its own executable plan; this arc does not pre-author them.
 ## Sequencing and Gates
 
 ```text
-graph-mvp-arc gate-1 (EEF) + gate-3a (misconceptions) + graph-stack Inc.3 design-stable
+graph-mvp-arc gate-1 (EEF) + gate-3a (misconceptions) + graph-stack Inc.3 closes
   ↓
 gate-cross-corpus-1: oak-misconceptions-eef-recommend-for-thread ships
   ↓
@@ -239,21 +246,45 @@ This arc does **not**:
 
 | Risk | Severity | Mitigation |
 |---|---|---|
-| graph-stack Inc.3 design slips, deferring this arc indefinitely | Medium | This plan's existence is the named downstream-consumer signal for Inc.3; graph-stack carries the reciprocal cross-reference. Arc activation is mechanical on Inc.3 design stability, not on Inc.3 fully shipping. |
+| graph-stack Inc.3 slips, deferring this arc indefinitely | Medium | This plan is the named downstream-consumer signal for Inc.3; graph-stack's Inc.3 row carries the reciprocal cross-reference. Arc opens by owner promotion after Inc.3 closes; todo `d6-inc3-join-api-review` ensures API feedback flows back to Inc.3 during its design phase. |
 | Combinatorial compositions surface complexity that should have been resolved at substrate level | Medium | gate-cross-corpus-1 includes architecture-expert-betty review of the substrate-only enforcement boundary (tool body should be thin; cross-corpus logic lives in graph-corpus-sdk join primitive). |
 | `future-compositions-exploration` todo accumulates scope without owner-approved promotion | Low | Explicit framing: deliverable is **the decision**, not the implementation. Decisions surface to owner; implementation is gated behind authoring a plan per composition. |
 | Confusion with `cross-source-journeys.plan.md` | Low | Layer distinction stated in both plans' overviews + cross-link. Periodic consolidation pass verifies the boundary holds. |
 
 ## Lifecycle Triggers
 
-- **Promotion trigger fires** when MVP arc gate-1 + gate-3a + Inc.3
-  design-stability are all true (see frontmatter).
+- **Promotion trigger fires** when MVP arc gate-1, gate-3a, and
+  graph-stack Inc.3 have all closed (see frontmatter); owner promotion
+  is the schedule signal.
 - **Plan-time reviewers** dispatch at promotion-trigger fire and at each
   gate.
 - **Mid-arc checkpoints** at each gate close: `/jc-consolidate-docs`
   graduation scan.
 - **Handoff closure**: end-of-session updates to the
   `connecting-oak-resources` thread next-session record.
+
+## Decisions Absorbed
+
+- **2026-05-11 — D-6 routed from `graph-mvp-arc.plan.md` Open Decisions.**
+  D-6 was "Inc.3 design-stable evaluator event." Owner direction same
+  date dissolved the "design stability" intermediate-state framing
+  across this plan and `graph-stack.plan.md` (schedule-not-trigger
+  doctrine: *"schedule it, sequence it, no imaginary flows; simple and
+  definite is the only way anything happens."*). The underlying need —
+  architecture-expert-betty review of the cross-corpus join API surface
+  at Inc.3 design phase — is preserved as concrete todo
+  `d6-inc3-join-api-review`, dispatched at Inc.3 design phase opening,
+  with its verdict as a hard predecessor of
+  `gate-cross-corpus-1-eef-misconceptions`. This arc's Promotion Trigger
+  is now Inc.3 close (no intermediate state).
+
+- **2026-05-11 — Cross-plan trigger relocated from `graph-stack.plan.md`.**
+  Commit `5c1cd339` removed the annotation that previously sat in
+  graph-stack's Inc.3 row stating "the combinatorial arc's promotion
+  trigger fires on Inc.3 design stability." Per owner direction, the
+  cure lives in this plan: the Promotion Trigger is owned here, the
+  signal is Inc.3 close, and graph-stack's Inc.3 row now carries only
+  the downstream-consumer pointer.
 
 ## Cross-References
 
