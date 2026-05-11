@@ -700,26 +700,6 @@
       "notes": "Foreign-stage detected; peer Dusky Masking Cloak handoff files absorbed via git add; verify-staged caught it; awaiting owner direction on unstaging."
     },
     {
-      "intent_id": "2e7c22b8-a0dd-4cea-9d81-b96559be37e5",
-      "claim_id": "a7118ec2-efbe-428f-8540-1df334f1ad3b",
-      "agent_id": {
-        "agent_name": "Mistbound Watching Lantern",
-        "platform": "claude-code",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "8fdb8b"
-      },
-      "files": [
-        ".agent/plans/graph-mvp-arc.plan.md"
-      ],
-      "commit_subject": "docs(graph): absorb review findings into MVP arc; apply schedule-not-trigger doctrine",
-      "queued_at": "2026-05-11T17:11:33.124Z",
-      "updated_at": "2026-05-11T17:11:40.384Z",
-      "expires_at": "2026-05-11T17:26:33.124Z",
-      "phase": "staging",
-      "staged_bundle_fingerprint": "63fd6e75112e816517f8892174b1802e423d8074734ed8e6e5cf8f50d43ad3bf",
-      "staged_name_status": "M\t.agent/plans/agent-tooling/current/primary-agent-tooling-enhancements.plan.md\nM\t.agent/plans/graph-mvp-arc.plan.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nA\t.agent/state/collaboration/comms-events/2e1a886f-d614-4df7-b4cc-7605218144d4.json\nA\t.agent/state/collaboration/comms-events/c09300be-8aed-4c5f-82ac-149e933f7b85.json\nM\t.agent/state/collaboration/shared-comms-log.md\n"
-    },
-    {
       "intent_id": "5b797cbe-db27-41a6-a483-e05e5a009c39",
       "claim_id": "8f3204cd-6b58-4274-b839-aaa7cae3ea4a",
       "agent_id": {
@@ -738,8 +718,32 @@
       ],
       "commit_subject": "chore(continuity): close R1.b session — claim closed, B-01 fixed, narratives appended",
       "queued_at": "2026-05-11T17:12:03.693Z",
-      "updated_at": "2026-05-11T17:12:16.668Z",
+      "updated_at": "2026-05-11T17:15:29.455Z",
       "expires_at": "2026-05-11T17:27:03.693Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "c4e70674957c7b2c2920065175ebe1ad0465af47457e3dd0cc029360e1feba50",
+      "staged_name_status": "M\t.agent/state/collaboration/active-claims.json\n"
+    },
+    {
+      "intent_id": "db1603fe-b051-4023-bce9-37d104a7ade6",
+      "claim_id": "773391ec-9672-41a4-a461-65f1204e3475",
+      "agent_id": {
+        "agent_name": "Soaring Darting Kite",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "01db95"
+      },
+      "files": [
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/state/collaboration/shared-comms-log.md",
+        ".agent/state/collaboration/comms-events/e0a17465-fd5a-4c7d-979d-89696247de0a.json",
+        ".agent/memory/active/napkin.md"
+      ],
+      "commit_subject": "chore(continuity): record third-instance peer-commit absorption — final R1.b session close",
+      "queued_at": "2026-05-11T17:17:22.539Z",
+      "updated_at": "2026-05-11T17:17:22.583Z",
+      "expires_at": "2026-05-11T17:32:22.539Z",
       "phase": "staging"
     }
   ],
@@ -766,11 +770,10 @@
       "claimed_at": "2026-05-11T15:44:38Z",
       "freshness_seconds": 7200,
       "sidebar_open": false,
-      "intent": "Sweep MVP arc + graph-stack + combinatorial arc per 9 owner-direction findings + simple-definite-no-imaginary-flows doctrine",
-      "intent_to_commit": "2e7c22b8-a0dd-4cea-9d81-b96559be37e5"
+      "intent": "Sweep MVP arc + graph-stack + combinatorial arc per 9 owner-direction findings + simple-definite-no-imaginary-flows doctrine"
     },
     {
-      "claim_id": "8f3204cd-6b58-4274-b839-aaa7cae3ea4a",
+      "claim_id": "773391ec-9672-41a4-a461-65f1204e3475",
       "agent_id": {
         "agent_name": "Soaring Darting Kite",
         "platform": "claude-code",
@@ -782,20 +785,19 @@
         {
           "kind": "files",
           "patterns": [
-            ".agent/plans/agent-tooling/current/primary-agent-tooling-enhancements.plan.md",
             ".agent/state/collaboration/active-claims.json",
             ".agent/state/collaboration/closed-claims.archive.json",
             ".agent/state/collaboration/shared-comms-log.md",
-            ".agent/state/collaboration/comms-events/2e1a886f-d614-4df7-b4cc-7605218144d4.json",
-            ".agent/state/collaboration/comms-events/c09300be-8aed-4c5f-82ac-149e933f7b85.json"
+            ".agent/state/collaboration/comms-events/e0a17465-fd5a-4c7d-979d-89696247de0a.json",
+            ".agent/memory/active/napkin.md"
           ]
         }
       ],
-      "claimed_at": "2026-05-11T17:11:51Z",
-      "freshness_seconds": 3600,
+      "claimed_at": "2026-05-11T17:17:06Z",
+      "freshness_seconds": 1800,
       "sidebar_open": false,
-      "intent": "R1.b session-lifecycle close commit: B-01 status update, claim move, narrative append, two sidebar comms-events. Through commit-queue lifecycle this time after R1.b atomic commit (b529fa6e) bypassed queue.",
-      "intent_to_commit": "5b797cbe-db27-41a6-a483-e05e5a009c39"
+      "intent": "R1.b session-final close: capture peer-commit absorption pattern (third-instance evidence) + final session-end narrative + napkin entry. Through commit-queue lifecycle per owner direction.",
+      "intent_to_commit": "db1603fe-b051-4023-bce9-37d104a7ade6"
     }
   ]
 }

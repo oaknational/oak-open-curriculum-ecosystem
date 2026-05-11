@@ -3537,3 +3537,23 @@ Closing R1.b session. Claim `b1302a12` closed in `closed-claims.archive.json` wi
 Working tree at session-close: 3 modified (graph-mvp-arc.plan.md from Fronded — not absorbed; active-claims.json — claim closed; shared-comms-log.md — this narrative); 2 untracked sidebar events (`2e1a886f`, `c09300be` — the B-10 orphan duplicate). Leaving these for separate session-continuity commit per ADR + plan ephemeral boundary.
 
 Next session re-launches the tail per the opener at `.agent/plans/agentic-engineering-enhancements/current/2026-05-12-collaboration-protocol-hardening-r1b-opener.md` (tail-only mode; R1.b is fixed).
+
+---
+
+## 2026-05-11T17:16:00Z — `Soaring Darting Kite` / `claude-code` / `claude-opus-4-7-1m` / `01db95` — Post-commit: peer-commit absorption observed; commit-queue UX work queued for next session
+
+After R1.b atomic commit `b529fa6e` landed and I was preparing session-lifecycle cleanup via the commit-queue, peer agent Mistbound Watching Lantern's commit `67885e3f` landed and absorbed six of my session-lifecycle files via non-pathspec staging. Full account at comms event `e0a17465-fd5a-4c7d-979d-89696247de0a`. Third observed instance of foreign-stage absorption at the commit boundary; symmetric to but structurally distinct from the husky-chain-absorption direction PDR-059 names. Pre-hook fingerprint-divergence cure (ADR-177 shape b) and post-hook classification gate (PDR-059) are both implementation-deferred — both are exactly what would have prevented this.
+
+Owner-direction set (2026-05-11) that the next session in this thread will work on commit-queue discoverability, ease-of-use, and harder-to-bypass enforcement. This session's frictions are the working evidence the next session needs:
+
+- The commit-skill canonical names the commit-queue role but offers zero structural friction when bypassed; the husky chain accepted my R1.b commit (`b529fa6e`) without any queue-lifecycle evidence.
+- The CLI is on a separate binary (`commit-queue`) not surfaced in `collaboration-state --help`.
+- `verify-staged` conflates "queue order ahead" with "staged-set divergence" — same exit code, single-line error obscures cause.
+- The husky pre-commit hook does not call the queue's `verify-staged`; nothing at the commit boundary requires queue evidence.
+- Peer-commit absorption (this incident) is the third-direction failure mode beyond the two PDR-054 + PDR-059 already name (husky-chain and explicit-pre-stage). The cure is the same — mechanical pathspec enforcement at the commit boundary — but the three failure modes are surface-different.
+
+R1.b atomic commit (`b529fa6e`): preserved, complete, all 24 files including the 7 file migrations and 16 new tests. R1.b session work fully landed and not affected by the absorption.
+
+Session-lifecycle artefacts: preserved in HEAD via Mistbound's absorbed commit `67885e3f`; attribution drifted but work intact. My queue intent `5b797cbe` abandoned; session-lifecycle claim `8f3204cd` closed in `closed-claims.archive.json` with the incident summary.
+
+This session closes here. Next session's owner direction: commit-queue discoverability + harder-to-bypass enforcement. The third-instance peer-commit-absorption pattern is fresh evidence for that work.

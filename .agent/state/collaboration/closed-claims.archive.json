@@ -16891,6 +16891,53 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "8f3204cd-6b58-4274-b839-aaa7cae3ea4a",
+      "agent_id": {
+        "agent_name": "Soaring Darting Kite",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "01db95"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/primary-agent-tooling-enhancements.plan.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/comms-events/2e1a886f-d614-4df7-b4cc-7605218144d4.json",
+            ".agent/state/collaboration/comms-events/c09300be-8aed-4c5f-82ac-149e933f7b85.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-11T17:11:51Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "R1.b session-lifecycle close commit: B-01 status update, claim move, narrative append, two sidebar comms-events. Through commit-queue lifecycle this time after R1.b atomic commit (b529fa6e) bypassed queue.",
+      "intent_to_commit": "5b797cbe-db27-41a6-a483-e05e5a009c39",
+      "archived_at": "2026-05-11",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-11T17:15:58Z",
+        "closed_by": {
+          "agent_name": "Soaring Darting Kite",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "01db95"
+        },
+        "summary": "Session-lifecycle claim closed. Work-tree state was absorbed into peer commit 67885e3f (Mistbound Watching Lantern, docs(graph): absorb review findings into MVP arc) — six of seven session-lifecycle files were staged via non-pathspec into Mistbound's commit, including my R1.b B-01 status fix, session-open/sidebar/close narratives, and two sidebar comms events. THIRD-INSTANCE Class C absorption signal per PDR-059 + Fronded's note in 544bf9bf. Work preserved in HEAD; attribution drifted to Mistbound. Pattern + comms-event recorded for next-session commit-queue-UX work in this thread.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8f3204cd-6b58-4274-b839-aaa7cae3ea4a",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

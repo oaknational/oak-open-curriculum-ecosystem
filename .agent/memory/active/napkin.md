@@ -164,3 +164,15 @@ per ADR-144 §Loop Health; no substance was compressed.
   correctly. Cure: name attestations only after they return;
   forward-looking claims fabricate evidence. Already corrected this
   session; record for discipline.
+
+## 2026-05-11 — Third-instance peer-commit absorption (Mistbound 67885e3f)
+
+SURPRISE: peer-commit absorption is a third direction beyond what PDR-054 (pre-hook) and PDR-059 (post-hook husky-chain) cover. Mistbound's `67885e3f` used non-pathspec staging and swept six of my session-lifecycle files into their commit. My R1.b atomic commit (`b529fa6e`) was complete and unaffected; the absorption hit only my preparing session-close work.
+
+OBSERVATION: my session opened with a sidebar to Fronded specifically to avoid this kind of overlap, and Fronded responded clean within 10 minutes. The sidebar protocol works for known peers. What Fronded and I did NOT anticipate: a third agent (Mistbound) entering the same shared-state surface mid-session with non-pathspec staging. Inter-agent comms-events between two agents do not prevent a third agent's non-pathspec commit.
+
+OBSERVATION: the work was preserved (HEAD has my narratives + B-01 fix + comms events + claim moves). The cost is attribution drift and the operational friction of having to abandon my queue intent and close my claim with an absorption summary instead of a clean closure. No data loss; clear evidence accumulation.
+
+OBSERVATION: this is exactly the third-instance trigger Fronded named in `544bf9bf` for the PDR-059 classification-gate implementation plan. Plus the new peer-commit-direction failure mode that should be considered when scoping that plan.
+
+OBSERVATION (owner direction, 2026-05-11): next session in this thread will work on commit-queue UX (discoverability, ease-of-use, harder-to-bypass enforcement). The friction profile this session generated is the brief.
