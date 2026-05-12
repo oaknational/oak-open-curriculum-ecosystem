@@ -1,13 +1,9 @@
+import { getJsonValue, isJsonObject, parseStringArray, requireString } from './json.js';
 import {
-  getJsonValue,
-  isJsonObject,
-  optionalNullableString,
-  optionalStringOrLegacyAgentName,
-  optionalStringArray,
-  parseStringArray,
-  requirePossiblyEmptyString,
-  requireString,
-} from './json.js';
+  parseDirectedCommsMessageValue,
+  parseLifecycleCommsEventValue,
+  parseNarrativeCommsEventValue,
+} from './state-schemas.js';
 import {
   type ClosedClaimsArchive,
   type CollaborationAgentId,
@@ -72,22 +68,7 @@ export function parseNarrativeCommsEvent(text: string): NarrativeCommsEvent {
     throw new Error('narrative communication event must be a JSON object');
   }
 
-  const audience = optionalStringArray(parsed, 'audience');
-  const addressedTo = optionalStringOrLegacyAgentName(parsed, 'addressed_to');
-  const inResponseTo = optionalNullableString(parsed, 'in_response_to');
-  const inReplyTo = optionalNullableString(parsed, 'in_reply_to');
-
-  return {
-    event_id: requireString(parsed, 'event_id'),
-    created_at: requireString(parsed, 'created_at'),
-    author: parseAgentId(getJsonValue(parsed, 'author')),
-    title: requireString(parsed, 'title'),
-    body: requireString(parsed, 'body'),
-    ...(audience === undefined ? {} : { audience }),
-    ...(addressedTo === undefined ? {} : { addressed_to: addressedTo }),
-    ...(inResponseTo === undefined ? {} : { in_response_to: inResponseTo }),
-    ...(inReplyTo === undefined ? {} : { in_reply_to: inReplyTo }),
-  };
+  return parseNarrativeCommsEventValue(parsed);
 }
 
 /**
@@ -102,20 +83,7 @@ export function parseLifecycleCommsEvent(text: string): LifecycleCommsEvent {
     throw new Error('lifecycle communication event must be a JSON object');
   }
 
-  return {
-    schema_version: requireString(parsed, 'schema_version'),
-    event_id: requireString(parsed, 'event_id'),
-    created_at: requireString(parsed, 'created_at'),
-    event_type: requireString(parsed, 'event_type'),
-    occurred_at: requireString(parsed, 'occurred_at'),
-    author: parseAgentId(getJsonValue(parsed, 'author')),
-    agent_id: parseAgentId(getJsonValue(parsed, 'agent_id')),
-    thread: requireString(parsed, 'thread'),
-    claim_id: requirePossiblyEmptyString(parsed, 'claim_id'),
-    title: requireString(parsed, 'title'),
-    subject: requireString(parsed, 'subject'),
-    body: requireString(parsed, 'body'),
-  };
+  return parseLifecycleCommsEventValue(parsed);
 }
 
 /**
@@ -130,16 +98,7 @@ export function parseDirectedCommsMessage(text: string): DirectedCommsMessage {
     throw new Error('directed communication message must be a JSON object');
   }
 
-  return {
-    schema_version: requireString(parsed, 'schema_version'),
-    event_id: requireString(parsed, 'event_id'),
-    created_at: requireString(parsed, 'created_at'),
-    kind: requireString(parsed, 'kind'),
-    from: parseAgentId(getJsonValue(parsed, 'from')),
-    to: parseAgentId(getJsonValue(parsed, 'to')),
-    subject: requireString(parsed, 'subject'),
-    body: requireString(parsed, 'body'),
-  };
+  return parseDirectedCommsMessageValue(parsed);
 }
 
 function parseCommitQueueEntry(value: unknown): CollaborationCommitQueueEntry {

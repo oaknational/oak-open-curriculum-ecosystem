@@ -101,34 +101,27 @@ describe('parseNarrativeCommsEvent', () => {
     expect(event.in_reply_to).toBe('another-earlier-event-id');
   });
 
-  it('normalizes a legacy addressed_to agent reference on a narrative event', () => {
-    const event = parseNarrativeCommsEvent(
-      JSON.stringify({
-        ...canonicalNarrative,
-        addressed_to: {
-          agent_name: 'Riverine Drifting Lighthouse',
-          session_id_prefix: 'd1105c',
-        },
-      }),
-    );
-
-    expect(event.addressed_to).toBe('Riverine Drifting Lighthouse');
+  it('rejects a legacy addressed_to agent reference object', () => {
+    expect(() =>
+      parseNarrativeCommsEvent(
+        JSON.stringify({
+          ...canonicalNarrative,
+          addressed_to: {
+            agent_name: 'Riverine Drifting Lighthouse',
+            session_id_prefix: 'd1105c',
+          },
+        }),
+      ),
+    ).toThrow(/addressed_to/);
   });
 
-  it('treats a legacy null in_response_to value as absent', () => {
-    const event = parseNarrativeCommsEvent(
-      JSON.stringify({ ...canonicalNarrative, in_response_to: null }),
-    );
-
-    expect(event.in_response_to).toBeUndefined();
-  });
-
-  it('treats a legacy null in_reply_to value as absent', () => {
-    const event = parseNarrativeCommsEvent(
-      JSON.stringify({ ...canonicalNarrative, in_reply_to: null }),
-    );
-
-    expect(event.in_reply_to).toBeUndefined();
+  it('rejects legacy null threading fields', () => {
+    expect(() =>
+      parseNarrativeCommsEvent(JSON.stringify({ ...canonicalNarrative, in_response_to: null })),
+    ).toThrow(/in_response_to/);
+    expect(() =>
+      parseNarrativeCommsEvent(JSON.stringify({ ...canonicalNarrative, in_reply_to: null })),
+    ).toThrow(/in_reply_to/);
   });
 
   it('rejects a narrative event missing the required body field', () => {
@@ -139,7 +132,7 @@ describe('parseNarrativeCommsEvent', () => {
       title: canonicalNarrative.title,
     };
 
-    expect(() => parseNarrativeCommsEvent(JSON.stringify(withoutBody))).toThrow(/missing required/);
+    expect(() => parseNarrativeCommsEvent(JSON.stringify(withoutBody))).toThrow(/body/);
   });
 
   it('rejects a non-object payload', () => {
@@ -187,14 +180,12 @@ describe('parseLifecycleCommsEvent', () => {
       body: lifecycle.body,
     };
 
-    expect(() => parseLifecycleCommsEvent(JSON.stringify(withoutEventType))).toThrow(
-      /missing required string field: event_type/,
-    );
+    expect(() => parseLifecycleCommsEvent(JSON.stringify(withoutEventType))).toThrow(/event_type/);
   });
 
   it('rejects a narrative payload that lacks the lifecycle-required fields', () => {
     expect(() => parseLifecycleCommsEvent(JSON.stringify(canonicalNarrative))).toThrow(
-      /missing required/,
+      /schema_version/,
     );
   });
 });
@@ -223,9 +214,7 @@ describe('parseDirectedCommsMessage', () => {
       body: directedPostMigration.body,
     };
 
-    expect(() => parseDirectedCommsMessage(JSON.stringify(legacyShape))).toThrow(
-      /missing required string field: created_at/,
-    );
+    expect(() => parseDirectedCommsMessage(JSON.stringify(legacyShape))).toThrow(/created_at/);
   });
 
   it('rejects a directed message missing the to field', () => {
@@ -239,12 +228,12 @@ describe('parseDirectedCommsMessage', () => {
       body: directedPostMigration.body,
     };
 
-    expect(() => parseDirectedCommsMessage(JSON.stringify(withoutTo))).toThrow(/agent_id/);
+    expect(() => parseDirectedCommsMessage(JSON.stringify(withoutTo))).toThrow(/to/);
   });
 
   it('rejects a narrative payload that lacks the directed-required fields', () => {
     expect(() => parseDirectedCommsMessage(JSON.stringify(canonicalNarrative))).toThrow(
-      /missing required/,
+      /schema_version/,
     );
   });
 });

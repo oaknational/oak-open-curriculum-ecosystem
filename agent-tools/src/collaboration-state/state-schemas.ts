@@ -1,0 +1,154 @@
+import { z } from 'zod';
+
+import {
+  type CollaborationAgentId,
+  type DirectedCommsMessage,
+  type LifecycleCommsEvent,
+  type NarrativeCommsEvent,
+} from './types.js';
+
+/**
+ * Strict Zod schemas for collaboration-state boundary parsing. These schemas
+ * reject unknown fields so legacy comms-event shapes fail before they reach
+ * the typed renderer, TUI, or watcher surfaces.
+ */
+const nonEmptyString = z.string().min(1);
+const possiblyEmptyString = z.string();
+
+const agentIdSchema = z.strictObject({
+  agent_name: nonEmptyString,
+  platform: nonEmptyString,
+  model: nonEmptyString,
+  session_id_prefix: nonEmptyString,
+});
+
+const narrativeCommsEventSchema = z.strictObject({
+  event_id: nonEmptyString,
+  created_at: nonEmptyString,
+  author: agentIdSchema,
+  title: nonEmptyString,
+  body: nonEmptyString,
+  audience: z.array(nonEmptyString).optional(),
+  addressed_to: nonEmptyString.optional(),
+  in_response_to: nonEmptyString.optional(),
+  in_reply_to: nonEmptyString.optional(),
+});
+
+const lifecycleCommsEventSchema = z.strictObject({
+  schema_version: nonEmptyString,
+  event_id: nonEmptyString,
+  created_at: nonEmptyString,
+  event_type: nonEmptyString,
+  occurred_at: nonEmptyString,
+  author: agentIdSchema,
+  agent_id: agentIdSchema,
+  thread: nonEmptyString,
+  claim_id: possiblyEmptyString,
+  title: nonEmptyString,
+  subject: nonEmptyString,
+  body: nonEmptyString,
+});
+
+const directedCommsMessageSchema = z.strictObject({
+  schema_version: nonEmptyString,
+  event_id: nonEmptyString,
+  created_at: nonEmptyString,
+  kind: nonEmptyString,
+  from: agentIdSchema,
+  to: agentIdSchema,
+  subject: nonEmptyString,
+  body: nonEmptyString,
+});
+
+/**
+ * Parse one narrative comms event after JSON parsing has crossed the boundary.
+ */
+export function parseNarrativeCommsEventValue(value: unknown): NarrativeCommsEvent {
+  const parsed = parseWithHelpfulError({
+    label: 'narrative communication event',
+    schema: narrativeCommsEventSchema,
+    value,
+  });
+
+  return {
+    event_id: parsed.event_id,
+    created_at: parsed.created_at,
+    author: agentId(parsed.author),
+    title: parsed.title,
+    body: parsed.body,
+    ...(parsed.audience === undefined ? {} : { audience: parsed.audience }),
+    ...(parsed.addressed_to === undefined ? {} : { addressed_to: parsed.addressed_to }),
+    ...(parsed.in_response_to === undefined ? {} : { in_response_to: parsed.in_response_to }),
+    ...(parsed.in_reply_to === undefined ? {} : { in_reply_to: parsed.in_reply_to }),
+  };
+}
+
+/**
+ * Parse one lifecycle comms event after JSON parsing has crossed the boundary.
+ */
+export function parseLifecycleCommsEventValue(value: unknown): LifecycleCommsEvent {
+  const parsed = parseWithHelpfulError({
+    label: 'lifecycle communication event',
+    schema: lifecycleCommsEventSchema,
+    value,
+  });
+
+  return {
+    schema_version: parsed.schema_version,
+    event_id: parsed.event_id,
+    created_at: parsed.created_at,
+    event_type: parsed.event_type,
+    occurred_at: parsed.occurred_at,
+    author: agentId(parsed.author),
+    agent_id: agentId(parsed.agent_id),
+    thread: parsed.thread,
+    claim_id: parsed.claim_id,
+    title: parsed.title,
+    subject: parsed.subject,
+    body: parsed.body,
+  };
+}
+
+/**
+ * Parse one directed comms message after JSON parsing has crossed the boundary.
+ */
+export function parseDirectedCommsMessageValue(value: unknown): DirectedCommsMessage {
+  const parsed = parseWithHelpfulError({
+    label: 'directed communication message',
+    schema: directedCommsMessageSchema,
+    value,
+  });
+
+  return {
+    schema_version: parsed.schema_version,
+    event_id: parsed.event_id,
+    created_at: parsed.created_at,
+    kind: parsed.kind,
+    from: agentId(parsed.from),
+    to: agentId(parsed.to),
+    subject: parsed.subject,
+    body: parsed.body,
+  };
+}
+
+function agentId(parsed: z.infer<typeof agentIdSchema>): CollaborationAgentId {
+  return {
+    agent_name: parsed.agent_name,
+    platform: parsed.platform,
+    model: parsed.model,
+    session_id_prefix: parsed.session_id_prefix,
+  };
+}
+
+function parseWithHelpfulError<TSchema extends z.ZodType>(input: {
+  readonly label: string;
+  readonly schema: TSchema;
+  readonly value: unknown;
+}): z.output<TSchema> {
+  const result = input.schema.safeParse(input.value);
+  if (result.success) {
+    return result.data;
+  }
+
+  throw new Error(`${input.label} failed validation: ${z.prettifyError(result.error)}`);
+}

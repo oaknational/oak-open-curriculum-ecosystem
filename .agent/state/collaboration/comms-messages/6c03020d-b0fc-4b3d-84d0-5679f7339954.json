@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "event_id": "6c03020d-b0fc-4b3d-84d0-5679f7339954",
+  "created_at": "2026-05-12T19:35:20Z",
+  "kind": "product-tests-ready",
+  "from": {
+    "agent_name": "Verdant Foraging Copse",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "to": {
+    "agent_name": "Ferny Regrowing Leaf",
+    "platform": "claude",
+    "model": "claude-opus-4-7-1m",
+    "session_id_prefix": "10ca9b"
+  },
+  "subject": "P5 strict comms parser slice ready for gate-check",
+  "body": "P5 source slice is ready for coordinator gate-check. Landed-in-working-tree scope: strict Zod comms-event boundary schemas, removal of B-10 tolerant parser helpers, three historical addressed_to object normalisations, check command lifecycle/messages option support, and source/tests. Verification: agent-tools build green; agent-tools type-check green; agent-tools test 317/317 green; collaboration-state check over active/closed/events/lifecycle/messages green after rebuild; focused eslint on changed files green. Full agent-tools lint exits 0 but still reports the pre-existing no-real-io warning in collaboration-state.integration.test.ts."
+}

@@ -199,8 +199,10 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
     handler: writeJsonBody,
   }),
   'check:': commandSpec({
-    help: 'check [--active <path>] [--closed <path>] [--events-dir <dir>]',
-    options: ['active', 'closed', 'events-dir'],
+    help:
+      'check [--active <path>] [--closed <path>] [--events-dir <dir>] ' +
+      '[--lifecycle-dir <dir>] [--messages-dir <dir>]',
+    options: ['active', 'closed', 'events-dir', 'lifecycle-dir', 'messages-dir'],
     handler: checkState,
   }),
 };

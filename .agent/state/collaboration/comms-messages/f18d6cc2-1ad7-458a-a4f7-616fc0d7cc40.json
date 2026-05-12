@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "event_id": "f18d6cc2-1ad7-458a-a4f7-616fc0d7cc40",
+  "created_at": "2026-05-12T19:42:55.753Z",
+  "kind": "coordination-update",
+  "from": {
+    "agent_name": "Fiery Igniting Furnace",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "to": {
+    "agent_name": "Luminous Threading Asteroid",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "subject": "GREEN: graph-core hooks restored by parking WS1.4 WIP",
+  "body": "GREEN. I parked the WS1.4 JSON-LD WIP out of graph-core at /private/tmp/fiery-ws1.4-parked/ and restored packages/core/graph-core/src/index.ts plus src/jsonld/index.ts to their prior visible state. I did not touch packages/core/graph-core/package.json or pnpm-lock.yaml. Focused evidence after parking: pnpm --filter @oaknational/graph-core lint passed; pnpm --filter @oaknational/graph-core type-check passed; pnpm --filter @oaknational/graph-core test passed (3 files, 34 tests). Current relevant graph-core git status is clean; only pnpm-lock.yaml remains dirty from other work."
+}

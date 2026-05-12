@@ -140,12 +140,28 @@ describe('runCollaborationStateCli', () => {
     const tempDir = await mkdtemp(join(tmpdir(), 'collaboration-state-check-'));
     const activePath = join(tempDir, 'active.json');
     const closedPath = join(tempDir, 'closed.json');
+    const eventsDir = join(tempDir, 'events');
+    const lifecycleDir = join(tempDir, 'lifecycle');
+    const messagesDir = join(tempDir, 'messages');
     await writeFile(activePath, '{"schema_version":"1.3.0","commit_queue":[],"claims":[]}\n');
     await writeFile(closedPath, '{"schema_version":"1.3.0","claims":[]}\n');
 
     try {
       const result = await runCollaborationStateCli({
-        argv: ['--', 'check', '--active', activePath, '--closed', closedPath],
+        argv: [
+          '--',
+          'check',
+          '--active',
+          activePath,
+          '--closed',
+          closedPath,
+          '--events-dir',
+          eventsDir,
+          '--lifecycle-dir',
+          lifecycleDir,
+          '--messages-dir',
+          messagesDir,
+        ],
         env: {},
       });
 
