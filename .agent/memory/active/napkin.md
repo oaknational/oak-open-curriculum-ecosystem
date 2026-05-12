@@ -645,3 +645,18 @@ this session generated, named in the next-session starting statement.
   graduation/insight/correction because a surface is "already
   overflowing", that impulse is the diagnostic, not the cure. Write the
   entry; surface the rotation question separately if needed.
+
+### `markdownlint --fix` is destructive on prose containing `+` / `#` / `-` patterns
+
+- **Signal**: surprise during commit 4 of this session.
+- **Observation**: ran `pnpm markdownlint .agent/memory/operational/repo-continuity.md --fix` to clear a `+` list-marker reported error. The autofix not only converted `+` to `-` at line-start positions, but ALSO turned literal `+` inside prose (peer-authored: `principle rename + reframe` continuing from a previous line) into a list-marker `-`, immediately failing the next gate with MD032 (lists must be surrounded by blank lines). A separate file (`cost-of-collaboration.plan.md`) had its literal `#4` inside prose converted to `# 4` (added space), which then registered as an h1 heading and broke heading-increment rules elsewhere.
+- **Behaviour change / candidate follow-up**: `markdownlint --fix` is unsafe on prose containing `+`, `#`, or `-` characters at or near line starts; the autofixer assumes block-level markdown semantics for ambiguous positions. Before running `--fix` on a peer file as a gate-cure, prefer targeted manual edits where possible, especially around peer prose with literal symbols. When `--fix` is the chosen path, verify the file by re-running `markdownlint-check` AFTER the fix and reading the changed lines as prose.
+- **Diagnostic for future detection**: any time `markdownlint --fix` returns "modified N lines" but `markdownlint-check` still reports errors, the autofix probably introduced new block-level interpretations of literal prose characters — read the diff before retrying.
+
+### Pre-commit scope leakage observed on commit 4
+
+- **Signal**: surprise post-commit.
+- **Observation**: enqueued 5 files explicitly for commit `2ca54b01`, staged exactly those 5, ran `verify-staged` (passed: bundle fingerprint locked), then `git commit -F /tmp/commit-msg.txt`. Commit landed with **7** files. The two extra files were `.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md` (peer-modified, unstaged) and `.agent/plans/agent-tooling/current/cost-of-collaboration.plan.md` (peer-authored markdown I had `markdownlint --fix`-ed mid-session as a gate-cure). Something in the husky pre-commit chain or a lint-staged-equivalent stage added them.
+- **Why it matters**: `record-staged` / `verify-staged` provide an authorial-bundle integrity check up to the moment of `git commit`, but they do NOT protect against the pre-commit hook itself mutating the staged set. The hook is between `verify-staged` and the actual `git commit` write. This is a real gap in the commit-queue protocol's authorial-bundle guarantee.
+- **Behaviour change / candidate follow-up**: after `git commit` lands, immediately verify the commit's actual file list (`git show --name-only HEAD`) against the queued file list. If a mismatch is detected, surface to coordinator and the committing session's owner — the bundle was not what was authorised. The `cost-of-collaboration.plan.md` P0 (staged-only gates) work is the structural cure; the protocol observation here is the post-commit verification step that the queue currently lacks.
+- **Diagnostic for future detection**: `verify-staged` is necessary but not sufficient. Post-commit name-list check is the closing of the loop.

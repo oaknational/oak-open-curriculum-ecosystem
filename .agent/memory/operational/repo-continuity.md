@@ -310,7 +310,7 @@ each thread record; this table is the repo-level index.
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
 | `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Wooded Spreading Thicket / `claude-code` / opus-4-7-1m / `5c8f3c` / 2026-05-11 (coordinator + gatekeeper through four-agent collaboration window; architectural reset captured; cost-of-collaboration plan authored, primary plan superseded, 5 feedback memories saved, B-11 design co-locked with Galactic in sidebar); Galactic Transiting Orbit / `codex` / GPT-5 / `019e18` / 2026-05-11 (F-15 recursion guard landed `70e746a3`; B-10 renderer compatibility + `comms inbox` landed `0be469a9`; B-11 sidebar design locked); Gilded Shimmering Dawn / `cursor` / GPT-5.5 / `3869cd` / 2026-05-11 (Cursor sub-coordinator: fresh-session linear delegation to 3 read-only helpers; result `3869cd-cursor-result-1-legacy-comms-audit`); Embered Burning Magma / `codex` / GPT-5 / `019e18` / 2026-05-11 (Wave 3 F-11 commit-queue list/show inspection slice, commit `e298723c`); Shaded Ripening Copse / `claude-code` / opus-4-7-1m / `c13bdf` / 2026-05-11 (commit-queue UX brief — B-02/B-03 + Workstream 4 architectural seam, commit `5c299ed5`); Soaring Darting Kite / `claude-code` / opus-4-7-1m / `01db95` / 2026-05-11 (R1.b landed `b529fa6e` + third-instance peer-commit-absorption record `5aa91a76`; tail plan reshaped into 6 sequenced waves); Fronded Flowering Seed / `claude-code` / opus-4-7-1m / `19ecd5` / 2026-05-11 (graduation-candidates-drain — both due items graduated, commit `53995192`) |
-| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Sparking Charring Ash / `claude-code` / opus-4-7-1m / `caf5e1` / 2026-05-11 (orphan-bundle land `dbe7321c` + ADR-173/179 Accepted + plan promotion current→active + WS1.1 refinement `5ec5004d`; Inc.1a WS1.1 open for execution); Flamebright Burning Lava / `claude-code` / opus-4-7-1m / `b1202e` / 2026-05-11 (question-assumptions pass — ADR-173 reviewer absorption + ADR-179 extraction + plan body correction + verdict-not-menu rule); Shaded Ripening Copse / `claude-code` / opus-4-7-1m / `c13bdf` / 2026-05-11 (schedule-not-trigger sweep); Mistbound Watching Lantern / `claude-code` / opus-4-7-1m / `8fdb8b` / 2026-05-11 (graph-mvp-arc review-absorption + doctrine ratification); Dusky Masking Cloak / `claude-code` / opus-4-7-1m / `c5ff7f` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11 |
+| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Sparking Charring Ash / `claude-code` / opus-4-7-1m / `caf5e1` / 2026-05-12 (graph foundation work session — commits `dbe7321c` + `5ec5004d` + `7560e48d` + `2ca54b01`: orphan-bundle land, ADR-173/179 Accepted, plan promoted current→active, WS1.1 row refined with eleven acceptance items, three-reviewer follow-up absorbed; Inc.1a WS1.1 open for execution); Flamebright Burning Lava / `claude-code` / opus-4-7-1m / `b1202e` / 2026-05-11 (question-assumptions pass — ADR-173 reviewer absorption + ADR-179 extraction + plan body correction + verdict-not-menu rule); Shaded Ripening Copse / `claude-code` / opus-4-7-1m / `c13bdf` / 2026-05-11 (schedule-not-trigger sweep); Mistbound Watching Lantern / `claude-code` / opus-4-7-1m / `8fdb8b` / 2026-05-11 (graph-mvp-arc review-absorption + doctrine ratification); Dusky Masking Cloak / `claude-code` / opus-4-7-1m / `c5ff7f` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / `codex` / 2026-04-28 |
@@ -1051,6 +1051,21 @@ Visible owner-appetite items, not blockers for the current branch state:
    candidate remains in `pending-graduations.md` for a later drafting slot.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-12 Sparking Charring Ash close, claude-code,
+opus-4-7-1m, `caf5e1`, graph foundation work)**: `completed this
+handoff — /jc-consolidate-docs ran mid-session before commit
+2ca54b01; surface updates landed across commits 7560e48d and
+2ca54b01`. Session ratified ADR-173 + ADR-179 (existing pipeline,
+not new candidates) and absorbed three-reviewer follow-up
+corrections on WS1.1 cold-start surfaces. Two new napkin candidates
+captured this final handoff (markdownlint --fix prose destruction;
+post-commit scope leakage as a real gap in commit-queue
+authorial-bundle guarantee) — both candidate-shape, neither yet
+elevated to a register entry pending second instance or
+substance-led graduation per the standing direction-substance rule.
+
+---
 
 **Status (2026-05-11 Gilded Shimmering Dawn, cursor, GPT-5.5,
 `3869cd`, Cursor helper sub-coordination)**: `not due — session-scoped

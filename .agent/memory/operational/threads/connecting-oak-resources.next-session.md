@@ -191,6 +191,16 @@ Do **not** start WS1.2 until WS1.1 has landed green.
   before ratification.
 - `7560e48d` — session-close surfaces (thread record, continuity
   row, claim archives).
+- `2ca54b01` — three-reviewer follow-up on WS1.1 cold-start
+  surfaces: knip workspace registration, tsconfig.lint.json
+  explicit naming, `do not pass dts to createLibConfig`
+  instruction, pnpm-lock.yaml in commit scope, "tree green"
+  expansion to match `.husky/pre-commit`, plan body status sweep,
+  ADR-173 plan-path link cleanup, ADR index README update.
+
+For the full session commit list, prefer
+`git log --oneline 0be469a9..HEAD` over this static list — it
+stays correct as further commits land.
 
 `packages/core/graph-core/` is unblocked. Open the scaffold cycle.
 
@@ -609,7 +619,7 @@ promotion.)
 | `Mistbound Watching Lantern` | `claude-code` | `claude-opus-4-7-1m` | `8fdb8b` | `graph-mvp-arc-review-absorption-and-doctrine-ratification` | 2026-05-11 | 2026-05-11 |
 | `Shaded Ripening Copse` | `claude-code` | `claude-opus-4-7-1m` | `c13bdf` | `graph-stack-and-combinatorial-arc-schedule-not-trigger-sweep` | 2026-05-11 | 2026-05-11 |
 | `Flamebright Burning Lava` | `claude-code` | `claude-opus-4-7-1m` | `b1202e` | `question-assumptions-adr-173-promotion-and-verdict-not-menu-nudges` | 2026-05-11 | 2026-05-11 |
-| `Sparking Charring Ash` | `claude-code` | `claude-opus-4-7-1m` | `caf5e1` | `orphan-bundle-land-and-adr-173-179-ratification-plan-promotion-ws1-1-refinement` | 2026-05-11 | 2026-05-11 |
+| `Sparking Charring Ash` | `claude-code` | `claude-opus-4-7-1m` | `caf5e1` | `graph-foundation-work-orphan-bundle-land-adr-ratification-plan-promotion-ws1-1-refinement-three-reviewer-followup` | 2026-05-11 | 2026-05-12 |
 
 ## Plan Locations
 
