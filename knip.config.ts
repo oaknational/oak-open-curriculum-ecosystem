@@ -156,6 +156,9 @@ const config: KnipConfig = {
     'packages/libs/env-resolution': {
       project: ['src/**/*.ts'],
     },
+    'packages/libs/graph-ingest': {
+      project: ['src/**/*.ts'],
+    },
     'packages/libs/logger': {
       project: ['src/**/*.ts'],
     },

@@ -12,6 +12,7 @@ packages:
   - packages/core/type-helpers
   - packages/design/*
   - packages/libs/env-resolution
+  - packages/libs/graph-ingest
   - packages/libs/logger
   - packages/libs/sentry-node
   - packages/libs/search-contracts
