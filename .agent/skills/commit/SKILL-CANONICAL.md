@@ -236,6 +236,37 @@ the advisory queue and the short-lived git transaction claim:
    abort. Archive the claim with the resulting SHA, failure reason, or abort
    reason and next action in `closure.summary`.
 
+### Collaboration-state commit residue exception
+
+The normal order above writes a clean audit trail for ordinary source commits,
+but it is a poor fit when the intended bundle itself includes
+`.agent/state/collaboration/active-claims.json`,
+`.agent/state/collaboration/closed-claims.archive.json`, or the rendered
+shared comms log. In that case, completing the queue and closing the
+`git:index/head` claim after `git commit` necessarily creates a follow-up
+working-tree diff: the commit made the old lifecycle state durable, then the
+post-commit cleanup changed the lifecycle state again.
+
+For commits whose purpose is to persist collaboration state, prefer a
+**self-contained lifecycle commit**:
+
+1. Open the short-lived `git:index/head` claim and enqueue the bundle as usual.
+2. Run the message, staging, and validation checks while the claim is live.
+3. Once the bundle is ready and no further staging-owner decision remains,
+   close the commit-window claim and mark the queue entry complete or
+   abandoned with a summary such as `closed in same collaboration-state commit`.
+4. Re-stage only the intended pathspecs, including the updated
+   `active-claims.json`, `closed-claims.archive.json`, comms event(s), and
+   `shared-comms-log.md`.
+5. Re-check `git diff --staged --name-only` against the intended bundle.
+6. Commit immediately with explicit pathspec discipline.
+
+This exception is only for commits that intentionally persist collaboration
+state. It trades the last few seconds of a live `git:index/head` claim for a
+single durable commit that includes its own lifecycle closure. Do not use it
+to dodge coordination on ordinary source commits, and do not use it while a
+fresh peer commit-window claim or staged foreign bundle exists.
+
 If a whole-repo hook fails on a minor issue such as formatting, markdown style,
 lint autofix, or generated shared-state read-model drift, fix the issue
 immediately and retry the commit protocol. This includes minor breakage in
