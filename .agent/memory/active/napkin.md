@@ -106,3 +106,15 @@ The most recent rotation is archived at
   ordinary agent use. Having agents hand-pass ISO dates, UUIDs, claim ids, and
   intent ids is tooling leakage, not good operator UX. Recorded as
   `frictions-register.md` F-19 and routed into the P-Foundation CLI overhaul.
+
+## 2026-05-12 — Shared State Is Commit-Worthy
+
+### Mistakes Made
+
+- I treated post-work comms/state residue as if it could be left behind after
+  the requested commit. Owner correction: comms are a shared responsibility
+  that anyone can commit, as is everything under `.agent/memory/**` and
+  `.agent/state/**`.
+- Behaviour change: when shared memory or state is part of the live work,
+  either commit it or name precisely why a fresh post-commit mutation remains.
+  Do not describe those surfaces as disposable cleanup.
