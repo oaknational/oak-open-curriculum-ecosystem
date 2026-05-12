@@ -193,6 +193,9 @@ open and close a short-lived `git:index/head` claim, and verify the exact
 staged bundle immediately before `git commit`. This is awareness, ordering,
 and auditability, not a mechanical lock.
 
+Peer-pair review is not commit authorship: implementers own staging/commit;
+reviewers gate by verdict.
+
 When a peer's pre-staged-but-uncommitted files share the working tree, blanket
 `git add -A` and bare `git commit` both absorb foreign work into your bundle
 and erase peer attribution. Stage by explicit pathspec (`git add -- <paths>`)
@@ -216,6 +219,9 @@ Files under `.agent/` are shared Practice and coordination state. Active claims
 there are visibility signals, not commit blockers. Commit `.agent` updates when
 they belong to the current bundle or are needed to keep handoff / claim /
 queue / thread state durable; otherwise shared-state residue never lands.
+Current memory/state means current-session state; peer-session dirty files
+follow the [shared-state rule][shared-state-rule]. Current-session writes land
+or become explicit post-commit residue.
 
 ### d. Cleanup Ethics for Apparently Orphaned Claims
 
@@ -358,3 +364,4 @@ and [escalations][escalations-dir]. Operational companions:
 [escalation-schema]: ../state/collaboration/escalation.schema.json
 [escalations-dir]: ../state/collaboration/escalations/
 [state-conventions]: ../memory/operational/collaboration-state-conventions.md
+[shared-state-rule]: ../rules/respect-active-agent-claims.md#shared-state-files-are-always-writable-and-always-commit-includable

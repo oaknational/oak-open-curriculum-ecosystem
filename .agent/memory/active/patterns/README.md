@@ -203,7 +203,7 @@ surface that makes later governance or enforcement honest.
 - **Wire-Format-Aware Redaction** -- Use this when: telemetry redaction protects structured objects or URLs, but secrets can also travel through raw encoded strings such as `application/x-www-form-urlencoded` request bodies. → [wire-format-aware-redaction.md](wire-format-aware-redaction.md)
 - **Workaround Debt Compounds Through Rationalisation** -- Use this when: a workaround exists and someone is explaining why it's justified, especially when invoking "different purposes" or "separate concerns". → [workaround-debt-compounds-through-rationalisation.md](workaround-debt-compounds-through-rationalisation.md)
 
-### Process (34)
+### Process (35)
 
 - **ADR by Reusability, Not Diff Size** -- Use this when: closing a small implementation lane and deciding whether the decision it encoded deserves to be promoted to an ADR. → [adr-by-reusability-not-diff-size.md](adr-by-reusability-not-diff-size.md)
 
@@ -236,6 +236,7 @@ surface that makes later governance or enforcement honest.
 - **Pre-implementation Plan Review** -- Use this when: complex implementation work needs specialist review at the plan stage, not just at the code stage. → [pre-implementation-plan-review.md](pre-implementation-plan-review.md)
 - **Re-evaluate Removal Conditions on Workarounds** -- Use this when: a workaround documents its own removal conditions and conditions may be met long before anyone checks. → [re-evaluate-removal-conditions.md](re-evaluate-removal-conditions.md)
 - **Review Intentions, Not Just Code** -- Use this when: you want specialist reviewers to assess design intent before implementation. → [review-intentions-not-just-code.md](review-intentions-not-just-code.md)
+- **Static Analysis Registration With Scaffold** -- Use this when: scaffolding a package, public export, or sub-path barrel before all planned consumers exist. → [static-analysis-registration-with-scaffold.md](static-analysis-registration-with-scaffold.md)
 - **UX Predates Visual Design** -- Use this when: user experience decisions accumulate in CLIs, SDKs, APIs, documentation, and error messages long before any visual UI exists. → [ux-predates-visual-design.md](ux-predates-visual-design.md)
 - **Verify Claims Against Primary Sources Before Propagating** -- Use this when: writing technical claims into plans, TSDoc, or governance documents. → [verify-before-propagating.md](verify-before-propagating.md)
 - **Plan-as-Artefact Gravity** -- Use this when: a remediation plan has accumulated multiple session-history sections, re-grounding tables, and re-classification amendments while the gates it targets remain red. → [plan-as-artefact-gravity.md](plan-as-artefact-gravity.md)

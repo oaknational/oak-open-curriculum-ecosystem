@@ -188,6 +188,124 @@ the queue churns.
 
 ## Entries
 
++ 2026-05-12; **Commit-boundary peer-pair governance refinements**
+  (Volcanic Charring Furnace distilled-stage processing of
+  `napkin-2026-05-12b.md` learning).
+  `[captured: 2026-05-12 | source: distilled.md+napkin-archive/napkin-2026-05-12b.md | target: multi:pdr:commit-window-coordination+rule:stage-by-explicit-pathspec+skill:commit | trigger: n>=3-validation+owner-direction | size: L | status: pending]`
+  The 2026-05-12 peer-triple/dispatcher window produced a coherent
+  commit-boundary governance bundle. Landed during this distilled-stage pass:
+  peer-pair review is not peer-pair commit authorship (`agent-collaboration.md`);
+  current-session memory/state should land or be named as residue while
+  peer-session state is
+  not default-includable (`agent-collaboration.md` with a cross-reference to
+  `respect-active-agent-claims.md`); queue intents are exact file-list
+  contracts (`commit/SKILL-CANONICAL.md`); new durable files require claim
+  expansion before further edits (`respect-active-agent-claims.md`).
+  Still pending: gatekeeper GO needs the named gate's evidence; unify that with
+  the landed clauses, PDR-054/PDR-059/ADR-177, and the live commit-skill
+  protocol after the collaboration hardening tail has another validation pass,
+  so the PDR/ADR layer carries the complete three-direction commit-boundary
+  model without hiding the in-session promotions already made.
+
++ 2026-05-12; **Collaboration tooling operator UX backlog**
+  (Volcanic Charring Furnace distilled-stage processing of
+  `napkin-2026-05-12b.md` learning).
+  `[captured: 2026-05-12 | source: distilled.md+napkin-archive/napkin-2026-05-12b.md | target: plan:cost-of-collaboration-p5-p8 | trigger: plan-execution-gated | size: L | status: pending]`
+  Operator friction from the P5/P8 collaboration-tooling work belongs in the
+  implementation backlog rather than staying as durable distilled prose. The
+  candidate bundle: every collaboration-state verb that requires `--active`
+  must advertise it or safely default to canonical paths; directed-message
+  targeting needs discoverable presence from fresh claims and recent comms;
+  shared-log mentions must either become inbox-visible or be replaced by
+  directed messages; `comms send`, `direct`, and `append` need
+  `--body-file`/`--subject-file` for long content; agents need a
+  protocol-position command reporting current intent, phase, and next action;
+  missing `--seen-file` should mean an empty seen set; built-CLI smoke must
+  cover help paths and real read/write paths; missing or stale built output
+  should produce an operator message, not a Node stack. Trigger: drain through
+  the cost-of-collaboration P5/P8 implementation lane or split into separate
+  tool tickets if the lane narrows.
+
++ 2026-05-12; **Detached collaboration monitor lifecycle contract**
+  (Volcanic Charring Furnace distilled-stage processing of
+  `napkin-2026-05-12b.md` learning).
+  `[captured: 2026-05-12 | source: distilled.md+napkin-archive/napkin-2026-05-12b.md | target: multi:doc-amend:collaboration-state-conventions+pdr:monitor-lifecycle-if-recurs | trigger: second-instance | size: M | status: pending]`
+  Background collaboration monitors that keep writing after the responsible
+  session ends are a protocol defect, not harmless telemetry. The candidate
+  contract needs explicit owner, start, stop, expiry, and owner-visible status;
+  a continuity note saying "monitor stopped" is not proof if fresh monitor
+  events continue afterwards. This pass amended the conventions surface with
+  the current lifecycle requirement; promote to a PDR or hard rule only after
+  a second monitor lifecycle failure or after monitor tooling becomes a
+  long-lived operator surface.
+
++ 2026-05-12; **Quality-gate profiling and built-surface proof backlog**
+  (Volcanic Charring Furnace distilled-stage processing of
+  `napkin-2026-05-12b.md` learning).
+  `[captured: 2026-05-12 | source: distilled.md+napkin-archive/napkin-2026-05-12b.md | target: multi:plan:cost-of-collaboration+doc-amend:build-system | trigger: plan-execution-gated | size: M | status: pending]`
+  Profiling and gate-topology lessons are implementation evidence, not
+  standalone doctrine yet. Preserve these as backlog checks: speed work must
+  not redefine the trigger's purpose; root `pnpm check` and dry profiling
+  graphs must stay in lockstep; profiling records should preserve environment
+  setup failures; temporary Git indexes can time dirty-tree hooks without
+  touching the real index, but sandbox object-write failures require a
+  non-sandbox rerun; root workspaces with no source logic still need explicit
+  Knip shape; dispatcher-first agent-tools unification is a valid landing;
+  forwarded legacy bins need help-path smoke; and `agent-tools` command-boundary
+  Vitest tests belong under `agent-tools/tests/` unless config intentionally
+  changes.
+
++ 2026-05-12; **Skill and documentation surface audit follow-ups**
+  (Volcanic Charring Furnace distilled-stage processing of
+  `napkin-2026-05-12b.md` learning).
+  `[captured: 2026-05-12 | source: distilled.md+napkin-archive/napkin-2026-05-12b.md | target: multi:plan:skills-audit+doc-amend:AGENT-practice-index | trigger: plan-execution-gated | size: M | status: pending]`
+  The skill-audit lessons are mostly workflow-maintenance backlog rather than
+  PDR-shaped doctrine. Candidate checks: canonical skill bodies are the review
+  target and wrappers remain pointers; command-topology drift should be audited
+  for retired command paths, retired adapter paths, mutating proof commands,
+  and stale workspace CLI invocations; redundant workflow skills should retire
+  into always-fired homes; parallel-agent decomposition is plan hygiene rather
+  than a narrow skill; guidance methodologies are not automatically skills;
+  portability validation failures found during docs work are real
+  infrastructure findings and should be fixed.
+
++ 2026-05-12; **Multi-agent orchestration and planning-shape candidates**
+  (Volcanic Charring Furnace distilled-stage processing of
+  `napkin-2026-05-12b.md` learning).
+  `[captured: 2026-05-12 | source: distilled.md+napkin-archive/napkin-2026-05-12b.md | target: multi:pdr:multi-agent-orchestration+pattern:plan-gate-grounding | trigger: second-instance | size: M | status: pending]`
+  Architecture and planning lessons from the same napkin are preserved here
+  rather than silently promoted. Candidate substance: multi-agent
+  orchestration should use unified contracts with platform-native invocation;
+  the shared layer coordinates contracts, comms, and claims without forcing
+  every platform to look like Codex. Cross-platform peer review caught errors
+  single-agent authoring missed in Codex guidance: JSONL shape, sandbox,
+  timeout, and co-authoring details. After two cycles land, re-plan the
+  remaining workstream backwards from the end-goal; the graph-stack pass found
+  five substantive remaining-cycle shape changes after WS1.1 and WS1.2.
+  Plan-body gate definitions drift; landed hooks are authoritative for
+  implementation cycles. Reviewer nits aligned with the next planned consumer
+  should be absorbed immediately, as with `TripleTerm.value: ''` before the
+  RDF/JS Data Model consumer arrived.
+
++ 2026-05-12; **Graph-stack implementation pattern candidates**
+  (Volcanic Charring Furnace distilled-stage processing of
+  `napkin-2026-05-12b.md` learning).
+  `[captured: 2026-05-12 | source: distilled.md+napkin-archive/napkin-2026-05-12b.md | target: multi:pattern:per-kind-union-dispatch+pattern:retrospective-deferral-tripwire | trigger: second-instance | size: M | status: pending]`
+  Several graph-stack implementation lessons look pattern-shaped but need a
+  second context or implementation proof before becoming permanent pattern
+  files. Candidate shapes: for equality across large discriminated unions, use
+  per-kind checker-array dispatch so TypeScript does not have to correlate two
+  union values from an equality guard; when a concept is deferred to a later
+  increment, attach a retrospective review tripwire to that later increment so
+  earlier surfaces can be collapsed, reshaped, removed, or kept with evidence.
+  The sub-path export lesson graduated to
+  `static-analysis-registration-with-scaffold.md` during the distilled-stage
+  processing pass. Related planning lessons retained here for validation:
+  metacognition can reveal a better layer question than the inherited frame;
+  explicit open questions are design artefacts; minimal primitives can land when
+  wrappers fight the discipline; friction-ratchet thresholds should summon
+  assumptions review before richer tooling resumes.
+
 + 2026-05-11; **ADR-041 amendment needed: top-level workspace tiers**
   (Dusky Masking Cloak 2026-05-11, surfaced by `assumptions-expert`
   during graph execution-prep step 1 D-4 verification).

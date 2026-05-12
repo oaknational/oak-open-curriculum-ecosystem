@@ -124,6 +124,11 @@ that window; coordinate through the shared log, decision thread, or owner
 question. This is not a second mechanical lock, but the default judgement is
 to avoid concurrent commit attempts.
 
+If the work creates a new source, pattern, plan, rule, or other durable file
+outside the claim you opened at session start, expand the claim before the next
+edit in that new area. New files are not invisible to coordination just because
+they did not exist when the original claim was written.
+
 A fresh root `commit_queue` entry ahead of yours means another agent has the
 next advisory commit turn. Do not treat it as a refusal gate, but do inspect
 the queued files, subject, phase, and expiry before staging. The commit skill's

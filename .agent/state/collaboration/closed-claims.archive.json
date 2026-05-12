@@ -21312,6 +21312,438 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "4452e802-f12b-4bff-ad19-b1cf32e72a3a",
+      "agent_id": {
+        "agent_name": "Shadowed Dimming Veil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T16:51:00Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Record reviewer synthesis for cost-of-collaboration work without editing peer-claimed memory/directive surfaces.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T16:58:00Z",
+        "closed_by": {
+          "agent_name": "Shadowed Dimming Veil",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1c"
+        },
+        "summary": "Recorded reviewer synthesis for cost-of-collaboration work in the plan; no code changes.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4452e802-f12b-4bff-ad19-b1cf32e72a3a",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f0bab052-1fcf-44b7-83ec-ff69d9c37c62",
+      "agent_id": {
+        "agent_name": "Fiery Igniting Furnace",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1d"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T16:41:56Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Introduce Fiery Igniting Furnace to Ferny Regrowing Leaf as session coordinator; no implementation lane or git/index work.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T16:42:15Z",
+        "closed_by": {
+          "agent_name": "Fiery Igniting Furnace",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1d"
+        },
+        "summary": "Introduced Fiery Igniting Furnace to Ferny Regrowing Leaf; no implementation lane or git/index work taken.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f0bab052-1fcf-44b7-83ec-ff69d9c37c62",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6835dc56-62ba-4cb6-9328-f5c5270c66ba",
+      "agent_id": {
+        "agent_name": "Dim Hiding Secret",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1d"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/threads/connecting-oak-resources.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T16:42:19Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Register Dim Hiding Secret PDR-027 identity row for Ferny coordinator introduction; no implementation claim.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T16:42:31Z",
+        "closed_by": {
+          "agent_name": "Dim Hiding Secret",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1d"
+        },
+        "summary": "Registered Dim Hiding Secret identity row on connecting-oak-resources and posted Ferny coordinator introduction; no implementation claim remains.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6835dc56-62ba-4cb6-9328-f5c5270c66ba",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "16a7ece8-3e6e-408b-a6a6-c16df84ae291",
+      "agent_id": {
+        "agent_name": "Shadowed Dimming Veil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/tui/controller.ts",
+            "agent-tools/src/collaboration-state/tui/app.tsx",
+            "agent-tools/src/collaboration-state/tui/panes.tsx",
+            "agent-tools/src/collaboration-state/tui/snapshot.ts",
+            "agent-tools/src/collaboration-state/tui/text.ts",
+            "agent-tools/src/collaboration-state/tui/cli.tsx",
+            "agent-tools/src/collaboration-state/cli-specs.ts",
+            "agent-tools/tests/collaboration-state/tui-snapshot.unit.test.ts",
+            "agent-tools/tests/collaboration-state/tui-text.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T16:45:00Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Implement live collaboration TUI refresh and visible human value signals.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T16:52:00Z",
+        "closed_by": {
+          "agent_name": "Shadowed Dimming Veil",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1c"
+        },
+        "summary": "Implementation paused by owner direction; no code changes retained.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "16a7ece8-3e6e-408b-a6a6-c16df84ae291",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c5041843-a936-405a-b54c-e376e089b6fd",
+      "agent_id": {
+        "agent_name": "Shadowed Dimming Veil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/cli-options.ts",
+            "agent-tools/package.json",
+            "pnpm-lock.yaml"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T16:47:00Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Extend live TUI option validation with strict Zod metadata.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T16:52:30Z",
+        "closed_by": {
+          "agent_name": "Shadowed Dimming Veil",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1c"
+        },
+        "summary": "Implementation paused by owner direction; no validation/package changes retained.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c5041843-a936-405a-b54c-e376e089b6fd",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e4906364-810b-4a45-ae4c-1248b5835ed8",
+      "agent_id": {
+        "agent_name": "Shadowed Dimming Veil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T16:49:00Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Record that the live collaboration TUI is mandatory, not optional.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T16:53:00Z",
+        "closed_by": {
+          "agent_name": "Shadowed Dimming Veil",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1c"
+        },
+        "summary": "Recorded that live collaboration TUI is mandatory and must show human-visible value.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e4906364-810b-4a45-ae4c-1248b5835ed8",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "05ae1861-0b2f-4cf1-8293-ae589334d1d3",
+      "agent_id": {
+        "agent_name": "Volcanic Charring Furnace",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "242ea3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/patterns/**",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/directives/agent-collaboration.md",
+            ".agent/memory/operational/collaboration-state-conventions.md",
+            ".agent/skills/commit/SKILL-CANONICAL.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T16:35:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Conservation-first processing of the new distilled.md section after napkin-2026-05-12b rotation; route entries to durable homes, pending graduations, patterns, or retained distilled state.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T17:10:00Z",
+        "closed_by": {
+          "agent_name": "Volcanic Charring Furnace",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "242ea3"
+        },
+        "summary": "Completed distilled-stage conservation routing: disposition ledger in distilled.md, durable collaboration/commit/conventions amendments, pending-graduations follow-ups, static-analysis scaffold pattern, napkin/comms updates, and validation.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "05ae1861-0b2f-4cf1-8293-ae589334d1d3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "b6f3e2b2-6d53-4436-b545-cf4adc973818",
+      "agent_id": {
+        "agent_name": "Volcanic Charring Furnace",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "242ea3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/rules/respect-active-agent-claims.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T16:50:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Supplemental claim for claim-expansion lesson routed from distilled processing into respect-active-agent-claims rule.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T17:10:30Z",
+        "closed_by": {
+          "agent_name": "Volcanic Charring Furnace",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "242ea3"
+        },
+        "summary": "Completed supplemental rule-surface claim for respect-active-agent-claims.md claim-expansion lesson.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b6f3e2b2-6d53-4436-b545-cf4adc973818",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "12376cab-d4d2-420b-a7b8-a98e332bcb68",
+      "agent_id": {
+        "agent_name": "Volcanic Charring Furnace",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "242ea3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/comms-events"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T16:51:30Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Run session handoff, commit completed distilled-stage consolidation, and notify Ferny.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T17:04:00Z",
+        "closed_by": {
+          "agent_name": "Volcanic Charring Furnace",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "242ea3"
+        },
+        "summary": "Completed session handoff updates and included them in the distilled-stage consolidation commit bundle.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "12376cab-d4d2-420b-a7b8-a98e332bcb68",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ebf3800c-8223-4797-8bad-d1e5982f5d05",
+      "agent_id": {
+        "agent_name": "Volcanic Charring Furnace",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "242ea3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T16:58:00Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit completed distilled-stage consolidation handoff bundle.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T17:04:30Z",
+        "closed_by": {
+          "agent_name": "Volcanic Charring Furnace",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "242ea3"
+        },
+        "summary": "Closed in same collaboration-state commit after staged-bundle verification for docs(practice): route distilled consolidation learnings.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ebf3800c-8223-4797-8bad-d1e5982f5d05",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

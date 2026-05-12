@@ -140,6 +140,7 @@ pretending the solution is already known.
 | `codex` | `GPT-5` | Shaded Masking Shadow | Implementer (post-P4 knip unblock and P5 handoff closeout) | 2026-05-12 | 2026-05-12 |
 | `codex` | `GPT-5` | Seaworthy Snorkelling Prow | Implementer (validate-boundaries graph-ingest inventory repair + pre-commit wiring) | 2026-05-12 | 2026-05-12 |
 | `cursor` | `GPT-5.5` | Dusky Lurking Shade | Consolidator (napkin-stage conservation-first consolidation; archive + distilled intake) | 2026-05-12 | 2026-05-12 |
+| `cursor` | `GPT-5.5` | Volcanic Charring Furnace | Consolidator (distilled-stage conservation routing; durable homes + pending follow-ups) | 2026-05-12 | 2026-05-12 |
 
 ## Boundary validator pre-commit wiring (2026-05-12)
 
@@ -193,9 +194,24 @@ outrank brevity; fitness numbers are advisory routing signals.
 - Behaviour-changing learning was preserved in `distilled.md` under
   `Recently Distilled — 2026-05-12 Napkin Processing (Dusky Lurking Shade)`.
 
-**Next safe consolidation step**: process that new `distilled.md` section and
-route entries to their natural homes or onward queues. Do not start the
-`pending-graduations.md` drain until the distilled stage is complete.
+**Distilled stage completed**:
+
+- The large 2026-05-12b distilled block is now a disposition ledger in
+  `distilled.md`.
+- Mature lessons were routed to `agent-collaboration.md`,
+  `commit/SKILL-CANONICAL.md`, `respect-active-agent-claims.md`,
+  `collaboration-state-conventions.md`, and
+  `substance-before-fitness.md`.
+- Follow-ups that remain owner-visible or require more validation are in
+  `pending-graduations.md`.
+- `static-analysis-registration-with-scaffold.md` was admitted as the proven
+  pattern; the retrospective-deferral tripwire lesson remains pending
+  validation rather than prematurely becoming a pattern.
+
+**Next safe consolidation step**: process `pending-graduations.md`
+conservation-first, routing entries to permanent homes, explicit retained
+pending state, or owner-facing decisions. Do not start
+`practice-bootstrap.md` until the pending-graduations stage is complete.
 
 ## P4 identity disambiguation handoff (2026-05-12)
 

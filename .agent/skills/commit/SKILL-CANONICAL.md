@@ -185,6 +185,11 @@ the advisory queue and the short-lived git transaction claim:
      --file "path/two"
    ```
 
+   The file list is a contract, not a hint. If a hook failure, formatter,
+   follow-up fix, generated artefact, or claim/lifecycle write introduces an
+   extra path, abandon the old intent and enqueue a widened one before
+   staging or verifying the new set.
+
 7. Move the queue entry to `staging`, run the pre-stage guard for the exact
    pathspecs, stage only explicit pathspecs, then record the staged-bundle
    fingerprint:

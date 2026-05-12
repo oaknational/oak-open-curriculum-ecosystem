@@ -21,6 +21,39 @@ The most recent rotation is archived at
 [archive-pass]: archive/napkin-2026-05-12b.md
 [previous-pass]: archive/napkin-2026-05-12.md
 
+## 2026-05-12 — Volcanic Charring Furnace / cursor / GPT-5.5 / `242ea3`
+
+### Distilled-stage consolidation
+
+- Processed the new `distilled.md` section from `napkin-2026-05-12b.md`
+  without treating fitness limits as brevity targets. Mature lessons were
+  routed into collaboration doctrine, commit-skill protocol, active-claim
+  rules, collaboration-state conventions, pattern files, and
+  `pending-graduations.md`.
+- Added `static-analysis-registration-with-scaffold.md` as the pattern home
+  for the sub-path export registration lesson. The retrospective-deferral
+  tripwire lesson was retained as pending validation instead of admitted as a
+  pattern, because the review loop found only one proven instance.
+
+### Mistakes Made
+
+- I added a durable edit to `respect-active-agent-claims.md` before expanding
+  my original claim to cover that rule. I opened a supplemental claim
+  immediately after noticing. Behaviour change: when a routed lesson crosses
+  from the originally claimed consolidation homes into a rule file, expand the
+  claim before the first edit, not after catching the scope expansion.
+- `comms send` accepts `--repo-root`, but `comms render` does not; render still
+  needs explicit `--events-dir`, `--lifecycle-dir`, `--messages-dir`, and
+  `--output`. Behaviour change: check action-specific help even inside the same
+  `comms` topic when switching from write to render paths.
+
+### Session Handoff
+
+- Landed outcome before commit: the distilled-stage conservation pass is
+  complete. The next consolidation session should process
+  `pending-graduations.md`, then `practice-bootstrap.md`, preserving knowledge
+  first and treating fitness output as routing evidence.
+
 ## 2026-05-12 — Seaworthy Snorkelling Prow / codex / GPT-5 / `019e1c`
 
 ### Boundary validator hook closeout

@@ -80,9 +80,12 @@ Earlier archives remain under [`archive/`](archive/).
   pass: historical closeout prose was archived, the live state was preserved,
   the pending-graduations due index was reconciled, and ADR/PDR promotion
   decisions were surfaced explicitly.
-- Next `agentic-engineering-enhancements` continuation is owner-directed:
-  audit all remaining skills. The paired `jc-session-handoff` /
-  `jc-consolidate-docs` and `jc-metacognition` review pass has completed.
+- Conservation-first consolidation advanced again on 2026-05-12: the
+  distilled-stage pass is complete, and the next staged consolidation session
+  should process `pending-graduations.md` before `practice-bootstrap.md`.
+- Next `agentic-engineering-enhancements` implementation continuation remains
+  owner-directed: audit all remaining skills if that lane is reopened, or
+  continue cost-of-collaboration P5/P8 from the active plan.
 - `connecting-oak-resources` lane advanced 2026-05-12: holistic
   re-plan of Inc.1a remaining cycles landed at commit `f73c42f5`
   (Clouded Vaulting Squall / `claude` / opus-4-7-1m / `866472`).
@@ -130,7 +133,7 @@ each thread record; this table is the repo-level index.
 | ------------------------------------------------------------------------------ | --------------------------------------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `main-critical-sonar-remediation`                                              | Sonar remediation                             | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | `observability-sentry-otel`                                                    | Sentry/OTel integration                       | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic]       | Seaworthy Snorkelling Prow / `codex` / GPT-5 / `019e1c` / 2026-05-12 (validate-boundaries graph-ingest inventory repair + pre-commit wiring); see thread record for full identity history |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic]       | Volcanic Charring Furnace / `cursor` / GPT-5.5 / `242ea3` / 2026-05-12 (distilled-stage conservation routing); Seaworthy Snorkelling Prow / `codex` / GPT-5 / `019e1c` / 2026-05-12 (validate-boundaries graph-ingest inventory repair + pre-commit wiring); see thread record for full identity history |
 | `connecting-oak-resources`                                                     | Oak resource graph                            | [record][connecting]    | Radiant Illuminating Twilight / `codex` / GPT-5 / `019e1c` / 2026-05-12 (WS2.1 graph-ingest scaffold landed at `0f895070`; commit-msg local-commitlint unblock landed at `42f2e721`); Brazen Stoking Ash / `claude` / opus-4-7-1m / `913094` / 2026-05-12 (peer-triple dispatcher session; Lofty Vaulting Summit landed WS1.3 DatasetCore + DataFactory at 87e21125 with type-expert + architecture-expert-betty absorbed; Shaded Masking Shadow landed knip-unblock at 730766ad; Lofty WS1.4 offered but deferred — owner closed Lofty's session; handed dispatcher role to Ferny Regrowing Leaf via shared-log 8c4dc90a); Clouded Vaulting Squall / `claude` / opus-4-7-1m / `866472` / 2026-05-12 (holistic re-plan of Inc.1a remaining cycles landed at f73c42f5; 12 → 10 cycles; WS1.4+WS1.5 collapsed; WS1.8 deferred to Inc.2 with retrospective-review tripwire; per-cycle reviewer flags + inherited patterns recorded inline); Starlit Scattering Moon / `claude` / opus-4-7-1m / `edd1fb` / 2026-05-12 (WS1.2 RDF Term hierarchy + Quad + equality landed at 1885fbcf); Celestial Transiting Satellite / `claude` / opus-4-7-1m / `9bc8e3` / 2026-05-12 (WS1.1 graph-core scaffold landed at ad2abb69); Sparking Charring Ash / `claude-code` / opus-4-7-1m / `caf5e1` / 2026-05-12 (graph foundation work; Inc.1a WS1.1 open for execution)      |
 | `exploring-open-education-resources`                                           | Third-party OER                               | [record][oer]           | Gnarled / `claude-code` / `e18e2c` / 2026-05-01                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `architectural-budget-system`                                                  | Architectural budget                          | [record][budget]        | Nebulous / `codex` / 2026-04-29                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -179,14 +182,16 @@ cost-of-collaboration continuation: the paired `jc-session-handoff` /
 remaining skills can resume from the thread record if the owner reopens that
 lane.
 
-Conservation-first consolidation is now staged across four sessions by owner
+Conservation-first consolidation is staged across four sessions by owner
 direction. The active napkin was processed first: the outgoing file was archived
 intact as
 [`napkin-2026-05-12b.md`](../active/archive/napkin-2026-05-12b.md), and its
 behaviour-changing learning was distilled into
 [`distilled.md`](../active/distilled.md) without treating fitness numbers as
-brevity targets. The next consolidation sessions should process, in order:
-`distilled.md`, then [`pending-graduations.md`](pending-graduations.md), then
+brevity targets. The distilled-stage pass is now complete: mature lessons were
+routed to durable doctrine and pattern homes, and unresolved or owner-shaped
+items were kept in [`pending-graduations.md`](pending-graduations.md). The next
+consolidation sessions should process, in order: `pending-graduations.md`, then
 `practice-bootstrap.md`. At every stage, knowledge curation and conservation
 outrank brevity; fitness numbers are advisory routing signals.
 
@@ -194,7 +199,7 @@ The acceptance bar remains:
 
 - live state remains in this file;
 - historical closeout prose remains archived, not deleted;
-- distilled learning is fully processed before pending-graduations is drained;
+- distilled learning is fully processed; pending-graduations is the next drain;
 - pending-graduations index/counts match body entries marked `status: due`;
 - ADR-shaped and PDR-shaped promotion decisions are visible to the owner;
 - cost-of-collaboration P0 remains named as the blocker for multi-agent
@@ -277,6 +282,12 @@ Current branch non-goals:
   acceptance work.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-12 — Volcanic Charring Furnace / `cursor` / GPT-5.5 /
+`242ea3`)**: due — the distilled-stage conservation pass is complete. The next
+bounded consolidation pass is `pending-graduations.md`, followed by
+`practice-bootstrap.md`. Fitness values remain advisory routing signals only;
+do not trim knowledge to make reports green.
 
 **Status (2026-05-12 — Dusky Lurking Shade / `cursor` / GPT-5.5 /
 `4cc0e8`)**: staged conservation-first consolidation is in progress. Owner

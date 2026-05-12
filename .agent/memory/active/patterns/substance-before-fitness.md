@@ -44,6 +44,15 @@ now "learning before fitness".
    or record owner-approved hard-limit changes. Agents may raise soft
    targets modestly with rationale; hard limits belong to the owner.
 
+Two conservation moves are part of the pattern:
+
+- **Archive before compaction.** Preserve a full-file snapshot before
+  rotating an oversized active-memory surface so live prose can shrink
+  without historical loss.
+- **Reconcile status, do not silently graduate.** If a due marker is stale
+  because a durable home already exists, name that home and correct the
+  metadata; do not present the correction as a fresh doctrine promotion.
+
 ## Anti-pattern
 
 Checking the character count after each sentence and trimming the

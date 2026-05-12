@@ -92,12 +92,20 @@ New shared-state writes use the
 - mutate active claims, commit queue entries, closed claims, conversations,
   and escalations through the transaction helper exposed by
   `pnpm agent-tools:collaboration-state -- ...`;
+- keep lifecycle writes sequential unless the helper provides a transaction;
+  parallel claim-close or archive writes can be correct by luck while still
+  violating the write-safety contract;
 - keep hooks as later polish. TTL cleanup is the portable baseline.
 
 The canonical communication-event directory is `comms-events/`. The older
 `comms/events/` path is legacy historical state; do not create new events
 there. Merges reconcile both eras as `exclusive-create-fragments` and keep all
 unique event files.
+
+Old comms events are buffers, not permanent archives. During consolidation,
+read events older than seven days for reusable substance, route any substance to
+napkin, distilled, patterns, pending graduations, or permanent docs, then delete
+the processed buffer file and regenerate the rendered log.
 
 ## Session-Close and Resume Semantics
 
@@ -114,6 +122,12 @@ sidebar response windows may use minutes-scale expiries; known session-close
 misses should use a short grace TTL before orphaning. A future SDK-driven
 one-turn invocation model may add external shared session-state reclaim, but
 that would be a new lifecycle transition, not the default today.
+
+Detached monitors are owned lifecycle actors. A monitor that watches comms,
+claims, or messages must name its owner session, start condition, stop
+condition, expiry, and owner-visible status. Do not treat a handoff note saying
+"monitor stopped" as proof if fresh monitor events continue to appear; the
+event stream is the reality signal.
 
 ## Lifecycle Summary
 
