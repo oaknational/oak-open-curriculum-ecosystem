@@ -30,6 +30,15 @@ it produces the surface `consolidate-docs` later distils.
 Lightweight end-of-session continuity update with a conditional
 consolidation gate.
 
+**Relationship to `consolidate-docs`**: this workflow and
+[`consolidate-docs`](../consolidate-docs/SKILL-CANONICAL.md) are one
+knowledge-flow pair with different cadences. Handoff runs at ordinary
+session close and captures the session's landed outcome, live state, and
+surprises. Consolidation runs only when its trigger checklist fires and
+decides what graduates out of temporary surfaces. Do not inline the
+consolidation inventory here; use this file for the session-close edge and
+defer cross-session inventories to `consolidate-docs`.
+
 Use this skill for ordinary session closeout. It replaces `wrap-up`.
 
 Do **not** treat this as a full closeout ritual. Unless the user explicitly
@@ -304,8 +313,8 @@ asks for more, this workflow must not trigger:
      session-scoped action here is *this session touched these
      items; update them*.
 
-   **7b. Update thread-record identity rows AND the active-agent
-   register column.** Two edits, both required:
+   **7b. Update thread-record identity rows AND the repo-continuity
+   identity summary.** Two edits, both required:
 
    1. **Thread next-session record** — for every thread this
       session touched
@@ -316,16 +325,17 @@ asks for more, this workflow must not trigger:
       and [PDR-027](../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md).
       If you are a new identity on the thread (different platform /
       model / `agent_name`), add a new row instead of updating.
-   2. **Active-agent register column** — refresh the `Active
-      identities` column for each touched thread in
+   2. **Repo-continuity identity summary** — refresh the identity
+      summary column for each touched thread in
       [`repo-continuity.md § Active threads`](../../memory/operational/repo-continuity.md#active-threads).
       Summary form: `platform / model / agent_name / role /
       last_session` per identity, comma-separated when multiple
-      identities are currently active on the thread. That column
-      IS the right-now register per PDR-029 (as amended
-      2026-04-21); it must reflect the thread record or the
-      audit in `/jc-consolidate-docs` step 7c will flag a
-      mismatch.
+      identities are currently active on the thread. In this repo the
+      compact table column is currently named `Latest identity`; other
+      Practice-bearing repos may choose a clearer `Active identities` heading.
+      Update the existing identity summary column rather than renaming the
+      table during routine handoff. The summary must reflect the thread record
+      or the audit in `jc-consolidate-docs` step 7c will flag a mismatch.
 
    This is the session-close counterpart to the session-open
    registration step in
@@ -342,7 +352,7 @@ asks for more, this workflow must not trigger:
 
    **Ordering assertion**: step 7b MUST have run in this session
    before step 7c. 7b refreshes the per-thread next-session record
-   AND the `Active identities` column; 7c validates those
+   AND the repo-continuity identity summary; 7c validates those
    refreshes against the thread's next-session file. Running 7c
    without 7b reads stale data and self-validates — the exact
    passive-guidance failure mode this gate counters. If 7b has not

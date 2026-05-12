@@ -1,10 +1,32 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-> **Current continuation**: the cost-of-collaboration plan now contains an
-> explicit P0 quality-gate performance implementation track. If the owner
-> resumes the quality-gate lane, start at §Quality-gate performance
-> implementation track. The workflow-skill review continuation remains below
-> as a separate owner-directed lane.
+> **Current continuation**: owner direction for the next session is to audit
+> all remaining skills. Start at §Remaining skills audit continuation. The
+> cost-of-collaboration lane remains preserved below, but is not the next
+> owner-directed continuation unless the owner reopens it.
+
+## Remaining skills audit continuation (2026-05-12+)
+
+**One-line objective**: audit all remaining `jc-*` skills that have not yet had
+the deep review/remediation treatment applied in this thread.
+
+**Current state**: `jc-plan`, `jc-start-right-quick`,
+`jc-start-right-thorough`, `jc-commit`, `jc-session-handoff`,
+`jc-consolidate-docs`, and `jc-metacognition` have been reviewed and patched
+where needed. The latest pass clarified the handoff/consolidation pairing,
+expanded `jc-metacognition`, and added stale `comms-events/` retention
+processing to `jc-consolidate-docs`.
+
+**Next safe step**: re-ground live state, enumerate the remaining
+`.agents/skills/jc-*` adapters, exclude the skills already reviewed above,
+then inspect each remaining canonical source under `.agent/skills/*/` with its
+generated `.agents` / `.claude` adapters. Patch canonical skill bodies rather
+than adapter wrappers unless the wrapper itself has drifted, then run focused
+Markdown validation plus `pnpm skills:check` and `pnpm portability:check`.
+
+**Boundary**: keep this as a documentation/infrastructure audit. Do not
+opportunistically start cost-of-collaboration implementation, graph work, or a
+comms-event retention sweep unless the owner redirects.
 
 ## Quality-gate performance implementation track (2026-05-12+)
 
@@ -35,10 +57,12 @@ assurance, and the evidence command that proves the new placement.
 
 ## Workflow skill deep review continuation (2026-05-12+)
 
-**One-line objective**: review and remediate `jc-session-handoff`,
-`jc-consolidate-docs`, and `jc-metacognition` with the same discipline just
-applied to `jc-plan`, `jc-start-right-quick`, `jc-start-right-thorough`, and
-`jc-commit`.
+**Status**: complete for `jc-session-handoff`, `jc-consolidate-docs`, and
+`jc-metacognition`; continue with §Remaining skills audit continuation.
+
+**One-line objective**: preserve the review frame used for
+`jc-session-handoff`, `jc-consolidate-docs`, and `jc-metacognition` so the
+remaining-skills audit can reuse it.
 
 **Pairing to preserve**: treat `jc-session-handoff` and `jc-consolidate-docs`
 as a pair. The handoff runs in more sessions than the consolidation workflow,
@@ -61,10 +85,11 @@ while consolidation decides what graduates out of temporary surfaces.
 - `2eba7ab7 docs(agent): harden jc-plan planning discipline`;
 - `d2d3fcf8 docs(agent): reconcile handoff and tooling state`.
 
-**Next safe step**: re-ground live state, read the canonical skill files and
-their generated `.agents` / `.claude` adapters, inspect adjacent references
-and ADR/PDR links, then patch the canonical source and regenerate/validate
-adapters where needed.
+**Landed this pass**: canonical skill docs now make the
+handoff/consolidation pairing explicit, give `jc-metacognition` an executable
+reflection workflow, and require `jc-consolidate-docs` to process
+`comms-events/` older than seven days into durable or still-processable memory
+surfaces before deleting them.
 
 ## `pnpm check` profiling result and next step (2026-05-12+)
 
@@ -3355,7 +3380,7 @@ and
 | `Flamebright Sparking Forge` | `codex` | `GPT-5` | `019e1a` | `bounded-repo-continuity-and-pending-graduations-consolidation-drain; archived-historical-continuity-prose; reconciled-live-state-and-due-index; no-staging-window` | 2026-05-12 | 2026-05-12 |
 | `Torrid Flaring Hearth` | `codex` | `GPT-5` | `019e1a` | `consolidate-docs-pass; napkin-rotation; fitness-routing; thread-register-and-collaboration-state-audit; session-handoff-and-commit-closeout` | 2026-05-12 | 2026-05-12 |
 | `Vining Budding Canopy` | `codex` | `GPT-5` | `019e1a` | `pnpm-check-profiling-deep-dive-and-session-handoff; captured-turbo-graph-228-nodes-88-real-commands; preserved-profile-artifacts-under-.logs-check-profiles; recorded-F20-repo-check-profile-bootstrap-friction; expanded-cost-of-collaboration-P0-quality-gate-implementation-tasks; historical-mcp-vitest-profile-failure-now-superseded-by-owner-reported-green-pnpm-check` | 2026-05-12 | 2026-05-12 |
-| `Smouldering Melting Kiln` | `codex` | `GPT-5` | `019e1a` | `paired-workflow-skill-review-for-jc-session-handoff-jc-consolidate-docs-and-jc-metacognition; claim-3ebea496-opened-after-empty-active-claims-scan; preserves-shared-state-and-comms-as-live-infrastructure` | 2026-05-12 | 2026-05-12 |
+| `Smouldering Melting Kiln` | `codex` | `GPT-5` | `019e1a` | `paired-workflow-skill-review-for-jc-session-handoff-jc-consolidate-docs-and-jc-metacognition; added-stale-comms-events-retention-rule; next-session-audit-all-remaining-skills; preserves-shared-state-and-comms-as-live-infrastructure` | 2026-05-12 | 2026-05-12 |
 | `Cosmic Gliding Aurora` | `codex` | `GPT-5` | `019e1a` | `quality-gate-plan-correction-and-p0-first-implementation-72c5cde1; pre-commit-contract-preserves-type-check-lint-shell-lint-test; prettier-markdownlint-now-stage-file-scoped; knip-depcruise-owner-classified-higher-standard-pre-push-check-ci-gates; handoff-claim-9e6cce6b` | 2026-05-12 | 2026-05-12 |
 | `Wooded Spreading Thicket` | `cursor` | `GPT-5.5` | `unknown` | `persistent-comms-coordinator-for-session; monitors-active-claims-shared-comms-log-and-fresh-comms-surfaces-every-30s; updateCurrentStep-telemetry-triage-external-tool-not-in-repo; writes-only-on-change-milestone-blocker-or-quiet-interval; all-agents-introduce-to-Wooded-Spreading-Thicket` | 2026-05-11 | 2026-05-11 |
 | `Galactic Transiting Orbit` | `codex` | `GPT-5` | `019e18` | `Wave-3-commit-queue-UX-hardening-claim-close-cycle-fingerprint-recursion-slice-in-progress; preserving-post-commit-ledger-residue-from-Embered-Burning-Magma-as-evidence; scope-agent-tools-commit-queue-collaboration-state-tests-plan-status-and-session-lifecycle-surfaces; Wave-4-and-Wave-5-remain-closed` | 2026-05-11 | 2026-05-11 |

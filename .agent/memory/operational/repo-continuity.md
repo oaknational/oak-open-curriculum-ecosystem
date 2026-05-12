@@ -52,8 +52,8 @@ Earlier archives remain under [`archive/`](archive/).
   the pending-graduations due index was reconciled, and ADR/PDR promotion
   decisions were surfaced explicitly.
 - Next `agentic-engineering-enhancements` continuation is owner-directed:
-  review `jc-session-handoff` and `jc-consolidate-docs` as a paired workflow
-  surface, and also review `jc-metacognition`.
+  audit all remaining skills. The paired `jc-session-handoff` /
+  `jc-consolidate-docs` and `jc-metacognition` review pass has completed.
 
 ## Active Threads
 
@@ -64,7 +64,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Cosmic Gliding Aurora / `codex` / GPT-5 / `019e1a` / 2026-05-12 (landed 72c5cde1: pre-commit broken-code guard preserved while Prettier/Markdownlint now use staged files; knip/depcruise classified as higher-standard gates); Vining Budding Canopy / `codex` / GPT-5 / `019e1a` / 2026-05-12 (`pnpm check` profiling deep dive + P0 quality-gate task expansion; next step is clean cold/warm profile from owner-reported green state); Volcanic Banking Pyre / `codex` / GPT-5 / `019e1a` / 2026-05-12 (recorded owner-directed paired `jc-session-handoff` + `jc-consolidate-docs` next step with `jc-metacognition`); see thread record for full identity history |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Smouldering Melting Kiln / `codex` / GPT-5 / `019e1a` / 2026-05-12 (landed paired handoff/consolidation/metacognition skill remediation and stale comms-event retention rule); Cosmic Gliding Aurora / `codex` / GPT-5 / `019e1a` / 2026-05-12 (landed 72c5cde1: pre-commit broken-code guard preserved while Prettier/Markdownlint now use staged files); see thread record for full identity history |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Sparking Charring Ash / `claude-code` / opus-4-7-1m / `caf5e1` / 2026-05-12 (graph foundation work; Inc.1a WS1.1 open for execution) |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -86,13 +86,10 @@ each thread record; this table is the repo-level index.
 
 ### Agentic-Engineering Enhancements
 
-Immediate owner-directed workflow skill review lane: perform the same deep
-analysis/remediation treatment on `jc-session-handoff` and
-`jc-consolidate-docs` as a pair, and also review `jc-metacognition`. The
-handoff workflow runs in more sessions, but it is closely coupled to
-consolidation because handoff captures session-close continuity and
-consolidation decides what graduates out of temporary surfaces. Start from
-the thread record's workflow-skill continuation opener.
+Immediate owner-directed workflow skill review lane: audit all remaining
+skills. Start from the thread record's remaining-skills audit continuation;
+the paired `jc-session-handoff` / `jc-consolidate-docs` and
+`jc-metacognition` remediation pass is complete.
 
 Immediate quality-gate lane: execute the remaining cost-of-collaboration P0.QG
 tasks after `72c5cde1`: capture clean cold and warm `pnpm check:profile`
@@ -186,13 +183,18 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-12 — Cosmic Gliding Aurora / `codex` / GPT-5 /
-`019e1a`)**: not escalated in this handoff — the session corrected the
-quality-gate plan boundary, landed `72c5cde1`, and captured the owner decision
-that knip and depcruise are higher-standard gates. No new ADR/PDR candidate
-requires immediate graduation. The existing pending-graduations due queue
-remains a separate owner-visible consolidation lane rather than work smuggled
-into this handoff.
+**Status (2026-05-12 — Smouldering Melting Kiln / `codex` / GPT-5 /
+`019e1a`)**: due, not run in this handoff. The new
+`jc-consolidate-docs` retention rule makes existing `comms-events/` older than
+seven days a consolidation trigger. Owner direction for the next session is to
+audit all remaining skills, so the stale-event retention sweep is named here
+instead of being smuggled into this closeout.
+
+Previous same-day handoff: Smouldering Melting Kiln reviewed and remediated
+`jc-session-handoff`, `jc-consolidate-docs`, and `jc-metacognition`; clarified
+the handoff/consolidation pairing; expanded metacognition into an executable
+reflection workflow; and added process-before-deletion rotation for
+`comms-events/` older than seven days.
 
 Previous same-day quality-gate handoff: Vining Budding Canopy converted
 quality-gate profiling recommendations into explicit P0 implementation tasks

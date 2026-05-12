@@ -18702,6 +18702,48 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "73c70636-760c-4e80-a85d-b888177c2597",
+      "agent_id": {
+        "agent_name": "Smouldering Melting Kiln",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T06:45:32Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit workflow skill review handoff.",
+      "intent_to_commit": "462d1f78-29d2-4713-9e45-ab0fb59bc34b",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T07:01:52Z",
+        "closed_by": {
+          "agent_name": "Smouldering Melting Kiln",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1a"
+        },
+        "summary": "Owner stopped commit attempt; abandoned queue 462d1f78 after broad pre-commit/Turbo checks collided with mutating parallel-agent/generated-workspace state. Staged bundle remains intentionally untouched for owner/fresh-session handling.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "73c70636-760c-4e80-a85d-b888177c2597",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

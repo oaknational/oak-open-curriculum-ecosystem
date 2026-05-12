@@ -17,6 +17,12 @@ candidates, subjective experience) belongs to
 every session. This workflow is the **distil-and-graduate edge** of
 the capture → distil → graduate → enforce pipeline.
 
+**Governance**: This workflow operationalises ADR-150, PDR-011, PDR-014, and
+PDR-046.
+Those authorities define the pair: `session-handoff` captures at session
+close, while `consolidate-docs` distils, graduates, and enforces only when
+cross-session convergence is due.
+
 Deep convergence workflow. This is **not** the default end-of-session flow.
 
 Use this workflow only when one or more triggers hold. If none apply, use
@@ -36,6 +42,9 @@ Run `consolidate-docs` when one or more of these is true:
   historical synthesis, or prior consolidations keep reporting the same
   family without naming its deeper cause
 - documentation drift or stale cross-references now need graduation
+- `.agent/state/collaboration/comms-events/` contains events whose
+  `created_at` timestamp is older than seven days and therefore due for
+  retention processing
 
 This workflow preserves the full deep-convergence role: graduation, pattern
 extraction, napkin rotation, fitness management, and practice exchange.
@@ -200,9 +209,10 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
      Sweep events across the consolidation window (not only session-
      authored ones); extract any cross-session coordination insight to
      `distilled.md`, a pattern instance, or a pending-graduations entry.
-     Do not rewrite or delete events — they are durable coordination
-     records. Step 7e audits them for protocol observability; this step
-     extracts substance.
+     Events older than seven days are retention-processing inputs, not
+     permanent documentation. Process them through step 3a before deletion.
+     Step 7e audits active protocol observability; this step extracts
+     substance from comms history.
    - **Plan surfaces**: active and recently completed plans (per step
      1 above) — surface any content that describes how things work
      rather than what to do next.
@@ -234,6 +244,31 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    Per the standing direction codified in the homing partial: *all
    content must be moved to permanent homes or, if not useful,
    removed*. Silent deletion without homing is not the default.
+3a. **Rotate stale comms-events after processing.** At each consolidation
+    pass, inspect `.agent/state/collaboration/comms-events/` for event files
+    whose `created_at` timestamp is older than seven days. Treat every
+    matching event as a capture surface that must be processed before
+    deletion:
+
+    1. Read the event body and decide whether it contains permanent
+       documentation content, reusable coordination insight, tooling friction,
+       owner direction, or pattern evidence.
+    2. Route useful substance to the smallest durable or still-processable
+       home: a permanent doc/ADR/PDR/rule/README when stable; otherwise
+       `.agent/memory/active/napkin.md`, `distilled.md`,
+       `.agent/memory/active/patterns/`, or
+       `.agent/memory/operational/pending-graduations.md` for normal later
+       processing.
+    3. If the event carries no useful substance beyond transient coordination,
+       record no duplicate copy; deletion is the correct lifecycle outcome
+       once that judgement has been made.
+    4. Delete the processed old event file from `comms-events/`.
+    5. Regenerate `shared-comms-log.md` from the remaining collaboration
+       sources so the rendered log reflects the retained live window.
+
+    The invariant is **process before deletion**. Old comms-events are not a
+    durable archive, but the insights they contain must be homed before the
+    source event disappears.
 4. **Audit `.agent/experience/` for three things, not one.** The experience directory is for *subjective experience* — what work was like, not what was done. The audit therefore has three distinct purposes (see [`../../experience/README.md § Why the audit step exists`](../../experience/README.md)):
 
    a. **Preserve the purpose** — scan for files that have drifted into technical content; this displaces the subjective register the files are meant to hold.

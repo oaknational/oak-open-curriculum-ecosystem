@@ -265,3 +265,13 @@ The most recent rotation is archived at
 - Knip and depcruise are owner-classified higher-standard gates for this repo:
   keep them at pre-push, `pnpm check`, and CI rather than at the commit
   boundary.
+
+## 2026-05-12 — Comms Event Retention Correction / codex / GPT-5 / `019e1a`
+
+### Owner Correction
+
+- Comms are first-class, but individual `comms-events/` files are not a
+  permanent archive. At consolidation, events older than seven days must be
+  read for documentation content or reusable coordination insight, routed to
+  napkin/distilled/patterns/pending-graduations or permanent docs as
+  appropriate, and then deleted from the event buffer.
