@@ -42,6 +42,9 @@ export default {
           'operations/utilities/',
           // SDK subpath-export barrels consumed via package.json "exports"
           'oak-sdk-codegen/src/(admin|zod|query-parser|observability)\\.ts$',
+          // graph-core subpath-export barrels consumed via package.json "exports"
+          'graph-core/src/index\\.ts$',
+          'graph-core/src/(term|dataset|jsonld|canon|vocab)/index\\.ts$',
           // SDK and TypeDoc entry points consumed via tsup + typedoc.json
           'oak-curriculum-sdk/src/types/(schema-bridge|public-types)\\.ts$',
         ],

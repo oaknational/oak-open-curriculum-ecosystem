@@ -141,6 +141,9 @@ const config: KnipConfig = {
     'packages/core/env': {
       project: ['src/**/*.ts'],
     },
+    'packages/core/graph-core': {
+      project: ['src/**/*.ts'],
+    },
     'packages/core/result': {
       project: ['src/**/*.ts'],
     },

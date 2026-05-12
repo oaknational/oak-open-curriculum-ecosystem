@@ -7,6 +7,7 @@ packages:
   - packages/core/openapi-zod-client-adapter
   - packages/core/build-metadata
   - packages/core/env
+  - packages/core/graph-core
   - packages/core/result
   - packages/core/type-helpers
   - packages/design/*
