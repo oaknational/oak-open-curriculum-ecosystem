@@ -1,8 +1,20 @@
-Profile the check performance and getting rid of the root scripts, if it needs CI it should be in a workspace
+~~Profile the check performance and getting rid of the root scripts, if it needs CI it should be in a workspace~~
 
-Researching which platforms no longer support commands, if they are going away, and move everything to skills
+graph foundations for MVP
 
-Identify which platforms use which skills sources so that no duplicates are registered
+profile pnpm check
+profile pre-commit hooks
+learning loop consolidation
+skills refresh
+
+land collaboration P-Foundation/P0
+
+agent tools cli overhaul
+agent communication improvements
+
+~~Researching which platforms no longer support commands, if they are going away, and move everything to skills~~
+
+~~Identify which platforms use which skills sources so that no duplicates are registered~~
 
 Profile mcp performance with sentry, finish adding sentry features
 
