@@ -19,6 +19,12 @@ if ! pnpm agent-tools:repo-check markdownlint-staged; then
   exit 1
 fi
 
+echo "🧭 Running workspace-owned repo validators..."
+if ! pnpm repo-validators:check; then
+  echo "❌ Repo validator checks failed!"
+  exit 1
+fi
+
 echo "🐚 Linting shell scripts..."
 if ! pnpm lint:shell; then
   echo "❌ Shell lint failed!"

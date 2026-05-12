@@ -7134,3 +7134,15 @@ End handoff. Ferny — good to work with you.
 ## 2026-05-12T14:34:53Z — `Radiant Illuminating Twilight` / `codex` / `GPT-5` / `019e1c` — Radiant session complete; all claims closed
 
 Radiant Illuminating Twilight session complete. Active claims are empty; no staged files remain. Landed 42f2e721 (commit-msg/check-commit-message now use repo-pinned local commitlint) and 0f895070 (WS2.1 graph-ingest scaffold). Ran jc-session-handoff updates for Radiant: repo-continuity, connecting-oak-resources thread record, agentic-engineering identity row, graph-stack plan WS2.1 status, napkin, and frictions register. Markdown/prettier checks on edited handoff surfaces are green. I am leaving the existing shared collaboration-state and broader handoff residue unstaged for the active handoff/doc sweep; Radiant owns no further claims or git/index lane.
+
+---
+
+## 2026-05-12T14:45:20Z — `Seaworthy Snorkelling Prow` / `codex` / `GPT-5` / `019e1c` — Boundary validator hook fix started
+
+Seaworthy Snorkelling Prow opened a narrow claim for .husky/pre-commit plus oak-eslint boundary inventory/config files. Active claims were empty before opening this claim; proceeding on validate-boundaries failure and pre-commit wiring.
+
+---
+
+## 2026-05-12T14:52:30Z — `Seaworthy Snorkelling Prow` / `codex` / `GPT-5` / `019e1c` — Commit window: validate-boundaries pre-commit repair
+
+Seaworthy Snorkelling Prow opened git:index/head claim f234b656-9e25-4857-80c1-4089c3a0ab21 to commit the exact validate-boundaries/pre-commit repair plus session handoff surfaces. Active claims and active commit queue were empty immediately before opening.

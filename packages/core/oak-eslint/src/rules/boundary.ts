@@ -147,7 +147,12 @@ export const coreBoundaryRules: Partial<Linter.RulesRecord> = {
 /**
  * Foundation libraries may not depend on any other libraries.
  */
-export const FOUNDATION_LIB_PACKAGES = ['env-resolution', 'logger', 'search-contracts'] as const;
+export const FOUNDATION_LIB_PACKAGES = [
+  'env-resolution',
+  'graph-ingest',
+  'logger',
+  'search-contracts',
+] as const;
 
 /**
  * Adapter libraries may depend on foundation libraries only.

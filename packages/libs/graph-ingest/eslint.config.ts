@@ -6,8 +6,8 @@
 
 import {
   configs,
-  coreBoundaryRules,
   createImportResolverSettings,
+  createLibBoundaryRules,
   defineConfigArray,
   ignores as globalIgnores,
   testRules,
@@ -42,7 +42,7 @@ const config = defineConfigArray(
   },
   {
     files: ['src/**/*.ts'],
-    rules: coreBoundaryRules,
+    rules: createLibBoundaryRules('graph-ingest'),
   },
   {
     files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**/*.ts'],

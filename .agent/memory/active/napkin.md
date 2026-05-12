@@ -21,6 +21,32 @@ The most recent rotation is archived at
 [archive-pass]: archive/napkin-2026-05-12b.md
 [previous-pass]: archive/napkin-2026-05-12.md
 
+## 2026-05-12 — Seaworthy Snorkelling Prow / codex / GPT-5 / `019e1c`
+
+### Boundary validator hook closeout
+
+- Repaired `validate-boundaries` after the new `@oaknational/graph-ingest`
+  workspace exposed a stale oak-eslint library inventory: `graph-ingest` belongs
+  in `FOUNDATION_LIB_PACKAGES`, and its own ESLint config should use
+  `createLibBoundaryRules('graph-ingest')` rather than `coreBoundaryRules`.
+- Added `pnpm repo-validators:check` to `.husky/pre-commit` because this
+  validator is fast enough to catch the package-inventory drift before the
+  push boundary.
+- Validation that mattered: `pnpm repo-validators:check`, focused oak-eslint
+  tests/lint/type-check, focused graph-ingest lint/type-check/build, and the
+  full `.husky/pre-commit` hook passed.
+
+### Patterns to Remember
+
+- The graph-ingest failure shape was an inventory tiering miss, not a package
+  creation miss: the package directory and `package.json` existed, but
+  `LIB_PACKAGES` did not include it. Read the validator's "expected/actual"
+  labels against the call site before inferring which side is stale.
+- `agent-tools` collaboration-state commands use the built
+  `agent-tools/dist/src/bin/agent-tools.js` entrypoint. If validation or a new
+  shell lacks that built output, run `pnpm agent-tools:build` before claims,
+  comms, or commit-queue lifecycle commands.
+
 ## 2026-05-12 — Shaded Masking Shadow / codex / GPT-5 / `019e1c`
 
 ### Agentic-tooling closeout for P5 handoff

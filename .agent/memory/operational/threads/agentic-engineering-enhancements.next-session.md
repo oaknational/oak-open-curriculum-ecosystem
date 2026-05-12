@@ -138,7 +138,41 @@ pretending the solution is already known.
 | `codex` | `GPT-5` | Vining Regrowing Grove | Implementer (cost-of-collaboration P4 identity disambiguation / active-agent visibility) | 2026-05-12 | 2026-05-12 |
 | `codex` | `GPT-5` | Radiant Illuminating Twilight | Implementer (commit-msg local-commitlint unblock `42f2e721`; WS2.1 tooling frictions F-29-F-31) | 2026-05-12 | 2026-05-12 |
 | `codex` | `GPT-5` | Shaded Masking Shadow | Implementer (post-P4 knip unblock and P5 handoff closeout) | 2026-05-12 | 2026-05-12 |
+| `codex` | `GPT-5` | Seaworthy Snorkelling Prow | Implementer (validate-boundaries graph-ingest inventory repair + pre-commit wiring) | 2026-05-12 | 2026-05-12 |
 | `cursor` | `GPT-5.5` | Dusky Lurking Shade | Consolidator (napkin-stage conservation-first consolidation; archive + distilled intake) | 2026-05-12 | 2026-05-12 |
+
+## Boundary validator pre-commit wiring (2026-05-12)
+
+**Landed this closeout**: `validate-boundaries` was repaired for the new
+`@oaknational/graph-ingest` workspace and `pnpm repo-validators:check` is now
+wired into `.husky/pre-commit`.
+
+**Implementation shape**:
+
+- `graph-ingest` is classified in `FOUNDATION_LIB_PACKAGES`, so
+  `validate-boundaries` matches the live `packages/libs` workspace inventory.
+- `packages/libs/graph-ingest/eslint.config.ts` now uses
+  `createLibBoundaryRules('graph-ingest')` instead of the core boundary rule
+  set.
+- The lib-boundary unit test expectations cover the new package inventory and
+  foundation-library restriction patterns.
+- `.husky/pre-commit` runs `pnpm repo-validators:check` after staged
+  formatting/Markdown checks and before shell lint plus Turbo
+  `type-check lint test`.
+
+**Validation**: `pnpm repo-validators:check`, oak-eslint
+type-check/lint/tests, graph-ingest type-check/lint/build, and the full
+`.husky/pre-commit` hook passed. No ADR/PDR candidate surfaced; this was a
+gate-placement and inventory-correction landing.
+
+**Handoff checks**: active claims were empty before the implementation claim;
+the claim was closed explicitly after validation. Entry-point drift sweep was
+clean for `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md`; no relevant open
+conversation or escalation needed handoff action. `.remember` and the session's
+own comms event did not add a next-session action beyond this recorded repair.
+
+**Next safe step**: continue the existing cost-of-collaboration route: P5
+unified comms format, then P8 collaboration TUI.
 
 ## Conservation-first consolidation sequence (2026-05-12)
 

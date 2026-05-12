@@ -21137,6 +21137,91 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "0c30abe7-b631-4017-b4f5-08ce9ca3f0c2",
+      "agent_id": {
+        "agent_name": "Seaworthy Snorkelling Prow",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".husky/pre-commit",
+            "packages/core/oak-eslint/src/rules/boundary.ts",
+            "packages/core/oak-eslint/src/rules/lib-boundary.unit.test.ts",
+            "packages/libs/graph-ingest/eslint.config.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T14:45:07Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Fix validate-boundaries inventory for graph-ingest and add repo validators to pre-commit",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T14:47:35Z",
+        "closed_by": {
+          "agent_name": "Seaworthy Snorkelling Prow",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1c"
+        },
+        "summary": "validate-boundaries green, graph-ingest boundary classification corrected, pre-commit now runs repo-validators:check",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0c30abe7-b631-4017-b4f5-08ce9ca3f0c2",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f234b656-9e25-4857-80c1-4089c3a0ab21",
+      "agent_id": {
+        "agent_name": "Seaworthy Snorkelling Prow",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T14:52:24Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit validate-boundaries pre-commit repair plus session handoff.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T14:55:17Z",
+        "closed_by": {
+          "agent_name": "Seaworthy Snorkelling Prow",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1c"
+        },
+        "summary": "committed validate-boundaries pre-commit repair and session handoff",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f234b656-9e25-4857-80c1-4089c3a0ab21",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
