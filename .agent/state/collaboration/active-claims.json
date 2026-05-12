@@ -1272,92 +1272,12 @@
       "updated_at": "2026-05-12T19:51:33.562Z",
       "expires_at": "2026-05-12T20:05:23.017Z",
       "phase": "abandoned",
-      "staged_name_status": "M\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/comms-events/05ccefb8-ca17-49cd-9fcc-ee326d1dfde7.json\nA\t.agent/state/collaboration/comms-events/1a3a34ac-717d-4650-8515-ab85fe721565.json\nA\t.agent/state/collaboration/comms-events/1e70b487-e7cd-4dc3-86c7-be1e5ce993bb.json\nA\t.agent/state/collaboration/comms-events/3adf07ff-0465-4d71-bfe0-a5eeaf41dab6.json\nM\t.agent/state/collaboration/comms-events/5bff4178-305f-471d-9f52-ac4131b899d4.json\nA\t.agent/state/collaboration/comms-events/6983f869-33d1-4f3f-bd80-ed0dad06aa3e.json\nM\t.agent/state/collaboration/comms-events/9344adf1-f16f-4d55-8fc8-27e354a427a6.json\nA\t.agent/state/collaboration/comms-events/b3a997ef-602a-4bc5-8ca7-8f97f10c8c7c.json\nA\t.agent/state/collaboration/comms-events/d6a9d370-5d76-4029-8dde-5980d144fc74.json\nA\t.agent/state/collaboration/comms-messages/0b53b238-0734-40b9-b67e-9d0d21cc6252.json\nA\t.agent/state/collaboration/comms-messages/102e78cd-3704-4077-a620-4bbc3d061ac4.json\nA\t.agent/state/collaboration/comms-messages/341d7d0c-a65d-4307-a778-df54c785aabf.json\nA\t.agent/state/collaboration/comms-messages/5554dc20-807b-4946-9179-5e3d6622d4c2.json\nA\t.agent/state/collaboration/comms-messages/6c03020d-b0fc-4b3d-84d0-5679f7339954.json\nA\t.agent/state/collaboration/comms-messages/8de3d8ff-7a41-4f93-a4e1-bab4411162aa.json\nA\t.agent/state/collaboration/comms-messages/b5913fd4-8201-4495-ac1d-1daca299c9e7.json\nA\t.agent/state/collaboration/comms-messages/edf873cf-ded5-4b1c-bd50-aaf95a3fe5bc.json\nA\t.agent/state/collaboration/comms-messages/f18d6cc2-1ad7-458a-a4f7-616fc0d7cc40.json\nA\t.agent/state/collaboration/comms-messages/f66d5031-dd82-4f5b-ab27-5b6ee4e91ea7.json\nM\t.agent/state/collaboration/shared-comms-log.md\nM\tagent-tools/package.json\nM\tagent-tools/src/collaboration-state/cli-specs.ts\nM\tagent-tools/src/collaboration-state/json.ts\nM\tagent-tools/src/collaboration-state/state-parsers.ts\nA\tagent-tools/src/collaboration-state/state-schemas.ts\nM\tagent-tools/tests/collaboration-state/collaboration-state.unit.test.ts\nA\tagent-tools/tests/collaboration-state/state-parsers-strict.unit.test.ts\nM\tagent-tools/tests/collaboration-state/state-parsers.unit.test.ts\nM\tpnpm-lock.yaml\n",
       "staged_bundle_fingerprint": "db5c8ea167488a5047c814c75611cdaaf2b61950812791c402847960386b6fce",
+      "staged_name_status": "M\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/comms-events/05ccefb8-ca17-49cd-9fcc-ee326d1dfde7.json\nA\t.agent/state/collaboration/comms-events/1a3a34ac-717d-4650-8515-ab85fe721565.json\nA\t.agent/state/collaboration/comms-events/1e70b487-e7cd-4dc3-86c7-be1e5ce993bb.json\nA\t.agent/state/collaboration/comms-events/3adf07ff-0465-4d71-bfe0-a5eeaf41dab6.json\nM\t.agent/state/collaboration/comms-events/5bff4178-305f-471d-9f52-ac4131b899d4.json\nA\t.agent/state/collaboration/comms-events/6983f869-33d1-4f3f-bd80-ed0dad06aa3e.json\nM\t.agent/state/collaboration/comms-events/9344adf1-f16f-4d55-8fc8-27e354a427a6.json\nA\t.agent/state/collaboration/comms-events/b3a997ef-602a-4bc5-8ca7-8f97f10c8c7c.json\nA\t.agent/state/collaboration/comms-events/d6a9d370-5d76-4029-8dde-5980d144fc74.json\nA\t.agent/state/collaboration/comms-messages/0b53b238-0734-40b9-b67e-9d0d21cc6252.json\nA\t.agent/state/collaboration/comms-messages/102e78cd-3704-4077-a620-4bbc3d061ac4.json\nA\t.agent/state/collaboration/comms-messages/341d7d0c-a65d-4307-a778-df54c785aabf.json\nA\t.agent/state/collaboration/comms-messages/5554dc20-807b-4946-9179-5e3d6622d4c2.json\nA\t.agent/state/collaboration/comms-messages/6c03020d-b0fc-4b3d-84d0-5679f7339954.json\nA\t.agent/state/collaboration/comms-messages/8de3d8ff-7a41-4f93-a4e1-bab4411162aa.json\nA\t.agent/state/collaboration/comms-messages/b5913fd4-8201-4495-ac1d-1daca299c9e7.json\nA\t.agent/state/collaboration/comms-messages/edf873cf-ded5-4b1c-bd50-aaf95a3fe5bc.json\nA\t.agent/state/collaboration/comms-messages/f18d6cc2-1ad7-458a-a4f7-616fc0d7cc40.json\nA\t.agent/state/collaboration/comms-messages/f66d5031-dd82-4f5b-ab27-5b6ee4e91ea7.json\nM\t.agent/state/collaboration/shared-comms-log.md\nM\tagent-tools/package.json\nM\tagent-tools/src/collaboration-state/cli-specs.ts\nM\tagent-tools/src/collaboration-state/json.ts\nM\tagent-tools/src/collaboration-state/state-parsers.ts\nA\tagent-tools/src/collaboration-state/state-schemas.ts\nM\tagent-tools/tests/collaboration-state/collaboration-state.unit.test.ts\nA\tagent-tools/tests/collaboration-state/state-parsers-strict.unit.test.ts\nM\tagent-tools/tests/collaboration-state/state-parsers.unit.test.ts\nM\tpnpm-lock.yaml\n",
       "notes": "Abandoned after verify-staged failed because closed-claims.archive.json has no staged diff before claim closure. Switching to a source/state commit first, with claim closure as follow-up lifecycle residue."
-    },
-    {
-      "intent_id": "fb6b7ccb-5947-4b4c-92f9-0582c6c7cff7",
-      "claim_id": "8aa6947d-e091-459e-a7f4-6948a2b7594c",
-      "agent_id": {
-        "agent_name": "Verdant Foraging Copse",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e1d"
-      },
-      "files": [
-        "agent-tools/package.json",
-        "pnpm-lock.yaml",
-        "agent-tools/src/collaboration-state/cli-specs.ts",
-        "agent-tools/src/collaboration-state/json.ts",
-        "agent-tools/src/collaboration-state/state-parsers.ts",
-        "agent-tools/src/collaboration-state/state-schemas.ts",
-        "agent-tools/tests/collaboration-state/collaboration-state.unit.test.ts",
-        "agent-tools/tests/collaboration-state/state-parsers.unit.test.ts",
-        "agent-tools/tests/collaboration-state/state-parsers-strict.unit.test.ts",
-        ".agent/state/collaboration/comms-events/05ccefb8-ca17-49cd-9fcc-ee326d1dfde7.json",
-        ".agent/state/collaboration/comms-events/5bff4178-305f-471d-9f52-ac4131b899d4.json",
-        ".agent/state/collaboration/comms-events/9344adf1-f16f-4d55-8fc8-27e354a427a6.json",
-        ".agent/state/collaboration/comms-events/1a3a34ac-717d-4650-8515-ab85fe721565.json",
-        ".agent/state/collaboration/comms-events/1e70b487-e7cd-4dc3-86c7-be1e5ce993bb.json",
-        ".agent/state/collaboration/comms-events/3adf07ff-0465-4d71-bfe0-a5eeaf41dab6.json",
-        ".agent/state/collaboration/comms-events/6983f869-33d1-4f3f-bd80-ed0dad06aa3e.json",
-        ".agent/state/collaboration/comms-events/b3a997ef-602a-4bc5-8ca7-8f97f10c8c7c.json",
-        ".agent/state/collaboration/comms-events/d6a9d370-5d76-4029-8dde-5980d144fc74.json",
-        ".agent/state/collaboration/comms-messages/6c03020d-b0fc-4b3d-84d0-5679f7339954.json",
-        ".agent/state/collaboration/comms-messages/8de3d8ff-7a41-4f93-a4e1-bab4411162aa.json",
-        ".agent/state/collaboration/comms-messages/102e78cd-3704-4077-a620-4bbc3d061ac4.json",
-        ".agent/state/collaboration/comms-messages/b5913fd4-8201-4495-ac1d-1daca299c9e7.json",
-        ".agent/state/collaboration/comms-messages/f66d5031-dd82-4f5b-ab27-5b6ee4e91ea7.json",
-        ".agent/state/collaboration/comms-messages/edf873cf-ded5-4b1c-bd50-aaf95a3fe5bc.json",
-        ".agent/state/collaboration/comms-messages/341d7d0c-a65d-4307-a778-df54c785aabf.json",
-        ".agent/state/collaboration/comms-messages/f18d6cc2-1ad7-458a-a4f7-616fc0d7cc40.json",
-        ".agent/state/collaboration/comms-messages/0b53b238-0734-40b9-b67e-9d0d21cc6252.json",
-        ".agent/state/collaboration/comms-messages/5554dc20-807b-4946-9179-5e3d6622d4c2.json",
-        ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/shared-comms-log.md"
-      ],
-      "commit_subject": "feat(agent-tools): add strict comms event parsing",
-      "queued_at": "2026-05-12T19:51:40.605Z",
-      "updated_at": "2026-05-12T19:51:43.477Z",
-      "expires_at": "2026-05-12T20:06:40.605Z",
-      "phase": "staging"
     }
   ],
   "claims": [
-    {
-      "claim_id": "29946268-c3a2-4e74-b78f-3f61797e77be",
-      "agent_id": {
-        "agent_name": "Verdant Foraging Copse",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e1d"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "agent-tools/package.json",
-            "pnpm-lock.yaml",
-            "agent-tools/src/collaboration-state",
-            "agent-tools/tests/collaboration-state",
-            ".agent/state/collaboration/comms-events/05ccefb8-ca17-49cd-9fcc-ee326d1dfde7.json",
-            ".agent/state/collaboration/comms-events/5bff4178-305f-471d-9f52-ac4131b899d4.json",
-            ".agent/state/collaboration/comms-events/9344adf1-f16f-4d55-8fc8-27e354a427a6.json",
-            ".agent/state/collaboration/active-claims.json",
-            ".agent/state/collaboration/closed-claims.archive.json",
-            ".agent/state/collaboration/shared-comms-log.md",
-            ".agent/state/collaboration/comms-events"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-12T19:32:20Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "P5 strict comms parser slice: normalise legacy narrative recipients, add Zod boundary schemas, and reject malformed comms event shapes in source/tests.",
-      "notes": "Overlap decision: Twigged claim 23e0ec2e owns pending-graduations consolidation and broad plan/rule surfaces. I will not edit pending-graduations, rules, PDRs, napkin, or cost-of-collaboration plan in this source slice; shared collaboration-state writes are coordination-visible and always writable."
-    },
     {
       "claim_id": "351219e4-6b39-470e-84b8-53162b25afab",
       "agent_id": {
@@ -1379,29 +1299,6 @@
       "freshness_seconds": 7200,
       "sidebar_open": false,
       "intent": "Draft Ferny-assigned WS1.6 vocab planning prep note only; no implementation and no git/index activity before a fresh commit protocol."
-    },
-    {
-      "claim_id": "8aa6947d-e091-459e-a7f4-6948a2b7594c",
-      "agent_id": {
-        "agent_name": "Verdant Foraging Copse",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e1d"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": [
-            "index/head"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-12T19:54:30Z",
-      "freshness_seconds": 900,
-      "sidebar_open": false,
-      "intent": "Stage and commit P5 strict comms parser slice after Luminous GO.",
-      "intent_to_commit": "fb6b7ccb-5947-4b4c-92f9-0582c6c7cff7"
     }
   ]
 }
