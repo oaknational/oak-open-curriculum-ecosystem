@@ -1,17 +1,55 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
-**Next anticipated work**: **Re-plan the remaining 12 Inc.1a cycles
-of `graph-stack.plan.md`** per owner direction at WS1.2 close
-(2026-05-12). Re-evaluation must precede opening WS1.3. After
-re-plan, the next executable cycle is Inc.1a WS1.3 (DatasetCore-
-compatible interface, RDF/JS-aligned, with add/has/match unit
-tests; one commit, atomic-landing; YAML todo
-`ws1-dataset-core` in the active plan). Reviewer flag for WS1.3:
-type-expert (Quad-store generic API + iterator typing) plus
-architecture-expert-betty (cohesion of the RDF/JS DataModel
-surface vs the new DatasetCore surface).
+**Next anticipated work**: **Open WS1.3 (DatasetCore + DataFactory)**
+per the 2026-05-12 holistic re-plan. WS1.3 lands the RDF/JS-aligned
+DatasetCore interface (1:1 with `@rdfjs/types` Dataset surface:
+add/has/match/delete/iterable/size) plus DataFactory-style Term
+constructors (namedNode, blankNode, literal, defaultGraph,
+tripleTerm, quad). One commit, atomic-landing. Reviewer flags
+(authoritative source is the YAML `content` field for
+`ws1-dataset-core` in the active plan): type-expert (generic
+match() iterator typing, @rdfjs/types alignment, DataFactory
+literal-preservation) plus architecture-expert-betty (cohesion of
+Dataset surface vs RDF/JS DataModel; whether DataFactory belongs
+in the same cycle or its own). Inc.1a remaining cycle count is 10
+(12 → 10 after V2 collapse + V3 deferral); the per-cycle inherited
+patterns and reviewer flags are now recorded inline in each YAML
+todo. WS1.6 vocab-registry's bare-literal-first-pass alternative
+is an owner-direction flag for WS1.6 dispatch time, not blocking
+WS1.3.
 
-**Last refreshed**: 2026-05-12 (Starlit Scattering Moon /
+**Last refreshed**: 2026-05-12 (Clouded Vaulting Squall /
+`claude` / `claude-opus-4-7-1m` / `866472` — holistic re-plan of
+Inc.1a remaining cycles landed at `f73c42f5`. Plan-file diff
++79/-43. Five verdicts applied: V1 WS1.6 vocab-registry recorded
+as file-scope parallel-safe with WS1.3 (dependency edge kept on
+WS1.3 because vocab consumes the DataFactory namedNode
+constructor; bare-literal-first alternative flagged for owner
+direction). V2 WS1.4 expand + WS1.5 compact-frame collapsed into
+one WS1.4 jsonld-processor cycle (shared file scope; framing-
+determinism invariant #8 contract test cannot land without both
+surfaces). V3 WS1.8 GraphDocument deferred to Inc.2 with
+owner-set retrospective-review tripwire on §Increments row 2 —
+the Inc.2 plan that takes ownership of GraphDocument MUST design-
+review Inc.1 surfaces (WS1.3 Dataset + DataFactory, WS1.4 jsonld
+processor, WS1.5 canon, WS1.6 vocab, WS2 graph-ingest, WS3
+graph-project, WS4 graph-corpus-sdk) to identify what could be
+expressed more efficiently, collapsed/removed, or reshaped
+through GraphDocument; the review's verdict is binding on Inc.2
+scope. V4 WS2.1 + WS3.1 scaffold depends_on corrected from
+ws1-graph-document to ws1-graph-core-scaffold with inter-scaffold
+serialisation invariant recorded. V5 WS3.3 adjacency scope
+sharpened to property-graph node→node traversal only;
+architecture-expert-barney collapse-vs-keep boundary check
+flagged. Inherited patterns from WS1.1 + WS1.2 written into each
+cycle: scaffold checklist (depcruise pathNot, eslint wsTsProject,
+five-file bundle), per-kind checker-array dispatch for
+discriminated-union equality, RDF/JS Data Model uniform-value-
+string posture, "tree green" aligned to `.husky/pre-commit` as
+authoritative source. Per-cycle reviewer flags now recorded
+inline in YAML content fields. WS7 closure quality-gate
+enumeration replaced with `pnpm check` reference). Previous
+refresh: 2026-05-12 (Starlit Scattering Moon /
 `claude` / `claude-opus-4-7-1m` / `edd1fb` — landed WS1.2 at
 `1885fbcf`: 3 files +443/-2; `packages/core/graph-core/term/`
 ships RDF/JS-aligned RDF 1.2 Term hierarchy (NamedNode | BlankNode |
@@ -653,6 +691,7 @@ promotion.)
 | `Sparking Charring Ash` | `claude-code` | `claude-opus-4-7-1m` | `caf5e1` | `graph-foundation-work-orphan-bundle-land-adr-ratification-plan-promotion-ws1-1-refinement-three-reviewer-followup` | 2026-05-11 | 2026-05-12 |
 | `Celestial Transiting Satellite` | `claude` | `claude-opus-4-7-1m` | `9bc8e3` | `ws1-1-graph-core-scaffold-landed-at-ad2abb69` | 2026-05-12 | 2026-05-12 |
 | `Starlit Scattering Moon` | `claude` | `claude-opus-4-7-1m` | `edd1fb` | `ws1-2-rdf-term-hierarchy-and-quad-equality-landed-at-1885fbcf` | 2026-05-12 | 2026-05-12 |
+| `Clouded Vaulting Squall` | `claude` | `claude-opus-4-7-1m` | `866472` | `inc-1a-holistic-re-plan-author-12-to-10-cycles-landed-at-f73c42f5` | 2026-05-12 | 2026-05-12 |
 
 ## Plan Locations
 

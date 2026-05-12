@@ -61,6 +61,47 @@ The most recent rotation is archived at
   surfaces. This is the correct residual signal: the queue still needs a real
   graduation/archive drain, not metric-shaped trimming.
 
+## 2026-05-12 — Prismatic Beaming Twilight / claude / haiku-4-5 / `501be6`
+
+### Multi-Agent Delegation Orchestration Design
+
+- Examined the codex-helper skill and codex-exec CLI to understand the existing
+  Codex delegation pattern, then asked: "What if other agents (Cursor, Claude,
+  internal) needed to delegate too?"
+- Initial frame was "build a Claude invoker like Codex" but metacognition
+  revealed the real question: "How do we let each platform be itself while
+  using unified contracts?"
+- Design breakthrough: three-layer architecture:
+  - **Invocation** (platform-specific, stays that way)
+  - **Contract** (unified, defined before code)
+  - **Coordination** (unified, already exists as comms-log + claims)
+- Invokers are NOT replacements for each other; they're complementary. Codex
+  uses `codex exec --json` with sandbox modes. Claude uses Anthropic SDK with
+  streaming. Cursor uses its native patterns. All return the same contract shape.
+- The dispatcher doesn't prescribe HOW to reach agents, only orchestrates the
+  coordination and contract layers. This is where the power comes from.
+- Strategic brief captured in future plans with explicit open questions
+  (discovery, credentials, timeout/failure, structured output, observability,
+  cascading). These are not gaps; they're architectural decisions deferred to
+  promotion phase.
+- Assumptions section made load-bearing ones explicit and deferrable ones
+  optional. Separates "what we know" from "what we're betting on."
+- Pattern to remember: **Metacognition works best when the initial frame is
+  slightly wrong.** Pausing to reflect on "why am I thinking about this as
+  Codex-vs-Claude" surfaced the deeper insight: "what are the platform-neutral
+  pieces and where do they belong?"
+
+### Patterns to Remember
+
+- **Unified contracts, platform-native invocation**: This is the right shape for
+  multi-vendor agent orchestration. Forces better separation of concerns.
+- **Explicit open questions are design artifacts**: Six numbered open questions
+  in the strategic brief are more useful than six undefined design decisions
+  lurking in PRs.
+- **Three-layer mental model**: When extending patterns to multiple platforms,
+  ask: (1) What's platform-specific? (2) What's shared? (3) What already exists?
+  These usually map cleanly to architecture layers.
+
 ## 2026-05-12 — Penumbral Veiling Raven / codex / GPT-5 / `019e1c`
 
 ### Cost-of-Collaboration P2
@@ -861,3 +902,48 @@ review-before-graduate discipline.
   the plan body's "tree green" definition is a snapshot that can drift
   during cost-of-collaboration evolution. Plan body will catch up; the
   hook is the source of truth.
+
+### Surprise — re-plan deltas after only two cycles landed
+
+- **Setup**: owner directed a holistic re-examination of the remaining 12
+  Inc.1a cycles of `graph-stack.plan.md` immediately after WS1.2 landed
+  — not at a sub-increment boundary, not at a phase close, just two
+  cycles into the workstream.
+- **What I expected**: a touch-up — apply WS1.1/WS1.2 discoveries to
+  later cycles' acceptance text, refresh reviewer flags, done.
+- **What actually emerged when I walked the dependency chain backwards
+  from Inc.1c**: five substantive shape changes (V1 newly-visible
+  parallel-safe pair within graph-core; V2 collapse of two cycles
+  sharing file scope; V3 YAGNI deferral of GraphDocument because no
+  Inc.1 consumer reads through it; V4 over-constrained scaffold
+  `depends_on` edges; V5 sharpened adjacency scope to avoid duplicating
+  `DatasetCore.match()`). 12 → 10 cycles.
+- **Insight**: two cycles is enough signal to find significant
+  shape-drift in the remaining plan. The cycles you have *not yet
+  written* are often more wrong than the ones you have, because no
+  consumer has pushed back against their definitions yet. The
+  "re-plan after pair lands" cadence catches this before the third
+  cycle multiplies the drift.
+- **Pattern candidate**: after the second cycle in a workstream lands,
+  *before* opening the third, walk the dependency chain backwards from
+  the workstream's end-goal and ask of each remaining cycle: what
+  does the consumer immediately downstream of this cycle actually
+  need? Cycles whose answer is "nothing concrete" are YAGNI candidates.
+
+### Surprise — owner-set tripwire on a deferred concept
+
+- **Setup**: when I proposed deferring WS1.8 GraphDocument to Inc.2
+  (V3), owner accepted but added: include a tripwire in its new home
+  to go back and see what could be expressed more efficiently — or
+  allowed to exist at all — with the new concept.
+- **Insight**: deferral is not silent removal. A concept deferred to
+  a later increment carries a verdict-binding obligation to
+  retrospectively review the surfaces shipped without it, once it
+  lands. Without the tripwire, the deferred concept arrives as an
+  *additional* surface bolted on top of the inherited shape, and the
+  opportunity to collapse/reshape inherited surfaces is missed.
+- **Pattern candidate**: "deferral-with-retrospective-review-tripwire"
+  — every defer-to-a-later-increment decision MUST record a binding
+  retrospective-review obligation on the receiving plan, naming the
+  surfaces to examine and the criteria for collapse/reshape/keep.
+  Without the tripwire, deferral becomes pure accumulation.

@@ -2909,3 +2909,51 @@ candidate is not merely "one gatekeeper"; it is "green-light implies a
 write-freeze, isolation surface, or controlled post-sweep refresh before the
 peer commit retries." This should graduate only after B-02/B-03/T-R4-new or an
 equivalent commit-window cure makes the rule mechanically actionable.
+
+### 2026-05-12 — Re-plan after second cycle lands (Clouded Vaulting Squall)
+
+`[CANDIDATE: re-plan-after-cycle-pair-lands | captured: 2026-05-12 |
+source: napkin + connecting-oak-resources thread re-plan session |
+graduation-target: new PDR for workstream-evolution cadence | trigger:
+second instance of holistic re-plan finding 3+ substantive verdicts
+after only two cycles landed; status: pending | size: M]`
+
+After WS1.2 of graph-stack Inc.1a landed (the second cycle of the
+workstream), owner directed a holistic re-examination of the
+remaining 12 cycles. Five substantive verdicts emerged (V1 new
+parallel-safe pair; V2 collapse of two cycles sharing file scope; V3
+YAGNI deferral of a speculative ergonomic surface; V4 over-constrained
+scaffold `depends_on`; V5 sharpened scope to avoid surface duplication).
+12 → 10 cycles. The drift was discoverable only by walking the
+dependency chain backwards from the workstream's end-goal and asking
+of each remaining cycle: "what does the immediate downstream consumer
+of this cycle actually need?" — a question the original plan-writing
+session could not answer with the same precision because no cycle had
+yet pushed back against any definition. Candidate doctrine: after the
+second cycle in a workstream lands, before opening the third, run a
+backwards-walk re-plan pass.
+
+### 2026-05-12 — Deferral with retrospective-review tripwire (Clouded Vaulting Squall)
+
+`[CANDIDATE: deferral-with-retrospective-review-tripwire | captured:
+2026-05-12 | source: connecting-oak-resources thread, V3 owner
+direction during graph-stack Inc.1a re-plan | graduation-target: new
+rule or new PDR on cross-increment scope deferral | trigger: second
+instance of an owner-set retrospective-review tripwire attached to a
+defer-to-later-increment decision; status: pending | size: S]`
+
+When V3 deferred WS1.8 GraphDocument from Inc.1 to Inc.2, owner did
+not accept silent deferral — they required a verdict-binding
+retrospective-review tripwire on Inc.2's row: the Inc.2 plan that
+takes ownership of GraphDocument MUST design-review Inc.1 surfaces
+(WS1.3 Dataset + DataFactory, WS1.4 jsonld processor, WS1.5 canon,
+WS1.6 vocab, WS2 graph-ingest, WS3 graph-project, WS4
+graph-corpus-sdk) to identify what could be (a) expressed more
+efficiently, (b) collapsed/removed, or (c) reshaped through
+GraphDocument. The review's verdict is binding on Inc.2 scope.
+Candidate doctrine: every defer-to-a-later-increment decision MUST
+record a verdict-binding retrospective-review obligation on the
+receiving plan, naming the surfaces to examine and the criteria for
+collapse/reshape/keep. Without the tripwire, deferral becomes pure
+accumulation — the deferred concept arrives bolted on top of the
+inherited shape and the opportunity to reshape is missed.
