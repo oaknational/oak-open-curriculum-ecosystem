@@ -14,7 +14,7 @@ import {
   type CollaborationRegistry,
 } from './types.js';
 
-export interface ActiveClaimSummary {
+interface ActiveClaimSummary {
   readonly claim_id: string;
   readonly thread: string;
   readonly freshness_status: 'fresh' | 'stale';
@@ -22,7 +22,7 @@ export interface ActiveClaimSummary {
   readonly intent: string;
 }
 
-export interface ActiveCommitQueueSummary {
+interface ActiveCommitQueueSummary {
   readonly intent_id: string;
   readonly claim_id: string;
   readonly phase: CollaborationCommitQueueEntry['phase'];
@@ -41,7 +41,7 @@ export interface ActiveAgentReport {
   readonly closed_claims: readonly ClosedClaimSummary[];
 }
 
-export interface ClosedClaimSummary {
+interface ClosedClaimSummary {
   readonly claim_id: string;
   readonly thread: string;
   readonly closure_kind: 'explicit' | 'stale' | 'owner_forced' | 'unknown';
