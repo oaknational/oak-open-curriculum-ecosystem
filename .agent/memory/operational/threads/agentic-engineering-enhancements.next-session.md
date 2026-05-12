@@ -5,7 +5,9 @@
 > P3 commit-queue enforcement, and P4 identity routing are complete; P4 landed
 > at `1bb369a5`, and the post-P4 knip unblock landed at `730766ad`. New CLI
 > work lands in the unified `agent-tools <topic> <action>` shape from
-> `cost-of-collaboration.plan.md`.
+> `cost-of-collaboration.plan.md`. P8 is mandatory, not optional polish: the
+> live TUI must make collaboration value visible to humans in the moment, not
+> merely after-the-fact throughput claims.
 >
 > **New strategic work** (2026-05-12): Prismatic Beaming Twilight session designed
 > multi-agent delegation orchestration architecture extending ADR-180 beyond Codex
@@ -139,8 +141,32 @@ pretending the solution is already known.
 | `codex` | `GPT-5` | Radiant Illuminating Twilight | Implementer (commit-msg local-commitlint unblock `42f2e721`; WS2.1 tooling frictions F-29-F-31) | 2026-05-12 | 2026-05-12 |
 | `codex` | `GPT-5` | Shaded Masking Shadow | Implementer (post-P4 knip unblock and P5 handoff closeout) | 2026-05-12 | 2026-05-12 |
 | `codex` | `GPT-5` | Seaworthy Snorkelling Prow | Implementer (validate-boundaries graph-ingest inventory repair + pre-commit wiring) | 2026-05-12 | 2026-05-12 |
+| `codex` | `GPT-5` | Shadowed Dimming Veil | Reviewer/synthesiser (cost-of-collaboration reviewer synthesis; P8 mandatory live-TUI routing) | 2026-05-12 | 2026-05-12 |
 | `cursor` | `GPT-5.5` | Dusky Lurking Shade | Consolidator (napkin-stage conservation-first consolidation; archive + distilled intake) | 2026-05-12 | 2026-05-12 |
 | `cursor` | `GPT-5.5` | Volcanic Charring Furnace | Consolidator (distilled-stage conservation routing; durable homes + pending follow-ups) | 2026-05-12 | 2026-05-12 |
+
+## Cost-of-collaboration reviewer synthesis (2026-05-12)
+
+**Session**: Shadowed Dimming Veil / `codex` / `GPT-5` / `019e1c`.
+
+**What landed**: reviewer synthesis was recorded in
+[`cost-of-collaboration.plan.md`](../../plans/agent-tooling/current/cost-of-collaboration.plan.md)
+after code reviewer, all four architecture reviewers, test reviewer, type
+reviewer, docs/ADR reviewer, design-system reviewer, config reviewer, and
+React/Ink reviewer inspected P-Foundation/P1-P4/P8.
+
+**Key routing outcome**: `cdfb8959` remains a useful P8 snapshot/text-mode
+slice, but not P8 completion. P8 is mandatory and must become a live
+human-visible operator surface, showing active collaborators, recent changes,
+waiting work, queue pressure, and directed-thread pressure. It is not a
+discretionary demo task and not replaceable by a numeric "three agents are
+faster" claim.
+
+**Next safe step**: continue P5 unified comms format with the reviewer findings
+in mind, then complete mandatory P8 live TUI before resuming P6/P7 unless the
+owner changes the sequence. The P8 completion bar now includes unified comms,
+automatic refresh, inactive-agent visibility, strict Zod boundary validation,
+human-visible live value signals, and component/CLI behaviour tests.
 
 ## Boundary validator pre-commit wiring (2026-05-12)
 

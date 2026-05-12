@@ -42,7 +42,7 @@ todos:
     content: Collapse the three-directory split (`comms-events/`, `comms-lifecycle/`, `comms-messages/`) and the three `$defs` into a single shape with a `kind` discriminant. Owner-relayed direction "ONE comms format used everywhere, no legacy lingering."
     status: pending
   - id: ws-p8-collaboration-tui
-    content: Build a human-facing real-time TUI for the main comms thread, direct-message threads, and active-agent state so operators can watch collaboration without tailing rendered markdown or raw JSON event directories. Owner-directed sequence update 2026-05-12: run immediately after P5.
+    content: Build a human-facing real-time TUI for the main comms thread, direct-message threads, and active-agent state so operators can watch collaboration without tailing rendered markdown or raw JSON event directories. Owner-directed sequence update 2026-05-12: run immediately after P5. Review update 2026-05-12: cdfb8959 landed a useful snapshot/text-mode slice and Ink primitives, but P8 acceptance remains pending until real-time refresh, unified comms source, inactive-agent visibility, and boundary/tooling gaps are resolved.
     status: pending
   - id: ws-p6-coordination-artefact-isolation
     content: Isolate coordination artefacts (sidebars, comms-events, monitor telemetry) from gate-visible repo state. Either separate branch/worktree or gitignored space.
@@ -92,6 +92,172 @@ This plan does NOT re-execute work that has already landed (B-10 compat
 shims landed at `0be469a9`; F-15 fingerprint-recursion guard landed at
 `70e746a3`). It re-frames the *remaining* and *newly-named* work in a
 single P-ordered list.
+
+## Reviewer synthesis — 2026-05-12
+
+**Review scope**: branch `feat/mcp-graph-support-foundation`, especially
+P-Foundation/P1/P2/P3/P4/P8 and `cdfb8959` (`feat(agent-tools): add
+collaboration tui with design primitives`).
+
+**Reviewers consulted**: code reviewer; architecture reviewers Barney, Betty,
+Fred, and Wilma; test reviewer; type reviewer; docs/ADR reviewer;
+design-system reviewer; config reviewer; React/Ink reviewer.
+
+**Verdict**: the landed TUI and design-primitives commit is useful operator
+surface area, but it is a **P8 snapshot slice**, not P8 completion. A live TUI
+is not optional: it is the human-visible proof surface for this whole
+cost-of-collaboration arc. The reviewers converged that the current slice can
+increase some collaboration costs by making an old storage shape and a partial
+visibility model look authoritative. Do not route future work as though P8
+acceptance has landed.
+
+**Owner constraint recorded during review**: `.agent/directives/principles.md`
+commits this repo to "Strict and complete, everywhere, all the time." For the
+collaboration-state readers, that means strict Zod validation at the boundary,
+not partial parsing followed by trusted TypeScript casts.
+
+### Cross-review findings
+
+1. **P8 landed before P5 and now consumes the split comms store.** The plan
+   says P5 collapses `comms-events/`, `comms-lifecycle/`, and
+   `comms-messages/` into one discriminated event shape, and P8 builds on
+   that. The landed TUI hard-codes and reads the three legacy directories,
+   which makes the P5 migration more expensive. Keep P8 pending until either
+   P5 lands or a clearly temporary adapter is added and scheduled for deletion.
+
+2. **The TUI is manually refreshed, not real time.** Reviewers found no watch
+   loop, interval, or reuse of `comms watch`; the controller refreshes only
+   when the operator presses `r`. In a claim handoff or commit-queue race, this
+   can present stale state with dashboard authority. P8 needs an injected
+   update source, automatic refresh, stale-result protection, and behavioural
+   tests before it satisfies the acceptance criteria.
+
+3. **Inactive-agent visibility is narrower than the acceptance text.**
+   `activeAgentReports` can model closed-only inactive agents, but the TUI
+   snapshot filters reports down to agents with live claims or queue entries.
+   That hides useful identity/collision/debugging history and violates the P8
+   requirement that active, stale, inactive, and uncertain agents appear in one
+   surface.
+
+4. **P3 enforcement remains partly advisory.** The commit-queue guard exists,
+   but ordinary explicit `git add path` can still skip it. The guard also
+   needs to reject stale `git:index/head` claims, not just matching claim ids.
+   Either attach enforcement to the actual staging workflow or downgrade the
+   recorded P3 claim from "enforced" to "guard command landed".
+
+5. **Runtime validation is not strict enough for collaboration state.**
+   The type reviewer found `parseClaim` spreading partially checked JSON into
+   a trusted `CollaborationClaim`, allowing optional and nested fields to keep
+   invalid runtime shapes. This conflicts with the strict/complete principle
+   and should move to strict Zod schemas for active claims, closed claims,
+   comms events, queue state, and TUI snapshot inputs.
+
+6. **Schema/version contracts disagree.** JSON schemas allow older v1.x
+   versions and describe opaque preservation for future additive minor fields,
+   while TypeScript parsers accept only `1.3.0` and reject unknown area kinds.
+   Either narrow the schema/docs to latest-only or implement the advertised
+   compatible-v1 contract in the parser and types.
+
+7. **The TUI widens the hot CLI dependency graph.** `cli-specs.ts` eagerly
+   imports the TUI handler, which imports Ink, React, and `oak-design-ink`.
+   Routine commands such as identity preflight and claims list now depend on
+   the interactive UI graph. Lazy-load the TUI path, or keep terminal
+   primitives local until the boundary decision is settled.
+
+8. **Design/package boundaries need reconciliation.** Architecture reviewers
+   flagged the `agent-tools -> packages/design` dependency against ADR-041's
+   boundary matrix. Design review also found `oak-design-ink` can import
+   `design-tokens-core` directly even though ADR-148 describes it as depending
+   on `oak-design-tokens`. Resolve the ADR/enforcement mismatch before adding
+   more reusable Ink surface.
+
+9. **Quality-tooling coverage regressed.** Config review confirmed `pnpm knip`
+   is red because `knip.config.ts` does not include `.tsx` consumers in
+   `agent-tools` and does not model the new `oak-design-ink` workspace. The
+   root `agent-tools:build` helper also does not prove the runtime closure for
+   built `agent-tools` once it imports built design packages.
+
+10. **P-Foundation is complete only for the dispatcher/build-isolation slice.**
+    Reviewers agreed the unified entrypoint landed useful plumbing, but the
+    acceptance item "ordinary workflows hide mechanics" is still open:
+    `--active`, `--now`, claim ids, intent ids, and registry paths remain
+    ordinary operator inputs. Split the completed single-dispatcher work from
+    an open ergonomics/F-19 slice.
+
+11. **Readers are too fragile under malformed or racing files.** One malformed
+    event file can take down readers because event directories parse as all or
+    nothing. The TUI reads active claims, closed claims, comms, and queue state
+    as separate unprotected snapshots, so a concurrent close/handoff can render
+    an impossible mixed moment. Readers should degrade per file, surface
+    diagnostics, and either retry or declare snapshot incoherence.
+
+12. **Watch/read state has small operational traps.** The documented `.seen/`
+    path for `comms watch` can fail when the parent directory does not exist.
+    Queue expiry rendering treats invalid timestamps as active-looking.
+    Staged-file discovery still parses newline-delimited paths instead of a
+    NUL-safe form. These are minor today, but exactly the kind of edges that
+    become expensive during multi-agent pressure.
+
+13. **CLI option contracts are split and drift-prone.** Known option keys,
+    command specs, and help text are separate string lists; some existing
+    options can parse a missing value as `"true"`. TUI default paths also erase
+    their key union with `Record<string, string>`. Move option metadata to one
+    typed registry with explicit `requiresValue` semantics.
+
+14. **React/Ink interaction needs state-machine hardening.** Scroll offsets are
+    stored unbounded, so panes can appear stuck after repeated down-arrow input.
+    Manual refresh has no in-flight or stale-result protection, so older
+    refreshes can overwrite newer snapshots. Add component/hook tests for tab
+    switching, bounded scrolling, refresh success/failure, and quit handling.
+
+15. **Ink design primitives are useful but too raw.** `Panel` only accepts a
+    string title, so active-pane state is encoded by mutating title text.
+    `OakText` exposes raw Ink `color`/`backgroundColor`, and consumers still
+    use raw `dimColor`. Add tokenised tone/active/header APIs so the design
+    primitive carries the convention rather than each consumer.
+
+16. **Terminal theme semantics need more status tokens.** The TUI hard-codes
+    dark mode with no CLI theme option. Warning currently reuses the focus-ring
+    semantic token, collapsing operational status meaning; status badges imply
+    distinct semantics that the token projection does not yet provide.
+
+17. **Test coverage describes implementation shape too narrowly.** The TUI
+    tests cover snapshot projection and text formatting, but not CLI dispatch,
+    invalid `--format`, default path resolution, real-time updates, inactive
+    closed-only agents, or component interaction. P2 watch fallback uses timing
+    and filesystem effects rather than deterministic injected sources. Several
+    unit/integration files still mix real filesystem IO with in-process tests.
+
+18. **Docs/ADR state has drift.** P8 still reads as pending-after-P5 while a
+    partial P8 slice has landed; this note preserves that distinction. ADR-178
+    overstates build-isolation coverage because some operational scripts still
+    build or run source-mode. The ADR index omits recent ADRs, ADR links point
+    at non-existent filenames, and this plan still contains machine-local
+    Claude memory links.
+
+19. **Small diagnostics and exports matter.** Boundary diagnostics can name
+    `oak-design-tokens` when the forbidden import is `oak-design-ink`.
+    TUI-specific help is hard to reach because top-level help intercepts it.
+    TUI entry types are not exported through the collaboration-state barrel.
+    A stale Knip ignore for `@commitlint/cli` remains after the hook change.
+
+### Recommended routing
+
+1. Treat `cdfb8959` as a landed **snapshot v1** and keep P8 open. P8 remains
+   mandatory, not a discretionary polish or demo task.
+2. First repair the red and strictness issues: Knip config, strict Zod
+   boundary validation, stale-claim guard rejection, and TUI CLI dispatch tests.
+3. Decide the `agent-tools -> design` boundary before growing `oak-design-ink`
+   further: either ADR-041/ADR-148 are amended and enforcement follows, or the
+   TUI keeps terminal primitives local/lazy-loaded until there is a second
+   consumer.
+4. Re-sequence deliberately before continuing storage work. Reviewers split on
+   whether P6 design must precede P5, but they agreed P5/P8/P6 are now coupled:
+   storage unification, artefact isolation, and the live TUI source should be
+   decided together rather than patched independently.
+5. Only mark P8 complete after unified comms, automatic refresh, inactive
+   visibility, strict validation, human-visible live value signals, and
+   component/CLI behaviour tests are all green.
 
 ## Structural insights driving the P-order
 
@@ -942,13 +1108,18 @@ event shape before P6/P7 resume.
 
 **Hypothesis**: tailing a rendered Markdown log is a debugging fallback,
 not a human collaboration surface. Operators need one real-time view for
-main comms, directed threads, and active-agent state.
+main comms, directed threads, and active-agent state. This is not optional:
+if the collaboration tooling works, its value must be visible to a human in
+the moment, not only inferred later from abstract throughput claims.
 
 **Evidence**: owner note on 2026-05-12 that `tail -f
 .agent/state/collaboration/shared-comms-log.md` appeared to interfere
 with render visibility. Even if the root cause is file-descriptor
 following versus atomic rewrite behaviour, the underlying need is a
 dedicated viewer rather than a shell workaround.
+Owner clarification on 2026-05-12: the live TUI is part of demonstrating
+the value of the current work in a way that is more visible to humans than
+"work with three agents happens 120% faster."
 
 **Concrete shape**:
 
@@ -956,6 +1127,10 @@ dedicated viewer rather than a shell workaround.
   and commit-queue state.
 - Show a main-thread pane, direct-message thread panes, unread/seen state,
   and active-agent visibility using the P4 status classifications.
+- Show human-visible live value signals: current collaborators, fresh versus
+  stale ownership, message flow, directed-thread pressure, queue pressure, and
+  recent changes since the last refresh. These are part of P8 acceptance, not
+  a later dashboard polish pass.
 - Avoid depending on `shared-comms-log.md` as the live source of truth; read
   event JSON and claim state directly, then render in memory.
 - Preserve a non-interactive text mode for logs and CI diagnostics.
@@ -968,6 +1143,9 @@ dedicated viewer rather than a shell workaround.
   replaces `shared-comms-log.md`.
 - Active, stale, inactive, and uncertain agents are visible in the same
   operator surface.
+- The operator can see collaboration value live: who is active, what changed
+  recently, what is waiting, and which directed threads need attention, without
+  translating raw JSON or counting throughput after the fact.
 
 **Routing**: builds on P2 watch, P4 active-agent visibility, and P5 unified
 comms format. Owner-directed sequence update on 2026-05-12: run P5, then P8,
