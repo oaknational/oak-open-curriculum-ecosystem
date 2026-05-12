@@ -18353,6 +18353,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "36319b58-a9f4-4e76-9a52-f1eba22fd305",
+      "agent_id": {
+        "agent_name": "Flamebright Sparking Forge",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T06:00:09Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "commit continuity, profiling, and agent-skill handoff docs",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T06:02:25Z",
+        "closed_by": {
+          "agent_name": "Flamebright Sparking Forge",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1a"
+        },
+        "summary": "Committed continuity, profiling, and agent-skill handoff docs in d2d3fcf8; SDK schema drift and jc-scratch left unstaged.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "36319b58-a9f4-4e76-9a52-f1eba22fd305",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
