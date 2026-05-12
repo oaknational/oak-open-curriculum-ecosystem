@@ -57,6 +57,8 @@
       "Skill(jc-ground-truth-design:*)",
       "Skill(jc-ground-truth-evaluation)",
       "Skill(jc-ground-truth-evaluation:*)",
+      "Skill(jc-codex-helper)",
+      "Skill(jc-codex-helper:*)",
       "Skill(jc-napkin)",
       "Skill(jc-napkin:*)",
       "Skill(jc-tsdoc)",

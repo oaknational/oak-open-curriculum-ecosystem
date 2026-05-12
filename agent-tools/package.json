@@ -20,6 +20,7 @@
     "codex-session-identity-hook": "pnpm -s build && node dist/src/bin/codex-session-identity-hook.js",
     "claude-agent-ops": "tsx src/bin/claude-agent-ops.ts",
     "commit-queue": "cd .. && node agent-tools/dist/src/bin/agent-tools.js commit-queue",
+    "codex-exec": "cd .. && node agent-tools/dist/src/bin/agent-tools.js codex-exec",
     "cursor-session-from-claude-session": "tsx src/bin/cursor-session-from-claude-session.ts",
     "codex-reviewer-resolve": "tsx src/bin/codex-reviewer-resolve.ts",
     "skills-adapter-generate": "tsx src/bin/skills-adapter-generate.ts",

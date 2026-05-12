@@ -1,22 +1,36 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
-**Next anticipated work**: Inc.1a WS1.2 — first paired
-product/test bundle in `packages/core/graph-core/`. Lands the RDF
-Term hierarchy (NamedNode | BlankNode | Literal | DefaultGraph |
-TripleTerm) plus the `Quad` type, with type-tests and equality
-tests in the same commit per the atomic-landing invariant. The
-sub-path entry `src/term/index.ts` stops being an empty barrel and
-exports the union; the root `src/index.ts` re-exports as part of
-the public surface. Reviewer flag: type-expert (Term discriminated
-union and `import type` discipline), plus follow-up lenses
-architecture-expert-betty (cohesion of RDF/JS surface vs internal
-helpers) at the boundary check.
+**Next anticipated work**: **Re-plan the remaining 12 Inc.1a cycles
+of `graph-stack.plan.md`** per owner direction at WS1.2 close
+(2026-05-12). Re-evaluation must precede opening WS1.3. After
+re-plan, the next executable cycle is Inc.1a WS1.3 (DatasetCore-
+compatible interface, RDF/JS-aligned, with add/has/match unit
+tests; one commit, atomic-landing; YAML todo
+`ws1-dataset-core` in the active plan). Reviewer flag for WS1.3:
+type-expert (Quad-store generic API + iterator typing) plus
+architecture-expert-betty (cohesion of the RDF/JS DataModel
+surface vs the new DatasetCore surface).
 
-**Last refreshed**: 2026-05-12 (Celestial Transiting Satellite /
-`claude` / `claude-opus-4-7-1m` / `9bc8e3` — landed WS1.1 at
-`ad2abb69`: 18 files +275/-1; `packages/core/graph-core/` scaffolded
-with six pre-declared sub-path exports and empty barrels; root
-registrations added across `pnpm-workspace.yaml`, `knip.config.ts`,
+**Last refreshed**: 2026-05-12 (Starlit Scattering Moon /
+`claude` / `claude-opus-4-7-1m` / `edd1fb` — landed WS1.2 at
+`1885fbcf`: 3 files +443/-2; `packages/core/graph-core/term/`
+ships RDF/JS-aligned RDF 1.2 Term hierarchy (NamedNode | BlankNode |
+Literal | DefaultGraph | TripleTerm) + Quad + free-function
+`equals`. Cast-free per-kind checker-array dispatch; each branch
+below complexity 8; recursive across Literal datatype + TripleTerm
+children + Quad components. 18 unit tests green. Root barrel
+re-exports as named exports; sub-path `@oaknational/graph-core/term`
+remains the preferred entrypoint per ADR-179. 77/77 turbo gates
+green. Reviewer: type-expert APPROVE-WITH-NITS; nit absorbed
+(added `value: ''` to TripleTerm for RDF/JS Data Model conformance,
+anticipating WS1.3 DatasetCore alignment). Full commit-queue
+protocol followed: claim opened on files areas, intent enqueued,
+record-staged, verify-staged, pre_commit, complete, claim closed).
+Earlier 2026-05-12 (Celestial Transiting Satellite / `claude` /
+`claude-opus-4-7-1m` / `9bc8e3` — landed WS1.1 at `ad2abb69`:
+18 files +275/-1; `packages/core/graph-core/` scaffolded with six
+pre-declared sub-path exports and empty barrels; root registrations
+added across `pnpm-workspace.yaml`, `knip.config.ts`,
 `pnpm-lock.yaml`, and `.dependency-cruiser.mjs`. Three reviewers
 APPROVE — config-expert, architecture-expert-fred, test-expert. Full
 commit-queue protocol followed: claim opened, re-scoped once on
@@ -638,6 +652,7 @@ promotion.)
 | `Flamebright Burning Lava` | `claude-code` | `claude-opus-4-7-1m` | `b1202e` | `question-assumptions-adr-173-promotion-and-verdict-not-menu-nudges` | 2026-05-11 | 2026-05-11 |
 | `Sparking Charring Ash` | `claude-code` | `claude-opus-4-7-1m` | `caf5e1` | `graph-foundation-work-orphan-bundle-land-adr-ratification-plan-promotion-ws1-1-refinement-three-reviewer-followup` | 2026-05-11 | 2026-05-12 |
 | `Celestial Transiting Satellite` | `claude` | `claude-opus-4-7-1m` | `9bc8e3` | `ws1-1-graph-core-scaffold-landed-at-ad2abb69` | 2026-05-12 | 2026-05-12 |
+| `Starlit Scattering Moon` | `claude` | `claude-opus-4-7-1m` | `edd1fb` | `ws1-2-rdf-term-hierarchy-and-quad-equality-landed-at-1885fbcf` | 2026-05-12 | 2026-05-12 |
 
 ## Plan Locations
 

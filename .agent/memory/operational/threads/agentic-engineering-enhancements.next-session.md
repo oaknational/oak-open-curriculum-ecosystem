@@ -5,6 +5,86 @@
 > lands in the unified `agent-tools <topic> <action>` shape from
 > `cost-of-collaboration.plan.md`.
 
+## codex-helper skill + codex-exec CLI minimum-viable surface (2026-05-12)
+
+**Session**: Lush Sprouting Thicket / `claude` / `claude-opus-4-7-1m` /
+`3afd08` (handed off to Sonnet 4.6 mid-session; final landings on Opus 4.7).
+
+**What landed**:
+
+- `pnpm agent-tools:codex-exec -- last-message` subcommand for extracting
+  the final assistant text from `codex exec --json` JSONL output. Pure
+  function `extractLastAgentMessage` + CLI wrapper, tested with injected
+  stdin (`Readable.from`). `--strict`, `--format text|json`, fail-fast on
+  invalid format value.
+- `jc-codex-helper` skill (canonical + two adapters) with brief/grounded
+  templates, JSONL parsing notes, sandbox mode table, cross-platform
+  timeout guidance.
+- ADR-180 (Codex-Exec Agent Delegation Pattern) — records the minimum
+  shipped surface, the peer-review collaboration pattern, and explicit
+  deferral of `run`/`extract`/`validate-brief`.
+- Future plan
+  [`codex-exec-cli-deep-dive.plan.md`](../../../plans/agentic-engineering-enhancements/future/codex-exec-cli-deep-dive.plan.md)
+  captures the deferred work with promotion trigger (second concrete
+  consumer + reshape strategy + `assumptions-expert` review).
+- `agent-tools/src/bin/agent-tools-cli.ts` refactor: split into three
+  files (`cli` / `cli-topics` / `cli-types`) to respect 250-line file
+  limit when adding the codex-exec topic. `AgentToolsCliInput` gained
+  an optional `stdin?: NodeJS.ReadableStream` field so topics that read
+  stdin can be tested through the unified dispatcher.
+
+**Validation**: `pnpm build`, `pnpm type-check`, `pnpm lint`, `pnpm test`
+(303 tests), `pnpm knip`, `pnpm depcruise`, `pnpm format-check:root`,
+`pnpm markdownlint-check:root`, `pnpm skills:check`,
+`pnpm portability:check` all green. Pre-existing
+`application-routing.e2e.test.ts` HTTP 401 failure on this branch is
+not introduced by this session.
+
+**Friction-ratchet signal**: code-expert peer review noted 2/3
+complexity-friction signals on this workstream — the file split was
+required, and the `run` subcommand was attempted then reverted. Plan
+promotion criterion is therefore an explicit `assumptions-expert` review
+before any further `codex-exec` CLI code lands.
+
+**Reviewer disposition**: code-expert APPROVED WITH SUGGESTIONS.
+Three findings fixed in-session: `--format` silent fallback on invalid
+value, `runCodexExecTopic` reading `process.stdin` directly instead of
+through injection, moving-target "currently" word in skill prose.
+Reviewer-recommended specialist follow-ups (`type-expert`, `test-expert`,
+`architecture-expert-barney`) were named but not invoked at owner direction.
+
+**Next safe step**: resume P2 `comms watch` opener; the codex-exec lane is
+parked behind the `codex-exec-cli-deep-dive.plan.md` promotion trigger.
+
+## Participating agent identities
+
+| Platform | Model | Agent name | Role | First-session | Last-session |
+| --- | --- | --- | --- | --- | --- |
+| `claude` | `claude-opus-4-7-1m` | Lush Sprouting Thicket | Implementer (codex-helper skill, codex-exec CLI, ADR-180, future plan) | 2026-05-12 | 2026-05-12 |
+| `codex` | `GPT-5` | Coastal Cresting Prow | Implementer (cost-of-collaboration P1 B-11 `comms direct/reply`; landed at `f88d0d67`; P2 `comms watch` next) | 2026-05-12 | 2026-05-12 |
+
+## B-11 directed-message authoring handoff (2026-05-12)
+
+**Landed**: cost-of-collaboration P1 / B-11 `comms direct` and
+`comms reply` — commit `f88d0d67`.
+
+**Validation**: focused collaboration-state tests, full agent-tools
+type-check/test/build, README markdownlint, built CLI help/direct/reply
+smoke, commit-message check, and staged diff check passed for the B-11
+bundle.
+
+**Commit caveat**: normal pre-commit was blocked by unrelated dirty
+`codex-exec` / agent-tools CLI work in the same checkout. The owner gave
+fresh one-commit authorisation to use `--no-verify` for `f88d0d67` only.
+Do not treat that as standing permission.
+
+**Lifecycle state**: no active claims and no active commit queue at handoff.
+
+**Next safe step**: open P2 `comms watch` from
+[`cost-of-collaboration.plan.md`](../../../plans/agent-tooling/current/cost-of-collaboration.plan.md).
+Keep it in the unified `pnpm agent-tools <topic> <action>` CLI shape and
+separate it from the unrelated `codex-exec` lane.
+
 ## Remaining skills audit continuation (2026-05-12+)
 
 **One-line objective**: audit all remaining `jc-*` skills that have not yet had
@@ -82,11 +162,13 @@ message authoring in the unified CLI shape: `comms direct` writes a parseable
 directed message from the current identity to an explicit recipient identity;
 `comms reply` reads the source message, requires the current identity to match
 the source recipient, swaps `from`/`to`, and defaults the subject to
-`re: <source subject>`. Validation passed: focused collaboration-state tests,
-full agent-tools type-check/test/build, README markdownlint, and built CLI
-smoke for help, direct, reply, and reader compatibility. Full agent-tools lint
-exited 0 with the pre-existing `no-real-io-in-tests` warning on the existing
-collaboration-state integration test file.
+`re: <source subject>`. Landed at `f88d0d67`. Validation passed: focused
+collaboration-state tests, full agent-tools type-check/test/build, README
+markdownlint, and built CLI smoke for help, direct, reply, and reader
+compatibility. Full agent-tools lint exited 0 with the pre-existing
+`no-real-io-in-tests` warning on the existing collaboration-state integration
+test file. Normal pre-commit was later blocked by unrelated dirty `codex-exec`
+work; the owner authorised `--no-verify` for the B-11 commit only.
 
 **P-Foundation handoff (2026-05-12)**: session handoff found no active claims,
 no open escalation files, no entrypoint drift, and no new ADR/PDR graduation

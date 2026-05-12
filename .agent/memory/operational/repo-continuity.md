@@ -56,10 +56,14 @@ Earlier archives remain under [`archive/`](archive/).
 - Owner live change on 2026-05-12: root `pnpm check` has moved its lint,
   Markdown, and format proof steps to non-mutating commands. The next
   quality-gate baseline should verify and measure this before further tuning.
-- P0 and P-Foundation have landed. The Agent-tools hot collaboration scripts
-  now route through the built unified `agent-tools` entrypoint without
-  rebuilding on every invocation. P1 directed-message authoring is the next
-  cost-of-collaboration implementation step.
+- P0, P-Foundation, and P1 have landed. The Agent-tools hot collaboration
+  scripts now route through the built unified `agent-tools` entrypoint without
+  rebuilding on every invocation, and `collaboration-state comms direct/reply`
+  now author directed messages without hand-written JSON. P1 landed at
+  `f88d0d67` after the owner gave fresh one-commit `--no-verify`
+  authorisation because unrelated dirty `codex-exec` work blocked the
+  repo-wide pre-commit hook; focused B-11 validation had passed. P2
+  `comms watch` is the next cost-of-collaboration implementation step.
   State/memory files remain always commit-includable when dirty; owner
   clarified on 2026-05-12 that every commit should include current memory/state
   files.
@@ -71,18 +75,24 @@ Earlier archives remain under [`archive/`](archive/).
 - Next `agentic-engineering-enhancements` continuation is owner-directed:
   audit all remaining skills. The paired `jc-session-handoff` /
   `jc-consolidate-docs` and `jc-metacognition` review pass has completed.
-- `connecting-oak-resources` lane advanced 2026-05-12: WS1.1 of
-  graph-stack Inc.1a (scaffold `packages/core/graph-core`) landed at
-  commit `ad2abb69` (Celestial Transiting Satellite / `claude` /
-  opus-4-7-1m / `9bc8e3`). Three reviewers APPROVE; multi-agent commit
-  window held cleanly under the now-live cost-of-collaboration P0
-  broken-code guard. Scaffold-checklist addition for the next
-  scaffold cycles (WS2.1, WS3.1, WS4.1):
-  `.dependency-cruiser.mjs` `no-orphans` `pathNot` exception is
-  required for any future sub-path-export workspace, mirroring the
-  existing `oak-sdk-codegen` precedent. Inc.1a WS1.2 (RDF Term + Quad,
-  first paired product/test bundle per atomic-landing) is now the
-  next executable cycle.
+- `connecting-oak-resources` lane advanced 2026-05-12: WS1.2 of
+  graph-stack Inc.1a (RDF/JS-aligned RDF 1.2 Term hierarchy + Quad +
+  free-function `equals`, first paired product/test bundle per
+  atomic-landing) landed at commit `1885fbcf` (Starlit Scattering Moon /
+  `claude` / opus-4-7-1m / `edd1fb`). 18 unit tests green; 77/77 turbo
+  gates green; type-expert APPROVE-WITH-NITS with the nit absorbed
+  (`TripleTerm.value: ''` added for RDF/JS Data Model conformance,
+  anticipates WS1.3 DatasetCore). Owner direction at WS1.2 close:
+  **re-plan the remaining 12 Inc.1a cycles** in the next session before
+  opening WS1.3 (DatasetCore-compatible interface). Earlier the same
+  day: WS1.1 (scaffold `packages/core/graph-core`) landed at commit
+  `ad2abb69` (Celestial Transiting Satellite / `claude` / opus-4-7-1m /
+  `9bc8e3`); three reviewers APPROVE; multi-agent commit window held
+  cleanly under the now-live cost-of-collaboration P0 broken-code
+  guard. Scaffold-checklist addition for the next scaffold cycles
+  (WS2.1, WS3.1, WS4.1): `.dependency-cruiser.mjs` `no-orphans`
+  `pathNot` exception is required for any future sub-path-export
+  workspace, mirroring the existing `oak-sdk-codegen` precedent.
 
 ## Active Threads
 
@@ -93,8 +103,8 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Glittering Weaving Quasar / `codex` / GPT-5 / `019e1b` / 2026-05-12 (P-Foundation unified agent-tools entrypoint; P1 next); Hushed Shrouding Mist / `codex` / GPT-5 / `019e1b` / 2026-05-12 (P0.QG complete, flake disposition, busy cold/warm profiles, repo-check profile hardening, session handoff); Galactic Transiting Galaxy / `codex` / GPT-5 / `019e1a` / 2026-05-12 (completed stale comms-event curation and deleted 120 processed buffer events); Stratospheric Winging Wing / `codex` / GPT-5 / `019e1b` / 2026-05-12 (remaining jc-skill audit complete); see thread record for full identity history |
-| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Celestial Transiting Satellite / `claude` / opus-4-7-1m / `9bc8e3` / 2026-05-12 (WS1.1 graph-core scaffold landed at ad2abb69; Inc.1a WS1.2 next); Sparking Charring Ash / `claude-code` / opus-4-7-1m / `caf5e1` / 2026-05-12 (graph foundation work; Inc.1a WS1.1 open for execution) |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Lush Sprouting Thicket / `claude` / claude-opus-4-7-1m / `3afd08` / 2026-05-12 (codex-helper skill + codex-exec last-message CLI + ADR-180 + future deep-dive plan); Coastal Cresting Prow / `codex` / GPT-5 / `019e1b` / 2026-05-12 (P1 B-11 `comms direct/reply`; P2 next); Glittering Weaving Quasar / `codex` / GPT-5 / `019e1b` / 2026-05-12 (P-Foundation unified agent-tools entrypoint); Hushed Shrouding Mist / `codex` / GPT-5 / `019e1b` / 2026-05-12 (P0.QG complete, flake disposition, busy cold/warm profiles, repo-check profile hardening, session handoff); Galactic Transiting Galaxy / `codex` / GPT-5 / `019e1a` / 2026-05-12 (completed stale comms-event curation and deleted 120 processed buffer events); Stratospheric Winging Wing / `codex` / GPT-5 / `019e1b` / 2026-05-12 (remaining jc-skill audit complete); see thread record for full identity history |
+| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Starlit Scattering Moon / `claude` / opus-4-7-1m / `edd1fb` / 2026-05-12 (WS1.2 RDF Term hierarchy + Quad + equality landed at 1885fbcf; re-plan remaining 12 Inc.1a cycles next session before WS1.3); Celestial Transiting Satellite / `claude` / opus-4-7-1m / `9bc8e3` / 2026-05-12 (WS1.1 graph-core scaffold landed at ad2abb69); Sparking Charring Ash / `claude-code` / opus-4-7-1m / `caf5e1` / 2026-05-12 (graph foundation work; Inc.1a WS1.1 open for execution) |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / `codex` / 2026-04-28 |
@@ -115,8 +125,8 @@ each thread record; this table is the repo-level index.
 
 ### Agentic-Engineering Enhancements
 
-Immediate cost-of-collaboration lane: P0 and P-Foundation are complete; continue
-with P1 directed-message authoring. The suspected flaky tests
+Immediate cost-of-collaboration lane: P0, P-Foundation, and P1 are complete;
+continue with P2 `comms watch`. The suspected flaky tests
 listed in
 [`cost-of-collaboration.flaky-tests.md`](../../plans/agent-tooling/current/cost-of-collaboration.flaky-tests.md)
 are disposed as not reproduced, and representative busy-checkout cold/warm
@@ -125,6 +135,9 @@ staged-only" framing. The preserved evidence and trigger map live in
 [`pnpm-check-profiling-deep-dive-2026-05-12.md`](../../plans/agent-tooling/pnpm-check-profiling-deep-dive-2026-05-12.md);
 the implementation tasks live in
 [`cost-of-collaboration.plan.md`](../../plans/agent-tooling/current/cost-of-collaboration.plan.md).
+Normal pre-commit is currently blocked by unrelated dirty `codex-exec` /
+agent-tools CLI work in the checkout; keep P2 pathspec-scoped and coordinate
+with that lane before attempting a normal commit.
 
 Workflow skill review lane remains available but is not the immediate
 cost-of-collaboration continuation: the paired `jc-session-handoff` /
@@ -144,16 +157,19 @@ promotion or archive, not by metric-shaped trimming. The acceptance bar remains:
   implementation windows.
 
 Implementation lane after profiling and consolidation: follow the thread
-record's cost-of-collaboration opener. P0 and P-Foundation have landed; P1 is
-the next implementation step.
+record's cost-of-collaboration opener. P0, P-Foundation, and P1 have landed;
+P2 is the next implementation step.
 
 ### Connecting-Oak-Resources
 
 Branch-primary graph work continues from
 [`threads/connecting-oak-resources.next-session.md`](threads/connecting-oak-resources.next-session.md).
-Current entry: Inc.1a WS1.1, scaffold `packages/core/graph-core` with
-`packages/core/result/` as the scaffold reference and the active
-`graph-stack.plan.md` todo `ws1-graph-core-scaffold` as the acceptance spec.
+Current entry: **re-plan the remaining 12 Inc.1a cycles** of
+`graph-stack.plan.md` per owner direction at WS1.2 close, then open
+WS1.3 (DatasetCore-compatible interface; YAML todo `ws1-dataset-core`).
+WS1.1 and WS1.2 are landed (`ad2abb69`, `1885fbcf`) and the
+`packages/core/graph-core/term/` surface ships RDF/JS-aligned RDF 1.2
+Term hierarchy + Quad + free-function `equals`.
 
 ## Open Owner-Decision Items
 
@@ -166,8 +182,8 @@ Current entry: Inc.1a WS1.1, scaffold `packages/core/graph-core` with
 3. Monorepo workspace topology (superseding ADR-108, S0-S6 strategic plan) is
    parked until after the graph MVP implementation tranche unless the owner
    explicitly reopens it.
-4. Cost-of-collaboration P0 and P-Foundation are complete; P1 directed-message
-   authoring is next.
+4. Cost-of-collaboration P0, P-Foundation, and P1 are complete; P1 landed at
+   `f88d0d67`; P2 `comms watch` is next.
 
 ## Repo-Wide Invariants / Non-Goals
 
@@ -228,6 +244,28 @@ beyond a single napkin candidate (`.dependency-cruiser.mjs` pathNot
 exception → scaffold checklist doc update; not ADR/PDR-worthy). No
 deep-consolidation escalation from this closeout — well-bounded next step
 (Inc.1a WS1.2) is already named.
+
+**Same-day update (2026-05-12 — Coastal Cresting Prow / `codex` / GPT-5 /
+`019e1b`)**: status remains **due** for the reasons above. P1 B-11 closed at
+`f88d0d67`; no new ADR/PDR candidate surfaced. The session reinforces the
+existing `--no-verify` rule rather than changing it: fresh owner authorisation
+was given for this one commit because unrelated dirty `codex-exec` work
+blocked the repo-wide pre-commit hook.
+
+**Same-day update (2026-05-12 — Lush Sprouting Thicket / `claude` /
+claude-opus-4-7-1m / `3afd08`)**: status remains **due** for the reasons
+above. This session landed ADR-180 (Codex-Exec Agent Delegation Pattern),
+the `jc-codex-helper` skill, the `codex-exec last-message` CLI subcommand,
+and the
+[`codex-exec-cli-deep-dive.plan.md`](../../plans/agentic-engineering-enhancements/future/codex-exec-cli-deep-dive.plan.md)
+strategic plan. The richer `run` subcommand was attempted then reverted at
+owner direction (Option A) when the implementation fought multiple
+complexity-discipline limits. The session's dirty working tree had blocked
+Coastal Cresting Prow's earlier P1 commit window — a concrete cross-session
+cost of local broken code; recorded in napkin as a behaviour-change entry
+for `lint-after-edit` discipline. No deep-consolidation escalation from this
+closeout — the well-bounded next step is the committed close of this
+session's work.
 
 Previous same-day status: Galactic Transiting Galaxy completed the
 owner-requested stale-event retention sweep. The

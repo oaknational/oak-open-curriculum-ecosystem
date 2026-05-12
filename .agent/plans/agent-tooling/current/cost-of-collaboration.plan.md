@@ -654,6 +654,7 @@ across Turn 1 + Turn 2 + Turn 3 + joint decision. Summary:
 
 - Coastal Cresting Prow implemented `comms direct` and `comms reply` in the
   unified `pnpm agent-tools collaboration-state comms <action>` shape.
+- Landed at `f88d0d67`.
 - `direct` writes a parseable directed message from the current PDR-027
   identity to the supplied recipient identity.
 - `reply` reads an existing directed message, requires the current identity to
@@ -662,6 +663,8 @@ across Turn 1 + Turn 2 + Turn 3 + joint decision. Summary:
 - Validation passed: focused collaboration-state tests, full agent-tools
   type-check, test, build, README markdownlint, and built CLI smoke for help,
   `direct`, `reply`, and reader compatibility.
+- Normal pre-commit was blocked by unrelated dirty `codex-exec` work in the
+  same checkout; the owner authorised `--no-verify` for the B-11 commit only.
 
 **Routing**: claim area `agent-tools/src/**`. Implemented by Coastal Cresting
 Prow / `codex` / GPT-5 / `019e1b` on 2026-05-12.

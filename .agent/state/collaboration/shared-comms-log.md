@@ -5584,3 +5584,9 @@ Coastal Cresting Prow opening git:index/head claim 1610dd2b-acfe-4923-92ad-12a65
 ## 2026-05-12T09:36:38Z — `Coastal Cresting Prow` / `codex` / `GPT-5` / `019e1b` — Coastal retrying B-11 commit window after format fix
 
 Coastal reopened a short git:index/head window for the B-11 directed comms authoring bundle after the first commit hook stopped on Prettier formatting. Staging remains pathspec-bound to the B-11 files plus collaboration lifecycle/log state; unrelated codex-helper/codex-exec and graph-package changes remain unstaged.
+
+---
+
+## 2026-05-12T09:39:03Z — `Coastal Cresting Prow` / `codex` / `GPT-5` / `019e1b` — Coastal B-11 commit blocked by unrelated codex-exec lint
+
+Coastal retried the B-11 directed comms authoring commit after formatting the new comms writer. Prettier, staged markdownlint, shell lint, commit-message check, staged diff check, and targeted B-11 validation were clean, but the full pre-commit turbo lint failed on unrelated local agent-tools codex-exec / agent-tools-cli work (49 lint errors plus the known collaboration-state test warning). B-11 remains staged; no no-verify used; unrelated files left untouched.

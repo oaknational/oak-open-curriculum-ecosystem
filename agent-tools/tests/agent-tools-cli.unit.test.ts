@@ -1,3 +1,5 @@
+import { Readable } from 'node:stream';
+
 import { describe, expect, it } from 'vitest';
 
 import { runAgentToolsCli } from '../src/bin/agent-tools-cli';
@@ -42,6 +44,22 @@ describe('agent-tools unified CLI', () => {
     expect(JSON.parse(result.stdout)).toMatchObject({ total: 0, active: 0 });
   });
 
+  it('dispatches codex-exec last-message with injected stdin', async () => {
+    const event = JSON.stringify({
+      type: 'item.completed',
+      item: { type: 'agent_message', text: 'Integration ok' },
+    });
+    const result = await runAgentToolsCli({
+      argv: ['codex-exec', 'last-message'],
+      env: {},
+      cwd: '/repo',
+      stdin: Readable.from(event),
+    });
+
+    expect(result).toMatchObject({ exitCode: 0, stderr: '' });
+    expect(result.stdout).toBe('Integration ok\n');
+  });
+
   it('passes commit-queue help through without requiring option values', async () => {
     const result = await runAgentToolsCli({
       argv: ['commit-queue', 'enqueue', '--help'],
@@ -72,6 +90,7 @@ describe('agent-tools unified CLI', () => {
         '  collaboration-state',
         '  commit-queue',
         '  branch-touched-files',
+        '  codex-exec',
         '',
         'Error: unknown topic: unknown-topic',
         '',

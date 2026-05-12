@@ -431,3 +431,249 @@ The most recent rotation is archived at
   pre-existing value-bearing option assumption that made `enqueue --help`
   report `missing value for --help` until the dispatcher regression test caught
   it.
+
+## 2026-05-12 — Detached Comms Monitor Lifecycle / codex / GPT-5 / `019e1b`
+
+### Owner Correction
+
+- A detached Wooded Spreading Thicket Python monitor process was still writing
+  comms events after that agent session had ended. Stopped process `28109`.
+  All comms-related background processes must be subject to explicit lifecycle
+  management: owner-visible start, owner-visible stop/expiry, and no orphaned
+  writer continuing after the responsible session closes.
+
+## 2026-05-12 — Lush Sprouting Thicket / claude-sonnet-4-6 / `3afd08`
+
+### codex-helper skill + CLI candidates (from Codex peer review)
+
+Codex reviewed `codex-helper/SKILL-CANONICAL.md` and the `agent-tools` CLI.
+Applied fixes already: `read-only` as default sandbox, corrected JSONL event
+shape (`.item.text` not `.content`), macOS `timeout` note, stripped Anthropic
+co-author placeholder, added missing flags (`--add-dir`, `--image`, `--profile`,
+`--config`, `--ignore-user-config`, `--skip-git-repo-check`), sharpened
+`danger-full-access` description.
+
+Codex proposed a `pnpm agent-tools:codex-exec` dispatcher topic — **owner
+decision required** on whether to build. Proposed subcommands:
+
+- `codex-exec run --timeout-seconds 120 --cd <repo> --sandbox <mode>
+  [--ephemeral] [--model <m>] [--output-schema <file>] -- <prompt>`
+  Stdout: final assistant message. Stderr: progress. Exit `124` on timeout.
+  Rationale: cross-platform timeout + child-process cleanup + JSONL parsing in
+  one tested unit.
+
+- `codex-exec last-message [--format text|json] [--strict] < events.jsonl`
+  Stdout: final message only. Exit non-zero if no final message under `--strict`.
+  Rationale: event shape is an API adapter, not a `jq | tail` recipe — belongs tested.
+
+- `codex-exec extract --last-message-file <path> [--schema <path>] [--format json|text]`
+  Schema validation via the existing `ajv` dependency.
+
+- `codex-exec validate-brief --mode brief|grounded|commit [--json] < brief.md`
+  Checks scope, target files, output contract, grounding requirement, dangerous flags.
+
+Would live as a new topic alongside `commit-queue` in `agent-tools-cli.ts`.
+
+## 2026-05-12 — Lush Sprouting Thicket / claude-opus-4-7-1m / `3afd08`
+
+### Mistakes Made
+
+- **Built ahead of lint signal.** Implemented the full `codex-exec` topic
+  (parse-events + cli + run subcommand + spawn helpers) without running
+  `pnpm lint` after each substantive edit. By the time I checked, there were
+  51 errors across 3 files, and the owner's correction was sharp: "you have
+  riddled the repo with gate errors". Direct violation of
+  [`lint-after-edit`](../../rules/lint-after-edit.md): every substantive edit
+  is a question to the lint pass, and batched signal is a refusal to listen.
+  Behaviour change: lint after every meaningful save, not after a whole
+  implementation.
+- **Designed past the discipline limits.** The `run` subcommand I drafted
+  had a 86-line `parseRunOptions` (max 50), complexity 25 (max 8),
+  cognitive complexity 43 (max 15), and required several `Record<string,
+  unknown>` and `as` shapes the rule set forbids. The instinct to refactor
+  smarter was the wrong cure; the right cure was to drop the subcommand and
+  ship only what justified its existence. Per
+  [`replace-dont-bridge`](../../rules/replace-dont-bridge.md) and the
+  architectural-excellence-over-expediency principle: do it properly or do
+  something else.
+- **Rushed the lint repair after the stop.** When the owner said "don't
+  commit", my first move was still to fix the lint errors and try again,
+  not to pause and reflect. The right move was `jc-start-right-thorough`
+  to re-ground, which the owner had to direct me into. Confirms the
+  rush-impulse failure pattern documented in
+  [`principles.md § Architectural Excellence Over Expediency`](../../directives/principles.md#architectural-excellence-over-expediency).
+
+### What Was Done
+
+Landed Option A (minimum-viable codex-exec CLI):
+
+- `pnpm agent-tools:codex-exec -- last-message` extracts the final
+  `item.completed / agent_message` text from `codex exec --json` JSONL
+  output. Tested with injected stdin; `--strict` flag for exit-1 on
+  missing; `--format text|json`; fail-fast on invalid format value.
+- `jc-codex-helper` skill ships brief + grounded session templates, JSONL
+  parsing notes (with API-stability caveat), sandbox mode table, and
+  cross-platform timeout guidance (`perl -e 'alarm N; exec @ARGV'` for macOS
+  since GNU `timeout` is absent).
+- ADR-180 records the pattern, including the honest deferral of the richer
+  `run`/`extract`/`validate-brief` surface.
+- Future plan
+  [`codex-exec-cli-deep-dive.plan.md`](../../plans/agentic-engineering-enhancements/future/codex-exec-cli-deep-dive.plan.md)
+  captures the deferred surface with a promotion trigger (second concrete
+  consumer + reshape strategy + assumptions-expert review).
+- Reviewer pass via `code-expert`: APPROVED WITH SUGGESTIONS. Three
+  findings fixed in-session (`--format` silent fallback, `stdin` not in
+  `AgentToolsCliInput`, moving-target "currently" word in skill).
+- `agent-tools-cli.ts` split into three files (`cli` / `cli-topics` /
+  `cli-types`) to respect the 250-line file limit when adding the
+  codex-exec topic.
+
+### Patterns to Remember
+
+- **Friction-ratchet signal**: code-expert reviewer noted 2 of 3 complexity-
+  friction signals on this workstream (split required + run-subcommand
+  reverted). A third signal should escalate to `assumptions-expert` before
+  more `codex-exec` code lands. The signal-count threshold is a
+  reviewer-suggested discipline that worked here.
+- **Peer-review loop value**: Codex reviewing Claude-authored content
+  caught real errors Claude could not have caught alone (wrong JSONL field
+  names, wrong default sandbox, macOS `timeout` gap). Asymmetric review
+  loops produce content better than single-agent authoring when each agent
+  has domain knowledge the other lacks. ADR-180 records this as a
+  first-class collaboration pattern.
+
+### ADR/PDR Candidates Surfaced
+
+- **ADR-180 (Codex-Exec Agent Delegation Pattern)** — drafted and landed
+  this session. Records the minimal CLI shape, the peer-review pattern,
+  and the deferred surface routing.
+- **Pattern candidate** (not graduated): "Ship the minimal primitive,
+  defer the complex wrapper" as a structural cure for the
+  fight-the-complexity-discipline failure mode. Captured implicitly in the
+  future plan; do not promote to a separate pattern artefact unless a
+  second instance shows the shape generalises.
+
+### Carry-Forward
+
+- Three reviewer-recommended specialists (`type-expert`, `test-expert`,
+  `architecture-expert-barney`) were named but not invoked. Owner directed
+  the gateway review was sufficient for this scope.
+- If `codex-exec-cli-deep-dive.plan.md` promotes, invoke
+  `assumptions-expert` BEFORE writing the reshape — the friction-ratchet
+  is at 2/3.
+
+## 2026-05-12 — B-11 Directed-Message Authoring / codex / GPT-5 / `019e1b`
+
+### What Was Done
+
+- Implemented `collaboration-state comms direct` and `comms reply` under the
+  unified `pnpm agent-tools <topic> <action>` entrypoint.
+- `direct` writes a parser-readable directed message from the current PDR-027
+  identity to the supplied recipient identity.
+- `reply` reads an existing directed message, requires the current identity to
+  match the source recipient, swaps `from`/`to`, and defaults the subject to
+  `re: <source subject>` without changing the directed-message schema.
+
+### Patterns to Remember
+
+- Built-CLI smoke needs both action help and a real write/readback path after
+  P-Foundation, because source-level Vitest proof does not prove the no-build
+  `pnpm agent-tools` path is current.
+- `comms inbox` can look empty for a specific agent if its seen-file already
+  contains the message id; use a fresh seen-file or `--agent-name "*"` for a
+  smoke that proves readback visibility.
+
+### Validation
+
+- `pnpm --dir agent-tools exec vitest run tests/collaboration-state`
+- `pnpm --filter @oaknational/agent-tools type-check`
+- `pnpm --filter @oaknational/agent-tools test`
+- `pnpm --filter @oaknational/agent-tools build`
+- `pnpm markdownlint-check:root agent-tools/README.md`
+- Built CLI smoke for `comms direct --help`, `comms reply --help`,
+  `comms direct`, `comms reply`, and reader compatibility.
+
+### Caveat
+
+- `pnpm --filter @oaknational/agent-tools lint` exited 0 but still reports the
+  pre-existing `@oaknational/no-real-io-in-tests` warning on
+  `agent-tools/tests/collaboration-state/collaboration-state.integration.test.ts`.
+  The B-11 acceptance deliberately used the existing CLI integration surface
+  because the user-visible behaviour is file authoring plus parser readback.
+
+### Surprise
+
+- **Expected**: the detached Wooded comms monitor had already been stopped, per
+  the opener and earlier lifecycle note.
+- **Actual**: fresh Wooded monitor events appeared during this session; process
+  search found Python monitor PID `74605` still writing comms-events.
+- **Why expectation failed**: the continuity note recorded the intended
+  lifecycle correction, but live process state had drifted again.
+- **Behaviour change**: before committing collaboration-state outputs, verify
+  that any recently active monitor is actually stopped; treat fresh monitor
+  events after a stop note as live-process evidence, not harmless residue.
+
+### Fitness Routing
+
+- Strict-hard fitness reported `napkin.md` critical after this append. Earlier
+  zones did fire: repo-continuity already marks consolidation due, but B-11 was
+  the owner-directed implementation lane and knowledge capture remained
+  required. The file limit is not wrong; the file is acting as active memory
+  and now needs the already-named consolidation lane, not reactive trimming.
+
+## 2026-05-12 — WS1.2 RDF Term Hierarchy / Starlit Scattering Moon / claude / opus-4-7-1m / `edd1fb`
+
+### Surprise — `consistent-type-assertions` + `complexity ≤ 8` together force checker-array dispatch
+
+- **Setup**: drafting `equals(a: Term | Quad, b: Term | Quad)` for the new
+  discriminated union (six `termType` literals). The natural shape is
+  `if (a.termType !== b.termType) return false; switch (a.termType) { ... }`
+  with each case accessing kind-specific fields on `b` via narrowing.
+- **Expected**: TS would narrow `b` once `a.termType` is fixed and the prior
+  equality check is in scope.
+- **Actual**: TS does NOT correlate `a` and `b` from the early-return guard;
+  case bodies need either casts (`b as NamedNode`) — which the repo ESLint
+  blocks via `@typescript-eslint/consistent-type-assertions` — OR per-case
+  `b.termType === 'X' && ...` checks combined with the case condition, which
+  pushes cyclomatic complexity over 8 (`complexity` rule limit).
+- **Cure that worked**: per-kind checker function that re-discriminates
+  *both* `a` and `b` inline (`a.termType === 'X' && b.termType === 'X' && ...`),
+  then a checker-array dispatched by `checkers.some((c) => c(a, b))`. Each
+  checker has bounded complexity ≤ 7; the top-level `equals` has complexity
+  2; zero casts.
+- **What I'll do differently next time**: for any equality-style function on
+  a 5+ variant discriminated union, reach straight for the per-kind
+  checker-array dispatch — do not start with `switch(a.termType)` and
+  discover the cast/complexity dilemma afterwards. Saves one drafting round.
+
+### Surprise — type-expert nit absorbed inline anticipates next slice
+
+- **Setup**: type-expert reviewer returned APPROVE-WITH-NITS on WS1.2. The
+  sole nit was that `TripleTerm` omitted `value: ''`, breaking RDF/JS Data
+  Model's "every Term has a `value: string`" uniform shape.
+- **Tension**: nit said "no fix needed unless interop with the RDF/JS
+  community-types package becomes a declared requirement". WS1.3
+  (`ws1-dataset-core`) explicitly targets a DatasetCore-compatible
+  interface, which is RDF/JS-aligned — interop is imminent, not
+  hypothetical.
+- **Decision**: absorbed the nit in the same commit (one tiny field
+  addition + 5 test-construction updates) rather than spinning a follow-on
+  cycle. The "do this later" option would have been pure churn.
+- **Pattern**: when a reviewer nit lights up an interface alignment that
+  the *next* planned cycle requires anyway, fold it into the current
+  commit. Cost: ~30 s of mechanical edit. Saved cost: a follow-on commit
+  whose only purpose would be adding one field.
+
+### Plan-vs-reality discrepancy — landed-state authority
+
+- The `.husky/pre-commit` gate set was reworded earlier in the day to
+  include explicit `format-check + markdownlint + knip + depcruise +
+  repo-wide turbo run type-check lint test`. The actual hook (read
+  fresh today) runs `prettier-staged + markdownlint-staged +
+  lint:shell + turbo run type-check lint test`. Knip and depcruise have
+  moved to pre-push / `pnpm check` / CI per the cost-of-collaboration
+  P0 broken-code guard.
+- For implementation cycles, treat `.husky/pre-commit` as authoritative —
+  the plan body's "tree green" definition is a snapshot that can drift
+  during cost-of-collaboration evolution. Plan body will catch up; the
+  hook is the source of truth.

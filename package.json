@@ -55,6 +55,7 @@
     "agent-tools:cursor-session-from-claude-session": "pnpm --filter @oaknational/agent-tools cursor-session-from-claude-session",
     "agent-tools:codex-reviewer-resolve": "pnpm --filter @oaknational/agent-tools codex-reviewer-resolve",
     "agent-tools:branch-touched-files": "pnpm --filter @oaknational/agent-tools branch-touched-files",
+    "agent-tools:codex-exec": "pnpm --filter @oaknational/agent-tools codex-exec",
     "agent-tools:repo-check": "pnpm --filter @oaknational/agent-tools repo-check",
     "agent-tools:check-blocked-patterns": "pnpm --filter @oaknational/agent-tools check-blocked-patterns",
     "agent-tools:check-blocked-content": "pnpm --filter @oaknational/agent-tools check-blocked-content",
