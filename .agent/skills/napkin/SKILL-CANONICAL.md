@@ -30,7 +30,7 @@ First thing, every session — read both files before doing anything:
 If neither file exists, create `napkin.md` at
 `.agent/memory/active/napkin.md` with a session heading and start
 logging. The distillation rotation in the
-[consolidation command](../../commands/consolidate-docs.md)
+[`consolidate-docs` skill](../consolidate-docs/SKILL-CANONICAL.md)
 handles creating `distilled.md` at rotation time.
 
 ## Knowledge Preservation Is Absolute — Fitness Is Never a Constraint
@@ -54,7 +54,7 @@ fitness target or limit are:
 2. **Thoughtful, holistic promotion of mature concepts and knowledge**
    out of the file to permanent homes — ADRs, PDRs, principles, rules,
    patterns, READMEs, governance docs — applying the
-   [`/jc-consolidate-docs`](../../commands/consolidate-docs.md)
+   [`consolidate-docs`](../consolidate-docs/SKILL-CANONICAL.md)
    graduation scan (step 7) to specific entries that are stable and
    have a natural permanent home. This is the deeper response: not
    "make space" but "the knowledge has matured enough to leave the
@@ -173,7 +173,7 @@ and [PDR-030 Plane-Tag Vocabulary](../../../practice-core/decision-records/PDR-0
   learning-loop content (other napkin entries, distilled, patterns). Can be
   omitted as the napkin is itself an active-plane surface.
 
-The origin tag is consumed at `/jc-consolidate-docs` step 5 cross-plane
+The origin tag is consumed by `consolidate-docs` step 5 cross-plane
 scan; it does not mutate anything at capture time. Omit the field when the
 observation is purely active-plane.
 
@@ -196,7 +196,7 @@ Add `### Mistakes Made` or `### Fixes` subsections as needed.
 ## Rotation
 
 When the napkin exceeds ~500 lines, follow step 6 of the
-[consolidation command](../../commands/consolidate-docs.md) to
+[`consolidate-docs` skill](../consolidate-docs/SKILL-CANONICAL.md) to
 extract high-signal content into `distilled.md`, archive the
 napkin, and start fresh.
 

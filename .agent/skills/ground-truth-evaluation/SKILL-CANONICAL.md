@@ -40,9 +40,13 @@ Flag queries that include the subject name when already filtered. "French negati
 
 **IMPORTANT**: The `bulk-downloads/` directory is gitignored. File search tools will NOT see these files.
 
-Use shell commands:
+Use shell commands from `apps/oak-search-cli`. If the expected JSON files are
+absent or suspiciously sparse, run the full download and codegen path before
+trusting benchmark or validation output:
 
 ```bash
+cd apps/oak-search-cli
+pnpm bulk:download
 ls bulk-downloads/
 jq '.lessons[] | {slug: .lessonSlug, title: .lessonTitle}' bulk-downloads/SUBJECT-PHASE.json
 ```
@@ -157,7 +161,7 @@ Of all relevant results, what proportion found in top 10?
 
 ```bash
 cd apps/oak-search-cli
-pnpm oaksearch search lessons "query" --subject subject --key-stage keyStage
+pnpm exec tsx bin/oaksearch.ts search lessons "query" --subject subject --key-stage keyStage
 ```
 
 ### Step 2: Explore Curriculum Data
@@ -199,7 +203,9 @@ Based on evidence:
 ### Step 5: Validate
 
 ```bash
+cd apps/oak-search-cli
 pnpm type-check
+pnpm ground-truth:validate
 pnpm test
 ```
 

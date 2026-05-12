@@ -60,11 +60,15 @@ Teachers type topics directly. Any prefix like "how to teach", "lessons on", "te
 
 **IMPORTANT**: The `bulk-downloads/` directory is gitignored. File search tools will NOT see these files.
 
-Use shell commands to explore bulk data:
+Use shell commands from `apps/oak-search-cli` to explore bulk data. If the
+expected JSON files are absent or suspiciously sparse, run the full download
+and codegen path before trusting generator or validation output:
 
 ```bash
+cd apps/oak-search-cli
+pnpm bulk:download
 ls bulk-downloads/           # List available files
-cat bulk-downloads/maths-primary.json | jq '.lessons | length'  # Count lessons
+jq '.lessons | length' bulk-downloads/maths-primary.json  # Count lessons
 ```
 
 ## Known-Answer-First Methodology
@@ -104,7 +108,7 @@ Create a query a teacher would realistically type:
 
 ```bash
 cd apps/oak-search-cli
-pnpm oaksearch search lessons "your query" --subject subject --key-stage keyStage
+pnpm exec tsx bin/oaksearch.ts search lessons "your query" --subject subject --key-stage keyStage
 ```
 
 ### Step 4: Capture Top 3 with Relevance Scores
@@ -160,7 +164,9 @@ export const SUBJECT_PHASE: LessonGroundTruth = {
 ## Validation
 
 ```bash
+cd apps/oak-search-cli
 pnpm type-check              # TypeScript compilation
+pnpm ground-truth:validate   # Semantic ground-truth validation
 pnpm test                    # Unit tests
 ```
 
