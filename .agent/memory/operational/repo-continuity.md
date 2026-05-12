@@ -30,7 +30,7 @@ local memory: `gatekeeper-specialisation`, `peer-sidebar-beats-
 coordinator-helpers`, `cursor-multitask-single-message-handoff`,
 `pre-commit-hook-must-gate-staged-only`, plus existing
 `feedback_register_owner_direction_substance` reinforced. **Landed**:
-[`.agent/plans/agent-tooling/current/cost-of-collaboration.plan.md`](/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/agent-tooling/current/cost-of-collaboration.plan.md)
+[`.agent/plans/agent-tooling/current/cost-of-collaboration.plan.md`](../../plans/agent-tooling/current/cost-of-collaboration.plan.md)
 authored, P0–P7 workstreams enumerated, prior
 `primary-agent-tooling-enhancements.plan.md` marked SUPERSEDED, agent-
 tools CLI improvements broadcast as comms-event `37ea0341` (eight
@@ -309,7 +309,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Wooded Spreading Thicket / `claude-code` / opus-4-7-1m / `5c8f3c` / 2026-05-11 (coordinator + gatekeeper through four-agent collaboration window; architectural reset captured; cost-of-collaboration plan authored, primary plan superseded, 5 feedback memories saved, B-11 design co-locked with Galactic in sidebar); Galactic Transiting Orbit / `codex` / GPT-5 / `019e18` / 2026-05-11 (F-15 recursion guard landed `70e746a3`; B-10 renderer compatibility + `comms inbox` landed `0be469a9`; B-11 sidebar design locked); Gilded Shimmering Dawn / `cursor` / GPT-5.5 / `3869cd` / 2026-05-11 (Cursor sub-coordinator: fresh-session linear delegation to 3 read-only helpers; result `3869cd-cursor-result-1-legacy-comms-audit`); Embered Burning Magma / `codex` / GPT-5 / `019e18` / 2026-05-11 (Wave 3 F-11 commit-queue list/show inspection slice, commit `e298723c`); Shaded Ripening Copse / `claude-code` / opus-4-7-1m / `c13bdf` / 2026-05-11 (commit-queue UX brief — B-02/B-03 + Workstream 4 architectural seam, commit `5c299ed5`); Soaring Darting Kite / `claude-code` / opus-4-7-1m / `01db95` / 2026-05-11 (R1.b landed `b529fa6e` + third-instance peer-commit-absorption record `5aa91a76`; tail plan reshaped into 6 sequenced waves); Fronded Flowering Seed / `claude-code` / opus-4-7-1m / `19ecd5` / 2026-05-11 (graduation-candidates-drain — both due items graduated, commit `53995192`) |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Wooded Spreading Thicket / `claude-code` / opus-4-7-1m / `5c8f3c` / 2026-05-11 (coordinator + gatekeeper through four-agent collaboration window; architectural reset captured; cost-of-collaboration plan authored, primary plan superseded, 5 feedback memories saved, B-11 design co-locked with Galactic in sidebar); Galactic Transiting Orbit / `codex` / GPT-5 / `019e18` / 2026-05-11 (F-15 recursion guard landed `70e746a3`; B-10 renderer compatibility + `comms inbox` landed `0be469a9`; B-11 sidebar design locked); Gilded Shimmering Dawn / `cursor` / GPT-5.5 / `3869cd` / 2026-05-11 (Cursor sub-coordinator: fresh-session linear delegation to 3 read-only helpers; result `3869cd-cursor-result-1-legacy-comms-audit`); Embered Burning Magma / `codex` / GPT-5 / `019e18` / 2026-05-11 (Wave 3 F-11 commit-queue list/show inspection slice, commit `e298723c`); Shaded Ripening Copse / `claude-code` / opus-4-7-1m / `c13bdf` / 2026-05-11 (commit-queue UX brief — B-02/B-03 + Workstream 4 architectural seam, commit `5c299ed5`); Soaring Darting Kite / `claude-code` / opus-4-7-1m / `01db95` / 2026-05-11 (R1.b landed `b529fa6e` + third-instance peer-commit-absorption record `5aa91a76`; tail plan reshaped into 6 sequenced waves); Fronded Flowering Seed / `claude-code` / opus-4-7-1m / `19ecd5` / 2026-05-11 (graduation-candidates-drain — both due items graduated, commit `53995192`) |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Sparking Charring Ash / `claude-code` / opus-4-7-1m / `caf5e1` / 2026-05-11 (orphan-bundle land `dbe7321c` + ADR-173/179 Accepted + plan promotion current→active + WS1.1 refinement `5ec5004d`; Inc.1a WS1.1 open for execution); Flamebright Burning Lava / `claude-code` / opus-4-7-1m / `b1202e` / 2026-05-11 (question-assumptions pass — ADR-173 reviewer absorption + ADR-179 extraction + plan body correction + verdict-not-menu rule); Shaded Ripening Copse / `claude-code` / opus-4-7-1m / `c13bdf` / 2026-05-11 (schedule-not-trigger sweep); Mistbound Watching Lantern / `claude-code` / opus-4-7-1m / `8fdb8b` / 2026-05-11 (graph-mvp-arc review-absorption + doctrine ratification); Dusky Masking Cloak / `claude-code` / opus-4-7-1m / `c5ff7f` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -662,6 +662,55 @@ acceptance work;
 evidence.
 
 ## Next Safe Step
+
+**Status update (2026-05-12 — Wooded Spreading Thicket close,
+agent communication improvements thread ready for single-agent
+window)**: cost-of-collaboration plan + new principle (local broken
+code never leaves) + thread record opener all landed. A new session
+saying "please continue the agent communication improvements thread"
+should land at
+[`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md)
+§ Agent communication improvements — session opener, and from there
+at
+[`cost-of-collaboration.plan.md`](../../plans/agent-tooling/current/cost-of-collaboration.plan.md).
+Load-bearing first question: does `.husky/pre-commit` gate against
+staged content only? If no, the session works on P0 (staged-only
+pre-commit gates) in a single-agent window; multi-agent collaboration
+is structurally blocked until P0 lands. Commits this session:
+`286db07f` (cost-of-collaboration plan), `c07ab1e0` (residual comms
+ledger), `86055b12` (initial principle), `5c78a4fc` (principle rename and reframe). Today's principle:
+**local broken code never leaves** —
+broken code is never acceptable, no `git push` until proven to work
+via observed behaviour.
+
+**Status update (2026-05-11 — Sparking Charring Ash close,
+graph MVP unblocked)**: ADR-173 + ADR-179 ratified Accepted;
+`graph-stack.plan.md` promoted current → active; WS1.1 row refined
+per holistic review (Fred / type-expert / test-expert) and Barney
+PROMOTION-READY verdict. Three commits landed: `dbe7321c` (orphan
+markdown bundle authoring the ADRs + plan body amendments +
+verdict-not-menu rule), `5ec5004d` (ratification + promotion +
+refinement), `7560e48d` (session close). Two doctrine corrections
+captured: commit-queue must be read AND enqueued BEFORE first
+`git add` (not after); knowledge preservation is strictly prior to
+mechanical fitness warnings (repo doctrine, owner-stated).
+
+**Next safe step (branch-primary lane `connecting-oak-resources` —
+graph MVP)**: Inc.1a WS1.1 — scaffold `packages/core/graph-core`.
+Read
+[`threads/connecting-oak-resources.next-session.md § Self-Bootstrapping Continuation`](threads/connecting-oak-resources.next-session.md#self-bootstrapping-continuation-cold-start-landing)
+for full carry-in (acceptance, commit-queue protocol, message
+gotchas, post-landing sequence). Read the YAML `todos` row
+`ws1-graph-core-scaffold` in
+[`active/graph-stack.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md)
+for the verbatim acceptance spec. `packages/core/result/` is the
+canonical scaffold reference. **Falsifiability**: a fresh agent
+prompted only with "please continue the graph mvp work" should
+reach Inc.1a WS1.1 without further owner briefing.
+
+---
+
+### Previous status (superseded, retained for trace)
 
 **Status update (2026-05-11 — Flamebright Burning Lava close,
 ADR-173 + ADR-179 surfaced for owner final approval)**:

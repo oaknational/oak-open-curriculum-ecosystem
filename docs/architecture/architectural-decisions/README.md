@@ -215,9 +215,10 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   vocabulary trip-list as a cohesive output-time defence;
   Accepted 2026-05-03)
 - [ADR-173: Graph Stack Topology — Standards-First, Layered, MCP-Agnostic](173-graph-stack-topology.md)
-  (proposed topology for the graph substrate: RDF-native internals,
-  standards-based wire projection, consumer/substrate workspace tiers,
-  and standards-evolution tripwires; Proposed 2026-05-07)
+  (eight-workspace graph topology — seven active plus one deferred —
+  with RDF 1.2-native internals, standards-based wire projection,
+  build-vs-buy attestation per library, and standards-evolution
+  tripwires; Accepted 2026-05-11)
 - [ADR-174: Dependency Vulnerability Scanning as a Quality Gate](174-dependency-vulnerability-scanning-quality-gate.md)
   (dependency vulnerability triage, blocking/disposition policy,
   Dependabot/override governance, and relationship to quality gates;
@@ -226,6 +227,11 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   (freshness metadata, ownership, threshold, stale-data behaviour, and
   attribution requirements for EEF and future external evidence corpora;
   Accepted 2026-05-10)
+- [ADR-179: Transport-Agnostic Graph Substrate — Surfacing Is A Consumer-Side Concern](179-transport-agnostic-graph-substrate.md)
+  (transport-discipline corollary of ADR-154 applied across the graph
+  stack: substrate ships no MCP/HTTP/CLI/transport-shaped code;
+  at-most-one-home per consumer surface; extracted from ADR-173 on
+  2026-05-11; Accepted 2026-05-11)
 
 ## Key Architectural Decisions
 

@@ -12,7 +12,7 @@ todos:
     content: Add `comms watch` with `fs.watch` + polling fallback to replace 30s bash poll loops. Sub-second new-message latency for any agent that runs the watch as a long-lived process.
     status: pending
   - id: ws-p3-commit-queue-enforcement
-    content: Promote the commit queue from advisory predictor to enforced pre-stage gate. Refuse `git add` (via husky pre-stage equivalent) when no active intent matches the staged file set.
+    content: Promote the commit queue from advisory predictor to enforced pre-stage gate. Refuse `git add` (via a commit-queue CLI guard wrapping `git add`, or a stage-time precondition check) when no active intent matches the staged file set. Note Git/Husky have no native `pre-stage` hook lifecycle; the enforcement lives in the agent-tools CLI or a wrapper, not in a hook of that name.
     status: pending
   - id: ws-p4-identity-disambiguation
     content: Make `(agent_name, platform, session_id_prefix)` the routing key in claim and comms writes; refuse a write whose tuple collides with an existing live identity.
@@ -215,8 +215,11 @@ is unreliable.
 **Evidence**: peer sidebar at 30s polls produced one productive design
 exchange per minute — adequate, but the cost compounded across the four
 agents in the broader window. Galactic's session-close findings
-(`198ee1a4`): "the comms inbox monitor command is useful but still
-rebuild-heavy because the package script runs build before each poll."
+(directed comms-message
+`198ee1a4-85d9-4313-af7a-bd3e2e49a9d3.json` under
+`.agent/state/collaboration/comms-messages/`): "the comms inbox
+monitor command is useful but still rebuild-heavy because the package
+script runs build before each poll."
 
 **Design** (from sidebar Turn 2 + Turn 3):
 
@@ -255,8 +258,11 @@ option: 'committing claims' in the shared log" — this is that work.
 
 **Concrete shape**:
 
-- Husky `pre-stage` (or `pre-commit` pre-pre) hook reads
-  `active-claims.json`, finds an active `git:index/head` claim
+- A commit-queue CLI guard invoked before any `git add` (Git/Husky
+  have no native `pre-stage` hook; enforcement lives in the
+  agent-tools CLI wrapping `git add`, or in a documented precondition
+  check that the `jc-commit` skill runs before staging). The guard
+  reads `active-claims.json`, finds an active `git:index/head` claim
   belonging to the current identity matching the staged file set; if
   none, refuses with a clear error naming the queue-enqueue command.
 - Skill `jc-commit` updates to ensure the enqueue step runs before any
@@ -324,7 +330,10 @@ underlying duplication remains.
 
 **Evidence**: owner-relayed direction via Flamebright 2026-05-11T20:05Z:
 "ONE comms format used everywhere, no legacy lingering." Galactic's
-`198ee1a4` session-close finding #4: "in this shared working tree, any
+directed comms-message
+`198ee1a4-85d9-4313-af7a-bd3e2e49a9d3.json` (under
+`.agent/state/collaboration/comms-messages/`) session-close finding
+number 4: "in this shared working tree, any
 new uncommitted coordination artefact after a clean gate sweep can
 invalidate a peer commit. Gatekeeper specialisation alone is
 insufficient without either commit isolation or a queue protocol that
@@ -433,23 +442,29 @@ These are the not-yet-landed workstreams from the prior
 that this plan absorbs. Status updates and acceptance criteria already
 documented there; this section is a routing cross-reference only.
 
-- **comms render resilience (F-05 finishing pass)**: B-10 landed the
-  compat shims for legacy optional fields; F-05's malformed-file
-  skip/reporting contract remains open. Recommend folding into P5
-  (unified comms format) since the migration will remove the legacy
-  shapes that triggered F-05 in the first place.
-- **identity-build-isolation split (F-08, F-13)**: split built/dev
-  agent-tools invocation paths and document name-prefix routing.
-  Composes with P4 (identity disambiguation).
-- **register-closeout**: friction-register status updates, F-16
-  routing verification, gates/reviewers, handoff/consolidation. Run
-  at the end of every slice; not a slice itself.
-- **collaboration read APIs (F-06, F-07, F-10)**: `comms list / show`,
-  `claims` filtering. Some of this landed implicitly via Galactic's
-  `cli-comms-inbox.ts` read-side (the `inbox` subcommand). Remainder
-  composes with P1's write-side surface.
-- **B-02 / B-03 (commit-queue build-prelude decoupling and
-  record/verify-staged divergence)**: routes to P3 enforcement work.
+Supersession mapping (per `consolidate-docs § Plan supersession
+discipline`): each prior `todos:` id from
+[`primary-agent-tooling-enhancements.plan.md`](primary-agent-tooling-enhancements.plan.md)
+mapped verbatim to its new owner P-workstream and acceptance lane.
+
+| Prior id (verbatim) | New owner | Acceptance lane | Rationale |
+| --- | --- | --- | --- |
+| `collaboration-read-apis` | P1 (write-side) + already-landed read | P1 acceptance + commit `0be469a9` for read-side in HEAD | Read-side landed implicitly in Galactic's B-10 commit; write-side is value-bearing remainder. |
+| `comms-render-resilience` | P5 | P5 acceptance | F-05's malformed-file contract is structurally subsumed by the unified-format migration that removes legacy shapes. |
+| `commit-queue-safety` | P3 + F-15 already landed at `70e746a3` | P3 acceptance | Residual is exactly P3's enforcement scope (refuse `git add` without active intent). |
+| `identity-build-isolation` | P4 | P4 acceptance | Build-isolation (F-08) and routing (F-13) unify under identity-tuple correctness. |
+| `register-closeout` | All P-workstreams (closeout-per-slice) | Each P-workstream's own closeout step | Operational, not a slice — runs at end of every slice. |
+| `shared-cli-discoverability` (completed) | Already landed in working tree | n/a | Closed before this plan; listed for verbatim completeness. |
+
+Cross-cutting friction-IDs explicitly routed: **F-05** → P5; **F-06,
+F-07, F-10** → P1 write-side; **F-08** → P4; **F-13** → P4; **F-15**
+→ already landed at `70e746a3`; **F-16** → routed to
+[`skills-standardisation-and-adapter-generator.plan.md`](skills-standardisation-and-adapter-generator.plan.md)
+per the prior plan's own routing line; **B-02, B-03** → P3 enforcement
+work.
+
+No verbatim id is dropped without a destination; no destination is
+named without an acceptance lane.
 
 ## Sequencing
 

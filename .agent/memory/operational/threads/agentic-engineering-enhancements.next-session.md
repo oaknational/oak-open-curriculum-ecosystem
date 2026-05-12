@@ -1,6 +1,113 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-## Next opener — collaboration protocol hardening tail (Wave 1+) (2026-05-12+)
+> **This thread is the agent communication improvements thread.**
+> A session opened with "please continue the agent communication
+> improvements thread" lands here. The full plan + sequencing + the
+> load-bearing question are below in the §Agent communication
+> improvements — session opener section. Read it once and you have
+> everything you need to start.
+
+## Agent communication improvements — session opener (2026-05-12+)
+
+**One-line objective**: land the workstreams in
+[`.agent/plans/agent-tooling/current/cost-of-collaboration.plan.md`](../../../plans/agent-tooling/current/cost-of-collaboration.plan.md)
+in P-order. That plan is the **single source of truth** for agent
+communication and agent-tooling improvement work. It subsumes
+`primary-agent-tooling-enhancements.plan.md` (now SUPERSEDED).
+
+### The load-bearing question — answer before anything else
+
+> Does `.husky/pre-commit` gate against staged content only, or does
+> it still scan the whole working tree?
+
+**The authoritative test is reading `.husky/pre-commit` directly.**
+If the gates invoke `prettier --check .`, `markdownlint --dot .`,
+repo-wide `pnpm knip`, `pnpm depcruise`, or full-tree
+`pnpm turbo run … type-check lint test` against the ambient working
+tree (no `lint-staged` / no staged-pathspec filter), the hook still
+scans ambient state and the P0 defect is unfixed. Commit-message
+grep is unreliable for this check (false-positive risk on words like
+"staged"); always verify by reading the hook file.
+
+### What to do, by case
+
+- **If P0 has not landed** (verify via reading `.husky/pre-commit`
+  as described above): this session's work is **cost-of-collaboration
+  P0 — staged-only pre-commit gates** and nothing else until P0
+  commits clean. **Single-agent window only.** The defect P0 fixes
+  blocks any multi-agent commit, including the commit that would
+  land P0 itself in a multi-agent window. **Decline any multi-agent
+  collaboration on this lane; if peer agents are already present in
+  the window, notify the owner before proceeding so the owner can
+  pause peers — do not attempt to override peers unilaterally.**
+
+- **If P0 has landed**: proceed to **cost-of-collaboration P1 — B-11
+  directed-message authoring** (`comms direct` + `comms reply`). The
+  design is locked in
+  [`.agent/state/collaboration/sidebars/cli-comms-inbox-design-2026-05-11.md`](../../../state/collaboration/sidebars/cli-comms-inbox-design-2026-05-11.md)
+  across Turn 1 + Turn 2 + Turn 3 + joint decision. Implementation
+  lives in new file `agent-tools/src/collaboration-state/cli-comms-messages.ts`.
+  Claim area `agent-tools/src/**`. Register a `pre_commit` queue
+  entry before staging.
+
+- **If P1 has landed**: continue P2, P3, P4, P5, P6, P7 in order, as
+  laid out in the cost-of-collaboration plan. Each workstream names
+  its own acceptance criteria.
+
+### Standing principle that applies from the very first push
+
+> **Local broken code never leaves.** Broken code is never
+> acceptable. The local-only constraint is not an excuse to
+> tolerate brokenness; it is the discipline that prevents brokenness
+> from reaching other agents, reviewers, CI, and production before
+> you finish fixing it. No `git push` until the change is proven to
+> work via observed behaviour, not absence of red. "It compiles" is
+> not "it works".
+
+Operational discipline:
+[`.agent/rules/local-broken-code-never-leaves.md`](../../../rules/local-broken-code-never-leaves.md).
+
+### Required reading order for this thread
+
+1. [`cost-of-collaboration.plan.md`](../../../plans/agent-tooling/current/cost-of-collaboration.plan.md)
+   — the plan. P0–P7 workstreams + sequencing + acceptance criteria.
+2. [`local-broken-code-never-leaves.md`](../../../rules/local-broken-code-never-leaves.md)
+   — the new owner-stated principle applying from your first push.
+3. [`cli-comms-inbox-design-2026-05-11.md`](../../../state/collaboration/sidebars/cli-comms-inbox-design-2026-05-11.md)
+   — the B-11 design sidebar. Read when P1 becomes current.
+4. [`2026-05-11-coordinator-deadlock-and-peer-sidebar.md`](../../../experience/2026-05-11-coordinator-deadlock-and-peer-sidebar.md)
+   — the subjective texture of the 2026-05-11 four-agent window that
+   produced this thread's reset. Optional but valuable.
+
+### Pre-stage discipline (carries forward from Sparking Charring Ash's correction)
+
+Pre-stage sequence is non-negotiable. Read `active-claims.json`
+(filter `kind=git`, pattern `index/head`) → read shared-log tail →
+enqueue intent → open claim → THEN `git add`. Queue-list-only is
+NOT a substitute for active-claims read. The queue is a predictor;
+it only works before the predicted event.
+
+### Operating mode
+
+- This thread is in **single-agent-window mode** until P0 lands.
+- Multi-agent collaboration is **structurally blocked** until P0.
+- Coordinator+helpers topology is **deprecated for design work** in
+  favour of peer-pair sidebars (see
+  [`feedback_peer_sidebar_beats_coordinator_helpers`](../../../../.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/feedback_peer_sidebar_beats_coordinator_helpers.md)).
+
+### Open hygiene flagged at handoff
+
+- **Napkin rotation overdue** (CRITICAL fitness zone, 622/300 lines
+  at handoff). Run `/jc-consolidate-docs` step 6 at the first natural
+  boundary in your work.
+- **Identity disambiguation note**: a cursor "Wooded Spreading
+  Thicket" with `session_id_prefix: unknown` exists in
+  `active-claims.json` as a long-running monitor — it is NOT the
+  claude-code coordinator from 2026-05-11. Identity routing is P4.
+
+---
+
+## Historical tail (older session entries)
 
 **Tail update 2026-05-11 (Wooded Spreading Thicket / `claude-code` /
 opus-4-7-1m / `5c8f3c`, coordinator + gatekeeper role, architectural

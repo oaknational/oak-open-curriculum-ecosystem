@@ -33,6 +33,169 @@ queue enqueue before first `git add`) and knowledge-preservation-
 over-mechanical-fitness-warnings (owner-stated repo doctrine,
 captured to feedback memory).)
 
+## Self-Bootstrapping Continuation (cold-start landing)
+
+A fresh session prompted with **"please continue the graph mvp work"**
+should read this section and routes directly to Inc.1a WS1.1. No
+additional briefing required.
+
+### State on session start
+
+- ADR-173 (`docs/architecture/architectural-decisions/173-graph-stack-topology.md`)
+  and ADR-179
+  (`docs/architecture/architectural-decisions/179-transport-agnostic-graph-substrate.md`)
+  both **Status: Accepted 2026-05-11**.
+- Active plan:
+  `.agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md`
+  (lifecycle `active`). WS0 marked completed; WS1.1 row carries the
+  full acceptance spec (read the YAML `todos` row `ws1-graph-core-scaffold`).
+- `packages/core/graph-core/` does not exist yet. WS1.1 is the cycle
+  that creates it.
+- Branch: `feat/mcp-graph-support-foundation`. HEAD at session
+  open should descend from `7560e48d` (continuity close) which
+  follows `5ec5004d` (ADR ratification + plan promotion + WS1.1
+  refinement) which follows `dbe7321c` (ADR-173/179 authorship).
+
+### Canonical scaffold reference
+
+`packages/core/result/` is the canonical `packages/core/*` scaffold.
+WS1.1 mirrors its file set with five additional items the WS1.1 row
+calls out (all also encoded verbatim in the active plan's YAML
+`todos` row `ws1-graph-core-scaffold`):
+
+1. `tsup.config.ts` is multi-entry, not 3-line — `createLibConfig()`
+   in `tsup.config.base.ts` defaults to single-entry `src/index.ts`
+   and graph-core needs five sub-paths (`./term`, `./dataset`,
+   `./jsonld`, `./canon`, `./vocab`). **Do not pass `dts` to
+   `createLibConfig`** — declarations are produced only by
+   `tsc --emitDeclarationOnly`; setting `dts` on tsup double-emits
+   and collides.
+2. `pnpm-workspace.yaml` is explicit (each workspace listed by exact
+   path), not wildcard. `packages/core/graph-core` must be added to
+   the `packages:` list.
+3. `knip.config.ts` enumerates workspaces explicitly under
+   `workspaces:`. Add a `'packages/core/graph-core': { project:
+   ['src/**/*.ts'] }` entry; absent registration produces a repo-wide
+   knip failure at pre-commit.
+4. `tsconfig.lint.json` is required (canonical reference has it).
+   Extends `./tsconfig.json`; pointed at by `eslint.config.ts`
+   `wsTsProject` variable. Absence breaks ESLint project resolution.
+5. `pnpm-lock.yaml` must be staged in the same commit as the
+   scaffold — adding a workspace updates the lockfile.
+
+### Zero tests in WS1.1
+
+Test-expert verdict: vitest is wired (config files present) but the
+first test lands in WS1.2 alongside the first product code (`Term`
+union: NamedNode | BlankNode | Literal | DefaultGraph | TripleTerm,
+plus `Quad`), per the atomic-landing invariant.
+
+### "Tree green" definition
+
+Matches `.husky/pre-commit` exactly (do not undercount):
+
+- `format-check:root` (prettier) passes
+- `markdownlint-check:root` passes
+- `knip` passes (requires step 3 above)
+- `depcruise` passes (no rule update needed; depcruise operates
+  on import paths and graph-core exports nothing real at WS1.1)
+- `turbo run type-check lint test` passes across **all** workspaces
+  (the new workspace's own gates exit 0; pre-existing workspaces
+  unchanged; `vitest.config.base.ts:11 passWithNoTests: true` makes
+  zero-tests-in-WS1.1 pass cleanly)
+
+### Commit-message gotchas observed in the prior session
+
+- The major-version-bump preventer hook
+  (`scripts/prevent-accidental-major-version.ts`) matches
+  `BREAKING CHANG` case-insensitively across the whole message.
+  Avoid the prose phrase "breaking change(s)" anywhere in the
+  body — reword to "incompatible" or similar.
+- Pre-commit `markdownlint --dot .` scans the entire working tree,
+  not just staged files. Peer-authored untracked markdown files can
+  block your commit. The fix is `markdownlint --fix` on the offending
+  peer file before retry (log the repair in the napkin); do not
+  narrow gate scope or use `--no-verify`. This stale-gate-sweep race
+  is tracked as a known repo defect in the
+  `cost-of-collaboration.plan.md` (agent-tooling) P0 — staged-only
+  gates.
+
+### Commit-queue protocol — non-negotiable from step 1
+
+The prior session was corrected mid-flight for skipping this. The
+queue is the predictor for foreign `.git/index.lock` collisions;
+staging before reading active-claims defeats its purpose.
+
+1. Read `.agent/state/collaboration/active-claims.json` for live
+   `git:index/head` claims AND `commit_queue` entries with `phase ∈
+   {queued, staging, pre_commit}`. Filter by liveness
+   (`claimed_at + freshness_seconds > now`).
+2. Read recent `.agent/state/collaboration/shared-comms-log.md`
+   tail for live coordination context.
+3. **Only then** open active claim:
+   `pnpm agent-tools:collaboration-state claims open --active
+   .agent/state/collaboration/active-claims.json --thread
+   connecting-oak-resources --area-kind git --area-pattern index/head
+   --intent "..." --platform claude-code --model claude-opus-4-7-1m
+   --now "$(date -u +%Y-%m-%dT%H:%M:%SZ)" --ttl-seconds 900`.
+4. Enqueue intent (`pnpm agent-tools:commit-queue -- enqueue
+   --file ... --file ...`) BEFORE `git add`.
+5. `phase staging` → `git add` by explicit pathspec →
+   `record-staged` (fingerprint).
+6. `pnpm exec tsx scripts/check-commit-skill-advisories.ts -F
+   <msg-file>` (advisory; pre-existing fitness pressure on
+   `napkin.md` / `repo-continuity.md` is NOT a commit verdict per
+   repo doctrine).
+7. `verify-staged --commit-subject "<exact subject>"` → `phase
+   pre_commit` → `git commit -F <msg-file>`.
+8. `complete --intent-id ...` → `claims close ...` with summary
+   citing the SHA.
+
+### After WS1.1 lands — promotion order
+
+Do **not** start WS1.2 until WS1.1 has landed green.
+
+1. Mark the YAML `todos` row `ws1-graph-core-scaffold` `status:
+   completed` (check sibling-row convention in the active plan
+   before editing).
+2. **WS1.2 next** — RDF Term hierarchy (`NamedNode`, `BlankNode`,
+   `Literal`, `DefaultGraph`) + `Quad` type, with type tests +
+   equality. Test-first cycle: one failing test, the product code
+   that greens it, one commit. Target shapes documented at
+   `.agent/research/graph-library.research.md` §4. `TripleTerm` is
+   WS1.2-or-later per the RDF 1.2-native stance (research §4 +
+   ADR-173 tripwire #2).
+
+### Carry-in discipline summary
+
+- `present-verdicts-not-menus` rule active (canonical at
+  `.agent/rules/`; adapters in `.claude/rules/` and `.cursor/rules/`).
+- Knowledge preservation is strictly prior to mechanical fitness
+  warnings (repo doctrine; napkin/distilled entries are written when
+  the moment occurs, not deferred for size reasons).
+- 30%-context-for-directives budget.
+- No-cheap-cure option discipline — only architectural-excellence
+  shapes are legitimate options.
+- ADRs permanent (no plan refs in body except canonical context);
+  plans ephemeral.
+
+### What the prior session shipped (for verification)
+
+- `dbe7321c` — orphan markdown bundle landed (ADR-173 reviewer
+  absorption, ADR-179 extraction, verdict-not-menu rule, plan body
+  updates, session-scoped napkin).
+- `5ec5004d` — ADR-173 + ADR-179 Status: Proposed → Accepted;
+  `graph-stack.plan.md` promoted current → active; WS0 marked
+  completed; WS1.1 row refined per holistic review by Fred,
+  type-expert, test-expert; PROMOTION-READY verdict by Barney
+  before ratification.
+- `7560e48d` — session-close surfaces (thread record, continuity
+  row, claim archives).
+
+`packages/core/graph-core/` is unblocked. Open the scaffold cycle.
+
+---
+
 **Prior refresh**: 2026-05-11 (Flamebright Burning Lava /
 `claude-code` / `claude-opus-4-7-1m` / `b1202e` — question-
 assumptions pass on the WS0 ADR brief. Three assumption-breaks
@@ -145,7 +308,7 @@ the bundle; commit-queue protocol failed twice this session (broken
 build from in-flight schema refactor; record-staged step clearing
 the index). **Memory captured**: feedback_simple_definite_no_imaginary_flows
 
-+ feedback_agents_default_no_gender (agents have no gender by
+- feedback_agents_default_no_gender (agents have no gender by
 default; use they/them unless self-declared).)
 
 **Prior refresh**: 2026-05-11 (Dusky Masking Cloak / `claude-code` /
@@ -407,10 +570,10 @@ promotion.)
 
 ## Thread Identity
 
-+ **Thread**: `connecting-oak-resources`
-+ **Thread purpose**: Connect Oak's own resources into this repo.
+- **Thread**: `connecting-oak-resources`
+- **Thread purpose**: Connect Oak's own resources into this repo.
   Two complementary streams:
-  + **Internal Oak knowledge-graph work** — the existing
+  - **Internal Oak knowledge-graph work** — the existing
     knowledge-graph-integration plans (graph-query-layer,
     graph-resource-factory, misconception/NC/open-education
     surfaces, kg-integration-quick-wins, kg-alignment-audit,
@@ -418,11 +581,11 @@ promotion.)
     ontology-repo-fresh-perspective-review, oak-curriculum-ontology-
     workspace-reassessment, direct-ontology-use-and-graph-serving-
     prototypes, agent-guidance-consolidation).
-  + **External Oak references** — research and selective adoption
+  - **External Oak references** — research and selective adoption
     from Oak's other public repos (oak-curriculum-ontology, Aila /
     oak-ai-lesson-assistant) plus concepts-only learning from Oak's
     private repos (oak-ai-moderation-service, aila-atomic-concepts).
-+ **Branch**: `planning/graph-tooling` for the current MVP-arc planning
+- **Branch**: `planning/graph-tooling` for the current MVP-arc planning
   closeout branch.
 
 ## Participating Agent Identities
@@ -450,18 +613,18 @@ promotion.)
 
 ## Plan Locations
 
-+ `.agent/plans/connecting-oak-resources/knowledge-graph-integration/`
+- `.agent/plans/connecting-oak-resources/knowledge-graph-integration/`
   — internal Oak KG work (was `.agent/plans/knowledge-graph-integration/`
   pre-2026-05-01 restructure).
-+ `.agent/plans/connecting-oak-resources/external-oak-references/` —
+- `.agent/plans/connecting-oak-resources/external-oak-references/` —
   external Oak repo research and selective adoption.
 
 ## Cross-Plan Links
 
-+ **EEF subthread** (`sector-engagement/eef/`) consumes the graph
+- **EEF subthread** (`sector-engagement/eef/`) consumes the graph
   layer (Increment 1: graph-query-layer.plan.md). EEF is *not* part
   of this thread (it is open-education evidence, not Oak-internal).
-+ **External (third-party) knowledge sources** live in the sibling
+- **External (third-party) knowledge sources** live in the sibling
   thread `exploring-open-education-resources/` —
   `.agent/memory/operational/threads/exploring-open-education-resources.next-session.md`.
 
@@ -469,17 +632,17 @@ promotion.)
 
 For external Oak repos:
 
-+ **Public repo + permissive license + attribution**: adoption-eligible.
+- **Public repo + permissive license + attribution**: adoption-eligible.
   Acknowledgement mechanism approved (per-file header + repo-level
   NOTICE + README acknowledgement of Oak National Academy).
-+ **Private repo**: concepts-only. We can learn patterns and apply
+- **Private repo**: concepts-only. We can learn patterns and apply
   them in our own implementation, but cannot copy code, prompts,
   schemas, or distinctive content into this public repo —
   doing so would bypass the upstream privacy choice.
 
 ## Light-Scan Findings (2026-05-01)
 
-+ `oaknational/oak-curriculum-ontology` — public, dual MIT/OGL-3.
+- `oaknational/oak-curriculum-ontology` — public, dual MIT/OGL-3.
   OWL ontology with classes including `Misconception`, `Thread`,
   `Programme`, `Unit`, `Lesson`, etc. Vocabulary overlap with
   Increment 1's adapter names (e.g. `MisconceptionGraphView`),
@@ -487,14 +650,14 @@ For external Oak repos:
   misconceptions; this repo's data has no misconception edges
   either — already a Phase B finding). Adoption-eligible.
   Alignment is informational, not blocking.
-+ `oaknational/oak-ai-lesson-assistant` (Aila) — public, MIT.
+- `oaknational/oak-ai-lesson-assistant` (Aila) — public, MIT.
   Monorepo with `apps/` and `packages/`. Likely contains prompts
   relevant to Increment 3 (cross-source-journeys). Adoption-eligible.
   Highest plan-altering potential of the three.
-+ `oaknational/oak-ai-moderation-service` — **private**. Concepts-
+- `oaknational/oak-ai-moderation-service` — **private**. Concepts-
   only. Relevant to plans that produce LLM prose (none of the
   current Increment 1/2 plans).
-+ Adjacent (private, concepts-only): `oaknational/aila-atomic-
+- Adjacent (private, concepts-only): `oaknational/aila-atomic-
   concepts` — "prerequisite derivation, and curriculum graph
   construction. Science KS3 pilot." Direct conceptual relevance
   to Increment 1's PrerequisiteGraph.
@@ -538,10 +701,10 @@ sections below as history.
 
 **Out of scope for this branch (per owner direction 2026-05-07)**:
 
-+ Slice 1 execution; slice 2/3a/3b execution.
-+ `graph-stack.plan.md` CURRENT → ACTIVE transition.
-+ ADR-173 ratification.
-+ Any production code changes.
+- Slice 1 execution; slice 2/3a/3b execution.
+- `graph-stack.plan.md` CURRENT → ACTIVE transition.
+- ADR-173 ratification.
+- Any production code changes.
 
 Queued (not blocked by MVP arc; appropriate for a separate session
 on a separate branch):
@@ -631,19 +794,19 @@ Tidal Surfing Lighthouse ran `docs-adr-expert`, `code-expert`, and
 `assumptions-expert` after the initial closeout fixes. Actionable
 follow-ups absorbed in the same pass:
 
-+ ADR-173 made self-contained: no permanent ADR links to ephemeral
+- ADR-173 made self-contained: no permanent ADR links to ephemeral
   `.agent/` plan or research surfaces.
-+ Superseded 2026-05-08 specialist-review opener marked historical, with
+- Superseded 2026-05-08 specialist-review opener marked historical, with
   the broken thread link corrected and the `53698ce0` ADR-168/ADR-173
   history clarified.
-+ Collaboration claim corrected to cover the deleted ADR-168 path plus
+- Collaboration claim corrected to cover the deleted ADR-168 path plus
   the added template/napkin/comms surfaces.
-+ Active napkin memory now points namespace/topology checks to ADR-173.
-+ Plan templates no longer generate `pnpm smoke:dev:stub`.
-+ `graph-stack.plan.md` no longer depends on nonexistent
+- Active napkin memory now points namespace/topology checks to ADR-173.
+- Plan templates no longer generate `pnpm smoke:dev:stub`.
+- `graph-stack.plan.md` no longer depends on nonexistent
   `ws4-mcp-wiring`; `ws5-coordination-amendments` depends on
   `ws4-query-proof`.
-+ The Phase 4 findings note now says these findings belong before slice
+- The Phase 4 findings note now says these findings belong before slice
   execution, while not retroactively blocking Breezy's planning closure.
 
 The old EEF plan contradiction note is superseded by the 2026-05-08
@@ -652,7 +815,7 @@ load-bearing now; LLM/outcome evaluation is follow-on infrastructure.
 
 ## References
 
-+ Plan: `.agent/plans/connecting-oak-resources/external-oak-references/future/external-oak-references-deep-research.plan.md`
-+ Existing strategy: `.agent/plans/connecting-oak-resources/knowledge-graph-integration/oak-ontology-graph-opportunities.strategy.md`
-+ Related thread record: `.agent/memory/operational/threads/eef.next-session.md`
-+ Sibling thread record: `.agent/memory/operational/threads/exploring-open-education-resources.next-session.md`
+- Plan: `.agent/plans/connecting-oak-resources/external-oak-references/future/external-oak-references-deep-research.plan.md`
+- Existing strategy: `.agent/plans/connecting-oak-resources/knowledge-graph-integration/oak-ontology-graph-opportunities.strategy.md`
+- Related thread record: `.agent/memory/operational/threads/eef.next-session.md`
+- Sibling thread record: `.agent/memory/operational/threads/exploring-open-education-resources.next-session.md`

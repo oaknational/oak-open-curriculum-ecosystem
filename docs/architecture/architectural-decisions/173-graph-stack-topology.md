@@ -32,10 +32,9 @@ architecture-expert-fred, assumptions-expert):
 - Plan-body routed findings (graph-enhance/graph-validate seam
   protocol, graph-ingest/graph-corpus-sdk corpus-local parse
   extension protocol, build-vs-buy attestation expansion, JSON-LD
-  framing performance contract test) absorbed into
-  [`graph-stack.plan.md`](../../../.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md)
-  rather than this ADR — they are sequencing and test-discipline
-  concerns, not topology decisions.
+  framing performance contract test) absorbed into the active graph
+  stack plan rather than this ADR — they are sequencing and
+  test-discipline concerns, not topology decisions.
 
 **Related**:
 [ADR-123](123-mcp-server-primitives-strategy.md) — MCP server primitives
@@ -53,10 +52,11 @@ cross-cutting thread fully named);
 graph substrate; the cross-cutting transport-discipline rule that the
 substrate ships no MCP/HTTP/CLI/transport-shaped code (extracted from
 ADR-173 on 2026-05-11);
-[`graph-mvp-arc.plan.md`](../../../.agent/plans/graph-mvp-arc.plan.md) —
-first vertical-slice consumer of this topology, keeping EEF and misconception
-cross-source value in scope while excluding NC graph/taxonomy work from the
-MVP.
+[ADR-157](157-multi-source-open-education-integration.md) (cited
+above) — the first vertical-slice consumer of this topology is
+the graph MVP arc that ADR-157 carries structurally; the active
+plan body in operational memory carries the per-increment
+sequencing.
 
 ## Context
 
