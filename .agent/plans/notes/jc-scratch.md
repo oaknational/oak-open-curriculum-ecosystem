@@ -2,15 +2,18 @@
 
 graph foundations for MVP
 
+# cost of collaboration
+
 profile pnpm check
 profile pre-commit hooks
-learning loop consolidation
-skills refresh
-
-land collaboration P-Foundation/P0
-
 agent tools cli overhaul
 agent communication improvements
+
+# BAU
+
+learning loop consolidation
+
+skills refresh
 
 ~~Researching which platforms no longer support commands, if they are going away, and move everything to skills~~
 
