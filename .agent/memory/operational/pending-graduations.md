@@ -92,9 +92,9 @@ not a verdict.
 
 ### `due` (current body candidates)
 
-The body now contains **8** due entries after reconciling five stale
+The body now contains **7** due entries after reconciling five stale
 due markers whose durable homes already exist and are named in this file's
-own graduation log.
+own graduation log, plus graduating the P3 enforcement entry.
 
 | Captured | Entry | Target / decision surface | Promotion decision |
 | --- | --- | --- | --- |
@@ -105,7 +105,6 @@ own graduation log.
 | 2026-05-11 | Commit-queue UX as structural cure surface | PDR or ADR amendment | PDR/ADR-shaped; keep due until Wave 3 doctrine settles. |
 | 2026-05-11 | Pre-commit hook must gate staged content only | ADR + rule + `cost-of-collaboration.plan.md` P0 | Host ADR-shaped and rule-shaped; this is the P0 blocker. |
 | 2026-05-11 | Peer-pair sidebar beats coordinator+helpers for design work | PDR or PDR amendment | PDR-shaped collaboration doctrine; owner-visible promotion decision required. |
-| 2026-05-11 | Advisory protocols decay under pressure; enforcement required | rule + `cost-of-collaboration.plan.md` P3 | Rule-shaped after implementation; keep due until enforcement shape lands. |
 
 ### Status Corrections Applied 2026-05-12
 
@@ -120,6 +119,12 @@ corrects stale status metadata; it does **not** silently promote new doctrine.
 | Invoke doc-and-onboarding experts on significant changes | `.agent/rules/invoke-doc-and-onboarding-experts-on-significant-changes.md` |
 | Observability orthogonal axes | ADR-171 + amendments to ADR-116/143/162/163 |
 | Inter-agent collaboration protocol gaps | PDR-056, preserving hypothesis-status evidence |
+
+### 2026-05-12 graduation log (Secret Vanishing Moth — P3 enforcement handoff)
+
+| Entry | Graduated to | Evidence |
+| --- | --- | --- |
+| Advisory protocols decay under pressure; enforcement required | `commit-queue guard` implementation + `cost-of-collaboration.plan.md` P3 evidence | `c083a1ab` |
 
 ### `partially-graduated`
 
@@ -166,13 +171,13 @@ the queue churns.
 
 | Status | Count | Notes |
 | --- | --- | --- |
-| due | 8 | body entries with live due metadata after stale-status corrections |
+| due | 7 | body entries with live due metadata after stale-status corrections and P3 graduation |
 | overdue | 0 | no body entry currently uses overdue metadata |
 | partially-graduated | 1 | stage-by-explicit-pathspec asymmetric-cure family |
 | quarantined | 0 | unchanged |
 | held-pending-plan | 1 | SDK codegen generator-duplication pointer |
 | pending | ~60 | grep count of explicit `status: pending` markers; prose-only older entries may still need metadata backfill |
-| **active queue total** | **~70** | excludes graduated-history bodies retained for audit until the next archive snapshot |
+| **active queue total** | **~69** | excludes graduated-history bodies retained for audit until the next archive snapshot |
 
 ### 2026-05-11 graduations log (Fronded Flowering Seed — graduation-candidates-drain session)
 
@@ -2882,7 +2887,10 @@ under the new gate regime.
 git add) | graduation-target:
 rule:commit-queue-enforced-pre-stage + plan:cost-of-collaboration.plan.md
 P3 | trigger: same-session evidence from multiple agents skipping the
-advisory queue under pressure; status: due | size: M]`
+advisory queue under pressure; status: graduated | graduated:
+2026-05-12 (Secret Vanishing Moth) | target-resolved:
+cost-of-collaboration.plan.md P3 + commit-queue guard at c083a1ab |
+size: M]`
 
 Anything that can be skipped will be skipped under pressure.
 Sparking Charring Ash skipped the commit queue at staging step;
@@ -2890,7 +2898,10 @@ their immediate next action hit the collision the queue would have
 predicted. Fix shape: structural enforcement at the pre-stage hook
 level — refuse `git add` if no active intent in `active-claims.json`
 matches the staged file set. Rule captures the constraint; cost-of-
-collaboration P3 captures the implementation.
+collaboration P3 captures the implementation. Graduated 2026-05-12:
+`commit-queue guard` now validates an active same-identity queue intent plus a
+live `git:index/head` claim before staging paths, and P3 evidence is recorded
+in `cost-of-collaboration.plan.md`.
 
 ### 2026-05-11 — Gatekeeper green-light stale-sweep race
 

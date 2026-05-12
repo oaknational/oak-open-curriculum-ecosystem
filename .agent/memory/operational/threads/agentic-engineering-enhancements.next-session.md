@@ -1,9 +1,10 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-> **Current continuation**: P3 commit-queue enforcement after P2 `comms watch`
-> closeout. P0.QG, P-Foundation, P1 directed-message authoring, and P2
-> directed-message watching are complete; new CLI work lands in the unified
-> `agent-tools <topic> <action>` shape from `cost-of-collaboration.plan.md`.
+> **Current continuation**: P4 identity disambiguation / active-agent visibility
+> after P3 commit-queue enforcement. P0.QG, P-Foundation, P1 directed-message
+> authoring, P2 directed-message watching, and P3 commit-queue enforcement are
+> complete; new CLI work lands in the unified `agent-tools <topic> <action>`
+> shape from `cost-of-collaboration.plan.md`.
 >
 > **New strategic work** (2026-05-12): Prismatic Beaming Twilight session designed
 > multi-agent delegation orchestration architecture extending ADR-180 beyond Codex
@@ -59,9 +60,9 @@ through injection, moving-target "currently" word in skill prose.
 Reviewer-recommended specialist follow-ups (`type-expert`, `test-expert`,
 `architecture-expert-barney`) were named but not invoked at owner direction.
 
-**Current routing**: P2 `comms watch` has landed. Continue with P3
-commit-queue enforcement; the codex-exec lane remains parked behind the
-`codex-exec-cli-deep-dive.plan.md` promotion trigger.
+**Current routing**: P3 commit-queue enforcement has landed. Continue with P4
+identity disambiguation / active-agent visibility; the codex-exec lane remains
+parked behind the `codex-exec-cli-deep-dive.plan.md` promotion trigger.
 
 **Post-commit corrections (2026-05-12 ~13:00 BST)**: owner flagged two
 procedural breaches in commit `6027e182`:
@@ -160,6 +161,41 @@ integration test file.
 **Next safe step**: P4 identity disambiguation / active-agent visibility is
 still separate. Do not retrofit it into the P3 guard; use the owner-visible
 uncertainty from the `6027e182` correction as P4 design input.
+
+## Session handoff after P3 and continuity commits (2026-05-12)
+
+**Landed this closeout**:
+
+- `c083a1ab feat(agent-tools): enforce commit-queue stage guard`
+- `1beede4d docs(agent): record agentic engineering continuity`
+
+**Handoff checks**:
+
+- Active claims and active commit queue were empty before handoff edits.
+- Entry-point drift sweep was clean for `AGENTS.md`, `CLAUDE.md`, and
+  `GEMINI.md`.
+- No relevant open conversation or escalation needed handoff action.
+- The tactical track card present in
+  `.agent/memory/operational/tracks/skills-standardisation-followup-timing.md`
+  is an older skills-standardisation follow-up surface, not part of this P3/P4
+  lane.
+- `.remember` and session comms surfaces did not add a new next-session action
+  beyond the already-recorded P4 routing and strategic delegation brief.
+
+**Pending-graduations update**: the due entry "Advisory protocols decay under
+pressure; enforcement required" is now graduated to the P3 implementation and
+`cost-of-collaboration.plan.md` evidence.
+
+**Deep consolidation status**: due, but not run in this handoff. The trigger is
+real (P3 closed and fitness pressure remains in known queue surfaces), but the
+bounded next implementation step is P4, and the deeper drain should be a
+deliberate consolidation session rather than hidden inside this closeout.
+
+**Next safe step**: implement P4 identity disambiguation / active-agent
+visibility from
+[`cost-of-collaboration.plan.md`](../../../plans/agent-tooling/current/cost-of-collaboration.plan.md).
+Use the `6027e182` active-agent uncertainty as design input; do not reopen P3
+unless the new guard itself fails in live use.
 
 ## P2 comms watch handoff (2026-05-12)
 
@@ -276,8 +312,8 @@ there. `repo-check profile` artifacts now include environment evidence,
 failure-phase classification, post-Turbo-gate status, and optional captured
 output via `--capture-output`.
 
-**Current routing**: P0.QG is complete, and P2 has now landed. Continue with
-P3 commit-queue enforcement. Do not reopen the "make pre-commit staged-only"
+**Current routing**: P0.QG, P2, and P3 have now landed. Continue with P4
+identity disambiguation / active-agent visibility. Do not reopen the "make pre-commit staged-only"
 framing; continue from the owner contract that pre-commit stops detectably
 broken code entering git history and pre-push owns higher-standard branch-exit
 failures.

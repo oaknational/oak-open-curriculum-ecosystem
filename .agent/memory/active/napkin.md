@@ -55,6 +55,16 @@ The most recent rotation is archived at
   appears during implementation, update or supplement the claim before the next
   edit, not after the first source write.
 
+### Session Handoff
+
+- Landed P3 at `c083a1ab` and the remaining agentic-engineering continuity
+  bundle at `1beede4d`. The final closeout routes the next implementation
+  slice to P4 identity disambiguation / active-agent visibility.
+- `pnpm agent-tools:check-commit-skill-advisories` correctly reported the
+  known Practice fitness debt as advisory, not as a commit verdict. Behaviour
+  change: route that signal into repo-continuity / consolidation status rather
+  than trying to trim knowledge surfaces during an implementation closeout.
+
 ## 2026-05-12 — Flamebright Sparking Forge / codex / GPT-5 / `019e1a`
 
 ### Consolidation Pass

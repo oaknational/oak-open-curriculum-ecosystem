@@ -147,8 +147,9 @@ each thread record; this table is the repo-level index.
 
 ### Agentic-Engineering Enhancements
 
-Immediate cost-of-collaboration lane: P0, P-Foundation, P1, and P2 are
-complete; continue with P3 commit-queue enforcement. The suspected flaky tests
+Immediate cost-of-collaboration lane: P0, P-Foundation, P1, P2, and P3 are
+complete; continue with P4 identity disambiguation / active-agent visibility.
+The suspected flaky tests
 listed in
 [`cost-of-collaboration.flaky-tests.md`](../../plans/agent-tooling/current/cost-of-collaboration.flaky-tests.md)
 are disposed as not reproduced, and representative busy-checkout cold/warm
@@ -179,8 +180,8 @@ promotion or archive, not by metric-shaped trimming. The acceptance bar remains:
   implementation windows.
 
 Implementation lane after profiling and consolidation: follow the thread
-record's cost-of-collaboration opener. P0, P-Foundation, P1, and P2 have
-landed; P3 is the next implementation step.
+record's cost-of-collaboration opener. P0, P-Foundation, P1, P2, and P3 have
+landed; P4 is the next implementation step.
 
 ### Connecting-Oak-Resources
 
@@ -211,8 +212,8 @@ commit`-authoritative "tree green") are recorded once under
 3. Monorepo workspace topology (superseding ADR-108, S0-S6 strategic plan) is
    parked until after the graph MVP implementation tranche unless the owner
    explicitly reopens it.
-4. Cost-of-collaboration P0, P-Foundation, P1, and P2 are complete; P1 landed
-   at `f88d0d67`; P3 commit-queue enforcement is next.
+4. Cost-of-collaboration P0, P-Foundation, P1, P2, and P3 are complete; P1
+   landed at `f88d0d67`, P2 at `0d3af914`, and P3 at `c083a1ab`.
 
 ## Repo-Wide Invariants / Non-Goals
 
@@ -371,6 +372,17 @@ old comms-events (< 7d), no ADR/PDR landed. No active claims opened
 by this session. Identity row updated in agentic-engineering-enhancements
 thread record. Repo-continuity identity summary refreshed to include
 Prismatic Beaming Twilight.
+
+**Same-day update (2026-05-12 — Secret Vanishing Moth / `codex` / GPT-5 /
+`019e1c`)**: status remains **due**. P3 commit-queue enforcement landed at
+`c083a1ab`; the remaining continuity and strategic delegation surfaces landed
+at `1beede4d`. This handoff marked the directly affected pending-graduations
+entry ("Advisory protocols decay under pressure") as graduated to
+`cost-of-collaboration.plan.md` P3 plus the new `commit-queue guard`
+implementation. Deeper consolidation remains due because Practice fitness
+pressure still exists in the known queue surfaces; this handoff does not run
+`jc-consolidate-docs`. Next implementation step: P4 identity disambiguation /
+active-agent visibility.
 
 Previous deep-consolidation and session-close prose lives in:
 
