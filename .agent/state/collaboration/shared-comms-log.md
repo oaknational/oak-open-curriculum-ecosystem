@@ -5797,3 +5797,129 @@ Material collaboration change observed after filtering monitor self-writes and h
 ## 2026-05-12T07:31:44Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Monitor observed comms change
 
 Monitor observed collaboration-state change. active claims: 1 (Hushed Shrouding Mist: Finish cost-of-collaboration P0.QG flaky-test investigation, clean check profiles, and scoped continuity evidence only.) fresh surfaces: comms-events: 3330e186-b0ee-4683-896b-4952b57c411b.json, b1ef5316-89d8-4577-a74d-0e853bee7504.json, c9afbcc5-2518-413b-b1cc-4ac90ae53df8.json | comms-messages: 198ee1a4-85d9-4313-af7a-bd3e2e49a9d3.json, 8a8811b0-c4bf-453e-b440-358b797fc057.json, 743cb9a7-0170-47a2-95e1-e0f1f85c60e6.json | conversations: pr-87-vercel-ignore-test-failures-prismatic-sidebar.json, pr-87-phases-3-6-vining-bending-root.json, ws3a-decision-thread-open.example.json | escalations: README.md Continuing 30-second non-blocking polling; no blocker.
+
+---
+
+## 2026-05-12T07:37:15Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Monitor observed comms change
+
+Monitor observed collaboration-state change. active claims: 2 (Hushed Shrouding Mist: Finish cost-of-collaboration P0.QG flaky-test investigation, clean check profiles, and scoped continuity evidence only.; Celestial Transiting Satellite: WS1.1 — scaffold packages/core/graph-core (graph-stack Inc.1a)) fresh surfaces: comms-events: a81800e7-0f40-4867-af7c-82f2059cd6ee.json, 3330e186-b0ee-4683-896b-4952b57c411b.json, b1ef5316-89d8-4577-a74d-0e853bee7504.json | comms-messages: 198ee1a4-85d9-4313-af7a-bd3e2e49a9d3.json, 8a8811b0-c4bf-453e-b440-358b797fc057.json, 743cb9a7-0170-47a2-95e1-e0f1f85c60e6.json | conversations: pr-87-vercel-ignore-test-failures-prismatic-sidebar.json, pr-87-phases-3-6-vining-bending-root.json, ws3a-decision-thread-open.example.json | escalations: README.md Continuing 30-second non-blocking polling; no blocker.
+
+---
+
+## 2026-05-12T07:37:36Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Material comms change observed
+
+Material collaboration change observed after filtering monitor self-writes and heartbeat-only churn. active claims: 2 latest non-Wooded headings: ## 2026-05-12T07:28:20Z — `Hushed Shrouding Mist` / `codex` / `GPT-5` / `019e1b` — P0.QG profile blocked by live skill-pruning deletion | ## 2026-05-12T07:28:30Z — `Galactic Transiting Galaxy` / `codex` / `GPT-5` / `019e1a` — curation commit waiting on foreign staged file | ## 2026-05-12T07:31:20Z — `Galactic Transiting Galaxy` / `codex` / `GPT-5` / `019e1a` — curation commit using pathspec-only mode Continuing 30-second polling; no blocker.
+
+---
+
+## 2026-05-12T07:37:45Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Monitor observed comms change
+
+Monitor observed collaboration-state change. active claims: 3 (Hushed Shrouding Mist: Finish cost-of-collaboration P0.QG flaky-test investigation, clean check profiles, and scoped continuity evidence only.; Celestial Transiting Satellite: WS1.1 — scaffold packages/core/graph-core (graph-stack Inc.1a); Hushed Shrouding Mist: Finish P0.QG repo-check profile hardening with focused tests.) fresh surfaces: comms-events: a410dbb9-d9b8-4c5a-82f7-4d6570e3ad04.json, 5142296d-7666-4f7f-8e57-5eba9a3d1251.json, a81800e7-0f40-4867-af7c-82f2059cd6ee.json | comms-messages: 198ee1a4-85d9-4313-af7a-bd3e2e49a9d3.json, 8a8811b0-c4bf-453e-b440-358b797fc057.json, 743cb9a7-0170-47a2-95e1-e0f1f85c60e6.json | conversations: pr-87-vercel-ignore-test-failures-prismatic-sidebar.json, pr-87-phases-3-6-vining-bending-root.json, ws3a-decision-thread-open.example.json | escalations: README.md Continuing 30-second non-blocking polling; no blocker.
+
+---
+
+## 2026-05-12T07:38:06Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Material comms change observed
+
+Material collaboration change observed after filtering monitor self-writes and heartbeat-only churn. active claims: 3 latest non-Wooded headings: ## 2026-05-12T07:28:20Z — `Hushed Shrouding Mist` / `codex` / `GPT-5` / `019e1b` — P0.QG profile blocked by live skill-pruning deletion | ## 2026-05-12T07:28:30Z — `Galactic Transiting Galaxy` / `codex` / `GPT-5` / `019e1a` — curation commit waiting on foreign staged file | ## 2026-05-12T07:31:20Z — `Galactic Transiting Galaxy` / `codex` / `GPT-5` / `019e1a` — curation commit using pathspec-only mode Continuing 30-second polling; no blocker.
+
+---
+
+## 2026-05-12T07:38:15Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Monitor observed comms change
+
+Monitor observed collaboration-state change. active claims: 3 (Hushed Shrouding Mist: Finish cost-of-collaboration P0.QG flaky-test investigation, clean check profiles, and scoped continuity evidence only.; Celestial Transiting Satellite: WS1.1 — scaffold packages/core/graph-core (graph-stack Inc.1a); Hushed Shrouding Mist: Finish P0.QG repo-check profile hardening with focused tests.) fresh surfaces: comms-events: 1d363bdd-327b-4125-bf5d-159c41b3698d.json, 2dc7a33c-8218-49fe-9bf3-0cfe4f459b6b.json, a410dbb9-d9b8-4c5a-82f7-4d6570e3ad04.json | comms-messages: 198ee1a4-85d9-4313-af7a-bd3e2e49a9d3.json, 8a8811b0-c4bf-453e-b440-358b797fc057.json, 743cb9a7-0170-47a2-95e1-e0f1f85c60e6.json | conversations: pr-87-vercel-ignore-test-failures-prismatic-sidebar.json, pr-87-phases-3-6-vining-bending-root.json, ws3a-decision-thread-open.example.json | escalations: README.md Continuing 30-second non-blocking polling; no blocker.
+
+---
+
+## 2026-05-12T07:41:15Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Monitor observed comms change
+
+Monitor observed collaboration-state change. active claims: 2 (Hushed Shrouding Mist: Finish cost-of-collaboration P0.QG flaky-test investigation, clean check profiles, and scoped continuity evidence only.; Hushed Shrouding Mist: Finish P0.QG repo-check profile hardening with focused tests.) fresh surfaces: comms-events: 8b5f7aca-87a6-48f2-8ba9-0f81a3775ca0.json, 1d363bdd-327b-4125-bf5d-159c41b3698d.json, 2dc7a33c-8218-49fe-9bf3-0cfe4f459b6b.json | comms-messages: 198ee1a4-85d9-4313-af7a-bd3e2e49a9d3.json, 8a8811b0-c4bf-453e-b440-358b797fc057.json, 743cb9a7-0170-47a2-95e1-e0f1f85c60e6.json | conversations: pr-87-vercel-ignore-test-failures-prismatic-sidebar.json, pr-87-phases-3-6-vining-bending-root.json, ws3a-decision-thread-open.example.json | escalations: README.md Continuing 30-second non-blocking polling; no blocker.
+
+---
+
+## 2026-05-12T07:41:36Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Material comms change observed
+
+Material collaboration change observed after filtering monitor self-writes and heartbeat-only churn. active claims: 3 latest non-Wooded headings: ## 2026-05-12T07:28:20Z — `Hushed Shrouding Mist` / `codex` / `GPT-5` / `019e1b` — P0.QG profile blocked by live skill-pruning deletion | ## 2026-05-12T07:28:30Z — `Galactic Transiting Galaxy` / `codex` / `GPT-5` / `019e1a` — curation commit waiting on foreign staged file | ## 2026-05-12T07:31:20Z — `Galactic Transiting Galaxy` / `codex` / `GPT-5` / `019e1a` — curation commit using pathspec-only mode Continuing 30-second polling; no blocker.
+
+---
+
+## 2026-05-12T07:41:45Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Monitor observed comms change
+
+Monitor observed collaboration-state change. active claims: 3 (Hushed Shrouding Mist: Finish cost-of-collaboration P0.QG flaky-test investigation, clean check profiles, and scoped continuity evidence only.; Hushed Shrouding Mist: Finish P0.QG repo-check profile hardening with focused tests.; Celestial Transiting Satellite: WS1.1 — scaffold packages/core/graph-core (graph-stack Inc.1a)) fresh surfaces: comms-events: aeb62237-43f5-485c-9863-3a7fe8de8a50.json, 296e58f6-2648-46ca-9697-dfbb3ce6064b.json, 8b5f7aca-87a6-48f2-8ba9-0f81a3775ca0.json | comms-messages: 198ee1a4-85d9-4313-af7a-bd3e2e49a9d3.json, 8a8811b0-c4bf-453e-b440-358b797fc057.json, 743cb9a7-0170-47a2-95e1-e0f1f85c60e6.json | conversations: pr-87-vercel-ignore-test-failures-prismatic-sidebar.json, pr-87-phases-3-6-vining-bending-root.json, ws3a-decision-thread-open.example.json | escalations: README.md Continuing 30-second non-blocking polling; no blocker.
+
+---
+
+## 2026-05-12T07:42:06Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Material comms change observed
+
+Material collaboration change observed after filtering monitor self-writes and heartbeat-only churn. active claims: 4 latest non-Wooded headings: ## 2026-05-12T07:28:20Z — `Hushed Shrouding Mist` / `codex` / `GPT-5` / `019e1b` — P0.QG profile blocked by live skill-pruning deletion | ## 2026-05-12T07:28:30Z — `Galactic Transiting Galaxy` / `codex` / `GPT-5` / `019e1a` — curation commit waiting on foreign staged file | ## 2026-05-12T07:31:20Z — `Galactic Transiting Galaxy` / `codex` / `GPT-5` / `019e1a` — curation commit using pathspec-only mode Continuing 30-second polling; no blocker.
+
+---
+
+## 2026-05-12T07:42:15Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Monitor observed comms change
+
+Monitor observed collaboration-state change. active claims: 4 (Hushed Shrouding Mist: Finish cost-of-collaboration P0.QG flaky-test investigation, clean check profiles, and scoped continuity evidence only.; Hushed Shrouding Mist: Finish P0.QG repo-check profile hardening with focused tests.; Celestial Transiting Satellite: WS1.1 — scaffold packages/core/graph-core (graph-stack Inc.1a); Hushed Shrouding Mist: Stage and commit P0.QG profile hardening and continuity bundle.) fresh surfaces: comms-events: 041e9fcb-7579-45a1-a98b-dacb87ed7d53.json, 7ad94be3-1d0e-4144-b0f4-a3af57479063.json, b8f0063b-5344-4de1-9ac2-f9915a70d2c8.json | comms-messages: 198ee1a4-85d9-4313-af7a-bd3e2e49a9d3.json, 8a8811b0-c4bf-453e-b440-358b797fc057.json, 743cb9a7-0170-47a2-95e1-e0f1f85c60e6.json | conversations: pr-87-vercel-ignore-test-failures-prismatic-sidebar.json, pr-87-phases-3-6-vining-bending-root.json, ws3a-decision-thread-open.example.json | escalations: README.md Continuing 30-second non-blocking polling; no blocker.
+
+---
+
+## 2026-05-12T07:43:15Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Monitor observed comms change
+
+Monitor observed collaboration-state change. active claims: 4 (Hushed Shrouding Mist: Finish cost-of-collaboration P0.QG flaky-test investigation, clean check profiles, and scoped continuity evidence only.; Hushed Shrouding Mist: Finish P0.QG repo-check profile hardening with focused tests.; Celestial Transiting Satellite: WS1.1 — scaffold packages/core/graph-core (graph-stack Inc.1a); Hushed Shrouding Mist: Stage and commit P0.QG profile hardening and continuity bundle.) fresh surfaces: comms-events: 9822fc22-7d91-43a9-a74c-13901d1391ad.json, 12fe513c-a8bc-455c-9a31-b7c39a8e101a.json, 041e9fcb-7579-45a1-a98b-dacb87ed7d53.json | comms-messages: 198ee1a4-85d9-4313-af7a-bd3e2e49a9d3.json, 8a8811b0-c4bf-453e-b440-358b797fc057.json, 743cb9a7-0170-47a2-95e1-e0f1f85c60e6.json | conversations: pr-87-vercel-ignore-test-failures-prismatic-sidebar.json, pr-87-phases-3-6-vining-bending-root.json, ws3a-decision-thread-open.example.json | escalations: README.md Continuing 30-second non-blocking polling; no blocker.
+
+---
+
+## 2026-05-12T07:43:37Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Material comms change observed
+
+Material collaboration change observed after filtering monitor self-writes and heartbeat-only churn. active claims: 4 latest non-Wooded headings: ## 2026-05-12T07:28:20Z — `Hushed Shrouding Mist` / `codex` / `GPT-5` / `019e1b` — P0.QG profile blocked by live skill-pruning deletion | ## 2026-05-12T07:28:30Z — `Galactic Transiting Galaxy` / `codex` / `GPT-5` / `019e1a` — curation commit waiting on foreign staged file | ## 2026-05-12T07:31:20Z — `Galactic Transiting Galaxy` / `codex` / `GPT-5` / `019e1a` — curation commit using pathspec-only mode Continuing 30-second polling; no blocker.
+
+---
+
+## 2026-05-12T07:43:45Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Monitor observed comms change
+
+Monitor observed collaboration-state change. active claims: 4 (Hushed Shrouding Mist: Finish cost-of-collaboration P0.QG flaky-test investigation, clean check profiles, and scoped continuity evidence only.; Hushed Shrouding Mist: Finish P0.QG repo-check profile hardening with focused tests.; Celestial Transiting Satellite: WS1.1 — scaffold packages/core/graph-core (graph-stack Inc.1a); Hushed Shrouding Mist: Stage and commit P0.QG profile hardening and continuity bundle.) fresh surfaces: comms-events: 7c25de68-3ad3-49b0-a136-56f6f6b83936.json, 4ee761cf-544d-4845-b55b-3fac840cca79.json, 9822fc22-7d91-43a9-a74c-13901d1391ad.json | comms-messages: 198ee1a4-85d9-4313-af7a-bd3e2e49a9d3.json, 8a8811b0-c4bf-453e-b440-358b797fc057.json, 743cb9a7-0170-47a2-95e1-e0f1f85c60e6.json | conversations: pr-87-vercel-ignore-test-failures-prismatic-sidebar.json, pr-87-phases-3-6-vining-bending-root.json, ws3a-decision-thread-open.example.json | escalations: README.md Continuing 30-second non-blocking polling; no blocker.
+
+---
+
+## 2026-05-12T07:44:07Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Material comms change observed
+
+Material collaboration change observed after filtering monitor self-writes and heartbeat-only churn. active claims: 1 latest non-Wooded headings: ## 2026-05-12T07:28:20Z — `Hushed Shrouding Mist` / `codex` / `GPT-5` / `019e1b` — P0.QG profile blocked by live skill-pruning deletion | ## 2026-05-12T07:28:30Z — `Galactic Transiting Galaxy` / `codex` / `GPT-5` / `019e1a` — curation commit waiting on foreign staged file | ## 2026-05-12T07:31:20Z — `Galactic Transiting Galaxy` / `codex` / `GPT-5` / `019e1a` — curation commit using pathspec-only mode Continuing 30-second polling; no blocker.
+
+---
+
+## 2026-05-12T07:44:15Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Monitor observed comms change
+
+Monitor observed collaboration-state change. active claims: 1 (Celestial Transiting Satellite: WS1.1 — scaffold packages/core/graph-core (graph-stack Inc.1a)) fresh surfaces: comms-events: f087f085-769c-48b7-8abd-dea44bbe87bf.json, 6382c004-8b16-46da-afda-36a6ae6d7938.json, 7c25de68-3ad3-49b0-a136-56f6f6b83936.json | comms-messages: 198ee1a4-85d9-4313-af7a-bd3e2e49a9d3.json, 8a8811b0-c4bf-453e-b440-358b797fc057.json, 743cb9a7-0170-47a2-95e1-e0f1f85c60e6.json | conversations: pr-87-vercel-ignore-test-failures-prismatic-sidebar.json, pr-87-phases-3-6-vining-bending-root.json, ws3a-decision-thread-open.example.json | escalations: README.md Continuing 30-second non-blocking polling; no blocker.
+
+---
+
+## 2026-05-12T07:44:37Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Material comms change observed
+
+Material collaboration change observed after filtering monitor self-writes and heartbeat-only churn. active claims: 1 latest non-Wooded headings: ## 2026-05-12T07:31:20Z — `Galactic Transiting Galaxy` / `codex` / `GPT-5` / `019e1a` — curation commit using pathspec-only mode Continuing 30-second polling; no blocker.
+
+---
+
+## 2026-05-12T07:44:45Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Monitor observed comms change
+
+Monitor observed collaboration-state change. active claims: 1 (Celestial Transiting Satellite: WS1.1 — scaffold packages/core/graph-core (graph-stack Inc.1a)) fresh surfaces: comms-events: 2209a870-abf6-464f-88e8-f03bb62181bc.json, bd3ae55e-10e3-477d-913a-d6c99013772a.json, f087f085-769c-48b7-8abd-dea44bbe87bf.json | comms-messages: 198ee1a4-85d9-4313-af7a-bd3e2e49a9d3.json, 8a8811b0-c4bf-453e-b440-358b797fc057.json, 743cb9a7-0170-47a2-95e1-e0f1f85c60e6.json | conversations: pr-87-vercel-ignore-test-failures-prismatic-sidebar.json, pr-87-phases-3-6-vining-bending-root.json, ws3a-decision-thread-open.example.json | escalations: README.md Continuing 30-second non-blocking polling; no blocker.
+
+---
+
+## 2026-05-12T07:45:45Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Monitor observed comms change
+
+Monitor observed collaboration-state change. active claims: 1 (Celestial Transiting Satellite: WS1.1 — scaffold packages/core/graph-core (graph-stack Inc.1a)) fresh surfaces: comms-events: ba4b0d57-0eb7-42d3-a008-6d1e0b37fcde.json, 2209a870-abf6-464f-88e8-f03bb62181bc.json, bd3ae55e-10e3-477d-913a-d6c99013772a.json | comms-messages: 198ee1a4-85d9-4313-af7a-bd3e2e49a9d3.json, 8a8811b0-c4bf-453e-b440-358b797fc057.json, 743cb9a7-0170-47a2-95e1-e0f1f85c60e6.json | conversations: pr-87-vercel-ignore-test-failures-prismatic-sidebar.json, pr-87-phases-3-6-vining-bending-root.json, ws3a-decision-thread-open.example.json | escalations: README.md Continuing 30-second non-blocking polling; no blocker.
+
+---
+
+## 2026-05-12T07:46:37Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Material comms change observed
+
+Material collaboration change observed after filtering monitor self-writes and heartbeat-only churn. active claims: 0 latest non-Wooded headings: ## 2026-05-12T07:31:20Z — `Galactic Transiting Galaxy` / `codex` / `GPT-5` / `019e1a` — curation commit using pathspec-only mode Continuing 30-second polling; no blocker.
+
+---
+
+## 2026-05-12T07:46:45Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Monitor observed comms change
+
+Monitor observed collaboration-state change. active claims: 0 fresh surfaces: comms-events: d9c06b80-b00d-4653-9322-1c7e6b0329fd.json, 3b9bb6ec-7c33-4aa5-b735-0126985aae7f.json, ba4b0d57-0eb7-42d3-a008-6d1e0b37fcde.json | comms-messages: 198ee1a4-85d9-4313-af7a-bd3e2e49a9d3.json, 8a8811b0-c4bf-453e-b440-358b797fc057.json, 743cb9a7-0170-47a2-95e1-e0f1f85c60e6.json | conversations: pr-87-vercel-ignore-test-failures-prismatic-sidebar.json, pr-87-phases-3-6-vining-bending-root.json, ws3a-decision-thread-open.example.json | escalations: README.md Continuing 30-second non-blocking polling; no blocker.
+
+---
+
+## 2026-05-12T07:47:15Z — `Wooded Spreading Thicket` / `cursor` / `GPT-5.5` / `unknown` — Monitor observed comms change
+
+Monitor observed collaboration-state change. active claims: 1 (Hushed Shrouding Mist: Commit all current collaboration state after P0 and graph-core commits.) fresh surfaces: comms-events: 6767c1a0-47e0-4ed8-b3e7-1de9162126f1.json, 04c3042d-236c-48e2-8825-f8afce722a4a.json, d9c06b80-b00d-4653-9322-1c7e6b0329fd.json | comms-messages: 198ee1a4-85d9-4313-af7a-bd3e2e49a9d3.json, 8a8811b0-c4bf-453e-b440-358b797fc057.json, 743cb9a7-0170-47a2-95e1-e0f1f85c60e6.json | conversations: pr-87-vercel-ignore-test-failures-prismatic-sidebar.json, pr-87-phases-3-6-vining-bending-root.json, ws3a-decision-thread-open.example.json | escalations: README.md Continuing 30-second non-blocking polling; no blocker.

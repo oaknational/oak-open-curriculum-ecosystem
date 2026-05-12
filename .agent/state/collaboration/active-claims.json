@@ -870,36 +870,41 @@
       "staged_bundle_fingerprint": "92ae7a3078750c2ef4db69b014265caeb523c4a01517cc6e1ef0a17cd24f6c93",
       "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nM\t.agent/skills/consolidate-docs/SKILL-CANONICAL.md\nM\t.agent/skills/metacognition/SKILL-CANONICAL.md\nM\t.agent/skills/session-handoff/SKILL-CANONICAL.md\nM\t.agent/state/collaboration/active-claims.json\nA\t.agent/state/collaboration/comms-events/09934f2b-cda2-403f-a056-263838de0dee.json\nA\t.agent/state/collaboration/comms-events/12b31912-30c7-4d7b-a2c0-b000110dc481.json\nA\t.agent/state/collaboration/comms-events/54b1b3bc-176b-457c-9245-595f21c9e5ab.json\nA\t.agent/state/collaboration/comms-events/7cfb3de1-efd6-4ce0-9f4d-21e290056d9e.json\nA\t.agent/state/collaboration/comms-events/99afd8e5-bee2-496b-b2ee-4cd0a80f9fd1.json\nA\t.agent/state/collaboration/comms-events/9daf689e-1bb2-440b-ab39-5d891d20e4fe.json\nA\t.agent/state/collaboration/comms-events/9e7ef1f3-5d4c-4b9e-b24d-8c0396cd29c7.json\nA\t.agent/state/collaboration/comms-events/ac074457-6faa-49e1-9372-9d4aa875c287.json\nA\t.agent/state/collaboration/comms-events/c2cc6929-0951-4f2e-b28d-ad69d2c34fb2.json\nA\t.agent/state/collaboration/comms-events/cd71af49-0388-4b8a-adb1-251f2796cf07.json\nA\t.agent/state/collaboration/comms-events/f0a135d4-440e-482c-a6ec-7dce98340143.json\nM\t.agent/state/collaboration/shared-comms-log.md\n",
       "notes": "Owner stopped commit attempt after broad pre-commit/Turbo runs appeared to collide with mutating parallel agent work and local generated workspace state."
+    },
+    {
+      "intent_id": "44fd2679-9d1b-460e-a9ee-d473ae2d0ada",
+      "claim_id": "674cb4fb-eb31-41a8-be5b-cf8fe47fcef0",
+      "agent_id": {
+        "agent_name": "Celestial Transiting Satellite",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "9bc8e3"
+      },
+      "files": [
+        "packages/core/graph-core/package.json",
+        "packages/core/graph-core/README.md",
+        "packages/core/graph-core/tsconfig.json",
+        "packages/core/graph-core/tsconfig.build.json",
+        "packages/core/graph-core/tsconfig.lint.json",
+        "packages/core/graph-core/tsup.config.ts",
+        "packages/core/graph-core/vitest.config.ts",
+        "packages/core/graph-core/eslint.config.ts",
+        "packages/core/graph-core/src/index.ts",
+        "packages/core/graph-core/src/term/index.ts",
+        "packages/core/graph-core/src/dataset/index.ts",
+        "packages/core/graph-core/src/jsonld/index.ts",
+        "packages/core/graph-core/src/canon/index.ts",
+        "packages/core/graph-core/src/vocab/index.ts",
+        "pnpm-workspace.yaml",
+        "knip.config.ts",
+        "pnpm-lock.yaml"
+      ],
+      "commit_subject": "feat(graph): scaffold graph-core workspace per ADR-173/179",
+      "queued_at": "2026-05-12T07:37:37.541Z",
+      "updated_at": "2026-05-12T07:40:58.998Z",
+      "expires_at": "2026-05-12T07:52:37.541Z",
+      "phase": "abandoned"
     }
   ],
-  "claims": [
-    {
-      "claim_id": "337c03ef-3e70-46bb-a148-125f75b9a03f",
-      "agent_id": {
-        "agent_name": "Hushed Shrouding Mist",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e1b"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/plans/agent-tooling/current/cost-of-collaboration.flaky-tests.md",
-            ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md",
-            ".agent/memory/operational/repo-continuity.md",
-            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
-            ".logs/check-profiles/**",
-            "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/oauth-rate-limit.integration.test.ts",
-            "apps/oak-curriculum-mcp-streamable-http/src/correlation/middleware.integration.test.ts"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-12T07:22:45Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Finish cost-of-collaboration P0.QG flaky-test investigation, clean check profiles, and scoped continuity evidence only."
-    }
-  ]
+  "claims": []
 }
