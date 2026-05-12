@@ -9,6 +9,48 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-12 — Flamebright Roasting Magma / `codex` /
+GPT-5 / `019e1a`, root-script retirement landed, `pnpm check`
+profiling handed off)**: landed
+`fabe99c3 refactor(tooling): retire root scripts` through the commit
+queue. Root `scripts/` is deleted; retained validators and hook helpers
+now live in workspace-owned surfaces (`agent-tools/scripts/**` or
+`packages/core/oak-eslint/scripts/**`); `.gitignore` now ignores only
+root `/scripts/` with an explicit workspace-logic comment. Added
+`pnpm check:profile` / `pnpm agent-tools:repo-check profile` and staged
+Markdown lint support for pre-commit. Verification included
+agent-tools test/type-check/lint, oak-eslint test/type-check/
+validate-boundaries, `pnpm repo-validators:check`, profile dry run,
+staged Markdown route, root markdownlint, root format check, Knip,
+depcruise, pre-commit Turbo type/lint/test sweep, and commit-message
+checks. The commit-skill advisory check remained advisory-only and
+reported pre-existing fitness pressure (napkin, pending-graduations,
+repo-continuity). **Next safe step**: continue the owner's opening
+brief for this thread by profiling the deliberately exhaustive
+`pnpm check` workflow: capture the Turbo graph, profile the
+many-process run, map local/pre-commit/pre-push/GitHub/SonarQube/CodeQL
+trigger purposes, and identify any tuning that preserves explicit
+assurance. **Deep consolidation status**: due — pre-existing
+repo-continuity and pending-graduations fitness pressure remains separate
+from this handoff; no new consolidation run was started after the commit.
+
+**Session close (2026-05-12 — Torrid Flaring Hearth / `codex` /
+GPT-5 / `019e1a`, consolidate-docs pass + handoff)**: ran
+`jc-start-right-thorough`, then `jc-consolidate-docs`, then
+`jc-session-handoff`. Active napkin rotation is complete in the working tree:
+`napkin-2026-05-12.md` archives the prior active napkin, active `napkin.md`
+is reset, 2026-05-12 distilled learning entries are added, and stale
+collaboration claims were archived. Validation: `pnpm
+practice:fitness:informational` executed; `pnpm
+practice:fitness:strict-hard` still fails on known structural debt. **Next
+safe step**: open a focused consolidation session for `repo-continuity.md`
+plus `pending-graduations.md`: preserve live state, archive or split
+historical closeout prose, reconcile the pending-graduations index/counts
+against body entries marked `status: due`, and route any promotions through
+owner-visible decisions. **Deep consolidation status**: due — this handoff
+identified critical/hard fitness pressure in `repo-continuity.md` and
+`pending-graduations.md`; the next session owns the drain.
+
 **Session close (2026-05-12 — Wooded Spreading Thicket / `claude-code`
 / opus-4-7-1m / `5c8f3c`, post-handoff continuation — P-Foundation
 landed, queue-bypass corrections captured)**: continued the agent
@@ -339,7 +381,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Wooded Spreading Thicket / `claude-code` / opus-4-7-1m / `5c8f3c` / 2026-05-11 (coordinator + gatekeeper through four-agent collaboration window; architectural reset captured; cost-of-collaboration plan authored, primary plan superseded, 5 feedback memories saved, B-11 design co-locked with Galactic in sidebar); Galactic Transiting Orbit / `codex` / GPT-5 / `019e18` / 2026-05-11 (F-15 recursion guard landed `70e746a3`; B-10 renderer compatibility + `comms inbox` landed `0be469a9`; B-11 sidebar design locked); Gilded Shimmering Dawn / `cursor` / GPT-5.5 / `3869cd` / 2026-05-11 (Cursor sub-coordinator: fresh-session linear delegation to 3 read-only helpers; result `3869cd-cursor-result-1-legacy-comms-audit`); Embered Burning Magma / `codex` / GPT-5 / `019e18` / 2026-05-11 (Wave 3 F-11 commit-queue list/show inspection slice, commit `e298723c`); Shaded Ripening Copse / `claude-code` / opus-4-7-1m / `c13bdf` / 2026-05-11 (commit-queue UX brief — B-02/B-03 + Workstream 4 architectural seam, commit `5c299ed5`); Soaring Darting Kite / `claude-code` / opus-4-7-1m / `01db95` / 2026-05-11 (R1.b landed `b529fa6e` + third-instance peer-commit-absorption record `5aa91a76`; tail plan reshaped into 6 sequenced waves); Fronded Flowering Seed / `claude-code` / opus-4-7-1m / `19ecd5` / 2026-05-11 (graduation-candidates-drain — both due items graduated, commit `53995192`) |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Flamebright Roasting Magma / `codex` / GPT-5 / `019e1a` / 2026-05-12 (`fabe99c3` root-script retirement landed; next slice profiles deliberately exhaustive `pnpm check`); Torrid Flaring Hearth / `codex` / GPT-5 / `019e1a` / 2026-05-12 (consolidate-docs pass and napkin rotation); Wooded Spreading Thicket / `claude-code` / opus-4-7-1m / `5c8f3c` / 2026-05-11 (cost-of-collaboration plan and P-Foundation); Galactic Transiting Orbit / `codex` / GPT-5 / `019e18` / 2026-05-11 (F-15 and B-10); Gilded Shimmering Dawn / `cursor` / GPT-5.5 / `3869cd` / 2026-05-11 (Cursor helper sub-coordination); see thread record for full identity history |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Sparking Charring Ash / `claude-code` / opus-4-7-1m / `caf5e1` / 2026-05-12 (graph foundation work session — commits `dbe7321c` + `5ec5004d` + `7560e48d` + `2ca54b01`: orphan-bundle land, ADR-173/179 Accepted, plan promoted current→active, WS1.1 row refined with eleven acceptance items, three-reviewer follow-up absorbed; Inc.1a WS1.1 open for execution); Flamebright Burning Lava / `claude-code` / opus-4-7-1m / `b1202e` / 2026-05-11 (question-assumptions pass — ADR-173 reviewer absorption + ADR-179 extraction + plan body correction + verdict-not-menu rule); Shaded Ripening Copse / `claude-code` / opus-4-7-1m / `c13bdf` / 2026-05-11 (schedule-not-trigger sweep); Mistbound Watching Lantern / `claude-code` / opus-4-7-1m / `8fdb8b` / 2026-05-11 (graph-mvp-arc review-absorption + doctrine ratification); Dusky Masking Cloak / `claude-code` / opus-4-7-1m / `c5ff7f` / 2026-05-11; Blooming Growing Thicket / `claude-code` / opus-4-7-1m / `756c60` / 2026-05-11 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -365,6 +407,28 @@ This branch also depends on the Practice/tooling substrate work from main in
 [threads/agentic-engineering-enhancements.next-session.md](threads/agentic-engineering-enhancements.next-session.md).
 
 ## Current Session Focus
+
+**Latest focus (2026-05-12 — Flamebright Roasting Magma / `codex` /
+GPT-5 / `019e1a`, root-script retirement plus `pnpm check` profiling
+handoff)**: root-script retirement is landed at `fabe99c3`. The
+follow-up is explicitly the owner's opening brief from this thread:
+analyse and profile the deliberately exhaustive `pnpm check` process,
+including the Turbo graph and many-process workflow. Treat
+`pnpm check` as the engineer proof trigger, and map it against
+pre-commit, pre-push, GitHub push, SonarQube Cloud, and CodeQL without
+collapsing their purposes. The root-script question is closed unless
+new defects appear: root `scripts/` is gone, retained logic lives in
+workspaces, and `/scripts/` is ignored at the root with a comment that
+logic belongs in workspaces.
+
+**Latest focus (2026-05-12 — Torrid Flaring Hearth / `codex` /
+GPT-5 / `019e1a`, consolidate-docs + handoff)**: active napkin rotation is
+complete and ready to commit; the remaining structural consolidation pressure
+is intentionally not hidden. `repo-continuity.md` remains critical on
+lines/chars, `pending-graduations.md` remains hard/critical, and
+`practice-bootstrap.md` remains hard on chars. **Next safe step**: start a
+fresh, focused consolidation pass on `repo-continuity.md` and
+`pending-graduations.md` before broadening to other soft fitness surfaces.
 
 **Latest focus (2026-05-11 — Galactic Transiting Orbit / `codex` /
 GPT-5 / `019e18`, Wave 3 F-15 + B-10/B-11 comms coordination)**:

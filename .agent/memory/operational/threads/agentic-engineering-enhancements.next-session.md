@@ -3263,7 +3263,7 @@ and
 | --- | --- | --- | --- | --- | --- | --- |
 | `Gilded Shimmering Dawn` | `cursor` | `GPT-5.5` | `3869cd` | `owner-directed-sub-coordinator-for-Cursor-helper-work; introduced-to-Wooded-Spreading-Thicket; delegated-brief-e6f3113e-legacy-comms-event-audit-by-directory-to-three-read-only-lower-powered-helpers; synthesized-result-3869cd-cursor-result-1-legacy-comms-audit; captured-Cursor-comms-lesson-fresh-session-plus-simple-linear-parallelisable-plan` | 2026-05-11 | 2026-05-11 |
 | `Flamebright Roasting Magma` | `codex` | `GPT-5` | `019e1a` | `root-script-retirement-and-pnpm-check-profiling-handoff; committed-fabe99c3-through-commit-queue; moved-retained-root-scripts-to-workspaces; added-agent-tools-repo-check-profile-and-markdownlint-staged-surfaces; next-session-owns-deliberately-exhaustive-pnpm-check-analysis` | 2026-05-12 | 2026-05-12 |
-| `Torrid Flaring Hearth` | `codex` | `GPT-5` | `019e1a` | `consolidate-docs-pass; napkin-rotation; fitness-routing; thread-register-and-collaboration-state-audit` | 2026-05-12 | 2026-05-12 |
+| `Torrid Flaring Hearth` | `codex` | `GPT-5` | `019e1a` | `consolidate-docs-pass; napkin-rotation; fitness-routing; thread-register-and-collaboration-state-audit; session-handoff-and-commit-closeout` | 2026-05-12 | 2026-05-12 |
 | `Wooded Spreading Thicket` | `cursor` | `GPT-5.5` | `unknown` | `persistent-comms-coordinator-for-session; monitors-active-claims-shared-comms-log-and-fresh-comms-surfaces-every-30s; updateCurrentStep-telemetry-triage-external-tool-not-in-repo; writes-only-on-change-milestone-blocker-or-quiet-interval; all-agents-introduce-to-Wooded-Spreading-Thicket` | 2026-05-11 | 2026-05-11 |
 | `Galactic Transiting Orbit` | `codex` | `GPT-5` | `019e18` | `Wave-3-commit-queue-UX-hardening-claim-close-cycle-fingerprint-recursion-slice-in-progress; preserving-post-commit-ledger-residue-from-Embered-Burning-Magma-as-evidence; scope-agent-tools-commit-queue-collaboration-state-tests-plan-status-and-session-lifecycle-surfaces; Wave-4-and-Wave-5-remain-closed` | 2026-05-11 | 2026-05-11 |
 | `Shaded Ripening Copse` | `claude-code` | `claude-opus-4-7-1m` | `c13bdf` | `commit-queue-UX-brief-author-B-02-B-03-Workstream-4-architectural-seam-and-third-direction-peer-commit-absorption-subsection-commit-5c299ed5; primary-thread-was-connecting-oak-resources-but-the-commit-queue-UX-brief-landed-here-per-opener-routing` | 2026-05-11 | 2026-05-11 |
@@ -3919,6 +3919,13 @@ nl -ba .agent/directives/AGENT.md
 
 ### Current Objective
 
+**2026-05-12 update (Torrid Flaring Hearth)**: the owner-requested
+`jc-start-right-thorough` + `jc-consolidate-docs` pass is complete. Active
+napkin rotation landed in working tree; 2026-05-12 distilled learnings were
+added; stale collaboration-state claims were cleared; entry-point drift sweep
+was clean. The remaining deliberate consolidation target is now
+`repo-continuity.md` plus `pending-graduations.md`.
+
 **2026-05-10 update (Sylvan Sprouting Grove)**: the owner-requested deep
 consolidate-docs pass and `/jc-session-handoff` are complete. The active
 napkin has been rotated and restarted; 2026-05-10 lessons are distilled; the
@@ -4091,6 +4098,11 @@ validation.
 
 ### Blockers / Low-Confidence Areas
 
+- `pnpm practice:fitness:strict-hard` currently fails on known structural
+  debt: `repo-continuity.md` critical, `pending-graduations.md`
+  hard/critical, and `practice-bootstrap.md` hard on characters.
+- `pending-graduations.md` index/count state appears stale relative to body
+  entries marked `status: due`; verify the body before moving entries.
 - Full branch gates are not claimed green beyond the real pre-commit hook that
   passed for `5c39d1d4`; current repo state may still include product-lane debt
   outside the completed practice-thread passes.
@@ -4136,9 +4148,19 @@ the advisory commit queue should make friction visible rather than hiding it.**
 
 Choose the lane deliberately:
 
-0. **Practice context-cost baseline follow-up (just-opened 2026-05-05 by Gnarled Climbing Bark)** — first baseline landed (figures only) at [`practice-context-cost-baseline.md`](../../../analysis/practice-context-cost-baseline.md). Doc commit deferred on unrelated OAuth proxy test gate (see `repo-continuity.md § Next Safe Step`). When that gate is unblocked, re-attempt the deferred doc commit (3 files staged in working tree). Refinement targets named in the analysis file's §Refinement Targets and registered as four scope-expansion items in [`memetic-immune-system-and-progressive-disclosure.plan.md`](../../../plans/agentic-engineering-enhancements/future/memetic-immune-system-and-progressive-disclosure.plan.md) §Scope Expansion Register: agent-tools CLI, fitness frontmatter token-estimate fields, fitness reporter token rendering, frontmatter mandation across guidance files. Each promotes on its own evidence trigger.
+0. **Focused consolidation drain (owner-requested next session)** — run
+   `jc-start-right-thorough`, then a bounded `jc-consolidate-docs` pass on
+   `repo-continuity.md` and `pending-graduations.md`. Goals: archive or split
+   historical repo-continuity closeout content while preserving live state;
+   reconcile pending-graduations index/counts against body `status: due`
+   entries; surface owner-visible ADR/PDR promotion decisions instead of
+   silently graduating doctrine. Keep cost-of-collaboration P0 status in view:
+   `.husky/pre-commit` still gates whole-tree checks, so avoid multi-agent
+   implementation windows until P0 lands.
 
-1. **Doctrine-enforcement-quick-wins continuation (WS3, WS4, WS6)** —
+1. **Practice context-cost baseline follow-up (just-opened 2026-05-05 by Gnarled Climbing Bark)** — first baseline landed (figures only) at [`practice-context-cost-baseline.md`](../../../analysis/practice-context-cost-baseline.md). Doc commit deferred on unrelated OAuth proxy test gate (see `repo-continuity.md § Next Safe Step`). When that gate is unblocked, re-attempt the deferred doc commit (3 files staged in working tree). Refinement targets named in the analysis file's §Refinement Targets and registered as four scope-expansion items in [`memetic-immune-system-and-progressive-disclosure.plan.md`](../../../plans/agentic-engineering-enhancements/future/memetic-immune-system-and-progressive-disclosure.plan.md) §Scope Expansion Register: agent-tools CLI, fitness frontmatter token-estimate fields, fitness reporter token rendering, frontmatter mandation across guidance files. Each promotes on its own evidence trigger.
+
+2. **Doctrine-enforcement-quick-wins continuation (WS3, WS4, WS6)** —
    continue
    [`doctrine-enforcement-quick-wins.plan.md`](../../../plans/agentic-engineering-enhancements/current/doctrine-enforcement-quick-wins.plan.md).
    Pearly Snorkelling Reef's 2026-05-04 session salvaged WS1
@@ -4154,7 +4176,7 @@ Choose the lane deliberately:
    directly** for these three — the parallel-worktree base-selection
    was unreliable in the prior attempt.
 
-2. **Collaboration-state write safety closure** — continue
+3. **Collaboration-state write safety closure** — continue
    [`collaboration-state-write-safety.plan.md`](../../../plans/agent-tooling/current/collaboration-state-write-safety.plan.md).
    The implementation is landed, and the named docs fitness blockers have been
    structurally routed by the deep consolidation pass. The brief active-napkin
@@ -4162,41 +4184,41 @@ Choose the lane deliberately:
    to close/archive the write-safety plan with the current soft-only evidence.
    Treat hooks/session-exit cleanup as a later refinement.
 
-3. **Workspace layer separation audit** — architecture-and-infrastructure now
+4. **Workspace layer separation audit** — architecture-and-infrastructure now
    has a queued executable plan:
    [`workspace-layer-separation-audit.plan.md`](../../../plans/architecture-and-infrastructure/current/workspace-layer-separation-audit.plan.md).
    First safe step: Phase 0 inventory against ADR-154, ADR-108, the Oak
    surface isolation programme, `pnpm-workspace.yaml`, and current package
    manifests before any package moves.
 
-4. **Strict exact-optional cleanup** — fix the pre-existing
+5. **Strict exact-optional cleanup** — fix the pre-existing
    `codex-reviewer-resolve.ts` optional typing issue.
-5. **First real sidebar / joint-decision seed** — when a real overlap uses
+6. **First real sidebar / joint-decision seed** — when a real overlap uses
    `sidebar_*` or `joint_decision*` entries, capture whether it reached
    resolution without becoming a permission gate or default owner
    escalation.
-6. **MCP / SDK dirty work** — run targeted type-checks and resolve the
+7. **MCP / SDK dirty work** — run targeted type-checks and resolve the
    `ToolMeta` / `listUniversalTools` TypeScript debt.
-7. **Observability branch-primary** — read the
+8. **Observability branch-primary** — read the
    [`sentry-preview-validation-and-quality-triage.plan.md`](../../../plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md)
    executable brief before validation/triage work.
-8. **Lifecycle integration follow-up** — only after write-collision relief is
+9. **Lifecycle integration follow-up** — only after write-collision relief is
    underway or owner-directed, observe whether the new start-right / handoff /
    template lifecycle triggers are actually used in real sessions. Do not add
    hook refinements before the shared-state write path is made safer; first
    real sidebar/joint-decision usage should feed WS5 observation.
-9. **Codex session identity plumbing follow-up** — the high-impact current
+10. **Codex session identity plumbing follow-up** — the high-impact current
    slice is implemented in
    [`codex-session-identity-plumbing.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/codex-session-identity-plumbing.plan.md).
    Only perform manual repair of historical anonymous rows when there is
    stronger evidence than the row itself; keep title/statusline as optional
    display.
-10. **PR lifecycle skill** — promote
+11. **PR lifecycle skill** — promote
     [`pr-lifecycle-skill.plan.md`](../../../plans/agentic-engineering-enhancements/future/pr-lifecycle-skill.plan.md)
     when the next PR closeout needs agent-owned creation, comment harvesting,
     reviewer-wait handling, CI/Sonar/Bugbot triage, and gate-honest closure.
     First slice should be a documentation skill only.
-11. **Other agentic engineering work** — pick an owner-directed queued plan.
+12. **Other agentic engineering work** — pick an owner-directed queued plan.
     WS3B implementation is no longer background work; it has landed.
 
 ### Active Track Links

@@ -78,6 +78,18 @@ The most recent rotation is archived at
 - When a fitness file is oversized because it is carrying useful state, the
   cure is home, graduate, split, refine, or limit. It is not trim-for-metrics.
 
+### Session Handoff
+
+- Ran `jc-session-handoff` after the consolidation pass per owner direction.
+- No new ADR/PDR decision was made in this closeout. The next session should
+  inspect the already-surfaced candidates in `pending-graduations.md` and make
+  owner-visible promotion decisions there.
+- Entry-point drift sweep was clean for `AGENTS.md`, `CLAUDE.md`, and
+  `GEMINI.md`.
+- No session-created tactical track card required promotion or deletion. The
+  existing skills-standardisation timing card is older, still informational,
+  and outside this closeout bundle.
+
 ## 2026-05-12 — Flamebright Roasting Magma / codex / GPT-5 / `019e1a`
 
 ### Root-Script Retirement Surprises
