@@ -32,6 +32,13 @@ export async function readActiveClaimsFile(activePath: string): Promise<Collabor
 }
 
 /**
+ * Read and parse the closed claims archive.
+ */
+export async function readClosedClaimsFile(closedPath: string): Promise<ClosedClaimsArchive> {
+  return parseClosedClaimsArchive(await readFile(closedPath, 'utf8'));
+}
+
+/**
  * Append an immutable narrative communication event to the narrative
  * directory by exclusive file create. Narrative events are the only kind
  * authored at runtime; lifecycle and directed events are produced by other

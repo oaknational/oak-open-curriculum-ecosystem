@@ -4,6 +4,7 @@ import { join } from 'node:path';
 
 import { resolveIdentity } from './cli-identity.js';
 import { optional, required, valueOrDefault, type Options } from './cli-options.js';
+import { assertIdentityCanWrite } from './identity-write-guard.js';
 import { validateSharedStateAgentId } from './identity.js';
 import { readDirectedCommsMessages } from './state-io.js';
 import {
@@ -29,7 +30,7 @@ export async function directComms(
     event_id: eventId,
     created_at: valueOrDefault(options, 'now', new Date().toISOString()),
     kind: nonEmptyRequired(options, 'kind'),
-    from: currentAgent(options, env),
+    from: await currentAgent(options, env, 'comms direct'),
     to: recipientAgent(options),
     subject: nonEmptyRequired(options, 'subject'),
     body: nonEmptyRequired(options, 'body'),
@@ -46,7 +47,7 @@ export async function replyComms(
   env: CollaborationStateEnvironment,
 ): Promise<string> {
   const source = await sourceMessageForReply(options);
-  const from = currentAgent(options, env);
+  const from = await currentAgent(options, env, 'comms reply');
   assertSameAgent(from, source.to);
   const eventId = valueOrDefault(options, 'event-id', randomUUID());
   const message: DirectedCommsMessage = {
@@ -89,12 +90,22 @@ async function sourceMessageForReply(options: Options): Promise<DirectedCommsMes
   return source;
 }
 
-function currentAgent(options: Options, env: CollaborationStateEnvironment): CollaborationAgentId {
+async function currentAgent(
+  options: Options,
+  env: CollaborationStateEnvironment,
+  surface: string,
+): Promise<CollaborationAgentId> {
   const identity = resolveIdentity(options, env);
   const validation = validateSharedStateAgentId({ agentId: identity.agent_id, env });
   if (!validation.ok) {
     throw new Error(validation.reason);
   }
+  await assertIdentityCanWrite({
+    options,
+    agentId: identity.agent_id,
+    nowIso: valueOrDefault(options, 'now', new Date().toISOString()),
+    surface,
+  });
 
   return identity.agent_id;
 }
@@ -128,7 +139,6 @@ function assertSameAgent(actual: CollaborationAgentId, expected: CollaborationAg
   if (
     actual.agent_name !== expected.agent_name ||
     actual.platform !== expected.platform ||
-    actual.model !== expected.model ||
     actual.session_id_prefix !== expected.session_id_prefix
   ) {
     throw new Error(

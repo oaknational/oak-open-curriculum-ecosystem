@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 
+import { assertNoLiveIdentityRoutingCollision } from './active-agents.js';
 import { archiveStaleClaims } from './claims.js';
 import { resolveIdentity } from './cli-identity.js';
 import { optional, required, valueOrDefault, type Options } from './cli-options.js';
@@ -20,10 +21,19 @@ export async function openClaim(
 
   await updateActiveClaimsFile({
     activePath: required(options, 'active'),
-    transform: (registry) => ({
-      ...registry,
-      claims: [...registry.claims, openedClaim],
-    }),
+    transform: (registry) => {
+      assertNoLiveIdentityRoutingCollision({
+        registry,
+        nowIso: required(options, 'now'),
+        agentId: identity,
+        surface: 'claims open',
+      });
+
+      return {
+        ...registry,
+        claims: [...registry.claims, openedClaim],
+      };
+    },
   });
 
   return formatOpenClaimResult(openedClaim);

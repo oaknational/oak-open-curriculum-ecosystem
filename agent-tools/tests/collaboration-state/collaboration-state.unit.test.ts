@@ -99,6 +99,43 @@ describe('runCollaborationStateCli', () => {
     expect(result.stdout).toContain('"session_id_prefix": "019dd3"');
   });
 
+  it('fails identity preflight when the live routing tuple is claimed by another model', async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), 'collaboration-state-preflight-'));
+    const activePath = join(tempDir, 'active.json');
+    const registry: CollaborationRegistry = {
+      schema_version: '1.3.0',
+      commit_queue: [],
+      claims: [claim({ agent_id: { ...woodland, model: 'GPT-5.1' } })],
+    };
+    await writeFile(activePath, `${JSON.stringify(registry)}\n`);
+
+    try {
+      const result = await runCollaborationStateCli({
+        argv: [
+          '--',
+          'identity',
+          'preflight',
+          '--platform',
+          'codex',
+          '--model',
+          'GPT-5',
+          '--active',
+          activePath,
+          '--now',
+          nowIso,
+        ],
+        env: { CODEX_THREAD_ID: codexThreadId },
+      });
+
+      expect(result.exitCode).toBe(2);
+      expect(result.stderr).toContain(
+        'identity preflight identity route Woodland Creeping Petal / codex / 019dd3 collides with live identity Woodland Creeping Petal / codex / GPT-5.1 / 019dd3',
+      );
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
   it('accepts command-only check flags without a topic', async () => {
     const tempDir = await mkdtemp(join(tmpdir(), 'collaboration-state-check-'));
     const activePath = join(tempDir, 'active.json');
@@ -415,6 +452,7 @@ describe('claim CLI reports', () => {
         'events-dir': '/repo/.agent/state/collaboration/comms-events',
         'lifecycle-dir': '/repo/.agent/state/collaboration/comms-lifecycle',
         'messages-dir': '/repo/.agent/state/collaboration/comms-messages',
+        active: '/repo/.agent/state/collaboration/active-claims.json',
         now: nowIso,
         'created-at': nowIso,
         'event-id': 'event-one',

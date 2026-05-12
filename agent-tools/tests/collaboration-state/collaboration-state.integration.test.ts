@@ -26,13 +26,17 @@ describe('collaboration-state comms integration', () => {
   it('writes a directed message from the current identity', async () => {
     const tempDir = await mkdtemp(join(tmpdir(), 'collaboration-state-direct-'));
     const messagesDir = join(tempDir, 'comms-messages');
+    const activePath = join(tempDir, 'active-claims.json');
 
     try {
+      await writeEmptyActiveClaims(activePath);
       const result = await runCollaborationStateCli({
         argv: [
           '--',
           'comms',
           'direct',
+          '--active',
+          activePath,
           '--messages-dir',
           messagesDir,
           '--to-agent-name',
@@ -88,9 +92,11 @@ describe('collaboration-state comms integration', () => {
   it('replies to a directed message by swapping sender and recipient', async () => {
     const tempDir = await mkdtemp(join(tmpdir(), 'collaboration-state-reply-'));
     const messagesDir = join(tempDir, 'comms-messages');
+    const activePath = join(tempDir, 'active-claims.json');
 
     try {
       await mkdir(messagesDir);
+      await writeEmptyActiveClaims(activePath);
       await writeFile(
         join(messagesDir, 'message-one.json'),
         `${JSON.stringify({
@@ -110,6 +116,8 @@ describe('collaboration-state comms integration', () => {
           '--',
           'comms',
           'reply',
+          '--active',
+          activePath,
           '--messages-dir',
           messagesDir,
           '--to-event-id',
@@ -364,3 +372,7 @@ describe('collaboration-state comms integration', () => {
     }
   });
 });
+
+async function writeEmptyActiveClaims(path: string): Promise<void> {
+  await writeFile(path, '{"schema_version":"1.3.0","commit_queue":[],"claims":[]}\n');
+}

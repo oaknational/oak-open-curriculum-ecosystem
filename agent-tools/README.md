@@ -111,6 +111,8 @@ OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" pnpm agent-tools agent-identity -
   communication events and render `shared-comms-log.md`. Use `send` for the
   low-boilerplate append-and-render path. `send` prints JSON with `event_id`,
   `event_path`, and `shared_log_path` so agents can verify the write target.
+  Comms writes check the active-claims registry and refuse live identity-route
+  collisions on `(agent_name, platform, session_id_prefix)`.
 - `comms inbox` / `comms watch` / `comms direct` / `comms reply` — read
   directed messages, keep a long-lived directed-message watcher open, author
   first-strike directed messages, and reply to an existing directed message
@@ -121,23 +123,33 @@ OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" pnpm agent-tools agent-identity -
   `re: <source subject>` unless `--subject` is supplied.
 - `claims open|heartbeat|close|archive-stale` — mutate active and closed
   claim state through the JSON transaction helper. `claims open` prints the
-  generated or supplied `claim_id` as JSON.
-- `claims list|mine|show|status` — inspect active claims, including freshness
-  from `heartbeat_at ?? claimed_at` plus the claim TTL.
+  generated or supplied `claim_id` as JSON and refuses live identity-route
+  collisions.
+- `claims list|mine|show|status|active-agents` — inspect active claims,
+  active-agent routing tuples, and freshness from `heartbeat_at ?? claimed_at`
+  plus the claim TTL.
 - `conversation append` — append a structured decision-thread entry.
 - `escalation open|close` — write an owner-escalation record.
 - `check` — parse collaboration JSON and comms events for a quick sanity check.
 
 Codex sessions with `CODEX_THREAD_ID` available must not write shared state as
-`Codex` / `unknown`; run preflight first and use the derived identity.
+`Codex` / `unknown`; run preflight first and use the derived identity. Pass
+`--active` when preflighting before a write so reused live routing tuples fail
+before the shared-state mutation.
 
 Example:
 
 ```bash
 CODEX_THREAD_ID=019dd34d-cb6a-74e0-a29d-6cb8a65ea14b \
-  pnpm agent-tools collaboration-state identity preflight --platform codex --model GPT-5
+  pnpm agent-tools collaboration-state identity preflight \
+    --platform codex \
+    --model GPT-5 \
+    --active .agent/state/collaboration/active-claims.json
 pnpm agent-tools collaboration-state claims list --active .agent/state/collaboration/active-claims.json
 pnpm agent-tools collaboration-state claims mine --active .agent/state/collaboration/active-claims.json --platform cursor --model GPT-5.5
+pnpm agent-tools collaboration-state claims active-agents \
+  --active .agent/state/collaboration/active-claims.json \
+  --closed .agent/state/collaboration/closed-claims.archive.json
 pnpm agent-tools collaboration-state claims open \
   --active .agent/state/collaboration/active-claims.json \
   --thread agentic-engineering-enhancements \
@@ -159,6 +171,7 @@ pnpm agent-tools collaboration-state claims open \
   --model GPT-5.5
 pnpm agent-tools collaboration-state comms send --title "Heads-up" --body "Rendered via immutable event." --platform cursor --model GPT-5.5
 pnpm agent-tools collaboration-state comms direct \
+  --active .agent/state/collaboration/active-claims.json \
   --messages-dir .agent/state/collaboration/comms-messages \
   --to-agent-name "Coastal Cresting Prow" \
   --to-platform codex \
@@ -170,6 +183,7 @@ pnpm agent-tools collaboration-state comms direct \
   --platform cursor \
   --model GPT-5.5
 pnpm agent-tools collaboration-state comms reply \
+  --active .agent/state/collaboration/active-claims.json \
   --messages-dir .agent/state/collaboration/comms-messages \
   --to-event-id 11111111-1111-4111-8111-111111111111 \
   --kind coordination-ack \

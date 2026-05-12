@@ -1,7 +1,8 @@
+import { activeAgentReports } from './active-agents.js';
 import { claimReport, sameAgent } from './claim-reports.js';
 import { resolveIdentity } from './cli-identity.js';
 import { optional, required, type Options } from './cli-options.js';
-import { readActiveClaimsFile } from './state-io.js';
+import { readActiveClaimsFile, readClosedClaimsFile } from './state-io.js';
 import { type CollaborationStateEnvironment } from './types.js';
 
 export async function listClaims(options: Options): Promise<string> {
@@ -49,6 +50,19 @@ export async function statusClaims(options: Options): Promise<string> {
       stale: reports.filter((claim) => claim.freshness_status === 'stale').length,
       claims: reports,
     },
+    null,
+    2,
+  )}\n`;
+}
+
+export async function activeAgents(options: Options): Promise<string> {
+  const registry = await readActiveClaimsFile(required(options, 'active'));
+  const closedPath = optional(options, 'closed');
+  const closedArchive =
+    closedPath === undefined ? undefined : await readClosedClaimsFile(closedPath);
+
+  return `${JSON.stringify(
+    activeAgentReports(registry, nowFromOptions(options), closedArchive),
     null,
     2,
   )}\n`;

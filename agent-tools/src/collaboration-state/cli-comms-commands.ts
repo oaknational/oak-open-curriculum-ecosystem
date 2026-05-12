@@ -5,6 +5,7 @@ import { dirname, join, parse } from 'node:path';
 import { renderSharedCommsLog } from './comms.js';
 import { resolveIdentity } from './cli-identity.js';
 import { optional, required, valueOrDefault, type Options } from './cli-options.js';
+import { assertIdentityCanWrite } from './identity-write-guard.js';
 import { validateSharedStateAgentId } from './identity.js';
 import {
   readDirectedCommsMessages,
@@ -29,6 +30,12 @@ export async function appendComms(
   if (!validation.ok) {
     throw new Error(validation.reason);
   }
+  await assertIdentityCanWrite({
+    options,
+    agentId: identity.agent_id,
+    nowIso: required(options, 'now'),
+    surface: 'comms append',
+  });
 
   await writeNarrativeCommsEvent({
     eventsDir: required(options, 'events-dir'),
@@ -85,6 +92,7 @@ export function commsSendDefaults(
     'created-at': nowIso,
     'event-id': eventId,
     output: join(repoRoot, DEFAULT_SHARED_LOG),
+    active: join(repoRoot, '.agent/state/collaboration/active-claims.json'),
   };
 }
 

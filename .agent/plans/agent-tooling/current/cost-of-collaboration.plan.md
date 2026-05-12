@@ -37,7 +37,7 @@ todos:
     status: completed
   - id: ws-p4-identity-disambiguation
     content: Make `(agent_name, platform, session_id_prefix)` the routing key in claim and comms writes; refuse a write whose tuple collides with an existing live identity.
-    status: pending
+    status: completed
   - id: ws-p5-unified-comms-format
     content: Collapse the three-directory split (`comms-events/`, `comms-lifecycle/`, `comms-messages/`) and the three `$defs` into a single shape with a `kind` discriminant. Owner-relayed direction "ONE comms format used everywhere, no legacy lingering."
     status: pending
@@ -46,6 +46,9 @@ todos:
     status: pending
   - id: ws-p7-async-sync-mode-awareness
     content: Add work-shape awareness to the polling/watch protocol so design (sub-second), execution (minutes), and monitoring (hour+) each get the right cadence.
+    status: pending
+  - id: ws-p8-collaboration-tui
+    content: Build a human-facing real-time TUI for the main comms thread, direct-message threads, and active-agent state so operators can watch collaboration without tailing rendered markdown or raw JSON event directories.
     status: pending
   - id: ws-subsumed-residual
     content: Carry forward the residual non-subsumed workstreams from primary-agent-tooling-enhancements.plan.md (comms render resilience F-05 finishing pass, identity-build-isolation split, register closeout).
@@ -847,6 +850,38 @@ state from raw claims, comms, and process residue.
 the wordlist resolver. Composes with F-13 (identity routing
 expectations) from the existing primary plan.
 
+**2026-05-12 evidence**:
+
+- Claim writes, comms append/send, and directed-message direct/reply now guard
+  writes against live `(agent_name, platform, session_id_prefix)` collisions
+  with a different model identity.
+- Directed-message reply routing and `claims mine` now use the routing tuple
+  rather than model-sensitive full identity equality, so model-label drift does
+  not hide an agent's own messages or claims.
+- `claims active-agents` reports the routing key, evidence rows, collision
+  status, and visibility status across active, stale, inactive, and uncertain
+  identities. It can include closed-claim archive evidence when `--closed` is
+  supplied.
+- `identity preflight` accepts optional `--active` and refuses live routing
+  tuple collisions before a write starts.
+- Focused validation: `pnpm --filter @oaknational/agent-tools exec vitest run
+  tests/collaboration-state/active-agents.unit.test.ts
+  tests/collaboration-state/collaboration-state.unit.test.ts
+  tests/collaboration-state/collaboration-state.integration.test.ts`,
+  `pnpm --filter @oaknational/agent-tools type-check`,
+  `pnpm --filter @oaknational/agent-tools lint`, and
+  `pnpm --filter @oaknational/agent-tools build`, plus
+  `pnpm markdownlint-check:root`. Lint exits 0 while preserving the
+  pre-existing `no-real-io-in-tests` warning in the collaboration-state
+  integration test file.
+- Live smoke:
+  `pnpm agent-tools:collaboration-state -- claims active-agents --active
+  .agent/state/collaboration/active-claims.json --closed
+  .agent/state/collaboration/closed-claims.archive.json --now
+  2026-05-12T14:05:00Z` reported this Codex session as active and separated
+  same-prefix peer graph-lane state by agent name. A later
+  `identity preflight --active` smoke also succeeded for this session.
+
 ---
 
 ### P5 — Unified comms format
@@ -963,6 +998,43 @@ work-shape-dependent.
 - Monitor processes contribute negligible telemetry volume.
 
 **Routing**: builds on P2; should not land before P2 stabilises.
+
+---
+
+### P8 — Collaboration TUI
+
+**Hypothesis**: tailing a rendered Markdown log is a debugging fallback,
+not a human collaboration surface. Operators need one real-time view for
+main comms, directed threads, and active-agent state.
+
+**Evidence**: owner note on 2026-05-12 that `tail -f
+.agent/state/collaboration/shared-comms-log.md` appeared to interfere
+with render visibility. Even if the root cause is file-descriptor
+following versus atomic rewrite behaviour, the underlying need is a
+dedicated viewer rather than a shell workaround.
+
+**Concrete shape**:
+
+- Add a TUI that watches narrative events, lifecycle events, directed
+  messages, active claims, closed claims, and commit-queue state.
+- Show a main-thread pane, direct-message thread panes, unread/seen state,
+  and active-agent visibility using the P4 status classifications.
+- Avoid depending on `shared-comms-log.md` as the live source of truth; read
+  event JSON and claim state directly, then render in memory.
+- Preserve a non-interactive text mode for logs and CI diagnostics.
+
+**Acceptance**:
+
+- An operator can watch the main collaboration stream and direct-message
+  threads in real time without `tail -f`.
+- The viewer continues to update when the Markdown renderer rewrites or
+  replaces `shared-comms-log.md`.
+- Active, stale, inactive, and uncertain agents are visible in the same
+  operator surface.
+
+**Routing**: builds on P2 watch, P4 active-agent visibility, and P5 unified
+comms format. It should be designed as an operator experience, not as another
+raw JSON inspection command.
 
 ---
 

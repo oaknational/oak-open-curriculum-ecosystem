@@ -1,13 +1,28 @@
 import { archiveClaims, closeClaim, heartbeatClaim, openClaim } from './cli-claim-commands.js';
-import { listClaims, mineClaims, showClaim, statusClaims } from './cli-claim-query-commands.js';
+import {
+  activeAgents,
+  listClaims,
+  mineClaims,
+  showClaim,
+  statusClaims,
+} from './cli-claim-query-commands.js';
 import { appendComms, renderComms, sendComms } from './cli-comms-commands.js';
 import { inboxComms } from './cli-comms-inbox.js';
 import { directComms, replyComms } from './cli-comms-messages.js';
 import { watchComms } from './cli-comms-watch.js';
-import { resolveIdentity } from './cli-identity.js';
+import { preflightIdentity } from './cli-identity.js';
 import { auditIdentity } from './cli-identity-audit.js';
 import { type Options } from './cli-options.js';
 import { appendJsonEntry, checkState, writeJsonBody } from './cli-json-commands.js';
+import {
+  claimsCloseOptions,
+  claimsOpenOptions,
+  commsAppendOptions,
+  commsDirectOptions,
+  commsReplyOptions,
+  commsSendOptions,
+  commsWatchOptions,
+} from './cli-spec-options.js';
 import { type CollaborationStateEnvironment } from './types.js';
 
 export interface CommandSpec {
@@ -29,9 +44,9 @@ type CliHandler = (
 
 export const specs: Readonly<Record<string, CommandSpec>> = {
   'identity:preflight': commandSpec({
-    help: 'identity preflight --platform <platform> --model <model>',
-    options: ['platform', 'model'],
-    handler: (options, env) => `${JSON.stringify(resolveIdentity(options, env), null, 2)}\n`,
+    help: 'identity preflight --platform <platform> --model <model> [--active <path>] [--now <iso>]',
+    options: ['platform', 'model', 'active', 'now'],
+    handler: (options, env) => preflightIdentity(options, env),
   }),
   'identity:audit': commandSpec({
     help:
@@ -43,28 +58,19 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
   'comms:append': commandSpec({
     help:
       'comms append --events-dir <dir> --now <iso> --created-at <iso> ' +
-      '--title <title> --body <body> --platform <platform> --model <model> [--event-id <id>]',
-    options: ['events-dir', 'now', 'created-at', 'title', 'body', 'platform', 'model', 'event-id'],
+      '--title <title> --body <body> --platform <platform> --model <model> ' +
+      '--active <path> [--event-id <id>]',
+    options: commsAppendOptions,
     handler: appendComms,
   }),
   'comms:send': commandSpec({
     help:
       'comms send --title <title> --body <body> --platform <platform> --model <model> ' +
-      '[--events-dir <dir>] [--output <path>] [--repo-root <path>] [--now <iso>] ' +
+      '[--events-dir <dir>] [--output <path>] [--active <path>] [--repo-root <path>] [--now <iso>] ' +
       '[--event-id <id>] (identity seed: PRACTICE_AGENT_SESSION_ID_CLAUDE, ' +
       'PRACTICE_AGENT_SESSION_ID_CURSOR, PRACTICE_AGENT_SESSION_ID_CODEX, CODEX_THREAD_ID, ' +
       'or OAK_AGENT_IDENTITY_OVERRIDE)',
-    options: [
-      'title',
-      'body',
-      'platform',
-      'model',
-      'events-dir',
-      'output',
-      'repo-root',
-      'now',
-      'event-id',
-    ],
+    options: commsSendOptions,
     handler: sendComms,
   }),
   'comms:render': commandSpec({
@@ -72,18 +78,18 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
       'comms render --events-dir <dir> --lifecycle-dir <dir> ' +
       '--messages-dir <dir> --output <path>',
     options: ['events-dir', 'lifecycle-dir', 'messages-dir', 'output'],
-    handler: (options) => renderComms(options),
+    handler: renderComms,
   }),
   'comms:inbox': commandSpec({
     help: 'comms inbox --messages-dir <dir> --agent-name <name> --seen-file <path>',
     options: ['messages-dir', 'agent-name', 'seen-file'],
-    handler: (options) => inboxComms(options),
+    handler: inboxComms,
   }),
   'comms:watch': commandSpec({
     help:
       'comms watch --messages-dir <dir> --agent-name <name> --seen-file <path> ' +
       '[--session-prefix <prefix>] [--poll-ms <n>] [--max-events <n>]',
-    options: ['messages-dir', 'agent-name', 'seen-file', 'session-prefix', 'poll-ms', 'max-events'],
+    options: commsWatchOptions,
     handler: (options, _env, runtime) => watchComms(options, runtime.stdout),
   }),
   'comms:direct': commandSpec({
@@ -91,39 +97,16 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
       'comms direct --messages-dir <dir> --to-agent-name <name> --to-platform <platform> ' +
       '--to-model <model> --to-session-prefix <prefix> --kind <kind> ' +
       '--subject <subject> --body <body> --platform <platform> --model <model> ' +
-      '[--event-id <id>] [--now <iso>]',
-    options: [
-      'messages-dir',
-      'to-agent-name',
-      'to-platform',
-      'to-model',
-      'to-session-prefix',
-      'kind',
-      'subject',
-      'body',
-      'platform',
-      'model',
-      'event-id',
-      'now',
-    ],
+      '--active <path> [--event-id <id>] [--now <iso>]',
+    options: commsDirectOptions,
     handler: directComms,
   }),
   'comms:reply': commandSpec({
     help:
       'comms reply --messages-dir <dir> --to-event-id <id> --kind <kind> ' +
       '--body <body> --platform <platform> --model <model> ' +
-      '[--subject <subject>] [--event-id <id>] [--now <iso>]',
-    options: [
-      'messages-dir',
-      'to-event-id',
-      'kind',
-      'body',
-      'platform',
-      'model',
-      'subject',
-      'event-id',
-      'now',
-    ],
+      '--active <path> [--subject <subject>] [--event-id <id>] [--now <iso>]',
+    options: commsReplyOptions,
     handler: replyComms,
   }),
   'claims:open': commandSpec({
@@ -133,42 +116,21 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
       '--intent <text> --now <iso> --platform <platform> --model <model> ' +
       '[--file <path>...] [--area-pattern <pattern>...] [--claim-id <id>] ' +
       '[--ttl-seconds <n>] (use either repeatable --file or repeatable --area-pattern, not both)',
-    options: [
-      'active',
-      'thread',
-      'area-kind',
-      'area-pattern',
-      'intent',
-      'now',
-      'platform',
-      'model',
-      'claim-id',
-      'ttl-seconds',
-      'notes',
-    ],
+    options: claimsOpenOptions,
     allowsFiles: true,
     handler: openClaim,
   }),
   'claims:heartbeat': commandSpec({
     help: 'claims heartbeat --active <path> --claim-id <id> --now <iso>',
     options: ['active', 'claim-id', 'now'],
-    handler: (options) => heartbeatClaim(options),
+    handler: heartbeatClaim,
   }),
   'claims:close': commandSpec({
     help:
       'claims close --active <path> --closed <path> --claim-id <id> ' +
       '--summary <text> --now <iso> --platform <platform> --model <model> ' +
       '[--closure-summary <text> alias for --summary]',
-    options: [
-      'active',
-      'closed',
-      'claim-id',
-      'summary',
-      'closure-summary',
-      'now',
-      'platform',
-      'model',
-    ],
+    options: claimsCloseOptions,
     handler: closeClaim,
   }),
   'claims:archive-stale': commandSpec({
@@ -181,7 +143,7 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
   'claims:list': commandSpec({
     help: 'claims list --active <path> [--now <iso>]',
     options: ['active', 'now'],
-    handler: (options) => listClaims(options),
+    handler: listClaims,
   }),
   'claims:mine': commandSpec({
     help: 'claims mine --active <path> --platform <platform> --model <model> [--now <iso>]',
@@ -191,32 +153,37 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
   'claims:show': commandSpec({
     help: 'claims show --active <path> --claim-id <id> [--now <iso>]',
     options: ['active', 'claim-id', 'now'],
-    handler: (options) => showClaim(options),
+    handler: showClaim,
   }),
   'claims:status': commandSpec({
     help: 'claims status --active <path> [--now <iso>]',
     options: ['active', 'now'],
-    handler: (options) => statusClaims(options),
+    handler: statusClaims,
+  }),
+  'claims:active-agents': commandSpec({
+    help: 'claims active-agents --active <path> [--closed <path>] [--now <iso>]',
+    options: ['active', 'closed', 'now'],
+    handler: activeAgents,
   }),
   'conversation:append': commandSpec({
     help: 'conversation append --file <path> --entry-json <json>',
     options: ['file', 'entry-json'],
-    handler: (options) => appendJsonEntry(options),
+    handler: appendJsonEntry,
   }),
   'escalation:open': commandSpec({
     help: 'escalation open --file <path> --body-json <json>',
     options: ['file', 'body-json'],
-    handler: (options) => writeJsonBody(options),
+    handler: writeJsonBody,
   }),
   'escalation:close': commandSpec({
     help: 'escalation close --file <path> --body-json <json>',
     options: ['file', 'body-json'],
-    handler: (options) => writeJsonBody(options),
+    handler: writeJsonBody,
   }),
   'check:': commandSpec({
     help: 'check [--active <path>] [--closed <path>] [--events-dir <dir>]',
     options: ['active', 'closed', 'events-dir'],
-    handler: (options) => checkState(options),
+    handler: checkState,
   }),
 };
 

@@ -1,10 +1,11 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
 > **Current continuation**: P4 identity disambiguation / active-agent visibility
-> after P3 commit-queue enforcement. P0.QG, P-Foundation, P1 directed-message
-> authoring, P2 directed-message watching, and P3 commit-queue enforcement are
-> complete; new CLI work lands in the unified `agent-tools <topic> <action>`
-> shape from `cost-of-collaboration.plan.md`.
+> has landed in working-tree implementation and plan evidence. P0.QG,
+> P-Foundation, P1 directed-message authoring, P2 directed-message watching,
+> P3 commit-queue enforcement, and P4 identity routing are complete; new CLI
+> work lands in the unified `agent-tools <topic> <action>` shape from
+> `cost-of-collaboration.plan.md`.
 >
 > **New strategic work** (2026-05-12): Prismatic Beaming Twilight session designed
 > multi-agent delegation orchestration architecture extending ADR-180 beyond Codex
@@ -134,6 +135,41 @@ pretending the solution is already known.
 | `codex` | `GPT-5` | Coastal Cresting Prow | Implementer (cost-of-collaboration P1 B-11 `comms direct/reply`; landed at `f88d0d67`) | 2026-05-12 | 2026-05-12 |
 | `codex` | `GPT-5` | Penumbral Veiling Raven | Implementer (cost-of-collaboration P2 `comms watch`) | 2026-05-12 | 2026-05-12 |
 | `codex` | `GPT-5` | Secret Vanishing Moth | Implementer (cost-of-collaboration P3 commit-queue enforcement) | 2026-05-12 | 2026-05-12 |
+| `codex` | `GPT-5` | Vining Regrowing Grove | Implementer (cost-of-collaboration P4 identity disambiguation / active-agent visibility) | 2026-05-12 | 2026-05-12 |
+
+## P4 identity disambiguation handoff (2026-05-12)
+
+**Implementation shape**:
+
+- `(agent_name, platform, session_id_prefix)` is now the routing key for
+  claim ownership and directed-message reply matching; `model` no longer hides
+  the same session's own claims or messages.
+- Claim writes, comms append/send, and directed-message direct/reply guard
+  shared-state writes against live routing-tuple collisions by a different
+  model identity.
+- `identity preflight` accepts optional `--active` / `--now` and fails early
+  when the derived identity collides with a live routing tuple.
+- `claims active-agents` reports active-agent routing keys with evidence and
+  `visibility_status` values for active, stale, inactive, and uncertain
+  identities; pass `--closed` to include closed-claim archive evidence.
+
+**Validation**: focused collaboration-state unit/integration tests; full
+agent-tools `type-check`; full agent-tools `build`; full agent-tools `lint`;
+root Markdownlint. Lint exits 0 with the known pre-existing
+`no-real-io-in-tests` warning in the collaboration-state integration test file.
+Live smoke:
+`identity preflight --active` succeeded for Vining Regrowing Grove, and
+`claims active-agents --active` showed Vining and the graph-lane Lofty session
+as separate active agents despite sharing the same Codex session prefix.
+
+**Owner follow-up captured**: a new P8 pending workstream records the request
+for a human-facing real-time TUI over main comms, direct-message threads, and
+active-agent state. `tail -f shared-comms-log.md` is a fallback, not the target
+operator experience; `tail -F` may be more robust for atomic rewrites, but the
+proper fix is the TUI.
+
+**Next safe step**: continue `cost-of-collaboration.plan.md` with P5 unified
+comms format, unless the owner explicitly pulls P8 collaboration TUI forward.
 
 ## P3 commit-queue enforcement handoff (2026-05-12)
 
