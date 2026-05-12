@@ -16,10 +16,10 @@ The repo carries two distinct enforcement surfaces in the commit flow,
 sharing configuration and vocabulary but with fundamentally different
 authority:
 
-1. The **agent-invoked orchestrator** at `scripts/check-commit-skill-gates.ts`
-   (current name; renamed by this ADR) — runs the commit skill's
+1. The **agent-invoked orchestrator** exposed as
+   `pnpm agent-tools:check-commit-skill-advisories` — runs the commit skill's
    pre-`git commit` discipline checks: `practice:fitness:strict-hard`,
-   `practice:vocabulary`, and `scripts/check-commit-message.sh`. It is
+   `practice:vocabulary`, and `pnpm agent-tools:check-commit-message`. It is
    _advisory_. Its non-zero exit is information to read and route, not a
    commit verdict.
 2. The **git-invoked blocking hook chain** at `.husky/pre-commit` — runs
@@ -45,11 +45,10 @@ impossible to round off under context pressure.
 Apply PDR-053's three-surface polarity cure to this repo's commit-skill
 advisory orchestrator:
 
-1. **Filename**. Rename
-   `scripts/check-commit-skill-gates.ts` →
-   `scripts/check-commit-skill-advisories.ts` and the corresponding
-   unit-test file. The filename token "gates" is severed; "advisories"
-   names the polarity directly.
+1. **Command naming**. Expose the orchestrator as
+   `pnpm agent-tools:check-commit-skill-advisories` with its implementation
+   owned by the `agent-tools` workspace. The command token "advisories" names
+   the polarity directly.
 
 2. **Exported API**. Rename the orchestrator's exported function
    `runCommitSkillGates` → `runCommitSkillAdvisories` and the result
@@ -99,12 +98,12 @@ commit. Per
 
 ## Verification
 
-`grep -r "check-commit-skill-gates" --include="*.ts" --include="*.md"
-.agent/skills .agent/plans .claude scripts` returns only archived /
-historical hits after this ADR's change set lands. Live references are
-all to `check-commit-skill-advisories`.
+`rg "check-commit-skill-gates" .agent/skills .agent/plans .claude
+agent-tools docs` returns only archived / historical hits after this ADR's
+change set lands. Live references are all to
+`pnpm agent-tools:check-commit-skill-advisories`.
 
-The unit test (`scripts/check-commit-skill-advisories.unit.test.ts`)
+The unit test (`agent-tools/scripts/check-commit-skill-advisories.unit.test.ts`)
 asserts the orchestrator's behaviour under the new symbol names.
 
 ## Source

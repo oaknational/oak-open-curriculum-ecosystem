@@ -3,10 +3,10 @@ import { describe, expect, it } from 'vitest';
 import { findStaleScriptInvocations } from './validate-no-stale-script-invocations-helpers.js';
 
 describe('findStaleScriptInvocations', () => {
-  it('returns no findings when content uses the canonical `pnpm exec tsx` form', () => {
+  it('returns no findings when content uses workspace-owned commands', () => {
     const files = [
-      { path: 'docs/guide.md', content: 'Run `pnpm exec tsx scripts/foo.ts` from root.' },
-      { path: '.github/workflows/ci.yml', content: 'run: pnpm exec tsx scripts/bar.ts' },
+      { path: 'docs/guide.md', content: 'Run `pnpm agent-tools:repo-check profile`.' },
+      { path: '.github/workflows/ci.yml', content: 'run: pnpm subagents:check' },
     ];
 
     expect(findStaleScriptInvocations(files)).toStrictEqual([]);
@@ -62,9 +62,23 @@ describe('findStaleScriptInvocations', () => {
     ]);
   });
 
-  it('does not flag npx, pnpm exec, or bare `scripts/` references that lack the `node ` prefix', () => {
-    const content =
-      'Run `pnpm exec tsx scripts/foo.ts`.\nOr `npx tsx scripts/foo.ts`.\nMentioning `scripts/foo.ts` alone.\n';
+  it.each([
+    {
+      content: 'run: npx tsx scripts/foo.ts',
+      expected: 'npx tsx scripts/foo.ts',
+    },
+    {
+      content: 'run: pnpm dlx tsx scripts/foo.ts',
+      expected: 'pnpm dlx tsx scripts/foo.ts',
+    },
+  ])('flags retired root-script invocation forms: $expected', ({ content, expected }) => {
+    expect(findStaleScriptInvocations([{ path: 'docs/guide.md', content }])).toStrictEqual([
+      { path: 'docs/guide.md', line: 1, match: expected },
+    ]);
+  });
+
+  it('does not flag bare or package-local `scripts/` references', () => {
+    const content = 'Mentioning `scripts/foo.ts` alone.\nRun package-local `./scripts/foo.sh`.\n';
 
     expect(findStaleScriptInvocations([{ path: 'docs/guide.md', content }])).toStrictEqual([]);
   });

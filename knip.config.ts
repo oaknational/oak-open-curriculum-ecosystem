@@ -41,8 +41,11 @@ const config: KnipConfig = {
 
   workspaces: {
     '.': {
-      entry: ['scripts/**/*.ts'],
-      project: ['scripts/**/*.ts'],
+      // The repo root intentionally has no source scripts; logic belongs in
+      // workspaces. Keep the root workspace narrow so Knip does not treat
+      // operational notes and platform shims as default source.
+      entry: ['package.json'],
+      project: [],
     },
     'agent-tools': {
       // Platform adapters (src/claude/, future src/codex/, src/cursor/) are
@@ -121,7 +124,8 @@ const config: KnipConfig = {
       ],
     },
     'packages/core/oak-eslint': {
-      project: ['src/**/*.ts'],
+      entry: ['scripts/**/*.ts'],
+      project: ['src/**/*.ts', 'scripts/**/*.ts'],
       ignoreDependencies: [
         // ESLint plugins are peer dependencies used at runtime
         'eslint-plugin-prettier',

@@ -247,7 +247,7 @@ that do not match what the file is actually doing.
 Wrong shape (validator wearing a vitest harness):
 
 ```typescript
-// scripts/validate-portability.integration.test.ts
+// agent-tools/scripts/validate-portability.integration.test.ts
 it('every canonical skill has a Claude adapter', () => {
   const skills = readdirSync('.agent/skills');
   for (const skill of skills) {
@@ -269,7 +269,7 @@ it('reports canonical skills with no adapter', () => {
   expect(adapterMissingFor(['a', 'b'], ['a'])).toEqual(['b']);
 });
 
-// scripts/validate-portability.ts (runtime script wired into pnpm test:root-scripts)
+// agent-tools/scripts/validate-portability.ts (runtime script wired into a workspace command)
 const missing = adapterMissingFor(await listCanonicalSkills(), await listClaudeAdapters());
 if (missing.length > 0) {
   console.error(`Missing: ${missing.join(', ')}`);
@@ -283,3 +283,7 @@ Structural cue: if the test body is `readdirSync` / `existsSync` /
 the test runner. "Look at peers" is a useful first orientation, but
 peers can be drift — the canonical-pattern test is _named guidance in
 the directives_, not the count of similar sibling files.
+
+Root `scripts/` is intentionally retired. Runtime validators belong in a
+workspace-owned command surface such as `agent-tools/scripts/` or the package
+that owns the contract being validated.

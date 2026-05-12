@@ -46,15 +46,15 @@ or configuration issue, never a missing check.
 | sdk-codegen       | --         | Yes      | Yes         | Yes                     |
 | build             | --         | Yes      | Yes         | Yes                     |
 | format-check      | Yes        | Yes      | Yes         | Yes (format:root)       |
-| markdownlint      | Yes        | Yes      | Yes         | Yes (markdownlint:root) |
+| markdownlint      | Staged     | Yes      | Yes         | Yes (markdownlint:root) |
 | subagents:check   | --         | Yes      | Yes         | Yes                     |
 | portability:check | --         | Yes      | Yes         | Yes                     |
 | knip              | Yes        | Yes      | Yes         | Yes                     |
 | depcruise         | Yes        | Yes      | Yes         | Yes                     |
-| test:root-scripts | --         | Yes      | Yes         | Yes                     |
+| repo-validators   | --         | Yes      | Yes         | Yes                     |
 | type-check        | Yes        | Yes      | Yes         | Yes                     |
 | lint              | Yes        | Yes      | Yes         | Yes (lint:fix)          |
-| lint:shell        | --         | --       | Yes         | Yes                     |
+| lint:shell        | --         | Yes      | Yes         | Yes                     |
 | test              | Yes        | Yes      | Yes         | Yes                     |
 | test:widget       | --         | --       | --          | Yes                     |
 | test:widget:ui    | --         | --       | --          | Yes                     |
@@ -77,10 +77,9 @@ or configuration issue, never a missing check.
   equality.
 - **Pre-push and CI exclude doc-gen**: documentation generation is a
   build-time convenience, not a correctness gate.
-- **`lint:shell` is currently CI and `pnpm check` only**: this is documented
-  drift from the original pre-push === CI principle. The accepted steady state
-  is either to promote it to pre-push or explicitly retain it as a CI/root
-  surface exception in a later reconciliation.
+- **Pre-commit markdownlint is staged-only**: the repo still requires full
+  markdownlint in pre-push, CI, and `pnpm check`, while pre-commit limits this
+  one check to staged Markdown files to keep the hook proportional.
 - **SonarCloud is a remote quality surface**: Sonar analysis runs outside local
   hooks and is governed by the Sonar disposition policy. It is not reproduced
   by pre-push today.
@@ -170,13 +169,13 @@ ADR-161 are amended together.
 
 - Pre-push runs: `secrets:scan`, `format-check:root`,
   `markdownlint-check:root`, `subagents:check`, `portability:check`,
-  `knip`, `depcruise`, `test:root-scripts`, then Turbo: `sdk-codegen
-build type-check lint test test:e2e test:ui`.
+  `knip`, `depcruise`, `repo-validators:check`, `lint:shell`, then Turbo:
+  `sdk-codegen build type-check lint test test:e2e test:ui`.
 - CI runs: `secrets:scan` (with Docker gitleaks fallback),
   `format-check:root`, `markdownlint-check:root`, `subagents:check`,
-  `portability:check`, `knip`, `depcruise`, `test:root-scripts`,
-  Playwright install, then Turbo: `sdk-codegen build type-check lint
-test test:e2e test:ui`.
+  `portability:check`, `knip`, `depcruise`, `repo-validators:check`,
+  `lint:shell`, Playwright install, then Turbo: `sdk-codegen build
+type-check lint test test:e2e test:ui`.
 - `pnpm check` runs the broadest set with fix-mode and clean rebuild.
 - Coverage matrix maintained in this ADR and referenced from
   `docs/engineering/build-system.md` and `docs/engineering/workflow.md`.

@@ -5,9 +5,9 @@ import {
   LIB_PACKAGES,
   SDK_PACKAGE_IMPORTS,
   TOOLING_PACKAGE_IMPORTS,
-} from '../packages/core/oak-eslint/src/rules/boundary.js';
+} from '../src/rules/boundary.js';
 
-const repoRoot = resolve(import.meta.dirname, '..');
+const repoRoot = resolve(import.meta.dirname, '../../../..');
 
 function readPackageName(packageJsonPath: string): string {
   const packageJson: unknown = JSON.parse(readFileSync(packageJsonPath, 'utf8'));

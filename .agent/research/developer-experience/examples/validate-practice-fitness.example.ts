@@ -3,12 +3,12 @@
 /**
  * Practice Fitness Check — TypeScript mirror of the live validator
  *
- * Mirrors `scripts/validate-practice-fitness.ts`, which is the version wired
- * into the live repo. Keep the logic aligned so this outgoing artefact remains
- * a faithful transferable reference.
+ * Mirrors the `pnpm practice:fitness` validator wired into the live repo. Keep
+ * the logic aligned so this outgoing artefact remains a faithful transferable
+ * reference.
  *
- * Copy into `scripts/` and run from the repo root:
- *   pnpm exec tsx scripts/validate-practice-fitness.ts
+ * In this repo, run:
+ *   pnpm practice:fitness
  *
  * Origin: oak-mcp-ecosystem, 2026-04-01 (earlier fitness model), evolved
  * 2026-04-17 to the three-zone scale.

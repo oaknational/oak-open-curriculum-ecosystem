@@ -21,7 +21,20 @@
     "commit-queue": "pnpm -s build && node dist/src/bin/commit-queue.js",
     "cursor-session-from-claude-session": "tsx src/bin/cursor-session-from-claude-session.ts",
     "codex-reviewer-resolve": "tsx src/bin/codex-reviewer-resolve.ts",
-    "skills-adapter-generate": "tsx src/bin/skills-adapter-generate.ts"
+    "skills-adapter-generate": "tsx src/bin/skills-adapter-generate.ts",
+    "repo-check": "cd .. && pnpm exec tsx agent-tools/scripts/repo-check.ts",
+    "check-blocked-patterns": "cd .. && pnpm exec tsx agent-tools/scripts/check-blocked-patterns.ts",
+    "check-blocked-content": "cd .. && pnpm exec tsx agent-tools/scripts/check-blocked-content.ts",
+    "check-commit-message": "cd .. && bash agent-tools/scripts/check-commit-message.sh",
+    "check-commit-skill-advisories": "cd .. && pnpm exec tsx agent-tools/scripts/check-commit-skill-advisories.ts",
+    "prevent-accidental-major-version": "cd .. && pnpm exec tsx agent-tools/scripts/prevent-accidental-major-version.ts",
+    "validate-fitness-vocabulary": "cd .. && pnpm exec tsx agent-tools/scripts/validate-fitness-vocabulary.ts",
+    "validate-no-stale-script-invocations": "cd .. && pnpm exec tsx agent-tools/scripts/validate-no-stale-script-invocations.ts",
+    "validate-portability": "cd .. && pnpm exec tsx agent-tools/scripts/validate-portability.ts",
+    "validate-practice-fitness": "cd .. && pnpm exec tsx agent-tools/scripts/validate-practice-fitness.ts",
+    "validate-subagents": "cd .. && pnpm exec tsx agent-tools/scripts/validate-subagents.ts",
+    "ci-schema-drift-check": "cd .. && pnpm exec tsx agent-tools/scripts/ci-schema-drift-check.ts",
+    "ci-turbo-report": "cd .. && pnpm exec tsx agent-tools/scripts/ci-turbo-report.ts"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",

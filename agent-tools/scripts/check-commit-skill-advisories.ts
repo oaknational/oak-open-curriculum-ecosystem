@@ -6,7 +6,7 @@
  * Runs the commit skill's pre-`git commit` advisory discipline checks as a
  * single composed sequence: fitness (`practice:fitness:strict-hard`),
  * vocabulary (`practice:vocabulary`), then commit message validation
- * (`scripts/check-commit-message.sh`). Exits with the first non-zero exit
+ * (`pnpm agent-tools:check-commit-message`). Exits with the first non-zero exit
  * code; exit 0 means every advisory check passed.
  *
  * **Polarity is advisory, NOT blocking.** This script is agent-invoked. Its
@@ -47,7 +47,6 @@
  */
 
 import { spawn } from 'node:child_process';
-import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ADVISORY_BANNER = '[ADVISORY ONLY — NOT A COMMIT GATE]';
@@ -158,7 +157,7 @@ function describeFailure(
   const headers: Record<typeof failure.failedCheck, string> = {
     fitness: 'practice:fitness:strict-hard (PDR-038 §2026-05-04 amendment)',
     vocabulary: 'practice:vocabulary (ADR-144)',
-    message: 'scripts/check-commit-message.sh',
+    message: 'pnpm agent-tools:check-commit-message',
   };
 
   return `commit-skill ADVISORY check "${failure.failedCheck}" failed (${headers[failure.failedCheck]}); exit ${failure.exitCode}. ${ADVISORY_BANNER} — read, route, and act per the substance-led path; this is NOT a commit verdict.`;
@@ -166,7 +165,6 @@ function describeFailure(
 
 async function main(forwardedArgs: readonly string[]): Promise<number> {
   const repoRoot = process.cwd();
-  const messageCheckScript = path.join(repoRoot, 'scripts', 'check-commit-message.sh');
 
   process.stderr.write(`${ADVISORY_BANNER}\n`);
   process.stderr.write(
@@ -191,8 +189,8 @@ async function main(forwardedArgs: readonly string[]): Promise<number> {
       }),
     messageCheck: async () =>
       runProcess({
-        command: messageCheckScript,
-        args: [...forwardedArgs],
+        command: 'pnpm',
+        args: ['agent-tools:check-commit-message', ...forwardedArgs],
         cwd: repoRoot,
       }),
   });

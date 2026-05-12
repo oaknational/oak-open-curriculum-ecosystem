@@ -166,9 +166,9 @@ function printPreflight(): void {
       : 'FAIL pnpm portability:check',
   );
   writeLine(
-    runPnpmGate('test:root-scripts', root)
-      ? 'PASS pnpm test:root-scripts'
-      : 'FAIL pnpm test:root-scripts',
+    runPnpmGate('repo-validators:check', root)
+      ? 'PASS pnpm repo-validators:check'
+      : 'FAIL pnpm repo-validators:check',
   );
 }
 function printCleanup(): void {

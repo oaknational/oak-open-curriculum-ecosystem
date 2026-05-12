@@ -21,7 +21,7 @@ Run each gate in order. If a gate fails, fix the issues before proceeding.
 ```bash
 pnpm secrets:scan:all
 pnpm clean
-pnpm test:root-scripts
+pnpm repo-validators:check
 pnpm sdk-codegen
 pnpm build
 pnpm type-check

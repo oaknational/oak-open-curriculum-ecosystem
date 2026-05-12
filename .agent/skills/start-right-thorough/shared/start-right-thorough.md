@@ -173,7 +173,7 @@ pnpm format:root        # Makes changes
 pnpm markdownlint:root  # Makes changes
 pnpm subagents:check    # After sub-agent definition changes
 pnpm portability:check  # After platform surface or hook changes
-pnpm test:root-scripts  # Repo-level script tests
+pnpm repo-validators:check  # Workspace-owned repo validators
 pnpm test
 pnpm test:widget
 pnpm test:e2e

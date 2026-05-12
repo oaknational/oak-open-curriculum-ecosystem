@@ -14,10 +14,10 @@ if ! pnpm format-check:root; then
   exit 1
 fi
 
-echo "🔍 Running full markdownlint..."
-if ! pnpm markdownlint-check:root; then
+echo "🔍 Running markdownlint on staged Markdown files..."
+if ! pnpm agent-tools:repo-check markdownlint-staged; then
   echo "❌ Markdownlint issues found!"
-  echo "💡 Run 'pnpm markdownlint:root' to fix markdown issues, then commit again"
+  echo "💡 Run 'pnpm markdownlint:root' to fix markdown issues, then stage the changes"
   exit 1
 fi
 
@@ -43,4 +43,3 @@ if ! pnpm turbo run --continue --output-logs=errors-only type-check lint test; t
 fi
 
 echo "✅ Pre-commit checks completed!"
-

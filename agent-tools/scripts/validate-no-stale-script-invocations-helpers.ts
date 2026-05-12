@@ -1,11 +1,8 @@
 /**
- * Detect stale `node scripts/<name>.{mjs,ts,js}` invocations in authored
- * surfaces (workflow YAML, markdown documentation, research notes, app
- * docs). The canonical TS-script invocation pattern across this repo is
- * `pnpm exec tsx scripts/<name>.ts`; bare `node scripts/...` invocations
- * either reference renamed `.mjs` paths that no longer exist (the failure
- * mode that broke CI on PR #90) or describe an invocation form that
- * cannot run without a TypeScript loader.
+ * Detect stale root `scripts/<name>` invocations in authored surfaces
+ * (workflow YAML, markdown documentation, research notes, app docs).
+ * Root-owned script logic is retired; executable repository logic belongs
+ * in a workspace command.
  *
  * The helper is pure and operates on an in-memory list of files; the
  * runtime that walks the file system is in
@@ -40,17 +37,17 @@ export interface FindStaleScriptInvocationsOptions {
 }
 
 /**
- * The canonical pattern matches `node scripts/<filename>.<ext>` where
- * `<ext>` is one of `mjs`, `ts`, or `js` and `<filename>` is a slug-like
- * token (alphanumeric plus dot, dash, and underscore). Restricting to
- * `scripts/` (and not, say, `dist/` or `build/`) keeps the gate focused
- * on authored TypeScript-source invocations.
+ * The pattern matches common command forms that execute a root script:
+ * `node scripts/<file>`, `npx tsx scripts/<file>`, and package-manager tsx
+ * execution. Restricting
+ * to root-relative `scripts/` keeps the gate focused on retired root
+ * script invocations rather than workspace-local script directories.
  */
-const STALE_INVOCATION_PATTERN = /node scripts\/[A-Za-z0-9_.-]+\.(?:mjs|ts|js)/g;
+const STALE_INVOCATION_PATTERN =
+  /(?:node|npx tsx|pnpm exec tsx|pnpm dlx tsx)\s+scripts\/[A-Za-z0-9_.-]+\.(?:mjs|ts|js|sh)/g;
 
 /**
- * Find stale `node scripts/<name>.{mjs,ts,js}` invocations across the
- * provided files.
+ * Find stale root `scripts/<name>` invocations across the provided files.
  *
  * @param files - In-memory representation of the files to scan. Each
  *   entry carries a repo-relative path and the file contents as a UTF-8

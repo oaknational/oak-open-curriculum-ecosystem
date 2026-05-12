@@ -11,6 +11,10 @@ dist
 dependency-graph.dot
 dependency-graph.svg
 
+# Root script logic is intentionally forbidden; checked logic belongs in a
+# workspace such as agent-tools or a package-owned tooling surface.
+/scripts/
+
 # Agent Interactions
 collaboration.txt
 

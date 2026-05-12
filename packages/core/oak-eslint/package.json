@@ -55,7 +55,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "test": "vitest run",
-    "type-check": "tsc -p tsconfig.lint.json --noEmit"
+    "type-check": "tsc -p tsconfig.lint.json --noEmit",
+    "validate-boundaries": "cd ../../.. && pnpm exec tsx packages/core/oak-eslint/scripts/validate-boundaries.ts"
   },
   "repository": {
     "type": "git",

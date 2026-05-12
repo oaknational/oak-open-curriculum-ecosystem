@@ -62,8 +62,8 @@ jobs:
       - name: Validate portability
         run: pnpm portability:check
 
-      - name: Run root-level script tests
-        run: pnpm test:root-scripts
+      - name: Run workspace-owned repo validators
+        run: pnpm repo-validators:check
 
       - name: Lint shell scripts
         run: pnpm lint:shell
@@ -87,8 +87,8 @@ jobs:
 
       - name: Report Turbo summary
         if: always()
-        run: pnpm exec tsx scripts/ci-turbo-report.ts >> "$GITHUB_STEP_SUMMARY"
+        run: pnpm --filter @oaknational/agent-tools ci-turbo-report >> "$GITHUB_STEP_SUMMARY"
 
       - name: Check schema cache drift (advisory)
         if: always()
-        run: pnpm exec tsx scripts/ci-schema-drift-check.ts
+        run: pnpm --filter @oaknational/agent-tools ci-schema-drift-check

@@ -1,10 +1,12 @@
 import fs from 'node:fs/promises';
 import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 /** Claude PreToolUse event name for deny responses. */
 const PRE_TOOL_USE_EVENT_NAME = 'PreToolUse';
-const POLICY_URL = new URL('../.agent/hooks/policy.json', import.meta.url);
+const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const POLICY_URL = pathToFileURL(path.resolve(REPO_ROOT, '.agent/hooks/policy.json'));
 
 /**
  * Parse JSON text from Claude's hook stdin payload.

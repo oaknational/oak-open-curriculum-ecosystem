@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const DEFAULT_RUNS_DIR = fileURLToPath(new URL('../.turbo/runs', import.meta.url));
+const DEFAULT_RUNS_DIR = path.resolve(process.cwd(), '.turbo/runs');
 
 /**
  * Parse a Turbo `--summarize` JSON payload into the reporter's internal shape.

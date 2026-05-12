@@ -77,8 +77,10 @@ describe('shouldInspectFile', () => {
   });
 
   it('excludes the vocabulary validator itself and its tests', () => {
-    expect(shouldInspectFile('scripts/validate-fitness-vocabulary.ts')).toBe(false);
-    expect(shouldInspectFile('scripts/validate-fitness-vocabulary.unit.test.ts')).toBe(false);
+    expect(shouldInspectFile('agent-tools/scripts/validate-fitness-vocabulary.ts')).toBe(false);
+    expect(shouldInspectFile('agent-tools/scripts/validate-fitness-vocabulary.unit.test.ts')).toBe(
+      false,
+    );
   });
 });
 

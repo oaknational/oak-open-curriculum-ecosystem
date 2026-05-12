@@ -142,7 +142,7 @@ staging before reading active-claims defeats its purpose.
    --file ... --file ...`) BEFORE `git add`.
 5. `phase staging` → `git add` by explicit pathspec →
    `record-staged` (fingerprint).
-6. `pnpm exec tsx scripts/check-commit-skill-advisories.ts -F
+6. `pnpm agent-tools:check-commit-skill-advisories -- -F
    <msg-file>` (advisory; pre-existing fitness pressure on
    `napkin.md` / `repo-continuity.md` is NOT a commit verdict per
    repo doctrine).

@@ -195,12 +195,11 @@ access.
 
 ### Pre-existing exception: Husky entry points
 
-Husky's hook entry points (`.husky/{pre-commit,commit-msg,pre-push}`,
-`scripts/check-commit-message.sh`, `scripts/log-commit-attempt.sh`)
+Husky's hook entry points (`.husky/{pre-commit,commit-msg,pre-push}`)
 remain `.sh` because Husky requires shell-script entry points. This
-is a pre-existing exception, not a new one. The hooks delegate to
-TypeScript implementations via `pnpm exec tsx` wherever the work
-itself is non-trivial.
+is a pre-existing exception, not a root-tooling exception. The hooks
+delegate to workspace-owned package scripts wherever the work itself is
+non-trivial.
 
 ## Consequences
 

@@ -14,7 +14,7 @@ const wsTsProject = fileURLToPath(new URL('./tsconfig.lint.json', import.meta.ur
 
 const config = defineConfigArray(
   {
-    ignores: [...globalIgnores, 'dist/**', 'coverage/**', '*.log', '.turbo/**'],
+    ignores: [...globalIgnores, 'dist/**', 'coverage/**', '*.log', '.turbo/**', 'scripts/**'],
   },
   configs.strict,
   {

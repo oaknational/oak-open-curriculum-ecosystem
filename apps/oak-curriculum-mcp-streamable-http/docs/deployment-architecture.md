@@ -249,7 +249,7 @@ The build pipeline has two independent steps:
 ### Widget Codegen (`build:widget`)
 
 ```json
-"build:widget": "vite build --config widget/vite.config.ts && pnpm exec tsx scripts/embed-widget-html.ts"
+"build:widget": "vite build --config widget/vite.config.ts && <package-local widget HTML embed step>"
 ```
 
 1. **Vite** builds the widget React app into `.widget-build/oak-banner.html`

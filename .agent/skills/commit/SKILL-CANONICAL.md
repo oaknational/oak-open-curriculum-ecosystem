@@ -5,7 +5,7 @@ description: >-
   Create a well-formed commit for current changes with conventional message
   format. Always active, every commit, every session, no trigger required.
   Enumerates live commitlint constraints inline at draft time, validates the
-  drafted message via scripts/check-commit-message.sh BEFORE invoking
+  drafted message via `pnpm agent-tools:check-commit-message` BEFORE invoking
   git commit, and coordinates the short-lived git index/head commit window.
 ---
 
@@ -15,7 +15,7 @@ Create a well-formed commit for the current changes. This skill converts
 commitlint from a post-hoc rejection surface (the `commit-msg` hook fires
 *after* a full message has been drafted) into an **active, pre-draft tripwire**:
 the constraints are enumerated inline before drafting, the message is
-validated by `scripts/check-commit-message.sh` before `git commit` is invoked,
+validated by `pnpm agent-tools:check-commit-message` before `git commit` is invoked,
 and the shared git index/head window is claimed briefly before staging or
 committing.
 
@@ -32,23 +32,23 @@ closes that exposure window.
 
 These scripts make this skill actionable end-to-end:
 
-- **`scripts/check-commit-skill-advisories.ts`** — `[ADVISORY ONLY — NOT A
+- **`pnpm agent-tools:check-commit-skill-advisories`** — `[ADVISORY ONLY — NOT A
   COMMIT GATE]`. Orchestrates the commit skill's pre-`git commit` advisory
   discipline-check sequence: practice fitness (`practice:fitness:strict-hard`),
   practice vocabulary (`practice:vocabulary`), then the commit-message check
-  (`scripts/check-commit-message.sh`). Exits with the first non-zero exit
+  (`pnpm agent-tools:check-commit-message`). Exits with the first non-zero exit
   code. **Use BEFORE every `git commit`** — but the exit is **advisory, not
   blocking**. The blocking commit-time enforcement is `.husky/pre-commit`,
   a separate enforcement surface (see "Quality Gates Are Always Blocking; the
   Orchestrator Is Advisory" below). Run via
-  `pnpm exec tsx scripts/check-commit-skill-advisories.ts` and forward the
-  same arguments you would pass to `check-commit-message.sh` (`-F file`,
+  `pnpm agent-tools:check-commit-skill-advisories` and forward the
+  same arguments you would pass to the message check (`-F file`,
   `-F -`, `-m "subject"`, etc.). Doctrinal anchors: PDR-038 §2026-05-04
   amendment (un-enforced doctrine at maturity is liability), PDR-044
   (memetic immune system, innate-immunity layer), PDR-053
   (orchestrator-vs-gate structural cure), ADR-144 (vocabulary consistency),
   ADR-176 (advisory orchestrator naming).
-- **`scripts/check-commit-message.sh`** — validates a commit message against
+- **`pnpm agent-tools:check-commit-message`** — validates a commit message against
   this repo's commitlint config in isolation from the rest of the pre-commit /
   commit-msg hook chain. Mirrors `git commit` message intake (`-m` repeats,
   `-F`, `-F -`, stdin). Exit 0 conforms, 1 violates, 2 invalid usage. Catches
@@ -205,7 +205,7 @@ the advisory queue and the short-lived git transaction claim:
    immediately before committing:
 
    ```bash
-   pnpm exec tsx scripts/check-commit-skill-advisories.ts -F .git/COMMIT_EDITMSG
+   pnpm agent-tools:check-commit-skill-advisories -F .git/COMMIT_EDITMSG
    pnpm agent-tools:commit-queue -- verify-staged \
      --intent-id "<intent-id>" \
      --commit-subject "<draft subject>"
@@ -293,8 +293,8 @@ The wait is not coordination. It complements, but never replaces, the
 5. **Stage selectively** — never blindly `git add .`. Skip `.env`, credentials,
    `bulk-downloads/`. Review each file staged and record its fingerprint.
 6. **Draft the message** against the enumerated constraints.
-7. **Run the commit-skill gate orchestrator
-   (`pnpm exec tsx scripts/check-commit-skill-advisories.ts`) BEFORE invoking
+7. **Run the commit-skill advisory orchestrator
+   (`pnpm agent-tools:check-commit-skill-advisories`) BEFORE invoking
    `git commit`** (see below). The orchestrator runs the practice fitness
    gate, the practice vocabulary gate, and the commit-message check in
    sequence. If any gate fails, fix the underlying issue and re-run — do
@@ -317,7 +317,7 @@ fitness gate (`practice:fitness:strict-hard`), the practice vocabulary gate
 with the first non-zero exit code.
 
 ```bash
-pnpm exec tsx scripts/check-commit-skill-advisories.ts -F - <<'EOF'
+pnpm agent-tools:check-commit-skill-advisories -F - <<'EOF'
 type(scope): short subject starting lowercase
 
 Body paragraph explaining motivation and context. Wrap at ~100 chars
@@ -331,7 +331,7 @@ Or pass via `-m` (repeats join paragraphs with blank lines, identical to
 `git commit -m … -m …`):
 
 ```bash
-pnpm exec tsx scripts/check-commit-skill-advisories.ts \
+pnpm agent-tools:check-commit-skill-advisories \
   -m "type(scope): short subject" \
   -m "Body paragraph one." \
   -m "Body paragraph two."
@@ -457,7 +457,7 @@ Additional prohibitions:
 Commitlint's `commit-msg` hook is a tripwire, but a **post-hoc** one — it fires
 *after* the full message has been drafted. Every failure becomes rework. This
 skill installs a **pre-draft** tripwire: constraints are enumerated inline
-*before* the agent drafts, and `scripts/check-commit-message.sh` runs the same
+*before* the agent drafts, and `pnpm agent-tools:check-commit-message` runs the same
 commitlint config *before* `git commit` is invoked. The live hook is still the
 ground truth — this skill does not replace it — but the rework loop is closed
 at draft time rather than commit-invocation time.
@@ -480,9 +480,9 @@ absolute. Bypassing them requires explicit per-commit owner authorisation
 (`--no-verify`), which is owner-initiated only — never agent-proposed.
 
 **The commit-skill orchestrator — advisory, always.** The
-`scripts/check-commit-skill-advisories.ts` script (and its sub-checks
+`pnpm agent-tools:check-commit-skill-advisories` command (and its sub-checks
 `practice:fitness:strict-hard`, `practice:vocabulary`,
-`scripts/check-commit-message.sh`) is the **advisory pre-screen tier**.
+`pnpm agent-tools:check-commit-message`) is the **advisory pre-screen tier**.
 Agents invoke it voluntarily before `git commit` to surface important
 signals (whole-tree fitness shape, vocabulary drift, message-format issues)
 early enough to act on. A non-zero orchestrator exit is **not** a commit
@@ -507,9 +507,8 @@ doctrinal collision between SKILL §Pre-Commit Validation and PDR-046 §Move
 underlying rounding-off, different framing. In every instance plain `git
 commit` succeeded because `.husky/pre-commit` does not run
 `practice:fitness:strict-hard`. The 2026-05-10 structural cure
-(rename `scripts/check-commit-skill-gates.ts` →
-`scripts/check-commit-skill-advisories.ts`, advisory banner at every
-invocation, this skill-doctrine update) closes the rounding-off gap by
+(advisory command naming, advisory banner at every invocation, this
+skill-doctrine update) closes the rounding-off gap by
 encoding the advisory polarity at three surfaces. See PDR-053 + ADR-176.
 
 **Diagnostic discipline.** When *any* enforcer fires, before proposing any

@@ -23,8 +23,9 @@ Internal `@oaknational/*` dependencies must use the `workspace:` protocol in
 registry by semver alone.
 
 Source-executed TypeScript entrypoints are part of the workspace contract.
-Invoke source-executed TS scripts via `pnpm exec tsx scripts/<script>.ts` (or
-the package-relative equivalent). Running through `pnpm exec` enables the
+Invoke source-executed TS tooling through workspace-owned package scripts, such
+as `pnpm --filter @oaknational/agent-tools <command>` or the corresponding root
+wrapper. Running through `pnpm exec` within the owning workspace enables the
 workspace `development` export condition while loading `tsx`, so packages
 participating in source execution must publish matching `development` export
 entries for their supported subpaths instead of assuming `dist/` already
@@ -112,14 +113,15 @@ for the full decision record.
 | sdk-codegen       | --         | Yes      | Yes         | Yes                     |
 | build             | --         | Yes      | Yes         | Yes                     |
 | format-check      | Yes        | Yes      | Yes         | Yes (format:root)       |
-| markdownlint      | Yes        | Yes      | Yes         | Yes (markdownlint:root) |
+| markdownlint      | Staged     | Yes      | Yes         | Yes (markdownlint:root) |
 | subagents:check   | --         | Yes      | Yes         | Yes                     |
 | portability:check | --         | Yes      | Yes         | Yes                     |
 | knip              | Yes        | Yes      | Yes         | Yes                     |
 | depcruise         | Yes        | Yes      | Yes         | Yes                     |
-| test:root-scripts | --         | Yes      | Yes         | Yes                     |
+| repo-validators   | --         | Yes      | Yes         | Yes                     |
 | type-check        | Yes        | Yes      | Yes         | Yes                     |
 | lint              | Yes        | Yes      | Yes         | Yes (lint:fix)          |
+| lint:shell        | --         | Yes      | Yes         | Yes                     |
 | test              | Yes        | Yes      | Yes         | Yes                     |
 | test:widget       | --         | --       | --          | Yes                     |
 | test:widget:ui    | --         | --       | --          | Yes                     |
@@ -177,6 +179,17 @@ pnpm check
 `pnpm qg` surface was removed to avoid having two competing “full gate”
 stories.
 
+To inspect the many-process shape without running the full gate, use:
+
+```bash
+pnpm check:profile --dry-run
+```
+
+This writes the Turbo dry graph for the `pnpm check` Turbo task set under
+`.turbo/profiles/`. Run `pnpm check:profile` without `--dry-run` when you want
+the same graph snapshot plus wall-clock timing for the full `pnpm check`
+process.
+
 #### Aggregate gate doctrine
 
 - `pnpm check` is executable truth and the only canonical aggregate
@@ -185,8 +198,8 @@ stories.
 - Design target: a human-facing aggregate gate should own one package-graph run.
   In practice, that means extending `pnpm check` rather than adding a
   second competing full-gate surface. The underlying implementation may still
-  compose multiple root scripts today, but discoverability and future
-  convergence should stay centred on this one gate.
+  compose multiple workspace-owned validator commands today, but
+  discoverability and future convergence should stay centred on this one gate.
 - Repo-wide claims must stay within the workspace task exports that back them.
   A workspace is only in the repo-wide `clean`, `type-check`, `lint`, or
   `test` story if it actually exports that task.

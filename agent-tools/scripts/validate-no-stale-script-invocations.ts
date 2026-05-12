@@ -11,8 +11,8 @@ import {
  * Standalone validator that walks authored repo surfaces (CI workflow YAML,
  * project documentation, app docs, agent research notes, agent directives,
  * memory, and Practice Core narrative) and fails if any file uses a stale
- * `node scripts/<name>.{mjs,ts,js}` invocation in place of the canonical
- * `pnpm exec tsx scripts/<name>.ts` form.
+ * root `scripts/<name>` invocation now that root script logic must live in
+ * workspace-owned commands.
  *
  * The gate exists to prevent regression of the failure class fixed in
  * PR-90 commit `b8540657`: the TS6 migration renamed `.mjs` scripts to
@@ -21,13 +21,13 @@ import {
  * Copilot caught the drift externally; this validator catches it locally
  * before push.
  *
- * Wired into `pnpm test:root-scripts` after the vitest run, following the
- * canonical pattern set by `validate-eslint-boundaries.ts`.
+ * Wired into `pnpm test:root-scripts` alongside the workspace-owned ESLint
+ * boundary inventory validator.
  *
  * @packageDocumentation
  */
 
-const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 
 /**
  * Authored surfaces walked recursively. Tests, generated artefacts,
@@ -136,7 +136,7 @@ async function main(): Promise<void> {
 
   if (findings.length === 0) {
     console.log(
-      'validate-no-stale-script-invocations: OK (no stale `node scripts/...` references)',
+      'validate-no-stale-script-invocations: OK (no stale root `scripts/...` invocations)',
     );
     return;
   }
@@ -144,7 +144,7 @@ async function main(): Promise<void> {
   console.error(
     `validate-no-stale-script-invocations: ${findings.length} stale invocation(s) found.\n\n` +
       `${formatFindings(findings)}\n\n` +
-      `Authored surfaces must use the canonical \`pnpm exec tsx scripts/<script>.ts\` form. ` +
+      `Authored surfaces must call workspace-owned package scripts instead of root \`scripts/\` files. ` +
       `Convert each finding above (or, for plans/research material legitimately describing ` +
       `the drift in prose, add the file path to ALLOWLISTED_PATHS in this script).`,
   );

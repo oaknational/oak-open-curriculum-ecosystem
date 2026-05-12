@@ -2,7 +2,7 @@
 
 This directory contains the canonical agent-hook policy for this
 repository. Hooks follow the same canonical-first pattern as rules and
-skills: policy lives here, shared runtime lives in a repo-local script,
+skills: policy lives here, shared runtime lives in a workspace-owned command,
 and thin native activation lives in platform config.
 
 ## Current Status
@@ -10,7 +10,7 @@ and thin native activation lives in platform config.
 **Guardrail-only**: the hook layer is intentionally narrow.
 
 - `preToolUse` — natively enforced for Claude Code Bash calls via
-  `scripts/check-blocked-patterns.mjs`; blocks shell commands that bypass
+  `pnpm agent-tools:check-blocked-patterns`; blocks shell commands that bypass
   safety guardrails or destroy history (force-push, hard reset,
   `--no-verify`)
 - `sessionStart` — documented policy only; grounding is already enforced
@@ -28,7 +28,7 @@ The hook layer follows a small Policy Spine. The layers are not peers.
 2. **Native activation** — platform config such as `.claude/settings.json`
    This tracked project config may activate only supported canonical policy. It
    does not redefine the policy.
-3. **Repo-local runtime** — `scripts/check-blocked-patterns.mjs`
+3. **Workspace-owned runtime** — `pnpm agent-tools:check-blocked-patterns`
    The runtime enforces the active policy for the supported native surface.
 4. **Explanatory mirrors** — this README and the cross-platform surface matrix
    These must describe the live arrangement, but they never override it.
@@ -64,7 +64,7 @@ When wiring hooks for a platform:
 
 1. Read `policy.json` for the canonical policy
 2. Create thin native activation in the platform config directory
-3. Reuse or add a repo-local runtime script only when native config
+3. Reuse or add a workspace-owned runtime command only when native config
    cannot read `policy.json` directly
 4. Update the surface matrix to record the supported state
 5. Add drift checks to the portability validation script

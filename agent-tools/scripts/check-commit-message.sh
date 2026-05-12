@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# scripts/check-commit-message.sh
+# pnpm agent-tools:check-commit-message
 #
 # Test a commit message against this repo's commitlint configuration in
 # isolation from the rest of the pre-commit / commit-msg hook chain.
@@ -14,10 +14,10 @@
 #   (no flags)   Read the message from stdin.
 #
 # Examples:
-#   ./scripts/check-commit-message.sh -m "feat(scope): subject"
-#   ./scripts/check-commit-message.sh -m "feat(scope): subject" -m "body"
-#   ./scripts/check-commit-message.sh -F .git/COMMIT_EDITMSG
-#   ./scripts/check-commit-message.sh -F - <<'EOF'
+#   pnpm agent-tools:check-commit-message -m "feat(scope): subject"
+#   pnpm agent-tools:check-commit-message -m "feat(scope): subject" -m "body"
+#   pnpm agent-tools:check-commit-message -F .git/COMMIT_EDITMSG
+#   pnpm agent-tools:check-commit-message -F - <<'EOF'
 #   feat(scope): subject
 #
 #   body paragraph
@@ -32,7 +32,7 @@ set -euo pipefail
 
 usage() {
   cat >&2 <<'EOM'
-Usage: scripts/check-commit-message.sh [-m <msg>]... [-F <file>]
+Usage: pnpm agent-tools:check-commit-message [-m <msg>]... [-F <file>]
 
 Test a commit message against this repo's commitlint configuration in
 isolation from the rest of the pre-commit / commit-msg hook chain.

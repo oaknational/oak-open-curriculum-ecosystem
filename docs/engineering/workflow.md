@@ -113,7 +113,7 @@ reference table.
 indicates an environmental or configuration issue, not a missing check. Both
 surfaces cover secrets, build, formatting, markdown, sub-agents, portability,
 knip (unused code detection), depcruise (circular deps, orphans, layer
-violations), root-script tests, lint, type-check, unit tests,
+violations), workspace-owned repo validators, lint, type-check, unit tests,
 E2E, UI, and smoke tests. `pnpm check` adds widget tests, a11y tests, doc-gen,
 clean rebuild, and fix-mode commands.
 

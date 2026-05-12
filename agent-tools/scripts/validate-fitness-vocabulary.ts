@@ -58,8 +58,8 @@ const EXCLUDED_PATH_PREFIXES_EXTRA = ['.agent/experience/'];
  */
 const ALLOWED_FILES = new Set([
   'docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md',
-  'scripts/validate-fitness-vocabulary.ts',
-  'scripts/validate-fitness-vocabulary.unit.test.ts',
+  'agent-tools/scripts/validate-fitness-vocabulary.ts',
+  'agent-tools/scripts/validate-fitness-vocabulary.unit.test.ts',
 ]);
 
 /**
