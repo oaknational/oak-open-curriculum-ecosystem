@@ -33,3 +33,22 @@ export {
   type LiteralTerm,
   type NamedNodeTerm,
 } from './data-factory/index.js';
+export {
+  createJsonLdProcessor,
+  createJsonLdProcessorWithDriver,
+  type CompactedJsonLdDocument,
+  type ExpandedJsonLdDocument,
+  type FramedJsonLdDocument,
+  type JsonLdContext,
+  type JsonLdDocument,
+  type JsonLdFrame,
+  type JsonLdObject,
+  type JsonLdProcessor,
+  type JsonLdProcessorDriver,
+  type JsonLdProcessorError,
+  type JsonLdProcessorErrorKind,
+  type JsonLdProcessorImplementation,
+  type JsonLdProcessorOperation,
+  type JsonLdProcessorResult,
+  type JsonLdValue,
+} from './jsonld/index.js';
