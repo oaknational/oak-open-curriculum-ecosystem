@@ -637,6 +637,7 @@ promotion.)
 | `Shaded Ripening Copse` | `claude-code` | `claude-opus-4-7-1m` | `c13bdf` | `graph-stack-and-combinatorial-arc-schedule-not-trigger-sweep` | 2026-05-11 | 2026-05-11 |
 | `Flamebright Burning Lava` | `claude-code` | `claude-opus-4-7-1m` | `b1202e` | `question-assumptions-adr-173-promotion-and-verdict-not-menu-nudges` | 2026-05-11 | 2026-05-11 |
 | `Sparking Charring Ash` | `claude-code` | `claude-opus-4-7-1m` | `caf5e1` | `graph-foundation-work-orphan-bundle-land-adr-ratification-plan-promotion-ws1-1-refinement-three-reviewer-followup` | 2026-05-11 | 2026-05-12 |
+| `Celestial Transiting Satellite` | `claude` | `claude-opus-4-7-1m` | `9bc8e3` | `ws1-1-graph-core-scaffold-landed-at-ad2abb69` | 2026-05-12 | 2026-05-12 |
 
 ## Plan Locations
 

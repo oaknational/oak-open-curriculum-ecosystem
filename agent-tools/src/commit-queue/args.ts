@@ -28,6 +28,11 @@ export function parseCommitQueueArgs(argv: readonly string[]): {
     if (!token.startsWith('--')) {
       throw new Error(`unexpected positional argument: ${token}`);
     }
+    if (token === '--help' || token === '-h') {
+      options.help = 'true';
+      index += 1;
+      continue;
+    }
     parseOptionToken({ tokens, index, options });
     index += 2;
   }

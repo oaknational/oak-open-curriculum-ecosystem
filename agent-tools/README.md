@@ -22,11 +22,14 @@ adjacent mechanisms are Practice substance by default per
 This repository's local implementation boundary is recorded in
 [ADR-165](../docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md).
 
-It provides six operator tools:
+It provides a unified `agent-tools` entrypoint with topic dispatch for the
+hot collaboration tools, plus specialised operator tools that still own their
+domain-specific flows:
 
 - `agent-identity`: derive deterministic agent display names from explicit stable seeds.
 - `collaboration-state`: safely mutate shared collaboration state with identity preflight, immutable comms events, transaction-guarded JSON writes, and TTL cleanup.
 - `commit-queue`: coordinate short-lived git index/head commit windows and verify staged bundles before commit.
+- `branch-touched-files`: report the files touched by a branch against a base ref.
 - `claude-agent-ops`: monitor background agents, inspect logs, diff worktrees, run preflight checks, and run a summary-first health probe for agent infrastructure drift.
 - `cursor-session-from-claude-session`: find/inspect Claude sessions and generate Cursor takeover bundles with an explicit reintegration contract.
 - `codex-reviewer-resolve`: resolve a repo-local Codex reviewer adapter to the exact `.codex` and canonical `.agent` files that should ground a review.
@@ -49,12 +52,31 @@ pnpm agent-tools:build
 pnpm agent-tools:lint
 pnpm agent-tools:test
 pnpm agent-tools:test:e2e
-pnpm agent-tools:agent-identity --seed example-session-id-001 --format display
-pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5
+pnpm agent-tools agent-identity --seed example-session-id-001 --format display
+pnpm agent-tools collaboration-state identity preflight --platform codex --model GPT-5
 pnpm agent-tools:claude-agent-ops status
 pnpm agent-tools:claude-agent-ops health
 pnpm agent-tools:cursor-session-from-claude-session find --last-hours 2
 pnpm agent-tools:codex-reviewer-resolve code-expert
+```
+
+## Unified entrypoint
+
+`pnpm agent-tools <topic> <action> [options]` is the stable hot path for
+collaboration tooling. The package scripts for `agent-identity`,
+`collaboration-state`, `commit-queue`, and `branch-touched-files` are thin
+shortcuts to the same built `dist/src/bin/agent-tools.js` file; they no longer
+run `pnpm -s build` before every invocation. After editing `agent-tools`
+source, run `pnpm agent-tools:build` once before using those built CLI scripts.
+
+Examples:
+
+```bash
+pnpm agent-tools agent-identity --seed example-session-id-001 --format json
+pnpm agent-tools collaboration-state claims list --active .agent/state/collaboration/active-claims.json
+pnpm agent-tools commit-queue status
+pnpm agent-tools branch-touched-files --json
+pnpm agent-tools --log-json agent-identity --seed example-session-id-001
 ```
 
 ## `agent-identity` quick reference
@@ -75,10 +97,10 @@ Claude/Codex/Cursor wrapper status is documented in
 Examples:
 
 ```bash
-pnpm agent-tools:agent-identity --seed example-session-id-001 --format display
+pnpm agent-tools agent-identity --seed example-session-id-001 --format display
 pnpm agent-tools:build
-node agent-tools/dist/src/bin/agent-identity.js --seed example-session-id-001 --format json
-OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" pnpm agent-tools:agent-identity --seed any --format display
+node agent-tools/dist/src/bin/agent-tools.js agent-identity --seed example-session-id-001 --format json
+OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" pnpm agent-tools agent-identity --seed any --format display
 ```
 
 ## `collaboration-state` quick reference
@@ -105,10 +127,10 @@ Example:
 
 ```bash
 CODEX_THREAD_ID=019dd34d-cb6a-74e0-a29d-6cb8a65ea14b \
-  pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5
-pnpm agent-tools:collaboration-state -- claims list --active .agent/state/collaboration/active-claims.json
-pnpm agent-tools:collaboration-state -- claims mine --active .agent/state/collaboration/active-claims.json --platform cursor --model GPT-5.5
-pnpm agent-tools:collaboration-state -- claims open \
+  pnpm agent-tools collaboration-state identity preflight --platform codex --model GPT-5
+pnpm agent-tools collaboration-state claims list --active .agent/state/collaboration/active-claims.json
+pnpm agent-tools collaboration-state claims mine --active .agent/state/collaboration/active-claims.json --platform cursor --model GPT-5.5
+pnpm agent-tools collaboration-state claims open \
   --active .agent/state/collaboration/active-claims.json \
   --thread agentic-engineering-enhancements \
   --area-kind files \
@@ -117,7 +139,7 @@ pnpm agent-tools:collaboration-state -- claims open \
   --now 2026-05-10T12:15:00Z \
   --platform cursor \
   --model GPT-5.5
-pnpm agent-tools:collaboration-state -- claims open \
+pnpm agent-tools collaboration-state claims open \
   --active .agent/state/collaboration/active-claims.json \
   --thread agentic-engineering-enhancements \
   --area-kind files \
@@ -127,8 +149,8 @@ pnpm agent-tools:collaboration-state -- claims open \
   --now 2026-05-10T12:15:00Z \
   --platform cursor \
   --model GPT-5.5
-pnpm agent-tools:collaboration-state -- comms send --title "Heads-up" --body "Rendered via immutable event." --platform cursor --model GPT-5.5
-pnpm agent-tools:commit-queue -- status
+pnpm agent-tools collaboration-state comms send --title "Heads-up" --body "Rendered via immutable event." --platform cursor --model GPT-5.5
+pnpm agent-tools commit-queue status
 ```
 
 ## `commit-queue` quick reference
@@ -151,8 +173,8 @@ pnpm agent-tools:commit-queue -- status
 Example:
 
 ```bash
-pnpm agent-tools:commit-queue -- list --agent-name "Embered" --queue-status active
-pnpm agent-tools:commit-queue -- show --intent-id 11111111-1111-4111-8111-111111111111
+pnpm agent-tools commit-queue list --agent-name "Embered" --queue-status active
+pnpm agent-tools commit-queue show --intent-id 11111111-1111-4111-8111-111111111111
 ```
 
 When `.agent/state/collaboration/active-claims.json` is part of the staged

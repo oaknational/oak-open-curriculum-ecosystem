@@ -25,7 +25,7 @@ todos:
     status: completed
   - id: ws-p-foundation-cli-overhaul
     content: Agent-tools CLI architectural overhaul. Single binary entrypoint with centralised parsing, error handling, and logging. Stop the build-on-every-invocation anti-pattern (defeats stability) and the bin-collection-without-shared-plumbing anti-pattern (defeats centralisation). Foundational pre-condition for P1–P7 implementations; land between P0 and P1.
-    status: pending
+    status: completed
   - id: ws-p1-comms-direct-and-reply
     content: Implement B-11 directed-message authoring CLI (`comms direct` + `comms reply`) per the locked sidebar design at `.agent/state/collaboration/sidebars/cli-comms-inbox-design-2026-05-11.md`. Lands in the unified CLI shape from P-Foundation.
     status: pending
@@ -545,6 +545,30 @@ on each invocation").
   internally; the CLI resolves current-agent/current-thread/current-
   intent defaults; explicit UUID/date flags remain available only for
   recovery, replay, or deterministic tests.
+
+**2026-05-12 evidence**:
+
+- Unified entrypoint landed at `agent-tools/src/bin/agent-tools.ts` with
+  pure dispatcher coverage in `agent-tools/tests/agent-tools-cli.unit.test.ts`.
+  The dispatcher owns global topic parsing, top-level help/error shape,
+  stdout/stderr capture, and a structured lifecycle log hook via
+  `--log-json`.
+- The hot collaboration scripts for `agent-identity`, `collaboration-state`,
+  `commit-queue`, and `branch-touched-files` now call the built single bin
+  (`dist/src/bin/agent-tools.js <topic> ...`) instead of running
+  `pnpm -s build` before each invocation. The legacy topic bin files are
+  forwarding stubs to preserve direct-node compatibility without keeping
+  separate process plumbing.
+- Documentation now names `pnpm agent-tools <topic> <action> [options]` as
+  the stable hot path and keeps the old topic scripts only as shortcuts to
+  the same built file.
+- The commit-queue topic now treats `--help` / `-h` as value-less help flags
+  through the unified dispatcher, preserving both `pnpm agent-tools
+  commit-queue enqueue --help` and legacy shortcut help flows.
+- Existing low-level workflows already generate ordinary IDs and timestamps
+  where the current commands support it (`claims open` and `commit-queue`
+  intent creation); P1/P3 add the higher-level command affordances on top of
+  this single entrypoint rather than as sibling bins.
 
 **Why it sits between P0 and P1**:
 

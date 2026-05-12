@@ -32,6 +32,11 @@ import {
  * Run a commit-queue CLI command against the current repository.
  */
 export async function runCommitQueueCli(input: CommitQueueCliInput): Promise<number> {
+  if (isHelpCommand(input.command, input.options)) {
+    writeStdout(input, `${usage()}\n`);
+    return 0;
+  }
+
   validateCommandOptions(input.command, input.options);
   const registryPath = resolveRegistryPath(input.repoRoot, input.options);
   const now = nowIso(input.options);
@@ -166,6 +171,20 @@ function stagedRegistry(
 
 function formatIntentIds(entries: readonly CommitIntent[]): string {
   return entries.map((entry) => entry.intent_id).join(', ');
+}
+
+function isHelpCommand(command: string | undefined, options: CommitQueueCliOptions): boolean {
+  return (
+    command === undefined ||
+    command === 'help' ||
+    command === '--help' ||
+    command === '-h' ||
+    optionString(options, 'help') === 'true'
+  );
+}
+
+function writeStdout(input: CommitQueueCliInput, chunk: string): void {
+  (input.stdout ?? process.stdout).write(chunk);
 }
 
 function writeVerificationResult(input: {

@@ -367,3 +367,67 @@ The most recent rotation is archived at
 - candidate: commit workflow docs should absorb the owner clarification that
   memory/state surfaces are included in every commit when dirty, alongside the
   existing shared-state-always-committable rule.
+
+## 2026-05-12 — WS1.1 Graph-Core Scaffold / claude / opus-4-7-1m / `9bc8e3`
+
+### Surprise
+
+- **Surprise**: depcruise `no-orphans` rule fires on pre-declared empty
+  sub-path-export barrels at WS1.1 even though every other gate is green.
+  Six errors, one per empty `src/<sub>/index.ts`.
+- **Expected**: the WS1.1 row's "Tree green" definition said
+  "depcruise passes (no rule update needed; depcruise operates on import
+  paths and graph-core exports nothing real at WS1.1)." That assumption
+  was wrong — the rule's failure mode is *orphan* (no inbound import),
+  not *unresolved import*.
+- **Actual**: the rule already had an established exception pattern for
+  exactly this class of file —
+  `oak-sdk-codegen/src/(admin|zod|query-parser|observability)\.ts$` —
+  documented inline as "SDK subpath-export barrels consumed via package.json
+  exports". The precedent makes the cure structural, not workaround-shaped.
+- **Why it matters**: the assumption embedded in the WS1.1 row will repeat
+  in WS2.1, WS3.1, and WS4.1 — every future scaffold cycle that
+  pre-declares sub-path exports. The scaffold checklist needs the
+  `.dependency-cruiser.mjs` exception entry alongside the
+  `pnpm-workspace.yaml`, `knip.config.ts`, `tsconfig.lint.json`, and
+  `pnpm-lock.yaml` items.
+- **Action taken**: closed claim + intent, re-opened both with the
+  expanded scope including `.dependency-cruiser.mjs`, added two
+  pathNot patterns mirroring the oak-sdk-codegen precedent, re-ran
+  depcruise green, proceeded. Cost: ~3 min round-trip. Thread record
+  and plan body now carry the discovery for the next scaffold cycle.
+
+### Worked Well
+
+- The cost-of-collaboration P0 broken-code guard worked under multi-agent
+  load. Peer agents were churning `.agent/state/collaboration/` files
+  throughout the WS1.1 cycle; staging by explicit pathspec kept my bundle
+  exactly the 18 files I authored. Pre-commit gates passed FULL TURBO
+  cached. The new staged-only gate routing is functioning as designed.
+
+### Candidate
+
+- candidate: extend the canonical scaffold checklist (currently lives
+  in `graph-stack.plan.md` WS1.1 row and the `connecting-oak-resources`
+  thread record) with the `.dependency-cruiser.mjs` pathNot exception
+  for sub-path-export barrels. Trigger: when WS2.1 or WS3.1 is opened
+  (second-instance test of the pattern's recurrence). Graduation
+  target: doc update to the canonical scaffold reference, not an ADR/PDR.
+
+## 2026-05-12 — P-Foundation Unified Agent-Tools CLI / codex / GPT-5 / `019e1b`
+
+### Patterns to Remember
+
+- P-Foundation can land as a dispatcher-first slice without rewriting every
+  topic parser at once: one built `agent-tools` entrypoint, forwarding legacy
+  bin wrappers, and package scripts that stop rebuilding on every hot
+  collaboration invocation are enough to make P1/P3 subcommands land in the
+  right architectural shape.
+- Unit tests for the unified dispatcher should inject commit-queue registry
+  reads rather than creating temp collaboration files; otherwise a pure CLI
+  dispatch test accidentally inherits the repo's no-real-IO test warning.
+- When forwarding legacy topic bins through the unified dispatcher, smoke one
+  action help path as well as one read command. The commit-queue parser had a
+  pre-existing value-bearing option assumption that made `enqueue --help`
+  report `missing value for --help` until the dispatcher regression test caught
+  it.

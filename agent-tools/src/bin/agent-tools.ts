@@ -2,7 +2,7 @@
 import { agentToolsCliEnvironmentFromProcessEnv, runAgentToolsCli } from './agent-tools-cli.js';
 
 runAgentToolsCli({
-  argv: ['agent-identity', ...process.argv.slice(2)],
+  argv: process.argv.slice(2),
   env: agentToolsCliEnvironmentFromProcessEnv(process.env),
   cwd: process.cwd(),
 })
