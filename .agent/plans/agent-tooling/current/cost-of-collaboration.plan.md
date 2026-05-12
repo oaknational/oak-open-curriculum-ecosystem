@@ -104,12 +104,12 @@ addresses, with P0 being the load-bearing prerequisite.
 
 ### P0 — Staged-only pre-commit gates
 
-**Hypothesis**: pre-commit hook scans the entire working tree (staged
-
-- unstaged + untracked) at hook-fire time. In a continuous-write
-multi-agent window this guarantees gate failures on files that have
-nothing to do with the committing agent's staged content. The fix is
-to gate against staged content only and move repo-wide gates to CI.
+**Hypothesis**: pre-commit hook scans the entire working tree
+(`staged plus unstaged plus untracked`) at hook-fire time. In a
+continuous-write multi-agent window this guarantees gate failures on
+files that have nothing to do with the committing agent's staged
+content. The fix is to gate against staged content only and move
+repo-wide gates to CI.
 
 **Evidence**: three serial deadlock iterations on 2026-05-11 — knip on
 peer-unstaged code, prettier on peer-unstaged code, markdownlint on
@@ -525,3 +525,55 @@ The locked B-11 design lives in
 [`.agent/state/collaboration/sidebars/cli-comms-inbox-design-2026-05-11.md`](../../../state/collaboration/sidebars/cli-comms-inbox-design-2026-05-11.md).
 Treat the joint-decision section at the foot of that file as P1's
 binding scope until implementation lands.
+
+## Exploration candidates (not yet workstreams)
+
+These are owner-flagged ideas to explore. They are not yet
+decision-complete and do not have acceptance criteria — they need a
+short scoping pass (a peer sidebar, a feasibility note, or a single-
+agent investigation slice) before promotion to a P-workstream.
+
+- **E-1 — Advisory-only agent hooks that remind to use agent-tools
+  systems.** Captured by owner 2026-05-12. The idea: lightweight,
+  non-blocking hooks (e.g. SessionStart, pre-edit, periodic
+  heartbeat) that detect when an agent is about to bypass an
+  established agent-tools system (e.g. hand-authored JSON instead of
+  `comms direct`, `git add` without an open commit-queue intent,
+  ad-hoc file watch instead of `comms watch`) and surface a polite
+  reminder pointing at the canonical tool. Advisory only — the
+  reminder does not block; the agent decides whether to course-
+  correct. Composes with the enforcement-not-exhortation lesson from
+  Sparking Charring Ash 2026-05-11: the hook itself is advisory, but
+  it removes the "I didn't know the tool existed" failure mode that
+  exhortation alone cannot. Open scoping questions: which detection
+  signals are reliable? Which tool surfaces deserve a reminder hook?
+  How do we keep these from being a hook-noise source that gets
+  filtered out? Scope candidate: peer sidebar with one engineer
+  before authoring; size estimate M.
+
+- **E-2 — `agent-tools git` CLI passthrough with checks and
+  balances.** Captured by owner 2026-05-12. The idea: a new
+  agent-tools CLI subcommand `agent-tools git <subcommand>` that
+  passes through to system `git` for the underlying operation but
+  layers additional checks and balances on top — e.g. commit-queue
+  enforcement on `git add` (P3-shaped), automatic comms-event
+  posting on `git commit` (so peers see new commits without polling
+  the log themselves), claim-aware `git push` (refuses to push if
+  a peer's `git:index/head` claim is still open), proof-of-
+  observed-behaviour gate on `git push` (the `local-broken-code-
+  never-leaves` rule made structurally hard to bypass). The CLI
+  shape lets us add discipline without forking the underlying tool
+  and without inventing a new vocabulary for everyday operations.
+  Composes with: P3 (commit queue enforcement), P1/P2 (comms write
+  - watch), `local-broken-code-never-leaves` rule, E-1 (the reminder
+  hook can route agents to `agent-tools git` rather than raw `git`).
+  Open scoping questions: which `git` subcommands need wrapping?
+  Where does the passthrough draw the line between additive checks
+  and behaviour change? How do we handle interactive git commands
+  (rebase, mergetool) where passthrough is harder? Scope candidate:
+  peer sidebar; size estimate L.
+
+E-1 and E-2 likely **compose into a single workstream** if both
+prove worth doing — E-2 is the host surface for the checks, E-1 is
+the advisory layer that detects when an agent is about to bypass
+E-2. Scoping pass should evaluate them together.
