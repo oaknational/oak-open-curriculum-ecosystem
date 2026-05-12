@@ -172,7 +172,7 @@ The most recent rotation is archived at
   environment failures as evidence instead of flattening everything into the
   final failing test.
 
-## 2026-05-12 — Volcanic Banking Pyre / codex / GPT-5 / `019e1a`
+## 2026-05-12 — Volcanic Banking Pyre Skill Review / codex / GPT-5 / `019e1a`
 
 ### Skill Remediation Findings
 
@@ -205,3 +205,28 @@ The most recent rotation is archived at
   Playwright bootstrap and sandbox launch were profiling constraints; the
   next actionable blocker is
   `src/correlation/middleware.integration.test.ts:203`.
+
+### Quality-Gate Plan Update
+
+- Owner asked whether the quality-gate performance/tuning work had an explicit
+  implementation plan. The correct answer was "partly": P0 existed in
+  `cost-of-collaboration.plan.md`, and the profiling deep dive contained
+  recommendations, but the task decomposition was not yet executable enough.
+- Behaviour change: when an analysis note creates next-step recommendations
+  that affect collaboration cost, promote them into the active plan's
+  machine-readable `todos:` before handoff. Recommendations alone are too easy
+  for the next agent to admire and not execute.
+- Owner then changed root `pnpm check` toward non-mutating lint, Markdown, and
+  format proof commands. Behaviour change: treat live owner gate changes as
+  current baseline evidence to verify, while keeping the owner-authored code
+  edit out of my commit unless explicitly asked to include it.
+
+## 2026-05-12 — Volcanic Banking Pyre Closeout / codex / GPT-5 / `019e1a`
+
+### Handoff Closeout Correction
+
+- The first closeout commit preserved the earlier profiling handoff at the
+  top of the thread record, but the owner's newest instruction superseded the
+  next-session opener. Fix: make the paired `jc-session-handoff` +
+  `jc-consolidate-docs` review, with `jc-metacognition`, the current
+  continuation while keeping the profiling lane below it as preserved state.

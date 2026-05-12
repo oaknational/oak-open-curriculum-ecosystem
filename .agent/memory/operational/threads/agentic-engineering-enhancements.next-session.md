@@ -1,10 +1,70 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-> **Current continuation**: the owner's `pnpm check` profiling brief has a
-> durable evidence pass and deep-dive write-up. Start at §`pnpm check`
-> profiling result and next step, then return to the older agent
-> communication improvement opener only when the profiling follow-up is no
-> longer load-bearing.
+> **Current continuation**: the cost-of-collaboration plan now contains an
+> explicit P0 quality-gate performance implementation track. If the owner
+> resumes the quality-gate lane, start at §Quality-gate performance
+> implementation track. The workflow-skill review continuation remains below
+> as a separate owner-directed lane.
+
+## Quality-gate performance implementation track (2026-05-12+)
+
+**One-line objective**: execute the P0 quality-gate implementation tasks in
+[`cost-of-collaboration.plan.md`](../../../plans/agent-tooling/current/cost-of-collaboration.plan.md):
+measure clean cold/warm baselines, make trigger purposes explicit, implement
+staged-only pre-commit, rebalance pre-push/CI assurance, harden profiling, and
+remeasure before declaring the checkpoint tuning effective.
+
+**Current state**: the plan now has concrete `todos:` entries
+`ws-p0-qg-baseline-and-unblock`, `ws-p0-qg-trigger-contract`,
+`ws-p0-qg-staged-precommit-implementation`,
+`ws-p0-qg-prepush-ci-rebalance`, `ws-p0-qg-profile-hardening`, and
+`ws-p0-qg-postchange-measurement`. Owner live update on 2026-05-12: root
+`pnpm check` has started moving lint, Markdown, and format proof steps to
+non-mutating commands; the next baseline should verify and measure that state.
+
+**Next safe step**: start with `ws-p0-qg-baseline-and-unblock`: fix or
+explicitly route the MCP correlation-middleware Vitest failure at
+`src/correlation/middleware.integration.test.ts:203`, then capture clean cold
+and warm `pnpm check:profile` baselines under `.logs/check-profiles/`,
+including evidence that the root proof path is non-mutating for lint,
+Markdown, and format.
+
+**Boundary**: no tuning may remove a check from a trigger without naming the
+assurance preserved at that trigger, the trigger that now owns any moved
+assurance, and the evidence command that proves the new placement.
+
+## Workflow skill deep review continuation (2026-05-12+)
+
+**One-line objective**: review and remediate `jc-session-handoff`,
+`jc-consolidate-docs`, and `jc-metacognition` with the same discipline just
+applied to `jc-plan`, `jc-start-right-quick`, `jc-start-right-thorough`, and
+`jc-commit`.
+
+**Pairing to preserve**: treat `jc-session-handoff` and `jc-consolidate-docs`
+as a pair. The handoff runs in more sessions than the consolidation workflow,
+but the two are closely related: handoff captures session-close continuity,
+while consolidation decides what graduates out of temporary surfaces.
+
+**Review frame**:
+
+- start from canonical skill files and generated adapters, not adapter-only
+  copies;
+- prefer pointers to canonical directories/files over duplicated lists;
+- treat markdown as foundational infrastructure and include minor findings;
+- re-check live claims, shared comms, repo continuity, and pending
+  graduations before editing or committing;
+- keep the owner correction active: comms are not noise, and
+  `.agent/memory/**` plus `.agent/state/**` are shared responsibility.
+
+**Precedent**:
+
+- `2eba7ab7 docs(agent): harden jc-plan planning discipline`;
+- `d2d3fcf8 docs(agent): reconcile handoff and tooling state`.
+
+**Next safe step**: re-ground live state, read the canonical skill files and
+their generated `.agents` / `.claude` adapters, inspect adjacent references
+and ADR/PDR links, then patch the canonical source and regenerate/validate
+adapters where needed.
 
 ## `pnpm check` profiling result and next step (2026-05-12+)
 
@@ -64,10 +124,10 @@ failed in `@oaknational/oak-curriculum-mcp-streamable-http#test` at
 problems were environmental profiling constraints; the final blocker is this
 ordinary Vitest assertion.
 
-**Next safe step**: fix or explicitly route the MCP correlation-middleware
-test failure, then rerun `pnpm check:profile`. After a clean full-profile
-attempt, run a warm-cache second pass in the same prepared environment. Only
-then decide whether any trigger tuning is warranted.
+**Next safe step**: this lane is now embodied in the cost-of-collaboration
+P0.QG implementation tasks. Start with `ws-p0-qg-baseline-and-unblock`: fix or
+explicitly route the MCP correlation-middleware test failure, then rerun
+`pnpm check:profile` cold and warm before tuning trigger placement.
 
 **Acceptance frame**:
 
@@ -3292,7 +3352,7 @@ and
 | `Flamebright Roasting Magma` | `codex` | `GPT-5` | `019e1a` | `root-script-retirement-and-pnpm-check-profiling-handoff; committed-fabe99c3-through-commit-queue; moved-retained-root-scripts-to-workspaces; added-agent-tools-repo-check-profile-and-markdownlint-staged-surfaces; next-session-owns-deliberately-exhaustive-pnpm-check-analysis` | 2026-05-12 | 2026-05-12 |
 | `Flamebright Sparking Forge` | `codex` | `GPT-5` | `019e1a` | `bounded-repo-continuity-and-pending-graduations-consolidation-drain; archived-historical-continuity-prose; reconciled-live-state-and-due-index; no-staging-window` | 2026-05-12 | 2026-05-12 |
 | `Torrid Flaring Hearth` | `codex` | `GPT-5` | `019e1a` | `consolidate-docs-pass; napkin-rotation; fitness-routing; thread-register-and-collaboration-state-audit; session-handoff-and-commit-closeout` | 2026-05-12 | 2026-05-12 |
-| `Vining Budding Canopy` | `codex` | `GPT-5` | `019e1a` | `pnpm-check-profiling-deep-dive-and-session-handoff; captured-turbo-graph-228-nodes-88-real-commands; preserved-profile-artifacts-under-.logs-check-profiles; recorded-F20-repo-check-profile-bootstrap-friction; next-step-fix-streamable-http-correlation-middleware-vitest-failure-then-rerun-clean-and-warm-profile` | 2026-05-12 | 2026-05-12 |
+| `Vining Budding Canopy` | `codex` | `GPT-5` | `019e1a` | `pnpm-check-profiling-deep-dive-and-session-handoff; captured-turbo-graph-228-nodes-88-real-commands; preserved-profile-artifacts-under-.logs-check-profiles; recorded-F20-repo-check-profile-bootstrap-friction; expanded-cost-of-collaboration-P0-quality-gate-implementation-tasks; next-step-fix-streamable-http-correlation-middleware-vitest-failure-then-rerun-clean-and-warm-profile` | 2026-05-12 | 2026-05-12 |
 | `Wooded Spreading Thicket` | `cursor` | `GPT-5.5` | `unknown` | `persistent-comms-coordinator-for-session; monitors-active-claims-shared-comms-log-and-fresh-comms-surfaces-every-30s; updateCurrentStep-telemetry-triage-external-tool-not-in-repo; writes-only-on-change-milestone-blocker-or-quiet-interval; all-agents-introduce-to-Wooded-Spreading-Thicket` | 2026-05-11 | 2026-05-11 |
 | `Galactic Transiting Orbit` | `codex` | `GPT-5` | `019e18` | `Wave-3-commit-queue-UX-hardening-claim-close-cycle-fingerprint-recursion-slice-in-progress; preserving-post-commit-ledger-residue-from-Embered-Burning-Magma-as-evidence; scope-agent-tools-commit-queue-collaboration-state-tests-plan-status-and-session-lifecycle-surfaces; Wave-4-and-Wave-5-remain-closed` | 2026-05-11 | 2026-05-11 |
 | `Shaded Ripening Copse` | `claude-code` | `claude-opus-4-7-1m` | `c13bdf` | `commit-queue-UX-brief-author-B-02-B-03-Workstream-4-architectural-seam-and-third-direction-peer-commit-absorption-subsection-commit-5c299ed5; primary-thread-was-connecting-oak-resources-but-the-commit-queue-UX-brief-landed-here-per-opener-routing` | 2026-05-11 | 2026-05-11 |

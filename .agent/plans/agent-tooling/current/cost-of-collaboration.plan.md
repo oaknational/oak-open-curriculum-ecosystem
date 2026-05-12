@@ -5,6 +5,24 @@ todos:
   - id: ws-p0-staged-only-gates
     content: Reshape the pre-commit hook to gate against staged content only (lint-staged or equivalent), with the full turbo suite moved to CI. Load-bearing pre-condition for every other multi-agent workstream.
     status: pending
+  - id: ws-p0-qg-baseline-and-unblock
+    content: Fix or explicitly route the current MCP Vitest blocker, then capture clean cold and warm `pnpm check:profile` baselines from `.logs/check-profiles/` before tuning gate placement.
+    status: pending
+  - id: ws-p0-qg-trigger-contract
+    content: Codify the quality-checkpoint trigger contract: local `pnpm check`, pre-commit, pre-push, GitHub CI, SonarQube Cloud, and GitHub CodeQL each name their purpose, assurance owner, and non-goals.
+    status: pending
+  - id: ws-p0-qg-staged-precommit-implementation
+    content: Implement staged-only pre-commit gates with regression coverage for ambient dirty peer files, preserving staged-content feedback while moving whole-repo proof to stronger triggers.
+    status: pending
+  - id: ws-p0-qg-prepush-ci-rebalance
+    content: Rebalance pre-push and GitHub CI so every gate removed from pre-commit still has an explicit assurance home, including knip, depcruise, Turbo families, UI/a11y/widget checks, and generated/artifact checks.
+    status: pending
+  - id: ws-p0-qg-profile-hardening
+    content: Harden `repo-check profile` so profile artifacts record environment preflight, Playwright/browser readiness, skipped post-Turbo gates, and optional captured output for many-process diagnosis.
+    status: pending
+  - id: ws-p0-qg-postchange-measurement
+    content: Re-profile after the gate rebalance, compare cold and warm runtimes against the baseline, and record which assurance was preserved, moved, or intentionally traded off.
+    status: pending
   - id: ws-p-foundation-cli-overhaul
     content: Agent-tools CLI architectural overhaul. Single binary entrypoint with centralised parsing, error handling, and logging. Stop the build-on-every-invocation anti-pattern (defeats stability) and the bin-collection-without-shared-plumbing anti-pattern (defeats centralisation). Foundational pre-condition for P1–P7 implementations; land between P0 and P1.
     status: pending
@@ -58,6 +76,14 @@ subsumes:
   at the relevant friction IDs.
 - The locked sidebar design for B-11 directed-message authoring at
   `.agent/state/collaboration/sidebars/cli-comms-inbox-design-2026-05-11.md`.
+- The `pnpm check` profiling deep dive at
+  [`../pnpm-check-profiling-deep-dive-2026-05-12.md`](../pnpm-check-profiling-deep-dive-2026-05-12.md),
+  which supplies the current quality-gate graph, trigger map, and tuning
+  recommendations.
+- Owner live change on 2026-05-12: root `pnpm check` has started moving its
+  terminal proof steps to non-mutating commands (`lint`, `markdownlint-check`,
+  and `format-check`). Treat that as part of the current baseline to verify,
+  not as proof that P0 is complete.
 
 This plan does NOT re-execute work that has already landed (B-10 compat
 shims landed at `0be469a9`; F-15 fingerprint-recursion guard landed at
@@ -85,6 +111,12 @@ independent napkin entries. Five load-bearing insights:
    that *can* be skipped *will* be skipped under pressure. Commit queue,
    claim registry, comms protocol — each is advisory; each was skipped
    by at least one agent in this session.
+6. **Quality checkpoints need different contracts at different trigger
+   surfaces.** Fast staged-content feedback, local whole-repo proof,
+   branch-exit proof, shared CI proof, static-analysis quality gates, and
+   semantic security scanning are distinct jobs. Collapsing them into one
+   "run everything everywhere" instinct raises collaboration cost without
+   making the assurance clearer.
 
 The P-order below sorts strictly by which insight each workstream
 addresses, with P0 being the load-bearing prerequisite.
@@ -107,6 +139,10 @@ addresses, with P0 being the load-bearing prerequisite.
   added inside the single-bin dispatcher, not as new sibling bins.
   This is the structural cure for the "CLI as collection of bins
   with build-on-every-invocation" defect P-Foundation pays down.
+- **Assurance-moving must be explicit.** Any speed-up that removes a
+  check from a trigger must name the assurance that remains at that
+  trigger, the trigger that now owns the moved assurance, and the evidence
+  command that proves the new placement still works.
 
 ## Workstreams
 
@@ -151,6 +187,162 @@ be bundled with agent-tools workspace changes.
 of pre-commit gates needs preserving in CI. Some gates (knip, depcruise)
 may need their own staged-aware variant — that is the slice's design
 problem.
+
+#### P0 quality-gate performance implementation tasks
+
+The `pnpm check` profiling pass split P0 into implementation tasks so the
+performance work can be executed without weakening the assurance contract.
+These tasks are part of P0, not a replacement for it.
+
+##### P0.QG-1 — baseline and unblock
+
+**Goal**: establish a clean quality-gate performance baseline before tuning.
+
+**Starting state**: the 2026-05-12 profile reached the real workload but
+failed in `@oaknational/oak-curriculum-mcp-streamable-http#test` at
+`src/correlation/middleware.integration.test.ts:203`. The owner has also
+started changing `pnpm check` so its lint, Markdown, and format proof steps are
+non-mutating; the baseline must verify that behaviour and measure its effect.
+
+**Implementation tasks**:
+
+1. Fix or explicitly route the MCP correlation-middleware Vitest failure.
+2. Run `pnpm check:profile` in a clean prepared environment.
+3. Run a second warm-cache `pnpm check:profile` without changing inputs.
+4. Confirm the profile and script evidence show non-mutating lint,
+   Markdown, and format proof steps in the root `pnpm check` path.
+5. Store both artifacts under `.logs/check-profiles/` and summarise them in
+   the profiling deep dive or a sibling evidence note.
+
+**Acceptance**:
+
+- The blocker has an owner-visible disposition: fixed with a test, routed to
+  an owning plan, or named as an external constraint with falsifiability.
+- Cold and warm profiles exist and include duration, exit code, Turbo dry
+  graph, and enough evidence to compare cache behaviour.
+- The root `pnpm check` path is verified as a proof command for lint,
+  Markdown, and format, not an auto-fix command.
+- No checkpoint tuning starts from a red baseline unless the owner explicitly
+  accepts the red condition as the baseline.
+
+##### P0.QG-2 — trigger contract
+
+**Goal**: make each quality checkpoint's job explicit before changing hook
+placement.
+
+**Implementation tasks**:
+
+1. Add a trigger-contract table to this plan or a linked permanent doc.
+2. For each trigger, record purpose, command surface, assurance owner,
+   non-goals, and fallback trigger:
+   - local engineer proof via `pnpm check`;
+   - pre-commit;
+   - pre-push;
+   - GitHub push / PR CI;
+   - SonarQube Cloud;
+   - GitHub CodeQL.
+3. Record the rule that pre-commit is fast staged-content feedback after P0,
+   not whole-repo proof.
+
+**Acceptance**:
+
+- A future agent can answer "where did this assurance move?" from the table.
+- The table names at least one deterministic validation command per local
+  trigger.
+- SonarQube Cloud and CodeQL remain separate from build/test/lint gates.
+
+##### P0.QG-3 — staged-only pre-commit implementation
+
+**Goal**: reduce commit-window contention by making pre-commit inspect the
+staged bundle rather than the ambient working tree.
+
+**Implementation tasks**:
+
+1. Introduce `lint-staged` or an equivalent staged-list-derived runner.
+2. Route formatting and markdown checks through staged paths.
+3. Decide whether ESLint-on-changed-files is safe and useful at pre-commit;
+   if not, leave lint ownership at pre-push/CI/explicit local gates.
+4. Remove whole-tree `knip`, `depcruise`, and Turbo
+   `type-check lint test` from pre-commit.
+5. Add a regression proving a staged-clean commit succeeds while an unrelated
+   unstaged peer file remains dirty.
+
+**Acceptance**:
+
+- Pre-commit no longer fails solely because of unrelated unstaged or untracked
+  peer files.
+- Staged formatting/markdown violations still fail before commit.
+- Representative commit runtime drops by more than 50% from the recorded
+  baseline.
+
+##### P0.QG-4 — pre-push and CI assurance rebalance
+
+**Goal**: ensure every assurance removed from pre-commit still has a stronger
+trigger home.
+
+**Implementation tasks**:
+
+1. Update `.husky/pre-push` and `.github/workflows/ci.yml` only where the
+   trigger contract shows a gap.
+2. Keep `knip` and `depcruise` at a trigger with whole-repo context.
+3. Keep generated/artifact drift checks at a trigger that runs after relevant
+   generation/build tasks.
+4. Keep UI/a11y/widget coverage in explicit `pnpm check`, CI, or a clearly
+   named pre-push lane; do not silently drop it.
+5. Update any contributor-facing docs or handoff surfaces that still claim
+   pre-commit is whole-repo proof.
+
+**Acceptance**:
+
+- The trigger-contract table has no orphaned assurance rows.
+- GitHub CI remains the shared proof surface for repo-wide build/type/lint/test
+  and dependency-graph checks.
+- Pre-push remains a branch-exit guard, not a duplicate of `pnpm check` unless
+  the owner explicitly chooses that cost.
+
+##### P0.QG-5 — profile hardening
+
+**Goal**: make profile artifacts explain the many-process workflow and its
+environment constraints without requiring chat-memory reconstruction.
+
+**Implementation tasks**:
+
+1. Extend `repo-check profile` with environment preflight evidence:
+   pnpm store/offline-cache state, Playwright browser availability, and known
+   sandbox/browser launch constraints.
+2. Record whether post-Turbo gates ran or were skipped because Turbo exited
+   first.
+3. Add an optional captured-output mode or deterministic log pointer for the
+   highest-signal task logs.
+4. Cover the new artifact shape with agent-tools tests.
+
+**Acceptance**:
+
+- A failed profile artifact says whether it failed on environment setup,
+  Turbo task failure, or post-Turbo gate failure.
+- The artifact preserves raw or pointer evidence under `.logs/check-profiles/`.
+- The command stays safe for local engineer use; it does not hide or suppress
+  failing gates.
+
+##### P0.QG-6 — post-change measurement and decision record
+
+**Goal**: prove the tuning improved collaboration cost without weakening the
+repo's stability contract.
+
+**Implementation tasks**:
+
+1. Re-run cold and warm `pnpm check:profile`.
+2. Time a representative clean staged commit through the real pre-commit hook.
+3. Run the pre-push/CI-equivalent local commands named by the trigger
+   contract, or record which ones require GitHub infrastructure.
+4. Update this plan with the before/after table and any follow-up rows.
+
+**Acceptance**:
+
+- Pre-commit runtime and failure scope improve against the baseline.
+- `pnpm check` remains the exhaustive local proof command.
+- Every speed-up names the assurance preserved, moved, or intentionally traded
+  off.
 
 ---
 
