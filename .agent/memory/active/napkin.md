@@ -102,3 +102,7 @@ The most recent rotation is archived at
 - Commit-queue intents are file-list exact. When a hook failure requires
   follow-up files, abandon the old intent and enqueue a widened one rather than
   trying to verify extra staged files against the original intent.
+- Owner correction: the current agent-tools CLI surface is too low-level for
+  ordinary agent use. Having agents hand-pass ISO dates, UUIDs, claim ids, and
+  intent ids is tooling leakage, not good operator UX. Recorded as
+  `frictions-register.md` F-19 and routed into the P-Foundation CLI overhaul.

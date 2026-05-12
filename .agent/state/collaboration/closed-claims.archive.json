@@ -18009,6 +18009,88 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "40ffa69e-7bb6-4465-a01a-fab5bbf582c7",
+      "agent_id": {
+        "agent_name": "Volcanic Glowing Brazier",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T05:33:26Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit jc-plan remediation plus consolidate-docs output.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T05:36:06Z",
+        "closed_by": {
+          "agent_name": "Volcanic Glowing Brazier",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1a"
+        },
+        "summary": "Committed jc-plan remediation plus consolidate-docs output as 2eba7ab7.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "40ffa69e-7bb6-4465-a01a-fab5bbf582c7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "bed6b36e-dc92-4afa-90ec-e7beb42fedeb",
+      "agent_id": {
+        "agent_name": "Torrid Flaring Hearth",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T05:37:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Stage and commit remaining consolidation handoff docs for repo-continuity plus pending-graduations next-session opener. Pathspec excludes active-claims bookkeeping and unrelated peer/sdk/scratch changes.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T05:38:30Z",
+        "closed_by": {
+          "agent_name": "Torrid Flaring Hearth",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1a"
+        },
+        "summary": "Commit df876be6 landed remaining consolidation handoff docs and comms breadcrumb. Pre-commit passed; commit-message checks passed. Strict-hard fitness remains red on known repo-continuity, pending-graduations, and practice-bootstrap debt routed to next session.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "bed6b36e-dc92-4afa-90ec-e7beb42fedeb",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
