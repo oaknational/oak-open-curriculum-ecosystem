@@ -72,7 +72,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Kilned Brazing Forge / `codex` / GPT-5 / `019e1a` / 2026-05-12 (P0.QG warm profile green, staged scanner regression coverage, hook timing, flaky-test list); Cosmic Gliding Aurora / `codex` / GPT-5 / `019e1a` / 2026-05-12 (landed 72c5cde1: pre-commit broken-code guard preserved while Prettier/Markdownlint now use staged files); see thread record for full identity history |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Galactic Transiting Galaxy / `codex` / GPT-5 / `019e1a` / 2026-05-12 (completed stale comms-event curation and deleted 120 processed buffer events); Stratospheric Winging Wing / `codex` / GPT-5 / `019e1b` / 2026-05-12 (remaining jc-skill audit complete); Kilned Brazing Forge / `codex` / GPT-5 / `019e1a` / 2026-05-12 (P0.QG warm profile green, staged scanner regression coverage, hook timing, flaky-test list); see thread record for full identity history |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Sparking Charring Ash / `claude-code` / opus-4-7-1m / `caf5e1` / 2026-05-12 (graph foundation work; Inc.1a WS1.1 open for execution) |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -194,12 +194,17 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-12 — Kilned Brazing Forge / `codex` / GPT-5 / `019e1a`)**:
-due, not run in this handoff. The existing `jc-consolidate-docs` retention
-rule still makes `comms-events/` older than seven days a consolidation trigger,
-but this owner-requested closeout is the cost-of-collaboration handoff and
-commit. Do not smuggle the stale-event retention sweep into the next P0.QG
-session; run it only if the owner explicitly opens consolidation.
+**Status (2026-05-12 — Galactic Transiting Galaxy / `codex` / GPT-5 /
+`019e1a`)**: completed the owner-requested stale-event retention sweep. The
+pass reviewed the 120 `comms-events/` files older than 2026-05-05, confirmed
+the durable coordination lessons were already routed into napkin, distilled,
+rules, plans, patterns, pending graduations, thread records, or prior
+continuity entries, then deleted those processed buffer files and regenerated
+the shared comms log. No new doctrine promotion was needed in this pass.
+
+Previous same-day curation trigger: Kilned Brazing Forge left the retention
+sweep due after the cost-of-collaboration handoff because the owner had not yet
+explicitly reopened consolidation.
 
 Previous same-day quality-gate handoff: Kilned Brazing Forge aligned the
 `repo-check` dry graph with root `pnpm check`, added staged

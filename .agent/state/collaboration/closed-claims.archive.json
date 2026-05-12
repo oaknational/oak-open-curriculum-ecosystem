@@ -18836,6 +18836,359 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "4aa64a3d-45ef-4d22-a1a5-06aefe954fc8",
+      "agent_id": {
+        "agent_name": "Stratospheric Winging Wing",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1b"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/*/SKILL-CANONICAL.md",
+            ".agents/skills/jc-*/SKILL.md",
+            ".claude/skills/jc-*/SKILL.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T07:13:27Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Audit remaining unreviewed jc-* workflow skill canonicals and adapters; keep existing P0.QG dirty tree residue out of this slice.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T07:18:12Z",
+        "closed_by": {
+          "agent_name": "Stratospheric Winging Wing",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1b"
+        },
+        "summary": "Remaining jc-* skill audit complete: audited 17 remaining canonicals, patched seven drifted skill bodies, and validated git diff, markdownlint, skills check, and portability check.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4aa64a3d-45ef-4d22-a1a5-06aefe954fc8",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "309a602a-6423-4344-abfc-8c8d54e1c46e",
+      "agent_id": {
+        "agent_name": "Galactic Transiting Galaxy",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/comms-events/**",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/memory/operational/repo-continuity.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T07:16:17Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Run owner-requested knowledge curation: process stale comms-events older than seven days, preserve durable insight already routed, delete processed event-buffer files, and regenerate shared comms log.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T07:19:16Z",
+        "closed_by": {
+          "agent_name": "Galactic Transiting Galaxy",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1a"
+        },
+        "summary": "Completed owner-requested knowledge curation: processed stale comms-events older than 2026-05-05, confirmed durable routing, deleted 120 buffer files, updated repo-continuity, regenerated shared comms log, and left active skill-audit files untouched.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "309a602a-6423-4344-abfc-8c8d54e1c46e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9bb19afe-5d1b-41fa-bb46-a583b0d3e389",
+      "agent_id": {
+        "agent_name": "Stratospheric Winging Wing",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1b"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/parallel-agents/**",
+            ".agents/skills/jc-parallel-agents/**",
+            ".claude/skills/jc-parallel-agents/**",
+            ".agent/skills/plan/SKILL-CANONICAL.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T07:22:11Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Delete retired jc-parallel-agents skill and fold independent parallelisable task guidance into the plan skill.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T07:22:55Z",
+        "closed_by": {
+          "agent_name": "Stratospheric Winging Wing",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1b"
+        },
+        "summary": "Retired jc-parallel-agents skill and moved its durable independent-cycle/delegation guidance into the plan skill.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9bb19afe-5d1b-41fa-bb46-a583b0d3e389",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "666f1e8e-7a62-4f23-a857-e86ae9d2c73c",
+      "agent_id": {
+        "agent_name": "Galactic Transiting Galaxy",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/**",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T07:27:09Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Run session handoff and commit owner-requested stale comms-event curation without absorbing peer skill-pruning source edits.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T07:27:46Z",
+        "closed_by": {
+          "agent_name": "Galactic Transiting Galaxy",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1a"
+        },
+        "summary": "Session handoff complete for owner-requested knowledge curation: repo-continuity and thread identity updated, no new ADR/PDR candidate, only open conversation is example data, commit will use scoped pathspecs.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "666f1e8e-7a62-4f23-a857-e86ae9d2c73c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "7742045a-74eb-4d1c-9b0a-a79a82b5e334",
+      "agent_id": {
+        "agent_name": "Stratospheric Winging Wing",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1b"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/{worktrees,systematic-debugging,review,receiving-code-review,patterns,finishing-branch,ephemeral-to-permanent-homing}/**",
+            ".agents/skills/jc-{worktrees,systematic-debugging,review,receiving-code-review,patterns,finishing-branch,ephemeral-to-permanent-homing}/**",
+            ".claude/skills/jc-{worktrees,systematic-debugging,review,receiving-code-review,patterns,finishing-branch,ephemeral-to-permanent-homing}/**",
+            ".agent/skills/plan/SKILL-CANONICAL.md",
+            ".agent/skills/start-right-quick/shared/start-right.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/practice-index.md",
+            ".claude/settings.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T07:25:59Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Prune redundant jc-* skills after extracting useful material; decide disposition for patterns, finishing-branch, and ephemeral-to-permanent-homing.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T07:29:24Z",
+        "closed_by": {
+          "agent_name": "Stratospheric Winging Wing",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1b"
+        },
+        "summary": "Pruned redundant skill surfaces: deleted worktrees, systematic-debugging, review, receiving-code-review, finishing-branch, patterns, parallel-agents, and moved ephemeral-to-permanent-homing out of skills into operational methodology.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7742045a-74eb-4d1c-9b0a-a79a82b5e334",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d874a945-d61b-4b51-bbf7-542c1026f4a2",
+      "agent_id": {
+        "agent_name": "Stratospheric Winging Wing",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1b"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/directives/AGENT.md",
+            ".agent/memory/executive/invoke-code-experts.md",
+            ".agent/memory/operational/ephemeral-to-permanent-homing.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T07:25:59Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Rehome patterns and review-skill residue into canonical directive/executive docs during skill pruning.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T07:29:24Z",
+        "closed_by": {
+          "agent_name": "Stratospheric Winging Wing",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1b"
+        },
+        "summary": "Rehomed patterns guidance into AGENT/practice docs and review preflight into reviewer-routing executive memory.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d874a945-d61b-4b51-bbf7-542c1026f4a2",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "56d887ea-b2c4-42fb-9fc7-0536a364dbfd",
+      "agent_id": {
+        "agent_name": "Stratospheric Winging Wing",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1b"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/prompts/onboarding-claude-teammate.md",
+            "docs/architecture/architectural-decisions/125-agent-artefact-portability.md",
+            ".agent/memory/executive/memory-state-substrate-contracts.manifest.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T07:28:55Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Clean live documentation references after redundant skill deletion.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T07:29:24Z",
+        "closed_by": {
+          "agent_name": "Stratospheric Winging Wing",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1b"
+        },
+        "summary": "Cleaned live docs and examples after redundant skill deletion; left historical plan/research references untouched.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "56d887ea-b2c4-42fb-9fc7-0536a364dbfd",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d349f9f4-ee35-4f38-af11-5fb873a9efa9",
+      "agent_id": {
+        "agent_name": "Galactic Transiting Galaxy",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T07:30:58Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Pathspec-only commit for Galactic curation and session-handoff shared-state bundle while preserving pre-existing foreign staged file.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T07:31:40Z",
+        "closed_by": {
+          "agent_name": "Galactic Transiting Galaxy",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1a"
+        },
+        "summary": "Closed in same collaboration-state commit; using explicit pathspec-only commit to preserve pre-existing staged .agent/memory/operational/ephemeral-to-permanent-homing.md.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d349f9f4-ee35-4f38-af11-5fb873a9efa9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

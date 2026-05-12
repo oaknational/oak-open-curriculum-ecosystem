@@ -299,3 +299,57 @@ The most recent rotation is archived at
   next full profile.
 - `apps/oak-curriculum-mcp-streamable-http/src/correlation/middleware.integration.test.ts:203`
   remains historical flaky evidence from the earlier profile-analysis note.
+
+## 2026-05-12 — Remaining Skill Audit / codex / GPT-5 / `019e1b`
+
+### Patterns to Remember
+
+- The remaining unreviewed `jc-*` skills split into two classes: pointer
+  wrappers were still clean/generated, while canonical bodies carried the real
+  drift. Patch `.agent/skills/*/SKILL-CANONICAL.md` first and let
+  `pnpm skills:check` prove adapter parity.
+- Skill docs can drift on command topology even when workflow intent remains
+  right. The useful audit grep was for retired `.agent/commands` links, retired
+  skill adapter paths, mutating commands used as proof, and stale workspace CLI
+  invocations.
+
+### What Landed
+
+- Audited all 17 remaining unreviewed canonical `jc-*` skill bodies after
+  excluding the seven already reviewed skills.
+- Patched seven canonicals: `napkin`, `gates`, `review`, `finishing-branch`,
+  `undo-change`, `ground-truth-design`, and `ground-truth-evaluation`.
+- Focused validation passed: `git diff --check`, targeted markdownlint,
+  `pnpm skills:check`, and `pnpm portability:check`.
+
+## 2026-05-12 — Parallel Agents Skill Retirement / codex / GPT-5 / `019e1b`
+
+### Owner Correction
+
+- The separate `jc-parallel-agents` skill is too narrow: most of its substance
+  is ordinary plan hygiene. Plans should always strive to decompose work into
+  independent, parallelisable cycles when the work shape allows, and only add
+  explicit delegation details when a cycle is actually handed to another agent.
+
+## 2026-05-12 — Skill Surface Pruning / codex / GPT-5 / `019e1b`
+
+### Owner Correction
+
+- `worktrees`, `systematic-debugging`, `review`, `receiving-code-review`, and
+  `finishing-branch` were redundant workflow skills, not durable invocation
+  surfaces. Keep their useful doctrine in the canonical homes that already fire:
+  reviewer routing, AGENT guidance, gates, commit, plan, and consolidation.
+- `ephemeral-to-permanent-homing` is useful but not a standalone skill. It is a
+  shared operational methodology for `session-handoff` and `consolidate-docs`.
+- `patterns` is guidance, not a skill. Agents should check repo patterns and
+  PDR pattern records from the normal AGENT/practice-index path before
+  inventing new approaches.
+
+## 2026-05-12 — Knowledge Curation Handoff / codex / GPT-5 / `019e1a`
+
+### Mistakes Made
+
+- I tried to paste a generated 120-file delete patch in one large block and
+  introduced filename typos. The safer pattern for bulk retention cleanup is to
+  verify the live generated list, apply smaller delete chunks, then rerun the
+  stale-count check before regenerating derived logs.

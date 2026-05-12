@@ -10,19 +10,21 @@
 **One-line objective**: audit all remaining `jc-*` skills that have not yet had
 the deep review/remediation treatment applied in this thread.
 
-**Current state**: `jc-plan`, `jc-start-right-quick`,
-`jc-start-right-thorough`, `jc-commit`, `jc-session-handoff`,
-`jc-consolidate-docs`, and `jc-metacognition` have been reviewed and patched
-where needed. The latest pass clarified the handoff/consolidation pairing,
-expanded `jc-metacognition`, and added stale `comms-events/` retention
-processing to `jc-consolidate-docs`.
+**Current state**: complete. The seven previously reviewed skills were
+`jc-plan`, `jc-start-right-quick`, `jc-start-right-thorough`, `jc-commit`,
+`jc-session-handoff`, `jc-consolidate-docs`, and `jc-metacognition`. The
+2026-05-12 Stratospheric Winging Wing pass then enumerated the remaining
+17 `jc-*` adapters, confirmed generated `.agents` / `.claude` wrappers were
+still pointer-only, and patched canonical drift in `napkin`, `gates`,
+`review`, `finishing-branch`, `undo-change`, `ground-truth-design`, and
+`ground-truth-evaluation`.
 
-**Next safe step**: re-ground live state, enumerate the remaining
-`.agents/skills/jc-*` adapters, exclude the skills already reviewed above,
-then inspect each remaining canonical source under `.agent/skills/*/` with its
-generated `.agents` / `.claude` adapters. Patch canonical skill bodies rather
-than adapter wrappers unless the wrapper itself has drifted, then run focused
-Markdown validation plus `pnpm skills:check` and `pnpm portability:check`.
+**Validation**: `git diff --check`, targeted markdownlint on the touched
+canonical skill docs, `pnpm skills:check`, and `pnpm portability:check` passed.
+
+**Next safe step**: no remaining `jc-*` skill requires this deep audit
+treatment. Resume the branch's current P0.QG/cost-of-collaboration lane unless
+the owner opens a new skill-specific issue.
 
 **Boundary**: keep this as a documentation/infrastructure audit. Do not
 opportunistically start cost-of-collaboration implementation, graph work, or a
@@ -3398,6 +3400,8 @@ and
 | `Smouldering Melting Kiln` | `codex` | `GPT-5` | `019e1a` | `paired-workflow-skill-review-for-jc-session-handoff-jc-consolidate-docs-and-jc-metacognition; added-stale-comms-events-retention-rule; next-session-audit-all-remaining-skills; preserves-shared-state-and-comms-as-live-infrastructure` | 2026-05-12 | 2026-05-12 |
 | `Cosmic Gliding Aurora` | `codex` | `GPT-5` | `019e1a` | `quality-gate-plan-correction-and-p0-first-implementation-72c5cde1; pre-commit-contract-preserves-type-check-lint-shell-lint-test; prettier-markdownlint-now-stage-file-scoped; knip-depcruise-owner-classified-higher-standard-pre-push-check-ci-gates; handoff-claim-9e6cce6b` | 2026-05-12 | 2026-05-12 |
 | `Kilned Brazing Forge` | `codex` | `GPT-5` | `019e1a` | `cost-of-collaboration-P0QG-profile-regression-handoff; repo-check-dry-graph-aligned-lint-not-lintfix; staged-prettier-markdownlint-regression-tests; warm-pnpm-check-profile-green-130561ms; cold-like-profile-blocked-by-suspected-oauth-rate-limit-flake; flaky-test-list-created; temp-index-precommit-real-2.39s; claim-e2fc7a6d-closed` | 2026-05-12 | 2026-05-12 |
+| `Galactic Transiting Galaxy` | `codex` | `GPT-5` | `019e1a` | `owner-requested-knowledge-curation; reviewed-120-comms-events-older-than-2026-05-05; confirmed-durable-routing; deleted-processed-event-buffer-files; regenerated-shared-comms-log; stale-count-zero; handoff-claim-666f1e8e` | 2026-05-12 | 2026-05-12 |
+| `Stratospheric Winging Wing` | `codex` | `GPT-5` | `019e1b` | `remaining-jc-skill-audit; enumerated-24-jc-adapters; excluded-7-reviewed-skills; audited-17-remaining-canonicals; patched-napkin-gates-review-finishing-branch-undo-change-ground-truth-design-ground-truth-evaluation; validation-git-diff-check-targeted-markdownlint-skills-check-portability-check-green; claim-4aa64a3d` | 2026-05-12 | 2026-05-12 |
 | `Wooded Spreading Thicket` | `cursor` | `GPT-5.5` | `unknown` | `persistent-comms-coordinator-for-session; monitors-active-claims-shared-comms-log-and-fresh-comms-surfaces-every-30s; updateCurrentStep-telemetry-triage-external-tool-not-in-repo; writes-only-on-change-milestone-blocker-or-quiet-interval; all-agents-introduce-to-Wooded-Spreading-Thicket` | 2026-05-11 | 2026-05-11 |
 | `Galactic Transiting Orbit` | `codex` | `GPT-5` | `019e18` | `Wave-3-commit-queue-UX-hardening-claim-close-cycle-fingerprint-recursion-slice-in-progress; preserving-post-commit-ledger-residue-from-Embered-Burning-Magma-as-evidence; scope-agent-tools-commit-queue-collaboration-state-tests-plan-status-and-session-lifecycle-surfaces; Wave-4-and-Wave-5-remain-closed` | 2026-05-11 | 2026-05-11 |
 | `Shaded Ripening Copse` | `claude-code` | `claude-opus-4-7-1m` | `c13bdf` | `commit-queue-UX-brief-author-B-02-B-03-Workstream-4-architectural-seam-and-third-direction-peer-commit-absorption-subsection-commit-5c299ed5; primary-thread-was-connecting-oak-resources-but-the-commit-queue-UX-brief-landed-here-per-opener-routing` | 2026-05-11 | 2026-05-11 |

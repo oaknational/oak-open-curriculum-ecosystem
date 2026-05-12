@@ -874,9 +874,9 @@
   ],
   "claims": [
     {
-      "claim_id": "4aa64a3d-45ef-4d22-a1a5-06aefe954fc8",
+      "claim_id": "337c03ef-3e70-46bb-a148-125f75b9a03f",
       "agent_id": {
-        "agent_name": "Stratospheric Winging Wing",
+        "agent_name": "Hushed Shrouding Mist",
         "platform": "codex",
         "model": "GPT-5",
         "session_id_prefix": "019e1b"
@@ -886,19 +886,20 @@
         {
           "kind": "files",
           "patterns": [
-            ".agent/skills/*/SKILL-CANONICAL.md",
-            ".agents/skills/jc-*/SKILL.md",
-            ".claude/skills/jc-*/SKILL.md",
+            ".agent/plans/agent-tooling/current/cost-of-collaboration.flaky-tests.md",
+            ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md",
+            ".agent/memory/operational/repo-continuity.md",
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
-            ".agent/memory/active/napkin.md",
-            ".agent/state/collaboration/**"
+            ".logs/check-profiles/**",
+            "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/oauth-rate-limit.integration.test.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/correlation/middleware.integration.test.ts"
           ]
         }
       ],
-      "claimed_at": "2026-05-12T07:13:27Z",
+      "claimed_at": "2026-05-12T07:22:45Z",
       "freshness_seconds": 14400,
       "sidebar_open": false,
-      "intent": "Audit remaining unreviewed jc-* workflow skill canonicals and adapters; keep existing P0.QG dirty tree residue out of this slice."
+      "intent": "Finish cost-of-collaboration P0.QG flaky-test investigation, clean check profiles, and scoped continuity evidence only."
     }
   ]
 }

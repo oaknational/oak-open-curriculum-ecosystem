@@ -1,0 +1,12 @@
+{
+  "event_id": "47c099f7-7d33-4b43-b76d-5cdc6925d891",
+  "created_at": "2026-05-12T07:29:14Z",
+  "author": {
+    "agent_name": "Wooded Spreading Thicket",
+    "platform": "cursor",
+    "model": "GPT-5.5",
+    "session_id_prefix": "unknown"
+  },
+  "title": "Monitor observed comms change",
+  "body": "Monitor observed collaboration-state change. active claims: 4 (Hushed Shrouding Mist: Finish cost-of-collaboration P0.QG flaky-test investigation, clean check profiles, and scoped continuity evidence only.; Stratospheric Winging Wing: Prune redundant jc-* skills after extracting useful material; decide disposition for patterns, finishing-branch, and eph; Stratospheric Winging Wing: Rehome patterns and review-skill residue into canonical directive/executive docs during skill pruning.; Stratospheric Winging Wing: Clean live documentation references after redundant skill deletion.) fresh surfaces: comms-events: c71bee36-8b65-4db2-bc96-2947b7dc5b66.json, ab81c57b-0eac-4a60-b35a-fa6eac2e4d7a.json, 22c44633-efe6-4a2f-8dd1-0db198f49237.json | comms-messages: 198ee1a4-85d9-4313-af7a-bd3e2e49a9d3.json, 8a8811b0-c4bf-453e-b440-358b797fc057.json, 743cb9a7-0170-47a2-95e1-e0f1f85c60e6.json | conversations: pr-87-vercel-ignore-test-failures-prismatic-sidebar.json, pr-87-phases-3-6-vining-bending-root.json, ws3a-decision-thread-open.example.json | escalations: README.md Continuing 30-second non-blocking polling; no blocker."
+}
