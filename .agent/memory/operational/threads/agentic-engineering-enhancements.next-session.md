@@ -1,13 +1,63 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-> **This thread is the agent communication improvements thread.**
-> A session opened with "please continue the agent communication
-> improvements thread" lands here. The full plan + sequencing + the
-> load-bearing question are below in the §Agent communication
-> improvements — session opener section. Read it once and you have
-> everything you need to start.
+> **Current continuation**: the next session in this thread carries the
+> owner's `pnpm check` analysis/profiling brief forward. Start at
+> §`pnpm check` profiling continuation. The older agent communication
+> improvement opener remains below as historical lane state, not the
+> immediate next slice.
+
+## `pnpm check` profiling continuation — session opener (2026-05-12+)
+
+**One-line objective**: analyse the deliberately exhaustive `pnpm check`
+process, including the Turbo graph and the many-process profiling strategy,
+without weakening the repo-wide stability contract.
+
+**Owner opening statement to preserve**: the repo relies on comprehensive
+automated checks to stay stable while multiple agents from multiple vendors
+work in it, but exhaustive checks are expensive. The key trigger surfaces are
+local engineer proof via `pnpm check`, pre-commit hooks, pre-push hooks, and
+GitHub push workflows, with SonarQube Cloud and GitHub CodeQL also configured.
+The initial profiling brief explicitly asked to review the Turbo graph behind
+`pnpm check` and how to profile the many-process workflow.
+
+**Landed prerequisite**: `fabe99c3 refactor(tooling): retire root scripts`
+completed the root-script retirement requested in this thread. Retained logic
+now lives in workspaces (`agent-tools/scripts/**` or
+`packages/core/oak-eslint/scripts/**`), root `scripts/` is deleted, and
+`.gitignore` ignores only `/scripts/` with a comment explaining that logic
+belongs in workspaces.
+
+**Available profiler surface**:
+
+- `pnpm check:profile`
+- `pnpm agent-tools:repo-check profile`
+- `pnpm agent-tools:repo-check profile --dry-run`
+
+The dry run records the Turbo graph under `.logs/check-profiles/`; this
+location is deliberate because `pnpm check` cleans `.turbo`.
+
+**Next safe step**: run the profiling pass for the exhaustive `pnpm check`
+path, then report which tasks are in the graph, which phases dominate runtime,
+which work is intentionally repo-wide, and which trigger surfaces can be tuned
+without reducing whole-repo assurance. Full `pnpm check` was not run in the
+root-script-retirement session; that cost belongs to this profiling slice.
+
+**Acceptance frame**:
+
+- Turbo graph for `pnpm check` is captured and explained.
+- Profiling method handles the multi-process Turbo workflow and preserves raw
+  evidence in `.logs/check-profiles/`.
+- Local, pre-commit, pre-push, GitHub push, SonarQube Cloud, and CodeQL
+  trigger surfaces are mapped without conflating their purposes.
+- Any proposed speed-up names the assurance it preserves, moves, or explicitly
+  trades off.
 
 ## Agent communication improvements — session opener (2026-05-12+)
+
+> **Owner direction captured 2026-05-12**: the next session in this
+> thread should perform the same deep analysis/remediation treatment
+> on `jc-start-right-quick`, `jc-start-right-thorough`, and `jc-commit`
+> that this session applied to `jc-plan`.
 
 **One-line objective**: land the workstreams in
 [`.agent/plans/agent-tooling/current/cost-of-collaboration.plan.md`](../../../plans/agent-tooling/current/cost-of-collaboration.plan.md)
@@ -3212,6 +3262,8 @@ and
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
 | `Gilded Shimmering Dawn` | `cursor` | `GPT-5.5` | `3869cd` | `owner-directed-sub-coordinator-for-Cursor-helper-work; introduced-to-Wooded-Spreading-Thicket; delegated-brief-e6f3113e-legacy-comms-event-audit-by-directory-to-three-read-only-lower-powered-helpers; synthesized-result-3869cd-cursor-result-1-legacy-comms-audit; captured-Cursor-comms-lesson-fresh-session-plus-simple-linear-parallelisable-plan` | 2026-05-11 | 2026-05-11 |
+| `Flamebright Roasting Magma` | `codex` | `GPT-5` | `019e1a` | `root-script-retirement-and-pnpm-check-profiling-handoff; committed-fabe99c3-through-commit-queue; moved-retained-root-scripts-to-workspaces; added-agent-tools-repo-check-profile-and-markdownlint-staged-surfaces; next-session-owns-deliberately-exhaustive-pnpm-check-analysis` | 2026-05-12 | 2026-05-12 |
+| `Torrid Flaring Hearth` | `codex` | `GPT-5` | `019e1a` | `consolidate-docs-pass; napkin-rotation; fitness-routing; thread-register-and-collaboration-state-audit` | 2026-05-12 | 2026-05-12 |
 | `Wooded Spreading Thicket` | `cursor` | `GPT-5.5` | `unknown` | `persistent-comms-coordinator-for-session; monitors-active-claims-shared-comms-log-and-fresh-comms-surfaces-every-30s; updateCurrentStep-telemetry-triage-external-tool-not-in-repo; writes-only-on-change-milestone-blocker-or-quiet-interval; all-agents-introduce-to-Wooded-Spreading-Thicket` | 2026-05-11 | 2026-05-11 |
 | `Galactic Transiting Orbit` | `codex` | `GPT-5` | `019e18` | `Wave-3-commit-queue-UX-hardening-claim-close-cycle-fingerprint-recursion-slice-in-progress; preserving-post-commit-ledger-residue-from-Embered-Burning-Magma-as-evidence; scope-agent-tools-commit-queue-collaboration-state-tests-plan-status-and-session-lifecycle-surfaces; Wave-4-and-Wave-5-remain-closed` | 2026-05-11 | 2026-05-11 |
 | `Shaded Ripening Copse` | `claude-code` | `claude-opus-4-7-1m` | `c13bdf` | `commit-queue-UX-brief-author-B-02-B-03-Workstream-4-architectural-seam-and-third-direction-peer-commit-absorption-subsection-commit-5c299ed5; primary-thread-was-connecting-oak-resources-but-the-commit-queue-UX-brief-landed-here-per-opener-routing` | 2026-05-11 | 2026-05-11 |

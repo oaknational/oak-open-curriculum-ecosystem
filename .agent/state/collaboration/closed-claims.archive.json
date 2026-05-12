@@ -17570,6 +17570,445 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "954ee8db-305a-40db-bdac-739a719afad3",
+      "agent_id": {
+        "agent_name": "Sparking Charring Ash",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "caf5e1"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T04:28:49Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Three-reviewer follow-up corrections: knip + tsconfig.lint + dts + lockfile in WS1.1, expanded tree-green, ADR-173/179 status sweep, ADR index update",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T04:34:47Z",
+        "closed_by": {
+          "agent_name": "Sparking Charring Ash",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "caf5e1"
+        },
+        "summary": "Landed 2ca54b01 — three-reviewer follow-up corrections absorbed",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "954ee8db-305a-40db-bdac-739a719afad3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "96258f72-1e7c-4951-9c25-ab7db4e8385d",
+      "agent_id": {
+        "agent_name": "Sparking Charring Ash",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "caf5e1"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T04:38:25Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Final session handoff: napkin surprises + thread record + continuity row + deep-consolidation status",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T04:39:29Z",
+        "closed_by": {
+          "agent_name": "Sparking Charring Ash",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "caf5e1"
+        },
+        "summary": "Landed 92d171f9 — final session handoff",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "96258f72-1e7c-4951-9c25-ab7db4e8385d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2675adc7-2c3b-4103-adc8-9425ace3679d",
+      "agent_id": {
+        "agent_name": "Wooded Spreading Thicket",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "5c8f3c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T04:42:34Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit cost-of-collaboration plan reviewer-fix update (3 files) for agent communication improvements thread continuation surfaces",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T04:47:40Z",
+        "closed_by": {
+          "agent_name": "Wooded Spreading Thicket",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "5c8f3c"
+        },
+        "summary": "Landed commit 67478303 (reviewer fixes to cost-of-collaboration plan) via commit-queue intent 205b027b. Three-reviewer findings (assumptions/code/docs-adr) absorbed; queue lifecycle clean enqueue->stage->record->verify->commit->complete. Two exploration candidates (E-1 advisory hooks, E-2 agent-tools git passthrough) captured per owner direction.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2675adc7-2c3b-4103-adc8-9425ace3679d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a6a91949-a29c-4547-92a7-ab79346a1ea7",
+      "agent_id": {
+        "agent_name": "Wooded Spreading Thicket",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "5c8f3c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T04:52:42Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit agent-tools CLI architectural overhaul addition to cost-of-collaboration plan (single file)",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T04:56:44Z",
+        "closed_by": {
+          "agent_name": "Wooded Spreading Thicket",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "5c8f3c"
+        },
+        "summary": "P-Foundation workstream landed via commit-queue intent 144d735b. Single-bin CLI architectural overhaul added between P0 and P1; new no-new-bins standing constraint; thread opener case-branched to include P-Foundation; E-2 cross-linked as consumer.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a6a91949-a29c-4547-92a7-ab79346a1ea7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "390790ca-14de-4085-8efb-b7fb3d65bcce",
+      "agent_id": {
+        "agent_name": "Wooded Spreading Thicket",
+        "platform": "claude-code",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "5c8f3c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T05:02:38Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Session-handoff commit — napkin + pending-graduations + repo-continuity for post-handoff continuation work (P-Foundation, queue-bypass corrections)",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T05:03:41Z",
+        "closed_by": {
+          "agent_name": "Wooded Spreading Thicket",
+          "platform": "claude-code",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "5c8f3c"
+        },
+        "summary": "Session handoff committed via queue intent c74c9a83. Napkin + pending-graduations + repo-continuity updated for the P-Foundation work + queue-bypass corrections. Session complete.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "390790ca-14de-4085-8efb-b7fb3d65bcce",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "28d25bed-6ee1-410a-a5f5-a972a26c96e7",
+      "agent_id": {
+        "agent_name": "Flamebright Roasting Magma",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "scripts/**",
+            "agent-tools/**",
+            "packages/core/oak-eslint/**",
+            "package.json",
+            ".husky/**",
+            ".github/workflows/**",
+            "docs/engineering/**",
+            "docs/architecture/architectural-decisions/121-quality-gate-surfaces.md",
+            ".gitignore"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T12:00:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Implement quality-gate profiling and retire the root scripts directory into workspace-owned tooling.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T05:18:30Z",
+        "closed_by": {
+          "agent_name": "Flamebright Roasting Magma",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1a"
+        },
+        "summary": "Retired root scripts into workspace-owned tooling, added check profiling, narrowed pre-commit markdownlint to staged Markdown, and rewired hooks/CI/docs.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "28d25bed-6ee1-410a-a5f5-a972a26c96e7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c2448165-fb8f-4fbb-95d4-7519a6f0ad1c",
+      "agent_id": {
+        "agent_name": "Volcanic Glowing Brazier",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/plan/SKILL-CANONICAL.md",
+            ".agent/plans/templates/README.md",
+            ".agent/plans/templates/quality-fix-plan-template.md",
+            ".agent/plans/templates/active-atomic-implementation-plan-template.md",
+            ".agent/plans/templates/components/quality-gates.md",
+            ".agent/plans/templates/components/documentation-propagation.md",
+            ".agent/plans/templates/collection-readme-template.md",
+            "docs/architecture/architectural-decisions/117-plan-templates-and-components.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T05:16:09Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Implement plan-skill remediation: PDR-018 acceptance criteria, DRY template pointers, readiness gates, and adjacent planning-template drift fixes.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T05:24:53Z",
+        "closed_by": {
+          "agent_name": "Volcanic Glowing Brazier",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1a"
+        },
+        "summary": "Implemented plan-skill remediation: PDR-018 acceptance criteria, DRY template pointers, readiness checks, quality-gate pointers, promotion evidence, and template drift fixes.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c2448165-fb8f-4fbb-95d4-7519a6f0ad1c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f7ea560a-cb19-4bdf-b1b8-6faf2a66d1d5",
+      "agent_id": {
+        "agent_name": "Torrid Flaring Hearth",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/archive/napkin-2026-05-12.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/comms-events/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T05:26:57Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Run jc-consolidate-docs: rotate napkin, update distilled learnings, audit fitness/thread/register/collaboration state, and report owner-decision candidates. Not staging or committing while peer git:index/head claim is fresh.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T05:33:00Z",
+        "closed_by": {
+          "agent_name": "Torrid Flaring Hearth",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1a"
+        },
+        "summary": "Consolidate-docs pass complete: rotated active napkin to archive/napkin-2026-05-12.md, reset napkin, added 2026-05-12 distilled learnings, recorded thread identity row and comms event, ran fitness informational and strict-hard. Remaining hard/critical fitness debt reported; no staging or commit performed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f7ea560a-cb19-4bdf-b1b8-6faf2a66d1d5",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "02ce5a3c-0ad8-4067-9abf-fbf12c5146c0",
+      "agent_id": {
+        "agent_name": "Wooded Spreading Thicket",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "unknown"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/comms-events/**",
+            ".agent/state/collaboration/comms-messages/**",
+            ".agent/state/collaboration/conversations/**",
+            ".agent/state/collaboration/escalations/**",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-11T19:42:31Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Persistent non-blocking comms coordinator: monitor active claims, shared comms log, fresh comms events/messages/conversations/escalations, and keep Wooded Spreading Thicket introduced as the coordination point.",
+      "notes": "Scanned registry: one active peer claim (Galactic Transiting Orbit B-10 parser/render compatibility) overlaps only on shared coordination ledgers; shared-state files remain writable. Avoiding peer-owned agent-tools implementation files.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "stale",
+        "closed_at": "2026-05-12T05:34:30Z",
+        "closed_by": {
+          "agent_name": "Torrid Flaring Hearth",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1a"
+        },
+        "summary": "Archived stale/orphaned claim after its freshness TTL expired.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "02ce5a3c-0ad8-4067-9abf-fbf12c5146c0",
+            "summary": "Claim exceeded its type-specific freshness TTL."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c08afcaf-6d79-4f33-a5bf-2ba9647d9796",
+      "agent_id": {
+        "agent_name": "Flamebright Roasting Magma",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T05:26:30Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit root script retirement implementation via commit queue.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T05:31:56Z",
+        "closed_by": {
+          "agent_name": "Flamebright Roasting Magma",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1a"
+        },
+        "summary": "Committed root script retirement via commit queue: fabe99c3.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c08afcaf-6d79-4f33-a5bf-2ba9647d9796",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

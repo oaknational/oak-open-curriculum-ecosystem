@@ -116,6 +116,41 @@ not yet at N≥3.
 
 ---
 
+## Recently Distilled — 2026-05-12 Napkin Rotation
+
+Distilled from the oversized 2026-05-12 napkin. Keep under validation before
+graduating to rules, PDRs, or collaboration-state docs.
+
+- **Pre-stage sequence is non-negotiable.** Queue-list-only is not an
+  active-claims read. Before staging, re-read active `git:index/head` claims,
+  check directed/shared comms, enqueue intent, open the claim, then run
+  pathspec-only `git add`.
+- **Bare `git reset HEAD` is cross-agent destructive.** In multi-agent windows,
+  unstaging requires an explicit pathspec. Whole-index reset yanks peer staged
+  bundles out from under their owners.
+- **Verify actual commit contents after hooks.** `verify-staged` proves the
+  pre-commit bundle. Hook chains can mutate stage, so compare the post-commit
+  file list back to the queued bundle.
+- **Quote glob-shaped collaboration patterns.** A bare
+  `.agent/state/collaboration/comms-events/**` expands in the shell before the
+  CLI can treat it as an area pattern.
+- **Agent-tools must become a real unified CLI.** Build-on-every-invocation and
+  per-topic bins are architectural defects, not just latency. New subcommands
+  should wait for the P-Foundation unified entrypoint.
+- **Peer sidebars are for design; helper pools are for logistics.** Comparable
+  peer dialogue produced the design decision; coordinator-plus-helpers produced
+  routing overhead.
+- **Advisory protocols decay under pressure.** If a step can be skipped during
+  time pressure, repeated sessions show that it will be skipped. Route durable
+  cures toward enforcement or mechanical affordances.
+- **Default agent pronouns to they/them.** Agent names do not imply gender.
+  Gendered pronouns require self-declaration.
+- **Inspect diffs after `markdownlint --fix` on prose-heavy files.** Literal
+  plus signs, hash-number citations, and dash-led fragments can be rewritten
+  into Markdown structure.
+
+---
+
 ## Recently Distilled — 2026-05-10 Napkin Rotation
 
 These entries merged during the 2026-05-10 deep consolidation pass and

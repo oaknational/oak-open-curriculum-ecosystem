@@ -6,8 +6,11 @@ description: Create or promote a plan following the plan architecture.
 
 # Create or Promote a Plan
 
-Create a plan aligned with the foundation documents and the plan architecture
-defined in [ADR-117](../../../docs/architecture/architectural-decisions/117-plan-templates-and-components.md).
+Create a plan aligned with the foundation documents, the planning
+discipline in
+[PDR-018](../../practice-core/decision-records/PDR-018-planning-discipline.md),
+and the plan architecture defined in
+[ADR-117](../../../docs/architecture/architectural-decisions/117-plan-templates-and-components.md).
 
 ## Before Writing
 
@@ -45,8 +48,11 @@ defined in [ADR-117](../../../docs/architecture/architectural-decisions/117-plan
 3. Read the plan templates and components:
    - `../../plans/templates/README.md`
 
-4. If the user has not provided enough detail, ask specific
-   questions. Do not guess scope, intent, or acceptance criteria.
+4. Resolve discoverable unknowns before asking the owner. Search the
+   repo, relevant plans, ADRs/PDRs, vendor docs or CLIs, and existing
+   code first. Ask specific questions only for owner-only decisions or
+   genuinely undiscoverable intent. Do not guess scope, intent, or
+   acceptance criteria.
 
 ## Choose Lifecycle First
 
@@ -58,16 +64,51 @@ Decide the lane before choosing structure:
 | `current/` | NEXT — queued and ready, not started | **Executable** |
 | `future/` | LATER — strategic backlog and intent | **Strategic (not yet executable)** |
 
-## Choose a Template (Executable Plans Only)
+## Choose a Template From the Live Inventory
 
-Use templates for `current/` and `active/` plans:
+Use
+[`../../plans/templates/README.md`](../../plans/templates/README.md)
+and the template directory as the live inventory. Do not copy template
+lists into this skill; the README and directory are the source of truth
+for available scaffolds, their lifecycle lanes, and their component
+references.
 
-| Template | Use When |
-|----------|----------|
-| `feature-workstream-template.md` | New feature with TDD phases |
-| `quality-fix-plan-template.md` | Quality improvement, refactoring, tech debt |
+Copy the closest template, then remove template residue before marking
+the plan ready: fill all `[bracketed]` placeholders, replace example
+todo ids, delete or complete optional sections, fix copied relative
+links, and remove sample paths or commands that are not true for the
+plan.
 
-Copy the template and fill all `[bracketed]` placeholders.
+Run a self-check before promotion or readiness:
+
+```bash
+rg -n "TBD|TODO|your-plan-name|semantic-search/active" \
+  .agent/plans/<collection>/<lane>/<plan>.md
+rg -n --pcre2 \
+  "(?<![!\\]])\\[(?![ xX]\\])(?!(?:[^]\\n]+)\\]\\([^)]*\\))(?!(?:[^]\\n]+)\\]\\[[^]\\n]*\\])[^]\\n]+\\]" \
+  .agent/plans/<collection>/<lane>/<plan>.md
+rg -n "git add .*git com[m]it" .agent/plans/<collection>/<lane>/<plan>.md
+```
+
+Expected: no unresolved placeholders, sample-only paths, or copied
+commit recipes remain. Review any bracket hits manually; only real markdown
+links, checked boxes, or intentionally literal bracket syntax may remain.
+
+## Requirements for All Non-Trivial Plans
+
+Every non-trivial plan, strategic or executable, MUST define:
+
+1. **End goal** — the user-impact outcome sought.
+2. **Mechanism** — why the named means produce that outcome.
+3. **Means** — the work items or strategic moves.
+4. **Explicit acceptance criteria** — strategic plans use
+   outcome-level acceptance criteria; executable plans use task or
+   cycle-level criteria. Acceptance criteria must measure outcomes, not
+   activity alone.
+5. **Prerequisite classification** — every prerequisite is either
+   `blocking` or `beneficial`. For each `beneficial` prerequisite, state
+   the minimum shippable shape without it.
+6. **Non-goals** — what the plan explicitly will not do.
 
 ## Strategic Plan Requirements (`future/`)
 
@@ -79,19 +120,22 @@ not an in-progress execution commitment.
 Every strategic plan MUST define:
 
 1. Problem and intent
-2. Domain boundaries and non-goals
-3. Dependencies and sequencing assumptions
-4. Success signals (what would justify promotion)
-5. Risks and unknowns
-6. Promotion trigger into `current/`
-7. If implementation detail is present, a clear note that execution decisions are
-   finalised only during promotion to `current/`/`active/`
+2. End goal, mechanism, and means
+3. Domain boundaries and non-goals
+4. Dependencies and sequencing assumptions, with `blocking` /
+   `beneficial` classification
+5. Strategic acceptance criteria and success signals
+6. Risks and unknowns
+7. Promotion trigger into `current/`
+8. If implementation detail is present, a clear note that execution
+   decisions are finalised only during promotion to `current/`/`active/`
 
 ## Executable Plan Requirements (`current/`, `active/`)
 
 Every executable plan MUST have:
 
 1. **YAML frontmatter** with machine-readable todos (id, content, status)
+   for every execution-relevant task or cycle.
 2. **TDD cycles as the unit of landing** — every workstream is a
    sequence of test+product-code PAIRS. Each cycle (Red → Green →
    Refactor) is one landing unit (one commit): the failing test, the
@@ -117,41 +161,61 @@ Every executable plan MUST have:
    genuinely depend on each other (a higher-level test that needs
    lower-level cycles in place; a cycle that consumes an interface
    another cycle introduces), declare the dependency explicitly in
-   the cycle description and, optionally, in a `depends_on` YAML
-   field on the todo. Cycles with no declared dependency are
-   parallel-safe and can be dispatched concurrently; dependent
-   cycles are queued behind their prerequisites. Plan authors do
-   not invent serial dependencies that the work shape does not
+   the cycle description and, when the plan will be dispatched to
+   parallel agents, in a `depends_on` YAML field on the todo. Omitted
+   `depends_on` means "not assessed" unless the cycle explicitly names
+   its parallel-safety evidence: starting state, file scope, files not
+   to touch, independent acceptance criteria, and validation commands.
+   Dependent cycles are queued behind their prerequisites. Plan authors
+   do not invent serial dependencies that the work shape does not
    require — pick the natural decomposition (separate workspaces,
-   separate modules, separate features) that the cycles already
-   suggest.
-4. **Quality gates** after every cycle — reference the
-   quality-gates component (`../../plans/templates/components/quality-gates.md`)
+   separate modules, separate features) that the cycles already suggest.
+4. **Quality gates** — reference
+   `../../plans/templates/components/quality-gates.md`. Each cycle has
+   focused deterministic validation plus the relevant local gates; phase
+   and final validation use the canonical aggregate gate named there.
 5. **Acceptance criteria** for every task — specific, checkable,
-   with deterministic validation commands. Acceptance for a TDD cycle
-   includes "all tests passing at every level" as a non-negotiable.
+   outcome-based, and paired with deterministic validation commands.
+   Acceptance for a TDD cycle includes "all tests passing at every
+   level" as a non-negotiable.
 6. **Risk assessment** — what could go wrong and how to mitigate
 7. **Foundation alignment** — explicit references to principles.md,
    testing-strategy.md, schema-first-execution.md
 8. **Non-goals** — what we are explicitly NOT doing (YAGNI)
-9. **Learning Loop** — all plans MUST end with running the consolidation workflow
-10. **Lifecycle triggers** — plans that touch non-trivial work MUST
+9. **Plan-body first-principles check** — state where the
+   `../../rules/plan-body-first-principles-check.md` shape,
+   landing-path, and vendor-literal clauses fire before executing
+   plan-prescribed tests, implementation, or doctrine.
+10. **Readiness reviewers** — before a plan is marked
+    `DECISION-COMPLETE`, `READY FOR EXECUTION`, or equivalent, invoke
+    required reviewers by substance: `assumptions-expert` for
+    plan-readiness/proportionality, docs/onboarding reviewers for
+    significant Practice or documentation changes, and technical
+    specialists where the work shape requires them.
+11. **Learning Loop** — executable plan completion, milestone closure,
+    strategic promotion, and archival MUST run or explicitly reference
+    the consolidation workflow.
+12. **Lifecycle triggers** — plans that touch non-trivial work MUST
     reference `../../plans/templates/components/lifecycle-triggers.md`
     or record why each lifecycle touch point is not applicable
 
 ## Promotion Workflow (`future/` -> `current/` -> `active/`)
 
 1. Select a `future/` strategic plan with a clear promotion trigger.
+   Record the evidence that the trigger has fired, the readiness
+   verdict, and any assumptions carried forward.
 2. Create a new executable plan in `current/` from the appropriate template.
-3. Mine strategic intent from `future/` into executable todos, TDD phases,
-   acceptance criteria, and deterministic validation commands.
+3. Mine strategic intent from `future/` into executable todos, TDD cycles,
+   acceptance criteria, prerequisite classification, and deterministic
+   validation commands.
 4. Keep a reference from the `current/` plan back to its source strategic brief.
 5. Move the executable plan into `active/` only when implementation starts.
 6. After completion, mine permanent documentation and archive per ADR-117.
 
 ## Document Hierarchy (ADR-117)
 
-Plans are one layer in a multi-document hierarchy. Do not duplicate content across layers:
+Plans are one layer in a multi-document hierarchy. Do not duplicate
+content across layers:
 
 - **Session prompt** (`../../prompts/`) — operational entry point
 - **Strategic plan** (`../../plans/*/future/`) — later intent and sequencing
@@ -164,12 +228,13 @@ link to the authoritative source.
 
 ## Plan Location
 
-Place plans in the relevant lifecycle directory:
+Place plans in the lifecycle directory owned by the plan's collection
+and actionability. Use `.agent/plans/<collection>/...` as the shape:
 
 ```bash
-.agent/plans/semantic-search/active/your-plan-name.md   # executable, in progress
-.agent/plans/semantic-search/current/your-plan-name.md  # executable, queued
-.agent/plans/semantic-search/future/your-plan-name.md   # strategic brief, later
+.agent/plans/<collection>/active/your-plan-name.md   # executable, in progress
+.agent/plans/<collection>/current/your-plan-name.md  # executable, queued
+.agent/plans/<collection>/future/your-plan-name.md   # strategic brief, later
 ```
 
 ## First Question
