@@ -1,5 +1,6 @@
 import { spawn, spawnSync } from 'node:child_process';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { performance } from 'node:perf_hooks';
 import { pathToFileURL } from 'node:url';
@@ -13,6 +14,42 @@ export interface RepoCheckCommandResult {
 export interface RepoCheckRuntime {
   runInherited(command: string, args: readonly string[]): Promise<number>;
   runCaptured(command: string, args: readonly string[]): RepoCheckCommandResult;
+}
+
+export type CheckProfileFailurePhase =
+  | 'passed'
+  | 'environment'
+  | 'turbo-task'
+  | 'post-turbo-gate'
+  | 'check-command';
+
+export type PostTurboGateStatus =
+  | 'not-captured'
+  | 'ran'
+  | 'skipped-after-turbo-failure'
+  | 'not-observed';
+
+export interface CheckProfileEnvironmentEvidence {
+  readonly nodeVersion: string;
+  readonly platform: NodeJS.Platform;
+  readonly arch: string;
+  readonly pnpmStorePath: string | null;
+  readonly playwrightBrowserCachePath: string;
+  readonly playwrightBrowserCacheExists: boolean;
+  readonly sandboxNote: string;
+}
+
+export interface CheckProfileArtifact {
+  readonly command: 'pnpm check';
+  readonly startedAt: string;
+  readonly finishedAt: string;
+  readonly durationMs: number;
+  readonly exitCode: number;
+  readonly turboDryGraph: string;
+  readonly environment: CheckProfileEnvironmentEvidence;
+  readonly outputLog?: string;
+  readonly failurePhase: CheckProfileFailurePhase;
+  readonly postTurboGateStatus: PostTurboGateStatus;
 }
 
 const CHECK_TURBO_TASKS = [
@@ -37,7 +74,9 @@ function usage(): string {
     'Commands:',
     '  markdownlint-staged    Run markdownlint on staged Markdown files only.',
     '  prettier-staged        Run Prettier on staged files only.',
-    '  profile [--dry-run]    Capture the pnpm check Turbo graph and, unless dry-run is set, time pnpm check.',
+    '  profile [--dry-run] [--capture-output]',
+    '                         Capture the pnpm check Turbo graph and, unless dry-run is set, time pnpm check.',
+    '                         --capture-output stores pnpm check stdout/stderr beside the profile artifact.',
   ].join('\n');
 }
 
@@ -80,6 +119,131 @@ function writeProfileArtifact(name: string, content: string): string {
   return path.relative(process.cwd(), filePath);
 }
 
+function playwrightBrowserCachePath(): string {
+  const configuredPath = process.env.PLAYWRIGHT_BROWSERS_PATH?.trim();
+
+  if (configuredPath !== undefined && configuredPath.length > 0) {
+    return configuredPath;
+  }
+
+  return path.join(os.homedir(), 'Library', 'Caches', 'ms-playwright');
+}
+
+export function collectProfileEnvironmentEvidence(
+  runtime: RepoCheckRuntime = defaultRuntime,
+): CheckProfileEnvironmentEvidence {
+  const pnpmStore = runtime.runCaptured('pnpm', ['store', 'path']);
+  const pnpmStorePath = (pnpmStore.status ?? 1) === 0 ? pnpmStore.stdout.trim() : null;
+  const browserCachePath = playwrightBrowserCachePath();
+
+  return {
+    nodeVersion: process.version,
+    platform: process.platform,
+    arch: process.arch,
+    pnpmStorePath,
+    playwrightBrowserCachePath: browserCachePath,
+    playwrightBrowserCacheExists: existsSync(browserCachePath),
+    sandboxNote:
+      'Playwright/Chromium can fail under restricted macOS sandboxes with Mach-port permission errors; rerun outside the sandbox before classifying as product failure.',
+  };
+}
+
+export function classifyCheckFailurePhase(input: {
+  readonly exitCode: number;
+  readonly output?: string;
+}): CheckProfileFailurePhase {
+  if (input.exitCode === 0) {
+    return 'passed';
+  }
+
+  const output = input.output ?? '';
+
+  if (
+    output.includes('MachPortRendezvous') ||
+    output.includes('browserType.launch') ||
+    output.includes('Playwright browsers')
+  ) {
+    return 'environment';
+  }
+
+  if (/Failed:\s+@/u.test(output) || /Tasks:\s+\d+\s+successful,\s+\d+\s+total/u.test(output)) {
+    return 'turbo-task';
+  }
+
+  if (
+    output.includes('markdownlint-check:root') ||
+    output.includes('format-check:root') ||
+    output.includes('subagents:check') ||
+    output.includes('portability:check') ||
+    output.includes('skills:check') ||
+    output.includes('pnpm knip') ||
+    output.includes('pnpm depcruise')
+  ) {
+    return 'post-turbo-gate';
+  }
+
+  return 'check-command';
+}
+
+export function profilePostTurboGateStatus(input: {
+  readonly outputCaptured: boolean;
+  readonly failurePhase: CheckProfileFailurePhase;
+  readonly output?: string;
+}): PostTurboGateStatus {
+  if (!input.outputCaptured) {
+    return 'not-captured';
+  }
+
+  if (
+    input.output?.includes('markdownlint-check:root') === true ||
+    input.output?.includes('format-check:root') === true ||
+    input.output?.includes('subagents:check') === true ||
+    input.output?.includes('portability:check') === true ||
+    input.output?.includes('skills:check') === true
+  ) {
+    return 'ran';
+  }
+
+  if (input.failurePhase === 'turbo-task') {
+    return 'skipped-after-turbo-failure';
+  }
+
+  return 'not-observed';
+}
+
+export function buildCheckProfileArtifact(input: {
+  readonly startedAt: string;
+  readonly finishedAt: string;
+  readonly durationMs: number;
+  readonly exitCode: number;
+  readonly turboDryGraph: string;
+  readonly environment: CheckProfileEnvironmentEvidence;
+  readonly outputLog?: string;
+  readonly output?: string;
+}): CheckProfileArtifact {
+  const failurePhase = classifyCheckFailurePhase({
+    exitCode: input.exitCode,
+    output: input.output,
+  });
+
+  return {
+    command: 'pnpm check',
+    startedAt: input.startedAt,
+    finishedAt: input.finishedAt,
+    durationMs: input.durationMs,
+    exitCode: input.exitCode,
+    turboDryGraph: input.turboDryGraph,
+    environment: input.environment,
+    ...(input.outputLog !== undefined ? { outputLog: input.outputLog } : {}),
+    failurePhase,
+    postTurboGateStatus: profilePostTurboGateStatus({
+      outputCaptured: input.output !== undefined,
+      output: input.output,
+      failurePhase,
+    }),
+  };
+}
+
 function turboDryRun(): { readonly exitCode: number; readonly artifactPath: string } {
   const result = runCaptured('pnpm', [
     'exec',
@@ -98,6 +262,7 @@ function turboDryRun(): { readonly exitCode: number; readonly artifactPath: stri
 
 async function runProfile(args: readonly string[]): Promise<number> {
   const dryRunOnly = args.includes('--dry-run');
+  const captureOutput = args.includes('--capture-output');
   const dryRun = turboDryRun();
 
   if (dryRun.exitCode !== 0) {
@@ -112,18 +277,35 @@ async function runProfile(args: readonly string[]): Promise<number> {
 
   const startedAt = new Date().toISOString();
   const startTime = performance.now();
-  const exitCode = await runInherited('pnpm', ['check']);
+  let exitCode: number;
+  let output: string | undefined;
+  let outputLog: string | undefined;
+
+  if (captureOutput) {
+    const result = runCaptured('pnpm', ['check']);
+    exitCode = result.status ?? 1;
+    output = `${result.stdout}${result.stderr}`;
+    outputLog = writeProfileArtifact(`check-output-${timestampSlug()}.log`, output);
+    process.stdout.write(result.stdout);
+    process.stderr.write(result.stderr);
+  } else {
+    exitCode = await runInherited('pnpm', ['check']);
+  }
+
   const durationMs = Math.round(performance.now() - startTime);
   const finishedAt = new Date().toISOString();
 
-  const profile = {
-    command: 'pnpm check',
+  const profile = buildCheckProfileArtifact({
     startedAt,
     finishedAt,
     durationMs,
     exitCode,
     turboDryGraph: dryRun.artifactPath,
-  };
+    environment: collectProfileEnvironmentEvidence(),
+    outputLog,
+    output,
+  });
+
   const artifactPath = writeProfileArtifact(
     `check-profile-${timestampSlug()}.json`,
     `${JSON.stringify(profile, null, 2)}\n`,

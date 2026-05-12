@@ -32,14 +32,14 @@ comms-event retention sweep unless the owner redirects.
 
 ## Quality-gate performance implementation track (2026-05-12+)
 
-**One-line objective**: execute the P0 quality-gate implementation tasks in
+**One-line objective**: P0 quality-gate implementation tasks in
 [`cost-of-collaboration.plan.md`](../../../plans/agent-tooling/current/cost-of-collaboration.plan.md):
 measure clean cold/warm baselines, make trigger purposes explicit, finish
 staged Prettier/Markdown pre-commit checks without weakening the pre-commit
 broken-code guard, rebalance pre-push/CI assurance, harden profiling, and
 remeasure before declaring the checkpoint tuning effective.
 
-**Current state**: P0's pre-commit shape has landed: Prettier and
+**Current state**: complete. P0's pre-commit shape has landed: Prettier and
 Markdownlint are staged-file scoped while shell lint and Turbo
 `type-check lint test` remain in the pre-commit broken-code guard. The Kilned
 Brazing Forge pass added regression coverage for staged Prettier/Markdownlint
@@ -50,23 +50,28 @@ pre-commit timing (`real 2.39`), and captured a warm green
 `.logs/check-profiles/check-profile-2026-05-12T06-57-53-216Z.json`
 with exit code 0 and duration 130561 ms.
 
-The clean cold baseline is still not complete. The escalated cold-like profile
-`.logs/check-profiles/check-profile-2026-05-12T06-55-17-199Z.json` reached the
-real workload but failed on
-`apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/oauth-rate-limit.integration.test.ts:103`
-(`302` observed, `429` expected). The same file passed immediately in
-isolation and the next full profile passed. Historical Sentry correlation
-profile failure evidence remains in
-`.logs/check-profiles/check-profile-analysis-2026-05-12.md`.
+Hushed Shrouding Mist then investigated the two listed flaky candidates:
+OAuth rate-limit passed 10 isolated + 10 adjacent-suite runs; correlation
+middleware passed 10 isolated + 10 adjacent-suite runs; the full HTTP MCP
+package test passed. A profile-only `public-resource-auth-bypass.e2e.test.ts`
+parse error also did not reproduce in 10 focused E2E runs or 3 full E2E task
+runs. Busy-checkout `pnpm check:profile` now has representative green
+baselines: `.logs/check-profiles/check-profile-2026-05-12T07-33-57-773Z.json`
+passed with exit code 0 and duration 147613 ms, and the immediate warm rerun
+`.logs/check-profiles/check-profile-2026-05-12T07-36-18-375Z.json` passed with
+exit code 0 and duration 131695 ms.
 
-**Next safe step**: open
-[`cost-of-collaboration.flaky-tests.md`](../../../plans/agent-tooling/current/cost-of-collaboration.flaky-tests.md)
-and investigate the two listed flaky-test candidates first. Preserve full
-console evidence for the repeated focused runs and the next full package run.
-Then rerun clean cold and warm `pnpm check:profile` baselines. Do not reopen
-the "make pre-commit staged-only" framing; continue from the owner contract
-that pre-commit stops detectably broken code entering git history and pre-push
-owns higher-standard branch-exit failures.
+P0.QG is also complete in the plan: trigger contract, pre-push/CI assurance
+rebalance evidence, profile hardening, and post-change measurement are recorded
+there. `repo-check profile` artifacts now include environment evidence,
+failure-phase classification, post-Turbo-gate status, and optional captured
+output via `--capture-output`.
+
+**Next safe step**: move to P-Foundation, the Agent-tools CLI architectural
+overhaul, before P1+ work. Do not reopen the "make pre-commit staged-only"
+framing; continue from the owner contract that pre-commit stops detectably
+broken code entering git history and pre-push owns higher-standard branch-exit
+failures.
 
 **Boundary**: no tuning may remove a check from a trigger without naming the
 assurance preserved at that trigger, the trigger that now owns any moved
@@ -3402,6 +3407,7 @@ and
 | `Kilned Brazing Forge` | `codex` | `GPT-5` | `019e1a` | `cost-of-collaboration-P0QG-profile-regression-handoff; repo-check-dry-graph-aligned-lint-not-lintfix; staged-prettier-markdownlint-regression-tests; warm-pnpm-check-profile-green-130561ms; cold-like-profile-blocked-by-suspected-oauth-rate-limit-flake; flaky-test-list-created; temp-index-precommit-real-2.39s; claim-e2fc7a6d-closed` | 2026-05-12 | 2026-05-12 |
 | `Galactic Transiting Galaxy` | `codex` | `GPT-5` | `019e1a` | `owner-requested-knowledge-curation; reviewed-120-comms-events-older-than-2026-05-05; confirmed-durable-routing; deleted-processed-event-buffer-files; regenerated-shared-comms-log; stale-count-zero; handoff-claim-666f1e8e` | 2026-05-12 | 2026-05-12 |
 | `Stratospheric Winging Wing` | `codex` | `GPT-5` | `019e1b` | `remaining-jc-skill-audit; enumerated-24-jc-adapters; excluded-7-reviewed-skills; audited-17-remaining-canonicals; patched-napkin-gates-review-finishing-branch-undo-change-ground-truth-design-ground-truth-evaluation; validation-git-diff-check-targeted-markdownlint-skills-check-portability-check-green; claim-4aa64a3d` | 2026-05-12 | 2026-05-12 |
+| `Hushed Shrouding Mist` | `codex` | `GPT-5` | `019e1b` | `cost-of-collaboration-P0QG-complete; flake-disposition-and-busy-profile-baseline; oauth-rate-limit-20-focused-runs-green; correlation-middleware-20-focused-runs-green; public-resource-auth-bypass-e2e-10-focused-plus-3-full-e2e-green; busy-pnpm-check-profile-cold-147613ms-green-warm-131695ms-green; repo-check-profile-artifact-hardening; agent-tools-focused-tests-typecheck-lint-green; claim-337c03ef-plus-9a37bc0f` | 2026-05-12 | 2026-05-12 |
 | `Wooded Spreading Thicket` | `cursor` | `GPT-5.5` | `unknown` | `persistent-comms-coordinator-for-session; monitors-active-claims-shared-comms-log-and-fresh-comms-surfaces-every-30s; updateCurrentStep-telemetry-triage-external-tool-not-in-repo; writes-only-on-change-milestone-blocker-or-quiet-interval; all-agents-introduce-to-Wooded-Spreading-Thicket` | 2026-05-11 | 2026-05-11 |
 | `Galactic Transiting Orbit` | `codex` | `GPT-5` | `019e18` | `Wave-3-commit-queue-UX-hardening-claim-close-cycle-fingerprint-recursion-slice-in-progress; preserving-post-commit-ledger-residue-from-Embered-Burning-Magma-as-evidence; scope-agent-tools-commit-queue-collaboration-state-tests-plan-status-and-session-lifecycle-surfaces; Wave-4-and-Wave-5-remain-closed` | 2026-05-11 | 2026-05-11 |
 | `Shaded Ripening Copse` | `claude-code` | `claude-opus-4-7-1m` | `c13bdf` | `commit-queue-UX-brief-author-B-02-B-03-Workstream-4-architectural-seam-and-third-direction-peer-commit-absorption-subsection-commit-5c299ed5; primary-thread-was-connecting-oak-resources-but-the-commit-queue-UX-brief-landed-here-per-opener-routing` | 2026-05-11 | 2026-05-11 |

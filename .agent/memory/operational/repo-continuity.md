@@ -33,10 +33,15 @@ Earlier archives remain under [`archive/`](archive/).
   pass: staged Prettier/Markdownlint regression coverage landed under
   `agent-tools/tests/repo-check.integration.test.ts`, the `repo-check` dry
   graph now matches root `pnpm check` by using `lint` rather than `lint:fix`,
-  and a warm `pnpm check:profile` completed green in 130561 ms. The clean cold
-  baseline is still not complete because the cold-like run exposed a suspected
-  flaky OAuth rate-limit assertion before a later focused rerun and full
-  profile passed.
+  and a warm `pnpm check:profile` completed green in 130561 ms. Hushed
+  Shrouding Mist then disposed the suspected flaky-test candidates as not
+  reproduced and captured representative busy-checkout green baselines:
+  cold-like `.logs/check-profiles/check-profile-2026-05-12T07-33-57-773Z.json`
+  at 147613 ms and warm
+  `.logs/check-profiles/check-profile-2026-05-12T07-36-18-375Z.json` at
+  131695 ms. P0.QG is complete: trigger contract, pre-push/CI assurance
+  rebalance evidence, profile hardening, and post-change measurement are
+  recorded in the cost-of-collaboration plan.
 - The `pnpm check` profiling brief has a durable deep dive:
   [`pnpm-check-profiling-deep-dive-2026-05-12.md`](../../plans/agent-tooling/pnpm-check-profiling-deep-dive-2026-05-12.md).
   The final full-profile attempt reached the real workload and failed on
@@ -94,12 +99,12 @@ each thread record; this table is the repo-level index.
 
 ### Agentic-Engineering Enhancements
 
-Immediate cost-of-collaboration lane: continue P0.QG from the Kilned Brazing
-Forge handoff. Start by investigating the suspected flaky tests listed in
-[`cost-of-collaboration.flaky-tests.md`](../../plans/agent-tooling/current/cost-of-collaboration.flaky-tests.md),
-then recapture clean cold and warm `pnpm check:profile` baselines with full
-console evidence. The staged Prettier/Markdownlint regression coverage and
-post-change hook timing are recorded; do not reopen the "make pre-commit
+Immediate cost-of-collaboration lane: P0 is complete; continue with
+P-Foundation from the Hushed Shrouding Mist handoff. The suspected flaky tests
+listed in
+[`cost-of-collaboration.flaky-tests.md`](../../plans/agent-tooling/current/cost-of-collaboration.flaky-tests.md)
+are disposed as not reproduced, and representative busy-checkout cold/warm
+`pnpm check:profile` baselines are green. Do not reopen the "make pre-commit
 staged-only" framing. The preserved evidence and trigger map live in
 [`pnpm-check-profiling-deep-dive-2026-05-12.md`](../../plans/agent-tooling/pnpm-check-profiling-deep-dive-2026-05-12.md);
 the implementation tasks live in
@@ -123,11 +128,8 @@ promotion or archive, not by metric-shaped trimming. The acceptance bar remains:
   implementation windows.
 
 Implementation lane after profiling and consolidation: follow the thread
-record's cost-of-collaboration opener. The staged content-scanner change has
-started; P0 remains open until the trigger contract, validation evidence,
-profile hardening, and post-change measurement land in
-[`cost-of-collaboration.plan.md`](../../plans/agent-tooling/current/cost-of-collaboration.plan.md).
-Do not open P1+ implementation or multi-agent work until P0 lands.
+record's cost-of-collaboration opener. P0 has landed; P-Foundation is the next
+required workstream before P1+ implementation.
 
 ### Connecting-Oak-Resources
 
@@ -148,8 +150,8 @@ Current entry: Inc.1a WS1.1, scaffold `packages/core/graph-core` with
 3. Monorepo workspace topology (superseding ADR-108, S0-S6 strategic plan) is
    parked until after the graph MVP implementation tranche unless the owner
    explicitly reopens it.
-4. Cost-of-collaboration P0 needs implementation before multi-agent
-   implementation windows resume.
+4. Cost-of-collaboration P0 is complete; P-Foundation is the next workstream
+   before P1+ implementation.
 
 ## Repo-Wide Invariants / Non-Goals
 

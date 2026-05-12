@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  buildCheckProfileArtifact,
+  classifyCheckFailurePhase,
+  profilePostTurboGateStatus,
   runMarkdownlintStaged,
   runPrettierStaged,
   type RepoCheckRuntime,
@@ -144,5 +147,78 @@ describe('repo-check staged scanners', () => {
       },
     ]);
     expect(inheritedCalls[0]?.args).not.toContain(ambientDirtyFile);
+  });
+});
+
+describe('repo-check profile artifact helpers', () => {
+  const environment = {
+    nodeVersion: 'v24.15.0',
+    platform: 'darwin',
+    arch: 'arm64',
+    pnpmStorePath: '/tmp/pnpm-store',
+    playwrightBrowserCachePath: '/tmp/ms-playwright',
+    playwrightBrowserCacheExists: true,
+    sandboxNote: 'sandbox evidence note',
+  } as const;
+
+  it('classifies macOS Chromium launch failures as environment failures', () => {
+    expect(
+      classifyCheckFailurePhase({
+        exitCode: 1,
+        output: 'browserType.launch failed: MachPortRendezvous permission denied',
+      }),
+    ).toBe('environment');
+  });
+
+  it('classifies Turbo task failures separately from post-Turbo gate failures', () => {
+    expect(
+      classifyCheckFailurePhase({
+        exitCode: 1,
+        output: 'Tasks: 87 successful, 88 total\nFailed: @oaknational/app#test:e2e',
+      }),
+    ).toBe('turbo-task');
+
+    expect(
+      classifyCheckFailurePhase({
+        exitCode: 4,
+        output: '> pnpm markdownlint-check:root\nError: ENOENT',
+      }),
+    ).toBe('post-turbo-gate');
+  });
+
+  it('records output log pointers, environment evidence, and post-Turbo status', () => {
+    const artifact = buildCheckProfileArtifact({
+      startedAt: '2026-05-12T07:31:30.160Z',
+      finishedAt: '2026-05-12T07:33:57.773Z',
+      durationMs: 147_613,
+      exitCode: 0,
+      turboDryGraph: '.logs/check-profiles/check-turbo-graph.json',
+      environment,
+      outputLog: '.logs/check-profiles/check-output.log',
+      output: '> pnpm markdownlint-check:root\n> pnpm format-check:root\n',
+    });
+
+    expect(artifact).toStrictEqual({
+      command: 'pnpm check',
+      startedAt: '2026-05-12T07:31:30.160Z',
+      finishedAt: '2026-05-12T07:33:57.773Z',
+      durationMs: 147_613,
+      exitCode: 0,
+      turboDryGraph: '.logs/check-profiles/check-turbo-graph.json',
+      environment,
+      outputLog: '.logs/check-profiles/check-output.log',
+      failurePhase: 'passed',
+      postTurboGateStatus: 'ran',
+    });
+  });
+
+  it('marks post-Turbo gates skipped when a captured Turbo failure exits first', () => {
+    expect(
+      profilePostTurboGateStatus({
+        outputCaptured: true,
+        failurePhase: 'turbo-task',
+        output: 'Tasks: 87 successful, 88 total\nFailed: @oaknational/app#test:e2e',
+      }),
+    ).toBe('skipped-after-turbo-failure');
   });
 });

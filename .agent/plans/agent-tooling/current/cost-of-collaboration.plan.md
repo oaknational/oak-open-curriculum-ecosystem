@@ -7,22 +7,22 @@ todos:
     status: completed
   - id: ws-p0-qg-baseline-and-unblock
     content: Capture clean cold and warm `pnpm check:profile` baselines from `.logs/check-profiles/` after the owner-reported green `pnpm check` runs, then tune gate placement from that green baseline.
-    status: pending
+    status: completed
   - id: ws-p0-qg-trigger-contract
     content: Codify the quality-checkpoint trigger contract: pre-commit stops detectably broken code entering git history; pre-push stops broken code and higher-standard failures leaving the local environment; local `pnpm check`, GitHub CI, SonarQube Cloud, and GitHub CodeQL each name their purpose, assurance owner, and non-goals.
-    status: pending
+    status: completed
   - id: ws-p0-qg-staged-precommit-implementation
     content: Implement staged-file Prettier/Markdown pre-commit gates with regression coverage for ambient dirty peer files, while preserving pre-commit type-check, lint, shell lint, and unit/current-test proof as the broken-code guard.
     status: completed
   - id: ws-p0-qg-prepush-ci-rebalance
     content: Rebalance pre-push and GitHub CI so every gate removed from pre-commit still has an explicit assurance home, including knip, depcruise, Turbo families, UI/a11y/widget checks, and generated/artifact checks.
-    status: pending
+    status: completed
   - id: ws-p0-qg-profile-hardening
     content: Harden `repo-check profile` so profile artifacts record environment preflight, Playwright/browser readiness, skipped post-Turbo gates, and optional captured output for many-process diagnosis.
-    status: pending
+    status: completed
   - id: ws-p0-qg-postchange-measurement
     content: Re-profile after the gate rebalance, compare cold and warm runtimes against the baseline, and record which assurance was preserved, moved, or intentionally traded off.
-    status: pending
+    status: completed
   - id: ws-p-foundation-cli-overhaul
     content: Agent-tools CLI architectural overhaul. Single binary entrypoint with centralised parsing, error handling, and logging. Stop the build-on-every-invocation anti-pattern (defeats stability) and the bin-collection-without-shared-plumbing anti-pattern (defeats centralisation). Foundational pre-condition for P1–P7 implementations; land between P0 and P1.
     status: pending
@@ -249,6 +249,13 @@ baseline must verify that behaviour and measure its effect.
 
 - P0.QG evidence is recorded at
   `.logs/check-profiles/p0-qg-baseline-2026-05-12.md`.
+- Hushed Shrouding Mist captured representative busy-checkout baselines after
+  disposing the flaky-test candidates:
+  `.logs/check-profiles/check-profile-2026-05-12T07-33-57-773Z.json`
+  passed with exit code 0 and duration 147613 ms; the immediate warm rerun at
+  `.logs/check-profiles/check-profile-2026-05-12T07-36-18-375Z.json` passed
+  with exit code 0 and duration 131695 ms. These runs represent the typical
+  multi-agent checkout rather than an artificially pristine tree.
 - A warm green `pnpm check:profile` baseline exists at
   `.logs/check-profiles/check-profile-2026-05-12T06-57-53-216Z.json`
   with exit code 0 and duration 130561 ms.
@@ -256,6 +263,9 @@ baseline must verify that behaviour and measure its effect.
   failed on a now-suspected flaky OAuth rate-limit test. Treat
   `.logs/check-profiles/check-profile-2026-05-12T06-55-17-199Z.json` as
   failure evidence, not a clean cold baseline.
+- The suspected OAuth rate-limit and correlation middleware failures did not
+  reproduce under repeated focused and adjacent-suite runs; disposition lives
+  in `cost-of-collaboration.flaky-tests.md`.
 - The current dry graph has been corrected to match root `pnpm check`: it
   contains `lint`, not `lint:fix`.
 
@@ -360,6 +370,20 @@ broken-code guard or has an owner-approved stronger trigger home.
 - Pre-push remains a branch-exit guard, not a duplicate of `pnpm check` unless
   the owner explicitly chooses that cost.
 
+**2026-05-12 evidence**:
+
+- `.husky/pre-push` keeps the moved higher-standard checks: `secrets:scan`,
+  `format-check:root`, `markdownlint-check:root`, `subagents:check`,
+  `portability:check`, `knip`, `depcruise`, `repo-validators:check`,
+  `lint:shell`, and Turbo `sdk-codegen build type-check lint test test:e2e
+  test:ui`.
+- `.github/workflows/ci.yml` keeps the shared proof surface: secret scan,
+  non-mutating format/Markdown checks, subagent/portability validation,
+  repo validators, shell lint, Playwright install, Turbo `sdk-codegen build
+  type-check lint test test:e2e test:ui`, then `knip` and `depcruise`.
+- UI/a11y/widget checks remain explicit in `pnpm check`, which is the
+  exhaustive local proof rather than the commit-boundary trigger.
+
 ##### P0.QG-5 — profile hardening
 
 **Goal**: make profile artifacts explain the many-process workflow and its
@@ -384,6 +408,25 @@ environment constraints without requiring chat-memory reconstruction.
 - The command stays safe for local engineer use; it does not hide or suppress
   failing gates.
 
+**2026-05-12 evidence**:
+
+- `repo-check profile` artifacts now include environment evidence: Node,
+  platform, architecture, pnpm store path, Playwright browser cache path,
+  browser cache existence, and a sandbox note for macOS Chromium Mach-port
+  failures.
+- Profile artifacts now classify failures as `environment`, `turbo-task`,
+  `post-turbo-gate`, `check-command`, or `passed`, and record whether
+  post-Turbo gates ran, were skipped after a Turbo failure, were not observed,
+  or were not captured.
+- `repo-check profile --capture-output` writes a deterministic
+  `.logs/check-profiles/check-output-*.log` pointer without suppressing the
+  failing command's exit code.
+- Focused validation: `pnpm --filter @oaknational/agent-tools exec vitest run
+  tests/repo-check.integration.test.ts`, `pnpm --filter @oaknational/agent-tools
+  type-check`, and `pnpm --filter @oaknational/agent-tools lint` passed. Lint
+  still reports the pre-existing warning in
+  `agent-tools/tests/collaboration-state/collaboration-state.integration.test.ts`.
+
 ##### P0.QG-6 — post-change measurement and decision record
 
 **Goal**: prove the tuning improved collaboration cost without weakening the
@@ -403,6 +446,21 @@ repo's stability contract.
 - `pnpm check` remains the exhaustive local proof command.
 - Every speed-up names the assurance preserved, moved, or intentionally traded
   off.
+
+**2026-05-12 evidence**:
+
+- Representative temp-index `.husky/pre-commit` timing for the staged P0.QG
+  files passed in `real 2.39`; staged Prettier and Markdownlint were scoped to
+  staged files, while shell lint and Turbo `type-check lint test` remained in
+  the broken-code guard.
+- Busy-checkout profile baseline passed at
+  `.logs/check-profiles/check-profile-2026-05-12T07-33-57-773Z.json`
+  (147613 ms, exit 0). Immediate warm rerun passed at
+  `.logs/check-profiles/check-profile-2026-05-12T07-36-18-375Z.json`
+  (131695 ms, exit 0).
+- The original OAuth and correlation flaky candidates did not reproduce under
+  repeated focused/adjacent-suite runs; the profile-only public-resource E2E
+  parse error also did not reproduce under focused or full E2E reruns.
 
 ---
 
