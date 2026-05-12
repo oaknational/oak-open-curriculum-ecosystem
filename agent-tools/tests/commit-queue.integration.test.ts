@@ -187,6 +187,39 @@ describe('commit-queue CLI read commands', () => {
     });
   });
 
+  it('dispatches guard to pre-stage queue validation', async () => {
+    const output = stdoutBuffer();
+
+    await expect(
+      runCommitQueueCli({
+        command: 'guard',
+        options: {
+          file: ['agent-tools/src/commit-queue/index.ts'],
+          'agent-name': 'Prismatic Waxing Constellation',
+          platform: 'codex',
+          model: 'gpt-5.5',
+          'session-id-prefix': '019dcd',
+          now: '2026-04-27T07:25:00Z',
+        },
+        repoRoot: '/repo',
+        readRegistry: async () => ({
+          schema_version: '1.3.0',
+          claims: [
+            {
+              claim_id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+              agent_id: agentId,
+              areas: [{ kind: 'git', patterns: ['index/head'] }],
+            },
+          ],
+          commit_queue: [intent({ phase: 'staging' })],
+        }),
+        stdout: output.stdout,
+      }),
+    ).resolves.toBe(0);
+
+    expect(output.text()).toBe('11111111-1111-4111-8111-111111111111\n');
+  });
+
   it('rejects unknown options for status', async () => {
     await expect(
       runCommitQueueCli({

@@ -52,6 +52,8 @@ export function usage(): string {
     '          --model <model> --session-id-prefix <prefix>',
     '          --commit-subject <subject> --file <path> [--file <path>...]',
     '  phase --intent-id <uuid> --phase <queued|staging|pre_commit|abandoned>',
+    '  guard --agent-name <name> --platform <platform> --model <model>',
+    '        --session-id-prefix <prefix> --file <path> [--file <path>...]',
     '  record-staged --intent-id <uuid>',
     '  verify-staged --intent-id <uuid> --commit-subject <subject>',
     '  complete --intent-id <uuid>',

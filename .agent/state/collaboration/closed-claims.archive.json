@@ -19972,6 +19972,144 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "8932158f-d335-4705-9d9d-3af1bad5a3f0",
+      "agent_id": {
+        "agent_name": "Secret Vanishing Moth",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/commit-queue/guard.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T12:40:30Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Supplement P3 claim for the new commit-queue guard module added during implementation.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T12:42:20Z",
+        "closed_by": {
+          "agent_name": "Secret Vanishing Moth",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1c"
+        },
+        "summary": "P3 guard supplement complete in working tree; focused tests, type-check, lint, build, markdownlint, diff-check, and CLI help smoke passed. No commit opened because peer-authored strategic-plan surfaces are dirty.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8932158f-d335-4705-9d9d-3af1bad5a3f0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "65cf1135-95e1-4e84-b7d4-ff8ee84781c4",
+      "agent_id": {
+        "agent_name": "Secret Vanishing Moth",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/commit-queue/args.ts",
+            "agent-tools/src/commit-queue/options.ts",
+            "agent-tools/src/commit-queue/cli.ts",
+            "agent-tools/src/commit-queue/core.ts",
+            "agent-tools/src/commit-queue/types.ts",
+            "agent-tools/src/commit-queue/index.ts",
+            "agent-tools/tests/commit-queue.unit.test.ts",
+            "agent-tools/tests/commit-queue.integration.test.ts",
+            "agent-tools/README.md",
+            ".agent/skills/commit/SKILL-CANONICAL.md",
+            ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/comms-events/a4c78f8d-9516-407e-b442-abaf9dc395af.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T12:38:13Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Implement cost-of-collaboration P3 commit-queue enforcement without folding P4 active-agent visibility or strategic delegation-plan implementation into scope.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T12:42:35Z",
+        "closed_by": {
+          "agent_name": "Secret Vanishing Moth",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1c"
+        },
+        "summary": "P3 commit-queue enforcement complete in working tree: commit-queue guard validates fresh same-identity intent plus git:index/head claim before staging; jc-commit and plan/thread/napkin docs updated. Validation passed. No commit opened because peer-authored strategic-plan surfaces are dirty.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "65cf1135-95e1-4e84-b7d4-ff8ee84781c4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "06624965-0798-41d5-b894-b47e983824de",
+      "agent_id": {
+        "agent_name": "Secret Vanishing Moth",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/commit-queue/types.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T13:35:56Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Resolve Knip export issue in P3 commit-queue types",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T13:36:10Z",
+        "closed_by": {
+          "agent_name": "Secret Vanishing Moth",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1c"
+        },
+        "summary": "Resolved Knip unused exported type by keeping CommitQueueClaimArea module-local.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "06624965-0798-41d5-b894-b47e983824de",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

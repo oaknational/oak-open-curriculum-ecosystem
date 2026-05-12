@@ -21,6 +21,40 @@ The most recent rotation is archived at
 [archive-pass]: archive/napkin-2026-05-12.md
 [previous-pass]: archive/napkin-2026-05-11.md
 
+## 2026-05-12 — Secret Vanishing Moth / codex / GPT-5 / `019e1c`
+
+### Cost-of-Collaboration P3
+
+- Implemented `commit-queue guard`, a pre-stage validator for the P3
+  enforcement slice. It refuses staging paths unless the current identity has
+  a fresh active commit-queue intent covering the requested files, backed by a
+  same-identity `git:index/head` claim.
+- Updated `jc-commit` so the guard runs after the queue entry moves to
+  `staging` and before `git add -- <pathspecs>`. This keeps P3 focused on
+  commit hygiene and leaves P4 active-agent visibility / identity
+  disambiguation as a separate design slice.
+
+### Practice/tooling feedback
+
+- **Surface**: `agent-tools:collaboration-state`
+- **Signal**: surprise
+- **Observation**: the first `comms append` failed because the built unified
+  CLI file was missing at the hot path. Re-running the agent-tools package
+  build restored `agent-tools/dist/src/bin/agent-tools.js`, after which the
+  same comms write succeeded.
+- **Behaviour change / candidate follow-up**: P-Foundation improved the hot
+  path, but sessions still need a clear operator signal when `dist/` is absent
+  or stale. A future CLI wrapper could produce a direct "build agent-tools
+  first" message rather than a Node module-resolution stack.
+
+### Mistakes Made
+
+- I added the new `agent-tools/src/commit-queue/guard.ts` module after opening
+  the initial claim and only then noticed the claim did not cover the new file.
+  I opened a supplemental claim immediately. Behaviour change: when a new file
+  appears during implementation, update or supplement the claim before the next
+  edit, not after the first source write.
+
 ## 2026-05-12 — Flamebright Sparking Forge / codex / GPT-5 / `019e1a`
 
 ### Consolidation Pass

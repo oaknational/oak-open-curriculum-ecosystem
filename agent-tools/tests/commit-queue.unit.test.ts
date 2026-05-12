@@ -8,8 +8,10 @@ import {
   formatCommitQueueStatusText,
   formatCommitQueueShowText,
   getFreshEntriesAhead,
+  guardStageFiles,
   type CommitIntent,
   type CommitQueueAgentId,
+  type CommitQueueClaim,
   type CommitQueueRegistry,
   verifyStagedBundle,
 } from '../src/commit-queue';
@@ -36,6 +38,19 @@ function intent(overrides: Partial<CommitIntent> = {}): CommitIntent {
     updated_at: queuedAt,
     expires_at: expiresAt,
     phase: 'queued',
+    ...overrides,
+  };
+}
+
+function gitClaim(overrides: Partial<CommitQueueClaim> = {}): CommitQueueClaim {
+  return {
+    claim_id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+    agent_id: agentId,
+    thread: 'agentic-engineering-enhancements',
+    areas: [{ kind: 'git', patterns: ['index/head'] }],
+    claimed_at: queuedAt,
+    freshness_seconds: 900,
+    intent: 'Stage and commit queue helper changes.',
     ...overrides,
   };
 }
@@ -229,6 +244,103 @@ describe('verifyStagedBundle', () => {
         'active-claims.json was re-staged after record-staged; the queue ' +
         'fingerprint changes its own staged payload. Leave the working-tree ' +
         'fingerprint unstaged and rerun verify-staged.',
+    });
+  });
+});
+
+describe('guardStageFiles', () => {
+  it('accepts requested files covered by a fresh owned intent and git claim', () => {
+    const registry: CommitQueueRegistry = {
+      schema_version: '1.3.0',
+      claims: [gitClaim()],
+      commit_queue: [
+        intent({
+          files: [
+            'agent-tools/src/commit-queue/index.ts',
+            'agent-tools/tests/commit-queue.unit.test.ts',
+          ],
+          phase: 'staging',
+        }),
+      ],
+    };
+
+    expect(
+      guardStageFiles({
+        registry,
+        agentId,
+        files: ['agent-tools/src/commit-queue/index.ts'],
+        nowIso: now,
+      }),
+    ).toStrictEqual({ ok: true, intent: registry.commit_queue[0] });
+  });
+
+  it('rejects staging before the owner has enqueued a matching intent', () => {
+    const registry: CommitQueueRegistry = {
+      schema_version: '1.3.0',
+      claims: [gitClaim()],
+      commit_queue: [],
+    };
+
+    expect(
+      guardStageFiles({
+        registry,
+        agentId,
+        files: ['agent-tools/src/commit-queue/index.ts'],
+        nowIso: now,
+      }),
+    ).toStrictEqual({
+      ok: false,
+      reason:
+        'no fresh active commit-queue intent for Prismatic Waxing Constellation / ' +
+        'codex / gpt-5.5 / 019dcd matches requested files: ' +
+        'agent-tools/src/commit-queue/index.ts. Enqueue the bundle before ' +
+        'staging: pnpm agent-tools:commit-queue -- enqueue ...',
+    });
+  });
+
+  it('rejects an intent whose claim is not a git index/head claim', () => {
+    const registry: CommitQueueRegistry = {
+      schema_version: '1.3.0',
+      claims: [gitClaim({ areas: [{ kind: 'files', patterns: ['agent-tools/src/**'] }] })],
+      commit_queue: [intent()],
+    };
+
+    expect(
+      guardStageFiles({
+        registry,
+        agentId,
+        files: ['agent-tools/src/commit-queue/index.ts'],
+        nowIso: now,
+      }),
+    ).toStrictEqual({
+      ok: false,
+      reason:
+        'queued intent 11111111-1111-4111-8111-111111111111 claim ' +
+        'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa is not an active git:index/head claim',
+    });
+  });
+
+  it('rejects when a fresh queue entry is ahead of the matching intent', () => {
+    const selected = intent({
+      intent_id: '22222222-2222-4222-8222-222222222222',
+      files: ['agent-tools/tests/commit-queue.unit.test.ts'],
+    });
+    const registry: CommitQueueRegistry = {
+      schema_version: '1.3.0',
+      claims: [gitClaim({ claim_id: selected.claim_id })],
+      commit_queue: [intent({ phase: 'pre_commit' }), selected],
+    };
+
+    expect(
+      guardStageFiles({
+        registry,
+        agentId,
+        files: ['agent-tools/tests/commit-queue.unit.test.ts'],
+        nowIso: now,
+      }),
+    ).toStrictEqual({
+      ok: false,
+      reason: 'fresh queue entries ahead: 11111111-1111-4111-8111-111111111111',
     });
   });
 });

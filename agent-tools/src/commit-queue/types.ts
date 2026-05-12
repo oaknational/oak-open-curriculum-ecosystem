@@ -26,6 +26,14 @@ export interface CommitQueueAgentId extends JsonObject {
 }
 
 /**
+ * Active-claims area shape required by pre-stage queue enforcement.
+ */
+interface CommitQueueClaimArea extends JsonObject {
+  readonly kind: string;
+  readonly patterns: readonly string[];
+}
+
+/**
  * Advisory queue entry describing one intended commit bundle.
  */
 export interface CommitIntent extends JsonObject {
@@ -48,6 +56,8 @@ export interface CommitIntent extends JsonObject {
  */
 export interface CommitQueueClaim extends JsonObject {
   readonly claim_id: string;
+  readonly agent_id?: CommitQueueAgentId;
+  readonly areas?: readonly CommitQueueClaimArea[];
   readonly intent_to_commit?: string;
 }
 

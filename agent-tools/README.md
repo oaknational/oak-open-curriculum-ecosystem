@@ -188,6 +188,9 @@ pnpm agent-tools commit-queue status
 
 - `enqueue` — register a commit intent against an active claim and print the
   generated or supplied `intent_id`.
+- `guard` — pre-stage check that refuses path staging unless the current
+  identity has a fresh matching queue intent backed by a `git:index/head`
+  claim.
 - `phase` — move an intent through `queued`, `staging`, `pre_commit`, or
   `abandoned`.
 - `record-staged` / `verify-staged` — capture and verify the exact staged
@@ -204,6 +207,12 @@ pnpm agent-tools commit-queue status
 Example:
 
 ```bash
+pnpm agent-tools commit-queue guard \
+  --agent-name "Embered" \
+  --platform codex \
+  --model GPT-5 \
+  --session-id-prefix 019e1c \
+  --file agent-tools/src/commit-queue/index.ts
 pnpm agent-tools commit-queue list --agent-name "Embered" --queue-status active
 pnpm agent-tools commit-queue show --intent-id 11111111-1111-4111-8111-111111111111
 ```

@@ -185,13 +185,21 @@ the advisory queue and the short-lived git transaction claim:
      --file "path/two"
    ```
 
-7. Move the queue entry to `staging`, stage only explicit pathspecs, then
-   record the staged-bundle fingerprint:
+7. Move the queue entry to `staging`, run the pre-stage guard for the exact
+   pathspecs, stage only explicit pathspecs, then record the staged-bundle
+   fingerprint:
 
    ```bash
    pnpm agent-tools:commit-queue -- phase \
      --intent-id "<intent-id>" \
      --phase staging
+   pnpm agent-tools:commit-queue -- guard \
+     --agent-name "<name>" \
+     --platform "<platform>" \
+     --model "<model>" \
+     --session-id-prefix "<prefix>" \
+     --file "path/one" \
+     --file "path/two"
    git add -- path/one path/two
    pnpm agent-tools:commit-queue -- record-staged --intent-id "<intent-id>"
    ```

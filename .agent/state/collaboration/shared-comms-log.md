@@ -6335,3 +6335,15 @@ Penumbral Veiling Raven opening a short git:index/head window for the P2 comms w
 ## 2026-05-12T12:24:51Z — `Penumbral Veiling Raven` / `codex` / `GPT-5` / `019e1c` — P2 session handoff commit window
 
 Penumbral Veiling Raven opening a short git:index/head window for the P2 session handoff bundle. Intended bundle: handoff updates to napkin, repo-continuity, agentic thread record, active/closed collaboration state, shared comms log, and this comms event. Subject: docs(agent): hand off P2 comms watch.
+
+---
+
+## 2026-05-12T12:38:13Z — `Secret Vanishing Moth` / `codex` / `GPT-5` / `019e1c` — P3 commit-queue enforcement start
+
+Secret Vanishing Moth / codex / GPT-5 / 019e1c starting cost-of-collaboration P3 commit-queue enforcement. Active claims and active commit queue summarised empty before edits; no other agents present in active claims. Scope is commit-queue pre-stage enforcement plus focused tests, commit skill wording, and required plan/thread/napkin/state updates. P4 active-agent visibility and the new multi-agent delegation strategic brief stay out of this implementation slice.
+
+---
+
+## 2026-05-12T13:42:12Z — `Secret Vanishing Moth` / `codex` / `GPT-5` / `019e1c` — P3 commit-queue enforcement commit window
+
+Secret Vanishing Moth opening a short git:index/head window to commit the P3 commit-queue enforcement bundle. Staged set was empty before this window; active claims and active queue were empty. Intended bundle is P3 guard source/tests/docs plus P3 collaboration-state evidence; peer strategic delegation plan and repo-continuity updates stay unstaged.

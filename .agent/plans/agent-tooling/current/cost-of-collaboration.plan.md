@@ -34,7 +34,7 @@ todos:
     status: completed
   - id: ws-p3-commit-queue-enforcement
     content: Promote the commit queue from advisory predictor to enforced pre-stage gate. Refuse `git add` (via a commit-queue CLI guard wrapping `git add`, or a stage-time precondition check) when no active intent matches the staged file set. Note Git/Husky have no native `pre-stage` hook lifecycle; the enforcement lives in the agent-tools CLI or a wrapper, not in a hook of that name.
-    status: pending
+    status: completed
   - id: ws-p4-identity-disambiguation
     content: Make `(agent_name, platform, session_id_prefix)` the routing key in claim and comms writes; refuse a write whose tuple collides with an existing live identity.
     status: pending
@@ -776,6 +776,26 @@ mechanical enforcement rather than advisory documentation alone.
 - An agent with an open intent matching the stage proceeds normally.
 - Concurrent stage attempts by two agents claim-collide on the
   registry, not on `.git/index.lock`.
+
+**2026-05-12 evidence**:
+
+- `pnpm agent-tools commit-queue guard` now validates requested stage paths
+  before `git add`: the current identity must have a fresh active
+  commit-queue intent covering every requested file, the intent must point to
+  a live claim owned by the same identity, and that claim must cover
+  `git:index/head`.
+- The guard refuses missing intents, stale or missing claims, non-git claims,
+  and fresh queue entries ahead of the selected intent with operator-facing
+  errors. Successful validation prints the matching `intent_id` for the
+  subsequent stage/record flow.
+- `jc-commit` now runs the guard between moving the intent to `staging` and
+  invoking `git add -- <pathspecs>`.
+- Focused validation: `pnpm --filter @oaknational/agent-tools exec vitest run
+  tests/commit-queue.unit.test.ts tests/commit-queue.integration.test.ts`,
+  `pnpm --filter @oaknational/agent-tools type-check`, and
+  `pnpm --filter @oaknational/agent-tools lint`. Lint exits 0 while preserving
+  the pre-existing `no-real-io-in-tests` warning in the collaboration-state
+  integration test file.
 
 **Routing**: hook + agent-tools CLI; touches the same area as P0 and
 shares review surface.
