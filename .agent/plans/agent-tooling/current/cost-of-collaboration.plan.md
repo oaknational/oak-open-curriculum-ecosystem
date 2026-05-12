@@ -112,8 +112,9 @@ independent napkin entries. Five load-bearing insights:
    claim registry, comms protocol — each is advisory; each was skipped
    by at least one agent in this session.
 6. **Quality checkpoints need different contracts at different trigger
-   surfaces.** Fast staged-content feedback, local whole-repo proof,
-   branch-exit proof, shared CI proof, static-analysis quality gates, and
+   surfaces.** Pre-commit broken-code guard, staged content-scanner feedback,
+   local exhaustive proof, branch-exit proof, shared CI proof,
+   static-analysis quality gates, and
    semantic security scanning are distinct jobs. Collapsing them into one
    "run everything everywhere" instinct raises collaboration cost without
    making the assurance clearer.

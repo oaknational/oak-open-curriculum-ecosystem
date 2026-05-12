@@ -1,0 +1,12 @@
+{
+  "event_id": "d5ceb610-477f-4e6d-a56e-f57830b689b4",
+  "created_at": "2026-05-12T06:33:08Z",
+  "author": {
+    "agent_name": "Smouldering Melting Kiln",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1a"
+  },
+  "title": "skill-review claim opened for paired handoff/consolidation workflows",
+  "body": "Opened claim 3ebea496-7f89-4856-9bb9-e24e0e6bdffb after active-claims read returned empty. Scope: canonical session-handoff, consolidate-docs, and metacognition skill sources plus generated adapters and this session's thread/napkin continuity surfaces. Current working tree already has unrelated quality-gate/profiling and monitor-tail changes; I will not sweep those into this slice."
+}

@@ -64,7 +64,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Vining Budding Canopy / `codex` / GPT-5 / `019e1a` / 2026-05-12 (`pnpm check` profiling deep dive + P0 quality-gate task expansion; next step is clean cold/warm profile from owner-reported green state); Volcanic Banking Pyre / `codex` / GPT-5 / `019e1a` / 2026-05-12 (recorded owner-directed paired `jc-session-handoff` + `jc-consolidate-docs` next step with `jc-metacognition`); Flamebright Sparking Forge / `codex` / GPT-5 / `019e1a` / 2026-05-12 (bounded repo-continuity + pending-graduations consolidation pass); Flamebright Roasting Magma / `codex` / GPT-5 / `019e1a` / 2026-05-12 (root-script retirement + `pnpm check` profiling handoff); Torrid Flaring Hearth / `codex` / GPT-5 / `019e1a` / 2026-05-12 (napkin rotation + consolidation handoff); see thread record for full identity history |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Cosmic Gliding Aurora / `codex` / GPT-5 / `019e1a` / 2026-05-12 (landed 72c5cde1: pre-commit broken-code guard preserved while Prettier/Markdownlint now use staged files; knip/depcruise classified as higher-standard gates); Vining Budding Canopy / `codex` / GPT-5 / `019e1a` / 2026-05-12 (`pnpm check` profiling deep dive + P0 quality-gate task expansion; next step is clean cold/warm profile from owner-reported green state); Volcanic Banking Pyre / `codex` / GPT-5 / `019e1a` / 2026-05-12 (recorded owner-directed paired `jc-session-handoff` + `jc-consolidate-docs` next step with `jc-metacognition`); see thread record for full identity history |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Sparking Charring Ash / `claude-code` / opus-4-7-1m / `caf5e1` / 2026-05-12 (graph foundation work; Inc.1a WS1.1 open for execution) |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -94,11 +94,11 @@ consolidation because handoff captures session-close continuity and
 consolidation decides what graduates out of temporary surfaces. Start from
 the thread record's workflow-skill continuation opener.
 
-Immediate quality-gate lane: execute the cost-of-collaboration P0.QG tasks.
-Continue `ws-p0-qg-baseline-and-unblock` from the owner-reported green
-`pnpm check` state: capture clean cold and warm `pnpm check:profile`
-baselines, including the current non-mutating `pnpm check` proof path for lint,
-Markdown, and format. The preserved evidence and trigger map live in
+Immediate quality-gate lane: execute the remaining cost-of-collaboration P0.QG
+tasks after `72c5cde1`: capture clean cold and warm `pnpm check:profile`
+baselines from the owner-reported green `pnpm check` state, add regression
+coverage for staged Prettier/Markdownlint with unrelated ambient dirty files,
+and record post-change hook timing. The preserved evidence and trigger map live in
 [`pnpm-check-profiling-deep-dive-2026-05-12.md`](../../plans/agent-tooling/pnpm-check-profiling-deep-dive-2026-05-12.md);
 the implementation tasks live in
 [`cost-of-collaboration.plan.md`](../../plans/agent-tooling/current/cost-of-collaboration.plan.md).
@@ -186,13 +186,17 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-12 — Vining Budding Canopy / `codex` / GPT-5 /
-`019e1a`)**: not escalated in this plan-update handoff — the session converted
+**Status (2026-05-12 — Cosmic Gliding Aurora / `codex` / GPT-5 /
+`019e1a`)**: not escalated in this handoff — the session corrected the
+quality-gate plan boundary, landed `72c5cde1`, and captured the owner decision
+that knip and depcruise are higher-standard gates. No new ADR/PDR candidate
+requires immediate graduation. The existing pending-graduations due queue
+remains a separate owner-visible consolidation lane rather than work smuggled
+into this handoff.
+
+Previous same-day quality-gate handoff: Vining Budding Canopy converted
 quality-gate profiling recommendations into explicit P0 implementation tasks
-inside `cost-of-collaboration.plan.md` and refreshed continuity surfaces. No
-new ADR/PDR candidate requires immediate graduation. The existing
-pending-graduations due queue remains a separate owner-visible consolidation
-lane rather than work smuggled into this handoff.
+inside `cost-of-collaboration.plan.md` and refreshed continuity surfaces.
 
 Previous same-day consolidation status: Flamebright Sparking Forge performed
 a bounded consolidation pass on `repo-continuity.md` and

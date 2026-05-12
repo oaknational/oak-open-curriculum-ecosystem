@@ -230,3 +230,38 @@ The most recent rotation is archived at
   next-session opener. Fix: make the paired `jc-session-handoff` +
   `jc-consolidate-docs` review, with `jc-metacognition`, the current
   continuation while keeping the profiling lane below it as preserved state.
+
+## 2026-05-12 — Smouldering Melting Kiln Skill Review / codex / GPT-5 / `019e1a`
+
+### Patterns to Remember
+
+- Cross-tool skill wrappers live under `.agents/skills/jc-*` and
+  `.claude/skills/jc-*`, but the reviewable source of truth for shared
+  workflow logic lives under `.agent/skills/*/SKILL-CANONICAL.md`. When
+  reviewing a skill, open the wrapper only to confirm it is a pointer; patch
+  the canonical body unless the adapter itself has drifted.
+- A "clean at closeout" opener can be overtaken by live owner edits or monitor
+  events before the next session starts. Treat the opener as a hypothesis,
+  re-read `git status`, active claims, shared comms, and continuity surfaces,
+  then scope around whatever residue is actually present.
+
+## 2026-05-12 — Cosmic Gliding Aurora Quality-Gate Correction / codex / GPT-5 / `019e1a`
+
+### Mistakes Made
+
+- I initially forced the P0 work through a blunt "make pre-commit staged-only"
+  frame and treated the owner's unit-test/type-check note as compatible with
+  removing too much from the commit boundary. Owner correction: pre-commit
+  stops detectably broken code entering git history; pre-push stops broken code
+  and additional high-standard failures leaving the local environment.
+
+### Patterns to Remember
+
+- Speed work cannot redefine the trigger's purpose. Optimise only the part that
+  is actually causing false ambient failures: here, Prettier and Markdownlint
+  content scanning. Keep type-check, lint, shell lint, and current test proof at
+  pre-commit until a validated unit-only lane preserves the same broken-code
+  guard.
+- Knip and depcruise are owner-classified higher-standard gates for this repo:
+  keep them at pre-push, `pnpm check`, and CI rather than at the commit
+  boundary.
