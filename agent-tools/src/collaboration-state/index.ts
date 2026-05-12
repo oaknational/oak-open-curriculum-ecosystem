@@ -4,6 +4,8 @@ export { auditCodexIdentityRecords } from './identity-audit.js';
 export { createNarrativeCommsEvent, renderSharedCommsLog } from './comms.js';
 export { archiveStaleClaims } from './claims.js';
 export { runCollaborationStateCli } from './cli.js';
+export { buildCollaborationTuiSnapshot, type CollaborationTuiSnapshot } from './tui/snapshot.js';
+export { formatCollaborationTuiText } from './tui/text.js';
 export { updateJsonFileWithRetry, updateJsonStateWithRetry } from './transaction.js';
 export type {
   ClosedClaimsArchive,
@@ -11,4 +13,7 @@ export type {
   CollaborationClaim,
   CollaborationCommitQueueEntry,
   CollaborationRegistry,
+  DirectedCommsMessage,
+  LifecycleCommsEvent,
+  NarrativeCommsEvent,
 } from './types.js';

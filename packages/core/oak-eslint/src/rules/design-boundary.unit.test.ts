@@ -63,7 +63,9 @@ describe('createDesignBoundaryRules', () => {
     expect(zones.some((zone) => zone.from === '../../../packages/libs/**')).toBe(true);
     expect(zones.some((zone) => zone.from === '../../../agent-tools/**')).toBe(true);
     expect(zones.some((zone) => zone.from === '../oak-design-tokens/**')).toBe(true);
+    expect(zones.some((zone) => zone.from === '../oak-design-ink/**')).toBe(true);
     expect(groups).toContain('@oaknational/oak-design-tokens');
+    expect(groups).toContain('@oaknational/oak-design-ink');
     expect(groups).toContain('@oaknational/curriculum-sdk');
     expect(groups).toContain('@oaknational/search-cli');
     expect(groups).toContain('@oaknational/logger');
@@ -79,7 +81,27 @@ describe('createDesignBoundaryRules', () => {
     expect(zones.some((zone) => zone.from === '../../../packages/sdks/**')).toBe(true);
     expect(zones.some((zone) => zone.from === '../../../packages/libs/**')).toBe(true);
     expect(zones.some((zone) => zone.from === '../../../agent-tools/**')).toBe(true);
+    expect(zones.some((zone) => zone.from === '../oak-design-ink/**')).toBe(true);
     expect(groups).not.toContain('@oaknational/design-tokens-core');
+    expect(groups).toContain('@oaknational/oak-design-ink');
+    expect(groups).toContain('@oaknational/oak-search-sdk');
+    expect(groups).toContain('@oaknational/agent-tools');
+    expect(groups).toContain('@oaknational/env-resolution');
+  });
+
+  it('allows oak-design-ink to consume Oak tokens while blocking apps, SDKs, libs, and tooling', () => {
+    const rules = createDesignBoundaryRules('oak-design-ink');
+    const zones = getRestrictedPathZones(rules);
+    const groups = getRestrictedImportPatterns(rules).flatMap((pattern) => pattern.group);
+
+    expect(zones.some((zone) => zone.from === '../design-tokens-core/**')).toBe(false);
+    expect(zones.some((zone) => zone.from === '../oak-design-tokens/**')).toBe(false);
+    expect(zones.some((zone) => zone.from === '../../../apps/**')).toBe(true);
+    expect(zones.some((zone) => zone.from === '../../../packages/sdks/**')).toBe(true);
+    expect(zones.some((zone) => zone.from === '../../../packages/libs/**')).toBe(true);
+    expect(zones.some((zone) => zone.from === '../../../agent-tools/**')).toBe(true);
+    expect(groups).not.toContain('@oaknational/design-tokens-core');
+    expect(groups).not.toContain('@oaknational/oak-design-tokens');
     expect(groups).toContain('@oaknational/oak-search-sdk');
     expect(groups).toContain('@oaknational/agent-tools');
     expect(groups).toContain('@oaknational/env-resolution');

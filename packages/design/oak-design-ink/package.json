@@ -1,15 +1,16 @@
 {
-  "name": "@oaknational/oak-design-tokens",
+  "name": "@oaknational/oak-design-ink",
   "version": "0.0.0-development",
   "private": true,
-  "description": "Oak token source files and generated CSS custom properties",
+  "description": "Reusable Oak Ink primitives for terminal user interfaces",
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    "./index.css": "./dist/index.css",
-    "./terminal-theme": {
-      "types": "./dist/terminal-theme.d.ts",
-      "development": "./src/terminal-theme.ts",
-      "import": "./dist/terminal-theme.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts",
+      "import": "./dist/index.js"
     }
   },
   "files": [
@@ -19,21 +20,28 @@
   ],
   "scripts": {
     "clean": "rm -rf dist .turbo",
-    "build": "pnpm exec tsx src/build.ts && pnpm exec tsup src/terminal-theme.ts --format esm --out-dir dist && pnpm exec tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "test": "vitest run",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
-    "@oaknational/design-tokens-core": "workspace:*",
-    "@oaknational/result": "workspace:*"
+    "@oaknational/oak-design-tokens": "workspace:*"
+  },
+  "peerDependencies": {
+    "ink": "^7.0.2",
+    "react": "^19.2.6"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@types/node": "^25.6.2",
+    "@types/react": "^19.2.14",
     "eslint": "^10.3.0",
     "globals": "^17.6.0",
+    "ink": "^7.0.2",
+    "ink-testing-library": "^4.0.0",
+    "react": "^19.2.6",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
     "vitest": "^4.1.5"

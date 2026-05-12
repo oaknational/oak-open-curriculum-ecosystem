@@ -21,6 +21,7 @@ const KNOWN_OPTION_KEYS = new Set([
   'event-id',
   'events-dir',
   'file',
+  'format',
   'help',
   'intent',
   'kind',

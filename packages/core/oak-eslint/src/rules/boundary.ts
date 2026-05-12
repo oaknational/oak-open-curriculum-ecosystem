@@ -17,7 +17,10 @@ const LIB_PACKAGE_IMPORTS = [
   '@oaknational/sentry-node',
 ] as const;
 
-type DesignPackageImport = '@oaknational/design-tokens-core' | '@oaknational/oak-design-tokens';
+type DesignPackageImport =
+  | '@oaknational/design-tokens-core'
+  | '@oaknational/oak-design-ink'
+  | '@oaknational/oak-design-tokens';
 
 export const SDK_PACKAGE_IMPORTS = [
   '@oaknational/curriculum-sdk',
@@ -166,7 +169,7 @@ export const ADAPTER_LIB_PACKAGES = ['sentry-node'] as const;
 export const LIB_PACKAGES = [...FOUNDATION_LIB_PACKAGES, ...ADAPTER_LIB_PACKAGES] as const;
 
 type LibPackage = (typeof LIB_PACKAGES)[number];
-type DesignPackage = 'design-tokens-core' | 'oak-design-tokens';
+type DesignPackage = 'design-tokens-core' | 'oak-design-ink' | 'oak-design-tokens';
 const SEARCH_CONTRACTS_LIB = 'search-contracts' as const;
 const LIB_SDK_BOUNDARY_MESSAGE =
   'Libraries cannot depend on SDKs unless ADR-041 documents an approved generated-surface exception.';
@@ -300,9 +303,9 @@ export function createLibBoundaryRules(libName: LibPackage): Partial<Linter.Rule
 /**
  * Generate boundary rules for design-token workspaces.
  *
- * Design workspaces may depend on core and library packages. The Oak token set
- * may also depend on the shared design-token core workspace. Neither design
- * workspace may depend on apps, SDKs, or tooling packages.
+ * Design workspaces may depend on core packages and upstream design workspaces
+ * only when the dependency direction stays within the design container. No
+ * design workspace may depend on apps, SDKs, libs, or tooling packages.
  *
  * @param designName - The current design workspace name
  */
@@ -313,10 +316,15 @@ export function createDesignBoundaryRules(designName: DesignPackage): Partial<Li
   const restrictedDesignImportPatterns =
     designName === 'design-tokens-core'
       ? createPackageSpecifierPatterns(
-          ['@oaknational/oak-design-tokens'],
+          ['@oaknational/oak-design-ink', '@oaknational/oak-design-tokens'],
           createDesignRestrictionMessage('@oaknational/oak-design-tokens'),
         )
-      : [];
+      : designName === 'oak-design-tokens'
+        ? createPackageSpecifierPatterns(
+            ['@oaknational/oak-design-ink'],
+            createDesignRestrictionMessage('@oaknational/oak-design-ink'),
+          )
+        : [];
   const restrictedDesignPathZones =
     designName === 'design-tokens-core'
       ? [
@@ -325,8 +333,21 @@ export function createDesignBoundaryRules(designName: DesignPackage): Partial<Li
             from: '../oak-design-tokens/**' as const,
             message: createDesignRestrictionMessage('@oaknational/oak-design-tokens'),
           },
+          {
+            target: './src/**' as const,
+            from: '../oak-design-ink/**' as const,
+            message: createDesignRestrictionMessage('@oaknational/oak-design-ink'),
+          },
         ]
-      : [];
+      : designName === 'oak-design-tokens'
+        ? [
+            {
+              target: './src/**' as const,
+              from: '../oak-design-ink/**' as const,
+              message: createDesignRestrictionMessage('@oaknational/oak-design-ink'),
+            },
+          ]
+        : [];
 
   return {
     'import-x/no-restricted-paths': [
@@ -338,13 +359,13 @@ export function createDesignBoundaryRules(designName: DesignPackage): Partial<Li
             target: './src/**' as const,
             from: '../../../apps/**' as const,
             message:
-              'Design workspaces cannot depend on apps. Tokens must remain reusable CSS artefact producers.',
+              'Design workspaces cannot depend on apps. Design primitives must remain reusable package surfaces.',
           },
           {
             target: './src/**' as const,
             from: '../../../packages/sdks/**' as const,
             message:
-              'Design workspaces cannot depend on SDKs. Tokens must stay outside schema/runtime application layers.',
+              'Design workspaces cannot depend on SDKs. Design primitives must stay outside schema/runtime application layers.',
           },
           {
             target: './src/**' as const,
@@ -355,7 +376,7 @@ export function createDesignBoundaryRules(designName: DesignPackage): Partial<Li
             target: './src/**' as const,
             from: '../../../packages/libs/**' as const,
             message:
-              'Design workspaces cannot depend on libs. Tokens are CSS artefact producers with no runtime lib dependencies (ADR-148).',
+              'Design workspaces cannot depend on libs. Design primitives must not depend on runtime library layers.',
           },
         ],
       },
@@ -375,12 +396,12 @@ export function createDesignBoundaryRules(designName: DesignPackage): Partial<Li
           ),
           ...createPackageSpecifierPatterns(
             APP_PACKAGE_IMPORTS,
-            'Design workspaces cannot depend on apps. Tokens must remain reusable CSS artefact producers.',
+            'Design workspaces cannot depend on apps. Design primitives must remain reusable package surfaces.',
           ),
           ...createPackageSpecifierPatterns(TOOLING_PACKAGE_IMPORTS, TOOLING_BOUNDARY_MESSAGE),
           ...createPackageSpecifierPatterns(
             LIB_PACKAGE_IMPORTS,
-            'Design workspaces cannot depend on libs. Tokens are CSS artefact producers with no runtime lib dependencies (ADR-148).',
+            'Design workspaces cannot depend on libs. Design primitives must not depend on runtime library layers.',
           ),
         ],
       },

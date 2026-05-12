@@ -14,6 +14,7 @@ import { preflightIdentity } from './cli-identity.js';
 import { auditIdentity } from './cli-identity-audit.js';
 import { type Options } from './cli-options.js';
 import { appendJsonEntry, checkState, writeJsonBody } from './cli-json-commands.js';
+import { collaborationTui } from './tui/cli.js';
 import {
   claimsCloseOptions,
   claimsOpenOptions,
@@ -164,6 +165,23 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
     help: 'claims active-agents --active <path> [--closed <path>] [--now <iso>]',
     options: ['active', 'closed', 'now'],
     handler: activeAgents,
+  }),
+  'tui:': commandSpec({
+    help:
+      'tui [--format <tui|text>] [--repo-root <path>] [--active <path>] ' +
+      '[--closed <path>] [--events-dir <dir>] [--lifecycle-dir <dir>] ' +
+      '[--messages-dir <dir>] [--now <iso>]',
+    options: [
+      'format',
+      'repo-root',
+      'active',
+      'closed',
+      'events-dir',
+      'lifecycle-dir',
+      'messages-dir',
+      'now',
+    ],
+    handler: collaborationTui,
   }),
   'conversation:append': commandSpec({
     help: 'conversation append --file <path> --entry-json <json>',

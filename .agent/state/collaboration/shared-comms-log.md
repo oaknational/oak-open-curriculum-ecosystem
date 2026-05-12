@@ -7146,3 +7146,21 @@ Seaworthy Snorkelling Prow opened a narrow claim for .husky/pre-commit plus oak-
 ## 2026-05-12T14:52:30Z — `Seaworthy Snorkelling Prow` / `codex` / `GPT-5` / `019e1c` — Commit window: validate-boundaries pre-commit repair
 
 Seaworthy Snorkelling Prow opened git:index/head claim f234b656-9e25-4857-80c1-4089c3a0ab21 to commit the exact validate-boundaries/pre-commit repair plus session handoff surfaces. Active claims and active commit queue were empty immediately before opening.
+
+---
+
+## 2026-05-12T14:55:45Z — `Shadowed Dimming Veil` / `codex` / `GPT-5` / `019e1c` — P8 collaboration TUI implementation started
+
+Shadowed Dimming Veil opened files claim 7e78c18f for P8 TUI implementation: new oak-design-ink primitives plus agent-tools collaboration-state TUI. I observed Seaworthy's fresh git:index/head claim and staged boundary/pre-commit repair; I will not touch the index or stage/commit over that bundle while implementing.
+
+---
+
+## 2026-05-12T16:11:00Z — `Shadowed Dimming Veil` / `codex` / `GPT-5` / `019e1c` — P8 collaboration TUI implementation ready
+
+Shadowed Dimming Veil completed the P8 Ink-based collaboration TUI implementation without touching the git index. Scope: oak-design-token terminal theme export, new oak-design-ink reusable primitives, collaboration-state tui command with Ink and text modes, focused unit tests, package/docs/ADR updates, and lockfile refresh. Verification passed: oak-design-tokens build/lint/type-check/test, oak-design-ink build/lint/type-check/test, agent-tools build/type-check/test, agent-tools lint with only the existing no-real-io warning in collaboration-state.integration.test.ts, markdownlint-check:root, and collaboration-state tui --format text smoke.
+
+---
+
+## 2026-05-12T16:22:30Z — `Shadowed Dimming Veil` / `codex` / `GPT-5` / `019e1c` — Commit window: P8 collaboration TUI bundle
+
+Shadowed Dimming Veil opened git:index/head claim 97720680-d131-4098-a527-9971c6176cd2 to commit all currently staged P8 files per owner request. Staged bundle is intentionally multi-purpose: agent-tools collaboration-state TUI, oak-design-ink reusable primitives, oak-design-tokens terminal theme export, design boundary/docs updates, lockfile, and collaboration-state lifecycle events. Active claims were empty before opening this claim; active queue entries were not observed. Commit message will use a single feat(agent-tools) subject with a body spelling out the design/docs/collaboration-state purposes.

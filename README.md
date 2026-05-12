@@ -227,15 +227,15 @@ Everything flows from the OpenAPI schema:
 
 Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vectors, BM25, synonym expansion, and phrase boosting) to achieve high-accuracy retrieval across curriculum structures. See the [search architecture](apps/oak-search-cli/docs/ARCHITECTURE.md) for details and the [OpenAPI pipeline](docs/architecture/openapi-pipeline.md) for the generation architecture.
 
-| Directory          | Purpose                                                                                                                  |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| `apps/`            | The canonical HTTP MCP server and the semantic search CLI                                                                |
-| `packages/sdks/`   | Curriculum SDK (code-generation, MCP metadata) and Search SDK (ES retrieval)                                             |
-| `packages/core/`   | Foundational packages: `Result<T, E>` type, env schema contracts, observability primitives, type helpers, ESLint configs |
-| `packages/libs/`   | Shared libraries: env-resolution, structured logging, search contracts, and Sentry adapters                              |
-| `packages/design/` | Design token pipeline: DTCG source format, CSS custom property generation, WCAG AA contrast validation                   |
-| `agent-tools/`     | Agent workflow CLIs: `claude-agent-ops`, `cursor-session-from-claude-session`, and `codex-reviewer-resolve`              |
-| `docs/`            | Developer documentation, guides, and the full ADR index                                                                  |
+| Directory          | Purpose                                                                                                                                                  |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `apps/`            | The canonical HTTP MCP server and the semantic search CLI                                                                                                |
+| `packages/sdks/`   | Curriculum SDK (code-generation, MCP metadata) and Search SDK (ES retrieval)                                                                             |
+| `packages/core/`   | Foundational packages: `Result<T, E>` type, env schema contracts, observability primitives, type helpers, ESLint configs                                 |
+| `packages/libs/`   | Shared libraries: env-resolution, structured logging, search contracts, and Sentry adapters                                                              |
+| `packages/design/` | Design token pipeline and reusable design primitives: DTCG source format, CSS custom property generation, WCAG AA contrast validation, Ink UI primitives |
+| `agent-tools/`     | Agent workflow CLIs: `claude-agent-ops`, `cursor-session-from-claude-session`, and `codex-reviewer-resolve`                                              |
+| `docs/`            | Developer documentation, guides, and the full ADR index                                                                                                  |
 
 ### Workspace Summaries
 
@@ -281,6 +281,7 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 | ----------------------------------------------------------- | ---------------------------------------------------------------------------------- |
 | [`design-tokens-core`](packages/design/design-tokens-core/) | Pure functions for DTCG token parsing and WCAG AA contrast validation              |
 | [`oak-design-tokens`](packages/design/oak-design-tokens/)   | Oak-specific token definitions (palette, semantic, component) and CSS build output |
+| [`oak-design-ink`](packages/design/oak-design-ink/)         | Reusable Oak React primitives for Ink-based terminal interfaces                    |
 
 Architectural Decision Records (ADRs) are the architectural source of truth. These three foundational ADRs define the schema-first approach that underpins the codebase:
 

@@ -82,12 +82,13 @@ function failure(message: string): CollaborationStateCliResult {
 
 function usage(): string {
   return [
-    'Usage: collaboration-state <identity|comms|claims|conversation|escalation|check> <action> [options]',
+    'Usage: collaboration-state <identity|comms|claims|tui|conversation|escalation|check> <action> [options]',
     '',
     'Topics:',
     '  identity       preflight, audit',
     '  comms          append, send, render, inbox, watch, direct, reply',
     '  claims         open, heartbeat, close, archive-stale, list, mine, show, status, active-agents',
+    '  tui            terminal collaboration dashboard',
     '  conversation   append',
     '  escalation     open, close',
     '  check',
