@@ -29,62 +29,52 @@ todos:
     depends_on: [ws1-graph-core-scaffold]
     sub_increment: 1a
   - id: ws1-dataset-core
-    content: "WS1.3: DatasetCore-compatible interface (RDF/JS aligned); add/has/match unit tests. One commit, tree green."
+    content: "WS1.3: DatasetCore-compatible interface (RDF/JS aligned) plus DataFactory-style Term constructors (namedNode, blankNode, literal, defaultGraph, tripleTerm, quad). Acceptance: 1:1 with @rdfjs/types Dataset interface surface (add/has/match/delete, iterable, size); add/has/match unit tests; one cycle, one commit, atomic-landing. Inherited from WS1.2: per-kind checker-array dispatch for any Quad-component equality inside add/has/match (cast-free, complexity ≤ 8 per branch); RDF/JS Data Model uniform-value-string posture retained. DataFactory constructors land in the same cycle because WS1.6 vocab-registry will consume them — extracting DataFactory to a later cycle would force vocab to start with bare object literals and rewrite later. Reviewer flags: type-expert (generic match() iterator typing, @rdfjs/types alignment, DataFactory return-type literal-preservation), architecture-expert-betty (cohesion of Dataset surface vs RDF/JS DataModel; whether DataFactory belongs in the same cycle or its own)."
     status: pending
     depends_on: [ws1-rdf-term-quad]
     sub_increment: 1a
-  - id: ws1-jsonld-expand
-    content: "WS1.4: JSON-LD 1.1 expand wrapper (versioned adapter); test against a known SKOS document fixture."
+  - id: ws1-jsonld-processor
+    content: "WS1.4: JSON-LD 1.1 processor wrapper — expand + compact + frame in one versioned adapter (src/jsonld/processor.ts) around jsonld.js. Acceptance: (a) expand a known SKOS document fixture deterministically; (b) compact back to a known context produces the input shape modulo declared @context choices; (c) framing on the pinned Oak Threads raw import produces deterministic output (lands the §Test discipline invariant #8 contract test). One cycle, one commit. Rationale for collapse of the prior WS1.4 + WS1.5 pair: they share file scope (src/jsonld/) and the round-trip determinism contract test cannot land without both surfaces present; an intermediate expand-only landing would leave the contract test unprovable until the next cycle, contra atomic-landing. Inherited from research §12: versioned JsonLdProcessor adapter shape so an alternative processor can slot in behind the same interface. Reviewer flags: type-expert (adapter interface shape vs jsonld.js raw call signatures), assumptions-expert (jsonld.js maintenance posture and version-pinning policy for Inc.2 upgrades), test-expert (round-trip + framing-determinism contract tests)."
     status: pending
     depends_on: [ws1-dataset-core]
     sub_increment: 1a
-  - id: ws1-jsonld-compact-frame
-    content: "WS1.5: JSON-LD 1.1 compact + frame wrappers; round-trip test."
-    status: pending
-    depends_on: [ws1-jsonld-expand]
-    sub_increment: 1a
   - id: ws1-canon
-    content: "WS1.6: RDF dataset canonicalisation; deterministic output for equivalent datasets."
+    content: "WS1.5 (renumbered from WS1.6): RDF dataset canonicalisation via rdf-canonize (URDNA2015) wrapped inside src/canon/. Acceptance: deterministic identical hash for two datasets ingested in different orders but identical logical content; idempotent re-canonicalisation; type-level test that canon output preserves Dataset shape. One cycle, one commit. Inherited from WS1.2: per-kind checker-array dispatch applies where structural equivalence dispatches on Term variant inside the canon wrapper's internal helpers. Reviewer flags: type-expert (input/output shape of rdf-canonize wrapper; literal preservation), test-expert (deterministic test design — same logical content, different ingestion order → identical hash, no false-negatives from ordering)."
     status: pending
     depends_on: [ws1-dataset-core]
     sub_increment: 1a
   - id: ws1-vocab-registry
-    content: "WS1.7: Vocabulary registry data tables (schema.org, RDFS, SKOS, PROV-O, DCMI, OWL, SHACL, Oak Curriculum Ontology, EEF custom IRIs); lookup + reverse-lookup tests."
+    content: "WS1.6 (renumbered from WS1.7): Vocabulary registry data tables (schema.org, RDFS, SKOS, PROV-O, DCMI, OWL, SHACL, Oak Curriculum Ontology, EEF custom IRIs); lookup + reverse-lookup. Each entry exported as a const-typed NamedNode constructed via the DataFactory namedNode() helper from WS1.3 — literal value types preserved end-to-end (no widening to string). Acceptance: forward and reverse lookup tests; type-level test that RDFS.label is inferred as NamedNode<'http://www.w3.org/2000/01/rdf-schema#label'>. **Parallel-safe with WS1.3** at the file-scope level (src/vocab/ disjoint from src/dataset/) but depends on the DataFactory shape landing in WS1.3 for const-typed NamedNode construction; the dependency edge therefore stays on WS1.3, not bare WS1.1. If a strictly-data-only first pass is acceptable (literal NamedNode object literals to be converted to DataFactory calls in a follow-up), WS1.6 can run truly parallel-safe with WS1.3 after WS1.2 lands — owner-direction question, not assumed. Reviewer flags: architecture-expert-fred (data-tables-as-schema discipline; no executable code in vocab entries beyond the DataFactory constructor call), type-expert (const-typed NamedNode literal preservation; no string widening)."
+    status: pending
+    depends_on: [ws1-dataset-core]
+    sub_increment: 1a
+  - id: ws2-ingest-scaffold
+    content: "WS2.1: Scaffold packages/libs/graph-ingest workspace. Acceptance: workspace registered, empty barrels green, all gates pass. **Inherited scaffold checklist** (from WS1.1 + WS1.2; canonical for every future graph workspace scaffold): pnpm-workspace.yaml explicit registration, knip.config.ts workspace entry, tsconfig.lint.json, staged pnpm-lock.yaml, .dependency-cruiser.mjs no-orphans pathNot exception for every pre-declared sub-path-export barrel (mirrors oak-sdk-codegen + graph-core precedent — absent registration causes six-error orphan failure at pre-commit even when every other gate is green), eslint.config.ts *.config.ts block uses the wsTsProject resolved constant (not the string literal './tsconfig.json'). **Inter-scaffold serialisation invariant**: WS2.1 and WS3.1 are NOT parallel-safe with each other because both write to root monorepo registration files (pnpm-workspace.yaml, root tsconfig.json project references, root package.json). Either ordering is acceptable; the two scaffolds must serialise OR batch their root-file edits into one preparatory commit. Reviewer flags: config-expert (scaffold-checklist conformance; same reviewer set as WS1.1)."
     status: pending
     depends_on: [ws1-graph-core-scaffold]
     sub_increment: 1a
-  - id: ws1-graph-document
-    content: "WS1.8: GraphDocument + GraphNode + GraphEdge ergonomic surface over Dataset; unit tests against a fixture dataset."
-    status: pending
-    depends_on: [ws1-dataset-core, ws1-vocab-registry]
-    sub_increment: 1a
-  - id: ws2-ingest-scaffold
-    content: "WS2.1: Scaffold packages/libs/graph-ingest workspace."
-    status: pending
-    depends_on: [ws1-graph-document]
-    sub_increment: 1a
   - id: ws2-jsonld-compatible
-    content: "WS2.2: jsonld-compatible ingestion mode (JSON with @context/@id/@type or inferable LD shape) plus generic Turtle/SKOS parse-to-dataset support; test against a generic SKOS fixture."
+    content: "WS2.2: jsonld-compatible ingestion mode (JSON with @context/@id/@type or inferable LD shape) plus generic Turtle/SKOS parse-to-dataset. Acceptance: parse a generic SKOS fixture into a Dataset deterministically; parse a small Turtle fixture identifying terms via the DataFactory from WS1.3. Lands the §Test discipline invariant #2 contract test (every emitted edge carries a NamedNode predicate, never a bare string). Reviewer flags: test-expert (fixture quality and round-trip coverage on both jsonld-compatible and Turtle paths), type-expert (parser return type is Dataset over Quad; no leakage of jsonld.js raw types)."
     status: pending
-    depends_on: [ws2-ingest-scaffold]
+    depends_on: [ws2-ingest-scaffold, ws1-dataset-core]
     sub_increment: 1a
   - id: ws2-source-mapping
-    content: "WS2.3: SourceMapping primitives (JSON Pointer + JSONPath); source path preserved end-to-end."
+    content: "WS2.3: SourceMapping primitives (JSON Pointer for JSON-LD-shaped inputs, JSONPath for tree-shaped inputs). Source path preserved end-to-end on every Quad produced by graph-ingest. **Load-bearing for §Test discipline invariant #3** (Source path preserved) — this cycle ships the contract test alongside the primitive. Acceptance: source-path round-trip test across the jsonld-compatible parser and the Turtle parser; both paths attach a sourcePath referenceable through JSON Pointer. Reviewer flags: type-expert (JSONPointer + JSONPath type shape; tagged-template-vs-runtime trade-off), test-expert (invariant #3 contract test design)."
     status: pending
     depends_on: [ws2-jsonld-compatible]
     sub_increment: 1a
   - id: ws3-project-scaffold
-    content: "WS3.1: Scaffold packages/libs/graph-project workspace."
+    content: "WS3.1: Scaffold packages/libs/graph-project workspace. Acceptance: workspace registered, empty barrels green, all gates pass. **Inherited scaffold checklist**: same as WS2.1 (depcruise no-orphans pathNot exception, eslint.config.ts wsTsProject, five-file scaffold bundle). **Inter-scaffold serialisation invariant**: WS3.1 serialises after WS2.1 (or vice versa); both touch root monorepo registration files. Reviewer flags: config-expert (scaffold-checklist conformance)."
     status: pending
-    depends_on: [ws1-graph-document]
+    depends_on: [ws1-graph-core-scaffold, ws2-ingest-scaffold]
     sub_increment: 1a
   - id: ws3-property-graph
-    content: "WS3.2: toPropertyGraph projection (nodes/edges with labels/properties); round-trip test."
+    content: "WS3.2: toPropertyGraph projection (nodes with labels/properties; edges with labels/properties) over a Dataset. **Load-bearing for §Test discipline invariant #6** (Property-graph projection is derived, not canonical) — this cycle ships the contract test asserting dataset.toPropertyGraph() output is reconstructable from the canonical Dataset (round-trip across the projection seam). Acceptance: round-trip test on a fixture dataset; nodes-and-edges typed surface stable. Reviewer flags: architecture-expert-betty (projection seam cohesion: derived view vs canonical Dataset; no leakage of property-graph types into graph-core), test-expert (invariant #6 reconstructability)."
     status: pending
-    depends_on: [ws3-project-scaffold]
+    depends_on: [ws3-project-scaffold, ws1-dataset-core]
     sub_increment: 1a
   - id: ws3-adjacency
-    content: "WS3.3: adjacency primitives — incoming/outgoing/neighbours/match; tests against fixture."
+    content: "WS3.3: Property-graph adjacency primitives (incoming/outgoing/neighbours) over the projected nodes-and-edges from WS3.2. **MUST NOT duplicate DatasetCore.match() semantics** — adjacency is node→node traversal over the property-graph projection; quad-pattern matching stays on Dataset (WS1.3). The Threads adapter (Inc.1b WS4.2) may choose either surface for its inverse-edge lookup; both must be available because they are distinct conceptual seams (research §10 fluent API on Dataset vs research §11 projection adjacency on PropertyGraph). Acceptance: adjacency unit tests against a fixture property-graph; type-level test that adjacency operates on PropertyGraph types, not Quad. Reviewer flags: type-expert (iterator API shape), architecture-expert-barney (explicit boundary check: can WS3.3 be safely collapsed into WS3.2 without losing the conceptual seam? If Barney's verdict is collapse-safe per consolidate-at-third-consumer, accept and reduce Inc.1a to 9 remaining cycles)."
     status: pending
     depends_on: [ws3-property-graph]
     sub_increment: 1a
@@ -123,8 +113,8 @@ todos:
 
 # Graph Stack — Topology and Foundation Increment
 
-**Last Updated**: 2026-05-12 (Starlit Scattering Moon — claude / opus-4-7-1m / edd1fb) — WS1.2 LANDED at commit 1885fbcf. `packages/core/graph-core/term/` now ships RDF/JS-aligned RDF 1.2 Term hierarchy + Quad + `equals` (18 tests green, type-expert APPROVE-WITH-NITS absorbed). Next executable cycle is WS1.3 (DatasetCore-compatible interface; depends on `ws1-rdf-term-quad`). Owner direction: re-plan the remaining 12 Inc.1a cycles in the next session before opening WS1.3. Earlier 2026-05-12 (Celestial Transiting Satellite — claude / opus-4-7-1m / 9bc8e3) — WS1.1 LANDED at commit ad2abb69. `packages/core/graph-core/` scaffold present with six pre-declared sub-path exports and empty barrels; root registrations across `pnpm-workspace.yaml`, `knip.config.ts`, `pnpm-lock.yaml`, and `.dependency-cruiser.mjs` (no-orphans exception mirroring oak-sdk-codegen precedent). Three reviewers APPROVE. Discovery: depcruise registration must be added to the canonical scaffold checklist for future sub-path-export workspaces (WS2.1, WS3.1, WS4.1). Earlier 2026-05-12 (Sparking Charring Ash — graph foundation work session) — Three-reviewer follow-up corrections (assumptions-expert / code-expert / docs-adr-expert) absorbed: WS1.1 row expanded with knip.config.ts workspace registration, tsconfig.lint.json explicit naming, "do not pass dts to createLibConfig" instruction, pnpm-lock.yaml in commit scope; "tree green" reworded to match `.husky/pre-commit` exact gate set (format-check + markdownlint + knip + depcruise + repo-wide `turbo run type-check lint test`); Status block reset post-ratification; §Increments row 1 Status cell flipped to ACTIVE; WS0 prose rewritten as closed; §Dependencies and §Promotion Trigger sections updated to reflect closed gates. 2026-05-11 amendment chain retained below. 2026-05-11 (Sparking Charring Ash earlier in session): ADR-173 + ADR-179 ratified Accepted; plan promoted current/ → active/; WS0 marked completed in YAML todos; WS1.1 row refined per holistic review (Fred / type-expert / test-expert) and Barney PROMOTION-READY verdict. 2026-05-11 (Flamebright Burning Lava): Question-assumptions pass corrected three framings; reviewer findings absorbed into ADR-173 tripwire matrix and plan body §Build-vs-Buy + §Test discipline + §Reviewer Absorption; ADR-179 extracted per owner direction; verdict-not-menu rule landed. Earlier 2026-05-11 updates: schedule-not-trigger doctrine sweep; Inc.1 decomposed into 1a / 1b / 1c sub-increments with file-scope-non-overlapping boundaries.
-**Status**: 🟢 ACTIVE — promoted current/ → active/ 2026-05-11 after ADR-173 + ADR-179 Status: Proposed → Accepted ratification. The topology decision is owner-approved. WS1.1 landed at commit ad2abb69 (2026-05-12). WS1.2 landed at commit 1885fbcf (2026-05-12): RDF Term hierarchy + Quad + equality, first paired product/test bundle per atomic-landing. Owner direction at WS1.2 close: re-plan the remaining 12 Inc.1a cycles in the next session before opening WS1.3. Next executable cycle after re-plan: WS1.3 (DatasetCore-compatible interface).
+**Last Updated**: 2026-05-12 (Clouded Vaulting Squall — claude / opus-4-7-1m / 866472) — Inc.1a remaining cycles re-planned holistically per owner direction (clarity, sequencing, parallelisability, completeness, impact validation). Re-plan deltas: (V1) WS1.6 vocab-registry recorded as parallel-safe with WS1.3 at file-scope level, dependency-edge kept on WS1.3 because WS1.6 consumes the WS1.3 DataFactory namedNode constructor (alternative bare-literal-first pass flagged for owner direction); (V2) WS1.4 JSON-LD expand + WS1.5 JSON-LD compact-frame collapsed into a single WS1.4 jsonld-processor cycle because they share file scope (src/jsonld/) and the §Test-discipline-invariant-#8 round-trip framing-determinism contract test cannot land without both surfaces; (V3) WS1.8 GraphDocument deferred to Inc.2 because no Inc.1 consumer reads through it — owner-directed tripwire recorded on §Increments row 2 to retrospectively review Inc.1 surfaces against GraphDocument when it lands; (V4) WS2.1 + WS3.1 scaffold depends_on edges corrected from ws1-graph-document to ws1-graph-core-scaffold (a scaffold cycle consumes only workspace registration, not the full public surface), with inter-scaffold serialisation invariant recorded because both write to root monorepo registration files; (V5) WS3.3 adjacency scope sharpened to property-graph node→node traversal only, MUST NOT duplicate DatasetCore.match() semantics, with architecture-expert-barney explicit collapse-vs-keep boundary review. Inherited patterns from WS1.1 + WS1.2 written into each cycle: scaffold checklist (depcruise pathNot, eslint wsTsProject, five-file bundle); per-kind checker-array dispatch for discriminated-union equality; RDF/JS Data Model uniform-value-string posture; "tree green" aligned to .husky/pre-commit as the authoritative source. Per-cycle reviewer flags added in YAML so machine-dispatched or coordinator-ordered execution carries reviewer guidance without re-derivation. Inc.1a remaining cycle count: 12 → 10. Previous landing: 2026-05-12 (Starlit Scattering Moon / claude / opus-4-7-1m / edd1fb) — WS1.2 LANDED at commit 1885fbcf (RDF 1.2 Term hierarchy + Quad + equals, 18 tests green, type-expert APPROVE-WITH-NITS absorbed for RDF/JS Data Model conformance). Next executable cycle is WS1.3 (DatasetCore + DataFactory). Earlier 2026-05-12 (Celestial Transiting Satellite — claude / opus-4-7-1m / 9bc8e3) — WS1.1 LANDED at commit ad2abb69. `packages/core/graph-core/` scaffold present with six pre-declared sub-path exports and empty barrels; root registrations across `pnpm-workspace.yaml`, `knip.config.ts`, `pnpm-lock.yaml`, and `.dependency-cruiser.mjs` (no-orphans exception mirroring oak-sdk-codegen precedent). Three reviewers APPROVE. Discovery: depcruise registration must be added to the canonical scaffold checklist for future sub-path-export workspaces (WS2.1, WS3.1, WS4.1). Earlier 2026-05-12 (Sparking Charring Ash — graph foundation work session) — Three-reviewer follow-up corrections (assumptions-expert / code-expert / docs-adr-expert) absorbed: WS1.1 row expanded with knip.config.ts workspace registration, tsconfig.lint.json explicit naming, "do not pass dts to createLibConfig" instruction, pnpm-lock.yaml in commit scope; "tree green" reworded to match `.husky/pre-commit` exact gate set (format-check + markdownlint + knip + depcruise + repo-wide `turbo run type-check lint test`); Status block reset post-ratification; §Increments row 1 Status cell flipped to ACTIVE; WS0 prose rewritten as closed; §Dependencies and §Promotion Trigger sections updated to reflect closed gates. 2026-05-11 amendment chain retained below. 2026-05-11 (Sparking Charring Ash earlier in session): ADR-173 + ADR-179 ratified Accepted; plan promoted current/ → active/; WS0 marked completed in YAML todos; WS1.1 row refined per holistic review (Fred / type-expert / test-expert) and Barney PROMOTION-READY verdict. 2026-05-11 (Flamebright Burning Lava): Question-assumptions pass corrected three framings; reviewer findings absorbed into ADR-173 tripwire matrix and plan body §Build-vs-Buy + §Test discipline + §Reviewer Absorption; ADR-179 extracted per owner direction; verdict-not-menu rule landed. Earlier 2026-05-11 updates: schedule-not-trigger doctrine sweep; Inc.1 decomposed into 1a / 1b / 1c sub-increments with file-scope-non-overlapping boundaries.
+**Status**: 🟢 ACTIVE — promoted current/ → active/ 2026-05-11 after ADR-173 + ADR-179 Status: Proposed → Accepted ratification. The topology decision is owner-approved. WS1.1 landed at commit ad2abb69 (2026-05-12). WS1.2 landed at commit 1885fbcf (2026-05-12). Inc.1a remaining cycles holistically re-planned 2026-05-12 (Clouded Vaulting Squall) — 12 → 10 cycles; WS1.4+WS1.5 collapsed; WS1.8 GraphDocument deferred to Inc.2 with retrospective-review tripwire; scaffold depends_on edges corrected; per-cycle inherited patterns and reviewer flags recorded inline. Next executable cycle: WS1.3 (DatasetCore + DataFactory; depends on ws1-rdf-term-quad — landed).
 **Scope**: Establish a layered, standards-based graph capability for Oak as a backbone of seven active graph workspaces plus one deferred, then ship the foundation increment ingesting the Oak Curriculum Ontology Threads graph end-to-end as the first attached corpus.
 
 ---
@@ -292,8 +282,8 @@ The full topology activates over seven increments. This plan ships **Increment 1
 
 | # | Increment | Activates | Status |
 |---|---|---|---|
-| 1 | **Foundation** (this plan) | `graph-core`, minimal `graph-ingest` (jsonld-compatible mode + generic Turtle/SKOS parsing), minimal `graph-project` (property-graph + adjacency), `graph-corpus-sdk` scaffold + Oak Curriculum Ontology Threads graph as first attached corpus | **ACTIVE** — WS1.1 (ad2abb69) + WS1.2 (1885fbcf) landed; re-plan remaining 12 Inc.1a cycles next session before WS1.3 |
-| 2 | **Build-pipeline completion** | `graph-ingest` (remaining five modes), `graph-enhance` (full EnhancementRecord + RelationshipRecord), `graph-validate` (JSON Schema + SHACL); rewrites of existing `oak-curriculum-sdk` graph code onto the new stack | opens by owner promotion after Inc.1 closes |
+| 1 | **Foundation** (this plan) | `graph-core`, minimal `graph-ingest` (jsonld-compatible mode + generic Turtle/SKOS parsing), minimal `graph-project` (property-graph + adjacency), `graph-corpus-sdk` scaffold + Oak Curriculum Ontology Threads graph as first attached corpus | **ACTIVE** — WS1.1 (ad2abb69) + WS1.2 (1885fbcf) landed; remaining Inc.1a cycles re-planned 2026-05-12 (12 → 10; WS1.4+WS1.5 collapsed, WS1.8 deferred to Inc.2); next executable cycle WS1.3 |
+| 2 | **Build-pipeline completion** | `graph-ingest` (remaining five modes), `graph-enhance` (full EnhancementRecord + RelationshipRecord), `graph-validate` (JSON Schema + SHACL); **WS1.8 GraphDocument + GraphNode + GraphEdge ergonomic surface lands here (deferred from Inc.1 per owner direction 2026-05-12)**; rewrites of existing `oak-curriculum-sdk` graph code onto the new stack. **Retrospective-review tripwire (owner-set)**: the Inc.2 plan that takes ownership of WS1.8 MUST include a design-review pass against the surfaces shipped in Inc.1 (WS1.3 Dataset + DataFactory, WS1.4 JSON-LD processor, WS1.5 canon, WS1.6 vocab, WS2 graph-ingest, WS3 graph-project, WS4 graph-corpus-sdk) to identify what could be (a) expressed more efficiently through GraphDocument, (b) collapsed or removed because GraphDocument subsumes it, or (c) reshaped to consume GraphDocument as its canonical input/output. The review's verdict is binding on Inc.2's scope — surfaces flagged for collapse or reshape land in Inc.2, not in a follow-on increment. | opens by owner promotion after Inc.1 closes |
 | 3 | **Oak corpus backbone** | `graph-corpus-sdk` adapters for prerequisite, misconception, and the EEF strand adapter required for cross-corpus joins; misconception adapter consumes the bulk-derived graph generated by this repository; EEF adapter consumes the repository-held canonical snapshot until EEF clarifies refresh mechanics; cross-corpus join primitives; sunsets the bespoke factory in `oak-curriculum-sdk`. **Downstream consumer**: [`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md) — the cross-corpus join primitive's first concrete consumer is the EEF × Oak misconceptions tool migrated there from the (former) MVP slice 3b. The cross-plan scheduling relationship is owned by `graph-combinatorial-arc.plan.md`'s own Promotion Trigger (no "design stability" intermediate state); this row records the consumer pointer only. | opens by owner promotion after Inc.2 closes (subsumes the work currently in [`graph-query-layer.plan.md`](graph-query-layer.plan.md)) |
 | 4 | **Practice proof point** | `agent-graphs/practice-graph` workspace as the second consumer; markdown-corpus ingestion; CLI/report surface through `agent-tools` | opens by owner promotion after **both** Inc.2 closes **and** the `agent-graphs/` workspace organisation plan lands; the later of the two predecessors is the schedule signal (consumes [`practice-graph-payoff-peak-pilot.plan.md`](../../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md)) |
 | 5 | **Projection + export** | Full `graph-project` surface — visualisation export hooks, JSON-LD export profiles, GQL-friendly property-graph shapes; cross-corpus journey tooling | opens by owner promotion after Inc.3 closes |
@@ -410,13 +400,42 @@ deterministic extraction proof runs against the pinned raw import.
 
 The cycle-by-cycle TDD breakdown is the YAML `todos` block at the head of this plan. Inc.1 is decomposed into three sub-increments (1a / 1b / 1c) plus a closure phase, by file-scope-non-overlapping boundaries; the `sub_increment` field on each todo records the assignment.
 
+#### Inherited patterns from WS1.1 + WS1.2
+
+The two landed Inc.1a cycles produced doctrinal patterns that every remaining Inc.1a cycle (and every future graph-tier scaffold cycle in Inc.2+) inherits. They are listed here once rather than re-stated per cycle:
+
+1. **Scaffold checklist** (applies to WS2.1, WS3.1, and any future graph-tier scaffold including WS4.1 in Inc.1b):
+   - `pnpm-workspace.yaml` explicit registration.
+   - `knip.config.ts` workspace entry.
+   - `tsconfig.lint.json` explicit naming.
+   - Staged `pnpm-lock.yaml`.
+   - `.dependency-cruiser.mjs` no-orphans `pathNot` exception for every pre-declared sub-path-export barrel (mirrors `oak-sdk-codegen/src/(admin|zod|query-parser|observability)\.ts$` precedent + `graph-core/src/(term|dataset|jsonld|canon|vocab)/index\.ts$`). Absent registration causes a six-error orphan failure at pre-commit even on otherwise-green workspaces.
+   - `eslint.config.ts` `*.config.ts` block uses the resolved `wsTsProject` constant, not the string literal `'./tsconfig.json'` (config-expert nit from WS1.1; opportunistic fix everywhere).
+   - `README` cites ADR-173 / ADR-179 by number only.
+   - `coreBoundaryRules` applied on `src/**/*.ts` per ADR-154.
+
+2. **Per-kind checker-array dispatch for discriminated-union equality / equivalence / match** (applies wherever WS1.3 / WS1.5 / WS3.3 dispatch on Term variant or PropertyGraph node kind):
+   - Default to checker-array dispatch from the outset; do not start with `switch(kind)` and discover the cast/complexity dilemma after the fact.
+   - Each branch ≤ complexity 8; top-level dispatcher ≤ complexity 2.
+   - Recurse where the union contains other unions (Literal.datatype is NamedNode; Quad components are Terms; PropertyGraph edges contain typed labels).
+   - Cast-free (passes `@typescript-eslint/consistent-type-assertions`).
+
+3. **RDF/JS Data Model uniform shape** (applies to WS1.3 DataFactory + WS1.6 vocab-registry):
+   - Every Term carries `value: string` (TripleTerm conformance landed in WS1.2; preserve invariant).
+   - WS1.3's DatasetCore surface must be 1:1 with `@rdfjs/types` Dataset interface (add/has/match/delete/iterable/size).
+   - WS1.6's vocab entries are constructed via the DataFactory `namedNode()` from WS1.3, not as bare object literals — preserves the single-shape posture downstream consumers (graph-ingest, graph-project, graph-corpus-sdk) depend on.
+
+4. **"Tree green" definition follows `.husky/pre-commit`** (do not re-enumerate the gate set in the plan body; the previous enumeration drifted from reality during cost-of-collaboration P0). Authoritative gate set is what the hook actually runs (currently prettier-staged + markdownlint-staged + lint:shell + turbo run type-check/lint/test on staged content). Knip + depcruise have moved to `pnpm check` / pre-push / CI. The Inc.1 closure WS7 invokes `pnpm check` for the repo-wide gate baseline.
+
+5. **Reviewer flags are recorded per cycle in the YAML `todos` content**, not solely in §Reviewer Scheduling. Per-cycle flags let any coordinator-ordered or machine-dispatched cycle pick up the reviewer matrix without re-derivation. §Reviewer Scheduling retains the plan-level and close-level reviewer responsibilities.
+
 #### Inc.1a — Substrate scaffolding (file scope: `packages/core/graph-core/`, `packages/libs/graph-ingest/`, `packages/libs/graph-project/`)
 
-- **WS1 — `graph-core`** (8 cycles): scaffold; RDF Term + Quad; DatasetCore; JSON-LD expand; JSON-LD compact + frame; canonicalisation; vocabulary registry; GraphDocument ergonomic surface.
-- **WS2 — minimal `graph-ingest`** (3 cycles): scaffold; `jsonld-compatible` mode + generic Turtle/SKOS parsing; SourceMapping primitives.
-- **WS3 — minimal `graph-project`** (3 cycles): scaffold; `toPropertyGraph` projection; adjacency primitives.
+- **WS1 — `graph-core`** (6 cycles total; 2 landed, 4 remaining): WS1.1 scaffold (DONE ad2abb69); WS1.2 RDF Term + Quad (DONE 1885fbcf); WS1.3 DatasetCore + DataFactory; WS1.4 JSON-LD 1.1 processor (expand + compact + frame in one cycle, collapsed from the prior WS1.4 + WS1.5 pair because they share file scope and the round-trip determinism contract test cannot land without both surfaces); WS1.5 canonicalisation (renumbered from WS1.6); WS1.6 vocabulary registry (renumbered from WS1.7). The prior WS1.8 GraphDocument is deferred to Inc.2 per owner direction 2026-05-12 (see §Increments row 2 retrospective-review tripwire).
+- **WS2 — minimal `graph-ingest`** (3 cycles): WS2.1 scaffold; WS2.2 `jsonld-compatible` mode + generic Turtle/SKOS parsing; WS2.3 SourceMapping primitives.
+- **WS3 — minimal `graph-project`** (3 cycles): WS3.1 scaffold; WS3.2 `toPropertyGraph` projection; WS3.3 property-graph adjacency primitives (scope sharpened: MUST NOT duplicate `DatasetCore.match()` semantics).
 
-**Inc.1a exit**: WS1 + WS2 + WS3 cycles land green; `graph-core`, `graph-ingest`, `graph-project` expose stable public surfaces; `graph-corpus-sdk` can compile against them.
+**Inc.1a exit**: WS1.3–WS1.6 + WS2 + WS3 cycles land green; `graph-core`, `graph-ingest`, `graph-project` expose stable public surfaces; `graph-corpus-sdk` can compile against them. **Cycle count after re-plan: 10 remaining** (was 12).
 
 #### Inc.1b — Threads adapter (file scope: `packages/sdks/graph-corpus-sdk/`)
 
@@ -436,16 +455,26 @@ The cycle-by-cycle TDD breakdown is the YAML `todos` block at the head of this p
 - **WS0 — Topology ADR promotion** (DONE 2026-05-11): ADR-173 and ADR-179 ratified Status: Proposed → Accepted. Reviewer absorption complete (architecture-expert-betty, architecture-expert-fred, assumptions-expert) and architecture-expert-barney PROMOTION-READY verdict on this plan body. The ADRs record the topology decision, transport-discipline corollary, and supersession/coordination map. Closed at commit `5ec5004d`.
 - **WS5 — Coordination amendments** (1 batch): amend `graph-query-layer.plan.md`, `oak-kg-threads-surface.plan.md`, `practice-graph-payoff-peak-pilot.plan.md`, and the parent `open-education-knowledge-surfaces.plan.md`.
 - **WS6 — Documentation propagation** (1 batch): collection README, monorepo README, CONTRIBUTING, `LICENCE-DATA.md` ontology section, Mark Hodierne author addition, research filename typo fix. ADR-123 is not amended by this increment because no MCP primitives are added or changed.
-- **WS7 — Quality gates** (1 batch): full chain (`pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && pnpm test && pnpm test:ui && pnpm test:e2e`).
+- **WS7 — Quality gates** (1 batch): run `pnpm check` for the repo-wide gate baseline, plus the full `.husky/pre-commit` chain on the integrated foundation increment. The chain is not re-enumerated here (see Inherited patterns rule #4 — `.husky/pre-commit` and `pnpm check` are the authoritative source of truth; re-enumerating in plan bodies caused drift during cost-of-collaboration P0). Plus surface-specific tests where the foundation increment ships them: `pnpm test`, `pnpm test:ui`, `pnpm test:e2e`.
 - **WS8 — Adversarial review** (1 batch): assumptions-expert, architecture-expert-betty/fred/barney, type-expert, docs-adr-expert.
 
 ### Cycle dependencies and parallelisation
 
-`graph-core` cycles are mostly sequential (WS1.1 → WS1.2 → WS1.3 → ...). Within the lib tier, `graph-ingest` (WS2) and `graph-project` (WS3) are *parallel-safe after WS1.8 lands*; both depend only on `graph-core`'s public surface. WS4 depends on both WS2's `jsonld-compatible` mode and WS3's adjacency primitives.
+Dependency edges are encoded per-cycle in the YAML `todos` block. This section describes the parallel-safe pairs and the serialisation invariants the dispatcher must honour.
 
-The parallel-safe pairs are **`WS2.2+WS3.2` and `WS2.3+WS3.3` only** — they touch disjoint workspace source trees after both scaffolds exist. The scaffold pair **`WS2.1+WS3.1` is NOT parallel-safe**: both write to repo-root monorepo registration files (`pnpm-workspace.yaml`, root `tsconfig.json` project references, root `package.json`), which have no merge-friendly concurrent-write story. Serialise WS2.1 and WS3.1 (either order; or batch their root-file edits into one preparatory commit). The later pairs may then be dispatched concurrently *if* worktree isolation is verified per the [worktree-isolation-unreliable](../../../../memory/active/distilled.md) guidance — in practice, sequential dispatch is preferred unless the orchestrator confirms isolation.
+**Inside `graph-core` (newly visible after the 2026-05-12 re-plan)**:
 
-**WS4.2 earliest-start refinement**: WS4.2 (`ws4-oak-ontology-thread-adapter`) declares `depends_on: [ws4-graph-corpus-sdk-scaffold, ws1-vocab-registry]`. Its earliest possible start is therefore *after WS1.7 + WS4.1*, not after all of Inc.1a. The Inc.1a-then-Inc.1b sub-increment framing is correct for the explicitly preferred single-agent shape; this note is for any future brief that revisits finer-granularity parallelism.
+- **WS1.3 ↔ WS1.6** (DatasetCore + DataFactory; vocab registry) are *parallel-safe at the file-scope level* — `src/dataset/` is disjoint from `src/vocab/`. They are NOT YAML-`depends_on`-independent in the default shape, because WS1.6 entries are constructed via the WS1.3 DataFactory `namedNode()` constructor. The plan therefore records the dependency edge on WS1.3 by default. Owner-direction alternative: if WS1.6 ships a strictly-data-only first pass with bare-literal NamedNodes (DataFactory call-site conversion as a follow-up), the dependency edge collapses and the pair becomes truly parallel-safe — *not* assumed; flagged for owner direction at WS1.6 dispatch time.
+- **WS1.4 ↔ WS1.5** (JSON-LD processor; canonicalisation) are *parallel-safe* once WS1.3 lands. File scope `src/jsonld/` ↔ `src/canon/` is disjoint; both depend only on WS1.3. Either ordering after WS1.3 lands; concurrent dispatch acceptable subject to the standing worktree-isolation caveat.
+
+**Inside the lib tier (WS2 / WS3)**:
+
+- **`WS2.1 ↔ WS3.1` scaffold pair is NOT parallel-safe** — both write to repo-root monorepo registration files (`pnpm-workspace.yaml`, root `tsconfig.json` project references, root `package.json`). Serialise (either order) or batch their root-file edits into one preparatory commit. The YAML `depends_on` for WS3.1 includes WS2.1 to express this invariant machine-readably.
+- **`WS2.2 ↔ WS3.2`** and **`WS2.3 ↔ WS3.3`** are *parallel-safe* — they touch disjoint workspace source trees after both scaffolds exist. WS2.2 and WS3.2 each declare an additional `depends_on: [ws1-dataset-core]` to record that they consume the Dataset surface.
+
+**Worktree-isolation caveat**: all "parallel-safe" pairs above remain subject to the [worktree-isolation-unreliable](../../../../memory/active/distilled.md) standing memory. Sequential dispatch is the default unless the orchestrator independently verifies isolation behaviour for the candidate pair on the candidate base SHA. Pair dispatch never short-cuts isolation verification.
+
+**WS4.2 earliest-start refinement**: WS4.2 (`ws4-oak-ontology-thread-adapter`) declares `depends_on: [ws4-graph-corpus-sdk-scaffold, ws1-vocab-registry]`. Its earliest possible start is therefore *after WS1.6 vocab-registry + WS4.1 graph-corpus-sdk scaffold*, not after all of Inc.1a. The Inc.1a-then-Inc.1b sub-increment framing is correct for the explicitly preferred single-agent shape; this note is for any future brief that revisits finer-granularity parallelism across the sub-increment boundary.
 
 **Sub-increment dependency direction**:
 
@@ -455,7 +484,8 @@ The parallel-safe pairs are **`WS2.2+WS3.2` and `WS2.3+WS3.3` only** — they to
 
 **Multi-agent parallelism within Inc.1**:
 
-- Two agents can share Inc.1 only at the Inc.1a substrate level — one agent on `graph-ingest` (WS2), one on `graph-project` (WS3), after `graph-core`'s public surface (WS1.8) is on `main`. Their file scopes are disjoint workspace trees.
+- Two agents can share Inc.1 only at the Inc.1a substrate level — one agent on `graph-ingest` (WS2), one on `graph-project` (WS3), after `graph-core`'s WS1.3 DatasetCore + DataFactory lands on `main` (WS2.2 and WS3.2 both consume `graph-core`'s Dataset surface; the scaffold cycles WS2.1 and WS3.1 depend only on WS1.1, which is already landed, so they can start earlier still but must serialise against each other per the root-file-edit invariant above). Their file scopes are disjoint workspace trees after the scaffolds and the root-file edit batch complete.
+- Within `graph-core` itself, WS1.4 ↔ WS1.5 and WS1.3 ↔ WS1.6 are parallel-safe pairs per the previous sub-section. Multi-agent dispatch within `graph-core` remains owner-discretion; single-agent is the explicitly preferred shape, with parallelism opened only when owner-directed and worktree isolation is independently verified.
 - Inc.1b is single-workspace by design (`packages/sdks/graph-corpus-sdk/`); single-agent.
 - Inc.1c is single-workspace and single-cycle; single-agent.
 - Inc.1 closure is sequential coordination work; single-agent.
@@ -603,10 +633,16 @@ dependency in §Increments table row 4.
 
 ### Mid-cycle (DURING execution)
 
-- `test-expert` — after each RED/GREEN cycle in WS1–WS4
-- `type-expert` — after `graph-core`'s RDF Term + Quad + Dataset types land; after `graph-corpus-sdk` GraphView lands
-- `code-expert` — gateway after each WS lands; routes to specialists
-- `architecture-expert-betty` — re-engaged after WS1.8 (GraphDocument surface) and after WS4.2 (graph-corpus-sdk scaffold); explicit check that no MCP-shaped types or surfaces have leaked into the graph workspaces
+**Per-cycle reviewer flags are recorded inline in each cycle's YAML `todos` `content` field** (added during the 2026-05-12 re-plan). The flags below are the standing tier-level responsibilities; the YAML is the authoritative per-cycle dispatch list.
+
+- `test-expert` — after each RED/GREEN cycle in WS1–WS4 (already engaged on WS1.2; landed APPROVE).
+- `type-expert` — landed on WS1.2 Term + Quad with APPROVE-WITH-NITS (absorbed in-cycle); re-engaged for WS1.3 DatasetCore + DataFactory (generic match() iterator typing, @rdfjs/types alignment), WS1.4 JSON-LD processor (adapter shape vs jsonld.js raw signatures), WS1.5 canon (rdf-canonize wrapper shape), WS1.6 vocab-registry (const-typed NamedNode literal preservation), WS2.3 SourceMapping primitives, WS3.3 adjacency iterator API, and WS4.1 graph-corpus-sdk scaffold.
+- `code-expert` — gateway after each WS lands; routes to specialists.
+- `architecture-expert-betty` — re-engaged after WS1.3 DatasetCore + DataFactory (cohesion of Dataset surface vs RDF/JS DataModel), WS3.2 toPropertyGraph projection (projection seam vs canonical Dataset; no leakage), and WS4.2 graph-corpus-sdk scaffold; explicit check at each engagement that no MCP-shaped types or surfaces have leaked into the graph workspaces.
+- `architecture-expert-fred` — re-engaged for WS1.6 vocab-registry (data-tables-as-schema discipline) and at any cycle that newly touches inter-tier dependency direction.
+- `architecture-expert-barney` — re-engaged for WS3.3 adjacency (explicit collapse-vs-keep boundary check against WS3.2). Verdict-binding: collapse-safe reduces Inc.1a to 9 remaining cycles.
+- `assumptions-expert` — re-engaged for WS1.4 JSON-LD processor (jsonld.js maintenance posture + Inc.2 upgrade policy).
+- `config-expert` — re-engaged for WS2.1 + WS3.1 scaffolds (canonical scaffold-checklist conformance per the inherited-patterns sub-section above).
 
 ### Close (POST-execution)
 
