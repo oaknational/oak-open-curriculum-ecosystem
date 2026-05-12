@@ -9,6 +9,36 @@ merge_class: index-narrative-tables
 
 # Repo Continuity
 
+**Session close (2026-05-12 — Wooded Spreading Thicket / `claude-code`
+/ opus-4-7-1m / `5c8f3c`, post-handoff continuation — P-Foundation
+landed, queue-bypass corrections captured)**: continued the agent
+communication improvements thread from the earlier handoff. Landed
+two additional commits via full commit-queue lifecycle:
+`67478303 docs(agent-tooling): apply reviewer fixes to
+cost-of-collaboration plan` (three-reviewer findings absorbed:
+dead-SHA replaced with file path, P3 `pre-stage` reframed as
+commit-queue CLI guard, supersession discipline satisfied with
+verbatim-id mapping table, machine-local path replaced, commit-grep
+replaced by file-read as authoritative P0 check, stand-down softened
+to "decline + notify owner", thread-alias added) and
+`6b88a3bf docs(agent-tooling): add P-Foundation CLI architectural
+overhaul workstream` (owner observation: agent-tools "CLI" is a bin
+collection with build-on-every-invocation, defeating both stability
+and centralisation; P-Foundation inserted between P0 and P1 with
+single-bin-entrypoint + centralised parsing/error/logging + build-once
+semantics; "no new bins" standing constraint added; E-2 cross-linked
+as canonical consumer). Two new pending-graduations entries: P-
+Foundation ADR candidate + E-1/E-2 exploration candidates. Owner
+correction mid-session caught me bypassing the commit queue twice
+(once with bare `git reset HEAD` which would have unstaged peer
+content); both corrections captured as napkin entries. **Next safe
+step**: unchanged — the agent communication improvements thread
+opener case-branches now (P0 → P-Foundation → P1); a new session
+opened with "please continue the agent communication improvements
+thread" lands at the thread record's §Agent communication
+improvements — session opener with the current load-bearing
+question and 3-way case branching.
+
 **Session close (2026-05-11 — Wooded Spreading Thicket / `claude-code` /
 opus-4-7-1m / `5c8f3c`, coordinator role, cost-of-collaboration plan
 authored + four-agent collaboration window architectural reset)**:

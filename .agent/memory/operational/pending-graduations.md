@@ -2744,6 +2744,54 @@ first Wave 3 implementation slice at `e298723c` (`commit-queue list`
 for discoverability, lifecycle ergonomics, harder-to-bypass enforcement,
 or claim-close-cycle recursion.
 
+### 2026-05-12 — Agent-tools CLI architectural overhaul (P-Foundation)
+
+`[captured-date: 2026-05-12 | source-surface: napkin Wooded 5c8f3c +
+owner direction + plan cost-of-collaboration P-Foundation |
+graduation-target: adr:agent-tools-cli-unified-entrypoint + rule:no-new-bins-in-agent-tools |
+trigger: P-Foundation implementation lands and doctrine emerges from the
+implementation work | status: pending | size: XL]`
+
+The agent-tools "CLI" is currently a collection of bin files with
+`pnpm -s build` triggered before every invocation, defeating both
+the stability point of using built artefacts (rebuilding on every
+call means the bin DOES change between calls from caller's own edits)
+and the centralisation point of having a CLI (each topic bin has its
+own option parsing, error shape, help text, logging — no shared
+plumbing). Landed as P-Foundation workstream in
+`cost-of-collaboration.plan.md` between P0 and P1 (commit `6b88a3bf`)
+with the standing constraint "No new bins; land new CLI surface in
+the unified entrypoint." Graduation target: an ADR capturing the
+architectural decision (single bin entrypoint + topic+action
+dispatch + build-once semantics) plus a rule enforcing the
+no-new-bins constraint going forward. Withdrawal trigger:
+P-Foundation lands and the post-implementation retrospective
+either confirms the doctrine or names a different lesson learned.
+
+### 2026-05-12 — Exploration candidates E-1 (advisory hooks) + E-2 (agent-tools git passthrough)
+
+`[captured-date: 2026-05-12 | source-surface: owner direction + plan
+cost-of-collaboration Exploration candidates section | graduation-target:
+plan:cost-of-collaboration P-Foundation follow-on workstream OR new
+workstream after scoping | trigger: scoping pass produces decision-
+complete acceptance criteria | status: pending | size: M-to-L
+combined]`
+
+Two exploration candidates captured 2026-05-12 in the cost-of-
+collaboration plan: **E-1** (advisory-only agent hooks that detect
+when an agent is about to bypass an agent-tools system and surface a
+non-blocking reminder) and **E-2** (`agent-tools git` CLI passthrough
+that wraps `git` with checks and balances — commit-queue enforcement
+on `git add`, comms-event auto-post on `git commit`, claim-aware
+`git push`, proof-of-observed-behaviour gate). Both are not yet
+decision-complete and need a scoping pass before promotion to
+P-workstreams. E-2 explicitly depends on P-Foundation (the unified
+CLI surface is its host). E-1 and E-2 likely compose into a single
+workstream — E-2 hosts the checks, E-1 detects when an agent is
+about to bypass them. Withdrawal trigger: scoping pass produces
+either decision-complete workstreams or names them as not-worth-
+doing with rationale.
+
 ### 2026-05-11 — Pre-commit hook must gate staged content only (load-bearing)
 
 `[captured-date: 2026-05-11 | source-surface: napkin Wooded 5c8f3c +
