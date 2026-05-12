@@ -4,7 +4,7 @@ overview: Unified single-source-of-truth plan for improving agent-tools so that 
 todos:
   - id: ws-p0-precommit-scope-gates
     content: Reshape the pre-commit hook without weakening its purpose: it must stop detectably broken code entering git history. Only file-content scanners may be narrowed to staged files; type-check, lint, shell lint, and the current unit-test lane still run before commit. Load-bearing pre-condition for every other multi-agent workstream.
-    status: pending
+    status: completed
   - id: ws-p0-qg-baseline-and-unblock
     content: Capture clean cold and warm `pnpm check:profile` baselines from `.logs/check-profiles/` after the owner-reported green `pnpm check` runs, then tune gate placement from that green baseline.
     status: pending
@@ -13,7 +13,7 @@ todos:
     status: pending
   - id: ws-p0-qg-staged-precommit-implementation
     content: Implement staged-file Prettier/Markdown pre-commit gates with regression coverage for ambient dirty peer files, while preserving pre-commit type-check, lint, shell lint, and unit/current-test proof as the broken-code guard.
-    status: pending
+    status: completed
   - id: ws-p0-qg-prepush-ci-rebalance
     content: Rebalance pre-push and GitHub CI so every gate removed from pre-commit still has an explicit assurance home, including knip, depcruise, Turbo families, UI/a11y/widget checks, and generated/artifact checks.
     status: pending
@@ -245,6 +245,20 @@ baseline must verify that behaviour and measure its effect.
 - No further checkpoint tuning starts from a red baseline unless the owner
   explicitly accepts the red condition as the baseline.
 
+**2026-05-12 evidence**:
+
+- P0.QG evidence is recorded at
+  `.logs/check-profiles/p0-qg-baseline-2026-05-12.md`.
+- A warm green `pnpm check:profile` baseline exists at
+  `.logs/check-profiles/check-profile-2026-05-12T06-57-53-216Z.json`
+  with exit code 0 and duration 130561 ms.
+- The preceding escalated cold-like attempt reached the real workload but
+  failed on a now-suspected flaky OAuth rate-limit test. Treat
+  `.logs/check-profiles/check-profile-2026-05-12T06-55-17-199Z.json` as
+  failure evidence, not a clean cold baseline.
+- The current dry graph has been corrected to match root `pnpm check`: it
+  contains `lint`, not `lint:fix`.
+
 ##### P0.QG-2 — trigger contract
 
 **Goal**: make each quality checkpoint's job explicit before changing hook
@@ -310,6 +324,16 @@ preserving the pre-commit checks that prevent broken code being committed.
   commit when the committed code is broken.
 - Any runtime improvement is reported as a consequence of scoped content
   scanners, not as permission to remove broken-code detection from pre-commit.
+
+**2026-05-12 regression evidence**:
+
+- `agent-tools/tests/repo-check.integration.test.ts` covers staged Prettier
+  and staged Markdownlint behaviour with unrelated ambient dirty-file sentinels,
+  no-staged/no-Markdown no-ops, and staged violation propagation.
+- Representative temp-index `.husky/pre-commit` timing for the P0.QG staged
+  files passed in `real 2.39`.
+- Suspected flaky tests discovered during profiling are tracked in
+  `cost-of-collaboration.flaky-tests.md`.
 
 ##### P0.QG-4 — pre-push and CI assurance rebalance
 

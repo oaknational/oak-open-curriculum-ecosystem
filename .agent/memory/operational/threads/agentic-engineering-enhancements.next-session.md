@@ -1,9 +1,9 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-> **Current continuation**: owner direction for the next session is to audit
-> all remaining skills. Start at §Remaining skills audit continuation. The
-> cost-of-collaboration lane remains preserved below, but is not the next
-> owner-directed continuation unless the owner reopens it.
+> **Current continuation**: cost-of-collaboration P0.QG. Start at
+> §Quality-gate performance implementation track. The remaining-skills audit
+> lane remains preserved below, but the owner requested this handoff for the
+> next cost-of-collaboration session.
 
 ## Remaining skills audit continuation (2026-05-12+)
 
@@ -37,19 +37,34 @@ staged Prettier/Markdown pre-commit checks without weakening the pre-commit
 broken-code guard, rebalance pre-push/CI assurance, harden profiling, and
 remeasure before declaring the checkpoint tuning effective.
 
-**Current state**: the plan now has concrete `todos:` entries
-`ws-p0-qg-baseline-and-unblock`, `ws-p0-qg-trigger-contract`,
-`ws-p0-qg-staged-precommit-implementation`,
-`ws-p0-qg-prepush-ci-rebalance`, `ws-p0-qg-profile-hardening`, and
-`ws-p0-qg-postchange-measurement`. Owner live update on 2026-05-12: root
-`pnpm check` has moved lint, Markdown, and format proof steps to non-mutating
-commands and has been run green several times by the owner; the next baseline
-should verify and measure that state.
+**Current state**: P0's pre-commit shape has landed: Prettier and
+Markdownlint are staged-file scoped while shell lint and Turbo
+`type-check lint test` remain in the pre-commit broken-code guard. The Kilned
+Brazing Forge pass added regression coverage for staged Prettier/Markdownlint
+with unrelated ambient dirty-file sentinels, changed the `repo-check` dry graph
+from `lint:fix` to `lint` to match root `pnpm check`, recorded temp-index
+pre-commit timing (`real 2.39`), and captured a warm green
+`pnpm check:profile` artifact
+`.logs/check-profiles/check-profile-2026-05-12T06-57-53-216Z.json`
+with exit code 0 and duration 130561 ms.
 
-**Next safe step**: continue `ws-p0-qg-baseline-and-unblock` from the updated
-green state: capture clean cold and warm `pnpm check:profile` baselines under
-`.logs/check-profiles/`, including evidence that the root proof path is
-non-mutating for lint, Markdown, and format.
+The clean cold baseline is still not complete. The escalated cold-like profile
+`.logs/check-profiles/check-profile-2026-05-12T06-55-17-199Z.json` reached the
+real workload but failed on
+`apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/oauth-rate-limit.integration.test.ts:103`
+(`302` observed, `429` expected). The same file passed immediately in
+isolation and the next full profile passed. Historical Sentry correlation
+profile failure evidence remains in
+`.logs/check-profiles/check-profile-analysis-2026-05-12.md`.
+
+**Next safe step**: open
+[`cost-of-collaboration.flaky-tests.md`](../../../plans/agent-tooling/current/cost-of-collaboration.flaky-tests.md)
+and investigate the two listed flaky-test candidates first. Preserve full
+console evidence for the repeated focused runs and the next full package run.
+Then rerun clean cold and warm `pnpm check:profile` baselines. Do not reopen
+the "make pre-commit staged-only" framing; continue from the owner contract
+that pre-commit stops detectably broken code entering git history and pre-push
+owns higher-standard branch-exit failures.
 
 **Boundary**: no tuning may remove a check from a trigger without naming the
 assurance preserved at that trigger, the trigger that now owns any moved
@@ -3382,6 +3397,7 @@ and
 | `Vining Budding Canopy` | `codex` | `GPT-5` | `019e1a` | `pnpm-check-profiling-deep-dive-and-session-handoff; captured-turbo-graph-228-nodes-88-real-commands; preserved-profile-artifacts-under-.logs-check-profiles; recorded-F20-repo-check-profile-bootstrap-friction; expanded-cost-of-collaboration-P0-quality-gate-implementation-tasks; historical-mcp-vitest-profile-failure-now-superseded-by-owner-reported-green-pnpm-check` | 2026-05-12 | 2026-05-12 |
 | `Smouldering Melting Kiln` | `codex` | `GPT-5` | `019e1a` | `paired-workflow-skill-review-for-jc-session-handoff-jc-consolidate-docs-and-jc-metacognition; added-stale-comms-events-retention-rule; next-session-audit-all-remaining-skills; preserves-shared-state-and-comms-as-live-infrastructure` | 2026-05-12 | 2026-05-12 |
 | `Cosmic Gliding Aurora` | `codex` | `GPT-5` | `019e1a` | `quality-gate-plan-correction-and-p0-first-implementation-72c5cde1; pre-commit-contract-preserves-type-check-lint-shell-lint-test; prettier-markdownlint-now-stage-file-scoped; knip-depcruise-owner-classified-higher-standard-pre-push-check-ci-gates; handoff-claim-9e6cce6b` | 2026-05-12 | 2026-05-12 |
+| `Kilned Brazing Forge` | `codex` | `GPT-5` | `019e1a` | `cost-of-collaboration-P0QG-profile-regression-handoff; repo-check-dry-graph-aligned-lint-not-lintfix; staged-prettier-markdownlint-regression-tests; warm-pnpm-check-profile-green-130561ms; cold-like-profile-blocked-by-suspected-oauth-rate-limit-flake; flaky-test-list-created; temp-index-precommit-real-2.39s; claim-e2fc7a6d-closed` | 2026-05-12 | 2026-05-12 |
 | `Wooded Spreading Thicket` | `cursor` | `GPT-5.5` | `unknown` | `persistent-comms-coordinator-for-session; monitors-active-claims-shared-comms-log-and-fresh-comms-surfaces-every-30s; updateCurrentStep-telemetry-triage-external-tool-not-in-repo; writes-only-on-change-milestone-blocker-or-quiet-interval; all-agents-introduce-to-Wooded-Spreading-Thicket` | 2026-05-11 | 2026-05-11 |
 | `Galactic Transiting Orbit` | `codex` | `GPT-5` | `019e18` | `Wave-3-commit-queue-UX-hardening-claim-close-cycle-fingerprint-recursion-slice-in-progress; preserving-post-commit-ledger-residue-from-Embered-Burning-Magma-as-evidence; scope-agent-tools-commit-queue-collaboration-state-tests-plan-status-and-session-lifecycle-surfaces; Wave-4-and-Wave-5-remain-closed` | 2026-05-11 | 2026-05-11 |
 | `Shaded Ripening Copse` | `claude-code` | `claude-opus-4-7-1m` | `c13bdf` | `commit-queue-UX-brief-author-B-02-B-03-Workstream-4-architectural-seam-and-third-direction-peer-commit-absorption-subsection-commit-5c299ed5; primary-thread-was-connecting-oak-resources-but-the-commit-queue-UX-brief-landed-here-per-opener-routing` | 2026-05-11 | 2026-05-11 |

@@ -275,3 +275,27 @@ The most recent rotation is archived at
   read for documentation content or reusable coordination insight, routed to
   napkin/distilled/patterns/pending-graduations or permanent docs as
   appropriate, and then deleted from the event buffer.
+
+## 2026-05-12 — Cost-of-Collaboration P0.QG Baseline / codex / GPT-5 / `019e1a`
+
+### Patterns to Remember
+
+- `repo-check profile` dry graphs must stay in lockstep with root
+  `pnpm check`. A graph that still says `lint:fix` after the root command moved
+  to `lint` is misleading baseline evidence even if the underlying run works.
+- Vitest files under `agent-tools/scripts/` are not discovered by the current
+  package test include. Put command-boundary tests under `agent-tools/tests/`
+  unless the config is intentionally changed.
+- When timing hooks in a dirty collaboration tree, a temporary Git index can
+  stage a representative path set without touching the real index. If sandboxed
+  `git add` cannot write objects, rerun that timing outside the sandbox rather
+  than accepting a no-staged measurement as representative.
+
+### Flaky-Test Candidates
+
+- `apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/`
+  `oauth-rate-limit.integration.test.ts:103`
+  failed in one full profile run but passed immediately in isolation and in the
+  next full profile.
+- `apps/oak-curriculum-mcp-streamable-http/src/correlation/middleware.integration.test.ts:203`
+  remains historical flaky evidence from the earlier profile-analysis note.

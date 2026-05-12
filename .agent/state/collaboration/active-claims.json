@@ -874,36 +874,31 @@
   ],
   "claims": [
     {
-      "claim_id": "e2fc7a6d-93ee-426d-bee6-3e7e6f6dfdd8",
+      "claim_id": "4aa64a3d-45ef-4d22-a1a5-06aefe954fc8",
       "agent_id": {
-        "agent_name": "Kilned Brazing Forge",
+        "agent_name": "Stratospheric Winging Wing",
         "platform": "codex",
         "model": "GPT-5",
-        "session_id_prefix": "019e1a"
+        "session_id_prefix": "019e1b"
       },
       "thread": "agentic-engineering-enhancements",
       "areas": [
         {
           "kind": "files",
           "patterns": [
-            ".husky/pre-commit",
-            ".husky/pre-push",
-            "package.json",
-            "agent-tools/scripts/repo-check.ts",
-            "agent-tools/**/*repo-check*",
-            ".logs/check-profiles/**",
-            ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md",
-            ".agent/plans/agent-tooling/pnpm-check-profiling-deep-dive-2026-05-12.md",
+            ".agent/skills/*/SKILL-CANONICAL.md",
+            ".agents/skills/jc-*/SKILL.md",
+            ".claude/skills/jc-*/SKILL.md",
             ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
             ".agent/memory/active/napkin.md",
             ".agent/state/collaboration/**"
           ]
         }
       ],
-      "claimed_at": "2026-05-12T06:45:48Z",
+      "claimed_at": "2026-05-12T07:13:27Z",
       "freshness_seconds": 14400,
       "sidebar_open": false,
-      "intent": "Continue cost-of-collaboration P0.QG: capture cold/warm check profiles, add staged Prettier/Markdownlint ambient-dirty regression coverage, and record hook timing without weakening the pre-commit broken-code guard."
+      "intent": "Audit remaining unreviewed jc-* workflow skill canonicals and adapters; keep existing P0.QG dirty tree residue out of this slice."
     }
   ]
 }

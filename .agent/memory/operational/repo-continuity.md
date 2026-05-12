@@ -29,6 +29,14 @@ Earlier archives remain under [`archive/`](archive/).
   shell lint and Turbo `type-check lint test` in the pre-commit broken-code
   guard. Knip and depcruise are now classified as higher-standard gates owned
   by pre-push, `pnpm check`, and CI rather than the commit boundary.
+- Cost-of-collaboration P0.QG has new evidence from the Kilned Brazing Forge
+  pass: staged Prettier/Markdownlint regression coverage landed under
+  `agent-tools/tests/repo-check.integration.test.ts`, the `repo-check` dry
+  graph now matches root `pnpm check` by using `lint` rather than `lint:fix`,
+  and a warm `pnpm check:profile` completed green in 130561 ms. The clean cold
+  baseline is still not complete because the cold-like run exposed a suspected
+  flaky OAuth rate-limit assertion before a later focused rerun and full
+  profile passed.
 - The `pnpm check` profiling brief has a durable deep dive:
   [`pnpm-check-profiling-deep-dive-2026-05-12.md`](../../plans/agent-tooling/pnpm-check-profiling-deep-dive-2026-05-12.md).
   The final full-profile attempt reached the real workload and failed on
@@ -64,7 +72,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Smouldering Melting Kiln / `codex` / GPT-5 / `019e1a` / 2026-05-12 (landed paired handoff/consolidation/metacognition skill remediation and stale comms-event retention rule); Cosmic Gliding Aurora / `codex` / GPT-5 / `019e1a` / 2026-05-12 (landed 72c5cde1: pre-commit broken-code guard preserved while Prettier/Markdownlint now use staged files); see thread record for full identity history |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Kilned Brazing Forge / `codex` / GPT-5 / `019e1a` / 2026-05-12 (P0.QG warm profile green, staged scanner regression coverage, hook timing, flaky-test list); Cosmic Gliding Aurora / `codex` / GPT-5 / `019e1a` / 2026-05-12 (landed 72c5cde1: pre-commit broken-code guard preserved while Prettier/Markdownlint now use staged files); see thread record for full identity history |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Sparking Charring Ash / `claude-code` / opus-4-7-1m / `caf5e1` / 2026-05-12 (graph foundation work; Inc.1a WS1.1 open for execution) |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -86,19 +94,22 @@ each thread record; this table is the repo-level index.
 
 ### Agentic-Engineering Enhancements
 
-Immediate owner-directed workflow skill review lane: audit all remaining
-skills. Start from the thread record's remaining-skills audit continuation;
-the paired `jc-session-handoff` / `jc-consolidate-docs` and
-`jc-metacognition` remediation pass is complete.
-
-Immediate quality-gate lane: execute the remaining cost-of-collaboration P0.QG
-tasks after `72c5cde1`: capture clean cold and warm `pnpm check:profile`
-baselines from the owner-reported green `pnpm check` state, add regression
-coverage for staged Prettier/Markdownlint with unrelated ambient dirty files,
-and record post-change hook timing. The preserved evidence and trigger map live in
+Immediate cost-of-collaboration lane: continue P0.QG from the Kilned Brazing
+Forge handoff. Start by investigating the suspected flaky tests listed in
+[`cost-of-collaboration.flaky-tests.md`](../../plans/agent-tooling/current/cost-of-collaboration.flaky-tests.md),
+then recapture clean cold and warm `pnpm check:profile` baselines with full
+console evidence. The staged Prettier/Markdownlint regression coverage and
+post-change hook timing are recorded; do not reopen the "make pre-commit
+staged-only" framing. The preserved evidence and trigger map live in
 [`pnpm-check-profiling-deep-dive-2026-05-12.md`](../../plans/agent-tooling/pnpm-check-profiling-deep-dive-2026-05-12.md);
 the implementation tasks live in
 [`cost-of-collaboration.plan.md`](../../plans/agent-tooling/current/cost-of-collaboration.plan.md).
+
+Workflow skill review lane remains available but is not the immediate
+cost-of-collaboration continuation: the paired `jc-session-handoff` /
+`jc-consolidate-docs` and `jc-metacognition` remediation pass is complete;
+remaining skills can resume from the thread record if the owner reopens that
+lane.
 
 Consolidation lane from this pass is complete. The next consolidation pass
 should continue draining [`pending-graduations.md`](pending-graduations.md) by
@@ -183,12 +194,18 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-12 — Smouldering Melting Kiln / `codex` / GPT-5 /
-`019e1a`)**: due, not run in this handoff. The new
-`jc-consolidate-docs` retention rule makes existing `comms-events/` older than
-seven days a consolidation trigger. Owner direction for the next session is to
-audit all remaining skills, so the stale-event retention sweep is named here
-instead of being smuggled into this closeout.
+**Status (2026-05-12 — Kilned Brazing Forge / `codex` / GPT-5 / `019e1a`)**:
+due, not run in this handoff. The existing `jc-consolidate-docs` retention
+rule still makes `comms-events/` older than seven days a consolidation trigger,
+but this owner-requested closeout is the cost-of-collaboration handoff and
+commit. Do not smuggle the stale-event retention sweep into the next P0.QG
+session; run it only if the owner explicitly opens consolidation.
+
+Previous same-day quality-gate handoff: Kilned Brazing Forge aligned the
+`repo-check` dry graph with root `pnpm check`, added staged
+Prettier/Markdownlint regression coverage, captured a green warm
+`pnpm check:profile` baseline, recorded temp-index pre-commit timing, and
+created a flaky-test investigation list for the cold-profile blocker.
 
 Previous same-day handoff: Smouldering Melting Kiln reviewed and remediated
 `jc-session-handoff`, `jc-consolidate-docs`, and `jc-metacognition`; clarified

@@ -18744,6 +18744,98 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "e2fc7a6d-93ee-426d-bee6-3e7e6f6dfdd8",
+      "agent_id": {
+        "agent_name": "Kilned Brazing Forge",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".husky/pre-commit",
+            ".husky/pre-push",
+            "package.json",
+            "agent-tools/scripts/repo-check.ts",
+            "agent-tools/**/*repo-check*",
+            ".logs/check-profiles/**",
+            ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md",
+            ".agent/plans/agent-tooling/pnpm-check-profiling-deep-dive-2026-05-12.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T06:45:48Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Continue cost-of-collaboration P0.QG: capture cold/warm check profiles, add staged Prettier/Markdownlint ambient-dirty regression coverage, and record hook timing without weakening the pre-commit broken-code guard.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T07:12:00Z",
+        "closed_by": {
+          "agent_name": "Kilned Brazing Forge",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1a"
+        },
+        "summary": "P0.QG profile/regression slice completed: warm profile green, staged scanner regression added, hook timing captured, flaky-test list recorded.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e2fc7a6d-93ee-426d-bee6-3e7e6f6dfdd8",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9e9feed4-4ac1-47a0-8417-9c91db38c2b4",
+      "agent_id": {
+        "agent_name": "Kilned Brazing Forge",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T07:18:00Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit cost-of-collaboration P0.QG profile and regression handoff.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T07:20:00Z",
+        "closed_by": {
+          "agent_name": "Kilned Brazing Forge",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1a"
+        },
+        "summary": "Closed in same collaboration-state commit for P0.QG handoff; staged bundle verified before lifecycle closure.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9e9feed4-4ac1-47a0-8417-9c91db38c2b4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

@@ -2,13 +2,25 @@ import { spawn, spawnSync } from 'node:child_process';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { performance } from 'node:perf_hooks';
+import { pathToFileURL } from 'node:url';
+
+export interface RepoCheckCommandResult {
+  readonly status: number | null;
+  readonly stdout: string;
+  readonly stderr: string;
+}
+
+export interface RepoCheckRuntime {
+  runInherited(command: string, args: readonly string[]): Promise<number>;
+  runCaptured(command: string, args: readonly string[]): RepoCheckCommandResult;
+}
 
 const CHECK_TURBO_TASKS = [
   'sdk-codegen',
   'build',
   'type-check',
   'doc-gen',
-  'lint:fix',
+  'lint',
   'test',
   'test:widget',
   'test:e2e',
@@ -46,6 +58,11 @@ function runCaptured(command: string, args: readonly string[]) {
     maxBuffer: 1024 * 1024 * 50,
   });
 }
+
+const defaultRuntime: RepoCheckRuntime = {
+  runCaptured,
+  runInherited,
+};
 
 function timestampSlug(): string {
   return new Date().toISOString().replaceAll(/[:.]/g, '-');
@@ -115,8 +132,13 @@ async function runProfile(args: readonly string[]): Promise<number> {
   return exitCode;
 }
 
-function stagedFiles(): readonly string[] {
-  const result = runCaptured('git', ['diff', '--cached', '--name-only', '--diff-filter=ACMR']);
+function stagedFiles(runtime: RepoCheckRuntime): readonly string[] {
+  const result = runtime.runCaptured('git', [
+    'diff',
+    '--cached',
+    '--name-only',
+    '--diff-filter=ACMR',
+  ]);
 
   if ((result.status ?? 1) !== 0) {
     throw new Error(result.stderr.trim() || 'git diff failed while discovering staged files');
@@ -128,30 +150,40 @@ function stagedFiles(): readonly string[] {
     .filter((entry) => entry.length > 0);
 }
 
-function stagedMarkdownFiles(): readonly string[] {
-  return stagedFiles().filter((entry) => entry.endsWith('.md'));
+function stagedMarkdownFiles(runtime: RepoCheckRuntime): readonly string[] {
+  return stagedFiles(runtime).filter((entry) => entry.endsWith('.md'));
 }
 
-async function runMarkdownlintStaged(): Promise<number> {
-  const files = stagedMarkdownFiles();
+export async function runMarkdownlintStaged(
+  runtime: RepoCheckRuntime = defaultRuntime,
+): Promise<number> {
+  const files = stagedMarkdownFiles(runtime);
 
   if (files.length === 0) {
     console.log('repo-check markdownlint-staged: no staged Markdown files');
     return 0;
   }
 
-  return runInherited('pnpm', ['exec', 'markdownlint', '--dot', ...files]);
+  return runtime.runInherited('pnpm', ['exec', 'markdownlint', '--dot', ...files]);
 }
 
-async function runPrettierStaged(): Promise<number> {
-  const files = stagedFiles();
+export async function runPrettierStaged(
+  runtime: RepoCheckRuntime = defaultRuntime,
+): Promise<number> {
+  const files = stagedFiles(runtime);
 
   if (files.length === 0) {
     console.log('repo-check prettier-staged: no staged files');
     return 0;
   }
 
-  return runInherited('pnpm', ['exec', 'prettier', '--check', '--ignore-unknown', ...files]);
+  return runtime.runInherited('pnpm', [
+    'exec',
+    'prettier',
+    '--check',
+    '--ignore-unknown',
+    ...files,
+  ]);
 }
 
 async function main(): Promise<void> {
@@ -173,4 +205,16 @@ async function main(): Promise<void> {
   process.exit(1);
 }
 
-await main();
+function isCliEntryPoint(): boolean {
+  const entryPoint = process.argv[1];
+
+  if (entryPoint === undefined) {
+    return false;
+  }
+
+  return import.meta.url === pathToFileURL(path.resolve(entryPoint)).href;
+}
+
+if (isCliEntryPoint()) {
+  await main();
+}
