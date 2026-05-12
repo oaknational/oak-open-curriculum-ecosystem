@@ -6,9 +6,9 @@ consumed by `graph-ingest`, `graph-project`, and `graph-corpus-sdk`.
 
 ## Status
 
-Scaffold cycle (Inc.1a WS1.1). All sub-path entries are empty barrels
-(`export {};`); the first real types and tests land in WS1.2 (`Term`
-union + `Quad`).
+Inc.1a foundation is active. WS1.1 established the sub-path scaffold, WS1.2
+landed the RDF Term union plus `Quad`, and WS1.3 adds DataFactory constructors
+plus the DatasetCore-compatible in-memory dataset surface.
 
 ## Architectural decisions
 
@@ -18,6 +18,7 @@ union + `Quad`).
 ## Sub-path exports
 
 - `@oaknational/graph-core/term`
+- `@oaknational/graph-core/data-factory`
 - `@oaknational/graph-core/dataset`
 - `@oaknational/graph-core/jsonld`
 - `@oaknational/graph-core/canon`

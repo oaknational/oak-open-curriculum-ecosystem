@@ -15,6 +15,11 @@
       "development": "./src/term/index.ts",
       "import": "./dist/term/index.js"
     },
+    "./data-factory": {
+      "types": "./dist/data-factory/index.d.ts",
+      "development": "./src/data-factory/index.ts",
+      "import": "./dist/data-factory/index.js"
+    },
     "./dataset": {
       "types": "./dist/dataset/index.d.ts",
       "development": "./src/dataset/index.ts",

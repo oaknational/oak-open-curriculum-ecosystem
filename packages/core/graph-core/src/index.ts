@@ -21,3 +21,15 @@ export {
   type Term,
   type TripleTerm,
 } from './term/index.js';
+export { createDataset, type DatasetCore } from './dataset/index.js';
+export {
+  blankNode,
+  defaultGraph,
+  literal,
+  namedNode,
+  quad,
+  tripleTerm,
+  type BlankNodeTerm,
+  type LiteralTerm,
+  type NamedNodeTerm,
+} from './data-factory/index.js';
