@@ -4,6 +4,12 @@
 > closeout. P0.QG, P-Foundation, P1 directed-message authoring, and P2
 > directed-message watching are complete; new CLI work lands in the unified
 > `agent-tools <topic> <action>` shape from `cost-of-collaboration.plan.md`.
+>
+> **New strategic work** (2026-05-12): Prismatic Beaming Twilight session designed
+> multi-agent delegation orchestration architecture extending ADR-180 beyond Codex
+> to Cursor, Claude, internal agents. Strategic brief
+> [`multi-agent-delegation-orchestration.plan.md`](../../plans/agentic-engineering-enhancements/future/multi-agent-delegation-orchestration.plan.md)
+> captured in future plans. See session findings below.
 
 ## codex-helper skill + codex-exec CLI minimum-viable surface (2026-05-12)
 
@@ -89,13 +95,71 @@ are active or inactive; P4 should improve active-agent functionality and
 visibility, while preserving the uncertainty as a design input rather than
 pretending the solution is already known.
 
+## Multi-Agent Delegation Orchestration Strategic Design (2026-05-12)
+
+**Session**: Prismatic Beaming Twilight / `claude` / `claude-haiku-4-5-20251001` / `501be6`
+
+**What landed**:
+
+- Strategic brief `multi-agent-delegation-orchestration.plan.md` in `future/` plans
+- Three-layer architecture: invocation (platform-specific), contract (unified), coordination (unified/existing)
+- Contract definitions (`DelegationRequest`, `DelegationResponse`, `CommsEvent`) designed but not yet typed
+- Six open questions left explicit for future implementation phases (agent discovery, credential scoping, timeout/failure modes, structured output, observability, cascading delegation)
+- Integration map showing how this extends ADR-180 beyond Codex to multi-platform orchestration
+- Assumptions section for owner review before promotion to `current/`
+
+**Design highlights**:
+
+- Unifies coordination layer (comms-log, claims, shared state — already exists)
+- Keeps invocation surfaces platform-native (CodexInvoker, ClaudeInvoker, CursorInvoker each optimized for their platform)
+- Defines unified contracts so any invoker can plug into the dispatcher
+- Scales to new platforms by adding one invoker, not rethinking the architecture
+- Promotion trigger: owner review of assumptions + second concrete consumer + reference implementations
+
+**Validation**: Strategic document review, principles alignment check, assumptions explicit and load-bearing identified, open questions numbered and deferred appropriately.
+
+**Friction-ratchet signal**: Code-expert noted during this session's analysis that the design emerged from conversation (examining codex-helper, asking "what if Cursor needed to delegate?") rather than being predetermined. This is healthy design; the complexity lies in the right places (contract definitions, invoker diversity) and the open questions are genuine design decisions, not gaps.
+
+**Current routing**: Plan is strategic (not yet executable). Awaits owner review of assumptions and open questions before promotion. No implementation work is scoped until the second-consumer trigger fires and owner decides to promote to `current/`.
+
+**Post-session note on reflection**: This session applied metacognition to avoid the trap of "how do we make Claude look like Codex." The reflection surface revealed that the real question is "how do we let each platform be itself while using a unified contract." That insight shaped the entire architecture: instead of unified invocation surfaces, unified contracts.
+
 ## Participating agent identities
 
 | Platform | Model | Agent name | Role | First-session | Last-session |
 | --- | --- | --- | --- | --- | --- |
 | `claude` | `claude-opus-4-7-1m` | Lush Sprouting Thicket | Implementer (codex-helper skill, codex-exec CLI, ADR-180, future plan) | 2026-05-12 | 2026-05-12 |
+| `claude` | `claude-haiku-4-5-20251001` | Prismatic Beaming Twilight | Designer (multi-agent delegation orchestration architecture, strategic brief) | 2026-05-12 | 2026-05-12 |
 | `codex` | `GPT-5` | Coastal Cresting Prow | Implementer (cost-of-collaboration P1 B-11 `comms direct/reply`; landed at `f88d0d67`) | 2026-05-12 | 2026-05-12 |
 | `codex` | `GPT-5` | Penumbral Veiling Raven | Implementer (cost-of-collaboration P2 `comms watch`) | 2026-05-12 | 2026-05-12 |
+| `codex` | `GPT-5` | Secret Vanishing Moth | Implementer (cost-of-collaboration P3 commit-queue enforcement) | 2026-05-12 | 2026-05-12 |
+
+## P3 commit-queue enforcement handoff (2026-05-12)
+
+**Landed at `c083a1ab`**: cost-of-collaboration P3 pre-stage guard in the
+unified CLI shape: `pnpm agent-tools commit-queue guard`.
+
+**Implementation shape**:
+
+- Adds `guardStageFiles`, a pure pre-stage validator that requires the current
+  identity to have a fresh active commit-queue intent covering the requested
+  stage paths.
+- Requires the selected intent to point to a live same-identity
+  `git:index/head` claim, so skipped commit-window claims fail before staging
+  rather than later as `.git/index.lock` collisions.
+- Refuses stale/missing intents, non-git claims, and fresh queue entries ahead
+  of the selected intent with explicit operator guidance.
+- Updates `jc-commit` so the guard runs after moving the queue entry to
+  `staging` and before `git add -- <pathspecs>`.
+
+**Validation**: focused commit-queue unit + integration tests; full
+agent-tools `type-check`; full agent-tools `lint` exits 0 with the known
+pre-existing `no-real-io-in-tests` warning on the collaboration-state
+integration test file.
+
+**Next safe step**: P4 identity disambiguation / active-agent visibility is
+still separate. Do not retrofit it into the P3 guard; use the owner-visible
+uncertainty from the `6027e182` correction as P4 design input.
 
 ## P2 comms watch handoff (2026-05-12)
 

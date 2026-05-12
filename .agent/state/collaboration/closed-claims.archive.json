@@ -20110,6 +20110,88 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "d929574f-3f5a-4785-abd5-2ea42dfe8dbc",
+      "agent_id": {
+        "agent_name": "Secret Vanishing Moth",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T13:42:12Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit cost-of-collaboration P3 commit-queue enforcement bundle.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T13:43:55Z",
+        "closed_by": {
+          "agent_name": "Secret Vanishing Moth",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1c"
+        },
+        "summary": "Committed P3 commit-queue enforcement at c083a1ab.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d929574f-3f5a-4785-abd5-2ea42dfe8dbc",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "38c9a441-77c6-4c2c-8c0b-4202198a39ad",
+      "agent_id": {
+        "agent_name": "Secret Vanishing Moth",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T13:44:57Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit remaining agentic-engineering continuity surfaces.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T13:45:36Z",
+        "closed_by": {
+          "agent_name": "Secret Vanishing Moth",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1c"
+        },
+        "summary": "Committed remaining agentic-engineering continuity bundle.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "38c9a441-77c6-4c2c-8c0b-4202198a39ad",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
