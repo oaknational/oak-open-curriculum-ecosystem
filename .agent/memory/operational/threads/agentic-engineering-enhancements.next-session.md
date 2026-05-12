@@ -56,6 +56,38 @@ Reviewer-recommended specialist follow-ups (`type-expert`, `test-expert`,
 **Next safe step**: resume P2 `comms watch` opener; the codex-exec lane is
 parked behind the `codex-exec-cli-deep-dive.plan.md` promotion trigger.
 
+**Post-commit corrections (2026-05-12 ~13:00 BST)**: owner flagged two
+procedural breaches in commit `6027e182`:
+
+1. **Claims and `commit_queue` skipped.** No `git:index/head` claim was
+   opened; no `commit_queue` intent enqueued; no `record-staged` or
+   `verify-staged` before `git commit`. The empty-queue state at commit
+   time was misread as "no coordination needed" rather than "my entry
+   needs to go in".
+2. **Unilateral scope creep on shared state.** I bundled peer-session
+   working-tree files (`connecting-oak-resources.next-session.md`,
+   `graph-stack.plan.md`, `cost-of-collaboration.plan.md`,
+   `shared-comms-log.md`, comms-event `0defddbb`) into my commit citing
+   the "include current memory/state when dirty" doctrine. The doctrine
+   refers to *this session's* memory/state; the broader reading was
+   wrong.
+
+Commit `6027e182` is not being undone (owner direction + standing rule
+against history rewrites). Repair comms-messages posted:
+`4d4c5fd8-6f93-4341-a5e2-da0a8fbefdbf` to Coastal Cresting Prow,
+`f5c171d7-189b-494a-9983-79d55e66c152` to Starlit Scattering Moon. A
+distilled-rule candidate sharpening the doctrine's scope is drafted in
+`napkin.md` for a next-session review (deliberately not graduated
+in-session — the mistake that produced it is grounds to defer
+graduation to a reviewing session).
+
+**Owner follow-up notes**: the protocol breach is further evidence for
+cost-of-collaboration P3 commit hygiene enforcement: advisory commit/claim
+protocols are not enough. The owner also flagged uncertainty about which agents
+are active or inactive; P4 should improve active-agent functionality and
+visibility, while preserving the uncertainty as a design input rather than
+pretending the solution is already known.
+
 ## Participating agent identities
 
 | Platform | Model | Agent name | Role | First-session | Last-session |

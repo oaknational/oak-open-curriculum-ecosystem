@@ -730,6 +730,10 @@ collision (`.git/index.lock`). The fix is structural enforcement.
 **Evidence**: Sparking Charring Ash napkin entry 2026-05-11; the
 `feedback_no_lock_wait_loops` memory referenced "Owner-flagged future
 option: 'committing claims' in the shared log" — this is that work.
+Owner note after the 2026-05-12 B-11/codex-helper window: another
+agent completely ignored the commit and claims protocols, including
+the commit queue, which is further evidence that commit hygiene needs
+mechanical enforcement rather than advisory documentation alone.
 
 **Concrete shape**:
 
@@ -770,6 +774,11 @@ collapsed.
 where a cursor-Wooded telemetry process and the claude-code Wooded
 coordinator both wrote under the same `agent_name`. Identity-routing
 fragility.
+Owner note after the 2026-05-12 B-11/codex-helper window: there is
+still confusion about which agents are active or not. The desired
+improvement is not yet fully specified, but active-agent functionality
+and visibility need to improve rather than relying on agents inferring
+state from raw claims, comms, and process residue.
 
 **Concrete shape**:
 
@@ -780,12 +789,19 @@ fragility.
 - Identity preflight (`identity preflight --platform <p> --model <m>`)
   must produce a unique tuple; collisions force a wordlist re-seed
   rather than reuse.
+- Add an active-agent visibility surface that distinguishes at least
+  active, stale, inactive/closed, and uncertain identities, with the
+  evidence source for each classification. Treat uncertainty as a
+  first-class output, not as an empty list.
 
 **Acceptance**:
 
 - Two sessions with the same name on different platforms can co-exist
   without comms-log filter collapse.
 - A re-used `session_id_prefix` triggers a clear preflight error.
+- A session can ask "who is active?" and get a readable answer that
+  explains why each identity is considered active, stale, inactive,
+  or uncertain.
 
 **Routing**: `agent-tools/src/collaboration-state/identity*` files and
 the wordlist resolver. Composes with F-13 (identity routing

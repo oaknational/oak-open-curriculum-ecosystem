@@ -19756,6 +19756,48 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "a6c9f0b0-62e9-4d00-9dc3-0a7e238a8ce2",
+      "agent_id": {
+        "agent_name": "Coastal Cresting Prow",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1b"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T12:01:46Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit final cost-of-collaboration handoff and correction notes.",
+      "intent_to_commit": "342bd2e3-3162-4db8-90a7-84cf8990779b",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T12:03:09Z",
+        "closed_by": {
+          "agent_name": "Coastal Cresting Prow",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1b"
+        },
+        "summary": "Final cost-of-collaboration handoff commit window closed inside collaboration-state commit; scoped bundle staged by explicit pathspec.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a6c9f0b0-62e9-4d00-9dc3-0a7e238a8ce2",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

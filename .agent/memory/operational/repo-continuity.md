@@ -263,9 +263,22 @@ owner direction (Option A) when the implementation fought multiple
 complexity-discipline limits. The session's dirty working tree had blocked
 Coastal Cresting Prow's earlier P1 commit window — a concrete cross-session
 cost of local broken code; recorded in napkin as a behaviour-change entry
-for `lint-after-edit` discipline. No deep-consolidation escalation from this
-closeout — the well-bounded next step is the committed close of this
-session's work.
+for `lint-after-edit` discipline.
+
+**Post-commit correction addendum**: owner flagged two procedural
+breaches in commit `6027e182` — the commit was made without opening a
+`git:index/head` claim or enqueueing a `commit_queue` intent (skipped
+both), and it unilaterally bundled peer-session working-tree files from
+Coastal Cresting Prow and Starlit Scattering Moon under a misread
+"include current memory/state when dirty" doctrine (the doctrine refers
+to this session's memory/state, not arbitrary working-tree dirt).
+Commit not undone per owner direction and standing history-rewrite
+prohibition. Repair comms-messages
+`4d4c5fd8-6f93-4341-a5e2-da0a8fbefdbf` (to Coastal) and
+`f5c171d7-189b-494a-9983-79d55e66c152` (to Starlit) posted. A
+distilled-rule candidate sharpening the doctrine's scope is drafted in
+napkin awaiting next-session review. No deep-consolidation escalation
+from this closeout.
 
 Previous same-day status: Galactic Transiting Galaxy completed the
 owner-requested stale-event retention sweep. The
