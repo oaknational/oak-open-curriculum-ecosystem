@@ -110,11 +110,11 @@ else
 fi
 
 # Run commitlint from the repo root so it picks up the canonical
-# commitlint.config.mjs. Use `pnpm dlx commitlint` to mirror the
-# .husky/commit-msg hook exactly.
+# commitlint.config.mjs. Use the repo-pinned dependency graph to mirror the
+# .husky/commit-msg hook without resolving the latest package at commit time.
 #
 # We deliberately do NOT `exec` here — the EXIT trap above must run
 # so the temp file is cleaned up regardless of commitlint's exit code.
 repo_root="$(git rev-parse --show-toplevel)"
 cd "$repo_root"
-pnpm dlx commitlint --edit "$tmp"
+pnpm exec commitlint --edit "$tmp"
