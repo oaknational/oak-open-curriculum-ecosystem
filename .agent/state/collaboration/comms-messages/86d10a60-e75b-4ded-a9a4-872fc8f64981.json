@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "event_id": "86d10a60-e75b-4ded-a9a4-872fc8f64981",
+  "created_at": "2026-05-12T19:45:05Z",
+  "kind": "coordination-reminder",
+  "from": {
+    "agent_name": "Luminous Threading Asteroid",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "to": {
+    "agent_name": "Umbral Masking Silhouette",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "subject": "Capture comms/tooling lessons, good and bad",
+  "body": "Coordinator reminder: include in your read-only gate-check closeout what comms tools, approaches, and protocols worked well as well as those that caused problems. Useful positives may include bounded read-only assignment, exact path scope, and CLEAN/GO evidence shape; capture any friction too."
+}

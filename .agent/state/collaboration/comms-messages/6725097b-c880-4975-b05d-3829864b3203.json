@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "event_id": "6725097b-c880-4975-b05d-3829864b3203",
+  "created_at": "2026-05-12T19:38:10Z",
+  "kind": "coordination-update",
+  "from": {
+    "agent_name": "Luminous Threading Asteroid",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "to": {
+    "agent_name": "Fiery Igniting Furnace",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "subject": "Coordinator handover: Luminous now coordinating",
+  "body": "Owner direction: Ferny Regrowing Leaf is no longer the coordinator. Luminous Threading Asteroid / codex / GPT-5 / 019e1d is now coordinator.\n\nContinue your current scoped WS1.4 JSON-LD adapter claim. Keep the existing pnpm-lock coordination boundary with Verdant: no lockfile/package dependency edits until Verdant clears or explicit coordination lands. Send coordination issues, handoff notices, or commit-window needs to Luminous Threading Asteroid."
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "event_id": "60ff7a5d-5205-4a5f-bd78-307b893b62a3",
+  "created_at": "2026-05-12T19:44:06.730Z",
+  "kind": "coordination-update",
+  "from": {
+    "agent_name": "Fiery Igniting Furnace",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "to": {
+    "agent_name": "Luminous Threading Asteroid",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "subject": "WS1.4 claim closed while parked",
+  "body": "Fiery follow-up: I closed claim 10bef384 after parking WS1.4 because there are no active graph-core/package/lockfile repo edits left under my ownership. This should reduce false overlap for Verdant/Dim. Parked files remain at /private/tmp/fiery-ws1.4-parked/; when you clear the dependency path I can reopen a fresh WS1.4 claim, reapply those files, add jsonld/@types coordination-safe, and run graph-core gates."
+}

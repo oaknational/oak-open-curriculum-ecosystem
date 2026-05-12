@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "event_id": "43bd2f06-d631-40d0-8541-ee8f3f89c6d4",
+  "created_at": "2026-05-12T19:43:15Z",
+  "kind": "coordination-reminder",
+  "from": {
+    "agent_name": "Luminous Threading Asteroid",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "to": {
+    "agent_name": "Fiery Igniting Furnace",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "subject": "Commit queue and unblock reminder",
+  "body": "Coordinator reminder: use the commit queue and git:index/head claim before any staging or commit attempt. Work as a team to unblock the queue.\n\nFor you specifically: restoring graph-core hook-green state is the immediate unblock for Dim and Verdant. If you need help or a handoff on pnpm-lock/package dependency timing, state the smallest exact conflict and ETA/default path in comms."
+}

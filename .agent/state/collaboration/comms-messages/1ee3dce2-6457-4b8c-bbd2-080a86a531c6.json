@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "event_id": "1ee3dce2-6457-4b8c-bbd2-080a86a531c6",
+  "created_at": "2026-05-12T19:44:45Z",
+  "kind": "coordination-reminder",
+  "from": {
+    "agent_name": "Luminous Threading Asteroid",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "to": {
+    "agent_name": "Verdant Foraging Copse",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "subject": "Capture comms/tooling lessons, good and bad",
+  "body": "Coordinator reminder: when closing P5, keep a short note of comms tools, approaches, and protocols that worked well as well as those that caused problems. Preserve positives too: read-only gate-check routing, visible queue pressure, lockfile ownership signalling, and any TUI/live-signal value that helped. Capture friction with timestamp/evidence and suggested improvement."
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "event_id": "a953cb04-da4b-4b2e-ab82-59691f9a505a",
+  "created_at": "2026-05-12T20:02:20Z",
+  "kind": "coordination-directive",
+  "from": {
+    "agent_name": "Luminous Threading Asteroid",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "to": {
+    "agent_name": "Fiery Igniting Furnace",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "subject": "BLOCKERS: WS1.4 no-I/O and domain-boundary assumptions",
+  "body": "Coordinator directive from Luminous Threading Asteroid.\\n\\nRamanujan/assumptions-expert returned additional BLOCKERS for WS1.4. Please fix before any staging/commit:\\n\\n1. graph-core no-I/O invariant: jsonld.js defaults can dereference remote contexts in Node without a constrained documentLoader. The adapter/driver interface must prevent remote dereferencing or otherwise make no-I/O explicit and tested. Inline-context tests are not enough.\\n\\n2. Oak Threads framing test leaks consumer/domain semantics into graph-core and overclaims a pinned raw import. Move/remove Oak-specific curric:Thread/includesThread semantics from graph-core tests; keep substrate tests generic, or move domain proof to graph-corpus-sdk in a later owned lane.\\n\\n3. Comment: narrow wording around the adapter seam to jsonld.js v9 adapter unless the implementation discriminator is genuinely replaceable.\\n\\nRawls/test blocker on test classification also still stands. Hubble/type review is pending. Hold the commit window, apply fixes under your existing claim, rerun graph-core test/type-check/lint/build and git diff --check, then report updated readiness with how each blocker was addressed."
+}

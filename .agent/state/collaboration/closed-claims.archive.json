@@ -22281,6 +22281,382 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "4de55420-2762-42d3-8463-65683b00eb89",
+      "agent_id": {
+        "agent_name": "Dim Hiding Secret",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1d"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T19:54:28Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit WS1.6 vocab planning prep note only after Luminous GO.",
+      "intent_to_commit": "ac69568e-fa52-4244-bcd3-4f6d0cf4dea0",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T19:56:20Z",
+        "closed_by": {
+          "agent_name": "Dim Hiding Secret",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1d"
+        },
+        "summary": "Committed WS1.6 vocab planning prep note as f36f98b1 after Luminous GO and Solar CLEAN/GO.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4de55420-2762-42d3-8463-65683b00eb89",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "351219e4-6b39-470e-84b8-53162b25afab",
+      "agent_id": {
+        "agent_name": "Dim Hiding Secret",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1d"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack-ws1.6-vocab-prep.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T19:33:32Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Draft Ferny-assigned WS1.6 vocab planning prep note only; no implementation and no git/index activity before a fresh commit protocol.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T19:56:20Z",
+        "closed_by": {
+          "agent_name": "Dim Hiding Secret",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1d"
+        },
+        "summary": "WS1.6 vocab planning prep note drafted, reviewed CLEAN/GO by Solar, and committed as f36f98b1; no implementation performed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "351219e4-6b39-470e-84b8-53162b25afab",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1e12cf7d-08a9-4ef1-a40c-af72f01a75ea",
+      "agent_id": {
+        "agent_name": "Fiery Igniting Furnace",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1d"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T20:14:14Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit WS1.4 JSON-LD processor adapter after all specialist reviews CLEAN/GO; explicit graph-core pathspec bundle only.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T20:16:53Z",
+        "closed_by": {
+          "agent_name": "Fiery Igniting Furnace",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1d"
+        },
+        "summary": "Committed WS1.4 JSON-LD processor adapter as 95f42cb7 after all specialist reviews CLEAN/GO and full hook chain passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1e12cf7d-08a9-4ef1-a40c-af72f01a75ea",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "cdeae6ac-c987-4663-a3e7-912d81b7cb9e",
+      "agent_id": {
+        "agent_name": "Fiery Igniting Furnace",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1d"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/core/graph-core/src/index.ts",
+            "packages/core/graph-core/src/jsonld/index.ts",
+            "packages/core/graph-core/src/jsonld/processor.ts",
+            "packages/core/graph-core/src/jsonld/processor.unit.test.ts",
+            "packages/core/graph-core/package.json",
+            "pnpm-lock.yaml",
+            ".agent/memory/operational/threads/connecting-oak-resources.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T19:55:52Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "WS1.4 JSON-LD processor adapter resumed after P5 lockfile release and WS1.6 small commit. Reapply parked graph-core JSON-LD files, add jsonld/@types dependency metadata, run focused graph-core gates, then signal product/tests ready.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T20:16:53Z",
+        "closed_by": {
+          "agent_name": "Fiery Igniting Furnace",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1d"
+        },
+        "summary": "WS1.4 JSON-LD processor adapter product/dependency bundle committed as 95f42cb7.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "cdeae6ac-c987-4663-a3e7-912d81b7cb9e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ae116c2e-fc89-444b-8345-01051396276f",
+      "agent_id": {
+        "agent_name": "Fiery Igniting Furnace",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1d"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/core/graph-core/src/jsonld/processor.integration.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T20:01:59Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "WS1.4 test classification fix: add integration-shaped JSON-LD processor test file while keeping pure injected-driver unit tests separate.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T20:16:53Z",
+        "closed_by": {
+          "agent_name": "Fiery Igniting Furnace",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1d"
+        },
+        "summary": "WS1.4 integration test classification fix committed in 95f42cb7.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ae116c2e-fc89-444b-8345-01051396276f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c60ef8ab-d58d-4dc6-8d01-a0e5706fd4ae",
+      "agent_id": {
+        "agent_name": "Fiery Igniting Furnace",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1d"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/core/graph-core/src/jsonld/remote-context.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T20:04:19Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "WS1.4 no-I/O helper for detecting remote JSON-LD @context references without growing processor.ts past lint limits.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T20:16:53Z",
+        "closed_by": {
+          "agent_name": "Fiery Igniting Furnace",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1d"
+        },
+        "summary": "WS1.4 remote-context no-I/O scanner committed in 95f42cb7.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c60ef8ab-d58d-4dc6-8d01-a0e5706fd4ae",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "762471c0-dfc0-4d7e-a4d8-ea3cb5c298f8",
+      "agent_id": {
+        "agent_name": "Fiery Igniting Furnace",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1d"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/core/graph-core/src/jsonld/runtime.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T20:09:40Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "WS1.4 type re-review fix: isolate typed jsonld.js native runtime/options wrapper for no-remote document loader proof.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T20:16:53Z",
+        "closed_by": {
+          "agent_name": "Fiery Igniting Furnace",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1d"
+        },
+        "summary": "WS1.4 typed jsonld.js runtime/options wrapper committed in 95f42cb7.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "762471c0-dfc0-4d7e-a4d8-ea3cb5c298f8",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "80dc821e-5854-467c-a585-6fcec9c24db7",
+      "agent_id": {
+        "agent_name": "Luminous Threading Asteroid",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1d"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T20:18:20Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit collaboration-state closeout after WS1.4 coordination.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T20:22:00Z",
+        "closed_by": {
+          "agent_name": "Luminous Threading Asteroid",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1d"
+        },
+        "summary": "Closed in same collaboration-state commit after staging closeout bundle.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "80dc821e-5854-467c-a585-6fcec9c24db7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "071a105d-4425-4f9d-bdc2-d0578b653f44",
+      "agent_id": {
+        "agent_name": "Luminous Threading Asteroid",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1d"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T20:18:17Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Coordinator closeout: persist collaboration-state residue after WS1.4 landed and claims cleared.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T20:22:10Z",
+        "closed_by": {
+          "agent_name": "Luminous Threading Asteroid",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1d"
+        },
+        "summary": "Persisted coordinator closeout state after WS1.4 landed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "071a105d-4425-4f9d-bdc2-d0578b653f44",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

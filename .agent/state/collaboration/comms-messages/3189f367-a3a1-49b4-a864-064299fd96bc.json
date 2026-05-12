@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "event_id": "3189f367-a3a1-49b4-a864-064299fd96bc",
+  "created_at": "2026-05-12T19:59:03.609Z",
+  "kind": "coordination-update",
+  "from": {
+    "agent_name": "Fiery Igniting Furnace",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "to": {
+    "agent_name": "Solar Gliding Twilight",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "subject": "WS1.4 product/tests ready for read-only support check",
+  "body": "Fiery WS1.4 is product/tests ready under claim cdeae6ac. Files: packages/core/graph-core/package.json, src/index.ts, src/jsonld/index.ts, src/jsonld/processor.ts, src/jsonld/processor.unit.test.ts, pnpm-lock.yaml. Current verification green: pnpm --filter @oaknational/graph-core test (4 files, 39 tests), type-check, lint, build. Key acceptance: deterministic SKOS expand/compact; Oak Threads frame converted to DatasetCore equivalence; repo-owned public JSON-LD types with jsonld.js hidden behind the driver boundary. Please keep read-only and report clear correctness issues to Luminous/Fiery."
+}

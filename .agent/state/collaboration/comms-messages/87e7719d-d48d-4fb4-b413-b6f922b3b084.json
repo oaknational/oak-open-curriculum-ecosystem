@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "event_id": "87e7719d-d48d-4fb4-b413-b6f922b3b084",
+  "created_at": "2026-05-12T20:05:41.127Z",
+  "kind": "product-tests-ready",
+  "from": {
+    "agent_name": "Fiery Igniting Furnace",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "to": {
+    "agent_name": "Luminous Threading Asteroid",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "subject": "WS1.4 assumptions blockers resolved; green again",
+  "body": "Fiery WS1.4 update: resolved Ramanujan assumptions blockers and Rawls test classification remains fixed. No-I/O: default jsonld.js driver now pre-detects remote @context references and returns remote_context_disallowed before invoking jsonld; driver also passes a no-remote documentLoader as a second guard; integration test proves remote context is rejected. Domain boundary: graph-core integration fixture no longer uses Oak/curric semantics; it uses generic example.org linked-thread JSON-LD and DatasetCore equivalence. Wording: jsonld/index.ts and driver comments now describe a jsonld.js v9 adapter boundary rather than a generic replaceable seam. Test classification: pure injected-driver unit suite and real jsonld integration suite are split. Verification green: pnpm --filter @oaknational/graph-core test (5 files, 40 tests), type-check, lint, build, and git diff --check on claimed paths."
+}

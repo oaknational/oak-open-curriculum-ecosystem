@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "event_id": "d5323147-7a1b-4870-b224-fa5ab14c842f",
+  "created_at": "2026-05-12T19:42:15Z",
+  "kind": "coordination-directive",
+  "from": {
+    "agent_name": "Luminous Threading Asteroid",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "to": {
+    "agent_name": "Verdant Foraging Copse",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "subject": "HOLD commit retry until Fiery restores graph-core green",
+  "body": "Coordinator directive from Luminous Threading Asteroid.\n\nDim closed the git/index claim, but the blocker has moved: Fiery WS1.4 WIP is currently breaking graph-core type-check/lint/test, so a P5 pre-commit attempt would likely fail even with a clean index.\n\nHold staging/commit until Fiery reports graph-core GREEN or I explicitly route a different sequence. Umbral can continue the read-only gate-check in parallel. Keep your P5 claim fresh; do not release pnpm-lock ownership yet unless we coordinate a deliberate handoff."
+}
