@@ -232,7 +232,7 @@ Representative execution surfaces:
 
 | Surface               | Canonical location                                      | Representative entries                                                                                                                                                                                                                                                                                                                                                                          | Purpose                                                       |
 | --------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| Skills                | [`.agent/skills/`](skills/)                             | [`start-right-quick`](skills/start-right-quick/SKILL-CANONICAL.md), [`start-right-thorough`](skills/start-right-thorough/SKILL-CANONICAL.md), [`go`](skills/go/SKILL-CANONICAL.md), [`session-handoff`](skills/session-handoff/SKILL-CANONICAL.md), [`gates`](skills/gates/SKILL-CANONICAL.md), [`plan`](skills/plan/SKILL-CANONICAL.md), [`review`](skills/review/SKILL-CANONICAL.md), [`consolidate-docs`](skills/consolidate-docs/SKILL-CANONICAL.md), [`metacognition`](skills/metacognition/SKILL-CANONICAL.md), [`napkin`](skills/napkin/SKILL-CANONICAL.md), [`commit`](skills/commit/SKILL-CANONICAL.md), [`patterns`](skills/patterns/SKILL-CANONICAL.md), [`chatgpt-report-normalisation`](skills/chatgpt-report-normalisation/SKILL-CANONICAL.md), [`systematic-debugging`](skills/systematic-debugging/SKILL-CANONICAL.md) | User-invoked workflows and on-demand expertise                |
+| Skills                | [`.agent/skills/`](skills/)                             | [`start-right-quick`](skills/start-right-quick/SKILL-CANONICAL.md), [`start-right-thorough`](skills/start-right-thorough/SKILL-CANONICAL.md), [`go`](skills/go/SKILL-CANONICAL.md), [`session-handoff`](skills/session-handoff/SKILL-CANONICAL.md), [`gates`](skills/gates/SKILL-CANONICAL.md), [`plan`](skills/plan/SKILL-CANONICAL.md), [`consolidate-docs`](skills/consolidate-docs/SKILL-CANONICAL.md), [`metacognition`](skills/metacognition/SKILL-CANONICAL.md), [`napkin`](skills/napkin/SKILL-CANONICAL.md), [`commit`](skills/commit/SKILL-CANONICAL.md), [`chatgpt-report-normalisation`](skills/chatgpt-report-normalisation/SKILL-CANONICAL.md) | User-invoked workflows and on-demand expertise                |
 | Session prompts       | [`.agent/prompts/`](prompts/)                           | Domain-specific handover briefs only (e.g. [`gt-review.md`](prompts/gt-review.md), [`semantic-search/semantic-search.prompt.md`](prompts/semantic-search/semantic-search.prompt.md)). General session orientation is no longer prompt-hosted — see [`orientation.md`](directives/orientation.md) and [`start-right-quick`](skills/start-right-quick/SKILL-CANONICAL.md).                                                     | Stateful session entry points tied to active plans or domains |
 
 ## Memory and Patterns
@@ -249,10 +249,8 @@ reusable knowledge:
 | Napkin archive | [`memory/active/archive/`](memory/active/archive/) | Rotated napkins (historical record) |
 | Operational continuity | [`memory/operational/repo-continuity.md`](memory/operational/repo-continuity.md) | Repo-wide active-thread register, standing decisions, pending-graduations |
 
-The patterns skill ([`.agent/skills/patterns/SKILL-CANONICAL.md`](skills/patterns/SKILL-CANONICAL.md))
-teaches agents to check the pattern library before inventing new approaches.
-Generated adapters live at `.claude/skills/jc-patterns/SKILL.md` and
-`.agents/skills/jc-patterns/SKILL.md`.
+The agent directive teaches agents to check the pattern library before
+inventing new approaches.
 
 ### Pattern instances cited by Practice Core
 

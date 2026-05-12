@@ -81,8 +81,8 @@ When the new teammate pastes or invokes this prompt:
   [MCP Servers for Contributors](../../docs/engineering/mcp-servers-for-contributors.md)
 - [ ] Aware that **the Vercel CLI is forbidden** — Vercel work goes through
   the project-scoped MCP plugin
-- [ ] Skill set explored: `/start-right-quick`, `/commit`, `/finishing-branch`,
-  `/gates`, `/review`, `/consolidate-docs`, `/session-handoff`. Canonical
+- [ ] Skill set explored: `/start-right-quick`, `/commit`, `/gates`,
+  `/consolidate-docs`, `/session-handoff`, `/plan`. Canonical
   definitions live under
   [.agent/skills/](../skills/) with platform adapters under
   [.claude/skills/](../../.claude/skills/) (and equivalents for other agents)

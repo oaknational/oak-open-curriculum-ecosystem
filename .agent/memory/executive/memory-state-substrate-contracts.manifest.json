@@ -615,7 +615,7 @@
         "PDR-049-memory-and-state-file-merge-semantics"
       ],
       "lifecycle": "live pattern library",
-      "writer_or_write_api": "patterns skill and consolidation edits; new files by exclusive creation",
+      "writer_or_write_api": "AGENT pattern lookup guidance and consolidation edits; new files by exclusive creation",
       "entry_identity": "pattern filename slug",
       "merge_class": "index-narrative-tables",
       "schema_or_parser": "directory README index plus per-file markdown frontmatter conventions",
@@ -650,7 +650,7 @@
         }
       ],
       "portability_tier": "repo-local-contract",
-      "owner_reviewer_route": "patterns skill + docs-adr"
+      "owner_reviewer_route": "AGENT pattern lookup guidance + docs-adr"
     },
     {
       "id": "memory-collaboration-patterns",

@@ -128,6 +128,12 @@ Institutional memory lives in `.agent/memory/`:
 - [threads/](../memory/operational/threads/README.md) — thread convention,
   identity discipline, and next-session records
 
+Before inventing a new approach for code, architecture, process, testing, or
+agent infrastructure, check the repo-grounded patterns in
+[`patterns/`](../memory/active/patterns/README.md). If the problem is a
+portable Practice-governance shape, also check PDRs with `pdr_kind: pattern`
+in [`.agent/practice-core/decision-records/`](../practice-core/decision-records/README.md).
+
 Before joining an active thread, read the thread record and follow the
 additive identity rule.
 

@@ -1,20 +1,11 @@
----
-name: ephemeral-to-permanent-homing
-classification: passive
-description: >-
-  Canonical methodology for moving content out of ephemeral surfaces (plans,
-  memory, platform entry points) into permanent homes. Referenced by
-  session-handoff and consolidate-docs so the homing discipline stays
-  single-sourced.
----
-
 # Ephemeral-to-Permanent Homing
 
-**Shared workflow partial.** Not a standalone workflow. Referenced by
-[`session-handoff`](../session-handoff/SKILL-CANONICAL.md) (session-scoped
-sweep, especially platform-specific entry points) and
-[`consolidate-docs`](../consolidate-docs/SKILL-CANONICAL.md) (thread-scoped
-deep sweep across napkin, distilled.md, plans, platform memory).
+**Shared operational methodology.** Not a standalone workflow. Referenced by
+[`session-handoff`](../../skills/session-handoff/SKILL-CANONICAL.md)
+(session-scoped sweep, especially platform-specific entry points) and
+[`consolidate-docs`](../../skills/consolidate-docs/SKILL-CANONICAL.md)
+(thread-scoped deep sweep across napkin, distilled.md, plans, platform
+memory).
 
 This file is the canonical methodology for moving content out of ephemeral
 surfaces and into permanent homes. Both the lightweight session closeout
@@ -125,10 +116,10 @@ phrasings — *"budget consumed"*, *"out of scope"*, *"for later"*,
 
 ## Related
 
-- [`session-handoff`](../session-handoff/SKILL-CANONICAL.md) —
+- [`session-handoff`](../../skills/session-handoff/SKILL-CANONICAL.md) —
   session-scoped caller; sweeps the session's drift surfaces (especially
   platform entry points).
-- [`consolidate-docs`](../consolidate-docs/SKILL-CANONICAL.md) —
+- [`consolidate-docs`](../../skills/consolidate-docs/SKILL-CANONICAL.md) —
   thread-scoped caller; sweeps the cross-session drift surfaces (napkin,
   distilled.md, completed plans, platform memory) at deep convergence
   time.

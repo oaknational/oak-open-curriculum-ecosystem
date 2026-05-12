@@ -207,6 +207,21 @@ Before marking the work complete, record:
 
 Invoke each specialist as a read-only sub-agent, giving it specific context about what changed and what to focus on.
 
+### Codex Reviewer Adapter Preflight
+
+When running reviewer workflows in Codex, do not assume the runtime has
+automatically loaded the repo-local reviewer adapter. Before each reviewer
+invocation:
+
+1. Resolve the reviewer with `pnpm agent-tools:codex-reviewer-resolve <name>`.
+2. Open the reported `.codex/agents/*.toml` adapter and every canonical
+   `.agent` file it references.
+3. Record those source paths in the review report so the review remains
+   auditable after session compression.
+
+If resolution fails, treat that as a blocking configuration defect and fix it
+before relying on the review.
+
 ## Reporting Requirement
 
 - Report which required specialists were invoked.

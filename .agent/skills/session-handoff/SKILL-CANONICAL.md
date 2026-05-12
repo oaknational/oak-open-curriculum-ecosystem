@@ -276,7 +276,7 @@ asks for more, this workflow must not trigger:
    invisible to Claude, and vice versa.
 
    For every piece of drift found, apply the
-   [ephemeral-to-permanent-homing methodology](../ephemeral-to-permanent-homing/SKILL-CANONICAL.md):
+   [ephemeral-to-permanent-homing methodology](../../memory/operational/ephemeral-to-permanent-homing.md):
    classify the substance shape, match to a destination, surface
    non-trivial moves to the owner, move the content, then strip the
    entry point back to its canonical pointer shape. Per the user's

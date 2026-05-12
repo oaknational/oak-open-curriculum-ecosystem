@@ -53,8 +53,8 @@ extraction, napkin rotation, fitness management, and practice exchange.
 
 The canonical methodology and destinations table for moving content out
 of ephemeral surfaces lives at
-[`ephemeral-to-permanent-homing`](../ephemeral-to-permanent-homing/SKILL-CANONICAL.md).
-Read that skill before steps 1, 3, 7, and 10 — it carries the
+[`ephemeral-to-permanent-homing`](../../memory/operational/ephemeral-to-permanent-homing.md).
+Read that methodology before steps 1, 3, 7, and 10 — it carries the
 destinations table, the entry-point sweep rule, and the
 deferral-honesty discipline that this workflow's homing actions all
 defer to. The session-scoped counterpart is
@@ -181,7 +181,7 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
 3. **Sweep ephemeral surfaces and home settled content.** Identify
    any content in ephemeral locations that now functions as settled
    documentation, and home it per the
-   [ephemeral-to-permanent-homing methodology](../ephemeral-to-permanent-homing/SKILL-CANONICAL.md)
+   [ephemeral-to-permanent-homing methodology](../../memory/operational/ephemeral-to-permanent-homing.md)
    (canonical destinations table, entry-point rule, deferral-honesty
    discipline). At thread-scoped depth, the surfaces to sweep are
    the full superset of what `session-handoff` step 6a auxiliary

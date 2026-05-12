@@ -100,8 +100,8 @@ command surface.
 Codex reads skills from `.agents/skills/` per its current docs (with parent-walk
 to repo root); `.codex/skills/` is not used.
 
-Codex skills are invoked with `$skill-name` syntax (e.g. `$jc-review`,
-`$patterns`) or selected through Codex's `/skills` built-in; repo-defined
+Codex skills are invoked with `$skill-name` syntax (e.g. `$jc-plan`,
+`$jc-gates`) or selected through Codex's `/skills` built-in; repo-defined
 workflows are not custom `/` commands. This follows the official
 [Codex skills](https://developers.openai.com/codex/skills) and
 [Codex CLI slash commands](https://developers.openai.com/codex/cli/slash-commands)
@@ -145,13 +145,13 @@ rebuild). Ingested skills (recorded in `skills-lock.json`) keep their
 canonical name. The prefix is applied only at adapter emission;
 canonical identity is unprefixed.
 
-| Platform    | Invocation       | Source                                              |
-| ----------- | ---------------- | --------------------------------------------------- |
-| Claude Code | `/jc-review`     | `.claude/skills/jc-review/SKILL.md`                 |
-| Cursor      | `/jc-review`     | `.agents/skills/jc-review/SKILL.md`                 |
-| Codex       | `$jc-review`     | `.agents/skills/jc-review/SKILL.md`                 |
-| Gemini CLI  | `activate_skill` | `.agents/skills/jc-review/SKILL.md` (model-invoked) |
-| Amp         | palette          | `.agents/skills/jc-review/SKILL.md`                 |
+| Platform    | Invocation       | Source                                            |
+| ----------- | ---------------- | ------------------------------------------------- |
+| Claude Code | `/jc-plan`       | `.claude/skills/jc-plan/SKILL.md`                 |
+| Cursor      | `/jc-plan`       | `.agents/skills/jc-plan/SKILL.md`                 |
+| Codex       | `$jc-plan`       | `.agents/skills/jc-plan/SKILL.md`                 |
+| Gemini CLI  | `activate_skill` | `.agents/skills/jc-plan/SKILL.md` (model-invoked) |
+| Amp         | palette          | `.agents/skills/jc-plan/SKILL.md`                 |
 
 ### Sub-agent Adapter Formats
 
@@ -327,7 +327,10 @@ prompts directory.
 
 ### Why consistent `jc-*` naming across platforms
 
-Different names for the same command (`jc-full-review` vs `/review` vs `jc-review`) created cognitive load when switching between platforms. A single name per command reduces confusion and makes the system easier to document and discover.
+Different names for the same workflow (`jc-full-review` vs `/review` vs
+`jc-review`, historically) created cognitive load when switching between
+platforms. A single name per workflow reduces confusion and makes the system
+easier to document and discover.
 
 ### Why principles.md is separate from activation triggers
 

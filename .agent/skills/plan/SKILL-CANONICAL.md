@@ -148,28 +148,29 @@ Every executable plan MUST have:
    several lower-level cycles, sequence those cycles and finish with
    the commit that adds the final piece needed to green the
    higher-level test. Every commit ends with all tests passing.
-3. **Atomic, independent cycles for parallel dispatch where the
-   work shape allows** — break larger workstreams into cycles that
-   are independent of each other so each can be handed to a
-   parallel agent without mid-work coordination. Two cycles are
-   independent when completing one does not change what the other
-   does or how it is verified. In practice each independent cycle
-   touches a separate file scope (or overlaps only additively),
-   declares its starting state, has executable acceptance criteria
-   another agent can verify, and carries a self-contained brief
-   with no "ask the original author" dependencies. Where cycles
-   genuinely depend on each other (a higher-level test that needs
-   lower-level cycles in place; a cycle that consumes an interface
-   another cycle introduces), declare the dependency explicitly in
-   the cycle description and, when the plan will be dispatched to
-   parallel agents, in a `depends_on` YAML field on the todo. Omitted
-   `depends_on` means "not assessed" unless the cycle explicitly names
-   its parallel-safety evidence: starting state, file scope, files not
-   to touch, independent acceptance criteria, and validation commands.
-   Dependent cycles are queued behind their prerequisites. Plan authors
-   do not invent serial dependencies that the work shape does not
-   require — pick the natural decomposition (separate workspaces,
-   separate modules, separate features) that the cycles already suggest.
+3. **Parallelisable plan hygiene** — always look for the independent
+   decomposition before accepting a serial plan. Break larger workstreams
+   into atomic cycles that can run independently when the work shape allows.
+   Two cycles are independent when completing one does not change what the
+   other does or how it is verified. In practice each independent cycle
+   touches a separate file scope, or overlaps only additively, declares its
+   starting state, names files or areas it must not touch, has executable
+   acceptance criteria another agent can verify, and includes deterministic
+   validation commands.
+
+   If cycles genuinely depend on each other, declare the dependency in the
+   cycle description and, where the plan may be machine-dispatched, in a
+   `depends_on` YAML field on the todo. Dependent cycles are queued behind
+   their prerequisites. Do not invent serial dependencies that the work shape
+   does not require; choose the natural decomposition that already exists in
+   the system, such as separate workspaces, modules, generated surfaces, or
+   user-facing behaviours.
+
+   When a cycle is actually delegated to another agent, the cycle itself is
+   the delegation brief. It must already contain the goal, owned surface,
+   non-goals, required evidence, acceptance signal, reintegration owner, and
+   stop-or-escalate rule. If those details cannot be stated concisely, the
+   plan is under-scoped rather than "not parallelisable".
 4. **Quality gates** — reference
    `../../plans/templates/components/quality-gates.md`. Each cycle has
    focused deterministic validation plus the relevant local gates; phase
