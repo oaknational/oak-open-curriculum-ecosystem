@@ -19931,6 +19931,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "b87d1b53-3594-459a-9edc-c23d50c10d6d",
+      "agent_id": {
+        "agent_name": "Penumbral Veiling Raven",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T12:24:51Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit P2 session handoff state.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T12:25:49Z",
+        "closed_by": {
+          "agent_name": "Penumbral Veiling Raven",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1c"
+        },
+        "summary": "Self-contained commit for P2 session handoff state.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b87d1b53-3594-459a-9edc-c23d50c10d6d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

@@ -79,6 +79,23 @@ The most recent rotation is archived at
   integration test file. This remains visible rather than being treated as a
   clean lint surface.
 
+### Session Handoff
+
+- Landed P2 at `0d3af914` and the closeout state at `a2845659`; active claims,
+  active commit queue, and directed inbox are clear at handoff.
+- Mistake: I ran the two claim-close commands in parallel even though both
+  write `active-claims.json` and `closed-claims.archive.json`. The resulting
+  state was correct when checked, but the behaviour is wrong. Shared-state
+  lifecycle writes should be sequential unless the tool itself provides a
+  transaction/lock.
+- Commit-message body length and Prettier both stopped the first commit
+  attempt. Behaviour change: for `jc-commit`, validate the final wrapped
+  message and run focused format on new source files before opening the normal
+  hook path.
+- No new ADR/PDR candidate surfaced beyond the already-recorded P3 evidence
+  from `6027e182` and P4 active-agent visibility input. Entry-point drift
+  sweep was clean for `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md`.
+
 ## 2026-05-12 — Torrid Flaring Hearth / codex / GPT-5 / `019e1a`
 
 ### Consolidate-Docs Pass

@@ -64,8 +64,9 @@ Earlier archives remain under [`archive/`](archive/).
   watcher with `fs.watch` plus polling fallback. P1 landed at `f88d0d67` after
   the owner gave fresh one-commit `--no-verify` authorisation because unrelated
   dirty `codex-exec` work blocked the repo-wide pre-commit hook; focused B-11
-  validation had passed. P2 landed in this handoff pass. P3 commit-queue
-  enforcement is the next cost-of-collaboration implementation step.
+  validation had passed. P2 landed at `0d3af914`; its collaboration closeout
+  state landed at `a2845659`. P3 commit-queue enforcement is the next
+  cost-of-collaboration implementation step.
   State/memory files remain always commit-includable when dirty; owner
   clarified on 2026-05-12 that every commit should include current memory/state
   files.
@@ -105,7 +106,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Lush Sprouting Thicket / `claude` / claude-opus-4-7-1m / `3afd08` / 2026-05-12 (codex-helper skill + codex-exec last-message CLI + ADR-180 + future deep-dive plan); Coastal Cresting Prow / `codex` / GPT-5 / `019e1b` / 2026-05-12 (P1 B-11 `comms direct/reply`; P2 next); Glittering Weaving Quasar / `codex` / GPT-5 / `019e1b` / 2026-05-12 (P-Foundation unified agent-tools entrypoint); Hushed Shrouding Mist / `codex` / GPT-5 / `019e1b` / 2026-05-12 (P0.QG complete, flake disposition, busy cold/warm profiles, repo-check profile hardening, session handoff); Galactic Transiting Galaxy / `codex` / GPT-5 / `019e1a` / 2026-05-12 (completed stale comms-event curation and deleted 120 processed buffer events); Stratospheric Winging Wing / `codex` / GPT-5 / `019e1b` / 2026-05-12 (remaining jc-skill audit complete); see thread record for full identity history |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Penumbral Veiling Raven / `codex` / GPT-5 / `019e1c` / 2026-05-12 (P2 `comms watch` landed at `0d3af914`; closeout state at `a2845659`; P3 next); Lush Sprouting Thicket / `claude` / claude-opus-4-7-1m / `3afd08` / 2026-05-12 (codex-helper skill + codex-exec last-message CLI + ADR-180 + future deep-dive plan); Coastal Cresting Prow / `codex` / GPT-5 / `019e1b` / 2026-05-12 (P1 B-11 `comms direct/reply` landed at `f88d0d67`); Glittering Weaving Quasar / `codex` / GPT-5 / `019e1b` / 2026-05-12 (P-Foundation unified agent-tools entrypoint); Hushed Shrouding Mist / `codex` / GPT-5 / `019e1b` / 2026-05-12 (P0.QG complete, flake disposition, busy cold/warm profiles, repo-check profile hardening, session handoff); see thread record for full identity history |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Starlit Scattering Moon / `claude` / opus-4-7-1m / `edd1fb` / 2026-05-12 (WS1.2 RDF Term hierarchy + Quad + equality landed at 1885fbcf; re-plan remaining 12 Inc.1a cycles next session before WS1.3); Celestial Transiting Satellite / `claude` / opus-4-7-1m / `9bc8e3` / 2026-05-12 (WS1.1 graph-core scaffold landed at ad2abb69); Sparking Charring Ash / `claude-code` / opus-4-7-1m / `caf5e1` / 2026-05-12 (graph foundation work; Inc.1a WS1.1 open for execution) |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -137,9 +138,9 @@ staged-only" framing. The preserved evidence and trigger map live in
 [`pnpm-check-profiling-deep-dive-2026-05-12.md`](../../plans/agent-tooling/pnpm-check-profiling-deep-dive-2026-05-12.md);
 the implementation tasks live in
 [`cost-of-collaboration.plan.md`](../../plans/agent-tooling/current/cost-of-collaboration.plan.md).
-Normal pre-commit is currently blocked by unrelated dirty `codex-exec` /
-agent-tools CLI work in the checkout; keep P2 pathspec-scoped and coordinate
-with that lane before attempting a normal commit.
+P2 committed through the normal pre-commit hook after formatting the new source
+files; do not preserve the earlier `codex-exec` dirty-tree blocker as current
+state.
 
 Workflow skill review lane remains available but is not the immediate
 cost-of-collaboration continuation: the paired `jc-session-handoff` /
@@ -281,6 +282,12 @@ prohibition. Repair comms-messages
 distilled-rule candidate sharpening the doctrine's scope is drafted in
 napkin awaiting next-session review. No deep-consolidation escalation
 from this closeout.
+
+**Same-day update (2026-05-12 — Penumbral Veiling Raven / `codex` / GPT-5 /
+`019e1c`)**: status remains **due**. P2 `comms watch` closed a
+cost-of-collaboration milestone, and Practice fitness pressure remains a real
+consolidation trigger. This handoff does not run `jc-consolidate-docs`; the
+next implementation opener is P3 commit-queue enforcement.
 
 Previous same-day status: Galactic Transiting Galaxy completed the
 owner-requested stale-event retention sweep. The

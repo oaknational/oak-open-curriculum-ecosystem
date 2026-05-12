@@ -53,8 +53,9 @@ through injection, moving-target "currently" word in skill prose.
 Reviewer-recommended specialist follow-ups (`type-expert`, `test-expert`,
 `architecture-expert-barney`) were named but not invoked at owner direction.
 
-**Next safe step**: resume P2 `comms watch` opener; the codex-exec lane is
-parked behind the `codex-exec-cli-deep-dive.plan.md` promotion trigger.
+**Current routing**: P2 `comms watch` has landed. Continue with P3
+commit-queue enforcement; the codex-exec lane remains parked behind the
+`codex-exec-cli-deep-dive.plan.md` promotion trigger.
 
 **Post-commit corrections (2026-05-12 ~13:00 BST)**: owner flagged two
 procedural breaches in commit `6027e182`:
@@ -93,13 +94,14 @@ pretending the solution is already known.
 | Platform | Model | Agent name | Role | First-session | Last-session |
 | --- | --- | --- | --- | --- | --- |
 | `claude` | `claude-opus-4-7-1m` | Lush Sprouting Thicket | Implementer (codex-helper skill, codex-exec CLI, ADR-180, future plan) | 2026-05-12 | 2026-05-12 |
-| `codex` | `GPT-5` | Coastal Cresting Prow | Implementer (cost-of-collaboration P1 B-11 `comms direct/reply`; landed at `f88d0d67`; P2 `comms watch` next) | 2026-05-12 | 2026-05-12 |
+| `codex` | `GPT-5` | Coastal Cresting Prow | Implementer (cost-of-collaboration P1 B-11 `comms direct/reply`; landed at `f88d0d67`) | 2026-05-12 | 2026-05-12 |
 | `codex` | `GPT-5` | Penumbral Veiling Raven | Implementer (cost-of-collaboration P2 `comms watch`) | 2026-05-12 | 2026-05-12 |
 
 ## P2 comms watch handoff (2026-05-12)
 
 **Landed**: cost-of-collaboration P2 `comms watch` in the unified CLI shape:
-`pnpm agent-tools collaboration-state comms watch`.
+`pnpm agent-tools collaboration-state comms watch` — commit `0d3af914`.
+Collaboration closeout state landed at `a2845659`.
 
 **Implementation shape**:
 
@@ -118,6 +120,9 @@ agent-tools `type-check`, `test`, `build`, and `lint`; built unified CLI
 `comms watch --help` and `comms help` smoke. `lint` exits 0 while still
 reporting the pre-existing `no-real-io-in-tests` warning in the
 collaboration-state integration test file.
+
+**Lifecycle state**: no active claims and no active commit queue after
+closeout. Directed inbox check found no new messages.
 
 **Next safe step**: continue cost-of-collaboration P3 commit-queue
 enforcement. Preserve the 6027e182 protocol breach as P3 evidence; do not fold
@@ -207,10 +212,11 @@ there. `repo-check profile` artifacts now include environment evidence,
 failure-phase classification, post-Turbo-gate status, and optional captured
 output via `--capture-output`.
 
-**Next safe step**: move to P2 `comms watch` after B-11 commit closeout. Do
-not reopen the "make pre-commit staged-only" framing; continue from the owner
-contract that pre-commit stops detectably broken code entering git history and
-pre-push owns higher-standard branch-exit failures.
+**Current routing**: P0.QG is complete, and P2 has now landed. Continue with
+P3 commit-queue enforcement. Do not reopen the "make pre-commit staged-only"
+framing; continue from the owner contract that pre-commit stops detectably
+broken code entering git history and pre-push owns higher-standard branch-exit
+failures.
 
 **P-Foundation update (2026-05-12)**: Glittering Weaving Quasar implemented the
 unified `agent-tools` dispatcher, forwarding legacy topic bins, no-build hot
@@ -228,7 +234,8 @@ markdownlint, and built CLI smoke for help, direct, reply, and reader
 compatibility. Full agent-tools lint exited 0 with the pre-existing
 `no-real-io-in-tests` warning on the existing collaboration-state integration
 test file. Normal pre-commit was later blocked by unrelated dirty `codex-exec`
-work; the owner authorised `--no-verify` for the B-11 commit only.
+work; the owner authorised `--no-verify` for the B-11 commit only. That
+blocker is historical; P2 landed through normal pre-commit.
 
 **P-Foundation handoff (2026-05-12)**: session handoff found no active claims,
 no open escalation files, no entrypoint drift, and no new ADR/PDR graduation

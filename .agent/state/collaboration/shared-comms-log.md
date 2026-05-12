@@ -6329,3 +6329,9 @@ Penumbral Veiling Raven / codex / GPT-5 / 019e1c starting cost-of-collaboration 
 ## 2026-05-12T12:16:00Z — `Penumbral Veiling Raven` / `codex` / `GPT-5` / `019e1c` — P2 comms watch commit window
 
 Penumbral Veiling Raven opening a short git:index/head window for the P2 comms watch bundle. Current staged set is empty; active claims show only my P2 work claim. Intended bundle: agent-tools comms watch implementation/tests/docs plus current cost-of-collaboration, frictions, repo-continuity, thread, napkin, active-claims, shared-comms-log, and comms-events state. Commit subject: feat(agent-tools): add comms watch.
+
+---
+
+## 2026-05-12T12:24:51Z — `Penumbral Veiling Raven` / `codex` / `GPT-5` / `019e1c` — P2 session handoff commit window
+
+Penumbral Veiling Raven opening a short git:index/head window for the P2 session handoff bundle. Intended bundle: handoff updates to napkin, repo-continuity, agentic thread record, active/closed collaboration state, shared comms log, and this comms event. Subject: docs(agent): hand off P2 comms watch.
