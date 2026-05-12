@@ -833,42 +833,81 @@
       "staged_name_status": "M\t.agent/hooks/README.md\nM\t.agent/memory/executive/cross-platform-agent-surface-matrix.md\nM\t.agent/memory/operational/threads/connecting-oak-resources.next-session.md\nM\t.agent/research/developer-experience/claude-code-hook-activation.md\nM\t.agent/research/developer-experience/examples/validate-practice-fitness.example.ts\nM\t.agent/skills/commit/SKILL-CANONICAL.md\nM\t.agent/skills/gates/SKILL-CANONICAL.md\nM\t.agent/skills/start-right-quick/shared/start-right.md\nM\t.agent/skills/start-right-thorough/shared/start-right-thorough.md\nM\t.agents/skills/jc-commit/SKILL.md\nM\t.claude/settings.json\nM\t.claude/skills/jc-commit/SKILL.md\nM\t.github/workflows/ci.yml\nM\t.gitignore\nM\t.husky/commit-msg\nM\t.husky/pre-commit\nM\t.husky/pre-push\nM\tagent-tools/README.md\nM\tagent-tools/eslint.config.ts\nM\tagent-tools/package.json\nR100\tscripts/check-blocked-content.integration.test.ts\tagent-tools/scripts/check-blocked-content.integration.test.ts\nR098\tscripts/check-blocked-content.ts\tagent-tools/scripts/check-blocked-content.ts\nR100\tscripts/check-blocked-content.unit.test.ts\tagent-tools/scripts/check-blocked-content.unit.test.ts\nR100\tscripts/check-blocked-patterns.integration.test.ts\tagent-tools/scripts/check-blocked-patterns.integration.test.ts\nR096\tscripts/check-blocked-patterns.ts\tagent-tools/scripts/check-blocked-patterns.ts\nR100\tscripts/check-blocked-patterns.unit.test.ts\tagent-tools/scripts/check-blocked-patterns.unit.test.ts\nR088\tscripts/check-commit-message.sh\tagent-tools/scripts/check-commit-message.sh\nR095\tscripts/check-commit-skill-advisories.ts\tagent-tools/scripts/check-commit-skill-advisories.ts\nR100\tscripts/check-commit-skill-advisories.unit.test.ts\tagent-tools/scripts/check-commit-skill-advisories.unit.test.ts\nR100\tscripts/ci-schema-drift-check.ts\tagent-tools/scripts/ci-schema-drift-check.ts\nR100\tscripts/ci-turbo-report.integration.test.ts\tagent-tools/scripts/ci-turbo-report.integration.test.ts\nR099\tscripts/ci-turbo-report.ts\tagent-tools/scripts/ci-turbo-report.ts\nR100\tscripts/ci-turbo-report.unit.test.ts\tagent-tools/scripts/ci-turbo-report.unit.test.ts\nR100\tscripts/prevent-accidental-major-version.ts\tagent-tools/scripts/prevent-accidental-major-version.ts\nA\tagent-tools/scripts/repo-check.ts\nR098\tscripts/validate-fitness-vocabulary.ts\tagent-tools/scripts/validate-fitness-vocabulary.ts\nR095\tscripts/validate-fitness-vocabulary.unit.test.ts\tagent-tools/scripts/validate-fitness-vocabulary.unit.test.ts\nR072\tscripts/validate-no-stale-script-invocations-helpers.ts\tagent-tools/scripts/validate-no-stale-script-invocations-helpers.ts\nR080\tscripts/validate-no-stale-script-invocations-helpers.unit.test.ts\tagent-tools/scripts/validate-no-stale-script-invocations-helpers.unit.test.ts\nR091\tscripts/validate-no-stale-script-invocations.ts\tagent-tools/scripts/validate-no-stale-script-invocations.ts\nR098\tscripts/validate-portability-helpers.ts\tagent-tools/scripts/validate-portability-helpers.ts\nR100\tscripts/validate-portability.ts\tagent-tools/scripts/validate-portability.ts\nR093\tscripts/validate-portability.unit.test.ts\tagent-tools/scripts/validate-portability.unit.test.ts\nR100\tscripts/validate-practice-fitness.ts\tagent-tools/scripts/validate-practice-fitness.ts\nR100\tscripts/validate-practice-fitness.unit.test.ts\tagent-tools/scripts/validate-practice-fitness.unit.test.ts\nR100\tscripts/validate-subagents-helpers.ts\tagent-tools/scripts/validate-subagents-helpers.ts\nR100\tscripts/validate-subagents.ts\tagent-tools/scripts/validate-subagents.ts\nR100\tscripts/validate-subagents.unit.test.ts\tagent-tools/scripts/validate-subagents.unit.test.ts\nM\tagent-tools/src/bin/claude-agent-ops.ts\nM\tagent-tools/src/core/health-probe-hook-state.ts\nM\tagent-tools/src/core/health-probe-shared.ts\nM\tagent-tools/tests/health-probe.unit.test.ts\nM\tagent-tools/tsconfig.lint.json\nM\tapps/oak-curriculum-mcp-streamable-http/docs/deployment-architecture.md\nM\tapps/oak-search-cli/README.md\nM\tapps/oak-search-cli/operations/utilities/generate-synonyms.ts\nM\tdocs/architecture/architectural-decisions/121-quality-gate-surfaces.md\nM\tdocs/architecture/architectural-decisions/168-typescript-6-baseline-and-workspace-script-architectural-rules.md\nM\tdocs/architecture/architectural-decisions/176-commit-skill-advisory-orchestrator-naming.md\nM\tdocs/engineering/build-system.md\nM\tdocs/engineering/testing-tdd-recipes.md\nM\tdocs/engineering/workflow.md\nM\tknip.config.ts\nM\tpackage.json\nM\tpackages/core/oak-eslint/package.json\nR095\tscripts/validate-eslint-boundaries.ts\tpackages/core/oak-eslint/scripts/validate-boundaries.ts\nM\tpackages/core/oak-eslint/tsconfig.json\nM\tpackages/core/oak-eslint/tsconfig.lint.json\nD\tscripts/log-commit-attempt.sh\nD\tvitest.config.ts\n"
     },
     {
-      "intent_id": "69eb9850-86c2-4e26-9cf0-c6c7c4b4c315",
-      "claim_id": "18938b53-9953-4ef7-95cf-797d3497272c",
+      "intent_id": "373d52bf-4e37-4902-93ae-33dea889eceb",
+      "claim_id": "36319b58-a9f4-4e76-9a52-f1eba22fd305",
       "agent_id": {
-        "agent_name": "Volcanic Glowing Brazier",
+        "agent_name": "Flamebright Sparking Forge",
         "platform": "codex",
         "model": "GPT-5",
         "session_id_prefix": "019e1a"
       },
       "files": [
         ".agent/memory/active/napkin.md",
+        ".agent/memory/operational/pending-graduations.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/operational/archive/repo-continuity-session-history-2026-05-12.md",
+        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+        ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md",
+        ".agent/plans/agent-tooling/frictions-register.md",
+        ".agent/plans/agent-tooling/pnpm-check-profiling-deep-dive-2026-05-12.md",
+        ".agent/skills/commit/SKILL-CANONICAL.md",
+        ".agent/skills/start-right-quick/SKILL-CANONICAL.md",
+        ".agent/skills/start-right-quick/shared/start-right.md",
+        ".agent/skills/start-right-thorough/SKILL-CANONICAL.md",
+        ".agent/skills/start-right-thorough/shared/start-right-thorough.md",
+        ".agents/skills/jc-commit/SKILL.md",
+        ".claude/skills/jc-commit/SKILL.md",
+        ".agents/rules/present-verdicts-not-menus.md",
         ".agent/state/collaboration/active-claims.json",
         ".agent/state/collaboration/closed-claims.archive.json",
         ".agent/state/collaboration/shared-comms-log.md",
-        ".agent/state/collaboration/comms-events/11d50b59-4969-4c40-8040-742c6b0b746d.json",
-        ".agent/state/collaboration/comms-events/293d753b-1d4f-423f-9c2d-d18f17cbb6fc.json",
-        ".agent/state/collaboration/comms-events/2d2b5ecd-cab2-4e88-afcf-dfbfae22dffa.json",
-        ".agent/state/collaboration/comms-events/3bac9696-346e-412e-917a-61f79c9c831f.json",
-        ".agent/state/collaboration/comms-events/41cc24fd-b202-4a9a-8fd6-7f3edf0f0901.json",
-        ".agent/state/collaboration/comms-events/453376c8-52b5-4a4c-a64d-89b4daf0984b.json",
-        ".agent/state/collaboration/comms-events/552c6a8f-0188-440e-b5c3-c57f07b9e7a9.json",
-        ".agent/state/collaboration/comms-events/690a7daf-3013-47d6-a347-58b9cc8dd975.json",
-        ".agent/state/collaboration/comms-events/7e2f1656-7d54-4c8a-8f59-3cfd54d8f5a6.json",
-        ".agent/state/collaboration/comms-events/e9ca0857-1e71-4283-a930-645daf58c177.json"
+        ".agent/state/collaboration/comms-events/100e72d4-ed82-41ca-a7e9-ce06b9f73666.json",
+        ".agent/state/collaboration/comms-events/10dd61e8-8e0b-4706-aeeb-404f790b8413.json",
+        ".agent/state/collaboration/comms-events/15c04d96-e179-4c06-b485-7625f41ad15d.json",
+        ".agent/state/collaboration/comms-events/26b3aae8-5d12-41cb-bd27-fea85d7934d5.json",
+        ".agent/state/collaboration/comms-events/282c93f5-a7af-46f0-a8e1-332ad6dc2b39.json",
+        ".agent/state/collaboration/comms-events/2b6cea59-5109-406b-84ae-0609ad1bfe3e.json",
+        ".agent/state/collaboration/comms-events/34238ee7-bf26-402c-9df9-1e266bced660.json",
+        ".agent/state/collaboration/comms-events/34c97a6b-b6cb-483c-b922-b132fbc1af62.json",
+        ".agent/state/collaboration/comms-events/4007b455-7955-4afa-b98a-317d521999b9.json",
+        ".agent/state/collaboration/comms-events/436648d9-b1e0-4583-9f36-75802adfdc13.json",
+        ".agent/state/collaboration/comms-events/4505e178-3f1d-4286-b635-286ee8e90d11.json",
+        ".agent/state/collaboration/comms-events/4abf6bb4-61ab-4d35-a92e-3278a05ff788.json",
+        ".agent/state/collaboration/comms-events/4ca4ac9a-7521-4f71-9902-cacd1123ac1a.json",
+        ".agent/state/collaboration/comms-events/56b5d33b-d1f8-4a3d-a8f9-b651f61904a0.json",
+        ".agent/state/collaboration/comms-events/6cf6c65d-0812-4677-b459-19e16f5d5902.json",
+        ".agent/state/collaboration/comms-events/712fc86b-02b3-4e0e-8d37-8e932e0fbaa5.json",
+        ".agent/state/collaboration/comms-events/75f2128c-3dd1-4463-b9d4-a3d7e594421b.json",
+        ".agent/state/collaboration/comms-events/7d5b4d23-3fc3-4014-bd7c-c86260632661.json",
+        ".agent/state/collaboration/comms-events/879ec129-9846-471a-8190-0ac734ad1e70.json",
+        ".agent/state/collaboration/comms-events/8fe0576e-d391-413c-9b9c-41a989d5b6bd.json",
+        ".agent/state/collaboration/comms-events/936f3637-3af9-46eb-9fda-ff5017af3d7b.json",
+        ".agent/state/collaboration/comms-events/9df9f7b7-75aa-4b57-998a-65bcc9bbcef6.json",
+        ".agent/state/collaboration/comms-events/aa59f6aa-8d32-4d05-a58a-54144b35773d.json",
+        ".agent/state/collaboration/comms-events/ac1117c3-4a98-4b96-8d81-1bef05e40b22.json",
+        ".agent/state/collaboration/comms-events/ba038d07-370c-4f8a-95a4-524f5ea8f502.json",
+        ".agent/state/collaboration/comms-events/bc316ae0-c498-4000-8dd1-590c6d57c15a.json",
+        ".agent/state/collaboration/comms-events/c3c762c3-7d45-4736-8adc-a24f9e91ce90.json",
+        ".agent/state/collaboration/comms-events/c43823e9-61b6-4bf5-86ba-df7288f87c53.json",
+        ".agent/state/collaboration/comms-events/d1d7dd48-c4ed-498b-a55e-03b7da32353d.json",
+        ".agent/state/collaboration/comms-events/d358e411-0809-4a7b-a4ef-c1417532ed65.json",
+        ".agent/state/collaboration/comms-events/dc0a21a6-9786-47dc-a945-d66e9ef17972.json",
+        ".agent/state/collaboration/comms-events/e953dc80-e5aa-4b07-b462-dc92bd5dae53.json",
+        ".agent/state/collaboration/comms-events/f086a61d-778e-440f-a23b-d59cde0a8b20.json",
+        ".agent/state/collaboration/comms-events/f0fb23b8-9f75-47da-aaf3-15784ed5b85e.json"
       ],
-      "commit_subject": "chore(continuity): persist follow-up shared state",
-      "queued_at": "2026-05-12T05:43:35.301Z",
-      "updated_at": "2026-05-12T05:43:39.585Z",
-      "expires_at": "2026-05-12T05:58:35.301Z",
+      "commit_subject": "docs(agent): reconcile handoff and tooling state",
+      "queued_at": "2026-05-12T06:01:07.357Z",
+      "updated_at": "2026-05-12T06:01:13.883Z",
+      "expires_at": "2026-05-12T06:16:07.357Z",
       "phase": "staging"
     }
   ],
   "claims": [
     {
-      "claim_id": "18938b53-9953-4ef7-95cf-797d3497272c",
+      "claim_id": "36319b58-a9f4-4e76-9a52-f1eba22fd305",
       "agent_id": {
-        "agent_name": "Volcanic Glowing Brazier",
+        "agent_name": "Flamebright Sparking Forge",
         "platform": "codex",
         "model": "GPT-5",
         "session_id_prefix": "019e1a"
@@ -882,34 +921,11 @@
           ]
         }
       ],
-      "claimed_at": "2026-05-12T05:42:36Z",
-      "freshness_seconds": 900,
+      "claimed_at": "2026-05-12T06:00:09Z",
+      "freshness_seconds": 1800,
       "sidebar_open": false,
-      "intent": "Stage and commit follow-up shared memory and collaboration state.",
-      "intent_to_commit": "69eb9850-86c2-4e26-9cf0-c6c7c4b4c315"
-    },
-    {
-      "claim_id": "faaab113-d585-41ea-92ca-92854a53a0e1",
-      "agent_id": {
-        "agent_name": "Flamebright Sparking Forge",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e1a"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/memory/operational/repo-continuity.md",
-            ".agent/memory/operational/pending-graduations.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-12T05:42:29Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Bounded consolidate-docs pass: reconcile repo-continuity live state and pending-graduations due counts without broad implementation."
+      "intent": "commit continuity, profiling, and agent-skill handoff docs",
+      "intent_to_commit": "373d52bf-4e37-4902-93ae-33dea889eceb"
     }
   ]
 }

@@ -80,54 +80,60 @@ snapshots in [`archive/`](archive/) — most recent is
 
 ## Index
 
-Regenerated 2026-05-10 by Sylvan Fruiting Glade (knowledge graduation
-session). Owner reframed the `vaporware-gated` / `sequenced-deferral`
-/ `XL-deferred` vocabulary as fabricated avoidance and directed full
-backlog drain; all 7 due items + both partially-graduated items
-graduated this pass. Entries are listed by status then by
-captured-date (most recent first). Line numbers are advisory hints;
-grep by status field for authoritative position.
+Regenerated 2026-05-12 by Flamebright Sparking Forge during the
+repo-continuity / pending-graduations consolidation drain. Entries are
+listed by status then by captured-date (most recent first). Line numbers are
+advisory hints; grep by status field for authoritative position.
 
 Per the [`fabricated-gate-as-avoidance`](../active/patterns/fabricated-gate-as-avoidance.md)
 pattern instance, future consolidation passes read each entry's
 substance before its inline metadata tag — gate vocabulary is a tag,
 not a verdict.
 
-### `due` (graduation candidates for next consolidation)
+### `due` (current body candidates)
 
-+ 2026-05-10; **hook-chain re-staging absorbs files post-verify-staged
-  — PDR-054 / ADR-177 amendment candidate (asymmetric-cure symmetry
-  re-imported)**.
-  `[captured: 2026-05-10 | graduated: 2026-05-11 (Fronded Flowering Seed) | source: napkin (Quiet Lurking Mask 2026-05-10) | target-resolved: new-PDR-059-regenerator-output-classification + amend:ADR-177 (2026-05-11) + amend:PDR-054-related-cross-ref | reviewers: architecture-expert-betty GO-WITH-CONDITIONS (2 doctrine edits applied) + docs-adr-expert GO + assumptions-expert GO-WITH-CONDITIONS (2 plan-level conditions recorded in ADR-177 amendment) | trigger-fired: owner-direction (cure-shape iii selected at session open) | size: M | status: graduated]`
-  Observed instance: commit `a098d709` landed 11 files when verify-
-  staged confirmed a 2-file bundle. Between verify-staged returning OK
-  and `git commit` invoking the hook chain, the pre-commit hook
-  (`lint:fix`, format-fix, RULES_INDEX regen, platform-adapter regen)
-  modified files and auto-staged them. PDR-054 / ADR-177's
-  verify-staged fingerprint divergence check runs *before* the hook
-  chain; the hook chain itself stages new files (this is its design —
-  auto-fix and re-stage). The verify-staged window does not cover
-  hook-introduced absorption. Asymmetric-cure framing: my disciplined
-  pathspec staging protected inbound scope, but not post-hook scope.
-  Symmetric cure shapes: (i) post-hook verify-staged INSIDE the hook
-  chain that fails the commit if non-queued files appear; (ii)
-  separate post-commit absorption-audit step that surfaces the
-  absorption with high visibility; (iii) classify hook-staged files
-  by intent (regenerator output is *meant* to land; auto-fixed
-  arbitrary peer work is not) and only absorb regenerator output.
-  Trigger: second instance OR owner direction. Source-surface:
-  `.agent/memory/active/napkin.md` (Quiet Lurking Mask session entry).
+The body now contains **8** due entries after reconciling five stale
+due markers whose durable homes already exist and are named in this file's
+own graduation log.
+
+| Captured | Entry | Target / decision surface | Promotion decision |
+| --- | --- | --- | --- |
+| 2026-05-10 | `getSkillPermissionIssues` dead parameter + missing live-path tests | code cleanup + test cycle in `agent-tools/scripts/validate-portability-helpers.ts` | Implementation cleanup, not ADR/PDR-shaped. |
+| 2026-05-10 | `shouldInspectFile` single-positive-example coverage | test cycle in the `validate-fitness-vocabulary` suite | Implementation cleanup, not ADR/PDR-shaped. |
+| 2026-05-10 | Cross-agent sweep-bundling prohibition | PDR or rule for commit-window coordination | PDR-shaped Practice governance; owner-visible promotion decision required. |
+| 2026-05-11 | R4-new native git pre-commit hook | rule + native hook per collaboration-protocol hardening arc | Enforcement-shaped; keep due until hook/rule land. |
+| 2026-05-11 | Commit-queue UX as structural cure surface | PDR or ADR amendment | PDR/ADR-shaped; keep due until Wave 3 doctrine settles. |
+| 2026-05-11 | Pre-commit hook must gate staged content only | ADR + rule + `cost-of-collaboration.plan.md` P0 | Host ADR-shaped and rule-shaped; this is the P0 blocker. |
+| 2026-05-11 | Peer-pair sidebar beats coordinator+helpers for design work | PDR or PDR amendment | PDR-shaped collaboration doctrine; owner-visible promotion decision required. |
+| 2026-05-11 | Advisory protocols decay under pressure; enforcement required | rule + `cost-of-collaboration.plan.md` P3 | Rule-shaped after implementation; keep due until enforcement shape lands. |
+
+### Status Corrections Applied 2026-05-12
+
+These body entries still carried due metadata, but the register already
+records their durable homes in the 2026-05-10 graduation log. This pass only
+corrects stale status metadata; it does **not** silently promote new doctrine.
+
+| Entry | Existing durable home |
+| --- | --- |
+| Agent-tools CLI affordance set + build isolation | PDR-055 + ADR-178 |
+| No-moving-targets hook tightening | `agent-tools/scripts/check-blocked-content.ts` prose-vs-data distinction + rule update |
+| Invoke doc-and-onboarding experts on significant changes | `.agent/rules/invoke-doc-and-onboarding-experts-on-significant-changes.md` |
+| Observability orthogonal axes | ADR-171 + amendments to ADR-116/143/162/163 |
+| Inter-agent collaboration protocol gaps | PDR-056, preserving hypothesis-status evidence |
 
 ### `partially-graduated`
 
-(empty — both partially-graduated items completed 2026-05-10)
+1 body entry remains partially graduated: the
+stage-by-explicit-pathspec asymmetric-cure entry. It is retained because later
+commit-boundary variants now route through PDR-054/PDR-059 plus the live
+cost-of-collaboration workstreams.
 
 ### `quarantined`
 
 (empty — apply-don't-ask / stop-inventing-optionality reformulations
 graduated 2026-05-10 to PDR-057 + PDR-058; quarantine cleared)
 
-### `pending` (~82 entries — second-instance or owner-direction gated)
+### `pending` (~60 body markers — second-instance or owner-direction gated)
 
 The bulk of the queue. Reviewed at every consolidation; most stay
 pending until trigger fires. Grep `status: pending` for the full
@@ -144,7 +150,7 @@ the queue churns.
 | pattern surface needs polarity discipline | PDR-014 amendment + bulk sweep across ~93 pattern files | L436–492 |
 | orchestrator-vs-gate structural cure | PDR-053 + ADR-176 + script rename + commit-skill SKILL update | L891–919 |
 | agent-tools CLI affordance set + build isolation | PDR-055 + ADR-178 | L951–985 |
-| no-moving-targets hook tightening | `scripts/check-blocked-content.ts` prose-vs-data distinction + rule update | L1085–1116 |
+| no-moving-targets hook tightening | `agent-tools/scripts/check-blocked-content.ts` prose-vs-data distinction + rule update | L1085–1116 |
 | stage-by-explicit-pathspec asymmetric-cure | PDR-054 + ADR-177 (rule already landed) | L1135–1198 |
 | observability orthogonal axes | ADR-171 + amendments to ADR-116/143/162/163 | L1508–1544 |
 | inter-agent collaboration protocol gaps | PDR-056 (ten cures, hypothesis-status preserved) | L1556–1632 |
@@ -156,15 +162,17 @@ the queue churns.
 | apply-don't-ask reformulation (empirical-answerability) | PDR-057 | L1988–2036 (quarantine entry) |
 | stop-inventing-optionality reformulation (three-tier decomposition) | PDR-058 | L1988–2036 (quarantine entry) |
 
-### Entry counts (2026-05-11 — post-graduation-candidates-drain — Fronded Flowering Seed)
+### Entry Counts (2026-05-12 — post-index reconciliation)
 
 | Status | Count | Notes |
 | --- | --- | --- |
-| due | 0 | both prior `due` entries graduated this session (hook-chain re-staging → PDR-059 + ADR-177 amendment + PDR-054 cross-ref; ADR-041 workspace-tier amendment landed with `agent-tools/` + `agent-graphs/` rows; ADR-173 ratification unblocked) |
-| partially-graduated | 0 | unchanged |
+| due | 8 | body entries with live due metadata after stale-status corrections |
+| overdue | 0 | no body entry currently uses overdue metadata |
+| partially-graduated | 1 | stage-by-explicit-pathspec asymmetric-cure family |
 | quarantined | 0 | unchanged |
-| pending | ~83 | down by 1: "Different-lens reviewers catch different gaps" graduated to repo-local pattern instance at /jc-consolidate-docs close |
-| **total** | **~83** | down from ~86 by 3 graduations |
+| held-pending-plan | 1 | SDK codegen generator-duplication pointer |
+| pending | ~60 | grep count of explicit `status: pending` markers; prose-only older entries may still need metadata backfill |
+| **active queue total** | **~70** | excludes graduated-history bodies retained for audit until the next archive snapshot |
 
 ### 2026-05-11 graduations log (Fronded Flowering Seed — graduation-candidates-drain session)
 
@@ -178,7 +186,13 @@ the queue churns.
 + 2026-05-11; **ADR-041 amendment needed: top-level workspace tiers**
   (Dusky Masking Cloak 2026-05-11, surfaced by `assumptions-expert`
   during graph execution-prep step 1 D-4 verification).
-  `[captured: 2026-05-11 | graduated: 2026-05-11 (Fronded Flowering Seed) | source: thread:connecting-oak-resources, comment:assumptions-expert-review-on-ADR-041 | target-resolved: amend:ADR-041-2026-05-11 (agent-tools/ + agent-graphs/ tiers added; matrix expanded to 8 rows × 8 columns; status Accepted (Revised); D-4a closed in graph-mvp-arc.plan.md; ADR-173 §Open Questions:1 cross-linked) | reviewers: architecture-expert-fred GO + architecture-expert-betty GO-WITH-CONDITIONS (2 precision edits applied) + docs-adr-expert GO-WITH-CONDITIONS (3 housekeeping items applied) | trigger-fired: blocks:ADR-173-ratification (now unblocked) | size: M | status: graduated]`
+  `[captured: 2026-05-11 | graduated: 2026-05-11 (Fronded Flowering Seed) | source: thread:connecting-oak-resources | target-resolved: amend:ADR-041-2026-05-11 | trigger-fired: blocks:ADR-173-ratification | size: M | status: graduated]`
+  Resolution details: `agent-tools/` + `agent-graphs/` tiers added; matrix
+  expanded to 8 rows x 8 columns; status Accepted (Revised); D-4a closed in
+  `graph-mvp-arc.plan.md`; ADR-173 §Open Questions:1 cross-linked.
+  Reviewers: architecture-expert-fred GO; architecture-expert-betty
+  GO-WITH-CONDITIONS (2 precision edits applied); docs-adr-expert
+  GO-WITH-CONDITIONS (3 housekeeping items applied).
   ADR-041 (workspace structure) enumerates exactly five tiers: `apps/`,
   `packages/core/`, `packages/libs/`, `packages/sdks/`, `packages/design/`
   with an importer/importee matrix. The repo has already shipped a
@@ -1001,7 +1015,7 @@ continuity snapshots.
 
 + 2026-05-05; **PDR/ADR candidate — agent-tools CLI affordance set + build
   isolation**.
-  `[captured: 2026-05-05 | source: napkin+feedback-memories | target: multi:adr:build-isolation+pdr:cli-affordance+plan:agent-tooling | trigger: owner-direction+multi-instance | size: XL | status: due]`
+  `[captured: 2026-05-05 | graduated: 2026-05-10 (Sylvan Fruiting Glade) | source: napkin+feedback-memories | target-resolved: PDR-055 + ADR-178 + agent-tooling plan routing | trigger-fired: owner-direction+multi-instance | size: XL | status: graduated]`
   Friction observed throughout the 7-agent coordinator
   session: (a) no `comms list/show/watch` commands; (b) no `claims
   list/show` filtered by prefix/name/thread/kind; (c) no `commit-queue
@@ -1024,8 +1038,9 @@ continuity snapshots.
   isolation discipline), PDR (CLI affordance set + non-blocking-by-design
   + portable substrate), and a concrete agent-tools enhancement plan.
   Trigger: graduation-ready (multiple worked instances + owner-stated
-  cures). Status: due. **Sequenced-deferral pointer (2026-05-07,
-  Pelagic Rolling Harbour)**: dedicated multi-artefact authoring
+  cures). Status: graduated 2026-05-10 to PDR-055 + ADR-178.
+  **Historical sequenced-deferral pointer (2026-05-07, Pelagic Rolling
+  Harbour)**: dedicated multi-artefact authoring
   session — Phase 1: ADR (build isolation); Phase 2: PDR (CLI
   affordance set / portable substrate); Phase 3: concrete
   agent-tools enhancement plan in
@@ -1137,7 +1152,7 @@ continuity snapshots.
   distinguish prose-narrative from code-block backtick contexts**
   (Vining Spreading Seed, owner-directed at session close after
   the WS3/WS4/WS6 + rules-and-index landing arc).
-  `[captured: 2026-05-04 | source: owner-direction | target: multi:script:check-blocked-content+rule:no-moving-targets-in-permanent-docs | trigger: owner-direction | size: L | status: due]`
+  `[captured: 2026-05-04 | graduated: 2026-05-10 (Sylvan Fruiting Glade) | source: owner-direction | target-resolved: agent-tools/scripts/check-blocked-content.ts + rule:no-moving-targets-in-permanent-docs | trigger-fired: owner-direction | size: L | status: graduated]`
   The WS4
   scoped_block's `excludes_inline_code` rule strips backticked
   spans from each line before the regex test, which correctly
@@ -1154,15 +1169,16 @@ continuity snapshots.
   sentence — should fire). Source surface: napkin §
   "Owner direction (2026-05-04, end of session)". Graduation-
   target: refinement workstream extending
-  `scripts/check-blocked-content.ts` regex matcher and updating
+  `agent-tools/scripts/check-blocked-content.ts` regex matcher and updating
   `.agent/rules/no-moving-targets-in-permanent-docs.md` to
   remove the now-stale "either/or" framing. Trigger-condition:
-  ready now (owner-directed). Status: `due`. **Sequenced-deferral
-  pointer (2026-05-07, Pelagic Rolling Harbour)**: dedicated
+  ready now (owner-directed). Status: graduated 2026-05-10 to the
+  prose-vs-data hook distinction and rule update. **Historical
+  sequenced-deferral pointer (2026-05-07, Pelagic Rolling Harbour)**: dedicated
   hook-tightening session — Phase 1: TDD-RED on the regex matcher
   with prose-narrative SHA fixture; Phase 2: implement
   prose-vs-code-block distinction in
-  `scripts/check-blocked-content.ts`; Phase 3: rule body rewrite
+  `agent-tools/scripts/check-blocked-content.ts`; Phase 3: rule body rewrite
   removing either/or framing. Implementation + tests + rule edit
   out of scope for this drain session.
 
@@ -1537,7 +1553,7 @@ continuity snapshots.
   doctrine *"for all significant documentation or Practice changes
   — and this is always true — we need reviews from the documentation
   reviewer and the onboarding reviewer"*;
-  `[captured: 2026-05-02 | source: owner-direction | target: rule:invoke-doc-and-onboarding-reviewers-on-significant-changes | trigger: vaporware-gated(WS11.3-execution); re-route-available | size: M | status: due]`
+  `[captured: 2026-05-02 | graduated: 2026-05-10 (Sylvan Fruiting Glade) | source: owner-direction | target-resolved: rule:invoke-doc-and-onboarding-experts-on-significant-changes | trigger-fired: re-route-available | size: M | status: graduated]`
   trigger condition: this
   doctrine is now load-bearing for every plan that mutates docs or
   Practice surfaces; graduation target: a permanent rule (likely
@@ -1545,7 +1561,8 @@ continuity snapshots.
   OR an amendment block in `invoke-code-reviewers.md`) plus a
   `distilled.md § Process` graduation pointer plus matrix update in
   `invoke-code-reviewers.md`; queued as plan WS11.3 deliverable;
-  status: due (graduates when WS11.3 executes). **Vaporware-trigger
+  status: graduated 2026-05-10 by direct re-route to the rule surface.
+  **Historical vaporware-trigger
   flag (2026-05-07, Pelagic Rolling Harbour)**: trigger is gated on
   unmet WS11.3 plan execution, which is the sequenced-deferral
   vaporware shape per `distilled.md` §Sequenced-Deferral Discipline.
@@ -1561,7 +1578,7 @@ continuity snapshots.
   `OBSERVABILITY_FIXTURES` orthogonal fixture-as-tee boolean) is a
   reusable architectural decision per PDR-019 (ADR scope by
   reusability).
-  `[captured: 2026-05-02 | source: plan-WS-amendment | target: multi:adr:171+adr-amend:116/143/162/163 | trigger: vaporware-gated(WS8.6/WS8.7-execution) | size: L | status: due]`
+  `[captured: 2026-05-02 | graduated: 2026-05-10 (Sylvan Fruiting Glade) | source: plan-WS-amendment | target-resolved: ADR-171+adr-amend:116/143/162/163 | trigger-fired: owner-direction | size: L | status: graduated]`
   Applies to every future sink and every future
   capability that emits; graduation target: a new
   `docs/architecture/architectural-decisions/NNN-observability-configuration-orthogonality.md`
@@ -1582,8 +1599,8 @@ continuity snapshots.
   `ls docs/architecture/architectural-decisions/ | sort -n | tail -5`
   — 165-169 already present, 170/171 next available. All cross-plan
   references updated; re-verify pre-authoring guards added at three
-  locations. Status: due (ADR-number question resolved; ADR authoring
-  + amendments graduate when plan WS8.6/WS8.7 execute). **Vaporware-
+  locations. Status: graduated 2026-05-10 to ADR-171 and amendments.
+  **Historical vaporware-
   trigger flag (2026-05-07, Pelagic Rolling Harbour)**: trigger is
   gated on WS8.6/WS8.7 plan execution; sequenced-deferral
   vaporware shape per `distilled.md` §Sequenced-Deferral
@@ -1606,7 +1623,7 @@ continuity snapshots.
 
 + 2026-05-03; **inter-agent collaboration protocol gaps surfaced
   by Pelagic ↔ Misty Task M1 round-trip**.
-  `[captured: 2026-05-03 | source: experience+napkin | target: multi:protocol-amendments(i)-(x)+collaboration-hypothesis-evolution | trigger: vaporware-gated(CLI-ergonomics-plan); empirical-N>=3-validation-required | size: XL | status: due]`
+  `[captured: 2026-05-03 | graduated: 2026-05-10 (Sylvan Fruiting Glade) | source: experience+napkin | target-resolved: PDR-056 with hypothesis-status preserved | trigger-fired: owner-direction+knowledge-graduation | size: XL | status: graduated]`
   **Status reframed 2026-05-03 (Misty session-handoff metacognition)**:
   these cures are now structured as candidate amendments to the N-agent
   collaboration hypothesis at
@@ -2534,7 +2551,7 @@ consolidation to triage.
    while the live `claudeSkillDirs` path has zero unit coverage.
    `[captured: 2026-05-10 | source: reviewer:test-expert+code-expert
    | target: code-cleanup + test-cycle | trigger: next touch on
-   scripts/validate-portability-helpers.ts | size: S | status: due]`
+   agent-tools/scripts/validate-portability-helpers.ts | size: S | status: due]`
 
 3. **Unit-coverage gap for `evaluateParityChecks`.** The two remaining
    parity evaluators (`evaluateReviewerAdapterParity`,

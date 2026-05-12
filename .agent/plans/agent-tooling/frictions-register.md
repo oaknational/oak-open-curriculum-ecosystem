@@ -616,6 +616,60 @@ below is a cross-reference index, not a second source of truth.
   the skills standardisation plan; this pass did not re-scope that work.
 - **Owner direction**: standing — pre-requisite for top-quality agent work
 
+### F-19 — CLI exposes internal mechanics as agent-facing inputs
+
+- **Source**: owner direction 2026-05-12 during root-script retirement
+  closeout and `pnpm check` profiling handoff.
+- **Surface**: agent-tools CLI, especially collaboration-state and
+  commit-queue flows.
+- **Observed**: Ordinary agent workflows require hand-passing ISO date
+  strings, UUIDs, claim ids, intent ids, and sometimes registry paths.
+  These are internal mechanics of the tooling, but the current surface
+  makes agents copy them between commands and remember which identifier
+  belongs to which lifecycle step.
+- **Expected**: The CLI derives `now`, generates IDs, resolves
+  current-agent/current-thread/current-intent defaults, and prompts or
+  errors only when there is genuine ambiguity. Explicit date/UUID flags
+  remain available for deterministic tests, recovery, and replay, not
+  as the normal path.
+- **Candidate cure**: Add this as a P-Foundation requirement in
+  [`current/cost-of-collaboration.plan.md`](current/cost-of-collaboration.plan.md):
+  a single high-level CLI that owns ID/timestamp generation and provides
+  semantic workflow commands such as "my active claim" or "this commit
+  intent" resolution.
+- **Target surface**: P-Foundation agent-tools CLI overhaul; future
+  collaboration-state and commit-queue command UX.
+- **Status**: addressed-in-plan-cost-of-collaboration-p-foundation
+- **Owner direction status**: standing
+
+### F-20 — Repo-check profile depends on external browser/bootstrap state
+
+- **Source**: `pnpm check` profiling continuation on 2026-05-12.
+- **Surface**: `pnpm check:profile`,
+  `pnpm agent-tools:repo-check profile`, Playwright-backed Turbo tasks,
+  and collaboration-state inbox usage during profiling.
+- **Observed**: The profile command writes useful dry graph and timing
+  JSON, but a clean isolated worktree still needed extra, undocumented
+  bootstrap steps before it could profile the browser-heavy legs:
+  `pnpm install --offline` failed on a missing pnpm tarball,
+  Playwright browsers were absent, browser tests failed inside the
+  sandbox with Chromium Mach-port permission errors, and the old
+  `comms inbox --recipient` muscle-memory path now errors because the
+  command expects `--agent-name` plus explicit message/seen-file paths.
+- **Expected**: A profiling command for a whole-repo assurance gate
+  either preflights required local state with actionable messages or
+  records those environment gaps in the profile artifact. The comms
+  read-side command should expose a current-agent/default-inbox path
+  that does not require agents to reconstruct storage paths.
+- **Candidate cure**: Extend `repo-check profile` with environment
+  preflight/reporting for pnpm cache availability, Playwright browser
+  installation, sandbox/browser constraints, and command-attempt notes.
+  Route the comms inbox ergonomics through the P-Foundation CLI
+  simplification work already covering F-19.
+- **Target surface**: P-Foundation agent-tools CLI overhaul and future
+  repo-check profiling hardening.
+- **Status**: open
+
 ---
 
 ## Mitigated / Addressed Frictions

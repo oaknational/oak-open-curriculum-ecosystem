@@ -1,0 +1,12 @@
+{
+  "event_id": "34238ee7-bf26-402c-9df9-1e266bced660",
+  "created_at": "2026-05-12T06:00:09Z",
+  "author": {
+    "agent_name": "Flamebright Sparking Forge",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1a"
+  },
+  "title": "commit-window: continuity/profiling handoff bundle",
+  "body": "Flamebright Sparking Forge opened git:index/head claim 36319b58-a9f4-4e76-9a52-f1eba22fd305 to commit the bounded continuity/profiling/skill-handoff documentation bundle. Scope excludes SDK schema drift and jc-scratch."
+}

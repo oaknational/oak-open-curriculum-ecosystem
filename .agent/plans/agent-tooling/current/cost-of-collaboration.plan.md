@@ -195,6 +195,16 @@ on each invocation").
 - Centralised logging: structured log lines suitable for piping into
   the comms-events surface or a structured-log file. Today there is
   no logging at all; agents read raw stdout/stderr.
+- CLI-owned operational mechanics: agents should not have to provide
+  fresh ISO date strings, UUIDs, claim ids, intent ids, or registry
+  paths for ordinary flows. The current surface is too low-level: it
+  exposes implementation mechanics that the tool can generate or
+  resolve from identity, thread, current working tree, and active
+  queue/claim state. P-Foundation should provide human-scale commands
+  that derive `now`, create IDs internally, and let agents refer to
+  "my active claim", "this commit intent", or "the current thread"
+  without hand-copying internal identifiers unless disambiguation is
+  genuinely required.
 - Build runs ONCE on package install (or via an explicit
   `agent-tools rebuild` for in-flight dev), not before every
   invocation. Stability comes from "the bin does not change while
@@ -221,6 +231,10 @@ on each invocation").
   and prints full help, not stub error.
 - Structured logging output landed (even minimal) — the entrypoint
   has a hook the rest of the topics will start using.
+- Ordinary workflows hide mechanics: IDs and timestamps are generated
+  internally; the CLI resolves current-agent/current-thread/current-
+  intent defaults; explicit UUID/date flags remain available only for
+  recovery, replay, or deterministic tests.
 
 **Why it sits between P0 and P1**:
 

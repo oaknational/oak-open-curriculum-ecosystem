@@ -18132,6 +18132,227 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "18938b53-9953-4ef7-95cf-797d3497272c",
+      "agent_id": {
+        "agent_name": "Volcanic Glowing Brazier",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T05:42:36Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit follow-up shared memory and collaboration state.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T05:44:30Z",
+        "closed_by": {
+          "agent_name": "Volcanic Glowing Brazier",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1a"
+        },
+        "summary": "Committed follow-up shared memory/state bundle as 247b74af.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "18938b53-9953-4ef7-95cf-797d3497272c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "faaab113-d585-41ea-92ca-92854a53a0e1",
+      "agent_id": {
+        "agent_name": "Flamebright Sparking Forge",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T05:42:29Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Bounded consolidate-docs pass: reconcile repo-continuity live state and pending-graduations due counts without broad implementation.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T05:47:22Z",
+        "closed_by": {
+          "agent_name": "Flamebright Sparking Forge",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1a"
+        },
+        "summary": "Bounded repo-continuity and pending-graduations consolidation pass complete. Repo-continuity live state compacted with verbatim archive snapshot; pending-graduations due index reconciled to 8 current due entries with stale graduated statuses corrected. Validation: focused markdownlint and git diff --check pass; fitness strict-hard still fails on known pending-graduations and practice-bootstrap hard pressure.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "faaab113-d585-41ea-92ca-92854a53a0e1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "91cbc152-4cd5-40f7-9271-1ba7f3f55e65",
+      "agent_id": {
+        "agent_name": "Volcanic Banking Pyre",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/start-right-quick/SKILL-CANONICAL.md",
+            ".agent/skills/start-right-thorough/SKILL-CANONICAL.md",
+            ".agent/skills/commit/SKILL-CANONICAL.md",
+            ".agent/skills/start-right-quick/shared/start-right.md",
+            ".agent/skills/start-right-thorough/shared/start-right-thorough.md",
+            ".agents/skills/jc-start-right-quick/SKILL.md",
+            ".agents/skills/jc-start-right-thorough/SKILL.md",
+            ".agents/skills/jc-commit/SKILL.md",
+            ".claude/skills/jc-start-right-quick/SKILL.md",
+            ".claude/skills/jc-start-right-thorough/SKILL.md",
+            ".claude/skills/jc-commit/SKILL.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T05:52:45Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Review and remediate jc-start-right-quick, jc-start-right-thorough, and jc-commit skill documentation.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T05:56:53Z",
+        "closed_by": {
+          "agent_name": "Volcanic Banking Pyre",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1a"
+        },
+        "summary": "Remediated jc-start-right-quick, jc-start-right-thorough, and jc-commit canonical skill documentation; regenerated jc-commit adapters; validation passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "91cbc152-4cd5-40f7-9271-1ba7f3f55e65",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "edf8e893-921e-4770-ac90-efca4a5d2c99",
+      "agent_id": {
+        "agent_name": "Volcanic Banking Pyre",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agents/rules/present-verdicts-not-menus.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T05:55:37Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Repair portability adapter gap found during jc skill remediation validation.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T05:56:53Z",
+        "closed_by": {
+          "agent_name": "Volcanic Banking Pyre",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1a"
+        },
+        "summary": "Added missing .agents rule wrapper for present-verdicts-not-menus after portability validation exposed the gap.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "edf8e893-921e-4770-ac90-efca4a5d2c99",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "53172c34-7c96-44a3-8253-99a69b35019f",
+      "agent_id": {
+        "agent_name": "Vining Budding Canopy",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agent-tooling/pnpm-check-profiling-deep-dive-2026-05-12.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".logs/check-profiles/check-profile-analysis-2026-05-12.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T05:55:50Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Write pnpm check profiling deep dive and refresh session handoff surfaces.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T05:58:02Z",
+        "closed_by": {
+          "agent_name": "Vining Budding Canopy",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1a"
+        },
+        "summary": "Completed pnpm check profiling deep dive, refreshed agentic thread and repo-continuity handoff surfaces, and preserved profile next steps.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "53172c34-7c96-44a3-8253-99a69b35019f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

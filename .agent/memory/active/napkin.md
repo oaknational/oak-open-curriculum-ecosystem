@@ -21,6 +21,46 @@ The most recent rotation is archived at
 [archive-pass]: archive/napkin-2026-05-12.md
 [previous-pass]: archive/napkin-2026-05-11.md
 
+## 2026-05-12 — Flamebright Sparking Forge / codex / GPT-5 / `019e1a`
+
+### Consolidation Pass
+
+- Ran `jc-start-right-thorough` before touching the targeted operational
+  docs. Registered claim `faaab113-d585-41ea-92ca-92854a53a0e1` after the
+  live claims query returned no active claims.
+- Archived the pre-reconciliation `repo-continuity.md` snapshot to
+  `archive/repo-continuity-session-history-2026-05-12.md`, then rewrote the
+  live file as a compact operational index: current state, active threads,
+  next safe steps, open owner decisions, invariants, and deep-consolidation
+  status.
+- Reconciled `pending-graduations.md` so the index counts the body's current
+  due candidates and explicitly separates stale graduated metadata from live
+  ADR/PDR promotion decisions.
+
+### Patterns to Remember
+
+- A full-file archive snapshot is a good defensive move before large continuity
+  compaction: it preserves historical prose verbatim while allowing the live
+  surface to become operational again.
+- When correcting stale `status: due` metadata, name the existing durable home
+  in the index. That makes the action status reconciliation, not silent
+  doctrine graduation.
+- Cost-of-collaboration P0 remains live: `.husky/pre-commit` still runs
+  whole-tree gates except for staged Markdown. Do not treat documentation
+  consolidation as permission to reopen multi-agent implementation windows.
+
+### Validation
+
+- Focused `markdownlint` and `git diff --check` passed for the edited
+  continuity, pending-graduations, napkin, thread-record, archive, and
+  collaboration-state surfaces.
+- `practice:fitness:informational` improved from CRITICAL to HARD:
+  `repo-continuity.md` is healthy; `pending-graduations.md` remains hard on
+  lines/chars; `practice-bootstrap.md` remains hard on chars.
+- `practice:fitness:strict-hard` failed as expected on those remaining hard
+  surfaces. This is the correct residual signal: the queue still needs a real
+  graduation/archive drain, not metric-shaped trimming.
+
 ## 2026-05-12 — Torrid Flaring Hearth / codex / GPT-5 / `019e1a`
 
 ### Consolidate-Docs Pass
@@ -118,3 +158,50 @@ The most recent rotation is archived at
 - Behaviour change: when shared memory or state is part of the live work,
   either commit it or name precisely why a fresh post-commit mutation remains.
   Do not describe those surfaces as disposable cleanup.
+
+## 2026-05-12 — `pnpm check:profile` Needs Environment Notes
+
+### Profiling Surprise
+
+- A clean detached worktree isolated the dirty main tree, but it also exposed
+  local bootstrap assumptions: pnpm offline cache was incomplete, Playwright
+  browsers were not installed, and Chromium could not launch inside the
+  sandbox. The useful full-profile attempt needed browser install plus an
+  escalated run before it reached the real failing task.
+- Behaviour change: when profiling a many-process gate, preserve the early
+  environment failures as evidence instead of flattening everything into the
+  final failing test.
+
+## 2026-05-12 — Volcanic Banking Pyre / codex / GPT-5 / `019e1a`
+
+### Skill Remediation Findings
+
+- Deep review of `jc-start-right-quick` and `jc-start-right-thorough` showed a
+  subtle drift shape: the canonical skill wrappers had become smaller
+  directive-only summaries while the shared workflow files carried the real
+  live-state, active-claim, thread, plan, and git-grounding contract. Fix:
+  make the canonical skill body point at the shared workflow as the source of
+  truth instead of duplicating a partial list.
+- `jc-commit` still named retired adapter paths and a deleted root
+  `scripts/log-commit-attempt.sh` helper after root-script retirement. Fix:
+  remove the stale root-script instruction and point platform topology back to
+  ADR-125 plus the generated `.agents/skills/jc-commit` and
+  `.claude/skills/jc-commit` adapters.
+- `pnpm portability:check` caught an adjacent `.agents/rules/` wrapper gap for
+  `present-verdicts-not-menus.md` from the prior jc-plan remediation. Treat
+  adapter validation failures during documentation work as real infrastructure
+  findings, even when the missing wrapper is not in the original edit list.
+
+## 2026-05-12 — Vining Budding Canopy / codex / GPT-5 / `019e1a`
+
+### Profiling Handoff
+
+- The `pnpm check` profile needs two evidence modes: cold isolated proof cost
+  and warm local rerun cost. The first pass is now preserved in
+  `.logs/check-profiles/` and explained in
+  `pnpm-check-profiling-deep-dive-2026-05-12.md`; the second pass is blocked
+  until the MCP Vitest failure is fixed.
+- Do not let profiling environment failures obscure the final product failure:
+  Playwright bootstrap and sandbox launch were profiling constraints; the
+  next actionable blocker is
+  `src/correlation/middleware.integration.test.ts:203`.

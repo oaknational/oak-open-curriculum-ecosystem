@@ -64,9 +64,10 @@ These scripts make this skill actionable end-to-end:
   after success. It is repo-owned and cross-vendor; no platform-native queue
   feature is required.
 
-`scripts/log-commit-attempt.sh` is retained in the repo but currently
-disabled. Do not call it unless the owner explicitly re-enables
-commit-attempt logging.
+Commit-attempt logging is currently paused. Do not call or recreate a root
+`scripts/log-commit-attempt.sh` helper; root scripts have been retired. If the
+owner re-enables commit-attempt logging, route the implementation through a
+workspace-owned tool surface and document the new command here.
 
 ## Before You Draft — Load the Live Constraints
 
@@ -201,7 +202,8 @@ the advisory queue and the short-lived git transaction claim:
    fingerprint with the already-staged payload. Re-staging the registry changes
    the payload being verified and creates the fingerprint-recursion loop.
 
-8. Run the commit-skill gate orchestrator and verify the staged bundle
+8. Write the drafted message to a file such as `.git/COMMIT_EDITMSG`, then run
+   the commit-skill advisory orchestrator and verify the staged bundle
    immediately before committing:
 
    ```bash
@@ -337,12 +339,15 @@ pnpm agent-tools:check-commit-skill-advisories \
   -m "Body paragraph two."
 ```
 
-If the orchestrator reports a violation, identify the failing gate from the
-`commit-skill gate "<gate>" failed` line on stderr, fix the underlying tree
-or message issue, and re-run before attempting `git commit`. The orchestrator
-runs the same fitness, vocabulary, and commitlint configurations as the live
-gates — same rules as the post-commit hook, without the rest of the ~34s
-pre-commit chain.
+If the orchestrator reports a violation, identify the failing advisory from
+the `commit-skill gate "<gate>" failed` line on stderr, then classify the
+signal before deciding what to do. Commit-message violations must be fixed
+before `git commit`. Fitness and vocabulary findings require substance-led
+disposition: fix violations introduced by the current change, and record or
+route pre-existing shared-state signals through the appropriate consolidation
+or owner-visible path. Do not treat the advisory orchestrator as a hook verdict.
+The live `.husky/pre-commit` and `.husky/commit-msg` hooks remain the blocking
+gate tier.
 
 The fitness and vocabulary gates inspect the working tree, not the staged
 set; pre-existing fitness or vocabulary violations are catalogued at the
@@ -543,22 +548,22 @@ the conflation is captured at
   (see `repo-continuity.md § Pending-graduations register additions
   (2026-04-23 handoff)`).
 - Diagnostics: [`.agent/memory/operational/diagnostics/README.md`](../../memory/operational/diagnostics/README.md)
-  — convention for the commit-attempts log + log-commit-attempt script.
+  — convention for diagnostic logs when the owner explicitly enables them.
 - Principles: [`.agent/directives/principles.md`](../../directives/principles.md)
   — the `--no-verify` fresh-authorisation invariant.
 
 ## Platform Adapters
 
 This skill is **passive / always-active** — discovery, not invocation.
-Adapters are skill-form thin pointers (no slash-command form):
+Adapters are generated skill-form thin pointers. ADR-125 is authoritative for
+the current adapter topology; do not hand-maintain a platform inventory here.
+For this owned skill the generated adapters currently live at:
 
-- **Cursor**: `.cursor/skills/commit/SKILL.md` — thin pointer to this file.
-- **Codex**: `.agents/skills/commit/SKILL.md` — thin pointer to this file.
-- **Claude**: `.claude/skills/commit/SKILL.md` — thin pointer to this file,
-  with always-active discovery also reinforced through the `CLAUDE.md` →
-  `AGENT.md` entrypoint citation chain at
-  [`.agent/directives/AGENT.md`](../../directives/AGENT.md).
-- **Gemini**: discovered via the same `AGENT.md` citation chain. Gemini
-  does not have a native skills surface; the slash-command form
-  (`.gemini/commands/jc-commit.toml`) was deliberately removed when this
-  workflow was promoted from a slash command to a passive skill.
+- `.agents/skills/jc-commit/SKILL.md` — cross-tool alias used by Codex,
+  Cursor, Gemini, and other `.agents/` consumers.
+- `.claude/skills/jc-commit/SKILL.md` — Claude Code adapter.
+
+The retired custom-command and per-platform skill directories are not valid
+homes for this workflow. Regenerate adapters with
+`pnpm --filter @oaknational/agent-tools skills-adapter-generate` and verify
+with `pnpm skills:check` or `pnpm portability:check` after canonical changes.

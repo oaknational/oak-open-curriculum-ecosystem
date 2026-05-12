@@ -1,16 +1,16 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-> **Current continuation**: the next session in this thread carries the
-> owner's `pnpm check` analysis/profiling brief forward. Start at
-> §`pnpm check` profiling continuation. The older agent communication
-> improvement opener remains below as historical lane state, not the
-> immediate next slice.
+> **Current continuation**: the owner's `pnpm check` profiling brief has a
+> durable evidence pass and deep-dive write-up. Start at §`pnpm check`
+> profiling result and next step, then return to the older agent
+> communication improvement opener only when the profiling follow-up is no
+> longer load-bearing.
 
-## `pnpm check` profiling continuation — session opener (2026-05-12+)
+## `pnpm check` profiling result and next step (2026-05-12+)
 
-**One-line objective**: analyse the deliberately exhaustive `pnpm check`
-process, including the Turbo graph and the many-process profiling strategy,
-without weakening the repo-wide stability contract.
+**One-line objective**: keep `pnpm check` as the explicit exhaustive local
+proof command; fix the current MCP package test blocker, rerun the profile,
+and only tune triggers where the preserved or moved assurance is named.
 
 **Owner opening statement to preserve**: the repo relies on comprehensive
 automated checks to stay stable while multiple agents from multiple vendors
@@ -36,15 +36,42 @@ belongs in workspaces.
 The dry run records the Turbo graph under `.logs/check-profiles/`; this
 location is deliberate because `pnpm check` cleans `.turbo`.
 
-**Next safe step**: run the profiling pass for the exhaustive `pnpm check`
-path, then report which tasks are in the graph, which phases dominate runtime,
-which work is intentionally repo-wide, and which trigger surfaces can be tuned
-without reducing whole-repo assurance. Full `pnpm check` was not run in the
-root-script-retirement session; that cost belongs to this profiling slice.
+**Landed profiling evidence**:
+
+- Deep dive:
+  [pnpm-check-profiling-deep-dive-2026-05-12.md](../../../plans/agent-tooling/pnpm-check-profiling-deep-dive-2026-05-12.md).
+- Raw profile artifacts:
+  [`.logs/check-profiles/`](../../../../.logs/check-profiles/).
+- Compact evidence note:
+  [check-profile-analysis-2026-05-12.md](../../../../.logs/check-profiles/check-profile-analysis-2026-05-12.md).
+- Tooling friction captured as F-20 in
+  [frictions-register.md](../../../plans/agent-tooling/frictions-register.md).
+
+**Observed graph/runtime shape**:
+
+- Turbo dry graph: 19 packages, 12 task families, 228 graph nodes.
+- Real command nodes: 88; `<NONEXISTENT>` package/task placeholder nodes: 140.
+- Main-checkout dry run showed warm cache for `test`, `type-check`, and most
+  `build` tasks; isolated-worktree full profile was all cache misses.
+- Final full profile attempt measured `pnpm check` at 73.867s before exit.
+  Turbo reported 87 successful real tasks, 1 failed real task, 0 cached, and
+  58.494s wall time.
+
+**Current blocker**: the escalated full profile reached the real workload and
+failed in `@oaknational/oak-curriculum-mcp-streamable-http#test` at
+`src/correlation/middleware.integration.test.ts:203`. Expected Sentry
+`correlation_id` scope tagging was absent. Playwright/browser bootstrap
+problems were environmental profiling constraints; the final blocker is this
+ordinary Vitest assertion.
+
+**Next safe step**: fix or explicitly route the MCP correlation-middleware
+test failure, then rerun `pnpm check:profile`. After a clean full-profile
+attempt, run a warm-cache second pass in the same prepared environment. Only
+then decide whether any trigger tuning is warranted.
 
 **Acceptance frame**:
 
-- Turbo graph for `pnpm check` is captured and explained.
+- Turbo graph for `pnpm check` is captured and explained in the deep dive.
 - Profiling method handles the multi-process Turbo workflow and preserves raw
   evidence in `.logs/check-profiles/`.
 - Local, pre-commit, pre-push, GitHub push, SonarQube Cloud, and CodeQL
@@ -3263,7 +3290,9 @@ and
 | --- | --- | --- | --- | --- | --- | --- |
 | `Gilded Shimmering Dawn` | `cursor` | `GPT-5.5` | `3869cd` | `owner-directed-sub-coordinator-for-Cursor-helper-work; introduced-to-Wooded-Spreading-Thicket; delegated-brief-e6f3113e-legacy-comms-event-audit-by-directory-to-three-read-only-lower-powered-helpers; synthesized-result-3869cd-cursor-result-1-legacy-comms-audit; captured-Cursor-comms-lesson-fresh-session-plus-simple-linear-parallelisable-plan` | 2026-05-11 | 2026-05-11 |
 | `Flamebright Roasting Magma` | `codex` | `GPT-5` | `019e1a` | `root-script-retirement-and-pnpm-check-profiling-handoff; committed-fabe99c3-through-commit-queue; moved-retained-root-scripts-to-workspaces; added-agent-tools-repo-check-profile-and-markdownlint-staged-surfaces; next-session-owns-deliberately-exhaustive-pnpm-check-analysis` | 2026-05-12 | 2026-05-12 |
+| `Flamebright Sparking Forge` | `codex` | `GPT-5` | `019e1a` | `bounded-repo-continuity-and-pending-graduations-consolidation-drain; archived-historical-continuity-prose; reconciled-live-state-and-due-index; no-staging-window` | 2026-05-12 | 2026-05-12 |
 | `Torrid Flaring Hearth` | `codex` | `GPT-5` | `019e1a` | `consolidate-docs-pass; napkin-rotation; fitness-routing; thread-register-and-collaboration-state-audit; session-handoff-and-commit-closeout` | 2026-05-12 | 2026-05-12 |
+| `Vining Budding Canopy` | `codex` | `GPT-5` | `019e1a` | `pnpm-check-profiling-deep-dive-and-session-handoff; captured-turbo-graph-228-nodes-88-real-commands; preserved-profile-artifacts-under-.logs-check-profiles; recorded-F20-repo-check-profile-bootstrap-friction; next-step-fix-streamable-http-correlation-middleware-vitest-failure-then-rerun-clean-and-warm-profile` | 2026-05-12 | 2026-05-12 |
 | `Wooded Spreading Thicket` | `cursor` | `GPT-5.5` | `unknown` | `persistent-comms-coordinator-for-session; monitors-active-claims-shared-comms-log-and-fresh-comms-surfaces-every-30s; updateCurrentStep-telemetry-triage-external-tool-not-in-repo; writes-only-on-change-milestone-blocker-or-quiet-interval; all-agents-introduce-to-Wooded-Spreading-Thicket` | 2026-05-11 | 2026-05-11 |
 | `Galactic Transiting Orbit` | `codex` | `GPT-5` | `019e18` | `Wave-3-commit-queue-UX-hardening-claim-close-cycle-fingerprint-recursion-slice-in-progress; preserving-post-commit-ledger-residue-from-Embered-Burning-Magma-as-evidence; scope-agent-tools-commit-queue-collaboration-state-tests-plan-status-and-session-lifecycle-surfaces; Wave-4-and-Wave-5-remain-closed` | 2026-05-11 | 2026-05-11 |
 | `Shaded Ripening Copse` | `claude-code` | `claude-opus-4-7-1m` | `c13bdf` | `commit-queue-UX-brief-author-B-02-B-03-Workstream-4-architectural-seam-and-third-direction-peer-commit-absorption-subsection-commit-5c299ed5; primary-thread-was-connecting-oak-resources-but-the-commit-queue-UX-brief-landed-here-per-opener-routing` | 2026-05-11 | 2026-05-11 |

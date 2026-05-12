@@ -23,11 +23,20 @@ grounding, not an installed tripwire layer; the installed layer
 is the plan-body first-principles-check rule).**
 
 1. @.agent/directives/AGENT.md — operational entry point and index
-2. @.agent/directives/principles.md — **THE AUTHORITATIVE RULES**
-3. @.agent/directives/tdd-as-design.md — **FOUNDATIONAL DEFINITION** of TDD: a test describes a system state, product code is the path that guides the system into it
-4. @.agent/directives/testing-strategy.md — test-type taxonomy and shape rules
-5. @.agent/directives/schema-first-execution.md — types flow from schema
-6. @.agent/directives/orientation.md — layering contract and authority order
+2. @RULES_INDEX.md — canonical list of always-applied `.agent/rules/*.md`
+   files
+3. @.agent/directives/principles.md — authoritative engineering principles
+4. @.agent/directives/tdd-as-design.md — foundational TDD definition: a test
+   describes a system state, product code is the path that guides the system
+   into it
+5. @.agent/directives/testing-strategy.md — test-type taxonomy and shape rules
+6. @.agent/directives/schema-first-execution.md — types flow from schema
+7. @.agent/directives/orientation.md — layering contract and authority order
+
+For Codex, Gemini, or any other platform that does not auto-load canonical
+rules, read every canonical `.agent/rules/*.md` file listed in
+`RULES_INDEX.md` before substantive work. Treat `RULES_INDEX.md` as the live
+inventory rather than copying the rule list here.
 
 ### 2. Start-here ADRs
 
@@ -110,10 +119,11 @@ Platform hooks set the platform-suffixed Practice variable: the Claude Code
 fallback.
 
 Before any Codex thread registration or shared collaboration-state write,
-prefer the full PDR-027 identity preflight:
+run the PDR-027 identity preflight with the current platform and model values.
+For this repo's Codex GPT-5 sessions the command is:
 
 ```bash
-pnpm agent-tools:collaboration-state -- identity preflight --platform <platform> --model <model>
+pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5
 ```
 
 Codex sessions with `CODEX_THREAD_ID` available must not write new thread rows

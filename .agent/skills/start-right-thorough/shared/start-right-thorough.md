@@ -15,16 +15,31 @@ Ground yourself rigorously before beginning significant work.
 Read and internalise these documents:
 
 1. @.agent/directives/AGENT.md — Entry point and documentation index
-2. @.agent/directives/principles.md — **THE AUTHORITATIVE RULES**
-3. @.agent/directives/tdd-as-design.md — **FOUNDATIONAL DEFINITION** of TDD: a test describes a system state, product code is the path that guides the system into it
-4. @.agent/directives/testing-strategy.md — test-type taxonomy and shape rules
-5. @.agent/directives/schema-first-execution.md — Types flow from schema
-6. @.agent/memory/operational/threads/README.md — thread convention + identity discipline (PDR-027)
-7. Scan the [Start Here: 5 ADRs in 15 Minutes](../../../../docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes)
+2. @RULES_INDEX.md — canonical list of always-applied `.agent/rules/*.md`
+   files
+3. @.agent/directives/principles.md — authoritative engineering principles
+4. @.agent/directives/tdd-as-design.md — foundational TDD definition: a test
+   describes a system state, product code is the path that guides the system
+   into it
+5. @.agent/directives/testing-strategy.md — test-type taxonomy and shape rules
+6. @.agent/directives/schema-first-execution.md — types flow from schema
+7. @.agent/memory/operational/threads/README.md — thread convention + identity discipline (PDR-027)
+8. Scan the [Start Here: 5 ADRs in 15 Minutes](../../../../docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes)
    block in the ADR index. Open any ADR whose slug matches your current
    work area from the [full ADR index](../../../../docs/architecture/architectural-decisions/README.md).
 
 **Plans must include regularly re-reading and re-committing to these foundation documents.**
+
+For Codex, Gemini, or any other platform that does not auto-load canonical
+rules, read every canonical `.agent/rules/*.md` file listed in
+`RULES_INDEX.md` before substantive work. Treat `RULES_INDEX.md` as the live
+inventory rather than copying the rule list here.
+
+Thorough grounding extends quick grounding. Also apply
+`.agent/skills/start-right-quick/shared/start-right.md` §Live state
+(operational memory) and §Live branch state so repo-continuity, the touched
+thread record, active claims, shared comms, decision/escalation state, active
+plans, and git status/log are part of the same grounding pass.
 
 ## Active-Claims Registry
 
