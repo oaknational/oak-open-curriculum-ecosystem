@@ -83,8 +83,8 @@ Earlier archives remain under [`archive/`](archive/).
   the pending-graduations due index was reconciled, and ADR/PDR promotion
   decisions were surfaced explicitly.
 - Conservation-first consolidation advanced again on 2026-05-12: the
-  distilled-stage pass is complete, and the next staged consolidation session
-  should process `pending-graduations.md` before `practice-bootstrap.md`.
+  distilled-stage and `pending-graduations.md` passes are complete. The next
+  staged consolidation session should process `practice-bootstrap.md`.
 - Next `agentic-engineering-enhancements` implementation continuation remains
   owner-directed: audit all remaining skills if that lane is reopened, or
   continue cost-of-collaboration P5/P8 from the active plan.
@@ -135,7 +135,7 @@ each thread record; this table is the repo-level index.
 | ------------------------------------------------------------------------------ | --------------------------------------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `main-critical-sonar-remediation`                                              | Sonar remediation                             | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | `observability-sentry-otel`                                                    | Sentry/OTel integration                       | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic]       | Volcanic Charring Furnace / `cursor` / GPT-5.5 / `242ea3` / 2026-05-12 (distilled-stage conservation routing); Shadowed Dimming Veil / `codex` / GPT-5 / `019e1c` / 2026-05-12 (P8 reviewer synthesis and mandatory live-TUI routing); Seaworthy Snorkelling Prow / `codex` / GPT-5 / `019e1c` / 2026-05-12 (validate-boundaries graph-ingest inventory repair + pre-commit wiring); see thread record for full identity history |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic]       | Twigged Growing Glade / `cursor` / GPT-5.5 / `c19c95` / 2026-05-12 (pending-graduations conservation pass complete; next consolidation target is `practice-bootstrap.md`); Ferny Regrowing Leaf / `claude` / opus-4-7-1m / `10ca9b` / 2026-05-12 (coordinator session; 6-agent directed-message allocation matrix; coordinator-as-allocator role-failure-mode captured); Volcanic Charring Furnace / `cursor` / GPT-5.5 / `242ea3` / 2026-05-12 (distilled-stage conservation routing); Shadowed Dimming Veil / `codex` / GPT-5 / `019e1c` / 2026-05-12 (P8 reviewer synthesis and mandatory live-TUI routing); Seaworthy Snorkelling Prow / `codex` / GPT-5 / `019e1c` / 2026-05-12 (validate-boundaries graph-ingest inventory repair + pre-commit wiring); see thread record for full identity history |
 | `connecting-oak-resources`                                                     | Oak resource graph                            | [record][connecting]    | Radiant Illuminating Twilight / `codex` / GPT-5 / `019e1c` / 2026-05-12 (WS2.1 graph-ingest scaffold landed at `0f895070`; commit-msg local-commitlint unblock landed at `42f2e721`); Brazen Stoking Ash / `claude` / opus-4-7-1m / `913094` / 2026-05-12 (peer-triple dispatcher session; Lofty Vaulting Summit landed WS1.3 DatasetCore + DataFactory at 87e21125 with type-expert + architecture-expert-betty absorbed; Shaded Masking Shadow landed knip-unblock at 730766ad; Lofty WS1.4 offered but deferred — owner closed Lofty's session; handed dispatcher role to Ferny Regrowing Leaf via shared-log 8c4dc90a); Clouded Vaulting Squall / `claude` / opus-4-7-1m / `866472` / 2026-05-12 (holistic re-plan of Inc.1a remaining cycles landed at f73c42f5; 12 → 10 cycles; WS1.4+WS1.5 collapsed; WS1.8 deferred to Inc.2 with retrospective-review tripwire; per-cycle reviewer flags + inherited patterns recorded inline); Starlit Scattering Moon / `claude` / opus-4-7-1m / `edd1fb` / 2026-05-12 (WS1.2 RDF Term hierarchy + Quad + equality landed at 1885fbcf); Celestial Transiting Satellite / `claude` / opus-4-7-1m / `9bc8e3` / 2026-05-12 (WS1.1 graph-core scaffold landed at ad2abb69); Sparking Charring Ash / `claude-code` / opus-4-7-1m / `caf5e1` / 2026-05-12 (graph foundation work; Inc.1a WS1.1 open for execution)      |
 | `exploring-open-education-resources`                                           | Third-party OER                               | [record][oer]           | Gnarled / `claude-code` / `e18e2c` / 2026-05-01                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `architectural-budget-system`                                                  | Architectural budget                          | [record][budget]        | Nebulous / `codex` / 2026-04-29                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -195,8 +195,10 @@ behaviour-changing learning was distilled into
 [`distilled.md`](../active/distilled.md) without treating fitness numbers as
 brevity targets. The distilled-stage pass is now complete: mature lessons were
 routed to durable doctrine and pattern homes, and unresolved or owner-shaped
-items were kept in [`pending-graduations.md`](pending-graduations.md). The next
-consolidation sessions should process, in order: `pending-graduations.md`, then
+items were kept in [`pending-graduations.md`](pending-graduations.md). The
+`pending-graduations.md` pass is also complete: the due queue is empty, stale
+body statuses are corrected, and remaining pending items are explicitly retained
+by trigger/carrier. The next consolidation session should process
 `practice-bootstrap.md`. At every stage, knowledge curation and conservation
 outrank brevity; fitness numbers are advisory routing signals.
 
@@ -204,7 +206,8 @@ The acceptance bar remains:
 
 - live state remains in this file;
 - historical closeout prose remains archived, not deleted;
-- distilled learning is fully processed; pending-graduations is the next drain;
+- distilled learning and pending-graduations are fully processed;
+  practice-bootstrap is the next drain;
 - pending-graduations index/counts match body entries marked `status: due`;
 - ADR-shaped and PDR-shaped promotion decisions are visible to the owner;
 - cost-of-collaboration P0 remains named as the blocker for multi-agent
@@ -234,8 +237,9 @@ authoritative in the active plan YAML.
    care-and-consult rule. Falsifiability:
    `pnpm practice:fitness:strict-hard`.
 2. [`pending-graduations.md`](pending-graduations.md) is a consolidation-pass
-   queue, not a daily session-open file. Drain due entries through explicit
-   ADR/PDR/rule/doc promotion decisions; do not trim for metrics.
+   queue, not a daily session-open file. Its 2026-05-12 due queue is drained;
+   future passes should preserve pending entries until their trigger fires and
+   must not trim for metrics.
 3. Monorepo workspace topology (superseding ADR-108, S0-S6 strategic plan) is
    parked until after the graph MVP implementation tranche unless the owner
    explicitly reopens it.
@@ -288,11 +292,15 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-12 — Volcanic Charring Furnace / `cursor` / GPT-5.5 /
-`242ea3`)**: due — the distilled-stage conservation pass is complete. The next
-bounded consolidation pass is `pending-graduations.md`, followed by
-`practice-bootstrap.md`. Fitness values remain advisory routing signals only;
-do not trim knowledge to make reports green.
+**Status (2026-05-12 — Twigged Growing Glade / `cursor` / GPT-5.5 /
+`c19c95`)**: due — the pending-graduations conservation pass is complete. The
+next bounded consolidation pass is `practice-bootstrap.md`. Fitness values
+remain advisory routing signals only; do not trim knowledge to make reports
+green.
+
+**Previous status (2026-05-12 — Volcanic Charring Furnace / `cursor` /
+GPT-5.5 / `242ea3`)**: the distilled-stage conservation pass completed and
+sequenced `pending-graduations.md` before `practice-bootstrap.md`.
 
 **Status (2026-05-12 — Dusky Lurking Shade / `cursor` / GPT-5.5 /
 `4cc0e8`)**: staged conservation-first consolidation is in progress. Owner

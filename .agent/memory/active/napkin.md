@@ -253,3 +253,107 @@ behalf per owner direction.
   shared worktree, verify required SHAs are already ancestors of local `HEAD`
   before requesting broad mutation. If the SHA evidence is sufficient, report
   the safer path rather than forcing a rebase through the shared state.
+
+## 2026-05-12 — Twigged Growing Glade / cursor / GPT-5.5 / `c19c95`
+
+### Pending-Graduations Conservation Pass
+
+- Continued the staged consolidation sequence after `napkin.md` and
+  `distilled.md` were committed at `be07b812`; did not start
+  `practice-bootstrap.md`.
+- Processed `pending-graduations.md` as a conservation register, not a brevity
+  target: emptied the stale `due` queue by routing entries to graduated,
+  retained-pending, or owner/implementation-decision states.
+- Corrected stale body wording where older audit-trail entries still said
+  `due`, `pending-audit`, or `ready for promotion` after later durable homes had
+  landed.
+- Reviewer correction absorbed: the peer-pair sidebar entry was over-claimed as
+  fully graduated. Demoted it to `partially-graduated` and named the residual
+  design-collaboration sidebar shape needing a durable home.
+- Tooling lesson: quote glob patterns in claim commands. An unquoted `**`
+  expanded in the shell before `agent-tools` saw it, producing a misleading
+  `unknown argument` error. Use `--area-pattern` with quoted globs for broad
+  claims.
+
+## 2026-05-12 — Ferny Regrowing Leaf / claude / claude-opus-4-7-1m / `10ca9b`
+
+Coordinator session frictions.
+
+### Agent-tool CLI snags observed this session
+
+- `pnpm agent-tools:claims active-agents` — wrapper script absent; only
+  `pnpm agent-tools:lint` exists. Wrapper-script index sparse; full path is
+  `pnpm --filter @oaknational/agent-tools run --silent agent-tools -- collaboration-state claims active-agents`.
+  Friction: discoverability cost on every coordinator query.
+- `claims active-agents` requires `--active <path>` and `--closed <path>` —
+  both omitted from help text. Re-confirms Brazen's earlier note that several
+  CLIs hide their required flags.
+- `comms inbox` flag is `--agent-name` not `--to` — but `comms send` /
+  `comms direct` use `--to-agent-name`. Cross-subcommand naming inconsistency.
+- `comms direct` invocation against
+  `--active .agent/state/collaboration/active-claims.json` produced
+  side-output:
+  - `Encountered two children with the same key, at recursivelyTraversePassiveMountEffects`
+    — React/Ink key-uniqueness defect in the TUI render path. Suggests the TUI
+    is being invoked as a validation side-effect, leaking render diagnostics into
+    a non-rendering command.
+  - `Error: Raw mode is not supported on the current process.stdin, which Ink uses as input stream by default.`
+    — Ink raw-mode setup needs guarding against non-TTY stdin.
+  - `Configuration hints (1): @commitlint/cli knip.config.ts Remove from ignoreDependencies`
+    — knip drift signal surfaced through comms-direct's tool chain.
+- Sub-issue with the side-output: commands that intermix Ink render output with
+  success notice make it harder to confirm success in CI/log contexts.
+- Identity routing-tuple collision risk on shared Codex prefix `019e1d` (Fiery
+  → Dim → Verdant chain today) demonstrates that
+  `(agent_name, platform, session_id_prefix)` routing tuple is necessary but the
+  rename-within-session pattern needs sharper guidance — coordinator can't tell
+  from claims surface alone whether three names = one session or three sessions.
+- `find-files-modified-on-branch` (or equivalent) — no obvious CLI for "which
+  agent authored which uncommitted file." When inheriting a working tree
+  mid-coordination, attributing modifications to authors requires reading the
+  comms log manually. Possible future tool.
+
+### Coordinator-experience friction (process, not CLI)
+
+- "Active agents" view shows live claims but not "agents present and idle
+  awaiting direction." Fiery and Dim posted introduction comms-events but had no
+  claims; without scanning the recent comms log they were invisible to the
+  coordinator's first surface query. Surfaces want a "presence != claim"
+  distinction.
+- Inbox watcher discipline: after sending six directives I have no built-in
+  mechanism to be notified when any of them is read or replied to. Polling is the
+  only option.
+
+### candidate: coordinator-role-as-allocator-not-gatekeeper
+
+PDR candidate, not landed in `pending-graduations.md` this session — Twigged
+holds the live editing claim.
+
+`[captured-date: 2026-05-12 | source-surface: Ferny Regrowing Leaf coordinator session reflection | graduation-target: pdr:coordinator-role-as-allocator-not-gatekeeper OR amendment to PDR-026 § coordinator-role-shape | trigger-condition: second-instance observed of "coordinator session ends with idle agents un-directed despite available open lanes" | status: pending | size: S]`
+
+Coordinator agents misread "do as little work as possible; coordinate not
+implement" briefs as licence to do nothing, including refusing to allocate work
+to idle peers who explicitly stand by for direction. Failure mode: conflating
+coordinator caution (don't override owner-sequenced lanes; don't double-commit
+to claimed files) with coordinator inaction (don't direct anyone unless a lane
+is unambiguously open). Three owner escalations required this session before the
+allocation matrix was produced; failure mode not idiosyncratic. Promotion
+trigger: second-instance observed in a future coordinator session, or explicit
+owner direction to graduate. Next pending-graduations refresh (by Twigged or
+successor) should pick this up via the `candidate:` tag and land it into the
+register.
+
+## 2026-05-12 — Fiery Igniting Furnace / codex / GPT-5 / `019e1d`
+
+### WS1.4 JSON-LD Parking Lesson
+
+- Green-tree priority worked once Luminous made the response shape explicit:
+  report `GREEN` with focused command evidence or `BLOCKED` with the smallest
+  exact conflict. That cut through the queue ambiguity quickly.
+- Parking WIP outside hook-discovered package paths preserved the source/test
+  work while restoring peer commit flow. Parked files:
+  `/private/tmp/fiery-ws1.4-parked/`.
+- Friction: source-only work that imports a not-yet-authorised dependency can
+  break repo-wide hooks before the lockfile/dependency lane is open. Better
+  protocol would either allow a deliberate dependency handoff earlier or keep
+  dependency-backed WIP parked until package/lockfile ownership is clear.

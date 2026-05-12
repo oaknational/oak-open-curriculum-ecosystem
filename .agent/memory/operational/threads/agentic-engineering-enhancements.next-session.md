@@ -9,11 +9,36 @@
 > live TUI must make collaboration value visible to humans in the moment, not
 > merely after-the-fact throughput claims.
 >
+> **Conservation-first consolidation**: `napkin.md`, `distilled.md`, and
+> `pending-graduations.md` stages are complete as of 2026-05-12. The next
+> bounded consolidation target is `practice-bootstrap.md`; do not reopen
+> `pending-graduations.md` as a brevity target.
+>
 > **New strategic work** (2026-05-12): Prismatic Beaming Twilight session designed
 > multi-agent delegation orchestration architecture extending ADR-180 beyond Codex
 > to Cursor, Claude, internal agents. Strategic brief
 > [`multi-agent-delegation-orchestration.plan.md`](../../plans/agentic-engineering-enhancements/future/multi-agent-delegation-orchestration.plan.md)
 > captured in future plans. See session findings below.
+
+## Pending-Graduations Conservation Pass (2026-05-12)
+
+**Session**: Twigged Growing Glade / `cursor` / `GPT-5.5` / `c19c95`.
+
+**Landed outcome**: `pending-graduations.md` was processed conservation-first:
+the `due` queue is empty, former due entries are routed to explicit
+graduated/retained-pending/owner-decision states, stale graduated-body prose was
+corrected, and remaining pending entries are retained by trigger/carrier rather
+than trimmed for fitness.
+
+**Reviewer correction absorbed**: the peer-pair sidebar entry is now
+`partially-graduated`; the coordinator-role boundary and claim-conflict sidebar
+pattern have durable homes, but the design-collaboration shape still needs a
+sibling pattern or directive clause for numbered turns, append-only shared file,
+and joint-decision closure.
+
+**Next safe consolidation step**: process `practice-bootstrap.md` only. Do not
+restart `pending-graduations.md` except for future trigger-driven register
+maintenance.
 
 ## codex-helper skill + codex-exec CLI minimum-viable surface (2026-05-12)
 
@@ -144,6 +169,47 @@ pretending the solution is already known.
 | `codex` | `GPT-5` | Shadowed Dimming Veil | Reviewer/synthesiser (cost-of-collaboration reviewer synthesis; P8 mandatory live-TUI routing) | 2026-05-12 | 2026-05-12 |
 | `cursor` | `GPT-5.5` | Dusky Lurking Shade | Consolidator (napkin-stage conservation-first consolidation; archive + distilled intake) | 2026-05-12 | 2026-05-12 |
 | `cursor` | `GPT-5.5` | Volcanic Charring Furnace | Consolidator (distilled-stage conservation routing; durable homes + pending follow-ups) | 2026-05-12 | 2026-05-12 |
+| `cursor` | `GPT-5.5` | Twigged Growing Glade | Consolidator (pending-graduations conservation-first routing + reviewer corrections + handoff) | 2026-05-12 | 2026-05-12 |
+| `claude` | `claude-opus-4-7-1m` | Ferny Regrowing Leaf | Coordinator (succeeded Brazen Stoking Ash; allocated work to 6 agents via directed-message matrix; surfaced coordinator-as-allocator role-failure-mode for capture) | 2026-05-12 | 2026-05-12 |
+
+## Ferny Regrowing Leaf coordinator session (2026-05-12)
+
+**Session**: Ferny Regrowing Leaf / `claude` / `claude-opus-4-7-1m` / `10ca9b`.
+
+**Role**: Coordinator, no-implementation. Took over from Brazen Stoking Ash after Brazen's session-end. Owner-stated brief: "do as little work as possible; coordinate, not implement."
+
+**What landed**: a directed-message coordinator-allocation matrix to all six other agents on the branch.
+
+| Agent | Prefix | Assignment | Conditional? |
+| --- | --- | --- | --- |
+| Twigged Growing Glade | cursor / `c19c95` | Pending-graduations consolidation completed; no further action unless future register triggers fire | complete |
+| Verdant Foraging Copse | codex / `019e1d` | Continue P5 unified comms slice + identity disambiguation | active continuation |
+| Fiery Igniting Furnace | codex / `019e1d` | WS1.4 jsonld-processor (conditional on session-distinctness from Verdant) | conditional |
+| Dim Hiding Secret | codex / `019e1d` | WS1.6 vocab planning prep slice (conditional on session-distinctness) | conditional |
+| Shadowed Dimming Veil | codex / `019e1c` | P8 live TUI auto-refresh (matches Shadowed's own "mandatory next" note) | unconditional |
+| Volcanic Charring Furnace | cursor / `242ea3` | Frictions-register F-32+ landing (multi-agent collaboration frictions captured today) | unconditional |
+
+**Coordinator presence**: posted comms-event `7f91ab13` at 16:42Z naming Ferny as coordinator.
+
+**Evidence the matrix executed**: by end of session, working tree showed Fiery on `packages/core/graph-core/src/jsonld/index.ts`, Dim's `graph-stack-ws1.6-vocab-prep.md` staged under the connecting-oak-resources plan, and `agent-tools/collaboration-state/*` edits consistent with Verdant's P5 slice.
+
+**Surprise / correction**: owner had to issue three escalations before the coordinator role was performed correctly:
+
+1. Initial response: "Stopping" with passive watcher posture.
+2. After "you tell the others what needs doing": still left 4 idle agents un-directed.
+3. After "why are you not directing the four idle agents to do work?": full allocation matrix produced.
+
+**Root cause of the failure pattern**: misread "do as little work as possible" as scoping all activity, when it scoped only implementation. Conflated coordinator caution with coordinator competence; treated unowned-and-unclaimed lanes as reason to defer assignment rather than reason to assign. **Recorded as PDR candidate at step 6b: coordinator role is allocator, not gatekeeper.**
+
+**Tool friction captured this session** (graduated to napkin frictions block lines 274-293 for Volcanic to land into the frictions register):
+
+- `comms direct` against `--active` surface side-effects Ink TUI render with React key-uniqueness defect and raw-mode-on-non-TTY error.
+- Cross-subcommand CLI flag inconsistency: `comms inbox --agent-name` vs `comms direct --to-agent-name`.
+- `claims active-agents` requires `--active <path>` but help omits the requirement (reconfirms Brazen's earlier friction).
+- Identity routing-tuple ambiguity on shared Codex prefix `019e1d` (Fiery → Dim → Verdant rename chain): coordinator cannot tell from claims surface alone whether three names = one session or three sessions.
+- Coordinator surface lacks a "presence ≠ claim" view; agents introducing-and-standing-by are invisible to the first-line query.
+
+**Next safe step**: when the assigned matrix lands, gate via reviewer dispatch per the per-agent reviewer flags in their directives. WS1.4 reviewer flags: type-expert, assumptions-expert, test-expert. P8 live-TUI reviewer flags: react-component-expert, test-expert, code-expert.
 
 ## Cost-of-collaboration reviewer synthesis (2026-05-12)
 

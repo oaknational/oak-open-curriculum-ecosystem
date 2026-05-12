@@ -56,7 +56,7 @@ Field definitions:
 | `target` | `pdr:<id-or-draft-name>` / `adr:<id-or-draft-name>` / `rule:<name>` / `pattern:<filename>` / `plan:<plan-name>` / `doc-amend:<doc>` / `multi:<list>` / `none` | Where the substance lands when graduated. `multi:` for entries with mandatory multiple targets. `none` is a sentinel for entries with no graduation target (e.g. quarantined entries pending rethink). Inside `multi:` lists, every component MUST follow the `<type>:<id-or-name>` shape. |
 | `trigger` | `second-instance` / `owner-direction` / `n>=3-validation` / `plan-execution-gated` / `candidate` / `vaporware-gated` | What unblocks promotion. `vaporware-gated` flags structural sequenced-deferral failure shape per `distilled.md` §Sequenced-Deferral Discipline. |
 | `size` | `S` (single small edit) / `M` (multi-file but single artefact) / `L` (multi-artefact, single domain) / `XL` (multi-artefact + cross-domain + directive-shape) | Work-shape at graduation time; informs whether entry can drain opportunistically (`S`) or needs a dedicated session (`L`/`XL`). |
-| `status` | `pending` / `due` / `overdue` / `partially-graduated` / `graduated` / `quarantined` / `withdrawn` | Lifecycle state. **Note**: `vaporware-gated` is a `trigger` facet, NOT a `status` value — the index groups vaporware-gated entries separately for navigation, but their `status` is `due`. |
+| `status` | `pending` / `due` / `overdue` / `partially-graduated` / `graduated` / `quarantined` / `withdrawn` | Lifecycle state. **Note**: `vaporware-gated` is a `trigger` facet, NOT a `status` value — the index groups vaporware-gated entries separately for navigation while their lifecycle status remains explicit on the entry. |
 
 **Composite values**: `source` and `trigger` accept `+`-joined
 composites (e.g. `napkin+distilled.md`, `n>=3-validation+owner-implicit`)
@@ -80,10 +80,10 @@ snapshots in [`archive/`](archive/) — most recent is
 
 ## Index
 
-Regenerated 2026-05-12 by Flamebright Sparking Forge during the
-repo-continuity / pending-graduations consolidation drain. Entries are
-listed by status then by captured-date (most recent first). Line numbers are
-advisory hints; grep by status field for authoritative position.
+Regenerated 2026-05-12 by Twigged Growing Glade during the conservation-first
+pending-graduations consolidation drain. Entries are listed by status then by
+captured-date (most recent first). Line numbers are advisory hints; grep by
+status field for authoritative position.
 
 Per the [`fabricated-gate-as-avoidance`](../active/patterns/fabricated-gate-as-avoidance.md)
 pattern instance, future consolidation passes read each entry's
@@ -92,19 +92,35 @@ not a verdict.
 
 ### `due` (current body candidates)
 
-The body now contains **7** due entries after reconciling five stale
-due markers whose durable homes already exist and are named in this file's
-own graduation log, plus graduating the P3 enforcement entry.
+The body contains **0** due entries after the 2026-05-12 conservation-first
+drain. The former due items were not compressed or discarded; each now has a
+specific disposition below and in its body entry.
 
-| Captured | Entry | Target / decision surface | Promotion decision |
-| --- | --- | --- | --- |
-| 2026-05-10 | `getSkillPermissionIssues` dead parameter + missing live-path tests | code cleanup + test cycle in `agent-tools/scripts/validate-portability-helpers.ts` | Implementation cleanup, not ADR/PDR-shaped. |
-| 2026-05-10 | `shouldInspectFile` single-positive-example coverage | test cycle in the `validate-fitness-vocabulary` suite | Implementation cleanup, not ADR/PDR-shaped. |
-| 2026-05-10 | Cross-agent sweep-bundling prohibition | PDR or rule for commit-window coordination | PDR-shaped Practice governance; owner-visible promotion decision required. |
-| 2026-05-11 | R4-new native git pre-commit hook | rule + native hook per collaboration-protocol hardening arc | Enforcement-shaped; keep due until hook/rule land. |
-| 2026-05-11 | Commit-queue UX as structural cure surface | PDR or ADR amendment | PDR/ADR-shaped; keep due until Wave 3 doctrine settles. |
-| 2026-05-11 | Pre-commit hook must gate staged content only | ADR + rule + `cost-of-collaboration.plan.md` P0 | Host ADR-shaped and rule-shaped; this is the P0 blocker. |
-| 2026-05-11 | Peer-pair sidebar beats coordinator+helpers for design work | PDR or PDR amendment | PDR-shaped collaboration doctrine; owner-visible promotion decision required. |
+### 2026-05-12 due-entry disposition log (Twigged Growing Glade)
+
+| Entry | Disposition |
+| --- | --- |
+| `getSkillPermissionIssues` dead parameter + missing live-path tests | Retained pending as an implementation cleanup triggered by next touch of `agent-tools/scripts/validate-portability-helpers.ts`; not ADR/PDR-shaped. |
+| `shouldInspectFile` single-positive-example coverage | Retained pending as a focused test-cycle cleanup triggered by next touch of the `validate-fitness-vocabulary` suite; not ADR/PDR-shaped. |
+| Cross-agent sweep-bundling prohibition | Retained pending as an owner/implementation decision because PDR-054/PDR-059 and P3 guard work already carry the doctrine backbone; remaining question is harder-to-bypass enforcement across all commit paths. |
+| R4-new native git pre-commit hook | Retained pending with corrected target: not a native pre-stage hook, because Git/Husky have no native pre-stage lifecycle; the live home is the cost-of-collaboration hard-to-bypass enforcement tail. |
+| Commit-queue UX as structural cure surface | Retained pending in the cost-of-collaboration P5/P8/P6 tail; P-Foundation/P1-P4 reduced friction but did not settle the full UX doctrine. |
+| Pre-commit hook must gate staged content only | Graduated to the completed P0 quality-gate rebalance: staged-only file-content scanners plus preserved whole-repo broken-code guards, recorded in `cost-of-collaboration.plan.md` and `.husky/pre-commit`. |
+| Peer-pair sidebar beats coordinator+helpers for design work | Partially graduated: `agent-collaboration.md` carries the coordinator-role boundary and `inter-agent-sidebar-with-default-action.md` carries a claim-conflict sidebar instance, but the design-collaboration shape still needs a durable home. |
+
+### 2026-05-12 remaining-queue disposition review (Twigged Growing Glade)
+
+After the due queue was emptied, the remaining live entries were reviewed as a
+register, not as a compression target. Their content is retained unless an
+entry already had a durable home or carried stale lifecycle wording.
+
+| Queue slice | Disposition |
+| --- | --- |
+| Plan- or implementation-gated lanes | Retained pending with explicit carrier plans/triggers, including cost-of-collaboration P5/P8/P6, graph-stack follow-ons, SDK codegen workspace decomposition, workspace-topology ADR sequencing, validation/TDD restructure, scripts-validator migration, PR lifecycle, Vercel warning elimination, and older tooling/domain plans. |
+| First-instance or second-instance pattern candidates | Retained pending; the register is the correct waiting room until corroboration, owner direction, or a named implementation slot fires. |
+| Owner-facing decisions | Retained pending where the entry asks for an owner choice (for example schema/directory projection choices, topology naming, optionality rule siblings, destructive-operation hook ideas, or generated-insight artefact methodology). |
+| Existing graduated audit trails | Kept as audit-trail bodies until the next archive snapshot; stale prose was corrected where it still said `due` or `ready for promotion` despite a resolved home. |
+| Stale target/status corrections applied | Older whole-tree pre-commit gate scope now points at the completed P0 gate rebalance; old CLI first-touch friction now points at PDR-055/ADR-178 plus the cost-of-collaboration lane; observability WS8.6/8.7 and inter-agent protocol prose no longer describe themselves as due; `pending-audit` was normalised to `pending (audit-triggered)`. |
 
 ### Status Corrections Applied 2026-05-12
 
@@ -128,17 +144,19 @@ corrects stale status metadata; it does **not** silently promote new doctrine.
 
 ### `partially-graduated`
 
-1 body entry remains partially graduated: the
-stage-by-explicit-pathspec asymmetric-cure entry. It is retained because later
-commit-boundary variants now route through PDR-054/PDR-059 plus the live
-cost-of-collaboration workstreams.
+2 body entries remain partially graduated: the stage-by-explicit-pathspec
+asymmetric-cure entry and the peer-pair design-collaboration sidebar entry. They
+are retained because later commit-boundary variants route through PDR-054/PDR-059
+plus the live cost-of-collaboration workstreams, while the design sidebar still
+needs a durable pattern or directive clause for numbered turns, append-only
+shared file, and joint-decision closure.
 
 ### `quarantined`
 
 (empty — apply-don't-ask / stop-inventing-optionality reformulations
 graduated 2026-05-10 to PDR-057 + PDR-058; quarantine cleared)
 
-### `pending` (~60 body markers — second-instance or owner-direction gated)
+### `pending` (~76 body markers — second-instance or owner-direction gated)
 
 The bulk of the queue. Reviewed at every consolidation; most stay
 pending until trigger fires. Grep `status: pending` for the full
@@ -171,13 +189,13 @@ the queue churns.
 
 | Status | Count | Notes |
 | --- | --- | --- |
-| due | 7 | body entries with live due metadata after stale-status corrections and P3 graduation |
+| due | 0 | former due entries disposed 2026-05-12 without trimming substance |
 | overdue | 0 | no body entry currently uses overdue metadata |
-| partially-graduated | 1 | stage-by-explicit-pathspec asymmetric-cure family |
+| partially-graduated | 2 | stage-by-explicit-pathspec asymmetric-cure family plus peer-pair design-collaboration sidebar residual |
 | quarantined | 0 | unchanged |
 | held-pending-plan | 1 | SDK codegen generator-duplication pointer |
-| pending | ~60 | grep count of explicit `status: pending` markers; prose-only older entries may still need metadata backfill |
-| **active queue total** | **~69** | excludes graduated-history bodies retained for audit until the next archive snapshot |
+| pending | ~76 | grep count of explicit `status: pending` markers after retaining implementation-shaped and owner-shaped former due entries; prose-only older entries may still need metadata backfill |
+| **active queue total** | **~79** | excludes graduated-history bodies retained for audit until the next archive snapshot |
 
 ### 2026-05-11 graduations log (Fronded Flowering Seed — graduation-candidates-drain session)
 
@@ -461,7 +479,7 @@ the queue churns.
 + 2026-05-09; **pre-commit gate scope (whole-tree vs staged-set)
   imposes a coordination tax on multi-agent work** (Luminous Twinkling
   Dawn 2026-05-09, observed during workflow-doc edit landing).
-  `[captured: 2026-05-09 | source: napkin-2026-05-09 | target: adr-candidate:pre-commit-gate-staged-scope OR tooling-amend:.husky/pre-commit | trigger: second-instance OR owner-direction | size: M | status: pending]`
+  `[captured: 2026-05-09 | source: napkin-2026-05-09 | target-resolved: plan:cost-of-collaboration.plan.md P0 + .husky/pre-commit staged file-content scanners | trigger-fired: owner-direction+multi-agent-deadlock-evidence | size: M | status: graduated]`
   The pre-commit hook runs `prettier --check .` and `markdownlint --dot .`
   over the *entire* working tree, not the staged set. Any working-tree
   noise from any agent (concurrent session WIP, abandoned partial edits,
@@ -477,16 +495,11 @@ the queue churns.
   between agents whose changes don't even touch the same files.
   Source-surface:
   [`napkin.md § 2026-05-09 Surprise: pre-commit gate scope is whole-tree, not staged-set`](../active/napkin.md).
-  Graduation-target options: (a) ADR documenting the gate's whole-tree
-  scope as a deliberate decision (with documented coordination tax),
-  OR (b) tooling amendment to `.husky/pre-commit` narrowing to staged
-  paths via `git diff --cached --name-only` (with the trade-off that
-  staged-set scope misses tree-wide drift the wider gate catches), OR
-  (c) leave gate as-is and codify a coordination protocol for
-  multi-agent staged-bundle windows. Trigger: second instance OR owner
-  direction. Status: pending — first instance with named architectural
-  property; awaiting second-instance accumulation OR owner direction
-  on the trade-off.
+  Disposition 2026-05-12: graduated through the completed P0 quality-gate
+  rebalance. The selected shape narrows file-content scanners to staged paths
+  while retaining the whole-repo broken-code guard before commit; the later
+  2026-05-11 load-bearing entry below preserves the stronger multi-agent
+  evidence and final wording.
 
 + 2026-05-09; **fitness-validator output should print the
   non-reactive-response discipline reminder inline at non-healthy
@@ -1728,10 +1741,9 @@ continuity snapshots.
   gated on WS8.6/WS8.7 plan execution; sequenced-deferral
   vaporware shape per `distilled.md` §Sequenced-Deferral
   Discipline. ADR authoring is itself directive-shape work
-  requiring its own context budget. This entry stays `due` for the
-  observability-thread's WS8.6/WS8.7 carrier; it is not a
-  pending-graduations drain candidate. Recommend Phase 3
-  surfacing: keep here only as audit-trail; carrier-plan progress
+  requiring its own context budget. Disposition 2026-05-12: the entry
+  is already graduated to ADR-171 and amendments; keep here only as
+  audit-trail until archival. Carrier-plan progress, not this register,
   is the live signal.
 
 + 2026-05-02; observability multi-sink + fixtures plan WS0 —
@@ -1811,8 +1823,9 @@ continuity snapshots.
   acknowledgement** (premature commits would have made this
   session's self-correction expensive); (x) **wait-for-ack on
   deadlined-defaults** (task-acceptor counterpart to overflow
-  protocol (iv)). Status: due (graduates with the next CLI
-  ergonomics plan execution slice). **Vaporware-trigger flag
+  protocol (iv)). Disposition 2026-05-12: the entry is already
+  graduated to PDR-056 with hypothesis-status preserved; the historical
+  due marker is stale. **Vaporware-trigger flag
   (2026-05-07, Pelagic Rolling Harbour)**: trigger gated on unmet
   "next CLI ergonomics plan execution slice"; sequenced-deferral
   vaporware shape per `distilled.md` §Sequenced-Deferral
@@ -1903,7 +1916,7 @@ continuity snapshots.
   pending.
 + 2026-04-23; ADR-163 release/version boundary and vendor passthrough
   audit; trigger: observability-thread consolidation audit; status:
-  pending-audit.
+  pending (audit-triggered).
 + 2026-04-23; session-handoff entrypoint sweep; PDR-014 amendment for
   platform-specific entry points as homing substance; trigger: second
   drift instance and owner request; status: pending.
@@ -1926,7 +1939,8 @@ continuity snapshots.
   (`--help` self-rejects; dispatch keys undiscoverable; `--platform`
   redundant when env-derived; claim file-list verbose; no `whoami`);
   future strategic plan candidate for promotion to `current/`; trigger:
-  second instance OR owner direction; **status: ready for promotion**
+  second instance OR owner direction; **status: graduated into PDR-055,
+  ADR-178, and the cost-of-collaboration agent-tools lane**
   (both triggers fired 2026-04-30 — owner observed warnings during
   Verdant Sheltering Glade session, AND the session itself accumulated
   new evidence). Second-instance evidence (2026-04-30):
@@ -1965,9 +1979,11 @@ continuity snapshots.
   itself a Practice failure mode: a queue that exists but is
   habitually bypassed under friction is worse than no queue. Strong
   case to promote the future plan to `current/` and execute its
-  ergonomics-fix slice next consolidation. **Status: ready for
-  promotion** (was already; third instance hardens the case
-  significantly). **Fourth-instance evidence (2026-05-01, Deep
+  ergonomics-fix slice next consolidation. **Disposition 2026-05-12:
+  graduated for doctrine/routing purposes into PDR-055, ADR-178, and the
+  current cost-of-collaboration implementation lane; remaining concrete
+  frictions stay as implementation backlog under the newer operator UX entry.**
+  **Fourth-instance evidence (2026-05-01, Deep
   Navigating Stern, day-arc continuity commits `514838c9` +
   `bc6cd2e6`)** — eight distinct frictions in one ceremony pair
   produced ~60 seconds of pure flag-discovery and recovery
@@ -2674,7 +2690,10 @@ consolidation to triage.
    while the live `claudeSkillDirs` path has zero unit coverage.
    `[captured: 2026-05-10 | source: reviewer:test-expert+code-expert
    | target: code-cleanup + test-cycle | trigger: next touch on
-   agent-tools/scripts/validate-portability-helpers.ts | size: S | status: due]`
+   agent-tools/scripts/validate-portability-helpers.ts | size: S | status: pending]`
+   Retained 2026-05-12: implementation cleanup, not a doctrine graduation.
+   Keep it with the next touch of the helper so test and product code land as
+   one focused cycle.
 
 3. **Unit-coverage gap for `evaluateParityChecks`.** The two remaining
    parity evaluators (`evaluateReviewerAdapterParity`,
@@ -2693,7 +2712,9 @@ consolidation to triage.
    class of paths, not one instance. Test-expert finding.
    `[captured: 2026-05-10 | source: reviewer:test-expert | target:
    test-cycle | trigger: next touch on validate-fitness-vocabulary
-   suite | size: XS | status: due]`
+   suite | size: XS | status: pending]`
+   Retained 2026-05-12: focused test-cycle cleanup, not a doctrine
+   graduation. Keep it with the next touch of the validator suite.
 
 5. **Cross-agent sweep-bundling prohibition (PATTERN — 5th instance).**
    Mask-bundle pattern: parallel agent's `git commit` absorbs another
@@ -2705,13 +2726,15 @@ consolidation to triage.
    observation + four prior foreign-stage absorption instances.
    `[captured: 2026-05-10 | source: reviewer:test-expert+napkin | target:
    PDR:cross-agent-commit-bundling-discipline OR rule:never-bundle-foreign-staged-work
-   | trigger: second instance confirmed (already 5 — DUE) | size: M |
-   status: due]`
+   | trigger: implementation-tail+owner-decision | size: M |
+   status: pending]`
    Graduation-target: portable Practice PDR governing commit-window
    coordination + intent-to-commit lifecycle.
-   Withdrawal-trigger: a sixth instance proves the cure unworkable
-   in practice OR commit-window claims protocol (PDR-054 / ADR-177)
-   absorbs the discipline.
+   Retained 2026-05-12: PDR-054/PDR-059 and the P3 guard now carry the doctrine
+   backbone. The remaining decision is harder-to-bypass enforcement across all
+   commit paths, not another prose prohibition. Withdrawal-trigger: the
+   cost-of-collaboration enforcement tail absorbs the discipline, or owner
+   direction asks for a separate PDR/rule anyway.
 
 ### 2026-05-11 — Cross-schema events in single directory (without discriminator)
 
@@ -2802,24 +2825,25 @@ directories. Parsers stay single-schema; new kinds add additively.
 Withdrawal-trigger: second instance (claim-event vs claim-history,
 escalation vs sidebar, etc.).
 
-### 2026-05-11 — R4-new native git pre-commit hook (due, was queued)
+### 2026-05-11 — R4-new commit-boundary enforcement (pending, was due)
 
 `[captured: 2026-05-11 | source: session:Smouldering-Crackling-Pyre |
-target: rule:R4-new-native-git-pre-commit-hook (already queued in
-collaboration-protocol-hardening arc) | trigger: this session counts as
-second cross-session foreign-stage event after Tempestuous Darting
-Zephyr sweep-bundling 2026-05-10; status moved from queued to due |
-size: M | status: due]`
+target: cost-of-collaboration hard-to-bypass commit-boundary enforcement
+(native pre-stage hook wording superseded) | trigger: implementation-tail |
+size: M | status: pending]`
 
-Live worked instance 2026-05-11 (Smouldering Crackling Pyre): peer
-agent `Dusky Masking Cloak` / `c5ff7f` was committing in parallel on
-the graph thread. Their pre-staged handoff files appeared in my index
-when I ran explicit-pathspec `git add`. `verify-staged` caught the
-foreign stage (3 extra files, 0 missing); cure was `git commit -F - --
-<pathspec>`. R4-new's authorship is no longer hypothetical.
-Graduation-target: rule + native git hook landing per the
-`primary-agent-tooling-enhancements.plan.md` queued landings.
-Withdrawal-trigger: hook lands and passes Wilma adversarial probe.
+Retained 2026-05-12 with corrected target: Git/Husky have no native
+pre-stage lifecycle, so "native git pre-commit hook" is not the right
+implementation home. Live worked instance 2026-05-11 (Smouldering Crackling
+Pyre): peer agent `Dusky Masking Cloak` / `c5ff7f` was committing in parallel
+on the graph thread. Their pre-staged handoff files appeared in my index when I
+ran explicit-pathspec `git add`. `verify-staged` caught the foreign stage (3
+extra files, 0 missing); cure was `git commit -F - -- <pathspec>`. R4-new's
+authorship is no longer hypothetical. Graduation-target: the
+cost-of-collaboration enforcement tail must make the guard harder to bypass
+than ordinary `git add`, then record the decision in the existing PDR/ADR chain
+if new doctrine remains. Withdrawal-trigger: the guard or replacement
+enforcement passes the adversarial probe.
 
 Older graduated entries (PDR-018, PDR-026, PDR-029, PDR-033, PDR-034,
 ADR-153, ADR-164, etc.) are preserved in
@@ -2860,13 +2884,11 @@ Wilma four-probe matrix passes.
 friction profile (R1.b atomic commit bypassed queue; verify-staged
 exit-code conflation; CLI on separate binary not surfaced in
 collaboration-state --help; six-command lifecycle; claim-close-cycle
-recursion) | graduation-target: dedicated PDR for commit-queue UX
-contract OR amendment to ADR-118 (commit-skill as canonical
-pre-commit flow) plus ADR-177 (asymmetric-cure enforcement) | trigger:
-owner direction set 2026-05-11 — next session in
-agentic-engineering-enhancements works on commit-queue
-discoverability + ease-of-use + harder-to-bypass | size: L (multi-
-session arc) | status: due (owner-direction-triggered)]`
+recursion) | graduation-target: cost-of-collaboration P5/P8/P6 tail,
+with a later PDR/ADR amendment only if the implementation leaves new
+doctrine uncaptured | trigger: cost-of-collaboration P5/P8/P6 tail
+settles the UX/enforcement doctrine | size: L (multi-session arc) |
+status: pending]`
 
 The friction profile names five concrete deficiencies (discoverability;
 ease-of-use; verify-staged error-message clarity; harder-to-bypass
@@ -2877,12 +2899,14 @@ implementation; this graduation entry tracks the doctrine that
 emerges from that implementation work. Withdrawal-trigger: Wave 3
 landed + retrospective PDR/ADR captures the doctrine.
 
-Session evidence update 2026-05-11: Embered Burning Magma landed the
-first Wave 3 implementation slice at `e298723c` (`commit-queue list`
-/ `show` read inspection plus strict time validation). The entry stays
-`due`: read inspection closes F-11 but does not yet settle the doctrine
-for discoverability, lifecycle ergonomics, harder-to-bypass enforcement,
-or claim-close-cycle recursion.
+Retained 2026-05-12: P-Foundation, P1, P2, P3, and P4 landed meaningful
+surface area, but the reviewer synthesis in `cost-of-collaboration.plan.md`
+keeps the UX/enforcement doctrine open. Session evidence update 2026-05-11:
+Embered Burning Magma landed the first Wave 3 implementation slice at
+`e298723c` (`commit-queue list` / `show` read inspection plus strict time
+validation). The entry stays pending: read inspection closes F-11 but does not
+yet settle the doctrine for discoverability, lifecycle ergonomics,
+harder-to-bypass enforcement, or claim-close-cycle recursion.
 
 ### 2026-05-12 — Agent-tools CLI architectural overhaul (P-Foundation)
 
@@ -2939,41 +2963,52 @@ feedback_pre_commit_hook_must_gate_staged_only |
 graduation-target: adr:pre-commit-hook-staged-only +
 rule:pre-commit-gates-staged-only + plan:cost-of-collaboration.plan.md
 P0 | trigger: four-agent convergent evidence in single session (three
-serial deadlock iterations on same defect); status: due | size: L]`
+serial deadlock iterations on same defect); status: graduated |
+graduated: 2026-05-12 (Twigged Growing Glade disposition pass); size: L]`
 
-Pre-commit hook scans the entire working tree (staged + unstaged +
+Graduated 2026-05-12 with corrected wording: the landed P0 decision narrows
+file-content scanners to staged paths while preserving whole-repo broken-code
+guards (`repo-validators:check`, shell lint, and Turbo type-check/lint/test) at
+the pre-commit boundary. Pre-commit hook previously scanned the entire working
+tree (staged + unstaged +
 untracked) at hook-fire time via repo-wide tools (`prettier --check .`,
 `markdownlint --dot .`, `knip`, `depcruise`, `turbo type-check lint
 test`). In any multi-agent window with ≥2 simultaneously-writing
 agents, this is **structurally fatal** to every coordination protocol
 layered on top of it — gatekeeper specialisation, commit queue, claim
 discipline, peer sidebars all fail because the gate-sweep snapshot
-goes stale at the next file write. Fix shape: `lint-staged` or
-equivalent staged-list-derived runner; turbo full-suite moved to CI.
-Graduates to an ADR (host architectural decision) + an enforcement
-rule + the P0 workstream in the cost-of-collaboration plan, in one
-slice. Block all multi-agent collaboration windows on this landing.
+goes stale at the next file write. Fix shape selected: `prettier-staged` and
+`markdownlint-staged` for file-content scanners, with higher-standard gates
+rebased to pre-push / CI / `pnpm check` and the broken-code guard retained
+before commit. No separate ADR/rule is required unless the gate contract drifts
+again.
 
 ### 2026-05-11 — Peer-pair sidebar > coordinator+helpers for design work
 
 `[captured-date: 2026-05-11 | source-surface: napkin Wooded 5c8f3c +
 feedback_peer_sidebar_beats_coordinator_helpers + experience file
 2026-05-11-coordinator-deadlock-and-peer-sidebar.md |
-graduation-target: pdr:peer-sidebar-for-design OR amendment to
-PDR-027 (threads-sessions-agent-identity) §collaboration-shape |
-trigger: owner-observed convergent evidence in same session ("the
-intense partner sidebar is going a lot better than the coordinator
-and helpers topology"); status: due | size: M]`
+graduation-target: partial:directive:agent-collaboration coordinator-role
+boundary + pattern:inter-agent-sidebar-with-default-action; residual-target:
+pattern:peer-pair-design-collaboration-sidebar OR directive:agent-collaboration
+design-sidebar clause | trigger: owner-observed convergent evidence in same
+session ("the intense partner sidebar is going a lot better than the coordinator
+and helpers topology"); status: partially-graduated | retained-residual:
+2026-05-12 (Twigged Growing Glade reviewer correction); size: M]`
 
-For design and decision work, peer-pair sidebars in a shared append-
+Partially graduated 2026-05-12: `agent-collaboration.md` frames the coordinator
+role as an opt-in affordance that appears only when super-linear coordination
+chains become visible, and `inter-agent-sidebar-with-default-action.md` carries a
+claim-conflict sidebar shape. The design-collaboration shape remains without a
+durable home: for design and decision work, peer-pair sidebars in a shared append-
 only markdown file produce materially better collaboration than
 coordinator+helpers hub-and-spoke topology. Helpers are for parallel
 execution of decided work; design needs dialogue between comparable
 agents. Numbered turns + single shared file + joint-decision closure
 section. Cursor Multitask single-message handoff is the helper-pool
 delivery shape (see [[cursor-multitask-single-message-handoff]]); the
-peer sidebar is the design-collaboration shape. PDR or PDR amendment
-should encode the choice rule and the cost-curve diagnosis.
+peer sidebar is the design-collaboration shape. Reopen for graduation when a
+sibling pattern or directive clause carries that design-collaboration shape.
 
 ### 2026-05-11 — Coordination-artefact isolation from gate-visible state
 

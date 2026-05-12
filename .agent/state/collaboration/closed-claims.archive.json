@@ -21831,6 +21831,322 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "108e4d39-fbd2-4924-bbfd-1ab79219cf14",
+      "agent_id": {
+        "agent_name": "Verdant Foraging Copse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state",
+            "agent-tools/tests",
+            ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/comms-events"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T19:28:10Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Continue cost-of-collaboration P5 unified comms format with a bounded source/test slice toward one strict comms event shape.",
+      "notes": "scanned registry at 2026-05-12T19:27:57Z: no active claims and no active commit_queue; recent Twigged pending-graduations comms does not overlap P5 source scope; will re-check before staging.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T19:32:00Z",
+        "closed_by": {
+          "agent_name": "Verdant Foraging Copse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1d"
+        },
+        "summary": "Closed overbroad startup P5 claim after Twigged Growing Glade's pending-graduations consolidation claim became visible; reopening narrower source/test claim to avoid plan/napkin overlap.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "108e4d39-fbd2-4924-bbfd-1ab79219cf14",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "23e0ec2e-10e7-4111-8799-fcd0e139e807",
+      "agent_id": {
+        "agent_name": "Twigged Growing Glade",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "c19c95"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/patterns/**",
+            ".agent/practice-core/decision-records/**",
+            ".agent/rules/**",
+            ".agent/plans/agent-tooling/current/**",
+            ".agent/state/collaboration/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T19:27:26Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Process pending-graduations.md conservation-first; route mature entries to durable homes or explicit retained/owner-decision state; do not touch practice-bootstrap.md.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T19:25:30Z",
+        "closed_by": {
+          "agent_name": "Twigged Growing Glade",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "c19c95"
+        },
+        "summary": "Completed pending-graduations conservation-first pass: due queue emptied, stale statuses corrected, remaining pending queue reviewed and retained by explicit trigger/carrier; practice-bootstrap.md untouched.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "23e0ec2e-10e7-4111-8799-fcd0e139e807",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f20fc1ab-a1a8-4db6-9cf1-c3580762fd93",
+      "agent_id": {
+        "agent_name": "Luminous Threading Asteroid",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/comms-events/**",
+            ".agent/state/collaboration/comms-messages/**",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/active-claims.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T19:37:08Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Owner-directed coordinator handover announcement and directed notifications as Luminous Threading Asteroid.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T19:39:00Z",
+        "closed_by": {
+          "agent_name": "Luminous Threading Asteroid",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1d"
+        },
+        "summary": "Posted owner-directed coordinator handover shared notice and directed active agents plus Ferny to route coordination to Luminous Threading Asteroid.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f20fc1ab-a1a8-4db6-9cf1-c3580762fd93",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "4931eb2a-5054-4701-a505-01c8f725c736",
+      "agent_id": {
+        "agent_name": "Dim Hiding Secret",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1d"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T19:37:23Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit WS1.6 vocab planning prep note only.",
+      "intent_to_commit": "d4c7f2ec-99a5-404c-b5b6-36da1d43618f",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T19:39:46Z",
+        "closed_by": {
+          "agent_name": "Dim Hiding Secret",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1d"
+        },
+        "summary": "Commit attempt failed in pre-commit hook on peer-owned Fiery WS1.4 graph-core jsonld work; queue abandoned and git window released.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4931eb2a-5054-4701-a505-01c8f725c736",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "36e68a8e-6a68-4cc8-ba62-b1784425b4b7",
+      "agent_id": {
+        "agent_name": "Twigged Growing Glade",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "c19c95"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T19:40:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Apply reviewer corrections, run session handoff, and commit the pending-graduations conservation pass.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T19:41:00Z",
+        "closed_by": {
+          "agent_name": "Twigged Growing Glade",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "c19c95"
+        },
+        "summary": "Applied reviewer corrections, ran handoff updates, and prepared scoped commit for pending-graduations conservation pass.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "36e68a8e-6a68-4cc8-ba62-b1784425b4b7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "10bef384-816c-4601-a34f-df864ab97cd2",
+      "agent_id": {
+        "agent_name": "Fiery Igniting Furnace",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1d"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/core/graph-core/src/jsonld/index.ts",
+            "packages/core/graph-core/src/jsonld/processor.ts",
+            "packages/core/graph-core/src/jsonld/processor.unit.test.ts",
+            "packages/core/graph-core/package.json",
+            "pnpm-lock.yaml",
+            ".agent/memory/operational/threads/connecting-oak-resources.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T19:34:04Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "WS1.4 JSON-LD processor adapter. Overlap decision: Verdant claim 29946268 currently owns pnpm-lock for P5; Fiery will not edit pnpm-lock/package dependency until Verdant lockfile work clears or explicit coordination lands. Graph-core jsonld files are disjoint from active claims.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T19:43:58Z",
+        "closed_by": {
+          "agent_name": "Fiery Igniting Furnace",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1d"
+        },
+        "summary": "WS1.4 repo WIP parked to restore graph-core hook-green state; no active graph-core/package/lockfile edits remain under Fiery ownership. Parked copies are in /private/tmp/fiery-ws1.4-parked/ for reapply after coordinator clears dependency path.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "10bef384-816c-4601-a34f-df864ab97cd2",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c4c56025-ad66-4f12-a3ef-306063ce7afb",
+      "agent_id": {
+        "agent_name": "Twigged Growing Glade",
+        "platform": "cursor",
+        "model": "GPT-5.5",
+        "session_id_prefix": "c19c95"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T19:42:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Stage and commit pending-graduations conservation handoff.",
+      "intent_to_commit": "f3c17a54-aade-4d9e-b225-8b14115b3429",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T19:43:00Z",
+        "closed_by": {
+          "agent_name": "Twigged Growing Glade",
+          "platform": "cursor",
+          "model": "GPT-5.5",
+          "session_id_prefix": "c19c95"
+        },
+        "summary": "Closed in same collaboration-state commit for pending-graduations conservation pass.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c4c56025-ad66-4f12-a3ef-306063ce7afb",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
