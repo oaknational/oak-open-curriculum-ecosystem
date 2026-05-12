@@ -2,17 +2,17 @@
 name: cost of collaboration — agent-tools improvement plan
 overview: Unified single-source-of-truth plan for improving agent-tools so that multi-agent collaboration windows produce more substance than coordination overhead. Subsumes primary-agent-tooling-enhancements.plan.md and lifts the structural insights from the 2026-05-11 four-agent session (Wooded / Galactic / Flamebright / Sparking Charring Ash) into P-ordered workstreams. The single guiding metric is **cost-per-coordination-event in agent-count-aware terms** — a protocol that works at N=1 may be fatal at N=4.
 todos:
-  - id: ws-p0-staged-only-gates
-    content: Reshape the pre-commit hook to gate against staged content only (lint-staged or equivalent), with the full turbo suite moved to CI. Load-bearing pre-condition for every other multi-agent workstream.
+  - id: ws-p0-precommit-scope-gates
+    content: Reshape the pre-commit hook without weakening its purpose: it must stop detectably broken code entering git history. Only file-content scanners may be narrowed to staged files; type-check, lint, shell lint, and the current unit-test lane still run before commit. Load-bearing pre-condition for every other multi-agent workstream.
     status: pending
   - id: ws-p0-qg-baseline-and-unblock
-    content: Fix or explicitly route the current MCP Vitest blocker, then capture clean cold and warm `pnpm check:profile` baselines from `.logs/check-profiles/` before tuning gate placement.
+    content: Capture clean cold and warm `pnpm check:profile` baselines from `.logs/check-profiles/` after the owner-reported green `pnpm check` runs, then tune gate placement from that green baseline.
     status: pending
   - id: ws-p0-qg-trigger-contract
-    content: Codify the quality-checkpoint trigger contract: local `pnpm check`, pre-commit, pre-push, GitHub CI, SonarQube Cloud, and GitHub CodeQL each name their purpose, assurance owner, and non-goals.
+    content: Codify the quality-checkpoint trigger contract: pre-commit stops detectably broken code entering git history; pre-push stops broken code and higher-standard failures leaving the local environment; local `pnpm check`, GitHub CI, SonarQube Cloud, and GitHub CodeQL each name their purpose, assurance owner, and non-goals.
     status: pending
   - id: ws-p0-qg-staged-precommit-implementation
-    content: Implement staged-only pre-commit gates with regression coverage for ambient dirty peer files, preserving staged-content feedback while moving whole-repo proof to stronger triggers.
+    content: Implement staged-file Prettier/Markdown pre-commit gates with regression coverage for ambient dirty peer files, while preserving pre-commit type-check, lint, shell lint, and unit/current-test proof as the broken-code guard.
     status: pending
   - id: ws-p0-qg-prepush-ci-rebalance
     content: Rebalance pre-push and GitHub CI so every gate removed from pre-commit still has an explicit assurance home, including knip, depcruise, Turbo families, UI/a11y/widget checks, and generated/artifact checks.
@@ -124,8 +124,9 @@ addresses, with P0 being the load-bearing prerequisite.
 ## Standing constraints
 
 - **Block all multi-agent collaboration windows on Workstream P0 landing.**
-  This is non-negotiable. Without staged-only gates, no amount of agent
-  discipline produces reliable commits in multi-writer windows.
+  This is non-negotiable. P0 must reduce ambient-tree contention without
+  weakening the pre-commit invariant: detectably broken code does not enter
+  git history.
 - **Test-first per the TDD-as-design directive.** Every bug-fix slice
   lands the failing test in the same atomic commit as the fix.
 - **Schema-first per the schema-first-execution directive.** Type flow
@@ -142,18 +143,24 @@ addresses, with P0 being the load-bearing prerequisite.
 - **Assurance-moving must be explicit.** Any speed-up that removes a
   check from a trigger must name the assurance that remains at that
   trigger, the trigger that now owns the moved assurance, and the evidence
-  command that proves the new placement still works.
+  command that proves the new placement still works. The trigger purposes are
+  distinct: pre-commit is the broken-code history guard; `pnpm check` is the
+  exhaustive local proof; pre-push is the local-environment exit guard plus
+  higher standards; CI is the shared reproducible proof.
 
 ## Workstreams
 
-### P0 — Staged-only pre-commit gates
+### P0 — Pre-commit broken-code guard
 
-**Hypothesis**: pre-commit hook scans the entire working tree
-(`staged plus unstaged plus untracked`) at hook-fire time. In a
-continuous-write multi-agent window this guarantees gate failures on
-files that have nothing to do with the committing agent's staged
-content. The fix is to gate against staged content only and move
-repo-wide gates to CI.
+**Hypothesis**: pre-commit's purpose is to stop detectably broken code entering
+git history. Pre-push's purpose is stronger: stop broken code, plus code that
+fails the repo's additional high standards, leaving the local environment.
+The current pre-commit hook also lets file-content scanners such as Prettier
+and Markdownlint scan the ambient working tree (`staged plus unstaged plus
+untracked`) at hook-fire time, so a peer's dirty file can block an unrelated
+clean commit. The fix is not to make pre-commit weaker; it is to narrow only
+ambient-sensitive content scanners to the staged bundle while preserving
+pre-commit's broken-code guard.
 
 **Evidence**: three serial deadlock iterations on 2026-05-11 — knip on
 peer-unstaged code, prettier on peer-unstaged code, markdownlint on
@@ -165,28 +172,40 @@ direction if required).
 **Concrete shape**:
 
 - Introduce `lint-staged` (or equivalent staged-list-derived runner)
-  for prettier, markdownlint, ESLint-on-changed-files, format.
-- Move full turbo `type-check + lint + test` to CI only.
-- For knip and depcruise (graph-shaped, need consistent project state):
-  decide whether they run pre-push or CI-only; do not run pre-commit.
+  for Prettier and Markdown formatting checks.
+- Keep type-check, lint, shell lint, and the current `pnpm test`/Turbo `test`
+  lane in pre-commit. If a clean unit-vs-integration split lands later,
+  pre-commit may narrow from `test` to an explicit unit-test lane only if that
+  lane preserves the "no detectably broken commits" invariant.
+- Keep integration tests, E2E tests, dependency graph checks, generated-drift
+  checks, and similar higher-standard repo assertions at pre-push, `pnpm
+  check`, CI, or another explicitly named stronger trigger rather than trying
+  to derive them from staged file lists.
+- Knip and depcruise are classified by owner direction as higher-standard
+  gates. Keep them at pre-push, `pnpm check`, and CI rather than in
+  pre-commit.
 - Regression test: a working-tree scenario where Agent A has unstaged
   violations and Agent B's staged-clean commit succeeds.
 
 **Acceptance**:
 
 - Multi-writer scenario passes its regression test.
-- Documented hook runtime drops by >50% on a representative commit.
+- Documented hook runtime improves where ambient-sensitive content scanners
+  were the cost, but runtime reduction is secondary to preserving the
+  broken-code guard.
 - The agent-tools test suite passes unchanged.
-- Existing CI surfaces the gates that moved out of pre-commit.
+- Any gate moved out of pre-commit has an explicit classification and a
+  stronger trigger home.
 
 **Routing**: this is a `.husky/pre-commit` + `package.json` change, NOT
 inside agent-tools/src. The fix lives at the repo root. It should not
 be bundled with agent-tools workspace changes.
 
-**Risk**: lint-staged maintenance shape; existing turbo orchestration
-of pre-commit gates needs preserving in CI. Some gates (knip, depcruise)
-may need their own staged-aware variant — that is the slice's design
-problem.
+**Risk**: lint-staged maintenance shape; preserving `type-check lint test` in
+pre-commit means the runtime reduction is smaller than a content-only hook.
+That cost is intentional: there is no efficiency in allowing broken code into
+repo history. The only valid speed-up is one that keeps the trigger contract
+intact.
 
 #### P0 quality-gate performance implementation tasks
 
@@ -196,34 +215,34 @@ These tasks are part of P0, not a replacement for it.
 
 ##### P0.QG-1 — baseline and unblock
 
-**Goal**: establish a clean quality-gate performance baseline before tuning.
+**Goal**: establish a clean quality-gate performance baseline before further
+tuning.
 
 **Starting state**: the 2026-05-12 profile reached the real workload but
 failed in `@oaknational/oak-curriculum-mcp-streamable-http#test` at
-`src/correlation/middleware.integration.test.ts:203`. The owner has also
-started changing `pnpm check` so its lint, Markdown, and format proof steps are
-non-mutating; the baseline must verify that behaviour and measure its effect.
+`src/correlation/middleware.integration.test.ts:203`. The owner subsequently
+reported multiple green full `pnpm check` runs, so that profile failure is now
+historical evidence rather than the current blocker. The owner also changed
+`pnpm check` so its lint, Markdown, and format proof steps are non-mutating; the
+baseline must verify that behaviour and measure its effect.
 
 **Implementation tasks**:
 
-1. Fix or explicitly route the MCP correlation-middleware Vitest failure.
-2. Run `pnpm check:profile` in a clean prepared environment.
-3. Run a second warm-cache `pnpm check:profile` without changing inputs.
-4. Confirm the profile and script evidence show non-mutating lint,
+1. Run `pnpm check:profile` in a clean prepared environment.
+2. Run a second warm-cache `pnpm check:profile` without changing inputs.
+3. Confirm the profile and script evidence show non-mutating lint,
    Markdown, and format proof steps in the root `pnpm check` path.
-5. Store both artifacts under `.logs/check-profiles/` and summarise them in
+4. Store both artifacts under `.logs/check-profiles/` and summarise them in
    the profiling deep dive or a sibling evidence note.
 
 **Acceptance**:
 
-- The blocker has an owner-visible disposition: fixed with a test, routed to
-  an owning plan, or named as an external constraint with falsifiability.
 - Cold and warm profiles exist and include duration, exit code, Turbo dry
   graph, and enough evidence to compare cache behaviour.
 - The root `pnpm check` path is verified as a proof command for lint,
   Markdown, and format, not an auto-fix command.
-- No checkpoint tuning starts from a red baseline unless the owner explicitly
-  accepts the red condition as the baseline.
+- No further checkpoint tuning starts from a red baseline unless the owner
+  explicitly accepts the red condition as the baseline.
 
 ##### P0.QG-2 — trigger contract
 
@@ -241,8 +260,9 @@ placement.
    - GitHub push / PR CI;
    - SonarQube Cloud;
    - GitHub CodeQL.
-3. Record the rule that pre-commit is fast staged-content feedback after P0,
-   not whole-repo proof.
+3. Record the rule that pre-commit stops detectably broken code entering git
+   history, while pre-push stops broken code and higher-standard failures
+   leaving the local environment.
 
 **Acceptance**:
 
@@ -251,34 +271,49 @@ placement.
   trigger.
 - SonarQube Cloud and CodeQL remain separate from build/test/lint gates.
 
-##### P0.QG-3 — staged-only pre-commit implementation
+**Target trigger contract**:
 
-**Goal**: reduce commit-window contention by making pre-commit inspect the
-staged bundle rather than the ambient working tree.
+| Trigger | Command surface | Purpose | Non-goal |
+| --- | --- | --- | --- |
+| Pre-commit | `.husky/pre-commit` | Stop detectably broken code entering git history. Staged-file content checks are allowed only for scanners whose whole-tree behaviour is the source of false ambient failures. | It is not a weaker, convenience-only hook. |
+| Pre-push | `.husky/pre-push` | Stop broken code and code that fails additional high standards from leaving the local environment. | It is not the first place obvious local breakage should be discovered. |
+| Local full proof | `pnpm check` | Exhaustive local proof command for the repo's full quality contract. | It is not optimised for every commit boundary. |
+| GitHub CI | `.github/workflows/ci.yml` | Shared reproducible proof for branch and PR state. | It is not a substitute for local proof before publishing. |
+| SonarQube Cloud | SonarQube Cloud project gate | External static-quality and maintainability signal. | It does not replace build, type, lint, or test gates. |
+| GitHub CodeQL | GitHub code scanning | External semantic security analysis. | It does not replace local security hygiene or test gates. |
+
+##### P0.QG-3 — scoped pre-commit implementation
+
+**Goal**: reduce commit-window contention by making ambient-sensitive content
+scanners inspect the staged bundle rather than the ambient working tree, while
+preserving the pre-commit checks that prevent broken code being committed.
 
 **Implementation tasks**:
 
 1. Introduce `lint-staged` or an equivalent staged-list-derived runner.
 2. Route formatting and markdown checks through staged paths.
-3. Decide whether ESLint-on-changed-files is safe and useful at pre-commit;
-   if not, leave lint ownership at pre-push/CI/explicit local gates.
-4. Remove whole-tree `knip`, `depcruise`, and Turbo
-   `type-check lint test` from pre-commit.
-5. Add a regression proving a staged-clean commit succeeds while an unrelated
+3. Keep shell lint in the local proof path.
+4. Keep Turbo `type-check lint test` in pre-commit until there is an explicit
+   and validated unit-test-only lane that preserves the broken-code guard.
+5. Keep owner-classified higher-standard gates (`knip` and `depcruise`) at
+   pre-push, `pnpm check`, and CI rather than in pre-commit.
+6. Add a regression proving a staged-clean commit succeeds while an unrelated
    unstaged peer file remains dirty.
 
 **Acceptance**:
 
 - Pre-commit no longer fails solely because of unrelated unstaged or untracked
-  peer files.
+  peer files that are only visible to content scanners.
 - Staged formatting/markdown violations still fail before commit.
-- Representative commit runtime drops by more than 50% from the recorded
-  baseline.
+- Type-check, lint, shell lint, and unit/current tests still fail before
+  commit when the committed code is broken.
+- Any runtime improvement is reported as a consequence of scoped content
+  scanners, not as permission to remove broken-code detection from pre-commit.
 
 ##### P0.QG-4 — pre-push and CI assurance rebalance
 
-**Goal**: ensure every assurance removed from pre-commit still has a stronger
-trigger home.
+**Goal**: ensure every assurance removed from pre-commit is either not a
+broken-code guard or has an owner-approved stronger trigger home.
 
 **Implementation tasks**:
 
@@ -289,8 +324,8 @@ trigger home.
    generation/build tasks.
 4. Keep UI/a11y/widget coverage in explicit `pnpm check`, CI, or a clearly
    named pre-push lane; do not silently drop it.
-5. Update any contributor-facing docs or handoff surfaces that still claim
-   pre-commit is whole-repo proof.
+5. Update any contributor-facing docs or handoff surfaces that misstate the
+   pre-commit/pre-push contract.
 
 **Acceptance**:
 
@@ -430,8 +465,8 @@ on each invocation").
 
 **Why it sits between P0 and P1**:
 
-- P0 (staged-only pre-commit gates) remains the load-bearing
-  prerequisite for multi-agent commit at all.
+- P0 (pre-commit broken-code guard plus staged content scanners) remains the
+  load-bearing prerequisite for multi-agent commit at all.
 - This refactor is the foundational architectural pre-condition for
   P1–P7 *implementations* — every new subcommand (`comms direct`,
   `comms reply`, `comms watch`, `commit-queue guard`, etc.) should

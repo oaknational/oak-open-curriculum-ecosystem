@@ -12,6 +12,8 @@ next-session cleanup pass before merge.
 
 | Plan | Scope | Status |
 | --- | --- | --- |
+| [cost-of-collaboration.plan.md](cost-of-collaboration.plan.md) | Current controlling plan for agent communication and agent-tooling improvement work. Owns P0 pre-commit broken-code guard tuning, staged content scanners, quality-gate profiling, P-Foundation unified CLI, directed comms, commit-queue enforcement, identity routing, unified comms format, coordination artefact isolation, and residual work re-homed from the old primary plan. | ACTIVE / SINGLE SOURCE OF TRUTH |
+| [primary-agent-tooling-enhancements.plan.md](primary-agent-tooling-enhancements.plan.md) | Superseded pre-2026-05-11 workstream split. Retained as a back-pointer only; remaining workstreams are re-homed into `cost-of-collaboration.plan.md` under its P-order. | SUPERSEDED |
 | [multi-agent-collaboration-protocol.plan.md](multi-agent-collaboration-protocol.plan.md) | Structural infrastructure for parallel agents (advisory, not enforcing; platform independent by design). WS0+WS1+WS2 landed; WS3A landed; WS4A lifecycle integration implemented; WS3B sidebar/escalation and joint-decision integration implemented; WS5 remains observation-gated | WS3B-IMPLEMENTED |
 | [multi-agent-collaboration-sidebar-and-escalation.plan.md](multi-agent-collaboration-sidebar-and-escalation.plan.md) | Split from WS3B: sidebar, timeout, and owner-escalation design implemented with conversation-schema and escalation-state support | IMPLEMENTED |
 | [multi-agent-collaboration-protocol-concept-home-refinement.plan.md](multi-agent-collaboration-protocol-concept-home-refinement.plan.md) | Concept home refinement for the multi-agent collaboration protocol | QUEUED |

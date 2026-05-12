@@ -24,6 +24,7 @@ function usage(): string {
     '',
     'Commands:',
     '  markdownlint-staged    Run markdownlint on staged Markdown files only.',
+    '  prettier-staged        Run Prettier on staged files only.',
     '  profile [--dry-run]    Capture the pnpm check Turbo graph and, unless dry-run is set, time pnpm check.',
   ].join('\n');
 }
@@ -114,7 +115,7 @@ async function runProfile(args: readonly string[]): Promise<number> {
   return exitCode;
 }
 
-function stagedMarkdownFiles(): readonly string[] {
+function stagedFiles(): readonly string[] {
   const result = runCaptured('git', ['diff', '--cached', '--name-only', '--diff-filter=ACMR']);
 
   if ((result.status ?? 1) !== 0) {
@@ -124,7 +125,11 @@ function stagedMarkdownFiles(): readonly string[] {
   return result.stdout
     .split(/\r?\n/u)
     .map((entry) => entry.trim())
-    .filter((entry) => entry.length > 0 && entry.endsWith('.md'));
+    .filter((entry) => entry.length > 0);
+}
+
+function stagedMarkdownFiles(): readonly string[] {
+  return stagedFiles().filter((entry) => entry.endsWith('.md'));
 }
 
 async function runMarkdownlintStaged(): Promise<number> {
@@ -138,11 +143,26 @@ async function runMarkdownlintStaged(): Promise<number> {
   return runInherited('pnpm', ['exec', 'markdownlint', '--dot', ...files]);
 }
 
+async function runPrettierStaged(): Promise<number> {
+  const files = stagedFiles();
+
+  if (files.length === 0) {
+    console.log('repo-check prettier-staged: no staged files');
+    return 0;
+  }
+
+  return runInherited('pnpm', ['exec', 'prettier', '--check', '--ignore-unknown', ...files]);
+}
+
 async function main(): Promise<void> {
   const [command, ...args] = process.argv.slice(2);
 
   if (command === 'markdownlint-staged') {
     process.exit(await runMarkdownlintStaged());
+  }
+
+  if (command === 'prettier-staged') {
+    process.exit(await runPrettierStaged());
   }
 
   if (command === 'profile') {

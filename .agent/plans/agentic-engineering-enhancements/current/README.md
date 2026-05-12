@@ -6,6 +6,21 @@ These files are not the atomic execution plans in `active/`, but they do
 represent strategic/capability work to promote into explicit active execution
 plans when scheduled.
 
+## Cross-Collection Boundary
+
+Agent communication and collaboration-tooling implementation now routes through
+[`../../agent-tooling/current/cost-of-collaboration.plan.md`](../../agent-tooling/current/cost-of-collaboration.plan.md).
+That plan is the current single source of truth for the `agent-tools/`
+workspace, collaboration-state substrate, hooks, commit queue, comms, and
+identity-plumbing work. The old
+[`../../agent-tooling/current/primary-agent-tooling-enhancements.plan.md`](../../agent-tooling/current/primary-agent-tooling-enhancements.plan.md)
+is superseded and retained only as a back-pointer.
+
+Keep this collection focused on Practice/governance questions: how agents
+collaborate, plan, communicate, learn, review, and shape doctrine. If the work
+would still exist without `agent-tools/`, it belongs here; if it changes the
+tooling substrate, it belongs under `agent-tooling/`.
+
 ## Source Plans
 
 | Source Plan | Serves | Status |

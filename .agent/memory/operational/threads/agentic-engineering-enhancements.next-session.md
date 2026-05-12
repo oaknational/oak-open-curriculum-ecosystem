@@ -10,8 +10,9 @@
 
 **One-line objective**: execute the P0 quality-gate implementation tasks in
 [`cost-of-collaboration.plan.md`](../../../plans/agent-tooling/current/cost-of-collaboration.plan.md):
-measure clean cold/warm baselines, make trigger purposes explicit, implement
-staged-only pre-commit, rebalance pre-push/CI assurance, harden profiling, and
+measure clean cold/warm baselines, make trigger purposes explicit, finish
+staged Prettier/Markdown pre-commit checks without weakening the pre-commit
+broken-code guard, rebalance pre-push/CI assurance, harden profiling, and
 remeasure before declaring the checkpoint tuning effective.
 
 **Current state**: the plan now has concrete `todos:` entries
@@ -19,15 +20,14 @@ remeasure before declaring the checkpoint tuning effective.
 `ws-p0-qg-staged-precommit-implementation`,
 `ws-p0-qg-prepush-ci-rebalance`, `ws-p0-qg-profile-hardening`, and
 `ws-p0-qg-postchange-measurement`. Owner live update on 2026-05-12: root
-`pnpm check` has started moving lint, Markdown, and format proof steps to
-non-mutating commands; the next baseline should verify and measure that state.
+`pnpm check` has moved lint, Markdown, and format proof steps to non-mutating
+commands and has been run green several times by the owner; the next baseline
+should verify and measure that state.
 
-**Next safe step**: start with `ws-p0-qg-baseline-and-unblock`: fix or
-explicitly route the MCP correlation-middleware Vitest failure at
-`src/correlation/middleware.integration.test.ts:203`, then capture clean cold
-and warm `pnpm check:profile` baselines under `.logs/check-profiles/`,
-including evidence that the root proof path is non-mutating for lint,
-Markdown, and format.
+**Next safe step**: continue `ws-p0-qg-baseline-and-unblock` from the updated
+green state: capture clean cold and warm `pnpm check:profile` baselines under
+`.logs/check-profiles/`, including evidence that the root proof path is
+non-mutating for lint, Markdown, and format.
 
 **Boundary**: no tuning may remove a check from a trigger without naming the
 assurance preserved at that trigger, the trigger that now owns any moved
@@ -69,7 +69,7 @@ adapters where needed.
 ## `pnpm check` profiling result and next step (2026-05-12+)
 
 **One-line objective**: keep `pnpm check` as the explicit exhaustive local
-proof command; fix the current MCP package test blocker, rerun the profile,
+proof command; rerun cold/warm profiles from the owner-reported green state,
 and only tune triggers where the preserved or moved assurance is named.
 
 **Owner opening statement to preserve**: the repo relies on comprehensive
@@ -117,17 +117,18 @@ location is deliberate because `pnpm check` cleans `.turbo`.
   Turbo reported 87 successful real tasks, 1 failed real task, 0 cached, and
   58.494s wall time.
 
-**Current blocker**: the escalated full profile reached the real workload and
-failed in `@oaknational/oak-curriculum-mcp-streamable-http#test` at
-`src/correlation/middleware.integration.test.ts:203`. Expected Sentry
+**Historical profile blocker**: the escalated full profile reached the real
+workload and failed in `@oaknational/oak-curriculum-mcp-streamable-http#test`
+at `src/correlation/middleware.integration.test.ts:203`. Expected Sentry
 `correlation_id` scope tagging was absent. Playwright/browser bootstrap
-problems were environmental profiling constraints; the final blocker is this
-ordinary Vitest assertion.
+problems were environmental profiling constraints. Owner update on 2026-05-12:
+full `pnpm check` has since run green several times, so this is historical
+evidence to keep in the profile record, not the current next-step blocker.
 
 **Next safe step**: this lane is now embodied in the cost-of-collaboration
-P0.QG implementation tasks. Start with `ws-p0-qg-baseline-and-unblock`: fix or
-explicitly route the MCP correlation-middleware test failure, then rerun
-`pnpm check:profile` cold and warm before tuning trigger placement.
+P0.QG implementation tasks. Do not optimise from stale red evidence: rerun
+`pnpm check:profile` cold and warm from the current green state before tuning
+trigger placement further.
 
 **Acceptance frame**:
 
@@ -154,29 +155,29 @@ communication and agent-tooling improvement work. It subsumes
 
 ### The load-bearing question — answer before anything else
 
-> Does `.husky/pre-commit` gate against staged content only, or does
-> it still scan the whole working tree?
+> Does `.husky/pre-commit` stop detectably broken code entering git history
+> while limiting ambient-sensitive content scanners to staged files?
 
 **The authoritative test is reading `.husky/pre-commit` directly.**
-If the gates invoke `prettier --check .`, `markdownlint --dot .`,
-repo-wide `pnpm knip`, `pnpm depcruise`, or full-tree
-`pnpm turbo run … type-check lint test` against the ambient working
-tree (no `lint-staged` / no staged-pathspec filter), the hook still
-scans ambient state and the P0 defect is unfixed. Commit-message
-grep is unreliable for this check (false-positive risk on words like
-"staged"); always verify by reading the hook file.
+If Prettier or Markdownlint still invoke the whole tree
+(`prettier --check .`, `markdownlint --dot .`) instead of staged paths, the
+ambient-file part of P0 is unfixed. If type-check, lint, shell lint, or the
+current unit/test lane are absent from pre-commit, the broken-code guard has
+been weakened and P0 is also unfixed. `knip` and `depcruise` are now classified
+as higher-standard gates owned by pre-push, `pnpm check`, and CI. Commit-message
+grep is unreliable for this check; always verify by reading the hook file.
 
 ### What to do, by case
 
 - **If P0 has not landed** (verify via reading `.husky/pre-commit`
   as described above): this session's work is **cost-of-collaboration
-  P0 — staged-only pre-commit gates** and nothing else until P0
-  commits clean. **Single-agent window only.** The defect P0 fixes
-  blocks any multi-agent commit, including the commit that would
-  land P0 itself in a multi-agent window. **Decline any multi-agent
-  collaboration on this lane; if peer agents are already present in
-  the window, notify the owner before proceeding so the owner can
-  pause peers — do not attempt to override peers unilaterally.**
+  P0 — pre-commit broken-code guard plus staged content scanners** and nothing
+  else until P0 commits clean. **Single-agent window only.** The defect P0
+  fixes blocks any multi-agent commit, including the commit that would land P0
+  itself in a multi-agent window. **Decline any multi-agent collaboration on
+  this lane; if peer agents are already present in the window, notify the owner
+  before proceeding so the owner can pause peers — do not attempt to override
+  peers unilaterally.**
 
 - **If P0 has landed but P-Foundation has not**: proceed to
   **cost-of-collaboration P-Foundation — Agent-tools CLI architectural
@@ -267,8 +268,9 @@ defect (pre-commit hook scans ambient tree, not staged content) led to
 owner-called architectural reset. Authored single-source-of-truth plan
 at [`cost-of-collaboration.plan.md`](../../../plans/agent-tooling/current/cost-of-collaboration.plan.md)
 subsuming `primary-agent-tooling-enhancements.plan.md` (now SUPERSEDED).
-P-ordered workstreams: P0 staged-only pre-commit gates (load-bearing
-prerequisite); P1 `comms direct` + `comms reply` per locked B-11 design;
+P-ordered workstreams: P0 pre-commit broken-code guard plus staged content
+scanners (load-bearing prerequisite); P1 `comms direct` + `comms reply` per
+locked B-11 design;
 P2 `comms watch` with `fs.watch`; P3 enforced commit queue; P4 identity
 disambiguation; P5 unified comms format ("ONE comms format" per relayed
 owner direction); P6 coordination-artefact isolation; P7 async/sync
@@ -279,10 +281,10 @@ to claude-code agent-local memory: gatekeeper-specialisation, peer-
 sidebar-beats-coordinator-helpers, cursor-multitask-single-message-
 handoff, pre-commit-hook-must-gate-staged-only, plus agent-tools CLI
 improvements observation broadcast as comms-event `37ea0341`. **Next
-safe step for this thread**: cost-of-collaboration P0 (staged-only
-pre-commit gates) is the next slice. **Single-agent window only** —
-multi-agent collaboration on this lane is blocked until P0 lands. After
-P0, P1 (B-11 directed-message authoring) is design-locked and ready to
+safe step for this thread**: cost-of-collaboration P0 (pre-commit broken-code
+guard plus staged content scanners) is the next slice. **Single-agent window
+only** — multi-agent collaboration on this lane is blocked until P0 lands.
+After P0, P1 (B-11 directed-message authoring) is design-locked and ready to
 implement.
 
 **Tail update 2026-05-11 (Galactic Transiting Orbit / `codex` /
@@ -3353,6 +3355,7 @@ and
 | `Flamebright Sparking Forge` | `codex` | `GPT-5` | `019e1a` | `bounded-repo-continuity-and-pending-graduations-consolidation-drain; archived-historical-continuity-prose; reconciled-live-state-and-due-index; no-staging-window` | 2026-05-12 | 2026-05-12 |
 | `Torrid Flaring Hearth` | `codex` | `GPT-5` | `019e1a` | `consolidate-docs-pass; napkin-rotation; fitness-routing; thread-register-and-collaboration-state-audit; session-handoff-and-commit-closeout` | 2026-05-12 | 2026-05-12 |
 | `Vining Budding Canopy` | `codex` | `GPT-5` | `019e1a` | `pnpm-check-profiling-deep-dive-and-session-handoff; captured-turbo-graph-228-nodes-88-real-commands; preserved-profile-artifacts-under-.logs-check-profiles; recorded-F20-repo-check-profile-bootstrap-friction; expanded-cost-of-collaboration-P0-quality-gate-implementation-tasks; next-step-fix-streamable-http-correlation-middleware-vitest-failure-then-rerun-clean-and-warm-profile` | 2026-05-12 | 2026-05-12 |
+| `Smouldering Melting Kiln` | `codex` | `GPT-5` | `019e1a` | `paired-workflow-skill-review-for-jc-session-handoff-jc-consolidate-docs-and-jc-metacognition; claim-3ebea496-opened-after-empty-active-claims-scan; preserves-shared-state-and-comms-as-live-infrastructure` | 2026-05-12 | 2026-05-12 |
 | `Wooded Spreading Thicket` | `cursor` | `GPT-5.5` | `unknown` | `persistent-comms-coordinator-for-session; monitors-active-claims-shared-comms-log-and-fresh-comms-surfaces-every-30s; updateCurrentStep-telemetry-triage-external-tool-not-in-repo; writes-only-on-change-milestone-blocker-or-quiet-interval; all-agents-introduce-to-Wooded-Spreading-Thicket` | 2026-05-11 | 2026-05-11 |
 | `Galactic Transiting Orbit` | `codex` | `GPT-5` | `019e18` | `Wave-3-commit-queue-UX-hardening-claim-close-cycle-fingerprint-recursion-slice-in-progress; preserving-post-commit-ledger-residue-from-Embered-Burning-Magma-as-evidence; scope-agent-tools-commit-queue-collaboration-state-tests-plan-status-and-session-lifecycle-surfaces; Wave-4-and-Wave-5-remain-closed` | 2026-05-11 | 2026-05-11 |
 | `Shaded Ripening Copse` | `claude-code` | `claude-opus-4-7-1m` | `c13bdf` | `commit-queue-UX-brief-author-B-02-B-03-Workstream-4-architectural-seam-and-third-direction-peer-commit-absorption-subsection-commit-5c299ed5; primary-thread-was-connecting-oak-resources-but-the-commit-queue-UX-brief-landed-here-per-opener-routing` | 2026-05-11 | 2026-05-11 |

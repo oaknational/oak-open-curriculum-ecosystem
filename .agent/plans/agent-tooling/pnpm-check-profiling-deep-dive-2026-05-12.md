@@ -16,9 +16,10 @@ profile artifacts were copied back to `.logs/check-profiles/`.
 
 The final escalated profile reached the real check workload: Playwright UI and
 a11y tasks passed, and the run then failed on one ordinary Vitest assertion in
-`@oaknational/oak-curriculum-mcp-streamable-http#test`. This means the profile
-is useful for graph and runtime-shape analysis, but it is not a clean green
-baseline.
+`@oaknational/oak-curriculum-mcp-streamable-http#test`. This profile is useful
+for graph and runtime-shape analysis, but it is not a clean green baseline.
+Owner update after the profile: full `pnpm check` has since run green several
+times, so the failure is historical evidence rather than the current blocker.
 
 ## Evidence
 
@@ -47,10 +48,10 @@ pnpm check:profile
 pnpm check:profile # escalated outside sandbox after Chromium launch EPERM
 ```
 
-## What `pnpm check` Actually Runs
+## What `pnpm check` Ran During This Profile
 
-The root script is a sequence of non-Turbo gates, a single broad Turbo run,
-then more non-Turbo gates:
+At the time of the recorded profile, the root script was a sequence of
+non-Turbo gates, a single broad Turbo run, then more non-Turbo gates:
 
 ```text
 pnpm secrets:scan
@@ -67,6 +68,12 @@ pnpm depcruise
 pnpm markdownlint:root
 pnpm format:root
 ```
+
+After this profile, the root `pnpm check` script began moving terminal proof
+steps to non-mutating commands (`lint`, `markdownlint-check:root`, and
+`format-check:root`) while preserving `pnpm lint:shell` as a separate shell
+syntax proof. Treat the command block above as historical profile input, not
+the current package script.
 
 The root-script prerequisite is complete at
 `fabe99c3 refactor(tooling): retire root scripts`; this analysis did not
@@ -210,9 +217,11 @@ expected [] to deeply equal [['correlation_id', 'undefined']]
 ```
 
 The important distinction: Playwright/browser bootstrap problems were
-environmental profiling constraints; the final blocker is an ordinary Vitest
-behaviour failure in the MCP package's correlation middleware/Sentry tagging
-test.
+environmental profiling constraints; the final product failure was an ordinary
+Vitest behaviour failure in the MCP package's correlation middleware/Sentry
+tagging test. Because the owner later reported multiple green `pnpm check`
+runs, the next profiling step should start from the current green state rather
+than treating this historical failure as the active blocker.
 
 ## Trigger Surface Map
 
@@ -230,26 +239,31 @@ Tuning rule: keep exhaustive unless a named assurance moves elsewhere.
 
 ### Pre-commit
 
-Purpose: guard the history boundary at commit time.
+Purpose: guard the history boundary at commit time. It stops detectably broken
+code entering git history.
 
-Current shape: still too broad for multi-agent windows because it reads the
-ambient tree for root format, knip, depcruise, and full Turbo
-`type-check lint test`; only markdownlint has a staged route.
+Current shape after the first P0 edit: Prettier and Markdownlint route through
+staged files only; shell lint and Turbo `type-check lint test` still run before
+commit. Knip and depcruise are classified as higher-standard gates, so they
+belong at pre-push, `pnpm check`, and CI rather than the commit boundary.
 
-Contract it should have after P0: fast staged-content feedback, not whole-repo
-proof. Whole-repo assurance moves to pre-push, CI, or explicit `pnpm check`.
+Contract after P0: staged-file feedback for ambient-sensitive content scanners
+plus broken-code proof for type-check, lint, shell lint, and unit/current
+tests. Pre-commit is not a weaker convenience hook.
 
 ### Pre-push
 
 Purpose: guard the branch-exit boundary before work leaves the local machine.
+It stops broken code and code that fails additional high standards from being
+pushed.
 
 Current shape: secrets, formatting, markdown, subagents, portability, knip,
 depcruise, repo validators, shell lint, and Turbo
 `sdk-codegen build type-check lint test test:e2e test:ui`.
 
-Contract: stronger local proof than pre-commit, still cheaper than full
-`pnpm check` because it omits some a11y/widget families and post-Turbo skills
-coverage differs.
+Contract: stronger local proof than pre-commit, including higher-standard
+checks such as knip and depcruise, still cheaper than full `pnpm check` because
+it omits some a11y/widget families and post-Turbo skills coverage differs.
 
 ### GitHub Push / PR CI
 
@@ -290,8 +304,8 @@ complements Sonar; it does not replace build, type, lint, or runtime tests.
 | Add `repo-check profile` preflights and richer artifacts | Faster diagnosis, not faster checks | Preserves all gates | None |
 | Fix current MCP Vitest failure before further tuning | Enables clean baseline | Preserves ordinary test correctness | None |
 | Run cold and warm profile pairs | Better measurement | Preserves all gates | None |
-| Make pre-commit staged-only under P0 | Faster commits, especially in multi-agent windows | Staged-content formatting/lint feedback | Whole-repo proof moves to pre-push, CI, and explicit `pnpm check` |
-| Keep knip/depcruise out of pre-commit if P0 lands | Faster commit boundary | Graph/dependency assurance remains in pre-push/CI | Commit-time graph assurance is intentionally traded for branch/CI assurance |
+| Make Prettier/Markdownlint check staged files under P0 | Faster commits when ambient peer files are dirty | Pre-commit still blocks broken code via type-check, lint, shell lint, and unit/current tests | Content-scanner scope narrows to the staged bundle |
+| Classify knip/depcruise as higher-standard gates | Faster commit boundary | Graph/dependency assurance remains in pre-push, `pnpm check`, and CI | Commit-time graph assurance is intentionally owned by the stronger branch-exit/full-proof surfaces |
 | Do not remove UI/a11y/widget families from `pnpm check` | No speed-up | Preserves browser/accessibility/widget coverage in full local proof | None |
 | If UI/a11y/widget families are omitted from a hook, keep them in CI or explicit `pnpm check` | Faster hook | Browser/accessibility coverage still exists | Hook purpose narrows to faster feedback |
 
@@ -320,14 +334,12 @@ Recommended hardening:
 
 ## Next Safe Steps
 
-1. Fix or route the failing MCP Vitest assertion:
-   `src/correlation/middleware.integration.test.ts:203`.
-2. Re-run `pnpm check:profile` in the same prepared worktree or a fresh clean
-   worktree after the test is fixed.
-3. Run a warm-cache second pass without clearing artifacts to measure local
+1. Re-run `pnpm check:profile` in the same prepared worktree or a fresh clean
+   worktree from the current owner-reported green state.
+2. Run a warm-cache second pass without clearing artifacts to measure local
    rerun cost.
-4. Land `repo-check profile` hardening under the F-20 route only after the
+3. Land `repo-check profile` hardening under the F-20 route only after the
    current `jc-start-right` / `jc-commit` skill-documentation claim clears or
    in a separately claimed agent-tools slice.
-5. Keep cost-of-collaboration P0 as the implementation prerequisite before any
+4. Keep cost-of-collaboration P0 as the implementation prerequisite before any
    broader multi-agent implementation window resumes.

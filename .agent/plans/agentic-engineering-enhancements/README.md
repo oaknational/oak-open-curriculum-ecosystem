@@ -47,6 +47,13 @@ Practice, repo structure, or how the system as a whole improves — it
 belongs here. When in doubt, ask: "could this plan exist if `agent-tools/`
 did not?" If yes, it is broader than the workspace and belongs here.
 
+Current routing note: agent communication and collaboration-tooling
+implementation is owned by
+[`../agent-tooling/current/cost-of-collaboration.plan.md`](../agent-tooling/current/cost-of-collaboration.plan.md).
+The older
+[`../agent-tooling/current/primary-agent-tooling-enhancements.plan.md`](../agent-tooling/current/primary-agent-tooling-enhancements.plan.md)
+is superseded and retained only for historical references.
+
 ---
 
 ## Quick Links
