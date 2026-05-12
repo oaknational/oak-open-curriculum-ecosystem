@@ -1,10 +1,11 @@
 import { parseOptions, type Options } from './cli-options.js';
-import { specs, type CommandSpec } from './cli-specs.js';
+import { specs, type CliRuntime, type CommandSpec } from './cli-specs.js';
 import { type CollaborationStateEnvironment } from './types.js';
 
 interface CollaborationStateCliInput {
   readonly argv: readonly string[];
   readonly env: CollaborationStateEnvironment;
+  readonly stdout?: Pick<NodeJS.WritableStream, 'write'>;
 }
 
 interface CollaborationStateCliResult {
@@ -20,13 +21,17 @@ export async function runCollaborationStateCli(
   input: CollaborationStateCliInput,
 ): Promise<CollaborationStateCliResult> {
   try {
-    return success(await dispatch(parseOptions(input.argv), input.env));
+    return success(await dispatch(parseOptions(input.argv), input.env, { stdout: input.stdout }));
   } catch (error) {
     return failure(error instanceof Error ? error.message : String(error));
   }
 }
 
-async function dispatch(options: Options, env: CollaborationStateEnvironment): Promise<string> {
+async function dispatch(
+  options: Options,
+  env: CollaborationStateEnvironment,
+  runtime: CliRuntime,
+): Promise<string> {
   if (isTopLevelHelp(options)) {
     return `${usage()}\n`;
   }
@@ -34,12 +39,13 @@ async function dispatch(options: Options, env: CollaborationStateEnvironment): P
     return `${topicUsage(options.command)}\n`;
   }
 
-  return dispatchCommand(options, env, commandSpecForOptions(options));
+  return dispatchCommand(options, env, runtime, commandSpecForOptions(options));
 }
 
 async function dispatchCommand(
   options: Options,
   env: CollaborationStateEnvironment,
+  runtime: CliRuntime,
   spec: CommandSpec,
 ): Promise<string> {
   if (options.values.has('help')) {
@@ -49,7 +55,7 @@ async function dispatchCommand(
   validateKnownOptions(options, spec);
 
   try {
-    return await spec.handler(options, env);
+    return await spec.handler(options, env, runtime);
   } catch (error) {
     throw new Error(commandError(spec, error instanceof Error ? error.message : String(error)), {
       cause: error,
@@ -80,7 +86,7 @@ function usage(): string {
     '',
     'Topics:',
     '  identity       preflight, audit',
-    '  comms          append, send, render, inbox, direct, reply',
+    '  comms          append, send, render, inbox, watch, direct, reply',
     '  claims         open, heartbeat, close, archive-stale, list, mine, show, status',
     '  conversation   append',
     '  escalation     open, close',

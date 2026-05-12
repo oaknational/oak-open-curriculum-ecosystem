@@ -1,9 +1,9 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-> **Current continuation**: P2, `comms watch`, after B-11 closeout. P0.QG,
-> P-Foundation, and P1 directed-message authoring are complete; new CLI work
-> lands in the unified `agent-tools <topic> <action>` shape from
-> `cost-of-collaboration.plan.md`.
+> **Current continuation**: P3 commit-queue enforcement after P2 `comms watch`
+> closeout. P0.QG, P-Foundation, P1 directed-message authoring, and P2
+> directed-message watching are complete; new CLI work lands in the unified
+> `agent-tools <topic> <action>` shape from `cost-of-collaboration.plan.md`.
 
 ## codex-helper skill + codex-exec CLI minimum-viable surface (2026-05-12)
 
@@ -94,6 +94,34 @@ pretending the solution is already known.
 | --- | --- | --- | --- | --- | --- |
 | `claude` | `claude-opus-4-7-1m` | Lush Sprouting Thicket | Implementer (codex-helper skill, codex-exec CLI, ADR-180, future plan) | 2026-05-12 | 2026-05-12 |
 | `codex` | `GPT-5` | Coastal Cresting Prow | Implementer (cost-of-collaboration P1 B-11 `comms direct/reply`; landed at `f88d0d67`; P2 `comms watch` next) | 2026-05-12 | 2026-05-12 |
+| `codex` | `GPT-5` | Penumbral Veiling Raven | Implementer (cost-of-collaboration P2 `comms watch`) | 2026-05-12 | 2026-05-12 |
+
+## P2 comms watch handoff (2026-05-12)
+
+**Landed**: cost-of-collaboration P2 `comms watch` in the unified CLI shape:
+`pnpm agent-tools collaboration-state comms watch`.
+
+**Implementation shape**:
+
+- Adds a directed-message watcher that runs as a long-lived process, emits
+  matching messages to stdout as they arrive, and records seen message IDs in
+  the caller-supplied `--seen-file`.
+- Uses Node `fs.watch` with polling fallback. Watch setup/runtime failures such
+  as `EMFILE` fall back to polling instead of crashing the command.
+- Supports `--agent-name` plus optional `--session-prefix` so a watcher can
+  narrow recipient matching to the identity tuple. `--max-events` is present as
+  a bounded test/control affordance, not as a separate legacy mode.
+
+**Validation**: focused collaboration-state watch integration test; focused
+agent-tools CLI unit + collaboration-state integration tests; full
+agent-tools `type-check`, `test`, `build`, and `lint`; built unified CLI
+`comms watch --help` and `comms help` smoke. `lint` exits 0 while still
+reporting the pre-existing `no-real-io-in-tests` warning in the
+collaboration-state integration test file.
+
+**Next safe step**: continue cost-of-collaboration P3 commit-queue
+enforcement. Preserve the 6027e182 protocol breach as P3 evidence; do not fold
+P4 active-agent visibility into the P3 implementation slice.
 
 ## B-11 directed-message authoring handoff (2026-05-12)
 

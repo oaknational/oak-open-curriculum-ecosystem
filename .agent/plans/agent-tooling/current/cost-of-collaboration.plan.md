@@ -31,7 +31,7 @@ todos:
     status: completed
   - id: ws-p2-comms-watch
     content: Add `comms watch` with `fs.watch` + polling fallback to replace 30s bash poll loops. Sub-second new-message latency for any agent that runs the watch as a long-lived process.
-    status: pending
+    status: completed
   - id: ws-p3-commit-queue-enforcement
     content: Promote the commit queue from advisory predictor to enforced pre-stage gate. Refuse `git add` (via a commit-queue CLI guard wrapping `git add`, or a stage-time precondition check) when no active intent matches the staged file set. Note Git/Husky have no native `pre-stage` hook lifecycle; the enforcement lives in the agent-tools CLI or a wrapper, not in a hook of that name.
     status: pending
@@ -716,6 +716,26 @@ script runs build before each poll."
 
 **Routing**: same claim area as P1; sits next to or inside
 `cli-comms-inbox.ts`.
+
+**2026-05-12 evidence**:
+
+- P2 landed in the unified CLI shape:
+  `pnpm agent-tools collaboration-state comms watch`.
+- The watcher emits directed messages through a streaming stdout path while
+  the process stays alive. `--max-events` is a test/control affordance for
+  bounded proof runs, not a separate legacy mode.
+- Recipient filtering supports `--agent-name` plus optional
+  `--session-prefix` so long-lived watchers can narrow to an identity tuple.
+- The implementation uses Node `fs.watch` with polling fallback; watcher
+  setup errors such as `EMFILE` degrade to polling rather than crashing.
+- Focused evidence: collaboration-state watch integration test proves a
+  message written after the command starts is emitted and marked seen; full
+  agent-tools `type-check`, `test`, `build`, and `lint` completed. Lint
+  still reports the pre-existing `no-real-io-in-tests` warning in the
+  collaboration-state integration test file and exits 0.
+
+**Routing**: implemented by Penumbral Veiling Raven / `codex` / GPT-5 /
+`019e1c` on 2026-05-12.
 
 ---
 

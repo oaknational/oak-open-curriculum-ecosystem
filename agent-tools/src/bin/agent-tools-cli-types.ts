@@ -15,6 +15,11 @@ export interface AgentToolsCliInput {
    * Defaults to `process.stdin` when not provided. Tests inject a fake stream.
    */
   readonly stdin?: NodeJS.ReadableStream;
+  /**
+   * Stdout stream for topics that need to emit while still running.
+   * Defaults to buffered output when not provided.
+   */
+  readonly stdout?: Pick<NodeJS.WritableStream, 'write'>;
 }
 
 export interface AgentToolsCliResult {

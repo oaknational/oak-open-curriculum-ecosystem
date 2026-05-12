@@ -1,6 +1,7 @@
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { setTimeout as delay } from 'node:timers/promises';
 
 import { describe, expect, it } from 'vitest';
 
@@ -296,6 +297,68 @@ describe('collaboration-state comms integration', () => {
       expect(result.exitCode).toBe(0);
       expect(result.stdout).toContain('subject: For Galactic');
       expect(result.stdout).toContain('subject: For Flamebright');
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('watches for a new directed message and marks it seen', async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), 'collaboration-state-watch-'));
+    const messagesDir = join(tempDir, 'comms-messages');
+    const seenFile = join(tempDir, 'seen.txt');
+    const streamed: string[] = [];
+
+    try {
+      await mkdir(messagesDir);
+      const pendingResult = runCollaborationStateCli({
+        argv: [
+          '--',
+          'comms',
+          'watch',
+          '--messages-dir',
+          messagesDir,
+          '--agent-name',
+          recipient.agent_name,
+          '--session-prefix',
+          recipient.session_id_prefix,
+          '--seen-file',
+          seenFile,
+          '--poll-ms',
+          '20',
+          '--max-events',
+          '1',
+        ],
+        env: {},
+        stdout: {
+          write(chunk: string | Uint8Array): boolean {
+            streamed.push(String(chunk));
+            return true;
+          },
+        },
+      });
+
+      await delay(40);
+      await writeFile(
+        join(messagesDir, 'message-one.json'),
+        `${JSON.stringify({
+          schema_version: '1.0.0',
+          event_id: 'message-one',
+          created_at: '2026-05-11T19:46:35Z',
+          kind: 'coordination-request',
+          from: sender,
+          to: recipient,
+          subject: 'Please check this',
+          body: 'There is useful coordination here.',
+        })}\n`,
+      );
+
+      const result = await pendingResult;
+
+      expect(result.exitCode).toBe(0);
+      expect(result.stdout).toBe('');
+      expect(streamed.join('')).toContain('subject: Please check this');
+      expect(streamed.join('')).toContain('There is useful coordination here.');
+      expect(await readFile(seenFile, 'utf8')).toBe('message-one\n');
     } finally {
       await rm(tempDir, { recursive: true, force: true });
     }

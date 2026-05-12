@@ -113,6 +113,7 @@ async function dispatchTopic(input: {
     return runCollaborationStateCli({
       argv: input.parsed.topicArgs,
       env: input.input.env,
+      stdout: input.input.stdout,
     });
   }
 

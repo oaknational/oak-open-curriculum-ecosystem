@@ -56,14 +56,16 @@ Earlier archives remain under [`archive/`](archive/).
 - Owner live change on 2026-05-12: root `pnpm check` has moved its lint,
   Markdown, and format proof steps to non-mutating commands. The next
   quality-gate baseline should verify and measure this before further tuning.
-- P0, P-Foundation, and P1 have landed. The Agent-tools hot collaboration
+- P0, P-Foundation, P1, and P2 have landed. The Agent-tools hot collaboration
   scripts now route through the built unified `agent-tools` entrypoint without
-  rebuilding on every invocation, and `collaboration-state comms direct/reply`
-  now author directed messages without hand-written JSON. P1 landed at
-  `f88d0d67` after the owner gave fresh one-commit `--no-verify`
-  authorisation because unrelated dirty `codex-exec` work blocked the
-  repo-wide pre-commit hook; focused B-11 validation had passed. P2
-  `comms watch` is the next cost-of-collaboration implementation step.
+  rebuilding on every invocation, `collaboration-state comms direct/reply` now
+  author directed messages without hand-written JSON, and
+  `collaboration-state comms watch` now provides a long-lived directed-message
+  watcher with `fs.watch` plus polling fallback. P1 landed at `f88d0d67` after
+  the owner gave fresh one-commit `--no-verify` authorisation because unrelated
+  dirty `codex-exec` work blocked the repo-wide pre-commit hook; focused B-11
+  validation had passed. P2 landed in this handoff pass. P3 commit-queue
+  enforcement is the next cost-of-collaboration implementation step.
   State/memory files remain always commit-includable when dirty; owner
   clarified on 2026-05-12 that every commit should include current memory/state
   files.
@@ -125,8 +127,8 @@ each thread record; this table is the repo-level index.
 
 ### Agentic-Engineering Enhancements
 
-Immediate cost-of-collaboration lane: P0, P-Foundation, and P1 are complete;
-continue with P2 `comms watch`. The suspected flaky tests
+Immediate cost-of-collaboration lane: P0, P-Foundation, P1, and P2 are
+complete; continue with P3 commit-queue enforcement. The suspected flaky tests
 listed in
 [`cost-of-collaboration.flaky-tests.md`](../../plans/agent-tooling/current/cost-of-collaboration.flaky-tests.md)
 are disposed as not reproduced, and representative busy-checkout cold/warm
@@ -157,8 +159,8 @@ promotion or archive, not by metric-shaped trimming. The acceptance bar remains:
   implementation windows.
 
 Implementation lane after profiling and consolidation: follow the thread
-record's cost-of-collaboration opener. P0, P-Foundation, and P1 have landed;
-P2 is the next implementation step.
+record's cost-of-collaboration opener. P0, P-Foundation, P1, and P2 have
+landed; P3 is the next implementation step.
 
 ### Connecting-Oak-Resources
 
@@ -182,8 +184,8 @@ Term hierarchy + Quad + free-function `equals`.
 3. Monorepo workspace topology (superseding ADR-108, S0-S6 strategic plan) is
    parked until after the graph MVP implementation tranche unless the owner
    explicitly reopens it.
-4. Cost-of-collaboration P0, P-Foundation, and P1 are complete; P1 landed at
-   `f88d0d67`; P2 `comms watch` is next.
+4. Cost-of-collaboration P0, P-Foundation, P1, and P2 are complete; P1 landed
+   at `f88d0d67`; P3 commit-queue enforcement is next.
 
 ## Repo-Wide Invariants / Non-Goals
 

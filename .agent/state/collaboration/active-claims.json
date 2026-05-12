@@ -962,7 +962,99 @@
       "staged_bundle_fingerprint": "62881a45c98f56dab6708371503caa0645babe5ddc5dcb515a1aaab6cc4f21d6",
       "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nM\t.agent/memory/operational/threads/connecting-oak-resources.next-session.md\nM\t.agent/plans/agent-tooling/current/cost-of-collaboration.plan.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nA\t.agent/state/collaboration/comms-events/0acb3bfb-640c-4863-879c-182f18bcbca6.json\nA\t.agent/state/collaboration/comms-events/0e29371c-b0f3-4304-87c8-e241110763a7.json\nA\t.agent/state/collaboration/comms-events/0f442cbb-ac86-4b00-a2c1-feba8d21fd06.json\nA\t.agent/state/collaboration/comms-events/34da1d70-d3b9-48e2-84af-ffdaabc5c67a.json\nA\t.agent/state/collaboration/comms-events/385b9c2c-cb8b-41b1-83e2-dd0d11775ce2.json\nA\t.agent/state/collaboration/comms-events/5afaf72b-0b38-44ca-8757-cb445dad8755.json\nA\t.agent/state/collaboration/comms-events/5cee2cdd-1cda-4e74-9e44-18fbd8de4ece.json\nA\t.agent/state/collaboration/comms-events/60707722-49ff-46f6-afaa-baf27be26086.json\nA\t.agent/state/collaboration/comms-events/6caf6af8-07a8-413c-a0c4-c1e31893cb6c.json\nA\t.agent/state/collaboration/comms-events/79579769-922c-4bdd-9ea6-402e1760477e.json\nA\t.agent/state/collaboration/comms-events/86e18947-c70b-4fbc-ba2b-7a46326f7cd0.json\nA\t.agent/state/collaboration/comms-events/8c306d5c-ff99-4742-aab5-69aed3fee910.json\nA\t.agent/state/collaboration/comms-events/92c474bf-7a20-4a63-9759-e924f085b30e.json\nA\t.agent/state/collaboration/comms-events/ad62c13b-ddd9-491f-a2ff-40f7754fbb70.json\nA\t.agent/state/collaboration/comms-events/ca5778a3-4dd6-4fbb-ad1c-9caed1a394d9.json\nA\t.agent/state/collaboration/comms-events/ccc0fc77-ea74-4129-b348-a7e0c31a510c.json\nA\t.agent/state/collaboration/comms-events/cd34bf22-3aeb-40ed-9142-8337cc96bf1f.json\nA\t.agent/state/collaboration/comms-events/fd3cee08-0ff0-4fcd-93b8-9063e3786544.json\nM\t.agent/state/collaboration/shared-comms-log.md\nM\tagent-tools/README.md\nM\tagent-tools/package.json\nM\tagent-tools/src/bin/agent-identity.ts\nA\tagent-tools/src/bin/agent-tools-cli.ts\nA\tagent-tools/src/bin/agent-tools.ts\nM\tagent-tools/src/bin/branch-touched-files.ts\nM\tagent-tools/src/bin/collaboration-state.ts\nM\tagent-tools/src/bin/commit-queue.ts\nM\tagent-tools/src/commit-queue/args.ts\nM\tagent-tools/src/commit-queue/cli.ts\nA\tagent-tools/tests/agent-tools-cli.unit.test.ts\nM\tpackage.json\n",
       "notes": "superseded to include monitor heartbeat ae3c3f2d before commit"
+    },
+    {
+      "intent_id": "484559bd-3c3c-496c-9b71-c5b5e6e00b0a",
+      "claim_id": "e2efef17-8c83-45c2-a6ab-eebae1aa8f3f",
+      "agent_id": {
+        "agent_name": "Penumbral Veiling Raven",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1c"
+      },
+      "files": [
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+        ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md",
+        ".agent/plans/agent-tooling/frictions-register.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/shared-comms-log.md",
+        ".agent/state/collaboration/comms-events/618c2f41-cb5b-4d1e-b032-1b41a996fe85.json",
+        ".agent/state/collaboration/comms-events/d23666a7-835f-4a6d-a599-7de6e5e40aa1.json",
+        "agent-tools/README.md",
+        "agent-tools/src/bin/agent-tools-cli-types.ts",
+        "agent-tools/src/bin/agent-tools-cli.ts",
+        "agent-tools/src/bin/agent-tools.ts",
+        "agent-tools/src/bin/collaboration-state.ts",
+        "agent-tools/src/collaboration-state/cli-comms-inbox.ts",
+        "agent-tools/src/collaboration-state/cli-comms-watch.ts",
+        "agent-tools/src/collaboration-state/cli-specs.ts",
+        "agent-tools/src/collaboration-state/cli.ts",
+        "agent-tools/tests/collaboration-state/collaboration-state.integration.test.ts"
+      ],
+      "commit_subject": "feat(agent-tools): add comms watch",
+      "queued_at": "2026-05-12T12:16:18.082Z",
+      "updated_at": "2026-05-12T12:16:23.060Z",
+      "expires_at": "2026-05-12T12:31:18.082Z",
+      "phase": "staging"
     }
   ],
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "a2685ce7-a7b4-41ba-ac39-bbc10a688cb8",
+      "agent_id": {
+        "agent_name": "Penumbral Veiling Raven",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state",
+            "agent-tools/tests/collaboration-state",
+            "agent-tools/README.md",
+            ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md",
+            ".agent/plans/agent-tooling/frictions-register.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/state/collaboration/comms-events"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T12:09:07Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Implement P2 comms watch in unified agent-tools collaboration-state comms CLI shape."
+    },
+    {
+      "claim_id": "e2efef17-8c83-45c2-a6ab-eebae1aa8f3f",
+      "agent_id": {
+        "agent_name": "Penumbral Veiling Raven",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1c"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T12:16:00Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit P2 comms watch implementation and handoff state.",
+      "intent_to_commit": "484559bd-3c3c-496c-9b71-c5b5e6e00b0a"
+    }
+  ]
 }

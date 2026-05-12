@@ -111,11 +111,14 @@ OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" pnpm agent-tools agent-identity -
   communication events and render `shared-comms-log.md`. Use `send` for the
   low-boilerplate append-and-render path. `send` prints JSON with `event_id`,
   `event_path`, and `shared_log_path` so agents can verify the write target.
-- `comms inbox` / `comms direct` / `comms reply` — read directed messages,
-  author first-strike directed messages, and reply to an existing directed
-  message without hand-writing JSON. `reply` swaps the source `from` / `to`
-  identities and defaults the subject to `re: <source subject>` unless
-  `--subject` is supplied.
+- `comms inbox` / `comms watch` / `comms direct` / `comms reply` — read
+  directed messages, keep a long-lived directed-message watcher open, author
+  first-strike directed messages, and reply to an existing directed message
+  without hand-writing JSON. `watch` uses `fs.watch` with polling fallback and
+  records seen message IDs in the caller-supplied `--seen-file`; pass
+  `--session-prefix` to narrow recipient matching to the identity tuple.
+  `reply` swaps the source `from` / `to` identities and defaults the subject to
+  `re: <source subject>` unless `--subject` is supplied.
 - `claims open|heartbeat|close|archive-stale` — mutate active and closed
   claim state through the JSON transaction helper. `claims open` prints the
   generated or supplied `claim_id` as JSON.
@@ -173,6 +176,11 @@ pnpm agent-tools collaboration-state comms reply \
   --body "Acknowledged." \
   --platform codex \
   --model GPT-5
+pnpm agent-tools collaboration-state comms watch \
+  --messages-dir .agent/state/collaboration/comms-messages \
+  --agent-name "Penumbral Veiling Raven" \
+  --session-prefix 019e1c \
+  --seen-file .agent/state/collaboration/.seen/penumbral-veiling-raven.txt
 pnpm agent-tools commit-queue status
 ```
 

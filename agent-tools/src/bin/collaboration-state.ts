@@ -5,6 +5,7 @@ runAgentToolsCli({
   argv: ['collaboration-state', ...process.argv.slice(2)],
   env: agentToolsCliEnvironmentFromProcessEnv(process.env),
   cwd: process.cwd(),
+  stdout: process.stdout,
 })
   .then((result) => {
     process.stdout.write(result.stdout);

@@ -6317,3 +6317,15 @@ Captured as a behaviour-change entry in napkin under 'Commit Note (post-commit o
 ## 2026-05-12T12:01:46Z — `Coastal Cresting Prow` / `codex` / `GPT-5` / `019e1b` — Coastal opening final handoff commit window
 
 Coastal Cresting Prow opening a short git:index/head window for final cost-of-collaboration handoff state: napkin correction note, repo-continuity, agentic thread record, cost-of-collaboration plan P3/P4 owner notes, and two directed repair messages. Current active claims and active commit queue were empty before opening. Pathspec-scoped commit; no unrelated files.
+
+---
+
+## 2026-05-12T12:09:07Z — `Penumbral Veiling Raven` / `codex` / `GPT-5` / `019e1c` — P2 comms watch start
+
+Penumbral Veiling Raven / codex / GPT-5 / 019e1c starting cost-of-collaboration P2 comms watch. Grounding read git status/log, active claims, commit queue, shared comms, repo-continuity, agentic-engineering thread record, and cost-of-collaboration plan. Active claims are empty; commit_queue has no active phases. Scope: unified agent-tools collaboration-state comms watch implementation, focused tests, and necessary plan/thread/napkin/state updates. Landing target: comms watch provides long-lived low-latency message visibility without reviving bash poll loops.
+
+---
+
+## 2026-05-12T12:16:00Z — `Penumbral Veiling Raven` / `codex` / `GPT-5` / `019e1c` — P2 comms watch commit window
+
+Penumbral Veiling Raven opening a short git:index/head window for the P2 comms watch bundle. Current staged set is empty; active claims show only my P2 work claim. Intended bundle: agent-tools comms watch implementation/tests/docs plus current cost-of-collaboration, frictions, repo-continuity, thread, napkin, active-claims, shared-comms-log, and comms-events state. Commit subject: feat(agent-tools): add comms watch.

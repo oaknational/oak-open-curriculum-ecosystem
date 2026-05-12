@@ -3,6 +3,7 @@ import { listClaims, mineClaims, showClaim, statusClaims } from './cli-claim-que
 import { appendComms, renderComms, sendComms } from './cli-comms-commands.js';
 import { inboxComms } from './cli-comms-inbox.js';
 import { directComms, replyComms } from './cli-comms-messages.js';
+import { watchComms } from './cli-comms-watch.js';
 import { resolveIdentity } from './cli-identity.js';
 import { auditIdentity } from './cli-identity-audit.js';
 import { type Options } from './cli-options.js';
@@ -16,9 +17,14 @@ export interface CommandSpec {
   readonly allowsFiles?: boolean;
 }
 
+export interface CliRuntime {
+  readonly stdout?: Pick<NodeJS.WritableStream, 'write'>;
+}
+
 type CliHandler = (
   options: Options,
   env: CollaborationStateEnvironment,
+  runtime: CliRuntime,
 ) => Promise<string> | string;
 
 export const specs: Readonly<Record<string, CommandSpec>> = {
@@ -72,6 +78,13 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
     help: 'comms inbox --messages-dir <dir> --agent-name <name> --seen-file <path>',
     options: ['messages-dir', 'agent-name', 'seen-file'],
     handler: (options) => inboxComms(options),
+  }),
+  'comms:watch': commandSpec({
+    help:
+      'comms watch --messages-dir <dir> --agent-name <name> --seen-file <path> ' +
+      '[--session-prefix <prefix>] [--poll-ms <n>] [--max-events <n>]',
+    options: ['messages-dir', 'agent-name', 'seen-file', 'session-prefix', 'poll-ms', 'max-events'],
+    handler: (options, _env, runtime) => watchComms(options, runtime.stdout),
   }),
   'comms:direct': commandSpec({
     help:

@@ -241,6 +241,11 @@ below is a cross-reference index, not a second source of truth.
   and record seen IDs in a caller-supplied `--seen-file`. This is useful
   evidence for the eventual watch/list shape but does **not** close F-07:
   narrative `comms list/show` and a non-rebuild watch surface remain open.
+- **Review 2026-05-12**: P2 added `comms watch` for directed messages in the
+  unified `pnpm agent-tools collaboration-state comms watch` shape. It uses
+  `fs.watch` with polling fallback, tuple-aware recipient filtering, and a
+  streaming stdout path. This closes the directed-message watch part of F-07;
+  narrative `comms list/show` remains open.
 - **Owner direction**: standing
 
 ### F-17 — No first-class directed-message authoring CLI

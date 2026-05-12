@@ -61,6 +61,24 @@ The most recent rotation is archived at
   surfaces. This is the correct residual signal: the queue still needs a real
   graduation/archive drain, not metric-shaped trimming.
 
+## 2026-05-12 — Penumbral Veiling Raven / codex / GPT-5 / `019e1c`
+
+### Cost-of-Collaboration P2
+
+- Implemented `pnpm agent-tools collaboration-state comms watch` in the
+  unified CLI shape rather than adding another bin or poll-loop wrapper.
+- The first watch implementation passed behaviourally but produced local
+  `EMFILE` watcher errors under test. Behaviour change: a long-lived agent
+  watcher must treat `fs.watch` as an acceleration path, not the only
+  correctness path; setup/runtime watcher failures fall back to polling.
+- Owner reinforced the replace-don't-bridge rule mid-slice. Applied it by
+  keeping the new surface inside the P-Foundation unified CLI and avoiding a
+  parallel legacy watcher.
+- `pnpm --filter @oaknational/agent-tools lint` exits 0 but still reports the
+  pre-existing `no-real-io-in-tests` warning on the collaboration-state
+  integration test file. This remains visible rather than being treated as a
+  clean lint surface.
+
 ## 2026-05-12 — Torrid Flaring Hearth / codex / GPT-5 / `019e1a`
 
 ### Consolidate-Docs Pass
