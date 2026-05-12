@@ -1,9 +1,9 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-> **Current continuation**: cost-of-collaboration P0.QG. Start at
-> §Quality-gate performance implementation track. The remaining-skills audit
-> lane remains preserved below, but the owner requested this handoff for the
-> next cost-of-collaboration session.
+> **Current continuation**: P-Foundation, the Agent-tools CLI architectural
+> overhaul. P0.QG is complete; start at §Quality-gate performance
+> implementation track, then move to the P-Foundation task in
+> `cost-of-collaboration.plan.md` before any P1+ work.
 
 ## Remaining skills audit continuation (2026-05-12+)
 
@@ -72,6 +72,15 @@ overhaul, before P1+ work. Do not reopen the "make pre-commit staged-only"
 framing; continue from the owner contract that pre-commit stops detectably
 broken code entering git history and pre-push owns higher-standard branch-exit
 failures.
+
+**Session handoff (2026-05-12)**: Hushed Shrouding Mist landed
+`fb90ebd2 feat(agent-tools): harden check profile artifacts for P0`, then the
+owner requested a full current state commit. The state-only follow-up landed as
+`50b49765 chore(collaboration): persist session state after P0 commit`.
+Handoff found no active claims and no open escalation files. Consolidation is
+marked due in repo-continuity because P0 closed and Practice fitness still has
+hard pressure; this closeout deliberately leaves that as a separate
+consolidation lane rather than mixing it into P-Foundation.
 
 **Boundary**: no tuning may remove a check from a trigger without naming the
 assurance preserved at that trigger, the trigger that now owns any moved
@@ -3407,7 +3416,7 @@ and
 | `Kilned Brazing Forge` | `codex` | `GPT-5` | `019e1a` | `cost-of-collaboration-P0QG-profile-regression-handoff; repo-check-dry-graph-aligned-lint-not-lintfix; staged-prettier-markdownlint-regression-tests; warm-pnpm-check-profile-green-130561ms; cold-like-profile-blocked-by-suspected-oauth-rate-limit-flake; flaky-test-list-created; temp-index-precommit-real-2.39s; claim-e2fc7a6d-closed` | 2026-05-12 | 2026-05-12 |
 | `Galactic Transiting Galaxy` | `codex` | `GPT-5` | `019e1a` | `owner-requested-knowledge-curation; reviewed-120-comms-events-older-than-2026-05-05; confirmed-durable-routing; deleted-processed-event-buffer-files; regenerated-shared-comms-log; stale-count-zero; handoff-claim-666f1e8e` | 2026-05-12 | 2026-05-12 |
 | `Stratospheric Winging Wing` | `codex` | `GPT-5` | `019e1b` | `remaining-jc-skill-audit; enumerated-24-jc-adapters; excluded-7-reviewed-skills; audited-17-remaining-canonicals; patched-napkin-gates-review-finishing-branch-undo-change-ground-truth-design-ground-truth-evaluation; validation-git-diff-check-targeted-markdownlint-skills-check-portability-check-green; claim-4aa64a3d` | 2026-05-12 | 2026-05-12 |
-| `Hushed Shrouding Mist` | `codex` | `GPT-5` | `019e1b` | `cost-of-collaboration-P0QG-complete; flake-disposition-and-busy-profile-baseline; oauth-rate-limit-20-focused-runs-green; correlation-middleware-20-focused-runs-green; public-resource-auth-bypass-e2e-10-focused-plus-3-full-e2e-green; busy-pnpm-check-profile-cold-147613ms-green-warm-131695ms-green; repo-check-profile-artifact-hardening; agent-tools-focused-tests-typecheck-lint-green; claim-337c03ef-plus-9a37bc0f` | 2026-05-12 | 2026-05-12 |
+| `Hushed Shrouding Mist` | `codex` | `GPT-5` | `019e1b` | `cost-of-collaboration-P0QG-complete; flake-disposition-and-busy-profile-baseline; oauth-rate-limit-20-focused-runs-green; correlation-middleware-20-focused-runs-green; public-resource-auth-bypass-e2e-10-focused-plus-3-full-e2e-green; busy-pnpm-check-profile-cold-147613ms-green-warm-131695ms-green; repo-check-profile-artifact-hardening; agent-tools-focused-tests-typecheck-lint-green; full-state-commit-50b49765; session-handoff-to-P-Foundation; no-active-claims-at-handoff` | 2026-05-12 | 2026-05-12 |
 | `Wooded Spreading Thicket` | `cursor` | `GPT-5.5` | `unknown` | `persistent-comms-coordinator-for-session; monitors-active-claims-shared-comms-log-and-fresh-comms-surfaces-every-30s; updateCurrentStep-telemetry-triage-external-tool-not-in-repo; writes-only-on-change-milestone-blocker-or-quiet-interval; all-agents-introduce-to-Wooded-Spreading-Thicket` | 2026-05-11 | 2026-05-11 |
 | `Galactic Transiting Orbit` | `codex` | `GPT-5` | `019e18` | `Wave-3-commit-queue-UX-hardening-claim-close-cycle-fingerprint-recursion-slice-in-progress; preserving-post-commit-ledger-residue-from-Embered-Burning-Magma-as-evidence; scope-agent-tools-commit-queue-collaboration-state-tests-plan-status-and-session-lifecycle-surfaces; Wave-4-and-Wave-5-remain-closed` | 2026-05-11 | 2026-05-11 |
 | `Shaded Ripening Copse` | `claude-code` | `claude-opus-4-7-1m` | `c13bdf` | `commit-queue-UX-brief-author-B-02-B-03-Workstream-4-architectural-seam-and-third-direction-peer-commit-absorption-subsection-commit-5c299ed5; primary-thread-was-connecting-oak-resources-but-the-commit-queue-UX-brief-landed-here-per-opener-routing` | 2026-05-11 | 2026-05-11 |

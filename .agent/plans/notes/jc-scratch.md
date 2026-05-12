@@ -9,11 +9,7 @@ profile pre-commit hooks
 agent tools cli overhaul
 agent communication improvements
 
-# BAU
-
-learning loop consolidation
-
-skills refresh
+try codex as mcp for claude
 
 ~~Researching which platforms no longer support commands, if they are going away, and move everything to skills~~
 

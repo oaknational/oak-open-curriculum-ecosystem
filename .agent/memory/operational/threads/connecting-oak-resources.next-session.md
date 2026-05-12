@@ -1,37 +1,33 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
-**Next anticipated work**: Inc.1a WS1.1 — scaffold
-`packages/core/graph-core` per the refined WS1.1 row in
-`graph-stack.plan.md` (now lifecycle `active`). Acceptance:
-package.json with pre-declared sub-path exports (`./term`,
-`./dataset`, `./jsonld`, `./canon`, `./vocab`) pointing to stub
-`src/<module>/index.ts` files (`export {};`), index.ts also empty
-barrel, eslint config with `coreBoundaryRules` on `src/**/*.ts`,
-tsup + vitest configs as 3-line re-exports of the repo-base helpers,
-tsconfig{,.build,.lint}.json mirroring `packages/core/result/`,
-README citing ADR-173/179 by number only. **Zero tests in WS1.1**
-(test-expert verdict: atomic-landing invariant — no test without
-product code; vitest wiring is verified by WS1.2's first real
-test). 'Tree green' = `pnpm install` resolves; type-check/lint/build
-pass; repo-wide knip/depcruise/format-check/markdownlint show no new
-failures. One commit, full commit-queue protocol from active-claims
-read forward.
+**Next anticipated work**: Inc.1a WS1.2 — first paired
+product/test bundle in `packages/core/graph-core/`. Lands the RDF
+Term hierarchy (NamedNode | BlankNode | Literal | DefaultGraph |
+TripleTerm) plus the `Quad` type, with type-tests and equality
+tests in the same commit per the atomic-landing invariant. The
+sub-path entry `src/term/index.ts` stops being an empty barrel and
+exports the union; the root `src/index.ts` re-exports as part of
+the public surface. Reviewer flag: type-expert (Term discriminated
+union and `import type` discipline), plus follow-up lenses
+architecture-expert-betty (cohesion of RDF/JS surface vs internal
+helpers) at the boundary check.
 
-**Last refreshed**: 2026-05-11 (Sparking Charring Ash /
-`claude-code` / `claude-opus-4-7-1m` / `caf5e1` — landed the prior
-session's orphan markdown bundle (`dbe7321c`) plus ADR ratification +
-plan promotion + WS1.1 refinement (`5ec5004d`). ADR-173 + ADR-179
-Status: Proposed → Accepted 2026-05-11. `graph-stack.plan.md`
-promoted `current/` → `active/`. WS0 marked completed; WS1.1 row
-refined per holistic review by Fred (ADR-179 enforcement language
-correction), type-expert (sub-path exports pre-declaration), and
-test-expert (zero tests in WS1.1). architecture-expert-barney
-returned PROMOTION-READY verdict on the plan body before
-ratification. Session also surfaced two doctrine corrections —
-commit-queue-skip mistake (skipped pre-stage active-claims read and
-queue enqueue before first `git add`) and knowledge-preservation-
-over-mechanical-fitness-warnings (owner-stated repo doctrine,
-captured to feedback memory).)
+**Last refreshed**: 2026-05-12 (Celestial Transiting Satellite /
+`claude` / `claude-opus-4-7-1m` / `9bc8e3` — landed WS1.1 at
+`ad2abb69`: 18 files +275/-1; `packages/core/graph-core/` scaffolded
+with six pre-declared sub-path exports and empty barrels; root
+registrations added across `pnpm-workspace.yaml`, `knip.config.ts`,
+`pnpm-lock.yaml`, and `.dependency-cruiser.mjs`. Three reviewers
+APPROVE — config-expert, architecture-expert-fred, test-expert. Full
+commit-queue protocol followed: claim opened, re-scoped once on
+depcruise discovery, intent enqueued/record-staged/verify-staged/
+pre_commit/complete/closed). Earlier 2026-05-11 (Sparking Charring
+Ash / `claude-code` / `claude-opus-4-7-1m` / `caf5e1`): ADR-173 +
+ADR-179 Status: Proposed → Accepted; `graph-stack.plan.md` promoted
+`current/` → `active/`; WS0 marked completed; WS1.1 row refined per
+holistic review (Fred / type-expert / test-expert) and Barney
+PROMOTION-READY verdict; doctrine corrections captured for
+commit-queue discipline and knowledge-preservation-over-fitness.
 
 ## Self-Bootstrapping Continuation (cold-start landing)
 

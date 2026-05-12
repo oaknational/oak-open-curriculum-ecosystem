@@ -23,7 +23,7 @@ Earlier archives remain under [`archive/`](archive/).
 - The Practice/tooling substrate lane for this branch remains
   `agentic-engineering-enhancements`; its detailed state lives in
   [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md).
-- Cost-of-collaboration P0 implementation is in progress. Direct evidence:
+- Cost-of-collaboration P0 implementation is complete. Direct evidence:
   [`.husky/pre-commit`](../../../.husky/pre-commit) now routes staged
   formatting and Markdown checks through `agent-tools:repo-check` while keeping
   shell lint and Turbo `type-check lint test` in the pre-commit broken-code
@@ -56,9 +56,11 @@ Earlier archives remain under [`archive/`](archive/).
 - Owner live change on 2026-05-12: root `pnpm check` has moved its lint,
   Markdown, and format proof steps to non-mutating commands. The next
   quality-gate baseline should verify and measure this before further tuning.
-- Until P0 lands, multi-agent implementation windows remain structurally
-  blocked. Single-agent documentation/state consolidation remains safe when
-  claims are registered narrowly and no staging window is opened.
+- P0 has landed. P-Foundation, the Agent-tools CLI architectural overhaul, is
+  the next required workstream before P1+ cost-of-collaboration implementation.
+  State/memory files remain always commit-includable when dirty; owner
+  clarified on 2026-05-12 that every commit should include current memory/state
+  files.
 - The owner-directed consolidation drain of `repo-continuity.md` and
   [`pending-graduations.md`](pending-graduations.md) is complete for this
   pass: historical closeout prose was archived, the live state was preserved,
@@ -77,7 +79,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Galactic Transiting Galaxy / `codex` / GPT-5 / `019e1a` / 2026-05-12 (completed stale comms-event curation and deleted 120 processed buffer events); Stratospheric Winging Wing / `codex` / GPT-5 / `019e1b` / 2026-05-12 (remaining jc-skill audit complete); Kilned Brazing Forge / `codex` / GPT-5 / `019e1a` / 2026-05-12 (P0.QG warm profile green, staged scanner regression coverage, hook timing, flaky-test list); see thread record for full identity history |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Hushed Shrouding Mist / `codex` / GPT-5 / `019e1b` / 2026-05-12 (P0.QG complete, flake disposition, busy cold/warm profiles, repo-check profile hardening, session handoff); Galactic Transiting Galaxy / `codex` / GPT-5 / `019e1a` / 2026-05-12 (completed stale comms-event curation and deleted 120 processed buffer events); Stratospheric Winging Wing / `codex` / GPT-5 / `019e1b` / 2026-05-12 (remaining jc-skill audit complete); see thread record for full identity history |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Sparking Charring Ash / `claude-code` / opus-4-7-1m / `caf5e1` / 2026-05-12 (graph foundation work; Inc.1a WS1.1 open for execution) |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -185,6 +187,8 @@ the authority.
 - shared-state files are always writable and commit-includable regardless of
   active claims —
   [`respect-active-agent-claims`](../../rules/respect-active-agent-claims.md).
+- current memory/state files should be included in every commit when dirty —
+  owner clarification, 2026-05-12.
 
 Current branch non-goals:
 
@@ -196,8 +200,15 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-12 — Galactic Transiting Galaxy / `codex` / GPT-5 /
-`019e1a`)**: completed the owner-requested stale-event retention sweep. The
+**Status (2026-05-12 — Hushed Shrouding Mist / `codex` / GPT-5 / `019e1b`)**:
+due — P0.QG closed this session and Practice fitness still reports hard
+pressure in `napkin.md`, `pending-graduations.md`, and
+`practice-bootstrap.md`. This handoff does not run `jc-consolidate-docs`;
+P-Foundation is the next implementation opener, and a separate consolidation
+pass should decide the fitness-routing work.
+
+Previous same-day status: Galactic Transiting Galaxy completed the
+owner-requested stale-event retention sweep. The
 pass reviewed the 120 `comms-events/` files older than 2026-05-05, confirmed
 the durable coordination lessons were already routed into napkin, distilled,
 rules, plans, patterns, pending graduations, thread records, or prior

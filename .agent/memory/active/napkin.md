@@ -353,3 +353,17 @@ The most recent rotation is archived at
   introduced filename typos. The safer pattern for bulk retention cleanup is to
   verify the live generated list, apply smaller delete chunks, then rerun the
   stale-count check before regenerating derived logs.
+
+## 2026-05-12 — P0.QG Closeout / codex / GPT-5 / `019e1b`
+
+### Owner Correction
+
+- All commits should include current memory/state files when those files are
+  dirty. Treat this as a standing commit invariant, not as an optional
+  cleanup-after-source-commit nicety.
+
+### Candidate
+
+- candidate: commit workflow docs should absorb the owner clarification that
+  memory/state surfaces are included in every commit when dirty, alongside the
+  existing shared-state-always-committable rule.
