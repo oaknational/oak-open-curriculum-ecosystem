@@ -80,7 +80,7 @@ function usage(): string {
     '',
     'Topics:',
     '  identity       preflight, audit',
-    '  comms          append, send, render, inbox',
+    '  comms          append, send, render, inbox, direct, reply',
     '  claims         open, heartbeat, close, archive-stale, list, mine, show, status',
     '  conversation   append',
     '  escalation     open, close',

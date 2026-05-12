@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { runCollaborationStateCli } from '../../src/collaboration-state';
+import { readDirectedCommsMessages } from '../../src/collaboration-state/state-io';
 
 const recipient = {
   agent_name: 'Galactic Transiting Orbit',
@@ -21,6 +22,135 @@ const sender = {
 } as const;
 
 describe('collaboration-state comms integration', () => {
+  it('writes a directed message from the current identity', async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), 'collaboration-state-direct-'));
+    const messagesDir = join(tempDir, 'comms-messages');
+
+    try {
+      const result = await runCollaborationStateCli({
+        argv: [
+          '--',
+          'comms',
+          'direct',
+          '--messages-dir',
+          messagesDir,
+          '--to-agent-name',
+          recipient.agent_name,
+          '--to-platform',
+          recipient.platform,
+          '--to-model',
+          recipient.model,
+          '--to-session-prefix',
+          recipient.session_id_prefix,
+          '--kind',
+          'coordination-request',
+          '--subject',
+          'Please check this',
+          '--body',
+          'There is useful coordination here.',
+          '--event-id',
+          'message-one',
+          '--now',
+          '2026-05-11T19:45:35Z',
+          '--platform',
+          'claude-code',
+          '--model',
+          sender.model,
+        ],
+        env: {
+          OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+          PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
+        },
+      });
+
+      expect(result.exitCode).toBe(0);
+      expect(result.stdout).toBe(
+        `wrote directed message message-one to ${join(messagesDir, 'message-one.json')}\n`,
+      );
+      expect(await readDirectedCommsMessages(messagesDir)).toStrictEqual([
+        {
+          schema_version: '1.0.0',
+          event_id: 'message-one',
+          created_at: '2026-05-11T19:45:35Z',
+          kind: 'coordination-request',
+          from: sender,
+          to: recipient,
+          subject: 'Please check this',
+          body: 'There is useful coordination here.',
+        },
+      ]);
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('replies to a directed message by swapping sender and recipient', async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), 'collaboration-state-reply-'));
+    const messagesDir = join(tempDir, 'comms-messages');
+
+    try {
+      await mkdir(messagesDir);
+      await writeFile(
+        join(messagesDir, 'message-one.json'),
+        `${JSON.stringify({
+          schema_version: '1.0.0',
+          event_id: 'message-one',
+          created_at: '2026-05-11T19:45:35Z',
+          kind: 'coordination-request',
+          from: sender,
+          to: recipient,
+          subject: 'Please check this',
+          body: 'There is useful coordination here.',
+        })}\n`,
+      );
+
+      const result = await runCollaborationStateCli({
+        argv: [
+          '--',
+          'comms',
+          'reply',
+          '--messages-dir',
+          messagesDir,
+          '--to-event-id',
+          'message-one',
+          '--kind',
+          'coordination-ack',
+          '--body',
+          'Looks good.',
+          '--event-id',
+          'message-two',
+          '--now',
+          '2026-05-11T19:46:35Z',
+          '--platform',
+          recipient.platform,
+          '--model',
+          recipient.model,
+        ],
+        env: {
+          CODEX_THREAD_ID: '019e1867-a0a8-7c11-aae3-1bc48533a585',
+          OAK_AGENT_IDENTITY_OVERRIDE: recipient.agent_name,
+        },
+      });
+
+      expect(result.exitCode).toBe(0);
+      expect(result.stdout).toBe(
+        `wrote directed message message-two to ${join(messagesDir, 'message-two.json')}\n`,
+      );
+      expect(await readDirectedCommsMessages(messagesDir)).toContainEqual({
+        schema_version: '1.0.0',
+        event_id: 'message-two',
+        created_at: '2026-05-11T19:46:35Z',
+        kind: 'coordination-ack',
+        from: recipient,
+        to: sender,
+        subject: 're: Please check this',
+        body: 'Looks good.',
+      });
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
   it('accepts all three comms directories when rendering the shared log', async () => {
     const tempDir = await mkdtemp(join(tmpdir(), 'collaboration-state-render-'));
     const outputPath = join(tempDir, 'shared-comms-log.md');

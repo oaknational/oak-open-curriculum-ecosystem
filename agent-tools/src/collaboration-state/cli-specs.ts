@@ -2,6 +2,7 @@ import { archiveClaims, closeClaim, heartbeatClaim, openClaim } from './cli-clai
 import { listClaims, mineClaims, showClaim, statusClaims } from './cli-claim-query-commands.js';
 import { appendComms, renderComms, sendComms } from './cli-comms-commands.js';
 import { inboxComms } from './cli-comms-inbox.js';
+import { directComms, replyComms } from './cli-comms-messages.js';
 import { resolveIdentity } from './cli-identity.js';
 import { auditIdentity } from './cli-identity-audit.js';
 import { type Options } from './cli-options.js';
@@ -71,6 +72,46 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
     help: 'comms inbox --messages-dir <dir> --agent-name <name> --seen-file <path>',
     options: ['messages-dir', 'agent-name', 'seen-file'],
     handler: (options) => inboxComms(options),
+  }),
+  'comms:direct': commandSpec({
+    help:
+      'comms direct --messages-dir <dir> --to-agent-name <name> --to-platform <platform> ' +
+      '--to-model <model> --to-session-prefix <prefix> --kind <kind> ' +
+      '--subject <subject> --body <body> --platform <platform> --model <model> ' +
+      '[--event-id <id>] [--now <iso>]',
+    options: [
+      'messages-dir',
+      'to-agent-name',
+      'to-platform',
+      'to-model',
+      'to-session-prefix',
+      'kind',
+      'subject',
+      'body',
+      'platform',
+      'model',
+      'event-id',
+      'now',
+    ],
+    handler: directComms,
+  }),
+  'comms:reply': commandSpec({
+    help:
+      'comms reply --messages-dir <dir> --to-event-id <id> --kind <kind> ' +
+      '--body <body> --platform <platform> --model <model> ' +
+      '[--subject <subject>] [--event-id <id>] [--now <iso>]',
+    options: [
+      'messages-dir',
+      'to-event-id',
+      'kind',
+      'body',
+      'platform',
+      'model',
+      'subject',
+      'event-id',
+      'now',
+    ],
+    handler: replyComms,
   }),
   'claims:open': commandSpec({
     help:

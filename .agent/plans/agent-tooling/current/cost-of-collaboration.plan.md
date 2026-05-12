@@ -28,7 +28,7 @@ todos:
     status: completed
   - id: ws-p1-comms-direct-and-reply
     content: Implement B-11 directed-message authoring CLI (`comms direct` + `comms reply`) per the locked sidebar design at `.agent/state/collaboration/sidebars/cli-comms-inbox-design-2026-05-11.md`. Lands in the unified CLI shape from P-Foundation.
-    status: pending
+    status: completed
   - id: ws-p2-comms-watch
     content: Add `comms watch` with `fs.watch` + polling fallback to replace 30s bash poll loops. Sub-second new-message latency for any agent that runs the watch as a long-lived process.
     status: pending
@@ -650,9 +650,21 @@ across Turn 1 + Turn 2 + Turn 3 + joint decision. Summary:
 - Reduces a coordination round-trip from ~60s authoring + 30s poll to
   ~1 CLI call + 30s poll.
 
-**Routing**: claim area `agent-tools/src/**`. Implementer: Galactic
-Transiting Orbit when their session resumes, or any next agent who
-picks up the agent-tooling lane.
+**2026-05-12 implementation evidence**:
+
+- Coastal Cresting Prow implemented `comms direct` and `comms reply` in the
+  unified `pnpm agent-tools collaboration-state comms <action>` shape.
+- `direct` writes a parseable directed message from the current PDR-027
+  identity to the supplied recipient identity.
+- `reply` reads an existing directed message, requires the current identity to
+  match the source recipient, swaps `from`/`to`, and defaults the subject to
+  `re: <source subject>` without schema changes.
+- Validation passed: focused collaboration-state tests, full agent-tools
+  type-check, test, build, README markdownlint, and built CLI smoke for help,
+  `direct`, `reply`, and reader compatibility.
+
+**Routing**: claim area `agent-tools/src/**`. Implemented by Coastal Cresting
+Prow / `codex` / GPT-5 / `019e1b` on 2026-05-12.
 
 **Deferred follow-ons (NOT in B-11, tracked here for visibility)**:
 

@@ -111,6 +111,11 @@ OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" pnpm agent-tools agent-identity -
   communication events and render `shared-comms-log.md`. Use `send` for the
   low-boilerplate append-and-render path. `send` prints JSON with `event_id`,
   `event_path`, and `shared_log_path` so agents can verify the write target.
+- `comms inbox` / `comms direct` / `comms reply` — read directed messages,
+  author first-strike directed messages, and reply to an existing directed
+  message without hand-writing JSON. `reply` swaps the source `from` / `to`
+  identities and defaults the subject to `re: <source subject>` unless
+  `--subject` is supplied.
 - `claims open|heartbeat|close|archive-stale` — mutate active and closed
   claim state through the JSON transaction helper. `claims open` prints the
   generated or supplied `claim_id` as JSON.
@@ -150,6 +155,24 @@ pnpm agent-tools collaboration-state claims open \
   --platform cursor \
   --model GPT-5.5
 pnpm agent-tools collaboration-state comms send --title "Heads-up" --body "Rendered via immutable event." --platform cursor --model GPT-5.5
+pnpm agent-tools collaboration-state comms direct \
+  --messages-dir .agent/state/collaboration/comms-messages \
+  --to-agent-name "Coastal Cresting Prow" \
+  --to-platform codex \
+  --to-model GPT-5 \
+  --to-session-prefix 019e1b \
+  --kind coordination-request \
+  --subject "Please check this" \
+  --body "Short directed message body." \
+  --platform cursor \
+  --model GPT-5.5
+pnpm agent-tools collaboration-state comms reply \
+  --messages-dir .agent/state/collaboration/comms-messages \
+  --to-event-id 11111111-1111-4111-8111-111111111111 \
+  --kind coordination-ack \
+  --body "Acknowledged." \
+  --platform codex \
+  --model GPT-5
 pnpm agent-tools commit-queue status
 ```
 

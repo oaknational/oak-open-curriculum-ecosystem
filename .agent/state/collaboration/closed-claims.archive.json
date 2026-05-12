@@ -19582,6 +19582,180 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "bc424df9-80e6-4efa-95ee-f2e37dfdace6",
+      "agent_id": {
+        "agent_name": "Starlit Scattering Moon",
+        "platform": "claude",
+        "model": "opus-4-7-1m",
+        "session_id_prefix": "edd1fb"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/core/graph-core/src/term/index.ts",
+            "packages/core/graph-core/src/term/index.unit.test.ts",
+            "packages/core/graph-core/src/index.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T08:32:42Z",
+      "freshness_seconds": 5400,
+      "sidebar_open": false,
+      "intent": "WS1.2 RDF Term hierarchy + Quad + equality",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T08:40:36Z",
+        "closed_by": {
+          "agent_name": "Starlit Scattering Moon",
+          "platform": "claude",
+          "model": "opus-4-7-1m",
+          "session_id_prefix": "edd1fb"
+        },
+        "summary": "WS1.2 RDF Term hierarchy + Quad + equality landed at 1885fbcf; 77/77 gates green",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "bc424df9-80e6-4efa-95ee-f2e37dfdace6",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1aced6dc-3726-4bf8-b84b-07301e91bcda",
+      "agent_id": {
+        "agent_name": "Coastal Cresting Prow",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1b"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/**",
+            "agent-tools/tests/collaboration-state/**",
+            ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T09:25:56Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Implement P1 B-11 directed-message authoring: comms direct and comms reply in the unified agent-tools CLI shape.",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T09:31:42Z",
+        "closed_by": {
+          "agent_name": "Coastal Cresting Prow",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1b"
+        },
+        "summary": "Completed P1 B-11 directed-message authoring in-tree: comms direct and comms reply implemented, documented, and validated; proceeding to pathspec-scoped commit.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1aced6dc-3726-4bf8-b84b-07301e91bcda",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1610dd2b-acfe-4923-92ad-12a65a92284c",
+      "agent_id": {
+        "agent_name": "Coastal Cresting Prow",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1b"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T09:32:12Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit B-11 directed-message authoring plus current memory/state.",
+      "intent_to_commit": "90490b14-77ce-4b97-8385-f593bab7aeb7",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T09:34:15Z",
+        "closed_by": {
+          "agent_name": "Coastal Cresting Prow",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1b"
+        },
+        "summary": "Commit-window claim closed in same collaboration-state commit for B-11 directed-message authoring.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1610dd2b-acfe-4923-92ad-12a65a92284c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9a7c26ec-79d4-47ec-9c9c-e4b31b93d218",
+      "agent_id": {
+        "agent_name": "Coastal Cresting Prow",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1b"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-12T09:36:38Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Retry B-11 directed comms authoring commit after mechanical formatting fix.",
+      "intent_to_commit": "9a5ce4af-0ba9-4c98-9021-be5c1a3f6efe",
+      "archived_at": "2026-05-12",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-12T09:38:07Z",
+        "closed_by": {
+          "agent_name": "Coastal Cresting Prow",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1b"
+        },
+        "summary": "B-11 commit retry window verified; closing lifecycle inside the collaboration-state commit before final pathspec staging.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9a7c26ec-79d4-47ec-9c9c-e4b31b93d218",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

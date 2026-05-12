@@ -1,8 +1,8 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-> **Current continuation**: P1, B-11 directed-message authoring. P0.QG and
-> P-Foundation are complete; new CLI work lands in the unified
-> `agent-tools <topic> <action>` shape from
+> **Current continuation**: P2, `comms watch`, after B-11 closeout. P0.QG,
+> P-Foundation, and P1 directed-message authoring are complete; new CLI work
+> lands in the unified `agent-tools <topic> <action>` shape from
 > `cost-of-collaboration.plan.md`.
 
 ## Remaining skills audit continuation (2026-05-12+)
@@ -67,22 +67,33 @@ there. `repo-check profile` artifacts now include environment evidence,
 failure-phase classification, post-Turbo-gate status, and optional captured
 output via `--capture-output`.
 
-**Next safe step**: move to P1 directed-message authoring. Do not reopen the
-"make pre-commit staged-only" framing; continue from the owner contract that
-pre-commit stops detectably broken code entering git history and pre-push owns
-higher-standard branch-exit failures.
+**Next safe step**: move to P2 `comms watch` after B-11 commit closeout. Do
+not reopen the "make pre-commit staged-only" framing; continue from the owner
+contract that pre-commit stops detectably broken code entering git history and
+pre-push owns higher-standard branch-exit failures.
 
 **P-Foundation update (2026-05-12)**: Glittering Weaving Quasar implemented the
 unified `agent-tools` dispatcher, forwarding legacy topic bins, no-build hot
 topic scripts, README/plan updates, commit-queue help compatibility, and
-focused tests. P1 can now land in the unified CLI shape.
+focused tests.
+
+**P1 update (2026-05-12)**: Coastal Cresting Prow implemented B-11 directed
+message authoring in the unified CLI shape: `comms direct` writes a parseable
+directed message from the current identity to an explicit recipient identity;
+`comms reply` reads the source message, requires the current identity to match
+the source recipient, swaps `from`/`to`, and defaults the subject to
+`re: <source subject>`. Validation passed: focused collaboration-state tests,
+full agent-tools type-check/test/build, README markdownlint, and built CLI
+smoke for help, direct, reply, and reader compatibility. Full agent-tools lint
+exited 0 with the pre-existing `no-real-io-in-tests` warning on the existing
+collaboration-state integration test file.
 
 **P-Foundation handoff (2026-05-12)**: session handoff found no active claims,
 no open escalation files, no entrypoint drift, and no new ADR/PDR graduation
 candidate. `.remember` now/recent/today entries confirm the live branch context:
 P0 and P-Foundation are complete, graph work continues separately on
-`connecting-oak-resources`, and this thread's next implementation opener is P1
-directed-message authoring.
+`connecting-oak-resources`, and P1 later landed as the directed-message
+authoring implementation described above.
 
 **Session handoff (2026-05-12)**: Hushed Shrouding Mist landed
 `fb90ebd2 feat(agent-tools): harden check profile artifacts for P0`, then the
