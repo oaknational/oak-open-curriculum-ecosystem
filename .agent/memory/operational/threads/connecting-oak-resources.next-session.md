@@ -32,7 +32,7 @@ commit-queue discipline and knowledge-preservation-over-fitness.
 ## Self-Bootstrapping Continuation (cold-start landing)
 
 A fresh session prompted with **"please continue the graph mvp work"**
-should read this section and routes directly to Inc.1a WS1.1. No
+should read this section and routes directly to Inc.1a WS1.2. No
 additional briefing required.
 
 ### State on session start
@@ -43,14 +43,31 @@ additional briefing required.
   both **Status: Accepted 2026-05-11**.
 - Active plan:
   `.agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md`
-  (lifecycle `active`). WS0 marked completed; WS1.1 row carries the
-  full acceptance spec (read the YAML `todos` row `ws1-graph-core-scaffold`).
-- `packages/core/graph-core/` does not exist yet. WS1.1 is the cycle
-  that creates it.
-- Branch: `feat/mcp-graph-support-foundation`. HEAD at session
-  open should descend from `7560e48d` (continuity close) which
-  follows `5ec5004d` (ADR ratification + plan promotion + WS1.1
-  refinement) which follows `dbe7321c` (ADR-173/179 authorship).
+  (lifecycle `active`). WS0 + WS1.1 marked completed; WS1.2 row
+  (YAML `todos` id `ws1-rdf-term-quad`) is the next executable cycle.
+- `packages/core/graph-core/` exists with six empty-barrel sub-paths
+  (`.`, `./term`, `./dataset`, `./jsonld`, `./canon`, `./vocab`).
+  WS1.2 fills `./term` with the Term union + Quad and lands the
+  first paired test bundle.
+- Branch: `feat/mcp-graph-support-foundation`. HEAD includes
+  `ad2abb69` (WS1.1 scaffold) on top of the prior continuity
+  lineage.
+
+### Scaffold checklist additions for future scaffold cycles (WS2.1, WS3.1, WS4.1)
+
+Discovered during WS1.1; not yet in the canonical scaffold row in the plan:
+
+1. `.dependency-cruiser.mjs` no-orphans `pathNot` exception for any
+   pre-declared sub-path-export barrels (mirrors the
+   `oak-sdk-codegen/src/(admin|zod|query-parser|observability)\.ts$`
+   precedent). Absent registration produces six-error orphan
+   failures at pre-commit even though every other gate is green.
+2. config-expert nit (non-blocking, applies to graph-core today and
+   any new workspace mirroring its eslint.config.ts): the
+   `*.config.ts` block's `parserOptions.project` should use the
+   resolved `wsTsProject` URL constant rather than the string
+   literal `'./tsconfig.json'`; harmless today but inconsistent
+   with the canonical pattern.
 
 ### Canonical scaffold reference
 
@@ -93,8 +110,12 @@ Matches `.husky/pre-commit` exactly (do not undercount):
 - `format-check:root` (prettier) passes
 - `markdownlint-check:root` passes
 - `knip` passes (requires step 3 above)
-- `depcruise` passes (no rule update needed; depcruise operates
-  on import paths and graph-core exports nothing real at WS1.1)
+- `depcruise` passes (WS1.1 required adding a `pathNot` exception
+  for the six pre-declared sub-path-export barrels in
+  `.dependency-cruiser.mjs`, mirroring the existing
+  `oak-sdk-codegen/src/(admin|zod|query-parser|observability)\.ts$`
+  precedent; without the exception, six `no-orphans` errors block
+  the commit even though every other gate is green)
 - `turbo run type-check lint test` passes across **all** workspaces
   (the new workspace's own gates exit 0; pre-existing workspaces
   unchanged; `vitest.config.base.ts:11 passWithNoTests: true` makes
