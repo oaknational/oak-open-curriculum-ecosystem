@@ -1,7 +1,70 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
-**Next anticipated work**: **Open WS1.3 (DatasetCore + DataFactory)**
-per the 2026-05-12 holistic re-plan. WS1.3 lands the RDF/JS-aligned
+**Next anticipated work**: **Continue Inc.1a — dispatch WS1.4
+jsonld-processor, WS1.5 canon, WS1.6 vocab-registry, and WS2.2
+jsonld-compatible ingestion.** WS1.3 (DatasetCore + DataFactory) LANDED at
+`87e21125` (2026-05-12, Lofty Vaulting Summit / codex / GPT-5 / 019e1c,
++480/-5). Knip-unblock landed at `730766ad` (Shaded Masking Shadow,
+fix(agent-tools): remove unused active-agent exports). Reviewer
+absorption complete: architecture-expert-betty APPROVE-WITH-CONDITIONS
+(DataFactory extracted to its own sub-path `./data-factory` —
+scaffold-checklist gap closed in-cycle: depcruise pathNot, tsup
+multi-entry, package.json exports, README) + type-expert
+APPROVE-WITH-NITS (nit 1 `| undefined` widening on `match()` params
+adopted; nit 2 `literal` datatype-string foot-gun deferred to WS1.6
+with TODO in DataFactory TSDoc). WS2.1 graph-ingest scaffold LANDED at
+`0f895070` (2026-05-12, Radiant Illuminating Twilight / codex / GPT-5 /
+019e1c), after hook tooling unblock `42f2e721` repaired local commitlint
+resolution. Ferny Regrowing Leaf is the incoming dispatcher/reviewer; Lofty
+WS1.4 was offered via directed comms `c333afb7` (reviewer flags type-expert +
+assumptions-expert + test-expert pre-recorded in plan YAML) but was explicitly
+deferred because the owner closed Lofty's session and requested
+`jc-session-handoff`.
+
+**Last refreshed**: 2026-05-12 (Brazen Stoking Ash / `claude` /
+`claude-opus-4-7-1m` / `913094` — peer-triple dispatcher session with
+Lofty Vaulting Summit (codex / 019e1c) and Radiant Illuminating
+Twilight (codex / 019e1c). WS1.3 landed at `87e21125` via Lofty
+inside the pre-commit hook before my STOP message became
+inbox-observable; outcome clean (no `--no-verify`). Sequence: (a) sent
+Lofty WS1.3 GO after broadcast intro round-trip with Lofty; (b) dispatched
+type-expert + architecture-expert-betty in parallel against the working
+tree; (c) routed Betty's APPROVE-WITH-CONDITIONS back to Lofty for
+DataFactory sub-path extraction; (d) Lofty absorbed the condition,
+discovered `./data-factory` was NOT among the WS1.1 pre-declared
+sub-paths and made the additive scaffold updates atomically;
+(e) corrected my own protocol-incompatible attribution split (had
+told Lofty "I run commit-queue end-to-end" — wrong; the 8-step protocol
+assumes single-agent ownership; Lofty caught it); (f) third partner
+Radiant joined mid-session, briefed on WS2.1 graph-ingest scaffold;
+(g) cross-thread knip blocker on Vining's `1bb369a5` exports, escalated
+to owner who confirmed Shaded Masking Shadow had taken the unblock;
+(h) prematurely signalled Lofty GO inferring Vining's commit cleared
+the gate without re-running it; (i) Shaded landed unblock at `730766ad`;
+(j) Lofty landed WS1.3 inside the pre-commit window racing the STOP;
+(k) assigned WS1.4 to Lofty; (l) handed over to Ferny Regrowing Leaf
+via shared-log entry `8c4dc90a` and this thread record refresh.
+
+**Captured frictions and lessons during this session** (also archived in
+`napkin-2026-05-12b.md` + distilled by Dusky Lurking Shade):
+
+- The gatekeeper must RUN the gate, not infer it from upstream-author
+  commits ("verify gate before GO").
+- STOP signal has an unrecoverable race window during the pre-commit
+  hook (hook is uninterruptible; outcome was correct here by luck).
+- `pnpm knip` standalone vs hook-invoked knip can disagree under
+  concurrent landings (cache state / timing).
+- `comms direct` and `claims active-agents` both require `--active <path>`
+  but help text omits it; pnpm wrapper buries the diagnostic.
+- Implementing-agent owns staging + commit (Lush correction); reviewer
+  gates by verdict only — protocol assumes single-agent commit windows.
+- Identity-discovery cost: peer-pair always needs one broadcast
+  round-trip before `comms direct` is usable (no `comms presence`
+  registry).
+- `--body-file` would remove heredoc-quoting fragility on long briefs.
+- 3-agent windows amplify the staged-only-gates P0 risk surface
+  (markdownlint stale-sweep + knip cross-thread serialisation both
+  observed today). Previous refresh: WS1.3 lands the RDF/JS-aligned
 DatasetCore interface (1:1 with `@rdfjs/types` Dataset surface:
 add/has/match/delete/iterable/size) plus DataFactory-style Term
 constructors (namedNode, blankNode, literal, defaultGraph,
@@ -18,7 +81,7 @@ todo. WS1.6 vocab-registry's bare-literal-first-pass alternative
 is an owner-direction flag for WS1.6 dispatch time, not blocking
 WS1.3.
 
-**Last refreshed**: 2026-05-12 (Clouded Vaulting Squall /
+Previous refresh: 2026-05-12 (Clouded Vaulting Squall /
 `claude` / `claude-opus-4-7-1m` / `866472` — holistic re-plan of
 Inc.1a remaining cycles landed at `f73c42f5`. Plan-file diff
 +79/-43. Five verdicts applied: V1 WS1.6 vocab-registry recorded
@@ -692,6 +755,9 @@ promotion.)
 | `Celestial Transiting Satellite` | `claude` | `claude-opus-4-7-1m` | `9bc8e3` | `ws1-1-graph-core-scaffold-landed-at-ad2abb69` | 2026-05-12 | 2026-05-12 |
 | `Starlit Scattering Moon` | `claude` | `claude-opus-4-7-1m` | `edd1fb` | `ws1-2-rdf-term-hierarchy-and-quad-equality-landed-at-1885fbcf` | 2026-05-12 | 2026-05-12 |
 | `Clouded Vaulting Squall` | `claude` | `claude-opus-4-7-1m` | `866472` | `inc-1a-holistic-re-plan-author-12-to-10-cycles-landed-at-f73c42f5` | 2026-05-12 | 2026-05-12 |
+| `Brazen Stoking Ash` | `claude` | `claude-opus-4-7-1m` | `913094` | `ws1-3-dispatcher-reviewer-gatekeeper-peer-triple-with-lofty-and-radiant-ws1-3-landed-at-87e21125` | 2026-05-12 | 2026-05-12 |
+| `Lofty Vaulting Summit` | `codex` | `GPT-5` | `019e1c` | `ws1-3-datasetcore-datafactory-implementation-landed-at-87e21125-session-closed-before-ws1-4` | 2026-05-12 | 2026-05-12 |
+| `Radiant Illuminating Twilight` | `codex` | `GPT-5` | `019e1c` | `ws2-1-graph-ingest-scaffold-landed-at-0f895070-after-commitlint-hook-unblock-42f2e721` | 2026-05-12 | 2026-05-12 |
 
 ## Plan Locations
 

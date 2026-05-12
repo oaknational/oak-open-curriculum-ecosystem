@@ -41,14 +41,14 @@ todos:
   - id: ws-p5-unified-comms-format
     content: Collapse the three-directory split (`comms-events/`, `comms-lifecycle/`, `comms-messages/`) and the three `$defs` into a single shape with a `kind` discriminant. Owner-relayed direction "ONE comms format used everywhere, no legacy lingering."
     status: pending
+  - id: ws-p8-collaboration-tui
+    content: Build a human-facing real-time TUI for the main comms thread, direct-message threads, and active-agent state so operators can watch collaboration without tailing rendered markdown or raw JSON event directories. Owner-directed sequence update 2026-05-12: run immediately after P5.
+    status: pending
   - id: ws-p6-coordination-artefact-isolation
     content: Isolate coordination artefacts (sidebars, comms-events, monitor telemetry) from gate-visible repo state. Either separate branch/worktree or gitignored space.
     status: pending
   - id: ws-p7-async-sync-mode-awareness
     content: Add work-shape awareness to the polling/watch protocol so design (sub-second), execution (minutes), and monitoring (hour+) each get the right cadence.
-    status: pending
-  - id: ws-p8-collaboration-tui
-    content: Build a human-facing real-time TUI for the main comms thread, direct-message threads, and active-agent state so operators can watch collaboration without tailing rendered markdown or raw JSON event directories.
     status: pending
   - id: ws-subsumed-residual
     content: Carry forward the residual non-subsumed workstreams from primary-agent-tooling-enhancements.plan.md (comms render resilience F-05 finishing pass, identity-build-isolation split, register closeout).
@@ -932,7 +932,46 @@ freezes/absorbs post-sweep artefacts."
 Large slice; design phase needs its own peer sidebar before
 implementation. Should NOT be attempted concurrently with active
 multi-agent traffic — schedule for a single-agent window or a coordinated
-pause.
+pause. Owner-directed sequencing update on 2026-05-12: P8 collaboration TUI
+follows immediately after P5 so the operator view can build on the unified
+event shape before P6/P7 resume.
+
+---
+
+### P8 — Collaboration TUI
+
+**Hypothesis**: tailing a rendered Markdown log is a debugging fallback,
+not a human collaboration surface. Operators need one real-time view for
+main comms, directed threads, and active-agent state.
+
+**Evidence**: owner note on 2026-05-12 that `tail -f
+.agent/state/collaboration/shared-comms-log.md` appeared to interfere
+with render visibility. Even if the root cause is file-descriptor
+following versus atomic rewrite behaviour, the underlying need is a
+dedicated viewer rather than a shell workaround.
+
+**Concrete shape**:
+
+- Add a TUI that watches unified comms events, active claims, closed claims,
+  and commit-queue state.
+- Show a main-thread pane, direct-message thread panes, unread/seen state,
+  and active-agent visibility using the P4 status classifications.
+- Avoid depending on `shared-comms-log.md` as the live source of truth; read
+  event JSON and claim state directly, then render in memory.
+- Preserve a non-interactive text mode for logs and CI diagnostics.
+
+**Acceptance**:
+
+- An operator can watch the main collaboration stream and direct-message
+  threads in real time without `tail -f`.
+- The viewer continues to update when the Markdown renderer rewrites or
+  replaces `shared-comms-log.md`.
+- Active, stale, inactive, and uncertain agents are visible in the same
+  operator surface.
+
+**Routing**: builds on P2 watch, P4 active-agent visibility, and P5 unified
+comms format. Owner-directed sequence update on 2026-05-12: run P5, then P8,
+then return to P6/P7.
 
 ---
 
@@ -998,45 +1037,6 @@ work-shape-dependent.
 - Monitor processes contribute negligible telemetry volume.
 
 **Routing**: builds on P2; should not land before P2 stabilises.
-
----
-
-### P8 — Collaboration TUI
-
-**Hypothesis**: tailing a rendered Markdown log is a debugging fallback,
-not a human collaboration surface. Operators need one real-time view for
-main comms, directed threads, and active-agent state.
-
-**Evidence**: owner note on 2026-05-12 that `tail -f
-.agent/state/collaboration/shared-comms-log.md` appeared to interfere
-with render visibility. Even if the root cause is file-descriptor
-following versus atomic rewrite behaviour, the underlying need is a
-dedicated viewer rather than a shell workaround.
-
-**Concrete shape**:
-
-- Add a TUI that watches narrative events, lifecycle events, directed
-  messages, active claims, closed claims, and commit-queue state.
-- Show a main-thread pane, direct-message thread panes, unread/seen state,
-  and active-agent visibility using the P4 status classifications.
-- Avoid depending on `shared-comms-log.md` as the live source of truth; read
-  event JSON and claim state directly, then render in memory.
-- Preserve a non-interactive text mode for logs and CI diagnostics.
-
-**Acceptance**:
-
-- An operator can watch the main collaboration stream and direct-message
-  threads in real time without `tail -f`.
-- The viewer continues to update when the Markdown renderer rewrites or
-  replaces `shared-comms-log.md`.
-- Active, stale, inactive, and uncertain agents are visible in the same
-  operator surface.
-
-**Routing**: builds on P2 watch, P4 active-agent visibility, and P5 unified
-comms format. It should be designed as an operator experience, not as another
-raw JSON inspection command.
-
----
 
 ### Subsumed-residual workstreams (from primary plan)
 

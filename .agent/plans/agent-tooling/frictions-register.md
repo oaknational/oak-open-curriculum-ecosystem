@@ -675,6 +675,253 @@ below is a cross-reference index, not a second source of truth.
   repo-check profiling hardening.
 - **Status**: open
 
+### F-21 — `comms inbox` requires pre-existing seen-file state
+
+- **Source**: Lofty Vaulting Summit checking Brazen Stoking Ash directed
+  messages on 2026-05-12.
+- **Surface**: `pnpm agent-tools:collaboration-state -- comms inbox`
+- **Observed**: `comms inbox --messages-dir ... --agent-name ... --seen-file
+  .agent/state/collaboration/comms-inbox/lofty-vaulting-summit.seen.json`
+  exited 2 with `ENOENT` because the seen-file path did not already exist.
+  The command failed before printing the new directed message it was meant to
+  surface, so the agent had to fall back to `rg`/`sed` over raw JSON files and
+  the rendered shared log.
+- **Expected**: First-run inbox reads should work without manual bootstrap:
+  create the seen-file parent and file when absent, or support a read-only
+  mode that prints unseen messages without updating seen state.
+- **Candidate cure**: Teach `comms inbox` to initialise missing seen-file
+  state atomically, and add help text naming the first-run behaviour. Consider
+  a default current-agent seen-file path so routine message checks do not
+  require agents to reconstruct storage locations.
+- **Target surface**:
+  `agent-tools/src/collaboration-state/cli-comms-messages.ts`;
+  `agent-tools/README.md`
+- **Status**: open
+
+### F-22 — Directed replies can be invisible to shared-log watchers until render
+
+- **Source**: Lofty/Brazen WS1.3 coordination on 2026-05-12.
+- **Surface**: `pnpm agent-tools:collaboration-state -- comms reply`,
+  `comms direct`, and `comms render`
+- **Observed**: `comms reply` wrote directed message
+  `c7c69c95-ab26-404b-956f-04676114f6b3` successfully, but the message was
+  absent from `shared-comms-log.md` until a separate explicit `comms render`
+  command ran. A peer status update in the shared log still said they were
+  waiting for the signal that had already been sent in `comms-messages/`.
+- **Expected**: Directed authoring commands either refresh the rendered shared
+  log on success, clearly print that the shared log was not regenerated, or
+  provide a single `send-and-render` path so agents do not have to know which
+  readers are watching raw directed messages versus the rendered log.
+- **Candidate cure**: Make `comms direct` and `comms reply` share the same
+  write-and-render contract as narrative comms, including success output that
+  names the message path and shared-log path. If render remains deliberately
+  separate, the success text should say so and point to the exact render
+  command.
+- **Target surface**:
+  `agent-tools/src/collaboration-state/cli-comms-messages.ts`;
+  `agent-tools/src/collaboration-state/cli-comms-commands.ts`;
+  `agent-tools/README.md`
+- **Status**: open
+
+### F-23 — Hot comms CLI contract can drift under peer agent-tools edits
+
+- **Source**: Lofty/Brazen WS1.3 coordination during Vining Regrowing Grove's
+  active P4 agent-tools work on 2026-05-12.
+- **Surface**: `pnpm agent-tools:collaboration-state -- comms reply` and the
+  root `agent-tools:*` scripts that execute the current working-tree build.
+- **Observed**: A `comms reply` invocation that had worked earlier in the same
+  session failed later with `missing required option --active`; the command's
+  live contract changed while another agent had active uncommitted
+  `agent-tools/**` edits. Retrying with `--active
+  .agent/state/collaboration/active-claims.json` succeeded, but the agent had
+  to discover the changed contract mid-coordination.
+- **Expected**: Operational collaboration commands used by all agents should
+  run from a stable accepted build during unrelated agent-tools development, or
+  expose explicit dev-mode drift warnings when the working-tree contract has
+  changed under active sessions.
+- **Candidate cure**: Fold this recurrence into the P-Foundation hot-path
+  split: stable operational `agent-tools` commands should not execute
+  uncommitted peer edits by default; dev commands remain available for the
+  agent actively changing the CLI.
+- **Target surface**: P-Foundation agent-tools CLI overhaul; root
+  `package.json` agent-tools scripts; `agent-tools/README.md`
+- **Status**: open; recurrence of F-06 with command-contract drift rather than
+  identity-name drift
+
+### F-24 — Status pings can cross fresh directed instructions
+
+- **Source**: Radiant Illuminating Twilight joining the Brazen/Lofty WS1.3 +
+  WS2.1 coordination window on 2026-05-12.
+- **Surface**: Manual comms loop across `shared-comms-log.md`,
+  `comms direct`, and active-claims reads.
+- **Observed**: Radiant sent a directed "P4 landed; awaiting direction" status
+  after reading active claims and HEAD, but Brazen had already authored a
+  directed WS2.1 assignment in the rendered log. The status ping and the
+  assignment crossed, forcing a corrective acknowledgement.
+- **Expected**: Before sending an "awaiting direction" status, the tool should
+  make the latest directed message to the current identity hard to miss, or
+  the send path should offer a cheap "show messages newer than my last read"
+  preflight.
+- **Candidate cure**: Add a `comms inbox --since <event-id|timestamp>` or
+  `comms direct --warn-if-newer-inbox` affordance that checks for newer
+  directed messages to the sender before writing another directed status.
+- **Target surface**:
+  `agent-tools/src/collaboration-state/cli-comms-messages.ts`;
+  `agent-tools/README.md`
+- **Status**: open
+
+### F-25 — Scaffold checklist and ESLint boundary helper disagree for new libs
+
+- **Source**: Radiant Illuminating Twilight implementing WS2.1
+  `packages/libs/graph-ingest` scaffold on 2026-05-12.
+- **Surface**: `@oaknational/eslint-plugin-standards`
+  `createLibBoundaryRules()` and graph scaffold checklist.
+- **Observed**: Mirroring existing `packages/libs/*` ESLint configs with
+  `createLibBoundaryRules('graph-ingest')` made type-check and lint fail:
+  the helper rejected the new package because its internal lib allow-list had
+  not been extended. The active graph scaffold checklist, inherited from
+  `graph-core`, says to apply `coreBoundaryRules` on `src/**/*.ts`, so Radiant
+  switched to that posture without editing oak-eslint.
+- **Expected**: A new-workspace scaffold recipe should say exactly whether to
+  extend the boundary helper's package allow-list or use a tier-neutral
+  boundary rule. The first focused lint run should not be the discovery point.
+- **Candidate cure**: Add a scaffold helper or checklist row that routes by
+  workspace tier: core packages use `coreBoundaryRules`; libs either use an
+  updated generated lib allow-list or a documented graph-substrate exception.
+- **Target surface**:
+  `packages/core/oak-eslint/src/*boundary*`;
+  `.agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md`
+- **Status**: open
+
+### F-26 — `pnpm install` can stop on a non-TTY modules-purge prompt
+
+- **Source**: Radiant Illuminating Twilight adding the WS2.1 workspace on
+  2026-05-12.
+- **Surface**: root `pnpm install` after `pnpm install --lockfile-only` and a
+  new workspace package.
+- **Observed**: `pnpm install` exited with
+  `ERR_PNPM_ABORTED_REMOVE_MODULES_DIR_NO_TTY` because it wanted confirmation
+  to recreate `node_modules`. Re-running with
+  `--config.confirmModulesPurge=false` succeeded and created workspace-local
+  links.
+- **Expected**: The repo should expose a non-interactive workspace-refresh
+  command for agents adding a workspace, or the scaffold checklist should name
+  the required pnpm flag.
+- **Candidate cure**: Add a root script or checklist note for new-workspace
+  sessions: `pnpm install --config.confirmModulesPurge=false` after the
+  package is created and before focused workspace gates.
+- **Target surface**: root `package.json`; graph scaffold checklist; onboarding
+  command docs
+- **Status**: open
+
+### F-27 — "P4 landed" did not prove the advertised root knip blocker cleared
+
+- **Source**: Brazen/Lofty/Radiant coordination after Vining Regrowing Grove's
+  P4 commit `1bb369a5` on 2026-05-12.
+- **Surface**: active-claims closure, shared-comms ordering, and root
+  `pnpm knip`.
+- **Observed**: After P4 landed and Vining's claims disappeared, Radiant reran
+  root `pnpm knip`; it still reported the same unused exports previously named
+  as P4-owned blockers (`sameAgentRoutingKey`, `ActiveClaimSummary`,
+  `ActiveCommitQueueSummary`, `ClosedClaimSummary`). Agents had already begun
+  treating the P4 landing as likely unblock evidence.
+- **Expected**: A coordination unblock should cite the exact gate rerun that
+  proves the named blocker cleared, not only the commit SHA or claim closure.
+- **Candidate cure**: Commit-close or coordinator-GO messages that unblock a
+  peer on a named gate should include a required `gate_proof` line with the
+  command and result. If absent, downstream agents should treat the unblock as
+  hypothesis and rerun the gate before staging.
+- **Target surface**: commit-queue completion guidance; comms templates;
+  `agent-tools` active-agent/queue summaries
+- **Status**: open
+
+### F-28 — Directed STOP can arrive after an irreversible commit hook starts
+
+- **Source**: Brazen/Lofty/Radiant WS1.3 + WS2.1 coordination on
+  2026-05-12.
+- **Surface**: directed comms, minute/poll-based message checks, and
+  long-running `git commit` / pre-commit hook execution.
+- **Observed**: Brazen sent a STOP after discovering root `pnpm knip` was still
+  red, but Lofty's `git commit` was already inside the pre-commit hook. Lofty
+  attempted to interrupt when the message became visible, but stdin was already
+  closed through the exec wrapper and the commit completed at `87e21125`.
+- **Expected**: A STOP coordination message should have a delivery path whose
+  latency and interrupt semantics match the criticality of an active
+  commit-window correction, or the commit-window protocol should include a
+  final "new STOP messages?" check immediately before invoking `git commit`.
+- **Candidate cure**: Extend commit-queue `phase pre_commit` or
+  `verify-staged` with an optional directed-message freshness check for the
+  committing identity and coordinator. Longer term, a sidecar `comms watch`
+  mode could emit a visible interrupt when a `coordination-correction` or
+  `STOP`-classified message targets an agent with an active `git:index/head`
+  claim.
+- **Target surface**: `agent-tools` commit-queue pre-commit phase;
+  `comms watch`; commit skill recipe
+- **Status**: open
+
+### F-29 — Rebase instructions are unsafe in a dirty shared worktree
+
+- **Source**: Radiant Illuminating Twilight following Brazen's WS2.1 GO on
+  2026-05-12.
+- **Surface**: commit-window handoff instructions and sandbox approval review.
+- **Observed**: Brazen's GO said to run `git fetch && git pull --rebase`.
+  `git fetch` required elevated permission because it writes `.git/FETCH_HEAD`.
+  `git pull --rebase` was then rejected by the approval reviewer because the
+  shared worktree had many modified and untracked collaboration-state files
+  outside Radiant's WS2.1 scope. The safer evidence path was to verify local
+  `HEAD` already contained the required SHAs (`87e21125` and `730766ad`) and
+  proceed with install plus gates from that base.
+- **Expected**: Commit-window handoff instructions should distinguish clean
+  worktree sync from dirty shared-worktree verification, especially when the
+  required commits are already ancestors of local `HEAD`.
+- **Candidate cure**: Add a "dirty shared worktree" variant to the commit
+  protocol: run `git fetch`, verify required SHAs with
+  `git merge-base --is-ancestor`, report if origin is behind/ahead, and avoid
+  pull/rebase unless the owner explicitly approves broad worktree mutation.
+- **Target surface**: commit skill recipe; coordinator GO template; sandbox
+  escalation guidance
+- **Status**: open
+
+### F-30 — Heartbeat command gives little recovery help for stale syntax
+
+- **Source**: Radiant Illuminating Twilight refreshing WS2.1 claims on
+  2026-05-12.
+- **Surface**: `agent-tools` claims heartbeat CLI.
+- **Observed**: Radiant first used the older positional path shape
+  `claims heartbeat .agent/state/collaboration/active-claims.json --claim-id …`.
+  The CLI returned `unknown argument` without showing the required current
+  shape: `claims heartbeat --active <path> --claim-id <id> --now <iso>`.
+- **Expected**: A rejected heartbeat invocation should either print the command
+  usage or accept the older positional form as a compatibility alias.
+- **Candidate cure**: Reuse the "show full help on invalid args" treatment for
+  write-side claim commands, and consider a deprecation shim for the old
+  positional `active-claims.json` argument.
+- **Target surface**: `agent-tools` claims heartbeat parser/help text
+- **Status**: open
+
+### F-31 — Commit-msg hook depends on unpinned `pnpm dlx commitlint`
+
+- **Source**: Radiant Illuminating Twilight attempting the WS2.1 graph-ingest
+  commit on 2026-05-12.
+- **Surface**: `.husky/commit-msg` and
+  `agent-tools/scripts/check-commit-message.sh`.
+- **Observed**: The real `git commit` passed staged prettier,
+  markdownlint-staged, shell lint, and full turbo, then failed in
+  `commit-msg`. The hook invokes `pnpm dlx commitlint --edit`, which resolved
+  `commitlint@21.0.1` and then failed fetching unpublished
+  `@commitlint/message@21.0.1` from the npm registry. Local
+  `pnpm exec commitlint` resolved the repo-pinned `@commitlint/cli@21.0.0`
+  and validated the same wrapped message successfully.
+- **Expected**: Commit-message validation should use the repo-pinned
+  dependency graph and should not depend on the latest external `commitlint`
+  package at commit time.
+- **Candidate cure**: Change the hook and the preflight helper to use
+  `pnpm exec commitlint --edit <file>` from the repo root. Keep the message
+  check isolated, but bind it to the lockfile rather than a live dlx resolve.
+- **Target surface**: `.husky/commit-msg`;
+  `agent-tools/scripts/check-commit-message.sh`; commit skill recipe
+- **Status**: open
+
 ---
 
 ## Mitigated / Addressed Frictions

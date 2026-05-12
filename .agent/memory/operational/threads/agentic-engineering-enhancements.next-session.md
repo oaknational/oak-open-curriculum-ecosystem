@@ -1,9 +1,9 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-> **Current continuation**: P4 identity disambiguation / active-agent visibility
-> has landed in working-tree implementation and plan evidence. P0.QG,
+> **Current continuation**: P5 unified comms format is next. P0.QG,
 > P-Foundation, P1 directed-message authoring, P2 directed-message watching,
-> P3 commit-queue enforcement, and P4 identity routing are complete; new CLI
+> P3 commit-queue enforcement, and P4 identity routing are complete; P4 landed
+> at `1bb369a5`, and the post-P4 knip unblock landed at `730766ad`. New CLI
 > work lands in the unified `agent-tools <topic> <action>` shape from
 > `cost-of-collaboration.plan.md`.
 >
@@ -136,8 +136,42 @@ pretending the solution is already known.
 | `codex` | `GPT-5` | Penumbral Veiling Raven | Implementer (cost-of-collaboration P2 `comms watch`) | 2026-05-12 | 2026-05-12 |
 | `codex` | `GPT-5` | Secret Vanishing Moth | Implementer (cost-of-collaboration P3 commit-queue enforcement) | 2026-05-12 | 2026-05-12 |
 | `codex` | `GPT-5` | Vining Regrowing Grove | Implementer (cost-of-collaboration P4 identity disambiguation / active-agent visibility) | 2026-05-12 | 2026-05-12 |
+| `codex` | `GPT-5` | Radiant Illuminating Twilight | Implementer (commit-msg local-commitlint unblock `42f2e721`; WS2.1 tooling frictions F-29-F-31) | 2026-05-12 | 2026-05-12 |
+| `codex` | `GPT-5` | Shaded Masking Shadow | Implementer (post-P4 knip unblock and P5 handoff closeout) | 2026-05-12 | 2026-05-12 |
+| `cursor` | `GPT-5.5` | Dusky Lurking Shade | Consolidator (napkin-stage conservation-first consolidation; archive + distilled intake) | 2026-05-12 | 2026-05-12 |
+
+## Conservation-first consolidation sequence (2026-05-12)
+
+**Owner direction**: process the active napkin fully first, then process
+`distilled.md` next session, then `pending-graduations.md`, then
+`practice-bootstrap.md`. At every stage, knowledge curation and conservation
+outrank brevity; fitness numbers are advisory routing signals.
+
+**Napkin stage completed**:
+
+- `pnpm practice:fitness:informational` reported CRITICAL overall from
+  `napkin.md`, with hard pressure in `pending-graduations.md` and
+  `practice-bootstrap.md`.
+- Outgoing `napkin.md` was archived intact to
+  `.agent/memory/active/archive/napkin-2026-05-12b.md`.
+- Active `napkin.md` was reset with the staged sequence and critical-zone
+  post-mortem.
+- Behaviour-changing learning was preserved in `distilled.md` under
+  `Recently Distilled — 2026-05-12 Napkin Processing (Dusky Lurking Shade)`.
+
+**Next safe consolidation step**: process that new `distilled.md` section and
+route entries to their natural homes or onward queues. Do not start the
+`pending-graduations.md` drain until the distilled stage is complete.
 
 ## P4 identity disambiguation handoff (2026-05-12)
+
+**Landed at `1bb369a5`**: cost-of-collaboration P4 identity routing and
+active-agent visibility.
+
+**Post-P4 unblock landed at `730766ad`**: Shaded Masking Shadow removed
+accidental unused public exports from the P4 active-agent surface after they
+blocked graph-lane `pnpm knip`. Focused validation was `pnpm knip` and
+`pnpm --filter @oaknational/agent-tools type-check`; the commit hook passed.
 
 **Implementation shape**:
 
@@ -169,7 +203,13 @@ operator experience; `tail -F` may be more robust for atomic rewrites, but the
 proper fix is the TUI.
 
 **Next safe step**: continue `cost-of-collaboration.plan.md` with P5 unified
-comms format, unless the owner explicitly pulls P8 collaboration TUI forward.
+comms format, then P8 collaboration TUI. P6/P7 resume after the operator-view
+path unless owner direction changes.
+
+**Closeout checks**: Shaded waited for the graph-lane git windows to clear
+before this handoff. Active claims and active commit queue were empty at final
+handoff. P5 was not started because the session closeout target was continuity
+and the comms substrate had just carried multi-agent graph traffic.
 
 ## P3 commit-queue enforcement handoff (2026-05-12)
 
@@ -563,7 +603,7 @@ grep is unreliable for this check; always verify by reading the hook file.
   `agent-tools/src/**`. Register a `pre_commit` queue entry before
   staging.
 
-- **If P1 has landed**: continue P2, P3, P4, P5, P6, P7 in order, as
+- **If P1 has landed**: continue P2, P3, P4, P5, P8, P6, P7 in order, as
   laid out in the cost-of-collaboration plan. Each workstream names
   its own acceptance criteria. New subcommands land in the unified
   CLI shape per the P-Foundation standing constraint.
@@ -584,7 +624,7 @@ Operational discipline:
 ### Required reading order for this thread
 
 1. [`cost-of-collaboration.plan.md`](../../../plans/agent-tooling/current/cost-of-collaboration.plan.md)
-   — the plan. P0–P7 workstreams + sequencing + acceptance criteria.
+   — the plan. P0–P8 workstreams + sequencing + acceptance criteria.
 2. [`local-broken-code-never-leaves.md`](../../../rules/local-broken-code-never-leaves.md)
    — the new owner-stated principle applying from your first push.
 3. [`cli-comms-inbox-design-2026-05-11.md`](../../../state/collaboration/sidebars/cli-comms-inbox-design-2026-05-11.md)

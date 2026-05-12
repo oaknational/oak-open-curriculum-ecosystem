@@ -66,7 +66,12 @@ Earlier archives remain under [`archive/`](archive/).
   dirty `codex-exec` work blocked the repo-wide pre-commit hook; focused B-11
   validation had passed. P2 landed at `0d3af914`; its collaboration closeout
   state landed at `a2845659`; P3 commit-queue enforcement landed at
-  `c083a1ab`.
+  `c083a1ab`. P4 identity disambiguation / active-agent visibility landed at
+  `1bb369a5`; its post-P4 knip unblock landed at `730766ad`.
+  `claims active-agents` now exposes active/stale/inactive/uncertain
+  visibility, and write paths guard live routing-tuple collisions.
+  Owner-requested collaboration TUI work is captured as pending P8 in the same
+  plan, now sequenced immediately after P5.
   State/memory files remain always commit-includable when dirty; owner
   clarified on 2026-05-12 that every commit should include current memory/state
   files.
@@ -125,8 +130,8 @@ each thread record; this table is the repo-level index.
 | ------------------------------------------------------------------------------ | --------------------------------------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `main-critical-sonar-remediation`                                              | Sonar remediation                             | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | `observability-sentry-otel`                                                    | Sentry/OTel integration                       | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic]       | Penumbral Veiling Raven / `codex` / GPT-5 / `019e1c` / 2026-05-12 (P2 `comms watch` landed at `0d3af914`; closeout state at `a2845659`); Secret Vanishing Moth / `codex` / GPT-5 / `019e1c` / 2026-05-12 (P3 commit-queue enforcement landed at `c083a1ab`); Lush Sprouting Thicket / `claude` / claude-opus-4-7-1m / `3afd08` / 2026-05-12 (codex-helper skill + codex-exec last-message CLI + ADR-180 + future deep-dive plan); Prismatic Beaming Twilight / `claude` / haiku-4-5-20251001 / `501be6` / 2026-05-12 (multi-agent delegation orchestration architecture; strategic brief in future plans); Coastal Cresting Prow / `codex` / GPT-5 / `019e1b` / 2026-05-12 (P1 B-11 `comms direct/reply` landed at `f88d0d67`); Glittering Weaving Quasar / `codex` / GPT-5 / `019e1b` / 2026-05-12 (P-Foundation unified agent-tools entrypoint); Hushed Shrouding Mist / `codex` / GPT-5 / `019e1b` / 2026-05-12 (P0.QG complete, flake disposition, busy cold/warm profiles, repo-check profile hardening, session handoff); see thread record for full identity history |
-| `connecting-oak-resources`                                                     | Oak resource graph                            | [record][connecting]    | Clouded Vaulting Squall / `claude` / opus-4-7-1m / `866472` / 2026-05-12 (holistic re-plan of Inc.1a remaining cycles landed at f73c42f5; 12 → 10 cycles; WS1.4+WS1.5 collapsed; WS1.8 deferred to Inc.2 with retrospective-review tripwire; per-cycle reviewer flags + inherited patterns recorded inline; next executable cycle WS1.3 DatasetCore + DataFactory); Starlit Scattering Moon / `claude` / opus-4-7-1m / `edd1fb` / 2026-05-12 (WS1.2 RDF Term hierarchy + Quad + equality landed at 1885fbcf); Celestial Transiting Satellite / `claude` / opus-4-7-1m / `9bc8e3` / 2026-05-12 (WS1.1 graph-core scaffold landed at ad2abb69); Sparking Charring Ash / `claude-code` / opus-4-7-1m / `caf5e1` / 2026-05-12 (graph foundation work; Inc.1a WS1.1 open for execution)      |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic]       | Radiant Illuminating Twilight / `codex` / GPT-5 / `019e1c` / 2026-05-12 (commit-msg local-commitlint unblock landed at `42f2e721`; WS2.1 tooling frictions F-29-F-31 captured); Shaded Masking Shadow / `codex` / GPT-5 / `019e1c` / 2026-05-12 (post-P4 knip unblock landed at `730766ad`; P5 handoff complete); Vining Regrowing Grove / `codex` / GPT-5 / `019e1c` / 2026-05-12 (P4 identity disambiguation + active-agent visibility landed at `1bb369a5`; P8 collaboration TUI captured); Penumbral Veiling Raven / `codex` / GPT-5 / `019e1c` / 2026-05-12 (P2 `comms watch` landed at `0d3af914`; closeout state at `a2845659`); Secret Vanishing Moth / `codex` / GPT-5 / `019e1c` / 2026-05-12 (P3 commit-queue enforcement landed at `c083a1ab`); Lush Sprouting Thicket / `claude` / claude-opus-4-7-1m / `3afd08` / 2026-05-12 (codex-helper skill + codex-exec last-message CLI + ADR-180 + future deep-dive plan); see thread record for full identity history |
+| `connecting-oak-resources`                                                     | Oak resource graph                            | [record][connecting]    | Radiant Illuminating Twilight / `codex` / GPT-5 / `019e1c` / 2026-05-12 (WS2.1 graph-ingest scaffold landed at `0f895070`; commit-msg local-commitlint unblock landed at `42f2e721`); Brazen Stoking Ash / `claude` / opus-4-7-1m / `913094` / 2026-05-12 (peer-triple dispatcher session; Lofty Vaulting Summit landed WS1.3 DatasetCore + DataFactory at 87e21125 with type-expert + architecture-expert-betty absorbed; Shaded Masking Shadow landed knip-unblock at 730766ad; Lofty WS1.4 offered but deferred — owner closed Lofty's session; handed dispatcher role to Ferny Regrowing Leaf via shared-log 8c4dc90a); Clouded Vaulting Squall / `claude` / opus-4-7-1m / `866472` / 2026-05-12 (holistic re-plan of Inc.1a remaining cycles landed at f73c42f5; 12 → 10 cycles; WS1.4+WS1.5 collapsed; WS1.8 deferred to Inc.2 with retrospective-review tripwire; per-cycle reviewer flags + inherited patterns recorded inline); Starlit Scattering Moon / `claude` / opus-4-7-1m / `edd1fb` / 2026-05-12 (WS1.2 RDF Term hierarchy + Quad + equality landed at 1885fbcf); Celestial Transiting Satellite / `claude` / opus-4-7-1m / `9bc8e3` / 2026-05-12 (WS1.1 graph-core scaffold landed at ad2abb69); Sparking Charring Ash / `claude-code` / opus-4-7-1m / `caf5e1` / 2026-05-12 (graph foundation work; Inc.1a WS1.1 open for execution)      |
 | `exploring-open-education-resources`                                           | Third-party OER                               | [record][oer]           | Gnarled / `claude-code` / `e18e2c` / 2026-05-01                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `architectural-budget-system`                                                  | Architectural budget                          | [record][budget]        | Nebulous / `codex` / 2026-04-29                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `cloudflare-mcp-security-and-token-economy-plans`                              | Cloudflare MCP                                | [record][cloudflare]    | Glassy / `codex` / 2026-04-28                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
@@ -143,12 +148,18 @@ each thread record; this table is the repo-level index.
 [sector]: threads/sector-engagement.next-session.md
 [eef]: threads/eef.next-session.md
 
+Identity-refresh note for `connecting-oak-resources`: Lofty Vaulting Summit /
+`codex` / GPT-5 / `019e1c` last participated on 2026-05-12, landing WS1.3
+DatasetCore + DataFactory at `87e21125`; WS1.4 was offered but deferred
+because the owner closed Lofty's session before new implementation started.
+
 ## Next Safe Steps
 
 ### Agentic-Engineering Enhancements
 
-Immediate cost-of-collaboration lane: P0, P-Foundation, P1, P2, and P3 are
-complete; continue with P4 identity disambiguation / active-agent visibility.
+Immediate cost-of-collaboration lane: P0, P-Foundation, P1, P2, P3, and P4 are
+complete; continue with P5 unified comms format, then P8 collaboration TUI.
+P6/P7 resume after the operator-view path unless owner direction changes.
 The suspected flaky tests
 listed in
 [`cost-of-collaboration.flaky-tests.md`](../../plans/agent-tooling/current/cost-of-collaboration.flaky-tests.md)
@@ -168,38 +179,44 @@ cost-of-collaboration continuation: the paired `jc-session-handoff` /
 remaining skills can resume from the thread record if the owner reopens that
 lane.
 
-Consolidation lane from this pass is complete. The next consolidation pass
-should continue draining [`pending-graduations.md`](pending-graduations.md) by
-promotion or archive, not by metric-shaped trimming. The acceptance bar remains:
+Conservation-first consolidation is now staged across four sessions by owner
+direction. The active napkin was processed first: the outgoing file was archived
+intact as
+[`napkin-2026-05-12b.md`](../active/archive/napkin-2026-05-12b.md), and its
+behaviour-changing learning was distilled into
+[`distilled.md`](../active/distilled.md) without treating fitness numbers as
+brevity targets. The next consolidation sessions should process, in order:
+`distilled.md`, then [`pending-graduations.md`](pending-graduations.md), then
+`practice-bootstrap.md`. At every stage, knowledge curation and conservation
+outrank brevity; fitness numbers are advisory routing signals.
+
+The acceptance bar remains:
 
 - live state remains in this file;
 - historical closeout prose remains archived, not deleted;
+- distilled learning is fully processed before pending-graduations is drained;
 - pending-graduations index/counts match body entries marked `status: due`;
 - ADR-shaped and PDR-shaped promotion decisions are visible to the owner;
 - cost-of-collaboration P0 remains named as the blocker for multi-agent
   implementation windows.
 
 Implementation lane after profiling and consolidation: follow the thread
-record's cost-of-collaboration opener. P0, P-Foundation, P1, P2, and P3 have
-landed; P4 is the next implementation step.
+record's cost-of-collaboration opener. P0, P-Foundation, P1, P2, P3, and P4
+have landed; P5 unified comms format is the next implementation step, followed
+by P8 collaboration TUI.
 
 ### Connecting-Oak-Resources
 
 Branch-primary graph work continues from
 [`threads/connecting-oak-resources.next-session.md`](threads/connecting-oak-resources.next-session.md).
-Current entry: **open WS1.3 (DatasetCore + DataFactory)** per the
-2026-05-12 holistic re-plan (commit `f73c42f5`). 10 remaining
-Inc.1a cycles (down from 12 after V2 collapse of WS1.4+WS1.5 and
-V3 deferral of WS1.8 to Inc.2). WS1.3 reviewer flags: type-expert
-
-- architecture-expert-betty (authoritative per-cycle flags live
-  in YAML `content` for `ws1-dataset-core` in the active plan).
-  WS1.1, WS1.2 landed (`ad2abb69`, `1885fbcf`); inherited patterns
-  from those landings (scaffold checklist; per-kind checker-array
-  dispatch; RDF/JS Data Model uniform-value-string; `.husky/pre-
-commit`-authoritative "tree green") are recorded once under
-  §Workstream decomposition and referenced from each remaining
-  cycle.
+Current entry: **WS1.3 is landed at `87e21125`, WS2.1 graph-ingest scaffold is
+landed at `0f895070`, and WS1.4 jsonld-processor, WS1.5 canon, WS1.6
+vocab-registry, or WS2.2 jsonld-compatible ingestion are the next
+parallelisable implementation choices once a fresh session accepts them.**
+Inc.1a continues under
+the 2026-05-12 holistic re-plan (`f73c42f5`): WS1.4+WS1.5 are collapsed, WS1.8
+is deferred to Inc.2, and inherited patterns from WS1.1/WS1.2/WS1.3 remain
+authoritative in the active plan YAML.
 
 ## Open Owner-Decision Items
 
@@ -212,8 +229,9 @@ commit`-authoritative "tree green") are recorded once under
 3. Monorepo workspace topology (superseding ADR-108, S0-S6 strategic plan) is
    parked until after the graph MVP implementation tranche unless the owner
    explicitly reopens it.
-4. Cost-of-collaboration P0, P-Foundation, P1, P2, and P3 are complete; P1
-   landed at `f88d0d67`, P2 at `0d3af914`, and P3 at `c083a1ab`.
+4. Cost-of-collaboration P0, P-Foundation, P1, P2, P3, and P4 are complete;
+   P1 landed at `f88d0d67`, P2 at `0d3af914`, P3 at `c083a1ab`, and P4 at
+   `1bb369a5`.
 
 ## Repo-Wide Invariants / Non-Goals
 
@@ -259,6 +277,15 @@ Current branch non-goals:
   acceptance work.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-12 — Dusky Lurking Shade / `cursor` / GPT-5.5 /
+`4cc0e8`)**: staged conservation-first consolidation is in progress. Owner
+direction sets the order: active napkin first, then `distilled.md`, then
+`pending-graduations.md`, then `practice-bootstrap.md`. This session completed
+the napkin stage by archiving the outgoing napkin intact to
+`napkin-2026-05-12b.md`, resetting the active napkin, and preserving the
+behaviour-changing learning in `distilled.md`. Fitness values remain advisory
+routing signals only; do not trim knowledge to make reports green.
 
 **Status (2026-05-12 — Hushed Shrouding Mist / `codex` / GPT-5 / `019e1b`)**:
 due — P0.QG closed this session and Practice fitness still reports hard
@@ -383,6 +410,43 @@ implementation. Deeper consolidation remains due because Practice fitness
 pressure still exists in the known queue surfaces; this handoff does not run
 `jc-consolidate-docs`. Next implementation step: P4 identity disambiguation /
 active-agent visibility.
+
+**Same-day update (2026-05-12 — Vining Regrowing Grove / `codex` / GPT-5 /
+`019e1c`)**: status remains **due**. P4 identity disambiguation and
+active-agent visibility landed at `1bb369a5`; the session also captured the
+owner-requested collaboration TUI as pending P8. Owner then updated the
+sequence to P5 followed immediately by P8. Deeper consolidation remains due
+because Practice fitness pressure and the pending-graduations queue remain
+real; this handoff does not run `jc-consolidate-docs`. Next implementation
+step: P5 unified comms format, then P8 collaboration TUI.
+
+**Same-day update (2026-05-12 — Shaded Masking Shadow / `codex` / GPT-5 /
+`019e1c`)**: not due for this session — Dusky Lurking Shade has already run
+the napkin-stage conservation pass in this same closeout window. Shaded landed
+the post-P4 knip unblock at `730766ad`, waited for graph-lane git windows to
+clear, and leaves the next agentic-tooling step as P5 unified comms format,
+then P8 collaboration TUI. No new ADR/PDR candidate surfaced beyond the
+already-recorded P5/P8 workstream routing.
+
+**Same-day update (2026-05-12 — Brazen Stoking Ash / `claude` /
+claude-opus-4-7-1m / `913094`)**: not due — Dusky Lurking Shade ran a full
+napkin-rotation + distillation pass earlier this session window; my own
+session-scoped frictions are now appended to the fresh active napkin and
+will land with the handoff bundle Ferny Regrowing Leaf is taking on my
+behalf. No ADR/PDR candidates landed this session; surprises captured to
+napkin per step 6a; no entry-point drift observed. Dispatcher-role peer-
+triple session: WS1.3 landed at `87e21125` (Lofty Vaulting Summit / codex /
+019e1c) with type-expert + architecture-expert-betty absorbed; knip-unblock
+landed at `730766ad` (Shaded Masking Shadow / codex / 019e1c); WS2.1
+graph-ingest scaffold staged by Radiant Illuminating Twilight (codex /
+019e1c) at handover; WS1.4 jsonld-processor offered to Lofty but deferred
+because owner closed Lofty's session. No active claims opened as Brazen
+(only shared-log + directed comms). Thread record + repo-continuity
+identity summary refreshed for `connecting-oak-resources`. Pending commit
+bundle (continuity surfaces + ~13 untracked comms-events authored this
+session) explicitly handed to Ferny Regrowing Leaf via shared-log
+`8c4dc90a` per owner direction. Hard gate (step 7c): touched threads
+verified — `connecting-oak-resources` only; identity row updated.
 
 Previous deep-consolidation and session-close prose lives in:
 
