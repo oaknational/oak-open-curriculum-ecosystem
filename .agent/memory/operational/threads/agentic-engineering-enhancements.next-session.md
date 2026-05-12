@@ -41,18 +41,31 @@ grep is unreliable for this check (false-positive risk on words like
   the window, notify the owner before proceeding so the owner can
   pause peers — do not attempt to override peers unilaterally.**
 
-- **If P0 has landed**: proceed to **cost-of-collaboration P1 — B-11
-  directed-message authoring** (`comms direct` + `comms reply`). The
-  design is locked in
+- **If P0 has landed but P-Foundation has not**: proceed to
+  **cost-of-collaboration P-Foundation — Agent-tools CLI architectural
+  overhaul**. Single binary entrypoint, centralised parsing / error
+  handling / logging, retire the build-on-every-invocation anti-
+  pattern, retire the bin-collection-without-shared-plumbing anti-
+  pattern. This is the foundational pre-condition for P1+
+  implementations — every new subcommand should land in the unified
+  CLI shape rather than as a new sibling bin. Single-agent window
+  only; test-first regression coverage required.
+
+- **If P-Foundation has landed**: proceed to **cost-of-collaboration
+  P1 — B-11 directed-message authoring** (`comms direct` + `comms
+  reply`). The design is locked in
   [`.agent/state/collaboration/sidebars/cli-comms-inbox-design-2026-05-11.md`](../../../state/collaboration/sidebars/cli-comms-inbox-design-2026-05-11.md)
   across Turn 1 + Turn 2 + Turn 3 + joint decision. Implementation
-  lives in new file `agent-tools/src/collaboration-state/cli-comms-messages.ts`.
-  Claim area `agent-tools/src/**`. Register a `pre_commit` queue
-  entry before staging.
+  lives in the unified CLI dispatcher under
+  `agent-tools/src/collaboration-state/cli-comms-messages.ts` (or
+  the equivalent post-overhaul location). Claim area
+  `agent-tools/src/**`. Register a `pre_commit` queue entry before
+  staging.
 
 - **If P1 has landed**: continue P2, P3, P4, P5, P6, P7 in order, as
   laid out in the cost-of-collaboration plan. Each workstream names
-  its own acceptance criteria.
+  its own acceptance criteria. New subcommands land in the unified
+  CLI shape per the P-Foundation standing constraint.
 
 ### Standing principle that applies from the very first push
 

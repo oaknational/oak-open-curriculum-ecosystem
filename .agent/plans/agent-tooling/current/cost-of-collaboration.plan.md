@@ -5,8 +5,11 @@ todos:
   - id: ws-p0-staged-only-gates
     content: Reshape the pre-commit hook to gate against staged content only (lint-staged or equivalent), with the full turbo suite moved to CI. Load-bearing pre-condition for every other multi-agent workstream.
     status: pending
+  - id: ws-p-foundation-cli-overhaul
+    content: Agent-tools CLI architectural overhaul. Single binary entrypoint with centralised parsing, error handling, and logging. Stop the build-on-every-invocation anti-pattern (defeats stability) and the bin-collection-without-shared-plumbing anti-pattern (defeats centralisation). Foundational pre-condition for P1–P7 implementations; land between P0 and P1.
+    status: pending
   - id: ws-p1-comms-direct-and-reply
-    content: Implement B-11 directed-message authoring CLI (`comms direct` + `comms reply`) per the locked sidebar design at `.agent/state/collaboration/sidebars/cli-comms-inbox-design-2026-05-11.md`.
+    content: Implement B-11 directed-message authoring CLI (`comms direct` + `comms reply`) per the locked sidebar design at `.agent/state/collaboration/sidebars/cli-comms-inbox-design-2026-05-11.md`. Lands in the unified CLI shape from P-Foundation.
     status: pending
   - id: ws-p2-comms-watch
     content: Add `comms watch` with `fs.watch` + polling fallback to replace 30s bash poll loops. Sub-second new-message latency for any agent that runs the watch as a long-lived process.
@@ -99,6 +102,11 @@ addresses, with P0 being the load-bearing prerequisite.
   must include a structural enforcement path or it does not land.
 - **Capture-as-you-go.** Insights, frictions, and corrections land in
   the napkin during the session, not after.
+- **No new bins; land new CLI surface in the unified entrypoint.**
+  After P-Foundation lands, new agent-tools subcommands MUST be
+  added inside the single-bin dispatcher, not as new sibling bins.
+  This is the structural cure for the "CLI as collection of bins
+  with build-on-every-invocation" defect P-Foundation pays down.
 
 ## Workstreams
 
@@ -146,12 +154,116 @@ problem.
 
 ---
 
+### P-Foundation — Agent-tools CLI architectural overhaul
+
+**Hypothesis**: the agent-tools "CLI" is not actually being used as a
+CLI; it is being used as a collection of bin files, with `pnpm -s
+build` triggered before each invocation. This defeats both the
+stability point of using built artefacts (rebuilding on every call
+means the bin DOES change between calls, just from the caller's own
+edits) and the centralisation point of having a CLI (each topic bin
+has its own option parsing, its own help text, its own error shape,
+its own logging). Confirmed empirically this session: every
+`pnpm agent-tools:commit-queue --` and `pnpm
+agent-tools:collaboration-state --` invocation runs `pnpm -s build &&
+node dist/src/bin/<topic>.js`, paying the build cost and bypassing
+any unified entry point.
+
+**Evidence**: owner direction 2026-05-12 ("the agent skills CLI is
+not being used as a CLI, it is being used as a collection of bin
+files, with a build triggered before each invocation… the point of
+using the built versions is stability, which is utterly bypassed if
+we build on every invocation, and the point of having a CLI is
+centralised parsing, error handling, logging etc"). Composes with
+F-obs-E (stable CLI entry without rebuild-on-invoke) from comms-event
+`37ea0341` and with the standing memory direction
+`feedback_use_built_agent_tools_only` ("use built dist/, not rebuild
+on each invocation").
+
+**Concrete shape**:
+
+- Single binary entrypoint `agent-tools` (or equivalent name) that
+  dispatches to topic+action handlers internally. `agent-tools <topic>
+  <action> [flags]` is the user-facing shape; today's
+  `pnpm agent-tools:<topic> -- <action>` scripts become thin pnpm
+  shortcuts to that single bin or are retired.
+- Centralised arg parsing (resolves F-obs-F help-routing-on-invalid
+  - addresses F-09 full-help-on-invalid-flag class structurally).
+- Centralised error handling: one error shape across topics; the
+  "missing required option X" / "unknown option Y" failure modes
+  produce consistent guidance instead of per-bin variants.
+- Centralised logging: structured log lines suitable for piping into
+  the comms-events surface or a structured-log file. Today there is
+  no logging at all; agents read raw stdout/stderr.
+- Build runs ONCE on package install (or via an explicit
+  `agent-tools rebuild` for in-flight dev), not before every
+  invocation. Stability comes from "the bin does not change while
+  you're using it"; the current shape provides the opposite.
+- Topic+action surface preserved: existing topics (`claims`, `comms`,
+  `conversation`, `escalation`, `commit-queue`, `identity`, `check`)
+  remain. The overhaul is the *plumbing*, not the *surface*. Agents
+  already familiar with `claims open --thread X` keep that vocabulary;
+  the change is one bin, one parser, one error shape underneath.
+- Pre-existing CLI behaviour preserved by regression tests authored
+  before the refactor lands.
+
+**Acceptance**:
+
+- Single bin file exposed as the only entrypoint; existing topic-bin
+  files retired or stubbed to forward.
+- `time pnpm agent-tools <topic> <action>` measurably faster than
+  `time pnpm agent-tools:<topic> -- <action>` today (build cost no
+  longer in the hot path).
+- Every existing CLI invocation in the agent-tools test suite passes
+  unchanged.
+- Help text on `<topic> --help`, `<topic> <action> --help`, and
+  unknown-action / unknown-flag paths is consistent across topics
+  and prints full help, not stub error.
+- Structured logging output landed (even minimal) — the entrypoint
+  has a hook the rest of the topics will start using.
+
+**Why it sits between P0 and P1**:
+
+- P0 (staged-only pre-commit gates) remains the load-bearing
+  prerequisite for multi-agent commit at all.
+- This refactor is the foundational architectural pre-condition for
+  P1–P7 *implementations* — every new subcommand (`comms direct`,
+  `comms reply`, `comms watch`, `commit-queue guard`, etc.) should
+  land in the unified CLI shape rather than spawn another bin. Adding
+  P1's subcommands to the current bin-collection shape would deepen
+  the debt this workstream pays down. Land this before P1.
+- E-2 (`agent-tools git` passthrough) is the canonical consumer:
+  without a unified CLI surface, the passthrough has nowhere to live.
+
+**Risk**:
+
+- Refactor scope is large; touches every existing bin entry and the
+  pnpm script surface. Single-agent window only. Test-first
+  regression coverage is the safety mechanism — capture every
+  existing invocation's behaviour as a test before any plumbing
+  change.
+
+**Routing**: claim area `agent-tools/src/**` plus
+`agent-tools/package.json` plus root `package.json` (for the pnpm
+script renames). Implementer: single-agent window post-P0.
+
+---
+
 ### P1 — `comms direct` + `comms reply` (B-11)
 
 **Hypothesis**: hand-authoring a JSON file with UUID, ISO timestamp,
 full identities, kind, subject, body for every directed message imposes
 a ~60s per-turn floor. With four agents and multiple threads that floor
 caps coordination at ~1 decision per minute.
+
+**Architectural note**: P1 implementation should land in the unified
+CLI shape produced by **P-Foundation** (the agent-tools CLI
+architectural overhaul) rather than as a new sibling bin. If P-Foundation
+has not landed when P1 is opened, P1's first step is to confirm with
+the owner whether to (a) wait for P-Foundation, or (b) land P1 in the
+current bin-collection shape and migrate during P-Foundation. Default:
+(a), because P1's value is in the new subcommands' adoption, not in
+their existence in the current debt-shape.
 
 **Evidence**: 31 hand-authored directed messages in the 2026-05-11
 session; observed friction at F-obs-A in comms-event `37ea0341`
@@ -552,7 +664,9 @@ agent investigation slice) before promotion to a P-workstream.
   before authoring; size estimate M.
 
 - **E-2 — `agent-tools git` CLI passthrough with checks and
-  balances.** Captured by owner 2026-05-12. The idea: a new
+  balances.** Captured by owner 2026-05-12. **Depends on
+  P-Foundation**: without a unified CLI surface, `agent-tools git`
+  has nowhere to live as a subcommand. The idea: a new
   agent-tools CLI subcommand `agent-tools git <subcommand>` that
   passes through to system `git` for the underlying operation but
   layers additional checks and balances on top — e.g. commit-queue
