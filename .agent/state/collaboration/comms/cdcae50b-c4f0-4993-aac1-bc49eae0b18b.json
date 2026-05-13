@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "cdcae50b-c4f0-4993-aac1-bc49eae0b18b",
+  "created_at": "2026-05-13T20:10:08.587Z",
+  "kind": "directed",
+  "message_kind": "coordination-update",
+  "from": {
+    "agent_name": "Embered Igniting Ash",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e22"
+  },
+  "to": {
+    "agent_name": "Nebulous Ascending Supernova",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e22"
+  },
+  "subject": "Marshal note: Slice B commit protocol after controller GO",
+  "body": "Embered marshal read after your Slice B ready report: active queue is empty; no git/index claim is visible; active claims show your Slice B claim ce537683, Arboreal Slice A claims 64f3058d/b8a60bb2/96809d67, and Pearly controller claim e24e7e44. I see no overlap in current claim intents: your scope is controller.ts and tui-app.unit.test.ts only. Do not stage unless Pearly routes the commit window. When routed, open a short git:index/head claim and enqueue the exact Slice B pathspec bundle before staging."
+}

@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "6b3af580-892e-4b17-9fab-6361b1b0b073",
+  "created_at": "2026-05-13T20:22:27.257Z",
+  "kind": "directed",
+  "message_kind": "coordination-update",
+  "from": {
+    "agent_name": "Pearly Drifting Jetty",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e22"
+  },
+  "to": {
+    "agent_name": "Arboreal Ripening Pollen",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e22"
+  },
+  "subject": "Next route scout: P8 attention-state data/value scope",
+  "body": "Controller route for next P8 slice: please do a read-only scope scout for p8-attention-state, focused on the data/value model. Do not edit, claim implementation files, stage, enqueue, or commit yet. Inspect the existing TUI snapshot/operator-value/text surfaces plus existing comms seen/inbox semantics, then reply with the smallest exact implementation scope and tests you recommend for unread/seen or equivalent directed-thread triage. Acceptance target: a human can tell which directed conversations need action without raw JSON. Preserve honesty: this would advance P8-A4/P8-A1 but not complete P8 on its own."
+}

@@ -8,9 +8,10 @@
 > `30c8ad15`, with closeout at `6a1d8d9e`; the later P5 repair recomputed
 > completion from the live proof contract by adding direct comms use cases,
 > simple-fake tests, and CLI-only production IO wiring. Resume mandatory P8 from
-> the cost-of-collaboration plan, not from the older P5-pending opener. The
-> next P8 implementation target is operator-value UI plus interaction hardening,
-> not another completion claim.
+> the cost-of-collaboration plan, not from the older P5-pending opener.
+> Operator-value UI and the smallest interaction-hardening slice landed at
+> `2791be3c` and `6e804485`; the next P8 implementation target is
+> `p8-attention-state`, not a P8 completion claim.
 >
 > **Conservation-first consolidation**: `napkin.md`, `distilled.md`, and
 > `pending-graduations.md` stages are complete as of 2026-05-12. The next
@@ -178,14 +179,49 @@ bundle, then re-check live state before continuing.
 `act(...)` warnings during otherwise green tests. Treat this as P8 interaction
 test-quality debt, not acceptable noise to copy.
 
-**Next safe execution step**: start `p8-operator-value-ui` from
+**Next safe execution step**: the first operator-value and
+interaction-hardening slices have landed; continue with `p8-attention-state`
+from
 [`cost-of-collaboration.plan.md`](../../plans/agent-tooling/current/cost-of-collaboration.plan.md).
-That slice should improve human situational awareness: current collaborators,
-fresh/stale ownership, recent changes, queue pressure, directed-thread
-pressure, and "needs attention" signals. Pair it with the smallest component
-interaction tests needed for focus, scroll, and refresh-state behaviour. Do not
-mark P8 complete until `P8-A1` through `P8-A4` in the plan's proof contract are
-all proven.
+Add unread/seen or equivalent directed-thread triage so a human operator can
+tell which directed conversations need action without reading raw event files.
+Do not mark P8 complete until `P8-A1` through `P8-A4` in the plan's proof
+contract are all proven.
+
+## P8 Operator-Value And Interaction Slices (2026-05-13)
+
+**Session**: Pearly Drifting Jetty / `codex` / `GPT-5` / `019e22`
+controller, routing Arboreal Ripening Pollen, Nebulous Ascending Supernova,
+Fronded Rustling Canopy, Torrid Charring Hearth, and Embered Igniting Ash.
+
+**Landed outcome**: mandatory P8 advanced in two exact source commits:
+`2791be3c` (`feat(agent-tools): surface p8 operator value signals`) and
+`6e804485` (`feat(agent-tools): harden p8 tui interactions`). The first slice
+made current collaborators, ownership freshness, recent changes, queue
+pressure, directed-thread pressure, and needs-attention signals visible through
+the snapshot/text value surface. The second slice hardened focus/scroll bounds,
+refresh success/failure state, stale refresh rejection, and the React/Ink
+component proof for the covered path.
+
+**Review and commit discipline**: Fronded blocked then cleared the Slice A
+plural needs-attention wording before commit; Torrid gave read-only GO for
+Slice B. Embered marshalled both exact commit windows. Source bundles landed
+separately, with no coordination residue or cross-slice files staged into the
+implementation commits.
+
+**Next safe execution step**: `p8-attention-state`. Pearly sent read-only scout
+requests to Arboreal for the data/value model and Nebulous for the interactive
+UI/test surface; both scouts answered during closeout. Arboreal recommended
+adding viewer/seen context to `snapshot.ts`, extending directed entries with an
+unread/seen/other-recipient status, updating operator-value directed pressure
+counts, and proving the shape in `tui-snapshot.unit.test.ts` plus
+`tui-text.unit.test.ts`. Nebulous recommended wiring optional TUI
+`--agent-name`, `--session-prefix`, and `--seen-file` inputs through config/CLI
+without marking messages seen, rendering compact seen/unread badges in
+`panes.tsx`, and proving it with config, CLI integration, and component tests.
+A future session should re-ground live claims/comms first, then open exact
+non-overlapping claims around that data-shape/UI split. This should advance
+`P8-A1`/`P8-A4`, not complete P8 by itself.
 
 ## Completion-Claim Proof Pipeline (2026-05-13)
 
@@ -440,6 +476,12 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 | `codex` | `GPT-5` | Umbral Masking Silhouette | Gate-checker/monitor (read-only P5 strict comms parser CLEAN/GO; repeated message/status monitoring through WS1.4 closeout) | 2026-05-12 | 2026-05-13 |
 | `codex` | `GPT-5` | Mossy Fruiting Thicket | Implementer (P5 DI/no-IO boundary repair for comms use cases) | 2026-05-13 | 2026-05-13 |
 | `codex` | `GPT-5` | Mossy Blossoming Canopy | Implementer (mandatory P8 live collaboration TUI continuation) | 2026-05-13 | 2026-05-13 |
+| `codex` | `GPT-5` | Pearly Drifting Jetty | Controller (P8 coordination only; no implementation; route standby developers toward operator-value UI work) | 2026-05-13 | 2026-05-13 |
+| `codex` | `GPT-5` | Arboreal Ripening Pollen | Implementer (P8 Slice A operator-value snapshot model) | 2026-05-13 | 2026-05-13 |
+| `codex` | `GPT-5` | Nebulous Ascending Supernova | Implementer (P8 Slice B interaction hardening) | 2026-05-13 | 2026-05-13 |
+| `codex` | `GPT-5` | Fronded Rustling Canopy | Reviewer (read-only P8 Slice A value-signal review) | 2026-05-13 | 2026-05-13 |
+| `codex` | `GPT-5` | Torrid Charring Hearth | Reviewer (read-only P8 Slice B interaction review) | 2026-05-13 | 2026-05-13 |
+| `codex` | `GPT-5` | Embered Igniting Ash | Marshal (P8 exact-bundle commit-window verification) | 2026-05-13 | 2026-05-13 |
 | `cursor` | `GPT-5.5` | Dusky Lurking Shade | Consolidator (napkin-stage conservation-first consolidation; archive + distilled intake) | 2026-05-12 | 2026-05-12 |
 | `cursor` | `GPT-5.5` | Volcanic Charring Furnace | Consolidator (distilled-stage conservation routing; durable homes + pending follow-ups) | 2026-05-12 | 2026-05-12 |
 | `cursor` | `GPT-5.5` | Twigged Growing Glade | Consolidator (pending-graduations conservation-first routing + reviewer corrections + handoff) | 2026-05-12 | 2026-05-12 |

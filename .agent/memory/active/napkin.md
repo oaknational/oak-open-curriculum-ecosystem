@@ -26,6 +26,7 @@ ten emergent findings (F1-F10) were captured in
 [archive-pass]: archive/napkin-2026-05-13.md
 [previous-pass]: archive/napkin-2026-05-12b.md
 [synthesis-report]: ../../research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-13.md
+[next-consolidation-opening]: ../../plans/notes/next-session-opening-2026-05-13.md
 
 ## 2026-05-13 — Coppery Kindling Anvil / cursor / claude-opus-4-7 / `536dd4`
 
@@ -63,7 +64,7 @@ ten emergent findings (F1-F10) were captured in
 
 - Owner asked for an opening statement for the next session to continue
   consolidation with another `/jc-consolidate-docs` run. It lives at
-  [`.agent/plans/notes/next-session-opening-2026-05-13.md`](../../plans/notes/next-session-opening-2026-05-13.md)
+  [`.agent/plans/notes/next-session-opening-2026-05-13.md`][next-consolidation-opening]
   and names the dirty consolidation outputs to commit first, the three
   numbered verdicts to re-surface, the next-touch pending-graduations
   items, the distilled.md graduation walk, and the explicit
@@ -76,3 +77,51 @@ ten emergent findings (F1-F10) were captured in
   the owner directly during this session's handoff window, capturing
   the consolidation outputs themselves and overriding the earlier
   mid-session *"forget commits"* redirect.
+
+## 2026-05-13 — Pearly Drifting Jetty / codex / GPT-5 / `019e22`
+
+### Controller grounding
+
+- Owner assigned this session as controller-only for the P8 continuation:
+  coordinate developers and preserve the P8 acceptance route, but do not do
+  implementation. Live grounding falsified the opener's latest-commit
+  hypothesis: `HEAD` was already `b39398b6`, four commits after `fb332619`.
+  Treat closeout openers as hypotheses even when they are very fresh.
+- Three standby developers had already introduced themselves via untracked
+  unified comms events, while active claims and the active queue were empty.
+  In controller mode, read comms as the actual roster surface, not only
+  active claims.
+
+### Practice/tooling feedback
+
+- **Surface**: `agent-tools:collaboration-state claims open`
+- **Signal**: friction
+- **Observation**: an unquoted `.agent/state/collaboration/**` area pattern
+  expanded in zsh before reaching the CLI, causing `claims open` to reject the
+  extra path arguments. Retrying with the pattern quoted worked.
+- **Behaviour change / candidate follow-up**: controller/claim examples should
+  quote glob-shaped `--area-pattern` values, or the CLI should surface a
+  friendlier "did your shell expand this glob?" diagnostic when extra path
+  tokens appear after `--area-pattern`.
+- **Surface**: `agent-tools:collaboration-state comms send`
+- **Signal**: friction
+- **Observation**: I initially tried to use directed-message flags on
+  `comms send`; live help shows directed routing belongs to `comms direct`
+  with `--to-agent-name`, `--to-platform`, `--to-model`, and
+  `--to-session-prefix`.
+- **Behaviour change / candidate follow-up**: controller docs/examples should
+  keep shared `send` and directed `direct` examples adjacent, because the
+  failure mode is easy to hit during a time-sensitive coordination handoff.
+
+### Controller closeout
+
+- Two exact implementation commits landed without the controller editing source:
+  `2791be3c` for operator-value signals and `6e804485` for interaction
+  hardening. The useful pattern was: implementation owner reports ready,
+  independent read-only reviewer returns GO/BLOCK, marshal verifies exact
+  staged pathspecs, and the controller releases one git/index lane at a time.
+- After both commits, the next logical P8 route is `p8-attention-state`.
+  Nebulous and Arboreal both returned useful read-only scouts during closeout:
+  Nebulous on UI/test wiring, Arboreal on the data/value shape. Treat those
+  scout responses as input, not as permission to open implementation claims
+  without a fresh live-state re-ground.

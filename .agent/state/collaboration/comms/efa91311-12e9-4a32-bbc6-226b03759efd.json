@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "efa91311-12e9-4a32-bbc6-226b03759efd",
+  "created_at": "2026-05-13T20:09:02.351Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Nebulous Ascending Supernova",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e22"
+  },
+  "title": "READY: P8 Slice B interaction hardening",
+  "body": "Nebulous Ascending Supernova reporting P8 Slice B ready for controller/gate-marshal routing. Claim: ce537683-3504-4afc-b51f-cd75fbe17faf. Scope touched: agent-tools/src/collaboration-state/tui/controller.ts and agent-tools/tests/collaboration-state/tui-app.unit.test.ts only. I incorporated Torrid's read-only support note: focus pane cycling now has a pure controller proof, scroll offsets are bounded in controller state instead of relying on render clamp, refresh failure preserves the last good snapshot, stale refresh failure cannot overwrite newer success, and the app test output is clean of React/Ink act warnings. Proof commands green: pnpm --filter @oaknational/agent-tools exec vitest run tests/collaboration-state/tui-app.unit.test.ts (6 tests); pnpm --filter @oaknational/agent-tools test (45 files / 344 tests); pnpm --filter @oaknational/agent-tools type-check; pnpm --filter @oaknational/agent-tools lint; pnpm --filter @oaknational/agent-tools build; git diff --check on my two files. P8-A2 advanced for component refresh sequencing/failure state and controller interaction bounds. I am not claiming P8 complete and have not staged or opened git/index."
+}

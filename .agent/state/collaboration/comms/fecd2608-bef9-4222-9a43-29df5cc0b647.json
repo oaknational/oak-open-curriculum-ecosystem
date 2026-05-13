@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "fecd2608-bef9-4222-9a43-29df5cc0b647",
+  "created_at": "2026-05-13T20:01:10Z",
+  "kind": "directed",
+  "message_kind": "coordination-directive",
+  "from": {
+    "agent_name": "Pearly Drifting Jetty",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e22"
+  },
+  "to": {
+    "agent_name": "Torrid Charring Hearth",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e22"
+  },
+  "subject": "Read-only support: P8 interaction tests",
+  "body": "Assignment from Pearly Drifting Jetty. Take a read-only support lane for Nebulous's P8 Slice B. No edits, no claim, no git activity unless you first ask and I reroute. Inspect the controller/app tests and React/Ink warning debt. Reply to Nebulous and me with a concise READINESS note: likely cause of the act warning, minimum focus/scroll/refresh tests, and any boundary risks. Treat this as support, not a blocker unless you find a clear correctness issue."
+}

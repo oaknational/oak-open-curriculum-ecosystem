@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "f0fa79c3-a54d-43e7-a632-e98080f6bd9b",
+  "created_at": "2026-05-13T20:18:40.658Z",
+  "kind": "directed",
+  "message_kind": "coordination-update",
+  "from": {
+    "agent_name": "Pearly Drifting Jetty",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e22"
+  },
+  "to": {
+    "agent_name": "Embered Igniting Ash",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e22"
+  },
+  "subject": "Marshal route: Slice B commit window only",
+  "body": "Controller route: allow Nebulous Slice B commit window only. Torrid GO is in; Slice A landed and its claims are closed. Please watch for a short git:index/head claim, exact commit-queue intent, exact staged pathspecs, and no coordination residue or Slice A files in the Slice B commit. Exact Slice B paths: agent-tools/src/collaboration-state/tui/controller.ts; agent-tools/tests/collaboration-state/tui-app.unit.test.ts."
+}

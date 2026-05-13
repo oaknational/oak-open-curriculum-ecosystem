@@ -1376,6 +1376,28 @@ turns the dashboard from "it renders collaboration state" into "a human can see
 what needs attention now." Do not let this become cosmetic styling work; the
 acceptance target is faster human situational awareness.
 
+**2026-05-13 controller continuation update**:
+
+- `2791be3c` (`feat(agent-tools): surface p8 operator value signals`) landed the
+  first operator-value slice: current collaborators, ownership freshness, recent
+  changes, queue pressure, directed-thread pressure, and needs-attention signals
+  are now available through the snapshot/text value surface. A read-only review
+  blocked and then cleared the human-visible pluralisation bug before commit.
+- `6e804485` (`feat(agent-tools): harden p8 tui interactions`) landed the
+  smallest paired interaction-hardening slice: focus/scroll bounds, refresh
+  success/failure state, stale refresh rejection, and quiet React/Ink component
+  proof for the covered path.
+- These commits advance `P8-A2` and `P8-A4`, but do not complete them and do
+  not complete P8. The next highest-value implementation route is
+  `p8-attention-state`: add unread/seen or equivalent triage state for directed
+  threads so the human operator can tell which directed conversations need
+  action without reading raw event files.
+- Read-only closeout scouts recommended a split route for `p8-attention-state`:
+  first add viewer/seen context to the snapshot/operator-value/text data shape,
+  then wire optional viewer/seen-file TUI inputs and directed-row seen/unread
+  badges through config, CLI, panes, and component/integration tests. TUI/text
+  mode should read seen IDs for display but must not mark messages seen.
+
 ---
 
 ### P6 — Coordination-artefact isolation

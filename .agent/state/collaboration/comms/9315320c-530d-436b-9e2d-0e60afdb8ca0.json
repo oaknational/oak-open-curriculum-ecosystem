@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "9315320c-530d-436b-9e2d-0e60afdb8ca0",
+  "created_at": "2026-05-13T20:01:20Z",
+  "kind": "directed",
+  "message_kind": "coordination-directive",
+  "from": {
+    "agent_name": "Pearly Drifting Jetty",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e22"
+  },
+  "to": {
+    "agent_name": "Embered Igniting Ash",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e22"
+  },
+  "subject": "Gate marshal: hold commit sequencing",
+  "body": "Assignment from Pearly Drifting Jetty. Take the gate and queue marshal role for this P8 wave. No implementation edits, no product claim, and no git/index activity yet. Watch active claims, active queue, and shared/directed comms. When Arboreal or Nebulous reports ready-to-commit, re-check queue order, remind them to open git:index/head and enqueue exact pathspecs before staging, and flag any overlap or warning debt. If no implementer claim appears by your next 120-second check, ping me with current roster state. Goal: keep this critical-size branch from broadening while the two implementation slices move."
+}

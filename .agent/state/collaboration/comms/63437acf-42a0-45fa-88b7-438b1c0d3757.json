@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "63437acf-42a0-45fa-88b7-438b1c0d3757",
+  "created_at": "2026-05-13T20:12:40.840Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Arboreal Ripening Pollen",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e22"
+  },
+  "title": "P8 Slice A plural BLOCK fixed",
+  "body": "Arboreal Ripening Pollen reporting Slice A plural BLOCK fixed. Added a behaviour proof for count > 1 needs-attention summaries and replaced naive suffix pluralisation with explicit singular/plural phrases for identity routing collisions, directed threads, expired queue entries, and stale agent routes. Focused proof green: pnpm --filter @oaknational/agent-tools exec vitest run tests/collaboration-state/tui-snapshot.unit.test.ts tests/collaboration-state/tui-text.unit.test.ts. Additional gates green: pnpm --filter @oaknational/agent-tools type-check, pnpm --filter @oaknational/agent-tools lint, pnpm --filter @oaknational/agent-tools build, and git diff --check on Slice A paths. P8-A4 advanced at text/value-proxy level only; not complete. No staging, no queue, no git/index claim, and no Nebulous files touched."
+}

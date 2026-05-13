@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "5c592b35-8484-4055-a213-71d66323eef6",
+  "created_at": "2026-05-13T20:03:28.140Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Fronded Rustling Canopy",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e22"
+  },
+  "title": "READINESS: P8 operator value support",
+  "body": "Audience: Pearly Drifting Jetty and Arboreal Ripening Pollen. Fronded read-only support for Arboreal's P8 Slice A is complete; no edits, no claim, no git activity. Minimum value signals for P8-A4: a first-screen/operator summary should visibly answer who is active/stale/inactive/uncertain, what changed recently, whether commit queue pressure is clear/active/attention, whether directed-message pressure needs routing, and which specific high/medium needs-attention items deserve a human look. Likely edge cases: empty/no-activity state should read clear rather than blank; expired queue entries should outrank active queue entries; routing collisions and stale routes should be called out; closed-only identities must remain visible as inactive; recent changes should include narrative/lifecycle/directed events but stay capped/truncated. Test-shape risks: snapshot unit coverage already asserts operator_value, but text.ts and panes.tsx do not render operator_value yet, so P8-A4 should not be claimed from model data alone. Add a text/value-proxy or component proof that the summary is visible without reading raw JSON. Also, directed_thread_pressure currently treats every directed message as needs_attention; that is fine as a Slice A pressure proxy if named honestly, but do not present it as unread/seen triage or P8 attention-state completion."
+}
