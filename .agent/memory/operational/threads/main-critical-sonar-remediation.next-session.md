@@ -141,7 +141,7 @@ In-scope inventory:
 | `.agent/memory/operational/pending-graduations.md` | `mostly-append-register` |
 | `.agent/memory/operational/repo-continuity.md` | `index-narrative-tables` |
 | `.agent/memory/operational/threads/*.next-session.md` (10 files) | `index-narrative-tables` |
-| `.agent/state/collaboration/comms-events/README.md` (does not exist; create) | `exclusive-create-fragments` |
+| `.agent/state/collaboration/comms/README.md` (does not exist; create) | `exclusive-create-fragments` |
 
 ### Open PR #97 review-bot findings (post-`5b5b9d4a` push)
 

@@ -398,3 +398,67 @@ tooling material, not optional session colour. -->
   status, acceptance ids, proof evidence, and value-proxy observation. Never
   use workstream-complete language from recent commit subjects, handoff prose,
   or claim closure alone.
+
+## 2026-05-13 — Umbral Masking Silhouette / codex / GPT-5 / `019e1d`
+
+### Repeated monitor loop closeout
+
+- Owner correction: "check for messages at least every 60s and report status at
+  least every 60s" means an actual repeated loop until the owner stops or
+  redirects, not a single inbox/status check plus a promise. Behaviour change:
+  keep the turn open, poll live coordination surfaces, and report status within
+  the requested cadence.
+- During the loop, sorting comms JSON by embedded `created_at` missed freshly
+  written message files whose timestamps were earlier than the current tail.
+  Behaviour change: long-running monitors must combine semantic timestamp reads
+  with an mtime/file-freshness pass before reporting "no new messages."
+- Final state observed at the end of Umbral's monitoring loop, before the owner
+  closed this session: P5 strict-parser, WS1.6 prep, WS1.4 JSON-LD, and WS1.4
+  coordination closeout all landed; working tree, cached index, active claims,
+  and commit queue were clean/empty.
+
+### Candidate
+
+- No ADR/PDR candidate surfaced. These are tactical monitor-loop lessons for
+  future handoff/coordination sessions, not settled governance changes yet.
+
+## 2026-05-13 — Dim Hiding Secret / codex / GPT-5 / `019e1d`
+
+### WS1.6 Prep Handoff And Queue Discipline
+
+- Landed outcome was already durable at handoff start:
+  `f36f98b1 docs(plan): draft WS1.6 vocab planning prep`. This handoff made no
+  new commit by owner direction.
+- What worked: the explicit commit queue, `git:index/head` claim, Solar's
+  read-only CLEAN/GO, and Luminous's queue-release messages prevented the
+  one-file planning note from racing peer P5 and WS1.4 windows.
+- What was harder: identical Codex prefix `019e1d` across multiple named
+  sessions made routing noisy; pre-existing advisory fitness signals were easy
+  to confuse with the one-file note's gate state; peer hook failure and foreign
+  staged residue required repeated live checks before retrying.
+
+### Candidate
+
+- No ADR/PDR candidate surfaced. This session reinforced existing commit-window
+  and completion-proof doctrine rather than creating a new decision.
+
+## 2026-05-13 — Uplifted Wheeling Sky / codex / GPT-5 / `019e20`
+
+### P5 Unified Comms Completion
+
+- P5 only became honestly complete after code, schema, live state, generated
+  read model, practice-substrate live readers, and active docs all agreed on
+  one canonical `.agent/state/collaboration/comms/` directory. The useful
+  parser slice and claim closeout were not enough.
+- What caught the last residue: `practice:substrate:check` found live docs
+  still naming retired paths, and Knip found newly-unused kind-specific readers
+  plus stale TUI project config. Behaviour change: for migration work, "no
+  legacy lingering" needs a state/filesystem check, a live-doc retired-path
+  check, and dependency/export cleanup, not just unit tests.
+- The remaining historical retired-path findings are informational by design:
+  archive/provenance evidence stays intact while live routing surfaces move on.
+
+### Candidate
+
+- No new ADR/PDR candidate. This is concrete evidence for the completion-proof
+  pipeline already routed in the agentic-engineering plan.

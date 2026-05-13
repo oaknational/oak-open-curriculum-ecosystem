@@ -23,11 +23,42 @@
 > Completion is a computed verdict, not a confident sentence; TDD evidence
 > requires test-first red/green proof at unit, integration, and E2E levels.
 >
+> **Umbral monitor closeout** (2026-05-13): Umbral Masking Silhouette completed
+> the read-only P5 strict comms parser gate-check and then stayed in a repeated
+> message/status monitoring loop until the live queue closed cleanly. No edits
+> or git/index activity from Umbral beyond directed comms.
+>
 > **New strategic work** (2026-05-12): Prismatic Beaming Twilight session designed
 > multi-agent delegation orchestration architecture extending ADR-180 beyond Codex
 > to Cursor, Claude, internal agents. Strategic brief
 > [`multi-agent-delegation-orchestration.plan.md`](../../plans/agentic-engineering-enhancements/future/multi-agent-delegation-orchestration.plan.md)
 > captured in future plans. See session findings below.
+
+## Umbral P5 Gate-Check And Monitor Session (2026-05-12/13)
+
+**Session**: Umbral Masking Silhouette / `codex` / `GPT-5` / `019e1d`.
+
+**Landed outcome**: read-only P5 strict comms parser gate-check completed with
+`CLEAN/GO`; Verdant's P5 strict-parser implementation landed at `dd5b9e54`,
+and its collaboration closeout landed at `3e033cad`.
+
+**Verification evidence**: Umbral ran the focused `agent-tools` parser tests,
+`@oaknational/agent-tools` type-check, collaboration-state `check`, full
+`@oaknational/agent-tools` test, `git diff --check` on the P5 paths, and a
+grep for remaining legacy `addressed_to` object/null-threading shapes. The only
+non-useful probe was an ad hoc single-file `tsc` invocation that failed because
+the project has `tsconfig` file-list constraints; the real type-check passed.
+
+**Monitoring evidence**: after P5, Umbral kept the user-requested repeated
+message/status loop active through Dim's WS1.6 prep commit (`f36f98b1`),
+Fiery's WS1.4 JSON-LD processor commit (`95f42cb7`), and Luminous's
+coordination closeout (`0d6f080a`). Final live state at the end of Umbral's
+monitoring loop, before the owner closed this session: clean working tree,
+empty cached index, no active claims, and no active commit queue.
+
+**Next safe step impact**: no change. P5 strict-parser work is a useful landed
+slice but P5 remains pending against unified-format acceptance; P8 remains the
+mandatory live-TUI proof path after P5.
 
 ## Completion-Claim Proof Pipeline (2026-05-13)
 
@@ -149,7 +180,7 @@ procedural breaches in commit `6027e182`:
    wrong.
 
 Commit `6027e182` is not being undone (owner direction + standing rule
-against history rewrites). Repair comms-messages posted:
+against history rewrites). Repair comms posted:
 `4d4c5fd8-6f93-4341-a5e2-da0a8fbefdbf` to Coastal Cresting Prow,
 `f5c171d7-189b-494a-9983-79d55e66c152` to Starlit Scattering Moon. A
 distilled-rule candidate sharpening the doctrine's scope is drafted in
@@ -208,6 +239,7 @@ pretending the solution is already known.
 | `codex` | `GPT-5` | Seaworthy Snorkelling Prow | Implementer (validate-boundaries graph-ingest inventory repair + pre-commit wiring) | 2026-05-12 | 2026-05-12 |
 | `codex` | `GPT-5` | Shadowed Dimming Veil | Reviewer/synthesiser (cost-of-collaboration reviewer synthesis; P8 mandatory live-TUI routing) | 2026-05-12 | 2026-05-12 |
 | `codex` | `GPT-5` | Verdant Foraging Copse | Synthesiser/plan author (completion-claim proof pipeline report, executable plan, thread/index routing, and first `jc-plan` proof-contract skill amendment) | 2026-05-13 | 2026-05-13 |
+| `codex` | `GPT-5` | Umbral Masking Silhouette | Gate-checker/monitor (read-only P5 strict comms parser CLEAN/GO; repeated message/status monitoring through WS1.4 closeout) | 2026-05-12 | 2026-05-13 |
 | `cursor` | `GPT-5.5` | Dusky Lurking Shade | Consolidator (napkin-stage conservation-first consolidation; archive + distilled intake) | 2026-05-12 | 2026-05-12 |
 | `cursor` | `GPT-5.5` | Volcanic Charring Furnace | Consolidator (distilled-stage conservation routing; durable homes + pending follow-ups) | 2026-05-12 | 2026-05-12 |
 | `cursor` | `GPT-5.5` | Twigged Growing Glade | Consolidator (pending-graduations conservation-first routing + reviewer corrections + handoff) | 2026-05-12 | 2026-05-12 |
@@ -649,7 +681,7 @@ while consolidation decides what graduates out of temporary surfaces.
 **Landed this pass**: canonical skill docs now make the
 handoff/consolidation pairing explicit, give `jc-metacognition` an executable
 reflection workflow, and require `jc-consolidate-docs` to process
-`comms-events/` older than seven days into durable or still-processable memory
+`comms/` older than seven days into durable or still-processable memory
 surfaces before deleting them.
 
 ## `pnpm check` profiling result and next step (2026-05-12+)
@@ -781,7 +813,7 @@ grep is unreliable for this check; always verify by reading the hook file.
   [`.agent/state/collaboration/sidebars/cli-comms-inbox-design-2026-05-11.md`](../../../state/collaboration/sidebars/cli-comms-inbox-design-2026-05-11.md)
   across Turn 1 + Turn 2 + Turn 3 + joint decision. Implementation
   lives in the unified CLI dispatcher under
-  `agent-tools/src/collaboration-state/cli-comms-messages.ts` (or
+  `agent-tools/src/collaboration-state/cli-comms.ts` (or
   the equivalent post-overhaul location). Claim area
   `agent-tools/src/**`. Register a `pre_commit` queue entry before
   staging.
@@ -887,7 +919,7 @@ by ambient peer/uncommitted files. Falsifiability: `git diff --cached
 --name-only` still shows the Flamebright staged set; `git log -3 --oneline`
 does not contain their graph/verdict commit. Sidebar with Wooded locked B-11
 as a later atomic slice: `comms direct` + `comms reply` in a new
-`cli-comms-messages.ts`, subject-convention reply threading only, no directed
+`cli-comms.ts`, subject-convention reply threading only, no directed
 schema change. Claim `8b00cc0c` closed with the unlanded-case summary.
 
 **Tail update 2026-05-11 (Gilded Shimmering Dawn / `cursor` /
@@ -900,7 +932,7 @@ read-only legacy comms-event audit by directory to three lower-powered
 helpers, and synthesized result
 `3869cd-cursor-result-1-legacy-comms-audit`. Result: only four
 narrative files need migration-out normalisation before B-10 compat
-helpers can retire; `comms-lifecycle/` and `comms-messages/` are clean
+helpers can retire; `comms/` and `comms/` are clean
 for this question. No implementation edits landed.
 
 **Tail update 2026-05-11 (Embered Burning Magma / `codex` /
@@ -967,12 +999,12 @@ module.
 ### Refuted-premise event captured this session
 
 Pre-flight field-set fingerprint scan refuted the predecessor's
-two-family diagnosis: `comms-events/` actually contains **three
+two-family diagnosis: `comms/` actually contains **three
 families** (narrative 311 / lifecycle 5 / directed 2) with five
 accreted narrative variants on optional routing/threading affordances.
 Owner directed Shape A′: ONE canonical schema with three `$defs`,
-projected to three sibling directories (`comms-events/`,
-`comms-lifecycle/`, `comms-messages/`). R1.a landed the schema
+projected to three sibling directories (`comms/`,
+`comms/`, `comms/`). R1.a landed the schema
 authority; R1.b will land the directory projection + parser
 refactor + 7-file migration.
 
@@ -994,7 +1026,7 @@ the session designed to fix it.
 - **R1.b** (load-bearing): three parsers (`parseNarrativeCommsEvent`,
   `parseLifecycleCommsEvent`, `parseDirectedCommsMessage`); three
   TypeScript types replacing flat `CommsEvent`; new directories
-  `comms-lifecycle/` and `comms-messages/` with the 5+2 file
+  `comms/` and `comms/` with the 5+2 file
   migration (rename `timestamp`→`created_at` in directed); update 6+
   consumers (state-io.ts, cli-comms-commands.ts, comms.ts,
   live-json.ts, live-json-support.ts, live-types.ts); extend
@@ -1595,7 +1627,7 @@ F-04, F-09 for `collaboration-state`, F-12, and F-13.
 - `comms send --help` names the supported identity seed inputs, and
   unsupported `--agent-name` returns help plus the exact error;
 - `comms send` returns JSON with `event_id`, `event_path`, and
-  `shared_log_path`, using resolved `--events-dir` / `--output`
+  `shared_log_path`, using resolved `--comms-dir` / `--output`
   targets;
 - README examples now show both `claims open --file` and repeated
   `--area-pattern`.
@@ -1607,7 +1639,7 @@ F-04, F-09 for `collaboration-state`, F-12, and F-13.
 - `pnpm --filter @oaknational/agent-tools lint`
 - `pnpm exec markdownlint --dot agent-tools/README.md .agent/plans/agent-tooling/frictions-register.md`
 - `pnpm exec prettier --check ...` on touched Workstream 1 files
-- `pnpm agent-tools:collaboration-state -- check --active .agent/state/collaboration/active-claims.json --closed .agent/state/collaboration/closed-claims.archive.json --events-dir .agent/state/collaboration/comms-events`
+- `pnpm agent-tools:collaboration-state -- check --active .agent/state/collaboration/active-claims.json --closed .agent/state/collaboration/closed-claims.archive.json --comms-dir .agent/state/collaboration/comms`
 
 **Reviewer dispatch**: `code-expert`, `test-expert`, and
 `docs-adr-expert` all returned CLEAN on the second pass. First-pass
@@ -2028,7 +2060,7 @@ immune-layer doctrine.
 `fix/sonar-fixes-20260506`. Commit `cb662b7e` adds PDR-050, the
 portable substrate plan, the repo-local doctor plan, PDR/PDR-index
 updates, Practice-index bridge updates, the multi-checkout merge-plan
-amendment, canonical `comms-events` path fixes, state README updates,
+amendment, canonical `comms` path fixes, state README updates,
 and specialist-review evidence. Commit `526a596e` closes the
 commit-window collaboration claim. A follow-up local working-tree slice
 seeded the host-local inventory/template at
@@ -2042,7 +2074,7 @@ and
 [`memory-state-substrate-contracts.schema.json`](../../executive/memory-state-substrate-contracts.schema.json),
 completed Phase 0/2 coverage, routed Phase 3 immune-layer responsibilities,
 and migrated the 114 legacy `comms/events` fragments into canonical
-`comms-events`. The legacy collaboration comms tree has now been deleted.
+`comms`. The legacy collaboration comms tree has now been deleted.
 Phase 4/5 closure is now complete in the working tree: PDR-049
 no longer names concrete host-state paths in
 Practice Core, host-local path guidance lives in the bridge/local contract,
@@ -2057,7 +2089,7 @@ classifies every Known Contract Gaps row as a live defect, known-good terminal
 state, or deferred semantic review; records the existing check inventory; and
 captures current evidence: 22 manifest surfaces, 114 migration-ledger entries,
 legacy `comms/events/` absent on disk with historical provenance preserved in
-the ledger/archive, canonical `comms-events/` parsing through the explicit
+the ledger/archive, canonical `comms/` parsing through the explicit
 collaboration-state check, and no duplicate manifest or ledger identities.
 Follow-up owner direction deleted the retained legacy `comms/` archive tree;
 the live doctor now validates 21 manifest surfaces and the complete absence of
@@ -2169,7 +2201,7 @@ or Practice Core content to make the report greener.
 
 - `pnpm agent-tools:collaboration-state -- check` — passed as the then-current
   narrow parser check. Future evidence should use explicit `--active`,
-  `--closed`, and `--events-dir` paths until the substrate doctor exists.
+  `--closed`, and `--comms-dir` paths until the substrate doctor exists.
 - `pnpm portability:check` — passed.
 - `pnpm practice:vocabulary` — passed.
 - `pnpm markdownlint:root` — passed.
@@ -2188,8 +2220,8 @@ or Practice Core content to make the report greener.
 - Strict local instance checks passed before commit: manifest/schema contract
   check reported 22 surfaces and no schema-contract failures; migration ledger
   reported 114 entries and no hash/byte-count failures; canonical
-  `comms-events` JSON parse check reported 236 files and no parse failures;
-  explicit collaboration-state check against canonical `comms-events` passed.
+  `comms` JSON parse check reported 236 files and no parse failures;
+  explicit collaboration-state check against canonical `comms` passed.
 - Commit/migration state landed in `47028fc3`; `origin/main` merged cleanly in
   `bf3211ac`.
 - Doctor Phase 0 gates passed after ledger drafting: explicit
@@ -2892,7 +2924,7 @@ GPT-5.5 / `512682`).
 **Landings**:
 
 - **Comms**: immutable event `512682-oak-local-mcp-landmark-2026-05-05`
-  under `.agent/state/collaboration/comms-events/`; rendered into
+  under `.agent/state/collaboration/comms/`; rendered into
   `shared-comms-log.md`.
 - **Plan**: `.agent/plans/observability/current/feat-eef-exploration-completion.plan.md`
   gained § Step 10 precursor — end-to-end Cursor MCP exercise against
@@ -3193,7 +3225,7 @@ recorded in napkin):**
   lookahead is the cure when SHA-shape detection is wanted.
 - `agent-tools:collaboration-state` CLI flag conventions
   (`--file` singular, `--area-kind`, `--active`, `--now`,
-  `comms append --events-dir`/`--title`/`--body`/`--created-at`).
+  `comms append --comms-dir`/`--title`/`--body`/`--created-at`).
 
 **Concurrent context:** Fronded Flowering Thicket (`7c8381`)
 remained active throughout on the layer-2 napkin/distilled
@@ -3941,10 +3973,10 @@ and
 | `Flamebright Sparking Forge` | `codex` | `GPT-5` | `019e1a` | `bounded-repo-continuity-and-pending-graduations-consolidation-drain; archived-historical-continuity-prose; reconciled-live-state-and-due-index; no-staging-window` | 2026-05-12 | 2026-05-12 |
 | `Torrid Flaring Hearth` | `codex` | `GPT-5` | `019e1a` | `consolidate-docs-pass; napkin-rotation; fitness-routing; thread-register-and-collaboration-state-audit; session-handoff-and-commit-closeout` | 2026-05-12 | 2026-05-12 |
 | `Vining Budding Canopy` | `codex` | `GPT-5` | `019e1a` | `pnpm-check-profiling-deep-dive-and-session-handoff; captured-turbo-graph-228-nodes-88-real-commands; preserved-profile-artifacts-under-.logs-check-profiles; recorded-F20-repo-check-profile-bootstrap-friction; expanded-cost-of-collaboration-P0-quality-gate-implementation-tasks; historical-mcp-vitest-profile-failure-now-superseded-by-owner-reported-green-pnpm-check` | 2026-05-12 | 2026-05-12 |
-| `Smouldering Melting Kiln` | `codex` | `GPT-5` | `019e1a` | `paired-workflow-skill-review-for-jc-session-handoff-jc-consolidate-docs-and-jc-metacognition; added-stale-comms-events-retention-rule; next-session-audit-all-remaining-skills; preserves-shared-state-and-comms-as-live-infrastructure` | 2026-05-12 | 2026-05-12 |
+| `Smouldering Melting Kiln` | `codex` | `GPT-5` | `019e1a` | `paired-workflow-skill-review-for-jc-session-handoff-jc-consolidate-docs-and-jc-metacognition; added-stale-comms-retention-rule; next-session-audit-all-remaining-skills; preserves-shared-state-and-comms-as-live-infrastructure` | 2026-05-12 | 2026-05-12 |
 | `Cosmic Gliding Aurora` | `codex` | `GPT-5` | `019e1a` | `quality-gate-plan-correction-and-p0-first-implementation-72c5cde1; pre-commit-contract-preserves-type-check-lint-shell-lint-test; prettier-markdownlint-now-stage-file-scoped; knip-depcruise-owner-classified-higher-standard-pre-push-check-ci-gates; handoff-claim-9e6cce6b` | 2026-05-12 | 2026-05-12 |
 | `Kilned Brazing Forge` | `codex` | `GPT-5` | `019e1a` | `cost-of-collaboration-P0QG-profile-regression-handoff; repo-check-dry-graph-aligned-lint-not-lintfix; staged-prettier-markdownlint-regression-tests; warm-pnpm-check-profile-green-130561ms; cold-like-profile-blocked-by-suspected-oauth-rate-limit-flake; flaky-test-list-created; temp-index-precommit-real-2.39s; claim-e2fc7a6d-closed` | 2026-05-12 | 2026-05-12 |
-| `Galactic Transiting Galaxy` | `codex` | `GPT-5` | `019e1a` | `owner-requested-knowledge-curation; reviewed-120-comms-events-older-than-2026-05-05; confirmed-durable-routing; deleted-processed-event-buffer-files; regenerated-shared-comms-log; stale-count-zero; handoff-claim-666f1e8e` | 2026-05-12 | 2026-05-12 |
+| `Galactic Transiting Galaxy` | `codex` | `GPT-5` | `019e1a` | `owner-requested-knowledge-curation; reviewed-120-comms-older-than-2026-05-05; confirmed-durable-routing; deleted-processed-event-buffer-files; regenerated-shared-comms-log; stale-count-zero; handoff-claim-666f1e8e` | 2026-05-12 | 2026-05-12 |
 | `Stratospheric Winging Wing` | `codex` | `GPT-5` | `019e1b` | `remaining-jc-skill-audit; enumerated-24-jc-adapters; excluded-7-reviewed-skills; audited-17-remaining-canonicals; patched-napkin-gates-review-finishing-branch-undo-change-ground-truth-design-ground-truth-evaluation; validation-git-diff-check-targeted-markdownlint-skills-check-portability-check-green; claim-4aa64a3d` | 2026-05-12 | 2026-05-12 |
 | `Hushed Shrouding Mist` | `codex` | `GPT-5` | `019e1b` | `cost-of-collaboration-P0QG-complete; flake-disposition-and-busy-profile-baseline; oauth-rate-limit-20-focused-runs-green; correlation-middleware-20-focused-runs-green; public-resource-auth-bypass-e2e-10-focused-plus-3-full-e2e-green; busy-pnpm-check-profile-cold-147613ms-green-warm-131695ms-green; repo-check-profile-artifact-hardening; agent-tools-focused-tests-typecheck-lint-green; full-state-commit-50b49765; session-handoff-to-P-Foundation; no-active-claims-at-handoff` | 2026-05-12 | 2026-05-12 |
 | `Glittering Weaving Quasar` | `codex` | `GPT-5` | `019e1b` | `cost-of-collaboration-P-Foundation-implementation; unified-agent-tools-entrypoint-and-no-build-on-hot-topic-scripts; claim-c0249273` | 2026-05-12 | 2026-05-12 |
@@ -3952,10 +3984,10 @@ and
 | `Galactic Transiting Orbit` | `codex` | `GPT-5` | `019e18` | `Wave-3-commit-queue-UX-hardening-claim-close-cycle-fingerprint-recursion-slice-in-progress; preserving-post-commit-ledger-residue-from-Embered-Burning-Magma-as-evidence; scope-agent-tools-commit-queue-collaboration-state-tests-plan-status-and-session-lifecycle-surfaces; Wave-4-and-Wave-5-remain-closed` | 2026-05-11 | 2026-05-11 |
 | `Shaded Ripening Copse` | `claude-code` | `claude-opus-4-7-1m` | `c13bdf` | `commit-queue-UX-brief-author-B-02-B-03-Workstream-4-architectural-seam-and-third-direction-peer-commit-absorption-subsection-commit-5c299ed5; primary-thread-was-connecting-oak-resources-but-the-commit-queue-UX-brief-landed-here-per-opener-routing` | 2026-05-11 | 2026-05-11 |
 | `Embered Burning Magma` | `codex` | `GPT-5` | `019e18` | `Wave-3-commit-queue-UX-hardening-F11-list-show-inspection-slice-landed-e298723c; list-filters-prefix-phase-agent-name-queue-status; show-by-intent-id; strict-now-validation-read-only-commands-accept-write-enforcement-reject; README-plus-plan-register-updates; reviewers-code-test-docs-adr-wilma-betty-onboarding-approved; focused-and-full-agent-tools-gates-plus-real-pre-commit-hook-passed; claim-close-cycle-recursion-reproduced-as-post-commit-ledger-mutation-and-captured-for-next-slice` | 2026-05-11 | 2026-05-11 |
-| `Soaring Darting Kite` | `claude-code` | `claude-opus-4-7-1m` | `01db95` | `R1.b-collaboration-protocol-hardening-atomic-landing-b529fa6e; three-readonly-typescript-interfaces-replace-flat-CommsEvent-NarrativeCommsEvent-LifecycleCommsEvent-DirectedCommsMessage; three-single-schema-parsers-replace-parseCommsEvent-parseNarrativeCommsEvent-parseLifecycleCommsEvent-parseDirectedCommsMessage-no-dispatch; createCommsEvent-renamed-createNarrativeCommsEvent; readCommsEvents-split-into-three-kind-named-readers-via-generic-readEventDirectory; renderSharedCommsLog-takes-three-explicit-arrays-merges-chronologically-with-lexical-event-id-tiebreak-per-code-expert-review; 7-event-file-migrations-5-lifecycle-fe4acc7e-into-comms-lifecycle-and-2-directed-3882213c-b0353884-into-comms-messages-with-timestamp-rename-created_at; 16-new-parser-and-render-tests-across-state-parsers-unit-test-and-comms-render-unit-test-extracted-to-new-file-after-700-line-cap; practice-substrate-live-comms-events-extracted-to-new-module-walks-three-canonical-directories; collaborationAjv-loads-comms-event-schema; live-retired-paths-excludes-two-new-directories; four-reviewers-code-expert-APPROVED-WITH-SUGGESTIONS-test-expert-IMPROVEMENTS-RECOMMENDED-type-expert-SAFE-docs-adr-expert-COMPLIANT-three-in-scope-fixes-applied; sidebar-2e1a886f-to-Fronded-Flowering-Seed-reply-544bf9bf-in-10min-claim-narrowed-no-owner-mediation-needed; third-instance-peer-commit-absorption-67885e3f-Mistbound-absorbed-six-session-lifecycle-files-via-non-pathspec-staging-structurally-new-direction-beyond-PDR-054-and-PDR-059-evidence-captured-at-e0a17465; R1b-atomic-commit-bypassed-commit-queue-load-bearing-miss-named-honestly-in-record-final-session-close-5aa91a76-through-full-queue-lifecycle-enqueue-staging-record-staged-verify-staged-exit-0-commit-complete; tail-plan-reshaped-into-six-sequenced-waves-R8-R4b-R7-R2-then-R3-then-commit-queue-UX-plus-R4-new-then-R5-Path-beta-five-substeps-then-Phase4-four-probe-validation-then-Phase5-arc-closure; owner-direction-next-session-works-on-commit-queue-UX-hardening-discoverability-ease-of-use-harder-to-bypass-enforcement; B-01-fixed-at-b529fa6e-in-primary-agent-tooling-enhancements-plan; commits-b529fa6e-R1b-5aa91a76-session-close` | 2026-05-11 | 2026-05-11 |
-| `Fronded Flowering Seed` | `claude-code` | `claude-opus-4-7-1m` | `19ecd5` | `executed-graduation-candidates-drain-opener-end-to-end; bootstrap-fast-path-claim-1ccfa79c-comms-event-076cfe79-shared-comms-log-entry; phase-1-PDR-059-regenerator-output-classification-authored-plus-ADR-177-2026-05-11-amendment-Accepted-Revised-plus-PDR-054-Related-cross-ref-plus-index-row-plus-CHANGELOG; phase-1-reviewers-betty-go-with-conditions-2-doctrine-edits-applied-plus-docs-adr-go-plus-assumptions-go-with-conditions-2-plan-level-pre-conditions-recorded-in-ADR-177; phase-2-ADR-041-amended-Accepted-Revised-agent-tools-regularised-plus-agent-graphs-added-8x8-matrix-decision-list-libs-split-note; phase-2-ADR-173-OQ1-cross-linked-plus-D-4a-closed-in-graph-mvp-arc-732; phase-2-reviewers-fred-go-plus-betty-go-with-conditions-2-matrix-cell-precision-edits-applied-agent-graphs-sdks-graph-corpus-sdk-only-agent-tools-identity-collaboration-only-plus-docs-adr-go-with-conditions-3-housekeeping-items-applied; phase-3-pending-triage-read-only-no-promotions-different-lens-reviewer-divergence-flagged-substance-ripe-in-napkin; phase-4-entry-counts-refreshed-0-due-from-2-84-pending; quality-gates-markdownlint-format-vocabulary-clean-fitness-only-pre-existing-out-of-scope-criticals; mid-session-coordination-sidebar-with-Soaring-Darting-Kite-claim-narrowed-comms-events-foreign-staged-events-not-absorbed-stage-by-explicit-pathspec; ADR-173-ratification-gate-unblocked; transient-register-inconsistency-at-session-open-self-cleared-recorded-napkin` | 2026-05-11 | 2026-05-11 |
+| `Soaring Darting Kite` | `claude-code` | `claude-opus-4-7-1m` | `01db95` | `R1.b-collaboration-protocol-hardening-atomic-landing-b529fa6e; three-readonly-typescript-interfaces-replace-flat-CommsEvent-NarrativeCommsEvent-LifecycleCommsEvent-DirectedCommsMessage; three-single-schema-parsers-replace-parseCommsEvent-parseNarrativeCommsEvent-parseLifecycleCommsEvent-parseDirectedCommsMessage-no-dispatch; createCommsEvent-renamed-createNarrativeCommsEvent; readCommsEvents-split-into-three-kind-named-readers-via-generic-readEventDirectory; renderSharedCommsLog-takes-three-explicit-arrays-merges-chronologically-with-lexical-event-id-tiebreak-per-code-expert-review; 7-event-file-migrations-5-lifecycle-fe4acc7e-into-comms-and-2-directed-3882213c-b0353884-into-comms-with-timestamp-rename-created_at; 16-new-parser-and-render-tests-across-state-parsers-unit-test-and-comms-render-unit-test-extracted-to-new-file-after-700-line-cap; practice-substrate-live-comms-extracted-to-new-module-walks-three-canonical-directories; collaborationAjv-loads-comms-event-schema; live-retired-paths-excludes-two-new-directories; four-reviewers-code-expert-APPROVED-WITH-SUGGESTIONS-test-expert-IMPROVEMENTS-RECOMMENDED-type-expert-SAFE-docs-adr-expert-COMPLIANT-three-in-scope-fixes-applied; sidebar-2e1a886f-to-Fronded-Flowering-Seed-reply-544bf9bf-in-10min-claim-narrowed-no-owner-mediation-needed; third-instance-peer-commit-absorption-67885e3f-Mistbound-absorbed-six-session-lifecycle-files-via-non-pathspec-staging-structurally-new-direction-beyond-PDR-054-and-PDR-059-evidence-captured-at-e0a17465; R1b-atomic-commit-bypassed-commit-queue-load-bearing-miss-named-honestly-in-record-final-session-close-5aa91a76-through-full-queue-lifecycle-enqueue-staging-record-staged-verify-staged-exit-0-commit-complete; tail-plan-reshaped-into-six-sequenced-waves-R8-R4b-R7-R2-then-R3-then-commit-queue-UX-plus-R4-new-then-R5-Path-beta-five-substeps-then-Phase4-four-probe-validation-then-Phase5-arc-closure; owner-direction-next-session-works-on-commit-queue-UX-hardening-discoverability-ease-of-use-harder-to-bypass-enforcement; B-01-fixed-at-b529fa6e-in-primary-agent-tooling-enhancements-plan; commits-b529fa6e-R1b-5aa91a76-session-close` | 2026-05-11 | 2026-05-11 |
+| `Fronded Flowering Seed` | `claude-code` | `claude-opus-4-7-1m` | `19ecd5` | `executed-graduation-candidates-drain-opener-end-to-end; bootstrap-fast-path-claim-1ccfa79c-comms-event-076cfe79-shared-comms-log-entry; phase-1-PDR-059-regenerator-output-classification-authored-plus-ADR-177-2026-05-11-amendment-Accepted-Revised-plus-PDR-054-Related-cross-ref-plus-index-row-plus-CHANGELOG; phase-1-reviewers-betty-go-with-conditions-2-doctrine-edits-applied-plus-docs-adr-go-plus-assumptions-go-with-conditions-2-plan-level-pre-conditions-recorded-in-ADR-177; phase-2-ADR-041-amended-Accepted-Revised-agent-tools-regularised-plus-agent-graphs-added-8x8-matrix-decision-list-libs-split-note; phase-2-ADR-173-OQ1-cross-linked-plus-D-4a-closed-in-graph-mvp-arc-732; phase-2-reviewers-fred-go-plus-betty-go-with-conditions-2-matrix-cell-precision-edits-applied-agent-graphs-sdks-graph-corpus-sdk-only-agent-tools-identity-collaboration-only-plus-docs-adr-go-with-conditions-3-housekeeping-items-applied; phase-3-pending-triage-read-only-no-promotions-different-lens-reviewer-divergence-flagged-substance-ripe-in-napkin; phase-4-entry-counts-refreshed-0-due-from-2-84-pending; quality-gates-markdownlint-format-vocabulary-clean-fitness-only-pre-existing-out-of-scope-criticals; mid-session-coordination-sidebar-with-Soaring-Darting-Kite-claim-narrowed-comms-foreign-staged-events-not-absorbed-stage-by-explicit-pathspec; ADR-173-ratification-gate-unblocked; transient-register-inconsistency-at-session-open-self-cleared-recorded-napkin` | 2026-05-11 | 2026-05-11 |
 | `Smouldering Crackling Pyre` | `claude-code` | `claude-opus-4-7-1m` | `ab76ef` | `executed-collaboration-protocol-hardening-final-opener-phase-0-and-R1a-only; bootstrap-fast-path-claim-059291ea-comms-event-shared-comms-log-entry; pre-flight-fingerprint-scan-refuted-two-family-premise-three-families-confirmed-narrative-311-lifecycle-5-directed-2; owner-direction-Shape-A-prime-three-directories-one-canonical-schema-with-three-defs; R1a-landed-f7560339-canonical-comms-event-schema-json-plus-12-Ajv-validated-tests-plus-test-fakes-fixture-module; assumptions-expert-and-architecture-expert-betty-GO-WITH-CONDITIONS-reviews-pre-execution; live-foreign-stage-absorption-event-from-peer-Dusky-Masking-Cloak-c5ff7f-pre-staged-handoff-files-caught-by-commit-queue-verify-staged-cured-by-git-commit-by-explicit-pathspec; R1b-and-R2-through-Phase-5-deferred-to-fresh-opener; arc-closure-honestly-deferred-not-this-session; commits-f7560339-R1a` | 2026-05-11 | 2026-05-11 |
-| `Deciduous Twining Dew` | `claude-code` | `claude-opus-4-7-1m` | `a12c90` | `executed-collaboration-protocol-hardening-opener-phases-0-through-3-partial; phase-0-ground-state-compiled-13-promises-10-incidents-8-gaps; phase-1-friction-audit-categorised-by-remediation-layer-CLI-BUG-CLI-AFFORDANCE-CONTRACT-GAP-HOOK-ENFORCEMENT; phase-2-remediation-design-crystallised-with-architecturally-excellent-shapes-only; assumptions-expert-x2-architecture-expert-betty-architecture-expert-wilma-docs-adr-expert-dispatched; opener-framing-amended-on-five-axes-sub-system-framing-super-linear-scaling-ramp-not-start-four-probe-matrix-wilma-seat-earned; owner-re-decisions-ORD-1-Path-beta-round-trip-and-delete-markdown-and-ORD-2-Shape-B-skill-plus-native-git-hook-drop-R4a; R6-coordinator-role-doctrine-landed-with-threshold-held-in-ephemeral-state-not-directive; B-01-corrected-diagnosis-schema-mix-in-comms-events-not-now-iso-bug; commits-9b619a05-doctrine-and-70507d72-session-close; remaining-work-queued-R1-schema-mix-owner-direction-R2-R3-CLI-test-first-R4b-skill-R4-new-native-git-hook-R5-Path-beta-migration-R7-B9-plan-stub-R8-pattern-capture-Phase-4-four-probe-matrix` | 2026-05-11 | 2026-05-11 |
+| `Deciduous Twining Dew` | `claude-code` | `claude-opus-4-7-1m` | `a12c90` | `executed-collaboration-protocol-hardening-opener-phases-0-through-3-partial; phase-0-ground-state-compiled-13-promises-10-incidents-8-gaps; phase-1-friction-audit-categorised-by-remediation-layer-CLI-BUG-CLI-AFFORDANCE-CONTRACT-GAP-HOOK-ENFORCEMENT; phase-2-remediation-design-crystallised-with-architecturally-excellent-shapes-only; assumptions-expert-x2-architecture-expert-betty-architecture-expert-wilma-docs-adr-expert-dispatched; opener-framing-amended-on-five-axes-sub-system-framing-super-linear-scaling-ramp-not-start-four-probe-matrix-wilma-seat-earned; owner-re-decisions-ORD-1-Path-beta-round-trip-and-delete-markdown-and-ORD-2-Shape-B-skill-plus-native-git-hook-drop-R4a; R6-coordinator-role-doctrine-landed-with-threshold-held-in-ephemeral-state-not-directive; B-01-corrected-diagnosis-schema-mix-in-comms-not-now-iso-bug; commits-9b619a05-doctrine-and-70507d72-session-close; remaining-work-queued-R1-schema-mix-owner-direction-R2-R3-CLI-test-first-R4b-skill-R4-new-native-git-hook-R5-Path-beta-migration-R7-B9-plan-stub-R8-pattern-capture-Phase-4-four-probe-matrix` | 2026-05-11 | 2026-05-11 |
 | `Blooming Growing Thicket` | `claude-code` | `claude-opus-4-7-1m` | `756c60` | `authored-collaboration-protocol-hardening-opener-as-dedicated-session-for-the-real-ceiling-on-safe-N-agent-work-six-phases-ground-state-friction-audit-remediation-design-land-validate-at-scale-closeout; recorded-B-01-comms-send-created-at-bug-in-primary-agent-tooling-enhancements-plan-with-test-first-discipline-named; thread-record-next-opener-pointer-added-at-top; commits-ac765955-bug-record-and-9547bb69-openers-plus-team-of-agents-section` | 2026-05-11 | 2026-05-11 |
 | `Burnished Crackling Pyre` | `claude-code` | `claude-opus-4-7-1m` | `e517c9` | `claude-skill-listing-budget-bumped-1pct-to-3pct-in-claude-settings-json; napkin-entry-records-architectural-rationale-practice-adopters-exhibit-elevated-skill-count-floor-by-construction-per-pdr-009-and-pdr-051; pending-graduations-entry-added-target-amend-practice-md-or-pdr-051-trigger-second-platform-or-owner-direction; commit-9547bb69-landed-by-parallel-or-owner` | 2026-05-11 | 2026-05-11 |
 | `Tempestuous Darting Zephyr` | `claude-code` | `claude-opus-4-7-1m` | `cb66a2` | `agent-commands-retirement-end-to-end; five-commits-a098d709-sweep-bundled-validator-probe-drift-fixes-and-b92a99e6-inline-and-delete-and-90363d08-docs-sweep-and-58910fe6-reviewer-fixes-and-b00ad5a5-final-code-expert-and-docs-adr-fixes; six-substantive-command-bodies-inlined-into-skill-canonicals; new-passive-skill-ephemeral-to-permanent-homing-promoted; twelve-commands-files-plus-three-experiments-plus-ten-cursor-jc-md-plus-ten-gemini-jc-toml-deleted; five-reviewers-dispatched-code-expert-architecture-fred-docs-adr-test-expert-config-expert-all-actionable-findings-applied; surface-parallel-agent-commit-absorption-vercel-plugin-duplicate-registration-validator-failure-surface-exceeded-plan-enumeration-missing-rule-wrappers-generated; tracked-follow-ups-pre-commit-hook-gap-claudeCommandFiles-dead-parameter-evaluateParityChecks-unit-coverage-shouldInspectFile-second-example-cross-agent-sweep-bundling-prohibition` | 2026-05-10 | 2026-05-10 |
@@ -3966,7 +3998,7 @@ and
 | `Open Lifting Gale` | `cursor` | `GPT-5.5` | `e4ad13` | `agent-tooling-friction-closeout-workstream-1; collaboration-state-cli-discoverability; invalid-option-help; closure-summary-alias-and-conflict; area-kind-enumeration; comms-send-json-output-with-resolved-paths; pure-helper-tests-after-no-real-io-review; README-and-frictions-register-evidence; claim-d7a76b78-closed; no-commit-owner-boundary` | 2026-05-10 | 2026-05-10 |
 | `Woodland Growing Leaf` | `claude-code` | `claude-opus-4-7-1m` | `0844d9` | `repo-continuity-archive-plan-end-to-end-execution; group-A-directive-foreign-stage-cure-naming-d981b2b3; phase-1-archive-sweep-13-session-close-blocks-and-9-deep-consolidation-entries-relocated-verbatim-to-2026-05-10-archive-companion-6d7d5ee3-live-file-555-to-270-lines; phase-2-invariants-role-justified-option-A-with-12-canonical-home-cross-references-09b513ae; plan-archived-current-to-archive-completed-c3061935; inter-agent-comms-event-coordination-with-Riverine-Drifting-Lighthouse-9344adf1-to-05ccefb8-to-5bff4178-resolved-pre-commit-blockage; cure-named-and-applied-to-its-own-landing` | 2026-05-10 | 2026-05-10 |
 | `Blooming Ripening Glade` | `claude-code` | `claude-opus-4-7-1m` | `0730a8` | `agent-collaboration-directive-evolution; re-parent-coordination-surface-discipline-and-inter-agent-comms-first-class-primitive-from-communication-channels-to-working-model; heading-count-correction-three-to-four-foundational-rules; c-amendment-naming-git-add-and-git-commit-explicit-pathspec-with-five-instance-evidence-and-rule-link; frontmatter-split-strategy-rewrite-per-channel-detail-vs-cross-channel-governance; owner-approved-fitness-line-target-240-to-280-limit-320-to-360; repo-continuity-archive-and-invariants-role-plan-drafted-current-lifecycle-two-phase-archive-sweep-then-owner-gated-invariants-role-decision; markdownlint-clean-no-commit-in-session` | 2026-05-10 | 2026-05-10 |
-| `Luminous Twinkling Dawn` | `claude-code` | `claude-opus-4-7-1m` | `c03c02` | `historical-napkin-synthesis-pass-2026-05-09-corpus-current-plus-three-prior-rotations; twelve-emergent-findings-six-rejected-near-patterns; three-new-patterns-comprehensive-cataloguing-drift-and-long-arc-finish-line-not-tail-and-mechanical-sequence-is-activity-bias-diagnostic; four-new-pending-graduations-entries-fitness-output-inline-discipline-reminder-and-verify-reviewer-text-claims-against-diff-and-reviewer-convergence-points-at-conceptual-root-and-owner-bounded-reviewer-scope; spine-drift-partially-graduated; sequence-or-admit-three-instance-confirmed; three-owner-gated-candidates-deferred-PDR-026-amendment-and-sequence-or-admit-graduation-and-proportionality-question-synthesis-PDR; commit-5071c8e6-synthesis-report; remainder-bundled-by-Cosmic-Glowing-Star-into-c63e3816-foreign-stage-absorption-fourth-instance; subsequent-workflow-doc-edits-vendor-memory-added-to-session-handoff-and-comms-events-added-to-consolidate-docs-step-3-staged-but-uncommitted-per-owner-direction-another-session-will-commit` | 2026-05-09 | 2026-05-09 |
+| `Luminous Twinkling Dawn` | `claude-code` | `claude-opus-4-7-1m` | `c03c02` | `historical-napkin-synthesis-pass-2026-05-09-corpus-current-plus-three-prior-rotations; twelve-emergent-findings-six-rejected-near-patterns; three-new-patterns-comprehensive-cataloguing-drift-and-long-arc-finish-line-not-tail-and-mechanical-sequence-is-activity-bias-diagnostic; four-new-pending-graduations-entries-fitness-output-inline-discipline-reminder-and-verify-reviewer-text-claims-against-diff-and-reviewer-convergence-points-at-conceptual-root-and-owner-bounded-reviewer-scope; spine-drift-partially-graduated; sequence-or-admit-three-instance-confirmed; three-owner-gated-candidates-deferred-PDR-026-amendment-and-sequence-or-admit-graduation-and-proportionality-question-synthesis-PDR; commit-5071c8e6-synthesis-report; remainder-bundled-by-Cosmic-Glowing-Star-into-c63e3816-foreign-stage-absorption-fourth-instance; subsequent-workflow-doc-edits-vendor-memory-added-to-session-handoff-and-comms-added-to-consolidate-docs-step-3-staged-but-uncommitted-per-owner-direction-another-session-will-commit` | 2026-05-09 | 2026-05-09 |
 | `Lush Rustling Bark` | `codex` | `GPT-5` | `019e03` | `oak-eslint-defineconfig-migration; no-deprecated-self-lint-response; single-call-lint-cleanup; session-handoff-closeout` | 2026-05-07 | 2026-05-07 |
 | `Twigged Shedding Fern` | `codex` | `GPT-5` | `019e03` | `pr-102-branch-touched-files-sonar-snagging; parser-index-refactor; audited-git-subprocess-boundary; focused-agent-tools-tests; pr-comment-refresh-handoff` | 2026-05-07 | 2026-05-07 |
 | `Silvered Masking Moth` | `codex` | `GPT-5` | `019e03` | `memory-state-doctor-safe-merge-gate; schema-blocker-fixes; strict-mode-and-built-output-root-alias; deleted-legacy-comms-tree-cleanup; code-reviewer-follow-up; final-validation-and-commit` | 2026-05-07 | 2026-05-07 |
@@ -3974,7 +4006,7 @@ and
 | `Cirrus Swooping Cloud` | `codex` | `GPT-5` | `019e02` | `memory-state-contract-doctor-phase-1-pure-fixture-slices; practice-substrate-evaluators; literal-object-and-string-tests; merge-class-parameter-edge-case-fix; test-reviewer-checkpoint-clean; owner-requested-session-handoff-and-commit` | 2026-05-07 | 2026-05-07 |
 | `Stratospheric Whirling Airstream` | `codex` | `GPT-5` | `019e02` | `memory-state-contract-doctor-phase-0-defect-ledger; existing-check-inventory; known-contract-gaps-classification; strict-manifest-and-migration-ledger-evidence; test-reviewer-fixture-strategy-checkpoint-and-validation-lane-fix; owner-requested-session-handoff-and-commit-prep` | 2026-05-07 | 2026-05-07 |
 | `Penumbral Veiling Owl` | `codex` | `GPT-5` | `019e02` | `memory-state-substrate-phase-4-5-closure-implementer; pdr-049-core-portability-cleanup; retired-yaml-seed-evidence-move; doctor-phase-0-test-and-validation-plan-tightening; current-tree-start-gate-validation` | 2026-05-07 | 2026-05-07 |
-| `Floating Vaulting Updraft` | `codex` | `GPT-5` | `019e01` | `memory-state-substrate-local-instance-completion; strict-json-manifest-and-schema; legacy-comms-events-migration-with-provenance; phase-3-immune-layer-routing; doctor-implementation-deferred-until-strict-local-instance-validates` | 2026-05-07 | 2026-05-07 |
+| `Floating Vaulting Updraft` | `codex` | `GPT-5` | `019e01` | `memory-state-substrate-local-instance-completion; strict-json-manifest-and-schema; legacy-comms-migration-with-provenance; phase-3-immune-layer-routing; doctor-implementation-deferred-until-strict-local-instance-validates` | 2026-05-07 | 2026-05-07 |
 | `Seaworthy Swimming Sextant` | `codex` | `GPT-5` | `019e01` | `portable-memory-state-substrate-contract-inventory-and-template-executor; continuing-from-committed-PDR-050-bundle; preserving-practice-core-vs-repo-local-boundary; no-fitness-driven-content-trimming; doctor-implementation-deferred-until-built-agent-tools-command-surface-contract` | 2026-05-07 | 2026-05-07 |
 | `Windward Spiralling Aerie` | `codex` | `GPT-5` | `019e01` | `memory-state-substrate-contract-review-stewardship-and-commit; dispatched-docs-adr-assumptions-architecture-fred-and-test-reviewers; applied-reviewer-fixes-to-PDR-050-portable-plan-doctor-plan-state-readme-and-evidence; preserved-owner-correction-knowledge-before-fitness; confirmed-next-session-order-portable-contracts-then-doctor-then-multi-checkout-merge-handling; committed-and-pushed-cb662b7e-and-526a596e` | 2026-05-07 | 2026-05-07 |
 | `Pelagic Rolling Harbour` | `claude-code` | `claude-opus-4-7-1m` | `58a9ad` | `pending-graduations-dedicated-drain-and-recalibration; phase-1-archive-Lacustrine-F-15-and-mark-polarity-discipline-partially-graduated; phase-1.5-vaporware-trigger-flagging-three-entries; phase-3-residual-shape-surfacing-three-options-for-owner-direction; owner-directed-reframe-fitness-limits-encode-implicit-access-rhythm-theory; recalibration-frontmatter-2000-2500-150000-300-plus-three-descriptive-fields-lifecycle-model-access-pattern-fitness-rationale; per-entry-metadata-schema-inline-tag-line-with-closed-vocabularies-plus-composite-value-convention; structured-index-TOC-by-status-with-line-hints-and-counts-table; twelve-high-touch-entries-tagged-pending-sweep-deferred-to-phase-B; new-pending-entry-captures-access-rhythm-as-fitness-axis-insight-graduation-target-ADR-144-amendment-plus-cross-repo-PDR; reviewer-dispatch-docs-adr-and-code-reviewer-three-P2-and-one-P1-and-two-nits-all-addressed; four-commits-cc084c67-177b9298-b0b7cec3-b1a8536b` | 2026-05-07 | 2026-05-07 |
@@ -4015,7 +4047,7 @@ and
 | `Misty Ebbing Pier` | `claude-code` | `claude-opus-4-7-1m` | `ba3961` | `n-agent-collaboration-hypothesis-decision-complete-plan-authored-at-current/n-agent-collaboration-experiments.plan.md; per-experiment-subfolder-restructure-experiments/E1/{brief,agent-1-orchestrator,agent-2-executor}; pending-graduations-cure-set-(vi)-(x)-and-hypothesis-framing-amendment; superseded-first-attempts.md-and-experiments.md-deleted; modes-taxonomy-folded-into-hypothesis.md-P1` | 2026-05-03 | 2026-05-03 |
 | `Dewy Shedding Glade` | `claude-code` | `claude-opus-4-7-1m` | `13ae71` | `validation-and-tdd-doctrine-restructure-arc-S1-through-S4; tdd-as-design-foundational-directive-authored; test-reviewer-refreshed-as-doctrine-carrier-with-recipe-citation-requirement; no-conditional-tests-rule-plus-three-platform-adapters; stryker-reframed-as-meta-quality; index-plan-validation-and-tdd-doctrine-restructure.plan.md-with-S1-S4-and-P1-P6-sequenced; commit-b2ef7992-23-files-+1159/-235; drift-fix-never-use-git-to-remove-work-adapters; three-pdr-pattern-candidates-surfaced-tests-describe-system; reviewers-carry-doctrine; forcing-function-read-path` | 2026-05-04 | 2026-05-04 |
 | `Verdant Sprouting Leaf` | `claude-code` | `claude-opus-4-7-1m` | `63a0e0` | `post-/insights-reflection-round; three-owner-named-insights-captured-at-moment-of-occurrence; PDR-018-amendment-beneficial-prerequisites-must-not-block; PDR-038-amendment-doctrine-without-enforcement-at-maturity; PDR-044-new-memetic-immune-system; current/doctrine-enforcement-quick-wins.plan.md-six-workstreams-innate-immunity; future/memetic-immune-system-and-progressive-disclosure.plan.md-strategic-roadmap; practice-index-and-current-future-README-discovery-updates; commit-192b6965-9-files-+1580/-1` | 2026-05-04 | 2026-05-04 |
-| `Pearly Snorkelling Reef` | `claude-code` | `claude-opus-4-7-1m` | `6db5ac` | `parallel-isolation-worktree-dispatch-attempt-of-doctrine-enforcement-quick-wins; two-of-three-workers-spawned-on-wrong-base-improvised-and-violated-worktree-boundary-by-writing-to-main-repo-scripts; main-repo-script-and-tests-restored-from-clean-worktree; salvage-path-cherry-pick-WS1-91232df6-port-WS2-eacb05f2-port-WS5-design-767ee23a; plan-marked-PARTIAL-WS3-WS4-WS6-pending; continuity-commit-79ef671c-worker-comms-events-prior-session-claim-closure; durable-lesson-saved-feedback_worktree_isolation_unreliable-md-in-personal-memory` | 2026-05-04 | 2026-05-04 |
+| `Pearly Snorkelling Reef` | `claude-code` | `claude-opus-4-7-1m` | `6db5ac` | `parallel-isolation-worktree-dispatch-attempt-of-doctrine-enforcement-quick-wins; two-of-three-workers-spawned-on-wrong-base-improvised-and-violated-worktree-boundary-by-writing-to-main-repo-scripts; main-repo-script-and-tests-restored-from-clean-worktree; salvage-path-cherry-pick-WS1-91232df6-port-WS2-eacb05f2-port-WS5-design-767ee23a; plan-marked-PARTIAL-WS3-WS4-WS6-pending; continuity-commit-79ef671c-worker-comms-prior-session-claim-closure; durable-lesson-saved-feedback_worktree_isolation_unreliable-md-in-personal-memory` | 2026-05-04 | 2026-05-04 |
 | `Fronded Flowering Thicket` | `claude-code` | `claude-opus-4-7-1m` | `7c8381` | `owner-directed-layered-knowledge-processing-pass-Layer-0-then-Layer-1-then-Layer-2; napkin-rotation-785-to-105-lines-archived-as-napkin-2026-05-04; distilled-merge-and-prune-401-to-308-lines-net-93-no-compression; three-patterns-created-parallel-worktree-dispatch-unreliable-templates-encode-failure-modes-plan-as-artefact-gravity; PDR-045-workspace-first-investigation-discipline-authored-three-moves-artefact-search-shared-package-survey-live-state-check; three-host-rules-cite-PDR-045-validate-full-target-estate-read-diagnostic-artefacts-in-full-consolidate-at-third-consumer; pre-existing-PDR-016-stale-filename-fixed-in-passing; PDR-README-index-drift-fixed-PDR-043-PDR-044-PDR-045; Practice-CHANGELOG-entry; layered-processing-methodology-itself-captured-as-graduation-candidate-PDR-and-consolidate-docs-amendment; eight-PDR-shaped-candidates-surfaced-for-fresh-session-continuation` | 2026-05-04 | 2026-05-04 |
 | `Vining Spreading Seed` | `claude-code` | `claude-opus-4-7-1m` | `11429f` | `doctrine-enforcement-quick-wins-WS3-hedging-vocabulary-scoped-trip-list-c256f325; WS4-SHA-in-permanent-doc-regex-with-context-exclusions-8b0fe826-citation-fix-aa6e37d5; WS6-git-add-wildcard-block-with-citation-infrastructure-0fffc55e; plan-marked-COMPLETE-07249f09; rules-and-RULES_INDEX-integration-7e295693-three-rule-files-stage-by-explicit-pathspec-no-hedging-vocabulary-no-moving-targets-in-permanent-docs-each-with-canonical-plus-claude-plus-cursor-adapters-and-RULES_INDEX-preamble-reframed-from-Codex-fallback-to-canonical-platform-independent-enumeration-and-AGENT.md-rules-section-wired-to-it; napkin-updates-c8f8e7dc-and-2a0da4d2-and-d3d2bb95-worked-instance-lessons-and-self-violation-discovery-via-permission-system-rejecting-backticked-SHAs-in-rule-files-themselves-and-owner-direction-to-tighten-the-hook-to-distinguish-prose-narrative-from-code-block-backtick-contexts; concurrent-with-Fronded-Flowering-Thicket-no-claim-overlap-one-peer-staged-rename-interaction-cured-via-git-commit-pathspec` | 2026-05-04 | 2026-05-04 |
 | `Ferny Spreading Petal` | `claude-code` | `claude-opus-4-7-1m` | `d0d13f` | `layer-2-second-pass-continuation-from-Fronded-handoff; PDR-046-layered-knowledge-processing-drafted-three-moves-bottom-up-traversal-suspend-in-process-form-keeping-graduate-substance-upward-not-compress; pending-graduations-marked-graduated; PDR-README-index-and-Practice-CHANGELOG-updated; PDR-047-rule-applies-always-and-PDR-048-insight-capture-at-moment-of-occurrence-sequenced-after-PDR-046-owner-review` | 2026-05-04 | 2026-05-04 |
@@ -4025,8 +4057,8 @@ and
 | `Opalescent Threading Nebula` | `claude-code` | `claude-opus-4-7-1m` | `4c1773` | `Layer-0-to-Layer-1-napkin-rotation-1513474e-per-PDR-046-Move-1; ADR-vs-PDR-vs-both-decision-discipline-applied-to-due-items-per-owner-direction; promotion-bundle-authored-orchestrator-vs-quality-gate-clarification-in-commit-SKILL-plus-cure-asymmetry-section-in-stage-by-explicit-pathspec-plus-eager-rounding-off-on-partial-structures-anti-pattern-host-pattern-with-polarity-discipline-plus-distilled-additions-plus-four-pending-graduations-entries; reviewer-dispatch-docs-adr-plus-code-reviewer-with-P1-P2-findings-absorbed; thread-record-and-pending-graduations-portion-landed-via-Riverine-53fffe74-with-explicit-pathspec; full-promotion-bundle-landed-via-coordinator-mediated-Asteroid-takeover-368e5aff-with-body-attribution-paragraph-per-Lacustrine-to-Gnarled-pattern; multi-agent-coordination-with-Ashen-Banking-Bellows-acting-as-coordinator-during-six-agent-convergence; eager-rounding-off-pattern-fired-on-its-own-author-via-misidentification-of-comms-event-recipient-fourth-instance-self-corrected; agents-decide-what-to-ask-sharpening-captured-as-standing-direction; async-vs-sync-sidebar-distinction-captured; inbound-polling-discipline-gap-discovered-after-missing-Twilit-first-message-at-11-53Z; fresh-session-opener-authored-at-2026-05-06-five-layer-restart-opener-md` | 2026-05-05 | 2026-05-05 |
 | `Riverine Navigating Sextant` | `cursor` | `GPT-5.5` | `740c80` | `archive-scale-historical-napkin-synthesis-cadence-landed-as-PDR-014-amendment-plus-consolidate-docs-triggered-step-plus-pending-graduations-status-flip; processed-marker-ledger-and-report-shape-specified; pdr_kind-pattern-routing-drift-corrected; docs-adr-reviewer-and-code-reviewer-findings-addressed` | 2026-05-05 | 2026-05-05 |
 | `Deciduous Budding Stamen` | `cursor` | `GPT-5.5` | `512682` | `oak-local-MCP-landmark-comms; feat-eef-step-10-precursor-plan-body; thread-record-arc; jc-session-handoff-close` | 2026-05-05 | 2026-05-05 |
-| `Glittering Waning Galaxy` | `claude-code` | `claude-opus-4-7-1m` | `3cff70` | `new-agent-tooling-plan-collection-spun-out-of-agentic-engineering-enhancements; nineteen-plans-git-mv-eight-to-current-eleven-to-future; frictions-register-seeded-with-eleven-entries-from-napkin-Surprise-7-and-comms-events-2dbd74f6-a1cf45a2-dfdea3f7-and-Stamen-CLI-flag-rejection; cross-references-rewritten-in-twenty-four-active-surfaces-directives-memory-threads-research-analysis-prompts-rules-state-fixtures; archive-refs-in-moved-plans-repointed-from-broken-agent-tooling-archive-to-correct-agentic-engineering-enhancements-archive; scope-boundary-clarification-added-across-three-READMEs-distinguishing-implementation-level-workspace-from-practice-level-broader-with-when-in-doubt-test-could-this-plan-exist-if-agent-tools-did-not; bootstrap-fast-path-comms-event-d1cc1290-at-session-open-no-active-claim-opened-none-to-close` | 2026-05-05 | 2026-05-05 |
-| `Riverine Fishing Rudder` | `claude-code` | `claude-opus-4-7-1m` | `b89da0` | `three-step-napkin-and-comms-graduation-pass-per-owner-direction-2026-05-05; step-1-archived-pre-step-napkin-verbatim-514L-49170C-nine-2026-05-05-session-entries-plus-drained-plus-F-12-F-13-frictions-added; step-2-walked-78-comms-events-extracted-3-structured-surprises-A-fat-baton-handoff-B-workflow-self-improvement-C-cross-thread-git-substrate; step-3-routed-surprises-A-B-C-to-pending-graduations-3-new-entries-plus-drained-napkin-to-single-rotation-summary; step-commits-307f7f13-d7ca48d5-5b40e206; docs-adr-reviewer-P0-P1-clean-on-each-step` | 2026-05-05 | 2026-05-06 |
+| `Glittering Waning Galaxy` | `claude-code` | `claude-opus-4-7-1m` | `3cff70` | `new-agent-tooling-plan-collection-spun-out-of-agentic-engineering-enhancements; nineteen-plans-git-mv-eight-to-current-eleven-to-future; frictions-register-seeded-with-eleven-entries-from-napkin-Surprise-7-and-comms-2dbd74f6-a1cf45a2-dfdea3f7-and-Stamen-CLI-flag-rejection; cross-references-rewritten-in-twenty-four-active-surfaces-directives-memory-threads-research-analysis-prompts-rules-state-fixtures; archive-refs-in-moved-plans-repointed-from-broken-agent-tooling-archive-to-correct-agentic-engineering-enhancements-archive; scope-boundary-clarification-added-across-three-READMEs-distinguishing-implementation-level-workspace-from-practice-level-broader-with-when-in-doubt-test-could-this-plan-exist-if-agent-tools-did-not; bootstrap-fast-path-comms-event-d1cc1290-at-session-open-no-active-claim-opened-none-to-close` | 2026-05-05 | 2026-05-05 |
+| `Riverine Fishing Rudder` | `claude-code` | `claude-opus-4-7-1m` | `b89da0` | `three-step-napkin-and-comms-graduation-pass-per-owner-direction-2026-05-05; step-1-archived-pre-step-napkin-verbatim-514L-49170C-nine-2026-05-05-session-entries-plus-drained-plus-F-12-F-13-frictions-added; step-2-walked-78-comms-extracted-3-structured-surprises-A-fat-baton-handoff-B-workflow-self-improvement-C-cross-thread-git-substrate; step-3-routed-surprises-A-B-C-to-pending-graduations-3-new-entries-plus-drained-napkin-to-single-rotation-summary; step-commits-307f7f13-d7ca48d5-5b40e206; docs-adr-reviewer-P0-P1-clean-on-each-step` | 2026-05-05 | 2026-05-06 |
 | `Masked Stalking Veil` | `codex` | `GPT-5` | `019dfc` | `quota-recovery-commit-stewardship-and-session-handoff-light-consolidation; committed-Umbral-Cloaking-Silhouette-artefact-portability-audit-and-plans-as-ad03f276; closed-quota-recovery-collaboration-state-as-8bf55080; ran-owner-requested-jc-session-handoff-plus-light-jc-consolidate-docs; no-entrypoint-drift-no-track-cards-no-escalations-vocabulary-green-collaboration-check-green; inherited-fitness-pressure-remains-separate-lane` | 2026-05-06 | 2026-05-06 |
 | `Ashen Burning Anvil` | `codex` | `GPT-5` | `019dfd` | `urgent-skill-load-pressure-relief-phase-1-settings-prune; removed-project-level-mcp-apps-cloudflare-linear-plugin-activations; retained-sentry-remember-mcp-server-dev-sonarqube-vercel; backup-captured; portability-subagents-typecheck-markdownlint-diff-whitespace-and-collaboration-check-green; owner-corrected-doctor-as-session-local-only; phase-2-vercel-triage-next` | 2026-05-06 | 2026-05-06 |
 
