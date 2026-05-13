@@ -467,3 +467,21 @@ tooling material, not optional session colour. -->
 - Candidate routing now exists in the no-IO findings report, P5 repair update,
   and separate no-IO test boundary plan. Do not reuse the old "P5 complete"
   wording from this napkin section.
+
+## 2026-05-13 — Solar Gliding Twilight Cold-Start Follow-Up / codex / GPT-5 / `019e1d`
+
+### Graph Thread Cold-Start Route Drift
+
+- Correction found during handoff/metacognition: the top of
+  `connecting-oak-resources.next-session.md` and the active graph-stack plan
+  correctly named WS1.5/WS1.6/WS2.2/WS3.1 as next graph choices, but the
+  self-bootstrapping cold-start section still routed fresh sessions to completed
+  WS1.2.
+- Behaviour change: when a thread record has both a current summary and a
+  cold-start/opener block, treat both as live routing surfaces. Search for stale
+  completed-work identifiers before declaring the handoff current.
+
+### Candidate
+
+- No ADR/PDR candidate surfaced. This is a continuity-surface drift correction,
+  not a new governance decision.

@@ -14,7 +14,18 @@ note remain implementation preconditions. WS1.3 (DatasetCore + DataFactory)
 LANDED at `87e21125`; WS2.1 graph-ingest scaffold LANDED at `0f895070`; WS1.4
 coordination closeout landed at `0d6f080a`.
 
-**Last refreshed**: 2026-05-13 (Luminous Threading Asteroid / `codex` /
+**Last refreshed**: 2026-05-13 (Solar Gliding Twilight / `codex` / `GPT-5` /
+`019e1d`) — session-handoff/metacognition correction only. No graph product
+implementation. Fixed the stale cold-start/self-bootstrapping section that still
+routed fresh graph sessions to completed WS1.2. Current active plan remains the
+authority: next executable choices are WS1.5 canon, WS1.6 vocab implementation
+after the prep-note owner decisions, WS2.2 jsonld-compatible ingestion, or WS3.1
+graph-project scaffold after a live root-file check. Live caveat at this refresh:
+the worktree contains unrelated generated SDK/schema changes under
+`packages/sdks/oak-sdk-codegen/`; preserve or isolate them before graph edits if
+they are still present.
+
+Previous refresh: 2026-05-13 (Luminous Threading Asteroid / `codex` /
 `GPT-5` / `019e1d`) — session-handoff-only closeout after WS1.4 coordination
 closeout and later graph-continuity repair commits were already landed. No
 product implementation and no commit in this handoff per owner direction.
@@ -161,8 +172,11 @@ commit-queue discipline and knowledge-preservation-over-fitness.
 ## Self-Bootstrapping Continuation (cold-start landing)
 
 A fresh session prompted with **"please continue the graph mvp work"**
-should read this section and routes directly to Inc.1a WS1.2. No
-additional briefing required.
+should read this section and route through the active graph-stack plan before
+editing. The direct implementation continuation is **Inc.1a**, not the
+completed WS1.2 cold-start path. No additional briefing is required, but the
+session must verify live dirty-tree and active-claim state before opening a
+claim.
 
 ### State on session start
 
@@ -172,15 +186,25 @@ additional briefing required.
   both **Status: Accepted 2026-05-11**.
 - Active plan:
   `.agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md`
-  (lifecycle `active`). WS0 + WS1.1 marked completed; WS1.2 row
-  (YAML `todos` id `ws1-rdf-term-quad`) is the next executable cycle.
-- `packages/core/graph-core/` exists with six empty-barrel sub-paths
-  (`.`, `./term`, `./dataset`, `./jsonld`, `./canon`, `./vocab`).
-  WS1.2 fills `./term` with the Term union + Quad and lands the
-  first paired test bundle.
-- Branch: `feat/mcp-graph-support-foundation`. HEAD includes
-  `ad2abb69` (WS1.1 scaffold) on top of the prior continuity
-  lineage.
+  (lifecycle `active`). WS0, WS1.1, WS1.2, WS1.3, WS1.4, and WS2.1
+  are completed. WS1.6 has a landed planning-prep note at `f36f98b1`.
+- `packages/core/graph-core/` already carries Term/Quad, DatasetCore +
+  DataFactory, and JSON-LD processor surfaces. The next `graph-core`
+  implementation choices are WS1.5 `src/canon/` canonicalisation or WS1.6
+  `src/vocab/` vocabulary registry implementation after respecting the owner
+  decisions in the prep note.
+- Cross-workspace Inc.1a choices are also available: WS2.2
+  jsonld-compatible ingestion in `packages/libs/graph-ingest/`, or WS3.1
+  `packages/libs/graph-project/` scaffold after a fresh root-file check.
+- Branch: `feat/mcp-graph-support-foundation`. Recent landed graph foundation
+  commits include WS1.1 `ad2abb69`, WS1.2 `1885fbcf`, WS1.3 `87e21125`, WS1.4
+  `95f42cb7`, WS2.1 `0f895070`, WS1.6 prep `f36f98b1`, and WS1.4 coordination
+  closeout `0d6f080a`.
+- Immediate single-agent recommendation: WS1.5 canon is the cleanest linear
+  continuation because it stays in `graph-core`, is unblocked by WS1.3/WS1.4,
+  and avoids root registration files. The Oak Ontology Threads proof remains the
+  first corpus/end-to-end proof, but it waits for the later `graph-corpus-sdk`
+  Inc.1b/Inc.1c path.
 
 ### Scaffold checklist additions for future scaffold cycles (WS2.1, WS3.1, WS4.1)
 
@@ -297,20 +321,13 @@ staging before reading active-claims defeats its purpose.
 8. `complete --intent-id ...` → `claims close ...` with summary
    citing the SHA.
 
-### After WS1.1 lands — promotion order
+### Historical WS1.1 promotion note — superseded
 
-Do **not** start WS1.2 until WS1.1 has landed green.
-
-1. Mark the YAML `todos` row `ws1-graph-core-scaffold` `status:
-   completed` (check sibling-row convention in the active plan
-   before editing).
-2. **WS1.2 next** — RDF Term hierarchy (`NamedNode`, `BlankNode`,
-   `Literal`, `DefaultGraph`) + `Quad` type, with type tests +
-   equality. Test-first cycle: one failing test, the product code
-   that greens it, one commit. Target shapes documented at
-   `.agent/research/graph-library.research.md` §4. `TripleTerm` is
-   WS1.2-or-later per the RDF 1.2-native stance (research §4 +
-   ADR-173 tripwire #2).
+The original post-WS1.1 promotion note routed to WS1.2. That route is now
+complete: WS1.2 landed at `1885fbcf`, WS1.3 at `87e21125`, WS1.4 at
+`95f42cb7`, and WS2.1 at `0f895070`. Do not use this historical block as the
+next-step authority. Current implementation routing lives at the top of this
+record and in the active graph-stack plan.
 
 ### Carry-in discipline summary
 
@@ -775,7 +792,7 @@ promotion.)
 | `Dim Hiding Secret` | `codex` | `GPT-5` | `019e1d` | `ws1-6-vocab-planning-prep-landed-at-f36f98b1` | 2026-05-12 | 2026-05-13 |
 | `Luminous Threading Asteroid` | `codex` | `GPT-5` | `019e1d` | `coordinator-handover-and-ws1-4-review-routing-closeout-at-0d6f080a` | 2026-05-12 | 2026-05-13 |
 | `Fiery Igniting Furnace` | `codex` | `GPT-5` | `019e1d` | `ws1-4-jsonld-processor-landed-at-95f42cb7` | 2026-05-12 | 2026-05-12 |
-| `Solar Gliding Twilight` | `codex` | `GPT-5` | `019e1d` | `ws1-4-review-support-plus-session-handoff-continuity-repair` | 2026-05-12 | 2026-05-13 |
+| `Solar Gliding Twilight` | `codex` | `GPT-5` | `019e1d` | `ws1-4-review-support-plus-continuity-cold-start-route-repair` | 2026-05-12 | 2026-05-13 |
 
 ## Plan Locations
 
