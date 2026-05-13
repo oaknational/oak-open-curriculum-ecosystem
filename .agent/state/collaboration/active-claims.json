@@ -1449,57 +1449,10 @@
       "updated_at": "2026-05-13T17:30:51.340Z",
       "expires_at": "2026-05-13T17:45:15.830Z",
       "phase": "abandoned",
-      "staged_name_status": "M\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nM\t.agent/state/collaboration/active-claims.json\nA\t.agent/state/collaboration/comms/427cba88-4155-402c-99ff-a701bd0b28b1.json\n",
       "staged_bundle_fingerprint": "3b0a73950c72c13ef5407d63ca07ebe639cbf800fab4d1ba32db6e630552db63",
-      "notes": "Abandoned before commit: shared-comms-log.md was queued but had no staged diff after unified comms append. Re-enqueueing exact staged set without shared-comms-log."
-    },
-    {
-      "intent_id": "82085596-aa7c-4de9-9208-cd6e9a96395b",
-      "claim_id": "f8c1a43a-7f33-4860-8b1f-bdac2f88fff7",
-      "agent_id": {
-        "agent_name": "Mossy Fruiting Thicket",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e22"
-      },
-      "files": [
-        ".agent/memory/operational/repo-continuity.md",
-        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
-        ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/comms/427cba88-4155-402c-99ff-a701bd0b28b1.json"
-      ],
-      "commit_subject": "docs(agent): refresh p5 handoff opener",
-      "queued_at": "2026-05-13T17:30:56.035Z",
-      "updated_at": "2026-05-13T17:31:12.511Z",
-      "expires_at": "2026-05-13T17:45:56.035Z",
-      "phase": "pre_commit",
       "staged_name_status": "M\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nM\t.agent/state/collaboration/active-claims.json\nA\t.agent/state/collaboration/comms/427cba88-4155-402c-99ff-a701bd0b28b1.json\n",
-      "staged_bundle_fingerprint": "3d88742026e7a8e9e40e86cb1a783bfeb3d9c1848d412af56298164e1008cf1f"
+      "notes": "Abandoned before commit: shared-comms-log.md was queued but had no staged diff after unified comms append. Re-enqueueing exact staged set without shared-comms-log."
     }
   ],
-  "claims": [
-    {
-      "claim_id": "f8c1a43a-7f33-4860-8b1f-bdac2f88fff7",
-      "agent_id": {
-        "agent_name": "Mossy Fruiting Thicket",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e22"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": [
-            "index/head"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-13T17:29:55Z",
-      "freshness_seconds": 900,
-      "sidebar_open": false,
-      "intent": "Stage and commit session-handoff continuity refresh for P5/P8 handoff.",
-      "intent_to_commit": "82085596-aa7c-4de9-9208-cd6e9a96395b"
-    }
-  ]
+  "claims": []
 }

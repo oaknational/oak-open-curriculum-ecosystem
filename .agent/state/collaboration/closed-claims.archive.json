@@ -23250,6 +23250,89 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "f8c1a43a-7f33-4860-8b1f-bdac2f88fff7",
+      "agent_id": {
+        "agent_name": "Mossy Fruiting Thicket",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T17:29:55Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit session-handoff continuity refresh for P5/P8 handoff.",
+      "archived_at": "2026-05-13",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-13T17:31:24Z",
+        "closed_by": {
+          "agent_name": "Mossy Fruiting Thicket",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Committed session-handoff continuity refresh at 948c8d0e; next opener points to mandatory P8 after P5 completion.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f8c1a43a-7f33-4860-8b1f-bdac2f88fff7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "874caff6-1a8a-479a-a575-56dc24580d52",
+      "agent_id": {
+        "agent_name": "Mossy Fruiting Thicket",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T17:31:45Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit handoff claim closure residue only.",
+      "intent_to_commit": "426e29bd-c997-4249-aa87-e3f7361315c0",
+      "archived_at": "2026-05-13",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-13T17:32:25Z",
+        "closed_by": {
+          "agent_name": "Mossy Fruiting Thicket",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Closed handoff lifecycle commit window after staged verification.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "874caff6-1a8a-479a-a575-56dc24580d52",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
