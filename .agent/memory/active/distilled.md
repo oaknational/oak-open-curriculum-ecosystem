@@ -150,36 +150,53 @@ not yet at N≥3.
 
 ## Recently Distilled — 2026-05-12 Napkin Rotation
 
-Distilled from the oversized 2026-05-12 napkin. Keep under validation before
-graduating to rules, PDRs, or collaboration-state docs.
+The nine entries previously held here have all graduated; routing is captured
+in the 2026-05-12 Volcanic Charring Furnace graduation log above. Brief
+disposition: pre-stage non-negotiability and advisory-decay → P3 commit-queue
+guard at `c083a1ab`; agent-tools unified CLI → P-Foundation landed; peer
+sidebars vs helpers → `inter-agent-sidebar-with-default-action` + agent-
+collaboration.md; pathspec discipline + verify-actual-contents → PDR-054 +
+peer-commit-absorption-third-direction pattern + agent-collaboration.md
+§ Treat Commit as a Short-Lived Shared Transaction Surface; gendered-
+pronoun default → user-memory + jc-* skill canonicals; tooling-discipline
+items (glob quoting, markdownlint --fix safety) live operationally rather
+than as distilled doctrine.
 
-- **Pre-stage sequence is non-negotiable.** Queue-list-only is not an
-  active-claims read. Before staging, re-read active `git:index/head` claims,
-  check directed/shared comms, enqueue intent, open the claim, then run
-  pathspec-only `git add`.
-- **Bare `git reset HEAD` is cross-agent destructive.** In multi-agent windows,
-  unstaging requires an explicit pathspec. Whole-index reset yanks peer staged
-  bundles out from under their owners.
-- **Verify actual commit contents after hooks.** `verify-staged` proves the
-  pre-commit bundle. Hook chains can mutate stage, so compare the post-commit
-  file list back to the queued bundle.
-- **Quote glob-shaped collaboration patterns.** A bare
-  `.agent/state/collaboration/comms/**` expands in the shell before the
-  CLI can treat it as an area pattern.
-- **Agent-tools must become a real unified CLI.** Build-on-every-invocation and
-  per-topic bins are architectural defects, not just latency. New subcommands
-  should wait for the P-Foundation unified entrypoint.
-- **Peer sidebars are for design; helper pools are for logistics.** Comparable
-  peer dialogue produced the design decision; coordinator-plus-helpers produced
-  routing overhead.
-- **Advisory protocols decay under pressure.** If a step can be skipped during
-  time pressure, repeated sessions show that it will be skipped. Route durable
-  cures toward enforcement or mechanical affordances.
-- **Default agent pronouns to they/them.** Agent names do not imply gender.
-  Gendered pronouns require self-declaration.
-- **Inspect diffs after `markdownlint --fix` on prose-heavy files.** Literal
-  plus signs, hash-number citations, and dash-led fragments can be rewritten
-  into Markdown structure.
+---
+
+## Recently Distilled — 2026-05-13 Three-Napkin Synthesis
+
+Substance routing for the three-rotation corpus
+(`napkin-2026-05-12.md` + `napkin-2026-05-12b.md` + `napkin-2026-05-13.md`)
+lives in the [historical synthesis report][synth-2026-05-13]. That report
+carries ten numbered findings (F1-F10), evidence arcs, rejected
+near-patterns, and routing decisions.
+
+[synth-2026-05-13]: ../../research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-13.md
+
+- **F1 is the cross-cutting constraint** — passive-guidance loses to artefact
+  gravity at the granularity of single decisions, with N=6 fresh corpus
+  instances on top of the four already in the existing
+  [`passive-guidance-loses-to-artefact-gravity`][f1-pattern] pattern and
+  [PDR-029][f1-pdr]. The behaviour-shape for every NEW cure designed after
+  2026-05-13: when choosing between a documented-but-not-enforced cure and
+  a mechanical cure that fires at the surface where the misshape would
+  otherwise land, prefer the mechanical cure. Passive guidance alone is a
+  watchlist item; pair it with a tripwire or do not call it a cure.
+
+[f1-pattern]: patterns/passive-guidance-loses-to-artefact-gravity.md
+[f1-pdr]: ../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md
+
+- **F2–F10 are routed to candidate destinations** —
+  [`pending-graduations.md`](../operational/pending-graduations.md)
+  carries explicit candidates with trigger conditions. Highest-value
+  next-touch items: PDR candidate `coordinator-role-as-allocator-not-
+  gatekeeper` (Ferny + Wooded + Brazen evidence, two failure modes
+  converging); rule candidate `boundary-design-strictness` for the
+  owner four-part doctrine; `agent-collaboration.md § Treat Commit as
+  a Short-Lived Shared Transaction Surface` amendment for mutual
+  mechanical verification + hook authority; thread-record-routing-
+  surfaces-drift amendment.
 
 ---
 

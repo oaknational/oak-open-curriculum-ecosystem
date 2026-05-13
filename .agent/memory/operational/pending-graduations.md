@@ -206,6 +206,142 @@ the queue churns.
 
 ## Entries
 
++ 2026-05-13; **Coordinator-role-as-allocator-not-gatekeeper (PDR candidate)**
+  (Coppery Kindling Anvil — three-napkin synthesis F2; Ferny's original
+  candidate plus cross-rotation evidence).
+  `[captured: 2026-05-13 | source: napkin+napkin-archive/napkin-2026-05-12.md+napkin-archive/napkin-2026-05-12b.md+research:historical-napkin-synthesis-2026-05-13 | target: pdr:coordinator-role-as-allocator-not-gatekeeper | trigger: owner-direction | size: M | status: pending]`
+  Three corpus instances of one root cause across two failure modes:
+  Wooded Spreading Thicket (over-write — sidebar file broke own gatekeeper
+  sweep), Brazen Stoking Ash (over-write — dispatcher coordination
+  artefacts generated friction the dispatcher then documented), Ferny
+  Regrowing Leaf (under-write — coordinator caution misread as licence to
+  do nothing while idle peers stood by). Both modes share root: the
+  coordinator role lacks a clean boundary between coordination outputs
+  and the work being coordinated. Companion to PDR-053/ADR-176
+  (orchestrator-vs-gate distinction); positive doctrine still missing on
+  *how a coordinator allocates work without becoming the gate that
+  serialises it*. Candidate substance: coordinator's job is allocation
+  and routing; gating is owned by mechanical hooks and per-implementer
+  re-verification; coordination artefacts route to a write-isolated
+  surface (separate branch/worktree/gitignored) so the coordinator does
+  not pollute the repo-wide gates they're trying to manage. Trigger:
+  owner direction; corpus already has N=3 instances. Promotion target:
+  PDR with companion pattern instances kept in `memory/active/patterns/`.
+
++ 2026-05-13; **Commit-window mutual mechanical verification +
+  hook-output authority (agent-collaboration.md amendment candidate)**
+  (Coppery Kindling Anvil — three-napkin synthesis F4).
+  `[captured: 2026-05-13 | source: napkin-archive/napkin-2026-05-12b.md+research:historical-napkin-synthesis-2026-05-13 | target: doc-amend:agent-collaboration | trigger: owner-direction | size: S | status: pending]`
+  Two companion observations from Brazen's dispatcher session: (a) the
+  pre-commit hook is uninterruptible by design, so STOP signal chains
+  cannot prevent a commit that has entered the hook window — the cure
+  is mutual mechanical verification (gatekeeper AND implementer both
+  re-run the gate immediately before `git commit`); (b) independent
+  gate probes vs hook-invoked gate probes can disagree under racing
+  landings (`pnpm knip` red on independent probe, then green inside
+  Lofty's hook window seconds later) — hook output is authoritative.
+  Both belong as a single amendment to
+  `agent-collaboration.md § Treat Commit as a Short-Lived Shared
+  Transaction Surface`. Already partially graduated: peer-pair review
+  is not commit authorship (line 196); pathspec discipline (lines
+  199-204). Candidate is the small focused addition naming the
+  authoritative-surface vs signal-chain distinction. Trigger: owner
+  direction; corpus has N=3 instances of the cluster.
+
++ 2026-05-13; **Boundary-design strictness rule candidate (owner
+  four-part doctrine)**
+  (Coppery Kindling Anvil — three-napkin synthesis F10; Quiet Stalking
+  Mirror's owner-stated capture).
+  `[captured: 2026-05-13 | source: napkin+research:historical-napkin-synthesis-2026-05-13 | target: rule:boundary-design-strictness | trigger: second-instance | size: S | status: pending]`
+  Owner-stated doctrine on 2026-05-13 during WS1.5 design review:
+  "no aliases, no fallbacks, fail fast and hard with helpful error
+  message, replace old with new". The four parts already exist
+  separately in `principles.md` (lines 159, 187, 268, 350). What is
+  new is the positive four-part formulation as a coherent
+  boundary-design discipline at first-derivative moments (new
+  wrapper, new adapter, new schema, new public API). Applied
+  immediately to WS1.5 canon wrapper design. Candidate destinations
+  in preference order: (1) new rule
+  `.agent/rules/boundary-design-strictness.md` operationalising the
+  four `principles.md` anchors as a positive boundary-design check;
+  (2) amendment to `apply-architectural-principles.md` adding the
+  four-part discipline as a worked operational instance; (3)
+  amendment to existing `replace-dont-bridge.md` to absorb the other
+  three parts. Adopter scope: next contributor in this repo who
+  designs a new boundary — ADR-shaped (rule), not PDR-shaped.
+  Trigger: second observation across a different boundary (next time
+  owner reiterates or applies this doctrine to a different surface).
+  Corpus has N=1.
+
++ 2026-05-13; **Thread-record routing-surfaces drift after coordinator
+  closeout (amendment candidate)**
+  (Coppery Kindling Anvil — three-napkin synthesis F5; Solar Gliding
+  Twilight's twin observations).
+  `[captured: 2026-05-13 | source: napkin+research:historical-napkin-synthesis-2026-05-13 | target: doc-amend:agent-collaboration+doc-amend:start-right-quick | trigger: second-instance | size: S | status: pending]`
+  Two independent drift instances within 24 hours from the same agent on
+  the same thread substrate: (a) live HEAD had WS1.6/WS1.4/coordination-
+  closeout landed while `repo-continuity.md`, the connecting thread
+  record, and the active graph plan still described WS1.4 as
+  pending/next; (b) the connecting thread record's top correctly named
+  next graph choices, but the cold-start opener block still routed
+  fresh sessions to completed WS1.2. Cure: treat all routing surfaces
+  in a thread record as live; coordinator closeouts must refresh them
+  all together; session opener must search for stale completed-work
+  identifiers before declaring the handoff current. Trigger:
+  second-agent observation (currently same agent twice within 24h).
+  Promotion target: amendment to `agent-collaboration.md` Cleanup
+  Ethics section + amendment to `start-right-quick` live-state
+  reading order naming both summary AND cold-start surfaces as live.
+
++ 2026-05-13; **Identity routing-tuple insufficient under shared Codex
+  prefix (P4 follow-on tooling backlog)**
+  (Coppery Kindling Anvil — three-napkin synthesis F7).
+  `[captured: 2026-05-13 | source: napkin+napkin-archive/napkin-2026-05-12.md+napkin-archive/napkin-2026-05-12b.md+research:historical-napkin-synthesis-2026-05-13 | target: plan:cost-of-collaboration-p4-followon | trigger: plan-execution-gated | size: M | status: pending]`
+  Corpus has N≥10 sessions across three Codex prefixes (`019e1d`:
+  Fiery + Dim + Verdant + Solar + Mossy + Uplifted + Luminous + Umbral;
+  `019e1c`: Lofty + Shaded + Radiant + Penumbral + Secret;
+  `019e1b`: Galactic + Coastal + Lush + Hushed + Twigged etc.).
+  Ferny's coordinator observation: "coordinator can't tell from claims
+  surface alone whether three names = one session or three sessions."
+  P4 landed `claims active-agents` but did not solve rename-within-
+  session shape. Candidate cures: session-aware identity discipline
+  (one name per session even on rename), OR explicit "rename within
+  session" comms-event class so the coordinator sees `Fiery → Dim →
+  Verdant` as one session, OR richer claims surface aggregating by
+  `session_id_prefix`. Implementation work, not new doctrine; route
+  to cost-of-collaboration P4-followon when that lane reopens.
+
++ 2026-05-13; **Long-running monitor loop dual-timestamp discipline
+  (first instance)**
+  (Coppery Kindling Anvil — three-napkin synthesis F8; Umbral Masking
+  Silhouette's observation).
+  `[captured: 2026-05-13 | source: napkin+research:historical-napkin-synthesis-2026-05-13 | target: doc-amend:collaboration-state-conventions | trigger: second-instance | size: S | status: pending]`
+  Sorting comms JSON by embedded `created_at` missed freshly written
+  message files whose timestamps were earlier than the current tail.
+  Cure: long-running monitors must combine semantic timestamp reads
+  with an mtime/file-freshness pass before reporting "no new messages."
+  First-instance; not yet at trigger. Promotion target when triggered:
+  `collaboration-state-conventions.md` operational note in the comms-
+  monitor section.
+
++ 2026-05-13; **Lockfile-in-flux without coordination-layer declaration
+  (start-right grounding amendment)**
+  (Coppery Kindling Anvil — three-napkin synthesis F9; Quiet Stalking
+  Mirror's WS1.5 hold).
+  `[captured: 2026-05-13 | source: napkin+research:historical-napkin-synthesis-2026-05-13 | target: doc-amend:start-right-quick | trigger: owner-direction | size: S | status: pending]`
+  The dependency refresh slice (43 files: pnpm@10.33.4→@11.1.1, every
+  workspace package.json, lockfile, SDK codegen artefacts) was visible
+  only via `repo-continuity.md § Next Safe Steps`, not via
+  `active-claims.json` or `shared-comms-log.md`. WS1.5 was correctly
+  held on lockfile-collision grounds, but the held could have been
+  avoided. Cure: "if `active-claims.json` shows no claim on a dirty
+  slice, cross-check `repo-continuity.md § Next Safe Steps` for
+  owner-direction landing notes before treating the dirty slice as
+  orphaned." Single one-line addition to `start-right-quick`'s
+  live-state reading order. First-instance; trigger: owner direction
+  to land the cheap addition (no second-instance theatre needed for a
+  one-line grounding amendment).
+
 + 2026-05-12; **Commit-boundary peer-pair governance refinements**
   (Volcanic Charring Furnace distilled-stage processing of
   `napkin-2026-05-12b.md` learning).
