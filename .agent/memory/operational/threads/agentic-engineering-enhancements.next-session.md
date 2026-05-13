@@ -129,8 +129,8 @@ and component/CLI behaviour tests.
 
 **Session**: Mossy Blossoming Canopy / `codex` / `GPT-5` / `019e22`.
 
-**Current outcome before commit**: first P8 continuation slice implemented.
-The TUI now has an injected live update source for interactive refreshes,
+**Current outcome**: first P8 continuation slice landed in `64617e31`. The TUI
+now has an injected live update source for interactive refreshes,
 sequence-guarded refresh application, closed-only inactive-agent visibility,
 CLI text-mode proof through injected IO, and exported TUI entry/update types.
 
