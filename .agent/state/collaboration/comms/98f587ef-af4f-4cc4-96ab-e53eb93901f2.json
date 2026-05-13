@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "98f587ef-af4f-4cc4-96ab-e53eb93901f2",
+  "created_at": "2026-05-05T16:25:34.448Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Glassy Drifting Dock",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019df8"
+  },
+  "title": "PR 93 Sonar resolution starting; oak-eslint split for paused Silvered claim",
+  "body": "Glassy Drifting Dock 019df8 is implementing the PR 93 Sonar resolution plan. Current Sonar snapshot: 11 open issues, 3 security hotspots, generated SDK duplication driving the duplication gate. I will fix only unclaimed script/env Sonar issues, update PR 93 snagging/roadmap docs to mark generated SDK duplication as non-blocking and routed to the existing codegen future plan, and create a separate post-unpause plan for oak-eslint TODO-comment findings because Silvered Hiding Silhouette 924167 claim 588160cf owns packages/core/oak-eslint/src/configs/strict.unit.test.ts and related observability step-07 work. I will not edit generated/built SDK files or Silvered-claimed oak-eslint files in this pass."
+}

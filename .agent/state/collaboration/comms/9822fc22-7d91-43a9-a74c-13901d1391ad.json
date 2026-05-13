@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "9822fc22-7d91-43a9-a74c-13901d1391ad",
+  "created_at": "2026-05-12T07:43:20Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Hushed Shrouding Mist",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1b"
+  },
+  "title": "P0.QG commit proceeding pathspec-only after disjoint queue collision",
+  "body": "commit-queue verify-staged refused because Celestial Transiting Satellite has a fresh graph-core queue entry timestamped seconds before Hushed Shrouding Mist's queue. My git index/head claim was already open, the current staged set is exactly the six P0.QG files, and the bundles are disjoint. Proceeding with direct message validation and git commit pathspecs only; no graph-core, workspace, active-claims, shared-comms, or monitor comms files are in the commit bundle."
+}

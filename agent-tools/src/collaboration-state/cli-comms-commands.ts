@@ -5,26 +5,20 @@ import { dirname, join, parse } from 'node:path';
 import { renderSharedCommsLog } from './comms.js';
 import { resolveIdentity } from './cli-identity.js';
 import { optional, required, valueOrDefault, type Options } from './cli-options.js';
+import { cliIo, type CliRuntime } from './cli-runtime.js';
 import { assertIdentityCanWrite } from './identity-write-guard.js';
 import { validateSharedStateAgentId } from './identity.js';
-import {
-  readDirectedCommsMessages,
-  readLifecycleCommsEvents,
-  readNarrativeCommsEvents,
-  writeNarrativeCommsEvent,
-} from './state-io.js';
-import { writeTextFileAtomically } from './transaction.js';
 import { type CollaborationStateEnvironment } from './types.js';
 
-const DEFAULT_EVENTS_DIR = '.agent/state/collaboration/comms-events';
-const DEFAULT_LIFECYCLE_DIR = '.agent/state/collaboration/comms-lifecycle';
-const DEFAULT_MESSAGES_DIR = '.agent/state/collaboration/comms-messages';
+const DEFAULT_COMMS_DIR = '.agent/state/collaboration/comms';
 const DEFAULT_SHARED_LOG = '.agent/state/collaboration/shared-comms-log.md';
 
 export async function appendComms(
   options: Options,
   env: CollaborationStateEnvironment,
+  runtime: CliRuntime = {},
 ): Promise<string> {
+  const io = cliIo(runtime);
   const identity = resolveIdentity(options, env);
   const validation = validateSharedStateAgentId({ agentId: identity.agent_id, env });
   if (!validation.ok) {
@@ -35,14 +29,17 @@ export async function appendComms(
     agentId: identity.agent_id,
     nowIso: required(options, 'now'),
     surface: 'comms append',
+    readActiveClaimsFile: io.readActiveClaimsFile,
   });
 
-  await writeNarrativeCommsEvent({
-    eventsDir: required(options, 'events-dir'),
+  await io.writeCommsEvent({
+    commsDir: required(options, 'comms-dir'),
     nowIso: required(options, 'now'),
     event: {
+      schema_version: '2.0.0',
       event_id: valueOrDefault(options, 'event-id', randomUUID()),
       created_at: required(options, 'created-at'),
+      kind: 'narrative',
       author: identity.agent_id,
       title: required(options, 'title'),
       body: required(options, 'body'),
@@ -52,28 +49,47 @@ export async function appendComms(
   return '';
 }
 
-export async function renderComms(options: Options): Promise<string> {
-  const narrative = await readNarrativeCommsEvents(required(options, 'events-dir'));
-  const lifecycle = await readLifecycleCommsEvents(required(options, 'lifecycle-dir'));
-  const directed = await readDirectedCommsMessages(required(options, 'messages-dir'));
-  await writeTextFileAtomically({
+export async function renderComms(
+  options: Options,
+  _env?: CollaborationStateEnvironment,
+  runtime: CliRuntime = {},
+): Promise<string> {
+  const io = cliIo(runtime);
+  const events = await io.readCommsEvents(required(options, 'comms-dir'));
+  await io.writeTextFile({
     filePath: required(options, 'output'),
-    text: renderSharedCommsLog({ narrative, lifecycle, directed }),
+    text: renderSharedCommsLog({ events }),
   });
 
   return '';
 }
 
+export async function migrateComms(
+  options: Options,
+  _env?: CollaborationStateEnvironment,
+  runtime: CliRuntime = {},
+): Promise<string> {
+  const migrated = await cliIo(runtime).migrateLegacyCommsDirectories({
+    eventsDir: required(options, 'events-dir'),
+    lifecycleDir: required(options, 'lifecycle-dir'),
+    messagesDir: required(options, 'messages-dir'),
+    commsDir: required(options, 'comms-dir'),
+  });
+
+  return `migrated ${migrated} comms events\n`;
+}
+
 export async function sendComms(
   options: Options,
   env: CollaborationStateEnvironment,
+  runtime: CliRuntime = {},
 ): Promise<string> {
   const nowIso = optional(options, 'now') ?? new Date().toISOString();
   const eventId = valueOrDefault(options, 'event-id', randomUUID());
   const defaults = commsSendDefaults(options, nowIso, eventId);
   const resolvedOptions = withDefaults(options, defaults);
-  await appendComms(resolvedOptions, env);
-  await renderComms(resolvedOptions);
+  await appendComms(resolvedOptions, env, runtime);
+  await renderComms(resolvedOptions, env, runtime);
 
   return formatCommsSendResult(resolvedOptions, eventId);
 }
@@ -85,9 +101,7 @@ export function commsSendDefaults(
 ): Readonly<Record<string, string>> {
   const repoRoot = collaborationRepoRoot(options);
   return {
-    'events-dir': join(repoRoot, DEFAULT_EVENTS_DIR),
-    'lifecycle-dir': join(repoRoot, DEFAULT_LIFECYCLE_DIR),
-    'messages-dir': join(repoRoot, DEFAULT_MESSAGES_DIR),
+    'comms-dir': join(repoRoot, DEFAULT_COMMS_DIR),
     now: nowIso,
     'created-at': nowIso,
     'event-id': eventId,
@@ -114,7 +128,7 @@ function commsSendResult(
 }> {
   return {
     event_id: eventId,
-    event_path: join(required(options, 'events-dir'), `${eventId}.json`),
+    event_path: join(required(options, 'comms-dir'), `${eventId}.json`),
     shared_log_path: required(options, 'output'),
   };
 }

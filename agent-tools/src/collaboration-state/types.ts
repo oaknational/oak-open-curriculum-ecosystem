@@ -108,16 +108,19 @@ export interface ClosedClaimsArchive {
   readonly claims: readonly CollaborationClaim[];
 }
 
-/**
- * Narrative communication event — the canonical and dominant event kind.
- * An authored, titled, bodied communication addressed to the team (or to a
- * specific agent or audience via the optional routing affordances). Lives in
- * `.agent/state/collaboration/comms-events/`. Projects `$defs.narrative` in
- * `comms-event.schema.json`.
- */
-export interface NarrativeCommsEvent {
+interface BaseCommsEvent {
+  readonly schema_version: '2.0.0';
   readonly event_id: string;
   readonly created_at: string;
+}
+
+/**
+ * Narrative communication event — an authored, titled, bodied communication
+ * addressed to the team or a narrower audience. Lives in the canonical
+ * `.agent/state/collaboration/comms/` directory.
+ */
+export interface NarrativeCommsEvent extends BaseCommsEvent {
+  readonly kind: 'narrative';
   readonly author: CollaborationAgentId;
   readonly title: string;
   readonly body: string;
@@ -128,16 +131,12 @@ export interface NarrativeCommsEvent {
 }
 
 /**
- * Lifecycle communication event — a structured record of a session, claim,
- * or consolidation lifecycle moment, carrying explicit thread and claim_id
- * context. Lives in `.agent/state/collaboration/comms-lifecycle/`. Projects
- * `$defs.lifecycle` in `comms-event.schema.json`. `claim_id` may be an empty
- * string when the event is not claim-scoped.
+ * Lifecycle communication event — a structured record of a session, claim, or
+ * consolidation lifecycle moment. `claim_id` may be empty when the event is
+ * not claim-scoped.
  */
-export interface LifecycleCommsEvent {
-  readonly schema_version: string;
-  readonly event_id: string;
-  readonly created_at: string;
+export interface LifecycleCommsEvent extends BaseCommsEvent {
+  readonly kind: 'lifecycle';
   readonly event_type: string;
   readonly occurred_at: string;
   readonly author: CollaborationAgentId;
@@ -150,19 +149,17 @@ export interface LifecycleCommsEvent {
 }
 
 /**
- * Directed communication message — a point-to-point message from one agent
- * to another, carrying explicit from/to identities and a `kind` discriminator.
- * Lives in `.agent/state/collaboration/comms-messages/`. Projects
- * `$defs.directed` in `comms-event.schema.json`. The post-migration shape
- * uses `created_at`; the legacy `timestamp` field is renamed on migration.
+ * Directed communication message — a point-to-point message from one agent to
+ * another. `kind` is the top-level comms discriminator; `message_kind` carries
+ * the directed-message sub-kind.
  */
-export interface DirectedCommsMessage {
-  readonly schema_version: string;
-  readonly event_id: string;
-  readonly created_at: string;
-  readonly kind: string;
+export interface DirectedCommsMessage extends BaseCommsEvent {
+  readonly kind: 'directed';
+  readonly message_kind: string;
   readonly from: CollaborationAgentId;
   readonly to: CollaborationAgentId;
   readonly subject: string;
   readonly body: string;
 }
+
+export type CommsEvent = NarrativeCommsEvent | LifecycleCommsEvent | DirectedCommsMessage;

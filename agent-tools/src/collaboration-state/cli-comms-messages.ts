@@ -1,19 +1,17 @@
 import { randomUUID } from 'node:crypto';
-import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import { resolveIdentity } from './cli-identity.js';
 import { optional, required, valueOrDefault, type Options } from './cli-options.js';
+import { cliIo, type CollaborationStateCliIo, type CliRuntime } from './cli-runtime.js';
 import { assertIdentityCanWrite } from './identity-write-guard.js';
 import { validateSharedStateAgentId } from './identity.js';
-import { readDirectedCommsMessages } from './state-io.js';
 import {
   type CollaborationAgentId,
   type CollaborationStateEnvironment,
   type DirectedCommsMessage,
 } from './types.js';
 
-const DIRECTED_COMMS_SCHEMA_VERSION = '1.0.0';
 const MAX_REPLY_SUBJECT_LENGTH = 200;
 
 /**
@@ -23,20 +21,29 @@ const MAX_REPLY_SUBJECT_LENGTH = 200;
 export async function directComms(
   options: Options,
   env: CollaborationStateEnvironment,
+  runtime: CliRuntime = {},
 ): Promise<string> {
+  const io = cliIo(runtime);
   const eventId = valueOrDefault(options, 'event-id', randomUUID());
+  const nowIso = valueOrDefault(options, 'now', new Date().toISOString());
   const message: DirectedCommsMessage = {
-    schema_version: DIRECTED_COMMS_SCHEMA_VERSION,
+    schema_version: '2.0.0',
     event_id: eventId,
-    created_at: valueOrDefault(options, 'now', new Date().toISOString()),
-    kind: nonEmptyRequired(options, 'kind'),
-    from: await currentAgent(options, env, 'comms direct'),
+    created_at: nowIso,
+    kind: 'directed',
+    message_kind: nonEmptyRequired(options, 'kind'),
+    from: await currentAgent(options, env, 'comms direct', io),
     to: recipientAgent(options),
     subject: nonEmptyRequired(options, 'subject'),
     body: nonEmptyRequired(options, 'body'),
   };
 
-  return writeDirectedMessage({ messagesDir: required(options, 'messages-dir'), message });
+  return writeDirectedMessage({
+    commsDir: required(options, 'comms-dir'),
+    nowIso,
+    message,
+    io,
+  });
 }
 
 /**
@@ -45,43 +52,60 @@ export async function directComms(
 export async function replyComms(
   options: Options,
   env: CollaborationStateEnvironment,
+  runtime: CliRuntime = {},
 ): Promise<string> {
-  const source = await sourceMessageForReply(options);
-  const from = await currentAgent(options, env, 'comms reply');
+  const io = cliIo(runtime);
+  const source = await sourceMessageForReply(options, io);
+  const from = await currentAgent(options, env, 'comms reply', io);
   assertSameAgent(from, source.to);
   const eventId = valueOrDefault(options, 'event-id', randomUUID());
+  const nowIso = valueOrDefault(options, 'now', new Date().toISOString());
   const message: DirectedCommsMessage = {
-    schema_version: DIRECTED_COMMS_SCHEMA_VERSION,
+    schema_version: '2.0.0',
     event_id: eventId,
-    created_at: valueOrDefault(options, 'now', new Date().toISOString()),
-    kind: nonEmptyRequired(options, 'kind'),
+    created_at: nowIso,
+    kind: 'directed',
+    message_kind: nonEmptyRequired(options, 'kind'),
     from,
     to: source.from,
     subject: optional(options, 'subject') ?? defaultReplySubject(source.subject),
     body: nonEmptyRequired(options, 'body'),
   };
 
-  return writeDirectedMessage({ messagesDir: required(options, 'messages-dir'), message });
+  return writeDirectedMessage({
+    commsDir: required(options, 'comms-dir'),
+    nowIso,
+    message,
+    io,
+  });
 }
 
 async function writeDirectedMessage(input: {
-  readonly messagesDir: string;
+  readonly commsDir: string;
+  readonly nowIso: string;
   readonly message: DirectedCommsMessage;
+  readonly io: CollaborationStateCliIo;
 }): Promise<string> {
-  await mkdir(input.messagesDir, { recursive: true });
-  const path = join(input.messagesDir, `${input.message.event_id}.json`);
-  await writeFile(path, `${JSON.stringify(input.message, null, 2)}\n`, { flag: 'wx' });
-  const written = await readDirectedCommsMessages(input.messagesDir);
+  const path = join(input.commsDir, `${input.message.event_id}.json`);
+  await input.io.writeCommsEvent({
+    commsDir: input.commsDir,
+    nowIso: input.nowIso,
+    event: input.message,
+  });
+  const written = await input.io.readDirectedCommsMessages(input.commsDir);
   if (!written.some((message) => message.event_id === input.message.event_id)) {
     throw new Error(`directed message readback failed for ${input.message.event_id}`);
   }
 
-  return `wrote directed message ${input.message.event_id} to ${path}\n`;
+  return `wrote comms event ${input.message.event_id} to ${path}\n`;
 }
 
-async function sourceMessageForReply(options: Options): Promise<DirectedCommsMessage> {
+async function sourceMessageForReply(
+  options: Options,
+  io: CollaborationStateCliIo,
+): Promise<DirectedCommsMessage> {
   const sourceEventId = nonEmptyRequired(options, 'to-event-id');
-  const messages = await readDirectedCommsMessages(required(options, 'messages-dir'));
+  const messages = await io.readDirectedCommsMessages(required(options, 'comms-dir'));
   const source = messages.find((message) => message.event_id === sourceEventId);
   if (source === undefined) {
     throw new Error(`directed message not found: ${sourceEventId}`);
@@ -94,6 +118,7 @@ async function currentAgent(
   options: Options,
   env: CollaborationStateEnvironment,
   surface: string,
+  io: CollaborationStateCliIo,
 ): Promise<CollaborationAgentId> {
   const identity = resolveIdentity(options, env);
   const validation = validateSharedStateAgentId({ agentId: identity.agent_id, env });
@@ -105,6 +130,7 @@ async function currentAgent(
     agentId: identity.agent_id,
     nowIso: valueOrDefault(options, 'now', new Date().toISOString()),
     surface,
+    readActiveClaimsFile: io.readActiveClaimsFile,
   });
 
   return identity.agent_id;

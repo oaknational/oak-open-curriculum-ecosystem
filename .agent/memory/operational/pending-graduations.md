@@ -872,7 +872,7 @@ the queue churns.
   response inside the deadline window"). Possible PDR candidate
   encoding the more general principle: agent-to-agent coordination
   is direct unless the decision is owner-owned. Possibly an ADR
-  amendment to ADR-150 (Continuity Surfaces) since comms-events live
+  amendment to ADR-150 (Continuity Surfaces) since comms live
   in that surface.
   Trigger-condition: second instance of agent-to-agent coordination
   resolving without owner mediation (this Gnarled-Lacustrine round
@@ -975,7 +975,7 @@ continuity snapshots.
   Specific instance: I edited `shared-comms-log.md` directly during
   session-handoff to post a heads-up to Moonlit Shimmering Comet about
   the OAuth proxy test gate. The file is generated from
-  `.agent/state/collaboration/comms-events/*.json` (its own header
+  `.agent/state/collaboration/comms/*.json` (its own header
   documents this via `> Generated from ...`); regeneration overwrote
   my manual append, the heads-up never reached the rendered log, and
   my session-handoff summary claimed it had. Discovered when owner
@@ -989,8 +989,8 @@ continuity snapshots.
   Graduation-target: extend
   [`.agent/rules/use-agent-comms-log.md`](../../rules/use-agent-comms-log.md)
   to state explicitly *"the rendered `shared-comms-log.md` is generated;
-  do not edit it directly — author comms-events as JSON files under
-  `.agent/state/collaboration/comms-events/<uuid>.json` only"*.
+  do not edit it directly — author comms as JSON files under
+  `.agent/state/collaboration/comms/<uuid>.json` only"*.
   Currently the rule references *"timestamped comms event that renders
   into shared-comms-log.md"* without naming that direct edits are
   reverted by regeneration. The discipline is implicit in the generator
@@ -1946,7 +1946,7 @@ continuity snapshots.
   new evidence). Second-instance evidence (2026-04-30):
   `pnpm agent-tools:agent-identity` does not inherit
   `PRACTICE_AGENT_SESSION_ID_CLAUDE` through `pnpm --filter` (forcing
-  --seed); `comms append` requires `--events-dir`, `--now`,
+  --seed); `comms append` requires `--comms-dir`, `--now`,
   `--created-at` with no discoverable defaults; `claims open` requires
   `--active`, `--thread`, `--area-kind` (with `--area-kind` rejecting
   intuitive values like `shared-state` — only `files`/`workspace`/`plan`/
@@ -2416,8 +2416,8 @@ continuity snapshots.
   pass by Riverine Fishing Rudder `b89da0`). Observed: Vining
   discovered that `session-handoff.md §6a` listed napkin buffers as
   source collection for session-close recordings but did not name
-  comms-events as an auxiliary source. The gap was directly relevant
-  to the in-flight consolidation work (Step 2 required comms-events
+  comms as an auxiliary source. The gap was directly relevant
+  to the in-flight consolidation work (Step 2 required comms
   as its primary read source). Vining patched the workflow file
   within the same session that exposed the gap — not in a later
   session. The default Practice cadence is capture-in-one-session /
@@ -2430,7 +2430,7 @@ continuity snapshots.
   gates directive-file edits; non-directive workflow files (commands,
   skills, permanent docs) are not gated.
   Source-surface: comms events `dfdea3f7` (Ashen handoff listing
-  buffers without comms-events) → `8170aad1` (Vining arrival
+  buffers without comms) → `8170aad1` (Vining arrival
   reply noting the gap) → commit `84879230`; Step 2 Surprise B in
   archive `napkin-2026-05-06.md`.
   Graduation-target: amendment to PDR-014 (consolidation flow)
@@ -2454,21 +2454,21 @@ continuity snapshots.
   the local branch head to a new SHA mid-session, re-ran the
   verification against the new head, and posted a fresh completion
   event — all without any comms exchange between the two threads.
-  The shared substrate (immutable comms-events ordered by
+  The shared substrate (immutable comms ordered by
   `created_at` + git history) was sufficient context for cross-thread
   adaptation. Behaviour change: treat git-history advances on a
   shared branch as observable cross-thread coordination signals; a
   cross-thread peer re-running their verification against a new head
   SHA is correct substrate use, not a violation of thread isolation.
   Thread-scoped identity (PDR-027) does not preclude cross-thread
-  substrate observation; the active-areas registry, comms-events,
+  substrate observation; the active-areas registry, comms,
   and git history are all shared observable surfaces.
   Source-surface: comms events `9d1b26c0`, `9ad379a7`, `eecb8de8`,
   `f4d5adaf`; Step 2 Surprise C in archive `napkin-2026-05-06.md`.
   Graduation-target: amendment to PDR-027 §Thread and Session Scope
   adding a note that thread-scoped identity does not exclude
   cross-thread substrate observation (git history, active-areas
-  registry, comms-events), OR new `distilled.md §Agent-Coordination`
+  registry, comms), OR new `distilled.md §Agent-Coordination`
   entry naming the shared observable surfaces.
   Trigger-condition: second instance of a cross-thread adaptation
   driven by git-history observation without explicit comms exchange;
@@ -2738,7 +2738,7 @@ consolidation to triage.
 
 ### 2026-05-11 — Cross-schema events in single directory (without discriminator)
 
-The `comms-events/` directory carries two schemas simultaneously
+The `comms/` directory carries two schemas simultaneously
 without a discriminator: append-only-narrative log events
 (`created_at / author / title / body`) and inter-agent directed
 messages (`timestamp / from / to / subject / kind / schema_version`).
@@ -2746,8 +2746,8 @@ messages (`timestamp / from / to / subject / kind / schema_version`).
 schema), so the 2 message-shape events trip the parser. B-01 was
 misdiagnosed for an entire session because of this. Cure shape
 choices (one architecturally-excellent option to be picked):
-**split directories** (`comms-events/` for narrative,
-`comms-messages/` for directed messages), **widen the parser with a
+**split directories** (`comms/` for narrative,
+`comms/` for directed messages), **widen the parser with a
 discriminator field**, or **deprecate the directed-message schema**
 in favour of narrative.
 
@@ -3021,7 +3021,7 @@ that coordinator role is structurally the largest source of timing-
 coupled gate trips; status: pending | size: L]`
 
 The coordinator role necessarily writes coordination artefacts
-(broadcasts, briefs, comms-messages, sidebars, monitor telemetry).
+(broadcasts, briefs, comms, sidebars, monitor telemetry).
 Under repo-wide pre-commit gates these become the role's largest
 source of timing-coupled gate trips. Iteration 3 of the 2026-05-11
 deadlock was triggered by the coordinator's own sidebar file. Fix

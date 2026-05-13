@@ -59,22 +59,18 @@ describe('buildCollaborationTuiSnapshot', () => {
     const snapshot = buildCollaborationTuiSnapshot({
       registry,
       closedArchive,
-      narrative: [
+      events: [
         narrative({
           event_id: 'older',
           created_at: '2026-05-12T12:00:00Z',
           title: 'Older note',
         }),
-      ],
-      lifecycle: [
         lifecycle({
           event_id: 'newer',
           created_at: '2026-05-12T13:00:00Z',
           event_type: 'session_handoff',
           title: 'Handoff landed',
         }),
-      ],
-      directed: [
         directed({
           event_id: 'directed-1',
           created_at: '2026-05-12T13:30:00Z',
@@ -150,8 +146,10 @@ function queueEntry(
 
 function narrative(overrides: Partial<NarrativeCommsEvent> = {}): NarrativeCommsEvent {
   return {
+    schema_version: '2.0.0',
     event_id: 'narrative-1',
     created_at: '2026-05-12T12:00:00Z',
+    kind: 'narrative',
     author: codexAgent,
     title: 'Shared note',
     body: 'Shared note body.',
@@ -161,8 +159,9 @@ function narrative(overrides: Partial<NarrativeCommsEvent> = {}): NarrativeComms
 
 function lifecycle(overrides: Partial<LifecycleCommsEvent> = {}): LifecycleCommsEvent {
   return {
-    schema_version: '1.0.0',
+    schema_version: '2.0.0',
     event_id: 'lifecycle-1',
+    kind: 'lifecycle',
     event_type: 'session_handoff',
     created_at: '2026-05-12T12:30:00Z',
     occurred_at: '2026-05-12T12:30:00Z',
@@ -179,10 +178,11 @@ function lifecycle(overrides: Partial<LifecycleCommsEvent> = {}): LifecycleComms
 
 function directed(overrides: Partial<DirectedCommsMessage> = {}): DirectedCommsMessage {
   return {
-    schema_version: '1.0.0',
+    schema_version: '2.0.0',
     event_id: 'directed-1',
     created_at: '2026-05-12T13:30:00Z',
-    kind: 'note',
+    kind: 'directed',
+    message_kind: 'note',
     from: codexAgent,
     to: cursorAgent,
     subject: 'Directed note',

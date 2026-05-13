@@ -4,9 +4,8 @@
  * fixtures of each event kind (narrative, lifecycle, directed).
  *
  * The schema is the single source of truth for the inter-agent communication
- * protocol; this test asserts that the authored schema matches the observed
- * reality of the three event families discovered in the comms-events corpus on
- * 2026-05-11 (refuted-premise pre-flight scan).
+ * protocol; this test asserts that the authored schema matches the unified
+ * v2 communication event shape.
  */
 import Ajv from 'ajv/dist/2020.js';
 import { describe, expect, it } from 'vitest';
@@ -28,16 +27,20 @@ const sylvan = {
 } as const;
 
 const canonicalNarrative = {
+  schema_version: '2.0.0',
   event_id: '00de9e88-44a5-41c1-a9a5-6488a890ff07',
   created_at: '2026-05-07T15:49:02Z',
+  kind: 'narrative',
   author: woodland,
   title: 'Test event title',
   body: 'Test event body.',
 } as const;
 
 const narrativeWithAffordances = {
+  schema_version: '2.0.0',
   event_id: 'claude-7402c9-prismatic-a1-acceptance-criterion-shift',
   created_at: '2026-05-03T09:35:57Z',
+  kind: 'narrative',
   author: woodland,
   audience: ['*'],
   addressed_to: 'Sylvan Fruiting Glade',
@@ -48,9 +51,10 @@ const narrativeWithAffordances = {
 } as const;
 
 const lifecycle = {
-  schema_version: '1.3.0',
+  schema_version: '2.0.0',
   event_id: 'fe4acc7e-cons-doc-2026-04-29-14-30',
   created_at: '2026-04-29T14:30:00Z',
+  kind: 'lifecycle',
   event_type: 'comms_event',
   occurred_at: '2026-04-29T14:30:00Z',
   author: woodland,
@@ -63,10 +67,11 @@ const lifecycle = {
 } as const;
 
 const directedPostMigration = {
-  schema_version: '1.0.0',
+  schema_version: '2.0.0',
   event_id: '3882213c-a6b1-4661-a1cd-a261f50ea5e8',
   created_at: '2026-05-10T18:15:00Z',
-  kind: 'session-handoff-summary',
+  kind: 'directed',
+  message_kind: 'session-handoff-summary',
   from: woodland,
   to: sylvan,
   subject: 'Session-handoff summary',
@@ -127,6 +132,7 @@ describe('comms-event.schema.json — canonical protocol authority', () => {
       schema_version: lifecycle.schema_version,
       event_id: lifecycle.event_id,
       created_at: lifecycle.created_at,
+      kind: lifecycle.kind,
       occurred_at: lifecycle.occurred_at,
       author: lifecycle.author,
       agent_id: lifecycle.agent_id,
@@ -152,6 +158,7 @@ describe('comms-event.schema.json — canonical protocol authority', () => {
       event_id: directedPostMigration.event_id,
       timestamp: directedPostMigration.created_at,
       kind: directedPostMigration.kind,
+      message_kind: directedPostMigration.message_kind,
       from: directedPostMigration.from,
       to: directedPostMigration.to,
       subject: directedPostMigration.subject,
@@ -167,6 +174,7 @@ describe('comms-event.schema.json — canonical protocol authority', () => {
       event_id: directedPostMigration.event_id,
       created_at: directedPostMigration.created_at,
       kind: directedPostMigration.kind,
+      message_kind: directedPostMigration.message_kind,
       from: directedPostMigration.from,
       subject: directedPostMigration.subject,
       body: directedPostMigration.body,

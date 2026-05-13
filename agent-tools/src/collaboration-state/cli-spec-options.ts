@@ -1,5 +1,5 @@
 export const commsAppendOptions = [
-  'events-dir',
+  'comms-dir',
   'now',
   'created-at',
   'title',
@@ -15,7 +15,7 @@ export const commsSendOptions = [
   'body',
   'platform',
   'model',
-  'events-dir',
+  'comms-dir',
   'output',
   'active',
   'repo-root',
@@ -24,7 +24,7 @@ export const commsSendOptions = [
 ] as const;
 
 export const commsWatchOptions = [
-  'messages-dir',
+  'comms-dir',
   'agent-name',
   'seen-file',
   'session-prefix',
@@ -33,7 +33,7 @@ export const commsWatchOptions = [
 ] as const;
 
 export const commsDirectOptions = [
-  'messages-dir',
+  'comms-dir',
   'to-agent-name',
   'to-platform',
   'to-model',
@@ -49,7 +49,7 @@ export const commsDirectOptions = [
 ] as const;
 
 export const commsReplyOptions = [
-  'messages-dir',
+  'comms-dir',
   'to-event-id',
   'kind',
   'body',

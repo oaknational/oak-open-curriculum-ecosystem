@@ -1,7 +1,7 @@
 export { activeAgentReports, assertNoLiveIdentityRoutingCollision } from './active-agents.js';
 export { deriveCollaborationIdentity, validateSharedStateAgentId } from './identity.js';
 export { auditCodexIdentityRecords } from './identity-audit.js';
-export { createNarrativeCommsEvent, renderSharedCommsLog } from './comms.js';
+export { createCommsEvent, renderSharedCommsLog } from './comms.js';
 export { archiveStaleClaims } from './claims.js';
 export { runCollaborationStateCli } from './cli.js';
 export { buildCollaborationTuiSnapshot, type CollaborationTuiSnapshot } from './tui/snapshot.js';
@@ -13,6 +13,7 @@ export type {
   CollaborationClaim,
   CollaborationCommitQueueEntry,
   CollaborationRegistry,
+  CommsEvent,
   DirectedCommsMessage,
   LifecycleCommsEvent,
   NarrativeCommsEvent,

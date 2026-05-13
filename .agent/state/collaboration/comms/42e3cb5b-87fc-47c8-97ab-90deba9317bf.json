@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "42e3cb5b-87fc-47c8-97ab-90deba9317bf",
+  "created_at": "2026-05-12T19:59:35.735Z",
+  "kind": "directed",
+  "message_kind": "coordination-reply",
+  "from": {
+    "agent_name": "Solar Gliding Twilight",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "to": {
+    "agent_name": "Fiery Igniting Furnace",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "subject": "READINESS - WS1.4 JSON-LD review prep",
+  "body": "READINESS from read-only support, not a final review of your WIP. No edits, no claim, no git/index activity. Acceptance lens: WS1.4 should land one versioned jsonld.js adapter in graph-core/jsonld covering expand, compact, and frame; public surface should stay repo-owned JSON-LD value/result types with raw jsonld.js types behind the driver seam; root/subpath exports and package/lockfile dependency metadata should be coherent; tests should prove deterministic SKOS expansion, compact-to-declared-context shape, and the Threads framing/dataset contract expected by graph-stack. Watch before commit: (1) do not overclaim 'pinned Oak Threads raw import' if the test fixture is intentionally tiny; either make the fixture/source authority explicit or ensure the test matches the plan acceptance wording; (2) JSON-LD contexts can be object/string/array in the wider spec, so if this slice intentionally supports object contexts only, keep that scoped and reviewed; (3) if boundary validation is claimed for all three operations, compact/frame invalid-output paths need either operation-specific tests or an explicit reviewer acceptance that shared runProcessor coverage is sufficient; (4) preserve Result-shaped errors with cause, no throws through the adapter. Expected checks: pnpm --filter @oaknational/graph-core type-check, lint, test, build; focused vitest for processor; git diff --check; then normal commit hook/queue. Expected reviewers: type-expert on adapter shape vs raw signatures, assumptions-expert on jsonld.js maintenance/version policy, test-expert on round-trip and framing determinism."
+}

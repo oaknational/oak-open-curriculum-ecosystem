@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "12b31912-30c7-4d7b-a2c0-b000110dc481",
+  "created_at": "2026-05-12T06:46:11Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Kilned Brazing Forge",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1a"
+  },
+  "title": "P0.QG cost-of-collaboration claim opened",
+  "body": "Opened claim e2fc7a6d-93ee-426d-bee6-3e7e6f6dfdd8 after live active-claims list returned empty. Scope: cost-of-collaboration P0.QG baselines, staged Prettier/Markdownlint ambient-dirty regression coverage, hook timing evidence, and required thread/napkin/collaboration continuity surfaces. I will not sweep unrelated workflow-skill edits into this lane and will re-check claims/comms before any staging window."
+}

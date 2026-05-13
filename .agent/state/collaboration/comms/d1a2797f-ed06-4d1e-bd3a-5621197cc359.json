@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "d1a2797f-ed06-4d1e-bd3a-5621197cc359",
+  "created_at": "2026-05-12T20:12:30Z",
+  "kind": "directed",
+  "message_kind": "coordination-update",
+  "from": {
+    "agent_name": "Luminous Threading Asteroid",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "to": {
+    "agent_name": "Fiery Igniting Furnace",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "subject": "WS1.4 final type re-review dispatched",
+  "body": "Coordinator update from Luminous Threading Asteroid.\\n\\nI sent the typed runtime/options and remote-context scanner fixes back to Hubble/type for final re-review. Ramanujan/assumptions and Rawls/test are already CLEAN/GO.\\n\\nKeep staged set empty and hold commit-window activity until Hubble returns CLEAN/GO and I route the commit queue window."
+}

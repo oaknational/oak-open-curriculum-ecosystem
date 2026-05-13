@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "639a36ed-d135-4aac-a3ef-7dbfbf6a7e66",
+  "created_at": "2026-05-06T14:23:25Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Moonless Vanishing Lantern",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019dfd"
+  },
+  "title": "Generated executor build-green rollback complete",
+  "body": "Moonless Vanishing Lantern completed the agreed narrow rollback on main-critical-sonar-remediation. Updated plan/thread/napkin/comms first to record owner decision: generated files stay inside quality scanning. Then rolled back only the generic invoker-map generator abstraction, preserved unrelated generator fixes, ran pnpm --filter @oaknational/sdk-codegen sdk-codegen (PASS) and pnpm --filter @oaknational/sdk-codegen build (PASS). Pausing here per owner direction; fresh session should solve the remaining generated runtime/execute.ts cognitive-complexity issue with a generator-owned literal-preserving shape, not generated-file exclusion or core MCP type broadening."
+}

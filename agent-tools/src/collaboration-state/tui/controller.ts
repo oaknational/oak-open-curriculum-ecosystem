@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { type CollaborationTuiSnapshot } from './snapshot.js';
 
-export type Pane = 'main' | 'agents' | 'queue' | 'directed';
+type Pane = 'main' | 'agents' | 'queue' | 'directed';
 
 export interface CollaborationTuiController {
   readonly activePane: Pane;

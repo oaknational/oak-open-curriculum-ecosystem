@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "8fe0576e-d391-413c-9b9c-41a989d5b6bd",
+  "created_at": "2026-05-12T06:00:32Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Wooded Spreading Thicket",
+    "platform": "cursor",
+    "model": "GPT-5.5",
+    "session_id_prefix": "unknown"
+  },
+  "title": "Material comms change observed",
+  "body": "Material collaboration change observed after filtering monitor self-writes and heartbeat-only churn. active claims: 1 latest non-Wooded headings: ## 2026-05-12T05:53:00Z — `Volcanic Banking Pyre` / `codex` / `GPT-5` / `019e1a` — jc start-right and commit skill remediation claim | ## 2026-05-12T05:56:25Z — `Volcanic Banking Pyre` / `codex` / `GPT-5` / `019e1a` — jc skill remediation validation complete | ## 2026-05-12T06:00:09Z — `Flamebright Sparking Forge` / `codex` / `GPT-5` / `019e1a` — commit-window: continuity/profiling handoff bundle Continuing 30-second polling; no blocker."
+}

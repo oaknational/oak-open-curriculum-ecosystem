@@ -40,12 +40,12 @@ todos:
     status: completed
   - id: ws-p5-unified-comms-format
     content: Collapse the three-directory split (`comms-events/`, `comms-lifecycle/`, `comms-messages/`) and the three `$defs` into a single shape with a `kind` discriminant. Owner-relayed direction "ONE comms format used everywhere, no legacy lingering."
-    status: pending
+    status: completed
   - id: ws-p8-collaboration-tui
-    content: Build a human-facing real-time TUI for the main comms thread, direct-message threads, and active-agent state so operators can watch collaboration without tailing rendered markdown or raw JSON event directories. Owner-directed sequence update 2026-05-12: run immediately after P5. Review update 2026-05-12: cdfb8959 landed a useful snapshot/text-mode slice and Ink primitives, but P8 acceptance remains pending until real-time refresh, unified comms source, inactive-agent visibility, and boundary/tooling gaps are resolved.
+    content: Build a human-facing real-time TUI for the main comms thread, direct-message threads, and active-agent state so operators can watch collaboration without tailing rendered markdown or raw JSON event directories. Owner-directed sequence update 2026-05-12: run immediately after P5. Review update 2026-05-13: cdfb8959 landed a useful snapshot/text-mode slice and Ink primitives, and P5 now supplies the unified comms source; P8 acceptance remains pending until real-time refresh, inactive-agent visibility, and boundary/tooling gaps are resolved.
     status: pending
   - id: ws-p6-coordination-artefact-isolation
-    content: Isolate coordination artefacts (sidebars, comms-events, monitor telemetry) from gate-visible repo state. Either separate branch/worktree or gitignored space.
+    content: Isolate coordination artefacts (sidebars, canonical comms events, monitor telemetry) from gate-visible repo state. Either separate branch/worktree or gitignored space.
     status: pending
   - id: ws-p7-async-sync-mode-awareness
     content: Add work-shape awareness to the polling/watch protocol so design (sub-second), execution (minutes), and monitoring (hour+) each get the right cadence.
@@ -672,7 +672,7 @@ on each invocation").
   "missing required option X" / "unknown option Y" failure modes
   produce consistent guidance instead of per-bin variants.
 - Centralised logging: structured log lines suitable for piping into
-  the comms-events surface or a structured-log file. Today there is
+  the canonical comms surface or a structured-log file. Today there is
   no logging at all; agents read raw stdout/stderr.
 - CLI-owned operational mechanics: agents should not have to provide
   fresh ISO date strings, UUIDs, claim ids, intent ids, or registry
@@ -792,9 +792,9 @@ across Turn 1 + Turn 2 + Turn 3 + joint decision. Summary:
 
 - New file `agent-tools/src/collaboration-state/cli-comms-messages.ts`
   (NOT in `cli-comms-inbox.ts` which stays read-side only).
-- `comms direct --messages-dir --to-agent-name --to-platform --to-model
+- `comms direct --comms-dir --to-agent-name --to-platform --to-model
   --to-session-prefix --kind --subject --body [--event-id] [--now]`.
-- `comms reply --messages-dir --to-event-id --kind --body [--subject]
+- `comms reply --comms-dir --to-event-id --kind --body [--subject]
   [--event-id] [--now]` with auto-swap of `from`/`to` from the source
   event, subject-convention threading (`re: <source>`), no schema
   change.
@@ -860,8 +860,8 @@ is unreliable.
 exchange per minute — adequate, but the cost compounded across the four
 agents in the broader window. Galactic's session-close findings
 (directed comms-message
-`198ee1a4-85d9-4313-af7a-bd3e2e49a9d3.json` under
-`.agent/state/collaboration/comms-messages/`): "the comms inbox
+`198ee1a4-85d9-4313-af7a-bd3e2e49a9d3.json`, now under
+`.agent/state/collaboration/comms/`): "the comms inbox
 monitor command is useful but still rebuild-heavy because the package
 script runs build before each poll."
 
@@ -1094,6 +1094,29 @@ freezes/absorbs post-sweep artefacts."
 - Renderer no longer sensitive to legacy optional-field shapes (the
   source data is normalised).
 
+**Computed completion verdict — 2026-05-13**: P5 is complete. Evidence:
+
+- The canonical directory is `.agent/state/collaboration/comms/`; the retired
+  `comms-events/`, `comms-lifecycle/`, and `comms-messages/` directories are
+  absent from the live state.
+- `comms-event.schema.json`, the Zod boundary parser, renderer, CLI direct /
+  reply / inbox / watch / render surfaces, TUI snapshot source, and
+  practice-substrate live reader all consume the v2 `kind`-discriminated
+  event shape.
+- The migration normalised 918 historical JSON events into v2
+  `schema_version: "2.0.0"` files under the unified directory; strict
+  `collaboration-state -- check --active ... --closed ... --comms-dir ...`
+  returned `ok`.
+- B-10 tolerant-read helper names (`optionalNullableString`,
+  `optionalStringOrLegacyAgentName`) are absent from the collaboration-state
+  source and tests.
+- Verification: red-first P5 tests observed before product code; final
+  `@oaknational/agent-tools` test suite passed (41 files / 324 tests),
+  `type-check` passed, `lint` exited 0 with two non-failing real-IO warnings in
+  integration-style tests, `knip` passed, `git diff --check` passed, and
+  `practice:substrate:check` returned `ok: true` with only informational
+  historical-retired-path findings.
+
 **Routing**: schema authority + parser + renderer + migration script.
 Large slice; design phase needs its own peer sidebar before
 implementation. Should NOT be attempted concurrently with active
@@ -1155,7 +1178,7 @@ then return to P6/P7.
 
 ### P6 — Coordination-artefact isolation
 
-**Hypothesis**: sidebars, comms-events, comms-messages, monitor
+**Hypothesis**: sidebars, canonical comms events, monitor
 telemetry, and napkin updates live in the same tree as code. Every
 write to them mutates the gatekeeper's tree-state and can trip a gate.
 A coordinator necessarily writes coordination artefacts; therefore the

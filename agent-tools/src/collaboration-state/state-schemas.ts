@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import {
   type CollaborationAgentId,
+  type CommsEvent,
   type DirectedCommsMessage,
   type LifecycleCommsEvent,
   type NarrativeCommsEvent,
@@ -23,8 +24,10 @@ const agentIdSchema = z.strictObject({
 });
 
 const narrativeCommsEventSchema = z.strictObject({
+  schema_version: z.literal('2.0.0'),
   event_id: nonEmptyString,
   created_at: nonEmptyString,
+  kind: z.literal('narrative'),
   author: agentIdSchema,
   title: nonEmptyString,
   body: nonEmptyString,
@@ -35,9 +38,10 @@ const narrativeCommsEventSchema = z.strictObject({
 });
 
 const lifecycleCommsEventSchema = z.strictObject({
-  schema_version: nonEmptyString,
+  schema_version: z.literal('2.0.0'),
   event_id: nonEmptyString,
   created_at: nonEmptyString,
+  kind: z.literal('lifecycle'),
   event_type: nonEmptyString,
   occurred_at: nonEmptyString,
   author: agentIdSchema,
@@ -50,15 +54,42 @@ const lifecycleCommsEventSchema = z.strictObject({
 });
 
 const directedCommsMessageSchema = z.strictObject({
-  schema_version: nonEmptyString,
+  schema_version: z.literal('2.0.0'),
   event_id: nonEmptyString,
   created_at: nonEmptyString,
-  kind: nonEmptyString,
+  kind: z.literal('directed'),
+  message_kind: nonEmptyString,
   from: agentIdSchema,
   to: agentIdSchema,
   subject: nonEmptyString,
   body: nonEmptyString,
 });
+
+const commsEventSchema = z.discriminatedUnion('kind', [
+  narrativeCommsEventSchema,
+  lifecycleCommsEventSchema,
+  directedCommsMessageSchema,
+]);
+
+/**
+ * Parse one canonical comms event after JSON parsing has crossed the boundary.
+ */
+export function parseCommsEventValue(value: unknown): CommsEvent {
+  const parsed = parseWithHelpfulError({
+    label: 'communication event',
+    schema: commsEventSchema,
+    value,
+  });
+
+  if (parsed.kind === 'narrative') {
+    return narrativeEvent(parsed);
+  }
+  if (parsed.kind === 'lifecycle') {
+    return lifecycleEvent(parsed);
+  }
+
+  return directedEvent(parsed);
+}
 
 /**
  * Parse one narrative comms event after JSON parsing has crossed the boundary.
@@ -72,7 +103,9 @@ export function parseNarrativeCommsEventValue(value: unknown): NarrativeCommsEve
 
   return {
     event_id: parsed.event_id,
+    schema_version: parsed.schema_version,
     created_at: parsed.created_at,
+    kind: parsed.kind,
     author: agentId(parsed.author),
     title: parsed.title,
     body: parsed.body,
@@ -97,6 +130,7 @@ export function parseLifecycleCommsEventValue(value: unknown): LifecycleCommsEve
     schema_version: parsed.schema_version,
     event_id: parsed.event_id,
     created_at: parsed.created_at,
+    kind: parsed.kind,
     event_type: parsed.event_type,
     occurred_at: parsed.occurred_at,
     author: agentId(parsed.author),
@@ -124,6 +158,55 @@ export function parseDirectedCommsMessageValue(value: unknown): DirectedCommsMes
     event_id: parsed.event_id,
     created_at: parsed.created_at,
     kind: parsed.kind,
+    message_kind: parsed.message_kind,
+    from: agentId(parsed.from),
+    to: agentId(parsed.to),
+    subject: parsed.subject,
+    body: parsed.body,
+  };
+}
+
+function narrativeEvent(parsed: z.infer<typeof narrativeCommsEventSchema>): NarrativeCommsEvent {
+  return {
+    event_id: parsed.event_id,
+    schema_version: parsed.schema_version,
+    created_at: parsed.created_at,
+    kind: parsed.kind,
+    author: agentId(parsed.author),
+    title: parsed.title,
+    body: parsed.body,
+    ...(parsed.audience === undefined ? {} : { audience: parsed.audience }),
+    ...(parsed.addressed_to === undefined ? {} : { addressed_to: parsed.addressed_to }),
+    ...(parsed.in_response_to === undefined ? {} : { in_response_to: parsed.in_response_to }),
+    ...(parsed.in_reply_to === undefined ? {} : { in_reply_to: parsed.in_reply_to }),
+  };
+}
+
+function lifecycleEvent(parsed: z.infer<typeof lifecycleCommsEventSchema>): LifecycleCommsEvent {
+  return {
+    schema_version: parsed.schema_version,
+    event_id: parsed.event_id,
+    created_at: parsed.created_at,
+    kind: parsed.kind,
+    event_type: parsed.event_type,
+    occurred_at: parsed.occurred_at,
+    author: agentId(parsed.author),
+    agent_id: agentId(parsed.agent_id),
+    thread: parsed.thread,
+    claim_id: parsed.claim_id,
+    title: parsed.title,
+    subject: parsed.subject,
+    body: parsed.body,
+  };
+}
+
+function directedEvent(parsed: z.infer<typeof directedCommsMessageSchema>): DirectedCommsMessage {
+  return {
+    schema_version: parsed.schema_version,
+    event_id: parsed.event_id,
+    created_at: parsed.created_at,
+    kind: parsed.kind,
+    message_kind: parsed.message_kind,
     from: agentId(parsed.from),
     to: agentId(parsed.to),
     subject: parsed.subject,

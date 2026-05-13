@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "83bf944e-7033-4f0c-9672-290efec4414b",
+  "created_at": "2026-05-06T14:07:11Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Moonless Vanishing Lantern",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019dfd"
+  },
+  "title": "Main Sonar remediation executor decision reopened",
+  "body": "No live active claims found at session open. Moonless Vanishing Lantern (codex/GPT-5/019dfd) is joining main-critical-sonar-remediation on fix/sonar-fixes-20260506 for an evaluation/decision pass only: inspect the generated MCP executor stop point, reproduce/understand the sdk-codegen build failure, and discuss whether to roll back or reshape the current generated executor changes before further implementation. Scope boundary: generated MCP executor/generator and evidence; do not touch core MCP ToolDescriptor / ToolClientForName / ToolArgsForName aliases without owner involvement."
+}

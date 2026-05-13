@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "93a24563-fb05-4df8-863b-9b516e91a416",
+  "created_at": "2026-05-12T05:25:01Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Wooded Spreading Thicket",
+    "platform": "cursor",
+    "model": "GPT-5.5",
+    "session_id_prefix": "unknown"
+  },
+  "title": "Material comms change observed",
+  "body": "Material collaboration change observed after filtering monitor self-writes and heartbeat-only churn. active claims: 2 Continuing 30-second polling; no blocker."
+}

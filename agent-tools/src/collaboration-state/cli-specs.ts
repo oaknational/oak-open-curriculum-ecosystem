@@ -6,13 +6,14 @@ import {
   showClaim,
   statusClaims,
 } from './cli-claim-query-commands.js';
-import { appendComms, renderComms, sendComms } from './cli-comms-commands.js';
+import { appendComms, migrateComms, renderComms, sendComms } from './cli-comms-commands.js';
 import { inboxComms } from './cli-comms-inbox.js';
 import { directComms, replyComms } from './cli-comms-messages.js';
 import { watchComms } from './cli-comms-watch.js';
 import { preflightIdentity } from './cli-identity.js';
 import { auditIdentity } from './cli-identity-audit.js';
 import { type Options } from './cli-options.js';
+import { type CliRuntime } from './cli-runtime.js';
 import { appendJsonEntry, checkState, writeJsonBody } from './cli-json-commands.js';
 import { collaborationTui } from './tui/cli.js';
 import {
@@ -31,10 +32,6 @@ export interface CommandSpec {
   readonly help: string;
   readonly options: ReadonlySet<string>;
   readonly allowsFiles?: boolean;
-}
-
-export interface CliRuntime {
-  readonly stdout?: Pick<NodeJS.WritableStream, 'write'>;
 }
 
 type CliHandler = (
@@ -58,7 +55,7 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
   }),
   'comms:append': commandSpec({
     help:
-      'comms append --events-dir <dir> --now <iso> --created-at <iso> ' +
+      'comms append --comms-dir <dir> --now <iso> --created-at <iso> ' +
       '--title <title> --body <body> --platform <platform> --model <model> ' +
       '--active <path> [--event-id <id>]',
     options: commsAppendOptions,
@@ -67,7 +64,7 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
   'comms:send': commandSpec({
     help:
       'comms send --title <title> --body <body> --platform <platform> --model <model> ' +
-      '[--events-dir <dir>] [--output <path>] [--active <path>] [--repo-root <path>] [--now <iso>] ' +
+      '[--comms-dir <dir>] [--output <path>] [--active <path>] [--repo-root <path>] [--now <iso>] ' +
       '[--event-id <id>] (identity seed: PRACTICE_AGENT_SESSION_ID_CLAUDE, ' +
       'PRACTICE_AGENT_SESSION_ID_CURSOR, PRACTICE_AGENT_SESSION_ID_CODEX, CODEX_THREAD_ID, ' +
       'or OAK_AGENT_IDENTITY_OVERRIDE)',
@@ -75,27 +72,32 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
     handler: sendComms,
   }),
   'comms:render': commandSpec({
-    help:
-      'comms render --events-dir <dir> --lifecycle-dir <dir> ' +
-      '--messages-dir <dir> --output <path>',
-    options: ['events-dir', 'lifecycle-dir', 'messages-dir', 'output'],
+    help: 'comms render --comms-dir <dir> --output <path>',
+    options: ['comms-dir', 'output'],
     handler: renderComms,
   }),
+  'comms:migrate': commandSpec({
+    help:
+      'comms migrate --events-dir <dir> --lifecycle-dir <dir> ' +
+      '--messages-dir <dir> --comms-dir <dir>',
+    options: ['events-dir', 'lifecycle-dir', 'messages-dir', 'comms-dir'],
+    handler: migrateComms,
+  }),
   'comms:inbox': commandSpec({
-    help: 'comms inbox --messages-dir <dir> --agent-name <name> --seen-file <path>',
-    options: ['messages-dir', 'agent-name', 'seen-file'],
+    help: 'comms inbox --comms-dir <dir> --agent-name <name> --seen-file <path>',
+    options: ['comms-dir', 'agent-name', 'seen-file'],
     handler: inboxComms,
   }),
   'comms:watch': commandSpec({
     help:
-      'comms watch --messages-dir <dir> --agent-name <name> --seen-file <path> ' +
+      'comms watch --comms-dir <dir> --agent-name <name> --seen-file <path> ' +
       '[--session-prefix <prefix>] [--poll-ms <n>] [--max-events <n>]',
     options: commsWatchOptions,
-    handler: (options, _env, runtime) => watchComms(options, runtime.stdout),
+    handler: (options, _env, runtime) => watchComms(options, runtime),
   }),
   'comms:direct': commandSpec({
     help:
-      'comms direct --messages-dir <dir> --to-agent-name <name> --to-platform <platform> ' +
+      'comms direct --comms-dir <dir> --to-agent-name <name> --to-platform <platform> ' +
       '--to-model <model> --to-session-prefix <prefix> --kind <kind> ' +
       '--subject <subject> --body <body> --platform <platform> --model <model> ' +
       '--active <path> [--event-id <id>] [--now <iso>]',
@@ -104,7 +106,7 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
   }),
   'comms:reply': commandSpec({
     help:
-      'comms reply --messages-dir <dir> --to-event-id <id> --kind <kind> ' +
+      'comms reply --comms-dir <dir> --to-event-id <id> --kind <kind> ' +
       '--body <body> --platform <platform> --model <model> ' +
       '--active <path> [--subject <subject>] [--event-id <id>] [--now <iso>]',
     options: commsReplyOptions,
@@ -169,18 +171,8 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
   'tui:': commandSpec({
     help:
       'tui [--format <tui|text>] [--repo-root <path>] [--active <path>] ' +
-      '[--closed <path>] [--events-dir <dir>] [--lifecycle-dir <dir>] ' +
-      '[--messages-dir <dir>] [--now <iso>]',
-    options: [
-      'format',
-      'repo-root',
-      'active',
-      'closed',
-      'events-dir',
-      'lifecycle-dir',
-      'messages-dir',
-      'now',
-    ],
+      '[--closed <path>] [--comms-dir <dir>] [--now <iso>]',
+    options: ['format', 'repo-root', 'active', 'closed', 'comms-dir', 'now'],
     handler: collaborationTui,
   }),
   'conversation:append': commandSpec({
@@ -199,10 +191,8 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
     handler: writeJsonBody,
   }),
   'check:': commandSpec({
-    help:
-      'check [--active <path>] [--closed <path>] [--events-dir <dir>] ' +
-      '[--lifecycle-dir <dir>] [--messages-dir <dir>]',
-    options: ['active', 'closed', 'events-dir', 'lifecycle-dir', 'messages-dir'],
+    help: 'check [--active <path>] [--closed <path>] [--comms-dir <dir>]',
+    options: ['active', 'closed', 'comms-dir'],
     handler: checkState,
   }),
 };

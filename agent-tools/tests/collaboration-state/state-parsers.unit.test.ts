@@ -1,14 +1,12 @@
 /**
- * Parser tests for the three communication-event kinds.
+ * Parser tests for the unified communication event kinds.
  *
  * The canonical comms-event schema at
  * `.agent/state/collaboration/comms-event.schema.json` defines three event
  * shapes ($defs.narrative, $defs.lifecycle, $defs.directed). The TypeScript
  * parsers in `state-parsers.ts` project the schema's $defs into the type
- * system as three single-schema parsers — each rejects shapes that do not
- * match its $def. Directory placement, not in-event field, carries the
- * discriminator at runtime; the parsers are therefore kind-named at the
- * call site and there is no top-level dispatch.
+ * system as three single-schema parsers plus the top-level discriminated
+ * parser.
  *
  * These tests are the TypeScript-layer correctness gate; the schema-
  * authority gate lives in `comms-event-schema.unit.test.ts`.
@@ -16,6 +14,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  parseCommsEvent,
   parseDirectedCommsMessage,
   parseLifecycleCommsEvent,
   parseNarrativeCommsEvent,
@@ -36,16 +35,20 @@ const sylvan = {
 } as const;
 
 const canonicalNarrative = {
+  schema_version: '2.0.0',
   event_id: '00de9e88-44a5-41c1-a9a5-6488a890ff07',
   created_at: '2026-05-07T15:49:02Z',
+  kind: 'narrative',
   author: woodland,
   title: 'Canonical narrative event title',
   body: 'Canonical narrative event body.',
 } as const;
 
 const narrativeWithAffordances = {
+  schema_version: '2.0.0',
   event_id: 'narrative-with-affordances',
   created_at: '2026-05-03T09:35:57Z',
+  kind: 'narrative',
   author: woodland,
   audience: ['*'],
   addressed_to: 'Sylvan Fruiting Glade',
@@ -56,9 +59,10 @@ const narrativeWithAffordances = {
 } as const;
 
 const lifecycle = {
-  schema_version: '1.3.0',
+  schema_version: '2.0.0',
   event_id: 'fe4acc7e-cons-doc-2026-04-29-14-30',
   created_at: '2026-04-29T14:30:00Z',
+  kind: 'lifecycle',
   event_type: 'comms_event',
   occurred_at: '2026-04-29T14:30:00Z',
   author: woodland,
@@ -71,10 +75,11 @@ const lifecycle = {
 } as const;
 
 const directedPostMigration = {
-  schema_version: '1.0.0',
+  schema_version: '2.0.0',
   event_id: '3882213c-a6b1-4661-a1cd-a261f50ea5e8',
   created_at: '2026-05-10T18:15:00Z',
-  kind: 'session-handoff-summary',
+  kind: 'directed',
+  message_kind: 'session-handoff-summary',
   from: woodland,
   to: sylvan,
   subject: 'Session-handoff summary',
@@ -85,6 +90,8 @@ describe('parseNarrativeCommsEvent', () => {
   it('parses a canonical narrative event with the five required fields', () => {
     const event = parseNarrativeCommsEvent(JSON.stringify(canonicalNarrative));
 
+    expect(event.schema_version).toBe('2.0.0');
+    expect(event.kind).toBe('narrative');
     expect(event.event_id).toBe('00de9e88-44a5-41c1-a9a5-6488a890ff07');
     expect(event.created_at).toBe('2026-05-07T15:49:02Z');
     expect(event.author).toEqual(woodland);
@@ -150,7 +157,8 @@ describe('parseLifecycleCommsEvent', () => {
   it('parses a lifecycle event with the full required field set', () => {
     const event = parseLifecycleCommsEvent(JSON.stringify(lifecycle));
 
-    expect(event.schema_version).toBe('1.3.0');
+    expect(event.schema_version).toBe('2.0.0');
+    expect(event.kind).toBe('lifecycle');
     expect(event.event_type).toBe('comms_event');
     expect(event.occurred_at).toBe('2026-04-29T14:30:00Z');
     expect(event.agent_id).toEqual(woodland);
@@ -185,7 +193,7 @@ describe('parseLifecycleCommsEvent', () => {
 
   it('rejects a narrative payload that lacks the lifecycle-required fields', () => {
     expect(() => parseLifecycleCommsEvent(JSON.stringify(canonicalNarrative))).toThrow(
-      /schema_version/,
+      /event_type/,
     );
   });
 });
@@ -194,8 +202,9 @@ describe('parseDirectedCommsMessage', () => {
   it('parses a directed message in the post-migration shape (created_at)', () => {
     const event = parseDirectedCommsMessage(JSON.stringify(directedPostMigration));
 
-    expect(event.schema_version).toBe('1.0.0');
-    expect(event.kind).toBe('session-handoff-summary');
+    expect(event.schema_version).toBe('2.0.0');
+    expect(event.kind).toBe('directed');
+    expect(event.message_kind).toBe('session-handoff-summary');
     expect(event.from).toEqual(woodland);
     expect(event.to).toEqual(sylvan);
     expect(event.subject).toBe('Session-handoff summary');
@@ -208,6 +217,7 @@ describe('parseDirectedCommsMessage', () => {
       event_id: directedPostMigration.event_id,
       timestamp: directedPostMigration.created_at,
       kind: directedPostMigration.kind,
+      message_kind: directedPostMigration.message_kind,
       from: directedPostMigration.from,
       to: directedPostMigration.to,
       subject: directedPostMigration.subject,
@@ -223,6 +233,7 @@ describe('parseDirectedCommsMessage', () => {
       event_id: directedPostMigration.event_id,
       created_at: directedPostMigration.created_at,
       kind: directedPostMigration.kind,
+      message_kind: directedPostMigration.message_kind,
       from: directedPostMigration.from,
       subject: directedPostMigration.subject,
       body: directedPostMigration.body,
@@ -233,7 +244,15 @@ describe('parseDirectedCommsMessage', () => {
 
   it('rejects a narrative payload that lacks the directed-required fields', () => {
     expect(() => parseDirectedCommsMessage(JSON.stringify(canonicalNarrative))).toThrow(
-      /schema_version/,
+      /message_kind/,
     );
+  });
+});
+
+describe('parseCommsEvent', () => {
+  it('dispatches canonical events through the top-level kind discriminator', () => {
+    expect(parseCommsEvent(JSON.stringify(canonicalNarrative)).kind).toBe('narrative');
+    expect(parseCommsEvent(JSON.stringify(lifecycle)).kind).toBe('lifecycle');
+    expect(parseCommsEvent(JSON.stringify(directedPostMigration)).kind).toBe('directed');
   });
 });

@@ -1,5 +1,6 @@
 import { getJsonValue, isJsonObject, parseStringArray, requireString } from './json.js';
 import {
+  parseCommsEventValue,
   parseDirectedCommsMessageValue,
   parseLifecycleCommsEventValue,
   parseNarrativeCommsEventValue,
@@ -11,6 +12,7 @@ import {
   type CollaborationClaim,
   type CollaborationCommitQueueEntry,
   type CollaborationRegistry,
+  type CommsEvent,
   type DirectedCommsMessage,
   type LifecycleCommsEvent,
   type NarrativeCommsEvent,
@@ -57,10 +59,19 @@ export function parseClosedClaimsArchive(text: string): ClosedClaimsArchive {
 }
 
 /**
- * Parse a narrative communication event from JSON text. Projects
- * `$defs.narrative` in `comms-event.schema.json`. Required fields: event_id,
- * created_at, author, title, body. Optional routing/threading affordances:
- * audience, addressed_to, in_response_to, in_reply_to.
+ * Parse a canonical communication event from JSON text.
+ */
+export function parseCommsEvent(text: string): CommsEvent {
+  const parsed: unknown = JSON.parse(text);
+  if (!isJsonObject(parsed)) {
+    throw new Error('communication event must be a JSON object');
+  }
+
+  return parseCommsEventValue(parsed);
+}
+
+/**
+ * Parse a narrative communication event from JSON text.
  */
 export function parseNarrativeCommsEvent(text: string): NarrativeCommsEvent {
   const parsed: unknown = JSON.parse(text);
@@ -72,10 +83,7 @@ export function parseNarrativeCommsEvent(text: string): NarrativeCommsEvent {
 }
 
 /**
- * Parse a lifecycle communication event from JSON text. Projects
- * `$defs.lifecycle` in `comms-event.schema.json`. All twelve fields are
- * required; `claim_id` may be an empty string when the event is not
- * claim-scoped.
+ * Parse a lifecycle communication event from JSON text.
  */
 export function parseLifecycleCommsEvent(text: string): LifecycleCommsEvent {
   const parsed: unknown = JSON.parse(text);
@@ -87,10 +95,7 @@ export function parseLifecycleCommsEvent(text: string): LifecycleCommsEvent {
 }
 
 /**
- * Parse a directed communication message from JSON text. Projects
- * `$defs.directed` in `comms-event.schema.json`. The post-migration shape
- * uses `created_at`; the legacy `timestamp` field is renamed on migration
- * and is no longer accepted by this parser.
+ * Parse a directed communication message from JSON text.
  */
 export function parseDirectedCommsMessage(text: string): DirectedCommsMessage {
   const parsed: unknown = JSON.parse(text);

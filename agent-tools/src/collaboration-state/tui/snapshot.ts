@@ -4,6 +4,7 @@ import {
   type ClosedClaimsArchive,
   type CollaborationCommitQueueEntry,
   type CollaborationRegistry,
+  type CommsEvent,
   type DirectedCommsMessage,
   type LifecycleCommsEvent,
   type NarrativeCommsEvent,
@@ -26,7 +27,7 @@ export interface TuiMainEntry {
   readonly author: string;
 }
 
-export interface TuiDirectedEntry {
+interface TuiDirectedEntry {
   readonly id: string;
   readonly created_at: string;
   readonly kind: string;
@@ -58,26 +59,21 @@ export interface TuiQueueEntry {
 export function buildCollaborationTuiSnapshot(input: {
   readonly registry: CollaborationRegistry;
   readonly closedArchive?: ClosedClaimsArchive;
-  readonly narrative: readonly NarrativeCommsEvent[];
-  readonly lifecycle: readonly LifecycleCommsEvent[];
-  readonly directed: readonly DirectedCommsMessage[];
+  readonly events: readonly CommsEvent[];
   readonly nowIso: string;
 }): CollaborationTuiSnapshot {
   return {
     generated_at: input.nowIso,
-    main: mainEntries(input.narrative, input.lifecycle),
-    directed: directedEntries(input.directed),
+    main: mainEntries(input.events),
+    directed: directedEntries(input.events),
     agents: agentEntries(input.registry, input.nowIso, input.closedArchive),
     queue: queueEntries(input.registry.commit_queue, input.nowIso),
   };
 }
 
-function mainEntries(
-  narrative: readonly NarrativeCommsEvent[],
-  lifecycle: readonly LifecycleCommsEvent[],
-): readonly TuiMainEntry[] {
+function mainEntries(events: readonly CommsEvent[]): readonly TuiMainEntry[] {
   return [
-    ...narrative.map((event) => ({
+    ...events.filter(isNarrativeEvent).map((event) => ({
       id: event.event_id,
       created_at: event.created_at,
       kind: 'narrative' as const,
@@ -85,7 +81,7 @@ function mainEntries(
       body: event.body,
       author: formatAgent(event.author),
     })),
-    ...lifecycle.map((event) => ({
+    ...events.filter(isLifecycleEvent).map((event) => ({
       id: event.event_id,
       created_at: event.created_at,
       kind: 'lifecycle' as const,
@@ -96,18 +92,31 @@ function mainEntries(
   ].toSorted(compareNewestFirst);
 }
 
-function directedEntries(directed: readonly DirectedCommsMessage[]): readonly TuiDirectedEntry[] {
-  return directed
+function directedEntries(events: readonly CommsEvent[]): readonly TuiDirectedEntry[] {
+  return events
+    .filter(isDirectedMessage)
     .map((message) => ({
       id: message.event_id,
       created_at: message.created_at,
-      kind: message.kind,
+      kind: message.message_kind,
       subject: message.subject,
       body: message.body,
       from: formatAgent(message.from),
       to: formatAgent(message.to),
     }))
     .toSorted(compareNewestFirst);
+}
+
+function isNarrativeEvent(event: CommsEvent): event is NarrativeCommsEvent {
+  return event.kind === 'narrative';
+}
+
+function isLifecycleEvent(event: CommsEvent): event is LifecycleCommsEvent {
+  return event.kind === 'lifecycle';
+}
+
+function isDirectedMessage(event: CommsEvent): event is DirectedCommsMessage {
+  return event.kind === 'directed';
 }
 
 function agentEntries(

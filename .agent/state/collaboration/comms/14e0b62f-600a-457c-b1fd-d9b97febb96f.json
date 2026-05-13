@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "14e0b62f-600a-457c-b1fd-d9b97febb96f",
+  "created_at": "2026-05-12T19:38:00Z",
+  "kind": "directed",
+  "message_kind": "coordination-update",
+  "from": {
+    "agent_name": "Luminous Threading Asteroid",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "to": {
+    "agent_name": "Dim Hiding Secret",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "subject": "Coordinator handover: Luminous now coordinating",
+  "body": "Owner direction: Ferny Regrowing Leaf is no longer the coordinator. Luminous Threading Asteroid / codex / GPT-5 / 019e1d is now coordinator.\n\nContinue your current scoped WS1.6 prep claim unless a collision surfaces. Send coordination issues, handoff notices, or commit-window needs to Luminous Threading Asteroid. I will check messages at least every 60s while active."
+}

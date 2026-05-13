@@ -17,7 +17,7 @@ describe('practice substrate contract-path fixtures', () => {
     expect(
       evaluateLegacyEventRoot({
         surface: 'legacy-collaboration-comms-events',
-        legacyRoot: '.agent/state/collaboration/comms/',
+        legacyRoot: '.agent/state/collaboration/comms-events/',
         rootExists: false,
         entries: [],
       }),
@@ -28,9 +28,9 @@ describe('practice substrate contract-path fixtures', () => {
     expect(
       evaluateLegacyEventRoot({
         surface: 'legacy-collaboration-comms-events',
-        legacyRoot: '.agent/state/collaboration/comms/',
+        legacyRoot: '.agent/state/collaboration/comms-events/',
         rootExists: true,
-        entries: [{ path: '.agent/state/collaboration/comms/archive/.gitkeep', kind: 'gitkeep' }],
+        entries: [{ path: '.agent/state/collaboration/comms-events/.gitkeep', kind: 'gitkeep' }],
       }),
     ).toStrictEqual([
       {
@@ -38,8 +38,8 @@ describe('practice substrate contract-path fixtures', () => {
         surface: 'legacy-collaboration-comms-events',
         severity: 'blocking',
         repair: 'manual-with-provenance',
-        message: 'Legacy event root .agent/state/collaboration/comms/ still exists on disk.',
-        evidence: ['.agent/state/collaboration/comms/archive/.gitkeep'],
+        message: 'Legacy event root .agent/state/collaboration/comms-events/ still exists on disk.',
+        evidence: ['.agent/state/collaboration/comms-events/.gitkeep'],
       },
     ]);
   });
@@ -48,7 +48,7 @@ describe('practice substrate contract-path fixtures', () => {
     expect(
       evaluateLegacyEventRoot({
         surface: 'legacy-collaboration-comms-events',
-        legacyRoot: '.agent/state/collaboration/comms/',
+        legacyRoot: '.agent/state/collaboration/comms-events/',
         rootExists: true,
         entries: [],
       }),
@@ -58,8 +58,8 @@ describe('practice substrate contract-path fixtures', () => {
         surface: 'legacy-collaboration-comms-events',
         severity: 'blocking',
         repair: 'manual-with-provenance',
-        message: 'Legacy event root .agent/state/collaboration/comms/ still exists on disk.',
-        evidence: ['.agent/state/collaboration/comms/'],
+        message: 'Legacy event root .agent/state/collaboration/comms-events/ still exists on disk.',
+        evidence: ['.agent/state/collaboration/comms-events/'],
       },
     ]);
   });
@@ -68,11 +68,11 @@ describe('practice substrate contract-path fixtures', () => {
     expect(
       evaluateLegacyEventRoot({
         surface: 'legacy-collaboration-comms-events',
-        legacyRoot: '.agent/state/collaboration/comms/',
+        legacyRoot: '.agent/state/collaboration/comms-events/',
         rootExists: true,
         entries: [
-          { path: '.agent/state/collaboration/comms/archive/.gitkeep', kind: 'gitkeep' },
-          { path: '.agent/state/collaboration/comms/events/old.json', kind: 'json' },
+          { path: '.agent/state/collaboration/comms-events/.gitkeep', kind: 'gitkeep' },
+          { path: '.agent/state/collaboration/comms-events/old.json', kind: 'json' },
         ],
       }),
     ).toStrictEqual([
@@ -82,8 +82,8 @@ describe('practice substrate contract-path fixtures', () => {
         severity: 'blocking',
         repair: 'manual-with-provenance',
         message:
-          'Legacy event root .agent/state/collaboration/comms/ contains live JSON fragments.',
-        evidence: ['.agent/state/collaboration/comms/events/old.json'],
+          'Legacy event root .agent/state/collaboration/comms-events/ contains live JSON fragments.',
+        evidence: ['.agent/state/collaboration/comms-events/old.json'],
       },
     ]);
   });
@@ -95,17 +95,17 @@ describe('practice substrate contract-path fixtures', () => {
           surface: 'state-entrypoint',
           path: '.agent/state/README.md',
           lifecycle: 'live',
-          text: 'Write communication events to .agent/state/collaboration/comms/archive/.',
-          retiredPath: '.agent/state/collaboration/comms/',
-          canonicalPath: '.agent/state/collaboration/comms-events/',
+          text: 'Write communication events to .agent/state/collaboration/comms-events/.',
+          retiredPath: '.agent/state/collaboration/comms-events/',
+          canonicalPath: '.agent/state/collaboration/comms/',
         },
         {
           surface: 'archived-handoff',
           path: '.agent/memory/active/archive/session.md',
           lifecycle: 'archived',
-          text: 'The old evidence mentioned .agent/state/collaboration/comms/events/.',
-          retiredPath: '.agent/state/collaboration/comms/',
-          canonicalPath: '.agent/state/collaboration/comms-events/',
+          text: 'The old evidence mentioned .agent/state/collaboration/comms-events/.',
+          retiredPath: '.agent/state/collaboration/comms-events/',
+          canonicalPath: '.agent/state/collaboration/comms/',
         },
       ]),
     ).toStrictEqual([
@@ -115,8 +115,8 @@ describe('practice substrate contract-path fixtures', () => {
         severity: 'blocking',
         repair: 'deterministic',
         message:
-          'Live surface references retired path .agent/state/collaboration/comms/; ' +
-          'use .agent/state/collaboration/comms-events/.',
+          'Live surface references retired path .agent/state/collaboration/comms-events/; ' +
+          'use .agent/state/collaboration/comms/.',
         evidence: ['.agent/state/README.md'],
       },
       {
@@ -125,7 +125,7 @@ describe('practice substrate contract-path fixtures', () => {
         severity: 'informational',
         repair: 'forbidden',
         message:
-          'Historical surface preserves retired path .agent/state/collaboration/comms/ as evidence.',
+          'Historical surface preserves retired path .agent/state/collaboration/comms-events/ as evidence.',
         evidence: ['.agent/memory/active/archive/session.md'],
       },
     ]);

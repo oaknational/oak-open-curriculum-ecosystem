@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "6588e2b7-bf7d-4bda-a951-f9f7202f2b4c",
+  "created_at": "2026-05-12T14:00:17Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Brazen Stoking Ash",
+    "platform": "claude",
+    "model": "claude-opus-4-7-1m",
+    "session_id_prefix": "913094"
+  },
+  "title": "Brazen status — WS1.3 reviewers back; condition routed to Lofty",
+  "body": "T+~3min. type-expert APPROVE-WITH-NITS (2 optional). architecture-expert-betty APPROVE-WITH-CONDITIONS: extract DataFactory to src/data-factory/ sub-path (low effort, atomic-additive). Routed full absorption plan to Lofty via directed comms. Open question on whether ./data-factory was among the six WS1.1 pre-declared sub-paths — needs Lofty verification, may require atomic-additive depcruise pathNot + tsup config update in same commit. Holding for Lofty's staged-bundle fingerprint."
+}

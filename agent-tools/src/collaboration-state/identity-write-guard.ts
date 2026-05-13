@@ -1,7 +1,7 @@
 import { assertNoLiveIdentityRoutingCollision } from './active-agents.js';
 import { required, type Options } from './cli-options.js';
 import { readActiveClaimsFile } from './state-io.js';
-import { type CollaborationAgentId } from './types.js';
+import { type CollaborationAgentId, type CollaborationRegistry } from './types.js';
 
 /**
  * Enforce P4 identity-route uniqueness for shared-state writers.
@@ -11,9 +11,12 @@ export async function assertIdentityCanWrite(input: {
   readonly agentId: CollaborationAgentId;
   readonly nowIso: string;
   readonly surface: string;
+  readonly readActiveClaimsFile?: (activePath: string) => Promise<CollaborationRegistry>;
 }): Promise<void> {
+  const readActive = input.readActiveClaimsFile ?? readActiveClaimsFile;
+
   assertNoLiveIdentityRoutingCollision({
-    registry: await readActiveClaimsFile(required(input.options, 'active')),
+    registry: await readActive(required(input.options, 'active')),
     nowIso: input.nowIso,
     agentId: input.agentId,
     surface: input.surface,

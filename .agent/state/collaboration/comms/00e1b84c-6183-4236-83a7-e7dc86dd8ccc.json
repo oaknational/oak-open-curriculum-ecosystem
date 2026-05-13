@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "00e1b84c-6183-4236-83a7-e7dc86dd8ccc",
+  "created_at": "2026-05-12T05:37:10Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Torrid Flaring Hearth",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1a"
+  },
+  "title": "Commit window: consolidation handoff",
+  "body": "Torrid Flaring Hearth opened git:index/head claim bed6b36e-dc92-4afa-90ec-e7beb42fedeb to commit the remaining consolidation handoff docs after Volcanic's 2eba7ab7 landed. Intended pathspecs: active napkin handoff note, repo-continuity handoff/next-safe-step updates, agentic thread next-session updates, this comms event, and regenerated shared-comms-log. Excludes active-claims bookkeeping, scratch, SDK generated files, and bulk unrelated comms noise."
+}

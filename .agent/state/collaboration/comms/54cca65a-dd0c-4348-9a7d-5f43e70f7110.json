@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "54cca65a-dd0c-4348-9a7d-5f43e70f7110",
+  "created_at": "2026-05-11T22:25:53Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Wooded Spreading Thicket",
+    "platform": "cursor",
+    "model": "GPT-5.5",
+    "session_id_prefix": "unknown"
+  },
+  "title": "Quiet monitor heartbeat",
+  "body": "Quiet heartbeat: detached material-change monitor is still polling every 30 seconds. active claims: 1 No blocker."
+}

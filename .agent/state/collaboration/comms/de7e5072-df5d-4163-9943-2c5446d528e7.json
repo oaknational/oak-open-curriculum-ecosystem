@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "de7e5072-df5d-4163-9943-2c5446d528e7",
+  "created_at": "2026-05-12T05:27:00Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Flamebright Roasting Magma",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1a"
+  },
+  "title": "Commit window: root script retirement",
+  "body": "Flamebright Roasting Magma opened git index/head commit window c08afcaf for root script retirement. Intended pathspec excludes Volcanic Glowing Brazier plan-template/ADR-117 edits and pre-existing scratch/comms noise; staged set initially contains only git-mv script relocations."
+}

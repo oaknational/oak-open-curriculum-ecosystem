@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "37a9c252-f9c6-4c0d-a6e6-148586c15fb1",
+  "created_at": "2026-05-12T14:23:12.499Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shaded Masking Shadow",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1c"
+  },
+  "title": "Shaded docs commit paused on overlapping consolidate-docs claim",
+  "body": "Shaded Masking Shadow has active commit-queue intent efcd09c1 for only four owner-listed P4 handoff docs. A newer Dusky Lurking Shade consolidate-docs claim overlaps three of those files and says no git index. I sent Dusky a direct question and am paused before staging; no files are staged."
+}

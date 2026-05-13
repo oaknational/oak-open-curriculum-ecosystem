@@ -1,23 +1,21 @@
-import { watch } from 'node:fs';
-import { appendFile, mkdir } from 'node:fs/promises';
-
 import {
   compareDirectedMessages,
   formatDirectedMessage,
   messageMatchesRecipient,
-  readSeenIds,
 } from './cli-comms-inbox.js';
 import { optional, required, type Options } from './cli-options.js';
-import { readDirectedCommsMessages } from './state-io.js';
-import { type DirectedCommsMessage } from './types.js';
+import {
+  cliIo,
+  type CollaborationStateCliIo,
+  type CliRuntime,
+  waitForCommsChange,
+} from './cli-runtime.js';
 
 const DEFAULT_POLL_MS = 500;
 
-export async function watchComms(
-  options: Options,
-  stdout?: Pick<NodeJS.WritableStream, 'write'>,
-): Promise<string> {
-  const messagesDir = required(options, 'messages-dir');
+export async function watchComms(options: Options, runtime: CliRuntime = {}): Promise<string> {
+  const io = cliIo(runtime);
+  const commsDir = required(options, 'comms-dir');
   const seenFile = required(options, 'seen-file');
   const agentName = required(options, 'agent-name');
   const sessionPrefix = optional(options, 'session-prefix');
@@ -26,34 +24,36 @@ export async function watchComms(
   let emitted = 0;
   let output = '';
 
-  await mkdir(messagesDir, { recursive: true });
+  await io.ensureDirectory(commsDir);
 
   while (needsMoreEvents({ emitted, maxEvents })) {
     const result = await drainUnseenMessages({
-      messagesDir,
+      commsDir,
       seenFile,
       agentName,
       sessionPrefix,
       remainingEvents: remainingEvents({ emitted, maxEvents }),
+      io,
     });
     output += result.output;
     emitted += result.eventCount;
-    stdout?.write(result.output);
+    runtime.stdout?.write(result.output);
 
-    await waitForNextScan({ emitted, maxEvents, messagesDir, pollMs });
+    await waitForNextScan({ emitted, maxEvents, commsDir, pollMs, runtime });
   }
 
-  return stdout === undefined ? output : '';
+  return runtime.stdout === undefined ? output : '';
 }
 
 async function waitForNextScan(input: {
   readonly emitted: number;
   readonly maxEvents: number | undefined;
-  readonly messagesDir: string;
+  readonly commsDir: string;
   readonly pollMs: number;
+  readonly runtime: CliRuntime;
 }): Promise<void> {
   if (needsMoreEvents(input)) {
-    await waitForDirectoryChange({ directory: input.messagesDir, pollMs: input.pollMs });
+    await waitForCommsChange(input.runtime, { directory: input.commsDir, pollMs: input.pollMs });
   }
 }
 
@@ -72,14 +72,15 @@ function remainingEvents(input: {
 }
 
 async function drainUnseenMessages(input: {
-  readonly messagesDir: string;
+  readonly commsDir: string;
   readonly seenFile: string;
   readonly agentName: string;
   readonly sessionPrefix?: string;
   readonly remainingEvents?: number;
+  readonly io: CollaborationStateCliIo;
 }): Promise<{ readonly output: string; readonly eventCount: number }> {
-  const seenIds = await readSeenIds(input.seenFile);
-  const unseen = (await readDirectedCommsMessages(input.messagesDir))
+  const seenIds = await input.io.readSeenIds(input.seenFile);
+  const unseen = (await input.io.readDirectedCommsMessages(input.commsDir))
     .filter((message) => messageMatchesRecipient(message, input.agentName, input.sessionPrefix))
     .filter((message) => !seenIds.has(message.event_id))
     .toSorted(compareDirectedMessages)
@@ -89,50 +90,15 @@ async function drainUnseenMessages(input: {
     return { output: '', eventCount: 0 };
   }
 
-  await appendSeenMessageIds(input.seenFile, unseen);
+  await input.io.appendSeenMessageIds(
+    input.seenFile,
+    unseen.map((message) => message.event_id),
+  );
 
   return {
     output: unseen.map(formatDirectedMessage).join('\n'),
     eventCount: unseen.length,
   };
-}
-
-async function appendSeenMessageIds(
-  seenFile: string,
-  messages: readonly DirectedCommsMessage[],
-): Promise<void> {
-  await appendFile(seenFile, messages.map((message) => message.event_id).join('\n') + '\n');
-}
-
-function waitForDirectoryChange(input: {
-  readonly directory: string;
-  readonly pollMs: number;
-}): Promise<void> {
-  return new Promise((resolve) => {
-    let settled = false;
-    const timer = setTimeout(done, input.pollMs);
-    const watcher = tryWatchDirectory(input.directory, done);
-
-    function done(): void {
-      if (settled) {
-        return;
-      }
-      settled = true;
-      clearTimeout(timer);
-      watcher?.close();
-      resolve();
-    }
-  });
-}
-
-function tryWatchDirectory(directory: string, done: () => void): ReturnType<typeof watch> | null {
-  try {
-    const watcher = watch(directory, { persistent: false }, done);
-    watcher.on('error', done);
-    return watcher;
-  } catch {
-    return null;
-  }
 }
 
 function optionalPositiveInteger(options: Options, key: string): number | undefined {

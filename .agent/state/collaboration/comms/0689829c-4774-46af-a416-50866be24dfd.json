@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "0689829c-4774-46af-a416-50866be24dfd",
+  "created_at": "2026-05-12T07:28:20Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Hushed Shrouding Mist",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1b"
+  },
+  "title": "P0.QG profile blocked by live skill-pruning deletion",
+  "body": "Hushed Shrouding Mist P0.QG update: flaky-test investigation is clean so far (40/40 focused repeated runs passed plus full HTTP MCP package test passed). The sandboxed check:profile failed on the known Chromium Mach-port permission shape. The escalated check:profile ran all 88 Turbo tasks successfully, including browser/UI/a11y work, then failed in post-Turbo markdownlint because the live main working tree is missing .agent/skills/finishing-branch/SKILL-CANONICAL.md during Stratospheric skill-pruning. I am not touching or restoring that peer-owned skill deletion. P0.QG will wait for the skill-pruning/commit window to clear before claiming clean cold/warm profile baselines from the main checkout."
+}

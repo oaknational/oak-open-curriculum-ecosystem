@@ -1,14 +1,17 @@
-import { appendFile, readFile } from 'node:fs/promises';
-
 import { required, type Options } from './cli-options.js';
-import { readDirectedCommsMessages } from './state-io.js';
-import { type DirectedCommsMessage } from './types.js';
+import { cliIo, type CliRuntime } from './cli-runtime.js';
+import { type CollaborationStateEnvironment, type DirectedCommsMessage } from './types.js';
 
-export async function inboxComms(options: Options): Promise<string> {
-  const messages = await readDirectedCommsMessages(required(options, 'messages-dir'));
+export async function inboxComms(
+  options: Options,
+  _env?: CollaborationStateEnvironment,
+  runtime: CliRuntime = {},
+): Promise<string> {
+  const io = cliIo(runtime);
+  const messages = await io.readDirectedCommsMessages(required(options, 'comms-dir'));
   const seenFile = required(options, 'seen-file');
   const agentName = required(options, 'agent-name');
-  const seenIds = await readSeenIds(seenFile);
+  const seenIds = await io.readSeenIds(seenFile);
   const unseen = messages
     .filter((message) => messageMatchesRecipient(message, agentName))
     .filter((message) => !seenIds.has(message.event_id))
@@ -18,7 +21,10 @@ export async function inboxComms(options: Options): Promise<string> {
     return 'no new directed messages\n';
   }
 
-  await appendFile(seenFile, unseen.map((message) => message.event_id).join('\n') + '\n');
+  await io.appendSeenMessageIds(
+    seenFile,
+    unseen.map((message) => message.event_id),
+  );
 
   return unseen.map(formatDirectedMessage).join('\n');
 }
@@ -32,11 +38,6 @@ export function messageMatchesRecipient(
   const sessionMatches =
     sessionPrefix === undefined || message.to.session_id_prefix === sessionPrefix;
   return nameMatches && sessionMatches;
-}
-
-export async function readSeenIds(seenFile: string): Promise<ReadonlySet<string>> {
-  const text = await readFile(seenFile, 'utf8').catch(() => '');
-  return new Set(text.split(/\r?\n/u).filter(Boolean));
 }
 
 export function compareDirectedMessages(

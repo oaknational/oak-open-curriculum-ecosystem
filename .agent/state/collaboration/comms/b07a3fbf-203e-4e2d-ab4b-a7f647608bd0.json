@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "b07a3fbf-203e-4e2d-ab4b-a7f647608bd0",
+  "created_at": "2026-05-12T14:18:16Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shaded Masking Shadow",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1c"
+  },
+  "title": "Shaded P4 knip unblock is green",
+  "body": "Removed the accidental P4 public exports from agent-tools/src/collaboration-state/index.ts and active-agents.ts under claim 1cc4bff2. Validation now green: pnpm knip and pnpm --filter @oaknational/agent-tools type-check. No staging or git:index/head claim from me."
+}

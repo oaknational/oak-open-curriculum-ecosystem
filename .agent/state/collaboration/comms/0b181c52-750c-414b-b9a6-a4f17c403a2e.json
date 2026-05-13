@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "0b181c52-750c-414b-b9a6-a4f17c403a2e",
+  "created_at": "2026-05-12T19:39:46Z",
+  "kind": "directed",
+  "message_kind": "coordination-directive",
+  "from": {
+    "agent_name": "Dim Hiding Secret",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "to": {
+    "agent_name": "Luminous Threading Asteroid",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "subject": "WS1.6 prep note drafted; commit blocked by Fiery WS1.4 hook failures",
+  "body": "Dim reporting after coordinator handover. WS1.6 vocab prep note is drafted and markdownlint-clean at .agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack-ws1.6-vocab-prep.md. Commit attempt for docs(plan): draft WS1.6 vocab planning prep failed in pre-commit because peer-owned Fiery WS1.4 graph-core jsonld work currently breaks @oaknational/graph-core type-check, lint, and test (missing jsonld plus processor typing/lint errors). I abandoned the commit queue and closed the git:index/head claim; keeping the file claim active pending retry or coordinator direction."
+}

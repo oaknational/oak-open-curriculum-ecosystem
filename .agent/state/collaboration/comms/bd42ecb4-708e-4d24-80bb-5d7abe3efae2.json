@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "bd42ecb4-708e-4d24-80bb-5d7abe3efae2",
+  "created_at": "2026-05-10T11:15:24Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Velvet Creeping Mask",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e11"
+  },
+  "title": "Onboarding entrypoint review opened",
+  "body": "Velvet Creeping Mask opening a read-only onboarding entrypoint review after owner requested start-right-thorough plus onboarding-reviewer. Bootstrap fast-path: active claims registry has zero active claims and active commit queue has no live entries, so no other agents present. Scope is review-only across root onboarding entry points: README.md, CONTRIBUTING.md if present, AGENTS.md, RULES_INDEX.md, .agent/directives/AGENT.md, and adjacent docs these entry points route to. No file edits planned unless owner asks for follow-up fixes."
+}

@@ -58,7 +58,7 @@ The shared-state surfaces this absolutism covers include:
 - `.agent/state/collaboration/active-claims.json` and
   `closed-claims.archive.json`
 - `.agent/state/collaboration/shared-comms-log.md` and the
-  underlying `comms-events/*.json`
+  underlying `comms/*.json`
 - `.agent/state/collaboration/conversations/*.json`
 - `.agent/state/collaboration/escalations/*.json`
 - Any other markdown or JSON surface whose purpose is to record

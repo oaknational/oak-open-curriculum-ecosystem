@@ -99,7 +99,7 @@ evidence accumulates.
 The role is a *commitment to coordinate*, not a new primitive. Any
 agent observing the chain claims it by posting a shared-comms-log
 entry naming the role and the chain symptom. Authority is bounded:
-pause peers via comms-events with deadlines, queue commits via
+pause peers via canonical comms events with deadlines, queue commits via
 `commit_queue`, resume once the chain clears. Conflicts between two
 claimants resolve by sidebar. Termination is automatic — when the
 chain clears the role dissolves; the opening shared-comms-log entry

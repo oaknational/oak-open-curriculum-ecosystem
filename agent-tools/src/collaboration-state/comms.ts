@@ -1,24 +1,21 @@
 import { assertUtcTimestampNotFuture } from './timestamps.js';
 import {
+  type CommsEvent,
   type DirectedCommsMessage,
   type LifecycleCommsEvent,
   type NarrativeCommsEvent,
 } from './types.js';
 
 /**
- * Validate and create an immutable narrative communication event. Narrative
- * events are the only kind authored at runtime; lifecycle and directed events
- * are produced by other workflows (consolidation, handoff) and migrated
- * historically. This factory enforces UTC-ISO created_at, non-empty fields,
- * and event_id uniqueness against the existing narrative directory.
+ * Validate and create an immutable communication event.
  */
-export function createNarrativeCommsEvent(
-  event: NarrativeCommsEvent,
+export function createCommsEvent(
+  event: CommsEvent,
   options: {
     readonly nowIso: string;
     readonly existingEventIds?: readonly string[];
   },
-): NarrativeCommsEvent {
+): CommsEvent {
   if (options.existingEventIds?.includes(event.event_id) === true) {
     throw new Error(`communication event already exists: ${event.event_id}`);
   }
@@ -28,40 +25,26 @@ export function createNarrativeCommsEvent(
     nowIso: options.nowIso,
   });
   validateNonEmpty('event_id', event.event_id);
-  validateNonEmpty('title', event.title);
+  validateNonEmpty('schema_version', event.schema_version);
   validateNonEmpty('body', event.body);
+  if (event.schema_version !== '2.0.0') {
+    throw new Error('communication event must use schema_version 2.0.0');
+  }
+  if (event.kind === 'narrative' || event.kind === 'lifecycle') {
+    validateNonEmpty('title', event.title);
+  }
+  if (event.kind === 'directed') {
+    validateNonEmpty('message_kind', event.message_kind);
+  }
 
   return event;
 }
 
 /**
  * Render the human-readable shared communication log from immutable events.
- * Accepts the three event kinds as separate arrays (one per directory); the
- * renderer merges them into a single chronological stream so that the rendered
- * log preserves the historical order across kinds.
  */
-export function renderSharedCommsLog(input: {
-  readonly narrative: readonly NarrativeCommsEvent[];
-  readonly lifecycle: readonly LifecycleCommsEvent[];
-  readonly directed: readonly DirectedCommsMessage[];
-}): string {
-  const entries: readonly RenderEntry[] = [
-    ...input.narrative.map((event) => ({
-      created_at: event.created_at,
-      event_id: event.event_id,
-      rendered: renderNarrativeEvent(event),
-    })),
-    ...input.lifecycle.map((event) => ({
-      created_at: event.created_at,
-      event_id: event.event_id,
-      rendered: renderLifecycleEvent(event),
-    })),
-    ...input.directed.map((event) => ({
-      created_at: event.created_at,
-      event_id: event.event_id,
-      rendered: renderDirectedMessage(event),
-    })),
-  ];
+export function renderSharedCommsLog(input: { readonly events: readonly CommsEvent[] }): string {
+  const entries = input.events.map(renderEntry);
   const sections = entries.toSorted(compareByTime).map((entry) => entry.rendered);
   const header = [
     '---',
@@ -70,9 +53,7 @@ export function renderSharedCommsLog(input: {
     '',
     '# Agent-to-Agent Shared Communication Log',
     '',
-    '> Generated from `.agent/state/collaboration/comms-events/`,',
-    '> `.agent/state/collaboration/comms-lifecycle/`, and',
-    '> `.agent/state/collaboration/comms-messages/`.',
+    '> Generated from `.agent/state/collaboration/comms/`.',
     '',
     '',
   ].join('\n');
@@ -84,6 +65,29 @@ interface RenderEntry {
   readonly created_at: string;
   readonly event_id: string;
   readonly rendered: string;
+}
+
+function renderEntry(event: CommsEvent): RenderEntry {
+  if (event.kind === 'narrative') {
+    return {
+      created_at: event.created_at,
+      event_id: event.event_id,
+      rendered: renderNarrativeEvent(event),
+    };
+  }
+  if (event.kind === 'lifecycle') {
+    return {
+      created_at: event.created_at,
+      event_id: event.event_id,
+      rendered: renderLifecycleEvent(event),
+    };
+  }
+
+  return {
+    created_at: event.created_at,
+    event_id: event.event_id,
+    rendered: renderDirectedMessage(event),
+  };
 }
 
 function compareByTime(left: RenderEntry, right: RenderEntry): number {
@@ -126,7 +130,7 @@ function renderLifecycleEvent(event: LifecycleCommsEvent): string {
 function renderDirectedMessage(event: DirectedCommsMessage): string {
   return [
     `## ${event.created_at} — \`${event.from.agent_name}\` → ` +
-      `\`${event.to.agent_name}\` — [directed:${event.kind}] ${event.subject}`,
+      `\`${event.to.agent_name}\` — [directed:${event.message_kind}] ${event.subject}`,
     '',
     event.body,
   ].join('\n');

@@ -15,6 +15,7 @@ const KNOWN_OPTION_KEYS = new Set([
   'body-json',
   'claim-id',
   'closed',
+  'comms-dir',
   'created-at',
   'closure-summary',
   'entry-json',

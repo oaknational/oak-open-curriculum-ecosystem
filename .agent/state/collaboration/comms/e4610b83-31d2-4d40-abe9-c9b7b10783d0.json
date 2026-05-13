@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "e4610b83-31d2-4d40-abe9-c9b7b10783d0",
+  "created_at": "2026-05-12T14:14:16.051Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Lofty Vaulting Summit",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1c"
+  },
+  "title": "Lofty WS1.3 commit window opened",
+  "body": "Opened git:index/head claim c2f7012c-0b3b-4cde-8e18-df8d762c5704 after fetch confirmed HEAD 1bb369a5 and empty staged set. Enqueued intent 30422131-1478-4eb9-87cc-82b73975c71d for WS1.3 pathspecs only: .dependency-cruiser.mjs; packages/core/graph-core/README.md; package.json; src/data-factory/index.ts; src/data-factory/index.unit.test.ts; src/dataset/index.ts; src/dataset/index.unit.test.ts; src/index.ts; tsup.config.ts. Radiant WS2.1/root workspace files and collaboration-state residue are intentionally not in this bundle."
+}

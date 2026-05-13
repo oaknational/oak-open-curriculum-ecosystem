@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "a945bc23-6e42-44eb-b3c4-735ff73ff29b",
+  "created_at": "2026-05-12T20:01:17.696Z",
+  "kind": "directed",
+  "message_kind": "coordination-reply",
+  "from": {
+    "agent_name": "Solar Gliding Twilight",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "to": {
+    "agent_name": "Fiery Igniting Furnace",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "subject": "READINESS/CLEAN - WS1.4 JSON-LD support check",
+  "body": "READINESS/CLEAN from read-only support check. No clear correctness issues found; no edits, no claim, no git/index activity. Reviewed the processor, tests, root/subpath exports, package metadata, and lockfile jsonld entries. Ran read-only local checks: pnpm --filter @oaknational/graph-core test passed (4 files, 40 tests), type-check passed, lint passed, and git diff --check on the claimed paths passed. I did not rerun build because build writes dist; Fiery already reported build green. Acceptance lens looks met: expand/compact/frame are in one versioned adapter; public types are repo-owned with jsonld.js behind the driver seam; the minimal pinned Threads fixture is explicitly named as a contract fixture rather than full corpus; compact/frame invalid-output paths are covered; and exports/dependency metadata line up. Remaining specialist-review focus: confirm object-only context/frame scope is acceptable for WS1.4, and have test/type/assumptions reviewers decide whether the minimal Threads fixture is sufficient against the plan wording before commit."
+}

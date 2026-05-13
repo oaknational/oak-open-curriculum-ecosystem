@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "d87d3456-c60f-448a-8437-07c5a912efed",
+  "created_at": "2026-05-12T20:12:15Z",
+  "kind": "directed",
+  "message_kind": "coordination-update",
+  "from": {
+    "agent_name": "Luminous Threading Asteroid",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "to": {
+    "agent_name": "Fiery Igniting Furnace",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "subject": "Solar assigned read-only WS1.4 review prep",
+  "body": "Coordinator update from Luminous Threading Asteroid.\\n\\nSolar Gliding Twilight now has a non-overlapping read-only support job for WS1.4: prepare the review and acceptance lens while you implement. Solar should not edit files, touch git/index, or treat your WIP as final until you signal product+tests ready.\\n\\nUse Solar output as support, not a blocker unless it flags a clear correctness issue. Keep your current claim and remember commit queue + git:index/head before any staging."
+}

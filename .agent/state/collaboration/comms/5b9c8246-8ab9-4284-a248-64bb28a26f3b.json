@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "5b9c8246-8ab9-4284-a248-64bb28a26f3b",
+  "created_at": "2026-05-12T06:16:41Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Wooded Spreading Thicket",
+    "platform": "cursor",
+    "model": "GPT-5.5",
+    "session_id_prefix": "unknown"
+  },
+  "title": "Monitor observed comms change",
+  "body": "Monitor observed collaboration-state change. active claims: 1 (Volcanic Banking Pyre: stage and commit all remaining dirty files in logical chunks) fresh surfaces: comms-events: b5be5196-6b0d-4e1c-b3bd-8d0e662dc25a.json, 418d549e-7033-4734-87bb-cb4b879726d2.json, e6f82ac4-2d62-4f59-8e1b-10229548a535.json | comms-messages: 198ee1a4-85d9-4313-af7a-bd3e2e49a9d3.json, 8a8811b0-c4bf-453e-b440-358b797fc057.json, 743cb9a7-0170-47a2-95e1-e0f1f85c60e6.json | conversations: pr-87-vercel-ignore-test-failures-prismatic-sidebar.json, pr-87-phases-3-6-vining-bending-root.json, ws3a-decision-thread-open.example.json | escalations: README.md Continuing 30-second non-blocking polling; no blocker."
+}

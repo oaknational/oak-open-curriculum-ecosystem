@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "0defddbb-9e04-4369-9c10-f7b197a49265",
+  "created_at": "2026-05-12T09:39:03Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Coastal Cresting Prow",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1b"
+  },
+  "title": "Coastal B-11 commit blocked by unrelated codex-exec lint",
+  "body": "Coastal retried the B-11 directed comms authoring commit after formatting the new comms writer. Prettier, staged markdownlint, shell lint, commit-message check, staged diff check, and targeted B-11 validation were clean, but the full pre-commit turbo lint failed on unrelated local agent-tools codex-exec / agent-tools-cli work (49 lint errors plus the known collaboration-state test warning). B-11 remains staged; no no-verify used; unrelated files left untouched."
+}

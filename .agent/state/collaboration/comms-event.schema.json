@@ -2,8 +2,8 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "comms-event.schema.json",
   "title": "Communication Protocol Event",
-  "description": "Single source of truth for the inter-agent communication protocol. The protocol is one canonical schema; the application is three event kinds expressed as $defs and projected to three sibling directories (comms-events/ narrative, comms-lifecycle/ lifecycle, comms-messages/ directed). Each directory is single-kind; readers infer the $def from the directory and validate against the named branch. Governed by .agent/directives/agent-collaboration.md.",
-  "$comment_compatibility": "Additive-only schema evolution within a major version. v1.x readers preserve unrecognised fields on write-back; major-version mismatch causes the reader to bail out. The $defs are deliberately strict (additionalProperties false) so an authoring agent cannot accidentally introduce a fourth shape under an existing $def; new event kinds are introduced as new $defs + new directories. Field provenance is documented inline against each $def.",
+  "description": "Single source of truth for the inter-agent communication protocol. The protocol is one canonical schema and one canonical directory: .agent/state/collaboration/comms/. Each event carries schema_version 2.0.0 and a top-level kind discriminator. Governed by .agent/directives/agent-collaboration.md.",
+  "$comment_compatibility": "Major-version mismatch causes strict readers to bail out. The $defs are deliberately strict (additionalProperties false) so an authoring agent cannot accidentally introduce a fourth shape under an existing $def; new event kinds are introduced as new kind values with explicit parser and renderer support. Field provenance is documented inline against each $def.",
   "oneOf": [
     { "$ref": "#/$defs/narrative" },
     { "$ref": "#/$defs/lifecycle" },
@@ -25,17 +25,22 @@
     "narrative": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["event_id", "created_at", "author", "title", "body"],
+      "required": ["schema_version", "event_id", "created_at", "kind", "author", "title", "body"],
       "properties": {
+        "schema_version": { "const": "2.0.0" },
         "event_id": {
           "type": "string",
           "minLength": 1,
-          "description": "Stable identifier for the event. UUID v4 or stable slug; must be unique across the comms-events/ directory."
+          "description": "Stable identifier for the event. UUID v4 or stable slug; must be unique across the canonical comms/ directory."
         },
         "created_at": {
           "type": "string",
           "format": "date-time",
           "description": "ISO 8601 UTC timestamp at which the event was authored. Canonical time field across all event kinds."
+        },
+        "kind": {
+          "const": "narrative",
+          "description": "Top-level canonical communication event discriminator."
         },
         "author": {
           "$ref": "#/$defs/agent_id",
@@ -64,7 +69,7 @@
           "description": "Optional reference to an earlier event_id this event replies to. Threading affordance (variant of in_response_to)."
         }
       },
-      "description": "Default narrative event: an authored, titled, bodied communication addressed to the team. The canonical and dominant shape (~311 of 318 events as of 2026-05-11). Lives in .agent/state/collaboration/comms-events/."
+      "description": "Default narrative event: an authored, titled, bodied communication addressed to the team. Lives in .agent/state/collaboration/comms/."
     },
     "lifecycle": {
       "type": "object",
@@ -73,6 +78,7 @@
         "schema_version",
         "event_id",
         "created_at",
+        "kind",
         "event_type",
         "occurred_at",
         "author",
@@ -84,11 +90,7 @@
         "body"
       ],
       "properties": {
-        "schema_version": {
-          "type": "string",
-          "minLength": 1,
-          "description": "Semantic version of the lifecycle event payload. Authored events use the latest supported version."
-        },
+        "schema_version": { "const": "2.0.0" },
         "event_id": { "type": "string", "minLength": 1 },
         "created_at": {
           "type": "string",
@@ -98,7 +100,11 @@
         "event_type": {
           "type": "string",
           "minLength": 1,
-          "description": "Lifecycle-event sub-kind. Examples: comms_event, consolidation_open, consolidation_close, claim_lifecycle. Not a top-level protocol discriminator (the directory does that); a lifecycle-specific category."
+          "description": "Lifecycle-event sub-kind. Examples: comms_event, consolidation_open, consolidation_close, claim_lifecycle."
+        },
+        "kind": {
+          "const": "lifecycle",
+          "description": "Top-level canonical communication event discriminator."
         },
         "occurred_at": {
           "type": "string",
@@ -123,7 +129,7 @@
         },
         "body": { "type": "string", "minLength": 1 }
       },
-      "description": "Lifecycle event: a structured event recording a session, claim, or consolidation lifecycle moment. Carries explicit thread and claim_id context. Lives in .agent/state/collaboration/comms-lifecycle/."
+      "description": "Lifecycle event: a structured event recording a session, claim, or consolidation lifecycle moment. Carries explicit thread and claim_id context. Lives in .agent/state/collaboration/comms/."
     },
     "directed": {
       "type": "object",
@@ -133,13 +139,14 @@
         "event_id",
         "created_at",
         "kind",
+        "message_kind",
         "from",
         "to",
         "subject",
         "body"
       ],
       "properties": {
-        "schema_version": { "type": "string", "minLength": 1 },
+        "schema_version": { "const": "2.0.0" },
         "event_id": { "type": "string", "minLength": 1 },
         "created_at": {
           "type": "string",
@@ -147,9 +154,13 @@
           "description": "ISO 8601 UTC authoring timestamp. Canonical time field across all event kinds; the legacy 'timestamp' field is renamed to created_at on migration."
         },
         "kind": {
+          "const": "directed",
+          "description": "Top-level canonical communication event discriminator."
+        },
+        "message_kind": {
           "type": "string",
           "minLength": 1,
-          "description": "Directed-message kind. Examples: session-handoff-summary, coordination-notice, sidebar-request."
+          "description": "Directed-message sub-kind. Examples: session-handoff-summary, coordination-notice, sidebar-request."
         },
         "from": {
           "$ref": "#/$defs/agent_id",
@@ -162,7 +173,7 @@
         "subject": { "type": "string", "minLength": 1 },
         "body": { "type": "string", "minLength": 1 }
       },
-      "description": "Directed message: a point-to-point communication from one agent to another, carrying explicit from/to identities and a kind discriminator. Lives in .agent/state/collaboration/comms-messages/."
+      "description": "Directed message: a point-to-point communication from one agent to another, carrying explicit from/to identities and a message_kind sub-discriminator. Lives in .agent/state/collaboration/comms/."
     }
   }
 }

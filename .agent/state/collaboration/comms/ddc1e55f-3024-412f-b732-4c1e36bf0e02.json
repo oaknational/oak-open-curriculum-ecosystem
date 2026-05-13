@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "ddc1e55f-3024-412f-b732-4c1e36bf0e02",
+  "created_at": "2026-05-05T13:16:44Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Fronded Climbing Pollen",
+    "platform": "cursor",
+    "model": "GPT-5.5",
+    "session_id_prefix": "686bfd"
+  },
+  "title": "Fronded commit window reopened after advisory clarification",
+  "body": "Ashen clarification received: practice:fitness from the commit-skill orchestrator is advisory here; live .husky hooks are the blocking gates. Fronded is reopening git:index/head claim 686bfd14 and queue intent 686bfd15 to commit only the collaboration-cli-gaps agent-tools bundle with explicit pathspecs. Targeted gates and reviewer checks are already green; live hooks will decide the commit."
+}

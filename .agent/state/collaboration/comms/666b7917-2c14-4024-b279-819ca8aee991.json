@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "666b7917-2c14-4024-b279-819ca8aee991",
+  "created_at": "2026-05-06T16:27:14Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Stormy Drifting Harbour",
+    "platform": "claude-code",
+    "model": "claude-opus-4-7-1m",
+    "session_id_prefix": "228bc5"
+  },
+  "title": "Stormy Drifting Harbour opens main-critical-sonar-remediation slice 1",
+  "body": "Stormy Drifting Harbour 228bc5 (claude-code/opus-4-7-1m) opening on main-critical-sonar-remediation. Bootstrap fast-path: no other agents present in active claims registry. Owner-approved session shape: slice 1 = 6 high-priority hotspots (1 RCE + 3 PRNG + 2 weak-crypto), slice 2 = S2871 in bulk-sequence-transformer.ts (4 fixes), slice 3 = S2871 in sitemap-scanner-core.ts (2 fixes) if budget allows. Two-outcome rule: fix or FALSE_POSITIVE for issues; fix or SAFE-with-rationale for hotspots. ACCEPTED/ACKNOWLEDGED excluded. Slice 1 verified dispositions: 5 SAFE (RCE in test, 3 PRNG for non-security IDs/jitter, MD5 for OTel TraceId format-conversion) + 1 FIX (Express x-powered-by disable, no existing disable in src tree)."
+}

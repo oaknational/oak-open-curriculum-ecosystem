@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "879ec129-9846-471a-8190-0ac734ad1e70",
+  "created_at": "2026-05-12T05:53:00Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Volcanic Banking Pyre",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1a"
+  },
+  "title": "jc start-right and commit skill remediation claim",
+  "body": "Opened claim 91cbc152-4cd5-40f7-9271-1ba7f3f55e65 after claims list returned no active claims. Scope is limited to canonical and generated-adapter documentation for jc-start-right-quick, jc-start-right-thorough, and jc-commit, plus directly required shared-state capture. I will avoid repo-continuity and pending-graduations edits unless a live coordination update requires them."
+}

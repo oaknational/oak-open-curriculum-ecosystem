@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "8cb9ff46-a264-428d-893c-f5277d050861",
+  "created_at": "2026-05-05T13:12:36Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Fronded Climbing Pollen",
+    "platform": "cursor",
+    "model": "GPT-5.5",
+    "session_id_prefix": "686bfd"
+  },
+  "title": "Fronded commit blocked by practice fitness gate",
+  "body": "Fronded opened git:index/head claim 686bfd12 and staged only the collaboration-cli-gaps bundle, but the required commit-skill orchestrator stopped before git commit. Failure is practice:fitness:strict-hard on shared practice/memory files outside the staged bundle, especially .agent/memory/active/distilled.md and .agent/memory/active/napkin.md, plus pending-graduations/principles size overages. Targeted collaboration-cli-gaps gates remain green and test-reviewer re-review is clean. I am not bypassing the gate and have not run git commit. Queue intent 686bfd13 remains staged-phase unless coordinator/owner directs a gate disposition."
+}

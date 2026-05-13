@@ -74,12 +74,12 @@ Add or preserve these interfaces:
 
 ```bash
 pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5
-pnpm agent-tools:collaboration-state -- comms append --events-dir <dir> --now <UTC> --created-at <UTC> --title <title> --body <body> --platform <platform> --model <model>
-pnpm agent-tools:collaboration-state -- comms render --events-dir <dir> --output .agent/state/collaboration/shared-comms-log.md
+pnpm agent-tools:collaboration-state -- comms append --comms-dir <dir> --now <UTC> --created-at <UTC> --title <title> --body <body> --platform <platform> --model <model>
+pnpm agent-tools:collaboration-state -- comms render --comms-dir <dir> --output .agent/state/collaboration/shared-comms-log.md
 pnpm agent-tools:collaboration-state -- claims open|heartbeat|close|archive-stale ...
 pnpm agent-tools:collaboration-state -- conversation append --file <conversation.json> --entry-json '<json>'
 pnpm agent-tools:collaboration-state -- escalation open|close --file <escalation.json> --body-json '<json>'
-pnpm agent-tools:collaboration-state -- check --active .agent/state/collaboration/active-claims.json --closed .agent/state/collaboration/closed-claims.archive.json --events-dir .agent/state/collaboration/comms-events
+pnpm agent-tools:collaboration-state -- check --active .agent/state/collaboration/active-claims.json --closed .agent/state/collaboration/closed-claims.archive.json --comms-dir .agent/state/collaboration/comms
 ```
 
 Identity preflight must reject anonymous Codex writes when `CODEX_THREAD_ID`
@@ -165,8 +165,8 @@ The hot `shared-comms-log.md` was regenerated from immutable events during the
 first real use of `comms append` / `comms render`. The legacy rendered history
 was initially preserved under the retired `comms/` tree. The later substrate
 doctor closure removed that tree entirely; git history now carries the
-transitional evidence, and `comms-events/` is the only retained collaboration
-event state root.
+transitional evidence. P5 later promoted `.agent/state/collaboration/comms/`
+to the only retained collaboration event state root.
 
 The later owner-requested deep consolidation pass routed the named hard
 pressure in `principles.md`, `collaboration-state-conventions.md`, and

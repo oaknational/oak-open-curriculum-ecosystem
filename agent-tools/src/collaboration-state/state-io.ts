@@ -1,13 +1,11 @@
 import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { createNarrativeCommsEvent } from './comms.js';
+import { createCommsEvent } from './comms.js';
 import {
   parseClosedClaimsArchive,
   parseCollaborationRegistry,
-  parseDirectedCommsMessage,
-  parseLifecycleCommsEvent,
-  parseNarrativeCommsEvent,
+  parseCommsEvent,
 } from './state-parsers.js';
 import {
   runJsonStateTransaction,
@@ -17,9 +15,8 @@ import {
 import {
   type ClosedClaimsArchive,
   type CollaborationRegistry,
+  type CommsEvent,
   type DirectedCommsMessage,
-  type LifecycleCommsEvent,
-  type NarrativeCommsEvent,
 } from './types.js';
 
 export { parseClosedClaimsArchive, parseCollaborationRegistry } from './state-parsers.js';
@@ -39,55 +36,40 @@ export async function readClosedClaimsFile(closedPath: string): Promise<ClosedCl
 }
 
 /**
- * Append an immutable narrative communication event to the narrative
- * directory by exclusive file create. Narrative events are the only kind
- * authored at runtime; lifecycle and directed events are produced by other
- * workflows and migrated historically, so this is the only writer.
+ * Append an immutable communication event to the canonical comms directory by
+ * exclusive file create.
  */
-export async function writeNarrativeCommsEvent(input: {
-  readonly eventsDir: string;
-  readonly event: NarrativeCommsEvent;
+export async function writeCommsEvent(input: {
+  readonly commsDir: string;
+  readonly event: CommsEvent;
   readonly nowIso: string;
 }): Promise<void> {
-  await mkdir(input.eventsDir, { recursive: true });
-  const existingIds = await listCommsEventIds(input.eventsDir);
-  const event = createNarrativeCommsEvent(input.event, {
+  await mkdir(input.commsDir, { recursive: true });
+  const existingIds = await listCommsEventIds(input.commsDir);
+  const event = createCommsEvent(input.event, {
     nowIso: input.nowIso,
     existingEventIds: existingIds,
   });
 
-  await writeFile(eventPath(input.eventsDir, event.event_id), eventJson(event), { flag: 'wx' });
+  await writeFile(eventPath(input.commsDir, event.event_id), eventJson(event), { flag: 'wx' });
 }
 
 /**
- * Read all immutable narrative communication events from the narrative
- * directory. Each file is parsed against `$defs.narrative` via the
- * single-schema narrative parser.
+ * Read all canonical immutable communication events from the unified comms
+ * directory.
  */
-export async function readNarrativeCommsEvents(
-  eventsDir: string,
-): Promise<readonly NarrativeCommsEvent[]> {
-  return readEventDirectory(eventsDir, parseNarrativeCommsEvent);
+export async function readCommsEvents(commsDir: string): Promise<readonly CommsEvent[]> {
+  return readEventDirectory(commsDir, parseCommsEvent);
 }
 
 /**
- * Read all immutable lifecycle communication events from the lifecycle
- * directory. Each file is parsed against `$defs.lifecycle`.
- */
-export async function readLifecycleCommsEvents(
-  lifecycleDir: string,
-): Promise<readonly LifecycleCommsEvent[]> {
-  return readEventDirectory(lifecycleDir, parseLifecycleCommsEvent);
-}
-
-/**
- * Read all immutable directed communication messages from the directed
- * directory. Each file is parsed against `$defs.directed`.
+ * Read all immutable directed communication messages from the canonical comms
+ * directory.
  */
 export async function readDirectedCommsMessages(
-  messagesDir: string,
+  commsDir: string,
 ): Promise<readonly DirectedCommsMessage[]> {
-  return readEventDirectory(messagesDir, parseDirectedCommsMessage);
+  return filterEvents(await readCommsEvents(commsDir), 'directed');
 }
 
 /**
@@ -162,6 +144,15 @@ function eventPath(eventsDir: string, eventId: string): string {
   return join(eventsDir, `${eventId}.json`);
 }
 
-function eventJson(event: NarrativeCommsEvent): string {
+function eventJson(event: CommsEvent): string {
   return `${JSON.stringify(event, null, 2)}\n`;
+}
+
+function filterEvents<TKind extends CommsEvent['kind']>(
+  events: readonly CommsEvent[],
+  kind: TKind,
+): readonly Extract<CommsEvent, { readonly kind: TKind }>[] {
+  return events.filter((event): event is Extract<CommsEvent, { readonly kind: TKind }> => {
+    return event.kind === kind;
+  });
 }

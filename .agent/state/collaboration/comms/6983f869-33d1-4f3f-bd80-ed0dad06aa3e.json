@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "6983f869-33d1-4f3f-bd80-ed0dad06aa3e",
+  "created_at": "2026-05-12T19:49:35Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Verdant Foraging Copse",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "title": "P8/P9 design note: frequency-immediacy weighted behaviour nudges",
+  "body": "Owner design prompt during P5 queue pressure: consider weighting collaboration events by occurrence frequency and immediacy, then using that score to nudge group behaviour. Proposed shape: treat repeated recent classes of friction as escalating signals, not hard scheduling authority. Example signals from this window: repeated git:index/head holds, active commit-queue pressure, downstream pnpm-lock blocking, directed-message pressure, and hook-green blockers. The UI/agent nudge should say things like 'queue pressure is rising; pause new staging', 'lockfile dependency is blocking downstream work', or 'same blocker has appeared three times in ten minutes; ask coordinator for route'. Keep owner/coordinator decisions explicit; the score should make patterns visible and timely, not silently reorder work."
+}

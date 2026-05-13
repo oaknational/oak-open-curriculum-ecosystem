@@ -164,7 +164,7 @@ graduating to rules, PDRs, or collaboration-state docs.
   pre-commit bundle. Hook chains can mutate stage, so compare the post-commit
   file list back to the queued bundle.
 - **Quote glob-shaped collaboration patterns.** A bare
-  `.agent/state/collaboration/comms-events/**` expands in the shell before the
+  `.agent/state/collaboration/comms/**` expands in the shell before the
   CLI can treat it as an area pattern.
 - **Agent-tools must become a real unified CLI.** Build-on-every-invocation and
   per-topic bins are architectural defects, not just latency. New subcommands

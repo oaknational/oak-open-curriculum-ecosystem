@@ -111,9 +111,7 @@ export async function evaluateSharedCommsLog(
     outputPath: SHARED_COMMS_LOG,
     committedText,
     regeneratedText: renderSharedCommsLog({
-      narrative: events.narrative,
-      lifecycle: events.lifecycle,
-      directed: events.directed,
+      events: [...events.narrative, ...events.lifecycle, ...events.directed],
     }),
   });
 }

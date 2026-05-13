@@ -5,9 +5,7 @@ import { optional, required, type Options } from './cli-options.js';
 import {
   parseClosedClaimsArchive,
   parseCollaborationRegistry,
-  readDirectedCommsMessages,
-  readLifecycleCommsEvents,
-  readNarrativeCommsEvents,
+  readCommsEvents,
 } from './state-io.js';
 import { updateJsonFileWithRetry, writeJsonFileAtomically } from './transaction.js';
 
@@ -45,14 +43,8 @@ export async function checkState(options: Options): Promise<string> {
   if (optional(options, 'closed') !== undefined) {
     parseClosedClaimsArchive(await readFile(required(options, 'closed'), 'utf8'));
   }
-  if (optional(options, 'events-dir') !== undefined) {
-    await readNarrativeCommsEvents(required(options, 'events-dir'));
-  }
-  if (optional(options, 'lifecycle-dir') !== undefined) {
-    await readLifecycleCommsEvents(required(options, 'lifecycle-dir'));
-  }
-  if (optional(options, 'messages-dir') !== undefined) {
-    await readDirectedCommsMessages(required(options, 'messages-dir'));
+  if (optional(options, 'comms-dir') !== undefined) {
+    await readCommsEvents(required(options, 'comms-dir'));
   }
 
   return 'ok\n';

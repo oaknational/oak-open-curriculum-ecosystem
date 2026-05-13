@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   archiveStaleClaims,
-  createNarrativeCommsEvent,
+  createCommsEvent,
   deriveCollaborationIdentity,
   runCollaborationStateCli,
   updateJsonFileWithRetry,
@@ -141,8 +141,6 @@ describe('runCollaborationStateCli', () => {
     const activePath = join(tempDir, 'active.json');
     const closedPath = join(tempDir, 'closed.json');
     const eventsDir = join(tempDir, 'events');
-    const lifecycleDir = join(tempDir, 'lifecycle');
-    const messagesDir = join(tempDir, 'messages');
     await writeFile(activePath, '{"schema_version":"1.3.0","commit_queue":[],"claims":[]}\n');
     await writeFile(closedPath, '{"schema_version":"1.3.0","claims":[]}\n');
 
@@ -155,12 +153,8 @@ describe('runCollaborationStateCli', () => {
           activePath,
           '--closed',
           closedPath,
-          '--events-dir',
+          '--comms-dir',
           eventsDir,
-          '--lifecycle-dir',
-          lifecycleDir,
-          '--messages-dir',
-          messagesDir,
         ],
         env: {},
       });
@@ -465,9 +459,7 @@ describe('claim CLI reports', () => {
   it('builds comms send defaults from the repo root', () => {
     expect(commsSendDefaults(options({ 'repo-root': '/repo' }), nowIso, 'event-one')).toStrictEqual(
       {
-        'events-dir': '/repo/.agent/state/collaboration/comms-events',
-        'lifecycle-dir': '/repo/.agent/state/collaboration/comms-lifecycle',
-        'messages-dir': '/repo/.agent/state/collaboration/comms-messages',
+        'comms-dir': '/repo/.agent/state/collaboration/comms',
         active: '/repo/.agent/state/collaboration/active-claims.json',
         now: nowIso,
         'created-at': nowIso,
@@ -480,26 +472,28 @@ describe('claim CLI reports', () => {
   it('formats comms send output from resolved write paths', () => {
     expect(
       formatCommsSendResult(
-        options({ 'events-dir': '/custom/events', output: '/custom/shared-comms-log.md' }),
+        options({ 'comms-dir': '/custom/comms', output: '/custom/shared-comms-log.md' }),
         'event-one',
       ),
     ).toBe(
       '{\n' +
         '  "event_id": "event-one",\n' +
-        '  "event_path": "/custom/events/event-one.json",\n' +
+        '  "event_path": "/custom/comms/event-one.json",\n' +
         '  "shared_log_path": "/custom/shared-comms-log.md"\n' +
         '}\n',
     );
   });
 });
 
-describe('createNarrativeCommsEvent', () => {
+describe('createCommsEvent', () => {
   it('rejects malformed and future UTC timestamps', () => {
     expect(() =>
-      createNarrativeCommsEvent(
+      createCommsEvent(
         {
+          schema_version: '2.0.0',
           event_id: 'event-one',
           created_at: '2026-04-28T10:00:00Z',
+          kind: 'narrative',
           author: woodland,
           title: 'future event',
           body: 'This should not render yet.',
@@ -509,10 +503,12 @@ describe('createNarrativeCommsEvent', () => {
     ).toThrow('created_at must not be in the future');
 
     expect(() =>
-      createNarrativeCommsEvent(
+      createCommsEvent(
         {
+          schema_version: '2.0.0',
           event_id: 'event-two',
           created_at: '2026-04-28 09:37:11',
+          kind: 'narrative',
           author: woodland,
           title: 'local-looking event',
           body: 'This lacks the UTC Z suffix.',
@@ -524,10 +520,12 @@ describe('createNarrativeCommsEvent', () => {
 
   it('rejects duplicate immutable communication event ids', () => {
     expect(() =>
-      createNarrativeCommsEvent(
+      createCommsEvent(
         {
+          schema_version: '2.0.0',
           event_id: 'event-one',
           created_at: nowIso,
+          kind: 'narrative',
           author: woodland,
           title: 'duplicate event',
           body: 'Duplicate event ids would overwrite immutable history.',

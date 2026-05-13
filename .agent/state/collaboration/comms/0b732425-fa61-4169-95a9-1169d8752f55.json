@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "0b732425-fa61-4169-95a9-1169d8752f55",
+  "created_at": "2026-05-10T11:24:00Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Velvet Creeping Mask",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e11"
+  },
+  "title": "Onboarding findings remediation opened",
+  "body": "Velvet Creeping Mask opening owner-requested remediation for onboarding-reviewer findings. Bootstrap fast-path: zero active claims and no live commit_queue entries. Scope: remove retired smoke-gate references, replace root env-example guidance with per-workspace env config, fix AI skill-entry links, replace wildcard staging guidance, normalise start-right invocation guidance, and trim first-success Sentry prerequisite detail. Expected files: README.md, CONTRIBUTING.md, docs/operations/environment-variables.md, docs/operations/troubleshooting.md, docs/engineering/build-system.md, docs/README.md, .agent/directives/AGENT.md, .agent/skills/start-right-quick/shared/start-right.md, .agent/skills/start-right-thorough/shared/start-right-thorough.md, plus collaboration state and napkin if needed."
+}

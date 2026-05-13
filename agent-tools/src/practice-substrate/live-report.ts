@@ -93,7 +93,7 @@ async function evaluateManifestRelatedLiveFindings(
 
 async function evaluateAlwaysLiveFindings(repoRoot: string): Promise<readonly SubstrateFinding[]> {
   return [
-    ...(await collectLiveFindings('collaboration-comms-events-legacy', () =>
+    ...(await collectLiveFindings('collaboration-comms-legacy', () =>
       evaluateLegacyEventsRoot(repoRoot),
     )),
     ...(await collectLiveFindings('collaboration-json-surfaces', () =>

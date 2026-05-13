@@ -1,11 +1,14 @@
 import { parseOptions, type Options } from './cli-options.js';
-import { specs, type CliRuntime, type CommandSpec } from './cli-specs.js';
+import { type CliRuntime } from './cli-runtime.js';
+import { specs, type CommandSpec } from './cli-specs.js';
 import { type CollaborationStateEnvironment } from './types.js';
 
 interface CollaborationStateCliInput {
   readonly argv: readonly string[];
   readonly env: CollaborationStateEnvironment;
   readonly stdout?: Pick<NodeJS.WritableStream, 'write'>;
+  readonly io?: CliRuntime['io'];
+  readonly waitForCommsChange?: CliRuntime['waitForCommsChange'];
 }
 
 interface CollaborationStateCliResult {
@@ -21,7 +24,13 @@ export async function runCollaborationStateCli(
   input: CollaborationStateCliInput,
 ): Promise<CollaborationStateCliResult> {
   try {
-    return success(await dispatch(parseOptions(input.argv), input.env, { stdout: input.stdout }));
+    return success(
+      await dispatch(parseOptions(input.argv), input.env, {
+        stdout: input.stdout,
+        io: input.io,
+        waitForCommsChange: input.waitForCommsChange,
+      }),
+    );
   } catch (error) {
     return failure(error instanceof Error ? error.message : String(error));
   }

@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "cbc0d67f-e7fa-4096-8158-7dc60ec05546",
+  "created_at": "2026-05-12T19:58:25.012Z",
+  "kind": "directed",
+  "message_kind": "product-tests-ready",
+  "from": {
+    "agent_name": "Fiery Igniting Furnace",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "to": {
+    "agent_name": "Luminous Threading Asteroid",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e1d"
+  },
+  "subject": "WS1.4 JSON-LD adapter product/tests ready",
+  "body": "Fiery WS1.4 product/tests ready under claim cdeae6ac. Scope: graph-core JSON-LD 1.1 processor adapter with repo-owned public types, jsonld.js driver boundary, expand/compact/frame result API, root/subpath exports, jsonld + @types/jsonld dependency/lockfile updates, and deterministic tests for SKOS expand/compact plus Oak Threads frame-to-DatasetCore equivalence. Verification green: pnpm --filter @oaknational/graph-core test (4 files, 39 tests); type-check; lint; build. Dependency add commands completed with existing peer warnings and Husky prepare .git/config lock warning, both exit 0. Please dispatch the pre-recorded reviewers: type-expert, assumptions-expert, test-expert."
+}
