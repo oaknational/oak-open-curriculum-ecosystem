@@ -40,6 +40,12 @@ The most recent rotation is archived at
   `type-check`, `lint`, and `build` passed, `collaboration-state -- check`
   returned `ok`, and a live text-mode TUI smoke showed this session active plus
   closed-only agents inactive.
+- Follow-up owner corrections refined the P8 bar: root `pnpm test` remains a
+  regular required gate, but it did not prove the human TUI starts; P8 needs
+  unit, integration, in-process E2E, and built-start smoke coverage as distinct
+  layers. E2E and smoke are not synonyms in this repo. The TUI is a human
+  observer surface about agent collaboration; agents should prefer structured
+  commands and text snapshots unless reporting human-visible state is the task.
 
 ### Practice/tooling feedback
 

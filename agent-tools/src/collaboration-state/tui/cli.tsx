@@ -1,20 +1,13 @@
-import { existsSync } from 'node:fs';
-import { dirname, join, parse } from 'node:path';
-
 import { render } from 'ink';
 
-import { optional, optionalPositiveInteger, type Options } from '../cli-options.js';
+import { optional, type Options } from '../cli-options.js';
 import { cliIo, type CliRuntime, waitForCollaborationStateChange } from '../cli-runtime.js';
 
 import { CollaborationTuiApp } from './app.js';
+import { collaborationTuiConfig, type CollaborationTuiConfig } from './config.js';
 import { type CollaborationTuiUpdateSource } from './controller.js';
 import { buildCollaborationTuiSnapshot, type CollaborationTuiSnapshot } from './snapshot.js';
 import { formatCollaborationTuiText } from './text.js';
-
-const DEFAULT_ACTIVE = '.agent/state/collaboration/active-claims.json';
-const DEFAULT_CLOSED = '.agent/state/collaboration/closed-claims.archive.json';
-const DEFAULT_COMMS_DIR = '.agent/state/collaboration/comms';
-const DEFAULT_POLL_MS = 500;
 
 export async function collaborationTui(options: Options, runtime: CliRuntime): Promise<string> {
   const config = collaborationTuiConfig(options);
@@ -49,14 +42,6 @@ function assertLiveUpdateRuntime(runtime: CliRuntime): void {
   }
 }
 
-interface CollaborationTuiConfig {
-  readonly activePath: string;
-  readonly closedPath: string;
-  readonly commsDir: string;
-  readonly nowIso?: string;
-  readonly pollMs: number;
-}
-
 async function loadCollaborationTuiSnapshot(
   config: CollaborationTuiConfig,
   runtime: CliRuntime,
@@ -73,27 +58,6 @@ async function loadCollaborationTuiSnapshot(
     events,
     nowIso,
   });
-}
-
-function collaborationTuiConfig(options: Options): CollaborationTuiConfig {
-  const defaults = collaborationTuiDefaults(options);
-  const nowIso = optional(options, 'now');
-  return {
-    activePath: value(options, defaults, 'active'),
-    closedPath: value(options, defaults, 'closed'),
-    commsDir: value(options, defaults, 'comms-dir'),
-    pollMs: optionalPositiveInteger(options, 'poll-ms') ?? DEFAULT_POLL_MS,
-    ...(nowIso === undefined ? {} : { nowIso }),
-  };
-}
-
-function collaborationTuiDefaults(options: Options): Readonly<Record<string, string>> {
-  const repoRoot = optional(options, 'repo-root') ?? findCollaborationRepoRoot(process.cwd());
-  return {
-    active: join(repoRoot, DEFAULT_ACTIVE),
-    closed: join(repoRoot, DEFAULT_CLOSED),
-    'comms-dir': join(repoRoot, DEFAULT_COMMS_DIR),
-  };
 }
 
 function collaborationTuiUpdateSource(
@@ -125,27 +89,4 @@ function collaborationTuiUpdateSource(
       };
     },
   };
-}
-
-function value(options: Options, defaults: Readonly<Record<string, string>>, key: string): string {
-  const defaultValue = defaults[key];
-  if (defaultValue === undefined) {
-    throw new Error(`missing default option --${key}`);
-  }
-
-  return optional(options, key) ?? defaultValue;
-}
-
-function findCollaborationRepoRoot(start: string): string {
-  let current = start;
-  const root = parse(start).root;
-  while (true) {
-    if (existsSync(join(current, '.agent', 'state', 'collaboration'))) {
-      return current;
-    }
-    if (current === root) {
-      return start;
-    }
-    current = dirname(current);
-  }
 }

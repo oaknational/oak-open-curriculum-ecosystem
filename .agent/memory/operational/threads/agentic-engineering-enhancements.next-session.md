@@ -1,13 +1,16 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-> **Current continuation**: P8 collaboration TUI is next. P0.QG,
+> **Current continuation**: P8 collaboration TUI is active and remains open.
+> P0.QG,
 > P-Foundation, P1 directed-message authoring, P2 directed-message watching,
 > P3 commit-queue enforcement, P4 identity routing, and P5 unified comms plus
 > DI/no-IO boundary repair are complete. P5's unified comms migration landed at
 > `30c8ad15`, with closeout at `6a1d8d9e`; the later P5 repair recomputed
 > completion from the live proof contract by adding direct comms use cases,
 > simple-fake tests, and CLI-only production IO wiring. Resume mandatory P8 from
-> the cost-of-collaboration plan, not from the older P5-pending opener.
+> the cost-of-collaboration plan, not from the older P5-pending opener. The
+> next P8 implementation target is operator-value UI plus interaction hardening,
+> not another completion claim.
 >
 > **Conservation-first consolidation**: `napkin.md`, `distilled.md`, and
 > `pending-graduations.md` stages are complete as of 2026-05-12. The next
@@ -145,6 +148,44 @@ identities rendered as inactive.
 acceptance bar: richer human-visible live value signals, interaction hardening,
 and any boundary/tooling follow-ups from the reviewer synthesis that are not
 closed by this slice.
+
+## P8 Foundation Repair And Continuation Route (2026-05-13)
+
+**Session**: Mossy Blossoming Canopy / `codex` / `GPT-5` / `019e22`.
+
+**Current outcome**: P8 has a working human-TUI foundation, but not a P8
+completion verdict. The follow-up repair keeps terminal rendering local to
+`agent-tools`, removes the hidden
+`@oaknational/oak-design-ink` runtime dependency, adds a named
+`pnpm agent-tools:smoke:collaboration-tui` gate, adds a co-located pure config
+unit test, reclassifies the CLI text-mode proof as integration, and adds a
+separate E2E proof under `agent-tools/e2e-tests/`.
+
+**Verification evidence**: after the repair, `pnpm agent-tools:test` passed
+(45 files / 339 tests), `pnpm agent-tools:test:e2e` passed (1 file / 1 test),
+`pnpm --filter @oaknational/agent-tools type-check`, `pnpm agent-tools:lint`,
+`pnpm agent-tools:build`, and `pnpm agent-tools:smoke:collaboration-tui`
+passed, and root `pnpm test` passed (39 tasks). A manual TTY start of
+`pnpm agent-tools:collaboration-state -- tui --poll-ms 5000` rendered the
+interactive dashboard and exited on `q`.
+
+**Landing note**: the owner confirmed the pnpm/dependency update is finished and
+requested a whole-tree closeout commit. Treat the dependency refresh, generated
+schema updates, P8 repair, and handoff surfaces as one intentionally landed
+bundle, then re-check live state before continuing.
+
+**Residual known debt**: `tui-app.unit.test.ts` still emits React/Ink
+`act(...)` warnings during otherwise green tests. Treat this as P8 interaction
+test-quality debt, not acceptable noise to copy.
+
+**Next safe execution step**: start `p8-operator-value-ui` from
+[`cost-of-collaboration.plan.md`](../../plans/agent-tooling/current/cost-of-collaboration.plan.md).
+That slice should improve human situational awareness: current collaborators,
+fresh/stale ownership, recent changes, queue pressure, directed-thread
+pressure, and "needs attention" signals. Pair it with the smallest component
+interaction tests needed for focus, scroll, and refresh-state behaviour. Do not
+mark P8 complete until `P8-A1` through `P8-A4` in the plan's proof contract are
+all proven.
 
 ## Completion-Claim Proof Pipeline (2026-05-13)
 

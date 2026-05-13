@@ -11,6 +11,7 @@
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
+    "smoke:collaboration-tui": "tsx smoke-tests/collaboration-tui-start.smoke.ts",
     "type-check": "tsc -p tsconfig.json",
     "agent-tools": "cd .. && node agent-tools/dist/src/bin/agent-tools.js",
     "agent-identity": "cd .. && node agent-tools/dist/src/bin/agent-tools.js agent-identity",
@@ -40,20 +41,19 @@
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "@types/node": "^25.6.2",
+    "@types/node": "^25.7.0",
     "@types/react": "^19.2.14",
     "eslint": "^10.3.0",
     "globals": "^17.6.0",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.5"
+    "vitest": "^4.1.6"
   },
   "dependencies": {
-    "@oaknational/oak-design-ink": "workspace:*",
     "ajv": "^8.20.0",
     "ink": "^7.0.2",
     "react": "^19.2.6",
-    "yaml": "^2.8.4",
+    "yaml": "^2.9.0",
     "zod": "^4.4.3"
   }
 }

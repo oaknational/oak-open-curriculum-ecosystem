@@ -47,6 +47,7 @@
     "agent-tools:lint": "pnpm --filter @oaknational/agent-tools lint",
     "agent-tools:test": "pnpm --filter @oaknational/agent-tools test",
     "agent-tools:test:e2e": "pnpm --filter @oaknational/agent-tools test:e2e",
+    "agent-tools:smoke:collaboration-tui": "pnpm --filter @oaknational/agent-tools smoke:collaboration-tui",
     "agent-tools": "pnpm --filter @oaknational/agent-tools agent-tools",
     "agent-tools:agent-identity": "pnpm --filter @oaknational/agent-tools agent-identity",
     "agent-tools:collaboration-state": "pnpm --filter @oaknational/agent-tools collaboration-state",
@@ -121,7 +122,7 @@
   "engines": {
     "node": "24.x"
   },
-  "packageManager": "pnpm@10.33.4+sha512.1c67b3b359b2d408119ba1ed289f34b8fc3c6873412bec6fd264fbdc82489e510fcbecb9ce9d22dae7f3b76269d8441046014bdca53b9979cd7a561ad631b800",
+  "packageManager": "pnpm@11.1.1+sha512.d1fdf5f73c617b64fa1a56a81c3c8dfe0e966e33a6010aa256b517ae77be21d93e05affc0de1a83b0e4f29d569f68b446ae8f068cd7247c0bb3df0fb4d7bdf9a",
   "license": "MIT",
   "pnpm": {
     "peerDependencyRules": {
@@ -156,20 +157,20 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/cli": "^21.0.0",
-    "@commitlint/config-conventional": "^21.0.0",
+    "@commitlint/cli": "^21.0.1",
+    "@commitlint/config-conventional": "^21.0.1",
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "@playwright/test": "^1.59.1",
+    "@playwright/test": "^1.60.0",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@stryker-mutator/core": "^9.6.1",
     "@stryker-mutator/typescript-checker": "^9.6.1",
     "@stryker-mutator/vitest-runner": "^9.6.1",
-    "@types/node": "^25.6.2",
+    "@types/node": "^25.7.0",
     "@types/supertest": "^7.2.0",
-    "@typescript-eslint/eslint-plugin": "^8.59.2",
-    "@typescript-eslint/parser": "^8.59.2",
-    "@vitest/coverage-v8": "^4.1.5",
+    "@typescript-eslint/eslint-plugin": "^8.59.3",
+    "@typescript-eslint/parser": "^8.59.3",
+    "@vitest/coverage-v8": "^4.1.6",
     "dependency-cruiser": "^17.4.0",
     "eslint": "^10.3.0",
     "eslint-config-prettier": "^10.1.8",
@@ -177,7 +178,7 @@
     "eslint-plugin-import-x": "^4.16.2",
     "eslint-plugin-prettier": "^5.5.5",
     "husky": "^9.1.7",
-    "knip": "^6.12.2",
+    "knip": "^6.13.1",
     "markdownlint-cli": "^0.48.0",
     "prettier": "^3.8.3",
     "semantic-release": "^25.0.3",
@@ -186,6 +187,6 @@
     "tsx": "^4.21.0",
     "turbo": "^2.9.12",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.5"
+    "vitest": "^4.1.6"
   }
 }

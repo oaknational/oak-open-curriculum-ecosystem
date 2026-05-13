@@ -1,11 +1,4 @@
-import {
-  EmptyState,
-  OakText,
-  Panel,
-  StatusBadge,
-  type StatusTone,
-} from '@oaknational/oak-design-ink';
-import { Box } from 'ink';
+import { Box, Text } from 'ink';
 
 import {
   type CollaborationTuiSnapshot,
@@ -15,6 +8,7 @@ import {
 } from './snapshot.js';
 
 const VISIBLE_ROWS = 6;
+type StatusTone = 'active' | 'success' | 'warning' | 'danger' | 'muted';
 
 export function MainPane({
   entries,
@@ -183,6 +177,66 @@ function queueTone(entry: TuiQueueEntry): StatusTone {
   }
 
   return 'muted';
+}
+
+function Panel({
+  title,
+  children,
+}: {
+  readonly title: string;
+  readonly children: React.ReactNode;
+}): React.JSX.Element {
+  const active = title.startsWith('>');
+  return (
+    <Box
+      borderStyle="single"
+      borderColor={active ? 'cyan' : 'gray'}
+      flexDirection="column"
+      paddingX={1}
+      width={56}
+    >
+      <Text bold color={active ? 'cyan' : undefined}>
+        {title}
+      </Text>
+      {children}
+    </Box>
+  );
+}
+
+function EmptyState({ children }: { readonly children: React.ReactNode }): React.JSX.Element {
+  return <Text dimColor>{children}</Text>;
+}
+
+function OakText({
+  children,
+  dimColor = false,
+}: {
+  readonly children: React.ReactNode;
+  readonly dimColor?: boolean;
+}): React.JSX.Element {
+  return <Text dimColor={dimColor}>{children}</Text>;
+}
+
+function StatusBadge({
+  tone,
+  children,
+}: {
+  readonly tone: StatusTone;
+  readonly children: React.ReactNode;
+}): React.JSX.Element {
+  return <Text color={toneColor(tone)}>[{children}]</Text>;
+}
+
+function toneColor(tone: StatusTone): string | undefined {
+  const colors: Record<StatusTone, string | undefined> = {
+    active: 'cyan',
+    success: 'green',
+    warning: 'yellow',
+    danger: 'red',
+    muted: undefined,
+  };
+
+  return colors[tone];
 }
 
 function truncate(value: string): string {

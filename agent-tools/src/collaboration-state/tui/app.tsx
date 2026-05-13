@@ -1,10 +1,3 @@
-import {
-  CommandFooter,
-  KeyHint,
-  OakInkThemeProvider,
-  OakText,
-  PaneTitle,
-} from '@oaknational/oak-design-ink';
 import { Box, Text } from 'ink';
 
 import { type CollaborationTuiUpdateSource } from './controller.js';
@@ -19,22 +12,10 @@ export interface CollaborationTuiAppProps {
 }
 
 export function CollaborationTuiApp(props: CollaborationTuiAppProps): React.JSX.Element {
-  return (
-    <OakInkThemeProvider mode="dark">
-      <CollaborationTuiSurface {...props} />
-    </OakInkThemeProvider>
-  );
-}
-
-function CollaborationTuiSurface({
-  initialSnapshot,
-  onRefresh,
-  updateSource,
-}: CollaborationTuiAppProps): React.JSX.Element {
   const { activePane, offsets, snapshot, status } = useCollaborationTuiController({
-    initialSnapshot,
-    onRefresh,
-    updateSource,
+    initialSnapshot: props.initialSnapshot,
+    onRefresh: props.onRefresh,
+    updateSource: props.updateSource,
   });
 
   return (
@@ -57,12 +38,12 @@ function CollaborationTuiSurface({
           active={activePane === 'directed'}
         />
       </Box>
-      <CommandFooter>
+      <Footer>
         <KeyHint keyName="tab" label="pane" />
         <KeyHint keyName="up/down" label="scroll" />
         <KeyHint keyName="r" label="refresh" />
         <KeyHint keyName="q" label="quit" />
-      </CommandFooter>
+      </Footer>
     </Box>
   );
 }
@@ -76,10 +57,35 @@ function Header({
 }): React.JSX.Element {
   return (
     <Box flexDirection="column">
-      <PaneTitle>Agent Collaboration</PaneTitle>
-      <OakText>
+      <Text bold color="cyan">
+        Agent Collaboration
+      </Text>
+      <Text>
         Generated {snapshot.generated_at} <Text dimColor>({status})</Text>
-      </OakText>
+      </Text>
     </Box>
+  );
+}
+
+function Footer({ children }: { readonly children: React.ReactNode }): React.JSX.Element {
+  return (
+    <Box gap={2}>
+      <Text dimColor>keys</Text>
+      {children}
+    </Box>
+  );
+}
+
+function KeyHint({
+  keyName,
+  label,
+}: {
+  readonly keyName: string;
+  readonly label: string;
+}): React.JSX.Element {
+  return (
+    <Text>
+      <Text bold>{keyName}</Text> {label}
+    </Text>
   );
 }

@@ -20,6 +20,12 @@ packages:
   - packages/sdks/oak-sdk-codegen
   - packages/sdks/oak-search-sdk
 
+allowBuilds:
+  '@clerk/shared': true
+  '@sentry/cli': true
+  esbuild: true
+  unrs-resolver: true
+
 onlyBuiltDependencies:
   - '@sentry/cli'
   - core-js

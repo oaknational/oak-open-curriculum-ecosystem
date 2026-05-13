@@ -40,7 +40,9 @@ domain-specific flows:
 agent-tools/
 ├─ src/bin/      # CLI entrypoints
 ├─ src/core/     # Shared runtime/session helpers
-└─ tests/        # Unit/integration/e2e coverage
+├─ tests/        # Shared test fakes and legacy co-located coverage
+├─ e2e-tests/    # E2E suites
+└─ smoke-tests/  # Local running-command smoke checks
 ```
 
 ## Commands
@@ -52,6 +54,7 @@ pnpm agent-tools:build
 pnpm agent-tools:lint
 pnpm agent-tools:test
 pnpm agent-tools:test:e2e
+pnpm agent-tools:smoke:collaboration-tui
 pnpm agent-tools agent-identity --seed example-session-id-001 --format display
 pnpm agent-tools collaboration-state identity preflight --platform codex --model GPT-5
 pnpm agent-tools:claude-agent-ops status
@@ -77,6 +80,39 @@ pnpm agent-tools collaboration-state claims list --active .agent/state/collabora
 pnpm agent-tools commit-queue status
 pnpm agent-tools branch-touched-files --json
 pnpm agent-tools --log-json agent-identity --seed example-session-id-001
+```
+
+### Human collaboration TUI
+
+The collaboration TUI is a human observer surface about agent collaboration,
+not an agent command-reading protocol. It lives in `agent-tools` because it
+reads the same collaboration-state registry, comms, and claim data that the
+agent commands maintain; that is a deliberate boundary choice with tension.
+To keep that choice contained, the terminal app uses local Ink primitives and
+does not depend on a separately built design workspace.
+
+Humans use the live terminal view:
+
+```bash
+pnpm agent-tools collaboration-state tui
+```
+
+Agents and logs should prefer non-interactive outputs:
+
+```bash
+pnpm agent-tools collaboration-state tui --format text
+pnpm agent-tools collaboration-state claims active-agents \
+  --active .agent/state/collaboration/active-claims.json
+pnpm agent-tools collaboration-state comms render \
+  --comms-dir .agent/state/collaboration/comms \
+  --shared-log .agent/state/collaboration/shared-comms-log.md
+```
+
+The automated startup smoke is intentionally separate from E2E:
+
+```bash
+pnpm agent-tools:build
+pnpm agent-tools:smoke:collaboration-tui
 ```
 
 ## `agent-identity` quick reference
@@ -302,3 +338,4 @@ pnpm agent-tools:codex-reviewer-resolve architecture-expert-fred --json
 - `pnpm agent-tools:lint`
 - `pnpm agent-tools:test`
 - `pnpm agent-tools:test:e2e`
+- `pnpm agent-tools:smoke:collaboration-tui`

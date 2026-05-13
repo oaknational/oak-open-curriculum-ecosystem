@@ -23462,6 +23462,270 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "650f832a-b74c-4a77-adde-0c792929ffc9",
+      "agent_id": {
+        "agent_name": "Mossy Blossoming Canopy",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/tui/app.tsx",
+            "agent-tools/src/collaboration-state/tui/cli.tsx",
+            "agent-tools/src/collaboration-state/tui/config.ts",
+            "agent-tools/tests/collaboration-state/tui-config.unit.test.ts",
+            "agent-tools/tests/collaboration-state/tui-cli.integration.test.ts",
+            "agent-tools/e2e-tests/collaboration-tui.e2e.test.ts",
+            "agent-tools/smoke-tests/collaboration-tui-start.smoke.test.ts",
+            "agent-tools/vitest.e2e.config.ts",
+            "agent-tools/vitest.smoke.config.ts",
+            "agent-tools/tsconfig.json",
+            "agent-tools/eslint.config.ts",
+            "agent-tools/README.md",
+            ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T18:36:35Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Repair P8 TUI test taxonomy and startup defaults",
+      "archived_at": "2026-05-13",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-13T18:45:36Z",
+        "closed_by": {
+          "agent_name": "Mossy Blossoming Canopy",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Repaired P8 TUI startup/test taxonomy slice; left uncommitted due owner dependency-update package/lock overlap.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "650f832a-b74c-4a77-adde-0c792929ffc9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c854d865-384e-4671-b520-fff553e6d0f2",
+      "agent_id": {
+        "agent_name": "Mossy Blossoming Canopy",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/tui/config.unit.test.ts",
+            "agent-tools/tsconfig.lint.json",
+            "agent-tools/smoke-tests/collaboration-tui-start.smoke.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T18:39:43Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Extend P8 TUI test taxonomy repair to co-located unit and smoke runner files",
+      "archived_at": "2026-05-13",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-13T18:45:36Z",
+        "closed_by": {
+          "agent_name": "Mossy Blossoming Canopy",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Added co-located config unit coverage and smoke-runner coverage for P8 TUI taxonomy repair.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c854d865-384e-4671-b520-fff553e6d0f2",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "eb653804-3785-4d55-ac79-da10b0146add",
+      "agent_id": {
+        "agent_name": "Mossy Blossoming Canopy",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/tui/panes.tsx",
+            "pnpm-lock.yaml"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T18:44:12Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Complete P8 TUI package boundary cleanup",
+      "archived_at": "2026-05-13",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-13T18:45:36Z",
+        "closed_by": {
+          "agent_name": "Mossy Blossoming Canopy",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Removed P8 TUI design-package runtime dependency and kept lockfile importer consistent.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "eb653804-3785-4d55-ac79-da10b0146add",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "cdbf9192-c480-4b60-b60c-fad4520c2dbf",
+      "agent_id": {
+        "agent_name": "Mossy Blossoming Canopy",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "package.json",
+            "agent-tools/package.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T18:42:37Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Add first-class P8 TUI smoke gate package scripts",
+      "archived_at": "2026-05-13",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-13T18:45:36Z",
+        "closed_by": {
+          "agent_name": "Mossy Blossoming Canopy",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Added first-class P8 TUI smoke scripts while respecting owner package-update overlap.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "cdbf9192-c480-4b60-b60c-fad4520c2dbf",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f3086312-9764-488f-9a37-76eafacf7c82",
+      "agent_id": {
+        "agent_name": "Mossy Blossoming Canopy",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/repo-continuity.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T18:52:47Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Deep-update P8 plan and continuation surfaces",
+      "archived_at": "2026-05-13",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-13T18:54:13Z",
+        "closed_by": {
+          "agent_name": "Mossy Blossoming Canopy",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Deep-updated P8 plan proof contract and continuation surfaces; no commit due owner dependency-update overlap.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f3086312-9764-488f-9a37-76eafacf7c82",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8af0fe3a-67ff-484e-8c7d-c86f60e1aa35",
+      "agent_id": {
+        "agent_name": "Mossy Blossoming Canopy",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T18:59:40Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "commit full P8 TUI foundation, dependency refresh, and handoff bundle",
+      "archived_at": "2026-05-13",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-13T19:00:31Z",
+        "closed_by": {
+          "agent_name": "Mossy Blossoming Canopy",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Full P8 TUI foundation, pnpm/dependency refresh, generated schema outputs, and handoff bundle ready for commit.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8af0fe3a-67ff-484e-8c7d-c86f60e1aa35",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

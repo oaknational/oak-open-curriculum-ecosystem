@@ -45,7 +45,7 @@ todos:
     content: Repair the P5 unified-comms implementation so tests directly invoke comms domain/use-case code with simple fakes; production filesystem/env/stdout/watch/clock/id wiring lives only in CLI composition/adapters; imported testable code has no production IO defaults.
     status: completed
   - id: ws-p8-collaboration-tui
-    content: Build a human-facing real-time TUI for the main comms thread, direct-message threads, and active-agent state so operators can watch collaboration without tailing rendered markdown or raw JSON event directories. Owner-directed sequence update 2026-05-12: run immediately after P5. Review update 2026-05-13: cdfb8959 landed a useful snapshot/text-mode slice and Ink primitives; P8 acceptance remains pending after P5 until real-time refresh, inactive-agent visibility, and boundary/tooling gaps are resolved.
+    content: Build a human-facing real-time TUI for the main comms thread, direct-message threads, and active-agent state so operators can watch collaboration without tailing rendered markdown or raw JSON event directories. Owner-directed sequence update 2026-05-12: run immediately after P5. Review update 2026-05-13: the TUI now has a working live-refresh foundation, default startup, inactive-agent visibility, and distinct unit/integration/E2E/smoke proof surfaces, but P8 acceptance remains pending until the operator-value UI, attention workflow, interaction hardening, reader resilience, and boundary follow-ups below are complete.
     status: pending
   - id: ws-p6-coordination-artefact-isolation
     content: Isolate coordination artefacts (sidebars, canonical comms events, monitor telemetry) from gate-visible repo state. Either separate branch/worktree or gitignored space.
@@ -167,6 +167,12 @@ not partial parsing followed by trusted TypeScript casts.
    the interactive UI graph. Lazy-load the TUI path, or keep terminal
    primitives local until the boundary decision is settled.
 
+   2026-05-13 repair note: the P8 startup correction keeps terminal primitives
+   local to `agent-tools`. This preserves the choice to host the human observer
+   TUI in `agent-tools` while avoiding a hard runtime dependency on a
+   separately built design workspace. The broader Ink/React hot-path dependency
+   remains a follow-up if ordinary non-TUI commands need graph isolation.
+
 8. **Design/package boundaries need reconciliation.** Architecture reviewers
    flagged the `agent-tools -> packages/design` dependency against ADR-041's
    boundary matrix. Design review also found `oak-design-ink` can import
@@ -179,6 +185,11 @@ not partial parsing followed by trusted TypeScript casts.
    `agent-tools` and does not model the new `oak-design-ink` workspace. The
    root `agent-tools:build` helper also does not prove the runtime closure for
    built `agent-tools` once it imports built design packages.
+
+   2026-05-13 correction: `pnpm test` passed, which proved the regular unit and
+   integration surface was green, but it did not prove that the built
+   collaboration TUI command starts. P8 now requires a distinct smoke check for
+   built-command startup; that smoke check is not E2E, and E2E is not smoke.
 
 10. **P-Foundation is complete only for the dispatcher/build-isolation slice.**
     Reviewers agreed the unified entrypoint landed useful plumbing, but the
@@ -1231,18 +1242,33 @@ the value of the current work in a way that is more visible to humans than
 - Avoid depending on `shared-comms-log.md` as the live source of truth; read
   event JSON and claim state directly, then render in memory.
 - Preserve a non-interactive text mode for logs and CI diagnostics.
+- Make the audience explicit: the interactive TUI is for human observers.
+  Agents should keep using structured commands and text snapshots unless a
+  human explicitly asks them to report what the TUI shows.
 
 **Acceptance**:
 
-- An operator can watch the main collaboration stream and direct-message
+- `P8-A1`: An operator can watch the main collaboration stream and direct-message
   threads in real time without `tail -f`.
-- The viewer continues to update when the Markdown renderer rewrites or
+- `P8-A2`: The viewer continues to update when the Markdown renderer rewrites or
   replaces `shared-comms-log.md`.
-- Active, stale, inactive, and uncertain agents are visible in the same
+- `P8-A3`: Active, stale, inactive, and uncertain agents are visible in the same
   operator surface.
-- The operator can see collaboration value live: who is active, what changed
+- `P8-A4`: The operator can see collaboration value live: who is active, what changed
   recently, what is waiting, and which directed threads need attention, without
   translating raw JSON or counting throughput after the fact.
+
+**P8 proof contract**:
+
+| Acceptance id | Proof level | Deterministic proof |
+| --- | --- | --- |
+| `P8-A1` | E2E + manual TTY smoke | E2E exercises the public TUI CLI flow with injected state; manual TTY proof starts the human dashboard and exits cleanly. |
+| `P8-A2` | integration + component | Update-source and refresh-sequencing tests prove automatic refresh, renderer independence, stale-result rejection, and refresh failure state. |
+| `P8-A3` | unit + integration | Snapshot/CLI tests prove active, stale, inactive, and uncertain agents render from active claims, closed claims, and queue state. |
+| `P8-A4` | component + value-proxy | Component tests and manual operator observation prove recent-change, queue-pressure, directed-thread pressure, and ownership signals are visible without reading raw JSON. |
+
+P8 completion requires all four acceptance ids above. A working dashboard,
+passing smoke, or pleasant first UI is not completion on its own.
 
 **Routing**: builds on P2 watch, P4 active-agent visibility, and P5 unified
 comms format. Owner-directed sequence update on 2026-05-12: run P5, then P8,
@@ -1270,6 +1296,85 @@ then return to P6/P7.
   visibility, but the remaining acceptance bar still includes fuller
   human-visible value signals, interaction hardening, and boundary/tooling
   follow-ups from the reviewer synthesis.
+
+**2026-05-13 startup/test-taxonomy correction**:
+
+- Root `pnpm test` was run and passed after the first continuation slice, but
+  the human TUI still exposed a startup gap: the built command path had not
+  been tested separately from in-process behaviour. Regular gate-running remains
+  mandatory; this was a coverage-design failure, not permission to defer tests.
+- Test layers are now recorded distinctly for P8:
+  - unit: pure TUI default/config behaviour;
+  - integration: imported CLI composition with injected collaboration-state IO;
+  - E2E: broad in-process public CLI flow under the repo E2E config and DI
+    constraints;
+  - smoke: built collaboration TUI command starts from sensible repo defaults
+    with real IO.
+- The interactive TUI remains in `agent-tools` because its data source and
+  command surface are the collaboration-state tools, but it is a human observer
+  product surface about agent collaboration. To acknowledge that tension, the
+  implementation keeps terminal rendering local to the TUI and keeps the
+  agent-facing path as text/structured command output.
+- Validation after the correction: `@oaknational/agent-tools` unit/integration
+  tests passed (45 files / 339 tests), `@oaknational/agent-tools` E2E passed
+  (1 file / 1 test), `type-check`, `lint`, and `build` passed, the TUI startup
+  smoke passed against built `dist` via
+  `pnpm agent-tools:smoke:collaboration-tui`, and root `pnpm test` passed
+  (39 tasks). A manual TTY start of
+  `pnpm agent-tools:collaboration-state -- tui --poll-ms 5000` rendered the
+  interactive human dashboard and exited on `q`.
+  The root test output still includes React/Ink `act(...)` warnings in the
+  existing `tui-app.unit.test.ts`; that is residual test-quality debt, not a
+  passing standard to copy.
+
+**2026-05-13 deep continuation update**:
+
+**Verdict**: P8 has a working foundation, not a completion verdict. The current
+human UI is useful enough to keep open, and it proves the architecture can
+support a live operator dashboard. It still needs a second value-focused slice
+before it should be called the collaboration TUI promised by this plan.
+
+**Foundation now in hand**:
+
+- The built command starts with repo defaults and no longer depends on a
+  separately built design workspace.
+- The interactive TUI starts in a TTY and exits on `q`.
+- The TUI reads active claims, closed claims, comms, and queue state directly,
+  with a non-interactive text mode preserved for logs and agents.
+- Unit, integration, E2E, and smoke surfaces exist and are intentionally
+  distinct.
+
+This is useful proof coverage, not a claim that the earlier product code was
+developed with perfect multi-level TDD evidence. All remaining P8 slices below
+must be landed as test+product-code pairs at the relevant level before their
+completion claims are made.
+
+**Remaining P8 implementation route**:
+
+1. `p8-operator-value-ui`: redesign the first screen around human decisions,
+   not raw record lists. Surface current active collaborators, stale ownership,
+   recent changes, queue pressure, directed-thread pressure, and "needs
+   attention" indicators before long message bodies.
+2. `p8-interaction-hardening`: harden focus, scroll bounds, terminal width,
+   refresh success/failure status, stale refresh rejection, and quit/keyboard
+   behaviour with component and CLI tests. Remove the current React/Ink
+   `act(...)` warning from the test output rather than normalising it.
+3. `p8-attention-state`: add unread/seen or equivalent triage state for
+   directed threads. The TUI should help a human decide where to look next, not
+   merely list directed records.
+4. `p8-reader-resilience`: make malformed or racing collaboration files degrade
+   visibly instead of taking down or silently corrupting the dashboard. This may
+   depend on the broader strict parser/reader work from findings 5, 11, and 12.
+5. `p8-hot-path-boundary-review`: confirm whether ordinary non-TUI
+   collaboration commands still pay an Ink/React import cost. If they do, split
+   the TUI handler behind an explicit boundary module that obeys the repo's
+   no-dynamic-import rule.
+
+**Recommended next slice**: start with `p8-operator-value-ui` plus the smallest
+interaction tests it needs. That is the highest-value next move because it
+turns the dashboard from "it renders collaboration state" into "a human can see
+what needs attention now." Do not let this become cosmetic styling work; the
+acceptance target is faster human situational awareness.
 
 ---
 
