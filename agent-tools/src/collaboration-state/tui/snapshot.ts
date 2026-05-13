@@ -1,4 +1,4 @@
-import { activeAgentReports } from '../active-agents.js';
+import { activeAgentReports, type ActiveAgentReport } from '../active-agents.js';
 import { formatAgent, formatRoutingKey } from '../active-agent-routing.js';
 import {
   type ClosedClaimsArchive,
@@ -9,6 +9,7 @@ import {
   type LifecycleCommsEvent,
   type NarrativeCommsEvent,
 } from '../types.js';
+import { operatorValue, type TuiOperatorValueSummary } from './operator-value.js';
 
 export interface CollaborationTuiSnapshot {
   readonly generated_at: string;
@@ -16,6 +17,7 @@ export interface CollaborationTuiSnapshot {
   readonly directed: readonly TuiDirectedEntry[];
   readonly agents: readonly TuiAgentEntry[];
   readonly queue: readonly TuiQueueEntry[];
+  readonly operator_value?: TuiOperatorValueSummary;
 }
 
 export interface TuiMainEntry {
@@ -62,12 +64,17 @@ export function buildCollaborationTuiSnapshot(input: {
   readonly events: readonly CommsEvent[];
   readonly nowIso: string;
 }): CollaborationTuiSnapshot {
+  const reports = activeAgentReports(input.registry, input.nowIso, input.closedArchive);
+  const queue = queueEntries(input.registry.commit_queue, input.nowIso);
+  const directed = directedEntries(input.events);
+
   return {
     generated_at: input.nowIso,
     main: mainEntries(input.events),
-    directed: directedEntries(input.events),
-    agents: agentEntries(input.registry, input.nowIso, input.closedArchive),
-    queue: queueEntries(input.registry.commit_queue, input.nowIso),
+    directed,
+    agents: agentEntries(reports),
+    queue,
+    operator_value: operatorValue(input.events, reports, queue, directed),
   };
 }
 
@@ -119,12 +126,8 @@ function isDirectedMessage(event: CommsEvent): event is DirectedCommsMessage {
   return event.kind === 'directed';
 }
 
-function agentEntries(
-  registry: CollaborationRegistry,
-  nowIso: string,
-  closedArchive: ClosedClaimsArchive | undefined,
-): readonly TuiAgentEntry[] {
-  return activeAgentReports(registry, nowIso, closedArchive).map((report) => ({
+function agentEntries(reports: readonly ActiveAgentReport[]): readonly TuiAgentEntry[] {
+  return reports.map((report) => ({
     routing_key: formatRoutingKey(report.routing_key),
     visibility_status: report.visibility_status,
     collision_status: report.collision_status,

@@ -142,6 +142,232 @@ describe('buildCollaborationTuiSnapshot', () => {
       },
     ]);
   });
+
+  it('summarises live operator-value signals without reading raw state', () => {
+    const staleAgent: CollaborationAgentId = {
+      agent_name: 'Dim Pausing Signal',
+      platform: 'codex',
+      model: 'GPT-5',
+      session_id_prefix: '019e1d',
+    };
+    const conflictingAgentA: CollaborationAgentId = {
+      agent_name: 'Pearly Drifting Jetty',
+      platform: 'codex',
+      model: 'GPT-5',
+      session_id_prefix: '019e22',
+    };
+    const conflictingAgentB: CollaborationAgentId = {
+      ...conflictingAgentA,
+      model: 'GPT-5.1',
+    };
+    const closedOnlyAgent: CollaborationAgentId = {
+      agent_name: 'Hushed Resting Signal',
+      platform: 'codex',
+      model: 'GPT-5',
+      session_id_prefix: '019e1b',
+    };
+
+    const snapshot = buildCollaborationTuiSnapshot({
+      registry: {
+        schema_version: '1.3.0',
+        claims: [
+          claim({
+            agent_id: conflictingAgentA,
+            claim_id: 'active-claim',
+            intent: 'Coordinate the P8 operator-value work.',
+          }),
+          claim({
+            agent_id: conflictingAgentB,
+            claim_id: 'colliding-claim',
+            intent: 'Accidental duplicate coordinator route.',
+          }),
+          claim({
+            agent_id: staleAgent,
+            claim_id: 'stale-claim',
+            claimed_at: '2026-05-12T10:00:00Z',
+            freshness_seconds: 60,
+          }),
+        ],
+        commit_queue: [
+          queueEntry({
+            intent_id: 'active-intent',
+            agent_id: conflictingAgentA,
+            expires_at: '2026-05-12T14:20:00Z',
+          }),
+          queueEntry({
+            intent_id: 'expired-intent',
+            agent_id: staleAgent,
+            expires_at: '2026-05-12T13:30:00Z',
+          }),
+        ],
+      },
+      closedArchive: {
+        schema_version: '1.3.0',
+        claims: [claim({ agent_id: closedOnlyAgent, claim_id: 'closed-only' })],
+      },
+      events: [
+        narrative({
+          event_id: 'narrative-update',
+          created_at: '2026-05-12T13:55:00Z',
+          title: 'P8 operator route updated',
+        }),
+        directed({
+          event_id: 'directed-assignment',
+          created_at: '2026-05-12T13:58:00Z',
+          message_kind: 'coordination-directive',
+          subject: 'Take P8 Slice A',
+        }),
+      ],
+      nowIso,
+    });
+
+    expect(snapshot.operator_value).toStrictEqual({
+      recent_changes: [
+        {
+          id: 'directed-assignment',
+          created_at: '2026-05-12T13:58:00Z',
+          kind: 'directed:coordination-directive',
+          summary: 'Take P8 Slice A',
+        },
+        {
+          id: 'narrative-update',
+          created_at: '2026-05-12T13:55:00Z',
+          kind: 'narrative',
+          summary: 'P8 operator route updated',
+        },
+      ],
+      ownership: {
+        active: 0,
+        stale: 1,
+        inactive: 1,
+        uncertain: 1,
+        collisions: 1,
+      },
+      queue_pressure: {
+        active: 1,
+        expired: 1,
+        total: 2,
+        status: 'attention',
+      },
+      directed_thread_pressure: {
+        total: 1,
+        needs_attention: 1,
+      },
+      needs_attention: [
+        {
+          severity: 'high',
+          summary: '1 identity routing collision needs coordinator attention.',
+        },
+        {
+          severity: 'high',
+          summary: '1 directed thread needs acknowledgement or routing.',
+        },
+        {
+          severity: 'medium',
+          summary: '1 commit queue entry is expired.',
+        },
+        {
+          severity: 'medium',
+          summary: '1 agent route is stale.',
+        },
+      ],
+    });
+  });
+
+  it('pluralises needs-attention summaries for human-readable text output', () => {
+    const staleAgentA: CollaborationAgentId = {
+      agent_name: 'Dim Pausing Signal',
+      platform: 'codex',
+      model: 'GPT-5',
+      session_id_prefix: '019e1d',
+    };
+    const staleAgentB: CollaborationAgentId = {
+      agent_name: 'Quiet Pausing Signal',
+      platform: 'codex',
+      model: 'GPT-5',
+      session_id_prefix: '019e1e',
+    };
+    const conflictingAgentA: CollaborationAgentId = {
+      agent_name: 'Pearly Drifting Jetty',
+      platform: 'codex',
+      model: 'GPT-5',
+      session_id_prefix: '019e22',
+    };
+    const conflictingAgentB: CollaborationAgentId = {
+      ...conflictingAgentA,
+      model: 'GPT-5.1',
+    };
+    const secondConflictingAgentA: CollaborationAgentId = {
+      agent_name: 'Pearly Gliding Jetty',
+      platform: 'codex',
+      model: 'GPT-5',
+      session_id_prefix: '019e23',
+    };
+    const secondConflictingAgentB: CollaborationAgentId = {
+      ...secondConflictingAgentA,
+      model: 'GPT-5.1',
+    };
+
+    const snapshot = buildCollaborationTuiSnapshot({
+      registry: {
+        schema_version: '1.3.0',
+        claims: [
+          claim({ agent_id: conflictingAgentA, claim_id: 'collision-a1' }),
+          claim({ agent_id: conflictingAgentB, claim_id: 'collision-a2' }),
+          claim({ agent_id: secondConflictingAgentA, claim_id: 'collision-b1' }),
+          claim({ agent_id: secondConflictingAgentB, claim_id: 'collision-b2' }),
+          claim({
+            agent_id: staleAgentA,
+            claim_id: 'stale-a',
+            claimed_at: '2026-05-12T10:00:00Z',
+            freshness_seconds: 60,
+          }),
+          claim({
+            agent_id: staleAgentB,
+            claim_id: 'stale-b',
+            claimed_at: '2026-05-12T10:00:00Z',
+            freshness_seconds: 60,
+          }),
+        ],
+        commit_queue: [
+          queueEntry({
+            intent_id: 'expired-a',
+            agent_id: staleAgentA,
+            expires_at: '2026-05-12T13:30:00Z',
+          }),
+          queueEntry({
+            intent_id: 'expired-b',
+            agent_id: staleAgentB,
+            expires_at: '2026-05-12T13:31:00Z',
+          }),
+        ],
+      },
+      events: [
+        directed({ event_id: 'directed-a' }),
+        directed({ event_id: 'directed-b', subject: 'Second directed note' }),
+      ],
+      nowIso,
+    });
+
+    expect(snapshot.operator_value?.needs_attention).toStrictEqual([
+      {
+        severity: 'high',
+        summary: '2 identity routing collisions need coordinator attention.',
+      },
+      {
+        severity: 'high',
+        summary: '2 directed threads need acknowledgement or routing.',
+      },
+      {
+        severity: 'medium',
+        summary: '2 commit queue entries are expired.',
+      },
+      {
+        severity: 'medium',
+        summary: '2 agent routes are stale.',
+      },
+    ]);
+  });
 });
 
 function claim(overrides: Partial<CollaborationClaim> = {}): CollaborationClaim {
