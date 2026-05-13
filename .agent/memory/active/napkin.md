@@ -444,12 +444,16 @@ tooling material, not optional session colour. -->
 
 ## 2026-05-13 — Uplifted Wheeling Sky / codex / GPT-5 / `019e20`
 
-### P5 Unified Comms Completion
+### P5 Unified Comms Useful Slice And Completion Correction
 
-- P5 only became honestly complete after code, schema, live state, generated
-  read model, practice-substrate live readers, and active docs all agreed on
-  one canonical `.agent/state/collaboration/comms/` directory. The useful
-  parser slice and claim closeout were not enough.
+- Correction after owner review: P5 is not complete. The unified comms
+  migration is a useful slice, but the command/test boundary still made IO
+  feel necessary to prove behaviour. Completion now requires a DI/no-IO repair
+  where tests invoke domain/use-case code directly with simple fakes.
+- Useful evidence retained: code, schema, live state, generated read model,
+  practice-substrate live readers, and active docs all agreed on one canonical
+  `.agent/state/collaboration/comms/` directory. That proves the storage shape,
+  not the full P5 architecture.
 - What caught the last residue: `practice:substrate:check` found live docs
   still naming retired paths, and Knip found newly-unused kind-specific readers
   plus stale TUI project config. Behaviour change: for migration work, "no
@@ -460,5 +464,6 @@ tooling material, not optional session colour. -->
 
 ### Candidate
 
-- No new ADR/PDR candidate. This is concrete evidence for the completion-proof
-  pipeline already routed in the agentic-engineering plan.
+- Candidate routing now exists in the no-IO findings report, P5 repair update,
+  and separate no-IO test boundary plan. Do not reuse the old "P5 complete"
+  wording from this napkin section.

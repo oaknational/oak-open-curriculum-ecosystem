@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "6236f156-c954-46cf-ac43-53bfa7f151f8",
+  "created_at": "2026-05-13T14:04:00Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Uplifted Wheeling Sky",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e20"
+  },
+  "title": "Commit window: P5 no-IO correction handoff",
+  "body": "Uplifted Wheeling Sky opened a short git:index/head window to stage and commit the P5 no-IO correction report, plan routing, and session-handoff continuity files. Intended bundle is docs/memory/plan/report only; unrelated SDK codegen dirty files remain excluded."
+}

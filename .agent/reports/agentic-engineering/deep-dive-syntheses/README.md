@@ -15,6 +15,7 @@ theme graduates beyond index notes and source routing.
 - [learning-loops-and-balancing-feedback-report.md](./learning-loops-and-balancing-feedback-report.md)
 - [graphify-repo-deep-dive-report.md](./graphify-repo-deep-dive-report.md)
 - [completion-claims-and-value-proof-pipeline-report.md](./completion-claims-and-value-proof-pipeline-report.md)
+- [no-io-tests-and-di-boundary-report.md](./no-io-tests-and-di-boundary-report.md)
 
 ## Promotion Rule
 

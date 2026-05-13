@@ -1,13 +1,13 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-> **Current continuation**: P5 unified comms format is next. P0.QG,
+> **Current continuation**: P5 DI/no-IO boundary repair is next. P0.QG,
 > P-Foundation, P1 directed-message authoring, P2 directed-message watching,
-> P3 commit-queue enforcement, and P4 identity routing are complete; P4 landed
-> at `1bb369a5`, and the post-P4 knip unblock landed at `730766ad`. New CLI
-> work lands in the unified `agent-tools <topic> <action>` shape from
-> `cost-of-collaboration.plan.md`. P8 is mandatory, not optional polish: the
-> live TUI must make collaboration value visible to humans in the moment, not
-> merely after-the-fact throughput claims.
+> P3 commit-queue enforcement, and P4 identity routing are complete. P5's
+> unified comms migration landed at `30c8ad15`, with closeout at `6a1d8d9e`,
+> but owner review corrected the completion claim: P5 is not complete until
+> tests directly invoke comms domain/application use cases with simple fakes
+> and imported testable code has no production IO defaults. Do not start P8
+> until P5 completion is recomputed from the live plan proof contract.
 >
 > **Conservation-first consolidation**: `napkin.md`, `distilled.md`, and
 > `pending-graduations.md` stages are complete as of 2026-05-12. The next
@@ -22,6 +22,13 @@
 > [`completion-claims-and-value-proof-pipeline-report.md`](../../reports/agentic-engineering/deep-dive-syntheses/completion-claims-and-value-proof-pipeline-report.md).
 > Completion is a computed verdict, not a confident sentence; TDD evidence
 > requires test-first red/green proof at unit, integration, and E2E levels.
+>
+> **No-IO / DI correction** (2026-05-13): use
+> [`no-io-tests-and-di-boundary-report.md`](../../reports/agentic-engineering/deep-dive-syntheses/no-io-tests-and-di-boundary-report.md)
+> for the findings source. The P5-specific repair is in
+> [`cost-of-collaboration.plan.md`](../../plans/agent-tooling/current/cost-of-collaboration.plan.md)
+> as `ws-p5-di-boundary-repair`; the wider repo recovery is separate in
+> [`no-io-test-boundary-and-di-recovery.plan.md`](../../plans/architecture-and-infrastructure/current/no-io-test-boundary-and-di-recovery.plan.md).
 >
 > **Umbral monitor closeout** (2026-05-13): Umbral Masking Silhouette completed
 > the read-only P5 strict comms parser gate-check and then stayed in a repeated
@@ -59,6 +66,32 @@ empty cached index, no active claims, and no active commit queue.
 **Next safe step impact**: no change. P5 strict-parser work is a useful landed
 slice but P5 remains pending against unified-format acceptance; P8 remains the
 mandatory live-TUI proof path after P5.
+
+## P5 Unified Comms And DI Boundary Correction (2026-05-13)
+
+**Session**: Uplifted Wheeling Sky / `codex` / `GPT-5` / `019e20`.
+
+**Landed / ready-to-land outcome**: P5 unified comms migration landed at
+`30c8ad15` and closeout at `6a1d8d9e`, but the session then corrected the
+completion claim after owner review. Findings report, P5 plan update, wider
+architecture plan, and continuity surfaces now route the next step.
+
+**Key correction**:
+
+- P5 is `pending`, not complete.
+- The useful migration slice proves the v2 canonical comms data shape and live
+  state migration, not the full P5 architecture.
+- The next implementation target is `ws-p5-di-boundary-repair`: extract direct
+  comms use cases, remove production IO defaults from imported testable code,
+  keep real filesystem/env/stdout/watch/clock/id wiring in CLI composition and
+  adapters only, and prove behaviour with simple fakes.
+- The wider historical no-IO test issue is separate; do not expand P5 into a
+  repo-wide IO cleanup.
+
+**Next safe execution step**: commit the planning/report correction, then start
+the P5 repair as TDD/refactor cycles from the proof contract in
+`cost-of-collaboration.plan.md`. Resume P8 only after P5 completion is
+recomputed from the live plan and evidence.
 
 ## Completion-Claim Proof Pipeline (2026-05-13)
 

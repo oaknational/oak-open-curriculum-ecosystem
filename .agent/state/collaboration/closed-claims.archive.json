@@ -22996,6 +22996,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "c8b9eec8-00d7-4ba9-8576-1121e18069f9",
+      "agent_id": {
+        "agent_name": "Uplifted Wheeling Sky",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e20"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T14:03:00Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit P5 no-IO correction, plan routing, and session handoff.",
+      "archived_at": "2026-05-13",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-13T14:05:00Z",
+        "closed_by": {
+          "agent_name": "Uplifted Wheeling Sky",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e20"
+        },
+        "summary": "Committed P5 no-IO correction handoff bundle in self-contained collaboration-state commit path.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c8b9eec8-00d7-4ba9-8576-1121e18069f9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

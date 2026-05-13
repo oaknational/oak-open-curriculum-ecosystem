@@ -39,10 +39,13 @@ todos:
     content: Make `(agent_name, platform, session_id_prefix)` the routing key in claim and comms writes; refuse a write whose tuple collides with an existing live identity.
     status: completed
   - id: ws-p5-unified-comms-format
-    content: Collapse the three-directory split (`comms-events/`, `comms-lifecycle/`, `comms-messages/`) and the three `$defs` into a single shape with a `kind` discriminant. Owner-relayed direction "ONE comms format used everywhere, no legacy lingering."
-    status: completed
+    content: Collapse the three-directory split (`comms-events/`, `comms-lifecycle/`, `comms-messages/`) and the three `$defs` into a single shape with a `kind` discriminant. Owner-relayed direction "ONE comms format used everywhere, no legacy lingering." Completion is currently pending DI/no-IO repair because the useful unified-format slice exposed that command/test boundaries still make production IO look like the proof path.
+    status: pending
+  - id: ws-p5-di-boundary-repair
+    content: Repair the P5 unified-comms implementation so tests directly invoke comms domain/use-case code with simple fakes; production filesystem/env/stdout/watch/clock/id wiring lives only in CLI composition/adapters; imported testable code has no production IO defaults.
+    status: pending
   - id: ws-p8-collaboration-tui
-    content: Build a human-facing real-time TUI for the main comms thread, direct-message threads, and active-agent state so operators can watch collaboration without tailing rendered markdown or raw JSON event directories. Owner-directed sequence update 2026-05-12: run immediately after P5. Review update 2026-05-13: cdfb8959 landed a useful snapshot/text-mode slice and Ink primitives, and P5 now supplies the unified comms source; P8 acceptance remains pending until real-time refresh, inactive-agent visibility, and boundary/tooling gaps are resolved.
+    content: Build a human-facing real-time TUI for the main comms thread, direct-message threads, and active-agent state so operators can watch collaboration without tailing rendered markdown or raw JSON event directories. Owner-directed sequence update 2026-05-12: run immediately after P5. Review update 2026-05-13: cdfb8959 landed a useful snapshot/text-mode slice and Ink primitives; P5's unified source shape is useful but not accepted until the DI/no-IO repair recomputes completion. P8 acceptance remains pending until real-time refresh, inactive-agent visibility, and boundary/tooling gaps are resolved.
     status: pending
   - id: ws-p6-coordination-artefact-isolation
     content: Isolate coordination artefacts (sidebars, canonical comms events, monitor telemetry) from gate-visible repo state. Either separate branch/worktree or gitignored space.
@@ -1094,7 +1097,18 @@ freezes/absorbs post-sweep artefacts."
 - Renderer no longer sensitive to legacy optional-field shapes (the
   source data is normalised).
 
-**Computed completion verdict — 2026-05-13**: P5 is complete. Evidence:
+**Completion correction — 2026-05-13**: P5 is not complete. The unified
+storage/parser/renderer migration slice is useful, but the later no-IO testing
+review found an architectural boundary defect: the tests and imported command
+paths still made production IO defaults and filesystem-shaped workflows look
+like the route to proving domain behaviour. Per ADR-078 and
+`.agent/directives/testing-strategy.md`, this invalidates the completion
+claim until the P5 command/use-case boundary is repaired and completion is
+recomputed.
+Findings source:
+[`no-io-tests-and-di-boundary-report.md`](../../../reports/agentic-engineering/deep-dive-syntheses/no-io-tests-and-di-boundary-report.md).
+
+Useful slice evidence retained:
 
 - The canonical directory is `.agent/state/collaboration/comms/`; the retired
   `comms-events/`, `comms-lifecycle/`, and `comms-messages/` directories are
@@ -1110,20 +1124,64 @@ freezes/absorbs post-sweep artefacts."
 - B-10 tolerant-read helper names (`optionalNullableString`,
   `optionalStringOrLegacyAgentName`) are absent from the collaboration-state
   source and tests.
-- Verification: red-first P5 tests observed before product code; final
-  `@oaknational/agent-tools` test suite passed (41 files / 324 tests),
-  `type-check` passed, `lint` exited 0 with two non-failing real-IO warnings in
-  integration-style tests, `knip` passed, `git diff --check` passed, and
-  `practice:substrate:check` returned `ok: true` with only informational
+- Verification before the correction: red-first P5 tests were observed before
+  product code; final `@oaknational/agent-tools` test suite passed (41 files /
+  324 tests), `type-check` passed, `knip` passed, `git diff --check` passed,
+  and `practice:substrate:check` returned `ok: true` with only informational
   historical-retired-path findings.
+
+Blocking repair requirements:
+
+- Extract comms domain/application use cases that are invoked directly by
+  tests and accept all dependencies as explicit arguments.
+- Remove production IO defaults from imported command/use-case surfaces.
+  Filesystem, environment, stdout, watcher, clock, and UUID wiring belongs in
+  CLI composition/adapters only.
+- Rewrite P5 unit, integration, and E2E proofs so they use trivial fakes, not
+  temp directories, real filesystem reads/writes, timers, or watcher effects.
+- Keep migration proof at the record-collection/use-case level; directory
+  traversal is adapter wiring, not domain behaviour.
+- Make `pnpm --filter @oaknational/agent-tools lint` fail cleanly with no
+  no-real-IO warnings in the P5 test surface.
+- Recompute P5 completion only after the proof contract below is satisfied.
+
+**Immediate next implementation order**:
+
+1. Keep P5 classified as `pending`; do not start P8 from the useful migration
+   slice.
+2. Land this planning/report correction as its own commit before more product
+   churn.
+3. Rework the current P5 command/test patch so imported testable code has no
+   production IO defaults.
+4. Implement `ws-p5-di-boundary-repair` as TDD/refactor cycles:
+   direct/reply/render/inbox use cases; watch with an injected update source;
+   migration over record collections and output sinks; CLI composition as the
+   only path/env/argv-to-adapter layer; P5 tests with trivial fakes only.
+5. Recompute P5 completion from the proof contract below.
+6. Resume mandatory P8 only after P5 completion is computed from live plan
+   status and evidence.
+
+The wider repo-wide no-IO-in-tests recovery is intentionally separate under
+[`no-io-test-boundary-and-di-recovery.plan.md`](../../../plans/architecture-and-infrastructure/current/no-io-test-boundary-and-di-recovery.plan.md).
+Do not expand P5 to repair unrelated historical IO tests.
+
+**P5 repair proof contract**:
+
+| Acceptance id | Claim | Proof level | Deterministic proof |
+| --- | --- | --- | --- |
+| `P5-DI-1` | Comms write/read/render/reply/watch/migrate behaviour is exposed as direct use-case functions with explicit dependencies. | integration | Focused Vitest tests import use cases and pass simple fakes. |
+| `P5-DI-2` | Imported use-case code cannot fall back to production filesystem/env/stdout/watch/clock/id services. | unit | Type/API tests or lint checks show no production defaults on testable imports. |
+| `P5-DI-3` | CLI composition is the only layer that turns paths/env/argv into real adapters. | integration | CLI parser/composition tests use pure command objects or injected adapters. |
+| `P5-DI-4` | P5 tests perform no IO. | non-code | `pnpm --filter @oaknational/agent-tools lint` exits 0 with no real-IO warnings for P5 files. |
+| `P5-DI-5` | Unified comms migration and strict parsing remain intact after the boundary repair. | integration | Focused unified-comms tests plus full agent-tools tests pass. |
 
 **Routing**: schema authority + parser + renderer + migration script.
 Large slice; design phase needs its own peer sidebar before
 implementation. Should NOT be attempted concurrently with active
 multi-agent traffic — schedule for a single-agent window or a coordinated
 pause. Owner-directed sequencing update on 2026-05-12: P8 collaboration TUI
-follows immediately after P5 so the operator view can build on the unified
-event shape before P6/P7 resume.
+follows after P5, but P5 now means the unified data shape plus the repaired
+DI/no-IO command boundary, not merely the storage migration.
 
 ---
 

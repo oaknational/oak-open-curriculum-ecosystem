@@ -77,12 +77,14 @@ Earlier archives remain under [`archive/`](archive/).
   State/memory files remain always commit-includable when dirty; owner
   clarified on 2026-05-12 that every commit should include current memory/state
   files.
-- P5 strict comms parser replacement landed as a bounded slice at `dd5b9e54`,
-  with collaboration closeout at `3e033cad`. Umbral Masking Silhouette's
-  read-only gate-check returned `CLEAN/GO` before commit and monitored the
-  shared queue through Dim WS1.6, Fiery WS1.4, and Luminous closeout. P5 is not
-  complete against the unified-format acceptance criteria; continue P5 unified
-  comms format before mandatory P8 live TUI unless owner direction changes.
+- P5 unified comms storage/parser/renderer migration landed at `30c8ad15`,
+  with collaboration closeout at `6a1d8d9e`. Owner review then corrected the
+  completion claim: P5 is **not complete** until the DI/no-IO command boundary
+  is repaired. The useful slice proves one canonical comms directory and v2
+  event shape, but imported testable code still needs direct use-case surfaces
+  with explicit simple-fake dependencies and no production IO defaults.
+  Continue `ws-p5-di-boundary-repair` before mandatory P8 live TUI unless
+  owner direction changes.
 - The owner-directed consolidation drain of `repo-continuity.md` and
   [`pending-graduations.md`](pending-graduations.md) is complete for this
   pass: historical closeout prose was archived, the live state was preserved,
@@ -128,7 +130,7 @@ each thread record; this table is the repo-level index.
 | ------------------------------------------------------------------------------ | --------------------------------------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `main-critical-sonar-remediation`                                              | Sonar remediation                             | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | `observability-sentry-otel`                                                    | Sentry/OTel integration                       | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic]       | Verdant Foraging Copse / `codex` / GPT-5 / `019e1d` / 2026-05-13 (completion-claim proof pipeline report + plan + first `jc-plan` proof-contract skill amendment); Umbral Masking Silhouette / `codex` / GPT-5 / `019e1d` / 2026-05-13 (read-only P5 strict-parser gate-check + repeated monitor loop; no edits/index activity); Twigged Growing Glade / `cursor` / GPT-5.5 / `c19c95` / 2026-05-12 (pending-graduations conservation pass complete; next consolidation target is `practice-bootstrap.md`); Ferny Regrowing Leaf / `claude` / opus-4-7-1m / `10ca9b` / 2026-05-12 (coordinator session; 6-agent directed-message allocation matrix; coordinator-as-allocator role-failure-mode captured); Volcanic Charring Furnace / `cursor` / GPT-5.5 / `242ea3` / 2026-05-12 (distilled-stage conservation routing); Shadowed Dimming Veil / `codex` / GPT-5 / `019e1c` / 2026-05-12 (P8 reviewer synthesis and mandatory live-TUI routing); see thread record for full identity history |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic]       | Uplifted Wheeling Sky / `codex` / GPT-5 / `019e20` / 2026-05-13 (P5 unified comms migration + no-IO/DI correction; P5 reset to pending with `ws-p5-di-boundary-repair` next); Verdant Foraging Copse / `codex` / GPT-5 / `019e1d` / 2026-05-13 (completion-claim proof pipeline report + plan + first `jc-plan` proof-contract skill amendment); Umbral Masking Silhouette / `codex` / GPT-5 / `019e1d` / 2026-05-13 (read-only P5 strict-parser gate-check + repeated monitor loop; no edits/index activity); Twigged Growing Glade / `cursor` / GPT-5.5 / `c19c95` / 2026-05-12 (pending-graduations conservation pass complete; next consolidation target is `practice-bootstrap.md`); see thread record for full identity history |
 | `connecting-oak-resources`                                                     | Oak resource graph                            | [record][connecting]    | Dim Hiding Secret / `codex` / GPT-5 / `019e1d` / 2026-05-13 (WS1.6 vocab planning prep landed at `f36f98b1`; handoff-only closeout no new commit); Luminous Threading Asteroid / `codex` / GPT-5 / `019e1d` / 2026-05-13 (session-handoff-only close; WS1.4 coordination closeout already landed at `0d6f080a`); Solar Gliding Twilight / `codex` / GPT-5 / `019e1d` / 2026-05-13 (session-handoff continuity repair; records now reflect WS1.4 landed); Fiery Igniting Furnace / `codex` / GPT-5 / `019e1d` / 2026-05-12 (WS1.4 JSON-LD processor landed at `95f42cb7`); Radiant Illuminating Twilight / `codex` / GPT-5 / `019e1c` / 2026-05-12 (WS2.1 graph-ingest scaffold landed at `0f895070`); Lofty Vaulting Summit / `codex` / GPT-5 / `019e1c` / 2026-05-12 (WS1.3 DatasetCore + DataFactory landed at `87e21125`); see thread record for full identity history |
 | `exploring-open-education-resources`                                           | Third-party OER                               | [record][oer]           | Gnarled / `claude-code` / `e18e2c` / 2026-05-01                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `architectural-budget-system`                                                  | Architectural budget                          | [record][budget]        | Nebulous / `codex` / 2026-04-29                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -156,13 +158,17 @@ session-handoff closeout only; WS1.4 coordination closeout was already landed at
 ### Agentic-Engineering Enhancements
 
 Immediate cost-of-collaboration lane: P0, P-Foundation, P1, P2, P3, and P4 are
-complete; P5 strict-parser work landed as a useful slice but P5 remains pending
-against the unified-format acceptance criteria. Continue with P5 unified comms
-format, then mandatory P8 live
-collaboration TUI. P8 must show human-visible live value — who is active, what
-changed, what is waiting, and which directed threads need attention — not only
-abstract throughput claims. P6/P7 resume after the operator-view path unless
-owner direction changes.
+complete; P5 unified comms migration landed as a useful slice but P5 remains
+pending. Continue `ws-p5-di-boundary-repair`: rework the current P5
+command/test patch so tests call comms domain/application use cases directly
+with trivial fakes, imported testable code has no production IO defaults, and
+filesystem/env/stdout/watch/clock/id wiring lives only in CLI composition and
+adapters. Recompute P5 completion from the acceptance table in
+[`cost-of-collaboration.plan.md`](../../plans/agent-tooling/current/cost-of-collaboration.plan.md).
+Only then resume mandatory P8 live collaboration TUI. P8 must show
+human-visible live value — who is active, what changed, what is waiting, and
+which directed threads need attention — not only abstract throughput claims.
+P6/P7 resume after the operator-view path unless owner direction changes.
 
 Completion-proof lane: continue from
 [`completion-claim-proof-pipeline.plan.md`](../../plans/agentic-engineering-enhancements/current/completion-claim-proof-pipeline.plan.md).

@@ -39,6 +39,11 @@ Workspace layer separation audit has been promoted to current (2026-04-28):
 It prepares the repo-wide migration for the ADR-154 rule that distinct
 architectural layers must live in distinct workspaces.
 
+No-IO test boundary and DI recovery has been added to current (2026-05-13):
+[current/no-io-test-boundary-and-di-recovery.plan.md](current/no-io-test-boundary-and-di-recovery.plan.md).
+It restores ADR-078 testability boundaries so unit, integration, and E2E tests
+directly prove domain/application behaviour with simple fakes and no IO.
+
 Architectural budget doctrine has been added as a future strategic companion
 (2026-04-29):
 [future/architectural-budget-system-across-scales.plan.md](future/architectural-budget-system-across-scales.plan.md).
