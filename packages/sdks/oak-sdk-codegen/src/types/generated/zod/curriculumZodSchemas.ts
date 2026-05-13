@@ -1987,6 +1987,11 @@ export const endpoints: readonly Endpoint[] = ([
         type: "Query",
         schema: z.number().lte(100).optional().default(10),
       },
+      {
+        name: "filter",
+        type: "Query",
+        schema: z.literal("images").optional(),
+      },
     ],
     response: QuestionsForKeyStageAndSubjectResponseSchema,
     errors: [
@@ -2239,6 +2244,11 @@ There is no response returned for this endpoint as it returns a content attachme
         name: "lesson",
         type: "Path",
         schema: z.string(),
+      },
+      {
+        name: "filter",
+        type: "Query",
+        schema: z.literal("images").optional(),
       },
     ],
     response: QuestionForLessonsResponseSchema,
@@ -2524,6 +2534,11 @@ This endpoint contains licence information for any third-party content contained
         name: "limit",
         type: "Query",
         schema: z.number().lte(100).optional().default(10),
+      },
+      {
+        name: "filter",
+        type: "Query",
+        schema: z.literal("images").optional(),
       },
     ],
     response: QuestionsForSequenceResponseSchema,

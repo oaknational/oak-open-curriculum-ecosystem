@@ -8,7 +8,7 @@ export const schemaBase = {
   "openapi": "3.1.0",
   "info": {
     "title": "Oak OpenAPI",
-    "version": "0.6.0-42c5c8f79ac2a493141925a63f34ad3df534c7f6"
+    "version": "0.6.0-4879c50ea5b9f1a2339d524075a86dea0d5f71b6"
   },
   "servers": [
     {
@@ -1537,6 +1537,17 @@ export const schemaBase = {
             },
             "required": true,
             "description": "The lesson slug identifier"
+          },
+          {
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "images"
+              ],
+              "description": "Optional filter for question results. Use `images` to return only questions with a question image or image answer."
+            }
           }
         ],
         "responses": {
@@ -1637,6 +1648,17 @@ export const schemaBase = {
               "maximum": 100,
               "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
               "example": 10
+            }
+          },
+          {
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "images"
+              ],
+              "description": "Optional filter for question results. Use `images` to return only questions with a question image or image answer."
             }
           }
         ],
@@ -1764,6 +1786,17 @@ export const schemaBase = {
               "maximum": 100,
               "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
               "example": 10
+            }
+          },
+          {
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "images"
+              ],
+              "description": "Optional filter for question results. Use `images` to return only questions with a question image or image answer."
             }
           }
         ],

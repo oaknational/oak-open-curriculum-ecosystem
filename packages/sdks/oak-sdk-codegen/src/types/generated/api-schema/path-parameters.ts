@@ -1818,6 +1818,17 @@ export const PATH_OPERATIONS = [
           "description": "The lesson slug identifier",
           "example": "imagining-you-are-the-characters-the-three-billy-goats-gruff"
         }
+      },
+      {
+        "in": "query",
+        "name": "filter",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "images"
+          ],
+          "description": "Optional filter for question results. Use `images` to return only questions with a question image or image answer."
+        }
       }
     ],
     "responses": {
@@ -1909,6 +1920,17 @@ export const PATH_OPERATIONS = [
           "maximum": 100,
           "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
           "example": 10
+        }
+      },
+      {
+        "in": "query",
+        "name": "filter",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "images"
+          ],
+          "description": "Optional filter for question results. Use `images` to return only questions with a question image or image answer."
         }
       }
     ],
@@ -2028,6 +2050,17 @@ export const PATH_OPERATIONS = [
           "maximum": 100,
           "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
           "example": 10
+        }
+      },
+      {
+        "in": "query",
+        "name": "filter",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "images"
+          ],
+          "description": "Optional filter for question results. Use `images` to return only questions with a question image or image answer."
         }
       }
     ],

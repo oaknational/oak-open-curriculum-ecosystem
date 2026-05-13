@@ -71,18 +71,21 @@ export const REQUEST_PARAMETER_SCHEMAS = {
   }),
   "GET:/lessons/:lesson/quiz": z.object({
     "lesson": z.string(),
+    "filter": z.literal("images").optional(),
   }),
   "GET:/sequences/:sequence/questions": z.object({
     "sequence": z.string(),
     "year": z.number().optional(),
     "offset": z.number().optional().default(0),
     "limit": z.number().lte(100).optional().default(10),
+    "filter": z.literal("images").optional(),
   }),
   "GET:/key-stages/:keyStage/subject/:subject/questions": z.object({
     "keyStage": z.enum(["ks1", "ks2", "ks3", "ks4"]),
     "subject": z.enum(["art", "citizenship", "computing", "cooking-nutrition", "design-technology", "english", "french", "geography", "german", "history", "maths", "music", "physical-education", "religious-education", "rshe-pshe", "science", "spanish"]),
     "offset": z.number().optional().default(0),
     "limit": z.number().lte(100).optional().default(10),
+    "filter": z.literal("images").optional(),
   }),
   "GET:/lessons/:lesson/summary": z.object({
     "lesson": z.string(),

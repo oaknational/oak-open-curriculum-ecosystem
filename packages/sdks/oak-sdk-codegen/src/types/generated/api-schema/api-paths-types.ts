@@ -3855,7 +3855,9 @@ export interface operations {
     };
     "getQuestions-getQuestionsForLessons": {
         parameters: {
-            query?: never;
+            query?: {
+                filter?: "images";
+            };
             header?: never;
             path: {
                 /** The lesson slug identifier */
@@ -3901,6 +3903,7 @@ export interface operations {
                 year?: number;
                 offset?: number;
                 limit?: number;
+                filter?: "images";
             };
             header?: never;
             path: {
@@ -3946,6 +3949,7 @@ export interface operations {
             query?: {
                 offset?: number;
                 limit?: number;
+                filter?: "images";
             };
             header?: never;
             path: {
