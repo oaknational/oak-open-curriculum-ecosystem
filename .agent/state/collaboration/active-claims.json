@@ -1390,7 +1390,155 @@
       "expires_at": "2026-05-12T20:34:05.992Z",
       "phase": "abandoned",
       "notes": "Re-enqueue with concrete comms-seen files instead of directory path."
+    },
+    {
+      "intent_id": "73c22f3c-5543-4392-a390-4fd44beeb0b6",
+      "claim_id": "310125c9-c078-4c6b-8611-cdf311c2e834",
+      "agent_id": {
+        "agent_name": "Mossy Fruiting Thicket",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "files": [
+        ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md",
+        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/state/collaboration/shared-comms-log.md",
+        ".agent/state/collaboration/comms/d810db61-96cd-445e-8611-b17996a8162c.json",
+        ".agent/state/collaboration/comms/e8b77d83-df8f-4174-886e-484b9df30dd7.json",
+        "agent-tools/src/bin/agent-tools-cli.ts",
+        "agent-tools/src/collaboration-state/cli-comms-commands.ts",
+        "agent-tools/src/collaboration-state/cli-comms-inbox.ts",
+        "agent-tools/src/collaboration-state/cli-comms-messages.ts",
+        "agent-tools/src/collaboration-state/cli-comms-watch.ts",
+        "agent-tools/src/collaboration-state/cli-runtime.ts",
+        "agent-tools/src/collaboration-state/comms-migration.ts",
+        "agent-tools/src/collaboration-state/comms-migration-records.ts",
+        "agent-tools/src/collaboration-state/comms-use-cases.ts",
+        "agent-tools/src/collaboration-state/index.ts",
+        "agent-tools/tests/collaboration-state/collaboration-state.unit.test.ts",
+        "agent-tools/tests/collaboration-state/comms-use-cases.integration.test.ts"
+      ],
+      "commit_subject": "feat(agent-tools): repair p5 comms di boundary",
+      "queued_at": "2026-05-13T17:18:16.803Z",
+      "updated_at": "2026-05-13T17:18:57.743Z",
+      "expires_at": "2026-05-13T17:33:16.803Z",
+      "phase": "abandoned",
+      "notes": "Abandoned before record-staged: closed-claims.archive.json has no diff until claim closure, so the exact staged set cannot match this first source/state commit. Re-enqueuing without closed-claims and leaving closure residue for explicit follow-up."
+    },
+    {
+      "intent_id": "407aa15a-a852-434c-92cc-f4767447a9d3",
+      "claim_id": "310125c9-c078-4c6b-8611-cdf311c2e834",
+      "agent_id": {
+        "agent_name": "Mossy Fruiting Thicket",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "files": [
+        ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md",
+        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/shared-comms-log.md",
+        ".agent/state/collaboration/comms/d810db61-96cd-445e-8611-b17996a8162c.json",
+        ".agent/state/collaboration/comms/e8b77d83-df8f-4174-886e-484b9df30dd7.json",
+        "agent-tools/src/bin/agent-tools-cli.ts",
+        "agent-tools/src/collaboration-state/cli-comms-commands.ts",
+        "agent-tools/src/collaboration-state/cli-comms-inbox.ts",
+        "agent-tools/src/collaboration-state/cli-comms-messages.ts",
+        "agent-tools/src/collaboration-state/cli-comms-watch.ts",
+        "agent-tools/src/collaboration-state/cli-runtime.ts",
+        "agent-tools/src/collaboration-state/comms-migration.ts",
+        "agent-tools/src/collaboration-state/comms-migration-records.ts",
+        "agent-tools/src/collaboration-state/comms-use-cases.ts",
+        "agent-tools/src/collaboration-state/index.ts",
+        "agent-tools/tests/collaboration-state/collaboration-state.unit.test.ts",
+        "agent-tools/tests/collaboration-state/comms-use-cases.integration.test.ts"
+      ],
+      "commit_subject": "feat(agent-tools): repair p5 comms di boundary",
+      "queued_at": "2026-05-13T17:19:02.956Z",
+      "updated_at": "2026-05-13T17:19:45.269Z",
+      "expires_at": "2026-05-13T17:34:02.956Z",
+      "phase": "pre_commit",
+      "staged_name_status": "M\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nM\t.agent/plans/agent-tooling/current/cost-of-collaboration.plan.md\nM\t.agent/state/collaboration/active-claims.json\nA\t.agent/state/collaboration/comms/d810db61-96cd-445e-8611-b17996a8162c.json\nA\t.agent/state/collaboration/comms/e8b77d83-df8f-4174-886e-484b9df30dd7.json\nM\t.agent/state/collaboration/shared-comms-log.md\nM\tagent-tools/src/bin/agent-tools-cli.ts\nM\tagent-tools/src/collaboration-state/cli-comms-commands.ts\nM\tagent-tools/src/collaboration-state/cli-comms-inbox.ts\nM\tagent-tools/src/collaboration-state/cli-comms-messages.ts\nM\tagent-tools/src/collaboration-state/cli-comms-watch.ts\nM\tagent-tools/src/collaboration-state/cli-runtime.ts\nA\tagent-tools/src/collaboration-state/comms-migration-records.ts\nM\tagent-tools/src/collaboration-state/comms-migration.ts\nA\tagent-tools/src/collaboration-state/comms-use-cases.ts\nM\tagent-tools/src/collaboration-state/index.ts\nM\tagent-tools/tests/collaboration-state/collaboration-state.unit.test.ts\nA\tagent-tools/tests/collaboration-state/comms-use-cases.integration.test.ts\n",
+      "staged_bundle_fingerprint": "9d6122fb4b47027916f77ba1e071d4099f01beb525ccb9a092e3b59892a66848"
     }
   ],
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "a9bc1512-3ba6-42a0-b5b9-f72a6a12c575",
+      "agent_id": {
+        "agent_name": "Mossy Fruiting Thicket",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "workspace",
+          "patterns": [
+            "agent-tools"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T17:08:28Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Implement ws-p5-di-boundary-repair in agent-tools: extract direct comms use-case boundaries, remove production IO defaults from imported testable code, and validate with focused no-IO tests using simple fakes."
+    },
+    {
+      "claim_id": "db3b25b4-106b-4f42-b6f9-33db4ca71c8e",
+      "agent_id": {
+        "agent_name": "Mossy Fruiting Thicket",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T17:08:28Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Maintain P5 DI repair continuity, identity, napkin, and collaboration-state surfaces for this session; no SDK codegen ownership."
+    },
+    {
+      "claim_id": "310125c9-c078-4c6b-8611-cdf311c2e834",
+      "agent_id": {
+        "agent_name": "Mossy Fruiting Thicket",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T17:17:43Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit the P5 comms DI boundary repair with explicit pathspecs; exclude napkin residue and unrelated files.",
+      "intent_to_commit": "407aa15a-a852-434c-92cc-f4767447a9d3"
+    }
+  ]
 }

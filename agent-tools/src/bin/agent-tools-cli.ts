@@ -12,6 +12,7 @@ import type {
   AgentToolsEnvironment,
 } from './agent-tools-cli-types.js';
 import { runCollaborationStateCli } from '../collaboration-state/cli.js';
+import { productionCollaborationStateRuntime } from '../collaboration-state/cli-runtime.js';
 
 export type {
   AgentToolsCliInput,
@@ -110,10 +111,13 @@ async function dispatchTopic(input: {
   }
 
   if (input.parsed.topic === 'collaboration-state') {
+    const runtime = productionCollaborationStateRuntime({ stdout: input.input.stdout });
     return runCollaborationStateCli({
       argv: input.parsed.topicArgs,
       env: input.input.env,
-      stdout: input.input.stdout,
+      stdout: runtime.stdout,
+      io: runtime.io,
+      waitForCommsChange: runtime.waitForCommsChange,
     });
   }
 

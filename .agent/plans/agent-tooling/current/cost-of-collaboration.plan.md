@@ -40,12 +40,12 @@ todos:
     status: completed
   - id: ws-p5-unified-comms-format
     content: Collapse the three-directory split (`comms-events/`, `comms-lifecycle/`, `comms-messages/`) and the three `$defs` into a single shape with a `kind` discriminant. Owner-relayed direction "ONE comms format used everywhere, no legacy lingering." Completion is currently pending DI/no-IO repair because the useful unified-format slice exposed that command/test boundaries still make production IO look like the proof path.
-    status: pending
+    status: completed
   - id: ws-p5-di-boundary-repair
     content: Repair the P5 unified-comms implementation so tests directly invoke comms domain/use-case code with simple fakes; production filesystem/env/stdout/watch/clock/id wiring lives only in CLI composition/adapters; imported testable code has no production IO defaults.
-    status: pending
+    status: completed
   - id: ws-p8-collaboration-tui
-    content: Build a human-facing real-time TUI for the main comms thread, direct-message threads, and active-agent state so operators can watch collaboration without tailing rendered markdown or raw JSON event directories. Owner-directed sequence update 2026-05-12: run immediately after P5. Review update 2026-05-13: cdfb8959 landed a useful snapshot/text-mode slice and Ink primitives; P5's unified source shape is useful but not accepted until the DI/no-IO repair recomputes completion. P8 acceptance remains pending until real-time refresh, inactive-agent visibility, and boundary/tooling gaps are resolved.
+    content: Build a human-facing real-time TUI for the main comms thread, direct-message threads, and active-agent state so operators can watch collaboration without tailing rendered markdown or raw JSON event directories. Owner-directed sequence update 2026-05-12: run immediately after P5. Review update 2026-05-13: cdfb8959 landed a useful snapshot/text-mode slice and Ink primitives; P8 acceptance remains pending after P5 until real-time refresh, inactive-agent visibility, and boundary/tooling gaps are resolved.
     status: pending
   - id: ws-p6-coordination-artefact-isolation
     content: Isolate coordination artefacts (sidebars, canonical comms events, monitor telemetry) from gate-visible repo state. Either separate branch/worktree or gitignored space.
@@ -1108,6 +1108,16 @@ recomputed.
 Findings source:
 [`no-io-tests-and-di-boundary-report.md`](../../../reports/agentic-engineering/deep-dive-syntheses/no-io-tests-and-di-boundary-report.md).
 
+**Completion recomputed — 2026-05-13**: P5 is complete after the DI/no-IO
+repair. The comms application layer now exposes direct use-case functions for
+directed writes, replies, inbox draining, watching, rendering, and legacy record
+migration. Focused tests call those use cases with in-memory stores, explicit
+seen-state fakes, injected update sources, and output sinks. Imported comms CLI
+commands no longer fall back to production IO when no runtime is supplied; the
+filesystem, stdout, and watch-source wiring is provided by the production CLI
+composition runtime. P8 remains pending and is now the next cost-of-collaboration
+implementation lane.
+
 Useful slice evidence retained:
 
 - The canonical directory is `.agent/state/collaboration/comms/`; the retired
@@ -1174,6 +1184,12 @@ Do not expand P5 to repair unrelated historical IO tests.
 | `P5-DI-3` | CLI composition is the only layer that turns paths/env/argv into real adapters. | integration | CLI parser/composition tests use pure command objects or injected adapters. |
 | `P5-DI-4` | P5 tests perform no IO. | non-code | `pnpm --filter @oaknational/agent-tools lint` exits 0 with no real-IO warnings for P5 files. |
 | `P5-DI-5` | Unified comms migration and strict parsing remain intact after the boundary repair. | integration | Focused unified-comms tests plus full agent-tools tests pass. |
+
+2026-05-13 proof: focused comms use-case/CLI/unified-format tests passed;
+`pnpm --filter @oaknational/agent-tools test`, `type-check`, `lint`, and
+`build` passed; `collaboration-state -- check` returned `ok`; and
+`practice:substrate:check` returned `ok: true` with only informational
+historical-retired-path findings.
 
 **Routing**: schema authority + parser + renderer + migration script.
 Large slice; design phase needs its own peer sidebar before

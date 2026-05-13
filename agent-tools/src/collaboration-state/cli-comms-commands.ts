@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { existsSync } from 'node:fs';
 import { dirname, join, parse } from 'node:path';
 
-import { renderSharedCommsLog } from './comms.js';
+import { renderCommsLog, writeCommsEventWithReadback } from './comms-use-cases.js';
 import { resolveIdentity } from './cli-identity.js';
 import { optional, required, valueOrDefault, type Options } from './cli-options.js';
 import { cliIo, type CliRuntime } from './cli-runtime.js';
@@ -16,9 +16,11 @@ const DEFAULT_SHARED_LOG = '.agent/state/collaboration/shared-comms-log.md';
 export async function appendComms(
   options: Options,
   env: CollaborationStateEnvironment,
-  runtime: CliRuntime = {},
+  runtime: CliRuntime,
 ): Promise<string> {
   const io = cliIo(runtime);
+  const commsDir = required(options, 'comms-dir');
+  const nowIso = required(options, 'now');
   const identity = resolveIdentity(options, env);
   const validation = validateSharedStateAgentId({ agentId: identity.agent_id, env });
   if (!validation.ok) {
@@ -27,14 +29,18 @@ export async function appendComms(
   await assertIdentityCanWrite({
     options,
     agentId: identity.agent_id,
-    nowIso: required(options, 'now'),
+    nowIso,
     surface: 'comms append',
     readActiveClaimsFile: io.readActiveClaimsFile,
   });
 
-  await io.writeCommsEvent({
-    commsDir: required(options, 'comms-dir'),
-    nowIso: required(options, 'now'),
+  await writeCommsEventWithReadback({
+    nowIso,
+    store: {
+      write: (event, currentNowIso) =>
+        io.writeCommsEvent({ commsDir, event, nowIso: currentNowIso }),
+      read: () => io.readCommsEvents(commsDir),
+    },
     event: {
       schema_version: '2.0.0',
       event_id: valueOrDefault(options, 'event-id', randomUUID()),
@@ -51,14 +57,16 @@ export async function appendComms(
 
 export async function renderComms(
   options: Options,
-  _env?: CollaborationStateEnvironment,
-  runtime: CliRuntime = {},
+  _env: CollaborationStateEnvironment,
+  runtime: CliRuntime,
 ): Promise<string> {
   const io = cliIo(runtime);
-  const events = await io.readCommsEvents(required(options, 'comms-dir'));
-  await io.writeTextFile({
-    filePath: required(options, 'output'),
-    text: renderSharedCommsLog({ events }),
+  const commsDir = required(options, 'comms-dir');
+  await renderCommsLog({
+    store: { read: () => io.readCommsEvents(commsDir) },
+    output: {
+      writeText: (text) => io.writeTextFile({ filePath: required(options, 'output'), text }),
+    },
   });
 
   return '';
@@ -66,8 +74,8 @@ export async function renderComms(
 
 export async function migrateComms(
   options: Options,
-  _env?: CollaborationStateEnvironment,
-  runtime: CliRuntime = {},
+  _env: CollaborationStateEnvironment,
+  runtime: CliRuntime,
 ): Promise<string> {
   const migrated = await cliIo(runtime).migrateLegacyCommsDirectories({
     eventsDir: required(options, 'events-dir'),
@@ -82,7 +90,7 @@ export async function migrateComms(
 export async function sendComms(
   options: Options,
   env: CollaborationStateEnvironment,
-  runtime: CliRuntime = {},
+  runtime: CliRuntime,
 ): Promise<string> {
   const nowIso = optional(options, 'now') ?? new Date().toISOString();
   const eventId = valueOrDefault(options, 'event-id', randomUUID());

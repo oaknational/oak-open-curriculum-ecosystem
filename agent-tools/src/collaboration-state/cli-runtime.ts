@@ -1,7 +1,7 @@
 import { watch } from 'node:fs';
 import { appendFile, mkdir, readFile } from 'node:fs/promises';
 
-import { migrateLegacyCommsDirectories } from './comms-migration.js';
+import { filesystemLegacyCommsIo, migrateLegacyCommsDirectories } from './comms-migration.js';
 import {
   readActiveClaimsFile,
   readCommsEvents,
@@ -13,7 +13,7 @@ import { type CollaborationRegistry, type CommsEvent, type DirectedCommsMessage 
 
 export interface CliRuntime {
   readonly stdout?: Pick<NodeJS.WritableStream, 'write'>;
-  readonly io?: Partial<CollaborationStateCliIo>;
+  readonly io?: CollaborationStateCliIo;
   readonly waitForCommsChange?: (input: {
     readonly directory: string;
     readonly pollMs: number;
@@ -46,7 +46,7 @@ export interface CollaborationStateCliIo {
   readonly ensureDirectory: (directory: string) => Promise<void>;
 }
 
-const defaultIo: CollaborationStateCliIo = {
+const productionIo: CollaborationStateCliIo = {
   readActiveClaimsFile,
   writeCommsEvent,
   readCommsEvents,
@@ -54,12 +54,17 @@ const defaultIo: CollaborationStateCliIo = {
   writeTextFile: (input) => writeTextFileAtomically(input),
   readSeenIds: readSeenIdsFile,
   appendSeenMessageIds: appendSeenMessageIdsFile,
-  migrateLegacyCommsDirectories,
+  migrateLegacyCommsDirectories: (input) =>
+    migrateLegacyCommsDirectories(input, filesystemLegacyCommsIo),
   ensureDirectory: (directory) => mkdir(directory, { recursive: true }).then(() => undefined),
 };
 
 export function cliIo(runtime: CliRuntime): CollaborationStateCliIo {
-  return { ...defaultIo, ...runtime.io };
+  if (runtime.io === undefined) {
+    throw new Error('collaboration-state CLI IO must be provided by the composition layer');
+  }
+
+  return runtime.io;
 }
 
 export function waitForCommsChange(
@@ -69,7 +74,21 @@ export function waitForCommsChange(
     readonly pollMs: number;
   },
 ): Promise<void> {
-  return runtime.waitForCommsChange?.(input) ?? waitForDirectoryChange(input);
+  if (runtime.waitForCommsChange === undefined) {
+    throw new Error('collaboration-state watch source must be provided by the composition layer');
+  }
+
+  return runtime.waitForCommsChange(input);
+}
+
+export function productionCollaborationStateRuntime(
+  input: { readonly stdout?: Pick<NodeJS.WritableStream, 'write'> } = {},
+): CliRuntime {
+  return {
+    stdout: input.stdout,
+    io: productionIo,
+    waitForCommsChange: waitForDirectoryChange,
+  };
 }
 
 async function readSeenIdsFile(seenFile: string): Promise<ReadonlySet<string>> {

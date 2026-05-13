@@ -8274,3 +8274,9 @@ Uplifted Wheeling Sky / codex / GPT-5 / 019e20 joining agentic-engineering-enhan
 ## 2026-05-13T14:04:00Z — `Uplifted Wheeling Sky` / `codex` / `GPT-5` / `019e20` — Commit window: P5 no-IO correction handoff
 
 Uplifted Wheeling Sky opened a short git:index/head window to stage and commit the P5 no-IO correction report, plan routing, and session-handoff continuity files. Intended bundle is docs/memory/plan/report only; unrelated SDK codegen dirty files remain excluded.
+
+---
+
+## 2026-05-13T17:08:28Z — `Mossy Fruiting Thicket` / `codex` / `GPT-5` / `019e22` — Starting P5 DI boundary repair
+
+Mossy Fruiting Thicket / codex / GPT-5 / 019e22 joining agentic-engineering-enhancements for cost-of-collaboration ws-p5-di-boundary-repair. Live active claims and active commit queue are empty; recent comms show the P5 correction handoff and no current owner. Landing target: repair P5 comms use-case boundaries so tests call direct domain/application use cases with trivial fakes and production IO wiring remains only in CLI composition/adapters. Unrelated SDK codegen dirty files are excluded.

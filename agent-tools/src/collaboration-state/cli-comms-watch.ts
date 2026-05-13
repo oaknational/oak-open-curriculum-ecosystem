@@ -1,8 +1,4 @@
-import {
-  compareDirectedMessages,
-  formatDirectedMessage,
-  messageMatchesRecipient,
-} from './cli-comms-inbox.js';
+import { drainDirectedInbox, watchDirectedInbox } from './comms-use-cases.js';
 import { optional, required, type Options } from './cli-options.js';
 import {
   cliIo,
@@ -13,7 +9,7 @@ import {
 
 const DEFAULT_POLL_MS = 500;
 
-export async function watchComms(options: Options, runtime: CliRuntime = {}): Promise<string> {
+export async function watchComms(options: Options, runtime: CliRuntime): Promise<string> {
   const io = cliIo(runtime);
   const commsDir = required(options, 'comms-dir');
   const seenFile = required(options, 'seen-file');
@@ -21,54 +17,27 @@ export async function watchComms(options: Options, runtime: CliRuntime = {}): Pr
   const sessionPrefix = optional(options, 'session-prefix');
   const pollMs = optionalPositiveInteger(options, 'poll-ms') ?? DEFAULT_POLL_MS;
   const maxEvents = optionalPositiveInteger(options, 'max-events');
-  let emitted = 0;
-  let output = '';
 
   await io.ensureDirectory(commsDir);
 
-  while (needsMoreEvents({ emitted, maxEvents })) {
-    const result = await drainUnseenMessages({
-      commsDir,
-      seenFile,
-      agentName,
-      sessionPrefix,
-      remainingEvents: remainingEvents({ emitted, maxEvents }),
-      io,
-    });
-    output += result.output;
-    emitted += result.eventCount;
-    runtime.stdout?.write(result.output);
-
-    await waitForNextScan({ emitted, maxEvents, commsDir, pollMs, runtime });
-  }
+  const output = await watchDirectedInbox({
+    maxEvents,
+    drain: (remainingEvents) =>
+      drainUnseenMessages({
+        commsDir,
+        seenFile,
+        agentName,
+        sessionPrefix,
+        remainingEvents,
+        io,
+      }),
+    waitForChange: () => waitForCommsChange(runtime, { directory: commsDir, pollMs }),
+    emit: async (text) => {
+      runtime.stdout?.write(text);
+    },
+  });
 
   return runtime.stdout === undefined ? output : '';
-}
-
-async function waitForNextScan(input: {
-  readonly emitted: number;
-  readonly maxEvents: number | undefined;
-  readonly commsDir: string;
-  readonly pollMs: number;
-  readonly runtime: CliRuntime;
-}): Promise<void> {
-  if (needsMoreEvents(input)) {
-    await waitForCommsChange(input.runtime, { directory: input.commsDir, pollMs: input.pollMs });
-  }
-}
-
-function needsMoreEvents(input: {
-  readonly emitted: number;
-  readonly maxEvents: number | undefined;
-}): boolean {
-  return input.maxEvents === undefined || input.emitted < input.maxEvents;
-}
-
-function remainingEvents(input: {
-  readonly emitted: number;
-  readonly maxEvents: number | undefined;
-}): number | undefined {
-  return input.maxEvents === undefined ? undefined : input.maxEvents - input.emitted;
 }
 
 async function drainUnseenMessages(input: {
@@ -80,25 +49,14 @@ async function drainUnseenMessages(input: {
   readonly io: CollaborationStateCliIo;
 }): Promise<{ readonly output: string; readonly eventCount: number }> {
   const seenIds = await input.io.readSeenIds(input.seenFile);
-  const unseen = (await input.io.readDirectedCommsMessages(input.commsDir))
-    .filter((message) => messageMatchesRecipient(message, input.agentName, input.sessionPrefix))
-    .filter((message) => !seenIds.has(message.event_id))
-    .toSorted(compareDirectedMessages)
-    .slice(0, input.remainingEvents);
-
-  if (unseen.length === 0) {
-    return { output: '', eventCount: 0 };
-  }
-
-  await input.io.appendSeenMessageIds(
-    input.seenFile,
-    unseen.map((message) => message.event_id),
-  );
-
-  return {
-    output: unseen.map(formatDirectedMessage).join('\n'),
-    eventCount: unseen.length,
-  };
+  return drainDirectedInbox({
+    messages: await input.io.readCommsEvents(input.commsDir),
+    seenIds,
+    agentName: input.agentName,
+    sessionPrefix: input.sessionPrefix,
+    remainingEvents: input.remainingEvents,
+    markSeen: (eventIds) => input.io.appendSeenMessageIds(input.seenFile, eventIds),
+  });
 }
 
 function optionalPositiveInteger(options: Options, key: string): number | undefined {

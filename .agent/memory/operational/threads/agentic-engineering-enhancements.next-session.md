@@ -1,13 +1,13 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-> **Current continuation**: P5 DI/no-IO boundary repair is next. P0.QG,
+> **Current continuation**: P8 collaboration TUI is next. P0.QG,
 > P-Foundation, P1 directed-message authoring, P2 directed-message watching,
-> P3 commit-queue enforcement, and P4 identity routing are complete. P5's
-> unified comms migration landed at `30c8ad15`, with closeout at `6a1d8d9e`,
-> but owner review corrected the completion claim: P5 is not complete until
-> tests directly invoke comms domain/application use cases with simple fakes
-> and imported testable code has no production IO defaults. Do not start P8
-> until P5 completion is recomputed from the live plan proof contract.
+> P3 commit-queue enforcement, P4 identity routing, and P5 unified comms plus
+> DI/no-IO boundary repair are complete. P5's unified comms migration landed at
+> `30c8ad15`, with closeout at `6a1d8d9e`; the later P5 repair recomputed
+> completion from the live proof contract by adding direct comms use cases,
+> simple-fake tests, and CLI-only production IO wiring. Resume mandatory P8 from
+> the cost-of-collaboration plan, not from the older P5-pending opener.
 >
 > **Conservation-first consolidation**: `napkin.md`, `distilled.md`, and
 > `pending-graduations.md` stages are complete as of 2026-05-12. The next
@@ -92,6 +92,36 @@ architecture plan, and continuity surfaces now route the next step.
 the P5 repair as TDD/refactor cycles from the proof contract in
 `cost-of-collaboration.plan.md`. Resume P8 only after P5 completion is
 recomputed from the live plan and evidence.
+
+## P5 DI Boundary Repair Complete (2026-05-13)
+
+**Session**: Mossy Fruiting Thicket / `codex` / `GPT-5` / `019e22`.
+
+**Landed / ready-to-land outcome**: P5's DI/no-IO repair is implemented and the
+completion verdict is recomputed as complete in
+[`cost-of-collaboration.plan.md`](../../plans/agent-tooling/current/cost-of-collaboration.plan.md).
+
+**Key repair**:
+
+- Extracted direct comms use cases for directed writes, replies, inbox draining,
+  watching, rendering, and legacy record migration.
+- Focused tests call those use cases with in-memory stores, seen-state fakes,
+  injected update sources, and output sinks.
+- Imported comms CLI commands no longer acquire production IO when no runtime
+  is supplied; production filesystem/stdout/watch wiring is supplied only by
+  the CLI composition runtime.
+
+**Verification evidence**: focused comms use-case/CLI/unified-format Vitest
+tests passed; full `@oaknational/agent-tools` test suite passed (42 files /
+331 tests); `pnpm --filter @oaknational/agent-tools type-check`, `lint`, and
+`build` passed; `collaboration-state -- check` returned `ok`; and
+`practice:substrate:check` returned `ok: true` with only informational
+historical-retired-path findings.
+
+**Next safe execution step**: start mandatory P8 live collaboration TUI from the
+cost-of-collaboration plan. Preserve the P8 acceptance bar: real-time refresh,
+inactive-agent visibility, strict validation, human-visible live value signals,
+and component/CLI behaviour tests.
 
 ## Completion-Claim Proof Pipeline (2026-05-13)
 
@@ -273,6 +303,7 @@ pretending the solution is already known.
 | `codex` | `GPT-5` | Shadowed Dimming Veil | Reviewer/synthesiser (cost-of-collaboration reviewer synthesis; P8 mandatory live-TUI routing) | 2026-05-12 | 2026-05-12 |
 | `codex` | `GPT-5` | Verdant Foraging Copse | Synthesiser/plan author (completion-claim proof pipeline report, executable plan, thread/index routing, and first `jc-plan` proof-contract skill amendment) | 2026-05-13 | 2026-05-13 |
 | `codex` | `GPT-5` | Umbral Masking Silhouette | Gate-checker/monitor (read-only P5 strict comms parser CLEAN/GO; repeated message/status monitoring through WS1.4 closeout) | 2026-05-12 | 2026-05-13 |
+| `codex` | `GPT-5` | Mossy Fruiting Thicket | Implementer (P5 DI/no-IO boundary repair for comms use cases) | 2026-05-13 | 2026-05-13 |
 | `cursor` | `GPT-5.5` | Dusky Lurking Shade | Consolidator (napkin-stage conservation-first consolidation; archive + distilled intake) | 2026-05-12 | 2026-05-12 |
 | `cursor` | `GPT-5.5` | Volcanic Charring Furnace | Consolidator (distilled-stage conservation routing; durable homes + pending follow-ups) | 2026-05-12 | 2026-05-12 |
 | `cursor` | `GPT-5.5` | Twigged Growing Glade | Consolidator (pending-graduations conservation-first routing + reviewer corrections + handoff) | 2026-05-12 | 2026-05-12 |

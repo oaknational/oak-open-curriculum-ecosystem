@@ -375,6 +375,18 @@ describe('runCollaborationStateCli', () => {
     expect(result.stdout).toContain('OAK_AGENT_IDENTITY_OVERRIDE');
   });
 
+  it('does not fall back to production IO for imported comms commands', async () => {
+    const result = await runCollaborationStateCli({
+      argv: ['--', 'comms', 'render', '--comms-dir', 'state/comms', '--output', 'state/log.md'],
+      env: {},
+    });
+
+    expect(result.exitCode).toBe(2);
+    expect(result.stderr).toContain(
+      'collaboration-state CLI IO must be provided by the composition layer',
+    );
+  });
+
   it('resolves closure-summary as an alias for summary', () => {
     expect(closeSummaryFromOptions(options({ 'closure-summary': 'Closed via alias.' }))).toBe(
       'Closed via alias.',
