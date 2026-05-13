@@ -97,8 +97,9 @@ recomputed from the live plan and evidence.
 
 **Session**: Mossy Fruiting Thicket / `codex` / `GPT-5` / `019e22`.
 
-**Landed / ready-to-land outcome**: P5's DI/no-IO repair is implemented and the
-completion verdict is recomputed as complete in
+**Landed outcome**: P5's DI/no-IO repair landed at `07ffee1d`; collaboration
+closure landed at `d45944b4`; the session napkin note landed at `16425adf`.
+The completion verdict is recomputed as complete in
 [`cost-of-collaboration.plan.md`](../../plans/agent-tooling/current/cost-of-collaboration.plan.md).
 
 **Key repair**:
@@ -116,7 +117,8 @@ tests passed; full `@oaknational/agent-tools` test suite passed (42 files /
 331 tests); `pnpm --filter @oaknational/agent-tools type-check`, `lint`, and
 `build` passed; `collaboration-state -- check` returned `ok`; and
 `practice:substrate:check` returned `ok: true` with only informational
-historical-retired-path findings.
+historical-retired-path findings. The real commit hooks passed for the P5
+implementation, collaboration closure, and napkin-note commits.
 
 **Next safe execution step**: start mandatory P8 live collaboration TUI from the
 cost-of-collaboration plan. Preserve the P8 acceptance bar: real-time refresh,

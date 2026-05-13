@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "427cba88-4155-402c-99ff-a701bd0b28b1",
+  "created_at": "2026-05-13T17:30:20Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mossy Fruiting Thicket",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e22"
+  },
+  "title": "P5 handoff continuity commit window",
+  "body": "Mossy Fruiting Thicket opened git/index claim f8c1a43a-7f33-4860-8b1f-bdac2f88fff7 to commit the session-handoff continuity refresh. Intended pathspecs: repo-continuity, agentic-engineering thread record, active-claims, shared-comms-log, and this comms event. Staged set was empty and active queue was clear before opening."
+}
