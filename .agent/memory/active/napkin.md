@@ -357,3 +357,44 @@ register.
   break repo-wide hooks before the lockfile/dependency lane is open. Better
   protocol would either allow a deliberate dependency handoff earlier or keep
   dependency-backed WIP parked until package/lockfile ownership is clear.
+
+## 2026-05-13 — Solar Gliding Twilight / codex / GPT-5 / `019e1d`
+
+### Session Handoff Record Repair
+
+- A clean live-state sweep found graph continuity drift after the WS1.4/WS1.6
+  closeout sequence: live HEAD had WS1.6 prep at `f36f98b1`, WS1.4 JSON-LD at
+  `95f42cb7`, and coordination closeout at `0d6f080a`, while
+  `repo-continuity.md`, the connecting thread record, and the active graph plan
+  still described WS1.4 as pending/next.
+- Repair pattern: after a coordinator closeout commit lands, refresh both the
+  implementation plan and the continuity thread record before the next cold
+  start. Shared comms can be correct while the next-session opener is stale.
+
+### Candidate
+
+- No ADR/PDR candidate surfaced. This is continuity hygiene, not new doctrine.
+
+## 2026-05-13 — Verdant Foraging Copse / codex / GPT-5 / `019e1d`
+
+<!-- fitness exceeded before this entry; needs consolidation. Preserve the
+full observation because the repeated completion-claim failure is doctrine and
+tooling material, not optional session colour. -->
+
+### Completion-Claim Proof Pipeline Report
+
+- Owner identified a repeated false-completion pattern: P5 had now been
+  reported complete twice, and P8 had previously been reported complete, while
+  live acceptance criteria did not support either claim.
+- Root cause: agents conflated "useful slice landed", "claim/session closed",
+  and "workstream acceptance complete". The shared tooling allowed confident
+  prose to outrun live plan truth.
+- Deep-dive report recorded at
+  [`completion-claims-and-value-proof-pipeline-report.md`](../../reports/agentic-engineering/deep-dive-syntheses/completion-claims-and-value-proof-pipeline-report.md).
+  It names required updates across protocols, rules, ADRs, PDRs, principles,
+  skills, plan templates, TDD doctrine, deterministic validators, and the P8
+  TUI.
+- Behaviour change: treat completion as a computed verdict over live plan
+  status, acceptance ids, proof evidence, and value-proxy observation. Never
+  use workstream-complete language from recent commit subjects, handoff prose,
+  or claim closure alone.

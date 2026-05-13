@@ -22657,6 +22657,263 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "b856e51f-b5d9-4dfb-8c80-384602b183e5",
+      "agent_id": {
+        "agent_name": "Verdant Foraging Copse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1d"
+      },
+      "thread": "feat-mcp-graph-support-foundation",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/reports/agentic-engineering/deep-dive-syntheses/completion-claims-and-value-proof-pipeline-report.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T08:12:49Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Author completion-claim enforcement report and napkin link",
+      "archived_at": "2026-05-13",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-13T08:14:35Z",
+        "closed_by": {
+          "agent_name": "Verdant Foraging Copse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1d"
+        },
+        "summary": "Report authored and napkin link added for completion-claim enforcement doctrine",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b856e51f-b5d9-4dfb-8c80-384602b183e5",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c104b3a8-27eb-4fc2-9b52-fcc3160de0ab",
+      "agent_id": {
+        "agent_name": "Solar Gliding Twilight",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1d"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T08:13:39Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Session handoff continuity repair after WS1.4/WS1.6 record drift",
+      "archived_at": "2026-05-13",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-13T08:16:02Z",
+        "closed_by": {
+          "agent_name": "Solar Gliding Twilight",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1d"
+        },
+        "summary": "Updated handoff/continuity records after WS1.4/WS1.6 drift; no product implementation; shared comms event f92e1671 posted.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c104b3a8-27eb-4fc2-9b52-fcc3160de0ab",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "5e1ec922-33e1-452a-9f68-eaab8695a89f",
+      "agent_id": {
+        "agent_name": "Verdant Foraging Copse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1d"
+      },
+      "thread": "feat-mcp-graph-support-foundation",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/reports/agentic-engineering/deep-dive-syntheses/completion-claims-and-value-proof-pipeline-report.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T08:17:05Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Update completion proof report with non-negotiable tenet and source-anchored TDD-first doctrine",
+      "archived_at": "2026-05-13",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-13T08:18:19Z",
+        "closed_by": {
+          "agent_name": "Verdant Foraging Copse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1d"
+        },
+        "summary": "Report updated: non-negotiable tenet language and source-anchored test-first multi-level TDD doctrine",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "5e1ec922-33e1-452a-9f68-eaab8695a89f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "bf853946-035e-4c6b-ad71-4adb288b3d27",
+      "agent_id": {
+        "agent_name": "Verdant Foraging Copse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/plans/agentic-engineering-enhancements/current/completion-claim-proof-pipeline.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/README.md",
+            ".agent/plans/agentic-engineering-enhancements/README.md",
+            ".agent/reports/agentic-engineering/deep-dive-syntheses/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T08:19:41Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Integrate completion-proof pipeline into agentic-engineering thread and plan index",
+      "archived_at": "2026-05-13",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-13T08:21:33Z",
+        "closed_by": {
+          "agent_name": "Verdant Foraging Copse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1d"
+        },
+        "summary": "Integrated completion-proof pipeline into agentic-engineering thread, current plan index, and report index",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "bf853946-035e-4c6b-ad71-4adb288b3d27",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "7354e77d-13a2-49e3-b34c-af450cf14e80",
+      "agent_id": {
+        "agent_name": "Verdant Foraging Copse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/plan/SKILL-CANONICAL.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T08:23:08Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Small jc-plan proof-contract skill amendment",
+      "archived_at": "2026-05-13",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-13T08:23:56Z",
+        "closed_by": {
+          "agent_name": "Verdant Foraging Copse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1d"
+        },
+        "summary": "Amended canonical plan skill with proof contract for completion claims and test-first TDD evidence distinction",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7354e77d-13a2-49e3-b34c-af450cf14e80",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a60bb143-808e-4e77-a7c0-02c0262f8580",
+      "agent_id": {
+        "agent_name": "Verdant Foraging Copse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e1d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/active-claims.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T09:02:42Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Session handoff and commit preparation for completion-proof pipeline",
+      "archived_at": "2026-05-13",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-13T09:08:26Z",
+        "closed_by": {
+          "agent_name": "Verdant Foraging Copse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e1d"
+        },
+        "summary": "Session handoff updated repo-continuity and agentic thread for completion-proof pipeline before commit",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a60bb143-808e-4e77-a7c0-02c0262f8580",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

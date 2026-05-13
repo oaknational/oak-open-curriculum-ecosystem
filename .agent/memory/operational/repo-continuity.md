@@ -88,43 +88,30 @@ Earlier archives remain under [`archive/`](archive/).
 - Next `agentic-engineering-enhancements` implementation continuation remains
   owner-directed: audit all remaining skills if that lane is reopened, or
   continue cost-of-collaboration P5/P8 from the active plan.
-- `connecting-oak-resources` lane advanced 2026-05-12: holistic
-  re-plan of Inc.1a remaining cycles landed at commit `f73c42f5`
-  (Clouded Vaulting Squall / `claude` / opus-4-7-1m / `866472`).
-  Plan-file diff +79/-43. Five verdicts applied: V1 WS1.6
-  vocab-registry recorded as file-scope parallel-safe with WS1.3
-  (dependency edge kept on WS1.3 because vocab consumes the
-  DataFactory `namedNode` constructor; bare-literal-first
-  alternative flagged for owner direction). V2 WS1.4 expand + WS1.5
-  compact-frame collapsed into one `ws1-jsonld-processor` cycle
-  (shared file scope; framing-determinism invariant #8 contract
-  test cannot land without both surfaces). V3 WS1.8 GraphDocument
-  deferred to Inc.2 with owner-set retrospective-review tripwire
-  on §Increments row 2 (Inc.2 plan inheriting GraphDocument MUST
-  design-review Inc.1 surfaces for collapse/reshape opportunities;
-  verdict-binding on Inc.2 scope). V4 WS2.1 + WS3.1 scaffold
-  `depends_on` corrected from `ws1-graph-document` to
-  `ws1-graph-core-scaffold` with inter-scaffold serialisation
-  invariant recorded. V5 WS3.3 adjacency scope sharpened to
-  property-graph node→node traversal only (MUST NOT duplicate
-  `DatasetCore.match()`; architecture-expert-barney collapse-
-  vs-keep boundary check flagged). Inherited patterns from WS1.1 +
-  WS1.2 codified once under §Workstream decomposition: scaffold
-  checklist (depcruise pathNot, eslint `wsTsProject`, five-file
-  bundle), per-kind checker-array dispatch for discriminated-union
-  equality, RDF/JS Data Model uniform-value-string posture, "tree
-  green" aligned to `.husky/pre-commit` as authoritative source.
-  Per-cycle reviewer flags now recorded inline in YAML content
-  fields. Inc.1a remaining cycle count: 12 → 10. Next executable
-  cycle: WS1.3 (DatasetCore + DataFactory). Earlier the same day:
-  WS1.2 RDF/JS-aligned RDF 1.2 Term hierarchy + Quad +
-  free-function `equals` landed at `1885fbcf` (Starlit Scattering
-  Moon / `claude` / opus-4-7-1m / `edd1fb`); 18 unit tests green;
-  type-expert APPROVE-WITH-NITS with `TripleTerm.value: ''`
-  absorbed for RDF/JS Data Model conformance. Earliest 2026-05-12:
-  WS1.1 (`packages/core/graph-core` scaffold) landed at `ad2abb69`
-  (Celestial Transiting Satellite / `claude` / opus-4-7-1m /
-  `9bc8e3`); three reviewers APPROVE.
+- Completion-claim proof pipeline is now a queued agentic-engineering lane.
+  Verdant Foraging Copse authored the findings report, executable plan, thread
+  routing, and the first small skill amendment on 2026-05-13. The immediate
+  next execution step is WS1 in
+  [`completion-claim-proof-pipeline.plan.md`](../../plans/agentic-engineering-enhancements/current/completion-claim-proof-pipeline.plan.md):
+  add the `completion-claims-must-match-plan` rule and smallest `jc-plan`
+  proof-contract/template amendment. Do not start `agent-tools` code until the
+  plan's WS4 bridge creates or amends the owning `agent-tooling` execution
+  surface.
+- `connecting-oak-resources` lane advanced through multiple 2026-05-12 graph
+  foundation commits. Holistic Inc.1a re-plan landed at `f73c42f5` (Clouded
+  Vaulting Squall / `claude` / opus-4-7-1m / `866472`): WS1.4+WS1.5 collapsed,
+  WS1.8 GraphDocument deferred to Inc.2 with retrospective-review tripwire,
+  WS2.1/WS3.1 scaffold serialisation recorded, and WS3.3 adjacency scope
+  sharpened. WS1.1 (`ad2abb69`), WS1.2 (`1885fbcf`), WS1.3 (`87e21125`),
+  WS2.1 (`0f895070`), WS1.6 prep (`f36f98b1`), and WS1.4 (`95f42cb7`) are now
+  landed. Luminous Threading Asteroid's closeout at `0d6f080a` records WS1.4
+  coordination evidence: Solar support plus type/assumptions/test review
+  resolved test classification, graph-core no-I/O remote-context guarding,
+  Oak-specific fixture semantics, jsonld.js v9 wording, and typed
+  runtime/options wrapper. Next graph implementation choices are WS1.5 canon,
+  WS1.6 vocab implementation after the prep-note owner decisions, WS2.2
+  jsonld-compatible ingestion, or WS3.1 graph-project scaffold after a fresh
+  root-file check.
 
 ## Active Threads
 
@@ -135,8 +122,8 @@ each thread record; this table is the repo-level index.
 | ------------------------------------------------------------------------------ | --------------------------------------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `main-critical-sonar-remediation`                                              | Sonar remediation                             | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | `observability-sentry-otel`                                                    | Sentry/OTel integration                       | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic]       | Twigged Growing Glade / `cursor` / GPT-5.5 / `c19c95` / 2026-05-12 (pending-graduations conservation pass complete; next consolidation target is `practice-bootstrap.md`); Ferny Regrowing Leaf / `claude` / opus-4-7-1m / `10ca9b` / 2026-05-12 (coordinator session; 6-agent directed-message allocation matrix; coordinator-as-allocator role-failure-mode captured); Volcanic Charring Furnace / `cursor` / GPT-5.5 / `242ea3` / 2026-05-12 (distilled-stage conservation routing); Shadowed Dimming Veil / `codex` / GPT-5 / `019e1c` / 2026-05-12 (P8 reviewer synthesis and mandatory live-TUI routing); Seaworthy Snorkelling Prow / `codex` / GPT-5 / `019e1c` / 2026-05-12 (validate-boundaries graph-ingest inventory repair + pre-commit wiring); see thread record for full identity history |
-| `connecting-oak-resources`                                                     | Oak resource graph                            | [record][connecting]    | Radiant Illuminating Twilight / `codex` / GPT-5 / `019e1c` / 2026-05-12 (WS2.1 graph-ingest scaffold landed at `0f895070`; commit-msg local-commitlint unblock landed at `42f2e721`); Brazen Stoking Ash / `claude` / opus-4-7-1m / `913094` / 2026-05-12 (peer-triple dispatcher session; Lofty Vaulting Summit landed WS1.3 DatasetCore + DataFactory at 87e21125 with type-expert + architecture-expert-betty absorbed; Shaded Masking Shadow landed knip-unblock at 730766ad; Lofty WS1.4 offered but deferred — owner closed Lofty's session; handed dispatcher role to Ferny Regrowing Leaf via shared-log 8c4dc90a); Clouded Vaulting Squall / `claude` / opus-4-7-1m / `866472` / 2026-05-12 (holistic re-plan of Inc.1a remaining cycles landed at f73c42f5; 12 → 10 cycles; WS1.4+WS1.5 collapsed; WS1.8 deferred to Inc.2 with retrospective-review tripwire; per-cycle reviewer flags + inherited patterns recorded inline); Starlit Scattering Moon / `claude` / opus-4-7-1m / `edd1fb` / 2026-05-12 (WS1.2 RDF Term hierarchy + Quad + equality landed at 1885fbcf); Celestial Transiting Satellite / `claude` / opus-4-7-1m / `9bc8e3` / 2026-05-12 (WS1.1 graph-core scaffold landed at ad2abb69); Sparking Charring Ash / `claude-code` / opus-4-7-1m / `caf5e1` / 2026-05-12 (graph foundation work; Inc.1a WS1.1 open for execution)      |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic]       | Verdant Foraging Copse / `codex` / GPT-5 / `019e1d` / 2026-05-13 (completion-claim proof pipeline report + plan + first `jc-plan` proof-contract skill amendment); Twigged Growing Glade / `cursor` / GPT-5.5 / `c19c95` / 2026-05-12 (pending-graduations conservation pass complete; next consolidation target is `practice-bootstrap.md`); Ferny Regrowing Leaf / `claude` / opus-4-7-1m / `10ca9b` / 2026-05-12 (coordinator session; 6-agent directed-message allocation matrix; coordinator-as-allocator role-failure-mode captured); Volcanic Charring Furnace / `cursor` / GPT-5.5 / `242ea3` / 2026-05-12 (distilled-stage conservation routing); Shadowed Dimming Veil / `codex` / GPT-5 / `019e1c` / 2026-05-12 (P8 reviewer synthesis and mandatory live-TUI routing); see thread record for full identity history |
+| `connecting-oak-resources`                                                     | Oak resource graph                            | [record][connecting]    | Solar Gliding Twilight / `codex` / GPT-5 / `019e1d` / 2026-05-13 (session-handoff continuity repair; records now reflect WS1.4 landed); Luminous Threading Asteroid / `codex` / GPT-5 / `019e1d` / 2026-05-12 (WS1.4 coordination closeout landed at `0d6f080a`); Fiery Igniting Furnace / `codex` / GPT-5 / `019e1d` / 2026-05-12 (WS1.4 JSON-LD processor landed at `95f42cb7`); Dim Hiding Secret / `codex` / GPT-5 / `019e1d` / 2026-05-12 (WS1.6 vocab planning prep landed at `f36f98b1`); Radiant Illuminating Twilight / `codex` / GPT-5 / `019e1c` / 2026-05-12 (WS2.1 graph-ingest scaffold landed at `0f895070`); Lofty Vaulting Summit / `codex` / GPT-5 / `019e1c` / 2026-05-12 (WS1.3 DatasetCore + DataFactory landed at `87e21125`); see thread record for full identity history |
 | `exploring-open-education-resources`                                           | Third-party OER                               | [record][oer]           | Gnarled / `claude-code` / `e18e2c` / 2026-05-01                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `architectural-budget-system`                                                  | Architectural budget                          | [record][budget]        | Nebulous / `codex` / 2026-04-29                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `cloudflare-mcp-security-and-token-economy-plans`                              | Cloudflare MCP                                | [record][cloudflare]    | Glassy / `codex` / 2026-04-28                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
@@ -153,21 +140,31 @@ each thread record; this table is the repo-level index.
 [sector]: threads/sector-engagement.next-session.md
 [eef]: threads/eef.next-session.md
 
-Identity-refresh note for `connecting-oak-resources`: Lofty Vaulting Summit /
-`codex` / GPT-5 / `019e1c` last participated on 2026-05-12, landing WS1.3
-DatasetCore + DataFactory at `87e21125`; WS1.4 was offered but deferred
-because the owner closed Lofty's session before new implementation started.
+Identity-refresh note for `connecting-oak-resources`: Solar Gliding Twilight /
+`codex` / GPT-5 / `019e1d` refreshed the records on 2026-05-13 after WS1.4 had
+already landed at `95f42cb7`; this was continuity repair only, not product
+implementation.
 
 ## Next Safe Steps
 
 ### Agentic-Engineering Enhancements
 
 Immediate cost-of-collaboration lane: P0, P-Foundation, P1, P2, P3, and P4 are
-complete; continue with P5 unified comms format, then mandatory P8 live
+complete; P5 strict-parser work landed as a useful slice but P5 remains pending
+against the unified-format acceptance criteria. Continue with P5 unified comms
+format, then mandatory P8 live
 collaboration TUI. P8 must show human-visible live value — who is active, what
 changed, what is waiting, and which directed threads need attention — not only
 abstract throughput claims. P6/P7 resume after the operator-view path unless
 owner direction changes.
+
+Completion-proof lane: continue from
+[`completion-claim-proof-pipeline.plan.md`](../../plans/agentic-engineering-enhancements/current/completion-claim-proof-pipeline.plan.md).
+The first implementation slice is doctrine/skill level only:
+`completion-claims-must-match-plan` plus the smallest `jc-plan` proof-contract
+and template amendment. This lane exists to prevent recurrence of the P5/P8
+false-completion reports; it must preserve the distinction between
+`partial-slice-landed`, `pending`, and `complete`.
 The suspected flaky tests
 listed in
 [`cost-of-collaboration.flaky-tests.md`](../../plans/agent-tooling/current/cost-of-collaboration.flaky-tests.md)
@@ -222,14 +219,14 @@ by mandatory P8 live collaboration TUI.
 
 Branch-primary graph work continues from
 [`threads/connecting-oak-resources.next-session.md`](threads/connecting-oak-resources.next-session.md).
-Current entry: **WS1.3 is landed at `87e21125`, WS2.1 graph-ingest scaffold is
-landed at `0f895070`, and WS1.4 jsonld-processor, WS1.5 canon, WS1.6
-vocab-registry, or WS2.2 jsonld-compatible ingestion are the next
-parallelisable implementation choices once a fresh session accepts them.**
-Inc.1a continues under
-the 2026-05-12 holistic re-plan (`f73c42f5`): WS1.4+WS1.5 are collapsed, WS1.8
-is deferred to Inc.2, and inherited patterns from WS1.1/WS1.2/WS1.3 remain
-authoritative in the active plan YAML.
+Current entry: **WS1.4 is landed at `95f42cb7`; WS1.6 prep is landed at
+`f36f98b1`; WS1.3 is landed at `87e21125`; WS2.1 graph-ingest scaffold is
+landed at `0f895070`.** Next implementation choices are WS1.5 canon, WS1.6
+vocab-registry implementation after the prep-note owner decisions are respected,
+WS2.2 jsonld-compatible ingestion, or WS3.1 graph-project scaffold after a fresh
+root-file check. Inc.1a continues under the 2026-05-12 holistic re-plan
+(`f73c42f5`): WS1.8 is deferred to Inc.2, and inherited patterns from landed
+WS1/WS2 cycles remain authoritative in the active plan YAML.
 
 ## Open Owner-Decision Items
 
@@ -291,6 +288,12 @@ Current branch non-goals:
   acceptance work.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-13 — Solar Gliding Twilight / `codex` / GPT-5 / `019e1d`)**:
+not due for this bounded session-handoff repair. This session fixed stale graph
+continuity references in-place and logged the lesson to the napkin; it did not
+close a new plan or milestone and surfaced no new ADR/PDR candidate. Existing
+next bounded consolidation target remains `practice-bootstrap.md`.
 
 **Status (2026-05-12 — Twigged Growing Glade / `cursor` / GPT-5.5 /
 `c19c95`)**: due — the pending-graduations conservation pass is complete. The

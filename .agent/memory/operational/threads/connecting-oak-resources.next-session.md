@@ -1,27 +1,27 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
-**Next anticipated work**: **Continue Inc.1a — dispatch WS1.4
-jsonld-processor, WS1.5 canon, WS1.6 vocab-registry, and WS2.2
-jsonld-compatible ingestion.** WS1.3 (DatasetCore + DataFactory) LANDED at
-`87e21125` (2026-05-12, Lofty Vaulting Summit / codex / GPT-5 / 019e1c,
-+480/-5). Knip-unblock landed at `730766ad` (Shaded Masking Shadow,
-fix(agent-tools): remove unused active-agent exports). Reviewer
-absorption complete: architecture-expert-betty APPROVE-WITH-CONDITIONS
-(DataFactory extracted to its own sub-path `./data-factory` —
-scaffold-checklist gap closed in-cycle: depcruise pathNot, tsup
-multi-entry, package.json exports, README) + type-expert
-APPROVE-WITH-NITS (nit 1 `| undefined` widening on `match()` params
-adopted; nit 2 `literal` datatype-string foot-gun deferred to WS1.6
-with TODO in DataFactory TSDoc). WS2.1 graph-ingest scaffold LANDED at
-`0f895070` (2026-05-12, Radiant Illuminating Twilight / codex / GPT-5 /
-019e1c), after hook tooling unblock `42f2e721` repaired local commitlint
-resolution. Ferny Regrowing Leaf is the incoming dispatcher/reviewer; Lofty
-WS1.4 was offered via directed comms `c333afb7` (reviewer flags type-expert +
-assumptions-expert + test-expert pre-recorded in plan YAML) but was explicitly
-deferred because the owner closed Lofty's session and requested
-`jc-session-handoff`.
+**Next anticipated work**: **Continue Inc.1a after WS1.4 — dispatch WS1.5
+canon, WS1.6 vocab-registry implementation, WS2.2 jsonld-compatible ingestion,
+or WS3.1 graph-project scaffold after a live root-file check.** WS1.4
+JSON-LD processor LANDED at `95f42cb7` (2026-05-12, Fiery Igniting Furnace /
+codex / GPT-5 / 019e1d) after Solar support plus type/assumptions/test review.
+Resolved blockers: test classification split, graph-core no-I/O remote-context
+guard, removal of Oak-specific semantics from graph-core fixtures, narrowed
+jsonld.js v9 wording, and typed runtime/options wrapper. WS1.6 vocab-registry
+prep note LANDED at `f36f98b1` (2026-05-12, Dim Hiding Secret / codex / GPT-5 /
+019e1d) and must be respected before implementation; owner decisions in that
+note remain implementation preconditions. WS1.3 (DatasetCore + DataFactory)
+LANDED at `87e21125`; WS2.1 graph-ingest scaffold LANDED at `0f895070`; WS1.4
+coordination closeout landed at `0d6f080a`.
 
-**Last refreshed**: 2026-05-12 (Brazen Stoking Ash / `claude` /
+**Last refreshed**: 2026-05-13 (Solar Gliding Twilight / `codex` / `GPT-5` /
+`019e1d`) — session-handoff continuity repair only. Live state before edits:
+no directed inbox messages, no active peer claims, clean working tree. Opened
+bounded file claim `c104b3a8-27eb-4fc2-9b52-fcc3160de0ab`, updated this thread
+record plus repo-continuity, graph-stack plan, and napkin so the graph records
+no longer name WS1.4 as pending/next. No product implementation in this session.
+
+Previous refresh: 2026-05-12 (Brazen Stoking Ash / `claude` /
 `claude-opus-4-7-1m` / `913094` — peer-triple dispatcher session with
 Lofty Vaulting Summit (codex / 019e1c) and Radiant Illuminating
 Twilight (codex / 019e1c). WS1.3 landed at `87e21125` via Lofty
@@ -758,7 +758,10 @@ promotion.)
 | `Brazen Stoking Ash` | `claude` | `claude-opus-4-7-1m` | `913094` | `ws1-3-dispatcher-reviewer-gatekeeper-peer-triple-with-lofty-and-radiant-ws1-3-landed-at-87e21125` | 2026-05-12 | 2026-05-12 |
 | `Lofty Vaulting Summit` | `codex` | `GPT-5` | `019e1c` | `ws1-3-datasetcore-datafactory-implementation-landed-at-87e21125-session-closed-before-ws1-4` | 2026-05-12 | 2026-05-12 |
 | `Radiant Illuminating Twilight` | `codex` | `GPT-5` | `019e1c` | `ws2-1-graph-ingest-scaffold-landed-at-0f895070-after-commitlint-hook-unblock-42f2e721` | 2026-05-12 | 2026-05-12 |
-| `Dim Hiding Secret` | `codex` | `GPT-5` | `019e1d` | `ferny-coordinator-introduction-no-implementation-claim` | 2026-05-12 | 2026-05-12 |
+| `Dim Hiding Secret` | `codex` | `GPT-5` | `019e1d` | `ws1-6-vocab-planning-prep-landed-at-f36f98b1` | 2026-05-12 | 2026-05-12 |
+| `Luminous Threading Asteroid` | `codex` | `GPT-5` | `019e1d` | `coordinator-handover-and-ws1-4-review-routing-closeout-at-0d6f080a` | 2026-05-12 | 2026-05-12 |
+| `Fiery Igniting Furnace` | `codex` | `GPT-5` | `019e1d` | `ws1-4-jsonld-processor-landed-at-95f42cb7` | 2026-05-12 | 2026-05-12 |
+| `Solar Gliding Twilight` | `codex` | `GPT-5` | `019e1d` | `ws1-4-review-support-plus-session-handoff-continuity-repair` | 2026-05-12 | 2026-05-13 |
 
 ## Plan Locations
 
