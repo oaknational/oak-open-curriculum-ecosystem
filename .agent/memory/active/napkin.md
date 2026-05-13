@@ -485,3 +485,21 @@ tooling material, not optional session colour. -->
 
 - No ADR/PDR candidate surfaced. This is a continuity-surface drift correction,
   not a new governance decision.
+
+## 2026-05-13 — Mossy Fruiting Thicket / codex / GPT-5 / `019e22`
+
+### P5 DI Boundary Repair
+
+- P5's no-IO correction needed a real application/use-case layer, not just fake
+  CLI runtime wiring. Direct comms use cases now make the proof surface narrow:
+  directed write/reply, inbox drain, watch, render, and legacy migration can be
+  called with simple fakes and no filesystem-shaped setup.
+- Behaviour change: imported comms CLI commands should fail without an injected
+  runtime instead of silently falling back to production IO. The production
+  runtime belongs in the bin/unified CLI composition path.
+
+### Coordination Note
+
+- The worktree already contained unrelated graph-continuity memory edits and
+  SDK codegen output during the P5 repair. Keep any P5 commit pathspec-bounded;
+  do not absorb those files into the agent-tools repair bundle.
