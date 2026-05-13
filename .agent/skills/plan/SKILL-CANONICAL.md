@@ -179,24 +179,36 @@ Every executable plan MUST have:
    outcome-based, and paired with deterministic validation commands.
    Acceptance for a TDD cycle includes "all tests passing at every
    level" as a non-negotiable.
-6. **Risk assessment** — what could go wrong and how to mitigate
-7. **Foundation alignment** — explicit references to principles.md,
+6. **Proof contract for completion claims** — every product-bearing
+   task or workstream must name addressable acceptance ids, the proof
+   level for each id (`unit`, `integration`, `e2e`, `value-proxy`, or
+   `non-code`), and the command or observation that proves it. Plans
+   that intend to use `complete`, `DECISION-COMPLETE`, `READY FOR
+   EXECUTION`, milestone-complete, or workstream-complete language must
+   state how that verdict will be validated. A landed slice, session
+   close, claim close, or useful snapshot is not completion unless all
+   acceptance ids for the parent scope are proven. For TDD claims, the
+   proof contract must distinguish test-first evidence from retrospective
+   test coverage: tests added after product code may be useful, but they
+   are not TDD evidence for that product code.
+7. **Risk assessment** — what could go wrong and how to mitigate
+8. **Foundation alignment** — explicit references to principles.md,
    testing-strategy.md, schema-first-execution.md
-8. **Non-goals** — what we are explicitly NOT doing (YAGNI)
-9. **Plan-body first-principles check** — state where the
+9. **Non-goals** — what we are explicitly NOT doing (YAGNI)
+10. **Plan-body first-principles check** — state where the
    `../../rules/plan-body-first-principles-check.md` shape,
    landing-path, and vendor-literal clauses fire before executing
    plan-prescribed tests, implementation, or doctrine.
-10. **Readiness reviewers** — before a plan is marked
+11. **Readiness reviewers** — before a plan is marked
     `DECISION-COMPLETE`, `READY FOR EXECUTION`, or equivalent, invoke
     required reviewers by substance: `assumptions-expert` for
     plan-readiness/proportionality, docs/onboarding reviewers for
     significant Practice or documentation changes, and technical
     specialists where the work shape requires them.
-11. **Learning Loop** — executable plan completion, milestone closure,
+12. **Learning Loop** — executable plan completion, milestone closure,
     strategic promotion, and archival MUST run or explicitly reference
     the consolidation workflow.
-12. **Lifecycle triggers** — plans that touch non-trivial work MUST
+13. **Lifecycle triggers** — plans that touch non-trivial work MUST
     reference `../../plans/templates/components/lifecycle-triggers.md`
     or record why each lifecycle touch point is not applicable
 

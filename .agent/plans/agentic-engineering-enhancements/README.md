@@ -114,6 +114,7 @@ is superseded and retained only for historical references.
 | `future/repair-workflow-wording-hazard-detection.plan.md` | Plan (Future) | Detect ambiguous wording and missing output contracts in multi-artefact repair workflows before they trigger rewrite or promotion drift |
 | `current/reviewer-gateway-upgrade.plan.md` | Plan | Upgrade code-expert gateway to a full Reviewer Gateway with layered triage, depth selection, and coverage tracking |
 | `current/learning-loop-negative-feedback-tightening.plan.md` | Plan | Tight incremental tranche: install live executive-memory drift detection and make consolidation-time memory-quality review explicit and auditable |
+| `current/completion-claim-proof-pipeline.plan.md` | Plan | Completion claims as computed verdicts: proof contracts, value proxies, source-anchored multi-level test-first TDD, and deterministic enforcement routing |
 | `current/agent-entrypoint-content-homing.plan.md` | Plan | Queued lossless homing of non-entrypoint `AGENT.md` content into durable homes while preserving discovery parity |
 | `current/practice-graph-payoff-peak-pilot.plan.md` | Plan | Queued executable pilot for the highest-value derived Practice graph slice: bounded TypeScript/esbuild workspace cluster, explicit-edge extraction, local graph/report outputs, and CLI build/query/path surfaces |
 | `current/knowledge-role-documentation-restructure.plan.md` | Plan | Queued repo documentation restructure around PDR-014 knowledge artefact roles: doctrine, recipe books, troubleshooting, patterns, rules, gates, decision records, and operational state |
@@ -138,7 +139,8 @@ is superseded and retained only for historical references.
    mutation testing -> continuity/surprise adoption (archived reference) ->
    operational-awareness surface separation -> governance-concept integration
    -> Reviewer Gateway -> learning-loop negative-feedback tightening ->
-   AGENT entrypoint content homing -> Knowledge-role documentation
+   completion-claim proof pipeline -> AGENT entrypoint content homing ->
+   Knowledge-role documentation
   restructure -> Elasticsearch specialist -> Clerk specialist -> Sentry ->
   MCP upgrade -> Codex Session Identity Plumbing -> Practice/process
   structural improvements -> Planning ->

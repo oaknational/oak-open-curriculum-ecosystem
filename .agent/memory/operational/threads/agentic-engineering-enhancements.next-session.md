@@ -14,11 +14,51 @@
 > bounded consolidation target is `practice-bootstrap.md`; do not reopen
 > `pending-graduations.md` as a brevity target.
 >
+> **Completion-proof routing** (2026-05-13): after repeated false reports that
+> P5 and P8 were "complete", the completion-claim proof pipeline is now an
+> explicit agentic-engineering lane. Use
+> [`completion-claim-proof-pipeline.plan.md`](../../plans/agentic-engineering-enhancements/current/completion-claim-proof-pipeline.plan.md)
+> as the execution router, with the findings source at
+> [`completion-claims-and-value-proof-pipeline-report.md`](../../reports/agentic-engineering/deep-dive-syntheses/completion-claims-and-value-proof-pipeline-report.md).
+> Completion is a computed verdict, not a confident sentence; TDD evidence
+> requires test-first red/green proof at unit, integration, and E2E levels.
+>
 > **New strategic work** (2026-05-12): Prismatic Beaming Twilight session designed
 > multi-agent delegation orchestration architecture extending ADR-180 beyond Codex
 > to Cursor, Claude, internal agents. Strategic brief
 > [`multi-agent-delegation-orchestration.plan.md`](../../plans/agentic-engineering-enhancements/future/multi-agent-delegation-orchestration.plan.md)
 > captured in future plans. See session findings below.
+
+## Completion-Claim Proof Pipeline (2026-05-13)
+
+**Session**: Verdant Foraging Copse / `codex` / `GPT-5` / `019e1d`.
+
+**Why this exists**: P5 had been reported complete twice and P8 once despite
+the controlling plan still showing unmet acceptance. The failure is now routed
+as a Practice/governance workstream rather than left as a report-only lesson.
+
+**What landed**:
+
+- Deep-dive findings source:
+  [`completion-claims-and-value-proof-pipeline-report.md`](../../reports/agentic-engineering/deep-dive-syntheses/completion-claims-and-value-proof-pipeline-report.md).
+- Executable current plan:
+  [`completion-claim-proof-pipeline.plan.md`](../../plans/agentic-engineering-enhancements/current/completion-claim-proof-pipeline.plan.md).
+
+**Key doctrine**:
+
+- Completion claims are boundary data. They must be validated against live plan
+  status, addressable acceptance ids, evidence, and value-proxy observation.
+- A landed implementation slice, session close, or claim close is not
+  workstream completion.
+- Actual TDD means tests at the relevant level are written and observed red
+  before the product code they describe, then observed green after the product
+  code lands. Tests added later can be valuable regression/audit coverage, but
+  they are not TDD evidence.
+
+**Next safe execution step**: start WS1 of the plan: add the
+`completion-claims-must-match-plan` rule and the smallest `jc-plan` proof
+contract amendment. Do not start `agent-tools` code until WS4 creates or amends
+the owning `agent-tooling` execution surface.
 
 ## Pending-Graduations Conservation Pass (2026-05-12)
 
@@ -167,6 +207,7 @@ pretending the solution is already known.
 | `codex` | `GPT-5` | Shaded Masking Shadow | Implementer (post-P4 knip unblock and P5 handoff closeout) | 2026-05-12 | 2026-05-12 |
 | `codex` | `GPT-5` | Seaworthy Snorkelling Prow | Implementer (validate-boundaries graph-ingest inventory repair + pre-commit wiring) | 2026-05-12 | 2026-05-12 |
 | `codex` | `GPT-5` | Shadowed Dimming Veil | Reviewer/synthesiser (cost-of-collaboration reviewer synthesis; P8 mandatory live-TUI routing) | 2026-05-12 | 2026-05-12 |
+| `codex` | `GPT-5` | Verdant Foraging Copse | Synthesiser/plan author (completion-claim proof pipeline report, executable plan, thread/index routing, and first `jc-plan` proof-contract skill amendment) | 2026-05-13 | 2026-05-13 |
 | `cursor` | `GPT-5.5` | Dusky Lurking Shade | Consolidator (napkin-stage conservation-first consolidation; archive + distilled intake) | 2026-05-12 | 2026-05-12 |
 | `cursor` | `GPT-5.5` | Volcanic Charring Furnace | Consolidator (distilled-stage conservation routing; durable homes + pending follow-ups) | 2026-05-12 | 2026-05-12 |
 | `cursor` | `GPT-5.5` | Twigged Growing Glade | Consolidator (pending-graduations conservation-first routing + reviewer corrections + handoff) | 2026-05-12 | 2026-05-12 |
