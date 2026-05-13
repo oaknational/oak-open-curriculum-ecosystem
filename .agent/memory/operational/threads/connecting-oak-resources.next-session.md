@@ -1,8 +1,8 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
-**Next anticipated work**: **Continue Inc.1a after WS1.4 — dispatch WS1.5
-canon, WS1.6 vocab-registry implementation, WS2.2 jsonld-compatible ingestion,
-or WS3.1 graph-project scaffold after a live root-file check.** WS1.4
+**Next anticipated work**: **Implement WS1.5 RDF canonicalisation against the design absorbed inline in `.agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md` §ws1-canon** — three-file `src/canon/{runtime.ts, canonicalize.ts, index.ts}`, hardcoded `RDFC-1.0` + `rejectURDNA2015: true`, cohesive `{ dataset, canonicalNQuads, hash }` return, SHA-256 via `node:crypto`, NQuads.parse output routed through data-factory `literal()` for `direction: ''` default. Owner-stated doctrinal rules apply: no aliases, no fallbacks, fail fast and hard with helpful error, replace old with new. Five tests atomic-landing with product: blank-node determinism, idempotent, type-level satisfies Dataset-shape, malformed-quad fail-path, URDNA2015-rejection proof. **Pre-condition: lockfile must be clean.** At 2026-05-13 close the working tree carries a 43-44-file uncoordinated dirty slice (root packageManager bump `pnpm@10.33.4→@11.1.1`, every workspace `package.json`, `pnpm-workspace.yaml`, `pnpm-lock.yaml`, SDK codegen artefacts) that was never declared through `shared-comms-log.md` or `active-claims.json`. WS1.5 cannot add `rdf-canonize` as direct graph-core dep until that slice resolves; owner action expected to commit/stash/revert it. Sequencing comms event `b9961327` was posted to Mossy Blossoming Canopy with no reply in-session.
+
+Other executable choices remain: WS1.6 vocab-registry implementation (after the prep-note owner decisions are respected), WS2.2 jsonld-compatible ingestion, or WS3.1 graph-project scaffold (live root-file check first). WS1.4
 JSON-LD processor LANDED at `95f42cb7` (2026-05-12, Fiery Igniting Furnace /
 codex / GPT-5 / 019e1d) after Solar support plus type/assumptions/test review.
 Resolved blockers: test classification split, graph-core no-I/O remote-context
@@ -14,7 +14,9 @@ note remain implementation preconditions. WS1.3 (DatasetCore + DataFactory)
 LANDED at `87e21125`; WS2.1 graph-ingest scaffold LANDED at `0f895070`; WS1.4
 coordination closeout landed at `0d6f080a`.
 
-**Last refreshed**: 2026-05-13 (Solar Gliding Twilight / `codex` / `GPT-5` /
+**Last refreshed**: 2026-05-13 (Quiet Stalking Mirror / `claude-code` / `claude-opus-4-7-1m` / `fe8a4f`) — WS1.5 pre-implementation review absorption + owner-stated doctrine record + URDNA2015→RDFC-1.0 plan-text remediation. No graph product implementation; WS1.5 implementation BLOCKED in-session by uncoordinated 43-44-file dirty slice (packageManager bump pnpm@10.33.4→@11.1.1, every workspace package.json, pnpm-workspace.yaml, pnpm-lock.yaml, SDK codegen artefacts) — no claim, no comms-event declared by the agent who produced it. Lockfile collision risk made adding `rdf-canonize` to graph-core deps unsafe. Three-reviewer absorption (code-expert APPROVE-WITH-NITS; assumptions-expert GO-WITH-CONDITIONS; architecture-expert-betty GO-WITH-RESHAPE) recorded inline in active graph-stack plan §ws1-canon along with the five-test set, the three-file layout, and the doctrinal rules. Sequencing comms event `b9961327` posted to Mossy Blossoming Canopy (no reply in session). Local pnpm install also failed with `husky: command not found` after the packageManager bump — surfaced in the comms event; mitigated locally by invoking `node agent-tools/dist/src/bin/agent-tools.js` directly. No active claim opened by this session (was blocked before reaching that step).
+
+Previous refresh: 2026-05-13 (Solar Gliding Twilight / `codex` / `GPT-5` /
 `019e1d`) — session-handoff/metacognition correction only. No graph product
 implementation. Fixed the stale cold-start/self-bootstrapping section that still
 routed fresh graph sessions to completed WS1.2. Current active plan remains the
@@ -793,6 +795,7 @@ promotion.)
 | `Luminous Threading Asteroid` | `codex` | `GPT-5` | `019e1d` | `coordinator-handover-and-ws1-4-review-routing-closeout-at-0d6f080a` | 2026-05-12 | 2026-05-13 |
 | `Fiery Igniting Furnace` | `codex` | `GPT-5` | `019e1d` | `ws1-4-jsonld-processor-landed-at-95f42cb7` | 2026-05-12 | 2026-05-12 |
 | `Solar Gliding Twilight` | `codex` | `GPT-5` | `019e1d` | `ws1-4-review-support-plus-continuity-cold-start-route-repair` | 2026-05-12 | 2026-05-13 |
+| `Quiet Stalking Mirror` | `claude-code` | `claude-opus-4-7-1m` | `fe8a4f` | `ws1-5-pre-implementation-review-absorption-plus-doctrine-record-no-aliases-no-fallbacks-fail-fast-replace-old-with-new-implementation-blocked-by-uncoordinated-43-file-dirty-slice` | 2026-05-13 | 2026-05-13 |
 
 ## Plan Locations
 
