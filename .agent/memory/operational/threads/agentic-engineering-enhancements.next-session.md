@@ -351,6 +351,77 @@ pretending the solution is already known.
 
 **Post-session note on reflection**: This session applied metacognition to avoid the trap of "how do we make Claude look like Codex." The reflection surface revealed that the real question is "how do we let each platform be itself while using a unified contract." That insight shaped the entire architecture: instead of unified invocation surfaces, unified contracts.
 
+## Coppery Kindling Anvil three-napkin deep-dive consolidation (2026-05-13)
+
+**Session**: Coppery Kindling Anvil / `cursor` / `claude-opus-4-7` / `536dd4`.
+
+**Role**: Consolidator (no implementation). Owner brief: deep dive into the
+current napkin and the two before it, capturing lessons from the previous
+multi-agent session.
+
+**Landed outcomes** (two commits):
+
+1. `39b3271d` — `docs(graph): absorb WS1.5 canon pre-implementation
+   review` — landed by this session under owner authorisation *"commit
+   ALL files, regardless of claims"*. Absorbed peer-session work from
+   Quiet Stalking Mirror (`connecting-oak-resources` thread record +
+   graph-stack plan §ws1-canon). Slipped one cohesion boundary: the
+   napkin rename was a pre-existing staged entry from `git mv` earlier
+   in this session and committed alongside the WS1.5 paths. Acceptable
+   single-leak; not worth amending.
+2. `c10c75e3` — `chore: learning loop processing` — landed by the
+   owner directly during this session's handoff window, capturing the
+   three-napkin consolidation outputs (the six files listed below).
+   Owner override of the earlier mid-session redirect *"forget commits,
+   run /jc-session-handoff then stop"*; the consolidation work is now
+   on HEAD rather than deferred.
+
+Files landed in `c10c75e3`:
+
+- `.agent/memory/active/distilled.md` — F1 distilled, older 2026-05-12
+  entries replaced with routing pointer
+- `.agent/memory/operational/pending-graduations.md` — 7 new dated entries
+  (F2/F4/F5/F7/F8/F9/F10) added with explicit triggers
+- `.agent/memory/operational/repo-continuity.md` — Deep Consolidation
+  Status entry added for this pass
+- `.agent/memory/active/napkin.md` — fresh post-rotation napkin (60 lines)
+- `.agent/memory/active/archive/napkin-2026-05-13.md` — appendage from
+  Quiet Stalking Mirror's session that landed AFTER my `git mv` rotated
+  the file (peer-session lockfile-in-flux + boundary-design doctrine
+  observations); now sits inside the rotated archive rather than the
+  active surface
+- `.agent/research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-13.md`
+  — durable synthesis report (573 lines, 10 numbered findings with
+  evidence arcs)
+
+Subsequent dirty files in the working tree at handoff close are the
+session-handoff narrative edits themselves (this thread record + the
+repo-continuity Active threads identity summary + the napkin's
+session-bridging entry + a new opening statement note). They are NOT
+deferred consolidation work; they are normal handoff outputs the next
+session will see in `git status`.
+
+**Verdicts surfaced for owner direction**: three numbered candidates
+recorded in `pending-graduations.md` as triggered, awaiting owner
+direction to commission:
+
+1. PDR `coordinator-role-as-allocator-not-gatekeeper` (N=3 corpus
+   instances, two failure modes converging)
+2. `agent-collaboration.md § Treat Commit as a Short-Lived Shared
+   Transaction Surface` amendment for mutual mechanical verification +
+   hook-output authority
+3. Rule `boundary-design-strictness` operationalising the owner
+   four-part doctrine (no-aliases / no-fallbacks / fail-fast /
+   replace-don't-bridge)
+
+**Next safe step**: another consolidation pass picks up at the deferred
+files above plus the next-touch fitness routing recorded in the
+*Deep Consolidation Status* section of `repo-continuity.md`. The opening
+statement at
+[`.agent/plans/notes/next-session-opening-2026-05-13.md`](../../plans/notes/next-session-opening-2026-05-13.md)
+carries the resume context (commit-first sequencing, three numbered
+verdicts, next-touch pending-graduations items, do-not-do list).
+
 ## Participating agent identities
 
 | Platform | Model | Agent name | Role | First-session | Last-session |
@@ -373,6 +444,7 @@ pretending the solution is already known.
 | `cursor` | `GPT-5.5` | Volcanic Charring Furnace | Consolidator (distilled-stage conservation routing; durable homes + pending follow-ups) | 2026-05-12 | 2026-05-12 |
 | `cursor` | `GPT-5.5` | Twigged Growing Glade | Consolidator (pending-graduations conservation-first routing + reviewer corrections + handoff) | 2026-05-12 | 2026-05-12 |
 | `claude` | `claude-opus-4-7-1m` | Ferny Regrowing Leaf | Coordinator (succeeded Brazen Stoking Ash; allocated work to 6 agents via directed-message matrix; surfaced coordinator-as-allocator role-failure-mode for capture) | 2026-05-12 | 2026-05-12 |
+| `cursor` | `claude-opus-4-7` | Coppery Kindling Anvil | Consolidator (three-napkin deep-dive synthesis; F1 graduated to distilled.md; F2-F10 routed to pending-graduations; napkin rotated; three numbered verdicts surfaced for owner direction) | 2026-05-13 | 2026-05-13 |
 
 ## Ferny Regrowing Leaf coordinator session (2026-05-12)
 

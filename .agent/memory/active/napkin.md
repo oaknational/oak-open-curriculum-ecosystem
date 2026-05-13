@@ -58,3 +58,21 @@ ten emergent findings (F1-F10) were captured in
   hook-output authority; (3) rule `boundary-design-strictness`
   operationalising the owner four-part doctrine
   (no-aliases / no-fallbacks / fail-fast / replace-don't-bridge).
+
+### Session-bridging opening statement for the next consolidation pass
+
+- Owner asked for an opening statement for the next session to continue
+  consolidation with another `/jc-consolidate-docs` run. It lives at
+  [`.agent/plans/notes/next-session-opening-2026-05-13.md`](../../plans/notes/next-session-opening-2026-05-13.md)
+  and names the dirty consolidation outputs to commit first, the three
+  numbered verdicts to re-surface, the next-touch pending-graduations
+  items, the distilled.md graduation walk, and the explicit
+  do-not-do list (no commit amendment, no reactive trimming, no
+  retargeting the bounded consolidation queue).
+- Two commits landed this session: `39b3271d`
+  (`docs(graph): absorb WS1.5 canon pre-implementation review`) by this
+  session under owner authorisation *"commit ALL files, regardless of
+  claims"*; and `c10c75e3` (`chore: learning loop processing`) landed by
+  the owner directly during this session's handoff window, capturing
+  the consolidation outputs themselves and overriding the earlier
+  mid-session *"forget commits"* redirect.
