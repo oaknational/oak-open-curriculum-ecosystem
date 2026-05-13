@@ -23037,6 +23037,177 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "310125c9-c078-4c6b-8611-cdf311c2e834",
+      "agent_id": {
+        "agent_name": "Mossy Fruiting Thicket",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T17:17:43Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit the P5 comms DI boundary repair with explicit pathspecs; exclude napkin residue and unrelated files.",
+      "archived_at": "2026-05-13",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-13T17:20:10Z",
+        "closed_by": {
+          "agent_name": "Mossy Fruiting Thicket",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Committed P5 comms DI boundary repair at 07ffee1d; queue 407aa15a completed after hook-pass commit.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "310125c9-c078-4c6b-8611-cdf311c2e834",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a9bc1512-3ba6-42a0-b5b9-f72a6a12c575",
+      "agent_id": {
+        "agent_name": "Mossy Fruiting Thicket",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "workspace",
+          "patterns": [
+            "agent-tools"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T17:08:28Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Implement ws-p5-di-boundary-repair in agent-tools: extract direct comms use-case boundaries, remove production IO defaults from imported testable code, and validate with focused no-IO tests using simple fakes.",
+      "archived_at": "2026-05-13",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-13T17:20:20Z",
+        "closed_by": {
+          "agent_name": "Mossy Fruiting Thicket",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Completed ws-p5-di-boundary-repair in agent-tools and landed source/tests/docs at 07ffee1d.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a9bc1512-3ba6-42a0-b5b9-f72a6a12c575",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "db3b25b4-106b-4f42-b6f9-33db4ca71c8e",
+      "agent_id": {
+        "agent_name": "Mossy Fruiting Thicket",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T17:08:28Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Maintain P5 DI repair continuity, identity, napkin, and collaboration-state surfaces for this session; no SDK codegen ownership.",
+      "archived_at": "2026-05-13",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-13T17:20:30Z",
+        "closed_by": {
+          "agent_name": "Mossy Fruiting Thicket",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Updated P5 plan/thread/collaboration state for 07ffee1d; left mixed napkin residue unstaged.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "db3b25b4-106b-4f42-b6f9-33db4ca71c8e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "548fb77e-3149-4923-a0dc-faa58b09eda3",
+      "agent_id": {
+        "agent_name": "Mossy Fruiting Thicket",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-13T17:20:36Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit P5 collaboration lifecycle closure residue only.",
+      "intent_to_commit": "fed0b52d-2b8c-4d55-8a1f-2e745d005850",
+      "archived_at": "2026-05-13",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-13T17:21:10Z",
+        "closed_by": {
+          "agent_name": "Mossy Fruiting Thicket",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Closed lifecycle commit window for P5 claim archival residue.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "548fb77e-3149-4923-a0dc-faa58b09eda3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
