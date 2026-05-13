@@ -118,6 +118,7 @@ async function dispatchTopic(input: {
       stdout: runtime.stdout,
       io: runtime.io,
       waitForCommsChange: runtime.waitForCommsChange,
+      waitForCollaborationStateChange: runtime.waitForCollaborationStateChange,
     });
   }
 

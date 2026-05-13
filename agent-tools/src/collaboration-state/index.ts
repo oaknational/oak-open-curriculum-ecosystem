@@ -13,7 +13,15 @@ export {
 export { productionCollaborationStateRuntime } from './cli-runtime.js';
 export { archiveStaleClaims } from './claims.js';
 export { runCollaborationStateCli } from './cli.js';
-export { buildCollaborationTuiSnapshot, type CollaborationTuiSnapshot } from './tui/snapshot.js';
+export { type CollaborationTuiUpdateSource } from './tui/controller.js';
+export {
+  buildCollaborationTuiSnapshot,
+  type CollaborationTuiSnapshot,
+  type TuiAgentEntry,
+  type TuiDirectedEntry,
+  type TuiMainEntry,
+  type TuiQueueEntry,
+} from './tui/snapshot.js';
 export { formatCollaborationTuiText } from './tui/text.js';
 export { updateJsonFileWithRetry, updateJsonStateWithRetry } from './transaction.js';
 export type {

@@ -1248,6 +1248,29 @@ the value of the current work in a way that is more visible to humans than
 comms format. Owner-directed sequence update on 2026-05-12: run P5, then P8,
 then return to P6/P7.
 
+**2026-05-13 first continuation slice**:
+
+- The TUI now accepts an injected live update source in interactive mode and
+  refreshes without a keyboard command when collaboration state changes.
+  Production CLI composition wires that source to the canonical comms directory,
+  active claims path, and closed-claims path with a polling fallback.
+- Refreshes are sequence-guarded so an older, slower refresh cannot overwrite a
+  newer snapshot. Manual `r` refresh uses the same guarded path.
+- The snapshot no longer drops closed-only identities: active, stale, inactive,
+  and uncertain agents are all visible in the operator surface.
+- `tui --format text` is now covered through injected collaboration-state IO,
+  and the TUI entry/update types are exported through the collaboration-state
+  barrel.
+- Validation: focused P8 tests passed (4 files / 7 tests), full
+  `@oaknational/agent-tools` tests passed (44 files / 336 tests),
+  `type-check`, `lint`, and `build` passed, `collaboration-state -- check`
+  returned `ok`, and a live `tui --format text` smoke showed this session as
+  active plus closed-only identities as inactive.
+- P8 remains pending: the slice advances real-time refresh and inactive
+  visibility, but the remaining acceptance bar still includes fuller
+  human-visible value signals, interaction hardening, and boundary/tooling
+  follow-ups from the reviewer synthesis.
+
 ---
 
 ### P6 — Coordination-artefact isolation

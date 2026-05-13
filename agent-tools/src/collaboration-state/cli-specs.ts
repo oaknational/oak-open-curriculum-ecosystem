@@ -171,9 +171,9 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
   'tui:': commandSpec({
     help:
       'tui [--format <tui|text>] [--repo-root <path>] [--active <path>] ' +
-      '[--closed <path>] [--comms-dir <dir>] [--now <iso>]',
-    options: ['format', 'repo-root', 'active', 'closed', 'comms-dir', 'now'],
-    handler: collaborationTui,
+      '[--closed <path>] [--comms-dir <dir>] [--now <iso>] [--poll-ms <n>]',
+    options: ['format', 'repo-root', 'active', 'closed', 'comms-dir', 'now', 'poll-ms'],
+    handler: (options, _env, runtime) => collaborationTui(options, runtime),
   }),
   'conversation:append': commandSpec({
     help: 'conversation append --file <path> --entry-json <json>',

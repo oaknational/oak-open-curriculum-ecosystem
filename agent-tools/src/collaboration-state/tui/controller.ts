@@ -1,5 +1,5 @@
 import { useApp, useInput } from 'ink';
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { type CollaborationTuiSnapshot } from './snapshot.js';
 
@@ -12,9 +12,14 @@ export interface CollaborationTuiController {
   readonly status: string;
 }
 
+export interface CollaborationTuiUpdateSource {
+  readonly subscribe: (onChange: () => void) => () => void;
+}
+
 interface CollaborationTuiControllerInput {
   readonly initialSnapshot: CollaborationTuiSnapshot;
   readonly onRefresh?: () => Promise<CollaborationTuiSnapshot>;
+  readonly updateSource?: CollaborationTuiUpdateSource;
 }
 
 const panes: readonly Pane[] = ['main', 'agents', 'queue', 'directed'];
@@ -22,12 +27,19 @@ const panes: readonly Pane[] = ['main', 'agents', 'queue', 'directed'];
 export function useCollaborationTuiController({
   initialSnapshot,
   onRefresh,
+  updateSource,
 }: CollaborationTuiControllerInput): CollaborationTuiController {
   const { exit } = useApp();
   const [snapshot, setSnapshot] = useState(initialSnapshot);
   const [activePane, setActivePane] = useState<Pane>('main');
   const [offsets, setOffsets] = useState<Readonly<Record<Pane, number>>>(initialOffsets());
   const [status, setStatus] = useState('ready');
+  const runRefresh = useLiveRefresh({
+    onRefresh,
+    setSnapshot,
+    setStatus,
+    updateSource,
+  });
 
   useInput((input, key) => {
     if (input === 'q') {
@@ -47,14 +59,48 @@ export function useCollaborationTuiController({
       return;
     }
     if (input === 'r' && onRefresh !== undefined) {
-      refreshSnapshot({ onRefresh, setSnapshot, setStatus });
+      runRefresh();
     }
   });
 
   return { activePane, offsets, snapshot, status };
 }
 
+function useLiveRefresh(input: {
+  readonly onRefresh?: () => Promise<CollaborationTuiSnapshot>;
+  readonly setSnapshot: (snapshot: CollaborationTuiSnapshot) => void;
+  readonly setStatus: (status: string) => void;
+  readonly updateSource?: CollaborationTuiUpdateSource;
+}): () => void {
+  const refreshSequence = useRef(0);
+  const runRefresh = useCallback(() => {
+    if (input.onRefresh === undefined) {
+      return;
+    }
+    refreshSequence.current += 1;
+    refreshSnapshot({
+      requestId: refreshSequence.current,
+      latestRequestId: () => refreshSequence.current,
+      onRefresh: input.onRefresh,
+      setSnapshot: input.setSnapshot,
+      setStatus: input.setStatus,
+    });
+  }, [input]);
+
+  useEffect(() => {
+    if (input.updateSource === undefined) {
+      return undefined;
+    }
+
+    return input.updateSource.subscribe(runRefresh);
+  }, [runRefresh, input.updateSource]);
+
+  return runRefresh;
+}
+
 function refreshSnapshot(input: {
+  readonly requestId: number;
+  readonly latestRequestId: () => number;
   readonly onRefresh: () => Promise<CollaborationTuiSnapshot>;
   readonly setSnapshot: (snapshot: CollaborationTuiSnapshot) => void;
   readonly setStatus: (status: string) => void;
@@ -63,10 +109,16 @@ function refreshSnapshot(input: {
   input
     .onRefresh()
     .then((next) => {
+      if (input.requestId !== input.latestRequestId()) {
+        return;
+      }
       input.setSnapshot(next);
-      input.setStatus('refreshed');
+      input.setStatus(`refreshed ${next.generated_at}`);
     })
     .catch((error: unknown) => {
+      if (input.requestId !== input.latestRequestId()) {
+        return;
+      }
       input.setStatus(error instanceof Error ? error.message : String(error));
     });
 }

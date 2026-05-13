@@ -1,5 +1,5 @@
 import { drainDirectedInbox, watchDirectedInbox } from './comms-use-cases.js';
-import { optional, required, type Options } from './cli-options.js';
+import { optional, optionalPositiveInteger, required, type Options } from './cli-options.js';
 import {
   cliIo,
   type CollaborationStateCliIo,
@@ -57,18 +57,4 @@ async function drainUnseenMessages(input: {
     remainingEvents: input.remainingEvents,
     markSeen: (eventIds) => input.io.appendSeenMessageIds(input.seenFile, eventIds),
   });
-}
-
-function optionalPositiveInteger(options: Options, key: string): number | undefined {
-  const raw = optional(options, key);
-  if (raw === undefined) {
-    return undefined;
-  }
-
-  const value = Number.parseInt(raw, 10);
-  if (!Number.isInteger(value) || value <= 0 || String(value) !== raw) {
-    throw new Error(`--${key} must be a positive integer`);
-  }
-
-  return value;
 }

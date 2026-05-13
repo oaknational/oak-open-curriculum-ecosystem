@@ -1,15 +1,22 @@
 import { watch } from 'node:fs';
 import { appendFile, mkdir, readFile } from 'node:fs/promises';
+import { dirname } from 'node:path';
 
 import { filesystemLegacyCommsIo, migrateLegacyCommsDirectories } from './comms-migration.js';
 import {
   readActiveClaimsFile,
+  readClosedClaimsFile,
   readCommsEvents,
   readDirectedCommsMessages,
   writeCommsEvent,
 } from './state-io.js';
 import { writeTextFileAtomically } from './transaction.js';
-import { type CollaborationRegistry, type CommsEvent, type DirectedCommsMessage } from './types.js';
+import {
+  type ClosedClaimsArchive,
+  type CollaborationRegistry,
+  type CommsEvent,
+  type DirectedCommsMessage,
+} from './types.js';
 
 export interface CliRuntime {
   readonly stdout?: Pick<NodeJS.WritableStream, 'write'>;
@@ -18,10 +25,17 @@ export interface CliRuntime {
     readonly directory: string;
     readonly pollMs: number;
   }) => Promise<void>;
+  readonly waitForCollaborationStateChange?: (input: {
+    readonly activePath: string;
+    readonly closedPath: string;
+    readonly commsDir: string;
+    readonly pollMs: number;
+  }) => Promise<void>;
 }
 
 export interface CollaborationStateCliIo {
   readonly readActiveClaimsFile: (activePath: string) => Promise<CollaborationRegistry>;
+  readonly readClosedClaimsFile: (closedPath: string) => Promise<ClosedClaimsArchive>;
   readonly writeCommsEvent: (input: {
     readonly commsDir: string;
     readonly event: CommsEvent;
@@ -48,6 +62,7 @@ export interface CollaborationStateCliIo {
 
 const productionIo: CollaborationStateCliIo = {
   readActiveClaimsFile,
+  readClosedClaimsFile,
   writeCommsEvent,
   readCommsEvents,
   readDirectedCommsMessages,
@@ -81,6 +96,24 @@ export function waitForCommsChange(
   return runtime.waitForCommsChange(input);
 }
 
+export function waitForCollaborationStateChange(
+  runtime: CliRuntime,
+  input: {
+    readonly activePath: string;
+    readonly closedPath: string;
+    readonly commsDir: string;
+    readonly pollMs: number;
+  },
+): Promise<void> {
+  if (runtime.waitForCollaborationStateChange === undefined) {
+    throw new Error(
+      'collaboration-state TUI update source must be provided by the composition layer',
+    );
+  }
+
+  return runtime.waitForCollaborationStateChange(input);
+}
+
 export function productionCollaborationStateRuntime(
   input: { readonly stdout?: Pick<NodeJS.WritableStream, 'write'> } = {},
 ): CliRuntime {
@@ -88,6 +121,7 @@ export function productionCollaborationStateRuntime(
     stdout: input.stdout,
     io: productionIo,
     waitForCommsChange: waitForDirectoryChange,
+    waitForCollaborationStateChange: waitForCollaborationStateChangeFromFiles,
   };
 }
 
@@ -107,10 +141,29 @@ function waitForDirectoryChange(input: {
   readonly directory: string;
   readonly pollMs: number;
 }): Promise<void> {
+  return waitForAnyDirectoryChange({ directories: [input.directory], pollMs: input.pollMs });
+}
+
+function waitForCollaborationStateChangeFromFiles(input: {
+  readonly activePath: string;
+  readonly closedPath: string;
+  readonly commsDir: string;
+  readonly pollMs: number;
+}): Promise<void> {
+  return waitForAnyDirectoryChange({
+    directories: [input.commsDir, dirname(input.activePath), dirname(input.closedPath)],
+    pollMs: input.pollMs,
+  });
+}
+
+function waitForAnyDirectoryChange(input: {
+  readonly directories: readonly string[];
+  readonly pollMs: number;
+}): Promise<void> {
   return new Promise((resolve) => {
     let settled = false;
     const timer = setTimeout(done, input.pollMs);
-    const watcher = tryWatchDirectory(input.directory, done);
+    const watchers = input.directories.map((directory) => tryWatchDirectory(directory, done));
 
     function done(): void {
       if (settled) {
@@ -118,7 +171,9 @@ function waitForDirectoryChange(input: {
       }
       settled = true;
       clearTimeout(timer);
-      watcher?.close();
+      for (const watcher of watchers) {
+        watcher?.close();
+      }
       resolve();
     }
   });

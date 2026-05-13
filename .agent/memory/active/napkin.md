@@ -21,6 +21,38 @@ The most recent rotation is archived at
 [archive-pass]: archive/napkin-2026-05-12b.md
 [previous-pass]: archive/napkin-2026-05-12.md
 
+## 2026-05-13 — Mossy Blossoming Canopy / codex / GPT-5 / `019e22`
+
+### P8 live collaboration TUI continuation
+
+- Thorough grounding confirmed P5 complete and P8 mandatory next: live claims
+  and active commit queue were empty, tree/index clean, and the controlling
+  cost-of-collaboration plan still marks `ws-p8-collaboration-tui` pending
+  until real-time refresh, inactive-agent visibility, strict validation, live
+  value signals, and component/CLI behaviour tests are satisfied.
+- First P8 continuation slice implemented live-refresh wiring without claiming
+  completion: interactive TUI refreshes can now come from an injected
+  collaboration-state update source, stale refreshes cannot overwrite newer
+  snapshots, closed-only identities remain visible as inactive, and CLI text
+  mode is tested through injected IO.
+- Focused evidence for the slice: P8 tests passed (4 files / 7 tests), full
+  `@oaknational/agent-tools` tests passed (44 files / 336 tests),
+  `type-check`, `lint`, and `build` passed, `collaboration-state -- check`
+  returned `ok`, and a live text-mode TUI smoke showed this session active plus
+  closed-only agents inactive.
+
+### Practice/tooling feedback
+
+- **Surface**: shell + repo search workflow
+- **Signal**: friction / mistake
+- **Observation**: I accidentally put backticks inside a double-quoted `rg`
+  pattern while searching for identity rows, so the shell attempted command
+  substitution before `rg` ran. No repo state changed, but the failure produced
+  noisy Codex state-runtime warnings.
+- **Behaviour change / candidate follow-up**: when searching for markdown text
+  containing backticks, use single-quoted patterns or `rg -F` with a separate
+  literal string.
+
 ## 2026-05-12 — Volcanic Charring Furnace / cursor / GPT-5.5 / `242ea3`
 
 ### Distilled-stage consolidation

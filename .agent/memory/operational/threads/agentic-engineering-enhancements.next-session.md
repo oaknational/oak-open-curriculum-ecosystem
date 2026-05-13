@@ -125,6 +125,27 @@ cost-of-collaboration plan. Preserve the P8 acceptance bar: real-time refresh,
 inactive-agent visibility, strict validation, human-visible live value signals,
 and component/CLI behaviour tests.
 
+## P8 Live TUI Continuation Started (2026-05-13)
+
+**Session**: Mossy Blossoming Canopy / `codex` / `GPT-5` / `019e22`.
+
+**Current outcome before commit**: first P8 continuation slice implemented.
+The TUI now has an injected live update source for interactive refreshes,
+sequence-guarded refresh application, closed-only inactive-agent visibility,
+CLI text-mode proof through injected IO, and exported TUI entry/update types.
+
+**Verification evidence**: focused P8 tests passed (4 files / 7 tests), full
+`@oaknational/agent-tools` tests passed (44 files / 336 tests),
+`pnpm --filter @oaknational/agent-tools type-check`, `lint`, and `build`
+passed, `collaboration-state -- check` returned `ok`, and a live
+`tui --format text` smoke showed this session as active while many closed-only
+identities rendered as inactive.
+
+**Next safe execution step**: keep P8 open. Continue from the plan's remaining
+acceptance bar: richer human-visible live value signals, interaction hardening,
+and any boundary/tooling follow-ups from the reviewer synthesis that are not
+closed by this slice.
+
 ## Completion-Claim Proof Pipeline (2026-05-13)
 
 **Session**: Verdant Foraging Copse / `codex` / `GPT-5` / `019e1d`.
@@ -306,6 +327,7 @@ pretending the solution is already known.
 | `codex` | `GPT-5` | Verdant Foraging Copse | Synthesiser/plan author (completion-claim proof pipeline report, executable plan, thread/index routing, and first `jc-plan` proof-contract skill amendment) | 2026-05-13 | 2026-05-13 |
 | `codex` | `GPT-5` | Umbral Masking Silhouette | Gate-checker/monitor (read-only P5 strict comms parser CLEAN/GO; repeated message/status monitoring through WS1.4 closeout) | 2026-05-12 | 2026-05-13 |
 | `codex` | `GPT-5` | Mossy Fruiting Thicket | Implementer (P5 DI/no-IO boundary repair for comms use cases) | 2026-05-13 | 2026-05-13 |
+| `codex` | `GPT-5` | Mossy Blossoming Canopy | Implementer (mandatory P8 live collaboration TUI continuation) | 2026-05-13 | 2026-05-13 |
 | `cursor` | `GPT-5.5` | Dusky Lurking Shade | Consolidator (napkin-stage conservation-first consolidation; archive + distilled intake) | 2026-05-12 | 2026-05-12 |
 | `cursor` | `GPT-5.5` | Volcanic Charring Furnace | Consolidator (distilled-stage conservation routing; durable homes + pending follow-ups) | 2026-05-12 | 2026-05-12 |
 | `cursor` | `GPT-5.5` | Twigged Growing Glade | Consolidator (pending-graduations conservation-first routing + reviewer corrections + handoff) | 2026-05-12 | 2026-05-12 |

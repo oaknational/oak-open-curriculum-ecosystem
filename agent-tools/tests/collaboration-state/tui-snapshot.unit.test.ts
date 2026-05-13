@@ -112,6 +112,36 @@ describe('buildCollaborationTuiSnapshot', () => {
       'expired-intent',
     ]);
   });
+
+  it('keeps closed-only inactive agents visible in the operator surface', () => {
+    const closedOnlyAgent: CollaborationAgentId = {
+      agent_name: 'Hushed Resting Signal',
+      platform: 'codex',
+      model: 'GPT-5',
+      session_id_prefix: '019e1b',
+    };
+
+    const snapshot = buildCollaborationTuiSnapshot({
+      registry: { schema_version: '1.3.0', claims: [], commit_queue: [] },
+      closedArchive: {
+        schema_version: '1.3.0',
+        claims: [claim({ agent_id: closedOnlyAgent, claim_id: 'closed-only' })],
+      },
+      events: [],
+      nowIso,
+    });
+
+    expect(snapshot.agents).toStrictEqual([
+      {
+        routing_key: 'Hushed Resting Signal / codex / 019e1b',
+        visibility_status: 'inactive',
+        collision_status: 'clear',
+        claim_count: 0,
+        queue_count: 0,
+        closed_claim_count: 1,
+      },
+    ]);
+  });
 });
 
 function claim(overrides: Partial<CollaborationClaim> = {}): CollaborationClaim {

@@ -7,6 +7,7 @@ import {
 } from '@oaknational/oak-design-ink';
 import { Box, Text } from 'ink';
 
+import { type CollaborationTuiUpdateSource } from './controller.js';
 import { type CollaborationTuiSnapshot } from './snapshot.js';
 import { useCollaborationTuiController } from './controller.js';
 import { AgentsPane, DirectedPane, MainPane, QueuePane, visible } from './panes.js';
@@ -14,6 +15,7 @@ import { AgentsPane, DirectedPane, MainPane, QueuePane, visible } from './panes.
 export interface CollaborationTuiAppProps {
   readonly initialSnapshot: CollaborationTuiSnapshot;
   readonly onRefresh?: () => Promise<CollaborationTuiSnapshot>;
+  readonly updateSource?: CollaborationTuiUpdateSource;
 }
 
 export function CollaborationTuiApp(props: CollaborationTuiAppProps): React.JSX.Element {
@@ -27,10 +29,12 @@ export function CollaborationTuiApp(props: CollaborationTuiAppProps): React.JSX.
 function CollaborationTuiSurface({
   initialSnapshot,
   onRefresh,
+  updateSource,
 }: CollaborationTuiAppProps): React.JSX.Element {
   const { activePane, offsets, snapshot, status } = useCollaborationTuiController({
     initialSnapshot,
     onRefresh,
+    updateSource,
   });
 
   return (

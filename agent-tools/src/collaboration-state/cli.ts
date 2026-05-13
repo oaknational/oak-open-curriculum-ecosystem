@@ -9,6 +9,7 @@ interface CollaborationStateCliInput {
   readonly stdout?: Pick<NodeJS.WritableStream, 'write'>;
   readonly io?: CliRuntime['io'];
   readonly waitForCommsChange?: CliRuntime['waitForCommsChange'];
+  readonly waitForCollaborationStateChange?: CliRuntime['waitForCollaborationStateChange'];
 }
 
 interface CollaborationStateCliResult {
@@ -29,6 +30,7 @@ export async function runCollaborationStateCli(
         stdout: input.stdout,
         io: input.io,
         waitForCommsChange: input.waitForCommsChange,
+        waitForCollaborationStateChange: input.waitForCollaborationStateChange,
       }),
     );
   } catch (error) {

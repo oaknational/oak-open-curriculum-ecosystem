@@ -33,6 +33,7 @@ const KNOWN_OPTION_KEYS = new Set([
   'now',
   'output',
   'platform',
+  'poll-ms',
   'repo-root',
   'shared-log',
   'seen-file',
@@ -80,6 +81,20 @@ export function optional(options: Options, key: string): string | undefined {
 
 export function valueOrDefault(options: Options, key: string, fallback: string): string {
   return optional(options, key) ?? fallback;
+}
+
+export function optionalPositiveInteger(options: Options, key: string): number | undefined {
+  const raw = optional(options, key);
+  if (raw === undefined) {
+    return undefined;
+  }
+
+  const value = Number.parseInt(raw, 10);
+  if (!Number.isInteger(value) || value <= 0 || String(value) !== raw) {
+    throw new Error(`--${key} must be a positive integer`);
+  }
+
+  return value;
 }
 
 function requireFlagValue(flag: string, value: string | undefined): string {

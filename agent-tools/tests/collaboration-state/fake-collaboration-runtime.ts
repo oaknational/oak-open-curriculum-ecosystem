@@ -5,6 +5,7 @@ import {
   type CollaborationStateCliIo,
 } from '../../src/collaboration-state/cli-runtime';
 import {
+  type ClosedClaimsArchive,
   type CollaborationRegistry,
   type CommsEvent,
   type DirectedCommsMessage,
@@ -16,11 +17,18 @@ const emptyActiveClaims: CollaborationRegistry = {
   claims: [],
 };
 
+const emptyClosedClaims: ClosedClaimsArchive = {
+  schema_version: '1.3.0',
+  claims: [],
+};
+
 interface FakeCollaborationRuntimeInput {
   readonly activeClaims?: CollaborationRegistry;
+  readonly closedClaims?: ClosedClaimsArchive;
   readonly comms?: Readonly<Record<string, readonly CommsEvent[]>>;
   readonly legacyComms?: Readonly<Record<string, readonly unknown[]>>;
   readonly onWaitForCommsChange?: () => void;
+  readonly onWaitForCollaborationStateChange?: () => void;
 }
 
 interface FakeCollaborationRuntime {
@@ -37,6 +45,7 @@ interface FakeRuntimeState {
   readonly textByPath: Map<string, string>;
   readonly legacyByDir: Map<string, readonly unknown[]>;
   readonly activeClaims: CollaborationRegistry;
+  readonly closedClaims: ClosedClaimsArchive;
 }
 
 export function createFakeCollaborationRuntime(
@@ -48,6 +57,7 @@ export function createFakeCollaborationRuntime(
     textByPath: new Map(),
     legacyByDir: legacyByDir(input.legacyComms ?? {}),
     activeClaims: input.activeClaims ?? emptyActiveClaims,
+    closedClaims: input.closedClaims ?? emptyClosedClaims,
   };
   seedComms(state, input.comms ?? {});
 
@@ -56,6 +66,9 @@ export function createFakeCollaborationRuntime(
       io: createFakeIo(state),
       waitForCommsChange: async () => {
         input.onWaitForCommsChange?.();
+      },
+      waitForCollaborationStateChange: async () => {
+        input.onWaitForCollaborationStateChange?.();
       },
     },
     readCommsEvents: (commsDir) => readCommsEvents(state, commsDir),
@@ -68,6 +81,7 @@ export function createFakeCollaborationRuntime(
 function createFakeIo(state: FakeRuntimeState): CollaborationStateCliIo {
   return {
     readActiveClaimsFile: async () => state.activeClaims,
+    readClosedClaimsFile: async () => state.closedClaims,
     writeCommsEvent: async ({ commsDir, event, nowIso }) => {
       writeCommsEvent(
         state,

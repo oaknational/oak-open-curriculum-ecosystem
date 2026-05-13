@@ -27,7 +27,7 @@ export interface TuiMainEntry {
   readonly author: string;
 }
 
-interface TuiDirectedEntry {
+export interface TuiDirectedEntry {
   readonly id: string;
   readonly created_at: string;
   readonly kind: string;
@@ -124,19 +124,17 @@ function agentEntries(
   nowIso: string,
   closedArchive: ClosedClaimsArchive | undefined,
 ): readonly TuiAgentEntry[] {
-  return activeAgentReports(registry, nowIso, closedArchive)
-    .filter((report) => report.claims.length > 0 || report.commit_queue.length > 0)
-    .map((report) => ({
-      routing_key: formatRoutingKey(report.routing_key),
-      visibility_status: report.visibility_status,
-      collision_status: report.collision_status,
-      claim_count: report.claims.length,
-      queue_count: report.commit_queue.length,
-      closed_claim_count: report.closed_claims.length,
-      ...(latestIntent(report.claims) === undefined
-        ? {}
-        : { latest_intent: latestIntent(report.claims) }),
-    }));
+  return activeAgentReports(registry, nowIso, closedArchive).map((report) => ({
+    routing_key: formatRoutingKey(report.routing_key),
+    visibility_status: report.visibility_status,
+    collision_status: report.collision_status,
+    claim_count: report.claims.length,
+    queue_count: report.commit_queue.length,
+    closed_claim_count: report.closed_claims.length,
+    ...(latestIntent(report.claims) === undefined
+      ? {}
+      : { latest_intent: latestIntent(report.claims) }),
+  }));
 }
 
 function queueEntries(
