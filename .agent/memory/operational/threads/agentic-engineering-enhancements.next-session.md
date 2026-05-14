@@ -11,13 +11,24 @@
   `p8-attention-state`; add unread/seen or equivalent directed-thread triage
   so a human operator can tell which directed conversations need action without
   reading raw event files.
-- Owner-requested exercise route from the 2026-05-14 closeout: if the owner
-  asks to exercise the new external-substrate learning plan, open
-  [`external-skills-substrate-learning.plan.md`](../../plans/agentic-engineering-enhancements/future/external-skills-substrate-learning.plan.md),
-  create the decided candidate register, review C1/C2 only, and stop before
-  C3-C8 adoption work. This is a future strategic-learning slice; it does not
-  supersede mandatory P8 unless the owner explicitly prioritises it for the
-  next session.
+- Agentic-engineering collaboration sequence while P8 is open:
+  1. **Active default** — continue mandatory P8 at `p8-attention-state`.
+     This is the in-progress collaboration spine; P8 is part-way done, not
+     complete.
+  2. **Ready adjacent implementation lane** — if the owner deliberately
+     switches from P8 to token-cost work, use
+     [`fitness-token-measurements-and-frontmatter-mandation.plan.md`](../../plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md)
+     as the controlling plan and start at WS1 (`ws1-token-measurement`).
+  3. **Strategic exercise lane** — if the owner asks to exercise the new
+     external-substrate learning plan, open
+     [`external-skills-substrate-learning.plan.md`](../../plans/agentic-engineering-enhancements/future/external-skills-substrate-learning.plan.md),
+     create the decided candidate register, review C1/C2 only, and stop before
+     C3-C8 adoption work. This does not supersede mandatory P8 unless the owner
+     explicitly prioritises it.
+  4. **Guardrail lane** — keep
+     [`completion-claim-proof-pipeline.plan.md`](../../plans/agentic-engineering-enhancements/current/completion-claim-proof-pipeline.plan.md)
+     in view when reporting status; it exists because P5/P8 completion was
+     previously overstated.
 - Completed prerequisites: P0.QG, P-Foundation, P1, P2, P3, P4, P5 unified
   comms plus DI/no-IO boundary repair.
 - Recent P8 source commits: `2791be3c` operator-value UI and `6e804485`
@@ -101,6 +112,9 @@ are now routed together through
 which supersedes the old frontmatter-manifest sweep. Review amendments landed
 at `41acffcc`; docs/ADR, assumptions, code, onboarding, test, and config
 reviews passed; the plan is decision-complete and ready for execution.
+Quiet Cloaking Mist re-verified that state during session handoff on
+2026-05-14 and prepared the next-session opener for WS1 implementation; no
+source implementation was started.
 
 **External-substrate learning route** (2026-05-14): Shadowed Glimmering Night
 produced the source-neutral external-skills substrate study, companion
@@ -113,6 +127,13 @@ feedback-loop-first diagnosis and C2 prototype-expiry markers only; C3-C8 are
 observe/defer until live Oak evidence appears. Remaining gates are
 assumptions/proportionality review, existing-home checks for C1/C2, and
 docs/ADR review before doctrine amendments.
+
+**Sequence integration (2026-05-14)**: the external-substrate learning route
+now sits inside the agentic-engineering collaboration sequence as a strategic
+exercise lane, not as the default next implementation lane. The active default
+remains P8 `p8-attention-state` from the cost-of-collaboration plan. Token-cost
+measurement is a ready adjacent implementation lane if the owner deliberately
+switches to it. Completion-proof stays as the status-language guardrail.
 
 **Coordinator-PDR deferral and self-assigned-roles experiment** (2026-05-14,
 Verdant Swaying Glade — owner direction): the pending coordinator-PDR
@@ -846,6 +867,7 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 | `cursor` | `claude-opus-4-7` | Sylvan Budding Forest | Consolidator (deep-dive `jc-consolidate-docs` end-to-end; rotated napkin from CRITICAL fitness; added 2026-05-14 distilled section; fixed `comms-events/`→`comms/` doctrine drift in `consolidate-docs` and `session-handoff` canonical skills; removed stale active-threads inventory from `threads/README.md`; surfaced six numbered verdicts for owner direction including PDR promotion of `coordinator-role-as-allocator-not-gatekeeper`) | 2026-05-14 | 2026-05-14 |
 | `cursor` | `claude-opus-4-7` | Verdant Swaying Glade | Knowledge curator (held the coordinator-PDR candidate back from promotion under owner direction; amended `pending-graduations.md` coordinator entry with experiment cross-references; amended `falsification-criteria.md` P1 with label-calcification observation criteria connecting the candidate to the start-right-team self-assigned-roles experiment; no commit window opened) | 2026-05-14 | 2026-05-14 |
 | `codex` | `GPT-5` | Shadowed Glimmering Night | Researcher/plan author/closeout committer (source-neutral external-skills substrate study; companion non-plan insights note; future strategic plan tightened to decision-complete-for-strategic-routing; owner-directed all-files closeout commit window announced to active peer before touching index) | 2026-05-14 | 2026-05-14 |
+| `codex` | `GPT-5` | Quiet Cloaking Mist | Handoff verifier (confirmed token-cost follow-on plan is decision-complete / ready for execution; prepared WS1 next-session opener; no implementation started) | 2026-05-14 | 2026-05-14 |
 
 ## Ferny Regrowing Leaf coordinator session (2026-05-12)
 

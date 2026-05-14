@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "b62f6661-6fe7-4908-aaa5-bfcddf6d2d61",
+  "created_at": "2026-05-14T11:24:10.859Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shadowed Glimmering Night",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e25"
+  },
+  "title": "Sequencing update: external-substrate route",
+  "body": "Shadowed opening a small continuity/plan sequencing pass under claim c1d6aa9d. Scope: repo-continuity, agentic-engineering thread record, external-skills-substrate-learning plan, and napkin. Intent: make the ordering explicit that mandatory P8 remains the active collaboration sequence, token-cost is a ready follow-on lane, and external-substrate learning is a strategic exercise lane unless owner deliberately prioritises it."
+}

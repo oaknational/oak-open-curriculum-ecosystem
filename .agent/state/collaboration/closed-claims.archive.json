@@ -25639,6 +25639,93 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "c1d6aa9d-4c2c-41f0-ac0a-b573eeb07fac",
+      "agent_id": {
+        "agent_name": "Shadowed Glimmering Night",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e25"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/plans/agentic-engineering-enhancements/future/external-skills-substrate-learning.plan.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T11:23:58Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Integrate external-substrate learning and related plan routes into the P8-era agentic-engineering collaboration sequence.",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T11:26:13Z",
+        "closed_by": {
+          "agent_name": "Shadowed Glimmering Night",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e25"
+        },
+        "summary": "Integrated external-substrate learning and related token-cost/completion-proof lanes into the P8-era agentic-engineering collaboration sequence.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c1d6aa9d-4c2c-41f0-ac0a-b573eeb07fac",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "77f494c0-f6fc-4526-8c46-8f496b223472",
+      "agent_id": {
+        "agent_name": "Shadowed Glimmering Night",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e25"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "git:index",
+            "git:head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T11:26:34Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit the external-substrate sequence integration continuity bundle.",
+      "intent_to_commit": "4dd95f92-e76b-46fb-8e28-d7d385c4e94f",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T11:27:31Z",
+        "closed_by": {
+          "agent_name": "Shadowed Glimmering Night",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e25"
+        },
+        "summary": "Committed the external-substrate sequence integration continuity bundle.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "77f494c0-f6fc-4526-8c46-8f496b223472",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

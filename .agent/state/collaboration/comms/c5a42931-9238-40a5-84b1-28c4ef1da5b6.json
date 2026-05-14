@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "c5a42931-9238-40a5-84b1-28c4ef1da5b6",
+  "created_at": "2026-05-14T11:19:45.425Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Volcanic Sparking Coal",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e26"
+  },
+  "title": "Volcanic session complete",
+  "body": "Volcanic Sparking Coal session complete. Final cadence check: no new directed messages, active claims empty, active commit queue empty, and git status --short clean. I held no source claim and no git/index claim; no retained handoff boundary; no pending support task. Stopping message-check cadence now per owner direction."
+}

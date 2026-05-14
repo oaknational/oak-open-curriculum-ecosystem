@@ -9217,3 +9217,44 @@ Active claims are now empty, commit queue is empty, and the git index is clear o
 ## 2026-05-14T10:45:07.941Z — `Shadowed Glimmering Night` / `codex` / `GPT-5` / `019e25` — Git window opened for closeout bundles
 
 Shadowed opened git:index/head claim 5f010dc7 after active claims, queue, and index were clear. I will commit the current dirty tree in pathspec-explicit logical groups: context-cost implementation, token-measurement routing, doctrine/skill amendments, external-substrate docs, and collaboration-state/handoff residue. I will close the claim after the window succeeds or if a blocker appears.
+
+---
+
+## 2026-05-14T11:19:45.425Z — `Volcanic Sparking Coal` / `codex` / `GPT-5` / `019e26` — Volcanic session complete
+
+Volcanic Sparking Coal session complete. Final cadence check: no new directed messages, active claims empty, active commit queue empty, and git status --short clean. I held no source claim and no git/index claim; no retained handoff boundary; no pending support task. Stopping message-check cadence now per owner direction.
+
+---
+
+## 2026-05-14T11:19:51.715Z — `Eclipsed Glimmering Veil` / `codex` / `GPT-5` / `019e26` — Eclipsed session complete: support and start-right-team amendments
+
+Team member closeout:
+- Boundary owned: Eclipsed Glimmering Veil support posture plus owner-requested amendments to .agent/skills/start-right-team/SKILL-CANONICAL.md.
+- Outcome: Added closeout requirements for session-complete announcements, default claim relinquishment, retained-claim handoff reasons, and pickup notification before a follow-on agent acts on retained handoff state. Preserved the existing 120-second cadence amendment. Also completed Quiet Cloaking Mist requested read-only context-cost residue sanity check and reported no blockers.
+- Evidence: skill file validation passed with git diff --check and markdownlint; context-cost read-only review evidence reported to Quiet included focused ESLint, full @oaknational/agent-tools lint, @oaknational/agent-tools type-check, focused Vitest for cli.integration/per-file.unit, markdownlint on touched docs, and git diff --check on listed files.
+- Claims / queue / git state: no active claims retained by Eclipsed; claims 6519a793 and 9e73a1b2 closed; no git/index claim opened; active commit queue empty; cached index empty at closeout check.
+- Session complete announcement: Eclipsed Glimmering Veil session is complete.
+- Retained claims, if any, and handoff reason: none.
+- Pickup notification required for follow-on agent: already encoded in start-right-team closeout contract; no retained Eclipsed boundary to pick up.
+- Surprise or changed understanding: owner clarified retained handoff claims need a matching pickup-notification requirement; captured directly in the canonical skill.
+- Blockers or risks: none from this session. The working tree remains busy with existing uncommitted peer/session outputs outside my ownership.
+- Handoff needed: no Eclipsed handoff needed; stop after this closeout note.
+
+---
+
+## 2026-05-14T11:20:31.400Z — `Luminous Glimmering Eclipse` / `codex` / `GPT-5` / `019e26` — Luminous session complete
+
+Team member closeout:
+- Boundary owned: Luminous Glimmering Eclipse read-only standby support plus the owner-requested 120-second message/progress cadence amendment to .agent/skills/start-right-team/SKILL-CANONICAL.md.
+- Outcome: The skill amendment landed earlier with git diff --check and markdownlint passing; cadence then ran in read-only standby. No isolated task was assigned to Luminous after cadence began.
+- Evidence: final checks found no directed messages for Luminous, no active claims, no active commit queue, no staged files, and no Luminous-owned work remaining. Late peer closeout comms from Volcanic and Eclipsed were read and did not assign work to Luminous.
+- Claims / queue / git state: no retained Luminous claims; no git/index claim; active claims and active queue were empty during final checks.
+- Session complete announcement: Luminous Glimmering Eclipse session is complete.
+- Retained claims, if any, and handoff reason: none.
+- Handoff needed: none; stopping per owner direction.
+
+---
+
+## 2026-05-14T11:24:10.859Z — `Shadowed Glimmering Night` / `codex` / `GPT-5` / `019e25` — Sequencing update: external-substrate route
+
+Shadowed opening a small continuity/plan sequencing pass under claim c1d6aa9d. Scope: repo-continuity, agentic-engineering thread record, external-skills-substrate-learning plan, and napkin. Intent: make the ordering explicit that mandatory P8 remains the active collaboration sequence, token-cost is a ready follow-on lane, and external-substrate learning is a strategic exercise lane unless owner deliberately prioritises it.

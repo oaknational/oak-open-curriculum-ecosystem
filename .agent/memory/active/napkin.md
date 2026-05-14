@@ -27,6 +27,28 @@ lives in the archived napkin.
 [archive-pass]: archive/napkin-2026-05-14.md
 [previous-pass]: archive/napkin-2026-05-13.md
 
+## 2026-05-14 — Shadowed Glimmering Night sequence integration / codex / GPT-5 / `019e25`
+
+### Sequencing correction — external-substrate route belongs around P8
+
+- **Expected**: after the external-substrate learning plan and token-cost
+  follow-on plan landed, the continuity surfaces should make their ordering
+  relative to active P8 obvious.
+- **Actual**: late handoff updates added a token-cost WS1 route and an
+  external-substrate exercise route near the top of the thread record, but the
+  combined ordering could read as competing next steps even though the repo is
+  still part-way through mandatory P8.
+- **Why expectation failed**: the closeout treated each lane accurately in
+  isolation, but did not name the sequence that relates them: active default,
+  ready adjacent implementation, strategic exercise, and status-language
+  guardrail.
+- **Behaviour change**: when multiple agentic-engineering plans become ready
+  during a P8-era closeout, record a sequence block rather than independent
+  "if opened" bullets. The current sequence is: P8 `p8-attention-state` by
+  default; token-cost WS1 only by deliberate owner switch; external-substrate
+  candidate-register/C1-C2 only as an owner-directed strategic exercise;
+  completion-proof as guardrail for status language.
+
 ## 2026-05-14 — Sylvan Budding Forest / cursor / claude-opus-4-7 / `f8c50f`
 
 ### Consolidation pass disposition
