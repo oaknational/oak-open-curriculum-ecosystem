@@ -383,18 +383,13 @@ consolidation.
 
 ### Curation And Doctrine-Holding
 
-- **Lettered-section edits must re-read the intro count.** Adding a new
-  `a/b/c/d` child without re-reading the parent sentence lets "three
-  rules" drift into a four-rule section.
-- **Growth-axis metadata is live doctrine.** When a graduation lands in
-  a directive, audit the file's `split_strategy` against the actual
-  growth axis just introduced.
+- (graduated 2026-05-14 — see Graduations Log entry under
+  "Riverine Swimming Hull Batch C")
 
 ### Coordination And Commit Discipline
 
-- **Shell loops over multiline command output are unsafe in deletion
-  paths.** Prefer `while IFS= read -r` over `for x in $(...)`, then
-  verify after the action.
+- (graduated 2026-05-14 — see Graduations Log entry under
+  "Riverine Swimming Hull Batch C")
 
 ### Planning Arithmetic And Disposition
 
@@ -516,3 +511,27 @@ disposition-ledger section in the `jc-plan` skill body.
 [wf-runner]: ../../../docs/engineering/workflow.md#use-the-test-runner-directly-when-script-forwarding-drifts
 [tdd-iodebt]: ../../../docs/engineering/testing-tdd-recipes.md#adding-to-existing-io-debt-in-a-unit-test-file
 [rba]: ../../rules/read-before-asking.md
+
+---
+
+## Graduations Log — 2026-05-14 Riverine Swimming Hull Batch C
+
+Three curation entries from the 2026-05-10 Sylvan Fruiting Glade rotation
+graduated to permanent homes per the graduation-triage-disposition
+2026-05-14 plan's Batch C. All three were stable since 2026-05-10 (4 days)
+with no contradicting evidence; all are minor curation/hygiene cures
+whose right home is the workflow gotchas section in the engineering
+workflow document.
+
+**Newly graduated (3 substance moves)**:
+
+- *Lettered-section edits must re-read the parent count*
+  → [`docs/engineering/workflow.md` § 12 Workflow Gotchas — Lettered-Section Edits Must Re-Read The Parent Count][wf-lettered]
+- *Growth-axis metadata is live doctrine*
+  → [`docs/engineering/workflow.md` § 12 Workflow Gotchas — Growth-Axis Metadata Is Live Doctrine][wf-growth]
+- *Shell loops over multiline command output are unsafe in deletion paths*
+  → [`docs/engineering/workflow.md` § 12 Workflow Gotchas — Shell Loops Over Multi-line Command Output Are Unsafe In Deletion Paths][wf-shell]
+
+[wf-lettered]: ../../../docs/engineering/workflow.md#lettered-section-edits-must-re-read-the-parent-count
+[wf-growth]: ../../../docs/engineering/workflow.md#growth-axis-metadata-is-live-doctrine
+[wf-shell]: ../../../docs/engineering/workflow.md#shell-loops-over-multi-line-command-output-are-unsafe-in-deletion-paths

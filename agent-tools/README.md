@@ -86,6 +86,40 @@ pnpm agent-tools context-cost --glob '.agent/rules/*.md'
 pnpm agent-tools --log-json agent-identity --seed example-session-id-001
 ```
 
+## CLI Norms
+
+Every agent-tools CLI command — top-level `agent-tools`, every topic
+subcommand (`agent-identity`, `collaboration-state`, `commit-queue`,
+`branch-touched-files`, `context-cost`, `claude-agent-ops`, etc.), and
+every action within those topics — MUST satisfy the following help
+contract. This is a hard requirement.
+
+- **`--help` accepts no value** and prints the full usage block for the
+  command at hand: command name, all required flags marked clearly
+  (asterisk, `REQUIRED` tag, or grouping header), all optional flags
+  with defaults, expected value formats (uuid, ISO-8601, glob, enum with
+  allowed values), and at least one example invocation.
+- **On invalid flags, missing required flags, or unsupported enum values,
+  print the error line AND the same full help block, then exit non-zero.**
+  A single-line error response (`missing required option --xyz`;
+  `unsupported area kind: foo`; `Exit status 2` with no detail) is
+  insufficient.
+- **Enum-shaped flags (`--area-kind`, `--platform`, `--phase`, similar)
+  must list allowed values on validation failure**, not just say
+  `unsupported`. The error message names the offered value, the allowed
+  set, and the flag.
+- **`--help` is wired at every subcommand depth**, not just at the top
+  level: `pnpm agent-tools collaboration-state claims open --help` MUST
+  print the `claims open` usage block, not the `collaboration-state`
+  overview.
+
+The norm exists because source-grep is an unreliable fallback under
+in-flight refactors (see [`use-built-agent-tools-cli.md`](../.agent/rules/use-built-agent-tools-cli.md)):
+the source structure can change between agent invocations, so the CLI
+help text must be the canonical discovery surface. Owner direction
+2026-05-05 after the 7-agent coordination session. Source: Claude
+per-user memory `feedback_agent_tool_help_on_invalid_flags`.
+
 ### Human collaboration TUI
 
 The collaboration TUI is a human observer surface about agent collaboration,

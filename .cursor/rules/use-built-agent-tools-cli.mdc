@@ -1,0 +1,6 @@
+---
+description: Invoke agent-tools CLIs only via the built dist/ artefact, never via per-invocation source rebuilds.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/use-built-agent-tools-cli.md`.

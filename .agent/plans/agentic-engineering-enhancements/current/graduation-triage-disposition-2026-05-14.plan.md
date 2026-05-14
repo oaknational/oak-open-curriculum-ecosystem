@@ -156,9 +156,9 @@ owner reviewing the diff. No new rule files created in this batch.
 | Source memory entry | Target surface |
 |---|---|
 | "Inter-agent comms is a first-class option" (`feedback_inter_agent_comms_first_class`) | [`.agent/rules/follow-agent-collaboration-practice.md`](../../../rules/follow-agent-collaboration-practice.md) — amend with the parallel-async/comms-event-default-before-owner-escalation framing |
-| "Identity routing: (name, prefix) as pair" (`feedback_identity_routing_uses_name_and_prefix_pair`) | [`.agent/rules/register-identity-on-thread-join.md`](../../../rules/register-identity-on-thread-join.md) OR PDR-027 Notes section — verify which is the cleaner home at execution time |
-| "Use only built agent-tools, never source" (`feedback_use_built_agent_tools_only`) | [`.agent/rules/use-agent-comms-log.md`](../../../rules/use-agent-comms-log.md) is the closest existing surface; if poor fit, create new minimal rule (still narrow scope, single-paragraph) |
-| "Agent-tool CLIs must print full help on invalid flags" (`feedback_agent_tool_help_on_invalid_flags`) | New entry under [`agent-tools/docs/agent-support-tools-specification.md`](../../../../agent-tools/docs/agent-support-tools-specification.md) (tooling spec, not doctrinal rule) — verify at execution time |
+| "Identity routing: (name, prefix) as pair" (`feedback_identity_routing_uses_name_and_prefix_pair`) | [`.agent/rules/register-identity-on-thread-join.md`](../../../rules/register-identity-on-thread-join.md) — single-paragraph amendment on (name, prefix) pair routing |
+| "Use only built agent-tools, never source" (`feedback_use_built_agent_tools_only`) | NEW minimal rule `.agent/rules/use-built-agent-tools-cli.md` — use-agent-comms-log.md is poor fit (it is scoped to comms-log usage, not agent-tools execution discipline) |
+| "Agent-tool CLIs must print full help on invalid flags" (`feedback_agent_tool_help_on_invalid_flags`) | [`agent-tools/README.md`](../../../../agent-tools/README.md) §"CLI Norms" — `agent-support-tools-specification.md` is scoped to MCP agent-support tools, not local agent-tools CLIs |
 
 For each: the cited memory file in
 `~/.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/`
@@ -294,13 +294,10 @@ Cross-platform scan turned up many candidates already homed:
 
 **Blocking**:
 
-- The WS1 token-measurement bundle currently uncommitted in the working
-  tree (`agent-tools/scripts/validate-practice-fitness.*`,
-  `agent-tools/src/practice-fitness/**`, plus repo-continuity / thread
-  record / plan-file edits from the WS1 team) must either land or be
-  explicitly held non-overlapping with these graduation amendments. The
-  singleton-lane plan flags this same prerequisite. Owner-coordinated
-  resolution required before Batch A/B/C executes.
+- ~~WS1 token-measurement bundle must land first~~ — **SATISFIED 2026-05-14
+  at commit `7a050c2a`** ("chore(agent): land 2026-05-14 multi-agent session
+  residue and graduation-triage plan"). Historical note retained; do not
+  re-open owner coordination on this gate.
 - Live grounding at next-session open: `.claims` (not `.active_claims`)
   probe; commit-queue scan; staged-files scan; comms inbox sweep;
   active plans scan.

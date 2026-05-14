@@ -89,6 +89,7 @@ index in the same commit.
 - `.agent/rules/test-immediate-fails.md`
 - `.agent/rules/unknown-is-type-destruction.md`
 - `.agent/rules/use-agent-comms-log.md`
+- `.agent/rules/use-built-agent-tools-cli.md`
 - `.agent/rules/use-result-pattern.md`
 - `.agent/rules/validate-full-target-estate.md`
 - `.agent/rules/validators-must-recompute-not-just-record.md`

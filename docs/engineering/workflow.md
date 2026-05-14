@@ -214,6 +214,37 @@ typecheck (`pnpm --dir <package> exec tsc --noEmit -p <project>`) and
 lint (`pnpm --dir <package> exec eslint <file>`) when their wrapping
 scripts misbehave under focused inspection.
 
+### Lettered-Section Edits Must Re-Read The Parent Count
+
+When adding a new `(a)/(b)/(c)/(d)` child to an enumerated section,
+re-read the parent sentence — the count is part of the section's
+contract. Adding a fourth child without updating "three rules" in the
+intro silently turns the intro into a lie. The same applies to
+section-count summaries in directive overviews, README tables of
+contents, and ADR/PDR-internal enumerations: the count and the children
+are co-edited, never independent.
+
+### Growth-Axis Metadata Is Live Doctrine
+
+When a graduation lands a new entry in a long directive, audit the
+file's `split_strategy` frontmatter (or equivalent growth-axis metadata)
+against the axis the graduation just introduced. The growth axis is the
+basis for the next split decision; if the new entry establishes a new
+axis (a new concern, a new lifecycle stage, a new failure mode), the
+split-strategy line must record that before the file grows further on
+the wrong axis.
+
+### Shell Loops Over Multi-line Command Output Are Unsafe In Deletion Paths
+
+In deletion or mutation paths, prefer
+`while IFS= read -r line; do ... done < <(cmd)` over
+`for x in $(cmd)`. Word-splitting in the `for` form silently treats
+spaces in filenames or paths as separators, which loses entire lines or
+splits one path across two iterations. After any bulk delete or move,
+verify the result with a second command (a count, a re-grep, a `git
+status` scan) — the shell exit code on its own does not prove the loop
+operated on the intended set.
+
 ## What Does Good Look Like?
 
 For individual contributors:
