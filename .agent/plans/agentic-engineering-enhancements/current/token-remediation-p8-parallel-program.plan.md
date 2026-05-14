@@ -12,7 +12,7 @@ overview: >
 todos:
   - id: step-1-token-work
     content: "Step 1 — finish token-related work. Owning plan: fitness-token-measurements-and-frontmatter-mandation.plan.md. Inclusive boundary: WS2 (`ws2-token-frontmatter`) lands; remaining workstreams (frontmatter sweep, manifest coverage) deferred into step 4 parallel-pair if owner directs, otherwise closed at WS2 boundary."
-    status: in_progress
+    status: completed
   - id: step-2-singleton-lane-remediation
     content: "Step 2 — run the singleton-lane remediation. Owning plan: start-right-team-singleton-lane-remediation.plan.md. Inclusive boundary: plan promotes to DECISION-COMPLETE then WS0–WS7 execute and plan archives."
     status: pending
@@ -31,8 +31,8 @@ isProject: true
 # Token / Remediation / P8 / Parallel Program 2026-05-14
 
 **Last Updated**: 2026-05-14
-**Status**: SEQUENCE-LIVE — Step 1 in progress (WS1 of token plan
-landed at `7a050c2a`; WS2 not yet started).
+**Status**: SEQUENCE-LIVE — Step 1 closed at WS2 boundary; Step 2 opens
+next session (WS2 of token plan landed at `72d31ca8`).
 **Collection**: `agentic-engineering-enhancements/current` (program
 spans two threads — see §Threads Touched).
 **Threads Touched**:
@@ -47,24 +47,30 @@ spans two threads — see §Threads Touched).
 
 (updated by every session that touches the program)
 
-- **Current step**: Step 1 — finish token-related work.
-- **Step 1 state**: WS1 token measurement landed at `7a050c2a` in the
-  prior multi-agent window. WS2 (`ws2-token-frontmatter`) has not
-  started. The controlling plan
-  [`fitness-token-measurements-and-frontmatter-mandation.plan.md`](fitness-token-measurements-and-frontmatter-mandation.plan.md)
-  carries the WS2 workshape.
+- **Current step**: Step 1 — finish token-related work — **CLOSED at WS2
+  boundary**. Step 2 — singleton-lane remediation — opens next session.
+- **This session advanced Step 1**: WS2 (`ws2-token-frontmatter`)
+  acceptance proven at commit `72d31ca8`. Token-zone classification,
+  `overallZone` folding, target-only configuration-finding semantics,
+  and the ADR-144 in-place amendment all landed in one atomic bundle
+  with three reviewer APPROVEs (test-expert, code-expert,
+  docs-adr-expert). Step 1 is now closed at the program's inclusive
+  boundary; WS3+ of the controlling token plan (convention docs,
+  manifest detection, frontmatter sweep) deferred per program scope.
 - **Next safe step**: open the next session against the
   `agentic-engineering-enhancements` thread, ground via
-  `jc-start-right-quick` (or `jc-start-right-thorough` if WS2
-  surfaces require cross-workspace coordination), then begin WS2.
-- **Last sequence-touching commits**: `c6008dee` (graduation-triage
-  Batches A/B/C); `4ee88df3` (metacog correction); `22d1980d` /
-  `54425b6d` / `7821636b` / `0b585435` (D1–D5 + PDR-060); `2714d909`
-  (session handoff). Sequence advancement during this session: **0
-  steps** — the graduation-triage cycle was orthogonal closeout work,
-  not program-step work.
-- **Step age** (sessions since last advance): 0 — program just
-  authored.
+  `jc-start-right-quick`, and begin Step 2 — the singleton-lane
+  remediation plan at
+  [`start-right-team-singleton-lane-remediation.plan.md`](../../agent-tooling/current/start-right-team-singleton-lane-remediation.plan.md).
+  The plan is **not decision-complete**; first safe sub-step is
+  owner/reviewer review then WS0 baseline disposition.
+- **Last sequence-touching commits**: `72d31ca8` (WS2 token frontmatter
+  zone classification — closes Step 1). Prior orthogonal work:
+  `c6008dee` (graduation-triage Batches A/B/C); `4ee88df3` (metacog
+  correction); `22d1980d` / `54425b6d` / `7821636b` / `0b585435`
+  (D1–D5 plus PDR-060); `2714d909` (session handoff).
+- **Step age** (sessions since last advance): 0 — Step 1 just closed,
+  Step 2 not yet opened.
 
 ## Why This Artefact Exists
 
