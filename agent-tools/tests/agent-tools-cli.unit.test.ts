@@ -90,6 +90,7 @@ describe('agent-tools unified CLI', () => {
         '  collaboration-state',
         '  commit-queue',
         '  branch-touched-files',
+        '  context-cost',
         '  codex-exec',
         '',
         'Error: unknown topic: unknown-topic',

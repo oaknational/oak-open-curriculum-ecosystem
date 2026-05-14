@@ -113,6 +113,9 @@ importers:
       react:
         specifier: ^19.2.6
         version: 19.2.6
+      tinyglobby:
+        specifier: ^0.2.0
+        version: 0.2.16
       yaml:
         specifier: ^2.9.0
         version: 2.9.0

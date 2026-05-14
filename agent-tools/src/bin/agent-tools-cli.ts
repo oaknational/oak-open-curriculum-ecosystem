@@ -5,6 +5,7 @@ import {
   runBranchTouchedFilesTopic,
   runCodexExecTopic,
   runCommitQueueTopic,
+  runContextCostTopic,
 } from './agent-tools-cli-topics.js';
 import type {
   AgentToolsCliInput,
@@ -130,6 +131,10 @@ async function dispatchTopic(input: {
     return runBranchTouchedFilesTopic(input.input, input.parsed.topicArgs);
   }
 
+  if (input.parsed.topic === 'context-cost') {
+    return runContextCostTopic(input.input, input.parsed.topicArgs);
+  }
+
   if (input.parsed.topic === 'codex-exec') {
     return runCodexExecTopic(input.input, input.parsed.topicArgs);
   }
@@ -180,6 +185,7 @@ function usage(): string {
     '  collaboration-state',
     '  commit-queue',
     '  branch-touched-files',
+    '  context-cost',
     '  codex-exec',
   ].join('\n');
 }

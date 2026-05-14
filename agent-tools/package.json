@@ -18,6 +18,7 @@
     "collaboration-state": "cd .. && node agent-tools/dist/src/bin/agent-tools.js collaboration-state",
     "practice-substrate": "pnpm -s build && cd .. && node agent-tools/dist/src/bin/practice-substrate.js",
     "branch-touched-files": "cd .. && node agent-tools/dist/src/bin/agent-tools.js branch-touched-files",
+    "context-cost": "cd .. && node agent-tools/dist/src/bin/agent-tools.js context-cost",
     "codex-session-identity-hook": "pnpm -s build && node dist/src/bin/codex-session-identity-hook.js",
     "claude-agent-ops": "tsx src/bin/claude-agent-ops.ts",
     "commit-queue": "cd .. && node agent-tools/dist/src/bin/agent-tools.js commit-queue",
@@ -53,6 +54,7 @@
     "ajv": "^8.20.0",
     "ink": "^7.0.2",
     "react": "^19.2.6",
+    "tinyglobby": "^0.2.0",
     "yaml": "^2.9.0",
     "zod": "^4.4.3"
   }

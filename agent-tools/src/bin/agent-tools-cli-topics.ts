@@ -3,6 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { runBranchTouchedFilesCli } from '../branch-touched-files/cli.js';
 import { runCodexExecCli } from '../codex-exec/cli.js';
 import { parseCommitQueueArgs, runCommitQueueCli } from '../commit-queue/index.js';
+import { runContextCostCli } from '../context-cost/cli.js';
 import type { AgentToolsCliInput, AgentToolsCliResult } from './agent-tools-cli-types.js';
 
 export class OutputBuffer {
@@ -56,6 +57,20 @@ export function runBranchTouchedFilesTopic(
     stderr,
   });
   return { exitCode, stdout: stdout.text(), stderr: stderr.text() };
+}
+
+export async function runContextCostTopic(
+  input: AgentToolsCliInput,
+  args: readonly string[],
+): Promise<AgentToolsCliResult> {
+  const stdout = new OutputBuffer();
+  const stderr = new OutputBuffer();
+  return runContextCostCli({
+    argv: args,
+    cwd: input.cwd,
+    stdout,
+    stderr,
+  });
 }
 
 export async function runCodexExecTopic(
