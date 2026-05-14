@@ -415,13 +415,53 @@ lives in the archived napkin.
   collision warning that explained the WS1 team overlap).
 - **Behaviour change**: during consolidation, **always** check for the
   presence of `.agent/state/collaboration/comms-events/` alongside `comms/`.
-  If it exists, treat its contents as substance to migrate to `comms/` and
-  re-render, then remove the directory. Add to the Step 3a sweep surface
-  list until the underlying CLI drift is cured.
-- **Root cause hypothesis**: agent-tools CLI version skew — Feathered's
-  session may have invoked a cached build of agent-tools predating commit
-  `30c8ad15`, OR a default-path constant lingers in some script. Companion
-  to `feedback_use_built_agent_tools_only` (the dist-only invariant) — the
-  diagnostic is the symmetric failure shape: a stale dist resolves the old
-  path. Captured in the rogue dir's removal commit; root cause is owner /
-  agent-tooling backlog.
+  If it exists, treat its contents as possible fresh substance to preserve in
+  the canonical surface or analysis record, then remove the directory. Do not
+  turn this into a standing migration lane.
+- **Superseded root-cause hypothesis**: the first hypothesis was agent-tools
+  CLI version skew or a lingering default-path constant. Source and session-log
+  checks sharpened that: the current source default is `comms/`, and the
+  observed session explicitly supplied the retired path through an agent-facing
+  option. The deeper fault is optionality in the comms writer interface plus
+  stale live docs, not merely a stale build.
+
+### Correction: the path should not be agent-overridable
+
+- **Expected**: the comms CLI owns the canonical collaboration path and agents
+  cannot select an alternate event root during normal operation.
+- **Actual**: the live CLI command shape still exposes a `--comms-dir` option,
+  and Feathered's session explicitly supplied the retired
+  `.agent/state/collaboration/comms-events/` path. Current source defaults are
+  already `comms/`, so the sharper issue is not merely stale default-path
+  code. The agent-facing interface allowed the stale path to be reintroduced.
+- **Owner correction**: do not frame the fix as "refuse incorrect paths" or as
+  a migration command. A refused path is still an option, and a migration lane
+  preserves an outdated concept when there is no legitimate old data to carry.
+  This conflicts with `.agent/directives/principles.md`: strict and complete,
+  no invented optionality, no compatibility layers, replace old approaches
+  everywhere.
+- **Behaviour change**: update or delete stale docs and prompts that describe
+  `comms-events/` as live; remove normal agent-facing comms path overrides;
+  keep testability through lower-level injection/fixtures rather than a
+  production CLI knob; treat future `comms-events/` mentions as historical
+  evidence only or deletion candidates.
+
+## 2026-05-14 — Additional WS1 self-organisation learning / codex / GPT-5 / `019e26`
+
+### Presence and ownership were collapsed into one act
+
+- **Expected**: `start-right-team` would let simultaneous agents establish
+  presence, then infer a temporary route before source work.
+- **Actual**: the team-start template asks for "Claimed paths", and several
+  agents opened WS1 source claims before or at the same time as their
+  team-start reports. The template quietly made claim-open feel like part of
+  presence, so the rendezvous point became the herd event.
+- **Additional evidence**: current `claims open` appends a claim after identity
+  routing checks but does not group overlapping path claims or emit a
+  `team_routing_required` signal. `distilled.md` already says passive guidance
+  loses to artefact gravity; this experiment is another instance.
+- **Behaviour change**: for owner-launched identical prompts on singleton
+  lanes, report intended boundary before opening a source claim, or use a
+  temporary team-routing lease. Amend the template from `Claimed paths` to
+  `Intended boundary` plus `Claim status`. Teach tooling to surface overlap
+  groups rather than asking agents to infer them from raw claim state.

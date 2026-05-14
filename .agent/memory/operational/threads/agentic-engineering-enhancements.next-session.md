@@ -7,12 +7,14 @@
   `$jc-start-right-team continue agentic-engineering-enhancements`.
 - Controlling plan for next session:
   [`fitness-token-measurements-and-frontmatter-mandation.plan.md`](../../plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md).
-- Owner-directed next safe step: complete the token-cost work end-to-end,
-  starting at WS1 (`ws1-token-measurement`) and proceeding through WS6 only as
-  the plan's dependencies and acceptance checks are satisfied.
+- Owner-directed next safe step: first land the validated-but-uncommitted WS1
+  token-measurement bundle with exact pathspec coordination, then continue to
+  WS2 (`ws2-token-frontmatter`) only after that commit boundary is clean.
 - Agentic-engineering collaboration sequence for the next session:
-  1. **Owner-selected implementation lane** — complete the token-cost plan.
-     Do not skip to frontmatter fields or manifest coverage before WS1 lands.
+  1. **Owner-selected implementation lane** — WS1 token measurement is
+     implemented and validation-green in the working tree, but not committed in
+     this handoff. Commit WS1 first, then continue the token-cost plan in order.
+     Do not skip to manifest coverage before token-frontmatter semantics land.
   2. **Paused active spine** — P8 remains part-way done, not complete. Resume
      mandatory P8 at `p8-attention-state` after the token-cost lane unless the
      owner gives newer direction.
@@ -26,6 +28,12 @@
      [`completion-claim-proof-pipeline.plan.md`](../../plans/agentic-engineering-enhancements/current/completion-claim-proof-pipeline.plan.md)
      in view when reporting status; it exists because P5/P8 completion was
      previously overstated.
+  5. **Team-remediation planning lane** — the N=7 WS1 self-organisation
+     experiment now has a first-pass remediation plan at
+     [`start-right-team-singleton-lane-remediation.plan.md`](../../plans/agent-tooling/current/start-right-team-singleton-lane-remediation.plan.md).
+     It is **not decision-complete**. Its first safe step is owner/reviewer
+     review, then WS0 baseline disposition; do not let it supersede the
+     token-cost commit boundary unless the owner explicitly reprioritises.
 - Completed prerequisites: P0.QG, P-Foundation, P1, P2, P3, P4, P5 unified
   comms plus DI/no-IO boundary repair.
 - Recent P8 source commits: `2791be3c` operator-value UI and `6e804485`
@@ -112,6 +120,46 @@ reviews passed; the plan is decision-complete and ready for execution.
 Quiet Cloaking Mist re-verified that state during session handoff on
 2026-05-14 and prepared the next-session opener for WS1 implementation; no
 source implementation was started.
+
+**WS1 token measurement implemented and validated, not committed**
+(2026-05-14): the owner-selected WS1 slice of
+[`fitness-token-measurements-and-frontmatter-mandation.plan.md`](../../plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md)
+was implemented in the working tree by overlapping Codex sessions and
+synthesised in coordinated handoff by Floating Lifting Thermal with supporting
+closeout notes from Shaded Shrouding Mask and Breezy Sailing Pier. Current
+source shape: reusable Practice fitness logic under
+`agent-tools/src/practice-fitness/`; `validate-practice-fitness` is a thin
+wrapper; fitness reports render a content-only chars/4 `Tokens:` row; WS2+
+frontmatter fields, convention docs, manifest coverage, and batch frontmatter
+application were not started. Evidence reported green by multiple agents:
+focused `src/practice-fitness` Vitest, `@oaknational/agent-tools` type-check,
+lint, build, and `pnpm practice:fitness:informational`; Foamy also reported
+`git diff --check` green. Positives: the team converged on one coherent
+modular implementation and preserved the content-only versus raw-file
+distinction. Frustrations/blockers: several agents opened duplicate claims on
+the same WS1 files, one consolidation pass missed live claims because it probed
+`.active_claims` instead of `.claims`, stale comms retention cleanup changed
+the shared comms surface during the WS1 window, and a transient peer-staged
+rename made git/index work unsafe until the final staged diff cleared. The
+working tree contains WS1 source plus shared collaboration-state residue. Next
+safe step: re-check claims, commit queue, and index, then commit the exact WS1
+implementation and handoff bundle before starting WS2. The commit owner must
+preserve peer collaboration-state cleanup deliberately rather than absorbing or
+reverting it by accident.
+
+**N=7 self-organisation analysis and remediation plan drafted**
+(2026-05-14): Fronded Foraging Moss analysed the comms log, closed-claims
+archive, napkin, distilled doctrine, live code, stale docs, memory snippets,
+and the rogue comms-path episode from the WS1 token-measurement experiment.
+The findings are captured in
+[`team-self-organisation-experiment-2026-05-14.md`](../../analysis/team-self-organisation-experiment-2026-05-14.md)
+and napkin entries. A first-pass remediation plan was added under
+agent-tooling current plans:
+[`start-right-team-singleton-lane-remediation.plan.md`](../../plans/agent-tooling/current/start-right-team-singleton-lane-remediation.plan.md).
+Verdict: enough evidence to plan remediation, not enough review to mark the
+plan decision-complete. First safe step is WS0 baseline disposition after
+owner/reviewer review. This planning lane does not change the immediate
+token-cost next safe step.
 
 **External-substrate learning route** (2026-05-14): Shadowed Glimmering Night
 produced the source-neutral external-skills substrate study, companion
@@ -865,6 +913,14 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 | `cursor` | `claude-opus-4-7` | Verdant Swaying Glade | Knowledge curator (held the coordinator-PDR candidate back from promotion under owner direction; amended `pending-graduations.md` coordinator entry with experiment cross-references; amended `falsification-criteria.md` P1 with label-calcification observation criteria connecting the candidate to the start-right-team self-assigned-roles experiment; no commit window opened) | 2026-05-14 | 2026-05-14 |
 | `codex` | `GPT-5` | Shadowed Glimmering Night | Researcher/plan author/closeout committer (source-neutral external-skills substrate study; companion non-plan insights note; future strategic plan tightened to decision-complete-for-strategic-routing; owner-directed all-files closeout commit window announced to active peer before touching index) | 2026-05-14 | 2026-05-14 |
 | `codex` | `GPT-5` | Quiet Cloaking Mist | Handoff verifier (confirmed token-cost follow-on plan is decision-complete / ready for execution; prepared WS1 next-session opener; no implementation started) | 2026-05-14 | 2026-05-14 |
+| `codex` | `GPT-5` | Breezy Sailing Pier | Implementer (WS1 token measurement display: move Practice fitness logic under `agent-tools/src/practice-fitness`, add content-only chars/4 token estimate, and keep frontmatter/manifest work out of scope) | 2026-05-14 | 2026-05-14 |
+| `codex` | `GPT-5` | Floating Lifting Thermal | Implementer/handoff synthesiser (WS1 token measurement display implemented and validated; coordinated team handoff captured duplicate-claim friction, stale-comms overlap, green evidence, and uncommitted exact-bundle next step) | 2026-05-14 | 2026-05-14 |
+| `codex` | `GPT-5` | Shaded Shrouding Mask | Implementer (WS1 token measurement display; reported focused Vitest, type-check, lint, build, practice-fitness informational, and plan markdownlint green; no WS2+ work) | 2026-05-14 | 2026-05-14 |
+| `codex` | `GPT-5` | Foamy Fathoming Sail | Source reconciler (resolved overlapping WS1 partial implementations; reported focused Vitest, type-check, lint, build, practice-fitness informational, and git diff check green; no commit) | 2026-05-14 | 2026-05-14 |
+| `codex` | `GPT-5` | Zephyrous Circling Current | Stand-down implementer (opened WS1 claim, then closed it after duplicate ownership became visible and Foamy took source reconciliation) | 2026-05-14 | 2026-05-14 |
+| `codex` | `GPT-5` | Feathered Darting Kite | Handoff synthesiser (closed duplicate WS1 claims after overlap appeared; captured early failure surface; coordinated owner-requested session handoff) | 2026-05-14 | 2026-05-14 |
+| `codex` | `GPT-5` | Fronded Foraging Moss | Stand-down reviewer / analysis plan author (completed grounding, found duplicate WS1 ownership, later analysed the N=7 experiment and drafted the first-pass singleton-lane remediation plan; no source/index edits) | 2026-05-14 | 2026-05-14 |
+| `claude` | `claude-opus-4-7-1m` | Salty Swimming Hull | Consolidator (processed stale comms + abandoned queue residue; migrated rogue `comms-events/` to canonical `comms/`; surfaced `.active_claims` vs `.claims` grounding miss; authored cross-platform graduation-triage disposition plan at `graduation-triage-disposition-2026-05-14.plan.md`) | 2026-05-14 | 2026-05-14 |
 
 ## Ferny Regrowing Leaf coordinator session (2026-05-12)
 
@@ -4589,6 +4645,8 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Zephyrous Circling Current` | `codex` | `GPT-5` | `019e26` | `ws1-token-measurement-implementer; move-reusable-practice-fitness-logic-under-agent-tools-src-practice-fitness-and-render-content-only-chars-over-four-token-counts-without-frontmatter-or-manifest-work` | 2026-05-14 | 2026-05-14 |
+| `Foamy Fathoming Sail` | `codex` | `GPT-5` | `019e26` | `ws1-token-measurement-implementer; moving-reusable-practice-fitness-logic-under-agent-tools-src-practice-fitness-and-rendering-content-only-token-counts` | 2026-05-14 | 2026-05-14 |
 | `Gilded Shimmering Dawn` | `cursor` | `GPT-5.5` | `3869cd` | `owner-directed-sub-coordinator-for-Cursor-helper-work; introduced-to-Wooded-Spreading-Thicket; delegated-brief-e6f3113e-legacy-comms-event-audit-by-directory-to-three-read-only-lower-powered-helpers; synthesized-result-3869cd-cursor-result-1-legacy-comms-audit; captured-Cursor-comms-lesson-fresh-session-plus-simple-linear-parallelisable-plan` | 2026-05-11 | 2026-05-11 |
 | `Flamebright Roasting Magma` | `codex` | `GPT-5` | `019e1a` | `root-script-retirement-and-pnpm-check-profiling-handoff; committed-fabe99c3-through-commit-queue; moved-retained-root-scripts-to-workspaces; added-agent-tools-repo-check-profile-and-markdownlint-staged-surfaces; next-session-owns-deliberately-exhaustive-pnpm-check-analysis` | 2026-05-12 | 2026-05-12 |
 | `Flamebright Sparking Forge` | `codex` | `GPT-5` | `019e1a` | `bounded-repo-continuity-and-pending-graduations-consolidation-drain; archived-historical-continuity-prose; reconciled-live-state-and-due-index; no-staging-window` | 2026-05-12 | 2026-05-12 |

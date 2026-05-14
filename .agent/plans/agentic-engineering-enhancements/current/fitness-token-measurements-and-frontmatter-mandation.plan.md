@@ -12,7 +12,7 @@ todos:
     status: completed
   - id: ws1-token-measurement
     content: "Move reusable Practice fitness logic under agent-tools/src, compute content-only estimated tokens, and render the count in reports."
-    status: pending
+    status: completed
   - id: ws2-token-frontmatter
     content: "Amend ADR-144, then add optional fitness_token_target and fitness_token_limit fields with tested zone classification."
     status: pending
@@ -39,7 +39,7 @@ isProject: false
 # Fitness Token Measurements And Frontmatter Mandation
 
 **Last Updated**: 2026-05-14
-**Status**: 🟢 DECISION-COMPLETE / READY FOR EXECUTION
+**Status**: 🟡 IN EXECUTION — WS1 COMPLETE / WS2 NEXT
 **Scope**: Add token estimates to the existing Practice fitness surface,
 extend fitness frontmatter with optional token thresholds, and make the
 frontmatter convention enforceable for agent guidance files.
@@ -345,6 +345,22 @@ pnpm --filter @oaknational/agent-tools lint
 pnpm --filter @oaknational/agent-tools build
 pnpm practice:fitness:informational
 ```
+
+WS1 closeout evidence (2026-05-14): the coordinated Codex WS1 window moved
+the reusable Practice fitness logic under `agent-tools/src/practice-fitness/`,
+kept `agent-tools/scripts/validate-practice-fitness.ts` as a thin wrapper,
+computed content-only estimated tokens with the chars/4 rule, and rendered a
+`Tokens:` row without token-threshold semantics. Shaded Shrouding Mask,
+Floating Lifting Thermal, Breezy Sailing Pier, and Foamy Fathoming Sail each
+reported the WS1 acceptance set green in shared comms: focused
+`src/practice-fitness` Vitest, `@oaknational/agent-tools` type-check, lint,
+build, and `pnpm practice:fitness:informational`. Foamy also reported
+`git diff --check` green. No WS2+ frontmatter fields, convention docs, or
+manifest coverage were intentionally added. Handoff caveat: the WS1 source is
+validation-green in the working tree but not committed in this handoff, and the
+implementation window included duplicate overlapping claims plus stale-comms
+cleanup overlap. Re-check live claims, queue, index, and dirty tree before
+staging the exact WS1 bundle.
 
 ### WS2 — Token Frontmatter Fields
 
