@@ -1,5 +1,19 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
+## Cross-Thread Program Pointer (2026-05-14)
+
+This thread participates as the **graph-foundations lane (4B)** of the
+[`token-remediation-p8-parallel-program.plan.md`](../../plans/agentic-engineering-enhancements/current/token-remediation-p8-parallel-program.plan.md).
+Owner-stated four-step sequence: token work → singleton-lane remediation
+→ P8 acceptance → **then** this thread's graph foundations run in
+parallel with cost-of-collaboration residual. **Hard constraint**:
+graph-foundations implementation work on this thread does NOT open
+under the program until step 3 (P8) lands. Until then, the work below
+remains the recorded continuation but is **program-paused** as the
+program runs steps 1–3 on `agentic-engineering-enhancements`. The
+owner may direct program reshape; the agent does not reshape from
+inside a session.
+
 **Next anticipated work**: **Implement WS1.5 RDF canonicalisation against the design absorbed inline in `.agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md` §ws1-canon** — three-file `src/canon/{runtime.ts, canonicalize.ts, index.ts}`, hardcoded `RDFC-1.0` + `rejectURDNA2015: true`, cohesive `{ dataset, canonicalNQuads, hash }` return, SHA-256 via `node:crypto`, NQuads.parse output routed through data-factory `literal()` for `direction: ''` default. Owner-stated doctrinal rules apply: no aliases, no fallbacks, fail fast and hard with helpful error, replace old with new. Five tests atomic-landing with product: blank-node determinism, idempotent, type-level satisfies Dataset-shape, malformed-quad fail-path, URDNA2015-rejection proof. **Pre-condition: lockfile must be clean.** At 2026-05-13 close the working tree carries a 43-44-file uncoordinated dirty slice (root packageManager bump `pnpm@10.33.4→@11.1.1`, every workspace `package.json`, `pnpm-workspace.yaml`, `pnpm-lock.yaml`, SDK codegen artefacts) that was never declared through `shared-comms-log.md` or `active-claims.json`. WS1.5 cannot add `rdf-canonize` as direct graph-core dep until that slice resolves; owner action expected to commit/stash/revert it. Sequencing comms event `b9961327` was posted to Mossy Blossoming Canopy with no reply in-session.
 
 Other executable choices remain: WS1.6 vocab-registry implementation (after the prep-note owner decisions are respected), WS2.2 jsonld-compatible ingestion, or WS3.1 graph-project scaffold (live root-file check first). WS1.4

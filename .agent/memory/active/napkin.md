@@ -466,6 +466,51 @@ lives in the archived napkin.
   `Intended boundary` plus `Claim status`. Teach tooling to surface overlap
   groups rather than asking agents to infer them from raw claim state.
 
+## 2026-05-14 — Cross-thread program artefact shape (first observed instance) / claude / claude-opus-4-7-1m / `304dde`
+
+### Multi-session sequences crossing threads have no canonical artefact
+
+- **Expected**: the Practice has a canonical artefact for any
+  recurring shape of work. Threads, plans, repo-continuity, and
+  per-session landing commitment cover continuity per thread,
+  work-shape per plan, live state per repo, and commitment per
+  session respectively.
+- **Actual**: when the owner named a four-step sequence spanning
+  agentic-engineering-enhancements (steps 1–3 plus step 4 lane A)
+  and connecting-oak-resources (step 4 lane B), no existing artefact
+  type fit. Thread records carry per-thread continuity, not
+  cross-thread programs. Plan files carry one workstream lane, not
+  multi-plan sequences. Repo-continuity carries live state, not
+  sequence intent across sessions.
+- **First-instance solution**: landed `token-remediation-p8-parallel-
+  program.plan.md` as a program-plan artefact with anti-decay clauses
+  (advancement rule, owner-redirection clause, evidence threshold for
+  reshape, interrupt log with explicit budget, anti-decay handoff
+  clause, intermediate-value-shipped record). Pointer entries in
+  repo-continuity Next Safe Steps plus both touched thread records'
+  Standing Thread Notes.
+- **Behaviour change** (this session and future): when an owner names
+  a multi-session sequence — especially one crossing threads —
+  propose a program-plan artefact at session-open rather than
+  scattering the sequence intent across thread records. The artefact
+  carries sequence-execution-state; per-step plans carry
+  work-shape-per-step.
+- **Second-instance trigger**: if a *second* multi-session
+  cross-thread program emerges, this artefact-shape doctrine
+  graduates to a PDR (Practice-portable) or a rule (always-applied
+  behavioural cure when an agent encounters such a sequence). Until
+  then, the substance is held here. Watch for: owner naming a
+  sequence with ≥3 steps spanning multiple plans; owner naming a
+  sequence that explicitly crosses thread boundaries; owner using
+  language like "then", "after that", "then back to" linking work
+  on different threads.
+- **Decay surface to monitor**: the program plan's §Current Snapshot
+  is the single-point-of-failure. If sessions touching the program
+  do not update §Current Snapshot, the program plan becomes
+  inventory rather than sequence-execution-state. The Anti-Decay
+  Handoff Clause is the structural cure but is itself
+  doctrine-dependent — a session that ignores the clause defeats it.
+
 ## 2026-05-14 — Shape-selection-by-vehicle-weight is a recurring failure / claude / claude-opus-4-7-1m / `304dde`
 
 ### Rules, ADRs, and PDRs are not interchangeable vehicles

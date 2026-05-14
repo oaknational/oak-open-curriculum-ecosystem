@@ -57,6 +57,16 @@
 
 ## Standing Thread Notes
 
+**Active cross-thread program** (2026-05-14, sequence-live):
+[`token-remediation-p8-parallel-program.plan.md`](../../plans/agentic-engineering-enhancements/current/token-remediation-p8-parallel-program.plan.md)
+is the four-step program covering token work → singleton-lane
+remediation → P8 acceptance → cost-of-collaboration + graph-foundations
+parallel. Steps 1, 2, 3, and step-4 cost-of-collab lane live on this
+thread; step-4 graph lane lives on `connecting-oak-resources`. Defer to
+the program plan for sequence routing; update its §Current Snapshot
+per its Anti-Decay Handoff Clause whenever a session touches the
+program.
+
 **Conservation-first consolidation**: `napkin.md`, `distilled.md`, and
 `pending-graduations.md` stages are complete as of 2026-05-12. The next
 bounded consolidation target is `practice-bootstrap.md`; do not reopen

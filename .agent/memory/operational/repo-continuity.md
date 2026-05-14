@@ -189,18 +189,25 @@ session-handoff closeout only; WS1.4 coordination closeout was already landed at
 
 ## Next Safe Steps
 
+### Active Cross-Thread Program (2026-05-14 — sequence-live)
+
+**Sequence routing**: defer to
+[`token-remediation-p8-parallel-program.plan.md`](../../plans/agentic-engineering-enhancements/current/token-remediation-p8-parallel-program.plan.md)
+for the four-step owner-stated program: (1) finish token work →
+(2) singleton-lane remediation → (3) P8 to acceptance →
+(4) cost-of-collaboration residual and graph foundations in parallel.
+Current step: 1. Sessions advancing the program MUST update the
+program's §Current Snapshot per its Anti-Decay Handoff Clause.
+
 ### Agentic-Engineering Enhancements
 
-Owner direction after the P8-era closeout: complete the token-cost work. Use
-[`fitness-token-measurements-and-frontmatter-mandation.plan.md`](../../plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md)
-as the controlling plan. WS1 (`ws1-token-measurement`) is implemented and
-validation-green in the working tree, with reusable Practice fitness logic
-under `agent-tools/src/practice-fitness/`, content-only chars/4 token estimates,
-and a rendered `Tokens:` row. It is not committed in this handoff. Next safe
-step: re-check live claims, queue, index, and dirty tree, then commit the exact
-WS1 source plus handoff/claim residue before beginning WS2
-(`ws2-token-frontmatter`). Do not skip to convention docs, manifest coverage,
-or batch frontmatter application before WS2 lands and validates.
+Owner direction: program-step 1 active — finish the token-cost work.
+WS1 (`ws1-token-measurement`) landed at commit `7a050c2a`. Controlling
+plan:
+[`fitness-token-measurements-and-frontmatter-mandation.plan.md`](../../plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md).
+Next safe step: begin WS2 (`ws2-token-frontmatter`). Do not skip to
+convention docs, manifest coverage, or batch frontmatter application
+before WS2 lands and validates.
 
 P8 remains the paused active collaboration spine, not complete. P0,
 P-Foundation, P1, P2, P3, P4, and P5 are complete. The P8 operator-value and
