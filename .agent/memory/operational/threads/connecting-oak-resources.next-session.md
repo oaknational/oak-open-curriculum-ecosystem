@@ -811,6 +811,7 @@ promotion.)
 | `Solar Gliding Twilight` | `codex` | `GPT-5` | `019e1d` | `ws1-4-review-support-plus-continuity-cold-start-route-repair` | 2026-05-12 | 2026-05-13 |
 | `Quiet Stalking Mirror` | `claude-code` | `claude-opus-4-7-1m` | `fe8a4f` | `ws1-5-pre-implementation-review-absorption-plus-doctrine-record-no-aliases-no-fallbacks-fail-fast-replace-old-with-new-implementation-blocked-by-uncoordinated-43-file-dirty-slice` | 2026-05-13 | 2026-05-13 |
 | `Coppery Kindling Anvil` | `cursor` | `claude-opus-4-7` | `536dd4` | `ws1-5-design-absorption-commit-39b3271d-with-owner-authorisation-commit-all-files-regardless-of-claims` | 2026-05-13 | 2026-05-13 |
+| `Riverine Swimming Hull` | `claude` | `claude-opus-4-7-1m` | `304dde` | `cross-thread-program-pointer-registration-only-no-implementation-this-thread-participates-as-graph-foundations-lane-4B-of-token-remediation-p8-parallel-program-step-4-implementation-paused-until-step-3-p8-acceptance` | 2026-05-14 | 2026-05-14 |
 
 ## Plan Locations
 
