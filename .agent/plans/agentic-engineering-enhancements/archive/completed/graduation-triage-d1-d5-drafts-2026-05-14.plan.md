@@ -7,25 +7,25 @@ overview: >
 todos:
   - id: d1-pdr-018-decision-complete-readiness
     content: "D1 draft: PDR-018 amendment — DECISION-COMPLETE is the readiness gate, not paperwork after execution."
-    status: pending
+    status: completed
   - id: d2-vendor-call-shape-verification
     content: "D2 draft: new rule .agent/rules/verify-vendor-call-shapes-at-plan-author-time.md OR PDR-018 amendment — owner picks shape."
-    status: pending
+    status: completed
   - id: d3-acceptance-value-proxies
     content: "D3 draft: testing-strategy.md OR principles.md amendment — acceptance value-proxies must compare against independent ground-truth measures. Owner picks home."
-    status: pending
+    status: completed
   - id: d4-pr-closeout-discipline
     content: "D4 draft: agent-collaboration.md new section PR Closeout Discipline (four entries)."
-    status: pending
+    status: completed
   - id: d5-pdr-015-multi-reviewer-audit-shape
     content: "D5 draft: PDR-015 amendment — each reviewer lens shrinks a different part of the audit-shape surface."
-    status: pending
+    status: completed
   - id: docs-adr-expert-review
     content: "Reviewer dispatch: docs-adr-expert review of D1–D5 drafts before owner final approval."
-    status: pending
+    status: completed
   - id: owner-review-cycle
     content: "Owner reviews each diff; agent applies each amendment in its own commit after approval."
-    status: pending
+    status: completed
     depends_on: [d1-pdr-018-decision-complete-readiness, d2-vendor-call-shape-verification, d3-acceptance-value-proxies, d4-pr-closeout-discipline, d5-pdr-015-multi-reviewer-audit-shape, docs-adr-expert-review]
 isProject: false
 ---
@@ -33,7 +33,9 @@ isProject: false
 # Graduation-Triage D1–D5 Amendment Drafts 2026-05-14
 
 **Last Updated**: 2026-05-14
-**Status**: DRAFTING — drafts ready for owner-review-per-diff cycle
+**Status**: ✅ COMPLETE — all five drafts (D1–D5) accepted verbatim
+by owner per-diff review and landed. D1+D5 commit 22d1980d; D2 commit
+54425b6d; D3+D4 commit 7821636b. Ready for archive.
 **Collection**: `agentic-engineering-enhancements/current`
 **Thread**: `agentic-engineering-enhancements`
 **Authoring agent**: Riverine Swimming Hull / `claude` / `claude-opus-4-7-1m` / `304dde`

@@ -166,9 +166,11 @@ the queue churns.
 
 ### 2026-05-05 — Agent tooling friction is first-class user feedback (standing direction)
 
-`[captured: 2026-05-14 | source: comms-log (event 9a249c-tooling-feedback-standing-note, 2026-05-05) | target: pdr:tooling-friction-is-user-feedback OR rule:capture-tooling-friction-as-user-feedback | trigger: owner-direction | size: S-to-M | status: due]`
+`[captured: 2026-05-14 | source: comms-log (event 9a249c-tooling-feedback-standing-note, 2026-05-05) | target: pdr:tooling-friction-is-user-feedback | trigger: owner-direction | size: S-to-M | status: graduated]`
 
 `[flipped pending→due: 2026-05-14 (Riverine Swimming Hull, Batch A of graduation-triage-disposition-2026-05-14 plan); owner-direction trigger is the standing direction itself, fired this session; owner selects graduation shape before amendment lands]`
+
+`[graduated 2026-05-14: PDR-060 (Tooling Friction Is First-Class User Feedback) landed at .agent/practice-core/decision-records/PDR-060-tooling-friction-is-first-class-user-feedback.md per owner verdict ACCEPT after the function-test metacognition correction]`
 
 **Recommended shape**: PDR with `pdr_kind: pattern`.
 

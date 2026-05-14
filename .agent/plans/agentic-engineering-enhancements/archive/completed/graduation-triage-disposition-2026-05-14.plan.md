@@ -9,23 +9,23 @@ overview: >
   substance as reference-only.
 todos:
   - id: batch-a-pending-graduations-status-flip
-    content: "Batch A: flip tooling-friction PDR candidate to `due` in pending-graduations.md and surface graduation-shape decision to owner (PDR / new rule / amend existing rule)."
-    status: pending
+    content: "Batch A: flip tooling-friction PDR candidate to `due` in pending-graduations.md and surface graduation-shape decision to owner (PDR / new rule / amend existing rule). Owner verdict: PDR. PDR-060 landed."
+    status: completed
   - id: batch-b-claude-memory-rule-amendments
     content: "Batch B: four single-paragraph rule amendments routing Claude per-user memory entries to existing rules with back-cite (inter-agent comms first-class, identity routing name/prefix pair, use built agent-tools not source, CLI help completeness)."
-    status: pending
+    status: completed
     depends_on: [batch-a-pending-graduations-status-flip]
   - id: batch-c-workflow-gotchas-graduation
     content: "Batch C: graduate three 2026-05-10 curation entries (lettered-section count re-read, growth-axis metadata, shell-loop-over-multiline-output) to docs/engineering/workflow.md §12 Workflow Gotchas; prune from distilled.md with graduations-log back-cite."
-    status: pending
+    status: completed
     depends_on: [batch-a-pending-graduations-status-flip]
   - id: deferred-pdr-adr-drafts
-    content: "Deferred to next-session: draft D1 (PDR-018 amendment — DECISION-COMPLETE as readiness gate), D2 (vendor-call-shape verification rule or PDR-018 amendment), D3 (acceptance value-proxies — testing-strategy.md or principles.md amendment), D4 (agent-collaboration.md PR-closeout-discipline section), D5 (PDR-015 amendment on multi-reviewer audit-shape framing). Owner reviews each diff before commit."
-    status: pending
+    content: "D1–D5 drafts: D1 PDR-018 amendment landed (commit 22d1980d); D2 new rule verify-vendor-call-shapes-at-plan-author-time.md landed (commit 54425b6d); D3 testing-strategy.md amendment landed (commit 7821636b); D4 agent-collaboration.md amendment landed (commit 7821636b); D5 PDR-015 amendment landed (commit 22d1980d). All five accepted verbatim by owner per-diff review."
+    status: completed
     depends_on: [batch-c-workflow-gotchas-graduation]
   - id: closeout-and-consolidation
-    content: "Closeout: confirm back-cite chains, run focused validators (markdownlint, fitness:informational), update repo-continuity + thread record, archive this plan or move deferred items to a new current/ plan if not all D1–D5 land."
-    status: pending
+    content: "Closeout: confirm back-cite chains; run focused validators (markdownlint passes); update plans to completed; archive both this plan and the D1–D5 drafts plan."
+    status: completed
     depends_on: [batch-b-claude-memory-rule-amendments, batch-c-workflow-gotchas-graduation, deferred-pdr-adr-drafts]
 isProject: false
 ---
@@ -33,7 +33,9 @@ isProject: false
 # Graduation-Triage Disposition 2026-05-14
 
 **Last Updated**: 2026-05-14
-**Status**: QUEUED / NOT-STARTED (owner-approved disposition + next-session execution scope; lowest-risk subset)
+**Status**: ✅ COMPLETE — all batches A/B/C landed (commit c6008dee);
+all D1–D5 amendments landed (commits 22d1980d, 54425b6d, 7821636b);
+Batch A PDR-060 landed in this closeout. Ready for archive.
 **Collection**: `agentic-engineering-enhancements/current`
 **Thread**: `agentic-engineering-enhancements`
 **Authoring agent**: Salty Swimming Hull / `claude` / Opus 4.7 / `f6e2af`
