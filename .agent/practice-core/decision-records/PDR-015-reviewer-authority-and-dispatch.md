@@ -26,6 +26,20 @@ against each other).
 
 ## Amendment Log
 
+- **2026-05-14 amendment — audit-shape surface framing for parallel
+  reviewer dispatch (Riverine Swimming Hull / claude-code /
+  claude-opus-4-7-1m; agentic-engineering-enhancements thread;
+  owner-ratified during the graduation-triage D1–D5 per-diff review
+  pass).** Each parallel reviewer lens shrinks a different part of
+  the audit-shape surface; reviewers are not redundant proxies for
+  one another. The corollary for plan WS0 dispatch is to expect
+  concrete cycle-shape correctives from each reviewer, not just
+  nudges. Each reviewer's absence is a specific gap in the
+  audit-shape coverage, not a generic loss of redundancy. New
+  §Audit-shape surface framing sub-section in the Decision area
+  (under the 2026-04-25 assumption-challenge amendment) names the
+  framing.
+
 - **2026-04-29 amendment — brief reviewers with full merge-gate
   scope when gating merge (Nebulous Illuminating Satellite /
   claude-code / claude-opus-4-7-1m; owner-directed graduation during
@@ -430,6 +444,24 @@ territory rather than at design-time. The gate names the
 reviewer-discipline statement of the same principle that PDR-029
 v2 names mechanism-side: the Practice prefers reframing to
 mechanical hardening when the underlying claim may be wrong.
+
+### Audit-shape surface framing (2026-05-14 amendment)
+
+Each parallel reviewer lens shrinks a **different part** of the
+audit-shape surface; reviewers are not redundant proxies for one
+another. Empirical observation (WS0 dispatch, 2026-05-09):
+
+- `test-expert` caught literal-text assertions in test bodies that
+  no other reviewer surfaced.
+- `architecture-expert-fred` caught a deferred boundary decision that
+  no other reviewer surfaced.
+- `docs-adr-expert` caught propagation-surface omissions (README,
+  thread record, ADR back-cite) that no other reviewer surfaced.
+
+The corollary for plan WS0 dispatch: expect **concrete cycle-shape
+correctives** from each reviewer, not just nudges. Each reviewer's
+absence is a specific gap in the audit-shape coverage, not a
+generic loss of redundancy.
 
 ## Rationale
 

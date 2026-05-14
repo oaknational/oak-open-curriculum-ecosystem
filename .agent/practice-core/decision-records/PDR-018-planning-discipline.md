@@ -115,6 +115,17 @@ aspirations).
   the required phase-boundary re-read, and the artefact requirement that
   makes the check observable under PDR-029.
 
+- **2026-05-14 amendment — DECISION-COMPLETE is the readiness gate
+  (Riverine Swimming Hull / claude-code / claude-opus-4-7-1m;
+  agentic-engineering-enhancements thread; owner-ratified during the
+  graduation-triage D1–D5 per-diff review pass).** DECISION-COMPLETE
+  is the readiness gate for plan promotion, not a status label
+  applied after execution. Every execution-time decision that *can*
+  be settled at plan-author time *must* be settled there. The
+  diagnostic phrase "verify at execution time" inside a plan body is
+  the failure mode this gate forbids. New §DECISION-COMPLETE is the
+  readiness gate section in the Decision area names the principle.
+
 - **2026-04-25 amendment — plan placement follows ownership and
   actionability, not numerical density caps (Fresh Prince /
   claude-code / claude-opus-4-7-1m; agentic-engineering-enhancements
@@ -323,6 +334,33 @@ of any single plan; it emerges from how plans declare relationships
 to other plans. Planning discipline is the only surface where the
 shape can be caught at authoring time. At execution time, the
 gating has already cost the dependent work the time it lost.
+
+### DECISION-COMPLETE is the readiness gate (2026-05-14 amendment)
+
+`DECISION-COMPLETE` is the **readiness gate** for plan promotion, not a
+status label applied after execution. When the owner asks for an
+implementation plan, every execution-time decision that *can* be
+settled at plan-author time *must* be settled there: vendor literals,
+output schemas, interface signatures, exit codes, sort order, encoding
+decisions, help-text shape, error-message wording, and any other
+artefact a downstream WS would otherwise have to invent. The
+plan-body first-principles check's vendor-literal clause permits
+deferral only when the dependency is added inside the same WS that
+consumes it, and even then the plan must pin the expected call shape so
+the WS becomes drift-detection rather than decision-making.
+
+The diagnostic phrase "verify at execution time" inside a plan body is
+the failure mode this gate forbids. If a plan body contains
+target-selection wording like "verify which home is the cleaner fit at
+execution time" or "create new minimal rule if poor fit," that wording
+*is* the unresolved decision: resolve it before promoting the plan,
+not by adding "verify" prose.
+
+Worked example (2026-05-14 triage batch): a Batch B row originally
+read "verify which is the cleaner home at execution time"; an
+assumptions-expert review flagged this as an unresolved plan-author
+decision leaking into execution. The plan author resolved each target
+home before execution began.
 
 ### Workflow contract clarity
 
