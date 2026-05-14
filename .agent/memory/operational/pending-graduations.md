@@ -164,6 +164,117 @@ list; entry-level summary index is intentionally omitted to avoid
 duplicating entry-body substance and to keep the index honest as
 the queue churns.
 
+### 2026-05-14 — Agents default to no gender unless self-declared (second-instance evidence)
+
+`[captured: 2026-05-14 | source: distilled.md §"Recently Distilled — 2026-05-14 Verdant Swaying Glade conduct correction" | target: rule:agents-default-no-gender + pdr:agents-default-no-gender | trigger: second-instance-fired-2026-05-14 | size: S | status: due]`
+
+Substance: when referring to another agent, default to **they/them**;
+gendered pronouns require self-declaration. Agent names are evocative
+phrase-pairs with no inherent gender. Recurrence evidence: 2026-05-11
+correction about Smouldering Crackling Pyre (in
+`napkin-2026-05-12.md` line 319, never graduated to active distilled);
+2026-05-14 correction about a Verdant Swaying Glade conversation
+partner. Per-user memory entry "Agents default to no gender" exists at
+Claude per-user level but not at cross-platform repo level — Codex and
+Cursor agents working in this repo do not read that surface and would
+re-derive the rule via correction.
+
+**Function-test verdict (per the 2026-05-14 metacognition correction)**:
+
+- **Rule-shape** (primary): always-applied behavioural cure that fires
+  at every chat/comms/commit output. Permanent home: new rule
+  `.agent/rules/agents-default-no-gender.md` + Claude/Cursor
+  forwarders + `RULES_INDEX.md` entry.
+- **PDR-shape** (companion): Practice-portable doctrine about
+  agents-as-genderless-by-default. Adopter scope: any Practice-bearing
+  repo with multi-agent work. Could ratify the doctrine separately
+  from the rule, or be deferred until a second adopter repo emerges.
+
+Owner picks one or both shapes at next consolidation. The "Graduation
+discipline for conduct rules" meta-substance inside the distilled
+entry (which says conduct corrections graduate to active distilled
+within the same session, not via the pending-graduations queue) is
+itself a second graduation candidate — surface as pending entry below.
+
+### 2026-05-14 — Conduct-rule graduation discipline (PDR-shaped meta)
+
+`[captured: 2026-05-14 | source: distilled.md §"Recently Distilled — 2026-05-14 Verdant Swaying Glade conduct correction" §"Graduation discipline for conduct rules" | target: pdr:conduct-rule-graduation-discipline | trigger: companion-to-agents-default-no-gender | size: S | status: pending]`
+
+Meta-substance: corrections about personal conduct (style, register,
+phrasing, attribution) graduate to **active distilled.md in the same
+session**, not via the pending-graduations queue. Rationale: a
+session-scoped napkin entry archives the lesson but leaves the rule
+unenforced for new sessions during the rotation gap. The
+2026-05-11 → 2026-05-14 gender-rule recurrence is the worked example —
+the lesson was captured in the napkin but did not reach active
+distilled until the second correction fired. Companion discipline to
+the existing "Substance > Destination" rule. Holds until
+agents-default-no-gender promotion is resolved (companion graduation).
+
+### 2026-05-14 — Cross-thread program artefact shape (first-instance trigger captured)
+
+`[captured: 2026-05-14 | source: napkin.md §"2026-05-14 — Cross-thread program artefact shape (first observed instance)" | target: pdr-or-rule-on-cross-thread-program-artefact-shape | trigger: second-cross-thread-program-emergence | size: M | status: pending]`
+
+Substance: multi-session sequences crossing two or more threads have
+no canonical artefact shape in this Practice. The 2026-05-14
+`token-remediation-p8-parallel-program.plan.md` is the first observed
+instance; its anti-decay clauses (advancement rule, owner-redirection
+clause, evidence threshold, interrupt log, anti-decay handoff clause)
+are proposed structural cures against ten documented multi-session
+decay modes. If a second cross-thread program emerges, the
+artefact-shape itself graduates to a PDR (Practice-portable) or rule
+(always-applied behavioural cure when an agent encounters such a
+sequence). Watch for: owner naming a sequence with ≥3 steps spanning
+multiple plans; owner naming a sequence that explicitly crosses
+thread boundaries; owner using language like "then", "after that",
+"then back to" linking work on different threads.
+
+### 2026-05-14 — Shape-selection-by-vehicle-weight failure mode (first-instance trigger captured)
+
+`[captured: 2026-05-14 | source: napkin.md §"2026-05-14 — Shape-selection-by-vehicle-weight is a recurring failure" | target: rule-or-pdr-on-shape-selection-by-function | trigger: second-shape-selection-by-weight-correction | size: S | status: pending]`
+
+Substance: when proposing graduation shapes (rule / ADR / PDR / new
+file / amendment), the function test must be applied first, not the
+vehicle-weight ranking. Today's Batch A failure: presented three
+shape options ranked by lightness, recommended the lightest, ignored
+the entry's own prior function-test argument. Owner intervention
+named the diagnostic: *"rules, ADRs, PDRs all have functions, this
+choice is not arbitrary."* Existing per-user memory ("never surface
+a cheap-cure option") is operational but not always-applied as a
+repo rule. If a second instance fires, graduate to a rule that names
+the failure shape directly and forces the function-test framing.
+
+### 2026-05-14 — Skill text vs continuation record distinction (single-instance, PDR-shape candidate)
+
+`[captured: 2026-05-14 | source: distilled.md §"Continuation surfaces" first bullet (Sylvan distillation) | target: pdr:skill-text-vs-continuation-record | trigger: second-instance-stability | size: S | status: pending]`
+
+Substance: skill text carries durable routing behaviour; continuation
+records carry volatile facts. Branch, plan, next-step, commit ids,
+team expectation — every fact that changes between sessions belongs
+in the thread record, not in the skill body. The skill's job is to
+fire the routing on arrival; the record's job is to provide the
+current state for that routing to act on. Function-test verdict:
+PDR-shape (Practice-meta design distinction). Currently single-
+instance evidence (Sylvan's distillation 2026-05-14). Holds until a
+second session corroborates or contradicts the distinction.
+
+### 2026-05-14 — Repo-continuity Active Threads identity column structural refactor (fitness-loop signal)
+
+`[captured: 2026-05-14 | source: consolidation step 9 critical-zone post-mortem (Riverine Swimming Hull) | target: structural-refactor:repo-continuity-active-threads-column | trigger: owner-direction-or-second-critical-zone-pass | size: M | status: pending]`
+
+Substance: the `repo-continuity.md § Active Threads` table's
+identity column has accumulated per-session detail that already
+lives in the thread record's `Participating Agent Identities`
+table. The repo-level summary has grown to multiple paragraphs per
+active thread; the file's 829 lines / 65 706 chars are over the
+critical threshold (787 / 52 500). Proposed structural cure: prune
+the identity column to "Latest identity / last_session date"
+summary (one short line per thread), with per-session context fully
+routed to the thread record. This is the missing-graduation cure
+per ADR-144 §Loop Health Q3 for the repo-continuity critical zone.
+Trigger: owner direction OR a second consolidation pass that finds
+repo-continuity in critical zone. Owner decides at next consolidation.
+
 ### 2026-05-05 — Agent tooling friction is first-class user feedback (standing direction)
 
 `[captured: 2026-05-14 | source: comms-log (event 9a249c-tooling-feedback-standing-note, 2026-05-05) | target: pdr:tooling-friction-is-user-feedback | trigger: owner-direction | size: S-to-M | status: graduated]`

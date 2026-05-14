@@ -419,15 +419,24 @@ Current branch non-goals:
 ## Deep Consolidation Status
 
 **Status (2026-05-14 — Riverine Swimming Hull / `claude` / Opus 4.7 /
-`304dde`)**: due — owner-directed consolidation pass after the
-program-plan landing and cross-thread program design. Trigger: owner
-explicit direction at session close after substantive new substance
-emerged (cross-thread program artefact-shape question, anti-decay
-clauses, two first-instance napkin entries, fitness critical zones on
-napkin/distilled/repo-continuity, second handoff). Running
-`jc-consolidate-docs` immediately in this session. Next bounded
-consolidation target remains `practice-bootstrap.md` regardless of
-this pass's outcome.
+`304dde`)**: completed this handoff — owner-directed consolidation
+pass ran end-to-end after the program-plan landing. Six pending-
+graduations entries captured (agents-default-no-gender rule + PDR;
+conduct-rule graduation-discipline meta-PDR; cross-thread program
+artefact-shape; shape-selection-by-vehicle-weight failure mode;
+skill text vs continuation record distinction; repo-continuity
+Active Threads identity column structural refactor). Three critical-
+zone fitness post-mortems (napkin, distilled, repo-continuity)
+identified the Active Threads identity column as the missing-
+graduation cure for repo-continuity's critical zone — captured as
+pending-graduations entry for owner-decided next consolidation. All
+six checks of the thread-register freshness audit (step 7c) pass.
+Collaboration state audit (step 7e): 0 active claims, 0 commit queue
+entries, 0 escalations, both JSON files schema-valid. No napkin
+rotation this pass — premature within 12 hours of Sylvan's morning
+rotation; today's two napkin entries carry explicit second-instance
+triggers. Next bounded consolidation target remains
+`practice-bootstrap.md`.
 
 **Prior status (2026-05-14 — Salty Swimming Hull / `claude` / Opus 4.7 /
 `f6e2af`)**: completed this handoff — `/jc-consolidate-docs` ran end-to-end
