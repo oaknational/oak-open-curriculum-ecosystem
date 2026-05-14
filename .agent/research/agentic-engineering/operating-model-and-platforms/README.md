@@ -30,6 +30,13 @@ research that explains why the portability model looks the way it does.
   focused research note on `start-right-team`, emergent temporary
   responsibilities, team handoff routing, and a future action-trace event
   surface.
+- [external-skills-substrate-study-2026-05-14.md](./external-skills-substrate-study-2026-05-14.md) —
+  source-neutral study of an external skills substrate through the Practice
+  lens; feeds the
+  [external skills substrate learning plan](../../../plans/agentic-engineering-enhancements/future/external-skills-substrate-learning.plan.md).
+- [external-skills-substrate-non-plan-insights-2026-05-14.md](./external-skills-substrate-non-plan-insights-2026-05-14.md) —
+  companion note for observations that should inform future Practice work
+  without being forced into execution-plan language.
 
 ## Feeds
 
