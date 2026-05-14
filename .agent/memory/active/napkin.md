@@ -463,6 +463,92 @@ ten emergent findings (F1-F10) were captured in
   architectural proposal for the team-start/action-trace surface; the PDR
   candidate remains about portable coordinator allocation doctrine.
 
+## 2026-05-14 — Luminous Glowing Moon / cursor / claude-opus-4-7 / `d28cfd`
+
+### Plan-promotion session: context-cost-cli to DECISION-COMPLETE
+
+- **What was done**: promoted `context-cost-cli.plan.md` from QUEUED to
+  DECISION-COMPLETE / READY FOR EXECUTION. Twelve decision blocks (D1–D12)
+  settled inline against repo conventions discovered live (agent-tools-cli
+  dispatch shape, branch-touched-files parser shape, vitest base-config
+  inclusion, `live-files.ts` walker patterns). Ran assumptions-expert
+  readiness review; closed all three GO-WITH-CONDITIONS findings (tinyglobby
+  API shape, JSON byte-determinism, tautological acceptance). Updated index.
+
+### Surprises and corrections
+
+- **Surface**: own first plan draft.
+- **Signal**: surprise / behaviour-change.
+- **Observation**: I marked the plan "QUEUED" with multiple "verify at
+  execution time" deferrals (CLI dispatch shape, glob library, FileReader
+  interface, JSON output schema, help text content). The user reset against
+  this with: *"if I ask for an implementation plan I mean a plan we can use
+  without having to do more planning work."*
+- **Why expectation failed**: I was treating "QUEUED" as the planning bar
+  and "DECISION-COMPLETE" as a paperwork milestone after execution. The
+  user's bar is the inverse — "DECISION-COMPLETE" is the readiness gate,
+  meaning every execution-time decision that *can* be settled at plan-author
+  time *must* be settled at plan-author time.
+- **Behaviour change**: when the owner asks for an implementation plan,
+  default to settling every execution-time vendor literal, output schema,
+  interface signature, and exit-code/sort-order/encoding decision in the
+  plan body before marking the plan ready. The vendor-literal clause of
+  [`plan-body-first-principles-check`](../../rules/plan-body-first-principles-check.md)
+  permits a deferral only when the dep is added inside the same WS; even
+  then, the plan must pin the call shape and the WS becomes drift-detection
+  rather than decision-making.
+- **Surface**: assumptions-expert readiness review.
+- **Signal**: mistake-of-mine.
+- **Observation**: I pinned tinyglobby's API as `glob({ patterns, ...options })`
+  from memory; the reviewer flagged the actual current API as
+  `glob(patterns, options)` (positional). Same library, wrong signature.
+- **Why expectation failed**: I treated "well-known utility library" as
+  permission to skip checking the actual current API. Cheap to verify at
+  plan-author time, expensive to discover wrong at WS5 execution.
+- **Behaviour change**: when D-blocks pin a vendor call shape, verify the
+  actual current export against installed-or-published docs at plan-author
+  time. "Stable API across the v0.x line" is necessary but not sufficient
+  evidence the call shape I remember matches the current shape.
+- **Surface**: assumptions-expert readiness review.
+- **Signal**: mistake-of-mine.
+- **Observation**: my acceptance value-proxy was `±5% of the always-on rule
+  tier figure (~42,125 tokens) recorded in
+  practice-context-cost-baseline.md`. Reviewer noted this is tautological:
+  the baseline figure was *itself* produced by chars/4 over an older fileset,
+  so the new chars/4 CLI agreeing with it ±5% proves nothing and may fail
+  due to normal file churn.
+- **Why expectation failed**: I conflated "reproduces the baseline value"
+  with "validates the CLI is correct". The baseline is method-equivalent,
+  not method-independent.
+- **Behaviour change**: acceptance value-proxies for a measurement tool must
+  compare against an independent ground-truth measure (here: `wc -c` for
+  chars; the chars/4 division then becomes mechanical), not against a same-
+  method historical artefact. Reframed as `acc-cli-live-parity` against
+  `wc -c` in the same shell session.
+
+### Patterns to remember
+
+- The `agent-tools-cli.ts` `dispatchTopic` shape (`if (input.parsed.topic ===
+  '<name>') { return runXTopic(...) }`) plus a topic handler in
+  `agent-tools-cli-topics.ts` plus a per-topic `runXCli` in
+  `src/<topic>/cli.ts` is the durable subcommand-registration pattern. New
+  subcommands are three small file edits, not a refactor.
+- Vitest base config at `vitest.config.base.ts` includes `src/**/*.test.ts`
+  and `tests/**/*.test.ts`; new test files at `agent-tools/src/<topic>/*.test.ts`
+  are auto-included. E2E uses a separate config under `e2e-tests/`.
+- For granular per-cycle test invocation, prefer `pnpm --dir agent-tools
+  exec vitest run <file>` over package-script forwarding (per the
+  2026-05-10 napkin lesson).
+
+### ADR/PDR candidate check
+
+- No new standalone ADR or PDR candidate. The session's lessons reinforce
+  existing rules (`plan-body-first-principles-check` vendor-literal clause;
+  `jc-plan` proof-contract requirements about outcome-not-activity
+  acceptance) rather than producing new doctrine. The application gap was
+  discipline at plan-author time, not missing doctrine. Recorded "nothing
+  qualifies" by asking, not by skipping.
+
 ## 2026-05-14 — Continuation Pointer Clarification
 
 ### What Was Done
@@ -497,3 +583,38 @@ ten emergent findings (F1-F10) were captured in
   edit continuity surfaces after validation, keep a short handoff claim open
   until repo-continuity, thread-record, napkin, comms, and claim closure are
   all complete.
+
+## 2026-05-14 — Agent Onboarding Flow Patch
+
+### What Was Done
+
+- Applied the onboarding-expert review of the root README agent-start section.
+  The README now labels slash-command examples as slash-surface examples, gives
+  a Codex `$jc-start-right-team` variant, and clarifies that team sessions need
+  one closeout owner to run full `jc-session-handoff`; other team members leave
+  boundary-scoped notes unless delegated.
+- Updated the Claude teammate onboarding prompt to use the current `jc-*` skill
+  names and to include `jc-start-right-team` and team handoff ownership checks.
+- Updated the Cursor start-right rule to point at `SKILL-CANONICAL.md` and to
+  include the team-start skill.
+
+### Surprises and Corrections
+
+- **Surface**: root README and onboarding entry points.
+- **Signal**: expectation-failure / onboarding drift.
+- **Observation**: after adding team-oriented examples, the handoff guidance was
+  too easy to read as "everyone runs full handoff", and several onboarding
+  surfaces still pointed at old skill names or non-canonical skill paths.
+- **Why expectation failed**: the repo had improved the agent-collaboration
+  operating model faster than the first-contact onboarding surfaces were
+  updated. The specialised skill text was correct, but a new agent could enter
+  through README / prompt / Cursor rule and miss the newer routing.
+- **Behaviour change**: whenever a new collaboration skill changes session
+  entry or exit behaviour, audit the root README and platform onboarding
+  adapters in the same closeout, not only the skill body and thread record.
+
+### ADR/PDR Candidate Check
+
+- No new standalone ADR or PDR candidate. This session applies proposed ADR-181
+  and the team-aware handoff routing already captured in the team-collaboration
+  research note; it does not introduce a new governance decision.

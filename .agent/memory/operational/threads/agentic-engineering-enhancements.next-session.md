@@ -17,7 +17,8 @@
   interaction hardening.
 - Recent team-collaboration commits: `bfa26e01` added `start-right-team`,
   proposed ADR-181, research note, and `session-handoff` team routing;
-  `498edcc2` recorded the team collaboration handoff.
+  `498edcc2` recorded the team collaboration handoff; `9a2a9b8b` clarified
+  continuation-pointer routing.
 - Team expectation: unknown until live grounding. Solo is valid if no team has
   registered; if multiple agents are present, use `start-right-team` to
   negotiate temporary responsibilities from live coordination pressure.
@@ -67,6 +68,29 @@ ADR-181, the focused team-start/action-trace research note, and the
 handoff landed in `498edcc2`. They are Practice collaboration surfaces only.
 They do not change the next implementation target: resume P8 at
 `p8-attention-state`.
+
+**Agent onboarding flow correction** (2026-05-14): root README examples,
+the Claude teammate onboarding prompt, and the Cursor start-right rule now route
+new agents toward `jc-start-right-quick`, `jc-start-right-team`, canonical skill
+files, and the one-closeout-owner team handoff pattern. This is onboarding
+alignment for the collaboration practice; it does not change P8 scope or
+acceptance.
+
+**Context-cost CLI plan ready for execution** (2026-05-14): Luminous Glowing
+Moon promoted
+[`context-cost-cli.plan.md`](../../plans/agent-tooling/current/context-cost-cli.plan.md)
+from QUEUED to DECISION-COMPLETE / READY FOR EXECUTION. The plan delivers §1
+of the strategic source plan's Scope Expansion Register (a new
+`agent-tools context-cost --glob '<pattern>'` subcommand using a chars/4
+tokenizer behind a swap seam). Twelve decision blocks (D1–D12) are settled
+inline so an executor can pick the plan up cold. WS1 (pure tokenizer) and
+WS4 (pure CLI option parser) are parallel-safe; WS2 → WS3 → WS5 sequence
+follows. This plan does NOT change the P8 implementation target — it is a
+separate agent-tooling sub-thread that an additional agent or a future
+session window can pick up without contention with P8 work. §2/§3/§4 of the
+strategic source plan (frontmatter token fields, fitness-reporter
+integration, frontmatter mandation) remain explicit non-goals here and
+promote separately on their own evidence triggers.
 
 ## Umbral P5 Gate-Check And Monitor Session (2026-05-12/13)
 
@@ -328,6 +352,30 @@ state plus pre-existing unrelated dirty plan files; next session must re-check
 opener when a team is expected, then let the skill resolve this continuation
 record and live state. Resume P8 at `p8-attention-state`; do not claim P8
 complete until `P8-A1` through `P8-A4` are proven.
+
+## Agent Onboarding Flow Patch (2026-05-14)
+
+**Session**: Pearly Drifting Jetty / `codex` / `GPT-5` / `019e22`.
+
+**Landed-in-working-tree outcome**: onboarding documentation/process
+clarification, not P8 source implementation. After onboarding-expert review,
+the root README's agent examples now distinguish slash-command surfaces from
+Codex `$jc-*` invocation and explain that teams should identify one full
+handoff closeout owner. The Claude teammate onboarding prompt now uses the
+current `jc-*` skill names, includes `jc-start-right-team`, and tells team
+members to leave boundary-scoped notes unless they own team closeout. The
+Cursor start-right rule now points at `SKILL-CANONICAL.md` and includes the
+team-start skill.
+
+**Validation evidence**: targeted Markdownlint passed for the touched README,
+prompt, and Cursor rule; `git diff --check` passed; `pnpm portability:check`
+passed; and `collaboration-state -- check` returned `ok` before final commit
+preparation.
+
+**Next safe execution step**: unchanged. Start with live grounding, then
+continue mandatory P8 at `p8-attention-state`. Treat team shape and dirty-tree
+state as hypotheses until `git status`, active claims, active commit queue, and
+collaboration checks confirm them.
 
 ## Fronded Read-Only Review And Standby Closeout (2026-05-13/14)
 
@@ -644,7 +692,7 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 | `codex` | `GPT-5` | Umbral Masking Silhouette | Gate-checker/monitor (read-only P5 strict comms parser CLEAN/GO; repeated message/status monitoring through WS1.4 closeout) | 2026-05-12 | 2026-05-13 |
 | `codex` | `GPT-5` | Mossy Fruiting Thicket | Implementer (P5 DI/no-IO boundary repair for comms use cases) | 2026-05-13 | 2026-05-13 |
 | `codex` | `GPT-5` | Mossy Blossoming Canopy | Implementer (mandatory P8 live collaboration TUI continuation) | 2026-05-13 | 2026-05-13 |
-| `codex` | `GPT-5` | Pearly Drifting Jetty | Controller/handoff synthesiser (P8 coordination only; no implementation; routed operator-value and interaction-hardening slices, captured role-selection observations and team-start / team-handoff research surfaces, then clarified continuation-pointer routing) | 2026-05-13 | 2026-05-14 |
+| `codex` | `GPT-5` | Pearly Drifting Jetty | Controller/handoff synthesiser (P8 coordination only; no source implementation; routed operator-value and interaction-hardening slices, captured role-selection observations and team-start / team-handoff research surfaces, clarified continuation-pointer routing, and patched agent-onboarding flow) | 2026-05-13 | 2026-05-14 |
 | `codex` | `GPT-5` | Arboreal Ripening Pollen | Implementer/scout (P8 Slice A operator-value snapshot model; p8-attention-state data/value scout) | 2026-05-13 | 2026-05-14 |
 | `codex` | `GPT-5` | Nebulous Ascending Supernova | Implementer (P8 Slice B interaction hardening) | 2026-05-13 | 2026-05-13 |
 | `codex` | `GPT-5` | Fronded Rustling Canopy | Reviewer/standby monitor (read-only P8 Slice A value-signal review; 120-second inbox/claims/queue/tree polling; no source edits or claims) | 2026-05-13 | 2026-05-14 |
@@ -655,6 +703,7 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 | `cursor` | `GPT-5.5` | Twigged Growing Glade | Consolidator (pending-graduations conservation-first routing + reviewer corrections + handoff) | 2026-05-12 | 2026-05-12 |
 | `claude` | `claude-opus-4-7-1m` | Ferny Regrowing Leaf | Coordinator (succeeded Brazen Stoking Ash; allocated work to 6 agents via directed-message matrix; surfaced coordinator-as-allocator role-failure-mode for capture) | 2026-05-12 | 2026-05-12 |
 | `cursor` | `claude-opus-4-7` | Coppery Kindling Anvil | Consolidator (three-napkin deep-dive synthesis; F1 graduated to distilled.md; F2-F10 routed to pending-graduations; napkin rotated; three numbered verdicts surfaced for owner direction) | 2026-05-13 | 2026-05-13 |
+| `cursor` | `claude-opus-4-7` | Luminous Glowing Moon | Plan author (promoted `context-cost-cli.plan.md` to DECISION-COMPLETE / READY FOR EXECUTION; settled twelve decision blocks inline; ran assumptions-expert readiness review with all findings closed; updated `agent-tooling/current` README index) | 2026-05-14 | 2026-05-14 |
 
 ## Ferny Regrowing Leaf coordinator session (2026-05-12)
 
