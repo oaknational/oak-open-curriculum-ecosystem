@@ -27,6 +27,17 @@ lives in the archived napkin.
 [archive-pass]: archive/napkin-2026-05-14.md
 [previous-pass]: archive/napkin-2026-05-13.md
 
+## 2026-05-14 — Shadowed Glimmering Night token-cost route correction / codex / GPT-5 / `019e25`
+
+### Owner-selected next session — complete token-cost work
+
+- **Correction**: after the P8/external-substrate sequence was recorded, owner
+  clarified that the next session will complete the token-cost work.
+- **Behaviour change**: continuity should now route the next session to
+  `fitness-token-measurements-and-frontmatter-mandation.plan.md` from WS1
+  through WS6, while saying plainly that P8 remains open and resumes afterward
+  unless newer owner direction changes the sequence.
+
 ## 2026-05-14 — Shadowed Glimmering Night sequence integration / codex / GPT-5 / `019e25`
 
 ### Sequencing correction — external-substrate route belongs around P8

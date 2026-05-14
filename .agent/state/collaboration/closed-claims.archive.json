@@ -25726,6 +25726,134 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "94005f57-2929-45ad-bb75-c629eb3486cf",
+      "agent_id": {
+        "agent_name": "Shadowed Glimmering Night",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e25"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/future/external-skills-substrate-learning.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T11:29:24Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Align related plan routing with owner-directed token-cost next session.",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T11:30:34Z",
+        "closed_by": {
+          "agent_name": "Shadowed Glimmering Night",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e25"
+        },
+        "summary": "Aligned related token-cost and external-substrate plan routing with owner-selected next session.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "94005f57-2929-45ad-bb75-c629eb3486cf",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "b51964b7-7b16-43e3-9737-cd31ccb2fe0d",
+      "agent_id": {
+        "agent_name": "Shadowed Glimmering Night",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e25"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T11:29:24Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Correct next-session route so token-cost work is the owner-directed next session target.",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T11:30:34Z",
+        "closed_by": {
+          "agent_name": "Shadowed Glimmering Night",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e25"
+        },
+        "summary": "Rerouted next-session continuity to complete token-cost work while keeping P8 open.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b51964b7-7b16-43e3-9737-cd31ccb2fe0d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "52c9dbd5-5c0e-48aa-8b30-76eb4bcf368b",
+      "agent_id": {
+        "agent_name": "Shadowed Glimmering Night",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e25"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "git:index",
+            "git:head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T11:30:43Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit the owner-directed token-cost next-session route correction.",
+      "intent_to_commit": "73163b8f-41a0-4dc4-94eb-bc586db8b020",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T11:31:10Z",
+        "closed_by": {
+          "agent_name": "Shadowed Glimmering Night",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e25"
+        },
+        "summary": "Committed the owner-directed token-cost next-session route correction.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "52c9dbd5-5c0e-48aa-8b30-76eb4bcf368b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

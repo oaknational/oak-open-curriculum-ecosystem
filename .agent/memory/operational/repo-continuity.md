@@ -176,31 +176,36 @@ session-handoff closeout only; WS1.4 coordination closeout was already landed at
 
 ### Agentic-Engineering Enhancements
 
-Immediate cost-of-collaboration lane: P0, P-Foundation, P1, P2, P3, P4, and P5
-are complete. Continue mandatory P8 live collaboration TUI from
-[`cost-of-collaboration.plan.md`](../../plans/agent-tooling/current/cost-of-collaboration.plan.md).
-The operator-value and smallest interaction-hardening slices landed at
-`2791be3c` and `6e804485`. The next implementation slice is
-`p8-attention-state`: add unread/seen or equivalent triage state for directed
-threads so a human operator can tell which directed conversations need action
-without reading raw event files. P8 must not be called complete until the
-plan's `P8-A1` through `P8-A4` proof contract is satisfied. P6/P7 resume after
-the P8 operator-view path unless owner direction changes.
+Owner direction after the P8-era closeout: the next session will complete the
+token-cost work. Use
+[`fitness-token-measurements-and-frontmatter-mandation.plan.md`](../../plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md)
+as the controlling plan, start at WS1 (`ws1-token-measurement`), and proceed
+through WS6 only as dependencies and acceptance checks are satisfied. Do not
+skip to frontmatter fields or manifest coverage before WS1 lands.
 
-Adjacent agentic-engineering collaboration sequence while P8 is open:
+P8 remains the paused active collaboration spine, not complete. P0,
+P-Foundation, P1, P2, P3, P4, and P5 are complete. The P8 operator-value and
+smallest interaction-hardening slices landed at `2791be3c` and `6e804485`.
+Resume mandatory P8 live collaboration TUI from `p8-attention-state` after the
+token-cost lane unless newer owner direction changes the sequence. P8 must not
+be called complete until the plan's `P8-A1` through `P8-A4` proof contract is
+satisfied. P6/P7 resume after the P8 operator-view path unless owner direction
+changes.
 
-1. **Active default** — P8 `p8-attention-state`.
-2. **Ready adjacent implementation lane** — if the owner deliberately switches
-   from P8 to token-cost work, open
+Agentic-engineering collaboration sequence for the next session:
+
+1. **Owner-selected implementation lane** — complete
    [`fitness-token-measurements-and-frontmatter-mandation.plan.md`](../../plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md)
-   and start at WS1 (`ws1-token-measurement`). Do not skip to frontmatter fields
-   or manifest coverage before WS1 lands.
+   from WS1 through WS6.
+2. **Paused active spine** — P8 `p8-attention-state` remains open and resumes
+   after token-cost unless the owner reprioritises.
 3. **Strategic exercise lane** — if the owner asks to exercise the
    external-substrate learning plan, open
    [`external-skills-substrate-learning.plan.md`](../../plans/agentic-engineering-enhancements/future/external-skills-substrate-learning.plan.md),
    create the decided candidate register, review C1/C2 for Practice fit and
    existing homes, then stop before C3-C8 adoption work. This does not supersede
-   P8 unless owner direction explicitly says it does.
+   the token-cost next-session route unless owner direction explicitly says it
+   does.
 4. **Guardrail lane** — use
    [`completion-claim-proof-pipeline.plan.md`](../../plans/agentic-engineering-enhancements/current/completion-claim-proof-pipeline.plan.md)
    to keep P8/P5 completion language evidence-bound.

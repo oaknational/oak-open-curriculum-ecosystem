@@ -1590,6 +1590,32 @@
       "updated_at": "2026-05-14T09:11:00.023Z",
       "expires_at": "2026-05-14T09:25:12.047Z",
       "phase": "abandoned"
+    },
+    {
+      "intent_id": "73163b8f-41a0-4dc4-94eb-bc586db8b020",
+      "claim_id": "52c9dbd5-5c0e-48aa-8b30-76eb4bcf368b",
+      "agent_id": {
+        "agent_name": "Shadowed Glimmering Night",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e25"
+      },
+      "files": [
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+        ".agent/plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md",
+        ".agent/plans/agentic-engineering-enhancements/future/external-skills-substrate-learning.plan.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json"
+      ],
+      "commit_subject": "docs(agentic): route next session to token cost",
+      "queued_at": "2026-05-14T11:30:55.695Z",
+      "updated_at": "2026-05-14T11:31:02.876Z",
+      "expires_at": "2026-05-14T11:45:55.695Z",
+      "phase": "staging",
+      "staged_bundle_fingerprint": "d4b34518373d31ae999831e0fcf13e88df3b77015595b984aca7550c492cb1c6",
+      "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nM\t.agent/plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md\nM\t.agent/plans/agentic-engineering-enhancements/future/external-skills-substrate-learning.plan.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\n"
     }
   ],
   "claims": []

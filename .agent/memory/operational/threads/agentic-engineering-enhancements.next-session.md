@@ -5,26 +5,23 @@
 - Branch: `feat/mcp-graph-support-foundation`.
 - Invocation pointer:
   `$jc-start-right-team continue agentic-engineering-enhancements`.
-- Controlling plan:
-  [`cost-of-collaboration.plan.md`](../../plans/agent-tooling/current/cost-of-collaboration.plan.md).
-- Next safe step: continue mandatory P8 collaboration TUI at
-  `p8-attention-state`; add unread/seen or equivalent directed-thread triage
-  so a human operator can tell which directed conversations need action without
-  reading raw event files.
-- Agentic-engineering collaboration sequence while P8 is open:
-  1. **Active default** — continue mandatory P8 at `p8-attention-state`.
-     This is the in-progress collaboration spine; P8 is part-way done, not
-     complete.
-  2. **Ready adjacent implementation lane** — if the owner deliberately
-     switches from P8 to token-cost work, use
-     [`fitness-token-measurements-and-frontmatter-mandation.plan.md`](../../plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md)
-     as the controlling plan and start at WS1 (`ws1-token-measurement`).
+- Controlling plan for next session:
+  [`fitness-token-measurements-and-frontmatter-mandation.plan.md`](../../plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md).
+- Owner-directed next safe step: complete the token-cost work end-to-end,
+  starting at WS1 (`ws1-token-measurement`) and proceeding through WS6 only as
+  the plan's dependencies and acceptance checks are satisfied.
+- Agentic-engineering collaboration sequence for the next session:
+  1. **Owner-selected implementation lane** — complete the token-cost plan.
+     Do not skip to frontmatter fields or manifest coverage before WS1 lands.
+  2. **Paused active spine** — P8 remains part-way done, not complete. Resume
+     mandatory P8 at `p8-attention-state` after the token-cost lane unless the
+     owner gives newer direction.
   3. **Strategic exercise lane** — if the owner asks to exercise the new
      external-substrate learning plan, open
      [`external-skills-substrate-learning.plan.md`](../../plans/agentic-engineering-enhancements/future/external-skills-substrate-learning.plan.md),
      create the decided candidate register, review C1/C2 only, and stop before
-     C3-C8 adoption work. This does not supersede mandatory P8 unless the owner
-     explicitly prioritises it.
+     C3-C8 adoption work. This does not supersede the token-cost next-session
+     route unless the owner explicitly reprioritises it.
   4. **Guardrail lane** — keep
      [`completion-claim-proof-pipeline.plan.md`](../../plans/agentic-engineering-enhancements/current/completion-claim-proof-pipeline.plan.md)
      in view when reporting status; it exists because P5/P8 completion was

@@ -26,15 +26,16 @@ This plan is now explicitly sequenced as a **strategic exercise lane** inside
 the agentic-engineering collaboration arc, not as the default next
 implementation lane.
 
-Current sequence while P8 is open:
+Current sequence after the owner selected the next-session route:
 
-1. Continue mandatory P8 at `p8-attention-state` from
+1. Complete
+   [`fitness-token-measurements-and-frontmatter-mandation.plan.md`](../current/fitness-token-measurements-and-frontmatter-mandation.plan.md)
+   from WS1 through WS6 before returning to P8, unless newer owner direction
+   changes the sequence.
+2. Resume mandatory P8 at `p8-attention-state` from
    [`cost-of-collaboration.plan.md`](../../agent-tooling/current/cost-of-collaboration.plan.md).
    P8 is part-way through and must not be called complete until `P8-A1` through
    `P8-A4` are proven.
-2. If the owner deliberately switches from P8 to token-cost work, execute
-   [`fitness-token-measurements-and-frontmatter-mandation.plan.md`](../current/fitness-token-measurements-and-frontmatter-mandation.plan.md)
-   from WS1.
 3. If the owner asks to exercise this external-substrate learning route, create
    the candidate register and review C1/C2 only, then stop before C3-C8
    adoption work.

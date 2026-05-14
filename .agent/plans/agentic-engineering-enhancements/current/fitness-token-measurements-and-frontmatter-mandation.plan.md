@@ -44,6 +44,11 @@ isProject: false
 extend fitness frontmatter with optional token thresholds, and make the
 frontmatter convention enforceable for agent guidance files.
 
+**Execution routing**: owner-selected next-session lane. Complete WS1 through
+WS6 in dependency order; do not skip to frontmatter fields or manifest coverage
+before WS1 lands. P8 remains open and resumes after this lane unless newer
+owner direction changes the sequence.
+
 **Strategic source**:
 [`memetic-immune-system-and-progressive-disclosure.plan.md` §Scope Expansion Register §2-§4](../future/memetic-immune-system-and-progressive-disclosure.plan.md#2-token-estimate-fields-in-standard-fitness-frontmatter)
 
