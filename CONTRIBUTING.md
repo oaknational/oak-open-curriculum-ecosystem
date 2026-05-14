@@ -48,10 +48,8 @@ local bridge).
 ### Working with Claude Code (and other AI coding agents)
 
 Oak teammates whose primary AI coding tool is Claude Code (or Cursor, Codex,
-Gemini CLI, Copilot, Windsurf) start with three additional surfaces:
+Gemini CLI, Copilot, Windsurf) start with two additional surfaces:
 
-- [Claude Code teammate onboarding prompt](.agent/prompts/onboarding-claude-teammate.md) —
-  guided first session
 - [MCP servers for contributors](docs/engineering/mcp-servers-for-contributors.md) —
   the sanctioned MCP set; note that the Vercel CLI is forbidden, all Vercel
   work goes through the project-scoped Vercel MCP plugin

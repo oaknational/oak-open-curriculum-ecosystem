@@ -28,7 +28,6 @@ prompts below are domain-specific handover briefs for focused work.
 | [semantic-search/semantic-search.prompt.md](semantic-search/semantic-search.prompt.md) | handover | Primary semantic-search session entry point — dormant, all plans archived | [active/README.md](../plans/semantic-search/active/README.md) |
 | [semantic-search/approaches-to-knowledge.prompt.md](semantic-search/approaches-to-knowledge.prompt.md) | handover | Research prompt exploring MCP, hybrid search, knowledge graphs, and atomic concepts as a unified quality system | Research-phase exploration; no single canonical execution plan |
 | [architecture-and-infrastructure/sentry-otel-foundation.prompt.md](architecture-and-infrastructure/sentry-otel-foundation.prompt.md) | handover | Sentry + OTel observability foundation session entry point | [sentry-otel-integration.execution.plan.md](../plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md) |
-| [onboarding-claude-teammate.md](onboarding-claude-teammate.md) | handover | First-session walkthrough for an Oak teammate joining via Claude Code (or another AI coding agent) | [good-first-issues.md](../plans/good-first-issues.md), [mcp-servers-for-contributors.md](../../docs/engineering/mcp-servers-for-contributors.md), [sibling-repos.md](../../docs/engineering/sibling-repos.md) |
 
 Complementary execution cadence: use the [`go` skill](../skills/go/SKILL-CANONICAL.md)
 and its [shared GO workflow](../skills/go/shared/go.md).

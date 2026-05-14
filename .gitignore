@@ -20,7 +20,7 @@ collaboration.txt
 
 # /team-onboarding slash command output (paste-into-Claude buddy guide).
 # Personal usage stats + Claude-only runbook; durable content lives in
-# docs/engineering/ and .agent/prompts/onboarding-claude-teammate.md.
+# README.md, CONTRIBUTING.md, and docs/engineering/.
 ONBOARDING.md
 
 # Local MCP server config

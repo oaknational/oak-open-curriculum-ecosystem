@@ -51,7 +51,7 @@ Deliver_](docs/foundation/VISION.md#what-we-deliver) in the Vision.
 ## Developers and AI agents
 
 - **Developers** — continue to [Quick Start](#quick-start) below
-- **Oak teammates joining via Claude Code (or another AI coding agent)** — Quick Start as above, then the [Claude Code teammate onboarding prompt](.agent/prompts/onboarding-claude-teammate.md) for a guided first session, [MCP servers for contributors](docs/engineering/mcp-servers-for-contributors.md) for the sanctioned MCP set, and [good first issues](.agent/plans/good-first-issues.md) for what to pick up first
+- **Oak teammates joining via Claude Code (or another AI coding agent)** — Quick Start as above, then [MCP servers for contributors](docs/engineering/mcp-servers-for-contributors.md) for the sanctioned MCP set, and [good first issues](.agent/plans/good-first-issues.md) for what to pick up first
 - **AI agents** — read the [start-right-quick workflow](.agent/skills/start-right-quick/shared/start-right.md), then [AGENT.md](.agent/directives/AGENT.md), then scan the [five foundational ADRs](docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes) — the architectural source of truth
 
 ### Working with agents
