@@ -3,4 +3,9 @@ description: Apply start-right skills at session start and re-grounding checkpoi
 alwaysApply: true
 ---
 
-Read and follow `.agent/skills/start-right-quick/SKILL.md`. For complex or architectural work, use `.agent/skills/start-right-thorough/SKILL.md` instead.
+Read and follow `.agent/skills/start-right-quick/SKILL-CANONICAL.md`. For
+complex or architectural work, use
+`.agent/skills/start-right-thorough/SKILL-CANONICAL.md` instead. For
+coordinated multi-agent sessions, use
+`.agent/skills/start-right-team/SKILL-CANONICAL.md` after the shared
+start-right foundation.

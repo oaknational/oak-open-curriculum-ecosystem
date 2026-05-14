@@ -28,6 +28,8 @@ and verification layer. The durable content lives in:
 - [start-right-quick](../skills/start-right-quick/shared/start-right.md) —
   per-session grounding workflow used by both humans driving Claude and
   autonomous agents
+- [start-right-team](../skills/start-right-team/SKILL-CANONICAL.md) —
+  team-session bootstrap and temporary responsibility routing
 - [Sibling Repositories](../../docs/engineering/sibling-repos.md) —
   related repos a teammate may need
 - [MCP Servers for Contributors](../../docs/engineering/mcp-servers-for-contributors.md) —
@@ -53,8 +55,9 @@ When the new teammate pastes or invokes this prompt:
 4. After setup, route them to the **Get Started** section to choose a first
    task.
 
-5. End by reminding them that future sessions begin with `/start-right-quick`
-   (or the platform-equivalent grounding skill).
+5. End by reminding them that future solo sessions begin with
+   `/jc-start-right-quick`, and coordinated team sessions begin with
+   `/jc-start-right-team`.
 
 ## Setup Checklist
 
@@ -81,13 +84,17 @@ When the new teammate pastes or invokes this prompt:
   [MCP Servers for Contributors](../../docs/engineering/mcp-servers-for-contributors.md)
 - [ ] Aware that **the Vercel CLI is forbidden** — Vercel work goes through
   the project-scoped MCP plugin
-- [ ] Skill set explored: `/start-right-quick`, `/commit`, `/gates`,
-  `/consolidate-docs`, `/session-handoff`, `/plan`. Canonical
+- [ ] Skill set explored: `/jc-start-right-quick`, `/jc-start-right-team`,
+  `/jc-commit`, `/jc-gates`, `/jc-consolidate-docs`,
+  `/jc-session-handoff`, `/jc-plan`, `/jc-metacognition`. Canonical
   definitions live under
   [.agent/skills/](../skills/) with platform adapters under
   [.claude/skills/](../../.claude/skills/) (and equivalents for other agents)
-- [ ] One trial session opened with `/start-right-quick` and closed with
-  `/session-handoff`
+- [ ] One trial solo session opened with `/jc-start-right-quick` and closed
+  with `/jc-session-handoff`
+- [ ] Aware that coordinated sessions use `/jc-start-right-team`; the named
+  closeout owner runs full `/jc-session-handoff`, while other team members
+  leave boundary-scoped closeout notes
 
 ### Sibling repositories (optional, only if relevant to your work)
 
@@ -101,13 +108,13 @@ That document lists the authoritative GitHub label for live tasks plus a
 small set of stable area onramps.
 
 If a starter task is contentious, ambiguous, or touches multiple workspaces,
-run `/start-right-quick` first and then `/metacognition` to discuss intent
+run `/jc-start-right-quick` first and then `/jc-metacognition` to discuss intent
 before committing to an approach.
 
 ## What this prompt is *not*
 
-- Not a substitute for `/start-right-quick`. That skill grounds every session;
-  this prompt grounds the *first* session.
+- Not a substitute for `/jc-start-right-quick` or `/jc-start-right-team`.
+  Those skills ground every session; this prompt grounds the *first* session.
 - Not durable team policy. Anything that should outlive a single teammate's
   ramp-up belongs in the docs linked at the top, not here.
 - Not a place for personal Claude usage statistics. Those are interesting at

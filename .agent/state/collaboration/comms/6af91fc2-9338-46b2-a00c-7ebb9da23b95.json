@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "6af91fc2-9338-46b2-a00c-7ebb9da23b95",
+  "created_at": "2026-05-14T08:30:37.770Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pearly Drifting Jetty",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e22"
+  },
+  "title": "Commit window: agent onboarding guidance",
+  "body": "Pearly Drifting Jetty opened git:index/head claim bbdfaba1 to commit the remaining onboarding guidance bundle after Luminous landed 37fbef6e. Intended pathspecs: README.md; .agent/prompts/onboarding-claude-teammate.md; .cursor/rules/use-start-right-skills.mdc; closed-claims archive; shared comms log; comms events from coordination with Luminous; active-claims lifecycle if dirty. Active queue and active agents were empty before opening; staged set was empty."
+}

@@ -24737,6 +24737,181 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "852a0512-a518-4d93-90b0-c38efc186d41",
+      "agent_id": {
+        "agent_name": "Pearly Drifting Jetty",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "README.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T08:17:54Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "add root README examples for working with agents",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T08:18:14Z",
+        "closed_by": {
+          "agent_name": "Pearly Drifting Jetty",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Added root README working-with-agents guidance with single-agent, team, continuation-pointer, and handoff examples. README markdownlint and diff whitespace checks passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "852a0512-a518-4d93-90b0-c38efc186d41",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f54fc399-ea54-4621-8eb8-664c8bc61b74",
+      "agent_id": {
+        "agent_name": "Pearly Drifting Jetty",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "README.md",
+            ".agent/prompts/onboarding-claude-teammate.md",
+            ".cursor/rules/use-start-right-skills.mdc",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T08:23:23Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "apply onboarding expert findings for agent start and handoff guidance",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T08:32:30Z",
+        "closed_by": {
+          "agent_name": "Pearly Drifting Jetty",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Applied onboarding expert findings across README, Claude teammate prompt, Cursor start-right rule, and handoff surfaces; validation passed; waiting for Luminous git window before commit.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f54fc399-ea54-4621-8eb8-664c8bc61b74",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "503e5b8a-1337-4371-9e55-66221013dbb1",
+      "agent_id": {
+        "agent_name": "Luminous Glowing Moon",
+        "platform": "cursor",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "d28cfd"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T08:26:11Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit context-cost-cli plan promotion + handoff updates.",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T08:28:53Z",
+        "closed_by": {
+          "agent_name": "Luminous Glowing Moon",
+          "platform": "cursor",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "d28cfd"
+        },
+        "summary": "Committed at 37fbef6e (docs(agent): promote context-cost-cli plan to decision-complete). 5 files; pre-commit hook clean; commit-msg clean.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "503e5b8a-1337-4371-9e55-66221013dbb1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "bbdfaba1-f6f1-41b7-8952-1070ffe6e731",
+      "agent_id": {
+        "agent_name": "Pearly Drifting Jetty",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T08:30:15Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit agent onboarding guidance bundle.",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T08:31:45Z",
+        "closed_by": {
+          "agent_name": "Pearly Drifting Jetty",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Closed in same collaboration-state commit for agent onboarding guidance bundle after staged verification.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "bbdfaba1-f6f1-41b7-8952-1070ffe6e731",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

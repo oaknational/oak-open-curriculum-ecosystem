@@ -54,6 +54,51 @@ Deliver_](docs/foundation/VISION.md#what-we-deliver) in the Vision.
 - **Oak teammates joining via Claude Code (or another AI coding agent)** — Quick Start as above, then the [Claude Code teammate onboarding prompt](.agent/prompts/onboarding-claude-teammate.md) for a guided first session, [MCP servers for contributors](docs/engineering/mcp-servers-for-contributors.md) for the sanctioned MCP set, and [good first issues](.agent/plans/good-first-issues.md) for what to pick up first
 - **AI agents** — read the [start-right-quick workflow](.agent/skills/start-right-quick/shared/start-right.md), then [AGENT.md](.agent/directives/AGENT.md), then scan the [five foundational ADRs](docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes) — the architectural source of truth
 
+### Working with agents
+
+This repository is designed for agentic development. Start agent sessions by
+naming the relevant start-right workflow and the outcome you want. The
+start-right workflow grounds the agent in the repo's live rules, plans,
+claims, comms, and git state before it acts.
+
+For Claude Code, Cursor, Gemini, or another slash-command surface, a single
+agent session might start with:
+
+```text
+/jc-start-right-quick find the most frequent user-impact bug from Sentry,
+create a plan for resolving it, then execute it
+```
+
+For a coordinated team:
+
+```text
+/jc-start-right-team you are part of a team of agents working on the
+knowledge graph enhancement plan, please continue
+```
+
+For existing threads, prefer a pointer to the thread continuation record rather
+than restating live state in the prompt:
+
+```text
+/jc-start-right-team continue agentic-engineering-enhancements from
+.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md.
+Treat this opener as a hypothesis until live grounding confirms it.
+```
+
+In Codex, use the same skill names through `/skills` or `$skill-name` mentions:
+
+```text
+$jc-start-right-team continue agentic-engineering-enhancements from
+.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md.
+Treat this opener as a hypothesis until live grounding confirms it.
+```
+
+Use `jc-session-handoff` at the end of a meaningful solo session so the next
+agent inherits the real state rather than a chat transcript guess. In team
+sessions, `jc-start-right-team` should name the closeout owner; only that owner
+runs the full handoff, while other team members leave boundary-scoped closeout
+notes.
+
 **Browse the documentation by section**:
 [Foundation](docs/foundation/README.md) (vision and the agentic
 engineering system) ·
