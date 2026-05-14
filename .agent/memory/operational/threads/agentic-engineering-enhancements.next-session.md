@@ -921,6 +921,7 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 | `codex` | `GPT-5` | Feathered Darting Kite | Handoff synthesiser (closed duplicate WS1 claims after overlap appeared; captured early failure surface; coordinated owner-requested session handoff) | 2026-05-14 | 2026-05-14 |
 | `codex` | `GPT-5` | Fronded Foraging Moss | Stand-down reviewer / analysis plan author (completed grounding, found duplicate WS1 ownership, later analysed the N=7 experiment and drafted the first-pass singleton-lane remediation plan; no source/index edits) | 2026-05-14 | 2026-05-14 |
 | `claude` | `claude-opus-4-7-1m` | Salty Swimming Hull | Consolidator (processed stale comms + abandoned queue residue; migrated rogue `comms-events/` to canonical `comms/`; surfaced `.active_claims` vs `.claims` grounding miss; authored cross-platform graduation-triage disposition plan at `graduation-triage-disposition-2026-05-14.plan.md`) | 2026-05-14 | 2026-05-14 |
+| `claude` | `claude-opus-4-7-1m` | Riverine Swimming Hull | Graduation-triage executor (executed batches A/B/C; landed all five D1–D5 amendments after owner per-diff review; metacognition correction on shape-selection-by-vehicle-weight; drafted and landed PDR-060 Tooling Friction Is First-Class User Feedback; archived disposition plan + D1–D5 drafts plan to `archive/completed/`) | 2026-05-14 | 2026-05-14 |
 
 ## Ferny Regrowing Leaf coordinator session (2026-05-12)
 
