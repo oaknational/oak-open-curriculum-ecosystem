@@ -156,13 +156,51 @@ shared file, and joint-decision closure.
 (empty — apply-don't-ask / stop-inventing-optionality reformulations
 graduated 2026-05-10 to PDR-057 + PDR-058; quarantine cleared)
 
-### `pending` (~76 body markers — second-instance or owner-direction gated)
+### `pending` (~77 body markers — second-instance or owner-direction gated)
 
 The bulk of the queue. Reviewed at every consolidation; most stay
 pending until trigger fires. Grep `status: pending` for the full
 list; entry-level summary index is intentionally omitted to avoid
 duplicating entry-body substance and to keep the index honest as
 the queue churns.
+
+### 2026-05-05 — Agent tooling friction is first-class user feedback (standing direction)
+
+`[captured: 2026-05-14 | source: comms-log (event 9a249c-tooling-feedback-standing-note, 2026-05-05) | target: pdr:tooling-friction-is-user-feedback OR rule:capture-tooling-friction-as-user-feedback | trigger: owner-direction | size: S-to-M | status: pending]`
+
+Owner standing direction recorded in comms-event
+`9a249c-tooling-feedback-standing-note` (Pelagic Swimming Rudder,
+2026-05-05): *"any friction with agent tooling should always be noted
+so the tooling and documentation can be improved. This is not limited
+to this identity-wordlist session. Agents are both users and authors
+of the tooling, so agent-observed friction is first-class user feedback
+and should be routed into the relevant plan, docs, napkin, or tooling
+backlog rather than left only in chat."*
+
+The doctrine has no permanent home. Surface scan 2026-05-14
+(Salty Swimming Hull consolidation) confirmed: no `.agent/directives/`,
+`.agent/rules/`, `.agent/practice-core/`, `distilled.md`, or
+`docs/governance/` entry codifies it. It is observed in practice —
+sessions routinely raise friction reports in comms and napkin — but
+the standing direction itself is unmoored. The risk is the routine
+quietly decaying when the conversational context drops.
+
+**Why PDR-shaped, not ADR-shaped**: applies to *how the Practice
+operates* (the discipline of treating agents-as-users), not to this
+repo's product architecture. Adopter scope = next Practice-bearing
+repo. Identical doctrine would be re-derived in any repo where
+agents both author and use the tooling.
+
+**Why also a rule candidate**: the standing direction maps to a
+behavioural cure that can fire at the moment friction is observed —
+parallel shape to `capture-practice-tool-feedback.md` (which covers
+practice-tool feedback specifically, not the broader agent-tooling
+surface). A rule would name: when friction observed → route to plan
+/ docs / napkin / tooling backlog, not to chat-only.
+
+**Trigger**: owner-direction; ready to graduate at next consolidation
+unless owner prefers different shape (e.g. amend an existing rule
+rather than a new one).
 
 ### 2026-05-10 graduations log (Sylvan Fruiting Glade — knowledge graduation session)
 

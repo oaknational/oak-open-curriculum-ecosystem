@@ -287,3 +287,141 @@ lives in the archived napkin.
   contracts, local dependency discipline, negative-decision memory, and
   a feedback loop that treats agent misfires as design evidence. The
   plan deliberately routes those as candidates, not automatic imports.
+
+## 2026-05-14 — Salty Swimming Hull consolidation grounding miss / claude / Opus 4.7 / `f6e2af`
+
+### `active-claims.json` key is `.claims`, not `.active_claims`
+
+- **Expected**: a session-open grounding probe `jq '.active_claims | length'`
+  would report the number of currently-held claims.
+- **Actual**: it returned `0` (jq treats unknown keys as null, length 0). The
+  file's actual key is `.claims`. Three live Codex claims (Shaded Shrouding Mask,
+  Foamy Fathoming Sail, Breezy Sailing Pier on session prefix `019e26`, opened
+  ~11:36 today) on `agent-tools/src/practice-fitness/**` and
+  `.agent/state/collaboration/comms/**` were invisible to my grounding.
+- **Consequence**: I edited 110 files inside Breezy's claimed `comms/**` area
+  without prior coordination, and ran a `commit_queue = []` jq edit on a file
+  three agents were writing to. The edit itself was safe (preserved `claims`),
+  but the missed-coordination breach is real and was only caught when the
+  comms-render side effect surfaced the `claims` array in a subsequent inspect.
+- **Behaviour change**: the canonical grounding probe is
+  `jq '{schema_version, claim_count: (.claims | length), commit_queue_count: (.commit_queue | length)}'`,
+  not `.active_claims`. The file is named *active-claims.json* but the array
+  inside is `.claims` — the name vs key asymmetry is the diagnostic. The
+  schema's `required` block (`["schema_version", "commit_queue", "claims"]`)
+  is the authoritative cue.
+- **Generalisation**: when a grounding probe returns zero/empty for a surface
+  that lives in shared state and has had multi-agent activity all week, treat
+  the zero as suspect and re-probe with the schema-confirmed key shape before
+  acting. "Empty grounding" plus "long-running activity" is a contradiction
+  worth resolving before mutating shared state.
+
+### Comms-render is non-pure with respect to active-claims.json
+
+- **Surprise**: running `collaboration-state comms render --comms-dir ... --output ...`
+  appeared to refresh the on-disk shape of `active-claims.json` such that
+  newly-arrived peer `claims` entries became visible in subsequent jq probes.
+  Either the render command itself touches the file (worth verifying), or
+  three Codex agents concurrently appended `claims` entries during the few
+  minutes the consolidation pass was active and the render call was simply
+  the next read.
+- **Behaviour change**: do not assume `active-claims.json` is stable across a
+  consolidation session. Re-read before any mutation that depends on
+  claims-emptiness, even when the same probe ran moments earlier. Treat the
+  file as a live-state surface with peer writers, not a snapshot.
+
+## 2026-05-14 — Feathered Darting Kite coordinated WS1 handoff / codex / GPT-5 / `019e26`
+
+### Duplicate WS1 claim collision resolved, but the coordination cost was real
+
+- **Expected**: after start-right-team grounding showed no active claims or
+  queue entries, a single agent would own WS1 token-measurement implementation
+  and other sessions would remain read-only unless explicitly routed.
+- **Actual**: several Codex sessions opened fresh claims within seconds on the
+  same files (`agent-tools/scripts/validate-practice-fitness.ts`,
+  `agent-tools/scripts/validate-practice-fitness.unit.test.ts`, and
+  `agent-tools/src/practice-fitness/**`). The source tree briefly held
+  competing partial module shapes, and an early focused Vitest run failed on a
+  missing module import, missing formatter/content aliases, and a bad raw-string
+  length fixture.
+- **What worked**: agents noticed the collision quickly. Fronded Foraging Moss
+  and Zephyrous Circling Current stood down; Feathered Darting Kite closed
+  duplicate claims and reported the failure surface; Foamy Fathoming Sail took
+  source reconciliation; Shaded Shrouding Mask, Floating Lifting Thermal,
+  Breezy Sailing Pier, and Foamy all reported WS1 validation green. The final
+  reported source shape stayed inside WS1: reusable Practice fitness logic
+  under `agent-tools/src/practice-fitness/`, content-only chars/4 token counts,
+  and a `Tokens:` report row with no token frontmatter or manifest work.
+- **Frustrations / blockers / issues**: claim-open was not enough to prevent a
+  thundering-herd start because the first few agents all saw the same empty
+  snapshot; one peer-staged rename briefly polluted the shared index; Salty
+  Swimming Hull's parallel stale-comms cleanup mutated `.agent/state` during the
+  WS1 window after probing `.active_claims` instead of `.claims`; and the
+  session ended with a validated but uncommitted source bundle plus shared-state
+  residue rather than a clean landing commit.
+- **Behaviour change**: for owner-directed multi-agent starts on one exact
+  source slice, appoint one source reconciler as soon as duplicate claims are
+  visible and have everyone else explicitly stand down or switch to read-only
+  review. Before mutating shared state, query the schema-confirmed `.claims`
+  key and re-check immediately before writes. Treat "empty claims" as a
+  moment-in-time fact, not a durable coordination assignment.
+
+## 2026-05-14 — Floating Lifting Thermal WS1 token-measurement team handoff / codex / GPT-5 / `019e26`
+
+### Duplicate "solo implementer" starts can create a team after grounding
+
+- **Expected**: start-right-team grounding showed no active claims, no active
+  queue, and a clean tree, so each WS1 Codex session reasonably announced a
+  solo-implementer route.
+- **Actual**: several agents started within seconds, opened overlapping claims
+  on the same Practice fitness files, and only then discovered the collision
+  through shared comms and active-claims refreshes. The implementation still
+  converged, but the first useful coordination act happened after overlap was
+  already real.
+- **Consequence**: claims prevented silent staging/commit collisions, but they
+  did not prevent duplicate source work because the sessions raced through the
+  "empty board" moment. The human-facing handoff needed to preserve both sides:
+  WS1 validation is genuinely green, and the path to that state was noisy. A
+  transient peer-staged rename also made the index feel unsafe until a final
+  `git diff --cached --name-status` showed it was clear.
+- **Behaviour change**: when multiple start-right-team launches target the same
+  narrow owner-selected lane, the closeout owner should reread team-start and
+  team-member closeout comms before writing continuity, then synthesise
+  positives, blockers, and frustrations explicitly. Do not flatten
+  duplicate-claim friction into "team handled it"; name the collision and the
+  exact next safe commit boundary.
+
+## 2026-05-14 — Salty Swimming Hull rogue `comms-events/` directory / claude / Opus 4.7 / `f6e2af`
+
+### Tooling drift wrote substantive coordination events to a retired path
+
+- **Expected**: every comms event authored by the unified agent-tools CLI lands
+  in `.agent/state/collaboration/comms/` and is picked up by `comms render`.
+- **Actual**: Feathered Darting Kite's session (`codex` / GPT-5 / `019e26`)
+  wrote three substantive events on 2026-05-14 — team-start report (11:36),
+  stand-down on duplicate-WS1-claim collision (11:39, diagnostic naming of
+  the Codex-multitask duplicate-claim friction), and the coordinated WS1
+  handoff opener (12:27) — into the retired path
+  `.agent/state/collaboration/comms-events/`. The directory had been retired
+  in favour of `comms/` (see commit `30c8ad15` *feat(agent-tools): unify
+  collaboration comms format*) but at least one CLI invocation path still
+  resolves to the old location for Feathered's session. None of the three
+  events appeared in `shared-comms-log.md` until the rogue directory was
+  discovered and the events migrated by hand.
+- **Consequence**: the canonical render of `shared-comms-log.md` silently
+  loses substance authored by sessions whose CLI resolves the wrong path.
+  Cross-agent coordination decisions made without those events as context
+  would be missing diagnostic information (in this case, the duplicate-claim
+  collision warning that explained the WS1 team overlap).
+- **Behaviour change**: during consolidation, **always** check for the
+  presence of `.agent/state/collaboration/comms-events/` alongside `comms/`.
+  If it exists, treat its contents as substance to migrate to `comms/` and
+  re-render, then remove the directory. Add to the Step 3a sweep surface
+  list until the underlying CLI drift is cured.
+- **Root cause hypothesis**: agent-tools CLI version skew — Feathered's
+  session may have invoked a cached build of agent-tools predating commit
+  `30c8ad15`, OR a default-path constant lingers in some script. Companion
+  to `feedback_use_built_agent_tools_only` (the dist-only invariant) — the
+  diagnostic is the symmetric failure shape: a stale dist resolves the old
+  path. Captured in the rogue dir's removal commit; root cause is owner /
+  agent-tooling backlog.
