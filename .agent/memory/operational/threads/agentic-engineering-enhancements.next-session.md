@@ -4,20 +4,37 @@
 
 - Branch: `feat/mcp-graph-support-foundation`.
 - Invocation pointer:
-  `$jc-start-right-team continue agentic-engineering-enhancements`.
-- Controlling plan for next session:
-  [`fitness-token-measurements-and-frontmatter-mandation.plan.md`](../../plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md).
-- Owner-directed next safe step: first land the validated-but-uncommitted WS1
-  token-measurement bundle with exact pathspec coordination, then continue to
-  WS2 (`ws2-token-frontmatter`) only after that commit boundary is clean.
-- Agentic-engineering collaboration sequence for the next session:
-  1. **Owner-selected implementation lane** — WS1 token measurement is
-     implemented and validation-green in the working tree, but not committed in
-     this handoff. Commit WS1 first, then continue the token-cost plan in order.
-     Do not skip to manifest coverage before token-frontmatter semantics land.
-  2. **Paused active spine** — P8 remains part-way done, not complete. Resume
-     mandatory P8 at `p8-attention-state` after the token-cost lane unless the
-     owner gives newer direction.
+  `$jc-start-right-quick continue agentic-engineering-enhancements`.
+- Controlling program for sequence routing:
+  [`token-remediation-p8-parallel-program.plan.md`](../../plans/agentic-engineering-enhancements/current/token-remediation-p8-parallel-program.plan.md)
+  — **Step 1 closed at WS2 boundary (2026-05-14, commit `72d31ca8`).
+  Upstream schema interrupt scheduled for next session per the program's
+  Interrupt Log; Step 2 (singleton-lane remediation) opens the session
+  after the interrupt closes.**
+- Owner-directed next safe step: **address the upstream Oak API schema
+  interrupt.** The codegen output sits in the working tree at session
+  close (13 files under `packages/sdks/oak-sdk-codegen/`); curriculum-sdk
+  and search-cli downstream consumers fail `pnpm check` against it
+  (programme-variant filters + multi-unit lesson shape — `unitSlug` /
+  `unitTitle` moved from flat lesson fields into a `units[]` array). The
+  next session decides shape (forward migration of consumers OR scoped
+  revert with separately routed adoption lane) and lands a green-gate
+  state. WS2 session-handoff was committed `--no-verify` once with fresh
+  owner authorisation to preserve the session-close boundary while the
+  interrupt is properly scoped.
+- Agentic-engineering collaboration sequence for the next two sessions:
+  1. **Next session — Upstream schema interrupt** (one-session budget per
+     program Interrupt Log 2026-05-14 #2). Decide and land the adoption
+     shape; restore `pnpm check` green. Do not start Step 2 work this
+     session.
+  2. **Session-after-next — Step 2 (singleton-lane remediation)** opens
+     against
+     [`start-right-team-singleton-lane-remediation.plan.md`](../../plans/agent-tooling/current/start-right-team-singleton-lane-remediation.plan.md).
+     The plan is **not decision-complete**; first sub-step is
+     owner/reviewer review then WS0 baseline disposition.
+  3. **Paused active spine — Step 3** — P8 acceptance
+     (`p8-attention-state`) remains blocked behind Step 2 per the program
+     advancement rule.
   3. **Strategic exercise lane** — if the owner asks to exercise the new
      external-substrate learning plan, open
      [`external-skills-substrate-learning.plan.md`](../../plans/agentic-engineering-enhancements/future/external-skills-substrate-learning.plan.md),
@@ -932,6 +949,7 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 | `codex` | `GPT-5` | Fronded Foraging Moss | Stand-down reviewer / analysis plan author (completed grounding, found duplicate WS1 ownership, later analysed the N=7 experiment and drafted the first-pass singleton-lane remediation plan; no source/index edits) | 2026-05-14 | 2026-05-14 |
 | `claude` | `claude-opus-4-7-1m` | Salty Swimming Hull | Consolidator (processed stale comms + abandoned queue residue; migrated rogue `comms-events/` to canonical `comms/`; surfaced `.active_claims` vs `.claims` grounding miss; authored cross-platform graduation-triage disposition plan at `graduation-triage-disposition-2026-05-14.plan.md`) | 2026-05-14 | 2026-05-14 |
 | `claude` | `claude-opus-4-7-1m` | Riverine Swimming Hull | Graduation-triage executor (executed batches A/B/C; landed all five D1–D5 amendments after owner per-diff review; metacognition correction on shape-selection-by-vehicle-weight; drafted and landed PDR-060 Tooling Friction Is First-Class User Feedback; archived disposition plan + D1–D5 drafts plan to `archive/completed/`) | 2026-05-14 | 2026-05-14 |
+| `claude` | `claude-opus-4-7-1m` | Highland Circling Plume | Implementer (WS2 token-frontmatter zone classification: `fitness_token_target`/`fitness_token_limit` parsing, token-zone classification folded into `overallZone`, target-only configuration-finding semantics, ADR-144 in-place amendment; landed at `72d31ca8` after three reviewer APPROVEs; closed Step 1 of the cross-thread token-remediation-p8-parallel program at the WS2 boundary; snapshot update at `737942c0`) | 2026-05-14 | 2026-05-14 |
 
 ## Ferny Regrowing Leaf coordinator session (2026-05-12)
 

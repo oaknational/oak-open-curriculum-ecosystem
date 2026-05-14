@@ -27,6 +27,61 @@ lives in the archived napkin.
 [archive-pass]: archive/napkin-2026-05-14.md
 [previous-pass]: archive/napkin-2026-05-13.md
 
+## 2026-05-14 — Highland Circling Plume WS2 landing observations / claude / Opus 4.7 / `38070b`
+
+**Context**: Solo WS2 token-frontmatter implementation session. WS2 landed at
+`72d31ca8`; cross-thread program §Current Snapshot updated at `737942c0`
+closing Step 1 at the WS2 boundary.
+
+**Observation — markdownlint MD004 trips on continuation-line `+`**: I wrote a
+multi-line prose paragraph in §Current Snapshot containing a list of commit
+SHAs followed by `+ PDR-060` on a wrapped line. Markdownlint flagged the
+wrapped line as `MD004/ul-style Expected: dash; Actual: plus` because the
+scanner treats any `+` at column 3 inside a list-item continuation as a
+list-bullet candidate. Pre-commit hook blocked. Fix was to reflow the line so
+the `+` no longer occupied that column (replaced with "plus PDR-060").
+Falsifiability: any prose-continuation line in a list item that starts with
+`+` at columns 1–4 trips this rule, even when the surrounding text is clearly
+prose. Future: prefer "plus" / "and" over `+` in prose-continuation lines
+under list items; the rule is consistent, not capricious.
+
+**Observation — parallel reviewer dispatch with scope-fixed brief works**:
+test-expert, code-expert, and docs-adr-expert ran simultaneously with briefs
+that pre-named the closed decisions and asked execution-legitimacy questions
+only. All three returned focused verdicts in ~50s with zero re-opening of
+D1–D10. test-expert correctly identified one audit-shaped duplicate test
+(deleted); code-expert correctly identified one inline-policy duplication
+(extracted as `anyConfigurationFindings`). Reinforces
+`feedback_reviewer_brief_respects_decided_scope`; worked instance of
+parallel-default coordination producing better signal than serial review.
+
+**Pre-existing memory pressure caveat for `strict-hard`**: `pnpm
+practice:fitness:strict-hard` exits 1 on this branch due to known pressure
+in `napkin.md`, `pending-graduations.md`, `repo-continuity.md`, and
+`collaboration-state-conventions.md` — unrelated to WS2. Plan D7
+("no reactive trimming") kept this from being treated as a WS2 acceptance
+regression. The `strict-hard` red is a genuine routing input that belongs to
+the consolidation cadence, not the WS-level cadence.
+
+**Surprise — upstream schema drift surfaced at session-handoff commit**: the
+session-handoff pre-commit hook caught an unrelated upstream Oak API schema
+regen in the working tree (programme-variant filters + multi-unit lesson
+shape; `unitSlug` / `unitTitle` moved from flat lesson fields to `units[]`
+array). `curriculum-sdk` and `search-cli` fail `pnpm check` against the new
+codegen output. I initially framed this as "unrelated to WS2" — owner
+corrected: "it never, ever matters where it was caused, quality gates are
+always blocking." Owner authorised a single `--no-verify` to land the
+session-handoff bundle, scheduled the upstream adoption as a one-session
+interrupt on the cross-thread program plan, and deferred Step 2 to the
+session after. Falsifiability: the program plan Interrupt Log entry
+2026-05-14 #2 records the interrupt; the next session's resolution must
+either land green gates or surface a routed lane with explicit work
+boundary. **Doctrine drift detected**: session-handoff should include a
+`pnpm check` cleanliness gate, since not all quality gates are part of
+pre-commit. Owner stated standing 2026-05-14: session-handoff cannot be
+considered complete in the individual-contributor or handoff-owner sense
+unless `pnpm check` completes with no errors or warnings.
+
 ## 2026-05-14 — Shadowed Glimmering Night token-cost route correction / codex / GPT-5 / `019e25`
 
 ### Owner-selected next session — complete token-cost work

@@ -2288,7 +2288,7 @@ export const PATH_OPERATIONS = [
     "method": "get",
     "operationId": "getUnits-getUnit",
     "summary": "Unit summary",
-    "description": "This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit",
+    "description": "This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit. Optional programme-factor filters can narrow the returned variant. The childSubject filter is only available for science units and accepts biology, chemistry, combined-science, or physics.",
     "parameters": [
       {
         "in": "path",
@@ -2298,7 +2298,58 @@ export const PATH_OPERATIONS = [
         "schema": {
           "type": "string",
           "description": "The unit slug",
-          "example": "simple-compound-and-adverbial-complex-sentences"
+          "example": "programming-subroutines"
+        }
+      },
+      {
+        "in": "query",
+        "name": "examBoard",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "aqa",
+            "edexcel",
+            "eduqas",
+            "ocr",
+            "wjec",
+            "edexcelb"
+          ]
+        }
+      },
+      {
+        "in": "query",
+        "name": "pathway",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "core",
+            "gcse"
+          ]
+        }
+      },
+      {
+        "in": "query",
+        "name": "tier",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "core",
+            "foundation",
+            "higher"
+          ]
+        }
+      },
+      {
+        "in": "query",
+        "name": "childSubject",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "biology",
+            "chemistry",
+            "combined-science",
+            "physics"
+          ]
         }
       }
     ],

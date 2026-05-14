@@ -98,6 +98,10 @@ export const REQUEST_PARAMETER_SCHEMAS = {
   }),
   "GET:/units/:unit/summary": z.object({
     "unit": z.string(),
+    "examBoard": z.enum(["aqa", "edexcel", "eduqas", "ocr", "wjec", "edexcelb"]).optional(),
+    "pathway": z.enum(["core", "gcse"]).optional(),
+    "tier": z.enum(["core", "foundation", "higher"]).optional(),
+    "childSubject": z.enum(["biology", "chemistry", "combined-science", "physics"]).optional(),
   }),
   "GET:/threads": z.object({}),
   "GET:/threads/:threadSlug/units": z.object({

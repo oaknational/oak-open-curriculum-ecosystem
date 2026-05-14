@@ -1,39 +1,42 @@
 /* GENERATED FILE - DO NOT EDIT */
 export const stubGetUnitsSummaryResponse = {
-  "unitSlug": "simple-compound-and-adverbial-complex-sentences",
-  "unitTitle": "Simple, compound and adverbial complex sentences",
-  "yearSlug": "year-3",
-  "year": 3,
-  "phaseSlug": "primary",
-  "subjectSlug": "english",
-  "keyStageSlug": "ks2",
+  "unitSlug": "programming-subroutines",
+  "unitTitle": "Programming subroutines",
+  "yearSlug": "year-10",
+  "year": 10,
+  "phaseSlug": "secondary",
+  "subjectSlug": "computing",
+  "keyStageSlug": "ks4",
   "priorKnowledgeRequirements": [
-    "A simple sentence is about one idea and makes complete sense.",
-    "Any simple sentence contains one verb and at least one noun.",
-    "Two simple sentences can be joined with a co-ordinating conjunction to form a compound sentence."
+    "Variables can be used to store values in a program.",
+    "Selection can be used to choose between paths in a program.",
+    "Iteration can be used to repeat a set of instructions."
   ],
   "nationalCurriculumContent": [
-    "Ask relevant questions to extend their understanding and knowledge",
-    "Articulate and justify answers, arguments and opinions",
-    "Speak audibly and fluently with an increasing command of Standard English"
+    "Use two or more programming languages, at least one of which is textual, to solve a variety of computational problems.",
+    "Make appropriate use of data structures.",
+    "Design and develop modular programs."
   ],
-  "threads": [
-    {
-      "slug": "developing-grammatical-knowledge",
-      "title": "Developing grammatical knowledge",
-      "order": 10
+  "programmeFactors": {
+    "examBoard": {
+      "slug": "aqa",
+      "title": "AQA"
+    },
+    "pathway": {
+      "slug": "gcse",
+      "title": "GCSE"
     }
-  ],
+  },
   "unitLessons": [
     {
-      "lessonSlug": "four-types-of-simple-sentence",
-      "lessonTitle": "Four types of simple sentence",
+      "lessonSlug": "structured-programs",
+      "lessonTitle": "Structured programs",
       "lessonOrder": 1,
       "state": "published"
     },
     {
-      "lessonSlug": "three-ways-for-co-ordination-in-compound-sentences",
-      "lessonTitle": "Three ways for co-ordination in compound sentences",
+      "lessonSlug": "subroutines-with-parameters",
+      "lessonTitle": "Subroutines with parameters",
       "lessonOrder": 2,
       "state": "new"
     }

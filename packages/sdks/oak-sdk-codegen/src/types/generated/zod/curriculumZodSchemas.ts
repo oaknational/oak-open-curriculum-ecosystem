@@ -1506,8 +1506,38 @@ const LessonSummaryResponseSchema = z
     lessonTitle: z.string(),
     canonicalUrl: z.url(),
     oakUrl: z.url(),
-    unitSlug: z.string(),
-    unitTitle: z.string(),
+    units: z.array(
+      z
+        .object({
+          unitSlug: z.string(),
+          unitTitle: z.string(),
+          programmeFactors: z
+            .object({
+              examBoard: z
+                .object({ slug: z.string(), title: z.string() })
+                .strict(),
+              pathway: z
+                .object({ slug: z.string(), title: z.string() })
+                .strict(),
+              tier: z.object({ slug: z.string(), title: z.string() }).strict(),
+              childSubject: z
+                .object({
+                  slug: z.enum([
+                    "biology",
+                    "chemistry",
+                    "combined-science",
+                    "physics",
+                  ]),
+                  title: z.string(),
+                })
+                .strict(),
+            })
+            .partial()
+            .strict()
+            .optional(),
+        })
+        .strict()
+    ),
     subjectSlug: z.string(),
     subjectTitle: z.string(),
     keyStageSlug: z.string(),
@@ -1591,6 +1621,26 @@ const UnitSummaryResponseSchema = z
           })
           .strict()
       )
+      .optional(),
+    programmeFactors: z
+      .object({
+        examBoard: z.object({ slug: z.string(), title: z.string() }).strict(),
+        pathway: z.object({ slug: z.string(), title: z.string() }).strict(),
+        tier: z.object({ slug: z.string(), title: z.string() }).strict(),
+        childSubject: z
+          .object({
+            slug: z.enum([
+              "biology",
+              "chemistry",
+              "combined-science",
+              "physics",
+            ]),
+            title: z.string(),
+          })
+          .strict(),
+      })
+      .partial()
+      .strict()
       .optional(),
     unitLessons: z.array(
       z
@@ -2817,13 +2867,37 @@ This endpoint contains licence information for any third-party content contained
   {
     method: "get",
     path: "/units/:unit/summary",
-    description: `This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit`,
+    description: `This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit. Optional programme-factor filters can narrow the returned variant. The childSubject filter is only available for science units and accepts biology, chemistry, combined-science, or physics.`,
     requestFormat: "json",
     parameters: [
       {
         name: "unit",
         type: "Path",
         schema: z.string(),
+      },
+      {
+        name: "examBoard",
+        type: "Query",
+        schema: z
+          .enum(["aqa", "edexcel", "eduqas", "ocr", "wjec", "edexcelb"])
+          .optional(),
+      },
+      {
+        name: "pathway",
+        type: "Query",
+        schema: z.enum(["core", "gcse"]).optional(),
+      },
+      {
+        name: "tier",
+        type: "Query",
+        schema: z.enum(["core", "foundation", "higher"]).optional(),
+      },
+      {
+        name: "childSubject",
+        type: "Query",
+        schema: z
+          .enum(["biology", "chemistry", "combined-science", "physics"])
+          .optional(),
       },
     ],
     response: UnitSummaryResponseSchema,

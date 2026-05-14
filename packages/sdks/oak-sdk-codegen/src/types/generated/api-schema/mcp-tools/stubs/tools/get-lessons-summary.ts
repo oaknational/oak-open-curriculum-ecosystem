@@ -1,10 +1,14 @@
 /* GENERATED FILE - DO NOT EDIT */
 export const stubGetLessonsSummaryResponse = {
   "lessonTitle": "Using vector tools to draw and modify shapes",
-  "canonicalUrl": "https://www.thenational.academy/teachers/programmes/computing-secondary-ks3/units/developing-vector-graphics/lessons/using-vector-tools-to-draw-and-modify-shapes",
+  "canonicalUrl": "https://www.thenational.academy/teachers/lessons/using-vector-tools-to-draw-and-modify-shapes",
   "oakUrl": "https://www.thenational.academy/teachers/lessons/using-vector-tools-to-draw-and-modify-shapes",
-  "unitSlug": "developing-vector-graphics",
-  "unitTitle": "Developing vector graphics",
+  "units": [
+    {
+      "unitSlug": "developing-vector-graphics",
+      "unitTitle": "Developing vector graphics"
+    }
+  ],
   "subjectSlug": "computing",
   "subjectTitle": "Computing",
   "keyStageSlug": "ks3",

@@ -31,8 +31,11 @@ isProject: true
 # Token / Remediation / P8 / Parallel Program 2026-05-14
 
 **Last Updated**: 2026-05-14
-**Status**: SEQUENCE-LIVE — Step 1 closed at WS2 boundary; Step 2 opens
-next session (WS2 of token plan landed at `72d31ca8`).
+**Status**: SEQUENCE-LIVE — Step 1 closed at WS2 boundary (WS2 of token
+plan landed at `72d31ca8`). **Interrupt scheduled**: upstream Oak API
+schema adoption (programme-variant filters + multi-unit lesson shape)
+runs next session as a one-session interrupt; Step 2 (singleton-lane
+remediation) opens the session after.
 **Collection**: `agentic-engineering-enhancements/current` (program
 spans two threads — see §Threads Touched).
 **Threads Touched**:
@@ -48,7 +51,10 @@ spans two threads — see §Threads Touched).
 (updated by every session that touches the program)
 
 - **Current step**: Step 1 — finish token-related work — **CLOSED at WS2
-  boundary**. Step 2 — singleton-lane remediation — opens next session.
+  boundary**. Step 2 — singleton-lane remediation — was originally scheduled
+  for the next session, but an upstream schema interrupt (see Interrupt
+  Log entry 2026-05-14 #2) takes the next session; Step 2 now opens the
+  session after the interrupt resolves.
 - **This session advanced Step 1**: WS2 (`ws2-token-frontmatter`)
   acceptance proven at commit `72d31ca8`. Token-zone classification,
   `overallZone` folding, target-only configuration-finding semantics,
@@ -59,10 +65,17 @@ spans two threads — see §Threads Touched).
   manifest detection, frontmatter sweep) deferred per program scope.
 - **Next safe step**: open the next session against the
   `agentic-engineering-enhancements` thread, ground via
-  `jc-start-right-quick`, and begin Step 2 — the singleton-lane
-  remediation plan at
+  `jc-start-right-quick`, and **address the upstream Oak API schema
+  interrupt** (programme-variant filters + multi-unit lesson shape). The
+  codegen output sits in the working tree at session close (13 files in
+  `packages/sdks/oak-sdk-codegen/`); the curriculum-sdk and search-cli
+  downstream consumers fail `pnpm check` against it. The interrupt
+  session decides shape (forward-fix downstream to the new array shape
+  OR scoped revert with separately routed adoption lane) and lands a
+  green-gate state. After interrupt closes, the session after opens
+  Step 2 — the singleton-lane remediation plan at
   [`start-right-team-singleton-lane-remediation.plan.md`](../../agent-tooling/current/start-right-team-singleton-lane-remediation.plan.md).
-  The plan is **not decision-complete**; first safe sub-step is
+  That plan is **not decision-complete**; first safe sub-step is
   owner/reviewer review then WS0 baseline disposition.
 - **Last sequence-touching commits**: `72d31ca8` (WS2 token frontmatter
   zone classification — closes Step 1). Prior orthogonal work:
@@ -248,6 +261,7 @@ program).
 | Date | Interrupt | Owning agent | Budget | Status | Resume note |
 |---|---|---|---|---|---|
 | 2026-05-14 | Graduation-triage execution + metacog correction + PDR-060 landing | Riverine Swimming Hull | 1 session | resolved this session | program authoring is the resume note |
+| 2026-05-14 | Upstream Oak API schema adoption (programme-variant filters + multi-unit lesson shape; codegen drift broke curriculum-sdk + search-cli `pnpm check`) | Highland Circling Plume surfaced; next session owns | 1 session | scheduled — runs next session | After interrupt session lands green gates, session-after-next opens Step 2 (singleton-lane remediation) per the original program sequence. Session-handoff for WS2 committed `--no-verify` once with fresh owner authorisation to preserve session-close boundary while the interrupt is properly scoped. |
 
 ## Anti-Decay Handoff Clause
 
