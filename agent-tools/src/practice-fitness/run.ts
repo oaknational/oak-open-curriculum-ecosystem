@@ -74,6 +74,25 @@ function writeZoneMessages(io: PracticeFitnessIo, results: readonly FitnessResul
   }
 }
 
+function writeConfigurationFindings(
+  io: PracticeFitnessIo,
+  results: readonly FitnessResult[],
+): void {
+  const filesWithFindings = results.filter((result) => result.configurationFindings.length > 0);
+  if (filesWithFindings.length === 0) {
+    return;
+  }
+
+  io.log(
+    '\n\x1b[33mConfiguration findings (frontmatter invalid; separate from overall zone):\x1b[0m',
+  );
+  for (const result of filesWithFindings) {
+    for (const finding of result.configurationFindings) {
+      io.log(`  ${result.filename}: ${finding.text}`);
+    }
+  }
+}
+
 function writeCriticalPostMortemPrompt(
   io: PracticeFitnessIo,
   results: readonly FitnessResult[],
@@ -105,11 +124,17 @@ export async function runPracticeFitnessCheck(
   writeFileResults(io, results);
   writeSummary(io, mode, results);
   writeZoneMessages(io, results);
+  writeConfigurationFindings(io, results);
   writeCriticalPostMortemPrompt(io, results);
   io.log();
 
   return getExitCode(
     mode,
     results.map((result) => result.overallZone),
+    anyConfigurationFindings(results),
   );
+}
+
+function anyConfigurationFindings(results: readonly FitnessResult[]): boolean {
+  return results.some((result) => result.configurationFindings.length > 0);
 }

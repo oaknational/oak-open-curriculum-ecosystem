@@ -255,6 +255,131 @@ describe('content-only token measurement', () => {
     expect(charsOverFourTokenizer.estimate(raw)).toBe(3);
   });
 
+  it('parses fitness_token_target and fitness_token_limit as numbers', () => {
+    const content = [
+      '---',
+      'fitness_token_target: 100',
+      'fitness_token_limit: 200',
+      '---',
+      'alpha',
+    ].join('\n');
+
+    const result = evaluateFitnessFile('tokens.md', content);
+
+    expect(result.targetTokens).toBe(100);
+    expect(result.limitTokens).toBe(200);
+  });
+
+  it('classifies token zone healthy when estimated tokens are at or below target', () => {
+    const content = [
+      '---',
+      'fitness_token_target: 100',
+      'fitness_token_limit: 200',
+      '---',
+      'a',
+    ].join('\n');
+
+    const result = evaluateFitnessFile('tokens-healthy.md', content);
+
+    expect(result.tokenZone).toBe('healthy');
+    expect(result.configurationFindings).toEqual([]);
+  });
+
+  it('classifies token zone soft when estimated tokens are above target but at or below limit', () => {
+    // 401 content chars -> 101 estimated tokens (chars/4 ceil).
+    const body = 'a'.repeat(401);
+    const content = [
+      '---',
+      'fitness_token_target: 100',
+      'fitness_token_limit: 200',
+      '---',
+      body,
+    ].join('\n');
+
+    const result = evaluateFitnessFile('tokens-soft.md', content);
+
+    expect(result.totalChars).toBe(401);
+    expect(result.estimatedTokens).toBe(101);
+    expect(result.tokenZone).toBe('soft');
+  });
+
+  it('classifies token zone hard when estimated tokens exceed limit but within critical ratio', () => {
+    // 805 content chars -> 202 estimated tokens; limit 200, critical = 300.
+    const body = 'a'.repeat(805);
+    const content = [
+      '---',
+      'fitness_token_target: 100',
+      'fitness_token_limit: 200',
+      '---',
+      body,
+    ].join('\n');
+
+    const result = evaluateFitnessFile('tokens-hard.md', content);
+
+    expect(result.tokenZone).toBe('hard');
+    expect(result.overallZone).toBe('hard');
+  });
+
+  it('classifies token zone critical when estimated tokens exceed limit times critical ratio', () => {
+    // 1204 content chars -> 302 estimated tokens; limit 200, critical = 300.
+    const body = 'a'.repeat(1204);
+    const content = [
+      '---',
+      'fitness_token_target: 100',
+      'fitness_token_limit: 200',
+      '---',
+      body,
+    ].join('\n');
+
+    const result = evaluateFitnessFile('tokens-critical.md', content);
+
+    expect(result.tokenZone).toBe('critical');
+    expect(result.overallZone).toBe('critical');
+  });
+
+  it('folds token zone into overallZone as the worst zone', () => {
+    const body = 'a'.repeat(805);
+    const content = [
+      '---',
+      'fitness_line_target: 100',
+      'fitness_line_limit: 200',
+      'fitness_token_target: 100',
+      'fitness_token_limit: 200',
+      '---',
+      body,
+    ].join('\n');
+
+    const result = evaluateFitnessFile('overall-token.md', content);
+
+    expect(result.lineZone).toBe('healthy');
+    expect(result.tokenZone).toBe('hard');
+    expect(result.overallZone).toBe('hard');
+  });
+
+  it('reports a configuration finding when target is set without limit', () => {
+    const content = ['---', 'fitness_token_target: 100', '---', 'short'].join('\n');
+
+    const result = evaluateFitnessFile('target-only.md', content);
+
+    expect(result.tokenZone).toBeNull();
+    expect(result.configurationFindings).toHaveLength(1);
+    expect(result.configurationFindings[0]).toEqual({
+      metric: 'tokens',
+      text: 'fitness_token_target declared without fitness_token_limit — declare both or neither',
+    });
+  });
+
+  it('does not classify target-only as a fitness zone', () => {
+    const content = ['---', 'fitness_token_target: 1', '---', 'considerable body of text'].join(
+      '\n',
+    );
+
+    const result = evaluateFitnessFile('target-only-zone.md', content);
+
+    expect(result.tokenZone).toBeNull();
+    expect(result.overallZone).toBe('healthy');
+  });
+
   it('differs from context-cost raw-file estimates when frontmatter is present', () => {
     const raw = [
       '---',

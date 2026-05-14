@@ -42,4 +42,19 @@ describe('getExitCode', () => {
     expect(getExitCode('strict-hard', ['healthy', 'soft'])).toBe(0);
     expect(getExitCode('strict-hard', [])).toBe(0);
   });
+
+  it('exits 1 in strict mode when configuration findings exist regardless of zones', () => {
+    expect(getExitCode('strict', ['healthy'], true)).toBe(1);
+    expect(getExitCode('strict', [], true)).toBe(1);
+  });
+
+  it('exits 1 in strict-hard mode when configuration findings exist regardless of zones', () => {
+    expect(getExitCode('strict-hard', ['healthy'], true)).toBe(1);
+    expect(getExitCode('strict-hard', ['soft'], true)).toBe(1);
+  });
+
+  it('exits 0 in informational mode even when configuration findings exist', () => {
+    expect(getExitCode('informational', ['healthy'], true)).toBe(0);
+    expect(getExitCode('informational', ['critical'], true)).toBe(0);
+  });
 });

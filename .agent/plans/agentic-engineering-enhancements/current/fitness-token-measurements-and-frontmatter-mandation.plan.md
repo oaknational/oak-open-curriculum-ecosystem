@@ -15,7 +15,7 @@ todos:
     status: completed
   - id: ws2-token-frontmatter
     content: "Amend ADR-144, then add optional fitness_token_target and fitness_token_limit fields with tested zone classification."
-    status: pending
+    status: completed
     depends_on: [ws1-token-measurement]
   - id: ws3-convention
     content: "Document the frontmatter convention, including token fields, inclusion criteria, and response discipline."
@@ -39,7 +39,7 @@ isProject: false
 # Fitness Token Measurements And Frontmatter Mandation
 
 **Last Updated**: 2026-05-14
-**Status**: 🟡 IN EXECUTION — WS1 COMPLETE / WS2 NEXT
+**Status**: 🟡 IN EXECUTION — WS1 & WS2 COMPLETE / WS3 DEFERRED (program Step 1 closed at WS2 boundary)
 **Scope**: Add token estimates to the existing Practice fitness surface,
 extend fitness frontmatter with optional token thresholds, and make the
 frontmatter convention enforceable for agent guidance files.

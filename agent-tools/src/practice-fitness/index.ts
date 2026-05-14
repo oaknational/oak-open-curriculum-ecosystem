@@ -11,6 +11,7 @@ export {
 } from './model.js';
 export type {
   FitnessCeilingZone,
+  FitnessConfigurationFinding,
   FitnessMetric,
   FitnessMode,
   FitnessZone,

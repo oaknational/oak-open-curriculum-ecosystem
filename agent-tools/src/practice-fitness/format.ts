@@ -38,7 +38,27 @@ function formatLineStatus(result: FitnessResult): string {
 }
 
 function formatTokenStatus(result: FitnessResult): string {
-  return `    Tokens:           ${String(result.estimatedTokens).padStart(6)}  (content est.; no threshold)`;
+  const count = String(result.estimatedTokens).padStart(6);
+
+  if (result.tokenZone == null) {
+    return `    Tokens:           ${count}  (content est.; no threshold)`;
+  }
+
+  const targetPart = result.targetTokens == null ? '' : `target ${result.targetTokens}`;
+  const limitPart = result.limitTokens == null ? '' : `limit ${result.limitTokens}`;
+  const thresholds = [targetPart, limitPart].filter(Boolean).join(' / ');
+
+  return `    Tokens:           ${count} / ${thresholds}  ${zoneGlyph(result.tokenZone)}  (content est.)`;
+}
+
+function formatConfigurationFindings(result: FitnessResult): string[] {
+  if (result.configurationFindings.length === 0) {
+    return [];
+  }
+  return [
+    '    Configuration findings:',
+    ...result.configurationFindings.map((finding) => `      - ${finding.text}`),
+  ];
 }
 
 function formatCharStatus(result: FitnessResult): string {
@@ -92,6 +112,7 @@ export function formatFitnessResult(result: FitnessResult): string {
     formatCharStatus(result),
     formatProseStatus(result),
     ...formatProseViolationLines(result),
+    ...formatConfigurationFindings(result),
   ].join('\n');
 }
 

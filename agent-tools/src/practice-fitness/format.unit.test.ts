@@ -37,6 +37,44 @@ describe('formatFitnessResult', () => {
   });
 });
 
+describe('formatFitnessResult with token thresholds', () => {
+  it('renders token row with target and limit when both are declared', () => {
+    const content = [
+      '---',
+      'fitness_token_target: 100',
+      'fitness_token_limit: 200',
+      '---',
+      'short body',
+    ].join('\n');
+    const result = evaluateFitnessFile('with-thresholds.md', content);
+
+    const output = formatFitnessResult(result);
+    expect(output).toContain('Tokens:');
+    expect(output).toContain('target 100');
+    expect(output).toContain('limit 200');
+    expect(output).not.toMatch(/Tokens:.*\(no threshold\)/);
+  });
+
+  it('renders configuration findings when target is declared without limit', () => {
+    const content = ['---', 'fitness_token_target: 100', '---', 'short'].join('\n');
+    const result = evaluateFitnessFile('target-only.md', content);
+
+    const output = formatFitnessResult(result);
+    expect(output).toContain('Configuration findings:');
+    expect(output).toContain('fitness_token_target declared without fitness_token_limit');
+  });
+
+  it('does not render configuration findings section when none exist', () => {
+    const content = ['---', 'fitness_line_target: 1', 'fitness_line_limit: 2', '---', 'a'].join(
+      '\n',
+    );
+    const result = evaluateFitnessFile('clean.md', content);
+
+    const output = formatFitnessResult(result);
+    expect(output).not.toContain('Configuration findings:');
+  });
+});
+
 describe('formatFitnessResponseDiscipline', () => {
   it('reminds agents to preserve substance and route fitness structurally', () => {
     const guidance = formatFitnessResponseDiscipline();

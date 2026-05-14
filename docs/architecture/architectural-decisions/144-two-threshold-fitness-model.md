@@ -10,6 +10,11 @@ graduation, or knowledge preservation.
 **Amended**: 2026-05-07 — clarified non-reactive handling: fitness output must
 remind agents to preserve substance first and route pressure structurally, not
 trim memory or Practice Core content to make the signal disappear.
+**Amended**: 2026-05-14 — extended the two-threshold model to optional
+`fitness_token_target` / `fitness_token_limit` frontmatter fields with
+content-only chars/4 estimation, and made target-only token configuration an
+invalid frontmatter shape reported as a separate configuration finding with
+mode-dependent exit semantics. See §Token Threshold Extension below.
 **Related**: [ADR-131 (Self-Reinforcing Improvement Loop)](131-self-reinforcing-improvement-loop.md),
 [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md),
 [ADR-127 (Documentation as Foundational Infrastructure)](127-documentation-as-foundational-infrastructure.md),
@@ -63,16 +68,48 @@ thresholds and a single global ratio.
 `CRITICAL_RATIO` is declared once in the validator
 (`scripts/validate-practice-fitness.ts`) as a named constant. Its current
 value is `1.5`. The ratio applies uniformly to `fitness_line_limit`,
-`fitness_char_limit`, and `fitness_line_length`. No per-file
-`fitness_*_critical` frontmatter field exists; if a file legitimately needs
-divergent critical-zone behaviour, the correct response is to adjust its hard
-limit, not to introduce per-file ratios. This choice follows
-`.agent/directives/principles.md` §Strict ("do not invent optionality").
+`fitness_char_limit`, `fitness_line_length`, and `fitness_token_limit`.
+No per-file `fitness_*_critical` frontmatter field exists; if a file
+legitimately needs divergent critical-zone behaviour, the correct response is
+to adjust its hard limit, not to introduce per-file ratios. This choice
+follows `.agent/directives/principles.md` §Strict ("do not invent
+optionality").
 
 For metrics with only a hard ceiling (`fitness_char_limit`,
 `fitness_line_length`), there is no `soft` zone — the metric is `healthy`,
 `hard`, or `critical`. The overall zone for a file is the worst zone across
 all its declared metrics.
+
+### Token Threshold Extension
+
+The two-threshold pair model accepts optional token thresholds:
+
+| Field                  | Role                                                |
+| ---------------------- | --------------------------------------------------- |
+| `fitness_token_target` | Soft boundary (target). Optional; pairs with limit. |
+| `fitness_token_limit`  | Hard boundary. Optional; required if target is set. |
+
+Token counts are content-only chars/4 estimates derived from the markdown
+body after frontmatter extraction. The estimator rule matches
+`agent-tools context-cost`, but the two surfaces intentionally differ for
+files that carry YAML frontmatter (fitness measures content-only; context-cost
+measures raw files).
+
+Token zones fold into `overallZone` exactly like line zones: `healthy`,
+`soft`, `hard`, and `critical` derive from the same threshold-pair semantics
+and the same `CRITICAL_RATIO`.
+
+`fitness_token_target` declared without `fitness_token_limit` is **invalid
+frontmatter**: the validator reports it as a configuration finding that is
+separate from `overallZone` (the file is not classified as soft, hard, or
+critical on that basis alone). Configuration findings have mode-dependent
+exit semantics:
+
+- `informational` mode: reports findings, exits 0.
+- `strict` and `strict-hard` modes: reports findings, exits 1.
+
+This protects the threshold-pair invariant without inventing a target-only
+zone contract.
 
 ### Exit code semantics
 

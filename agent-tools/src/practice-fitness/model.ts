@@ -27,10 +27,15 @@ export type FitnessZone = 'healthy' | 'soft' | 'hard' | 'critical';
 
 export type FitnessCeilingZone = Exclude<FitnessZone, 'soft'>;
 
-export type FitnessMetric = 'lines' | 'chars' | 'prose';
+export type FitnessMetric = 'lines' | 'chars' | 'prose' | 'tokens';
 
 export interface ZoneMessage {
   readonly zone: Exclude<FitnessZone, 'healthy'>;
+  readonly metric: FitnessMetric;
+  readonly text: string;
+}
+
+export interface FitnessConfigurationFinding {
   readonly metric: FitnessMetric;
   readonly text: string;
 }
@@ -118,9 +123,17 @@ export function worstZone(zones: readonly (FitnessZone | null)[]): FitnessZone {
   return worst;
 }
 
-export function getExitCode(mode: FitnessMode, overallZones: readonly FitnessZone[]): number {
+export function getExitCode(
+  mode: FitnessMode,
+  overallZones: readonly FitnessZone[],
+  hasConfigurationFindings = false,
+): number {
   if (mode === FITNESS_MODE_INFORMATIONAL) {
     return 0;
+  }
+
+  if (hasConfigurationFindings) {
+    return 1;
   }
 
   const blocking: readonly FitnessZone[] =
