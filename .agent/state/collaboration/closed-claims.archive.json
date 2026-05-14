@@ -24144,6 +24144,468 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "efeca2cc-34ab-4796-ac5d-98609033dbb7",
+      "agent_id": {
+        "agent_name": "Pearly Drifting Jetty",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T07:08:18Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Add metacognition notes on the P8 controller/team approach and role emergence.",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T07:09:05Z",
+        "closed_by": {
+          "agent_name": "Pearly Drifting Jetty",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Metacognition notes added to napkin; no source implementation.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "efeca2cc-34ab-4796-ac5d-98609033dbb7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6d1e7e10-21dd-45b5-a50e-3df758edf10b",
+      "agent_id": {
+        "agent_name": "Pearly Drifting Jetty",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T07:12:33Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Run deep jc-session-handoff and capture comms-log observations for the P8 controller/metacognition session.",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T07:14:40Z",
+        "closed_by": {
+          "agent_name": "Pearly Drifting Jetty",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Deep jc-session-handoff completed; comms-log observations captured in napkin, thread record, repo continuity, and pending-graduations candidate.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6d1e7e10-21dd-45b5-a50e-3df758edf10b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3961ffc2-2aa9-421f-a1e8-5f36914f7ac1",
+      "agent_id": {
+        "agent_name": "Pearly Drifting Jetty",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/future/team-handoff-routing-and-action-log-exploration.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/future/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T07:25:55Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Capture exploratory approaches for team-scoped session handoff routing and auditable action logs.",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T07:26:51Z",
+        "closed_by": {
+          "agent_name": "Pearly Drifting Jetty",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Exploration note added for team session-handoff routing and auditable action-log options.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3961ffc2-2aa9-421f-a1e8-5f36914f7ac1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c94fd2a6-003f-4f41-82a5-565c06dd731f",
+      "agent_id": {
+        "agent_name": "Pearly Drifting Jetty",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/start-right-team",
+            ".agents/skills/jc-start-right-team",
+            "docs/architecture/architectural-decisions",
+            ".agent/research/agentic-engineering/operating-model-and-platforms",
+            ".agent/plans/agentic-engineering-enhancements/future"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T07:38:03Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "create start-right-team skill plus ADR and focused collaboration research notes",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T07:41:12Z",
+        "closed_by": {
+          "agent_name": "Pearly Drifting Jetty",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Created start-right-team canonical skill, adapters, proposed ADR, focused research note, and related indexes",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c94fd2a6-003f-4f41-82a5-565c06dd731f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2b0147bc-f755-41a0-9363-ce0f836817a4",
+      "agent_id": {
+        "agent_name": "Pearly Drifting Jetty",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".claude/skills/jc-start-right-team"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T07:38:03Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "add Claude adapter for start-right-team skill",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T07:41:12Z",
+        "closed_by": {
+          "agent_name": "Pearly Drifting Jetty",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Added Claude adapter for start-right-team skill",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2b0147bc-f755-41a0-9363-ce0f836817a4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e92aa2a5-8aa8-4c49-9f89-b22806e5d574",
+      "agent_id": {
+        "agent_name": "Pearly Drifting Jetty",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T07:38:03Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "capture start-right-team collaboration research note in napkin alongside focused docs",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T07:41:12Z",
+        "closed_by": {
+          "agent_name": "Pearly Drifting Jetty",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Captured napkin pointer to focused start-right-team research artefacts",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e92aa2a5-8aa8-4c49-9f89-b22806e5d574",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "12680bbd-a299-4a19-9ad9-f56d6345898c",
+      "agent_id": {
+        "agent_name": "Pearly Drifting Jetty",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".claude/settings.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T07:38:03Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "register start-right-team Claude skill permission for portability check",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T07:41:12Z",
+        "closed_by": {
+          "agent_name": "Pearly Drifting Jetty",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Registered start-right-team permission in Claude settings",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "12680bbd-a299-4a19-9ad9-f56d6345898c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1cb4ca35-2bb2-4652-988f-d6029b3cf69b",
+      "agent_id": {
+        "agent_name": "Pearly Drifting Jetty",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/session-handoff/SKILL-CANONICAL.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T07:46:30Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "amend session-handoff with conditional team-session routing while preserving solo default",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T07:47:03Z",
+        "closed_by": {
+          "agent_name": "Pearly Drifting Jetty",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Amended session-handoff with explicit sole-contributor default and conditional team handoff routing",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1cb4ca35-2bb2-4652-988f-d6029b3cf69b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "24f10455-b863-4c0c-9695-c992bfe4671b",
+      "agent_id": {
+        "agent_name": "Pearly Drifting Jetty",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T07:48:35Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "final session-handoff updates before committing all logical bundles",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T07:50:53Z",
+        "closed_by": {
+          "agent_name": "Pearly Drifting Jetty",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Completed final session-handoff continuity updates before logical commits",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "24f10455-b863-4c0c-9695-c992bfe4671b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a1cf8e4c-e578-4337-80a7-87a798d382f6",
+      "agent_id": {
+        "agent_name": "Pearly Drifting Jetty",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T07:51:39Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "stage and commit team collaboration skill and research surfaces",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T07:53:16Z",
+        "closed_by": {
+          "agent_name": "Pearly Drifting Jetty",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Committed team collaboration skill and research surfaces as bfa26e01",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a1cf8e4c-e578-4337-80a7-87a798d382f6",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "083cf776-016a-4623-bd8b-7636857376c3",
+      "agent_id": {
+        "agent_name": "Pearly Drifting Jetty",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T07:53:38Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "stage and commit final session handoff and collaboration state",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T07:54:36Z",
+        "closed_by": {
+          "agent_name": "Pearly Drifting Jetty",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Closing final handoff commit window inside self-contained collaboration-state bundle",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "083cf776-016a-4623-bd8b-7636857376c3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

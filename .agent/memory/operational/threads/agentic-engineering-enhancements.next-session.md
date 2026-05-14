@@ -44,6 +44,12 @@
 > to Cursor, Claude, internal agents. Strategic brief
 > [`multi-agent-delegation-orchestration.plan.md`](../../plans/agentic-engineering-enhancements/future/multi-agent-delegation-orchestration.plan.md)
 > captured in future plans. See session findings below.
+>
+> **Team collaboration research** (2026-05-14): `start-right-team`, proposed
+> ADR-181, the focused team-start/action-trace research note, and the
+> `session-handoff` team-routing amendment are ready to land. They are Practice
+> collaboration surfaces only. They do not change the next implementation
+> target: resume P8 at `p8-attention-state`.
 
 ## Umbral P5 Gate-Check And Monitor Session (2026-05-12/13)
 
@@ -222,6 +228,126 @@ without marking messages seen, rendering compact seen/unread badges in
 A future session should re-ground live claims/comms first, then open exact
 non-overlapping claims around that data-shape/UI split. This should advance
 `P8-A1`/`P8-A4`, not complete P8 by itself.
+
+## Pearly Controller Metacognition And Deep Handoff (2026-05-14)
+
+**Session**: Pearly Drifting Jetty / `codex` / `GPT-5` / `019e22`.
+
+**Landed / unlanded outcome**: no source implementation. Pearly captured the
+team-process reflection requested by the owner, then ran a deeper
+`jc-session-handoff` pass over the P8 controller window and shared comms log.
+The session updated the napkin with role-selection observations and refreshed
+continuity surfaces. P8 source state remains the two landed commits above:
+`2791be3c` and `6e804485`; P8 is still open.
+
+**Comms-log observations captured**:
+
+- The useful team signals were assignment, readiness, BLOCK, GO, marshal
+  verification, exact commit-window route, residue report, and scout-only hold.
+- Fronded's narrow BLOCK on plural needs-attention wording converted a
+  human-visible defect into a focused proof before commit.
+- Embered's marshal checks worked because the marshal owned the scarce
+  git/index/queue surface rather than source code.
+- Nebulous and Arboreal scout replies landed after the first closeout sentence,
+  so final controller status needs a last shared-comms and directed-inbox sweep.
+- Closeout comms can perturb the closeout bundle after `record-staged`; after
+  one verification event, prefer local verification unless a blocker appears.
+
+**Next safe execution step**: unchanged. Re-ground live claims, active queue,
+staged files, shared comms, and directed inbox. Then route
+`p8-attention-state` as exact non-overlapping implementation claims:
+Arboreal-shaped data/value ownership first, Nebulous-shaped UI/test wiring
+after field names settle. This should advance `P8-A1`/`P8-A4`; do not claim
+P8 complete.
+
+## Team Start And Handoff Routing Research (2026-05-14)
+
+**Session**: Pearly Drifting Jetty / `codex` / `GPT-5` / `019e22`.
+
+**Landed / ready-to-land outcome**: documentation and skill-surface closeout,
+not P8 source implementation. The session created `start-right-team`,
+proposed ADR-181, the focused operating-model research note on team start and
+action trace, and a conditional `session-handoff` session-shape check that
+keeps sole contributor as the default while routing team closeout owners and
+team members differently.
+
+**Why it exists**: owner review of the P8 team window surfaced that full
+`session-handoff` is too individual-contributor-shaped for every team member
+to run independently. The new pattern keeps shared start-right immersion,
+routes temporary responsibilities from live coordination pressure, and makes
+exactly one closeout owner synthesise team handoff unless the owner directs
+otherwise.
+
+**Validation evidence**: targeted Markdownlint passed for the touched skill,
+ADR, research, and plan/index files; `pnpm portability:check` passed after
+adding the Claude skill permission; `git diff --check` passed. Final handoff
+will commit all dirty files in logical chunks per owner direction.
+
+**Next safe execution step**: unchanged. Next implementation remains
+`p8-attention-state`; the team-collaboration docs are research/practice
+surfaces, not permission to claim P8 complete.
+
+## Fronded Read-Only Review And Standby Closeout (2026-05-13/14)
+
+**Session**: Fronded Rustling Canopy / `codex` / `GPT-5` / `019e22`.
+
+**Landed outcome**: no source or plan implementation landed from Fronded by
+design. The session completed the assigned read-only support role: visible
+standby introduction, 120-second polling, Slice A readiness input, post-change
+GO/BLOCK review, and final clean-state standby monitoring.
+
+**Evidence**: shared comms events `2fa2710d` (standby introduction),
+`5c592b35` (operator-value readiness), `660b7b24` (Slice A BLOCK), and
+`91064b51` (post-fix GO). The source work Fronded reviewed landed separately
+at `2791be3c`, followed by `6e804485` and controller closeout `5afa1201`.
+
+**What worked / challenges**: the read-only reviewer shape worked because it
+owned one bounded challenge surface and never touched claims, source, or the
+git/index queue. The useful standby poll was direct inbox + active claims +
+active commit queue + `git status --short`. A brief ambiguity appeared when
+claims/queue were empty while a closeout bundle still looked staged; Fronded
+reported the inconsistency and waited until HEAD advanced and the tree was
+clean rather than inferring completion.
+
+**Next safe step impact**: no change. Continue with `p8-attention-state` from
+the data-shape/UI split above; Fronded's role is closed and should not be
+treated as an open implementation claim.
+
+**Arboreal handoff note (2026-05-14)**: Slice A worked because ownership was
+kept to the data/value surface and because Fronded's BLOCK became a focused
+red/green pluralisation fix before commit. Commit friction to remember:
+`.git/COMMIT_EDITMSG` was not writable from the sandbox, the advisory
+commit-skill fitness pre-screen reported unrelated known practice/memory hard
+signals, and Prettier needed a targeted retry before the real hook passed.
+None of those changed the source verdict: `2791be3c` landed cleanly through
+the real pre-commit hook, and the scout response remains input for
+`p8-attention-state`, not an open implementation claim.
+
+## Embered Marshal Handoff (2026-05-14)
+
+**Session**: Embered Igniting Ash / `codex` / `GPT-5` / `019e22`.
+
+**Landed outcome**: no source implementation by Embered. Embered acted as P8
+marshal for the Pearly-routed multi-agent session: verified the exact Slice A
+and Slice B staged bundles, watched the active queue and shared index, ACKed
+the scout-only hold for `p8-attention-state`, and verified Pearly's final
+controller closeout intent before it landed as `5afa1201`
+(`chore(agent): close p8 controller session`).
+
+**What worked well**: the marshal role was useful because it owned the scarce
+shared resource: git/index/queue state. The winning pattern was one
+implementation owner, one independent reviewer, one controller route, and one
+marshal check per short commit window.
+
+**Challenges / lesson**: closeout comms can become part of the closeout bundle
+they are verifying. After Embered's verification event forced a refreshed
+Pearly intent, the safer behaviour was to verify locally and avoid creating a
+new comms event unless a blocker appeared.
+
+**Next safe execution step**: unchanged. Re-ground live claims, queue, staged
+files, and comms, then route exact non-overlapping `p8-attention-state` claims
+using the Arboreal data/value scout and Nebulous UI/test scout as input. This
+should advance `P8-A1`/`P8-A4`; do not mark P8 complete.
 
 ## Completion-Claim Proof Pipeline (2026-05-13)
 
@@ -476,12 +602,12 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 | `codex` | `GPT-5` | Umbral Masking Silhouette | Gate-checker/monitor (read-only P5 strict comms parser CLEAN/GO; repeated message/status monitoring through WS1.4 closeout) | 2026-05-12 | 2026-05-13 |
 | `codex` | `GPT-5` | Mossy Fruiting Thicket | Implementer (P5 DI/no-IO boundary repair for comms use cases) | 2026-05-13 | 2026-05-13 |
 | `codex` | `GPT-5` | Mossy Blossoming Canopy | Implementer (mandatory P8 live collaboration TUI continuation) | 2026-05-13 | 2026-05-13 |
-| `codex` | `GPT-5` | Pearly Drifting Jetty | Controller (P8 coordination only; no implementation; route standby developers toward operator-value UI work) | 2026-05-13 | 2026-05-13 |
-| `codex` | `GPT-5` | Arboreal Ripening Pollen | Implementer (P8 Slice A operator-value snapshot model) | 2026-05-13 | 2026-05-13 |
+| `codex` | `GPT-5` | Pearly Drifting Jetty | Controller/handoff synthesiser (P8 coordination only; no implementation; routed operator-value and interaction-hardening slices, then captured role-selection observations and team-start / team-handoff research surfaces) | 2026-05-13 | 2026-05-14 |
+| `codex` | `GPT-5` | Arboreal Ripening Pollen | Implementer/scout (P8 Slice A operator-value snapshot model; p8-attention-state data/value scout) | 2026-05-13 | 2026-05-14 |
 | `codex` | `GPT-5` | Nebulous Ascending Supernova | Implementer (P8 Slice B interaction hardening) | 2026-05-13 | 2026-05-13 |
-| `codex` | `GPT-5` | Fronded Rustling Canopy | Reviewer (read-only P8 Slice A value-signal review) | 2026-05-13 | 2026-05-13 |
+| `codex` | `GPT-5` | Fronded Rustling Canopy | Reviewer/standby monitor (read-only P8 Slice A value-signal review; 120-second inbox/claims/queue/tree polling; no source edits or claims) | 2026-05-13 | 2026-05-14 |
 | `codex` | `GPT-5` | Torrid Charring Hearth | Reviewer (read-only P8 Slice B interaction review) | 2026-05-13 | 2026-05-13 |
-| `codex` | `GPT-5` | Embered Igniting Ash | Marshal (P8 exact-bundle commit-window verification) | 2026-05-13 | 2026-05-13 |
+| `codex` | `GPT-5` | Embered Igniting Ash | Marshal (P8 exact-bundle commit-window verification and handoff reflection) | 2026-05-13 | 2026-05-14 |
 | `cursor` | `GPT-5.5` | Dusky Lurking Shade | Consolidator (napkin-stage conservation-first consolidation; archive + distilled intake) | 2026-05-12 | 2026-05-12 |
 | `cursor` | `GPT-5.5` | Volcanic Charring Furnace | Consolidator (distilled-stage conservation routing; durable homes + pending follow-ups) | 2026-05-12 | 2026-05-12 |
 | `cursor` | `GPT-5.5` | Twigged Growing Glade | Consolidator (pending-graduations conservation-first routing + reviewer corrections + handoff) | 2026-05-12 | 2026-05-12 |

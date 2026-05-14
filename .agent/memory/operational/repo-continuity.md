@@ -136,7 +136,7 @@ each thread record; this table is the repo-level index.
 | ------------------------------------------------------------------------------ | --------------------------------------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `main-critical-sonar-remediation`                                              | Sonar remediation                             | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | `observability-sentry-otel`                                                    | Sentry/OTel integration                       | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic]       | Pearly Drifting Jetty / `codex` / GPT-5 / `019e22` / 2026-05-13 (P8 controller session; routed operator-value and interaction-hardening slices to exact commits `2791be3c` and `6e804485`; next route is `p8-attention-state`); Coppery Kindling Anvil / `cursor` / claude-opus-4-7 / `536dd4` / 2026-05-13 (three-napkin deep-dive consolidation; F1 graduated to distilled.md; F2-F10 routed to pending-graduations as triggered candidates with explicit conditions; napkin rotated to archive/napkin-2026-05-13.md; synthesis report landed under research/agentic-engineering/; three numbered verdicts surfaced for owner direction; consolidation outputs deferred from commit per owner direction "forget commits, run /jc-session-handoff then stop"); Mossy Blossoming Canopy / `codex` / GPT-5 / `019e22` / 2026-05-13 (P8 TUI foundation repair; P8 remains open); Mossy Fruiting Thicket / `codex` / GPT-5 / `019e22` / 2026-05-13 (P5 DI/no-IO boundary repair landed at `07ffee1d`; P8 live TUI next); Uplifted Wheeling Sky / `codex` / GPT-5 / `019e20` / 2026-05-13 (P5 unified comms migration + no-IO/DI correction); Verdant Foraging Copse / `codex` / GPT-5 / `019e1d` / 2026-05-13 (completion-claim proof pipeline report + plan + first `jc-plan` proof-contract skill amendment); Umbral Masking Silhouette / `codex` / GPT-5 / `019e1d` / 2026-05-13 (read-only P5 strict-parser gate-check + repeated monitor loop); see thread record for full identity history |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic]       | Pearly Drifting Jetty / `codex` / GPT-5 / `019e22` / 2026-05-14 (P8 controller/metacognition handoff plus start-right-team / session-handoff team-routing research; next route remains `p8-attention-state`); Embered Igniting Ash / `codex` / GPT-5 / `019e22` / 2026-05-14 (P8 marshal handoff reflection; verified exact source and controller-closeout commit windows; no implementation claim open); Arboreal Ripening Pollen / `codex` / GPT-5 / `019e22` / 2026-05-14 (P8 Slice A operator-value implementer and p8-attention-state data/value scout; no open implementation claim); Fronded Rustling Canopy / `codex` / GPT-5 / `019e22` / 2026-05-14 (P8 read-only reviewer and standby monitor; blocked then cleared Slice A wording; no implementation claim open); Coppery Kindling Anvil / `cursor` / claude-opus-4-7 / `536dd4` / 2026-05-13 (three-napkin deep-dive consolidation; F1 graduated to distilled.md; F2-F10 routed to pending-graduations as triggered candidates with explicit conditions; napkin rotated to archive/napkin-2026-05-13.md; synthesis report landed under research/agentic-engineering/; three numbered verdicts surfaced for owner direction; consolidation outputs deferred from commit per owner direction "forget commits, run /jc-session-handoff then stop"); Mossy Blossoming Canopy / `codex` / GPT-5 / `019e22` / 2026-05-13 (P8 TUI foundation repair; P8 remains open); Mossy Fruiting Thicket / `codex` / GPT-5 / `019e22` / 2026-05-13 (P5 DI/no-IO boundary repair landed at `07ffee1d`; P8 live TUI next); Uplifted Wheeling Sky / `codex` / GPT-5 / `019e20` / 2026-05-13 (P5 unified comms migration + no-IO/DI correction); Verdant Foraging Copse / `codex` / GPT-5 / `019e1d` / 2026-05-13 (completion-claim proof pipeline report + plan + first `jc-plan` proof-contract skill amendment); Umbral Masking Silhouette / `codex` / GPT-5 / `019e1d` / 2026-05-13 (read-only P5 strict-parser gate-check + repeated monitor loop); see thread record for full identity history |
 | `connecting-oak-resources`                                                     | Oak resource graph                            | [record][connecting]    | Quiet Stalking Mirror / `claude-code` / opus-4-7-1m / `fe8a4f` / 2026-05-13 (WS1.5 pre-implementation review absorbed + owner doctrine recorded + URDNA2015→RDFC-1.0 plan-text remediation; implementation blocked in-session by uncoordinated 43-file dirty slice + lockfile collision risk; documentation absorption later landed at `39b3271d` via Coppery Kindling Anvil with owner authorisation); Dim Hiding Secret / `codex` / GPT-5 / `019e1d` / 2026-05-13 (WS1.6 vocab planning prep landed at `f36f98b1`); Luminous Threading Asteroid / `codex` / GPT-5 / `019e1d` / 2026-05-13 (session-handoff-only close; WS1.4 coordination closeout already landed at `0d6f080a`); Solar Gliding Twilight / `codex` / GPT-5 / `019e1d` / 2026-05-13 (session-handoff continuity repair); Fiery Igniting Furnace / `codex` / GPT-5 / `019e1d` / 2026-05-12 (WS1.4 JSON-LD processor landed at `95f42cb7`); Radiant Illuminating Twilight / `codex` / GPT-5 / `019e1c` / 2026-05-12 (WS2.1 graph-ingest scaffold landed at `0f895070`); Lofty Vaulting Summit / `codex` / GPT-5 / `019e1c` / 2026-05-12 (WS1.3 landed at `87e21125`); see thread record for full identity history |
 | `exploring-open-education-resources`                                           | Third-party OER                               | [record][oer]           | Gnarled / `claude-code` / `e18e2c` / 2026-05-01                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `architectural-budget-system`                                                  | Architectural budget                          | [record][budget]        | Nebulous / `codex` / 2026-04-29                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -174,12 +174,19 @@ without reading raw event files. P8 must not be called complete until the
 plan's `P8-A1` through `P8-A4` proof contract is satisfied. P6/P7 resume after
 the P8 operator-view path unless owner direction changes.
 
-Landing note for the current closeout: the owner confirmed the pnpm/dependency
-update is finished and requested the whole dirty tree be committed together.
-The closeout bundle therefore lands the owner dependency refresh with the P8
-foundation repair and handoff surfaces. The next agent should still treat the
-clean tree as a hypothesis until live `git status`, active claims, commit queue,
-and collaboration check confirm it.
+Team collaboration research from the P8 controller window now has focused
+artefacts: `start-right-team`, proposed ADR-181, the
+`team-start-ritual-and-action-trace-2026-05-14.md` research note, and a
+conditional team/sole-contributor branch in `session-handoff`. This advances
+the agent-collaboration practice surface only; it does not change the next
+P8 implementation target.
+
+Current closeout note: this session added the team-collaboration research and
+skill surfaces (`start-right-team`, ADR-181, research note, and
+`session-handoff` team routing). The owner asked for final `jc-session-handoff`
+and logical commits of the full dirty tree. The next agent should still treat
+the clean tree as a hypothesis until live `git status`, active claims, active
+commit queue, and collaboration-state checks confirm it.
 
 Completion-proof lane: continue from
 [`completion-claim-proof-pipeline.plan.md`](../../plans/agentic-engineering-enhancements/current/completion-claim-proof-pipeline.plan.md).
@@ -329,6 +336,31 @@ Current branch non-goals:
   acceptance work.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-14 — Pearly Drifting Jetty / `codex` / GPT-5 / `019e22`)**:
+due, but not run in this handoff. This closeout captured a dense same-window
+role/comms synthesis, then promoted the team-collaboration lesson into
+`start-right-team`, proposed ADR-181, a focused research note, and a
+team-aware `session-handoff` branch. The next bounded consolidation target
+remains `practice-bootstrap.md`, but the active napkin is also over its normal
+line limit and should be processed conservation-first in the next
+consolidation session. This handoff stops at capture because the owner asked
+for `jc-session-handoff`, not a full `jc-consolidate-docs` pass.
+
+**Status (2026-05-14 — Arboreal Ripening Pollen / `codex` / GPT-5 /
+`019e22`)**: not evaluated by owner direction for this lightweight handoff.
+The owner explicitly requested recording session learning and running
+`jc-session-handoff` while ignoring fitness functions; no fitness checks or
+deep-consolidation gate were run. Existing next bounded consolidation target
+remains `practice-bootstrap.md`.
+
+**Status (2026-05-14 — Embered Igniting Ash / `codex` / GPT-5 / `019e22`)**:
+not due for this handoff-only marshal closeout. This pass recorded the
+P8 marshal learning and refreshed identity/continuity surfaces only; the
+implementation state and next safe step were already captured in the
+P8 controller closeout. Existing next bounded consolidation target remains
+`practice-bootstrap.md`; fitness functions intentionally ignored per owner
+direction for this handoff.
 
 **Status (2026-05-13 — Coppery Kindling Anvil / `cursor` / claude-opus-4-7 /
 `536dd4`)**: completed this handoff — three-napkin deep-dive consolidation

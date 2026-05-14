@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "4681f9bd-5d1d-4be0-8e52-5ba57bf161ce",
+  "created_at": "2026-05-14T07:12:33Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pearly Drifting Jetty",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e22"
+  },
+  "title": "Deep session handoff pass",
+  "body": "Pearly Drifting Jetty opening a deeper jc-session-handoff pass for the P8 controller/metacognition session. Scope: repo-continuity, agentic-engineering thread record, cost-of-collaboration plan if needed, napkin observations from shared comms, and collaboration lifecycle state. No source implementation."
+}

@@ -227,6 +227,16 @@ the queue churns.
   not pollute the repo-wide gates they're trying to manage. Trigger:
   owner direction; corpus already has N=3 instances. Promotion target:
   PDR with companion pattern instances kept in `memory/active/patterns/`.
+  2026-05-14 P8 controller evidence adds the positive case: roles selected
+  from live pressure points worked when each role had a handoff proof
+  (implementer exact bundle, reviewer GO/BLOCK challenge, marshal
+  git/index/queue facts, scout next-slice shape). Static role menus remain
+  useful as prompts, but should not become canonical topology.
+  Follow-up on 2026-05-14 turned the first low-risk slice into
+  `start-right-team`, proposed ADR-181, a focused operating-model research
+  note, and a conditional team branch in `session-handoff`. The PDR candidate
+  remains pending because the stable portable doctrine for coordinator
+  allocation vs gating has not yet been written.
 
 + 2026-05-13; **Commit-window mutual mechanical verification +
   hook-output authority (agent-collaboration.md amendment candidate)**

@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "2e436e30-059c-4881-91b3-aa615dbac679",
+  "created_at": "2026-05-14T07:08:18Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pearly Drifting Jetty",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e22"
+  },
+  "title": "Metacognition notes pass",
+  "body": "Pearly Drifting Jetty opening a note-only metacognition pass on yesterday's P8 controller/team approach. Active claims scan was empty; touching napkin reflection surfaces only; no source implementation."
+}
