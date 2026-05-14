@@ -214,7 +214,7 @@ there unless the owner or closeout owner gives a further assignment.
    maintain.
 
    **Auxiliary input: session comms-events.** The session's own
-   comms-events under `.agent/state/collaboration/comms-events/`
+   comms-events under `.agent/state/collaboration/comms/`
    (and the regenerated `shared-comms-log.md`) carry
    coordination-context substance: owner-direction-captured-inline,
    inter-agent surprises, tooling friction discovered during

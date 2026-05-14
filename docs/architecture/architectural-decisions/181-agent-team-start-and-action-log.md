@@ -1,6 +1,6 @@
 # ADR-181: Agent Team Start Ritual and Action-Trace Surface
 
-**Status**: Proposed
+**Status**: Accepted 2026-05-14 (Verdant Swaying Glade session, owner direction)
 **Date**: 2026-05-14
 **Related**:
 [ADR-119](119-agentic-engineering-practice.md) - agentic engineering practice;
@@ -10,6 +10,43 @@ topology;
 [ADR-135](135-agent-classification-taxonomy.md) - agent capabilities and modes;
 [ADR-150](150-continuity-surfaces-session-handoff-and-surprise-pipeline.md) -
 continuity and handoff surfaces.
+
+## Acceptance (2026-05-14)
+
+Decisions 1–3 are operational at acceptance time:
+
+- **Decision 1** (`start-right-team` skill): canonical at
+  [`.agent/skills/start-right-team/SKILL-CANONICAL.md`](../../../.agent/skills/start-right-team/SKILL-CANONICAL.md)
+  with platform adapters under `.agents/skills/jc-start-right-team/SKILL.md`
+  and `.claude/skills/start-right-team/SKILL.md`. Landed at commit
+  `bfa26e01`.
+- **Decision 2** (route by live pressure, temporary responsibility):
+  operational through the canonical skill body (`§ Pressure-First
+Routing`, `§ Temporary Responsibilities With Expiry`). Live empirical
+  validation runs through the _self-assigned roles_ experiment scoped
+  in [`.agent/prompts/agentic-engineering/collaboration/falsification-criteria.md` § Primitive 1 — Modes, not roles](../../../.agent/prompts/agentic-engineering/collaboration/falsification-criteria.md);
+  see also the related coordinator-PDR deferral in
+  [`.agent/memory/operational/pending-graduations.md` § coordinator-role-as-allocator-not-gatekeeper (PDR candidate)](../../../.agent/memory/operational/pending-graduations.md).
+  The ADR's meta-shape (route by pressure; name boundary; expire on
+  completion) is upstream of any specific role label set; the
+  experiment's outcomes feed PDR-shaped doctrine downstream of this
+  ADR, not back-pressure on this ADR's acceptance.
+- **Decision 3** (separate team handoff from individual handoff):
+  operational through the team-aware
+  [`session-handoff` SKILL-CANONICAL.md `§ Team-Member Handoff Mode`](../../../.agent/skills/session-handoff/SKILL-CANONICAL.md).
+  Landed at commit `498edcc2`.
+
+Decision 4 (action-trace event surface) remains explicitly proposed-only,
+as the ADR text states. Schema design and rendered-view design are
+tracked as a separate collaboration-state slice, listed under §Follow-up
+below. Acceptance of decisions 1–3 does not commit to a specific
+action-trace schema; that decision is deferred to the slice that delivers
+it.
+
+Acceptance authority: owner direction in the 2026-05-14 Verdant Swaying
+Glade session ("1 and 3 in this session" — graduation pass plus ADR-181
+status flip). Companion graduation pass landed in the same session; see
+[`.agent/memory/active/distilled.md` § Graduations Log — 2026-05-14 Verdant Swaying Glade Route C-iv](../../../.agent/memory/active/distilled.md).
 
 ## Context
 

@@ -42,7 +42,7 @@ Run `consolidate-docs` when one or more of these is true:
   historical synthesis, or prior consolidations keep reporting the same
   family without naming its deeper cause
 - documentation drift or stale cross-references now need graduation
-- `.agent/state/collaboration/comms-events/` contains events whose
+- `.agent/state/collaboration/comms/` contains events whose
   `created_at` timestamp is older than seven days and therefore due for
   retention processing
 
@@ -201,7 +201,7 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
      or delete them manually. Read them alongside the napkin and
      extract any cross-session insight into `distilled.md` or a
      permanent home per the standard graduation rules in step 7.
-   - **Session comms-events**: `.agent/state/collaboration/comms-events/`
+   - **Session comms-events**: `.agent/state/collaboration/comms/`
      (and the regenerated `shared-comms-log.md`) carry coordination-context
      substance — owner-direction-captured-inline, inter-agent surprises,
      tooling friction discovered during cross-agent work, decision
@@ -245,7 +245,7 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    content must be moved to permanent homes or, if not useful,
    removed*. Silent deletion without homing is not the default.
 3a. **Rotate stale comms-events after processing.** At each consolidation
-    pass, inspect `.agent/state/collaboration/comms-events/` for event files
+    pass, inspect `.agent/state/collaboration/comms/` for event files
     whose `created_at` timestamp is older than seven days. Treat every
     matching event as a capture surface that must be processed before
     deletion:
@@ -262,7 +262,7 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
     3. If the event carries no useful substance beyond transient coordination,
        record no duplicate copy; deletion is the correct lifecycle outcome
        once that judgement has been made.
-    4. Delete the processed old event file from `comms-events/`.
+    4. Delete the processed old event file from `comms/`.
     5. Regenerate `shared-comms-log.md` from the remaining collaboration
        sources so the rendered log reflects the retained live window.
 

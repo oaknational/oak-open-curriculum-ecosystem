@@ -179,6 +179,41 @@ See [Release and Publishing](./release-and-publishing.md) for npm package
 publishing, and [Milestone Release Runbook](./milestone-release-runbook.md)
 for milestone/service release gates, snagging, and go/no-go controls.
 
+## 12. Workflow Gotchas
+
+Recurring friction patterns that cost cycles when re-discovered. The
+common frame: **the literal command that runs is what matters** — not
+what a wrapping script appears to forward, not what a generator's CLI
+help implies, not what historical local precedent permits.
+
+### Generators Require Populated Source Data
+
+A code-only generator run over sparse or absent local source data can
+produce structurally valid but semantically empty output. The generator
+exits clean; the file shape is correct; the content is wrong. For any
+generator that derives output from input data (ground-truth generators,
+fixture builders, schema-from-data tools), run the full
+download-then-codegen path when local bulk data is absent, then verify
+the expected dataset-size signal (e.g. `Total lessons: 12391`) before
+trusting the output. Structural validity is not semantic validity. This
+is a CI-shaped failure that often appears local-only because the local
+checkout is partial; the proof of generator correctness is in the
+verified output, not in the green exit code.
+
+### Use The Test Runner Directly When Script Forwarding Drifts
+
+Package scripts that wrap a test runner sometimes pick up extra suite
+selection, parallelism flags, or filter rewrites that broaden the run
+beyond what a focused proof needs. When a `pnpm test:unit <file>`
+invocation starts running the broader suite or hangs on unrelated
+work, drop to the runner directly:
+`pnpm --dir <package> exec vitest run <file>`. The literal vitest
+invocation is what the proof actually needs; the package script is
+optional sugar that has its own drift. Apply the same principle to
+typecheck (`pnpm --dir <package> exec tsc --noEmit -p <project>`) and
+lint (`pnpm --dir <package> exec eslint <file>`) when their wrapping
+scripts misbehave under focused inspection.
+
 ## What Does Good Look Like?
 
 For individual contributors:

@@ -96,6 +96,179 @@ at non-healthy zones. Source: §F1 of the synthesis report under
 
 ---
 
+## Recently Distilled — 2026-05-14 Verdant Swaying Glade conduct correction
+
+### Agents have no gender unless they self-declare (default they/them)
+
+- **Owner correction**: *"agents do not have gender unless they decide
+  they do."* This is the second instance of the same correction; the
+  first (2026-05-11, about Smouldering Crackling Pyre) is recorded in
+  [`napkin-2026-05-12.md`](archive/napkin-2026-05-12.md) line 319 but
+  was never graduated to active distilled, allowing recurrence.
+- **Rule**: when referring to any other agent, default to **they/them**.
+  Gendered pronouns require self-declaration from that agent (in their
+  identity record, comms event, or thread-record entry). Agent names
+  are evocative phrase-pairs with no inherent gender; do not infer
+  gender from the name.
+- **Scope**: applies everywhere the agent's voice persists — chat
+  output, commit messages, comms event JSON bodies, napkin entries,
+  active claims `intent` fields, thread-record narrative, ADR
+  attribution, plan documents. *Including* working-tree edits that
+  have not yet been committed.
+- **Sweep on correction**: when corrected, sweep every persisted
+  surface touched in the current session (active comms events,
+  shared-comms-log, claim intents, thread records, napkin) and amend
+  in place; regenerate any surfaces derived from those primaries
+  (`shared-comms-log.md` is rendered from `comms/*.json`).
+- **Graduation discipline for conduct rules**: corrections about
+  personal conduct (style, register, phrasing, attribution) graduate
+  to **active distilled.md in the same session**, not via the
+  pending-graduations queue. Rationale: a session-scoped napkin entry
+  archives the lesson but leaves the rule unenforced for new sessions
+  during the rotation gap. The 2026-05-11 → 2026-05-14 recurrence is
+  the worked example. Companion to the existing "Substance > Destination"
+  discipline: substance-rules tolerate queueing; conduct-rules do not.
+
+## Recently Distilled — 2026-05-14 Sylvan Budding Forest deep-dive consolidation
+
+Behaviour-changing entries distilled from the 2026-05-14 napkin rotation
+(archived at [`napkin-2026-05-14.md`](archive/napkin-2026-05-14.md)). The
+rotation covers eight sessions across two threads — the multi-agent P8 team
+(Pearly Drifting Jetty controller plus Nebulous, Arboreal, Torrid, Fronded,
+Embered) and three Cursor / Codex closeouts (Luminous Glowing Moon plan
+promotion; continuation-pointer clarification; agent onboarding flow patch).
+The full session-by-session capture lives in the archived napkin; the
+durable doctrine below is what changes behaviour next session, regardless
+of who picks the work up.
+
+### Coordination role discipline (multi-agent evidence)
+
+- **Roles emerge from live pressure, not from a fixed menu.** The useful
+  multi-agent topology in the P8 window (controller, marshal, reviewer,
+  implementer, scout, standby) was selected from the scarce resource at
+  the time — git/index/queue contention drove marshal value; bounded
+  GO/BLOCK challenge drove reviewer value; an exact file bundle drove
+  implementer ownership. Static role menus are useful as *prompts* for
+  what shape might fit, but treating them as canonical topology risks
+  premature structure and silent over-coordination. Naming a role
+  costs nothing; naming the obligation plus the handoff proof is what
+  actually pays off.
+- **Every role description must carry its handoff proof.** "Marshal"
+  worked because it meant *watching exact staged pathspecs and queue
+  state*. "Reviewer" worked because it meant *GO/BLOCK on a bounded
+  slice plus focused-test evidence*. "Controller" worked when it meant
+  *allocator and sequencer*; it would become harmful if it slid into
+  *central permission for every judgement*. When a role appears in a
+  team plan, the next sentence should name what artefact proves the
+  handoff.
+- **Treat scout responses as input, not as permission.** Read-only
+  scouts after a source commit are valuable when they preserve
+  momentum into the next slice. They are *not* implicit licence to
+  open a new implementation claim during closeout; the next slice
+  needs fresh live grounding and an explicit route.
+- **Pre-closeout sweep ritual is now a controller invariant.** Before
+  hardening any "final status" sentence, sweep all six surfaces in
+  this order: active claims, active commit queue, staged files,
+  `git status --short`, shared comms, directed inbox (plus late
+  scout/reviewer replies arriving after the last source commit).
+  Discrepancies between these surfaces are status-worthy even when
+  the session has no implementation assignment. "Empty claims and
+  queue" is never the whole state during a closeout window.
+- **Closeout comms can perturb the closeout bundle.** During a
+  closeout commit window: one explicit marshal verification event is
+  fine; further verification should be local-only unless a blocker
+  appears. New comms events written after record-staged force the
+  closeout bundle owner to re-enqueue or accept residue.
+
+### Commit-window operational sharpening
+
+- **`git:index/head` commit-queue claim pattern syntax**: when opening a
+  commit-window claim, use `--area-kind git --area-pattern "index/head"`
+  (bare, no `git:` prefix). The `git:` prefix is the symbolic name of
+  the resource; the stored pattern is the bare path. The guard
+  (`claimCoversGitIndexHead`) does exact-element match on the
+  normalized list, so `["git:index/head"].includes("index/head")` is
+  false. Mistake source: Luminous Glowing Moon 2026-05-14; behaviour
+  change recorded so the next agent does not repeat it.
+- **CLI flag-shape drift under coordination pressure**: the
+  collaboration-state surface has moved. `comms inbox` takes
+  `--agent-name`/`--comms-dir`, not `--agent`. `commit-queue` is a
+  top-level `agent-tools` topic (`pnpm agent-tools:commit-queue --
+  list --queue-status active`), not a `collaboration-state` topic.
+  `comms send` is shared-log; directed routing belongs to
+  `comms direct` with `--to-agent-name`, `--to-platform`,
+  `--to-model`, `--to-session-prefix`. Check topic-specific help in
+  every resumed or compacted session before relying on muscle memory.
+- **Run formatting proof before the commit hook for new modules.** The
+  Slice A landing burned a shared git/index window because Prettier
+  fired inside the hook on a new module. The cheap cure is
+  `pnpm agent-tools:repo-check -- prettier-staged` (or targeted
+  Prettier) immediately before `git commit` when the bundle creates a
+  new file. Re-record the queue fingerprint after the format, then
+  retry the commit.
+
+### Plan-author discipline reinforcement
+
+- **DECISION-COMPLETE is the readiness gate, not paperwork after
+  execution.** When the owner asks for an implementation plan, every
+  execution-time vendor literal, output schema, interface signature,
+  exit-code/sort-order/encoding decision, and help-text shape that
+  *can* be settled at plan-author time *must* be settled there. The
+  `plan-body-first-principles-check` vendor-literal clause permits a
+  deferral only when the dep is added inside the same WS, and even
+  then the plan must pin the call shape so the WS becomes
+  drift-detection rather than decision-making. "Verify at execution
+  time" is the failure mode this discipline forbids.
+- **Verify vendor call shapes against installed-or-published docs at
+  plan-author time.** "Well-known utility library" is not permission
+  to pin a call shape from memory. Stable API across a v0.x line is
+  necessary but insufficient evidence the call shape *I remember*
+  matches the *current* shape (worked example: tinyglobby was
+  documented as `glob({ patterns, ... })` from memory; actual current
+  export is `glob(patterns, options)` positional). Cheap at
+  plan-author time; expensive at WS execution.
+- **Acceptance value-proxies must compare against independent
+  ground-truth measures.** Reproducing a baseline value does not
+  validate the CLI is correct if the baseline was itself produced by
+  the same method (chars/4 reproducing chars/4 proves nothing).
+  Compare against a method-independent measure (e.g. `wc -c` for
+  chars, then chars/4 becomes mechanical). Acceptance proxies
+  framed as "agrees with prior baseline ±N%" are tautological and
+  fail under normal churn.
+
+### Continuation surfaces
+
+- **Skill text carries durable routing behaviour; continuation
+  records carry volatile facts.** Branch, plan, next-step, commit ids,
+  team expectation — every fact that changes between sessions belongs
+  in the thread record, not in the skill body. The skill's job is to
+  fire the routing on arrival; the record's job is to provide the
+  current state for that routing to act on.
+- **"Ready to land" is dangerous in continuation records after a
+  commit window.** Use it only when the work is genuinely uncommitted
+  and pending. Once the work lands, replace the phrase with commit
+  evidence (`bfa26e01`, `498edcc2`, etc.). Stale "ready to land"
+  wording in a continuation record is an actionable defect, not a
+  wrapper.
+- **When a collaboration skill changes session entry or exit
+  behaviour, audit root README and platform onboarding adapters in
+  the same closeout.** The specialised skill text is correct only
+  half the story; a new agent can enter through README, a teammate
+  prompt, or a Cursor/Codex rule and miss the new routing entirely.
+  Routing surfaces are co-load-bearing with the skill body.
+
+### Read-only support pattern (Torrid evidence)
+
+- **For a read-only review or scout assignment, send two notes.**
+  Send a *readiness note to the implementer* (naming likely risk
+  surfaces, the minimum proof set, and the boundary that distinguishes
+  this slice from adjacent work) *before* implementation. Send a
+  *completion note to the controller* afterwards (with exact
+  commands and evidence). Two notes give the controller a routable
+  signal without requiring another claim.
+
+---
+
 ## Recent graduations (2026-05-12 — Volcanic Charring Furnace)
 
 Processed the substance distilled from
@@ -202,19 +375,14 @@ near-patterns, and routing decisions.
 
 ## Recently Distilled — 2026-05-10 Napkin Rotation
 
-These entries merged during the 2026-05-10 deep consolidation pass and
-remain pending one subsequent-session validation cycle before graduation.
+These entries merged during the 2026-05-10 deep consolidation pass.
+Most graduated to permanent homes during the 2026-05-14 Verdant Swaying
+Glade Route C-iv pass; the entries listed below remain held for
+cross-session validation or for a destination decision in a future
+consolidation.
 
 ### Curation And Doctrine-Holding
 
-- **Reading doctrine is weaker than holding its frame at output time.**
-  Foundational-doc work must lead with each section's role question:
-  does this still serve its role? Metrics may inform the diagnosis, but
-  optimisation vocabulary must not frame the work.
-- **Target-architecture wording needs consuming-runtime evidence.** A
-  shared package exposing a target schema is not proof that an app has
-  migrated. Verify at least one composition root before using present
-  tense in ADRs, runbooks, or operator docs.
 - **Lettered-section edits must re-read the intro count.** Adding a new
   `a/b/c/d` child without re-reading the parent sentence lets "three
   rules" drift into a four-rule section.
@@ -224,53 +392,24 @@ remain pending one subsequent-session validation cycle before graduation.
 
 ### Coordination And Commit Discipline
 
-- **Commit-helper state writes still need peer-claim audits.** After any
-  commit-queue completion or claim close, re-read active claims before
-  the final state commit; helper-mediated writes can otherwise lose a
-  fresh peer claim under rapid same-file updates.
-- **Parent directives need operational cures when the rule keeps being
-  rediscovered.** Five foreign-stage absorptions despite the explicit
-  pathspec rule showed that the parent collaboration directive also had
-  to name both `git add -- <paths>` and `git commit -- <paths>`.
-- **Whole-tree hooks can block pathspec-only commits by design.**
-  Pathspec discipline controls commit contents, not quality-gate scope.
-  Minor peer-owned hook failures are repaired or coordinated; gates are
-  not narrowed to the staged bundle.
 - **Shell loops over multiline command output are unsafe in deletion
   paths.** Prefer `while IFS= read -r` over `for x in $(...)`, then
   verify after the action.
 
-### Tooling And Test Proofs
-
-- **Exact focused tests should use the runner directly when script
-  forwarding drifts.** For agent-tools Vitest proof, prefer
-  `pnpm --dir agent-tools exec vitest run <file>` when the package
-  script starts running broader suites than the proof requires.
-- **Unit test taxonomy beats historical local precedent.** Existing IO
-  debt in a unit test file is not permission to add more; factor pure
-  option parsers or formatters and test those directly.
-- **Generators require populated source data.** A structurally valid
-  generator run over sparse source data can produce semantically empty
-  outputs; verify the expected dataset-size signal before trusting it.
-
 ### Planning Arithmetic And Disposition
 
-- **Count targets derived from current state must name their derivation.**
-  Concurrent same-day flow can invalidate an acceptance count before
-  execution; re-derive the target at execution time and let substance
-  preservation outrank stale arithmetic.
-- **"Apply all of X" needs a disposition ledger, not one cycle per item.**
-  When most inputs are redundant with canonical doctrine, thoroughness is
-  every item having a recorded decision; implementation may be one small
-  tranche plus a batched pending-graduations entry.
+- (no remaining entries — both planning-arithmetic items graduated to
+  the [`jc-plan` skill body § Disposition Ledger][plan-disposition])
+
+[plan-disposition]: ../../skills/plan/SKILL-CANONICAL.md#disposition-ledger-for-apply-all-of-x-inputs
 
 ---
 
 ## Recently Distilled — 2026-05-09 Napkin Rotation
 
-These entries merged this session and have not yet survived a
-subsequent session without correction; held here for cross-session
-validation per the step-7b stability criterion before any graduation.
+Most entries from the 2026-05-09 rotation graduated during the
+2026-05-14 Verdant Swaying Glade Route C-iv pass. The entries listed
+below remain held for a destination decision in a future consolidation.
 
 ### PR Closeout Discipline
 
@@ -296,17 +435,6 @@ validation per the step-7b stability criterion before any graduation.
 
 ### Generator And Tooling Discipline
 
-- **Generators are valid only when their source data is populated.**
-  A code-only generator run in a sparse checkout can produce
-  structurally valid but semantically empty output. For ground-truth
-  generators, run the full download-then-codegen path when local bulk
-  data is absent; verify the expected dataset size (e.g. `Total
-  lessons: 12391`) before trusting output.
-- **Check schema or CLI help before authoring claims from memory.**
-  Natural-language plausibility (`--area-kind file`) is not a
-  substitute for the schema vocabulary (`files`). Read
-  `active-claims.schema.json` or `<cli> --help` first when authoring
-  claims, areas, or any structured-vocabulary input from memory.
 - **Self-lint surfaces deprecated helper drift.** Adding new candidate
   rules in the plugin self-lint lane catches maintenance drift early.
   When core ESLint helper types reject a locally-typed plugin, split
@@ -327,3 +455,64 @@ graduated 2026-05-10 to the host pattern
 [`deferred-at-write-time-is-unmade-load-bearing-decision`][def-at-write].
 
 [def-at-write]: patterns/deferred-at-write-time-is-unmade-load-bearing-decision.md
+
+---
+
+## Graduations Log — 2026-05-14 Verdant Swaying Glade Route C-iv
+
+Graduations landed during the 2026-05-14 Route C-iv pass. Entries below
+moved from the 2026-05-09 / 2026-05-10 rotations to their named permanent
+homes per canonical step 7b. Five distilled entries graduated as new
+substance; four were verified as already-incorporated and pruned with
+back-cites; two planning-arithmetic items consolidated into one
+disposition-ledger section in the `jc-plan` skill body.
+
+**Newly graduated (5 substance moves)**:
+
+- *Target-architecture wording needs consuming-runtime evidence*
+  → [`principles.md` § Code Quality (after "Misleading docs are blocking")][prin-target-arch]
+- *Commit-helper state writes still need peer-claim audits*
+  → [`agent-collaboration.md` § Treat Commit as a Short-Lived Shared Transaction Surface][ac-helper]
+- *Generators require populated source data* (consolidating the
+  2026-05-09 + 2026-05-10 mentions of the same insight)
+  → [`docs/engineering/workflow.md` § 12 Workflow Gotchas][wf-generators]
+- *Exact focused tests should use the runner directly when script forwarding drifts*
+  → [`docs/engineering/workflow.md` § 12 Workflow Gotchas][wf-runner]
+- *Unit test taxonomy beats historical local precedent*
+  → [`docs/engineering/testing-tdd-recipes.md` § Adding To Existing IO Debt In A Unit Test File][tdd-iodebt]
+
+**Consolidated graduation (2 entries → 1 section)**:
+
+- *Count targets derived from current state must name their derivation*
+  AND *"Apply all of X" needs a disposition ledger, not one cycle per item*
+  → [`jc-plan` skill body § Disposition Ledger For "Apply All Of X" Inputs][plan-disposition]
+
+**Already-incorporated prunes (4 back-cites, no new substance)**:
+
+- *Reading doctrine is weaker than holding its frame at output time*
+  was already covered structurally by `principles.md` § Architectural
+  Excellence Over Expediency — three structural cues at output time
+  (PDR-043 / ADR-172). The cure is operational; the distilled note
+  was a refinement of an already-landed cure.
+- *Parent directives need operational cures when the rule keeps being
+  rediscovered* was already incorporated into `agent-collaboration.md`
+  § c (Treat Commit as a Short-Lived Shared Transaction Surface), which
+  now names both `git add -- <paths>` and `git commit -- <paths>` as
+  the cured pair. Cure landed; observation distilled.
+- *Whole-tree hooks can block pathspec-only commits by design* was
+  already incorporated into `agent-collaboration.md` § c — the queue
+  protects authorial-bundle integrity but does not narrow whole-tree
+  hooks; minor peer-owned failures are repaired in place. Cure landed;
+  observation distilled.
+- *Check schema or CLI help before authoring claims from memory* was
+  already covered structurally by [`read-before-asking.md`][rba] (and
+  PDR-057, the empirical-answerability pre-question gate). The
+  structural cure is read-before-asking; the distilled note was an
+  instance.
+
+[prin-target-arch]: ../../directives/principles.md#code-quality
+[ac-helper]: ../../directives/agent-collaboration.md#c-treat-commit-as-a-short-lived-shared-transaction-surface
+[wf-generators]: ../../../docs/engineering/workflow.md#generators-require-populated-source-data
+[wf-runner]: ../../../docs/engineering/workflow.md#use-the-test-runner-directly-when-script-forwarding-drifts
+[tdd-iodebt]: ../../../docs/engineering/testing-tdd-recipes.md#adding-to-existing-io-debt-in-a-unit-test-file
+[rba]: ../../rules/read-before-asking.md

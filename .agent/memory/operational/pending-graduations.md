@@ -209,7 +209,7 @@ the queue churns.
 + 2026-05-13; **Coordinator-role-as-allocator-not-gatekeeper (PDR candidate)**
   (Coppery Kindling Anvil — three-napkin synthesis F2; Ferny's original
   candidate plus cross-rotation evidence).
-  `[captured: 2026-05-13 | source: napkin+napkin-archive/napkin-2026-05-12.md+napkin-archive/napkin-2026-05-12b.md+research:historical-napkin-synthesis-2026-05-13 | target: pdr:coordinator-role-as-allocator-not-gatekeeper | trigger: owner-direction | size: M | status: pending]`
+  `[captured: 2026-05-13 | source: napkin+napkin-archive/napkin-2026-05-12.md+napkin-archive/napkin-2026-05-12b.md+research:historical-napkin-synthesis-2026-05-13 | target: pdr:coordinator-role-as-allocator-not-gatekeeper | trigger: n>=3-validation(start-right-team-experiment)+owner-direction | size: M | status: pending]`
   Three corpus instances of one root cause across two failure modes:
   Wooded Spreading Thicket (over-write — sidebar file broke own gatekeeper
   sweep), Brazen Stoking Ash (over-write — dispatcher coordination
@@ -237,6 +237,64 @@ the queue churns.
   note, and a conditional team branch in `session-handoff`. The PDR candidate
   remains pending because the stable portable doctrine for coordinator
   allocation vs gating has not yet been written.
+
+  **Owner direction 2026-05-14 (Verdant Swaying Glade)**: hold this
+  candidate back from promotion; the coordinator/marshal/reviewer/scout/
+  standby role-set is *the first possibly naive approach we tried* and a
+  durable PDR on agent roles must not give it extra weight before the
+  upcoming self-assigned-roles experiment has produced cross-session
+  evidence. Eventual graduation target is broader than just "coordinator":
+  it is a PDR on agent roles, of which coordinator is one role.
+
+  **Co-tested companion hypothesis** (already operational and accumulating
+  evidence): the n-agent collaboration `hypothesis.md` § P1 — *Modes, not
+  roles* — claims agents occupy *functions* for *units of work*, not
+  territorial roles. P1 was confirmed across all three E1 pairings on
+  2026-05-03 (Pelagic+Misty, Woodland+Prismatic, Salty+Tidal); see
+  [`E1/closure.md`](../../prompts/agentic-engineering/collaboration/experiments/E1/closure.md).
+  The current self-assigned-roles experiment runs P1 forward through
+  [`start-right-team`](../../skills/start-right-team/SKILL-CANONICAL.md)
+  ("pressure before role" / "boundary before identity") and the proposed
+  [ADR-181](../../../docs/architecture/architectural-decisions/181-agent-team-start-and-action-log.md)
+  team-start ritual. The team-start research note is at
+  [`team-start-ritual-and-action-trace-2026-05-14.md`](../../research/agentic-engineering/operating-model-and-platforms/team-start-ritual-and-action-trace-2026-05-14.md).
+
+  **Why holding matters**: this PDR candidate names *concrete role labels*
+  (coordinator, marshal, reviewer, implementer, scout, standby) as the
+  positive doctrine substrate. P1 + ADR-181 + start-right-team treat those
+  same labels as *examples, not a required ontology* — the canonical field
+  is the boundary owned and the pressure being addressed. If we graduate
+  this PDR before the experiment matures, we risk three failure modes:
+  (1) calcifying transient labels into territorial roles (the exact
+  failure mode P1 was designed to prevent); (2) pre-empting falsification
+  evidence (P1 strengthens when role labels emerge from live pressure and
+  dissolve when the pressure ends; the PDR's positive role-set assumes
+  those labels are stable enough to write permanent doctrine about);
+  (3) encoding a possibly-naive cure into Practice Core (PDRs are
+  portable; entrenching the first menu of labels propagates it to the
+  next Practice-bearing repo before validation).
+
+  **Updated trigger condition**: do NOT graduate until the
+  start-right-team experiment has accumulated **N≥3 multi-agent sessions**
+  across at least two thread/work-shape contexts, AND the
+  [P1 falsification criteria](../../prompts/agentic-engineering/collaboration/falsification-criteria.md#p1--modes-not-roles)
+  show either (a) strengthening evidence that role labels remain bounded
+  to live pressure (in which case the PDR can be reframed around the
+  *pressure-to-role mapping protocol* rather than the role labels
+  themselves), or (b) falsifying evidence that one or more labels
+  consistently re-emerge across changing pressure shapes (in which case
+  the PDR can graduate naming exactly those persistent labels with their
+  empirical justification). Owner direction also remains as a co-trigger.
+
+  **Experimental notes capture surface**: per
+  [`falsification-criteria.md § Falsification process`](../../prompts/agentic-engineering/collaboration/falsification-criteria.md#falsification-process),
+  observations during start-right-team sessions land in `napkin.md` tagged
+  with the experiment ID and the affected primitive. P1 falsification
+  criteria amendment in this same closeout adds an explicit observation
+  hook for label-calcification vs label-dissolution as a strengthening or
+  weakening signal. When the experiment matures, the consolidation pass
+  reading those napkin observations decides whether to graduate this PDR
+  candidate as currently framed, reframe it, or remove it.
 
 + 2026-05-13; **Commit-window mutual mechanical verification +
   hook-output authority (agent-collaboration.md amendment candidate)**
@@ -333,6 +391,32 @@ the queue churns.
   First-instance; not yet at trigger. Promotion target when triggered:
   `collaboration-state-conventions.md` operational note in the comms-
   monitor section.
+
++ 2026-05-14; **Value-proxy-independence discipline for measurement tools
+  (rule or PDR candidate)**
+  (Sylvan Budding Forest — 2026-05-14 consolidation pass; first instance:
+  Luminous Glowing Moon `context-cost-cli.plan.md` acceptance lane caught
+  by `assumptions-expert` readiness review).
+  `[captured: 2026-05-14 | source: napkin-archive/napkin-2026-05-14.md+distilled.md | target: rule:value-proxy-independence-discipline OR pdr:value-proxy-independence | trigger: second-instance | size: S | status: pending]`
+  Acceptance value-proxies for a measurement tool MUST compare against an
+  independent ground-truth measure, not against a method-equivalent
+  historical artefact. Initial draft pinned `acc-cli-baseline-parity` as
+  reproducing the `~42,125 tokens` baseline `±5%`; that baseline was itself
+  produced by chars/4 over an older fileset, so the new chars/4 CLI agreeing
+  with it ±5% proves nothing and may fail under normal file churn.
+  Reviewer reframed as `acc-cli-live-parity` against `wc -c` in the same
+  shell session (method-independent ground truth; the chars/4 division is
+  then mechanical). The pattern shape is *"a proxy that reproduces a
+  method-equivalent baseline is tautological; only a method-independent
+  comparand validates the tool."* Reinforces but extends `jc-plan` proof-
+  contract requirements (outcome-not-activity acceptance, generally). First
+  instance only. Trigger: second observed instance, OR an owner-direction
+  decision to land the discipline ahead of corroboration. Promotion target
+  in preference order: (1) new rule `.agent/rules/value-proxy-independence-
+  discipline.md` operationalising the pattern as a plan-author check; (2)
+  amendment to `plan-body-first-principles-check.md` adding tautological-
+  baseline as a named first-principles failure mode; (3) new PDR if the
+  pattern proves cross-ecosystem at N≥2.
 
 + 2026-05-13; **Lockfile-in-flux without coordination-layer declaration
   (start-right grounding amendment)**

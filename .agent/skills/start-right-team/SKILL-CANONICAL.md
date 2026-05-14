@@ -130,7 +130,31 @@ Result:
 
 Record intent and brief reasoning, not hidden chain-of-thought.
 
-### 5. Revise The Route As The Work Changes
+### 5. Maintain The Team Cadence
+
+Once a team session is active, every participating agent must check for new
+messages of any type at least once every 120 seconds until they close out or
+are explicitly released from the team route. Use a tighter cadence when the
+owner or controller sets one.
+
+The message sweep must cover every live surface that can carry session
+coordination:
+
+- owner chat for current-turn direction;
+- directed inbox / directed comms addressed to the agent;
+- shared comms for team-wide updates;
+- active claims and active commit queue for ownership or git-order changes;
+- relevant conversations, sidebars, joint decisions, and escalations when the
+  current route depends on structured async coordination.
+
+Each participating agent must also report progress at least once every 120
+seconds. A progress report can be a brief owner-facing update, a shared-comms
+entry, or a directed reply, depending on the team route. It should name the
+current state, any blocker, and the next action. Silence is only acceptable
+after the agent has been explicitly released, closed out, or told to stop
+reporting.
+
+### 6. Revise The Route As The Work Changes
 
 Roles can dissolve when their pressure disappears. A scout can become an
 implementer only after a new route, claim, and evidence expectation are posted.
@@ -154,6 +178,24 @@ Only one agent owns the full session handoff unless the owner says otherwise.
 In team sessions this is normally the controller or the agent explicitly named
 as closeout owner.
 
+Every participating agent must close their own team presence explicitly before
+leaving the session, even when they did not own the full handoff. At minimum,
+they tell the other agents that their session is complete, name whether any
+work remains in their boundary, and state the claim disposition.
+
+The default closeout state is **no active claims retained**. Relinquish every
+claim the session opened before leaving. Keep a claim active only when there is
+a specific handoff reason for a follow-on agent, and make that reason explicit
+in the closeout message: which claim remains, what boundary it protects, who or
+what session should pick it up, and when it should be released if the follow-on
+does not arrive.
+
+When a later agent picks up a session, claim, or boundary that was retained for
+handoff, they must notify the other agents before acting. The pickup message
+must name the retained claim or boundary, confirm whether they are continuing,
+closing, or replacing that claim, and state their next coordination-visible
+action.
+
 Non-closeout agents provide a boundary-scoped synthesis instead of running the
 full `session-handoff` workflow:
 
@@ -163,6 +205,9 @@ Team member closeout:
 - Outcome:
 - Evidence:
 - Claims / queue / git state:
+- Session complete announcement:
+- Retained claims, if any, and handoff reason:
+- Pickup notification required for follow-on agent:
 - Surprise or changed understanding:
 - Blockers or risks:
 - Handoff needed:

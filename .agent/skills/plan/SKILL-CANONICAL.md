@@ -110,6 +110,40 @@ Every non-trivial plan, strategic or executable, MUST define:
    the minimum shippable shape without it.
 6. **Non-goals** — what the plan explicitly will not do.
 
+### Disposition Ledger For "Apply All Of X" Inputs
+
+When a plan's input is *"apply all of X"* — every audit finding,
+every reviewer comment, every entry in a list, every item in a
+queue — thoroughness is **every item having a recorded decision**,
+not every item triggering a separate execution cycle. When most
+inputs are redundant with existing canonical doctrine, the right
+shape is one small implementation tranche plus a batched disposition
+ledger:
+
+- **Every input gets a recorded decision** — `applied`,
+  `already-covered`, `superseded`, `out-of-scope`,
+  `deferred-to-pending-graduations`, etc. The ledger is the proof
+  that nothing was silently dropped.
+- **Implementation work is sized to the unique substance**, not to
+  the input count. Five reviewer comments that all restate one
+  existing rule are one batched ledger entry plus a back-cite, not
+  five cycles. Twenty pending-graduation items where eighteen are
+  already covered are one tranche of two graduations plus a
+  disposition log for the eighteen.
+- **Counts derived from the input list are derivation-anchored.**
+  Concurrent same-day flow can invalidate an arithmetic count
+  before execution; re-derive at execution time and let substance
+  preservation outrank stale arithmetic. Naming the derivation in
+  the ledger ("X items as of <date>; Y now applied; Z covered
+  elsewhere; W deferred with named constraint") is the audit trail
+  the plan body cannot carry inline.
+
+The failure mode is treating "apply all of X" as a literal
+N-cycle commitment: the plan inflates to N cycles, most of which
+restate existing doctrine, the rest of which carry the actual
+substance, and the agent loses the disposition view that would
+have prevented N times the wasted work.
+
 ## Strategic Plan Requirements (`future/`)
 
 `future/` plans are strategic briefs. They are not executable work plans yet.

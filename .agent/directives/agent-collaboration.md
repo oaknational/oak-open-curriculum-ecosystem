@@ -223,6 +223,15 @@ Current memory/state means current-session state; peer-session dirty files
 follow the [shared-state rule][shared-state-rule]. Current-session writes land
 or become explicit post-commit residue.
 
+Helper-mediated state writes need a peer-claim re-read. After any commit-queue
+completion or claim close, re-read `active-claims.json` before the final state
+commit; the helper applies its mutation against the snapshot it took at
+invocation, and a peer claim opened in the intervening window is silently
+overwritten when the helper writes back. Pathspec discipline prevents absorbing
+peer-staged files; the re-read prevents overwriting peer-authored claim state.
+Both fire at the same moment in the commit window, both prevent the same
+coordination class.
+
 ### d. Cleanup Ethics for Apparently Orphaned Claims
 
 Resist unilateral cleanup; archive only via deliberate governance passes

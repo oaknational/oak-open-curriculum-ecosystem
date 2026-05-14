@@ -375,6 +375,19 @@ paths, setup files) don't apply.
   docs prompt verification; misleading docs are trusted and acted
   on. Fix immediately — never defer, never TODO. Pairs with PDR-026
   §Landing target definition.
+- **Target-architecture wording needs consuming-runtime evidence** -
+  Present-tense architectural claims ("the SDK exposes the target
+  schema", "all consumers migrated", "the app uses the new
+  endpoint") MUST be backed by at least one consuming-runtime
+  instance verified at write time. A shared package exposing a
+  target schema is not proof that an app has migrated; the proof
+  is the import resolved in a built composition root. Use future
+  tense or "intended" when authoring without runtime evidence;
+  reserve present tense for verified state. ADRs, runbooks, and
+  operator docs fail this rule loudest because they are cited as
+  authority. Companion to "Misleading docs are blocking": that rule
+  fires after the misstatement lands; this rule prevents authoring
+  the misstatement in the first place.
 
 ### Compiler Time Types and Runtime Validation
 
