@@ -170,14 +170,57 @@ the queue churns.
 
 `[flipped pending→due: 2026-05-14 (Riverine Swimming Hull, Batch A of graduation-triage-disposition-2026-05-14 plan); owner-direction trigger is the standing direction itself, fired this session; owner selects graduation shape before amendment lands]`
 
-**Recommended shape**: amend [`capture-practice-tool-feedback.md`](../../rules/capture-practice-tool-feedback.md) to broaden scope from Practice/host-local-Practice-capability feedback to all agent-tooling friction. Rationale: the existing rule already routes feedback into napkin/plan/docs/backlog (not chat-only) — the standing direction is a scope broadening of an already-shaped cure, not new substance. A new rule would duplicate the existing rule's behavioural shape; a PDR is structurally too heavy for a single-paragraph behavioural broadening. PDR shape is correct only if owner wants Practice-portability (next adopter repo will re-derive the doctrine).
+**Recommended shape**: PDR with `pdr_kind: pattern`.
 
-**Alternatives**:
+**Function test** (rules, ADRs, and PDRs are not interchangeable
+vehicles — each has a distinct function, and the choice follows from
+the substance):
 
-- New rule `.agent/rules/capture-tooling-friction-as-user-feedback.md` — duplicative with `capture-practice-tool-feedback.md`'s shape unless owner wants sharp scope separation between Practice-tool feedback and broader agent-tooling friction.
-- PDR with `pdr_kind: pattern` — correct shape if owner wants ratification for cross-repo portability. Adopter scope: any Practice-bearing repo with agents-as-users-and-authors.
+- **ADR** is wrong shape. The substance is not an architectural
+  decision about *this repo's product*; it is doctrinal substance
+  about how the Practice operates.
+- **Rule** is wrong shape as the *primary* home. A rule is an
+  always-applied behavioural modifier that *operationalises* doctrine.
+  The substance here is the doctrine itself — the claim that agents
+  are both users and authors of the tooling, which collapses the
+  user/author distinction and makes agent-observed friction first-class
+  user feedback. The behavioural cure ("route into plan / docs /
+  napkin / tooling backlog, not chat-only") is downstream of that
+  claim; [`capture-practice-tool-feedback.md`](../../rules/capture-practice-tool-feedback.md)
+  already operationalises a slice of the cure for Practice-tool
+  feedback specifically.
+- **PDR** is the right shape. The substance is *portable Practice
+  doctrine*: any Practice-bearing repo where agents both author and
+  use the tooling would re-derive the same claim. That is the
+  textbook PDR test, and this entry's earlier "Why PDR-shaped, not
+  ADR-shaped" subsection already ran it.
 
-Owner-review-gated: no amendment lands until owner picks shape.
+PDR weight is set by the substance, not by paragraph count. A
+paragraph-sized PDR is appropriate when the substance is a paragraph;
+"too heavy for a single-paragraph broadening" is a category error
+against the function.
+
+**Downstream of the PDR**, the existing rule
+`capture-practice-tool-feedback.md` continues to operationalise the
+Practice-tool slice; a sibling rule (or an amendment broadening this
+one) may land to operationalise the wider agent-tooling slice. That
+is rule-level work that *follows* the PDR; it is not a substitute.
+
+**Authoring note for the PDR**: the candidate target slug
+`pdr:tooling-friction-is-user-feedback` already appears in this
+entry's frontmatter. The next PDR number in the practice-core
+sequence resolves at draft time. Adopter scope: any Practice-bearing
+repo with agents-as-users-and-authors.
+
+Owner-review-gated: no PDR file lands until owner approves shape.
+
+**Revision note (2026-05-14 metacognition)**: an earlier version of
+this section recommended amending `capture-practice-tool-feedback.md`
+and listed PDR as an "alternative if owner wants portability." That
+framing ranked shapes by weight rather than by function, surfaced a
+cheap-cure option, and contradicted the entry's own "Why PDR-shaped,
+not ADR-shaped" subsection. The owner flagged the error and the
+recommendation has been revised to follow the function test.
 
 Owner standing direction recorded in comms-event
 `9a249c-tooling-feedback-standing-note` (Pelagic Swimming Rudder,

@@ -465,3 +465,49 @@ lives in the archived napkin.
   temporary team-routing lease. Amend the template from `Claimed paths` to
   `Intended boundary` plus `Claim status`. Teach tooling to surface overlap
   groups rather than asking agents to infer them from raw claim state.
+
+## 2026-05-14 — Shape-selection-by-vehicle-weight is a recurring failure / claude / claude-opus-4-7-1m / `304dde`
+
+### Rules, ADRs, and PDRs are not interchangeable vehicles
+
+- **Expected**: graduation shape selection follows the function test —
+  which surface has the function this substance belongs to. ADR for
+  this-repo product architecture; PDR for portable Practice doctrine;
+  rule for always-applied behavioural cure that operationalises
+  doctrine.
+- **Actual**: in Batch A of the graduation-triage-disposition plan, I
+  presented three shape options (PDR / new rule / rule amendment) as
+  roughly equivalent vehicles and ranked them by *weight* — "PDR is
+  structurally too heavy for a single-paragraph broadening," "new
+  rule is duplicative." I recommended the lightest shape (amend the
+  existing rule). The pending-graduations entry itself had already
+  argued for PDR in a "Why PDR-shaped, not ADR-shaped" subsection;
+  I read that argument and then ignored it.
+- **The doctrine I violated**: my own per-user memory says *"Never
+  surface a cheap-cure option — cheap/fast/good-enough is
+  categorically excluded; only architectural-excellence shapes are
+  legitimate options."* Framing options by weight ("too heavy",
+  "duplicative") is the weight-of-vehicle smell. The corrective
+  framing leads with function ("which surface has this function")
+  and treats convenience only as a tiebreaker between
+  function-equivalent shapes.
+- **Owner intervention**: *"rules, ADRs, PDRs all have functions,
+  this choice is not arbitrary"*. The intervention is the diagnostic:
+  if I have to be told the choice is not arbitrary, my framing
+  treated it as if it were. PDR weight is set by the substance, not
+  by paragraph count; a paragraph-sized PDR is fine when the
+  substance is a paragraph.
+- **Behaviour change**: when surfacing graduation-shape options,
+  state the function test verdict first and only enumerate shapes
+  that pass it. The function test runs against the substance, not
+  against the substance's *size*. Re-read the candidate's own
+  prior shape-classification arguments before drafting a
+  recommendation; if those arguments are already in the entry,
+  honour them or explicitly refute them — never silently
+  override them with a lighter recommendation.
+- **Graduation candidate**: this entry sharpens existing distilled
+  doctrine (cheap-cure exclusion) into a specific failure-mode name
+  — *"shape-selection-by-vehicle-weight"*. If observed a second time
+  in any future session, route into a rule or PDR amendment that
+  names the failure shape directly. Until then, hold here as a
+  napkin observation.
