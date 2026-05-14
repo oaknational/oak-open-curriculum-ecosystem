@@ -24912,6 +24912,733 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "f5ea7f4d-cf3f-421e-8fb4-c53699be0ca0",
+      "agent_id": {
+        "agent_name": "Luminous Glowing Moon",
+        "platform": "cursor",
+        "model": "claude-opus-4.7",
+        "session_id_prefix": "d28cfd"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/prompts/onboarding-claude-teammate.md",
+            ".agent/prompts/README.md",
+            "README.md",
+            "CONTRIBUTING.md",
+            ".gitignore"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T09:07:29Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Remove onboarding-claude-teammate prompt and clean up four cross-references per owner direction (agents lack persistent identity; no 'first session' to onboard).",
+      "intent_to_commit": "5cd42655-9084-45ca-8518-b3b3fadcd651",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T09:09:53Z",
+        "closed_by": {
+          "agent_name": "Luminous Glowing Moon",
+          "platform": "cursor",
+          "model": "claude-opus-4.7",
+          "session_id_prefix": "d28cfd"
+        },
+        "summary": "wrong area-kind for commit-queue: reopening with --area-kind git",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f5ea7f4d-cf3f-421e-8fb4-c53699be0ca0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ac9b073a-4d50-4b5b-a41a-c629215bd620",
+      "agent_id": {
+        "agent_name": "Luminous Glowing Moon",
+        "platform": "cursor",
+        "model": "claude-opus-4.7",
+        "session_id_prefix": "d28cfd"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "git:index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T09:10:00Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Remove onboarding-claude-teammate prompt and clean up four cross-references per owner direction.",
+      "intent_to_commit": "a0692c90-0024-47bd-8ebb-5228aea38e1c",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T09:10:58Z",
+        "closed_by": {
+          "agent_name": "Luminous Glowing Moon",
+          "platform": "cursor",
+          "model": "claude-opus-4.7",
+          "session_id_prefix": "d28cfd"
+        },
+        "summary": "wrong pattern shape: commit-queue guard requires exact element 'index/head', not 'git:index/head'; reopening",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ac9b073a-4d50-4b5b-a41a-c629215bd620",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "77720f50-877f-45d5-aec0-036893eb5083",
+      "agent_id": {
+        "agent_name": "Luminous Glowing Moon",
+        "platform": "cursor",
+        "model": "claude-opus-4.7",
+        "session_id_prefix": "d28cfd"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T09:10:58Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Remove onboarding-claude-teammate prompt and clean up four cross-references per owner direction.",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T09:12:11Z",
+        "closed_by": {
+          "agent_name": "Luminous Glowing Moon",
+          "platform": "cursor",
+          "model": "claude-opus-4.7",
+          "session_id_prefix": "d28cfd"
+        },
+        "summary": "Cleanup landed at 635dd89f: deleted .agent/prompts/onboarding-claude-teammate.md and updated four cross-references (.agent/prompts/README.md row, README.md bullet, CONTRIBUTING.md bullet+'three'\\u2192'two', .gitignore comment). 5 files, +3/-142. Pre-commit gates green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "77720f50-877f-45d5-aec0-036893eb5083",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "A2427C10-3F5D-4416-883E-326A033027ED",
+      "agent_id": {
+        "agent_name": "Shadowed Glimmering Night",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e25"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/research/agentic-engineering/operating-model-and-platforms/external-skills-substrate-study-2026-05-14.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T09:44:44Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Write read-only external substrate study report on external skills repository through the Practice lens.",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T09:48:08Z",
+        "closed_by": {
+          "agent_name": "Shadowed Glimmering Night",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e25"
+        },
+        "summary": "Completed cited report on external skills repository as an external substrate study through the Practice lens.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "A2427C10-3F5D-4416-883E-326A033027ED",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "89CAAA81-0E0C-409E-8B93-1202F232EFEF",
+      "agent_id": {
+        "agent_name": "Shadowed Glimmering Night",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e25"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/future/external-skills-substrate-learning.plan.md,.agent/plans/agentic-engineering-enhancements/future/README.md,.agent/research/agentic-engineering/operating-model-and-platforms/external-skills-substrate-non-plan-insights-2026-05-14.md,.agent/research/agentic-engineering/operating-model-and-platforms/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T09:58:53Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Plan the Practice learning pipeline from the external skills substrate study and record non-plan insights.",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T09:59:12Z",
+        "closed_by": {
+          "agent_name": "Shadowed Glimmering Night",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e25"
+        },
+        "summary": "Closed and replaced because the comma-separated file list was recorded as one pattern; reopening with clean scoped patterns.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "89CAAA81-0E0C-409E-8B93-1202F232EFEF",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "07BBCC01-6728-4A18-A6D2-2A2872AC7C79",
+      "agent_id": {
+        "agent_name": "Shadowed Glimmering Night",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e25"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/future/*"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T09:59:12Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Plan the Practice learning pipeline from the external skills substrate study.",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T10:00:43Z",
+        "closed_by": {
+          "agent_name": "Shadowed Glimmering Night",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e25"
+        },
+        "summary": "Created future strategic plan for Practice learning pipeline from external skills substrate study and indexed it.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "07BBCC01-6728-4A18-A6D2-2A2872AC7C79",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3996A8A0-2DA0-4B06-8A50-6BDEC9A23BC1",
+      "agent_id": {
+        "agent_name": "Shadowed Glimmering Night",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e25"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/research/agentic-engineering/operating-model-and-platforms/*"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T09:59:12Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Record non-plan insights from the external skills substrate study and index the research note.",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T10:00:43Z",
+        "closed_by": {
+          "agent_name": "Shadowed Glimmering Night",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e25"
+        },
+        "summary": "Created companion non-plan insights note for external skills substrate study and indexed it.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3996A8A0-2DA0-4B06-8A50-6BDEC9A23BC1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "bceae653-b212-4731-a7a4-34fd49f3f46c",
+      "agent_id": {
+        "agent_name": "Verdant Swaying Glade",
+        "platform": "cursor",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "af40bc"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/prompts/agentic-engineering/collaboration/falsification-criteria.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/repo-continuity.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T10:01:10Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Amend pending-graduations coordinator-PDR entry with experiment cross-references; amend falsification-criteria.md P1; lightweight session-note + identity-row + continuity refresh. No commit window opened.",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T10:08:31Z",
+        "closed_by": {
+          "agent_name": "Verdant Swaying Glade",
+          "platform": "cursor",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "af40bc"
+        },
+        "summary": "Knowledge-curation pass complete. Coordinator-PDR candidate held back from promotion under owner direction; pending-graduations entry amended with experiment cross-references and trigger upgraded to n>=3-validation(start-right-team-experiment)+owner-direction; falsification-criteria.md P1 extended with label-calcification observation criteria + Co-tested PDR candidate cross-reference; napkin session note + thread-record identity row + repo-continuity identity-summary refreshed; pre-existing markdownlint error at falsification-criteria.md:109 fixed (paragraph continuation  line-wrap). All five touched files lint clean. No commit window opened. Outputs sit in working tree alongside Sylvan Budding Forest's deep-dive consolidation outputs and Shadowed Glimmering Night's external-substrate study + future plan + insights note.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "bceae653-b212-4731-a7a4-34fd49f3f46c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3584F8CD-206A-45F8-9FCE-F2532E52FFE4",
+      "agent_id": {
+        "agent_name": "Shadowed Glimmering Night",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e25"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/future/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T10:09:34Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Update future-plan index row after external skills substrate learning plan strategic decisions were completed.",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T10:09:55Z",
+        "closed_by": {
+          "agent_name": "Shadowed Glimmering Night",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e25"
+        },
+        "summary": "Updated future-plan index row to match the decided strategic routing and remaining promotion gates.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3584F8CD-206A-45F8-9FCE-F2532E52FFE4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "F04CCC01-5421-49F6-92F9-44603DE3F6FD",
+      "agent_id": {
+        "agent_name": "Shadowed Glimmering Night",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e25"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/future/external-skills-substrate-learning.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T10:08:47Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Tighten external skills substrate learning plan to decision-complete strategic routing as far as evidence allows.",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T10:09:55Z",
+        "closed_by": {
+          "agent_name": "Shadowed Glimmering Night",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e25"
+        },
+        "summary": "Tightened external skills substrate learning plan to decision-complete strategic routing, with explicit remaining gates before execution.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "F04CCC01-5421-49F6-92F9-44603DE3F6FD",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ad1b68f5-3401-4d35-91bb-3f8a0119ae44",
+      "agent_id": {
+        "agent_name": "Verdant Swaying Glade",
+        "platform": "cursor",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "af40bc"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/comms/ed28a045-2f8f-46dc-b5ba-f7bc37624fb2.json",
+            ".agent/state/collaboration/shared-comms-log.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T10:12:54Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Pronoun correction sweep + root-cause distilled rule",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T10:15:24Z",
+        "closed_by": {
+          "agent_name": "Verdant Swaying Glade",
+          "platform": "cursor",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "af40bc"
+        },
+        "summary": "Pronoun correction sweep complete. Amended ed28a045 comms event body (her/she -> their/they when referring to Shadowed Glimmering Night); regenerated shared-comms-log.md; appended correction entry to active napkin; graduated they/them-default rule into active distilled.md as new dated section so the rule survives napkin rotation. Root cause of the recurrence: 2026-05-11 correction lived only in archived napkin-2026-05-12.md and never reached active distilled. Now durable. Touched files lint clean.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ad1b68f5-3401-4d35-91bb-3f8a0119ae44",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "20b4dfea-2d65-49db-b38b-b04a9b2cec08",
+      "agent_id": {
+        "agent_name": "Luminous Glimmering Eclipse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e26"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T10:30:16Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Amend start-right-team skill cadence: check all message types and report progress at least every 120 seconds.",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T10:30:38Z",
+        "closed_by": {
+          "agent_name": "Luminous Glimmering Eclipse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e26"
+        },
+        "summary": "Updated start-right-team skill to require message sweeps and progress reports at least every 120 seconds during active team sessions; targeted markdownlint and diff check passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "20b4dfea-2d65-49db-b38b-b04a9b2cec08",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a515672d-bfd4-48d0-a47f-fcbb25bf8786",
+      "agent_id": {
+        "agent_name": "Verdant Swaying Glade",
+        "platform": "cursor",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "af40bc"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/distilled.md",
+            ".agent/directives/principles.md",
+            ".agent/directives/agent-collaboration.md",
+            "docs/engineering/workflow.md",
+            "docs/engineering/testing-tdd-recipes.md",
+            ".agent/skills/plan/SKILL-CANONICAL.md",
+            ".agents/skills/jc-plan/SKILL.md",
+            "docs/architecture/architectural-decisions/181-agent-team-start-and-action-log.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T10:21:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Route C-iv graduation pass: graduate seven 2026-05-09/05-10 distilled entries to named permanent homes (principles, agent-collaboration, workflow, testing-tdd-recipes, jc-plan skill); back-cite from each destination; prune graduated entries from distilled.md per step 7b. Tail-of-window: ADR-181 status Proposed->Accepted.",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T10:30:45Z",
+        "closed_by": {
+          "agent_name": "Verdant Swaying Glade",
+          "platform": "cursor",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "af40bc"
+        },
+        "summary": "Route C-iv graduation pass complete (5 substance graduations + 1 consolidated planning-arithmetic graduation + 4 already-incorporated prunes with back-cites + ADR-181 status flip Proposed->Accepted with Acceptance section). All seven touched files lint-clean. Closed under owner direction to stop further curation work and route remaining knowledge-curation to a fresh session. Releases lock that Shadowed Glimmering Night was waiting on for the all-files commit window. Outputs in working tree (uncommitted): principles.md, agent-collaboration.md, workflow.md, testing-tdd-recipes.md, plan SKILL-CANONICAL.md, ADR-181, distilled.md. Distilled.md grew from 469 to 518 lines because graduations log captures provenance; substance preservation outranks fitness pressure per canonical step 7 doctrine.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a515672d-bfd4-48d0-a47f-fcbb25bf8786",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6519a793-ae31-4d33-b0fc-503ad50d24dd",
+      "agent_id": {
+        "agent_name": "Eclipsed Glimmering Veil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e26"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T10:36:52Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Amend start-right-team closeout contract for session-complete announcement and claim relinquishment",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T10:37:20Z",
+        "closed_by": {
+          "agent_name": "Eclipsed Glimmering Veil",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e26"
+        },
+        "summary": "Amended start-right-team closeout contract to require session-complete announcement and claim relinquishment by default.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6519a793-ae31-4d33-b0fc-503ad50d24dd",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9e73a1b2-66fa-4227-8652-2d0db04c8c4c",
+      "agent_id": {
+        "agent_name": "Eclipsed Glimmering Veil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e26"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T10:38:51Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Amend start-right-team closeout contract to require pickup notification when a handed-off session resumes",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T10:39:11Z",
+        "closed_by": {
+          "agent_name": "Eclipsed Glimmering Veil",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e26"
+        },
+        "summary": "Amended start-right-team closeout contract to require pickup notification when a retained handoff claim or boundary is resumed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9e73a1b2-66fa-4227-8652-2d0db04c8c4c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e86af95a-3961-45d9-8584-5356e3ec2838",
+      "agent_id": {
+        "agent_name": "Quiet Cloaking Mist",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e25"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/context-cost/**",
+            "agent-tools/src/bin/agent-tools-cli.ts",
+            "agent-tools/src/bin/agent-tools-cli-topics.ts",
+            "agent-tools/package.json",
+            "pnpm-lock.yaml",
+            "agent-tools/README.md",
+            ".agent/analysis/practice-context-cost-baseline.md",
+            ".agent/plans/agentic-engineering-enhancements/future/memetic-immune-system-and-progressive-disclosure.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T10:17:51Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Implement context-cost CLI plan and author follow-on fitness token measurement plan",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T10:43:38Z",
+        "closed_by": {
+          "agent_name": "Quiet Cloaking Mist",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e25"
+        },
+        "summary": "Context-cost CLI plan residue reviewed; follow-on fitness token/frontmatter plan authored, amended after specialist blockers, and cleared docs/ADR, assumptions, code, onboarding, test, and config review. No git index work.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e86af95a-3961-45d9-8584-5356e3ec2838",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "5f010dc7-23a1-4dfc-9c3c-8c1e358d774c",
+      "agent_id": {
+        "agent_name": "Shadowed Glimmering Night",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e25"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T10:45:00Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit owner-directed closeout bundles after active claims cleared.",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T10:49:31Z",
+        "closed_by": {
+          "agent_name": "Shadowed Glimmering Night",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e25"
+        },
+        "summary": "Committed owner-directed closeout bundles: 92826c91, 41acffcc, 289f190b, 2ee8905d; closing git/index window before final collaboration-state commit.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "5f010dc7-23a1-4dfc-9c3c-8c1e358d774c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

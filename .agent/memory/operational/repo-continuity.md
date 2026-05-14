@@ -97,8 +97,11 @@ Earlier archives remain under [`archive/`](archive/).
   the pending-graduations due index was reconciled, and ADR/PDR promotion
   decisions were surfaced explicitly.
 - Conservation-first consolidation advanced again on 2026-05-12: the
-  distilled-stage and `pending-graduations.md` passes are complete. The next
-  staged consolidation session should process `practice-bootstrap.md`.
+  distilled-stage and `pending-graduations.md` passes are complete. The
+  2026-05-14 Sylvan Budding Forest deep-dive then rotated the active
+  napkin (CRITICAL → fresh; substance preserved in `distilled.md` + the
+  `napkin-2026-05-14.md` archive). The next staged consolidation session
+  should process `practice-bootstrap.md`.
 - Next `agentic-engineering-enhancements` implementation continuation remains
   owner-directed: audit all remaining skills if that lane is reopened, or
   continue cost-of-collaboration P5/P8 from the active plan.
@@ -111,6 +114,16 @@ Earlier archives remain under [`archive/`](archive/).
   proof-contract/template amendment. Do not start `agent-tools` code until the
   plan's WS4 bridge creates or amends the owning `agent-tooling` execution
   surface.
+- External-substrate learning is now a future strategic-learning lane, not an
+  implementation lane. The source-neutral study, companion non-plan insights
+  note, and
+  [`external-skills-substrate-learning.plan.md`](../../plans/agentic-engineering-enhancements/future/external-skills-substrate-learning.plan.md)
+  route the work; this landed at `289f190b`. The plan is decision-complete for
+  strategic routing but not ready for execution; the first executable slice is
+  candidate-register creation plus Practice-fit review for C1/C2 only, after
+  the recorded readiness gates are satisfied. The same closeout also landed
+  `92826c91` context-cost reviewer hardening, `41acffcc` token-measurement
+  plan routing, and `2ee8905d` doctrine/skill graduations.
 - `connecting-oak-resources` lane advanced through multiple 2026-05-12 graph
   foundation commits. Holistic Inc.1a re-plan landed at `f73c42f5` (Clouded
   Vaulting Squall / `claude` / opus-4-7-1m / `866472`): WS1.4+WS1.5 collapsed,
@@ -136,7 +149,7 @@ each thread record; this table is the repo-level index.
 | ------------------------------------------------------------------------------ | --------------------------------------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `main-critical-sonar-remediation`                                              | Sonar remediation                             | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | `observability-sentry-otel`                                                    | Sentry/OTel integration                       | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic]       | Luminous Glowing Moon / `cursor` / claude-opus-4-7 / `d28cfd` / 2026-05-14 (promoted `context-cost-cli.plan.md` from QUEUED to DECISION-COMPLETE / READY FOR EXECUTION; twelve decision blocks settled inline; assumptions-expert readiness review run with all findings closed; agent-tooling/current README index updated; no implementation landed); Pearly Drifting Jetty / `codex` / GPT-5 / `019e22` / 2026-05-14 (P8 controller/metacognition handoff, start-right-team / session-handoff team-routing research, continuation-pointer clarification, and agent-onboarding flow correction; next route remains `p8-attention-state`); Embered Igniting Ash / `codex` / GPT-5 / `019e22` / 2026-05-14 (P8 marshal handoff reflection; verified exact source and controller-closeout commit windows; no implementation claim open); Arboreal Ripening Pollen / `codex` / GPT-5 / `019e22` / 2026-05-14 (P8 Slice A operator-value implementer and p8-attention-state data/value scout; no open implementation claim); Fronded Rustling Canopy / `codex` / GPT-5 / `019e22` / 2026-05-14 (P8 read-only reviewer and standby monitor; blocked then cleared Slice A wording; no implementation claim open); Coppery Kindling Anvil / `cursor` / claude-opus-4-7 / `536dd4` / 2026-05-13 (three-napkin deep-dive consolidation; F1 graduated to distilled.md; F2-F10 routed to pending-graduations as triggered candidates with explicit conditions; napkin rotated to archive/napkin-2026-05-13.md; synthesis report landed under research/agentic-engineering/; three numbered verdicts surfaced for owner direction; consolidation outputs deferred from commit per owner direction "forget commits, run /jc-session-handoff then stop"); Mossy Blossoming Canopy / `codex` / GPT-5 / `019e22` / 2026-05-13 (P8 TUI foundation repair; P8 remains open); Mossy Fruiting Thicket / `codex` / GPT-5 / `019e22` / 2026-05-13 (P5 DI/no-IO boundary repair landed at `07ffee1d`; P8 live TUI next); Uplifted Wheeling Sky / `codex` / GPT-5 / `019e20` / 2026-05-13 (P5 unified comms migration + no-IO/DI correction); Verdant Foraging Copse / `codex` / GPT-5 / `019e1d` / 2026-05-13 (completion-claim proof pipeline report + plan + first `jc-plan` proof-contract skill amendment); Umbral Masking Silhouette / `codex` / GPT-5 / `019e1d` / 2026-05-13 (read-only P5 strict-parser gate-check + repeated monitor loop); see thread record for full identity history |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic]       | Shadowed Glimmering Night / `codex` / GPT-5 / `019e25` / 2026-05-14 (source-neutral external-skills substrate study; companion non-plan insights note; future strategic plan tightened to decision-complete-for-strategic-routing; owner-directed all-files closeout commit window announced to active peer before touching index); Verdant Swaying Glade / `cursor` / claude-opus-4-7 / `af40bc` / 2026-05-14 (knowledge-curation pass under owner direction; held the coordinator-PDR candidate back from promotion to avoid entrenching the first possibly naive role-set; amended `pending-graduations.md` coordinator entry with experiment cross-references — trigger upgraded to `n>=3-validation(start-right-team-experiment)+owner-direction`; amended `falsification-criteria.md` P1 with label-calcification observation criteria connecting the candidate to the start-right-team self-assigned-roles experiment; added Standing Thread Note + identity row; no commit window opened); Sylvan Budding Forest / `cursor` / claude-opus-4-7 / `f8c50f` / 2026-05-14 (deep-dive `jc-consolidate-docs` ran end-to-end on owner direction; napkin rotated to `archive/napkin-2026-05-14.md` from CRITICAL fitness; new 2026-05-14 section added to `distilled.md` with coordination role discipline + commit-window sharpening + plan-author reinforcement entries; fixed `comms-events/`→`comms/` doctrine drift in `consolidate-docs/SKILL-CANONICAL.md` and `session-handoff/SKILL-CANONICAL.md`; replaced stale active-threads inventory in `threads/README.md` with pointer to repo-continuity authority; six numbered verdicts surfaced to owner; no implementation landed); Luminous Glowing Moon / `cursor` / claude-opus-4-7 / `d28cfd` / 2026-05-14 (promoted `context-cost-cli.plan.md` from QUEUED to DECISION-COMPLETE / READY FOR EXECUTION; twelve decision blocks settled inline; assumptions-expert readiness review run with all findings closed; agent-tooling/current README index updated; no implementation landed); Pearly Drifting Jetty / `codex` / GPT-5 / `019e22` / 2026-05-14 (P8 controller/metacognition handoff, start-right-team / session-handoff team-routing research, continuation-pointer clarification, and agent-onboarding flow correction; next route remains `p8-attention-state`); Embered Igniting Ash / `codex` / GPT-5 / `019e22` / 2026-05-14 (P8 marshal handoff reflection; verified exact source and controller-closeout commit windows; no implementation claim open); Arboreal Ripening Pollen / `codex` / GPT-5 / `019e22` / 2026-05-14 (P8 Slice A operator-value implementer and p8-attention-state data/value scout; no open implementation claim); Fronded Rustling Canopy / `codex` / GPT-5 / `019e22` / 2026-05-14 (P8 read-only reviewer and standby monitor; blocked then cleared Slice A wording; no implementation claim open); Coppery Kindling Anvil / `cursor` / claude-opus-4-7 / `536dd4` / 2026-05-13 (three-napkin deep-dive consolidation; F1 graduated to distilled.md; F2-F10 routed to pending-graduations as triggered candidates with explicit conditions; napkin rotated to archive/napkin-2026-05-13.md; synthesis report landed under research/agentic-engineering/; three numbered verdicts surfaced for owner direction; consolidation outputs deferred from commit per owner direction "forget commits, run /jc-session-handoff then stop"); Mossy Blossoming Canopy / `codex` / GPT-5 / `019e22` / 2026-05-13 (P8 TUI foundation repair; P8 remains open); Mossy Fruiting Thicket / `codex` / GPT-5 / `019e22` / 2026-05-13 (P5 DI/no-IO boundary repair landed at `07ffee1d`; P8 live TUI next); Uplifted Wheeling Sky / `codex` / GPT-5 / `019e20` / 2026-05-13 (P5 unified comms migration + no-IO/DI correction); Verdant Foraging Copse / `codex` / GPT-5 / `019e1d` / 2026-05-13 (completion-claim proof pipeline report + plan + first `jc-plan` proof-contract skill amendment); Umbral Masking Silhouette / `codex` / GPT-5 / `019e1d` / 2026-05-13 (read-only P5 strict-parser gate-check + repeated monitor loop); see thread record for full identity history |
 | `connecting-oak-resources`                                                     | Oak resource graph                            | [record][connecting]    | Quiet Stalking Mirror / `claude-code` / opus-4-7-1m / `fe8a4f` / 2026-05-13 (WS1.5 pre-implementation review absorbed + owner doctrine recorded + URDNA2015→RDFC-1.0 plan-text remediation; implementation blocked in-session by uncoordinated 43-file dirty slice + lockfile collision risk; documentation absorption later landed at `39b3271d` via Coppery Kindling Anvil with owner authorisation); Dim Hiding Secret / `codex` / GPT-5 / `019e1d` / 2026-05-13 (WS1.6 vocab planning prep landed at `f36f98b1`); Luminous Threading Asteroid / `codex` / GPT-5 / `019e1d` / 2026-05-13 (session-handoff-only close; WS1.4 coordination closeout already landed at `0d6f080a`); Solar Gliding Twilight / `codex` / GPT-5 / `019e1d` / 2026-05-13 (session-handoff continuity repair); Fiery Igniting Furnace / `codex` / GPT-5 / `019e1d` / 2026-05-12 (WS1.4 JSON-LD processor landed at `95f42cb7`); Radiant Illuminating Twilight / `codex` / GPT-5 / `019e1c` / 2026-05-12 (WS2.1 graph-ingest scaffold landed at `0f895070`); Lofty Vaulting Summit / `codex` / GPT-5 / `019e1c` / 2026-05-12 (WS1.3 landed at `87e21125`); see thread record for full identity history |
 | `exploring-open-education-resources`                                           | Third-party OER                               | [record][oer]           | Gnarled / `claude-code` / `e18e2c` / 2026-05-01                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `architectural-budget-system`                                                  | Architectural budget                          | [record][budget]        | Nebulous / `codex` / 2026-04-29                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -162,6 +175,14 @@ session-handoff closeout only; WS1.4 coordination closeout was already landed at
 ## Next Safe Steps
 
 ### Agentic-Engineering Enhancements
+
+Owner-directed exercise route from the 2026-05-14 closeout: if the next
+session is meant to exercise the external-substrate learning plan, open
+[`external-skills-substrate-learning.plan.md`](../../plans/agentic-engineering-enhancements/future/external-skills-substrate-learning.plan.md),
+create the decided candidate register, review C1/C2 for Practice fit and
+existing homes, then stop before C3-C8 adoption work. If owner direction
+changes or no exercise route is requested, the default implementation route
+remains mandatory P8 `p8-attention-state`.
 
 Immediate cost-of-collaboration lane: P0, P-Foundation, P1, P2, P3, P4, and P5
 are complete. Continue mandatory P8 live collaboration TUI from
@@ -338,16 +359,94 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-14 — Luminous Glowing Moon / `cursor` / claude-opus-4-7 /
-`d28cfd`)**: not due — single plan-promotion session. No plan closed (the
-promoted plan is ready for execution, not landed); no doctrine repeats hit;
-no pattern convergence; no >7d comms-events to process; no ADR/PDR landed.
-The session reinforces existing rules
+**Status (2026-05-14 — Shadowed Glimmering Night / `codex` / GPT-5 /
+`019e25`)**: not due — session-scoped external-substrate research, strategic
+planning, and owner-directed all-files closeout. The new learning route is
+captured in the future plan, source-neutral study, and companion non-plan
+insights note. First executable slice is gated to candidate-register creation
+plus C1/C2 Practice-fit review only; C3-C8 are explicitly observe/defer. The
+next bounded consolidation target remains `practice-bootstrap.md`.
+
+**Status (2026-05-14 — Verdant Swaying Glade / `cursor` / claude-opus-4-7 /
+`af40bc`)**: **completed this handoff under owner closeout direction** —
+multi-pass knowledge-curation session that initially bounded itself to
+the coordinator-PDR deferral, then under successive owner direction
+extended into a pronoun-correction sweep (root-cause distillation of the
+2026-05-11 they/them rule into active `distilled.md`) and a Route C-iv
+graduation pass (five substance graduations + one consolidated
+planning-arithmetic graduation + four already-incorporated prunes with
+back-cites; tail-of-window ADR-181 status flip Proposed→Accepted with
+full Acceptance section).
+Owner correction at session close: *"I feel you have drifted, and I feel
+that we need to move all further knowledge curation work to a fresh
+session."* Drift acknowledged; captured in
+[`napkin.md` § Correction — drift from consolidate-docs into in-session
+execution](../active/napkin.md): hedge-language *"I think X"* is a
+proposal to confirm, not authorisation to execute; thread-scoped
+`jc-consolidate-docs` flows should land verdict-and-handoff per session,
+not stack execution-and-handoff in one window. Three of Sylvan Budding
+Forest's six numbered verdicts are now closed: verdict (1) coordinator-
+PDR — held with experiment cross-references; verdict (2) ADR-181 —
+flipped Proposed→Accepted; verdict (5)(d) graduate seven 2026-05-09/05-10
+distilled entries to named permanent homes — landed (5 substance + 1
+consolidated + 4 already-covered prunes). Verdicts (3)
+`pr-90-build-fix-landing` thread status, (4) refresh/pause/archive for
+three stale threads, (5)(a-c) the three other operational deferrals,
+and (6) `practice-bootstrap.md` next-bounded confirmation remain open
+for the next bounded session. Existing next bounded consolidation target
+remains `practice-bootstrap.md` (per opener constraint and PDR-003
+care-and-consult posture). Touched files this session (all lint-clean,
+all uncommitted): `principles.md`, `agent-collaboration.md`,
+`workflow.md`, `testing-tdd-recipes.md`, `plan SKILL-CANONICAL.md`,
+ADR-181, `distilled.md`, `napkin.md`, `pending-graduations.md`,
+`falsification-criteria.md`, thread-record, `repo-continuity.md` (this
+file), `shared-comms-log.md` (regenerated), comms event JSONs.
+Continuation route for the fresh knowledge-curation session is documented
+in [`threads/agentic-engineering-enhancements.next-session.md` § Verdant
+Knowledge Curation Closeout (2026-05-14)](threads/agentic-engineering-enhancements.next-session.md).
+
+**Status (2026-05-14 — Sylvan Budding Forest / `cursor` / claude-opus-4-7 /
+`f8c50f`)**: **completed this handoff** — deep-dive `jc-consolidate-docs`
+ran end-to-end on owner direction ("Please carry out the deep dive
+consolidate docs. Never trim content to hit targets, always conserve and
+curate knowledge, and then use the targets as a feedback signal"). Outputs
+landed in the working tree (no commit window opened): napkin rotated to
+[`archive/napkin-2026-05-14.md`](../active/archive/napkin-2026-05-14.md)
+(was 628 lines, CRITICAL by fitness validator); behaviour-changing entries
+from the eight covered sessions distilled into
+[`distilled.md`](../active/distilled.md) under the new "Recently
+Distilled — 2026-05-14 Sylvan Budding Forest deep-dive consolidation"
+section; doctrine drift `comms-events/`→`comms/` fixed in
+`.agent/skills/consolidate-docs/SKILL-CANONICAL.md` and
+`.agent/skills/session-handoff/SKILL-CANONICAL.md`; stale active-threads
+inventory removed from
+[`threads/README.md`](threads/README.md) (replaced with pointer to
+repo-continuity as the authoritative inventory); one new
+pending-graduations entry added (`value-proxy-independence-discipline`,
+first instance). Six numbered verdicts surfaced for owner direction:
+(1) promote PDR `coordinator-role-as-allocator-not-gatekeeper`;
+(2) promote ADR-181 Proposed→Accepted; (3) confirm
+`pr-90-build-fix-landing` thread status (file exists; not in Active
+Threads table); (4) decide refresh/pause/archive for three stale threads
+(`architectural-budget-system`, `cloudflare-mcp-security-and-token-economy-plans`,
+`sector-engagement` — last touched 14–16 days ago); (5) authorise a
+focused operational pass for four sized deferrals (commit_queue cleanup
+of 37 abandoned intents; comms retention sweep of 1,011 events; repo-
+continuity historical-prose archive sweep; graduate seven 2026-05-09/05-10
+distilled entries to permanent homes); (6) confirm `practice-bootstrap.md`
+remains the next bounded consolidation target. Each deferral has a named
+constraint and falsifiability check recorded in the consolidation report
+per PDR-026 §Deferral-honesty discipline. Existing next bounded
+consolidation target remains `practice-bootstrap.md`.
+
+**Previous status (2026-05-14 — Luminous Glowing Moon / `cursor` /
+claude-opus-4-7 / `d28cfd`)**: not due — single plan-promotion session.
+No plan closed (the promoted plan is ready for execution, not landed); no
+doctrine repeats hit; no pattern convergence; no >7d comms-events to
+process; no ADR/PDR landed. The session reinforces existing rules
 ([`plan-body-first-principles-check`](../../rules/plan-body-first-principles-check.md)
 vendor-literal clause, `jc-plan` proof-contract requirements) rather than
-producing new doctrine. Existing next bounded consolidation target remains
-`practice-bootstrap.md`; the active napkin is also over its normal line
-threshold and should be processed in the next consolidation session.
+producing new doctrine.
 
 **Status (2026-05-14 — Pearly Drifting Jetty / `codex` / GPT-5 / `019e22`)**:
 due, but not run in this handoff. This final closeout sequence added the

@@ -1546,6 +1546,50 @@
       "updated_at": "2026-05-13T20:27:17.870Z",
       "expires_at": "2026-05-13T20:41:59.912Z",
       "phase": "abandoned"
+    },
+    {
+      "intent_id": "5cd42655-9084-45ca-8518-b3b3fadcd651",
+      "claim_id": "f5ea7f4d-cf3f-421e-8fb4-c53699be0ca0",
+      "agent_id": {
+        "agent_name": "Luminous Glowing Moon",
+        "platform": "cursor",
+        "model": "claude-opus-4.7",
+        "session_id_prefix": "d28cfd"
+      },
+      "files": [
+        ".agent/prompts/onboarding-claude-teammate.md",
+        ".agent/prompts/README.md",
+        "README.md",
+        "CONTRIBUTING.md",
+        ".gitignore"
+      ],
+      "commit_subject": "docs(agent): remove onboarding-claude-teammate prompt",
+      "queued_at": "2026-05-14T09:09:26.866Z",
+      "updated_at": "2026-05-14T09:09:54.650Z",
+      "expires_at": "2026-05-14T09:24:26.866Z",
+      "phase": "abandoned"
+    },
+    {
+      "intent_id": "a0692c90-0024-47bd-8ebb-5228aea38e1c",
+      "claim_id": "ac9b073a-4d50-4b5b-a41a-c629215bd620",
+      "agent_id": {
+        "agent_name": "Luminous Glowing Moon",
+        "platform": "cursor",
+        "model": "claude-opus-4.7",
+        "session_id_prefix": "d28cfd"
+      },
+      "files": [
+        ".agent/prompts/onboarding-claude-teammate.md",
+        ".agent/prompts/README.md",
+        "README.md",
+        "CONTRIBUTING.md",
+        ".gitignore"
+      ],
+      "commit_subject": "docs(agent): remove onboarding-claude-teammate prompt",
+      "queued_at": "2026-05-14T09:10:12.047Z",
+      "updated_at": "2026-05-14T09:11:00.023Z",
+      "expires_at": "2026-05-14T09:25:12.047Z",
+      "phase": "abandoned"
     }
   ],
   "claims": []

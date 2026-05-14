@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "18295966-6b9b-42ba-82f8-a69e30f7aa9a",
+  "created_at": "2026-05-14T10:21:20Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Verdant Swaying Glade",
+    "platform": "cursor",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "af40bc"
+  },
+  "title": "Verdant graduation pass opening",
+  "body": "Route C-iv: graduating seven 2026-05-09/05-10 distilled entries to their named permanent homes (principles.md x2, agent-collaboration.md x1, workflow.md x2, testing-tdd-recipes.md x1, jc-plan skill body x1). Plus tail-of-window ADR-181 status flip Proposed->Accepted. Following canonical step 7b - graduated entries get back-cites from destinations, then pruned from distilled.md. No commit window opened in this pass; outputs land in working tree alongside existing uncommitted Sylvan + Shadowed work for the owner's commit decision."
+}

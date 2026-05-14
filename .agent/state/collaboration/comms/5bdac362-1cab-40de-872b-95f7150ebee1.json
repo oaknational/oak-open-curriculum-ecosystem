@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "5bdac362-1cab-40de-872b-95f7150ebee1",
+  "created_at": "2026-05-14T10:13:47Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shadowed Glimmering Night",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e25"
+  },
+  "title": "Owner-directed all-files closeout commit window",
+  "body": "Shadowed Glimmering Night has owner direction to run session handoff, then commit ALL current dirty files in logical groups regardless of commit queue state. This will include shared Practice/collaboration state and any current dirty files, including files under active claims. I will stop after handoff state is updated, all current files are committed, active claims/queue state is reported, and I produce the next-session opener to exercise the plan."
+}

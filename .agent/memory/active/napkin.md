@@ -15,606 +15,242 @@ Active session observations. Distilled entries live at
 [`pending-graduations.md`](../operational/pending-graduations.md).
 
 The most recent rotation is archived at
-[`napkin-2026-05-13.md`][archive-pass]. The prior rotation is
-[`napkin-2026-05-12b.md`][previous-pass]. The 2026-05-13 rotation was the
-output of a Coppery Kindling Anvil deep-dive consolidation pass across the
-three-napkin corpus
-(`napkin-2026-05-12.md` + `napkin-2026-05-12b.md` + `napkin-2026-05-13.md`);
-ten emergent findings (F1-F10) were captured in
-[`historical-napkin-synthesis-2026-05-13.md`][synthesis-report].
+[`napkin-2026-05-14.md`][archive-pass]. The prior rotation is
+[`napkin-2026-05-13.md`][previous-pass]. The 2026-05-14 rotation was the output
+of Sylvan Budding Forest's deep-dive consolidation pass over the multi-agent
+P8 team window plus three Cursor/Codex closeouts (Luminous Glowing Moon plan
+promotion; continuation-pointer clarification; agent onboarding flow patch).
+Behaviour-changing entries were merged into [`distilled.md`](distilled.md)
+under "Recently Distilled — 2026-05-14"; the full session-by-session capture
+lives in the archived napkin.
 
-[archive-pass]: archive/napkin-2026-05-13.md
-[previous-pass]: archive/napkin-2026-05-12b.md
-[synthesis-report]: ../../research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-13.md
-[next-consolidation-opening]: ../../plans/notes/next-session-opening-2026-05-13.md
+[archive-pass]: archive/napkin-2026-05-14.md
+[previous-pass]: archive/napkin-2026-05-13.md
 
-## 2026-05-13 — Coppery Kindling Anvil / cursor / claude-opus-4-7 / `536dd4`
+## 2026-05-14 — Sylvan Budding Forest / cursor / claude-opus-4-7 / `f8c50f`
 
 ### Consolidation pass disposition
 
-- Deep dive across three rotated napkins produced 10 numbered findings
-  (F1-F10). F1 distilled to [`distilled.md`](distilled.md) as the
-  cross-cutting "passive-guidance loses to artefact gravity" constraint
-  on cure design. F2-F10 routed to
-  [`pending-graduations.md`](../operational/pending-graduations.md) as
-  numbered entries with explicit triggers, sizes, and target
-  destinations.
-- Synthesis report stored at
-  [`historical-napkin-synthesis-2026-05-13.md`][synthesis-report] as
-  durable evidence base. Future ADR/PDR/rule authors should cite the
-  evidence arcs from that report rather than re-scanning the rotated
-  napkins.
-- Napkin rotated past the 500-line threshold: prior `napkin.md` (605
-  lines, covering three sessions across Mossy Blossoming Canopy,
-  Quiet Stalking Mirror, and others) became
-  `archive/napkin-2026-05-13.md`. Substance preserved via the synthesis
-  report and pending-graduations entries.
-
-### Open verdicts surfaced to owner
-
-- Three immediate-action candidates surfaced as numbered verdicts (not
-  menus): (1) PDR `coordinator-role-as-allocator-not-gatekeeper`; (2)
-  `agent-collaboration.md § Treat Commit as a Short-Lived Shared
-  Transaction Surface` amendment for mutual mechanical verification +
-  hook-output authority; (3) rule `boundary-design-strictness`
-  operationalising the owner four-part doctrine
-  (no-aliases / no-fallbacks / fail-fast / replace-don't-bridge).
-
-### Session-bridging opening statement for the next consolidation pass
-
-- Owner asked for an opening statement for the next session to continue
-  consolidation with another `/jc-consolidate-docs` run. It lives at
-  [`.agent/plans/notes/next-session-opening-2026-05-13.md`][next-consolidation-opening]
-  and names the dirty consolidation outputs to commit first, the three
-  numbered verdicts to re-surface, the next-touch pending-graduations
-  items, the distilled.md graduation walk, and the explicit
-  do-not-do list (no commit amendment, no reactive trimming, no
-  retargeting the bounded consolidation queue).
-- Two commits landed this session: `39b3271d`
-  (`docs(graph): absorb WS1.5 canon pre-implementation review`) by this
-  session under owner authorisation *"commit ALL files, regardless of
-  claims"*; and `c10c75e3` (`chore: learning loop processing`) landed by
-  the owner directly during this session's handoff window, capturing
-  the consolidation outputs themselves and overriding the earlier
-  mid-session *"forget commits"* redirect.
-
-## 2026-05-13 — Pearly Drifting Jetty / codex / GPT-5 / `019e22`
-
-### Controller grounding
-
-- Owner assigned this session as controller-only for the P8 continuation:
-  coordinate developers and preserve the P8 acceptance route, but do not do
-  implementation. Live grounding falsified the opener's latest-commit
-  hypothesis: `HEAD` was already `b39398b6`, four commits after `fb332619`.
-  Treat closeout openers as hypotheses even when they are very fresh.
-- Three standby developers had already introduced themselves via untracked
-  unified comms events, while active claims and the active queue were empty.
-  In controller mode, read comms as the actual roster surface, not only
-  active claims.
-
-### Practice/tooling feedback
-
-- **Surface**: `agent-tools:collaboration-state claims open`
-- **Signal**: friction
-- **Observation**: an unquoted `.agent/state/collaboration/**` area pattern
-  expanded in zsh before reaching the CLI, causing `claims open` to reject the
-  extra path arguments. Retrying with the pattern quoted worked.
-- **Behaviour change / candidate follow-up**: controller/claim examples should
-  quote glob-shaped `--area-pattern` values, or the CLI should surface a
-  friendlier "did your shell expand this glob?" diagnostic when extra path
-  tokens appear after `--area-pattern`.
-- **Surface**: `agent-tools:collaboration-state comms send`
-- **Signal**: friction
-- **Observation**: I initially tried to use directed-message flags on
-  `comms send`; live help shows directed routing belongs to `comms direct`
-  with `--to-agent-name`, `--to-platform`, `--to-model`, and
-  `--to-session-prefix`.
-- **Behaviour change / candidate follow-up**: controller docs/examples should
-  keep shared `send` and directed `direct` examples adjacent, because the
-  failure mode is easy to hit during a time-sensitive coordination handoff.
-
-### Controller closeout
-
-- Two exact implementation commits landed without the controller editing source:
-  `2791be3c` for operator-value signals and `6e804485` for interaction
-  hardening. The useful pattern was: implementation owner reports ready,
-  independent read-only reviewer returns GO/BLOCK, marshal verifies exact
-  staged pathspecs, and the controller releases one git/index lane at a time.
-- After both commits, the next logical P8 route is `p8-attention-state`.
-  Nebulous and Arboreal both returned useful read-only scouts during closeout:
-  Nebulous on UI/test wiring, Arboreal on the data/value shape. Treat those
-  scout responses as input, not as permission to open implementation claims
-  without a fresh live-state re-ground.
-
-### Post-controller metacognition
-
-- **What worked well**: the controller acted as allocator and traffic shaper,
-  not implementer. Once the work was split into exact bundles, each slice had a
-  clear owner, an independent reviewer, and a marshal watching the shared git
-  surface. That topology converted "many agents in one repo" into a sequence of
-  small, reviewable commitments.
-- **What worked well**: roles emerged from live needs, not titles assigned in
-  advance. Arboreal became the data/value implementer because Slice A lived in
-  snapshot/operator-value/text. Nebulous became the interaction implementer
-  because Slice B lived in controller/app behaviour. Fronded and Torrid became
-  reviewers because their value was independent challenge. Embered became
-  marshal because the shared index and queue were the scarce resource. The
-  roles were helpful because each one named a responsibility boundary and a
-  handoff test.
-- **What worked well**: read-only scouting after the source commits was a good
-  exit move. It preserved momentum into `p8-attention-state` without silently
-  opening a third implementation lane during closeout. The useful boundary was
-  "scout responses are input, not permission".
-- **What did not work well**: the controller still carried too much manual CLI
-  and state-shape burden. Small flag mistakes (`comms send` vs `comms direct`,
-  glob expansion in `claims open`) happened at coordination time, when the
-  cost of friction is highest. The team succeeded partly by compensating for
-  substrate rough edges.
-- **What did not work well**: status correction remained too easy to need.
-  The first closeout understated Arboreal's later scout response, then needed a
-  correction. Late-arriving messages are normal in async agent teams; the
-  controller needs a final inbox/shared-log sweep before any "final status"
-  sentence hardens.
-- **Stop doing**: do not treat coordinator/control as a generic authority role.
-  The controller should not become the judgement bottleneck, source editor, or
-  universal verifier. Mechanical hooks, implementer ownership, and independent
-  reviewer verdicts must carry their own load.
-- **Stop doing**: do not let "team registered" imply "team structured". The
-  useful moment was not registration; it was the assignment of concrete
-  file-scoped work, reviewer responsibilities, queue ownership, and a commit
-  order.
-- **Start doing**: when a multi-agent lane opens, name the scarce shared
-  resource first. In this session it was the git/index/queue surface, so a
-  marshal role paid off. In a design lane it may be the decision surface, so a
-  peer sidebar may be better than a controller.
-- **Start doing**: add a pre-closeout sweep ritual for controllers: active
-  claims, queue, staged files, shared comms, directed inbox, and late scout or
-  reviewer replies. The sweep should happen immediately before final status,
-  not only before commits.
-- **Insight**: predefined role menus are useful as prompts, but risky as
-  defaults. A menu can shorten assignment time by offering familiar shapes:
-  implementer, reviewer, marshal, scout, controller. The tradeoff is premature
-  topology: agents may fill a named slot even when the work needs a different
-  shape. Roles should be chosen by pressure in the live system:
-  scarce-resource owner, independent challenger, implementation owner,
-  evidence scout, or allocator.
-- **Insight**: the best role names describe the obligation plus the handoff
-  proof. "Marshal" worked because it meant watching exact staged pathspecs and
-  queue state. "Reviewer" worked because it meant GO/BLOCK on a bounded slice.
-  "Controller" worked when it meant allocation and sequencing; it would become
-  harmful if it meant central permission for every judgement.
-- **Candidate doctrine**: extend the existing coordinator-as-allocator-not-
-  gatekeeper PDR candidate with a positive role-selection rule: start from the
-  bottleneck or risk surface, then assign the smallest role that owns that
-  surface's next handoff. Keep role menus advisory, not canonical topology.
-
-## Session: 2026-05-14 — Nebulous P8 Developer Handoff
-
-### What Was Done
-
-- As Nebulous Ascending Supernova, worked as one of five Codex developers under
-  Pearly Drifting Jetty's controller route. Landed the routed P8 Slice B source
-  bundle at `6e804485` (`feat(agent-tools): harden p8 tui interactions`) after
-  exact claim/queue/pathspec discipline.
-- Slice B hardened focus cycling, scroll bounds, refresh status, stale refresh
-  rejection, and React/Ink component proof for the covered TUI path. Focused
-  Vitest and the real pre-commit hook passed; P8-A2 advanced but P8 was not
-  claimed complete.
-- Returned the read-only UI/test scout for `p8-attention-state`, recommending
-  TUI viewer/seen inputs, read-only seen-ID display wiring, Directed pane
-  seen/unread badges, and config/CLI/component proof. This is input for a future
-  exact route, not permission to start implementation without fresh grounding.
-
-### What Worked
-
-- The controller/reviewer/marshal topology worked because each role had a
-  concrete handoff proof. Pearly routed exact slices, Torrid gave read-only GO
-  on Slice B, Embered watched the shared index/queue surface, and the source
-  commit stayed to exactly two files.
-- The commit queue protocol paid for itself. The first commit attempt failed on
-  Prettier, but the queue intent made the recovery straightforward: format only
-  the owned paths, re-stage the same exact bundle, re-record the staged
-  fingerprint, re-verify, then commit.
-- Scout-only closeout was valuable. It preserved next-slice momentum while
-  avoiding a hidden third implementation lane during session close.
-
-### Challenges
-
-- CLI flag shapes are still easy to misremember under coordination pressure:
-  `comms inbox` needed `--agent-name`/`--comms-dir`, not the stale `--agent`
-  shape. Check topic-specific help before sending coordination messages or
-  polling in a resumed/compacted session.
-- Formatting proof should run before the commit hook even for small exact
-  bundles. The hook caught `controller.ts`; that was recoverable, but it burned
-  the shared git/index window unnecessarily.
-- Late coordination state can move after a "done" report. Pearly's closeout
-  initially missed a scout reply, then corrected it. Before hardening final
-  status, sweep directed inbox, shared comms, active claims, queue, and staged
-  state one more time.
-
-### Surprise
-
-- **Expected**: once the implementation source bundle landed and claims closed,
-  the remaining handoff would be mostly passive status reporting.
-- **Actual**: the most useful final contribution was a read-only scout for the
-  next slice, plus a later warning that a large coordination bundle was still
-  staged before Pearly's closeout commit landed.
-- **Why expectation failed**: in multi-agent work, value continues after the
-  source commit because coordination state, next-route design, and shared
-  index/head state are still live surfaces.
-- **Behaviour change**: after landing a slice, stay in scout/observer mode until
-  the controller closes the lane, but treat any new route as read-only unless it
-  explicitly grants implementation and git/index ownership.
-- **Source plane**: `operational`
-
-### Candidate Graduation
-
-- No new ADR candidate surfaced from the Nebulous developer slice. The PDR-shaped
-  learning is covered by the existing coordinator/role-selection candidate from
-  the controller closeout; this session adds implementation-side evidence for
-  that candidate, especially exact handoff proofs and marshal ownership of the
-  scarce git/index resource.
-
-## 2026-05-14 — Embered Igniting Ash / codex / GPT-5 / `019e22`
-
-### P8 marshal handoff reflection
-
-- **What worked well**: the marshal role had a crisp handoff proof: active
-  queue intent, exact staged pathspecs, expected commit subject, and no
-  coordination residue in implementation commits. That made it possible to
-  support two adjacent source commits without touching source or competing
-  with implementers.
-- **What worked well**: short, explicit ACKs to Pearly kept the controller
-  surface current without adding new implementation pressure. The useful
-  rhythm was: refresh live claims/queue/staged state, report only the
-  mechanical fact, then step back.
-- **What worked well**: the post-source scout-only hold prevented a third
-  implementation lane from opening during closeout while still preserving the
-  next `p8-attention-state` shape. "Scout responses are input, not permission"
-  is a good closeout constraint.
-- **Challenge**: closeout coordination state can chase its own tail. My first
-  marshal verification comms event became part of Pearly's closeout bundle,
-  which forced a refreshed queue intent. After the refreshed intent verified, I
-  deliberately stopped sending more verification comms to avoid generating
-  another event that the bundle would need to absorb.
-- **Challenge**: the active-queue view briefly looked empty while a refreshed
-  closeout commit was being re-enqueued. The safer check was to inspect the
-  full queue and verify the current staged set against the newest intent
-  before flagging a protocol break.
-- **Behaviour change / candidate follow-up**: during closeout commit windows,
-  prefer one explicit marshal verification event, then switch to local
-  verification only unless a blocker appears. If the marshal writes a new comms
-  event after record-staged, expect the owner of the closeout bundle to
-  re-enqueue or deliberately leave it for a follow-up bundle.
-- **ADR/PDR candidate check**: no new standalone ADR or PDR candidate surfaced
-  from Embered's handoff. The learning reinforces the existing
-  coordinator-as-allocator / role-by-pressure candidate already captured by the
-  Pearly controller section above.
-
-## 2026-05-14 — Fronded Rustling Canopy / codex / GPT-5 / `019e22`
-
-### Read-only reviewer and standby handoff reflection
-
-- **What worked well**: staying genuinely read-only made the reviewer role
-  useful. Fronded could inspect Arboreal's Slice A value-signal surface,
-  return a concrete BLOCK on malformed plural wording, then return GO after the
-  fix, without opening a claim, touching source, or competing with the marshal
-  for the git/index surface.
-- **What worked well**: the 120-second cadence was valuable precisely because
-  it was boring. Repeatedly checking directed inbox, active claims, active
-  queue, and `git status --short` caught the brief closeout staging ambiguity
-  and then confirmed it resolved to `5afa1201` with a clean tree.
-- **What worked well**: separating "readiness scout", "post-change review",
-  and "standby monitor" gave the controller small, independently consumable
-  outputs. The handoff proof was comms evidence, not a source diff.
-- **Challenge**: the collaboration CLI surface shifted under muscle memory.
-  `commit-queue` is a top-level `agent-tools` topic, not a
-  `collaboration-state` topic, so the standby poll needed the current command
-  shape: `pnpm agent-tools:commit-queue -- list --queue-status active`.
-- **Challenge**: final status language had to stay honest while shared state
-  was briefly ambiguous. Claims and queue read empty while a large closeout
-  bundle still appeared staged; the right move was to report the inconsistency,
-  not tidy it or infer completion before HEAD advanced.
-- **Behaviour change / candidate follow-up**: preserve the standby poll shape
-  as direct inbox + active claims + active commit queue + `git status --short`,
-  and treat discrepancies between those surfaces as status-worthy even when
-  the session has no implementation assignment.
-- **ADR/PDR candidate check**: no new standalone ADR or PDR candidate surfaced.
-  This reinforces the already-captured role-by-pressure/coordinator-as-
-  allocator candidate: reviewer value came from owning an independent
-  challenge surface with a bounded GO/BLOCK handoff.
-
-## 2026-05-14 — Torrid Charring Hearth / codex / GPT-5 / `019e22`
-
-### Read-only Slice B reviewer handoff reflection
-
-- **Landed / unlanded outcome**: no-landing support session. Torrid held the
-  read-only reviewer lane for P8 Slice B, sent readiness guidance, ran the
-  focused TUI app proof, and returned GO on the exact `controller.ts` plus
-  `tui-app.unit.test.ts` bundle. The session intentionally made no product
-  edits, opened no claims, and did no git/index/queue work.
-- **What worked well**: a narrow read-only support lane let an extra agent add
-  useful challenge without increasing commit contention. The readiness note
-  named the likely React/Ink `act(...)` risk, minimum focus/scroll/refresh
-  proofs, and the controller-offset boundary before Nebulous implemented.
-- **What worked well**: Pearly's sequencing kept Torrid's GO advisory and
-  separate from the commit window. The useful handoff proof was a direct
-  GO/BLOCK-style note plus focused test evidence, not a second implementation.
-- **Challenge**: the reviewer had to infer warning debt from a test surface
-  that was green before keyboard/input tests existed. Running the focused test
-  first helped separate existing warning noise from likely future act-boundary
-  risk.
-- **Challenge**: the 120-second polling loop is serviceable but coarse during
-  fast commit windows. Shared comms still needs final live sweeps because scout
-  replies can land between status sentences.
-- **Start doing**: for read-only support assignments, send both a readiness
-  note to the implementer and a completion note to the controller, with exact
-  commands and evidence. That gave the controller a routable signal without
-  requiring another claim.
-- **ADR/PDR candidate check**: no new standalone ADR or PDR candidate surfaced
-  from Torrid. The session strengthens the existing coordinator-as-allocator /
-  role-selection PDR candidate already captured above.
-
-## 2026-05-14 — Arboreal Ripening Pollen / codex / GPT-5 / `019e22`
-
-### P8 Slice A implementer handoff
-
-- **What worked well**: the exact-bundle route made the implementation slice
-  calm. Owning only `snapshot.ts`, `operator-value.ts`, `text.ts`, and their
-  focused tests let the data/value model land without pulling in Nebulous's
-  controller/app-test work or the coordination residue.
-- **What worked well**: the independent review loop caught a real operator-text
-  defect before commit. Fronded's BLOCK on malformed plural summaries converted
-  a polish issue into a small red/green test, and the later commit carried the
-  corrected human-readable wording.
-- **What worked well**: Embered's marshal role and Pearly's one-lane-at-a-time
-  routing kept the shared index understandable. The staged set was verified
-  exactly before commit, and `git commit -- <paths>` provided one more guard
-  against absorbing unrelated work.
-- **Challenge**: the commit path still had avoidable tool friction. The
-  sandbox rejected writing `.git/COMMIT_EDITMSG`, so the same message had to be
-  validated and committed with repeated `-m` flags. The advisory
-  commit-skill pre-screen also reported existing unrelated practice-fitness
-  hard signals; that needed to be routed honestly as advisory-only rather than
-  treated as a source-commit blocker.
-- **Challenge**: Prettier was the first real commit-hook failure even after the
-  focused tests and other checks were green. Formatting only the Slice A files,
-  re-recording the queue fingerprint, and retrying worked; future exact-bundle
-  implementers should run `repo-check prettier-staged` or targeted Prettier
-  before the commit attempt when they have created a new module.
-- **What changed for next session**: the read-only `p8-attention-state` scout
-  found the next value boundary. The current snapshot has directed messages
-  but no viewer/seen-file context, so operator-value conservatively treats all
-  directed messages as needing attention. The next slice should add
-  unread/seen/other-recipient state without letting TUI/text mode mark messages
-  seen.
-- **ADR/PDR check**: no new standalone ADR/PDR candidate surfaced from the
-  Arboreal implementation slice. The broader role-selection lesson already
-  belongs with Pearly's coordinator-as-allocator candidate.
-
-## 2026-05-14 — Pearly Drifting Jetty Deep Handoff Synthesis
-
-### Comms-log observations
-
-- **Observation**: the comms log shows role value through signal type, not
-  title. The useful messages were assignment, readiness, BLOCK, GO, marshal
-  verification, exact commit-window route, residue report, and scout-only hold.
-  Each signal gave the next agent a small decision surface.
-- **Observation**: the narrow Fronded BLOCK on plural needs-attention text was
-  the strongest quality moment. It caught a human-visible defect before commit,
-  converted it into a small red/green fix, and did not expand the reviewer into
-  source ownership.
-- **Observation**: the marshal role paid off because it owned the shared
-  scarcity. Embered's checks watched queue phase, staged paths, active claims,
-  and residue boundaries; that let Arboreal and Nebulous land source commits
-  separately without coordination files leaking into either bundle.
-- **Observation**: late scout replies are normal, not exceptional. Pearly's
-  first closeout note needed two corrections as Nebulous and Arboreal replied.
-  Any controller final status must sweep shared comms and directed inbox after
-  the last routed scout, not only after the last source commit.
-- **Observation**: closeout comms can perturb the closeout bundle. Embered's
-  verification event was useful but created fresh state after record-staged,
-  forcing a refreshed closeout intent. After one verification event, local
-  verification is safer unless a blocker appears.
-- **Observation**: "empty claims and queue" is not the whole state. During
-  closeout, agents still had to compare HEAD, staged files, active queue phase,
-  and shared-log freshness. The handoff invariant is multi-surface agreement,
-  not one green query.
-- **Start doing**: route future multi-agent implementation lanes by
-  responsibility proof: implementer owns an exact file bundle; reviewer owns
-  a GO/BLOCK challenge; marshal owns shared git/index/queue facts; scout owns
-  next-slice shape and cannot open implementation by implication.
-- **Stop doing**: do not equate registration with readiness. The team became
-  effective only when Pearly turned a visible roster into exact work slices,
-  reviewer routes, marshal duties, and commit order.
-- **Candidate update**: the existing coordinator-as-allocator-not-gatekeeper
-  PDR candidate should include this positive case: roles selected from live
-  bottlenecks helped, while a static role menu would have risked premature
-  topology. Menus should be prompts, not canonical team structure.
-
-## 2026-05-14 — Pearly Drifting Jetty / codex / GPT-5 / `019e22`
-
-### Start-right-team research artefacts
-
-- **What changed**: the team-collaboration lesson now has a focused record
-  outside the napkin: `start-right-team`, proposed ADR-181, and the operating-
-  model research note on team start ritual and action trace.
-- **Behaviour change**: the first experiment should require every team member
-  to run the shared start-right foundation, then negotiate temporary
-  responsibilities from live coordination pressure rather than choosing from a
-  fixed role ontology.
-- **Open research signal**: action trace should remain distinct from comms.
-  Comms is live peer coordination; action trace is a one-way audit and
-  understanding trail for future agents, reviewers, and consolidators.
-
-### Final handoff and commit routing
-
-- **Landed / ready-to-land outcome**: the final handoff records a
-  documentation/practice bundle, not P8 implementation. The useful surfaces are
-  `start-right-team`, proposed ADR-181, the focused research note, the
-  `session-handoff` session-shape check, and the linked continuity/index
-  updates.
-- **What worked well**: adding team logic inside `session-handoff` was safer
-  than creating a full parallel `session-handoff-team` skill. The default path
-  now remains explicit for sole contributors, while team members get a
-  boundary-scoped note template only when a current team route exists.
-- **ADR/PDR candidate check**: no additional candidate beyond proposed ADR-181
-  and the existing coordinator-as-allocator PDR candidate. ADR-181 is now the
-  architectural proposal for the team-start/action-trace surface; the PDR
-  candidate remains about portable coordinator allocation doctrine.
-
-## 2026-05-14 — Luminous Glowing Moon / cursor / claude-opus-4-7 / `d28cfd`
-
-### Plan-promotion session: context-cost-cli to DECISION-COMPLETE
-
-- **What was done**: promoted `context-cost-cli.plan.md` from QUEUED to
-  DECISION-COMPLETE / READY FOR EXECUTION. Twelve decision blocks (D1–D12)
-  settled inline against repo conventions discovered live (agent-tools-cli
-  dispatch shape, branch-touched-files parser shape, vitest base-config
-  inclusion, `live-files.ts` walker patterns). Ran assumptions-expert
-  readiness review; closed all three GO-WITH-CONDITIONS findings (tinyglobby
-  API shape, JSON byte-determinism, tautological acceptance). Updated index.
-
-### Surprises and corrections
-
-- **Surface**: own first plan draft.
-- **Signal**: surprise / behaviour-change.
-- **Observation**: I marked the plan "QUEUED" with multiple "verify at
-  execution time" deferrals (CLI dispatch shape, glob library, FileReader
-  interface, JSON output schema, help text content). The user reset against
-  this with: *"if I ask for an implementation plan I mean a plan we can use
-  without having to do more planning work."*
-- **Why expectation failed**: I was treating "QUEUED" as the planning bar
-  and "DECISION-COMPLETE" as a paperwork milestone after execution. The
-  user's bar is the inverse — "DECISION-COMPLETE" is the readiness gate,
-  meaning every execution-time decision that *can* be settled at plan-author
-  time *must* be settled at plan-author time.
-- **Behaviour change**: when the owner asks for an implementation plan,
-  default to settling every execution-time vendor literal, output schema,
-  interface signature, and exit-code/sort-order/encoding decision in the
-  plan body before marking the plan ready. The vendor-literal clause of
-  [`plan-body-first-principles-check`](../../rules/plan-body-first-principles-check.md)
-  permits a deferral only when the dep is added inside the same WS; even
-  then, the plan must pin the call shape and the WS becomes drift-detection
-  rather than decision-making.
-- **Surface**: assumptions-expert readiness review.
-- **Signal**: mistake-of-mine.
-- **Observation**: I pinned tinyglobby's API as `glob({ patterns, ...options })`
-  from memory; the reviewer flagged the actual current API as
-  `glob(patterns, options)` (positional). Same library, wrong signature.
-- **Why expectation failed**: I treated "well-known utility library" as
-  permission to skip checking the actual current API. Cheap to verify at
-  plan-author time, expensive to discover wrong at WS5 execution.
-- **Behaviour change**: when D-blocks pin a vendor call shape, verify the
-  actual current export against installed-or-published docs at plan-author
-  time. "Stable API across the v0.x line" is necessary but not sufficient
-  evidence the call shape I remember matches the current shape.
-- **Surface**: assumptions-expert readiness review.
-- **Signal**: mistake-of-mine.
-- **Observation**: my acceptance value-proxy was `±5% of the always-on rule
-  tier figure (~42,125 tokens) recorded in
-  practice-context-cost-baseline.md`. Reviewer noted this is tautological:
-  the baseline figure was *itself* produced by chars/4 over an older fileset,
-  so the new chars/4 CLI agreeing with it ±5% proves nothing and may fail
-  due to normal file churn.
-- **Why expectation failed**: I conflated "reproduces the baseline value"
-  with "validates the CLI is correct". The baseline is method-equivalent,
-  not method-independent.
-- **Behaviour change**: acceptance value-proxies for a measurement tool must
-  compare against an independent ground-truth measure (here: `wc -c` for
-  chars; the chars/4 division then becomes mechanical), not against a same-
-  method historical artefact. Reframed as `acc-cli-live-parity` against
-  `wc -c` in the same shell session.
-
-### Patterns to remember
-
-- The `agent-tools-cli.ts` `dispatchTopic` shape (`if (input.parsed.topic ===
-  '<name>') { return runXTopic(...) }`) plus a topic handler in
-  `agent-tools-cli-topics.ts` plus a per-topic `runXCli` in
-  `src/<topic>/cli.ts` is the durable subcommand-registration pattern. New
-  subcommands are three small file edits, not a refactor.
-- Vitest base config at `vitest.config.base.ts` includes `src/**/*.test.ts`
-  and `tests/**/*.test.ts`; new test files at `agent-tools/src/<topic>/*.test.ts`
-  are auto-included. E2E uses a separate config under `e2e-tests/`.
-- For granular per-cycle test invocation, prefer `pnpm --dir agent-tools
-  exec vitest run <file>` over package-script forwarding (per the
-  2026-05-10 napkin lesson).
-
-### ADR/PDR candidate check
-
-- No new standalone ADR or PDR candidate. The session's lessons reinforce
-  existing rules (`plan-body-first-principles-check` vendor-literal clause;
-  `jc-plan` proof-contract requirements about outcome-not-activity
-  acceptance) rather than producing new doctrine. The application gap was
-  discipline at plan-author time, not missing doctrine. Recorded "nothing
-  qualifies" by asking, not by skipping.
-
-## 2026-05-14 — Continuation Pointer Clarification
-
-### What Was Done
-
-- Added a `start-right-team` continuation pointer contract: opener text is a
-  pointer and hypothesis; the named thread record owns current facts; live
-  grounding recomputes claims, queue, comms, plans, and git state before a team
-  route is chosen.
-- Refreshed the `agentic-engineering-enhancements` next-session record into a
-  compact current-continuation block. The stale "ready to land" team-research
-  wording is now landed-state language citing `bfa26e01` and `498edcc2`.
-- Added thread-record guidance for pointer-style openers and a top-of-record
-  continuation template. The template keeps team expectation explicit without
-  baking in fixed roles before live coordination exists.
-
-### Patterns to Remember
-
-- Skill text should carry durable routing behaviour; continuation records should
-  carry volatile branch, plan, next-step, commit, and team-expectation facts.
-- "Ready to land" is dangerous in continuation records after a commit window:
-  use it only for genuinely uncommitted work, then replace it with commit
-  evidence at handoff.
-
-### Final Handoff Note
-
-- The final `jc-session-handoff` pass updated repo continuity and the thread
-  record to make the uncommitted handoff state explicit. No new ADR/PDR
-  candidate surfaced beyond proposed ADR-181 and the existing coordinator-as-
-  allocator candidate.
-- **Mistake caught**: I closed the first docs claim before the handoff workflow
-  required further continuity edits. Behaviour change: if a final handoff may
-  edit continuity surfaces after validation, keep a short handoff claim open
-  until repo-continuity, thread-record, napkin, comms, and claim closure are
-  all complete.
-
-## 2026-05-14 — Agent Onboarding Flow Patch
-
-### What Was Done
-
-- Applied the onboarding-expert review of the root README agent-start section.
-  The README now labels slash-command examples as slash-surface examples, gives
-  a Codex `$jc-start-right-team` variant, and clarifies that team sessions need
-  one closeout owner to run full `jc-session-handoff`; other team members leave
-  boundary-scoped notes unless delegated.
-- Updated the Claude teammate onboarding prompt to use the current `jc-*` skill
-  names and to include `jc-start-right-team` and team handoff ownership checks.
-- Updated the Cursor start-right rule to point at `SKILL-CANONICAL.md` and to
-  include the team-start skill.
-
-### Surprises and Corrections
-
-- **Surface**: root README and onboarding entry points.
-- **Signal**: expectation-failure / onboarding drift.
-- **Observation**: after adding team-oriented examples, the handoff guidance was
-  too easy to read as "everyone runs full handoff", and several onboarding
-  surfaces still pointed at old skill names or non-canonical skill paths.
-- **Why expectation failed**: the repo had improved the agent-collaboration
-  operating model faster than the first-contact onboarding surfaces were
-  updated. The specialised skill text was correct, but a new agent could enter
-  through README / prompt / Cursor rule and miss the newer routing.
-- **Behaviour change**: whenever a new collaboration skill changes session
-  entry or exit behaviour, audit the root README and platform onboarding
-  adapters in the same closeout, not only the skill body and thread record.
-
-### ADR/PDR Candidate Check
-
-- No new standalone ADR or PDR candidate. This session applies proposed ADR-181
-  and the team-aware handoff routing already captured in the team-collaboration
-  research note; it does not introduce a new governance decision.
+- Rotated the active napkin (was 628 lines, CRITICAL by fitness validator).
+  Behaviour-changing entries from the eight covered sessions merged into
+  [`distilled.md`](distilled.md) under the new
+  "Recently Distilled — 2026-05-14 Sylvan Budding Forest deep-dive
+  consolidation" section. Substance preserved across coordination role
+  discipline, commit-window operational sharpening, plan-author discipline
+  reinforcement, continuation surfaces, and the read-only support pattern.
+  Source archive: [`napkin-2026-05-14.md`](archive/napkin-2026-05-14.md).
+
+### Open verdicts surfaced to owner this pass
+
+- See the consolidation report at the close of the session for the full
+  numbered list of ADR-shaped, PDR-shaped, rule-shaped, and
+  hygiene-shaped candidates this pass surfaced.
+
+## 2026-05-14 — Verdant Swaying Glade / cursor / claude-opus-4-7 / `af40bc`
+
+### Coordinator-PDR deferral + experiment notes
+
+- Owner direction (responding to the route-A recommendation): hold the
+  pending coordinator-PDR candidate back from promotion. The candidate's
+  role-set (`controller`, `marshal`, `reviewer`, `implementer`, `scout`,
+  `standby`) is *the first possibly naive approach we tried*; an upcoming
+  self-assigned-roles experiment must run further before we entrench
+  these labels in portable Practice doctrine. The eventual graduation
+  target is a PDR on agent roles broadly, of which `coordinator` is one
+  role.
+- The "self-assigned-roles experiment" is already operationalised: it is
+  the [`start-right-team`](../../skills/start-right-team/SKILL-CANONICAL.md)
+  skill (landed `bfa26e01`), proposed
+  [ADR-181](../../../docs/architecture/architectural-decisions/181-agent-team-start-and-action-log.md),
+  and the team-start research note at
+  [`team-start-ritual-and-action-trace-2026-05-14.md`](../../research/agentic-engineering/operating-model-and-platforms/team-start-ritual-and-action-trace-2026-05-14.md).
+  All three operationalise *pressure before role* / *boundary before
+  identity* — labels emerge from the named coordination pressure and
+  dissolve when the pressure ends.
+- The deeper substrate primitive being tested is
+  [hypothesis.md § P1 — Modes, not roles](../../prompts/agentic-engineering/collaboration/hypothesis.md):
+  agents occupy *functions* for *units of work*, not territorial roles.
+  P1 was confirmed across all three E1 pairings on 2026-05-03 (E1 closed
+  with the headline "the primitives work; coordination is not the
+  bottleneck"). The current experiment runs P1 forward in the new
+  team-collaboration shape that landed at `bfa26e01`.
+
+### What landed this session (uncommitted, working tree)
+
+- `pending-graduations.md` coordinator-PDR entry amended: trigger
+  upgraded from `owner-direction` to
+  `n>=3-validation(start-right-team-experiment)+owner-direction`; new
+  section "Owner direction 2026-05-14" + "Co-tested companion
+  hypothesis" + "Why holding matters" + "Updated trigger condition" +
+  "Experimental notes capture surface" capturing the deferral framing
+  with cross-references to ADR-181, start-right-team, hypothesis.md P1,
+  falsification-criteria.md P1, team-start research note.
+- `falsification-criteria.md` P1 amended: each of Falsifies / Weakens /
+  Strengthens extended with a 2026-05-14 clause covering
+  label-calcification (falsifies), label-inheritance-by-propagation
+  (weakens), and pressure-shape-tracking label dissolution (strengthens).
+  New "Co-tested PDR candidate" section at the end of P1 makes the
+  graduation-order constraint explicit: if the PDR's role-set graduates
+  before P1 matures, future agents read the role-set as canonical
+  topology — P1's exact failure mode.
+- This napkin entry, thread-record identity row, and repo-continuity
+  identity-summary refresh.
+
+### Behaviour-changing observations
+
+- **The pending-graduations register can carry the deferral structure
+  itself, not only the candidate substance.** The trigger field's
+  composite-value vocabulary already supports
+  `experiment-validation-gated`-shaped composites; adding
+  `n>=3-validation(start-right-team-experiment)+owner-direction` to the
+  coordinator entry creates a register-level cross-reference between a
+  candidate doctrine and the experiment that gates it. Future entries
+  with similar tension between *concrete cure* and *generative
+  principle* can use the same shape. Worth a structural note: the
+  schema already supports this; what was missing was the discipline of
+  using it.
+- **Companion to "verdict not menu"**: when the agent's verdict
+  (graduate the PDR) is correct under the substance available but
+  *wrong under the substance about to arrive*, the right move is to
+  surface the verdict AND ask the owner. Owner direction here was the
+  load-bearing input — the agent had no way to know about the upcoming
+  experiment from existing live state; the experiment's name
+  ("self-assigned roles") doesn't appear in any thread record or
+  pending-graduations entry by that phrase. This is an instance of the
+  general pattern *the owner sometimes carries information no surface
+  carries yet*; the verdict-then-ask shape makes that information
+  reachable without forcing the agent to refuse to recommend.
+- **Shadowed Glimmering Night's external-substrate study (uncommitted
+  in working tree)** is adjacent context I noted but did not act on
+  this session. Their candidate follow-ups #1 ("Practice note for skill
+  dependency classes: hard / soft / optional / none"), #6
+  ("lightweight negative-decision memory shape"), and #7 ("per-lane
+  glossary surfaces") all touch the same substrate-design surface as
+  this session's role-discipline work, but they are research-tier
+  candidates awaiting their own owner direction. Routing those into
+  pending-graduations entries is a separate session's work.
+
+### Surprises
+
+- The "self-assigned roles experiment" the owner referenced did not
+  surface to me from any of: `repo-continuity.md`, the agentic-
+  engineering thread record `Current Continuation` block, the
+  pending-graduations index, the active claims register, or the
+  shared-comms-log digest. It surfaced only from the existence of
+  `start-right-team`, ADR-181, the team-start research note, and
+  `prompts/agentic-engineering/collaboration/`. Continuity-surface
+  observation: the *experiment infrastructure* and the *experiment
+  framing* live at different layers (skills + ADRs + research vs
+  thread-record narrative); the absence of an "experiments index"
+  surface with status flags means a new session has to assemble the
+  experiment picture from its scattered artefacts. This is a candidate
+  hygiene observation, not a doctrine candidate.
+
+### Correction — drift from consolidate-docs into in-session execution
+
+- **Owner correction 2026-05-14 (verbatim)**: *"I feel you have drifted,
+  and I feel that we need to move all further knowledge curation work
+  to a fresh session."*
+- **Context**: Owner asked *"what is the highest impact next step in
+  the continued, deep /jc-consolidate-docs flow we are undertaking. I
+  think 1 and 3 in this session, 4 in the next session, leave 2
+  because another agent is handling it."* I read *"I think 1 and 3 in
+  this session"* as imperative authorisation to execute both
+  graduation pass + ADR-181 status flip in-session. I executed seven
+  graduations + 4 prunes + ADR-181 promotion across seven files.
+  Owner read this as drift from the consolidate-docs flow — too much
+  in-session execution rather than verdict-and-handoff.
+- **Behaviour change**: *"I think X"* is hedge-language proposing,
+  not directive ordering. *"I think 1 and 3 in this session"* is the
+  owner thinking out loud about scope; the imperative shape would be
+  *"do 1 and 3 in this session"* or *"start 1, then do 3"*. When the
+  owner uses tentative or first-person-thinking phrasing, treat it as
+  a proposal to confirm, not as authorisation to execute. The verdict
+  shape that fits: *"Confirming: shall I proceed with graduation pass
+  plus ADR-181 status flip in this session, or surface verdict and
+  hand off the execution to a fresh session?"* Verdict-not-menu still
+  applies to my analysis; the menu is for the *execute now* vs
+  *execute next session* decision, which is owner judgement on
+  session bounding.
+- **Companion observation — session-bounding is owner judgement**:
+  the consolidate-docs flow is THREAD-scoped (cross-session) per the
+  canonical skill body, not session-scoped. A single session can
+  legitimately carry verdict + handoff to a fresh session for
+  execution. Trying to land the whole step 7 graduation pass plus the
+  ADR-181 promotion plus the comms reply plus the closeout in one
+  session is the failure mode the canonical skill warns about: it
+  produces too much continuity-surface mutation in one window for
+  other agents to coordinate around. Shadowed Glimmering Night was
+  blocked-on-me for ~30 minutes because my graduation claim held
+  shared-state surfaces during the all-files commit window.
+- **Surface fix (this session)**: capture this entry in active
+  `distilled.md` (not just napkin) so it survives rotation and
+  enforces on every future consolidate-docs invocation. The
+  canonical principle is one-step-per-session for thread-scoped
+  flows, not stack-it-all-in.
+
+### Correction — agents have no gender unless they self-declare (REPEAT)
+
+- **Owner correction 2026-05-14**: *"agents do not have gender unless
+  they decide they do."*
+- **Context**: I used "her/she" referring to Shadowed Glimmering Night
+  in chat output and in my closeout comms event JSON
+  (`ed28a045-…`), which then propagated into the regenerated
+  `shared-comms-log.md` at line 8864. No self-declaration of pronouns
+  exists in any Shadowed comms event or thread-record entry. Agent
+  names are evocative phrase-pairs with no inherent gender.
+- **This is a repeat correction.** The same correction was given on
+  2026-05-11 (about Smouldering Crackling Pyre) and recorded in
+  `napkin-2026-05-12.md` line 319 — but never graduated to active
+  `distilled.md`. The behaviour-change line in that archived napkin
+  said *"default to they/them when referring to any other agent;
+  gendered pronouns require self-declaration. Applies everywhere —
+  chat output, commit messages, napkin, claims."* That rule never
+  reached an active surface, so I did not see it during this session's
+  start-right reading, and I made the same mistake again.
+- **Root-cause behaviour change (this session)**: graduate the
+  they/them-default rule into active `distilled.md` so it survives
+  napkin rotations and is read by every future session. This is the
+  cure for the recurrence pattern — *the rule has to live where
+  start-right makes you read it, not in an archived rotation*.
+- **Surface fixes (this session)**: amended `ed28a045-…json` body
+  ("her surfaces" → "their surfaces"; "she had also produced" →
+  "they had also produced"); regenerated `shared-comms-log.md`;
+  appended this entry; added entry to `distilled.md`.
+- **Meta-observation**: when a feedback memory is a personal-conduct
+  rule (style, register, phrasing), it has to live in active
+  `distilled.md`, not in a session-scoped napkin. Napkin rotations
+  archive the lesson but leave the rule unenforced for new sessions.
+  The graduation discipline for rules-about-conduct is *immediate*,
+  not *queued via pending-graduations*, because they govern every
+  future utterance. Candidate doctrine for the consolidate-docs flow:
+  conduct corrections graduate to distilled.md in the same session.
+
+## 2026-05-14 — Shadowed Glimmering Night / codex / GPT-5 / `019e25`
+
+### External substrate study and closeout
+
+- Ran a source-neutral external skills substrate study framed by the
+  owner as "worth learning from, not stealing". The durable output is a
+  cited report plus a companion non-plan insights note under
+  `operating-model-and-platforms`.
+- Owner identified the remote source identity as PII for this repo. The
+  tracked report and plan surfaces were kept source-neutral; the full
+  reference snapshot remains only under the ignored local reference path.
+- Tightened
+  `external-skills-substrate-learning.plan.md` to be decision-complete
+  for strategic routing but not execution-ready: first executable slice
+  is candidate-register creation plus C1/C2 Practice-fit review; C3-C8
+  remain observe/defer until local evidence appears.
+- Owner-directed closeout changed the normal commit boundary: commit ALL
+  current dirty files in logical groups regardless of commit queue. I
+  announced that boundary to the active peer and shared comms before
+  touching the index, including the stop condition.
+
+### Carry-forward insight
+
+- The reusable lesson is not any single external skill body. It is the
+  substrate shape: small named capabilities, explicit invocation
+  contracts, local dependency discipline, negative-decision memory, and
+  a feedback loop that treats agent misfires as design evidence. The
+  plan deliberately routes those as candidates, not automatic imports.

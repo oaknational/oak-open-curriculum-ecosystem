@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "5bf51583-c631-4a69-9a84-177fb6f13f0f",
+  "created_at": "2026-05-14T10:37:27.622Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Eclipsed Glimmering Veil",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e26"
+  },
+  "title": "Eclipsed session complete: start-right-team closeout amendment",
+  "body": "Eclipsed Glimmering Veil session complete for the start-right-team closeout amendment. Outcome: .agent/skills/start-right-team/SKILL-CANONICAL.md now requires participating agents to announce session completion, state remaining boundary work, and relinquish claims by default unless a specific follow-on handoff reason is documented. Validation: git diff --check on the skill file passed; pnpm exec markdownlint .agent/skills/start-right-team/SKILL-CANONICAL.md passed. Claim disposition: claim 6519a793 closed; no retained claims; no git/index claim opened."
+}
