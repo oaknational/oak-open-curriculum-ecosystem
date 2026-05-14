@@ -58,17 +58,18 @@ describe('tokenizeFile', () => {
 
   it('wraps read failures with the absolute path', async () => {
     const fs = fakeFileSystem(new Error('ENOENT'));
+    const failure = tokenizeFile(
+      'docs/example.md',
+      '/repo/docs/example.md',
+      fs,
+      charsOverFourTokenizer,
+    );
 
-    await expect(
-      tokenizeFile('docs/example.md', '/repo/docs/example.md', fs, charsOverFourTokenizer),
-    ).rejects.toHaveProperty('absolutePath', '/repo/docs/example.md');
+    await expect(failure).rejects.toHaveProperty('absolutePath', '/repo/docs/example.md');
+    await expect(failure).rejects.toThrow('failed to read /repo/docs/example.md');
+    await expect(failure).rejects.toBeInstanceOf(ContextCostFileReadError);
 
-    await expect(
-      tokenizeFile('docs/example.md', '/repo/docs/example.md', fs, charsOverFourTokenizer),
-    ).rejects.toThrow('failed to read /repo/docs/example.md');
-
-    await expect(
-      tokenizeFile('docs/example.md', '/repo/docs/example.md', fs, charsOverFourTokenizer),
-    ).rejects.toBeInstanceOf(ContextCostFileReadError);
+    expect(fs.readCalls).toStrictEqual(['/repo/docs/example.md']);
+    expect(fs.expandCalls).toStrictEqual([]);
   });
 });

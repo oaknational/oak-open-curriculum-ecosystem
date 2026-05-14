@@ -30,6 +30,7 @@ domain-specific flows:
 - `collaboration-state`: safely mutate shared collaboration state with identity preflight, immutable comms events, transaction-guarded JSON writes, and TTL cleanup.
 - `commit-queue`: coordinate short-lived git index/head commit windows and verify staged bundles before commit.
 - `branch-touched-files`: report the files touched by a branch against a base ref.
+- `context-cost`: estimate chars/4 token cost for an arbitrary fileset from repeatable glob inputs.
 - `claude-agent-ops`: monitor background agents, inspect logs, diff worktrees, run preflight checks, and run a summary-first health probe for agent infrastructure drift.
 - `cursor-session-from-claude-session`: find/inspect Claude sessions and generate Cursor takeover bundles with an explicit reintegration contract.
 - `codex-reviewer-resolve`: resolve a repo-local Codex reviewer adapter to the exact `.codex` and canonical `.agent` files that should ground a review.
@@ -57,6 +58,7 @@ pnpm agent-tools:test:e2e
 pnpm agent-tools:smoke:collaboration-tui
 pnpm agent-tools agent-identity --seed example-session-id-001 --format display
 pnpm agent-tools collaboration-state identity preflight --platform codex --model GPT-5
+pnpm agent-tools context-cost --glob '.agent/rules/*.md'
 pnpm agent-tools:claude-agent-ops status
 pnpm agent-tools:claude-agent-ops health
 pnpm agent-tools:cursor-session-from-claude-session find --last-hours 2
@@ -67,7 +69,8 @@ pnpm agent-tools:codex-reviewer-resolve code-expert
 
 `pnpm agent-tools <topic> <action> [options]` is the stable hot path for
 collaboration tooling. The package scripts for `agent-identity`,
-`collaboration-state`, `commit-queue`, and `branch-touched-files` are thin
+`collaboration-state`, `commit-queue`, `branch-touched-files`, and
+`context-cost` are thin
 shortcuts to the same built `dist/src/bin/agent-tools.js` file; they no longer
 run `pnpm -s build` before every invocation. After editing `agent-tools`
 source, run `pnpm agent-tools:build` once before using those built CLI scripts.
@@ -79,6 +82,7 @@ pnpm agent-tools agent-identity --seed example-session-id-001 --format json
 pnpm agent-tools collaboration-state claims list --active .agent/state/collaboration/active-claims.json
 pnpm agent-tools commit-queue status
 pnpm agent-tools branch-touched-files --json
+pnpm agent-tools context-cost --glob '.agent/rules/*.md'
 pnpm agent-tools --log-json agent-identity --seed example-session-id-001
 ```
 

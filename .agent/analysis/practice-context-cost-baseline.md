@@ -28,6 +28,12 @@ cost is approximated by `chars / 4` (the standard rule of thumb for
 English-prose markdown, ~10–15% accuracy; punctuation-dense or
 code-heavy content closer to `chars / 3`).
 
+For repeatable fileset measurements, use
+`pnpm agent-tools context-cost --glob '<pattern>'`; for example,
+`pnpm agent-tools context-cost --glob '.agent/rules/*.md'` reproduces
+the canonical rule-tier measurement surface without re-deriving the
+manual shell pipeline.
+
 A worked extraction command:
 
 ```bash

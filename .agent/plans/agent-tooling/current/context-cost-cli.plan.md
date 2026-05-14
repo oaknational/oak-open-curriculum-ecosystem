@@ -4,25 +4,25 @@ overview: "Deliver a vendor-agnostic agent-tools subcommand that estimates token
 todos:
   - id: ws1-cycle-1
     content: "WS1 cycle 1: pure tokenizer estimator. Test estimateTokens(text) returns ceil(text.length / 4) for fixture inputs against the Tokenizer interface. One commit. Tree green."
-    status: pending
+    status: completed
   - id: ws2-cycle-1
     content: "WS2 cycle 1: per-file row computation. Test tokenizeFile(absolutePath, fs, tokenizer) returns {path, chars, tokens} via the injected ContextCostFileSystem; throws typed FileReadError on missing file. One commit. Tree green."
-    status: pending
+    status: completed
     depends_on: [ws1-cycle-1]
   - id: ws3-cycle-1
     content: "WS3 cycle 1: glob expansion + aggregate. Test tokenizeGlobs(globs, cwd, fs, tokenizer) returns deterministic rows + aggregate + warnings against a fake ContextCostFileSystem. One commit. Tree green."
-    status: pending
+    status: completed
     depends_on: [ws2-cycle-1]
   - id: ws4-cycle-1
     content: "WS4 cycle 1: pure CLI option parser. Test parseArgs(argv) returns the discriminated-union ParseResult covering --glob (repeatable), --json, --help, missing --glob, unknown flag. One commit. Tree green."
-    status: pending
+    status: completed
   - id: ws5-cycle-1
     content: "WS5 cycle 1: CLI integration. Integration test invokes runContextCostCli against a tmp directory and asserts deterministic text + JSON outputs; register context-cost in dispatchTopic; add the runContextCostTopic handler; add tinyglobby dep + workspace pnpm script. One commit. Tree green."
-    status: pending
+    status: completed
     depends_on: [ws3-cycle-1, ws4-cycle-1]
   - id: ws6-docs
     content: "WS6: documentation slice. agent-tools/README.md subcommand entry; back-link in the strategic source plan §1; reproducibility footnote in practice-context-cost-baseline.md. One commit, no behaviour change."
-    status: pending
+    status: completed
     depends_on: [ws5-cycle-1]
 isProject: false
 ---
@@ -30,7 +30,7 @@ isProject: false
 # Context Cost CLI
 
 **Last Updated**: 2026-05-14
-**Status**: 🟢 DECISION-COMPLETE / READY FOR EXECUTION
+**Status**: ✅ IMPLEMENTED
 **Scope**: A new `context-cost` subcommand under the unified `agent-tools` binary that, given one or more file globs, returns a deterministic per-file and aggregate estimate of token cost using a chars/4 baseline behind a swappable `Tokenizer` interface.
 
 **Strategic source**:
@@ -39,6 +39,11 @@ isProject: false
 **Empirical baseline this CLI replaces / unlocks**:
 [practice-context-cost-baseline.md](../../../analysis/practice-context-cost-baseline.md)
 — the always-on rule tier and skill tier figures in that file were produced by manual `wc -c` plus jq pipelines. The CLI replaces those one-shots with a deterministic command suitable for repeated baselines and ad-hoc per-fileset queries.
+
+**Implementation note (2026-05-14)**: landed in `7bf05c6b` with a follow-up
+reviewer-fix/docs residue pass in the same session. The follow-up tightened the
+production-IO integration proof, disabled symlink following in the production
+glob adapter, preserved file-read causes, and stabilised JSON key ordering.
 
 ---
 

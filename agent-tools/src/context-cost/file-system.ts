@@ -9,6 +9,7 @@ export class ContextCostFileReadError extends Error {
   constructor(absolutePath: string, cause: unknown) {
     super(
       `failed to read ${absolutePath}: ${cause instanceof Error ? cause.message : String(cause)}`,
+      { cause },
     );
     this.absolutePath = absolutePath;
     this.name = 'ContextCostFileReadError';

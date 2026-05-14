@@ -17,7 +17,7 @@ interface MutableContextCostOptions {
 type FlagHandler = (state: MutableContextCostOptions) => void;
 type ValueHandler = (state: MutableContextCostOptions, value: string) => void;
 
-const FLAG_HANDLERS: Readonly<Record<string, FlagHandler>> = {
+const FLAG_HANDLERS = {
   '--json': (state) => {
     state.json = true;
   },
@@ -27,13 +27,16 @@ const FLAG_HANDLERS: Readonly<Record<string, FlagHandler>> = {
   '-h': (state) => {
     state.help = true;
   },
-};
+} satisfies Record<'--json' | '--help' | '-h', FlagHandler>;
 
-const VALUE_HANDLERS: Readonly<Record<string, ValueHandler>> = {
+const VALUE_HANDLERS = {
   '--glob': (state, value) => {
     state.globs.push(value);
   },
-};
+} satisfies Record<'--glob', ValueHandler>;
+
+type FlagOption = keyof typeof FLAG_HANDLERS;
+type ValueOption = keyof typeof VALUE_HANDLERS;
 
 export const CONTEXT_COST_HELP_TEXT = [
   'context-cost --glob <pattern> [--glob <pattern> ...] [--json]',
@@ -113,17 +116,24 @@ function consumeArg(input: {
 }
 
 function consumeFlag(state: MutableContextCostOptions, arg: string | undefined): boolean {
-  const handler = FLAG_HANDLERS[arg ?? ''];
-  if (handler === undefined) {
+  if (!isFlagOption(arg)) {
     return false;
   }
 
-  handler(state);
+  FLAG_HANDLERS[arg](state);
   return true;
 }
 
 function getValueHandler(arg: string | undefined): ValueHandler | undefined {
-  return VALUE_HANDLERS[arg ?? ''];
+  return isValueOption(arg) ? VALUE_HANDLERS[arg] : undefined;
+}
+
+function isFlagOption(arg: string | undefined): arg is FlagOption {
+  return arg !== undefined && Object.prototype.hasOwnProperty.call(FLAG_HANDLERS, arg);
+}
+
+function isValueOption(arg: string | undefined): arg is ValueOption {
+  return arg !== undefined && Object.prototype.hasOwnProperty.call(VALUE_HANDLERS, arg);
 }
 
 function requireValue(argv: readonly string[], index: number, option: string): string {

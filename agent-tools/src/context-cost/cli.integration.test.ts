@@ -1,10 +1,16 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { z } from 'zod';
 
 import type { AgentToolsCliInput } from '../bin/agent-tools-cli-types.js';
 import { runContextCostTopic } from '../bin/agent-tools-cli-topics.js';
+import { CONTEXT_COST_HELP_TEXT } from './cli-options.js';
 import type { ContextCostFileSystem } from './file-system.js';
 import { runContextCostCli } from './cli.js';
+import {
+  createContextCostFixture,
+  createContextCostSymlink,
+  removeContextCostFixtures,
+} from './test-helpers/context-cost-fixture.js';
 
 const tokenizedRowSchema = z.object({
   path: z.string(),
@@ -23,12 +29,16 @@ const contextCostJsonSchema = z.object({
 });
 
 describe('runContextCostCli', () => {
-  it('emits deterministic tab-separated text output', async () => {
-    const fixture = fixtureFileSystem();
+  const tmpDirs: string[] = [];
 
-    await expect(
-      runContextCostCli({ argv: ['--glob', '*.md'], cwd: fixture.cwd, fs: fixture.fs }),
-    ).resolves.toStrictEqual({
+  afterEach(async () => {
+    await removeContextCostFixtures(tmpDirs);
+  });
+
+  it('emits deterministic tab-separated text output through production IO', async () => {
+    const cwd = await createContextCostFixture(tmpDirs);
+
+    await expect(runContextCostCli({ argv: ['--glob', '*.md'], cwd })).resolves.toStrictEqual({
       exitCode: 0,
       stdout: [
         'path\tchars\ttokens',
@@ -43,12 +53,11 @@ describe('runContextCostCli', () => {
     });
   });
 
-  it('emits stable JSON output', async () => {
-    const fixture = fixtureFileSystem();
+  it('emits stable JSON output through production IO', async () => {
+    const cwd = await createContextCostFixture(tmpDirs);
     const result = await runContextCostCli({
       argv: ['--glob', '*.md', '--json'],
-      cwd: fixture.cwd,
-      fs: fixture.fs,
+      cwd,
     });
 
     expect(result.exitCode).toBe(0);
@@ -81,17 +90,27 @@ describe('runContextCostCli', () => {
   });
 
   it('prints no-match warnings to stderr while keeping stdout cuttable', async () => {
-    const fixture = fixtureFileSystem();
+    const cwd = await createContextCostFixture(tmpDirs);
     const result = await runContextCostCli({
       argv: ['--glob', '*.md', '--glob', '*.MISSING'],
-      cwd: fixture.cwd,
-      fs: fixture.fs,
+      cwd,
     });
 
     expect(result.exitCode).toBe(0);
     expect(result.stdout).toContain('a.md\t4\t1');
     expect(result.stdout).not.toContain('warning:');
     expect(result.stderr).toBe("warning: glob '*.MISSING' matched no files\n");
+  });
+
+  it('excludes symlinked files from production glob expansion', async () => {
+    const cwd = await createContextCostFixture(tmpDirs);
+    await createContextCostSymlink(cwd);
+
+    const result = await runContextCostCli({ argv: ['--glob', '*.md'], cwd });
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).not.toContain('linked.md');
+    expect(result.stdout).toContain('total: 3 files, 24 chars, 6 tokens');
   });
 
   it('prints help without filesystem access', async () => {
@@ -111,7 +130,7 @@ describe('runContextCostCli', () => {
     });
 
     expect(result.exitCode).toBe(0);
-    expect(result.stdout).toMatch(/^context-cost --glob <pattern>/);
+    expect(result.stdout).toBe(`${CONTEXT_COST_HELP_TEXT}\n`);
     expect(result.stderr).toBe('');
   });
 
@@ -158,30 +177,7 @@ describe('runContextCostCli', () => {
     const result = await runContextCostTopic(input, ['--help']);
 
     expect(result.exitCode).toBe(0);
-    expect(result.stdout).toMatch(/^context-cost --glob <pattern>/);
+    expect(result.stdout).toBe(`${CONTEXT_COST_HELP_TEXT}\n`);
     expect(result.stderr).toBe('');
   });
 });
-
-function fixtureFileSystem(): { readonly cwd: string; readonly fs: ContextCostFileSystem } {
-  const files = new Map([
-    ['/repo/a.md', '1234'],
-    ['/repo/b.md', '12345678'],
-    ['/repo/c.md', '123456789012'],
-  ]);
-
-  return {
-    cwd: '/repo',
-    fs: {
-      expandGlob: async (_cwd, pattern) =>
-        pattern === '*.md' ? ['/repo/c.md', '/repo/a.md', '/repo/b.md'] : [],
-      readFileUtf8: async (absolutePath) => {
-        const content = files.get(absolutePath);
-        if (content === undefined) {
-          throw new Error(`missing fixture ${absolutePath}`);
-        }
-        return content;
-      },
-    },
-  };
-}

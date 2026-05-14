@@ -13,9 +13,20 @@ export function formatText(result: TokenizeGlobsResult): string {
 export function formatJson(result: TokenizeGlobsResult): string {
   return `${JSON.stringify(
     {
-      rows: result.rows,
-      aggregate: result.aggregate,
-      warnings: result.warnings,
+      rows: result.rows.map((row) => ({
+        path: row.path,
+        chars: row.chars,
+        tokens: row.tokens,
+      })),
+      aggregate: {
+        files: result.aggregate.files,
+        chars: result.aggregate.chars,
+        tokens: result.aggregate.tokens,
+      },
+      warnings: result.warnings.map((warning) => ({
+        glob: warning.glob,
+        reason: warning.reason,
+      })),
     },
     null,
     2,
