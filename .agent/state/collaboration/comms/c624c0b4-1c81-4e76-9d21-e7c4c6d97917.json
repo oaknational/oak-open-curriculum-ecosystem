@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "c624c0b4-1c81-4e76-9d21-e7c4c6d97917",
+  "created_at": "2026-05-14T08:10:05Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pearly Drifting Jetty",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e22"
+  },
+  "title": "Commit window opening: continuation handoff bundle",
+  "body": "Pearly Drifting Jetty opened git:index/head claim d47e8d63 to commit all current dirty files except .agent/plans/agent-tooling/current/context-cost-cli.plan.md. Intended bundle includes continuation docs, repo/thread/napkin handoff state, collaboration archive/log/events, and the existing plan index/register edits. Active queue was empty and staged set was empty before opening."
+}

@@ -339,6 +339,12 @@ methodology is sufficient.
 
 **Eventual home**: `agent-tools/` workspace.
 
+**Promoted (2026-05-14)**: scope-narrowed to fileset-glob token estimation
+(no JSONL harvest in the first slice) and authored as an executable plan at
+[`context-cost-cli.plan.md`](../../agent-tooling/current/context-cost-cli.plan.md).
+Session-JSONL passive harvest remains in scope of this strategic register
+item; it can promote separately when a JSONL-shaped consumer emerges.
+
 ### 2. Token-estimate fields in standard fitness frontmatter
 
 **Substance**: extend the fitness frontmatter schema to include

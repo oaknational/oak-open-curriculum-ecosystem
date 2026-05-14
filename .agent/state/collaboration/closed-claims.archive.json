@@ -24606,6 +24606,137 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "12e15e46-f953-4e74-984d-4e323cf407e9",
+      "agent_id": {
+        "agent_name": "Pearly Drifting Jetty",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/threads/README.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T08:04:08Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "clarify start-right-team continuation pointer contract and thread continuation guidance",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T08:05:13Z",
+        "closed_by": {
+          "agent_name": "Pearly Drifting Jetty",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Clarified start-right-team continuation pointer contract, refreshed agentic-engineering current continuation block, added thread-record opener/template guidance, and logged the behaviour change in napkin. Targeted markdownlint, git diff --check, and portability check passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "12e15e46-f953-4e74-984d-4e323cf407e9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "444cff80-8f40-4487-ba0b-322920ee8962",
+      "agent_id": {
+        "agent_name": "Pearly Drifting Jetty",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T08:08:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "final session-handoff continuity refresh for continuation pointer docs",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T08:08:30Z",
+        "closed_by": {
+          "agent_name": "Pearly Drifting Jetty",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Final session-handoff continuity refresh complete: repo-continuity, agentic-engineering thread record, and napkin now record the continuation-pointer docs handoff, validation evidence, and uncommitted working-tree state. Completion comms event ff05858c recorded.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "444cff80-8f40-4487-ba0b-322920ee8962",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d47e8d63-2689-47d9-b093-2c1de2e91656",
+      "agent_id": {
+        "agent_name": "Pearly Drifting Jetty",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e22"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T08:09:56Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "stage and commit all current files except context-cost-cli.plan.md",
+      "archived_at": "2026-05-14",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-14T08:11:09Z",
+        "closed_by": {
+          "agent_name": "Pearly Drifting Jetty",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e22"
+        },
+        "summary": "Commit window closed in same collaboration-state commit for docs(agent): clarify team continuation handoff; queued intent b9bc19c0 completed before final staging per lifecycle commit exception.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d47e8d63-2689-47d9-b093-2c1de2e91656",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

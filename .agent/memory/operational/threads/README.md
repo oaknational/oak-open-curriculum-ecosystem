@@ -45,6 +45,8 @@ Archived threads:
 One `*.next-session.md` file per active thread. Each file contains:
 
 - **Thread identity** — which thread this record belongs to.
+- **Current continuation** — the branch, invocation pointer, controlling plan,
+  next safe step, team expectation, and acceptance bar for the next agent.
 - **Participating agent identities** — every session that has
   touched the thread, additive (per the proposed rule: joining a
   thread adds an identity; never replaces).
@@ -106,6 +108,45 @@ chat opener that invokes this checklist only needs to name what is
 unique to the session (thread name, plan reference, any
 session-specific signal); the checklist handles the rest.
 
+The preferred opener is a pointer, not a state dump:
+
+```text
+$jc-start-right-team continue <thread-slug> from
+.agent/memory/operational/threads/<thread-slug>.next-session.md.
+Treat this opener as a hypothesis until live grounding confirms it.
+```
+
+Use `start-right-quick` or `start-right-thorough` instead when the session is
+not a team session. The continuation record owns current facts; the skill owns
+the routing behaviour. Keep volatile state, live commit ids, branch state, next
+safe step, and team expectation in the record rather than copying them into a
+chat opener or permanent skill text.
+
+### Continuation record template
+
+Thread records should start with a compact current-state block before older
+session history:
+
+```markdown
+## Current Continuation
+
+- Branch:
+- Invocation pointer:
+- Controlling plan:
+- Next safe step:
+- Completed prerequisites:
+- Recent relevant commits:
+- Team expectation:
+- Suggested team split if a team forms:
+- Acceptance bar:
+```
+
+Use `Team expectation: unknown until live grounding` when no owner-assigned team
+shape exists. Do not encode fixed roles unless they have already been assigned
+by owner direction or live coordination. Avoid `ready to land` wording in
+continuation records unless the work is genuinely uncommitted and pending; once
+landed, cite the commit instead.
+
 ### Read, in order
 
 1. [`../repo-continuity.md`](../repo-continuity.md) end-to-end —
@@ -161,12 +202,12 @@ session-specific signal); the checklist handles the rest.
 Only the session-unique signal:
 
 - Thread name.
+- Pointer to the thread's next-session record.
 - Session number and plan reference (path to the plan + which
   session within it, if multi-session).
 - Any owner-chosen session-scoped decision (e.g. "Bundle rhythm
   chosen for this session" per a plan's optional branches).
-- Optional: pointer to the next-session record's landing target
-  block for convenience.
+- Optional: a short note about why team routing is expected.
 
 The chat opener should **not** restate the checklist above. If an
 opener finds itself listing grounding order, identity discipline,

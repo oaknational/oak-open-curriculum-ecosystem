@@ -1,55 +1,72 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-> **Current continuation**: P8 collaboration TUI is active and remains open.
-> P0.QG,
-> P-Foundation, P1 directed-message authoring, P2 directed-message watching,
-> P3 commit-queue enforcement, P4 identity routing, and P5 unified comms plus
-> DI/no-IO boundary repair are complete. P5's unified comms migration landed at
-> `30c8ad15`, with closeout at `6a1d8d9e`; the later P5 repair recomputed
-> completion from the live proof contract by adding direct comms use cases,
-> simple-fake tests, and CLI-only production IO wiring. Resume mandatory P8 from
-> the cost-of-collaboration plan, not from the older P5-pending opener.
-> Operator-value UI and the smallest interaction-hardening slice landed at
-> `2791be3c` and `6e804485`; the next P8 implementation target is
-> `p8-attention-state`, not a P8 completion claim.
->
-> **Conservation-first consolidation**: `napkin.md`, `distilled.md`, and
-> `pending-graduations.md` stages are complete as of 2026-05-12. The next
-> bounded consolidation target is `practice-bootstrap.md`; do not reopen
-> `pending-graduations.md` as a brevity target.
->
-> **Completion-proof routing** (2026-05-13): after repeated false reports that
-> P5 and P8 were "complete", the completion-claim proof pipeline is now an
-> explicit agentic-engineering lane. Use
-> [`completion-claim-proof-pipeline.plan.md`](../../plans/agentic-engineering-enhancements/current/completion-claim-proof-pipeline.plan.md)
-> as the execution router, with the findings source at
-> [`completion-claims-and-value-proof-pipeline-report.md`](../../reports/agentic-engineering/deep-dive-syntheses/completion-claims-and-value-proof-pipeline-report.md).
-> Completion is a computed verdict, not a confident sentence; TDD evidence
-> requires test-first red/green proof at unit, integration, and E2E levels.
->
-> **No-IO / DI correction** (2026-05-13): use
-> [`no-io-tests-and-di-boundary-report.md`](../../reports/agentic-engineering/deep-dive-syntheses/no-io-tests-and-di-boundary-report.md)
-> for the findings source. The P5-specific repair is in
-> [`cost-of-collaboration.plan.md`](../../plans/agent-tooling/current/cost-of-collaboration.plan.md)
-> as `ws-p5-di-boundary-repair`; the wider repo recovery is separate in
-> [`no-io-test-boundary-and-di-recovery.plan.md`](../../plans/architecture-and-infrastructure/current/no-io-test-boundary-and-di-recovery.plan.md).
->
-> **Umbral monitor closeout** (2026-05-13): Umbral Masking Silhouette completed
-> the read-only P5 strict comms parser gate-check and then stayed in a repeated
-> message/status monitoring loop until the live queue closed cleanly. No edits
-> or git/index activity from Umbral beyond directed comms.
->
-> **New strategic work** (2026-05-12): Prismatic Beaming Twilight session designed
-> multi-agent delegation orchestration architecture extending ADR-180 beyond Codex
-> to Cursor, Claude, internal agents. Strategic brief
-> [`multi-agent-delegation-orchestration.plan.md`](../../plans/agentic-engineering-enhancements/future/multi-agent-delegation-orchestration.plan.md)
-> captured in future plans. See session findings below.
->
-> **Team collaboration research** (2026-05-14): `start-right-team`, proposed
-> ADR-181, the focused team-start/action-trace research note, and the
-> `session-handoff` team-routing amendment are ready to land. They are Practice
-> collaboration surfaces only. They do not change the next implementation
-> target: resume P8 at `p8-attention-state`.
+## Current Continuation
+
+- Branch: `feat/mcp-graph-support-foundation`.
+- Invocation pointer:
+  `$jc-start-right-team continue agentic-engineering-enhancements`.
+- Controlling plan:
+  [`cost-of-collaboration.plan.md`](../../plans/agent-tooling/current/cost-of-collaboration.plan.md).
+- Next safe step: continue mandatory P8 collaboration TUI at
+  `p8-attention-state`; add unread/seen or equivalent directed-thread triage
+  so a human operator can tell which directed conversations need action without
+  reading raw event files.
+- Completed prerequisites: P0.QG, P-Foundation, P1, P2, P3, P4, P5 unified
+  comms plus DI/no-IO boundary repair.
+- Recent P8 source commits: `2791be3c` operator-value UI and `6e804485`
+  interaction hardening.
+- Recent team-collaboration commits: `bfa26e01` added `start-right-team`,
+  proposed ADR-181, research note, and `session-handoff` team routing;
+  `498edcc2` recorded the team collaboration handoff.
+- Team expectation: unknown until live grounding. Solo is valid if no team has
+  registered; if multiple agents are present, use `start-right-team` to
+  negotiate temporary responsibilities from live coordination pressure.
+- Suggested team split if a team forms: data/value ownership first, shaped by
+  Arboreal's scout; UI/test wiring after field names settle, shaped by
+  Nebulous's scout.
+- Acceptance bar: do not claim P8 complete until `P8-A1` through `P8-A4` in
+  the controlling plan are all proven.
+
+## Standing Thread Notes
+
+**Conservation-first consolidation**: `napkin.md`, `distilled.md`, and
+`pending-graduations.md` stages are complete as of 2026-05-12. The next
+bounded consolidation target is `practice-bootstrap.md`; do not reopen
+`pending-graduations.md` as a brevity target.
+
+**Completion-proof routing** (2026-05-13): after repeated false reports that
+P5 and P8 were "complete", the completion-claim proof pipeline is now an
+explicit agentic-engineering lane. Use
+[`completion-claim-proof-pipeline.plan.md`](../../plans/agentic-engineering-enhancements/current/completion-claim-proof-pipeline.plan.md)
+as the execution router, with the findings source at
+[`completion-claims-and-value-proof-pipeline-report.md`](../../reports/agentic-engineering/deep-dive-syntheses/completion-claims-and-value-proof-pipeline-report.md).
+Completion is a computed verdict, not a confident sentence; TDD evidence
+requires test-first red/green proof at unit, integration, and E2E levels.
+
+**No-IO / DI correction** (2026-05-13): use
+[`no-io-tests-and-di-boundary-report.md`](../../reports/agentic-engineering/deep-dive-syntheses/no-io-tests-and-di-boundary-report.md)
+for the findings source. The P5-specific repair is in
+[`cost-of-collaboration.plan.md`](../../plans/agent-tooling/current/cost-of-collaboration.plan.md)
+as `ws-p5-di-boundary-repair`; the wider repo recovery is separate in
+[`no-io-test-boundary-and-di-recovery.plan.md`](../../plans/architecture-and-infrastructure/current/no-io-test-boundary-and-di-recovery.plan.md).
+
+**Umbral monitor closeout** (2026-05-13): Umbral Masking Silhouette completed
+the read-only P5 strict comms parser gate-check and then stayed in a repeated
+message/status monitoring loop until the live queue closed cleanly. No edits or
+git/index activity from Umbral beyond directed comms.
+
+**New strategic work** (2026-05-12): Prismatic Beaming Twilight session
+designed multi-agent delegation orchestration architecture extending ADR-180
+beyond Codex to Cursor, Claude, internal agents. Strategic brief
+[`multi-agent-delegation-orchestration.plan.md`](../../plans/agentic-engineering-enhancements/future/multi-agent-delegation-orchestration.plan.md)
+captured in future plans. See session findings below.
+
+**Team collaboration research** (2026-05-14): `start-right-team`, proposed
+ADR-181, the focused team-start/action-trace research note, and the
+`session-handoff` team-routing amendment landed in `bfa26e01`; the follow-up
+handoff landed in `498edcc2`. They are Practice collaboration surfaces only.
+They do not change the next implementation target: resume P8 at
+`p8-attention-state`.
 
 ## Umbral P5 Gate-Check And Monitor Session (2026-05-12/13)
 
@@ -264,12 +281,12 @@ P8 complete.
 
 **Session**: Pearly Drifting Jetty / `codex` / `GPT-5` / `019e22`.
 
-**Landed / ready-to-land outcome**: documentation and skill-surface closeout,
-not P8 source implementation. The session created `start-right-team`,
-proposed ADR-181, the focused operating-model research note on team start and
-action trace, and a conditional `session-handoff` session-shape check that
-keeps sole contributor as the default while routing team closeout owners and
-team members differently.
+**Landed outcome**: documentation and skill-surface closeout, not P8 source
+implementation. Commit `bfa26e01` created `start-right-team`, proposed ADR-181,
+the focused operating-model research note on team start and action trace, and a
+conditional `session-handoff` session-shape check that keeps sole contributor
+as the default while routing team closeout owners and team members differently.
+Commit `498edcc2` recorded the team collaboration handoff.
 
 **Why it exists**: owner review of the P8 team window surfaced that full
 `session-handoff` is too individual-contributor-shaped for every team member
@@ -280,12 +297,37 @@ otherwise.
 
 **Validation evidence**: targeted Markdownlint passed for the touched skill,
 ADR, research, and plan/index files; `pnpm portability:check` passed after
-adding the Claude skill permission; `git diff --check` passed. Final handoff
-will commit all dirty files in logical chunks per owner direction.
+adding the Claude skill permission; `git diff --check` passed. The docs bundle
+landed in the two commits above.
 
 **Next safe execution step**: unchanged. Next implementation remains
 `p8-attention-state`; the team-collaboration docs are research/practice
 surfaces, not permission to claim P8 complete.
+
+## Continuation Pointer Clarification And Final Handoff (2026-05-14)
+
+**Session**: Pearly Drifting Jetty / `codex` / `GPT-5` / `019e22`.
+
+**Landed-in-working-tree outcome**: documentation/process clarification, not a
+P8 source implementation and not a commit. The session added a
+`start-right-team` continuation pointer contract, refreshed this thread record
+into a compact `Current Continuation` block, added pointer-style opener and
+continuation-record template guidance to the threads README, and logged the
+behaviour change in the napkin.
+
+**Validation evidence**: targeted Markdownlint passed for the touched docs,
+`git diff --check` passed, and `pnpm portability:check` passed.
+
+**Live-state evidence at handoff**: active agents and active commit queue were
+empty after claim closure. The working tree still has this session's handoff
+state plus pre-existing unrelated dirty plan files; next session must re-check
+`git status --short` before deciding whether to commit, split, or continue.
+
+**Next safe execution step**: unchanged. Use
+`$jc-start-right-team continue agentic-engineering-enhancements` as the compact
+opener when a team is expected, then let the skill resolve this continuation
+record and live state. Resume P8 at `p8-attention-state`; do not claim P8
+complete until `P8-A1` through `P8-A4` are proven.
 
 ## Fronded Read-Only Review And Standby Closeout (2026-05-13/14)
 
@@ -602,7 +644,7 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 | `codex` | `GPT-5` | Umbral Masking Silhouette | Gate-checker/monitor (read-only P5 strict comms parser CLEAN/GO; repeated message/status monitoring through WS1.4 closeout) | 2026-05-12 | 2026-05-13 |
 | `codex` | `GPT-5` | Mossy Fruiting Thicket | Implementer (P5 DI/no-IO boundary repair for comms use cases) | 2026-05-13 | 2026-05-13 |
 | `codex` | `GPT-5` | Mossy Blossoming Canopy | Implementer (mandatory P8 live collaboration TUI continuation) | 2026-05-13 | 2026-05-13 |
-| `codex` | `GPT-5` | Pearly Drifting Jetty | Controller/handoff synthesiser (P8 coordination only; no implementation; routed operator-value and interaction-hardening slices, then captured role-selection observations and team-start / team-handoff research surfaces) | 2026-05-13 | 2026-05-14 |
+| `codex` | `GPT-5` | Pearly Drifting Jetty | Controller/handoff synthesiser (P8 coordination only; no implementation; routed operator-value and interaction-hardening slices, captured role-selection observations and team-start / team-handoff research surfaces, then clarified continuation-pointer routing) | 2026-05-13 | 2026-05-14 |
 | `codex` | `GPT-5` | Arboreal Ripening Pollen | Implementer/scout (P8 Slice A operator-value snapshot model; p8-attention-state data/value scout) | 2026-05-13 | 2026-05-14 |
 | `codex` | `GPT-5` | Nebulous Ascending Supernova | Implementer (P8 Slice B interaction hardening) | 2026-05-13 | 2026-05-13 |
 | `codex` | `GPT-5` | Fronded Rustling Canopy | Reviewer/standby monitor (read-only P8 Slice A value-signal review; 120-second inbox/claims/queue/tree polling; no source edits or claims) | 2026-05-13 | 2026-05-14 |

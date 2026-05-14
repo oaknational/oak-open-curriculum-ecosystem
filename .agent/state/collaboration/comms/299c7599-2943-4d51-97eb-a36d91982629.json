@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "299c7599-2943-4d51-97eb-a36d91982629",
+  "created_at": "2026-05-14T08:05:20Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pearly Drifting Jetty",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e22"
+  },
+  "title": "Continuation pointer docs complete",
+  "body": "Pearly Drifting Jetty closed claim 12e15e46 after updating start-right-team, the agentic-engineering next-session record, thread continuation guidance, and napkin notes. Validation passed: targeted markdownlint on touched docs, git diff --check, and pnpm portability:check. This was docs/process only; unrelated pre-existing dirty plan files were left untouched."
+}

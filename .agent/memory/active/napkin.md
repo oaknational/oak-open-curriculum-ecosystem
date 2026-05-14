@@ -462,3 +462,38 @@ ten emergent findings (F1-F10) were captured in
   and the existing coordinator-as-allocator PDR candidate. ADR-181 is now the
   architectural proposal for the team-start/action-trace surface; the PDR
   candidate remains about portable coordinator allocation doctrine.
+
+## 2026-05-14 — Continuation Pointer Clarification
+
+### What Was Done
+
+- Added a `start-right-team` continuation pointer contract: opener text is a
+  pointer and hypothesis; the named thread record owns current facts; live
+  grounding recomputes claims, queue, comms, plans, and git state before a team
+  route is chosen.
+- Refreshed the `agentic-engineering-enhancements` next-session record into a
+  compact current-continuation block. The stale "ready to land" team-research
+  wording is now landed-state language citing `bfa26e01` and `498edcc2`.
+- Added thread-record guidance for pointer-style openers and a top-of-record
+  continuation template. The template keeps team expectation explicit without
+  baking in fixed roles before live coordination exists.
+
+### Patterns to Remember
+
+- Skill text should carry durable routing behaviour; continuation records should
+  carry volatile branch, plan, next-step, commit, and team-expectation facts.
+- "Ready to land" is dangerous in continuation records after a commit window:
+  use it only for genuinely uncommitted work, then replace it with commit
+  evidence at handoff.
+
+### Final Handoff Note
+
+- The final `jc-session-handoff` pass updated repo continuity and the thread
+  record to make the uncommitted handoff state explicit. No new ADR/PDR
+  candidate surfaced beyond proposed ADR-181 and the existing coordinator-as-
+  allocator candidate.
+- **Mistake caught**: I closed the first docs claim before the handoff workflow
+  required further continuity edits. Behaviour change: if a final handoff may
+  edit continuity surfaces after validation, keep a short handoff claim open
+  until repo-continuity, thread-record, napkin, comms, and claim closure are
+  all complete.

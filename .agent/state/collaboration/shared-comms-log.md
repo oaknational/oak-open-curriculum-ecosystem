@@ -8760,3 +8760,51 @@ Pearly Drifting Jetty opening a deeper jc-session-handoff pass for the P8 contro
 ## 2026-05-14T07:25:55Z — `Pearly Drifting Jetty` / `codex` / `GPT-5` / `019e22` — Metacognition: team handoff routing exploration
 
 Pearly Drifting Jetty capturing owner-raised design question: jc-session-handoff currently behaves like every team member owns the whole session boundary. I am writing a future exploration note for team-member handoff routing and the adjacent auditable action-log idea; no skill mutation or source implementation.
+
+---
+
+## 2026-05-14T07:38:03Z — `Pearly Drifting Jetty` / `codex` / `GPT-5` / `019e22` — Creating start-right-team research surfaces
+
+Claim c94fd2a6-003f-4f41-82a5-565c06dd731f is open for the start-right-team skill, proposed ADR, focused research note, and related future-plan links. I will keep this to documentation and skill-surface changes, preserving existing dirty handoff/metacognition residue.
+
+---
+
+## 2026-05-14T07:46:30Z — `Pearly Drifting Jetty` / `codex` / `GPT-5` / `019e22` — Amending session-handoff for team routing
+
+Claim 1cb4ca35-2bb2-4652-988f-d6029b3cf69b is open for .agent/skills/session-handoff/SKILL-CANONICAL.md. Scope is a conditional team-session branch that preserves the sole-contributor default path.
+
+---
+
+## 2026-05-14T07:51:39Z — `Pearly Drifting Jetty` / `codex` / `GPT-5` / `019e22` — Commit window: team collaboration surfaces
+
+Opening commit window claim a1cf8e4c-e578-4337-80a7-87a798d382f6. Intended bundle: start-right-team skill/adapters, session-handoff team-routing amendment, ADR-181, team-start/action-trace research note, future-plan links, research indexes, ADR index, and Claude permission wiring. Current staged set is empty; active claims and active commit queue were empty before this window.
+
+---
+
+## 2026-05-14T07:53:38Z — `Pearly Drifting Jetty` / `codex` / `GPT-5` / `019e22` — Commit window: final handoff state
+
+Opening commit window claim 083cf776-016a-4623-bd8b-7636857376c3 for final session-handoff memory and collaboration state. This bundle intentionally uses the collaboration-state residue exception so active-claims, closed-claims, comms events, and shared-comms-log can land with their own closure.
+
+---
+
+## 2026-05-14T08:04:15Z — `Pearly Drifting Jetty` / `codex` / `GPT-5` / `019e22` — Continuation pointer docs claim opened
+
+Pearly Drifting Jetty opened claim 12e15e46 on agentic-engineering-enhancements to clarify start-right-team continuation-pointer behaviour, refresh the current next-session record, and add continuation template/guidance. Scope is docs/process only: .agent/skills/start-right-team/SKILL-CANONICAL.md, .agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md, .agent/memory/operational/threads/README.md, and napkin.md. Pre-existing dirty plan files are unrelated and will be left alone.
+
+---
+
+## 2026-05-14T08:05:20Z — `Pearly Drifting Jetty` / `codex` / `GPT-5` / `019e22` — Continuation pointer docs complete
+
+Pearly Drifting Jetty closed claim 12e15e46 after updating start-right-team, the agentic-engineering next-session record, thread continuation guidance, and napkin notes. Validation passed: targeted markdownlint on touched docs, git diff --check, and pnpm portability:check. This was docs/process only; unrelated pre-existing dirty plan files were left untouched.
+
+---
+
+## 2026-05-14T08:08:19Z — `Pearly Drifting Jetty` / `codex` / `GPT-5` / `019e22` — Final continuation-pointer handoff complete
+
+Pearly Drifting Jetty final handoff for continuation-pointer docs is complete. Updated repo-continuity, agentic-engineering next-session record, and napkin to make the validated working-tree handoff state explicit. Validation passed: targeted markdownlint on touched docs, git diff --check, and collaboration-state check. Next route remains P8 p8-attention-state; no P8 completion claim. Handoff claim 444cff80 will be closed after this event.
+
+---
+
+## 2026-05-14T08:10:05Z — `Pearly Drifting Jetty` / `codex` / `GPT-5` / `019e22` — Commit window opening: continuation handoff bundle
+
+Pearly Drifting Jetty opened git:index/head claim d47e8d63 to commit all current dirty files except .agent/plans/agent-tooling/current/context-cost-cli.plan.md. Intended bundle includes continuation docs, repo/thread/napkin handoff state, collaboration archive/log/events, and the existing plan index/register edits. Active queue was empty and staged set was empty before opening.

@@ -33,6 +33,27 @@ The controller or first registered agent must not assign implementation work
 until each participating agent has either reported this foundation complete or
 named the blocker preventing completion.
 
+## Continuation Pointer Contract
+
+When invoked as `start-right-team continue <thread>` or with equivalent
+continuation language, treat the opener as a pointer and hypothesis, not as the
+source of volatile truth.
+
+1. Resolve the named thread through
+   `.agent/memory/operational/threads/<thread-slug>.next-session.md`.
+2. Read the continuation record before choosing a team route. It owns the
+   current branch, controlling plan, next safe step, live acceptance bar, and
+   any thread-specific team expectation.
+3. Recompute current facts from live grounding surfaces before acting:
+   identity preflight, active claims, shared comms, active commit queue, active
+   plans, and git status/log.
+4. Treat any team shape in the continuation record as a hint unless it is an
+   owner instruction or live coordination has already assigned it. Solo work is
+   valid when no team has registered; a team may self-organise only after live
+   presence and coordination pressure are clear.
+5. Keep volatile facts out of chat openers and permanent skill text. The skill
+   owns routing behaviour; the continuation record owns current thread facts.
+
 ## Team Bootstrap
 
 After the shared foundation is complete, establish a session-local operating
