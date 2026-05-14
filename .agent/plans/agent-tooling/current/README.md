@@ -23,7 +23,7 @@ next-session cleanup pass before merge.
 | [n-agent-collaboration-experiments.plan.md](n-agent-collaboration-experiments.plan.md) | Decision-complete plan to validate or refute the N-agent collaboration hypothesis primitives in parallel with real work on active threads. E1 active; E2-E5 queued. Hypothesis at `.agent/prompts/agentic-engineering/collaboration/hypothesis.md`. | DECISION-COMPLETE / E1 ACTIVE |
 | [agent-infrastructure-portability-remediation.plan.md](agent-infrastructure-portability-remediation.plan.md) | Portability remediation for the expanding expert/skill/rule collection; Phase 5 is the documentation dependency for portability PDR/ADR work | QUEUED |
 | [pr-102-snagging.plan.md](pr-102-snagging.plan.md) | Queued next-session plan to clear PR #102 review threads and Sonar quality-gate blockers | QUEUED |
-| [context-cost-cli.plan.md](context-cost-cli.plan.md) | New `agent-tools context-cost` subcommand: token-cost estimate over arbitrary file globs (chars/4 baseline, swap seam for real tokenizer). Delivers §1 of the strategic source plan's Scope Expansion Register; §2/§3/§4 explicit non-goals. Six small TDD cycles, all decisions settled in §Settled Decisions, ready for cold handoff. | DECISION-COMPLETE / READY FOR EXECUTION |
+| [context-cost-cli.plan.md](context-cost-cli.plan.md) | New `agent-tools context-cost` subcommand: token-cost estimate over arbitrary file globs (chars/4 baseline, swap seam for real tokenizer). Delivers §1 of the strategic source plan's Scope Expansion Register; §2/§3/§4 now route through `fitness-token-measurements-and-frontmatter-mandation.plan.md`. | IMPLEMENTED |
 
 ## Related
 

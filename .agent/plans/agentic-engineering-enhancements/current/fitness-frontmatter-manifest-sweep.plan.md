@@ -33,10 +33,17 @@ isProject: false
 # Fitness Frontmatter — Manifest Sweep
 
 **Last Updated**: 2026-05-01
-**Status**: 🔴 NOT STARTED
+**Status**: SUPERSEDED BY
+[`fitness-token-measurements-and-frontmatter-mandation.plan.md`](fitness-token-measurements-and-frontmatter-mandation.plan.md)
 **Scope**: Make fitness frontmatter the canonical manifest of
 knowledge-accretion surfaces with bounded size; apply it consistently
 across qualifying files.
+
+**Supersession note (2026-05-14)**: this plan is not deleted because it
+preserves useful manifest-sweep analysis. Execution now routes through
+[`fitness-token-measurements-and-frontmatter-mandation.plan.md`](fitness-token-measurements-and-frontmatter-mandation.plan.md),
+which absorbs the manifest criterion and mandation work while adding token
+measurement fields and reporter integration from the strategic scope register.
 
 ---
 
