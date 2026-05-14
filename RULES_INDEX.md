@@ -93,3 +93,4 @@ index in the same commit.
 - `.agent/rules/use-result-pattern.md`
 - `.agent/rules/validate-full-target-estate.md`
 - `.agent/rules/validators-must-recompute-not-just-record.md`
+- `.agent/rules/verify-vendor-call-shapes-at-plan-author-time.md`
