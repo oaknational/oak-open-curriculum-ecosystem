@@ -2,7 +2,8 @@
 captured_date: 2026-05-14
 source_exercise: project-explorer-especially-names Practice transplant
 target_repo: /Users/jim/code/personal/project-explorer-especially-names
-target_commit: 77de2e0
+target_commit: d985c67
+target_closeout_commit: 82a219b
 status: captured
 ---
 
@@ -12,10 +13,10 @@ This report captures process feedback from transplanting the Practice,
 agentic-engineering infrastructure, and quality gates into
 `/Users/jim/code/personal/project-explorer-especially-names`.
 
-The target repo reached an operational state and landed as commit `77de2e0`
-with `pnpm check` passing. The exercise exposed several portability frictions
-that should feed back into the source Practice/bootstrap documentation and
-tooling.
+The target repo reached an operational state and landed as commit `d985c67`,
+with collaboration-state closeout in `82a219b` and `pnpm check` passing. The
+exercise exposed several portability frictions that should feed back into the
+source Practice/bootstrap documentation and tooling.
 
 ## Findings
 
@@ -85,6 +86,44 @@ tooling.
     The transplant checklist should include one real commit dry run or actual
     commit before declaring hooks operational.
 
+11. **Testing taxonomy needs a portable standard vocabulary.**
+    The target repo inherited test labels and file suffixes that blurred
+    unit, integration, browser E2E, tool E2E, and smoke testing. The target fix
+    was to define unit tests as single pure modules with no IO, integration
+    tests as in-process multi-module seams with injected fakes, browser E2E
+    tests as Playwright user journeys, tool E2E tests as dedicated
+    process/CLI-level specs, and smoke tests as minimal viability checks tagged
+    `@smoke` or isolated in smoke scripts. Bootstrap guidance should carry
+    those definitions instead of relying on repo-local custom usage.
+
+12. **Source-residue scans must include active state snapshots.**
+    A late commit attempt failed because an abandoned commit-queue
+    `staged_name_status` string still contained a pre-rename source path. The
+    codebase had no live source-domain references, but the state snapshot
+    still violated the target's "no source repo name" gate. Transplant
+    guidance should tell agents to scan `.agent/state/**` and other generated
+    coordination artifacts, not only source, docs, skills, and rules.
+
+13. **Commit-queue stale metadata is a portability hazard.**
+    Abandoned queue entries may preserve stale path names, broad directory
+    intents, and source-specific terms. A target repo should either archive or
+    prune abandoned queue entries before declaring host-shape clean, and the
+    queue tooling should consider formatting and source-residue validation for
+    metadata it writes.
+
+14. **Root package identity and dependency relinking are part of the host
+    shape.** The target needed explicit `packageManager`, engines, dependency
+    installation, and lockfile relinking before the gates were genuinely
+    reproducible. Transplant docs should include a dependency-relink step
+    rather than treating copied package scripts as sufficient.
+
+15. **Framework-specific bootstrap assumptions need a live-doc check.**
+    The target used a newer Next.js with local `node_modules/next/dist/docs/`
+    guidance and a sandbox that could not fetch remote fonts during build. The
+    target fix removed remote font loading and aligned the Playwright web
+    server with build/start behaviour. Transplant instructions should include
+    a framework-doc grounding step for app repos.
+
 ## Suggested Source Updates
 
 - Add a "minimum target seed set" table to `practice-bootstrap.md`.
@@ -94,3 +133,9 @@ tooling.
 - Add a "source-domain assumption audit" checklist for copied tests,
   sub-agents, rules, and docs.
 - Add a generated-file formatting guidance note for deterministic read models.
+- Add a standard testing taxonomy section for unit, integration, browser E2E,
+  tool E2E, and smoke tests.
+- Add state-snapshot residue scans to the host-shape/source-residue checklist.
+- Add commit-queue metadata formatting and pruning guidance for transplant
+  commit windows.
+- Add dependency-relink and framework-doc grounding steps to target bootstrap.
