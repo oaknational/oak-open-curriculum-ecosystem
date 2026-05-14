@@ -67,6 +67,7 @@ sources without turning research notes into a second canon.
 | Operational awareness and state surfaces | ADR-150, `workbench-agent-operating-topology.md`, `continuity-operational-awareness-baseline.md` | [operational-awareness-and-state-surfaces.md](./operational-awareness-and-state-surfaces.md) | [analysis](../../analysis/README.md), [future sidecars plan](../../plans/agent-tooling/future/cross-vendor-session-sidecars.plan.md) |
 | Reviewer systems and review operations | ADR-114, ADR-129, ADR-146, ADR-149 | [reviewer-system-and-review-operations.md](./reviewer-systems-and-discoverability/reviewer-system-and-review-operations.md) | [research reviewer lane](./reviewer-systems-and-discoverability/README.md) |
 | Portability and platform surfaces | ADR-125, support matrix, adapter formats | [portability-and-platform-surfaces.md](./operating-model-and-platforms/portability-and-platform-surfaces.md) | [research operating-model lane](./operating-model-and-platforms/README.md) |
+| Team collaboration and action trace | ADR-181, `start-right-team`, ADR-150 | [team-start-ritual-and-action-trace-2026-05-14.md](./operating-model-and-platforms/team-start-ritual-and-action-trace-2026-05-14.md) | [research operating-model lane](./operating-model-and-platforms/README.md), [research continuity lane](./continuity-memory-and-knowledge-flow/README.md) |
 | Safety, evidence, and enforcement | ADR-131, [principles.md](../../directives/principles.md), [hallucination-and-evidence-guard-adoption.plan.md](../../plans/agentic-engineering-enhancements/current/hallucination-and-evidence-guard-adoption.plan.md) | no seed deep dive yet | [research safety lane](./safety-evidence-and-enforcement/README.md), [plans collection](../../plans/agentic-engineering-enhancements/README.md) |
 | Derived memory and graph navigation | ADR-059, ADR-062, ADR-157, [graphify-and-graph-memory-exploration.plan.md](../../plans/agentic-engineering-enhancements/future/graphify-and-graph-memory-exploration.plan.md) | [derived-memory-and-graph-navigation.md](./derived-memory-and-graph-navigation/derived-memory-and-graph-navigation.md) | [research graph lane](./derived-memory-and-graph-navigation/README.md) |
 
@@ -100,6 +101,10 @@ sources without turning research notes into a second canon.
 - [operational-awareness-and-state-surfaces.md](./operational-awareness-and-state-surfaces.md)
   — cross-lane deep dive (sits at the top level because it spans
   operating-model, continuity, and governance lanes).
+- [operating-model-and-platforms/team-start-ritual-and-action-trace-2026-05-14.md](./operating-model-and-platforms/team-start-ritual-and-action-trace-2026-05-14.md)
+  — focused research note on `start-right-team`, emergent temporary
+  responsibilities, team handoff routing, and the proposed action-trace
+  surface.
 
 ## Human-Facing Discovery Surfaces
 

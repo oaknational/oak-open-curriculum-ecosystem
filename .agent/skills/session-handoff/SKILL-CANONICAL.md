@@ -48,6 +48,62 @@ asks for more, this workflow must not trigger:
 - commit or push
 - deep convergence by default
 
+## Session Shape Check
+
+Before running the steps below, classify the session shape. The default is
+**sole contributor**.
+
+You are in a team handoff only when the current work has an explicit team
+route: the owner asked for a team/coordinator, `start-right-team` established a
+closeout owner, active current-session comms named team responsibilities, or
+another live coordination surface explicitly assigns you a team closeout
+boundary. Historical comms, old claims, dirty files, or the mere existence of
+other agents in the repo do not make your session a team.
+
+### Sole Contributor
+
+If you are closing your own single-agent session, run the normal steps below
+directly. Do not ask for a team closeout owner, do not wait for peer syntheses,
+and do not downgrade your responsibility to a boundary note.
+
+### Team Closeout Owner
+
+If you are the controller, coordinator, or explicitly named closeout owner for
+a team session, run the full steps below exactly once for the team. Before
+editing canonical continuity surfaces, collect or reread:
+
+- team-member closeout syntheses;
+- recent shared comms and directed messages;
+- active claims and closed-claim residue;
+- active commit queue state;
+- git status and recent log;
+- the relevant active plan.
+
+Synthesis is your responsibility. Preserve useful nuance from participant
+notes, but do not paste every note into canonical continuity surfaces.
+
+### Team Member, Not Closeout Owner
+
+If you are a team member who is not the closeout owner, do **not** run the full
+handoff steps and do **not** update repo-wide continuity surfaces unless the
+team route explicitly delegated that boundary to you.
+
+Instead, leave a boundary-scoped closeout note for the closeout owner:
+
+```text
+Team member closeout:
+- Boundary owned:
+- Outcome:
+- Evidence:
+- Claims / queue / git state:
+- Surprise or changed understanding:
+- Blockers or risks:
+- Handoff needed:
+```
+
+Then clean up any claims, queue entries, or comms obligations you own. Stop
+there unless the owner or closeout owner gives a further assignment.
+
 ## Steps
 
 1. **Record the landed outcome (or unlanded case).** Report against

@@ -227,11 +227,27 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   (freshness metadata, ownership, threshold, stale-data behaviour, and
   attribution requirements for EEF and future external evidence corpora;
   Accepted 2026-05-10)
+- [ADR-176: Commit-Skill Advisory Orchestrator Naming](176-commit-skill-advisory-orchestrator-naming.md)
+  (commit-skill remains advisory, stages by explicit pathspec, and treats
+  commit queue / index facts as coordination signals; Accepted 2026-05-11)
+- [ADR-177: Asymmetric-Cure Enforcement for Staging](177-asymmetric-cure-enforcement-in-staging.md)
+  (`git commit -- <pathspec>` may cure unstaged noise outside the intended
+  bundle, but must not hide defects inside the staged boundary; Accepted
+  2026-05-11)
+- [ADR-178: Agent-Tools Build Isolation](178-agent-tools-build-isolation.md)
+  (`agent-tools` is consumed as built `dist/`, not via hidden source-on-each-
+  invocation runtime compilation; Accepted 2026-05-11)
 - [ADR-179: Transport-Agnostic Graph Substrate — Surfacing Is A Consumer-Side Concern](179-transport-agnostic-graph-substrate.md)
   (transport-discipline corollary of ADR-154 applied across the graph
   stack: substrate ships no MCP/HTTP/CLI/transport-shaped code;
   at-most-one-home per consumer surface; extracted from ADR-173 on
   2026-05-11; Accepted 2026-05-11)
+- [ADR-180: Codex-Exec Agent Delegation Pattern](180-codex-exec-agent-delegation-pattern.md)
+  (`codex exec` is the preferred scripted delegation surface; `read-only` is
+  the default sandbox; Accepted 2026-05-12)
+- [ADR-181: Agent Team Start Ritual and Action-Trace Surface](181-agent-team-start-and-action-log.md)
+  (`start-right-team`, emergent temporary responsibilities, team handoff
+  routing, and future action-trace event surface; Proposed)
 
 ## Key Architectural Decisions
 
@@ -279,6 +295,7 @@ For understanding the agentic engineering practice:
 - **[ADR-144](144-two-threshold-fitness-model.md)** - Three-zone fitness model: `healthy` / `soft` / `hard` / `critical` graduated scale with `CRITICAL_RATIO = 1.5`; `critical` is a loop-failure signal requiring a three-question post-mortem (§Loop Health)
 - **[ADR-146](146-assumptions-expert-meta-level-plan-assessment.md)** - Assumptions expert: independent proportionality and plan-assumption challenge with an inverted doctrine hierarchy
 - **[ADR-150](150-continuity-surfaces-session-handoff-and-surprise-pipeline.md)** - Continuity surfaces, lightweight session handoff, conditional deep consolidation, and the surprise pipeline
+- **[ADR-181](181-agent-team-start-and-action-log.md)** - Proposed team start ritual, emergent temporary responsibilities, and future action-trace surface
 - **[ADR-147](147-browser-accessibility-as-blocking-quality-gate.md)** - Browser accessibility as a 9th blocking quality gate: WCAG 2.2 AA, Playwright + axe-core, two-level MCP App testing
 - **[ADR-148](148-design-token-architecture.md)** - Design token architecture: DTCG JSON source, three-tier model, CSS custom properties output, `packages/design/` location
 - **[ADR-149](149-frontend-specialist-expert-gateway-cluster.md)** - Frontend specialist expert gateway cluster: accessibility-expert, design-system-expert, react-component-expert cohort with MCP boundary rule

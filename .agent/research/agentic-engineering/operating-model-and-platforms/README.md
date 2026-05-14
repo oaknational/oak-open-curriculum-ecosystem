@@ -26,6 +26,10 @@ research that explains why the portability model looks the way it does.
   Slice C umbrella that re-routes Slice A/B/D evidence by lane.
 - [practice-aligned-direction-and-gap-baseline.md](../../../analysis/practice-aligned-direction-and-gap-baseline.md) —
   analysis-grade comparison matrix derived from the four notes above.
+- [team-start-ritual-and-action-trace-2026-05-14.md](./team-start-ritual-and-action-trace-2026-05-14.md) —
+  focused research note on `start-right-team`, emergent temporary
+  responsibilities, team handoff routing, and a future action-trace event
+  surface.
 
 ## Feeds
 
