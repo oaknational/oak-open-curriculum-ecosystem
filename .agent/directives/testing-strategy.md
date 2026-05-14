@@ -394,6 +394,34 @@ Keep E2E assertions on system/transport invariants; prove runtime
 stub semantics in SDK unit/integration tests, not by asserting
 server output against the same stub path.
 
+## Acceptance Value-Proxies
+
+Acceptance value-proxies must compare against independent ground-truth
+measures. A value-proxy acceptance criterion ("the new CLI produces a
+value within ±N% of the prior baseline") is **tautological** if the
+new implementation and the baseline use the same method. Reproducing
+the baseline value does not validate correctness; it validates only
+internal consistency.
+
+Worked example: a token-count CLI defines acceptance as "the chars/4
+output agrees with the prior chars/4 baseline ±5%." The baseline is
+itself chars/4. The CLI cannot fail the acceptance check by
+construction — chars/4 reproducing chars/4 proves nothing.
+
+The cure is to compare against a **method-independent ground-truth
+measure**. For token-count, that is `wc -c` for total characters; the
+chars/4 conversion then becomes a mechanical step verified
+independently. For other domains, the ground-truth measure is the
+authoritative external observation (file size from `stat`, byte count
+from the filesystem, response time from a stopwatch, etc.) that the
+proxy is supposed to approximate.
+
+Acceptance criteria framed as "agrees with prior baseline ±N%" without
+naming an independent ground-truth measure are tautological and fail
+under normal churn (any drift looks like baseline error rather than
+proxy error). Reject the framing at plan-author time, not at WS
+execution.
+
 ## Test Configuration Gotchas
 
 - `tsconfig.json` `include` patterns `**/*.test.ts` and

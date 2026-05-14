@@ -241,6 +241,45 @@ before deletion is the discipline: post a shared-log note naming the
 claim and closure kind before writing the close. Recipe in
 [lifecycle][lifecycle] §Apparently Orphaned Claims.
 
+## PR Closeout Discipline
+
+A PR closeout has two **independent** evidence loops — both must
+report green before the PR is considered closed.
+
+### Gate State And Reviewer-Comment State Are Distinct
+
+Gate state (checks, Sonar, CI) and reviewer-comment state are
+independent. A green PR can still need a comment-harvest pass:
+top-level comments, review summaries, and threads marked
+`resolved`/`outdated` may carry live feedback outside the check
+surface. Fetch and classify reviewer comments before the next edit;
+do not infer comment state from check state.
+
+### PR Title And Body Are An Active Review Surface
+
+Branch scope drift makes stale PR metadata an actionable defect, not
+a wrapper. After every push that materially changes scope, rewrite
+the title and body against `origin/main...HEAD` before disposing of
+any metadata-shaped review comment as `fixed`. The PR description is
+the document reviewers read first; stale wording wastes their cycles.
+
+### Planning PRs Report Two Verdicts Separately
+
+For PRs whose primary substance is a plan or set of plans, the gate
+state ("PR technical readiness") and the plan substance state ("plan
+decision-completeness") are independent gates. A green PR must not
+collapse unresolved planning questions (topology findings, slice-plan
+findings, plan-internal contradictions) into implicit acceptance. Each
+verdict is reported separately in the closeout summary.
+
+### Remote Metadata Transitions Are Part Of State Handoff
+
+When a closeout moves from local/pending to pushed, refresh the live
+PR body and next-session records in the same handoff pass so the next
+session does not inherit stale blockers or stale "ready to land"
+wording. State handoff is a complete operation; partial refreshes are
+themselves the bug they appear to fix.
+
 ## Communication Channels
 
 Pick the channel that fits the shape of the coordination need. The
@@ -358,7 +397,12 @@ Core state: [log](../state/collaboration/shared-comms-log.md), [active claims][a
 and [escalations][escalations-dir]. Operational companions:
 [`collaboration-state-conventions.md`][state-conventions],
 [`agent-collaboration-channels.md`][channels-card], and
-[`threads/README.md`][threads-readme].
+[`threads/README.md`][threads-readme]. Reviewer-comment-state harvesting
+(§PR Closeout Discipline §Gate State And Reviewer-Comment State Are
+Distinct) composes with [PDR-015 reviewer authority and dispatch](../practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md):
+PR closeout names *when* reviewer-comment state must be harvested;
+PDR-015 names *whose* review authority applies on which abstraction
+layer.
 
 [p]: ../plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md
 [channels-card]: ../memory/executive/agent-collaboration-channels.md
