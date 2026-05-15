@@ -234,6 +234,13 @@ describe('extractUnitSlug', () => {
   it('returns undefined for non-object', () => {
     expect(extractUnitSlug(42)).toBeUndefined();
   });
+
+  it('returns undefined for a lesson resource without a top-level unitSlug', () => {
+    const lessonResource = {
+      units: [{ unitSlug: 'fractions', unitTitle: 'Fractions' }],
+    };
+    expect(extractUnitSlug(lessonResource)).toBeUndefined();
+  });
 });
 
 describe('extractSequenceSlug', () => {

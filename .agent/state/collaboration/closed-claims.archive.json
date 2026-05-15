@@ -26322,6 +26322,48 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "aa362136-3008-4624-9b32-782667f89613",
+      "agent_id": {
+        "agent_name": "Luminous Waxing Twilight",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "d7e9d6"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "workspace",
+          "patterns": [
+            "packages/sdks/oak-curriculum-sdk/**",
+            "apps/oak-search-cli/src/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-14T21:41:08Z",
+      "freshness_seconds": 28800,
+      "sidebar_open": false,
+      "intent": "Upstream Oak API multi-unit lesson adoption — WS0-WS6 per the-upstream-oak-open plan",
+      "archived_at": "2026-05-15",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-15T06:57:55Z",
+        "closed_by": {
+          "agent_name": "Luminous Waxing Twilight",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "d7e9d6"
+        },
+        "summary": "Upstream Oak API multi-unit lesson adoption WS0-WS6 landed; pnpm check red on pre-existing knip findings (out-of-scope)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "aa362136-3008-4624-9b32-782667f89613",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

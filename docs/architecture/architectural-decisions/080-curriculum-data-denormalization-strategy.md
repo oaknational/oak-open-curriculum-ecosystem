@@ -47,7 +47,7 @@ Teachers need to filter search results by:
 - **Exam Subject**: Biology, Chemistry, Physics (for combined science)
 - **KS4 Option**: Combined Science, Triple Science, etc.
 
-The API exposes this data via **top-down traversal** (sequence → year → tier/examSubject → units → lessons), not as flat fields on lesson/unit resources. This design reflects the underlying **many-to-many relationships**:
+The API exposes this data via **top-down traversal** (sequence → year → tier/examSubject → units → lessons) for KS4 filterable metadata such as tier and exam board. The **lesson resource itself** also exposes its membership across multiple units structurally via the `units[]` array on `LessonSummaryResponseSchema`, where each entry carries `unitSlug`, `unitTitle`, and optional `programmeFactors` (`examBoard`, `pathway`, `tier`, `childSubject`). Both surfaces reflect the same underlying **many-to-many relationships**:
 
 | Relationship           | Cardinality  | Example                                                       |
 | ---------------------- | ------------ | ------------------------------------------------------------- |
@@ -625,6 +625,8 @@ Sequence traversal adds API calls. With 10,000 req/hr rate limit:
 2. We can deliver value now with denormalisation
 3. When upstream adds flat fields, we simplify—but the index schema stays the same
 
+**Update**: the upstream API has surfaced the many-to-many lesson↔unit relationship structurally on the lesson resource (the `units[]` array with `programmeFactors`). The anticipated future named above has happened, and the denormalisation strategy still holds: the SDK consumer surface adopts the structured `units[]` shape, while the ES index continues to denormalise into parallel `tiers[]` / `exam_boards[]` / `unit_slugs[]` arrays for query performance. Consumer-side reshaping to a flat scalar is prohibited (see ADR-029).
+
 ## Consequences
 
 ### Positive
@@ -666,6 +668,10 @@ With arrays, `tier: "foundation"` matches lessons that **include** Foundation ti
 - A Foundation+Higher lesson: matches ✓ (may or may not be desired)
 
 For **exclusive** filtering ("Foundation only, not Higher"), query must explicitly exclude.
+
+### ES Shape vs API Shape Are Independent
+
+The ES index keeps the parallel-array denormalisation (`tiers[]`, `exam_boards[]`, `unit_slugs[]`, `unit_titles[]`) for query performance. The SDK consumer surface exposes the structured `units[]` array with embedded `programmeFactors` directly from the lesson resource. The two shapes serve different consumers and evolve independently — a future change to embed structured unit-variant tuples in the ES doc (for programme-variant faceting) remains an open option but is not implied by the SDK surface change.
 
 ## Appendix: Complete Subject Analysis (2025-12-28)
 

@@ -67,6 +67,16 @@ All API-related information must be imported from the SDK, which is automaticall
    }
    ```
 
+5. **No consumer-side reshaping of generated response shapes**
+
+   Type assumptions must flow from the generated schema (e.g.
+   `LessonSummaryResponseSchema`), not from a downstream simplification.
+   Flattening the many-to-many `lesson.units[]` array to a scalar
+   `unitSlug` is prohibited — the lesson resource exposes its unit
+   membership structurally (see ADR-080 §"Context"), and consumers must
+   adopt the structured shape rather than re-introduce the flat scalar
+   the API previously surfaced.
+
 ### What is Allowed ✅
 
 1. **Decorative metadata only**

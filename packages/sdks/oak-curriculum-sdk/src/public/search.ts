@@ -33,3 +33,5 @@ export {
   type SubjectAssets,
   isSubjectAssets,
 } from '../types/search-response-guards.js';
+
+export { extractLessonUnits, formatPrimaryUnit } from '../lesson-resource-helpers.js';

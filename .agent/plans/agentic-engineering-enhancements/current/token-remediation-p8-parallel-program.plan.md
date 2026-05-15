@@ -30,12 +30,11 @@ isProject: true
 
 # Token / Remediation / P8 / Parallel Program 2026-05-14
 
-**Last Updated**: 2026-05-14
-**Status**: SEQUENCE-LIVE — Step 1 closed at WS2 boundary (WS2 of token
-plan landed at `72d31ca8`). **Interrupt scheduled**: upstream Oak API
-schema adoption (programme-variant filters + multi-unit lesson shape)
-runs next session as a one-session interrupt; Step 2 (singleton-lane
-remediation) opens the session after.
+**Last Updated**: 2026-05-15
+**Status**: SEQUENCE-LIVE — Step 1 closed at WS2 boundary. **Interrupt
+resolved**: upstream Oak API schema adoption (multi-unit lesson shape
+plus programme-variant + image filters) landed in this session; Step 2
+(singleton-lane remediation) opens next session.
 **Collection**: `agentic-engineering-enhancements/current` (program
 spans two threads — see §Threads Touched).
 **Threads Touched**:
@@ -51,39 +50,39 @@ spans two threads — see §Threads Touched).
 (updated by every session that touches the program)
 
 - **Current step**: Step 1 — finish token-related work — **CLOSED at WS2
-  boundary**. Step 2 — singleton-lane remediation — was originally scheduled
-  for the next session, but an upstream schema interrupt (see Interrupt
-  Log entry 2026-05-14 #2) takes the next session; Step 2 now opens the
-  session after the interrupt resolves.
-- **This session advanced Step 1**: WS2 (`ws2-token-frontmatter`)
-  acceptance proven at commit `72d31ca8`. Token-zone classification,
-  `overallZone` folding, target-only configuration-finding semantics,
-  and the ADR-144 in-place amendment all landed in one atomic bundle
-  with three reviewer APPROVEs (test-expert, code-expert,
-  docs-adr-expert). Step 1 is now closed at the program's inclusive
-  boundary; WS3+ of the controlling token plan (convention docs,
-  manifest detection, frontmatter sweep) deferred per program scope.
+  boundary**. Step 2 — singleton-lane remediation — is now the next
+  scheduled session; the upstream API interrupt that took the slot before
+  it has been resolved (see Interrupt Log entry 2026-05-14 #2).
+- **This session advanced the interrupt**: upstream Oak API multi-unit
+  lesson adoption landed across the curriculum SDK and search-CLI
+  consumer surfaces. New helpers `extractLessonUnits` and
+  `formatPrimaryUnit` introduced; consumer code migrated from flat
+  `unitSlug` to structured `units[]`; MCP aggregated-fetch tool carries
+  the new shape through to AI agents; MCP search tool filter
+  descriptions clarified; generated MCP tools auto-expose KS4
+  programme-variant filters (`examBoard`, `pathway`, `tier`,
+  `childSubject`) and the `filter=images` parameter on the three
+  question endpoints via codegen. ADR-080 §"Context", §"Rationale", and
+  §"Limitations" amended; ADR-029 §"What is Prohibited" gained the
+  consumer-side reshaping sub-bullet; ADR-093 §line-96 disambiguates
+  bulk-row vs API-resource `lesson.unitSlug`. Bulk data shape was held
+  out of scope and routed to a follow-on plan
+  (`bulk-data-rebaseline-and-infra-impact-investigation.plan.md`).
 - **Next safe step**: open the next session against the
   `agentic-engineering-enhancements` thread, ground via
-  `jc-start-right-quick`, and **address the upstream Oak API schema
-  interrupt** (programme-variant filters + multi-unit lesson shape). The
-  codegen output sits in the working tree at session close (13 files in
-  `packages/sdks/oak-sdk-codegen/`); the curriculum-sdk and search-cli
-  downstream consumers fail `pnpm check` against it. The interrupt
-  session decides shape (forward-fix downstream to the new array shape
-  OR scoped revert with separately routed adoption lane) and lands a
-  green-gate state. After interrupt closes, the session after opens
-  Step 2 — the singleton-lane remediation plan at
+  `jc-start-right-quick`, and open Step 2 — the singleton-lane
+  remediation plan at
   [`start-right-team-singleton-lane-remediation.plan.md`](../../agent-tooling/current/start-right-team-singleton-lane-remediation.plan.md).
   That plan is **not decision-complete**; first safe sub-step is
   owner/reviewer review then WS0 baseline disposition.
-- **Last sequence-touching commits**: `72d31ca8` (WS2 token frontmatter
-  zone classification — closes Step 1). Prior orthogonal work:
-  `c6008dee` (graduation-triage Batches A/B/C); `4ee88df3` (metacog
-  correction); `22d1980d` / `54425b6d` / `7821636b` / `0b585435`
-  (D1–D5 plus PDR-060); `2714d909` (session handoff).
-- **Step age** (sessions since last advance): 0 — Step 1 just closed,
-  Step 2 not yet opened.
+- **Bulk data follow-on**: a separately scheduled investigation plan
+  re-downloads upstream bulk data and observes whether bulk-typed
+  consumers or search infrastructure break under the new shape. Not a
+  fix plan; if breakage emerges, each fix is separately scoped. The
+  plan lives at
+  `connecting-oak-resources/current/bulk-data-rebaseline-and-infra-impact-investigation.plan.md`.
+- **Step age** (sessions since last advance): 0 — interrupt just
+  resolved, Step 2 not yet opened.
 
 ## Why This Artefact Exists
 
@@ -261,7 +260,7 @@ program).
 | Date | Interrupt | Owning agent | Budget | Status | Resume note |
 |---|---|---|---|---|---|
 | 2026-05-14 | Graduation-triage execution + metacog correction + PDR-060 landing | Riverine Swimming Hull | 1 session | resolved this session | program authoring is the resume note |
-| 2026-05-14 | Upstream Oak API schema adoption (programme-variant filters + multi-unit lesson shape; codegen drift broke curriculum-sdk + search-cli `pnpm check`) | Highland Circling Plume surfaced; next session owns | 1 session | scheduled — runs next session | After interrupt session lands green gates, session-after-next opens Step 2 (singleton-lane remediation) per the original program sequence. Session-handoff for WS2 committed `--no-verify` once with fresh owner authorisation to preserve session-close boundary while the interrupt is properly scoped. |
+| 2026-05-14 | Upstream Oak API schema adoption (programme-variant filters + multi-unit lesson shape; codegen drift broke curriculum-sdk + search-cli `pnpm check`) | Highland Circling Plume surfaced; Luminous Waxing Twilight executed | 1 session | resolved 2026-05-15 | Multi-unit lesson adoption landed across SDK helpers (`extractLessonUnits`, `formatPrimaryUnit`), consumer code migration, MCP aggregated-fetch dual-emission test, MCP search-tool description clarification, three ADR amendments (080, 029, 093). Bulk data shape routed to follow-on plan `bulk-data-rebaseline-and-infra-impact-investigation`. `pnpm check` remains red on pre-existing `knip` unused-export findings in `agent-tools/src/` (unrelated to upstream adoption); separately scoped. Next-session opens Step 2. |
 
 ## Anti-Decay Handoff Clause
 

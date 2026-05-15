@@ -151,7 +151,12 @@ export function extractLessonSlug(response: unknown): string | undefined {
 }
 
 /**
- * Extracts unit slug from response
+ * Extracts the top-level `unitSlug` from a unit-resource response.
+ *
+ * For unit resources, `unitSlug` is a top-level scalar. For lesson
+ * resources, use `extractLessonUnits` / `formatPrimaryUnit` from
+ * `lesson-resource-helpers.ts` — lessons expose units structurally via
+ * `units` (lesson↔unit many-to-many per ADR-080 §"Context").
  */
 export function extractUnitSlug(response: unknown): string | undefined {
   if (!isNonNullObject(response)) {

@@ -86,8 +86,7 @@ function buildUnitSummary(overrides: Partial<UnitSummaryFixture> = {}): UnitSumm
 function buildLessonSummary(overrides: Partial<LessonSummaryFixture> = {}): LessonSummaryFixture {
   const base: LessonSummaryFixture = {
     lessonTitle: 'Lesson Title',
-    unitSlug: 'unit-slug',
-    unitTitle: 'Unit Title',
+    units: [{ unitSlug: 'unit-slug', unitTitle: 'Unit Title' }],
     subjectSlug: mathsSubject,
     subjectTitle: 'Mathematics',
     keyStageSlug: ks4,

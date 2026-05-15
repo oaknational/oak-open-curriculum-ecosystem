@@ -121,14 +121,19 @@ export function extractLessonPlanningFields(summary: LessonDocumentSummaryInput)
 }
 
 /**
- * Extracts all fields from lesson summary for document creation.
+ * Extracts fields from a lesson summary for ES document creation.
  *
- * @param summary - Lesson summary (typed SDK data)
- * @returns Extracted fields for lesson document
+ * Unit membership is carried on the lesson document via the multi-unit
+ * `units[]` array passed separately into the document builder (see
+ * `CreateLessonDocumentParams.units` in `document-transforms.ts`), so this
+ * helper does not project a single `unitSlug` / `unitTitle` — the lesson
+ * resource is many-to-many with units per ADR-080 §"Context".
+ *
+ * @param summary - Lesson summary (typed SDK data, `SearchLessonSummary`).
+ * @returns Extracted fields for the lesson document, excluding unit
+ *   membership (passed in via `CreateLessonDocumentParams.units`).
  */
 export function extractLessonDocumentFields(summary: LessonDocumentSummaryInput): {
-  unitSlug: string;
-  unitTitle: string;
   oakUrl: string;
   lessonKeywords?: string[];
   keyLearningPoints?: string[];
@@ -142,15 +147,13 @@ export function extractLessonDocumentFields(summary: LessonDocumentSummaryInput)
   downloadsAvailable?: boolean;
 } {
   if (!summary.oakUrl) {
-    throw new Error(`Missing oak URL for lesson in unit ${summary.unitSlug}`);
+    throw new Error(`Missing oak URL for lesson "${summary.lessonTitle}"`);
   }
 
   const { lessonKeywords, keyLearningPoints, misconceptions, teacherTips, contentGuidance } =
     extractLessonPlanningFields(summary);
 
   return {
-    unitSlug: summary.unitSlug,
-    unitTitle: summary.unitTitle,
     oakUrl: summary.oakUrl,
     lessonKeywords,
     keyLearningPoints,

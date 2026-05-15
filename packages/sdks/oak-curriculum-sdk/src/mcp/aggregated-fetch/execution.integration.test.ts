@@ -45,6 +45,51 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
       expect(result.structuredContent).toHaveProperty('status', 'success');
     });
 
+    it('carries the lesson resource units[] through to MCP clients (multi-unit lesson shape)', async () => {
+      const multiUnitLesson = {
+        lessonTitle: 'Photosynthesis Foundations',
+        units: [
+          {
+            unitSlug: 'cells',
+            unitTitle: 'Cells',
+            programmeFactors: {
+              childSubject: { slug: 'biology', title: 'Biology' },
+              tier: { slug: 'foundation', title: 'Foundation' },
+            },
+          },
+          {
+            unitSlug: 'cells',
+            unitTitle: 'Cells',
+            programmeFactors: {
+              childSubject: { slug: 'combined-science', title: 'Combined science' },
+              tier: { slug: 'foundation', title: 'Foundation' },
+            },
+          },
+        ],
+      };
+      const deps = createMockExecutor(ok({ status: 200, data: multiUnitLesson }));
+
+      const result = await runFetchTool({ id: 'lesson:photosynthesis-foundations' }, deps);
+
+      expect(result.structuredContent).toBeDefined();
+      expect(result.structuredContent).toMatchObject({
+        data: {
+          units: [
+            {
+              unitSlug: 'cells',
+              programmeFactors: { childSubject: { slug: 'biology', title: 'Biology' } },
+            },
+            {
+              unitSlug: 'cells',
+              programmeFactors: {
+                childSubject: { slug: 'combined-science', title: 'Combined science' },
+              },
+            },
+          ],
+        },
+      });
+    });
+
     it('includes FULL data for model reasoning', async () => {
       const lessonData = {
         lessonTitle: 'Photosynthesis Basics',

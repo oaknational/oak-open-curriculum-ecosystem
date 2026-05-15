@@ -96,6 +96,11 @@ Neither bulk download nor API provides `yearSlug` directly on lessons. Derivatio
 lesson.unitSlug → sequence.units[].unitSlug → unit.yearSlug
 ```
 
+Note: `lesson.unitSlug` here refers to a bulk-download row, which is
+variant-flattened (one row per lesson-unit variant). The API lesson
+resource exposes its unit membership structurally via `lesson.units[]`
+with embedded `programmeFactors` — see ADR-080 §"Context".
+
 ## Rationale
 
 ### Why Bulk-First?

@@ -149,8 +149,7 @@ describe('createResponseAugmentationMiddleware', () => {
         canonicalUrl:
           'https://www.thenational.academy/teachers/programmes/maths/units/place-value/lessons/add-two-numbers',
         oakUrl: 'https://www.thenational.academy/teachers/lessons/add-two-numbers',
-        unitSlug: 'place-value',
-        unitTitle: 'Place Value',
+        units: [{ unitSlug: 'place-value', unitTitle: 'Place Value' }],
         subjectSlug: 'maths',
         subjectTitle: 'Maths',
         keyStageSlug: 'ks1',
