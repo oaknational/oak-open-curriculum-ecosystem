@@ -1,9 +1,4 @@
-import {
-  compareDirectedMessages,
-  drainDirectedInbox,
-  formatDirectedMessage,
-  messageMatchesRecipient,
-} from './comms-use-cases.js';
+import { drainDirectedInbox } from './comms-use-cases.js';
 import { required, type Options } from './cli-options.js';
 import { cliIo, type CliRuntime } from './cli-runtime.js';
 import { type CollaborationStateEnvironment } from './types.js';
@@ -28,5 +23,3 @@ export async function inboxComms(
 
   return drained.output;
 }
-
-export { compareDirectedMessages, formatDirectedMessage, messageMatchesRecipient };

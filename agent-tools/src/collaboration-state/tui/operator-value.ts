@@ -10,14 +10,14 @@ export interface TuiOperatorValueSummary {
   readonly needs_attention: readonly TuiNeedsAttentionEntry[];
 }
 
-export interface TuiRecentChangeEntry {
+interface TuiRecentChangeEntry {
   readonly id: string;
   readonly created_at: string;
   readonly kind: 'narrative' | `lifecycle:${string}` | `directed:${string}`;
   readonly summary: string;
 }
 
-export interface TuiOwnershipSummary {
+interface TuiOwnershipSummary {
   readonly active: number;
   readonly stale: number;
   readonly inactive: number;
@@ -25,19 +25,19 @@ export interface TuiOwnershipSummary {
   readonly collisions: number;
 }
 
-export interface TuiQueuePressureSummary {
+interface TuiQueuePressureSummary {
   readonly active: number;
   readonly expired: number;
   readonly total: number;
   readonly status: 'clear' | 'active' | 'attention';
 }
 
-export interface TuiDirectedThreadPressureSummary {
+interface TuiDirectedThreadPressureSummary {
   readonly total: number;
   readonly needs_attention: number;
 }
 
-export interface TuiNeedsAttentionEntry {
+interface TuiNeedsAttentionEntry {
   readonly severity: 'high' | 'medium';
   readonly summary: string;
 }

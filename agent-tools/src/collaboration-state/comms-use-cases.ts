@@ -142,7 +142,7 @@ export async function watchDirectedInbox(input: {
   return output;
 }
 
-export function messageMatchesRecipient(
+function messageMatchesRecipient(
   message: DirectedCommsMessage,
   agentName: string,
   sessionPrefix?: string,
@@ -153,10 +153,7 @@ export function messageMatchesRecipient(
   return nameMatches && sessionMatches;
 }
 
-export function compareDirectedMessages(
-  left: DirectedCommsMessage,
-  right: DirectedCommsMessage,
-): number {
+function compareDirectedMessages(left: DirectedCommsMessage, right: DirectedCommsMessage): number {
   const byTime = Date.parse(left.created_at) - Date.parse(right.created_at);
   if (byTime !== 0) {
     return byTime;
@@ -165,7 +162,7 @@ export function compareDirectedMessages(
   return left.event_id.localeCompare(right.event_id);
 }
 
-export function formatDirectedMessage(message: DirectedCommsMessage): string {
+function formatDirectedMessage(message: DirectedCommsMessage): string {
   return [
     '--- NEW DIRECTED MESSAGE ---',
     `from: ${message.from.agent_name} / ${message.from.platform} / ${message.from.session_id_prefix}`,

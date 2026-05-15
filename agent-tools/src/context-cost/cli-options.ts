@@ -1,4 +1,4 @@
-export interface ContextCostOptions {
+interface ContextCostOptions {
   readonly globs: readonly string[];
   readonly json: boolean;
   readonly help: boolean;
