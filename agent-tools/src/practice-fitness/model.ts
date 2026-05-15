@@ -27,7 +27,7 @@ export type FitnessZone = 'healthy' | 'soft' | 'hard' | 'critical';
 
 export type FitnessCeilingZone = Exclude<FitnessZone, 'soft'>;
 
-export type FitnessMetric = 'lines' | 'chars' | 'prose' | 'tokens';
+type FitnessMetric = 'lines' | 'chars' | 'prose' | 'tokens';
 
 export interface ZoneMessage {
   readonly zone: Exclude<FitnessZone, 'healthy'>;

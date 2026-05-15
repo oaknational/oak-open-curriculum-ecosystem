@@ -7,14 +7,14 @@ const EXCLUDED_DIRECTORY_NAMES = new Set(['.git', 'coverage', 'dist', 'node_modu
 const EXCLUDED_PATH_PREFIXES = ['.agent/practice-core-backup-', '.agent/practice-core/incoming/'];
 const EXCLUDED_PATH_SEGMENTS = ['/archive/'];
 
-export function normalizeRelativePath(relPath: string): string {
+function normalizeRelativePath(relPath: string): string {
   return relPath.split(path.sep).join('/');
 }
 
 /**
  * Decide whether a directory should be skipped during repo-wide discovery.
  */
-export function shouldSkipDirectory(relPath: string): boolean {
+function shouldSkipDirectory(relPath: string): boolean {
   const normalizedPath = normalizeRelativePath(relPath);
   const pathParts = normalizedPath.split('/');
   const directoryName = pathParts[pathParts.length - 1];
@@ -50,7 +50,7 @@ export function shouldInspectFitnessPath(relPath: string): boolean {
 /**
  * Recursively discover candidate markdown files in the repo.
  */
-export async function discoverMarkdownFiles(repoRoot: string, relDir = '.'): Promise<string[]> {
+async function discoverMarkdownFiles(repoRoot: string, relDir = '.'): Promise<string[]> {
   const absDir = path.join(repoRoot, relDir);
   const dirEntries = await fs.readdir(absDir, { withFileTypes: true });
   const sortedEntries = dirEntries.toSorted((left, right) => left.name.localeCompare(right.name));

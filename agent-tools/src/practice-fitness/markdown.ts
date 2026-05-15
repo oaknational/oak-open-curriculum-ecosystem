@@ -1,4 +1,4 @@
-export type FitnessLineKind =
+type FitnessLineKind =
   | 'frontmatter'
   | 'code-fence'
   | 'code-block'

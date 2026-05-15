@@ -18,7 +18,7 @@ import {
 } from './format.js';
 import { discoverFitnessFiles } from './paths.js';
 
-export interface PracticeFitnessIo {
+interface PracticeFitnessIo {
   readonly log: (message?: string) => void;
 }
 

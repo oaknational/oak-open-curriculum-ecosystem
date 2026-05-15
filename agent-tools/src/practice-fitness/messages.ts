@@ -55,7 +55,7 @@ export function buildAllZoneMessages(
   ];
 }
 
-export function buildLineZoneMessages(
+function buildLineZoneMessages(
   zone: FitnessZone | null,
   totalLines: number,
   targetLines: number | null,
@@ -93,7 +93,7 @@ export function buildLineZoneMessages(
   return [];
 }
 
-export function buildCharZoneMessages(
+function buildCharZoneMessages(
   zone: FitnessCeilingZone | null,
   totalChars: number,
   limitChars: number | null,
@@ -120,7 +120,7 @@ export function buildCharZoneMessages(
   return [];
 }
 
-export function buildTokenZoneMessages(
+function buildTokenZoneMessages(
   zone: FitnessZone | null,
   estimatedTokens: number,
   targetTokens: number | null,
@@ -158,7 +158,7 @@ export function buildTokenZoneMessages(
   return [];
 }
 
-export function buildProseZoneMessages(
+function buildProseZoneMessages(
   zone: FitnessCeilingZone | null,
   violationCount: number,
   maxProseLen: number,

@@ -16,25 +16,6 @@ import {
 } from './markdown.js';
 import { buildAllZoneMessages } from './messages.js';
 
-export {
-  classifyFitnessCeilingZone,
-  classifyFitnessZone,
-  estimateTokensFromContentChars,
-  FITNESS_MODE_INFORMATIONAL,
-  FITNESS_MODE_STRICT,
-  FITNESS_MODE_STRICT_HARD,
-  getExitCode,
-  worstZone,
-} from './model.js';
-export type { FitnessMetric, FitnessMode, FitnessZone, ZoneMessage } from './model.js';
-export {
-  classifyLines,
-  extractFitnessContentText,
-  extractFrontmatter,
-  getFrontmatterNumber,
-} from './markdown.js';
-export type { ClassifiedLine } from './markdown.js';
-
 export interface FitnessResult {
   readonly filename: string;
   readonly contentText: string;
