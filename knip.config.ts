@@ -50,8 +50,10 @@ const config: KnipConfig = {
       // entry points: the built JS is invoked via spawn from the platform's
       // own thin shim (e.g. `.claude/scripts/statusline-identity.mjs`), which
       // knip cannot trace as a TS import.
-      entry: ['src/bin/**/*.ts', 'src/claude/**/*.ts', 'src/cursor/**/*.ts'],
-      project: ['src/**/*.{ts,tsx}'],
+      // scripts/**/*.ts are tsx-invoked entry points from package.json scripts
+      // (validate-practice-fitness, validate-subagents, repo-check, etc.).
+      entry: ['src/bin/**/*.ts', 'src/claude/**/*.ts', 'src/cursor/**/*.ts', 'scripts/**/*.ts'],
+      project: ['src/**/*.{ts,tsx}', 'scripts/**/*.ts'],
     },
     'apps/oak-curriculum-mcp-streamable-http': {
       entry: [
