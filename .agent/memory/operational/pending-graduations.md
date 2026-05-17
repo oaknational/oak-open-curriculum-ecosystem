@@ -185,6 +185,31 @@ consumer rate, never the buffer's envelope. Four candidate bottlenecks
 named in source. Trigger to watch: owner-direction at next
 consolidation, ideally paired with surface-classification PDR.
 
+### 2026-05-17 — Metacognition has two modes (retrospective + generative) (PDR-shaped)
+
+`[captured: 2026-05-17 | source: distilled.md §"Metacognition has two modes — retrospective and generative" | target: pdr:metacognition-two-modes | trigger: second-instance-or-owner-direction | size: S | status: pending]`
+
+Substance summary: metacognition has retrospective (cure
+doctrine-by-analogy on correction signal) and generative (cure
+purpose-by-default on non-trivial brief / strategic fork / recurring
+systems vocabulary) modes; both share pre-action action-to-impact
+ratification reflex; success test is "produces correct moves next
+time without same intervention." Routing: directive already names
+both modes implicitly; PDR could ratify the model explicitly.
+
+### 2026-05-17 — Platform-specific per-user memory is a buffer with drainage contract (PDR-shaped)
+
+`[captured: 2026-05-17 | source: distilled.md §"Platform-specific per-user memory is a buffer, not a personal store" | target: pdr:per-user-memory-is-a-buffer | trigger: owner-direction | size: S | status: pending]`
+
+Substance summary: Claude/Cursor/Codex per-user memory surfaces are
+platform-specific buffers that drain into in-repo canonical surfaces
+(napkin / distilled / rules / PDRs) per session-handoff step 6 +
+consolidate-docs step 3. Cross-cutting substance written there must
+be integrated; declaring the sweep done without performing it is the
+failure mode. Routing: workflows already name this; PDR would ratify
+the buffer-with-drainage-contract framing and make the recurrence
+detectable.
+
 ### 2026-05-17 — Doctrine-first vs first-principles diversity in agent-owner pairs (PDR-shaped)
 
 `[captured: 2026-05-17 | source: distilled.md §"Doctrine-first vs first-principles is cognitive-approach diversity" | target: pdr:cognitive-approach-diversity-in-agent-owner-pairs | trigger: second-instance-or-owner-direction | size: M | status: pending]`

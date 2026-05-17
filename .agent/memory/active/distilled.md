@@ -187,6 +187,82 @@ response, and routes recurring signals to upstream-cause diagnosis
 rather than menu-application. Routing: PDR candidate in pending-
 graduations register.
 
+### Metacognition has two modes — retrospective and generative
+
+The metacognition directive and skill body name both modes; my prior
+application collapsed them into one. Both modes share one structural
+move — **pre-action ratification of the action-to-impact bridge** —
+but their triggers and cure targets differ:
+
+- **Retrospective metacognition** fires on a correction signal. Cure
+  target: doctrine-by-analogy. A rule was reached for that didn't
+  fit; step back, re-examine, update reflexes so the next equivalent
+  decision goes differently.
+- **Generative metacognition** fires when the purpose under an action
+  is non-obvious or load-bearing. Cure target: purpose-by-default.
+  The surface ask has an obvious interpretation, but the deeper
+  impact the user actually needs may be wider, sharper, or
+  differently shaped. Triggers: non-trivial brief whose impact space
+  is wider than the obvious one; strategic fork where the right move
+  depends on what is really being built; open-ended ask where direct
+  execution would foreclose the real question; concept that recurs in
+  unexpected places (often systems-level vocabulary surfacing inside
+  a surface-level task).
+
+When uncertain, generative is the safer default for non-trivial work:
+it costs a brief first-principles pause and protects against the
+doctrine-by-analogy failure mode pre-emptively. The success test for
+either mode is the same: **does the model produce correct moves next
+time without needing the same intervention?** Owner-stated 2026-05-17
+*"that is exactly right"* on the model-not-edits framing; then
+broadened with *"metacognition is not just about learning from
+mistakes, it can also be about intellectual deep dives to uncover the
+real impact or purpose that we are trying to achieve... it's not
+always retrospective."* The broadening exposed that the same session
+I was processing as recovery had actually been generative throughout.
+Routing: PDR candidate in pending-graduations register;
+[`.agent/directives/metacognition.md`](../../directives/metacognition.md)
+already names both modes implicitly via *"consider the impact you
+have been asked to bring about"* (forward-looking) and
+*"pre-action or boundary reflection"* (both modes).
+
+### Platform-specific per-user memory is a buffer, not a personal store
+
+Vendor-managed per-user memory surfaces — Claude Code
+`~/.claude/projects/<project>/memory/`, Cursor `~/.cursor/chats/`
+plus `prompt_history.json`, Codex `~/.codex/memories/` —
+are **platform-specific buffers** that drain into the in-repo
+canonical surfaces (`napkin.md`, `distilled.md`, rules, PDRs) where
+all agents can see the substance. Substance written there with
+cross-platform value MUST be integrated into in-repo surfaces during
+`session-handoff` step 6 (mirror at session close) or `consolidate-
+docs` step 3 (cross-platform ingestion at thread-scoped depth). The
+workflows make this clear; the failure mode is treating the per-user
+surface as a *personal accumulator* rather than as a *buffer with a
+drainage contract*.
+
+Worked instance 2026-05-17 (Swift Winging Gust): I authored two
+feedback memories at Claude per-user level during the session
+(`pending-graduations-is-buffer-not-dump` carrying the buffer-vs-
+memory diagnostic; `metacognition-impact-test` carrying the two-mode
+model) and declared `consolidate-docs` step 3 done without ever
+sweeping that surface for cross-cutting substance. Owner correction:
+*"part of the function of the session handoff and the document
+consolidation flows is to sweep vendor specific memories and
+integrate them into our learning loop, so that all agents working on
+the repo can benefit from the understanding."* Recurrence pattern:
+the **same** buffer-as-dump failure mode I diagnosed for
+`pending-graduations.md` earlier in the session, applied to a
+different buffer surface — strong evidence the failure mode is a
+general anti-pattern, not specific to one file. Falsifiability: at
+the next session close, the agent's `session-handoff` step 6 sweep
+of own-platform per-user memory should produce either a positive
+finding (substance mirrored to napkin/distilled with a named in-
+repo destination) or a justified empty result; declaring the sweep
+done without performing it is the recurrence the rule blocks.
+Routing: this entry is itself the integration; PDR-shaped
+"per-user-memory-is-a-buffer" candidate added to pending-graduations.
+
 ---
 
 ## Recently Distilled — 2026-05-17 Solar Orbiting Asteroid gate-green cascade
