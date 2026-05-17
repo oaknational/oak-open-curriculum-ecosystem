@@ -164,6 +164,77 @@ list; entry-level summary index is intentionally omitted to avoid
 duplicating entry-body substance and to keep the index honest as
 the queue churns.
 
+### 2026-05-17 — Gates hide gates — failure surface is a stack
+
+`[captured: 2026-05-17 | source: distilled.md §"Recently Distilled — 2026-05-17 Solar Orbiting Asteroid gate-green cascade" §"Gates hide gates" | target: pattern:gates-hide-gates | trigger: second-instance | size: S | status: pending]`
+
+Substance: `pnpm check`'s serial chain (each gate's `&&` means
+downstream gates do not run while an upstream gate is red) shields
+each failed gate from the next. The shielding holds at test-level
+too. **Diagnostic discipline**: when a gate clears, expect the next
+downstream gate to surface a previously hidden problem. Treat each
+green gate as a magnifying glass aimed at the next. Worked instance
+2026-05-17 (Solar Orbiting Asteroid): knip clearing surfaced a
+parallel-load MCP e2e flake; the e2e deletions surfaced a missing
+Playwright binary; installing the binary surfaced two pre-existing
+circular type imports in depcruise that had been latent for weeks.
+Falsifiability: a `pnpm check --continue` mode would reveal the
+full latent stack at once. Second-instance trigger: any future
+consolidation observing the same cascade-on-clear shape graduates
+this to a pattern in `.agent/memory/active/patterns/`.
+
+### 2026-05-17 — Supertest classification conflict (doc-amend)
+
+`[captured: 2026-05-17 | source: distilled.md §"Recently Distilled — 2026-05-17 Solar Orbiting Asteroid gate-green cascade" §"Supertest tests are integration by classification, not e2e" | target: doc-amend:testing-patterns | trigger: owner-direction | size: S | status: pending]`
+
+Substance: `testing-strategy.md` §Test Types (authoritative) defines
+classification by behaviour shape: *"A test that imports product
+code into the test process is an integration test even if named
+`.e2e.test.ts`."* `docs/engineering/testing-patterns.md` currently
+classifies supertest as E2E in §"Test File Classification". Direct
+doctrinal conflict with the authoritative directive. Worked instance
+2026-05-17: two MCP supertest files filed under `e2e-tests/` were
+identified as integration tests by classification and deleted as
+duplicates of existing unit/integration coverage (commit `96fd3e61`).
+Routing: amend `testing-patterns.md` to align with the strategy
+doc, or amend `testing-strategy.md` if the patterns doc's
+classification is the corrected position. Owner decides direction
+at next consolidation.
+
+### 2026-05-17 — `pnpm check` cleanliness gate in session-handoff (skill-amend)
+
+`[captured: 2026-05-17 | source: distilled.md §"Recently Distilled — 2026-05-17 Solar Orbiting Asteroid gate-green cascade" §"pnpm check cleanliness gate belongs in session-handoff" | target: skill-amend:session-handoff | trigger: owner-direction-already-fired-2026-05-14 | size: S | status: due]`
+
+Substance: owner stated standing 2026-05-14 (recorded in archived
+napkin `napkin-2026-05-14.md`): session-handoff cannot be considered
+complete in the individual-contributor or handoff-owner sense unless
+`pnpm check` completes with no errors or warnings. The 2026-05-15
+session committed `da2a4aac` with `pnpm check` red on pre-existing
+knip findings, framing them as "out-of-scope" — owner-corrected as
+foundational-rule violation per the all-quality-gates-blocking
+standing rule. Structural cure: the session-handoff skill should
+include a `pnpm check` cleanliness step that the agent walks before
+declaring handoff complete (paired with the existing all-quality-
+gates-blocking standing rule). Owner-direction trigger has fired;
+this entry is `status: due` for the next session-handoff skill edit.
+
+### 2026-05-17 — Hook-bypass equivalence in `--no-verify` rule (rule-amend)
+
+`[captured: 2026-05-17 | source: distilled.md §"Recently Distilled — 2026-05-17 Solar Orbiting Asteroid gate-green cascade" §"Hook-bypass equivalence" | target: rule-amend:no-verify-requires-fresh-authorisation | trigger: owner-direction-already-fired-2026-05-14 | size: S | status: due]`
+
+Substance: the repo-wide invariant
+[`no-verify-requires-fresh-authorisation`](../../rules/no-verify-requires-fresh-authorisation.md)
+currently centres on the `--no-verify` flag. The 2026-05-14 incident
+(committed `16590083` via `git -c core.hooksPath=/dev/null commit`
+after the repo hook policy blocked `git commit --no-verify`) showed
+the rule must extend to **any** mechanism that skips hooks:
+`core.hooksPath=/dev/null`, `GIT_HOOKS_PATH` override, `.husky/`
+deletion, `--no-gpg-sign` when gpg-sign is a hook, any future
+equivalent. Fresh per-commit owner authorisation binds to the *act*
+of skipping, not the *syntax*. Owner-correction on the day fired the
+trigger. Routing: amend the rule body to enumerate the hook-bypass
+equivalence class. `status: due` for the next rule-edit pass.
+
 ### 2026-05-14 — Agents default to no gender unless self-declared (second-instance evidence)
 
 `[captured: 2026-05-14 | source: distilled.md §"Recently Distilled — 2026-05-14 Verdant Swaying Glade conduct correction" | target: rule:agents-default-no-gender + pdr:agents-default-no-gender | trigger: second-instance-fired-2026-05-14 | size: S | status: due]`

@@ -96,6 +96,88 @@ at non-healthy zones. Source: §F1 of the synthesis report under
 
 ---
 
+## Recently Distilled — 2026-05-17 Solar Orbiting Asteroid gate-green cascade
+
+### Gates hide gates — failure surface is a stack, not a list
+
+`pnpm check`'s serial chain (each gate's `&&` means downstream gates do
+not run while an upstream gate is red) shields each failed gate from
+the next. The shielding holds at test-level too: a flaky test prevents
+the test below it from being trusted. **Diagnostic discipline**: when
+a gate clears, *expect* the next downstream gate to surface a previously
+hidden problem; treat each green gate as a magnifying glass aimed at
+the next. Worked instance 2026-05-17: knip clearing surfaced a
+parallel-load MCP e2e flake; the e2e deletions surfaced a missing
+Playwright binary; installing the binary surfaced two pre-existing
+circular type imports in depcruise that had been latent for weeks.
+Falsifiability: a `pnpm check --continue` mode would reveal the full
+latent stack at once; periodic continue-mode runs catch this earlier.
+Routing: pending-graduations entry pending second-instance trigger.
+
+### Test-design lens precedes shared-state hunt on flaky suites
+
+When a test flakes, the **test-design lens is the first move**;
+the shared-state hunt is the second. Tests at the right level cross
+less shared-state surface than tests at the wrong level, so applying
+the lens often surfaces both the cure and the flake source
+simultaneously. Worked instance 2026-05-17: I spent context chasing
+"find the Sentry/MCP shared mutation causing MCP e2e flakes" before
+owner reframed via `testing-strategy.md`. Every failing test was a
+duplicate of existing unit/integration coverage at the wrong level,
+booting the entire Express app to assert constants and stub-data
+shapes. Deletion was the cure. Graduated this session as the
+[`test-coverage-review-lens`](patterns/test-coverage-review-lens.md)
+pattern (commit `0c083409`); first worked instance at commit
+`96fd3e61`.
+
+### Supertest tests are integration by classification, not e2e
+
+Per `testing-strategy.md` §Test Types (authoritative): *"A test
+that imports product code into the test process is an integration
+test even if named `.e2e.test.ts`."* Supertest is in-memory; no
+separate running system. Filing supertest tests under `e2e-tests/`
+routes them through the e2e setup file (`test.setup.no-network.ts`
+which mutates `globalThis.fetch`) and schedules them alongside
+Playwright loads, inflating their shared-state surface for no proof
+gain. **Doctrinal conflict to surface**:
+`docs/engineering/testing-patterns.md` currently classifies
+supertest as E2E — direct conflict with `testing-strategy.md` which
+it itself names authoritative. Owner-surface candidate at next
+consolidation: align `testing-patterns.md` with the strategy doc.
+Routing: pending-graduations entry,
+target `doc-amend:testing-patterns`.
+
+### `pnpm check` cleanliness gate belongs in session-handoff (carry-forward from 2026-05-15)
+
+Owner stated standing 2026-05-14: session-handoff cannot be
+considered complete in the individual-contributor or handoff-owner
+sense unless `pnpm check` completes with no errors or warnings.
+The 2026-05-15 session committed `da2a4aac` with `pnpm check` red
+on pre-existing knip findings, framing them as "out-of-scope" —
+owner-corrected as foundational-rule violation per the
+all-quality-gates-blocking standing rule. Structural cure landed
+this session through gate-green forced via seven commits; the
+session-handoff skill should grow a `pnpm check` cleanliness step
+to make the standing direction structurally enforced rather than
+agent-recalled. Routing: pending-graduations entry,
+target `skill-amend:session-handoff`.
+
+### Hook-bypass equivalence — `--no-verify` covers more than the flag (carry-forward from 2026-05-14)
+
+The repo-wide invariant
+[`no-verify-requires-fresh-authorisation`](../../rules/no-verify-requires-fresh-authorisation.md)
+must extend to **any** mechanism that skips hooks:
+`core.hooksPath=/dev/null`, `GIT_HOOKS_PATH` override, `.husky/`
+deletion, `--no-gpg-sign` when gpg-sign is a hook, any future
+equivalent. Fresh per-commit owner authorisation binds to the *act*
+of skipping, not the *syntax*. Falsifiability: if any future agent
+reaches for any of those mechanisms without fresh per-commit owner
+authorisation for the exact commit, the rule has been violated.
+Routing: pending-graduations entry,
+target `rule-amend:no-verify-requires-fresh-authorisation`.
+
+---
+
 ## Recently Distilled — 2026-05-14 Verdant Swaying Glade conduct correction
 
 ### Agents have no gender unless they self-declare (default they/them)

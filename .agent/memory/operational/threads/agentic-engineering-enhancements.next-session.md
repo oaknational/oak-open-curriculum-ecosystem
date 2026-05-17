@@ -7,31 +7,36 @@
   `$jc-start-right-quick continue agentic-engineering-enhancements`.
 - Controlling program for sequence routing:
   [`token-remediation-p8-parallel-program.plan.md`](../../plans/agentic-engineering-enhancements/current/token-remediation-p8-parallel-program.plan.md)
-  — **Step 1 closed at WS2 boundary (2026-05-14, commit `72d31ca8`).
-  Upstream schema interrupt scheduled for next session per the program's
-  Interrupt Log; Step 2 (singleton-lane remediation) opens the session
-  after the interrupt closes.**
-- Owner-directed next safe step: **address the upstream Oak API schema
-  interrupt.** The codegen output sits in the working tree at session
-  close (13 files under `packages/sdks/oak-sdk-codegen/`); curriculum-sdk
-  and search-cli downstream consumers fail `pnpm check` against it
-  (programme-variant filters + multi-unit lesson shape — `unitSlug` /
-  `unitTitle` moved from flat lesson fields into a `units[]` array). The
-  next session decides shape (forward migration of consumers OR scoped
-  revert with separately routed adoption lane) and lands a green-gate
-  state. WS2 session-handoff was committed `--no-verify` once with fresh
-  owner authorisation to preserve the session-close boundary while the
-  interrupt is properly scoped.
-- Agentic-engineering collaboration sequence for the next two sessions:
-  1. **Next session — Upstream schema interrupt** (one-session budget per
-     program Interrupt Log 2026-05-14 #2). Decide and land the adoption
-     shape; restore `pnpm check` green. Do not start Step 2 work this
-     session.
-  2. **Session-after-next — Step 2 (singleton-lane remediation)** opens
-     against
-     [`start-right-team-singleton-lane-remediation.plan.md`](../../plans/agent-tooling/current/start-right-team-singleton-lane-remediation.plan.md).
-     The plan is **not decision-complete**; first sub-step is
-     owner/reviewer review then WS0 baseline disposition.
+  — **Step 1 closed at WS2 boundary (`72d31ca8`). Upstream schema
+  interrupt 2026-05-14 #2 RESOLVED at `ee41cd49` (2026-05-17).
+  `pnpm check` fully green — 100/100 turbo tasks. Step 2
+  (singleton-lane remediation) opens next session.**
+- Last session (2026-05-17, Solar Orbiting Asteroid) brought the
+  gate green via seven commits, each unmasking the next as its
+  upstream gate cleared: `9f04d9af` knip config (scripts/** as
+  entry) → `b3ef1cbb` slim practice-fitness barrel → `4c30ffee`
+  slim collaboration-state barrel → `0c083409` test-coverage-
+  review-lens pattern → `96fd3e61` delete misclassified e2e files
+  (18 tests, duplicates of existing unit/integration coverage)
+  → `ee41cd49` break two pre-existing circular type imports
+  (graph-core/jsonld and tui/snapshot) → `0cb8599e` close
+  interrupt in program plan.
+- Owner-named methodology pattern from this session:
+  [`test-coverage-review-lens`](../active/patterns/test-coverage-review-lens.md).
+  Five-question lens for reviewing test coverage around a feature;
+  the e2e file deletions were its first worked instance.
+- Next session opens Step 2 (singleton-lane remediation):
+    1. Open against this thread. Ground via `jc-start-right-quick`.
+    2. Owner/reviewer review of
+       [`start-right-team-singleton-lane-remediation.plan.md`](../../plans/agent-tooling/current/start-right-team-singleton-lane-remediation.plan.md)
+       (it is **not decision-complete**). Don't skip to WS0.
+    3. After decision-complete: run WS0 baseline disposition, then
+       WS0–WS7 execution per the plan.
+- **Do NOT open** ahead of Step 2 (still-paused list, per program
+  advancement rule): Step 3 P8 collaboration TUI; Step 4A P6/P7
+  cost-of-collab + ws-subsumed-residual; Step 4B graph foundations;
+  P9 rule/skill topology refinement; bulk-data investigation
+  follow-on.
   3. **Paused active spine — Step 3** — P8 acceptance
      (`p8-attention-state`) remains blocked behind Step 2 per the program
      advancement rule.
@@ -950,6 +955,8 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 | `claude` | `claude-opus-4-7-1m` | Salty Swimming Hull | Consolidator (processed stale comms + abandoned queue residue; migrated rogue `comms-events/` to canonical `comms/`; surfaced `.active_claims` vs `.claims` grounding miss; authored cross-platform graduation-triage disposition plan at `graduation-triage-disposition-2026-05-14.plan.md`) | 2026-05-14 | 2026-05-14 |
 | `claude` | `claude-opus-4-7-1m` | Riverine Swimming Hull | Graduation-triage executor (executed batches A/B/C; landed all five D1–D5 amendments after owner per-diff review; metacognition correction on shape-selection-by-vehicle-weight; drafted and landed PDR-060 Tooling Friction Is First-Class User Feedback; archived disposition plan + D1–D5 drafts plan to `archive/completed/`) | 2026-05-14 | 2026-05-14 |
 | `claude` | `claude-opus-4-7-1m` | Highland Circling Plume | Implementer (WS2 token-frontmatter zone classification: `fitness_token_target`/`fitness_token_limit` parsing, token-zone classification folded into `overallZone`, target-only configuration-finding semantics, ADR-144 in-place amendment; landed at `72d31ca8` after three reviewer APPROVEs; closed Step 1 of the cross-thread token-remediation-p8-parallel program at the WS2 boundary; snapshot update at `737942c0`) | 2026-05-14 | 2026-05-14 |
+| `claude` | `claude-opus-4-7-1m` | Luminous Waxing Twilight | Implementer (upstream Oak API multi-unit lesson adoption at `da2a4aac`: SDK helpers `extractLessonUnits` + `formatPrimaryUnit`, search-CLI consumer migration, MCP aggregated-fetch dual-emission test, ADR amendments 080/029/093; commit landed with `pnpm check` red on pre-existing knip findings — owner-corrected as foundational-rule violation) | 2026-05-15 | 2026-05-15 |
+| `claude` | `claude-opus-4-7-1m` | Solar Orbiting Asteroid | Gate-green executor + pattern author (closed the 2026-05-14 #2 interrupt with seven commits: `9f04d9af` knip config gap, `b3ef1cbb` practice-fitness barrel slim, `4c30ffee` collaboration-state barrel slim, `0c083409` `test-coverage-review-lens` pattern, `96fd3e61` deleted two misclassified MCP e2e files duplicating unit/integration coverage, `ee41cd49` broke two pre-existing circular type imports surfaced by depcruise, `0cb8599e` closed interrupt in program plan; `pnpm check` 100/100 green; the flake observed earlier in MCP e2e was unmasked by the deletions — tests at the wrong level crossing shared state they shouldn't have crossed) | 2026-05-17 | 2026-05-17 |
 
 ## Ferny Regrowing Leaf coordinator session (2026-05-12)
 
