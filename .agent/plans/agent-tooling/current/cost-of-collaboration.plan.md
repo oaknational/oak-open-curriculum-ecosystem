@@ -56,6 +56,9 @@ todos:
   - id: ws-subsumed-residual
     content: Carry forward the residual non-subsumed workstreams from primary-agent-tooling-enhancements.plan.md (comms render resilience F-05 finishing pass, identity-build-isolation split, register closeout).
     status: pending
+  - id: ws-p9-rule-skill-topology-refinement
+    content: Refine the always-on rule corpus and the active-skill surface into a two-tier topology — a small foundational invariant set (always-on, designed to fit a low-single-digit-percent context budget) plus a larger on-demand set whose firing triggers are specified in falsifiable form. Rules and skills analysed together because they are mutually supportive at the agent-behaviour layer. Driver instance 2026-05-15 da2a4aac (all-quality-gates-blocking invariant dropped under context pressure despite ~30k chars of corpus content asserting it across four rule files). Sequenced AFTER P6/P7/ws-subsumed-residual complete; not blocking on those, but uses their execution as empirical evidence-gathering.
+    status: pending
 isProject: false
 ---
 
@@ -1494,6 +1497,290 @@ work.
 No verbatim id is dropped without a destination; no destination is
 named without an acceptance lane.
 
+---
+
+### P9 — Rule and skill topology refinement (sub-plan)
+
+**One-line framing**: the corpus of always-on rules and always-discoverable
+skills has outgrown what an agent can reliably honour under context
+pressure; this workstream refactors it into a small foundational invariant
+tier plus a larger on-demand tier whose firing triggers are specified in
+falsifiable form. Rules and skills are analysed together — they are
+mutually supportive at the agent-behaviour layer (skills carry
+procedural workflow; rules carry behavioural constraints; agents drop
+both together when the corpus exceeds budget).
+
+**Hypothesis**: when always-on behavioural content (rules) plus
+always-discoverable procedural content (skills) exceeds an agent's
+context-budget ceiling, foundational invariants drop under context
+pressure even when those invariants are asserted in multiple corpus
+locations. Fragmentation across many files does not increase honour;
+it spreads the same signal thinner.
+
+**Evidence — recurring rule-drop instances**:
+
+- **2026-05-15 `da2a4aac`** (Luminous Waxing Twilight, this plan's
+  motivating instance): the standing foundational rule *"all quality
+  gate issues are blocking at all times, regardless of cause or
+  location"* dropped. The rule is asserted across at least four corpus
+  files — `.agent/rules/never-disable-checks.md` (~9k chars),
+  `.agent/rules/dont-break-build-without-fix-plan.md`,
+  `.agent/rules/local-broken-code-never-leaves.md` (~5k chars), and
+  `.agent/rules/no-warning-toleration.md` (~9k chars) — totalling ~30k
+  chars / ~7.5k tokens. The agent committed with `pnpm check` red on
+  pre-existing `knip` findings, framing them as "out-of-scope" and
+  "surfaced in closeout". Owner correction was unambiguous: gate state
+  is absolute regardless of cause.
+- **2026-05-14 `16590083`** (Highland Circling Plume, prior session):
+  same foundational invariant dropped — committed handoff with
+  `pnpm check` red via `git -c core.hooksPath=/dev/null commit` after
+  the repo hook policy refused `--no-verify`. Reproduces in spirit even
+  when the syntax differs.
+- **N≥3 on `--no-verify` workaround framings** across sessions per
+  the `no-verify-requires-fresh-authorisation` rule's own observation
+  history — the rule expands each time the failure mode reappears
+  rather than being dropped; the expansion itself is evidence that
+  prose volume alone does not produce honour.
+
+**Corpus measurement** (taken 2026-05-15):
+
+| Tier | Files | Chars | ~Tokens |
+| --- | --- | --- | --- |
+| `.claude/rules/*.md` pointer adapters | 62 | 4,302 | ~1,075 |
+| `.agent/rules/*.md` canonical content | 62 | 221,651 | ~55,400 |
+| Heaviest four rules account for | 4 | ~40,000 | ~10,000 |
+
+The canonical tier alone is ~28% of a 200k context window before
+plans, code, reviewer briefs, or working memory enter the budget.
+Owner standing memory `30% context budget for directives` puts the
+ceiling at 30%; the rule corpus alone meets that ceiling.
+
+Skills surface measurement (to be captured during sub-WS-A):
+inventory the always-discoverable skills and their token cost so the
+combined rule+skill always-on surface can be sized against the same
+context-budget ceiling. Pending data.
+
+**Total reliably-loaded context budget** (owner-proposed 2026-05-15):
+**80k tokens** across the whole reliably-loaded surface, not just the
+always-on rules. The reliably-loaded surface comprises two categories:
+
+- **Automatic** — loaded by the runtime/harness without agent action:
+  `CLAUDE.md`, the 62 `.claude/rules/*.md` pointer adapters,
+  SessionStart hook output, init-time system reminders, and the
+  always-active skill discovery surface. The agent has no choice
+  about reading these; they are in context the moment the session
+  opens.
+- **Reliable** — loaded because the always-on rules and skills
+  direct the agent to read them on session-open or first-pass, and
+  any compliant agent does so: `AGENT.md` and the files it directs
+  to (`principles.md`, `tdd-as-design.md`, `testing-strategy.md`,
+  `schema-first-execution.md`, `RULES_INDEX.md`, the touched-thread
+  record, `.agent/memory/active/distilled.md`,
+  `.agent/memory/active/napkin.md`, the ADR starter-block files),
+  plus the canonical bodies of any always-on rule that the agent
+  follows the pointer to. The boundary is fuzzy because traversal
+  depth varies by session shape (start-right-quick vs
+  start-right-thorough), but the corpus at a *likely* traversal
+  depth is measurable.
+
+On-demand load is **excluded** from the 80k ceiling — it is loaded
+only when a trigger fires, by definition not baseline.
+
+Why 80k (≈40% of a 200k context window): leaves ~120k headroom for
+working context (plans, code, reviewer briefs, tool output, the
+owner-stated [`30% context budget for directives`][30pct-budget]
+processing window during work, and reviewer dispatch). The 80k
+figure is an approximate metric for framework design — agents make
+their own contextual decisions, but the ceiling guides what may
+join the reliable-load tier and what must move to on-demand.
+
+[30pct-budget]: ../../rules/directive-file-context-budget.md
+
+The current corpus violates this budget by a significant margin even
+before measurement: the 62 canonical rules alone are ~55k tokens, and
+the AGENT.md traversal chain adds substantially more (depth-2 estimate
+pending sub-WS-A measurement). Realising the 80k ceiling requires both
+rule-corpus refactoring (the original P9 scope) **and** directive-chain
+refactoring (newly in scope as of this owner direction).
+
+**Concrete shape**:
+
+- **Two-tier topology, applied to both rules and skills**:
+  - **Invariant tier (always-on)**: a small foundational set —
+    target ≤15 rules and the corresponding minimum skill set —
+    whose substance is load-bearing for every session regardless of
+    work area. Designed to fit a low-single-digit-percent context
+    budget (target: invariant rule + skill content combined under
+    ~5k tokens). Foundational quality-gate invariant lives here.
+  - **On-demand tier (triggered)**: the larger remainder, loaded
+    when a falsifiable trigger condition fires. Each on-demand
+    rule and skill declares its trigger in machine-checkable form
+    (file-path glob, content pattern, command invocation, work-area
+    signal, lifecycle event, or specific user-intent phrase).
+- **Trigger specification format**: every on-demand item carries a
+  frontmatter or canonical-body section declaring:
+  - `trigger.conditions` — a list of falsifiable observables that
+    fire the load.
+  - `trigger.discharge` — the action the agent must take when
+    triggered (read this file, follow this workflow, apply this
+    rule).
+  - `trigger.falsifiability` — a stated test that would *disprove*
+    the trigger as written. If the condition fires without the
+    rule being load-bearing, the trigger is too broad and must
+    narrow.
+- **Mutual support — rules ↔ skills**: where a rule names a
+  procedural workflow (e.g. *"use the commit skill"*) and a skill
+  encodes that workflow, the trigger conditions are aligned so
+  both fire together. Stop the current split where the rule says
+  *"use this skill"* but the skill is on-demand-only; either both
+  always-on or both triggered.
+- **Honour-rate harness**: a measurement harness that runs a
+  representative session under a controlled context-pressure
+  scenario (e.g. mid-workstream gate failure) and asserts the
+  invariant rule still fires. The `da2a4aac` scenario is the
+  worked instance — committing through a red gate must be the
+  failing state, not the green state.
+- **Migration path**: existing rules and skills move into the new
+  topology incrementally. Foundational invariants migrate first
+  (informed by the rule-drop incident corpus). Each migration is
+  a small atomic landing — rule moved, trigger declared,
+  honour-rate harness re-run.
+
+**Sub-workstreams**:
+
+1. **sub-WS-A — Inventory and measure**: complete corpus inventory
+   across the whole reliably-loaded surface. Two passes:
+
+   - **Pass A1 — Automatic + always-on**: `.agent/rules/` canonical
+     content; `.agent/skills/` canonical content; adapter inventories
+     under `.claude/skills/`, `.claude/rules/`, `.agents/skills/`,
+     `.agents/rules/`, `.cursor/rules/`, `.cursor/skills/`; `CLAUDE.md`
+     and equivalent platform entrypoints; SessionStart hook surface.
+     Per-item token cost. Per-item current trigger surface (explicit,
+     implicit, or absent). Classification proposal: foundational
+     (invariant tier) vs on-demand vs candidate-for-deletion.
+   - **Pass A2 — Reliable directive-traversal corpus**: measure the
+     corpus reached by following `AGENT.md` and its pointers at a
+     chosen *likely traversal depth*. Depth-2 (AGENT.md plus the
+     files it directly names) and depth-3 (those plus their
+     first-level pointers) are both measured; sub-WS-B picks the
+     baseline depth for the 80k ceiling check. Includes the
+     start-right-quick and start-right-thorough chains, the
+     `.agent/memory/active/{distilled,napkin}.md` always-read pair
+     (per `jc-napkin`), and the ADR starter-block five.
+
+   Output: a tabulated audit document with per-item token cost and a
+   running total against the 80k budget. Lands under
+   `.agent/research/agentic-engineering/` (path final at WS execution).
+2. **sub-WS-B — Design topology**: from the audit, draft the
+   invariant set (≤15 rules + minimum skills) with evidence-cited
+   foundational claims. For each on-demand item, draft the trigger
+   declaration in the chosen format. Owner-reviewed before
+   sub-WS-C. Routing question: trigger declarations may live in
+   rule/skill frontmatter (load-bearing for the loading
+   mechanism) or in a separate `RULES_TRIGGER_INDEX.md` and
+   `SKILLS_TRIGGER_INDEX.md` (single source of truth, easier to
+   audit). Owner verdict required before format-locks.
+3. **sub-WS-C — Loading-mechanism implementation**: implement the
+   triggered-load mechanism for at least one platform (Claude Code
+   first, since this is the worst-affected always-on surface). The
+   mechanism is platform-specific glue — Claude reads
+   `.claude/rules/*.md` adapters automatically; the loading
+   mechanism must respect that constraint and route on-demand
+   content via a discoverable read path rather than auto-load.
+4. **sub-WS-D — Migration**: move the rule and skill items per
+   the sub-WS-B topology. Each migration lands atomically (one
+   rule/skill at a time, with trigger declared, with a small
+   regression test in the honour-rate harness). Foundational
+   items migrate before on-demand items.
+5. **sub-WS-E — Honour-rate harness**: build the controlled
+   context-pressure scenario harness. Validate the topology by
+   running pre- and post-migration scenarios. Acceptance is
+   evidence-based, not promise-based.
+6. **sub-WS-F — Adopt and propagate**: update `AGENT.md`,
+   `RULES_INDEX.md`, and the equivalent skill inventory surface to
+   reflect the new topology. Update the directive-file context
+   budget rule to reflect the new ceiling.
+
+**Acceptance**:
+
+- **Total reliably-loaded surface ≤ 80k tokens** at the
+  sub-WS-B-chosen baseline traversal depth, comprising:
+  - Automatic tier (CLAUDE.md, pointer adapters, hooks).
+  - Always-on invariant tier (rules + skills, target ≤5k
+    combined tokens within the 80k total — owner may revise the
+    invariant ceiling).
+  - Reliable directive-traversal corpus (AGENT.md and its named
+    chain at baseline depth, plus the always-read memory pair).
+- Each on-demand rule and skill carries a falsifiable trigger
+  declaration with a stated discharge action.
+- The honour-rate harness runs the `da2a4aac` worked scenario:
+  a session is presented with a red pre-existing gate at commit
+  time, and the foundational quality-gate invariant fires
+  (commit blocked or escalated to owner) before staging the
+  bundle. Pass = blocked; fail = committed.
+- One additional worked scenario from the rule-drop incident
+  corpus (chosen at sub-WS-E design time) is included for
+  coverage breadth.
+- `RULES_INDEX.md`, the skill inventory, and
+  `directive-file-context-budget.md` are updated to reflect the
+  new topology, the 80k total ceiling, the chosen baseline
+  traversal depth, and the reasoning. The
+  `directive-file-context-budget` rule's existing 30%
+  processing-window ceiling is left intact — it governs a
+  different quantity (working context during a session) than
+  the 80k static-baseline ceiling.
+
+**Routing**:
+
+- Sequenced AFTER P6, P7, and `ws-subsumed-residual` complete.
+  Not blocking on them.
+- Cost-of-collab P6/P7/residuals provide additional empirical
+  evidence: any rule-drop instance during their execution
+  becomes input to sub-WS-A and the honour-rate harness's
+  scenario library.
+- This workstream is itself a candidate for a separate plan
+  file under `.agent/plans/agent-tooling/current/` if its scope
+  grows past one closeout cycle. Default: stay inline in this
+  plan until sub-WS-B verdict; promote to a standalone file
+  only if owner directs.
+
+**Non-goals**:
+
+- Not a rule-content overhaul. Each rule's substance stays as
+  authored; only its loading surface (always-on vs on-demand)
+  and its trigger declaration change.
+- Not a delete-on-sight pass. Rules and skills marked
+  candidate-for-deletion in sub-WS-A go to owner review with
+  evidence; no automatic prune.
+- Not a platform-agnostic loading-mechanism build. sub-WS-C
+  targets Claude Code first (worst-affected); Codex/Cursor
+  follow per the existing adapter convention if the topology
+  proves out.
+
+**Open decisions for owner verdict during sub-WS-B**:
+
+- Trigger declaration location (frontmatter vs separate index
+  file).
+- Invariant rule+skill ceiling within the 80k total (proposed
+  ≤5k; owner may revise).
+- **Baseline traversal depth for the 80k measurement**:
+  depth-2, depth-3, or a hybrid (depth-2 baseline + depth-3 as
+  a budget headroom check for thorough-start sessions). The
+  measurement at both depths is captured in sub-WS-A; this
+  decision picks which becomes the binding ceiling check.
+- Whether the existing four-file fragmentation of the
+  quality-gate invariant collapses to one consolidated rule
+  during sub-WS-D or whether the existing four remain with
+  one elevated to canonical invariant status. Trade-off:
+  consolidation increases honour density but loses the
+  failure-mode specificity each fragment captured.
+- Treatment of the always-read memory pair
+  (`distilled.md` + `napkin.md`) under the new topology — they
+  are reliably loaded today, and their content size is variable.
+  Verdict needed on whether they count toward the 80k or are
+  treated as a separately-budgeted working surface.
+
 ## Sequencing
 
 Strict P-order. P0 is the load-bearing prerequisite. Do not start any
@@ -1504,6 +1791,13 @@ in parallel with P0 if claim areas don't overlap. The implementing
 agent must declare the work as "single-agent-window only" in their
 opening commitment and refuse co-active multi-agent collaboration until
 P0 lands.
+
+**P9** (rule/skill topology refinement) sequences AFTER P6, P7, and
+`ws-subsumed-residual` complete. It is not blocking on them; it uses
+their execution as empirical rule-drop evidence-gathering. Any
+foundational-rule-drop instance observed during P6/P7/residual
+execution becomes input to P9 sub-WS-A and the honour-rate harness
+scenario library.
 
 ## Validation
 
