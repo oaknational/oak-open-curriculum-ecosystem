@@ -1,11 +1,7 @@
 import { Box, Text } from 'ink';
 
-import {
-  type CollaborationTuiSnapshot,
-  type TuiAgentEntry,
-  type TuiMainEntry,
-  type TuiQueueEntry,
-} from './snapshot.js';
+import { type CollaborationTuiSnapshot } from './snapshot.js';
+import { type TuiAgentEntry, type TuiMainEntry, type TuiQueueEntry } from './entry-types.js';
 
 const VISIBLE_ROWS = 6;
 type StatusTone = 'active' | 'success' | 'warning' | 'danger' | 'muted';

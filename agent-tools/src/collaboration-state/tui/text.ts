@@ -1,9 +1,5 @@
-import {
-  type CollaborationTuiSnapshot,
-  type TuiAgentEntry,
-  type TuiMainEntry,
-  type TuiQueueEntry,
-} from './snapshot.js';
+import { type CollaborationTuiSnapshot } from './snapshot.js';
+import { type TuiAgentEntry, type TuiMainEntry, type TuiQueueEntry } from './entry-types.js';
 
 const MAX_BODY_LENGTH = 120;
 const MAX_SECTION_ENTRIES = 10;

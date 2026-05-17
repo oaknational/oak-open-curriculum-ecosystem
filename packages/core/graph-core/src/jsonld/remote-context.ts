@@ -7,7 +7,7 @@ import type {
   JsonLdProcessorError,
   JsonLdProcessorOperation,
   JsonLdValue,
-} from './processor.js';
+} from './processor-types.js';
 
 const REMOTE_CONTEXT_PATTERN = /^https?:\/\//u;
 

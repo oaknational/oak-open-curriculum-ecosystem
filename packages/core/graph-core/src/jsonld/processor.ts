@@ -2,12 +2,6 @@
  * Versioned JSON-LD 1.1 processor adapter backed by `jsonld.js`.
  */
 
-import type {
-  JsonLdRuntimeContext,
-  JsonLdRuntimeDocument,
-  JsonLdRuntimeFrame,
-  JsonLdRuntimeObject,
-} from './runtime.js';
 import { findRemoteContextReference, remoteContextDisallowed } from './remote-context.js';
 import {
   jsonLdRuntime,
@@ -15,54 +9,37 @@ import {
   noRemoteExpandOptions,
   noRemoteFrameOptions,
 } from './runtime.js';
+import type {
+  CompactedJsonLdDocument,
+  ExpandedJsonLdDocument,
+  FramedJsonLdDocument,
+  JsonLdContext,
+  JsonLdDocument,
+  JsonLdFrame,
+  JsonLdObject,
+  JsonLdProcessorError,
+  JsonLdProcessorErrorKind,
+  JsonLdProcessorOperation,
+  JsonLdProcessorResult,
+  JsonLdValue,
+} from './processor-types.js';
 
 type JsonLdScalar = string | number | boolean | null;
 
-export type JsonLdObject = JsonLdRuntimeObject;
-
-export type JsonLdValue =
-  | JsonLdScalar
-  | JsonLdObject
-  | JsonLdRuntimeContext
-  | JsonLdRuntimeDocument
-  | NonNullable<JsonLdObject[string]>
-  | JsonLdValue[];
-
-export type JsonLdDocument = JsonLdRuntimeDocument;
-
-export type JsonLdContext = JsonLdRuntimeContext;
-
-export type JsonLdFrame = JsonLdRuntimeFrame;
-
-export type ExpandedJsonLdDocument = JsonLdObject[];
-
-export type CompactedJsonLdDocument = JsonLdObject;
-
-export type FramedJsonLdDocument = JsonLdObject;
-
-export type JsonLdProcessorOperation = 'expand' | 'compact' | 'frame';
-
-export type JsonLdProcessorErrorKind =
-  | 'processor_failed'
-  | 'invalid_processor_output'
-  | 'remote_context_disallowed';
-
-export interface JsonLdProcessorError {
-  readonly kind: JsonLdProcessorErrorKind;
-  readonly operation: JsonLdProcessorOperation;
-  readonly message: string;
-  readonly cause?: Error;
-}
-
-export type JsonLdProcessorResult<T> =
-  | {
-      readonly ok: true;
-      readonly value: T;
-    }
-  | {
-      readonly ok: false;
-      readonly error: JsonLdProcessorError;
-    };
+export type {
+  CompactedJsonLdDocument,
+  ExpandedJsonLdDocument,
+  FramedJsonLdDocument,
+  JsonLdContext,
+  JsonLdDocument,
+  JsonLdFrame,
+  JsonLdObject,
+  JsonLdProcessorError,
+  JsonLdProcessorErrorKind,
+  JsonLdProcessorOperation,
+  JsonLdProcessorResult,
+  JsonLdValue,
+};
 
 export interface JsonLdProcessorImplementation {
   readonly name: 'jsonld.js';

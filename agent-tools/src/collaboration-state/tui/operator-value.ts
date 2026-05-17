@@ -1,6 +1,6 @@
 import { type ActiveAgentReport } from '../active-agents.js';
 import { type CommsEvent, type DirectedCommsMessage, type LifecycleCommsEvent } from '../types.js';
-import { type TuiDirectedEntry, type TuiQueueEntry } from './snapshot.js';
+import { type TuiDirectedEntry, type TuiQueueEntry } from './entry-types.js';
 
 export interface TuiOperatorValueSummary {
   readonly recent_changes: readonly TuiRecentChangeEntry[];
