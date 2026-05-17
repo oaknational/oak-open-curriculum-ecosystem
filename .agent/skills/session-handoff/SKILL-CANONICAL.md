@@ -505,7 +505,31 @@ there unless the owner or closeout owner gives a further assignment.
     - If `jc-consolidate-docs` runs now, refresh `Deep consolidation status`
       to `completed this handoff — <reason>`.
 
-11. **Keep the boundary clean.** `session-handoff` includes the consolidation
+11. **Verify the `pnpm check` cleanliness gate.** A sole-contributor session
+    or team handoff-owner closeout cannot be marked complete while
+    `pnpm check` is red or carries warnings. Run `pnpm check` from the repo
+    root before declaring handoff complete. The outcome routes one of three
+    ways:
+
+    - **Green** — handoff may complete. Record the green run in the landed
+      outcome or as a no-landing-session closeout artefact.
+    - **Red on this session's work** — fix before declaring complete. The
+      [`local-broken-code-never-leaves`](../../rules/local-broken-code-never-leaves.md)
+      rule applies; the
+      [`all-quality-gates-blocking-always`](../../rules/dont-break-build-without-fix-plan.md)
+      standing rule applies. Out-of-scope framings are not acceptable.
+    - **Red on pre-existing unrelated breakage** — same standing rule:
+      every red gate is blocking regardless of cause/location/scope. Either
+      cure it in this session, or surface the blocker to the owner with
+      evidence and stop. Do not bundle handoff over a red gate.
+
+    Owner-stated standing 2026-05-14 (carry-forward in
+    `distilled.md` §"Recently Distilled — 2026-05-17"): session-handoff is
+    not complete in the individual-contributor or handoff-owner sense unless
+    `pnpm check` completes with no errors or warnings. This step makes that
+    standing direction structurally enforced rather than agent-recalled.
+
+12. **Keep the boundary clean.** `session-handoff` includes the consolidation
     gate and can escalate into `jc-consolidate-docs` when appropriate, but
     ordinary sessions remain lightweight. It does not smuggle in review or git
     actions.

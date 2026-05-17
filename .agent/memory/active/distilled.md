@@ -1,9 +1,10 @@
 ---
-fitness_line_target: 200
-fitness_line_limit: 275
-fitness_char_limit: 16500
+fitness_line_target: 350
+fitness_line_limit: 500
+fitness_char_limit: 28000
 fitness_line_length: 100
 split_strategy: "Extract settled entries to permanent docs (ADRs, PDRs, governance, READMEs)"
+fitness_rationale: "Raised 2026-05-17 (Swift Winging Gust) per owner direction after the structural pass: the 2026-05-14 multi-agent deep-dive and 2026-05-17 gate-green cascade landed durable substance that, after archiving the graduations-log and back-cite blocks, leaves ~455 lines of high-signal cross-session learning. Previous limits (target 200 / limit 275 / chars 16500) were calibrated when distilled content volume was lower; substance growth is legitimate and preservation outranks fitness pressure. The new envelope keeps refinement pressure on without forcing premature graduation of recent (still-ripening) entries. Falsifiability: if substance later compresses naturally below the previous envelope, the limits should be lowered again at the next consolidation."
 ---
 
 # Distilled Learnings
@@ -93,6 +94,98 @@ pending-graduations entries: lifecycle-aware fitness model and
 active inline discipline-reminder text in fitness-validator output
 at non-healthy zones. Source: §F1 of the synthesis report under
 `research/agentic-engineering/continuity-memory-and-knowledge-flow/`.
+
+---
+
+## Recently Distilled — 2026-05-17 Swift Winging Gust pipeline-reframe
+
+### Surface classification routes fitness response — buffers are not memory
+
+The knowledge-flow pipeline has **four distinct surface kinds**, each
+with a different correct response to fitness pressure:
+
+| Surface kind | Examples | What fitness pressure means | Correct response |
+|---|---|---|---|
+| **Memory** | napkin, distilled, patterns/ | Substance has matured; needs durable home | Graduate upward (per PDR-046 Move 3) |
+| **State** | repo-continuity, threads, claims, conversations, comms log | Historical prose accumulated | Archive per `split_strategy` |
+| **Buffer** | pending-graduations, capture queues | **Downstream consumer is bottlenecked** | Pipeline diagnostic at producer or consumer; never extend the buffer |
+| **Doctrine** | ADRs, PDRs, rules, principles, governance docs | Doc outgrew its split point | Split along its axis |
+
+The "Learning Preservation Overrides Fitness Pressure" rule enumerates
+memory and state surfaces; it does **not** apply to buffers. Buffer
+substance is supposed to be transient — accumulation past envelope IS
+the structural signal worth listening to, never an instruction to grow
+the envelope.
+
+### Pipeline back-pressure is information, not a defect
+
+`capture → distil → graduate → enforce` is a flow with rates, not a
+chain of files. A full buffer with fitness alarms means producer-rate
+is exceeding consumer-rate over the consolidation window. Four
+candidate bottlenecks to diagnose (not all hold for every instance):
+
+- **Consumer cadence too low**: graduation only fires at consolidation
+  passes. Non-consolidation sessions never drain. Cure: lighter-weight
+  trigger-scan pass that any session can run.
+- **Trigger conditions unscannable**: many entries gate on
+  "owner-direction" or "second-instance-fired-elsewhere" but nothing
+  systematically scans for fired triggers across sessions. Cure:
+  capture-time discipline on trigger conditions that can actually be
+  re-checked.
+- **Producer doctrine-drafting in the buffer**: entries grow to
+  60-150 lines with function-tests and "Recommended shape" verdicts.
+  The buffer entry becomes a draft for the eventual artefact. Cure:
+  buffer-shape contract at capture time — tag header + ≤15 lines of
+  trigger-to-watch-for, doctrine drafting at the target home.
+- **Capture over-eagerness**: not every promising idea needs a register
+  entry. Ripe candidates should graduate immediately; substance-but-
+  not-yet-stable belongs in distilled.md as held-pending-validation.
+
+Worked instance 2026-05-17 (Swift Winging Gust): I framed
+pending-graduations.md's CRITICAL fitness signal as a substance-
+preservation question and proposed a modest limit raise. Owner
+reframed twice — first that the file had become "an essay" not a
+buffer; second that the right question is "why has the pipeline
+become a broken accumulator instead of a flow-control mechanism."
+The substance-preservation rule had over-reached its surface scope.
+Falsifiability: a repeat consolidation pass that runs producer-rate
+vs consumer-rate diagnostic and identifies a specific upstream
+bottleneck demonstrates the reframe. Routing: PDR candidates in
+pending-graduations register; consumer-cadence and capture-shape
+cures are pipeline-repair work for a future session under owner
+direction.
+
+### Doctrine-first vs first-principles is cognitive-approach diversity
+
+Owner observation 2026-05-17: when corrections recur, they often
+follow a recognisable shape — agent applies a doctrine-match move
+(fast, consistent, transferable); owner reframes at the structural
+layer (slow, novel, doctrine-extending). This is **diversity, not
+deficiency**. Both reasoning shapes have evolutionary fit:
+
+- **Doctrine-first** scales when doctrine is complete and the
+  situation is in-distribution. Failure mode: when the rule has a
+  hole or the situation is out-of-distribution, lexical match reaches
+  for the nearest rule even when none fits structurally.
+- **First-principles** scales when the situation is novel or doctrine
+  is incomplete; produces structural insights that grow the doctrine.
+  Failure mode: slow, doesn't transfer well, re-derives established
+  knowledge unnecessarily.
+
+The pair compounds when both are present. When the owner is not
+present, the agent operates doctrine-first alone, and the
+doctrine-by-analogy failure mode becomes the dominant risk. Cure
+shape: a pre-action first-principles checkpoint — *what kind of
+thing is in front of me, and is this rule shaped for it?* — fires
+before any response-menu is applied. When a signal recurs (second
+limit-raise, second correction of the same shape), the agent must
+treat the doctrine answer itself as a candidate failure mode and
+ask: *what is the upstream cause of this signal recurring?*
+Falsifiability: at the next equivalent fitness-response decision, the
+agent surfaces a surface-classification verdict before proposing a
+response, and routes recurring signals to upstream-cause diagnosis
+rather than menu-application. Routing: PDR candidate in pending-
+graduations register.
 
 ---
 
@@ -351,37 +444,6 @@ of who picks the work up.
 
 ---
 
-## Recent graduations (2026-05-12 — Volcanic Charring Furnace)
-
-Processed the substance distilled from
-[`napkin-2026-05-12b.md`](archive/napkin-2026-05-12b.md) into durable homes
-without using fitness numbers as brevity targets. The source archive remains
-intact. Disposition:
-
-- Mature commit/collaboration lessons landed in
-  [`agent-collaboration.md`](../../directives/agent-collaboration.md),
-  [`commit/SKILL-CANONICAL.md`](../../skills/commit/SKILL-CANONICAL.md),
-  [`respect-active-agent-claims.md`](../../rules/respect-active-agent-claims.md),
-  and
-  [`collaboration-state-conventions.md`](../operational/collaboration-state-conventions.md).
-- Learning-before-fitness details landed in
-  [`substance-before-fitness.md`](patterns/substance-before-fitness.md):
-  archive before compaction, and reconcile stale status without silent
-  graduation.
-- New pattern entry: static-analysis registration with scaffold
-  ([pattern][static-analysis-scaffold]).
-- Owner-visible or implementation-shaped follow-ups were routed to
-  [`pending-graduations.md`](../operational/pending-graduations.md) as:
-  commit-boundary peer-pair governance refinements; collaboration tooling
-  operator UX backlog; detached monitor lifecycle contract; quality-gate
-  profiling and built-surface proof backlog; skill and documentation surface
-  audit follow-ups; graph-stack implementation and planning pattern candidates.
-- Retained distilled state: the staged sequence still continues with
-  `pending-graduations.md`, then `practice-bootstrap.md`; the hypothesis-layer
-  multi-agent validation entry below remains held pending N≥3 validation.
-
----
-
 ## Held Pending Validation
 
 ### Hypothesis-Layer Routing for Multi-Agent Cures → `hypothesis.md` family
@@ -399,23 +461,6 @@ not yet at N≥3.
 [n-agent-hypothesis]: ../../prompts/agentic-engineering/collaboration/hypothesis.md
 [n-agent-falsify]: ../../prompts/agentic-engineering/collaboration/falsification-criteria.md
 [n-agent-experiments]: ../../prompts/agentic-engineering/collaboration/experiments.md
-[static-analysis-scaffold]: patterns/static-analysis-registration-with-scaffold.md
-
----
-
-## Recently Distilled — 2026-05-12 Napkin Rotation
-
-The nine entries previously held here have all graduated; routing is captured
-in the 2026-05-12 Volcanic Charring Furnace graduation log above. Brief
-disposition: pre-stage non-negotiability and advisory-decay → P3 commit-queue
-guard at `c083a1ab`; agent-tools unified CLI → P-Foundation landed; peer
-sidebars vs helpers → `inter-agent-sidebar-with-default-action` + agent-
-collaboration.md; pathspec discipline + verify-actual-contents → PDR-054 +
-peer-commit-absorption-third-direction pattern + agent-collaboration.md
-§ Treat Commit as a Short-Lived Shared Transaction Surface; gendered-
-pronoun default → user-memory + jc-* skill canonicals; tooling-discipline
-items (glob quoting, markdownlint --fix safety) live operationally rather
-than as distilled doctrine.
 
 ---
 
@@ -452,33 +497,6 @@ near-patterns, and routing decisions.
   a Short-Lived Shared Transaction Surface` amendment for mutual
   mechanical verification + hook authority; thread-record-routing-
   surfaces-drift amendment.
-
----
-
-## Recently Distilled — 2026-05-10 Napkin Rotation
-
-These entries merged during the 2026-05-10 deep consolidation pass.
-Most graduated to permanent homes during the 2026-05-14 Verdant Swaying
-Glade Route C-iv pass; the entries listed below remain held for
-cross-session validation or for a destination decision in a future
-consolidation.
-
-### Curation And Doctrine-Holding
-
-- (graduated 2026-05-14 — see Graduations Log entry under
-  "Riverine Swimming Hull Batch C")
-
-### Coordination And Commit Discipline
-
-- (graduated 2026-05-14 — see Graduations Log entry under
-  "Riverine Swimming Hull Batch C")
-
-### Planning Arithmetic And Disposition
-
-- (no remaining entries — both planning-arithmetic items graduated to
-  the [`jc-plan` skill body § Disposition Ledger][plan-disposition])
-
-[plan-disposition]: ../../skills/plan/SKILL-CANONICAL.md#disposition-ledger-for-apply-all-of-x-inputs
 
 ---
 
@@ -532,88 +550,3 @@ graduated 2026-05-10 to the host pattern
 [`deferred-at-write-time-is-unmade-load-bearing-decision`][def-at-write].
 
 [def-at-write]: patterns/deferred-at-write-time-is-unmade-load-bearing-decision.md
-
----
-
-## Graduations Log — 2026-05-14 Verdant Swaying Glade Route C-iv
-
-Graduations landed during the 2026-05-14 Route C-iv pass. Entries below
-moved from the 2026-05-09 / 2026-05-10 rotations to their named permanent
-homes per canonical step 7b. Five distilled entries graduated as new
-substance; four were verified as already-incorporated and pruned with
-back-cites; two planning-arithmetic items consolidated into one
-disposition-ledger section in the `jc-plan` skill body.
-
-**Newly graduated (5 substance moves)**:
-
-- *Target-architecture wording needs consuming-runtime evidence*
-  → [`principles.md` § Code Quality (after "Misleading docs are blocking")][prin-target-arch]
-- *Commit-helper state writes still need peer-claim audits*
-  → [`agent-collaboration.md` § Treat Commit as a Short-Lived Shared Transaction Surface][ac-helper]
-- *Generators require populated source data* (consolidating the
-  2026-05-09 + 2026-05-10 mentions of the same insight)
-  → [`docs/engineering/workflow.md` § 12 Workflow Gotchas][wf-generators]
-- *Exact focused tests should use the runner directly when script forwarding drifts*
-  → [`docs/engineering/workflow.md` § 12 Workflow Gotchas][wf-runner]
-- *Unit test taxonomy beats historical local precedent*
-  → [`docs/engineering/testing-tdd-recipes.md` § Adding To Existing IO Debt In A Unit Test File][tdd-iodebt]
-
-**Consolidated graduation (2 entries → 1 section)**:
-
-- *Count targets derived from current state must name their derivation*
-  AND *"Apply all of X" needs a disposition ledger, not one cycle per item*
-  → [`jc-plan` skill body § Disposition Ledger For "Apply All Of X" Inputs][plan-disposition]
-
-**Already-incorporated prunes (4 back-cites, no new substance)**:
-
-- *Reading doctrine is weaker than holding its frame at output time*
-  was already covered structurally by `principles.md` § Architectural
-  Excellence Over Expediency — three structural cues at output time
-  (PDR-043 / ADR-172). The cure is operational; the distilled note
-  was a refinement of an already-landed cure.
-- *Parent directives need operational cures when the rule keeps being
-  rediscovered* was already incorporated into `agent-collaboration.md`
-  § c (Treat Commit as a Short-Lived Shared Transaction Surface), which
-  now names both `git add -- <paths>` and `git commit -- <paths>` as
-  the cured pair. Cure landed; observation distilled.
-- *Whole-tree hooks can block pathspec-only commits by design* was
-  already incorporated into `agent-collaboration.md` § c — the queue
-  protects authorial-bundle integrity but does not narrow whole-tree
-  hooks; minor peer-owned failures are repaired in place. Cure landed;
-  observation distilled.
-- *Check schema or CLI help before authoring claims from memory* was
-  already covered structurally by [`read-before-asking.md`][rba] (and
-  PDR-057, the empirical-answerability pre-question gate). The
-  structural cure is read-before-asking; the distilled note was an
-  instance.
-
-[prin-target-arch]: ../../directives/principles.md#code-quality
-[ac-helper]: ../../directives/agent-collaboration.md#c-treat-commit-as-a-short-lived-shared-transaction-surface
-[wf-generators]: ../../../docs/engineering/workflow.md#generators-require-populated-source-data
-[wf-runner]: ../../../docs/engineering/workflow.md#use-the-test-runner-directly-when-script-forwarding-drifts
-[tdd-iodebt]: ../../../docs/engineering/testing-tdd-recipes.md#adding-to-existing-io-debt-in-a-unit-test-file
-[rba]: ../../rules/read-before-asking.md
-
----
-
-## Graduations Log — 2026-05-14 Riverine Swimming Hull Batch C
-
-Three curation entries from the 2026-05-10 Sylvan Fruiting Glade rotation
-graduated to permanent homes per the graduation-triage-disposition
-2026-05-14 plan's Batch C. All three were stable since 2026-05-10 (4 days)
-with no contradicting evidence; all are minor curation/hygiene cures
-whose right home is the workflow gotchas section in the engineering
-workflow document.
-
-**Newly graduated (3 substance moves)**:
-
-- *Lettered-section edits must re-read the parent count*
-  → [`docs/engineering/workflow.md` § 12 Workflow Gotchas — Lettered-Section Edits Must Re-Read The Parent Count][wf-lettered]
-- *Growth-axis metadata is live doctrine*
-  → [`docs/engineering/workflow.md` § 12 Workflow Gotchas — Growth-Axis Metadata Is Live Doctrine][wf-growth]
-- *Shell loops over multiline command output are unsafe in deletion paths*
-  → [`docs/engineering/workflow.md` § 12 Workflow Gotchas — Shell Loops Over Multi-line Command Output Are Unsafe In Deletion Paths][wf-shell]
-
-[wf-lettered]: ../../../docs/engineering/workflow.md#lettered-section-edits-must-re-read-the-parent-count
-[wf-growth]: ../../../docs/engineering/workflow.md#growth-axis-metadata-is-live-doctrine
-[wf-shell]: ../../../docs/engineering/workflow.md#shell-loops-over-multi-line-command-output-are-unsafe-in-deletion-paths

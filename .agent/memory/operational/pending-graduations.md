@@ -1,6 +1,6 @@
 ---
-fitness_line_target: 2000
-fitness_line_limit: 2500
+fitness_line_target: 500
+fitness_line_limit: 750
 fitness_char_limit: 150000
 fitness_line_length: 300
 lifecycle_model: "queue — empties as substance graduates; depth proportional to cross-session-wait accumulation, not to file-permanence concerns"
@@ -164,6 +164,39 @@ list; entry-level summary index is intentionally omitted to avoid
 duplicating entry-body substance and to keep the index honest as
 the queue churns.
 
+### 2026-05-17 — Surface classification for fitness-response routing (PDR-shaped)
+
+`[captured: 2026-05-17 | source: distilled.md §"Surface classification routes fitness response" | target: pdr:surface-classification-for-fitness-response | trigger: owner-direction | size: S | status: pending]`
+
+Substance summary: four surface kinds in the knowledge-flow pipeline
+(memory / state / buffer / doctrine) route fitness signals to
+different correct responses. The "Learning Preservation" rule applies
+to memory and state, not buffers. Trigger to watch: owner-direction
+at next consolidation. Full doctrine drafted at the target home, not
+here.
+
+### 2026-05-17 — Pipeline back-pressure as structural-cure signal (PDR-shaped)
+
+`[captured: 2026-05-17 | source: distilled.md §"Pipeline back-pressure is information" | target: pdr:pipeline-back-pressure-is-structural-cure-signal | trigger: owner-direction | size: S | status: pending]`
+
+Substance summary: a full buffer with fitness alarms means the
+upstream consumer is bottlenecked. The cure targets producer or
+consumer rate, never the buffer's envelope. Four candidate bottlenecks
+named in source. Trigger to watch: owner-direction at next
+consolidation, ideally paired with surface-classification PDR.
+
+### 2026-05-17 — Doctrine-first vs first-principles diversity in agent-owner pairs (PDR-shaped)
+
+`[captured: 2026-05-17 | source: distilled.md §"Doctrine-first vs first-principles is cognitive-approach diversity" | target: pdr:cognitive-approach-diversity-in-agent-owner-pairs | trigger: second-instance-or-owner-direction | size: M | status: pending]`
+
+Substance summary: agent baselines doctrine-first reasoning; owner
+baselines first-principles reasoning; the pair compounds when both
+present, but agent operating alone falls into doctrine-by-analogy
+failure mode. Cure: pre-action surface-classification checkpoint;
+recurring signals route to upstream-cause diagnosis. Trigger to
+watch: second instance of the recurring-signal shape, or owner
+direction.
+
 ### 2026-05-17 — Gates hide gates — failure surface is a stack
 
 `[captured: 2026-05-17 | source: distilled.md §"Recently Distilled — 2026-05-17 Solar Orbiting Asteroid gate-green cascade" §"Gates hide gates" | target: pattern:gates-hide-gates | trigger: second-instance | size: S | status: pending]`
@@ -203,7 +236,9 @@ at next consolidation.
 
 ### 2026-05-17 — `pnpm check` cleanliness gate in session-handoff (skill-amend)
 
-`[captured: 2026-05-17 | source: distilled.md §"Recently Distilled — 2026-05-17 Solar Orbiting Asteroid gate-green cascade" §"pnpm check cleanliness gate belongs in session-handoff" | target: skill-amend:session-handoff | trigger: owner-direction-already-fired-2026-05-14 | size: S | status: due]`
+`[captured: 2026-05-17 | source: distilled.md §"Recently Distilled — 2026-05-17 Solar Orbiting Asteroid gate-green cascade" §"pnpm check cleanliness gate belongs in session-handoff" | target: skill-amend:session-handoff | trigger: owner-direction-already-fired-2026-05-14 | size: S | status: graduated]`
+
+`[graduated 2026-05-17: Swift Winging Gust consolidation pass added new step 11 "Verify the pnpm check cleanliness gate" to .agent/skills/session-handoff/SKILL-CANONICAL.md between the consolidation escalation step and the boundary-clean step; previous step 11 renumbered to 12]`
 
 Substance: owner stated standing 2026-05-14 (recorded in archived
 napkin `napkin-2026-05-14.md`): session-handoff cannot be considered
@@ -220,7 +255,9 @@ this entry is `status: due` for the next session-handoff skill edit.
 
 ### 2026-05-17 — Hook-bypass equivalence in `--no-verify` rule (rule-amend)
 
-`[captured: 2026-05-17 | source: distilled.md §"Recently Distilled — 2026-05-17 Solar Orbiting Asteroid gate-green cascade" §"Hook-bypass equivalence" | target: rule-amend:no-verify-requires-fresh-authorisation | trigger: owner-direction-already-fired-2026-05-14 | size: S | status: due]`
+`[captured: 2026-05-17 | source: distilled.md §"Recently Distilled — 2026-05-17 Solar Orbiting Asteroid gate-green cascade" §"Hook-bypass equivalence" | target: rule-amend:no-verify-requires-fresh-authorisation | trigger: owner-direction-already-fired-2026-05-14 | size: S | status: graduated]`
+
+`[graduated 2026-05-15 (verified 2026-05-17): the rule body of .agent/rules/no-verify-requires-fresh-authorisation.md was extended at commit da2a4aac (Luminous Waxing Twilight session) to enumerate the full hook-bypass equivalence class — --no-verify/-n, --no-pre-commit, --no-commit-msg, --no-post-commit, --no-gpg-sign, --no-edit when bypassing a hook, HUSKY=0, SKIP_HOOKS=1, LEFTHOOK=0, env-var skips, git -c core.hooksPath=/dev/null, GIT_HOOKS_PATH override, deleting/renaming/chmod-ing .husky/ or .git/hooks/, any future equivalent. Substance landed before the pending-graduation entry was captured; entry was stale on creation. Verified by Swift Winging Gust 2026-05-17 consolidation pass.]`
 
 Substance: the repo-wide invariant
 [`no-verify-requires-fresh-authorisation`](../../rules/no-verify-requires-fresh-authorisation.md)
@@ -331,7 +368,9 @@ second session corroborates or contradicts the distinction.
 
 ### 2026-05-14 — Repo-continuity Active Threads identity column structural refactor (fitness-loop signal)
 
-`[captured: 2026-05-14 | source: consolidation step 9 critical-zone post-mortem (Riverine Swimming Hull) | target: structural-refactor:repo-continuity-active-threads-column | trigger: owner-direction-or-second-critical-zone-pass | size: M | status: pending]`
+`[captured: 2026-05-14 | source: consolidation step 9 critical-zone post-mortem (Riverine Swimming Hull) | target: structural-refactor:repo-continuity-active-threads-column | trigger: owner-direction-or-second-critical-zone-pass | size: M | status: graduated]`
+
+`[graduated 2026-05-17 (Swift Winging Gust): owner-direction trigger fired — full structural pass approved. Refactored the Latest identity column in .agent/memory/operational/repo-continuity.md § Active Threads to compact form (agent_name / platform / model / session_id_prefix / last_session) per PDR-027. Removed accumulated per-session narrative paragraphs (Floating Lifting Thermal, Feathered Darting Kite, Fronded Foraging Moss, Luminous Threading Asteroid identity-refresh notes) — their substance lives in the threads/<slug>.next-session.md records as the doctrinal home. Added compact-identity rule footnote citing PDR-027 below the table.]`
 
 Substance: the `repo-continuity.md § Active Threads` table's
 identity column has accumulated per-session detail that already
