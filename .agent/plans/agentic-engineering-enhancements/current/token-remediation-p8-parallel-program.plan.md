@@ -30,11 +30,14 @@ isProject: true
 
 # Token / Remediation / P8 / Parallel Program 2026-05-14
 
-**Last Updated**: 2026-05-15
+**Last Updated**: 2026-05-17
 **Status**: SEQUENCE-LIVE — Step 1 closed at WS2 boundary. **Interrupt
-resolved**: upstream Oak API schema adoption (multi-unit lesson shape
-plus programme-variant + image filters) landed in this session; Step 2
-(singleton-lane remediation) opens next session.
+RESOLVED**: `pnpm check` is fully green at commit `ee41cd49` (100/100
+turbo tasks successful). The upstream Oak API adoption work (originally
+landed at `da2a4aac`) plus the gate-green cleanup (six commits this
+session, see §Current Snapshot) closes the interrupt that began
+2026-05-14. Step 2 (singleton-lane remediation) opens in the next
+session.
 **Collection**: `agentic-engineering-enhancements/current` (program
 spans two threads — see §Threads Touched).
 **Threads Touched**:
@@ -49,40 +52,50 @@ spans two threads — see §Threads Touched).
 
 (updated by every session that touches the program)
 
-- **Current step**: Step 1 — finish token-related work — **CLOSED at WS2
-  boundary**. Step 2 — singleton-lane remediation — is now the next
-  scheduled session; the upstream API interrupt that took the slot before
-  it has been resolved (see Interrupt Log entry 2026-05-14 #2).
-- **This session advanced the interrupt**: upstream Oak API multi-unit
-  lesson adoption landed across the curriculum SDK and search-CLI
-  consumer surfaces. New helpers `extractLessonUnits` and
-  `formatPrimaryUnit` introduced; consumer code migrated from flat
-  `unitSlug` to structured `units[]`; MCP aggregated-fetch tool carries
-  the new shape through to AI agents; MCP search tool filter
-  descriptions clarified; generated MCP tools auto-expose KS4
-  programme-variant filters (`examBoard`, `pathway`, `tier`,
-  `childSubject`) and the `filter=images` parameter on the three
-  question endpoints via codegen. ADR-080 §"Context", §"Rationale", and
-  §"Limitations" amended; ADR-029 §"What is Prohibited" gained the
-  consumer-side reshaping sub-bullet; ADR-093 §line-96 disambiguates
-  bulk-row vs API-resource `lesson.unitSlug`. Bulk data shape was held
-  out of scope and routed to a follow-on plan
-  (`bulk-data-rebaseline-and-infra-impact-investigation.plan.md`).
-- **Next safe step**: open the next session against the
-  `agentic-engineering-enhancements` thread, ground via
-  `jc-start-right-quick`, and open Step 2 — the singleton-lane
-  remediation plan at
-  [`start-right-team-singleton-lane-remediation.plan.md`](../../agent-tooling/current/start-right-team-singleton-lane-remediation.plan.md).
-  That plan is **not decision-complete**; first safe sub-step is
-  owner/reviewer review then WS0 baseline disposition.
-- **Bulk data follow-on**: a separately scheduled investigation plan
-  re-downloads upstream bulk data and observes whether bulk-typed
-  consumers or search infrastructure break under the new shape. Not a
-  fix plan; if breakage emerges, each fix is separately scoped. The
-  plan lives at
-  `connecting-oak-resources/current/bulk-data-rebaseline-and-infra-impact-investigation.plan.md`.
-- **Step age** (sessions since last advance): 0 — interrupt just
-  resolved, Step 2 not yet opened.
+- **Current step**: Step 1 — finish token-related work — **CLOSED at
+  WS2 boundary**. Interrupt 2026-05-14 #2 (upstream API adoption +
+  gate-green cleanup) is **RESOLVED** at `ee41cd49` (2026-05-17 session).
+  Step 2 (singleton-lane remediation) opens next session.
+- **This session (2026-05-17) brought `pnpm check` green** through six
+  commits. Headline: each unmasked the next when its upstream gate
+  cleared.
+    1. `9f04d9af` — `chore(knip): include agent-tools/scripts in
+       entry list`. Aligned the agent-tools knip workspace config
+       with the canonical pattern used by other workspaces;
+       reduced knip findings from 56+29 to 40+28.
+    2. `b3ef1cbb` — `chore(agent-tools): slim practice-fitness
+       barrel and demote internal-only exports`. Removed dead
+       re-exports and demoted symbols only used inside their own
+       module.
+    3. `4c30ffee` — `chore(agent-tools): slim collaboration-state
+       barrel and demote internal-only exports`. Same pattern;
+       brought knip to zero unused findings.
+    4. `0c083409` — `docs(patterns): add
+       test-coverage-review-lens`. Captured the reusable review
+       methodology that surfaced the next commit's deletions.
+    5. `96fd3e61` — `test(mcp): delete misclassified e2e files
+       duplicating unit and integration coverage`. Deleted two
+       MCP e2e files (18 tests) whose every claim was already
+       proved at the right level (curriculum-model-data.unit.test,
+       agent-support-tool-metadata.unit.test,
+       conditional-clerk-middleware.unit.test +
+       .integration.test, register-resources.integration.test).
+       Removed the test-design contribution to the cross-test
+       parallel-load flake observed earlier.
+    6. `ee41cd49` — `refactor(graph-core,agent-tools): break two
+       circular type imports surfaced by depcruise`. Two
+       pre-existing latent cycles became visible once the gates
+       above turned green:
+       `graph-core/jsonld/processor ↔ remote-context` (broken via
+       new `processor-types.ts`) and
+       `agent-tools/tui/snapshot ↔ operator-value` (broken via
+       new `tui/entry-types.ts`). No behavioural change.
+- **Final state**: `pnpm check` exits 0; 100/100 turbo tasks
+  successful; agent-tools type-check + 419 tests green; graph-core
+  type-check + 40 tests green; MCP e2e suite 155/155 green
+  consistently in isolation and under full-`pnpm check` parallel load.
+- **Step age** (sessions since last advance): 0 — interrupt
+  resolved, Step 2 opens next session.
 
 ## Why This Artefact Exists
 
@@ -260,7 +273,7 @@ program).
 | Date | Interrupt | Owning agent | Budget | Status | Resume note |
 |---|---|---|---|---|---|
 | 2026-05-14 | Graduation-triage execution + metacog correction + PDR-060 landing | Riverine Swimming Hull | 1 session | resolved this session | program authoring is the resume note |
-| 2026-05-14 | Upstream Oak API schema adoption (programme-variant filters + multi-unit lesson shape; codegen drift broke curriculum-sdk + search-cli `pnpm check`) | Highland Circling Plume surfaced; Luminous Waxing Twilight executed | 1 session | resolved 2026-05-15 | Multi-unit lesson adoption landed across SDK helpers (`extractLessonUnits`, `formatPrimaryUnit`), consumer code migration, MCP aggregated-fetch dual-emission test, MCP search-tool description clarification, three ADR amendments (080, 029, 093). Bulk data shape routed to follow-on plan `bulk-data-rebaseline-and-infra-impact-investigation`. `pnpm check` remains red on pre-existing `knip` unused-export findings in `agent-tools/src/` (unrelated to upstream adoption); separately scoped. Next-session opens Step 2. |
+| 2026-05-14 | Upstream Oak API schema adoption (programme-variant filters + multi-unit lesson shape; codegen drift broke curriculum-sdk + search-cli `pnpm check`) | Highland Circling Plume surfaced; Luminous Waxing Twilight executed and surfaced gate-state error; Solar Orbiting Asteroid brought gate green | budget originally 1 session; expanded — gate-green was binding | resolved 2026-05-17 at `ee41cd49` | Adoption work landed at `da2a4aac` (commit-time gate-red was the foundational-rule violation owner corrected 2026-05-15). 2026-05-17 session closed the gate via six commits in sequence (see §Current Snapshot for the commit chain): knip config gap → barrel-slim → barrel-slim → review-lens pattern → e2e file deletions → cycle-break. Each commit unmasked the next downstream gate as upstream gates cleared. Final state: 100/100 turbo tasks successful. |
 
 ## Anti-Decay Handoff Clause
 
