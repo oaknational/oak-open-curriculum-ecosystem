@@ -168,7 +168,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Swift Winging Gust / `claude` / Opus 4.7 (1M) / `50492a` / 2026-05-17 |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Swift Winging Gust / `claude` / Opus 4.7 (1M) / `50492a` / 2026-05-18 |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Riverine Swimming Hull / `claude` / Opus 4.7 / `304dde` / 2026-05-14 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -495,10 +495,17 @@ metacognition from retrospective-only to retrospective-plus-generative):
   retrospective and generative modes plus the shared pre-action
   ratification reflex).
 
-Pipeline-repair work (producer-side capture-shape contract, consumer-
-side trigger-scan cadence, drain pass for the existing backlog,
-ADR-144 amendment to classify surfaces) is registered as future
-owner-directed work; not in scope for this session.
+Pipeline-repair work is now registered as a DECISION-COMPLETE-
+FOR-STRATEGIC-ROUTING plan at
+[`knowledge-flow-pipeline-mechanisms.plan.md`](../../plans/agentic-engineering-enhancements/current/knowledge-flow-pipeline-mechanisms.plan.md)
+(authored 2026-05-18 Swift Winging Gust continuation). Six WSes:
+WS1 producer-side buffer-shape contract; WS2 consumer-side trigger-
+scan cadence + recurring-signal tripwire rule; WS3 drain pass for
+existing backlog (first executable slice); WS4 ADR-144 surface-
+classification amendment; WS5 declared-workflow-steps-require-
+evidence rule; WS6 PDR-drafting lane for the five 2026-05-17
+candidates. Suggested execution order WS3 → WS4 → WS1 → WS2 → WS5 →
+WS6; owner-direction selects.
 
 **Prior status (2026-05-17 — Solar Orbiting Asteroid / `claude` / Opus 4.7 (1M) /
 `01ff58`)**: completed this handoff — owner-directed
