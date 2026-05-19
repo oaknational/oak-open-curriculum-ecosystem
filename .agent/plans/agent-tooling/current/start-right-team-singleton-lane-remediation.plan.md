@@ -18,34 +18,35 @@ todos:
     status: pending
     depends_on: [ws0-baseline-disposition]
   - id: ws3-canonical-comms-path
-    content: "Remove normal agent-facing comms path overrides and any standing migration command shape; derive canonical comms paths from repo-root/tool contracts."
+    content: "Remove normal agent-facing comms path overrides and any standing migration command shape; derive canonical comms paths from repo-root/tool contracts. **Absorbed scope (2026-05-19)**: widen `comms watch` identity filter from `(agent_name, session_id_prefix)` to the full PDR-027 tuple `(agent_name, platform, model, session_id_prefix)`; add a self-echo unit test proving a same-name-different-platform peer is not excluded and a same-tuple self-write is. Required by multi-vendor (Claude+Codex) graph work where derived `agent_name` collisions are foreseeable."
     status: pending
     depends_on: [ws0-baseline-disposition]
   - id: ws4-stale-surface-sweep
-    content: "Update or delete stale docs, prompts, executive manifests, and memory-correction surfaces that present comms-events or other retired paths as live."
-    status: pending
+    content: "Update or delete stale docs, prompts, executive manifests, and memory-correction surfaces that present comms-events or other retired paths as live. **Deferred 2026-05-19**: scheduled to run parallel with graph multi-agent work, not before it."
+    status: deferred
     depends_on: [ws3-canonical-comms-path]
   - id: ws5-bulk-cleanup-hot-window
-    content: "Separate live coordination writes from bulk cleanup/retention sweeps, with parser-backed hot-window preflight before cleanup mutates shared state."
-    status: pending
+    content: "Separate live coordination writes from bulk cleanup/retention sweeps, with parser-backed hot-window preflight before cleanup mutates shared state. **Deferred 2026-05-19**: scheduled to run parallel with graph multi-agent work, not before it."
+    status: deferred
     depends_on: [ws0-baseline-disposition]
   - id: ws6-pilot-and-hypothesis-routing
-    content: "Route the N=7 evidence through the collaboration hypothesis surfaces and validate the remediation on the next natural singleton-lane team window."
-    status: pending
+    content: "Route the N=7 evidence through the collaboration hypothesis surfaces and validate the remediation on the next natural singleton-lane team window. **Deferred 2026-05-19**: validation surface for the deferred WS4+WS5 — moves with them."
+    status: deferred
     depends_on: [ws1-team-start-rendezvous, ws2-claim-overlap-signal, ws3-canonical-comms-path, ws5-bulk-cleanup-hot-window]
   - id: ws7-closeout-and-consolidation
-    content: "Run final validation, reviewer synthesis, continuity updates, and consolidation routing without entrenching fixed role labels."
-    status: pending
+    content: "Run final validation, reviewer synthesis, continuity updates, and consolidation routing without entrenching fixed role labels. **Deferred 2026-05-19**: closeout for the deferred tail; runs after WS6."
+    status: deferred
     depends_on: [ws6-pilot-and-hypothesis-routing]
 isProject: false
 ---
 
 # Start Right Team Singleton Lane Remediation
 
-**Last Updated**: 2026-05-14
-**Status**: FIRST-PASS PLAN / NOT DECISION-COMPLETE
+**Last Updated**: 2026-05-19
+**Status**: DECISION-COMPLETE — lean multi-vendor scope (WS0 + WS1 + WS2 + WS3 only). WS4–WS7 deferred to run parallel with graph multi-agent work.
 **Collection**: `agent-tooling/current`
 **Thread**: `agentic-engineering-enhancements`
+**Owner ratification (2026-05-19)**: under the broken/accelerator lens applied to graph multi-vendor priority, the gating scope is the four-workstream lean subset. WS3 absorbs the full-tuple identity-filter tightening from the deferred `comms-watch-liveness-floor` plan because the canonical-comms-path workstream already touches that surface and the multi-vendor (Claude+Codex) self-echo risk is named as non-negotiable in [`comms-watch-mechanism.md`](../../../reference/comms-watch-mechanism.md).
 
 ## Metacognition Pass
 

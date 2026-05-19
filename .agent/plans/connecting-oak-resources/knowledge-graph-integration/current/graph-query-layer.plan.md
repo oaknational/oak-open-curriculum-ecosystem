@@ -46,9 +46,8 @@ todos:
 
 # Graph Query Layer
 
-**Status**: CURRENT — queued; depends on owner approval of the architecture
-session conclusions (2026-04-30, Iridescent Soaring Planet).
-**Last Updated**: 2026-04-30
+**Status**: CURRENT — architecture-session conclusions approved by owner 2026-05-19. Remaining promotion gates: T1 tracer use-cases signed off, plan-body first-principles check re-applied, EEF corpus plan ready for parallel start.
+**Last Updated**: 2026-05-19
 **Branch**: `feat/eef_exploration` (originating session); execution branch
 TBD when promoted to ACTIVE.
 **Increment**: 1 of 5 in the EEF graph-and-corpus delivery sequence.
@@ -913,7 +912,7 @@ not achieve the user value the plan exists for.
 
 Promote when:
 
-1. Owner has approved the architecture session conclusions;
+1. ~~Owner has approved the architecture session conclusions~~ — **APPROVED 2026-05-19** under the broken/accelerator lens applied to graph multi-vendor priority;
 2. T1 (tracer use cases) is signed off;
 3. The plan-body first-principles check has been re-applied to the
    tracer shapes against the actual data files;

@@ -1,5 +1,54 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Lens-Applied Sequence (2026-05-19)
+
+**Owner direction (Shaded Passing Candle session)**: graph tooling is the
+priority under a long-term-excellence framing. Apply a broken/accelerator
+lens to all sequenced work — items earn a slot ahead of graph only if they
+are fixing concrete breakage *or* directly accelerate graph work.
+Otherwise they defer. Anything sequenced ahead of graph must be
+decision-complete. Multi-vendor (Claude + Codex) confirmed as the graph
+work shape — the most multi-agent yet.
+
+**Token-remediation program advancement rule is superseded** for graph
+priority. Step 2 (singleton-lane) → Step 3 (P8 TUI) → Step 4A
+(cost-of-collab) → Step 4B (graph) is *not* the active sequence. P8 TUI,
+cost-of-collab P6/P7, and the hardening tail waves 2–6 defer past graph.
+
+**Gating set under the lens (all decision-complete 2026-05-19)**:
+
+1. [`graph-stack.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md)
+   Inc.1a (in execution; unblock WS1.5 lockfile collision to resume) and
+   Inc.1b (single-agent, sequenced after Inc.1a + pinned ontology revision).
+2. [`start-right-team-singleton-lane-remediation.plan.md`](../../plans/agent-tooling/current/start-right-team-singleton-lane-remediation.plan.md)
+   — **lean scope**: WS0 + WS1 + WS2 + WS3 only. WS3 absorbs the full-tuple
+   identity-filter widening from the deferred liveness-floor plan because
+   Claude+Codex sessions may derive the same `agent_name` and self-echo is
+   named non-negotiable in
+   [`comms-watch-mechanism.md`](../../reference/comms-watch-mechanism.md).
+   WS4–WS7 deferred to parallel-with-graph.
+3. [`graph-query-layer.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md)
+   — architecture-session conclusions approved by owner 2026-05-19.
+   Remaining promotion-to-ACTIVE gates: T1 sign-off, first-principles
+   re-check, EEF corpus parallel-readiness.
+4. Hardening tail
+   [Wave 1](../../plans/agentic-engineering-enhancements/current/2026-05-12-collaboration-protocol-hardening-r1b-opener.md)
+   (T-R4b, T-R7, T-R2) — parallel-safe doc/investigation work.
+
+**Newly captured this session**:
+
+- [`comms-watch-mechanism.md`](../../reference/comms-watch-mechanism.md)
+  reference doc — portable substrate spec for event-driven directed-message
+  intake plus liveness floor. Inbound from another repo.
+- [`comms-watch-liveness-floor.plan.md`](../../plans/agent-tooling/future/comms-watch-liveness-floor.plan.md)
+  — deferred to `future/` under the lens; scope reduced after WS3 absorption.
+- [`plan-index-reachability-remediation.plan.md`](../../plans/agentic-engineering-enhancements/current/plan-index-reachability-remediation.plan.md)
+  — decision-incomplete, captures the leaf-to-root reachability invariant
+  now documented in `.agent/plans/README.md`. Slot owner's call.
+
+**Next safe step**: WS0 baseline disposition on singleton-lane remediation,
+in parallel with unblocking the graph-stack WS1.5 lockfile collision.
+
 ## Current Continuation
 
 - Branch: `feat/mcp-graph-support-foundation`.

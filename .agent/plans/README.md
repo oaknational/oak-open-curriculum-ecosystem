@@ -3,6 +3,9 @@
 Strategic and tactical planning documents for the Oak Open Curriculum Ecosystem.
 
 **High-Level Coordination**: [high-level-plan.md](high-level-plan.md)
+**Graph Portfolio Index**: [graph-portfolio-index.md](graph-portfolio-index.md) — single cross-collection index for every graph-related plan and artefact; coordinates the MVP and combinatorial arcs below
+**Graph MVP Arc**: [graph-mvp-arc.plan.md](graph-mvp-arc.plan.md) — three-slice substrate-and-surface spine across EEF strands, Oak ontology Threads, and Oak misconceptions
+**Graph Combinatorial Arc**: [graph-combinatorial-arc.plan.md](graph-combinatorial-arc.plan.md) — follow-on cross-corpus composition spine after the MVP arc
 **Milestones**: [milestones/](../milestones/) — per-milestone summaries (audience, value, gates)
 **Completed Plans**: [completed-plans.md](completed-plans.md)
 **Foundation Documents**: [.agent/directives/](../directives/)
@@ -47,6 +50,31 @@ directories are omitted because the collection does not need them yet:
 ├── reference/            # Supporting reference material (optional)
 └── {plan-documents}      # Collection-owned plans outside lifecycle subdirs
 ```
+
+### Reachability Invariant — Leaf-To-Root
+
+Every plan file MUST be a leaf node reachable from this root README via the
+index chain:
+
+```text
+.agent/plans/README.md
+  → {collection}/README.md
+    → {collection}/{active|current|future}/README.md
+      → {plan-file}.md
+```
+
+Equivalently: the plan portfolio is a tree, and every leaf has exactly one
+path back to this shared root. Cross-collection coordination spines
+(top-level `*-arc.plan.md` or `*-portfolio-index.md` files at
+`.agent/plans/`) are leaves of the root README directly, not of any single
+collection.
+
+This is the **plan-portfolio reachability invariant**. It is the structural
+reason the lifecycle READMEs exist; an unindexed plan is invisible to plan
+triage, consolidation, and the broken/accelerator lens applied at
+priority-setting time. The
+[plan-index-reachability-remediation plan](agentic-engineering-enhancements/current/plan-index-reachability-remediation.plan.md)
+owns the validator that enforces this invariant at CI time.
 
 ---
 
