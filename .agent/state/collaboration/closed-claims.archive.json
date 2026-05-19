@@ -26364,6 +26364,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "995c5ebd-716a-4228-b47b-93f2ef2ffd14",
+      "agent_id": {
+        "agent_name": "Shaded Passing Candle",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "ab4290"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-19T12:08:58Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Commit lens-applied decision record: singleton-lane decision-complete + graph-query-layer arch approval + liveness-floor scope reduction + reachability invariant + comms-watch reference + thread record update",
+      "archived_at": "2026-05-19",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-19T12:13:37Z",
+        "closed_by": {
+          "agent_name": "Shaded Passing Candle",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "ab4290"
+        },
+        "summary": "Committed at 3ef0a23a — lens-applied decision record + reachability invariant + comms-watch reference. Pre-commit markdownlint required one in-flight fix (root README nested bullets flattened); fitness advisory signals (pending-graduations, repo-continuity, practice-bootstrap) pre-existing on files not touched, routed per ADR-144 substance-led path.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "995c5ebd-716a-4228-b47b-93f2ef2ffd14",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

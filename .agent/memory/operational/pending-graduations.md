@@ -3691,3 +3691,41 @@ receiving plan, naming the surfaces to examine and the criteria for
 collapse/reshape/keep. Without the tripwire, deferral becomes pure
 accumulation — the deferred concept arrives bolted on top of the
 inherited shape and the opportunity to reshape is missed.
+
+### 2026-05-19 — Plan-portfolio leaf-to-root reachability invariant (Shaded Passing Candle)
+
+`[CANDIDATE: plan-portfolio-reachability-invariant | captured: 2026-05-19 |
+source: napkin 2026-05-19 + .agent/plans/README.md §Reachability Invariant |
+graduation-target: ADR amendment (or new ADR) ratifying the leaf-to-root
+invariant plus the obligated CI validator | trigger: validator implementation
+slice ready, OR second collection-level orphan instance, OR owner-direct
+promotion; status: pending | size: S]`
+
+Audit on 2026-05-19 found three collections absent from the root README's
+Plan Collections table (`notes/`, `observability/`, `user-experience/`),
+five orphan plans below the lifecycle layer, and two collections missing
+lifecycle READMEs entirely (`observability/{active,current,future}/`,
+`security-and-privacy/future/`). Plus three top-level graph coordination
+spines unindexed at the root (remediated in-line). The invariant — every
+plan is a leaf node reachable from `.agent/plans/README.md` via
+collection-and-lifecycle indexes — is now documented at
+`.agent/plans/README.md § Reachability Invariant — Leaf-To-Root`. The
+remediation plan
+`.agent/plans/agentic-engineering-enhancements/current/plan-index-reachability-remediation.plan.md`
+captures the validator obligation as Phase 4. ADR ratification follows
+when the validator implementation slice opens.
+
+### 2026-05-19 — Portable-reference-arrives-without-plan-slot pattern (Shaded Passing Candle)
+
+`[CANDIDATE: portable-reference-arrives-without-plan-slot | captured:
+2026-05-19 | source: napkin 2026-05-19 | graduation-target: pattern card
+in memory/active/patterns/ after second instance | trigger: second
+observation of a portable reference doc arriving into .agent/reference/
+without an owning plan; status: pending | size: S]`
+
+`.agent/reference/comms-watch-mechanism.md` arrived as a portable substrate
+spec with no owning plan, no workstream pointer, and no decision-complete
+trigger to integrate. The reasonable response was a three-question
+grounding pass (substrate / thread / delta) before drafting integration
+scope. Going straight to drafting is guesswork dressed as readiness.
+Pattern card material once a second instance is observed.

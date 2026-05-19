@@ -17,6 +17,19 @@ Earlier archives remain under [`archive/`](archive/).
 ## Current State
 
 - Current branch: `feat/mcp-graph-support-foundation`.
+- **2026-05-19 (Shaded Passing Candle)**: broken/accelerator lens applied
+  to all sequenced work for graph-multi-vendor priority (Claude + Codex,
+  most multi-agent yet). Token-remediation program advancement rule
+  superseded for graph priority. Three gating plans flipped to
+  decision-complete: singleton-lane remediation (lean scope WS0+WS1+WS2+WS3
+  with WS3 absorbing the full-tuple identity-filter widening),
+  graph-query-layer (arch-session conclusions approved), graph-stack
+  Inc.1a/1b (already active). Liveness-floor plan deferred to `future/`
+  with Phase 2 absorbed into singleton-lane WS3. New reachability invariant
+  documented at `.agent/plans/README.md`; new portable reference
+  `.agent/reference/comms-watch-mechanism.md` landed. Commit `3ef0a23a`.
+  Next safe step: WS0 baseline disposition on singleton-lane, in parallel
+  with unblocking graph-stack WS1.5 lockfile collision.
 - **2026-05-17 (Solar Orbiting Asteroid)**: cross-thread program
   Interrupt Log entry 2026-05-14 #2 (upstream Oak API schema
   adoption + gate-green cleanup) **resolved at `ee41cd49`**;
@@ -168,7 +181,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Swift Winging Gust / `claude` / Opus 4.7 (1M) / `50492a` / 2026-05-18 |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Shaded Passing Candle / `claude` / Opus 4.7 (1M) / `ab4290` / 2026-05-19 |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Riverine Swimming Hull / `claude` / Opus 4.7 / `304dde` / 2026-05-14 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -204,6 +217,14 @@ for the four-step owner-stated program: (1) finish token work →
 **Current step: 2** (Step 1 closed at WS2 boundary 2026-05-14). Sessions
 advancing the program MUST update the program's §Current Snapshot per its
 Anti-Decay Handoff Clause.
+
+**2026-05-19 lens-applied override (Shaded Passing Candle)**: program
+advancement rule is **superseded for graph priority**. Step 3 (P8 TUI),
+Step 4A (cost-of-collab P6/P7), and hardening tail waves 2–6 defer past
+graph. Step 2 lean scope (WS0+WS1+WS2+WS3) plus graph-stack Inc.1a/1b plus
+graph-query-layer plus hardening tail wave 1 form the gating set. See
+`threads/agentic-engineering-enhancements.next-session.md § Lens-Applied
+Sequence` for the authoritative gating list and rationale.
 
 ### Agentic-Engineering Enhancements
 
