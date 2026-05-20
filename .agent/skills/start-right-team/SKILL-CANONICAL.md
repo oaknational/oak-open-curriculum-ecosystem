@@ -61,17 +61,49 @@ contract. Keep it lightweight and revisable.
 
 ### 1. Register Presence
 
-Each agent posts a short team-start report before non-trivial work:
+Each agent posts a short team-start report **before any source claim** and
+before non-trivial work:
 
 ```text
 Team start report:
 - Identity:
 - Foundation: complete / blocked by <path or command>
-- Claimed paths: <paths or none>
+- Intended boundary: <files / paths / behaviour the agent expects to own>
+- Claim status: none yet / pending team rendezvous / open <claim_id>
 - Useful capability:
 - Constraint or risk:
 - Preferred boundary, if any:
 ```
+
+`Intended boundary` is a non-binding declaration of *where* the agent expects
+to work; `Claim status` reports the live registry state. Role labels in the
+sections below are examples, not doctrine — describe the boundary first and
+pick a label that fits.
+
+**Singleton-lane rendezvous rule** (added 2026-05-20 per singleton-lane
+remediation plan §WS1). When the owner has launched identical
+`start-right-team` prompts to multiple agents AND the next safe step on the
+relevant thread is a narrow single-owner source slice (a singleton lane),
+the team-start report is the rendezvous surface, not the claim. Concretely:
+
+- An empty `active-claims.json` at session open means *"no team visible
+  yet"*, NOT *"safe solo ownership of the singleton slice"*. Other
+  identically-prompted agents may be in the same window and have not yet
+  reached the registration step.
+- Each agent posts presence with `Claim status: none yet / pending team
+  rendezvous` before opening any source claim on the singleton lane.
+- An agent may open a source claim on the singleton lane only after one of:
+  (a) all participating agents have posted presence and exactly one has
+  been routed to the source slice (the first-overlap response is pending
+  WS1 completion — see thread record); (b) a documented team-routing
+  lease exists (claim with `team_routing_required: false`, see WS2); or
+  (c) sufficient time has elapsed that the agent reasonably concludes no
+  team is present — the silent default, used with care because the failure
+  mode is duplicate parallel claims.
+
+Normal solo work and broad parallelisable work (where overlapping claims
+are safe because the surfaces don't conflict) are unaffected by this rule;
+the rendezvous contract applies only to singleton-lane work.
 
 ### 2. Name The Coordination Pressure
 

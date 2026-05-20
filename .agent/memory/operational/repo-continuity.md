@@ -18,28 +18,45 @@ Earlier archives remain under [`archive/`](archive/).
 
 - Current branch: `feat/mcp-graph-support-foundation`.
 - **2026-05-20 (Shaded Creeping Cloak / `claude` / opus-4-7-1m / `4ef359`)**:
-  eight-commit disposition + consolidation + handoff session continuing
-  from Stormy Plumbing Atoll's under-reported handoff. Commits: `e0e9ad0d` chore(sdk-codegen) upstream
-  schema-hash refresh (independent residue from a new upstream drift);
-  `2d38cb27` chore(continuity) corrected handoff bundle (memory + thread +
-  plans + closure-pressure research/exploration artefacts + session-open
-  comms event); `ccfe8948` refactor(graph-core) absorbing 4 of 5 WS1.5
-  reviewer findings (D1 typed `TermReconstructionError` + reconstruction
-  extracted to sibling file, D2 exhaustive switches with default-never, N1
-  redundant utf8 arg dropped, N2 ambient `algorithm` literal-narrowing
-  reverted to `string` per type-expert verdict); `db5b8bc0` docs absorbing
-  the fifth finding (N3) by enumerating 10 line-by-line Class B
-  dispositions in the WS0 ledger so no partial-WS0 remainders persist;
-  `21579675` chore(continuity) recording full disposition in thread record
-  plus repo-continuity; `45e54736` chore(consolidation) napkin plus
+  multi-commit disposition + reviewer dispatch + WS0 sign-off + WS1
+  opening session continuing from Stormy Plumbing Atoll's under-reported
+  handoff. Commits in order: `e0e9ad0d` chore(sdk-codegen) upstream
+  schema-hash refresh; `2d38cb27` chore(continuity) corrected handoff
+  bundle plus closure-pressure research/exploration artefacts plus
+  session-open comms event; `ccfe8948` refactor(graph-core) absorbing
+  4 of 5 WS1.5 reviewer findings (D1 typed `TermReconstructionError` +
+  sibling-file extraction; D2 exhaustive switches with default-never;
+  N1 redundant utf8 dropped; N2 ambient `algorithm` literal-narrowing
+  reverted per type-expert verdict); `db5b8bc0` docs absorbing N3
+  (ten Class B line-by-line dispositions); `21579675` chore(continuity)
+  full disposition recorded; `45e54736` chore(consolidation) napkin +
   pending-graduations refresh with over-correction-during-absorption
-  candidate captured; `c3627b69` docs(graph-core) TSDoc backfill on
-  term-reconstruction helpers per §Document Everywhere; `340bdbda`
-  chore(napkin) capture of review-as-re-decision failure mode after owner
-  correction "that isn't a decision, that is hand wringing." All 5
-  previously under-disposed findings disposed via absorb. Owner review of
-  the WS0 ledger remains the singular gate before WS1 of singleton-lane
-  remediation can open.
+  candidate; `c3627b69` docs(graph-core) TSDoc backfill on
+  term-reconstruction helpers; `340bdbda` chore(napkin) capture of
+  review-as-re-decision failure mode after owner correction "that isn't
+  a decision, that is hand wringing"; `4025b795` chore(continuity)
+  session handoff close; `ee06a682` chore(consolidation) second pass
+  promoting review-as-re-decision candidate + absorption-failure-mode
+  family observation; `5a55fa4d` chore(plans,memory) absorbing
+  architecture-expert-fred condition 1 (manifest.json:200 is WS3-coupled
+  not WS4) plus recording four owner-parsed decisions. All 5 previously
+  under-disposed WS1.5/WS0 reviewer findings disposed via absorb.
+  **Late-session decision arc**: owner directed reviewer dispatch on the
+  WS0 ledger; assumptions-expert returned APPROVE; architecture-expert-fred
+  returned GO-WITH-CONDITIONS with condition 1 absorbed and condition 2
+  (missing ADR-125 citation) invalid (ADR exists at
+  125-agent-artefact-portability.md). Owner signed off "Fine, consider it
+  approved" and authorised WS1 opening. WS1 §Register Presence amendment
+  landed in working tree (Intended boundary + Claim status fields
+  replacing Claimed paths; singleton-lane rendezvous rule; role-labels-
+  as-examples wording) but the first-overlap response naming is owed for
+  next session per owner direction "save implementation for the next
+  session, keep any you already have but flag for review". Authorisations
+  also recorded: PDR-044 amendment (draft now); absorption-failure-mode
+  family PDR with three children closure-pressure/over-correction/
+  re-litigate (draft now). Parks: knowledge-flow pipeline-mechanisms
+  plan and closure-pressure 10-todo exploration both parked until graph
+  tooling resumes.
 - **2026-05-20 (Stormy Plumbing Atoll / `claude` / opus-4-7-1m / `2e2764`)**:
   WS1.5 RDFC-1.0 canonicalisation landed at `ebd0e8dc` (graph-core canon
   module; rdf-canonize@^5.0.0 added; 5 atomic tests + 2 absorbed-from-review
@@ -272,10 +289,19 @@ at `7a050c2a`, WS2 (`ws2-token-frontmatter`) landed at `72d31ca8` with
 ADR-144 amended in place, and the program snapshot updated at `737942c0`.
 Controlling plan for Step 2:
 [`start-right-team-singleton-lane-remediation.plan.md`](../../plans/agent-tooling/current/start-right-team-singleton-lane-remediation.plan.md).
-Next safe step: owner/reviewer review of the singleton-lane remediation
-plan (it is **not decision-complete**), then WS0 baseline disposition,
-then WS0–WS7 execution. Do not bypass owner/reviewer review and do not
-skip directly to WS1+ before WS0 runs.
+**Status update 2026-05-20 (Shaded Creeping Cloak)**: WS0 baseline
+disposition is owner-approved (reviewer dispatch complete; assumptions
+APPROVE, fred GO-WITH-CONDITIONS condition 1 absorbed, condition 2
+invalid). WS1 opening is partial-in-flight (Register Presence template
+amended; first-overlap response naming owed). **Next safe step**:
+complete WS1 (name the first-overlap response: route proposal / one
+provisional reconciler / support roles by boundary / silent default /
+closeout owner; run markdownlint; run the parent plan's rg validation),
+then WS2 (claim-overlap routing signal), then WS3 (canonical comms path
+interface plus the atomic manifest.json:200 co-change required by
+architecture-expert-fred condition 1). After WS3 lands, multi-vendor
+parallel fan-out opens for graph-stack Inc.1a remaining cycles plus
+the two `due` PDR drafts on a separate agent or session.
 
 P8 remains the paused active collaboration spine, not complete. P0,
 P-Foundation, P1, P2, P3, P4, and P5 are complete. The P8 operator-value and
@@ -487,7 +513,21 @@ Current branch non-goals:
 ## Deep Consolidation Status
 
 **Status (2026-05-20 — Shaded Creeping Cloak / `claude` / Opus 4.7 (1M) /
-`4ef359`)**: **completed this handoff — light consolidation pass alongside
+`4ef359` — second pass at second handoff)**: **completed this handoff —
+three consolidation passes total across the extended session window**:
+(1) inline-with-D close-out pass capturing over-correction candidate;
+(2) post-handoff promotion pass for review-as-re-decision candidate
+plus naming the absorption-failure-mode family observation; (3) this
+final pass after WS0 sign-off and WS1 opening — recording the four
+owner-parsed decisions, the reviewer dispatch outcomes, and the
+WS1-partial-in-flight state in pending-graduations + thread record.
+No additional ADR/PDR candidates surfaced in pass 3; no Practice Core
+amendments queued. Critical-zone fitness signals on napkin.md and
+pending-graduations.md continue as owner-acknowledged back-pressure.
+No napkin rotation due. Comms-events younger than 7 days; no retention
+processing required.
+
+**Prior pass (2026-05-20 — Shaded Creeping Cloak — first handoff)**: **completed this handoff — light consolidation pass alongside
 session close**. Triggers fired: plan/milestone closures (WS1.5 RDFC-1.0
 canon `ebd0e8dc`, WS0 ledger `8227d3f7`, N3 ledger absorption `db5b8bc0`);
 settled doctrine candidate captured (over-correction-during-absorption

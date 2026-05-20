@@ -169,6 +169,44 @@ absorption-failure-mode family PDR (both `due`). Owner sequencing for
 the full window-to-graph-tooling-completion arc pending capture in this
 record.
 
+### WS1 opening landed; implementation deferred to next session (2026-05-20)
+
+Owner sign-off on WS0 ledger fired 2026-05-20 ("Fine, consider it
+approved"). WS1 opening was started in the same window; owner then
+directed: "opening is fine, but save implementation for the next
+session (keep any you already have but flag for review)".
+
+**WS1 partial-in-flight state at handoff** (commit pending in next
+session-close commit; staged content):
+
+- `.agent/skills/start-right-team/SKILL-CANONICAL.md` §"Register Presence":
+  - Done — `Intended boundary` and `Claim status` fields replace the
+    previous `Claimed paths` field in the team-start report template.
+  - Done — singleton-lane rendezvous rule added naming the three
+    legitimate paths to opening a source claim on a singleton lane
+    (rendezvous completes; documented team-routing lease; silent
+    default with named failure mode).
+  - Done — wording that role labels are examples, not doctrine.
+  - Owed for next session — the first-overlap response per parent plan
+    §WS1 acceptance must be named explicitly: route proposal, one
+    provisional reconciler, support roles by boundary, silent default,
+    closeout owner. The SKILL currently has a placeholder reference to
+    "the first-overlap response is pending WS1 completion — see thread
+    record"; the response itself is unwritten.
+  - Owed for next session — markdownlint validation; rg validation per
+    parent plan §WS1 validation block.
+
+**Next-session entry**: complete WS1 (first-overlap response naming +
+both validations), then WS2 (claim-overlap routing signal), then WS3
+(canonical comms path interface + atomic manifest.json:200 co-change).
+WS1–WS3 are sequential single-agent; multi-vendor parallel fan-out
+opens after WS3 lands.
+
+**Parallel-safe alongside WS1–WS3 completion**: the two `due` PDR
+drafts (PDR-044 amendment + absorption-failure-mode family PDR) can
+run on a separate agent or session because they touch Practice Core
+only and don't overlap with the singleton-lane workspaces.
+
 ### Open observations for owner
 
 - Upstream Oak API schema hash refreshed twice during the session

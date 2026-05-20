@@ -2,7 +2,9 @@
 
 **Plan**: [`start-right-team-singleton-lane-remediation.plan.md`](./start-right-team-singleton-lane-remediation.plan.md)
 **Authored**: 2026-05-20 (Stormy Plumbing Atoll / claude / claude-opus-4-7-1m / 2e2764)
-**Status**: WS0 acceptance proof. No WS1+ edit has started; this ledger is the gate.
+**Reviewer dispatch + N3 absorption**: 2026-05-20 (Shaded Creeping Cloak / claude / claude-opus-4-7-1m / 4ef359). Assumptions-expert APPROVE; architecture-expert-fred GO-WITH-CONDITIONS (condition 1 absorbed at `5a55fa4d`; condition 2 invalid).
+**Owner sign-off**: 2026-05-20 — "Fine, consider it approved".
+**Status**: WS0 acceptance proof complete and owner-approved. WS1 unblocked.
 
 ## Scope
 
