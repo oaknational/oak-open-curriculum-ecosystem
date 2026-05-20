@@ -18,8 +18,8 @@ Earlier archives remain under [`archive/`](archive/).
 
 - Current branch: `feat/mcp-graph-support-foundation`.
 - **2026-05-20 (Shaded Creeping Cloak / `claude` / opus-4-7-1m / `4ef359`)**:
-  five-commit disposition session continuing from Stormy Plumbing Atoll's
-  under-reported handoff. Commits: `e0e9ad0d` chore(sdk-codegen) upstream
+  eight-commit disposition + consolidation + handoff session continuing
+  from Stormy Plumbing Atoll's under-reported handoff. Commits: `e0e9ad0d` chore(sdk-codegen) upstream
   schema-hash refresh (independent residue from a new upstream drift);
   `2d38cb27` chore(continuity) corrected handoff bundle (memory + thread +
   plans + closure-pressure research/exploration artefacts + session-open
@@ -29,10 +29,17 @@ Earlier archives remain under [`archive/`](archive/).
   redundant utf8 arg dropped, N2 ambient `algorithm` literal-narrowing
   reverted to `string` per type-expert verdict); `db5b8bc0` docs absorbing
   the fifth finding (N3) by enumerating 10 line-by-line Class B
-  dispositions in the WS0 ledger so no partial-WS0 remainders persist. All
-  5 previously under-disposed findings are now disposed via absorb. Owner
-  review of the WS0 ledger remains the singular gate before WS1 of
-  singleton-lane remediation can open.
+  dispositions in the WS0 ledger so no partial-WS0 remainders persist;
+  `21579675` chore(continuity) recording full disposition in thread record
+  plus repo-continuity; `45e54736` chore(consolidation) napkin plus
+  pending-graduations refresh with over-correction-during-absorption
+  candidate captured; `c3627b69` docs(graph-core) TSDoc backfill on
+  term-reconstruction helpers per §Document Everywhere; `340bdbda`
+  chore(napkin) capture of review-as-re-decision failure mode after owner
+  correction "that isn't a decision, that is hand wringing." All 5
+  previously under-disposed findings disposed via absorb. Owner review of
+  the WS0 ledger remains the singular gate before WS1 of singleton-lane
+  remediation can open.
 - **2026-05-20 (Stormy Plumbing Atoll / `claude` / opus-4-7-1m / `2e2764`)**:
   WS1.5 RDFC-1.0 canonicalisation landed at `ebd0e8dc` (graph-core canon
   module; rdf-canonize@^5.0.0 added; 5 atomic tests + 2 absorbed-from-review
@@ -212,7 +219,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Stormy Plumbing Atoll / `claude` / Opus 4.7 (1M) / `2e2764` / 2026-05-20 |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Shaded Creeping Cloak / `claude` / Opus 4.7 (1M) / `4ef359` / 2026-05-20 |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Riverine Swimming Hull / `claude` / Opus 4.7 / `304dde` / 2026-05-14 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -479,7 +486,26 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-20 — Stormy Plumbing Atoll / `claude` / Opus 4.7 (1M) /
+**Status (2026-05-20 — Shaded Creeping Cloak / `claude` / Opus 4.7 (1M) /
+`4ef359`)**: **completed this handoff — light consolidation pass alongside
+session close**. Triggers fired: plan/milestone closures (WS1.5 RDFC-1.0
+canon `ebd0e8dc`, WS0 ledger `8227d3f7`, N3 ledger absorption `db5b8bc0`);
+settled doctrine candidate captured (over-correction-during-absorption
+pattern, single-instance); repeated surprise (review-as-re-decision
+failure mode after owner correction). Outcomes: 1 new entry in
+pending-graduations.md (over-correction-during-absorption candidate);
+1 new candidate in napkin (review-as-re-decision failure mode);
+session-scoped TSDoc gap addressed (c3627b69). Critical-zone fitness
+signals on napkin.md and pending-graduations.md preserved as owner-
+acknowledged back-pressure; no compression applied. Three-question
+Loop Health post-mortem: earlier zones are flashing as designed; limits
+deliberately tight to surface back-pressure; structural cure is the
+existing knowledge-flow-pipeline-mechanisms.plan.md awaiting owner
+execution order. No Practice Core refinement candidates surfaced.
+No napkin rotation due (177 lines, under 500). Comms-events younger
+than 7 days; no retention processing required.
+
+**Prior status (2026-05-20 — Stormy Plumbing Atoll / `claude` / Opus 4.7 (1M) /
 `2e2764`)**: **due — not well-bounded for this closeout**. Triggers fired:
 WS1.5 RDFC-1.0 canon milestone closed at `ebd0e8dc`; WS0 disposition
 ledger milestone closed at `8227d3f7`; closure-pressure rationalisation
