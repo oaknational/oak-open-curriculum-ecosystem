@@ -26487,6 +26487,88 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "b4290e69-86d9-429c-a92d-61df0110e432",
+      "agent_id": {
+        "agent_name": "Stormy Plumbing Atoll",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "2e2764"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-20T11:08:44Z",
+      "freshness_seconds": 900,
+      "intent": "Stage and commit pre-work residue: codegen schema-hash refresh + prior-session closed-claims archive.",
+      "notes": "Pathspecs: packages/sdks/oak-sdk-codegen/{schema-cache/api-schema-original.json,src/types/generated/api-schema/api-schema-base.ts,src/types/generated/api-schema/api-schema-original.json,src/types/generated/api-schema/api-schema-sdk.json}, .agent/state/collaboration/closed-claims.archive.json. Gates: sdk-codegen + type-check green. Peer claims: none.",
+      "archived_at": "2026-05-20",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-20T11:10:58Z",
+        "closed_by": {
+          "agent_name": "Stormy Plumbing Atoll",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "2e2764"
+        },
+        "summary": "Pre-work residue commit landed at 4ffef192 (codegen schema-hash refresh + closed-claims archive). Next: lockfile attestation for WS1.5.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b4290e69-86d9-429c-a92d-61df0110e432",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "adf171da-c087-45f1-a0ca-7b6d8281eba0",
+      "agent_id": {
+        "agent_name": "Stormy Plumbing Atoll",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "2e2764"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-20T11:19:47Z",
+      "freshness_seconds": 900,
+      "intent": "Stage and commit WS1.5 RDFC-1.0 canonicalisation in graph-core (atomic).",
+      "notes": "Pathspecs: .gitignore, packages/core/graph-core/{package.json,src/canon/*.ts,src/canon/rdf-canonize.d.ts,src/index.ts}, pnpm-lock.yaml. Gates: type-check + lint + 45/45 tests + build green. Peer claims: none.",
+      "archived_at": "2026-05-20",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-20T11:24:22Z",
+        "closed_by": {
+          "agent_name": "Stormy Plumbing Atoll",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "2e2764"
+        },
+        "summary": "WS1.5 RDFC-1.0 canonicalisation landed at ebd0e8dc. 45/45 graph-core tests pass, 83/83 turbo tasks green. Next: WS0 disposition ledger.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "adf171da-c087-45f1-a0ca-7b6d8281eba0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+
 import { describe, expect, it } from 'vitest';
 
 import { blankNode, literal, namedNode, quad } from '../data-factory/index.js';
@@ -106,19 +108,55 @@ describe('canonicalize (RDFC-1.0)', () => {
     expect(error.cause?.message).toBe('synthetic canonize failure');
   });
 
-  it('rejects URDNA2015 by construction: the wrapper passes rejectURDNA2015:true so the underlying library never falls back to the alias', async () => {
-    const seenOptions: unknown[] = [];
-    const recordingRuntime: CanonizeRuntime = {
-      canonize: async (_input, options) => {
-        seenOptions.push(options);
-        return '';
+  it('returns reparse_failed when the canonical N-Quads cannot be reparsed', async () => {
+    const reparseFailingRuntime: CanonizeRuntime = {
+      canonize: async () => '_:b0 <http://example/p> _:b1 .\n',
+      parseNQuads: () => {
+        throw new Error('synthetic reparse failure');
       },
-      parseNQuads: () => [],
     };
 
-    expectOk(await canonicalize(blankNodeDataset(['x', 'y']), { runtime: recordingRuntime }));
+    const error = expectErr(
+      await canonicalize(blankNodeDataset(['x', 'y']), { runtime: reparseFailingRuntime }),
+    );
 
-    expect(seenOptions).toHaveLength(1);
-    expect(seenOptions[0]).toEqual({ algorithm: 'RDFC-1.0', rejectURDNA2015: true });
+    expect(error.kind).toBe('reparse_failed');
+    expect(error.step).toBe('parse_nquads');
+    expect(error.cause?.message).toBe('synthetic reparse failure');
+  });
+
+  it('returns reconstruction_failed when reparsed terms have an unsupported shape', async () => {
+    const reconstructFailingRuntime: CanonizeRuntime = {
+      canonize: async () => '',
+      // Emit a quad whose subject is a Literal — illegal in RDF; reconstruction throws.
+      parseNQuads: () => [
+        {
+          subject: {
+            termType: 'Literal',
+            value: 'oops',
+            datatype: { termType: 'NamedNode', value: 'urn:x' },
+          },
+          predicate: { termType: 'NamedNode', value: 'urn:p' },
+          object: { termType: 'NamedNode', value: 'urn:o' },
+          graph: { termType: 'DefaultGraph', value: '' },
+        },
+      ],
+    };
+
+    const error = expectErr(
+      await canonicalize(blankNodeDataset(['x', 'y']), { runtime: reconstructFailingRuntime }),
+    );
+
+    expect(error.kind).toBe('reconstruction_failed');
+    expect(error.step).toBe('reconstruct_dataset');
+    expect(error.cause?.message).toContain('Unexpected subject termType');
+  });
+
+  it('produces a hash that is the SHA-256 of the canonical N-Quads string', async () => {
+    const dataset = blankNodeDataset(['x', 'y']);
+    const { canonicalNQuads, hash } = expectOk(await canonicalize(dataset));
+
+    const expected = createHash('sha256').update(canonicalNQuads, 'utf8').digest('hex');
+    expect(hash).toBe(expected);
   });
 });

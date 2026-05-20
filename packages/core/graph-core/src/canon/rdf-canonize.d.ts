@@ -23,8 +23,8 @@ declare module 'rdf-canonize' {
   }
 
   interface RdfCanonizeOptions {
-    readonly algorithm: string;
-    readonly rejectURDNA2015?: boolean;
+    readonly algorithm: 'RDFC-1.0';
+    readonly rejectURDNA2015: true;
   }
 
   export function canonize(input: readonly unknown[], options: RdfCanonizeOptions): Promise<string>;
