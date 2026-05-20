@@ -52,3 +52,10 @@ export {
   type JsonLdProcessorResult,
   type JsonLdValue,
 } from './jsonld/index.js';
+export {
+  canonicalize,
+  type CanonicalizationError,
+  type CanonicalizationErrorKind,
+  type CanonicalizationResult,
+  type CanonicalizedDataset,
+} from './canon/index.js';

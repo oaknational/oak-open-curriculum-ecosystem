@@ -63,6 +63,10 @@ ONBOARDING.md
 # resolution; the widget's CSS side-effect imports need it explicit).
 !apps/oak-curriculum-mcp-streamable-http/widget/src/vite-env.d.ts
 
+# Hand-authored ambient declaration for `rdf-canonize` (no upstream types).
+# Sole consumer is graph-core's canon runtime; see canon/runtime.ts.
+!packages/core/graph-core/src/canon/rdf-canonize.d.ts
+
 # File system artefacts (macOS, Windows, Linux desktops)
 .DS_Store
 .AppleDouble

@@ -59,7 +59,8 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "jsonld": "^9.0.0"
+    "jsonld": "^9.0.0",
+    "rdf-canonize": "^5.0.0"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
