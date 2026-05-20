@@ -3813,3 +3813,63 @@ is not re-arguing; it is absorbing the original reviewer verdict cleanly.
 
 Single instance observed. Promote on second instance OR owner-direction
 graduation request.
+
+### 2026-05-20 — Review-of-completed-work surfaces lessons and fixes, never re-decisions (Shaded Creeping Cloak)
+
+`[CANDIDATE: review-of-completed-work-is-not-re-decision | captured:
+2026-05-20 | source: napkin 2026-05-20 §"Failure: re-surfacing a settled
+decision as if it were a new one"; owner correction "that isn't a decision,
+that is hand wringing that has cost more in my attention and yours than
+simply moving on" | graduation-target: Practice-governance PDR (new) OR
+amendment to PDR-026 (per-session landing commitment) | trigger: second
+observed instance OR owner-direction graduation request | status: pending |
+size: S]`
+
+Worked instance: owner requested a principles-grounded review of completed
+work. The review correctly identified D1's absorption as a §First Question
+miss (high cascade cost relative to observable-behaviour delta). The
+agent then incorrectly framed the finding as a *live decision* ("keep or
+revert D1?") and asked the owner to adjudicate. Owner response was the
+sharp correction quoted above.
+
+Substance: a review of completed work has two legitimate output classes:
+**lessons** (which feed future decisions and may surface as new pattern
+candidates or PDR amendments) and **defects to fix** (which the agent
+addresses immediately — TSDoc gaps, broken cross-refs, residue from the
+work itself). It does NOT have a third class of "re-decide the settled
+call." The disposition is made; the work is committed; the cost is paid.
+Re-surfacing it as a fresh decision spends owner attention twice for no
+new information and is itself a failure mode.
+
+Falsifiable shape: any review-of-completed-work response that ends with a
+multiple-choice question to the owner about a settled call is the failure
+shape. The right shape is verdict + fix-in-flight; never verdict + re-decide.
+
+Adjacent to but distinct from `.agent/rules/present-verdicts-not-menus.md`
+(which targets forward-looking options). This is the backward-looking
+counterpart. A graduation might either amend the existing rule or add a
+sibling rule.
+
+### Cross-session observation: absorption-adjacent failure-mode family (Shaded Creeping Cloak / Stormy Plumbing Atoll)
+
+`[OBSERVATION (not yet candidate): absorption-adjacent-failure-mode-family |
+captured: 2026-05-20 | source: napkin 2026-05-20; pending-graduations entries
+closure-pressure-rationalisation + over-correction-during-absorption +
+review-of-completed-work-is-not-re-decision | trigger: second instance from
+a different family member OR owner direction | status: observation only]`
+
+Three failure-mode candidates accumulated within the 2e2764 + 4ef359 window,
+all touching the moment an agent disposes (or re-handles) reviewer findings:
+
+- **Closure-pressure rationalisation**: agent absorbs *less* than the
+  reviewer named (oversight re-labelled as deferral).
+- **Over-correction-during-absorption**: agent absorbs *more* than the
+  reviewer named (an adjacent narrowing the reviewer never asked for).
+- **Review-as-re-decision**: agent re-surfaces a settled disposition as
+  if it were a fresh decision (during retrospective review of completed
+  work).
+
+The family may eventually warrant a single PDR with three children, or
+remain three separate candidates. Not action-bearing without owner direction
+or a third-family-instance corroboration; recorded so the family is visible
+in the register before any individual member graduates.
