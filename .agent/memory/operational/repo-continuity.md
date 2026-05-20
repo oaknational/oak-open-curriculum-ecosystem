@@ -17,22 +17,37 @@ Earlier archives remain under [`archive/`](archive/).
 ## Current State
 
 - Current branch: `feat/mcp-graph-support-foundation`.
+- **2026-05-20 (Shaded Creeping Cloak / `claude` / opus-4-7-1m / `4ef359`)**:
+  five-commit disposition session continuing from Stormy Plumbing Atoll's
+  under-reported handoff. Commits: `e0e9ad0d` chore(sdk-codegen) upstream
+  schema-hash refresh (independent residue from a new upstream drift);
+  `2d38cb27` chore(continuity) corrected handoff bundle (memory + thread +
+  plans + closure-pressure research/exploration artefacts + session-open
+  comms event); `ccfe8948` refactor(graph-core) absorbing 4 of 5 WS1.5
+  reviewer findings (D1 typed `TermReconstructionError` + reconstruction
+  extracted to sibling file, D2 exhaustive switches with default-never, N1
+  redundant utf8 arg dropped, N2 ambient `algorithm` literal-narrowing
+  reverted to `string` per type-expert verdict); `db5b8bc0` docs absorbing
+  the fifth finding (N3) by enumerating 10 line-by-line Class B
+  dispositions in the WS0 ledger so no partial-WS0 remainders persist. All
+  5 previously under-disposed findings are now disposed via absorb. Owner
+  review of the WS0 ledger remains the singular gate before WS1 of
+  singleton-lane remediation can open.
 - **2026-05-20 (Stormy Plumbing Atoll / `claude` / opus-4-7-1m / `2e2764`)**:
   WS1.5 RDFC-1.0 canonicalisation landed at `ebd0e8dc` (graph-core canon
   module; rdf-canonize@^5.0.0 added; 5 atomic tests + 2 absorbed-from-review
   for 7 total). WS0 disposition ledger for singleton-lane remediation landed
   at `8227d3f7` as companion report. Pre-work residue commit `4ffef192`.
   Continuity commit `5f1551c3` UNDER-REPORTED reviewer-finding disposition
-  state — corrected in working tree (this section + thread record). Owner
-  probing during closeout surfaced a closure-pressure rationalisation failure
-  mode; preserved in
+  state. Owner probing during closeout surfaced a closure-pressure
+  rationalisation failure mode; preserved in
   [`closure-pressure-and-workflow-composition-2026-05-20.md`](../../research/agentic-engineering/closure-pressure-and-workflow-composition-2026-05-20.md)
   (research) and
   [`closure-pressure-remediation-design-space.plan.md`](../../plans/agentic-engineering-enhancements/future/closure-pressure-remediation-design-space.plan.md)
-  (exploration plan with 10 todo questions). 5 reviewer findings (D1, D2,
-  N1, N2, N3) remain under-disposed with legitimate-dispositions named per
-  item in the thread record. Next safe step: WS1 of singleton-lane
-  remediation after owner review of the WS0 ledger.
+  (exploration plan with 10 todo questions). The 5 under-disposed reviewer
+  findings (D1, D2, N1, N2, N3) carried into the next session and have
+  since been disposed — see the 2026-05-20 Shaded Creeping Cloak entry
+  above.
 - **2026-05-19 (Shaded Passing Candle)**: broken/accelerator lens applied
   to all sequenced work for graph-multi-vendor priority (Claude + Codex,
   most multi-agent yet). Token-remediation program advancement rule

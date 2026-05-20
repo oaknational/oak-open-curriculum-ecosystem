@@ -122,6 +122,32 @@ state. Future sessions should validate or challenge each:
 Commit shape for the uncommitted set is itself an open disposition for
 the next session.
 
+### Disposition update (2026-05-20 — Shaded Creeping Cloak / claude / opus-4-7-1m / 4ef359)
+
+All 5 previously under-disposed reviewer findings are now disposed.
+Disposition column: **absorb** for every item. No re-argument or escalation.
+
+| ID | Disposition | Commit | Notes |
+|----|-------------|--------|-------|
+| D1 | absorb | `ccfe8948` | Typed `TermReconstructionError` with position + termType fields; helpers throw the typed error; `runReconstruct` surfaces position in outer `CanonicalizationError.message`. Reconstruction logic extracted to `src/canon/term-reconstruction.ts` for cohesion + to keep `canonicalize.ts` under the 250-line lint limit. |
+| D2 | absorb | `ccfe8948` | Helpers restructured as `switch` with explicit case arms for every `ParsedQuadTerm` termType plus `default` arm asserting `const exhaustive: never`. Compile-time guarantee against future union expansion. |
+| N1 | absorb | `ccfe8948` | Redundant `'utf8'` arg dropped from both `createHash.update` call sites (product + test). |
+| N2 | absorb (revert) | `ccfe8948` | Ambient `RdfCanonizeOptions.algorithm` reverted from literal `'RDFC-1.0'` to `string`. Ambient mirrors library contract; doctrinal pinning lives at call site only. `rejectURDNA2015: true` (the actual reviewer-recommended constraint) preserved. |
+| N3 | absorb | `db5b8bc0` | Class B exec-memory line refs produced. Three previously partial-WS0 rows in `.ws0-disposition.md` replaced with 10 line-by-line disposition rows (3 in collaboration-state-conventions.md; 1 in memory-state-substrate-contracts.md; 6 in memory-state-substrate-contracts.manifest.json). WS0 Acceptance Mapping row "Every stale comms-root surface has one disposition" now reads truthfully. |
+
+Continuity-correction commits also landed earlier in the session:
+`e0e9ad0d` (chore(sdk-codegen) upstream hash refresh) and `2d38cb27`
+(chore(continuity) corrected handoff bundle including closure-pressure
+research + exploration plan + this thread record's corrected Session
+Outcome). 5 commits total this session before the disposition window
+closed.
+
+Owner review of the WS0 ledger is now the singular gate before WS1 of
+singleton-lane remediation can open. The ledger at
+`start-right-team-singleton-lane-remediation.ws0-disposition.md` is
+fully populated (385 inventoried files; 8 disposition classes A–H; no
+partial-WS0 remainders).
+
 ### Open observations for owner
 
 - Upstream Oak API schema hash refreshed twice during the session
