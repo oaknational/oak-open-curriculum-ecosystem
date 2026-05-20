@@ -230,3 +230,37 @@ Falsifiable: when adding code triggers complexity or file-length lint
 warnings, extract-to-sibling is the default cure shape. Weakening the
 lint, removing comments, or compressing the new code are all
 anti-patterns; their cost is paid later.
+
+### Failure: re-surfacing a settled decision as if it were a new one
+
+Owner asked for a principles-grounded review of completed work. I
+correctly identified that D1's absorption had a high cascade cost
+relative to its observable-behaviour delta and flagged that as a §First
+Question miss. I then incorrectly framed it as a *live decision*
+("keep or revert?") and asked the owner to adjudicate. Owner response:
+"that isn't a decision, that is hand wringing that has cost more in my
+attention and yours than simply moving on."
+
+The principle violated is more general than D1: a review of completed
+work surfaces *lessons* (which feed future decisions) and *defects to
+fix* (which the agent fixes). It does not surface *re-litigation of
+the completed call as a fresh decision*. The disposition was made; the
+work landed; the cost is paid. Surfacing it again as a menu spends
+owner attention twice for no new information.
+
+Same shape applies to the TSDoc question I also raised: missing TSDoc
+on the new helpers is a principle violation that I should have fixed
+in the moment, not surfaced as "should I land this as a follow-up?"
+Where it is committed is irrelevant — the principle says all functions
+have TSDoc, so add it.
+
+Falsifiable: any review-of-completed-work response that ends with a
+multiple-choice question to the owner about a settled call is the
+failure shape. The right shape is verdict + fix-in-flight, never
+verdict + re-decide. Adjacent to but distinct from the
+present-verdicts-not-menus rule (which targets forward-looking
+options); this is the *backward-looking* counterpart.
+
+candidate: rule or directive amendment — *review-of-completed-work
+surfaces lessons and fixes, never re-decisions*. First instance.
+Promote on second instance OR owner-direction graduation request.
