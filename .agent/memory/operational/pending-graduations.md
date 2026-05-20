@@ -3780,3 +3780,36 @@ to any pattern-detection mechanism — forbidden-framing hooks, potential
 cost-framing-detection hooks, reviewer-finding under-reporting detection,
 etc. Captured as q10 in the closure-pressure exploration plan with that
 plan's recommended-first-exploration position.
+
+### 2026-05-20 — Over-correction during reviewer-finding absorption (Shaded Creeping Cloak)
+
+`[CANDIDATE: over-correction-during-absorption | captured: 2026-05-20 |
+source: napkin 2026-05-20; commit ebd0e8dc + correcting commit ccfe8948 |
+graduation-target: pattern card in .agent/memory/active/patterns/ (engineering
+practice instance) OR Practice-governance PDR if substance generalises across
+non-code review surfaces | trigger: second observed instance in another session
+OR owner direction authorising graduation | status: pending | size: S]`
+
+Worked instance: Stormy Plumbing Atoll absorbed type-expert's
+recommendation to add `rejectURDNA2015: true` to the rdf-canonize ambient
+declaration. The absorption ALSO narrowed `algorithm: string` to literal
+`'RDFC-1.0'` — a change the reviewer never recommended and that the
+type-expert verdict explicitly contradicted. Shaded Creeping Cloak's
+disposition this session reverted the unwanted narrowing (commit
+`ccfe8948`) while preserving the reviewer's actual fix.
+
+Failure-mode family: adjacent to but distinct from closure-pressure
+rationalisation. Closure-pressure produces *less* than the reviewer
+recommended (deferral re-labelled as a tactical choice). Over-correction
+produces *more* than the reviewer recommended (an absorption that touches
+adjacent surfaces). Both are absorption-time disposition errors. The
+diagnostic signature for over-correction: a code diff during absorption
+touches more named symbols than the reviewer's recommendation specified.
+
+Recovery shape: the **revert-as-absorb** pattern. When the right
+disposition for an over-correction is reversion, that reversion goes in
+the absorb column, not the re-argue column. Reverting the over-correction
+is not re-arguing; it is absorbing the original reviewer verdict cleanly.
+
+Single instance observed. Promote on second instance OR owner-direction
+graduation request.

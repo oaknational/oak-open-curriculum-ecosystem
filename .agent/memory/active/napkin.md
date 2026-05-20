@@ -172,3 +172,61 @@ candidate: refinement to PDR-044 memetic-immune-system hook —
 *refusal-vs-approval mechanism choice*. Captured in pending-graduations
 register; graduation-target is PDR-044 amendment. Triggers: owner direction
 authorising the implementation work.
+
+## 2026-05-20 — Shaded Creeping Cloak (claude / opus-4.7-1m / `4ef359`)
+
+### Working pattern: {absorb, re-argue, escalate} closes the disposition contract
+
+Owner direction A→B→C→D applied in sequence to dispose the five
+under-disposed reviewer findings (D1, D2, N1, N2, N3) carried over from
+Stormy Plumbing Atoll. All five absorbed in one window — D1 typed
+`TermReconstructionError` + sibling-file extraction, D2 exhaustive
+switches with default-never, N1 redundant utf8 arg removed, N2 ambient
+literal-narrowing reverted (correcting the prior session's over-correction),
+N3 Class B exec-memory line refs produced (10 line-by-line rows replacing
+3 partial-WS0 rows).
+
+Falsifiable: the {absorb, re-argue, escalate} framework eliminates
+"defer by agent decision" as a fourth column. A future session ending
+with reviewer-finding-under-disposed items should produce a state record
+where every item has one of those three labels and explicit evidence.
+
+### Surprise: over-correction during absorption is its own failure mode
+
+N2 was Stormy Plumbing Atoll's specific failure: absorbing the
+type-expert's `rejectURDNA2015: true` recommendation, the absorption
+ALSO narrowed `algorithm: string` to literal `'RDFC-1.0'` — a change
+the reviewer never asked for and that the type-expert verdict
+explicitly contradicted. The recovery shape is the **revert-as-absorb**
+pattern: when an over-correction is the right disposition, the absorb
+column carries a one-line revert, not a re-argument.
+
+The diagnostic signature: an absorption that touches more lines than
+the reviewer's recommendation specified. The reviewer's actual fix
+was one field (`rejectURDNA2015: true`); the absorption changed two
+(plus ambient narrowing). The extra line is the failure surface.
+
+Falsifiable: a reviewer recommendation absorbed alongside an adjacent
+narrowing that the reviewer did not name is over-correction. The
+correct disposition is absorb-the-recommendation + revert-the-adjacent.
+
+candidate: pattern — *over-correction-during-absorption* — adjacent to
+but distinct from the closure-pressure family. The closure-pressure
+failure is *less* than the reviewer recommended; over-correction is
+*more*. Single instance observed. Promote on second instance OR
+owner-direction graduation request.
+
+### Working observation: refactor-meets-lint constraint resolves with extract-to-sibling
+
+Absorbing D1 added ~70 lines to `canonicalize.ts` (`TermReconstructionError`
+class + restructured helpers). Two lint failures resulted: `toObject`
+complexity 9 > 8 max; file 289 > 250 lines. Cure: extract reconstruction
+helpers + the error class to `src/canon/term-reconstruction.ts`; main file
+became 137 lines; `toObject` complexity dropped below 8 via a
+`literalFromParsed` helper. No lint weakening, no comment trimming, no
+code compression. Cohesion improved as a side effect.
+
+Falsifiable: when adding code triggers complexity or file-length lint
+warnings, extract-to-sibling is the default cure shape. Weakening the
+lint, removing comments, or compressing the new code are all
+anti-patterns; their cost is paid later.
