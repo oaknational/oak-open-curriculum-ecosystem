@@ -12,18 +12,11 @@
 
 import { createHash } from 'node:crypto';
 
-import { blankNode, defaultGraph, literal, namedNode, quad } from '../data-factory/index.js';
 import { createDataset, type DatasetCore } from '../dataset/index.js';
-import type { GraphTerm, ObjectTerm, PredicateTerm, Quad, SubjectTerm } from '../term/index.js';
+import type { Quad } from '../term/index.js';
 
-import {
-  canonizeRuntime,
-  type CanonizeRuntime,
-  type ParsedQuad,
-  type ParsedQuadTerm,
-} from './runtime.js';
-
-const RDF_LANG_STRING_IRI = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#langString';
+import { canonizeRuntime, type CanonizeRuntime, type ParsedQuad } from './runtime.js';
+import { reconstructQuad, TermReconstructionError } from './term-reconstruction.js';
 
 export type CanonicalizationErrorKind =
   | 'canonize_failed'
@@ -60,69 +53,6 @@ function toError(cause: unknown): Error {
     return cause;
   }
   return new Error(typeof cause === 'string' ? cause : 'Unknown error');
-}
-
-function toSubject(term: ParsedQuadTerm): SubjectTerm {
-  if (term.termType === 'NamedNode') {
-    return namedNode(term.value);
-  }
-  if (term.termType === 'BlankNode') {
-    return blankNode(term.value);
-  }
-  throw new Error(`Unexpected subject termType from N-Quads parse: ${term.termType}`);
-}
-
-function toPredicate(term: ParsedQuadTerm): PredicateTerm {
-  if (term.termType === 'NamedNode') {
-    return namedNode(term.value);
-  }
-  throw new Error(`Unexpected predicate termType from N-Quads parse: ${term.termType}`);
-}
-
-function toObject(term: ParsedQuadTerm): ObjectTerm {
-  if (term.termType === 'NamedNode') {
-    return namedNode(term.value);
-  }
-  if (term.termType === 'BlankNode') {
-    return blankNode(term.value);
-  }
-  if (term.termType === 'Literal') {
-    const datatypeIri = term.datatype?.value;
-    if (datatypeIri === undefined) {
-      throw new Error('Literal term from N-Quads parse is missing a datatype IRI');
-    }
-    if (datatypeIri === RDF_LANG_STRING_IRI) {
-      const tag = term.language;
-      if (tag === undefined) {
-        throw new Error('rdf:langString literal from N-Quads parse is missing a language tag');
-      }
-      return literal(term.value, tag);
-    }
-    return literal(term.value, namedNode(datatypeIri));
-  }
-  throw new Error(`Unexpected object termType from N-Quads parse: ${term.termType}`);
-}
-
-function toGraph(term: ParsedQuadTerm): GraphTerm {
-  if (term.termType === 'DefaultGraph') {
-    return defaultGraph();
-  }
-  if (term.termType === 'NamedNode') {
-    return namedNode(term.value);
-  }
-  if (term.termType === 'BlankNode') {
-    return blankNode(term.value);
-  }
-  throw new Error(`Unexpected graph termType from N-Quads parse: ${term.termType}`);
-}
-
-function reconstructQuad(parsed: ParsedQuad): Quad {
-  return quad(
-    toSubject(parsed.subject),
-    toPredicate(parsed.predicate),
-    toObject(parsed.object),
-    toGraph(parsed.graph),
-  );
 }
 
 function datasetToCanonizeInput(dataset: DatasetCore): readonly Quad[] {
@@ -176,12 +106,16 @@ function runReconstruct(parsedQuads: readonly ParsedQuad[]): StepResult<DatasetC
   try {
     return { ok: true, value: createDataset(parsedQuads.map(reconstructQuad)) };
   } catch (cause) {
+    const message =
+      cause instanceof TermReconstructionError
+        ? `Failed to reconstruct graph-core DatasetCore: ${cause.position} term (termType=${cause.termType})`
+        : 'Failed to reconstruct graph-core DatasetCore from canonical N-Quads';
     return {
       ok: false,
       error: {
         kind: 'reconstruction_failed',
         step: 'reconstruct_dataset',
-        message: 'Failed to reconstruct graph-core DatasetCore from canonical N-Quads',
+        message,
         cause: toError(cause),
       },
     };
@@ -204,7 +138,7 @@ export async function canonicalize(
   if (!reconstructed.ok) {
     return reconstructed;
   }
-  const hash = createHash('sha256').update(canonized.value, 'utf8').digest('hex');
+  const hash = createHash('sha256').update(canonized.value).digest('hex');
   return {
     ok: true,
     value: {

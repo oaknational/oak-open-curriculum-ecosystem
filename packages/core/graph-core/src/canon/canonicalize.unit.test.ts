@@ -149,14 +149,19 @@ describe('canonicalize (RDFC-1.0)', () => {
 
     expect(error.kind).toBe('reconstruction_failed');
     expect(error.step).toBe('reconstruct_dataset');
-    expect(error.cause?.message).toContain('Unexpected subject termType');
+    // Outer message names the term position that failed (added with the
+    // TermReconstructionError absorption — D1).
+    expect(error.message).toContain('subject');
+    // Cause is the typed TermReconstructionError; its message names the
+    // observed termType so diagnostics surface the actual offending shape.
+    expect(error.cause?.message).toContain('Literal');
   });
 
   it('produces a hash that is the SHA-256 of the canonical N-Quads string', async () => {
     const dataset = blankNodeDataset(['x', 'y']);
     const { canonicalNQuads, hash } = expectOk(await canonicalize(dataset));
 
-    const expected = createHash('sha256').update(canonicalNQuads, 'utf8').digest('hex');
+    const expected = createHash('sha256').update(canonicalNQuads).digest('hex');
     expect(hash).toBe(expected);
   });
 });

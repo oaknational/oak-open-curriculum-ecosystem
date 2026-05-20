@@ -23,7 +23,12 @@ declare module 'rdf-canonize' {
   }
 
   interface RdfCanonizeOptions {
-    readonly algorithm: 'RDFC-1.0';
+    // The native rdf-canonize API accepts any algorithm string and errors at
+    // runtime when an unknown or deprecated value is passed. The ambient
+    // mirrors the library contract; doctrinal pinning to 'RDFC-1.0' lives at
+    // the call site in `canonicalize.ts`, not in the type of someone else's
+    // library.
+    readonly algorithm: string;
     readonly rejectURDNA2015: true;
   }
 
