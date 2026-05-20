@@ -26405,6 +26405,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "dc103f41-6d77-4ce9-b0bd-49bed87c01e6",
+      "agent_id": {
+        "agent_name": "Shaded Passing Candle",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "ab4290"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-19T12:36:48Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Commit session handoff + consolidation closeout: thread record identity row, repo-continuity lens update, napkin and pending-graduations entries, closed-claims residue from prior commit",
+      "archived_at": "2026-05-19",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-19T12:38:42Z",
+        "closed_by": {
+          "agent_name": "Shaded Passing Candle",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "ab4290"
+        },
+        "summary": "Committed at 109dfb23 — session handoff + consolidation closeout. Pre-commit gates green 83/83 (26 cached, 57 fresh, 29.9s). Pending-graduations register grew by 2 candidates (reachability invariant ADR-shaped, portable-reference pattern). pnpm check fully green before commit.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "dc103f41-6d77-4ce9-b0bd-49bed87c01e6",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

@@ -448,6 +448,21 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
+**Status (2026-05-19 — Shaded Passing Candle / `claude` / Opus 4.7 (1M) /
+`ab4290`)**: completed this handoff — light consolidation pass alongside
+session handoff. Triggers fired: plan/milestone closures (singleton-lane
+decision-complete, comms-watch reference landed), settled doctrine
+graduating from ephemeral surface to README (leaf-to-root reachability
+invariant), repeated surprise candidate (portable-reference-arrives-
+without-plan-slot). Outcomes: 2 new entries in pending-graduations.md
+(reachability invariant ADR-shaped; pattern card pending second
+instance). No Practice Core refinement candidates surfaced. No napkin
+rotation due. Comms-events not yet at 7-day threshold (last live
+activity 2026-05-14, today 2026-05-19). Practice-box incoming empty;
+outgoing directory retired. Fitness pressure on pending-graduations.md
+and repo-continuity.md noted; both pre-existing, route via PDR-046
+§Move 3 graduation upward.
+
 **Status (2026-05-17 — Swift Winging Gust / `claude` / Opus 4.7 (1M) /
 `50492a`)**: completed this handoff — owner-directed full structural
 pass `/jc-consolidate-docs` targeting fitness functions for knowledge
