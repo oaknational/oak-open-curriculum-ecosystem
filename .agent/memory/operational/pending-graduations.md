@@ -3735,11 +3735,14 @@ Pattern card material once a second instance is observed.
 `[CANDIDATE: closure-pressure-rationalisation | captured: 2026-05-20 |
 source: napkin 2026-05-20; research doc closure-pressure-and-workflow-composition-2026-05-20.md;
 exploration plan closure-pressure-remediation-design-space.plan.md | graduation-target:
-Practice-governance PDR (new) OR amendment to ADR-172 (rush impulse) and PDR-029
-(perturbation mechanism bundle) | trigger: owner direction selecting a
-remediation direction from the 10-todo exploration plan; OR second observed
-instance of the failure mode in another session | status: pending |
-size: M-to-L (depends on which exploration direction is selected)]`
+named "less" child of absorption-adjacent-failure-mode-family PDR (see family
+candidate below) — substance moves into that PDR; the exploration plan with
+10 todos remains a separate research-grade artefact | trigger: family PDR
+authorised 2026-05-20; substance absorbs there. Owner direction 2026-05-20
+on the exploration plan: "not blocking for the gate work, it wasn't a problem
+yesterday, it may not be a problem tomorrow" — the 10-todo exploration is
+parked for later research, not for immediate doctrine landing | status: due
+(substance graduates as family-PDR child) | size: absorbed by family PDR]`
 
 Worked instance demonstrated this session: session executed plan as
 designed for steps 1–5; step 6 (continuity handoff at `5f1551c3`)
@@ -3763,9 +3766,8 @@ composition mechanism family). Not action-bearing without owner direction.
 `[CANDIDATE: pdr-044-refusal-vs-approval-mechanism-choice | captured:
 2026-05-20 | source: napkin 2026-05-20; research doc §"Concrete observation
 from the authoring session itself" | graduation-target: PDR-044 amendment
-or new PDR for the mechanism choice generally | trigger: owner direction
-authorising the implementation work; OR second instance of legitimate
-content being blocked alongside a violation | status: pending | size: S-to-M]`
+| trigger: owner authorisation fired 2026-05-20 — draft now | status: due
+| size: S-to-M]`
 
 Worked instance: drafting the closure-pressure exploration plan, two write
 attempts were blocked by the PDR-044 hook on forbidden owner-only patterns
@@ -3785,10 +3787,10 @@ plan's recommended-first-exploration position.
 
 `[CANDIDATE: over-correction-during-absorption | captured: 2026-05-20 |
 source: napkin 2026-05-20; commit ebd0e8dc + correcting commit ccfe8948 |
-graduation-target: pattern card in .agent/memory/active/patterns/ (engineering
-practice instance) OR Practice-governance PDR if substance generalises across
-non-code review surfaces | trigger: second observed instance in another session
-OR owner direction authorising graduation | status: pending | size: S]`
+graduation-target: named "more" child of absorption-adjacent-failure-mode-family PDR
+(see family candidate below) — substance moves into that PDR | trigger:
+family PDR authorised 2026-05-20; substance absorbs there | status: due
+(substance graduates as family-PDR child) | size: absorbed by family PDR]`
 
 Worked instance: Stormy Plumbing Atoll absorbed type-expert's
 recommendation to add `rejectURDNA2015: true` to the rdf-canonize ambient
@@ -3820,10 +3822,11 @@ graduation request.
 2026-05-20 | source: napkin 2026-05-20 §"Failure: re-surfacing a settled
 decision as if it were a new one"; owner correction "that isn't a decision,
 that is hand wringing that has cost more in my attention and yours than
-simply moving on" | graduation-target: Practice-governance PDR (new) OR
-amendment to PDR-026 (per-session landing commitment) | trigger: second
-observed instance OR owner-direction graduation request | status: pending |
-size: S]`
+simply moving on" | graduation-target: named "re-litigate" child of
+absorption-adjacent-failure-mode-family PDR (see family candidate below) —
+substance moves into that PDR | trigger: family PDR authorised 2026-05-20;
+substance absorbs there | status: due (substance graduates as family-PDR
+child) | size: absorbed by family PDR]`
 
 Worked instance: owner requested a principles-grounded review of completed
 work. The review correctly identified D1's absorption as a §First Question
@@ -3852,11 +3855,13 @@ sibling rule.
 
 ### Cross-session observation: absorption-adjacent failure-mode family (Shaded Creeping Cloak / Stormy Plumbing Atoll)
 
-`[OBSERVATION (not yet candidate): absorption-adjacent-failure-mode-family |
-captured: 2026-05-20 | source: napkin 2026-05-20; pending-graduations entries
+`[CANDIDATE: absorption-adjacent-failure-mode-family-pdr | captured:
+2026-05-20 | source: napkin 2026-05-20; pending-graduations entries
 closure-pressure-rationalisation + over-correction-during-absorption +
-review-of-completed-work-is-not-re-decision | trigger: second instance from
-a different family member OR owner direction | status: observation only]`
+review-of-completed-work-is-not-re-decision | graduation-target: single
+Practice-governance PDR with three named children (less / more / re-litigate)
+| trigger: owner authorisation fired 2026-05-20 — single-PDR-with-three-children
+shape selected; draft now | status: due | size: L]`
 
 Three failure-mode candidates accumulated within the 2e2764 + 4ef359 window,
 all touching the moment an agent disposes (or re-handles) reviewer findings:

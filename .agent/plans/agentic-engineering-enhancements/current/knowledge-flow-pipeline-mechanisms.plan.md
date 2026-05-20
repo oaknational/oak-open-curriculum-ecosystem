@@ -29,8 +29,8 @@ todos:
 
 # Knowledge-Flow Pipeline Mechanisms
 
-**Last Updated**: 2026-05-18
-**Status**: 🟡 DECISION-COMPLETE FOR STRATEGIC ROUTING — first executable slice is WS3 (drain pass for existing backlog) under owner direction; remaining WSes are scoped but not WS-execution-ready until WS1/WS4 doctrinal decisions are settled.
+**Last Updated**: 2026-05-20 (Shaded Creeping Cloak / claude / opus-4-7-1m / 4ef359)
+**Status**: 🟠 PARKED BY OWNER DIRECTION — owner direction 2026-05-20: "park the whole plan, we will revisit after we get back to the graph tooling work". The pending-graduations.md back-pressure signal remains as the validator continues to flash; structural cure deferred until graph tooling resumes. First executable slice when reopened remains WS3 (drain pass). Strategic-routing decisions in the plan stand; this is a scheduling park, not a scope change.
 **Scope**: Six mechanisms (WS1–WS6) that repair the knowledge-flow pipeline's flow-control function across producer (capture-shape contract), consumer (trigger-scan cadence + recurring-signal tripwire), backlog (drain pass), doctrine (ADR-144 amendment), enforcement (workflow-step-evidence rule), and ratification (PDR-drafting lane for emitted candidates).
 
 ---

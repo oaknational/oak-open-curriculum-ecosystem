@@ -340,6 +340,15 @@ Acceptance:
   normal agent-facing path.
 - Tests prove the canonical path is used.
 - Tests prove retired paths are absent from help output.
+- **Manifest validator co-change (added 2026-05-20 per architecture-expert-fred WS0 ledger review)**:
+  `.agent/memory/executive/memory-state-substrate-contracts.manifest.json:200`
+  validator command string MUST be updated in the same commit as the CLI flag
+  removal. The current value `pnpm agent-tools:collaboration-state -- check
+  --events-dir .agent/state/collaboration/comms-events` references a CLI flag
+  that WS3 removes; leaving the manifest declarative contract pointing at a
+  non-existent flag would create a transient ADR-034 boundary-contract
+  violation for the duration of the WS4 deferral window. Atomic update closes
+  the contract integrity gap.
 
 Validation:
 

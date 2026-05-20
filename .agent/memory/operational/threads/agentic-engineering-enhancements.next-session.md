@@ -148,6 +148,27 @@ singleton-lane remediation can open. The ledger at
 fully populated (385 inventoried files; 8 disposition classes A–H; no
 partial-WS0 remainders).
 
+### Late-session decisions and reviewer outcomes (2026-05-20)
+
+**WS0 ledger reviewer dispatch** (owner-directed second-opinion before sign-off):
+
+- **assumptions-expert: APPROVE.** All 4 acceptance criteria satisfied. Spot-checked 10 Class B line references against actual files — all accurate. Class F closure rule sound (set-difference total over named classes). Workspace-vs-external split honest. One non-blocking observation: state/README.md disposition row implies but doesn't separately enumerate both lines 44 and 96 — owner discretion.
+- **architecture-expert-fred: GO-WITH-CONDITIONS** (2 conditions):
+  - **Condition 1 (valid, absorbed)**: manifest.json:200 validator string is structurally coupled to WS3 CLI-flag removal, not WS4. Leaving it as "WS4 after WS3" creates a transient ADR-034 boundary-contract violation across the WS4 deferral window. Absorbed: WS0 ledger row 200 retargeted to "WS3 co-change, not deferred"; parent plan WS3 acceptance amended to require atomic manifest update in the same commit as CLI flag removal.
+  - **Condition 2 (invalid)**: Fred could not locate ADR-125 in `docs/architecture/architectural-decisions/`. Verified at `docs/architecture/architectural-decisions/125-agent-artefact-portability.md` — citation is correct.
+
+**Owner decisions parsed 2026-05-20** (four-question round):
+
+1. **WS0 ledger**: dispatch reviewers first → done; with Fred's condition 1 absorbed, ledger is owner-ready for sign-off (no further reviewer concerns outstanding).
+2. **PDR-044 amendment**: authorise drafting now → pending-graduations entry status promoted from `pending` to `due`; PDR-044 amendment draft pending.
+3. **Absorption-failure-mode family**: authorise single PDR with three children (closure-pressure / over-correction / review-as-re-decision) → family observation promoted to `due` candidate with `size: L`; three child candidates point at the family PDR as their graduation target; family PDR draft pending.
+4. **Knowledge-flow plan**: park whole plan; revisit after graph tooling resumes → plan status changed from DECISION-COMPLETE to PARKED BY OWNER DIRECTION; back-pressure signal preserved. Closure-pressure exploration plan also parked ("not blocking for the gate work, it wasn't a problem yesterday, it may not be a problem tomorrow").
+
+Next executable work for this thread: draft PDR-044 amendment + draft
+absorption-failure-mode family PDR (both `due`). Owner sequencing for
+the full window-to-graph-tooling-completion arc pending capture in this
+record.
+
 ### Open observations for owner
 
 - Upstream Oak API schema hash refreshed twice during the session
