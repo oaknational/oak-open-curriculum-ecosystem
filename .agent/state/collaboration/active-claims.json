@@ -1,56 +1,5 @@
 {
   "schema_version": "1.3.0",
-  "commit_queue": [
-    {
-      "intent_id": "c8c575c6-dd5e-4962-acb1-6bf10a3e9db1",
-      "claim_id": "58a3245a-6261-41d4-9a0b-fe39c2e1268a",
-      "agent_id": {
-        "agent_name": "Stormy Plumbing Atoll",
-        "platform": "claude",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "2e2764"
-      },
-      "files": [
-        ".agent/plans/agent-tooling/current/start-right-team-singleton-lane-remediation.ws0-disposition.md",
-        "packages/core/graph-core/src/canon/canonicalize.unit.test.ts",
-        "packages/core/graph-core/src/canon/rdf-canonize.d.ts",
-        ".agent/state/collaboration/active-claims.json",
-        ".agent/state/collaboration/closed-claims.archive.json",
-        "packages/sdks/oak-sdk-codegen/schema-cache/api-schema-original.json",
-        "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/api-schema-base.ts",
-        "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/api-schema-original.json",
-        "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/api-schema-sdk.json"
-      ],
-      "commit_subject": "chore(graph-core,agent-tooling): land ws0 ledger and absorb ws1.5 reviewer findings",
-      "queued_at": "2026-05-20T11:35:08.234Z",
-      "updated_at": "2026-05-20T11:35:20.212Z",
-      "expires_at": "2026-05-20T11:50:08.234Z",
-      "phase": "staging"
-    }
-  ],
-  "claims": [
-    {
-      "claim_id": "58a3245a-6261-41d4-9a0b-fe39c2e1268a",
-      "agent_id": {
-        "agent_name": "Stormy Plumbing Atoll",
-        "platform": "claude",
-        "model": "claude-opus-4-7-1m",
-        "session_id_prefix": "2e2764"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": [
-            "index/head"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-20T11:34:45Z",
-      "freshness_seconds": 900,
-      "intent": "Stage and commit WS0 disposition ledger + WS1.5 reviewer-finding fixes + session residue.",
-      "notes": "Pathspecs: ws0 ledger (new), canon test/ambient updates, lifecycle residue, codegen residue. Gates: 47/47 graph-core tests + lint + type-check green. Peer claims: none.",
-      "intent_to_commit": "c8c575c6-dd5e-4962-acb1-6bf10a3e9db1"
-    }
-  ]
+  "commit_queue": [],
+  "claims": []
 }

@@ -26569,6 +26569,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "58a3245a-6261-41d4-9a0b-fe39c2e1268a",
+      "agent_id": {
+        "agent_name": "Stormy Plumbing Atoll",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "2e2764"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-20T11:34:45Z",
+      "freshness_seconds": 900,
+      "intent": "Stage and commit WS0 disposition ledger + WS1.5 reviewer-finding fixes + session residue.",
+      "notes": "Pathspecs: ws0 ledger (new), canon test/ambient updates, lifecycle residue, codegen residue. Gates: 47/47 graph-core tests + lint + type-check green. Peer claims: none.",
+      "archived_at": "2026-05-20",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-20T11:37:10Z",
+        "closed_by": {
+          "agent_name": "Stormy Plumbing Atoll",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "2e2764"
+        },
+        "summary": "WS0 ledger + WS1.5 reviewer fixes landed at 8227d3f7. Session work-cycle complete. Next: continuity handoff.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "58a3245a-6261-41d4-9a0b-fe39c2e1268a",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

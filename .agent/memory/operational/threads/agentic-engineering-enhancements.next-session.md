@@ -1,5 +1,73 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-20 — Stormy Plumbing Atoll / claude / 2e2764)
+
+Three commits landed on `feat/mcp-graph-support-foundation`:
+
+- `4ffef192` — pre-work residue (codegen schema-hash refresh
+  917e9b47→07789088, prior-session closed-claims archive).
+- `ebd0e8dc` — **WS1.5 atomic**: `@oaknational/graph-core/canon`
+  RDFC-1.0 canonicalisation via rdf-canonize, with SHA-256 hash
+  and DatasetCore round-trip through data-factory helpers.
+  Doctrinal: no aliases, no fallbacks, fail fast with kind+step
+  +native cause. 5 tests atomic-landed. WS1.5 lockfile blocker
+  was cleared (43-file dirty slice from prior session no longer
+  present); rdf-canonize@^5.0.0 added as graph-core direct dep.
+- `8227d3f7` — WS0 disposition ledger lands as companion report
+  at `.agent/plans/agent-tooling/current/start-right-team-
+  singleton-lane-remediation.ws0-disposition.md`. Plus WS1.5
+  reviewer-finding fixes: ambient declaration tightened so
+  doctrinal flags are non-negotiable at library boundary; test
+  5 (URDNA2015 audit-shape) replaced with three describe-shape
+  tests (`reparse_failed`, `reconstruction_failed`, SHA-256
+  hash-consistency). Test count 5→7.
+
+**Reviewer dispatch (5 reviewers, parallel)**:
+
+- code-expert (WS1.5): APPROVE-WITH-NITS. Two nits — one absorbed
+  (ambient tightening); one deferred (term-reconstruction helpers
+  throw raw Error, not typed CanonicalizationError; runReconstruct
+  wraps the message but the typed kind detail is in the Error
+  string only).
+- type-expert (WS1.5): SAFE. Optional `never`-exhaustiveness proof
+  for `toSubject`/`toPredicate`/`toObject`/`toGraph` declined for
+  this session (eslint `consistent-return` interaction needs the
+  switch-with-explicit-throw pattern; deferred).
+- test-expert (WS1.5): one critical (test 5 audit-shape) absorbed;
+  two coverage gaps (reparse_failed, reconstruction_failed) and
+  the hash-consistency proof absorbed in `8227d3f7`.
+- assumptions-expert (WS0 ledger): two critical (Class A row 2
+  conditional, Class F closure rule) absorbed; three important
+  (Class D doctrine attestation, Class E external phrasing,
+  Class B exec-memory partial WS0) absorbed.
+- docs-adr-expert (WS0 ledger): three important (Class A
+  live-types conditional execution, missing absorbed-WS3
+  comms-watch row, §Scope wording) absorbed.
+
+**Open observations for owner**:
+
+- Upstream Oak API schema hash refreshed twice in one session
+  (917e9b47 → 07789088 → bdecf3f87...). Folded forward as
+  residue per session plan. If this rate continues, may be worth
+  surfacing as a friction signal.
+- Deferred reviewer findings (code-expert nit 2 + type-expert
+  exhaustiveness) belong in a follow-up cycle, not blocking next
+  session.
+
+**Next safe step**: WS1 of singleton-lane remediation (team-start
+template amendment in `.agent/skills/start-right-team/SKILL-CANONICAL.md`
+line 70 — replace `Claimed paths` with `Intended boundary` + `Claim
+status`, add singleton-lane caveat). Requires owner review of the
+WS0 ledger first per the parent plan's blocking-prerequisite
+classification. Stays solo — multi-vendor open of this thread
+remains forbidden until WS3 lands.
+
+Graph-stack Inc.1a continues: WS1.5 done, remaining Inc.1a cycles
+are WS1.6 (vocab-registry implementation after prep-note owner
+decisions are respected), WS2.2 (jsonld-compatible ingestion),
+WS2.3, WS3.1, WS3.2, WS3.3. Cycle count after this session: 6
+remaining in Inc.1a.
+
 ## Lens-Applied Sequence (2026-05-19)
 
 **Owner direction (Shaded Passing Candle session)**: graph tooling is the
