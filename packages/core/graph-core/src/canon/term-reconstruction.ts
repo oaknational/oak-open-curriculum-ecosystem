@@ -31,6 +31,16 @@ export class TermReconstructionError extends Error {
   }
 }
 
+/**
+ * Reconstruct a Literal object term from its parsed shape.
+ *
+ * Branches on the datatype IRI: the rdf:langString datatype requires a
+ * language tag and produces a language-tagged literal; every other
+ * datatype produces a datatyped literal. Missing required metadata
+ * (no datatype, or rdf:langString without a tag) throws
+ * `TermReconstructionError` so the outer Result envelope surfaces the
+ * shape mismatch precisely.
+ */
 function literalFromParsed(term: ParsedQuadTerm): ObjectTerm {
   const datatypeIri = term.datatype?.value;
   if (datatypeIri === undefined) {
@@ -50,6 +60,13 @@ function literalFromParsed(term: ParsedQuadTerm): ObjectTerm {
   return literal(term.value, namedNode(datatypeIri));
 }
 
+/**
+ * Reconstruct a subject term. The RDF data model permits only NamedNode
+ * and BlankNode in subject position; any other termType is a reconstruction
+ * failure and throws `TermReconstructionError`. The `default` arm is an
+ * exhaustiveness proof: if `ParsedQuadTerm.termType` grows a new variant,
+ * the `const exhaustive: never` assignment fails to compile.
+ */
 function toSubject(term: ParsedQuadTerm): SubjectTerm {
   switch (term.termType) {
     case 'NamedNode':
@@ -70,6 +87,12 @@ function toSubject(term: ParsedQuadTerm): SubjectTerm {
   }
 }
 
+/**
+ * Reconstruct a predicate term. The RDF data model permits only NamedNode
+ * in predicate position; BlankNode, Literal, and DefaultGraph in predicate
+ * position are reconstruction failures and throw `TermReconstructionError`.
+ * The `default` arm asserts `never` for compile-time exhaustiveness.
+ */
 function toPredicate(term: ParsedQuadTerm): PredicateTerm {
   switch (term.termType) {
     case 'NamedNode':
@@ -89,6 +112,14 @@ function toPredicate(term: ParsedQuadTerm): PredicateTerm {
   }
 }
 
+/**
+ * Reconstruct an object term. The RDF data model permits NamedNode,
+ * BlankNode, and Literal in object position; DefaultGraph is a
+ * reconstruction failure. Literal reconstruction delegates to
+ * `literalFromParsed` to keep this function's cyclomatic complexity
+ * under the lint limit. The `default` arm asserts `never` for
+ * compile-time exhaustiveness.
+ */
 function toObject(term: ParsedQuadTerm): ObjectTerm {
   switch (term.termType) {
     case 'NamedNode':
@@ -110,6 +141,12 @@ function toObject(term: ParsedQuadTerm): ObjectTerm {
   }
 }
 
+/**
+ * Reconstruct a graph term. The RDF data model permits DefaultGraph,
+ * NamedNode, and BlankNode in graph position; Literal is a
+ * reconstruction failure. The `default` arm asserts `never` for
+ * compile-time exhaustiveness.
+ */
 function toGraph(term: ParsedQuadTerm): GraphTerm {
   switch (term.termType) {
     case 'DefaultGraph':
@@ -131,6 +168,12 @@ function toGraph(term: ParsedQuadTerm): GraphTerm {
   }
 }
 
+/**
+ * Reconstruct a canonical `Quad` from an rdf-canonize parsed quad. Each
+ * term position routes through its position-specific reconstruction
+ * helper so position-illegal term shapes (e.g. a Literal in the subject
+ * slot) throw `TermReconstructionError` with the failing position named.
+ */
 export function reconstructQuad(parsed: ParsedQuad): Quad {
   return quad(
     toSubject(parsed.subject),
