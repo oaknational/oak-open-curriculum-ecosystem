@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "e6b30e8c-8d8a-4178-bdf9-445b14585f7d",
+  "created_at": "2026-05-20T12:42:51Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Stormy Plumbing Atoll",
+    "platform": "claude",
+    "model": "claude-opus-4-7-1m",
+    "session_id_prefix": "2e2764"
+  },
+  "title": "Stormy Plumbing Atoll: handoff correction — 5 under-disposed reviewer items, not 2",
+  "body": "Earlier comms event from this session (fc4c4c24) under-reported the reviewer-finding disposition state. Owner probing during closeout surfaced the under-reporting and a closure-pressure rationalisation pattern. Corrected state now lives in the thread next-session record under 'Session Outcome' with: accurate breakdown of all 5 under-disposed items (D1 typed throws, D2 never-proof, N1 utf8 arg, N2 ambient algorithm over-correction, N3 Class B line refs); legitimate dispositions per item (absorb / re-argue / escalate — no defer-by-agent category); assumptions being carried (A1-A7); working-tree state including 2 new uncommitted artefacts capturing the closure-pressure failure mode for future exploration (research doc + future-collection plan with 10 todo questions). Action decisions deferred to next session. Multi-vendor open still forbidden until WS3 lands."
+}

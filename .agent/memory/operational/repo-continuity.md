@@ -17,6 +17,22 @@ Earlier archives remain under [`archive/`](archive/).
 ## Current State
 
 - Current branch: `feat/mcp-graph-support-foundation`.
+- **2026-05-20 (Stormy Plumbing Atoll / `claude` / opus-4-7-1m / `2e2764`)**:
+  WS1.5 RDFC-1.0 canonicalisation landed at `ebd0e8dc` (graph-core canon
+  module; rdf-canonize@^5.0.0 added; 5 atomic tests + 2 absorbed-from-review
+  for 7 total). WS0 disposition ledger for singleton-lane remediation landed
+  at `8227d3f7` as companion report. Pre-work residue commit `4ffef192`.
+  Continuity commit `5f1551c3` UNDER-REPORTED reviewer-finding disposition
+  state — corrected in working tree (this section + thread record). Owner
+  probing during closeout surfaced a closure-pressure rationalisation failure
+  mode; preserved in
+  [`closure-pressure-and-workflow-composition-2026-05-20.md`](../../research/agentic-engineering/closure-pressure-and-workflow-composition-2026-05-20.md)
+  (research) and
+  [`closure-pressure-remediation-design-space.plan.md`](../../plans/agentic-engineering-enhancements/future/closure-pressure-remediation-design-space.plan.md)
+  (exploration plan with 10 todo questions). 5 reviewer findings (D1, D2,
+  N1, N2, N3) remain under-disposed with legitimate-dispositions named per
+  item in the thread record. Next safe step: WS1 of singleton-lane
+  remediation after owner review of the WS0 ledger.
 - **2026-05-19 (Shaded Passing Candle)**: broken/accelerator lens applied
   to all sequenced work for graph-multi-vendor priority (Claude + Codex,
   most multi-agent yet). Token-remediation program advancement rule
@@ -181,7 +197,7 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Shaded Passing Candle / `claude` / Opus 4.7 (1M) / `ab4290` / 2026-05-19 |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Stormy Plumbing Atoll / `claude` / Opus 4.7 (1M) / `2e2764` / 2026-05-20 |
 | `connecting-oak-resources` | Oak resource graph | [record][connecting] | Riverine Swimming Hull / `claude` / Opus 4.7 / `304dde` / 2026-05-14 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
@@ -447,6 +463,25 @@ Current branch non-goals:
   acceptance work.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-20 — Stormy Plumbing Atoll / `claude` / Opus 4.7 (1M) /
+`2e2764`)**: **due — not well-bounded for this closeout**. Triggers fired:
+WS1.5 RDFC-1.0 canon milestone closed at `ebd0e8dc`; WS0 disposition
+ledger milestone closed at `8227d3f7`; closure-pressure rationalisation
+failure mode surfaced through three rounds of metacognition (new entry
+in pending-graduations.md targeting Practice-governance PDR or amendment
+to ADR-172/PDR-029; companion research + future-collection plan with 10
+todo questions); PDR-044 refusal-vs-approval mechanism choice surfaced as
+a second candidate. Five reviewer-finding items remain under-disposed
+against the WS1.5/WS0 work (carried in agentic-engineering-enhancements
+thread record). Deferring to next session because: (1) the failure-mode
+preservation work itself was the session's late-stage workload and a
+second metacognition cycle to drive graduation would be cognitively
+expensive in the same window; (2) owner direction during closeout
+explicitly placed action-decisions in the next session's scope. Next
+session should consider whether to consume the trigger list as a deep
+consolidation pass, or whether to land WS1 of singleton-lane remediation
+first and consolidate after.
 
 **Status (2026-05-19 — Shaded Passing Candle / `claude` / Opus 4.7 (1M) /
 `ab4290`)**: completed this handoff — light consolidation pass alongside

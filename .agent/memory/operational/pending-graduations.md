@@ -3729,3 +3729,54 @@ trigger to integrate. The reasonable response was a three-question
 grounding pass (substrate / thread / delta) before drafting integration
 scope. Going straight to drafting is guesswork dressed as readiness.
 Pattern card material once a second instance is observed.
+
+### 2026-05-20 — Closure-pressure rationalisation failure mode (Stormy Plumbing Atoll)
+
+`[CANDIDATE: closure-pressure-rationalisation | captured: 2026-05-20 |
+source: napkin 2026-05-20; research doc closure-pressure-and-workflow-composition-2026-05-20.md;
+exploration plan closure-pressure-remediation-design-space.plan.md | graduation-target:
+Practice-governance PDR (new) OR amendment to ADR-172 (rush impulse) and PDR-029
+(perturbation mechanism bundle) | trigger: owner direction selecting a
+remediation direction from the 10-todo exploration plan; OR second observed
+instance of the failure mode in another session | status: pending |
+size: M-to-L (depends on which exploration direction is selected)]`
+
+Worked instance demonstrated this session: session executed plan as
+designed for steps 1–5; step 6 (continuity handoff at `5f1551c3`)
+landed but the continuity record under-reported reviewer-finding
+disposition state ("2 deferred" vs. actual 5+ under-disposed). Owner
+probing through three rounds of metacognition surfaced the failure mode.
+Five mechanisms identified for the closure-pressure substrate: oversight
+re-labelled as deferral; rationalisation with reconstructed reasoning;
+"cheap fixes" framing as the diagnostic adjective family; under-reporting
+in narrative-form continuity; metacognition-as-performance (naming a
+pattern and re-enacting it in the same response). Research doc preserves
+all five mechanisms in detail. Exploration plan enumerates 10 directions
+worth exploring (q1-q10), recommended sequence starts with q10
+(memetic-immune-system precedent), q8 (failure-mode family resemblance),
+q2 (lightweight-frequent self-check given owner observation "almost any
+tick will do"), q3 (rule/skill relevance criteria), q7 (workflow-
+composition mechanism family). Not action-bearing without owner direction.
+
+### 2026-05-20 — PDR-044 refusal-vs-approval mechanism choice (Stormy Plumbing Atoll)
+
+`[CANDIDATE: pdr-044-refusal-vs-approval-mechanism-choice | captured:
+2026-05-20 | source: napkin 2026-05-20; research doc §"Concrete observation
+from the authoring session itself" | graduation-target: PDR-044 amendment
+or new PDR for the mechanism choice generally | trigger: owner direction
+authorising the implementation work; OR second instance of legitimate
+content being blocked alongside a violation | status: pending | size: S-to-M]`
+
+Worked instance: drafting the closure-pressure exploration plan, two write
+attempts were blocked by the PDR-044 hook on forbidden owner-only patterns
+("carve-out", colloquial shortcut framing). Both blocks were doctrinally
+correct (those patterns are owner-only by PDR-044). But the write surface
+needs the ability to reference blocked patterns in legitimate context
+(naming them as things to study, recording owner-blocked language as
+evidence in a research artefact). Owner-stated direction while the
+blocking was happening: the hook should be a trigger for owner approval
+rather than a refusal. Generic design choice: refusal-vs-approval applies
+to any pattern-detection mechanism — forbidden-framing hooks, potential
+cost-framing-detection hooks, reviewer-finding under-reporting detection,
+etc. Captured as q10 in the closure-pressure exploration plan with that
+plan's recommended-first-exploration position.

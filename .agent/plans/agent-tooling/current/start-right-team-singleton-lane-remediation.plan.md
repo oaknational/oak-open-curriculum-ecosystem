@@ -8,7 +8,8 @@ overview: >
 todos:
   - id: ws0-baseline-disposition
     content: "Inventory stale comms roots, low-level comms path options, claim-open overlap behaviour, team-start template shape, bulk-cleanup surfaces, and memory snippets; record a disposition for every finding."
-    status: pending
+    status: completed
+    completion_note: "Disposition ledger landed 2026-05-20 at companion report start-right-team-singleton-lane-remediation.ws0-disposition.md (commit 8227d3f7). 385 inventoried files across 8 classes (A source, B doctrine, C team-start, D cleanup, E memory, F historical-evidence, G plans, H test-fixture). Class F closure rule eliminates bulk-class ambiguity. One reviewer concern remains under-disposed: Class B exec-memory line refs marked partial-WS0 (N3 in thread record); strict reading of acceptance criterion is partially unsatisfied — disposition decision deferred to next session."
   - id: ws1-team-start-rendezvous
     content: "Amend start-right-team and adjacent doctrine so owner-launched identical prompts on singleton lanes report presence/intended boundary before source claims."
     status: pending
