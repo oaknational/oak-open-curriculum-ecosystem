@@ -59,6 +59,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@oaknational/type-helpers": "workspace:*",
     "jsonld": "^9.0.0",
     "rdf-canonize": "^5.0.0"
   },
