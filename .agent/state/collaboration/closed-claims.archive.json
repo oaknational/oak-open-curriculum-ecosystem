@@ -27975,6 +27975,48 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "dd93c2d9-84d7-48ca-aec5-53831f17c5ce",
+      "agent_id": {
+        "agent_name": "Soaring Flying Gale",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "ffa6ce"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-21T22:17:25Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "stage and commit gate-1a planning deepening (4 plan/memory files)",
+      "notes": "pathspecs: eef-first-feature.plan.md, addendum.plan.md, pending-graduations.md, connecting-oak-resources.next-session.md; tree clean apart from these 4; no peer claims observed",
+      "archived_at": "2026-05-21",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-21T22:18:36Z",
+        "closed_by": {
+          "agent_name": "Soaring Flying Gale",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "ffa6ce"
+        },
+        "summary": "commit landed at 24ab73c9; gate-1a planning deepening; 4 files / +286 −33; pre-commit gates all green",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "dd93c2d9-84d7-48ca-aec5-53831f17c5ce",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
