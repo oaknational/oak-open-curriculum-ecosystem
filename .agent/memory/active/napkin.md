@@ -501,3 +501,23 @@ multi-agent coordination doctrine. Trigger for promotion: second
 instance of the principle being either contested or extended (e.g.
 when the sync kind is added, or when a platform-specific watcher
 needs to deviate). Captured in pending-graduations.
+
+---
+
+## 2026-05-21 — Rename suggestion timing encoded in team-start SKILL
+
+Owner correction during opener-revision review: the `/rename` hint must
+also live in the team-start SKILL (not only in opener text), and the
+timing must be explicit — **before any significant implementation**, not
+at session close. Encoded in `.agent/skills/start-right-team/SKILL-CANONICAL.md`
+as new move 4 in the First Moves list, sandwiched between rendezvous
+resolution (move 3) and source-claim opening (move 5). The analogous
+failure mode is named in the post-list paragraph: surfacing `/rename`
+after significant implementation means the title no longer matches the
+work by the time the title question reaches the owner.
+
+This is the team-session counterpart of the existing user-memory
+`feedback_rename_suggestion_at_session_open_only`. Same principle —
+surface once at intent-clarity moment, never in closeout — promoted from
+user-memory to SKILL surface for the multi-agent case because in team
+sessions "intent clarity" is rendezvous-resolution, not session-open.
