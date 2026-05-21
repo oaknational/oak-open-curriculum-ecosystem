@@ -27,7 +27,49 @@ lives in the archived napkin.
 [previous-pass]: archive/napkin-2026-05-14.md
 [previous-previous-pass]: archive/napkin-2026-05-13.md
 
-## 2026-05-19 — Shaded Passing Candle (claude / opus-4.7-1m / `ab4290`)
+## 2026-05-21 — Cirrus Circling Plume (claude / opus-4.7 / `fba398`)
+
+### Surprise: shell command-substitution from markdown backticks in double-quoted body argument
+
+Composed a `comms send` broadcast with a double-quoted `--body "Cron … <backtick>git commit<backtick> …"` argument carrying markdown backtick code spans (using `<backtick>` placeholder here because literal backticks inside an MD code span would re-fire the issue in this very entry). Inside double quotes, backticks are command-substitution; the bare `git commit` token shell-evaluated and ran. The pre-commit hook fired against the shared working tree (Salty was the active gatekeeper at that moment), failed on a flaky `oak-search-sdk` lifecycle-lease integration test, and aborted the phantom commit. No on-disk damage; Salty's actual `git commit` ran cleanly ~30s later and landed `0cdaf58c`.
+
+Falsifiable check for future sessions: grep any `--body "..."` invocation for unescaped backticks before submitting. Or — the structural cure — `--body-file <path>` CLI flag that reads body content from a file without any shell argument interpolation. Logged as pending-graduations rule candidate + `--body-file` evidence point 2 (first evidence point was Celestial Glimmering Moon's shell-argv-corruption in the 2026-05-21 morning session). Two distinct failure shapes both cured by the same CLI flag.
+
+### Surprise: coordinator-handoff has two distinct moments
+
+Stratospheric Gusting Squall pre-positioned a coordinator-handoff broadcast to me at 19:31Z stating the role transferred to Cirrus. Owner corrected at 19:32Z: pre-positioning state-of-play is distinct from transferring authority; the transfer happens at the receiving agent's active acknowledgement. Stratospheric issued a correction broadcast re-asserting active coordinator role. I then posted the active-acknowledgement broadcast at 19:33Z which substantively effected the transfer.
+
+Falsifiable: when receiving a "handoff to you" broadcast in a future session, distinguish whether the sender has framed it as pre-positioning (state-of-play, awaits my active ack) or as authority-transfer (effective immediately, requires me to assume responsibility). The receiver's active acknowledgement is the load-bearing act. Captured as pattern candidate in pending-graduations.
+
+### Surprise: same word can be pathogen AND corrective vocabulary depending on usage-shape
+
+Vocabulary-discipline pass on graph-mvp-arc.plan.md surfaced six "definite" hits at pre-existing lines (152/455/574/695/817/883). Doctrinal tension: Charcoal Searing Ember's 2026-05-21 napkin entry registers "definite" as Family 2 dogma vocabulary (closure-shape — "the definite answer"); user-memory entry `feedback_simple_definite_no_imaginary_flows` uses "definite" as the corrective doctrine vocabulary (structural-antonym to "imaginary-flow conditional triggers" — "definite sequence position"). The six in-place hits all follow the corrective structural-antonym shape.
+
+Refinement: the vocabulary-discipline lexicon check must be by USAGE SHAPE not by word. "definite" in closure-shape is pathogenic; "definite" in structural-antonym usage is corrective. Verdict applied this session: KEEP all 6 instances (structural-antonym, consistent with corrective doctrine). Captured as napkin refinement candidate in pending-graduations.
+
+### Surprise: walking back a verdict that the other reviewer also walked back from is a loop
+
+Mid-session sequence on the "definite" disposition:
+
+1. I (Cirrus) gave verdict KEEP with closure-shape vs structural-antonym reasoning.
+2. Evergreen Climbing Canopy's coherence pass gave verdict DEFER (owner adjudication).
+3. I walked back to align with Evergreen's DEFER.
+4. Evergreen walked back to align with my original KEEP reasoning.
+
+We swapped positions. Net outcome is identical on disk (don't edit the 6 lines), but the routing wasted ~1 broadcast of churn. Cure: when a reviewer surfaces a doctrinal-tension question, name the verdict and the reasoning rather than walking back to the reviewer's deferred shape. Hold the verdict until the reviewer either accepts or contests it; one round of dialogue, not two walk-backs. Falsifiable: count the round-trip count on disposition convergence; one-trip convergence is the target.
+
+### Worked-precedent observation: four-slice file-disjoint partition + cross-cutting reviewer + elected gatekeeper
+
+Six-agent team session shape that worked structurally well:
+
+- 4 slice owners on file-disjoint planning surfaces (Gilded A, Stratospheric B, Salty C, Opalescent D)
+- 1 cross-cutting reviewer (Evergreen) running per-slice second-eye + integrated coherence pass
+- 1 coordinator (Stratospheric until 19:33Z handoff, then Cirrus)
+- 1 elected gatekeeper (Salty, role-stacked with §1a gate-runner + Slice C owner)
+
+The file-disjoint partition meant slice owners could work concurrently without coordination-during-edit; coordination happened at the slice-completion boundary via comms events. Cross-cutting reviewer handled the integration concern (the cross-reference matrix, the integrated vocabulary discipline) without entering any slice owner's edit boundary. Elected gatekeeper avoided commit-window interleave. Net: 6 agents, 7 files, 1 atomic commit, ~30 minutes from cycle-overlap coordination to commit-landing.
+
+Pattern candidate logged in pending-graduations. Falsifiable: future planning-amendment sessions of similar scope (3+ files across 2+ thread surfaces) should reach for this shape; if the file-disjoint property doesn't hold (slices overlap), the partition won't work.
 
 ### Surprise: portable reference doc arrived without an integration plan slot
 
@@ -1650,3 +1692,92 @@ extended the surface from 3 candidates to 4 confirmed offences (1
 of which I had missed) plus 1 outstanding security-expert
 escalation. This is the shape the owner has described as wanted
 ("extensive reviewers", "no backfill reviews").
+
+## 2026-05-21 — Stratospheric Gusting Squall (claude / claude-opus-4-7 / `cfe7da`)
+
+### Surprise: pre-positioning a coordinator handoff is distinct from transferring authority
+
+Charcoal Searing Ember handed me the coordinator role at 19:18Z under owner
+direction. After running the role for ~13 minutes (routing brief, §1a
+gate-runner election to Salty, four-slice partition assignments, Slice B
+execution), the owner direction came in to "pass the coordinator role to
+Cirrus". I posted a handoff broadcast (event `c020b3d6`) pre-positioning the
+team state-of-play for Cirrus to read on arrival, cancelled the 3-min
+coordinator-cadence cron loop, and stated I was stepping down to peer.
+
+The owner immediately corrected: *"you are coordinator until Cirrus actively
+acknowledges taking over the role"*. My broadcast was a pre-positioning, not
+a transfer. I issued a correction broadcast (`554bc011`) re-arming the cron
+loop and re-asserting coordinator authority. Cirrus arrived 50 seconds later
+(event `c9d8d016`) and the transfer became real.
+
+The structural distinction: **active-acknowledgement by the receiving agent
+IS the transfer**. The outgoing agent's pre-positioning broadcast is a
+state-of-play laid down for the incoming agent's foundation read on arrival.
+Until the incoming agent broadcasts active-acknowledgement, the outgoing
+agent retains all coordinator responsibilities (routing, cron cadence,
+reviewer dispatch, commit-window coordination).
+
+Falsifiable: in any future coordinator handoff, observe whether the
+authority transfer happens at the outgoing agent's pre-positioning broadcast
+or at the incoming agent's active-acknowledgement broadcast. This pattern
+predicts active-acknowledgement.
+
+candidate: pattern entry or PDR amendment — *Coordinator-handoff has two
+distinct moments: (1) pre-positioning (outgoing agent broadcasts
+state-of-play); (2) active-acknowledgement (incoming agent broadcasts
+intent-to-coordinate). Only the latter transfers authority. The outgoing
+agent retains coordinator responsibilities until the incoming agent's
+active-acknowledgement is observable in comms.* First instance; promote on
+second occurrence or owner-direction graduation request.
+
+### Insight: coordinator-as-slice-runner is workable when team capacity is short by 1
+
+When Charcoal closed out at 19:21:18Z (before my routing brief at 19:22Z
+reached them), the 4-peer pool minus Charcoal dropped to 3 peers against 4
+file-disjoint slices (A/B/C/D from Charcoal's pre-killed-sub-agent partition).
+Two options: force one peer to double up (broken file-disjoint discipline; load
+imbalance), or take one slice myself as coordinator. I took Slice B
+(`graph-stack.plan.md`, the smallest/freshest slice) and ran it concurrently
+with coordinator routing.
+
+Worked because the slice was bounded: one vocabulary fix (line 126 removing
+"non-negotiable") plus one §Acceptance section addition (Inc.1d item). Total
+~2 edits in working tree. Coordinator load remained manageable because the
+other three slices ran in parallel and slice-completion events were
+event-driven (not blocking coordinator cadence).
+
+Risk shape: a larger slice (e.g. Slice A with Charcoal's killed-sub-agent
+partial edits requiring diff-verify) would have been the wrong choice for
+coordinator-as-slice-runner. The pattern requires the COORDINATOR PICKING
+THE SMALLEST / FRESHEST SLICE, not a complex one.
+
+candidate: pattern entry — *When team capacity is short by 1 and slices
+remain file-disjoint, coordinator-as-slice-runner on the smallest/freshest
+slice is preferable to forcing peers to double up.* First instance; promote
+on second occurrence.
+
+### Insight: §1a inherited-tree gate-runner scopes per-workspace, not tree-wide
+
+Salty's 19:25Z §1a gate-state report demonstrated per-workspace gates
+against the four dirty workspaces (`agent-tools`, `oak-search-cli`,
+`@oaknational/env`, `@oaknational/graph-project`) running in ~2 minutes
+total — type-check + lint + test per workspace, 12 commands total, all
+PASS, 1505 tests. Tree-wide `pnpm check` would have re-run already-green
+workspaces unnecessarily plus the full integrated chain (sdk-codegen,
+build, doc-gen, format-check, markdownlint, knip, depcruise, gitleaks,
+subagents:check, portability:check, repo-validators:check). The
+start-right-team skill text mentions per-workspace as an option when the
+dirty files are scoped to specific workspaces; this session is a worked
+instance of the savings.
+
+Risk shape: per-workspace would miss a cross-workspace cascade (e.g. an
+SDK type change that breaks consumers in another workspace). The §1a
+runner's diagnosis-hypothesis step is the guard — Salty explicitly framed
+the inherited residual as "uncommitted in-flight work, not cascade
+residue", which justified the per-workspace shape.
+
+candidate: skill amendment to start-right-team §1a — promote
+"per-workspace" from "an option" to "the default when dirty files are
+workspace-scoped" with the cross-workspace cascade caveat. Already
+implicit in the skill; explicit promotion on second-instance observation.

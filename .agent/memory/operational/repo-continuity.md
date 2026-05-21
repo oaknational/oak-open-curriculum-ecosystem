@@ -17,6 +17,8 @@ Earlier archives remain under [`archive/`](archive/).
 ## Current State
 
 - Current branch: `feat/mcp-graph-support-foundation`.
+- **2026-05-21 (Cirrus Circling Plume / `claude` / Opus 4.7 / `fba398`, six-agent team session, closeout owner)** —
+  **landed the Inc.1d EEF concurrent-tenant planning amendment-set at commit `0cdaf58c`** (`docs(plans): land Inc.1d EEF concurrent-tenant amendment-set`; 7 files, +657/−129; all pre-commit gates green on first attempt; 87/87 turbo tasks, 28 cached, 1m44s). Team shape: four-slice file-disjoint partition + cross-cutting reviewer + elected gatekeeper. Slice owners: Gilded Beaming Eclipse (`0467d0`, Slice A graph-query-layer.plan.md), Stratospheric Gusting Squall (`cfe7da`, Slice B graph-stack.plan.md), Salty Snorkelling Pier (`5eb191`, Slice C graph-mvp-arc.plan.md + §1a gate-runner + elected gatekeeper), Opalescent Illuminating Galaxy (`2aa615`, Slice D eef-evidence-corpus + portfolio + conservation-map + new eef-first-feature.plan.md). Cross-cutting reviewer: Evergreen Climbing Canopy (`4a365e`) — per-slice PDR-044 vocabulary second-eye on all four slices (all CLEAN) + 8-row bidirectional cross-reference matrix verification + final coherence verdict GO. Coordinator handoff: Stratospheric opened the four-slice partition and routed §1a gate-runner; coordinator role transferred to Cirrus at 19:33Z via explicit active-acknowledgement (owner-corrected timing: pre-positioning is distinct from authority transfer). §1a inherited-tree gate-state at session-open: ALL GREEN per Salty's per-workspace run (agent-tools / search-cli / env / graph-project; 1505 tests passing at HEAD `688ccef2`); cascade-class failure mode cured. PDR-044 vocabulary discipline applied across all four slices + 3 supplements. Mid-session incident: Cirrus accidentally triggered shell command-substitution from markdown backticks in a double-quoted `--body` argument, causing a phantom `git commit` during Salty's gatekeeper-window; pre-commit hook failed on a flaky lifecycle-lease test and aborted; no on-disk damage; captured as rule candidate + `--body-file` CLI evidence point 2. Five peer team-member closeouts received (Stratospheric, Salty, Evergreen, Gilded, Opalescent) — no retained claims. Coordinator-side closeout: thread record refreshed; 5 pending-graduations entries captured (3 coordination patterns from Stratospheric, 1 napkin-refinement for closure-shape vs structural-antonym vocabulary, 1 backtick-substitution rule + CLI evidence point); napkin entry written; entry-point sweep clean.
 - **2026-05-21 (Sunlit Weaving Aurora / `claude` / Opus 4.7 (1M) / `a6574f`)** —
   **HTTP MCP test-suite quality pass** in
   `apps/oak-curriculum-mcp-streamable-http`. Triggered by an intermittent
@@ -498,7 +500,7 @@ each thread record; this table is the repo-level index.
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
 | `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Torrid Glowing Flame / `claude` / Opus 4.7 (1M) / `5ab0ec` / 2026-05-21, Fiery Firing Cinder / `claude` / Opus 4.7 (1M) / `40c178` / 2026-05-21 |
-| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Torrid Glowing Flame / `claude` / Opus 4.7 (1M) / `5ab0ec` / 2026-05-21, Molten Igniting Hearth / `claude` / Opus 4.7 (1M) / `078515` / 2026-05-21, Celestial Glimmering Moon / `claude` / Opus 4.7 / `46d23a` / 2026-05-21, Pelagic Sailing Beacon / `claude` / Opus 4.7 (1M) / `f72405` / 2026-05-21 |
+| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Cirrus Circling Plume / `claude` / Opus 4.7 / `fba398` / 2026-05-21 (closeout owner), Stratospheric Gusting Squall / `claude` / Opus 4.7 / `cfe7da` / 2026-05-21, Salty Snorkelling Pier / `claude` / Opus 4.7 / `5eb191` / 2026-05-21, Opalescent Illuminating Galaxy / `claude` / Opus 4.7 / `2aa615` / 2026-05-21, Gilded Beaming Eclipse / `claude` / Opus 4.7 / `0467d0` / 2026-05-21, Evergreen Climbing Canopy / `claude` / Opus 4.7 / `4a365e` / 2026-05-21 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / `codex` / 2026-04-28 |
@@ -695,26 +697,7 @@ owner-directed mid-session pivot to all-channels comms CLI work
 (95f42cb7), WS1.5 (ebd0e8dc), WS1.6 (3add41f9), WS2.1 (0f895070), WS3.1
 (84bfffa5), WS3.2 (abe6fcb3). Inc.1a remaining: 3 cycles (WS2.2, WS2.3,
 WS3.3).
-**Next safe step (post-Torrid handoff 2026-05-21 evening)**: **the v0.7.0
-cascade has CLEARED** via Opalescent Twinkling Supernova's three commits
-earlier today (`b1afd5bf` chore(sdk), `5613eee4` refactor(search-cli),
-`8fcd3200` docs(plans)); branch is no longer cascade-blocked. **The next
-session's load-bearing work** is to refine the EEF Inc.1d sequencing
-pull-forward amendment set (currently uncommitted in the working tree;
-11 plan/ADR files + thread records + napkin + one comms event;
-+2035/-249 lines per the Torrid session's diff stat) and to dispatch
-the three remaining specialist reviewers: **type-expert** at WS4.4
-authoring time (load-bearing for the `Result<T, NotImplementedYet>`
-variant typing across 5 EEF stub operations and the
-`Result<readonly TNode[], FindByTagError>` shape introduced in the
-2026-05-21 amendment; also the `DeepKeyPath<TNode, Depth>` recursive
-type and array-stop discipline); **architecture-expert-betty** for the
-`GraphView<TNode, TEdgeType>`-in-`graph-corpus-sdk`-vs-`graph-core`
-boundary question already flagged on WS4.4; **assumptions-expert** for
-the sparse-relations-on-manifest carry-over from the 2026-04-30 verdict
-flagged on WS4.5. The owner may also choose to commit the amendment
-set ahead of further reviewer cycles. After amendment-set landing,
-resume Inc.1a substrate completion (WS2.2 + WS2.3 + WS3.3) and then
+**Next safe step (post-Cirrus six-agent team session 2026-05-21 evening)**: **the Inc.1d EEF concurrent-tenant amendment-set has LANDED at `0cdaf58c`** (7 files, +657/−129; per-slice PDR-044 vocabulary + integrated coherence pass + atomic commit; all gates green). Substrate dependencies remain unchanged: resume Inc.1a completion (WS2.2 jsonld-compatible + Turtle/SKOS parser, WS2.3, WS3.3 adjacency primitives), then Inc.1b (WS4.1 graph-corpus-sdk scaffold + WS4.2 Threads adapter) and Inc.1c (WS4.3 query proof). Inc.1d (WS4.4 GraphView interface + WS4.5 EefStrandsGraphView adapter) opens once Inc.1a + WS4.1 + WS4.2 + WS4.3 land per the amendment-set's sequencing. Three remaining specialist reviewers still required at Inc.1d authoring time per the prior thread record: **type-expert** (load-bearing for the `Result<T, NotImplementedYet>` variant typing across 5 EEF stub operations + `DeepKeyPath<TNode, Depth>` recursive type + array-stop discipline); **architecture-expert-betty** for the GraphView placement (already resolved to `packages/core/graph-core/src/graph-view/` per the amendment-set; verify holds at WS4.4 author time); **assumptions-expert** for the sparse-relations-on-manifest WS4.5 stub criterion. After Inc.1d landing,
 Inc.1b (WS4.1 scaffold + WS4.2 Threads adapter) + Inc.1c (WS4.3 query
 proof) + Inc.1d (WS4.4 GraphView interface + WS4.5 EEF adapter — new
 sub-increment per the 2026-05-21 amendment). Then the three
@@ -755,22 +738,9 @@ Multi-vendor open of the thread remains forbidden until WS3.3 lands.
 Inc.1a continues under the 2026-05-12 holistic re-plan (`f73c42f5`):
 WS1.8 is deferred to Inc.2.
 
-**Deep consolidation status**: not due — no consolidation trigger fired
-this session. The session's substance is captured in session-scoped
-surfaces (napkin entries, pending-graduations annotation, thread record,
-this continuity refresh). Cross-session pattern extraction +
-doctrine graduation work belongs to the next `consolidate-docs` run
-triggered by its own thread-scoped checklist.
+**Deep consolidation status**: **due — owner-directed at session close 2026-05-21 evening** (Cirrus closeout). The six-agent team session produced 5 pending-graduations entries (3 coordination-pattern candidates from Stratospheric, 1 napkin-refinement for closure-shape vs structural-antonym vocabulary, 1 backtick-substitution rule + `--body-file` CLI evidence point 2) and 5 napkin surprise entries. The next session-handoff step is to escalate immediately into `jc-consolidate-docs` per the owner's direction "run a reasonable /jc-consolidate-docs and then commit". This refreshes to `completed this handoff` once consolidation lands.
 
-**`pnpm check` cleanliness gate** (Step 11 of `session-handoff`): RED on
-the inherited tree per the cascade enumerated in the
-`upstream-api-v0.7.0-alignment.plan.md`. Per the standing rule's third
-option, the blocker is surfaced to owner with evidence and execution is
-held. Session-handoff completes with the gate-red state explicitly
-documented and the cure path named; the gate goes green when the
-cascade-clear `chore(sdk):` commit lands. No `--no-verify` used; no
-bypass attempted; no scoped-only gate run substituted for the aggregate
-check.
+**`pnpm check` cleanliness gate** (Step 11 of `session-handoff`): pending verification post-handoff edits. Salty's pre-commit hook chain at `0cdaf58c` was green across 87/87 turbo tasks on the planning-files-only bundle; the post-commit working tree still carries the inherited residual (Molten WS3.3, Pelagic bulk-download, agent-tools surface, ADR-173 touch) that was NOT in scope of the four-slice partition. Will be re-verified before this handoff is declared complete.
 
 **WS1.5 status (2026-05-13, Quiet Stalking Mirror)**: design fully absorbed inline in
 the active graph-stack plan under `ws1-canon`. Three-reviewer pre-implementation

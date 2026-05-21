@@ -247,6 +247,93 @@ graduation request. Promotion target: new rule at
 `.agent/rules/no-dogma-vocabulary.md` (parallel to `no-hedging-vocabulary`)
 OR amendment to `no-hedging-vocabulary.md` extending it bidirectionally.
 
+### 2026-05-21 — Coordinator-handoff: pre-positioning vs active-acknowledgement (PDR-shaped or pattern-shaped)
+
+`[captured: 2026-05-21 | source: napkin.md §"Surprise: pre-positioning a coordinator handoff is distinct from transferring authority" + comms-event 554bc011 (correction broadcast) + comms-event c9d8d016 (Cirrus active-acknowledgement) | target: pattern:coordinator-handoff-two-moments OR PDR amendment to PDR-049 (peer-collaboration governance) | trigger: second-instance-or-owner-direction | size: S | status: pending]`
+
+Substance summary: a coordinator handoff has two distinct moments
+that are commonly conflated: (1) **pre-positioning** — outgoing
+agent broadcasts the team state-of-play (roster, slice state,
+outstanding work, standing notes) for the incoming agent's
+foundation read on arrival; (2) **active-acknowledgement** —
+incoming agent broadcasts intent-to-coordinate. **Only the latter
+transfers authority.** The outgoing agent retains all coordinator
+responsibilities (routing, cron cadence, reviewer dispatch,
+commit-window coordination) until the incoming agent's
+active-acknowledgement is observable in comms.
+
+First instance this session: Stratospheric Gusting Squall posted
+a pre-positioning handoff broadcast (`c020b3d6`) and cancelled the
+3-min coordinator-cadence cron, intending to step down. Owner
+corrected: *"you are coordinator until Cirrus actively acknowledges
+taking over the role"*. Correction broadcast (`554bc011`) re-armed
+the cron + re-asserted authority. Cirrus's active-acknowledgement
+(`c9d8d016`) 50 seconds later was the actual transfer.
+
+Trigger to watch: second observed instance in a different team
+session, or owner-direction graduation request. Promotion target:
+pattern entry at `.agent/memory/active/patterns/` (general form);
+OR PDR amendment to PDR-049 if the two-moments distinction warrants
+governance-level codification.
+
+### 2026-05-21 — Coordinator-as-slice-runner when team capacity is short by 1 (pattern-shaped)
+
+`[captured: 2026-05-21 | source: napkin.md §"Insight: coordinator-as-slice-runner is workable when team capacity is short by 1" | target: pattern:coordinator-as-slice-runner-short-by-one | trigger: second-instance-or-owner-direction | size: S | status: pending]`
+
+Substance summary: when a team session has N peers against N+1
+file-disjoint slices (a capacity shortfall of 1), the coordinator
+taking the smallest/freshest slice as a concurrent responsibility
+is preferable to forcing a peer to double up. Forces file-disjoint
+discipline to hold; preserves load balance.
+
+Risk shape: a larger slice (e.g. one with inherited partial edits
+requiring diff-verify) is the wrong choice. The pattern requires
+the COORDINATOR PICKING THE SMALLEST / FRESHEST SLICE, not a
+complex one.
+
+First instance this session: Charcoal Searing Ember closed out
+before the routing brief reached them; 4-peer pool minus Charcoal
+= 3 peers against 4 slices. Stratospheric Gusting Squall took
+Slice B (graph-stack.plan.md, smallest/freshest) and ran it
+concurrently with coordinator routing. Total ~2 edits; coordinator
+load remained manageable because other slices were parallel and
+slice-completion events were event-driven.
+
+Trigger to watch: second observed instance in a different team
+session. Promotion target: pattern entry at
+`.agent/memory/active/patterns/` with the smallest/freshest
+constraint named.
+
+### 2026-05-21 — §1a inherited-tree gate-runner default scope is per-workspace (skill-amendment-shaped)
+
+`[captured: 2026-05-21 | source: napkin.md §"Insight: §1a inherited-tree gate-runner scopes per-workspace, not tree-wide" + comms-event 7511fb37 (Salty's §1a gate-state report) | target: skill-amendment:start-right-team §1a "Running the gates" subsection | trigger: second-instance-or-cross-workspace-cascade-failure | size: S | status: pending]`
+
+Substance summary: the start-right-team skill text mentions
+per-workspace as "an option" when the dirty files are scoped to
+specific workspaces; this session is a worked instance demonstrating
+the savings. Salty Snorkelling Pier's §1a gate-state report ran
+type-check + lint + test against 4 dirty workspaces
+(`agent-tools` / `oak-search-cli` / `@oaknational/env` /
+`@oaknational/graph-project`) in ~2 minutes total — 12 commands,
+all PASS, 1505 tests. Tree-wide `pnpm check` would have re-run
+already-green workspaces plus the integrated chain.
+
+Risk shape: per-workspace would miss a cross-workspace cascade
+(e.g. an SDK type change that breaks consumers in another
+workspace). The §1a runner's diagnosis-hypothesis step is the
+guard — Salty explicitly framed the inherited residual as
+"uncommitted in-flight work, not cascade residue", which justified
+the per-workspace shape.
+
+Trigger to watch: second observed per-workspace instance with
+similar savings (promotes to default with the cascade caveat), OR
+the inverse — a session where per-workspace missed a cross-workspace
+cascade (promotes a stronger cascade-detection requirement).
+Promotion target: amendment to start-right-team skill §1a
+"Running the gates" subsection promoting per-workspace from "an
+option" to "the default when dirty files are workspace-scoped" with
+the cross-workspace cascade caveat.
+
 ### 2026-05-17 — Surface classification for fitness-response routing (PDR-shaped)
 
 `[captured: 2026-05-17 | source: distilled.md §"Surface classification routes fitness response" | target: pdr:surface-classification-for-fitness-response | trigger: owner-direction | size: S | status: pending]`
@@ -987,7 +1074,16 @@ rather than a new one).
   targeting needs discoverable presence from fresh claims and recent comms;
   shared-log mentions must either become inbox-visible or be replaced by
   directed messages; `comms send`, `direct`, and `append` need
-  `--body-file`/`--subject-file` for long content; agents need a
+  `--body-file`/`--subject-file` for long content (second-instance evidence
+  2026-05-21 Celestial Glimmering Moon `46d23a`: ~3300-char `--body`
+  triggered `[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command "agent-tools:
+  collaboration-state" not found` despite the script being present and
+  working before/after on short bodies; root cause is shell argv corruption
+  from auto-escaped `'"'"'` apostrophe sequences in long directly-quoted
+  multi-line `--body` values; CLI never reached; CLI's own
+  fail-fast-with-helpful-error discipline confirmed sound on
+  missing-required-option test; `--body-file` would eliminate this entire
+  failure class); agents need a
   protocol-position command reporting current intent, phase, and next action;
   missing `--seen-file` should mean an empty seen set; built-CLI smoke must
   cover help paths and real read/write paths; missing or stale built output
@@ -4059,3 +4155,81 @@ The family may eventually warrant a single PDR with three children, or
 remain three separate candidates. Not action-bearing without owner direction
 or a third-family-instance corroboration; recorded so the family is visible
 in the register before any individual member graduates.
+
+- 2026-05-21; **Coordinator-handoff has two distinct moments (pattern candidate)**.
+  `[captured: 2026-05-21 | source: Stratospheric-Gusting-Squall-closeout-note+owner-correction | target: pattern:coordinator-handoff-two-moments | trigger: second-instance | size: S | status: pending]`
+  Worked precedent from the 2026-05-21 six-agent Inc.1d session: Stratospheric
+  pre-positioned a coordinator-handoff broadcast to Cirrus at 19:31Z; owner
+  clarified at 19:32Z that authority transfer occurs at the receiving agent's
+  *active acknowledgement*, not at the pre-positioner's broadcast. Stratospheric
+  issued a correction broadcast re-asserting active coordinator authority;
+  Cirrus then posted the active-acknowledgement broadcast at 19:33Z, transferring
+  the role substantively. Pattern shape: **pre-positioning state-of-play is
+  distinct from transferring authority; only the receiver's active acknowledgement
+  effects the transfer**. Captured for next-session pattern landing; trigger is a
+  second-instance of the pre-positioning-vs-transfer confusion.
+
+- 2026-05-21; **Coordinator-as-slice-runner viability when capacity is short by one (pattern candidate)**.
+  `[captured: 2026-05-21 | source: Stratospheric-Gusting-Squall-closeout-note | target: pattern:coordinator-as-slice-runner-short-capacity | trigger: second-instance | size: S | status: pending]`
+  Worked precedent from the same session: Charcoal Searing Ember closed out
+  before Stratospheric's routing brief reached them; the four-peer pool dropped
+  to three against four slices. Stratospheric (coordinator) took Slice B
+  themselves (smallest, freshest), preserving the file-disjoint partition.
+  Pattern: **when team capacity is short by one against a file-disjoint slice
+  partition, the coordinator can take the smallest slice without breaking the
+  partition invariant**. Captured for next-session pattern landing; trigger is
+  a second-instance.
+
+- 2026-05-21; **§1a inherited-tree gate-runner scopes per-workspace not tree-wide (pattern candidate)**.
+  `[captured: 2026-05-21 | source: Stratospheric-Gusting-Squall-closeout-note+Salty-Snorkelling-Pier-gate-state-report | target: pattern:start-right-team-1a-per-workspace-scope | trigger: second-instance-or-skill-amendment | size: S | status: pending]`
+  Worked precedent from the same session: Salty (elected §1a gate-runner) ran
+  workspace-scoped gates against the four dirty workspaces (agent-tools,
+  search-cli, env, graph-project) in ~2 minutes; tree-wide gates would have
+  redundantly re-run already-green workspaces. Pattern: **§1a gate-runner
+  scopes to the dirty-tree workspaces visible from `git status`, not the
+  full tree, unless the dirty scope is unclear or spans the full repo**. The
+  `start-right-team` SKILL §1a already names this in the "Running the gates"
+  block; the pattern candidate is the empirical confirmation that the
+  per-workspace scoping reliably catches cascade-class failures within
+  reasonable runtime envelope.
+
+- 2026-05-21; **Backtick-substitution in double-quoted shell args carrying markdown bodies (rule candidate + CLI-enhancement evidence point)**.
+  `[captured: 2026-05-21 | source: Cirrus-Circling-Plume-incident | target: rule:comms-send-body-composition-safety + cli-enhancement:--body-file | trigger: --body-file CLI shipping | size: S | status: pending]`
+  Worked precedent from the same session, Cirrus coordinator-side mistake: a
+  cron-tick progress broadcast was composed with the pnpm command using
+  DOUBLE-quotes around `--body`, with markdown backtick code spans inside
+  (including a literal `git commit` token in backticks). Shell
+  command-substitution evaluated the backticks before passing the argument;
+  the bare `git commit` invocation ran during another agent's
+  gatekeeper-window, triggered the pre-commit hook, FAILED on a flaky
+  oak-search-sdk lifecycle-lease integration test, and aborted (no commit
+  landed). Salty's actual `git commit` ran cleanly ~30s later. No on-disk
+  damage but the gatekeeper-specialisation protocol was momentarily
+  breached. Two graduation surfaces:
+  (a) **Rule candidate**: comms-send body composition with markdown content
+      must avoid double-quoted shell arg interpolation — either single-quote
+      the `--body` argument, or use the `--body-file` CLI flag once it
+      ships.
+  (b) **`--body-file` CLI enhancement (evidence point 2)**: prior evidence
+      point from the 2026-05-21 (Celestial Glimmering Moon) session captured
+      shell-argv-corruption-upstream-of-CLI; this evidence point adds
+      backtick-substitution in double-quoted bodies. Two failure shapes,
+      both cured by a `--body-file` flag that reads the body from a file
+      path without any shell argument-list interpolation.
+
+- 2026-05-21; **Closure-shape vs structural-antonym distinction for vocabulary discipline (napkin refinement candidate)**.
+  `[captured: 2026-05-21 | source: Cirrus-Circling-Plume-coordinator-disposition+Evergreen-Climbing-Canopy-coherence-pass | target: napkin:closure-shape-vs-structural-antonym | trigger: next-consolidation | size: S | status: pending]`
+  Worked precedent from the same session: Evergreen surfaced six "definite"
+  hits at pre-existing lines 152/455/574/695/817/883 of graph-mvp-arc.plan.md.
+  Doctrinal tension: Charcoal Searing Ember's 2026-05-21 napkin entry registers
+  "definite" as Family 2 dogma vocabulary (closure-shape); user-memory entry
+  `feedback_simple_definite_no_imaginary_flows` uses "definite" as the
+  corrective doctrine vocabulary (structural-antonym to "imaginary-flow
+  conditional triggers"). The hits in graph-mvp-arc.plan.md follow the
+  structural-antonym shape ("definite ordering / definite sequence position
+  / no conditional triggers"). Refinement: the same word can be pathogen in
+  closure-shape usage AND corrective in structural-antonym usage; the
+  vocabulary-discipline check must be by usage-shape, not by word. Verdict
+  applied this session: KEEP all 6 instances (structural-antonym usage,
+  consistent with corrective doctrine). Captured for next-consolidation
+  napkin refinement.

@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "026533c1-176d-4cdf-ba6b-cc0b3b28f582",
+  "created_at": "2026-05-21T15:31:49Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Torrid Glowing Flame",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "5ab0ec"
+  },
+  "title": "Inc.1d EEF concurrent-tenant sequencing pull-forward authored (6-surface amendment set)",
+  "body": "Planning amendments only; no source code. ADR-173 First-wave ingestion scope amended: graph-corpus-sdk Inc.1 activation now hosts Threads + EEF strands as concurrent tenants. graph-stack.plan.md adds WS4.4 (GraphView interface + T7a DeepKeyPath smoke-test) + WS4.5 (EefStrandsGraphView subgraph+manifest; remaining 5 ops as NotImplementedYet typed stubs) at new sub_increment 1d. graph-mvp-arc gate-0/gate-1 split: gate-0a/gate-1a (first user-facing EEF feature ships ahead of substrate completion) and gate-0b/gate-1b (residual substrate + slice 1 completes). graph-query-layer T2 interface home corrected to graph-corpus-sdk per ADR-173/179. eef-evidence-corpus adds t6a-explore-tool for the gate-1a first-feature surface (eef-explore-evidence-for-context). Non-negotiable at gate-1a: full GraphView interface, DeepKeyPath array-stop discipline, structural citation envelope, ADR-175 freshness CI gate (180-day binding), eef-asterisk namespace + _meta attribution, Sentry telemetry seam pattern, atomic TDD landing. Substrate dependencies for the new Inc.1d work are WS4.1 + WS3.3 (NOT WS4.2/4.3) so parallel-safe with Threads after WS4.1 scaffold lands. Net additional work roughly +10-15 percent accepted per owner direction. Predecessor: graph implementation work remains blocked on the upstream-api-v0.7.0 cascade; this session is planning-only."
+}

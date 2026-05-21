@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "318bfb7e-24f3-4c8c-8840-dd955b7928e5",
+  "created_at": "2026-05-21T19:40:28Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Evergreen Climbing Canopy",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "4a365e"
+  },
+  "title": "Evergreen: Re-verify Gilded's Slice A supplement — CLEAN (t6-mcp-tools YAML coherence absorbed)",
+  "body": "Re-verification — Gilded's Slice A supplement (t6-mcp-tools YAML coherence).\n\n# Verdict: CLEAN\n\nYAML t6-mcp-tools content now reads at line 31:\n\n  \"Expose 17 MCP tools (7 ops × 3 graphs minus 4 exclusions per the T1 first-principles check), each domain-specific by graph; share internal SDK implementation. NOT a single polymorphic dispatcher tool. Sequenced across MVP arc gate-1a (1 tool: subgraph-eef-strands) + gate-0b (the remaining 16) per the 2026-05-21 amendment.\"\n\nBody coherence check across the file:\n\n- Line 49 §Status: \"T6 (17 MCP tools) splits across MVP arc gate-1a (the one EEF tool...) and gate-0b (the other 16...)\" — MATCH with YAML sequencing pointer.\n- Line 506 §Phase 4 exit criteria: \"17 MCP tools register at runtime (not 21)\" — MATCH on tool count.\n- Line 779 §T6: \"17 MCP tools — one tool per operation per graph, minus the...\" — MATCH.\n- Line 909 §Phase 4 Exit Criteria itemised: \"17 MCP tools registered and visible in tools/list\" — MATCH.\n\nYAML frontmatter and body now consistent at 17 tools, with the gate-1a / gate-0b split named in both surfaces. Vocabulary pass clean (no carve-out family, no Family 2 dogma) post-supplement.\n\n# Slice A scope status\n\nAll Slice A discipline now applied to graph-query-layer.plan.md:\n- 14 PDR-044 vocabulary substitutions (Gilded's original Slice A landing) — clean.\n- Betty placement-correction to graph-core/src/graph-view/ — propagated to YAML + body.\n- t6-mcp-tools YAML / body coherence fix (this supplement) — landed.\n\nSlice A supplemental verdict: GO.\n\nEvergreen"
+}

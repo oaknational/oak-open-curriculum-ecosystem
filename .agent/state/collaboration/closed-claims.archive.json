@@ -27246,6 +27246,435 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "58fcf059-974f-4aea-8139-3b076099fd52",
+      "agent_id": {
+        "agent_name": "Fiery Firing Cinder",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "40c178"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-21T12:00:51Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Move /rename rule from start-right-team into shared start-right (correct home — every session goes through start-right per AGENT.md); route reviewer follow-ups out of commit-message text into pending-graduations; rewrap AGENT.md line that exceeded 100-char budget.",
+      "archived_at": "2026-05-21",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-21T12:02:43Z",
+        "closed_by": {
+          "agent_name": "Fiery Firing Cinder",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "40c178"
+        },
+        "summary": "Corrections landed at 84638bc9: /rename rule moved to shared start-right; reviewer follow-ups routed to pending-graduations.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "58fcf059-974f-4aea-8139-3b076099fd52",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e60b56a1-8258-4413-9022-2f3944f965d7",
+      "agent_id": {
+        "agent_name": "Pelagic Sailing Beacon",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "f72405"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/libs/graph-ingest/**",
+            "packages/libs/graph-project/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-21T12:23:51Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "READ-ONLY review + WS2.3 scout pre-work + gate-sweeper role. Will NOT write to graph-ingest/** or graph-project/** during peer cycles (WS2.2 Celestial, WS3.3 Molten). After both cycles land, runs integrated repo-wide quality-gate sweep over the integrated tree per three-way split (broadcast dfce648d). Second-pair post-landing review on both cycles per directed comms 4ab15234 (Molten) + 6947ed0b (Celestial). Visibility-only overlap with Celestial's claim f4613bdc and Molten's claim 8ca9dd0e is intentional and expected per agent-collaboration.md (claims are signals, not locks).",
+      "archived_at": "2026-05-21",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-21T13:15:10Z",
+        "closed_by": {
+          "agent_name": "Pelagic Sailing Beacon",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "f72405"
+        },
+        "summary": "Closing read-only review + WS2.3 scout + gate-sweeper claim per owner direction. No source-tree writes made under this claim. WS3.3 pre-landing review notes communicated via comms (4ab15234). WS2.2 scout questions answered by Celestial (50cc5e01). Session winds down without the gate-sweep firing because both peer cycles remain held pending owner cascade direction.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e60b56a1-8258-4413-9022-2f3944f965d7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f4613bdc-6af8-435d-a5aa-26067408c588",
+      "agent_id": {
+        "agent_name": "Celestial Glimmering Moon",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "46d23a"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/libs/graph-ingest/src/jsonld-compatible/**",
+            "packages/libs/graph-ingest/src/turtle/**",
+            "packages/libs/graph-ingest/package.json",
+            "packages/libs/graph-ingest/tsup.config.ts",
+            ".dependency-cruiser.mjs",
+            "pnpm-lock.yaml",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-21T12:13:21Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "WS2.2 graph-ingest jsonld-compatible ingestion + generic Turtle/SKOS parse-to-Dataset + invariant #2 contract test",
+      "archived_at": "2026-05-21",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-21T13:32:22Z",
+        "closed_by": {
+          "agent_name": "Celestial Glimmering Moon",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "46d23a"
+        },
+        "summary": "WS2.2 not executed this session. Cascade-clear plan authored at .agent/plans/sdk-and-mcp-enhancements/current/upstream-api-v0.7.0-alignment.plan.md awaiting owner authorisation. Thread record updated with full session continuity. Claim relinquished cleanly; next agent re-opens against current branch state after cascade clears.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f4613bdc-6af8-435d-a5aa-26067408c588",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8ca9dd0e-17d8-4f8a-a8c8-696982b1d5a9",
+      "agent_id": {
+        "agent_name": "Molten Igniting Hearth",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "078515"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/libs/graph-project/src/adjacency/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-21T12:19:31Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "WS3.3: implement property-graph adjacency primitives (incoming/outgoing/neighbours) over PropertyGraph projection from WS3.2; atomic TDD landing",
+      "archived_at": "2026-05-21",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-21T13:37:56Z",
+        "closed_by": {
+          "agent_name": "Molten Igniting Hearth",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "078515"
+        },
+        "summary": "WS3.3 graph-project adjacency primitives authored test-first in working tree (3 files: src/adjacency/index.ts + src/adjacency/index.unit.test.ts + src/index.ts +1 line; 22 vitest green; in-cycle reviewers absorbed: type-expert GO, architecture-expert-barney KEEP-SEPARATE, test-expert GO-WITH-CONDITIONS absorbed). NOT committed — blocked on upstream API v0.7.0 cascade-clear plan (.agent/plans/sdk-and-mcp-enhancements/current/upstream-api-v0.7.0-alignment.plan.md). Working-tree files remain for next agent to pick up post-cascade-clear; full handoff state recorded in connecting-oak-resources.next-session.md Last refreshed entry.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8ca9dd0e-17d8-4f8a-a8c8-696982b1d5a9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0c238495-0619-4fb8-b17e-320081a35968",
+      "agent_id": {
+        "agent_name": "Torrid Glowing Flame",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "5ab0ec"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/architecture/architectural-decisions/173-graph-stack-topology.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md",
+            ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md",
+            ".agent/plans/graph-mvp-arc.plan.md",
+            ".agent/plans/graph-portfolio-index.md",
+            ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
+            ".agent/memory/operational/threads/eef.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-21T15:14:14Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Author sequencing pull-forward of EEF strands adapter into graph-stack Inc.1 alongside Threads; split graph-mvp-arc gate-0 into 0a/0b. Touching ADR-173 plus 5 plans plus thread records plus napkin plus comms log.",
+      "archived_at": "2026-05-21",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-21T15:34:41Z",
+        "closed_by": {
+          "agent_name": "Torrid Glowing Flame",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "5ab0ec"
+        },
+        "summary": "Sequencing pull-forward amendment set landed across 10 surfaces: ADR-173 (workspace #6 Inc.1 + first-wave ingestion scope), graph-stack.plan.md (WS4.4 + WS4.5 todos at sub_increment 1d), graph-query-layer.plan.md (T2 home + per-adapter sequencing), eef-evidence-corpus.plan.md (gate-1a/1b grouping + t6a-explore-tool), graph-mvp-arc.plan.md (gate-0/gate-1 split into gate-0a/1a/0b/1b + sequence diagram restructure), graph-portfolio-index.md, both thread records, napkin entry, shared-comms-log via canonical comms/ rerender. Working tree carries amendments uncommitted; ready for owner review and commit. NO source code changed; planning-only session.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0c238495-0619-4fb8-b17e-320081a35968",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e46f8fbb-8939-4545-bae5-42b62653b390",
+      "agent_id": {
+        "agent_name": "Stratospheric Gusting Squall",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "cfe7da"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-21T19:26:19Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Slice B: verify Betty WS4.4 placement + assumptions WS4.5 live/stub criterion + PDR-044 vocabulary pass on graph-stack.plan.md",
+      "archived_at": "2026-05-21",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-21T19:35:14Z",
+        "closed_by": {
+          "agent_name": "Stratospheric Gusting Squall",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "cfe7da"
+        },
+        "summary": "Slice B complete: graph-stack.plan.md edited (line 126 vocabulary fix removing 'non-negotiable' substituted with structural framing; §Acceptance section gained Inc.1d item with cross-ref to gate-0a/gate-1a acceptance in graph-mvp-arc.plan.md). Evergreen Climbing Canopy PDR-044 second-eye verdict CLEAN at 19:30:15Z (event 19:30Z). File remains in working tree pending team commit-window coordination owned by current coordinator Cirrus Circling Plume; closure here is the team-member-closeout claim relinquishment per session-handoff skill step 8 + Closeout Contract default (no retained claims). Evidence: comms event a3419a42 (slice-completion 19:28Z); comms event from Evergreen 19:30:15Z (second-eye CLEAN); coordinator-handoff event c020b3d6 + correction 554bc011 + Cirrus acknowledgement c9d8d016 chain.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e46f8fbb-8939-4545-bae5-42b62653b390",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f2c631a1-3296-48a2-90e9-42b6fd670c18",
+      "agent_id": {
+        "agent_name": "Salty Snorkelling Pier",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "5eb191"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-21T19:44:47Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "commit-window: land Inc.1d EEF concurrent-tenant amendment-set (7-file docs(plans) bundle)",
+      "archived_at": "2026-05-21",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-21T19:48:31Z",
+        "closed_by": {
+          "agent_name": "Salty Snorkelling Pier",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "5eb191"
+        },
+        "summary": "Commit-window complete: docs(plans): land Inc.1d EEF concurrent-tenant amendment-set landed at 0cdaf58c (7 files; 657 insertions / 129 deletions). All pre-commit gates green (87/87 turbo tasks). Intent d50cc038 completed in commit-queue.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f2c631a1-3296-48a2-90e9-42b6fd670c18",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f2e006b9-a2da-48be-9210-e80accabe889",
+      "agent_id": {
+        "agent_name": "Salty Snorkelling Pier",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "5eb191"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/graph-mvp-arc.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-21T19:27:09Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Slice C: graph-mvp-arc.plan.md docs-adr-expert P1s — Slice 1 segmentation + gate-1a todo simplification + gate-0a cross-ref",
+      "archived_at": "2026-05-21",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-21T19:48:31Z",
+        "closed_by": {
+          "agent_name": "Salty Snorkelling Pier",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "5eb191"
+        },
+        "summary": "Slice C files claim closed: graph-mvp-arc.plan.md edits landed in 0cdaf58c. Three docs-adr-expert P1s addressed (gate-0a cross-ref, gate-1a todo simplification, Slice 1 segmentation) + line 601 PDR-044 substitution absorbed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f2e006b9-a2da-48be-9210-e80accabe889",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f37b1574-f1a3-4ad4-9f95-89d7d7b51e0b",
+      "agent_id": {
+        "agent_name": "Opalescent Illuminating Galaxy",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "2aa615"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md",
+            ".agent/plans/graph-portfolio-index.md",
+            ".agent/plans/sector-engagement/eef/reference/conservation-map.md",
+            ".agent/plans/sector-engagement/eef/current/eef-first-feature.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-21T19:26:44Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Slice D: EvidenceCorpus widening (F3 error union widening for rank/explain/compare to include NotImplementedYet; F4 schema_hash computed at Zod loader load time) + MVP-arc cross-reference fix + portfolio row split for gate-0a/1a vs gate-0b/1b + extraction-trail note in conservation-map.md + line 96 vocabulary fix on eef-first-feature.plan.md",
+      "archived_at": "2026-05-21",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-21T19:49:36Z",
+        "closed_by": {
+          "agent_name": "Opalescent Illuminating Galaxy",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "2aa615"
+        },
+        "summary": "Slice D landed in commit 0cdaf58c (docs(plans): land Inc.1d EEF concurrent-tenant amendment-set). EvidenceCorpus widening (F3 NotImplementedYet error-union widening for rank/explain/compare) + F4 schema_hash at Zod loader load time + MVP-arc cross-reference fix + Slice 1 portfolio row split (1a + 1b) + conservation-map.md Section O extraction-trail note + lines 57+114 carve-out → exemption supplement absorption + eef-first-feature.plan.md line 95 vocabulary fix. All 4 files PDR-044-clean (own and inherited content). Evergreen second-eye CLEAN + supplement re-verify CLEAN. Bundle 7-file commit landed under Salty's gatekeeper run with all gates green. No retained claims.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f37b1574-f1a3-4ad4-9f95-89d7d7b51e0b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "23981643-f466-4cd7-a2f3-8cb0fbb76e5e",
+      "agent_id": {
+        "agent_name": "Gilded Beaming Eclipse",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "0467d0"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-21T19:26:05.494Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Slice A: vocabulary-discipline pass on graph-query-layer.plan.md (PDR-044 — replace 13 occurrences of carve/carved/carve-out and 1 of non-negotiable with plain language)",
+      "archived_at": "2026-05-21",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-21T19:49:48.750Z",
+        "closed_by": {
+          "agent_name": "Gilded Beaming Eclipse",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "0467d0"
+        },
+        "summary": "Slice A complete and landed in commit 0cdaf58c (docs(plans): land Inc.1d EEF concurrent-tenant amendment-set). Substance: 14 PDR-044 vocabulary substitutions on graph-query-layer.plan.md (13 carve/carve-out/carve-outs/carved-out family - exclude/exclusion/exclusions family + 1 non-negotiable - structurally-required), Betty placement-correction propagated from body to YAML t2-graph-view-interface todo, t6-mcp-tools YAML/body coherence fix (7 - 17 with gate-1a/gate-0b sequencing pointer). Charcoal Searing Ember pre-handoff partial edits (type-expert F1/F2/F4 + Betty placement) verified absorbed via git diff vs 688ccef2 before extension. Evergreen Climbing Canopy second-eye CLEAN at 19:31:10Z; supplement re-verify CLEAN at 19:40:28Z. Optional Slice-A-perspective cross-ref coherence check CLEAN across A/B/C anchors. No retained claim; team-member closeout follows.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "23981643-f466-4cd7-a2f3-8cb0fbb76e5e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
