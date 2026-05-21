@@ -1,12 +1,13 @@
 import { renderSharedCommsLog } from './comms.js';
-import { type CollaborationAgentId, type CommsEvent, type DirectedCommsMessage } from './types.js';
+import {
+  type CollaborationAgentId,
+  type CommsEvent,
+  type DirectedCommsMessage,
+  type DirectedInboxDrainResult,
+} from './types.js';
 
 export { migrateLegacyCommsRecordCollections } from './comms-migration-records.js';
-export {
-  classifyEventForAgent,
-  drainRelevantEvents,
-  type EventView,
-} from './comms-relevant-events.js';
+export { classifyEventForAgent, drainRelevantEvents } from './comms-relevant-events.js';
 
 const MAX_REPLY_SUBJECT_LENGTH = 200;
 
@@ -17,11 +18,6 @@ export interface CommsEventStore {
 
 export interface CommsTextOutput {
   readonly writeText: (text: string) => Promise<void>;
-}
-
-export interface DirectedInboxDrainResult {
-  readonly output: string;
-  readonly eventCount: number;
 }
 
 export function createDirectedCommsMessage(input: {

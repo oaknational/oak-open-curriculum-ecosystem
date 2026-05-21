@@ -1,8 +1,8 @@
-import { type DirectedInboxDrainResult } from './comms-use-cases.js';
 import {
   type CollaborationAgentId,
   type CommsEvent,
   type DirectedCommsMessage,
+  type DirectedInboxDrainResult,
   type LifecycleCommsEvent,
   type NarrativeCommsEvent,
 } from './types.js';
@@ -23,7 +23,7 @@ import {
  * reasoning layer, not at the watcher boundary. When the schema grows a
  * sync kind or urgency flag, `sync` will be added here as a fifth view.
  */
-export type EventView = 'broadcast' | 'group' | 'directed' | 'lifecycle';
+type EventView = 'broadcast' | 'group' | 'directed' | 'lifecycle';
 
 /**
  * Classify an event relative to an agent's identity, returning `undefined`

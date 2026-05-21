@@ -1,6 +1,47 @@
 # Next-Session Record — `eef` thread
 
-**Last refreshed**: 2026-05-10 (Fragrant Regrowing Root / codex / GPT-5 /
+**Last refreshed**: 2026-05-21 (Torrid Glowing Flame / claude /
+claude-opus-4-7-1m / `5ab0ec`) — **Sequencing pull-forward authored
+under owner direction. NO product code in this session; planning
+amendments only.** The first user-facing EEF MCP feature is now
+sequenced at graph-mvp-arc **gate-1a** (a new gate added by the
+2026-05-21 split) atop **graph-stack Inc.1d** (new sub-increment: WS4.4
+GraphView interface + WS4.5 EEF subgraph+manifest adapter as a
+concurrent Inc.1 tenant of `graph-corpus-sdk` alongside the Threads
+adapter, per ADR-173 §First-wave ingestion scope 2026-05-21
+amendment). The EEF adapter formerly scheduled at Inc.3 is split:
+`subgraph` + `manifest` operations land at Inc.1d; the remaining 5
+operations (`summary`, `getNode`, `enumerateNodes`, `neighbours`,
+`findByTag`) remain at Inc.3 as typed `NotImplementedYet` Result
+stubs satisfying the full GraphView interface contract from
+day one. The first user-facing tool is **`eef-explore-evidence-for-context`**
+(new todo t6a in `eef-evidence-corpus.plan.md`) — a subgraph-shaped
+response over EEF strands matching a teacher's seed context
+(subject + key_stage + optional focus), wrapped in the structural
+citation/caveat/freshness envelope. The first prompt is
+`eef-evidence-grounded-lesson-plan` (t10, unchanged). EEF
+source-authority status unchanged: the repository-held snapshot
+remains the canonical implementation source until EEF clarifies
+refresh mechanics. **Gate-1a is the EEF partnership-conversation
+opener gate** — contact named, first-contact action recorded with
+date + outcome before gate-1a promotes to active. **Non-negotiable
+at gate-1a**: full GraphView interface (Inc.1d WS4.4),
+DeepKeyPath compile-time discipline (T7a smoke-test), structural
+citation envelope (t12 full), ADR-175 freshness CI gate (t13 full
+binding), `eef-*` namespace + `_meta` attribution (ADR-157), Sentry
+telemetry seam pattern (t14 partial — full pattern, one tool
+instrumented). The gate-1b cluster (recommend/explain/compare +
+second prompt) ships after graph-stack Inc.3 lands. **Slice 1 still
+ships in full**; the split is sequencing only. No scope reduction.
+**Predecessor (corrected at handoff close)**: the v0.7.0 upstream-API
+cascade CLEARED earlier today via Opalescent Twinkling Supernova's
+three commits on `feat/mcp-graph-support-foundation` (`b1afd5bf`
+chore(sdk), `5613eee4` refactor(search-cli), `8fcd3200` docs(plans));
+my session ran with the cascade already resolved. Graph
+implementation work is no longer cascade-blocked. This session's
+amendments are planning-only and do not touch SDK codegen output.
+
+**Prior refresh**: 2026-05-10 (Fragrant Regrowing Root / codex / GPT-5 /
 `019e12` — EEF source-authority clarification. The repository-held
 `eef-toolkit.json` snapshot is now treated as the canonical implementation
 source until EEF clarifies whether refresh should come from a public
@@ -42,13 +83,13 @@ under the ≥2-of-3 rule (`neighbours × misconception`,
 
 ## Thread Identity
 
-- **Thread**: `eef`
-- **Thread purpose**: Integrate the EEF Teaching and Learning Toolkit
++ **Thread**: `eef`
++ **Thread purpose**: Integrate the EEF Teaching and Learning Toolkit
   as an evidence corpus on Oak's MCP server, on top of a polymorphic
   graph-query foundation that also serves the misconception and
   prerequisite graphs. Five-increment delivery, parallel implementation
   across three graphs, user-value template enforced on every plan task.
-- **Branch**: `feat/eef_exploration` (originating session); execution
++ **Branch**: `feat/eef_exploration` (originating session); execution
   branch TBD when Increment 1 promotes to ACTIVE.
 
 ## Participating Agent Identities
@@ -62,6 +103,7 @@ under the ≥2-of-3 rule (`neighbours × misconception`,
 | `Windward Darting Horizon` | `cursor` | `claude-opus-4.7` | `dd084d` | `eef-tool-rename-eef-prefix-per-adr-157-and-mvp-arc-cross-ref` | 2026-05-07 | 2026-05-07 |
 | `Opalescent Shimmering Orbit` | `codex` | `GPT-5` | `019e06` | `pr-102-eef-structural-eval-closeout` | 2026-05-08 | 2026-05-08 |
 | `Fragrant Regrowing Root` | `codex` | `GPT-5` | `019e12` | `eef-source-authority-clarification` | 2026-05-10 | 2026-05-10 |
+| `Torrid Glowing Flame` | `claude` | `claude-opus-4-7-1m` | `5ab0ec` | `inc-1d-eef-concurrent-tenant-sequencing-pull-forward-author` | 2026-05-21 | 2026-05-21 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -84,33 +126,33 @@ history at commit `e2796757`.
 
 Evidence:
 
-- [eef/README.md](../../../plans/sector-engagement/eef/README.md) — subthread orientation
-- [eef/current/eef-evidence-corpus.plan.md](../../../plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md) — Increment 2 executable plan
-- [eef/reference/conservation-map.md](../../../plans/sector-engagement/eef/reference/conservation-map.md) — semantic preservation map with verification log (§N)
-- [knowledge-graph-integration/current/graph-query-layer.plan.md](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md) — Increment 1 foundation
-- [knowledge-graph-integration/future/cross-source-journeys.plan.md](../../../plans/connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) — Increment 3 design
-- [napkin § 2026-04-30 EEF graph-and-corpus architecture session](../../active/napkin.md) — full session insight
-- [experience/2026-04-30-iridescent-graph-corpus-composition.md](../../../experience/2026-04-30-iridescent-graph-corpus-composition.md) — methodology + reflection
++ [eef/README.md](../../../plans/sector-engagement/eef/README.md) — subthread orientation
++ [eef/current/eef-evidence-corpus.plan.md](../../../plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md) — Increment 2 executable plan
++ [eef/reference/conservation-map.md](../../../plans/sector-engagement/eef/reference/conservation-map.md) — semantic preservation map with verification log (§N)
++ [knowledge-graph-integration/current/graph-query-layer.plan.md](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md) — Increment 1 foundation
++ [knowledge-graph-integration/future/cross-source-journeys.plan.md](../../../plans/connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) — Increment 3 design
++ [napkin § 2026-04-30 EEF graph-and-corpus architecture session](../../active/napkin.md) — full session insight
++ [experience/2026-04-30-iridescent-graph-corpus-composition.md](../../../experience/2026-04-30-iridescent-graph-corpus-composition.md) — methodology + reflection
 
 ---
 
 ## Current State
 
-- All three plan files (graph-query-layer, eef-evidence-corpus,
++ All three plan files (graph-query-layer, eef-evidence-corpus,
   cross-source-journeys) are CURRENT or FUTURE; **none is ACTIVE**.
-- `eef-evidence-corpus.plan.md` now carries the structural-only evaluation
++ `eef-evidence-corpus.plan.md` now carries the structural-only evaluation
   stance: T19 proves shape/citation/data/caveat preservation at the tool
   boundary; LLM/outcome evaluation is sequenced behind follow-on evaluation
   infrastructure.
-- Predecessor `eef-evidence-mcp-surface.plan.md` deleted from working
++ Predecessor `eef-evidence-mcp-surface.plan.md` deleted from working
   tree; recoverable via `git show e2796757:.agent/plans/exploring-open-education-resources/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md`.
-- The `originals/` snapshot directory was created during the
++ The `originals/` snapshot directory was created during the
   restructure for the verification pass and deleted afterwards (see
   conservation map § Recovery path).
-- 25 files in the working tree at session-handoff time; 0 commits
++ 25 files in the working tree at session-handoff time; 0 commits
   ahead of main; ready to commit in three sensible chunks (restructure,
   napkin, handoff).
-- Sector-engagement umbrella sees the new subthread:
++ Sector-engagement umbrella sees the new subthread:
   `sector-engagement/README.md` documents table includes `eef/` row;
   `external-knowledge-sources/README.md` retains education-skills + KG
   meta-strategy plans only.
@@ -122,24 +164,24 @@ Evidence:
 The five-increment delivery sequence with explicit promotion gates:
 
 1. **Increment 1** (graph-query-layer) → ACTIVE when:
-   - Owner has approved architecture session conclusions ✓ (done this session).
-   - T1 (tracer use cases — 21 minimum, 7 ops × 3 graphs) signed off.
-   - Plan-body first-principles check applied to tracer shapes against
+   + Owner has approved architecture session conclusions ✓ (done this session).
+   + T1 (tracer use cases — 21 minimum, 7 ops × 3 graphs) signed off.
+   + Plan-body first-principles check applied to tracer shapes against
      actual data files.
-   - EEF corpus plan (Increment 2) ready for parallel start.
+   + EEF corpus plan (Increment 2) ready for parallel start.
 2. **Increment 2** (eef-evidence-corpus) → ACTIVE when:
-   - Increment 1 reached ACTIVE.
-   - EEF provenance/refresh check performed with EEF or Oak's EEF contact. If
+   + Increment 1 reached ACTIVE.
+   + EEF provenance/refresh check performed with EEF or Oak's EEF contact. If
      unresolved, promotion notes must explicitly record that the checked-in
      JSON remains the definitive implementation source pending clarification.
-   - Conservation map signed off by owner.
-   - Plan-body first-principles check applied to citation type, corpus
+   + Conservation map signed off by owner.
+   + Plan-body first-principles check applied to citation type, corpus
      operations, test shapes.
 3. **Increment 3** (cross-source-journeys) → CURRENT when:
-   - Increments 1 and 2 both reached ACTIVE.
-   - GraphView adapters exist for misconception and prerequisite (T3,
+   + Increments 1 and 2 both reached ACTIVE.
+   + GraphView adapters exist for misconception and prerequisite (T3,
      T4 of graph-query-layer plan).
-   - Real teacher question identifies that prompt-only orchestration
+   + Real teacher question identifies that prompt-only orchestration
      is insufficient (the load-bearing observation the journeys plan
      waits on).
 4. **Increment 4** (telemetry/freshness/provenance) — does not have a
@@ -159,11 +201,11 @@ real interface when it lands. See Increment 2 § Risks.
 **Status**: type-expert round complete. Verdict: AT-RISK with concrete
 remediations applied. Of 11 findings:
 
-- **Bucket (a) principles-decided** — applied: Result<T, E> on fallible
++ **Bucket (a) principles-decided** — applied: Result<T, E> on fallible
   GraphView ops; non-empty tuple `caveats: readonly [string, ...string[]]`;
   non-empty tuple `citations: readonly [Citation, ...Citation[]]`;
   `ComparisonDimension` literal union (no `string[]` widening).
-- **Bucket (b) reviewer-recommendation** — applied: DeepKeyPath
++ **Bucket (b) reviewer-recommendation** — applied: DeepKeyPath
   array-stop constraint named in T2; T7a compile-time smoke-test added;
   `ExplainOptions` clarified TNode-independent (sketched); `NodeFilter<TNode>`
   and `RankOptions<TNode>` sketched in plans to prevent implementor drift;
@@ -171,7 +213,7 @@ remediations applied. Of 11 findings:
   `meta.last_updated` and `meta.data_version` Zod precision tightened
   (`z.string().date()` and semver regex); journey citation propagation
   type note added to T4.
-- **Bucket (c) resolved by reading the data, not by escalation:**
++ **Bucket (c) resolved by reading the data, not by escalation:**
   `school_context_schema` in `eef-toolkit.json` is itself a JSON Schema
   document with a known closed shape — 9 named properties
   (phase, key_stage, school_type, pupil_premium, send_percentage,
@@ -236,10 +278,10 @@ Result after two review rounds: **17 of 21 tracer cells drafted**
 (7 operations × 3 graphs), **4 cells explicitly marked NO TRACER**
 under the ≥2-of-3 rule:
 
-- `neighbours × misconception` — no edges in current `MisconceptionGraph` data (round-1 finding).
-- `subgraph × misconception` — same root cause (round-1 finding).
-- `find_by_tag × prerequisite` — no tag taxonomy in source data (round-2 finding from assumptions-expert); the synthetic-compound `${subject}-${keyStage}` proxy initially drafted was the *invented optionality* anti-pattern. Agents wanting subject+keyStage filtering use `enumerate_nodes`.
-- `find_by_tag × misconception` — same root cause (round-2 finding).
++ `neighbours × misconception` — no edges in current `MisconceptionGraph` data (round-1 finding).
++ `subgraph × misconception` — same root cause (round-1 finding).
++ `find_by_tag × prerequisite` — no tag taxonomy in source data (round-2 finding from assumptions-expert); the synthetic-compound `${subject}-${keyStage}` proxy initially drafted was the *invented optionality* anti-pattern. Agents wanting subject+keyStage filtering use `enumerate_nodes`.
++ `find_by_tag × misconception` — same root cause (round-2 finding).
 
 Final MCP tool count: **17**, not 21. Per-graph: prerequisite 6 +
 misconception 4 + eef-strands 7. The four carve-outs are explicit in
@@ -249,11 +291,11 @@ contributor).
 
 Each of the 19 tracers carries:
 
-- A concrete teacher question.
-- An expected response shape grounded in the actual data structure.
-- A token budget at default projection.
-- A boundary check (drops to graph mechanics, not corpus scoring).
-- A verification footnote (`Verified against: <file> + <field path>`).
++ A concrete teacher question.
++ An expected response shape grounded in the actual data structure.
++ A token budget at default projection.
++ A boundary check (drops to graph mechanics, not corpus scoring).
++ A verification footnote (`Verified against: <file> + <field path>`).
 
 Inline location: `.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md § Phase 1 § T1 Tracer Matrix`.
 
@@ -302,10 +344,10 @@ in this session:
 Two additional plan-body corrections were applied while verifying
 the existing T3/T4 adapter descriptions against real data:
 
-- T3 PrerequisiteGraphView previously named edge types `prerequisite_of`,
++ T3 PrerequisiteGraphView previously named edge types `prerequisite_of`,
   `succeeds`. Real data: single edge type `prerequisiteFor` with a
   `source: 'thread' | 'priorKnowledge'` discriminator. Corrected.
-- T4 MisconceptionGraphView previously named edge types
++ T4 MisconceptionGraphView previously named edge types
   `related_misconception`, `addressed_by_lesson`. Real data: no edges
   at all. Corrected (with carve-outs).
 
@@ -337,17 +379,17 @@ Verified against `.agent/plans/sector-engagement/eef/current/eef-evidence-corpus
 Modifications to `.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`
 this session, across two review rounds:
 
-- Added § Phase 1 § T1 Tracer Matrix subsection (17 tracers + 4 NO TRACER cells + 6 Phase B findings + matrix summary).
-- Extended `FieldPredicate<TFieldValue>` with the array-element `contains` arm (T2 spec) plus the "Semantic collision note" that names the string-vs-array structural identity for `{ contains }`.
-- Corrected T3 PrerequisiteGraphView edge-type description (`prerequisiteFor` only, with `source` discriminator); marked `find_by_tag` as not registered (no tag taxonomy in source data) — implements 6 of 7 operations.
-- Rewrote T4 MisconceptionGraphView description: 4-of-7 operations (no edges, no tag taxonomy), mints stable IDs (SHA-1-based; index-based forms ruled out).
-- Rewrote T5 EefStrandsGraphView description with concrete tag/edge counts, the `id → strand_id` rename note, the optionality of `related_strands` (absent on 13 of 30) and `related_guidance_reports` (absent on 23 of 30, present as `{title, url}` objects). Added a "Sparse-relations surface" subsection: `manifest()` and `summary()` expose `strands_without_relations: readonly string[]` to front-load the empty-edge knowledge.
-- Updated `manifest × eef-strands`, `neighbours × eef-strands`, and `subgraph × eef-strands` tracers to name the absent-field behaviour and the new manifest field.
-- Updated T6 description: 17 MCP tools (not 21), with the four carve-outs explicit.
-- Replaced Risk #5 ("tag-search semantics drift" mitigation) with a structural resolution: `find_by_tag` no longer ships for prerequisite or misconception, so the docstring-as-correction-of-surface-lie pattern is gone.
-- Updated Size Estimate table: 17 tools, ~1605 lines total.
-- Updated Exit Criteria § Shape conditions #1 to read "17 MCP tools".
-- **Reframed Exit Criteria § Outcome conditions** from a "ratio ≥50% in 4 weeks" gate (sampling-noise-dominated at expected launch volumes) to a composite "adoption evidence" gate with three branches (≥10 distinct sessions / ≥1 downstream consumer composing without special-casing / honest analysis).
++ Added § Phase 1 § T1 Tracer Matrix subsection (17 tracers + 4 NO TRACER cells + 6 Phase B findings + matrix summary).
++ Extended `FieldPredicate<TFieldValue>` with the array-element `contains` arm (T2 spec) plus the "Semantic collision note" that names the string-vs-array structural identity for `{ contains }`.
++ Corrected T3 PrerequisiteGraphView edge-type description (`prerequisiteFor` only, with `source` discriminator); marked `find_by_tag` as not registered (no tag taxonomy in source data) — implements 6 of 7 operations.
++ Rewrote T4 MisconceptionGraphView description: 4-of-7 operations (no edges, no tag taxonomy), mints stable IDs (SHA-1-based; index-based forms ruled out).
++ Rewrote T5 EefStrandsGraphView description with concrete tag/edge counts, the `id → strand_id` rename note, the optionality of `related_strands` (absent on 13 of 30) and `related_guidance_reports` (absent on 23 of 30, present as `{title, url}` objects). Added a "Sparse-relations surface" subsection: `manifest()` and `summary()` expose `strands_without_relations: readonly string[]` to front-load the empty-edge knowledge.
++ Updated `manifest × eef-strands`, `neighbours × eef-strands`, and `subgraph × eef-strands` tracers to name the absent-field behaviour and the new manifest field.
++ Updated T6 description: 17 MCP tools (not 21), with the four carve-outs explicit.
++ Replaced Risk #5 ("tag-search semantics drift" mitigation) with a structural resolution: `find_by_tag` no longer ships for prerequisite or misconception, so the docstring-as-correction-of-surface-lie pattern is gone.
++ Updated Size Estimate table: 17 tools, ~1605 lines total.
++ Updated Exit Criteria § Shape conditions #1 to read "17 MCP tools".
++ **Reframed Exit Criteria § Outcome conditions** from a "ratio ≥50% in 4 weeks" gate (sampling-noise-dominated at expected launch volumes) to a composite "adoption evidence" gate with three branches (≥10 distinct sessions / ≥1 downstream consumer composing without special-casing / honest analysis).
 
 `eef-evidence-corpus.plan.md` is unchanged this session (Phase C verified
 no drift). However, the round-2 findings have a forward-impact for
@@ -362,12 +404,12 @@ without specifying these field shapes.
 
 **Approve promotion of Increment 1 (`graph-query-layer.plan.md`) to ACTIVE?**
 
-- **YES** → the plan moves from `current/` to `active/`; the next
++ **YES** → the plan moves from `current/` to `active/`; the next
   execution session begins with the `pnpm sdk-codegen` round-trip
   (verifying the type designs translate to working SDK code).
-- **AMEND** → name the gap; the plan is updated and the packet is
++ **AMEND** → name the gap; the plan is updated and the packet is
   re-presented.
-- **NO** → name the blocker; the plan stays CURRENT and the blocker
++ **NO** → name the blocker; the plan stays CURRENT and the blocker
   becomes a new pre-promotion task.
 
 No menu of alternative shapes is offered; the doctrine is to apply
@@ -386,12 +428,12 @@ above).
 
 Brief the type-expert with:
 
-- Branch: `feat/eef_exploration` at HEAD.
-- Primary files: `graph-query-layer.plan.md` (NodeProjection recursive
++ Branch: `feat/eef_exploration` at HEAD.
++ Primary files: `graph-query-layer.plan.md` (NodeProjection recursive
   deep-path type with depth bound 4; the seven-operation interface),
   `eef-evidence-corpus.plan.md` (EvidenceCorpus wrapping a GraphView,
   Citation type as structural invariant).
-- Specific questions for the reviewer:
++ Specific questions for the reviewer:
   1. Does the recursive `DeepKeyPath<TNode, Depth extends number = 4>`
      shape produce useful inference at depth 4 for `EefStrand` (the
      deepest node type), or does it hit instantiation limits earlier?
@@ -500,7 +542,7 @@ for the full list with triggers and candidate homes. Items cover:
 
 ## Cross-Plan and Cross-Thread Links
 
-- **Parent (sector-engagement)**: [`sector-engagement.next-session.md`](sector-engagement.next-session.md)
-- **Parent (KG-integration coordinator)**: [`open-education-knowledge-surfaces.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md) — this subthread owns its WS-3 (now restructured into Increments 1+2+3).
-- **Authoritative ADR**: [ADR-157](../../../../docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md)
-- **Strategic brief**: [`evidence-integration-strategy.md`](../../../plans/sector-engagement/eef/future/evidence-integration-strategy.md) — R1–R8 source.
++ **Parent (sector-engagement)**: [`sector-engagement.next-session.md`](sector-engagement.next-session.md)
++ **Parent (KG-integration coordinator)**: [`open-education-knowledge-surfaces.plan.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md) — this subthread owns its WS-3 (now restructured into Increments 1+2+3).
++ **Authoritative ADR**: [ADR-157](../../../../docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md)
++ **Strategic brief**: [`evidence-integration-strategy.md`](../../../plans/sector-engagement/eef/future/evidence-integration-strategy.md) — R1–R8 source.

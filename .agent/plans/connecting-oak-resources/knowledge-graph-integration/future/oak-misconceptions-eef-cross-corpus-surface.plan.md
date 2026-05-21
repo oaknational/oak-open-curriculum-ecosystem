@@ -10,9 +10,9 @@ namespace: "oak-misconceptions-eef-*"
 substrate_path: "graph-corpus-sdk EEF + misconception adapters via graph-stack Inc.3 cross-corpus join primitive"
 substrate_floor:
   - "graph-stack Inc.3 (cross-corpus join primitive + bulk-derived misconception adapter + repository-held EEF strand adapter on graph-corpus-sdk)"
-  - "graph-mvp-arc gate-1-eef-ships as naming/response-shape prerequisite only; no runtime MCP tool dependency"
+  - "graph-mvp-arc gate-1a-first-eef-feature-ships as naming/citation-envelope/response-shape prerequisite only; no runtime MCP tool dependency (per 2026-05-21 gate-split amendment: gate-1a is the locking-in point for EEF surface stability, not gate-1b which adds recommend/explain/compare)"
   - "graph-mvp-arc gate-3a-mcg-subgraph-ships as bounded-sub-graph response-shape prerequisite only; no runtime MCP tool dependency"
-sequencing_gate: "graph-combinatorial-arc promotion trigger: MVP-arc gate-1 + gate-3a shipped + graph-stack Inc.3 design stable. Slice 2 (Oak Threads) is NOT a dependency."
+sequencing_gate: "graph-combinatorial-arc promotion trigger: MVP-arc gate-1a + gate-3a shipped + graph-stack Inc.3 design stable (per 2026-05-21 gate-split amendment). Slice 2 (Oak Threads) is NOT a dependency."
 last_updated: 2026-05-11
 related_indices:
   - ".agent/plans/graph-portfolio-index.md"
@@ -77,11 +77,13 @@ todos:
 
 # Oak Misconceptions × EEF Cross-Corpus MCP Surface — first concrete combinatorial-arc exploration
 
-**Last Updated**: 2026-05-11
+**Last Updated**: 2026-05-21 (gate-name references aligned with the 2026-05-21 gate-split amendment; previous: 2026-05-11).
 **Status**: 🟡 PLANNING (future/) — queued behind the
 [`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md)
-promotion trigger: MVP-arc gate-1 + gate-3a shipped + graph-stack Inc.3
-design stable.
+promotion trigger: MVP-arc gate-1a + gate-3a shipped + graph-stack Inc.3
+design stable (per 2026-05-21 gate-split amendment: gate-1a is the
+locking-in point for EEF surface stability; gate-1b's recommend/explain/
+compare surface is not a precursor for cross-corpus composition).
 **Scope**: First concrete combinatorial exploration of the
 [`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md)
 — author and ship `oak-misconceptions-eef-recommend-for-thread`, the
@@ -122,9 +124,11 @@ Inc.3`. Phase 2 of the single-session planning closure (assumptions-expert
 FINDING #4) corrected this: the cross-corpus payload composes EEF and
 misconceptions; the Oak Threads MCP surface is **not** part of the payload.
 This historical context survives in the body as it shaped the substrate-floor
-list now carried in frontmatter (`graph-mvp-arc gate-1-eef-ships` and
-`graph-mvp-arc gate-3a-mcg-subgraph-ships` as response-shape prerequisites
-only; graph-stack Inc.3 as the substrate floor).
+list now carried in frontmatter (`graph-mvp-arc gate-1a-first-eef-feature-ships`
+and `graph-mvp-arc gate-3a-mcg-subgraph-ships` as response-shape
+prerequisites only; graph-stack Inc.3 as the substrate floor; gate-1a
+references reflect the 2026-05-21 gate-split amendment, which renamed
+the EEF-naming-and-response-shape locking-in event to gate-1a).
 
 ### What ships (locked from spine)
 
@@ -154,10 +158,12 @@ the response shape, not as runtime dependencies.
 
 - `graph-corpus-sdk` cross-corpus join primitive (lands in graph-stack
   Inc.3)
-- `graph-corpus-sdk` EEF strand corpus adapter (explicitly included in
-  graph-stack Inc.3 before slice 3b starts — slice 1's EEF substrate may be
-  on graph-query-layer at gate-1; the cross-corpus join primitive requires
-  both corpora on `graph-corpus-sdk`)
+- `graph-corpus-sdk` EEF strand corpus adapter (per 2026-05-21
+  gate-split amendment: `subgraph` + `manifest` for EEF strands already
+  on graph-corpus-sdk at Inc.1d; the remaining 5 operations land at
+  Inc.3. The cross-corpus join primitive requires both corpora on
+  `graph-corpus-sdk` — Inc.3 satisfies this on the EEF side via the
+  Inc.1d adapter completion + Inc.3 implementation of remaining ops.)
 - `graph-corpus-sdk` misconception adapter (lands in Inc.3
   misconception replatform — see
   `oak-misconceptions-substrate-migration.plan.md` future plan that
@@ -405,14 +411,17 @@ Structural enforcement gates at WS5:
 
 **Blocking**:
 
-- Spine `gate-1-eef-ships` (slice 1's `eef-*` names and response-shape
-  contract available).
+- Spine `gate-1a-first-eef-feature-ships` (slice 1's `eef-*` names,
+  citation envelope, and response-shape contract available; per
+  2026-05-21 gate-split amendment, gate-1a is the locking-in point —
+  gate-1b's recommend/explain/compare surface is not a precursor for
+  cross-corpus composition).
 - Spine `gate-3a-mcg-subgraph-ships`
   ([`oak-misconceptions-subgraph-mcp-surface.plan.md`](oak-misconceptions-subgraph-mcp-surface.plan.md)).
 - `graph-stack.plan.md` Inc.3 (cross-corpus join primitive +
-  misconception adapter + EEF strand adapter on `graph-corpus-sdk`).
-- EEF substrate migration onto `graph-corpus-sdk` is an explicit
-  Inc.3 precondition for slice 3b.
+  misconception adapter + EEF strand adapter's remaining 5 operations
+  on `graph-corpus-sdk` — EEF `subgraph` + `manifest` already landed
+  at Inc.1d).
 - Slice-1 EEF evaluation stance resolved to structural-only: no
   LLM/outcome gate before slice 1 or slice 3b execution.
 
@@ -420,7 +429,7 @@ Structural enforcement gates at WS5:
 
 - Spine `gate-2-threads-ships` — Phase 2 spine correction 2026-05-07
   removed this dependency. Slice 2 and slice 3b can ship in any order
-  relative to each other once gate-1, gate-3a, and Inc.3 have landed.
+  relative to each other once gate-1a, gate-3a, and Inc.3 have landed.
 
 **Related plans**:
 

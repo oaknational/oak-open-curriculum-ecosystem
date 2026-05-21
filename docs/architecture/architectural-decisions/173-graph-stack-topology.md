@@ -6,9 +6,9 @@ architecture-expert-betty, architecture-expert-fred,
 assumptions-expert, and architecture-expert-barney
 PROMOTION-READY verdict on `graph-stack.plan.md`). Skeleton 2026-05-07;
 NC-boundary amendment 2026-05-10; reviewer-absorption amendment
-2026-05-11.
+2026-05-11; EEF concurrent-tenant amendment 2026-05-21.
 
-**Date**: 2026-05-07; amended 2026-05-10; amended 2026-05-11
+**Date**: 2026-05-07; amended 2026-05-10; amended 2026-05-11; amended 2026-05-21
 
 **2026-05-11 amendment summary** (Flamebright Burning Lava session,
 reviewer absorption against architecture-expert-betty,
@@ -35,6 +35,36 @@ architecture-expert-fred, assumptions-expert):
   framing performance contract test) absorbed into the active graph
   stack plan rather than this ADR — they are sequencing and
   test-discipline concerns, not topology decisions.
+
+**2026-05-21 amendment summary** (owner-directed sequencing
+pull-forward to ship the first user-facing graph-stack consumer
+earlier without scope reduction):
+
+- Workspace #6 (`graph-corpus-sdk`) Inc.1 activation expanded: the
+  Oak Curriculum Ontology Threads adapter and the EEF strands adapter
+  are concurrent tenants in Inc.1. Prerequisite and misconception
+  adapters remain at Inc.3.
+- §First-wave ingestion scope amended to record two concurrent
+  attached corpora with disjoint ingestion paths: Threads via
+  `graph-ingest` Turtle/SHACL from the pinned ontology raw import,
+  EEF strands via a corpus-local Zod loader inside `graph-corpus-sdk`
+  with no `graph-ingest` participation.
+- The topology of seven active workspaces plus one deferred is
+  unchanged. Increment activation for the EEF adapter shifts forward;
+  no workspace is added, no boundary moves, no transport rule
+  changes.
+- §Corpus source authority is unchanged: the repository-held EEF
+  Toolkit JSON snapshot remains the canonical implementation source
+  until EEF clarifies refresh mechanics; the corpus must not be
+  reconstructed from scraped pages.
+- Tripwire set unchanged: EEF data does not exercise triple terms,
+  so tripwire #6 (triple-term ingestion contract test) is unaffected
+  by the earlier EEF adapter activation. Tripwire #8 (upstream
+  ontology breaking change) is also unaffected because the EEF
+  adapter does not consume the Oak Curriculum Ontology IRI surface.
+- Per-increment sequencing and plan-body decomposition continue to
+  live in the active substrate and vertical-slice plan bodies in
+  operational memory, not in this ADR.
 
 **Related**:
 [ADR-123](123-mcp-server-primitives-strategy.md) — MCP server primitives
@@ -136,8 +166,10 @@ once. Increment sequencing is owned by the implementing plan.
    Curriculum Ontology Threads graph, prerequisite, misconception, EEF
    strands, future corpora). Cross-corpus join primitives. Ontology IRIs as
    canonical identity. **Activates in Inc.1 with the Oak Curriculum
-   Ontology Threads adapter; prerequisite, misconception, and EEF
-   adapters activate in Inc.3.**
+   Ontology Threads adapter and the EEF strands adapter as concurrent
+   tenants (per the 2026-05-21 amendment); prerequisite and misconception
+   adapters activate in Inc.3. Cross-corpus join primitives activate in
+   Inc.3.**
 7. `agent-graphs/practice-graph/` — markdown-corpus graph for Oak's
    engineering practice. It is an agent-tooling-adjacent consumer, not a
    substrate library, and proves the substrate works for non-curriculum data.
@@ -193,16 +225,25 @@ sdk-codegen`. Thread slugs, API endpoint shapes, unit response fields, and
   but it must not reconstruct the corpus from scraped EEF pages.
 
 Where the same educational concept appears in more than one source, identity is
-joined explicitly rather than collapsed silently. For the first attached corpus,
-the ontology Thread IRI is the graph identity, while API/bulk slugs and unit
-metadata remain generated API/bulk projections. A consumer that needs API shape
-uses the generated SDK types; a consumer that needs graph traversal uses
-ontology IRIs through `graph-corpus-sdk`; a cross-corpus tool states the join
-boundary in its adapter and output metadata.
+joined explicitly rather than collapsed silently. The two first-wave attached
+corpora carry distinct identity schemes (per the 2026-05-21 amendment):
+the Oak Curriculum Ontology Threads corpus uses ontology Thread IRIs as graph
+identity, while API/bulk slugs and unit metadata remain generated API/bulk
+projections; the EEF strands corpus uses the corpus-native `strands[].id`
+(e.g. `eef-tl-metacognition-and-self-regulation`) as graph identity, with
+the `id → strand_id` rename happening at the corpus boundary inside the EEF
+adapter's loader, not inside graph traversal code. A consumer that needs
+API shape uses the generated SDK types; a consumer that needs graph traversal
+uses each corpus's canonical identity through `graph-corpus-sdk`; a
+cross-corpus tool states the join boundary in its adapter and output metadata.
 
-### First-wave ingestion scope (proposed topology constraint)
+### First-wave ingestion scope (amended 2026-05-21 — two concurrent attached corpora)
 
-The foundation wave targets the smallest end-to-end attached corpus:
+The foundation wave targets two end-to-end attached corpora, each
+with its own ingestion path. Both are first-wave; neither is a
+follow-on. The corpora share no ingestion machinery — Threads
+exercises the substrate Turtle/SHACL path; EEF strands exercises a
+corpus-local Zod loader without `graph-ingest` participation.
 
 1. **Oak Curriculum Ontology Threads graph** — Turtle + SHACL, ingested
    from the source-of-truth `oaknational/oak-curriculum-ontology` GitHub
@@ -213,6 +254,20 @@ The foundation wave targets the smallest end-to-end attached corpus:
    parsing; `graph-enhance` owns derived graph enrichments and IRI/link records;
    `graph-corpus-sdk` owns the `curric:Thread` enumeration and
    `curric:includesThread` inverse-edge typed adapter.
+2. **EEF strands corpus** — corpus-local JSON snapshot, ingested via
+   a Zod-validated loader inside `graph-corpus-sdk` against the
+   repository-held canonical snapshot. `graph-ingest` does not
+   participate in this path; the loader carries its own schema and
+   typing discipline (consistent with §Typing Discipline of
+   [ADR-157](157-multi-source-open-education-integration.md)). Source
+   authority is governed by §Corpus source authority below: the
+   repository-held snapshot is canonical until EEF clarifies refresh
+   mechanics. Concurrent tenancy with the Threads adapter inside
+   `graph-corpus-sdk` is structurally valid because the two adapters
+   have disjoint ingestion paths and disjoint identity schemes
+   (ontology IRIs for Threads, EEF strand IDs for EEF strands); no
+   cross-corpus join primitive ships in Inc.1, so the two adapters
+   are independent at this increment.
 
 ### Ontology source-of-truth boundary
 
@@ -257,9 +312,14 @@ that work separately.
 - The RDF 1.2-native internal stance minimises the JSON-LD 1.2 upgrade
   cost: when JSON-LD 1.2 reaches Recommendation (tripwire #1), we add an
   emit/parse adapter rather than reshape the canonical model.
-- The foundation ingestion scope is bounded to one attached corpus while still
-  importing that corpus as full straight-copy source files, proving ontology
-  IRI identity and generic Turtle/SKOS parsing against real Oak ontology data.
+- The foundation ingestion scope is bounded to two concurrent attached corpora
+  with disjoint ingestion paths (per the 2026-05-21 amendment): the Oak
+  Curriculum Ontology Threads corpus is imported as full straight-copy
+  Turtle/SHACL source files, proving ontology IRI identity and generic
+  Turtle/SKOS parsing against real Oak ontology data; the EEF strands corpus
+  is ingested through a corpus-local Zod-validated loader inside
+  `graph-corpus-sdk`, proving the substrate composes with a corpus-native
+  identity scheme through a path independent of `graph-ingest`.
 - The API/bulk/ontology split prevents a new graph adapter from becoming a
   shadow schema layer for thread or unit data. Joins are explicit and
   inspectable instead of hidden behind shared names.

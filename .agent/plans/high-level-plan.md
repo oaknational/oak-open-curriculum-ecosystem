@@ -106,8 +106,9 @@ corpus.
   for EEF, Oak ontology Threads, and Oak misconceptions):
   [graph-mvp-arc.plan.md](graph-mvp-arc.plan.md)
 - **Combinatorial arc** (follow-on; substrate-layer cross-corpus
-  composition; activates when MVP arc gate-1 + gate-3a ship +
-  graph-stack Inc.3 design-stable):
+  composition; activates when MVP arc gate-1a + gate-3a ship +
+  graph-stack Inc.3 design-stable per the 2026-05-21 gate-split
+  amendment):
   [graph-combinatorial-arc.plan.md](graph-combinatorial-arc.plan.md)
 - **Research direction**:
   [graph-library.research.md](../research/graph-library.research.md)

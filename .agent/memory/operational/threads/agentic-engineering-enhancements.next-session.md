@@ -1,5 +1,73 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-21 evening — Torrid Glowing Flame / `claude` / `claude-opus-4-7-1m` / `5ab0ec`, gate-cure round 2 of the EEF planning session)
+
+**Cross-thread cure touched this thread's comms-CLI files** while curing
+a knip + depcruise gate-failure on the branch. Three agent-tools files
+changed (uncommitted in the working tree, atop Fiery Firing Cinder's
+`a9d0b8cf` landing):
+
+1. **`agent-tools/src/collaboration-state/comms-use-cases.ts`**:
+   - Removed `type EventView` from the re-export block (it was dead —
+     no external file imports `EventView` from this re-export hub).
+   - Moved the `DirectedInboxDrainResult` interface declaration out to
+     `types.ts` to break a pre-existing type-only import cycle with
+     `comms-relevant-events.ts`. Added a corresponding type import on
+     the existing `./types.js` import line.
+
+2. **`agent-tools/src/collaboration-state/comms-relevant-events.ts`**:
+   - Dropped `export` from `type EventView` (the type is referenced 7
+     times internally as parameter / return types on functions that
+     ARE exported; under TypeScript strict + declaration emit, this
+     is sound — verified by reading the emitted `.d.ts`).
+   - Changed `DirectedInboxDrainResult` import source from
+     `./comms-use-cases.js` to `./types.js` (the cycle break).
+   - Merged the resulting duplicate `./types.js` import declarations
+     into one combined import (per code-expert + type-expert
+     convergent finding).
+
+3. **`agent-tools/src/collaboration-state/types.ts`**:
+   - Appended `DirectedInboxDrainResult` interface with TSDoc
+     (contract-first description of `output` / `eventCount` plus
+     `@remarks` capturing the cycle-prevention rationale).
+
+**Public API surface unchanged**: `classifyEventForAgent`,
+`drainRelevantEvents`, `drainDirectedInbox`, `watchDirectedInbox`,
+`createDirectedCommsMessage`, `replyToDirectedCommsMessage`,
+`writeCommsEventWithReadback`, `renderCommsLog`,
+`migrateLegacyCommsRecordCollections` all still export from
+`comms-use-cases.ts` with identical signatures. The barrel
+(`collaboration-state/index.ts`) is unchanged. The CLI consumers
+(`cli-comms-inbox.ts`, `cli-comms-watch.ts`) compile and run
+identically. No behaviour changes.
+
+**Reviewers cleared**: code-expert APPROVED WITH SUGGESTIONS (both
+suggestions absorbed in-cycle); type-expert SAFE (one TSDoc
+suggestion absorbed; one barrel-omission NIT left for owner
+decision; one pre-existing Result-pattern concern surfaced but
+not introduced by this cure).
+
+**Pre-existing standing concerns surfaced but not actioned**:
+
+- `drainDirectedInbox` and other comms-use-cases functions
+  `throw new Error(...)` on internal failures rather than returning
+  `Result<T, E>`. Violates the Result-pattern principle. Pre-dates
+  this cure; flagged here for the next session on this thread to
+  schedule.
+- `DirectedInboxDrainResult` is not exported from the
+  `collaboration-state` barrel. `agent-tools` is `private: true`
+  with no external `"exports"` map so this is not blocking; owner
+  decision needed on whether the omission is intentional (internal
+  type) or an oversight to fix.
+
+**Next-session entry shape on this thread**: nothing changed in the
+thread's main next-session work (the post-`a9d0b8cf` continuation
+of comms-CLI work, two-participant invariant write-side validator,
+`[SYNC]` view wiring once the schema gains sync kind / urgency
+flag). The cure set is mechanical and isolated; the
+DirectedInboxDrainResult relocation is a structural improvement that
+any future work on this thread will benefit from.
+
 ## Session Outcome (2026-05-21 — Fiery Firing Cinder / claude / claude-opus-4-7-1m / 40c178)
 
 **All-channels comms CLI landed at `a9d0b8cf`** on `feat/mcp-graph-support-foundation`.
@@ -5105,6 +5173,7 @@ and
 | `Riverine Fishing Rudder` | `claude-code` | `claude-opus-4-7-1m` | `b89da0` | `three-step-napkin-and-comms-graduation-pass-per-owner-direction-2026-05-05; step-1-archived-pre-step-napkin-verbatim-514L-49170C-nine-2026-05-05-session-entries-plus-drained-plus-F-12-F-13-frictions-added; step-2-walked-78-comms-extracted-3-structured-surprises-A-fat-baton-handoff-B-workflow-self-improvement-C-cross-thread-git-substrate; step-3-routed-surprises-A-B-C-to-pending-graduations-3-new-entries-plus-drained-napkin-to-single-rotation-summary; step-commits-307f7f13-d7ca48d5-5b40e206; docs-adr-reviewer-P0-P1-clean-on-each-step` | 2026-05-05 | 2026-05-06 |
 | `Masked Stalking Veil` | `codex` | `GPT-5` | `019dfc` | `quota-recovery-commit-stewardship-and-session-handoff-light-consolidation; committed-Umbral-Cloaking-Silhouette-artefact-portability-audit-and-plans-as-ad03f276; closed-quota-recovery-collaboration-state-as-8bf55080; ran-owner-requested-jc-session-handoff-plus-light-jc-consolidate-docs; no-entrypoint-drift-no-track-cards-no-escalations-vocabulary-green-collaboration-check-green; inherited-fitness-pressure-remains-separate-lane` | 2026-05-06 | 2026-05-06 |
 | `Ashen Burning Anvil` | `codex` | `GPT-5` | `019dfd` | `urgent-skill-load-pressure-relief-phase-1-settings-prune; removed-project-level-mcp-apps-cloudflare-linear-plugin-activations; retained-sentry-remember-mcp-server-dev-sonarqube-vercel; backup-captured; portability-subagents-typecheck-markdownlint-diff-whitespace-and-collaboration-check-green; owner-corrected-doctor-as-session-local-only; phase-2-vercel-triage-next` | 2026-05-06 | 2026-05-06 |
+| `Torrid Glowing Flame` | `claude` | `claude-opus-4-7-1m` | `5ab0ec` | `cross-thread-gate-cure-touching-agent-tools-comms-cli-files-during-eef-planning-session-round-2; knip-fixes-default-bulk-dir-name-export-removed-event-view-re-export-and-source-export-removed; depcruise-cycle-cured-by-moving-directed-inbox-drain-result-interface-from-comms-use-cases-to-shared-types-with-two-import-sites-updated; reviewer-driven-followups-merged-duplicate-types-imports-and-reshaped-tsdoc-to-contract-first; public-api-surface-unchanged-classify-drain-watch-render-all-still-export-with-identical-signatures; pre-existing-result-pattern-violations-on-throws-in-comms-use-cases-surfaced-but-not-actioned-out-of-scope` | 2026-05-21 | 2026-05-21 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):

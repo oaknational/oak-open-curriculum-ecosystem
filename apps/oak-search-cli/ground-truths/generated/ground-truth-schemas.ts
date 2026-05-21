@@ -4,7 +4,7 @@
  * Provides runtime validation for ground truth entries.
  *
  * @generated - DO NOT EDIT
- * Generated at: 2026-05-08T06:45:34.427Z
+ * Generated at: 2026-05-21T13:45:19.892Z
  */
 
 import { typeSafeKeys } from '@oaknational/type-helpers';

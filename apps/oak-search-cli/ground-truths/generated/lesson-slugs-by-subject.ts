@@ -5,7 +5,7 @@
  * Uses a JSON-backed loader to avoid monolithic generated TypeScript data files.
  *
  * @generated - DO NOT EDIT
- * Generated at: 2026-05-08T06:45:34.423Z
+ * Generated at: 2026-05-21T13:45:19.886Z
  */
 
 import rawLessonSlugData from './lesson-slugs-by-subject.data.json';

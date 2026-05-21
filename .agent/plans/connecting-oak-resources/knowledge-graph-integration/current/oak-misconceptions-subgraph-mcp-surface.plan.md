@@ -13,7 +13,7 @@ substrate_floor:
   - "bulk-derived legacy graph factory (already shipped; see existing `misconception-graph-resource.ts` + `aggregated-misconception-graph.ts`)"
   - "graph-stack Inc.1 Oak Ontology Threads foundation (Thread IRI -> Unit lookup)"
   - "ADR-157 amendment for `oak-misconceptions-*` prefix (landed Phase 0 of MVP-arc spine)"
-sequencing_gate: "PARALLEL-SAFE with slice 2 after MVP-arc gate-0 + graph-stack Inc.1 are in place. The 2026-05-11 reshape relaxed the previous strict gate-1 → gate-3a ordering: substrate streams are co-primary. Thread IRI input still requires Thread → Unit lookup from Inc.1; misconception traversal remains on the legacy factory."
+sequencing_gate: "PARALLEL-SAFE with slice 2 (gate-2) and slice 1 (gate-1a + gate-1b) after graph-stack Inc.1b (Thread → Unit lookup) lands. Per the 2026-05-21 gate-split amendment: gate-3a does not depend on the slice-1 EEF gates and the EEF gates do not depend on Inc.1b — substrate streams are co-primary. Thread IRI input requires Inc.1b Thread → Unit lookup; misconception traversal remains on the legacy factory until graph-stack Inc.3's misconception adapter ships."
 last_updated: 2026-05-11
 related_indices:
   - ".agent/plans/graph-portfolio-index.md"
@@ -74,17 +74,16 @@ todos:
     status: pending
     depends_on: [ws5-quality-gates]
   - id: ws7-spine-gate-3a-close-and-migration-followup
-    content: "WS7: update spine `gate-3a-mcg-subgraph-ships` todo to `completed`; record acceptance evidence (including the shape-understanding paragraph required by the MVP-arc gate-3a acceptance criterion — graph-from-bulk-data design lessons + token-sensitive sub-graph extraction lessons); refresh thread next-session record; refresh/verify the existing named follow-up plan `oak-misconceptions-substrate-migration.plan.md` (future/) per spine cut-scope row 3a (migration onto graph-corpus-sdk + GraphView when graph-stack Inc.3 misconception adapter ships). This gate contributes to the combinatorial-arc promotion trigger (combinatorial arc activates when MVP-arc gate-1 + gate-3a ship + Inc.3 design-stable)."
+    content: "WS7: update spine `gate-3a-mcg-subgraph-ships` todo to `completed`; record acceptance evidence (including the shape-understanding paragraph required by the MVP-arc gate-3a acceptance criterion — graph-from-bulk-data design lessons + token-sensitive sub-graph extraction lessons); refresh thread next-session record; refresh/verify the existing named follow-up plan `oak-misconceptions-substrate-migration.plan.md` (future/) per spine cut-scope row 3a (migration onto graph-corpus-sdk + GraphView when graph-stack Inc.3 misconception adapter ships). This gate contributes to the combinatorial-arc promotion trigger (combinatorial arc activates when MVP-arc gate-1a + gate-3a ship + Inc.3 design-stable per 2026-05-21 gate-split amendment)."
     status: pending
     depends_on: [ws6-adversarial-review]
 ---
 
 # Oak Misconceptions Sub-Graph MCP Surface — Slice 3a of the MVP Arc
 
-**Last Updated**: 2026-05-10
-**Status**: 🟡 PLANNING (current/) — pending gate-1-eef-ships
-(STRICT, owner sequencing). PARALLEL-SAFE with slice 2 — different
-substrate path, different namespace, different files.
+**Last Updated**: 2026-05-21 (substrate-floor + parallel-safety wording aligned with the 2026-05-21 gate-split amendment; previous: 2026-05-10).
+**Status**: 🟡 PLANNING (current/) — pending graph-stack Inc.1b
+(Thread → Unit lookup). PARALLEL-SAFE with slice 2 (gate-2) and slice 1 (gate-1a + gate-1b) — different substrate paths, different namespaces, different files. Per the 2026-05-21 gate-split amendment, the previous "pending gate-1-eef-ships" framing no longer applies: substrate streams are co-primary and slice 3a does not depend on the slice-1 EEF gates.
 **Scope**: Slice 3a of the
 [`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md) — author and
 ship `oak-misconceptions-subgraph-for-thread` (and optionally
@@ -385,18 +384,23 @@ Dispatch:
 
 **Blocking**:
 
-- Spine `gate-0-substrate-floor` (MVP arc).
-- Graph-stack Inc.1 Oak Ontology Threads foundation for Thread→Unit lookup.
+- Graph-stack Inc.1b Oak Ontology Threads foundation for Thread→Unit
+  lookup (the only substrate dependency; per the 2026-05-21 gate-split
+  amendment, gate-3a does not depend on the slice-1 EEF gates because
+  misconception traversal stays on the legacy factory until graph-stack
+  Inc.3's misconception adapter ships).
 
 **Parallel-safe with**:
 
 - [`oak-kg-threads-surface.plan.md`](oak-kg-threads-surface.plan.md)
-  (slice 2) — shared Inc.1 Thread lookup but different implementation path
-  after lookup (legacy misconception factory vs Oak Ontology Threads surface),
-  different namespace (`oak-misconceptions-*` vs `oak-kg-*`), different
-  tool / resource files. The 2026-05-11 MVP-arc reshape relaxed the
-  previous strict gate-1 → gate-3a ordering: substrate streams are
-  co-primary.
+  (slice 2, gate-2) — shared Inc.1b Thread lookup but different
+  implementation path after lookup (legacy misconception factory vs
+  Oak Ontology Threads surface), different namespace
+  (`oak-misconceptions-*` vs `oak-kg-*`), different tool / resource
+  files.
+- Slice 1 gates (gate-1a + gate-1b) — per the 2026-05-21 gate-split
+  amendment, gate-3a does not depend on the slice-1 EEF gates and the
+  EEF gates do not depend on Inc.1b. Substrate streams are co-primary.
 
 **Consumed by**:
 

@@ -68,28 +68,42 @@ order, before any non-planning source edit:
    before anything else).
 2. **Post a team-start report** broadcast (§1 — §1 is the umbrella
    "Register Presence" section that owns the broadcast format AND the
-   rendezvous rules; the broadcast declares identity, foundation status,
-   intended boundary, and any preferred cycle).
-3. **Wait for peer team-starts** to surface, then negotiate cycle /
-   boundary assignment via comms (§1 cycle-collision rule and
-   singleton-lane rendezvous rule).
-4. **Suggest the user run `/rename`** per the shared start-right rule
+   coordination rules; the broadcast declares identity, foundation
+   status, intended boundary, inherited working-tree status, and any
+   preferred cycle).
+3. **Wait for peer team-starts** to surface, then coordinate cycle /
+   boundary assignment via comms (§1 cycle-overlap coordination rule
+   and singleton-lane coordination rule).
+4. **Verify the inherited working-tree state with ONE elected
+   gate-runner** (§1a — required whenever any agent's team-start reports
+   a non-clean inherited tree). One agent runs the relevant gates against
+   the inherited state and posts a gate-state report to comms; all other
+   agents wait for that report before opening source claims. No agent
+   starts source work until the gate-state report is observable in
+   comms. **This step structurally requires coordination and
+   communication to be the precondition for work-start.**
+5. **Suggest the user run `/rename`** per the shared start-right rule
    at
    [`start-right-quick/shared/start-right.md` §"Session Title — `/rename` Suggestion"](../start-right-quick/shared/start-right.md).
-   The team-shaped intent-clarity moment is **rendezvous-resolution**
-   (immediately after move 3 settles cycle / boundary assignment), not
-   session-open as in solo sessions. The rename must be surfaced
-   BEFORE any significant implementation, source claim, or staging
-   operation in move 5.
-5. **Open the work claim** in `active-claims.json` for the agreed
-   boundary only after rendezvous resolves and the rename suggestion
-   has been surfaced.
-6. **Proceed with the work** under the team cadence (§5) and
+   The team-shaped intent-clarity moment is **coordination-resolution**
+   (immediately after move 3 settles cycle / boundary assignment and
+   move 4 reports a green inherited tree, or after the team has
+   coordinated a non-green response with the owner), not session-open
+   as in solo sessions. The rename must be surfaced BEFORE any
+   significant implementation, source claim, or staging operation in
+   move 6.
+6. **Open the work claim** in `active-claims.json` for the agreed
+   boundary only after cycle/boundary coordination resolves, the
+   gate-state report is observable, and the rename suggestion has been
+   surfaced.
+7. **Proceed with the work** under the team cadence (§5) and
    traceability discipline (§4).
 
-Source-claim opening BEFORE rendezvous resolves is the recurring failure
-mode this order exists to prevent — see the singleton-lane rendezvous
-rule in §1 and the cycle-collision rule below.
+Source-claim opening BEFORE coordination resolves is the recurring
+failure mode this order exists to prevent — see the singleton-lane
+coordination rule in §1 and the cycle-overlap coordination rule below.
+Source-work starting BEFORE the inherited-tree gate-state is verified
+is the second failure mode this order exists to prevent — see §1a.
 
 ### 0. Start The All-Channels Comms Monitor (non-negotiable)
 
@@ -194,7 +208,7 @@ An agent on a platform with no persistent background-task primitive must
 declare the gap in their team-start post and adopt a polling cadence that
 sweeps the full directory at the team-cadence interval (§5), never a
 single-view filter — because the directed-only view misses the broadcast
-and group events that carry the team-bootstrap rendezvous itself.
+and group events that carry the team-bootstrap coordination itself.
 
 ### 1. Register Presence
 
@@ -205,67 +219,206 @@ before non-trivial work:
 Team start report:
 - Identity:
 - Foundation: complete / blocked by <path or command>
+- Inherited working-tree status: clean / non-clean (paths listed)
 - Intended boundary: <files / paths / behaviour the agent expects to own>
-- Claim status: none yet / pending team rendezvous / open <claim_id>
+- Claim status: none yet / pending team coordination / open <claim_id>
 - Useful capability:
 - Constraint or risk:
 - Preferred boundary, if any:
+- Gate-verification offer: willing to run inherited-tree gates if elected / observing only
 ```
 
 `Intended boundary` is a non-binding declaration of *where* the agent expects
-to work; `Claim status` reports the live registry state. Role labels in the
-sections below are examples, not doctrine — describe the boundary first and
-pick a label that fits.
+to work; `Claim status` reports the live registry state. `Inherited
+working-tree status` is the agent's observation of `git status` at session
+open; the team uses these reports to decide whether §1a gate-verification
+fires. `Gate-verification offer` declares willingness to take the elected
+gate-runner role; the team uses this to coordinate the election in §1a.
+Role labels in the sections below are examples, not doctrine — describe the
+boundary first and pick a label that fits.
 
-**Singleton-lane rendezvous rule** (added 2026-05-20 per singleton-lane
-remediation plan §WS1). When the owner has launched identical
-`start-right-team` prompts to multiple agents AND the next safe step on the
-relevant thread is a narrow single-owner source slice (a singleton lane),
-the team-start report is the rendezvous surface, not the claim. Concretely:
+**Singleton-lane coordination rule** (added 2026-05-20 per singleton-lane
+remediation plan §WS1; reframed 2026-05-21 to dialogue-over-competition
+vocabulary). When the owner has launched identical `start-right-team`
+prompts to multiple agents AND the next safe step on the relevant thread
+is a narrow single-owner source slice (a singleton lane), the team-start
+report is the coordination surface, not the claim. Concretely:
 
 - An empty `active-claims.json` at session open means *"no team visible
   yet"*, NOT *"safe solo ownership of the singleton slice"*. Other
   identically-prompted agents may be in the same window and have not yet
   reached the registration step.
 - Each agent posts presence with `Claim status: none yet / pending team
-  rendezvous` before opening any source claim on the singleton lane.
+  coordination` before opening any source claim on the singleton lane.
 - An agent may open a source claim on the singleton lane only after one of:
-  (a) all participating agents have posted presence and exactly one has
-  been routed to the source slice (the first-overlap response is pending
-  WS1 completion — see thread record); (b) a documented team-routing
-  lease exists (claim with `team_routing_required: false`, see WS2); or
+  (a) all participating agents have posted presence and the team has
+  coordinated exactly one agent to the source slice (first-broadcast
+  establishes context; the agent who posted earliest is the natural owner
+  by convention unless the team coordinates otherwise);
+  (b) a documented team-routing lease exists (claim with
+  `team_routing_required: false`, see WS2); or
   (c) sufficient time has elapsed that the agent reasonably concludes no
   team is present — the silent default, used with care because the failure
   mode is duplicate parallel claims.
 
 Normal solo work and broad parallelisable work (where overlapping claims
 are safe because the surfaces don't conflict) are unaffected by this rule;
-the rendezvous contract applies only to singleton-lane work.
+the coordination contract applies only to singleton-lane work.
 
-**Cycle-collision deferral rule** (added 2026-05-21 from worked precedent
-on the WS2.2 ↔ WS3.2 parallel pair). When two or more agents declare the
-same cycle / boundary in their team-start posts:
+**Cycle-overlap coordination rule** (added 2026-05-21 from worked
+precedent on the WS2.2 ↔ WS3.2 parallel pair; reframed 2026-05-21 to
+dialogue-over-competition vocabulary). When two or more agents declare
+overlapping intent on the same cycle / boundary in their team-start
+posts, the team coordinates a complementary-boundary split through
+dialogue. The substantive shape is **boundary clarification through
+communication**, not a contest with winners and losers:
 
-- **Earliest team-start timestamp wins** the contested cycle. Source
-  authority is the comms event's `created_at` field, not any agent's
-  self-reported memory.
-- **Other contenders defer in arrival order** and pick from the remaining
-  parallel-safe alternatives the opener / plan named. The deferring agent
-  posts a follow-up event explicitly naming (a) the cycle they yielded,
-  (b) the cycle they now intend, (c) the architectural rationale (if any)
-  — never a personal-preference framing.
-- **No agent opens a source claim on the contested cycle** until the
-  deferral chain has explicitly resolved in comms. The team-start posts
-  are the rendezvous surface; the claim is the commitment.
-- **Equal-strength rationales are not a stalemate** — earliest-timestamp
-  still wins. The deferral resolves; the substantive design conversation
+- **First-broadcast-establishes-context**. The agent whose team-start
+  has the earliest `created_at` timestamp is the natural owner of the
+  cycle by convention. This is a deterministic tie-breaker for when
+  dialogue alone would loop, not a victory condition; the substantive
+  coordination happens in the dialogue itself. Source authority is the
+  comms event's `created_at` field, not any agent's self-reported memory.
+- **Agents with overlapping intent adopt complementary boundaries in
+  broadcast-arrival order**, picking from the remaining parallel-safe
+  alternatives the opener / plan named. Each agent posts a follow-up
+  event naming (a) the cycle whose context they now clear for the
+  first-broadcaster, (b) the complementary cycle they now intend, and
+  (c) the architectural rationale (if any) — framed as collaboration,
+  never as personal-preference or competition.
+- **No agent opens a source claim on a cycle with unresolved overlapping
+  intent** until the team has coordinated complementary boundaries in
+  comms. Team-start posts are the coordination surface; the claim is
+  the commitment.
+- **Equal-strength rationales do not stall the coordination chain** —
+  first-broadcast-establishes-context resolves the boundary assignment
+  cleanly so the team can proceed; the substantive design conversation
   can continue inside the chosen cycle's reviewer cadence.
 
 This rule covers the parallel-pair case (multiple cycles available,
-collision on which agent takes which). The singleton-lane rendezvous
+shared interest in who takes which). The singleton-lane coordination
 rule above covers the single-owner case (one slice, N agents arriving).
-Both reduce to: **team-start broadcast is the rendezvous surface;
-source claims open only after rendezvous resolves.**
+Both reduce to: **team-start broadcast is the coordination surface;
+source claims open only after the team has coordinated complementary
+boundaries.**
+
+### 1a. Verify Inherited Working-Tree State (one elected gate-runner)
+
+**Added 2026-05-21 from worked precedent**: a three-agent session opened
+on a branch carrying 16 inherited modified files from a prior session.
+The thread record warned about the files but framed them with the prior
+owner direction *"leave it"*. All three agents posted team-start
+broadcasts claiming *"Foundation: complete"* without running gates
+against the inherited state. The cascade (an upstream API schema bump
+that had broken consumer workspaces) was discovered ~30 minutes into
+the session when one agent eventually ran `pnpm turbo`. Every later
+session failure was downstream of NOT having ground-stated the
+inherited tree as a first move. Three agents independently fell into
+the same overstated-foundation claim.
+
+**When this step fires**: any time at least one team-start broadcast
+reports a non-clean inherited working-tree status. If every team-start
+reports a clean tree, this step is trivial (no gate-runner election;
+proceed directly to move 5).
+
+**The structural property the step enforces**: only ONE agent runs the
+inherited-tree gates. All other agents wait for that agent's
+gate-state report to be observable in comms before opening source
+claims. Because only one agent runs but the team must know the
+outcome, coordination and communication are the structural
+precondition for work-start. There is no path where multiple agents
+independently start source work on a non-verified inherited tree.
+
+#### Electing the gate-runner
+
+The election happens through comms after team-start broadcasts surface,
+typically within the same coordination window as cycle/boundary
+assignment:
+
+- Agents who included `Gate-verification offer: willing to run` in
+  their team-start are candidates. If exactly one volunteered, they are
+  the elected gate-runner.
+- If multiple agents volunteered, the team coordinates one of them
+  through dialogue (first-broadcast convention applies as a tie-breaker
+  if dialogue alone would loop).
+- If no agent volunteered AND the inherited tree is non-clean, the
+  agent whose team-start has the earliest `created_at` timestamp is the
+  default gate-runner (the same convention used for cycle-overlap
+  coordination). They may decline in their own follow-up broadcast,
+  passing the responsibility to the next agent by broadcast-arrival
+  order; the team coordinates a successor through dialogue.
+
+The elected gate-runner posts a brief comms event confirming the
+election before running gates. This makes the election observable to
+all team members and prevents two agents from independently running the
+same gates.
+
+#### Running the gates
+
+The elected gate-runner runs the gates appropriate to the inherited
+tree's scope:
+
+- If the dirty files are scoped to specific workspaces (visible from
+  `git status` paths), run the per-workspace gates against those
+  workspaces (e.g. `pnpm --filter <workspace> type-check`,
+  `pnpm --filter <workspace> lint`, `pnpm --filter <workspace> test`).
+- If the scope is unclear or spans multiple workspaces, run
+  `pnpm check` against the inherited tree.
+- The gate-runner does NOT modify the inherited tree during this step.
+  The goal is observation of state, not fixes. Fixes (if needed) are
+  coordinated through dialogue after the gate-state report is observable.
+
+#### Posting the gate-state report
+
+After running the gates, the gate-runner posts a comms event with the
+gate-state report. The report includes:
+
+- **Result**: green / non-green (named gates that failed).
+- **Failure surface** (if non-green): full output of each failing
+  gate, including affected files and error texts.
+- **Diagnosis hypothesis** (if non-green): the gate-runner's best
+  reading of what the failures represent (e.g. *"upstream schema bump
+  cascaded into consumer workspaces"*, *"stale codegen artefacts"*,
+  *"unrelated peer work-in-progress"*).
+- **Proposed next step**: surface to owner / coordinate a fix plan /
+  proceed (if green).
+
+The report becomes part of the team's coordination evidence. Other
+agents read it before opening source claims.
+
+#### Acting on a non-green gate-state
+
+If the gate-state is non-green:
+
+- No agent opens source claims for cycle work until the team has
+  coordinated a path forward.
+- If the failures are surface-class (a known prior-session residue, a
+  pre-staged cycle nearly ready to land), the team may coordinate a
+  short fix tranche before resuming cycle work.
+- If the failures are cascade-class (e.g. an upstream schema bump that
+  has cascaded across multiple workspaces), the team surfaces to the
+  owner for direction. The cascade-clear path may need a dedicated
+  plan; cycle work pauses until the cascade clears.
+- Either path is coordinated through dialogue, not by individual
+  agents starting their own remediation in parallel.
+
+#### When the gate-runner cannot complete the step
+
+If the elected gate-runner gets blocked (their environment cannot run
+the gates, they get pulled into another priority, etc.), they post a
+comms event handing the responsibility to the next agent by
+broadcast-arrival order. Other agents continue to wait until a gate-state
+report from the new gate-runner is observable.
+
+#### Cure shape
+
+This step structurally cures the failure mode where agents read the
+thread record's description of past tree state and conflate it with
+current tree state. The thread record is a pointer-and-hypothesis,
+not the source of volatile truth (same principle as the §Continuation
+Pointer Contract at the top of this SKILL). The gate-state report is
+the ground-truth check. One agent runs; everyone reads; coordination
+is the precondition for work.
 
 ### 2. Name The Coordination Pressure
 

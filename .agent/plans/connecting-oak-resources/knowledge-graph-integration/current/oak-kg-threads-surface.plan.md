@@ -10,7 +10,7 @@ spine_slice: 2
 namespace: "oak-kg-*"
 substrate_floor:
   - "graph-stack Inc.1 (Oak Curriculum Ontology Threads foundation: generic Turtle/SKOS ingestion, graph-project adjacency, graph-corpus-sdk curric:Thread adapter)"
-sequencing_gate: "PARALLEL-SAFE with slice 3a after MVP-arc gate-0 + graph-stack Inc.1 are in place. The 2026-05-11 reshape relaxed the previous strict gate-1 → gate-2 ordering: substrate streams are co-primary."
+sequencing_gate: "PARALLEL-SAFE with slice 3a (gate-3a) and slice 1's gates (gate-1a + gate-1b) after graph-stack Inc.1b lands. Per the 2026-05-21 gate-split amendment: gate-2 (Threads slice) does not depend on the slice-1 EEF gates because the Threads adapter does not consume the GraphView<TNode, TEdgeType> interface (different adapter shape: ontology-IRI enumeration + inverse-edge resolution); substrate-floor for gate-2 is Inc.1b alone, not the broader MVP-arc gate-0a/gate-0b path."
 last_updated: 2026-05-11
 related_indices:
   - ".agent/plans/graph-portfolio-index.md"
@@ -76,9 +76,9 @@ todos:
 
 # Oak KG Threads MCP Surface — Slice 2 of the MVP Arc
 
-**Last Updated**: 2026-05-10
+**Last Updated**: 2026-05-21 (substrate-floor + parallel-safety wording aligned with the gate-split amendment; previous: 2026-05-10).
 **Status**: 🟡 PLANNING (current/) — pending substrate floor (graph-stack
-Inc.1 Oak Curriculum Ontology Threads foundation) + gate-1-eef-ships.
+Inc.1b Oak Curriculum Ontology Threads adapter). Per the 2026-05-21 gate-split amendment, gate-2 (this slice) is parallel-safe with gate-1a/gate-1b (slice 1 EEF) and gate-3a (slice 3a misconception) — it does not depend on the slice-1 EEF gates.
 **Scope**: Slice 2 of the
 [`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md) — author and
 ship the `curriculum://oak-kg-threads` resource + `oak-kg-get-thread-content`
@@ -340,19 +340,22 @@ composes EEF and misconceptions only.
 
 **Blocking**:
 
-- Spine `gate-0-substrate-floor` (MVP arc).
-- Graph-stack Inc.1 Oak Curriculum Ontology Threads foundation (substrate;
-  topology must reach ACTIVE before this slice can execute, with the
-  topology BLOCKERs surfaced by `architecture-expert-betty` 2026-05-07
-  absorbed).
+- Graph-stack Inc.1b (Oak Curriculum Ontology Threads adapter inside
+  `graph-corpus-sdk`) — Threads substrate floor; the Threads adapter
+  does not consume the GraphView<TNode, TEdgeType> interface from
+  Inc.1d, so gate-2 does not depend on the slice-1 EEF substrate floor.
+  Per 2026-05-21 gate-split amendment: gate-0a/gate-0b are slice-1
+  specific and are not preconditions for this slice.
 
 **Parallel-safe with**:
 
 - [`oak-misconceptions-subgraph-mcp-surface.plan.md`](oak-misconceptions-subgraph-mcp-surface.plan.md)
-  (slice 3a) — different substrate path, different namespace, different
-  files. Both wait on graph-stack Inc.1 + MVP-arc gate-0; per the
-  2026-05-11 reshape, the previous strict gate-1 → slice-3a ordering is
-  relaxed: substrate streams are co-primary.
+  (slice 3a, gate-3a) — different substrate path, different namespace, different
+  files. Both wait on graph-stack Inc.1b only.
+- Slice 1 EEF gates (gate-1a + gate-1b) — per the 2026-05-21
+  amendment, slice 2 (gate-2) does not depend on the EEF slice gates,
+  and the EEF slice gates do not depend on Inc.1b. The substrate streams
+  are co-primary.
 
 **Consumed by**:
 

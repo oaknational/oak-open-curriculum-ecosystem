@@ -13,11 +13,11 @@ related_indices:
   - "high-level-plan.md"
   - "graph-portfolio-index.md"
 substrate_floor:
-  - "graph-mvp-arc.plan.md gate-1 (EEF surface) closed — names + response shapes for EEF strands stable"
+  - "graph-mvp-arc.plan.md gate-1a (first EEF feature ships) closed — names, citation envelope, freshness governance, and response shapes for EEF strands stable (per 2026-05-21 gate-split amendment; gate-1a is the locking-in point for EEF surface stability, not gate-1b which adds recommend/explain/compare and is not a precursor for cross-corpus composition)"
   - "graph-mvp-arc.plan.md gate-3a (Oak misconception sub-graph surface) closed — bounded sub-graph response shape stable"
-  - "graph-stack.plan.md Inc.3 closed — `graph-corpus-sdk` cross-corpus join primitive + EEF strand adapter + misconception adapter in production"
+  - "graph-stack.plan.md Inc.3 closed — `graph-corpus-sdk` cross-corpus join primitive + the EEF strand adapter's remaining 5 operations + misconception adapter in production (EEF `subgraph` + `manifest` already landed at Inc.1d per the 2026-05-21 amendment)"
 promotion_trigger:
-  - "graph-mvp-arc.plan.md gate-1 and gate-3a have closed — EEF naming + response-shape contracts and misconception sub-graph response shape are stable"
+  - "graph-mvp-arc.plan.md gate-1a and gate-3a have closed — EEF naming + citation envelope + response-shape contracts and misconception sub-graph response shape are stable"
   - "graph-stack.plan.md Inc.3 has closed; the cross-corpus join primitive is in production (no 'design stability' intermediate state — Inc.3 close is the schedule signal)"
   - "Opens by owner promotion when all three substrate-floor items are true; queued in `current/` from authoring"
 specialist_reviewers:
@@ -53,8 +53,9 @@ todos:
 # Graph Combinatorial Arc — Cross-Corpus Substrate Composition Spine
 
 **Status**: CURRENT — authored 2026-05-11; opens by owner promotion after
-MVP arc gate-1, MVP arc gate-3a, and graph-stack Inc.3 have all closed
-(see the substrate floor and promotion trigger in frontmatter).
+MVP arc gate-1a, MVP arc gate-3a, and graph-stack Inc.3 have all closed
+(see the substrate floor and promotion trigger in frontmatter; updated
+to gate-1a per the 2026-05-21 gate-split amendment).
 **Type**: Cross-collection coordination spine. Owns the substrate-level
 combinatorial exploration that begins after the MVP arc establishes three
 independent corpora.
@@ -103,9 +104,13 @@ the portfolio index already names. Both stay; both cross-link.
 The promotion trigger above is mechanical: the arc activates when its
 named substrate floor is in place. Three pieces:
 
-1. **MVP arc gate-1 (EEF) closed**. Names + response shapes for EEF
-   strands are stable; the compound-prefix tool can reuse them without
-   re-deciding their shape.
+1. **MVP arc gate-1a (first EEF feature ships) closed**. Names,
+   citation envelope, response shapes, and ADR-175 freshness
+   governance for EEF strands are stable; the compound-prefix tool
+   can reuse them without re-deciding their shape (per 2026-05-21
+   gate-split amendment: gate-1a is the locking-in point for EEF
+   surface stability; gate-1b adds recommend/explain/compare on top
+   but is not a precursor for cross-corpus composition).
 2. **MVP arc gate-3a (misconception sub-graph) closed**. Bounded
    sub-graph response shape is stable; the compound tool composes that
    shape rather than redefining it.
@@ -155,7 +160,7 @@ duplicating its content.
 |---|---|
 | 8 TDD-cycle todos (WS1 cycle 1–4; WS2 cycle 1–2; WS3 ADR-123; WS4 quality gates; WS5 adversarial review; WS6 spine close) | **Preserved verbatim**; reviewer dispatch + cycle scope intact |
 | `spine_plan` frontmatter pointer | **Repointed** from `graph-mvp-arc.plan.md` to `graph-combinatorial-arc.plan.md` |
-| `sequencing_gate` frontmatter | **Refreshed** to name MVP-arc gate-1 + gate-3a as response-shape prerequisites + graph-stack Inc.3 as substrate floor |
+| `sequencing_gate` frontmatter | **Refreshed** to name MVP-arc gate-1a + gate-3a as response-shape prerequisites + graph-stack Inc.3 as substrate floor (gate-1a per 2026-05-21 gate-split amendment) |
 | Substrate floor list | **Unchanged**; the substrate dependencies are the same |
 | ADR amendment list | **Unchanged** |
 
@@ -189,7 +194,7 @@ authoring its own executable plan; this arc does not pre-author them.
 ## Sequencing and Gates
 
 ```text
-graph-mvp-arc gate-1 (EEF) + gate-3a (misconceptions) + graph-stack Inc.3 closes
+graph-mvp-arc gate-1a (first EEF feature) + gate-3a (misconceptions) + graph-stack Inc.3 closes
   ↓
 gate-cross-corpus-1: oak-misconceptions-eef-recommend-for-thread ships
   ↓
@@ -253,8 +258,9 @@ This arc does **not**:
 
 ## Lifecycle Triggers
 
-- **Promotion trigger fires** when MVP arc gate-1, gate-3a, and
-  graph-stack Inc.3 have all closed (see frontmatter); owner promotion
+- **Promotion trigger fires** when MVP arc gate-1a, gate-3a, and
+  graph-stack Inc.3 have all closed (see frontmatter; gate-1a per
+  2026-05-21 gate-split amendment); owner promotion
   is the schedule signal.
 - **Plan-time reviewers** dispatch at promotion-trigger fire and at each
   gate.

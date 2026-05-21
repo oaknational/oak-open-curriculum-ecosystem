@@ -34,28 +34,5 @@
       "notes": "claim was kind=files, need kind=git index/head claim"
     }
   ],
-  "claims": [
-    {
-      "claim_id": "b3a1edb5-3ef9-4496-b78c-12e2d12f1227",
-      "agent_id": {
-        "agent_name": "Cirrus Circling Plume",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "fba398"
-      },
-      "thread": "connecting-oak-resources",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": [
-            "index/head"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-21T20:55:51Z",
-      "freshness_seconds": 900,
-      "sidebar_open": false,
-      "intent": "session-handoff commit-window: memory + collaboration-state surface for the six-agent Inc.1d team session closeout"
-    }
-  ]
+  "claims": []
 }

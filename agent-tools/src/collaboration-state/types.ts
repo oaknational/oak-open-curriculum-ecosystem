@@ -163,3 +163,20 @@ export interface DirectedCommsMessage extends BaseCommsEvent {
 }
 
 export type CommsEvent = NarrativeCommsEvent | LifecycleCommsEvent | DirectedCommsMessage;
+
+/**
+ * Result of draining an inbox of comms events. `output` is the formatted
+ * text the caller emits to its destination (stdout, file, log); `eventCount`
+ * is the number of events drained (zero means nothing new was emitted).
+ *
+ * @remarks Used by both `drainDirectedInbox` (legacy narrow directed-only
+ * view) and `drainRelevantEvents` (default all-channels view per the
+ * 2026-05-21 amendment). Declared in this shared types module rather than
+ * in either implementing file (`comms-use-cases.ts` /
+ * `comms-relevant-events.ts`) to avoid the import cycle that arises when
+ * each file needs the type the other produces.
+ */
+export interface DirectedInboxDrainResult {
+  readonly output: string;
+  readonly eventCount: number;
+}

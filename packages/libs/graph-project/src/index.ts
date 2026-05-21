@@ -18,3 +18,5 @@ export type {
 } from './property-graph/index.js';
 
 export { fromPropertyGraph, toPropertyGraph } from './projection/index.js';
+
+export { incoming, neighbours, outgoing } from './adjacency/index.js';
