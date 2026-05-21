@@ -17,6 +17,35 @@ Earlier archives remain under [`archive/`](archive/).
 ## Current State
 
 - Current branch: `feat/mcp-graph-support-foundation`.
+- **2026-05-21 (Cirrus Circling Plume / `claude` / Opus 4.7 / `fba398`, continued — post-team-session strategic-brief authoring under owner direction)** —
+  After the team-session closeout, owner directed an ultrathink-level
+  analysis of how to throw compute at the remaining substrate +
+  delivery sequence (WS2.2 → WS2.3 → WS4.1 → WS4.2 → WS4.3 → WS4.4 →
+  WS4.5 → ff1–ff6) without rushing or compromising. Applied
+  architectural-excellence lens to six open questions raised earlier;
+  resolved most to fact-finding/operational; surfaced one substrate
+  architectural amendment (WS4.4 test partition by ownership-of-invariant,
+  not by ownership-of-implementation) and four rotating-cast
+  coordination-protocol questions (mid-cycle retirement, coordinator
+  handoff under token pressure, grounding-cost amortisation,
+  comms-events as failure-mode channel). Authored addendum plan at
+  `.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/gate-1a-delivery-parallel-execution-addendum.plan.md`
+  with 12 frontmatter todos, dependency-graph-dictated 4-round
+  structure (~8–11 hours wall-clock through first tool shipped), and
+  10 inviolate quality invariants. Also committed the inherited
+  working-tree residual from prior 2026-05-21 sessions at `f4ca84f6`
+  (Molten WS3.3 adjacency primitives + Pelagic search-cli fixes +
+  Torrid agent-tools surface refactor + Celestial start-right-team
+  SKILL update + ADR-173 amendment + upstream-api-v0.7.0 plan + thread
+  records). Metacognition insight: my own first parallelisation
+  proposal pulled WS4.4 forward by deferring T7a smoke-test —
+  parallelism-driven re-shape that violated atomic-landing. The
+  architectural-excellence lens resolved it to a different re-shape
+  (separate type-invariant smoke-test in graph-core from
+  instantiation smoke-test in corpus-sdk) that is correct on its
+  own merits AND happens to enable the same parallelism. Captured
+  for next consolidation as a worked instance of the "good
+  architecture vs rushed architecture" distinction.
 - **2026-05-21 (Cirrus Circling Plume / `claude` / Opus 4.7 / `fba398`, six-agent team session, closeout owner)** —
   **landed the Inc.1d EEF concurrent-tenant planning amendment-set at commit `0cdaf58c`** (`docs(plans): land Inc.1d EEF concurrent-tenant amendment-set`; 7 files, +657/−129; all pre-commit gates green on first attempt; 87/87 turbo tasks, 28 cached, 1m44s). Team shape: four-slice file-disjoint partition + cross-cutting reviewer + elected gatekeeper. Slice owners: Gilded Beaming Eclipse (`0467d0`, Slice A graph-query-layer.plan.md), Stratospheric Gusting Squall (`cfe7da`, Slice B graph-stack.plan.md), Salty Snorkelling Pier (`5eb191`, Slice C graph-mvp-arc.plan.md + §1a gate-runner + elected gatekeeper), Opalescent Illuminating Galaxy (`2aa615`, Slice D eef-evidence-corpus + portfolio + conservation-map + new eef-first-feature.plan.md). Cross-cutting reviewer: Evergreen Climbing Canopy (`4a365e`) — per-slice PDR-044 vocabulary second-eye on all four slices (all CLEAN) + 8-row bidirectional cross-reference matrix verification + final coherence verdict GO. Coordinator handoff: Stratospheric opened the four-slice partition and routed §1a gate-runner; coordinator role transferred to Cirrus at 19:33Z via explicit active-acknowledgement (owner-corrected timing: pre-positioning is distinct from authority transfer). §1a inherited-tree gate-state at session-open: ALL GREEN per Salty's per-workspace run (agent-tools / search-cli / env / graph-project; 1505 tests passing at HEAD `688ccef2`); cascade-class failure mode cured. PDR-044 vocabulary discipline applied across all four slices + 3 supplements. Mid-session incident: Cirrus accidentally triggered shell command-substitution from markdown backticks in a double-quoted `--body` argument, causing a phantom `git commit` during Salty's gatekeeper-window; pre-commit hook failed on a flaky lifecycle-lease test and aborted; no on-disk damage; captured as rule candidate + `--body-file` CLI evidence point 2. Five peer team-member closeouts received (Stratospheric, Salty, Evergreen, Gilded, Opalescent) — no retained claims. Coordinator-side closeout: thread record refreshed; 5 pending-graduations entries captured (3 coordination patterns from Stratospheric, 1 napkin-refinement for closure-shape vs structural-antonym vocabulary, 1 backtick-substitution rule + CLI evidence point); napkin entry written; entry-point sweep clean.
 - **2026-05-21 (Sunlit Weaving Aurora / `claude` / Opus 4.7 (1M) / `a6574f`)** —
