@@ -159,6 +159,9 @@ const config: KnipConfig = {
     'packages/libs/graph-ingest': {
       project: ['src/**/*.ts'],
     },
+    'packages/libs/graph-project': {
+      project: ['src/**/*.ts'],
+    },
     'packages/libs/logger': {
       project: ['src/**/*.ts'],
     },

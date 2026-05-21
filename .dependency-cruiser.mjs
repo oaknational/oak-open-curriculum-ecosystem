@@ -48,6 +48,9 @@ export default {
           // graph-ingest subpath-export barrels consumed via package.json "exports"
           'graph-ingest/src/index\\.ts$',
           'graph-ingest/src/(strict-jsonld|jsonld-compatible|plain-json-tree|records|node-edge-list|custom-mapping)/index\\.ts$',
+          // graph-project subpath-export barrels consumed via package.json "exports"
+          'graph-project/src/index\\.ts$',
+          'graph-project/src/(property-graph|projection|adjacency)/index\\.ts$',
           // SDK and TypeDoc entry points consumed via tsup + typedoc.json
           'oak-curriculum-sdk/src/types/(schema-bridge|public-types)\\.ts$',
         ],

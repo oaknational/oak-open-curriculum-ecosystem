@@ -114,6 +114,7 @@ describe('createLibBoundaryRules', () => {
     expect(LIB_PACKAGES).toEqual([
       'env-resolution',
       'graph-ingest',
+      'graph-project',
       'logger',
       'search-contracts',
       'sentry-node',
@@ -121,6 +122,7 @@ describe('createLibBoundaryRules', () => {
     expect(FOUNDATION_LIB_PACKAGES).toEqual([
       'env-resolution',
       'graph-ingest',
+      'graph-project',
       'logger',
       'search-contracts',
     ]);
@@ -137,6 +139,7 @@ describe('createLibBoundaryRules', () => {
     expect(blockedLibs).toEqual([
       '../env-resolution/**',
       '../graph-ingest/**',
+      '../graph-project/**',
       '../search-contracts/**',
       '../sentry-node/**',
     ]);

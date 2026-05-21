@@ -13,6 +13,7 @@ packages:
   - packages/design/*
   - packages/libs/env-resolution
   - packages/libs/graph-ingest
+  - packages/libs/graph-project
   - packages/libs/logger
   - packages/libs/sentry-node
   - packages/libs/search-contracts
