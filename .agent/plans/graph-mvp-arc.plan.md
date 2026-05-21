@@ -35,25 +35,33 @@ foundation_alignment:
 isProject: false
 todos:
   - id: name-ai-client-adoption-owner
-    content: "Name the owner of AI-client adoption tracking and the tracking mechanism (which AI clients have adopted which Oak MCP tools, with what usage signal). Without this, the executive summary's teacher-value chain has no signal source. Required before gate-1 promotes to active. Resolves D-1."
+    content: "Name the owner of AI-client adoption tracking and the tracking mechanism (which AI clients have adopted which Oak MCP tools, with what usage signal). Without this, the executive summary's teacher-value chain has no signal source. Required before gate-1a promotes to active (per 2026-05-21 gate-split amendment; was previously gate-1, now the first-shipping gate is gate-1a). Resolves D-1."
     status: pending
     depends_on: []
-  - id: gate-0-substrate-floor
-    content: "Substrate floor for slice 1: graph-query-layer 7-op surface implemented per graph-query-layer.plan.md (matches the EEF plan's KG-independent substrate dependency). Acceptance: surface is implemented and substrate quality gates green; no surfacing required at this gate. Follow-up (post-arc): migrate the EEF strand corpus onto graph-corpus-sdk after graph-stack Inc.3 lands; not a slice-1 gate."
+  - id: gate-0a-substrate-floor-for-first-feature
+    content: "Substrate floor for the first user-facing EEF feature (2026-05-21 amendment — gate split). Lands graph-stack Inc.1d (WS4.4 + WS4.5; defined in [`graph-stack.plan.md`](connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md) — the spine names the substrate-floor semantics, the graph-stack plan owns the increment contract). Inc.1d ships the full polymorphic GraphView<TNode, TEdgeType> interface inside graph-corpus-sdk (all 7 method signatures, Result<T, E> discipline, NodeProjection recursive deep-path with array-stop, NodeFilter with full FieldPredicate arm set), the T7a DeepKeyPath compile-time smoke-test (load-bearing for the array-stop discipline), and the EefStrandsGraphView adapter implementing `subgraph` + `manifest` for EEF data with the sparse-relations surface on manifest per the assumptions-expert round 2026-04-30 verdict. The remaining 5 EEF operations land as typed `NotImplementedYet` Result stubs at this gate (interface contract complete; only implementations are sequenced). Substrate dependencies: WS4.1 (corpus-sdk scaffold), WS3.3 (adjacency primitives) — both in [`graph-stack.plan.md`](connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md). Disjoint from Threads ingestion path: no graph-ingest participation; EEF loader is corpus-local Zod inside graph-corpus-sdk. Parallel-safe with Threads work (WS4.2/4.3). Acceptance: WS4.4 + WS4.5 cycles closed atomically (test+product code per the foundational TDD invariant); type-check + lint + unit-test gates green across graph-corpus-sdk; T7a smoke-test passing; sparse-relations list on manifest exactly matches the 13 named strands."
     status: pending
     depends_on: []
-  - id: gate-1-eef-ships
-    content: "Slice 1 ships: all 20 todos in eef-evidence-corpus.plan.md complete against the repository-held EEF Toolkit JSON snapshot as the canonical implementation source until EEF clarifies provenance/refresh; tools/resources named per ADR-157 with `eef-*` prefix; ADR-123 + ADR-157 updated; freshness CI gate active without reconstructing data from scraped EEF pages; Sentry telemetry live; caveat-presence rate sampled; EEF partnership-conversation opener executed (contact named, first-contact action recorded with date + outcome); shape-understanding evidence answered per the spine template (§ Shape-Understanding Evidence Template)."
+  - id: gate-1a-first-eef-feature-ships
+    content: "First user-facing EEF MCP feature ships (2026-05-21 amendment — gate split). Delivery contract owned by [`eef-first-feature.plan.md`](sector-engagement/eef/current/eef-first-feature.plan.md) (ff1–ff6 todos enumerate the gate-1a surface by reference to the gate-1a-scoped subset of `eef-evidence-corpus.plan.md`). Spine-level acceptance: tools/resources named per ADR-157 with `eef-*` prefix; `_meta` source attribution preserved; structural citation envelope at the tool boundary (non-empty tuple compile-time + Zod min(1) runtime); ADR-175 freshness CI gate active (180-day threshold); EEF partnership-conversation opener executed (contact named, first-contact action recorded with date + outcome); shape-understanding evidence answered per the spine template (§ Shape-Understanding Evidence Template); `name-ai-client-adoption-owner` resolved (precondition for promotion). Substrate floor: gate-0a (graph-stack Inc.1d WS4.4 + WS4.5; see gate-0a todo for the substrate cross-reference). MCP tool home: existing `oak-curriculum-sdk` MCP module per ADR-179 surfacing discipline."
     status: pending
-    depends_on: [gate-0-substrate-floor, name-ai-client-adoption-owner]
+    depends_on: [gate-0a-substrate-floor-for-first-feature, name-ai-client-adoption-owner]
+  - id: gate-0b-substrate-completes
+    content: "Substrate completes (formerly gate-0; 2026-05-21 gate-split rename): the remaining 16 graph-layer MCP tools surfaced across prerequisite (6 ops), misconception (4 ops), and eef-strands (6 ops — everything except `subgraph-eef-strands` which shipped at gate-1a). Implements the remaining 5 EEF adapter operations (`summary`, `getNode`, `enumerateNodes`, `neighbours`, `findByTag`) and the prerequisite + misconception adapters per graph-query-layer.plan.md T3/T4/T5. Substrate dependencies: graph-stack Inc.3 (prerequisite + misconception adapters + remaining EEF operations). Acceptance: all 17 tools registered and visible in `tools/list`; the four NO-TRACER exclusions explicit per the T1 first-principles check; default projection bounds response size; ADR-123 updated with the residual 16 tools. The 17-tool exit-criterion of graph-query-layer.plan.md is achieved at gate-0b (gate-1a achieved the first 1; gate-0b achieves the remaining 16). Parallel-safe with gate-2 / gate-3a / gate-1b."
+    status: pending
+    depends_on: [gate-0a-substrate-floor-for-first-feature, "graph-stack Inc.3 prerequisite + misconception adapters + remaining EEF operations"]
+  - id: gate-1b-slice-1-completes
+    content: "Slice 1 completes (formerly gate-1; 2026-05-21 gate-split rename): the residual eef-evidence-corpus.plan.md surface lands — t3-methodology-resource, t4-strands-resource, t5-scoring-engine, t6-recommend-tool, t7-explain-tool, t8-compare-tool, t11-pp-review-prompt (second prompt), plus the gate-1b *full* portions of t14-telemetry / t15-negative-space-doc / t16-public-export / t17-register-resources / t18-adr-123-update / t19-e2e. Caveat-presence rate sampled across the full corpus tool suite; Sentry telemetry covers all corpus operations. Substrate dependencies: gate-0b (residual EEF adapter operations) and gate-1a (corpus envelope already in place). Parallel-safe with gate-2 / gate-3a / gate-0b."
+    status: pending
+    depends_on: [gate-1a-first-eef-feature-ships, gate-0b-substrate-completes]
   - id: gate-2-threads-ships
-    content: "Slice 2 ships: oak-kg-threads resource + oak-kg-get-thread-content tool complete via graph-corpus-sdk Oak Curriculum Ontology Threads adapter; inverse-edge query (Unit->Thread) verified; ADR-123 updated. Substrate floor: graph-stack Inc.1b (Threads adapter inside graph-corpus-sdk). PARALLEL-SAFE with gate-3a after gate-0 + Inc.1b; sequencing relative to gate-1 is the substrate-floor ordering only. Shape-understanding evidence answered per the spine template (§ Shape-Understanding Evidence Template)."
+    content: "Slice 2 ships: oak-kg-threads resource + oak-kg-get-thread-content tool complete via graph-corpus-sdk Oak Curriculum Ontology Threads adapter; inverse-edge query (Unit->Thread) verified; ADR-123 updated. Substrate floor: graph-stack Inc.1b (Threads adapter inside graph-corpus-sdk). PARALLEL-SAFE with gate-1a + gate-3a after Inc.1b lands (Threads slice does not depend on the EEF gates; substrate-floor ordering only). Shape-understanding evidence answered per the spine template (§ Shape-Understanding Evidence Template)."
     status: pending
-    depends_on: [gate-0-substrate-floor, "graph-stack Inc.1b Oak Ontology Threads adapter"]
+    depends_on: ["graph-stack Inc.1b Oak Ontology Threads adapter"]
   - id: gate-3a-mcg-subgraph-ships
-    content: "Slice 3a ships: oak-misconceptions-subgraph-for-thread (and optional -for-unit only if authorised) tool(s) complete on the bulk-derived legacy misconception graph factory data plus graph-stack Inc.1b Thread->Unit lookup; bounded sub-graph extraction primitive verified against maxResponseTokens = 16000 across the committed 20-context fixture manifest; ADR-123 + ADR-157 updated. PARALLEL-SAFE with gate-2 after gate-0 + Inc.1b. Non-Thread sub-work (bulk-derived graph construction, sub-graph extraction primitive, fixture manifest authoring) may proceed in parallel with Inc.1b — only the Thread-IRI input wiring step is blocked on Inc.1b. Shape-understanding evidence answered per the spine template (§ Shape-Understanding Evidence Template)."
+    content: "Slice 3a ships: oak-misconceptions-subgraph-for-thread (and optional -for-unit only if authorised) tool(s) complete on the bulk-derived legacy misconception graph factory data plus graph-stack Inc.1b Thread->Unit lookup; bounded sub-graph extraction primitive verified against maxResponseTokens = 16000 across the committed 20-context fixture manifest; ADR-123 + ADR-157 updated. PARALLEL-SAFE with gate-1a + gate-2 after Inc.1b lands. Non-Thread sub-work (bulk-derived graph construction, sub-graph extraction primitive, fixture manifest authoring) may proceed in parallel with Inc.1b — only the Thread-IRI input wiring step is blocked on Inc.1b. Shape-understanding evidence answered per the spine template (§ Shape-Understanding Evidence Template)."
     status: pending
-    depends_on: [gate-0-substrate-floor, "graph-stack Inc.1b Thread->Unit lookup"]
+    depends_on: ["graph-stack Inc.1b Thread->Unit lookup"]
   - id: amend-eef-plan
     content: "Amend sector-engagement/eef/current/eef-evidence-corpus.plan.md tool todos to apply `eef-*` prefix; update t18 (ADR-123) entry to record renamed tool names. Coordination amendment, no behaviour change."
     status: completed
@@ -87,12 +95,41 @@ todos:
     status: completed
     depends_on: []
   - id: learning-loop
-    content: "After each gate, run /jc-consolidate-docs to surface graduation candidates and update permanent docs. After gate-3a ships, run consolidation pass and consider archiving this spine plan with key outcomes mined to permanent docs per ADR-117."
+    content: "After each gate (gate-1a, gate-2, gate-3a, gate-0b, gate-1b), run /jc-consolidate-docs to surface graduation candidates and update permanent docs. After all five gates ship, run a final consolidation pass and consider archiving this spine plan with key outcomes mined to permanent docs per ADR-117. 2026-05-21 amendment: gate-1a is the new first-shipping gate (smallest cycle from substrate floor to user-facing feature); the consolidation cadence runs accordingly."
     status: pending
-    depends_on: [gate-3a-mcg-subgraph-ships]
+    depends_on: [gate-1a-first-eef-feature-ships, gate-1b-slice-1-completes, gate-2-threads-ships, gate-3a-mcg-subgraph-ships, gate-0b-substrate-completes]
 ---
 
 # Graph MVP Arc — Three-Slice Substrate-And-Surface Spine
+
+## 2026-05-21 amendment — gate-0 / gate-1 sequence-first split
+
+Owner-directed sequencing change. The first user-facing EEF MCP
+feature ships at the new **gate-1a** (atop graph-stack **Inc.1d**:
+WS4.4 GraphView interface + WS4.5 EEF subgraph+manifest adapter),
+ahead of substrate completion. The former gate-0 and gate-1 are
+renamed gate-0b and gate-1b respectively — same scope, no
+reduction. The full slice-1 surface still ships; it ships in two
+tranches.
+
+**No scope reduction. No quality compromise. No architectural
+shortcut.** The full polymorphic GraphView interface ships at
+Inc.1d; the T7a DeepKeyPath compile-time discipline ships at
+Inc.1d; the structural citation/caveat/freshness envelope ships at
+gate-1a; the ADR-175 freshness CI gate is active at gate-1a; the
+`eef-*` namespace + `_meta` attribution discipline applies from
+day one. The change is sequencing only. Net additional work over
+the unsplit sequencing is roughly +10–15% (ADR-123 amends twice;
+T7/T19 extend across two passes; T6 MCP registration extends),
+accepted per owner direction as the price of earlier first
+delivery.
+
+The substrate sequencing change is propagated to
+[ADR-173](../../docs/architecture/architectural-decisions/173-graph-stack-topology.md)
+§First-wave ingestion scope (concurrent EEF strands attachment
+amendment) and to
+[`graph-stack.plan.md`](connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md)
+Inc.1 (new Inc.1d sub-increment).
 
 ## Executive Summary
 
@@ -101,7 +138,10 @@ surfaces for the three corpora the MVP touches — EEF strands, Oak
 ontology Threads, Oak misconceptions — as three independently-navigable
 slices. Each slice closes when its substrate is proven, its shape is
 understood, and its surfacing-design lessons are recorded. Slice 1
-additionally opens the EEF partnership conversation.
+additionally opens the EEF partnership conversation. **Slice 1's first
+user-facing tool ships ahead of substrate completion** under the
+2026-05-21 gate-0a/gate-1a split (above); the rest of slice 1 lands at
+gate-1b after substrate completion at gate-0b.
 
 **Out of scope here**: cross-corpus composition. The first concrete
 combinatorial tool (formerly slice 3b) lives in
@@ -111,20 +151,25 @@ immediately after this arc's gate-3a closes; graph-stack Inc.3 is the
 precursor substrate work that must complete before the combinatorial
 arc's Phase 1 can open. No conditional triggers — definite ordering.
 
-**Status**: gate-0 substrate floor is **pending** — the
-graph-query-layer 7-op surface has not yet been implemented; its plan
-is `current` with all todos `pending` and no `GraphView` interface
-exists in code. The three substrate streams are co-primary in value;
-gates 2 and 3a are parallel-safe after gate-0 + graph-stack Inc.1b
-(Threads adapter inside graph-corpus-sdk) lands.
+**Status**: gate-0a substrate floor is **pending** — graph-stack
+Inc.1d (WS4.4 GraphView interface + WS4.5 EEF subgraph+manifest
+adapter) has not yet been authored; the EEF adapter is a new
+concurrent Inc.1 tenant per ADR-173 §First-wave ingestion scope
+2026-05-21 amendment. The three substrate streams remain co-primary
+in value; gate-1a, gate-2, gate-3a are parallel-safe after their
+respective substrate floors land (gate-0a Inc.1d → gate-1a;
+graph-stack Inc.1b → gate-2 and gate-3a). Gate-0b and gate-1b are
+parallel-safe after graph-stack Inc.3 lands.
 
 **Dependency named honestly**: teacher value is downstream of AI-client
 adoption. AI clients (Claude, ChatGPT, Oak's own clients) must adopt
 these MCP tools and put them in front of teachers for downstream user
 value to materialise. AI-client adoption is **not** a spine deliverable.
 A spine todo (`name-ai-client-adoption-owner`, resolves D-1) commits to
-naming the tracking owner + mechanism before gate-1 promotes to active;
-this arc cannot solve adoption but it does not ship gate-1 into a void.
+naming the tracking owner + mechanism before gate-1a promotes to active
+(per the 2026-05-21 gate-split amendment; gate-1a is now the first
+user-facing-feature gate; the same precondition applies); this arc
+cannot solve adoption but it does not ship gate-1a into a void.
 Downstream teacher-outcome impact is still named, not delivered.
 
 **What changed in the 2026-05-11 reshape** (vs. earlier 4-slice shape):
@@ -238,14 +283,19 @@ acceptance criterion.
 
 ## Slice 1 — EEF Evidence Corpus MCP Surface
 
-**Status**: pending substrate floor (gate-0).
+**Status**: pending substrate floor (gate-0a per 2026-05-21
+amendment; previously gate-0).
 **Namespace**: `eef-*` (per ADR-157).
-**Substrate floor**: graph-query-layer 7-op surface — matches the
-substrate dependency the EEF plan itself names (`KG-Independent`
-section: thin in-process operations layer over typed JSON). The 7-op
-surface has not yet been implemented; gate-0 closes when it is. Migration
-of the EEF strand corpus onto `graph-corpus-sdk` is sequenced after
-graph-stack Inc.3 lands — **not** a slice-1 gate.
+**Substrate floor**: graph-stack Inc.1d (WS4.4 + WS4.5) — the
+GraphView<TNode, TEdgeType> interface + the EEF subgraph+manifest
+adapter as concurrent Inc.1 tenants of `graph-corpus-sdk` per
+ADR-173 §First-wave ingestion scope 2026-05-21 amendment. Pulls
+forward the EEF adapter from its former Inc.3 sequencing so the
+first user-facing EEF feature ships at gate-1a ahead of substrate
+completion. The remaining 5 EEF adapter operations land as typed
+`NotImplementedYet` Result stubs at Inc.1d (preserving the full
+interface contract surface) and are implemented at graph-stack
+Inc.3 alongside the prerequisite and misconception adapters.
 **Consumes**:
 [`sector-engagement/eef/current/eef-evidence-corpus.plan.md`](sector-engagement/eef/current/eef-evidence-corpus.plan.md)
 (20 todos, drafted, current/).
@@ -266,17 +316,22 @@ graph-stack Inc.3 lands — **not** a slice-1 gate.
   with EEF about provenance, refresh-path, and downstream-adoption
   surfaces. The case strengthens in the follow-on combinatorial arc.
 
-### What ships (with applied namespace)
+### What ships (with applied namespace, segmented by gate)
 
-| Primitive | Name | Owning todo in eef-evidence-corpus |
-|---|---|---|
-| Resource | `curriculum://eef-methodology` | t3 |
-| Resource | `curriculum://eef-strands` | t4 |
-| Tool | `eef-recommend-evidence-for-context` | t6 (rename) |
-| Tool | `eef-explain-evidence-strand` | t7 (rename) |
-| Tool | `eef-compare-evidence-strands` | t8 (rename) |
-| Prompt | `eef-evidence-grounded-lesson-plan` | t10 (rename) |
-| Prompt | `eef-pupil-premium-strategy-review` | t11 (rename) |
+Slice 1 ships in two tranches per the 2026-05-21 gate-0a / gate-1a split. The first user-facing primitives ship at gate-1a (first-feature surface, atop the Inc.1d substrate floor); the residual corpus surface lands at gate-1b alongside the remaining EEF adapter operations from graph-stack Inc.3.
+
+| Primitive | Name | Owning todo in eef-evidence-corpus | Ships at |
+|---|---|---|---|
+| Tool | `eef-explore-evidence-for-context` | t6a (new at gate-1a; consumes GraphView.subgraph + corpus envelope) | gate-1a |
+| Prompt | `eef-evidence-grounded-lesson-plan` | t10 (rename) | gate-1a |
+| Resource | `curriculum://eef-methodology` | t3 | gate-1b |
+| Resource | `curriculum://eef-strands` | t4 | gate-1b |
+| Tool | `eef-recommend-evidence-for-context` | t6 (rename) | gate-1b |
+| Tool | `eef-explain-evidence-strand` | t7 (rename) | gate-1b |
+| Tool | `eef-compare-evidence-strands` | t8 (rename) | gate-1b |
+| Prompt | `eef-pupil-premium-strategy-review` | t11 (rename) | gate-1b |
+
+Internal infrastructure todos from `eef-evidence-corpus.plan.md` (t1-corpus-shape, t2-zod-loader, t9-guidance-constant, t12-citation-shape, t13-freshness-gate, t20-credits) land at gate-1a as preconditions for the gate-1a primitives. Cross-cutting todos (t14-telemetry, t15-negative-space-doc, t16-public-export, t17-register-resources, t18-adr-123-update, t19-e2e) land partially at gate-1a (scoped to the gate-1a tool + prompt) and complete at gate-1b. The full per-tranche breakdown lives in [`eef-first-feature.plan.md`](sector-engagement/eef/current/eef-first-feature.plan.md) (gate-1a delivery contract) and `eef-evidence-corpus.plan.md` (slice-wide enumeration).
 
 ### Acceptance — Slice 1
 
@@ -318,10 +373,13 @@ resolution over the `graph-project` adjacency primitives. Inc.1 is
 decomposed into 1a (substrate scaffolding) / 1b (Threads adapter +
 Thread→Unit lookup) / 1c (end-to-end query proof) per graph-stack's
 own sub-incrementation.
-**Sequencing**: PARALLEL-SAFE with gate-3a after gate-0 + Inc.1b lands.
-The previous strict gate-1 → gate-2 ordering is relaxed: the three
-substrate streams are co-primary; slice 2 and slice 3a need not wait on
-slice 1 once their own substrate floors exist.
+**Sequencing**: PARALLEL-SAFE with gate-1a + gate-3a after Inc.1b
+lands (per 2026-05-21 amendment: gate-2 no longer depends on the
+EEF gates because the Threads adapter does not consume the
+GraphView<TNode, TEdgeType> interface — Threads uses a different
+adapter shape, IRI enumeration + inverse-edge resolution; the
+substrate streams are co-primary; slice 2 and slice 3a need not
+wait on slice 1's gates once their own substrate floors exist).
 
 ### Value streams served by slice 2
 
@@ -458,20 +516,25 @@ produces.
 
 ## Sequencing and Gates
 
-gate-0 (slice-1 substrate floor) and graph-stack Inc.1b (Threads
-adapter + Thread→Unit lookup) are independent prerequisites for
-different downstream slices. They run concurrently from the start.
+**Restructured 2026-05-21 (gate-0/gate-1 sequence-first split).**
+gate-0a (first-feature substrate floor) and graph-stack Inc.1b
+(Threads adapter + Thread→Unit lookup) are independent prerequisites
+for different downstream gates. They run concurrently from the start.
 
 ```text
                   name-ai-client-adoption-owner
                               │
-                              │  (precondition for gate-1)
+                              │  (precondition for gate-1a)
                               ▼
-gate-0: graph-query-layer 7-op surface implemented
-        (slice-1 substrate floor)
+gate-0a: graph-stack Inc.1d (WS4.4 GraphView interface
+         + WS4.5 EEF subgraph+manifest adapter)
+         — first-feature substrate floor
                               │
                               ▼
-gate-1: SLICE 1 SHIPS (EEF evidence corpus, eef-* namespace)
+gate-1a: FIRST EEF FEATURE SHIPS
+         (eef-explore-evidence-for-context tool
+          + eef-evidence-grounded-lesson-plan prompt
+          + corpus envelope + freshness CI gate)
 
 
 graph-stack Inc.1b (Threads adapter + Thread→Unit lookup)
@@ -481,40 +544,82 @@ graph-stack Inc.1b (Threads adapter + Thread→Unit lookup)
 gate-2: SLICE 2 SHIPS              gate-3a: SLICE 3a SHIPS
         (oak-kg-* namespace)               (oak-misconceptions-*;
                                             legacy factory path)
-                              [gate-2 and gate-3a PARALLEL-SAFE]
 
-(all three gates closed → MVP arc complete)
+
+graph-stack Inc.3 (prerequisite + misconception adapters
+                   + remaining 5 EEF operations)
+                              │
+                ┌─────────────┴─────────────┐
+                ▼                           ▼
+gate-0b: SUBSTRATE COMPLETES        gate-1b: SLICE 1 COMPLETES
+         (remaining 16 graph-layer           (recommend/explain/compare
+          MCP tools)                          + second prompt)
+
+[gate-1a, gate-2, gate-3a, gate-0b, gate-1b all PARALLEL-SAFE
+ once their respective substrate floors land]
+
+(all five gates closed → MVP arc complete)
                               │
                               ▼
 gate-learning-loop: /jc-consolidate-docs after each gate;
-                    archive after gate-3a
+                    archive after the five-gate set is closed
                               │
                               ▼
 [combinatorial arc Phase 1 — sequenced immediately after gate-3a;
  see graph-combinatorial-arc.plan.md. graph-stack Inc.3 lands as
- the precursor substrate work for combinatorial Phase 1.]
+ the precursor substrate work for combinatorial Phase 1, and is
+ also the substrate floor for gate-0b/gate-1b.]
 ```
 
 **Sequence positions** (definite ordering, no conditional triggers):
 
-- `name-ai-client-adoption-owner` → gate-1 (D-1 resolution gates gate-1
+- `name-ai-client-adoption-owner` → gate-1a (D-1 resolution gates gate-1a
   promotion to active; without an adoption-tracking owner named,
-  gate-1 ships into a void).
-- gate-0 → gate-1 (substrate floor implemented before slice 1 ships).
+  gate-1a ships the first user-facing feature into a void).
+- gate-0a → gate-1a (Inc.1d substrate floor implemented before the
+  first feature ships).
 - graph-stack Inc.1b → gate-2 (Threads adapter + inverse-edge lookup
   must exist before slice 2 can ship its surface).
 - graph-stack Inc.1b → gate-3a (Thread→Unit lookup must exist for the
   Thread-IRI input path; misconception traversal stays on the legacy
   factory under explicit `_meta` disclosure).
+- graph-stack Inc.3 → gate-0b (remaining 16 graph-layer tools surface
+  the residual adapter operations landed at Inc.3).
+- gate-1a + gate-0b → gate-1b (residual corpus tools require the
+  EEF adapter's enumerateNodes from Inc.3, surfaced as MCP tools
+  at gate-0b; the corpus envelope was already in place at gate-1a).
 - gate-3a → combinatorial arc Phase 1 (immediate sequence; no
   intervening tripwire or activation event).
 - graph-stack Inc.3 misconception adapter → migration plan promotion
   (`oak-misconceptions-substrate-migration.plan.md` opens here,
   precedes combinatorial arc Phase 1).
 
-**Parallel-safe**: gate-1, gate-2, and gate-3a may run concurrently
-once their substrate floors land. The three substrate streams are
-co-primary; no single slice's surfacing blocks another's.
+**Parallel-safe**: gate-1a, gate-2, gate-3a, gate-0b, and gate-1b
+may run concurrently once their substrate floors land. No single
+gate's surfacing blocks another's.
+
+**Architectural commitments at gate-1a, all together as the
+surfacing floor for the first user-facing feature (ship in full)**:
+
+1. **Full GraphView<TNode, TEdgeType> interface** authored at
+   Inc.1d (all 7 method signatures; only `subgraph` and `manifest`
+   on EEF are implemented; the other 5 EEF operations and all
+   prerequisite/misconception operations are typed `NotImplementedYet`
+   Result stubs satisfying the contract surface).
+2. **T7a DeepKeyPath compile-time smoke-test** — load-bearing for
+   the array-stop discipline.
+3. **Mandatory projection** with minimal defaults and opt-in detail.
+4. **Structural citation/caveat/freshness envelope** at the tool
+   boundary — non-empty tuple compile-time + Zod min(1) runtime.
+5. **`eef-*` namespace + `_meta` attribution** per ADR-157.
+6. **Freshness CI gate at 180 days** per ADR-175 binding.
+7. **Sentry telemetry seam pattern** — instrumented on the one
+   gate-1a operation; the pattern is full.
+8. **TDD doctrine, atomic test+product-code landing, specialist
+   reviewer dispatch, all quality gates green** — every commit, no
+   exceptions.
+9. **`graph-corpus-sdk` as the EEF adapter's home** per ADR-173 §6;
+   the MCP tool wiring lives in `oak-curriculum-sdk` per ADR-179.
 
 ## Sequencing of Spine-Owned Todos
 
@@ -584,11 +689,11 @@ the ADR carries it.
 
 | Risk | Severity | Mitigation |
 |---|---|---|
-| Substrate floor for slice 1 (`graph-query-layer`) takes longer than expected; slice 1 ships later than "soon" feels | Medium | The MVP framing accepts honest substrate cost; "soon" means earliest substrate-allows, not artificial deadline. Visible progress through gate-0 substrate increments. |
+| Substrate floor for slice 1 (`graph-query-layer`) takes longer than expected; slice 1 ships later than "soon" feels | Medium | The MVP framing accepts honest substrate cost; "soon" means earliest substrate-allows, not artificial deadline. 2026-05-21 amendment shortens the path: gate-1a ships the first user-facing feature atop the minimum substrate floor (Inc.1d) rather than waiting on full substrate completion (Inc.3). Visible progress through gate-0a, then gate-1a; remaining substrate at gate-0b. |
 | EEF tool rename breaks downstream consumers | Low | Tool surface is not yet shipped under any name; rename costs zero. Document in ADR-123. |
 | EEF source-authority clarification requires rewriting freshness gate + ingestion + Inc.3 EEF adapter together | Medium | Owner direction 2026-05-11: the repository-held EEF Toolkit JSON file is the canonical source for now; no premature seam abstraction. If EEF clarifies that the canonical source is an API or supplier-pushed file, the freshness CI gate, the tools' ingestion path, and the future Inc.3 graph-corpus-sdk EEF adapter must all be rewritten together against the new authority. The rewrite cost is accepted as the price of avoiding a premature seam; the touch surface is named so the cost is visible. |
 | Slice 3a's legacy-factory tech debt grows during Inc.2/3 wait | Medium | `oak-misconceptions-substrate-migration.plan.md` has a definite sequence position (after Inc.3 misconception-adapter, before combinatorial arc Phase 1); ADR-123 records the legacy path explicitly so the contract for migration is visible. |
-| AI-client adoption stalls; teacher value never materialises | Medium | Named honestly in the executive summary. Spine todo `name-ai-client-adoption-owner` is the forcing function — gate-1 promotion blocks until owner + tracking mechanism are named. This arc cannot solve adoption; it can only refuse to ship surfaces into a void. |
+| AI-client adoption stalls; teacher value never materialises | Medium | Named honestly in the executive summary. Spine todo `name-ai-client-adoption-owner` is the forcing function — gate-1a promotion blocks until owner + tracking mechanism are named (per 2026-05-21 amendment; gate-1a is the first user-facing gate). This arc cannot solve adoption; it can only refuse to ship surfaces into a void. |
 | Combinatorial arc loses Inc.3 forcing-function after slice 3b moves out | Medium | `amend-graph-stack-inc-3-consumer-ref` todo lands the cross-reference from graph-stack Inc.3 to graph-combinatorial-arc.plan.md. Inc.3 retains a named downstream consumer; the combinatorial arc is `current/`, not deferred. |
 | Specialist reviewer load becomes serial bottleneck | Medium | Slices 2 and 3a are parallel-safe; reviewer dispatch happens at each gate, not all at once. |
 
@@ -630,9 +735,8 @@ pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check \
 
 Plus per-slice gates:
 
-- **gate-1**: `pnpm test` exercises eef-evidence-corpus E2E shape
-  conditions (t19); freshness CI gate active (t13); Sentry telemetry
-  visible (t14); shape-understanding evidence recorded.
+- **gate-1a** (first feature): `pnpm test` exercises t6a-explore-tool + t10-lesson-plan-prompt E2E shape conditions (t19 *partial*); freshness CI gate active (t13 *full* per ADR-175 binding); Sentry telemetry visible on the one tool (t14 *partial*, full seam pattern); shape-understanding evidence recorded.
+- **gate-1b** (slice 1 completes): `pnpm test` exercises full eef-evidence-corpus E2E shape conditions (t19 *full*); Sentry telemetry covers all corpus operations (t14 *full*); shape-understanding evidence recorded for the residual surface.
 - **gate-2**: E2E test verifies all `curric:Thread` enumeration and
   inverse-edge resolution returns expected unit lists;
   shape-understanding evidence recorded.
@@ -666,7 +770,7 @@ Reference
 - **Collaboration claim registration**: required when promoting any of
   the underlying plans (eef-evidence-corpus, graph-stack, etc.) from
   `current/` to `active/`.
-- **Mid-arc checkpoints**: at gate-1, gate-2, gate-3a — run
+- **Mid-arc checkpoints**: at gate-1a, gate-2, gate-3a, gate-0b, gate-1b (per 2026-05-21 amendment) — run
   `/jc-consolidate-docs` graduation scan; surface any pattern candidates;
   capture shape-understanding evidence to permanent docs.
 - **Handoff closure**: every session ends with `next-session.md` updated
@@ -774,7 +878,7 @@ thread record.
 
 | ID | Decision | Resolution needed by |
 |---|---|---|
-| **D-1** | **AI-client adoption tracking owner.** AI-client adoption is currently un-tracked anywhere in the repo; the executive summary names it as a load-bearing downstream dependency for teacher value. **Resolution path**: spine todo `name-ai-client-adoption-owner` is the forcing function — gate-1 cannot promote to active until that todo names the owner and tracking mechanism. | Resolved when `name-ai-client-adoption-owner` completes; gate-1 promotion blocked until then |
+| **D-1** | **AI-client adoption tracking owner.** AI-client adoption is currently un-tracked anywhere in the repo; the executive summary names it as a load-bearing downstream dependency for teacher value. **Resolution path**: spine todo `name-ai-client-adoption-owner` is the forcing function — gate-1a (per 2026-05-21 amendment) cannot promote to active until that todo names the owner and tracking mechanism. | Resolved when `name-ai-client-adoption-owner` completes; gate-1a promotion blocked until then |
 | **D-2** | **Per-unit misconception variant (`oak-misconceptions-subgraph-for-unit`)**. Default is skip per slice 3a plan WS2 cycle 1; gate at owner direction or T0 check. | At slice 3a opening (current → active) |
 | **D-3** | **`oak-misconceptions-substrate-migration.plan.md` sequence position** — RESOLVED 2026-05-11. Migration plan promotes from `future/` to `current/` immediately after graph-stack Inc.3 misconception-adapter todos land; precedes combinatorial arc Phase 1 as a required precursor. Definite sequence position, no conditional trigger. See Slice 3a § Substrate path. | Resolved |
 | **D-4** | **Topology BLOCKERs from 2026-05-07 architecture-expert-betty review** — RESOLVED 2026-05-11. Both BLOCKERs (WS4 sequencing leak; `practice-graph` tier placement) verified CLOSED in `graph-stack.plan.md` and ADR-173 (graph-corpus-sdk-scaffold sequenced first with Oak extraction confined inside the SDK boundary; `practice-graph` placed under `agent-graphs/` outside substrate package tiers). Reviewer attestations: `architecture-expert-betty` and `assumptions-expert` independently verified. Sub-task **D-4a CLOSED** 2026-05-11: ADR-041 amended to add `agent-graphs/` and regularise `agent-tools/` as top-level workspace tiers; status `Accepted (Revised)`; ADR-173 §Open Questions:1 cross-linked. ADR-173 ratification gate unblocked. | Resolved |

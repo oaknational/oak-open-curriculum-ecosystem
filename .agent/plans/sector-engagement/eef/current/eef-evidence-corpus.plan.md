@@ -14,11 +14,11 @@ status: current
 isProject: false
 todos:
   - id: t1-corpus-shape
-    content: "Define EvidenceCorpus { readonly view: GraphView<...>; rank; explain; compare } wrapping shape with Result<T, E> returns; sketch ExplainOptions (TNode-independent), CompareOptions with ComparisonDimension literal union, RankOptions context shape. EEF strands becomes the first concrete corpus."
+    content: "Define EvidenceCorpus { readonly view: GraphView<...>; rank; explain; compare } wrapping shape with Result<T, E> returns. Per type-expert F3 (2026-05-21): the rank/explain/compare error unions include NotImplementedYet (readonly kind: 'NotImplementedYet' discriminant per repo convention) so the gate-1a stub implementations (Result.err({ kind: 'NotImplementedYet', operation: 'rank' }) and similar) compile against the same surface gate-1b will enable. Sketch ExplainOptions (TNode-independent), CompareOptions with ComparisonDimension literal union, RankOptions context shape. EEF strands becomes the first concrete corpus."
     status: pending
     workstream: corpus-loading
   - id: t2-zod-loader
-    content: "Zod-validated loader for the repository-held canonical eef-toolkit.json snapshot (preserves F1, F4, F7; revises F2/F3 to remove the school_context_schema.properties carve-out — typed concretely as SchoolContextSchema with the 9 closed properties, each a JsonSchemaProperty). Validate meta.last_updated as z.string().date() and meta.data_version as z.string().regex(semver) — not bare z.string()."
+    content: "Zod-validated loader for the repository-held canonical eef-toolkit.json snapshot (preserves F1, F4, F7; revises F2/F3 to remove the school_context_schema.properties exemption — typed concretely as SchoolContextSchema with the 9 closed properties, each a JsonSchemaProperty). Validate meta.last_updated as z.string().date() and meta.data_version as z.string().regex(semver) — not bare z.string(). Per type-expert F4 (2026-05-21): the loader also computes schema_hash at load time (SHA-256 over the loaded-and-validated strand records under canonical serialisation, truncated to 16 hex characters; matches packages/core/graph-core/src/canon/canonicalize.ts discipline) so manifest() remains infallible and the loader is the failure boundary for hash-related failures."
     status: pending
     workstream: corpus-loading
   - id: t3-methodology-resource
@@ -33,6 +33,10 @@ todos:
     content: "ScoringEngine with composite weighting (40/30/20/10), null-impact guard (F5), and rationale generation (R1, R2, R7). RankedResult uses non-empty tuple types: caveats: readonly [string, ...string[]], citations: readonly [Citation, ...Citation[]]."
     status: pending
     workstream: recommend
+  - id: t6a-explore-tool
+    content: "eef-explore-evidence-for-context tool (2026-05-21 amendment — gate-1a first-feature tool). Composes GraphView.subgraph (Inc.1d EEF adapter, WS4.5) + the corpus envelope (citations, caveats, freshness, source attribution); response shape is a typed subgraph of EEF strands matching the seed context (subject + keyStage + optional focus), NOT a ranked list. The subgraph topology is the response — the connections between strands are pedagogically meaningful for evidence. Citation discipline is structural at the tool boundary per t12-citation-shape (non-empty tuple compile-time + Zod min(1) runtime); the prompt projects the subgraph into a teacher-readable narrative without paraphrasing citations away. Sentry telemetry per t14-telemetry pattern instrumented on this one operation; pattern is full, instrumentation scope is the one tool. Lives in the existing oak-curriculum-sdk MCP module per ADR-179 surfacing discipline. Ships at gate-1a; t6-recommend-tool ships separately at gate-1b with the t5-scoring-engine."
+    status: pending
+    workstream: explore
   - id: t6-recommend-tool
     content: "eef-recommend-evidence-for-context tool composing GraphView.enumerate_nodes + ScoringEngine.rank, with explicit data_coverage in response (F8, R8)."
     status: pending
@@ -106,16 +110,21 @@ the restructure for an independent verification pass; after that pass
 confirmed no semantic loss (see [`../reference/conservation-map.md`](../reference/conservation-map.md)
 §N), `originals/` was deleted. The pre-session predecessor remains
 permanently recoverable via `git show e2796757:<path>`.
-**Last Updated**: 2026-05-11 (workstream overlay added: 20 todos grouped into 9 capability workstreams + 1 coordination workstream to expose intra-slice parallelism; underlying todo content preserved verbatim).
+**Last Updated**: 2026-05-21 (Torrid Glowing Flame / claude / opus-4-7-1m / 5ab0ec) — gate-1a / gate-1b sequence-first split authored per owner direction; new todo `t6a-explore-tool` added for the first-feature `eef-explore-evidence-for-context` tool consumed by gate-1a; §Gate grouping table records the split. Underlying t1–t20 content preserved verbatim. Previous: 2026-05-11 (workstream overlay added: 20 todos grouped into 9 capability workstreams + 1 coordination workstream to expose intra-slice parallelism; underlying todo content preserved verbatim).
 **Branch**: `feat/eef_exploration` (originating session); execution branch
 TBD when promoted to ACTIVE.
 **Increment**: 2 (with EEF-side of 3 and 4) of the EEF graph-and-corpus
 delivery sequence.
 **MVP arc**: this plan is **slice 1** of the
-[graph-mvp-arc spine](../../../graph-mvp-arc.plan.md). Slice 1's gate
-acceptance criteria require the `eef-*` prefix and the explicit-source-
-attribution discipline addendum to ADR-157. Both are coordination
-amendments that landed alongside the spine plan on 2026-05-07.
+[graph-mvp-arc spine](../../../graph-mvp-arc.plan.md). Slice 1 ships in two
+tranches per the 2026-05-21 amendment below: **gate-1a** (first user-facing
+EEF MCP feature; owned end-to-end by
+[`./eef-first-feature.plan.md`](./eef-first-feature.plan.md) by reference)
+and **gate-1b** (remaining slice-1 surface — recommend/explain/compare
+tools, second prompt, full telemetry, registration, E2E). Both gates
+require the `eef-*` prefix and the explicit-source-attribution discipline
+addendum to ADR-157; both are coordination amendments that landed
+alongside the spine plan on 2026-05-07.
 
 **Partnership-value framing (2026-05-11 reshape)**: slice 1 opens the
 EEF partnership conversation as a co-primary value stream alongside
@@ -126,6 +135,70 @@ case lives in the follow-on
 LLM/outcome evaluation lives in
 [`../future/eef-outcome-evaluation-infrastructure.plan.md`](../future/eef-outcome-evaluation-infrastructure.plan.md).
 Teacher value is downstream of AI-client adoption.
+
+## 2026-05-21 amendment — gate-1a / gate-1b split (sequence-first pull-forward)
+
+Owner-directed sequencing change: the first user-facing EEF MCP
+feature ships at gate-1a (a new gate added to
+[`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md)) before slice 1
+completes at gate-1b (the renamed former gate-1). The split is
+**sequencing only** — no scope reduction; the full slice-1 surface
+still ships, in two tranches. Architectural commitments do not
+shrink: full GraphView interface at Inc.1d (graph-stack WS4.4),
+DeepKeyPath array-stop discipline, structural citation envelope,
+ADR-175 freshness CI gate, ADR-157 `eef-*` namespace + `_meta`
+attribution all ship at gate-1a.
+
+### Gate grouping
+
+| Todo | Gate | Notes |
+|---|---|---|
+| t1-corpus-shape | **gate-1a** | EvidenceCorpus wrapping shape ships; rank/explain/compare method slots present in the type (delegating to `NotImplementedYet` Result variants until gate-1b enables them) so consumers compile against the full surface |
+| t2-zod-loader | **gate-1a** | Full Zod-validated loader; Phase B findings 5+6 from graph-query-layer applied (related_strands optional, related_guidance_reports as `{title, url}` objects) |
+| t3-methodology-resource | gate-1b | Methodology+caveats resource (graph factory) |
+| t4-strands-resource | gate-1b | Strands resource (graph factory) |
+| t5-scoring-engine | gate-1b | Composite weighting + rationale generation |
+| **t6a-explore-tool** | **gate-1a** | New (this amendment): `eef-explore-evidence-for-context`, subgraph-shaped response with corpus envelope |
+| t6-recommend-tool | gate-1b | Recommend tool (renamed scope; ships after scoring engine) |
+| t7-explain-tool | gate-1b | Explain tool |
+| t8-compare-tool | gate-1b | Compare tool |
+| t9-guidance-constant | **gate-1a** | AGGREGATED_EEF_EVIDENCE_GUIDANCE constant; consumed by t10 prompt at gate-1a and by t6/t7/t8/t11 at gate-1b |
+| t10-lesson-plan-prompt | **gate-1a** | `eef-evidence-grounded-lesson-plan` prompt; projects t6a subgraph result into a teacher-readable narrative with structurally-preserved citations |
+| t11-pp-review-prompt | gate-1b | Pupil-premium strategy review prompt (second prompt) |
+| t12-citation-shape | **gate-1a** | Structural citation discipline; non-empty tuple compile-time + Zod min(1) runtime — load-bearing architectural commitment for both gates |
+| t13-freshness-gate | **gate-1a** | ADR-175 binding; freshness CI gate active before any user-facing surface ships |
+| t14-telemetry | gate-1a *partial* / gate-1b *full* | Sentry seam pattern shipped at gate-1a with one tool instrumented; remaining instrumentation extends at gate-1b |
+| t15-negative-space-doc | gate-1a *partial* / gate-1b *full* | Subgraph-projection default-projection fields documented at gate-1a; recommend/explain/compare projection additions documented at gate-1b |
+| t16-public-export | gate-1a *partial* / gate-1b *full* | EvidenceCorpus type + t6a tool + t10 prompt exported at gate-1a; recommend/explain/compare tool types + second prompt exported at gate-1b |
+| t17-register-resources | gate-1a *partial* / gate-1b *full* | t10 prompt registered at gate-1a; resources + remaining tools/prompt registered at gate-1b |
+| t18-adr-123-update | gate-1a *partial* / gate-1b *full* | One tool + one prompt recorded at gate-1a; remaining primitives recorded at gate-1b. ADR-123 amends twice; bounded coordination cost accepted per owner direction (sequencing over single-batch update) |
+| t19-e2e | gate-1a *partial* / gate-1b *full* | Shape conditions for t6a + t10 at gate-1a; full slice-1 E2E at gate-1b |
+| t20-credits | **gate-1a** | EEF + John Roberts attribution; binding before any user-facing surface ships |
+
+### Why this split
+
+The split delivers the first user-facing EEF MCP feature earlier
+without compromising the eventual full slice-1 surface. Three
+architectural commitments ship in full at gate-1a (and were
+the load-bearing reasons to amend the sequencing rather than
+shrinking scope):
+
+1. **Full GraphView interface at graph-stack Inc.1d (WS4.4)** — the
+   `subgraph` + `manifest` implementations on EEF land into a
+   complete contract that the remaining 5 operations (Inc.3) plug
+   into without reshape. Sequencing is changing; the interface
+   contract is not.
+2. **DeepKeyPath array-stop discipline (T7a compile-time smoke-test)** —
+   ships at WS4.4 alongside the interface. Non-optional.
+3. **Structural citation/caveat/freshness envelope at the tool
+   boundary** (t12, t13) — the partner-demo-legibility *and*
+   architectural-discipline commitment that prevents LLM paraphrase
+   from leaking past the boundary. Non-optional.
+
+The net additional work over the unsplit sequencing is roughly
++10-15% (ADR-123 amends twice; T7/T19 extend across two passes;
+T6 MCP registration extends), accepted per owner direction as the
+price of earlier first delivery.
 
 ## 2026-05-07 amendment — `eef-*` prefix applied per ADR-157
 
@@ -378,11 +451,24 @@ import type { Result } from '@oaknational/result';
  * `TNode` because they accept node-shape parameters (predicates,
  * comparison sets); explain takes only an identifier.
  */
+/**
+ * Per type-expert F3 (2026-05-21): rank/explain/compare error unions
+ * include `NotImplementedYet` so the gate-1a stub implementations compile
+ * against the same surface gate-1b will enable. The discriminant follows
+ * the repo convention (a readonly `kind:` literal — see F1 in
+ * graph-query-layer.plan.md), and the `operation` field names the stub
+ * site for telemetry and error-message clarity.
+ */
+export type NotImplementedYet = {
+  readonly kind: 'NotImplementedYet';
+  readonly operation: 'rank' | 'explain' | 'compare';
+};
+
 export interface EvidenceCorpus<TNode, TEdgeType extends string> {
   readonly view: GraphView<TNode, TEdgeType>;
-  rank(opts: RankOptions<TNode>): Result<RankedResults<TNode>, RankError>;
-  explain(opts: ExplainOptions): Result<NodeExplanation<TNode>, NodeNotFoundError>;
-  compare(opts: CompareOptions<TNode>): Result<ComparisonResult<TNode>, CompareError>;
+  rank(opts: RankOptions<TNode>): Result<RankedResults<TNode>, RankError | NotImplementedYet>;
+  explain(opts: ExplainOptions): Result<NodeExplanation<TNode>, NodeNotFoundError | NotImplementedYet>;
+  compare(opts: CompareOptions<TNode>): Result<ComparisonResult<TNode>, CompareError | NotImplementedYet>;
 }
 
 export interface ExplainOptions {
@@ -440,7 +526,8 @@ export interface RankOptions<TNode> {
 F1 (data home is SDK, not codegen — third-party static data),
 **revises F2/F3** (all fields typed, no `Record<string, unknown>`
 anywhere — the predecessor's `school_context_schema.properties`
-carve-out is removed; see "Closed schema typing" below), F4 (direct
+`Record<string, unknown>` exemption is removed; see "Closed schema
+typing" below), F4 (direct
 Zod parse at load, not `as const satisfies`), F7 (Zod validation at
 import time).
 
@@ -531,6 +618,22 @@ the predecessor (recoverable via `git show e2796757:.agent/plans/exploring-open-
   drop a required field) MUST cause module-load failure in unit tests.
 - **Architecture validation**: confirms Zod-at-boundary is correct
   for non-OpenAPI data sources (per ADR-157).
+
+**Schema hash computation timing** (per type-expert F4, 2026-05-21):
+`schema_hash` is computed inside this loader at load time, not lazily at
+first `manifest()` call. The hash is computed over the
+loaded-and-validated EEF strand records (canonical serialisation: stable
+key ordering, no whitespace) using SHA-256, truncated to 16 hex
+characters for compact display — matching the repo's existing hash
+discipline in `packages/core/graph-core/src/canon/canonicalize.ts`.
+Computing at load time means the loader is the failure boundary for
+hash-related failures (malformed snapshot, hashing primitive
+unavailable); `manifest()` itself stays infallible and returns a plain
+value, as the
+[graph-query-layer.plan.md](../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md)
+manifest signature already declares. The exported value is consumed by
+`GraphView.manifest()` on the EEF adapter (WS4.5) and surfaces in every
+agent-discovery response.
 
 **Loader behaviour, not data shape, is what we test.** The loader's unit
 test must prove one thing: a real EEF dataset parses through the Zod

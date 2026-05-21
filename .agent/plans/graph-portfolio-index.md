@@ -3,7 +3,7 @@ plan_id: graph-portfolio-index
 title: "Graph Portfolio — Index"
 type: cross-collection-index
 status: active
-last_updated: 2026-05-10
+last_updated: 2026-05-21
 indexed_collections:
   - "connecting-oak-resources/knowledge-graph-integration/"
   - "agent-tooling/"
@@ -53,8 +53,13 @@ is captured in two sequential arcs:
   explicit follow-up for everything cut).
 - **Combinatorial arc** ([`graph-combinatorial-arc.plan.md`](graph-combinatorial-arc.plan.md))
   — follow-on arc owning substrate-layer cross-corpus composition.
-  Activates when MVP arc gate-1 + gate-3a ship and graph-stack Inc.3
-  cross-corpus join primitive is design-stable.
+  Activates when MVP arc gate-1a + gate-3a ship and graph-stack Inc.3
+  cross-corpus join primitive is design-stable (per the 2026-05-21
+  gate-split amendment: combinatorial-arc precursors resolve at
+  gate-1a because that is where the EEF naming, citation envelope,
+  response shape, and ADR-175 freshness governance lock in;
+  gate-1b's additional recommend/explain/compare surface is not a
+  precursor for cross-corpus composition).
 
 ---
 
@@ -100,7 +105,7 @@ silently skipped; each becomes a named follow-on plan when triggered.
 | 1 | **Oak Curriculum Ontology Threads graph** | Turtle/SKOS + SHACL source, ingested directly from sibling `oak-curriculum-ontology` repo | Foundation attached corpus for the MVP. `graph-ingest` owns generic Turtle/SKOS parsing; `graph-corpus-sdk` owns `curric:Thread` enumeration and inverse `curric:includesThread` Unit lookup. PG-JSONL, Neo4j export, SQL projections, WIDOCO docs, and NC taxonomy work are out of foundation scope. |
 | 2 | **Pre-requisite graph** | Oak-controlled (recommend JSON-LD 1.1 with stable Oak context) | Sequenced into graph-stack Increment 3. |
 | 3 | **Misconception graph** | Oak-controlled (recommend JSON-LD 1.1 with stable Oak context) | Sequenced into graph-stack Increment 3; required before the combinatorial arc's first cross-corpus tool. |
-| 4 | **EEF Toolkit corpus** | EEF-controlled (currently structured JSON) | External; EEF strand adapter is explicit graph-stack Increment 3 scope before cross-corpus joins. |
+| 4 | **EEF Toolkit corpus** | EEF-controlled (currently structured JSON) | External; EEF strand adapter is a **concurrent first-wave attached corpus alongside Threads** per 2026-05-21 amendment (graph-stack Inc.1d WS4.5 ships `subgraph` + `manifest`; remaining 5 operations + cross-corpus joins land at Inc.3). Disjoint ingestion path: no `graph-ingest` participation; corpus-local Zod loader inside `graph-corpus-sdk`. |
 
 ---
 
@@ -127,7 +132,7 @@ follow-on consolidation task.
 | **Oak KG schema browser** | [`connecting-oak-resources/.../future/oak-kg-schema-browser.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-kg-schema-browser.plan.md) | future — slice 2 cut scope |
 | **Oak misconceptions substrate migration** | [`connecting-oak-resources/.../future/oak-misconceptions-substrate-migration.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-substrate-migration.plan.md) | future — slice 3a substrate follow-on |
 | **Oak misconceptions topic extraction** | [`connecting-oak-resources/.../future/oak-misconceptions-topic-extraction.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-topic-extraction.plan.md) | future — slice 3a topic-string follow-on |
-| **EEF evidence strands corpus** | [`sector-engagement/eef/current/eef-evidence-corpus.plan.md`](sector-engagement/eef/current/eef-evidence-corpus.plan.md) | CURRENT — 20 todos pending. Cross-cutting thread (see below). |
+| **EEF evidence strands corpus** | [`sector-engagement/eef/current/eef-evidence-corpus.plan.md`](sector-engagement/eef/current/eef-evidence-corpus.plan.md) | CURRENT — 21 todos pending (20 original + t6a-explore-tool added 2026-05-21 for the gate-1a first-feature surface). Cross-cutting thread (see below). |
 | **Derived Practice graph** (memory estate) | [`agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md`](agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md) | NOT STARTED — first graph-memory pilot |
 | **Agent graph workspace organisation** | [`agent-tooling/future/agent-graphs-workspace-organisation.plan.md`](agent-tooling/future/agent-graphs-workspace-organisation.plan.md) | future — creates `agent-graphs/` and workspace wiring for `agent-graphs/practice-graph/` when the Practice pilot promotes |
 | **External knowledge graph intake** (third-party KGs as Oak data) | [`exploring-open-education-resources/external-knowledge-sources/future/external-knowledge-graph-data-source-integration.plan.md`](exploring-open-education-resources/external-knowledge-sources/future/external-knowledge-graph-data-source-integration.plan.md) | future |
@@ -212,16 +217,17 @@ adoption.
 
 | Slice | Goal | Namespace | Status |
 |---|---|---|---|
-| 1 — EEF evidence corpus MCP surface | 2 (Oak graph surface) + 3 (feature) | `eef-*` | pending substrate floor; structural eval only now |
-| 2 — Oak ontology Threads MCP surface | 2 (Oak graph surface) | `oak-kg-*` | pending graph-stack Inc.1; parallel-safe with slice 3a |
-| 3a — Misconception sub-graph query | 2 (Oak graph surface) + 3 (feature) | `oak-misconceptions-*` | pending graph-stack Inc.1; parallel-safe with slice 2 |
+| 1a — EEF first user-facing feature (gate-0a substrate floor + gate-1a feature ship) | 2 (Oak graph surface) + 3 (feature) | `eef-*` | gate-0a pending (graph-stack Inc.1d: WS4.4 GraphView interface in graph-core + WS4.5 EEF subgraph+manifest adapter); gate-1a pending (first user-facing EEF MCP feature: `eef-explore-evidence-for-context` tool + `eef-evidence-grounded-lesson-plan` prompt + corpus envelope + ADR-175 freshness CI gate). Gate-1a delivery owned by [`sector-engagement/eef/current/eef-first-feature.plan.md`](sector-engagement/eef/current/eef-first-feature.plan.md). Cross-ref: [`graph-mvp-arc.plan.md`](graph-mvp-arc.plan.md) gate-0a/gate-1a definitions; [`sector-engagement/eef/current/eef-evidence-corpus.plan.md`](sector-engagement/eef/current/eef-evidence-corpus.plan.md) §Gate grouping table. |
+| 1b — EEF slice-1 completion (gate-0b substrate residual + gate-1b surface completion) | 2 (Oak graph surface) + 3 (feature) | `eef-*` | gate-0b pending (substrate residual after Inc.1d closes); gate-1b pending (recommend/explain/compare tools, second prompt — `eef-pupil-premium-strategy-review` — full telemetry, registration, E2E). Gate-1b delivery owned by [`sector-engagement/eef/current/eef-evidence-corpus.plan.md`](sector-engagement/eef/current/eef-evidence-corpus.plan.md) (residual surface after gate-1a extraction). Cross-ref: [`graph-mvp-arc.plan.md`](graph-mvp-arc.plan.md) gate-0b/gate-1b definitions. |
+| 2 — Oak ontology Threads MCP surface | 2 (Oak graph surface) | `oak-kg-*` | pending graph-stack Inc.1b; parallel-safe with gate-1a + gate-3a |
+| 3a — Misconception sub-graph query | 2 (Oak graph surface) + 3 (feature) | `oak-misconceptions-*` | pending graph-stack Inc.1b; parallel-safe with gate-1a + gate-2 |
 
 ### Combinatorial arc — substrate-layer cross-corpus composition
 
 [`graph-combinatorial-arc.plan.md`](graph-combinatorial-arc.plan.md).
-Authored to `current/` 2026-05-11; activates when MVP arc gate-1 +
+Authored to `current/` 2026-05-11; activates when MVP arc gate-1a +
 gate-3a ship and graph-stack Inc.3 cross-corpus join primitive is
-design-stable. First concrete exploration: cross-corpus tool composing
+design-stable (per the 2026-05-21 gate-split amendment). First concrete exploration: cross-corpus tool composing
 EEF strands and bounded misconception sub-graph for a Thread IRI
 (formerly MVP slice 3b; executable plan migrated from
 `current/` to `future/` during the 2026-05-11 reshape). Subsequent
@@ -229,7 +235,7 @@ compositions decided after the first tool ships.
 
 | Composition | Namespace | Status |
 |---|---|---|
-| EEF × Misconceptions (first concrete exploration) | `oak-misconceptions-eef-*` | pending combinatorial arc promotion trigger (MVP gate-1 + gate-3a + Inc.3 design-stable) |
+| EEF × Misconceptions (first concrete exploration) | `oak-misconceptions-eef-*` | pending combinatorial arc promotion trigger (MVP gate-1a + gate-3a + Inc.3 design-stable per 2026-05-21 gate-split amendment) |
 
 This arc is distinct from [`cross-source-journeys.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md):
 combinatorial-arc ships substrate-layer cross-corpus *primitives* (MCP

@@ -16,7 +16,7 @@ todos:
     content: "Document 1 tracer use case per operation per graph (3×7 = 21 tracers minimum). Operations without ≥2-of-3 tracer support do not ship."
     status: pending
   - id: t2-graph-view-interface
-    content: "Design GraphView<TNode, TEdge> interface in oak-curriculum-sdk: 7 operations + projection type."
+    content: "Design GraphView<TNode, TEdgeType> interface in packages/core/graph-core/src/graph-view/ (placement corrected 2026-05-21 per architecture-expert-betty under ADR-041 dependency direction): 7 operations + projection type."
     status: pending
   - id: t3-prereq-adapter
     content: "Implement PrerequisiteGraphView adapter over the existing prerequisite graph data."
@@ -28,7 +28,7 @@ todos:
     content: "Implement EefStrandsGraphView adapter over the EEF strands collection (used by the corpus extension downstream)."
     status: pending
   - id: t6-mcp-tools
-    content: "Expose 7 MCP tools (one per operation), each domain-specific by graph; share internal SDK implementation. NOT a single polymorphic dispatcher tool."
+    content: "Expose 17 MCP tools (7 ops × 3 graphs minus 4 exclusions per the T1 first-principles check), each domain-specific by graph; share internal SDK implementation. NOT a single polymorphic dispatcher tool. Sequenced across MVP arc gate-1a (1 tool: subgraph-eef-strands) + gate-0b (the remaining 16) per the 2026-05-21 amendment."
     status: pending
   - id: t7-progressive-disclosure-tests
     content: "Tests proving response size remains bounded under projection; tests proving manifest+summary+detail tiers compose correctly. Includes T7a: a DeepKeyPath compile-time smoke-test asserting the array-stop constraint (no element-index recursion) and depth-3 path inference on EefStrand."
@@ -46,11 +46,11 @@ todos:
 
 # Graph Query Layer
 
-**Status**: CURRENT — architecture-session conclusions approved by owner 2026-05-19. Remaining promotion gates: T1 tracer use-cases signed off, plan-body first-principles check re-applied, EEF corpus plan ready for parallel start.
-**Last Updated**: 2026-05-19
+**Status**: CURRENT — architecture-session conclusions approved by owner 2026-05-19. **Distributed across graph-stack increments per the 2026-05-21 EEF sequencing pull-forward**: T2 (`GraphView<TNode, TEdgeType>` interface + supporting types + T7a compile-time smoke-test) and the `subgraph` + `manifest` portion of T5 (`EefStrandsGraphView`) land at **graph-stack Inc.1d** (WS4.4 + WS4.5). The remaining 5 EEF operations plus T3 (`PrerequisiteGraphView`) and T4 (`MisconceptionGraphView`) land at **graph-stack Inc.3**. T6 (17 MCP tools) splits across MVP arc **gate-1a** (the one EEF tool consumed by the first user-facing feature) and **gate-0b** (the other 16 graph-layer tools across all three graphs). T7/T8/T9/T10 follow the same gate split. Remaining promotion gates: T1 tracer use-cases signed off, plan-body first-principles check re-applied, EEF corpus plan ready for parallel start.
+**Last Updated**: 2026-05-21 (Torrid Glowing Flame / claude / opus-4-7-1m / 5ab0ec) — sequencing pull-forward authored under owner direction. T2 interface home corrected twice in the same day: first from `oak-curriculum-sdk/src/mcp/graph-views/` to `graph-corpus-sdk/src/graph-views/` per ADR-173 §Topology workspace #6 (substrate-vs-transport discipline: substrate workspaces ship no MCP code, so the interface belongs in a substrate workspace; MCP tool wiring lives in the consumer `oak-curriculum-sdk` MCP module), then a second correction to `packages/core/graph-core/src/graph-view/` per architecture-expert-betty's verdict 2026-05-21 under ADR-041 dependency-direction rules: `packages/libs/` cannot import from `packages/sdks/`, and the interface is intended to be implemented by non-corpus consumers (practice-graph at Inc.4, possibly graph-project for type annotation) — those consumers cannot acquire the contract from a sdks/ home. graph-core is the dependency-direction-correct home, and the sequence-first stance makes this placement permanent. Per-adapter sequencing recorded across §Implementation. T5 split notes recorded inline. No content removed; sequencing notes added.
 **Branch**: `feat/eef_exploration` (originating session); execution branch
 TBD when promoted to ACTIVE.
-**Increment**: 1 of 5 in the EEF graph-and-corpus delivery sequence.
+**Increment**: 1 of 5 in the EEF graph-and-corpus delivery sequence (distributed across graph-stack increments 1d and 3 per the 2026-05-21 amendment).
 
 ## Summary
 
@@ -268,7 +268,7 @@ data-file open. The shape:
 
 Two cells are explicitly **NO TRACER** under the ≥2-of-3 rule (see
 Phase B findings below the matrix). Operations with NO TRACER cells
-ship for the supported graphs and are explicitly carved out for the
+ship for the supported graphs and are explicitly excluded for the
 unsupported ones; they are not silently dropped.
 
 ##### `manifest`
@@ -388,7 +388,7 @@ unsupported ones; they are not silently dropped.
 **neighbours × misconception**
 
 - **NO TRACER** — reason: `MisconceptionGraph` has no edges. The current generator (`misconception-graph-generator.ts`) emits nodes only (no `edges` field on `MisconceptionGraph`). Adjacency would require either (a) synthesising edges from `lessonSlug` co-occurrence, or (b) extending the generator to emit explicit relations. Both are out of scope for Increment 1.
-- ≥2-of-3 rule applied: `neighbours` ships for **prerequisite ✓ + eef-strands ✓ = 2-of-3**. Misconception is **explicitly carved out** in MCP tool registration (no `neighbours-misconception` tool until misconception edges exist in the source data).
+- ≥2-of-3 rule applied: `neighbours` ships for **prerequisite ✓ + eef-strands ✓ = 2-of-3**. Misconception is **explicitly excluded** in MCP tool registration (no `neighbours-misconception` tool until misconception edges exist in the source data).
 
 **neighbours × eef-strands**
 
@@ -411,7 +411,7 @@ unsupported ones; they are not silently dropped.
 **subgraph × misconception**
 
 - **NO TRACER** — reason: same as `neighbours × misconception`. No edges → no traversable subgraph.
-- ≥2-of-3 rule applied: `subgraph` ships for **prerequisite ✓ + eef-strands ✓ = 2-of-3**. Misconception is **explicitly carved out**.
+- ≥2-of-3 rule applied: `subgraph` ships for **prerequisite ✓ + eef-strands ✓ = 2-of-3**. Misconception is **explicitly excluded**.
 
 **subgraph × eef-strands**
 
@@ -474,8 +474,8 @@ here because each is a real Increment 1 work item, not a punt.
    note" alongside the FieldPredicate spec in Phase 2 § T2.
 4. **MisconceptionGraph has no edges.** Confirmed by reading the
    generator. Two operations (`neighbours`, `subgraph`) are
-   explicitly carved out for misconception; the remaining five ship
-   for all three graphs. The carve-out is the structural enforcement
+   explicitly excluded for misconception; the remaining five ship
+   for all three graphs. The exclusion is the structural enforcement
    of the ≥2-of-3 rule and is named in the MCP tool registration.
 5. **`related_strands` is absent on 13 of 30 EEF strands.** The field
    is missing entirely (not empty array) on `eef-tl-aspiration-interventions`,
@@ -504,10 +504,10 @@ here because each is a real Increment 1 work item, not a punt.
 - 17 tracer entries drafted with verification footnotes.
 - **4 NO TRACER cells** (`neighbours × misconception`, `subgraph × misconception`, `find_by_tag × prerequisite`, `find_by_tag × misconception`).
 - **17 MCP tools** register at runtime (not 21).
-  Carve-outs: `neighbours-misconception` (no edges), `subgraph-misconception` (no edges), `find-by-tag-prerequisite` (no tag taxonomy in source data), `find-by-tag-misconception` (no tag taxonomy in source data).
+  Excluded MCP tools: `neighbours-misconception` (no edges), `subgraph-misconception` (no edges), `find-by-tag-prerequisite` (no tag taxonomy in source data), `find-by-tag-misconception` (no tag taxonomy in source data).
   Per-graph: prerequisite 6 + misconception 4 + eef-strands 7 = 17.
 - 6 Phase B findings (above) feed forward into T2, T4, T5, and Increment 2 § T2 (loader must validate the optionality of `related_strands` and the object shape of `related_guidance_reports`).
-- The four carve-outs are the structural enforcement of the
+- The four exclusions are the structural enforcement of the
   ≥2-of-3 rule. Two were caught by the round-1 first-principles
   check (`MisconceptionGraph` has no edges); two were caught by the
   round-2 assumptions-expert check (no tag taxonomy in
@@ -519,7 +519,7 @@ here because each is a real Increment 1 work item, not a punt.
 
 ### Phase 2: SDK shape (T2)
 
-**T2: GraphView interface** — `oak-curriculum-sdk/src/mcp/graph-views/`
+**T2: GraphView interface** — `packages/core/graph-core/src/graph-view/` (location corrected twice on 2026-05-21: first sketched in `oak-curriculum-sdk/src/mcp/graph-views/`, then corrected to `packages/sdks/graph-corpus-sdk/src/graph-views/` per ADR-173 §Topology workspace #6 and ADR-179 substrate-vs-transport discipline, then corrected again to `packages/core/graph-core/src/graph-view/` per architecture-expert-betty's verdict). The rationale for the second correction: under ADR-041 dependency-direction rules, `packages/libs/` cannot import from `packages/sdks/`, and the interface is intended to be implemented by non-corpus consumers (practice-graph at Inc.4, possibly graph-project for type annotation) — those consumers cannot acquire the contract from a sdks/ home. graph-core is the dependency-direction-correct home, and the sequence-first stance makes this placement permanent. The file lives under a new sub-path export, following the `./term`, `./dataset`, `./jsonld` precedent already in graph-core. The interface is the polymorphic substrate contract; MCP tool wiring lives separately in the existing `oak-curriculum-sdk` MCP module (the one allowed home per ADR-179 §Surfacing discipline)
 
 ```typescript
 import type { Result } from '@oaknational/result';
@@ -528,37 +528,80 @@ export interface GraphView<TNode, TEdgeType extends string> {
   manifest(): GraphManifest;
   summary(
     opts?: { groupBy?: keyof TNode | TEdgeType },
-  ): Result<GraphSummary, GraphSummaryError>;
+  ): Result<GraphSummary, GraphSummaryError | NotImplementedYet>;
   getNode(
     id: string,
     projection?: NodeProjection<TNode>,
-  ): Result<TNode, NodeNotFoundError>;
+  ): Result<TNode, NodeNotFoundError | NotImplementedYet>;
   enumerateNodes(opts?: {
     filter?: NodeFilter<TNode>;
     projection?: NodeProjection<TNode>;
     page?: { number: number; size: number };
-  }): Result<EnumerateNodesResult<TNode>, EnumerateNodesError>;
+  }): Result<EnumerateNodesResult<TNode>, EnumerateNodesError | NotImplementedYet>;
   neighbours(opts: {
     nodeId: string;
     edgeType?: TEdgeType;
     direction?: 'in' | 'out' | 'both';
     projection?: NodeProjection<TNode>;
-  }): Result<NeighbourResult<TNode>, NodeNotFoundError>;
+  }): Result<NeighbourResult<TNode>, NodeNotFoundError | NotImplementedYet>;
   subgraph(opts: {
     rootIds: readonly string[];
     depth: number;
     projection?: NodeProjection<TNode>;
   }): Result<SubgraphResult<TNode>, SubgraphError>;
-  findByTag(tag: string, projection?: NodeProjection<TNode>): readonly TNode[];
+  findByTag(
+    tag: string,
+    projection?: NodeProjection<TNode>,
+  ): Result<readonly TNode[], FindByTagError>;
 }
 ```
+
+**Stub error-union widening (2026-05-21 type-expert amendment F2/F3).** Five of the six fallible operations above (`summary`, `getNode`, `enumerateNodes`, `neighbours`, `findByTag`) are sequenced as `Result.err(NotImplementedYet)` stubs at graph-stack Inc.1d on the EEF adapter (WS4.5) before their real implementations land at Inc.3. For the type system to permit that stub return, `NotImplementedYet` must appear as a member of each stub operation's error union. The widening above is additive and remains backward-compatible at Inc.3 when the real implementations land — exhaustive `Result.match` consumers gain a new arm rather than losing one. `findByTag` already declares `FindByTagError = NotImplementedYet | InvalidTagFormat` so no change is needed there. `subgraph` is excluded from this widening because it ships as a real implementation at Inc.1d (per the T5 sequencing note), not as a stub.
+
+`NotImplementedYet` itself is a closed shape used uniformly across all five stubs:
+
+```typescript
+/**
+ * Standard "operation not yet implemented" error variant used by adapter
+ * stubs during sequenced delivery. Discriminator field uses the repo
+ * convention `kind:` (see `packages/core/graph-core/src/canon/canonicalize.ts`
+ * and `packages/core/graph-core/src/jsonld/processor-types.ts` for precedent).
+ */
+export type NotImplementedYet = {
+  readonly kind: 'NotImplementedYet';
+  readonly operation: string; // e.g. 'summary', 'getNode', 'enumerateNodes'
+};
+```
+
+The discriminator is `kind` (not `_tag`, `type`, or other variants) per the precedent already established in graph-core canon and JSON-LD processor types.
 
 `Result<T, E>` is the canonical error-handling shape from
 [`@oaknational/result`](../../../../packages/core/result/src/index.ts) per
 `principles.md` §Code Design ("Don't throw, use the result pattern
-`Result<T, E>`, handle all cases explicitly"). `manifest()` and
-`findByTag()` return plain values: manifest is metadata that always
-exists; an empty tag-match list is a valid result, not a failure.
+`Result<T, E>`, handle all cases explicitly"). `manifest()` returns a
+plain value because the manifest is metadata that always exists once
+the adapter has loaded — the load step is the failure boundary, not
+the per-call boundary, so `manifest()` itself has no error path.
+
+**`findByTag` return shape (2026-05-21 code-review amendment)**: was
+`readonly TNode[]` in the original draft on the rationale that an
+empty match is `Ok([])` rather than an error and a plain return is
+simpler. The 2026-05-21 review caught a discipline conflict: the
+adapter sequencing (graph-stack WS4.5) ships `findByTag` as a
+`NotImplementedYet`-stubbed operation at Inc.1d on the EEF adapter
+(and as fully implemented at Inc.3 only for `eef-strands`; the
+prerequisite and misconception adapters explicitly do not register
+`find_by_tag` per the ≥2-of-3 rule). A `readonly TNode[]` return
+cannot carry the `NotImplementedYet` stub variant, which breaks the
+uniform `Result<T, NotImplementedYet>` stub discipline across the
+five EEF stub operations. Updated shape: `Result<readonly TNode[], FindByTagError>`
+where `FindByTagError = NotImplementedYet | InvalidTagFormat` (the
+`InvalidTagFormat` arm is a tagged-input guard for adapters that
+constrain their tag taxonomy; `eef-strands` rejects tags outside the
+curated 110-tag taxonomy with `InvalidTagFormat` rather than silently
+returning `Ok([])`). Empty matches inside the taxonomy remain
+`Ok([])`. The discipline is now uniform across all 6 fallible
+operations.
 
 **`NodeFilter<TNode>` shape** — preventing implementor drift toward
 `Partial<TNode>` (introduces unwanted optionality) or
@@ -644,7 +687,7 @@ testable at compile time (see T7 smoke-test).
 Default: `['id', 'displayName']` plus one numeric metric if the node
 type has one. This makes projection a *type-system* property, not a
 runtime convention. Strict, everywhere, always — full type discipline
-on the projection contract is non-negotiable.
+on the projection contract is structurally required.
 
 **On the depth bound**: a node type whose path-set produces an
 instantiation that hits TypeScript's recursion limit at depth 4 is a
@@ -660,7 +703,7 @@ Each adapter is small (~150 LOC), implementing `GraphView` over the
 existing typed graph data. The adapters do not modify the underlying
 data; they read it and project it.
 
-**T3: PrerequisiteGraphView** — over the `priorKnowledgeGraph` data
+**T3: PrerequisiteGraphView** — **sequenced at graph-stack Inc.3** per 2026-05-21 amendment. Over the `priorKnowledgeGraph` data
 (generated by `prior-knowledge-graph-generator.ts`). Edge type:
 `prerequisiteFor` (one type, with `source: 'thread' | 'priorKnowledge'`
 preserved on the edge — direction-of-flow query handled by the
@@ -671,7 +714,7 @@ filtering is available via `enumerate_nodes`. Implements **6 of 7
 operations**: `manifest`, `summary`, `get_node`, `enumerate_nodes`,
 `neighbours`, `subgraph`.
 
-**T4: MisconceptionGraphView** — over the `misconceptionGraph` data.
+**T4: MisconceptionGraphView** — **sequenced at graph-stack Inc.3** per 2026-05-21 amendment. Over the `misconceptionGraph` data.
 **Edge types: none in the current generator output.** The
 `MisconceptionGraph` interface has `nodes` only, no `edges` field.
 **No tag taxonomy**: `MisconceptionNode` has no `tags` field and
@@ -679,7 +722,7 @@ operations**: `manifest`, `summary`, `get_node`, `enumerate_nodes`,
 `enumerate_nodes`. Consequently, this adapter implements **4 of 7
 operations**: `manifest`, `summary`, `get_node`, `enumerate_nodes`.
 The `neighbours`, `subgraph`, and `find_by_tag` operations are
-explicitly carved out under the ≥2-of-3 rule — none of the three
+explicitly excluded under the ≥2-of-3 rule — none of the three
 will register as MCP tools for misconception until the source data
 gains edges (for `neighbours`/`subgraph`) or a tag taxonomy (for
 `find_by_tag`). ID discipline: misconception nodes have no explicit
@@ -688,7 +731,7 @@ ID field; the adapter mints stable IDs via SHA-1 hash of
 (see Phase B finding 1; index-based forms ruled out as not
 regeneration-stable).
 
-**T5: EefStrandsGraphView** — over the EEF strands data. Edge types:
+**T5: EefStrandsGraphView** — over the EEF strands data. **Sequencing (2026-05-21 amendment):** `subgraph` + `manifest` operations land at graph-stack **Inc.1d** (WS4.5) so the first user-facing EEF MCP feature ships at MVP arc gate-1a. The remaining 5 operations (`summary`, `getNode`, `enumerateNodes`, `neighbours`, `findByTag`) ship as typed `NotImplementedYet` Result stubs at Inc.1d (satisfying the full GraphView interface contract authored in WS4.4) and are *implemented* at graph-stack **Inc.3** alongside the prerequisite and misconception adapters. The full adapter content below is unchanged — only the per-operation sequencing varies. Edge types:
 `related_strand` (from the `related_strands` field on each strand;
 **field is absent on 13 of 30 strands**, treated as empty edge set —
 `neighbours`/`subgraph` from those strands return single-node results),
@@ -717,11 +760,33 @@ build-time precompute. Implements **all 7 operations** (the
 sparse-relations surface is additional manifest content, not a new
 operation).
 
+**Schema hash computation timing** (per type-expert F4, 2026-05-21):
+`schema_hash` is computed inside the Zod loader (T2 in
+[`eef-evidence-corpus.plan.md`](../../sector-engagement/eef/current/eef-evidence-corpus.plan.md))
+at load time, not lazily at first `manifest()` call. The hash is
+computed over the loaded-and-validated EEF strand records (canonical
+serialisation: stable key ordering, no whitespace) using SHA-256,
+truncated to 16 hex characters for compact display — matching the
+repo's existing hash discipline in
+`packages/core/graph-core/src/canon/canonicalize.ts`. Computing at
+load time means the loader is the failure boundary for hash-related
+failures (e.g. malformed snapshot, hashing primitive unavailable);
+`manifest()` itself remains infallible and returns a plain value, as
+the interface signature already declares.
+
 ### Phase 4: MCP tools (T6)
 
 **T6: 17 MCP tools** — one tool per operation per graph, **minus the
-four NO-TRACER carve-outs surfaced by the T1 first-principles check
-(rounds 1 and 2)**:
+four NO-TRACER exclusions surfaced by the T1 first-principles check
+(rounds 1 and 2)**.
+
+**Sequencing (2026-05-21 amendment):** the 17 tools land in two
+gate-controlled tranches, owned by `graph-mvp-arc.plan.md`:
+
+- **Gate-1a** ships **1 tool**: `subgraph-eef-strands` (the graph-layer surface invoked internally by the corpus-side `eef-explore-evidence-for-context` corpus tool that the first user-facing EEF feature exposes; ADR-157 `eef-*` prefix applies).
+- **Gate-0b** ships the remaining **16 tools**: prerequisite 6, misconception 4, eef-strands 6 (everything except `subgraph-eef-strands`). The four NO-TRACER exclusions are explicitly absent.
+
+T6's full delivery surface is unchanged; only the sequencing varies.
 
 - `neighbours-misconception` — not registered (no edges in the
   misconception graph).
@@ -737,7 +802,7 @@ internal implementation routes to the correct adapter. Tools follow
 the established naming convention: `{operation}-{graph}` (e.g.
 `enumerate-nodes-eef-strands`).
 
-The four carve-outs are explicit — the registration code names
+The four exclusions are explicit — the registration code names
 each and links to the corresponding T1 tracer-matrix NO TRACER cell,
 so a future contributor reading the registration sees why the tools
 are absent rather than wondering whether to add them.
@@ -828,7 +893,7 @@ T3-T5 are parallel. T6-T10 are mostly parallel after T5.
 |---|---|
 | GraphView interface + projection types | ~210 |
 | 3 adapters (prereq 6/7 ops, misconception 4/7 ops, eef-strands 7/7 + sparse-relations precompute) | ~410 |
-| 17 MCP tool definitions (mostly generated/derived; 21 cells minus 4 carve-outs) | ~205 |
+| 17 MCP tool definitions (mostly generated/derived; 21 cells minus 4 exclusions) | ~205 |
 | Internal implementation (operation dispatchers, projection logic) | ~300 |
 | Tests | ~400 |
 | Documentation (ADR-123 update + TSDoc) | ~80 |
@@ -843,7 +908,7 @@ Coexists with the existing factory and dump tools — does not replace them.
 
 1. **17 MCP tools** registered and visible in `tools/list`:
    prerequisite 6 + misconception 4 + eef-strands 7. The four
-   carve-outs (`neighbours-misconception`, `subgraph-misconception`,
+   exclusions (`neighbours-misconception`, `subgraph-misconception`,
    `find-by-tag-prerequisite`, `find-by-tag-misconception`) are
    explicitly absent under the ≥2-of-3 rule applied during the T1
    first-principles check (rounds 1 and 2).
