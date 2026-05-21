@@ -17,6 +17,7 @@ Earlier archives remain under [`archive/`](archive/).
 ## Current State
 
 - Current branch: `feat/mcp-graph-support-foundation`.
+- **🛑 PR #108 IS MERGE-BLOCKED ON QUALITY GATES (2026-05-21, Feathered Circling Horizon / `cursor` / Opus 4.7 / `9e1c24`)** — PR #108 (`feat/mcp-graph-support-foundation` → `main`) is failing two quality gates: CodeQL alert #90 (`js/missing-rate-limiting` on `bootstrap-helpers.ts:151`, false-positive on `createRequestLogger` of the same misclassification shape as the already-disposed alert #69 on `createCorrelationMiddleware`) and SonarCloud Quality Gate (40 new issues across 17 rules, 12 unreviewed security hotspots, 6.0% new-code duplication ≥ 3.0% threshold). **The PR must not merge until those gates clear.** Disposition strategy and execution lane: [`pr-108-snagging.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/current/pr-108-snagging.plan.md) — type `quality-fix`, status `planning`, 12 cycles across 3 phases, per-finding ledger inside the plan body, aligned with `docs/governance/sonar-disposition-policy.md` and `.agent/rules/never-disable-checks.md` (no gate-weakening tactics). Cross-referenced as a `🛑 PR #108 MERGE BLOCKER` block at the top of [`active/graph-stack.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md). **Substantive graph implementation work (WS2.2, WS2.3, WS3.3, Inc.1b, Inc.1c, Inc.1d) on this branch is parked behind the snagging plan**: either complete the snagging plan on `feat/mcp-graph-support-foundation` and merge clean, or merge after a green-gate rebase. No code touched this session; analysis-and-plan-authoring only; no commits; no claims opened.
 - **2026-05-21 (Cirrus Circling Plume / `claude` / Opus 4.7 / `fba398`, continued — post-team-session strategic-brief authoring under owner direction)** —
   After the team-session closeout, owner directed an ultrathink-level
   analysis of how to throw compute at the remaining substrate +
@@ -529,7 +530,7 @@ each thread record; this table is the repo-level index.
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
 | `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Torrid Glowing Flame / `claude` / Opus 4.7 (1M) / `5ab0ec` / 2026-05-21, Fiery Firing Cinder / `claude` / Opus 4.7 (1M) / `40c178` / 2026-05-21 |
-| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Cirrus Circling Plume / `claude` / Opus 4.7 / `fba398` / 2026-05-21 (closeout owner), Stratospheric Gusting Squall / `claude` / Opus 4.7 / `cfe7da` / 2026-05-21, Salty Snorkelling Pier / `claude` / Opus 4.7 / `5eb191` / 2026-05-21, Opalescent Illuminating Galaxy / `claude` / Opus 4.7 / `2aa615` / 2026-05-21, Gilded Beaming Eclipse / `claude` / Opus 4.7 / `0467d0` / 2026-05-21, Evergreen Climbing Canopy / `claude` / Opus 4.7 / `4a365e` / 2026-05-21 |
+| `connecting-oak-resources` | Oak resource graph; **PR #108 blocked on quality-gate snagging plan** | [record][connecting] | Feathered Circling Horizon / `cursor` / Opus 4.7 / `9e1c24` / 2026-05-21 (pr-108-snagging-plan author), Cirrus Circling Plume / `claude` / Opus 4.7 / `fba398` / 2026-05-21 (closeout owner) |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / `codex` / 2026-04-28 |
@@ -716,6 +717,9 @@ step.
 
 Branch-primary graph work continues from
 [`threads/connecting-oak-resources.next-session.md`](threads/connecting-oak-resources.next-session.md).
+
+**🛑 IMMEDIATE NEXT STEP — PR #108 quality-gate snagging plan**: PR #108 is failing CodeQL (alert #90) + SonarCloud Quality Gate (40 issues, 12 hotspots, 6.0% duplication). The snagging plan at [`.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/pr-108-snagging.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/current/pr-108-snagging.plan.md) is the authoritative execution surface — `type: quality-fix`, `status: planning`, 12 cycles, per-finding disposition ledger, aligned with `docs/governance/sonar-disposition-policy.md` and `.agent/rules/never-disable-checks.md`. **Substantive graph implementation work (Inc.1a WS2.2/WS2.3/WS3.3, Inc.1b, Inc.1c, Inc.1d) on PR #108 is parked behind the snagging plan landing.** The next session opening this thread should: (1) read the snagging plan; (2) decide between completing it on `feat/mcp-graph-support-foundation` before merge OR rebasing the substantive cycles onto a fresh branch after PR #108 merges clean; (3) execute Phase 0 (disposition ledger commit) as the first cycle.
+
 **Current state (2026-05-21 close, second session of the day)**: Inc.1a
 is **half-complete on the first parallel-pair**: WS3.2 LANDED at
 `abe6fcb3` (Foamy Charting Fjord, claude opus-4-7-1m, session 86dbd1)
@@ -850,7 +854,9 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-21 evening — Torrid Glowing Flame / `claude` / Opus 4.7
+**Status (2026-05-21 — Feathered Circling Horizon / `cursor` / Opus 4.7 / `9e1c24`)**: **not due — sole-contributor analysis-and-plan-authoring session, no consolidation triggers fired**. Session substance is the PR #108 snagging plan (`current/pr-108-snagging.plan.md`) plus continuity refreshes (this file, `connecting-oak-resources.next-session.md`, `active/graph-stack.plan.md`). Two pending-graduation candidates surfaced inline in the thread record rather than written to the (currently peer-claimed) `pending-graduations.md` surface: (a) tighter policy-doc-first reading at gate-analysis time (read `docs/governance/sonar-disposition-policy.md` BEFORE proposing dispositions, not after); (b) doctrine candidate "the gate is the cheap version of the failure it names" from the metacognition pass. Both should be picked up by the next consolidation drain. Prior status preserved below for the audit trail.
+
+**Prior status (2026-05-21 evening — Torrid Glowing Flame / `claude` / Opus 4.7
 (1M) / `5ab0ec`)**: **not due — planning-only session, no consolidation
 triggers fired**. Session substance is captured in session-scoped
 surfaces (one substantial napkin entry on sequence-first vs
