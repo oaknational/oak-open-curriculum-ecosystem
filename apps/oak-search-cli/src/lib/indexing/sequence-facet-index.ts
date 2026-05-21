@@ -1,15 +1,25 @@
+/**
+ * Live-API sequence-facet-source extraction.
+ *
+ * Sequence facet *documents* are emitted only by the bulk-data ingestion
+ * pipeline (`bulk-sequence-transformer.ts`); this module no longer builds
+ * facet operations from the live-API path because the v0.7.0 API response
+ * does not carry per-sequence variant info and the previously hardcoded
+ * `hasKs4Options: false` contradicted the bulk-known truth.
+ *
+ * The remaining responsibility here is extracting `SequenceFacetSource`
+ * records (per-sequence unit slugs) from the live-API `getSequenceUnits`
+ * payload, which the live-API pipeline still uses to populate the
+ * `oak_sequences` index and to drive unit context aggregation.
+ */
+
 import { performance } from 'node:perf_hooks';
-import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../../types/oak';
 import type { SubjectSequenceEntry } from '../../adapters/oak-adapter';
 import {
-  createSequenceFacetDocuments,
   extractSequenceFacetSource,
   resolveSequenceSlug,
   type SequenceFacetSource,
 } from './sequence-facets';
-import { resolvePrimarySearchIndexName } from '../search-index-target';
-import type { BulkOperations } from './bulk-operation-types';
-import { createBulkAction } from './bulk-action-factory';
 import { ingestLogger } from '../logger';
 
 type SequenceUnitsFetcher = (sequenceSlug: string) => Promise<unknown>;
@@ -66,35 +76,4 @@ export async function buildSequenceFacetSources(
   }
 
   return sources;
-}
-
-interface BuildSequenceFacetOpsArgs {
-  subject: SearchSubjectSlug;
-  keyStage: KeyStage;
-  sequences: readonly SubjectSequenceEntry[];
-  sequenceSources: ReadonlyMap<string, SequenceFacetSource>;
-  unitSummaries: ReadonlyMap<string, SearchUnitSummary>;
-}
-
-export function buildSequenceFacetOps({
-  subject,
-  keyStage,
-  sequences,
-  sequenceSources,
-  unitSummaries,
-}: BuildSequenceFacetOpsArgs): BulkOperations {
-  const docs = createSequenceFacetDocuments({
-    subject,
-    keyStage,
-    sequences,
-    sequenceSources,
-    unitSummaries,
-  });
-
-  const result: BulkOperations = [];
-  for (const doc of docs) {
-    const docId = `${doc.subject_slug}-${doc.sequence_slug}-${doc.key_stages[0]}`;
-    result.push(createBulkAction(resolvePrimarySearchIndexName('sequence_facets'), docId), doc);
-  }
-  return result;
 }

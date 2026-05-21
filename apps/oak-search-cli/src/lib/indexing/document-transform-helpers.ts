@@ -17,18 +17,17 @@ import type { AggregatedUnitContext } from './ks4-context-builder';
 export { extractPedagogicalData, createEnrichedRollupText };
 
 /**
- * KS4 fields for Elasticsearch documents.
- * Optional arrays following the denormalisation pattern in ADR-080.
+ * KS4 fields for Elasticsearch documents derived from sequence responses.
+ *
+ * Only tier and exam-subject fields are sourced here — exam-board and
+ * ks4-option fields are owned by the bulk-data pipeline (the live-API path
+ * does not have authoritative variant info per ADR-080).
  */
 export interface Ks4DocumentFields {
   readonly tiers?: string[];
   readonly tier_titles?: string[];
-  readonly exam_boards?: string[];
-  readonly exam_board_titles?: string[];
   readonly exam_subjects?: string[];
   readonly exam_subject_titles?: string[];
-  readonly ks4_options?: string[];
-  readonly ks4_option_titles?: string[];
 }
 
 /** Converts non-empty readonly array to mutable, or undefined. */
@@ -46,12 +45,8 @@ export function extractKs4DocumentFields(ks4Context: AggregatedUnitContext): Ks4
   return {
     tiers: nonEmptyOrUndefined(ks4Context.tiers),
     tier_titles: nonEmptyOrUndefined(ks4Context.tierTitles),
-    exam_boards: nonEmptyOrUndefined(ks4Context.examBoards),
-    exam_board_titles: nonEmptyOrUndefined(ks4Context.examBoardTitles),
     exam_subjects: nonEmptyOrUndefined(ks4Context.examSubjects),
     exam_subject_titles: nonEmptyOrUndefined(ks4Context.examSubjectTitles),
-    ks4_options: nonEmptyOrUndefined(ks4Context.ks4Options),
-    ks4_option_titles: nonEmptyOrUndefined(ks4Context.ks4OptionTitles),
   };
 }
 

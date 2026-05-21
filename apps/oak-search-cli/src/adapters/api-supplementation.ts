@@ -114,10 +114,7 @@ export function getKs4FieldsForUnit(
 ): Ks4SupplementationResult {
   const aggregatedContext = getKs4ContextForUnit(context.unitContextMap, unitSlug);
   const ks4Fields = extractKs4DocumentFields(aggregatedContext);
-  const hasKs4Data =
-    hasValues(ks4Fields.tiers) ||
-    hasValues(ks4Fields.exam_boards) ||
-    hasValues(ks4Fields.exam_subjects);
+  const hasKs4Data = hasValues(ks4Fields.tiers) || hasValues(ks4Fields.exam_subjects);
 
   return { ks4Fields, hasKs4Data };
 }

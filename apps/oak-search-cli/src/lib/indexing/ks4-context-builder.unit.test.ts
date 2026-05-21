@@ -1,16 +1,15 @@
 /**
  * Unit tests for KS4 context builder functions.
  *
- * These tests follow TDD RED phase - they are written BEFORE the implementation.
- * The tests specify the desired behaviour for building UnitContextMap from
- * sequence traversal data.
+ * Builds `UnitContext` records by traversing the live-API sequence-units
+ * response. Tier and exam-subject metadata is sourced here. Exam-board and
+ * ks4-option metadata is owned by the bulk-data pipeline.
  *
  * @see ADR-080 KS4 Metadata Denormalisation Strategy
  */
 
 import { describe, expect, it } from 'vitest';
 import {
-  parseExamBoardFromSlug,
   buildUnitContextsFromSequenceResponse,
   mergeUnitContexts,
   buildKs4ContextMap,
@@ -18,51 +17,7 @@ import {
   type UnitContextMap,
 } from './ks4-context-builder';
 
-describe('parseExamBoardFromSlug', () => {
-  it('extracts aqa from science-secondary-aqa', () => {
-    const result = parseExamBoardFromSlug('science-secondary-aqa');
-    expect(result).toEqual({ slug: 'aqa', title: 'AQA' });
-  });
-
-  it('extracts edexcel from science-secondary-edexcel', () => {
-    const result = parseExamBoardFromSlug('science-secondary-edexcel');
-    expect(result).toEqual({ slug: 'edexcel', title: 'Edexcel' });
-  });
-
-  it('extracts ocr from science-secondary-ocr', () => {
-    const result = parseExamBoardFromSlug('science-secondary-ocr');
-    expect(result).toEqual({ slug: 'ocr', title: 'OCR' });
-  });
-
-  it('extracts eduqas from science-secondary-eduqas', () => {
-    const result = parseExamBoardFromSlug('science-secondary-eduqas');
-    expect(result).toEqual({ slug: 'eduqas', title: 'Eduqas' });
-  });
-
-  it('extracts edexcelb from science-secondary-edexcelb', () => {
-    const result = parseExamBoardFromSlug('science-secondary-edexcelb');
-    expect(result).toEqual({ slug: 'edexcelb', title: 'Edexcel B' });
-  });
-
-  it('returns null for maths-secondary (no exam board)', () => {
-    const result = parseExamBoardFromSlug('maths-secondary');
-    expect(result).toBeNull();
-  });
-
-  it('returns null for english-primary (not KS4)', () => {
-    const result = parseExamBoardFromSlug('english-primary');
-    expect(result).toBeNull();
-  });
-
-  it('handles case insensitivity', () => {
-    const result = parseExamBoardFromSlug('Science-Secondary-AQA');
-    expect(result).toEqual({ slug: 'aqa', title: 'AQA' });
-  });
-});
-
 describe('buildUnitContextsFromSequenceResponse', () => {
-  const ks4Option = { slug: 'gcse-maths', title: 'GCSE Maths' };
-
   describe('handles KS4 Maths structure (year -> tiers -> units)', () => {
     it('extracts unit contexts from tiered response without exam subjects', () => {
       const response = [
@@ -93,30 +48,22 @@ describe('buildUnitContextsFromSequenceResponse', () => {
         },
       ];
 
-      const result = buildUnitContextsFromSequenceResponse(response, null, ks4Option);
+      const result = buildUnitContextsFromSequenceResponse(response);
 
       expect(result).toHaveLength(4);
       expect(result).toContainEqual({
         unitSlug: 'fractions-foundation',
         tiers: ['foundation'],
         tierTitles: ['Foundation'],
-        examBoards: [],
-        examBoardTitles: [],
         examSubjects: [],
         examSubjectTitles: [],
-        ks4Options: ['gcse-maths'],
-        ks4OptionTitles: ['GCSE Maths'],
       });
       expect(result).toContainEqual({
         unitSlug: 'fractions-higher',
         tiers: ['higher'],
         tierTitles: ['Higher'],
-        examBoards: [],
-        examBoardTitles: [],
         examSubjects: [],
         examSubjectTitles: [],
-        ks4Options: ['gcse-maths'],
-        ks4OptionTitles: ['GCSE Maths'],
       });
     });
 
@@ -143,7 +90,7 @@ describe('buildUnitContextsFromSequenceResponse', () => {
         },
       ];
 
-      const result = buildUnitContextsFromSequenceResponse(response, null, ks4Option);
+      const result = buildUnitContextsFromSequenceResponse(response);
 
       expect(result).toHaveLength(2);
       expect(result.map((r) => r.unitSlug)).toContain('equations-a');
@@ -152,9 +99,6 @@ describe('buildUnitContextsFromSequenceResponse', () => {
   });
 
   describe('handles KS4 Sciences structure (year -> examSubjects -> tiers -> units)', () => {
-    const examBoard = { slug: 'aqa', title: 'AQA' };
-    const scienceKs4Option = { slug: 'aqa-gcse-science', title: 'AQA GCSE Science' };
-
     it('extracts unit contexts from tiered response with exam subjects', () => {
       const response = [
         {
@@ -195,7 +139,7 @@ describe('buildUnitContextsFromSequenceResponse', () => {
         },
       ];
 
-      const result = buildUnitContextsFromSequenceResponse(response, examBoard, scienceKs4Option);
+      const result = buildUnitContextsFromSequenceResponse(response);
 
       expect(result).toHaveLength(3);
 
@@ -204,12 +148,8 @@ describe('buildUnitContextsFromSequenceResponse', () => {
         unitSlug: 'cells-foundation',
         tiers: ['foundation'],
         tierTitles: ['Foundation'],
-        examBoards: ['aqa'],
-        examBoardTitles: ['AQA'],
         examSubjects: ['biology'],
         examSubjectTitles: ['Biology'],
-        ks4Options: ['aqa-gcse-science'],
-        ks4OptionTitles: ['AQA GCSE Science'],
       });
 
       const atomsFoundation = result.find((r) => r.unitSlug === 'atoms-foundation');
@@ -217,12 +157,8 @@ describe('buildUnitContextsFromSequenceResponse', () => {
         unitSlug: 'atoms-foundation',
         tiers: ['foundation'],
         tierTitles: ['Foundation'],
-        examBoards: ['aqa'],
-        examBoardTitles: ['AQA'],
         examSubjects: ['chemistry'],
         examSubjectTitles: ['Chemistry'],
-        ks4Options: ['aqa-gcse-science'],
-        ks4OptionTitles: ['AQA GCSE Science'],
       });
     });
   });
@@ -236,7 +172,7 @@ describe('buildUnitContextsFromSequenceResponse', () => {
         },
       ];
 
-      const result = buildUnitContextsFromSequenceResponse(response, null, null);
+      const result = buildUnitContextsFromSequenceResponse(response);
 
       expect(result).toEqual([]);
     });
@@ -244,17 +180,17 @@ describe('buildUnitContextsFromSequenceResponse', () => {
 
   describe('handles empty and edge cases', () => {
     it('returns empty array for empty response', () => {
-      const result = buildUnitContextsFromSequenceResponse([], null, ks4Option);
+      const result = buildUnitContextsFromSequenceResponse([]);
       expect(result).toEqual([]);
     });
 
     it('returns empty array for null response', () => {
-      const result = buildUnitContextsFromSequenceResponse(null, null, ks4Option);
+      const result = buildUnitContextsFromSequenceResponse(null);
       expect(result).toEqual([]);
     });
 
     it('returns empty array for undefined response', () => {
-      const result = buildUnitContextsFromSequenceResponse(undefined, null, ks4Option);
+      const result = buildUnitContextsFromSequenceResponse(undefined);
       expect(result).toEqual([]);
     });
   });
@@ -268,12 +204,8 @@ describe('mergeUnitContexts', () => {
         unitSlug: 'fractions',
         tiers: ['foundation'],
         tierTitles: ['Foundation'],
-        examBoards: ['aqa'],
-        examBoardTitles: ['AQA'],
         examSubjects: ['biology'],
         examSubjectTitles: ['Biology'],
-        ks4Options: ['aqa-gcse-science'],
-        ks4OptionTitles: ['AQA GCSE Science'],
       },
     ];
 
@@ -282,12 +214,8 @@ describe('mergeUnitContexts', () => {
     expect(result.get('fractions')).toEqual({
       tiers: ['foundation'],
       tierTitles: ['Foundation'],
-      examBoards: ['aqa'],
-      examBoardTitles: ['AQA'],
       examSubjects: ['biology'],
       examSubjectTitles: ['Biology'],
-      ks4Options: ['aqa-gcse-science'],
-      ks4OptionTitles: ['AQA GCSE Science'],
     });
   });
 
@@ -298,12 +226,8 @@ describe('mergeUnitContexts', () => {
         {
           tiers: ['foundation'],
           tierTitles: ['Foundation'],
-          examBoards: ['aqa'],
-          examBoardTitles: ['AQA'],
           examSubjects: ['biology'],
           examSubjectTitles: ['Biology'],
-          ks4Options: ['aqa-gcse-science'],
-          ks4OptionTitles: ['AQA GCSE Science'],
         },
       ],
     ]);
@@ -313,12 +237,8 @@ describe('mergeUnitContexts', () => {
         unitSlug: 'fractions',
         tiers: ['higher'],
         tierTitles: ['Higher'],
-        examBoards: ['aqa'],
-        examBoardTitles: ['AQA'],
         examSubjects: ['chemistry'],
         examSubjectTitles: ['Chemistry'],
-        ks4Options: ['aqa-gcse-science'],
-        ks4OptionTitles: ['AQA GCSE Science'],
       },
     ];
 
@@ -338,12 +258,8 @@ describe('mergeUnitContexts', () => {
         {
           tiers: ['foundation'],
           tierTitles: ['Foundation'],
-          examBoards: ['aqa'],
-          examBoardTitles: ['AQA'],
           examSubjects: [],
           examSubjectTitles: [],
-          ks4Options: ['gcse-maths'],
-          ks4OptionTitles: ['GCSE Maths'],
         },
       ],
     ]);
@@ -353,12 +269,8 @@ describe('mergeUnitContexts', () => {
         unitSlug: 'fractions',
         tiers: ['foundation'],
         tierTitles: ['Foundation'],
-        examBoards: ['aqa'],
-        examBoardTitles: ['AQA'],
         examSubjects: [],
         examSubjectTitles: [],
-        ks4Options: ['gcse-maths'],
-        ks4OptionTitles: ['GCSE Maths'],
       },
     ];
 
@@ -366,7 +278,6 @@ describe('mergeUnitContexts', () => {
 
     const merged = result.get('fractions');
     expect(merged?.tiers).toEqual(['foundation']);
-    expect(merged?.examBoards).toEqual(['aqa']);
   });
 
   it('preserves existing entries when adding new units', () => {
@@ -376,12 +287,8 @@ describe('mergeUnitContexts', () => {
         {
           tiers: ['foundation'],
           tierTitles: ['Foundation'],
-          examBoards: [],
-          examBoardTitles: [],
           examSubjects: [],
           examSubjectTitles: [],
-          ks4Options: [],
-          ks4OptionTitles: [],
         },
       ],
     ]);
@@ -391,12 +298,8 @@ describe('mergeUnitContexts', () => {
         unitSlug: 'algebra',
         tiers: ['higher'],
         tierTitles: ['Higher'],
-        examBoards: [],
-        examBoardTitles: [],
         examSubjects: [],
         examSubjectTitles: [],
-        ks4Options: [],
-        ks4OptionTitles: [],
       },
     ];
 
@@ -414,12 +317,8 @@ describe('mergeUnitContexts', () => {
         {
           tiers: ['foundation'],
           tierTitles: ['Foundation'],
-          examBoards: [],
-          examBoardTitles: [],
           examSubjects: [],
           examSubjectTitles: [],
-          ks4Options: [],
-          ks4OptionTitles: [],
         },
       ],
     ]);
@@ -429,31 +328,19 @@ describe('mergeUnitContexts', () => {
         unitSlug: 'fractions',
         tiers: ['higher'],
         tierTitles: ['Higher'],
-        examBoards: [],
-        examBoardTitles: [],
         examSubjects: [],
         examSubjectTitles: [],
-        ks4Options: [],
-        ks4OptionTitles: [],
       },
     ];
 
     mergeUnitContexts(existingMap, newContexts);
 
-    // Original should be unchanged
     expect(existingMap.get('fractions')?.tiers).toEqual(['foundation']);
   });
 });
 
 describe('buildKs4ContextMap', () => {
-  /**
-   * TDD RED: This test captures the Maths-style sequence bug.
-   * The maths-secondary sequence has NO exam board in the slug and NO ks4Options,
-   * BUT it DOES have tiered year entries (Year 10/11 have tiers: foundation/higher).
-   * The context map SHOULD contain tier information for those units.
-   */
-  it('extracts tiers from Maths-style sequences (no exam board, no ks4Options, but tiered years)', async () => {
-    // Simulate maths-secondary sequence structure
+  it('extracts tiers from Maths-style sequences (tiered years, no exam subjects)', async () => {
     const mathsSecondaryResponse = [
       {
         year: 7,
@@ -495,11 +382,10 @@ describe('buildKs4ContextMap', () => {
       return [];
     };
 
-    const sequences = [{ sequenceSlug: 'maths-secondary', ks4Options: null }];
+    const sequences = [{ sequenceSlug: 'maths-secondary' }];
 
     const result = await buildKs4ContextMap(fetchSequenceUnits, sequences);
 
-    // The algebraic-manipulation unit should appear in BOTH foundation and higher tiers
     const algebraContext = result.get('algebraic-manipulation');
     expect(algebraContext).toBeDefined();
     expect(algebraContext?.tiers).toContain('foundation');
@@ -508,8 +394,7 @@ describe('buildKs4ContextMap', () => {
     expect(algebraContext?.tierTitles).toContain('Higher');
   });
 
-  it('extracts tiers from Sciences-style sequences (with exam board and ks4Options)', async () => {
-    // Simulate science-secondary-aqa sequence structure
+  it('extracts tiers and exam subjects from Sciences-style sequences', async () => {
     const scienceAqaResponse = [
       {
         year: 10,
@@ -536,20 +421,13 @@ describe('buildKs4ContextMap', () => {
       return [];
     };
 
-    const sequences = [
-      {
-        sequenceSlug: 'science-secondary-aqa',
-        ks4Options: { slug: 'aqa-gcse-science', title: 'AQA GCSE Science' },
-      },
-    ];
+    const sequences = [{ sequenceSlug: 'science-secondary-aqa' }];
 
     const result = await buildKs4ContextMap(fetchSequenceUnits, sequences);
 
     const cellsContext = result.get('cells');
     expect(cellsContext).toBeDefined();
     expect(cellsContext?.tiers).toContain('foundation');
-    expect(cellsContext?.examBoards).toContain('aqa');
     expect(cellsContext?.examSubjects).toContain('biology');
-    expect(cellsContext?.ks4Options).toContain('aqa-gcse-science');
   });
 });

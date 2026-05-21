@@ -78,12 +78,8 @@ describe('getKs4FieldsForUnit', () => {
           {
             tiers: ['higher'],
             tierTitles: ['Higher'],
-            examBoards: [],
-            examBoardTitles: [],
             examSubjects: [],
             examSubjectTitles: [],
-            ks4Options: [],
-            ks4OptionTitles: [],
           },
         ],
       ]),
@@ -124,12 +120,8 @@ describe('enrichUnitDocWithKs4', () => {
           {
             tiers: ['higher'],
             tierTitles: ['Higher'],
-            examBoards: ['aqa'],
-            examBoardTitles: ['AQA'],
-            examSubjects: [],
-            examSubjectTitles: [],
-            ks4Options: [],
-            ks4OptionTitles: [],
+            examSubjects: ['biology'],
+            examSubjectTitles: ['Biology'],
           },
         ],
       ]),
@@ -140,8 +132,8 @@ describe('enrichUnitDocWithKs4', () => {
 
     expect(result.tiers).toEqual(['higher']);
     expect(result.tier_titles).toEqual(['Higher']);
-    expect(result.exam_boards).toEqual(['aqa']);
-    expect(result.unit_slug).toBe('test-unit'); // Original fields preserved
+    expect(result.exam_subjects).toEqual(['biology']);
+    expect(result.unit_slug).toBe('test-unit');
   });
 });
 
@@ -171,12 +163,8 @@ describe('enrichLessonDocWithKs4', () => {
           {
             tiers: ['foundation'],
             tierTitles: ['Foundation'],
-            examBoards: [],
-            examBoardTitles: [],
             examSubjects: [],
             examSubjectTitles: [],
-            ks4Options: [],
-            ks4OptionTitles: [],
           },
         ],
       ]),
@@ -186,7 +174,7 @@ describe('enrichLessonDocWithKs4', () => {
     const result = enrichLessonDocWithKs4(doc, context);
 
     expect(result.tiers).toEqual(['foundation']);
-    expect(result.lesson_slug).toBe('test-lesson'); // Original fields preserved
+    expect(result.lesson_slug).toBe('test-lesson');
   });
 });
 

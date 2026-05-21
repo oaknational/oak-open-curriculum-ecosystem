@@ -6,7 +6,6 @@
 import { generateSubjectProgrammesUrl } from '@oaknational/curriculum-sdk';
 import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../types/oak';
 import type { OakClient } from '../adapters/oak-adapter';
-import { buildSequenceFacetOps } from './indexing/sequence-facet-index';
 import { buildRollupDocuments, buildUnitDocuments } from './indexing/index-bulk-helpers';
 import { buildSequenceOps } from './indexing/sequence-bulk-helpers';
 import { ingestLogger } from './logger';
@@ -197,25 +196,21 @@ export async function buildPairDocuments(
   });
   const subjectProgrammesUrl = getSubjectProgrammesUrl(subject, ks);
 
-  const { unitOps, lessonOps, rollupOps, unitSummaries } = await buildCoreDocumentOps(
+  const { unitOps, lessonOps, rollupOps } = await buildCoreDocumentOps(
     context,
     units,
     subjectProgrammesUrl,
   );
 
-  const sequenceFacetOps = buildSequenceFacetOps({
-    subject,
-    keyStage: ks,
-    sequences: subjectSequences,
-    sequenceSources,
-    unitSummaries,
-  });
-
+  // Sequence facet docs (`oak_sequence_facets` index) are emitted only by the
+  // bulk-data pipeline, which has authoritative `ks4Options` from the bulk
+  // schema. The live-API path no longer emits them because the v0.7.0 API
+  // response carries no per-sequence variant signal.
   const sequenceOps = buildSequenceOps({
     subject,
     sequences: subjectSequences,
     sequenceSources,
   });
 
-  return [...unitOps, ...lessonOps, ...rollupOps, ...sequenceFacetOps, ...sequenceOps];
+  return [...unitOps, ...lessonOps, ...rollupOps, ...sequenceOps];
 }
