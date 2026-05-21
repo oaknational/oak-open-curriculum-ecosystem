@@ -26736,6 +26736,132 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "56818b16-46d5-49aa-a2de-16ef5bc2ef1d",
+      "agent_id": {
+        "agent_name": "Uplifted Swooping Wing",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "8d9999"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-21T00:30:00Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Commit WS3.1 graph-project scaffold",
+      "archived_at": "2026-05-21",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-21T00:35:00Z",
+        "closed_by": {
+          "agent_name": "Uplifted Swooping Wing",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "8d9999"
+        },
+        "summary": "Committed WS3.1 graph-project scaffold at 84bfffa5",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "56818b16-46d5-49aa-a2de-16ef5bc2ef1d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "52c653f1-01f5-4b0f-a65a-580530c7200a",
+      "agent_id": {
+        "agent_name": "Uplifted Swooping Wing",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "8d9999"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/libs/graph-project/**",
+            "pnpm-workspace.yaml",
+            "knip.config.ts",
+            ".dependency-cruiser.mjs"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-21T00:20:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "WS3.1 graph-project scaffold: workspace + 3 sub-path barrels (property-graph, projection, adjacency); inherited scaffold checklist",
+      "archived_at": "2026-05-21",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-21T00:35:01Z",
+        "closed_by": {
+          "agent_name": "Uplifted Swooping Wing",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "8d9999"
+        },
+        "summary": "WS3.1 graph-project scaffold landed at 84bfffa5: workspace + 3 reserved sub-path barrels (property-graph, projection, adjacency), graph-project added to FOUNDATION_LIB_PACKAGES, boundary tests updated",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "52c653f1-01f5-4b0f-a65a-580530c7200a",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a7f661d6-22b7-4c18-a8b5-c633a738be90",
+      "agent_id": {
+        "agent_name": "Uplifted Swooping Wing",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "8d9999"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-21T00:40:00Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Lifecycle commit: WS3.1 plan completion + claim-closure state",
+      "archived_at": "2026-05-21",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-21T00:42:00Z",
+        "closed_by": {
+          "agent_name": "Uplifted Swooping Wing",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "8d9999"
+        },
+        "summary": "Lifecycle commit landing: WS3.1 plan completion + claim-closure state",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a7f661d6-22b7-4c18-a8b5-c633a738be90",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
