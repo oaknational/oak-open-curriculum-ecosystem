@@ -2,6 +2,11 @@ import { renderSharedCommsLog } from './comms.js';
 import { type CollaborationAgentId, type CommsEvent, type DirectedCommsMessage } from './types.js';
 
 export { migrateLegacyCommsRecordCollections } from './comms-migration-records.js';
+export {
+  classifyEventForAgent,
+  drainRelevantEvents,
+  type EventView,
+} from './comms-relevant-events.js';
 
 const MAX_REPLY_SUBJECT_LENGTH = 200;
 

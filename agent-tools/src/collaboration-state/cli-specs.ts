@@ -21,6 +21,7 @@ import {
   claimsOpenOptions,
   commsAppendOptions,
   commsDirectOptions,
+  commsInboxOptions,
   commsReplyOptions,
   commsSendOptions,
   commsWatchOptions,
@@ -84,16 +85,25 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
     handler: migrateComms,
   }),
   'comms:inbox': commandSpec({
-    help: 'comms inbox --comms-dir <dir> --agent-name <name> --seen-file <path>',
-    options: ['comms-dir', 'agent-name', 'seen-file'],
+    help:
+      'comms inbox --comms-dir <dir> --seen-file <path> ' +
+      '--platform <platform> --model <model> ' +
+      '[--session-prefix <prefix>] [--only-directed] ' +
+      '(default: emit every relevant event — broadcast, group, directed, lifecycle — ' +
+      'with self-exclusion only; --only-directed narrows to directed-to-me)',
+    options: commsInboxOptions,
     handler: inboxComms,
   }),
   'comms:watch': commandSpec({
     help:
-      'comms watch --comms-dir <dir> --agent-name <name> --seen-file <path> ' +
-      '[--session-prefix <prefix>] [--poll-ms <n>] [--max-events <n>]',
+      'comms watch --comms-dir <dir> --seen-file <path> ' +
+      '--platform <platform> --model <model> ' +
+      '[--session-prefix <prefix>] [--only-directed] ' +
+      '[--poll-ms <n>] [--max-events <n>] ' +
+      '(default: emit every relevant event — broadcast, group, directed, lifecycle — ' +
+      'with self-exclusion only; --only-directed narrows to directed-to-me)',
     options: commsWatchOptions,
-    handler: (options, _env, runtime) => watchComms(options, runtime),
+    handler: watchComms,
   }),
   'comms:direct': commandSpec({
     help:

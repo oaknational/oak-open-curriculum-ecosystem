@@ -395,3 +395,38 @@ inquiry; reasoning vocabulary keeps it open*. Adjacent to but distinct
 from `no-hedging-vocabulary` (which targets weak vocabulary); this
 targets strong vocabulary that smuggles authority. Single instance.
 Promote on second instance.
+
+---
+
+## 2026-05-21 — Watch surface coverage: BOTH broadcast and directed
+
+Session 40c178 (Fiery Firing Cinder), two-agent collaborative test on
+WS2.2 ↔ WS3.2. After posting team-start I manually polled
+`ls -t .agent/state/collaboration/comms/` to spot the other agent's
+team-start.
+
+Owner correction: "why are you not using the monitor method to check
+for both general messages and messages to you? We always need to check
+both, checking only for direct messages will result in missing vital
+information".
+
+The diagnostic: `comms watch` from agent-tools filters to directed-to-me
+events only. Manual `ls -t` of the shared dir samples broadcast at the
+moment I sample, not event-driven, and is silent between samples. The
+two surfaces together — directed inbox AND broadcast/shared — are both
+load-bearing and neither alone is sufficient. Manual poll on one of them
+is a known-bad shape.
+
+The fix: a persistent Monitor over the entire comms directory,
+self-excluded by session_id_prefix, emitting one line per new event
+regardless of addressee. Script at `/tmp/fiery-comms-monitor.sh`. The
+self-exclusion is non-negotiable (see
+`.agent/reference/comms-watch-mechanism.md` §"Identity discipline").
+
+candidate: rule or directive amendment — *team-cadence watch must cover
+both broadcast AND directed surfaces, event-driven, not sampled*.
+Adjacent to `feedback_periodic_comms_check.md` (which says "poll
+periodically") but specifies the coverage shape: a manual poll on the
+shared log alone is the failure mode. The correct shape is one watcher
+over the full comms event stream with self-exclusion by session prefix.
+Promote on second instance or owner-direction graduation request.

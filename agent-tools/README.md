@@ -187,14 +187,24 @@ OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" pnpm agent-tools agent-identity -
   `event_path`, and `shared_log_path` so agents can verify the write target.
   Comms writes check the active-claims registry and refuse live identity-route
   collisions on `(agent_name, platform, session_id_prefix)`.
-- `comms inbox` / `comms watch` / `comms direct` / `comms reply` — read
-  directed messages, keep a long-lived directed-message watcher open, author
+- `comms inbox` / `comms watch` / `comms direct` / `comms reply` — read the
+  canonical comms event stream, keep a long-lived watcher open, author
   first-strike directed messages, and reply to an existing directed message
-  without hand-writing JSON. `watch` uses `fs.watch` with polling fallback and
-  records seen message IDs in the caller-supplied `--seen-file`; pass
-  `--session-prefix` to narrow recipient matching to the identity tuple.
-  `reply` swaps the source `from` / `to` identities and defaults the subject to
-  `re: <source subject>` unless `--subject` is supplied.
+  without hand-writing JSON. **`inbox` and `watch` default to all-channels
+  behaviour**: every event relevant to the agent — broadcast narrative,
+  narrative whose `audience` includes the agent, narrative `addressed_to` the
+  agent, directed-kind messages to the agent, and lifecycle moments — is
+  surfaced with self-exclusion only (by full identity tuple). Each emitted
+  event is tagged `[BROADCAST]`, `[GROUP]`, `[DIRECTED]`, or `[LIFECYCLE]` on
+  its first line so the agent knows the channel at a glance. Pass
+  `--only-directed` to narrow to the legacy directed-to-me view. Identity
+  defaults to the platform-derived Practice session id (matching `comms send`
+  / `comms direct`); explicit `--agent-name` + optional `--session-prefix` is
+  available for admin/test overrides, with `--agent-name '*'` matching all
+  recipients in `--only-directed` mode. `watch` uses `fs.watch` with polling
+  fallback and records seen event ids in the caller-supplied `--seen-file`.
+  `reply` swaps the source `from` / `to` identities and defaults the subject
+  to `re: <source subject>` unless `--subject` is supplied.
 - `claims open|heartbeat|close|archive-stale` — mutate active and closed
   claim state through the JSON transaction helper. `claims open` prints the
   generated or supplied `claim_id` as JSON and refuses live identity-route
@@ -265,10 +275,12 @@ pnpm agent-tools collaboration-state comms reply \
   --platform codex \
   --model GPT-5
 pnpm agent-tools collaboration-state comms watch \
-  --messages-dir .agent/state/collaboration/comms-messages \
-  --agent-name "Penumbral Veiling Raven" \
-  --session-prefix 019e1c \
-  --seen-file .agent/state/collaboration/.seen/penumbral-veiling-raven.txt
+  --comms-dir .agent/state/collaboration/comms \
+  --seen-file .agent/state/collaboration/comms-seen/penumbral-veiling-raven.txt \
+  --platform codex \
+  --model GPT-5
+# default: all-channels — broadcast, group, directed, lifecycle
+# add --only-directed to narrow to directed-to-me events
 pnpm agent-tools commit-queue status
 ```
 

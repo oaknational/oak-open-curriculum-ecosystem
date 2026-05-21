@@ -59,6 +59,73 @@ source of volatile truth.
 After the shared foundation is complete, establish a session-local operating
 contract. Keep it lightweight and revisable.
 
+### 0. Start The All-Channels Comms Monitor (non-negotiable)
+
+**Communication is the absolute heart of multi-agent work.** Before any other
+team-bootstrap step — before registering presence, before naming coordination
+pressure, before opening any claim — every participating agent must have a
+persistent watcher running over the **entire** comms event stream at
+`.agent/state/collaboration/comms/`.
+
+The comms event stream is the canonical truth. Public (broadcast), group
+(narrative with `audience` or `addressed_to`), direct (`directed` kind, and
+narrative with `addressed_to` matching the agent), and lifecycle messages are
+all valid views onto the same stream, and **all are important**. A watcher
+that filters to a single view (e.g. `comms watch` in its current
+directed-only shape, or manual `ls -t` polling of the shared dir) discards
+the others and will miss vital coordination.
+
+The required shape is **one event-driven watcher** over the full directory,
+emitting one notification per new event, with **self-exclusion only** —
+filter out events authored by the agent's own
+`(agent_name, platform, session_id_prefix)` identity tuple (per
+[`.agent/reference/comms-watch-mechanism.md`](../../reference/comms-watch-mechanism.md)
+§"Identity discipline") and emit everything else. The agent applies any
+relevance triage in their own reasoning, not at the watcher boundary.
+
+Reference shape (run via the harness Monitor / equivalent persistent
+mechanism):
+
+```bash
+SEEN=/tmp/<agent>-comms-seen.txt
+ls .agent/state/collaboration/comms | sort > "$SEEN"
+while true; do
+  ls .agent/state/collaboration/comms | sort > /tmp/now.txt
+  for f in $(comm -13 "$SEEN" /tmp/now.txt); do
+    jq -r --arg self "$SELF_SESSION_PREFIX" '
+      if (.author.session_id_prefix // .from.session_id_prefix // "") == $self
+      then empty
+      else "[" + .created_at + "] "
+           + ((.author.agent_name // .from.agent_name // "?") + "/"
+              + (.author.session_id_prefix // .from.session_id_prefix // "?"))
+           + " -> " + (
+               if (.to // null) != null
+               then (.to.agent_name // "?") + "/" + (.to.session_id_prefix // "?")
+               elif (.addressed_to // null) != null then .addressed_to
+               elif (.audience // null) != null
+               then "GROUP(" + (.audience | join(",")) + ")"
+               else "BROADCAST"
+               end
+             )
+           + " :: " + (.title // .subject // "?")
+      end' ".agent/state/collaboration/comms/$f"
+  done
+  mv /tmp/now.txt "$SEEN"
+  sleep 5
+done
+```
+
+A participating agent that cannot run such a watcher (platform without a
+persistent background-task primitive) must declare the gap in their team
+presence post and adopt a polling cadence that sweeps the full directory at
+the team-cadence interval, never a single-view filter.
+
+The `agent-tools` CLI surfaces (`comms watch`, `comms inbox`) default to
+all-channels behaviour when available; a `--only-directed` flag opts into
+the narrow view. If the local CLI build still filters to directed-only by
+default, treat that as a known gap and use the script form above until the
+build catches up.
+
 ### 1. Register Presence
 
 Each agent posts a short team-start report **before any source claim** and

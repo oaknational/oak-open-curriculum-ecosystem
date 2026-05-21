@@ -25,11 +25,24 @@ export const commsSendOptions = [
 
 export const commsWatchOptions = [
   'comms-dir',
-  'agent-name',
   'seen-file',
+  'platform',
+  'model',
+  'agent-name',
   'session-prefix',
+  'only-directed',
   'poll-ms',
   'max-events',
+] as const;
+
+export const commsInboxOptions = [
+  'comms-dir',
+  'seen-file',
+  'platform',
+  'model',
+  'agent-name',
+  'session-prefix',
+  'only-directed',
 ] as const;
 
 export const commsDirectOptions = [
