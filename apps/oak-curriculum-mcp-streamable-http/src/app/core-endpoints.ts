@@ -47,7 +47,7 @@ export function initializeCoreEndpoints(
   options: CoreEndpointOptions,
   log: Logger,
   assetRateLimiter: RequestHandler,
-): { mcpFactory: McpServerFactory; ready: Promise<void> } {
+): { mcpFactory: McpServerFactory } {
   const { runtimeConfig, observability } = options;
   const searchRetrieval = runtimeConfig.useStubTools
     ? createStubSearchRetrieval()
@@ -104,5 +104,5 @@ export function initializeCoreEndpoints(
 
   addHealthEndpoints(app, log);
 
-  return { mcpFactory, ready: Promise.resolve() };
+  return { mcpFactory };
 }

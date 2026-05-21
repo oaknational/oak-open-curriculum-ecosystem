@@ -9,6 +9,7 @@ import {
   createMockObservability,
   createMockRuntimeConfig,
   createNoOpClerkMiddleware,
+  createNoOpRateLimiterFactory,
 } from './helpers/test-config.js';
 
 const ACCEPT = 'application/json, text/event-stream';
@@ -24,6 +25,7 @@ async function createBypassedApp() {
     runtimeConfig,
     observability,
     getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
+    rateLimiterFactory: createNoOpRateLimiterFactory(),
   });
 }
 
@@ -38,6 +40,7 @@ async function createEnforcedApp() {
     getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: createNoOpClerkMiddleware(),
+    rateLimiterFactory: createNoOpRateLimiterFactory(),
   });
 }
 

@@ -1,6 +1,10 @@
 import type express from 'express';
 import { createApp } from '../../src/application.js';
-import { createMockObservability, createMockRuntimeConfig } from './test-config.js';
+import {
+  createMockObservability,
+  createMockRuntimeConfig,
+  createNoOpRateLimiterFactory,
+} from './test-config.js';
 
 export const STUB_ACCEPT_HEADER = 'application/json, text/event-stream';
 const STUB_API_KEY = 'stub-api-key';
@@ -26,6 +30,7 @@ export async function createStubbedHttpApp(
     runtimeConfig,
     observability,
     getWidgetHtml: () => '<!doctype html><html><body>stub-widget</body></html>',
+    rateLimiterFactory: createNoOpRateLimiterFactory(),
   });
 
   return { app };

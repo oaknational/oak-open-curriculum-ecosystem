@@ -9,7 +9,6 @@ import { createEnsureMcpAcceptHeader } from './mcp-middleware.js';
 import {
   runBootstrapPhase,
   setupBaseMiddleware,
-  createMcpReadinessMiddleware,
   logBootstrapComplete,
   logRegisteredRoutes,
   initializeAppInstance,
@@ -42,13 +41,18 @@ export interface CreateAppOptions {
   readonly upstreamMetadata?: UpstreamAuthServerMetadata;
   /** Factory for global Clerk middleware (tests inject no-op; prod omits). (ADR-078) */
   readonly clerkMiddlewareFactory?: () => RequestHandler;
-  /** Factory for per-IP rate-limit middleware (tests inject fake; prod omits). (ADR-078, ADR-158) */
-  readonly rateLimiterFactory?: RateLimiterFactory;
+  /**
+   * Factory for per-IP rate-limit middleware. Required: production passes
+   * {@link createDefaultRateLimiterFactory}; tests pass a no-op or recording
+   * fake from `src/test-helpers/rate-limiter-fakes.ts`. Required (not
+   * optional) so the test boundary cannot silently fall back to the
+   * production `express-rate-limit` factory and its `MemoryStore` cleanup
+   * interval. (ADR-078, ADR-158)
+   */
+  readonly rateLimiterFactory: RateLimiterFactory;
   /** Sentry Express error-handler registration; live mode only, not fixture/off. (ADR-078) */
   readonly setupSentryErrorHandler?: SentryExpressErrorHandlerSetup;
 }
-
-let appCounter = 0;
 
 function setupPreAuthPhases(
   app: ExpressWithAppId,
@@ -101,7 +105,7 @@ function setupPostAuthPhases(deps: SetupPostAuthPhasesDeps): void {
   const { app, options, log, bootstrapTimer, appId, allowedHosts } = deps;
   const { dnsRebindingMiddleware, mcpRateLimiter, assetRateLimiter } = deps;
 
-  const { mcpFactory, ready } = runBootstrapPhase(
+  const { mcpFactory } = runBootstrapPhase(
     log,
     bootstrapTimer,
     'initializeCoreEndpoints',
@@ -118,7 +122,7 @@ function setupPostAuthPhases(deps: SetupPostAuthPhasesDeps): void {
     options.runtimeConfig.displayHostname,
     options.runtimeConfig.version,
   );
-  app.use('/mcp', createEnsureMcpAcceptHeader(log), createMcpReadinessMiddleware(ready, log));
+  app.use('/mcp', createEnsureMcpAcceptHeader(log));
 
   runBootstrapPhase(
     log,
@@ -156,8 +160,7 @@ function logBootstrapSummary(
 export async function createApp(options: CreateAppOptions): Promise<ExpressWithAppId> {
   const log =
     options.logger ?? options.observability.createLogger({ name: 'streamable-http:app-instance' });
-  const { app, timer: bootstrapTimer, appId } = initializeAppInstance(appCounter, log);
-  appCounter = appId;
+  const { app, timer: bootstrapTimer, appId } = initializeAppInstance(log);
 
   // VERCEL_ENV is set on Vercel (production|preview|development), absent
   // elsewhere — see rate-limiter-factory.ts module TSDoc for why this

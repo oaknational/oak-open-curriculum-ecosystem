@@ -26,6 +26,7 @@ import {
   createMockObservability,
   createMockRuntimeConfig,
   createNoOpClerkMiddleware,
+  createNoOpRateLimiterFactory,
 } from './helpers/test-config.js';
 import { TEST_UPSTREAM_METADATA } from '../src/test-helpers/upstream-metadata-fixture.js';
 
@@ -51,6 +52,7 @@ async function createAuthEnabledApp(): Promise<Express> {
     runtimeConfig,
     observability: createMockObservability(runtimeConfig),
     getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
+    rateLimiterFactory: createNoOpRateLimiterFactory(),
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: createNoOpClerkMiddleware(),
   });
@@ -272,6 +274,7 @@ describe('Application-Level Method-Aware Auth', () => {
         runtimeConfig,
         observability: createMockObservability(runtimeConfig),
         getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
+        rateLimiterFactory: createNoOpRateLimiterFactory(),
       });
     }
 

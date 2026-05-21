@@ -2,7 +2,11 @@ import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import { hasJsonRpcOrResultError, parseSseEnvelope } from './helpers/sse.js';
-import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
+import {
+  createMockObservability,
+  createMockRuntimeConfig,
+  createNoOpRateLimiterFactory,
+} from './helpers/test-config.js';
 
 const ACCEPT = 'application/json, text/event-stream';
 
@@ -26,6 +30,7 @@ async function post(body: Record<string, unknown>) {
     runtimeConfig,
     observability: createMockObservability(runtimeConfig),
     getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
+    rateLimiterFactory: createNoOpRateLimiterFactory(),
   });
   return request(app).post('/mcp').set('Host', 'localhost').set('Accept', ACCEPT).send(body);
 }

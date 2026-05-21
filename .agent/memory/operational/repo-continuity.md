@@ -17,6 +17,209 @@ Earlier archives remain under [`archive/`](archive/).
 ## Current State
 
 - Current branch: `feat/mcp-graph-support-foundation`.
+- **2026-05-21 (Sunlit Weaving Aurora / `claude` / Opus 4.7 (1M) / `a6574f`)** —
+  **HTTP MCP test-suite quality pass** in
+  `apps/oak-curriculum-mcp-streamable-http`. Triggered by an intermittent
+  `Parse Error: Expected HTTP/, RTSP/ or ICE/` flake under `pnpm check`.
+  Landed: (1) commit `ab0dac3f` deleted `e2e-tests/header-redaction.e2e.test.ts`
+  (per-test comments admitted it could not verify redaction; real proof
+  at `src/logging/header-redaction.unit.test.ts`, 503 lines). (2) Three
+  architectural shared-state fixes: deleted dead `createMcpReadinessMiddleware`
+  in `src/app/bootstrap-helpers.ts` (leaked `setTimeout` per request,
+  racing `ready: Promise.resolve()`); made `rateLimiterFactory` required
+  on `CreateAppOptions` (production callsites inject
+  `createDefaultRateLimiterFactory` explicitly; tests use new
+  `createNoOpRateLimiterFactory` in `e2e-tests/helpers/test-config.ts`);
+  encapsulated `let appCounter` from `application.ts` into private
+  module-scoped counter in `bootstrap-helpers.ts`. (3) Plan landed at
+  `.agent/plans/sdk-and-mcp-enhancements/current/http-mcp-test-suite-improvements.plan.md`
+  covering 7 follow-on cycles (proportionality pushdown, immediate-fail
+  assertions, audit-shaped duplicate deletion, out-of-process E2E
+  decision, appId elimination, security-expert Sentry confirmation).
+  Reviewer transcripts: test-expert `a7b66b32ca44df2e8`, code-expert
+  `a2245c63224d1fbe5`. Owner correction absorbed: supertest-based e2e
+  files in HTTP-transport workspaces are correctly classified as e2e
+  per `testing-strategy.md`'s "runner harness boots the system" rule;
+  STDIO-transport's "separate process" requirement does not generalise.
+  E2E suite duration dropped from ~5s to 3.09s (consistent with the
+  leaked-timer fix). Charcoal Searing Ember handling parallel planning
+  work.
+- **2026-05-21 (Torrid Glowing Flame / `claude` / Opus 4.7 (1M) / `5ab0ec`, second round of the same session)** —
+  **gate-cure pass + reviewer absorption on the knip / depcruise / markdownlint
+  surface that was red at the end of the first round.** Owner-directed
+  six-file cure set: (1) dropped `export` on `DEFAULT_BULK_DIR_NAME`
+  (`apps/oak-search-cli/src/cli/shared/resolve-bulk-dir.ts` — internal use
+  only); (2) dropped `type EventView` re-export from
+  `agent-tools/src/collaboration-state/comms-use-cases.ts` AND dropped
+  `export` from the source declaration in `comms-relevant-events.ts`
+  (type used internally only across 7 sites in the source file); (3)
+  moved `DirectedInboxDrainResult` interface from `comms-use-cases.ts`
+  to the shared `types.ts` and updated two import sites — this broke a
+  pre-existing `no-circular` depcruise cycle exposed once the knip
+  failure cleared (the cycle was type-only:
+  `comms-relevant-events → comms-use-cases → comms-relevant-events`,
+  with `comms-relevant-events` importing the result type from
+  `comms-use-cases` and `comms-use-cases` re-exporting the function
+  that returns it); (4) markdownlint MD004 cure on two thread records
+  — `markdownlint --fix` was misinterpreting `+` commit-ref separators
+  in prose as bullet markers; replaced with commas. Then both
+  reviewers (code-expert + type-expert) dispatched on the cure set;
+  two convergent follow-ups absorbed: (a) merged the duplicate
+  `./types.js` import declarations in `comms-relevant-events.ts`
+  (one combined import with seven named members); (b) reshaped the
+  TSDoc on `DirectedInboxDrainResult` to lead with the type contract
+  (`output` is formatted text; `eventCount` is drain count) and move
+  the file-structure rationale (cycle prevention) to `@remarks`.
+  **knip and depcruise are now green**; one residual prettier-check
+  warning remains on a peer-agent file
+  (`apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts`
+  — not from my session). Owner direction: skip further gate
+  verification this session. **Reviewer findings flagged but not
+  actioned (pre-existing, out of scope)**: `BulkDirError` not exported
+  from `resolve-bulk-dir.ts` (consumers can narrow by `.type` but
+  cannot name it); throw-paths in `comms-use-cases.ts` violate the
+  Result-pattern principle per `principles.md` (pre-existing standing
+  concern, not introduced by this cure). The first round's planning
+  amendment set (11 plan/ADR files) is unchanged in the working tree
+  and ready for refinement by Charcoal Searing Ember per the owner's
+  handoff direction.
+- **2026-05-21 (Torrid Glowing Flame / `claude` / Opus 4.7 (1M) / `5ab0ec`)** —
+  **EEF Inc.1d sequencing pull-forward planning amendment set authored
+  across 11 plan/ADR surfaces; NO source code changed.** Owner-directed
+  sequencing change moves the EEF strands adapter into a new graph-stack
+  Inc.1d sub-increment as a concurrent tenant of `graph-corpus-sdk`
+  alongside the Threads adapter (per ADR-173 §First-wave ingestion scope
+  2026-05-21 amendment), enabling the first user-facing EEF MCP feature
+  to ship at a new MVP-arc gate-1a ahead of substrate completion without
+  scope reduction. Amendment set: ADR-173 (workspace #6 Inc.1 activation
+  - §First-wave ingestion scope + §Corpus source authority +
+  §Consequences); graph-stack.plan.md (WS4.4 + WS4.5 todos at
+  `sub_increment: 1d`); graph-query-layer.plan.md (T2 interface home
+  correction to `graph-corpus-sdk`; `findByTag` signature uniformised to
+  `Result<readonly TNode[], FindByTagError>`; per-adapter sequencing
+  notes on T3/T4/T5); eef-evidence-corpus.plan.md (new `t6a-explore-tool`
+  todo for the gate-1a first-feature tool `eef-explore-evidence-for-context`;
+  §Gate grouping table mapping t1–t20+t6a); graph-mvp-arc.plan.md (gate-0/
+  gate-1 split into gate-0a/gate-1a/gate-0b/gate-1b; sequencing diagram
+  restructured); graph-portfolio-index.md (MVP arc table; Foundation
+  ingestion-scope row 4); high-level-plan.md (combinatorial-arc activation);
+  graph-combinatorial-arc.plan.md (substrate_floor + promotion_trigger
+  updated to gate-1a); oak-kg-threads-surface.plan.md +
+  oak-misconceptions-subgraph-mcp-surface.plan.md +
+  oak-misconceptions-eef-cross-corpus-surface.plan.md (gate-name
+  propagation; parallel-safety updated). Both reviewers ran (code-expert
+  - docs-adr-expert); all 5 findings absorbed (2 docs-adr MUST-FIX on
+  ADR-173 singular-corpus contradictions; 1 code-expert CONCERN on
+  findByTag Result-discipline tension; 2 code-expert NITs on
+  FieldPredicate semantic-collision propagation + portfolio-index
+  Foundation row staleness). Working tree carries +2035/-249 lines net
+  across 11 files plus thread records, napkin entry, and one comms event.
+  **Non-negotiable architectural commitments declared at gate-1a**: full
+  GraphView<TNode, TEdgeType> interface (all 7 method signatures, all 5
+  unimplemented operations as typed `NotImplementedYet` Result stubs);
+  T7a DeepKeyPath compile-time smoke-test (array-stop discipline);
+  structural citation/caveat/freshness envelope at the tool boundary;
+  ADR-175 freshness CI gate (180-day binding); ADR-157 `eef-*` namespace
+  - `_meta` attribution; Sentry telemetry seam pattern; atomic TDD
+  landing; `graph-corpus-sdk` as the long-term home for the EEF adapter
+  (no transient stub in `oak-curriculum-sdk`). Net additional work over
+  the unsplit sequencing roughly +10–15% (ADR-123 amends twice; T7/T19
+  extend across two passes), accepted per owner direction as the price
+  of earlier first-feature delivery without future drift. **Cascade
+  status**: Opalescent Twinkling Supernova's session cleared the v0.7.0
+  upstream-API cascade earlier today (3 commits b1afd5bf/5613eee4/
+  8fcd3200); my session is downstream of that clear and adds
+  planning-only amendments to the (post-cascade) feature branch.
+  **`pnpm check` gate**: known red on two pre-existing peer-agent knip
+  violations (`DEFAULT_BULK_DIR_NAME` in Pelagic's bug-fix branch
+  uncommitted in `apps/oak-search-cli/src/cli/shared/resolve-bulk-dir.ts:96`;
+  `EventView` re-export in
+  `agent-tools/src/collaboration-state/comms-use-cases.ts:8`). Both pre-date
+  my session; neither caused by planning amendments. Per
+  `all-quality-gates-blocking-always`, this session does NOT declare
+  handoff complete in the cleanliness-gate sense; surfacing the residual
+  red to owner. **Next session entry shape**: pick up refining the
+  amendment set, dispatch the three remaining specialist reviewers
+  (type-expert at WS4.4 authoring time — load-bearing for the
+  `NotImplementedYet` variant typing + DeepKeyPath array-stop discipline;
+  architecture-expert-betty for the GraphView-in-`graph-corpus-sdk`-vs-
+  `graph-core` boundary question; assumptions-expert for the
+  sparse-relations carry-over from the 2026-04-30 verdict). Owner may
+  also choose to commit the amendment set ahead of further reviewer
+  cycles. Working tree files mine: see `git diff --stat HEAD --`
+  enumeration in shared-comms-log entry at 2026-05-21T15:31:49Z.
+- **2026-05-21 (Opalescent Twinkling Supernova / `claude` / Opus 4.7 (1M) / `5c3963`)** —
+  **upstream API v0.7.0 alignment landed + schema-flow cleanup + two future plans**.
+  Three commits on `feat/mcp-graph-support-foundation`:
+  (1) [`b1afd5bf`](https://example/commit/b1afd5bf) `chore(sdk): update repo for upstream
+  API v0.7.0` — 15 codegen artefacts + 7 search-cli source/test files + 3 JSON fixtures
+  - 1 curriculum-sdk test (26 files; +1286/-619).
+  (2) [`5613eee4`](https://example/commit/5613eee4) `refactor(search-cli): remove
+  hardcoded slug oracle and dual-path facet emission` — deletes `KNOWN_EXAM_BOARDS`,
+  `parseExamBoardFromSlug`, `Ks4Option`/`extractKs4Option`/`SubjectSequenceInfo.ks4Options`
+  dead surface, hardcoded `hasKs4Options: false`, and the live-API sequence-facet
+  emission path. Bulk pipeline is now sole emitter of `oak_sequence_facets` docs
+  (13 files; +108/-569). 1001/1001 search-cli + 728/728 curriculum-sdk tests pass.
+  (3) [`8fcd3200`](https://example/commit/8fcd3200) `docs(plans): add search-cli
+  ingestion consolidation strategic brief` — new future plan
+  [`search-cli-ingestion-pipeline-consolidation.plan.md`](../plans/architecture-and-infrastructure/future/search-cli-ingestion-pipeline-consolidation.plan.md)
+  paired with cross-references in/out of
+  [`bulk-schema-driven-code-generation.md`](../plans/semantic-search/future/02-schema-authority-and-codegen/bulk-schema-driven-code-generation.md).
+  Behaviour-failure pattern caught and corrected this session: **rounding
+  principle-driven work to gate-green work under cognitive load** — corrected
+  three times by owner ("ceremony" / "made-up cascade phrase" / "dead code never
+  okay, hardcoded values are antithesis of schema-first"). Each correction landed
+  the next principle-aligned cut. No `--no-verify` invoked; all gates green at
+  every commit. Working tree carries 60 uncommitted files belonging to other
+  agents' in-flight work — none mine, not closed by this session.
+  **Cleanliness gate red at session close**: `pnpm check` exits 1 on two knip
+  unused-export violations in uncommitted peer-agent work — neither caused by
+  this session. (1) `DEFAULT_BULK_DIR_NAME` exported from
+  `apps/oak-search-cli/src/cli/shared/resolve-bulk-dir.ts:96` (Pelagic's
+  bug-fix branch); used internally only — drop `export`. (2) `EventView`
+  re-exported from `agent-tools/src/collaboration-state/comms-use-cases.ts:8`
+  (pre-existing); internally referenced only — drop the re-export OR drop
+  `export` on the source definition in `comms-relevant-events.ts:26`. Both
+  fixes are surface-level export-keyword removals. Handoff not declared
+  complete per `all-quality-gates-blocking-always`; surfacing for owner
+  direction.
+- **2026-05-21 (Molten Igniting Hearth / `claude` / Opus 4.7 (1M) / `078515`)** —
+  **three-agent team session on `connecting-oak-resources`; NO graph product
+  code landed; upstream-API v0.7.0 cascade discovered + cascade-clear plan
+  authored**. Agents: Celestial Glimmering Moon `46d23a` (WS2.2 + gate-running),
+  Molten Igniting Hearth `078515` (WS3.3), Pelagic Sailing Beacon `f72405`
+  (Inc.1a gate-sweeper + WS2.3 scout + reviewer cadence). Rendezvous resolved
+  via comms-event cycle-collision protocol (earliest-timestamp wins per §3 of
+  `start-right-team` First Moves). Mid-session **cascade discovered**: the
+  dirty SDK codegen tree inherited from `84638bc9` is an intentional upstream
+  API v0.6.0 → v0.7.0 bump (subject path-param enum constraint; `ks4Options`
+  removed from `sequenceSlugs[]`; `ks4ProgrammeFactors` added as required on
+  `/subjects/{subject}` response); 5 search-cli type errors + 2 lint errors +
+  1 curriculum-sdk middleware-test failure cascade locally. Per AGENT.md
+  Cardinal Rule, codegen + workspace alignment is one atomic operation. Plan
+  authored at
+  [`upstream-api-v0.7.0-alignment.plan.md`](../plans/sdk-and-mcp-enhancements/current/upstream-api-v0.7.0-alignment.plan.md)
+  with 4 workstreams and 8 explicit assumptions. **All commits blocked** on
+  owner authorisation of A1 (v0.7.0 intent confirm) + chore(sdk) commit
+  shape. **WS3.3 atomic bundle ready-to-commit** in Molten's working tree
+  (3 files: `packages/libs/graph-project/src/adjacency/index.ts`,
+  `src/adjacency/index.unit.test.ts`, `src/index.ts` +1 line; 22 vitest
+  green; in-cycle reviewers absorbed — type-expert GO, architecture-expert-
+  barney KEEP-SEPARATE on the three-barrel split, test-expert GO-WITH-
+  CONDITIONS absorbed). Team coordinated cleanly via comms substrate through
+  the all-quality-gates-blocking surfacing — no agent attempted
+  `--no-verify` or bypass. **Behaviour-failure entries captured in napkin**:
+  (a) `bypass-as-progress` impulse when shell argv long-body comms-append
+  failed (Celestial; owner caught); (b) `preparation-as-progress` during
+  plan authoring (Celestial; owner caught); (c) honesty-correction on
+  overstated foundation-completeness in initial team-start broadcast
+  (Molten; self-corrected mid-session before any commit attempt). All
+  three agent sessions closed; no retained claims; Molten's working-tree
+  WS3.3 files remain in the tree for the next agent to pick up after the
+  cascade clears. Inc.1a remaining cycles unchanged at 3 (WS2.2, WS2.3,
+  WS3.3); WS3.2 LANDED `abe6fcb3` (Foamy, 2026-05-21 morning) remains
+  the most-recent Inc.1a landing.
+
 - **2026-05-21 (Fiery Firing Cinder / `claude` / Opus 4.7 (1M) / `40c178`)** —
   **two-agent collaborative session, empirical-test outcome WORKING**.
   Session opened as the owner-directed two-Claude empirical test of the
@@ -294,13 +497,13 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Fiery Firing Cinder / `claude` / Opus 4.7 (1M) / `40c178` / 2026-05-21 |
-| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Fiery Firing Cinder / `claude` / Opus 4.7 (1M) / `40c178` / 2026-05-21, Foamy Charting Fjord / `claude` / Opus 4.7 (1M) / `86dbd1` / 2026-05-21 |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Torrid Glowing Flame / `claude` / Opus 4.7 (1M) / `5ab0ec` / 2026-05-21, Fiery Firing Cinder / `claude` / Opus 4.7 (1M) / `40c178` / 2026-05-21 |
+| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Torrid Glowing Flame / `claude` / Opus 4.7 (1M) / `5ab0ec` / 2026-05-21, Molten Igniting Hearth / `claude` / Opus 4.7 (1M) / `078515` / 2026-05-21, Celestial Glimmering Moon / `claude` / Opus 4.7 / `46d23a` / 2026-05-21, Pelagic Sailing Beacon / `claude` / Opus 4.7 (1M) / `f72405` / 2026-05-21 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / `codex` / 2026-04-28 |
 | `sector-engagement` | External adoption | [record][sector] | Squally / `cursor` / 2026-04-30 |
-| `eef` | EEF evidence corpus | [record][eef] | Fragrant Regrowing Root / `codex` / GPT-5 / `019e12` / 2026-05-10 |
+| `eef` | EEF evidence corpus | [record][eef] | Torrid Glowing Flame / `claude` / Opus 4.7 (1M) / `5ab0ec` / 2026-05-21 |
 
 Compact identity rule (per [PDR-027](../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md)
 and the 2026-05-17 structural refactor): this column carries only the
@@ -492,22 +695,82 @@ owner-directed mid-session pivot to all-channels comms CLI work
 (95f42cb7), WS1.5 (ebd0e8dc), WS1.6 (3add41f9), WS2.1 (0f895070), WS3.1
 (84bfffa5), WS3.2 (abe6fcb3). Inc.1a remaining: 3 cycles (WS2.2, WS2.3,
 WS3.3).
-**Next safe step**: WS2.2 — `packages/libs/graph-ingest/src/jsonld-compatible/**`
-plus a Turtle parser location (recommended: new `src/turtle/` sub-path
-peer to the six WS2.1 pre-declared barrels; n3.js is the W3C-aligned
-Turtle parser choice). Lands §Test discipline invariant #2 contract
-test (every emitted edge predicate is `NamedNode`, never a bare
-string). The next team session may also dispatch WS2.3 ↔ WS3.3 in
-parallel per plan §Cycle dependencies; single-agent through WS2.2 →
-WS2.3 → WS3.3 remains the explicitly preferred default. The empirical
-two-agent collaboration shape (shared physical checkout, coordination
-via active-claims + comms on disjoint workspace trees) is now confirmed
-WORKING from today's session — the standing
-`feedback_worktree_isolation_unreliable` memory is scoped to Agent-tool
-`isolation: "worktree"` sub-agent dispatch only, not shared-checkout
-two-main-session collaboration. Multi-vendor open of the thread remains
-forbidden until WS3.3 lands. Inc.1a continues under the 2026-05-12
-holistic re-plan (`f73c42f5`): WS1.8 is deferred to Inc.2.
+**Next safe step (post-Torrid handoff 2026-05-21 evening)**: **the v0.7.0
+cascade has CLEARED** via Opalescent Twinkling Supernova's three commits
+earlier today (`b1afd5bf` chore(sdk), `5613eee4` refactor(search-cli),
+`8fcd3200` docs(plans)); branch is no longer cascade-blocked. **The next
+session's load-bearing work** is to refine the EEF Inc.1d sequencing
+pull-forward amendment set (currently uncommitted in the working tree;
+11 plan/ADR files + thread records + napkin + one comms event;
++2035/-249 lines per the Torrid session's diff stat) and to dispatch
+the three remaining specialist reviewers: **type-expert** at WS4.4
+authoring time (load-bearing for the `Result<T, NotImplementedYet>`
+variant typing across 5 EEF stub operations and the
+`Result<readonly TNode[], FindByTagError>` shape introduced in the
+2026-05-21 amendment; also the `DeepKeyPath<TNode, Depth>` recursive
+type and array-stop discipline); **architecture-expert-betty** for the
+`GraphView<TNode, TEdgeType>`-in-`graph-corpus-sdk`-vs-`graph-core`
+boundary question already flagged on WS4.4; **assumptions-expert** for
+the sparse-relations-on-manifest carry-over from the 2026-04-30 verdict
+flagged on WS4.5. The owner may also choose to commit the amendment
+set ahead of further reviewer cycles. After amendment-set landing,
+resume Inc.1a substrate completion (WS2.2 + WS2.3 + WS3.3) and then
+Inc.1b (WS4.1 scaffold + WS4.2 Threads adapter) + Inc.1c (WS4.3 query
+proof) + Inc.1d (WS4.4 GraphView interface + WS4.5 EEF adapter — new
+sub-increment per the 2026-05-21 amendment). Then the three
+pieces of session-output that remained in the working tree from earlier
+2026-05-21 sessions: (a) Molten's WS3.3 atomic bundle on
+`packages/libs/graph-project/src/adjacency/**` (3 files, 22/22 green,
+three in-cycle reviewers absorbed clean — see thread record);
+(b) Celestial's `start-right-team` SKILL update encoding the new
+inherited-tree gate-verification First Move and the dialogue-over-
+competition vocabulary reframe; (c) Pelagic's `apps/oak-search-cli`
+bug fixes — verify post-cascade-clear which of these are still in the
+tree vs absorbed into the v0.7.0 cascade-clear commits. After the cascade
+clears, three pieces of session-output remain in the working tree from
+the 2026-05-21 three-agent session and should land as separate
+follow-on commits: (a) Molten's WS3.3 atomic bundle on
+`packages/libs/graph-project/src/adjacency/**` (3 files, 22/22 green,
+three in-cycle reviewers absorbed clean — see thread record);
+(b) Celestial's `start-right-team` SKILL update encoding the new
+inherited-tree gate-verification First Move and the
+dialogue-over-competition vocabulary reframe;
+(c) continuity-state updates (this file, thread record, napkin,
+pending-graduations). After all of that, **then** resume WS2.2 —
+`packages/libs/graph-ingest/src/jsonld-compatible/**` plus a Turtle
+parser location (recommended: new `src/turtle/` sub-path peer to the six
+WS2.1 pre-declared barrels; n3.js is the W3C-aligned Turtle parser
+choice). Lands §Test discipline invariant #2 contract test (every
+emitted edge predicate is `NamedNode`, never a bare string). The next
+team session may also dispatch WS2.3 ↔ WS3.3 in parallel per plan §Cycle
+dependencies; single-agent through WS2.2 → WS2.3 → WS3.3 remains the
+explicitly preferred default. The empirical two-agent collaboration
+shape (shared physical checkout, coordination via active-claims + comms
+on disjoint workspace trees) is now confirmed WORKING from earlier
+2026-05-21 sessions; the three-agent shape (Celestial + Molten +
+Pelagic) is also confirmed WORKING for coordination, with the
+inherited-tree-state failure mode (cascade-discovered-late) now
+structurally cured in the updated `start-right-team` SKILL First Moves.
+Multi-vendor open of the thread remains forbidden until WS3.3 lands.
+Inc.1a continues under the 2026-05-12 holistic re-plan (`f73c42f5`):
+WS1.8 is deferred to Inc.2.
+
+**Deep consolidation status**: not due — no consolidation trigger fired
+this session. The session's substance is captured in session-scoped
+surfaces (napkin entries, pending-graduations annotation, thread record,
+this continuity refresh). Cross-session pattern extraction +
+doctrine graduation work belongs to the next `consolidate-docs` run
+triggered by its own thread-scoped checklist.
+
+**`pnpm check` cleanliness gate** (Step 11 of `session-handoff`): RED on
+the inherited tree per the cascade enumerated in the
+`upstream-api-v0.7.0-alignment.plan.md`. Per the standing rule's third
+option, the blocker is surfaced to owner with evidence and execution is
+held. Session-handoff completes with the gate-red state explicitly
+documented and the cure path named; the gate goes green when the
+cascade-clear `chore(sdk):` commit lands. No `--no-verify` used; no
+bypass attempted; no scoped-only gate run substituted for the aggregate
+check.
 
 **WS1.5 status (2026-05-13, Quiet Stalking Mirror)**: design fully absorbed inline in
 the active graph-stack plan under `ws1-canon`. Three-reviewer pre-implementation
@@ -588,7 +851,26 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-21 — Uplifted Swooping Wing / `claude` / Opus 4.7 (1M) /
+**Status (2026-05-21 evening — Torrid Glowing Flame / `claude` / Opus 4.7
+(1M) / `5ab0ec`)**: **not due — planning-only session, no consolidation
+triggers fired**. Session substance is captured in session-scoped
+surfaces (one substantial napkin entry on sequence-first vs
+smallest-first epistemic stance + cross-surface amendment-landing
+pattern + carve-out vocabulary hook block; 11 plan/ADR amendments;
+thread-record updates on both `connecting-oak-resources` and `eef`;
+one comms event). The earlier 2026-05-21 "due — not well-bounded"
+status from Uplifted Swooping Wing's session has been partially
+addressed by Opalescent Twinkling Supernova's cascade-clear commits +
+this session's continuity refresh; the residual "due" portion (cross-
+session pattern extraction, doctrine graduation, napkin-rotation
+consideration) carries to the next deliberate `consolidate-docs` run.
+Three new candidate insights captured in napkin this session
+(sequence-first stance; cross-surface amendment landing pattern;
+hook-blocked vocabulary) are session-scoped capture only — graduation
+at next `consolidate-docs`. Prior status preserved below for the
+audit trail.
+
+**Prior status (2026-05-21 — Uplifted Swooping Wing / `claude` / Opus 4.7 (1M) /
 `8d9999`)**: **due — not well-bounded for this closeout**. Triggers
 fired: (1) plan/milestone closures — WS1.6 vocab registry `3add41f9` and
 WS3.1 graph-project scaffold `84bfffa5`, plus the Inc.1a first-parallel-

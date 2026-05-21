@@ -1,5 +1,5 @@
 import express, { json as expressJson } from 'express';
-import type { Express, RequestHandler } from 'express';
+import type { Express } from 'express';
 import {
   createRequestLogger,
   logLevelToSeverityNumber,
@@ -157,32 +157,6 @@ export function setupBaseMiddleware(
 }
 
 /**
- * Creates middleware that ensures MCP connection is ready before processing requests.
- * Responds with 503 if connection is not ready within 5 seconds.
- */
-export function createMcpReadinessMiddleware(ready: Promise<void>, log: Logger): RequestHandler {
-  return async (_req, _res, next) => {
-    try {
-      await Promise.race([
-        ready,
-        new Promise((_, reject) => {
-          setTimeout(() => {
-            reject(new Error('MCP connection timeout'));
-          }, 5000);
-        }),
-      ]);
-      next();
-    } catch (error: unknown) {
-      log.error('MCP connection failed', normalizeError(error));
-      _res.status(503).json({
-        error: 'MCP server not ready',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      });
-    }
-  };
-}
-
-/**
  * Logs bootstrap completion with timing and route count information.
  *
  * @param log - Logger instance
@@ -224,18 +198,26 @@ export function logRegisteredRoutes(log: Logger, appId: number, routes: unknown[
  */
 export type ExpressWithAppId = Express & { __appId?: number };
 
+// Module-encapsulated counter for diagnostic app IDs. Production constructs
+// one app per process so the counter is always 1; tests construct many apps
+// per worker and use the increment to disambiguate bootstrap-phase logs and
+// OTel attributes. The counter is intentionally not exposed: callers receive
+// the next id via `initializeAppInstance`, not by mutating module state.
+let appInstanceCounter = 0;
+
 /**
  * Initializes a new Express app instance with tracking and timing infrastructure.
  *
- * @param appCounter - Current app instance counter (will be incremented)
  * @param log - Logger instance
  * @returns Object containing the initialized app, timer, and app ID
  */
-export function initializeAppInstance(
-  appCounter: number,
-  log: Logger,
-): { app: ExpressWithAppId; timer: PhasedTimer; appId: number } {
-  const appId = appCounter + 1;
+export function initializeAppInstance(log: Logger): {
+  app: ExpressWithAppId;
+  timer: PhasedTimer;
+  appId: number;
+} {
+  appInstanceCounter += 1;
+  const appId = appInstanceCounter;
   log.debug(`Creating app #${String(appId)}`);
   const app: ExpressWithAppId = express();
   app.__appId = appId;

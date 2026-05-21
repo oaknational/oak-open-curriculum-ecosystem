@@ -6,7 +6,9 @@ import type {
 } from '../../src/runtime-config.js';
 import type { Env } from '../../src/env.js';
 import type { HttpObservability } from '../../src/observability/http-observability.js';
+import type { RateLimiterFactory } from '../../src/rate-limiting/rate-limiter-factory.js';
 import { createFakeHttpObservability } from '../../src/test-helpers/observability-fakes.js';
+import { createFakeRateLimiterFactory } from '../../src/test-helpers/rate-limiter-fakes.js';
 
 /**
  * Creates a no-op Clerk middleware factory for E2E tests.
@@ -132,4 +134,22 @@ export function createMockObservability(runtimeConfig?: RuntimeConfig): HttpObse
     authDisabled: runtimeConfig?.dangerouslyDisableAuth === true,
   });
   return observability;
+}
+
+/**
+ * Returns a no-op {@link RateLimiterFactory} for E2E tests.
+ *
+ * Wraps {@link createFakeRateLimiterFactory} and discards the recording
+ * channel for the common case where the test does not need to assert on
+ * rate-limiter invocation. Tests that need to assert on calls should import
+ * `createFakeRateLimiterFactory` directly.
+ *
+ * @remarks `rateLimiterFactory` is a required field on
+ * {@link CreateAppOptions}. Without injection the production factory would
+ * be reached, which instantiates `MemoryStore` per limiter with internal
+ * `setInterval` cleanup — a real production object inside the test process.
+ * This helper is the canonical test-boundary cure. (ADR-078)
+ */
+export function createNoOpRateLimiterFactory(): RateLimiterFactory {
+  return createFakeRateLimiterFactory().factory;
 }
