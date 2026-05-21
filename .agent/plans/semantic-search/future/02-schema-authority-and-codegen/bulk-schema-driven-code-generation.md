@@ -4,7 +4,11 @@
 **Status**: 📋 BACKLOG
 **Priority**: Medium-High — improves type safety, eliminates hardcoded domain constants
 **Created**: 2026-02-17
-**Related**: [Config Architecture Standardisation](../../../architecture-and-infrastructure/config-architecture-standardisation-plan.md), [Subject Domain Model](move-search-domain-knowledge-to-codegen-time.md)
+**Related**:
+
+- [Config Architecture Standardisation](../../../architecture-and-infrastructure/config-architecture-standardisation-plan.md)
+- [Subject Domain Model](move-search-domain-knowledge-to-codegen-time.md)
+- [Search-CLI Ingestion Pipeline Consolidation](../../../architecture-and-infrastructure/future/search-cli-ingestion-pipeline-consolidation.plan.md) — downstream consumer of this work; relies on the schema-derived bulk Zod types this plan produces to make single-source-of-truth ingestion structurally enforceable. Without this plan landing, the consolidation can still execute against `z.string()`-typed bulk schemas; type-level guards strengthen once the enum propagation lands.
 
 **Strategic Note**: This `future/` plan keeps implementation-level research
 detail for accuracy and transfer. Treat the steps as non-binding until
