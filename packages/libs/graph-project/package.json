@@ -43,6 +43,9 @@
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest"
   },
+  "dependencies": {
+    "@oaknational/graph-core": "workspace:*"
+  },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@types/node": "^25.7.0",

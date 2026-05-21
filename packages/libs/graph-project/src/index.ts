@@ -1,8 +1,20 @@
 /**
  * `@oaknational/graph-project` root barrel.
  *
- * Public projection surfaces are introduced by paired product and test
- * cycles. WS3.1 reserves the package entrypoint and sub-path shape only.
+ * Re-exports the workspace's public surfaces as named exports. The
+ * sub-path entrypoints (`@oaknational/graph-project/property-graph`,
+ * `@oaknational/graph-project/projection`, etc.) remain the preferred
+ * entrypoints per ADR-179.
  */
 
-export {};
+export type {
+  PropertyGraph,
+  PropertyGraphEdge,
+  PropertyGraphEdgeEndpoint,
+  PropertyGraphEdgeProperty,
+  PropertyGraphNode,
+  PropertyGraphNodeId,
+  PropertyGraphNodeProperty,
+} from './property-graph/index.js';
+
+export { fromPropertyGraph, toPropertyGraph } from './projection/index.js';

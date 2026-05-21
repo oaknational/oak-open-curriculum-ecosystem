@@ -1,9 +1,12 @@
 /**
- * Projection sub-path: RDF Dataset → PropertyGraph.
+ * Projection sub-path: `DatasetCore` ↔ `PropertyGraph`.
  *
- * Reserved in WS3.1; WS3.2 owns the first implementation and tests,
- * including the §Test discipline invariant #6 contract test that
- * asserts the projection is reconstructable from the canonical Dataset.
+ * `toPropertyGraph` derives the property-graph view; `fromPropertyGraph`
+ * reconstructs a default-graph dataset from the property-graph view.
+ * Together they satisfy the §Test discipline invariant #6 round-trip
+ * contract for inputs inside the projection's declared scope (see
+ * `@oaknational/graph-project/property-graph` TSDoc).
  */
 
-export {};
+export { toPropertyGraph } from './to-property-graph.js';
+export { fromPropertyGraph } from './from-property-graph.js';
