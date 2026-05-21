@@ -1,5 +1,46 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-21 — Fiery Firing Cinder / claude / claude-opus-4-7-1m / 40c178)
+
+**All-channels comms CLI landed at `a9d0b8cf`** on `feat/mcp-graph-support-foundation`.
+Owner-directed mid-session pivot from WS2.2 work (in the parallel `connecting-oak-resources`
+thread) to encode the all-channels-matter principle in the canonical `agent-tools`
+comms commands: *the comms event stream is canonical truth; broadcast, group,
+directed, and lifecycle messages are all valid views; all are important.*
+
+### What landed in this thread
+
+- `a9d0b8cf` — `feat(agent-tools): encode all-channels-matter principle in comms watch/inbox CLI`.
+  - `agent-tools/src/collaboration-state/comms-relevant-events.ts` (new, 211 lines): `EventView` type, `classifyEventForAgent`, `drainRelevantEvents`, per-view formatters; re-exported from `comms-use-cases.ts`.
+  - `comms watch` and `comms inbox` defaults swapped from directed-only to all-channels: emit every event classified relevant for the agent (`broadcast` / `group` / `directed` / `lifecycle`) with self-exclusion only by full identity tuple. Output tagged `[BROADCAST]` / `[GROUP]` / `[DIRECTED]` / `[LIFECYCLE]` on first line.
+  - `--only-directed` flag preserves the narrow legacy view.
+  - Explicit `--agent-name` + `--session-prefix` override path retained for admin/test use; wildcard `*` agent name works in `--only-directed` mode.
+  - `.agent/skills/start-right-team/SKILL-CANONICAL.md` §0 "Start The All-Channels Comms Monitor (non-negotiable)" added ahead of presence registration as a precondition for team-session participation. Owner-stated 2026-05-21: *"all agents joining or starting a team session should be running the all-channels monitor, the communication is the absolute heart of what we are doing here."*
+  - 14 new unit tests for `classifyEventForAgent` + `drainRelevantEvents`; 2 existing narrow-directed CLI integration tests updated to new identity-tuple shape + `--only-directed`. Full agent-tools suite 433/433 green.
+  - README updated to document the new defaults.
+  - Pre-commit gates: type-check + lint + 87/87 turbo (fully cached) + repo validators + shell lint + commitlint + prevent-accidental-major-version all green.
+
+### Honest scope flagged as follow-ups (NOT landed in this commit)
+
+1. **Two-participant invariant on narrative-directed events**: a narrative with `addressed_to === author.agent_name` would today still classify as `directed` to self. The write-side validator that refuses self-addressed narrative is the right structural cure. Candidate captured in pending-graduations.
+2. **`[SYNC]` view**: high-urgency sync messages are mentioned by the owner but the schema (`types.ts`) has no `sync` kind or `urgency` flag. Today urgency is carried at the agent reasoning layer via title/body conventions. When the schema grows a sync representation, `[SYNC]` slots into the `EventView` enum without touching the watcher contract. Candidate captured in pending-graduations.
+
+### Empirical observation — staged-only-gates P0 defect re-fired in real time
+
+During the 2026-05-21 multi-agent session, Foamy Charting Fjord's first WS3.2 commit attempt was blocked by Fiery Firing Cinder's dirty file `agent-tools/src/collaboration-state/comms-use-cases.ts` at 415 lines (max-lines 250) — the file was entirely outside Foamy's staged bundle, but the repo pre-commit hook runs gates over the **whole working tree**, not staged-only. Foamy's retry ~30s later passed after Fiery refactored to 222 lines. Lucky-timing pass; in a different ordering Foamy would have been blocked indefinitely or forced a coordination round-trip. This is documented coordination-protocol P0 in [`feedback_pre_commit_hook_must_gate_staged_only`](../../active/distilled.md) and remains the existing pending-graduations item.
+
+### Next safe step for this thread
+
+The all-channels CLI is the structural cure for the watcher-coverage failure mode that this thread previously surfaced in multi-agent windows. The next session on this thread should:
+
+1. **Land the two follow-ups** (sync-view, self-addressed-narrative refusal) when owner directs.
+2. **Continue the pending pre-commit-staged-only-gates remediation** which is the next P0.
+3. **Cross-vendor migration** of the new CLI behaviour (Cursor/Codex equivalent hooks) — out of scope for the current commit; trigger when adoption surface is named.
+
+The branch-primary thread (`connecting-oak-resources`) remains owner of the graph-stack Inc.1a work; WS2.2 is the next graph cycle.
+
+---
+
 ## Session Outcome (2026-05-20 — Stormy Plumbing Atoll / claude / 2e2764)
 
 **Important correction**: an earlier draft of this section (committed at
@@ -4967,6 +5008,7 @@ and
 | --- | --- | --- | --- | --- | --- | --- |
 | `Shaded Creeping Cloak` | `claude` | `claude-opus-4-7-1m` | `4ef359` | `disposed-5-under-disposed-ws1-5-ws0-reviewer-findings-all-absorb-d1-typed-term-reconstruction-error-with-sibling-file-extraction-d2-exhaustive-switches-with-default-never-n1-utf8-arg-dropped-n2-ambient-algorithm-narrowing-reverted-n3-class-b-exec-memory-line-refs-produced-ten-rows; landed-continuity-corrections-from-prior-session-handoff-with-closure-pressure-research-and-exploration-plan-artefacts; presented-ws0-ledger-for-owner-review-no-partial-ws0-remainders; ran-consolidation-pass-with-over-correction-during-absorption-candidate-captured; surfaced-and-captured-review-as-re-decision-failure-mode-after-owner-correction; eight-commits-e0e9ad0d-2d38cb27-ccfe8948-db5b8bc0-21579675-45e54736-c3627b69-340bdbda` | 2026-05-20 | 2026-05-20 |
 | `Stormy Plumbing Atoll` | `claude` | `claude-opus-4-7-1m` | `2e2764` | `ws1-5-rdfc-1-0-canonicalisation-atomic-commit-ebd0e8dc-with-graph-core-canon-module-rdf-canonize-dependency-7-tests-doctrinal-no-aliases-no-fallbacks-fail-fast; ws0-disposition-ledger-for-singleton-lane-remediation-companion-report-commit-8227d3f7; pre-work-residue-codegen-schema-hash-refresh-4ffef192; continuity-handoff-commit-5f1551c3-under-reported-5-reviewer-findings-as-2-deferred-corrected-during-closeout-via-multiple-metacognition-rounds; closure-pressure-rationalisation-failure-mode-surfaced-and-preserved-in-research-doc-closure-pressure-and-workflow-composition-2026-05-20-md-and-future-plan-closure-pressure-remediation-design-space-plan-md-with-10-todo-questions; under-disposed-reviewer-findings-d1-typed-throws-d2-never-proof-n1-utf8-arg-n2-ambient-algorithm-over-correction-n3-class-b-line-refs-with-legitimate-dispositions-named-per-item-absorb-re-argue-escalate-no-defer-by-agent-category; corrective-comms-event-e6b30e8c-supersedes-fc4c4c24; pdr-044-blocked-pattern-hooks-fired-twice-during-authoring-owner-observation-refusal-vs-approval-mechanism-captured-as-q10` | 2026-05-20 | 2026-05-20 |
+| `Fiery Firing Cinder` | `claude` | `claude-opus-4-7-1m` | `40c178` | `all-channels-comms-cli-landing-at-a9d0b8cf-encodes-comms-event-stream-is-canonical-truth-principle-broadcast-group-directed-lifecycle-all-views-matter-default-watch-and-inbox-emit-every-relevant-event-with-self-exclusion-only-only-directed-flag-preserves-legacy-narrow-view-new-comms-relevant-events-ts-module-extracted-for-250-line-fitness-with-classifyEventForAgent-drainRelevantEvents-and-per-view-formatters-skill-section-0-amendment-makes-the-all-channels-monitor-non-negotiable-for-team-sessions-14-new-tests-433-of-433-green-87-of-87-turbo-cached-pre-commit-honest-scope-flagged-for-followup-sync-view-needs-schema-urgency-flag-and-two-participant-invariant-on-narrative-directed-needs-write-side-validator` | 2026-05-21 | 2026-05-21 |
 | `Shaded Passing Candle` | `claude` | `claude-opus-4-7-1m` | `ab4290` | `broken-accelerator-lens-application-for-graph-multi-vendor-priority; analysed-comms-watch-mechanism-portable-reference; full-orphan-audit-of-plans-tree-with-three-collections-missing-from-root-and-five-orphan-plans-and-two-lifecycle-readme-gaps; documented-leaf-to-root-reachability-invariant-at-plans-readme; created-plan-index-reachability-remediation-plan-decision-incomplete; created-comms-watch-liveness-floor-plan-deferred-to-future-with-phase-2-absorbed-into-singleton-lane-ws3; updated-singleton-lane-remediation-to-decision-complete-lean-multi-vendor-scope-ws0-ws1-ws2-ws3-with-ws4-ws7-deferred; recorded-graph-query-layer-arch-session-approval; prepended-lens-applied-sequence-section-to-thread-record-superseding-token-remediation-program-advancement-rule-for-graph-priority; commit-3ef0a23a` | 2026-05-19 | 2026-05-19 |
 | `Zephyrous Circling Current` | `codex` | `GPT-5` | `019e26` | `ws1-token-measurement-implementer; move-reusable-practice-fitness-logic-under-agent-tools-src-practice-fitness-and-render-content-only-chars-over-four-token-counts-without-frontmatter-or-manifest-work` | 2026-05-14 | 2026-05-14 |
 | `Foamy Fathoming Sail` | `codex` | `GPT-5` | `019e26` | `ws1-token-measurement-implementer; moving-reusable-practice-fitness-logic-under-agent-tools-src-practice-fitness-and-rendering-content-only-token-counts` | 2026-05-14 | 2026-05-14 |

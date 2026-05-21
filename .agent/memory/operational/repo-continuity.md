@@ -17,6 +17,35 @@ Earlier archives remain under [`archive/`](archive/).
 ## Current State
 
 - Current branch: `feat/mcp-graph-support-foundation`.
+- **2026-05-21 (Fiery Firing Cinder / `claude` / Opus 4.7 (1M) / `40c178`)** —
+  **two-agent collaborative session, empirical-test outcome WORKING**.
+  Session opened as the owner-directed two-Claude empirical test of the
+  WS2.2 ↔ WS3.2 parallel pair on the `connecting-oak-resources` graph thread.
+  Both agents (Fiery Firing Cinder `40c178` + Foamy Charting Fjord `86dbd1`)
+  reached for WS3.2 in their team-start broadcasts; first-to-claim deferral
+  resolved cleanly (Foamy 16 seconds ahead). Mid-session pivot per owner
+  direction: paused WS2.2 work to encode the **all-channels-matter principle**
+  in the canonical `agent-tools` comms commands — *the comms event stream is
+  canonical truth; broadcast, group, directed, and lifecycle messages are all
+  valid views; all matter*. **Commits this session**: `a9d0b8cf` (Fiery,
+  `feat(agent-tools)`: all-channels comms CLI + SKILL §0 amendment + 14 new
+  tests), `abe6fcb3` (Foamy, `feat(graph-project)`: WS3.2 toPropertyGraph
+  round-trip projection + invariant #6 contract test, 11 tests), `35b49858`
+  (Foamy, `chore(plan)`: WS3.2 landing record). Inc.1a remaining: 3 cycles
+  (WS2.2, WS2.3, WS3.3). **Staged-only-gates P0 defect re-fired empirically**:
+  Foamy's first WS3.2 commit attempt was blocked by Fiery's dirty
+  comms-use-cases.ts at 415 lines (max-lines 250) via the repo pre-commit
+  hook's whole-tree lint scan, even though the file was entirely outside
+  Foamy's staged bundle; retried ~30s later after Fiery refactored to 222
+  lines. Lucky-timing pass; remains the named structural P0 in
+  pending-graduations. **Memory-scope clarification landed**:
+  `feedback_worktree_isolation_unreliable` is scoped to Agent-tool
+  `isolation: "worktree"` sub-agent dispatch only; shared-checkout
+  two-main-session collaboration is a distinct empirical class which today's
+  evidence confirms WORKS. **Honest scope flagged for follow-up**:
+  two-participant invariant for narrative-directed events not yet refused at
+  write time; `[SYNC]` view not yet wired (schema has no urgency
+  representation). Foamy closed at 09:02:30Z; Fiery solo for the closeout.
 - **2026-05-21 (Uplifted Swooping Wing / `claude` / Opus 4.7 (1M) / `8d9999`)**:
   WS1.6 vocab registry LANDED at `3add41f9` (seven standard W3C/community
   vocabularies — RDFS, SKOS, PROV-O, DCTERMS, OWL, SHACL, schema.org — as
@@ -265,8 +294,8 @@ each thread record; this table is the repo-level index.
 | --- | --- | --- | --- |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Shaded Creeping Cloak / `claude` / Opus 4.7 (1M) / `4ef359` / 2026-05-20 |
-| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Uplifted Swooping Wing / `claude` / Opus 4.7 (1M) / `8d9999` / 2026-05-21 |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Fiery Firing Cinder / `claude` / Opus 4.7 (1M) / `40c178` / 2026-05-21 |
+| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Fiery Firing Cinder / `claude` / Opus 4.7 (1M) / `40c178` / 2026-05-21, Foamy Charting Fjord / `claude` / Opus 4.7 (1M) / `86dbd1` / 2026-05-21 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / `codex` / 2026-04-28 |
@@ -453,23 +482,32 @@ step.
 
 Branch-primary graph work continues from
 [`threads/connecting-oak-resources.next-session.md`](threads/connecting-oak-resources.next-session.md).
-**Current state (2026-05-21 close)**: Inc.1a is at the first parallel-pair
-boundary. Landed cycles: WS0 (5ec5004d), WS1.1 (ad2abb69), WS1.2 (1885fbcf),
-WS1.3 (87e21125), WS1.4 (95f42cb7), WS1.5 (ebd0e8dc), WS1.6 (3add41f9),
-WS2.1 (0f895070), WS3.1 (84bfffa5). Inc.1a remaining: 4 cycles (WS2.2,
-WS2.3, WS3.2, WS3.3).
-**Next safe step**: two-agent collaborative Claude session on WS2.2 ↔
-WS3.2 — owner-directed empirical test of intra-vendor multi-agent
-collaboration on disjoint workspace trees. WS2.2 ships `jsonld-compatible`
-ingestion + generic Turtle/SKOS parse to Dataset (lands §Test discipline
-invariant #2 contract test); WS3.2 ships `toPropertyGraph` projection +
-PropertyGraph types under `./property-graph` sub-path (lands §Test
-discipline invariant #6 reconstructability contract). Both depend on
-landed WS1.3; file scopes are empirically disjoint. The session is the
-empirical test of `feedback_worktree_isolation_unreliable.md` on the
-current base SHA — outcome updates the memory either way. Inc.1a
-continues under the 2026-05-12 holistic re-plan (`f73c42f5`): WS1.8 is
-deferred to Inc.2.
+**Current state (2026-05-21 close, second session of the day)**: Inc.1a
+is **half-complete on the first parallel-pair**: WS3.2 LANDED at
+`abe6fcb3` (Foamy Charting Fjord, claude opus-4-7-1m, session 86dbd1)
+plus chore(plan) record at `35b49858`. WS2.2 NOT landed this session —
+owner-directed mid-session pivot to all-channels comms CLI work
+(see `agentic-engineering-enhancements` thread). Landed cycles: WS0
+(5ec5004d), WS1.1 (ad2abb69), WS1.2 (1885fbcf), WS1.3 (87e21125), WS1.4
+(95f42cb7), WS1.5 (ebd0e8dc), WS1.6 (3add41f9), WS2.1 (0f895070), WS3.1
+(84bfffa5), WS3.2 (abe6fcb3). Inc.1a remaining: 3 cycles (WS2.2, WS2.3,
+WS3.3).
+**Next safe step**: WS2.2 — `packages/libs/graph-ingest/src/jsonld-compatible/**`
+plus a Turtle parser location (recommended: new `src/turtle/` sub-path
+peer to the six WS2.1 pre-declared barrels; n3.js is the W3C-aligned
+Turtle parser choice). Lands §Test discipline invariant #2 contract
+test (every emitted edge predicate is `NamedNode`, never a bare
+string). The next team session may also dispatch WS2.3 ↔ WS3.3 in
+parallel per plan §Cycle dependencies; single-agent through WS2.2 →
+WS2.3 → WS3.3 remains the explicitly preferred default. The empirical
+two-agent collaboration shape (shared physical checkout, coordination
+via active-claims + comms on disjoint workspace trees) is now confirmed
+WORKING from today's session — the standing
+`feedback_worktree_isolation_unreliable` memory is scoped to Agent-tool
+`isolation: "worktree"` sub-agent dispatch only, not shared-checkout
+two-main-session collaboration. Multi-vendor open of the thread remains
+forbidden until WS3.3 lands. Inc.1a continues under the 2026-05-12
+holistic re-plan (`f73c42f5`): WS1.8 is deferred to Inc.2.
 
 **WS1.5 status (2026-05-13, Quiet Stalking Mirror)**: design fully absorbed inline in
 the active graph-stack plan under `ws1-canon`. Three-reviewer pre-implementation

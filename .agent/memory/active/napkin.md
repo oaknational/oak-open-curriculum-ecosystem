@@ -430,3 +430,74 @@ periodically") but specifies the coverage shape: a manual poll on the
 shared log alone is the failure mode. The correct shape is one watcher
 over the full comms event stream with self-exclusion by session prefix.
 Promote on second instance or owner-direction graduation request.
+
+---
+
+## 2026-05-21 — Session-close: two-agent collaboration empirical outcome
+
+Two-Claude empirical-test session (Fiery Firing Cinder `40c178` + Foamy
+Charting Fjord `86dbd1`, shared physical checkout on base `40129940`).
+Outcome: **collaboration shape WORKED**. Both agents grounded
+independently against the same start-right-team SKILL, posted team-start
+broadcasts within ~30 seconds of each other, resolved the WS3.2 collision
+by first-to-claim deferral (Foamy 16 seconds ahead; Fiery took WS2.2),
+coordinated commit-window ordering via directed comms event, landed
+cycle work on disjoint workspace trees. Foamy landed WS3.2 at
+`abe6fcb3`; Fiery's WS2.2 work was paused mid-session by owner direction
+to land the all-channels comms CLI at `a9d0b8cf` and the SKILL §0
+amendment that makes the all-channels monitor non-negotiable for team
+sessions.
+
+**The standing memory `feedback_worktree_isolation_unreliable` is
+scoped to Agent-tool `isolation: "worktree"` sub-agent dispatch only.**
+Shared-checkout two-main-session collaboration (today's shape) is a
+**distinct empirical class** which today's evidence confirms WORKS.
+Updating that memory entry with the scope clarification is a follow-up.
+
+**Failure mode observed in real time: staged-only-gates P0 defect.**
+Foamy's first WS3.2 commit attempt was blocked by my (Fiery's) dirty
+`agent-tools/src/collaboration-state/comms-use-cases.ts` at 415 lines
+(max-lines 250) — the file was entirely outside Foamy's staged bundle,
+but the repo pre-commit hook runs gates over the whole working tree,
+not staged-only. Foamy's retry ~30s later passed after I refactored to
+222 lines (the comms-relevant-events.ts extraction for the all-channels
+work). Lucky-timing pass; in a different ordering Foamy would have
+been blocked indefinitely or forced into a coordination round-trip
+asking me to refactor or stash. This is the named structural P0 in
+pending-graduations; today's evidence is a fresh worked instance
+strengthening the case for the structural cure.
+
+candidate: pattern — *mid-session owner-direction pivot from primary
+work to higher-priority structural cure*. Observed this session:
+owner pivoted Fiery from WS2.2 graph cycle work to the all-channels
+comms CLI mid-session because "communication is the absolute heart of
+what we are doing here." The pivot landed substantial structural value
+(all-channels default in CLI, SKILL §0 amendment, 14 new tests). The
+shape: a single-session pivot is a legitimate owner mechanism when the
+new target is **structural cure for an observed failure mode** rather
+than feature ambition. Single instance; promote on second instance or
+owner-direction graduation request. Diagnostic: a pivot from feature
+work to structural cure should leave the structural cure as a landed
+commit by session close, not a partially-implemented sketch.
+
+candidate: rule or directive amendment — *all-channels comms monitor
+is non-negotiable for team sessions*. Already encoded in
+`.agent/skills/start-right-team/SKILL-CANONICAL.md` §0 this session.
+The candidate here is the **inter-platform extension**: a Cursor /
+Codex-equivalent persistent watcher shape needs to exist to make the
+SKILL §0 contract honourable on every platform. Today only Claude
+Code has the harness Monitor tool. Follow-up: platform-specific
+adapters or a portable script that any platform can run.
+
+candidate: ADR/PDR — *comms event stream is canonical truth; broadcast,
+group, directed, lifecycle, and (when schema supports) sync are all
+valid views; all are important; views are derived by classification at
+the watcher boundary with self-exclusion only*. Substance has already
+landed in the CLI + SKILL §0 + memory entry
+`feedback_watch_both_broadcast_and_directed` (renamed to
+"comms-event-stream-is-canonical-truth"). The PDR-candidate slot is
+the **Practice governance ratification** of the principle as the
+multi-agent coordination doctrine. Trigger for promotion: second
+instance of the principle being either contested or extended (e.g.
+when the sync kind is added, or when a platform-specific watcher
+needs to deviate). Captured in pending-graduations.

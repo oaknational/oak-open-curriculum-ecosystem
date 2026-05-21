@@ -629,6 +629,72 @@ rather than a new one).
 
 ## Entries
 
+- 2026-05-21; **Comms event stream as canonical truth (PDR candidate)**.
+  `[captured: 2026-05-21 | source: napkin+owner-direction+agent-tools-cli-landing | target: pdr:comms-event-stream-canonical-truth-views-derived | trigger: second-instance(of-contestation-or-extension) | size: M | status: pending]`
+  Substance already landed in three artefacts this session: (a) the
+  all-channels CLI defaults at commit `a9d0b8cf`
+  (`drainRelevantEvents` + `classifyEventForAgent`), (b) the
+  `start-right-team` SKILL §0 amendment making the all-channels
+  monitor non-negotiable for team sessions, (c) the auto-memory entry
+  `feedback_comms_event_stream_canonical_truth`. The PDR slot is the
+  **Practice governance ratification** of the principle as the
+  multi-agent coordination doctrine — *the comms event stream is the
+  canonical truth; broadcast, group, directed, lifecycle, and (when
+  schema supports) sync are all valid views; all matter; views are
+  derived at the watcher boundary by classification with self-exclusion
+  only*. Trigger for promotion: second instance of the principle being
+  either contested (someone proposes returning to a single-view
+  default) or extended (e.g. when the sync kind lands in the schema, or
+  when a platform-specific watcher adapter needs to deviate from the
+  reference shape). Owner-stated standing direction is recorded;
+  further codification awaits empirical extension or contestation.
+- 2026-05-21; **Sync-kind / urgency flag in comms schema (ADR candidate)**.
+  `[captured: 2026-05-21 | source: owner-direction+agent-tools-cli-landing | target: adr:comms-sync-urgency-representation | trigger: owner-direction | size: M | status: pending]`
+  Owner direction 2026-05-21: *sync messages for high urgency decisions
+  are a valid view onto the event stream; sync messages must have at
+  least two participants.* The current schema (`agent-tools/src/
+  collaboration-state/types.ts`) has only three top-level kinds:
+  `narrative`, `lifecycle`, `directed`. There is no `sync` kind and no
+  `urgency` flag. Today, urgency must be inferred at the agent
+  reasoning layer from title/body conventions — the watcher boundary
+  cannot expose `[SYNC]` as a first-class view because it has no
+  syntactic signal to classify against. ADR work: decide between a
+  new `sync` top-level kind versus an `urgency: 'sync' | 'normal'`
+  flag on narrative + directed kinds. The trade-off is granularity
+  (urgency flag composes with view type) vs simplicity (separate kind
+  is easier to validate). Then write-side validation enforces the
+  two-participant invariant: a sync event must have at least two
+  agents in scope (sender + addressee/audience), refusing self-only
+  sync. Trigger: owner direction to start the schema work. Slot in the
+  `comms-relevant-events.ts` `EventView` enum is already reserved by
+  the doctrine — the line `'broadcast' | 'group' | 'directed' |
+  'lifecycle'` extends to include `'sync'` without other change.
+- 2026-05-21; **Two-participant invariant write-side validator (rule candidate)**.
+  `[captured: 2026-05-21 | source: owner-direction+agent-tools-cli-landing+honest-scope-flag | target: rule:comms-write-refuses-self-addressed | trigger: owner-direction | size: S | status: pending]`
+  Owner direction 2026-05-21: *private messages must have at least two
+  participants*. Today the `classifyEventForAgent` classifier handles
+  the read-side correctly (a `directed`-kind event from `self.to.self`
+  passes self-exclusion before to-match runs because the author is
+  self). The write-side does NOT currently refuse a narrative event
+  whose `addressed_to === author.agent_name`, nor a directed event
+  whose `from === to`. The structural cure is a write-side validator
+  in `agent-tools/src/collaboration-state/comms-messages.ts` (and
+  wherever narrative events are constructed) that refuses self-only
+  addressing at write time. Trigger: owner-direction to land the
+  validator. Size S — single validator function plus unit tests.
+- 2026-05-21; **Multi-agent shared-checkout collaboration as distinct empirical class (memory-clarification + memory-graduation candidate)**.
+  `[captured: 2026-05-21 | source: napkin+session-evidence | target: memory:feedback_worktree_isolation_unreliable+pdr:multi-agent-collaboration-classes | trigger: second-instance | size: S | status: pending]`
+  Today's two-agent session (Fiery + Foamy, both claude opus-4-7-1m,
+  shared physical checkout on base `40129940`) confirms the
+  shared-checkout shape WORKS for disjoint workspace-tree cycles.
+  The standing memory `feedback_worktree_isolation_unreliable` is
+  scoped to Agent-tool `isolation: "worktree"` sub-agent dispatch —
+  shared-checkout multi-main-session collaboration is a distinct
+  empirical class. Memory-clarification edit: add the scope note to
+  the existing entry. Graduation candidate: a PDR/doctrine ratifying
+  the empirical-class distinction so future cohorts don't conflate
+  the two shapes. Trigger: second instance of the shared-checkout
+  shape being run (today is instance 1).
 - 2026-05-13; **Coordinator-role-as-allocator-not-gatekeeper (PDR candidate)**
   (Coppery Kindling Anvil — three-napkin synthesis F2; Ferny's original
   candidate plus cross-rotation evidence).
