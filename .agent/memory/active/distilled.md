@@ -265,6 +265,62 @@ Routing: this entry is itself the integration; PDR-shaped
 
 ---
 
+## Recently Distilled — 2026-05-21 multi-agent graph and consolidation window
+
+### Transport shape determines E2E classification
+
+HTTP-transport systems can have valid in-process Supertest E2E tests when the
+runner harness boots a real HTTP listener and drives it through protocol
+framing. The earlier separate-process intuition belongs to STDIO transport,
+where the exposure boundary is process-level. For HTTP MCP servers, the
+operative question is whether the harness boots and drives a running system;
+do not propose reclassifying Supertest E2E files merely because product code is
+imported in-process.
+
+### Coordinator handoff has two distinct moments
+
+Pre-positioning a coordinator handoff is not the same act as transferring
+authority. The outgoing coordinator may broadcast state-of-play for the
+incoming agent, but authority transfers only when the receiving agent actively
+acknowledges taking the role. Until that acknowledgement is observable in
+comms, the outgoing coordinator retains routing, cadence, and commit-window
+responsibility.
+
+### Verdict reasoning must be substance, not citation
+
+At a decision point, citing a plan, memory entry, reviewer verdict, or prior
+agreement is not itself reasoning. Citations are pointers to inspect; reasons
+must explain why the current substance supports the verdict. A verdict whose
+"reasons" are mostly references is dogma-shaped. Re-render the citations into
+substantive reasoning, or mark them as flags to verify.
+
+### Vocabulary discipline applies when absorbing inputs
+
+Hooks catch some problematic words at write time, but multi-agent work imports
+vocabulary through reviewer verdicts, prior plan text, owner paraphrases, and
+peer comms before the agent writes anything. Absorption requires re-vocabulary:
+carry forward the structural recommendation, not the source phrasing. A hook-
+blocked word whose first appearance was in a reviewer or peer artefact is the
+diagnostic signature for inbound vocabulary inheritance.
+
+### Per-workspace inherited-tree gates are the default for workspace-scoped dirt
+
+For `start-right-team` inherited-tree verification, per-workspace gates are the
+default when dirty files are clearly workspace-scoped and the runner's
+diagnosis rules out cross-workspace cascade residue. Tree-wide gates still
+apply when the dirty state could affect generated SDK contracts, shared types,
+root configuration, or cross-workspace consumers.
+
+### Bare timer races leak unless cleaned up
+
+`Promise.race([p, setTimeout(reject, n)])` without cleanup is a leak by
+construction; the timer survives even when `p` wins. If the ready promise
+cannot remain unsettled, the race is dead safety code and should be deleted.
+If it can remain unsettled, clear the timer in `finally` or use an abortable
+timeout shape.
+
+---
+
 ## Recently Distilled — 2026-05-17 Solar Orbiting Asteroid gate-green cascade
 
 ### Gates hide gates — failure surface is a stack, not a list

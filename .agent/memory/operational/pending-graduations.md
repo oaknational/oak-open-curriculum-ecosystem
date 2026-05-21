@@ -446,7 +446,7 @@ standing rule. Structural cure: the session-handoff skill should
 include a `pnpm check` cleanliness step that the agent walks before
 declaring handoff complete (paired with the existing all-quality-
 gates-blocking standing rule). Owner-direction trigger has fired;
-this entry is `status: due` for the next session-handoff skill edit.
+this entry is `status: graduated`; retained only as audit trail until archive.
 
 ### 2026-05-17 — Hook-bypass equivalence in `--no-verify` rule (rule-amend)
 
@@ -464,12 +464,12 @@ the rule must extend to **any** mechanism that skips hooks:
 deletion, `--no-gpg-sign` when gpg-sign is a hook, any future
 equivalent. Fresh per-commit owner authorisation binds to the *act*
 of skipping, not the *syntax*. Owner-correction on the day fired the
-trigger. Routing: amend the rule body to enumerate the hook-bypass
-equivalence class. `status: due` for the next rule-edit pass.
+trigger. Routing: graduated before this pass; the rule already enumerates the hook-bypass
+equivalence class. Retained only as audit trail until archive.
 
 ### 2026-05-14 — Agents default to no gender unless self-declared (second-instance evidence)
 
-`[captured: 2026-05-14 | source: distilled.md §"Recently Distilled — 2026-05-14 Verdant Swaying Glade conduct correction" | target: rule:agents-default-no-gender + pdr:agents-default-no-gender | trigger: second-instance-fired-2026-05-14 | size: S | status: due]`
+`[captured: 2026-05-14 | graduated: 2026-05-21 | source: distilled.md §"Recently Distilled — 2026-05-14 Verdant Swaying Glade conduct correction" | target-resolved: rule:agents-default-no-gender + PDR-061 | trigger-fired: second-instance-fired-2026-05-14 | size: S | status: graduated]`
 
 Substance: when referring to another agent, default to **they/them**;
 gendered pronouns require self-declaration. Agent names are evocative
@@ -493,15 +493,13 @@ re-derive the rule via correction.
   repo with multi-agent work. Could ratify the doctrine separately
   from the rule, or be deferred until a second adopter repo emerges.
 
-Owner picks one or both shapes at next consolidation. The "Graduation
-discipline for conduct rules" meta-substance inside the distilled
-entry (which says conduct corrections graduate to active distilled
-within the same session, not via the pending-graduations queue) is
-itself a second graduation candidate — surface as pending entry below.
+Graduated 2026-05-21: always-applied rule `.agent/rules/agents-default-no-gender.md`
+plus Claude and Cursor adapters, RULES_INDEX entry, and PDR-061. The
+companion conduct-correction graduation discipline also lives in PDR-061.
 
 ### 2026-05-14 — Conduct-rule graduation discipline (PDR-shaped meta)
 
-`[captured: 2026-05-14 | source: distilled.md §"Recently Distilled — 2026-05-14 Verdant Swaying Glade conduct correction" §"Graduation discipline for conduct rules" | target: pdr:conduct-rule-graduation-discipline | trigger: companion-to-agents-default-no-gender | size: S | status: pending]`
+`[captured: 2026-05-14 | graduated: 2026-05-21 | source: distilled.md conduct-correction entry | target-resolved: PDR-061 | trigger-fired: companion-to-agents-default-no-gender | size: S | status: graduated]`
 
 Meta-substance: corrections about personal conduct (style, register,
 phrasing, attribution) graduate to **active distilled.md in the same
@@ -511,8 +509,8 @@ unenforced for new sessions during the rotation gap. The
 2026-05-11 → 2026-05-14 gender-rule recurrence is the worked example —
 the lesson was captured in the napkin but did not reach active
 distilled until the second correction fired. Companion discipline to
-the existing "Substance > Destination" rule. Holds until
-agents-default-no-gender promotion is resolved (companion graduation).
+the existing "Substance > Destination" rule. Graduated 2026-05-21 into PDR-061 alongside the agent pronoun default rule.
+The pending-graduations register is no longer the only live carrier.
 
 ### 2026-05-14 — Cross-thread program artefact shape (first-instance trigger captured)
 
@@ -4018,8 +4016,8 @@ candidate below) — substance moves into that PDR; the exploration plan with
 authorised 2026-05-20; substance absorbs there. Owner direction 2026-05-20
 on the exploration plan: "not blocking for the gate work, it wasn't a problem
 yesterday, it may not be a problem tomorrow" — the 10-todo exploration is
-parked for later research, not for immediate doctrine landing | status: due
-(substance graduates as family-PDR child) | size: absorbed by family PDR]`
+parked for later research, not for immediate doctrine landing | status: graduated
+(substance graduated 2026-05-21 as PDR-062 child) | size: absorbed by family PDR]`
 
 Worked instance demonstrated this session: session executed plan as
 designed for steps 1–5; step 6 (continuity handoff at `5f1551c3`)
@@ -4043,8 +4041,8 @@ composition mechanism family). Not action-bearing without owner direction.
 `[CANDIDATE: pdr-044-refusal-vs-approval-mechanism-choice | captured:
 2026-05-20 | source: napkin 2026-05-20; research doc §"Concrete observation
 from the authoring session itself" | graduation-target: PDR-044 amendment
-| trigger: owner authorisation fired 2026-05-20 — draft now | status: due
-| size: S-to-M]`
+| trigger-fired: owner authorisation fired 2026-05-20 | status: graduated
+| size: S-to-M | graduated: 2026-05-21 to PDR-044 amendment]`
 
 Worked instance: drafting the closure-pressure exploration plan, two write
 attempts were blocked by the PDR-044 hook on forbidden owner-only patterns
@@ -4057,8 +4055,8 @@ blocking was happening: the hook should be a trigger for owner approval
 rather than a refusal. Generic design choice: refusal-vs-approval applies
 to any pattern-detection mechanism — forbidden-framing hooks, potential
 cost-framing-detection hooks, reviewer-finding under-reporting detection,
-etc. Captured as q10 in the closure-pressure exploration plan with that
-plan's recommended-first-exploration position.
+etc. Graduated 2026-05-21: PDR-044 now distinguishes irreducible blocks
+from approval-trigger detections, preserving an explicit owner-approval route.
 
 ### 2026-05-20 — Over-correction during reviewer-finding absorption (Shaded Creeping Cloak)
 
@@ -4066,8 +4064,8 @@ plan's recommended-first-exploration position.
 source: napkin 2026-05-20; commit ebd0e8dc + correcting commit ccfe8948 |
 graduation-target: named "more" child of absorption-adjacent-failure-mode-family PDR
 (see family candidate below) — substance moves into that PDR | trigger:
-family PDR authorised 2026-05-20; substance absorbs there | status: due
-(substance graduates as family-PDR child) | size: absorbed by family PDR]`
+family PDR authorised 2026-05-20; substance absorbs there | status: graduated
+(substance graduated 2026-05-21 as PDR-062 child) | size: absorbed by family PDR]`
 
 Worked instance: Stormy Plumbing Atoll absorbed type-expert's
 recommendation to add `rejectURDNA2015: true` to the rdf-canonize ambient
@@ -4102,8 +4100,8 @@ that is hand wringing that has cost more in my attention and yours than
 simply moving on" | graduation-target: named "re-litigate" child of
 absorption-adjacent-failure-mode-family PDR (see family candidate below) —
 substance moves into that PDR | trigger: family PDR authorised 2026-05-20;
-substance absorbs there | status: due (substance graduates as family-PDR
-child) | size: absorbed by family PDR]`
+substance absorbs there | status: graduated
+(substance graduated 2026-05-21 as PDR-062 child) | size: absorbed by family PDR]`
 
 Worked instance: owner requested a principles-grounded review of completed
 work. The review correctly identified D1's absorption as a §First Question
@@ -4137,8 +4135,7 @@ sibling rule.
 closure-pressure-rationalisation + over-correction-during-absorption +
 review-of-completed-work-is-not-re-decision | graduation-target: single
 Practice-governance PDR with three named children (less / more / re-litigate)
-| trigger: owner authorisation fired 2026-05-20 — single-PDR-with-three-children
-shape selected; draft now | status: due | size: L]`
+| trigger-fired: owner authorisation fired 2026-05-20 | status: graduated | size: L | graduated: 2026-05-21 to PDR-062]`
 
 Three failure-mode candidates accumulated within the 2e2764 + 4ef359 window,
 all touching the moment an agent disposes (or re-handles) reviewer findings:
@@ -4155,43 +4152,6 @@ The family may eventually warrant a single PDR with three children, or
 remain three separate candidates. Not action-bearing without owner direction
 or a third-family-instance corroboration; recorded so the family is visible
 in the register before any individual member graduates.
-
-- 2026-05-21; **Coordinator-handoff has two distinct moments (pattern candidate)**.
-  `[captured: 2026-05-21 | source: Stratospheric-Gusting-Squall-closeout-note+owner-correction | target: pattern:coordinator-handoff-two-moments | trigger: second-instance | size: S | status: pending]`
-  Worked precedent from the 2026-05-21 six-agent Inc.1d session: Stratospheric
-  pre-positioned a coordinator-handoff broadcast to Cirrus at 19:31Z; owner
-  clarified at 19:32Z that authority transfer occurs at the receiving agent's
-  *active acknowledgement*, not at the pre-positioner's broadcast. Stratospheric
-  issued a correction broadcast re-asserting active coordinator authority;
-  Cirrus then posted the active-acknowledgement broadcast at 19:33Z, transferring
-  the role substantively. Pattern shape: **pre-positioning state-of-play is
-  distinct from transferring authority; only the receiver's active acknowledgement
-  effects the transfer**. Captured for next-session pattern landing; trigger is a
-  second-instance of the pre-positioning-vs-transfer confusion.
-
-- 2026-05-21; **Coordinator-as-slice-runner viability when capacity is short by one (pattern candidate)**.
-  `[captured: 2026-05-21 | source: Stratospheric-Gusting-Squall-closeout-note | target: pattern:coordinator-as-slice-runner-short-capacity | trigger: second-instance | size: S | status: pending]`
-  Worked precedent from the same session: Charcoal Searing Ember closed out
-  before Stratospheric's routing brief reached them; the four-peer pool dropped
-  to three against four slices. Stratospheric (coordinator) took Slice B
-  themselves (smallest, freshest), preserving the file-disjoint partition.
-  Pattern: **when team capacity is short by one against a file-disjoint slice
-  partition, the coordinator can take the smallest slice without breaking the
-  partition invariant**. Captured for next-session pattern landing; trigger is
-  a second-instance.
-
-- 2026-05-21; **§1a inherited-tree gate-runner scopes per-workspace not tree-wide (pattern candidate)**.
-  `[captured: 2026-05-21 | source: Stratospheric-Gusting-Squall-closeout-note+Salty-Snorkelling-Pier-gate-state-report | target: pattern:start-right-team-1a-per-workspace-scope | trigger: second-instance-or-skill-amendment | size: S | status: pending]`
-  Worked precedent from the same session: Salty (elected §1a gate-runner) ran
-  workspace-scoped gates against the four dirty workspaces (agent-tools,
-  search-cli, env, graph-project) in ~2 minutes; tree-wide gates would have
-  redundantly re-run already-green workspaces. Pattern: **§1a gate-runner
-  scopes to the dirty-tree workspaces visible from `git status`, not the
-  full tree, unless the dirty scope is unclear or spans the full repo**. The
-  `start-right-team` SKILL §1a already names this in the "Running the gates"
-  block; the pattern candidate is the empirical confirmation that the
-  per-workspace scoping reliably catches cascade-class failures within
-  reasonable runtime envelope.
 
 - 2026-05-21; **Backtick-substitution in double-quoted shell args carrying markdown bodies (rule candidate + CLI-enhancement evidence point)**.
   `[captured: 2026-05-21 | source: Cirrus-Circling-Plume-incident | target: rule:comms-send-body-composition-safety + cli-enhancement:--body-file | trigger: --body-file CLI shipping | size: S | status: pending]`
