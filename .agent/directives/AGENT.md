@@ -44,8 +44,8 @@ Start with:
 - [practice-lineage.md](../practice-core/practice-lineage.md) — cross-repo
   propagation and plasmid exchange
 
-All work MUST start with the `start-right-quick` or `start-right-thorough`
-skills. If neither has been specified then read
+All work MUST start with the `start-right-quick`, `start-right-thorough`,
+or `start-right-team` skill. If none has been specified then read
 [`start-right-quick/SKILL-CANONICAL.md`](../skills/start-right-quick/SKILL-CANONICAL.md)
 immediately after reading this file, and apply it.
 

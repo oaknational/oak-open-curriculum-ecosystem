@@ -682,6 +682,38 @@ rather than a new one).
   wherever narrative events are constructed) that refuses self-only
   addressing at write time. Trigger: owner-direction to land the
   validator. Size S — single validator function plus unit tests.
+- 2026-05-21; **Cycle-collision rule tertiary tie-break for clock skew (rule refinement candidate)**.
+  `[captured: 2026-05-21 | source: reviewer-finding+docs-adr-expert | target: rule:start-right-team-cycle-collision-tertiary | trigger: second-instance(of-clock-skew-tie) | size: S | status: pending]`
+  The `start-right-team` SKILL §1 cycle-collision rule (added 2026-05-21,
+  commit `dc67d0fb`) resolves contested cycles by *"earliest team-start
+  `created_at` wins"*. Source authority is the comms event's `created_at`
+  field. Two agents on different physical hosts (e.g. Codex GPT-5 on
+  OpenAI infrastructure vs Claude Code on the user's laptop) may have
+  divergent host clocks; sub-second collisions are possible. The current
+  rule has no tertiary tie-break beyond "earliest timestamp wins" and
+  pure clock-skew ties (< 1s apart from different hosts) are not
+  addressed. Candidate refinement: ties break by `event_id` lexicographic
+  order as a deterministic fallback. Trigger: second instance of an
+  empirical clock-skew tie or near-tie observed in a real session.
+  Today's session (instance count = 0 of empirical clock-skew ties)
+  is not the trigger.
+- 2026-05-21; **Identity-seed precondition error message in CLI (code refinement candidate)**.
+  `[captured: 2026-05-21 | source: reviewer-finding+code-expert | target: code:agent-tools/src/collaboration-state/identity.ts | trigger: owner-direction | size: S | status: pending]`
+  The `agent-tools` comms `watch` and `inbox` commands require one of
+  `PRACTICE_AGENT_SESSION_ID_CLAUDE` / `PRACTICE_AGENT_SESSION_ID_CURSOR`
+  / `PRACTICE_AGENT_SESSION_ID_CODEX` / `CODEX_THREAD_ID` to be set in
+  the shell. When unset, `deriveCollaborationIdentity` throws the generic
+  message `"missing collaboration identity seed; set a Practice session
+  id or CODEX_THREAD_ID"`. The `start-right-team` SKILL §0 documents
+  this precondition as skill-side prose, but the prose duplicates what
+  the error message itself could carry. Candidate refinement: extend the
+  error message to enumerate the specific env vars expected per
+  platform, and (optionally) detect a probable-platform from the shell
+  context to make the message platform-specific. Trigger: owner
+  direction to land the CLI-side fix. Size S — single function
+  edit + unit test. Routing this through pending-graduations rather
+  than a commit-message follow-up note per owner direction 2026-05-21:
+  forward-action notes do not live in commit messages.
 - 2026-05-21; **Multi-agent shared-checkout collaboration as distinct empirical class (memory-clarification + memory-graduation candidate)**.
   `[captured: 2026-05-21 | source: napkin+session-evidence | target: memory:feedback_worktree_isolation_unreliable+pdr:multi-agent-collaboration-classes | trigger: second-instance | size: S | status: pending]`
   Today's two-agent session (Fiery + Foamy, both claude opus-4-7-1m,

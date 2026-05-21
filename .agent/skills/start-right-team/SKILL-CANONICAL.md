@@ -73,14 +73,14 @@ order, before any non-planning source edit:
 3. **Wait for peer team-starts** to surface, then negotiate cycle /
    boundary assignment via comms (§1 cycle-collision rule and
    singleton-lane rendezvous rule).
-4. **Suggest the user run `/rename <session-name> - <intent>`** as soon
-   as the session intent is clear (immediately after rendezvous
-   resolves and BEFORE any significant implementation, source claim,
-   or staging operation). The session-name component is your PDR-027
-   display name; the intent component names the cycle / boundary you
-   own. The rename is surfaced **once**, never in closeout. This is
-   the team-session counterpart of the standing rule recorded as
-   user-memory `feedback_rename_suggestion_at_session_open_only`.
+4. **Suggest the user run `/rename`** per the shared start-right rule
+   at
+   [`start-right-quick/shared/start-right.md` §"Session Title — `/rename` Suggestion"](../start-right-quick/shared/start-right.md).
+   The team-shaped intent-clarity moment is **rendezvous-resolution**
+   (immediately after move 3 settles cycle / boundary assignment), not
+   session-open as in solo sessions. The rename must be surfaced
+   BEFORE any significant implementation, source claim, or staging
+   operation in move 5.
 5. **Open the work claim** in `active-claims.json` for the agreed
    boundary only after rendezvous resolves and the rename suggestion
    has been surfaced.
@@ -88,11 +88,8 @@ order, before any non-planning source edit:
    traceability discipline (§4).
 
 Source-claim opening BEFORE rendezvous resolves is the recurring failure
-mode this order exists to prevent — see the singleton-lane rendezvous rule
-in §1 and the cycle-collision rule below. Surfacing `/rename` AFTER
-significant implementation is the analogous failure mode for session
-titling: the title no longer matches the work by the time the title
-question becomes visible to the owner.
+mode this order exists to prevent — see the singleton-lane rendezvous
+rule in §1 and the cycle-collision rule below.
 
 ### 0. Start The All-Channels Comms Monitor (non-negotiable)
 

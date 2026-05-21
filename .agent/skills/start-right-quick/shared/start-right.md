@@ -175,6 +175,33 @@ Bounded exceptions: deep-consolidation, Core-trinity refinement, and
 root-cause investigation sessions. Any other no-landing session is
 drift.
 
+## Session Title — `/rename` Suggestion
+
+As soon as the session intent is clear and BEFORE any significant
+implementation (no source edits, no scaffolding, no claim opening
+beyond pure-reading work), suggest the user run:
+
+> `/rename <session-name> - <intent>`
+
+where `<session-name>` is your PDR-027 display name and `<intent>` is
+the cycle, plan, or boundary you have committed to landing.
+
+The suggestion is surfaced **once**, at the moment intent first clears:
+
+- Solo sessions: typically after the Per-Session Landing Commitment
+  above is declared.
+- Team sessions: after rendezvous resolves and cycle / boundary
+  assignment is settled. See
+  [`start-right-team` First Moves §4](../../start-right-team/SKILL-CANONICAL.md)
+  for the team-shaped invocation point.
+
+Never surface `/rename` in closeout summaries — by then the title
+either matches the work (no-op) or no longer matches because the work
+shifted (in which case the rename is too late to inform the title's
+audience). The standing rule lives in user-memory entry
+`feedback_rename_suggestion_at_session_open_only`; this section is its
+repo-visible doctrine surface.
+
 ## Work Shape and Simple Plan
 
 Before the first non-planning edit, leave a small observable plan

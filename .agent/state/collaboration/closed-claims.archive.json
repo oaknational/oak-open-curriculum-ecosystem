@@ -27164,6 +27164,88 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "0bb891bf-c4a7-4b19-a06a-35ed3b8cffae",
+      "agent_id": {
+        "agent_name": "Fiery Firing Cinder",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "40c178"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-21T11:37:21Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Fix start-right-team SKILL: encode repeatable team-bootstrap infrastructure (First Moves ordered list, canonical CLI invocation, cycle-collision deferral rule) so opening statements stop carrying load-bearing repeatable content.",
+      "archived_at": "2026-05-21",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-21T11:46:16Z",
+        "closed_by": {
+          "agent_name": "Fiery Firing Cinder",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "40c178"
+        },
+        "summary": "SKILL fix landed at dc67d0fb; reviewers absorbed (docs-adr-expert + code-expert).",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0bb891bf-c4a7-4b19-a06a-35ed3b8cffae",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2257bcc2-3c96-454b-981f-af5787cef484",
+      "agent_id": {
+        "agent_name": "Fiery Firing Cinder",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "40c178"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-21T11:53:53Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Add /rename timing rule to start-right-team SKILL First Moves (move 4: surface rename suggestion immediately after rendezvous, before any significant implementation).",
+      "archived_at": "2026-05-21",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-21T11:54:44Z",
+        "closed_by": {
+          "agent_name": "Fiery Firing Cinder",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "40c178"
+        },
+        "summary": "/rename timing rule added to start-right-team First Moves at 52d50e3e.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2257bcc2-3c96-454b-981f-af5787cef484",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
