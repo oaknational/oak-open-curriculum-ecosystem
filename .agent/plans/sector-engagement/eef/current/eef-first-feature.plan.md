@@ -32,7 +32,7 @@ todos:
     status: pending
     depends_on: []
   - id: ff5-shape-understanding-evidence
-    content: "Answer the five-question shape-understanding evidence template (from graph-mvp-arc.plan.md § Shape-Understanding Evidence Template) for the gate-1a feature: (1) what teacher action does this enable, (2) what is the smallest verifiable signal of value, (3) what is the worst plausible failure shape and the structural guard against it, (4) what does the response look like under a degenerate input, (5) what is the freshness-staleness behaviour. Record answers here as gate-1a precondition."
+    content: "Answer the five-question shape-understanding evidence template (from graph-mvp-arc.plan.md § Shape-Understanding Evidence Template) for the gate-1a feature: (1) what teacher action does this enable, (2) what is the smallest verifiable signal of value, (3) what is the worst plausible failure shape and the structural guard against it, (4) what does the response look like under a degenerate input, (5) what is the freshness-staleness behaviour. Record answers here as gate-1a precondition. Note: ff5 content can only be answered concretely once t1-corpus-shape + t6a-explore-tool are at least drafted, so the implementation order is Round 4 (parallel with t6a) per the Execution Partition table; the ff4 dependency is the tracking pointer to those corpus todos."
     status: pending
     depends_on: [ff4-corpus-todos-tracking]
   - id: ff6-acceptance-bundle
@@ -120,6 +120,176 @@ reduction**. The following ship in full at gate-1a:
    `strands_without_relations: readonly string[]` to front-load the
    empty-edge knowledge so consumers avoid pointless `subgraph`/`neighbours`
    calls on isolated strands.
+
+## Execution Partition
+
+This section is the team-execution overlay for gate-1a delivery. It names
+every gate-1a-blocking cycle and coordination token, the file scope each
+owns, the dependency edges between them, the in-cycle reviewer set, and
+the round assignment derived from the dependency graph. A fresh agent
+landing on a Round 1 cycle should be able to pick it up from this table
+alone, without re-deriving the partition.
+
+The canonical authoritative todo content stays in the substrate plan
+(`graph-stack.plan.md` for `WS4.x`) and the corpus plan
+(`eef-evidence-corpus.plan.md` for `t1`–`t20`). This overlay points; it
+does not duplicate.
+
+**Hard gate before Round 1 opens** (added 2026-05-21): the
+`feat/mcp-graph-support-foundation` branch carries PR #108 with
+failing quality gates (CodeQL alert #90, SonarCloud Quality Gate
+failing on 40 new issues, 12 unreviewed hotspots, and 6.0% new-code
+duplication ≥ 3.0% threshold). All gate-1a substrate cycles in this
+overlay (`WS4.1`, `WS4.4`, `WS4.5`) plus Inc.1a closure (`WS2.2`,
+`WS2.3`) are blocked until PR #108 clears — either via the
+[`pr-108-snagging.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/current/pr-108-snagging.plan.md)
+12-cycle plan landing on this branch, or via the branch merging
+first and graph implementation resuming on a fresh branch. The
+corpus cycles (`t1` through `t20`) and `ff`-coordination tokens
+become dispatchable only after the substrate floor is unblocked.
+Round 0 owner authorisation (the WS4.4 test-partition amendment +
+four protocol additions) is necessary but NOT sufficient; the
+PR-#108 gate is also a precondition.
+
+### Dependency graph (gate-1a scope only)
+
+| Cycle / token | Workspace + file scope | Depends on | Parallel-safe with |
+| --- | --- | --- | --- |
+| `WS4.1` | `packages/sdks/graph-corpus-sdk/**` + root registrations (`pnpm-workspace.yaml`, `knip.config.ts`, `.dependency-cruiser.mjs`, `pnpm-lock.yaml`) | (none after Round 0) | `WS4.4`, `WS2.2`, `WS2.3`, `t9`, `t12`, `t13`, `t20`, `ff1`, `ff2` |
+| `WS4.4` | `packages/core/graph-core/src/graph-view/**` (interface + fixture-based DeepKeyPath smoke-test using inline fixture `TNode`) | (none after Round 0; test-partition amendment lifts the `WS4.1` dependency) | `WS4.1`, `WS2.2`, `WS2.3`, `t9`, `t12`, `t13`, `t20`, `ff1`, `ff2` |
+| `WS4.5` | `packages/sdks/graph-corpus-sdk/src/eef-strands/**` (`EefStrandsGraphView` adapter + `EefStrand`-instantiation smoke-test) | `WS4.1`, `WS4.4` | `t12`, `t13`, `t9`, `t14`-pattern, `t20`, `ff1`, `ff2` |
+| `t1-corpus-shape` | `packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/types.ts` (canonical scaffold filename — actual name confirmed during cycle) | `WS4.4` | `WS4.5`, `t12`, `t13`, `t9`, `t20` |
+| `t2-zod-loader` | `oak-curriculum-sdk/src/mcp/evidence-corpus/loader.ts` (+ co-located unit tests) | `t1-corpus-shape`, `WS4.5` | `t9`, `t12`, `t13`, `t20` |
+| `t6a-explore-tool` | `oak-curriculum-sdk/src/mcp/evidence-corpus/tools/eef-explore-evidence-for-context.ts` (+ tests) | `t1-corpus-shape`, `t2-zod-loader`, `WS4.5`, `t12-citation-shape`, `t14`-pattern | `t9`, `t20`, `ff5` (parallel — different surfaces) |
+| `t9-guidance-constant` | `oak-curriculum-sdk/src/mcp/evidence-corpus/guidance-constant.ts` | (none) | every other cycle |
+| `t10-lesson-plan-prompt` | `oak-curriculum-sdk/src/mcp/evidence-corpus/prompts/eef-evidence-grounded-lesson-plan.ts` (+ tests) | `t6a-explore-tool`, `t9-guidance-constant` | `t15`/`t16`/`t17`/`t18`/`t19` partial extensions |
+| `t12-citation-shape` | `oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.ts` (non-empty-tuple compile-time type + Zod `min(1)` runtime schema + tests) | (none) | every other cycle |
+| `t13-freshness-gate` | canonical CI gate location (workflow file + ADR-175 binding wiring) | (none) | every other cycle |
+| `t14-telemetry` (pattern only at gate-1a) | `oak-curriculum-sdk/src/mcp/evidence-corpus/telemetry.ts` (Sentry seam pattern); instrumentation of the one tool lands inside `t6a` | `t6a-explore-tool` (for instrumentation) | `t1`, `t12`, `t13`, `t9`, `t20` |
+| `t20-credits` | repo `README.md` + `ATTRIBUTION.md` (EEF + John Roberts attribution) | (none) | every other cycle |
+| `t15`/`t16`/`t17`/`t18`/`t19` (gate-1a partials) | canonical homes per corpus plan workstream overlay | `t6a-explore-tool`, `t10-lesson-plan-prompt` (partial scopes only) | `t9`, `t12`, `t13`, `t20` |
+| `ff1-partnership-opener` | NON-TECHNICAL (sector-engagement deliverable; updates `ATTRIBUTION.md` + this plan body) | (none) | every other cycle |
+| `ff2-adoption-tracking-owner` | NON-TECHNICAL (resolves D-1; updates `graph-mvp-arc.plan.md::name-ai-client-adoption-owner` + this plan body) | (none) | every other cycle |
+| `ff5-shape-understanding-evidence` | plan-file edit in `eef-first-feature.plan.md` (answers the five-question template) | `ff4-corpus-todos-tracking` (substantively: `t1-corpus-shape` + `t6a-explore-tool` drafted) | `ff1`, `ff2`, `t9`, `t12`, `t13`, `t20`, `t6a` (parallel — plan-file vs. source) |
+| `ff6-acceptance-bundle` | plan-file gate (terminal; this plan body records gate-1a closure) | ALL above | (terminal) |
+
+Inc.1a closure cycles `WS2.2` (graph-ingest jsonld-compatible + Turtle/SKOS parser) and `WS2.3` (graph-ingest peer cycle) are NOT gate-1a-blocking — they live in `packages/libs/graph-ingest/**`, a separate workspace tree from the gate-1a substrate (`graph-core`, `graph-corpus-sdk`) and the gate-1a corpus (`oak-curriculum-sdk`). They are cross-workspace parallel with the entire Round 1 cohort and can land in any round without affecting the gate-1a critical path.
+
+### Round assignment
+
+Each round = the maximum file-disjoint cohort whose dependencies are
+satisfied by the prior round.
+
+- **Round 0** (owner authorisation only — no source code):
+  - `WS4.4` test-partition amendment (split `T7a` `DeepKeyPath`
+    compile-time smoke-test by ownership-of-invariant — fixture-based
+    in graph-core with `WS4.4`, `EefStrand`-instantiation in
+    `graph-corpus-sdk` with `WS4.5`).
+  - Four rotating-cast coordination protocol additions captured as
+    pending-graduations entries (mid-cycle retirement, coordinator
+    handoff two-distinct-moments, grounding-cost amortisation,
+    comms-event stream as failure-mode capture channel).
+- **Round 1** (eight parallel cycles, all file-disjoint):
+  `WS4.1`, `WS4.4`, `t9-guidance-constant`, `t12-citation-shape`,
+  `t13-freshness-gate`, `t20-credits`, `ff1-partnership-opener`,
+  `ff2-adoption-tracking-owner`. Plus `WS2.2`, `WS2.3` (Inc.1a closure,
+  cross-workspace parallel — separate tree).
+- **Round 2** (three parallel cycles): `WS4.5`, `t1-corpus-shape`,
+  `t14-telemetry` (pattern only; instrumentation in `t6a`).
+- **Round 3**: `t2-zod-loader` (depends on `t1` + `WS4.5`).
+- **Round 4**: `t6a-explore-tool` (depends on `t2` + `WS4.5` + `t12` +
+  `t14`-pattern) + `ff5-shape-understanding-evidence` (parallel —
+  different surface; plan-file edit).
+- **Round 5**: `t10-lesson-plan-prompt` (depends on `t6a` + `t9`) +
+  `t15`/`t16`/`t17`/`t18`/`t19` partial extensions (parallel — each
+  edits a different file home per corpus plan workstream overlay).
+- **Round 6** (terminal): `ff6-acceptance-bundle` (acceptance gate;
+  the closeout, not a cycle).
+
+The critical path is the longest sequential chain:
+`WS4.4` → `t1` → `t2` → `t6a` → `t10` → `ff6` (5 sequential rounds +
+Round 0 authorisation + terminal acceptance). Compute scaling buys
+round-internal parallelism (eight cycles + two non-technical streams +
+two cross-workspace Inc.1a cycles in Round 1) and rotating-cast
+resilience; it does not compress the chain.
+
+### Per-cycle reviewer set (in-cycle dispatch; verdicts absorbed before commit)
+
+| Cycle | Mandatory reviewers | Optional |
+| --- | --- | --- |
+| `WS4.1` | config-expert, architecture-expert-fred, test-expert | type-expert |
+| `WS4.4` | type-expert, architecture-expert-betty, test-expert | — |
+| `WS4.5` | type-expert, test-expert, architecture-expert-betty | mcp-expert (interface compliance) |
+| `t1-corpus-shape` | type-expert, test-expert | architecture-expert-betty |
+| `t2-zod-loader` | type-expert, test-expert | — |
+| `t6a-explore-tool` | mcp-expert, type-expert, test-expert, sentry-expert | architecture-expert-betty |
+| `t10-lesson-plan-prompt` | mcp-expert, type-expert | test-expert |
+| `t12-citation-shape` | type-expert, test-expert | — |
+| `t13-freshness-gate` | docs-adr-expert (ADR-175 alignment), test-expert | — |
+| `t14-telemetry` | sentry-expert, type-expert | — |
+| `t9-guidance-constant`, `t20-credits` | docs-adr-expert | — |
+| `t15`/`t16`/`t17`/`t18`/`t19` (partials) | per corpus plan workstream-specific reviewer set | — |
+
+Cross-cutting reviewer per round (reads the integrated state after
+all round-cycles land, before the next round opens; per the inviolate
+quality invariants in [`gate-1a-delivery-parallel-execution-addendum.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/current/gate-1a-delivery-parallel-execution-addendum.plan.md)):
+architecture-expert-betty by default, or docs-adr-expert when the
+round predominantly touches plan/ADR surfaces.
+
+### Per-cycle acceptance test shape
+
+Every cycle ships product code and test code in one atomic commit per
+the inviolate `atomic-landing` invariant. The canonical authoritative
+test shape per cycle lives in the substrate or corpus plan's `content`
+field for that todo; this overlay points at the row, it does not
+duplicate the test specification. A team agent picking up a cycle
+reads:
+
+1. This overlay row for file scope + dependencies + reviewers + round.
+2. The substrate/corpus plan's todo `content` for the canonical test
+   shape (e.g., for `t12-citation-shape`: "non-empty tuple compile-
+   time + Zod `min(1)` runtime; load-bearing architectural commitment
+   for both gates").
+3. The reviewer cadence (dispatch in-cycle; absorb before commit).
+
+### Named user-facing scenarios
+
+The acceptance bundle (`ff6`) is the gate-1a closure trigger. The
+substantive user-facing scenarios behind each gate-1a precondition:
+
+- **`ff1` (partnership opener)** — EEF contact named in
+  `ATTRIBUTION.md`; first-contact action recorded with date and outcome
+  in this plan body. Acceptance test = manual review by owner.
+- **`ff2` (adoption-tracking owner)** — owner named for AI-client
+  adoption tracking; tracking mechanism documented in a named location
+  (resolves `D-1`). Acceptance test = manual review by owner.
+- **`ff3` (substrate floor)** — `WS4.4` + `WS4.5` commits visible in
+  `graph-stack.plan.md` status with both todos at `status: completed`;
+  `GraphView<TNode, TEdgeType>` importable from
+  `@oaknational/graph-core/graph-view`; `EefStrandsGraphView`
+  importable from `@oaknational/graph-corpus-sdk/eef-strands`.
+  Acceptance test = plan-status cross-check + import smoke-test in
+  consumer workspace.
+- **`ff4` (corpus floor)** — the 8 full + 6 partial gate-1a corpus
+  todos enumerated in `eef-evidence-corpus.plan.md` §Gate grouping
+  table at `status: completed`; `t6a-explore-tool` callable
+  end-to-end against EEF data. Acceptance test = the MCP-tool
+  round-trip integration test already specified in corpus-plan `t19`
+  partial.
+- **`ff5` (shape-understanding evidence)** — the five-question
+  template from `graph-mvp-arc.plan.md` §Shape-Understanding Evidence
+  Template answered in this plan body for gate-1a. Acceptance test =
+  manual review by owner.
+- **`ff6` (acceptance bundle)** — teacher launches an MCP client,
+  invokes `eef-explore-evidence-for-context` with a real KS-bound
+  seed context (e.g., KS2 maths + "feedback" focus), receives a
+  typed subgraph of EEF strands wrapped in the corpus envelope:
+  non-empty `citations` tuple (per `t12-citation-shape`), non-empty
+  `caveats` tuple, freshness metadata (per `t13-freshness-gate`,
+  data version emitted), `_meta.source = 'EEF Toolkit'` (per
+  ADR-157), `eef-*` namespace on the tool name. Acceptance test =
+  manual MCP-client round-trip + the integration test set per
+  corpus-plan `t19` partial.
 
 ## Non-technical preconditions
 

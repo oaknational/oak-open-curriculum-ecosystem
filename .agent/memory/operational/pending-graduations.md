@@ -334,6 +334,105 @@ Promotion target: amendment to start-right-team skill §1a
 option" to "the default when dirty files are workspace-scoped" with
 the cross-workspace cascade caveat.
 
+### 2026-05-21 — Mid-cycle retirement protocol for token-bounded agents (PDR-shaped or skill-amendment-shaped)
+
+`[captured: 2026-05-21 | source: gate-1a-delivery-parallel-execution-addendum.plan.md §"Question 1: Mid-cycle retirement protocol" + final-handoff session deepening plan | target: pdr:mid-cycle-retirement OR skill-amendment:start-right-team §"Mid-cycle retirement" | trigger: first-instance-observation-in-rotating-cast-launch | size: M | status: pending]`
+
+Substance summary: a rotating-cast agent approaching their token
+budget mid-cycle (mid-edit, possibly mid-claim) cannot simply stop
+without risking either leaving work in an indeterminate state for
+the next agent, or rushing to a forced stopping point that breaks
+the atomic-landing invariant. The current closeout contract only
+covers natural-boundary closeouts (slice-complete, commit-landed,
+peer-closeout).
+
+Proposed protocol shape:
+
+1. Agent senses approaching budget (≥80% used, or after each
+   commit).
+2. Agent freezes work-in-progress to a structured handoff record
+   covering: current edit state (which files are open and what
+   state they are in), in-flight reasoning (the analysis that led
+   to current state), decisions made (what is settled), decisions
+   deferred (what the next agent must resolve).
+3. Claim reassigned (existing claim shape extended with
+   `mid_cycle_handoff: true` flag plus the structured handoff
+   record reference).
+4. Next agent picks up the claim via the active-claims registry +
+   comms-event watcher.
+5. Original agent retires with explicit retirement broadcast.
+
+Trigger to watch: first observed mid-cycle retirement instance in
+a rotating-cast Round 1 launch. The first launch will deliberately
+stress-test this protocol via mid-round coordinator retirement per
+the addendum plan. Promotion target: PDR formalising the protocol,
+OR skill-amendment to start-right-team adding a §"Mid-cycle
+retirement" subsection adjacent to the existing Closeout Contract.
+
+### 2026-05-21 — Grounding-cost amortisation under rotating-cast operation (PDR-shaped)
+
+`[captured: 2026-05-21 | source: gate-1a-delivery-parallel-execution-addendum.plan.md §"Question 3: Grounding-cost amortisation" + final-handoff session deepening plan | target: pdr:grounding-cost-amortisation-under-rotation | trigger: owner-direction-or-first-rotating-cast-launch-evidence | size: M | status: pending]`
+
+Substance summary: each new agent session pays ~30k tokens reading
+the start-right-team foundation (AGENT.md, RULES_INDEX, principles,
+tdd-as-design, testing-strategy, orientation, thread record, active
+claims, recent comms, plan body) before any productive work. At
+10-min auto-spawn cadence, this is ~180k tokens/hour burned on
+duplicate grounding. The architectural question: is this efficient
+under faster-than-human-pace operation, or is a fast-bootstrap mode
+appropriate for narrowly-scoped single-cycle agents?
+
+Proposed fast-bootstrap shape (open for owner direction): read only
+the last-session record + current active claims + recent comms-event
+window, skipping full directive reading on the assumption that the
+coordinator already verified directive compliance at session
+open. The full grounding remains mandatory for coordinator-role
+agents and any agent that opens a source claim beyond a single
+named cycle.
+
+Risk shape: fast-bootstrap agents may miss a recently-graduated
+rule or doctrine update. The cure (if adopted): rule/doctrine
+changes are also surfaced as comms-events with a `[DOCTRINE]`
+tag so the fast-bootstrap window catches them.
+
+Trigger to watch: owner-direction to evaluate, OR first
+rotating-cast launch where grounding cost is observed empirically
+against productive cycle work. Promotion target: PDR codifying
+fast-bootstrap as a session-mode option with eligibility
+constraints.
+
+### 2026-05-21 — Comms-event stream as real-time failure-mode capture channel (PDR-shaped)
+
+`[captured: 2026-05-21 | source: gate-1a-delivery-parallel-execution-addendum.plan.md §"Question 4: Comms-events as the failure-mode capture channel" + final-handoff session deepening plan | target: pdr:comms-event-stream-as-failure-mode-channel | trigger: second-instance-or-rotating-cast-launch-observation | size: S | status: pending]`
+
+Substance summary: today's session captures failure modes (verdict
+walk-backs, backtick incidents, shell-quoting hazards) at session
+close in napkin entries. Under rotating-cast operation, failure
+modes need to be visible to the next coordinator *during their
+session*, not at the prior coordinator's close. The napkin is too
+coarse a vehicle — it lives in the authoring agent's context until
+written at close.
+
+Proposed protocol: each substantive failure mode is surfaced as a
+comms-event in real time, with a `[FAILURE-MODE]` or
+`[BEHAVIOUR-NOTE]` tag on the first line (consistent with the
+existing `[BROADCAST]`/`[GROUP]`/`[DIRECTED]`/`[LIFECYCLE]` tag
+convention from the all-channels comms-monitor CLI). The next
+coordinator's watcher picks it up immediately; session-close
+napkin entries become the *consolidation* of real-time events,
+not the first capture.
+
+Coupling: this protocol depends on the
+comms-event-stream-as-canonical-truth principle (already in this
+register awaiting graduation under §"Comms event stream as
+canonical truth (PDR candidate)") — under rotation, that principle
+becomes load-bearing infrastructure rather than a recommendation.
+
+Trigger to watch: second observed real-time failure-mode comms-event
+in a rotating-cast session, OR owner-direction graduation. Promotion
+target: PDR formalising the failure-mode-channel protocol AND
+extending the comms-event schema with the new tag set.
+
 ### 2026-05-17 — Surface classification for fitness-response routing (PDR-shaped)
 
 `[captured: 2026-05-17 | source: distilled.md §"Surface classification routes fitness response" | target: pdr:surface-classification-for-fitness-response | trigger: owner-direction | size: S | status: pending]`

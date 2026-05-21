@@ -163,43 +163,25 @@ The cure: comms-events as the durable real-time channel. Each failure mode is su
 
 ## Dependency-graph-dictated round structure
 
-The wall-clock floor is set by the dependency graph, not by compute. Round N cannot start before Round N-1 lands. Within a round, parallelism is bounded by the file-disjoint partition size (~3–4 cycles per round). Adding agents beyond that within a single round yields coordinator overhead, not speed.
+The wall-clock floor is set by the dependency graph, not by compute. Round N cannot start before Round N-1 lands. Within a round, parallelism is bounded by the file-disjoint partition size. Adding agents beyond that within a single round yields coordinator overhead, not speed.
 
-### Round 1 (after WS4.4 amendment lands; ~2–3 hours wall-clock)
+### Unified execution partition — see `eef-first-feature.plan.md` §Execution Partition
 
-Four parallel cycles, file-disjoint:
+The earlier substrate-only round structure here (4 rounds bounded by `WS2.2`/`WS2.3`/`WS4.1`/`WS4.4`/`WS4.2`/`WS4.5`/`WS4.3` + `ff1`–`ff6`) under-counted gate-1a parallelism: corpus cycles (`t9`, `t12`, `t13`, `t14`, `t20` and downstream) were not layered in, and Inc.1a closure (`WS2.2`/`WS2.3`) was bundled with gate-1a substrate rather than recognised as cross-workspace parallel.
 
-| Cycle | Workspace / file-disjoint scope | In-cycle reviewers |
-|---|---|---|
-| WS2.2 | `packages/libs/graph-ingest/src/jsonld-compatible/**` + `src/turtle/**` | type-expert + test-expert |
-| WS2.3 | `packages/libs/graph-ingest/**` (peer cycle; verify parallel-safety with WS2.2) | type-expert + test-expert |
-| WS4.1 | `packages/sdks/graph-corpus-sdk/**` + root files | config-expert + architecture-expert-fred |
-| WS4.4 | `packages/core/graph-core/src/graph-view/**` (interface + fixture-based smoke-test) | type-expert + architecture-expert-betty |
+The unified execution partition — substrate cycles + corpus cycles + `ff`-coordination tokens, with file scope, dependency edges, reviewer set, and round assignment — lives in [`eef-first-feature.plan.md`](../../../sector-engagement/eef/current/eef-first-feature.plan.md) §Execution Partition. That table is the team-execution surface. A rotating-cast agent picking up any Round N cycle reads it there.
 
-WS2.2's jsonld-compatible and Turtle/SKOS sub-paths are themselves file-disjoint and could split across two agents if additional compute is available.
+Summary shape (full table in the eef-first-feature plan):
 
-### Round 2 (~2 hours wall-clock)
+- **Round 0**: owner authorisation only (`WS4.4` test-partition amendment + four protocol additions).
+- **Round 1**: eight parallel cycles + two non-technical streams + two cross-workspace Inc.1a cycles.
+- **Round 2**: three parallel cycles (`WS4.5`, `t1`, `t14`-pattern).
+- **Round 3**: `t2-zod-loader`.
+- **Round 4**: `t6a-explore-tool` + `ff5`-evidence (parallel).
+- **Round 5**: `t10-lesson-plan-prompt` + `t15`/`t16`/`t17`/`t18`/`t19` partial extensions (parallel).
+- **Round 6**: `ff6-acceptance-bundle` (terminal gate).
 
-Two parallel cycles in the same workspace (`graph-corpus-sdk`) but different sub-paths:
-
-| Cycle | Sub-path | In-cycle reviewers |
-|---|---|---|
-| WS4.2 | `graph-corpus-sdk/src/threads/**` | type-expert + architecture-expert-betty |
-| WS4.5 | `graph-corpus-sdk/src/eef-strands/**` + EefStrand-instantiation smoke-test | type-expert + test-expert + architecture-expert-betty |
-
-WS4.5 could further decompose into WS4.5a (adapter scaffold + 5 NotImplementedYet stub operations), WS4.5b (subgraph operation + tests), WS4.5c (manifest operation + tests), WS4.5d (smoke-test). WS4.5b/c/d would run parallel after WS4.5a lands. Only worth doing if Round 2 has spare compute and the coordinator has bandwidth to route sub-cycles.
-
-### Round 3 (~1–2 hours wall-clock)
-
-WS4.3 Threads query proof (depends on WS4.2) + ff1 (first EEF feature ratifying the interface against a concrete user-facing scenario; depends on WS4.5 + ff1-ff6 dependency-graph fact-finding completing).
-
-### Round 4 (~2–3 hours wall-clock)
-
-ff2–ff6 in parallel after ff1 stabilises the interface. Specific shape derived from `eef-first-feature.plan.md`. Deferred until Round 1 outcome confirms the rotating-cast model.
-
-### Total wall-clock estimate
-
-~8–11 hours from owner authorisation through first EEF tool shipped. Rotating-cast does not compress this — the dependency graph is the bottleneck. What rotation compresses is per-agent context budget: each round's work split across multiple sessions, no single session burning >250k tokens.
+Critical path: `WS4.4` → `t1` → `t2` → `t6a` → `t10` → `ff6` (5 sequential rounds + Round 0 + terminal acceptance). The dependency graph, not compute, is the bottleneck.
 
 ### What compute scaling buys
 
