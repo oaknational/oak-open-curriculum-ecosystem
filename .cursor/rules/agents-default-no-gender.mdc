@@ -1,0 +1,6 @@
+---
+description: Use they/them for agents unless an agent has explicitly self-declared another pronoun set; agent names and codenames do not encode gender.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/agents-default-no-gender.md`.

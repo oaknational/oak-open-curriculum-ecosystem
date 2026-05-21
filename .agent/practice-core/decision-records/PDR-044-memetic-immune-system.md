@@ -4,7 +4,7 @@ pdr_kind: governance
 
 # PDR-044: Memetic Immune System — Innate and Adaptive Doctrine Defence
 
-**Status**: Accepted
+**Status**: Accepted (amended 2026-05-21)
 **Date**: 2026-05-04
 **Related**:
 [PDR-038](PDR-038-stated-principles-require-structural-enforcement.md)
@@ -82,6 +82,11 @@ agent attention. Its responsibilities:
 - **Soft-report** the substantive class — patterns that may have
   legitimate context but whose presence requires cognitive
   disposition before landing.
+- **Route owner-authorised references through approval**, not refusal.
+  Some fingerprints protect owner-only or context-sensitive language.
+  When the surface is legitimate only with owner approval, the
+  detection stops automatic continuation and requests that approval
+  path. It does not make the reference impossible.
 
 Innate immunity is intentionally *broad and fast*. It produces some
 false positives by design; it never silently misses a known
@@ -153,6 +158,27 @@ A fingerprint exits the registry when:
 
 Fingerprints are not retired silently; a retirement is itself a
 doctrinal act recorded in the napkin or distilled.
+
+### 2026-05-21 amendment — refusal vs approval
+
+The innate layer distinguishes **irreducible blocks** from
+**approval-trigger detections**. Irreducible blocks have no legitimate
+agent-authored shape without prior owner authorisation: destructive
+history operations, silent hook bypass, and other operations that
+would damage trust if allowed to proceed automatically.
+
+Approval-trigger detections are different. They flag vocabulary or
+patterns that are usually pathogenic but can be legitimately discussed
+when the owner has authorised the context, such as naming a blocked
+pattern inside a research or governance artefact. In those cases the
+detector preserves the route to owner approval. A detector may pause
+or reject the immediate write so the approval can be recorded, but the
+design target is **approval before continuation**, not absolute
+impossibility.
+
+This prevents autoimmunity in the innate layer: the scanner still
+catches the pattern, while legitimate doctrine work remains possible
+through an explicit approval path.
 
 ## Rationale
 

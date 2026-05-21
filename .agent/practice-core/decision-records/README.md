@@ -167,7 +167,7 @@ Practice-Core portability ratifies both — see the bridge index
 | [PDR-041](PDR-041-composition-obscurity-investigation-methodology.md) | Composition-Obscurity Investigation Methodology | Accepted |
 | [PDR-042](PDR-042-signal-distinguishing-pre-action-gate.md) | Signal-Distinguishing Pre-Action Gate | Accepted |
 | [PDR-043](PDR-043-rush-impulse-three-structural-cues.md) | Rush-Impulse Three Structural Cues | Accepted |
-| [PDR-044](PDR-044-memetic-immune-system.md) | Memetic Immune System | Accepted |
+| [PDR-044](PDR-044-memetic-immune-system.md) | Memetic Immune System | Accepted (amended 2026-05-21) |
 | [PDR-045](PDR-045-workspace-first-investigation-discipline.md) | Workspace-First Investigation Discipline | Accepted |
 | [PDR-046](PDR-046-layered-knowledge-processing.md) | Layered Knowledge Processing — Preserve First, Restructure Second | Accepted |
 | [PDR-047](PDR-047-rule-applies-always-doctrine-authoring.md) | The Rule Applies, Always — Doctrine-Authoring Discipline | Accepted |
@@ -183,3 +183,6 @@ Practice-Core portability ratifies both — see the bridge index
 | [PDR-057](PDR-057-empirical-answerability.md) | Empirical-Answerability Pre-Question Gate | Accepted (supersedes quarantined `apply-don't-ask`) |
 | [PDR-058](PDR-058-three-tier-optionality-decomposition.md) | Three-Tier Optionality Decomposition | Accepted (supersedes quarantined `stop-inventing-optionality`) |
 | [PDR-059](PDR-059-regenerator-output-classification.md) | Regenerator-Output Classification Discipline | Accepted |
+| [PDR-060](PDR-060-tooling-friction-is-first-class-user-feedback.md) | Tooling Friction Is First-Class User Feedback | Accepted |
+| [PDR-061](PDR-061-agent-pronoun-default-and-conduct-correction-graduation.md) | Agent Pronoun Default and Conduct-Correction Graduation | Accepted |
+| [PDR-062](PDR-062-absorption-adjacent-failure-modes.md) | Absorption-Adjacent Failure Modes | Accepted |
