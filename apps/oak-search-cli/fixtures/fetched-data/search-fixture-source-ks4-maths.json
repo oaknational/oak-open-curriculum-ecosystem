@@ -17,8 +17,7 @@
         }
       ],
       "phaseSlug": "primary",
-      "phaseTitle": "Primary",
-      "ks4Options": null
+      "phaseTitle": "Primary"
     },
     {
       "sequenceSlug": "maths-secondary",
@@ -34,8 +33,7 @@
         }
       ],
       "phaseSlug": "secondary",
-      "phaseTitle": "Secondary",
-      "ks4Options": null
+      "phaseTitle": "Secondary"
     }
   ],
   "lessonsSample": [

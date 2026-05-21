@@ -117,7 +117,9 @@ function createSequenceFacetDocument({
     unitSlugs: unitDetails.slugs,
     unitTitles: unitDetails.titles,
     lessonCount: unitDetails.lessonCount,
-    hasKs4Options: sequence.ks4Options !== null,
+    // ks4Options removed from API response in v0.7.0; live-API path can no
+    // longer signal variant presence. Bulk path retains its own signal.
+    hasKs4Options: false,
     oakUrl: sequence.oakUrl ?? generateSequenceOakUrl(sequence.sequenceSlug),
   });
 }

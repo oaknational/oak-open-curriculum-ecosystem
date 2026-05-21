@@ -127,6 +127,7 @@ describe('createResponseAugmentationMiddleware', () => {
         sequenceSlugs: [],
         years: [],
         keyStages: [],
+        ks4ProgrammeFactors: {},
       };
       const request = buildGetRequest('/subjects/maths');
       const response = buildJsonResponse(body);

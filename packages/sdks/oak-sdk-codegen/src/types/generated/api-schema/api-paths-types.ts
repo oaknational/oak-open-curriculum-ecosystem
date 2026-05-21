@@ -1188,8 +1188,7 @@ export interface components {
          *               \}
          *             ],
          *             "phaseSlug": "primary",
-         *             "phaseTitle": "Primary",
-         *             "ks4Options": null
+         *             "phaseTitle": "Primary"
          *           \},
          *           \{
          *             "sequenceSlug": "art-secondary",
@@ -1211,8 +1210,7 @@ export interface components {
          *               \}
          *             ],
          *             "phaseSlug": "secondary",
-         *             "phaseTitle": "Secondary",
-         *             "ks4Options": null
+         *             "phaseTitle": "Secondary"
          *           \}
          *         ],
          *         "years": [
@@ -1271,10 +1269,6 @@ export interface components {
                 phaseSlug: string;
                 /** The title for the phase to which this sequence belongs */
                 phaseTitle: string;
-                ks4Options: {
-                    title: string;
-                    slug: string;
-                } | null;
             }[];
             /** The years for which this subject has content available for */
             years: number[];
@@ -1294,11 +1288,11 @@ export interface components {
         }[];
         /**
          * @example \{
-         *       "subjectTitle": "Art and design",
-         *       "subjectSlug": "art",
+         *       "subjectTitle": "Science",
+         *       "subjectSlug": "science",
          *       "sequenceSlugs": [
          *         \{
-         *           "sequenceSlug": "art-primary",
+         *           "sequenceSlug": "science-primary",
          *           "years": [
          *             1,
          *             2,
@@ -1318,32 +1312,73 @@ export interface components {
          *             \}
          *           ],
          *           "phaseSlug": "primary",
-         *           "phaseTitle": "Primary",
-         *           "ks4Options": null
+         *           "phaseTitle": "Primary"
          *         \},
          *         \{
-         *           "sequenceSlug": "art-secondary",
+         *           "sequenceSlug": "science-secondary-aqa",
          *           "years": [
-         *             1,
-         *             2,
-         *             3,
-         *             4,
-         *             5,
-         *             6
+         *             7,
+         *             8,
+         *             9,
+         *             10,
+         *             11
          *           ],
          *           "keyStages": [
          *             \{
-         *               "keyStageTitle": "Key Stage 1",
-         *               "keyStageSlug": "ks1"
+         *               "keyStageTitle": "Key Stage 3",
+         *               "keyStageSlug": "ks3"
          *             \},
          *             \{
-         *               "keyStageTitle": "Key Stage 2",
-         *               "keyStageSlug": "ks2"
+         *               "keyStageTitle": "Key Stage 4",
+         *               "keyStageSlug": "ks4"
          *             \}
          *           ],
          *           "phaseSlug": "secondary",
-         *           "phaseTitle": "Secondary",
-         *           "ks4Options": null
+         *           "phaseTitle": "Secondary"
+         *         \},
+         *         \{
+         *           "sequenceSlug": "science-secondary-edexcel",
+         *           "years": [
+         *             7,
+         *             8,
+         *             9,
+         *             10,
+         *             11
+         *           ],
+         *           "keyStages": [
+         *             \{
+         *               "keyStageTitle": "Key Stage 3",
+         *               "keyStageSlug": "ks3"
+         *             \},
+         *             \{
+         *               "keyStageTitle": "Key Stage 4",
+         *               "keyStageSlug": "ks4"
+         *             \}
+         *           ],
+         *           "phaseSlug": "secondary",
+         *           "phaseTitle": "Secondary"
+         *         \},
+         *         \{
+         *           "sequenceSlug": "science-secondary-ocr",
+         *           "years": [
+         *             7,
+         *             8,
+         *             9,
+         *             10,
+         *             11
+         *           ],
+         *           "keyStages": [
+         *             \{
+         *               "keyStageTitle": "Key Stage 3",
+         *               "keyStageSlug": "ks3"
+         *             \},
+         *             \{
+         *               "keyStageTitle": "Key Stage 4",
+         *               "keyStageSlug": "ks4"
+         *             \}
+         *           ],
+         *           "phaseSlug": "secondary",
+         *           "phaseTitle": "Secondary"
          *         \}
          *       ],
          *       "years": [
@@ -1376,7 +1411,51 @@ export interface components {
          *           "keyStageTitle": "Key Stage 4",
          *           "keyStageSlug": "ks4"
          *         \}
-         *       ]
+         *       ],
+         *       "ks4ProgrammeFactors": \{
+         *         "examBoard": [
+         *           \{
+         *             "title": "AQA",
+         *             "slug": "aqa"
+         *           \},
+         *           \{
+         *             "title": "Edexcel",
+         *             "slug": "edexcel"
+         *           \},
+         *           \{
+         *             "title": "OCR",
+         *             "slug": "ocr"
+         *           \}
+         *         ],
+         *         "tier": [
+         *           \{
+         *             "title": "Foundation",
+         *             "slug": "foundation"
+         *           \},
+         *           \{
+         *             "title": "Higher",
+         *             "slug": "higher"
+         *           \}
+         *         ],
+         *         "childSubject": [
+         *           \{
+         *             "title": "Biology",
+         *             "slug": "biology"
+         *           \},
+         *           \{
+         *             "title": "Chemistry",
+         *             "slug": "chemistry"
+         *           \},
+         *           \{
+         *             "title": "Combined science",
+         *             "slug": "combined-science"
+         *           \},
+         *           \{
+         *             "title": "Physics",
+         *             "slug": "physics"
+         *           \}
+         *         ]
+         *       \}
          *     \}
          */
         SubjectResponseSchema: {
@@ -1401,10 +1480,6 @@ export interface components {
                 phaseSlug: string;
                 /** The title for the phase to which this sequence belongs */
                 phaseTitle: string;
-                ks4Options: {
-                    title: string;
-                    slug: string;
-                } | null;
             }[];
             /** The years for which this subject has content available for */
             years: number[];
@@ -1415,6 +1490,37 @@ export interface components {
                 /** The unique identifier for a given key stage */
                 keyStageSlug: string;
             }[];
+            /** The programme factors that apply to this subject at key stage 4, with the valid values for each factor. */
+            ks4ProgrammeFactors: {
+                /** The valid exam board values offered by Oak for this subject at key stage 4. */
+                examBoard?: {
+                    /** The display title for a valid programme factor value */
+                    title: string;
+                    /** The slug identifier for a valid programme factor value */
+                    slug: string;
+                }[];
+                /** The valid pathway values offered by Oak for this subject at key stage 4. */
+                pathway?: {
+                    /** The display title for a valid programme factor value */
+                    title: string;
+                    /** The slug identifier for a valid programme factor value */
+                    slug: string;
+                }[];
+                /** The valid tier values offered by Oak for this subject at key stage 4. */
+                tier?: {
+                    /** The display title for a valid programme factor value */
+                    title: string;
+                    /** The slug identifier for a valid programme factor value */
+                    slug: string;
+                }[];
+                /** The child subjects offered by Oak for this subject at key stage 4 (e.g. biology, chemistry, physics and combined-science under science). Only present for Science, which is split into child subjects at KS4. */
+                childSubject?: {
+                    /** The display title for a valid programme factor value */
+                    title: string;
+                    /** The slug identifier for a valid programme factor value */
+                    slug: string;
+                }[];
+            };
             /**
              * Format: uri
              * The Oak URL for this resource — a direct, slug-based URL generated by the SDK. Distinct from canonicalUrl, which encodes full curriculum context.
@@ -1445,8 +1551,7 @@ export interface components {
          *           \}
          *         ],
          *         "phaseSlug": "primary",
-         *         "phaseTitle": "Primary",
-         *         "ks4Options": null
+         *         "phaseTitle": "Primary"
          *       \},
          *       \{
          *         "sequenceSlug": "art-secondary",
@@ -1469,8 +1574,7 @@ export interface components {
          *           \}
          *         ],
          *         "phaseSlug": "secondary",
-         *         "phaseTitle": "Secondary",
-         *         "ks4Options": null
+         *         "phaseTitle": "Secondary"
          *       \}
          *     ]
          */
@@ -1490,10 +1594,6 @@ export interface components {
             phaseSlug: string;
             /** The title for the phase to which this sequence belongs */
             phaseTitle: string;
-            ks4Options: {
-                title: string;
-                slug: string;
-            } | null;
             /**
              * Format: uri
              * The Oak URL for this resource — a direct, slug-based URL generated by the SDK. Distinct from canonicalUrl, which encodes full curriculum context.
@@ -3606,7 +3706,7 @@ export interface operations {
             header?: never;
             path: {
                 /** The slug identifier for the subject */
-                subject: string;
+                subject: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
             };
             cookie?: never;
         };

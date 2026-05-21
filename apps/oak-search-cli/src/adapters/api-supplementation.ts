@@ -76,9 +76,10 @@ export async function buildKs4SupplementationContext(
   const sequences = sequencesResult.value;
 
   // Convert to SubjectSequenceInfo format
+  // ks4Options was removed from the API response in v0.7.0; the live-API path
+  // no longer carries per-sequence variant info. Bulk-data path still does.
   const sequenceInfos: SubjectSequenceInfo[] = sequences.map((seq) => ({
     sequenceSlug: seq.sequenceSlug,
-    ks4Options: seq.ks4Options ?? null,
   }));
 
   // Build context map by fetching sequence units

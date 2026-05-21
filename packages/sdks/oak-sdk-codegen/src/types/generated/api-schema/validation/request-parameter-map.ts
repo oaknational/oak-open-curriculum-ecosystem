@@ -38,7 +38,7 @@ export const REQUEST_PARAMETER_SCHEMAS = {
   }),
   "GET:/subjects": z.object({}),
   "GET:/subjects/:subject": z.object({
-    "subject": z.string(),
+    "subject": z.enum(["art", "citizenship", "computing", "cooking-nutrition", "design-technology", "english", "french", "geography", "german", "history", "maths", "music", "physical-education", "religious-education", "rshe-pshe", "science", "spanish"]),
   }),
   "GET:/subjects/:subject/sequences": z.object({
     "subject": z.string(),

@@ -88,7 +88,6 @@ function makeSequenceEntry(overrides: Partial<SubjectSequenceEntry> = {}): Subje
     ],
     phaseSlug: 'primary',
     phaseTitle: 'Primary',
-    ks4Options: null,
   };
   return { ...defaults, ...overrides };
 }

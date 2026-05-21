@@ -191,7 +191,6 @@ describe('HybridDataSource KS4 enrichment', () => {
       value: [
         {
           sequenceSlug: 'maths-secondary',
-          ks4Options: null,
           years: [10, 11],
           keyStages: [{ keyStageSlug: 'ks4', keyStageTitle: 'Key Stage 4' }],
           phaseSlug: 'secondary',

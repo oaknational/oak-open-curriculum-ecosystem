@@ -8,7 +8,7 @@ export const schemaBase = {
   "openapi": "3.1.0",
   "info": {
     "title": "Oak OpenAPI",
-    "version": "0.6.0-c3184afa6b3c206b9139d74c292e351ee8fd59ae"
+    "version": "0.7.0-3804b95b2b38a67f085077b82b763226a06966a2"
   },
   "servers": [
     {
@@ -774,6 +774,25 @@ export const schemaBase = {
             "name": "subject",
             "schema": {
               "type": "string",
+              "enum": [
+                "art",
+                "citizenship",
+                "computing",
+                "cooking-nutrition",
+                "design-technology",
+                "english",
+                "french",
+                "geography",
+                "german",
+                "history",
+                "maths",
+                "music",
+                "physical-education",
+                "religious-education",
+                "rshe-pshe",
+                "science",
+                "spanish"
+              ],
               "description": "The slug identifier for the subject",
               "example": "art"
             },
@@ -2327,19 +2346,18 @@ export const schemaBase = {
                   },
                   "example": [
                     {
+                      "version": "0.7.0",
+                      "date": "2026-05-21",
+                      "changes": [
+                        "/subjects/{subject} now exposes `ks4ProgrammeFactors.childSubject` for subjects split into child subjects at KS4 (currently science → biology, chemistry, combined-science, physics)",
+                        "Removed the per-sequence `ks4Options` field from `sequenceSlugs[]` in /subjects, /subjects/{subject}, and /subjects/{subject}/sequences responses; the variant is still encoded in the sequenceSlug suffix"
+                      ]
+                    },
+                    {
                       "version": "0.6.0",
                       "date": "2026-02-19",
                       "changes": [
                         "Change to how blocked content is handled, using BAD_REQUEST & .data.cause instead of 451"
-                      ]
-                    },
-                    {
-                      "version": "0.5.0",
-                      "date": "2025-03-06",
-                      "changes": [
-                        "PPTX used for slideDeck assets",
-                        "All video assets now fully downloadable in mp4 format",
-                        "New /threads/* endpoints"
                       ]
                     }
                   ]
@@ -2420,10 +2438,11 @@ export const schemaBase = {
                   ],
                   "additionalProperties": false,
                   "example": {
-                    "version": "0.6.0",
-                    "date": "2026-02-19",
+                    "version": "0.7.0",
+                    "date": "2026-05-21",
                     "changes": [
-                      "Change to how blocked content is handled, using BAD_REQUEST & .data.cause instead of 451"
+                      "/subjects/{subject} now exposes `ks4ProgrammeFactors.childSubject` for subjects split into child subjects at KS4 (currently science → biology, chemistry, combined-science, physics)",
+                      "Removed the per-sequence `ks4Options` field from `sequenceSlugs[]` in /subjects, /subjects/{subject}, and /subjects/{subject}/sequences responses; the variant is still encoded in the sequenceSlug suffix"
                     ]
                   }
                 }
@@ -4089,30 +4108,6 @@ export const schemaBase = {
                   "phaseTitle": {
                     "type": "string",
                     "description": "The title for the phase to which this sequence belongs"
-                  },
-                  "ks4Options": {
-                    "anyOf": [
-                      {
-                        "type": "object",
-                        "properties": {
-                          "title": {
-                            "type": "string"
-                          },
-                          "slug": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "title",
-                          "slug"
-                        ],
-                        "additionalProperties": false,
-                        "description": "The key stage 4 study pathway that this sequence represents. May be null."
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
                   }
                 },
                 "required": [
@@ -4120,8 +4115,7 @@ export const schemaBase = {
                   "years",
                   "keyStages",
                   "phaseSlug",
-                  "phaseTitle",
-                  "ks4Options"
+                  "phaseTitle"
                 ],
                 "additionalProperties": false
               },
@@ -4198,8 +4192,7 @@ export const schemaBase = {
                   }
                 ],
                 "phaseSlug": "primary",
-                "phaseTitle": "Primary",
-                "ks4Options": null
+                "phaseTitle": "Primary"
               },
               {
                 "sequenceSlug": "art-secondary",
@@ -4221,8 +4214,7 @@ export const schemaBase = {
                   }
                 ],
                 "phaseSlug": "secondary",
-                "phaseTitle": "Secondary",
-                "ks4Options": null
+                "phaseTitle": "Secondary"
               }
             ],
             "years": [
@@ -4315,30 +4307,6 @@ export const schemaBase = {
                 "phaseTitle": {
                   "type": "string",
                   "description": "The title for the phase to which this sequence belongs"
-                },
-                "ks4Options": {
-                  "anyOf": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "title": {
-                          "type": "string"
-                        },
-                        "slug": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "title",
-                        "slug"
-                      ],
-                      "additionalProperties": false,
-                      "description": "The key stage 4 study pathway that this sequence represents. May be null."
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
                 }
               },
               "required": [
@@ -4346,8 +4314,7 @@ export const schemaBase = {
                 "years",
                 "keyStages",
                 "phaseSlug",
-                "phaseTitle",
-                "ks4Options"
+                "phaseTitle"
               ],
               "additionalProperties": false
             },
@@ -4382,6 +4349,101 @@ export const schemaBase = {
             },
             "description": "The key stage slug identifiers for which this subject has content available for."
           },
+          "ks4ProgrammeFactors": {
+            "type": "object",
+            "properties": {
+              "examBoard": {
+                "description": "The valid exam board values offered by Oak for this subject at key stage 4.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "The display title for a valid programme factor value"
+                    },
+                    "slug": {
+                      "type": "string",
+                      "description": "The slug identifier for a valid programme factor value"
+                    }
+                  },
+                  "required": [
+                    "title",
+                    "slug"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "pathway": {
+                "description": "The valid pathway values offered by Oak for this subject at key stage 4.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "The display title for a valid programme factor value"
+                    },
+                    "slug": {
+                      "type": "string",
+                      "description": "The slug identifier for a valid programme factor value"
+                    }
+                  },
+                  "required": [
+                    "title",
+                    "slug"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "tier": {
+                "description": "The valid tier values offered by Oak for this subject at key stage 4.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "The display title for a valid programme factor value"
+                    },
+                    "slug": {
+                      "type": "string",
+                      "description": "The slug identifier for a valid programme factor value"
+                    }
+                  },
+                  "required": [
+                    "title",
+                    "slug"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "childSubject": {
+                "description": "The child subjects offered by Oak for this subject at key stage 4 (e.g. biology, chemistry, physics and combined-science under science). Only present for Science, which is split into child subjects at KS4.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "The display title for a valid programme factor value"
+                    },
+                    "slug": {
+                      "type": "string",
+                      "description": "The slug identifier for a valid programme factor value"
+                    }
+                  },
+                  "required": [
+                    "title",
+                    "slug"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false,
+            "description": "The programme factors that apply to this subject at key stage 4, with the valid values for each factor."
+          },
           "oakUrl": {
             "type": "string",
             "format": "uri",
@@ -4394,15 +4456,16 @@ export const schemaBase = {
           "subjectSlug",
           "sequenceSlugs",
           "years",
-          "keyStages"
+          "keyStages",
+          "ks4ProgrammeFactors"
         ],
         "additionalProperties": false,
         "example": {
-          "subjectTitle": "Art and design",
-          "subjectSlug": "art",
+          "subjectTitle": "Science",
+          "subjectSlug": "science",
           "sequenceSlugs": [
             {
-              "sequenceSlug": "art-primary",
+              "sequenceSlug": "science-primary",
               "years": [
                 1,
                 2,
@@ -4422,32 +4485,73 @@ export const schemaBase = {
                 }
               ],
               "phaseSlug": "primary",
-              "phaseTitle": "Primary",
-              "ks4Options": null
+              "phaseTitle": "Primary"
             },
             {
-              "sequenceSlug": "art-secondary",
+              "sequenceSlug": "science-secondary-aqa",
               "years": [
-                1,
-                2,
-                3,
-                4,
-                5,
-                6
+                7,
+                8,
+                9,
+                10,
+                11
               ],
               "keyStages": [
                 {
-                  "keyStageTitle": "Key Stage 1",
-                  "keyStageSlug": "ks1"
+                  "keyStageTitle": "Key Stage 3",
+                  "keyStageSlug": "ks3"
                 },
                 {
-                  "keyStageTitle": "Key Stage 2",
-                  "keyStageSlug": "ks2"
+                  "keyStageTitle": "Key Stage 4",
+                  "keyStageSlug": "ks4"
                 }
               ],
               "phaseSlug": "secondary",
-              "phaseTitle": "Secondary",
-              "ks4Options": null
+              "phaseTitle": "Secondary"
+            },
+            {
+              "sequenceSlug": "science-secondary-edexcel",
+              "years": [
+                7,
+                8,
+                9,
+                10,
+                11
+              ],
+              "keyStages": [
+                {
+                  "keyStageTitle": "Key Stage 3",
+                  "keyStageSlug": "ks3"
+                },
+                {
+                  "keyStageTitle": "Key Stage 4",
+                  "keyStageSlug": "ks4"
+                }
+              ],
+              "phaseSlug": "secondary",
+              "phaseTitle": "Secondary"
+            },
+            {
+              "sequenceSlug": "science-secondary-ocr",
+              "years": [
+                7,
+                8,
+                9,
+                10,
+                11
+              ],
+              "keyStages": [
+                {
+                  "keyStageTitle": "Key Stage 3",
+                  "keyStageSlug": "ks3"
+                },
+                {
+                  "keyStageTitle": "Key Stage 4",
+                  "keyStageSlug": "ks4"
+                }
+              ],
+              "phaseSlug": "secondary",
+              "phaseTitle": "Secondary"
             }
           ],
           "years": [
@@ -4480,7 +4584,51 @@ export const schemaBase = {
               "keyStageTitle": "Key Stage 4",
               "keyStageSlug": "ks4"
             }
-          ]
+          ],
+          "ks4ProgrammeFactors": {
+            "examBoard": [
+              {
+                "title": "AQA",
+                "slug": "aqa"
+              },
+              {
+                "title": "Edexcel",
+                "slug": "edexcel"
+              },
+              {
+                "title": "OCR",
+                "slug": "ocr"
+              }
+            ],
+            "tier": [
+              {
+                "title": "Foundation",
+                "slug": "foundation"
+              },
+              {
+                "title": "Higher",
+                "slug": "higher"
+              }
+            ],
+            "childSubject": [
+              {
+                "title": "Biology",
+                "slug": "biology"
+              },
+              {
+                "title": "Chemistry",
+                "slug": "chemistry"
+              },
+              {
+                "title": "Combined science",
+                "slug": "combined-science"
+              },
+              {
+                "title": "Physics",
+                "slug": "physics"
+              }
+            ]
+          }
         }
       },
       "SubjectSequenceResponseSchema": {
@@ -4529,30 +4677,6 @@ export const schemaBase = {
               "type": "string",
               "description": "The title for the phase to which this sequence belongs"
             },
-            "ks4Options": {
-              "anyOf": [
-                {
-                  "type": "object",
-                  "properties": {
-                    "title": {
-                      "type": "string"
-                    },
-                    "slug": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "title",
-                    "slug"
-                  ],
-                  "additionalProperties": false,
-                  "description": "The key stage 4 study pathway that this sequence represents. May be null."
-                },
-                {
-                  "type": "null"
-                }
-              ]
-            },
             "oakUrl": {
               "type": "string",
               "format": "uri",
@@ -4565,8 +4689,7 @@ export const schemaBase = {
             "years",
             "keyStages",
             "phaseSlug",
-            "phaseTitle",
-            "ks4Options"
+            "phaseTitle"
           ],
           "additionalProperties": false
         },
@@ -4592,8 +4715,7 @@ export const schemaBase = {
               }
             ],
             "phaseSlug": "primary",
-            "phaseTitle": "Primary",
-            "ks4Options": null
+            "phaseTitle": "Primary"
           },
           {
             "sequenceSlug": "art-secondary",
@@ -4616,8 +4738,7 @@ export const schemaBase = {
               }
             ],
             "phaseSlug": "secondary",
-            "phaseTitle": "Secondary",
-            "ks4Options": null
+            "phaseTitle": "Secondary"
           }
         ]
       },

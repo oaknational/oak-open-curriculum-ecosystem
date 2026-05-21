@@ -628,10 +628,6 @@ const AllSubjectsResponseSchema = z.array(
             ),
             phaseSlug: z.string(),
             phaseTitle: z.string(),
-            ks4Options: z.union([
-              z.object({ title: z.string(), slug: z.string() }).strict(),
-              z.null(),
-            ]),
           })
           .strict()
       ),
@@ -661,10 +657,6 @@ const SubjectResponseSchema = z
           ),
           phaseSlug: z.string(),
           phaseTitle: z.string(),
-          ks4Options: z.union([
-            z.object({ title: z.string(), slug: z.string() }).strict(),
-            z.null(),
-          ]),
         })
         .strict()
     ),
@@ -672,6 +664,23 @@ const SubjectResponseSchema = z
     keyStages: z.array(
       z.object({ keyStageTitle: z.string(), keyStageSlug: z.string() }).strict()
     ),
+    ks4ProgrammeFactors: z
+      .object({
+        examBoard: z.array(
+          z.object({ title: z.string(), slug: z.string() }).strict()
+        ),
+        pathway: z.array(
+          z.object({ title: z.string(), slug: z.string() }).strict()
+        ),
+        tier: z.array(
+          z.object({ title: z.string(), slug: z.string() }).strict()
+        ),
+        childSubject: z.array(
+          z.object({ title: z.string(), slug: z.string() }).strict()
+        ),
+      })
+      .partial()
+      .strict(),
     oakUrl: z.url().optional(),
   })
   .strict();
@@ -687,10 +696,6 @@ const SubjectSequenceResponseSchema = z.array(
       ),
       phaseSlug: z.string(),
       phaseTitle: z.string(),
-      ks4Options: z.union([
-        z.object({ title: z.string(), slug: z.string() }).strict(),
-        z.null(),
-      ]),
       oakUrl: z.url().optional(),
     })
     .strict()
@@ -2694,7 +2699,25 @@ This endpoint contains licence information for any third-party content contained
       {
         name: "subject",
         type: "Path",
-        schema: z.string(),
+        schema: z.enum([
+          "art",
+          "citizenship",
+          "computing",
+          "cooking-nutrition",
+          "design-technology",
+          "english",
+          "french",
+          "geography",
+          "german",
+          "history",
+          "maths",
+          "music",
+          "physical-education",
+          "religious-education",
+          "rshe-pshe",
+          "science",
+          "spanish",
+        ]),
       },
     ],
     response: SubjectResponseSchema,

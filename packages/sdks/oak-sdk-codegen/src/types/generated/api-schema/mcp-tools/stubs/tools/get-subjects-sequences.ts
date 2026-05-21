@@ -21,8 +21,7 @@ export const stubGetSubjectsSequencesResponse = [
       }
     ],
     "phaseSlug": "primary",
-    "phaseTitle": "Primary",
-    "ks4Options": null
+    "phaseTitle": "Primary"
   },
   {
     "sequenceSlug": "art-secondary",
@@ -45,7 +44,6 @@ export const stubGetSubjectsSequencesResponse = [
       }
     ],
     "phaseSlug": "secondary",
-    "phaseTitle": "Secondary",
-    "ks4Options": null
+    "phaseTitle": "Secondary"
   }
 ] as const;

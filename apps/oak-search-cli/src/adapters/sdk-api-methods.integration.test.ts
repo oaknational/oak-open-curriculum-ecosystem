@@ -132,7 +132,6 @@ function createMockSubjectSequences() {
       ],
       phaseSlug: 'primary',
       phaseTitle: 'Primary',
-      ks4Options: null,
     },
   ];
 }

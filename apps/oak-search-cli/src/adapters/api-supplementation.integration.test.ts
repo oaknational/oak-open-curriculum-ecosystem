@@ -46,7 +46,7 @@ describe('buildKs4SupplementationContext', () => {
     const client = createMockClient({
       getSubjectSequences: vi.fn().mockResolvedValue({
         ok: true,
-        value: [{ sequenceSlug: 'maths-secondary', ks4Options: null }],
+        value: [{ sequenceSlug: 'maths-secondary' }],
       }),
       getSequenceUnits: vi.fn().mockResolvedValue({
         ok: true,
