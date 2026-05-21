@@ -17,6 +17,35 @@ Earlier archives remain under [`archive/`](archive/).
 ## Current State
 
 - Current branch: `feat/mcp-graph-support-foundation`.
+- **2026-05-21 (Uplifted Swooping Wing / `claude` / Opus 4.7 (1M) / `8d9999`)**:
+  WS1.6 vocab registry LANDED at `3add41f9` (seven standard W3C/community
+  vocabularies — RDFS, SKOS, PROV-O, DCTERMS, OWL, SHACL, schema.org — as
+  file-per-vocabulary const-typed NamedNode tables, every entry constructed
+  via `DataFactory.namedNode()` for single canonical construction path; byIri
+  reverse-lookup; `@oaknational/type-helpers` added as dep; 20 unit tests
+  including type-level RDFS.label literal-narrowing assertion and
+  cross-namespace collision invariant; CURRIC + EEF deferred to WS4.2 / EEF
+  corpus plan when source IRIs are pinned). WS3.1 graph-project scaffold
+  LANDED at `84bfffa5` (workspace + three reserved sub-path barrels —
+  `./property-graph` types, `./projection` toPropertyGraph, `./adjacency` —
+  three-barrel split keeps adjacency dependency-direction clean;
+  graph-project added to `FOUNDATION_LIB_PACKAGES` with boundary tests
+  updated). Two lifecycle commits `db9d2e60` (WS1.6 plan plus napkin entry
+  capturing decision-moment heuristic candidate) and `8e441bd0` (WS3.1 plan
+  plus parallel-pair boundary marker). Inc.1a remaining: 4 cycles (WS2.2,
+  WS2.3, WS3.2, WS3.3). **First parallel graph tooling work boundary now
+  open**: WS2.2 ↔ WS3.2 are dispatchable; their file scopes are empirically
+  disjoint, both depend on landed WS1.3, reviewer dispatch is independent.
+  Owner direction at close: next session is two-agent collaborative Claude
+  on the parallel pair — empirical test of intra-vendor multi-agent
+  collaboration shape. **Owner correction on reasoning hygiene received**
+  during dispatch-shape verdict: plans are records of past reasoning, not
+  evidence; memory entries about reliability issues are flags-to-verify
+  not permanent prohibitions; "preferred / forbidden" dogma vocabulary
+  closes inquiry. Captured in napkin (2026-05-21 entry). Decision-moment
+  heuristic candidate (single decision-time heuristic — long-term
+  architectural excellence — may subsume many topic-decomposed rules at
+  fire time) captured for promotion on third instance or owner direction.
 - **2026-05-20 (Shaded Creeping Cloak / `claude` / opus-4-7-1m / `4ef359`)**:
   multi-commit disposition + reviewer dispatch + WS0 sign-off + WS1
   opening session continuing from Stormy Plumbing Atoll's under-reported
@@ -237,7 +266,7 @@ each thread record; this table is the repo-level index.
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
 | `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Shaded Creeping Cloak / `claude` / Opus 4.7 (1M) / `4ef359` / 2026-05-20 |
-| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Riverine Swimming Hull / `claude` / Opus 4.7 / `304dde` / 2026-05-14 |
+| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Uplifted Swooping Wing / `claude` / Opus 4.7 (1M) / `8d9999` / 2026-05-21 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / `codex` / 2026-04-28 |
@@ -424,14 +453,23 @@ step.
 
 Branch-primary graph work continues from
 [`threads/connecting-oak-resources.next-session.md`](threads/connecting-oak-resources.next-session.md).
-Current entry: **WS1.4 is landed at `95f42cb7`; WS1.6 prep is landed at
-`f36f98b1`; WS1.3 is landed at `87e21125`; WS2.1 graph-ingest scaffold is
-landed at `0f895070`.** Next implementation choices are WS1.5 canon, WS1.6
-vocab-registry implementation after the prep-note owner decisions are respected,
-WS2.2 jsonld-compatible ingestion, or WS3.1 graph-project scaffold after a fresh
-root-file check. Inc.1a continues under the 2026-05-12 holistic re-plan
-(`f73c42f5`): WS1.8 is deferred to Inc.2, and inherited patterns from landed
-WS1/WS2 cycles remain authoritative in the active plan YAML.
+**Current state (2026-05-21 close)**: Inc.1a is at the first parallel-pair
+boundary. Landed cycles: WS0 (5ec5004d), WS1.1 (ad2abb69), WS1.2 (1885fbcf),
+WS1.3 (87e21125), WS1.4 (95f42cb7), WS1.5 (ebd0e8dc), WS1.6 (3add41f9),
+WS2.1 (0f895070), WS3.1 (84bfffa5). Inc.1a remaining: 4 cycles (WS2.2,
+WS2.3, WS3.2, WS3.3).
+**Next safe step**: two-agent collaborative Claude session on WS2.2 ↔
+WS3.2 — owner-directed empirical test of intra-vendor multi-agent
+collaboration on disjoint workspace trees. WS2.2 ships `jsonld-compatible`
+ingestion + generic Turtle/SKOS parse to Dataset (lands §Test discipline
+invariant #2 contract test); WS3.2 ships `toPropertyGraph` projection +
+PropertyGraph types under `./property-graph` sub-path (lands §Test
+discipline invariant #6 reconstructability contract). Both depend on
+landed WS1.3; file scopes are empirically disjoint. The session is the
+empirical test of `feedback_worktree_isolation_unreliable.md` on the
+current base SHA — outcome updates the memory either way. Inc.1a
+continues under the 2026-05-12 holistic re-plan (`f73c42f5`): WS1.8 is
+deferred to Inc.2.
 
 **WS1.5 status (2026-05-13, Quiet Stalking Mirror)**: design fully absorbed inline in
 the active graph-stack plan under `ws1-canon`. Three-reviewer pre-implementation
@@ -512,7 +550,38 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-20 — Shaded Creeping Cloak / `claude` / Opus 4.7 (1M) /
+**Status (2026-05-21 — Uplifted Swooping Wing / `claude` / Opus 4.7 (1M) /
+`8d9999`)**: **due — not well-bounded for this closeout**. Triggers
+fired: (1) plan/milestone closures — WS1.6 vocab registry `3add41f9` and
+WS3.1 graph-project scaffold `84bfffa5`, plus the Inc.1a first-parallel-
+pair boundary itself; (2) fitness pressure on
+[`napkin.md`](../active/napkin.md) — 328 lines above 300 hard limit
+after the decision-moment heuristic entry; per `knowledge-preservation-
+over-fitness-warnings` the entry was correctly preserved and rotation
+is owner-cadenced (not blocking the session); (3) thread-record
+identity drift on `connecting-oak-resources` — the Latest identity
+column was at Riverine Swimming Hull 2026-05-14 despite Stormy
+Plumbing Atoll (2026-05-20) and Shaded Creeping Cloak (2026-05-20)
+sessions touching the thread in between; identity row updated for
+this session but the intervening gap remains; (4) candidate
+captured at step 6b — decision-moment heuristic (single
+decision-time heuristic — long-term architectural excellence — may
+subsume many topic-decomposed rules at fire time), single instance,
+promote on third instance or owner direction; (5) reasoning-hygiene
+correction surfaced by owner this session (plans-as-evidence,
+memory-as-permanent, dogma vocabulary), single instance, candidate
+pattern. Deferring to a future session because: owner directed at
+session close that the next session is a two-agent collaborative
+Claude implementation session on the WS2.2 ↔ WS3.2 parallel pair —
+focused execution boundary, not a deep-consolidation boundary.
+Constraint: owner direction (named); evidence: explicit direction
+"Let's close out this session, and then start a two agent
+collaborative session, both Claude, and see how that goes";
+falsifiability: a future session can verify by reading this entry
+plus the connecting-oak-resources thread record's "Next anticipated
+work" field.
+
+**Prior status (2026-05-20 — Shaded Creeping Cloak / `claude` / Opus 4.7 (1M) /
 `4ef359` — second pass at second handoff)**: **completed this handoff —
 three consolidation passes total across the extended session window**:
 (1) inline-with-D close-out pass capturing over-correction candidate;

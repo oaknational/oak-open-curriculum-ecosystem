@@ -26862,6 +26862,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "05d4f09d-ae4c-4ba1-81d6-dcdc55b3fdcd",
+      "agent_id": {
+        "agent_name": "Uplifted Swooping Wing",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "8d9999"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-21T00:50:00Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Lifecycle commit: consolidation closeout artefacts (handoff + register + experience)",
+      "archived_at": "2026-05-21",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-21T00:55:00Z",
+        "closed_by": {
+          "agent_name": "Uplifted Swooping Wing",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "8d9999"
+        },
+        "summary": "Session handoff + consolidation pass landing",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "05d4f09d-ae4c-4ba1-81d6-dcdc55b3fdcd",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

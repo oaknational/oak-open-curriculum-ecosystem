@@ -333,3 +333,65 @@ explicit observation this session; owner has stated the underlying
 framing twice in two days. Promote on third instance, owner-direction
 graduation request, or attempt to write the heuristic concretely and
 test it against a corpus of past decisions.
+
+### Failure: citation-as-reasoning at the moment of verdict
+
+After WS3.1 landed I produced a four-point verdict on the dispatch shape
+for the parallel pair. Owner read it and named three of four points as
+citations dressed as reasons:
+
+1. *Plan body says single-agent is preferred* — pointing at the plan,
+   not reasoning from substance. Plans are records of past reasoning;
+   they warrant scrutiny against current evidence, not citation as
+   authority.
+2. *Memory entry records worktree-isolation unreliability* — citing a
+   short-term failure-mode observation as if it were a permanent
+   prohibition. Memory entries about reliability are flags to verify,
+   not standing rules. Assuming a bug will never be fixed upstream is
+   not reasonable.
+3. (Substantive — fresh context for substantive work — accepted.)
+4. *Multi-vendor remains forbidden until WS3.3 lands* — restatement of
+   (1) plus the additional issue of dogma vocabulary ("forbidden")
+   closing inquiry rather than opening it.
+
+The citation-as-reasoning move felt natural in flow. The verdict felt
+urgent; citing was faster than re-deriving. Each citation was truthful
+(the plan really does say X; the memory really does record Y). But
+truthfulness of the citation is orthogonal to whether it is evidence.
+Reference closes inquiry by pointing at past closure; reasoning
+continues inquiry by pointing at current substance.
+
+Dogma vocabulary — *preferred*, *forbidden*, *required*, *established* —
+silently does work the agent has not asked it to do. The words feel
+natural; that is their function. Once named as dogma, they become visible
+as a layer that smuggles authority into what should be substance-led
+reasoning.
+
+After the correction, the restated verdict was cleaner: fewer reasons,
+each carrying weight on its own. The owner's call to empirically test
+parallel dispatch in a two-agent next session followed from the
+substantive analysis, not from any of the citations I had originally
+offered.
+
+Falsifiable: future verdicts I produce should be auditable line-by-line.
+A "reason" that is actually a citation should be re-derivable from
+current substance, or recharacterised as a flag-to-verify, or
+substituted with a substantive reason. Verdicts that cannot survive that
+audit are dogma-shaped.
+
+This is the counterpart to the decision-moment heuristic candidate above:
+the heuristic is what *should* happen at the moment of verdict; the
+anti-pattern is what often happens instead. The two are related but
+distinct candidates.
+
+candidate: pattern — *citation-as-reasoning at the moment of verdict*.
+Single instance this session, observed via owner correction. Promote on
+second instance or owner-direction graduation request. The diagnostic
+test is: each "reason" in a verdict should be auditable as substantive
+reasoning or as citation; if citation, recharacterise or remove.
+
+candidate: rule or directive amendment — *dogma vocabulary closes
+inquiry; reasoning vocabulary keeps it open*. Adjacent to but distinct
+from `no-hedging-vocabulary` (which targets weak vocabulary); this
+targets strong vocabulary that smuggles authority. Single instance.
+Promote on second instance.

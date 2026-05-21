@@ -164,6 +164,89 @@ list; entry-level summary index is intentionally omitted to avoid
 duplicating entry-body substance and to keep the index honest as
 the queue churns.
 
+### 2026-05-21 — Moment-of-decision heuristic consolidation (PDR-shaped or directive-shaped)
+
+`[captured: 2026-05-21 | source: napkin.md §"Observation: moment-of-decision is the natural locus..." | target: pdr-or-directive:moment-of-decision-heuristic-consolidation | trigger: third-instance-or-owner-direction | size: M | status: pending]`
+
+Substance summary: rules / skills / invariants are currently
+decomposed by **topic** (replace-don't-bridge,
+present-verdicts-not-menus, no-fallbacks, schema-first, apply-don't-ask,
+stop-inventing-optionality, plan-body-first-principles-check, etc.).
+Decomposition by **temporal/structural locus** would group rules by
+*when they should fire*. The moment of decision is the densest locus.
+A single decision-time heuristic — **at every decision point, the
+question is which shape gives long-term architectural excellence** —
+candidate to subsume many rules' verdicts at that locus, with the
+rules themselves carrying the *reasoning content* behind the verdict
+rather than acting as triggered fan-out at decision time.
+
+Empirical first instance this session: WS1.6 namedNode-vs-literal
+verdict — five load-bearing rules (replace-don't-bridge, no-aliases,
+no-fallbacks, verdict-vs-menu, schema-first) all converged on the
+same answer (route every entry through DataFactory.namedNode()) when
+the long-term-architectural-excellence frame was applied at the
+moment of decision. Owner has stated the underlying framing twice
+in two days (2026-05-20 closure-pressure metacognition; 2026-05-21
+WS1.6 verdict). Falsifiability: future decision points where
+multiple rules fire should produce verdicts that converge under the
+heuristic; divergence names rules the heuristic doesn't cover yet.
+
+Trigger to watch: third explicit instance, or owner-direction
+graduation request, or successful empirical test against a corpus
+of past decisions. Not graduating as a single-instance observation.
+
+### 2026-05-21 — Citation-as-reasoning at the moment of verdict (pattern-shaped or PDR-shaped)
+
+`[captured: 2026-05-21 | source: napkin.md §"Failure: citation-as-reasoning at the moment of verdict" | target: pattern-or-pdr:citation-as-reasoning-at-verdict | trigger: second-instance-or-owner-direction | size: M | status: pending]`
+
+Substance summary: at the moment of producing a verdict on a
+decision, citing a plan body / memory entry / prior agreement as a
+"reason" feels like reasoning but is reference. Three of four
+"reasons" in a verdict this session were citations dressed as
+reasons; owner correction named the pattern. Each citation was
+truthful (the plan really does say X; the memory really does
+record Y) but truthfulness is orthogonal to whether the citation
+is evidence. Reference closes inquiry by pointing at past closure;
+reasoning continues inquiry by pointing at current substance.
+
+This is the counterpart to the moment-of-decision heuristic
+candidate (above): the heuristic is what *should* happen at the
+moment of verdict; the anti-pattern is what often happens instead.
+
+Diagnostic test: each "reason" in a verdict should be auditable as
+substantive reasoning or as citation; if citation, it must be
+recharacterised as a flag-to-verify, or substituted with substantive
+reasoning, or removed. Verdicts that cannot survive that audit are
+dogma-shaped.
+
+Trigger to watch: second observed instance (in another agent's
+output or my own) or owner-direction graduation request. Promotion
+target: `.agent/memory/active/patterns/` (specific instance) AND/OR
+PDR with `pdr_kind: pattern` (general form, after ≥2 instances).
+
+### 2026-05-21 — Dogma vocabulary closes inquiry (rule-shaped)
+
+`[captured: 2026-05-21 | source: napkin.md §"Failure: citation-as-reasoning at the moment of verdict" | target: rule:dogma-vocabulary-closes-inquiry | trigger: second-instance-or-owner-direction | size: S | status: pending]`
+
+Substance summary: vocabulary like *preferred*, *forbidden*,
+*required*, *established* silently does authority work that the
+agent has not asked it to do. The words feel natural; that is their
+function. Once named as dogma, they become visible as a layer that
+smuggles authority into what should be substance-led reasoning.
+Adjacent to but distinct from
+[`no-hedging-vocabulary`](../../rules/no-hedging-vocabulary.md)
+(which targets weak vocabulary that softens claims). This candidate
+targets strong vocabulary that closes inquiry.
+
+Owner-named this session at the moment of the dispatch-shape verdict:
+"it moves into the language of dogma rather than reason, and that has
+its own issues".
+
+Trigger to watch: second observed instance or owner-direction
+graduation request. Promotion target: new rule at
+`.agent/rules/no-dogma-vocabulary.md` (parallel to `no-hedging-vocabulary`)
+OR amendment to `no-hedging-vocabulary.md` extending it bidirectionally.
+
 ### 2026-05-17 — Surface classification for fitness-response routing (PDR-shaped)
 
 `[captured: 2026-05-17 | source: distilled.md §"Surface classification routes fitness response" | target: pdr:surface-classification-for-fitness-response | trigger: owner-direction | size: S | status: pending]`
