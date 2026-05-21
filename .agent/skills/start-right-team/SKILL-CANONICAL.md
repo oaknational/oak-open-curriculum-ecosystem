@@ -59,6 +59,29 @@ source of volatile truth.
 After the shared foundation is complete, establish a session-local operating
 contract. Keep it lightweight and revisable.
 
+### First Moves (ordered, non-negotiable)
+
+Every participating agent in every team session executes these moves in
+order, before any non-planning source edit:
+
+1. **Start the all-channels comms monitor** (§0 — required precondition
+   before anything else).
+2. **Post a team-start report** broadcast (§1 — §1 is the umbrella
+   "Register Presence" section that owns the broadcast format AND the
+   rendezvous rules; the broadcast declares identity, foundation status,
+   intended boundary, and any preferred cycle).
+3. **Wait for peer team-starts** to surface, then negotiate cycle /
+   boundary assignment via comms (§1 cycle-collision rule and
+   singleton-lane rendezvous rule).
+4. **Open the work claim** in `active-claims.json` for the agreed boundary
+   only after rendezvous resolves.
+5. **Proceed with the work** under the team cadence (§5) and traceability
+   discipline (§4).
+
+Source-claim opening BEFORE rendezvous resolves is the recurring failure
+mode this order exists to prevent — see the singleton-lane rendezvous rule
+in §1 and the cycle-collision rule below.
+
 ### 0. Start The All-Channels Comms Monitor (non-negotiable)
 
 **Communication is the absolute heart of multi-agent work.** Before any other
@@ -71,9 +94,9 @@ The comms event stream is the canonical truth. Public (broadcast), group
 (narrative with `audience` or `addressed_to`), direct (`directed` kind, and
 narrative with `addressed_to` matching the agent), and lifecycle messages are
 all valid views onto the same stream, and **all are important**. A watcher
-that filters to a single view (e.g. `comms watch` in its current
-directed-only shape, or manual `ls -t` polling of the shared dir) discards
-the others and will miss vital coordination.
+that filters to a single view (e.g. directed-only filters, manual `ls -t`
+polling of the shared dir) discards the others and will miss vital
+coordination.
 
 The required shape is **one event-driven watcher** over the full directory,
 emitting one notification per new event, with **self-exclusion only** —
@@ -83,8 +106,51 @@ filter out events authored by the agent's own
 §"Identity discipline") and emit everything else. The agent applies any
 relevance triage in their own reasoning, not at the watcher boundary.
 
-Reference shape (run via the harness Monitor / equivalent persistent
-mechanism):
+**Canonical invocation — the `agent-tools` CLI** (preferred when available;
+default behaviour is all-channels):
+
+```bash
+# Replace <agent-codename> with the codename emitted by identity preflight.
+pnpm agent-tools:collaboration-state -- comms watch \
+  --comms-dir .agent/state/collaboration/comms \
+  --seen-file .agent/state/collaboration/comms-seen/<agent-codename>.json \
+  --platform <claude|codex|cursor> \
+  --model <model-id>
+```
+
+The CLI emits every relevant event with self-exclusion only against the
+identity tuple it derives from the platform-specific session-id env var
+(`PRACTICE_AGENT_SESSION_ID_CLAUDE`, `PRACTICE_AGENT_SESSION_ID_CURSOR`,
+`PRACTICE_AGENT_SESSION_ID_CODEX`, or `CODEX_THREAD_ID`) — **one of these
+MUST be set in the shell**, or the CLI exits with `missing collaboration
+identity seed`. Each event is tagged `[BROADCAST]` / `[GROUP]` /
+`[DIRECTED]` / `[LIFECYCLE]` on its first line so the agent knows the
+channel at a glance (event shape:
+`.agent/state/collaboration/comms-event.schema.json`).
+`--only-directed` opts into the legacy narrow view. Run the command via
+the platform's persistent background-task mechanism (Claude Code: the
+`Monitor` tool; other platforms: their equivalent watch primitive).
+
+The `<agent-codename>.json` seen-file lives in
+`.agent/state/collaboration/comms-seen/` (committed directory). On a fresh
+clone or in a worktree where the directory has not yet been created,
+`mkdir -p .agent/state/collaboration/comms-seen` first — the CLI does not
+auto-create the seen-file's parent directory and `appendFile` will fail
+silently if it is missing, causing the watcher to re-emit every event on
+every poll. The codename matches the agent_name derived by
+`pnpm agent-tools:collaboration-state -- identity preflight --platform <p>
+--model <m>`; pre-existing seen-files in the directory model the
+convention.
+
+See also: the all-channels-as-canonical-truth principle has a graduation
+candidate in
+[`.agent/memory/operational/pending-graduations.md`](../../memory/operational/pending-graduations.md)
+under "Comms event stream as canonical truth (PDR candidate)" awaiting a
+second instance of contestation or extension before ratification as
+Practice governance.
+
+**Fallback shape — portable script** (use when the `agent-tools` CLI is
+not yet built locally, or on a platform without the CLI):
 
 ```bash
 SEEN=/tmp/<agent>-comms-seen.txt
@@ -115,16 +181,11 @@ while true; do
 done
 ```
 
-A participating agent that cannot run such a watcher (platform without a
-persistent background-task primitive) must declare the gap in their team
-presence post and adopt a polling cadence that sweeps the full directory at
-the team-cadence interval, never a single-view filter.
-
-The `agent-tools` CLI surfaces (`comms watch`, `comms inbox`) default to
-all-channels behaviour when available; a `--only-directed` flag opts into
-the narrow view. If the local CLI build still filters to directed-only by
-default, treat that as a known gap and use the script form above until the
-build catches up.
+An agent on a platform with no persistent background-task primitive must
+declare the gap in their team-start post and adopt a polling cadence that
+sweeps the full directory at the team-cadence interval (§5), never a
+single-view filter — because the directed-only view misses the broadcast
+and group events that carry the team-bootstrap rendezvous itself.
 
 ### 1. Register Presence
 
@@ -171,6 +232,31 @@ the team-start report is the rendezvous surface, not the claim. Concretely:
 Normal solo work and broad parallelisable work (where overlapping claims
 are safe because the surfaces don't conflict) are unaffected by this rule;
 the rendezvous contract applies only to singleton-lane work.
+
+**Cycle-collision deferral rule** (added 2026-05-21 from worked precedent
+on the WS2.2 ↔ WS3.2 parallel pair). When two or more agents declare the
+same cycle / boundary in their team-start posts:
+
+- **Earliest team-start timestamp wins** the contested cycle. Source
+  authority is the comms event's `created_at` field, not any agent's
+  self-reported memory.
+- **Other contenders defer in arrival order** and pick from the remaining
+  parallel-safe alternatives the opener / plan named. The deferring agent
+  posts a follow-up event explicitly naming (a) the cycle they yielded,
+  (b) the cycle they now intend, (c) the architectural rationale (if any)
+  — never a personal-preference framing.
+- **No agent opens a source claim on the contested cycle** until the
+  deferral chain has explicitly resolved in comms. The team-start posts
+  are the rendezvous surface; the claim is the commitment.
+- **Equal-strength rationales are not a stalemate** — earliest-timestamp
+  still wins. The deferral resolves; the substantive design conversation
+  can continue inside the chosen cycle's reviewer cadence.
+
+This rule covers the parallel-pair case (multiple cycles available,
+collision on which agent takes which). The singleton-lane rendezvous
+rule above covers the single-owner case (one slice, N agents arriving).
+Both reduce to: **team-start broadcast is the rendezvous surface;
+source claims open only after rendezvous resolves.**
 
 ### 2. Name The Coordination Pressure
 

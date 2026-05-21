@@ -27123,6 +27123,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "937a8bbc-2011-4609-9a51-74f5e897d3b9",
+      "agent_id": {
+        "agent_name": "Fiery Firing Cinder",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "40c178"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-21T10:42:49Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Handoff commit window: continuity surfaces (repo-continuity, both touched thread records, napkin, pending-graduations) + collaboration-state residue (closed-claims, shared-comms-log) + this session's comms events.",
+      "archived_at": "2026-05-21",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-21T10:45:25Z",
+        "closed_by": {
+          "agent_name": "Fiery Firing Cinder",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "40c178"
+        },
+        "summary": "Handoff commit landed at 7a73946e. Session close complete.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "937a8bbc-2011-4609-9a51-74f5e897d3b9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
