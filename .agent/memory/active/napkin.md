@@ -264,3 +264,72 @@ options); this is the *backward-looking* counterpart.
 candidate: rule or directive amendment — *review-of-completed-work
 surfaces lessons and fixes, never re-decisions*. First instance.
 Promote on second instance OR owner-direction graduation request.
+
+## 2026-05-21 — Uplifted Swooping Wing (claude / opus-4.7-1m / `8d9999`)
+
+### Observation: moment-of-decision is the natural locus for consolidating skills, rules, and invariants
+
+Owner direction this session, after a verdict on `DataFactory.namedNode()`
+versus literal `NamedNode` objects for WS1.6 vocab: "we should bring all
+skills and rules and invariants around the moment of decision making
+together, I think a fairly simple heuristic could resolve quite a lot of
+the questions that come up."
+
+The rules/skills/invariants system is currently decomposed by **topic**:
+`replace-don't-bridge`, `present-verdicts-not-menus`,
+`plan-body-first-principles-check`, no-fallbacks, no-aliases, schema-first,
+read-before-asking, apply-don't-ask, stop-inventing-optionality, etc.
+Each rule fires when the work surface matches its trigger condition.
+
+Decomposition by **temporal/structural locus** would group rules by *when
+they should fire*. The moment of decision is the densest locus — the point
+where a choice between architectural shapes is being made. Many rules
+collapse into a single decision-time heuristic at that point:
+
+- *replace-don't-bridge* — "does this shape introduce a temporary form
+  that the design says shouldn't exist?"
+- *no-fallbacks / no-aliases* — "does this shape create alternate paths
+  for the same intent?"
+- *verdict-vs-menu* — "do I already have evidence to rank? If yes,
+  present the verdict, don't ask."
+- *stop-inventing-optionality* — "is this option real, or am I inventing
+  it because the verdict feels heavy?"
+- *first-principles* — "does this shape route through the canonical
+  interface the design records?"
+
+A single heuristic candidate that subsumes many: **at every decision
+point, the question is which shape gives long-term architectural
+excellence.** Owner has stated this framing twice in two sessions —
+2026-05-20 ("we value and choose long-term architectural excellence
+at every point" during closure-pressure metacognition) and 2026-05-21
+("at every decision point, we opt for long-term architectural
+excellence. Which option gives us that?" during the WS1.6 namedNode
+choice). The shape of the answer — once that frame is applied —
+collapses several rules' verdicts into one verdict in the same
+direction. The literal-vs-factory question dissolved against five
+load-bearing reasons that read as one underlying reason
+(single canonical path) refracted through five rules.
+
+Falsifiable: future decision points where multiple rules fire should
+produce verdicts that converge. If the long-term-architectural-excellence
+heuristic at the decision moment produces the same answer as the
+five-rule fan-out, the rules are doing redundant work at that locus
+and a consolidation candidate exists. If they diverge, the heuristic
+is incomplete — the specific rule that diverges names the surface
+the heuristic doesn't cover yet.
+
+What this is not: it is not a replacement for the topic-decomposed
+rule set. The rules carry the *reasoning content* that justifies the
+verdict. The heuristic carries the *fire-time invocation pattern*.
+Removing the rules would remove the substance behind the verdict;
+the proposal is to consolidate their *invocation* at the moment of
+decision, not their *content*.
+
+candidate: PDR or directive — *moment-of-decision consolidation of
+rules, skills, and invariants under a single decision-time heuristic
+(long-term architectural excellence) with rules-as-reasoning behind
+the verdict, not rules-as-trigger-fan-out at decision time*. First
+explicit observation this session; owner has stated the underlying
+framing twice in two days. Promote on third instance, owner-direction
+graduation request, or attempt to write the heuristic concretely and
+test it against a corpus of past decisions.

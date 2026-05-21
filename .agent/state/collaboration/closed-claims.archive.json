@@ -26610,6 +26610,132 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "f66d1664-8e7c-4220-9e29-1ca255ad7f11",
+      "agent_id": {
+        "agent_name": "Uplifted Swooping Wing",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "8d9999"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-21T00:05:00Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit WS1.6 vocab registry",
+      "archived_at": "2026-05-21",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-21T00:10:00Z",
+        "closed_by": {
+          "agent_name": "Uplifted Swooping Wing",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "8d9999"
+        },
+        "summary": "Committed WS1.6 vocab registry at 3add41f9",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f66d1664-8e7c-4220-9e29-1ca255ad7f11",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a617fcf6-1a59-4755-9751-8dc7c2ad6364",
+      "agent_id": {
+        "agent_name": "Uplifted Swooping Wing",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "8d9999"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/core/graph-core/src/vocab/**",
+            "packages/core/graph-core/tsup.config.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-21T00:00:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "WS1.6 vocab registry: RDFS/SKOS/PROV/DCTERMS/OWL/SHACL/schema.org with reverse-lookup; file-per-vocabulary; DataFactory.namedNode() at every entry; defer CURRIC+EEF",
+      "intent_to_commit": "d0b780ce-94f6-43ff-835c-e11ad28b2ab1",
+      "archived_at": "2026-05-21",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-21T00:10:01Z",
+        "closed_by": {
+          "agent_name": "Uplifted Swooping Wing",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "8d9999"
+        },
+        "summary": "WS1.6 vocab registry landed at 3add41f9: 7 standard vocabularies, file-per-vocab, DataFactory.namedNode() at every entry, byIri reverse-lookup; CURRIC+EEF deferred",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a617fcf6-1a59-4755-9751-8dc7c2ad6364",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f72b7fda-83b6-4efb-b4a5-88e22f8020f6",
+      "agent_id": {
+        "agent_name": "Uplifted Swooping Wing",
+        "platform": "claude",
+        "model": "claude-opus-4-7-1m",
+        "session_id_prefix": "8d9999"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-21T00:12:00Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Lifecycle commit: WS1.6 plan completion + napkin entry + claim-closure state",
+      "intent_to_commit": "801c8975-b749-4908-a694-59ad18d65bfd",
+      "archived_at": "2026-05-21",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-21T00:14:00Z",
+        "closed_by": {
+          "agent_name": "Uplifted Swooping Wing",
+          "platform": "claude",
+          "model": "claude-opus-4-7-1m",
+          "session_id_prefix": "8d9999"
+        },
+        "summary": "Lifecycle commit landed: WS1.6 plan completion, napkin entry, claim-closures",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f72b7fda-83b6-4efb-b4a5-88e22f8020f6",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
