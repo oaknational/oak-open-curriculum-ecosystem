@@ -14,32 +14,36 @@ landing-vs-no-landing dichotomy to landing-via-handoff);
 (threads, sessions, identity — handoff records identify
 authoring + receiving agents through the same identity tuple);
 [PDR-049](PDR-049-memory-and-state-file-merge-semantics.md)
-(memory and state file merge semantics — the active-claims
+(memory and state file merge semantics — the active-claim
 surface this protocol extends);
 [PDR-050](PDR-050-state-memory-substrate-contracts.md)
-(state and memory substrate contracts — adds a new substrate
-under `.agent/state/collaboration/handoffs/`);
+(state and memory substrate contracts — peer substrate to the
+one this protocol introduces);
 [PDR-056](PDR-056-inter-agent-collaboration-protocol.md)
-(ten named cures — this PDR is a structural addition adjacent to
-cure (iii) stale-claims and cure (viii) worker-side discoveries);
+(ten named cures — this protocol is a structural addition adjacent
+to cure (iii) stale-claims and cure (viii) worker-side discoveries);
 [PDR-064](PDR-064-coordinator-handoff-two-moments.md)
-(coordinator-handoff two moments — coordinator-role mid-cycle handoff
-intersection; join-point at the active-acknowledgement boundary).
+(coordinator-handoff two moments — coordinator-role mid-cycle
+handoff intersection; join-point at the active-acknowledgement
+boundary);
+[`practice-index.md`](../practice-index.md) (substrate-implementation
+ADR carrying the repo-specific phenotype of this PDR).
 
 ## Context
 
 Multi-agent operation in this Practice is moving from human-pace
 sessions with natural-boundary closeouts (slice-complete,
 commit-landed, peer-closeout) toward rotating-cast operation: a
-larger pool of agents, each bounded to ~250k context tokens, with
-auto-spawn cadence approaching 10 minutes. Under those conditions a
-new and previously unobserved retirement mode becomes routine:
+larger pool of agents, each bounded to a fixed context budget, with
+auto-spawn cadence approaching human-faster-than-pace operation.
+Under those conditions a new and previously unobserved retirement
+mode becomes routine:
 
-> An agent approaching token budget mid-cycle, mid-edit, possibly
-> mid-claim must retire before the natural boundary they were
-> heading for.
+> An agent approaching its context budget mid-cycle, mid-edit,
+> possibly mid-claim must retire before the natural boundary they
+> were heading for.
 
-The existing closeout contract (codified in `start-right-team`
+The existing closeout contract (codified in the `start-right-team`
 SKILL §Closeout Contract) only governs natural-boundary closeouts.
 A token-pressured retirement at an unnatural boundary has two
 failure paths the closeout contract cannot prevent:
@@ -57,13 +61,12 @@ failure paths the closeout contract cannot prevent:
    code split across commits) or skips reviewer absorption to make
    the deadline.
 
-The capture trigger for this PDR is the gate-1a delivery addendum's
-§"Question 1: Mid-cycle retirement protocol" plus the rotating-cast
-operational model the owner has directed toward. Rotating-cast
-Round 1 will be the controlled stress test for the protocol; the
-PDR exists to give that stress test a structured artefact to
-observe against, rather than retro-fitting a protocol from whatever
-the first instance happens to produce.
+The capture trigger for this PDR is the rotating-cast operational
+model: the first rotating-cast Round 1 launch will be the controlled
+stress test for the protocol. The PDR exists to give that stress
+test a structured artefact to observe against, rather than retro-
+fitting a protocol from whatever the first instance happens to
+produce.
 
 ## Decision
 
@@ -72,13 +75,13 @@ fires only when an agent must retire before the natural boundary
 they were working toward; natural-boundary closeouts continue to
 use the existing `start-right-team` §Closeout Contract unchanged.
 
-### Step 1 — Senses approaching budget
+### Step 1 — Sense approaching budget
 
 The retiring agent senses approaching budget at either of two
 triggers, whichever comes first:
 
 - **Quantitative**: context usage ≥ 80 % of the agent's bounded
-  budget (~200k of a 250k cap).
+  budget.
 - **Post-commit**: immediately after landing any commit, the agent
   re-evaluates remaining budget against the next-cycle floor (TDD
   authoring + reviewer absorption + gate suite) and retires if the
@@ -88,12 +91,9 @@ The 80 % quantitative trigger has priority over the post-commit
 trigger: an agent at 85 % mid-cycle does not get to "push for one
 more commit"; the protocol fires.
 
-### Step 2 — Freezes work-in-progress to a structured handoff record
+### Step 2 — Freeze work-in-progress to a structured handoff record
 
-The retiring agent writes a handoff record to
-`.agent/state/collaboration/handoffs/<claim_id>.json`, where
-`<claim_id>` is the active claim the agent owns. The handoff
-record carries four named sections:
+The retiring agent writes a handoff record naming four sections:
 
 1. **Current edit state** — for each open or in-flight file, the
    path, the working-tree state (clean / modified / staged), the
@@ -113,46 +113,37 @@ record carries four named sections:
    open question named, with the constraints and options as the
    retiring agent saw them.
 
-The handoff record is a first-class artefact. It is human-readable
-JSON (one document per claim, content-addressed by claim_id),
-discoverable through the filesystem, replay-able by any future
-agent reconstructing the cycle's history, and retained until the
-claim closes successfully.
+The handoff record is a first-class artefact: human-readable,
+content-addressed by the active claim, discoverable through the
+collaboration-state substrate, replay-able by any future agent
+reconstructing the cycle's history, and retained until the claim
+closes successfully.
 
-### Step 3 — Extends the active claim
+### Step 3 — Extend the active claim
 
-The retiring agent updates their active-claims entry with one new
-field:
+The retiring agent updates their active-claim entry with a single
+optional field naming the handoff record. The field's presence
+signals "this claim is mid-cycle and carries a handoff record"; its
+absence signals normal active-claim semantics. No other schema
+field changes; existing readers ignore the new field without
+breakage.
 
-```json
-"handoff_record_path": ".agent/state/collaboration/handoffs/<claim_id>.json"
-```
+### Step 4 — Hand off via directed comms-event
 
-The field is **optional** on the claim schema. Its presence
-signals "this claim is mid-cycle and carries a handoff record";
-its absence signals normal active-claim semantics. No other
-schema field changes; existing readers ignore the new field
-without breakage.
+The retiring agent posts a directed comms-event with a discriminator
+identifying it as a mid-cycle handoff (distinct from natural-
+boundary closeout and from coordination-notice classes). The event
+body carries:
 
-### Step 4 — Hands off via directed comms-event
-
-The retiring agent posts a directed comms-event with
-`message_kind: "mid-cycle-handoff"` to the receiving agent (or
-broadcast to the team if no specific receiver is named, with
-`audience` listing the agents in scope). The event body carries:
-
-- the `claim_id` being handed off;
-- the `handoff_record_path` pointer;
+- the claim identifier being handed off;
+- a pointer to the handoff record;
 - a one-paragraph human summary (≤ 200 words) of where the work
   is and what the next agent must do first;
-- the retiring agent's name + session prefix (per PDR-027
-  identity discipline) so the receiving agent knows who to credit
-  for the handoff.
+- the retiring agent's identity tuple (per PDR-027 identity
+  discipline) so the receiving agent knows who to credit for the
+  handoff.
 
-The comms-event schema is unchanged; `mid-cycle-handoff` becomes a
-new `message_kind` value on the existing directed event shape.
-
-### Step 5 — Retires
+### Step 5 — Retire
 
 The retiring agent posts a final retirement broadcast (existing
 team-cadence shape, no new event kind required) naming the
@@ -162,182 +153,174 @@ session.
 
 ### Receiving agent's pickup contract
 
-A receiving agent picking up a claim with `handoff_record_path`
-set:
+A receiving agent picking up a claim carrying a handoff-record
+pointer:
 
 1. Reads the handoff record before any source edit or comms post.
 2. Posts a directed acknowledgement event back to the retiring
    agent's identity (the comms record persists even after the
    retiring agent's session ends; the acknowledgement is for the
    audit trail, not for the retired agent to read).
-3. Updates the active-claims entry with their own identity in
-   the `agent_id` block; clears the `handoff_record_path` field
-   only when they decide the cycle has resumed on a natural
-   footing and no further handoff is currently pending.
+3. Updates the active-claim entry with their own identity in the
+   agent-id block; clears the handoff-record pointer field only
+   when they decide the cycle has resumed on a natural footing
+   and no further handoff is currently pending.
 4. Proceeds with the cycle, treating Step 2's "decisions made" as
    committed and "decisions deferred" as the open work surface.
 
 ### Handoff-record carriage decision
 
-The handoff record is carried as a separate file under
-`.agent/state/collaboration/handoffs/` rather than inline on the
-active-claims entry. Inline carriage was rejected because:
+The handoff record is carried as a separate content artefact rather
+than inline on the active-claim entry. Inline carriage was rejected
+because:
 
-- The claims surface is meant to stay compact (10 KB envelope
-  per existing convention); attaching a multi-section reasoning
-  payload to every mid-cycle claim would bloat the surface against
-  its design.
+- The claims surface stays compact (small-envelope discipline);
+  attaching a multi-section reasoning payload to every mid-cycle
+  claim would bloat the surface against its design.
 - A handoff record is a first-class content artefact (replay-able,
   citable, discoverable); embedding it in operational state
   conflates content boundaries with operational boundaries at the
   wrong layer.
-- File-per-handoff aligns with the existing PDR / ADR / plan
-  convention (file-per-decision, content-addressed by name).
+- File-per-handoff (or equivalent first-class-artefact carriage)
+  aligns with the existing decision-record / plan convention
+  (file-per-decision, content-addressed by name).
 
 ## Rationale
 
 **Why a protocol, not just a guideline.** Mid-cycle retirement
-under token pressure is structurally different from natural-
-boundary closeout. Without explicit steps, agents under pressure
-will default to either rushing (atomic-landing breach) or stopping
-silently (state leakage). A protocol that an agent can follow
-under cognitive pressure is the structural cure; a guideline that
-asks an agent to "think clearly while almost out of context" is
-not.
+under context-budget pressure is structurally different from
+natural-boundary closeout. Without explicit steps, agents under
+pressure will default to either rushing (atomic-landing breach) or
+stopping silently (state leakage). A protocol that an agent can
+follow under cognitive pressure is the structural cure; a guideline
+that asks an agent to "think clearly while almost out of context"
+is not.
 
-**Why file-per-handoff, not inline on claims.** See "Handoff-record
-carriage decision" above. The summary: claims are operational
+**Why a separate content artefact, not inline on claims.** See
+"Handoff-record carriage decision" above. Claims are operational
 state with a small-envelope discipline; handoff records are content
 artefacts with their own lifecycle. Conflating them at the schema
-layer would be a category error.
+layer is a category error.
 
 **Why an optional schema field, not a new claim kind.** A new claim
-kind would force all claim readers to disambiguate "ordinary"
-versus "mid-cycle" claims at every read site. An optional
-`handoff_record_path` field is additive: readers that do not
-understand it ignore it; readers that do understand it can branch
-on its presence. This matches the additive-extension discipline in
-PDR-049 and PDR-050.
+kind forces every claim reader to disambiguate "ordinary" versus
+"mid-cycle" claims at every read site. An optional pointer field is
+additive: readers that do not understand it ignore it; readers that
+do understand it branch on its presence. Matches the additive-
+extension discipline in PDR-049 and PDR-050.
 
-**Why a new comms-event `message_kind`, not a schema amendment.**
-The existing comms-event schema's directed shape carries a
-`message_kind` sub-discriminator with examples listed in the
-schema docstring (`session-handoff-summary`, `coordination-notice`,
-`sidebar-request`). Adding `mid-cycle-handoff` is a new value on
-an existing field, not a structural amendment. Strict readers
-already accept arbitrary `message_kind` strings. The orthogonal
-schema-property-addition layer (new optional `tags` array on
-event kinds) is governed by [PDR-066](PDR-066-comms-events-as-failure-mode-channel.md);
-the two schema operations sit on different layers and land on
-separate commits in the order that PDR specifies.
+**Why a value-on-existing-field discriminator on comms-events.**
+Strict readers already accept arbitrary discriminator values on the
+existing directed-event shape. A new value is the smallest change
+that satisfies the protocol; a new event kind would force parser +
+renderer + reader-compatibility amendments. The orthogonal schema-
+property-addition layer (tags on event kinds) is governed by
+PDR-066; the two schema operations sit on different layers.
 
 **Why broadcast retirement at Step 5.** Without the broadcast,
 peers reading the comms log later cannot distinguish "agent
 retired with handoff" from "agent abandoned the claim". The
 broadcast preserves the audit trail.
 
-**Why the receiving-agent's acknowledgement (Step 4 pickup contract
-item 2) goes to the retired agent's identity.** The retiring
-agent's session is gone; the acknowledgement is not for them to
-read. It is for the durable audit trail: any future agent
-reconstructing the cycle can correlate retirement → acknowledgement
-→ continuation through the comms-event stream, even if no single
-agent observed the whole arc live.
+**Why the receiving agent's acknowledgement (pickup contract item
+2) goes to the retired agent's identity.** The retiring agent's
+session is gone; the acknowledgement is not for them to read. It is
+for the durable audit trail: any future agent reconstructing the
+cycle can correlate retirement → acknowledgement → continuation
+through the comms-event stream, even if no single agent observed
+the whole arc live.
 
 **Trigger to graduate from Proposed to Accepted.** First observed
 mid-cycle retirement instance in a rotating-cast Round 1 launch.
-The first launch will deliberately stress-test this protocol via
-mid-round coordinator retirement per the gate-1a delivery
-addendum. The post-launch observation captures what worked, what
-broke, what the protocol does not yet cover; the PDR moves to
-Accepted with any refinements absorbed inline.
+The first launch is the controlled stress test. Post-launch
+observation captures what worked, what broke, what the protocol
+does not yet cover; this PDR moves to Accepted with any refinements
+absorbed inline.
 
 ## Consequences
 
 ### Required
 
-- A new directory `.agent/state/collaboration/handoffs/` exists
-  as a first-class collaboration-state substrate (peer of
-  `comms/`, `comms-seen/`, `conversations/`, `escalations/`).
-- A new optional field `handoff_record_path` is added to the
-  active-claims schema (`active-claims.schema.json`) on a
-  separate commit, not as part of this PDR's landing.
-- A new schema for handoff records
-  (`.agent/state/collaboration/handoff-record.schema.json`)
-  defines the four named sections (current edit state, in-flight
-  reasoning, decisions made, decisions deferred) as a strict
-  shape, also on a separate commit.
-- The `start-right-team` SKILL §Closeout Contract adds a
-  subsection naming mid-cycle retirement as a distinct closeout
-  mode that follows this protocol instead of the natural-boundary
-  contract.
-- The `start-right-team` SKILL First Moves order is extended for
-  agents picking up claims with `handoff_record_path` set: the
-  handoff record is read before any source edit (peer of
-  reading the thread record and current plan body).
-- A reference example handoff record (anonymised, drawn from the
-  first observed instance once Round 1 lands) lives at
-  `.agent/state/collaboration/handoffs/EXAMPLE.json` so future
-  agents have a worked instance to anchor on.
+- A first-class handoff-record substrate exists as a peer of the
+  other collaboration-state substrates.
+- An optional handoff-record-pointer field is added additively to
+  the active-claim schema.
+- The handoff record's four named sections (current edit state,
+  in-flight reasoning, decisions made, decisions deferred) are
+  the strict shape; the substrate implementation may enforce a
+  formal schema once the first worked instance accumulates.
+- A reference example record exists once the first instance lands,
+  so future agents have an anchor.
+- The `start-right-team` SKILL §Closeout Contract names mid-cycle
+  retirement as a distinct closeout mode following this protocol.
+- The `start-right-team` SKILL First Moves order extends for
+  agents picking up a claim carrying a handoff-record pointer:
+  the handoff record is read before any source edit.
 
 ### Forbidden
 
-- Mid-cycle retirement without writing a handoff record (the
+- Mid-cycle retirement without writing a handoff record. The
   retiring agent must complete Step 2 even if it costs the last
   few thousand tokens; the alternative is unbounded state leakage
-  for the receiving agent).
-- Embedding the handoff record content inline in the claims
-  surface (the carriage decision is structural, not stylistic).
+  for the receiving agent.
+- Embedding the handoff record content inline on the claims
+  surface. The carriage decision is structural, not stylistic.
 - Pushing the 80 % trigger upward to squeeze in one more cycle.
-  The trigger threshold may be revisited under empirical
-  evidence; individual agents may not move it for their own
-  session.
-- Using `mid-cycle-handoff` for natural-boundary closeouts. A
-  natural-boundary closeout uses the existing closeout contract;
-  the `mid-cycle-handoff` message_kind is reserved for unnatural
-  retirement so the audit trail remains semantically honest.
+  The trigger threshold may be revisited under empirical evidence;
+  individual agents may not move it for their own session.
+- Using the mid-cycle handoff discriminator for natural-boundary
+  closeouts. A natural-boundary closeout uses the existing
+  closeout contract; the mid-cycle discriminator is reserved for
+  unnatural retirement so the audit trail remains semantically
+  honest.
 
 ### Accepted Cost
 
-- An additional ~2–5k tokens at retirement time spent writing the
-  handoff record. The retiring agent must reserve this budget
+- An additional context budget (estimated 2–5 k tokens; empirical
+  evidence will set the floor) at retirement time spent writing
+  the handoff record. The retiring agent must reserve this budget
   before the 80 % trigger fires; the budget is a fixed cost of
   rotating-cast operation, not waste.
-- A new directory and new schema file in the collaboration-state
-  substrate; new readers must understand the directory's purpose
-  and the schema's shape. The cost is amortised by the
-  rotating-cast operation it enables.
-- Handoff records accumulate under `.agent/state/collaboration/
-  handoffs/` over time. Archive discipline (likely an
-  `archive/` subdirectory keyed by claim-close date) is a
-  follow-on once a handful of records exist; not specified here
-  because the empirical shape of accumulation is not yet known.
+- A new content substrate. Archive discipline is a follow-on once
+  a handful of records exist; not specified here because the
+  empirical shape of accumulation is not yet known.
 
 ## Open questions deferred to first-instance observation
 
 These are explicitly **not** specified by this PDR; they are
 recorded so the Round 1 stress-test observer knows what to look
 for, and the PDR can absorb the answers when it graduates to
-Accepted:
+Accepted.
 
 1. **Retirement-budget reserve size.** How many tokens does Step 2
    actually take? The 2–5 k estimate is a guess; empirical
    evidence will set the floor.
-2. **Picker contention.** If two agents observe a mid-cycle-
-   handoff event before either acknowledges, how is the
-   contention resolved? (Hypothesis: first-acknowledgement-wins,
-   same as singleton-lane coordination in `start-right-team`
-   §1.)
+2. **Picker contention.** If two agents observe a mid-cycle
+   handoff event before either acknowledges, how is the contention
+   resolved? (Hypothesis: first-acknowledgement-wins, same as
+   singleton-lane coordination in `start-right-team` §1.)
 3. **Re-retirement.** If the receiving agent also approaches their
    budget before resolving the open decisions, do they write a
-   second handoff record on the same claim_id, or does the
-   chain switch to a new claim with the prior handoff as
-   provenance? (Hypothesis: same claim, append a new handoff
-   record under a versioned filename; the claim's
-   `handoff_record_path` updates to the latest.)
+   second handoff record on the same claim, or does the chain
+   switch to a new claim with the prior handoff as provenance?
+   (Hypothesis: same claim, append a new handoff record under a
+   versioned successor; the claim's pointer field updates to the
+   latest.)
 4. **Coordinator-role handoff.** Is mid-cycle coordinator
    retirement a distinct protocol or a special case of this one?
    PDR-064 (two-distinct-moments coordinator handoff) governs
    the active-acknowledgement boundary; the intersection with
    this PDR's mid-cycle handoff is a join-point that the Round 1
    stress test will exercise.
+
+## Substrate implementation
+
+The repository-specific implementation of this PDR — the handoffs
+directory location, the handoff-record JSON schema, the active-
+claim schema field name, the comms-event discriminator value, the
+landing-tranche plan — lives in an ADR (the phenotype). The PDR
+captures the principle (this document); the ADR captures the
+repository's concrete realisation of it. See the substrate
+implementation ADR referenced from
+[`practice-index.md`](../practice-index.md) for the current
+substrate state.

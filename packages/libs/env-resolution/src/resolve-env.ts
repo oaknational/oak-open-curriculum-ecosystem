@@ -152,9 +152,11 @@ function buildEnvResolutionError(
         `Vercel project settings (Settings → Environment Variables): ${failingKeys.join(', ')}`
       : '';
 
+  const absentCount = absentButNotFailing.length;
+  const absentSuffix = absentCount === 1 ? '' : 's';
   const optionalAbsentLine =
-    absentButNotFailing.length > 0
-      ? `\n  (${String(absentButNotFailing.length)} optional key${absentButNotFailing.length === 1 ? '' : 's'} not configured: ${absentButNotFailing.join(', ')})`
+    absentCount > 0
+      ? `\n  (${String(absentCount)} optional key${absentSuffix} not configured: ${absentButNotFailing.join(', ')})`
       : '';
 
   const message =

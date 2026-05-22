@@ -150,13 +150,26 @@ State snapshot — refresh on session pickup.
 - assumptions-expert verdict on PDR-063..066 absorbed by drafter; cures in flight.
 - Working tree carries: PDR-063, PDR-064 (with cures), PDR-065, PDR-066 (with cures); the addendum's four protocol questions are these PDRs.
 
-### In flight (uncommitted state in working tree)
+### PDR slice (2026-05-22 architectural-excellence pass)
 
-- PDR-063 cures paused mid-work pending owner Q1/Q2/Q3 routing.
-- PDR-065 cures paused mid-work pending owner Q2 + Q3.
-- PDR-066 cures paused mid-work pending owner Q1.
-- PDR-064 cures landed in working tree pre-pause (parenthetical tightening + Q5/Q6 open-question additions).
-- Documentation consolidation in flight against memory surfaces.
+- **Owner direction received**: PDRs never contain repo-specific paths.
+  Repo-specific content signals genotype/phenotype split (PDR = portable
+  principle; ADR = repo-specific substrate) or pure-ADR placement.
+- **Splits executed**:
+  - ADR-182 `mid-cycle-handoff-record-substrate` authored (PDR-063
+    phenotype).
+  - ADR-183 `comms-event-tag-namespace-substrate` authored (PDR-066
+    phenotype).
+  - PDR-063, PDR-065, PDR-066 rewritten as portable genotype, cross-
+    referencing the substrate-implementation ADRs via
+    `practice-index.md`.
+  - PDR-064 already portability-clean.
+- **Deferred mechanisms in PDR-065** (per architectural-excellence
+  invariant): doctrine-change cross-substrate surfacing mechanism;
+  eligibility-signal carriage. Both graduate via substrate-
+  implementation ADRs when rotating-cast Round 1 surfaces empirical
+  evidence.
+- Documentation consolidation completed earlier in the session.
 
 ### Blocked
 
