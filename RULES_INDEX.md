@@ -72,6 +72,7 @@ index in the same commit.
 - `.agent/rules/no-warning-toleration.md`
 - `.agent/rules/plan-body-first-principles-check.md`
 - `.agent/rules/practice-core-portability.md`
+- `.agent/rules/pre-execution-code-expert-review-per-loop-cycle.md`
 - `.agent/rules/present-verdicts-not-menus.md`
 - `.agent/rules/pre-merge-divergence-analysis.md`
 - `.agent/rules/re-apply-first-question-at-elaboration-boundaries.md`
