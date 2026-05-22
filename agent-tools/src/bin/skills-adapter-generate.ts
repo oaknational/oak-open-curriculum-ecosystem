@@ -71,9 +71,10 @@ async function main(): Promise<number> {
   return flags.check ? await runCheck(repoRoot, flags.prefix) : await runGenerate(repoRoot, flags);
 }
 
-main()
-  .then((code) => exit(code))
-  .catch((error: unknown) => {
-    stderr.write(`skills-adapter-generate failed: ${String(error)}\n`);
-    exit(1);
-  });
+try {
+  const code = await main();
+  exit(code);
+} catch (error: unknown) {
+  stderr.write(`skills-adapter-generate failed: ${String(error)}\n`);
+  exit(1);
+}

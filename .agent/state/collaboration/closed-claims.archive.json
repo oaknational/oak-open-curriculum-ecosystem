@@ -28782,6 +28782,89 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "6e004e80-e1d5-408b-b7e1-435dd2bf8a4b",
+      "agent_id": {
+        "agent_name": "Mistbound Slipping Night",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "a1cb64"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T12:34:21Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit Lane B Tranche 1 substrate (ADR-182/183 T1 + PDR-064 SKILL amendments). Pathspecs: 5 files + new handoffs dir. Bundle gate-clean evidence: Shaded gate-run 2 + post-commit hook on d57c5025 attested combined tree green; pre-commit hook will re-run gates against residual tree as source of truth.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T12:37:02Z",
+        "closed_by": {
+          "agent_name": "Mistbound Slipping Night",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "a1cb64"
+        },
+        "summary": "Closed at commit c4bacfc5 — Lane B Tranche 1 substrate landed: ADR-182 + ADR-183 + PDR-064 SKILL amendments. 5 files, 287+/3-. Turbo 87/87 green. Pre-commit hook chain green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6e004e80-e1d5-408b-b7e1-435dd2bf8a4b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d23deb1b-5a66-4bd5-ad6e-6aabd482d905",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "thread": "pr-108-snagging",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T12:49:33Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit Cycle 6 S7785 fixes (5 sites)",
+      "intent_to_commit": "7100a5f7-0a53-4bf0-a2ff-ab9a8a5f9afa",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T12:50:58Z",
+        "closed_by": {
+          "agent_name": "Shaded Whispering Dusk",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "763ef4"
+        },
+        "summary": "closed in same collaboration-state commit; Cycle 6 S7785 bundle pre-stage verified",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d23deb1b-5a66-4bd5-ad6e-6aabd482d905",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

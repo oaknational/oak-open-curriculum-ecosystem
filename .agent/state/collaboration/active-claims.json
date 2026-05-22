@@ -334,6 +334,64 @@
       "freshness_seconds": 7200,
       "sidebar_open": false,
       "intent": "Lane B PDR-063..066 cure work — substrate implementation: ADR-182 Tranche 1 (handoffs dir + claims schema field + SKILL Closeout amendment), ADR-183 Tranche 1 (comms-event schema tags field), PDR-064 SKILL Coordinator Handoff amendment. Tranche 2 of both ADRs deferred (ADR-183 Tranche 2 needs Shaded coordination on agent-tools CLI scope)."
+    },
+    {
+      "claim_id": "da769539-e0a2-484f-8282-cb5ace1d1fd0",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "thread": "pr-108-snagging",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/bin/agent-identity.ts",
+            "agent-tools/src/bin/agent-tools.ts",
+            "agent-tools/src/bin/branch-touched-files.ts",
+            "agent-tools/src/bin/codex-exec.ts",
+            "agent-tools/src/bin/skills-adapter-generate.ts",
+            "packages/libs/graph-ingest/src/custom-mapping/index.ts",
+            "packages/libs/graph-ingest/src/index.ts",
+            "packages/libs/graph-ingest/src/jsonld-compatible/index.ts",
+            "packages/libs/graph-ingest/src/node-edge-list/index.ts",
+            "packages/libs/graph-ingest/src/plain-json-tree/index.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T12:40:07Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Cycle 6 architectural-judgement cluster (S7785+S7787, 12 sites, pre-execution reviewer first)"
+    },
+    {
+      "claim_id": "d26e453f-db59-4381-ac10-fab5b99411c3",
+      "agent_id": {
+        "agent_name": "Wooded Swaying Thicket",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "6c58f3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/active/archive/",
+            ".agent/memory/active/patterns/"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T12:42:00Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Continuous /jc-consolidate-docs pass — critical-zone memory surfaces (napkin 1099L, pending-graduations 4071L, repo-continuity prose widths, distilled 677L); graduate due/overdue PDR/ADR candidates to permanent homes; rotate napkin; honour learning-preservation-overrides-fitness."
     }
   ]
 }
