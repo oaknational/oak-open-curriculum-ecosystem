@@ -128,6 +128,7 @@ export interface NarrativeCommsEvent extends BaseCommsEvent {
   readonly addressed_to?: string;
   readonly in_response_to?: string;
   readonly in_reply_to?: string;
+  readonly tags?: readonly string[];
 }
 
 /**
@@ -146,6 +147,7 @@ export interface LifecycleCommsEvent extends BaseCommsEvent {
   readonly title: string;
   readonly subject: string;
   readonly body: string;
+  readonly tags?: readonly string[];
 }
 
 /**
@@ -160,6 +162,7 @@ export interface DirectedCommsMessage extends BaseCommsEvent {
   readonly to: CollaborationAgentId;
   readonly subject: string;
   readonly body: string;
+  readonly tags?: readonly string[];
 }
 
 export type CommsEvent = NarrativeCommsEvent | LifecycleCommsEvent | DirectedCommsMessage;

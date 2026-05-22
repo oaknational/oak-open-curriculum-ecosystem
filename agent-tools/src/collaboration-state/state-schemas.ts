@@ -35,6 +35,7 @@ const narrativeCommsEventSchema = z.strictObject({
   addressed_to: nonEmptyString.optional(),
   in_response_to: nonEmptyString.optional(),
   in_reply_to: nonEmptyString.optional(),
+  tags: z.array(nonEmptyString).optional(),
 });
 
 const lifecycleCommsEventSchema = z.strictObject({
@@ -51,6 +52,7 @@ const lifecycleCommsEventSchema = z.strictObject({
   title: nonEmptyString,
   subject: nonEmptyString,
   body: nonEmptyString,
+  tags: z.array(nonEmptyString).optional(),
 });
 
 const directedCommsMessageSchema = z.strictObject({
@@ -63,6 +65,7 @@ const directedCommsMessageSchema = z.strictObject({
   to: agentIdSchema,
   subject: nonEmptyString,
   body: nonEmptyString,
+  tags: z.array(nonEmptyString).optional(),
 });
 
 const commsEventSchema = z.discriminatedUnion('kind', [
@@ -113,6 +116,7 @@ export function parseNarrativeCommsEventValue(value: unknown): NarrativeCommsEve
     ...(parsed.addressed_to === undefined ? {} : { addressed_to: parsed.addressed_to }),
     ...(parsed.in_response_to === undefined ? {} : { in_response_to: parsed.in_response_to }),
     ...(parsed.in_reply_to === undefined ? {} : { in_reply_to: parsed.in_reply_to }),
+    ...(parsed.tags === undefined ? {} : { tags: parsed.tags }),
   };
 }
 
@@ -140,6 +144,7 @@ export function parseLifecycleCommsEventValue(value: unknown): LifecycleCommsEve
     title: parsed.title,
     subject: parsed.subject,
     body: parsed.body,
+    ...(parsed.tags === undefined ? {} : { tags: parsed.tags }),
   };
 }
 
@@ -163,6 +168,7 @@ export function parseDirectedCommsMessageValue(value: unknown): DirectedCommsMes
     to: agentId(parsed.to),
     subject: parsed.subject,
     body: parsed.body,
+    ...(parsed.tags === undefined ? {} : { tags: parsed.tags }),
   };
 }
 
@@ -179,6 +185,7 @@ function narrativeEvent(parsed: z.infer<typeof narrativeCommsEventSchema>): Narr
     ...(parsed.addressed_to === undefined ? {} : { addressed_to: parsed.addressed_to }),
     ...(parsed.in_response_to === undefined ? {} : { in_response_to: parsed.in_response_to }),
     ...(parsed.in_reply_to === undefined ? {} : { in_reply_to: parsed.in_reply_to }),
+    ...(parsed.tags === undefined ? {} : { tags: parsed.tags }),
   };
 }
 
@@ -197,6 +204,7 @@ function lifecycleEvent(parsed: z.infer<typeof lifecycleCommsEventSchema>): Life
     title: parsed.title,
     subject: parsed.subject,
     body: parsed.body,
+    ...(parsed.tags === undefined ? {} : { tags: parsed.tags }),
   };
 }
 
@@ -211,6 +219,7 @@ function directedEvent(parsed: z.infer<typeof directedCommsMessageSchema>): Dire
     to: agentId(parsed.to),
     subject: parsed.subject,
     body: parsed.body,
+    ...(parsed.tags === undefined ? {} : { tags: parsed.tags }),
   };
 }
 

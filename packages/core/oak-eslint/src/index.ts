@@ -27,6 +27,9 @@ import { strict } from './configs/strict.js';
 import { react } from './configs/react.js';
 import { next } from './configs/next.js';
 
+export { createGraphBaseConfig } from './configs/base.js';
+export type { CreateGraphBaseConfigOptions } from './configs/base.js';
+
 import type { TSESLint } from '@typescript-eslint/utils';
 
 export const configs = {

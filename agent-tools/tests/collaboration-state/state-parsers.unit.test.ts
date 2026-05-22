@@ -142,6 +142,14 @@ describe('parseNarrativeCommsEvent', () => {
     expect(() => parseNarrativeCommsEvent(JSON.stringify(withoutBody))).toThrow(/body/);
   });
 
+  it('round-trips an optional tags array on a narrative event', () => {
+    const event = parseNarrativeCommsEvent(
+      JSON.stringify({ ...canonicalNarrative, tags: ['failure-mode'] }),
+    );
+
+    expect(event.tags).toEqual(['failure-mode']);
+  });
+
   it('rejects a non-object payload', () => {
     expect(() => parseNarrativeCommsEvent('null')).toThrow(/must be a JSON object/);
     expect(() => parseNarrativeCommsEvent('"a string"')).toThrow(/must be a JSON object/);
@@ -196,6 +204,14 @@ describe('parseLifecycleCommsEvent', () => {
       /event_type/,
     );
   });
+
+  it('round-trips an optional tags array on a lifecycle event', () => {
+    const event = parseLifecycleCommsEvent(
+      JSON.stringify({ ...lifecycle, tags: ['failure-mode'] }),
+    );
+
+    expect(event.tags).toEqual(['failure-mode']);
+  });
 });
 
 describe('parseDirectedCommsMessage', () => {
@@ -246,6 +262,14 @@ describe('parseDirectedCommsMessage', () => {
     expect(() => parseDirectedCommsMessage(JSON.stringify(canonicalNarrative))).toThrow(
       /message_kind/,
     );
+  });
+
+  it('round-trips an optional tags array on a directed message', () => {
+    const event = parseDirectedCommsMessage(
+      JSON.stringify({ ...directedPostMigration, tags: ['failure-mode'] }),
+    );
+
+    expect(event.tags).toEqual(['failure-mode']);
   });
 });
 

@@ -23,7 +23,7 @@ import {
  * reasoning layer, not at the watcher boundary. When the schema grows a
  * sync kind or urgency flag, `sync` will be added here as a fifth view.
  */
-type EventView = 'broadcast' | 'group' | 'directed' | 'lifecycle';
+export type EventView = 'broadcast' | 'group' | 'directed' | 'lifecycle';
 
 /**
  * Classify an event relative to an agent's identity, returning `undefined`
@@ -150,9 +150,36 @@ function formatClassifiedEvent(entry: {
   return formatClassifiedNarrative(entry.event, entry.view);
 }
 
+/**
+ * Compose the watcher's per-event header marker line.
+ *
+ * - When `tags` is `undefined` or empty, emits `--- NEW [VIEW] EVENT ---`.
+ * - When `tags` is present, sorts a copy alphabetically (input untouched),
+ *   uppercases each entry, and composes
+ *   `--- NEW [VIEW] [TAG1] [TAG2] EVENT ---`.
+ *
+ * Unknown tag strings render literal-normalised — no allowlist at render
+ * time. Write-time validation handles namespace enforcement at a different
+ * layer.
+ */
+export function formatWatcherEventHeader(
+  view: EventView,
+  tags: readonly string[] | undefined,
+): string {
+  const viewToken = `[${view.toUpperCase()}]`;
+  if (tags === undefined || tags.length === 0) {
+    return `--- NEW ${viewToken} EVENT ---`;
+  }
+  const tagTokens = [...tags]
+    .sort((left, right) => left.localeCompare(right))
+    .map((tag) => `[${tag.toUpperCase()}]`)
+    .join(' ');
+  return `--- NEW ${viewToken} ${tagTokens} EVENT ---`;
+}
+
 function formatClassifiedDirected(event: DirectedCommsMessage, view: EventView): string {
   return [
-    `--- NEW [${view.toUpperCase()}] EVENT ---`,
+    formatWatcherEventHeader(view, event.tags),
     `from: ${formatIdentity(event.from)}`,
     `to: ${formatIdentity(event.to)}`,
     `subject: ${event.subject}`,
@@ -166,7 +193,7 @@ function formatClassifiedDirected(event: DirectedCommsMessage, view: EventView):
 
 function formatClassifiedNarrative(event: NarrativeCommsEvent, view: EventView): string {
   return [
-    `--- NEW [${view.toUpperCase()}] EVENT ---`,
+    formatWatcherEventHeader(view, event.tags),
     `from: ${formatIdentity(event.author)}`,
     `to: ${formatNarrativeAddressee(event)}`,
     `title: ${event.title}`,
@@ -180,7 +207,7 @@ function formatClassifiedNarrative(event: NarrativeCommsEvent, view: EventView):
 
 function formatClassifiedLifecycle(event: LifecycleCommsEvent): string {
   return [
-    '--- NEW [LIFECYCLE] EVENT ---',
+    formatWatcherEventHeader('lifecycle', event.tags),
     `from: ${formatIdentity(event.author)}`,
     `event_type: ${event.event_type}`,
     `thread: ${event.thread}`,

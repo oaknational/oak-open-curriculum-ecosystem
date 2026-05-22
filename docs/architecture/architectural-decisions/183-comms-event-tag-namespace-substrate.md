@@ -1,6 +1,6 @@
 # ADR-183: Comms-Event Tag Namespace Substrate
 
-**Status**: Proposed 2026-05-22
+**Status**: Accepted 2026-05-22
 **Date**: 2026-05-22
 **Related**:
 PDR-066 (comms-events as real-time failure-mode capture channel —
