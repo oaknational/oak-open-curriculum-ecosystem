@@ -30686,6 +30686,89 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "d99ce15f-1c08-43fe-978f-bfce8146a9a6",
+      "agent_id": {
+        "agent_name": "Starlit Beaming Aurora",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "1977cf"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T19:39:13Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Land source-deletion half of plan rename + claim residue.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T19:40:25Z",
+        "closed_by": {
+          "agent_name": "Starlit Beaming Aurora",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "1977cf"
+        },
+        "summary": "commit 8a4eb070: source-deletion half of rename + claim residue (message header reused prior consolidation-msg; substance correct)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d99ce15f-1c08-43fe-978f-bfce8146a9a6",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3e2889c0-60c1-43e3-89d2-72ffd6d292ef",
+      "agent_id": {
+        "agent_name": "Starlit Beaming Aurora",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "1977cf"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T19:40:49Z",
+      "freshness_seconds": 300,
+      "sidebar_open": false,
+      "intent": "Final session residue sweep.",
+      "intent_to_commit": "dd02f9ec-a303-4898-b9fc-9aeef79506d7",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T19:41:02Z",
+        "closed_by": {
+          "agent_name": "Starlit Beaming Aurora",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "1977cf"
+        },
+        "summary": "self-contained lifecycle commit per SKILL exception; commit pending",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3e2889c0-60c1-43e3-89d2-72ffd6d292ef",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
