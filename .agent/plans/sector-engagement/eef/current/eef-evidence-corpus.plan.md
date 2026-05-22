@@ -55,8 +55,8 @@ todos:
     workstream: corpus-loading
     cross_cuts: [recommend, explain, compare, prompt-a, prompt-b]
   - id: t10-lesson-plan-prompt
-    content: "eef-evidence-grounded-lesson-plan prompt (preserves F8, F9, F10 resolutions; KS-to-phase mapping inline)."
-    status: pending
+    content: "eef-evidence-grounded-lesson-plan prompt — preserves F8 / F9 / F10 resolutions and the 5-step orchestration spine, adapted for t6a's subgraph response shape (step 1 calls eef-explore-evidence-for-context; step 2 selects 2-3 strands by contextual fit from the subgraph rather than by rank). KS-to-phase mapping inline. Splices AGGREGATED_EEF_EVIDENCE_GUIDANCE (t9) as preamble. See §Phase E for rationale."
+    status: completed
     workstream: prompt-a
   - id: t11-pp-review-prompt
     content: "eef-pupil-premium-strategy-review prompt (Workflow B from strategy doc; previously not in executable plan)."
@@ -166,7 +166,7 @@ attribution all ship at gate-1a.
 | t10-lesson-plan-prompt | **gate-1a** | `eef-evidence-grounded-lesson-plan` prompt; projects t6a subgraph result into a teacher-readable narrative with structurally-preserved citations |
 | t11-pp-review-prompt | gate-1b | Pupil-premium strategy review prompt (second prompt) |
 | t12-citation-shape | **gate-1a** | Structural citation discipline; non-empty tuple compile-time + Zod min(1) runtime — load-bearing architectural commitment for both gates |
-| t13-freshness-gate | **gate-1a** | ADR-175 binding; freshness CI gate active before any user-facing surface ships |
+| t13-freshness-gate | gate-1a *partial* / gate-1b *full* | CI freshness check (180-day threshold per ADR-175) ships at gate-1a as a vitest-based check inside the SDK workspace; refresh script lands at gate-1b (depends on `t2-zod-loader` Zod schema for snapshot validation) |
 | t14-telemetry | gate-1a *partial* / gate-1b *full* | Sentry seam pattern shipped at gate-1a with one tool instrumented; remaining instrumentation extends at gate-1b |
 | t15-negative-space-doc | gate-1a *partial* / gate-1b *full* | Subgraph-projection default-projection fields documented at gate-1a; recommend/explain/compare projection additions documented at gate-1b |
 | t16-public-export | gate-1a *partial* / gate-1b *full* | EvidenceCorpus type + t6a tool + t10 prompt exported at gate-1a; recommend/explain/compare tool types + second prompt exported at gate-1b |
@@ -814,11 +814,47 @@ be imported into all gate-1a and gate-1b consumer surfaces (t6/t6a/
 t7/t8/t10/t11 — none of those consumers exist yet at landing) so
 agents see consistent framing as the surfaces come online.
 
-**T10: `eef-evidence-grounded-lesson-plan` prompt** — preserves predecessor
-T10 verbatim, including F8 resolution (step 3 = extract implementation
-data from recommendation response, no separate tool), F9 resolution
-(KS-to-phase mapping inline in prompt), F10 resolution (focus enum
-matches data values).
+**T10: `eef-evidence-grounded-lesson-plan` prompt** **(landed 2026-05-22)**.
+Preserves the predecessor T10's F8 / F9 / F10 resolutions and the 5-step
+orchestration spine, adapted for t6a's subgraph response shape:
+
+- **F8 resolution** preserved — step 3 extracts implementation guidance
+  (CPD intensity, time to embed, key staff) from each selected strand's
+  record; no separate tool call. The prompt body acknowledges that the
+  implementation fields may not always be in t6a's default projection
+  and instructs the LLM to proceed honestly with what is available
+  (pending the t6a default-projection contract).
+- **F9 resolution** preserved — KS-to-phase mapping appears inline in
+  the prompt body so the LLM does the mapping using the table (more
+  permissive than rejecting unmapped key-stages at the schema boundary).
+- **F10 resolution** preserved — focus enum matches `RankOptions.context.focus`
+  (closing_disadvantage_gap, metacognition, literacy, numeracy, behaviour,
+  feedback). The generator does not validate the value; MCP-protocol
+  schema validation is the boundary check.
+
+**Gate-1a adaptation from the predecessor**: the predecessor called
+`recommend-evidence-for-context` (t6, gate-1b, ranked-list response).
+The 2026-05-21 gate-1a / gate-1b split moved the first user-facing
+tool to t6a `eef-explore-evidence-for-context` (gate-1a, subgraph
+response). Step 1 of the orchestration now calls t6a; step 2's
+selection criterion changes from rank-ordering to contextual-fit-
+from-the-subgraph topology because the response is a typed subgraph
+rather than a sorted list. Steps 3-5 are otherwise unchanged.
+
+**t9 wire-up**: the generator splices `AGGREGATED_EEF_EVIDENCE_GUIDANCE`
+(landed earlier 2026-05-22 by t9 at `acd2a3f3`) as a preamble between
+the user-context paragraph and the numbered orchestration steps,
+making the R1 + R7 framing visible to the LLM at every prompt
+invocation.
+
+**File location**: the generator lives at
+`packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-grounded-lesson-plan-messages.ts`
+(co-located with the t9 guidance constant + the t12 citation shape)
+rather than in the shared `mcp-prompt-messages.ts`. The split keeps
+the parent generators file under the workspace `max-lines: 250`
+ceiling and keeps the EEF feature surface cohesive. The shared
+`mcp-prompts.ts` imports the generator and includes the prompt in
+the public `MCP_PROMPTS` registry as the fifth entry.
 
 - **User value**: a teacher's "design a lesson on photosynthesis for
   Year 8" is answered with a structured plan that integrates 2-3
@@ -901,17 +937,43 @@ invariants.
 
 ### Phase G: Freshness (T13)
 
-**T13: Freshness gate** — A CI job that fails when
+**T13: Freshness gate** — splits gate-1a *partial* / gate-1b *full*
+following the pattern of t14/t15/t16/t17/t18/t19.
+
+**Gate-1a portion (CI freshness check)**: a vitest-based check inside
+the SDK workspace asserts the data file at
 `packages/sdks/oak-curriculum-sdk/src/mcp/data/eef-toolkit.json` has
-`meta.last_updated` >180 days old. Until EEF clarifies a public download or API,
-the refresh workflow treats the repo reference file as the definitive source and
-validates/copies a reviewed replacement snapshot rather than reconstructing data
-from EEF web pages. If EEF later confirms a download URL, API, or direct supply
-process, `packages/sdks/oak-curriculum-sdk/scripts/refresh-eef-toolkit.ts`
-implements that acquisition path, validates it against the Zod schema, and
-produces a diff summary for human review. The script lives inside the SDK
-workspace so it has natural access to the Zod schema and stays inside the
-workspace boundary (no workspace-to-root script coupling).
+`meta.last_updated` within the 180-day threshold per ADR-175. The
+check ships as a freshness function (`packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/freshness.ts`)
+plus co-located unit tests proving boundary behaviour on synthetic
+in-range/out-of-range inputs, plus a binding test that reads the live
+SDK data file. **Two-phase activation**: the gate is *structurally
+active* from gate-1a (the check function + tests prove gate semantics
+on synthetic inputs); it becomes *operationally active* (blocking
+real data) when `t2-zod-loader` lands the live `eef-toolkit.json` in
+the SDK at `src/mcp/data/`. Until t2 lands the data file, the binding
+test skips cleanly with an informative message, and the synthetic-
+input tests still prove the gate semantics. No separate GitHub
+Actions workflow file is needed — the existing CI's `test` task
+catches the vitest-based check.
+
+**Gate-1b portion (refresh script)**: a refresh script at
+`packages/sdks/oak-curriculum-sdk/scripts/refresh-eef-toolkit.ts`
+validates a reviewed replacement snapshot against the t2-zod-loader
+Zod schema and produces a diff summary for human review. **The
+refresh script depends on `t2-zod-loader` (Round 3) for the Zod
+schema** — without the schema, the script would be incomplete-by-
+design; deferring it to gate-1b matches the existing partial/full
+pattern (t14, t19) and keeps gate-1a's commitment honest. Until EEF
+clarifies a public download/API, the refresh workflow treats the repo
+reference file at `.agent/plans/sector-engagement/eef/reference/eef-toolkit.json`
+as the definitive source and validates/copies a reviewed replacement
+snapshot rather than reconstructing data from EEF web pages. If EEF
+later confirms a download URL, API, or direct supply process, the
+refresh script implements that acquisition path. The script lives
+inside the SDK workspace so it has natural access to the Zod schema
+and stays inside the workspace boundary (no workspace-to-root script
+coupling).
 
 - **User value**: teachers receive evidence-backed recommendations
   whose data version is not silently >6 months stale; CI says so before

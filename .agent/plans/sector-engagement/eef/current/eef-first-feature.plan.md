@@ -182,7 +182,7 @@ questions.
 | `t9-guidance-constant` | `oak-curriculum-sdk/src/mcp/evidence-corpus/guidance-constant.ts` | (none) | every other cycle |
 | `t10-lesson-plan-prompt` | `oak-curriculum-sdk/src/mcp/evidence-corpus/prompts/eef-evidence-grounded-lesson-plan.ts` (+ tests) | `t6a-explore-tool`, `t9-guidance-constant` | `t15`/`t16`/`t17`/`t18`/`t19` partial extensions |
 | `t12-citation-shape` | `oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.ts` (non-empty-tuple compile-time type + Zod `min(1)` runtime schema + tests) | (none) | every other cycle |
-| `t13-freshness-gate` | canonical CI gate location (workflow file + ADR-175 binding wiring) | (none) | every other cycle |
+| `t13-freshness-gate` (gate-1a *partial*; gate-1b *full*) | gate-1a partial: `packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/freshness.ts` + co-located unit tests + binding test (CI catches via existing vitest `test` task; 180-day threshold per ADR-175). Gate-1b full: `packages/sdks/oak-curriculum-sdk/scripts/refresh-eef-toolkit.ts` (depends on `t2-zod-loader` Zod schema). | gate-1a partial: (none); gate-1b full: `t2-zod-loader` | every other cycle |
 | `t14-telemetry` (pattern only at gate-1a) | `oak-curriculum-sdk/src/mcp/evidence-corpus/telemetry.ts` (Sentry seam pattern); instrumentation of the one tool lands inside `t6a` | `t6a-explore-tool` (for instrumentation) | `t1`, `t12`, `t13`, `t9`, `t20` |
 | `t20-credits` | repo `README.md` + `ATTRIBUTION.md` (EEF + John Roberts attribution) | (none) | every other cycle |
 | `t15`/`t16`/`t17`/`t18`/`t19` (gate-1a partials) | canonical homes per corpus plan workstream overlay | `t6a-explore-tool`, `t10-lesson-plan-prompt` (partial scopes only) | `t9`, `t12`, `t13`, `t20` |
@@ -209,9 +209,11 @@ satisfied by the prior round.
     comms-event stream as failure-mode capture channel).
 - **Round 1** (eight parallel cycles, all file-disjoint):
   `WS4.1`, `WS4.4`, `t9-guidance-constant`, `t12-citation-shape`,
-  `t13-freshness-gate`, `t20-credits`, `ff1-partnership-opener`,
-  `ff2-adoption-tracking-owner`. Plus `WS2.2`, `WS2.3` (Inc.1a closure,
-  cross-workspace parallel — separate tree).
+  `t13-freshness-gate` (gate-1a *partial* only — refresh script
+  defers to gate-1b, depends on `t2-zod-loader`), `t20-credits`,
+  `ff1-partnership-opener`, `ff2-adoption-tracking-owner`. Plus
+  `WS2.2`, `WS2.3` (Inc.1a closure, cross-workspace parallel —
+  separate tree).
 - **Round 2** (three parallel cycles): `WS4.5`, `t1-corpus-shape`,
   `t14-telemetry` (pattern only; instrumentation in `t6a`).
 - **Round 3**: `t2-zod-loader` (depends on `t1` + `WS4.5`).
