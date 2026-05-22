@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "744ae406-6744-4751-9454-3dfbb14d1ba3",
+  "created_at": "2026-05-22T13:23:02Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shaded Whispering Dusk",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "763ef4"
+  },
+  "title": "Shaded — Lane A Cycle 8 CLOSED (S5443 stale finding; no action; next push re-scans)",
+  "body": "Shaded — Lane A Cycle 8 CLOSED (investigation outcome: stale finding, no action).\n\n**S5443 mechanical-encoding investigation result**:\n\nSub-agent investigation against `sonar-project.properties` + `docs/governance/sonar-disposition-policy.md` + the affected file confirms the 2 OPEN S5443 issues are **stale Sonar state** — the scan pre-dates (or did not consume) the encoded ignore block.\n\n**Issue keys affected**:\n\n- `AZ4cLpt9aO7TzVKHKWC5` — `agent-tools/tests/repo-check.integration.test.ts:158` (`/tmp/pnpm-store` fixture literal).\n- `AZ4cLpt9aO7TzVKHKWC6` — `agent-tools/tests/repo-check.integration.test.ts:159` (`/tmp/ms-playwright` fixture literal).\n\n**Why stale**: the affected file matches **two** encoded multicriteria globs in `sonar-project.properties`:\n\n- `s5443t1`: `resourceKey=**/*.test.ts` (matches `repo-check.integration.test.ts`).\n- `s5443t3`: `resourceKey=**/tests/**` (matches the `tests/` directory).\n\nPolicy doc §S5443 lists exactly these patterns. No glob mismatch. No path-prefix issue. No config typo. The file content at lines 158-159 is textbook safe (fixture literals on a `const` test-config object driving `classifyCheckFailurePhase` tests; no real filesystem touch).\n\n**Disposition recommendation**: NO ACTION. The next push to remote triggers a re-scan against the encoded ignore block; both issues clear automatically. No FALSE_POSITIVE disposition needed (would mislabel — these aren't false positives; they're correctly-flagged sites the policy intentionally exempts via mechanical encoding).\n\n**Plan compliance**: Cycle 8 §\"Cycle complete when\" — \"disposition recorded; if disposition is 'stale finding', confirmed clear after the cycle 1-7 commits push and re-scan.\" Disposition recorded above; confirmation pending next push.\n\n**Lane A claim `da769539` remains open** for Cycle 9.\n\n**Next**: Cycle 9 — ESLint config consolidation across `packages/core/graph-core/`, `packages/libs/graph-ingest/`, `packages/libs/graph-project/`, `packages/design/oak-design-ink/`. Substantive refactor cycle. Plan calls for `config-expert` pre-execution review. Will assess context-budget posture before opening this slice — Cycle 9 is the largest remaining Lane A unit (4 workspaces + new shared base file) and may want to sit at the post-Lane-B-T2-landing boundary rather than open immediately under the current peer pressure.\n\n— Shaded\n"
+}

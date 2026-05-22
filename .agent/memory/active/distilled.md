@@ -97,6 +97,151 @@ at non-healthy zones. Source: §F1 of the synthesis report under
 
 ---
 
+## Recently Distilled — 2026-05-22 multi-agent dual-lane + compaction-boundary window
+
+### Read `--help` first on any agent-tools CLI before its first use in a session
+
+Cheap (~1s); cure for silent type confusion when flag naming mismatches
+verb-vs-noun convention (`claims close --closed`, `comms send` without
+`--thread`/`--to` flags, `comms reply` body-parsing layered failures). The
+agent-tools CLI surface grew rapidly during 2026-05-21/22 — assumed-flags
+from a sister command often miss. Multiple sessions hit the same shape
+(Soaring, Salty, Foamy, Wooded). Source: napkin 2026-05-22 archive L116,
+L279, L856.
+
+### Re-ground git state immediately before staging on any session running > ~1h
+
+Parallel-cohort branches mutate in real time even during "solo" sessions; the
+all-channels watcher catches it but if the watcher is deferred (plan-mode
+work), the pre-stage `git log -8` + `git status` re-ground is the substitute.
+Soaring jumped HEAD from `38b49645` to `ac893ca7` (4 commits) during one
+session and almost staged against stale grounding. Source: napkin 2026-05-22
+archive L69.
+
+### Hyphenate `PR-#NNN` (or rewrap so `#` is mid-line) when referencing issues in prose
+
+Markdownlint MD018 (no-missing-space-atx) treats line-start `#NNN` as an ATX
+heading marker missing its required space. Paragraph wrap can push such tokens
+to line-start unpredictably. `PR-#108` is still legible and lint-stable.
+Source: napkin 2026-05-22 archive L102.
+
+### Owner-given unblock hints during selective pause need explicit scope
+
+`[Ferny-only]` vs `[all-paused-may-use]`. Without explicit scope, paused agents
+should stay paused and surface "I see an unblock for the unpaused agent; does
+it apply to me?" rather than self-routing. Same-instant duplicate writes
+(S4036 hotspot Ferny + Midnight) are the failure mode this rule prevents.
+Source: napkin 2026-05-22 archive L556.
+
+### Sonar MCP `show_security_hotspot.comments` is NOT the rationale carrier
+
+The MCP mutation accepts a `comment` parameter, but `show_*` returns
+`comments: []` and exposes no `changelog` field. Audit trails MUST be verified
+via REST `/api/hotspots/show?hotspot=KEY | jq .changelog`, not via MCP. Plans
+citing MCP `comments` for rationale visibility are wrong. Source: napkin
+2026-05-22 archive L584.
+
+### Plan-as-source-of-truth supersedes coordinator brief on workspace/path/key specifics
+
+Coordinator briefs are short-form recall and can lose fidelity vs the plan
+they cite. Implementer reflex on substance: re-read the plan section before
+executing against the brief. Surface divergence as a routing-correction
+event, proceed against plan, not brief. Source: napkin 2026-05-22 archive
+L612.
+
+### Docker MCP: check `docker mcp tools ls --format json` before declaring MCP namespace absent on Codex
+
+When a Codex session reports "no `mcp__sonarqube__` namespace", the Docker
+MCP gateway may still expose the same tools at a different surface. CLI
+syntax is positional tool name + `key=value` arguments (NOT JSON payload).
+When the secrets-engine socket is missing
+(`/Users/jim/Library/Caches/docker-secrets-engine/engine.sock` absent), the
+gateway starts the container with empty env and the container fails
+initialize with EOF — the secrets-engine `ls` is the diagnostic, the EOF is
+the symptom. Source: napkin 2026-05-22 archive L689, L637.
+
+### Revision-tranche verification: re-read ORIGINAL defect location, not just intended-cure location
+
+A BLOCKER fix that adds new content without removing the contradicting
+original content leaves a regression. Spot-verify must re-read the
+defect area in the new file, not just the new-content area.
+architecture-expert-fred caught the regression on PDR-066 L242 ("Strict
+readers ignore unknown optional fields by construction") that the first-pass
+BLOCKER fix was supposed to remove. Source: napkin 2026-05-22 archive L438.
+
+### assumptions-expert on a PDR-SET (not per-PDR) surfaces cross-PDR coupling defects
+
+Per-PDR reviewers (architecture-expert-fred) check correctness in isolation;
+set-scope reviewer surfaces cross-coupling defects — PDR-065 imports PDR-066
+`tags` namespace as hard dependency AND adds a third tag value within the
+same Proposed-status window, foreclosing PDR-066 §Open Question 1 before its
+second-instance trigger. When drafting a related PDR set in one session,
+dispatch the proportionality reviewer against the set. Source: napkin
+2026-05-22 archive L839.
+
+### Compaction-boundary handoff differs from session-close handoff
+
+Compaction replaces conversation history with a summary; the SAME session
+continues post-compaction. The handoff's priority is
+**conversation-only-substance flushing** — load-bearing context (cron
+expressions, /loop instructions, topology agreements, verbatim prompts)
+MUST land in durable surfaces (thread record, napkin, repo-continuity)
+BEFORE the compaction, because the summary does not preserve it reliably.
+Empirical: persistent-monitor contracts may or may not survive compaction
+(non-deterministic — Shaded and Mistbound monitors both invalidated;
+Wooded's monitor survived once but cannot be relied on). Post-compaction
+agents MUST verify cron + monitor on first wake-up. Source: napkin
+2026-05-22 archive L1019, L1108.
+
+### Metacognition produces structural cure, not doc patch
+
+When a defect's root cause is "documentation surface can drift from
+implementation", default the cure to "make documentation generated by the
+implementation" (executable bootstrap CLI emitting canonical invocation),
+not "fix the current copy of the documentation". Doc patches are once-cures;
+structural cures amortise across future agents. The `/jc-metacognition`
+directive — *"the bridge from action to impact"* — forces evaluating cures
+by whether they recur-proof, not whether they fix today's instance. Source:
+napkin 2026-05-22 archive L945.
+
+### Dual peer-primary topology is structurally distinct from coordinator+helpers
+
+Two primary agents on file-disjoint lanes, each running its own /loop +
+watcher, each owning its own sub-agent fan-out, no coordinator mediating.
+Routing is direct peer-to-peer via comms; owner is the only escalation
+surface above. Distinguishes from coordinator+helpers (one authority,
+helpers don't own lanes) and from specialists+generalists (stratification
+by capability scope). The /loop heartbeat + claim discipline are
+load-bearing — without them silent-peer detection and file-collision
+prevention break. Falsifiability: repeated cross-peer claim collisions or
+owner spending more attention routing between peers than a coordinator
+would, falsifies the topology. Source: napkin 2026-05-22 archive L970,
+L1051.
+
+### Catalogue-not-block resolves SKILL/standing-memory tension on advisory fitness
+
+Standing memory `all-quality-gates-blocking-always` and SKILL §commit
+advisory carve-out are NOT contradictory when classified correctly: the
+carve-out applies when (a) the failure is the advisory sub-check, (b) the
+bundle introduces zero new violations, (c) the bundle drains pre-existing
+signal, (d) the catalogue is recorded in the commit body. Standing memory
+fires against DISMISSAL or NEW violations; it does NOT fire against
+drain-with-catalogue. Worked instances: `5b8635c4` (Blustery Stage 1a),
+`77463a22` (Flamebright Cycle 1). Source: napkin 2026-05-22 archive L329,
+L755.
+
+### `--body-file <path>` is the cure for shell-quoting hazards on agent-tools CLI bodies
+
+When body content contains backticks (markdown code fences, inline-code
+spans), double-quoted `--body "..."` triggers shell command-substitution
+even on substituted file content. Cures: (a) single-quoted `--body '...'`,
+(b) `--body-file /tmp/path.md` (the CLI reads the file literally, bypassing
+shell interpretation). The agent-tools CLI now exposes `--body-file` on
+`comms append/send/direct/reply`. Default to it when authoring any
+non-trivial event body. Source: napkin 2026-05-22 archive L409, L856.
+
+---
+
 ## Recently Distilled — 2026-05-17 Swift Winging Gust pipeline-reframe
 
 ### Surface classification routes fitness response — buffers are not memory

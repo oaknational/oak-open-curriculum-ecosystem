@@ -334,6 +334,29 @@
       "phase": "abandoned",
       "staged_bundle_fingerprint": "22d62b60c2f5532eb93ab24281968c2ca5d60237e9119c0b7d829e26d8cf2fc3",
       "staged_name_status": "M\t.agent/memory/operational/archive/pending-graduations-archive-2026-05-22.md\nM\t.agent/memory/operational/archive/repo-continuity-session-history-2026-05-22.md\nM\t.agent/memory/operational/pending-graduations.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/connecting-oak-resources.next-session.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nM\t.agent/state/collaboration/comms-seen/mistbound-slipping-night.json\nA\t.agent/state/collaboration/comms-seen/tempestuous-spiralling-thermal.json\nM\t.agent/state/collaboration/comms-seen/wooded-swaying-thicket.json\nA\t.agent/state/collaboration/comms/432af3fd-e312-4299-b14c-6cde769acc4a.json\nA\t.agent/state/collaboration/comms/4724ea9a-4c00-4a99-ab6e-72f77c5c7a82.json\nA\t.agent/state/collaboration/comms/6bd9786c-1836-4481-935e-4c616557202e.json\nA\t.agent/state/collaboration/comms/77cea2a8-bf35-42bd-9e0b-4841102f83f3.json\nA\t.agent/state/collaboration/comms/9a3344c6-8ac4-479c-9f98-756edfc4ba88.json\nA\t.agent/state/collaboration/comms/c2930b23-7d1a-465f-8119-e884e538d5d5.json\nM\t.agent/state/collaboration/shared-comms-log.md\n"
+    },
+    {
+      "intent_id": "ac0774c9-341c-4016-bdee-c8d5bb659eb4",
+      "claim_id": "eb8048f8-faf5-4e4b-b662-b8c0520c4363",
+      "agent_id": {
+        "agent_name": "Mistbound Slipping Night",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "a1cb64"
+      },
+      "files": [
+        "agent-tools/src/collaboration-state/comms-relevant-events.ts",
+        "agent-tools/src/collaboration-state/types.ts",
+        "agent-tools/tests/collaboration-state/format-watcher-event.unit.test.ts",
+        "docs/architecture/architectural-decisions/183-comms-event-tag-namespace-substrate.md"
+      ],
+      "commit_subject": "feat(comms): land ADR-183 Tranche 2 — comms-event tag-token rendering",
+      "queued_at": "2026-05-22T13:21:16.052Z",
+      "updated_at": "2026-05-22T13:21:30.065Z",
+      "expires_at": "2026-05-22T13:36:16.052Z",
+      "phase": "staging",
+      "staged_bundle_fingerprint": "07092ba6abf2c2321cee9afe2690be1390b359d94fe09c5d5200b4842b2438e7",
+      "staged_name_status": "M\tagent-tools/src/collaboration-state/comms-relevant-events.ts\nM\tagent-tools/src/collaboration-state/types.ts\nA\tagent-tools/tests/collaboration-state/format-watcher-event.unit.test.ts\nM\tdocs/architecture/architectural-decisions/183-comms-event-tag-namespace-substrate.md\n"
     }
   ],
   "claims": [
@@ -447,6 +470,55 @@
       "freshness_seconds": 5400,
       "sidebar_open": false,
       "intent": "Lane B ADR-183 Tranche 2 — comms-event tag-token rendering. Compose [FAILURE-MODE]/[BEHAVIOUR-NOTE] tokens with channel discriminator per Q1-Q5 sidebar settlement. File-disjoint from Tempestuous (commit-queue) and Shaded (graph-ingest+bin)."
+    },
+    {
+      "claim_id": "eb8048f8-faf5-4e4b-b662-b8c0520c4363",
+      "agent_id": {
+        "agent_name": "Mistbound Slipping Night",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "a1cb64"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T13:20:51Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit Lane B Tranche 2 — ADR-183 CLI rendering update (comms-event tag-token rendering).",
+      "intent_to_commit": "ac0774c9-341c-4016-bdee-c8d5bb659eb4"
+    },
+    {
+      "claim_id": "6af12756-b43a-4b98-8a2f-b79e3155fee1",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "thread": "pr-108-snagging",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/core/graph-core/eslint.config.ts",
+            "packages/libs/graph-ingest/eslint.config.ts",
+            "packages/libs/graph-project/eslint.config.ts",
+            "packages/design/oak-design-ink/eslint.config.ts",
+            "packages/core/oak-eslint/src/configs/base.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T13:25:14Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Cycle 9 ESLint config consolidation — extract 47-line shared shape across 4 workspace configs into shared base; pre-execution code-expert + config-expert review per new runbook rule 2; plan section pr-108-snagging.plan.md lines 945-1000"
     }
   ]
 }
