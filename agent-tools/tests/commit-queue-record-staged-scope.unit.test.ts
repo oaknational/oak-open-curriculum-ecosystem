@@ -39,7 +39,7 @@ function gitClaim(): CommitQueueClaim {
   };
 }
 
-function emptyRegistry(): CommitQueueRegistry {
+function registryWithIntentA(): CommitQueueRegistry {
   return {
     schema_version: '1.3.0',
     commit_queue: [intentForA()],
@@ -258,7 +258,7 @@ describe('record-staged scope invariant: writer A is independent of writer B', (
 
   it('recordStagedBundle stores the scoped fingerprint when fed scoped staged content', () => {
     const intent = intentForA();
-    const registry = emptyRegistry();
+    const registry = registryWithIntentA();
     const snapshot: IndexSnapshot = {
       'agent-tools/src/commit-queue/core.ts': {
         nameStatus: 'M\tagent-tools/src/commit-queue/core.ts\n',

@@ -277,6 +277,19 @@ All four acceptance criteria are satisfied:
 
 **Phase 0 verdict**: GO. Proceed to Cycle 1.1.
 
+#### Task 0.3: Cycle 1.1 post-delivery reviewer absorption (recorded 2026-05-22 ~15:18Z by Stormbound Kiting Squall, claude/ddbea2)
+
+Cycle 1.1 landed at `fb0833a4`. Three reviewers dispatched in parallel post-delivery:
+
+- **test-expert**: GO-WITH-AMENDMENTS. All four tests describe system state correctly; atomic-landing invariant honoured; fake-runGit fixture is state-describing not implementation-tracking; coverage of the scope invariant is complete. Improvements absorbed in the follow-up commit: `emptyRegistry → registryWithIntentA` fixture rename. Forward brief for Cycle 1.3: integration test must NOT import `execFileSync`/`child_process` directly to set up git state — set up through fixture helpers or product-code seam; `test-immediate-fails.md §1` boundary applies.
+- **type-expert**: GO. No `as`/`any`/`unknown`/`@ts-expect-error`/`!` introduced. `ScopedStagedBundleInput` signature is correctly tightened (`pathspec: readonly string[]` required; `runGit?` optional injection seam). Type flow from `CommitIntent.files` (`readonly string[]`) → `pathspec` is direct with no widening. Watch for Cycle 1.2: `runVerifyStagedCommand` still calls unscoped `getStagedBundle` — must migrate before Cycle 1.3 retires the unscoped helpers, otherwise the retirement has a dangling consumer.
+- **code-expert post-delivery gateway**: GO-WITH-AMENDMENTS. All four pre-execution amendments absorbed cleanly; all five Cycle 1.1 acceptance criteria satisfied. The one important finding (`index.ts` re-export missing) resolved via the Task 0.1 §index.ts decision above (internal-only through the multi-cycle window — documented choice, not a missed deliverable). Three Cycle 1.2 pre-execution concerns flagged:
+  1. **`stagedFileMismatch` check at `core.ts:74`** — when Cycle 1.2 replaces the whole-index read with a scoped read, this check's "extra files" branch becomes semantically narrower (in-scope-but-not-in-intent files only); error message may need updating.
+  2. **Injection seam in `commit-workflow.ts`** — Cycle 1.2 must decide whether `CommitWorkflowDependencies.getStagedBundle` is widened to accept scope, or the scoped helper is called directly inside the runtime wiring (bypassing the injection seam for the scoped path). `architecture-expert-betty` recommended for the pre-execution dispatch with focus on this boundary question.
+  3. **`commit-workflow.unit.test.ts` fixture scope** — that file builds fixtures via `createStagedBundleFingerprint` (the unscoped helper). After Cycle 1.2, the verify path uses scoped fingerprints; fixtures may need updating to match.
+
+The two minor amendments (fixture rename + plan-body internal-only clarification) land in a small follow-up commit alongside this Phase 0 absorption record. Cycle 1.2 implementer picks up with full reviewer evidence in hand.
+
 ---
 
 ### Phase 1: Intent-scope discipline
@@ -296,7 +309,7 @@ All four acceptance criteria are satisfied:
 - `agent-tools/src/commit-queue/core.ts` (add intent-scoped variant of `createStagedBundleFingerprint`; mandatory `pathspec` parameter, no optional/default-to-whole-index overload)
 - `agent-tools/src/commit-queue/git.ts` (add intent-scoped variant of `getStagedBundle`; mandatory `pathspec` parameter; also inject a `runGit` callback for unit testability per the pre-execution `assumptions-expert` direction)
 - `agent-tools/src/commit-queue/cli.ts` (`runRecordStagedCommand` at lines 130–143: read `intent.files` from the registry before calling the scoped helpers; pass `intent.files` as pathspec)
-- `agent-tools/src/commit-queue/index.ts` (re-export the scoped helpers alongside the existing unscoped ones; the unscoped helpers stay during the multi-cycle landing window and retire in Cycle 1.3 after all call sites have adopted)
+- `agent-tools/src/commit-queue/index.ts` — **DECISION (post-Cycle-1.1)**: scoped helpers (`getStagedBundleScoped`, `ScopedStagedBundleInput`) remain INTERNAL-ONLY through the multi-cycle window; they are NOT re-exported from the public package surface during Cycles 1.1 + 1.2. Callers inside `agent-tools/src/commit-queue/**` import via the internal module path (already the case for `cli.ts` post-Cycle-1.1; will be the case for `commit-workflow.ts`/`commit-workflow-runtime.ts` in Cycle 1.2). Cycle 1.3 retires the unscoped helpers and renames the scoped variants to the canonical names — at that point the public package surface ends in one clean shape with operative scope, with no transient name bloat ever appearing in published artefacts. Rationale: `getStagedBundle` was never re-exported (internal helper); `getStagedBundleScoped` carries the same internal status. The Phase 0 finding that `createStagedBundleFingerprint` + `verifyStagedBundle` ARE re-exported is preserved unchanged in Cycle 1.1 — those exports continue to point at the unchanged unscoped functions and only flip to operative scope at Cycle 1.3's canonical rename.
 - `agent-tools/tests/commit-queue-record-staged-scope.unit.test.ts` (NEW; two-writer scenario; flat-named sibling per repo convention)
 
 **Current Implementation** (load-bearing line in `git.ts`):
