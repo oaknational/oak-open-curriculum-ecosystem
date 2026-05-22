@@ -1,5 +1,92 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-22 — Shadowed Hiding Shade / `claude` / `claude-opus-4-7[1m]` / `e35155`, deep-graduation pass under owner direction drains owner-direction-gated buffer entries)
+
+**Owner directive**: *"please run a deep graduation of knowledge
+source materials, the napkin, the comms records, the .remember
+directory, the vendor specific memory locations. Ignore fitness
+metric levels for now."*
+
+**Landed (single commit `a49e7a21`, 34 files, +1983/-163)**:
+
+**Tier A (8 substantive doctrine landings)**:
+
+- pattern `.agent/memory/active/patterns/where-system-state-is-observable-at-plan-author-time.md`
+  - `tdd-as-design.md` §"One state, one describing surface" amendment
+- new rule `.agent/rules/check-singleton-per-window.md` (+ adapters
+  - RULES_INDEX entry) + `session-handoff` SKILL §11 amendment naming
+  the singleton invariant and broadcast convention
+- new rule `.agent/rules/use-monitor-for-event-driven-wake.md`
+  (+ adapters + RULES_INDEX entry)
+- `.agent/directives/metacognition.md` amendment naming retrospective
+  - generative modes (shared pre-action ratification primitive) plus
+  structural-cure-not-doc-patch corollary
+- new rule `.agent/rules/per-user-memory-is-a-buffer.md` (+ adapters
+  - RULES_INDEX entry)
+- new rule `.agent/rules/knowledge-preservation-over-fitness-warnings.md`
+  (+ adapters + RULES_INDEX entry)
+- PDR-067 surface-classification-for-fitness-response (Proposed)
+- PDR-068 pipeline-back-pressure-as-structural-cure-signal (Proposed)
+
+**Tier B (9 captures at pattern/draft fidelity)**:
+
+- 6 new patterns: `structurally-identical-new-function-pre-authoring-drop`,
+  `citation-as-reasoning-at-moment-of-verdict`, `dogma-vocabulary-closes-inquiry`,
+  `coordinator-as-slice-runner-short-by-one`,
+  `routing-broadcast-needs-paired-claim-action`,
+  `behaviour-nudge-pressure-design-constraints` (design-note polarity)
+- PDR-069 doctrine-first-vs-first-principles-diversity (Draft —
+  promotion requires second instance or owner ratification)
+- PDR-070 moment-of-decision-heuristic-consolidation (Draft —
+  promotion requires third instance against different class)
+- `session-handoff` SKILL §11a amendment naming
+  dispatch-PENDING-reviewers-at-session-close
+
+**Tier C (5 per-user Claude memory audit-trail markers)**:
+`feedback_no_speed_pressure`, `feedback_broken_code_stays_local`,
+`feedback_watch_both_broadcast_and_directed`,
+`feedback_30_percent_context_for_directives`,
+`feedback_no_moving_targets_in_permanent_docs` — each flagged
+"Graduated to <in-repo home>" in both the entry file and the
+per-user `MEMORY.md` index.
+
+**Supporting**: pending-graduations register status flips on
+graduated entries with cross-references to destination homes;
+napkin closure observation; RULES_INDEX entries for 4 new rules
+across 3 forwarder tiers (`.claude/`, `.cursor/`, `.agents/`);
+one-line ADR-144 vocabulary fix in
+`fitness-token-measurements-and-frontmatter-mandation.plan.md`
+surfaced by the practice:vocabulary gate.
+
+**Gates green for changed scope**: markdownlint, format,
+practice:vocabulary, portability:check, repo-validators:check.
+Full `pnpm check` deferred — doc-only changes; targeted gates
+covered the relevant surfaces.
+
+**Worked instance**: this pass is itself an instance of PDR-068's
+"consumer cadence too low" cure — substance gated on owner-direction
+since 2026-05-17 drained through a focused pass.
+
+**Learning surfaced (worth flagging next session)**: surfaced the
+vocabulary-gate failure as a decision menu (Tier A/B/C options)
+when it was straight-line SOP. That's the same shape
+`present-verdicts-not-menus` exists to prevent — applied at the
+wrong moment. Owner correction: *"drop all pretence and fix the
+problem, there is no optionality here, there is an issue, fix,
+it's not a decision point, it's SOP."* Captured in this session's
+napkin entry.
+
+**Next safe step for this thread**: thread remains paused per owner
+direction. Pending-graduations register still carries ~75 pending
+entries (most gated on second-instance triggers that have not fired).
+No follow-on work is queued for this thread; the active session-priority
+lane remains `eef` per repo-continuity.md.
+
+**Claim disposition**: this session opened zero claims (deep-graduation
+pass is a meta-documentation activity, not a source-claim activity).
+Active-claims.json still carries claims from other agents (Midnight,
+Blustery, etc.) from prior sessions — these are not mine to close.
+
 ## Session Outcome (2026-05-22 late evening — Starlit Beaming Aurora / `claude` / `Opus-4.7` / `1977cf`, metacognition reshape + Cycle 1.3 atomic landing + Phase Final SKILL update + arc closeout)
 
 **Landed (three commits, arc complete)**:
@@ -5205,6 +5292,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Shadowed Hiding Shade` | `claude` | `claude-opus-4-7[1m]` | `e35155` | `deep-graduation-pass-under-owner-direction-drains-owner-direction-gated-buffer-entries; 8-tier-a-doctrine-landings-5-new-rules-2-pdrs-proposed-1-pattern-plus-tdd-as-design-amendment-1-directive-amendment-session-handoff-skill-amendments; 9-tier-b-captures-6-patterns-2-pdrs-draft-1-skill-amendment; 5-tier-c-per-user-memory-marker-updates; commit-a49e7a21-34-files-1983-163; worked-instance-of-pdr-068-consumer-cadence-cure; surfaced-vocabulary-gate-as-menu-when-it-was-sop-owner-correction-captured` | 2026-05-22 | 2026-05-22 |
 | `Shaded Creeping Cloak` | `claude` | `claude-opus-4-7-1m` | `4ef359` | `disposed-5-under-disposed-ws1-5-ws0-reviewer-findings-all-absorb-d1-typed-term-reconstruction-error-with-sibling-file-extraction-d2-exhaustive-switches-with-default-never-n1-utf8-arg-dropped-n2-ambient-algorithm-narrowing-reverted-n3-class-b-exec-memory-line-refs-produced-ten-rows; landed-continuity-corrections-from-prior-session-handoff-with-closure-pressure-research-and-exploration-plan-artefacts; presented-ws0-ledger-for-owner-review-no-partial-ws0-remainders; ran-consolidation-pass-with-over-correction-during-absorption-candidate-captured; surfaced-and-captured-review-as-re-decision-failure-mode-after-owner-correction; eight-commits-e0e9ad0d-2d38cb27-ccfe8948-db5b8bc0-21579675-45e54736-c3627b69-340bdbda` | 2026-05-20 | 2026-05-20 |
 | `Stormy Plumbing Atoll` | `claude` | `claude-opus-4-7-1m` | `2e2764` | `ws1-5-rdfc-1-0-canonicalisation-atomic-commit-ebd0e8dc-with-graph-core-canon-module-rdf-canonize-dependency-7-tests-doctrinal-no-aliases-no-fallbacks-fail-fast; ws0-disposition-ledger-for-singleton-lane-remediation-companion-report-commit-8227d3f7; pre-work-residue-codegen-schema-hash-refresh-4ffef192; continuity-handoff-commit-5f1551c3-under-reported-5-reviewer-findings-as-2-deferred-corrected-during-closeout-via-multiple-metacognition-rounds; closure-pressure-rationalisation-failure-mode-surfaced-and-preserved-in-research-doc-closure-pressure-and-workflow-composition-2026-05-20-md-and-future-plan-closure-pressure-remediation-design-space-plan-md-with-10-todo-questions; under-disposed-reviewer-findings-d1-typed-throws-d2-never-proof-n1-utf8-arg-n2-ambient-algorithm-over-correction-n3-class-b-line-refs-with-legitimate-dispositions-named-per-item-absorb-re-argue-escalate-no-defer-by-agent-category; corrective-comms-event-e6b30e8c-supersedes-fc4c4c24; pdr-044-blocked-pattern-hooks-fired-twice-during-authoring-owner-observation-refusal-vs-approval-mechanism-captured-as-q10` | 2026-05-20 | 2026-05-20 |
 | `Fiery Firing Cinder` | `claude` | `claude-opus-4-7-1m` | `40c178` | `all-channels-comms-cli-landing-at-a9d0b8cf-encodes-comms-event-stream-is-canonical-truth-principle-broadcast-group-directed-lifecycle-all-views-matter-default-watch-and-inbox-emit-every-relevant-event-with-self-exclusion-only-only-directed-flag-preserves-legacy-narrow-view-new-comms-relevant-events-ts-module-extracted-for-250-line-fitness-with-classifyEventForAgent-drainRelevantEvents-and-per-view-formatters-skill-section-0-amendment-makes-the-all-channels-monitor-non-negotiable-for-team-sessions-14-new-tests-433-of-433-green-87-of-87-turbo-cached-pre-commit-honest-scope-flagged-for-followup-sync-view-needs-schema-urgency-flag-and-two-participant-invariant-on-narrative-directed-needs-write-side-validator` | 2026-05-21 | 2026-05-21 |
