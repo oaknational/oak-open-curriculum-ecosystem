@@ -10,15 +10,12 @@ import {
   noRemoteFrameOptions,
 } from './runtime.js';
 import type {
-  CompactedJsonLdDocument,
   ExpandedJsonLdDocument,
-  FramedJsonLdDocument,
   JsonLdContext,
   JsonLdDocument,
   JsonLdFrame,
   JsonLdObject,
   JsonLdProcessorError,
-  JsonLdProcessorErrorKind,
   JsonLdProcessorOperation,
   JsonLdProcessorResult,
   JsonLdValue,
@@ -27,19 +24,17 @@ import type {
 type JsonLdScalar = string | number | boolean | null;
 
 export type {
-  CompactedJsonLdDocument,
   ExpandedJsonLdDocument,
-  FramedJsonLdDocument,
   JsonLdContext,
   JsonLdDocument,
   JsonLdFrame,
   JsonLdObject,
   JsonLdProcessorError,
-  JsonLdProcessorErrorKind,
   JsonLdProcessorOperation,
   JsonLdProcessorResult,
   JsonLdValue,
 };
+export type { JsonLdProcessorErrorKind } from './processor-types.js';
 
 export interface JsonLdProcessorImplementation {
   readonly name: 'jsonld.js';
@@ -60,11 +55,8 @@ export interface JsonLdProcessor {
   compact(
     document: JsonLdDocument,
     context: JsonLdContext,
-  ): Promise<JsonLdProcessorResult<CompactedJsonLdDocument>>;
-  frame(
-    document: JsonLdDocument,
-    frame: JsonLdFrame,
-  ): Promise<JsonLdProcessorResult<FramedJsonLdDocument>>;
+  ): Promise<JsonLdProcessorResult<JsonLdObject>>;
+  frame(document: JsonLdDocument, frame: JsonLdFrame): Promise<JsonLdProcessorResult<JsonLdObject>>;
 }
 
 function ok<T>(value: T): JsonLdProcessorResult<T> {
@@ -204,7 +196,7 @@ export function createJsonLdProcessorWithDriver(driver: JsonLdProcessorDriver): 
     compact(
       document: JsonLdDocument,
       context: JsonLdContext,
-    ): Promise<JsonLdProcessorResult<CompactedJsonLdDocument>> {
+    ): Promise<JsonLdProcessorResult<JsonLdObject>> {
       return runProcessor(
         'compact',
         [document, context],
@@ -215,7 +207,7 @@ export function createJsonLdProcessorWithDriver(driver: JsonLdProcessorDriver): 
     frame(
       document: JsonLdDocument,
       frame: JsonLdFrame,
-    ): Promise<JsonLdProcessorResult<FramedJsonLdDocument>> {
+    ): Promise<JsonLdProcessorResult<JsonLdObject>> {
       return runProcessor(
         'frame',
         [document, frame],

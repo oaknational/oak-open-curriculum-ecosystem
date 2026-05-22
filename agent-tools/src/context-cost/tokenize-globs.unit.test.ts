@@ -89,8 +89,8 @@ describe('tokenizeGlobs', () => {
 
   it('normalises display paths to forward slashes', async () => {
     const fs = fakeFileSystem({
-      globs: { '**/*.md': { matches: ['/repo/nested\\file.md'] } },
-      files: { '/repo/nested\\file.md': '1234' },
+      globs: { '**/*.md': { matches: [String.raw`/repo/nested\file.md`] } },
+      files: { [String.raw`/repo/nested\file.md`]: '1234' },
     });
 
     const result = await tokenizeGlobs(['**/*.md'], '/repo', fs, charsOverFourTokenizer);

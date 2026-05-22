@@ -10,7 +10,6 @@
 export type {
   PropertyGraph,
   PropertyGraphEdge,
-  PropertyGraphEdgeEndpoint,
   PropertyGraphEdgeProperty,
   PropertyGraphNode,
   PropertyGraphNodeId,

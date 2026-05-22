@@ -1,8 +1,20 @@
+import { randomUUID } from 'node:crypto';
+import { tmpdir } from 'node:os';
+import { join as pathJoin } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { runCollaborationStateCli } from '../../src/collaboration-state';
 import { type CommsEvent } from '../../src/collaboration-state/types';
 import { createFakeCollaborationRuntime } from './fake-collaboration-runtime';
+
+// These paths are virtual keys in the in-memory fake runtime, not real
+// filesystem locations; computing them via tmpdir() + randomUUID() keeps the
+// shape unique-per-test and avoids hard-coded publicly-writable directory
+// literals (SonarCloud S5443).
+function transientPath(name: string): string {
+  return pathJoin(tmpdir(), `${name}-${randomUUID()}.txt`);
+}
 
 const recipient = {
   agent_name: 'Galactic Transiting Orbit',
@@ -78,7 +90,7 @@ describe('collaboration-state comms integration', () => {
 
   it('writes a directed message whose body was supplied via --body-file (literal contents, no shell interpretation)', async () => {
     const commsDir = 'state/comms';
-    const bodyPath = '/tmp/test-body.txt';
+    const bodyPath = transientPath('test-body');
     const bodyText =
       'Body with backticks like `--body-file` and dollars like $HOME that would normally be shell-evaluated.';
     const fake = createFakeCollaborationRuntime();
@@ -138,7 +150,8 @@ describe('collaboration-state comms integration', () => {
 
   it('rejects --body and --body-file together as mutually exclusive', async () => {
     const fake = createFakeCollaborationRuntime();
-    fake.seedTextFile('/tmp/body.txt', 'file body');
+    const bodyPath = transientPath('body');
+    fake.seedTextFile(bodyPath, 'file body');
 
     const result = await runCollaborationStateCli({
       argv: [
@@ -164,7 +177,7 @@ describe('collaboration-state comms integration', () => {
         '--body',
         'inline body',
         '--body-file',
-        '/tmp/body.txt',
+        bodyPath,
         '--event-id',
         'message-conflict',
         '--now',
@@ -231,7 +244,8 @@ describe('collaboration-state comms integration', () => {
 
   it('rejects --body-file pointing at an empty file because directed messages require a non-empty body', async () => {
     const fake = createFakeCollaborationRuntime();
-    fake.seedTextFile('/tmp/empty.txt', '   \n  \n');
+    const emptyBodyPath = transientPath('empty');
+    fake.seedTextFile(emptyBodyPath, '   \n  \n');
 
     const result = await runCollaborationStateCli({
       argv: [
@@ -255,7 +269,7 @@ describe('collaboration-state comms integration', () => {
         '--subject',
         'Empty body file',
         '--body-file',
-        '/tmp/empty.txt',
+        emptyBodyPath,
         '--event-id',
         'message-empty',
         '--now',

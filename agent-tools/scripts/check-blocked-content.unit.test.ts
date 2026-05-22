@@ -577,7 +577,7 @@ describe('lineIsPredominantlyCodeShaped', () => {
 describe('regex matching with prose-vs-code distinction', () => {
   it('fires the SHA matcher on prose-narrative backticked SHAs when excludes_inline_code is set', () => {
     const block = {
-      pattern: '\\b[0-9a-f]{7,40}\\b',
+      pattern: String.raw`\b[0-9a-f]{7,40}\b`,
       kind: 'regex' as const,
       include_paths: ['**/*.md'],
       excludes_inline_code: true,
@@ -593,7 +593,7 @@ describe('regex matching with prose-vs-code distinction', () => {
 
   it('does not fire the SHA matcher on YAML-style data lines with backticked SHAs', () => {
     const block = {
-      pattern: '\\b[0-9a-f]{7,40}\\b',
+      pattern: String.raw`\b[0-9a-f]{7,40}\b`,
       kind: 'regex' as const,
       include_paths: ['**/*.md'],
       excludes_inline_code: true,

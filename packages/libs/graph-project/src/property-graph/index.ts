@@ -66,13 +66,6 @@ import type { BlankNode, Literal, NamedNode } from '@oaknational/graph-core/term
 export type PropertyGraphNodeId = NamedNode | BlankNode;
 
 /**
- * Endpoint term admitted at a property-graph edge. Source and target both
- * stand for node identities, so the edge endpoint type is the node id
- * type.
- */
-export type PropertyGraphEdgeEndpoint = PropertyGraphNodeId;
-
-/**
  * Literal-valued attribute attached to a property-graph node.
  *
  * The predicate IRI carries the attribute's semantic role; the literal
@@ -127,9 +120,9 @@ export interface PropertyGraphNode {
  * and is always empty under the default projection in this cycle.
  */
 export interface PropertyGraphEdge {
-  readonly source: PropertyGraphEdgeEndpoint;
+  readonly source: PropertyGraphNodeId;
   readonly predicate: NamedNode;
-  readonly target: PropertyGraphEdgeEndpoint;
+  readonly target: PropertyGraphNodeId;
   readonly properties: readonly PropertyGraphEdgeProperty[];
 }
 

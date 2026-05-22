@@ -87,7 +87,7 @@ function expectOk<T>(result: { readonly ok: true; readonly value: T } | { readon
 function getStringField(record: JsonLdObject, key: string): string {
   const value = record[key];
   if (typeof value !== 'string') {
-    throw new Error(`Expected ${key} to be a string.`);
+    throw new TypeError(`Expected ${key} to be a string.`);
   }
   return value;
 }

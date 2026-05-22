@@ -35,10 +35,6 @@ export type JsonLdFrame = JsonLdRuntimeFrame;
 
 export type ExpandedJsonLdDocument = JsonLdObject[];
 
-export type CompactedJsonLdDocument = JsonLdObject;
-
-export type FramedJsonLdDocument = JsonLdObject;
-
 export type JsonLdProcessorOperation = 'expand' | 'compact' | 'frame';
 
 export type JsonLdProcessorErrorKind =

@@ -36,9 +36,7 @@ export {
 export {
   createJsonLdProcessor,
   createJsonLdProcessorWithDriver,
-  type CompactedJsonLdDocument,
   type ExpandedJsonLdDocument,
-  type FramedJsonLdDocument,
   type JsonLdContext,
   type JsonLdDocument,
   type JsonLdFrame,
