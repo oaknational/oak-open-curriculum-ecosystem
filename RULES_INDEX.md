@@ -44,6 +44,7 @@ index in the same commit.
 - `.agent/rules/follow-collaboration-practice.md`
 - `.agent/rules/follow-the-practice.md`
 - `.agent/rules/generator-first-mindset.md`
+- `.agent/rules/hook-policy-substring-discipline.md`
 - `.agent/rules/invoke-accessibility-expert.md`
 - `.agent/rules/invoke-assumptions-expert.md`
 - `.agent/rules/invoke-clerk-expert.md`

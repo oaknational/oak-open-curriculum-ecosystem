@@ -2,18 +2,26 @@
 archive_kind: pending-graduations-snapshot
 archived_on: 2026-05-22
 archived_by: consolidation pass via /jc-consolidate-docs
-archive_reason: 'pending-graduations.md CRITICAL fitness zone; 13 graduated-status entries with completed audit trails rotated to dated snapshot per the 2026-05-06 / 2026-05-10 precedent and the file split_strategy.'
-window_covered: '2026-05-05 → 2026-05-20 (entries graduated during that window)'
+archive_reason: 'pending-graduations.md CRITICAL fitness zone; multiple multi-agent graduation passes on 2026-05-22 retired entries whose audit trail bodies are preserved here. Combined retentions per the 2026-05-06 / 2026-05-10 precedent and the file split_strategy.'
+window_covered: '2026-05-05 → 2026-05-22 (entries graduated during that window)'
 ---
 
 # Pending-Graduations Archive — 2026-05-22 Drain
 
-This archive holds the bodies of 13 graduated pending-graduations
+This archive holds the bodies of graduated pending-graduations
 entries that were retained inline as audit trail prior to the
-2026-05-22 consolidation pass. The live register at
+2026-05-22 consolidation passes. The live register at
 [`../pending-graduations.md`](../pending-graduations.md) replaces
 each archived entry with a one-line graduated-pointer naming the
 target home and the archive location.
+
+Three drain passes contributed to this snapshot on 2026-05-22:
+the initial pass (13 entries from the 2026-05-05 → 2026-05-20
+window); the Wooded Swaying Thicket substrate-landing pass
+(5 entries whose substrate landed in `c4bacfc5` or in pre-existing
+draft PDRs); the Tempestuous Spiralling Thermal substrate-completion
+pass (4 entries whose graduation targets had either already-landed
+substrate or had natural homes ready to receive the amendment).
 
 The graduations log tables at the head of `pending-graduations.md`
 remain the canonical index of which entry graduated to which target.
@@ -649,3 +657,92 @@ Trigger to watch: second observed real-time failure-mode comms-event
 in a rotating-cast session, OR owner-direction graduation. Promotion
 target: PDR formalising the failure-mode-channel protocol AND
 extending the comms-event schema with the new tag set.
+
+## Tempestuous Spiralling Thermal — substrate-completion graduation pass (2026-05-22)
+
+### 2026-05-22 — Partial / slice-scoped coordinator transfer (graduated to PDR-064 amendment)
+
+`[CANDIDATE: partial-slice-scoped-coordinator-transfer | captured: 2026-05-22 | source: PDR-064 drafting + worked instance Ferny→Blustery slice-coord assignment + comms event 9670c08f behaviour-note | graduation-target: PDR-064 §"Partial / Slice-Scoped Coordinator Transfer" amendment subsection | trigger: 3rd instance observed THIS SESSION (Flamebright→Ferny full, Ferny→Blustery full, slice-coord assignment between them) — graduation trigger fired; awaiting commit window | status: due | size: S]`
+
+PDR-064 establishes the two-distinct-moments coordinator handoff
+pattern for the full-session role. This session demonstrated that a
+distinct pattern applies when the handoff is scoped to a slice
+(boundary-bounded coordination of a sub-arc), not the whole session.
+Three concrete instances landed in one session: (a) Flamebright →
+Ferny full-coordinator transfer; (b) Ferny → Blustery full-coordinator
+transfer; (c) Ferny's slice-coordinator assignment for the PDR-063..066
+arc, sitting *inside* the full-coordinator window. The slice-shaped
+case differs structurally — no cron rearm, no full-authority transfer,
+boundary-bounded by the slice itself. PDR-064 explicitly anticipates
+this with the parenthetical at lines 145-154 (cured this session to
+"out of scope for this PDR; captured for a follow-on amendment"). The
+3-instance trigger fired this session — amendment ready to graduate
+into PDR-064 as a §"Partial / Slice-Scoped Coordinator Transfer"
+subsection at the next non-PDR commit window.
+
+`[graduated 2026-05-22: Tempestuous Spiralling Thermal pass added §"Partial / Slice-Scoped Coordinator Transfer" subsection between §"Cron / cadence boundary" and §"Intersection with PDR-063" inside PDR-064 §Decision. Anchor references in §Moment 2 and §Cron / cadence boundary updated to point at the landed subsection.]`
+
+### 2026-05-22 — Coordinator-must-delegate-sub-agent-launches-not-self-dispatch (graduated to start-right-team SKILL amendment)
+
+`[CANDIDATE: coordinator-delegates-subagent-launches | captured: 2026-05-22 | source: owner correction to Ferny on subagent dispatch + owner correction to Blustery on architecture-expert-fred re-verify self-dispatch + Blustery self-flagged graduation candidate in directed event 09:00:21 | graduation-target: amendment to start-right-team SKILL §"Choose Temporary Responsibilities" + adjacent collaboration practice rule on coordinator boundary | trigger: 2-instance trigger fired this session (Ferny correction, Blustery correction) | status: due | size: S]`
+
+Owner direction observed twice this session in different framings:
+"coordinator's concern is to coordinate, if work needs doing, including
+launching sub-agents, delegate that to a team member". Sub-agent
+launches (Agent-tool dispatches to reviewer agents like architecture-expert-fred,
+assumptions-expert, etc.) are *implementer-class work*, not coordination.
+The coordinator's role is to route the dispatch to a team member; the
+delegated team member runs the Agent-tool invocation, absorbs the
+verdict, and surfaces results. This applies whether the dispatch is a
+review of a slice the coordinator already routed, or a fresh-eyes pass.
+Blustery self-flagged this as a graduation candidate after the owner's
+second correction; the doctrine target is the start-right-team SKILL
+§"Choose Temporary Responsibilities" subsection on coordinator-vs-
+implementer boundary, plus the adjacent rule on collaboration practice.
+
+`[graduated 2026-05-22: Tempestuous Spiralling Thermal pass added the "Coordinator delegates sub-agent launches" amendment paragraph to start-right-team SKILL §"Choose Temporary Responsibilities" — names the boundary, the discipline, the structural reason, and the slice-coordinator extension under PDR-064.]`
+
+### 2026-05-22 — CLI body backtick-shell-substitution cure pattern (graduated to agent-tools/README.md §"CLI Norms")
+
+`[CANDIDATE: cli-body-backtick-cure-pattern | captured: 2026-05-22 | source: at least 3 independent instances across recent sessions — Cirrus Circling Plume 2026-05-21 (shell command-substitution from markdown backticks in double-quoted body argument), Ferny Swaying Leaf 2026-05-22 (event 0ce0b26b lost the field-name tokens to backtick eval in --body), Foamy Snorkelling Jetty 2026-05-22 (comms reply --body parsing failure on backticks in markdown code fences). Stratospheric Gusting Squall earlier instance also referenced in current napkin index | graduation-target: amend agent-tools/README.md §"CLI Norms" with the cure pattern (prefer single-quoted --body OR write body to tmp-file with escaped backticks OR add --body-file path flag that reads body without shell interpretation) | trigger: 3+ instance evidence is firm; cure shape has consensus; awaiting owner-direction or coordinator-routed graduation | status: due | size: M]`
+
+The failure mode: agent-tools CLI comms send/direct/reply with the
+body passed via double-quoted shell argument. When the body
+contains backticks (markdown code fences, identifier references),
+the outer double-quote allows the shell to evaluate
+backtick-wrapped spans as command substitution. The backtick spans
+get replaced with the (usually empty) stdout of the substituted
+"command". Result: the comms event body is silently truncated or
+corrupted; the agent receiving it sees stripped or replaced text.
+The same failure mode appears on `comms send` (Cirrus), `comms
+direct` (Ferny), and `comms reply` (Foamy). Three+ cure shapes
+have proven workable: single-quoted body argument preserves
+content literally; cat-from-tmp-file with escaped backticks is
+fragile; preferring square brackets over backticks for inline
+identifier references; and the load-bearing graduation target —
+add a path flag that reads body from a file without shell
+interpretation. The 3rd instance is the trigger threshold per
+the standing "third-consumer consolidation" pattern.
+
+`[graduated 2026-05-22: Tempestuous Spiralling Thermal pass confirmed the --body-file cure mechanism had already shipped in 675bb83b alongside an agent-tools/README.md §"CLI Norms" subsection ("Comms body input: --body vs --body-file") that documents when to prefer each form, the hazard shape, and a canonical usage example. Substance is fully landed; this graduation moves the status to graduated and records the cross-session evidence trail.]`
+
+### 2026-05-22 — Hook-policy substring-matching in instructive content (graduated to new .agent/rules/hook-policy-substring-discipline.md)
+
+`[CANDIDATE: hook-policy-substring-match-cure | captured: 2026-05-22 | source: at least 3 cross-session instances — Midnight Veiling Threshold 2026-05-22 (Coordinator pattern: hook policy substring-matches forbidden patterns even in instructive context — whole-tree-shortcut command inside "do NOT use" guard sentence blocked); Torrid Glowing Flame 2026-05-21 ("Hook blocked carve-out vocabulary in new agent content"); Charcoal Searing Ember 2026-05-21 ("Failure: vocabulary inheritance from sub-agent verdict text — new vector for the carve-out hook"); Ferny + Flamebright 2026-05-22 (hook-bypass literal substring in dispatch briefs blocked by hook policy until rephrased) | graduation-target: either (a) hook policy upgrade to context-aware parsing (multi-token negation-aware) which is structurally hard, OR (b) coordinator-brief / agent-content discipline rule: substitute generic descriptive language for literal forbidden-pattern strings in instructive contexts; literal forbidden-pattern strings belong only in the rule's canonical home where the hook expects them | trigger: 3+ instance evidence firm across multiple sessions and multiple agents; cure shape (b) is portable and immediate; cure shape (a) is upstream and slow | status: due | size: M]`
+
+Hook policies are substring-matchers that do not parse the
+semantic context of natural-language guards. "Do not use X" and
+"use X" trip the same substring filter. Recurring failure mode
+across at least 3 distinct sessions and multiple agents. The
+discipline cure is the immediate path: agent-authored content in
+comms events, dispatch briefs, napkin entries, and similar
+surfaces must use descriptive substitutes for literal forbidden
+patterns in instructive contexts. Literal forbidden-pattern
+strings belong only in the rule's canonical home (where the hook
+expects them) and in agent execution contexts where the pattern
+is being deliberately invoked. The structural cure (context-aware
+hook parsing) is upstream and slow; the discipline cure is portable
+and applies immediately to coordinator-brief discipline plus
+comms-event drafting norms.
+
+`[graduated 2026-05-22: Tempestuous Spiralling Thermal pass landed cure (b) as a new rule .agent/rules/hook-policy-substring-discipline.md, with Claude (.claude/rules/) and Cursor (.cursor/rules/.mdc with frontmatter) adapter wrappers and an entry in RULES_INDEX.md. The rule names the in-scope surfaces (comms-event bodies, dispatch briefs, napkin entries, team-start broadcasts, conversation threads), the excluded surfaces (canonical rule homes, hook policy config, archive material, test fixtures), the descriptive-substitute examples, and the doctrinal anchors. Cure (a) — upstream context-aware hook parsing — remains a separate concern outside this graduation.]`

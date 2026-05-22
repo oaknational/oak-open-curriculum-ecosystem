@@ -506,6 +506,43 @@ Useful responsibility labels include `controller`, `implementer`, `reviewer`,
 `marshal`, `scout`, `standby`, and `consolidator`, but they are examples rather
 than a required ontology.
 
+**Coordinator delegates sub-agent launches.** The coordinator role is
+to **route** work, not to **execute** it. Sub-agent launches —
+Agent-tool invocations of reviewer agents (architecture-expert-fred,
+assumptions-expert, code-expert, type-expert, and similar), spec-fetch
+agents, exploration agents — are **implementer-class work**. A
+coordinator who self-dispatches sub-agents has stepped out of the
+coordinator role into an implementer role for the duration of the
+dispatch, which is exactly the boundary the coordinator role exists
+to protect.
+
+The discipline:
+
+- When work needs doing inside the session — including launching a
+  sub-agent for a review pass, a spec fetch, or a focused exploration —
+  the coordinator **routes the dispatch to a team member** through a
+  directed comms event or a routing broadcast. The named team member
+  runs the Agent-tool invocation, absorbs the verdict, and surfaces
+  results back through the coordinator's routing surface.
+- This applies whether the dispatch is reviewing a slice the
+  coordinator already routed, or a fresh-eyes pass the coordinator
+  wants to commission.
+- The single legitimate exception is when the coordinator is also
+  the only team member (a degenerate one-agent "team"). In that
+  case the coordinator role collapses into the implementer role and
+  the boundary does not apply.
+- Slice-coordinators (per PDR-064 §"Partial / Slice-Scoped Coordinator
+  Transfer") inherit the same discipline within their slice
+  boundary: routing inside the slice is theirs to do; sub-agent
+  launches inside the slice are routed to a slice team member.
+
+The structural reason: a coordinator who self-dispatches a sub-agent
+is unavailable for routing for the duration of that dispatch, which
+silently re-creates the coordinator-less window that PDR-064 names
+as the failure mode the role exists to prevent. The cost of
+delegating is one routing event; the cost of self-dispatching is a
+coordination gap that peers cannot detect from comms alone.
+
 ### 4. Work With Traceability
 
 For every meaningful decision, verification, or coordination-visible action,

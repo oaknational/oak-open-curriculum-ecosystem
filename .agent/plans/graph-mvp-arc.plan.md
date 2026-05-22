@@ -35,8 +35,8 @@ foundation_alignment:
 isProject: false
 todos:
   - id: name-ai-client-adoption-owner
-    content: "Name the owner of AI-client adoption tracking and the tracking mechanism (which AI clients have adopted which Oak MCP tools, with what usage signal). Without this, the executive summary's teacher-value chain has no signal source. Required before gate-1a promotes to active (per 2026-05-21 gate-split amendment; was previously gate-1, now the first-shipping gate is gate-1a). Resolves D-1."
-    status: pending
+    content: "Name the owner of AI-client adoption tracking and the tracking mechanism (which AI clients have adopted which Oak MCP tools, with what usage signal). Without this, the executive summary's teacher-value chain has no signal source. Required before gate-1a promotes to active (per 2026-05-21 gate-split amendment; was previously gate-1, now the first-shipping gate is gate-1a). Resolves D-1. Resolved 2026-05-22: owner = Jim Cresswell; mechanism = conversations (deliberately-light current state; future evolution to a Notion document gated by an Oak-specific token in .env.local is recorded as a possibility, not a commitment). Outcome detail in sector-engagement/eef/current/eef-first-feature.plan.md § Non-technical preconditions."
+    status: completed
     depends_on: []
   - id: gate-0a-substrate-floor-for-first-feature
     content: "Substrate floor for the first user-facing EEF feature (2026-05-21 amendment — gate split). Lands graph-stack Inc.1d (WS4.4 + WS4.5; defined in [`graph-stack.plan.md`](connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md) — the spine names the substrate-floor semantics, the graph-stack plan owns the increment contract). Inc.1d ships the full polymorphic GraphView<TNode, TEdgeType> interface inside graph-corpus-sdk (all 7 method signatures, Result<T, E> discipline, NodeProjection recursive deep-path with array-stop, NodeFilter with full FieldPredicate arm set), the T7a DeepKeyPath compile-time smoke-test (load-bearing for the array-stop discipline), and the EefStrandsGraphView adapter implementing `subgraph` + `manifest` for EEF data with the sparse-relations surface on manifest per the assumptions-expert round 2026-04-30 verdict. The remaining 5 EEF operations land as typed `NotImplementedYet` Result stubs at this gate (interface contract complete; only implementations are sequenced). Substrate dependencies: WS4.1 (corpus-sdk scaffold), WS3.3 (adjacency primitives) — both in [`graph-stack.plan.md`](connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md). Disjoint from Threads ingestion path: no graph-ingest participation; EEF loader is corpus-local Zod inside graph-corpus-sdk. Parallel-safe with Threads work (WS4.2/4.3). Acceptance: WS4.4 + WS4.5 cycles closed atomically (test+product code per the foundational TDD invariant); type-check + lint + unit-test gates green across graph-corpus-sdk; T7a smoke-test passing; sparse-relations list on manifest exactly matches the 13 named strands."
@@ -168,7 +168,8 @@ value to materialise. AI-client adoption is **not** a spine deliverable.
 A spine todo (`name-ai-client-adoption-owner`, resolves D-1) commits to
 naming the tracking owner + mechanism before gate-1a promotes to active
 (per the 2026-05-21 gate-split amendment; gate-1a is now the first
-user-facing-feature gate; the same precondition applies); this arc
+user-facing-feature gate; the same precondition applies). Resolved
+2026-05-22 — see D-1 row in the Owner Decisions Log. This arc
 cannot solve adoption but it does not ship gate-1a into a void.
 Downstream teacher-outcome impact is still named, not delivered.
 
@@ -575,7 +576,8 @@ gate-learning-loop: /jc-consolidate-docs after each gate;
 
 - `name-ai-client-adoption-owner` → gate-1a (D-1 resolution gates gate-1a
   promotion to active; without an adoption-tracking owner named,
-  gate-1a ships the first user-facing feature into a void).
+  gate-1a ships the first user-facing feature into a void). Satisfied
+  2026-05-22 — see D-1 row in the Owner Decisions Log.
 - gate-0a → gate-1a (Inc.1d substrate floor implemented before the
   first feature ships).
 - graph-stack Inc.1b → gate-2 (Threads adapter + inverse-edge lookup
@@ -693,7 +695,7 @@ the ADR carries it.
 | EEF tool rename breaks downstream consumers | Low | Tool surface is not yet shipped under any name; rename costs zero. Document in ADR-123. |
 | EEF source-authority clarification requires rewriting freshness gate + ingestion + Inc.3 EEF adapter together | Medium | Owner direction 2026-05-11: the repository-held EEF Toolkit JSON file is the canonical source for now; no premature seam abstraction. If EEF clarifies that the canonical source is an API or supplier-pushed file, the freshness CI gate, the tools' ingestion path, and the future Inc.3 graph-corpus-sdk EEF adapter must all be rewritten together against the new authority. The rewrite cost is accepted as the price of avoiding a premature seam; the touch surface is named so the cost is visible. |
 | Slice 3a's legacy-factory tech debt grows during Inc.2/3 wait | Medium | `oak-misconceptions-substrate-migration.plan.md` has a definite sequence position (after Inc.3 misconception-adapter, before combinatorial arc Phase 1); ADR-123 records the legacy path explicitly so the contract for migration is visible. |
-| AI-client adoption stalls; teacher value never materialises | Medium | Named honestly in the executive summary. Spine todo `name-ai-client-adoption-owner` is the forcing function — gate-1a promotion blocks until owner + tracking mechanism are named (per 2026-05-21 amendment; gate-1a is the first user-facing gate). This arc cannot solve adoption; it can only refuse to ship surfaces into a void. |
+| AI-client adoption stalls; teacher value never materialises | Medium | Named honestly in the executive summary. Forcing function fired 2026-05-22: owner = Jim Cresswell; tracking mechanism = conversations (deliberately-light current state; future Notion-token evolution recorded as a possibility). The gate-1a precondition is no longer a void. The underlying adoption risk remains real — this arc cannot solve adoption, only refuse to ship surfaces into a tracking void; the void is now closed. |
 | Combinatorial arc loses Inc.3 forcing-function after slice 3b moves out | Medium | `amend-graph-stack-inc-3-consumer-ref` todo lands the cross-reference from graph-stack Inc.3 to graph-combinatorial-arc.plan.md. Inc.3 retains a named downstream consumer; the combinatorial arc is `current/`, not deferred. |
 | Specialist reviewer load becomes serial bottleneck | Medium | Slices 2 and 3a are parallel-safe; reviewer dispatch happens at each gate, not all at once. |
 
@@ -878,7 +880,7 @@ thread record.
 
 | ID | Decision | Resolution needed by |
 |---|---|---|
-| **D-1** | **AI-client adoption tracking owner.** AI-client adoption is currently un-tracked anywhere in the repo; the executive summary names it as a load-bearing downstream dependency for teacher value. **Resolution path**: spine todo `name-ai-client-adoption-owner` is the forcing function — gate-1a (per 2026-05-21 amendment) cannot promote to active until that todo names the owner and tracking mechanism. | Resolved when `name-ai-client-adoption-owner` completes; gate-1a promotion blocked until then |
+| **D-1** | **AI-client adoption tracking owner.** RESOLVED 2026-05-22: owner = **Jim Cresswell**; tracking mechanism = **conversations** (deliberately-light current state; future Notion-backed tracking gated by an Oak-specific token in `.env.local` recorded as a possibility, not a commitment). Underlying adoption risk remains real and is preserved in the risks block; only the gate-1a tracking-owner precondition is now satisfied. See `name-ai-client-adoption-owner` todo and `sector-engagement/eef/current/eef-first-feature.plan.md` § Non-technical preconditions. | Resolved |
 | **D-2** | **Per-unit misconception variant (`oak-misconceptions-subgraph-for-unit`)**. Default is skip per slice 3a plan WS2 cycle 1; gate at owner direction or T0 check. | At slice 3a opening (current → active) |
 | **D-3** | **`oak-misconceptions-substrate-migration.plan.md` sequence position** — RESOLVED 2026-05-11. Migration plan promotes from `future/` to `current/` immediately after graph-stack Inc.3 misconception-adapter todos land; precedes combinatorial arc Phase 1 as a required precursor. Definite sequence position, no conditional trigger. See Slice 3a § Substrate path. | Resolved |
 | **D-4** | **Topology BLOCKERs from 2026-05-07 architecture-expert-betty review** — RESOLVED 2026-05-11. Both BLOCKERs (WS4 sequencing leak; `practice-graph` tier placement) verified CLOSED in `graph-stack.plan.md` and ADR-173 (graph-corpus-sdk-scaffold sequenced first with Oak extraction confined inside the SDK boundary; `practice-graph` placed under `agent-graphs/` outside substrate package tiers). Reviewer attestations: `architecture-expert-betty` and `assumptions-expert` independently verified. Sub-task **D-4a CLOSED** 2026-05-11: ADR-041 amended to add `agent-graphs/` and regularise `agent-tools/` as top-level workspace tiers; status `Accepted (Revised)`; ADR-173 §Open Questions:1 cross-linked. ADR-173 ratification gate unblocked. | Resolved |
@@ -886,10 +888,9 @@ thread record.
 | **D-6** | **gate-cross-corpus-1 design-stability evaluator event** — ROUTED 2026-05-11 to the combinatorial arc as a concrete Inc.3-design-phase todo there; this entry remains as a pointer for traceability. See [`graph-combinatorial-arc.plan.md`](graph-combinatorial-arc.plan.md). | Resolved (routing complete; concrete event lives in combinatorial arc) |
 | **D-7** | **`future-compositions-exploration` decision deliverable** — RESOLVED 2026-05-11. The combinatorial arc body bounds the deliverable as "the authored decision within one consolidation cycle of gate-cross-corpus-1 close"; this entry remains as a pointer. See [`graph-combinatorial-arc.plan.md`](graph-combinatorial-arc.plan.md). | Resolved |
 
-D-1 (AI-client adoption tracking) is the most urgent open decision — it
-has a named forcing function (`name-ai-client-adoption-owner` todo) but
-the owner-naming work itself has not yet been done. D-2 and D-5 are
-genuine slice-opening decisions. D-3, D-4, D-6, D-7 are resolved.
+D-1 (AI-client adoption tracking) RESOLVED 2026-05-22 — owner + mechanism
+named; see D-1 row above. D-2 and D-5 are genuine slice-opening
+decisions. D-1, D-3, D-4, D-6, D-7 are resolved.
 
 ## Non-Goals (YAGNI)
 

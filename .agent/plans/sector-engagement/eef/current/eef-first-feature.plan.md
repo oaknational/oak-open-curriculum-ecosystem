@@ -20,8 +20,8 @@ todos:
     status: pending
     depends_on: []
   - id: ff2-adoption-tracking-owner
-    content: "Name the owner of AI-client adoption tracking and the tracking mechanism (which AI clients have adopted which Oak MCP tools, with what usage signal). Carried over from graph-mvp-arc.plan.md::name-ai-client-adoption-owner — owned here because it is gate-1a's named precondition (resolves D-1). Without this the executive teacher-value chain has no signal source."
-    status: pending
+    content: "Name the owner of AI-client adoption tracking and the tracking mechanism (which AI clients have adopted which Oak MCP tools, with what usage signal). Carried over from graph-mvp-arc.plan.md::name-ai-client-adoption-owner — owned here because it is gate-1a's named precondition (resolves D-1). Without this the executive teacher-value chain has no signal source. Resolved 2026-05-22: owner = Jim Cresswell; mechanism = conversations (deliberately-light current state — adoption volume does not yet warrant a tracking surface). Future evolution recorded as a possibility, not a commitment: a Notion document gated by an Oak-specific token held in .env.local. The future evolution graduates when conversation cadence stops carrying the signal cleanly."
+    status: completed
     depends_on: []
   - id: ff3-substrate-floor-tracking
     content: "Track graph-stack Inc.1d landing (WS4.4 + WS4.5 in active/graph-stack.plan.md). Not authored here — pointer only. WS4.4: GraphView<TNode, TEdgeType> interface in packages/core/graph-core/src/graph-view/ (placement corrected per architecture-expert-betty verdict 2026-05-21). WS4.5: EefStrandsGraphView adapter in packages/sdks/graph-corpus-sdk/ implementing subgraph + manifest for EEF data, remaining 5 ops as typed NotImplementedYet Result stubs."
@@ -325,6 +325,15 @@ here because they gate `gate-1a` promotion to active:
   load-bearing decision shipping into the void without a tracking surface).
   The previous home in `graph-mvp-arc.plan.md::name-ai-client-adoption-owner`
   remains as a coordination pointer back here.
+
+  **Resolved 2026-05-22**: owner = **Jim Cresswell**; mechanism =
+  **conversations** for now. This is a deliberately-light current state —
+  adoption volume does not yet warrant a tracking surface, and conversation
+  cadence currently carries the signal cleanly. Future evolution recorded
+  as a possibility, not a commitment: a Notion document gated by an
+  Oak-specific token held in `.env.local`. The future surface graduates
+  when conversation cadence stops carrying the signal cleanly — there is
+  no scheduled trigger; the signal-degradation observation is the trigger.
 
 ## Acceptance bundle (`ff6`)
 

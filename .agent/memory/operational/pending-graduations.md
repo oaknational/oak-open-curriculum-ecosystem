@@ -183,6 +183,20 @@ list; entry-level summary index is intentionally omitted to avoid
 duplicating entry-body substance and to keep the index honest as
 the queue churns.
 
+### 2026-05-22 — Rule/skill topology fragmentation (PDR-shaped, recovered from .remember buffer)
+
+`[captured: 2026-05-22 | source: .remember/today-2026-05-15.md ("55k rule tokens fragmented; rule-topology + skills PDR → post-collab-lane queue") | target: pdr:rule-skill-topology | trigger: owner-direction or rule-topology slice opens | size: M | status: pending]`
+
+Substance summary: at 2026-05-15, the cumulative token-load of `.agent/rules/*.md` was measured at ~55k tokens — a fragmentation signal flagged by the authoring session as a PDR candidate, with the lane queued *"post-collab-lane"* (i.e., after the multi-agent collaboration substrate work completed). The substance was captured only in the `.remember/` plugin buffer and never drained into `distilled.md` or `pending-graduations.md` during the subsequent week's consolidations, because the plugin lifecycle stalled when the v0.5.0 install was scoped to a different project (re-installed as v0.7.2 at 2026-05-22T13:49Z scoped to this project, restoring the drainage path).
+
+**Underlying substance**: rule files are loaded into context at session-open via CLAUDE.md / equivalent platform entry points. 55k tokens of rule load is large relative to the 80k reliably-loaded context budget (memory `project_80k_reliably_loaded_context_budget.md`). Fragmentation across ~60+ rule files multiplies surface-discovery cost without proportionate substance-density gain. The PDR candidate would author the topology: which substance lives where, fitness signals for rule files individually and as a load surface, the rules ↔ skills boundary, and the criteria for promoting/demoting/merging rules.
+
+**Why pending**: forward-looking restructuring substance; no current plan absorbs the topology question. The closest active surface is the standing memory entry on the 80k budget (which sets the constraint) but does not author the cure. **Trigger to watch**: owner-direction to author a rule/skill-topology PDR, OR the moment a rule-topology consolidation lane opens (would absorb this as its design input).
+
+Falsifiability: a future rule-topology consolidation that proceeds without measuring rule load against the 80k budget, or without authoring criteria for rule promotion/demotion/merging, is the failure mode. An implementation that measures the load and authors the criteria is the success.
+
+**Lifecycle note**: this entry is **first-instance recovery from .remember buffer drainage**; if a second instance of the rule-topology fragmentation signal appears in a future session, that strengthens the PDR case from candidate → ratification-ready.
+
 ### 2026-05-22 — Behaviour-nudge pressure-score design constraints (design-note / PDR-shaped, captured for future P8/P9 surface)
 
 `[captured: 2026-05-22 | source: comms-events 2026-05-12T19:49:35Z + 19:54:15Z (Verdant Foraging Copse, P5 queue-pressure window) extracted from .agent/state/collaboration/comms/ before §3a retention deletion | target: pdr-or-plan:behaviour-nudge-pressure-architecture | trigger: owner-direction or behaviour-nudge implementation slice opens | size: M | status: pending]`

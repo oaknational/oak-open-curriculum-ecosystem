@@ -114,9 +114,9 @@ intent-to-coordinate. The active-acknowledgement event:
 - explicitly states *"I am taking the [slice] coordinator role
   from \<prior\>"* in the title or first line of the body (the
   square-bracketed `[slice]` is an optional scope qualifier that
-  absorbs both full-handoff and slice-handoff cases — see the
-  pending follow-on amendment §"Partial / Slice-Scoped Coordinator
-  Transfer" captured for post-Round-1 absorption);
+  absorbs both full-handoff and slice-handoff cases — see
+  §"Partial / Slice-Scoped Coordinator Transfer" below for the
+  slice-handoff shape);
 - declares the cadence the incoming coordinator will adopt (which
   may differ from the outgoing coordinator's cadence).
 
@@ -147,8 +147,9 @@ monitor owned by the outgoing coordinator:
   comms-event chain showing coordinator-cadence cron silence
   after a Moment 1 broadcast but before the corresponding
   Moment 2 active-acknowledgement falsifies this rule.
-  Slice-coordinator cron cases are out of scope for this PDR
-  and are captured for a follow-on amendment. If the outgoing
+  Slice-coordinator cron cases are governed separately by
+  §"Partial / Slice-Scoped Coordinator Transfer" below.
+  If the outgoing
   coordinator must end their session before active-
   acknowledgement, the cron / wakeup / monitor stays armed and
   the outgoing coordinator declares the gap explicitly in the
@@ -156,6 +157,66 @@ monitor owned by the outgoing coordinator:
   \<deadline\>, the cron continues firing into an empty
   coordinator slot — this is the structural defect; the team
   must surface a new candidate"*).
+
+### Partial / Slice-Scoped Coordinator Transfer
+
+The full-session coordinator role is one shape of coordinator
+authority. A second shape co-exists: **slice-scoped coordinator
+authority**, where one agent owns coordination of a bounded sub-arc
+(a multi-cycle implementation slice, a multi-PDR drafting set, a
+multi-agent reviewer fan-out) while the full-session coordinator
+continues to own the broader session. The slice-coordinator sits
+*inside* the full-coordinator window, not in place of it.
+
+The two-moments shape applies to slice transfers, but with reduced
+operational surface:
+
+- **Moment 1 (pre-positioning) for a slice transfer** is a narrative
+  broadcast naming the slice boundary, the outgoing slice-coordinator,
+  the incoming slice-coordinator, and the carried slice state
+  (open routing inside the slice, queued slice-internal
+  decision-points, slice-specific reviewer dispatches in flight).
+  The pre-positioning event explicitly names the slice scope —
+  *"slice-coordinator pre-positioning for [slice boundary]:
+  \<outgoing\> → \<incoming\>"* — so peers know the transfer is
+  scoped, not full-session.
+- **Moment 2 (active-acknowledgement) for a slice transfer** is a
+  narrative broadcast from the incoming slice-coordinator with the
+  conventional title *"Slice-coordinator role acknowledgement
+  for [slice boundary]: \<incoming\> from \<prior\>"*, referencing
+  the slice pre-positioning event via `in_response_to` and naming
+  the cadence the incoming slice-coordinator will adopt for the
+  slice.
+
+The structural reductions relative to full-session transfer:
+
+- **No full-authority transfer**: routing outside the slice, reviewer
+  dispatch outside the slice, and commit-window mediation outside
+  the slice remain with the full-session coordinator throughout.
+- **No coordinator-cadence cron rearm**: a slice-coordinator does
+  not own a session-cadence cron; the full-session coordinator's
+  cadence continues unchanged. Slice-coordinator cadence, if any,
+  is a slice-internal artefact owned by the slice-coordinator (a
+  scoped wakeup, a slice-internal Monitor) and ends when the slice
+  closes or transfers, never persisting into the full-session role.
+- **Boundary-bounded scope**: the slice transfer authority covers
+  only events whose scope is the named slice. Events that touch
+  surfaces outside the slice remain a full-session-coordinator
+  concern and are routed through them as normal.
+
+The slice transfer still requires both moments. Slice pre-positioning
+without active-acknowledgement creates a slice-coordinator-less window
+inside an otherwise-coordinated session — peers route slice-internal
+events to no one and the slice stalls. The cure shape is the same:
+authority transfers only when the incoming slice-coordinator's
+active-acknowledgement lands as a distinct event referencing the
+pre-positioning.
+
+A single session may carry multiple slice-coordinator boundaries
+concurrently (e.g. one slice-coord on a PDR-drafting arc, another
+slice-coord on an implementation cycle), each governed by its own
+two-moments pair. The full-session coordinator routes inter-slice
+events and remains the escalation surface above each slice-coord.
 
 ### Intersection with PDR-063 (mid-cycle retirement)
 
