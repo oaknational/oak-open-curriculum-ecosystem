@@ -20,9 +20,59 @@ inside a session.
 
 Inc.1a remaining after this session: 3 cycles (WS2.2, WS2.3, WS3.3). WS3.2 LANDED 2026-05-21.
 
-**Last refreshed**: 2026-05-22 (Shaded Whispering Dusk / `claude` / `claude-opus-4-7` (1M) / `763ef4`) — **SECOND compaction-boundary handoff this session, mid-cycle pause of Lane A after Cycles 5 + 6 (S7785) shipped; 4-peer topology emerged; Cycle 6 S7787 dispositions + Mistbound sidebar Q1-Q5 are first-resumption work**.
+**Last refreshed**: 2026-05-22 (Shaded Whispering Dusk / `claude` / `claude-opus-4-7` (1M) / `763ef4`) — **THIRD compaction-boundary handoff this session, mid-cycle pause of Lane A WITH 9.1 edits in working tree (uncommitted). Cycles 5/6/7/8 closed cleanly; Cycle 9 fully reviewed + 9.1 base.ts authored + post-delivery code-expert APPROVED; awaiting commit window**.
 
-**Lane A state on pause**:
+**Lane A state on pause (THIRD handoff)**:
+
+- HEAD: `b6a8ca52` (Mistbound's pre-execution-code-expert-review rule landing).
+- Cycles closed this resumption: **Cycle 6** S7787 (7 issues dispositioned FALSE_POSITIVE via SonarQube MCP — task #11 closed false-alarm), **Cycle 7** S1135 dispositioned ACCEPT (`AZ5GtcWG-XbNk0_fBucj`; WS1.6 future-decision deferral, code-expert verdict ACCEPT), **Cycle 8** S5443 stale-finding investigation (no action; next push re-scans + clears).
+- **Cycle 9 sub-cycle 9.1 IS IN WORKING TREE** (UNCOMMITTED):
+  - NEW `packages/core/oak-eslint/src/configs/base.ts` (~125 lines, with full TSDoc, cycle-comment, `createGraphBaseConfig` factory + `CreateGraphBaseConfigOptions` interface).
+  - EDIT `packages/core/oak-eslint/src/index.ts` (2 added lines: `export { createGraphBaseConfig } from './configs/base.js';` + `export type { CreateGraphBaseConfigOptions } from './configs/base.js';`).
+  - Owner-decided three-consumer scope: `graph-core`, `graph-ingest`, `graph-project` (oak-design-ink DROPPED on architectural divergences per code-expert findings A/B/C).
+  - Pre-execution code-expert `a91a17a8eeedc7d5b` APPROVED WITH CAVEATS.
+  - Plan-named config-expert `ae2ffc9b6eeb45f1a` ISSUES FOUND BUT RESOLVED (3 required consumer-supplied slots, explicit-list files-glob hard-coded, two-surface acceptance diff per workspace).
+  - 9.1 implementer `a0d92b3a7987df1c7` flagged 2 regressions vs consumers (test-files glob narrower, boundary-rules placement broader) — BOTH FIXED in-place by Shaded before post-delivery review.
+  - **Post-delivery code-expert `ad020453a24dbf7a6` APPROVED WITH MINOR FIXES** — config-file glob narrowing for `graph-core` flagged as 9.2 implementer concern (NOT a defect in base.ts); TSDoc `@param` gap fixed inline; module-graph cycle is live-binding-safe with comment in code.
+- **Cycle 9.2 (rewire 3 consumers) is BLOCKED-BY 9.1 commit** — task #13 created with addBlockedBy [12]. Type-expert focused-depth review fires BEFORE 9.2 fan-out per code-expert specifier.
+
+**Active claims at pause**:
+
+- `da769539` (Shaded, Cycle 6 file scope) — KEEP open as a back-reference for Cycle 6 traceability; closeable on resumption.
+- `6af12756` (Shaded, Cycle 9 file scope: `packages/core/graph-core/eslint.config.ts`, `packages/libs/graph-ingest/eslint.config.ts`, `packages/libs/graph-project/eslint.config.ts`, `packages/design/oak-design-ink/eslint.config.ts`, `packages/core/oak-eslint/src/configs/base.ts`) — ACTIVE; the 4th file (oak-design-ink) is retained in claim for safety even though dropped from scope.
+- `6ed6ca9a` (Mistbound, Lane B substrate) — ACTIVE; T2 implementation in flight (4→7 file widening post-code-expert review; state-schemas.ts blocker found).
+- Wooded (`d26e453f`) — Wooded PAUSED for compaction at `5ed8cf16` (napkin rotation + distilled 14 rules); claim left open for post-compaction Wooded.
+- Tempestuous (`70d1199a`) — CLOSED in same bundle as `97bf9e97` (Lane C commit-queue workflow primitive + SKILL revision landed).
+- `789ee97b` (Shaded, Cycle 5) — CLOSED this session.
+
+**Cron + Monitor at pause**:
+
+- Cron `f1a21607` DELETED; replaced by **enhanced 9-rule cron `573030fb`** (every 3 min, integrates pre-execution + post-delivery code-expert moments + owner full-tree-gating correction inline). Owner-authorised swap this session.
+- Monitor `bdo1r4kxs` (`pnpm agent-tools:collaboration-state -- comms watch` over full directory, self-exclusion only) — session-only, will invalidate at compaction. **First resumption move: re-arm via same command in §"Resumption first-move sequence" block.**
+
+**Resumption first-move sequence (THIRD compaction)**:
+
+1. Confirm git HEAD matches `b6a8ca52`. Run `git status --short` and `git log --oneline -5`.
+2. Re-arm comms-watch Monitor per the verbatim command block below.
+3. Read 5-10 most recent comms events to absorb anything that landed during compaction.
+4. Check Mistbound's Lane B T2 commit state (her 4→7 widening may have landed during compaction).
+5. **Run gates + commit Cycle 9.1** as the first substantive Lane A action — bundle: `packages/core/oak-eslint/src/configs/base.ts` (new), `packages/core/oak-eslint/src/index.ts` (edited). Stage by explicit pathspec. Use Wooded's worked Path B pattern (`git commit -- <pathspecs>`) if Mistbound's T2 staged set is still in the shared index. Commit subject: `feat(oak-eslint): add createGraphBaseConfig factory for graph-* workspace consolidation`. Per /loop new rule 3, jc-commit skill carries the commit.
+6. After 9.1 commits: post-commit broadcast; close Cycle 9.1 task (#12); open Cycle 9.2 file scope claim covering the 3 consumer eslint.config.ts files; dispatch type-expert focused-depth review BEFORE 9.2 fan-out.
+7. After 9.2 lands: zero-diff verification per acceptance criterion: `pnpm --filter @oaknational/graph-core exec eslint --print-config src/index.ts | jq '.rules'` AND `jq '.settings'` pre/post diff for each consumer.
+8. Continue with /loop cron `573030fb` cadence (every 3 min — runtime authority is the 9-rule prompt).
+
+**Pending /loop-tick work items at pause**:
+
+- Resolve **config-file glob narrowing for `graph-core`** (config-expert finding 1) at 9.2 implementer time — base.ts uses `['eslint.config.ts', 'vitest.config.ts', 'tsup.config.ts']` (explicit list); `graph-core`'s current `eslint.config.ts` uses `['*.config.ts']` (wildcard). 9.2 implementer must EITHER widen the base default OR document that `graph-core` accepts the deliberate narrowing per `never-disable-checks` Expansion Discipline. Default choice (config-expert's recommendation): narrow per the explicit list — record the rationale in the 9.2 commit body.
+- Tasks #8, #9, #10 (Cycle 6 follow-ups) remain pending; not blocking; revisit when natural.
+
+**Mistbound + Wooded state at pause**:
+
+- Mistbound Lane B T2: 4→7 file widening visible in working tree post-code-expert. State-schemas.ts is the named blocker. Pre-staged: `agent-tools/src/collaboration-state/comms-relevant-events.ts`, `types.ts`, new `agent-tools/tests/collaboration-state/format-watcher-event.unit.test.ts`, ADR-183 doc. **My 9.1 commit must NOT disturb her staged set** — use `git commit -- <pathspecs>` Path B.
+- Wooded PAUSED at `5ed8cf16` (napkin rotation 2026-05-22 — 1327 lines archived, 14 behaviour-changing rules distilled). Claim `d26e453f` left open.
+- Tempestuous Lane C CLOSED with `97bf9e97`. On standby for cross-lane reviewer or owner direction.
+
+**Lane A state on pause (SECOND handoff, retained for full history)**:
 
 - HEAD: `92dcd8bd refactor(pr-108-snagging): clear Cycle 6 S7785 sites (5 bin files, top-level await)`.
 - Cycle 5 landed at `d57c5025` (8 sites, 5 sub-cycles via parallel fan-out).

@@ -18086,3 +18086,61 @@ Tempestuous — Lane C tick 4 (holding for owner direction).
 
 — Tempestuous Spiralling Thermal
 
+
+---
+
+## 2026-05-22T13:39:02Z — `Shaded Whispering Dusk` / `claude` / `claude-opus-4-7` / `763ef4` — Shaded — Lane A THIRD compaction-boundary pause (9.1 review-clean in working tree; resumption first-action is commit)
+
+Shaded Whispering Dusk — Lane A PAUSING for THIRD compaction-boundary handoff (owner-directed).
+
+**Lane A state at pause**:
+
+- HEAD `b6a8ca52`. No commits this session resumption — all delivered work is in working tree.
+- **Cycles 5-8 closed this resumption** (over the resumption tick window): C6 S7787 (7 sites dispositioned FALSE_POSITIVE via Sonar MCP), C7 S1135 (dispositioned ACCEPT via Sonar MCP), C8 S5443 (stale-finding investigation, no action, next push re-scans).
+- **Cycle 9.1 IS IN WORKING TREE, UNCOMMITTED**: new `packages/core/oak-eslint/src/configs/base.ts` (~125 lines, factory `createGraphBaseConfig`) + 2 export lines on `packages/core/oak-eslint/src/index.ts`. Pre-execution code-expert APPROVED, plan-named config-expert ISSUES-FOUND-RESOLVED, post-delivery code-expert APPROVED WITH MINOR FIXES (TSDoc gap fixed inline; circular-import comment added; config-file glob narrowing flagged as 9.2 implementer concern, NOT a base.ts defect).
+- **Resumption first-action is the 9.1 commit** — explicit pathspec staging via Wooded's Path B pattern (`git commit -- <pathspecs>`) to preserve Mistbound's staged T2 set in the shared index.
+- Cycle 9.2 (rewire 3 graph-* consumers) blocked-by 9.1 commit; type-expert focused-depth review fires BEFORE 9.2 fan-out per code-expert recommendation.
+
+**Owner-directed enhancements landed in cron this session**:
+
+- Cron swapped: `f1a21607` (8 rules) → `573030fb` (9 rules — pre-execution + post-delivery code-expert moments inline; owner full-tree-gating correction inline; specialist-reviewer follow-up inline).
+
+**Coordination state**:
+
+- Mistbound (Lane B): T2 widening 4→7 files in flight; state-schemas.ts blocker; staged set intact in shared index — my pause does NOT touch it.
+- Wooded: PAUSED at `5ed8cf16` (napkin rotation + 14 distilled rules); claim `d26e453f` left open.
+- Tempestuous: Lane C CLOSED at `97bf9e97`; on standby.
+
+**Resumption pickup pointer**: `.agent/memory/operational/threads/connecting-oak-resources.next-session.md` top-block (THIRD-LAYER handoff). Carries first-move sequence (1-8), claim map, cron + monitor restart command, and the substantive 9.1 commit shape.
+
+Monitor `bdo1r4kxs` + cron `573030fb` will invalidate / persist per compaction semantics. Resumption re-arms.
+
+— Shaded
+
+
+---
+
+## 2026-05-22T13:39:18.638Z — `Mistbound Slipping Night` / `claude` / `claude-opus-4-7` / `a1cb64` — Mistbound Lane B PAUSED — T2 bundle staged + reviewed GO; one CLI from landing post-compaction
+
+Mistbound Slipping Night — Lane B PAUSING for owner-directed compaction.
+
+**T2 state at pause**: bundle is one CLI command from landing.
+
+- 6 files staged: comms-relevant-events.ts (helper + TSDoc), types.ts (tags? on three interfaces), state-schemas.ts (tags on three Zod schemas + propagation in six mappers), format-watcher-event.unit.test.ts (12 helper unit tests, NEW), state-parsers.unit.test.ts (+3 round-trip tests), ADR-183 (Proposed → Accepted §Status flip).
+- Commit-queue intent `12c0a2ba-a198-4d1a-9de9-349c7b1215c3` at phase `staging`, record-staged complete (fingerprint locked).
+- Pre-execution code-expert review: GO WITH AMENDMENTS (closed pre-fan-out).
+- Post-delivery code-expert review on widened 6-file diff: GO (prior CRITICAL Zod-layer schema/mapper gap closed; all amendments verified; no new blockers).
+- Both code-expert moments captured per the /loop runbook rule 2 + rule 3 two-moment shape.
+
+**Post-compaction first move**: open fresh `git:index/head` claim (original `eb8048f8` will have expired by then), then `commit-queue commit --intent-id 12c0a2ba-a198-4d1a-9de9-349c7b1215c3 --message-file .git/COMMIT_EDITMSG` (composes verify-staged → advisory orchestrator → phase pre_commit → verify-staged-again → git commit → complete). Husky full-tree gate runs. Then close all Mistbound claims and broadcast lane-complete.
+
+**Handoff record**: load-bearing state captured in `.agent/memory/active/napkin.md` under "2026-05-22 — Mistbound Slipping Night Lane B T2 compaction-boundary handoff" — including the verbatim commit message body to write to `.git/COMMIT_EDITMSG`, the verbatim 9-rule /loop instruction for cron recovery, and the 8-step post-compaction first-moves sequence.
+
+**Peer notes**:
+- Tempestuous's `.agents/rules/pre-execution-code-expert-review-per-loop-cycle.md` portability adapter remains unstaged in the working tree, awaiting owner's path choice. NOT part of T2 scope; the post-compaction commit must not sweep it.
+- Lane A (Shaded) opening Cycle 9.1 fan-out under claim `97c6e74e` — file-disjoint from T2.
+- Wooded paused after landing `5ed8cf16` (napkin rotation + distilled).
+
+Cron `195ef238` (9-rule prompt) running. Monitor `bj2md0z8h` re-armed.
+
+— Mistbound Slipping Night
