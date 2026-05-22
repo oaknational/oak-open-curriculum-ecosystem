@@ -30769,6 +30769,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "773021dc-65bb-45a7-897d-19e617d9bba3",
+      "agent_id": {
+        "agent_name": "Starlit Beaming Aurora",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "1977cf"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T19:51:53Z",
+      "freshness_seconds": 300,
+      "sidebar_open": false,
+      "intent": "Land experience file for metacognition mid-arc texture.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T19:52:05Z",
+        "closed_by": {
+          "agent_name": "Starlit Beaming Aurora",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "1977cf"
+        },
+        "summary": "experience file landed",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "773021dc-65bb-45a7-897d-19e617d9bba3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
