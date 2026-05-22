@@ -118,6 +118,16 @@ export interface ExplainOptions {
  *
  * Non-empty-two-minimum tuple on `strand_ids` makes "compare with
  * fewer than two strands" structurally impossible.
+ *
+ * **Deliberate non-generic divergence from `eef-evidence-corpus.plan.md`
+ * §Phase A**: the plan body sketches `CompareOptions<TNode>` with a
+ * `TNode` type parameter, anticipating future expansion with
+ * node-shape predicates. The current fields (`strand_ids` strings +
+ * closed `ComparisonDimension` literal union) carry no `TNode`
+ * constraint, so the parameter is removed per the type-expert
+ * pre-execution verdict (C2 of GO-WITH-CONDITIONS on the t1 cycle):
+ * unused generics are noise. The parameter returns additively if and
+ * when a `TNode`-bearing predicate field lands.
  */
 export interface CompareOptions {
   readonly strand_ids: readonly [string, string, ...string[]];
@@ -129,17 +139,31 @@ export interface CompareOptions {
  * for context inputs lives alongside the scoring engine in `t5`; this
  * shape is the compile-time surface consumers commit to at the corpus
  * boundary.
+ *
+ * Field placement: `filter`, `context`, and `max_results` are peer
+ * fields on `RankOptions`. `max_results` is intentionally outside
+ * `context` because it is a pagination / truncation concern, not a
+ * scoring-context component — keeping it at the outer level matches
+ * `eef-evidence-corpus.plan.md` §Phase A and the t5 scoring engine
+ * integration boundary.
  */
 export interface RankOptions<TNode> {
   readonly filter?: NodeFilter<TNode>;
   readonly context: {
     readonly phase: 'primary' | 'secondary';
     readonly subject?: string;
-    readonly focus?: 'closing_disadvantage_gap' | 'metacognition' | 'literacy' | 'numeracy';
+    readonly focus?:
+      | 'closing_disadvantage_gap'
+      | 'metacognition'
+      | 'literacy'
+      | 'numeracy'
+      | 'behaviour'
+      | 'feedback';
+    readonly pp_percentage?: number;
     readonly max_cost?: 1 | 2 | 3 | 4 | 5;
     readonly min_evidence?: 1 | 2 | 3 | 4 | 5;
-    readonly max_results?: number;
   };
+  readonly max_results?: number;
 }
 
 /** A single ranked recommendation paired with its computed score. */
