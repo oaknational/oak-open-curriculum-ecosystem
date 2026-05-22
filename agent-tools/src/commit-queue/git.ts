@@ -23,23 +23,6 @@ export interface ScopedStagedBundleInput {
 }
 
 /**
- * Read the staged git bundle used by commit-queue verification.
- *
- * Whole-index read; retained for any caller that has not yet adopted the
- * intent-scoped variant. Cycles 1.2 and 1.3 of the
- * commit-queue-intent-scope-discipline plan migrate the remaining
- * callers; this function retires when those cycles land.
- */
-export function getStagedBundle(repoRoot: string): StagedBundle {
-  return {
-    stagedNameOnly: runGit(repoRoot, ['diff', '--cached', '--name-only']),
-    stagedNameStatus: runGit(repoRoot, ['diff', '--cached', '--name-status']),
-    stagedPatch: runGit(repoRoot, ['diff', '--cached', '--full-index', '--binary']),
-    worktreeShortStatus: runGit(repoRoot, ['status', '--short']),
-  };
-}
-
-/**
  * Read the staged git bundle scoped to a declared pathspec.
  *
  * Each underlying git invocation appends `--` and the pathspec entries

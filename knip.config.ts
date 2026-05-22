@@ -129,7 +129,6 @@ const config: KnipConfig = {
       ignoreDependencies: [
         // ESLint plugins are peer dependencies used at runtime
         'eslint-plugin-prettier',
-        'globals',
       ],
     },
     'packages/core/openapi-zod-client-adapter': {

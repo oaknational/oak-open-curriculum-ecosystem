@@ -18,10 +18,20 @@ import {
 const repoRoot = process.cwd();
 const SKILLS_LOCK_PATH = 'skills-lock.json';
 
+const fixMode = process.argv.includes('--fix');
+const writtenWrappers = [];
+
 // --- Shared helpers (same pattern as validate-subagents.mjs) ---
 
 async function readText(relPath) {
   return fs.readFile(path.join(repoRoot, relPath), 'utf8');
+}
+
+async function writeText(relPath, content) {
+  const absPath = path.join(repoRoot, relPath);
+  await fs.mkdir(path.dirname(absPath), { recursive: true });
+  await fs.writeFile(absPath, content, 'utf8');
+  writtenWrappers.push(relPath);
 }
 
 async function readJson(relPath) {
@@ -179,20 +189,34 @@ for (const issue of getReviewerAdapterParityIssues({
 // --- Rule orphan detection — canonical rule with no platform adapters ---
 
 const canonicalRules = await listFiles('.agent/rules', '.md');
+const claudeWrapperBody = (ruleName) => `Read and follow \`.agent/rules/${ruleName}.md\`.\n`;
+const agentsWrapperBody = (ruleName) => `Read and follow \`.agent/rules/${ruleName}.md\`.\n`;
+
 for (const ruleFile of canonicalRules) {
   const ruleName = path.basename(ruleFile, '.md');
-  const hasClaudeWrapper = await exists(`.claude/rules/${ruleName}.md`);
-  const hasCursorTrigger = await exists(`.cursor/rules/${ruleName}.mdc`);
-  const hasAgentsWrapper = await exists(`.agents/rules/${ruleName}.md`);
+  const claudeWrapperPath = `.claude/rules/${ruleName}.md`;
+  const cursorTriggerPath = `.cursor/rules/${ruleName}.mdc`;
+  const agentsWrapperPath = `.agents/rules/${ruleName}.md`;
 
-  if (!hasClaudeWrapper) {
-    addIssue(`.agent/rules/${ruleName}.md: missing .claude/rules/${ruleName}.md wrapper`);
+  if (!(await exists(claudeWrapperPath))) {
+    if (fixMode) {
+      await writeText(claudeWrapperPath, claudeWrapperBody(ruleName));
+    } else {
+      addIssue(`.agent/rules/${ruleName}.md: missing .claude/rules/${ruleName}.md wrapper`);
+    }
   }
-  if (!hasCursorTrigger) {
+  // Cursor `.mdc` triggers carry a hand-authored description in frontmatter
+  // (used by Cursor's rule-picker UI); --fix cannot synthesise that, so
+  // missing Cursor triggers are always reported as issues.
+  if (!(await exists(cursorTriggerPath))) {
     addIssue(`.agent/rules/${ruleName}.md: missing .cursor/rules/${ruleName}.mdc trigger`);
   }
-  if (!hasAgentsWrapper) {
-    addIssue(`.agent/rules/${ruleName}.md: missing .agents/rules/${ruleName}.md wrapper`);
+  if (!(await exists(agentsWrapperPath))) {
+    if (fixMode) {
+      await writeText(agentsWrapperPath, agentsWrapperBody(ruleName));
+    } else {
+      addIssue(`.agent/rules/${ruleName}.md: missing .agents/rules/${ruleName}.md wrapper`);
+    }
   }
 }
 
@@ -329,6 +353,13 @@ const stats = [
 ];
 
 export function reportPortabilityValidation(validationIssues = issues) {
+  if (writtenWrappers.length > 0) {
+    console.log(`Portability --fix wrote ${writtenWrappers.length} wrapper file(s):`);
+    for (const writtenPath of writtenWrappers) {
+      console.log(`  + ${writtenPath}`);
+    }
+  }
+
   if (validationIssues.length > 0) {
     console.error(
       `Portability validation failed (${validationIssues.length} issue${validationIssues.length === 1 ? '' : 's'}):`,

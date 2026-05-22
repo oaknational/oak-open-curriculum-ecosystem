@@ -80,6 +80,7 @@
     "lint:shell:syntax": "bash -n apps/oak-curriculum-mcp-streamable-http/scripts/*.sh",
     "subagents:check": "pnpm --filter @oaknational/agent-tools validate-subagents",
     "portability:check": "pnpm --filter @oaknational/agent-tools validate-portability",
+    "portability:fix": "pnpm --filter @oaknational/agent-tools validate-portability:fix",
     "skills:check": "pnpm --filter @oaknational/agent-tools -s build && node agent-tools/dist/src/bin/skills-adapter-generate.js --check --prefix=oak-",
     "practice:fitness": "pnpm --filter @oaknational/agent-tools validate-practice-fitness",
     "practice:fitness:informational": "pnpm --filter @oaknational/agent-tools validate-practice-fitness -- --informational",

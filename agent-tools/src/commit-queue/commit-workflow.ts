@@ -54,7 +54,7 @@ export interface CommitWorkflowDependencies {
  * failure results and as the audit-trail notes prefix when the intent
  * is transitioned to `abandoned`.
  */
-export type CommitWorkflowFailureStage =
+type CommitWorkflowFailureStage =
   | 'load-intent'
   | 'verify-staged-before'
   | 'verify-staged-after'

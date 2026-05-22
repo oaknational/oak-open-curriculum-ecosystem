@@ -34,15 +34,12 @@ import type { Linter } from 'eslint';
 import type { TSESLint } from '@typescript-eslint/utils';
 
 import { strict } from './strict.js';
-// Module-graph cycle (base.ts ↔ ../index.js) is intentional and live-binding-safe:
-// index.ts only re-exports from this file; this file only references the imports
-// inside the factory function body. Do NOT add a module-level call here.
 import {
   createImportResolverSettings,
   defineConfigArray,
   ignores as globalIgnores,
   testRules,
-} from '../index.js';
+} from '../shared.js';
 
 export interface CreateGraphBaseConfigOptions {
   readonly thisDir: string;
