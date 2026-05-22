@@ -24,7 +24,8 @@ import {
   type CommitWorkflowProcessResult,
   type CommitWorkflowResult,
 } from './commit-workflow.js';
-import { getStagedBundleScoped } from './git.js';
+import { getStagedBundle } from './git.js';
+import { type CommitWorkflowPathspec } from './pathspec.js';
 import { readRegistry, updateRegistry } from './registry.js';
 
 const ADVISORY_BANNER = '[ADVISORY ONLY — NOT A COMMIT GATE]';
@@ -52,9 +53,16 @@ export async function runCommitWorkflowRuntime(
     readRegistry: () => readRegistry(input.registryPath),
     transformRegistry: (transform) => updateRegistry(input.registryPath, transform),
     getStagedBundle: (scopeInput) =>
-      getStagedBundleScoped({ repoRoot: input.repoRoot, pathspec: scopeInput.pathspec }),
+      getStagedBundle({ repoRoot: input.repoRoot, pathspec: scopeInput.pathspec }),
     runAdvisoryOrchestrator: () => runAdvisoryOrchestrator(input),
-    runGitCommit: () => runGitCommit(input),
+    runGitCommit: (scopeInput) =>
+      runGitCommit({
+        intentId: input.intentId,
+        messageFilePath: input.messageFilePath,
+        registryPath: input.registryPath,
+        repoRoot: input.repoRoot,
+        pathspec: scopeInput.pathspec,
+      }),
     nowIso: () => new Date().toISOString(),
   };
 
@@ -80,11 +88,11 @@ async function runAdvisoryOrchestrator(
 }
 
 async function runGitCommit(
-  input: CommitWorkflowRuntimeInput,
+  input: CommitWorkflowRuntimeInput & { readonly pathspec: CommitWorkflowPathspec },
 ): Promise<CommitWorkflowGitCommitResult> {
   const commit = await spawnProcess({
     command: 'git',
-    args: ['commit', '-F', input.messageFilePath],
+    args: ['commit', '-F', input.messageFilePath, '--', ...input.pathspec],
     cwd: input.repoRoot,
   });
 

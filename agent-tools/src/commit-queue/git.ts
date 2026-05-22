@@ -7,18 +7,21 @@ const STAGED_PATCH_BUFFER_BYTES = 32 * 1024 * 1024;
 /**
  * Input for the intent-scoped staged-bundle read.
  *
- * `pathspec` is mandatory: the scope of the read MUST be declared. The
- * caller is expected to pass the owning commit-queue intent's `files`
- * field so that the staged read returns content for those files only,
- * independent of any concurrent peer staging activity in the shared git
- * index.
+ * `pathspec` is a non-empty tuple: the scope of the read MUST be declared
+ * and MUST contain at least one path. The caller is expected to pass the
+ * owning commit-queue intent's `files` field so that the staged read
+ * returns content for those files only, independent of any concurrent peer
+ * staging activity in the shared git index. The compile-time non-empty
+ * constraint prevents the silent fallback to whole-index reading that
+ * would occur if `git diff --cached -- ` were invoked with an empty
+ * pathspec list.
  *
  * `runGit` is an injection seam for unit tests; production callers omit
  * it and the default real-git invocation runs.
  */
-export interface ScopedStagedBundleInput {
+export interface GetStagedBundleInput {
   readonly repoRoot: string;
-  readonly pathspec: readonly string[];
+  readonly pathspec: readonly [string, ...string[]];
   readonly runGit?: (args: readonly string[]) => string;
 }
 
@@ -30,7 +33,7 @@ export interface ScopedStagedBundleInput {
  * intent's declared file set. Out-of-scope staged content authored by
  * peers does not appear in the returned bundle.
  */
-export function getStagedBundleScoped(input: ScopedStagedBundleInput): StagedBundle {
+export function getStagedBundle(input: GetStagedBundleInput): StagedBundle {
   const runGitBound = input.runGit ?? ((args) => runGit(input.repoRoot, args));
   const pathspecArgs = ['--', ...input.pathspec];
   return {

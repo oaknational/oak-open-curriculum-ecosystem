@@ -4,7 +4,6 @@ import {
   getFreshEntriesAhead,
   recordStagedBundle,
   updateCommitIntentPhase,
-  verifyStagedBundle,
 } from './core.js';
 import {
   nowIso,
@@ -15,7 +14,8 @@ import {
   usage,
 } from './args.js';
 import { runCommitCommand } from './commit-command.js';
-import { getStagedBundleScoped } from './git.js';
+import { getStagedBundle } from './git.js';
+import { narrowIntentPathspec } from './pathspec.js';
 import { createIntent } from './intent.js';
 import { validateCommandOptions } from './options.js';
 import { isCommitQueueReadCommand, runCommitQueueReadCommand } from './read-commands.js';
@@ -25,8 +25,8 @@ import {
   type CommitQueueCliInput,
   type CommitQueueCliOptions,
   type CommitQueueRegistry,
-  type StagedBundle,
 } from './types.js';
+import { writeVerificationResult } from './verify-output.js';
 
 /**
  * Run a commit-queue CLI command against the current repository.
@@ -131,9 +131,14 @@ async function runRecordStagedCommand(input: CommandInputWithCli): Promise<numbe
   const intentId = requireOption(input.options, 'intent-id');
   const registryBefore = await readRegistryForCli(input.input, input.registryPath);
   const intent = requireIntent(registryBefore, intentId);
-  const staged = getStagedBundleScoped({
+  const narrowed = narrowIntentPathspec(intent);
+  if (!narrowed.ok) {
+    process.stderr.write(`intent ${intent.intent_id}: ${narrowed.reason}\n`);
+    return 1;
+  }
+  const staged = getStagedBundle({
     repoRoot: input.input.repoRoot,
-    pathspec: intent.files,
+    pathspec: narrowed.pathspec,
   });
   await updateRegistry(input.registryPath, (registry) => {
     requireIntent(registry, intentId);
@@ -157,11 +162,17 @@ function runVerifyStagedCommand(input: VerifyInput): number {
     return 1;
   }
 
+  const narrowed = narrowIntentPathspec(intent);
+  if (!narrowed.ok) {
+    process.stderr.write(`intent ${intent.intent_id}: ${narrowed.reason}\n`);
+    return 1;
+  }
+
   return writeVerificationResult({
     intent,
-    staged: getStagedBundleScoped({
+    staged: getStagedBundle({
       repoRoot: input.repoRoot,
-      pathspec: intent.files,
+      pathspec: narrowed.pathspec,
     }),
     commitSubject: requireOption(input.options, 'commit-subject'),
   });
@@ -192,32 +203,6 @@ function isHelpCommand(command: string | undefined, options: CommitQueueCliOptio
 
 function writeStdout(input: CommitQueueCliInput, chunk: string): void {
   (input.stdout ?? process.stdout).write(chunk);
-}
-
-function writeVerificationResult(input: {
-  readonly intent: CommitIntent;
-  readonly staged: StagedBundle;
-  readonly commitSubject: string;
-}): number {
-  const result = verifyStagedBundle({
-    intent: input.intent,
-    stagedNameOnly: input.staged.stagedNameOnly,
-    stagedNameStatus: input.staged.stagedNameStatus,
-    stagedPatch: input.staged.stagedPatch,
-    worktreeShortStatus: input.staged.worktreeShortStatus,
-    commitSubject: input.commitSubject,
-  });
-
-  if (!result.ok) {
-    process.stderr.write(`${result.reason}\n`);
-    return 1;
-  }
-
-  if (result.warning !== undefined) {
-    process.stderr.write(`${result.warning}\n`);
-  }
-  process.stdout.write(`${result.fingerprint}\n`);
-  return 0;
 }
 
 function requireIntent(registry: CommitQueueRegistry, intentId: string): CommitIntent {

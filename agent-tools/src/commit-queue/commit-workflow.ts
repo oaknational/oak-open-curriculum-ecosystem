@@ -18,6 +18,7 @@
  */
 
 import { completeCommitIntent, updateCommitIntentPhase, verifyStagedBundle } from './core.js';
+import { narrowIntentPathspec, type CommitWorkflowPathspec } from './pathspec.js';
 import { type CommitIntent, type CommitQueueRegistry, type StagedBundle } from './types.js';
 
 /**
@@ -43,9 +44,11 @@ export interface CommitWorkflowDependencies {
   readonly transformRegistry: (
     transform: (registry: CommitQueueRegistry) => CommitQueueRegistry,
   ) => Promise<void>;
-  readonly getStagedBundle: (input: { readonly pathspec: readonly string[] }) => StagedBundle;
+  readonly getStagedBundle: (input: { readonly pathspec: CommitWorkflowPathspec }) => StagedBundle;
   readonly runAdvisoryOrchestrator: () => Promise<CommitWorkflowProcessResult>;
-  readonly runGitCommit: () => Promise<CommitWorkflowGitCommitResult>;
+  readonly runGitCommit: (input: {
+    readonly pathspec: CommitWorkflowPathspec;
+  }) => Promise<CommitWorkflowGitCommitResult>;
   readonly nowIso: () => string;
 }
 
@@ -89,6 +92,12 @@ export interface CommitWorkflowInput {
  * Run the post-staging commit workflow. Sequencing matches the SKILL
  * doctrine: verify-staged → advisory orchestrator → phase pre_commit →
  * verify-staged-again → git commit → complete intent.
+ *
+ * The loaded intent is narrowed once at entry: `intent.files` must be
+ * non-empty for the workflow to proceed. The narrowed pathspec then flows
+ * into every dep call that touches scoped git state (both verify-staged
+ * reads and the inner `git commit`), so the dep boundary is structurally
+ * incapable of being called with an empty pathspec.
  */
 export async function runCommitWorkflow(input: CommitWorkflowInput): Promise<CommitWorkflowResult> {
   const loaded = await loadIntent(input);
@@ -96,7 +105,23 @@ export async function runCommitWorkflow(input: CommitWorkflowInput): Promise<Com
     return loaded.failure;
   }
 
-  const beforeFailure = await runVerifyStage(input, loaded.intent, 'verify-staged-before');
+  const narrowed = narrowIntentPathspec(loaded.intent);
+  if (!narrowed.ok) {
+    await abandonIntent({ input, stage: 'git-commit', reason: narrowed.reason });
+    return {
+      ok: false,
+      stage: 'git-commit',
+      reason: narrowed.reason,
+      intentId: input.intentId,
+    };
+  }
+
+  const beforeFailure = await runVerifyStage(
+    input,
+    loaded.intent,
+    narrowed.pathspec,
+    'verify-staged-before',
+  );
   if (beforeFailure !== undefined) {
     return beforeFailure;
   }
@@ -104,12 +129,21 @@ export async function runCommitWorkflow(input: CommitWorkflowInput): Promise<Com
   const advisory = await input.deps.runAdvisoryOrchestrator();
   await transitionPhase(input, 'pre_commit');
 
-  const afterFailure = await runVerifyStage(input, loaded.intent, 'verify-staged-after');
+  const afterFailure = await runVerifyStage(
+    input,
+    loaded.intent,
+    narrowed.pathspec,
+    'verify-staged-after',
+  );
   if (afterFailure !== undefined) {
     return afterFailure;
   }
 
-  return runCommitAndComplete({ input, advisoryExitCode: advisory.exitCode });
+  return runCommitAndComplete({
+    input,
+    advisoryExitCode: advisory.exitCode,
+    pathspec: narrowed.pathspec,
+  });
 }
 
 async function loadIntent(
@@ -137,39 +171,40 @@ async function loadIntent(
 async function runVerifyStage(
   input: CommitWorkflowInput,
   intent: CommitIntent,
+  pathspec: CommitWorkflowPathspec,
   stage: 'verify-staged-before' | 'verify-staged-after',
 ): Promise<CommitWorkflowResult | undefined> {
-  const verification = verifyStagedAgainstIntent({
+  const staged = input.deps.getStagedBundle({ pathspec });
+  const result = verifyStagedBundle({
     intent,
-    staged: input.deps.getStagedBundle({ pathspec: intent.files }),
+    stagedNameOnly: staged.stagedNameOnly,
+    stagedNameStatus: staged.stagedNameStatus,
+    stagedPatch: staged.stagedPatch,
+    worktreeShortStatus: staged.worktreeShortStatus,
+    commitSubject: intent.commit_subject,
   });
-  if (verification.ok) {
+  if (result.ok) {
     return undefined;
   }
 
-  await abandonIntent({ input, stage, reason: verification.reason });
-  return {
-    ok: false,
-    stage,
-    reason: verification.reason,
-    intentId: input.intentId,
-  };
+  await abandonIntent({ input, stage, reason: result.reason });
+  return { ok: false, stage, reason: result.reason, intentId: input.intentId };
 }
 
 async function runCommitAndComplete(input: {
   readonly input: CommitWorkflowInput;
   readonly advisoryExitCode: number;
+  readonly pathspec: CommitWorkflowPathspec;
 }): Promise<CommitWorkflowResult> {
-  const commitResult = await input.input.deps.runGitCommit();
+  const commitResult = await input.input.deps.runGitCommit({ pathspec: input.pathspec });
   if (commitResult.exitCode !== 0 || commitResult.sha === undefined) {
-    const reason = describeGitCommitFailure(commitResult);
+    const trimmedStderr = commitResult.stderr.trim();
+    const reason =
+      trimmedStderr.length === 0
+        ? `git commit exited with code ${commitResult.exitCode}`
+        : `git commit exited with code ${commitResult.exitCode}: ${trimmedStderr}`;
     await abandonIntent({ input: input.input, stage: 'git-commit', reason });
-    return {
-      ok: false,
-      stage: 'git-commit',
-      reason,
-      intentId: input.input.intentId,
-    };
+    return { ok: false, stage: 'git-commit', reason, intentId: input.input.intentId };
   }
 
   await input.input.deps.transformRegistry((current) =>
@@ -182,22 +217,6 @@ async function runCommitAndComplete(input: {
     sha: commitResult.sha,
     advisoryExitCode: input.advisoryExitCode,
   };
-}
-
-function verifyStagedAgainstIntent(input: {
-  readonly intent: CommitIntent;
-  readonly staged: StagedBundle;
-}): { readonly ok: true } | { readonly ok: false; readonly reason: string } {
-  const result = verifyStagedBundle({
-    intent: input.intent,
-    stagedNameOnly: input.staged.stagedNameOnly,
-    stagedNameStatus: input.staged.stagedNameStatus,
-    stagedPatch: input.staged.stagedPatch,
-    worktreeShortStatus: input.staged.worktreeShortStatus,
-    commitSubject: input.intent.commit_subject,
-  });
-
-  return result.ok ? { ok: true } : { ok: false, reason: result.reason };
 }
 
 async function transitionPhase(input: CommitWorkflowInput, phase: 'pre_commit'): Promise<void> {
@@ -225,13 +244,4 @@ async function abandonIntent(input: {
       notes: `commit-workflow ${input.stage} failure: ${input.reason}`,
     }),
   );
-}
-
-function describeGitCommitFailure(result: CommitWorkflowGitCommitResult): string {
-  const trimmedStderr = result.stderr.trim();
-  if (trimmedStderr.length === 0) {
-    return `git commit exited with code ${result.exitCode}`;
-  }
-
-  return `git commit exited with code ${result.exitCode}: ${trimmedStderr}`;
 }

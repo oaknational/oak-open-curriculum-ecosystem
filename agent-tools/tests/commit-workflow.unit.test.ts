@@ -120,6 +120,7 @@ interface FakeDepsCallLog {
   readonly stagedBundlePathspecs: readonly (readonly string[])[];
   readonly advisoryCalls: { current: number };
   readonly gitCommitCalls: { current: number };
+  readonly gitCommitPathspecs: readonly (readonly string[])[];
   readonly nowCalls: { current: number };
   readonly transformationCalls: { current: number };
 }
@@ -132,6 +133,7 @@ function fakeDeps(input: FakeDepsInput): {
   const stagedBundlePathspecs: (readonly string[])[] = [];
   const advisoryCalls = { current: 0 };
   const gitCommitCalls = { current: 0 };
+  const gitCommitPathspecs: (readonly string[])[] = [];
   const nowCalls = { current: 0 };
   const transformationCalls = { current: 0 };
   const advisory: CommitWorkflowProcessResult = input.advisoryResult ?? {
@@ -170,8 +172,9 @@ function fakeDeps(input: FakeDepsInput): {
       advisoryCalls.current += 1;
       return advisory;
     },
-    runGitCommit: async () => {
+    runGitCommit: async (scopeInput) => {
       gitCommitCalls.current += 1;
+      gitCommitPathspecs.push(scopeInput.pathspec);
       return gitCommit;
     },
     nowIso: () => {
@@ -188,6 +191,7 @@ function fakeDeps(input: FakeDepsInput): {
       stagedBundlePathspecs,
       advisoryCalls,
       gitCommitCalls,
+      gitCommitPathspecs,
       nowCalls,
       transformationCalls,
     },
@@ -376,6 +380,104 @@ describe('runCommitWorkflow — unknown intent id', () => {
     expect(holder.current.commit_queue.length).toBe(1);
     expect(calls.transformationCalls.current).toBe(0);
     expect(calls.gitCommitCalls.current).toBe(0);
+  });
+});
+
+describe('runCommitWorkflow — invariant (f): runGitCommit pathspec threading', () => {
+  it('threads intent.files through the runGitCommit dependency seam as pathspec, so the inner git commit lands only the intent-declared files regardless of any peer staging activity in the shared index', async () => {
+    const holder = holderFor(initialRegistry());
+    const { deps, calls } = fakeDeps({
+      holder,
+      stagedBundles: [matchingStagedBundle(), matchingStagedBundle()],
+    });
+
+    await runCommitWorkflow({ intentId, deps });
+
+    expect(calls.gitCommitPathspecs).toStrictEqual([
+      ['agent-tools/src/commit-queue/commit-workflow.ts'],
+    ]);
+  });
+
+  it('threads a different intent.files value through the runGitCommit dependency seam when the loaded intent declares a different file set', async () => {
+    const altFiles: readonly string[] = [
+      'agent-tools/src/commit-queue/git.ts',
+      'agent-tools/src/commit-queue/cli.ts',
+    ];
+    const altNameStatus = `M\t${altFiles[0]}\nM\t${altFiles[1]}\n`;
+    const altPatch = `diff --git a/${altFiles[0]} b/${altFiles[0]}\ndiff --git a/${altFiles[1]} b/${altFiles[1]}\n`;
+    const altFingerprint = createStagedBundleFingerprint({
+      nameStatus: altNameStatus,
+      patch: altPatch,
+    });
+    const altBundle: StagedBundle = {
+      stagedNameOnly: `${altFiles[0]}\n${altFiles[1]}\n`,
+      stagedNameStatus: altNameStatus,
+      stagedPatch: altPatch,
+      worktreeShortStatus: `M  ${altFiles[0]}\nM  ${altFiles[1]}\n`,
+    };
+    const altIntent = queuedIntent({
+      files: altFiles,
+      staged_bundle_fingerprint: altFingerprint,
+      staged_name_status: altNameStatus,
+    });
+    const holder = holderFor(initialRegistry(altIntent));
+    const { deps, calls } = fakeDeps({
+      holder,
+      stagedBundles: [altBundle, altBundle],
+    });
+
+    await runCommitWorkflow({ intentId, deps });
+
+    expect(calls.gitCommitPathspecs).toStrictEqual([altFiles]);
+  });
+});
+
+describe('runCommitWorkflow — invariant (g): empty intent.files boundary guard', () => {
+  it('fails the workflow before invoking runGitCommit when the loaded intent declares no files, so an empty-pathspec commit is never delegated to git', async () => {
+    const emptyIntent = queuedIntent({
+      files: [],
+      staged_bundle_fingerprint: createStagedBundleFingerprint({ nameStatus: '', patch: '' }),
+      staged_name_status: '',
+    });
+    const holder = holderFor(initialRegistry(emptyIntent));
+    const { deps, calls } = fakeDeps({
+      holder,
+      stagedBundles: [],
+    });
+
+    const result = await runCommitWorkflow({ intentId, deps });
+
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      return;
+    }
+    expect(result.stage).toBe('git-commit');
+    expect(result.reason).toMatch(/empty/i);
+    expect(result.reason).toMatch(/files|pathspec|intent/i);
+    expect(calls.gitCommitCalls.current).toBe(0);
+    expect(calls.gitCommitPathspecs).toStrictEqual([]);
+    expect(calls.advisoryCalls.current).toBe(0);
+    expect(calls.stagedBundleCalls.current).toBe(0);
+  });
+
+  it('transitions the empty-files intent to abandoned with notes naming the git-commit stage so the audit trail records the failure surface', async () => {
+    const emptyIntent = queuedIntent({
+      files: [],
+      staged_bundle_fingerprint: createStagedBundleFingerprint({ nameStatus: '', patch: '' }),
+      staged_name_status: '',
+    });
+    const holder = holderFor(initialRegistry(emptyIntent));
+    const { deps } = fakeDeps({
+      holder,
+      stagedBundles: [],
+    });
+
+    await runCommitWorkflow({ intentId, deps });
+
+    const intent = holder.current.commit_queue.find((entry) => entry.intent_id === intentId);
+    expect(intent?.phase).toBe('abandoned');
+    expect(intent?.notes).toMatch(/^commit-workflow git-commit failure: /);
+    expect(intent?.notes).toMatch(/empty/i);
   });
 });
 
