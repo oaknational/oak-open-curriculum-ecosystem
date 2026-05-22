@@ -50,8 +50,8 @@ todos:
     status: pending
     workstream: compare
   - id: t9-guidance-constant
-    content: "eef-evidence-guidance.ts with AGGREGATED_EEF_EVIDENCE_GUIDANCE (preserves R1, R3, R7 prescriptions)."
-    status: pending
+    content: "eef-evidence-guidance.ts with AGGREGATED_EEF_EVIDENCE_GUIDANCE — preserves R1 + R7 prose prescriptions only (R3 scoring-structural, R8 response-structural; see §Phase E for rationale)."
+    status: completed
     workstream: corpus-loading
     cross_cuts: [recommend, explain, compare, prompt-a, prompt-b]
   - id: t10-lesson-plan-prompt
@@ -404,7 +404,7 @@ This plan must satisfy all eight. Mapping to executable todos below:
 
 | Req | Subject | Where it lands |
 |---|---|---|
-| **R1** Epistemic honesty | every recommendation includes impact + evidence + caveat | T5, T6, T12 (structural enforcement) |
+| **R1** Epistemic honesty | every recommendation includes impact + evidence + caveat | T5, T6, T12 (structural enforcement) + T9 (prose framing for LLM-facing output) |
 | **R2** Transparent scoring | weighting exposed in tool response | T5, T6 |
 | **R3** Disadvantage-gap priority | PP relevance as first-class param | T5, T6, T11 |
 | **R4** Synthesis boundary | no individual study citations | T6 (out by design); T12 enforces |
@@ -798,11 +798,21 @@ and useful standalone.
 ### Phase E: Guidance and prompts (T9–T11)
 
 **T9: `eef-evidence-guidance.ts`** — `AGGREGATED_EEF_EVIDENCE_GUIDANCE`
-constant. Preserves the predecessor T5 content: always cite evidence
-strength alongside impact, surface caveats, frame as decision-support
-not prescription, note partial coverage honestly. The guidance is
-imported into all three tool definitions (T6, T7, T8) so agents see
-consistent framing.
+constant **(landed 2026-05-22)**. Single-string `as const` aggregating
+the two prose-shaped R-prescriptions: R1 (epistemic honesty — surface
+evidence strength alongside impact, name the population-average
+caveat, name implementation quality as the strongest moderator) and
+R7 (professional-judgement framing — results are decision-support
+that inform, not replace, the teacher's judgement). R3
+(disadvantage-gap priority) is enforced structurally via t5-scoring-
+engine PP-weighting; R8 (partial-coverage honesty) is enforced
+structurally via the `data_coverage` field on the response envelope.
+Neither belongs in prose guidance — duplicating a structural
+commitment as advisory text is the anti-pattern the citation envelope
+(`citation-shape.ts`) exists to prevent. The guidance constant will
+be imported into all gate-1a and gate-1b consumer surfaces (t6/t6a/
+t7/t8/t10/t11 — none of those consumers exist yet at landing) so
+agents see consistent framing as the surfaces come online.
 
 **T10: `eef-evidence-grounded-lesson-plan` prompt** — preserves predecessor
 T10 verbatim, including F8 resolution (step 3 = extract implementation
@@ -1182,7 +1192,7 @@ Before promoting:
 | `packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/scoring.ts` | NEW (corpus extension; this plan) |
 | `packages/sdks/oak-curriculum-sdk/src/mcp/eef-methodology-resource.ts` | NEW |
 | `packages/sdks/oak-curriculum-sdk/src/mcp/eef-strands-resource.ts` | NEW |
-| `packages/sdks/oak-curriculum-sdk/src/mcp/eef-evidence-guidance.ts` | NEW |
+| `packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-guidance.ts` | NEW (landed 2026-05-22) |
 | `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-eef-recommend.ts` | NEW |
 | `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-eef-explain.ts` | NEW (this plan adds) |
 | `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-eef-compare.ts` | NEW (this plan adds) |
