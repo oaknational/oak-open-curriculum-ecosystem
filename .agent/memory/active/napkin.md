@@ -125,3 +125,99 @@ pre-empted that drain.
   use in a session, even when the action feels obvious from a sister
   command's pattern. Cheap (~1s); cure for silent type confusion.
   Source plane: `operational`.
+
+## 2026-05-22 — Blustery Lifting Plume / claude / claude-opus-4-7 / `d4aad7`
+
+### Mistake: comms-watcher setup keeps reproducing the same two failure modes
+
+- **Mistake**: started the all-channels comms watcher with two errors that
+  immediately stopped it from picking up live messages: (a) the seen-file
+  `.agent/state/collaboration/comms-seen/blustery-lifting-plume.json` did
+  not exist, so the CLI treated all ~862 historical events as unseen and
+  began draining them as if they were new — backfill flood drowns any live
+  signal until the queue clears; (b) I wrapped the watcher in
+  `| grep -E "^\[BROADCAST\]|^\[GROUP\]|..."` thinking I was preserving
+  the four-channel discipline, but the channel-tag is only on the first
+  line of each event, so multi-line event bodies were silently filtered
+  out and the SKILL's "self-exclusion only" principle was violated at the
+  watcher boundary.
+- **Owner correction**: *"Why is your monitor failing to pick up
+  messages?"* — direct diagnostic question pointing at both errors at
+  once.
+- **Cure shape**: standardise the watcher invocation in
+  `.agent/skills/start-right-team/SKILL-CANONICAL.md` §0 so agents cannot
+  make these mistakes. Concrete shape candidates: (1) make the CLI itself
+  prime the seen-file from the current `comms/` directory on first run if
+  the seen-file does not exist (cheap; one `readdir` + write); (2) the
+  SKILL invocation example bakes in the seen-file priming step as a
+  pre-watcher one-liner; (3) the SKILL forbids any pipe past the watcher
+  CLI in normative language — self-exclusion is the CLI's job, and
+  agent-side `grep` defeats the all-channels guarantee. Both surfaces
+  (SKILL + CLI) should converge so the muscle-memory invocation is
+  correct by construction.
+- **Recurrence diagnostic**: the SKILL already names this exact failure
+  mode in the abstract ("A watcher that filters to a single view ...
+  discards the others and will miss vital coordination") but the
+  copy/paste-able example does not pre-prime the seen-file, and there is
+  no example of what NOT to add after the CLI. Passive doctrine; needs
+  mechanical cure at the SKILL invocation example AND ideally inside the
+  CLI itself. Same shape as the F1 cross-cutting constraint
+  (passive-guidance-loses-to-artefact-gravity) — the agent reaches for
+  the obvious filter even though the doctrine forbids it.
+- **Falsifiability**: next session that opens a `start-right-team`
+  watcher should produce no backfill flood and no agent-side filter; if
+  either appears, the SKILL/CLI change has not landed yet.
+  Source plane: `operational`. Routing: PDR/skill-amend candidate for
+  pending-graduations on second-instance accumulation (this is instance
+  one captured against the existing abstract doctrine); also a candidate
+  CLI feature (`comms watch` auto-prime-on-missing-seen-file).
+
+- **2026-05-22 (Flamebright Igniting Forge / `claude` / Opus 4.7 1M /
+  `9a01f3`) — observation: the coordinator role, when one exists,
+  benefits from a `/loop` running.**
+- **Trigger**: owner invoked `/loop 180s review new messages, assess
+  progress towards goals, send corrections where necessary, instruct
+  agents to launch specialist reviewers where necessary, review which
+  agents need to rotate out and instruct them to wind up their work and
+  run the team session complete workflow and surface the need for
+  additional agent instance to the user` after the team coalesced
+  (3 agents on-channel). Owner explicitly asked the observation be
+  captured here when the loop's value became clear.
+- **Why this is load-bearing**: a coordinator without a periodic
+  scheduled tick is purely reactive — they sweep comms when events
+  arrive but cannot detect what is NOT happening. Several coordinator
+  decisions this session depended on time-based assessment the event
+  stream alone could not surface: (a) Blustery silence at the ~5min
+  threshold during commit-window work (no event to react to; the
+  absence is the signal); (b) agent cadence-rule violations
+  (SKILL §5 120s progress-report rule) are by definition
+  negative-space observations the loop is built to detect;
+  (c) idle blocker drift (Midnight held at commit boundary with
+  declining headroom while waiting on a peer commit); (d) timing of
+  additional-agent dispatch surfacing (the right moment is
+  cycle-cadence-aware, not event-aware).
+- **Cure shape**: any coordinator-shaped session should default to
+  running a `/loop` at slightly longer than the agent-cadence-rule
+  interval (cadence rule is 120s; recommended cron is `*/3 * * * *` =
+  180s so the loop is a safety-net not a noisemaker). The loop prompt
+  should cover: review new messages, assess progress, send corrections,
+  dispatch specialist reviewers where needed, review rotation
+  candidates, surface additional-agent need. Owner-explicit invocation
+  is today's shape; future candidate is the start-right-team SKILL
+  adding a §"Coordinator activation" section baking the loop-invocation
+  suggestion into the coordinator's first moves.
+- **Architectural framing**: this is event-driven-coordination plus
+  time-driven-coordination, not either-or. Events fire when something
+  happens; the loop fires when the right amount of time has passed.
+  Together they cover both "what changed" and "what should have changed
+  but didn't." Either alone has structural blind spots.
+- **Source plane**: `operational`. Routing: candidate
+  start-right-team SKILL amendment under a new §"Coordinator activation"
+  section. Until that lands, owner-invoked `/loop` is the standing
+  pattern for any coordinated multi-agent session with a named
+  coordinator.
+- **Falsifiability**: a future coordinated multi-agent session that
+  opens without a `/loop` should show coordination drift on time-based
+  signals (silent agents past cadence, idle blockers, missed dispatch
+  timing); if it does not, the loop is less load-bearing than this
+  entry claims and the entry should be downgraded.

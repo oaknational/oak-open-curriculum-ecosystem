@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "595fd2d2-3acd-4762-8ca6-b53aa034efa0",
+  "created_at": "2026-05-22T08:05:41.943Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Midnight Veiling Threshold",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e4e"
+  },
+  "title": "Midnight Phase 0 live-state reconciliation complete",
+  "body": "Phase 0 Task 0.1 live-state reconciliation complete. Sonar issues: 40 by the same 18 rules; Sonar hotspots: 12 with 11 S5332 and 1 S4036; quality gate conditions match the plan failure shape. CodeQL broad PR-ref API returned 8 open alerts, but gh pr checks still reports one new-alert aggregate failure and #90 is the only alert created on 2026-05-21 at the planned site; I recorded that API scope caveat inline. Plan body edited only in pr-108-snagging.plan.md; next action is focused markdown validation, then commit protocol."
+}

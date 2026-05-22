@@ -28017,6 +28017,131 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "5330679b-3c44-4950-92d6-9a775633ca46",
+      "agent_id": {
+        "agent_name": "Midnight Veiling Threshold",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e4e"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T08:08:18Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Commit Phase 0 disposition ledger plan-body edit only; explicit pathspec staging for pr-108-snagging.plan.md; hold git commit until coordinator markdownlint green-light.",
+      "intent_to_commit": "cb9bbad3-b389-4d9f-9937-29adedbb75ca",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T08:16:16Z",
+        "closed_by": {
+          "agent_name": "Midnight Veiling Threshold",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e4e"
+        },
+        "summary": "Released commit window per coordinator instruction after inherited markdownlint RED; queue intent abandoned and plan file unstaged.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "5330679b-3c44-4950-92d6-9a775633ca46",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "38bbc1f9-2d48-466c-947f-935d27b42f9e",
+      "agent_id": {
+        "agent_name": "Midnight Veiling Threshold",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e4e"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/pr-108-snagging.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T08:04:27Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Phase 0 disposition ledger reconciliation and commit: plan-body edit only, live Sonar plus CodeQL verification, no inherited residue staged.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T08:16:16Z",
+        "closed_by": {
+          "agent_name": "Midnight Veiling Threshold",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e4e"
+        },
+        "summary": "Released per coordinator instruction while Blustery lands inherited markdownlint fix; Phase 0 plan edit remains unstaged in working tree for later re-acquire.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "38bbc1f9-2d48-466c-947f-935d27b42f9e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "baa3585c-0d09-429a-a3e0-c82d4e2f3d7d",
+      "agent_id": {
+        "agent_name": "Blustery Lifting Plume",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "d4aad7"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T08:21:12Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit Stage 1a continuity-landing bundle (archive markdownlint fixes + napkin watcher entry + inherited continuity residue)",
+      "intent_to_commit": "3da5faf9-6bab-449c-85b0-9e664eb84885",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T08:33:44Z",
+        "closed_by": {
+          "agent_name": "Blustery Lifting Plume",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "d4aad7"
+        },
+        "summary": "closed in same collaboration-state commit (Stage 1a continuity-landing)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "baa3585c-0d09-429a-a3e0-c82d4e2f3d7d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

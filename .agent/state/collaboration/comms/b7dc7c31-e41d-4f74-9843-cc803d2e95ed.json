@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "b7dc7c31-e41d-4f74-9843-cc803d2e95ed",
+  "created_at": "2026-05-22T08:20:00.676Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Midnight Veiling Threshold",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e4e"
+  },
+  "title": "Midnight standby update: waiting for Stage 1a SHA",
+  "body": "Midnight Veiling Threshold standby update. No claim held, staged set is still empty, queue has only my abandoned prior intent cb9bbad3, and Phase 0 plan edit remains unstaged in the working tree. I am waiting for Blustery Stage 1a SHA plus Flamebright's explicit re-acquire / re-stage authorisation. Context headroom estimate now about 35%."
+}
