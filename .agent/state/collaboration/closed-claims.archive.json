@@ -28142,6 +28142,342 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "da6ffc40-3186-429e-b37b-696f21c228e7",
+      "agent_id": {
+        "agent_name": "Blustery Lifting Plume",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "d4aad7"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/archive/pending-graduations-archive-2026-05-22.md",
+            ".agent/memory/operational/archive/repo-continuity-session-history-2026-05-22.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T08:17:13Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Stage 1a continuity-landing: fix archive markdownlint (13 MD012 + 1 MD012 + 1 MD032) + commit watcher-failure napkin + include inherited continuity residue per coordinator authorisation 5f73ebaf",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T08:34:52Z",
+        "closed_by": {
+          "agent_name": "Blustery Lifting Plume",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "d4aad7"
+        },
+        "summary": "landed at 5b8635c4 chore(continuity): Stage 1a continuity-landing complete",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "da6ffc40-3186-429e-b37b-696f21c228e7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2afaad06-fa10-4147-897f-6cb01070df20",
+      "agent_id": {
+        "agent_name": "Midnight Veiling Threshold",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e4e"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/pr-108-snagging.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T08:35:21Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Phase 0 disposition ledger commit after Stage 1a markdownlint fix landed at 5b8635c4; plan-body edit only.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T08:36:44Z",
+        "closed_by": {
+          "agent_name": "Midnight Veiling Threshold",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e4e"
+        },
+        "summary": "Phase 0 disposition ledger landed at 5af5e289; plan-body edit only; full pre-commit hook green.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2afaad06-fa10-4147-897f-6cb01070df20",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d6e5cb67-204e-43e9-8ada-e47392436a12",
+      "agent_id": {
+        "agent_name": "Midnight Veiling Threshold",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e4e"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T08:35:21Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Commit Phase 0 disposition ledger plan-body edit only; explicit pathspec staging for pr-108-snagging.plan.md after Stage 1a fix.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T08:36:44Z",
+        "closed_by": {
+          "agent_name": "Midnight Veiling Threshold",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e4e"
+        },
+        "summary": "Commit window closed: Phase 0 disposition ledger committed at 5af5e289; queue intent d78fa2c0 completed; staged set clean after commit.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d6e5cb67-204e-43e9-8ada-e47392436a12",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "30d3434c-821a-412c-b20a-ff54555de7dc",
+      "agent_id": {
+        "agent_name": "Midnight Veiling Threshold",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e4e"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T08:39:21Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Owner-requested napkin capture for Midnight Phase 0 session insights; no source/plan edits.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T08:40:10Z",
+        "closed_by": {
+          "agent_name": "Midnight Veiling Threshold",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e4e"
+        },
+        "summary": "Owner-requested napkin capture added for Midnight Phase 0 insights; markdownlint-check:root on napkin passed; no commit requested.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "30d3434c-821a-412c-b20a-ff54555de7dc",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "faae28af-f2dd-40ea-b1f1-d051396b2126",
+      "agent_id": {
+        "agent_name": "Salty Charting Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e4e"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T08:57:29Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit PR-108 Cycle 4.1 S6653 mechanical fix for cli option ownership checks.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T08:58:36Z",
+        "closed_by": {
+          "agent_name": "Salty Charting Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e4e"
+        },
+        "summary": "Committed Cycle 4.1 S6653 mechanical fix as 73ab1624; queue intent 8918ad16 completed; staged bundle was agent-tools/src/context-cost/cli-options.ts only.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "faae28af-f2dd-40ea-b1f1-d051396b2126",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8306e709-f2df-4f50-a990-3be26109faa5",
+      "agent_id": {
+        "agent_name": "Salty Charting Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e4e"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T09:00:48Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit PR-108 Cycle 4.2 S6594 mechanical RegExp.exec fix with Salty lifecycle residue.",
+      "intent_to_commit": "469c2e4b-281d-48ea-8421-dddf5d23d205",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T09:01:13Z",
+        "closed_by": {
+          "agent_name": "Salty Charting Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e4e"
+        },
+        "summary": "Abandoned Cycle 4.2 commit window before staging because git index already contained foreign staged file apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts outside Salty bundle; no index changes made by Salty.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8306e709-f2df-4f50-a990-3be26109faa5",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "4f622868-a1b4-49ec-a059-62bacd4d0d71",
+      "agent_id": {
+        "agent_name": "Flamebright Igniting Forge",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "9a01f3"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T09:00:06.000Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit PR-108 Cycle 1 TSDoc extension for setupBaseMiddleware",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T09:03:25.000Z",
+        "closed_by": {
+          "agent_name": "Flamebright Igniting Forge",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "9a01f3"
+        },
+        "summary": "Cycle 1 commit 77463a22 landed clean; husky 87/87 green",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4f622868-a1b4-49ec-a059-62bacd4d0d71",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "5e51d6b4-a418-41eb-9c1b-f04687d9df41",
+      "agent_id": {
+        "agent_name": "Flamebright Igniting Forge",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "9a01f3"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T08:58:39.000Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "PR-108 snagging Cycle 1: extend setupBaseMiddleware TSDoc to cover both CodeQL #69 and #90",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T09:03:26.000Z",
+        "closed_by": {
+          "agent_name": "Flamebright Igniting Forge",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "9a01f3"
+        },
+        "summary": "Cycle 1 file claim closed; commit 77463a22",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "5e51d6b4-a418-41eb-9c1b-f04687d9df41",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

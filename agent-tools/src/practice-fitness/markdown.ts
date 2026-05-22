@@ -13,7 +13,7 @@ export interface ClassifiedLine {
 }
 
 export function extractFrontmatter(content: string): string | null {
-  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  const match = /^---\r?\n([\s\S]*?)\r?\n---/.exec(content);
   return match?.[1] ?? null;
 }
 
