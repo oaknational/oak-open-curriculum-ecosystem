@@ -253,6 +253,16 @@ Substance summary: owner design prompt during 2026-05-12 P5 queue-pressure windo
 
 Falsifiability: a future behaviour-nudge implementation that proceeds without these safeguards (silent reordering, hard scheduling authority, no decay) is the failure mode this entry warns about; an implementation that adopts the safeguards in shape is the success.
 
+### 2026-05-22 — Dispatch PENDING reviewers at session-close, not next-session-open (session-handoff SKILL amendment)
+
+`[captured: 2026-05-22 | source: napkin §"Insight: pending reviewer dispatches at session-end are cheap" (Charcoal evening session) | target: skill-amend:session-handoff (new sub-step or step-6b extension) | trigger: second-instance(PENDING reviewer marker persists across ≥2 sessions for the same plan) | size: S | status: pending]`
+
+Substance: when a plan's `Reviewer Dispatch Log` carries PENDING reviewer markers AND the current session has touched that plan's body, dispatching the pending reviewers at session-close (parallel sub-agent calls, ~60s each) is dramatically cheaper than deferring them to "the next implementer". The next implementer's session-open then opens with the reviewers' verdicts already absorbed, the plan body internally coherent, and the MUST-NOT-BEGIN gate cleared. Worked instance this session: `type-expert` + `assumptions-expert` carried PENDING markers across Stormbound's 2026-05-22 afternoon session and Velvet's evening review-only session; Charcoal dispatched them in parallel at session-close (single-message Agent tool calls), absorbed verdicts in ~60s, and landed `2adeccec`. Cycle 1.3 went from "blocked on reviewer dispatch" to "ready for TDD authoring" without the next implementer paying any reviewer-dispatch cost.
+
+Why pending: single instance with full cure executed. A second instance — a thread record carrying PENDING reviewer markers, a session touching that thread's plan, but the closing agent defers the dispatch to the next implementer — would cross the trigger. The cure shape is a small addition to `session-handoff/SKILL-CANONICAL.md` step 6 (or step 9 consolidation gate): "If the current thread record's plan carries PENDING reviewer markers AND this session touched the plan's body, dispatch the pending reviewers as a session-close move before declaring handoff complete. Absorb verdicts; flip markers; commit."
+
+Falsifiability: a future session-handoff where PENDING reviewer markers persist across the handoff despite the session having touched the plan is the failure mode this entry warns about. A handoff that dispatches and absorbs is the success shape.
+
 ### 2026-05-22 — Routing broadcast vs claim release distinction (rule-shaped or PDR-shaped)
 
 `[captured: 2026-05-22 | source: comms-events bfa99e61 (routing broadcast) + b67a3240 (sidebar discovering overlap) + 23afa78a (explicit release) | target: pdr:routing-vs-claim-release-distinction OR rule:routing-requires-claim-release | trigger: second-instance(routing precedes release without explicit release-action) | size: S | status: pending]`
