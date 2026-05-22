@@ -183,6 +183,24 @@ list; entry-level summary index is intentionally omitted to avoid
 duplicating entry-body substance and to keep the index honest as
 the queue churns.
 
+### 2026-05-22 — Cycle decomposition that produces wrong-layer scaffolding tests is the load-bearing shape (testing-strategy amendment OR pattern)
+
+`[captured: 2026-05-22 | source: starlit/commit-queue-intent-scope-discipline arc closeout via metacognition pass | target: pattern:where-system-state-is-observable-at-plan-author-time OR amendment:testing-strategy.md-or-tdd-as-design.md | trigger: second instance from a different plan OR owner direction to author | size: S | status: pending]`
+
+Substance summary: the commit-queue-intent-scope-discipline arc was originally decomposed into three TDD cycles each describing an internal seam (Cycle 1.1 record-staged read seam; Cycle 1.2 verify-staged read seam; Cycle 1.3 commit invocation). Each cycle's tests reached past the workflow into the read mechanism, producing implementation-coupled scaffolding tests (`fakeRunGitFor` re-implementing git argv parsing; assertions on argv-derived strings) that violated `testing-strategy.md` §"NEVER create complex mocks" + §"Test real behaviour, not implementation details". The metacognition pass at Cycle 1.3 surfaced that the system state was one state (commit-queue commit honours intent.files scope across peer staging drift) takes one describing surface at the workflow seam, not three at internal read mechanisms. Cycle 1.3 reshape: workflow-level invariants in `commit-workflow.unit.test.ts` via capture-list pattern on injected deps; two scaffolding test files deleted; one cycle of test-and-product co-design where the system state finally gets described at the right layer.
+
+**Underlying pattern**: when planning multi-cycle structural changes, ask at plan-author time **where the system state will be observable**. If the answer is "at one boundary" (e.g. the workflow seam), every cycle's tests should describe that one surface. Intermediate scaffolding tests written for the implementer's confidence in internal-seam correctness do not earn ongoing maintenance cost.
+
+**Cure shape options**:
+
+1. **Pattern candidate**: capture as `.agent/memory/active/patterns/where-system-state-is-observable-at-plan-author-time.md` with the worked instance (commit-queue-intent-scope-discipline arc) and the diagnostic prompt at plan-authoring.
+2. **`testing-strategy.md` amendment**: add §"Cycle-decomposition and the describing-surface boundary" naming that scaffolding tests at the wrong layer are an anti-pattern and pointing at workflow-seam capture-list patterns as the cure.
+3. **`tdd-as-design.md` amendment**: extend the foundational definition with "one system state takes one describing surface; cycle decomposition must respect that boundary".
+
+**Why pending**: 1 instance, one author, one arc. Second instance from a different plan / different author would confirm the pattern's generality. Owner direction to author can fire earlier.
+
+Falsifiability: a future plan that decomposes into multiple cycles each describing an internal seam, lands scaffolding tests that subsequently need retirement, is the failure mode this entry would cure. A future plan that explicitly identifies the describing-surface boundary at plan-author time and constrains all cycles' tests to that surface is the success.
+
 ### 2026-05-22 — "Structurally-identical-new-function" pre-authoring drop pattern (PDR-shaped or skill-amendment-shaped)
 
 `[captured: 2026-05-22 | source: stormbound/commit-queue-intent-scope-discipline plan, Cycles 1.1 + 1.2 | target: pdr-or-skill:structurally-identical-function-pre-authoring-drop | trigger: third instance OR owner direction to author | size: S | status: pending]`

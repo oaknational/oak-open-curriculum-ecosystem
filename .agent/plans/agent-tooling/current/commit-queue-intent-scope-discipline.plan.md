@@ -82,7 +82,10 @@ todos:
       Forward-trace closeout broadcast at end of cycle. One commit;
       tree green; atomic narrowing + threading + rename + scaffolding-
       test deletion + invariant additions.
-    status: pending
+    status: completed
+    completed_at: 2026-05-22
+    completed_by: "Starlit Beaming Aurora (claude/1977cf)"
+    evidence: "Commit 896312d0 (atomic TDD landing); 472/472 tests; aggregate pnpm check GREEN 104/104. Closeout broadcast cf32f2c1 anchored in shared-comms-log.md (markdown anchor) names failure-mode instances A/B/C."
     depends_on: [cycle-2-verify-staged-scoped]
   - id: phase-final-hardening
     content: >
@@ -95,16 +98,19 @@ todos:
       broadcast targets persistent shared-comms-log markdown anchors
       (not event UUIDs) so the anchor survives comms-event retention
       sweeps.
-    status: pending
+    status: completed
+    completed_at: 2026-05-22
+    completed_by: "Starlit Beaming Aurora (claude/1977cf)"
+    evidence: "Commit 3f6b258a (SKILL update + closeout broadcast residue); aggregate pnpm check GREEN 104/104; SKILL-CANONICAL §'Intent-Scoped End-to-End (2026-05-22 cure)' subsection; closeout broadcast cf32f2c1 anchored in shared-comms-log.md."
     depends_on: [cycle-3-commit-pathspec]
-status: current
+status: complete
 isProject: false
 ---
 
 # Commit-Queue Intent-Scope Discipline
 
-**Last Updated**: 2026-05-22 (post-metacognition reshape — Cycle 1.3 collapsed to a single workflow-level describing surface; scaffolding tests scheduled for retirement)
-**Status**: 🟡 IN PROGRESS — Phase 0 ✓, Cycle 1.1 ✓ (`fb0833a4` + `e242e633`), Cycle 1.2 ✓; Cycle 1.3 reshaped + Phase Final remain
+**Last Updated**: 2026-05-22 (arc COMPLETE — Phase Final + Cycle 1.3 + plan-reshape landed; ready for archive transition to `archive/completed/` at next consolidation pass)
+**Status**: 🟢 COMPLETE — Phase 0 ✓, Cycle 1.1 ✓ (`fb0833a4` + `e242e633`), Cycle 1.2 ✓ (`6b5c9b4e`), Cycle 1.3 ✓ (`896312d0`), Phase Final ✓ (`3f6b258a`)
 **Scope**: Make the commit-queue intent record's `files` field load-bearing for the workflow-level system state ("commit-queue commit honours intent.files scope across peer staging drift"). Cycle 1.3 lands the describing-surface for that state in `commit-workflow.unit.test.ts` and retires the implementation-coupled scaffolding tests from Cycles 1.1 + 1.2.
 
 ## Progress Snapshot
