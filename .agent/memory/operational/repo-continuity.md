@@ -16,8 +16,32 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
-- Current branch: `feat/mcp-graph-support-foundation`. HEAD `a49e7a21` (Shadowed Hiding Shade deep-graduation pass under owner direction: 8 Tier A doctrine landings + 9 Tier B pattern/draft captures + 5 Tier C per-user memory marker updates; 34 files +1983/-163; husky pre-commit chain green). Prior: `3f6b258a` (Starlit Beaming Aurora landing Phase Final SKILL update for commit-queue-intent-scope-discipline arc + Cycle 1.3 closeout broadcast `cf32f2c1`; 4 files +154/-0; husky pre-commit chain 87/87 green). Prior: `896312d0` (Starlit landing Cycle 1.3 atomic TDD — workflow-level system-state describing surface; 9 files +297/-687 net; 472/472 tests green; 87/87 turbo). Prior: `989dc6b4` (Starlit metacognition-reshape of Cycle 1.3 plan body; 1 file +128/-112).
-- **2026-05-22 (Shadowed Hiding Shade / `claude` / `claude-opus-4-7[1m]` / `e35155`) — deep-graduation pass drains owner-direction-gated buffer entries.** Owner directive: *"please run a deep graduation of knowledge source materials, the napkin, the comms records, the .remember directory, the vendor specific memory locations. Ignore fitness metric levels for now."* Single commit `a49e7a21` lands 8 Tier A graduations (5 new rules — `check-singleton-per-window`, `use-monitor-for-event-driven-wake`, `per-user-memory-is-a-buffer`, `knowledge-preservation-over-fitness-warnings`, plus the directive home for the metacognition two-modes amendment; 2 PDRs Proposed — PDR-067 surface-classification-for-fitness-response, PDR-068 pipeline-back-pressure-as-structural-cure-signal; 1 pattern `where-system-state-is-observable-at-plan-author-time` + `tdd-as-design.md` "One state, one describing surface" amendment; `session-handoff` SKILL §11 + §11a amendments). 9 Tier B captures at pattern/draft fidelity (6 patterns + PDR-069 Draft + PDR-070 Draft + the §11a amendment counts in both tiers). 5 Tier C per-user memory audit-trail markers. Pending-graduations register status flips on graduated entries; one-line ADR-144 vocabulary fix in `fitness-token-measurements-and-frontmatter-mandation.plan.md` surfaced by the vocabulary gate. Gates green for changed scope: markdownlint, format, practice:vocabulary, portability:check, repo-validators:check. Worked instance of PDR-068's consumer-cadence cure — substance gated on owner-direction since 2026-05-17 drained through a focused pass.
+- Current branch: `feat/mcp-graph-support-foundation`.
+  HEAD `ad67d24f` (Velvet Veiling Wisp nested-bullet defect-class
+  archive sweep: 7 graduated bodies relocated from pending-graduations.md
+  to the 2026-05-22 archive snapshot; cumulative 2026-05-22 evening
+  drain `−629` lines on pending-graduations.md). Prior:
+  `44d23533` (Velvet Veiling Wisp primary backfill archive sweep: 20
+  graduated bodies relocated; `−382` lines net). Prior:
+  `a6015381` (peer chore continuity for Shadowed pass). Prior:
+  `a49e7a21` (Shadowed Hiding Shade deep-graduation pass under
+  owner direction: 8 Tier A doctrine landings + 9 Tier B pattern/draft
+  captures + 5 Tier C per-user memory marker updates; 34 files
+  +1983/-163; husky pre-commit chain green). Prior: `3f6b258a`
+  (Starlit Phase Final SKILL update for commit-queue-intent-scope-discipline
+  arc; 4 files +154/-0). Prior: `896312d0` (Starlit Cycle 1.3 atomic
+  TDD; 9 files +297/-687 net; 472/472 tests green; 87/87 turbo).
+- **2026-05-22 (Shadowed Hiding Shade / `claude` / `claude-opus-4-7[1m]` / `e35155`) — deep-graduation pass drains owner-direction-gated buffer entries.**
+
+  Owner directive: *"please run a deep graduation of knowledge source materials, the napkin, the comms records, the .remember directory, the vendor specific memory locations. Ignore fitness metric levels for now."*
+
+  Single commit `a49e7a21` lands:
+
+  - **8 Tier A graduations** — 5 new rules (`check-singleton-per-window`, `use-monitor-for-event-driven-wake`, `per-user-memory-is-a-buffer`, `knowledge-preservation-over-fitness-warnings`, plus the directive home for the metacognition two-modes amendment); 2 PDRs Proposed (PDR-067 surface-classification-for-fitness-response, PDR-068 pipeline-back-pressure-as-structural-cure-signal); 1 pattern `where-system-state-is-observable-at-plan-author-time` + `tdd-as-design.md` "One state, one describing surface" amendment + `session-handoff` SKILL §11 + §11a amendments.
+  - **9 Tier B captures** at pattern/draft fidelity (6 patterns + PDR-069 Draft + PDR-070 Draft + the §11a amendment counts in both tiers).
+  - **5 Tier C** per-user memory audit-trail markers.
+
+  Pending-graduations register status flips on graduated entries; one-line ADR-144 vocabulary fix in `fitness-token-measurements-and-frontmatter-mandation.plan.md` surfaced by the vocabulary gate. Gates green for changed scope: markdownlint, format, practice:vocabulary, portability:check, repo-validators:check. Worked instance of PDR-068's consumer-cadence cure — substance gated on owner-direction since 2026-05-17 drained through a focused pass.
 - **2026-05-22 (Starlit Beaming Aurora / `claude` / `Opus-4.7` / `1977cf`) —
   commit-queue-intent-scope-discipline arc COMPLETE.** Three commits land the
   full structural cure for the multi-writer queue concurrency failure mode:
@@ -38,8 +62,21 @@ Earlier archives remain under [`archive/`](archive/).
   short-circuit. Aggregate `pnpm check` GREEN 104/104 turbo tasks (1m15s).
   Closeout broadcast `cf32f2c1` anchored in `shared-comms-log.md` markdown
   anchor for retention-safe forward-trace to failure-mode instances A/B/C.
-- **2026-05-22 (Shaded Whispering Dusk / `claude` / Opus 4.7 (1M) / `763ef4`) — two-primary lane assignment + meta-plan refresh + coordination-watcher canonicalisation plan captured. Compaction-boundary handoff.** Three commit boundaries this session: (a) `4200a17b` `docs(meta-plan): refresh post-arch-excellence and cure graph-stack link drift` — meta-plan §"Working tree carries" line refreshed to commit-`77d6ce85` pointer; Q1/Q2/Q3 in §"Open structural questions" closed as resolved by the architectural-excellence pass; `current/` → `active/` link drift cured for `graph-stack.plan.md` across 7 plan files including the meta plan itself, `high-level-plan.md`, `graph-portfolio-index.md`, `graph-mvp-arc.plan.md`, `graph-combinatorial-arc.plan.md`, `practice-graph-payoff-peak-pilot.plan.md`, `2026-05-11-graduation-candidates-drain-opener.md`, and `agent-graphs-workspace-organisation.plan.md`. Executed via 4-sub-agent fan-out (A=practice-index bridge, B=meta-plan refresh, C+D=link-drift cure). (b) Working tree at handoff carries the coordination-watcher-canonicalisation plan (new at `agent-tooling/future/coordination-watcher-canonicalisation.plan.md`), napkin entries for the worked-instance defect + reference-folder scope clarification + two-primary-each-fanning-out model + compaction-boundary-handoff pattern, pending-graduations entry "Canonical tool definitions belong code-adjacent" (status `due`, target `multi:plan-execution + doc-amend + rule`), 2 comms team-start events, 2 seen-files, regenerated `shared-comms-log.md`. (c) Two-peer collaboration formed: Shaded Whispering Dusk = Lane A (PR-108 snagging Cycles 5-10 + Phase Final per `pr-108-snagging.plan.md`), Mistbound Slipping Night (`a1cb64`) = Peer B candidate read-only awaiting owner direction (likely Lane B = Inc.1a closure WS2.2/WS2.3/WS3.3 OR Inc.1d substrate WS4.1/WS4.4/WS4.5). **Lane work NOT started this session** — owner direction was "give me a loop command first". Comms watcher armed for Shaded as Monitor task `b7ofkzzv1` (may need restart after compaction). The /loop command for advancing lane work is recorded in the `connecting-oak-resources` thread record verbatim. Substantive metacognition pass produced the canonical-watcher-canonicalisation plan capturing three structural issues with the current watcher contract (canonical home misplaced in `.agent/reference/`; SKILL invocation example as fragile authority; watcher scope narrower than substrate scope). Doctrine substance: canonical tool definitions belong code-adjacent and ideally executable; `.agent/reference/` is for external materials only.
-- **🛑 PR #108 IS MERGE-BLOCKED ON QUALITY GATES** — PR #108 (`feat/mcp-graph-support-foundation` → `main`) is failing two quality gates: CodeQL alert #90 (`js/missing-rate-limiting` on `bootstrap-helpers.ts:151`) and SonarCloud Quality Gate (40 new issues, 12 unreviewed security hotspots, 6.0% new-code duplication ≥ 3.0% threshold). **The PR must not merge until those gates clear.** Disposition strategy and execution lane: [`pr-108-snagging.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/current/pr-108-snagging.plan.md). Substantive graph implementation work on this branch is parked behind the snagging plan. Full prior-session context in [`archive/repo-continuity-session-history-2026-05-22.md`](archive/repo-continuity-session-history-2026-05-22.md).
+- **2026-05-22 (Shaded Whispering Dusk / `claude` / Opus 4.7 (1M) / `763ef4`)** — two-primary lane assignment + meta-plan refresh + coordination-watcher canonicalisation plan captured. Compaction-boundary handoff. Full session detail archived to [`archive/repo-continuity-session-history-2026-05-22.md`](archive/repo-continuity-session-history-2026-05-22.md) § "Repo-continuity Current-State bullets archived 2026-05-22 evening".
+- **🛑 PR #108 IS MERGE-BLOCKED ON QUALITY GATES** — PR #108
+  (`feat/mcp-graph-support-foundation` → `main`) is failing two
+  quality gates:
+  - CodeQL alert #90 (`js/missing-rate-limiting` on
+    `bootstrap-helpers.ts:151`).
+  - SonarCloud Quality Gate (40 new issues, 12 unreviewed security
+    hotspots, 6.0% new-code duplication ≥ 3.0% threshold).
+
+  **The PR must not merge until those gates clear.** Disposition
+  strategy and execution lane:
+  [`pr-108-snagging.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/current/pr-108-snagging.plan.md).
+  Substantive graph implementation work on this branch is parked
+  behind the snagging plan. Full prior-session context in
+  [`archive/repo-continuity-session-history-2026-05-22.md`](archive/repo-continuity-session-history-2026-05-22.md).
 
 ## Active Threads
 
@@ -282,7 +319,18 @@ executable path delivering EEF first-feature gate-1a, not as a standalone
 active thread. Detail continues from
 [`threads/connecting-oak-resources.next-session.md`](threads/connecting-oak-resources.next-session.md).
 
-**🛑 IMMEDIATE NEXT STEP — PR #108 quality-gate snagging plan**: PR #108 is failing CodeQL (alert #90) + SonarCloud Quality Gate (40 issues, 12 hotspots, 6.0% duplication). The snagging plan at [`.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/pr-108-snagging.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/current/pr-108-snagging.plan.md) is the authoritative execution surface — `type: quality-fix`, `status: planning`, 12 cycles, per-finding disposition ledger, aligned with `docs/governance/sonar-disposition-policy.md` and `.agent/rules/never-disable-checks.md`. **Substantive graph implementation work (Inc.1a WS2.2/WS2.3/WS3.3, Inc.1b, Inc.1c, Inc.1d) on PR #108 is parked behind the snagging plan landing.** The next session opening this thread should: (1) read the snagging plan; (2) decide between completing it on `feat/mcp-graph-support-foundation` before merge OR rebasing the substantive cycles onto a fresh branch after PR #108 merges clean; (3) execute Phase 0 (disposition ledger commit) as the first cycle.
+**🛑 IMMEDIATE NEXT STEP — PR #108 quality-gate snagging plan**:
+
+- PR #108 is failing CodeQL (alert #90) + SonarCloud Quality Gate (40 issues, 12 hotspots, 6.0% duplication).
+- Authoritative execution surface: [`.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/pr-108-snagging.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/current/pr-108-snagging.plan.md) (`type: quality-fix`, `status: planning`, 12 cycles, per-finding disposition ledger).
+- Aligned with [`docs/governance/sonar-disposition-policy.md`](../../../docs/governance/sonar-disposition-policy.md) and [`.agent/rules/never-disable-checks.md`](../../rules/never-disable-checks.md).
+- **Substantive graph implementation work (Inc.1a WS2.2/WS2.3/WS3.3, Inc.1b, Inc.1c, Inc.1d) on PR #108 is parked behind the snagging plan landing.**
+
+The next session opening this thread should:
+
+1. Read the snagging plan.
+2. Decide between completing it on `feat/mcp-graph-support-foundation` before merge OR rebasing the substantive cycles onto a fresh branch after PR #108 merges clean.
+3. Execute Phase 0 (disposition ledger commit) as the first cycle.
 
 **Current state (2026-05-21 close, second session of the day)**: Inc.1a
 is **half-complete on the first parallel-pair**: WS3.2 LANDED at
@@ -294,7 +342,21 @@ owner-directed mid-session pivot to all-channels comms CLI work
 (95f42cb7), WS1.5 (ebd0e8dc), WS1.6 (3add41f9), WS2.1 (0f895070), WS3.1
 (84bfffa5), WS3.2 (abe6fcb3). Inc.1a remaining: 3 cycles (WS2.2, WS2.3,
 WS3.3).
-**Next safe step (post-Cirrus six-agent team session 2026-05-21 evening)**: **the Inc.1d EEF concurrent-tenant amendment-set has LANDED at `0cdaf58c`** (7 files, +657/−129; per-slice PDR-044 vocabulary + integrated coherence pass + atomic commit; all gates green). Substrate dependencies remain unchanged: resume Inc.1a completion (WS2.2 jsonld-compatible + Turtle/SKOS parser, WS2.3, WS3.3 adjacency primitives), then Inc.1b (WS4.1 graph-corpus-sdk scaffold + WS4.2 Threads adapter) and Inc.1c (WS4.3 query proof). Inc.1d (WS4.4 GraphView interface + WS4.5 EefStrandsGraphView adapter) opens once Inc.1a + WS4.1 + WS4.2 + WS4.3 land per the amendment-set's sequencing. Three remaining specialist reviewers still required at Inc.1d authoring time per the prior thread record: **type-expert** (load-bearing for the `Result<T, NotImplementedYet>` variant typing across 5 EEF stub operations + `DeepKeyPath<TNode, Depth>` recursive type + array-stop discipline); **architecture-expert-betty** for the GraphView placement (already resolved to `packages/core/graph-core/src/graph-view/` per the amendment-set; verify holds at WS4.4 author time); **assumptions-expert** for the sparse-relations-on-manifest WS4.5 stub criterion. After Inc.1d landing,
+**Next safe step (post-Cirrus six-agent team session 2026-05-21 evening)**: **the Inc.1d EEF concurrent-tenant amendment-set has LANDED at `0cdaf58c`** (7 files, +657/−129; per-slice PDR-044 vocabulary + integrated coherence pass + atomic commit; all gates green).
+
+Substrate dependencies remain unchanged:
+
+1. Resume Inc.1a completion (WS2.2 jsonld-compatible + Turtle/SKOS parser, WS2.3, WS3.3 adjacency primitives).
+2. Then Inc.1b (WS4.1 graph-corpus-sdk scaffold + WS4.2 Threads adapter) and Inc.1c (WS4.3 query proof).
+3. Inc.1d (WS4.4 GraphView interface + WS4.5 EefStrandsGraphView adapter) opens once Inc.1a + WS4.1 + WS4.2 + WS4.3 land per the amendment-set's sequencing.
+
+Three remaining specialist reviewers still required at Inc.1d authoring time per the prior thread record:
+
+- **type-expert** — load-bearing for the `Result<T, NotImplementedYet>` variant typing across 5 EEF stub operations + `DeepKeyPath<TNode, Depth>` recursive type + array-stop discipline.
+- **architecture-expert-betty** — GraphView placement (already resolved to `packages/core/graph-core/src/graph-view/` per the amendment-set; verify holds at WS4.4 author time).
+- **assumptions-expert** — sparse-relations-on-manifest WS4.5 stub criterion.
+
+After Inc.1d landing,
 Inc.1b (WS4.1 scaffold + WS4.2 Threads adapter) + Inc.1c (WS4.3 query
 proof) + Inc.1d (WS4.4 GraphView interface + WS4.5 EEF adapter — new
 sub-increment per the 2026-05-21 amendment). Then the three
@@ -438,21 +500,20 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-22 — Blustery Lifting Plume coordinator team session / `claude` / Opus 4.7 / `d4aad7` + team: Foamy `1c0db8`, Ferny `b282b8`, Flamebright `9a01f3`, Veiled / Salty / Midnight `019e4e`)**: **performed inline — multi-agent team session executed deep consolidation under owner direction at session-close**, with Ferny Swaying Leaf as consolidation specialist routed by coordinator event 09:35:57Z, and Blustery landing a branch-concurrency manifest at directed event 10:00:55Z under owner direction "update all relevant plans and continuity surfaces to make the parallel work explicit". Owner subsequently refined the criterion to "describe what highly parallel work is possible, not how it is carried out or by whom", and Blustery superseded the branch-concurrency manifest with a top-level meta plan at [`feat-mcp-graph-support-foundation-meta.md`](../plans/feat-mcp-graph-support-foundation-meta.md) — the earlier manifest had operational drift (Stream framing, Path 1/2/3 merge ordering, coordinator-structure heuristics) which did not match the refined criterion.
+**Status (2026-05-22 evening — Velvet Veiling Wisp consolidation curation pass / `claude` / claude-opus-4-7 / `b4bb7a`)**: critical-surface curation per owner direction.
 
-**Final closeout this session**: Blustery as the sole remaining team member committed (a) the meta plan, (b) tightened plan amendments (cross-reference the meta plan, drop operational framing) across `pr-108-snagging.plan.md`, `eef-first-feature.plan.md`, `graph-stack.plan.md`, (c) the four PDR drafts (`PDR-063..066`) as preserved artefacts — PDR-064 cures landed, PDR-063/065/066 cures paused mid-work awaiting owner Q1/Q2/Q3 routing, (d) this closeout entry.
+Four consolidation passes landed today:
 
-**Branch pickup pointer for any future session joining `feat/mcp-graph-support-foundation`**: read [`.agent/plans/feat-mcp-graph-support-foundation-meta.md`](../plans/feat-mcp-graph-support-foundation-meta.md) FIRST — the meta plan names every plan currently in force on this branch, the cross-plan dependency picture, the file-scope partition (work-structure, not team-structure; no operational/team/branch-topology language), current state of work, entry points for different kinds of work, and the open owner-class structural questions on owner surface (PDR-063/065/066 routing Q1/Q2/Q3, ff1/ff2 owner actions, Cycle 8 policy-amendment authorisation, Cycle 10 path). Concurrent-execution shape was a 2026-05-22 amendment landing across `pr-108-snagging.plan.md`, `eef-first-feature.plan.md`, and `graph-stack.plan.md` — each cross-references the manifest and relaxes prior single-stream gates to permit parallel WS authoring.
+- **Shadowed Hiding Shade `a49e7a21`** — owner-directed deep-graduation pass: 8 Tier A doctrine landings + 9 Tier B captures + 5 Tier C audit markers.
+- **Velvet Veiling Wisp `44d23533`** — primary backfill archive sweep: 20 status:graduated entry bodies relocated from `pending-graduations.md` to the 2026-05-22 archive snapshot; net `−382` lines on the live register.
+- **Velvet Veiling Wisp `ad67d24f`** — nested-bullet defect-class archive sweep: 7 more graduated bodies relocated (Sylvan Fruiting Glade era 2026-05-09 / 05-10 / 05-11 entries whose bodies were never archived when their status flipped); net `−258` lines.
+- **Velvet Veiling Wisp (this pass, uncommitted)** — repo-continuity.md, distilled.md, and tdd-as-design.md curation per the file-specific structural cures named in their split_strategy frontmatter.
 
-Knowledge-graduation backlog (5 candidates) per Blustery directed event 7bbe719a: PDR-064 §Partial/Slice-Scoped Coordinator Transfer; coordinator-delegates-sub-agent-launches; CLI body backtick-shell-substitution cure (option 1 LANDED via `--body-file` at commit 675bb83b); hook-policy substring-matching cross-session pattern; Sonar MCP audit-trail visibility gap.
+Cumulative `pending-graduations.md` reduction: `4439 → 3810` lines (−629; 14%). Pre-existing CRITICAL fitness pressure on `pending-graduations.md` partially relieved; remaining pressure on graduation-log table rows is legitimate markdown shape per the buffer's bounded-envelope rationale (`feedback_pending_graduations_is_buffer_not_dump`).
 
-Session substance: (1) PR-108 quality-gate advancement — `new_security_hotspots_reviewed` moved 0% → 100% (12/12 SAFE dispositions: 11×S5332 in `packages/core/graph-core/` + 1×S4036 at `agent-tools/src/bin/agent-tools-cli-topics.ts:96`), CodeQL alert #90 dismissed pending CI, 5 mechanical commits landed on `feat/mcp-graph-support-foundation` (`77463a22` Cycle 1 / `73ab1624` Cycle 4.1 / `ca28bd83` Cycle 4.2 / `0c3df45b` Cycle 4.3 / `604f64b7` Cycle 4.4). (2) Three PDR-064 two-moments coordinator-handoff instances in one session (Flamebright → Ferny slice; Flamebright → Ferny full; Ferny → Blustery full) — 3-instance trigger fired; PDR-064 §"Partial / Slice-Scoped Coordinator Transfer" amendment ready to graduate. (3) Owner correction on coordinator-vs-implementer discipline — sub-agent dispatches are implementer-class work, not coordination; 2-instance correction (Ferny + Blustery) fired the graduation trigger. (4) PDR-063..066 drafted, reviewed (architecture-expert-fred + assumptions-expert), partially cured (PDR-064 only); cures for PDR-063/065/066 deferred owner-class to next session under open Q1/Q2/Q3 routing. (5) Sonar MCP three-path unblock catalogue durable in napkin: Claude `/mcp` reconnect, `docker mcp gateway --profile sonarqube_oak` for Codex, denied `mcp-add` (auto-mode self-modification). (6) Consolidation pass produced 3 new `pending-graduations.md` entries (Sonar MCP audit-trail visibility gap; CLI body backtick-shell-substitution cure 3+ instance cross-session; hook-policy substring-matching 3+ instance cross-session); `eef.next-session.md` updated with session-2026-05-22 substantive progress block + Last refreshed attribution; this status block.
+Two reviewers dispatched in parallel pre-commit on `44d23533`: docs-adr-expert GO (substance preservation verified), assumptions-expert GO-WITH-CONDITIONS (3 conditions absorbed into napkin entries). No reviewer dispatch on `ad67d24f` (same-shape continuation of `44d23533` work) — assumptions-expert condition 2 ("do not chain a fifth substantive pass") was already absorbed; that gate fires at pass 5, this is pass 2.
 
-Roster outcomes: Codex side cleared (Veiled / Salty / Midnight team-member closeouts); Claude side held in pause under owner direction. Open owner-class items carried forward: Q1 portability migration surface; Q2 PDR-065 `[DOCTRINE]` tag mechanism; Q3 PDR-065 `fast_bootstrap_eligible` frontmatter field. Uncommitted in working tree: PDR-064 cures + three uncured PDR drafts (PDR-063/065/066) + napkin entries from this session. `distilled.md` additions deferred to explicit owner go-ahead per "owner-approved matured entries" gate. Prior status preserved below for the audit trail.
-
-**Follow-on inline consolidation (2026-05-22 — Tempestuous Spiralling Thermal / `claude` / Opus 4.7 (1M) / `9205b8`)**: completed this handoff. (1) Substrate-completion graduations — 4 entries from `pending-graduations.md` landed to permanent homes across two complementary commits (`c7fd0b7b` Shaded-absorbed coherence bundle covering PDR-064 §"Partial / Slice-Scoped Coordinator Transfer" amendment + start-right-team SKILL "Coordinator delegates sub-agent launches" amendment + new `.agent/rules/hook-policy-substring-discipline.md` + `.claude/` + `.cursor/` adapters + RULES_INDEX entry + archive header + 4 entry bodies; `20fcf565` Wooded-pass complementary covering pending-graduations.md graduation-log table + 4 graduated-pointers). Status counts moved 5 due → 1 due (remaining: `canonical-tool-definitions-code-adjacent`, plan-execution-gated on `coordination-watcher-canonicalisation` plan). (2) `distilled.md` audit-trail rotation (`53b00386`) — 4 earlier graduation blocks (2026-05-06, 2026-05-09 Woodland Sheltering Glade, 2026-05-10 Quiet Lurking Mask, 2026-05-11 Verdict-not-menu Flamebright Burning Lava) moved to `archive/distilled-graduations-log-2026-05-14.md` "Backfill rotation 2026-05-22" section with full substance preservation; distilled.md 919L → 874L. Further trim deferred — Recently-Distilled entry settling assessment is substantive judgement work requiring a separate session.
-
-Prior session statuses (Soaring Flying Gale 2026-05-22, Feathered Circling Horizon 2026-05-21) archived to [`archive/repo-continuity-session-history-2026-05-22.md`](archive/repo-continuity-session-history-2026-05-22.md) by the Wooded Swaying Thicket 2026-05-22 drain. Per split_strategy, only the most-recent deep-consolidation status entry remains live here; earlier statuses live in the archive snapshots below.
+Prior 2026-05-22 statuses (Blustery Lifting Plume coordinator team session; Tempestuous Spiralling Thermal follow-on; Soaring Flying Gale planning-deepening session; Feathered Circling Horizon plan-authoring session) archived to [`archive/repo-continuity-session-history-2026-05-22.md`](archive/repo-continuity-session-history-2026-05-22.md). Per split_strategy, only the most-recent deep-consolidation status entry remains live here.
 
 Previous deep-consolidation and session-close prose lives in:
 

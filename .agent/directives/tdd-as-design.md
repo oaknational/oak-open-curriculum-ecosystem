@@ -3,7 +3,11 @@ fitness_line_target: 180
 fitness_line_limit: 240
 fitness_char_limit: 14000
 fitness_line_length: 100
-split_strategy: "Grow the methodology depth (cycle worked examples, atomic-landing scenarios, refactoring TDD detail) into docs/engineering/testing-tdd-recipes.md; this directive holds only the foundational definition and load-bearing invariants."
+split_strategy: >-
+  Grow the methodology depth (cycle worked examples, atomic-landing
+  scenarios, refactoring TDD detail) into
+  docs/engineering/testing-tdd-recipes.md; this directive holds only
+  the foundational definition and load-bearing invariants.
 ---
 
 # TDD as Design
@@ -101,9 +105,11 @@ that "need to describe an internal seam" are asking for scaffolding
 unless the seam genuinely produces new observable state; the default
 is scaffolding.
 
-See [`patterns/where-system-state-is-observable-at-plan-author-time.md`](../memory/active/patterns/where-system-state-is-observable-at-plan-author-time.md)
-for the diagnostic question, the worked instance, and how to apply
-the constraint during cycle decomposition.
+See the [`where-system-state-is-observable-at-plan-author-time`][observable-pattern]
+pattern for the diagnostic question, the worked instance, and how to
+apply the constraint during cycle decomposition.
+
+[observable-pattern]: ../memory/active/patterns/where-system-state-is-observable-at-plan-author-time.md
 
 ## Why Scales Are Complementary
 

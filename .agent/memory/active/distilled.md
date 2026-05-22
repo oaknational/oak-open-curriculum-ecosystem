@@ -54,29 +54,51 @@ at non-healthy zones. Source: §F1 of the synthesis report under
 
 ## Recently Distilled — 2026-05-22 evening peer-pair plan-improvement collaboration (Velvet + Charcoal)
 
-Three behaviour-changing observations from the Velvet/Charcoal peer-pair plan-improvement pass on `commit-queue-intent-scope-discipline.plan.md`. Source napkin entries archived at `napkin-2026-05-22-evening.md`. Plan commits: `bf9266f3` + `2adeccec`.
-
-### Event-driven wake uses Monitor, not Bash background
-
-For any long-running command whose output should drive agent wake-ups (comms events, log lines, CI status), arm the `Monitor` tool with `persistent: true` and a `grep --line-buffered` filter on the meaningful lines. Bash `run_in_background` writes stdout to a file and delivers no notifications — it requires the agent to poll. Monitor streams each stdout line as a `<task-notification>` that wakes the loop immediately, eliminating polling cost.
-
-The canonical comms-watcher CLI (`pnpm agent-tools:collaboration-state -- comms watch …`) is the same either way; the difference is the harness wrapper. For start-right-team session §0, default to Monitor. Stop any prior Bash background watcher first to avoid two redundant streams.
-
-Falsifiability: if Bash background ever starts delivering per-line notifications, this distinction becomes moot. Until then, choosing Bash background for event-driven wake is a recurring failure mode worth surfacing as soon as polling shows up.
+Two behaviour-changing observations from the Velvet/Charcoal peer-pair
+plan-improvement pass on `commit-queue-intent-scope-discipline.plan.md`.
+Source napkin entries archived at `napkin-2026-05-22-evening.md`. Plan
+commits: `bf9266f3` + `2adeccec`. A third observation (event-driven
+wake uses Monitor, not Bash background) graduated 2026-05-22 to
+[`.agent/rules/use-monitor-for-event-driven-wake.md`](../../rules/use-monitor-for-event-driven-wake.md)
+in commit `a49e7a21` and is no longer duplicated here per the
+no-duplication-across-tiers discipline.
 
 ### Peer-pair plan-improvement across model families produces ~50% non-overlapping defect coverage
 
-For dense plans where the next implementation step is high-cost, run two independent reviews across different model families before authoring. Velvet (codex/GPT-5) surfaced six findings; Charcoal (claude/Opus-4.7) surfaced ten; five overlapped substantively; five were distinct on each side. The model-family complementarity is the load-bearing factor: Codex's coverage was strong on plan-text discipline (pre-checked ACs, stale wording, AC checkbox state); Claude's was strong on internal coherence (contradictions, equivocations, semantic narrowing).
+For dense plans where the next implementation step is high-cost, run two
+independent reviews across different model families before authoring.
+Velvet (codex/GPT-5) surfaced six findings; Charcoal (claude/Opus-4.7)
+surfaced ten; five overlapped substantively; five were distinct on each
+side. The model-family complementarity is the load-bearing factor:
+Codex's coverage was strong on plan-text discipline (pre-checked ACs,
+stale wording, AC checkbox state); Claude's was strong on internal
+coherence (contradictions, equivocations, semantic narrowing).
 
-Cost ~2x single-reviewer; defect coverage ~50% non-overlapping — net coverage roughly doubles. Default to peer-pair for plan readiness before high-cost implementation cycles. Solo review is fine for low-cost cycles where the cost of a missed defect is bounded.
+Cost ~2× single-reviewer; defect coverage ~50% non-overlapping — net
+coverage roughly doubles. Default to peer-pair for plan readiness before
+high-cost implementation cycles. Solo review is fine for low-cost cycles
+where the cost of a missed defect is bounded.
 
 ### Named peers can arrive after first live checks; keep all-channel comms reconciliation alive until final closeout
 
-In a team-start session, a peer named in the user's brief can arrive AFTER the first live registry/comms checks complete (the empty-registry-at-session-open does not mean "no peer will arrive"). Velvet observed this during the plan-improvement collaboration: their first live checks showed no Charcoal presence, then Charcoal's team-start broadcast surfaced 60+ seconds later.
+In a team-start session, a peer named in the user's brief can arrive
+AFTER the first live registry/comms checks complete (the
+empty-registry-at-session-open does not mean "no peer will arrive").
+Velvet observed this during the plan-improvement collaboration: their
+first live checks showed no Charcoal presence, then Charcoal's team-start
+broadcast surfaced 60+ seconds later.
 
-The discipline: keep the all-channel comms watcher alive until final closeout; treat early solo analysis as provisional; do a final comms reconciliation before reporting the work as complete. If a named peer appears, explicitly map their findings against your own (accepted / partially accepted / deferred) rather than letting the first agent's private review become the whole story.
+The discipline: keep the all-channel comms watcher alive until final
+closeout; treat early solo analysis as provisional; do a final comms
+reconciliation before reporting the work as complete. If a named peer
+appears, explicitly map their findings against your own (accepted /
+partially accepted / deferred) rather than letting the first agent's
+private review become the whole story.
 
-This refines the singleton-lane coordination rule's existing guidance — "empty active-claims.json at session-open means 'no team visible yet'" — by adding the temporal qualifier: empty registry at any single moment is not "no team will arrive", it's "no team is visible at this moment".
+This refines the singleton-lane coordination rule's existing guidance —
+"empty active-claims.json at session-open means 'no team visible yet'"
+— by adding the temporal qualifier: empty registry at any single moment
+is not "no team will arrive", it's "no team is visible at this moment".
 
 ---
 
