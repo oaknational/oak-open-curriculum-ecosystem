@@ -484,24 +484,301 @@
       "phase": "abandoned"
     },
     {
-      "intent_id": "692c57a7-ed09-404e-8a2d-de3871cc1994",
-      "claim_id": "985099cc-7cfb-4307-bd47-b06229de4253",
+      "intent_id": "cf39fd43-e2dc-4b03-bdfa-0ecdd771796d",
+      "claim_id": "e15a00c6-0f16-454e-9274-a9e33f58641e",
       "agent_id": {
-        "agent_name": "Wooded Swaying Thicket",
+        "agent_name": "Stormbound Kiting Squall",
         "platform": "claude",
         "model": "claude-opus-4-7",
-        "session_id_prefix": "6c58f3"
+        "session_id_prefix": "ddbea2"
       },
       "files": [
-        ".agent/memory/active/distilled.md"
+        ".agent/plans/agent-tooling/current/commit-queue-intent-scope-discipline.plan.md",
+        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+        ".agent/memory/operational/pending-graduations.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/active/napkin.md"
       ],
-      "commit_subject": "docs(distilled): add 8 owner-profile observations from .remember/ plugin distillation",
-      "queued_at": "2026-05-22T14:54:08.061Z",
-      "updated_at": "2026-05-22T14:54:57.167Z",
-      "expires_at": "2026-05-22T15:09:08.061Z",
-      "phase": "pre_commit",
-      "staged_name_status": "M\t.agent/memory/active/distilled.md\n",
-      "staged_bundle_fingerprint": "69810033a5cc83564e427be7f91644a482a7bbc2e444fa0092dd39754bd9bf99"
+      "commit_subject": "docs(handoff): finalise commit-queue-intent-scope plan post-Cycle-1.1 + check-singleton invariant",
+      "queued_at": "2026-05-22T15:33:34.603Z",
+      "updated_at": "2026-05-22T15:35:09.112Z",
+      "expires_at": "2026-05-22T15:48:34.603Z",
+      "phase": "abandoned",
+      "notes": "Foreign-staged Mistbound citation-shape files detected before record-staged; abandoning to avoid sweep of peer work-in-progress (the very failure mode Cycle 1.1 cures). Will retry handoff commit after Mistbound lands t12 work."
+    },
+    {
+      "intent_id": "131fe2a9-edde-4481-abc7-6838ddad4eec",
+      "claim_id": "f013f95d-ab63-4e83-a716-f198da3ee19f",
+      "agent_id": {
+        "agent_name": "Mistbound Slipping Night",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "a1cb64"
+      },
+      "files": [
+        "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.ts",
+        "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.unit.test.ts",
+        ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md"
+      ],
+      "commit_subject": "feat(evidence-corpus): land t12 citation shape primitives",
+      "queued_at": "2026-05-22T15:34:51.219Z",
+      "updated_at": "2026-05-22T15:47:14.982Z",
+      "expires_at": "2026-05-22T15:49:51.219Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "35a29ef59ee73c924994c460a5b1ac543062695255eed382342b4ddf320c7790",
+      "staged_name_status": "M\t.agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md\nA\tpackages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.ts\nA\tpackages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.unit.test.ts\n"
+    },
+    {
+      "intent_id": "18a9272e-b3e4-4e37-a7e6-2d3c74481511",
+      "claim_id": "3f1c3521-6028-48d1-9c6b-d1ba6d6e487f",
+      "agent_id": {
+        "agent_name": "Stormbound Kiting Squall",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ddbea2"
+      },
+      "files": [
+        "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.ts",
+        "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.unit.test.ts",
+        ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md"
+      ],
+      "commit_subject": "feat(evidence-corpus): land t12 citation shape primitives",
+      "queued_at": "2026-05-22T15:46:57.156Z",
+      "updated_at": "2026-05-22T15:47:51.142Z",
+      "expires_at": "2026-05-22T16:01:57.156Z",
+      "phase": "abandoned"
+    },
+    {
+      "intent_id": "ea53e1b5-58f7-45f5-af55-2aeb3c00a7a5",
+      "claim_id": "7f45a590-ff47-4b9f-8ff4-e4d2acce6df4",
+      "agent_id": {
+        "agent_name": "Stormbound Kiting Squall",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ddbea2"
+      },
+      "files": [
+        "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.ts",
+        "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.unit.test.ts",
+        ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md"
+      ],
+      "commit_subject": "feat(evidence-corpus): land t12 citation shape primitives",
+      "queued_at": "2026-05-22T15:47:58.362Z",
+      "updated_at": "2026-05-22T15:49:09.107Z",
+      "expires_at": "2026-05-22T16:02:58.362Z",
+      "phase": "abandoned"
+    },
+    {
+      "intent_id": "164f6897-4a94-4d65-a786-3ee6d1a3e031",
+      "claim_id": "3c9bcc8c-cc55-4dd0-951f-d5cf6c7cd4c7",
+      "agent_id": {
+        "agent_name": "Stormbound Kiting Squall",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ddbea2"
+      },
+      "files": [
+        "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.ts",
+        "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.unit.test.ts",
+        ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md"
+      ],
+      "commit_subject": "feat(evidence-corpus): land t12 citation shape primitives",
+      "queued_at": "2026-05-22T15:49:09.938Z",
+      "updated_at": "2026-05-22T15:51:40.684Z",
+      "expires_at": "2026-05-22T16:04:09.938Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "35a29ef59ee73c924994c460a5b1ac543062695255eed382342b4ddf320c7790",
+      "staged_name_status": "M\t.agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md\nA\tpackages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.ts\nA\tpackages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.unit.test.ts\n"
+    },
+    {
+      "intent_id": "abd37364-6630-4459-9a41-ffb70fb674c4",
+      "claim_id": "e89c52fe-2116-4d09-a00e-c4daba228557",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "files": [
+        ".agent/directives/continuity-practice.md",
+        ".agent/directives/operationalisation-contract.md",
+        ".agent/rules/executive-memory-drift-capture.md",
+        ".agent/rules/present-verdicts-not-menus.md",
+        ".agent/rules/register-identity-on-thread-join.md",
+        ".agent/skills/codex-helper/SKILL-CANONICAL.md",
+        ".agent/skills/commit/SKILL-CANONICAL.md",
+        ".agent/skills/consolidate-docs/SKILL-CANONICAL.md",
+        ".agent/skills/plan/SKILL-CANONICAL.md",
+        ".agent/skills/session-handoff/SKILL-CANONICAL.md",
+        ".agent/skills/start-right-quick/shared/start-right.md",
+        ".agent/skills/start-right-thorough/shared/start-right-thorough.md",
+        ".agent/skills/undo-change/SKILL-CANONICAL.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/comms-seen/shaded-whispering-dusk.json",
+        ".agent/state/collaboration/shared-comms-log.md",
+        ".agents/skills/oak-chatgpt-report-normalisation/SKILL.md",
+        ".agents/skills/oak-codex-helper/SKILL.md",
+        ".agents/skills/oak-commit/SKILL.md",
+        ".agents/skills/oak-complex-merge/SKILL.md",
+        ".agents/skills/oak-consolidate-docs/SKILL.md",
+        ".agents/skills/oak-gates/SKILL.md",
+        ".agents/skills/oak-go/SKILL.md",
+        ".agents/skills/oak-ground-truth-design/SKILL.md",
+        ".agents/skills/oak-ground-truth-evaluation/SKILL.md",
+        ".agents/skills/oak-metacognition/SKILL.md",
+        ".agents/skills/oak-napkin/SKILL.md",
+        ".agents/skills/oak-plan/SKILL.md",
+        ".agents/skills/oak-session-handoff/SKILL.md",
+        ".agents/skills/oak-start-right-quick/SKILL.md",
+        ".agents/skills/oak-start-right-team/SKILL.md",
+        ".agents/skills/oak-start-right-thorough/SKILL.md",
+        ".agents/skills/oak-tsdoc/SKILL.md",
+        ".agents/skills/oak-undo-change/SKILL.md",
+        ".claude/settings.json",
+        ".claude/skills/oak-chatgpt-report-normalisation/SKILL.md",
+        ".claude/skills/oak-codex-helper/SKILL.md",
+        ".claude/skills/oak-commit/SKILL.md",
+        ".claude/skills/oak-complex-merge/SKILL.md",
+        ".claude/skills/oak-consolidate-docs/SKILL.md",
+        ".claude/skills/oak-gates/SKILL.md",
+        ".claude/skills/oak-go/SKILL.md",
+        ".claude/skills/oak-ground-truth-design/SKILL.md",
+        ".claude/skills/oak-ground-truth-evaluation/SKILL.md",
+        ".claude/skills/oak-metacognition/SKILL.md",
+        ".claude/skills/oak-napkin/SKILL.md",
+        ".claude/skills/oak-plan/SKILL.md",
+        ".claude/skills/oak-session-handoff/SKILL.md",
+        ".claude/skills/oak-start-right-quick/SKILL.md",
+        ".claude/skills/oak-start-right-team/SKILL.md",
+        ".claude/skills/oak-start-right-thorough/SKILL.md",
+        ".claude/skills/oak-tsdoc/SKILL.md",
+        ".claude/skills/oak-undo-change/SKILL.md",
+        "CONTRIBUTING.md",
+        "README.md",
+        "agent-tools/scripts/validate-portability.ts",
+        "agent-tools/scripts/validate-portability.unit.test.ts",
+        "agent-tools/src/bin/skills-adapter-generate.ts",
+        "agent-tools/src/core/health-probe-hook-state.ts",
+        "agent-tools/tests/health-probe.unit.test.ts",
+        "agent-tools/tests/skills-adapter-generate/generator.unit.test.ts",
+        "docs/architecture/architectural-decisions/117-plan-templates-and-components.md",
+        "docs/architecture/architectural-decisions/125-agent-artefact-portability.md",
+        "docs/architecture/architectural-decisions/180-codex-exec-agent-delegation-pattern.md",
+        "docs/architecture/architectural-decisions/181-agent-team-start-and-action-log.md",
+        "package.json"
+      ],
+      "commit_subject": "refactor(skills-adapter): migrate adapter prefix from jc- to oak- (Task #9 / Cure D)",
+      "queued_at": "2026-05-22T15:50:23.117Z",
+      "updated_at": "2026-05-22T15:54:21.763Z",
+      "expires_at": "2026-05-22T16:05:23.117Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "ea4dae6ec51a9b8f66ca080f63e3a9d6a9f59dd530210337e82ceb05d88658ce",
+      "staged_name_status": "M\t.agent/directives/continuity-practice.md\nM\t.agent/directives/operationalisation-contract.md\nM\t.agent/rules/executive-memory-drift-capture.md\nM\t.agent/rules/present-verdicts-not-menus.md\nM\t.agent/rules/register-identity-on-thread-join.md\nM\t.agent/skills/codex-helper/SKILL-CANONICAL.md\nM\t.agent/skills/commit/SKILL-CANONICAL.md\nM\t.agent/skills/consolidate-docs/SKILL-CANONICAL.md\nM\t.agent/skills/plan/SKILL-CANONICAL.md\nM\t.agent/skills/session-handoff/SKILL-CANONICAL.md\nM\t.agent/skills/start-right-quick/shared/start-right.md\nM\t.agent/skills/start-right-thorough/shared/start-right-thorough.md\nM\t.agent/skills/undo-change/SKILL-CANONICAL.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/comms-seen/shaded-whispering-dusk.json\nM\t.agent/state/collaboration/shared-comms-log.md\nA\t.agents/skills/oak-chatgpt-report-normalisation/SKILL.md\nA\t.agents/skills/oak-codex-helper/SKILL.md\nA\t.agents/skills/oak-commit/SKILL.md\nA\t.agents/skills/oak-complex-merge/SKILL.md\nA\t.agents/skills/oak-consolidate-docs/SKILL.md\nA\t.agents/skills/oak-gates/SKILL.md\nA\t.agents/skills/oak-go/SKILL.md\nA\t.agents/skills/oak-ground-truth-design/SKILL.md\nA\t.agents/skills/oak-ground-truth-evaluation/SKILL.md\nA\t.agents/skills/oak-metacognition/SKILL.md\nA\t.agents/skills/oak-napkin/SKILL.md\nA\t.agents/skills/oak-plan/SKILL.md\nA\t.agents/skills/oak-session-handoff/SKILL.md\nA\t.agents/skills/oak-start-right-quick/SKILL.md\nA\t.agents/skills/oak-start-right-team/SKILL.md\nA\t.agents/skills/oak-start-right-thorough/SKILL.md\nA\t.agents/skills/oak-tsdoc/SKILL.md\nA\t.agents/skills/oak-undo-change/SKILL.md\nM\t.claude/settings.json\nA\t.claude/skills/oak-chatgpt-report-normalisation/SKILL.md\nA\t.claude/skills/oak-codex-helper/SKILL.md\nA\t.claude/skills/oak-commit/SKILL.md\nA\t.claude/skills/oak-complex-merge/SKILL.md\nA\t.claude/skills/oak-consolidate-docs/SKILL.md\nA\t.claude/skills/oak-gates/SKILL.md\nA\t.claude/skills/oak-go/SKILL.md\nA\t.claude/skills/oak-ground-truth-design/SKILL.md\nA\t.claude/skills/oak-ground-truth-evaluation/SKILL.md\nA\t.claude/skills/oak-metacognition/SKILL.md\nA\t.claude/skills/oak-napkin/SKILL.md\nA\t.claude/skills/oak-plan/SKILL.md\nA\t.claude/skills/oak-session-handoff/SKILL.md\nA\t.claude/skills/oak-start-right-quick/SKILL.md\nA\t.claude/skills/oak-start-right-team/SKILL.md\nA\t.claude/skills/oak-start-right-thorough/SKILL.md\nA\t.claude/skills/oak-tsdoc/SKILL.md\nA\t.claude/skills/oak-undo-change/SKILL.md\nM\tCONTRIBUTING.md\nM\tREADME.md\nM\tagent-tools/scripts/validate-portability.ts\nM\tagent-tools/scripts/validate-portability.unit.test.ts\nM\tagent-tools/src/bin/skills-adapter-generate.ts\nM\tagent-tools/src/core/health-probe-hook-state.ts\nM\tagent-tools/tests/health-probe.unit.test.ts\nM\tagent-tools/tests/skills-adapter-generate/generator.unit.test.ts\nM\tdocs/architecture/architectural-decisions/117-plan-templates-and-components.md\nM\tdocs/architecture/architectural-decisions/125-agent-artefact-portability.md\nM\tdocs/architecture/architectural-decisions/180-codex-exec-agent-delegation-pattern.md\nM\tdocs/architecture/architectural-decisions/181-agent-team-start-and-action-log.md\nM\tpackage.json\n"
+    },
+    {
+      "intent_id": "0cdfd816-47f2-4816-8aa7-b49fca347ccf",
+      "claim_id": "ceffd30a-05f8-4bd4-9667-79c19e7a5870",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "files": [
+        ""
+      ],
+      "commit_subject": "refactor(skills-adapter): migrate adapter prefix from jc- to oak- (Task #9 / Cure D)",
+      "queued_at": "2026-05-22T15:54:44.874Z",
+      "updated_at": "2026-05-22T15:54:56.418Z",
+      "expires_at": "2026-05-22T16:09:44.874Z",
+      "phase": "abandoned"
+    },
+    {
+      "intent_id": "461b79be-39c2-41e5-b144-060b65040338",
+      "claim_id": "ceffd30a-05f8-4bd4-9667-79c19e7a5870",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "files": [
+        ".agent/directives/continuity-practice.md",
+        ".agent/directives/operationalisation-contract.md",
+        ".agent/rules/executive-memory-drift-capture.md",
+        ".agent/rules/present-verdicts-not-menus.md",
+        ".agent/rules/register-identity-on-thread-join.md",
+        ".agent/skills/codex-helper/SKILL-CANONICAL.md",
+        ".agent/skills/commit/SKILL-CANONICAL.md",
+        ".agent/skills/consolidate-docs/SKILL-CANONICAL.md",
+        ".agent/skills/plan/SKILL-CANONICAL.md",
+        ".agent/skills/session-handoff/SKILL-CANONICAL.md",
+        ".agent/skills/start-right-quick/shared/start-right.md",
+        ".agent/skills/start-right-thorough/shared/start-right-thorough.md",
+        ".agent/skills/undo-change/SKILL-CANONICAL.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/comms-seen/shaded-whispering-dusk.json",
+        ".agent/state/collaboration/comms/09a2349a-3aba-4f7e-93c8-1af801d0d8ab.json",
+        ".agent/state/collaboration/shared-comms-log.md",
+        ".agents/skills/oak-chatgpt-report-normalisation/SKILL.md",
+        ".agents/skills/oak-codex-helper/SKILL.md",
+        ".agents/skills/oak-commit/SKILL.md",
+        ".agents/skills/oak-complex-merge/SKILL.md",
+        ".agents/skills/oak-consolidate-docs/SKILL.md",
+        ".agents/skills/oak-gates/SKILL.md",
+        ".agents/skills/oak-go/SKILL.md",
+        ".agents/skills/oak-ground-truth-design/SKILL.md",
+        ".agents/skills/oak-ground-truth-evaluation/SKILL.md",
+        ".agents/skills/oak-metacognition/SKILL.md",
+        ".agents/skills/oak-napkin/SKILL.md",
+        ".agents/skills/oak-plan/SKILL.md",
+        ".agents/skills/oak-session-handoff/SKILL.md",
+        ".agents/skills/oak-start-right-quick/SKILL.md",
+        ".agents/skills/oak-start-right-team/SKILL.md",
+        ".agents/skills/oak-start-right-thorough/SKILL.md",
+        ".agents/skills/oak-tsdoc/SKILL.md",
+        ".agents/skills/oak-undo-change/SKILL.md",
+        ".claude/settings.json",
+        ".claude/skills/oak-chatgpt-report-normalisation/SKILL.md",
+        ".claude/skills/oak-codex-helper/SKILL.md",
+        ".claude/skills/oak-commit/SKILL.md",
+        ".claude/skills/oak-complex-merge/SKILL.md",
+        ".claude/skills/oak-consolidate-docs/SKILL.md",
+        ".claude/skills/oak-gates/SKILL.md",
+        ".claude/skills/oak-go/SKILL.md",
+        ".claude/skills/oak-ground-truth-design/SKILL.md",
+        ".claude/skills/oak-ground-truth-evaluation/SKILL.md",
+        ".claude/skills/oak-metacognition/SKILL.md",
+        ".claude/skills/oak-napkin/SKILL.md",
+        ".claude/skills/oak-plan/SKILL.md",
+        ".claude/skills/oak-session-handoff/SKILL.md",
+        ".claude/skills/oak-start-right-quick/SKILL.md",
+        ".claude/skills/oak-start-right-team/SKILL.md",
+        ".claude/skills/oak-start-right-thorough/SKILL.md",
+        ".claude/skills/oak-tsdoc/SKILL.md",
+        ".claude/skills/oak-undo-change/SKILL.md",
+        "CONTRIBUTING.md",
+        "README.md",
+        "agent-tools/scripts/validate-portability.ts",
+        "agent-tools/scripts/validate-portability.unit.test.ts",
+        "agent-tools/src/bin/skills-adapter-generate.ts",
+        "agent-tools/src/core/health-probe-hook-state.ts",
+        "agent-tools/tests/health-probe.unit.test.ts",
+        "agent-tools/tests/skills-adapter-generate/generator.unit.test.ts",
+        "docs/architecture/architectural-decisions/117-plan-templates-and-components.md",
+        "docs/architecture/architectural-decisions/125-agent-artefact-portability.md",
+        "docs/architecture/architectural-decisions/180-codex-exec-agent-delegation-pattern.md",
+        "docs/architecture/architectural-decisions/181-agent-team-start-and-action-log.md",
+        "package.json"
+      ],
+      "commit_subject": "refactor(skills-adapter): migrate adapter prefix from jc- to oak- (Task #9 / Cure D)",
+      "queued_at": "2026-05-22T15:54:57.266Z",
+      "updated_at": "2026-05-22T15:56:25.674Z",
+      "expires_at": "2026-05-22T16:09:57.266Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "98beb2f5b1870cf74bf82560f9eaecf3fb7535966fdb44e9eb88b5b27bd05d36",
+      "staged_name_status": "M\t.agent/directives/continuity-practice.md\nM\t.agent/directives/operationalisation-contract.md\nM\t.agent/rules/executive-memory-drift-capture.md\nM\t.agent/rules/present-verdicts-not-menus.md\nM\t.agent/rules/register-identity-on-thread-join.md\nM\t.agent/skills/codex-helper/SKILL-CANONICAL.md\nM\t.agent/skills/commit/SKILL-CANONICAL.md\nM\t.agent/skills/consolidate-docs/SKILL-CANONICAL.md\nM\t.agent/skills/plan/SKILL-CANONICAL.md\nM\t.agent/skills/session-handoff/SKILL-CANONICAL.md\nM\t.agent/skills/start-right-quick/shared/start-right.md\nM\t.agent/skills/start-right-thorough/shared/start-right-thorough.md\nM\t.agent/skills/undo-change/SKILL-CANONICAL.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/comms-seen/shaded-whispering-dusk.json\nA\t.agent/state/collaboration/comms/09a2349a-3aba-4f7e-93c8-1af801d0d8ab.json\nM\t.agent/state/collaboration/shared-comms-log.md\nA\t.agents/skills/oak-chatgpt-report-normalisation/SKILL.md\nA\t.agents/skills/oak-codex-helper/SKILL.md\nA\t.agents/skills/oak-commit/SKILL.md\nA\t.agents/skills/oak-complex-merge/SKILL.md\nA\t.agents/skills/oak-consolidate-docs/SKILL.md\nA\t.agents/skills/oak-gates/SKILL.md\nA\t.agents/skills/oak-go/SKILL.md\nA\t.agents/skills/oak-ground-truth-design/SKILL.md\nA\t.agents/skills/oak-ground-truth-evaluation/SKILL.md\nA\t.agents/skills/oak-metacognition/SKILL.md\nA\t.agents/skills/oak-napkin/SKILL.md\nA\t.agents/skills/oak-plan/SKILL.md\nA\t.agents/skills/oak-session-handoff/SKILL.md\nA\t.agents/skills/oak-start-right-quick/SKILL.md\nA\t.agents/skills/oak-start-right-team/SKILL.md\nA\t.agents/skills/oak-start-right-thorough/SKILL.md\nA\t.agents/skills/oak-tsdoc/SKILL.md\nA\t.agents/skills/oak-undo-change/SKILL.md\nM\t.claude/settings.json\nA\t.claude/skills/oak-chatgpt-report-normalisation/SKILL.md\nA\t.claude/skills/oak-codex-helper/SKILL.md\nA\t.claude/skills/oak-commit/SKILL.md\nA\t.claude/skills/oak-complex-merge/SKILL.md\nA\t.claude/skills/oak-consolidate-docs/SKILL.md\nA\t.claude/skills/oak-gates/SKILL.md\nA\t.claude/skills/oak-go/SKILL.md\nA\t.claude/skills/oak-ground-truth-design/SKILL.md\nA\t.claude/skills/oak-ground-truth-evaluation/SKILL.md\nA\t.claude/skills/oak-metacognition/SKILL.md\nA\t.claude/skills/oak-napkin/SKILL.md\nA\t.claude/skills/oak-plan/SKILL.md\nA\t.claude/skills/oak-session-handoff/SKILL.md\nA\t.claude/skills/oak-start-right-quick/SKILL.md\nA\t.claude/skills/oak-start-right-team/SKILL.md\nA\t.claude/skills/oak-start-right-thorough/SKILL.md\nA\t.claude/skills/oak-tsdoc/SKILL.md\nA\t.claude/skills/oak-undo-change/SKILL.md\nM\tCONTRIBUTING.md\nM\tREADME.md\nM\tagent-tools/scripts/validate-portability.ts\nM\tagent-tools/scripts/validate-portability.unit.test.ts\nM\tagent-tools/src/bin/skills-adapter-generate.ts\nM\tagent-tools/src/core/health-probe-hook-state.ts\nM\tagent-tools/tests/health-probe.unit.test.ts\nM\tagent-tools/tests/skills-adapter-generate/generator.unit.test.ts\nM\tdocs/architecture/architectural-decisions/117-plan-templates-and-components.md\nM\tdocs/architecture/architectural-decisions/125-agent-artefact-portability.md\nM\tdocs/architecture/architectural-decisions/180-codex-exec-agent-delegation-pattern.md\nM\tdocs/architecture/architectural-decisions/181-agent-team-start-and-action-log.md\nM\tpackage.json\n",
+      "notes": "commit-workflow verify-staged-before failure: active-claims.json was re-staged after record-staged; the queue fingerprint changes its own staged payload. Leave the working-tree fingerprint unstaged and rerun verify-staged."
     }
   ],
   "claims": [
@@ -537,104 +814,7 @@
       "intent": "Cycle 6 architectural-judgement cluster (S7785+S7787, 12 sites, pre-execution reviewer first)"
     },
     {
-      "claim_id": "d26e453f-db59-4381-ac10-fab5b99411c3",
-      "agent_id": {
-        "agent_name": "Wooded Swaying Thicket",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "6c58f3"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/memory/active/napkin.md",
-            ".agent/memory/active/distilled.md",
-            ".agent/memory/operational/pending-graduations.md",
-            ".agent/memory/operational/repo-continuity.md",
-            ".agent/memory/active/archive/",
-            ".agent/memory/active/patterns/"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-22T12:42:00Z",
-      "freshness_seconds": 7200,
-      "sidebar_open": false,
-      "intent": "Continuous /jc-consolidate-docs pass — critical-zone memory surfaces (napkin 1099L, pending-graduations 4071L, repo-continuity prose widths, distilled 677L); graduate due/overdue PDR/ADR candidates to permanent homes; rotate napkin; honour learning-preservation-overrides-fitness.",
-      "intent_to_commit": "8369fee5-bb1b-4c94-9af6-b282f945ac50"
-    },
-    {
-      "claim_id": "c847fffc-e81b-4a1b-b4d2-e09251803111",
-      "agent_id": {
-        "agent_name": "Mistbound Slipping Night",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "a1cb64"
-      },
-      "thread": "connecting-oak-resources",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/plans/graph-mvp-arc.plan.md",
-            ".agent/plans/sector-engagement/eef/current/eef-first-feature.plan.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-22T13:57:31Z",
-      "freshness_seconds": 3600,
-      "sidebar_open": false,
-      "intent": "Land ff2 owner-decision: AI-client adoption tracking owner=Jim, mechanism=conversations (with future Notion-token possibility deferred). Resolves D-1; flips name-ai-client-adoption-owner + ff2-adoption-tracking-owner todos pending->completed; records outcome in both plan bodies; updates D-1 commentary."
-    },
-    {
-      "claim_id": "306dcadd-2be1-4436-9e44-57fb28ee2668",
-      "agent_id": {
-        "agent_name": "Shaded Whispering Dusk",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "763ef4"
-      },
-      "thread": "pr-108-snagging",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": [
-            "index/head"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-22T14:01:09Z",
-      "freshness_seconds": 900,
-      "sidebar_open": false,
-      "intent": "Stage and commit Lane A Cycle 9.2 — graph-* eslint config consolidation via createGraphBaseConfig.",
-      "intent_to_commit": "851d07af-5989-4441-abe2-d9a72508a5e7"
-    },
-    {
-      "claim_id": "f013f95d-ab63-4e83-a716-f198da3ee19f",
-      "agent_id": {
-        "agent_name": "Mistbound Slipping Night",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "a1cb64"
-      },
-      "thread": "eef-first-feature",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.ts",
-            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.unit.test.ts"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-22T14:48:44Z",
-      "freshness_seconds": 3600,
-      "sidebar_open": false,
-      "intent": "t12-citation-shape — land non-empty tuple Citation + Zod min(1) schema with co-located TDD unit tests"
-    },
-    {
-      "claim_id": "7bc6b37b-1c0f-4589-866b-1244d8c93949",
+      "claim_id": "e32b2e09-709c-490b-9b88-16f44f261b0c",
       "agent_id": {
         "agent_name": "Shaded Whispering Dusk",
         "platform": "claude",
@@ -646,92 +826,31 @@
         {
           "kind": "files",
           "patterns": [
-            "agent-tools/src/bin/commit-queue.ts",
-            "agent-tools/src/bin/collaboration-state.ts"
+            "agent-tools/src/bin/skills-adapter-generate.ts",
+            "agent-tools/src/core/health-probe-hook-state.ts",
+            "agent-tools/tests/skills-adapter-generate/**",
+            "agent-tools/tests/health-probe.unit.test.ts",
+            "package.json",
+            ".claude/settings.json",
+            ".claude/settings.local.json",
+            ".claude/skills/**",
+            ".agents/skills/**",
+            "docs/architecture/ADR-117.md",
+            "docs/architecture/ADR-125.md",
+            "docs/architecture/ADR-180.md",
+            "docs/architecture/ADR-181.md",
+            ".agent/rules/executive-memory-drift-capture.md",
+            ".agent/rules/present-verdicts-not-menus.md",
+            ".agent/rules/register-identity-on-thread-join.md",
+            ".agent/directives/operationalisation-contract.md",
+            ".agent/directives/continuity-practice.md"
           ]
         }
       ],
-      "claimed_at": "2026-05-22T14:51:01Z",
-      "freshness_seconds": 5400,
-      "sidebar_open": false,
-      "intent": "Cycle 10 / task #10 — finish Cycle 6 S7785 convergence: convert 2 remaining .then/.catch bin launchers to try/await; preserve stdout arg only where streaming is required"
-    },
-    {
-      "claim_id": "02eadf52-17e3-470e-a026-24f94be7a5f4",
-      "agent_id": {
-        "agent_name": "Tempestuous Spiralling Thermal",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "9205b8"
-      },
-      "thread": "connecting-oak-resources-distilled-fitness-rotation",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/memory/active/distilled.md",
-            ".agent/memory/active/archive/distilled-graduations-log-2026-05-14.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-22T14:51:05Z",
+      "claimed_at": "2026-05-22T15:36:27Z",
       "freshness_seconds": 7200,
       "sidebar_open": false,
-      "intent": "OUTPUT-surface curation continuation: distilled.md fitness-pressure rotation. 829L vs hard-limit 500. Move 'Recent graduations' audit-trail blocks (lines ~25-96 covering 2026-05-06, 2026-05-09, 2026-05-10, Verdict-not-menu 2026-05-11, Meta-observation 2026-05-09) to existing distilled-graduations-log-2026-05-14.md archive. Substance-preservation discipline: only audit-trail describing already-graduated material moves; load-bearing distilled entries stay."
-    },
-    {
-      "claim_id": "26148516-e98e-432e-8a48-93fbd92ad43c",
-      "agent_id": {
-        "agent_name": "Stormbound Kiting Squall",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "ddbea2"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "agent-tools/src/commit-queue/core.ts",
-            "agent-tools/src/commit-queue/git.ts",
-            "agent-tools/src/commit-queue/cli.ts",
-            "agent-tools/src/commit-queue/commit-workflow.ts",
-            "agent-tools/src/commit-queue/commit-workflow-runtime.ts",
-            "agent-tools/src/commit-queue/types.ts",
-            "agent-tools/src/commit-queue/index.ts",
-            "agent-tools/tests/commit-queue.unit.test.ts",
-            "agent-tools/tests/commit-queue.integration.test.ts",
-            ".agent/plans/agent-tooling/current/commit-queue-intent-scope-discipline.plan.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-22T14:53:44Z",
-      "freshness_seconds": 5400,
-      "sidebar_open": false,
-      "intent": "Implement commit-queue-intent-scope-discipline plan: scope record-staged/verify-staged/verify-staged-again/commit operations to intent.files. Three TDD cycles + Phase Final."
-    },
-    {
-      "claim_id": "985099cc-7cfb-4307-bd47-b06229de4253",
-      "agent_id": {
-        "agent_name": "Wooded Swaying Thicket",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "6c58f3"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": [
-            "index/head"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-22T14:53:50Z",
-      "freshness_seconds": 900,
-      "sidebar_open": false,
-      "intent": "Land distilled.md 8-owner-profile-observations entries via commit-queue intent 8369fee5",
-      "intent_to_commit": "692c57a7-ed09-404e-8a2d-de3871cc1994"
+      "intent": "Cycle 11 / Task #9 / Cure D — jc- to oak- skill prefix migration"
     }
   ]
 }

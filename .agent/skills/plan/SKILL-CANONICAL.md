@@ -16,7 +16,7 @@ and the plan architecture defined in
 
 1. **Design gate**: Has the design intent been explored and confirmed
    with the project owner? If the scope is ambiguous or the approach
-   has multiple valid paths, run `jc-metacognition` first to explore
+   has multiple valid paths, run `oak-metacognition` first to explore
    intent, constraints, and trade-offs before committing to a plan
    structure. Do not skip this step for non-trivial work.
 

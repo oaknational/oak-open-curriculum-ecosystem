@@ -27,7 +27,7 @@ well-defined sub-task to a Codex agent, two invocation surfaces exist:
 A live experiment (2026-05-12) validated this delegation loop:
 
 - Claude Code invoked `mcp__codex__codex` to ask Codex its model identity
-  after grounding with `/jc-start-right-quick`. Codex reported GPT-5 with
+  after grounding with `/oak-start-right-quick`. Codex reported GPT-5 with
   full session-identity registration.
 - Claude Code then delegated a skill-review task to Codex via `codex exec
 --json --sandbox read-only` with a grounded brief. Codex reviewed the
@@ -83,7 +83,7 @@ invocation and is only appropriate inside an externally sandboxed environment.
 
 ### 4. A `codex-helper` skill documents the patterns
 
-The `jc-codex-helper` skill (`classification: active`) provides templates for
+The `oak-codex-helper` skill (`classification: active`) provides templates for
 brief/one-shot tasks and grounded sessions. The skill references the
 `agent-tools:codex-exec` CLI as the preferred extraction and execution surface.
 It is generated as a cross-tool adapter under ADR-125.

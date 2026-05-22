@@ -17,7 +17,7 @@ Decisions 1–3 are operational at acceptance time:
 
 - **Decision 1** (`start-right-team` skill): canonical at
   [`.agent/skills/start-right-team/SKILL-CANONICAL.md`](../../../.agent/skills/start-right-team/SKILL-CANONICAL.md)
-  with platform adapters under `.agents/skills/jc-start-right-team/SKILL.md`
+  with platform adapters under `.agents/skills/oak-start-right-team/SKILL.md`
   and `.claude/skills/start-right-team/SKILL.md`. Landed at commit
   `bfa26e01`.
 - **Decision 2** (route by live pressure, temporary responsibility):

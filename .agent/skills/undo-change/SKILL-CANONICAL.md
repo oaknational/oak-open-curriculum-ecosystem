@@ -172,9 +172,9 @@ The skill does not authorise unilateral execution. It always halts.
 Thin pointers (no slash-command form):
 
 - Codex and other cross-tool runtimes:
-  `.agents/skills/jc-undo-change/SKILL.md`
-- Claude Code: `.claude/skills/jc-undo-change/SKILL.md`
+  `.agents/skills/oak-undo-change/SKILL.md`
+- Claude Code: `.claude/skills/oak-undo-change/SKILL.md`
 
 Cursor, Gemini, Codex-native, and Windsurf skill adapter trees were retired by
 the 2026-05-09 ADR-125/PDR-051 two-surface skills contract. All live skill
-adapters resolve to this canonical file through the `jc-` wrapper name.
+adapters resolve to this canonical file through the `oak-` wrapper name.

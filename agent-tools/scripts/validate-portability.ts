@@ -96,7 +96,7 @@ function addIssue(message) {
 //   - canonical skill frontmatter (classification: active|passive)
 //   - rule wrapper / trigger / RULES_INDEX parity
 //   - reviewer agent parity
-//   - hook portability and Claude permission parity for jc-* skill adapters
+//   - hook portability and Claude permission parity for oak-* skill adapters
 
 const canonicalSkillDirs = await listSubdirs('.agent/skills');
 
@@ -292,7 +292,7 @@ if (await exists(HOOK_POLICY_PATH)) {
   }
 }
 
-// --- Claude skill permission parity (jc-* adapters → settings.json) ---
+// --- Claude skill permission parity (oak-* adapters → settings.json) ---
 
 if (await exists(CLAUDE_SETTINGS_PATH)) {
   try {

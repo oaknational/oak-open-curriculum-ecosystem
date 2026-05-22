@@ -313,17 +313,20 @@ describe('getSkillPermissionIssues', () => {
   it('reports a missing Skill() permission when a Claude command adapter exists without a settings entry', () => {
     expect(
       getSkillPermissionIssues({
-        claudeCommandFiles: ['.claude/commands/jc-start-right-quick.md'],
-        claudeSettingsPermissions: ['Skill(jc-plan)', 'Skill(jc-plan:*)'],
+        claudeCommandFiles: ['.claude/commands/oak-start-right-quick.md'],
+        claudeSettingsPermissions: ['Skill(oak-plan)', 'Skill(oak-plan:*)'],
       }),
-    ).toContainEqual(expect.stringContaining('jc-start-right-quick'));
+    ).toContainEqual(expect.stringContaining('oak-start-right-quick'));
   });
 
   it('returns no issues when every Claude command adapter has a matching Skill() permission', () => {
     expect(
       getSkillPermissionIssues({
-        claudeCommandFiles: ['.claude/commands/jc-start-right-quick.md'],
-        claudeSettingsPermissions: ['Skill(jc-start-right-quick)', 'Skill(jc-start-right-quick:*)'],
+        claudeCommandFiles: ['.claude/commands/oak-start-right-quick.md'],
+        claudeSettingsPermissions: [
+          'Skill(oak-start-right-quick)',
+          'Skill(oak-start-right-quick:*)',
+        ],
       }),
     ).toStrictEqual([]);
   });
@@ -331,8 +334,8 @@ describe('getSkillPermissionIssues', () => {
   it('does not require the wildcard variant — only the base Skill() entry', () => {
     expect(
       getSkillPermissionIssues({
-        claudeCommandFiles: ['.claude/commands/jc-gates.md'],
-        claudeSettingsPermissions: ['Skill(jc-gates)'],
+        claudeCommandFiles: ['.claude/commands/oak-gates.md'],
+        claudeSettingsPermissions: ['Skill(oak-gates)'],
       }),
     ).toStrictEqual([]);
   });
@@ -340,9 +343,9 @@ describe('getSkillPermissionIssues', () => {
   it('ignores non-Skill permissions in the allow list', () => {
     expect(
       getSkillPermissionIssues({
-        claudeCommandFiles: ['.claude/commands/jc-gates.md'],
+        claudeCommandFiles: ['.claude/commands/oak-gates.md'],
         claudeSettingsPermissions: ['WebSearch', 'Bash(git status:*)'],
       }),
-    ).toContainEqual(expect.stringContaining('jc-gates'));
+    ).toContainEqual(expect.stringContaining('oak-gates'));
   });
 });

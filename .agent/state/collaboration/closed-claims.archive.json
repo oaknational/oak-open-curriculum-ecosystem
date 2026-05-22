@@ -29048,6 +29048,995 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "eb8048f8-faf5-4e4b-b662-b8c0520c4363",
+      "agent_id": {
+        "agent_name": "Mistbound Slipping Night",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "a1cb64"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T13:20:51Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit Lane B Tranche 2 — ADR-183 CLI rendering update (comms-event tag-token rendering).",
+      "intent_to_commit": "12c0a2ba-a198-4d1a-9de9-349c7b1215c3",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T13:47:41Z",
+        "closed_by": {
+          "agent_name": "Mistbound Slipping Night",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "a1cb64"
+        },
+        "summary": "T2 staged bundle landed via owner-authorized sweep 03da8e3d at 2026-05-22T13:38:45Z (directive: 'commit all files, regardless of claims or cause'); intent_to_commit 12c0a2ba abandoned post-sweep; no further git index/head work this lane.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "eb8048f8-faf5-4e4b-b662-b8c0520c4363",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "56206b71-a942-44ac-aa42-715b1cd5b30c",
+      "agent_id": {
+        "agent_name": "Mistbound Slipping Night",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "a1cb64"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/comms-relevant-events.ts",
+            "agent-tools/tests/collaboration-state/format-watcher-event.unit.test.ts",
+            "docs/architecture/architectural-decisions/183-comms-event-tag-namespace-substrate.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T13:12:34Z",
+      "freshness_seconds": 5400,
+      "sidebar_open": false,
+      "intent": "Lane B ADR-183 Tranche 2 — comms-event tag-token rendering. Compose [FAILURE-MODE]/[BEHAVIOUR-NOTE] tokens with channel discriminator per Q1-Q5 sidebar settlement. File-disjoint from Tempestuous (commit-queue) and Shaded (graph-ingest+bin).",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T13:47:52Z",
+        "closed_by": {
+          "agent_name": "Mistbound Slipping Night",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "a1cb64"
+        },
+        "summary": "ADR-183 T2 source-file work landed via owner-authorized sweep 03da8e3d at 2026-05-22T13:38:45Z. Helper formatWatcherEventHeader extraction + types.ts tags field + ADR-183 §Status flip all in the sweep bundle.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "56206b71-a942-44ac-aa42-715b1cd5b30c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6ed6ca9a-9702-4b4f-8994-2a862367516d",
+      "agent_id": {
+        "agent_name": "Mistbound Slipping Night",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "a1cb64"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/handoffs/",
+            ".agent/state/collaboration/active-claims.schema.json",
+            ".agent/state/collaboration/comms-event.schema.json",
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md",
+            ".agent/practice-index.md",
+            ".agent/practice-core/decision-records/PDR-063-mid-cycle-retirement-protocol.md",
+            ".agent/practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md",
+            ".agent/practice-core/decision-records/PDR-066-comms-events-as-failure-mode-channel.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T12:17:53Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Lane B PDR-063..066 cure work — substrate implementation: ADR-182 Tranche 1 (handoffs dir + claims schema field + SKILL Closeout amendment), ADR-183 Tranche 1 (comms-event schema tags field), PDR-064 SKILL Coordinator Handoff amendment. Tranche 2 of both ADRs deferred (ADR-183 Tranche 2 needs Shaded coordination on agent-tools CLI scope).",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T13:48:07Z",
+        "closed_by": {
+          "agent_name": "Mistbound Slipping Night",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "a1cb64"
+        },
+        "summary": "Lane B PDR-063..066 substrate cure work complete. Tranche 1 landed in c4bacfc5 (ADR-182 handoffs + claims schema field + SKILL Closeout amendment; ADR-183 schema tags field; PDR-064 SKILL Coordinator Handoff amendment). Tranche 2 (ADR-183 CLI rendering) landed via owner-authorized sweep 03da8e3d at 13:38:45Z. Lane B substantive scope discharged.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6ed6ca9a-9702-4b4f-8994-2a862367516d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "47497834-c4b1-4b50-ab02-9040fe6b0195",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "git:index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T14:19:25Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Lane A Cycle 9.2 commit — graph-* eslint factory rewire + Tempestuous coherence absorbs (PDR-064 amendment, SKILL amendment, RULES_INDEX, archive append) + 2 own prior pause/halt comms",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T14:21:42Z",
+        "closed_by": {
+          "agent_name": "Shaded Whispering Dusk",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "763ef4"
+        },
+        "summary": "Cycle 9.2 commit landed at c7fd0b7b — 18 files, gates green, husky GREEN",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "47497834-c4b1-4b50-ab02-9040fe6b0195",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6af12756-b43a-4b98-8a2f-b79e3155fee1",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "thread": "pr-108-snagging",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/core/graph-core/eslint.config.ts",
+            "packages/libs/graph-ingest/eslint.config.ts",
+            "packages/libs/graph-project/eslint.config.ts",
+            "packages/design/oak-design-ink/eslint.config.ts",
+            "packages/core/oak-eslint/src/configs/base.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T13:25:14Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Cycle 9 ESLint config consolidation — extract 47-line shared shape across 4 workspace configs into shared base; pre-execution code-expert + config-expert review per new runbook rule 2; plan section pr-108-snagging.plan.md lines 945-1000",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T14:21:47Z",
+        "closed_by": {
+          "agent_name": "Shaded Whispering Dusk",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "763ef4"
+        },
+        "summary": "Cycle 9 eslint factory consolidation complete — Cycle 9.1 landed in sweep 03da8e3d, Cycle 9.2 landed at c7fd0b7b",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6af12756-b43a-4b98-8a2f-b79e3155fee1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "cb6a4cfc-f488-4ae0-adb9-debf508cdccf",
+      "agent_id": {
+        "agent_name": "Tempestuous Spiralling Thermal",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "9205b8"
+      },
+      "thread": "connecting-oak-resources-knowledge-curation-output-surfaces",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/repo-continuity.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T13:48:27Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Knowledge curation at OUTPUT — distilled.md graduation backlog (829 vs hard-limit 500) + pending-graduations.md buffer back-pressure diagnosis (3953 lines, fired-trigger drain) + repo-continuity.md drain. Routes ripe substance to permanent homes (PDR/ADR/rules/governance). Complementary to Wooded INPUT scope.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T14:46:37Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Spiralling Thermal",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "9205b8"
+        },
+        "summary": "OUTPUT-surface curation complete. All 4 actionable graduations from pending-graduations.md landed in HEAD via two complementary commits: c7fd0b7b (Shaded's absorbed bundle — PDR-064 §'Partial / Slice-Scoped Coordinator Transfer' amendment + start-right-team SKILL 'Coordinator delegates sub-agent launches' amendment + new .agent/rules/hook-policy-substring-discipline.md rule + .claude/ + .cursor/ adapter siblings + RULES_INDEX entry + archive header + 4 entry bodies appended) and 20fcf565 (Wooded's pass — pending-graduations.md graduation-log table + 4 graduated-pointers). Coherence in HEAD confirmed. Only remaining due entry in pending-graduations.md is canonical-tool-definitions-code-adjacent, plan-execution-gated (coordination-watcher-canonicalisation plan) — not actionable until that plan executes. Discharge evidence: c7fd0b7b + 20fcf565 + 1b619457.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "cb6a4cfc-f488-4ae0-adb9-debf508cdccf",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "985099cc-7cfb-4307-bd47-b06229de4253",
+      "agent_id": {
+        "agent_name": "Wooded Swaying Thicket",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "6c58f3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T14:53:50Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Land distilled.md 8-owner-profile-observations entries via commit-queue intent 8369fee5",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T14:58:31Z",
+        "closed_by": {
+          "agent_name": "Wooded Swaying Thicket",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "6c58f3"
+        },
+        "summary": "Distilled.md owner-profile substance landed at 2389ff5e via commit-queue intent 692c57a7. Foreign-staged Shaded Cycle 10 source edits absorbed by primitive scope bug (live instance of commit-queue-intent-scope-discipline.plan.md fix). Directed events to Shaded + Stormbound (correction) sent. Tempestuous trim landed in parallel on same file; no conflict.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "985099cc-7cfb-4307-bd47-b06229de4253",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "7bc6b37b-1c0f-4589-866b-1244d8c93949",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/bin/commit-queue.ts",
+            "agent-tools/src/bin/collaboration-state.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T14:51:01Z",
+      "freshness_seconds": 5400,
+      "sidebar_open": false,
+      "intent": "Cycle 10 / task #10 — finish Cycle 6 S7785 convergence: convert 2 remaining .then/.catch bin launchers to try/await; preserve stdout arg only where streaming is required",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T15:00:38Z",
+        "closed_by": {
+          "agent_name": "Shaded Whispering Dusk",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "763ef4"
+        },
+        "summary": "Cycle 10 substance landed at 2389ff5e (Wooded's bundle, absorbed via commit-queue scope bug); attribution-correction broadcast posted; both code-expert verdicts (pre-exec GO + post-exec APPROVED) recorded in transcript before absorb. Substance-complete.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7bc6b37b-1c0f-4589-866b-1244d8c93949",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "306dcadd-2be1-4436-9e44-57fb28ee2668",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "thread": "pr-108-snagging",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T14:01:09Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit Lane A Cycle 9.2 — graph-* eslint config consolidation via createGraphBaseConfig.",
+      "intent_to_commit": "851d07af-5989-4441-abe2-d9a72508a5e7",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T15:02:23Z",
+        "closed_by": {
+          "agent_name": "Shaded Whispering Dusk",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "763ef4"
+        },
+        "summary": "Stale post-Cycle-9.2-landing (c7fd0b7b 14:21Z) and post-Cycle-10-landing (2389ff5e 14:54Z). Closing per Tempestuous flag; clears path for their distilled.md Path B commit.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "306dcadd-2be1-4436-9e44-57fb28ee2668",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "faf35c2c-4758-446d-9bc9-89a6866bf3b4",
+      "agent_id": {
+        "agent_name": "Stormbound Kiting Squall",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ddbea2"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T15:12:10Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit Cycle 1.1 atomic landing: plan + getStagedBundleScoped + record-staged adoption.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T15:13:27Z",
+        "closed_by": {
+          "agent_name": "Stormbound Kiting Squall",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "ddbea2"
+        },
+        "summary": "commit fb0833a4: feat(commit-queue): scope record-staged to intent.files via getStagedBundleScoped (Cycle 1.1)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "faf35c2c-4758-446d-9bc9-89a6866bf3b4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "02eadf52-17e3-470e-a026-24f94be7a5f4",
+      "agent_id": {
+        "agent_name": "Tempestuous Spiralling Thermal",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "9205b8"
+      },
+      "thread": "connecting-oak-resources-distilled-fitness-rotation",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/archive/distilled-graduations-log-2026-05-14.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T14:51:05Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "OUTPUT-surface curation continuation: distilled.md fitness-pressure rotation. 829L vs hard-limit 500. Move 'Recent graduations' audit-trail blocks (lines ~25-96 covering 2026-05-06, 2026-05-09, 2026-05-10, Verdict-not-menu 2026-05-11, Meta-observation 2026-05-09) to existing distilled-graduations-log-2026-05-14.md archive. Substance-preservation discipline: only audit-trail describing already-graduated material moves; load-bearing distilled entries stay.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T15:16:52Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Spiralling Thermal",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "9205b8"
+        },
+        "summary": "Distilled.md fitness-rotation landed at 53b00386. distilled.md 919L -> 874L (-45 lines); 4 audit-trail blocks archived to distilled-graduations-log-2026-05-14.md 'Backfill rotation 2026-05-22' section with substance preservation; pointer left in distilled.md naming permanent homes. Full pre-commit gate suite GREEN. Further trim deferred to a separate session — requires substantive judgement on Recently-Distilled entry settling.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "02eadf52-17e3-470e-a026-24f94be7a5f4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d26e453f-db59-4381-ac10-fab5b99411c3",
+      "agent_id": {
+        "agent_name": "Wooded Swaying Thicket",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "6c58f3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/active/archive/",
+            ".agent/memory/active/patterns/"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T12:42:00Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Continuous /jc-consolidate-docs pass — critical-zone memory surfaces (napkin 1099L, pending-graduations 4071L, repo-continuity prose widths, distilled 677L); graduate due/overdue PDR/ADR candidates to permanent homes; rotate napkin; honour learning-preservation-overrides-fitness.",
+      "intent_to_commit": "8369fee5-bb1b-4c94-9af6-b282f945ac50",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T15:17:28Z",
+        "closed_by": {
+          "agent_name": "Wooded Swaying Thicket",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "6c58f3"
+        },
+        "summary": "Wooded INPUT-surface curation complete. Substantive landings: 990 stale comms-events drained at 1b619457; 8 owner-profile observations promoted to distilled.md at 2389ff5e; rule-topology + behaviour-nudge + routing-vs-claim-release pending-graduations entries added; .remember/ plugin dormancy diagnosed as platform-scope-mismatch with cure (restart). Foreign-staged absorption incident captured in napkin as fresh evidence for commit-queue-intent-scope-discipline plan. Session-handoff Wooded identity row added to agentic-engineering-enhancements thread record.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d26e453f-db59-4381-ac10-fab5b99411c3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e33b1cf3-d001-4aab-87d8-4aeb04ccb11e",
+      "agent_id": {
+        "agent_name": "Stormbound Kiting Squall",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ddbea2"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T15:19:38Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Stage and commit Cycle 1.1 follow-up: reviewer absorption + fixture rename.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T15:21:21Z",
+        "closed_by": {
+          "agent_name": "Stormbound Kiting Squall",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "ddbea2"
+        },
+        "summary": "commit e242e633: docs(commit-queue): Cycle 1.1 post-delivery reviewer absorption + fixture rename",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e33b1cf3-d001-4aab-87d8-4aeb04ccb11e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "26148516-e98e-432e-8a48-93fbd92ad43c",
+      "agent_id": {
+        "agent_name": "Stormbound Kiting Squall",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ddbea2"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/commit-queue/core.ts",
+            "agent-tools/src/commit-queue/git.ts",
+            "agent-tools/src/commit-queue/cli.ts",
+            "agent-tools/src/commit-queue/commit-workflow.ts",
+            "agent-tools/src/commit-queue/commit-workflow-runtime.ts",
+            "agent-tools/src/commit-queue/types.ts",
+            "agent-tools/src/commit-queue/index.ts",
+            "agent-tools/tests/commit-queue.unit.test.ts",
+            "agent-tools/tests/commit-queue.integration.test.ts",
+            ".agent/plans/agent-tooling/current/commit-queue-intent-scope-discipline.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T14:53:44Z",
+      "freshness_seconds": 5400,
+      "sidebar_open": false,
+      "intent": "Implement commit-queue-intent-scope-discipline plan: scope record-staged/verify-staged/verify-staged-again/commit operations to intent.files. Three TDD cycles + Phase Final.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T15:26:07Z",
+        "closed_by": {
+          "agent_name": "Stormbound Kiting Squall",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "ddbea2"
+        },
+        "summary": "Cycle 1.1 of commit-queue-intent-scope-discipline plan landed at fb0833a4 + e242e633; Cycles 1.2 + 1.3 + Phase Final remain for next agent",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "26148516-e98e-432e-8a48-93fbd92ad43c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e15a00c6-0f16-454e-9274-a9e33f58641e",
+      "agent_id": {
+        "agent_name": "Stormbound Kiting Squall",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ddbea2"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T15:33:26Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Stage and commit Cycle 1.1 handoff finalisation.",
+      "intent_to_commit": "cf39fd43-e2dc-4b03-bdfa-0ecdd771796d",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T15:35:09Z",
+        "closed_by": {
+          "agent_name": "Stormbound Kiting Squall",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "ddbea2"
+        },
+        "summary": "Closed before record-staged: foreign-staged Mistbound t12-citation-shape files in index; waiting for Mistbound to land before retrying handoff",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e15a00c6-0f16-454e-9274-a9e33f58641e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c847fffc-e81b-4a1b-b4d2-e09251803111",
+      "agent_id": {
+        "agent_name": "Mistbound Slipping Night",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "a1cb64"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/graph-mvp-arc.plan.md",
+            ".agent/plans/sector-engagement/eef/current/eef-first-feature.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T13:57:31Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Land ff2 owner-decision: AI-client adoption tracking owner=Jim, mechanism=conversations (with future Notion-token possibility deferred). Resolves D-1; flips name-ai-client-adoption-owner + ff2-adoption-tracking-owner todos pending->completed; records outcome in both plan bodies; updates D-1 commentary.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T15:42:03Z",
+        "closed_by": {
+          "agent_name": "Mistbound Slipping Night",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "a1cb64"
+        },
+        "summary": "ff2 work absorbed by owner-directed sweep 03da8e3d/2cda69a2 during compaction pause; no further action required",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c847fffc-e81b-4a1b-b4d2-e09251803111",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f013f95d-ab63-4e83-a716-f198da3ee19f",
+      "agent_id": {
+        "agent_name": "Mistbound Slipping Night",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "a1cb64"
+      },
+      "thread": "eef-first-feature",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.ts",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T14:48:44Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "t12-citation-shape — land non-empty tuple Citation + Zod min(1) schema with co-located TDD unit tests",
+      "intent_to_commit": "131fe2a9-edde-4481-abc7-6838ddad4eec",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T15:42:06Z",
+        "closed_by": {
+          "agent_name": "Mistbound Slipping Night",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "a1cb64"
+        },
+        "summary": "t12-citation-shape main claim — work staged + verify-staged passed (fingerprint 35a29ef5...); commit handed to Stormbound Kiting Squall per owner direction at session-end",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f013f95d-ab63-4e83-a716-f198da3ee19f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "59eabaea-73bd-412d-aeb2-b6ce9b997141",
+      "agent_id": {
+        "agent_name": "Mistbound Slipping Night",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "a1cb64"
+      },
+      "thread": "eef-first-feature",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T15:14:31Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "t12-citation-shape — drop source field from Citation per owner direction (option A); §Phase F amendment cohesive with citation-shape.ts landing",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T15:42:11Z",
+        "closed_by": {
+          "agent_name": "Mistbound Slipping Night",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "a1cb64"
+        },
+        "summary": "t12 supplementary corpus-plan amendment claim — §Phase F edit staged with t12 main; commit handed to Stormbound per owner direction",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "59eabaea-73bd-412d-aeb2-b6ce9b997141",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "7f45a590-ff47-4b9f-8ff4-e4d2acce6df4",
+      "agent_id": {
+        "agent_name": "Stormbound Kiting Squall",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ddbea2"
+      },
+      "thread": "eef-evidence-corpus",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "git:index",
+            "git:head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T15:47:29Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "land Mistbound's t12 citation shape commit",
+      "intent_to_commit": "ea53e1b5-58f7-45f5-af55-2aeb3c00a7a5",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T15:48:42Z",
+        "closed_by": {
+          "agent_name": "Stormbound Kiting Squall",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "ddbea2"
+        },
+        "summary": "Wrong area-pattern format used; recreating with index/head",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7f45a590-ff47-4b9f-8ff4-e4d2acce6df4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3f1c3521-6028-48d1-9c6b-d1ba6d6e487f",
+      "agent_id": {
+        "agent_name": "Stormbound Kiting Squall",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ddbea2"
+      },
+      "thread": "eef-evidence-corpus",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.ts",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.unit.test.ts",
+            ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T15:46:39Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "land Mistbound's t12 citation shape on owner-directed peer handoff",
+      "intent_to_commit": "18a9272e-b3e4-4e37-a7e6-2d3c74481511",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T15:51:40Z",
+        "closed_by": {
+          "agent_name": "Stormbound Kiting Squall",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "ddbea2"
+        },
+        "summary": "t12 citation shape landed at 0b7289e9 via Path-B (queue verify-staged unscoped — Cycle 1.2 mutation point caught live)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3f1c3521-6028-48d1-9c6b-d1ba6d6e487f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3c9bcc8c-cc55-4dd0-951f-d5cf6c7cd4c7",
+      "agent_id": {
+        "agent_name": "Stormbound Kiting Squall",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ddbea2"
+      },
+      "thread": "eef-evidence-corpus",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T15:48:50Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "land Mistbound's t12 citation shape commit",
+      "intent_to_commit": "164f6897-4a94-4d65-a786-3ee6d1a3e031",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T15:51:41Z",
+        "closed_by": {
+          "agent_name": "Stormbound Kiting Squall",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "ddbea2"
+        },
+        "summary": "git:index/head released after Path-B commit at 0b7289e9",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3c9bcc8c-cc55-4dd0-951f-d5cf6c7cd4c7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e89c52fe-2116-4d09-a00e-c4daba228557",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "git:index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T15:47:42Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Cycle 11 commit window — jc- to oak- skill prefix migration (Cure D)",
+      "intent_to_commit": "abd37364-6630-4459-9a41-ffb70fb674c4",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T15:51:43Z",
+        "closed_by": {
+          "agent_name": "Shaded Whispering Dusk",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "763ef4"
+        },
+        "summary": "Yielding git:index/head to Stormbound for their Path-B commit of Mistbound t12. Will re-open after their commit clears foreign-staged files from my staged set; commit-queue intent abd37364 remains in staging phase.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e89c52fe-2116-4d09-a00e-c4daba228557",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ceffd30a-05f8-4bd4-9667-79c19e7a5870",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "git:index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T15:52:58Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Cycle 11 commit window (resumed after Stormbound Path-B at 0b7289e9)",
+      "intent_to_commit": "461b79be-39c2-41e5-b144-060b65040338",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T15:56:24Z",
+        "closed_by": {
+          "agent_name": "Shaded Whispering Dusk",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "763ef4"
+        },
+        "summary": "closed in same collaboration-state commit per SKILL residue exception; queue intent 461b79be abandoned post-record-staged due to fingerprint recursion; proceeding via explicit pathspec git commit",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ceffd30a-05f8-4bd4-9667-79c19e7a5870",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

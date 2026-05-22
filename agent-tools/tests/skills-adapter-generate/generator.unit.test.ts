@@ -70,12 +70,12 @@ describe('buildAdapterFrontmatter', () => {
   it('renames the skill with the configured prefix and preserves the description', () => {
     const result = buildAdapterFrontmatter(
       { name: 'go', description: 'Re-ground execution.' },
-      'jc-',
+      'oak-',
       'go',
     );
 
     expect(result).toEqual({
-      name: 'jc-go',
+      name: 'oak-go',
       description: 'Re-ground execution.',
     });
   });
@@ -104,7 +104,7 @@ function makeFs(files: ReadonlyMap<string, string>): CheckerFs {
 
 describe('checkAdapters', () => {
   const repoRoot = '/repo';
-  const prefix = 'jc-';
+  const prefix = 'oak-';
   const sampleCanonical: ParsedCanonicalSkill = {
     id: 'sample',
     frontmatter: { name: 'sample', description: 'A sample canonical skill.' },

@@ -59,8 +59,8 @@ Gemini CLI, Copilot, Windsurf) start with two additional surfaces:
 The team's skill and command vocabulary lives under
 [`.agent/skills/`](.agent/skills/) (canonical) with platform adapters under
 [`.claude/skills/`](.claude/skills/) and equivalents for other agents. Open
-every session with the platform adapter for `jc-start-right-quick` and close
-it with the platform adapter for `jc-session-handoff`. The docs index keeps
+every session with the platform adapter for `oak-start-right-quick` and close
+it with the platform adapter for `oak-session-handoff`. The docs index keeps
 the current platform invocation forms in
 [`docs/README.md`](docs/README.md#getting-started).
 

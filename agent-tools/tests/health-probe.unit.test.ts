@@ -102,7 +102,7 @@ describe('health report formatting', () => {
           label: 'Practice box state',
           status: 'warn',
           summary: 'Incoming artefacts are waiting.',
-          details: ['Use jc-consolidate-docs.'],
+          details: ['Use oak-consolidate-docs.'],
         },
       ],
     };
@@ -113,6 +113,6 @@ describe('health report formatting', () => {
     expect(output).toContain('Summary');
     expect(output).toContain('Practice box state');
     expect(output).toContain('Details');
-    expect(output).toContain('Use jc-consolidate-docs.');
+    expect(output).toContain('Use oak-consolidate-docs.');
   });
 });

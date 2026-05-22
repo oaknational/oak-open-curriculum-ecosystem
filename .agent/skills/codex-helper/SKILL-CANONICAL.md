@@ -4,7 +4,7 @@ classification: active
 description: >-
   Invoke Codex as a sub-agent for well-defined tasks using `codex exec`.
   Provides templates for brief one-shot tasks (no grounding) and longer
-  repo-aware sessions (with jc-start-right-quick). Use when delegating
+  repo-aware sessions (with oak-start-right-quick). Use when delegating
   a self-contained task to Codex from Claude Code or from a shell script.
 ---
 
@@ -90,7 +90,7 @@ All context the agent needs inline.
 BRIEF
 ```
 
-## Grounded Session Template (with jc-start-right-quick)
+## Grounded Session Template (with oak-start-right-quick)
 
 For tasks that read or write repo state, touch shared claim surfaces, or
 need the agent to understand current branch context before acting.
@@ -101,7 +101,7 @@ codex exec \
   --sandbox workspace-write \
   -C /path/to/repo \
   - <<'BRIEF'
-Before starting, run /jc-start-right-quick to ground yourself in this
+Before starting, run /oak-start-right-quick to ground yourself in this
 repository's current state.
 
 <task>
@@ -223,6 +223,6 @@ A well-scoped brief prevents the agent from filling ambiguity with guesses:
 - State the expected output format explicitly.
 - Include all necessary context inline — the agent has no session memory.
 - Keep grounded briefs to one coherent goal; multi-goal briefs drift.
-- For repo-aware tasks, the grounding prompt (`/jc-start-right-quick`)
+- For repo-aware tasks, the grounding prompt (`/oak-start-right-quick`)
   handles claim-scanning, branch state, and comms-surface checks — do not
   duplicate that in the brief body.

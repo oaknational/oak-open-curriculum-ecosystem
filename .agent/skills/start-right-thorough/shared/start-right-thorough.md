@@ -139,7 +139,7 @@ that the work shape and validation path are visible before mutation.
 
 ## Practice Box
 
-Check `.agent/practice-core/incoming/` for practice-core files. If present, alert the user — incoming material may carry learnings from another repo. Full integration happens during `/jc-consolidate-docs`.
+Check `.agent/practice-core/incoming/` for practice-core files. If present, alert the user — incoming material may carry learnings from another repo. Full integration happens during `/oak-consolidate-docs`.
 
 ## Commit
 
@@ -199,7 +199,7 @@ pnpm test:widget:a11y
 
 # Practice health — three-zone model, ADR-144
 pnpm practice:fitness:informational  # Four-zone report (always exit 0)
-# Consolidation-closure signal (used by jc-consolidate-docs):
+# Consolidation-closure signal (used by oak-consolidate-docs):
 #   pnpm practice:fitness:strict-hard
 # Vocabulary consistency (ADR-144 §Key Principles #1):
 #   pnpm practice:vocabulary

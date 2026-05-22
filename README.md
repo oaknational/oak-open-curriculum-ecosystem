@@ -65,14 +65,14 @@ For Claude Code, Cursor, Gemini, or another slash-command surface, a single
 agent session might start with:
 
 ```text
-/jc-start-right-quick find the most frequent user-impact bug from Sentry,
+/oak-start-right-quick find the most frequent user-impact bug from Sentry,
 create a plan for resolving it, then execute it
 ```
 
 For a coordinated team:
 
 ```text
-/jc-start-right-team you are part of a team of agents working on the
+/oak-start-right-team you are part of a team of agents working on the
 knowledge graph enhancement plan, please continue
 ```
 
@@ -80,7 +80,7 @@ For existing threads, prefer a pointer to the thread continuation record rather
 than restating live state in the prompt:
 
 ```text
-/jc-start-right-team continue agentic-engineering-enhancements from
+/oak-start-right-team continue agentic-engineering-enhancements from
 .agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md.
 Treat this opener as a hypothesis until live grounding confirms it.
 ```
@@ -88,14 +88,14 @@ Treat this opener as a hypothesis until live grounding confirms it.
 In Codex, use the same skill names through `/skills` or `$skill-name` mentions:
 
 ```text
-$jc-start-right-team continue agentic-engineering-enhancements from
+$oak-start-right-team continue agentic-engineering-enhancements from
 .agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md.
 Treat this opener as a hypothesis until live grounding confirms it.
 ```
 
-Use `jc-session-handoff` at the end of a meaningful solo session so the next
+Use `oak-session-handoff` at the end of a meaningful solo session so the next
 agent inherits the real state rather than a chat transcript guess. In team
-sessions, `jc-start-right-team` should name the closeout owner; only that owner
+sessions, `oak-start-right-team` should name the closeout owner; only that owner
 runs the full handoff, while other team members leave boundary-scoped closeout
 notes.
 

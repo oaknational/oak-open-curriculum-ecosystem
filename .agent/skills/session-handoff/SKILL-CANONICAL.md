@@ -391,7 +391,7 @@ there unless the owner or closeout owner gives a further assignment.
       Practice-bearing repos may choose a clearer `Active identities` heading.
       Update the existing identity summary column rather than renaming the
       table during routine handoff. The summary must reflect the thread record
-      or the audit in `jc-consolidate-docs` step 7c will flag a mismatch.
+      or the audit in `oak-consolidate-docs` step 7c will flag a mismatch.
 
    This is the session-close counterpart to the session-open
    registration step in
@@ -498,11 +498,11 @@ there unless the owner or closeout owner gives a further assignment.
 10. **Escalate only when the deeper loop is clearly warranted.**
 
     - If the triggered work is already well-bounded and belongs to this
-      closeout, continue immediately into `jc-consolidate-docs`.
+      closeout, continue immediately into `oak-consolidate-docs`.
     - If deep consolidation is due but not well-bounded for this closeout,
       stop after marking `due — <reason>` so the next session can pick it up
       deliberately.
-    - If `jc-consolidate-docs` runs now, refresh `Deep consolidation status`
+    - If `oak-consolidate-docs` runs now, refresh `Deep consolidation status`
       to `completed this handoff — <reason>`.
 
 11. **Verify the `pnpm check` cleanliness gate.** A sole-contributor session
@@ -530,6 +530,6 @@ there unless the owner or closeout owner gives a further assignment.
     standing direction structurally enforced rather than agent-recalled.
 
 12. **Keep the boundary clean.** `session-handoff` includes the consolidation
-    gate and can escalate into `jc-consolidate-docs` when appropriate, but
+    gate and can escalate into `oak-consolidate-docs` when appropriate, but
     ordinary sessions remain lightweight. It does not smuggle in review or git
     actions.

@@ -21,7 +21,7 @@ interface CliFlags {
 function parseFlags(args: readonly string[]): CliFlags {
   let clear = false;
   let check = false;
-  let prefix = 'jc-';
+  let prefix = '';
   for (const arg of args) {
     if (arg === '--clear') {
       clear = true;

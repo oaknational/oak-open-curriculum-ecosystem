@@ -577,9 +577,9 @@ Adapters are generated skill-form thin pointers. ADR-125 is authoritative for
 the current adapter topology; do not hand-maintain a platform inventory here.
 For this owned skill the generated adapters currently live at:
 
-- `.agents/skills/jc-commit/SKILL.md` — cross-tool alias used by Codex,
+- `.agents/skills/oak-commit/SKILL.md` — cross-tool alias used by Codex,
   Cursor, Gemini, and other `.agents/` consumers.
-- `.claude/skills/jc-commit/SKILL.md` — Claude Code adapter.
+- `.claude/skills/oak-commit/SKILL.md` — Claude Code adapter.
 
 The retired custom-command and per-platform skill directories are not valid
 homes for this workflow. Regenerate adapters with

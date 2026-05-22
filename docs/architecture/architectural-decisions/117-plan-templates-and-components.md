@@ -223,7 +223,7 @@ the plan content.
 - `current/` and `future/` hold not-yet-started work only — no in-progress
   execution in these directories.
 - No stubs, no redirects, no compatibility layers.
-- Run the consolidation flow (`/jc-consolidate-docs`) after every milestone.
+- Run the consolidation flow (`/oak-consolidate-docs`) after every milestone.
 
 ## References
 

@@ -35,7 +35,7 @@ phrased.
 3. **Exploration of design intent before verdict is possible.** When the
    agent genuinely has no strong basis for a position (early planning,
    ambiguous scope, novel domain), surfacing 2–3 approaches with
-   trade-offs is the right move. This is the case the `jc-plan` skill's
+   trade-offs is the right move. This is the case the `oak-plan` skill's
    §Before Writing item 1 is written for.
 
 ## Illegitimate Uses (the trip-list shapes)

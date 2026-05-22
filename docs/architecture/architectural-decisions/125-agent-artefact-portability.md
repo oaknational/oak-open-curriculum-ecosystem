@@ -11,7 +11,9 @@ removed or reclassified when native Gemini agent support exists.
 and `.gemini/commands/jc-*.toml` are now retired. Their substantive content
 has been inlined into `.agent/skills/<name>/SKILL-CANONICAL.md`; skills are
 the sole user-and-model-invokable workflow surface. The 2026-05-09
-amendment's transitional language no longer applies.
+amendment's transitional language no longer applies. (Historical: at the
+time of this amendment the owned-skill prefix was `jc-`; that prefix was
+later migrated to `oak-` per the 2026-05-22 amendment.)
 **Related**: [ADR-114 (Layered Sub-agent Prompt Composition)](114-layered-sub-agent-prompt-composition-architecture.md), [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md), [ADR-124 (Practice Propagation Model)](124-practice-propagation-model.md), [PDR-009 (Canonical-First Cross-Platform Architecture)](../../../.agent/practice-core/decision-records/PDR-009-canonical-first-cross-platform-architecture.md), [PDR-035 (Agent Work Capabilities Belong to the Practice)](../../../.agent/practice-core/decision-records/PDR-035-agent-work-capabilities-belong-to-the-practice.md), [PDR-051 (Vendor-Agnostic Skills Standardisation)](../../../.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md), [ADR-165 (Agent Work Practice Phenotype Boundary)](165-agent-work-practice-phenotype-boundary.md)
 
 ## Context
@@ -47,7 +49,7 @@ Live skill counts surface in the directory listing — counts in this ADR drift;
 
 ### Layer 2: Platform Adapters (thin wrappers)
 
-Each platform has thin wrappers that reference canonical content. Skill adapters are emitted by the `agent-tools:skills-adapter-generate` CLI; manual edits are forbidden by header comment in every emitted file. Owned skills carry a configurable prefix (default `jc-`) in adapter directories; ingested skills (recorded in `skills-lock.json`) keep their canonical name.
+Each platform has thin wrappers that reference canonical content. Skill adapters are emitted by the `agent-tools:skills-adapter-generate` CLI; manual edits are forbidden by header comment in every emitted file. Owned skills carry a configurable prefix (default `oak-`) in adapter directories; ingested skills (recorded in `skills-lock.json`) keep their canonical name.
 
 #### Cross-tool skill alias (`.agents/`)
 
@@ -100,8 +102,8 @@ command surface.
 Codex reads skills from `.agents/skills/` per its current docs (with parent-walk
 to repo root); `.codex/skills/` is not used.
 
-Codex skills are invoked with `$skill-name` syntax (e.g. `$jc-plan`,
-`$jc-gates`) or selected through Codex's `/skills` built-in; repo-defined
+Codex skills are invoked with `$skill-name` syntax (e.g. `$oak-plan`,
+`$oak-gates`) or selected through Codex's `/skills` built-in; repo-defined
 workflows are not custom `/` commands. This follows the official
 [Codex skills](https://developers.openai.com/codex/skills) and
 [Codex CLI slash commands](https://developers.openai.com/codex/cli/slash-commands)
@@ -139,19 +141,21 @@ A thin wrapper MUST NOT contain substantive instructions, workflow steps, or log
 ### Owned-Skill Naming Convention
 
 Owned skills (`metadata.owned: true` in canonical frontmatter) carry a
-configurable prefix in adapter directories. The prefix defaults to
-`jc-` and is set in the generator entry file (repo-scope; change once,
-rebuild). Ingested skills (recorded in `skills-lock.json`) keep their
-canonical name. The prefix is applied only at adapter emission;
-canonical identity is unprefixed.
+configurable prefix in adapter directories. The source default is
+empty; the effective prefix `oak-` is passed explicitly via
+`--prefix=oak-` in `package.json` scripts (`pnpm skills:check`).
+Contributors who want a different prefix override at the call site.
+Ingested skills (recorded in `skills-lock.json`) keep their canonical
+name. The prefix is applied only at adapter emission; canonical
+identity is unprefixed.
 
-| Platform    | Invocation       | Source                                            |
-| ----------- | ---------------- | ------------------------------------------------- |
-| Claude Code | `/jc-plan`       | `.claude/skills/jc-plan/SKILL.md`                 |
-| Cursor      | `/jc-plan`       | `.agents/skills/jc-plan/SKILL.md`                 |
-| Codex       | `$jc-plan`       | `.agents/skills/jc-plan/SKILL.md`                 |
-| Gemini CLI  | `activate_skill` | `.agents/skills/jc-plan/SKILL.md` (model-invoked) |
-| Amp         | palette          | `.agents/skills/jc-plan/SKILL.md`                 |
+| Platform    | Invocation       | Source                                             |
+| ----------- | ---------------- | -------------------------------------------------- |
+| Claude Code | `/oak-plan`      | `.claude/skills/oak-plan/SKILL.md`                 |
+| Cursor      | `/oak-plan`      | `.agents/skills/oak-plan/SKILL.md`                 |
+| Codex       | `$oak-plan`      | `.agents/skills/oak-plan/SKILL.md`                 |
+| Gemini CLI  | `activate_skill` | `.agents/skills/oak-plan/SKILL.md` (model-invoked) |
+| Amp         | palette          | `.agents/skills/oak-plan/SKILL.md`                 |
 
 ### Sub-agent Adapter Formats
 
@@ -174,7 +178,7 @@ Rules have two conceptually distinct layers:
 
 2. **Activation triggers** (`.cursor/rules/*.mdc`, entry-point chains) — platform-specific mechanisms that determine _when_ and _how_ policies surface during a session. These are not thin wrappers for `principles.md` in the way command wrappers point at commands. They are a separate artefact type: a trigger mechanism that activates specific policies, directives, or skills at the right moment.
 
-Some triggers activate policies from `principles.md` via a canonical rule (e.g., `apply-architectural-principles.mdc` → `.agent/rules/apply-architectural-principles.md` → `principles.md`). Others activate standalone directives (e.g., `invoke-code-experts.mdc` → `.agent/memory/executive/invoke-code-experts.md`). Others activate skills through generated adapters (e.g., `napkin-always-active.mdc` → `.agents/skills/jc-napkin/SKILL.md` backed by `.agent/skills/napkin/SKILL-CANONICAL.md`). The trigger is not the policy — it is the mechanism that surfaces the policy.
+Some triggers activate policies from `principles.md` via a canonical rule (e.g., `apply-architectural-principles.mdc` → `.agent/rules/apply-architectural-principles.md` → `principles.md`). Others activate standalone directives (e.g., `invoke-code-experts.mdc` → `.agent/memory/executive/invoke-code-experts.md`). Others activate skills through generated adapters (e.g., `napkin-always-active.mdc` → `.agents/skills/oak-napkin/SKILL.md` backed by `.agent/skills/napkin/SKILL-CANONICAL.md`). The trigger is not the policy — it is the mechanism that surfaces the policy.
 
 #### Many-to-One Consolidation Pattern
 
@@ -219,14 +223,14 @@ directly.
 
 **Triggers that activate skills or directives:**
 
-| Trigger                          | What it activates                                                                                 |
-| -------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `apply-architectural-principles` | All architectural principles via `.agent/rules/apply-architectural-principles.md`                 |
-| `napkin-always-active`           | `.agents/skills/jc-napkin/SKILL.md` -> `.agent/skills/napkin/SKILL-CANONICAL.md`                  |
-| `use-start-right-skills`         | `.agents/skills/jc-start-right-quick/SKILL.md`, `.agents/skills/jc-start-right-thorough/SKILL.md` |
-| `follow-the-practice`            | Practice reading, which leads to skills                                                           |
-| `invoke-code-experts`            | All registered reviewers via `.agent/memory/executive/invoke-code-experts.md`                     |
-| `lint-after-edit`                | Lint checking (file-scoped to `*.ts`)                                                             |
+| Trigger                          | What it activates                                                                                   |
+| -------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `apply-architectural-principles` | All architectural principles via `.agent/rules/apply-architectural-principles.md`                   |
+| `napkin-always-active`           | `.agents/skills/oak-napkin/SKILL.md` -> `.agent/skills/napkin/SKILL-CANONICAL.md`                   |
+| `use-start-right-skills`         | `.agents/skills/oak-start-right-quick/SKILL.md`, `.agents/skills/oak-start-right-thorough/SKILL.md` |
+| `follow-the-practice`            | Practice reading, which leads to skills                                                             |
+| `invoke-code-experts`            | All registered reviewers via `.agent/memory/executive/invoke-code-experts.md`                       |
+| `lint-after-edit`                | Lint checking (file-scoped to `*.ts`)                                                               |
 
 #### Trigger Content Contract
 
@@ -274,7 +278,7 @@ and overrides.
 
 **Project settings contain:**
 
-- Skill and command permission allowlists (`Skill(jc-*)` entries)
+- Skill and command permission allowlists (`Skill(oak-*)` entries)
 - Safety hooks (`PreToolUse` matchers for Bash, Edit, Write)
 - MCP tool allowlists (`mcp__*` entries)
 - Domain fetch permissions (`WebFetch(domain:*)`)
@@ -325,10 +329,10 @@ invoked by name, had platform-specific syntax, and mapped to slash commands.
 Keeping them separate avoided overloading the
 prompts directory.
 
-### Why consistent `jc-*` naming across platforms
+### Why consistent `oak-*` naming across platforms
 
-Different names for the same workflow (`jc-full-review` vs `/review` vs
-`jc-review`, historically) created cognitive load when switching between
+Different names for the same workflow (`oak-full-review` vs `/review` vs
+`oak-review`, historically) created cognitive load when switching between
 platforms. A single name per workflow reduces confusion and makes the system
 easier to document and discover.
 
@@ -424,6 +428,31 @@ continues to live in the PDR-027 identity block and the canonical
 `pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5`
 interface.
 
+### 2026-05-22 — Owned-skill prefix migrated from `jc-` to `oak-`
+
+The owned-skill adapter prefix is migrated from the owner-personal `jc-`
+namespace to the repo-neutral `oak-` namespace. The change has two
+parts:
+
+1. **Source default**: `agent-tools/src/bin/skills-adapter-generate.ts`
+   no longer bakes in a default value. The prefix is sourced from
+   `--prefix=oak-` passed explicitly in `package.json` scripts
+   (`pnpm skills:check`). If neither the script nor the user passes
+   `--prefix`, the effective prefix is empty.
+2. **Committed adapter rename**: the 18 `.claude/skills/jc-*/` dirs and
+   18 `.agents/skills/jc-*/` dirs are replaced with 36 `oak-*` dirs by
+   running `skills-adapter-generate --clear --prefix=oak-`.
+
+`Skill(jc-*)` permission entries in `.claude/settings.json` are
+updated to `Skill(oak-*)` to match the new adapter names.
+
+Rationale: the owner-personal `jc-` namespace bled into a repo asset
+visible to every contributor. The `oak-` namespace matches the
+workspace prefix (`@oaknational/...`) and the organisation identity.
+Per `.agent/rules/replace-dont-bridge.md` the migration is a hard
+cut-over; no transition shim or compatibility alias exists. Discovery
+of new adapter names is via `ls .claude/skills/`.
+
 ### 2026-05-09 — Vendor-agnostic two-surface skills contract (PDR-051)
 
 Skills moved to a non-discoverable canonical filename
@@ -444,7 +473,8 @@ header comment in every emitted file; `pnpm portability:check` now
 includes a drift gate and the new contract checks. Owned skills carry
 `metadata.owned: true` in canonical frontmatter and a configurable
 `jc-` prefix in adapters; ingested skills recorded in
-`skills-lock.json` keep canonical names. The portable doctrine is
+`skills-lock.json` keep canonical names. (Historical: the prefix
+was later migrated to `oak-` per the 2026-05-22 amendment.) The portable doctrine is
 [PDR-051](../../../.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md);
 this ADR records the host adoption.
 
