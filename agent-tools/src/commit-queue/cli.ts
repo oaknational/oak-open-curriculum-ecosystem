@@ -15,7 +15,7 @@ import {
   usage,
 } from './args.js';
 import { runCommitCommand } from './commit-command.js';
-import { getStagedBundle } from './git.js';
+import { getStagedBundle, getStagedBundleScoped } from './git.js';
 import { createIntent } from './intent.js';
 import { validateCommandOptions } from './options.js';
 import { isCommitQueueReadCommand, runCommitQueueReadCommand } from './read-commands.js';
@@ -129,7 +129,12 @@ async function runPhaseCommand(input: CommandInputWithNow): Promise<number> {
 
 async function runRecordStagedCommand(input: CommandInputWithCli): Promise<number> {
   const intentId = requireOption(input.options, 'intent-id');
-  const staged = getStagedBundle(input.input.repoRoot);
+  const registryBefore = await readRegistryForCli(input.input, input.registryPath);
+  const intent = requireIntent(registryBefore, intentId);
+  const staged = getStagedBundleScoped({
+    repoRoot: input.input.repoRoot,
+    pathspec: intent.files,
+  });
   await updateRegistry(input.registryPath, (registry) => {
     requireIntent(registry, intentId);
     return recordStagedBundle({

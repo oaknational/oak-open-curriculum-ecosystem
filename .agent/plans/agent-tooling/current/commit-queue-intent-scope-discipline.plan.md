@@ -1,0 +1,734 @@
+---
+name: "Commit-queue intent-scope discipline — make intent.files load-bearing for fingerprint and commit scope"
+overview: "Tighten three commit-queue subcommands (record-staged, verify-staged/verify-staged-again, commit) so each scopes its operation to the intent record's existing `files` field instead of operating over the whole index. Closes the multi-writer audit-trail gap surfaced 2026-05-22 when a writer's ff2 plan-edit commit would have swept a peer's in-flight 9.2 eslint-config work staged in the shared index. Replace-don't-bridge: the data model already declares the scope; the operations don't honour it. No new CLI flag, no schema break, no new ADR."
+todos:
+  - id: phase-0-foundation
+    content: >
+      Phase 0: Verify foundation assumptions. Confirm intent.files is the
+      semantic scope of the audit-trail invariant; confirm current code
+      reads `git diff --cached --name-status` with no pathspec; confirm
+      the inner `git commit` invocation injection point in
+      commit-workflow-runtime.ts has no pathspec; confirm no other queue
+      subcommand needs the same treatment.
+    status: pending
+    depends_on: []
+  - id: cycle-1-fingerprint-helper-scoped
+    content: >
+      Cycle 1: Add intent-scoped variant of `createStagedBundleFingerprint`
+      and `getStagedBundle` that accept a pathspec set; route
+      `record-staged` through the scoped variant using `intent.files`.
+      Failing test (atomic-landing): two-writer scenario where writer A
+      stages files X,Y; writer B stages files Z,W; both record-staged
+      under their respective intents and end up with fingerprints that
+      reflect ONLY their own scope (writer A's fingerprint is unchanged
+      by writer B's staging activity). One commit; tree green at end.
+    status: pending
+    depends_on: [phase-0-foundation]
+  - id: cycle-2-verify-staged-scoped
+    content: >
+      Cycle 2: Route `verify-staged` and `verify-staged-again` through
+      the scoped fingerprint helper. Failing test: writer A's
+      verify-staged-again returns ok=true even when writer B has
+      restaged unrelated files; writer A's verify-staged-again returns
+      ok=false when writer A's own staged content has drifted (e.g., a
+      claimed file's staging was modified by an external rebase). One
+      commit; tree green at end.
+    status: pending
+    depends_on: [cycle-1-fingerprint-helper-scoped]
+  - id: cycle-3-commit-pathspec
+    content: >
+      Cycle 3: Update the `runGitCommit` injection so the inner
+      `git commit` runs with `intent.files` as explicit pathspec. The
+      runtime in `commit-workflow-runtime.ts` is the single mutation
+      point. Failing test: two-writer scenario where both writers run
+      `commit-queue commit` under their respective intents and produce
+      two distinct commits, each containing ONLY the files in its
+      intent.files, with no cross-pollination. Full-tree husky
+      pre-commit gate still runs on each commit (single-tree gating
+      invariant preserved). One commit; tree green at end.
+    status: pending
+    depends_on: [cycle-2-verify-staged-scoped]
+  - id: phase-final-hardening
+    content: >
+      Phase Final: Update the jc-commit SKILL-CANONICAL to note that the
+      queue ceremony is now intent-scoped (no Path-B bypass needed for
+      multi-writer scenarios); cross-reference this plan from the
+      ff2-coordination event in the comms log for forward traceability;
+      consolidation pass (docs-adr-expert post-review + napkin entry on
+      the resolved coordination gap); aggregate gate (`pnpm check`)
+      passes from the agent-tools workspace and root.
+    status: pending
+    depends_on: [cycle-3-commit-pathspec]
+status: current
+isProject: false
+---
+
+# Commit-Queue Intent-Scope Discipline
+
+**Last Updated**: 2026-05-22
+**Status**: 🔴 NOT STARTED
+**Scope**: Make the commit-queue intent record's `files` field load-bearing for fingerprint computation and inner `git commit` scope in three subcommands (`record-staged`, `verify-staged`/`verify-staged-again`, `commit`). One fingerprint helper, three call sites, one runtime injection.
+
+---
+
+## Context
+
+### Issue: Queue ceremony silently overrides intent scope
+
+The commit-queue intent record carries a `files: readonly string[]` field set at `enqueue` time — the files the intent claims to commit. Three downstream subcommands (`record-staged`, `verify-staged`, `commit`) compute their fingerprints and execute their inner `git commit` over the **entire staged index**, not the intent's `files` scope. In single-writer scenarios this works accidentally because the staged index equals the intent's scope. In multi-writer scenarios — which the queue + claim + comms ceremony explicitly exists to support — the operations silently sweep peer work.
+
+**Evidence (two instances, same 60-minute window 2026-05-22)**:
+
+1. **Instance A (ff2 / Mistbound, 14:04Z)**: surfaced during ff2 owner-decision recording. Mistbound staged 2 plan files (`.agent/plans/graph-mvp-arc.plan.md` + `.agent/plans/sector-engagement/eef/current/eef-first-feature.plan.md`); Shaded had concurrently staged 6 files (3 graph-* eslint configs + 3 collab-state files) for Cycle 9.2 rewire. The current `verifyStagedBundle` would actually have BLOCKED Mistbound's commit at the `stagedFileMismatch` check (returning `extra: <Shaded's 6 files>`) rather than silently committing everything — the framing "would have committed everything staged" in the original write-up overstates the symptom. The deeper issue is that `recordStagedBundle` would have fingerprinted the peer-polluted index content, leaving Mistbound with a baseline that could not match any subsequent re-stage attempt either. The current resolution requires bypassing the queue ceremony via manual `git commit -- <pathspecs>`, which breaks the audit-trail invariant the queue exists to enforce. See comms event `e48d7f16` and the corresponding entry in `.agent/state/collaboration/shared-comms-log.md` (markdown anchor, persistent regardless of comms-event retention) from the same window.
+
+2. **Instance B (distilled.md graduation / Wooded, 14:54Z)**: while this very plan was being grounded, Wooded ran `commit-queue commit` with intent `692c57a7` scoped to a single file (`.agent/memory/active/distilled.md`). The primitive's `record-staged` step fingerprinted the FULL git index rather than the intersection of (`intent.files`, currently-staged). Result: commit `2389ff5e` absorbed Shaded's Cycle 10 source edits to `agent-tools/src/bin/commit-queue.ts` + `agent-tools/src/bin/collaboration-state.ts` (`.then/.catch` → `try/await` conversion) under Wooded's `docs(distilled): …` commit subject. Substance preserved in HEAD; audit trail misattributed. Self-corrected via directed-comms apology + broadcast; substance redress requires the operative fix this plan lands. See comms event `2389ff5e`-broadcast (Wooded) and Stormbound's Shaded-directed event `31641f82` + the corresponding `shared-comms-log.md` window for the full narrative.
+
+**Root cause**: The `files` field on the intent record is treated as advisory metadata rather than operative scope. The data model is correct (intent declares its file scope); the operations don't honour the declaration. This is a Replace-Don't-Bridge case: the implicit "operate over the whole staged index" assumption is the bug; the explicit "operate over `intent.files`" is the replacement.
+
+**Existing capabilities**:
+
+- The intent record schema (`agent-tools/src/commit-queue/types.ts`) already declares `files: readonly string[]`.
+- The fingerprint helper `createStagedBundleFingerprint` lives in `agent-tools/src/commit-queue/core.ts` and currently consumes a `nameStatus` string from `getStagedBundle(repoRoot)` in `agent-tools/src/commit-queue/git.ts`, which calls `git diff --cached --name-status` with no pathspec.
+- The inner `git commit` runs via an injected `runGitCommit` dependency declared in `commit-workflow.ts:48` and wired in `commit-workflow-runtime.ts`. Single injection point; no scope plumbing through callers.
+- The prior Wooded Path-B precedent (Lane B Tranche 2 session, 2026-05-22 earlier) demonstrated `git commit -- <pathspecs>` works correctly for the multi-writer case but had to bypass the queue ceremony. This plan codifies that pattern as queue-native.
+
+---
+
+## Quality Gate Strategy
+
+See [`../../templates/components/quality-gates.md`](../../templates/components/quality-gates.md) for canonical gate doctrine.
+
+### After Each Cycle
+
+```bash
+pnpm --filter @oaknational/agent-tools test
+# Expected: exit 0, new tests pass
+
+pnpm type-check
+pnpm lint
+pnpm test
+```
+
+### Final Aggregate Gate
+
+```bash
+pnpm check
+```
+
+---
+
+## Solution Architecture
+
+### Principle
+
+From `principles.md`:
+
+> "Replace, don't wrap. If a behavior is wrong, fix it; don't add a compatibility flag."
+
+From the project memory (graduated owner doctrine):
+
+> "Full-tree pre-commit gating is INTENTIONAL and CORRECT. Multi-writer coordination is solved by queue + claim + comms, never by narrowing gate scope."
+
+This plan honours both: the full-tree husky gate runs unchanged on every commit (gate scope is unchanged); only the inner `git commit`'s pathspec narrows to the intent's declared scope (commit content scope tightens to match the already-declared intent scope).
+
+### Key Insight
+
+The data model is already correct. `intent.files` declares the operative scope of the commit. The three affected subcommands ignore that declaration and use "the whole staged index" as the implicit scope. That implicit scope is the bug.
+
+Could it be simpler? **Yes**: no new flag, no schema change, no new field. Three call sites adopt the existing `intent.files` field as the operative scope; one fingerprint helper gains a pathspec parameter; one runtime injection narrows its `git commit` invocation.
+
+### Strategy
+
+One fingerprint helper variant + three call-site updates + one runtime injection update. Three TDD cycles, each landing test + product code together. No CLI surface change for users; internal semantic tightening only.
+
+**Non-Goals** (YAGNI):
+
+- ❌ New `--pathspec` CLI flag on `commit-queue commit` (the intent's `files` field IS the pathspec; no flag needed).
+- ❌ Per-writer git worktree isolation (collides with the full-tree-gating owner doctrine; rewrites the claim model needlessly).
+- ❌ Stash-and-restore around the inner `git commit` (bridge, not replacement; introduces conflict-on-restore failure modes).
+- ❌ Detect-staged-content-outside-intent-scope abort (forces serialization theatre rather than enabling concurrent commits).
+- ❌ New schema field on the intent record for "pathspec scope". The existing `files` field IS the scope.
+- ❌ ADR. The architectural decision (queue + claim + comms; intent records scope via `files`) was already made; this codifies it in the operations. No new pattern, no new boundary.
+- ✅ Make `intent.files` load-bearing for `record-staged`, `verify-staged`/`verify-staged-again`, and `commit`.
+
+---
+
+## Reviewer Scheduling (phase-aligned)
+
+- **Pre-execution**: `assumptions-expert` (plan-readiness check on the "no new schema field; no new flag" framing); `code-expert` gateway brief on Phase 0 plus cycle scope.
+- **During**: `test-expert` (two-writer integration test shape per cycle); `type-expert` (fingerprint helper signature change ripple); `code-expert` per-cycle absorption.
+- **Post**: `docs-adr-expert` (SKILL-CANONICAL jc-commit cross-reference; ADR-non-need attestation); `release-readiness-expert` on the aggregate change.
+
+Scheduling all reviewers at close is phase-misalignment. The pre-execution `assumptions-expert` pass is load-bearing: it must validate that no new flag / no new field is genuinely the right shape before Cycle 1 staging begins.
+
+---
+
+## Foundation Document Commitment
+
+Before beginning work and at the start of each phase:
+
+1. **Re-read** `.agent/directives/principles.md` — Replace-Don't-Bridge; Cardinal Rule.
+2. **Re-read** `.agent/directives/testing-strategy.md` — atomic-landing invariant; tests-describe-state-not-implementation.
+3. **Re-read** `.agent/directives/schema-first-execution.md` — schema as operative scope, not advisory metadata.
+4. **Ask**: "Does this deliver system-level value (queue ceremony becomes sound for the multi-writer scenario it was designed for), not just fix the immediate ff2 case?"
+5. **Verify**: No new field, no new flag, no `--no-verify`, no scope-narrowing of the husky full-tree gate.
+
+---
+
+## Lifecycle Trigger Commitment
+
+Before the first non-planning edit:
+
+1. Work shape: **bounded simple plan**. Three TDD cycles + a hardening phase. Single agent can pick up + complete in one or two sessions.
+2. Start-right + claims consultation: open a peer-level claim covering the agent-tools commit-queue source surface (`agent-tools/src/commit-queue/**` + flat-named `agent-tools/tests/commit-queue*.test.ts` + flat-named `agent-tools/tests/commit-workflow*.test.ts`). Cross-check `.agent/state/collaboration/active-claims.json` for conflicts.
+3. Active-area registration before edits; claim close at session handoff.
+4. Apply [`../../templates/components/lifecycle-triggers.md`](../../templates/components/lifecycle-triggers.md) — multi-file fix touching a shared substrate.
+
+---
+
+## Documentation Propagation Commitment
+
+Before marking the final phase complete:
+
+1. Update `.agent/skills/commit/SKILL-CANONICAL.md` if the multi-writer flow changes (it should: no Path-B bypass needed any more; queue ceremony is now intent-scoped).
+2. Cross-reference this plan from the ff2-coordination comms event (`e48d7f16`) by appending a closeout broadcast that points forward to this plan's landing.
+3. No ADR update needed. Record explicit no-change rationale in the consolidation pass: "Architectural decision (queue + claim + comms; intent records scope via `files`) was already made; this plan codifies operative discipline, no new pattern."
+4. Update `.agent/practice-core/practice.md` only if a load-bearing practice principle emerges from the work (probably not — the principle "intent scope is load-bearing" is already implicit in the queue design; this plan just makes it operative).
+5. Apply `/jc-consolidate-docs` after the final cycle lands.
+
+---
+
+## Resolution Plan
+
+### Phase 0: Verify Foundation Assumptions
+
+**Foundation Check-In**: Re-read `.agent/directives/principles.md` §"Replace, don't wrap"; re-read this plan's §"Solution Architecture" §Key Insight.
+
+**Key Principle**: The intent record's `files` field is the operative scope. Confirm this before any code change.
+
+#### Task 0.1: Confirm code structure matches the metacognition findings
+
+**Current Assumption** (from the metacognition pass):
+
+- `agent-tools/src/commit-queue/types.ts` declares `files: readonly string[]` on the intent record.
+- `agent-tools/src/commit-queue/git.ts:13` calls `git diff --cached --name-status` with no pathspec.
+- `agent-tools/src/commit-queue/core.ts` houses `createStagedBundleFingerprint` and consumes the unscoped `nameStatus` string.
+- `agent-tools/src/commit-queue/commit-workflow.ts:48` declares `runGitCommit` as an injected dep.
+- `agent-tools/src/commit-queue/commit-workflow-runtime.ts` is the single mutation point for the actual `git commit` invocation.
+- No other queue subcommand (`enqueue`, `phase`, `guard`, `complete`, `status`, `list`, `show`) reads or writes the staged-bundle fingerprint.
+
+**Validation Required**: Confirm each item above by direct inspection of the named files.
+
+**Acceptance Criteria**:
+
+1. ✅ All six structural claims above verified by file inspection.
+2. ✅ Search for any other call site of `createStagedBundleFingerprint` or `getStagedBundle` outside the three named subcommands returns nothing.
+3. ✅ Search for any other invocation of `git commit` (or `runGit(... 'commit' ...)` shape) inside the commit-queue source returns only the runtime injection.
+4. ✅ The intent record schema confirms `files` is a typed `readonly string[]`, not advisory metadata.
+
+**Deterministic Validation**:
+
+```bash
+# 1. Intent record schema
+grep -n "files:" agent-tools/src/commit-queue/types.ts
+# Expected: at least one row showing `files: readonly string[]` or equivalent
+
+# 2. Single unscoped staged-bundle read
+grep -rn "git diff --cached" agent-tools/src/commit-queue/
+# Expected: exactly the three lines in git.ts (name-only, name-status, full-index --binary)
+
+# 3. Fingerprint helper call sites
+grep -rn "createStagedBundleFingerprint\b" agent-tools/src/commit-queue/
+# Expected: defined in core.ts; called from at most three sites (record-staged, verify-staged, verify-staged-again)
+
+# 4. Inner git commit injection point
+grep -rn "runGitCommit\|'commit'" agent-tools/src/commit-queue/
+# Expected: declared in commit-workflow.ts; wired in commit-workflow-runtime.ts; no other call sites
+```
+
+**If Assumptions Differ**:
+
+1. **STOP** — do not proceed to Cycle 1.
+2. Document the divergence in this plan body under §Phase 0 Findings.
+3. Update the cycle scopes if the surface is wider than expected (e.g., additional call sites of the fingerprint helper).
+4. Re-run Phase 0 validation after the surface map is corrected.
+
+**Task Complete When**: All four acceptance criteria checked AND deterministic validation matches expectations.
+
+**Foundation Alignment**: This validates that the existing data model already declares the scope; the operations just don't honour it. If the data model were silent on scope, this plan would need a different shape.
+
+#### Task 0.2: Phase 0 findings (recorded 2026-05-22 ~15:00Z by Stormbound Kiting Squall, claude/ddbea2)
+
+All four acceptance criteria are satisfied:
+
+1. **`intent.files` schema confirmed**: `agent-tools/src/commit-queue/types.ts:39-52` — `CommitIntent` declares `readonly files: readonly string[]`. Typed, mandatory, not optional metadata.
+2. **Single unscoped staged-read site**: `agent-tools/src/commit-queue/git.ts:10-17` is the only definition; `git diff --cached --name-only|--name-status|--full-index --binary` invoked with no pathspec. Three callers via grep:
+   - `commit-queue/cli.ts:132` (`runRecordStagedCommand`)
+   - `commit-queue/cli.ts:157` (`runVerifyStagedCommand`)
+   - `commit-queue/commit-workflow-runtime.ts:54` (wiring the `getStagedBundle` injected dep)
+3. **`createStagedBundleFingerprint` call sites**: defined at `core.ts:17`; called at `core.ts:142` (`recordStagedBundle`) and `core.ts:189` (`verifyFingerprint` via `verifyStagedBundle`). Also used in the **test file** `agent-tools/tests/commit-workflow.unit.test.ts:35` to construct a fixture fingerprint — this becomes a regression-guard surface for all three cycles.
+4. **`runGitCommit` injection point**: `agent-tools/src/commit-queue/commit-workflow.ts:48` declares the injected dep; `commit-workflow-runtime.ts:81-95` is the single runtime implementation — spawns `git commit -F <message-file>` with NO pathspec. Single mutation point per the plan.
+
+**Additional finding** (not in the original Phase 0 acceptance criteria but surfaced by the pre-execution `code-expert` gateway):
+
+- `agent-tools/src/commit-queue/index.ts` re-exports `createStagedBundleFingerprint` and `verifyStagedBundle` as part of the public `@oaknational/agent-tools` package surface. `getStagedBundle` is NOT re-exported (internal helper). The cycle-amendment landing strategy preserves the original unscoped functions through Cycles 1.1–1.2 so the public API does not change shape mid-arc; Cycle 1.3 performs the canonical retirement (rename scoped variants to the canonical names; the public surface ends in one clean shape with operative scope).
+
+**Additional live evidence** (surfaced during this Phase 0 window — Instance B from §Context): the `2389ff5e` commit at 14:54Z is a fresh concrete instance of the failure mode this plan cures. Increases confidence that the cure shape is correctly framed.
+
+**Phase 0 verdict**: GO. Proceed to Cycle 1.1.
+
+---
+
+### Phase 1: Intent-scope discipline
+
+**Foundation Check-In**: Re-read `principles.md` §Cardinal Rule + §Replace-Don't-Bridge.
+
+**Key Principle**: One fingerprint helper, scoped to intent.files; one runtime injection, scoped to intent.files. Three cycles each prove a separate concurrent-writer invariant.
+
+#### Cycle 1.1: Fingerprint helper accepts pathspec scope; record-staged adopts it
+
+**Parallel-safety**: sequenced after `phase-0-foundation`.
+
+**Starting state**: branch HEAD at dispatch; no working-tree changes from prior cycles.
+
+**File scope** (corrected from Phase 0 inspection; the `record-staged` mutation point is in `cli.ts`, not `registry.ts`):
+
+- `agent-tools/src/commit-queue/core.ts` (add intent-scoped variant of `createStagedBundleFingerprint`; mandatory `pathspec` parameter, no optional/default-to-whole-index overload)
+- `agent-tools/src/commit-queue/git.ts` (add intent-scoped variant of `getStagedBundle`; mandatory `pathspec` parameter; also inject a `runGit` callback for unit testability per the pre-execution `assumptions-expert` direction)
+- `agent-tools/src/commit-queue/cli.ts` (`runRecordStagedCommand` at lines 130–143: read `intent.files` from the registry before calling the scoped helpers; pass `intent.files` as pathspec)
+- `agent-tools/src/commit-queue/index.ts` (re-export the scoped helpers alongside the existing unscoped ones; the unscoped helpers stay during the multi-cycle landing window and retire in Cycle 1.3 after all call sites have adopted)
+- `agent-tools/tests/commit-queue-record-staged-scope.unit.test.ts` (NEW; two-writer scenario; flat-named sibling per repo convention)
+
+**Current Implementation** (load-bearing line in `git.ts`):
+
+```typescript
+stagedNameStatus: runGit(repoRoot, ['diff', '--cached', '--name-status']),
+```
+
+**Target Implementation** (corrected per pre-execution `assumptions-expert` + `code-expert` direction: no optional/whole-index overload — mandatory `pathspec` on a NEW scoped function; existing unscoped helpers retained unchanged during the multi-cycle landing window and retired in Cycle 1.3):
+
+```typescript
+// NEW scoped variant — mandatory pathspec; injected runGit for unit testability:
+export interface ScopedStagedBundleInput {
+  readonly repoRoot: string;
+  readonly pathspec: readonly string[];
+  readonly runGit?: (args: readonly string[]) => string;
+}
+
+export function getStagedBundleScoped(input: ScopedStagedBundleInput): StagedBundle {
+  /* runGit defaults to the existing execFileSync invocation; args end with `--`, ...pathspec */
+}
+
+// NEW scoped fingerprint — takes the same scoped StagedBundle inputs:
+export function createScopedStagedBundleFingerprint(input: {
+  readonly nameStatus: string;
+  readonly patch: string;
+}): string { /* same hash algorithm; the scope is enforced by the upstream getStagedBundleScoped read */ }
+```
+
+**Failing Test or Check** (`agent-tools/tests/commit-queue-record-staged-scope.unit.test.ts`):
+
+State the system invariant: "two writers' record-staged fingerprints are independent of each other's staged content when each writer's intent.files is disjoint."
+
+The test sets up a simulated staged-bundle state covering files X, Y, Z, W; constructs intent A with `files: [X, Y]` and intent B with `files: [Z, W]`; calls record-staged for A; mutates the staged-bundle state to add a change in Z; calls record-staged for A again; asserts the fingerprint is unchanged.
+
+**Product Changes** (corrected: no optional/fallback overload):
+
+- Add NEW `getStagedBundleScoped({repoRoot, pathspec, runGit?})` in `git.ts` with `pathspec` as a required parameter; the `runGit` injection point allows unit tests to feed literal index snapshots without spawning real git.
+- Add NEW `createScopedStagedBundleFingerprint({nameStatus, patch})` in `core.ts` (same hash algorithm; the scope enforcement is upstream at the staged-read).
+- Route `runRecordStagedCommand` (`cli.ts:130–143`) through the scoped variants using `intent.files` as `pathspec`.
+- Re-export the new scoped helpers from `index.ts` alongside the existing unscoped helpers.
+- Existing unscoped `getStagedBundle` and `createStagedBundleFingerprint` are LEFT UNCHANGED. Non-adopted call sites (verify-staged in Cycle 1.2, the `runGitCommit` inner commit in Cycle 1.3) continue to use the unscoped helpers until their respective cycles adopt. **No backward-compat optional parameter; no transient fallback in committed history.**
+
+**Acceptance Criteria**:
+
+1. ✅ Two-writer record-staged invariant test passes (fingerprint stable under peer staging activity).
+2. ✅ Single-writer existing behaviour preserved (existing `record-staged` test suite continues green).
+3. ✅ Type-check passes; `getStagedBundle` and `createStagedBundleFingerprint` signatures remain backward-compatible.
+4. ✅ No new `any` / `as` / `unknown` usage introduced.
+5. ✅ One commit; tree green; atomic-landing invariant satisfied.
+
+**Deterministic Validation**:
+
+```bash
+# 1. Target test green
+pnpm --filter @oaknational/agent-tools test record-staged-scope
+# Expected: exit 0, two-writer test passes
+
+# 2. No regression in existing record-staged tests
+pnpm --filter @oaknational/agent-tools test record-staged
+# Expected: exit 0, all existing tests pass
+
+# 3. Type-check + lint
+pnpm type-check  # Expected: exit 0
+pnpm lint        # Expected: exit 0
+```
+
+**Cycle Complete When**: All five acceptance criteria checked; one cohesive commit lands carrying test + product code; full-tree husky gate passes.
+
+---
+
+#### Cycle 1.2: verify-staged and verify-staged-again adopt scoped fingerprint
+
+**Parallel-safety**: sequenced after Cycle 1.1.
+
+**Starting state**: Cycle 1.1 landed; scoped fingerprint helper available.
+
+**File scope** (corrected from Phase 0 inspection — the `verify-staged` CLI handler is in `cli.ts`, not only `commit-workflow.ts`):
+
+- `agent-tools/src/commit-queue/core.ts` (add NEW scoped `verifyScopedStagedBundle` that uses `createScopedStagedBundleFingerprint`; existing `verifyStagedBundle` retained for any non-cycle callers)
+- `agent-tools/src/commit-queue/cli.ts` (`runVerifyStagedCommand` at lines 146–160: reads `intent.files`, calls scoped variants)
+- `agent-tools/src/commit-queue/commit-workflow.ts` (`getStagedBundle` injected dep type, `verifyStagedAgainstIntent` at lines 187–201, and the `runVerifyStage` calls for both `verify-staged-before` and `verify-staged-after`: route through the scoped helpers via `intent.files`)
+- `agent-tools/src/commit-queue/commit-workflow-runtime.ts` (update the `getStagedBundle` dep wiring to call the scoped variant; pass `intent.files` from the registry read)
+- `agent-tools/tests/commit-queue-verify-staged-scope.unit.test.ts` (NEW; flat-named sibling)
+- `agent-tools/tests/commit-workflow.unit.test.ts` (regression-guard reference: this file uses `createStagedBundleFingerprint` + an injected `getStagedBundle` closure; ensure single-writer behaviour preserved)
+
+**Failing Test or Check**:
+
+State the system invariant: "writer A's verify-staged-again returns ok=true when writer B restages files outside A's scope, AND returns ok=false when writer A's own scope drifts."
+
+Two assertions in one test or two paired tests:
+
+- (a) record-staged for intent A; mutate index to add a change in a non-A file; verify-staged-again for A returns ok=true.
+- (b) record-staged for intent A; mutate index to modify an A file; verify-staged-again for A returns ok=false with reason="staged bundle fingerprint changed since it was recorded" (verbatim from existing core.ts).
+
+**Product Changes**:
+
+- `verifyStagedBundleAgainstIntent` (or the existing verify helper) accepts a scope parameter.
+- Both verify-staged and verify-staged-again call sites pass `intent.files`.
+
+**Acceptance Criteria**:
+
+1. ✅ Writer-independence verify invariant test passes (both sub-cases).
+2. ✅ Existing verify-staged single-writer tests remain green.
+3. ✅ The existing failure-reason string format unchanged.
+4. ✅ One commit; tree green; atomic-landing satisfied.
+
+**Deterministic Validation**:
+
+```bash
+pnpm --filter @oaknational/agent-tools test verify-staged-scope
+# Expected: exit 0, both invariants pass
+
+pnpm --filter @oaknational/agent-tools test verify-staged
+# Expected: exit 0, no regression
+
+pnpm type-check
+pnpm lint
+```
+
+**Cycle Complete When**: All four acceptance criteria checked; one cohesive commit lands.
+
+---
+
+#### Cycle 1.3: Inner `git commit` narrows to intent.files
+
+**Parallel-safety**: sequenced after Cycle 1.2.
+
+**Starting state**: Cycles 1.1 + 1.2 landed; fingerprint chain fully intent-scoped.
+
+**File scope**:
+
+- `agent-tools/src/commit-queue/commit-workflow-runtime.ts` (the `runGitCommit` injection: append `--` and intent.files as pathspec)
+- `agent-tools/src/commit-queue/commit-workflow.ts` (if signatures need to propagate intent.files into the deps)
+- `agent-tools/tests/commit-queue-commit-pathspec.unit.test.ts` (NEW; flat-named sibling; commit-time two-writer invariant)
+- `agent-tools/tests/commit-queue-commit-pathspec.integration.test.ts` (NEW; flat-named sibling; ephemeral-repo integration test exercising the full ceremony with two concurrent writers — this is the cycle that requires a real `git init` because the inner `git commit` mutation is what is under test)
+- `agent-tools/tests/commit-workflow.unit.test.ts` (regression-guard reference: confirm the workflow-orchestrator tests still pass with the now-fully-scoped helpers)
+
+**Current Implementation**: `runGitCommit` calls `git commit -m <message-file>` (or the workflow's chosen invocation) with no pathspec. Inferred from commit-workflow-runtime.ts; Phase 0 confirms.
+
+**Target Implementation**: `runGitCommit` invocation appends `--` then `intent.files` to the argv.
+
+**Failing Test or Check**:
+
+State the system invariant: "two concurrent writers each end up with a cohesive commit containing only their intent.files; no cross-pollination."
+
+Integration test:
+
+1. Initialise an ephemeral git repo with an initial commit.
+2. Stage files X+Y for writer A's intent + files Z+W for writer B's intent.
+3. Run the full commit-queue commit ceremony for A then B (or interleaved; both must succeed).
+4. Assert: commit A contains exactly X+Y; commit B contains exactly Z+W; HEAD is two commits ahead; no files left staged after both commits.
+
+**Product Changes**:
+
+- `commit-workflow-runtime.ts` `runGitCommit` injection narrows to `intent.files` pathspec (read `intent.files` from the registry inside the runtime wiring; append `--` and each pathspec entry to the `git commit` argv).
+- **Retire the original unscoped helpers** now that all three call sites (record-staged in Cycle 1.1, verify-staged in Cycle 1.2, runGitCommit in this cycle) have adopted: delete `getStagedBundle(repoRoot)` and `createStagedBundleFingerprint({nameStatus, patch})` from `git.ts`/`core.ts`; remove the unscoped exports from `index.ts`; rename the scoped variants to the canonical names (`getStagedBundle`, `createStagedBundleFingerprint`, `verifyStagedBundle`) so the surface ends in one clean shape — schema-declared scope is now operative on the canonical names.
+- (No transient fallback was introduced in Cycle 1.1, so there is no fallback to remove. The retirement step in this cycle is the natural consequence of all call sites having adopted, not a clean-up of a deferred bridge.)
+
+**Acceptance Criteria**:
+
+1. ✅ Two-writer commit-time invariant integration test passes.
+2. ✅ Single-writer existing commit-queue ceremony test suite remains green.
+3. ✅ Husky full-tree pre-commit gate verified to run unchanged (a working-tree side-effect outside intent.files still triggers the gate — verify by intentionally adding an unstaged hook-failing artefact and confirming the commit aborts).
+4. ✅ The `runGitCommit` deps signature still has a single mutation point.
+5. ✅ One commit; tree green; atomic-landing satisfied.
+
+**Deterministic Validation**:
+
+```bash
+pnpm --filter @oaknational/agent-tools test commit-pathspec
+# Expected: exit 0, two-writer invariant passes (unit + integration)
+
+pnpm --filter @oaknational/agent-tools test commit
+# Expected: exit 0, no regression in existing commit-queue tests
+
+pnpm type-check
+pnpm lint
+
+# Full-tree gate verification (manual once, then captured as a test):
+# A working-tree-only failing artefact must still abort the commit.
+```
+
+**Cycle Complete When**: All five acceptance criteria checked; one cohesive commit lands; the queue ceremony is intent-scoped end-to-end.
+
+---
+
+### Phase Final: Hardening and consolidation
+
+**Foundation Check-In**: Re-read all three foundation documents; verify Replace-Don't-Bridge applied (no new flag, no compatibility wrapper, no widened gate scope).
+
+#### Task Final.1: SKILL-CANONICAL update
+
+Update `.agent/skills/commit/SKILL-CANONICAL.md` to record that the queue ceremony is now intent-scoped; no Path-B bypass needed for multi-writer scenarios. The four-move protocol (open claim → stage → commit-queue commit → close claim) now genuinely supports concurrent multi-writer commits when each writer's intent.files is disjoint.
+
+**Acceptance Criteria**:
+
+1. ✅ SKILL-CANONICAL text updated; no Path-B bypass language remains as a default.
+2. ✅ Path-B retained as a documented fallback for emergency cases only (e.g., manual recovery if the queue is corrupted).
+3. ✅ Cross-reference to this plan added in the SKILL's references section.
+
+#### Task Final.2: Comms forward-trace
+
+Append a closeout broadcast to the comms log pointing forward to this plan's landing as the structural resolution of the gap surfaced in **both** instances captured in §Context (Instance A: `e48d7f16` ff2 case; Instance B: `2389ff5e` / Wooded's `692c57a7` intent + Stormbound's `31641f82` directed event). **Target the persistent markdown anchors in `.agent/state/collaboration/shared-comms-log.md`** rather than the comms-event UUIDs directly — comms events have a retention window (commit `1b619457` drained 990 stale events earlier this same session), and the forward-trace must survive that. The closeout broadcast should be posted **at the end of Cycle 1.3** (not deferred to Phase Final) so it lands while the anchor events are still recent and findable in the live comms stream.
+
+**Acceptance Criteria**:
+
+1. ✅ Closeout broadcast posted via `comms send` referencing both shared-comms-log markdown anchors and this plan's path.
+2. ✅ Broadcast posted at end of Cycle 1.3 (not Phase Final).
+
+#### Task Final.3: Aggregate gate + consolidation
+
+```bash
+pnpm check
+# Expected: exit 0 from both agent-tools workspace and root
+
+# Stability check
+for i in {1..5}; do
+  echo "Run $i/5"
+  pnpm --filter @oaknational/agent-tools test || break
+done
+# Expected: 5/5 passes
+```
+
+Run `/jc-consolidate-docs` for the standard graduation + napkin-rotation pass.
+
+#### Task Final.4: Foundation Document Compliance Checklist
+
+- [ ] **principles.md - Cardinal Rule**: schema-first; intent.files schema is now load-bearing for queue ops.
+- [ ] **principles.md - No Type Shortcuts**: no `as`, `any`, `Record<string, unknown>` added.
+- [ ] **principles.md - No Compatibility Layers**: backward-compat fallback from Cycle 1.1 removed in Cycle 1.3 refactor.
+- [ ] **principles.md - Replace, Don't Bridge**: the implicit "whole-index scope" assumption replaced; no flag added.
+- [ ] **principles.md - Quality Gates**: aggregate `pnpm check` exits 0.
+- [ ] **testing-strategy.md - Test Behavior**: two-writer invariant tests describe SYSTEM STATE (independent fingerprints, cohesive commits), not implementation choices.
+- [ ] **testing-strategy.md - Atomic Landing**: each cycle ships test + product code in one commit.
+- [ ] **testing-strategy.md - No Audit-Shaped Tests**: new tests fail before product code; product code makes them pass.
+- [ ] **schema-first-execution.md - Schema as Operative Scope**: `intent.files` is now operative, not advisory.
+- [ ] **System-Level Impact**: queue ceremony becomes sound for the multi-writer scenario it was designed for; no bypass needed.
+
+**Acceptance Criteria**:
+
+1. ✅ All checklist items verified.
+2. ✅ Any unchecked item has documented justification OR is fixed before commit.
+
+---
+
+## Testing Strategy
+
+### Unit Tests
+
+**New Tests Required**:
+
+- `record-staged-scope.unit.test.ts` — two-writer record-staged invariant (Cycle 1.1).
+- `verify-staged-scope.unit.test.ts` — writer-independence verify invariant + own-scope-drift detection (Cycle 1.2).
+- `commit-pathspec.unit.test.ts` — commit-time pathspec composition (Cycle 1.3 unit portion).
+
+**Existing Coverage**: the existing commit-queue test suite covers single-writer ceremony; preserved.
+
+### Integration Tests
+
+**New Tests Required**:
+
+- `commit-pathspec.integration.test.ts` — ephemeral-repo two-writer end-to-end (Cycle 1.3 integration portion). Exercises the full queue ceremony (enqueue → stage → record-staged → verify-staged → commit → complete) for two writers concurrently, asserts cohesive commits.
+
+### E2E Tests
+
+None affected (commit-queue is internal tooling; no user-facing E2E suite covers it).
+
+---
+
+## Success Criteria
+
+### Phase 0
+
+- ✅ Source-structure assumptions verified by direct inspection.
+- ✅ No other queue subcommand needs the same treatment.
+
+### Phase 1
+
+- ✅ Cycle 1.1: record-staged fingerprint is scoped to intent.files; two-writer record-staged invariant test green.
+- ✅ Cycle 1.2: verify-staged/verify-staged-again is scoped to intent.files; writer-independence test green.
+- ✅ Cycle 1.3: inner `git commit` is scoped to intent.files; two-writer commit invariant test green.
+
+### Phase Final
+
+- ✅ SKILL-CANONICAL updated; comms forward-trace posted; aggregate gate green; consolidation pass complete.
+
+### Overall
+
+- ✅ Queue ceremony is sound for multi-writer scenarios.
+- ✅ No Path-B bypass needed for concurrent commits with disjoint intent scopes.
+- ✅ Full-tree husky pre-commit gate preserved unchanged.
+- ✅ No new CLI flag; no schema break; no new ADR.
+
+---
+
+## Dependencies
+
+**Blocking prerequisites**:
+
+- None. The agent-tools workspace is self-contained and the surfaces touched have no cross-workspace consumers.
+
+**Beneficial prerequisites**:
+
+- The 2026-05-22 ff2 owner-decision recording (the case that surfaced this gap) ideally lands BEFORE this plan begins so the comms event `e48d7f16` is anchored in committed history. Not blocking — this plan can proceed regardless.
+
+**Related Plans**:
+
+- `.agent/skills/commit/SKILL-CANONICAL.md` — documents the queue ceremony; updated in Phase Final.
+- `.agent/plans/sector-engagement/eef/current/eef-first-feature.plan.md` — the ff2 work that surfaced the gap.
+
+**Minimum shippable shape without beneficial prerequisites**: full plan as written; ff2 anchor is documentation context only.
+
+---
+
+## Plan-Body First-Principles Check
+
+Apply [`.agent/rules/plan-body-first-principles-check.md`](../../../rules/plan-body-first-principles-check.md) at the start of Phase 0 and again at the start of Cycle 1.3 (the largest behaviour change):
+
+- **Shape**: is "scope the existing intent.files field to be operative" still the right shape, or has new evidence surfaced a different cure?
+- **Landing path**: do all three cycles land cohesively (test + product code per cycle) without skipped tests or test-after-code drift?
+- **Vendor literals**: no vendor APIs touched; not applicable.
+
+If the first-principles check at the Cycle 1.3 boundary surfaces a different shape (e.g., the two-writer integration test reveals a git-locking subtlety that requires additional ceremony), STOP and revise the plan body before proceeding.
+
+---
+
+## Risks
+
+| Risk | Severity | Mitigation |
+|---|---|---|
+| Concurrent `git commit` calls collide on `.git/index.lock` | Low | Git's index.lock serializes commit operations natively; concurrent attempts wait or fail cleanly. Existing queue claim system already prevents simultaneous `commit-queue commit` calls for the same git claim. |
+| Husky full-tree gate masks the scope narrowing (a working-tree-only failing artefact still aborts the commit, even though it's outside intent.files) | Low | This is intentional per the owner doctrine. Cycle 1.3 acceptance criterion 3 verifies this behaviour is preserved. |
+| Optional-parameter fallback leaks into committed history | Eliminated | The Cycle 1.1 amendment (pre-execution reviewer feedback) replaced the optional-scope overload with a NEW scoped function (mandatory pathspec) sitting alongside the unscoped originals. No transient backward-compat shape ever enters committed history; Cycle 1.3 retires the originals once all callers adopt. |
+| Comms-event forward-trace anchor drained before Phase Final | Medium → Mitigated | Forward-trace target switched to persistent `shared-comms-log.md` markdown anchors; closeout broadcast posted at end of Cycle 1.3, not deferred to Phase Final. |
+| Stash-or-scope confusion in tests | Low | All new tests are state-describing (system invariant) rather than implementation-tracking; the test-expert reviewer pre-execution dispatch validates this. |
+| Other queue subcommands silently rely on the whole-index assumption | Low | Phase 0 verification covers this; if any are found, the cycle scopes widen. The mitigation is "discover before commit", not "ignore". |
+
+---
+
+## Foundation Alignment
+
+This plan commits to:
+
+1. **[`principles.md`](../../../directives/principles.md)** — Replace-Don't-Bridge; schema-first; quality gates; no type shortcuts.
+2. **[`testing-strategy.md`](../../../directives/testing-strategy.md)** — atomic-landing per cycle; tests describe state not implementation; no audit-shaped tests.
+3. **[`schema-first-execution.md`](../../../directives/schema-first-execution.md)** — `intent.files` is schema-declared; this plan makes it operative.
+
+---
+
+## Notes
+
+### Why This Matters (System-Level)
+
+**Immediate Value**:
+
+- ff2 (today's owner-decision recording) lands via the queue ceremony cleanly without sweeping Shaded's 9.2 work.
+- Future multi-writer scenarios don't require Path-B bypass.
+
+**System-Level Impact**:
+
+- The queue + claim + comms ceremony genuinely fulfils its design intent: safe concurrent commits with audit-traceable scope.
+- The intent.files field becomes the single source of truth for "what this commit owns" — both at declaration time (enqueue) and at execution time (record-staged, verify-staged, commit).
+- Replace-Don't-Bridge applied at the doctrinal level: a silent implicit scope replaced by an explicit declared scope.
+
+**Risk of Not Doing**:
+
+- Every future multi-writer commit requires manual Path-B bypass, breaking the audit trail.
+- The queue ceremony's design intent is undermined by an unstated assumption that the ceremony was supposed to enable past.
+
+### Key Insight (restated for the implementer who picks this up)
+
+The fix isn't "add a flag" — it's "honour the field that's already there". The intent record's `files` field is the operative scope; three subcommands ignore it; this plan makes them honour it.
+
+---
+
+## References
+
+- Source files (per Phase 0 verification, completed by Stormbound 2026-05-22 ~15:00Z):
+  - `agent-tools/src/commit-queue/types.ts:39-52` — `CommitIntent.files: readonly string[]` (schema operative scope)
+  - `agent-tools/src/commit-queue/git.ts:10-17` — `getStagedBundle(repoRoot)` (single unscoped staged-read site)
+  - `agent-tools/src/commit-queue/core.ts:17-29` — `createStagedBundleFingerprint`
+  - `agent-tools/src/commit-queue/core.ts:135-160` — `recordStagedBundle` (first caller)
+  - `agent-tools/src/commit-queue/core.ts:57-80, 181-217` — `verifyStagedBundle` + `verifyFingerprint` (second caller)
+  - `agent-tools/src/commit-queue/cli.ts:130-143` — `runRecordStagedCommand` (Cycle 1.1 mutation point)
+  - `agent-tools/src/commit-queue/cli.ts:146-160` — `runVerifyStagedCommand` (Cycle 1.2 mutation point)
+  - `agent-tools/src/commit-queue/commit-workflow.ts:46,144,191` — `getStagedBundle` injected dep, `verifyStagedAgainstIntent`, `runVerifyStage` (Cycle 1.2 mutation point)
+  - `agent-tools/src/commit-queue/commit-workflow-runtime.ts:51-95` — `getStagedBundle` wiring + `runGitCommit` (Cycle 1.2 wiring + Cycle 1.3 mutation point)
+  - `agent-tools/src/commit-queue/index.ts` — public package surface; re-exports `createStagedBundleFingerprint` + `verifyStagedBundle` (so signature changes are part of the package public API)
+- Comms anchors (persistent markdown form, retention-resilient):
+  - Instance A: `.agent/state/collaboration/shared-comms-log.md` entry "2026-05-22T14:04Z — Mistbound Slipping Night → Shaded Whispering Dusk — Mistbound → Shaded — shared-index coordination ask before ff2 commit (A/B/C, default B in 90s)" (originated as comms event `e48d7f16` — may not survive retention sweep)
+  - Instance B: `.agent/state/collaboration/shared-comms-log.md` entry "2026-05-22T14:56:37Z — Wooded Swaying Thicket → Stormbound Kiting Squall — commit 2389ff5e absorbed your foreign-staged commit-queue.ts + collaboration-state.ts edits" + the 14:58Z correction + the 15:00Z Shaded broadcast + Stormbound's 15:00Z directed-to-Shaded event `31641f82`
+- SKILL: `.agent/skills/commit/SKILL-CANONICAL.md` (updated in Phase Final)
+- Foundation:
+  - `.agent/directives/principles.md`
+  - `.agent/directives/testing-strategy.md`
+  - `.agent/directives/schema-first-execution.md`
+
+---
+
+## Implementation Notes
+
+### Key Insight
+
+The data model already declares the scope (`intent.files`). The operations don't honour the declaration. Replace the silent assumption with the explicit field; no new surface needed.
+
+### Migration Path
+
+1. **Phase 0**: Confirm code structure matches the metacognition findings.
+2. **Cycle 1.1**: Fingerprint helper + record-staged adopt intent-scoped variant.
+3. **Cycle 1.2**: verify-staged + verify-staged-again adopt the same scoped helper.
+4. **Cycle 1.3**: Inner `git commit` narrows to `intent.files`; backward-compat fallback removed.
+5. **Phase Final**: SKILL-CANONICAL update + comms forward-trace + aggregate gate + consolidation.
+
+### Minimal Risk
+
+- Three cohesive cycles, each test + product code together; rollback unit is one commit.
+- Existing single-writer commit-queue tests preserved as regression guard throughout.
+- No CLI surface change for users; internal semantic tightening only.
+- Git's own index.lock provides the concurrency primitive; no new locking ceremony required.
+
+---
+
+## Consolidation
+
+After the final cycle lands and `pnpm check` passes, run `/jc-consolidate-docs` for the standard graduation + napkin-rotation pass. Surface the "intent.files is operative scope" insight as a candidate doctrine entry if it surfaces as load-bearing across multiple sessions.
+
+---
+
+## Future Enhancements (Out of Scope)
+
+- Per-writer git worktree isolation (Shape B from metacognition): not pursued; collides with full-tree-gating owner doctrine.
+- Stash-and-restore wrapper (Shape C): not pursued; bridge-not-replacement; conflict-on-restore failure modes.
+- Detect-and-abort safety net (Shape D): could be added later as a belt-and-braces guard if a genuine two-writers-overlapping-scope case emerges; not needed for the disjoint-scope case this plan covers.
+- Queue-state visualisation (TUI improvements showing per-writer scope): future ergonomic improvement; not load-bearing.
