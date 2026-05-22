@@ -1067,30 +1067,7 @@ collaboration-state" not found` despite the script being present and
   wrappers fight the discipline; friction-ratchet thresholds should summon
   assumptions review before richer tooling resumes.
 
-- 2026-05-11; **ADR-041 amendment needed: top-level workspace tiers**
-  (Dusky Masking Cloak 2026-05-11, surfaced by `assumptions-expert`
-  during graph execution-prep step 1 D-4 verification).
-  `[captured: 2026-05-11 | graduated: 2026-05-11 (Fronded Flowering Seed) | source: thread:connecting-oak-resources | target-resolved: amend:ADR-041-2026-05-11 | trigger-fired: blocks:ADR-173-ratification | size: M | status: graduated]`
-  Resolution details: `agent-tools/` + `agent-graphs/` tiers added; matrix
-  expanded to 8 rows x 8 columns; status Accepted (Revised); D-4a closed in
-  `graph-mvp-arc.plan.md`; ADR-173 §Open Questions:1 cross-linked.
-  Reviewers: architecture-expert-fred GO; architecture-expert-betty
-  GO-WITH-CONDITIONS (2 precision edits applied); docs-adr-expert
-  GO-WITH-CONDITIONS (3 housekeeping items applied).
-  ADR-041 (workspace structure) enumerates exactly five tiers: `apps/`,
-  `packages/core/`, `packages/libs/`, `packages/sdks/`, `packages/design/`
-  with an importer/importee matrix. The repo has already shipped a
-  sixth top-level tier (`agent-tools/`, referenced by ADR-165 / ADR-168 /
-  ADR-178 without amending ADR-041 — a latent gap). ADR-173 adds a
-  seventh top-level tier (`agent-graphs/`) for `agent-graphs/practice-graph/`.
-  Before ADR-173 can move from Proposed to Accepted, ADR-041 must be
-  amended to (a) add `agent-graphs/` as a top-level tier with permitted
-  importer/importee rows in the dependency-direction matrix, and (b)
-  regularise the already-shipped `agent-tools/` tier in the same matrix
-  (closing the latent gap). ADR-041 status update: "Accepted (Revised)"
-  with a dated revision note. No new ADR number required. Recorded as
-  D-4a in `graph-mvp-arc.plan.md § Open Decisions`. Trigger: blocks ADR-173
-  ratification — must land before graph-stack moves to ACTIVE.
+- **ADR-041 amendment needed: top-level workspace tiers** — captured 2026-05-11; graduated 2026-05-11; target: amend:ADR-041-2026-05-11; body archived at [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md#nested-bullet-defect-class-sweep--2026-05-22-evening-velvet-veiling-wisp).
 
 - 2026-05-11; **Opener-vs-substrate divergence — planning artefacts
   can be overtaken by execution before deferral closes**
@@ -1219,30 +1196,7 @@ collaboration-state" not found` despite the script being present and
   the SDK codegen workspace decomposition plan promotes to `current/`
   and reaches a phase that consumes this duplication.
 
-- 2026-05-09; **pre-commit gate scope (whole-tree vs staged-set)
-  imposes a coordination tax on multi-agent work** (Luminous Twinkling
-  Dawn 2026-05-09, observed during workflow-doc edit landing).
-  `[captured: 2026-05-09 | source: napkin-2026-05-09 | target-resolved: plan:cost-of-collaboration.plan.md P0 + .husky/pre-commit staged file-content scanners | trigger-fired: owner-direction+multi-agent-deadlock-evidence | size: M | status: graduated]`
-  The pre-commit hook runs `prettier --check .` and `markdownlint --dot .`
-  over the *entire* working tree, not the staged set. Any working-tree
-  noise from any agent (concurrent session WIP, abandoned partial edits,
-  in-progress test fixtures) breaks every commit until that noise is
-  cleaned. Observed instance: a clean 2-file workflow-doc edit could
-  not land because (a) commit attempt 1 failed on a parallel agent's
-  earlier-commit MD038 issue in `repo-continuity.md` line 405, and (b)
-  commit attempt 2 failed on prettier in
-  `agent-tools/tests/skills-adapter-generate/fixtures/lock-malformed.json`
-  — an untracked WIP fixture from a concurrent session's WS1 work that
-  is not in the staged set. The architectural property: gate-scope
-  mismatch with commit-scope produces silent coordination failures
-  between agents whose changes don't even touch the same files.
-  Source-surface:
-  [`napkin.md § 2026-05-09 Surprise: pre-commit gate scope is whole-tree, not staged-set`](../active/napkin.md).
-  Disposition 2026-05-12: graduated through the completed P0 quality-gate
-  rebalance. The selected shape narrows file-content scanners to staged paths
-  while retaining the whole-repo broken-code guard before commit; the later
-  2026-05-11 load-bearing entry below preserves the stronger multi-agent
-  evidence and final wording.
+- **2026-05-09 — Pre-commit gate scope (whole-tree vs staged-set)** — captured 2026-05-09; graduated 2026-05-09; target: plan:cost-of-collaboration.plan.md P0 + .husky/pre-commit staged file-content scanners; body archived at [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md#nested-bullet-defect-class-sweep--2026-05-22-evening-velvet-veiling-wisp).
 
 - 2026-05-09; **fitness-validator output should print the
   non-reactive-response discipline reminder inline at non-healthy
@@ -1892,42 +1846,7 @@ coordinator-7agent-arc.md` plus napkin Surprises 1, 2, 9. Graduation-
   (c) naming the discipline (fingerprint verification, explicit pathspec,
   attribution body). Trigger: drafting slot reached. Status: pending.
 
-- 2026-05-05; **PDR/ADR candidate — agent-tools CLI affordance set + build
-  isolation**.
-  `[captured: 2026-05-05 | graduated: 2026-05-10 (Sylvan Fruiting Glade) | source: napkin+feedback-memories | target-resolved: PDR-055 + ADR-178 + agent-tooling plan routing | trigger-fired: owner-direction+multi-instance | size: XL | status: graduated]`
-  Friction observed throughout the 7-agent coordinator
-  session: (a) no `comms list/show/watch` commands; (b) no `claims
-list/show` filtered by prefix/name/thread/kind; (c) no `commit-queue
-list/show` filtered by phase or agent; (d) flag-name discoverability
-  (`--summary` not `--closure-summary` for `claims close`; `--file`
-  vs `--area-pattern` ambiguity for `claims open`); (e) `comms render`
-  fragile — single malformed event JSON blocks regeneration repo-wide;
-  (f) build-on-each-CLI-invocation creates identity drift under in-flight
-  tooling refactor; (g) help-on-flag-failure not consistently applied.
-  Owner standing direction: *"all invocations of ALL agent tools with
-  improper flags MUST print the FULL help text"*. Owner cure: *"all
-  agents use only the built agent tools, so that development work can
-  happen on them without causing this issue again"*. Owner suggestion:
-  optional non-blocking `comms watch` streaming CLI for platforms with
-  background services; bare polling JSON list for platforms without.
-  Source-surface: napkin Surprise 7 + feedback memories
-  `feedback_use_built_agent_tools_only`,
-  `feedback_agent_tool_help_on_invalid_flags`,
-  `feedback_periodic_comms_check`. Graduation-target: ADR (build
-  isolation discipline), PDR (CLI affordance set + non-blocking-by-design
-  - portable substrate), and a concrete agent-tools enhancement plan.
-    Trigger: graduation-ready (multiple worked instances + owner-stated
-    cures). Status: graduated 2026-05-10 to PDR-055 + ADR-178.
-    **Historical sequenced-deferral pointer (2026-05-07, Pelagic Rolling
-    Harbour)**: dedicated multi-artefact authoring
-    session — Phase 1: ADR (build isolation); Phase 2: PDR (CLI
-    affordance set / portable substrate); Phase 3: concrete
-    agent-tools enhancement plan in
-    `.agent/plans/agent-tooling/`. ADR + PDR + plan = three
-    directive-shape artefacts; exceeds this drain session's context
-    budget; sequenced for next agent-tooling work slot. Owner
-    standing direction (full-help on improper flags) and built-CLI
-    discipline operate immediately as separate user-memory rules.
+- **2026-05-05 — Agent-tools CLI affordance set + build isolation (PDR-055 + ADR-178)** — captured 2026-05-05; graduated 2026-05-10; target: PDR-055 + ADR-178 + agent-tooling plan routing; body archived at [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md#nested-bullet-defect-class-sweep--2026-05-22-evening-velvet-veiling-wisp).
 
 - 2026-05-05; **turbo cache invalidation by an unrelated peer can expose
   a pre-existing latent test failure mid-commit, gating both sessions**
@@ -2027,39 +1946,7 @@ Constraint`); the constraint targets host-leakage, not
     pending — first instance (two surfaces in one session count as
     one instance of the pattern, since they're the same arc).
 
-- 2026-05-04; **hook tightening for no-moving-targets-in-permanent-docs:
-  distinguish prose-narrative from code-block backtick contexts**
-  (Vining Spreading Seed, owner-directed at session close after
-  the WS3/WS4/WS6 + rules-and-index landing arc).
-  `[captured: 2026-05-04 | graduated: 2026-05-10 (Sylvan Fruiting Glade) | source: owner-direction | target-resolved: agent-tools/scripts/check-blocked-content.ts + rule:no-moving-targets-in-permanent-docs | trigger-fired: owner-direction | size: L | status: graduated]`
-  The WS4
-  scoped*block's `excludes_inline_code` rule strips backticked
-  spans from each line before the regex test, which correctly
-  excludes data-shape SHAs in YAML/JSON code blocks but
-  incorrectly excludes prose-context backticked SHAs (the
-  *"see commit `abc1234`"*shape). The repo's permission system
-  surfaced this gap by rejecting the first-draft rule files,
-  which themselves embedded backticked session-commit SHAs.
-  Owner direction is to tighten the hook, not accept the
-  rule-vs-hook gap as optionality. Implementation cue:
-  distinguish \_code-block data context* (line is inside a
-  fenced block, or the line is predominantly code-shaped) from
-  *prose-narrative context* (a backticked token inside a
-  sentence — should fire). Source surface: napkin §
-  "Owner direction (2026-05-04, end of session)". Graduation-
-  target: refinement workstream extending
-  `agent-tools/scripts/check-blocked-content.ts` regex matcher and updating
-  `.agent/rules/no-moving-targets-in-permanent-docs.md` to
-  remove the now-stale "either/or" framing. Trigger-condition:
-  ready now (owner-directed). Status: graduated 2026-05-10 to the
-  prose-vs-data hook distinction and rule update. **Historical
-  sequenced-deferral pointer (2026-05-07, Pelagic Rolling Harbour)**: dedicated
-  hook-tightening session — Phase 1: TDD-RED on the regex matcher
-  with prose-narrative SHA fixture; Phase 2: implement
-  prose-vs-code-block distinction in
-  `agent-tools/scripts/check-blocked-content.ts`; Phase 3: rule body rewrite
-  removing either/or framing. Implementation + tests + rule edit
-  out of scope for this drain session.
+- **2026-05-04 — No-moving-targets hook tightening (prose-vs-data distinction)** — captured 2026-05-04; graduated 2026-05-10; target: agent-tools/scripts/check-blocked-content.ts + rule:no-moving-targets-in-permanent-docs; body archived at [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md#nested-bullet-defect-class-sweep--2026-05-22-evening-velvet-veiling-wisp).
 
 - 2026-05-04; **session-handoff §6d "canonical-pointer-only" rule
   is too absolute for AGENTS.md** (Vining Spreading Seed,
@@ -2428,66 +2315,9 @@ done && echo "lock cleared"`). Even though the loop only OBSERVED
   (single instance; not yet graduation-ripe; falsification criteria
   named in napkin entry).
 
-- 2026-05-02; observability multi-sink + fixtures plan WS10 — owner
-  doctrine *"for all significant documentation or Practice changes
-  — and this is always true — we need reviews from the documentation
-  reviewer and the onboarding reviewer"*;
-  `[captured: 2026-05-02 | graduated: 2026-05-10 (Sylvan Fruiting Glade) | source: owner-direction | target-resolved: rule:invoke-doc-and-onboarding-experts-on-significant-changes | trigger-fired: re-route-available | size: M | status: graduated]`
-  trigger condition: this
-  doctrine is now load-bearing for every plan that mutates docs or
-  Practice surfaces; graduation target: a permanent rule (likely
-  `.agent/rules/invoke-doc-and-onboarding-reviewers-on-significant-changes.md`
-  OR an amendment block in `invoke-code-reviewers.md`) plus a
-  `distilled.md § Process` graduation pointer plus matrix update in
-  `invoke-code-reviewers.md`; queued as plan WS11.3 deliverable;
-  status: graduated 2026-05-10 by direct re-route to the rule surface.
-  **Historical vaporware-trigger
-  flag (2026-05-07, Pelagic Rolling Harbour)**: trigger is gated on
-  unmet WS11.3 plan execution, which is the sequenced-deferral
-  vaporware shape per `distilled.md` §Sequenced-Deferral Discipline.
-  Substance is owner-standing-doctrine and is already in operational
-  effect (multi-reviewer dispatch is current practice). Re-route
-  option: land directly as
-  `.agent/rules/invoke-doc-and-onboarding-reviewers-on-significant-changes.md`
-  in next agent-rules pass without WS11.3 gating. Decision surfaced
-  for owner direction.
+- **2026-05-02; observability multi-sink + fixtures plan WS10 — owner** — captured 2026-05-02; graduated 2026-05-10; target: rule:invoke-doc-and-onboarding-experts-on-significant-changes; body archived at [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md#nested-bullet-defect-class-sweep--2026-05-22-evening-velvet-veiling-wisp).
 
-- 2026-05-02; observability multi-sink + fixtures plan WS8.6 —
-  orthogonal axes shape (`OBSERVABILITY_SINKS` typed list +
-  `OBSERVABILITY_FIXTURES` orthogonal fixture-as-tee boolean) is a
-  reusable architectural decision per PDR-019 (ADR scope by
-  reusability).
-  `[captured: 2026-05-02 | graduated: 2026-05-10 (Sylvan Fruiting Glade) | source: plan-WS-amendment | target-resolved: ADR-171+adr-amend:116/143/162/163 | trigger-fired: owner-direction | size: L | status: graduated]`
-  Applies to every future sink and every future
-  capability that emits; graduation target: a new
-  `docs/architecture/architectural-decisions/NNN-observability-configuration-orthogonality.md`
-  ADR (NEW). **2026-05-03 amendment (Moonlit Drifting Nebula)**:
-  the plan body originally scheduled this as ADR-165, but ADR-165
-  is already taken — the next available number must be chosen
-  before WS8.6 starts. Plus amendments to ADR-116 (warnings
-  channel), ADR-143 (registry shape, fixture-as-tee), ADR-162
-  (Open Question close on `ServerInstrumenter` port — partially
-  addressed in WS1 RED via the type definition; final closure
-  rides at WS6 when the HTTP composition root consumes the port),
-  ADR-163 (build-time scope clarification — D7a verification
-  confirmed structural orthogonality; WS4 cleanup is the
-  follow-on); queued as plan WS8.6/WS8.7 deliverable. **2026-05-03
-  ADR-number resolved (Woodland Sprouting Glade ARC B0, c0d17634)**:
-  ARC A4 ADR is **170** (smoke harness shape, parent plan); orthogonality
-  ADR is **171** (this plan, WS8.6). Verified by
-  `ls docs/architecture/architectural-decisions/ | sort -n | tail -5`
-  — 165-169 already present, 170/171 next available. All cross-plan
-  references updated; re-verify pre-authoring guards added at three
-  locations. Status: graduated 2026-05-10 to ADR-171 and amendments.
-  **Historical vaporware-
-  trigger flag (2026-05-07, Pelagic Rolling Harbour)**: trigger is
-  gated on WS8.6/WS8.7 plan execution; sequenced-deferral
-  vaporware shape per `distilled.md` §Sequenced-Deferral
-  Discipline. ADR authoring is itself directive-shape work
-  requiring its own context budget. Disposition 2026-05-12: the entry
-  is already graduated to ADR-171 and amendments; keep here only as
-  audit-trail until archival. Carrier-plan progress, not this register,
-  is the live signal.
+- **2026-05-02; observability multi-sink + fixtures plan WS8.6 —** — captured 2026-05-02; graduated 2026-05-10; target: ADR-171+adr-amend:116/143/162/163; body archived at [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md#nested-bullet-defect-class-sweep--2026-05-22-evening-velvet-veiling-wisp).
 
 - 2026-05-02; observability multi-sink + fixtures plan WS0 —
   near-miss surprise: almost spawned a duplicate
@@ -2499,84 +2329,7 @@ done && echo "lock cleared"`). Even though the loop only OBSERVED
   OR amendment to `consolidate-at-third-consumer.md`; status: pending
   (single instance; capture-only until second instance accumulates).
 
-- 2026-05-03; **inter-agent collaboration protocol gaps surfaced
-  by Pelagic ↔ Misty Task M1 round-trip**.
-  `[captured: 2026-05-03 | graduated: 2026-05-10 (Sylvan Fruiting Glade) | source: experience+napkin | target-resolved: PDR-056 with hypothesis-status preserved | trigger-fired: owner-direction+knowledge-graduation | size: XL | status: graduated]`
-  **Status reframed 2026-05-03 (Misty session-handoff metacognition)**:
-  these cures are now structured as candidate amendments to the N-agent
-  collaboration hypothesis at
-  [`.agent/prompts/agentic-engineering/collaboration/hypothesis.md`](../../prompts/agentic-engineering/collaboration/hypothesis.md),
-  with per-cure falsification criteria at
-  [`falsification-criteria.md`](../../prompts/agentic-engineering/collaboration/falsification-criteria.md)
-  and proposed validation experiments at
-  [`experiments.md`](../../prompts/agentic-engineering/collaboration/experiments.md).
-  Cures graduate to permanent doctrine **after** empirical validation
-  at N≥3, not before. The CLI ergonomics plan remains the natural
-  carrier for cure (v) tooling work, but the four protocol-amendment
-  cures (i)-(iv) and the five worker-perspective addenda (vi)-(x)
-  graduate via the hypothesis-evolution loop, not via direct
-  promotion to PDR. The original five structural cures
-  named in the session's reflection log
-  ([`experience/2026-05-03-pelagic-two-way-agent-communication-reflection.md`](../../experience/2026-05-03-pelagic-two-way-agent-communication-reflection.md))
-  and a tactical 10-point next-session guide in napkin (same date,
-  Pelagic Washing Anchor). Specific candidates: (i) **out-of-band
-  brief acknowledgement** — when an agent acts on owner direction
-  received outside the comms log, first comms event must cite the
-  out-of-band source explicitly (cure for the temporal-anomaly
-  reading of Misty's pre-existing claim); (ii) **read/write claim
-  mode field** — extend `active-claims.json` schema with
-  `mode: 'read' | 'write' | 'mutual-exclusive'` so non-conflicting
-  modes coexist on overlapping paths (cure for the
-  smoke-tests-workspace path overlap); (iii) **heartbeat-or-die
-  enforcement** — claims past `claimed_at + ETA * 1.5` without
-  heartbeat are stale; orchestrator reclaims, escalates, or asks
-  owner (cure for the ETA decay observed); (iv) **overflow
-  protocol in task offers** — task issuers must include *"if the
-  spec is too tight, do X; do not unilaterally Y"* up front (cure
-  for the round-trip cost on Misty's hybrid-vs-inline question);
-  (v) **`comms` CLI ergonomics** — `comms reply` (auto-populates
-  `in_response_to`, inverts `audience`); `comms watch` (tail
-  events directory); `comms pending` (events awaiting my reply);
-  `comms heartbeat <claim_id>` (cure for event_id mismatch
-  Misty made when inferring from title rather than copying from
-  source body, plus the discipline failures naming inertia of
-  manual JSON authoring). Routes to the existing
-  [`agent-coordination-cli-ergonomics-and-request-correlation.plan.md`](../../plans/agent-tooling/future/agent-coordination-cli-ergonomics-and-request-correlation.plan.md)
-  as concrete worked instances strengthening the existing
-  promotion case (already at fourth-instance evidence; this is a
-  fifth). Trigger: owner direction has fired in the request for
-  the reflection itself; CLI ergonomics plan promotion (already
-  named in `agentic-engineering-enhancements.next-session.md`)
-  is the natural carrier; the four protocol-amendment candidates
-  (i)-(iv) graduate to a single PDR or amendment to the existing
-  agent-collaboration directive at consolidation. **Worker-
-  perspective addenda from Misty Ebbing Pier (2026-05-03 napkin
-  entry "Worker-perspective addenda to Pelagic's collaboration
-  suggestions")** — five additional cures: (vi) **wall-clock
-  authority** (`date -u` from host shell as the canonical source
-  of `created_at`, distinct from the out-of-band-ack cure (i)
-  which addresses sequence reconstruction by readers); (vii)
-  **render conversation threading** (promote `audience` and
-  `in_response_to` to canonical schema and surface in render so
-  the log is a conversation tree, not flat dump); (viii)
-  **asymmetric ground-truth — worker initiates on empirical
-  surface** (assumption-breaking discoveries mid-task MUST surface
-  via comms event before worker continues; orchestrator MUST poll
-  that signal); (ix) **defer commit until task-close + counterparty
-  acknowledgement** (premature commits would have made this
-  session's self-correction expensive); (x) **wait-for-ack on
-  deadlined-defaults** (task-acceptor counterpart to overflow
-  protocol (iv)). Disposition 2026-05-12: the entry is already
-  graduated to PDR-056 with hypothesis-status preserved; the historical
-  due marker is stale. **Vaporware-trigger flag
-  (2026-05-07, Pelagic Rolling Harbour)**: trigger gated on unmet
-  "next CLI ergonomics plan execution slice"; sequenced-deferral
-  vaporware shape per `distilled.md` §Sequenced-Deferral
-  Discipline. The (i)-(x) cures are protocol amendments awaiting
-  empirical validation at N≥3 per the entry's own framing — they
-  should not graduate to permanent doctrine before validation
-  regardless of CLI carrier. Stays here as audit-trail; carrier-
-  plan progress is the live signal.
+- **2026-05-03 — Inter-agent collaboration protocol gaps surfaced under cross-vendor session** — captured 2026-05-03; graduated 2026-05-10; target: PDR-056 with hypothesis-status preserved; body archived at [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md#nested-bullet-defect-class-sweep--2026-05-22-evening-velvet-veiling-wisp).
 
 - 2026-05-03; **PDR-043 cue 2 sharpening: vocabulary is not the
   trigger, intent is** — owner direction this session: "there is
