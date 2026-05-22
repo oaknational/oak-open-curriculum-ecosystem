@@ -22,68 +22,23 @@ understanding — fitness management handles the consequences. What
 remains here is repo/domain-specific context with no natural
 permanent home, plus entries explicitly held pending validation.
 
-**Recent graduations (2026-05-10 — Quiet Lurking Mask)**: QUAR-1
-reformulation landed. *apply-don't-ask* → PDR-057 (empirical-
-answerability pre-question gate; discharge action is reading, not
-acting; destructive-operation guard problem structurally absent).
-*stop-inventing-optionality* → PDR-058 (three-tier decomposition by
-impact: decision optionality subsumed by PDR-057; design optionality
-routes to closed-shape cure; outcome optionality routes to
-falsifiability cure). Quarantine cleared at
-`.agent/memory/operational/quarantine/apply-dont-ask-doctrine.md`;
-pending-graduations entry flipped to graduated; PDR README index
-updated; `read-before-asking` rule back-cites PDR-057 as its
-doctrinal frame; `consolidate-at-third-consumer` cross-references
-PDR-058 §Surface 2 boundary.
-
-**Recent graduations (2026-05-09)** — focused consolidation pass on
-`distilled.md` (Woodland Sheltering Glade): five planning-discipline
-rules → PDR-018 amendment (lead-with-narrative, CLI-first
-enumeration, locally-producible-evidence-first, split-client-
-compatibility, dry-run-multi-step). Sequenced-Deferral Discipline
-(three modes) → PDR-026 amendment. Per-Session Closure Owns the
-Loop → PDR-026 amendment. Coordination Surface Discipline +
-Inter-Agent Comms First-Class Primitive → `agent-collaboration.md`
-directive amendments. Repo-Specific Codegen routing pointer →
-`pending-graduations.md` entry tied to SDK codegen workspace
-decomposition plan. 2026-05-07 Doctor Safe-Merge rotation entries
-pruned (doctrine durable in PDR-049, PDR-050,
-`memory-state-substrate-contracts.md`, archived doctor plan).
-
-**Recent graduations (2026-05-06)**: Practice-Core portability,
-directive-file <30% context budget, validators-must-recompute, and
-re-apply-first-question-at-elaboration-boundaries graduated to new
-files in `.agent/rules/`. Discoverable+actionable plans,
-parent-reconciliation, narrative-section-drift-first, and
-plan-following-vs-principle-following landed in
-`docs/governance/development-practice.md` § Documentation Practice.
-Apparently-orphaned-claim policy landed in
-`.agent/memory/operational/collaboration-state-lifecycle.md`.
-Citation-directionality is in
-`.agent/rules/no-moving-targets-in-permanent-docs.md`.
-TDD-compositionality and the multi-agent pointer/platform-
-independence paragraphs were subsumed by existing directive content
-(`testing-strategy.md`, `tdd-as-design.md`,
-`agent-collaboration.md`) and deleted here.
-
-**Verdict, not menu (2026-05-11 Flamebright Burning Lava)**: when
-analysis is complete and a verdict exists in the agent's own
-reasoning, the agent **presents the verdict** — not as a multiple-
-choice quiz. Converting completed findings into `AskUserQuestion`
-form is responsibility-passback; the diagnostic is *could the agent
-rank these options by evidence already in context?* If yes, the quiz
-is evasion. `AskUserQuestion` is reserved for: (a) genuine permission
-gates, (b) decisions only the owner can make, (c) exploration when
-the agent has no strong basis for verdict. Landed structurally:
-`.agent/rules/present-verdicts-not-menus.md`, RULES_INDEX entry,
-Claude + Cursor adapters, `jc-plan` skill §Before Writing item 1
-amendment. Doctrinal anchors:
-`feedback_no_responsibility_passback` (2026-05-09),
-`feedback_answer_verification_questions_directly` (2026-04-24),
-PDR-057 (apply-don't-ask), PDR-058 (stop-inventing-optionality).
-Origin: the pattern recurred this session *despite* both feedback
-memories being in context — evidence that user-memory alone is
-insufficient and rule + skill structural surfacing is needed.
+**Earlier graduations audit-trail archived (2026-05-22)**: the
+2026-05-06, 2026-05-09 (Woodland Sheltering Glade), 2026-05-10
+(Quiet Lurking Mask), and 2026-05-11 (Verdict-not-menu Flamebright
+Burning Lava) graduation blocks moved to
+[`archive/distilled-graduations-log-2026-05-14.md`](archive/distilled-graduations-log-2026-05-14.md)
+§ "Backfill rotation 2026-05-22 — earlier graduations blocks moved
+from distilled.md". Substance lives at named permanent homes
+(PDR-057, PDR-058, PDR-018 amendment, PDR-026 amendment,
+`agent-collaboration.md` directive amendments,
+`.agent/rules/present-verdicts-not-menus.md`,
+`.agent/rules/practice-core-portability.md`,
+`.agent/rules/directive-file-context-budget.md`,
+`.agent/rules/validators-must-recompute-not-just-record.md`,
+`.agent/rules/re-apply-first-question-at-elaboration-boundaries.md`,
+`.agent/rules/no-moving-targets-in-permanent-docs.md`,
+`docs/governance/development-practice.md` § Documentation Practice,
+`.agent/memory/operational/collaboration-state-lifecycle.md`).
 
 **Meta-observation (2026-05-09 historical-napkin-synthesis)**: the
 fitness-as-trim impulse is doctrine-resistant under context

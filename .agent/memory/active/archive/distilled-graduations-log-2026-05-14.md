@@ -9,14 +9,23 @@ sections_archived:
   - 'Recently Distilled — 2026-05-10 Napkin Rotation'
   - 'Graduations Log — 2026-05-14 Verdant Swaying Glade Route C-iv'
   - 'Graduations Log — 2026-05-14 Riverine Swimming Hull Batch C'
+appended_passes:
+  - appended_at: 2026-05-22
+    appended_by: Tempestuous Spiralling Thermal / claude / Opus 4.7 (1M) / 9205b8
+    sections_added:
+      - 'Recent graduations (2026-05-10 — Quiet Lurking Mask)'
+      - 'Recent graduations (2026-05-09 — Woodland Sheltering Glade)'
+      - 'Recent graduations (2026-05-06)'
+      - 'Verdict, not menu (2026-05-11 Flamebright Burning Lava)'
+    reason: 'Backfill rotation of earlier graduations blocks left in distilled.md after the 2026-05-17 structural pass. All four entries describe substance that already graduated to permanent homes (PDR-057, PDR-058, PDR-018 amendment, PDR-026 amendment, agent-collaboration.md amendments, .agent/rules/*, docs/governance/development-practice.md, .agent/memory/operational/collaboration-state-lifecycle.md). distilled.md fitness rotation per fitness_line_limit 500 vs observed 829L.'
 ---
 
-# Distilled — Graduations-Log Archive (2026-05-12 → 2026-05-14)
+# Distilled — Graduations-Log Archive (2026-05-06 → 2026-05-14)
 
-Routing logs from the 2026-05-12 → 2026-05-14 consolidation passes. Every
-entry below describes substance that already graduated to a permanent home;
-the back-cites are preserved here for audit-trail value, not active recall.
-Live distilled state remains at [`../distilled.md`](../distilled.md).
+Routing logs from consolidation passes spanning 2026-05-06 → 2026-05-14.
+Every entry below describes substance that already graduated to a permanent
+home; the back-cites are preserved here for audit-trail value, not active
+recall. Live distilled state remains at [`../distilled.md`](../distilled.md).
 
 ---
 
@@ -179,3 +188,81 @@ workflow document.
 [wf-lettered]: ../../../docs/engineering/workflow.md#lettered-section-edits-must-re-read-the-parent-count
 [wf-growth]: ../../../docs/engineering/workflow.md#growth-axis-metadata-is-live-doctrine
 [wf-shell]: ../../../docs/engineering/workflow.md#shell-loops-over-multi-line-command-output-are-unsafe-in-deletion-paths
+
+---
+
+## Backfill rotation 2026-05-22 — earlier graduations blocks moved from distilled.md
+
+Four graduation audit-trail blocks left in `distilled.md` after the 2026-05-17
+Swift Winging Gust structural pass. Each describes substance that already
+graduated to a permanent home; preserved here for audit trail. Rotation
+driven by `distilled.md` fitness pressure (829L vs `fitness_line_limit` 500;
+substance preservation discipline applied — only audit-trail moved, no
+live-distilled entries displaced).
+
+### Recent graduations (2026-05-10 — Quiet Lurking Mask)
+
+QUAR-1 reformulation landed. *apply-don't-ask* → PDR-057 (empirical-
+answerability pre-question gate; discharge action is reading, not
+acting; destructive-operation guard problem structurally absent).
+*stop-inventing-optionality* → PDR-058 (three-tier decomposition by
+impact: decision optionality subsumed by PDR-057; design optionality
+routes to closed-shape cure; outcome optionality routes to
+falsifiability cure). Quarantine cleared at
+`.agent/memory/operational/quarantine/apply-dont-ask-doctrine.md`;
+pending-graduations entry flipped to graduated; PDR README index
+updated; `read-before-asking` rule back-cites PDR-057 as its
+doctrinal frame; `consolidate-at-third-consumer` cross-references
+PDR-058 §Surface 2 boundary.
+
+### Recent graduations (2026-05-09 — Woodland Sheltering Glade)
+
+Focused consolidation pass on `distilled.md`: five planning-discipline
+rules → PDR-018 amendment (lead-with-narrative, CLI-first
+enumeration, locally-producible-evidence-first, split-client-
+compatibility, dry-run-multi-step). Sequenced-Deferral Discipline
+(three modes) → PDR-026 amendment. Per-Session Closure Owns the
+Loop → PDR-026 amendment. Coordination Surface Discipline +
+Inter-Agent Comms First-Class Primitive → `agent-collaboration.md`
+directive amendments. Repo-Specific Codegen routing pointer →
+`pending-graduations.md` entry tied to SDK codegen workspace
+decomposition plan. 2026-05-07 Doctor Safe-Merge rotation entries
+pruned (doctrine durable in PDR-049, PDR-050,
+`memory-state-substrate-contracts.md`, archived doctor plan).
+
+### Recent graduations (2026-05-06)
+
+Practice-Core portability, directive-file <30% context budget,
+validators-must-recompute, and re-apply-first-question-at-elaboration-
+boundaries graduated to new files in `.agent/rules/`.
+Discoverable+actionable plans, parent-reconciliation, narrative-
+section-drift-first, and plan-following-vs-principle-following landed
+in `docs/governance/development-practice.md` § Documentation Practice.
+Apparently-orphaned-claim policy landed in
+`.agent/memory/operational/collaboration-state-lifecycle.md`.
+Citation-directionality is in
+`.agent/rules/no-moving-targets-in-permanent-docs.md`.
+TDD-compositionality and the multi-agent pointer/platform-
+independence paragraphs were subsumed by existing directive content
+(`testing-strategy.md`, `tdd-as-design.md`,
+`agent-collaboration.md`) and deleted from distilled.md.
+
+### Verdict, not menu (2026-05-11 Flamebright Burning Lava)
+
+When analysis is complete and a verdict exists in the agent's own
+reasoning, the agent **presents the verdict** — not as a multiple-
+choice quiz. Converting completed findings into `AskUserQuestion`
+form is responsibility-passback; the diagnostic is *could the agent
+rank these options by evidence already in context?* If yes, the quiz
+is evasion. `AskUserQuestion` is reserved for: (a) genuine permission
+gates, (b) decisions only the owner can make, (c) exploration when
+the agent has no strong basis for verdict. Landed structurally:
+`.agent/rules/present-verdicts-not-menus.md`, RULES_INDEX entry,
+Claude + Cursor adapters, `jc-plan` skill §Before Writing item 1
+amendment. Doctrinal anchors:
+`feedback_no_responsibility_passback` (2026-05-09),
+`feedback_answer_verification_questions_directly` (2026-04-24),
+PDR-057 (apply-don't-ask), PDR-058 (stop-inventing-optionality).
+Origin: the pattern recurred this session *despite* both feedback
+memories being in context — evidence that user-memory alone is
+insufficient and rule + skill structural surfacing is needed.
