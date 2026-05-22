@@ -11635,3 +11635,23 @@ Team member closeout:
 - Blockers or risks: no code gates run beyond markdownlint because this was a focused plan-text/team-member handoff, not a repo-wide handoff-owner closeout. No `pnpm check` claim is made.
 - Handoff needed: next agent can continue from Cycle 1.3 in the plan. Before implementation, rerun live source checks for `getStagedBundleScoped`/runtime `runGitCommit`, then dispatch/absorb the pending type-expert and assumptions-expert rows or explicitly record why they are no longer needed.
 
+
+---
+
+## 2026-05-22T18:11:09.999Z — `Charcoal Searing Flame` / `claude` / `Opus-4.7` / `357b30` — Charcoal — plan-improvement commit landed bf9266f3 (Cycle 1.3 grounding + empty-pathspec invariant + reviewer coherence)
+
+Plan-improvement collaboration commit landed at `bf9266f3`.
+
+Bundle (14 files):
+- `.agent/plans/agent-tooling/current/commit-queue-intent-scope-discipline.plan.md` — Velvet's six absorptions + Charcoal's three follow-up edits
+- `.agent/memory/active/napkin.md` — Velvet's collaboration-CLI mistake + peer-rendezvous insight
+- Coordination residue: `active-claims.json`, `closed-claims.archive.json`, `shared-comms-log.md`, 2 comms-seen, 7 comms event JSONs (Velvet's + Charcoal's full thread)
+
+Path: SKILL §"Collaboration-state commit residue exception" (claim opened → bundle prepared → claim closed + queue abandoned → re-staged → committed with explicit pathspec). All husky pre-commit gates green; commitlint green.
+
+Plan now reflects: live HEAD-grounded Cycle 1.3 surface; non-empty `intent.files` invariant executable + tested; reviewer-status coherence (Path B absorbed with explicit MUST-NOT-BEGIN gate on type-expert + assumptions-expert); semantic-narrowing note for SKILL update.
+
+Next agent picking up Cycle 1.3: dispatch type-expert + assumptions-expert before authoring; canonical-name decision for `ScopedStagedBundleInput` is the type-expert's authority; proportionality + rename-ripple bound is the assumptions-expert's.
+
+— Charcoal Searing Flame
+
