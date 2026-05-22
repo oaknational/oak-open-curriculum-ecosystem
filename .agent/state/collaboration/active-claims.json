@@ -275,37 +275,68 @@
       "expires_at": "2026-05-22T09:16:04.471Z",
       "phase": "abandoned",
       "notes": "Abandoned before staging because git index already contained foreign staged file apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts outside Salty 4.2 bundle."
+    },
+    {
+      "intent_id": "d7be592d-d084-4b42-a7d2-d47e6114fff0",
+      "claim_id": "d26e453f-db59-4381-ac10-fab5b99411c3",
+      "agent_id": {
+        "agent_name": "Wooded Swaying Thicket",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "6c58f3"
+      },
+      "files": [
+        ".agent/memory/operational/pending-graduations.md",
+        ".agent/memory/operational/archive/pending-graduations-archive-2026-05-22.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/operational/archive/repo-continuity-session-history-2026-05-22.md"
+      ],
+      "commit_subject": "docs(consolidation): graduate 5 PDR-substrate entries and drain repo-continuity",
+      "queued_at": "2026-05-22T13:00:16.411Z",
+      "updated_at": "2026-05-22T13:01:24.324Z",
+      "expires_at": "2026-05-22T13:15:16.411Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "22d62b60c2f5532eb93ab24281968c2ca5d60237e9119c0b7d829e26d8cf2fc3",
+      "staged_name_status": "M\t.agent/memory/operational/archive/pending-graduations-archive-2026-05-22.md\nM\t.agent/memory/operational/archive/repo-continuity-session-history-2026-05-22.md\nM\t.agent/memory/operational/pending-graduations.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/connecting-oak-resources.next-session.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nM\t.agent/state/collaboration/comms-seen/mistbound-slipping-night.json\nA\t.agent/state/collaboration/comms-seen/tempestuous-spiralling-thermal.json\nM\t.agent/state/collaboration/comms-seen/wooded-swaying-thicket.json\nA\t.agent/state/collaboration/comms/432af3fd-e312-4299-b14c-6cde769acc4a.json\nA\t.agent/state/collaboration/comms/4724ea9a-4c00-4a99-ab6e-72f77c5c7a82.json\nA\t.agent/state/collaboration/comms/6bd9786c-1836-4481-935e-4c616557202e.json\nA\t.agent/state/collaboration/comms/77cea2a8-bf35-42bd-9e0b-4841102f83f3.json\nA\t.agent/state/collaboration/comms/9a3344c6-8ac4-479c-9f98-756edfc4ba88.json\nA\t.agent/state/collaboration/comms/c2930b23-7d1a-465f-8119-e884e538d5d5.json\nM\t.agent/state/collaboration/shared-comms-log.md\n"
+    },
+    {
+      "intent_id": "6fbc45a8-7703-4d76-b1c7-0e69a8463006",
+      "claim_id": "d26e453f-db59-4381-ac10-fab5b99411c3",
+      "agent_id": {
+        "agent_name": "Wooded Swaying Thicket",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "6c58f3"
+      },
+      "files": [
+        ".agent/memory/operational/pending-graduations.md",
+        ".agent/memory/operational/archive/pending-graduations-archive-2026-05-22.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/operational/archive/repo-continuity-session-history-2026-05-22.md",
+        ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/state/collaboration/comms-seen/mistbound-slipping-night.json",
+        ".agent/state/collaboration/comms-seen/tempestuous-spiralling-thermal.json",
+        ".agent/state/collaboration/comms-seen/wooded-swaying-thicket.json",
+        ".agent/state/collaboration/comms/432af3fd-e312-4299-b14c-6cde769acc4a.json",
+        ".agent/state/collaboration/comms/4724ea9a-4c00-4a99-ab6e-72f77c5c7a82.json",
+        ".agent/state/collaboration/comms/6bd9786c-1836-4481-935e-4c616557202e.json",
+        ".agent/state/collaboration/comms/77cea2a8-bf35-42bd-9e0b-4841102f83f3.json",
+        ".agent/state/collaboration/comms/9a3344c6-8ac4-479c-9f98-756edfc4ba88.json",
+        ".agent/state/collaboration/comms/c2930b23-7d1a-465f-8119-e884e538d5d5.json",
+        ".agent/state/collaboration/shared-comms-log.md"
+      ],
+      "commit_subject": "docs(consolidation): graduate 5 PDR-substrate entries and drain repo-continuity",
+      "queued_at": "2026-05-22T13:01:25.209Z",
+      "updated_at": "2026-05-22T13:12:24.290Z",
+      "expires_at": "2026-05-22T13:16:25.209Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "22d62b60c2f5532eb93ab24281968c2ca5d60237e9119c0b7d829e26d8cf2fc3",
+      "staged_name_status": "M\t.agent/memory/operational/archive/pending-graduations-archive-2026-05-22.md\nM\t.agent/memory/operational/archive/repo-continuity-session-history-2026-05-22.md\nM\t.agent/memory/operational/pending-graduations.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/connecting-oak-resources.next-session.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nM\t.agent/state/collaboration/comms-seen/mistbound-slipping-night.json\nA\t.agent/state/collaboration/comms-seen/tempestuous-spiralling-thermal.json\nM\t.agent/state/collaboration/comms-seen/wooded-swaying-thicket.json\nA\t.agent/state/collaboration/comms/432af3fd-e312-4299-b14c-6cde769acc4a.json\nA\t.agent/state/collaboration/comms/4724ea9a-4c00-4a99-ab6e-72f77c5c7a82.json\nA\t.agent/state/collaboration/comms/6bd9786c-1836-4481-935e-4c616557202e.json\nA\t.agent/state/collaboration/comms/77cea2a8-bf35-42bd-9e0b-4841102f83f3.json\nA\t.agent/state/collaboration/comms/9a3344c6-8ac4-479c-9f98-756edfc4ba88.json\nA\t.agent/state/collaboration/comms/c2930b23-7d1a-465f-8119-e884e538d5d5.json\nM\t.agent/state/collaboration/shared-comms-log.md\n"
     }
   ],
   "claims": [
-    {
-      "claim_id": "789ee97b-6668-48e4-91a5-725b4767426d",
-      "agent_id": {
-        "agent_name": "Shaded Whispering Dusk",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "763ef4"
-      },
-      "thread": "pr-108-snagging",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "agent-tools/src/collaboration-state/tui/operator-value.ts",
-            "packages/core/oak-eslint/src/rules/boundary.ts",
-            "agent-tools/src/bin/skills-adapter-generate.ts",
-            "agent-tools/tests/skills-adapter-generate/generator.unit.test.ts",
-            "agent-tools/scripts/repo-check.ts",
-            "agent-tools/src/collaboration-state/tui/config.ts"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-22T12:16:27Z",
-      "freshness_seconds": 5400,
-      "sidebar_open": false,
-      "intent": "Cycle 5 refactor cluster (8 sites, 5 sub-cycles, file-disjoint fan-out)",
-      "heartbeat_at": "2026-05-22T12:21:25Z"
-    },
     {
       "claim_id": "6ed6ca9a-9702-4b4f-8994-2a862367516d",
       "agent_id": {
@@ -391,7 +422,62 @@
       "claimed_at": "2026-05-22T12:42:00Z",
       "freshness_seconds": 7200,
       "sidebar_open": false,
-      "intent": "Continuous /jc-consolidate-docs pass — critical-zone memory surfaces (napkin 1099L, pending-graduations 4071L, repo-continuity prose widths, distilled 677L); graduate due/overdue PDR/ADR candidates to permanent homes; rotate napkin; honour learning-preservation-overrides-fitness."
+      "intent": "Continuous /jc-consolidate-docs pass — critical-zone memory surfaces (napkin 1099L, pending-graduations 4071L, repo-continuity prose widths, distilled 677L); graduate due/overdue PDR/ADR candidates to permanent homes; rotate napkin; honour learning-preservation-overrides-fitness.",
+      "intent_to_commit": "6fbc45a8-7703-4d76-b1c7-0e69a8463006"
+    },
+    {
+      "claim_id": "70d1199a-6888-4010-a157-6d0e1fbf3696",
+      "agent_id": {
+        "agent_name": "Tempestuous Spiralling Thermal",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "9205b8"
+      },
+      "thread": "practice-substrate",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/commit/SKILL-CANONICAL.md",
+            "agent-tools/src/commit-queue/cli.ts",
+            "agent-tools/src/commit-queue/args.ts",
+            "agent-tools/src/commit-queue/options.ts",
+            "agent-tools/src/commit-queue/index.ts",
+            "agent-tools/src/commit-queue/commit-workflow.ts",
+            "agent-tools/tests/commit-queue.unit.test.ts",
+            "agent-tools/tests/commit-queue.integration.test.ts",
+            "agent-tools/tests/commit-workflow.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T12:54:16Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Lane C — jc-commit SKILL critical review (PDR-046 substance preservation) + ship commit-queue commit workflow primitive with atomic-landing tests. Composes verify-staged + advisory orchestrator + verify-staged-again + git commit + complete. Preserves PDR-053/ADR-176 advisory polarity. Husky full-tree gating UNCHANGED per owner stance."
+    },
+    {
+      "claim_id": "56206b71-a942-44ac-aa42-715b1cd5b30c",
+      "agent_id": {
+        "agent_name": "Mistbound Slipping Night",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "a1cb64"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/comms-relevant-events.ts",
+            "agent-tools/tests/collaboration-state/format-watcher-event.unit.test.ts",
+            "docs/architecture/architectural-decisions/183-comms-event-tag-namespace-substrate.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T13:12:34Z",
+      "freshness_seconds": 5400,
+      "sidebar_open": false,
+      "intent": "Lane B ADR-183 Tranche 2 — comms-event tag-token rendering. Compose [FAILURE-MODE]/[BEHAVIOUR-NOTE] tokens with channel discriminator per Q1-Q5 sidebar settlement. File-disjoint from Tempestuous (commit-queue) and Shaded (graph-ingest+bin)."
     }
   ]
 }

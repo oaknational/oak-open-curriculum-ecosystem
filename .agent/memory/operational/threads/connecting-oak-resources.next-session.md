@@ -20,7 +20,97 @@ inside a session.
 
 Inc.1a remaining after this session: 3 cycles (WS2.2, WS2.3, WS3.3). WS3.2 LANDED 2026-05-21.
 
-**Last refreshed**: 2026-05-22 (Shaded Whispering Dusk / `claude` / `claude-opus-4-7` (1M) / `763ef4`) — **compaction-boundary handoff after meta-plan review + two-peer team formation + metacognition pass on canonical-watcher organisation**. This session: (a) reviewed `feat-mcp-graph-support-foundation-meta.md` + 11 associated docs end-to-end; produced verdict "meta plan is structurally sound; three substantive drifts + one link bug worth follow-up"; (b) executed the cures via 4-sub-agent fan-out, landed at commit `4200a17b` (`docs(meta-plan): refresh post-arch-excellence and cure graph-stack link drift`; 9 files +31/−15; all 87 turbo gates green); (c) at owner direction formed a two-primary team for the next phase — Shaded Whispering Dusk on Lane A (PR-108 snagging Cycles 5-10 + Phase Final), Mistbound Slipping Night (`a1cb64`) as Peer B candidate awaiting owner direction (likely Lane B = Inc.1a closure WS2.2/WS2.3/WS3.3 OR Inc.1d substrate WS4.1/WS4.4/WS4.5); (d) ran `/jc-metacognition` on a worked-instance defect (seen-file JSON-vs-plain-text format confusion) and produced a structural plan at `.agent/plans/agent-tooling/future/coordination-watcher-canonicalisation.plan.md` capturing the canonical-home misplacement (`.agent/reference/` is for external materials only), the SKILL-invocation-example-as-fragile-authority shape, and the watcher-scope-narrower-than-substrate-scope gap; (e) authored napkin entries + pending-graduations entry "Canonical tool definitions belong code-adjacent" (`due`, second-instance trigger fired). **Lane A work NOT started this session** — owner direction was "give me a loop command first; don't start yet". The lane-advancing /loop command (paste identically into both Shaded's session and Mistbound's session once owner authorises start):
+**Last refreshed**: 2026-05-22 (Shaded Whispering Dusk / `claude` / `claude-opus-4-7` (1M) / `763ef4`) — **SECOND compaction-boundary handoff this session, mid-cycle pause of Lane A after Cycles 5 + 6 (S7785) shipped; 4-peer topology emerged; Cycle 6 S7787 dispositions + Mistbound sidebar Q1-Q5 are first-resumption work**.
+
+**Lane A state on pause**:
+
+- HEAD: `92dcd8bd refactor(pr-108-snagging): clear Cycle 6 S7785 sites (5 bin files, top-level await)`.
+- Cycle 5 landed at `d57c5025` (8 sites, 5 sub-cycles via parallel fan-out).
+- Cycle 6 S7785 (5 sites, 5 bin files) landed at `92dcd8bd` via parallel fan-out; post-delivery code-expert review APPROVED, no drift, no specialist escalation.
+- Cycle 6 S7787 (5 sites in `packages/libs/graph-ingest/src/*/index.ts`) **disposition is FALSE_POSITIVE** for all 5 per code-expert pre-execution review (WS2.1 reserved-entrypoint placeholders; `export {}` is the only TS-valid module-marker for ESM zero-implementation reserved sub-paths with no sibling files to re-export). **Pending: 5 SonarQube MCP `change_sonar_issue_status` calls** with the per-site rationales already produced by code-expert this session. The MCP calls are durable in plan-context and can be done from a fresh session — Sonar issue keys must be discovered via `search_sonar_issues_in_projects` filtering on rule `typescript:S7787` against this branch.
+- Cycle 7+: not started. Cycles 7-10 + Phase Final remain in plan per `pr-108-snagging.plan.md`.
+
+**Active claims on pause**:
+
+- `789ee97b` (Shaded, Cycle 5 file scope, thread `pr-108-snagging`) — STALE; Cycle 5 landed at `d57c5025`. Should be closed in resumption first move.
+- `da769539` (Shaded, Cycle 6 file scope, thread `pr-108-snagging`) — ACTIVE; Cycle 6 S7785 landed but the same claim covers the S7787 FALSE_POSITIVE work. Keep open until FALSE_POSITIVE pass completes.
+- `6ed6ca9a` (Mistbound, Lane B substrate, thread `connecting-oak-resources`) — ACTIVE.
+- `d26e453f` (Wooded, consolidation, thread `agentic-engineering-enhancements`) — ACTIVE.
+
+**Standing rules landed this session that weren't in place pre-session**:
+
+- `.agent/rules/pre-execution-code-expert-review-per-loop-cycle.md` (+ `.claude/` + `.cursor/` adapters) — authored by Mistbound's capture sub-agent per owner directive after my tick-4 loop-doctrine memory entry. Specifies: TWO code-expert dispatches per /loop cycle (pre-execution before fan-out + post-execution before commit). My memory entry `feedback_loop_runbook_code_expert_after_delivery.md` is now graduated — keep as record but flag superseded by the rule.
+
+**Owner corrections received this session (memory updates required)**:
+
+- Full-tree pre-commit gating is INTENTIONAL AND CORRECT; staged-only gating is REJECTED as a cure shape. Owner: "the worst bugs are often emergent outside of changed files." Multi-writer coordination is solved by queue + ordering + comms, not by narrowing gate scope. Supersedes memory entry `feedback_pre_commit_hook_must_gate_staged_only.md` — that memory should be deleted or rewritten as a "rejected cure" record on resumption.
+
+**Triple-then-quadruple peer topology this session**:
+
+- Shaded Whispering Dusk (`763ef4`, claude/opus-4-7) — Lane A, this session.
+- Mistbound Slipping Night (`a1cb64`, claude/opus-4-7) — Lane B (PDR-063..066 cure, substrate Tranche 1 landed at `c4bacfc5`; Tranche 2 ADR-183 CLI rendering sidebar in flight; Q1-Q5 awaiting Shaded answers).
+- Wooded Swaying Thicket (`6c58f3`, claude/opus-4-7) — consolidation specialist; scope = `.agent/memory/active|operational/*` + graduation destinations.
+- Tempestuous Spiralling Thermal (4th peer, prefix unknown) — seen-file appeared mid-session; broadcast not yet absorbed before pause. **First resumption move: read their team-start broadcast to learn their role and scope**.
+
+**Mistbound's sidebar Q1-Q5 outstanding** (for ADR-183 T2 CLI rendering update at `agent-tools/src/collaboration-state/cli-comms-watch.ts`):
+
+- Q1 render-site location (render-time confirm); Q2 token format `[FAILURE-MODE]`/`[BEHAVIOUR-NOTE]` confirm; Q3 composition order `[BROADCAST] [FAILURE-MODE] <title>` confirm; Q4 multi-tag rendering rule (co-tag allowed? order? only-one-tag convention?); Q5 unknown-tag handling (literal/skip/error). Q6+Q7 Mistbound's own. **Resumption: reply via directed comms to Mistbound (prefix `a1cb64`)**; Mistbound dispatches the implementer sub-agent after Q1-Q5 are settled.
+
+**Comms watcher Monitor task** for this session: `b683jt1tv` (current). After compaction, this task ID will be invalidated. **Resumption move**: re-arm via:
+
+```bash
+pnpm agent-tools:collaboration-state -- comms watch \
+  --comms-dir .agent/state/collaboration/comms \
+  --seen-file .agent/state/collaboration/comms-seen/shaded-whispering-dusk.json \
+  --platform claude --model claude-opus-4-7
+```
+
+Run as a persistent Monitor task (Claude Code `Monitor` tool with `persistent: true`, `timeout_ms: 3600000`). The seen-file is committed and primed — no historical backfill will fire.
+
+**Lane-advancing /loop command** (multi-peer-aware version from `/tmp/lane-c-opening-statement.md` lines 147-166; the runbook the user is currently pasting each tick):
+
+```text
+/loop 180s Advance lane AND coordinate. (1) Before any sub-agent dispatch: ensure a peer-level active-claim is open covering the full file scope of the imminent work; cross-check .agent/state/collaboration/active-claims.json AND each peer's latest broadcast for collision. (2) If a fan-out is in flight, do NOT spawn another — absorb returns as they arrive; when the cycle's full bundle is back, run pre-commit gates and commit cohesively via the jc-commit skill (no --no-verify). (3) If no fan-out is in flight and the next cycle is ready, fan out: file-disjoint sub-agents, one task brief per sub-agent, edits-only-no-commit-no-gates discipline. (4) If >120s silent on shared comms, broadcast a brief progress event per §5 cadence. (5) Cross-check each peer's recent broadcast scope against your intended next-cycle file scope; open a sidebar BEFORE dispatching if encroachment risk surfaces. (6) Surface anything the watcher will not surface via AskUserQuestion to owner OR directed comms to peer — never block silently. (7) If >75% context budget, post coordinator-style pre-positioning per PDR-064 and prepare mid-cycle handoff record per PDR-063. (8) End the tick when nothing is due — advance where possible, check where required, post where mandated; do not force action when none is due.
+```
+
+**Resumption first-move sequence (post-compaction)** — read this top-to-bottom before resuming /loop:
+
+1. Confirm git HEAD matches `92dcd8bd` (Cycle 6 S7785) or a later commit if other peers landed work during the compaction gap. Run `git status --short` and `git log --oneline -5`.
+2. Re-arm the Monitor comms watcher per the command block above; verify it starts cleanly (first stdout line should be the pnpm/node command echo, not backfill).
+3. Read the 5-10 most recent comms events to absorb anything that landed during compaction: `ls -t .agent/state/collaboration/comms/*.json | head -10 | while read f; do jq -r '"\(.created_at)\t\(.author.agent_name // "?")\t\(.title // .subject)"' "$f"; done`.
+4. **Critical: read Tempestuous Spiralling Thermal's team-start broadcast** (seen-file present at handoff but broadcast unread). Their scope + role must be absorbed before any Lane A dispatch in case it overlaps. Find via `grep -l "Tempestuous" .agent/state/collaboration/comms/*.json | head -3`.
+5. Close stale claim `789ee97b` (Cycle 5, completed) via `pnpm agent-tools:collaboration-state -- claims close --active <path> --closed <path> --claim-id 789ee97b-6668-48e4-91a5-725b4767426d --summary "Cycle 5 completed at d57c5025; closing stale claim" --now <iso> --platform claude --model claude-opus-4-7`.
+6. Paste the /loop command (block above). First tick options, in priority order:
+   - (a) Send Mistbound directed comms answering sidebar Q1-Q5 (cheapest unblock for them; their T2 dispatch hinges on these answers).
+   - (b) Dispatch the 5 SonarQube MCP `change_sonar_issue_status` calls to close out Cycle 6 formally (S7787 sites). Issue keys discovered via `mcp__sonarqube__search_sonar_issues_in_projects` filtering rule `typescript:S7787` on branch `feat/mcp-graph-support-foundation`. Rationale text already drafted by code-expert in this session — see prior agent return (in conversation memory, will be lost on compaction; if lost, the rationale shape is "WS2.1 reserved-entrypoint placeholder; no sibling implementation files; `export {}` is the only TS-valid module-marker idiom for an ESM zero-implementation reserved sub-path; replacing with named specifiers or `export type {} from '...'` would require a target module that does not exist yet").
+   - (c) Begin Cycle 7 (S1135 TODO disposition at `packages/core/graph-core/src/data-factory/index.ts`) — single file, single site, mechanical or FALSE_POSITIVE depending on judgement. Plan section at `pr-108-snagging.plan.md` lines 866-895.
+7. Continue cadence per the /loop runbook.
+
+**Pending follow-up tasks at pause** (in-conversation task list, will be lost on compaction; recorded here for durability):
+
+- #8 Pre-existing boundary.ts error-message mismatch (design-tokens-core branch reports `oak-design-tokens` for `oak-design-ink` violations) — surfaced by code-expert in Cycle 5 review; refactor preserved the defect, did not introduce. Architecture-expert follow-up candidate.
+- #9 `jc-` prefix default leak in `agent-tools/src/bin/skills-adapter-generate.ts` line 24 — owner-relevant judgement call (intentional dev convention OR leak; orthogonal to the S7785 fix).
+- #10 `stdout` arg inconsistency: `agent-tools/src/bin/agent-tools.ts` passes `stdout: process.stdout` to `runAgentToolsCli`, sibling bin files do not. Possibly load-bearing.
+- #11 Sonar S7787 coverage gap: 7 export-only files in `packages/libs/graph-ingest/src/`, only 5 flagged. `records/index.ts` + `strict-jsonld/index.ts` not flagged. Either scan-path boundary or per-file cap.
+
+**Session pattern captures (napkin)**:
+
+- Multi-cycle Lane A session: 2 commits (Cycle 5, Cycle 6 S7785), 13 site fixes, 3 follow-up tasks tracked. The cohort drift (1 site producing a real fix, others producing followups) is normal.
+- Triple-then-quadruple peer topology emerged smoothly: Shaded + Mistbound sequential commit choreography → Wooded joined as consolidation specialist (disjoint scope) → Tempestuous arrival mid-session was visible via seen-file before broadcast was absorbed (good early-warning signal for future peers).
+- Pre-execution code-expert review caught zero defects in 5-site mechanical refactor (Cycle 5 + Cycle 6 S7785) but caught 5 architectural FALSE_POSITIVE calls in S7787 — value of the gate is in the FALSE_POSITIVE prevention more than the FIX confirmation.
+- Loop-doctrine rule graduation pathway: in-session memory entry → owner directive to graduate → peer captures via sub-agent → rule lands in `.agent/rules/` within 2 ticks of owner directive. Fast cycle.
+
+**Working tree at handoff time** (this commit lifecycle):
+
+Will include: this thread record update; napkin entries; the loop-doctrine memory entry mark-as-graduated; the pre-commit-staged-only memory entry deletion-or-rewrite. Will NOT include: Wooded's `pending-graduations.md` + archive (their work product). Will NOT include: the new rule files (already committed by Mistbound's capture).
+
+---
+
+## SECOND-LAYER (deeper history) Last refreshed: 2026-05-22 (Shaded, first compaction-boundary handoff)
+
+The block below is the previous (first) handoff this session, retained for full history. It describes the pre-Lane-A state. Read only if the current handoff block above is insufficient context.
+
+**Compaction-boundary handoff after meta-plan review + two-peer team formation + metacognition pass on canonical-watcher organisation**. This session: (a) reviewed `feat-mcp-graph-support-foundation-meta.md` + 11 associated docs end-to-end; produced verdict "meta plan is structurally sound; three substantive drifts + one link bug worth follow-up"; (b) executed the cures via 4-sub-agent fan-out, landed at commit `4200a17b` (`docs(meta-plan): refresh post-arch-excellence and cure graph-stack link drift`; 9 files +31/−15; all 87 turbo gates green); (c) at owner direction formed a two-primary team for the next phase — Shaded Whispering Dusk on Lane A (PR-108 snagging Cycles 5-10 + Phase Final), Mistbound Slipping Night (`a1cb64`) as Peer B candidate awaiting owner direction (likely Lane B = Inc.1a closure WS2.2/WS2.3/WS3.3 OR Inc.1d substrate WS4.1/WS4.4/WS4.5); (d) ran `/jc-metacognition` on a worked-instance defect (seen-file JSON-vs-plain-text format confusion) and produced a structural plan at `.agent/plans/agent-tooling/future/coordination-watcher-canonicalisation.plan.md` capturing the canonical-home misplacement (`.agent/reference/` is for external materials only), the SKILL-invocation-example-as-fragile-authority shape, and the watcher-scope-narrower-than-substrate-scope gap; (e) authored napkin entries + pending-graduations entry "Canonical tool definitions belong code-adjacent" (`due`, second-instance trigger fired). **Lane A work NOT started this session** — owner direction was "give me a loop command first; don't start yet". The lane-advancing /loop command (paste identically into both Shaded's session and Mistbound's session once owner authorises start):
 
 ```text
 /loop 180s Advance lane AND coordinate. (1) Before any sub-agent dispatch: ensure a peer-level active-claim is open covering the full file scope of the imminent work; cross-check .agent/state/collaboration/active-claims.json AND peer's latest broadcast for collision. (2) If a fan-out is in flight, do NOT spawn another — absorb returns as they arrive; when the cycle's full bundle is back, run pre-commit gates and commit cohesively via the jc-commit skill (no --no-verify). (3) If no fan-out is in flight and the next cycle is ready, fan out: file-disjoint sub-agents, one task brief per sub-agent, edits-only-no-commit-no-gates discipline. (4) If >120s silent on shared comms, broadcast a brief progress event (lane state, current cycle, blocker if any) per §5 cadence. (5) Cross-check peer's recent broadcast scope against your intended next-cycle file scope; open a sidebar BEFORE dispatching if encroachment risk surfaces. (6) Surface anything the watcher will not surface (silent peer past cadence, inter-peer routing question, missing owner direction, blocked sub-agent return) via AskUserQuestion to owner OR directed comms to peer — never block silently. (7) If >75% context budget, post coordinator-style pre-positioning per PDR-064 and prepare mid-cycle handoff record per PDR-063. (8) End the tick when nothing is due — advance where possible, check where required, post where mandated; do not force action when none is due.

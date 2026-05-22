@@ -1104,3 +1104,136 @@ pre-empted that drain.
   points back toward coordinator+helpers for whole-session
   parallelism.
   Source plane: `operational` → `topology`.
+
+### Mistbound (Lane B) — compaction-boundary handoff 2026-05-22 ~12:56Z
+
+Compaction was requested by owner mid-session. Recording the
+load-bearing context that must survive the conversation rewrite:
+
+**Identity (post-compaction continues as)**: Mistbound Slipping Night
+/ claude / claude-opus-4-7 / `a1cb64`. PRACTICE_AGENT_SESSION_ID_CLAUDE
+env preserves identity through the harness.
+
+**Persistent infrastructure that should survive compaction**:
+
+- **Cron job `2ffafdad`** — session-only `*/3 * * * *` re-firing the
+  full /loop instruction prompt every 3 minutes. The post-compaction
+  agent must verify this cron is still scheduled on first wake-up via
+  CronList; if it has dropped, re-create via CronCreate with the same
+  cron expression and the /loop prompt verbatim (preserved in
+  thread record below).
+- **Monitor task `b1g350h9k`** — persistent all-channels comms
+  watcher. **CORRECTION 2026-05-22T12:58Z** (Shaded's directed event
+  re their monitor `b683jt1tv`): **monitor WILL be invalidated by
+  compaction**; the persistent-task contract does NOT survive the
+  conversation rewrite. Post-compaction agent MUST re-arm the watcher
+  on first wake-up via the agent-tools comms watch CLI invocation
+  recorded in `start-right-team` SKILL §0, using self-exclusion
+  seen-file at `.agent/state/collaboration/comms-seen/mistbound-
+  slipping-night.json` (already on disk).
+- **Active claim `6ed6ca9a`** — Lane B presence, files area, TTL
+  7200s from `2026-05-22T12:17:53Z` (expires ~14:17Z). Claim covers
+  handoffs/, schemas, SKILL-CANONICAL, practice-index, PDR-063/064/066.
+
+**Lane B work landed this session**:
+
+- `c4bacfc5` — Lane B Tranche 1 substrate (ADR-182 T1 + ADR-183 T1 +
+  PDR-064 SKILL amendments + topology napkin entry).
+- `b6a8ca52` — Pre-execution code-expert review rule (canonical +
+  Claude adapter + Cursor adapter + RULES_INDEX update). The owner-
+  directed loop-doctrine capture, prior to ADR-183 T2 dispatch.
+
+**Lane B work pending**:
+
+- ADR-183 Tranche 2 (CLI rendering for `[FAILURE-MODE]`/
+  `[BEHAVIOUR-NOTE]` tag tokens in `agent-tools/src/collaboration-
+  state/cli-comms-watch.ts`). **Sidebar opener with Shaded posted
+  at comms event 2026-05-22T12:50:14Z** with seven design questions
+  (Q1 render-site location, Q2 token format, Q3 composition order,
+  Q4 multiple tags per event, Q5 unknown tag handling, Q6 test
+  substrate, Q7 ADR §Status flip).
+- Post-compaction agent: read the sidebar reply from Shaded (search
+  comms for in_response_to my `6bd9786c` event or topic match
+  "ADR-183 T2" / "comms watch CLI rendering"). Once Q1–Q5 confirmed,
+  dispatch the implementer sub-agent for the rendering update + tests.
+- ADR-182 Tranche 2 remains deferred per ADR §"Landing tranche"
+  (awaits first observed instance). NOT scope for this session
+  unless owner direction changes.
+
+**Peer state at compaction**:
+
+- Lane A: Shaded Whispering Dusk / `763ef4` — Cycle 6 landed at
+  `92dcd8bd`. Continuing PR-108 snagging Cycles 7–10. Likely
+  approaching Cycle 7 dispatch by the time of compaction.
+- Lane C: Tempestuous Spiralling Thermal / `9205b8` — joined ~12:55Z
+  for jc-commit skill critical review + commit-queue commit workflow
+  primitive (claim `70d1199a`). Owner spawned them with my opening
+  statement at `/tmp/lane-c-opening-statement.md`. Lane scope:
+  `.agent/skills/commit/SKILL-CANONICAL.md` + `agent-tools/src/
+  commit-queue/` + tests. File-disjoint from Lane B.
+- Consolidation: Wooded Swaying Thicket / `6c58f3` — memory critical-
+  zone rotation (`pending-graduations.md` -118 lines so far; bundle
+  uncommitted, pending session-close).
+
+**Owner correction this session — DO NOT REVERT**: full-tree pre-
+commit gating is intentional and correct. Staged-only gating is
+rejected as a cure shape — "the worst bugs are often emergent
+outside of changed files." Multi-writer coordination is solved by
+queue + ordering + comms, NOT by narrowing gate scope. The agent's
+session-memory entry at `feedback_pre_commit_hook_must_gate_staged_
+only` has been overwritten to record this correction. The Lane C
+opening statement pins this stance for Tempestuous's review work.
+
+**The /loop instruction (verbatim, for cron recovery if 2ffafdad
+drops)**:
+
+```text
+/loop 180s Advance lane AND coordinate. (1) Before any sub-agent
+dispatch: ensure a peer-level active-claim is open covering the full
+file scope of the imminent work; cross-check .agent/state/
+collaboration/active-claims.json AND peer's latest broadcast for
+collision. (2) If a fan-out is in flight, do NOT spawn another —
+absorb returns as they arrive; when the cycle's full bundle is back,
+run pre-commit gates and commit cohesively via the jc-commit skill
+(no --no-verify). (3) If no fan-out is in flight and the next cycle
+is ready, fan out: file-disjoint sub-agents, one task brief per
+sub-agent, edits-only-no-commit-no-gates discipline. (4) If >120s
+silent on shared comms, broadcast a brief progress event (lane
+state, current cycle, blocker if any) per §5 cadence. (5) Cross-
+check peer's recent broadcast scope against your intended next-
+cycle file scope; open a sidebar BEFORE dispatching if encroachment
+risk surfaces. (6) Surface anything the watcher will not surface
+(silent peer past cadence, inter-peer routing question, missing
+owner direction, blocked sub-agent return) via AskUserQuestion to
+owner OR directed comms to peer — never block silently. (7) If
+>75% context budget, post coordinator-style pre-positioning per
+PDR-064 and prepare mid-cycle handoff record per PDR-063. (8) End
+the tick when nothing is due — advance where possible, check where
+required, post where mandated; do not force action when none is due.
+```
+
+**First-tick discipline post-compaction**:
+
+1. Read this napkin entry and the recent comms backlog (last 10
+   events) to recover state.
+2. Verify monitor task `b1g350h9k` is running (TaskList); restart
+   if dropped via the agent-tools comms watch CLI with self-
+   exclusion seen-file at `.agent/state/collaboration/comms-seen/
+   mistbound-slipping-night.json`.
+3. Verify cron `2ffafdad` is scheduled (CronList); re-create from
+   the /loop instruction above if dropped.
+4. Broadcast a resume event naming compaction completion + state.
+5. Check Shaded's comms for sidebar reply to ADR-183 T2 Q1–Q7.
+6. If sidebar settled, dispatch T2 implementer per the pre-execution
+   code-expert review doctrine just landed (`.agent/rules/pre-
+   execution-code-expert-review-per-loop-cycle.md`).
+7. If sidebar not yet replied, post a cadence event + standby.
+
+**Falsifiability**: if post-compaction agent finds the cron has not
+fired since compaction, the cron is session-only-and-compaction-
+dropping rather than session-only-but-compaction-surviving. Re-
+create immediately. If the watcher is silent for >180s after
+verified-running, restart it. Either signal updates Shaded's
+"compaction-boundary handoff" napkin entry shape with the empirical
+finding.
+Source plane: `operational` → `process`.

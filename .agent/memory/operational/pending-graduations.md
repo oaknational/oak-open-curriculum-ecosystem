@@ -142,6 +142,16 @@ corrects stale status metadata; it does **not** silently promote new doctrine.
 | --- | --- | --- |
 | Advisory protocols decay under pressure; enforcement required | `commit-queue guard` implementation + `cost-of-collaboration.plan.md` P3 evidence | `c083a1ab` |
 
+### 2026-05-22 graduation log (Wooded Swaying Thicket — substrate-landing graduation pass)
+
+| Entry | Graduated to | Evidence |
+| --- | --- | --- |
+| Coordinator-handoff: pre-positioning vs active-acknowledgement | PDR-064 + `start-right-team` SKILL §"Coordinator Handoff (Two Moments)" | `c4bacfc5` (SKILL amendment); three in-session instances captured in Foamy 2026-05-22 napkin entry |
+| §1a inherited-tree gate-runner default scope is per-workspace | `start-right-team` SKILL §1a "Running the gates" (per-workspace promoted to first listed option) | distilled.md 2026-05-21 §"Per-workspace inherited-tree gates are the default for workspace-scoped dirt" |
+| Mid-cycle retirement protocol for token-bounded agents | PDR-063 + ADR-182 Tranche 1 (handoffs dir + `handoff_record_path` claim field + `mid-cycle-handoff` `message_kind`) + `start-right-team` SKILL §"Mid-Cycle Retirement" | `c4bacfc5` (substrate land) |
+| Grounding-cost amortisation under rotating-cast operation | PDR-065 | Foamy Snorkelling Jetty draft 2026-05-22 |
+| Comms-event stream as real-time failure-mode capture channel | PDR-066 + ADR-183 Tranche 1 (`tags` array on event kinds; namespace `failure-mode` / `behaviour-note`) + `start-right-team` SKILL §"Real-time failure-mode capture on the comms stream" | `c4bacfc5` (substrate land); ADR-183 Tranche 2 CLI rendering deferred per the ADR's tranche ordering rule |
+
 ### `partially-graduated`
 
 2 body entries remain partially graduated: the stage-by-explicit-pathspec
@@ -249,32 +259,7 @@ OR amendment to `no-hedging-vocabulary.md` extending it bidirectionally.
 
 ### 2026-05-21 — Coordinator-handoff: pre-positioning vs active-acknowledgement (PDR-shaped or pattern-shaped)
 
-`[captured: 2026-05-21 | source: napkin.md §"Surprise: pre-positioning a coordinator handoff is distinct from transferring authority" + comms-event 554bc011 (correction broadcast) + comms-event c9d8d016 (Cirrus active-acknowledgement) | target: pattern:coordinator-handoff-two-moments OR PDR amendment to PDR-049 (peer-collaboration governance) | trigger: second-instance-or-owner-direction | size: S | status: pending]`
-
-Substance summary: a coordinator handoff has two distinct moments
-that are commonly conflated: (1) **pre-positioning** — outgoing
-agent broadcasts the team state-of-play (roster, slice state,
-outstanding work, standing notes) for the incoming agent's
-foundation read on arrival; (2) **active-acknowledgement** —
-incoming agent broadcasts intent-to-coordinate. **Only the latter
-transfers authority.** The outgoing agent retains all coordinator
-responsibilities (routing, cron cadence, reviewer dispatch,
-commit-window coordination) until the incoming agent's
-active-acknowledgement is observable in comms.
-
-First instance this session: Stratospheric Gusting Squall posted
-a pre-positioning handoff broadcast (`c020b3d6`) and cancelled the
-3-min coordinator-cadence cron, intending to step down. Owner
-corrected: *"you are coordinator until Cirrus actively acknowledges
-taking over the role"*. Correction broadcast (`554bc011`) re-armed
-the cron + re-asserted authority. Cirrus's active-acknowledgement
-(`c9d8d016`) 50 seconds later was the actual transfer.
-
-Trigger to watch: second observed instance in a different team
-session, or owner-direction graduation request. Promotion target:
-pattern entry at `.agent/memory/active/patterns/` (general form);
-OR PDR amendment to PDR-049 if the two-moments distinction warrants
-governance-level codification.
+**Graduated — body archived 2026-05-22**. See [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md) for the verbatim entry body. Status: graduated; substance lives at [PDR-064](../../practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md) (Proposed) + `start-right-team` SKILL §"Coordinator Handoff (Two Moments)". Three independent in-session instances (Foamy 2026-05-22 napkin entry) + Mistbound Tranche 1 commit `c4bacfc5` SKILL amendment satisfied the second-instance-or-owner-direction trigger.
 
 ### 2026-05-21 — Coordinator-as-slice-runner when team capacity is short by 1 (pattern-shaped)
 
@@ -306,132 +291,19 @@ constraint named.
 
 ### 2026-05-21 — §1a inherited-tree gate-runner default scope is per-workspace (skill-amendment-shaped)
 
-`[captured: 2026-05-21 | source: napkin.md §"Insight: §1a inherited-tree gate-runner scopes per-workspace, not tree-wide" + comms-event 7511fb37 (Salty's §1a gate-state report) | target: skill-amendment:start-right-team §1a "Running the gates" subsection | trigger: second-instance-or-cross-workspace-cascade-failure | size: S | status: pending]`
-
-Substance summary: the start-right-team skill text mentions
-per-workspace as "an option" when the dirty files are scoped to
-specific workspaces; this session is a worked instance demonstrating
-the savings. Salty Snorkelling Pier's §1a gate-state report ran
-type-check + lint + test against 4 dirty workspaces
-(`agent-tools` / `oak-search-cli` / `@oaknational/env` /
-`@oaknational/graph-project`) in ~2 minutes total — 12 commands,
-all PASS, 1505 tests. Tree-wide `pnpm check` would have re-run
-already-green workspaces plus the integrated chain.
-
-Risk shape: per-workspace would miss a cross-workspace cascade
-(e.g. an SDK type change that breaks consumers in another
-workspace). The §1a runner's diagnosis-hypothesis step is the
-guard — Salty explicitly framed the inherited residual as
-"uncommitted in-flight work, not cascade residue", which justified
-the per-workspace shape.
-
-Trigger to watch: second observed per-workspace instance with
-similar savings (promotes to default with the cascade caveat), OR
-the inverse — a session where per-workspace missed a cross-workspace
-cascade (promotes a stronger cascade-detection requirement).
-Promotion target: amendment to start-right-team skill §1a
-"Running the gates" subsection promoting per-workspace from "an
-option" to "the default when dirty files are workspace-scoped" with
-the cross-workspace cascade caveat.
+**Graduated — body archived 2026-05-22**. See [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md) for the verbatim entry body. Status: graduated; substance lives at `start-right-team` SKILL §1a "Running the gates" — per-workspace gates now the first listed option ("If the dirty files are scoped to specific workspaces, run the per-workspace gates against those workspaces"); tree-wide reserved for unclear-scope cases. Distilled to `distilled.md` 2026-05-21 §"Per-workspace inherited-tree gates are the default for workspace-scoped dirt".
 
 ### 2026-05-21 — Mid-cycle retirement protocol for token-bounded agents (PDR-shaped or skill-amendment-shaped)
 
-`[captured: 2026-05-21 | source: gate-1a-delivery-parallel-execution-addendum.plan.md §"Question 1: Mid-cycle retirement protocol" + final-handoff session deepening plan | target: pdr:mid-cycle-retirement OR skill-amendment:start-right-team §"Mid-cycle retirement" | trigger: first-instance-observation-in-rotating-cast-launch | size: M | status: pending]`
-
-Substance summary: a rotating-cast agent approaching their token
-budget mid-cycle (mid-edit, possibly mid-claim) cannot simply stop
-without risking either leaving work in an indeterminate state for
-the next agent, or rushing to a forced stopping point that breaks
-the atomic-landing invariant. The current closeout contract only
-covers natural-boundary closeouts (slice-complete, commit-landed,
-peer-closeout).
-
-Proposed protocol shape:
-
-1. Agent senses approaching budget (≥80% used, or after each
-   commit).
-2. Agent freezes work-in-progress to a structured handoff record
-   covering: current edit state (which files are open and what
-   state they are in), in-flight reasoning (the analysis that led
-   to current state), decisions made (what is settled), decisions
-   deferred (what the next agent must resolve).
-3. Claim reassigned (existing claim shape extended with
-   `mid_cycle_handoff: true` flag plus the structured handoff
-   record reference).
-4. Next agent picks up the claim via the active-claims registry +
-   comms-event watcher.
-5. Original agent retires with explicit retirement broadcast.
-
-Trigger to watch: first observed mid-cycle retirement instance in
-a rotating-cast Round 1 launch. The first launch will deliberately
-stress-test this protocol via mid-round coordinator retirement per
-the addendum plan. Promotion target: PDR formalising the protocol,
-OR skill-amendment to start-right-team adding a §"Mid-cycle
-retirement" subsection adjacent to the existing Closeout Contract.
+**Graduated — body archived 2026-05-22**. See [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md) for the verbatim entry body. Status: graduated; substance lives at [PDR-063](../../practice-core/decision-records/PDR-063-mid-cycle-retirement-protocol.md) (Proposed) + [ADR-182](../../../docs/architecture/architectural-decisions/182-mid-cycle-handoff-record-substrate.md) Tranche 1 (handoffs directory + `handoff_record_path` claim field + `mid-cycle-handoff` `message_kind`) + `start-right-team` SKILL §"Mid-Cycle Retirement" five-step protocol. Substrate landed in Mistbound Tranche 1 commit `c4bacfc5`.
 
 ### 2026-05-21 — Grounding-cost amortisation under rotating-cast operation (PDR-shaped)
 
-`[captured: 2026-05-21 | source: gate-1a-delivery-parallel-execution-addendum.plan.md §"Question 3: Grounding-cost amortisation" + final-handoff session deepening plan | target: pdr:grounding-cost-amortisation-under-rotation | trigger: owner-direction-or-first-rotating-cast-launch-evidence | size: M | status: pending]`
-
-Substance summary: each new agent session pays ~30k tokens reading
-the start-right-team foundation (AGENT.md, RULES_INDEX, principles,
-tdd-as-design, testing-strategy, orientation, thread record, active
-claims, recent comms, plan body) before any productive work. At
-10-min auto-spawn cadence, this is ~180k tokens/hour burned on
-duplicate grounding. The architectural question: is this efficient
-under faster-than-human-pace operation, or is a fast-bootstrap mode
-appropriate for narrowly-scoped single-cycle agents?
-
-Proposed fast-bootstrap shape (open for owner direction): read only
-the last-session record + current active claims + recent comms-event
-window, skipping full directive reading on the assumption that the
-coordinator already verified directive compliance at session
-open. The full grounding remains mandatory for coordinator-role
-agents and any agent that opens a source claim beyond a single
-named cycle.
-
-Risk shape: fast-bootstrap agents may miss a recently-graduated
-rule or doctrine update. The cure (if adopted): rule/doctrine
-changes are also surfaced as comms-events with a `[DOCTRINE]`
-tag so the fast-bootstrap window catches them.
-
-Trigger to watch: owner-direction to evaluate, OR first
-rotating-cast launch where grounding cost is observed empirically
-against productive cycle work. Promotion target: PDR codifying
-fast-bootstrap as a session-mode option with eligibility
-constraints.
+**Graduated — body archived 2026-05-22**. See [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md) for the verbatim entry body. Status: graduated; substance lives at [PDR-065](../../practice-core/decision-records/PDR-065-grounding-cost-amortisation-under-rotation.md) (Proposed). PDR drafted by Foamy Snorkelling Jetty 2026-05-22; fast-bootstrap mode + eligibility constraints codified at the target home.
 
 ### 2026-05-21 — Comms-event stream as real-time failure-mode capture channel (PDR-shaped)
 
-`[captured: 2026-05-21 | source: gate-1a-delivery-parallel-execution-addendum.plan.md §"Question 4: Comms-events as the failure-mode capture channel" + final-handoff session deepening plan | target: pdr:comms-event-stream-as-failure-mode-channel | trigger: second-instance-or-rotating-cast-launch-observation | size: S | status: pending]`
-
-Substance summary: today's session captures failure modes (verdict
-walk-backs, backtick incidents, shell-quoting hazards) at session
-close in napkin entries. Under rotating-cast operation, failure
-modes need to be visible to the next coordinator *during their
-session*, not at the prior coordinator's close. The napkin is too
-coarse a vehicle — it lives in the authoring agent's context until
-written at close.
-
-Proposed protocol: each substantive failure mode is surfaced as a
-comms-event in real time, with a `[FAILURE-MODE]` or
-`[BEHAVIOUR-NOTE]` tag on the first line (consistent with the
-existing `[BROADCAST]`/`[GROUP]`/`[DIRECTED]`/`[LIFECYCLE]` tag
-convention from the all-channels comms-monitor CLI). The next
-coordinator's watcher picks it up immediately; session-close
-napkin entries become the *consolidation* of real-time events,
-not the first capture.
-
-Coupling: this protocol depends on the
-comms-event-stream-as-canonical-truth principle (already in this
-register awaiting graduation under §"Comms event stream as
-canonical truth (PDR candidate)") — under rotation, that principle
-becomes load-bearing infrastructure rather than a recommendation.
-
-Trigger to watch: second observed real-time failure-mode comms-event
-in a rotating-cast session, OR owner-direction graduation. Promotion
-target: PDR formalising the failure-mode-channel protocol AND
-extending the comms-event schema with the new tag set.
+**Graduated — body archived 2026-05-22**. See [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md) for the verbatim entry body. Status: graduated; substance lives at [PDR-066](../../practice-core/decision-records/PDR-066-comms-events-as-failure-mode-channel.md) (Proposed) + [ADR-183](../../../docs/architecture/architectural-decisions/183-comms-event-tag-namespace-substrate.md) Tranche 1 (`tags` array on narrative/lifecycle/directed event kinds with `"failure-mode"` / `"behaviour-note"` namespace) + `start-right-team` SKILL §"Real-time failure-mode capture on the comms stream". ADR-183 Tranche 2 (CLI rendering update) deferred per ADR-183 §"Landing tranche" — agents do NOT write `tags`-bearing events until both tranches land. Substrate Tranche 1 landed in Mistbound commit `c4bacfc5`.
 
 ### 2026-05-17 — Surface classification for fitness-response routing (PDR-shaped)
 

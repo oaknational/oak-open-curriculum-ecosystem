@@ -716,3 +716,49 @@ characters (queue churn — same story); repo-continuity critical
 (named structural cure remains the Active Threads identity column
 refactor, pending in the register). No Practice Core contradiction
 or extension surfaced this pass.
+
+---
+
+## Wooded Swaying Thicket pass — older Current-State + Deep-Consolidation-Status entries (appended 2026-05-22)
+
+Owner direction this session: char/line excessions matter more than prose-line widths. Drain executed per the file's `split_strategy` ("Archive historical session-close summaries to a companion archive file; keep only live operational state and most recent session summary here"). Live state retained: branch HEAD pointer + most-recent session (Shaded Whispering Dusk 2026-05-22) + PR #108 merge-blocker notice (live operational status, not historical). Deep-Consolidation-Status retained: Blustery 2026-05-22 (most recent consolidation pass).
+
+### Current State entries (archived 2026-05-22 — Wooded pass)
+
+- **2026-05-21 → 2026-05-22 (Soaring Flying Gale / `claude` / Opus 4.7 (1M) / `ffa6ce`) — gate-1a execution-partition deepening landed; owner promoted the addendum plan at session close** — solo planning-deepening session for gate-1a maximum-parallelisation execution. Plan-file-only edits; no source code touched. Two commits landed: `24ab73c9` `docs(plans): deepen gate-1a execution overlay + protocol PDR candidates` (4 files, +286/−33) and `f6170504` `chore(collaboration-state): close Soaring Flying Gale commit-window claim`. Substantive output: (a) `eef-first-feature.plan.md` gains §Execution Partition — unified dependency graph + round assignment + per-cycle reviewer set + named user-facing scenarios across substrate `WS4.1`/`WS4.4`/`WS4.5`, corpus `t1`/`t2`/`t6a`/`t9`/`t10`/`t12`/`t13`/`t14`/`t20` + partials, and `ff1`–`ff6` coordination tokens; critical path `WS4.4` → `t1` → `t2` → `t6a` → `t10` → `ff6` (5 sequential rounds + Round 0 + terminal acceptance); Round 1 maximum-parallelism = 8 file-disjoint cycles + 2 non-technical streams + 2 cross-workspace Inc.1a cycles. (b) Addendum plan refocused — substrate-only round table replaced with pointer to unified execution partition. (c) Three new pending-graduations PDR candidates: mid-cycle retirement protocol, grounding-cost amortisation, comms-event stream as failure-mode capture channel. (d) Owner promoted the addendum plan at session close — opening statement for next coordinator authored in chat (not landed in a plan file). **PR #108 hard gate explicitly acknowledged throughout**: substrate cycles cannot land until snagging plan clears or PR #108 merges and graph implementation resumes on a fresh branch. No claims retained. Working tree clean at session close.
+
+- **2026-05-21 (Cirrus Circling Plume / `claude` / Opus 4.7 / `fba398`, continued — post-team-session strategic-brief authoring under owner direction)** —
+  After the team-session closeout, owner directed an ultrathink-level
+  analysis of how to throw compute at the remaining substrate +
+  delivery sequence (WS2.2 → WS2.3 → WS4.1 → WS4.2 → WS4.3 → WS4.4 →
+  WS4.5 → ff1–ff6) without rushing or compromising. Applied
+  architectural-excellence lens to six open questions raised earlier;
+  resolved most to fact-finding/operational; surfaced one substrate
+  architectural amendment (WS4.4 test partition by ownership-of-invariant,
+  not by ownership-of-implementation) and four rotating-cast
+  coordination-protocol questions (mid-cycle retirement, coordinator
+  handoff under token pressure, grounding-cost amortisation,
+  comms-events as failure-mode channel). Authored addendum plan at
+  `.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/gate-1a-delivery-parallel-execution-addendum.plan.md`
+  with 12 frontmatter todos, dependency-graph-dictated 4-round
+  structure (~8–11 hours wall-clock through first tool shipped), and
+  10 inviolate quality invariants. Also committed the inherited
+  working-tree residual from prior 2026-05-21 sessions at `f4ca84f6`
+  (Molten WS3.3 adjacency primitives + Pelagic search-cli fixes +
+  Torrid agent-tools surface refactor + Celestial start-right-team
+  SKILL update + ADR-173 amendment + upstream-api-v0.7.0 plan + thread
+  records). Metacognition insight: my own first parallelisation
+  proposal pulled WS4.4 forward by deferring T7a smoke-test —
+  parallelism-driven re-shape that violated atomic-landing. The
+  architectural-excellence lens resolved it to a different re-shape
+  (separate type-invariant smoke-test in graph-core from
+  instantiation smoke-test in corpus-sdk) that is correct on its
+  own merits AND happens to enable the same parallelism. Captured
+  for next consolidation as a worked instance of the "good
+  architecture vs rushed architecture" distinction.
+
+### Deep Consolidation Status entries (archived 2026-05-22 — Wooded pass)
+
+**Status (2026-05-22 — Soaring Flying Gale / `claude` / Opus 4.7 (1M) / `ffa6ce`)**: **not due — sole-contributor planning-deepening session, no consolidation triggers fired**. Session substance: §Execution Partition added to `eef-first-feature.plan.md`, addendum plan refocused, three PDR candidates landed in `pending-graduations.md`, thread record + repo-continuity refreshed. Owner promoted the addendum plan at session close; opening statement for next coordinator authored in chat (not landed). All three PDR candidates carry first-instance triggers gated on rotating-cast Round 1 launch — no graduation pressure yet. Prior status preserved below for the audit trail.
+
+**Status (2026-05-21 — Feathered Circling Horizon / `cursor` / Opus 4.7 / `9e1c24`)**: **not due — sole-contributor analysis-and-plan-authoring session, no consolidation triggers fired**. Session substance is the PR #108 snagging plan (`current/pr-108-snagging.plan.md`) plus continuity refreshes (this file, `connecting-oak-resources.next-session.md`, `active/graph-stack.plan.md`). Two pending-graduation candidates surfaced inline in the thread record rather than written to the (currently peer-claimed) `pending-graduations.md` surface: (a) tighter policy-doc-first reading at gate-analysis time (read `docs/governance/sonar-disposition-policy.md` BEFORE proposing dispositions, not after); (b) doctrine candidate "the gate is the cheap version of the failure it names" from the metacognition pass. Both should be picked up by the next consolidation drain. Prior status preserved below for the audit trail.

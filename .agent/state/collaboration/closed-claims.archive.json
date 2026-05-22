@@ -28865,6 +28865,140 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "018e4994-99c2-466d-a46b-3a1b16d754e1",
+      "agent_id": {
+        "agent_name": "Mistbound Slipping Night",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "a1cb64"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T12:53:35Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit pre-execution-code-expert-review rule + Claude/Cursor adapters + RULES_INDEX update (Lane B doctrine capture, owner-directed 2026-05-22).",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T12:55:41Z",
+        "closed_by": {
+          "agent_name": "Mistbound Slipping Night",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "a1cb64"
+        },
+        "summary": "Closed at b6a8ca52 — doctrine capture commit (pre-execution code-expert review per /loop cycle rule + Claude/Cursor adapters + RULES_INDEX). 4 files +119 lines. Turbo green; husky chain clean.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "018e4994-99c2-466d-a46b-3a1b16d754e1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "789ee97b-6668-48e4-91a5-725b4767426d",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "thread": "pr-108-snagging",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/tui/operator-value.ts",
+            "packages/core/oak-eslint/src/rules/boundary.ts",
+            "agent-tools/src/bin/skills-adapter-generate.ts",
+            "agent-tools/tests/skills-adapter-generate/generator.unit.test.ts",
+            "agent-tools/scripts/repo-check.ts",
+            "agent-tools/src/collaboration-state/tui/config.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T12:16:27Z",
+      "freshness_seconds": 5400,
+      "sidebar_open": false,
+      "intent": "Cycle 5 refactor cluster (8 sites, 5 sub-cycles, file-disjoint fan-out)",
+      "heartbeat_at": "2026-05-22T12:21:25Z",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T13:10:49Z",
+        "closed_by": {
+          "agent_name": "Shaded Whispering Dusk",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "763ef4"
+        },
+        "summary": "Cycle 5 refactor cluster completed at d57c5025 (8 sites, 5 sub-cycles); post-delivery code-expert + specialist reviews absorbed; closing stale claim as Cycle 6+ now covered by da769539.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "789ee97b-6668-48e4-91a5-725b4767426d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "aaa01f4a-4de1-4afc-aa1f-61df6c971890",
+      "agent_id": {
+        "agent_name": "Wooded Swaying Thicket",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "6c58f3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/archive/pending-graduations-archive-2026-05-22.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/archive/repo-continuity-session-history-2026-05-22.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T13:11:11Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "memory consolidation bundle land + napkin compaction-boundary entry + collab-state churn (Wooded post-compaction resume)",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T13:11:57Z",
+        "closed_by": {
+          "agent_name": "Wooded Swaying Thicket",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "6c58f3"
+        },
+        "summary": "Closed as duplicate — d26e453f from session-open is still active and broader. Consolidation continues under d26e453f. Collab-state churn in bundle is universal (every agent touches it), not exclusive scope; explicit listing not required.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "aaa01f4a-4de1-4afc-aa1f-61df6c971890",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
