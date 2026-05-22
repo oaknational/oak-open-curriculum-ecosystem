@@ -93,6 +93,16 @@
       "development": "./src/public/mcp-tools.ts",
       "default": "./dist/public/mcp-tools.js"
     },
+    "./public/evidence-corpus": {
+      "types": "./dist/public/evidence-corpus.d.ts",
+      "development": "./src/public/evidence-corpus.ts",
+      "default": "./dist/public/evidence-corpus.js"
+    },
+    "./public/evidence-corpus.js": {
+      "types": "./dist/public/evidence-corpus.d.ts",
+      "development": "./src/public/evidence-corpus.ts",
+      "default": "./dist/public/evidence-corpus.js"
+    },
     "./elasticsearch": {
       "types": "./dist/elasticsearch.d.ts",
       "development": "./src/elasticsearch.ts",
