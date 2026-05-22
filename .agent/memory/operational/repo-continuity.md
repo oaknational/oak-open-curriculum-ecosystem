@@ -17,7 +17,26 @@ Earlier archives remain under [`archive/`](archive/).
 ## Current State
 
 - Current branch: `feat/mcp-graph-support-foundation`. HEAD `3f6b258a` (Starlit Beaming Aurora landing Phase Final SKILL update for commit-queue-intent-scope-discipline arc + Cycle 1.3 closeout broadcast `cf32f2c1`; 4 files +154/-0; husky pre-commit chain 87/87 green). Prior: `896312d0` (Starlit landing Cycle 1.3 atomic TDD — workflow-level system-state describing surface; 9 files +297/-687 net; 472/472 tests green; 87/87 turbo). Prior: `989dc6b4` (Starlit metacognition-reshape of Cycle 1.3 plan body; 1 file +128/-112). Prior: `2adeccec`, `bf9266f3`, `4fc95d35` (continuity handoff).
-- **2026-05-22 (Starlit Beaming Aurora / `claude` / `Opus-4.7` / `1977cf`) — commit-queue-intent-scope-discipline arc COMPLETE.** Three commits land the full structural cure for the multi-writer queue concurrency failure mode: (a) `989dc6b4` plan-body reshape per metacognition pass — one system state takes one describing surface, retire implementation-coupled scaffolding; (b) `896312d0` Cycle 1.3 atomic landing — workflow-level invariants (f)/(g) added, compile-time non-empty `readonly [string, ...string[]]` narrowing on three load-bearing dep input pathspec types, single narrowing site at `runCommitWorkflow` entry, canonical rename `getStagedBundleScoped`→`getStagedBundle` + `ScopedStagedBundleInput`→`GetStagedBundleInput`, two new modules `pathspec.ts`+`verify-output.ts`, two scaffolding test files deleted (`commit-queue-record-staged-scope.unit.test.ts`, `commit-queue-verify-staged-scope.unit.test.ts`); (c) `3f6b258a` Phase Final SKILL update — new subsection §"Intent-Scoped End-to-End (2026-05-22 cure)" in `.agent/skills/commit/SKILL-CANONICAL.md` documenting disjoint multi-writer commits land via queue ceremony, `stagedFileMismatch` "extra files" semantic narrowing under scoped reads, empty `intent.files` short-circuit. Aggregate `pnpm check` GREEN 104/104 turbo tasks (1m15s). Closeout broadcast `cf32f2c1` anchored in `shared-comms-log.md` markdown anchor for retention-safe forward-trace to failure-mode instances A/B/C.
+- **2026-05-22 (Starlit Beaming Aurora / `claude` / `Opus-4.7` / `1977cf`) —
+  commit-queue-intent-scope-discipline arc COMPLETE.** Three commits land the
+  full structural cure for the multi-writer queue concurrency failure mode:
+  (a) `989dc6b4` plan-body reshape per metacognition pass — one system state
+  takes one describing surface, retire implementation-coupled scaffolding;
+  (b) `896312d0` Cycle 1.3 atomic landing — workflow-level invariants (f)/(g)
+  added, compile-time non-empty `readonly [string, ...string[]]` narrowing on
+  three load-bearing dep input pathspec types, single narrowing site at
+  `runCommitWorkflow` entry, canonical rename `getStagedBundleScoped` →
+  `getStagedBundle` + `ScopedStagedBundleInput` → `GetStagedBundleInput`, two
+  new modules `pathspec.ts`+`verify-output.ts`, two scaffolding test files
+  deleted (`commit-queue-record-staged-scope.unit.test.ts`,
+  `commit-queue-verify-staged-scope.unit.test.ts`); (c) `3f6b258a` Phase Final
+  SKILL update — new subsection §"Intent-Scoped End-to-End (2026-05-22 cure)"
+  in `.agent/skills/commit/SKILL-CANONICAL.md` documenting disjoint
+  multi-writer commits land via queue ceremony, `stagedFileMismatch` "extra
+  files" semantic narrowing under scoped reads, empty `intent.files`
+  short-circuit. Aggregate `pnpm check` GREEN 104/104 turbo tasks (1m15s).
+  Closeout broadcast `cf32f2c1` anchored in `shared-comms-log.md` markdown
+  anchor for retention-safe forward-trace to failure-mode instances A/B/C.
 - **2026-05-22 (Shaded Whispering Dusk / `claude` / Opus 4.7 (1M) / `763ef4`) — two-primary lane assignment + meta-plan refresh + coordination-watcher canonicalisation plan captured. Compaction-boundary handoff.** Three commit boundaries this session: (a) `4200a17b` `docs(meta-plan): refresh post-arch-excellence and cure graph-stack link drift` — meta-plan §"Working tree carries" line refreshed to commit-`77d6ce85` pointer; Q1/Q2/Q3 in §"Open structural questions" closed as resolved by the architectural-excellence pass; `current/` → `active/` link drift cured for `graph-stack.plan.md` across 7 plan files including the meta plan itself, `high-level-plan.md`, `graph-portfolio-index.md`, `graph-mvp-arc.plan.md`, `graph-combinatorial-arc.plan.md`, `practice-graph-payoff-peak-pilot.plan.md`, `2026-05-11-graduation-candidates-drain-opener.md`, and `agent-graphs-workspace-organisation.plan.md`. Executed via 4-sub-agent fan-out (A=practice-index bridge, B=meta-plan refresh, C+D=link-drift cure). (b) Working tree at handoff carries the coordination-watcher-canonicalisation plan (new at `agent-tooling/future/coordination-watcher-canonicalisation.plan.md`), napkin entries for the worked-instance defect + reference-folder scope clarification + two-primary-each-fanning-out model + compaction-boundary-handoff pattern, pending-graduations entry "Canonical tool definitions belong code-adjacent" (status `due`, target `multi:plan-execution + doc-amend + rule`), 2 comms team-start events, 2 seen-files, regenerated `shared-comms-log.md`. (c) Two-peer collaboration formed: Shaded Whispering Dusk = Lane A (PR-108 snagging Cycles 5-10 + Phase Final per `pr-108-snagging.plan.md`), Mistbound Slipping Night (`a1cb64`) = Peer B candidate read-only awaiting owner direction (likely Lane B = Inc.1a closure WS2.2/WS2.3/WS3.3 OR Inc.1d substrate WS4.1/WS4.4/WS4.5). **Lane work NOT started this session** — owner direction was "give me a loop command first". Comms watcher armed for Shaded as Monitor task `b7ofkzzv1` (may need restart after compaction). The /loop command for advancing lane work is recorded in the `connecting-oak-resources` thread record verbatim. Substantive metacognition pass produced the canonical-watcher-canonicalisation plan capturing three structural issues with the current watcher contract (canonical home misplaced in `.agent/reference/`; SKILL invocation example as fragile authority; watcher scope narrower than substrate scope). Doctrine substance: canonical tool definitions belong code-adjacent and ideally executable; `.agent/reference/` is for external materials only.
 - **🛑 PR #108 IS MERGE-BLOCKED ON QUALITY GATES** — PR #108 (`feat/mcp-graph-support-foundation` → `main`) is failing two quality gates: CodeQL alert #90 (`js/missing-rate-limiting` on `bootstrap-helpers.ts:151`) and SonarCloud Quality Gate (40 new issues, 12 unreviewed security hotspots, 6.0% new-code duplication ≥ 3.0% threshold). **The PR must not merge until those gates clear.** Disposition strategy and execution lane: [`pr-108-snagging.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/current/pr-108-snagging.plan.md). Substantive graph implementation work on this branch is parked behind the snagging plan. Full prior-session context in [`archive/repo-continuity-session-history-2026-05-22.md`](archive/repo-continuity-session-history-2026-05-22.md).
 
@@ -315,7 +334,25 @@ Multi-vendor open of the thread remains forbidden until WS3.3 lands.
 Inc.1a continues under the 2026-05-12 holistic re-plan (`f73c42f5`):
 WS1.8 is deferred to Inc.2.
 
-**Deep consolidation status**: **due — accumulated across multiple sessions including Stormbound 2026-05-22 post-compaction**. Napkin at 538/300 lines (past hard limit; rotation gap since 2026-05-22 morning rotation by Wooded). Pending-graduations grew with 2 new candidates this session window (`check-runner singleton` + `structurally-identical-new-function pre-authoring drop`). Three Stormbound napkin entries from this session capture cross-session patterns ready for distillation (Path B test-classification reasoning, plan-improvement-only mode, peer-hearsay-vs-direct-owner-direction). Not bounded for the focused handoff — next session picks up `oak-consolidate-docs` deliberately.
+**Deep consolidation status**: **completed this handoff (focused subset, Starlit Beaming Aurora 2026-05-22)** —
+plan archive + thread-register audit + collaboration-state audit + fitness-pressure assessment. NOT a full
+multi-session deep drain — that remains DUE for a deliberate next session. This pass:
+(a) archived completed `commit-queue-intent-scope-discipline.plan.md` to `archive/completed/`;
+(b) verified thread-register freshness via the six checks (agentic-engineering-enhancements thread:
+identity row `last_session: 2026-05-22` updated for Starlit Beaming Aurora; no stale/orphan/missing/expired/
+duplicate findings);
+(c) verified collaboration state clean (active-claims.json empty; all three session claims closed in-session);
+(d) added one PDR-shaped pattern candidate to `pending-graduations.md` (cycle-decomposition-wrong-layer-scaffolding;
+status pending, awaiting second instance);
+(e) updated thread record + repo-continuity Active threads identity summary + new Session Outcome on the thread;
+(f) ran `pnpm practice:fitness:informational` — surfaced significant CRITICAL fitness pressure on
+`distilled.md` (895L/49992C), `pending-graduations.md` (4329L/306632C), `napkin.md` prose-line-width, and
+`repo-continuity.md` Characters + prose-line-width; reflowed THIS session's contributions to napkin + repo-
+continuity to remove avoidable prose-line-width pressure, but pre-existing CRITICAL pressure on
+`pending-graduations.md` + `distilled.md` remains unaddressed and is a candidate for a dedicated drain session.
+**Carry forward for next consolidation**: pending-graduations.md drain (4329 lines, 4329/1125 critical ratio
+~3.85x); distilled.md substantive graduation pass (entries ready for permanent homes); historical-napkin
+synthesis (multiple archived rotations available since last marker).
 
 **`pnpm check` cleanliness gate** (Step 11 of `session-handoff`): pending verification post-handoff edits. Salty's pre-commit hook chain at `0cdaf58c` was green across 87/87 turbo tasks on the planning-files-only bundle; the post-commit working tree still carries the inherited residual (Molten WS3.3, Pelagic bulk-download, agent-tools surface, ADR-173 touch) that was NOT in scope of the four-slice partition. Will be re-verified before this handoff is declared complete.
 
