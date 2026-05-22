@@ -31,7 +31,7 @@ todos:
     content: "Expose 17 MCP tools (7 ops × 3 graphs minus 4 exclusions per the T1 first-principles check), each domain-specific by graph; share internal SDK implementation. NOT a single polymorphic dispatcher tool. Sequenced across MVP arc gate-1a (1 tool: subgraph-eef-strands) + gate-0b (the remaining 16) per the 2026-05-21 amendment."
     status: pending
   - id: t7-progressive-disclosure-tests
-    content: "Tests proving response size remains bounded under projection; tests proving manifest+summary+detail tiers compose correctly. Includes T7a: a DeepKeyPath compile-time smoke-test asserting the array-stop constraint (no element-index recursion) and depth-3 path inference on EefStrand."
+    content: "Tests proving response size remains bounded under projection; tests proving manifest+summary+detail tiers compose correctly. Includes T7a: a DeepKeyPath compile-time smoke-test asserting the array-stop constraint (no element-index recursion) and depth-3 path inference. **T7a partition (2026-05-22 amendment per gate-1a-delivery-parallel-execution-addendum §Architectural amendment)**: T7a now ships in two halves owned by the workspace each invariant lives in — graph-core ships the inline-fixture TNode half at WS4.4 (interface contract: array-stop holds for any TNode satisfying the interface's structural constraints); graph-corpus-sdk ships the EefStrand-instantiation half at WS4.5 (instantiation contract: array-stop holds for the real EefStrand TNode). Same invariant, two test homes, decoupled atomic-landing cycles."
     status: pending
   - id: t8-telemetry-seams
     content: "Sentry spans + named metrics for every operation; ratio-of-focused-to-full-dump dashboard query documented."
@@ -575,6 +575,36 @@ export type NotImplementedYet = {
 
 The discriminator is `kind` (not `_tag`, `type`, or other variants) per the precedent already established in graph-core canon and JSON-LD processor types.
 
+**`SubgraphError` shape (2026-05-22 type-expert amendment — fills referenced-but-undefined gap)**:
+
+```typescript
+/**
+ * Error variants for `subgraph()` traversal. `subgraph` is the one live
+ * fallible operation at Inc.1d (per T5 sequencing); other operations stub
+ * via `NotImplementedYet`. SubgraphError variants are real failure modes
+ * the traversal can encounter at runtime.
+ */
+export type SubgraphError =
+  | { readonly kind: 'SubgraphRootNotFound'; readonly rootId: string }
+  | { readonly kind: 'SubgraphDepthExceeded'; readonly depth: number; readonly limit: number };
+```
+
+The `SubgraphRootNotFound` arm fires when any `rootIds[i]` does not resolve
+to a node in the graph; the `SubgraphDepthExceeded` arm fires when the
+requested `depth` exceeds the adapter's bounded-growth limit (per the runtime
+"≤50 nodes" target named in `t13-freshness-gate` / response-size discipline).
+Both arms preserve the offending input value in the error variant so consumers
+can construct actionable error messages without re-querying the graph.
+
+**`Result<T, E>` API note (2026-05-22 type-expert amendment)**: the
+`@oaknational/result` API exports named functions `ok()`, `err()`, `isOk()`,
+`isErr()` plus a boolean `.ok` discriminant on the Result shape itself.
+Earlier plan prose referenced a hypothetical `Result.match()` /
+`Result.err()` namespace pattern; the actual API uses named-function calls
+(`err({ kind: 'NotImplementedYet', operation: 'summary' })`) and `.ok`
+boolean branching at the consumer side. Plan prose corrected to match the
+landed API.
+
 `Result<T, E>` is the canonical error-handling shape from
 [`@oaknational/result`](../../../../packages/core/result/src/index.ts) per
 `principles.md` §Code Design ("Don't throw, use the result pattern
@@ -622,9 +652,20 @@ type FieldPredicate<TFieldValue> =
       : never);
 
 type NodeFilter<TNode> = {
-  readonly [K in keyof TNode]?: FieldPredicate<TNode[K]>;
+  readonly [K in keyof TNode]?: FieldPredicate<NonNullable<TNode[K]>>;
 };
 ```
+
+**Null-handling on numeric fields (type-expert 2026-05-22 amendment)**: the
+`NonNullable<TNode[K]>` wrap in the mapped-type's `FieldPredicate` parameter
+position preserves `gte`/`lte` arms for nullable numeric fields (e.g. the EEF
+`headline.impact_months: number | null` field). Without it,
+`FieldPredicate<number | null>` evaluates the gte/lte arms as `never` because
+`number | null extends number` is `false`, silently dropping the numeric
+predicate arms for any field whose type admits `null`. With `NonNullable`, the
+predicate set fires correctly while the underlying value can still be `null`
+at runtime — runtime predicate evaluation treats `null` as not-matching for
+gte/lte by convention.
 
 The array-element `contains` arm is required by `enumerate_nodes ×
 eef-strands` (the `tags: { contains: 'primary' }` tracer). Without it
@@ -671,7 +712,33 @@ type NodeProjection<TNode, Depth extends number = 4> =
 
 // DeepKeyPath produces literal-string path unions:
 //   'id' | 'name' | 'headline.impact_months' | 'headline.cost_rating' | ...
+
+// Depth-decrement mechanism (tuple-indexed Prev pattern, type-expert 2026-05-22):
+type Prev = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8];
+
+type DeepKeyPath<T, D extends number> = D extends 0
+  ? never
+  : T extends ReadonlyArray<unknown>
+    ? never  // array-stop: arrays are projection leaves; do not recurse into elements
+    : T extends object
+      ? {
+          [K in keyof T & string]: T[K] extends ReadonlyArray<unknown>
+            ? K  // array field: emit the field name only, not element-index paths
+            : T[K] extends object
+              ? K | `${K}.${DeepKeyPath<T[K], Prev[D]>}`
+              : K;
+        }[keyof T & string]
+      : never;
 ```
+
+**Depth-decrement (type-expert 2026-05-22 amendment)**: the tuple-indexed
+`Prev` pattern is the canonical TypeScript depth-bounded recursion idiom.
+`Prev[D]` produces `D - 1` for `D ∈ {1..8}`; `D extends 0 ? never` is the
+terminating base case. The default depth `= 4` gives one level of headroom
+over the deepest real EEF path (`school_context_relevance.implementation_requirements.cpd_intensity`
+at depth 3). The array-stop branch is structurally enforced at the type level
+— element-index paths like `'tags.0'` and `'tags[number]'` are NOT reachable
+through the recursion.
 
 **Implementation constraint — `DeepKeyPath` MUST stop at array
 boundaries.** Arrays are projection leaves: the path
@@ -819,8 +886,35 @@ are absent rather than wondering whether to add them.
   `key_findings`, `behind_the_average`, etc. (those are opt-in).
 
 **T7a: `DeepKeyPath` compile-time smoke-test** — a unit test (or a
-`*.test-d.ts` type-test file using `expectTypeOf`) that instantiates
-`NodeProjection<EefStrand>` and asserts:
+`*.test-d.ts` type-test file using `expectTypeOf`).
+
+**T7a partition (2026-05-22 amendment per gate-1a-delivery-parallel-execution-addendum
+§Architectural amendment)**: T7a ships in two halves, partitioned by
+ownership-of-invariant. Each home tests its own invariant; neither half
+pulls a cross-workspace dependency that would couple atomic-landing
+cycles.
+
+**Half (a) — interface contract, graph-core, WS4.4**: instantiates
+`NodeProjection<TFixtureNode>` against an **inline-fixture TNode declared
+in the test file** (no `EefStrand` import; no `graph-corpus-sdk`
+dependency) and asserts:
+
+- A nested-object path member at depth 2 is valid
+  (`'<fixtureField>.<subField>'`).
+- A nested-object path member at depth 3 is valid
+  (`'<fixtureField>.<sub>.<subSub>'`).
+- Array-element paths are NOT valid members (`'tags.0'`,
+  `'tags[number]'` rejected; array-stop constraint).
+
+This half is the load-bearing test that proves the array-stop
+constraint named in T2 holds at compile time for the interface itself.
+If the test compiles and the forbidden members are absent from the
+union, the constraint is satisfied. If the implementation regresses to
+recursing into array element types, the test breaks loudly.
+
+**Half (b) — instantiation contract, graph-corpus-sdk, WS4.5**:
+instantiates `NodeProjection<EefStrand>` against the real EefStrand
+TNode (which lives in the corpus-sdk workspace) and asserts:
 
 - `'headline.impact_months'` is a valid member.
 - `'school_context_relevance.implementation_requirements.cpd_intensity'`
@@ -829,11 +923,18 @@ are absent rather than wondering whether to add them.
 - `'tags.0'` is NOT a valid member (no element-index recursion).
 - `'tags[number]'` is NOT a valid member (no element-index recursion).
 
-This is the load-bearing test that proves the array-stop constraint
-named in T2 holds at compile time. If the test compiles and the
-forbidden members are absent from the union, the constraint is
-satisfied. If the implementation regresses to recursing into array
-element types, the test breaks loudly.
+This half is the regression guard that the interface's array-stop
+constraint actually holds for the EEF corpus's TNode at the
+instantiation boundary. Together, the two halves prove that the
+constraint is both interface-true and instantiation-true.
+
+The partition mirrors the same separation-of-concerns that placed
+graph-project adjacency tests in `./adjacency/` rather than in
+graph-core: type contracts test where the type lives; instantiation
+contracts test where the instantiation lives. Side-effect: WS4.4 and
+WS4.5 atomic-landing cycles decouple — WS4.4 no longer depends on
+WS4.1 (corpus-sdk scaffold), enabling Round 1 parallelism per the
+addendum's dependency-graph-dictated round structure.
 
 ### Phase 6: Observability (T8)
 
