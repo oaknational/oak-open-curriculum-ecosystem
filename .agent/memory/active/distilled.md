@@ -97,6 +97,96 @@ at non-healthy zones. Source: §F1 of the synthesis report under
 
 ---
 
+## Recently Distilled — 2026-05-22 owner-profile observations from `.remember/` plugin (Wooded INPUT-curation pass)
+
+These observations were extracted by the `.remember/` plugin's Haiku
+distillation pass over owner messages spanning 2026-04-24 → 2026-05-13
+and surfaced as `IDENTITY CANDIDATE` rows in `.remember/recent.md`.
+Owner directed (2026-05-22) that they be promoted to `distilled.md` as
+durable cross-session collaboration knowledge. Each observation names a
+working pattern of this owner and what it implies for any agent
+collaborating with them.
+
+### Phased gated activation beats big-bang integration
+
+Owner prefers staged rollout of new infrastructure (plugins,
+frameworks, multi-agent topologies) gated on validation evidence
+before broad adoption. When proposing new infrastructure, present
+plans with explicit gates between stages, not monolithic integration
+sequences. Expect "let's prove this in a corner first" feedback on
+broad introductions; offer the corner explicitly. Source:
+`.remember/recent.md` IDENTITY CANDIDATE 1.
+
+### Wire tools into the existing capture-and-distil flow, not parallel to it
+
+Owner invests in feedback-loop tooling that converts observation into
+durable substance: `.remember/` → `/jc-consolidate-docs`, napkin →
+distilled → graduate → enforce, comms-event → graduation. When
+proposing new tooling, the first question is "does this hook into the
+existing capture/distil/graduate flow?" not "what shape does this take
+in isolation". Parallel tracking surfaces are anti-pattern. Source:
+`.remember/recent.md` IDENTITY CANDIDATE 2.
+
+### Surface emergent patterns for graduation as soon as they're clear
+
+Owner formalises repeated patterns through the explicit graduation
+process rather than leaving them tacit. When a behaviour repeats
+across two sessions and the substance is clear, surface it for
+graduation; don't wait for a folkloric "third confirmed instance"
+gate if the doctrine is already evident. The pending-graduations
+buffer absorbs the ambiguity. Source: `.remember/recent.md` IDENTITY
+CANDIDATE 3.
+
+### Pause for missing validation rather than proceed on assumed evidence
+
+Owner is willing to PAUSE a workstream rather than advance on
+assumed validation or unresolved external blockers. If the evidence
+an action depends on is not yet in hand, the right move is "we
+should pause until X arrives" rather than "we can proceed assuming
+X". State the assumed evidence explicitly and let owner choose;
+don't quietly bridge the gap. Source: `.remember/recent.md` IDENTITY
+CANDIDATE 4.
+
+### Multi-agent friction is an infrastructure problem, not a workaround occasion
+
+Owner treats coordination friction as a protocol-level concern
+requiring infrastructure solutions (commit-queue, claim model,
+comms-events, sidebars, gate-runner election). When surfacing a
+coordination friction, frame it as "what protocol gap does this
+reveal?" rather than "how do we work around this once?" Workaround
+proposals consistently get redirected to structural cure. Source:
+`.remember/recent.md` IDENTITY CANDIDATE 5.
+
+### Principle violations get reverted, not deferred
+
+Owner will undo substantive work to maintain principle compliance
+rather than land a compromised state. Never offer "we could ship
+this with a known principle violation and clean it up later" — the
+clean-up-later path is consistently rejected. Cure shapes must be
+principled at the moment of landing; if the principled cure is not
+ready, the work waits. Source: `.remember/recent.md` IDENTITY
+CANDIDATE 6.
+
+### Destructive incidents cure through structure, not through more care
+
+After destructive incidents (lost work, accidental commits, hook
+bypass), owner's cure is structural: new rules, new hooks, new
+SKILL amendments, new schema constraints — not exhortations to "be
+more careful". When surfacing a near-miss, propose a structural
+cure (hook, rule, schema, protocol change), not a behavioural
+intention. Capability is preserved by gating, not by removal.
+Source: `.remember/recent.md` IDENTITY CANDIDATE 7.
+
+### Consolidation surfaces are first-class observability infrastructure
+
+Owner treats `pending-graduations.md`, frictions register, napkin,
+distilled, repo-continuity as observable infra, not bookkeeping.
+Lifecycle tags (`pending` / `due` / `overdue` / `graduated`) carry
+load-bearing meaning; HARD-zone fitness warnings are signals to act,
+not nags to ignore. Keep these surfaces accurate as-you-go;
+out-of-date status fields produce silent doctrine drift. Source:
+`.remember/recent.md` IDENTITY CANDIDATE 8.
+
 ## Recently Distilled — 2026-05-22 multi-agent dual-lane + compaction-boundary window
 
 ### Read `--help` first on any agent-tools CLI before its first use in a session

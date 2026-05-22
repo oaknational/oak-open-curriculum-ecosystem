@@ -378,43 +378,133 @@
       ],
       "commit_subject": "feat(comms): land ADR-183 Tranche 2 — comms-event tag-token rendering",
       "queued_at": "2026-05-22T13:35:00.071Z",
-      "updated_at": "2026-05-22T13:35:12.000Z",
+      "updated_at": "2026-05-22T13:47:30.744Z",
       "expires_at": "2026-05-22T13:50:00.071Z",
-      "phase": "staging",
-      "staged_name_status": "M\tagent-tools/src/collaboration-state/comms-relevant-events.ts\nM\tagent-tools/src/collaboration-state/state-schemas.ts\nM\tagent-tools/src/collaboration-state/types.ts\nA\tagent-tools/tests/collaboration-state/format-watcher-event.unit.test.ts\nM\tagent-tools/tests/collaboration-state/state-parsers.unit.test.ts\nM\tdocs/architecture/architectural-decisions/183-comms-event-tag-namespace-substrate.md\n",
-      "staged_bundle_fingerprint": "0e712de3c648f831eb9b26f57816d01037a6ad4f859e21f1f260f70fcb7d3253"
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "0e712de3c648f831eb9b26f57816d01037a6ad4f859e21f1f260f70fcb7d3253",
+      "staged_name_status": "M\tagent-tools/src/collaboration-state/comms-relevant-events.ts\nM\tagent-tools/src/collaboration-state/state-schemas.ts\nM\tagent-tools/src/collaboration-state/types.ts\nA\tagent-tools/tests/collaboration-state/format-watcher-event.unit.test.ts\nM\tagent-tools/tests/collaboration-state/state-parsers.unit.test.ts\nM\tdocs/architecture/architectural-decisions/183-comms-event-tag-namespace-substrate.md\n"
+    },
+    {
+      "intent_id": "9bf74ccf-6889-4aae-9bef-e2826f051850",
+      "claim_id": "306dcadd-2be1-4436-9e44-57fb28ee2668",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "files": [
+        "packages/core/graph-core/eslint.config.ts",
+        "packages/libs/graph-ingest/eslint.config.ts",
+        "packages/libs/graph-project/eslint.config.ts",
+        ".agent/state/collaboration/comms-seen/shaded-whispering-dusk.json",
+        ".agent/state/collaboration/shared-comms-log.md",
+        ".agent/state/collaboration/comms/7125f556-877f-4a71-a920-75c02aa22a69.json",
+        ".agent/state/collaboration/comms/23847181-4c35-4234-b686-b73dfee93ce8.json"
+      ],
+      "commit_subject": "refactor(pr-108-snagging): consolidate graph-* eslint configs via createGraphBaseConfig",
+      "queued_at": "2026-05-22T14:01:25.169Z",
+      "updated_at": "2026-05-22T14:04:02.766Z",
+      "expires_at": "2026-05-22T14:16:25.169Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "7ad7ea68cd508064a3791c9a8609252ce096a4bd7ccccade751f56cc606d9a45",
+      "staged_name_status": "M\t.agent/state/collaboration/comms-seen/shaded-whispering-dusk.json\nA\t.agent/state/collaboration/comms/23847181-4c35-4234-b686-b73dfee93ce8.json\nA\t.agent/state/collaboration/comms/7125f556-877f-4a71-a920-75c02aa22a69.json\nM\tpackages/core/graph-core/eslint.config.ts\nM\tpackages/libs/graph-ingest/eslint.config.ts\nM\tpackages/libs/graph-project/eslint.config.ts\n",
+      "notes": "shared-comms-log.md drained from working tree by peer consolidation commit 1b619457; re-enqueuing with 6-file bundle."
+    },
+    {
+      "intent_id": "b5a8b0dc-1a06-42e3-a6f0-8f8efa252895",
+      "claim_id": "306dcadd-2be1-4436-9e44-57fb28ee2668",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "files": [
+        "packages/core/graph-core/eslint.config.ts",
+        "packages/libs/graph-ingest/eslint.config.ts",
+        "packages/libs/graph-project/eslint.config.ts",
+        ".agent/state/collaboration/comms-seen/shaded-whispering-dusk.json",
+        ".agent/state/collaboration/comms/7125f556-877f-4a71-a920-75c02aa22a69.json",
+        ".agent/state/collaboration/comms/23847181-4c35-4234-b686-b73dfee93ce8.json"
+      ],
+      "commit_subject": "refactor(pr-108-snagging): consolidate graph-* eslint configs via createGraphBaseConfig",
+      "queued_at": "2026-05-22T14:04:03.628Z",
+      "updated_at": "2026-05-22T14:06:49.115Z",
+      "expires_at": "2026-05-22T14:19:03.628Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "813db2ac0c00692394fb900d875aa97ebce743dfefae1d7a8efc30deda0ef266",
+      "staged_name_status": "M\t.agent/plans/graph-mvp-arc.plan.md\nM\t.agent/plans/sector-engagement/eef/current/eef-first-feature.plan.md\nM\t.agent/state/collaboration/comms-seen/shaded-whispering-dusk.json\nA\t.agent/state/collaboration/comms/23847181-4c35-4234-b686-b73dfee93ce8.json\nA\t.agent/state/collaboration/comms/7125f556-877f-4a71-a920-75c02aa22a69.json\nM\tpackages/core/graph-core/eslint.config.ts\nM\tpackages/libs/graph-ingest/eslint.config.ts\nM\tpackages/libs/graph-project/eslint.config.ts\n",
+      "notes": "verify-staged detected 2 foreign-staged plan files; owner authorized widening bundle (no peer git:index/head claim was open)"
+    },
+    {
+      "intent_id": "851d07af-5989-4441-abe2-d9a72508a5e7",
+      "claim_id": "306dcadd-2be1-4436-9e44-57fb28ee2668",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "files": [
+        "packages/core/graph-core/eslint.config.ts",
+        "packages/libs/graph-ingest/eslint.config.ts",
+        "packages/libs/graph-project/eslint.config.ts",
+        ".agent/state/collaboration/comms-seen/shaded-whispering-dusk.json",
+        ".agent/state/collaboration/comms/7125f556-877f-4a71-a920-75c02aa22a69.json",
+        ".agent/state/collaboration/comms/23847181-4c35-4234-b686-b73dfee93ce8.json",
+        ".agent/plans/graph-mvp-arc.plan.md",
+        ".agent/plans/sector-engagement/eef/current/eef-first-feature.plan.md"
+      ],
+      "commit_subject": "refactor(pr-108-snagging): consolidate graph-* eslint configs via createGraphBaseConfig",
+      "queued_at": "2026-05-22T14:06:49.977Z",
+      "updated_at": "2026-05-22T14:07:01.270Z",
+      "expires_at": "2026-05-22T14:21:49.977Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "cefde94a69154b12f2dd4aa142f3c8458e9793e76c516a0fa84ab5ff01c882df",
+      "staged_name_status": "M\t.agent/plans/graph-mvp-arc.plan.md\nM\t.agent/plans/sector-engagement/eef/current/eef-first-feature.plan.md\nA\t.agent/rules/hook-policy-substring-discipline.md\nM\t.agent/state/collaboration/comms-seen/shaded-whispering-dusk.json\nA\t.agent/state/collaboration/comms/23847181-4c35-4234-b686-b73dfee93ce8.json\nA\t.agent/state/collaboration/comms/7125f556-877f-4a71-a920-75c02aa22a69.json\nA\t.claude/rules/hook-policy-substring-discipline.md\nA\t.cursor/rules/hook-policy-substring-discipline.mdc\nM\tpackages/core/graph-core/eslint.config.ts\nM\tpackages/libs/graph-ingest/eslint.config.ts\nM\tpackages/libs/graph-project/eslint.config.ts\n",
+      "notes": "commit-workflow verify-staged-before failure: staged files do not exactly match intent files; extra: .agent/rules/hook-policy-substring-discipline.md, .claude/rules/hook-policy-substring-discipline.md, .cursor/rules/hook-policy-substring-discipline.mdc; missing: none"
+    },
+    {
+      "intent_id": "8369fee5-bb1b-4c94-9af6-b282f945ac50",
+      "claim_id": "d26e453f-db59-4381-ac10-fab5b99411c3",
+      "agent_id": {
+        "agent_name": "Wooded Swaying Thicket",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "6c58f3"
+      },
+      "files": [
+        ".agent/memory/active/distilled.md"
+      ],
+      "commit_subject": "docs(distilled): add 8 owner-profile observations from .remember/ plugin distillation",
+      "queued_at": "2026-05-22T14:53:22.303Z",
+      "updated_at": "2026-05-22T14:54:07.879Z",
+      "expires_at": "2026-05-22T15:08:22.303Z",
+      "phase": "abandoned"
+    },
+    {
+      "intent_id": "692c57a7-ed09-404e-8a2d-de3871cc1994",
+      "claim_id": "985099cc-7cfb-4307-bd47-b06229de4253",
+      "agent_id": {
+        "agent_name": "Wooded Swaying Thicket",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "6c58f3"
+      },
+      "files": [
+        ".agent/memory/active/distilled.md"
+      ],
+      "commit_subject": "docs(distilled): add 8 owner-profile observations from .remember/ plugin distillation",
+      "queued_at": "2026-05-22T14:54:08.061Z",
+      "updated_at": "2026-05-22T14:54:57.167Z",
+      "expires_at": "2026-05-22T15:09:08.061Z",
+      "phase": "pre_commit",
+      "staged_name_status": "M\t.agent/memory/active/distilled.md\n",
+      "staged_bundle_fingerprint": "69810033a5cc83564e427be7f91644a482a7bbc2e444fa0092dd39754bd9bf99"
     }
   ],
   "claims": [
-    {
-      "claim_id": "6ed6ca9a-9702-4b4f-8994-2a862367516d",
-      "agent_id": {
-        "agent_name": "Mistbound Slipping Night",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "a1cb64"
-      },
-      "thread": "connecting-oak-resources",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/state/collaboration/handoffs/",
-            ".agent/state/collaboration/active-claims.schema.json",
-            ".agent/state/collaboration/comms-event.schema.json",
-            ".agent/skills/start-right-team/SKILL-CANONICAL.md",
-            ".agent/practice-index.md",
-            ".agent/practice-core/decision-records/PDR-063-mid-cycle-retirement-protocol.md",
-            ".agent/practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md",
-            ".agent/practice-core/decision-records/PDR-066-comms-events-as-failure-mode-channel.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-22T12:17:53Z",
-      "freshness_seconds": 7200,
-      "sidebar_open": false,
-      "intent": "Lane B PDR-063..066 cure work — substrate implementation: ADR-182 Tranche 1 (handoffs dir + claims schema field + SKILL Closeout amendment), ADR-183 Tranche 1 (comms-event schema tags field), PDR-064 SKILL Coordinator Handoff amendment. Tranche 2 of both ADRs deferred (ADR-183 Tranche 2 needs Shaded coordination on agent-tools CLI scope)."
-    },
     {
       "claim_id": "da769539-e0a2-484f-8282-cb5ace1d1fd0",
       "agent_id": {
@@ -471,10 +561,11 @@
       "claimed_at": "2026-05-22T12:42:00Z",
       "freshness_seconds": 7200,
       "sidebar_open": false,
-      "intent": "Continuous /jc-consolidate-docs pass — critical-zone memory surfaces (napkin 1099L, pending-graduations 4071L, repo-continuity prose widths, distilled 677L); graduate due/overdue PDR/ADR candidates to permanent homes; rotate napkin; honour learning-preservation-overrides-fitness."
+      "intent": "Continuous /jc-consolidate-docs pass — critical-zone memory surfaces (napkin 1099L, pending-graduations 4071L, repo-continuity prose widths, distilled 677L); graduate due/overdue PDR/ADR candidates to permanent homes; rotate napkin; honour learning-preservation-overrides-fitness.",
+      "intent_to_commit": "8369fee5-bb1b-4c94-9af6-b282f945ac50"
     },
     {
-      "claim_id": "56206b71-a942-44ac-aa42-715b1cd5b30c",
+      "claim_id": "c847fffc-e81b-4a1b-b4d2-e09251803111",
       "agent_id": {
         "agent_name": "Mistbound Slipping Night",
         "platform": "claude",
@@ -486,42 +577,18 @@
         {
           "kind": "files",
           "patterns": [
-            "agent-tools/src/collaboration-state/comms-relevant-events.ts",
-            "agent-tools/tests/collaboration-state/format-watcher-event.unit.test.ts",
-            "docs/architecture/architectural-decisions/183-comms-event-tag-namespace-substrate.md"
+            ".agent/plans/graph-mvp-arc.plan.md",
+            ".agent/plans/sector-engagement/eef/current/eef-first-feature.plan.md"
           ]
         }
       ],
-      "claimed_at": "2026-05-22T13:12:34Z",
-      "freshness_seconds": 5400,
+      "claimed_at": "2026-05-22T13:57:31Z",
+      "freshness_seconds": 3600,
       "sidebar_open": false,
-      "intent": "Lane B ADR-183 Tranche 2 — comms-event tag-token rendering. Compose [FAILURE-MODE]/[BEHAVIOUR-NOTE] tokens with channel discriminator per Q1-Q5 sidebar settlement. File-disjoint from Tempestuous (commit-queue) and Shaded (graph-ingest+bin)."
+      "intent": "Land ff2 owner-decision: AI-client adoption tracking owner=Jim, mechanism=conversations (with future Notion-token possibility deferred). Resolves D-1; flips name-ai-client-adoption-owner + ff2-adoption-tracking-owner todos pending->completed; records outcome in both plan bodies; updates D-1 commentary."
     },
     {
-      "claim_id": "eb8048f8-faf5-4e4b-b662-b8c0520c4363",
-      "agent_id": {
-        "agent_name": "Mistbound Slipping Night",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "a1cb64"
-      },
-      "thread": "connecting-oak-resources",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": [
-            "index/head"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-22T13:20:51Z",
-      "freshness_seconds": 900,
-      "sidebar_open": false,
-      "intent": "Stage and commit Lane B Tranche 2 — ADR-183 CLI rendering update (comms-event tag-token rendering).",
-      "intent_to_commit": "12c0a2ba-a198-4d1a-9de9-349c7b1215c3"
-    },
-    {
-      "claim_id": "6af12756-b43a-4b98-8a2f-b79e3155fee1",
+      "claim_id": "306dcadd-2be1-4436-9e44-57fb28ee2668",
       "agent_id": {
         "agent_name": "Shaded Whispering Dusk",
         "platform": "claude",
@@ -531,20 +598,140 @@
       "thread": "pr-108-snagging",
       "areas": [
         {
-          "kind": "files",
+          "kind": "git",
           "patterns": [
-            "packages/core/graph-core/eslint.config.ts",
-            "packages/libs/graph-ingest/eslint.config.ts",
-            "packages/libs/graph-project/eslint.config.ts",
-            "packages/design/oak-design-ink/eslint.config.ts",
-            "packages/core/oak-eslint/src/configs/base.ts"
+            "index/head"
           ]
         }
       ],
-      "claimed_at": "2026-05-22T13:25:14Z",
+      "claimed_at": "2026-05-22T14:01:09Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit Lane A Cycle 9.2 — graph-* eslint config consolidation via createGraphBaseConfig.",
+      "intent_to_commit": "851d07af-5989-4441-abe2-d9a72508a5e7"
+    },
+    {
+      "claim_id": "f013f95d-ab63-4e83-a716-f198da3ee19f",
+      "agent_id": {
+        "agent_name": "Mistbound Slipping Night",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "a1cb64"
+      },
+      "thread": "eef-first-feature",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.ts",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T14:48:44Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "t12-citation-shape — land non-empty tuple Citation + Zod min(1) schema with co-located TDD unit tests"
+    },
+    {
+      "claim_id": "7bc6b37b-1c0f-4589-866b-1244d8c93949",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/bin/commit-queue.ts",
+            "agent-tools/src/bin/collaboration-state.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T14:51:01Z",
+      "freshness_seconds": 5400,
+      "sidebar_open": false,
+      "intent": "Cycle 10 / task #10 — finish Cycle 6 S7785 convergence: convert 2 remaining .then/.catch bin launchers to try/await; preserve stdout arg only where streaming is required"
+    },
+    {
+      "claim_id": "02eadf52-17e3-470e-a026-24f94be7a5f4",
+      "agent_id": {
+        "agent_name": "Tempestuous Spiralling Thermal",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "9205b8"
+      },
+      "thread": "connecting-oak-resources-distilled-fitness-rotation",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/archive/distilled-graduations-log-2026-05-14.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T14:51:05Z",
       "freshness_seconds": 7200,
       "sidebar_open": false,
-      "intent": "Cycle 9 ESLint config consolidation — extract 47-line shared shape across 4 workspace configs into shared base; pre-execution code-expert + config-expert review per new runbook rule 2; plan section pr-108-snagging.plan.md lines 945-1000"
+      "intent": "OUTPUT-surface curation continuation: distilled.md fitness-pressure rotation. 829L vs hard-limit 500. Move 'Recent graduations' audit-trail blocks (lines ~25-96 covering 2026-05-06, 2026-05-09, 2026-05-10, Verdict-not-menu 2026-05-11, Meta-observation 2026-05-09) to existing distilled-graduations-log-2026-05-14.md archive. Substance-preservation discipline: only audit-trail describing already-graduated material moves; load-bearing distilled entries stay."
+    },
+    {
+      "claim_id": "26148516-e98e-432e-8a48-93fbd92ad43c",
+      "agent_id": {
+        "agent_name": "Stormbound Kiting Squall",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ddbea2"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/commit-queue/core.ts",
+            "agent-tools/src/commit-queue/git.ts",
+            "agent-tools/src/commit-queue/cli.ts",
+            "agent-tools/src/commit-queue/commit-workflow.ts",
+            "agent-tools/src/commit-queue/commit-workflow-runtime.ts",
+            "agent-tools/src/commit-queue/types.ts",
+            "agent-tools/src/commit-queue/index.ts",
+            "agent-tools/tests/commit-queue.unit.test.ts",
+            "agent-tools/tests/commit-queue.integration.test.ts",
+            ".agent/plans/agent-tooling/current/commit-queue-intent-scope-discipline.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T14:53:44Z",
+      "freshness_seconds": 5400,
+      "sidebar_open": false,
+      "intent": "Implement commit-queue-intent-scope-discipline plan: scope record-staged/verify-staged/verify-staged-again/commit operations to intent.files. Three TDD cycles + Phase Final."
+    },
+    {
+      "claim_id": "985099cc-7cfb-4307-bd47-b06229de4253",
+      "agent_id": {
+        "agent_name": "Wooded Swaying Thicket",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "6c58f3"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T14:53:50Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Land distilled.md 8-owner-profile-observations entries via commit-queue intent 8369fee5",
+      "intent_to_commit": "692c57a7-ed09-404e-8a2d-de3871cc1994"
     }
   ]
 }
