@@ -899,6 +899,70 @@ below is a cross-reference index, not a second source of truth.
 - **Target surface**: `agent-tools` claims heartbeat parser/help text
 - **Status**: open
 
+### F-32 — `comms send/direct/reply/append --body "..."` silently corrupts bodies containing backticks or dollar signs
+
+- **Source**: cross-session pattern. At least three independent
+  instances captured in `.agent/memory/active/napkin.md`: Cirrus
+  Circling Plume 2026-05-21 archive entry "shell command-substitution
+  from markdown backticks in double-quoted body argument"; Ferny
+  Swaying Leaf 2026-05-22 (event `0ce0b26b` lost the words `tags` and
+  `fast_bootstrap_eligible` to backtick-eval in `--body`); Foamy
+  Snorkelling Jetty 2026-05-22 ("`comms reply` CLI body parsing
+  failure modes are layered" — failed twice on backticks inside
+  markdown code fences). Stratospheric Gusting Squall has an earlier
+  documented instance. Pending-graduations entry titled "CLI body
+  backtick-shell-substitution cure pattern is a 3+ instance cross-
+  session shape" tracks the cross-session graduation status.
+- **Surface**: `agent-tools/src/collaboration-state/cli-comms-commands.ts`
+  `appendComms` / `sendComms`; `cli-comms-messages.ts` `directComms` /
+  `replyComms`.
+- **Observed**: a double-quoted `--body "..."` argument allows the
+  shell to evaluate backtick-wrapped spans as command substitution
+  and dollar-prefixed tokens as variable expansion BEFORE the CLI
+  receives the body. The resulting comms event is silently truncated
+  or corrupted; the agent receiving the event sees stripped or
+  replaced text. Same hazard on `--body "$(cat tmp-file)"`: the file
+  contents are substituted, and backticks within the substituted
+  content are then evaluated by the outer double quotes.
+- **Expected**: comms event bodies should reach the CLI verbatim,
+  regardless of whether they contain shell-special characters.
+  Authoring a body should not require knowing the shell's quoting
+  rules.
+- **Candidate cure** (ranked by leverage; option 1 LANDED 2026-05-22):
+  1. **`--body-file <path>` flag** [LANDED — this entry's commit]:
+     read body from a file path; the shell only parses the path, not
+     the contents. Backwards-compatible, mutually exclusive with
+     `--body`. Implemented at `cli-comms-commands.ts::resolveCommsBody`
+     and wired through all four comms commands. Tests in
+     `tests/collaboration-state/collaboration-state.integration.test.ts`.
+     README §"Comms body input: `--body` vs `--body-file`" carries
+     the user-facing guidance.
+  2. **`--event-spec <path>` flag** [DEFERRED]: accept an entire event
+     spec as a JSON file (title + body + platform + model + recipient
+     fields), lifting all fields out of the shell-argv layer. More
+     robust shape for programmatic/templated workflows. Not load-
+     bearing if `--body-file` is in place; useful as a follow-on if
+     the templated-event use case grows.
+  3. **Write-time body sanitisation / warning** [DEFERRED]: detect
+     likely shell-corruption signals at CLI write time (unbalanced
+     backticks in received body, body suspiciously shorter than
+     typical, absent expected delimiter tokens) and warn or refuse.
+     Belt-and-braces — does not prevent the corruption, only catches
+     it after the body has already been eaten. False positives
+     possible.
+- **Target surface**: `agent-tools/src/collaboration-state/cli-comms-*.ts`
+  for code changes; `agent-tools/README.md §"CLI Norms"` for caller
+  guidance; `.agent/memory/operational/pending-graduations.md` for
+  cross-session trigger trace.
+- **Status**: option 1 (`--body-file`) addressed in working tree
+  2026-05-22 (Ferny Swaying Leaf, this entry's commit). Options 2 and
+  3 remain DEFERRED — open for future agents whose work surfaces a
+  second instance of templated-event need (for option 2) or audit
+  drift in dispatched bodies (for option 3).
+- **Owner direction status**: standing (owner stated 2026-05-22:
+  "make sure the other options are included in the appropriate,
+  discoverable plan surface").
+
 ### F-31 — Commit-msg hook depends on unpinned `pnpm dlx commitlint`
 
 - **Source**: Radiant Illuminating Twilight attempting the WS2.1 graph-ingest

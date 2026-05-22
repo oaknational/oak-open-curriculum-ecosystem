@@ -28560,6 +28560,186 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "7b9745a7-b8de-4709-8b7d-e8fd97cbe35a",
+      "agent_id": {
+        "agent_name": "Salty Charting Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e4e"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T09:08:36Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit PR-108 Cycle 4.4 S7755 Array.at path fix.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T09:09:43Z",
+        "closed_by": {
+          "agent_name": "Salty Charting Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e4e"
+        },
+        "summary": "Committed Cycle 4.4 S7755 Array.at fix as 604f64b7; queue intent a7e74989 completed; bundle included paths.ts plus Salty lifecycle residue.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7b9745a7-b8de-4709-8b7d-e8fd97cbe35a",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "17b40834-a56e-498b-a307-d3f47df50a83",
+      "agent_id": {
+        "agent_name": "Salty Charting Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e4e"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/context-cost/cli-options.ts",
+            "agent-tools/src/practice-fitness/markdown.ts",
+            "packages/core/graph-core/src/canon/canonicalize.unit.test.ts",
+            "agent-tools/src/practice-fitness/paths.ts",
+            "packages/core/graph-core/src/jsonld/processor-types.ts",
+            "packages/libs/graph-project/src/property-graph/index.ts",
+            "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/api-paths-types.ts",
+            "agent-tools/scripts/check-blocked-content.unit.test.ts",
+            "agent-tools/src/context-cost/tokenize-globs.unit.test.ts",
+            "packages/core/graph-core/src/jsonld/processor.integration.test.ts",
+            "packages/core/graph-core/src/jsonld/processor.ts",
+            "packages/core/graph-core/vitest.config.ts",
+            "packages/libs/graph-ingest/vitest.config.ts",
+            "packages/libs/graph-project/vitest.config.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T08:53:49Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "PR-108 snagging Cycle 4 mechanical rule cluster; execute per-sub-cycle fixes with pathscoped commits after coordinator handoff.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T09:25:24Z",
+        "closed_by": {
+          "agent_name": "Salty Charting Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e4e"
+        },
+        "summary": "Session complete: Cycle 4.1-4.4 landed; owner pause stopped 4.5-4.9; no further Salty action.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "17b40834-a56e-498b-a307-d3f47df50a83",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c99caf20-b935-4319-be45-5f2deca8cbe9",
+      "agent_id": {
+        "agent_name": "Midnight Veiling Threshold",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e4e"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T09:30:00Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Capture Midnight closeout insight: Docker MCP gateway exposes Sonar write tools for PR-108 Cycle 3",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T09:27:42Z",
+        "closed_by": {
+          "agent_name": "Midnight Veiling Threshold",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e4e"
+        },
+        "summary": "Napkin closeout capture complete; markdownlint passed; Cycle 3 Docker MCP/Sonar insight recorded.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c99caf20-b935-4319-be45-5f2deca8cbe9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "4b91ed18-c0c5-4b5d-826d-a6a0ddb169b2",
+      "agent_id": {
+        "agent_name": "Foamy Snorkelling Jetty",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "1c0db8"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-063-mid-cycle-retirement-protocol.md",
+            ".agent/practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md",
+            ".agent/practice-core/decision-records/PDR-065-grounding-cost-amortisation-under-rotation.md",
+            ".agent/practice-core/decision-records/PDR-066-comms-events-as-failure-mode-channel.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T09:01:54Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "PDR-063..066 reviewer-verdict absorption arc: dispatch assumptions-expert via Agent tool, absorb verdict, cure any findings, hold commit-window for coordinator authorisation. Read-only review boundary; no source edits until cures applied.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T09:30:51Z",
+        "closed_by": {
+          "agent_name": "Foamy Snorkelling Jetty",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "1c0db8"
+        },
+        "summary": "Session-complete per owner direction. assumptions-expert verdict on PDR-063..066 received and broadcast (event 6cdd7501): PDR-063 RESHAPE, PDR-064 GO-WITH-CONDITIONS, PDR-065 RESHAPE, PDR-066 GO-WITH-CONDITIONS, plus portability hook-blocker on PDR-063/065/066. PDR-064 cures landed in working tree uncommitted (parenthetical tightening + Q5/Q6 open questions). PDR-063/065/066 cures NOT STARTED. Three routing questions Q1/Q2/Q3 outstanding to coordinator Blustery. Boundary released; PDR slice ownership returns to coordinator's coordination surface.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4b91ed18-c0c5-4b5d-826d-a6a0ddb169b2",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

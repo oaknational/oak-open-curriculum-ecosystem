@@ -3908,3 +3908,137 @@ Pattern card material once a second instance is observed.
 ### Cross-session observation: absorption-adjacent failure-mode family (Shaded Creeping Cloak / Stormy Plumbing Atoll)
 
 **Graduated — body archived 2026-05-22**. See [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md) for the verbatim entry body. Status: graduated; substance lives at the target home named in the entry.
+
+### 2026-05-22 — Partial / slice-scoped coordinator transfer (Foamy Snorkelling Jetty)
+
+`[CANDIDATE: partial-slice-scoped-coordinator-transfer | captured: 2026-05-22 | source: PDR-064 drafting + worked instance Ferny→Blustery slice-coord assignment + comms event 9670c08f behaviour-note | graduation-target: PDR-064 §"Partial / Slice-Scoped Coordinator Transfer" amendment subsection | trigger: 3rd instance observed THIS SESSION (Flamebright→Ferny full, Ferny→Blustery full, slice-coord assignment between them) — graduation trigger fired; awaiting commit window | status: due | size: S]`
+
+PDR-064 establishes the two-distinct-moments coordinator handoff
+pattern for the full-session role. This session demonstrated that a
+distinct pattern applies when the handoff is scoped to a slice
+(boundary-bounded coordination of a sub-arc), not the whole session.
+Three concrete instances landed in one session: (a) Flamebright →
+Ferny full-coordinator transfer; (b) Ferny → Blustery full-coordinator
+transfer; (c) Ferny's slice-coordinator assignment for the PDR-063..066
+arc, sitting *inside* the full-coordinator window. The slice-shaped
+case differs structurally — no cron rearm, no full-authority transfer,
+boundary-bounded by the slice itself. PDR-064 explicitly anticipates
+this with the parenthetical at lines 145-154 (cured this session to
+"out of scope for this PDR; captured for a follow-on amendment"). The
+3-instance trigger fired this session — amendment ready to graduate
+into PDR-064 as a §"Partial / Slice-Scoped Coordinator Transfer"
+subsection at the next non-PDR commit window.
+
+### 2026-05-22 — Coordinator-must-delegate-sub-agent-launches-not-self-dispatch (Foamy Snorkelling Jetty)
+
+`[CANDIDATE: coordinator-delegates-subagent-launches | captured: 2026-05-22 | source: owner correction to Ferny on subagent dispatch + owner correction to Blustery on architecture-expert-fred re-verify self-dispatch + Blustery self-flagged graduation candidate in directed event 09:00:21 | graduation-target: amendment to start-right-team SKILL §"Choose Temporary Responsibilities" + adjacent collaboration practice rule on coordinator boundary | trigger: 2-instance trigger fired this session (Ferny correction, Blustery correction) | status: due | size: S]`
+
+Owner direction observed twice this session in different framings:
+"coordinator's concern is to coordinate, if work needs doing, including
+launching sub-agents, delegate that to a team member". Sub-agent
+launches (Agent-tool dispatches to reviewer agents like architecture-expert-fred,
+assumptions-expert, etc.) are *implementer-class work*, not coordination.
+The coordinator's role is to route the dispatch to a team member; the
+delegated team member runs the Agent-tool invocation, absorbs the
+verdict, and surfaces results. This applies whether the dispatch is a
+review of a slice the coordinator already routed, or a fresh-eyes pass.
+Blustery self-flagged this as a graduation candidate after the owner's
+second correction; the doctrine target is the start-right-team SKILL
+§"Choose Temporary Responsibilities" subsection on coordinator-vs-
+implementer boundary, plus the adjacent rule on collaboration practice.
+
+### 2026-05-22 — Practice-Core portability rule applies at PDR drafting, not at review (Foamy Snorkelling Jetty)
+
+`[CANDIDATE: practice-core-portability-at-drafting | captured: 2026-05-22 | source: assumptions-expert verdict on PDR-063..066 (event 6cdd7501) flagged portability hook-blocker on 3 of 4 PDRs | graduation-target: amendment to PDR-drafting checklist surface (start-right-team SKILL §"Decide PDR vs addendum-amendment shape" OR a new dedicated PDR-drafting reference doc) + cross-link from .agent/practice-core/README.md | trigger: 1st explicit instance — fires when a 2nd PDR-drafting session repeats the same defect, OR when owner promotes by direct route | status: pending | size: S]`
+
+Three of four PDRs drafted this session (PDR-063, PDR-065, PDR-066)
+embedded repo paths (`.agent/state/collaboration/...`,
+`active-claims.schema.json`, the `pnpm agent-tools:collaboration-state`
+CLI command) in their §Required and §Decision sections. The standing
+rule "Anything under .agent/practice-core/ must have NO repo paths,
+ADR refs, or commit refs; only outgoing link allowed is to
+.agent/practice-index.md" (durable user-memory entry
+`feedback_practice_core_portability_strict`) is unambiguous. The drafting
+agent (me) knew the rule but did not apply it during drafting —
+treated portability as a review-time concern rather than a
+drafting-time invariant. The cure shape: portability check moves into
+the PDR drafting checklist *before first edit*, alongside trigger-
+evidence and proportionality checks. The empirical observation worth
+graduating is the *category-of-rule* observation: portability is a
+structural rule applied at drafting, not a stylistic rule caught at
+review. Land as a PDR-drafting reference doc cross-linked from
+practice-core/README.md.
+
+### 2026-05-22 — Sonar MCP `show_security_hotspot` audit-trail visibility gap (Ferny Swaying Leaf)
+
+`[CANDIDATE: sonar-mcp-changelog-not-comments | captured: 2026-05-22 | source: Ferny + Midnight independent observations on PR-108 Cycle 2/3 dispositions; both passed comment strings to change_security_hotspot_status, both verified via show_security_hotspot which returned comments: [] | graduation-target: amendment to docs/governance/sonar-disposition-policy.md §Hotspot review (cite REST /api/hotspots/show?hotspot=KEY | jq .changelog as the rationale-verification path, NOT MCP show_security_hotspot.comments) OR new ADR if the Sonar MCP server upstream cannot be relied on to expose changelog | trigger: 1st explicit instance; fires when a 2nd consolidation pass cites the same MCP/REST asymmetry OR when an auditor reviews PR-108 rationale trail and finds the comments-field empty | status: pending | size: S]`
+
+Sonar MCP `change_security_hotspot_status` accepts a `comment`
+parameter; mutation succeeds and returns `success: true,
+newStatus: REVIEWED, newResolution: SAFE`. Subsequent
+`show_security_hotspot` on the same hotspot returns `comments: []`
+and does not expose a `changelog` field. The rationale text is
+stored Sonar-side (the mutation accepted it) but is invisible
+through the MCP read surface. The plan's deterministic-validation
+block cites the public REST `/api/hotspots/show` endpoint returning
+a `changelog` field — the MCP tool does NOT expose `changelog`,
+only the `comments` thread which is a different concept (free-text
+comment thread vs status-change-history). An auditor relying on
+MCP `show_security_hotspot.comments` would incorrectly conclude no
+rationale was filed. Not blocking the QG (the disposition itself
+gates `new_security_hotspots_reviewed = 100%`), but worth
+amending the policy doc with the REST-verification path. May also
+deserve an ADR if cross-cutting (e.g. multiple Sonar MCP read
+surfaces are similarly asymmetric vs REST).
+
+### 2026-05-22 — CLI body backtick-shell-substitution cure pattern is a 3+ instance cross-session shape (Ferny Swaying Leaf)
+
+`[CANDIDATE: cli-body-backtick-cure-pattern | captured: 2026-05-22 | source: at least 3 independent instances across recent sessions — Cirrus Circling Plume 2026-05-21 (shell command-substitution from markdown backticks in double-quoted body argument), Ferny Swaying Leaf 2026-05-22 (event 0ce0b26b lost the field-name tokens to backtick eval in --body), Foamy Snorkelling Jetty 2026-05-22 (comms reply --body parsing failure on backticks in markdown code fences). Stratospheric Gusting Squall earlier instance also referenced in current napkin index | graduation-target: amend agent-tools/README.md §"CLI Norms" with the cure pattern (prefer single-quoted --body '...' OR write body to tmp-file with escaped backticks OR add --body-file path flag that reads body without shell interpretation) | trigger: 3+ instance evidence is firm; cure shape has consensus; awaiting owner-direction or coordinator-routed graduation | status: due | size: M]`
+
+The failure mode: agent-tools CLI `comms send/direct/reply --body
+"..."` with the body passed via double-quoted shell argument. When
+the body contains backticks (markdown code fences, identifier
+references like `tag`, `field_name`), the outer double-quote allows
+the shell to evaluate backtick-wrapped spans as command
+substitution. The backtick spans get replaced with the (usually
+empty) stdout of the substituted "command". Result: the comms
+event body is silently truncated or corrupted; the agent receiving
+it sees stripped or replaced text. The same failure mode appears
+on `comms send` (Cirrus), `comms direct` (Ferny), and `comms reply`
+(Foamy). Three+ cure shapes have proven workable:
+
+- (a) single-quoted `--body '...'` preserves all content literally
+  (best for non-templated bodies);
+- (b) cat-from-tmp-file with backticks in the file content escaped
+  (`\\\`text\\\``) — fragile, error-prone;
+- (c) prefer square brackets `[name]` over backticks `` `name` ``
+  in inline identifier references inside comms-event bodies;
+- (d) [GRADUATION TARGET] add `--body-file <path>` flag to
+  `comms send/direct/reply` that reads body from a file WITHOUT
+  shell interpretation. The 3rd instance is the trigger threshold
+  per the standing "third-consumer consolidation" pattern.
+
+### 2026-05-22 — Hook-policy substring-matching in instructive content is a recurring blocker (Ferny Swaying Leaf via cross-session pattern scan)
+
+`[CANDIDATE: hook-policy-substring-match-cure | captured: 2026-05-22 | source: at least 3 cross-session instances — Midnight Veiling Threshold 2026-05-22 (Coordinator pattern: hook policy substring-matches forbidden patterns even in instructive context — whole-tree-shortcut command inside "do NOT use" guard sentence blocked); Torrid Glowing Flame 2026-05-21 ("Hook blocked carve-out vocabulary in new agent content"); Charcoal Searing Ember 2026-05-21 ("Failure: vocabulary inheritance from sub-agent verdict text — new vector for the carve-out hook"); Ferny + Flamebright 2026-05-22 (hook-bypass literal substring in dispatch briefs blocked by hook policy until rephrased) | graduation-target: either (a) hook policy upgrade to context-aware parsing (multi-token negation-aware) which is structurally hard, OR (b) coordinator-brief / agent-content discipline rule: substitute generic descriptive language for literal forbidden-pattern strings in instructive contexts; literal forbidden-pattern strings belong only in the rule's canonical home where the hook expects them | trigger: 3+ instance evidence firm across multiple sessions and multiple agents; cure shape (b) is portable and immediate; cure shape (a) is upstream and slow | status: due | size: M]`
+
+Hook policies are substring-matchers that do not parse the semantic
+context of natural-language guards. "Do not use X" and "use X"
+trip the same substring filter. Recurring failure mode across at
+least 3 distinct sessions and multiple agents. The discipline cure
+is the immediate path: agent-authored content in comms events,
+dispatch briefs, napkin entries, and similar surfaces must use
+descriptive substitutes for literal forbidden patterns in
+instructive contexts. Examples:
+
+- whole-tree-shortcut command (the staging glob shortcut) → "whole-tree shortcut"
+- hook-bypass flag (the verify-skip flag) → "hook bypass" or "skip-hooks flag"
+- forbidden bash patterns → generic "do not bypass commit verification"
+
+Literal forbidden-pattern strings belong only in the rule's
+canonical home (where the hook expects them) and in agent
+execution contexts where the pattern is being deliberately
+invoked. The structural cure (context-aware hook parsing) is
+upstream and slow; the discipline cure is portable and applies
+immediately to coordinator-brief discipline + comms-event drafting
+norms.

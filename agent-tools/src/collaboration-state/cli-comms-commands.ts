@@ -5,13 +5,47 @@ import { dirname, join, parse } from 'node:path';
 import { renderCommsLog, writeCommsEventWithReadback } from './comms-use-cases.js';
 import { resolveIdentity } from './cli-identity.js';
 import { optional, required, valueOrDefault, type Options } from './cli-options.js';
-import { cliIo, type CliRuntime } from './cli-runtime.js';
+import { cliIo, type CollaborationStateCliIo, type CliRuntime } from './cli-runtime.js';
 import { assertIdentityCanWrite } from './identity-write-guard.js';
 import { validateSharedStateAgentId } from './identity.js';
 import { type CollaborationStateEnvironment } from './types.js';
 
 const DEFAULT_COMMS_DIR = '.agent/state/collaboration/comms';
 const DEFAULT_SHARED_LOG = '.agent/state/collaboration/shared-comms-log.md';
+
+/**
+ * Resolve the event body from either `--body` (inline string) or
+ * `--body-file <path>` (file contents read literally, no shell interpretation).
+ *
+ * The file path is the cure for shell-quoting hazards on inline bodies that
+ * contain backticks, dollar-signs, or other shell-special characters.
+ *
+ * Errors:
+ * - Both flags set: rejected as mutually exclusive.
+ * - Neither flag set: rejected as missing required `--body`.
+ * - File unreadable: error message names the offending path.
+ */
+export async function resolveCommsBody(
+  options: Options,
+  io: CollaborationStateCliIo,
+): Promise<string> {
+  const inline = optional(options, 'body');
+  const filePath = optional(options, 'body-file');
+  if (inline !== undefined && filePath !== undefined) {
+    throw new Error('--body and --body-file are mutually exclusive');
+  }
+  if (filePath !== undefined) {
+    try {
+      return await io.readTextFile(filePath);
+    } catch (cause) {
+      throw new Error(`--body-file path is unreadable: ${filePath}`, { cause });
+    }
+  }
+  if (inline === undefined) {
+    throw new Error('missing required option --body (or pass --body-file <path>)');
+  }
+  return inline;
+}
 
 export async function appendComms(
   options: Options,
@@ -34,6 +68,7 @@ export async function appendComms(
     readActiveClaimsFile: io.readActiveClaimsFile,
   });
 
+  const body = await resolveCommsBody(options, io);
   await writeCommsEventWithReadback({
     nowIso,
     store: {
@@ -48,7 +83,7 @@ export async function appendComms(
       kind: 'narrative',
       author: identity.agent_id,
       title: required(options, 'title'),
-      body: required(options, 'body'),
+      body,
     },
   });
 

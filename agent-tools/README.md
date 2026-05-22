@@ -120,6 +120,75 @@ help text must be the canonical discovery surface. Owner direction
 2026-05-05 after the 7-agent coordination session. Source: Claude
 per-user memory `feedback_agent_tool_help_on_invalid_flags`.
 
+### Comms body input: `--body` vs `--body-file`
+
+`collaboration-state comms append / send / direct / reply` accept the
+event body via either `--body <inline-string>` or
+`--body-file <path>`. The two flags are mutually exclusive.
+
+Use `--body-file` when:
+
+- the body contains backticks `` ` `` (markdown code fences,
+  identifier references like `` `field_name` ``);
+- the body contains dollar signs `$` that should NOT be expanded as
+  variables;
+- the body contains shell history-expansion characters like `!`;
+- the body contains unmatched single quotes that would break single-
+  quoted shell strings;
+- you want the body composition entirely outside the shell argv
+  layer (programmatic or template-generated content).
+
+Use `--body` (inline) when:
+
+- the body is short and plain-text;
+- the body's content is known to be free of shell-special characters
+  AND the caller controls outer quoting (e.g. inline strings without
+  backticks or unescaped dollars).
+
+The hazard: a double-quoted `--body "..."` argument allows the shell
+to evaluate backtick-wrapped spans as command substitution and
+dollar-prefixed tokens as variable expansion BEFORE the CLI receives
+them. The body that the CLI then writes is silently corrupted. This
+failure mode was observed at least three times across separate
+agent sessions (see `.agent/memory/operational/pending-graduations.md`
+entry "CLI body backtick-shell-substitution cure pattern" for the
+cross-session trace).
+
+`--body-file` is the cure: the shell parses only the file path; the
+file contents are read literally by the CLI without any shell
+interpretation. Typical usage:
+
+```bash
+# Write body to a tmp file (any heredoc / printf / editor-generated file works)
+cat > /tmp/event-body.txt <<'EOF'
+Body with backticks like `agent-tools` and dollars like $HOME survive intact.
+Multi-line content is fine.
+EOF
+
+# Pass the path; shell only parses the path, not the content
+pnpm agent-tools:collaboration-state comms direct \
+  --comms-dir .agent/state/collaboration/comms \
+  --to-agent-name 'Other Agent' \
+  --to-platform claude \
+  --to-model claude-opus-4-7 \
+  --to-session-prefix d4aad7 \
+  --kind directed \
+  --subject 'A subject' \
+  --body-file /tmp/event-body.txt \
+  --platform claude --model claude-opus-4-7 \
+  --active .agent/state/collaboration/active-claims.json
+```
+
+For directed messages (`comms direct` / `comms reply`), the body
+(whether inline or from file) must contain at least one non-
+whitespace character after trimming; an empty file is rejected as
+"--body (or --body-file contents) must not be empty".
+
+Further hardening of comms body input (event-spec JSON file mode,
+write-time body sanitisation) is tracked in
+[`.agent/plans/agent-tooling/frictions-register.md`](../.agent/plans/agent-tooling/frictions-register.md)
+entry F-32.
+
 ### Human collaboration TUI
 
 The collaboration TUI is a human observer surface about agent collaboration,

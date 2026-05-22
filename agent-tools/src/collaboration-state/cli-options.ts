@@ -12,6 +12,7 @@ const KNOWN_OPTION_KEYS = new Set([
   'area-kind',
   'area-pattern',
   'body',
+  'body-file',
   'body-json',
   'claim-id',
   'closed',

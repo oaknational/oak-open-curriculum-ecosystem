@@ -37,6 +37,7 @@ interface FakeCollaborationRuntime {
   readonly readSeenIds: (seenFile: string) => readonly string[];
   readonly readTextFile: (path: string) => string | undefined;
   readonly writeCommsEvent: (commsDir: string, event: CommsEvent) => void;
+  readonly seedTextFile: (filePath: string, text: string) => void;
 }
 
 interface FakeRuntimeState {
@@ -75,6 +76,9 @@ export function createFakeCollaborationRuntime(
     readSeenIds: (seenFile) => state.seenByFile.get(seenFile) ?? [],
     readTextFile: (path) => state.textByPath.get(path),
     writeCommsEvent: (commsDir, event) => writeCommsEvent(state, commsDir, event),
+    seedTextFile: (filePath, text) => {
+      state.textByPath.set(filePath, text);
+    },
   };
 }
 
@@ -94,6 +98,15 @@ function createFakeIo(state: FakeRuntimeState): CollaborationStateCliIo {
       readCommsEvents(state, commsDir).filter(isDirectedCommsMessage),
     writeTextFile: async ({ filePath, text }) => {
       state.textByPath.set(filePath, text);
+    },
+    readTextFile: async (filePath) => {
+      const text = state.textByPath.get(filePath);
+      if (text === undefined) {
+        throw Object.assign(new Error(`ENOENT: no such file or directory, open '${filePath}'`), {
+          code: 'ENOENT',
+        });
+      }
+      return text;
     },
     readSeenIds: async (seenFile) => new Set(state.seenByFile.get(seenFile) ?? []),
     appendSeenMessageIds: async (seenFile, eventIds) => {

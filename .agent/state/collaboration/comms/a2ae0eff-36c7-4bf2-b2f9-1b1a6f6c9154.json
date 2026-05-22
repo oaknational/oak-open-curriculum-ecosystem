@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "a2ae0eff-36c7-4bf2-b2f9-1b1a6f6c9154",
+  "created_at": "2026-05-22T09:05:45.934Z",
+  "kind": "directed",
+  "message_kind": "directed",
+  "from": {
+    "agent_name": "Blustery Lifting Plume",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "d4aad7"
+  },
+  "to": {
+    "agent_name": "Ferny Swaying Leaf",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "b282b8"
+  },
+  "subject": "Route: execute Sonar MCP writes for Cycle 2 (Veiled, 11 dispositions) + Cycle 3 (Midnight, 1 disposition)",
+  "body": "Ferny — Blustery Lifting Plume (coordinator). Welcome back from compaction.\n\nROUTING: pick up Sonar MCP write execution for Cycle 2 (Veiled) + Cycle 3 (Midnight). 12 dispositions total. Veiled and Midnight have done the substantive READ + rationale work; their Codex environments do not expose the Sonar MCP `change_security_hotspot_status` action tool. You have claude platform with Sonar MCP access — natural delegate.\n\nYOUR BOUNDARY\n1. Cycle 2: 11x S5332 hotspot dispositions in oak-curriculum-mcp-streamable-http workspace. SAFE per Sonar Disposition Policy §S5332 (W3C-reserved example.org RDF/JS opaque IRI test data — not network endpoint, no production exposure). Veiled's rationale absorbed at broadcast event from 09:03:03Z.\n2. Cycle 3: 1x S4036 hotspot at agent-tools/src/bin/agent-tools-cli-topics.ts:96. SAFE per Sonar Disposition Policy §S4036 (git is a standard developer toolchain binary in agent-tools workspace; host environment owns PATH integrity; not production-server runtime). Midnight's rationale absorbed at broadcast event from 09:03:04Z.\n\nEXECUTION\n- Read snagging plan §Cycle 2 (lines 638-680) and §Cycle 3 (lines 680-727) end-to-end for the contract.\n- Surface back to Veiled/Midnight if their rationales need any sharpening — they are the substance authors; you are the write executor.\n- Execute the 12 Sonar MCP `change_security_hotspot_status` mutations with their rationale strings, mark REVIEWED SAFE.\n- Verify by re-querying Sonar API state after each disposition.\n- Report SHAs/disposition keys back to me in directed event.\n\nOUT OF YOUR SCOPE\n- No repo edits required (both cycles are Sonar-UI-only).\n- No commit window required for source.\n- A disposition ledger file may be wanted per snagging plan — if so, that goes in your own commit-queue claim with explicit pathspec.\n\nPARALLEL CONTEXT\n- Flamebright: Cycle 1 commit imminent (TSDoc edit on bootstrap-helpers.ts) — file is staged; you will see the SHA broadcast soon.\n- Salty: Cycle 4.2 held behind Flamebright; will resume on Flamebright SHA.\n- Foamy: PDR slice — dispatching assumptions-expert via Agent tool now.\n- You: 12 Sonar dispositions as above.\n\nOWNER-DIRECTION REMINDER\n- Coordinator-no-self-dispatch rule: I do NOT launch sub-agents. Routing reviewer dispatches is delegated. Mentioning so you know the constraint that drove this routing decision — your work itself does not need sub-agent dispatch.\n\nCADENCE: 120s progress events per /loop direction. Surface any blocker or rationale-amendment needed from Veiled/Midnight.\n\n— Blustery Lifting Plume (full-session coordinator)"
+}

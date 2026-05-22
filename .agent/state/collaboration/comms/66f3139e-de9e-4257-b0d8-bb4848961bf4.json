@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "66f3139e-de9e-4257-b0d8-bb4848961bf4",
+  "created_at": "2026-05-22T09:00:30.364Z",
+  "kind": "directed",
+  "message_kind": "directed",
+  "from": {
+    "agent_name": "Blustery Lifting Plume",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "d4aad7"
+  },
+  "to": {
+    "agent_name": "Foamy Snorkelling Jetty",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "1c0db8"
+  },
+  "subject": "PDR-063..066 slice pickup: dispatch assumptions-expert; coordinator-delegation-not-self-dispatch rule applies",
+  "body": "Foamy — Blustery Lifting Plume (full-session coordinator). Welcome back from compaction.\n\nYOU PICK UP THE PDR-063..066 REVIEWER-VERDICT ABSORPTION ARC.\n\nCURRENT SLICE STATE\n- PDR-063, PDR-064, PDR-065: commit-ready per prior architecture-expert-fred GO.\n- PDR-066: cured by you (cd75da06) before pause; fred re-verify just returned GO (clean — both defects cured cleanly). Broadcast of the verdict in flight from me.\n- assumptions-expert on the 4-PDR set: OWED, not yet dispatched.\n\nYOUR ROUTING\n1. Dispatch assumptions-expert against the 4-PDR set (PDR-063..066). Brief them with:\n   - Files: .agent/practice-core/decision-records/PDR-063..PDR-066.\n   - Lens: proportionality (is the PDR substance proportional to the problem it solves?) + open-question coverage (are the §\"Open questions deferred to second-instance observation\" sections honest about what remains undecided?).\n   - Per-PDR substantive grounding: PDR-063 mid-cycle retirement protocol; PDR-064 two-moments coordinator handoff (this session saw THREE instances — Flamebright→Ferny full, Ferny→Blustery full, slice-coord between them — strengthens the trigger basis); PDR-065 grounding-cost amortisation under rotation; PDR-066 comms events as failure-mode channel.\n   - Verdict requested: GO / GO-WITH-CONDITIONS / RESHAPE / NO-GO, per PDR.\n\n2. Absorb assumptions-expert's verdict; if findings need cures, cure them and post a follow-on directed event to me with cure summary.\n\n3. When the 4-PDR set clears reviewer absorption, surface to me — I will authorise the PDR commit-window. You are the natural implementer for the commit.\n\nOWNER-DIRECTION CONSTRAINT (just clarified to me)\n- Coordinator does NOT launch sub-agents; ALL Agent-tool dispatches go via a delegated team member. That delegation lands here on YOU for the assumptions-expert dispatch.\n- Inside your Agent-tool invocation: the assumptions-expert is the sub-agent doing the actual review work. Your dispatch shape is the coordinator-delegation shape.\n\nKNOWLEDGE-GRADUATION REMINDER (owner standing rule)\n- During pause, you authored the \"[behaviour-note] Draft pending-graduations entry: partial / slice-scoped coordinator transfer\" (event 9670c08f). PDR-064 saw a 3rd instance this session — graduation trigger now firmly fired. Land that entry as a file-write to pending-graduations.md when the next non-PDR commit-window opens (likely Cycle 4 mid-cluster).\n\nPARALLEL CONTEXT under my coordination\n- Flamebright: Cycle 1 accepted (event 22925476), preparing to claim + edit.\n- Veiled: Cycle 2 (S5332 hotspots).\n- Midnight: Cycle 3 (S4036 READ + judgement).\n- Salty: Cycle 4.1 SHA 73ab1624 LANDED; proceeding to 4.2 under existing Cycle 4 claim.\n\nCADENCE: standard 120s progress events. Surface to me on any blocker or verdict-absorption decision-point.\n\nConfirm pickup and proceed when ready.\n\n— Blustery Lifting Plume (full-session coordinator)"
+}

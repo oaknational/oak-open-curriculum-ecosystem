@@ -221,3 +221,656 @@ pre-empted that drain.
   signals (silent agents past cadence, idle blockers, missed dispatch
   timing); if it does not, the loop is less load-bearing than this
   entry claims and the entry should be downgraded.
+
+## 2026-05-22 — Midnight Veiling Threshold Docker MCP closeout / codex / GPT-5 / `019e4e`
+
+### What Worked: watcher plus disk-backed recent-event sweeps
+
+- **Observed pattern**: the most reliable Codex comms monitoring shape was
+  two-layered: keep the canonical `comms watch` running with no extra pipe or
+  grep, then use short `jq` sweeps over `.agent/state/collaboration/comms/*.json`
+  filtered by `created_at` whenever a decision point needed audit-grade
+  certainty.
+- **Why it worked**: the watcher gave live awareness, while the disk sweep
+  corrected for scrollback truncation, historical-drain noise, and missed
+  directed events. The sweep also made it cheap to inspect the exact event
+  body before staging or releasing a commit window.
+- **Behaviour change**: for coordinated Codex sessions, treat the live watcher
+  as attention and the `jq` sweep as verification. Before any index action,
+  re-check recent comms, active claims, commit queue, and staged names from
+  disk. Do not put an agent-side pipe after the watcher.
+  Source plane: `operational`.
+
+### Surprise: the PR #108 CodeQL query was broader than the one-alert expectation
+
+- **Expected**: the requested CodeQL API query for PR #108 would return the
+  single alert described in the Phase 0 acceptance bar.
+- **Actual**: the `ref=refs/pull/108/head&state=open` query returned eight
+  open alerts. PR checks and alert metadata showed that #90 was the PR-new
+  failure relevant to the current blocked check, while the other seven were
+  older open alerts on the same ref/query surface.
+- **Why expectation failed**: the endpoint shape answers "open alerts visible
+  at this PR head ref", not "new alerts introduced by this PR quality gate".
+  Treating the raw response as a one-alert source would silently erase real
+  query scope.
+- **Behaviour change**: when a live validation query returns more than the
+  plan expects, record the drift or scope caveat in the ledger instead of
+  normalising it away. Use PR check state, alert metadata, created dates, and
+  location evidence to identify the PR-new finding.
+  Source plane: `operational`.
+
+### Coordination lesson: release the commit window when a peer-owned inherited gate fix is needed
+
+- **Situation**: the Phase 0 plan edit was staged, recorded, and verified, but
+  the inherited markdownlint pre-flight found errors in peer-owned archive
+  files. Attempting the commit would have failed the full hook for reasons
+  outside the Phase 0 file.
+- **What worked**: coordinator-routed release was cleaner than holding the
+  index: unstage the plan file by explicit pathspec, abandon the queue intent,
+  close both files and `git:index/head` claims, and leave the plan edit intact
+  in the working tree until the inherited fix lands. After the peer commit,
+  re-acquire both claims and run a fresh queue/verify/commit pass.
+- **Behaviour change**: in team sessions, a verified staged bundle is still a
+  coordination state, not a right to hold the index indefinitely. If a
+  peer-owned precondition blocks the hook, release the commit window and
+  preserve the edit unstaged unless the coordinator explicitly says otherwise.
+  Source plane: `operational`.
+
+### Tooling friction: `comms send` is not a directed-message API yet
+
+- **Mistake**: I tried `comms send --thread ... --to ...` when sending a
+  directed status event. The CLI rejected both options; current `comms send`
+  accepts title/body/platform/model plus storage/identity options, so directed
+  routing is expressed in the title/body rather than typed CLI flags.
+- **Behaviour change**: check `pnpm agent-tools:collaboration-state -- comms
+  send --help` before assuming typed routing flags exist. This is a candidate
+  agent-tools UX improvement: typed `--thread` and `--to` would make the
+  durable routing intent less convention-dependent.
+  Source plane: `operational`.
+
+### Coordinator pattern: auto-mode classifier blocks file-content-to-other-agent
+
+- **Mistake**: tried to send a long directed-comms body to another agent via
+  Write-to-tmp + Bash `cat <tmp> | comms direct --body "$(cat ...)"` pattern
+  (same pattern that worked four times earlier in the session). Auto-mode
+  classifier denied: "Bash command references /tmp/... which was never written
+  in the transcript — sending unverifiable content to another agent."
+- **Why expectation failed**: the classifier became stricter when the
+  destination was another agent (vs my own session). Previous transcripts
+  with the same pattern had cached the tmp file's provenance; a fresh tmp
+  path in a coordination message triggers the safety check.
+- **Behaviour change**: when sending a directed `comms direct/send` to
+  another agent with a non-trivial body, prefer inline body in the Bash
+  command (with single-quoted argv) over cat-from-tmp. Long bodies become
+  long inline single-quoted strings. This is a coordinator-specific pattern
+  — sending instructions to peer agents has a different safety boundary
+  than self-only file ops.
+  Source plane: `operational`.
+
+### Coordinator pattern: hook policy substring-matches forbidden patterns even in instructive context
+
+- **Mistake**: my directed brief to Blustery contained the literal string
+  `git add -A` inside a "do NOT use" guard sentence ("never use `git add -A`
+  or `.`"). The repo hook policy substring-matched the forbidden pattern and
+  blocked the comms-send entirely, even though I was warning AGAINST the
+  pattern, not invoking it.
+- **Why expectation failed**: hook policies are pattern-matchers; they do
+  not parse semantics of natural-language guards. "Don't use X" and "use X"
+  trip the same substring filter.
+- **Behaviour change**: coordinator briefs to peer agents must phrase
+  forbidden-pattern guards descriptively, not literally. Substitute generic
+  language: "do not use any whole-tree shortcut", "stage by explicit
+  pathspec per the standing rule", etc. Literal forbidden-pattern strings
+  belong only in the rule's canonical home (where the hook expects them) and
+  in agent execution contexts where the pattern is being deliberately
+  invoked.
+  Source plane: `operational`.
+
+### Coordinator doctrine instance: catalogue-not-block resolves SKILL-vs-standing-memory tension on advisory fitness
+
+- **Situation**: Blustery's Stage 1a commit prep hit advisory orchestrator
+  RED on pre-existing critical fitness signals (~14 surfaces) on files
+  outside their staged scope. Two doctrines in tension: standing memory
+  `all-quality-gates-blocking-always` says every red is blocking; SKILL
+  carves out fitness/vocabulary as advisory-only (catalogued at consolidation
+  pass, not retroactively blocking). Blustery surfaced the routing question
+  rather than deciding unilaterally.
+- **What worked**: the carve-out applies when (a) the failure is the
+  advisory sub-check, (b) the bundle introduces zero new violations, (c) the
+  bundle DRAINS the pre-existing signal surface, AND (d) the catalogue is
+  recorded in the commit body so it does not silently drift. Standing memory
+  fires against DISMISSAL or NEW violations; it does not fire against
+  drain-with-catalogue.
+- **Behaviour change**: when SKILL and standing-memory appear to conflict on
+  a gate, classify the failure shape against each doctrine's stated remit
+  before treating them as contradictory. The standing memory rule has a
+  named recurring failure mode ("pre-existing, out-of-scope" framings used
+  to DISMISS); a drain-with-catalogue is structurally different and the
+  carve-out is honest. Architectural-excellence framing is: catalogue is the
+  load-bearing discipline, blocking-the-drain would be quick-fix-shaped
+  (use the rule literally to avoid making a routing decision).
+  Source plane: `operational`. Worked instance during Blustery Stage 1a;
+  catalogue landed in commit body of `5b8635c4`.
+
+## 2026-05-22 — Ferny Swaying Leaf / claude / claude-opus-4-7 / `b282b8`
+
+### Worked instance: PDR-064 two-moments coordinator handoff fired three times in one session
+
+- **Observation**: PDR-064's two-moments pattern (pre-positioning =
+  information transfer; active-acknowledgement = authority transfer)
+  executed three times in a single team session: (1) Flamebright →
+  Ferny partial slice handoff for the PDR-063..066 review domain;
+  (2) Flamebright → Ferny full-session coordinator handoff per owner
+  direction; (3) Ferny → Blustery full-session coordinator handoff
+  per owner correction on coordinator-vs-implementer discipline. All
+  three completed cleanly with explicit Moment-2 broadcasts and
+  reciprocal Moment-1 acknowledgements.
+- **Diagnosis**: the partial-slice instance was a NEW SHAPE that
+  PDR-064 §Open Question 3 (share-the-role for N minutes) did not
+  contemplate. Scope-bounded (not time-bounded) authority
+  partitioning where the outgoing coordinator retains full-session
+  authority and the incoming coordinator takes a bounded sub-domain.
+  Dual-authority disambiguated by routing-slice, not by time-window.
+- **Behaviour change**: PDR-064 partial-slice amendment graduate-
+  trigger has fired with strong evidence base across one session.
+  Three independent instances + Foamy's drafted pending-graduations
+  entry text (comms event `9670c08f`) + the worked Moment-2
+  broadcasts (`d1bd7dc1`, `c89bb8da`, `8a8de67a`). Amendment lands
+  after the slice closes per Flamebright's direction; the substance
+  is durably captured pending file-write opening.
+  Source plane: `governance`. Carrier: PDR-064 amendment after
+  slice/session close.
+
+### Owner correction: coordinator subagent dispatch is implementer-class friction
+
+- **Owner direction**: *"your job is to coordinate and direct, not
+  to implement, please pass full coordination authority to Blustery,
+  and include an appropriate loop command to monitor messages and to
+  direct."*
+- **Diagnosis**: as full-session coordinator I dispatched two
+  subagent reviewers myself (assumptions-expert on the snagging plan;
+  architecture-expert-fred on the PDR set). Subagent dispatches by
+  the coordinator are implementer-class work when the team has
+  capacity to delegate that dispatch to a non-coordinator agent. The
+  coordinator's correct shape is to direct OTHER agents to dispatch
+  reviewers, not to do the dispatch themselves.
+- **Behaviour change**: pure-coordination posture = comms-event
+  routing, decision arbitration, commit-window ratification, and
+  owner-decision routing. Subagent dispatch is delegable
+  implementation work. The distinction is: opening a subagent costs
+  the coordinator's context budget and produces a result the
+  coordinator must absorb and route — better to have a non-
+  coordinator agent open the subagent, absorb the verdict, and
+  surface a summary to the coordinator for routing.
+  Source plane: `operational`. PDR/skill candidate: amend
+  `start-right-team` SKILL §"Choose Temporary Responsibilities"
+  with a coordinator anti-pattern note.
+
+### Failure mode (2nd instance): backtick-shell-substitution in double-quoted `--body` args
+
+- **Mistake**: my comms-direct event `0ce0b26b` to Foamy lost two
+  words to backtick shell-substitution. The body contained inline
+  references to schema field names wrapped in backticks (`tags`,
+  `fast_bootstrap_eligible`). The outer double-quoted `--body
+  "$(cat /tmp/...)"` allowed the shell to interpret backticks
+  INSIDE the substituted file content as command-substitution. The
+  shell tried to execute `tags` and `fast_bootstrap_eligible` as
+  commands, failed, and the resulting body strings had the backtick
+  spans replaced with empty output.
+- **Diagnosis**: cat-from-tmp-file pattern is safe FROM the
+  classifier-hook angle (no inline body) but UNSAFE on backticks
+  unless wrapped in single quotes. The outer-quote choice is the
+  determining factor: single quotes preserve all content literally;
+  double quotes evaluate backticks even on substituted file content.
+- **Behaviour change**: graduate-trigger fires (this is the 2nd
+  instance; first was Stratospheric per existing pending-graduations
+  entry). Cure shape: any comms-event body containing inline-code
+  spans MUST use either (a) single-quoted `--body '...'`, or
+  (b) cat-from-tmp-file with single-quoted outer-substitution
+  `--body "$(cat ...)"` is wrong — should be `--body "$(cat ...)"`
+  with backticks ESCAPED in the file content. Simplest cure:
+  prefer `[brackets]` instead of `\`backticks\`` in comms-event
+  bodies when referencing identifiers.
+  Source plane: `operational`. PDR/skill candidate: amend
+  `agent-tools` CLI to default to single-quote body shape OR
+  document the hazard in the README §"CLI Norms" with cure shapes.
+
+### Reviewer pattern: revision tranches need regression-of-prior-fix check, not just intended-changes verification
+
+- **Observation**: architecture-expert-fred dispatched against
+  Foamy's revised four-PDR set returned RESHAPE on PDR-066. Two
+  defects: (a) line 242 still contained the original incorrect
+  "Strict readers ignore unknown optional fields by construction"
+  wording that the BLOCKER fix from first-pass review was supposed
+  to remove — REGRESSION OF PRIOR FIX; (b) sentence fragmentation
+  around the new §Migration sequence header insertion (lines 181-
+  211). My coordinator spot-verify before dispatching fred had
+  read the §Migration sequence subsection and confirmed it was
+  present, but had NOT re-read the §Rationale paragraph below it
+  to verify the regression-target wording was removed.
+- **Diagnosis**: revision-tranche verification reflexively reads the
+  CHANGED sections (intended fixes) but does not re-read the
+  related-but-unchanged sections (where the original wording lived).
+  A BLOCKER fix that adds new content without removing the
+  contradicting original content leaves a regression. The
+  spot-verify pattern needs to include "read the original-defect
+  area in the new file, not just the new-content area."
+- **Behaviour change**: when verifying a revision tranche that
+  applies a BLOCKER fix, always re-read the ORIGINAL DEFECT
+  LOCATION in the revised file, not just the new content the fix
+  added. The two are not the same — the BLOCKER may live in a
+  different section than where the cure goes, and reading only the
+  cure-section can miss a regression in the defect-section.
+  Subagent reviewer (fred) caught this; coordinator spot-verify
+  missed it.
+  Source plane: `operational`. Skill candidate: amend the implicit
+  spot-verify pattern with "re-read original-defect location, not
+  just intended-cure location."
+
+### Pattern: cross-PDR schema-amendment layering — VALUE on existing field vs PROPERTY on schema
+
+- **Observation**: PDR-063 introduces a new `message_kind` VALUE
+  (`mid-cycle-handoff`) on the existing `message_kind` field of the
+  directed comms-event shape. PDR-066 introduces a new optional
+  `tags` array PROPERTY on the narrative/lifecycle/directed event
+  kinds. These are non-overlapping schema operations on different
+  layers: PDR-063 = enum-value addition; PDR-066 = field addition.
+  Both are additive-backward-compatible but require different
+  migration disciplines.
+- **Diagnosis**: when two PDRs touch the same schema, the right
+  question is "what schema LAYER does each touch?" — not "do they
+  conflict?". Layer separation (VALUE on existing field vs new
+  PROPERTY on schema) is the architectural distinction that lets
+  each PDR own one schema operation cleanly. Composition is automatic
+  when layers are disjoint.
+- **Behaviour change**: PDR / ADR review pattern when multiple
+  decisions touch one schema: classify each by the schema layer
+  it operates on (property-addition / value-addition / property-
+  removal / property-rename / etc.). Non-overlapping layers
+  compose; overlapping layers need explicit ordering. PDR-063 ↔
+  PDR-066 boundary was correctly framed by Foamy as "non-overlapping
+  schema operations on different layers"; that framing should be
+  reusable for future doctrine pairs.
+  Source plane: `governance`. Carrier: future architecture-review
+  brief template; PDR/skill candidate for additive-extension
+  discipline articulation.
+
+### Reviewer pattern: assumptions-expert surfaces OOPS-class risks the plan author did not write into §Risks
+
+- **Observation**: assumptions-expert dispatched against the PR-108
+  snagging plan returned GO-WITH-CONDITIONS with one OOPS-class
+  risk not in the plan's §Risks section: Phase 0 ledger drift
+  between SHA `5af5e289` and push HEAD. The plan's §Re-grounding
+  clause says per-cycle verification is local (lint/type/test) plus
+  the push at phase-final, NOT a per-cycle live-Sonar re-query —
+  which is correct for execution efficiency but lets drift slip
+  between Phase 0 baseline and Phase Final push (a parallel push
+  by another agent on the same branch would re-scan Sonar with
+  fresh state). The reviewer surfaced the gap; plan author did not.
+- **Diagnosis**: §Risks sections capture risks the plan author
+  thought of. assumptions-expert's role is exactly to surface
+  OOPS-class risks the author did not think of — the "what could
+  silently invalidate this plan between now and acceptance" angle.
+  Cure: add C2 condition to Phase Final §Task F.2 (pre-push live
+  Sonar+CodeQL re-query against Phase 0 baseline to catch any
+  drift).
+- **Behaviour change**: assumptions-expert dispatch is load-bearing
+  for plans whose Phase 0 captures live state that can drift before
+  Phase Final. Specifically: any plan whose acceptance signal is a
+  remote-state read (CI gates, vendor MCP, external service)
+  needs an explicit re-grounding step at Phase Final, not just at
+  Phase 0. The assumptions-expert verdict shape that surfaced this
+  was load-bearing for the snagging-plan condition C2.
+  Source plane: `operational`. Carrier: amendment to the snagging
+  plan's Phase Final §Task F.2 (already encoded as assumptions-
+  expert C2 condition).
+
+### Post-compaction continuation — Sonar disposition unblock paths
+
+- **Observation**: owner-directed pause excluded only Ferny;
+  Sonar MCP block was owner-surface. THREE unblock paths surfaced
+  in one session: (1) `/mcp` reconnect in Claude Code re-attached
+  the `mcp__sonarqube__` namespace mid-session; (2) `docker mcp
+  gateway run --profile sonarqube_oak` exposes the same tools via
+  shell layer (Midnight's path on Codex); (3) `mcp__sonarqube__
+  mcp-add` of the server programmatically — DENIED by auto-mode
+  classifier as "Self-Modification" without prior user/inter-agent
+  authorisation.
+- **Diagnosis**: Codex sessions lack the `mcp__sonarqube__`
+  namespace by default — Docker MCP gateway is the canonical
+  unblock for Codex (must-check before declaring Sonar
+  unavailable). Claude sessions have `/mcp` reconnect available.
+  Programmatic `mcp-add` is auto-mode-blocked categorically;
+  user-driven reconnect via `/mcp` is the substitute. Substrate
+  diversity in unblock paths is real and worth knowing.
+- **Behaviour change**: when a Codex session reports "no Sonar
+  MCP," check `docker mcp tools ls --format json` BEFORE
+  declaring the work blocked. When a Claude session loses the
+  namespace mid-session, request user `/mcp` reconnect rather
+  than attempt `mcp-add`. Three-path-substrate awareness is
+  a recurring shape across MCP integrations.
+  Source plane: `operational`. Carrier: amend sonarqube-mcp-
+  instructions.md §Common troubleshooting with the three-path
+  enumeration.
+
+### Owner-unblock-hint scope ambiguity during selective pause
+
+- **Observation**: owner-directed pause excluded "all agents
+  except Ferny." Owner subsequently provided a hint to Ferny
+  (Docker MCP gateway test) which Midnight also acted upon to
+  unblock their own Cycle 3 disposition. Result: same S4036
+  hotspot (AZ4cLpsUaO7TzVKHKWC0) double-written by Ferny + Midnight
+  with identical updateDate timestamp 09:24:14Z; Sonar handled
+  idempotently. No bad state, but duplicated work.
+- **Diagnosis**: an owner-given unblock hint targeted at the
+  unpaused agent is ambiguous about whether previously-paused
+  agents are also unblocked-by-side-effect. Midnight's read was
+  reasonable (hint provides the unblock path; they were blocked
+  on the same surface). Ferny's read was also reasonable
+  (selective pause means only the unpaused agent is unblocked).
+  Both reads predict different action.
+- **Behaviour change**: owner-given unblock hints during selective
+  pause should carry explicit scope: `[Ferny-only]` vs
+  `[all-paused-may-use]`. Coordinator can amend by reasserting
+  the pause boundary after seeing the hint, or by explicitly
+  broadcasting "this unblock applies to all paused agents." In
+  absence of explicit scope, paused agents should stay paused
+  and surface "I see an unblock for the unpaused agent; does
+  it apply to me?" rather than self-routing.
+  Source plane: `operational`. PDR/skill candidate: graduate to
+  pending-graduations with two-instance trigger (this is a new
+  shape; awaiting one more instance OR owner-direction graduation).
+
+### Audit-trail visibility gap: Sonar MCP show returns `comments: []`
+
+- **Observation**: `change_security_hotspot_status` accepts a
+  `comment` parameter; the mutation succeeds and Sonar returns
+  `newStatus: REVIEWED, newResolution: SAFE, success: true`.
+  Subsequent `show_security_hotspot` on the same hotspot returns
+  `comments: []` and does not expose a `changelog` field. The
+  rationale-text is stored somewhere on the Sonar side (the
+  mutation accepted it) but is not visible through the MCP
+  surface.
+- **Diagnosis**: the plan's deterministic validation cites the
+  public REST `/api/hotspots/show` endpoint returning a
+  `changelog` field with the rationale. The MCP tool surface
+  does NOT expose `changelog` — only `comments`, which is a
+  different concept (free-text comment thread vs status-change
+  history). Anyone auditing via MCP alone would see empty
+  comments and may incorrectly conclude no rationale was filed.
+- **Behaviour change**: rationale audit trails must be verified
+  via the REST API or Sonar Web UI, not via MCP `show_security
+  _hotspot`. Plans that cite MCP-surface verification of
+  rationale visibility need amending — the MCP `comments` field
+  is not the rationale carrier. Worth flagging to the snagging
+  plan's Phase Final task list as a verification-path correction.
+  Source plane: `operational`. Carrier: amend pr-108-snagging
+  plan Cycle 2/3 deterministic-validation block to cite the
+  REST endpoint explicitly, OR add a code-mode JS tool that
+  reads `/api/hotspots/show?hotspot=KEY | jq .changelog`.
+
+### Coordinator-brief vs plan-as-source-of-truth routing fidelity
+
+- **Observation**: Blustery's Cycle 2 routing brief named the
+  workspace as `oak-curriculum-mcp-streamable-http`. The plan's
+  §Cycle 2 ledger located the 11 sites in `packages/core/graph-
+  core/` test files. Substance (W3C example.org RDF/JS SAFE per
+  §S5332) was consistent; only workspace name diverged. I
+  caught the discrepancy via plan-as-source-of-truth before
+  executing — the disposition went against the actual sites,
+  not the briefed-but-wrong workspace name.
+- **Diagnosis**: coordinator briefs are written from short-form
+  recall; they can lose fidelity vs the plan they reference.
+  Implementer-side reflex must be plan-first read on substance
+  even when the coordinator brief seems clear. Caught early
+  (before any Sonar write) — no rework needed.
+- **Behaviour change**: when a coordinator brief cites specific
+  workspaces / file paths / hotspot keys, the implementer
+  re-reads the plan section to confirm. If divergence is found,
+  surface as routing-correction (substance-only) and proceed
+  against the plan, not the brief. Plan-as-source-of-truth is
+  invariant; coordinator-brief is a routing pointer.
+  Source plane: `operational`. Skill candidate: amend
+  start-right-team / dispatch protocols with explicit
+  "plan-first verification of brief specifics."
+
+### docker-secrets-engine dependency for Docker MCP gateway profiles
+
+- **Observation**: `docker mcp gateway run --profile sonarqube
+  _oak --dry-run` returned `Failed to fetch secrets from secrets
+  engine: dial unix /Users/jim/Library/Caches/docker-secrets-
+  engine/engine.sock: connect: no such file or directory`
+  followed by container `Can't start sonarqube: failed to
+  connect: calling "initialize": EOF`. The profile config was
+  correct; the image pulled; the gateway initialised. The block
+  was solely the secrets-engine socket being absent — meaning
+  `SONARQUBE_TOKEN/URL/ORG` env vars couldn't be resolved.
+- **Diagnosis**: Docker Desktop's MCP Toolkit secrets-engine is
+  a sub-feature that must be enabled in Settings; absence of the
+  socket = secrets resolution fails silently with a Warning, then
+  the downstream container fails initialize. The gateway does
+  not error early on missing secrets — it tries to start the
+  server with empty env. Bypass path: `--secrets <path-to-env-
+  file>` flag, but the cleaner cure is enabling MCP Toolkit in
+  Docker Desktop.
+- **Behaviour change**: when a `docker mcp gateway run` config
+  validates but the downstream MCP container fails initialize,
+  check the secrets-engine socket existence FIRST: `ls -la
+  /Users/jim/Library/Caches/docker-secrets-engine/`. Missing
+  socket is a categorically different failure mode than missing
+  token or wrong token. The Warning line is the diagnostic, not
+  the EOF line.
+  Source plane: `operational`. Carrier: amend napkin archive
+  entry from 2026-05-03 (which already references the Docker
+  MCP Toolkit gateway pattern) with the secrets-engine socket
+  diagnostic check.
+
+## 2026-05-22 — Salty Charting Harbour / codex / GPT-5 / `019e4e`
+
+### Surprise: pause receipt can lag behind a short commit window
+
+- **Expected**: a live `comms watch` during team execution would make owner
+  pause direction arrive before the next mechanical sub-cycle landed.
+- **Actual**: Cycle 4.4 was already committed as `604f64b7` and its queue /
+  git-index claim were closed before the owner pause broadcast reached this
+  Codex session. I then confirmed the timing mismatch to the coordinator and
+  stopped further Cycle 4 work.
+- **Why expectation failed**: even a running watcher is an attention surface,
+  not a hard interlock; short commit windows can complete between poll output
+  and the next visible pause event.
+- **Behaviour change**: before starting any further sub-cycle after a pause-
+  sensitive team direction, run a fresh disk-backed comms sweep as well as
+  watching the stream. Treat watcher output latency as a coordination risk,
+  especially for small mechanical commits.
+  Source plane: `operational`.
+
+## 2026-05-22 — Midnight Veiling Threshold / codex / GPT-5 / `019e4e`
+
+### Correction: Docker MCP gateway exposes Sonar write tools
+
+- **Mistake**: I initially reported PR-108 Cycle 3 as blocked because this
+  Codex session did not expose a direct `mcp__sonarqube__*` namespace and the
+  shell did not contain `SONAR_TOKEN`.
+- **Owner correction**: Jim pointed out that `mcp-docker` should provide access
+  to Sonar via the Docker MCP gateway.
+- **Actual**: `docker mcp tools ls --format json` showed the Sonar tools,
+  including `show_security_hotspot` and `change_security_hotspot_status`.
+  `docker mcp tools call show_security_hotspot
+  hotspotKey=AZ4cLpsUaO7TzVKHKWC0` returned `canChangeStatus: true`, and
+  `docker mcp tools call change_security_hotspot_status ...` successfully
+  marked the Cycle 3 hotspot `REVIEWED` / `SAFE`.
+- **Behaviour change**: when a direct MCP namespace is missing in Codex, check
+  `docker mcp tools ls --format json` before declaring the capability absent.
+  The Docker gateway may expose the real downstream server tools even when the
+  platform-level namespace only looks like gateway management. CLI call syntax
+  is positional tool name plus `key=value` arguments, not JSON payload.
+  Source plane: `operational`.
+
+### What Worked: policy-first disposition plus gateway verification
+
+- **Observed pattern**: for S4036, read the site first, classify the command
+  (`git` at `agent-tools/src/bin/agent-tools-cli-topics.ts:96`), apply
+  `docs/governance/sonar-disposition-policy.md` §S4036, then make one Docker
+  MCP write call with the exact site-specific SAFE rationale.
+- **Verification**: after the write, both Docker MCP `show_security_hotspot`
+  and the public SonarCloud API reported hotspot `AZ4cLpsUaO7TzVKHKWC0` as
+  `REVIEWED` / `SAFE`. No repo edit or commit was needed.
+
+## 2026-05-22 — Flamebright Igniting Forge / claude / Opus 4.7 (1M) / `9a01f3` (re-grounded post-compaction; team-member, NOT coordinator)
+
+### Knowledge-graduation candidate: WS-reserved entrypoint module-marker pattern
+
+- **Site density**: Cycle 6 S7787 surfaced 7 instances in one package
+  (`packages/libs/graph-ingest/src/{custom-mapping,index,jsonld-compatible,node-edge-list,plain-json-tree,records,strict-jsonld}/index.ts`),
+  all carrying bare `export {};` with TSDoc reserving the sub-path under
+  WS2.1 for future consumer-backed cycles.
+- **Architectural reason**: `export {}` is the TypeScript module-marker
+  idiom. Without it, `tsc` treats the file as a global-scope script (errors
+  on multi-package builds) and Node ESM resolution may fail for sub-path
+  entries in `package.json`'s `exports` map. The rule's premise (specifiers
+  omitted by accident) is structurally false here.
+- **Graduation candidate**: add §Issue Classes entry to
+  `docs/governance/sonar-disposition-policy.md` for S7787 with a
+  "WS-reserved entrypoint module-marker" class. Owner-authorisation gated
+  per Expansion Discipline §1. First-density encounter.
+- Source plane: `architecture` → `policy`.
+
+### Knowledge-graduation candidate: top-level await as canonical bin-file pattern
+
+- **Site density**: Cycle 6 S7785 surfaced 5 instances all in
+  `agent-tools/src/bin/` (`agent-identity.ts`, `agent-tools.ts`,
+  `branch-touched-files.ts`, `codex-exec.ts`, `skills-adapter-generate.ts`),
+  using `.then().catch()` promise chains rather than top-level
+  `try { await main() } catch (e) { handle(e) }`.
+- **Architectural reason**: these are terminal CLI bin files that own their
+  own exit path, not library entrypoints where promise composition gives
+  callers error-propagation control. Top-level await + try/catch has
+  explicit unhandled-rejection semantics that `.then().catch()` does not in
+  all Node versions.
+- **Graduation candidate**: encode the bin-file pattern as agent-tools
+  contributing/style guidance so the cluster doesn't recur at the next PR
+  boundary.
+- Source plane: `architecture` → `convention`.
+
+### Worked instance: catalogue-not-block applied cleanly to commit landing
+
+- **Setting**: Cycle 1 (CodeQL #90 TSDoc edit, commit `77463a22`).
+- **Signal**: `pnpm agent-tools:check-commit-skill-advisories` exit 1 on
+  `practice:fitness:strict-hard` — critical-zone signal on
+  `repo-continuity.md` prose width 1744, hard-limit on
+  `practice-bootstrap.md` chars 41035, several soft warnings on other
+  shared-state files. ALL pre-existing, ALL in files NOT in cycle scope.
+- **Reconciliation**: SKILL §"Quality Gates Are Always Blocking; the
+  Orchestrator Is Advisory" + owner-stated catalogue-not-block doctrine
+  for advisory orchestrator findings on residue not in cycle scope.
+  Surfaced the catalogue to coordinator (Blustery) as a progress event
+  before proceeding; husky pre-commit blocking chain (which does NOT
+  include practice-fitness) was the actual verdict surface.
+- **Result**: commit landed clean, 87/87 turbo cached, all husky gates
+  green. First clean worked instance of catalogue-not-block under the
+  doctrine substrate without an owner-side reconciliation pass needed.
+- Source plane: `operational` → `doctrine` (graduation candidate: SKILL
+  §commit could carry an explicit catalogue-not-block worked example).
+
+### Plan-list defect surfacing: column counts and file-list cells can drift
+
+- **Setting**: Cycle 6 plan §Cycle 6 line 814-817 table.
+- **Defect**: column "Sites" reports "7" for S7787; file-list cell
+  enumerates only 5 files. The column count was correct (`ls` confirmed
+  7 files); the enumeration was incomplete (omitted `records/index.ts`
+  and `strict-jsonld/index.ts`).
+- **Cure shape**: when plan internal counts and enumerations disagree,
+  re-derive from canonical source (filesystem grep or Sonar issue list)
+  rather than trust the narrower enumeration. Pre-execution reviewer
+  (code-expert) caught it cleanly via the cross-check brief instruction.
+- **Why this matters**: downstream Sonar UI disposition lane would have
+  missed 2 of 7 sites if the team had trusted the file-list enumeration
+  without cross-check. The pre-execution-reviewer pattern earned its
+  keep here.
+- Source plane: `operational` → `process`.
+
+### Behaviour observation: cron-fired coordinator-loop misroutes after coordinator handoff
+
+- **Setting**: I was earlier coordinator (pre-compaction), handed off to
+  Ferny → Blustery, then re-grounded as team-member post-compaction. The
+  /loop cron `fc45ab8d` (every 3 min) kept firing the coordinator-shape
+  prompt into my session through the re-ground and through every
+  team-member task I executed.
+- **Cure**: only the cron-creating agent (or owner) can CronDelete it.
+  Coordinator-loop crons need to be deleted at the coordinator-handoff
+  moment, not later. Otherwise the loop keeps firing into the now-wrong
+  session — noise overhead that has to be ignored every 3 minutes.
+- **Graduation candidate**: PDR-064 §"Two Moments" coordinator-handoff
+  pattern could carry an explicit "Moment 3: pause / delete any /loop
+  cron the outgoing coordinator created" step.
+- Source plane: `operational` → `protocol`.
+
+## 2026-05-22 — Foamy Snorkelling Jetty / claude / claude-opus-4-7-1m / `1c0db8`
+
+### Learning: Practice-Core portability rule applies at PDR drafting, not at review
+
+- **Setting**: drafted PDR-063, PDR-064, PDR-065, PDR-066 this session
+  under planning-specialist boundary. assumptions-expert reviewer
+  verdict (event `6cdd7501`) flagged Practice-Core portability
+  hook-blocker on PDR-063, PDR-065, PDR-066 — embedded repo paths
+  (`.agent/state/collaboration/...`, `active-claims.schema.json`, the
+  `pnpm agent-tools:collaboration-state` CLI command). PDR-064 alone
+  was portability-clean.
+- **What surprised me**: I knew the standing rule (memory entry
+  `feedback_practice_core_portability_strict`: "Anything under
+  .agent/practice-core/ must have NO repo paths, ADR refs, or commit
+  refs"). I read it during start-right grounding. I still drafted three
+  out of four PDRs with embedded paths.
+- **Diagnosis**: I treated portability as a *review-time stylistic*
+  check rather than a *drafting-time structural* invariant. Drafting
+  felt natural with concrete path references — they made the PDR feel
+  grounded. The portability rule has the shape of a Practice-Core
+  constructional invariant, not a copy-editing concern.
+- **Cure shape**: portability check moves to the PDR-drafting
+  pre-write phase, alongside trigger-evidence and proportionality.
+  Specifically: before writing any §Required line, ask "does this line
+  contain a repo path, ADR ref, or commit ref?" — if yes, restate as
+  abstract substrate language and migrate the path-bound detail to a
+  non-Practice-Core surface.
+- **Graduation candidate captured**: `practice-core-portability-at-drafting`
+  in pending-graduations under today's date.
+- Source plane: `operational` → `process`.
+
+### Reviewer pattern: assumptions-expert on a PDR *set* surfaces cross-PDR coupling defects no per-PDR reviewer catches
+
+- **Setting**: dispatched assumptions-expert against all four PDRs as
+  a *set*, not per-PDR. Per-PDR review by architecture-expert-fred
+  had already returned GO on each.
+- **What the set-scope reviewer found**: PDR-065 imports PDR-066's
+  `tags` namespace as a hard dependency AND adds a third tag value
+  (`doctrine-update`) within the same Proposed-status window. PDR-066's
+  §Open question 1 ("tag namespace boundaries") is foreclosed by
+  PDR-065 before PDR-066's second-instance trigger lands. Per-PDR
+  review never sees this — both PDRs look proportional in isolation.
+- **Cure pattern**: when a related PDR set is being drafted in one
+  session, dispatch the proportionality reviewer (assumptions-expert)
+  against the set, not per-PDR. Per-PDR reviewer (fred) for
+  correctness; set-scope reviewer for coherence.
+- Source plane: `operational` → `protocol`.
+
+### Surprise: `comms reply` CLI body parsing failure modes are layered
+
+- **Setting**: attempted `pnpm agent-tools:collaboration-state -- comms
+  reply` twice. First failed (abbreviated event_id `a01076e3` — needed
+  full UUID). Second with full UUID also failed (exit 2, no stderr) —
+  same backtick-shell-substitution mode Ferny captured at line 409 of
+  this napkin, but now appearing on the `--body` argument when the body
+  was passed via `BODY=$(cat /tmp/file.txt)` and contained markdown code
+  fences (backticks).
+- **Cure used**: fall back to `comms send` (broadcast) with the
+  recipient addressed in the body. Both `comms reply` failures cured
+  this way; broadcasts landed cleanly.
+- **Worth noting**: the `comms reply` shape needs proper body-parsing
+  hardening, OR the agent-tools CLI doctrine needs a `--body-file
+  <path>` mode that reads the body from a file without shell
+  interpretation. Either is a fix worth flagging — Blustery already
+  catalogued the backtick-shell mode as a graduation candidate (their
+  directed event `09:03:05` mentioned the pending-graduations entry on
+  CLI body cure pattern). Not adding a third entry — Ferny's existing
+  line-409 entry plus Blustery's catalogue cover the substance.
+- Source plane: `operational` → `tooling`.

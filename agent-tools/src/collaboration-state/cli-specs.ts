@@ -57,16 +57,22 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
   'comms:append': commandSpec({
     help:
       'comms append --comms-dir <dir> --now <iso> --created-at <iso> ' +
-      '--title <title> --body <body> --platform <platform> --model <model> ' +
-      '--active <path> [--event-id <id>]',
+      '--title <title> (--body <body> | --body-file <path>) ' +
+      '--platform <platform> --model <model> ' +
+      '--active <path> [--event-id <id>] ' +
+      '(--body and --body-file are mutually exclusive; --body-file is the cure ' +
+      'for shell-quoting hazards on bodies that contain backticks or dollar signs)',
     options: commsAppendOptions,
     handler: appendComms,
   }),
   'comms:send': commandSpec({
     help:
-      'comms send --title <title> --body <body> --platform <platform> --model <model> ' +
+      'comms send --title <title> (--body <body> | --body-file <path>) ' +
+      '--platform <platform> --model <model> ' +
       '[--comms-dir <dir>] [--output <path>] [--active <path>] [--repo-root <path>] [--now <iso>] ' +
-      '[--event-id <id>] (identity seed: PRACTICE_AGENT_SESSION_ID_CLAUDE, ' +
+      '[--event-id <id>] (--body and --body-file are mutually exclusive; --body-file reads ' +
+      'the file literally and bypasses shell interpretation) ' +
+      '(identity seed: PRACTICE_AGENT_SESSION_ID_CLAUDE, ' +
       'PRACTICE_AGENT_SESSION_ID_CURSOR, PRACTICE_AGENT_SESSION_ID_CODEX, CODEX_THREAD_ID, ' +
       'or OAK_AGENT_IDENTITY_OVERRIDE)',
     options: commsSendOptions,
@@ -109,16 +115,21 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
     help:
       'comms direct --comms-dir <dir> --to-agent-name <name> --to-platform <platform> ' +
       '--to-model <model> --to-session-prefix <prefix> --kind <kind> ' +
-      '--subject <subject> --body <body> --platform <platform> --model <model> ' +
-      '--active <path> [--event-id <id>] [--now <iso>]',
+      '--subject <subject> (--body <body> | --body-file <path>) ' +
+      '--platform <platform> --model <model> ' +
+      '--active <path> [--event-id <id>] [--now <iso>] ' +
+      '(--body and --body-file are mutually exclusive; --body-file reads the file ' +
+      'literally and bypasses shell interpretation)',
     options: commsDirectOptions,
     handler: directComms,
   }),
   'comms:reply': commandSpec({
     help:
       'comms reply --comms-dir <dir> --to-event-id <id> --kind <kind> ' +
-      '--body <body> --platform <platform> --model <model> ' +
-      '--active <path> [--subject <subject>] [--event-id <id>] [--now <iso>]',
+      '(--body <body> | --body-file <path>) --platform <platform> --model <model> ' +
+      '--active <path> [--subject <subject>] [--event-id <id>] [--now <iso>] ' +
+      '(--body and --body-file are mutually exclusive; --body-file reads the file ' +
+      'literally and bypasses shell interpretation)',
     options: commsReplyOptions,
     handler: replyComms,
   }),

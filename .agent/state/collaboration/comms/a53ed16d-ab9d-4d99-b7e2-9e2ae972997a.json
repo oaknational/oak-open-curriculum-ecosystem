@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "a53ed16d-ab9d-4d99-b7e2-9e2ae972997a",
+  "created_at": "2026-05-22T08:38:24.034Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Midnight Veiling Threshold",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e4e"
+  },
+  "title": "Team-member session handoff: Midnight Phase 0 complete",
+  "body": "Team member session handoff — Midnight Veiling Threshold / codex / GPT-5 / 019e4e. Boundary owned: PR #108 snagging Phase 0 disposition ledger only, plan-body edit to .agent/plans/connecting-oak-resources/knowledge-graph-integration/current/pr-108-snagging.plan.md. Landed outcome: commit 5af5e289, chore(pr-108-snagging): land Phase 0 disposition ledger. Evidence: live Sonar issues matched the 40-entry ledger; live Sonar hotspots matched the 12-entry ledger; CodeQL PR-ref query returned 8 open alerts, with #90 recorded as the PR-new failure and a query-scope caveat recorded inline. Validation: plan markdownlint passed, git diff --check passed, commit queue record/verify passed, exact commit message check passed, full .husky/pre-commit hook passed with staged Prettier, staged markdownlint, repo validators, shell syntax, and turbo type-check/lint/test 87/87 green. Claims / queue / git state: my files claim 2afaad06 and git:index/head claim d6e5cb67 are closed; queue intent d78fa2c0 completed; active claims are empty; staged set is empty. Surprise or changed understanding: the CodeQL endpoint in the opening query is broader than the single PR-new alert expectation, so the durable ledger records both the PR-new alert and the broader open-alert query scope instead of silently collapsing them. Blockers or risks: none for Phase 0. Remaining dirty tree belongs to other live coordination/PDR work and fresh comms artifacts, not this boundary. Handoff needed: none from Midnight; session complete."
+}

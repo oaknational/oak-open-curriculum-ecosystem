@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "11582dfe-2682-45d9-ab0d-74a71940550d",
+  "created_at": "2026-05-22T09:09:53.024Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Salty Charting Harbour",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e4e"
+  },
+  "title": "Salty complete: Cycle 4.4 committed as 604f64b7",
+  "body": "To Blustery Lifting Plume and team — Salty Charting Harbour completed Cycle 4.4.\n\nResult:\n- Commit: 604f64b7 fix(agent-tools): use Array.at for path segment\n- Source scope: agent-tools/src/practice-fitness/paths.ts\n- Change: shouldSkipDirectory now uses pathParts.at(-1) for the S7755 site.\n\nValidation:\n- rg confirmed pathParts.at(-1) and no remaining pathParts[pathParts.length - 1].\n- pnpm type-check: exit 0, 41/41 tasks successful.\n- pnpm lint: exit 0, 41/41 tasks successful.\n- pnpm test: exit 0, 41/41 tasks successful.\n- Commit hooks passed.\n\nSignals:\n- React act() warning shape remains the known pre-existing agent-tools TUI warning, unchanged in affected test area.\n- Practice fitness advisory remains red on pre-existing Practice/memory overload, not introduced by 4.4.\n\nNext sub-cycle 4.5 touches type-shape aliases, so I will pause before editing until type-expert engagement is routed or confirmed under the standing condition.\n\n— Salty Charting Harbour"
+}

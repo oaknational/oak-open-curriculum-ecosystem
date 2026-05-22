@@ -76,6 +76,206 @@ describe('collaboration-state comms integration', () => {
     ]);
   });
 
+  it('writes a directed message whose body was supplied via --body-file (literal contents, no shell interpretation)', async () => {
+    const commsDir = 'state/comms';
+    const bodyPath = '/tmp/test-body.txt';
+    const bodyText =
+      'Body with backticks like `--body-file` and dollars like $HOME that would normally be shell-evaluated.';
+    const fake = createFakeCollaborationRuntime();
+    fake.seedTextFile(bodyPath, bodyText);
+
+    const result = await runCollaborationStateCli({
+      argv: [
+        '--',
+        'comms',
+        'direct',
+        '--active',
+        'state/active-claims.json',
+        '--comms-dir',
+        commsDir,
+        '--to-agent-name',
+        recipient.agent_name,
+        '--to-platform',
+        recipient.platform,
+        '--to-model',
+        recipient.model,
+        '--to-session-prefix',
+        recipient.session_id_prefix,
+        '--kind',
+        'coordination-request',
+        '--subject',
+        'Body file path',
+        '--body-file',
+        bodyPath,
+        '--event-id',
+        'message-bf',
+        '--now',
+        '2026-05-22T10:00:00Z',
+        '--platform',
+        'claude-code',
+        '--model',
+        sender.model,
+      ],
+      env: {
+        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
+      },
+      io: fake.runtime.io,
+    });
+
+    expect(result.exitCode).toBe(0);
+    expect(fake.readCommsEvents(commsDir)).toStrictEqual([
+      directedMessage({
+        event_id: 'message-bf',
+        created_at: '2026-05-22T10:00:00Z',
+        from: sender,
+        to: recipient,
+        subject: 'Body file path',
+        body: bodyText,
+      }),
+    ]);
+  });
+
+  it('rejects --body and --body-file together as mutually exclusive', async () => {
+    const fake = createFakeCollaborationRuntime();
+    fake.seedTextFile('/tmp/body.txt', 'file body');
+
+    const result = await runCollaborationStateCli({
+      argv: [
+        '--',
+        'comms',
+        'direct',
+        '--active',
+        'state/active-claims.json',
+        '--comms-dir',
+        'state/comms',
+        '--to-agent-name',
+        recipient.agent_name,
+        '--to-platform',
+        recipient.platform,
+        '--to-model',
+        recipient.model,
+        '--to-session-prefix',
+        recipient.session_id_prefix,
+        '--kind',
+        'coordination-request',
+        '--subject',
+        'Both flags',
+        '--body',
+        'inline body',
+        '--body-file',
+        '/tmp/body.txt',
+        '--event-id',
+        'message-conflict',
+        '--now',
+        '2026-05-22T10:00:00Z',
+        '--platform',
+        'claude-code',
+        '--model',
+        sender.model,
+      ],
+      env: {
+        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
+      },
+      io: fake.runtime.io,
+    });
+
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain('mutually exclusive');
+  });
+
+  it('rejects missing --body and --body-file as missing required option', async () => {
+    const fake = createFakeCollaborationRuntime();
+
+    const result = await runCollaborationStateCli({
+      argv: [
+        '--',
+        'comms',
+        'direct',
+        '--active',
+        'state/active-claims.json',
+        '--comms-dir',
+        'state/comms',
+        '--to-agent-name',
+        recipient.agent_name,
+        '--to-platform',
+        recipient.platform,
+        '--to-model',
+        recipient.model,
+        '--to-session-prefix',
+        recipient.session_id_prefix,
+        '--kind',
+        'coordination-request',
+        '--subject',
+        'Neither flag',
+        '--event-id',
+        'message-missing',
+        '--now',
+        '2026-05-22T10:00:00Z',
+        '--platform',
+        'claude-code',
+        '--model',
+        sender.model,
+      ],
+      env: {
+        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
+      },
+      io: fake.runtime.io,
+    });
+
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain('--body');
+  });
+
+  it('rejects --body-file pointing at an empty file because directed messages require a non-empty body', async () => {
+    const fake = createFakeCollaborationRuntime();
+    fake.seedTextFile('/tmp/empty.txt', '   \n  \n');
+
+    const result = await runCollaborationStateCli({
+      argv: [
+        '--',
+        'comms',
+        'direct',
+        '--active',
+        'state/active-claims.json',
+        '--comms-dir',
+        'state/comms',
+        '--to-agent-name',
+        recipient.agent_name,
+        '--to-platform',
+        recipient.platform,
+        '--to-model',
+        recipient.model,
+        '--to-session-prefix',
+        recipient.session_id_prefix,
+        '--kind',
+        'coordination-request',
+        '--subject',
+        'Empty body file',
+        '--body-file',
+        '/tmp/empty.txt',
+        '--event-id',
+        'message-empty',
+        '--now',
+        '2026-05-22T10:00:00Z',
+        '--platform',
+        'claude-code',
+        '--model',
+        sender.model,
+      ],
+      env: {
+        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
+      },
+      io: fake.runtime.io,
+    });
+
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain('must not be empty');
+  });
+
   it('replies to a directed message by swapping sender and recipient', async () => {
     const commsDir = 'state/comms';
     const fake = createFakeCollaborationRuntime({

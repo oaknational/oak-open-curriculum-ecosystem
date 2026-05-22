@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { join } from 'node:path';
 
+import { resolveCommsBody } from './cli-comms-commands.js';
 import {
   createDirectedCommsMessage,
   replyToDirectedCommsMessage,
@@ -36,7 +37,7 @@ export async function directComms(
     from: await currentAgent(options, env, 'comms direct', io, nowIso),
     to: recipientAgent(options),
     subject: nonEmptyRequired(options, 'subject'),
-    body: nonEmptyRequired(options, 'body'),
+    body: await resolveNonEmptyBody(options, io),
   });
 
   return writeDirectedMessage({
@@ -66,7 +67,7 @@ export async function replyComms(
     createdAt: nowIso,
     messageKind: nonEmptyRequired(options, 'kind'),
     subject: optional(options, 'subject'),
-    body: nonEmptyRequired(options, 'body'),
+    body: await resolveNonEmptyBody(options, io),
   });
 
   return writeDirectedMessage({
@@ -147,4 +148,12 @@ function nonEmptyRequired(options: Options, key: string): string {
   }
 
   return value;
+}
+
+async function resolveNonEmptyBody(options: Options, io: CollaborationStateCliIo): Promise<string> {
+  const body = (await resolveCommsBody(options, io)).trim();
+  if (body.length === 0) {
+    throw new Error('--body (or --body-file contents) must not be empty');
+  }
+  return body;
 }

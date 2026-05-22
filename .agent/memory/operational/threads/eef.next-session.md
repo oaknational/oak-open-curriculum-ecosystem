@@ -160,6 +160,79 @@ Evidence:
 
 ---
 
+## Session 2026-05-22 — multi-agent team session under Blustery Lifting Plume coordinator
+
+**Substantive progress this session**: PR-108 quality-gate
+advancement — `new_security_hotspots_reviewed` moved 0% → 100%
+(12/12 hotspots reviewed: 11×S5332 SAFE in
+`packages/core/graph-core/` test files + 1×S4036 SAFE at
+`agent-tools/src/bin/agent-tools-cli-topics.ts:96`). CodeQL alert
+number 90 dismissed via `gh api PATCH state=dismissed
+dismissed_reason="false positive"` (Flamebright Cycle 1 tail
+action; criterion 3 pending next CI run). Five mechanical commits
+landed on `feat/mcp-graph-support-foundation`:
+
+| Cycle | Commit  | Substance                                                |
+| ----- | ------- | -------------------------------------------------------- |
+| C1    | 77463a22 | CodeQL #90 TSDoc edit + UI dismissal (Flamebright)       |
+| C4.1  | 73ab1624 | Object.hasOwn in agent-tools/src/context-cost/cli-options.ts (Salty) |
+| C4.2  | ca28bd83 | RegExp.exec in agent-tools/src/practice-fitness/markdown.ts (Salty) |
+| C4.3  | 0c3df45b | Optional-chain in graph-core canonicalize.unit.test.ts (Salty) |
+| C4.4  | 604f64b7 | Array.at(-1) in agent-tools/src/practice-fitness/paths.ts (Salty) |
+
+**Substrate-unblock framing**: PR-108 is the merge-blocker for the
+EEF gate-1a substrate (graph-stack Inc.1d WS4.4 + WS4.5). This
+session moved the PR-108 quality-gate conditions (hotspots cleared,
+CodeQL #90 dismissed pending CI, four mechanical issues fixed) but
+did **not** advance EEF gate-1a named delivery-contract items
+(ff1–ff6). The substrate movement is necessary-but-not-sufficient;
+gate-1a remains gated on the named delivery contract.
+
+**Open Q1/Q2/Q3 PDR routing questions still on owner surface**:
+Foamy Snorkelling Jetty (planning specialist) raised three
+architectural routing questions during PDR-063..066 reviewer-verdict
+absorption that remain owner-class decisions:
+
++ Q1: portability migration surface — how do PDR-063, PDR-065,
+  PDR-066 cure their embedded-repo-path defects without losing
+  substantive grounding? (Cure-shape decision: abstract substrate
+  language vs migrate detail to a non-Practice-Core surface.)
++ Q2: PDR-065 `[DOCTRINE]` tag mechanism — keep, defer, or move to
+  PDR-066 Tranche 2 amendment?
++ Q3: PDR-065 `fast_bootstrap_eligible` frontmatter field — keep or
+  downgrade to deferred-to-first-instance?
+
+All three remain unanswered at session pause. PDR-064 cured cleanly
+in working tree (uncommitted); PDR-063/065/066 cures NOT STARTED.
+
+**Roster outcomes**:
+
++ Codex side fully cleared: Veiled Cloaking Threshold, Salty
+  Charting Harbour, Midnight Veiling Threshold all rotated out via
+  team-member closeout broadcasts.
++ Claude side held in pause: Blustery (coordinator), Foamy
+  (planning), Flamebright (retired post-Cycle-1/6 prep), Ferny
+  (continuing for consolidation pass under owner direction).
+
+**Sonar MCP unblock evidence** (durable; for future sessions): three
+substrates demonstrated three distinct unblock paths — (i) Claude
+Code `/mcp` reconnect re-attaches the `mcp__sonarqube__` namespace
+mid-session (owner-driven); (ii) `docker mcp gateway run --profile
+sonarqube_oak` exposes the same tools via shell layer for Codex
+sessions (Midnight worked precedent); (iii) `mcp__sonarqube__
+mcp-add` is denied by auto-mode classifier as "Self-Modification"
+without prior user/inter-agent authorisation. Codex sessions
+lacking the `mcp__sonarqube__` namespace should check `docker mcp
+tools ls --format json` BEFORE declaring Sonar unavailable.
+
+**Last refreshed**: 2026-05-22 — Blustery Lifting Plume / claude /
+claude-opus-4-7 / `d4aad7` (full-session coordinator) + team
+(Flamebright / Foamy / Ferny / Veiled / Salty / Midnight).
+Consolidation pass executed under Ferny by coordinator routing
+event `09:35:57Z`.
+
+---
+
 ## Promotion Triggers and Sequencing
 
 The five-increment delivery sequence with explicit promotion gates:

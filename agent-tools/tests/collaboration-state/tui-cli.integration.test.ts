@@ -81,6 +81,7 @@ describe('collaboration-state tui CLI integration', () => {
         appendSeenMessageIds: async () => undefined,
         writeCommsEvent: async () => undefined,
         writeTextFile: async () => undefined,
+        readTextFile: async () => '',
         ensureDirectory: async () => undefined,
         migrateLegacyCommsDirectories: async () => 0,
       },

@@ -49,6 +49,7 @@ export interface CollaborationStateCliIo {
     readonly filePath: string;
     readonly text: string;
   }) => Promise<void>;
+  readonly readTextFile: (filePath: string) => Promise<string>;
   readonly readSeenIds: (seenFile: string) => Promise<ReadonlySet<string>>;
   readonly appendSeenMessageIds: (seenFile: string, eventIds: readonly string[]) => Promise<void>;
   readonly migrateLegacyCommsDirectories: (input: {
@@ -67,6 +68,7 @@ const productionIo: CollaborationStateCliIo = {
   readCommsEvents,
   readDirectedCommsMessages,
   writeTextFile: (input) => writeTextFileAtomically(input),
+  readTextFile: (filePath) => readFile(filePath, 'utf8'),
   readSeenIds: readSeenIdsFile,
   appendSeenMessageIds: appendSeenMessageIdsFile,
   migrateLegacyCommsDirectories: (input) =>
