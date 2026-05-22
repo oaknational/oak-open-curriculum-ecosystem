@@ -15,7 +15,7 @@ isProject: false
 todos:
   - id: t1-corpus-shape
     content: "Define EvidenceCorpus { readonly view: GraphView<...>; rank; explain; compare } wrapping shape with Result<T, E> returns. Per type-expert F3 (2026-05-21): the rank/explain/compare error unions include NotImplementedYet (readonly kind: 'NotImplementedYet' discriminant per repo convention) so the gate-1a stub implementations (Result.err({ kind: 'NotImplementedYet', operation: 'rank' }) and similar) compile against the same surface gate-1b will enable. Sketch ExplainOptions (TNode-independent), CompareOptions with ComparisonDimension literal union, RankOptions context shape. EEF strands becomes the first concrete corpus."
-    status: pending
+    status: completed
     workstream: corpus-loading
   - id: t2-zod-loader
     content: "Zod-validated loader for the repository-held canonical eef-toolkit.json snapshot (preserves F1, F4, F7; revises F2/F3 to remove the school_context_schema.properties exemption — typed concretely as SchoolContextSchema with the 9 closed properties, each a JsonSchemaProperty). Validate meta.last_updated as z.string().date() and meta.data_version as z.string().regex(semver) — not bare z.string(). Per type-expert F4 (2026-05-21): the loader also computes schema_hash at load time (SHA-256 over the loaded-and-validated strand records under canonical serialisation, truncated to 16 hex characters; matches packages/core/graph-core/src/canon/canonicalize.ts discipline) so manifest() remains infallible and the loader is the failure boundary for hash-related failures."

@@ -14,6 +14,27 @@
 export { createOakClient, createOakPathBasedClient } from '../client/index.js';
 export type { OakApiClient, OakApiPathBasedClient } from '../client/index.js';
 
+// Re-export EEF evidence corpus type substrate (t1-corpus-shape; gate-1a).
+// `EvidenceCorpus` is the wrapping composition type that adapters
+// (`WS4.5` `EefStrandsGraphView` and successors) consume to implement
+// the corpus-layer rank / explain / compare operations on top of a
+// `GraphView`. See `eef-evidence-corpus.plan.md` §Phase A.
+export type {
+  CompareError,
+  CompareOptions,
+  ComparisonDimension,
+  ComparisonResult,
+  EefStrand,
+  EvidenceCorpus,
+  ExplainOptions,
+  NodeExplanation,
+  NotImplementedYet,
+  RankError,
+  RankOptions,
+  RankedItem,
+  RankedResults,
+} from '../mcp/evidence-corpus/types.js';
+
 export {
   toolNames,
   isToolName,

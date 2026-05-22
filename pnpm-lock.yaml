@@ -1043,6 +1043,9 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: ^1.29.0
         version: 1.29.0(zod@4.4.3)
+      '@oaknational/graph-core':
+        specifier: workspace:*
+        version: link:../../core/graph-core
       '@oaknational/logger':
         specifier: workspace:*
         version: link:../../libs/logger

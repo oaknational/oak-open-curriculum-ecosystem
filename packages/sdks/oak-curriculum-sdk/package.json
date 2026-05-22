@@ -125,6 +125,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
+    "@oaknational/graph-core": "workspace:*",
     "@oaknational/logger": "workspace:*",
     "@oaknational/result": "workspace:*",
     "@oaknational/sdk-codegen": "workspace:*",
