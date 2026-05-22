@@ -134,8 +134,11 @@ export async function runAsyncBootstrapPhase<T>(
 /**
  * Sets up base Express middleware: JSON, correlation, and debug request logging.
  * Error handlers register later for Sentry compatibility. Not a route handler:
- * CodeQL #69 (line 146, `app.use(createCorrelationMiddleware(...))`) is a
- * misclassification — correlation middleware is cross-cutting, not auth-bearing.
+ * CodeQL #69 and #90 (lines 146 `app.use(createCorrelationMiddleware(...))`
+ * and 151 `app.use(createRequestLogger(...))`) are misclassifications —
+ * correlation and request-logger middleware are cross-cutting, not
+ * auth-bearing. Rate limiting applies at auth-bearing routes
+ * (see `auth-routes.ts`).
  */
 export function setupBaseMiddleware(
   app: Express,
