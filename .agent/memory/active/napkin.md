@@ -874,3 +874,176 @@ pre-empted that drain.
   CLI body cure pattern). Not adding a third entry — Ferny's existing
   line-409 entry plus Blustery's catalogue cover the substance.
 - Source plane: `operational` → `tooling`.
+
+## 2026-05-22 — Shaded Whispering Dusk / claude / claude-opus-4-7 / `763ef4`
+
+### Failure mode: seen-file JSON format breaks comms watcher silently (backfill flood)
+
+- **Mistake**: started the all-channels comms watcher with a seen-file
+  written in JSON format (`{ schema_version: ..., seen_event_ids: [...] }`)
+  per the SKILL invocation example at
+  `.agent/skills/start-right-team/SKILL-CANONICAL.md:139` which carries
+  `<agent-codename>.json` as the filename. The CLI implementation at
+  `agent-tools/src/collaboration-state/cli-runtime.ts:130-142` reads the
+  seen-file as plain text, one event-id per line — `split(/\r?\n/u).filter(Boolean)`
+  treats the JSON content as one invalid line. Result: every event in
+  the directory became "unseen"; the watcher began emitting the full
+  ~1300-event historical backfill before I could stop it.
+- **Owner correction surface**: caught it myself within seconds of the
+  first backfill notification arriving in the Monitor stream; stopped
+  the watcher, re-primed the seen-file as plain text (one UUID per
+  line), restarted clean.
+- **Diagnosis**: this is the same shape as Blustery's missing-seen-file
+  defect captured higher in this napkin under their 2026-05-22 section —
+  the SKILL invocation example is the only authoritative documentation
+  surface for the watcher invocation, and it can drift from the CLI it
+  claims to specify. Blustery's instance: file did not exist → CLI saw
+  empty seen-set → backfill. My instance: file existed but in wrong
+  format → CLI saw empty seen-set → backfill. Both result in the same
+  failure mode; both stem from the SKILL example carrying authority it
+  cannot durably hold. The `.json` extension is the proximate misleader
+  (the README at `agent-tools/README.md:348` uses `.txt`; the CLI is
+  extension-agnostic; the SKILL is the misleading authority).
+- **Cure shape (proposed)**: see the new plan
+  `.agent/plans/agent-tooling/future/coordination-watcher-canonicalisation.plan.md`
+  authored from a metacognition pass this session. Structural cure has
+  three layers: (a) move the canonical home out of `.agent/reference/`
+  to code-adjacent docs; (b) introduce `coord how-to-start` CLI that
+  emits the canonical invocation parameterised by identity — agents call
+  the command, never carry the example; (c) extend watcher scope from
+  comms-only to multi-surface (active-claims, conversations,
+  escalations, handoffs) so the ad-hoc /loop polyfill can shrink.
+- **Falsifiability**: a future agent opening a `start-right-team`
+  watcher after this plan lands should be able to run one CLI command
+  and have a correctly-primed watcher start cleanly. If they still hit
+  a seen-file format defect, the structural cure has not landed.
+  Source plane: `operational` → `tooling`. Routing: pending-graduations
+  entry below; plan in `agent-tooling/future/`.
+
+### Surprise: `.agent/reference/` is for external materials, not internal canonical definitions
+
+- **Expected**: I treated `.agent/reference/comms-watch-mechanism.md` as
+  the canonical home for the watcher contract because the SKILL pointed
+  at it and the file's content read like an authoritative spec.
+- **Actual**: owner clarified mid-session that `.agent/reference/` is
+  for external materials we consult (W3C specs, vendor docs, RFCs) —
+  not for Oak-internal canonical definitions. Our own canonical
+  definitions belong code-adjacent (next to the implementing CLI),
+  with Practice-doctrine bits (identity discipline, anti-patterns)
+  promoted to `.agent/rules/` or PDRs.
+- **Why expectation failed**: there is no
+  `.agent/reference/README.md` that states the folder's scope. Single
+  occupancy (one file in the folder) made the mis-placement invisible;
+  if the folder had carried a clear scope statement at the top, the
+  defect would have been visible at session-open grounding.
+- **Behaviour change**: before treating any folder as canonical home
+  for an Oak-internal artefact, check for a folder-scope README or
+  equivalent contract. If absent, ask. The cure is recorded in
+  `coordination-watcher-canonicalisation.plan.md` Phase 7.
+  Source plane: `operational` → `tooling`.
+
+### What Worked: metacognition pass on a defect produced a structural cure, not a doc patch
+
+- **Observed pattern**: when the owner invoked `/jc-metacognition` on
+  the question "where should the canonical watcher definition live",
+  the first move I considered was a doc patch (update the SKILL
+  example from `.json` to `.txt`, add a one-line format note). The
+  metacognition directive pushed deeper: *"has the inherited shape
+  been ratified from first principles?"*. The first-principles lens
+  surfaced that the doc-patch fix is a once-cure (next agent might
+  hit a different inconsistency between SKILL/README/CLI); the
+  structural cure (executable bootstrap CLI + code-adjacent canonical)
+  is recurrence-proof.
+- **Why this worked**: the directive's framing —
+  *"the bridge from action to impact"* — forces evaluating cures by
+  whether they amortise across future agents under rotating-cast, not
+  whether they fix today's instance. Doc patches don't amortise;
+  structural cures do.
+- **Behaviour change**: when a defect's root cause has the shape
+  "documentation surface can drift from implementation", default the
+  cure to "make the documentation generated by the implementation"
+  rather than "fix the current copy of the documentation". The
+  executable-bootstrap pattern (CLI that emits the canonical
+  invocation) is the worked instance of this principle.
+  Source plane: `operational` → `process`.
+
+### Live pattern: two-primary-each-fanning-out collaboration model
+
+- **Setting**: owner directed mid-session that the next-phase meta-plan
+  work should use "two primary Claude agents, working in tandem via
+  team coordination mechanisms, each using the fan-out protocol to
+  create teams of agents with highly defined tasks." Today (2026-05-22)
+  this session became Peer A (Shaded Whispering Dusk, Lane A — PR-108
+  snagging Cycles 5-10 + Phase Final) and Mistbound Slipping Night
+  (`a1cb64`) was queued as Peer B (Lane B — Inc.1a closure or Inc.1d
+  substrate, owner to confirm).
+- **Architectural framing**: two-tier topology. Tier 1 is two Claude
+  peer sessions on the same branch, both running `start-right-team`
+  (comms watcher, active-claims, team-start broadcasts). Tier 2 is
+  each peer dispatching Agent-tool sub-agents for parallel work within
+  its lane. Sub-agents do NOT participate in collaboration protocols —
+  they are invisible to active-claims, comms, etc. Their file scope
+  is defended by their parent peer's claim, opened BEFORE dispatch.
+- **The load-bearing precondition**: peer-level file-scope claim
+  before any sub-agent fan-out. Without this, two peers could each
+  dispatch sub-agents that collide on the same file because neither
+  peer's claims surface the sub-agent's identities. Today's
+  pre-validated solo fan-out (4 sub-agents on the meta-plan refresh,
+  9 files, 0 conflicts) worked because there was no peer; the
+  two-peer extension requires the new discipline.
+- **Operational cost**: two peers paying start-right ≈ 60k tokens
+  overhead; each then dispatches 3-5 sub-agents = 6-10 sub-agent
+  slots total. Justified by lane parallelism IF the work has that
+  much parallelism. Sub-agent context budgets are independent; the
+  primary's context is the bottleneck (each absorbs each return).
+- **Coordination cost**: two comms streams the owner has to follow;
+  one closeout owner named across both peers (today's pattern: I am
+  Lane A's session-handoff owner; Mistbound holds boundary-scoped
+  closeout for Lane B).
+- **/loop heartbeat is load-bearing**: complements the reactive
+  watcher with time-driven sweeps the watcher does not surface
+  (claims-file changes, sub-agent returns, silent-peer detection,
+  120s cadence broadcasts). The watcher fires on filesystem-change;
+  the /loop fires on time. Together they cover "what changed" + "what
+  should have changed but didn't". Either alone has structural blind
+  spots.
+- **Falsifiability**: a session that runs this model and observes (a)
+  no cross-peer sub-agent file collisions, (b) cohesive per-cycle
+  commits with no race, (c) silent-peer detection within 180-360s of
+  silence — confirms the model. A failure on any of these is
+  diagnostic data for the model's refinement.
+  Source plane: `operational` → `protocol`. Captured live during
+  formation rather than after the fact so the design is not
+  reconstructed-from-memory.
+
+### Worked instance: session-handoff at compaction boundary, not session-close
+
+- **Setting**: owner directed *"I am going to compact this session,
+  please run a session handoff now to make sure that no insights will
+  be lost"*. The compaction is a harness operation that replaces
+  conversation history with a summary; the SAME session continues
+  post-compaction.
+- **Diagnosis**: this is structurally a checkpoint, not a session
+  close. Conversation-only content (the two-primary model agreement,
+  the /loop command verbatim, lane assignments, the peer-claim
+  discipline) WILL be lost across the compaction unless flushed to
+  durable surfaces. The handoff SKILL's steps were authored for
+  session-close at owner sign-off; applying them at compaction means
+  the goal shifts from "next-session pickup is clear" to "next-tick
+  pickup is clear with full context absent".
+- **Behaviour change**: when an owner names compaction explicitly,
+  the handoff's priority is **conversation-only-substance flushing**.
+  The repo-continuity and thread-record refreshes are still required,
+  but the napkin entries should be more substantive than usual —
+  they're the bridge across the compaction boundary, not just the
+  capture-edge for the next consolidation pass. The /loop command
+  text itself becomes load-bearing context that must land in a known
+  durable location (thread record) so the post-compaction agent can
+  re-issue it without reconstructing from conversation.
+- **Falsifiability**: after the compaction, the post-compaction agent
+  should be able to read the thread record + repo-continuity +
+  napkin and have everything needed to advance Lane A. If anything
+  load-bearing surfaces only as a gap during the next tick, this
+  handoff was incomplete and that gap is the diagnostic for future
+  compaction-boundary handoffs.
+  Source plane: `operational` → `process`.

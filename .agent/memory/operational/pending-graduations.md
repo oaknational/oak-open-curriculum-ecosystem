@@ -4042,3 +4042,40 @@ invoked. The structural cure (context-aware hook parsing) is
 upstream and slow; the discipline cure is portable and applies
 immediately to coordinator-brief discipline + comms-event drafting
 norms.
+
+### 2026-05-22 — Canonical tool definitions belong code-adjacent, not in `.agent/reference/` (Shaded Whispering Dusk)
+
+`[CANDIDATE: canonical-tool-definitions-code-adjacent | captured: 2026-05-22 | source: napkin (Shaded Whispering Dusk worked-instance + Blustery Lifting Plume earlier instance same session); coordination-watcher-canonicalisation plan body | graduation-target: multi:plan-execution:coordination-watcher-canonicalisation + doc-amend:.agent/reference/README.md (state folder scope as external materials only) + rule:canonical-tool-definitions-code-adjacent (or absorb into existing portability/practice-core rule) | trigger: second-instance fired 2026-05-22 (Blustery missing-seen-file + Shaded JSON-format-seen-file are same shape — SKILL invocation example as fragile authority); plan-execution-gated for graduation | status: due | size: L]`
+
+The SKILL invocation example for the comms watcher (at
+`.agent/skills/start-right-team/SKILL-CANONICAL.md:139` with
+`<agent-codename>.json` extension) is the only documentation surface
+that carries a complete watch invocation. Today two distinct agents in
+the same session hit two facets of the same defect class: Blustery's
+missing-seen-file backfill flood (file did not exist when the CLI
+expected it) and Shaded's wrong-format-seen-file backfill flood (file
+existed but in JSON instead of the plain-text-one-id-per-line shape the
+CLI's `cli-runtime.ts:130-142` requires). Both stem from the SKILL
+example carrying authority it cannot durably hold — there is no
+mechanism that prevents drift between the example, the README at
+`agent-tools/README.md:348` (which uses `.txt`), and the CLI source.
+
+The structural cure has three layers, captured in
+`.agent/plans/agent-tooling/future/coordination-watcher-canonicalisation.plan.md`:
+
+- (a) move the canonical home out of `.agent/reference/` (which is for
+  external materials we consult) to code-adjacent
+  (`agent-tools/src/collaboration-state/README.md`);
+- (b) introduce an executable `coord how-to-start` CLI that emits the
+  canonical invocation parameterised by identity, so the SKILL stops
+  carrying an example and points at a command that cannot drift;
+- (c) extend watcher scope from comms-only to multi-surface
+  (active-claims, conversations, escalations, handoffs) so the
+  ad-hoc `/loop` polyfill can shrink to its proper role
+  (agent-reasoning ticks, not surface-sweep).
+
+The doctrine substance for graduation is broader than just the
+watcher cure: **canonical tool definitions belong code-adjacent,
+ideally executable; `.agent/reference/` is for external materials
+only**. The graduation lands when the plan executes; the plan body
+records the doctrine inline so it persists if the plan archives.
