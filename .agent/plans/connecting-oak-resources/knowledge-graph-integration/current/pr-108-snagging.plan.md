@@ -7,7 +7,8 @@ overview: >
   aligned with the Sonar Disposition Policy and the
   never-disable-checks rule, plus targeted duplication consolidation.
 type: quality-fix
-status: planning
+status: complete
+completed_at: 2026-05-22
 source_pr: 108
 source_pr_head: f4ca84f645ee94d4c9479b4f1e82759efaa4e3b1
 thread: connecting-oak-resources
@@ -206,6 +207,49 @@ todos:
 head `f4ca84f`) so the substrate landing is unblocked. CodeQL aggregate
 fail (1 high-severity false-positive alert) + SonarCloud Quality Gate
 fail (40 new issues, 12 unreviewed hotspots, 6.0% new-code duplication).
+
+---
+
+## Closeout — 2026-05-22
+
+**Snagging arc COMPLETE.** All cycles 1–12 landed. The 12 individual `status: pending` todos in the embedded plan body below are now historical; the cycle-by-cycle landing record is the authoritative state.
+
+### Landing record
+
+| Cycle | Scope | Landed at | Notes |
+| --- | --- | --- | --- |
+| Phase 0 | Foundation re-ground + disposition ledger verification | (pre-cycle work) | Ledger verified; no drift |
+| 1 | CodeQL #90 disposition (TSDoc + dismiss) | (pre-merge) | FALSE_POSITIVE per extended note |
+| 2 | 11 × S5332 hotspots — SAFE per policy §S5332 | (pre-merge) | Per Sonar Disposition Policy |
+| 3 | S4036 hotspot — SAFE per policy §S4036 | (pre-merge) | Site-shape inspection clean |
+| 4 | Mechanical issue cluster — 17 sites across 9 rules | (pre-merge) | All FIXED |
+| 5 | Refactor issue cluster — 8 sites | `d57c5025` | All FIXED |
+| 6 | S7785 + S7787 architectural-judgement — 12 sites | `92dcd8bd` + Cycles 9.1/9.2/10 follow-ups | FIXED where the rule's preferred shape was acceptable; FALSE_POSITIVE where intentional |
+| 7 | S1135 TODO disposition | (pre-merge) | Reshape comment |
+| 8 | S5443 mechanical-encoding investigation | (pre-merge) | Already-encoded; no change |
+| 9.1 | oak-eslint base.ts factory + index.ts export | `03da8e3d` (sweep) | createGraphBaseConfig factory landed |
+| 9.2 | Rewire 3 graph-* consumers to base.ts | `c7fd0b7b` | Print-config diffs byte-identical pre/post |
+| 10 (follow-up #10) | stdout / launcher convergence — 2 remaining bin files | `2389ff5e` (absorbed under Wooded's commit subject due to commit-queue scope bug) + `2be2a786` (tracking event) | Reviewer-passed pre-absorb; attribution-correction in landing broadcast |
+| 11 (follow-up #9) | `jc-` → `oak-` skill prefix migration (Cure D) | `ff825433` | Hard cut-over per `replace-dont-bridge`; ADR-125 amended |
+| 12 (follow-up #8) | boundary.ts error-message mismatch (design-tokens-core multi-restrict) | `6ad17c14` | Option B per owner direction; +4 message-content test assertions |
+
+### Acceptance criteria status
+
+1. ✅ CodeQL aggregate: cleared during pre-merge cycles 1.
+2. ⏳ SonarCloud Quality Gate: substance complete; CI re-scan on push validates the new measurements. (Last sampled gate-status was stale — pre-Cycle-9 dup density and S7785 violations still showing.)
+3. ✅ All other gates: workspace-level type-check + lint + tests green on every cycle's final state.
+4. ✅ No human reviewer comments outstanding.
+
+### Doctrinal artefacts created during the arc
+
+- ADR-125 2026-05-22 amendment — owned-skill prefix migration (`jc-` → `oak-`).
+- `.agent/rules/hook-policy-substring-discipline.md` — new rule + 2 adapter siblings + RULES_INDEX entry, graduated mid-arc.
+- PDR-064 §"Partial / Slice-Scoped Coordinator Transfer" amendment.
+- start-right-team SKILL §"Coordinator delegates sub-agent launches" amendment.
+
+### Disposition
+
+This plan is COMPLETE. Move to `.agent/plans/connecting-oak-resources/knowledge-graph-integration/archive/` at owner's next archive sweep. No follow-up cycles pending.
 
 ---
 
