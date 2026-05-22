@@ -135,7 +135,8 @@ The canonical authoritative todo content stays in the substrate plan
 (`eef-evidence-corpus.plan.md` for `t1`–`t20`). This overlay points; it
 does not duplicate.
 
-**Hard gate before Round 1 opens** (added 2026-05-21): the
+**Hard gate before Round 1 opens** (added 2026-05-21; relaxed
+2026-05-22 — see amendment note below): the
 `feat/mcp-graph-support-foundation` branch carries PR #108 with
 failing quality gates (CodeQL alert #90, SonarCloud Quality Gate
 failing on 40 new issues, 12 unreviewed hotspots, and 6.0% new-code
@@ -150,6 +151,27 @@ become dispatchable only after the substrate floor is unblocked.
 Round 0 owner authorisation (the WS4.4 test-partition amendment +
 four protocol additions) is necessary but NOT sufficient; the
 PR-#108 gate is also a precondition.
+
+**2026-05-22 amendment — concurrent-execution relaxation**. Owner
+direction this session is "two teams on the same branch, team snag
+and team eef". The hard-gate above is **relaxed**: gate-1a substrate
+authoring (`WS4.1`, `WS4.4`, `WS4.5`) and `ff1`/`ff2` non-technical
+preconditions are now permitted to proceed concurrently with the
+PR-#108 snagging stream, under the file-disjointness invariant set
+in the branch-state manifest. Merge ordering remains gated — the
+WS4.x scope still requires PR-#108's quality-gate conditions to
+clear before it can merge to main (either as the same PR if Path 3
+is chosen, or as a separate PR rebased after PR-#108 merges if Path
+1 or 2 is chosen). The path selection is currently undecided and is
+owner-class; see the manifest's "Promotion / merge ordering" and
+"Open structural questions" sections.
+
+**Branch-state cross-reference**: any coordinating agent picking up
+this branch should read
+[`../../../connecting-oak-resources/knowledge-graph-integration/current/branch-concurrency.md`](../../../connecting-oak-resources/knowledge-graph-integration/current/branch-concurrency.md)
+first. The manifest names every concurrent work-stream, the
+file-disjointness matrix, the dependency graph, and the open
+structural questions.
 
 ### Dependency graph (gate-1a scope only)
 

@@ -225,11 +225,21 @@ without prior user/inter-agent authorisation. Codex sessions
 lacking the `mcp__sonarqube__` namespace should check `docker mcp
 tools ls --format json` BEFORE declaring Sonar unavailable.
 
+**Branch-state pickup pointer**: any coordinator picking up this
+thread on `feat/mcp-graph-support-foundation` MUST first read
+[`branch-concurrency.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/branch-concurrency.md)
+— the branch-scoped manifest naming the six concurrent work-streams
+(A–F), file-disjointness matrix, dependency graph, Path 1/2/3 merge
+ordering, and the open structural questions on owner surface.
+
 **Last refreshed**: 2026-05-22 — Blustery Lifting Plume / claude /
 claude-opus-4-7 / `d4aad7` (full-session coordinator) + team
 (Flamebright / Foamy / Ferny / Veiled / Salty / Midnight).
 Consolidation pass executed under Ferny by coordinator routing
-event `09:35:57Z`.
+event `09:35:57Z`; follow-on branch-concurrency manifest landed by
+Blustery at directed event 10:00:55Z under owner direction "update
+all relevant plans and continuity surfaces to make the parallel
+work explicit".
 
 ---
 

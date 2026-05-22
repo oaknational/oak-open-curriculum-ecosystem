@@ -209,6 +209,36 @@ fail (40 new issues, 12 unreviewed hotspots, 6.0% new-code duplication).
 
 ---
 
+## Concurrent execution context (2026-05-22 amendment)
+
+This plan is **Stream A** in a multi-stream concurrent execution shape on
+the `feat/mcp-graph-support-foundation` branch. Other live streams author
+new files outside this plan's scope and can proceed in parallel.
+
+**Read the branch-state manifest first** if you are a coordinating agent
+picking up this branch:
+[`branch-concurrency.md`](branch-concurrency.md). It names every concurrent
+stream, the file-disjointness invariant, the dependency graph, and the
+open structural questions.
+
+**File-scope summary for this plan (Stream A)**:
+
+- **Owns (will edit)**: existing files per the per-cycle tables below.
+- **Must not edit**: any file under `packages/core/graph-core/src/graph-view/`
+  (Stream B home; new directory); any file under
+  `packages/sdks/graph-corpus-sdk/` (Stream B home; new workspace); any
+  PDR file under `.agent/practice-core/decision-records/PDR-06[3-6]-*.md`
+  (Stream E); any memory file beyond the standing lifecycle-residue
+  inclusion (Stream F).
+
+**Cross-stream coordination**: the SonarCloud QG `new_security_hotspots_reviewed`
+condition advanced to 100% during the 2026-05-22 team session via Stream
+A's Cycle 2 + Cycle 3 dispositions; Cycle 6 Lane B (7 S7787 FALSE_POSITIVE
+dispositions) remains the next Sonar-MCP write batch. See the manifest's
+"Currently live on this branch" section for the status of each stream.
+
+---
+
 ## Context
 
 PR #108 is the long-lived graph-stack foundation branch. All functional
