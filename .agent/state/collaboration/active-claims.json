@@ -779,6 +779,38 @@
       "staged_bundle_fingerprint": "98beb2f5b1870cf74bf82560f9eaecf3fb7535966fdb44e9eb88b5b27bd05d36",
       "staged_name_status": "M\t.agent/directives/continuity-practice.md\nM\t.agent/directives/operationalisation-contract.md\nM\t.agent/rules/executive-memory-drift-capture.md\nM\t.agent/rules/present-verdicts-not-menus.md\nM\t.agent/rules/register-identity-on-thread-join.md\nM\t.agent/skills/codex-helper/SKILL-CANONICAL.md\nM\t.agent/skills/commit/SKILL-CANONICAL.md\nM\t.agent/skills/consolidate-docs/SKILL-CANONICAL.md\nM\t.agent/skills/plan/SKILL-CANONICAL.md\nM\t.agent/skills/session-handoff/SKILL-CANONICAL.md\nM\t.agent/skills/start-right-quick/shared/start-right.md\nM\t.agent/skills/start-right-thorough/shared/start-right-thorough.md\nM\t.agent/skills/undo-change/SKILL-CANONICAL.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/comms-seen/shaded-whispering-dusk.json\nA\t.agent/state/collaboration/comms/09a2349a-3aba-4f7e-93c8-1af801d0d8ab.json\nM\t.agent/state/collaboration/shared-comms-log.md\nA\t.agents/skills/oak-chatgpt-report-normalisation/SKILL.md\nA\t.agents/skills/oak-codex-helper/SKILL.md\nA\t.agents/skills/oak-commit/SKILL.md\nA\t.agents/skills/oak-complex-merge/SKILL.md\nA\t.agents/skills/oak-consolidate-docs/SKILL.md\nA\t.agents/skills/oak-gates/SKILL.md\nA\t.agents/skills/oak-go/SKILL.md\nA\t.agents/skills/oak-ground-truth-design/SKILL.md\nA\t.agents/skills/oak-ground-truth-evaluation/SKILL.md\nA\t.agents/skills/oak-metacognition/SKILL.md\nA\t.agents/skills/oak-napkin/SKILL.md\nA\t.agents/skills/oak-plan/SKILL.md\nA\t.agents/skills/oak-session-handoff/SKILL.md\nA\t.agents/skills/oak-start-right-quick/SKILL.md\nA\t.agents/skills/oak-start-right-team/SKILL.md\nA\t.agents/skills/oak-start-right-thorough/SKILL.md\nA\t.agents/skills/oak-tsdoc/SKILL.md\nA\t.agents/skills/oak-undo-change/SKILL.md\nM\t.claude/settings.json\nA\t.claude/skills/oak-chatgpt-report-normalisation/SKILL.md\nA\t.claude/skills/oak-codex-helper/SKILL.md\nA\t.claude/skills/oak-commit/SKILL.md\nA\t.claude/skills/oak-complex-merge/SKILL.md\nA\t.claude/skills/oak-consolidate-docs/SKILL.md\nA\t.claude/skills/oak-gates/SKILL.md\nA\t.claude/skills/oak-go/SKILL.md\nA\t.claude/skills/oak-ground-truth-design/SKILL.md\nA\t.claude/skills/oak-ground-truth-evaluation/SKILL.md\nA\t.claude/skills/oak-metacognition/SKILL.md\nA\t.claude/skills/oak-napkin/SKILL.md\nA\t.claude/skills/oak-plan/SKILL.md\nA\t.claude/skills/oak-session-handoff/SKILL.md\nA\t.claude/skills/oak-start-right-quick/SKILL.md\nA\t.claude/skills/oak-start-right-team/SKILL.md\nA\t.claude/skills/oak-start-right-thorough/SKILL.md\nA\t.claude/skills/oak-tsdoc/SKILL.md\nA\t.claude/skills/oak-undo-change/SKILL.md\nM\tCONTRIBUTING.md\nM\tREADME.md\nM\tagent-tools/scripts/validate-portability.ts\nM\tagent-tools/scripts/validate-portability.unit.test.ts\nM\tagent-tools/src/bin/skills-adapter-generate.ts\nM\tagent-tools/src/core/health-probe-hook-state.ts\nM\tagent-tools/tests/health-probe.unit.test.ts\nM\tagent-tools/tests/skills-adapter-generate/generator.unit.test.ts\nM\tdocs/architecture/architectural-decisions/117-plan-templates-and-components.md\nM\tdocs/architecture/architectural-decisions/125-agent-artefact-portability.md\nM\tdocs/architecture/architectural-decisions/180-codex-exec-agent-delegation-pattern.md\nM\tdocs/architecture/architectural-decisions/181-agent-team-start-and-action-log.md\nM\tpackage.json\n",
       "notes": "commit-workflow verify-staged-before failure: active-claims.json was re-staged after record-staged; the queue fingerprint changes its own staged payload. Leave the working-tree fingerprint unstaged and rerun verify-staged."
+    },
+    {
+      "intent_id": "522560bb-383d-468f-912d-df6b9b301152",
+      "claim_id": "8f0ec639-e9d1-4e54-ac5c-403b92b2c834",
+      "agent_id": {
+        "agent_name": "Charcoal Searing Flame",
+        "platform": "claude",
+        "model": "Opus-4.7",
+        "session_id_prefix": "357b30"
+      },
+      "files": [
+        ".agent/plans/agent-tooling/current/commit-queue-intent-scope-discipline.plan.md",
+        ".agent/memory/active/napkin.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/state/collaboration/shared-comms-log.md",
+        ".agent/state/collaboration/comms-seen/charcoal-searing-flame.json",
+        ".agent/state/collaboration/comms-seen/velvet-vanishing-shadow.json",
+        ".agent/state/collaboration/comms/0c8b0237-4884-436a-9ca0-ff298f71ceab.json",
+        ".agent/state/collaboration/comms/58b1859a-41da-4dbf-999c-a027d39142eb.json",
+        ".agent/state/collaboration/comms/63c2d1c1-51c9-4783-9706-acaa6e14b348.json",
+        ".agent/state/collaboration/comms/a32d8a52-1844-409c-817d-b565b3e5b32b.json",
+        ".agent/state/collaboration/comms/ac08c112-c7e8-4ee2-adb5-4158372949a0.json",
+        ".agent/state/collaboration/comms/d71b538e-bea8-455d-935a-28ed02141d27.json",
+        ".agent/state/collaboration/comms/f5ff786b-5be1-40a2-a2c2-9ab04f4cb8ce.json"
+      ],
+      "commit_subject": "docs(plans): tighten Cycle 1.3 grounding, empty-pathspec invariant, reviewer-status coherence",
+      "queued_at": "2026-05-22T18:09:22.184Z",
+      "updated_at": "2026-05-22T18:10:02.886Z",
+      "expires_at": "2026-05-22T18:24:22.184Z",
+      "phase": "abandoned",
+      "notes": "closed in same collaboration-state commit: queue ceremony bypassed per SKILL §residue exception (active-claims + closed-claims + comms residue in bundle)"
     }
   ],
   "claims": []

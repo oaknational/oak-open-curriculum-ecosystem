@@ -30398,6 +30398,89 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "3a52600b-ffc9-4629-89d7-6726834f056f",
+      "agent_id": {
+        "agent_name": "Velvet Vanishing Shadow",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e50"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/commit-queue-intent-scope-discipline.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T17:44:04Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "plan cleanup: improve commit-queue intent-scope discipline plan with Charcoal read-only collaboration",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T17:49:29Z",
+        "closed_by": {
+          "agent_name": "Velvet Vanishing Shadow",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e50"
+        },
+        "summary": "Plan cleanup complete: absorbed Charcoal review findings into commit-queue intent-scope discipline plan; no source implementation changes",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3a52600b-ffc9-4629-89d7-6726834f056f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8f0ec639-e9d1-4e54-ac5c-403b92b2c834",
+      "agent_id": {
+        "agent_name": "Charcoal Searing Flame",
+        "platform": "claude",
+        "model": "Opus-4.7",
+        "session_id_prefix": "357b30"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T18:08:59Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit plan-improvement collaboration (plan + napkin + coordination residue).",
+      "intent_to_commit": "522560bb-383d-468f-912d-df6b9b301152",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T18:09:59Z",
+        "closed_by": {
+          "agent_name": "Charcoal Searing Flame",
+          "platform": "claude",
+          "model": "Opus-4.7",
+          "session_id_prefix": "357b30"
+        },
+        "summary": "closed in same collaboration-state commit: plan-improvement + napkin + coordination residue (SKILL §residue exception)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8f0ec639-e9d1-4e54-ac5c-403b92b2c834",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

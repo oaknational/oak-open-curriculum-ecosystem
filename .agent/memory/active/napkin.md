@@ -14,6 +14,16 @@ Active session observations. Distilled entries live at
 [`patterns/`](patterns/README.md). Cross-session pending graduations live in
 [`pending-graduations.md`](../operational/pending-graduations.md).
 
+## 2026-05-22 — Velvet Vanishing Shadow commit-queue plan review / codex / GPT-5 / `019e50`
+
+### Mistakes Made
+
+- I read `collaboration-state claims --help` and then still ran
+  `claims list --active` without the required registry path. Correct live check is
+  `pnpm agent-tools:collaboration-state -- claims list --active .agent/state/collaboration/active-claims.json`.
+  Behaviour change: for agent-tools verbs, read the action-level help before the
+  first action use, not just the topic-level help.
+
 The most recent rotation is archived at [`napkin-2026-05-22.md`][archive-pass].
 Prior rotations are [`napkin-2026-05-21.md`][previous-pass],
 [`napkin-2026-05-17.md`][previous-previous-pass], and
@@ -372,6 +382,20 @@ Identity: `Mistbound Slipping Night / claude / claude-opus-4-7 / a1cb64`. Owner 
 **No git operations permitted** until owner clears the constraint. Working-tree edits preserved; no staging, no commits, no resets.
 
 — Mistbound Slipping Night
+
+---
+
+## 2026-05-22 — Velvet / Charcoal plan-improvement rendezvous
+
+### Insight: team-start must not mistake "no active claim yet" for "no peer will arrive"
+
+**Observation**: I began the plan-improvement pass, opened a narrow plan claim, and initially treated Charcoal collaboration as something to emulate with a read-only reviewer subagent. The live all-channel comms stream then delivered Charcoal's actual team-start with ten concrete findings and a clear "Velvet edits, Charcoal reviews" preference.
+
+**Diagnosis**: in a team-start session, a peer can arrive after the first live checks but before edit finalisation. The correct discipline is to keep the watcher alive, treat early solo analysis as provisional, and reconcile actual peer input before reporting the plan improved.
+
+**Cure**: after opening a claim in a named peer-collaboration turn, do a final comms reconciliation before closeout. If the named peer appears, explicitly map their findings to accepted / partially accepted / deferred edits rather than letting the first agent's private review become the whole story.
+
+— Velvet Vanishing Shadow
 
 ---
 
