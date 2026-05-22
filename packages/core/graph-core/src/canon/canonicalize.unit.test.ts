@@ -48,7 +48,7 @@ function onlyLiteralObject(dataset: DatasetCore): Literal {
     throw new Error(`expected exactly one quad, got ${quads.length}`);
   }
   const [onlyQuad] = quads;
-  if (onlyQuad === undefined || onlyQuad.object.termType !== 'Literal') {
+  if (onlyQuad?.object.termType !== 'Literal') {
     throw new Error(`expected single Literal-object quad, got ${onlyQuad?.object.termType}`);
   }
   return onlyQuad.object;

@@ -28478,6 +28478,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "7625aa11-d41e-44e9-8a9d-ca909fb3e057",
+      "agent_id": {
+        "agent_name": "Salty Charting Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e4e"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T09:04:30Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit PR-108 Cycle 4.2 S6594 mechanical RegExp.exec fix after Flamebright index cleared.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T09:05:41Z",
+        "closed_by": {
+          "agent_name": "Salty Charting Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e4e"
+        },
+        "summary": "Committed Cycle 4.2 S6594 RegExp.exec fix as ca28bd83; queue intent fbcede57 completed; bundle included markdown.ts plus Salty lifecycle residue.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7625aa11-d41e-44e9-8a9d-ca909fb3e057",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

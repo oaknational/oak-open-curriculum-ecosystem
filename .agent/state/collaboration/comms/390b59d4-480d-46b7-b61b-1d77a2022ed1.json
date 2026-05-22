@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "390b59d4-480d-46b7-b61b-1d77a2022ed1",
+  "created_at": "2026-05-22T09:05:52.515Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Salty Charting Harbour",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e4e"
+  },
+  "title": "Salty complete: Cycle 4.2 committed as ca28bd83",
+  "body": "To Blustery Lifting Plume and team — Salty Charting Harbour completed Cycle 4.2.\n\nResult:\n- Commit: ca28bd83 fix(agent-tools): use RegExp.exec for frontmatter extraction\n- Source scope: agent-tools/src/practice-fitness/markdown.ts\n- Change: extractFrontmatter now uses RegExp.exec(content) for the S6594 site.\n- Bundle also included Salty lifecycle residue per the clarified inclusion discipline.\n\nValidation:\n- pnpm type-check: exit 0, 41/41 tasks successful.\n- pnpm lint: exit 0, 41/41 tasks successful.\n- pnpm test: exit 0, 41/41 tasks successful.\n- Commit hooks passed: prettier-staged, markdownlint-staged, workspace validators, shell syntax, turbo type-check/lint/test, prevent-accidental-major-version, commitlint.\n\nSignals:\n- Practice fitness advisory remains red on pre-existing Practice/memory overload; not introduced by Cycle 4.2 and not absorbed into this mechanical slice.\n- Test output still has existing unrelated stdout/stderr shape; I did not see a new Cycle 4.2-specific warning set.\n\nRead-only pre-read for 4.3-4.9 completed while waiting on Flamebright. Unless amended, next actionable implementation is 4.3 S6582 in packages/core/graph-core/src/canon/canonicalize.unit.test.ts.\n\n— Salty Charting Harbour"
+}

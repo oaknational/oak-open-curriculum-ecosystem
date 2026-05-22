@@ -277,8 +277,8 @@
       "notes": "Abandoned before staging because git index already contained foreign staged file apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts outside Salty 4.2 bundle."
     },
     {
-      "intent_id": "fbcede57-2d90-4338-94d5-8942179b698d",
-      "claim_id": "7625aa11-d41e-44e9-8a9d-ca909fb3e057",
+      "intent_id": "27c45067-4d32-4ddc-930b-f244fec41e2e",
+      "claim_id": "17a82b8d-29b3-4941-b47b-397b99679db1",
       "agent_id": {
         "agent_name": "Salty Charting Harbour",
         "platform": "codex",
@@ -286,27 +286,17 @@
         "session_id_prefix": "019e4e"
       },
       "files": [
-        "agent-tools/src/practice-fitness/markdown.ts",
+        "packages/core/graph-core/src/canon/canonicalize.unit.test.ts",
         ".agent/state/collaboration/active-claims.json",
         ".agent/state/collaboration/closed-claims.archive.json",
         ".agent/state/collaboration/shared-comms-log.md",
-        ".agent/state/collaboration/comms-seen/salty-charting-harbour.json",
-        ".agent/state/collaboration/comms/12060ad0-a184-4eb7-8d09-8275ed636add.json",
-        ".agent/state/collaboration/comms/25b32989-ec85-4b71-bbc6-ca8a0f77b4bc.json",
-        ".agent/state/collaboration/comms/27b18697-f3ed-4742-ac2b-b016a02d853d.json",
-        ".agent/state/collaboration/comms/4e8118f2-086d-48c3-a0be-a0e7180070b7.json",
-        ".agent/state/collaboration/comms/4f96c65a-7c94-4097-a319-5e7d4cebca66.json",
-        ".agent/state/collaboration/comms/5930231c-5c93-43d7-bf71-c2b923dbe027.json",
-        ".agent/state/collaboration/comms/79a684d9-6078-4207-beae-2bf57b1e8570.json",
-        ".agent/state/collaboration/comms/b1a54c0b-010b-4063-8855-66f458eb3953.json",
-        ".agent/state/collaboration/comms/b3230f69-9a8b-4d3f-a527-e1a6ba598ceb.json",
-        ".agent/state/collaboration/comms/ccf2683c-069b-4648-822e-6010bf67417f.json",
-        ".agent/state/collaboration/comms/fcd1eadb-c062-4e92-aa53-3c4af5db1556.json"
+        ".agent/state/collaboration/comms/390b59d4-480d-46b7-b61b-1d77a2022ed1.json",
+        ".agent/state/collaboration/comms/4c99e439-92d6-4caf-a002-bfcee23c1a02.json"
       ],
-      "commit_subject": "fix(agent-tools): use RegExp.exec for frontmatter extraction",
-      "queued_at": "2026-05-22T09:04:48.730Z",
-      "updated_at": "2026-05-22T09:04:53.471Z",
-      "expires_at": "2026-05-22T09:19:48.730Z",
+      "commit_subject": "test(graph-core): use optional chain in literal helper",
+      "queued_at": "2026-05-22T09:06:47.552Z",
+      "updated_at": "2026-05-22T09:06:54.173Z",
+      "expires_at": "2026-05-22T09:21:47.552Z",
       "phase": "staging"
     }
   ],
@@ -372,7 +362,7 @@
       "intent": "PDR-063..066 reviewer-verdict absorption arc: dispatch assumptions-expert via Agent tool, absorb verdict, cure any findings, hold commit-window for coordinator authorisation. Read-only review boundary; no source edits until cures applied."
     },
     {
-      "claim_id": "7625aa11-d41e-44e9-8a9d-ca909fb3e057",
+      "claim_id": "17a82b8d-29b3-4941-b47b-397b99679db1",
       "agent_id": {
         "agent_name": "Salty Charting Harbour",
         "platform": "codex",
@@ -388,11 +378,11 @@
           ]
         }
       ],
-      "claimed_at": "2026-05-22T09:04:30Z",
+      "claimed_at": "2026-05-22T09:06:23Z",
       "freshness_seconds": 900,
       "sidebar_open": false,
-      "intent": "Stage and commit PR-108 Cycle 4.2 S6594 mechanical RegExp.exec fix after Flamebright index cleared.",
-      "intent_to_commit": "fbcede57-2d90-4338-94d5-8942179b698d"
+      "intent": "Stage and commit PR-108 Cycle 4.3 S6582 optional chaining test fix.",
+      "intent_to_commit": "27c45067-4d32-4ddc-930b-f244fec41e2e"
     }
   ]
 }
