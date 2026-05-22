@@ -63,8 +63,8 @@ todos:
     status: pending
     workstream: prompt-b
   - id: t12-citation-shape
-    content: "Citation discipline: every recommendation/explain/compare response carries {strand_id, data_version, last_updated, caveats: non-empty tuple} as structured fields. Non-empty tuple types enforce the ≥1 caveat and ≥1 citation invariants at compile time; Zod .min(1) re-asserts at runtime."
-    status: pending
+    content: "Citation discipline: every response from the EEF tool surface carries citations as a non-empty readonly tuple of Citation values {strand_id, strand_name, data_version, last_updated, eef_url, caveats: non-empty readonly tuple of strings}. Non-empty tuple types enforce the ≥1 caveat and ≥1 citation invariants at compile time; Zod runtime schemas (z.tuple([T], T).readonly()) re-assert them at runtime. Source attribution lives on the response envelope (_meta.attribution, carrying EEF_ATTRIBUTION) not per-citation. Landed 2026-05-22 in packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.ts."
+    status: completed
     workstream: corpus-loading
     cross_cuts: [recommend, explain, compare, prompt-a, prompt-b]
   - id: t13-freshness-gate
@@ -851,13 +851,22 @@ the strategy doc, now executable. Parameters: `current_approaches: string[]`,
 interface Citation {
   strand_id: string;
   strand_name: string;
-  source: 'EEF Teaching and Learning Toolkit';
   data_version: string;          // semver, validated in T2
   last_updated: string;          // ISO 8601 date, validated in T2
   eef_url: string;               // direct link to the strand page
   caveats: readonly [string, ...string[]];  // ≥1 caveat enforced at compile time
 }
 ```
+
+**Source attribution lives on the envelope, not per-citation.** The response
+`_meta.attribution` field carries `EEF_ATTRIBUTION` once per response (per
+ADR-157 §`_meta` source attribution + the existing
+`packages/sdks/oak-curriculum-sdk/src/mcp/source-attribution.ts` constant);
+a `Citation` identifies a single strand within that already-attributed
+envelope. Resolved 2026-05-22 during the t12-citation-shape cycle — owner
+direction; code-expert flagged the prior literal `source: 'EEF Teaching
+and Learning Toolkit'` field as a divergent-representation risk against
+the canonical `EEF_ATTRIBUTION` constant.
 
 This is a **structural** invariant: the response type makes it
 impossible to ship a recommendation without a non-empty citation
