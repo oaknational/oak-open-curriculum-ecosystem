@@ -940,22 +940,28 @@ invariants.
 **T13: Freshness gate** — splits gate-1a *partial* / gate-1b *full*
 following the pattern of t14/t15/t16/t17/t18/t19.
 
-**Gate-1a portion (CI freshness check)**: a vitest-based check inside
-the SDK workspace asserts the data file at
-`packages/sdks/oak-curriculum-sdk/src/mcp/data/eef-toolkit.json` has
-`meta.last_updated` within the 180-day threshold per ADR-175. The
-check ships as a freshness function (`packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/freshness.ts`)
-plus co-located unit tests proving boundary behaviour on synthetic
-in-range/out-of-range inputs, plus a binding test that reads the live
-SDK data file. **Two-phase activation**: the gate is *structurally
-active* from gate-1a (the check function + tests prove gate semantics
-on synthetic inputs); it becomes *operationally active* (blocking
-real data) when `t2-zod-loader` lands the live `eef-toolkit.json` in
-the SDK at `src/mcp/data/`. Until t2 lands the data file, the binding
-test skips cleanly with an informative message, and the synthetic-
-input tests still prove the gate semantics. No separate GitHub
-Actions workflow file is needed — the existing CI's `test` task
-catches the vitest-based check.
+**Gate-1a portion (CI freshness check)**: a freshness check function
+at `packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/freshness.ts`
+asserts a snapshot's `meta.last_updated` is within the 180-day
+threshold per ADR-175. The check ships with co-located unit tests
+(`freshness.unit.test.ts`) proving boundary behaviour on synthetic
+in-range / out-of-range inputs (including the inclusive-threshold
+boundary and the invalid-date error path). **Two-phase activation**:
+the gate is *structurally active* from gate-1a — the check function
+plus its unit tests prove gate semantics deterministically;
+downstream consumers (the gate-1b refresh script; t2-zod-loader's
+load path) invoke the same function against live data. The gate
+becomes *operationally active* (continuously blocking real data)
+when `t2-zod-loader` lands the live `eef-toolkit.json` in the SDK at
+`src/mcp/data/` and adds a live binding that exercises the function
+against the snapshot. **The live binding test does NOT ship at
+gate-1a** — per `no-conditional-tests` doctrine, a binding test
+cannot conditionally skip when the data file is absent, and a
+fail-fast binding test before t2 lands the file would block all
+commits; the cleanest shape is for t2's cycle to add the live
+binding when the data file exists and the typed loader is
+available. No separate GitHub Actions workflow file is needed — the
+existing CI's `test` task catches the vitest-based check.
 
 **Gate-1b portion (refresh script)**: a refresh script at
 `packages/sdks/oak-curriculum-sdk/scripts/refresh-eef-toolkit.ts`
