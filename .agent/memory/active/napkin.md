@@ -34,6 +34,30 @@ session-by-session capture lives in the archived napkin.
 [previous-previous-pass]: archive/napkin-2026-05-17.md
 [previous-previous-previous-pass]: archive/napkin-2026-05-14.md
 
+## 2026-05-22 — Stormbound Kiting Squall Cycle 1.1 landing / claude / claude-opus-4-7 / `ddbea2`
+
+### Surprise: live `2389ff5e` instance of failure mode plan cures — during Cycle 1.1 staging
+
+**Observation**: while grounding for Cycle 1.1 of `commit-queue-intent-scope-discipline.plan.md` (the very plan whose subject is the `record-staged` whole-index scope bug), Wooded's `commit-queue commit` at 14:54Z with intent `692c57a7` scoped to one file (`.remember/distilled.md`) absorbed Shaded's mid-flight Cycle 10 source edits to `agent-tools/src/bin/{commit-queue,collaboration-state}.ts` because `record-staged` fingerprinted the FULL git index, not the intersection of (`intent.files`, currently-staged). Wooded initially mis-DM'd Stormbound thinking the foreign-staged edits were mine; self-corrected via diff inspection within 2 minutes; Shaded acknowledged Cycle 10 LANDED at `2389ff5e` with substance-preserved attribution-misattributed verdict.
+
+**Diagnosis**: this is the SECOND fresh instance of the failure mode this plan cures in a 60-minute window (Instance A was Mistbound's ff2 case at `e48d7f16`, 14:04Z, named in original plan). The repeat-fresh-evidence signal during the very session that's implementing the cure is unusual and strengthens the framing: "intent.files is operative scope" is not a hypothetical concern but a live ongoing failure with measurable cost (attribution noise, audit-trail misalignment, recovery work).
+
+**Cure**: cited Instance B in plan §Context alongside Instance A as anchoring worked-instance evidence. Cycle 1.1's `getStagedBundleScoped` (landed `fb0833a4`) is the first of three operative fixes. Cycles 1.2 + 1.3 close the loop.
+
+**Discipline-pending-structural-cure**: per Wooded + Shaded's same-day extraction — run `git status --short` IMMEDIATELY before `record-staged` to surface foreign-staged files. Lesson applied during my own Cycle 1.1 staging; no foreign-staged absorption.
+
+### Surprise: owner direction during session-handoff — check-singleton invariant + observable-surface gap
+
+**Observation**: while running session-handoff SKILL §11 (`pnpm check` cleanliness gate), owner intervened with direction: *"only one agent needs to run check, and one agent already is, so stop check, and record that invariant, and note that we need some kind of record of who is running check when"*.
+
+**Diagnosis**: session-handoff §11 currently directs every closing agent to run `pnpm check`. In an N-agent window this produces N concurrent invocations of a ~30s+ whole-repo gate sweep, duplicating work and providing no marginal signal. The team has no observable surface for "who is running check (or other whole-repo gate sweep) when". The SKILL prescribes the invocation without prescribing the coordination.
+
+**Cure (immediate)**: captured as standing user-memory entry `feedback_check_singleton_per_window` so the rule applies immediately in this and future sessions even without structural infrastructure.
+
+**Cure (structural-pending)**: pending-graduations register entry "Check-runner singleton claim (rule-shaped or coordination-state-schema-amendment-shaped)" naming three cure-shape options (active-claims `area-kind: gate-sweep` + rule; broadcast convention; SKILL §11 amendment naming the invariant). Likely shape: rule + schema amendment together, but trade-off design needs a focused pass.
+
+**Generalisation**: the SKILL prescribes-without-coordinating pattern is worth watching elsewhere. Any SKILL step that directs "every agent does X" against a shared whole-repo resource has the same structural failure mode as session-handoff §11. The cure pattern is consistent: observable claim/broadcast naming who's running it now, and a SKILL amendment honouring that surface.
+
 ## 2026-05-22 — Wooded Swaying Thicket napkin rotation / claude / claude-opus-4-7 / `6c58f3`
 
 ### Rotation: 2026-05-22 napkin rotated under owner direction "work on the napkin"
@@ -54,6 +78,36 @@ delegate amendment, CLI Norms backtick cure, hook-policy substring-match
 cure, canonical-tool-definitions-code-adjacent plan).
 
 Source plane: `operational` → `process`.
+
+## 2026-05-22 — Wooded Swaying Thicket INPUT-curation post-rotation closeout / claude / claude-opus-4-7 / `6c58f3`
+
+### Surprise: `commit-queue commit` primitive's `record-staged` step fingerprints the FULL git index, not the intent's `files` scope
+
+**Observation**: ran `commit-queue commit` for intent `692c57a7` scoped to one file (`.agent/memory/active/distilled.md`). The primitive landed an 8-file bundle at `2389ff5e` including Shaded's mid-flight Cycle 10 source edits (`agent-tools/src/bin/commit-queue.ts` + `agent-tools/src/bin/collaboration-state.ts`, `.then/.catch` → `try/await` conversion) that were peer-staged in the shared index at the moment of `record-staged`.
+
+**Diagnosis**: `record-staged` snapshots `git diff --cached` without filtering against `intent.files`. Any peer-staged content rides along. This is the failure mode `.agent/plans/agent-tooling/current/commit-queue-intent-scope-discipline.plan.md` (Stormbound implementing) cures via three TDD cycles: record-staged-scope, verify-staged-scope, commit-pathspec.
+
+**Cure** (until structural fix lands): every agent running `commit-queue commit` MUST run `git status --short` immediately before `record-staged` and explicitly pause for any foreign-staged files visible in the index. Treat the workflow primitive as scope-leaky for the duration.
+
+**Pointer**: live evidence at `2389ff5e` (commit subject `docs(distilled): add 8 owner-profile observations...` ate Shaded's Cycle 10 source bundle). Recovery via Shaded's correction broadcast at event `[Lane A Cycle 10 LANDED at 2389ff5e (attribution-correction)]`. Substance preserved; only attribution is suboptimal. No rollback per Shaded's clean reviewer evidence (pre-execution code-expert GO + post-execution code-expert APPROVED + 467 tests green).
+
+### Surprise: `.remember/` plugin dormancy was platform-scope mismatch, not actual failure
+
+**Observation**: at session open, `.remember/recent.md` last entry was 2026-05-13 (9 days stale); 24 daily files unrotated; 8 IDENTITY CANDIDATE rows unprocessed. The plugin appeared dormant.
+
+**Diagnosis**: `/Users/jim/.claude/plugins/installed_plugins.json` showed TWO entries for `remember@claude-plugins-official` — old v0.5.0 was scoped to `/Users/jim/code/personal/project-explorer-especially-names` (the dormancy cause; wrong project path), new v0.7.2 was installed today scoped to this project. The plugin wasn't failing; it was just scoped elsewhere.
+
+**Cure**: owner restarted the plugin pre-session (Claude Code reload). On restart, the v0.7.2 plugin processed Mistbound's session and created `memory-2026-05-22.log` at 13:49Z, confirming the hook flow works on disk. Future sessions auto-bind on SessionStart.
+
+**Generalisation**: when a vendor plugin appears dormant, check `installed_plugins.json` for project-scope mismatches before assuming bug. The plugin lifecycle is owned by the platform; our session's job is to detect-and-route, not to repair plugin internals.
+
+### Surprise: `.remember/recent.md` IDENTITY CANDIDATE rows are owner-profile substance, not project-doctrine
+
+**Observation**: the plugin's Haiku distillation extracted 8 IDENTITY CANDIDATE rows characterising the owner (Jim) — e.g. "Prefers phased, gated activation over big-bang integrations". My first instinct was to surface for owner review, not promote directly.
+
+**Owner direction**: "add them to distilled". Owner wanted these as durable cross-session collaboration knowledge that agents should adopt by default — not just owner-profile material gated on consent.
+
+**Cure shape**: the resulting distilled.md section names each observation as a working pattern of the owner + what it implies for any agent collaborating with them. Provenance retained via `.remember/recent.md` IDENTITY CANDIDATE N` pointers. Owner-profile observations DO graduate into project-doctrine when owner directs — they're not categorically different from owner-direction-derived rules; they're rules-of-engagement.
 
 ## 2026-05-22 — Mistbound Slipping Night Lane B T2 compaction-boundary handoff / claude / claude-opus-4-7 / `a1cb64`
 
@@ -249,3 +303,50 @@ action when none is due.
   compaction.
 
 Source plane: `operational` → `process`.
+
+---
+
+## 2026-05-22T14:?? — Mistbound Slipping Night EEF First Feature ff2 + commit-queue-intent-scope plan compaction-boundary handoff
+
+Identity: `Mistbound Slipping Night / claude / claude-opus-4-7 / a1cb64`. Owner direction: "finish the plan, then prepare for compaction then stop, the work will be resumed post compaction, no git operations permitted until post compaction".
+
+**Working-tree state at pause** (NOT staged; NOT committed; preserved as edits only):
+
+- `.agent/plans/graph-mvp-arc.plan.md` — ff2 / D-1 / name-ai-client-adoption-owner resolution edits (6 substantive edits: frontmatter status flip, D-1 row resolution, D-1 commentary paragraph, risks-block mitigation update, executive-summary "spine todo" forward-tense fix, sequence-positions list "satisfied" annotation).
+- `.agent/plans/sector-engagement/eef/current/eef-first-feature.plan.md` — ff2 resolution edits (frontmatter status flip + § Non-technical preconditions `**Resolved 2026-05-22**` block with owner=Jim Cresswell, mechanism=conversations, future-Notion-token possibility recorded as non-committing).
+- `.agent/plans/agent-tooling/current/commit-queue-intent-scope-discipline.plan.md` — NEW; the plan written under /jc-plan + /jc-metacognition this turn. Self-check clean.
+
+**Open Mistbound claim**: `c847fffc-e81b-4a1b-b4d2-e09251803111` (files scope: `.agent/plans/graph-mvp-arc.plan.md` + `.agent/plans/sector-engagement/eef/current/eef-first-feature.plan.md`). Claimed at 2026-05-22T13:57:31Z; TTL 3600s; will expire ~14:57Z. Resumption may need to re-open or extend.
+
+**Pending Shaded sync** (`e48d7f16-e046-4a05-9b02-7d02b21609a2`): sync-urgent posted at 2026-05-22T14:04:01Z asking A/B/C coordination for shared-index conflict (Shaded's staged 9.2 work + my ff2 edits mixed in the index). The 90s default-to-Path-B in that message is INVALIDATED by the compaction pause + no-git-ops constraint; resumption must re-engage Shaded fresh, NOT default to Path B autonomously.
+
+**Owner-discussion context**: Owner spotted the commit-queue pathspec-mode gap; asked for a separate plan. Metacognition pass surfaced that the right fix is NOT a new `--pathspec` flag but to honour the existing `intent.files` field across three subcommands (record-staged, verify-staged/verify-staged-again, commit). Replace-Don't-Bridge applied; no new schema field; no new ADR. The plan (`.agent/plans/agent-tooling/current/commit-queue-intent-scope-discipline.plan.md`) is the artefact.
+
+**Resumption first-moves** (in order):
+
+1. Verify cron `195ef238` (9-rule prompt) survived compaction (re-create if dropped, same prompt).
+2. Re-arm comms watcher (the prior watcher `bj2md0z8h` crashed on an ENOENT for a peer-archived comms file; new watcher needed — known issue worth surfacing as a separate fix).
+3. Read recent comms backlog for Shaded's response to `e48d7f16` (may have arrived during pause).
+4. Decide coordination path with Shaded: if Shaded already committed their 9.2 work during the pause, my working-tree edits proceed via normal queue ceremony. If Shaded is still in-flight, re-engage Shaded fresh — NO autonomous Path-B default.
+5. Verify claim `c847fffc` still active or re-open with same scope.
+6. Resume ff2 commit flow (working-tree edits intact; staging is `git add` of the two plan files only; queue ceremony from there).
+7. Surface the watcher-crash ENOENT issue as a candidate follow-up.
+
+**Working-tree non-Mistbound state** (visible at pause; for resumption awareness):
+
+- 3 graph-* eslint configs (`packages/core/graph-core/eslint.config.ts`, `packages/libs/graph-ingest/eslint.config.ts`, `packages/libs/graph-project/eslint.config.ts`) — Shaded's Cycle 9.2 rewire (may have landed during pause).
+- Collab-state drift: comms-seen files for several agents, two new comms events, `active-claims.json` changes.
+- Other peer working-tree state I don't own; do NOT sweep on resumption.
+
+**Plan summary** (for the implementer who picks up the commit-queue-intent-scope plan):
+
+- Three TDD cycles + Phase 0 verification + Phase Final hardening.
+- One fingerprint helper variant (`createStagedBundleFingerprint` + `getStagedBundle` accept optional pathspec scope).
+- Three call-site updates (record-staged + verify-staged + verify-staged-again all pass `intent.files`).
+- One runtime injection update (`commit-workflow-runtime.ts`'s `runGitCommit` appends `-- <intent.files>` to argv).
+- No new CLI flag; no schema field; no ADR.
+- Acceptance: two-writer integration test where both writers commit cohesively with no cross-pollination, full-tree husky gate preserved unchanged.
+
+**No git operations permitted** until owner clears the constraint. Working-tree edits preserved; no staging, no commits, no resets.
+
+— Mistbound Slipping Night

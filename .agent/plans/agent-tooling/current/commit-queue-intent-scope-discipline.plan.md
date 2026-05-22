@@ -10,53 +10,68 @@ todos:
       the inner `git commit` invocation injection point in
       commit-workflow-runtime.ts has no pathspec; confirm no other queue
       subcommand needs the same treatment.
-    status: pending
+    status: completed
+    completed_at: 2026-05-22
+    completed_by: "Stormbound Kiting Squall (claude/ddbea2)"
+    evidence: "Plan §Phase 0 Task 0.2 Findings; verified by file inspection."
     depends_on: []
   - id: cycle-1-fingerprint-helper-scoped
     content: >
-      Cycle 1: Add intent-scoped variant of `createStagedBundleFingerprint`
-      and `getStagedBundle` that accept a pathspec set; route
-      `record-staged` through the scoped variant using `intent.files`.
-      Failing test (atomic-landing): two-writer scenario where writer A
-      stages files X,Y; writer B stages files Z,W; both record-staged
-      under their respective intents and end up with fingerprints that
-      reflect ONLY their own scope (writer A's fingerprint is unchanged
-      by writer B's staging activity). One commit; tree green at end.
-    status: pending
+      Cycle 1.1: Add NEW `getStagedBundleScoped` (mandatory pathspec) in
+      git.ts; route `runRecordStagedCommand` in cli.ts:130-143 through
+      the scoped variant using `intent.files`. Failing test (atomic-
+      landing): two-writer scenario where writer A's fingerprint is
+      independent of writer B's out-of-scope staging activity, AND
+      writer A's fingerprint changes under writer A's own in-scope
+      drift. One commit; tree green at end. Existing unscoped helpers
+      retained unchanged for Cycles 1.2 + 1.3 callers; no optional
+      fallback in committed history.
+    status: completed
+    completed_at: 2026-05-22
+    completed_by: "Stormbound Kiting Squall (claude/ddbea2)"
+    evidence: "Commit fb0833a4 (atomic test+product code + plan body) + e242e633 (post-delivery reviewer absorption + fixture rename). All 5 AC satisfied; 471/471 tests green; husky pre-commit chain green. Pre-execution + post-delivery reviewers all GO/GO-WITH-AMENDMENTS (recorded in §Phase 0 Task 0.3)."
     depends_on: [phase-0-foundation]
   - id: cycle-2-verify-staged-scoped
     content: >
-      Cycle 2: Route `verify-staged` and `verify-staged-again` through
-      the scoped fingerprint helper. Failing test: writer A's
-      verify-staged-again returns ok=true even when writer B has
-      restaged unrelated files; writer A's verify-staged-again returns
-      ok=false when writer A's own staged content has drifted (e.g., a
-      claimed file's staging was modified by an external rebase). One
-      commit; tree green at end.
+      Cycle 1.2: Add NEW `verifyScopedStagedBundle` in core.ts; route
+      `runVerifyStagedCommand` (cli.ts:146-160) AND the verify-staged-
+      before/verify-staged-after sites in commit-workflow.ts +
+      commit-workflow-runtime.ts through the scoped helpers using
+      `intent.files`. Pre-execution dispatch `architecture-expert-betty`
+      on the `CommitWorkflowDependencies.getStagedBundle` injection-seam
+      design (widen-deps-type vs scoped-helper-direct-call) per code-
+      expert post-delivery flag. Failing test: writer A's verify-staged-
+      again returns ok=true under writer B's out-of-scope restage AND
+      ok=false under writer A's own in-scope drift. One commit; tree
+      green at end.
     status: pending
     depends_on: [cycle-1-fingerprint-helper-scoped]
   - id: cycle-3-commit-pathspec
     content: >
-      Cycle 3: Update the `runGitCommit` injection so the inner
-      `git commit` runs with `intent.files` as explicit pathspec. The
-      runtime in `commit-workflow-runtime.ts` is the single mutation
-      point. Failing test: two-writer scenario where both writers run
-      `commit-queue commit` under their respective intents and produce
-      two distinct commits, each containing ONLY the files in its
-      intent.files, with no cross-pollination. Full-tree husky
-      pre-commit gate still runs on each commit (single-tree gating
-      invariant preserved). One commit; tree green at end.
+      Cycle 1.3: Update `runGitCommit` injection so inner `git commit`
+      runs with `intent.files` as explicit pathspec; retire the unscoped
+      helpers and rename scoped variants to canonical names (one clean
+      public surface ends the arc). Failing test (unit + integration):
+      two-writer scenario where both writers run `commit-queue commit`
+      under their respective intents and produce two distinct commits,
+      each containing ONLY the files in its intent.files. Full-tree
+      husky pre-commit gate preserved. One commit; tree green at end.
+      Integration test must NOT reach past the product seam for git
+      setup (test-immediate-fails.md §1) — set up through fixture
+      helpers or product-code seam (test-expert forward brief).
     status: pending
     depends_on: [cycle-2-verify-staged-scoped]
   - id: phase-final-hardening
     content: >
-      Phase Final: Update the jc-commit SKILL-CANONICAL to note that the
-      queue ceremony is now intent-scoped (no Path-B bypass needed for
-      multi-writer scenarios); cross-reference this plan from the
-      ff2-coordination event in the comms log for forward traceability;
-      consolidation pass (docs-adr-expert post-review + napkin entry on
-      the resolved coordination gap); aggregate gate (`pnpm check`)
-      passes from the agent-tools workspace and root.
+      Phase Final: Update `.agent/skills/commit/SKILL-CANONICAL.md` to
+      note the queue ceremony is now intent-scoped (no Path-B bypass
+      needed for multi-writer scenarios); aggregate gate (`pnpm check`)
+      passes from the agent-tools workspace and root; consolidation
+      pass (docs-adr-expert post-review + napkin entry on resolved
+      coordination gap). Forward-trace closeout broadcast posted at
+      end of Cycle 1.3 (not Phase Final) targeting persistent shared-
+      comms-log markdown anchors (not event UUIDs) so the anchor
+      survives comms-event retention sweeps.
     status: pending
     depends_on: [cycle-3-commit-pathspec]
 status: current
@@ -65,9 +80,35 @@ isProject: false
 
 # Commit-Queue Intent-Scope Discipline
 
-**Last Updated**: 2026-05-22
-**Status**: 🔴 NOT STARTED
-**Scope**: Make the commit-queue intent record's `files` field load-bearing for fingerprint computation and inner `git commit` scope in three subcommands (`record-staged`, `verify-staged`/`verify-staged-again`, `commit`). One fingerprint helper, three call sites, one runtime injection.
+**Last Updated**: 2026-05-22 (post-Cycle-1.1 landing)
+**Status**: 🟡 IN PROGRESS — Phase 0 ✓, Cycle 1.1 ✓ (`fb0833a4` + `e242e633`); Cycle 1.2 + 1.3 + Phase Final remain
+**Scope**: Make the commit-queue intent record's `files` field load-bearing for fingerprint computation and inner `git commit` scope in three subcommands (`record-staged` ✓, `verify-staged`/`verify-staged-again`, `commit`). One fingerprint helper, three call sites, one runtime injection.
+
+## Progress Snapshot
+
+| Phase | Status | Evidence |
+|---|---|---|
+| Phase 0 — surface verification | ✓ Complete | §Phase 0 Task 0.2 Findings (2026-05-22 by Stormbound) |
+| Cycle 1.1 — `getStagedBundleScoped` + `record-staged` adoption | ✓ Complete | `fb0833a4` (atomic test+product code) + `e242e633` (reviewer absorption + fixture rename) |
+| Cycle 1.2 — `verifyScopedStagedBundle` + `verify-staged`/`verify-staged-again` adoption | Pending | Plan body updated with code-expert's 3 pre-execution concerns; recommended `architecture-expert-betty` pre-dispatch on injection-seam design |
+| Cycle 1.3 — `runGitCommit` pathspec narrowing + canonical retirement | Pending | Forward briefs recorded: integration test must not reach past product seam for git setup; forward-trace closeout posted at end of this cycle (not Phase Final) |
+| Phase Final — SKILL update + `pnpm check` aggregate + consolidation | Pending |  |
+
+## Reviewer Dispatch Log
+
+| Phase | Reviewer | Verdict | Evidence |
+|---|---|---|---|
+| Pre-Cycle-1.1 | `assumptions-expert` | GO-WITH-AMENDMENTS (4 absorbed) | Plan body §Cycle 1.1 amended pre-staging |
+| Pre-Cycle-1.1 | `code-expert` gateway | GO-WITH-AMENDMENTS (4 absorbed) | Plan body §Cycle 1.1/1.2 amended pre-staging |
+| Post-Cycle-1.1 | `test-expert` | GO-WITH-AMENDMENTS | §Phase 0 Task 0.3 + `e242e633` fixture rename |
+| Post-Cycle-1.1 | `type-expert` | GO | §Phase 0 Task 0.3 |
+| Post-Cycle-1.1 | `code-expert` gateway | GO-WITH-AMENDMENTS | §Phase 0 Task 0.3 |
+| Pre-Cycle-1.2 | `architecture-expert-betty` | **PENDING** (recommended dispatch) | Injection-seam design on `CommitWorkflowDependencies.getStagedBundle` |
+| Pre-Cycle-1.2 | `assumptions-expert` + `code-expert` gateway | Pending | After architecture-betty returns |
+| In-Cycle-1.2 | `test-expert`, `type-expert`, `code-expert` | Pending |  |
+| Pre-Cycle-1.3 | `assumptions-expert` + `code-expert` gateway | Pending |  |
+| In-Cycle-1.3 | `test-expert`, `type-expert`, `code-expert` | Pending |  |
+| Post-arc | `docs-adr-expert` + `release-readiness-expert` | Pending | Phase Final |
 
 ---
 

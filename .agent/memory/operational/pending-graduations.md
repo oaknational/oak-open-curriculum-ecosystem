@@ -183,6 +183,26 @@ list; entry-level summary index is intentionally omitted to avoid
 duplicating entry-body substance and to keep the index honest as
 the queue churns.
 
+### 2026-05-22 — Check-runner singleton claim (rule-shaped or coordination-state-schema-amendment-shaped)
+
+`[captured: 2026-05-22 | source: owner-direction (Stormbound session-handoff window) | target: rule:check-singleton-per-window OR adr:coordination-state-schema-add-gate-sweep-area-kind | trigger: owner-direction (already fired) — author the structural cure when bandwidth allows | size: S | status: pending]`
+
+Substance summary: owner-stated direction 2026-05-22 during Stormbound's session-handoff: *"only one agent needs to run check, and one agent already is, so stop check, and record that invariant, and note that we need some kind of record of who is running check when"*. The session-handoff SKILL §11 currently directs every closing agent to run `pnpm check`; in an N-agent window this produces N concurrent invocations duplicating ~30s+ of work per run and providing no marginal signal. The team has no observable surface for "who is running check (or other whole-repo gate sweep) when".
+
+**Underlying invariant**: only ONE agent runs `pnpm check` (or equivalent whole-repo gate sweep like `pnpm test`, large `turbo` invocations) per coordination window. Multiple parallel runs are wasteful at best and can collide on advisory-orchestrator file outputs at worst.
+
+**Cure shape options** (to be designed at graduation):
+
+1. **Rule + observable surface**: new rule `check-singleton-per-window` referencing a new `area-kind: gate-sweep` (or `whole-repo-gate`) in the active-claims schema. An agent opens the claim with pattern `pnpm-check` (or similar) before invoking `pnpm check`; peers observe the claim and defer. Closes when the run completes with the result evidence (green/red + SHA at run time).
+2. **Lightweight broadcast convention**: short-lived "Lane X running pnpm check, ETA 30s" broadcast convention with a corresponding "Lane X check completed: green/red" follow-up. No schema change; relies on the comms event stream as the singleton-coordination surface. Less rigorous than (1) but lower-friction.
+3. **Session-handoff SKILL §11 amendment**: the SKILL itself names the check-singleton invariant and tells agents to observe peer activity first. Without (1) or (2) the invariant has no observable surface; could be a starting point that names the gap and stages the fuller cure.
+
+**Why pending**: structural cure design depends on whether (a) the active-claims schema absorbs a new area-kind (PDR/ADR-shaped decision), (b) a broadcast convention suffices (rule-shaped + SKILL amendment), or (c) something else. Owner direction has fired (this is the trigger); the design moment is on the next bandwidth window. Likely shape: rule + schema amendment together, but the trade-off design needs a focused pass.
+
+**Lifecycle note**: captured as standing memory `feedback_check_singleton_per_window` in Stormbound's per-user Claude memory same session (so the rule applies immediately even before the structural cure lands). Standing-memory pre-empts the cure; the cure makes the invariant observable to peers rather than purely-agent-recalled.
+
+Falsifiability: a future session-handoff sequence in an N-agent window where every closing agent independently runs `pnpm check` is the failure mode this entry warns about. A session where the first agent opens a check-runner claim (or broadcast), runs check, posts the result, and the other agents defer to that result is the success.
+
 ### 2026-05-22 — Rule/skill topology fragmentation (PDR-shaped, recovered from .remember buffer)
 
 `[captured: 2026-05-22 | source: .remember/today-2026-05-15.md ("55k rule tokens fragmented; rule-topology + skills PDR → post-collab-lane queue") | target: pdr:rule-skill-topology | trigger: owner-direction or rule-topology slice opens | size: M | status: pending]`
@@ -214,6 +234,18 @@ Substance summary: owner design prompt during 2026-05-12 P5 queue-pressure windo
 **Why pending**: forward-looking design substance about behaviour-nudge architecture; no current plan absorbs it. The `closure-pressure-remediation-design-space.plan.md` covers a different surface (closure-rationalisation failure mode at session-close). The P8 token-remediation-parallel-program plan is sequence-execution, not behaviour-nudge architecture. **Trigger to watch**: owner-direction to author a behaviour-nudge PDR, OR the moment a behaviour-nudge implementation slice opens (would absorb these constraints as design inputs).
 
 Falsifiability: a future behaviour-nudge implementation that proceeds without these safeguards (silent reordering, hard scheduling authority, no decay) is the failure mode this entry warns about; an implementation that adopts the safeguards in shape is the success.
+
+### 2026-05-22 — Routing broadcast vs claim release distinction (rule-shaped or PDR-shaped)
+
+`[captured: 2026-05-22 | source: comms-events bfa99e61 (routing broadcast) + b67a3240 (sidebar discovering overlap) + 23afa78a (explicit release) | target: pdr:routing-vs-claim-release-distinction OR rule:routing-requires-claim-release | trigger: second-instance(routing precedes release without explicit release-action) | size: S | status: pending]`
+
+Substance: a routing broadcast naming a file as another agent's lane does NOT release the routing agent's claim on that file. The claim is the binding ownership marker; the broadcast is a recommendation. Worked instance this session: Wooded held claim `d26e453f` covering `distilled.md`; broadcast at 14:47Z "Task #13 distilled.md fitness-pressure graduation is properly Tempestuous's OUTPUT lane, not mine. Routed"; continued to edit distilled.md under direct owner direction; commit `2389ff5e` landed at 14:54Z. Tempestuous opened claim `02eadf52` at 14:51Z based on the routing broadcast. Collision discovered when Tempestuous's Edit failed with "file has been modified since read" — the binding state was the still-open claim, not the routing broadcast. Coordination resolved when Wooded sent a directed event explicitly releasing the area.
+
+Cure shape (candidate doctrine): when routing a file to a peer, simultaneously either (a) close the claim that covers it, or (b) edit the claim to narrow its file pattern list (drop the routed file). The broadcast surface and the claim surface are not coupled — claim release requires an action on the claim surface.
+
+Why pending: single instance so far. If a second instance arises in subsequent multi-agent sessions, it crosses the trigger and becomes graduation-ready. The cure shape (claim-surface action paired with routing broadcast) is a small structural amendment to the routing convention; could land as a rule (`.agent/rules/routing-requires-claim-release.md`) or as a PDR amendment to existing claim-discipline doctrine.
+
+Falsifiability: a future routing broadcast that fails to pair with an action on the claim surface (close OR narrow) is the failure mode this entry warns about; routing-with-paired-claim-action is the success shape.
 
 ### 2026-05-21 — Moment-of-decision heuristic consolidation (PDR-shaped or directive-shaped)
 
