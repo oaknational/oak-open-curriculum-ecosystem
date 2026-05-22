@@ -318,7 +318,7 @@ export function createDesignBoundaryRules(designName: DesignPackage): Partial<Li
     if (designName === 'design-tokens-core') {
       return createPackageSpecifierPatterns(
         ['@oaknational/oak-design-ink', '@oaknational/oak-design-tokens'],
-        createDesignRestrictionMessage('@oaknational/oak-design-tokens'),
+        `Design workspace '${designName}' cannot depend on '@oaknational/oak-design-ink' or '@oaknational/oak-design-tokens'. Follow ADR-041's packages/design dependency direction.`,
       );
     }
     if (designName === 'oak-design-tokens') {

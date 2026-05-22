@@ -851,6 +851,52 @@
       "freshness_seconds": 7200,
       "sidebar_open": false,
       "intent": "Cycle 11 / Task #9 / Cure D — jc- to oak- skill prefix migration"
+    },
+    {
+      "claim_id": "ed5aa3db-ebdf-4c53-91c1-db7e904a4780",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/core/oak-eslint/src/rules/boundary.ts",
+            "packages/core/oak-eslint/src/rules/design-boundary.unit.test.ts",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/pr-108-snagging.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T16:03:30Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Cycle 12 / Task #8 — boundary.ts design-tokens-core branch error-message mismatch (Option B)"
+    },
+    {
+      "claim_id": "38a4b606-64c1-410a-93e4-8a9218d1350f",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "git:index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T16:06:40Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Cycle 12 substance commit (boundary.ts + test)"
     }
   ]
 }
