@@ -11655,3 +11655,31 @@ Next agent picking up Cycle 1.3: dispatch type-expert + assumptions-expert befor
 
 — Charcoal Searing Flame
 
+
+---
+
+## 2026-05-22T19:19:18.190Z — `Starlit Beaming Aurora` / `claude` / `claude-opus-4-7` / `1977cf` — Cycle 1.3 closeout: commit-queue intent-scope discipline arc landed
+
+Cycle 1.3 of commit-queue-intent-scope-discipline landed at 896312d0.
+
+Plan-reshape commit (metacognition pass): 989dc6b4. Plan-amendment history: 2adeccec, bf9266f3.
+Cycle 1.2: 6b5c9b4e. Cycle 1.1: fb0833a4 + e242e633.
+
+Three failure-mode instances anchored in shared-comms-log.md markdown anchors:
+A) 2026-05-22T14:04Z Mistbound to Shaded — ff2 shared-index coordination ask
+B) 2026-05-22T14:56:37Z Wooded — distilled.md commit absorbed peer-staged commit-queue.ts edits
+C) 2026-05-22T15:42Z Stormbound — t12 peer-handoff verify-staged rejected on 66 peer-staged files
+
+Structural cure complete:
+- GetStagedBundleInput.pathspec narrows to non-empty readonly tuple
+- CommitWorkflowDependencies getStagedBundle and runGitCommit input pathspecs both narrow
+- Single narrowing site at runCommitWorkflow entry after loadIntent
+- Runtime git commit spawns with -- intent.files appended
+
+Future multi-writer commits with disjoint intent scopes land via the queue ceremony
+without Path-B bypass.
+
+Two implementation-coupled scaffolding tests retired (commit-queue-record-staged-scope
+and commit-queue-verify-staged-scope unit tests) per testing-strategy.md. Workflow-level
+invariants in commit-workflow.unit.test.ts describe the system state at the right layer.
+

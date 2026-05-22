@@ -126,6 +126,36 @@ auditability** — not a mechanical lock. Default discipline is still one
 commit owner at a time; the queue and claim make that ownership observable
 to peers.
 
+### Intent-Scoped End-to-End (2026-05-22 cure)
+
+As of the commit-queue-intent-scope-discipline arc, every dep boundary that
+touches scoped git state inside the workflow is compile-time-typed for a
+non-empty pathspec, narrowed once at `runCommitWorkflow` entry from
+`CommitIntent.files`. The inner `git commit` invocation appends
+`-- <intent.files>` to its spawn argv; the two `verify-staged` reads pass
+the same pathspec into `git diff --cached`. The structural consequence:
+
+- **Disjoint multi-writer commits land via the queue ceremony.** When two
+  agents' `intent.files` lists are disjoint, the queue's inner commit and
+  staged-bundle reads only see their own intent's files; peer-staged
+  content outside the intent's scope is invisible by construction. Path-B
+  explicit-pathspec bypass is no longer the default workaround for the
+  ff2-style multi-writer case.
+- **`verifyStagedBundle` "extra files" semantics narrow.** The error
+  signals files staged inside `intent.files` that the recorded bundle did
+  not contain — a genuine intent integrity violation. Under the scoped
+  read, the error cannot fire because of peer-staged drift outside the
+  intent's scope; that case is no longer surfaced.
+- **Empty `intent.files` short-circuits.** `runCommitWorkflow` refuses
+  empty intents before any dep call, returning `{ok: false, stage:
+  'git-commit'}` with a reason naming the empty list. The dep boundary is
+  structurally incapable of being reached with an empty pathspec.
+
+Path-B remains a documented fallback for emergency cases (queue
+corruption, manual recovery) but is no longer the cure for the
+multi-writer concurrency failure mode the queue ceremony exists to
+support.
+
 ### Five invariants the protocol protects
 
 | # | Invariant | Protected by |
