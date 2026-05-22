@@ -24,6 +24,7 @@ const ALLOWED_OPTIONS: ReadonlyMap<string, ReadonlySet<string>> = new Map([
   ['record-staged', new Set(['intent-id', 'registry'])],
   ['verify-staged', new Set(['intent-id', 'commit-subject', 'registry'])],
   ['complete', new Set(['intent-id', 'registry'])],
+  ['commit', new Set(['intent-id', 'message-file', 'registry'])],
   ['status', new Set(['now', 'registry'])],
   ['list', new Set(['now', 'registry', 'prefix', 'phase', 'agent-name', 'queue-status'])],
   ['show', new Set(['now', 'registry', 'intent-id'])],

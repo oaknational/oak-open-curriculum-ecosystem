@@ -97,6 +97,38 @@ export interface MutableCommitQueueCliOptions {
 }
 
 /**
+ * Outcome of the commit workflow as surfaced to the CLI layer.
+ *
+ * Mirrors the discriminated union from `commit-workflow.ts` but uses
+ * structural types here to avoid an import cycle between types.ts and
+ * commit-workflow.ts.
+ */
+export type CommitWorkflowCliResult =
+  | {
+      readonly ok: true;
+      readonly intentId: string;
+      readonly sha: string;
+      readonly advisoryExitCode: number;
+    }
+  | {
+      readonly ok: false;
+      readonly stage: 'load-intent' | 'verify-staged-before' | 'verify-staged-after' | 'git-commit';
+      readonly reason: string;
+      readonly intentId?: string;
+    };
+
+/**
+ * Injected commit-workflow dependency exposed to CLI input so tests can
+ * exercise the dispatch wiring without spawning real sub-processes.
+ */
+export type CommitWorkflowCliRunner = (input: {
+  readonly intentId: string;
+  readonly messageFilePath: string;
+  readonly registryPath: string;
+  readonly repoRoot: string;
+}) => Promise<CommitWorkflowCliResult>;
+
+/**
  * Parsed command-line input for the commit-queue CLI.
  */
 export interface CommitQueueCliInput {
@@ -104,7 +136,11 @@ export interface CommitQueueCliInput {
   readonly options: CommitQueueCliOptions;
   readonly repoRoot: string;
   readonly readRegistry?: (registryPath: string) => Promise<CommitQueueRegistry>;
+  readonly commitWorkflow?: CommitWorkflowCliRunner;
   readonly stdout?: {
+    write(chunk: string): void;
+  };
+  readonly stderr?: {
     write(chunk: string): void;
   };
 }

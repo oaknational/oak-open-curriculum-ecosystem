@@ -14,6 +14,7 @@ import {
   resolveRegistryPath,
   usage,
 } from './args.js';
+import { runCommitCommand } from './commit-command.js';
 import { getStagedBundle } from './git.js';
 import { createIntent } from './intent.js';
 import { validateCommandOptions } from './options.js';
@@ -23,7 +24,6 @@ import {
   type CommitIntent,
   type CommitQueueCliInput,
   type CommitQueueCliOptions,
-  type CommitQueuePhase,
   type CommitQueueRegistry,
   type StagedBundle,
 } from './types.js';
@@ -41,6 +41,30 @@ export async function runCommitQueueCli(input: CommitQueueCliInput): Promise<num
   const registryPath = resolveRegistryPath(input.repoRoot, input.options);
   const now = nowIso(input.options);
 
+  const writeResult = await dispatchWriteCommand({ input, registryPath, now });
+  if (writeResult !== undefined) {
+    return writeResult;
+  }
+
+  if (isCommitQueueReadCommand(input.command)) {
+    return runCommitQueueReadCommand({
+      command: input.command,
+      registry: await readRegistryForCli(input, registryPath),
+      options: input.options,
+      now,
+      stdout: input.stdout,
+    });
+  }
+
+  throw new Error(usage());
+}
+
+async function dispatchWriteCommand(args: {
+  readonly input: CommitQueueCliInput;
+  readonly registryPath: string;
+  readonly now: string;
+}): Promise<number | undefined> {
+  const { input, registryPath, now } = args;
   if (input.command === 'enqueue') {
     return runEnqueueCommand({ registryPath, options: input.options });
   }
@@ -61,17 +85,10 @@ export async function runCommitQueueCli(input: CommitQueueCliInput): Promise<num
   if (input.command === 'complete') {
     return runCompleteCommand({ registryPath, options: input.options });
   }
-  if (isCommitQueueReadCommand(input.command)) {
-    return runCommitQueueReadCommand({
-      command: input.command,
-      registry: await readRegistryForCli(input, registryPath),
-      options: input.options,
-      now,
-      stdout: input.stdout,
-    });
+  if (input.command === 'commit') {
+    return runCommitCommand({ registryPath, options: input.options, input });
   }
-
-  throw new Error(usage());
+  return undefined;
 }
 
 function readRegistryForCli(
@@ -99,7 +116,13 @@ async function runPhaseCommand(input: CommandInputWithNow): Promise<number> {
   const intentId = requireOption(input.options, 'intent-id');
   await updateRegistry(input.registryPath, (registry) => {
     requireIntent(registry, intentId);
-    return phaseRegistry(input, registry, phase, intentId);
+    return updateCommitIntentPhase({
+      registry,
+      intentId,
+      phase,
+      nowIso: input.now,
+      notes: optionString(input.options, 'notes'),
+    });
   });
   return 0;
 }
@@ -109,7 +132,13 @@ async function runRecordStagedCommand(input: CommandInputWithCli): Promise<numbe
   const staged = getStagedBundle(input.input.repoRoot);
   await updateRegistry(input.registryPath, (registry) => {
     requireIntent(registry, intentId);
-    return stagedRegistry(input, registry, intentId, staged);
+    return recordStagedBundle({
+      registry,
+      intentId,
+      nowIso: input.now,
+      stagedNameStatus: staged.stagedNameStatus,
+      stagedPatch: staged.stagedPatch,
+    });
   });
   return 0;
 }
@@ -137,36 +166,6 @@ async function runCompleteCommand(input: CommandInput): Promise<number> {
     return completeCommitIntent({ registry, intentId });
   });
   return 0;
-}
-
-function phaseRegistry(
-  input: CommandInputWithNow,
-  registry: CommitQueueRegistry,
-  phase: CommitQueuePhase,
-  intentId: string,
-): CommitQueueRegistry {
-  return updateCommitIntentPhase({
-    registry,
-    intentId,
-    phase,
-    nowIso: input.now,
-    notes: optionString(input.options, 'notes'),
-  });
-}
-
-function stagedRegistry(
-  input: CommandInputWithNow,
-  registry: CommitQueueRegistry,
-  intentId: string,
-  staged: StagedBundle,
-): CommitQueueRegistry {
-  return recordStagedBundle({
-    registry,
-    intentId,
-    nowIso: input.now,
-    stagedNameStatus: staged.stagedNameStatus,
-    stagedPatch: staged.stagedPatch,
-  });
 }
 
 function formatIntentIds(entries: readonly CommitIntent[]): string {

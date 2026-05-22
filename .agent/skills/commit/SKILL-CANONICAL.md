@@ -121,133 +121,127 @@ Run these steps **before** formulating the commit message.
 ## Commit Queue And Window Protocol
 
 Staging and committing touch the shared git index and `HEAD`, even when file
-edits do not overlap. Before staging or invoking `git commit`, coordinate both
-the advisory queue and the short-lived git transaction claim:
+edits do not overlap. The protocol below is **awareness, ordering, and
+auditability** — not a mechanical lock. Default discipline is still one
+commit owner at a time; the queue and claim make that ownership observable
+to peers.
 
-1. Read
-   [`.agent/state/collaboration/active-claims.json`](../../state/collaboration/active-claims.json)
-   and recent
-   [`.agent/state/collaboration/shared-comms-log.md`](../../state/collaboration/shared-comms-log.md)
-   entries for fresh `commit_queue` entries and a fresh `git:index/head`
-   claim.
-2. Inspect `git diff --staged --name-only`. If the staged set is non-empty
-   and not wholly within your intended scope, pause and coordinate or ask the
-   owner before opening or continuing the commit window.
-3. If another fresh queue entry is ahead of yours, or another fresh
-   commit-window claim exists, coordinate through the shared log, decision
-   thread, or owner question instead of racing the git lock. The queue is
-   advisory, not a mechanical refusal; default discipline is still one commit
-   owner at a time.
-   Active claims on `.agent/` paths are visibility signals, not commit
-   blockers: `.agent` is shared Practice and coordination state, and it may be
-   swept into commits when the bundle needs current handoff, plan, claim,
-   queue, thread, or generated communication state to become durable.
-4. If the window is clear, open a short-lived active claim entry under
-   `claims[]`:
+### Five invariants the protocol protects
 
-   ```json
-   {
-     "claim_id": "<uuid-v4>",
-     "agent_id": {
-       "agent_name": "<name>",
-       "platform": "<platform>",
-       "model": "<model>",
-       "session_id_prefix": "<prefix>"
-     },
-     "thread": "<thread-slug>",
-     "areas": [
-       {
-         "kind": "git",
-         "patterns": ["index/head"]
-       }
-     ],
-     "claimed_at": "<iso-8601-now>",
-     "freshness_seconds": 900,
-     "intent": "Stage and commit <summary>.",
-     "notes": "Pathspecs: <paths>; gates: <state>; peer claims: <summary>."
-   }
+| # | Invariant | Protected by |
+|---|---|---|
+| 1 | Authorial-bundle integrity | `enqueue` declares the intent; `record-staged` fingerprints the staged payload; `commit` re-verifies files / fingerprint / subject before AND after the advisory orchestrator runs |
+| 2 | git:index/head coordination | The `git:index/head` active claim — read by peers, opened by you, closed by you |
+| 3 | Commitlint conformance pre-`git commit` | Advisory orchestrator pre-screen (`check-commit-skill-advisories`) + the blocking `.husky/commit-msg` hook |
+| 4 | Audit traceability | `claim_id` ↔ `intent_id` ↔ commit SHA ↔ `closure.summary` |
+| 5 | Rollback discipline on abandon | Failed-attempt intents transition to `abandoned` with stage-named notes; claim closes with failure reason |
+
+### Four operational moves
+
+A clean commit is **four moves**, each backed by one CLI command. The
+five invariants above are preserved by composition; the individual
+primitives that compose into moves 2 and 3 (`enqueue`, `phase`, `guard`,
+`record-staged`, `verify-staged`, `complete`) remain available as
+direct CLI commands for inspection and recovery.
+
+1. **Open the git:index/head active claim** via
+   [`collaboration-state claims open`](../../../agent-tools/src/collaboration-state):
+
+   ```bash
+   pnpm agent-tools:collaboration-state -- claims open \
+     --active .agent/state/collaboration/active-claims.json \
+     --thread "<thread-slug>" \
+     --area-kind git --area-pattern index/head \
+     --intent "Stage and commit <summary>." \
+     --ttl-seconds 900 \
+     --platform <platform> --model <model> --now "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
    ```
 
-5. Append a shared-log entry naming the intended pathspecs, current staged set,
-   gate state, and peer-claim scan.
-6. Enqueue the intended bundle before staging. Use one `--file` argument per
-   repo-relative path you intend to stage:
+   Before opening: read
+   [`.agent/state/collaboration/active-claims.json`](../../state/collaboration/active-claims.json)
+   for fresh `commit_queue` entries and any peer `git:index/head` claim.
+   Inspect `git diff --staged --name-only`; if the staged set is
+   non-empty and not wholly within your intended scope, pause and
+   coordinate or ask the owner before opening the window. Active
+   claims on `.agent/` paths are visibility signals, not commit
+   blockers — `.agent` is shared Practice and coordination state, and
+   it may be swept into commits when the bundle needs current
+   handoff, plan, claim, queue, thread, or generated communication
+   state to become durable.
+
+2. **Stage the bundle.** Enqueue the intended file list, run the
+   pre-stage guard, `git add` the exact pathspecs, and record the
+   staged-bundle fingerprint. The file list is a contract, not a hint:
+   if a hook failure, formatter, generated artefact, or claim /
+   lifecycle write introduces an extra path, abandon the old intent
+   and enqueue a widened one before staging or verifying the new set.
 
    ```bash
    pnpm agent-tools:commit-queue -- enqueue \
-     --claim-id "<active-claim-id>" \
-     --agent-name "<name>" \
-     --platform "<platform>" \
-     --model "<model>" \
+     --claim-id "<claim-id>" \
+     --agent-name "<name>" --platform "<platform>" --model "<model>" \
      --session-id-prefix "<prefix>" \
      --commit-subject "<draft subject>" \
-     --file "path/one" \
-     --file "path/two"
-   ```
-
-   The file list is a contract, not a hint. If a hook failure, formatter,
-   follow-up fix, generated artefact, or claim/lifecycle write introduces an
-   extra path, abandon the old intent and enqueue a widened one before
-   staging or verifying the new set.
-
-7. Move the queue entry to `staging`, run the pre-stage guard for the exact
-   pathspecs, stage only explicit pathspecs, then record the staged-bundle
-   fingerprint:
-
-   ```bash
-   pnpm agent-tools:commit-queue -- phase \
-     --intent-id "<intent-id>" \
-     --phase staging
+     --file path/one --file path/two
+   pnpm agent-tools:commit-queue -- phase --intent-id "<intent-id>" --phase staging
    pnpm agent-tools:commit-queue -- guard \
-     --agent-name "<name>" \
-     --platform "<platform>" \
-     --model "<model>" \
+     --agent-name "<name>" --platform "<platform>" --model "<model>" \
      --session-id-prefix "<prefix>" \
-     --file "path/one" \
-     --file "path/two"
+     --file path/one --file path/two
    git add -- path/one path/two
    pnpm agent-tools:commit-queue -- record-staged --intent-id "<intent-id>"
    ```
 
    If `.agent/state/collaboration/active-claims.json` is in the staged
-   bundle, do not re-stage it after `record-staged`. The command writes the
-   fingerprint into the working tree so `verify-staged` can compare that
-   fingerprint with the already-staged payload. Re-staging the registry changes
-   the payload being verified and creates the fingerprint-recursion loop.
+   bundle, do not re-stage it after `record-staged`. The command
+   writes the fingerprint into the working tree so `verify-staged` can
+   compare that fingerprint with the already-staged payload —
+   re-staging the registry changes the payload being verified and
+   creates a fingerprint-recursion loop.
 
-8. Write the drafted message to a file such as `.git/COMMIT_EDITMSG`, then run
-   the commit-skill advisory orchestrator and verify the staged bundle
-   immediately before committing:
-
-   ```bash
-   pnpm agent-tools:check-commit-skill-advisories -F .git/COMMIT_EDITMSG
-   pnpm agent-tools:commit-queue -- verify-staged \
-     --intent-id "<intent-id>" \
-     --commit-subject "<draft subject>"
-   pnpm agent-tools:commit-queue -- phase \
-     --intent-id "<intent-id>" \
-     --phase pre_commit
-   ```
-
-   Verification checks all three authorial-bundle invariants: staged files
-   equal queued files exactly, the staged fingerprint has not changed, and the
-   subject equals the queued subject. A mismatch aborts before history is
-   written.
-
-   This verification is deliberately narrow: it protects the authorial bundle.
-   It does not replace the repository's whole-tree quality gates.
-
-9. Commit, then clear the queue entry on success:
+3. **Land the commit** via the workflow primitive. Write the drafted
+   message to a file (typically `.git/COMMIT_EDITMSG`), then invoke a
+   single command that composes verify-staged → advisory orchestrator
+   → phase `pre_commit` → verify-staged-again → `git commit` →
+   `complete` intent:
 
    ```bash
-   git commit -F .git/COMMIT_EDITMSG
-   pnpm agent-tools:commit-queue -- complete --intent-id "<intent-id>"
+   pnpm agent-tools:commit-queue -- commit \
+     --intent-id "<intent-id>" \
+     --message-file .git/COMMIT_EDITMSG
    ```
 
-10. Close the commit-window claim after every exit once opened: success,
-   staging failure, message-validation failure, hook failure, or deliberate
-   abort. Archive the claim with the resulting SHA, failure reason, or abort
-   reason and next action in `closure.summary`.
+   The two verify-staged checks book-end the advisory orchestrator so
+   tree-widening during the advisory pass is caught before history is
+   written. Any failure between intent-load and successful `git
+   commit` transitions the intent to `abandoned` with stage-named
+   notes; on success the workflow prints the new SHA.
+
+   **Advisory polarity preserved**: the orchestrator's stdout/stderr
+   stream through to the caller, but its non-zero exit code does NOT
+   abort the commit attempt or alter the workflow path. Blocking
+   authority remains `.husky/pre-commit` + `.husky/commit-msg`. See
+   PDR-053 and ADR-176; the §"Quality Gates Are Always Blocking; the
+   Orchestrator Is Advisory" section below states the doctrine in
+   full.
+
+   The verify-staged checks protect the authorial bundle — they do
+   not replace the repository's whole-tree quality gates.
+
+4. **Close the commit-window claim** after every exit once opened:
+   success, staging failure, message-validation failure, hook
+   failure, or deliberate abort. The closure summary records the SHA,
+   failure reason, or abort reason and names the next action.
+
+   ```bash
+   pnpm agent-tools:collaboration-state -- claims close \
+     --active .agent/state/collaboration/active-claims.json \
+     --closed .agent/state/collaboration/closed-claims.archive.json \
+     --claim-id "<claim-id>" \
+     --summary "commit <SHA>: <subject>" \
+     --platform <platform> --model <model> \
+     --now "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+   ```
 
 ### Collaboration-state commit residue exception
 
@@ -328,39 +322,29 @@ The wait is not coordination. It complements, but never replaces, the
 
 ## Process
 
-1. **Check status**: `git status` — see all changes.
-2. **Review diff**: `git diff --staged && git diff` — understand what will be
-   committed.
-3. **Confirm quality gates have passed** (or run them now). Do NOT pre-prime
-   the turbo cache by running `bash .husky/pre-commit` separately — the real
-   commit will warm it; the pre-prime is wasted ~30s and confuses symptom
-   for cause.
-4. **Open the commit-window claim and queue entry** using the protocol above.
-5. **Stage selectively** — never blindly `git add .`. Skip `.env`, credentials,
-   `bulk-downloads/`. Review each file staged and record its fingerprint.
-6. **Draft the message** against the enumerated constraints.
-7. **Run the commit-skill advisory orchestrator
-   (`pnpm agent-tools:check-commit-skill-advisories`) BEFORE invoking
-   `git commit`** (see below). The orchestrator runs the practice fitness
-   gate, the practice vocabulary gate, and the commit-message check in
-   sequence. If any gate fails, fix the underlying issue and re-run — do
-   not let the live hooks be your first check.
-8. **Verify the staged bundle** via `pnpm agent-tools:commit-queue -- verify-staged`.
-   Do not commit if verification fails.
-9. **Commit** using the HEREDOC template below so multi-line body formatting
-   survives the shell. Cursor-Shell-tool users add the file-redirect
-   workaround documented under "Cursor Shell tool — stream truncation
-   workaround" below.
-10. **Verify and close**: `git status` — confirm the commit succeeded, clear
-   the queue entry, then close the commit-window claim with the SHA or failure
-   reason.
+Before opening the four-move protocol above:
 
-## Pre-Commit Validation (replaces the manual format-check)
+1. `git status` — see all changes; `git diff --staged && git diff` —
+   understand what will be committed.
+2. Confirm quality gates have passed (or run them now). Do NOT
+   pre-prime the turbo cache by running `bash .husky/pre-commit`
+   separately — the real commit will warm it; the pre-prime is
+   wasted ~30s and confuses symptom for cause.
+3. Stage selectively — never blindly `git add .`. Skip `.env`,
+   credentials, `bulk-downloads/`. The `commit-queue` enqueue +
+   guard chain in move 2 enforces explicit pathspecs by design.
+4. Draft the message against the enumerated constraints above. The
+   `commit-queue commit` workflow in move 3 invokes the advisory
+   orchestrator (which runs the message check) as part of its
+   composition; no separate manual format-check pass is required.
 
-Run the gate orchestrator against the drafted message. It runs the practice
-fitness gate (`practice:fitness:strict-hard`), the practice vocabulary gate
-(`practice:vocabulary`), and the commit-message check in sequence and exits
-with the first non-zero exit code.
+## Advisory Orchestrator In Isolation
+
+The `commit-queue commit` workflow invokes the advisory orchestrator
+internally during move 3. Run the orchestrator directly only when
+iterating on a draft message *before* the bundle is staged — for
+example, to confirm a header obeys `header-max-length` without
+attempting a real commit:
 
 ```bash
 pnpm agent-tools:check-commit-skill-advisories -F - <<'EOF'
@@ -373,31 +357,21 @@ Co-Authored-By: <name> <email>
 EOF
 ```
 
-Or pass via `-m` (repeats join paragraphs with blank lines, identical to
-`git commit -m … -m …`):
+If the orchestrator reports a violation, classify the signal before
+deciding what to do. Commit-message violations must be fixed before
+`git commit`. Fitness and vocabulary findings require substance-led
+disposition: fix violations introduced by the current change, and
+record or route pre-existing shared-state signals through the
+appropriate consolidation or owner-visible path. Do not treat the
+advisory orchestrator as a hook verdict — the live `.husky/pre-commit`
+and `.husky/commit-msg` hooks remain the blocking gate tier.
 
-```bash
-pnpm agent-tools:check-commit-skill-advisories \
-  -m "type(scope): short subject" \
-  -m "Body paragraph one." \
-  -m "Body paragraph two."
-```
-
-If the orchestrator reports a violation, identify the failing advisory from
-the `commit-skill gate "<gate>" failed` line on stderr, then classify the
-signal before deciding what to do. Commit-message violations must be fixed
-before `git commit`. Fitness and vocabulary findings require substance-led
-disposition: fix violations introduced by the current change, and record or
-route pre-existing shared-state signals through the appropriate consolidation
-or owner-visible path. Do not treat the advisory orchestrator as a hook verdict.
-The live `.husky/pre-commit` and `.husky/commit-msg` hooks remain the blocking
-gate tier.
-
-The fitness and vocabulary gates inspect the working tree, not the staged
-set; pre-existing fitness or vocabulary violations are catalogued at the
-appropriate consolidation pass per the `doctrine-enforcement-quick-wins`
-plan (WS5) and not blocked retroactively. New violations introduced by the
-current change are blocked at this gate.
+The fitness and vocabulary gates inspect the working tree, not the
+staged set; pre-existing fitness or vocabulary violations are
+catalogued at the appropriate consolidation pass per the
+`doctrine-enforcement-quick-wins` plan (WS5) and not blocked
+retroactively. New violations introduced by the current change are
+blocked at this gate.
 
 ## Commit Message Template
 

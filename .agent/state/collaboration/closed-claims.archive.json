@@ -28999,6 +28999,55 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "70d1199a-6888-4010-a157-6d0e1fbf3696",
+      "agent_id": {
+        "agent_name": "Tempestuous Spiralling Thermal",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "9205b8"
+      },
+      "thread": "practice-substrate",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/commit/SKILL-CANONICAL.md",
+            "agent-tools/src/commit-queue/cli.ts",
+            "agent-tools/src/commit-queue/args.ts",
+            "agent-tools/src/commit-queue/options.ts",
+            "agent-tools/src/commit-queue/index.ts",
+            "agent-tools/src/commit-queue/commit-workflow.ts",
+            "agent-tools/tests/commit-queue.unit.test.ts",
+            "agent-tools/tests/commit-queue.integration.test.ts",
+            "agent-tools/tests/commit-workflow.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T12:54:16Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Lane C — jc-commit SKILL critical review (PDR-046 substance preservation) + ship commit-queue commit workflow primitive with atomic-landing tests. Composes verify-staged + advisory orchestrator + verify-staged-again + git commit + complete. Preserves PDR-053/ADR-176 advisory polarity. Husky full-tree gating UNCHANGED per owner stance.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T13:17:20Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Spiralling Thermal",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "9205b8"
+        },
+        "summary": "Lane C deliverable landing: commit-queue commit workflow primitive + 15 new tests + SKILL revision (5-invariant ledger + 4 operational moves + workflow primitive named). Gates green: type-check, lint (root + agent-tools), 452 agent-tools tests, full repo test (FULL TURBO cached), markdownlint, format. Bundle commits next under residue-exception (collaboration-state inclusive). PDR-046 substance verdict: doctrinal substance irreducible and preserved at full weight; operational ceremony collapsed 10→4.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "70d1199a-6888-4010-a157-6d0e1fbf3696",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

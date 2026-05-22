@@ -7,6 +7,15 @@ export {
 export { guardStageFiles } from './guard.js';
 export { parseCommitQueueArgs } from './args.js';
 export { runCommitQueueCli } from './cli.js';
+export { runCommitWorkflow } from './commit-workflow.js';
+export type {
+  CommitWorkflowDependencies,
+  CommitWorkflowFailureStage,
+  CommitWorkflowGitCommitResult,
+  CommitWorkflowInput,
+  CommitWorkflowProcessResult,
+  CommitWorkflowResult,
+} from './commit-workflow.js';
 export {
   formatCommitQueueListText,
   formatCommitQueueShowText,

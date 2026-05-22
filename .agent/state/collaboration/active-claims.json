@@ -422,38 +422,7 @@
       "claimed_at": "2026-05-22T12:42:00Z",
       "freshness_seconds": 7200,
       "sidebar_open": false,
-      "intent": "Continuous /jc-consolidate-docs pass — critical-zone memory surfaces (napkin 1099L, pending-graduations 4071L, repo-continuity prose widths, distilled 677L); graduate due/overdue PDR/ADR candidates to permanent homes; rotate napkin; honour learning-preservation-overrides-fitness.",
-      "intent_to_commit": "6fbc45a8-7703-4d76-b1c7-0e69a8463006"
-    },
-    {
-      "claim_id": "70d1199a-6888-4010-a157-6d0e1fbf3696",
-      "agent_id": {
-        "agent_name": "Tempestuous Spiralling Thermal",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "9205b8"
-      },
-      "thread": "practice-substrate",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/skills/commit/SKILL-CANONICAL.md",
-            "agent-tools/src/commit-queue/cli.ts",
-            "agent-tools/src/commit-queue/args.ts",
-            "agent-tools/src/commit-queue/options.ts",
-            "agent-tools/src/commit-queue/index.ts",
-            "agent-tools/src/commit-queue/commit-workflow.ts",
-            "agent-tools/tests/commit-queue.unit.test.ts",
-            "agent-tools/tests/commit-queue.integration.test.ts",
-            "agent-tools/tests/commit-workflow.unit.test.ts"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-22T12:54:16Z",
-      "freshness_seconds": 7200,
-      "sidebar_open": false,
-      "intent": "Lane C — jc-commit SKILL critical review (PDR-046 substance preservation) + ship commit-queue commit workflow primitive with atomic-landing tests. Composes verify-staged + advisory orchestrator + verify-staged-again + git commit + complete. Preserves PDR-053/ADR-176 advisory polarity. Husky full-tree gating UNCHANGED per owner stance."
+      "intent": "Continuous /jc-consolidate-docs pass — critical-zone memory surfaces (napkin 1099L, pending-graduations 4071L, repo-continuity prose widths, distilled 677L); graduate due/overdue PDR/ADR candidates to permanent homes; rotate napkin; honour learning-preservation-overrides-fitness."
     },
     {
       "claim_id": "56206b71-a942-44ac-aa42-715b1cd5b30c",

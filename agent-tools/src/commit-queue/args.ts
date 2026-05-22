@@ -57,6 +57,7 @@ export function usage(): string {
     '  record-staged --intent-id <uuid>',
     '  verify-staged --intent-id <uuid> --commit-subject <subject>',
     '  complete --intent-id <uuid>',
+    '  commit --intent-id <uuid> --message-file <path>',
     '  status [--registry <path>] [--now <iso>]',
     '  list [--registry <path>] [--now <iso>] [--prefix <intent-prefix>]',
     '       [--phase <queued|staging|pre_commit|abandoned>]',

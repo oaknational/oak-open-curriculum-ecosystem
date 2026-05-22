@@ -263,4 +263,135 @@ describe('commit-queue CLI read commands', () => {
       }),
     ).rejects.toThrow('invalid ISO date-time for --now: 2026-02-31T07:25:00Z');
   });
+
+  it('dispatches commit to the workflow runner and writes the resulting SHA to stdout on success', async () => {
+    const stdout = stdoutBuffer();
+    const stderr = stdoutBuffer();
+
+    await expect(
+      runCommitQueueCli({
+        command: 'commit',
+        options: {
+          file: [],
+          'intent-id': '11111111-1111-4111-8111-111111111111',
+          'message-file': '.git/COMMIT_EDITMSG',
+        },
+        repoRoot: '/repo',
+        commitWorkflow: async () => ({
+          ok: true,
+          intentId: '11111111-1111-4111-8111-111111111111',
+          sha: 'cafef00dcafef00dcafef00dcafef00dcafef00d',
+          advisoryExitCode: 0,
+        }),
+        stdout: stdout.stdout,
+        stderr: stderr.stdout,
+      }),
+    ).resolves.toBe(0);
+
+    expect(stdout.text()).toBe('cafef00dcafef00dcafef00dcafef00dcafef00d\n');
+    expect(stderr.text()).toBe('');
+  });
+
+  it('surfaces the advisory orchestrator exit code to stderr on commit success when the advisory exit was non-zero', async () => {
+    const stdout = stdoutBuffer();
+    const stderr = stdoutBuffer();
+
+    await expect(
+      runCommitQueueCli({
+        command: 'commit',
+        options: {
+          file: [],
+          'intent-id': '11111111-1111-4111-8111-111111111111',
+          'message-file': '.git/COMMIT_EDITMSG',
+        },
+        repoRoot: '/repo',
+        commitWorkflow: async () => ({
+          ok: true,
+          intentId: '11111111-1111-4111-8111-111111111111',
+          sha: 'cafef00dcafef00dcafef00dcafef00dcafef00d',
+          advisoryExitCode: 7,
+        }),
+        stdout: stdout.stdout,
+        stderr: stderr.stdout,
+      }),
+    ).resolves.toBe(0);
+
+    expect(stderr.text()).toContain('advisory orchestrator exit 7');
+    expect(stderr.text()).toContain('substance-led path');
+  });
+
+  it('exits non-zero and writes the failure stage to stderr when the workflow reports failure', async () => {
+    const stdout = stdoutBuffer();
+    const stderr = stdoutBuffer();
+
+    await expect(
+      runCommitQueueCli({
+        command: 'commit',
+        options: {
+          file: [],
+          'intent-id': '11111111-1111-4111-8111-111111111111',
+          'message-file': '.git/COMMIT_EDITMSG',
+        },
+        repoRoot: '/repo',
+        commitWorkflow: async () => ({
+          ok: false,
+          stage: 'verify-staged-before',
+          reason: 'staged files do not exactly match intent files; extra: a; missing: b',
+          intentId: '11111111-1111-4111-8111-111111111111',
+        }),
+        stdout: stdout.stdout,
+        stderr: stderr.stdout,
+      }),
+    ).resolves.toBe(1);
+
+    expect(stdout.text()).toBe('');
+    expect(stderr.text()).toContain('commit-workflow verify-staged-before failure');
+  });
+
+  it('rejects commit invocations missing --intent-id', async () => {
+    await expect(
+      runCommitQueueCli({
+        command: 'commit',
+        options: {
+          file: [],
+          'message-file': '.git/COMMIT_EDITMSG',
+        },
+        repoRoot: '/repo',
+        commitWorkflow: async () => {
+          throw new Error('commitWorkflow should not be called when args are invalid');
+        },
+      }),
+    ).rejects.toThrow('missing required --intent-id');
+  });
+
+  it('rejects commit invocations missing --message-file', async () => {
+    await expect(
+      runCommitQueueCli({
+        command: 'commit',
+        options: {
+          file: [],
+          'intent-id': '11111111-1111-4111-8111-111111111111',
+        },
+        repoRoot: '/repo',
+        commitWorkflow: async () => {
+          throw new Error('commitWorkflow should not be called when args are invalid');
+        },
+      }),
+    ).rejects.toThrow('missing required --message-file');
+  });
+
+  it('rejects unknown options for commit', async () => {
+    await expect(
+      runCommitQueueCli({
+        command: 'commit',
+        options: {
+          file: [],
+          'intent-id': '11111111-1111-4111-8111-111111111111',
+          'message-file': '.git/COMMIT_EDITMSG',
+          'commit-subject': 'feat(x): y',
+        },
+        repoRoot: '/repo',
+      }),
+    ).rejects.toThrow('unknown option for commit-queue commit: --commit-subject');
+  });
 });
