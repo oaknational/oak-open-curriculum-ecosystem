@@ -15,9 +15,11 @@
  *
  * Two-phase activation: the synthetic-input tests in
  * `freshness.unit.test.ts` prove the gate semantics from gate-1a;
- * the binding test in `eef-freshness-binding.unit.test.ts` exercises
- * the gate against the live SDK snapshot when `t2-zod-loader` lands
- * `src/mcp/data/eef-toolkit.json`.
+ * the live binding (exercising this function against the SDK
+ * snapshot) joins `t2-zod-loader`'s cycle when the data file at
+ * `src/mcp/data/eef-toolkit.json` and its typed loader are
+ * available. See `eef-evidence-corpus.plan.md` §Phase G for the
+ * partial/full split rationale.
  *
  * The gate-1b refresh script (a separate cycle) consumes the same
  * check function to validate any reviewed replacement before copying
