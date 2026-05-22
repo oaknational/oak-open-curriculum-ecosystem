@@ -183,6 +183,24 @@ list; entry-level summary index is intentionally omitted to avoid
 duplicating entry-body substance and to keep the index honest as
 the queue churns.
 
+### 2026-05-22 — "Structurally-identical-new-function" pre-authoring drop pattern (PDR-shaped or skill-amendment-shaped)
+
+`[captured: 2026-05-22 | source: stormbound/commit-queue-intent-scope-discipline plan, Cycles 1.1 + 1.2 | target: pdr-or-skill:structurally-identical-function-pre-authoring-drop | trigger: third instance OR owner direction to author | size: S | status: pending]`
+
+Substance summary: two cycles in a row in the same plan (Cycle 1.1 + Cycle 1.2 of `commit-queue-intent-scope-discipline.plan.md`) planned to introduce a NEW "scoped" variant of an existing function (`createScopedStagedBundleFingerprint`, `verifyScopedStagedBundle`). In both cases, pre-authoring reviewer dispatch (code-expert gateway + type-expert) converged on "structurally identical to the existing function" — the existing function accepts already-scoped data through its existing parameter shape; no new function is required. The scope enforcement is upstream at the staged-read; downstream verify/fingerprint logic doesn't need scope-awareness at all. Both new-function proposals dropped at pre-authoring; both cycles landed simpler than planned.
+
+**Underlying pattern**: when a plan proposes a NEW parallel function (`fooScoped`, `fooV2`, `fooEnhanced`, etc.) that mirrors an existing function's signature, that's a signal the migration is purely on the read seam (or some other upstream concern), not on the downstream function. Pre-authoring reviewer dispatch can surface this BEFORE any code is written, dropping the duplicate.
+
+**Cure shape options**:
+
+1. **PDR candidate**: "Pre-authoring scope check — does the proposed new function's signature differ structurally from the existing one?" If no, the migration is on the seam, not on the function. Drop the new function before authoring.
+2. **Skill amendment**: add this check to `oak-plan` skill's pre-authoring + `pre-execution-code-expert-review-per-loop-cycle` rule's gateway checklist.
+3. **Inline pattern note**: capture as a pattern in `.agent/memory/active/patterns/` and let the third instance trigger formal graduation.
+
+**Why pending**: 2 instances same plan, same author. Third instance from a different author / different plan would confirm the pattern's generality before formal graduation. Owner direction to author can fire earlier.
+
+Falsifiability: a future plan that proposes a NEW parallel function and lands it without pre-authoring drop, then has the new function flagged as a duplicate post-delivery, is the failure mode this entry would cure. A future plan that proposes a NEW parallel function and drops it at pre-authoring is the success.
+
 ### 2026-05-22 — Check-runner singleton claim (rule-shaped or coordination-state-schema-amendment-shaped)
 
 `[captured: 2026-05-22 | source: owner-direction (Stormbound session-handoff window) | target: rule:check-singleton-per-window OR adr:coordination-state-schema-add-gate-sweep-area-kind | trigger: owner-direction (already fired) — author the structural cure when bandwidth allows | size: S | status: pending]`

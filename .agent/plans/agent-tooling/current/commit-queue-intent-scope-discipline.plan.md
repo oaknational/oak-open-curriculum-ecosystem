@@ -53,17 +53,26 @@ todos:
     depends_on: [cycle-1-fingerprint-helper-scoped]
   - id: cycle-3-commit-pathspec
     content: >
-      Cycle 1.3: Update `runGitCommit` injection so inner `git commit`
-      runs with `intent.files` as explicit pathspec; retire the unscoped
-      helpers and rename scoped variants to canonical names (one clean
-      public surface ends the arc). Failing test (unit + integration):
-      two-writer scenario where both writers run `commit-queue commit`
-      under their respective intents and produce two distinct commits,
-      each containing ONLY the files in its intent.files. Full-tree
-      husky pre-commit gate preserved. One commit; tree green at end.
-      Integration test must NOT reach past the product seam for git
-      setup (test-immediate-fails.md §1) — set up through fixture
-      helpers or product-code seam (test-expert forward brief).
+      Cycle 1.3 (Path B per test-expert CRITICAL VIOLATIONS, code-expert
+      gateway Shape A): widen `CommitWorkflowDependencies.runGitCommit`
+      to `(input: { readonly pathspec: readonly string[] }) =>
+      Promise<CommitWorkflowGitCommitResult>` (mirrors Cycle 1.2's
+      `getStagedBundle` shape); thread `intent` through
+      `runCommitAndComplete` so `intent.files` is passed as `pathspec`;
+      runtime closure appends `['--', ...pathspec]` to inner `git
+      commit` spawn argv. Delete unscoped `getStagedBundle` from
+      `git.ts`; rename `getStagedBundleScoped` to canonical
+      `getStagedBundle` (and `ScopedStagedBundleInput` to canonical
+      name — type-expert pending). Update import lines in `cli.ts`,
+      `commit-workflow-runtime.ts`, and the two Cycle 1.1 + 1.2
+      sibling test files in the same commit. NEW unit test
+      `commit-queue-commit-pathspec.unit.test.ts` uses the same
+      capture-list pattern Cycle 1.2 used for `getStagedBundle`. NO
+      integration test (originally planned `*.integration.test.ts`
+      dropped — would spawn subprocess + classification-violate
+      immediate-fail rule 8 + risk husky-hook recursion; structural
+      cure widens dep so unit test suffices). One commit; tree green;
+      atomic rename + retirement + tests + import updates.
     status: pending
     depends_on: [cycle-2-verify-staged-scoped]
   - id: phase-final-hardening
@@ -96,7 +105,7 @@ isProject: false
 | Phase 0 — surface verification | ✓ Complete | §Phase 0 Task 0.2 Findings (2026-05-22 by Stormbound) |
 | Cycle 1.1 — `getStagedBundleScoped` + `record-staged` adoption | ✓ Complete | `fb0833a4` (atomic test+product code) + `e242e633` (reviewer absorption + fixture rename) |
 | Cycle 1.2 — `verify-staged`/`verify-staged-again` adoption (no new core function — existing `verifyStagedBundle` handles scoped data unchanged) | ✓ Completed | Atomic landing: test + product code (5 file changes). 476/476 tests green; type-check + lint clean. `architecture-expert-betty` Shape A absorbed: `CommitWorkflowDependencies.getStagedBundle` widened to `(input: { readonly pathspec: readonly string[] }) => StagedBundle`; `commit-workflow-runtime.ts` explicit construction per type-expert (no spread). New `commit-queue-verify-staged-scope.unit.test.ts` (4 tests covering invariants a/b/c/d); `commit-workflow.unit.test.ts` extended with pathspec-capture (invariant e). CLI handler `cli.ts:162` migrated to scoped read |
-| Cycle 1.3 — `runGitCommit` pathspec narrowing + canonical retirement | Pending | Forward briefs recorded: integration test must not reach past product seam for git setup; forward-trace closeout posted at end of this cycle (not Phase Final) |
+| Cycle 1.3 — `runGitCommit` pathspec narrowing + canonical retirement | Pre-execution partial | Path B absorbed (drop integration test; widen dep; unit-test capture-list mirrors Cycle 1.2). `code-expert` gateway APPROVED WITH CONDITIONS; `test-expert` CRITICAL VIOLATIONS resolved by Path B. Pending: `type-expert` (canonical name decision for `ScopedStagedBundleInput` + signature verification) + `assumptions-expert` (proportionality + rename ripple bound). No integration test required; forward-trace closeout still posted at end of this cycle |
 | Phase Final — SKILL update + `pnpm check` aggregate + consolidation | Pending |  |
 
 ## Reviewer Dispatch Log
@@ -115,8 +124,11 @@ isProject: false
 | Pre-Cycle-1.2 | `type-expert` (focused) | **AT-RISK RESOLVED** | Inline `{ readonly pathspec: readonly string[] }` at dep interface (no `ScopedStagedBundleInput` import in workflow); **must-fix**: explicit construction (no spread) in runtime binding — absorbed. NEW `verifyScopedStagedBundle` deemed unnecessary; both reviewers' specs collapse to "existing `verifyStagedBundle` handles scoped data unchanged" |
 | In-Cycle-1.2 | TDD + atomic landing | ✓ | 476/476 tests; lint + type-check clean |
 | In-Cycle-1.2 | `test-expert`, `type-expert`, `code-expert` | Pending |  |
-| Pre-Cycle-1.3 | `assumptions-expert` + `code-expert` gateway | Pending |  |
-| In-Cycle-1.3 | `test-expert`, `type-expert`, `code-expert` | Pending |  |
+| Pre-Cycle-1.3 | `code-expert` gateway | **APPROVED WITH CONDITIONS** | Shape A widen `runGitCommit` to `(input: { readonly pathspec: readonly string[] }) => Promise<…>`; thread `intent` through `runCommitAndComplete`; atomic deletion of unscoped helper; rename ripple into two existing scope test files must land in same commit; zero external consumers — full reasoning in §Cycle 1.3 Pre-Execution Absorption |
+| Pre-Cycle-1.3 | `test-expert` (focused) | **CRITICAL VIOLATIONS → Path B absorbed** | Proposed `*.integration.test.ts` failed immediate-fail rule 8 (subprocess) + classification mismatch + husky-hook-recursion risk. Resolution: drop integration test entirely; widen dep so pathspec passes through seam; unit-test via capture-list pattern (mirror Cycle 1.2's `stagedBundlePathspecs`). End-to-end git behaviour is git's contract, not ours to re-test |
+| Pre-Cycle-1.3 | `type-expert` (focused) | **PENDING** | Confirms exact widened signature; commits to canonical name for `ScopedStagedBundleInput` (`GetStagedBundleInput` vs `StagedBundleInput` vs keep); compilation-time non-empty `pathspec` enforcement decision |
+| Pre-Cycle-1.3 | `assumptions-expert` | **PENDING** | Validate the cycle-shape simplification (Path B) is proportionate; confirm rename ripple is bounded |
+| In-Cycle-1.3 | TDD + atomic landing | Pending |  |
 | Post-arc | `docs-adr-expert` + `release-readiness-expert` | Pending | Phase Final |
 
 ---
@@ -127,11 +139,13 @@ isProject: false
 
 The commit-queue intent record carries a `files: readonly string[]` field set at `enqueue` time — the files the intent claims to commit. Three downstream subcommands (`record-staged`, `verify-staged`, `commit`) compute their fingerprints and execute their inner `git commit` over the **entire staged index**, not the intent's `files` scope. In single-writer scenarios this works accidentally because the staged index equals the intent's scope. In multi-writer scenarios — which the queue + claim + comms ceremony explicitly exists to support — the operations silently sweep peer work.
 
-**Evidence (two instances, same 60-minute window 2026-05-22)**:
+**Evidence (three instances, same 2-hour window 2026-05-22)**:
 
 1. **Instance A (ff2 / Mistbound, 14:04Z)**: surfaced during ff2 owner-decision recording. Mistbound staged 2 plan files (`.agent/plans/graph-mvp-arc.plan.md` + `.agent/plans/sector-engagement/eef/current/eef-first-feature.plan.md`); Shaded had concurrently staged 6 files (3 graph-* eslint configs + 3 collab-state files) for Cycle 9.2 rewire. The current `verifyStagedBundle` would actually have BLOCKED Mistbound's commit at the `stagedFileMismatch` check (returning `extra: <Shaded's 6 files>`) rather than silently committing everything — the framing "would have committed everything staged" in the original write-up overstates the symptom. The deeper issue is that `recordStagedBundle` would have fingerprinted the peer-polluted index content, leaving Mistbound with a baseline that could not match any subsequent re-stage attempt either. The current resolution requires bypassing the queue ceremony via manual `git commit -- <pathspecs>`, which breaks the audit-trail invariant the queue exists to enforce. See comms event `e48d7f16` and the corresponding entry in `.agent/state/collaboration/shared-comms-log.md` (markdown anchor, persistent regardless of comms-event retention) from the same window.
 
 2. **Instance B (distilled.md graduation / Wooded, 14:54Z)**: while this very plan was being grounded, Wooded ran `commit-queue commit` with intent `692c57a7` scoped to a single file (`.agent/memory/active/distilled.md`). The primitive's `record-staged` step fingerprinted the FULL git index rather than the intersection of (`intent.files`, currently-staged). Result: commit `2389ff5e` absorbed Shaded's Cycle 10 source edits to `agent-tools/src/bin/commit-queue.ts` + `agent-tools/src/bin/collaboration-state.ts` (`.then/.catch` → `try/await` conversion) under Wooded's `docs(distilled): …` commit subject. Substance preserved in HEAD; audit trail misattributed. Self-corrected via directed-comms apology + broadcast; substance redress requires the operative fix this plan lands. See comms event `2389ff5e`-broadcast (Wooded) and Stormbound's Shaded-directed event `31641f82` + the corresponding `shared-comms-log.md` window for the full narrative.
+
+3. **Instance C (t12 citation-shape peer-handoff / Stormbound, 15:35Z to 16:13Z)**: while Cycle 1.2 of this very plan was being absorbed and Cycle 1.3 was being scoped, Mistbound handed off their staged t12 work for me to land on owner-directed handoff. Three files staged; my `commit-queue verify-staged` ceremony invoked the (then still unscoped) `verifyStagedBundle` and was rejected with 66 extra files because peer Shaded had concurrently staged their Cycle 11 jc-→oak- rename in the shared index between my queue-enqueue and verify-staged steps. The unscoped read couldn't distinguish "my 3 files plus Shaded's 66 unrelated files" from "wrong staged set". Resolved out-of-cycle via Path-B explicit-pathspec commit (`0b7289e9`) — precisely the structural cure Cycle 1.3 codifies for the queue's own inner `git commit`. This is the third worked example AND the live-production proof that Cycle 1.1's `record-staged` scoping (then-recently-landed) was insufficient on its own without Cycles 1.2 + 1.3 to complete the chain. Cycle 1.2 (verify-staged scope) subsequently landed at `6b5c9b4e`; Cycle 1.3 remains pending. See `0b7289e9` commit metadata + the `shared-comms-log.md` t12 handoff/closeout sequence.
 
 **Root cause**: The `files` field on the intent record is treated as advisory metadata rather than operative scope. The data model is correct (intent declares its file scope); the operations don't honour the declaration. This is a Replace-Don't-Bridge case: the implicit "operate over the whole staged index" assumption is the bug; the explicit "operate over `intent.files`" is the replacement.
 
@@ -321,7 +335,7 @@ All four acceptance criteria are satisfied:
 
 **Additional finding** (not in the original Phase 0 acceptance criteria but surfaced by the pre-execution `code-expert` gateway):
 
-- `agent-tools/src/commit-queue/index.ts` re-exports `createStagedBundleFingerprint` and `verifyStagedBundle` as part of the public `@oaknational/agent-tools` package surface. `getStagedBundle` is NOT re-exported (internal helper). The cycle-amendment landing strategy preserves the original unscoped functions through Cycles 1.1–1.2 so the public API does not change shape mid-arc; Cycle 1.3 performs the canonical retirement (rename scoped variants to the canonical names; the public surface ends in one clean shape with operative scope).
+- `agent-tools/src/commit-queue/index.ts` re-exports `createStagedBundleFingerprint` and `verifyStagedBundle` as part of the public `@oaknational/agent-tools` package surface. `getStagedBundle` is NOT re-exported (internal helper). The cycle-amendment landing strategy preserves the original unscoped `getStagedBundle` through Cycles 1.1–1.2 so the public API does not change shape mid-arc; Cycle 1.3 deletes the unscoped `getStagedBundle` and renames the scoped variant to the canonical name. **Revised post-Cycle-1.2**: `createStagedBundleFingerprint` and `verifyStagedBundle` were NEVER duplicated — Cycles 1.1 and 1.2 reused them on already-scoped data. Cycle 1.3 retires/renames exactly one function pair (`getStagedBundle` deleted; `getStagedBundleScoped` → canonical `getStagedBundle`) plus possibly `ScopedStagedBundleInput` → canonical name. The two public re-exports of `createStagedBundleFingerprint` + `verifyStagedBundle` survive Cycle 1.3 unchanged.
 
 **Additional live evidence** (surfaced during this Phase 0 window — Instance B from §Context): the `2389ff5e` commit at 14:54Z is a fresh concrete instance of the failure mode this plan cures. Increases confidence that the cure shape is correctly framed.
 
@@ -331,8 +345,8 @@ All four acceptance criteria are satisfied:
 
 Cycle 1.1 landed at `fb0833a4`. Three reviewers dispatched in parallel post-delivery:
 
-- **test-expert**: GO-WITH-AMENDMENTS. All four tests describe system state correctly; atomic-landing invariant honoured; fake-runGit fixture is state-describing not implementation-tracking; coverage of the scope invariant is complete. Improvements absorbed in the follow-up commit: `emptyRegistry → registryWithIntentA` fixture rename. Forward brief for Cycle 1.3: integration test must NOT import `execFileSync`/`child_process` directly to set up git state — set up through fixture helpers or product-code seam; `test-immediate-fails.md §1` boundary applies.
-- **type-expert**: GO. No `as`/`any`/`unknown`/`@ts-expect-error`/`!` introduced. `ScopedStagedBundleInput` signature is correctly tightened (`pathspec: readonly string[]` required; `runGit?` optional injection seam). Type flow from `CommitIntent.files` (`readonly string[]`) → `pathspec` is direct with no widening. Watch for Cycle 1.2: `runVerifyStagedCommand` still calls unscoped `getStagedBundle` — must migrate before Cycle 1.3 retires the unscoped helpers, otherwise the retirement has a dangling consumer.
+- **test-expert**: GO-WITH-AMENDMENTS. All four tests describe system state correctly; atomic-landing invariant honoured; fake-runGit fixture is state-describing not implementation-tracking; coverage of the scope invariant is complete. Improvements absorbed in the follow-up commit: `emptyRegistry → registryWithIntentA` fixture rename. **Forward brief for Cycle 1.3 (refined post-Cycle-1.2)**: the originally planned `*.integration.test.ts` is dropped per Cycle 1.3 Pre-Execution Absorption (Path B — widen the dep so unit-test capture-list pattern suffices; subprocess + filesystem IO classification mismatch + husky-hook-recursion risk all avoided structurally). The original forward-brief concern (integration test must not reach past product seam for git setup, `test-immediate-fails.md §1`) is moot under Path B because there is no integration test.
+- **type-expert**: GO. No `as`/`any`/`unknown`/`@ts-expect-error`/`!` introduced. `ScopedStagedBundleInput` signature is correctly tightened (`pathspec: readonly string[]` required; `runGit?` optional injection seam). Type flow from `CommitIntent.files` (`readonly string[]`) → `pathspec` is direct with no widening. **Resolved post-Cycle-1.2**: `runVerifyStagedCommand` migrated to scoped read at `6b5c9b4e`; the previously flagged dangling-consumer risk for Cycle 1.3's retirement is now closed. The only remaining consumer of the unscoped `getStagedBundle` is the runtime wiring (and that's Cycle 1.3's mutation point).
 - **code-expert post-delivery gateway**: GO-WITH-AMENDMENTS. All four pre-execution amendments absorbed cleanly; all five Cycle 1.1 acceptance criteria satisfied. The one important finding (`index.ts` re-export missing) resolved via the Task 0.1 §index.ts decision above (internal-only through the multi-cycle window — documented choice, not a missed deliverable). Three Cycle 1.2 pre-execution concerns flagged:
   1. **`stagedFileMismatch` check at `core.ts:74`** — when Cycle 1.2 replaces the whole-index read with a scoped read, this check's "extra files" branch becomes semantically narrower (in-scope-but-not-in-intent files only); error message may need updating.
   2. **Injection seam in `commit-workflow.ts`** — Cycle 1.2 must decide whether `CommitWorkflowDependencies.getStagedBundle` is widened to accept scope, or the scoped helper is called directly inside the runtime wiring (bypassing the injection seam for the scoped path). `architecture-expert-betty` recommended for the pre-execution dispatch with focus on this boundary question.
@@ -382,11 +396,12 @@ export function getStagedBundleScoped(input: ScopedStagedBundleInput): StagedBun
   /* runGit defaults to the existing execFileSync invocation; args end with `--`, ...pathspec */
 }
 
-// NEW scoped fingerprint — takes the same scoped StagedBundle inputs:
-export function createScopedStagedBundleFingerprint(input: {
-  readonly nameStatus: string;
-  readonly patch: string;
-}): string { /* same hash algorithm; the scope is enforced by the upstream getStagedBundleScoped read */ }
+// NOTE (post-landing): `createScopedStagedBundleFingerprint` was originally
+// planned as a parallel-scoped variant, but Cycle 1.1 landed reusing the
+// existing `createStagedBundleFingerprint({nameStatus, patch})` unchanged —
+// the scope enforcement is entirely upstream at the `getStagedBundleScoped`
+// read, so the fingerprint helper operates on already-scoped data without
+// modification.
 ```
 
 **Failing Test or Check** (`agent-tools/tests/commit-queue-record-staged-scope.unit.test.ts`):
@@ -395,13 +410,14 @@ State the system invariant: "two writers' record-staged fingerprints are indepen
 
 The test sets up a simulated staged-bundle state covering files X, Y, Z, W; constructs intent A with `files: [X, Y]` and intent B with `files: [Z, W]`; calls record-staged for A; mutates the staged-bundle state to add a change in Z; calls record-staged for A again; asserts the fingerprint is unchanged.
 
-**Product Changes** (corrected: no optional/fallback overload):
+**Product Changes (landed shape — `fb0833a4` + `e242e633`)**:
 
 - Add NEW `getStagedBundleScoped({repoRoot, pathspec, runGit?})` in `git.ts` with `pathspec` as a required parameter; the `runGit` injection point allows unit tests to feed literal index snapshots without spawning real git.
-- Add NEW `createScopedStagedBundleFingerprint({nameStatus, patch})` in `core.ts` (same hash algorithm; the scope enforcement is upstream at the staged-read).
-- Route `runRecordStagedCommand` (`cli.ts:130–143`) through the scoped variants using `intent.files` as `pathspec`.
-- Re-export the new scoped helpers from `index.ts` alongside the existing unscoped helpers.
-- Existing unscoped `getStagedBundle` and `createStagedBundleFingerprint` are LEFT UNCHANGED. Non-adopted call sites (verify-staged in Cycle 1.2, the `runGitCommit` inner commit in Cycle 1.3) continue to use the unscoped helpers until their respective cycles adopt. **No backward-compat optional parameter; no transient fallback in committed history.**
+- Route `runRecordStagedCommand` (`cli.ts:130–148`) through `getStagedBundleScoped` using `intent.files` as `pathspec`.
+- Existing `createStagedBundleFingerprint`, `verifyStagedBundle`, `recordStagedBundle` UNCHANGED — they accept already-scoped data through their existing parameter shapes; the scope discipline is enforced entirely upstream at the staged-read seam.
+- `getStagedBundleScoped` + `ScopedStagedBundleInput` remain INTERNAL-ONLY through the multi-cycle window (NOT re-exported from `index.ts`). Cycle 1.3 deletes the unscoped `getStagedBundle` and renames the scoped variant to canonical, so no transient name bloat ever appears in the public package surface.
+- Existing unscoped `getStagedBundle` is LEFT UNCHANGED through this cycle. The non-adopted call sites (verify-staged in Cycle 1.2, the `runGitCommit` inner commit in Cycle 1.3) continue to use it until their respective cycles adopt. **No backward-compat optional parameter; no transient fallback in committed history.**
+- (Originally planned `createScopedStagedBundleFingerprint` was dropped at implementation time — the existing helper accepts already-scoped data unchanged. See "NOTE (post-landing)" in the code-sketch above.)
 
 **Acceptance Criteria**:
 
@@ -451,60 +467,68 @@ pnpm lint        # Expected: exit 0
 **Pre-Execution Reviewer Absorption (assumptions-expert + code-expert gateway, 2026-05-22 post-betty)**:
 
 - **Line refs verified at `0b7289e9` HEAD**: `commit-workflow.ts:20` (import `verifyStagedBundle` — unchanged under Shape A), `:46` (dep type — widens), `:99/:107/:137` (`runVerifyStage` chain), `:144` (call site — passes scope), `:191` (`verifyStagedBundle` call — receives already-scoped data from the dep, unchanged). `commit-workflow-runtime.ts:27` (imports `getStagedBundle` — flips to `getStagedBundleScoped`), `:39` (`repoRoot` in deps), `:54` (binding — closure absorbs `repoRoot`). `cli.ts:18` already imports both helpers (Cycle 1.1), `:134` already calls scoped (Cycle 1.1), `:151` `runVerifyStagedCommand` def, `:162` **unscoped call site to migrate** (this cycle's CLI mutation), `:199` `verifyStagedBundle` call inside `writeVerificationResult` (receives staged via parameter — unchanged).
-- **Two migration sites, ONE new core function**: `cli.ts:162` migrates to `getStagedBundleScoped({ repoRoot: input.input.repoRoot, pathspec: intent.files })` matching the Cycle 1.1 record-staged pattern; the `staged:` argument feeds `verifyStagedBundle` at line 199 (unchanged). `commit-workflow.ts:144` migrates to `input.deps.getStagedBundle({ pathspec: intent.files })`; `verifyStagedAgainstIntent` keeps calling `verifyStagedBundle` (line 191) on pre-scoped data — **NO** new code path through `verifyScopedStagedBundle` from the workflow.
-- **`verifyScopedStagedBundle` scope**: per code-expert gateway #4 + #5, this NEW core export wraps the **CLI** path's scoped fingerprint-and-compare logic. Internally it delegates to the existing private `verifyFingerprint` (currently at `core.ts:181`) — does NOT duplicate logic. Keeps complexity under 8. The CLI handler at `cli.ts:151` calls `verifyScopedStagedBundle` directly via fixture-fed snapshot chain (in tests) or via real git (in production). **Workflow uses pre-scoped data through `verifyStagedBundle`; CLI uses the new `verifyScopedStagedBundle`** — single concept, two surface adapters, no code-path duplication.
+- **Two migration sites, ZERO new core functions** (final landed shape — supersedes the original "ONE new function" plan): `cli.ts:162` migrates to `getStagedBundleScoped({ repoRoot: input.input.repoRoot, pathspec: intent.files })` matching the Cycle 1.1 record-staged pattern; the `staged:` argument feeds `verifyStagedBundle` at line 199 (unchanged). `commit-workflow.ts:144` migrates to `input.deps.getStagedBundle({ pathspec: intent.files })`; `verifyStagedAgainstIntent` keeps calling `verifyStagedBundle` (line 191) on pre-scoped data.
+- **`verifyScopedStagedBundle` dropped at pre-authoring** (originally proposed by code-expert gateway #4 + type-expert finding 2; collapsed at pre-authoring because both reviewers' signatures were structurally identical to the existing `verifyStagedBundle`). The CLI handler and the workflow now both feed scoped data into the unchanged `verifyStagedBundle` — single function, two consumers, no new public surface. The `stagedFileMismatch` check at `core.ts:74` narrows naturally under the scoped input (cannot contain peer-owned files by construction) with no code change required.
 - **`commit-workflow.unit.test.ts` regression-guard**: the fake dep at lines 126–185 updates signature to `(input) => fixture` (accepts the new pathspec input). Per code-expert #3, **one of the existing tests** captures `pathspec` on a spy and asserts the workflow passes `intent.files` through; remaining tests use `_input` parameter. Stronger than betty's pure-`_input` recommendation; absorbs the seam-change into the regression-guard rather than bypassing it.
 - **Three additional invariant sub-cases** (per assumptions-expert #5):
   - (c) **Empty `intent.files`**: `getStagedBundleScoped({pathspec: []})` must NOT silently widen to whole-index (git argv assembly risk). Either reject at boundary OR deterministically return empty bundle. Test asserts the chosen behaviour explicitly. (Likely already-rejecting because Cycle 1.1's record-staged tests would have caught widening — confirm at execution time and pin in the new test file.)
   - (d) **Overlapping scope** (writer A `intent.files = [X, Y]`; writer B `intent.files = [Y, Z]`; B restages Y): A's verify-staged-again correctly trips with the verbatim "staged bundle fingerprint changed since it was recorded" reason. Symmetric and expected; pin to ensure no special-casing creeps in.
   - (e) **Origin-trace of `stagedNameOnly`** at execution time: when the test asserts that `verifyStagedBundle` (workflow path) operates on already-scoped data, the test must verify the path through the dep wiring — not just the surface result. Fail-loud if origin trace breaks.
 - **Specialists required pre-authoring**: `test-expert` (focused — two-assertion shape correctness; no conditional branching into one it-block) + `type-expert` (focused — confirm Shape A widening introduces no `any`/widening in `commit-workflow-runtime.ts` closure binding). `code-expert` post-delivery only.
-- **ESLint forward-trace**: reuse Cycle 1.1's fixture machinery (`fakeRunGitFor` + dispatch table + `inScopeFilesFor` + `shapeKeyFor`) verbatim — no new exposure to complexity-8 / `sonarjs/no-alphabetical-sort` / `missing-curly`. New core function `verifyScopedStagedBundle` MUST delegate to private `verifyFingerprint` to stay under complexity-8.
+- **ESLint forward-trace**: reuse Cycle 1.1's fixture machinery (`fakeRunGitFor` + dispatch table + `inScopeFilesFor` + `shapeKeyFor`) verbatim — no new exposure to complexity-8 / `sonarjs/no-alphabetical-sort` / `missing-curly`. (The original concern about complexity in a new `verifyScopedStagedBundle` is moot under the pre-authoring simplification that dropped the new function.)
 
-**File scope** (corrected from Phase 0 inspection — the `verify-staged` CLI handler is in `cli.ts`, not only `commit-workflow.ts`):
+**File scope (post-landing — Cycle 1.2 landed at `6b5c9b4e`)**:
 
-- `agent-tools/src/commit-queue/core.ts` (add NEW scoped `verifyScopedStagedBundle` that uses `createScopedStagedBundleFingerprint`; existing `verifyStagedBundle` retained for any non-cycle callers)
-- `agent-tools/src/commit-queue/cli.ts` (`runVerifyStagedCommand` at lines 146–160: reads `intent.files`, calls scoped variants)
-- `agent-tools/src/commit-queue/commit-workflow.ts` (`getStagedBundle` injected dep type, `verifyStagedAgainstIntent` at lines 187–201, and the `runVerifyStage` calls for both `verify-staged-before` and `verify-staged-after`: route through the scoped helpers via `intent.files`)
-- `agent-tools/src/commit-queue/commit-workflow-runtime.ts` (update the `getStagedBundle` dep wiring to call the scoped variant; pass `intent.files` from the registry read)
-- `agent-tools/tests/commit-queue-verify-staged-scope.unit.test.ts` (NEW; flat-named sibling)
-- `agent-tools/tests/commit-workflow.unit.test.ts` (regression-guard reference: this file uses `createStagedBundleFingerprint` + an injected `getStagedBundle` closure; ensure single-writer behaviour preserved)
+- `agent-tools/src/commit-queue/cli.ts` — `runVerifyStagedCommand` at line 162 migrated to `getStagedBundleScoped({ repoRoot: input.repoRoot, pathspec: intent.files })`; unused `getStagedBundle` import dropped.
+- `agent-tools/src/commit-queue/commit-workflow.ts` — `CommitWorkflowDependencies.getStagedBundle` (line 46) widened to `(input: { readonly pathspec: readonly string[] }) => StagedBundle`; `runVerifyStage` (line 144) passes `{ pathspec: intent.files }`. `verifyStagedAgainstIntent` (line 187) keeps calling `verifyStagedBundle` (line 191) on now-pre-scoped data — unchanged.
+- `agent-tools/src/commit-queue/commit-workflow-runtime.ts` — closure binding (line 54) flips to `getStagedBundleScoped` with explicit `{ repoRoot, pathspec: scopeInput.pathspec }` construction (no spread; type-expert).
+- `agent-tools/src/commit-queue/core.ts` — UNCHANGED. `verifyStagedBundle`, `recordStagedBundle`, `createStagedBundleFingerprint`, private `verifyFingerprint`, and `stagedFileMismatch` all accept already-scoped data; the migration is purely on the read side.
+- `agent-tools/tests/commit-queue-verify-staged-scope.unit.test.ts` (NEW; 4 tests covering invariants a/b/c/d).
+- `agent-tools/tests/commit-workflow.unit.test.ts` — `FakeDepsCallLog` extended with `stagedBundlePathspecs` capture array; `getStagedBundle` fake-dep stub signature updated to `(scopeInput) => { stagedBundlePathspecs.push(scopeInput.pathspec); ... }`; one new `it` asserts both verify-staged sites pass `intent.files` through the seam (invariant e).
 
-**Failing Test or Check**:
+**Failing Test or Check (landed shape)**:
 
-State the system invariant: "writer A's verify-staged-again returns ok=true when writer B restages files outside A's scope, AND returns ok=false when writer A's own scope drifts."
+State the system invariant: "writer A's verify-staged returns ok=true when writer B restages files outside A's scope, AND returns ok=false when writer A's own scope drifts."
 
-Two assertions in one test or two paired tests:
+Four invariants asserted across `commit-queue-verify-staged-scope.unit.test.ts`:
 
-- (a) record-staged for intent A; mutate index to add a change in a non-A file; verify-staged-again for A returns ok=true.
-- (b) record-staged for intent A; mutate index to modify an A file; verify-staged-again for A returns ok=false with reason="staged bundle fingerprint changed since it was recorded" (verbatim from existing core.ts).
+- (a) record-staged for intent A; mutate index to add a change in a non-A file; verify-staged for A returns ok=true.
+- (b) record-staged for intent A; mutate index to modify an A file; verify-staged for A returns ok=false with verbatim reason "staged bundle fingerprint changed since it was recorded".
+- (c) empty `intent.files` (`pathspec: []`): `getStagedBundleScoped` returns an empty bundle (does NOT widen to whole-index).
+- (d) overlapping scope (writer A `[X, Y]`; writer B `[Y, Z]`; B restages Y): A's verify-staged trips with the verbatim reason.
 
-**Product Changes**:
+Plus invariant (e) in `commit-workflow.unit.test.ts`: workflow passes `intent.files` through the widened `getStagedBundle` dep on both `verify-staged-before` and `verify-staged-after`.
 
-- `verifyStagedBundleAgainstIntent` (or the existing verify helper) accepts a scope parameter.
-- Both verify-staged and verify-staged-again call sites pass `intent.files`.
+**Product Changes (landed shape)**:
 
-**Acceptance Criteria**:
+- Widen `CommitWorkflowDependencies.getStagedBundle` dep type from `() => StagedBundle` to `(input: { readonly pathspec: readonly string[] }) => StagedBundle`.
+- Migrate CLI `runVerifyStagedCommand` (cli.ts:162) to `getStagedBundleScoped` with `intent.files` as pathspec.
+- Migrate workflow `runVerifyStage` (commit-workflow.ts:144) to pass `{ pathspec: intent.files }` to the dep.
+- Flip runtime closure binding (commit-workflow-runtime.ts:54) to `getStagedBundleScoped` with explicit property construction (no spread).
+- `verifyStagedBundle` + `recordStagedBundle` + `createStagedBundleFingerprint` + `stagedFileMismatch` UNCHANGED — they all accept scoped data through their existing parameter shape. No new core function required.
 
-1. ✅ Writer-independence verify invariant test passes (both sub-cases).
-2. ✅ Existing verify-staged single-writer tests remain green.
-3. ✅ The existing failure-reason string format unchanged.
-4. ✅ One commit; tree green; atomic-landing satisfied.
+**Acceptance Criteria (landed shape — Cycle 1.2 at `6b5c9b4e`)**:
+
+1. ✅ Writer-independence verify invariants pass across four sub-cases (peer drift ok=true; own drift ok=false with verbatim reason; overlapping-scope ok=false with verbatim reason; empty-pathspec returns empty bundle).
+2. ✅ Workflow dep-wiring origin-trace asserted (invariant e): `intent.files` passes through the widened `getStagedBundle` dep on both `verify-staged-before` and `verify-staged-after`.
+3. ✅ Existing verify-staged single-writer tests remain green.
+4. ✅ The existing failure-reason string format unchanged.
+5. ✅ One commit; tree green; atomic-landing satisfied (476/476 tests; type-check + lint clean).
 
 **Deterministic Validation**:
 
 ```bash
 pnpm --filter @oaknational/agent-tools test verify-staged-scope
-# Expected: exit 0, both invariants pass
+# Expected: exit 0, four invariants pass (a/b/c/d)
 
-pnpm --filter @oaknational/agent-tools test verify-staged
-# Expected: exit 0, no regression
+pnpm --filter @oaknational/agent-tools test commit-workflow
+# Expected: exit 0, no regression after fake-dep signature update; invariant e passes
 
-pnpm type-check
-pnpm lint
+pnpm --filter @oaknational/agent-tools type-check
+pnpm --filter @oaknational/agent-tools lint
 ```
 
-**Cycle Complete When**: All four acceptance criteria checked; one cohesive commit lands.
+**Cycle Complete When**: All five acceptance criteria checked; one cohesive commit lands.
 
 ---
 
@@ -512,62 +536,95 @@ pnpm lint
 
 **Parallel-safety**: sequenced after Cycle 1.2.
 
-**Starting state**: Cycles 1.1 + 1.2 landed; fingerprint chain fully intent-scoped.
+**Starting state**: Cycles 1.1 + 1.2 landed; staged-bundle read chain fully intent-scoped end-to-end (record-staged + verify-staged-before + verify-staged-after all consume scoped reads). The inner `git commit` is the last unscoped link; this cycle closes the chain.
 
-**File scope**:
+**Pre-Execution Reviewer Absorption (code-expert gateway + test-expert focused, 2026-05-22 post-Cycle-1.2 at `6b5c9b4e`)**:
 
-- `agent-tools/src/commit-queue/commit-workflow-runtime.ts` (the `runGitCommit` injection: append `--` and intent.files as pathspec)
-- `agent-tools/src/commit-queue/commit-workflow.ts` (if signatures need to propagate intent.files into the deps)
-- `agent-tools/tests/commit-queue-commit-pathspec.unit.test.ts` (NEW; flat-named sibling; commit-time two-writer invariant)
-- `agent-tools/tests/commit-queue-commit-pathspec.integration.test.ts` (NEW; flat-named sibling; ephemeral-repo integration test exercising the full ceremony with two concurrent writers — this is the cycle that requires a real `git init` because the inner `git commit` mutation is what is under test)
-- `agent-tools/tests/commit-workflow.unit.test.ts` (regression-guard reference: confirm the workflow-orchestrator tests still pass with the now-fully-scoped helpers)
+- **Path B (definitive — test-expert CRITICAL VIOLATIONS absorbed)**: drop the originally planned `commit-queue-commit-pathspec.integration.test.ts`. The proposed integration test would spawn `git commit` in an ephemeral repo, which triggers immediate-fail rule 8 (in-process test spawns subprocess), classification mismatch under `testing-patterns.md §Test File Classification` (integration tests must have NONE IO), and introduces husky-hook-recursion risk (test-runner's `core.hooksPath` may be inherited by the ephemeral repo). The structural cure is to widen the `runGitCommit` dep so the pathspec passes through the seam, then unit-test the pathspec threading via the same capture-list pattern Cycle 1.2 used for `getStagedBundle`. The end-to-end git behaviour (`git commit -- <pathspec>` honours pathspec) is git's contract, not ours to re-test.
+- **Shape A widening for `runGitCommit`** (code-expert gateway verdict): `CommitWorkflowDependencies.runGitCommit` widens from `() => Promise<CommitWorkflowGitCommitResult>` to `(input: { readonly pathspec: readonly string[] }) => Promise<CommitWorkflowGitCommitResult>`, mirroring Cycle 1.2's `getStagedBundle` shape exactly. The runtime binding receives `{ pathspec }` and appends `['--', ...pathspec]` to the existing spawn argv.
+- **Thread `intent.files` through `runCommitAndComplete`**: the existing call chain inside `commit-workflow.ts` reaches `runGitCommit` from `runCommitAndComplete`, which currently has access to `input.input.deps` but NOT to `intent`. `runCommitAndComplete`'s param object must extend with an `intent: CommitIntent` field (or just `files: readonly string[]`). The path is: `runCommitWorkflow` loads intent → passes it into `runCommitAndComplete` → that helper extracts `intent.files` and forwards to `input.input.deps.runGitCommit({ pathspec: intent.files })`. No `as` cast, no widening; `intent.files` is `readonly string[]` which matches the new dep type exactly.
+- **`commit-workflow.unit.test.ts` regression-guard extension** (per Cycle 1.2's precedent + test-expert): extend `FakeDepsCallLog` with `readonly runGitCommitPathspecs: readonly (readonly string[])[]`; capture `input.pathspec` on every `runGitCommit` call into the array. One existing test (or one new test in the new file) asserts the pathspec equals `intent.files`. Mechanical update to the fake-dep stub: `runGitCommit: async (input) => { runGitCommitPathspecs.push(input.pathspec); ... }`.
+- **NEW unit test `commit-queue-commit-pathspec.unit.test.ts`** (flat-named sibling): asserts the workflow passes `intent.files` through the `runGitCommit` dep seam. Uses the simple capture-list pattern (NOT the `fakeRunGitFor` dispatch table — that is for `getStagedBundle`-flavoured callers; `runGitCommit` is a flat-arg dep). Per test-expert: do not reuse the dispatch-table fixture machinery; it would import complexity the test does not need (immediate-fail rule 14).
+- **No `--no-verify` bypass concern**: by dropping the real-spawn integration test, husky-hook recursion is not a concern. If a future cycle DOES require a real-spawn test, use `git config core.hooksPath /dev/null` inside the ephemeral repo (not `--no-verify`, which would need fresh authorisation per `.agent/rules/no-verify-requires-fresh-authorisation.md`).
+- **Retirement + canonical rename is narrower than the plan previously stated**: only `getStagedBundle` (unscoped) gets deleted and `getStagedBundleScoped` → `getStagedBundle` gets renamed. `verifyStagedBundle` was never duplicated (Cycle 1.2 reused it on already-scoped data); `createStagedBundleFingerprint` was never duplicated (Cycle 1.1 reused it on already-scoped data). Plan's earlier "rename `verifyStagedBundle` and `createStagedBundleFingerprint` to canonical" language was based on the original speculation that Cycle 1.2 would add `verifyScopedStagedBundle` (which the cycle simplification dropped — see §Cycle 1.2 Pre-Execution Absorption). Cycle 1.3 retires/renames exactly **one** function pair: `getStagedBundle` (unscoped → deleted) + `getStagedBundleScoped` (scoped → renamed to canonical `getStagedBundle`).
+- **`ScopedStagedBundleInput` canonical-rename trade-off** (type-expert focused PENDING): three candidate names — `GetStagedBundleInput`, `StagedBundleInput`, or keep `ScopedStagedBundleInput`. The implementer must commit to one before authoring. Recommendation pending type-expert dispatch.
+- **Rename ripple atomic-landing risk**: the rename `getStagedBundleScoped` → `getStagedBundle` ripples into two existing test files' imports (`commit-queue-record-staged-scope.unit.test.ts` line 11; `commit-queue-verify-staged-scope.unit.test.ts` line 9) which import the scoped name directly from `git.ts`. Both updates MUST land in the same Cycle 1.3 commit alongside the product rename — no transitional re-export bridge.
+- **External callers**: zero. Confirmed by grep — no consumers of `getStagedBundle`, `getStagedBundleScoped`, `createStagedBundleFingerprint`, or `verifyStagedBundle` exist outside `agent-tools/`. The rename is purely internal-to-package + test-file imports.
 
-**Current Implementation**: `runGitCommit` calls `git commit -m <message-file>` (or the workflow's chosen invocation) with no pathspec. Inferred from commit-workflow-runtime.ts; Phase 0 confirms.
+**File scope** (post-absorption):
 
-**Target Implementation**: `runGitCommit` invocation appends `--` then `intent.files` to the argv.
+- `agent-tools/src/commit-queue/commit-workflow.ts` — `CommitWorkflowDependencies.runGitCommit` widens (Shape A); `runCommitAndComplete` param object extends to carry `intent` (or `intent.files`); the existing call site forwards `intent.files` into `runGitCommit({ pathspec })`.
+- `agent-tools/src/commit-queue/commit-workflow-runtime.ts` — runtime closure binding for `runGitCommit` flips to receive `{ pathspec }` and forward; the inner spawn argv appends `['--', ...pathspec]`.
+- `agent-tools/src/commit-queue/git.ts` — delete unscoped `getStagedBundle(repoRoot: string): StagedBundle`; rename `getStagedBundleScoped` → `getStagedBundle` and `ScopedStagedBundleInput` → canonical name (chosen at execution time pending type-expert).
+- `agent-tools/src/commit-queue/cli.ts` — already imports `getStagedBundleScoped` after Cycle 1.2; update to canonical name.
+- `agent-tools/src/commit-queue/commit-workflow-runtime.ts` — also imports `getStagedBundleScoped` after Cycle 1.2; update to canonical name.
+- `agent-tools/tests/commit-queue-commit-pathspec.unit.test.ts` (NEW; flat-named sibling) — capture-list pattern asserting the workflow threads `intent.files` through `runGitCommit({ pathspec })`. Mirror Cycle 1.2's `stagedBundlePathspecs` shape.
+- `agent-tools/tests/commit-workflow.unit.test.ts` — extend `FakeDepsCallLog` with `runGitCommitPathspecs`; update `runGitCommit` fake stub signature; one new assertion in an existing or new `it` for the pathspec invariant if not covered by the new sibling file.
+- `agent-tools/tests/commit-queue-record-staged-scope.unit.test.ts` — update import line 11 from `getStagedBundleScoped` to `getStagedBundle` (post-rename).
+- `agent-tools/tests/commit-queue-verify-staged-scope.unit.test.ts` — update import line 9 from `getStagedBundleScoped` to `getStagedBundle` (post-rename).
 
-**Failing Test or Check**:
+**Current Implementation** (verified at HEAD `6b5c9b4e` per gateway re-grep):
 
-State the system invariant: "two concurrent writers each end up with a cohesive commit containing only their intent.files; no cross-pollination."
+- `commit-workflow.ts` line ~48: `readonly runGitCommit: () => Promise<CommitWorkflowGitCommitResult>;` (zero-arg).
+- `commit-workflow.ts` `runCommitAndComplete` (around line ~163): calls `input.input.deps.runGitCommit()` with no arguments; `intent` is reachable in scope via the caller chain but not currently passed in to this helper.
+- `commit-workflow-runtime.ts` line ~56: `runGitCommit: () => runGitCommit(input)` (closes over `CommitWorkflowRuntimeInput`); the real `runGitCommit` function builds spawn argv `['commit', '-F', input.messageFilePath]` with no pathspec.
 
-Integration test:
+**Target Implementation**:
 
-1. Initialise an ephemeral git repo with an initial commit.
-2. Stage files X+Y for writer A's intent + files Z+W for writer B's intent.
-3. Run the full commit-queue commit ceremony for A then B (or interleaved; both must succeed).
-4. Assert: commit A contains exactly X+Y; commit B contains exactly Z+W; HEAD is two commits ahead; no files left staged after both commits.
+- `runGitCommit` dep accepts `{ pathspec: readonly string[] }`.
+- `runCommitAndComplete` receives `intent` and passes `intent.files` as `pathspec`.
+- Runtime closure receives `{ pathspec }` and forwards `pathspec` to the real `runGitCommit` which appends `['--', ...pathspec]` to spawn argv.
+- Unscoped `getStagedBundle` deleted; scoped variant renamed to canonical.
+
+**Failing Test or Check (Path B)**:
+
+State the system invariant: "the workflow threads `intent.files` through the `runGitCommit` dep seam unmodified — every commit that lands carries the queued intent's declared pathspec, never the whole staged index."
+
+Test (`commit-queue-commit-pathspec.unit.test.ts`):
+
+- Build a registry with intent A (files `[X, Y]`).
+- Run `runCommitWorkflow` against a fake-deps factory that captures every `runGitCommit({ pathspec })` call into a flat array.
+- Assert `runGitCommitPathspecs` equals `[['X', 'Y']]` (one entry, exactly the intent's files).
+- Repeat with intent B (files `[Z, W]`) in a separate test: assert capture equals `[['Z', 'W']]`. Single-writer scenarios assert the threading; two-writer scenarios are observable in the workflow regression-guard at `commit-workflow.unit.test.ts` if the existing test fixtures cover both intents (extend if needed, single-writer-per-test is fine).
+
+Two-writer cross-pollination is **structurally impossible** under Path B: the dep is called once per `runCommitWorkflow` invocation with the loaded intent's `files`; two separate workflow invocations produce two separate capture entries with disjoint pathspecs by construction. No ephemeral repo needed to prove this — the type signature plus the threading test prove it.
 
 **Product Changes**:
 
-- `commit-workflow-runtime.ts` `runGitCommit` injection narrows to `intent.files` pathspec (read `intent.files` from the registry inside the runtime wiring; append `--` and each pathspec entry to the `git commit` argv).
-- **Retire the original unscoped helpers** now that all three call sites (record-staged in Cycle 1.1, verify-staged in Cycle 1.2, runGitCommit in this cycle) have adopted: delete `getStagedBundle(repoRoot)` and `createStagedBundleFingerprint({nameStatus, patch})` from `git.ts`/`core.ts`; remove the unscoped exports from `index.ts`; rename the scoped variants to the canonical names (`getStagedBundle`, `createStagedBundleFingerprint`, `verifyStagedBundle`) so the surface ends in one clean shape — schema-declared scope is now operative on the canonical names.
-- (No transient fallback was introduced in Cycle 1.1, so there is no fallback to remove. The retirement step in this cycle is the natural consequence of all call sites having adopted, not a clean-up of a deferred bridge.)
+1. **Widen `runGitCommit` dep** in `CommitWorkflowDependencies` to `(input: { readonly pathspec: readonly string[] }) => Promise<CommitWorkflowGitCommitResult>`.
+2. **Thread `intent` (or `intent.files`)** through `runCommitAndComplete`; pass `intent.files` as `pathspec` to the dep call.
+3. **Update runtime binding** in `commit-workflow-runtime.ts` to receive `{ pathspec }` and append `['--', ...pathspec]` to spawn argv.
+4. **Delete unscoped `getStagedBundle`** from `git.ts`.
+5. **Rename `getStagedBundleScoped` → `getStagedBundle`** (canonical) and `ScopedStagedBundleInput` → canonical name (type-expert pending) in `git.ts`.
+6. **Update import lines** in `cli.ts`, `commit-workflow-runtime.ts`, and the two existing scope test files to the canonical name.
+
+No transient fallback was introduced in Cycles 1.1 or 1.2, so there is no fallback to remove. The retirement step is the natural consequence of all call sites having adopted, not a clean-up of a deferred bridge.
 
 **Acceptance Criteria**:
 
-1. ✅ Two-writer commit-time invariant integration test passes.
-2. ✅ Single-writer existing commit-queue ceremony test suite remains green.
-3. ✅ Husky full-tree pre-commit gate verified to run unchanged (a working-tree side-effect outside intent.files still triggers the gate — verify by intentionally adding an unstaged hook-failing artefact and confirming the commit aborts).
-4. ✅ The `runGitCommit` deps signature still has a single mutation point.
-5. ✅ One commit; tree green; atomic-landing satisfied.
+1. ✅ NEW pathspec-threading invariant test passes (capture-list pattern asserts `runGitCommitPathspecs` equals `[intent.files]`).
+2. ✅ Existing commit-queue test suite (Cycles 1.1 + 1.2 sibling tests + `commit-workflow.unit.test.ts`) remains green after import-line updates for the canonical rename.
+3. ✅ `getStagedBundle` (unscoped) deleted; `getStagedBundleScoped` → `getStagedBundle` rename applied; no stale exports in `index.ts`.
+4. ✅ The `runGitCommit` deps signature has a single mutation point in the workflow seam (no second code path).
+5. ✅ One commit; tree green; atomic-landing satisfied; husky full-tree pre-commit gate green (the gate's full-tree scope is unrelated to this change — `pnpm check` runs unchanged).
 
 **Deterministic Validation**:
 
 ```bash
 pnpm --filter @oaknational/agent-tools test commit-pathspec
-# Expected: exit 0, two-writer invariant passes (unit + integration)
+# Expected: exit 0, pathspec-threading invariant passes
 
-pnpm --filter @oaknational/agent-tools test commit
-# Expected: exit 0, no regression in existing commit-queue tests
+pnpm --filter @oaknational/agent-tools test commit-workflow
+# Expected: exit 0, no regression after fake-dep signature update
 
-pnpm type-check
-pnpm lint
+pnpm --filter @oaknational/agent-tools test record-staged-scope verify-staged-scope
+# Expected: exit 0, no regression after canonical-name import updates
 
-# Full-tree gate verification (manual once, then captured as a test):
-# A working-tree-only failing artefact must still abort the commit.
+pnpm --filter @oaknational/agent-tools type-check
+pnpm --filter @oaknational/agent-tools lint
 ```
 
-**Cycle Complete When**: All five acceptance criteria checked; one cohesive commit lands; the queue ceremony is intent-scoped end-to-end.
+**Cycle Complete When**: All five acceptance criteria checked; one cohesive commit lands; the queue ceremony is intent-scoped end-to-end; the public surface of `git.ts` ends in one clean shape (`getStagedBundle` is the canonical, scoped form).
 
 ---
 
@@ -587,12 +644,19 @@ Update `.agent/skills/commit/SKILL-CANONICAL.md` to record that the queue ceremo
 
 #### Task Final.2: Comms forward-trace
 
-Append a closeout broadcast to the comms log pointing forward to this plan's landing as the structural resolution of the gap surfaced in **both** instances captured in §Context (Instance A: `e48d7f16` ff2 case; Instance B: `2389ff5e` / Wooded's `692c57a7` intent + Stormbound's `31641f82` directed event). **Target the persistent markdown anchors in `.agent/state/collaboration/shared-comms-log.md`** rather than the comms-event UUIDs directly — comms events have a retention window (commit `1b619457` drained 990 stale events earlier this same session), and the forward-trace must survive that. The closeout broadcast should be posted **at the end of Cycle 1.3** (not deferred to Phase Final) so it lands while the anchor events are still recent and findable in the live comms stream.
+Append a closeout broadcast to the comms log pointing forward to this plan's landing as the structural resolution of the gap surfaced in **three** instances captured in §Context:
+
+- **Instance A**: `e48d7f16` ff2 case (Mistbound) — original motivation.
+- **Instance B**: `2389ff5e` / Wooded's `692c57a7` intent + Stormbound's `31641f82` directed event — second worked example surfaced during Phase 0.
+- **Instance C**: `0b7289e9` — t12 citation-shape peer-handoff during Cycle 1.3 pre-execution. Live reproduction of the unscoped `verify-staged` failure mode in production: peer (Shaded) staged 66 files for Cycle 11 jc-→oak- rename in the shared index between my queue-enqueue and verify-staged, rejecting my ceremony with the unscoped diff. Resolved out-of-cycle via Path-B explicit-pathspec commit (precisely the structural cure Cycle 1.3 codifies for the queue's own inner `git commit`).
+
+**Target the persistent markdown anchors in `.agent/state/collaboration/shared-comms-log.md`** rather than the comms-event UUIDs directly — comms events have a retention window (commit `1b619457` drained 990 stale events earlier this same session), and the forward-trace must survive that. The closeout broadcast should be posted **at the end of Cycle 1.3** (not deferred to Phase Final) so it lands while the anchor events are still recent and findable in the live comms stream.
 
 **Acceptance Criteria**:
 
-1. ✅ Closeout broadcast posted via `comms send` referencing both shared-comms-log markdown anchors and this plan's path.
+1. ✅ Closeout broadcast posted via `comms send` referencing the relevant shared-comms-log markdown anchors and this plan's path.
 2. ✅ Broadcast posted at end of Cycle 1.3 (not Phase Final).
+3. ✅ All three live instances (A, B, C) named in the closeout body.
 
 #### Task Final.3: Aggregate gate + consolidation
 
@@ -614,7 +678,7 @@ Run `/jc-consolidate-docs` for the standard graduation + napkin-rotation pass.
 
 - [ ] **principles.md - Cardinal Rule**: schema-first; intent.files schema is now load-bearing for queue ops.
 - [ ] **principles.md - No Type Shortcuts**: no `as`, `any`, `Record<string, unknown>` added.
-- [ ] **principles.md - No Compatibility Layers**: backward-compat fallback from Cycle 1.1 removed in Cycle 1.3 refactor.
+- [ ] **principles.md - No Compatibility Layers**: no backward-compat fallback was introduced at any point in the arc (Cycle 1.1 Pre-Execution Absorption dropped the originally proposed optional-pathspec overload before authoring; the migration is Replace-Don't-Bridge throughout).
 - [ ] **principles.md - Replace, Don't Bridge**: the implicit "whole-index scope" assumption replaced; no flag added.
 - [ ] **principles.md - Quality Gates**: aggregate `pnpm check` exits 0.
 - [ ] **testing-strategy.md - Test Behavior**: two-writer invariant tests describe SYSTEM STATE (independent fingerprints, cohesive commits), not implementation choices.
@@ -634,19 +698,17 @@ Run `/jc-consolidate-docs` for the standard graduation + napkin-rotation pass.
 
 ### Unit Tests
 
-**New Tests Required**:
+**New Tests Required** (flat-named siblings per `test-immediate-fails.md`):
 
-- `record-staged-scope.unit.test.ts` — two-writer record-staged invariant (Cycle 1.1).
-- `verify-staged-scope.unit.test.ts` — writer-independence verify invariant + own-scope-drift detection (Cycle 1.2).
-- `commit-pathspec.unit.test.ts` — commit-time pathspec composition (Cycle 1.3 unit portion).
+- `commit-queue-record-staged-scope.unit.test.ts` — two-writer record-staged invariant (Cycle 1.1; landed `fb0833a4`).
+- `commit-queue-verify-staged-scope.unit.test.ts` — writer-independence verify invariant + own-scope-drift detection + overlapping-scope + empty-pathspec boundary (Cycle 1.2; landed `6b5c9b4e`).
+- `commit-queue-commit-pathspec.unit.test.ts` — workflow threads `intent.files` through `runGitCommit` dep seam via capture-list pattern (Cycle 1.3; pending).
 
-**Existing Coverage**: the existing commit-queue test suite covers single-writer ceremony; preserved.
+**Existing Coverage**: the existing commit-queue test suite covers single-writer ceremony; preserved. `commit-workflow.unit.test.ts` extended in Cycles 1.2 + 1.3 with `stagedBundlePathspecs` and `runGitCommitPathspecs` capture lists asserting the dep-seam invariants.
 
 ### Integration Tests
 
-**New Tests Required**:
-
-- `commit-pathspec.integration.test.ts` — ephemeral-repo two-writer end-to-end (Cycle 1.3 integration portion). Exercises the full queue ceremony (enqueue → stage → record-staged → verify-staged → commit → complete) for two writers concurrently, asserts cohesive commits.
+**None required for this plan.** The originally proposed `commit-queue-commit-pathspec.integration.test.ts` was dropped at Cycle 1.3 pre-execution per test-expert CRITICAL VIOLATIONS (spawning a real `git commit` in an ephemeral repo classifies as subprocess + filesystem-IO, not integration; husky-hook recursion risk through inherited `core.hooksPath`). The structural cure (Path B) widens the `runGitCommit` dep so the pathspec threading is observable at unit level; the end-to-end behaviour of `git commit -- <pathspec>` is git's contract, not ours to re-test.
 
 ### E2E Tests
 
@@ -776,6 +838,7 @@ The fix isn't "add a flag" — it's "honour the field that's already there". The
 - Comms anchors (persistent markdown form, retention-resilient):
   - Instance A: `.agent/state/collaboration/shared-comms-log.md` entry "2026-05-22T14:04Z — Mistbound Slipping Night → Shaded Whispering Dusk — Mistbound → Shaded — shared-index coordination ask before ff2 commit (A/B/C, default B in 90s)" (originated as comms event `e48d7f16` — may not survive retention sweep)
   - Instance B: `.agent/state/collaboration/shared-comms-log.md` entry "2026-05-22T14:56:37Z — Wooded Swaying Thicket → Stormbound Kiting Squall — commit 2389ff5e absorbed your foreign-staged commit-queue.ts + collaboration-state.ts edits" + the 14:58Z correction + the 15:00Z Shaded broadcast + Stormbound's 15:00Z directed-to-Shaded event `31641f82`
+  - Instance C: `.agent/state/collaboration/shared-comms-log.md` entry "2026-05-22T15:42Z — Mistbound Slipping Night → Stormbound Kiting Squall — t12 handoff at session-end" + the 15:46Z Stormbound-to-Shaded heads-up + the 15:52Z Stormbound broadcast "t12 landed (0b7289e9); Cycle 1.2 pre-execution next" + the 16:13Z Cycle 1.2 closeout (commit `6b5c9b4e`)
 - SKILL: `.agent/skills/commit/SKILL-CANONICAL.md` (updated in Phase Final)
 - Foundation:
   - `.agent/directives/principles.md`

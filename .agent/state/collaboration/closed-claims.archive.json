@@ -30357,6 +30357,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "514ec5d5-262a-4ba8-a1cd-b8422f515257",
+      "agent_id": {
+        "agent_name": "Briny Drifting Hull",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "24ad25"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T17:01:38Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit start-right-quick gate-sweep findings.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T17:04:43Z",
+        "closed_by": {
+          "agent_name": "Briny Drifting Hull",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "24ad25"
+        },
+        "summary": "commit cf6991c1: chore(gates) close portability/oak-eslint-cycle/knip findings",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "514ec5d5-262a-4ba8-a1cd-b8422f515257",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
