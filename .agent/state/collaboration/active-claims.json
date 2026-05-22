@@ -811,7 +811,79 @@
       "expires_at": "2026-05-22T18:24:22.184Z",
       "phase": "abandoned",
       "notes": "closed in same collaboration-state commit: queue ceremony bypassed per SKILL §residue exception (active-claims + closed-claims + comms residue in bundle)"
+    },
+    {
+      "intent_id": "3745278e-6e57-4f4b-a3ca-1716d5addcb6",
+      "claim_id": "132e1fb5-10f0-43b8-a16d-768cb1791175",
+      "agent_id": {
+        "agent_name": "Starlit Beaming Aurora",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "1977cf"
+      },
+      "files": [
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/plans/agent-tooling/archive/completed/commit-queue-intent-scope-discipline.plan.md",
+        ".agent/plans/agent-tooling/current/commit-queue-intent-scope-discipline.plan.md",
+        ".agent/state/collaboration/closed-claims.archive.json"
+      ],
+      "commit_subject": "chore(consolidate): focused consolidation pass for commit-queue-intent-scope-discipline arc closeout",
+      "queued_at": "2026-05-22T19:37:24.711Z",
+      "updated_at": "2026-05-22T19:38:04.017Z",
+      "expires_at": "2026-05-22T19:52:24.711Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "30e113dcdf6c11eca96a692e7367135ca187a0ac2250134e8d239d7a15de482e",
+      "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/repo-continuity.md\nR100\t.agent/plans/agent-tooling/current/commit-queue-intent-scope-discipline.plan.md\t.agent/plans/agent-tooling/archive/completed/commit-queue-intent-scope-discipline.plan.md\nM\t.agent/state/collaboration/closed-claims.archive.json\n",
+      "notes": "intent.files included both old and new rename paths; git treats rename as single new-path entry. Re-enqueueing with new path only."
+    },
+    {
+      "intent_id": "5d90c255-47d8-4a55-b879-1cffede5471d",
+      "claim_id": "d99ce15f-1c08-43fe-978f-bfce8146a9a6",
+      "agent_id": {
+        "agent_name": "Starlit Beaming Aurora",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "1977cf"
+      },
+      "files": [
+        ".agent/plans/agent-tooling/current/commit-queue-intent-scope-discipline.plan.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json"
+      ],
+      "commit_subject": "chore(consolidate): close out plan rename and final claim residue",
+      "queued_at": "2026-05-22T19:39:14.799Z",
+      "updated_at": "2026-05-22T19:39:47.476Z",
+      "expires_at": "2026-05-22T19:54:14.799Z",
+      "phase": "pre_commit",
+      "staged_name_status": "D\t.agent/plans/agent-tooling/current/commit-queue-intent-scope-discipline.plan.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\n",
+      "staged_bundle_fingerprint": "03f9ba908f88ff7a08bb965448d7d2aea3a1369566ad3b700320ad51a053c4e3",
+      "notes": "commit-workflow verify-staged-before failure: staged files do not exactly match intent files; extra: none; missing: .agent/state/collaboration/active-claims.json, .agent/state/collaboration/closed-claims.archive.json"
     }
   ],
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "d99ce15f-1c08-43fe-978f-bfce8146a9a6",
+      "agent_id": {
+        "agent_name": "Starlit Beaming Aurora",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "1977cf"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T19:39:13Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Land source-deletion half of plan rename + claim residue.",
+      "intent_to_commit": "5d90c255-47d8-4a55-b879-1cffede5471d"
+    }
+  ]
 }
