@@ -746,3 +746,445 @@ and applies immediately to coordinator-brief discipline plus
 comms-event drafting norms.
 
 `[graduated 2026-05-22: Tempestuous Spiralling Thermal pass landed cure (b) as a new rule .agent/rules/hook-policy-substring-discipline.md, with Claude (.claude/rules/) and Cursor (.cursor/rules/.mdc with frontmatter) adapter wrappers and an entry in RULES_INDEX.md. The rule names the in-scope surfaces (comms-event bodies, dispatch briefs, napkin entries, team-start broadcasts, conversation threads), the excluded surfaces (canonical rule homes, hook policy config, archive material, test fixtures), the descriptive-substitute examples, and the doctrinal anchors. Cure (a) — upstream context-aware hook parsing — remains a separate concern outside this graduation.]`
+
+## Backfill sweep — 2026-05-22 evening (Velvet Veiling Wisp)
+
+This appended block carries the 30 entry bodies whose `status: graduated` tags accumulated through 2026-05-22's four graduation passes (Starlit, Tempestuous, Wooded, Shadowed Hiding Shade). The live register replaces each entry body with a one-line graduated-pointer; substance is preserved verbatim below. The graduation-log tables at the head of `pending-graduations.md` remain the canonical index of which entry graduated to which target.
+
+### 2026-05-22 — Cycle decomposition that produces wrong-layer scaffolding tests is the load-bearing shape (testing-strategy amendment OR pattern)
+
+`[captured: 2026-05-22 | source: starlit/commit-queue-intent-scope-discipline arc closeout via metacognition pass | target: pattern:where-system-state-is-observable-at-plan-author-time + amendment:tdd-as-design.md | trigger: owner-direction (fired 2026-05-22 deep-graduation) | size: S | status: graduated]`
+
+**Graduated 2026-05-22 (deep-graduation pass)**: pattern landed at
+`.agent/memory/active/patterns/where-system-state-is-observable-at-plan-author-time.md`;
+`tdd-as-design.md` §"One state, one describing surface" amendment
+landed in the same pass.
+
+Substance summary: the commit-queue-intent-scope-discipline arc was originally decomposed into three TDD cycles each describing an internal seam (Cycle 1.1 record-staged read seam; Cycle 1.2 verify-staged read seam; Cycle 1.3 commit invocation). Each cycle's tests reached past the workflow into the read mechanism, producing implementation-coupled scaffolding tests (`fakeRunGitFor` re-implementing git argv parsing; assertions on argv-derived strings) that violated `testing-strategy.md` §"NEVER create complex mocks" + §"Test real behaviour, not implementation details". The metacognition pass at Cycle 1.3 surfaced that the system state was one state (commit-queue commit honours intent.files scope across peer staging drift) takes one describing surface at the workflow seam, not three at internal read mechanisms. Cycle 1.3 reshape: workflow-level invariants in `commit-workflow.unit.test.ts` via capture-list pattern on injected deps; two scaffolding test files deleted; one cycle of test-and-product co-design where the system state finally gets described at the right layer.
+
+**Underlying pattern**: when planning multi-cycle structural changes, ask at plan-author time **where the system state will be observable**. If the answer is "at one boundary" (e.g. the workflow seam), every cycle's tests should describe that one surface. Intermediate scaffolding tests written for the implementer's confidence in internal-seam correctness do not earn ongoing maintenance cost.
+
+**Cure shape options**:
+
+1. **Pattern candidate**: capture as `.agent/memory/active/patterns/where-system-state-is-observable-at-plan-author-time.md` with the worked instance (commit-queue-intent-scope-discipline arc) and the diagnostic prompt at plan-authoring.
+2. **`testing-strategy.md` amendment**: add §"Cycle-decomposition and the describing-surface boundary" naming that scaffolding tests at the wrong layer are an anti-pattern and pointing at workflow-seam capture-list patterns as the cure.
+3. **`tdd-as-design.md` amendment**: extend the foundational definition with "one system state takes one describing surface; cycle decomposition must respect that boundary".
+
+**Why pending**: 1 instance, one author, one arc. Second instance from a different plan / different author would confirm the pattern's generality. Owner direction to author can fire earlier.
+
+Falsifiability: a future plan that decomposes into multiple cycles each describing an internal seam, lands scaffolding tests that subsequently need retirement, is the failure mode this entry would cure. A future plan that explicitly identifies the describing-surface boundary at plan-author time and constrains all cycles' tests to that surface is the success.
+
+### 2026-05-22 — Check-runner singleton claim (rule-shaped or coordination-state-schema-amendment-shaped)
+
+`[captured: 2026-05-22 | source: owner-direction (Stormbound session-handoff window) | target: rule:check-singleton-per-window + skill-amend:session-handoff | trigger: owner-direction (fired) | size: S | status: graduated (rule + SKILL amend); schema cure pending]`
+
+**Graduated 2026-05-22 (deep-graduation pass)**: rule landed at
+`.agent/rules/check-singleton-per-window.md`; `session-handoff`
+SKILL §11 amendment landed naming the singleton invariant and
+broadcast convention. **Still pending**: the more rigorous
+structural cure — a new `area-kind: gate-sweep` (or `whole-repo-gate`)
+in the active-claims schema so peers observe in-flight check runs
+via the claim registry rather than via comms broadcast alone.
+
+Substance summary: owner-stated direction 2026-05-22 during Stormbound's session-handoff: *"only one agent needs to run check, and one agent already is, so stop check, and record that invariant, and note that we need some kind of record of who is running check when"*. The session-handoff SKILL §11 currently directs every closing agent to run `pnpm check`; in an N-agent window this produces N concurrent invocations duplicating ~30s+ of work per run and providing no marginal signal. The team has no observable surface for "who is running check (or other whole-repo gate sweep) when".
+
+**Underlying invariant**: only ONE agent runs `pnpm check` (or equivalent whole-repo gate sweep like `pnpm test`, large `turbo` invocations) per coordination window. Multiple parallel runs are wasteful at best and can collide on advisory-orchestrator file outputs at worst.
+
+**Cure shape options** (to be designed at graduation):
+
+1. **Rule + observable surface**: new rule `check-singleton-per-window` referencing a new `area-kind: gate-sweep` (or `whole-repo-gate`) in the active-claims schema. An agent opens the claim with pattern `pnpm-check` (or similar) before invoking `pnpm check`; peers observe the claim and defer. Closes when the run completes with the result evidence (green/red + SHA at run time).
+2. **Lightweight broadcast convention**: short-lived "Lane X running pnpm check, ETA 30s" broadcast convention with a corresponding "Lane X check completed: green/red" follow-up. No schema change; relies on the comms event stream as the singleton-coordination surface. Less rigorous than (1) but lower-friction.
+3. **Session-handoff SKILL §11 amendment**: the SKILL itself names the check-singleton invariant and tells agents to observe peer activity first. Without (1) or (2) the invariant has no observable surface; could be a starting point that names the gap and stages the fuller cure.
+
+**Why pending**: structural cure design depends on whether (a) the active-claims schema absorbs a new area-kind (PDR/ADR-shaped decision), (b) a broadcast convention suffices (rule-shaped + SKILL amendment), or (c) something else. Owner direction has fired (this is the trigger); the design moment is on the next bandwidth window. Likely shape: rule + schema amendment together, but the trade-off design needs a focused pass.
+
+**Lifecycle note**: captured as standing memory `feedback_check_singleton_per_window` in Stormbound's per-user Claude memory same session (so the rule applies immediately even before the structural cure lands). Standing-memory pre-empts the cure; the cure makes the invariant observable to peers rather than purely-agent-recalled.
+
+Falsifiability: a future session-handoff sequence in an N-agent window where every closing agent independently runs `pnpm check` is the failure mode this entry warns about. A session where the first agent opens a check-runner claim (or broadcast), runs check, posts the result, and the other agents defer to that result is the success.
+
+### 2026-05-22 — Dispatch PENDING reviewers at session-close, not next-session-open (session-handoff SKILL amendment)
+
+`[captured: 2026-05-22 | source: napkin §"Insight: pending reviewer dispatches at session-end are cheap" (Charcoal evening session) | target: skill-amend:session-handoff | trigger: owner-direction (fired 2026-05-22 deep-graduation) | size: S | status: graduated]`
+
+**Graduated 2026-05-22 (deep-graduation pass)**: `session-handoff`
+SKILL §11a amendment landed naming the dispatch-PENDING-reviewers-
+at-session-close move.
+
+Substance: when a plan's `Reviewer Dispatch Log` carries PENDING reviewer markers AND the current session has touched that plan's body, dispatching the pending reviewers at session-close (parallel sub-agent calls, ~60s each) is dramatically cheaper than deferring them to "the next implementer". The next implementer's session-open then opens with the reviewers' verdicts already absorbed, the plan body internally coherent, and the MUST-NOT-BEGIN gate cleared. Worked instance this session: `type-expert` + `assumptions-expert` carried PENDING markers across Stormbound's 2026-05-22 afternoon session and Velvet's evening review-only session; Charcoal dispatched them in parallel at session-close (single-message Agent tool calls), absorbed verdicts in ~60s, and landed `2adeccec`. Cycle 1.3 went from "blocked on reviewer dispatch" to "ready for TDD authoring" without the next implementer paying any reviewer-dispatch cost.
+
+Why pending: single instance with full cure executed. A second instance — a thread record carrying PENDING reviewer markers, a session touching that thread's plan, but the closing agent defers the dispatch to the next implementer — would cross the trigger. The cure shape is a small addition to `session-handoff/SKILL-CANONICAL.md` step 6 (or step 9 consolidation gate): "If the current thread record's plan carries PENDING reviewer markers AND this session touched the plan's body, dispatch the pending reviewers as a session-close move before declaring handoff complete. Absorb verdicts; flip markers; commit."
+
+Falsifiability: a future session-handoff where PENDING reviewer markers persist across the handoff despite the session having touched the plan is the failure mode this entry warns about. A handoff that dispatches and absorbs is the success shape.
+
+### 2026-05-21 — Coordinator-as-slice-runner when team capacity is short by 1 (pattern-shaped)
+
+`[captured: 2026-05-21 | source: napkin.md §"Insight: coordinator-as-slice-runner is workable when team capacity is short by 1" | target: pattern:coordinator-as-slice-runner-short-by-one | trigger: second-instance-or-owner-direction | size: S | status: graduated (pattern)]`
+
+**Graduated 2026-05-22 (deep-graduation pass)**: pattern landed at
+`.agent/memory/active/patterns/coordinator-as-slice-runner-short-by-one.md`.
+Second-instance trigger applied through owner direction during
+the deep-graduation pass.
+
+Substance summary: when a team session has N peers against N+1
+file-disjoint slices (a capacity shortfall of 1), the coordinator
+taking the smallest/freshest slice as a concurrent responsibility
+is preferable to forcing a peer to double up. Forces file-disjoint
+discipline to hold; preserves load balance.
+
+Risk shape: a larger slice (e.g. one with inherited partial edits
+requiring diff-verify) is the wrong choice. The pattern requires
+the COORDINATOR PICKING THE SMALLEST / FRESHEST SLICE, not a
+complex one.
+
+First instance this session: Charcoal Searing Ember closed out
+before the routing brief reached them; 4-peer pool minus Charcoal
+= 3 peers against 4 slices. Stratospheric Gusting Squall took
+Slice B (graph-stack.plan.md, smallest/freshest) and ran it
+concurrently with coordinator routing. Total ~2 edits; coordinator
+load remained manageable because other slices were parallel and
+slice-completion events were event-driven.
+
+Trigger to watch: second observed instance in a different team
+session. Promotion target: pattern entry at
+`.agent/memory/active/patterns/` with the smallest/freshest
+constraint named.
+
+### 2026-05-17 — Surface classification for fitness-response routing (PDR-shaped)
+
+`[captured: 2026-05-17 | source: distilled.md §"Surface classification routes fitness response" | target: pdr:surface-classification-for-fitness-response | trigger: owner-direction (fired 2026-05-22 deep-graduation) | size: S | status: graduated]`
+
+**Graduated 2026-05-22 (deep-graduation pass)**: PDR-067 landed
+(Proposed).
+
+Substance summary: four surface kinds in the knowledge-flow pipeline
+(memory / state / buffer / doctrine) route fitness signals to
+different correct responses. The "Learning Preservation" rule applies
+to memory and state, not buffers. Trigger to watch: owner-direction
+at next consolidation. Full doctrine drafted at the target home, not
+here.
+
+### 2026-05-17 — Pipeline back-pressure as structural-cure signal (PDR-shaped)
+
+`[captured: 2026-05-17 | source: distilled.md §"Pipeline back-pressure is information" | target: pdr:pipeline-back-pressure-is-structural-cure-signal | trigger: owner-direction (fired 2026-05-22 deep-graduation) | size: S | status: graduated]`
+
+**Graduated 2026-05-22 (deep-graduation pass)**: PDR-068 landed
+(Proposed).
+
+Substance summary: a full buffer with fitness alarms means the
+upstream consumer is bottlenecked. The cure targets producer or
+consumer rate, never the buffer's envelope. Four candidate bottlenecks
+named in source. Trigger to watch: owner-direction at next
+consolidation, ideally paired with surface-classification PDR.
+
+### 2026-05-17 — Metacognition has two modes (retrospective + generative) (PDR-shaped)
+
+`[captured: 2026-05-17 | source: distilled.md §"Metacognition has two modes — retrospective and generative" | target: directive-amend:metacognition.md | trigger: owner-direction (fired 2026-05-22 deep-graduation) | size: S | status: graduated]`
+
+**Graduated 2026-05-22 (deep-graduation pass)**: `metacognition.md`
+directive amendment landed naming both modes (retrospective +
+generative), the shared pre-action ratification primitive, and the
+structural-cure-not-doc-patch corollary.
+
+Substance summary: metacognition has retrospective (cure
+doctrine-by-analogy on correction signal) and generative (cure
+purpose-by-default on non-trivial brief / strategic fork / recurring
+systems vocabulary) modes; both share pre-action action-to-impact
+ratification reflex; success test is "produces correct moves next
+time without same intervention." Routing: directive already names
+both modes implicitly; PDR could ratify the model explicitly.
+
+### 2026-05-17 — Platform-specific per-user memory is a buffer with drainage contract (PDR-shaped)
+
+`[captured: 2026-05-17 | source: distilled.md §"Platform-specific per-user memory is a buffer, not a personal store" | target: rule:per-user-memory-is-a-buffer | trigger: owner-direction (fired 2026-05-22 deep-graduation) | size: S | status: graduated]`
+
+**Graduated 2026-05-22 (deep-graduation pass)**: rule landed at
+`.agent/rules/per-user-memory-is-a-buffer.md`. Original target
+shape was PDR; rule chosen because the doctrine is operational
+(applies at session-handoff and consolidate-docs surfaces) rather
+than design-shape.
+
+Substance summary: Claude/Cursor/Codex per-user memory surfaces are
+platform-specific buffers that drain into in-repo canonical surfaces
+(napkin / distilled / rules / PDRs) per session-handoff step 6 +
+consolidate-docs step 3. Cross-cutting substance written there must
+be integrated; declaring the sweep done without performing it is the
+failure mode. Routing: workflows already name this; PDR would ratify
+the buffer-with-drainage-contract framing and make the recurrence
+detectable.
+
+### 2026-05-22 — Partial / slice-scoped coordinator transfer (Foamy Snorkelling Jetty)
+
+**Graduated 2026-05-22 (Tempestuous Spiralling Thermal)** — body archived to [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md). Substance lives at PDR-064 §"Partial / Slice-Scoped Coordinator Transfer" amendment subsection.
+
+`[captured: 2026-05-22 | graduated: 2026-05-22 (Tempestuous Spiralling Thermal) | source: PDR-064 drafting + worked instance Ferny→Blustery slice-coord assignment + comms event 9670c08f behaviour-note | target-resolved: PDR-064 §"Partial / Slice-Scoped Coordinator Transfer" | trigger-fired: 3rd instance observed in one session | size: S | status: graduated]`
+
+### 2026-05-22 — Coordinator-must-delegate-sub-agent-launches-not-self-dispatch (Foamy Snorkelling Jetty)
+
+**Graduated 2026-05-22 (Tempestuous Spiralling Thermal)** — body archived to [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md). Substance lives at `start-right-team` SKILL §"Choose Temporary Responsibilities" — *"Coordinator delegates sub-agent launches"* amendment.
+
+`[captured: 2026-05-22 | graduated: 2026-05-22 (Tempestuous Spiralling Thermal) | source: owner correction to Ferny + owner correction to Blustery + Blustery self-flagged graduation candidate | target-resolved: skill-amend:start-right-team §"Choose Temporary Responsibilities" | trigger-fired: 2-instance owner direction in one session | size: S | status: graduated]`
+
+### 2026-05-22 — CLI body backtick-shell-substitution cure pattern is a 3+ instance cross-session shape (Ferny Swaying Leaf)
+
+**Graduated 2026-05-22 (Tempestuous Spiralling Thermal)** — body archived to [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md). Substance lives at `agent-tools/README.md` §"CLI Norms" → §"Comms body input: `--body` vs `--body-file`" (already-landed substrate at `675bb83b`).
+
+`[captured: 2026-05-22 | graduated: 2026-05-22 (Tempestuous Spiralling Thermal) | source: 3+ independent cross-session instances | target-resolved: doc-amend:agent-tools/README.md §"Comms body input" + --body-file CLI flag landed at 675bb83b | trigger-fired: 3rd instance + cure mechanism shipped | size: M | status: graduated]`
+
+### 2026-05-22 — Hook-policy substring-matching in instructive content is a recurring blocker (Ferny Swaying Leaf via cross-session pattern scan)
+
+**Graduated 2026-05-22 (Tempestuous Spiralling Thermal)** — body archived to [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md). Substance lives at the new rule `.agent/rules/hook-policy-substring-discipline.md` (cure b — content-authoring discipline). Cure (a) — context-aware hook parsing — remains a separate upstream concern.
+
+`[captured: 2026-05-22 | graduated: 2026-05-22 (Tempestuous Spiralling Thermal) | source: 3+ cross-session instances across multiple agents | target-resolved: rule:hook-policy-substring-discipline + RULES_INDEX entry + Claude + Cursor adapters | trigger-fired: 3+ instance evidence across sessions | size: M | status: graduated]`
+
+### 2026-05-22 — Pre-execution code-expert review catches design-time bugs static gates cannot (Mistbound Slipping Night)
+
+**Graduated 2026-05-22 (owner-directed promotion)** — substance ratified
+into `.agent/rules/pre-execution-code-expert-review-per-loop-cycle.md`
+as the implicit justification for the rule's existence (the rule
+already exists; this worked-instance reinforces the rule's value via
+its source-attribution amendment). The standalone pattern-instance
+file under `memory/active/patterns/` is NOT created: the substance is
+already enforcement-surface; a pattern instance would be redundant.
+
+`[captured: 2026-05-22 | graduated: 2026-05-22 (owner-directed) | source: napkin | target-resolved: .agent/rules/pre-execution-code-expert-review-per-loop-cycle.md (source-attribution evidence) | trigger-fired: owner-directed promotion | size: S | status: graduated]`
+
+The t12-citation-shape cycle's pre-execution code-expert verdict
+surfaced `Citation.source: 'EEF Teaching and Learning Toolkit'`
+literal field collision with the canonical `EEF_ATTRIBUTION`
+constant at `oak-curriculum-sdk/src/mcp/source-attribution.ts`.
+The bug would NOT have surfaced at type-check, lint, or vitest —
+the literal string field is structurally well-typed and Zod would
+have accepted the EEF_ATTRIBUTION constant's string value at parse
+time. Code-expert read across two files (plan + existing attribution
+constant) and named the architectural-intent collision. Static gates
+catch syntactic problems; pre-execution review catches design-intent
+collisions.
+
+Adjacent existing pattern: `pre-implementation-plan-review.md`.
+Distinct shape: that pattern covers plan-review (whole plans);
+this candidate covers cycle-review (single-cycle scope) with a
+specific class of finding (cross-file architectural collisions).
+
+### 2026-05-22 — Framing-direction (session-forward vs impact-backward) determines graduation destination (Mistbound Slipping Night, metacognition pass)
+
+**Graduated 2026-05-22 (owner-directed promotion)** — substance landed
+at PDR-014 §"Amendment Log: 2026-05-22 — Framing-direction discipline
+at the capture edge". The amendment names the two framing directions,
+their natural homes, and the three moments where the discipline
+applies (session-handoff step 6a, consolidate-docs step 7a/7b,
+owner-direction reframing).
+
+`[captured: 2026-05-22 | graduated: 2026-05-22 (owner-directed) | source: napkin | target-resolved: PDR-014 amendment 2026-05-22 (framing-direction discipline at the capture edge) | trigger-fired: owner-directed promotion | size: M | status: graduated]`
+
+When surfacing insights for graduation, the question is "what
+coordination surface does this cure?" not "where did this
+observation come from?" Session-forward framing's natural home is
+the experience file (subjective texture). Impact-backward framing's
+natural home is the rule / PDR / schema surface (durable substrate).
+Same substance, different destination, based purely on framing.
+
+Worked instance this session: I surfaced five insights at session-end
+framed forward-from-session. Owner reframed them as topology-
+independent coordination cures. The reframing made them eligible for
+graduation as structural cure candidates (rules / PDR amendments /
+schema additions) rather than session-anecdotes confined to napkin.
+
+The cure shape: amend PDR-014 (capture → distil → graduate → enforce
+pipeline) to name the framing-direction discipline at the capture
+edge. Or, if PDR-014 is too high-level for this, a new PDR naming
+the framing-direction rule for graduation candidates. The
+substance: impact-backward framing is the more durable framing
+because it travels across the session boundary that produced the
+observation; session-forward framing is correct for experience-file
+texture but produces graduation-resistant substance for rules.
+
+### 2026-05-22 — Continuity-surface drift is structurally orphaned from cycle commits (Mistbound Slipping Night)
+
+**Graduated 2026-05-22 (owner-directed promotion)** — substance landed
+at `.agent/rules/continuity-surface-commits-as-orphans.md` (canonical
+rule + .claude + .cursor forwarders + RULES_INDEX entry).
+
+`[captured: 2026-05-22 | graduated: 2026-05-22 (owner-directed) | source: napkin | target-resolved: rule:continuity-surface-commits-as-orphans | trigger-fired: owner-directed promotion | size: M | status: graduated]`
+
+Continuity-surface edits (napkin, thread records, repo-continuity,
+pending-graduations, experience files) are structurally produced
+AFTER the cycle's product code. They cannot ride with the cycle
+commit because they don't exist when the cycle commits. They sit
+in the working tree unowned, waiting for someone to sweep them.
+
+This is structural orphaning, not procedural drift. Continuity
+commits ratify an OBSERVATION about the session; cycle commits
+ratify a TESTED CHANGE. Different acceptance criteria; bundling
+obscures both.
+
+The cure shape: a rule naming that continuity-surface edits land
+as their own session-end commit (`chore(continuity): land
+<YYYY-MM-DD> <agent> session reflection`) — committed by the
+closing agent at session-end OR explicitly handed off to a follow-on
+agent. Topology-independent — applies to solo (the agent who
+closes commits), hub-and-spoke (the coordinator at session-end),
+peer-primary (each agent at their close), cursor-multitask (the
+main brief at close).
+
+Adjacent: the current `session-handoff` SKILL step 11 (`pnpm check`
+cleanliness gate) and the check-singleton-per-window candidate.
+Continuity-orphan-commit pattern would land as a new step OR as
+amendment to existing step 8 (close collaboration lifecycle).
+
+### 2026-05-22 — Reviewer dispatch has two shapes: fan-from-brief vs fan-from-verdict (Mistbound Slipping Night)
+
+**Graduated 2026-05-22 (owner-directed promotion)** — substance landed
+as amendment to `.agent/rules/pre-execution-code-expert-review-per-loop-cycle.md`
+§"Two dispatch shapes — fan-from-brief vs fan-from-verdict", with
+named decision rule (plan-named reviewer set → fan-from-brief;
+contingent → fan-from-verdict).
+
+`[captured: 2026-05-22 | graduated: 2026-05-22 (owner-directed) | source: napkin | target-resolved: rule-amendment:pre-execution-code-expert-review-per-loop-cycle §"Two dispatch shapes" | trigger-fired: owner-directed promotion | size: S | status: graduated]`
+
+The current pre-execution review rule prescribes fan-from-verdict:
+brief code-expert, absorb verdict, dispatch any specialists they
+name. This is correct for unknown scopes where the reviewer set
+must be discovered.
+
+For named-set cycles (plan-named per-cycle reviewer set), code-
+expert is rubber-stamping the named set rather than discovering it.
+The serialised hop adds wall-clock without adding signal.
+
+The cure shape: amend the pre-execution review rule to distinguish:
+
+- **Fan-from-brief**: named-set cycles. All plan-named reviewers
+  dispatched in parallel from cycle-open. Code-expert runs alongside
+  as architectural reviewer, not as router.
+- **Fan-from-verdict**: unknown-scope cycles. Code-expert briefed
+  first; specialists named in their verdict; specialists dispatched
+  after verdict absorbed.
+
+Decision rule: check the plan's per-cycle reviewer set. If
+named, fan-from-brief. If contingent/unknown, fan-from-verdict.
+
+Topology-independent. Saves ~one wall-clock hop per named-set
+cycle; compounds over sessions.
+
+### 2026-05-22 — Handoff messages must be self-contained (Mistbound Slipping Night)
+
+**Graduated 2026-05-22 (owner-directed promotion)** — substance landed
+at `.agent/rules/handoff-messages-self-contained.md` (canonical rule
+
+- .claude + .cursor forwarders + RULES_INDEX entry). The rule names
+  the forbidden patterns, the receiver-cannot-read-transcript principle,
+  and the compaction-boundary self-handoff case explicitly.
+
+`[captured: 2026-05-22 | graduated: 2026-05-22 (owner-directed) | source: napkin | target-resolved: rule:handoff-messages-self-contained | trigger-fired: owner-directed promotion | size: M | status: graduated]`
+
+Receiving agents (peer agents, future self after compaction,
+cross-platform agents) cannot read the sending agent's transcript.
+The handoff message IS the entire information transfer. Without
+an explicit rule, the discipline is implicit and inconsistent
+across agents.
+
+The cure shape: a rule "handoff-messages-self-contained" enforcing:
+
+- Every fact the receiver needs to act NAMED in the message.
+- Every decision NAMED with WHO + WHEN.
+- Every artefact named by FILE PATH (not "the earlier discussion").
+- Receiver should be able to act WITHOUT a clarifying question back.
+
+Topology-independent. Particularly acute for:
+
+- Cross-platform handoffs (Claude → Codex, etc.).
+- Compaction-boundary self-handoffs (my future self cannot read
+  current transcript reliably).
+- Cross-session peer handoffs (the queue-pickup case).
+
+Adjacent: `start-right-team` SKILL §Continuation Pointer Contract
+covers the continuation-record-as-pointer case; the cure here is
+broader (every handoff message, not just start-right-team
+continuations) and could either amend that section or land as a
+distinct rule.
+
+Distinct from "comms event stream canonical truth" (about the
+channel) — this is about the substance carried.
+
+### 2026-05-22 — Queue-wait dependency state should be observable (Mistbound Slipping Night)
+
+**Graduated 2026-05-22 (owner-directed promotion, broadened scope)** —
+substance landed at `.agent/rules/agent-state-observable.md` (canonical
+rule + .claude + .cursor forwarders + RULES_INDEX entry). The rule
+broadens the queue-wait-specific case to the general principle "agent
+state that affects another agent's next action must be observable",
+with queue-wait, long-running sub-agent dispatch, blocked-on-owner,
+and gate-runner-role as named applications.
+
+`[captured: 2026-05-22 | graduated: 2026-05-22 (owner-directed, broadened) | source: napkin | target-resolved: rule:agent-state-observable (broader principle; queue-wait is one named application) | trigger-fired: owner-directed promotion | size: S → M (broadened) | status: graduated]`
+
+When agent A is blocked behind agent B's commit-queue intent,
+A's wait state lives only in A's session reasoning. No external
+observable. If A crashes (compaction, network), the wait state
+vanishes — B doesn't know A was waiting. If a third agent
+arrives, they cannot see A is queued.
+
+The cure shape: when an agent enters "waiting on intent X"
+state, emit a directed comms-event to the upstream agent +
+audience addition for awareness:
+
+- kind: `directed` (current schema supports it)
+- subject: "Waiting on intent X"
+- body: my intent ID, my files, expected wait condition
+- (eventually) tags: `['queue-wait']` once ADR-183 substrate lands
+
+Makes the dependency graph observable to peers and owner.
+
+Topology-independent. The intent-scope-discipline plan reduces
+queue waits structurally; until that lands, the waits exist and
+should be visible.
+
+### 2026-05-22 — Owner attention is gated at action-moments (Mistbound Slipping Night)
+
+**Graduated 2026-05-22 (owner-directed experiment)** — substance landed
+at `.agent/rules/owner-attention-at-action-moments.md` (canonical rule
+
+- .claude + .cursor forwarders + RULES*INDEX entry) under provisional
+  status. Owner direction at promotion:*"if the framing is useful let's
+  try it, if it doesn't work we can always change it"\_. Rule is in
+  force; friction observed in practice routes back through the
+  graduation pipeline for amendment or retirement.
+
+`[captured: 2026-05-22 | graduated: 2026-05-22 (owner-directed experiment) | source: napkin §"Insight (9th)" surfaced as question; owner answered to try the framing | target-resolved: rule:owner-attention-at-action-moments (provisional status) | trigger-fired: owner-directed experimental promotion | size: M | status: graduated]`
+
+### 2026-05-22 — Post-compaction resumption needs explicit "did prior edits land?" validation (Mistbound Slipping Night)
+
+**Graduated 2026-05-22 (owner-directed promotion)** — substance landed
+at PDR-063 §"Receiving agent's pickup contract" amendment + new
+§"Discontinuity-boundary validation step". The amendment names four
+validation checks (prior-edit landing, claim-closure, queue-state,
+sub-agent transcript recovery) and makes them mandatory before the
+receiver's acknowledgement event. Topology-independence named:
+applies to solo session resumption, mid-cycle peer pickup,
+compaction-boundary self-resumption, and post-crash recovery.
+
+`[captured: 2026-05-22 | graduated: 2026-05-22 (owner-directed) | source: napkin | target-resolved: PDR-063 amendment 2026-05-22 (discontinuity-boundary validation step) | trigger-fired: owner-directed promotion | size: M | status: graduated]`
+
+Compaction-boundary (and any session-reentry — solo resumption,
+mid-cycle pickup, cross-session handoff) is a discontinuity. Prior-
+session reasoning is summarised; volatile facts (working-tree state,
+recent peer activity) are stale.
+
+My napkin handoff had 7 resumption first-moves. None was "verify
+my prior session's edits actually landed somewhere." I assumed
+loss; only by grepping file content did I discover prior edits had
+been swept into a peer commit. Avoidable redo of work.
+
+The cure shape: extend PDR-063's mid-cycle pickup contract (step 5
+in the canonical SKILL "First Moves" section) with a pre-action
+validation step:
+
+- If you had staged content at boundary: `git log --since "<boundary>" -- <files>` to check for commits during pause.
+- If you had open claims at boundary: check closed-claims archive for closures during pause.
+- If you had queued intents at boundary: check queue status for phase transitions during pause.
+- If you had pending sub-agent dispatches: check transcript recovery path (per `feedback_subagent_transcript_recovery`).
+
+Topology-independent. Applies to solo resumption (your future self
+cannot trust their assumed prior state), mid-cycle peer pickup
+(the receiver inherits a stale working tree picture), and
+compaction-boundary self-resumption (you are the receiver).
+

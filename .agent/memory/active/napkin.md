@@ -37,6 +37,20 @@ window), [`napkin-2026-05-21.md`][previous-previous-pass], and
 [previous-previous-pass]: archive/napkin-2026-05-21.md
 [previous-previous-previous-pass]: archive/napkin-2026-05-17.md
 
+## 2026-05-22 evening — Velvet Veiling Wisp consolidate-docs backfill archive sweep / claude / Opus-4.7 / `b4bb7a`
+
+### Two follow-up findings surfaced by assumptions-expert during pre-commit review
+
+**Finding 1 — repo-continuity.md session-summary bullets need sub-bullet decomposition discipline (orthogonal structural cure).**
+`.agent/memory/operational/repo-continuity.md` line 41 currently carries a 2615-character single-bullet paragraph (the Shaded Whispering Dusk session summary). The line concatenates sub-points (a)/(b)/(c) into one paragraph rather than splitting into sub-bullets. This is the structural cure for the prose-line-width metric on that file, orthogonal to the pending-graduations archive sweep this session executed. **Capture for next consolidation**: doctrine candidate that session-summary bullets must use sub-bullet decomposition when carrying multiple distinct sub-points, so the prose-line-width metric tracks substance shape and not concatenation habit. Capture surface: this napkin entry; graduation target candidate: `repo-continuity.md` split_strategy frontmatter amendment, OR a new rule on session-summary bullet shape. Trigger to fire: second instance of the same shape, OR owner direction.
+
+**Finding 2 — 10 nested-bullet `status: graduated` entries from 2026-05-09 / 2026-05-10 / 2026-05-11 (Sylvan Fruiting Glade era) have bodies in `pending-graduations.md` that were NOT moved to any archive snapshot when their status flipped to graduated.**
+Verified: `pending-graduations-archive-2026-05-10.md` carries 4 ### headers; none of the skipped entries' titles appear there. These entries' bodies have sat as audit trail for 12 days. Defect class: the graduation-pass discipline at the time did not archive bodies for nested-bullet entries (only top-level ### entries). Cure shape: a next-pass script with bullet-level boundary discipline to relocate those 10 bodies. Out of scope for this commit (assumptions-expert condition 3 explicitly defers). **Captured here so the defect remains visible until cured.**
+
+### Observation: the script-based archive surgery succeeded where 30-entry hand-edit would have risked boundary drift
+
+This session's archive sweep used a Python script (substance-extracting regex on ### YYYY-MM-DD — headers with `status: graduated` tag matching) rather than 20 sequential Edit operations. The script-based approach: (a) preserved 442 lines of substance verbatim with no boundary errors detected by docs-adr-expert spot-check; (b) handled all 20 entries in one atomic pass; (c) made the operation reproducible and reviewable as a discrete artefact. The hand-edit alternative would have multiplied the boundary-discipline risk 20-fold. Pattern shape: **for repetitive substance-relocation operations across many entries, script-the-surgery beats hand-edit-the-surgery; the script becomes the audit artefact.** Trigger to watch: second instance of substance-relocation work where a script gives both atomicity and reviewability. Graduation candidate target: pattern entry at `.agent/memory/active/patterns/` (general form: "Script substance-preserving relocations; the script is the audit artefact").
+
 ## 2026-05-22 — Starlit Beaming Aurora metacognition reshape + Cycle 1.3 arc closeout / claude / Opus-4.7 / `1977cf`
 
 ### Surprise: the inherited cycle decomposition was the load-bearing shape, not the type narrowing
