@@ -483,40 +483,62 @@ Before the first non-planning edit:
 
 ## Disposition Ledger (Phase 0 deliverable)
 
-Phase 0 produces a per-finding disposition ledger as a single artefact
-in this plan file (replacing this paragraph). The ledger shape:
+Phase 0 live re-query completed on 2026-05-22 by Midnight Veiling
+Threshold. The ledger below is the source of cycles 1–10 and is
+verified against the live SonarCloud and GitHub CodeQL surfaces named
+in the Phase 0 deterministic validation block.
 
-| Finding | Class | Site | Disposition | Cycle | Rationale anchor |
-| --- | --- | --- | --- | --- | --- |
-| CodeQL #90 | `js/missing-rate-limiting` | `bootstrap-helpers.ts:151–154` | FALSE_POSITIVE (per #69 precedent) | 1 | In-file TSDoc note, extended in cycle 1 |
-| Sonar S5332 hotspot ×11 | Documented class §S5332 | graph-core term/canon test files | SAFE | 2 | Policy §S5332 — W3C `example.org` namespace |
-| Sonar S4036 hotspot ×1 | Documented class §S4036 | `agent-tools-cli-topics.ts:96` | TBD (cycle 3) | 3 | Policy §S4036 — site-shape inspection |
-| Sonar S6653 ×2 | Mechanical | `cli-options.ts` | FIXED (Object.hasOwn) | 4 | Standard refactor |
-| Sonar S6594 ×1 | Mechanical | `markdown.ts` | FIXED (RegExp.exec) | 4 | Standard refactor |
-| Sonar S6582 ×1 | Mechanical | `canonicalize.unit.test.ts` | FIXED (optional chain) | 4 | Standard refactor |
-| Sonar S7755 ×1 | Mechanical | `paths.ts` | FIXED (Array.at) | 4 | Standard refactor |
-| Sonar S6564 ×3 | Mechanical | `processor-types.ts`, `property-graph/index.ts` | FIXED (remove redundant alias) | 4 | Standard refactor |
-| Sonar S4323 ×1 | Mechanical | generated `api-paths-types.ts` | FALSE_POSITIVE (generated file) or FIXED via codegen update | 4 | Codegen output; tie disposition to schema-first |
-| Sonar S7780 ×3 | Mechanical | agent-tools test files | FIXED (String.raw) | 4 | Standard refactor |
-| Sonar S7786 ×1 | Mechanical | `processor.integration.test.ts` | FIXED (new TypeError) | 4 | Standard refactor |
-| Sonar S7763 ×4 | Mechanical | `processor.ts` + 3× `vitest.config.ts` | FIXED (export … from) | 4 | Standard refactor |
-| Sonar S3358 ×3 | Refactor | `operator-value.ts`, `boundary.ts` | FIXED (extract nested ternary) | 5 | Standard refactor |
-| Sonar S4624 ×2 | Refactor | `skills-adapter-generate.ts` | FIXED (un-nest template literals) | 5 | Standard refactor |
-| Sonar S7721 ×1 | Refactor | `skills-adapter-generate/generator.unit.test.ts` | FIXED (hoist function) | 5 | Standard refactor |
-| Sonar S7735 ×1 | Refactor | `repo-check.ts` | FIXED (invert negated condition) | 5 | Standard refactor |
-| Sonar S7737 ×1 | Refactor | `tui/config.ts` | FIXED (don't use object literal as default) | 5 | Standard refactor |
-| Sonar S7785 ×5 | Architectural judgement | agent-tools CLI bins | TBD per site (cycle 6) | 6 | Top-level await vs promise-chain bootstrap — site-specific design call |
-| Sonar S7787 ×7 | Architectural judgement | graph-ingest registry surfaces | TBD per site (cycle 6) | 6 | Bare re-export pattern is the documented graph-ingest shape; per-site rationale required |
-| Sonar S1135 ×1 | Placeholder | `data-factory/index.ts` | FALSE_POSITIVE or reshape comment | 7 | WS1.3 placeholder; not a real TODO |
-| Sonar S5443 ×2 | Already-encoded class | `agent-tools/tests/repo-check.integration.test.ts` | Investigation (cycle 8) | 8 | Path should match `**/tests/**` exemption; gate may be stale |
-| Sonar duplication 6.003% | Density gate | Across PR | Consolidate (cycle 9) + contingency (cycle 10) | 9, 10 | ESLint config base extraction is third-consumer trigger |
+### Phase 0 Live-State Summary
 
-This table is the SOURCE of cycles 1–10; Phase 0's output is the
-verification that no finding was missed. If the live Sonar state shows
-a finding not in this table at the start of execution, Phase 0
-re-derives the table from the current state per
-[`/jc-plan` §Disposition Ledger](../../../../.agent/skills/plan/SKILL-CANONICAL.md)
-counts-derivation-anchored discipline.
+| Surface | Live result | Ledger verdict |
+| --- | --- | --- |
+| Sonar Quality Gate | `new_violations = 40`, `new_security_hotspots_reviewed = 0.0`, `new_duplicated_lines_density = 6.0` | Matches plan gate failure shape. The opener query used `qualitygates/pro_status`, which returns `null`; the live Sonar endpoint is `qualitygates/project_status` and returned the conditions above. |
+| Sonar issues | 40 open/confirmed new-code issues, 18 rules | Matches the 40-issue ledger below; no issue-count drift. |
+| Sonar hotspots | 12 `TO_REVIEW` hotspots: 11× `typescript:S5332`, 1× `typescript:S4036` | Matches the 12-hotspot ledger below; no hotspot-count drift. |
+| CodeQL | `gh pr checks 108` reports the CodeQL aggregate failing; CodeQL alert #90 is the only alert created on 2026-05-21 and is the PR-#108-new alert cited by the aggregate. The broader `ref=refs/pull/108/head&state=open` API query returns eight open alerts on the PR ref: #90 plus older #89, #81, #77, #76, #72, #71, #70. | Ledger scope remains CodeQL #90 for this snagging plan. The seven older open alerts are recorded as a validation-query scope caveat, not new Phase 0 work, because the failing aggregate text is "1 new alert" and #90 is the only live alert matching that recency and site. |
+
+### Verified CodeQL Ledger
+
+| Finding | Class | Site | Live evidence | Disposition | Cycle | Rationale anchor |
+| --- | --- | --- | --- | --- | --- | --- |
+| CodeQL #90 | `js/missing-rate-limiting` | `apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts:151-154` | Open; created 2026-05-21T21:29:45Z; `gh pr checks 108` CodeQL aggregate fails | FALSE_POSITIVE (per #69 precedent) | 1 | In-file TSDoc note, extended in cycle 1 |
+| CodeQL query-scope caveat | Older open alerts on PR ref | #89, #81, #77, #76, #72, #71, #70 | Open on `refs/pull/108/head`, created 2026-04-21 to 2026-05-08 | No new snagging-cycle work | N/A | Not the "1 new alert" failing the aggregate; recorded so the broad API query is not mistaken for Phase 0 drift |
+
+### Verified Sonar Hotspot Ledger
+
+| Finding | Class | Sites | Live evidence | Disposition | Cycle | Rationale anchor |
+| --- | --- | --- | --- | --- | --- | --- |
+| Sonar S5332 hotspot ×11 | Documented class §S5332 | `packages/core/graph-core/src/term/index.unit.test.ts:28,29,30,42,123,124,125,179,180,181`; `packages/core/graph-core/src/canon/canonicalize.unit.test.ts:80` | 11 `TO_REVIEW`, vulnerabilityProbability `LOW` | SAFE | 2 | Policy §S5332 — W3C `example.org` namespace |
+| Sonar S4036 hotspot ×1 | Documented class §S4036 | `agent-tools/src/bin/agent-tools-cli-topics.ts:96` | 1 `TO_REVIEW`, vulnerabilityProbability `LOW` | TBD (cycle 3) | 3 | Policy §S4036 — site-shape inspection |
+
+### Verified Sonar Issue Ledger
+
+| Finding | Class | Sites | Live evidence | Disposition | Cycle | Rationale anchor |
+| --- | --- | --- | --- | --- | --- | --- |
+| Sonar S1135 ×1 | Placeholder | `packages/core/graph-core/src/data-factory/index.ts:73` | 1 INFO issue | FALSE_POSITIVE or reshape comment | 7 | WS1.3 placeholder; not a real TODO |
+| Sonar S3358 ×3 | Refactor | `agent-tools/src/collaboration-state/tui/operator-value.ts:119`; `packages/core/oak-eslint/src/rules/boundary.ts:323,343` | 3 MAJOR issues | FIXED (extract nested ternary) | 5 | Standard refactor |
+| Sonar S4323 ×1 | Mechanical | `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/api-paths-types.ts:2963` | 1 MINOR issue | FALSE_POSITIVE (generated file) or FIXED via codegen update | 4 | Codegen output; tie disposition to schema-first |
+| Sonar S4624 ×2 | Refactor | `agent-tools/src/bin/skills-adapter-generate.ts:44,47` | 2 MAJOR issues | FIXED (un-nest template literals) | 5 | Standard refactor |
+| Sonar S5443 ×2 | Already-encoded class | `agent-tools/tests/repo-check.integration.test.ts:158,159` | 2 CRITICAL issues | Investigation (cycle 8) | 8 | Path should match `**/tests/**` exemption; gate may be stale |
+| Sonar S6564 ×3 | Mechanical | `packages/core/graph-core/src/jsonld/processor-types.ts:38,40`; `packages/libs/graph-project/src/property-graph/index.ts:73` | 3 MAJOR issues | FIXED (remove redundant alias) | 4 | Standard refactor |
+| Sonar S6582 ×1 | Mechanical | `packages/core/graph-core/src/canon/canonicalize.unit.test.ts:51` | 1 MAJOR issue | FIXED (optional chain) | 4 | Standard refactor |
+| Sonar S6594 ×1 | Mechanical | `agent-tools/src/practice-fitness/markdown.ts:16` | 1 MINOR issue | FIXED (`RegExp.exec`) | 4 | Standard refactor |
+| Sonar S6653 ×2 | Mechanical | `agent-tools/src/context-cost/cli-options.ts:132,136` | 2 MINOR issues | FIXED (`Object.hasOwn`) | 4 | Standard refactor |
+| Sonar S7721 ×1 | Refactor | `agent-tools/tests/skills-adapter-generate/generator.unit.test.ts:104` | 1 MAJOR issue | FIXED (hoist function) | 5 | Standard refactor |
+| Sonar S7735 ×1 | Refactor | `agent-tools/scripts/repo-check.ts:237` | 1 MINOR issue | FIXED (invert negated condition) | 5 | Standard refactor |
+| Sonar S7737 ×1 | Refactor | `agent-tools/src/collaboration-state/tui/config.ts:25` | 1 MINOR issue | FIXED (avoid object literal default) | 5 | Standard refactor |
+| Sonar S7755 ×1 | Mechanical | `agent-tools/src/practice-fitness/paths.ts:20` | 1 MINOR issue | FIXED (`Array.at`) | 4 | Standard refactor |
+| Sonar S7763 ×4 | Mechanical | `packages/core/graph-core/src/jsonld/processor.ts:38`; `packages/core/graph-core/vitest.config.ts:3`; `packages/libs/graph-ingest/vitest.config.ts:3`; `packages/libs/graph-project/vitest.config.ts:3` | 4 MINOR issues | FIXED (`export ... from`) | 4 | Standard refactor |
+| Sonar S7780 ×3 | Mechanical | `agent-tools/scripts/check-blocked-content.unit.test.ts:580,596`; `agent-tools/src/context-cost/tokenize-globs.unit.test.ts:92` | 3 MINOR issues | FIXED (`String.raw`) | 4 | Standard refactor |
+| Sonar S7785 ×5 | Architectural judgement | `agent-tools/src/bin/agent-identity.ts:14`; `agent-tools/src/bin/agent-tools.ts:15`; `agent-tools/src/bin/branch-touched-files.ts:14`; `agent-tools/src/bin/codex-exec.ts:14`; `agent-tools/src/bin/skills-adapter-generate.ts:74` | 5 MAJOR issues | TBD per site (cycle 6) | 6 | Top-level await vs promise-chain bootstrap — site-specific design call |
+| Sonar S7786 ×1 | Mechanical | `packages/core/graph-core/src/jsonld/processor.integration.test.ts:90` | 1 MINOR issue | FIXED (`new TypeError`) | 4 | Standard refactor |
+| Sonar S7787 ×7 | Architectural judgement | `packages/libs/graph-ingest/src/custom-mapping/index.ts:7`; `packages/libs/graph-ingest/src/index.ts:8`; `packages/libs/graph-ingest/src/jsonld-compatible/index.ts:7`; `packages/libs/graph-ingest/src/node-edge-list/index.ts:7`; `packages/libs/graph-ingest/src/plain-json-tree/index.ts:7`; `packages/libs/graph-ingest/src/records/index.ts:7`; `packages/libs/graph-ingest/src/strict-jsonld/index.ts:7` | 7 MINOR issues | TBD per site (cycle 6) | 6 | Bare re-export pattern is the documented graph-ingest shape; per-site rationale required |
+| Sonar duplication 6.0% | Density gate | Across PR | Quality gate condition `new_duplicated_lines_density = 6.0` | Consolidate (cycle 9) + contingency (cycle 10) | 9, 10 | ESLint config base extraction is third-consumer trigger |
+
+No Sonar issue or hotspot drift was discovered. The only Phase 0
+clarification is the CodeQL API scope caveat above: the broad PR-ref
+query exposes older open alerts in addition to the new alert that the
+CodeQL aggregate is currently failing on.
 
 ---
 
