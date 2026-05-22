@@ -277,8 +277,8 @@
       "notes": "Abandoned before staging because git index already contained foreign staged file apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts outside Salty 4.2 bundle."
     },
     {
-      "intent_id": "27c45067-4d32-4ddc-930b-f244fec41e2e",
-      "claim_id": "17a82b8d-29b3-4941-b47b-397b99679db1",
+      "intent_id": "a7e74989-d241-4dda-9b77-cd98690122eb",
+      "claim_id": "7b9745a7-b8de-4709-8b7d-e8fd97cbe35a",
       "agent_id": {
         "agent_name": "Salty Charting Harbour",
         "platform": "codex",
@@ -286,17 +286,18 @@
         "session_id_prefix": "019e4e"
       },
       "files": [
-        "packages/core/graph-core/src/canon/canonicalize.unit.test.ts",
+        "agent-tools/src/practice-fitness/paths.ts",
         ".agent/state/collaboration/active-claims.json",
         ".agent/state/collaboration/closed-claims.archive.json",
         ".agent/state/collaboration/shared-comms-log.md",
-        ".agent/state/collaboration/comms/390b59d4-480d-46b7-b61b-1d77a2022ed1.json",
-        ".agent/state/collaboration/comms/4c99e439-92d6-4caf-a002-bfcee23c1a02.json"
+        ".agent/state/collaboration/comms/1b212fcb-c265-4b8c-91b2-b096c89df2dc.json",
+        ".agent/state/collaboration/comms/5e140236-c9d9-46d7-a5e5-acc2c0e06e4b.json",
+        ".agent/state/collaboration/comms/674e927a-e55c-4195-a6a4-354ada6f9f5a.json"
       ],
-      "commit_subject": "test(graph-core): use optional chain in literal helper",
-      "queued_at": "2026-05-22T09:06:47.552Z",
-      "updated_at": "2026-05-22T09:06:54.173Z",
-      "expires_at": "2026-05-22T09:21:47.552Z",
+      "commit_subject": "fix(agent-tools): use Array.at for path segment",
+      "queued_at": "2026-05-22T09:08:54.843Z",
+      "updated_at": "2026-05-22T09:08:58.108Z",
+      "expires_at": "2026-05-22T09:23:54.843Z",
       "phase": "staging"
     }
   ],
@@ -362,7 +363,7 @@
       "intent": "PDR-063..066 reviewer-verdict absorption arc: dispatch assumptions-expert via Agent tool, absorb verdict, cure any findings, hold commit-window for coordinator authorisation. Read-only review boundary; no source edits until cures applied."
     },
     {
-      "claim_id": "17a82b8d-29b3-4941-b47b-397b99679db1",
+      "claim_id": "7b9745a7-b8de-4709-8b7d-e8fd97cbe35a",
       "agent_id": {
         "agent_name": "Salty Charting Harbour",
         "platform": "codex",
@@ -378,11 +379,11 @@
           ]
         }
       ],
-      "claimed_at": "2026-05-22T09:06:23Z",
+      "claimed_at": "2026-05-22T09:08:36Z",
       "freshness_seconds": 900,
       "sidebar_open": false,
-      "intent": "Stage and commit PR-108 Cycle 4.3 S6582 optional chaining test fix.",
-      "intent_to_commit": "27c45067-4d32-4ddc-930b-f244fec41e2e"
+      "intent": "Stage and commit PR-108 Cycle 4.4 S7755 Array.at path fix.",
+      "intent_to_commit": "a7e74989-d241-4dda-9b77-cd98690122eb"
     }
   ]
 }

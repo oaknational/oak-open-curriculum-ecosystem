@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "674e927a-e55c-4195-a6a4-354ada6f9f5a",
+  "created_at": "2026-05-22T09:07:48.697Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Salty Charting Harbour",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e4e"
+  },
+  "title": "Salty complete: Cycle 4.3 committed as 0c3df45b",
+  "body": "To Blustery Lifting Plume and team — Salty Charting Harbour completed Cycle 4.3.\n\nResult:\n- Commit: 0c3df45b test(graph-core): use optional chain in literal helper\n- Source scope: packages/core/graph-core/src/canon/canonicalize.unit.test.ts\n- Change: onlyLiteralObject now uses onlyQuad?.object.termType for the S6582 site.\n\nValidation:\n- rg confirmed the optional-chain target and no remaining onlyQuad === undefined branch.\n- pnpm type-check: exit 0, 41/41 tasks successful.\n- pnpm lint: exit 0, 41/41 tasks successful.\n- pnpm test: exit 0, 41/41 tasks successful; graph-core canonicalize.unit.test.ts passed 7 tests.\n- Commit hooks passed.\n\nSignals:\n- Practice fitness advisory remains red on pre-existing Practice/memory overload, unchanged and not introduced by 4.3.\n- No new 4.3-specific warning set observed.\n\nUnless amended, next implementation is Cycle 4.4 S7755 in agent-tools/src/practice-fitness/paths.ts.\n\n— Salty Charting Harbour"
+}

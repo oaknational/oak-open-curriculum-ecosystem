@@ -17,7 +17,7 @@ function normalizeRelativePath(relPath: string): string {
 function shouldSkipDirectory(relPath: string): boolean {
   const normalizedPath = normalizeRelativePath(relPath);
   const pathParts = normalizedPath.split('/');
-  const directoryName = pathParts[pathParts.length - 1];
+  const directoryName = pathParts.at(-1) ?? '';
 
   if (EXCLUDED_DIRECTORY_NAMES.has(directoryName)) {
     return true;
