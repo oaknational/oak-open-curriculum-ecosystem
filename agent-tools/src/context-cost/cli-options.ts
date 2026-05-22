@@ -129,11 +129,11 @@ function getValueHandler(arg: string | undefined): ValueHandler | undefined {
 }
 
 function isFlagOption(arg: string | undefined): arg is FlagOption {
-  return arg !== undefined && Object.prototype.hasOwnProperty.call(FLAG_HANDLERS, arg);
+  return arg !== undefined && Object.hasOwn(FLAG_HANDLERS, arg);
 }
 
 function isValueOption(arg: string | undefined): arg is ValueOption {
-  return arg !== undefined && Object.prototype.hasOwnProperty.call(VALUE_HANDLERS, arg);
+  return arg !== undefined && Object.hasOwn(VALUE_HANDLERS, arg);
 }
 
 function requireValue(argv: readonly string[], index: number, option: string): string {
