@@ -231,7 +231,7 @@ governance edits.
   — the two `due` items and the recent `pending` additions.
 - [`graph-mvp-arc.plan.md` § Open Decisions](../../graph-mvp-arc.plan.md)
   — D-4a entry; close on Phase 2 landing.
-- [`graph-stack.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md)
+- [`graph-stack.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md)
   — graph-stack ACTIVE promotion is downstream of ADR-173
   ratification, which is downstream of D-4a.
 - [`ADR-041`](../../../../docs/architecture/architectural-decisions/041-workspace-structure-option-a.md)

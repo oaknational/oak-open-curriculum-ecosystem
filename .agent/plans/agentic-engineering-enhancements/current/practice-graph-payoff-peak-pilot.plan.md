@@ -182,7 +182,7 @@ Rules:
 #### `packages/core/graph-core/`
 
 This workspace is provided by
-[`graph-stack.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md),
+[`graph-stack.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md),
 not created conditionally by this pilot. Practice graph consumes it only after
 the graph-stack foundation increment lands; it must not fork local graph-core
 types inside `agent-graphs/practice-graph/`.
@@ -677,7 +677,7 @@ After all work is complete and quality gates pass, run
 
 - [graphify-and-graph-memory-exploration.plan.md](../future/graphify-and-graph-memory-exploration.plan.md)
   — strategic parent and acknowledgement boundary
-- [graph-stack.plan.md](../../connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md)
+- [graph-stack.plan.md](../../connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md)
   — provides `packages/core/graph-core/` foundation consumed by this pilot
 - [agent-graphs-workspace-organisation.plan.md](../../agent-tooling/future/agent-graphs-workspace-organisation.plan.md)
   — creates the top-level `agent-graphs/` organisation and workspace wiring

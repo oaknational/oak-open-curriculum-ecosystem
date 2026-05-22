@@ -7,7 +7,7 @@ status: current
 graph_layer: cross-cutting
 graph_portfolio_index: "graph-portfolio-index.md"
 predecessor_arc: "graph-mvp-arc.plan.md"
-predecessor_substrate: "connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md"
+predecessor_substrate: "connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md"
 owner_thread: "connecting-oak-resources"
 related_indices:
   - "high-level-plan.md"
@@ -298,7 +298,7 @@ This arc does **not**:
 - [`connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-eef-cross-corpus-surface.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/oak-misconceptions-eef-cross-corpus-surface.plan.md) —
   executable detail for the first concrete tool (migrated from current/
   2026-05-11).
-- [`connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md`](connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md) —
+- [`connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md`](connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md) —
   substrate increments; Inc.3 cross-references this arc as its named
   downstream consumer.
 - [`connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) —

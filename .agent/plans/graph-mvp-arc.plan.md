@@ -16,7 +16,7 @@ adr_amendments_required:
   - "ADR-173 (proposed) cross-reference: name MVP arc as the first vertical-slice consumer of the graph stack topology"
 plan_amendments_required:
   - "sector-engagement/eef/current/eef-evidence-corpus.plan.md: rename tool todos to `eef-*` prefix per ADR-157 (todos t6, t7, t8 + t18 ADR-123 update); add MVP-arc cross-reference"
-  - "connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md: Inc.1 provides the Oak Ontology Threads adapter for slice 2; Inc.3 EEF + misconception adapters + cross-corpus join primitive carry their downstream-consumer cross-reference to graph-combinatorial-arc.plan.md (replaces the cross-reference the MVP arc previously held via slice 3b)"
+  - "connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md: Inc.1 provides the Oak Ontology Threads adapter for slice 2; Inc.3 EEF + misconception adapters + cross-corpus join primitive carry their downstream-consumer cross-reference to graph-combinatorial-arc.plan.md (replaces the cross-reference the MVP arc previously held via slice 3b)"
   - "graph-portfolio-index.md: 3-slice MVP table; add row for follow-on combinatorial arc"
   - "high-level-plan.md: cross-link 3-slice MVP arc + follow-on combinatorial arc from Cross-cutting Threads section"
 specialist_reviewers:
@@ -185,7 +185,7 @@ Downstream teacher-outcome impact is still named, not delivered.
 ## Why This Plan Exists
 
 The graph portfolio defines a **substrate** layer
-([`graph-stack.plan.md`](connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md)),
+([`graph-stack.plan.md`](connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md)),
 multiple **Oak graph surfaces**, and several **features built on those
 graphs** — but no plan threads vertical slices from substrate through
 surface for each of the three corpora the MVP commits to. The substrate
@@ -680,7 +680,7 @@ the ADR carries it.
 | Plan | Amendment | Status |
 |---|---|---|
 | [`eef-evidence-corpus.plan.md`](sector-engagement/eef/current/eef-evidence-corpus.plan.md) | Tool todos t6/t7/t8 renamed to `eef-*` prefix; t10/t11 prompt names renamed; t18 ADR-123 entry updated. Cross-reference to this spine. | **Landed** |
-| [`graph-stack.plan.md`](connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md) | Foundation corpus corrected to Oak Ontology Threads; Inc.1 provides the Thread adapter for slice 2; Inc.3 carries downstream-consumer cross-reference to graph-combinatorial-arc.plan.md (2026-05-11 reshape). NC graph work is outside the MVP. | **Amended 2026-05-10**; Inc.3 cross-ref pending 2026-05-11 reshape |
+| [`graph-stack.plan.md`](connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md) | Foundation corpus corrected to Oak Ontology Threads; Inc.1 provides the Thread adapter for slice 2; Inc.3 carries downstream-consumer cross-reference to graph-combinatorial-arc.plan.md (2026-05-11 reshape). NC graph work is outside the MVP. | **Amended 2026-05-10**; Inc.3 cross-ref pending 2026-05-11 reshape |
 | [`graph-portfolio-index.md`](graph-portfolio-index.md) | 3-slice MVP arc table; new row for graph-combinatorial-arc (2026-05-11 reshape). | Pending |
 | [`high-level-plan.md`](high-level-plan.md) | Cross-link 3-slice MVP + follow-on combinatorial arc. | Pending |
 | `ADR-157` | Amendment per [`§ ADR-157 Amendment`](#adr-157-amendment). | **Landed** |

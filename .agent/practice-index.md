@@ -146,6 +146,22 @@ adoption from the Core concept name.
 | Practice-Core portability is by construction (`decision-records/README.md` Portability Constraint) | [`memory/active/distilled.md` § Practice-Core portability is by construction](memory/active/distilled.md#practice-core-portability-is-by-construction) (host-side scope statement for the constraint); structural-enforcement scanner per PDR-038 is the next follow-on |
 | State and memory substrate contracts (PDR-050) | PDR-050 carries the transferable specification; [`memory-state-substrate-contracts.md`](memory/executive/memory-state-substrate-contracts.md) is the human-facing host-local instance; [`memory-state-substrate-contracts.manifest.json`](memory/executive/memory-state-substrate-contracts.manifest.json) and [`memory-state-substrate-contracts.schema.json`](memory/executive/memory-state-substrate-contracts.schema.json) are the strict local data contract; [`memory-state-substrate-portable-contracts.plan.md`](plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md) adopts the portable contract locally; [`memory-state-contract-doctor.plan.md`](plans/agent-tooling/archive/completed/memory-state-contract-doctor.plan.md) owns deterministic host enforcement |
 
+### Decision Record ↔ Substrate ADR Bridge
+
+PDRs name portable principles (genotype); substrate-implementation
+ADRs name the concrete repository realisation (phenotype). Each PDR
+below cross-references `practice-index.md` for its phenotype; this
+table closes that loop. A phenotype may be a SKILL amendment rather
+than an ADR, or may be explicitly deferred to first-instance
+evidence.
+
+| PDR (portable principle) | Phenotype (host substrate) |
+| --- | --- |
+| [PDR-063](practice-core/decision-records/PDR-063-mid-cycle-retirement-protocol.md) — mid-cycle retirement protocol for token-bounded agents | [ADR-182](../docs/architecture/architectural-decisions/182-mid-cycle-handoff-record-substrate.md) — mid-cycle handoff record substrate (handoffs directory, handoff-record JSON schema, active-claim pointer field, comms-event discriminator value, landing-tranche plan) |
+| [PDR-064](practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md) — coordinator handoff: pre-positioning vs active-acknowledgement | No phenotype ADR. Substrate is an amendment to the [`start-right-team`](skills/start-right-team/SKILL-CANONICAL.md) SKILL §Closeout / handoff sections; the two-moments boundary lives in the SKILL surface, not in a separate substrate file |
+| [PDR-065](practice-core/decision-records/PDR-065-grounding-cost-amortisation-under-rotation.md) — grounding-cost amortisation under rotating-cast operation (Mode A / Mode B) | Phenotype **explicitly deferred** to first-instance evidence. Both load-bearing mechanisms — see PDR-065 §"Doctrine-change visibility under Mode B (deferred mechanism)" and §"Eligibility-signal carriage (deferred)" — are pending the first observed rotating-cast Round 1 instance. A substrate ADR will be authored only when the deferred mechanisms graduate |
+| [PDR-066](practice-core/decision-records/PDR-066-comms-events-as-failure-mode-channel.md) — comms-events as real-time failure-mode capture channel | [ADR-183](../docs/architecture/architectural-decisions/183-comms-event-tag-namespace-substrate.md) — comms-event tag namespace substrate (schema `tags` field on `narrative` / `lifecycle` / `directed` event definitions, tag namespace governance, CLI rendering convention, landing tranche) |
+
 ### Rules cited by Practice Core
 
 Practice-Core PDRs cite host-local rule files as proven enforcement

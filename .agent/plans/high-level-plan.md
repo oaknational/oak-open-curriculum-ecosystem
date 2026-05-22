@@ -113,7 +113,7 @@ corpus.
 - **Research direction**:
   [graph-library.research.md](../research/graph-library.research.md)
 - **Topology spine plan**:
-  [connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md](connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md)
+  [connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md](connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md)
 - **Collection README**:
   [connecting-oak-resources/knowledge-graph-integration/README.md](connecting-oak-resources/knowledge-graph-integration/README.md)
 

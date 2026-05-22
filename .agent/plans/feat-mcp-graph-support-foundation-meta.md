@@ -148,7 +148,7 @@ State snapshot — refresh on session pickup.
 - Cycle 6 code-expert verdict absorbed (5 S7785 FIX + 7 S7787 FALSE_POSITIVE).
 - Architecture-expert-fred re-verify on PDR-066 cured spots: GO.
 - assumptions-expert verdict on PDR-063..066 absorbed by drafter; cures in flight.
-- Working tree carries: PDR-063, PDR-064 (with cures), PDR-065, PDR-066 (with cures); the addendum's four protocol questions are these PDRs.
+- Commit `77d6ce85` landed the architectural-excellence pass: PDR-063..066 portability-clean genotype, plus ADR-182 (mid-cycle handoff record substrate, PDR-063 phenotype) and ADR-183 (comms-event tag namespace substrate, PDR-066 phenotype). These supersede the addendum's four protocol questions.
 
 ### PDR slice (2026-05-22 architectural-excellence pass)
 
@@ -222,9 +222,9 @@ as load-bearing constraints, not as gaps the session can decide unilaterally.
 
 | Question | Affects | Status |
 |---|---|---|
-| Q1 — PDR portability-migration surface (where do repo-path specifics land — non-Practice-Core doc, or PDR §Implementation Notes appendix?) | PDR-063, 065, 066 cure work | Pending |
-| Q2 — PDR-065 `[DOCTRINE]` cross-substrate mechanism (split into PDR-066 Tranche 2, independent PDR, or defer to first-instance?) | PDR-065 cure work | Pending |
-| Q3 — PDR-065 `fast_bootstrap_eligible` frontmatter field (justify with concrete failure mode or downgrade to deferred?) | PDR-065 cure work | Pending |
+| Q1 — PDR portability-migration surface (where do repo-path specifics land — non-Practice-Core doc, or PDR §Implementation Notes appendix?) | PDR-063, 065, 066 cure work | Resolved 2026-05-22 (commit `77d6ce85`): genotype/phenotype split. Repo-specific paths live in ADR-182 (PDR-063 phenotype) and ADR-183 (PDR-066 phenotype); PDRs are portability-clean. |
+| Q2 — PDR-065 `[DOCTRINE]` cross-substrate mechanism (split into PDR-066 Tranche 2, independent PDR, or defer to first-instance?) | PDR-065 cure work | Resolved 2026-05-22 as deferred-by-design. See PDR-065 §"Doctrine-change visibility under Mode B (deferred mechanism)" — graduates via a substrate-implementation ADR when second-instance evidence accumulates. |
+| Q3 — PDR-065 `fast_bootstrap_eligible` frontmatter field (justify with concrete failure mode or downgrade to deferred?) | PDR-065 cure work | Resolved 2026-05-22 as deferred. See PDR-065 §"Eligibility-signal carriage (deferred)" — re-derivation by the incoming agent is the sound shape; static signal only graduates if empirical evidence shows re-derivation cost is systematically high. PDR-065 frontmatter does not carry the field. |
 | ff1 EEF partnership opener — name the EEF contact, record first-contact action | gate-1a promotion | Pending owner action |
 | ff2 AI-client adoption-tracking owner naming — resolves D-1 | gate-1a promotion | Pending owner action |
 | Cycle 8 mechanical-encoding investigation policy-amendment authorisation (if investigation finds policy-amendment shape) | PR-108 merge | Contingent on investigation outcome |
