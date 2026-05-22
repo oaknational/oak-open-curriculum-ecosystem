@@ -9,5 +9,6 @@ export default createLibConfig({
     'jsonld/index': 'src/jsonld/index.ts',
     'canon/index': 'src/canon/index.ts',
     'vocab/index': 'src/vocab/index.ts',
+    'graph-view/index': 'src/graph-view/index.ts',
   },
 });

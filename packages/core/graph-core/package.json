@@ -39,6 +39,11 @@
       "types": "./dist/vocab/index.d.ts",
       "development": "./src/vocab/index.ts",
       "import": "./dist/vocab/index.js"
+    },
+    "./graph-view": {
+      "types": "./dist/graph-view/index.d.ts",
+      "development": "./src/graph-view/index.ts",
+      "import": "./dist/graph-view/index.js"
     }
   },
   "main": "./dist/index.js",
@@ -59,6 +64,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@oaknational/result": "workspace:*",
     "@oaknational/type-helpers": "workspace:*",
     "jsonld": "^9.0.0",
     "rdf-canonize": "^5.0.0"

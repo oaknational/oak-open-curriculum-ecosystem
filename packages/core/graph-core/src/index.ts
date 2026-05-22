@@ -57,3 +57,22 @@ export {
   type CanonicalizationResult,
   type CanonicalizedDataset,
 } from './canon/index.js';
+export {
+  type DeepKeyPath,
+  type EnumerateNodesError,
+  type EnumerateNodesResult,
+  type FieldPredicate,
+  type FindByTagError,
+  type GraphManifest,
+  type GraphSummary,
+  type GraphSummaryError,
+  type GraphView,
+  type InvalidTagFormat,
+  type NeighbourResult,
+  type NodeFilter,
+  type NodeNotFoundError,
+  type NodeProjection,
+  type NotImplementedYet,
+  type SubgraphError,
+  type SubgraphResult,
+} from './graph-view/index.js';
