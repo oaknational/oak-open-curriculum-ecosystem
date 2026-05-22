@@ -211,31 +211,34 @@ fail (40 new issues, 12 unreviewed hotspots, 6.0% new-code duplication).
 
 ## Concurrent execution context (2026-05-22 amendment)
 
-This plan is **Stream A** in a multi-stream concurrent execution shape on
-the `feat/mcp-graph-support-foundation` branch. Other live streams author
-new files outside this plan's scope and can proceed in parallel.
+This plan is one of several plans currently in force on
+`feat/mcp-graph-support-foundation`. Other plans author new files
+outside this plan's scope and can proceed in parallel under the
+file-scope partition.
 
-**Read the branch-state manifest first** if you are a coordinating agent
-picking up this branch:
-[`branch-concurrency.md`](branch-concurrency.md). It names every concurrent
-stream, the file-disjointness invariant, the dependency graph, and the
-open structural questions.
+**Read the branch meta plan first** if you are a fresh session picking
+up this branch:
+[`../../../feat-mcp-graph-support-foundation-meta.md`](../../../feat-mcp-graph-support-foundation-meta.md).
+It names every plan currently in force, the cross-plan dependency
+picture, the file-scope partition that prevents collisions, current
+state of work, entry points for different kinds of work, and the open
+owner-class structural questions.
 
-**File-scope summary for this plan (Stream A)**:
+**File-scope summary for this plan**:
 
-- **Owns (will edit)**: existing files per the per-cycle tables below.
-- **Must not edit**: any file under `packages/core/graph-core/src/graph-view/`
-  (Stream B home; new directory); any file under
-  `packages/sdks/graph-corpus-sdk/` (Stream B home; new workspace); any
-  PDR file under `.agent/practice-core/decision-records/PDR-06[3-6]-*.md`
-  (Stream E); any memory file beyond the standing lifecycle-residue
-  inclusion (Stream F).
+- **Owns (will edit)**: existing files per the `primary_artefacts`
+  frontmatter and per-cycle tables below.
+- **Must not edit**: any new directory under
+  `packages/core/graph-core/src/graph-view/`; any file under the new
+  `packages/sdks/graph-corpus-sdk/` workspace; the four PDR-063..066
+  files under `.agent/practice-core/decision-records/`; any memory file
+  beyond the standing lifecycle-residue inclusion.
 
-**Cross-stream coordination**: the SonarCloud QG `new_security_hotspots_reviewed`
-condition advanced to 100% during the 2026-05-22 team session via Stream
-A's Cycle 2 + Cycle 3 dispositions; Cycle 6 Lane B (7 S7787 FALSE_POSITIVE
-dispositions) remains the next Sonar-MCP write batch. See the manifest's
-"Currently live on this branch" section for the status of each stream.
+**Recent progress (2026-05-22)**: Cycles 1 + 2 + 3 + 4.1 + 4.2 + 4.3 +
+4.4 landed; SonarCloud `new_security_hotspots_reviewed` condition
+advanced from 0% to 100% (12 dispositions REVIEWED/SAFE); CodeQL #90
+dismissed FALSE_POSITIVE (criterion 3 pending next CI run). See meta
+plan §"Current state" for the cross-plan snapshot.
 
 ---
 

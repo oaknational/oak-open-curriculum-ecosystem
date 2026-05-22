@@ -153,25 +153,21 @@ four protocol additions) is necessary but NOT sufficient; the
 PR-#108 gate is also a precondition.
 
 **2026-05-22 amendment — concurrent-execution relaxation**. Owner
-direction this session is "two teams on the same branch, team snag
-and team eef". The hard-gate above is **relaxed**: gate-1a substrate
-authoring (`WS4.1`, `WS4.4`, `WS4.5`) and `ff1`/`ff2` non-technical
-preconditions are now permitted to proceed concurrently with the
-PR-#108 snagging stream, under the file-disjointness invariant set
-in the branch-state manifest. Merge ordering remains gated — the
-WS4.x scope still requires PR-#108's quality-gate conditions to
-clear before it can merge to main (either as the same PR if Path 3
-is chosen, or as a separate PR rebased after PR-#108 merges if Path
-1 or 2 is chosen). The path selection is currently undecided and is
-owner-class; see the manifest's "Promotion / merge ordering" and
-"Open structural questions" sections.
+direction this session relaxes the hard gate above: gate-1a
+substrate authoring (`WS4.1`, `WS4.4`, `WS4.5`) and `ff1` / `ff2`
+non-technical preconditions are permitted to proceed concurrently
+with the PR-#108 snagging work, under the file-scope partition that
+prevents collisions across plans. Merge ordering — which PRs land in
+what order — is a session-time operational choice, not a planning
+constraint, and is not specified here.
 
-**Branch-state cross-reference**: any coordinating agent picking up
-this branch should read
-[`../../../connecting-oak-resources/knowledge-graph-integration/current/branch-concurrency.md`](../../../connecting-oak-resources/knowledge-graph-integration/current/branch-concurrency.md)
-first. The manifest names every concurrent work-stream, the
-file-disjointness matrix, the dependency graph, and the open
-structural questions.
+**Meta-plan cross-reference**: a fresh session picking up this
+branch reads
+[`../../../feat-mcp-graph-support-foundation-meta.md`](../../../feat-mcp-graph-support-foundation-meta.md)
+first. The meta plan names every plan currently in force on this
+branch, the cross-plan dependency picture, the file-scope partition,
+current state of work, and the open owner-class structural
+questions.
 
 ### Dependency graph (gate-1a scope only)
 

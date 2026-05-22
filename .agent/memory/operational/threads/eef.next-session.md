@@ -225,21 +225,43 @@ without prior user/inter-agent authorisation. Codex sessions
 lacking the `mcp__sonarqube__` namespace should check `docker mcp
 tools ls --format json` BEFORE declaring Sonar unavailable.
 
-**Branch-state pickup pointer**: any coordinator picking up this
-thread on `feat/mcp-graph-support-foundation` MUST first read
-[`branch-concurrency.md`](../../../plans/connecting-oak-resources/knowledge-graph-integration/current/branch-concurrency.md)
-— the branch-scoped manifest naming the six concurrent work-streams
-(A–F), file-disjointness matrix, dependency graph, Path 1/2/3 merge
-ordering, and the open structural questions on owner surface.
+**Branch-state pickup pointer (2026-05-22 final shape)**: any
+session picking up this thread on `feat/mcp-graph-support-foundation`
+MUST first read
+[`feat-mcp-graph-support-foundation-meta.md`](../../../plans/feat-mcp-graph-support-foundation-meta.md)
+— the top-level meta plan naming every plan currently in force on
+the branch, the cross-plan dependency picture, the file-scope
+partition (work-structure, not team-structure), current state of
+work, entry points for different kinds of work, and the open
+owner-class structural questions. **The earlier
+`branch-concurrency.md` is retired**: it carried operational drift
+(Stream-A-to-F framing read as team-shape; Path 1/2/3 merge
+ordering = operational; coordinator-structure heuristics =
+operational) that did not match owner direction "describe what
+parallel work is possible, not how it is carried out or by whom".
+Substantive content survives in the meta plan.
 
 **Last refreshed**: 2026-05-22 — Blustery Lifting Plume / claude /
 claude-opus-4-7 / `d4aad7` (full-session coordinator) + team
 (Flamebright / Foamy / Ferny / Veiled / Salty / Midnight).
 Consolidation pass executed under Ferny by coordinator routing
-event `09:35:57Z`; follow-on branch-concurrency manifest landed by
-Blustery at directed event 10:00:55Z under owner direction "update
-all relevant plans and continuity surfaces to make the parallel
-work explicit".
+event `09:35:57Z`; branch-concurrency manifest landed by Ferny at
+commit `c8860a0f` under owner direction "update all relevant plans
+and continuity surfaces to make the parallel work explicit"; the
+manifest was subsequently superseded by the meta plan
+`feat-mcp-graph-support-foundation-meta.md` after owner refined the
+criterion ("describe what highly parallel work is possible, not how
+it is carried out or by whom"). Final closeout this session: team
+dissolved (last team member Blustery); meta plan landed; three plan
+amendments (`pr-108-snagging.plan.md`, `eef-first-feature.plan.md`,
+`graph-stack.plan.md`) tightened to cross-reference the meta plan
+and drop operational framing; the four PDR drafts
+(`PDR-063..066`) preserved on the branch as committed artefacts
+under this closeout, with PDR-064 cures landed and PDR-063/065/066
+cures paused mid-work awaiting owner Q1/Q2/Q3 routing. Knowledge-
+graduation backlog expanded to 6 candidates (added: planning
+documents describe work-structure, not operational/team approach
+— owner-stated criterion).
 
 ---
 
