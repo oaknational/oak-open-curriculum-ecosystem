@@ -41,10 +41,12 @@ async function runCheck(repoRoot: string, prefix: string): Promise<number> {
     return 0;
   }
   if (result.missing.length > 0) {
-    stderr.write(`Missing adapters:\n${result.missing.map((p) => `  ${p}`).join('\n')}\n`);
+    const missingList = result.missing.map((p) => `  ${p}`).join('\n');
+    stderr.write(`Missing adapters:\n${missingList}\n`);
   }
   if (result.drifted.length > 0) {
-    stderr.write(`Drifted adapters:\n${result.drifted.map((p) => `  ${p}`).join('\n')}\n`);
+    const driftedList = result.drifted.map((p) => `  ${p}`).join('\n');
+    stderr.write(`Drifted adapters:\n${driftedList}\n`);
   }
   stderr.write('Run `pnpm skills:check` after regenerating to confirm.\n');
   return 1;

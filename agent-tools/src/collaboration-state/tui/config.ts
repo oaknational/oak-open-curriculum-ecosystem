@@ -22,9 +22,10 @@ export interface CollaborationTuiConfigRuntime {
 
 export function collaborationTuiConfig(
   options: Options,
-  runtime: CollaborationTuiConfigRuntime = { cwd: process.cwd() },
+  runtime?: CollaborationTuiConfigRuntime,
 ): CollaborationTuiConfig {
-  const repoRoot = optional(options, 'repo-root') ?? findCollaborationRepoRoot(runtime.cwd);
+  const resolvedRuntime = runtime ?? { cwd: process.cwd() };
+  const repoRoot = optional(options, 'repo-root') ?? findCollaborationRepoRoot(resolvedRuntime.cwd);
   const nowIso = optional(options, 'now');
 
   return {

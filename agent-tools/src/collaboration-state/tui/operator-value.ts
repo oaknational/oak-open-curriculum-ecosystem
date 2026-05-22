@@ -112,11 +112,13 @@ function queuePressureSummary(queue: readonly TuiQueueEntry[]): TuiQueuePressure
   const active = queue.filter((entry) => entry.status === 'active').length;
   const expired = queue.filter((entry) => entry.status === 'expired').length;
   const total = active + expired;
+  const nonExpiredStatus: TuiQueuePressureSummary['status'] = active > 0 ? 'active' : 'clear';
+  const status: TuiQueuePressureSummary['status'] = expired > 0 ? 'attention' : nonExpiredStatus;
   return {
     active,
     expired,
     total,
-    status: expired > 0 ? 'attention' : active > 0 ? 'active' : 'clear',
+    status,
   };
 }
 

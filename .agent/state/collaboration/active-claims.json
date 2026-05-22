@@ -277,5 +277,63 @@
       "notes": "Abandoned before staging because git index already contained foreign staged file apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts outside Salty 4.2 bundle."
     }
   ],
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "789ee97b-6668-48e4-91a5-725b4767426d",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "thread": "pr-108-snagging",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/tui/operator-value.ts",
+            "packages/core/oak-eslint/src/rules/boundary.ts",
+            "agent-tools/src/bin/skills-adapter-generate.ts",
+            "agent-tools/tests/skills-adapter-generate/generator.unit.test.ts",
+            "agent-tools/scripts/repo-check.ts",
+            "agent-tools/src/collaboration-state/tui/config.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T12:16:27Z",
+      "freshness_seconds": 5400,
+      "sidebar_open": false,
+      "intent": "Cycle 5 refactor cluster (8 sites, 5 sub-cycles, file-disjoint fan-out)",
+      "heartbeat_at": "2026-05-22T12:21:25Z"
+    },
+    {
+      "claim_id": "6ed6ca9a-9702-4b4f-8994-2a862367516d",
+      "agent_id": {
+        "agent_name": "Mistbound Slipping Night",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "a1cb64"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/handoffs/",
+            ".agent/state/collaboration/active-claims.schema.json",
+            ".agent/state/collaboration/comms-event.schema.json",
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md",
+            ".agent/practice-index.md",
+            ".agent/practice-core/decision-records/PDR-063-mid-cycle-retirement-protocol.md",
+            ".agent/practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md",
+            ".agent/practice-core/decision-records/PDR-066-comms-events-as-failure-mode-channel.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T12:17:53Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Lane B PDR-063..066 cure work — substrate implementation: ADR-182 Tranche 1 (handoffs dir + claims schema field + SKILL Closeout amendment), ADR-183 Tranche 1 (comms-event schema tags field), PDR-064 SKILL Coordinator Handoff amendment. Tranche 2 of both ADRs deferred (ADR-183 Tranche 2 needs Shaded coordination on agent-tools CLI scope)."
+    }
+  ]
 }

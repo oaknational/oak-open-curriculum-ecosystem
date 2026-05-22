@@ -314,41 +314,49 @@ export function createDesignBoundaryRules(designName: DesignPackage): Partial<Li
   const createDesignRestrictionMessage = (otherDesignPackage: DesignPackageImport) =>
     `Design workspace '${designName}' cannot depend on '${otherDesignPackage}'. Follow ADR-041's packages/design dependency direction.`;
 
-  const restrictedDesignImportPatterns =
-    designName === 'design-tokens-core'
-      ? createPackageSpecifierPatterns(
-          ['@oaknational/oak-design-ink', '@oaknational/oak-design-tokens'],
-          createDesignRestrictionMessage('@oaknational/oak-design-tokens'),
-        )
-      : designName === 'oak-design-tokens'
-        ? createPackageSpecifierPatterns(
-            ['@oaknational/oak-design-ink'],
-            createDesignRestrictionMessage('@oaknational/oak-design-ink'),
-          )
-        : [];
-  const restrictedDesignPathZones =
-    designName === 'design-tokens-core'
-      ? [
-          {
-            target: './src/**' as const,
-            from: '../oak-design-tokens/**' as const,
-            message: createDesignRestrictionMessage('@oaknational/oak-design-tokens'),
-          },
-          {
-            target: './src/**' as const,
-            from: '../oak-design-ink/**' as const,
-            message: createDesignRestrictionMessage('@oaknational/oak-design-ink'),
-          },
-        ]
-      : designName === 'oak-design-tokens'
-        ? [
-            {
-              target: './src/**' as const,
-              from: '../oak-design-ink/**' as const,
-              message: createDesignRestrictionMessage('@oaknational/oak-design-ink'),
-            },
-          ]
-        : [];
+  const buildRestrictedDesignImportPatterns = () => {
+    if (designName === 'design-tokens-core') {
+      return createPackageSpecifierPatterns(
+        ['@oaknational/oak-design-ink', '@oaknational/oak-design-tokens'],
+        createDesignRestrictionMessage('@oaknational/oak-design-tokens'),
+      );
+    }
+    if (designName === 'oak-design-tokens') {
+      return createPackageSpecifierPatterns(
+        ['@oaknational/oak-design-ink'],
+        createDesignRestrictionMessage('@oaknational/oak-design-ink'),
+      );
+    }
+    return [];
+  };
+  const restrictedDesignImportPatterns = buildRestrictedDesignImportPatterns();
+  const buildRestrictedDesignPathZones = () => {
+    if (designName === 'design-tokens-core') {
+      return [
+        {
+          target: './src/**' as const,
+          from: '../oak-design-tokens/**' as const,
+          message: createDesignRestrictionMessage('@oaknational/oak-design-tokens'),
+        },
+        {
+          target: './src/**' as const,
+          from: '../oak-design-ink/**' as const,
+          message: createDesignRestrictionMessage('@oaknational/oak-design-ink'),
+        },
+      ];
+    }
+    if (designName === 'oak-design-tokens') {
+      return [
+        {
+          target: './src/**' as const,
+          from: '../oak-design-ink/**' as const,
+          message: createDesignRestrictionMessage('@oaknational/oak-design-ink'),
+        },
+      ];
+    }
+    return [];
+  };
+  const restrictedDesignPathZones = buildRestrictedDesignPathZones();
 
   return {
     'import-x/no-restricted-paths': [

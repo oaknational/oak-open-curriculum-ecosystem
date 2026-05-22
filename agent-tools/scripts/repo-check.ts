@@ -190,25 +190,25 @@ export function profilePostTurboGateStatus(input: {
   readonly failurePhase: CheckProfileFailurePhase;
   readonly output?: string;
 }): PostTurboGateStatus {
-  if (!input.outputCaptured) {
-    return 'not-captured';
+  if (input.outputCaptured) {
+    if (
+      input.output?.includes('markdownlint-check:root') === true ||
+      input.output?.includes('format-check:root') === true ||
+      input.output?.includes('subagents:check') === true ||
+      input.output?.includes('portability:check') === true ||
+      input.output?.includes('skills:check') === true
+    ) {
+      return 'ran';
+    }
+
+    if (input.failurePhase === 'turbo-task') {
+      return 'skipped-after-turbo-failure';
+    }
+
+    return 'not-observed';
   }
 
-  if (
-    input.output?.includes('markdownlint-check:root') === true ||
-    input.output?.includes('format-check:root') === true ||
-    input.output?.includes('subagents:check') === true ||
-    input.output?.includes('portability:check') === true ||
-    input.output?.includes('skills:check') === true
-  ) {
-    return 'ran';
-  }
-
-  if (input.failurePhase === 'turbo-task') {
-    return 'skipped-after-turbo-failure';
-  }
-
-  return 'not-observed';
+  return 'not-captured';
 }
 
 export function buildCheckProfileArtifact(input: {

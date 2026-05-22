@@ -91,6 +91,17 @@ describe('buildAdapterFrontmatter', () => {
   });
 });
 
+function makeFs(files: ReadonlyMap<string, string>): CheckerFs {
+  return {
+    async readFileOrUndefined(path) {
+      return files.get(path);
+    },
+    async listSubdirectoryNames(path) {
+      return path === '/repo/.agent/skills' ? ['sample'] : [];
+    },
+  };
+}
+
 describe('checkAdapters', () => {
   const repoRoot = '/repo';
   const prefix = 'jc-';
@@ -100,17 +111,6 @@ describe('checkAdapters', () => {
     canonicalPath: '/repo/.agent/skills/sample/SKILL-CANONICAL.md',
     canonicalFilename: 'SKILL-CANONICAL.md',
   };
-
-  function makeFs(files: ReadonlyMap<string, string>): CheckerFs {
-    return {
-      async readFileOrUndefined(path) {
-        return files.get(path);
-      },
-      async listSubdirectoryNames(path) {
-        return path === '/repo/.agent/skills' ? ['sample'] : [];
-      },
-    };
-  }
 
   function expectedAdapter(surface: AdapterSurface): { path: string; content: string } {
     return {
