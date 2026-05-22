@@ -227,7 +227,7 @@ compress memory/Practice substance.
 
 ### D8 — ADR-144 Amendment Is Mandatory
 
-Token thresholds extend the ADR-governed two-threshold model. WS2 must amend
+Token thresholds extend the ADR-governed three-zone model. WS2 must amend
 ADR-144 in place before token fields become executable semantics.
 
 ### D9 — Manifest Closure Requires Disposition

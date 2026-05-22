@@ -116,3 +116,32 @@ more delicate.
 
 **Cure**: continue to use the queue ceremony for self-application moments;
 they're the highest-quality validation of structural cures.
+
+## 2026-05-22 — Deep-graduation pass under owner direction / claude / Opus-4.7 / `e35155`
+
+### Observation: owner-direction graduation pass drained a substantial slice of the buffer
+
+**Observation**: owner directive *"please run a deep graduation of
+knowledge source materials, the napkin, the comms records, the
+.remember directory, the vendor specific memory locations. Ignore
+fitness metric levels for now."* fired as the owner-direction trigger
+for entries that had been gated on that condition since 2026-05-17.
+Eight Tier A graduations landed (5 new rules, 2 PDRs, 1 directive
+amendment, plus SKILL amendments), nine Tier B candidates were
+captured at pattern fidelity or PDR-Draft status, five per-user
+memory entries had audit-trail markers updated.
+
+**Diagnosis**: the pending-graduations buffer accumulates substance
+gated on owner-direction or N+1 instance triggers; without a
+periodic owner-driven drain, the buffer slowly fills with substance
+whose triggers never fire spontaneously. The deep-graduation pass
+is itself a worked instance of PDR-068's consumer-cadence cure —
+the bottleneck was the "consumer cadence too low" diagnostic and
+the cure was a focused owner-triggered drain.
+
+**Cure**: deep-graduation passes under owner direction are a
+legitimate consumer-cadence increase for buffer drainage. The
+pattern can recur whenever the buffer accumulates substance gated
+on conditions that don't fire spontaneously in normal session work.
+Captured implicitly in PDR-068 §"Consumer cadence too low" cure;
+the worked instance is this pass itself.

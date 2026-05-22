@@ -1,0 +1,6 @@
+---
+description: Only one agent runs the whole-repo gate sweep (pnpm check, pnpm test) per coordination window; multiple parallel runs duplicate work and provide no marginal signal. Broadcast before invoking; defer when a peer's in-flight broadcast is on the stream.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/check-singleton-per-window.md`.

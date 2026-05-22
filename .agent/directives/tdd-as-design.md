@@ -78,6 +78,33 @@ signature changes, not runtime test failures. Update the test call
 sites first. Existing tests *are* the safety net; no new tests are
 needed for internal restructuring.
 
+## One State, One Describing Surface
+
+A multi-cycle plan moves the system toward a system state. That state
+has **one place where it is observable from a test, in the form the
+code actually runs** — the workflow seam, the persisted record, the
+rendered output, or the effect on an external surface. Every cycle's
+tests in the plan describe that surface, even when the cycles'
+internal mechanics differ.
+
+Cycles that produce tests below the describing surface are
+**scaffolding tests**. They exist for the implementer's confidence
+in an internal seam, not for the system's durable description.
+Scaffolding tests are coupled to implementation choices — a refactor
+that changes the internal seam without changing observable state
+breaks the scaffolding without removing user-observable behaviour.
+
+The cure fires at plan-author time, not at test-review time: state
+the describing surface in one sentence before the cycle decomposition
+is settled, and tag each cycle's test boundary against it. Cycles
+that "need to describe an internal seam" are asking for scaffolding
+unless the seam genuinely produces new observable state; the default
+is scaffolding.
+
+See [`patterns/where-system-state-is-observable-at-plan-author-time.md`](../memory/active/patterns/where-system-state-is-observable-at-plan-author-time.md)
+for the diagnostic question, the worked instance, and how to apply
+the constraint during cycle decomposition.
+
 ## Why Scales Are Complementary
 
 Each test scale describes a different swathe of behaviour:

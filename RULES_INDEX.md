@@ -35,6 +35,7 @@ index in the same commit.
 - `.agent/rules/apply-architectural-principles.md`
 - `.agent/rules/agents-default-no-gender.md`
 - `.agent/rules/capture-practice-tool-feedback.md`
+- `.agent/rules/check-singleton-per-window.md`
 - `.agent/rules/agent-state-observable.md`
 - `.agent/rules/consolidate-at-third-consumer.md`
 - `.agent/rules/continuity-surface-commits-as-orphans.md`
@@ -58,6 +59,7 @@ index in the same commit.
 - `.agent/rules/invoke-mcp-expert.md`
 - `.agent/rules/invoke-react-component-expert.md`
 - `.agent/rules/invoke-sentry-expert.md`
+- `.agent/rules/knowledge-preservation-over-fitness-warnings.md`
 - `.agent/rules/lint-after-edit.md`
 - `.agent/rules/local-broken-code-never-leaves.md`
 - `.agent/rules/markdown-code-blocks-must-have-language.md`
@@ -75,6 +77,7 @@ index in the same commit.
 - `.agent/rules/no-verify-requires-fresh-authorisation.md`
 - `.agent/rules/no-warning-toleration.md`
 - `.agent/rules/owner-attention-at-action-moments.md`
+- `.agent/rules/per-user-memory-is-a-buffer.md`
 - `.agent/rules/plan-body-first-principles-check.md`
 - `.agent/rules/practice-core-portability.md`
 - `.agent/rules/pre-execution-code-expert-review-per-loop-cycle.md`
@@ -97,6 +100,7 @@ index in the same commit.
 - `.agent/rules/unknown-is-type-destruction.md`
 - `.agent/rules/use-agent-comms-log.md`
 - `.agent/rules/use-built-agent-tools-cli.md`
+- `.agent/rules/use-monitor-for-event-driven-wake.md`
 - `.agent/rules/use-result-pattern.md`
 - `.agent/rules/validate-full-target-estate.md`
 - `.agent/rules/validators-must-recompute-not-just-record.md`

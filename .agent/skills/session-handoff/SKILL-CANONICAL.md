@@ -529,6 +529,41 @@ there unless the owner or closeout owner gives a further assignment.
     `pnpm check` completes with no errors or warnings. This step makes that
     standing direction structurally enforced rather than agent-recalled.
 
+    **Singleton in multi-agent windows.** When two or more agents are
+    closing concurrently, only **one** of them runs the whole-repo
+    `pnpm check`. Apply the
+    [`check-singleton-per-window`](../../rules/check-singleton-per-window.md)
+    rule: before invoking `pnpm check`, broadcast on the comms stream
+    *"Lane &lt;name&gt; running pnpm check, ETA ~30s, will broadcast
+    result"*, observe peers' in-flight broadcasts and defer if one is
+    live, and broadcast the result event (green or red with first
+    blocker) carrying the HEAD SHA at run time. Peers consume the
+    result; do not duplicate the run.
+
+11a. **Dispatch PENDING reviewers if the session touched a plan body.**
+    If a thread record's plan carries PENDING reviewer markers AND this
+    session touched the plan's body, **dispatch the pending reviewers
+    as a session-close move** before declaring handoff complete. Parallel
+    sub-agent calls (single message, multiple `Agent` tool blocks) absorb
+    verdicts in roughly the time of one reviewer; the next implementer's
+    session-open then opens with the MUST-NOT-BEGIN gate cleared rather
+    than re-inheriting the dispatch obligation.
+
+    The cost is bounded (~60s per reviewer in parallel) and the cure is
+    additive (no commits, only plan-body edits to flip the markers and
+    absorb verdicts). Worked instance 2026-05-22: `type-expert` +
+    `assumptions-expert` PENDING markers persisted across two sessions
+    on the commit-queue-intent-scope-discipline plan; dispatching them
+    in parallel at session-close took ~60s and produced a plan body the
+    next implementer opened ready to author.
+
+    Skip only when (a) the plan body was not touched this session
+    (the markers are not on the agent's path), or (b) dispatching would
+    require source-code changes (the reviewer needs a working tree that
+    isn't this session's). In both cases, surface the pending reviewer
+    list in the handoff narrative so the next implementer does not
+    discover the dispatch obligation only at session-open.
+
 12. **Keep the boundary clean.** `session-handoff` includes the consolidation
     gate and can escalate into `oak-consolidate-docs` when appropriate, but
     ordinary sessions remain lightweight. It does not smuggle in review or git

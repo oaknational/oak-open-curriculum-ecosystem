@@ -1,0 +1,6 @@
+---
+description: Event-driven streams (comms events, log lines, CI status) run on harness Monitor with persistent:true and a line-buffered filter — never on Bash run_in_background, which writes to a file and delivers no notifications. Cure for polling failure modes.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/use-monitor-for-event-driven-wake.md`.
