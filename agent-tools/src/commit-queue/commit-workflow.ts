@@ -43,7 +43,7 @@ export interface CommitWorkflowDependencies {
   readonly transformRegistry: (
     transform: (registry: CommitQueueRegistry) => CommitQueueRegistry,
   ) => Promise<void>;
-  readonly getStagedBundle: () => StagedBundle;
+  readonly getStagedBundle: (input: { readonly pathspec: readonly string[] }) => StagedBundle;
   readonly runAdvisoryOrchestrator: () => Promise<CommitWorkflowProcessResult>;
   readonly runGitCommit: () => Promise<CommitWorkflowGitCommitResult>;
   readonly nowIso: () => string;
@@ -141,7 +141,7 @@ async function runVerifyStage(
 ): Promise<CommitWorkflowResult | undefined> {
   const verification = verifyStagedAgainstIntent({
     intent,
-    staged: input.deps.getStagedBundle(),
+    staged: input.deps.getStagedBundle({ pathspec: intent.files }),
   });
   if (verification.ok) {
     return undefined;

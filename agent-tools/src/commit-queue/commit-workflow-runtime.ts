@@ -24,7 +24,7 @@ import {
   type CommitWorkflowProcessResult,
   type CommitWorkflowResult,
 } from './commit-workflow.js';
-import { getStagedBundle } from './git.js';
+import { getStagedBundleScoped } from './git.js';
 import { readRegistry, updateRegistry } from './registry.js';
 
 const ADVISORY_BANNER = '[ADVISORY ONLY — NOT A COMMIT GATE]';
@@ -51,7 +51,8 @@ export async function runCommitWorkflowRuntime(
   const deps: CommitWorkflowDependencies = {
     readRegistry: () => readRegistry(input.registryPath),
     transformRegistry: (transform) => updateRegistry(input.registryPath, transform),
-    getStagedBundle: () => getStagedBundle(input.repoRoot),
+    getStagedBundle: (scopeInput) =>
+      getStagedBundleScoped({ repoRoot: input.repoRoot, pathspec: scopeInput.pathspec }),
     runAdvisoryOrchestrator: () => runAdvisoryOrchestrator(input),
     runGitCommit: () => runGitCommit(input),
     nowIso: () => new Date().toISOString(),

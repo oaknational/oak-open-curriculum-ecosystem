@@ -33,18 +33,23 @@ todos:
     depends_on: [phase-0-foundation]
   - id: cycle-2-verify-staged-scoped
     content: >
-      Cycle 1.2: Add NEW `verifyScopedStagedBundle` in core.ts; route
-      `runVerifyStagedCommand` (cli.ts:146-160) AND the verify-staged-
-      before/verify-staged-after sites in commit-workflow.ts +
-      commit-workflow-runtime.ts through the scoped helpers using
-      `intent.files`. Pre-execution dispatch `architecture-expert-betty`
-      on the `CommitWorkflowDependencies.getStagedBundle` injection-seam
-      design (widen-deps-type vs scoped-helper-direct-call) per code-
-      expert post-delivery flag. Failing test: writer A's verify-staged-
-      again returns ok=true under writer B's out-of-scope restage AND
-      ok=false under writer A's own in-scope drift. One commit; tree
-      green at end.
-    status: pending
+      Cycle 1.2: Route `runVerifyStagedCommand` (cli.ts:162) and the
+      verify-staged-before/verify-staged-after sites in
+      commit-workflow.ts + commit-workflow-runtime.ts through
+      `getStagedBundleScoped` using `intent.files`. Architecture-betty
+      Shape A: widen `CommitWorkflowDependencies.getStagedBundle` to
+      `(input: { readonly pathspec: readonly string[] }) => StagedBundle`;
+      `repoRoot` absorbed in runtime closure with explicit construction
+      (no spread) per type-expert. The pre-existing `verifyStagedBundle`
+      handles scoped data unchanged; no new core function needed.
+      Writer-independence invariants + empty-pathspec boundary +
+      overlapping-scope + dep-wiring origin-trace asserted across
+      `commit-queue-verify-staged-scope.unit.test.ts` (NEW, 4 tests)
+      and `commit-workflow.unit.test.ts` (extended).
+    status: completed
+    completed_at: 2026-05-22
+    completed_by: "Stormbound Kiting Squall (claude/ddbea2)"
+    evidence: "476/476 tests green (471 → 476: +4 verify-scope + 1 dep-wiring pathspec capture); type-check + lint clean. Pre-execution: architecture-expert-betty (Shape A), assumptions-expert (proportional + 2 pin-downs), code-expert gateway (APPROVED WITH CONDITIONS — all absorbed), test-expert + type-expert (focused — absorbed). Cycle-shape simplification: NEW `verifyScopedStagedBundle` proved unnecessary; existing `verifyStagedBundle` accepts scoped data without modification."
     depends_on: [cycle-1-fingerprint-helper-scoped]
   - id: cycle-3-commit-pathspec
     content: >
@@ -81,7 +86,7 @@ isProject: false
 # Commit-Queue Intent-Scope Discipline
 
 **Last Updated**: 2026-05-22 (post-Cycle-1.1 landing)
-**Status**: 🟡 IN PROGRESS — Phase 0 ✓, Cycle 1.1 ✓ (`fb0833a4` + `e242e633`); Cycle 1.2 + 1.3 + Phase Final remain
+**Status**: 🟡 IN PROGRESS — Phase 0 ✓, Cycle 1.1 ✓ (`fb0833a4` + `e242e633`), Cycle 1.2 ✓; Cycle 1.3 + Phase Final remain
 **Scope**: Make the commit-queue intent record's `files` field load-bearing for fingerprint computation and inner `git commit` scope in three subcommands (`record-staged` ✓, `verify-staged`/`verify-staged-again`, `commit`). One fingerprint helper, three call sites, one runtime injection.
 
 ## Progress Snapshot
@@ -90,7 +95,7 @@ isProject: false
 |---|---|---|
 | Phase 0 — surface verification | ✓ Complete | §Phase 0 Task 0.2 Findings (2026-05-22 by Stormbound) |
 | Cycle 1.1 — `getStagedBundleScoped` + `record-staged` adoption | ✓ Complete | `fb0833a4` (atomic test+product code) + `e242e633` (reviewer absorption + fixture rename) |
-| Cycle 1.2 — `verifyScopedStagedBundle` + `verify-staged`/`verify-staged-again` adoption | Pending | Plan body updated with code-expert's 3 pre-execution concerns; recommended `architecture-expert-betty` pre-dispatch on injection-seam design |
+| Cycle 1.2 — `verify-staged`/`verify-staged-again` adoption (no new core function — existing `verifyStagedBundle` handles scoped data unchanged) | ✓ Completed | Atomic landing: test + product code (5 file changes). 476/476 tests green; type-check + lint clean. `architecture-expert-betty` Shape A absorbed: `CommitWorkflowDependencies.getStagedBundle` widened to `(input: { readonly pathspec: readonly string[] }) => StagedBundle`; `commit-workflow-runtime.ts` explicit construction per type-expert (no spread). New `commit-queue-verify-staged-scope.unit.test.ts` (4 tests covering invariants a/b/c/d); `commit-workflow.unit.test.ts` extended with pathspec-capture (invariant e). CLI handler `cli.ts:162` migrated to scoped read |
 | Cycle 1.3 — `runGitCommit` pathspec narrowing + canonical retirement | Pending | Forward briefs recorded: integration test must not reach past product seam for git setup; forward-trace closeout posted at end of this cycle (not Phase Final) |
 | Phase Final — SKILL update + `pnpm check` aggregate + consolidation | Pending |  |
 
@@ -103,8 +108,12 @@ isProject: false
 | Post-Cycle-1.1 | `test-expert` | GO-WITH-AMENDMENTS | §Phase 0 Task 0.3 + `e242e633` fixture rename |
 | Post-Cycle-1.1 | `type-expert` | GO | §Phase 0 Task 0.3 |
 | Post-Cycle-1.1 | `code-expert` gateway | GO-WITH-AMENDMENTS | §Phase 0 Task 0.3 |
-| Pre-Cycle-1.2 | `architecture-expert-betty` | **PENDING** (recommended dispatch) | Injection-seam design on `CommitWorkflowDependencies.getStagedBundle` |
-| Pre-Cycle-1.2 | `assumptions-expert` + `code-expert` gateway | Pending | After architecture-betty returns |
+| Pre-Cycle-1.2 | `architecture-expert-betty` | **VERDICT: Shape A** | Widen dep type; `repoRoot` in runtime closure; full reasoning + concrete code changes in §Cycle 1.2 Pre-Execution Absorption |
+| Pre-Cycle-1.2 | `assumptions-expert` | **PROPORTIONAL with 2 pin-downs** | Empty-`intent.files` + overlapping-scope degenerate cases absorbed into §Cycle 1.2 Pre-Execution Absorption |
+| Pre-Cycle-1.2 | `code-expert` gateway | **APPROVED WITH CONDITIONS** | `cli.ts:162` migration explicit + `verifyStagedBundle` vs `verifyScopedStagedBundle` split clarified + spy capture on workflow regression-guard + delegate to `verifyFingerprint` to stay under complexity-8 |
+| Pre-Cycle-1.2 | `test-expert` (focused) | **IMPROVEMENTS ABSORBED** | Three describe blocks (verify invariants + boundary + workflow dep wiring); audit-shape risk on verbatim-reason tests resolved by contract-level naming; pathspec captured-calls pattern (not vi.spyOn) on workflow regression-guard |
+| Pre-Cycle-1.2 | `type-expert` (focused) | **AT-RISK RESOLVED** | Inline `{ readonly pathspec: readonly string[] }` at dep interface (no `ScopedStagedBundleInput` import in workflow); **must-fix**: explicit construction (no spread) in runtime binding — absorbed. NEW `verifyScopedStagedBundle` deemed unnecessary; both reviewers' specs collapse to "existing `verifyStagedBundle` handles scoped data unchanged" |
+| In-Cycle-1.2 | TDD + atomic landing | ✓ | 476/476 tests; lint + type-check clean |
 | In-Cycle-1.2 | `test-expert`, `type-expert`, `code-expert` | Pending |  |
 | Pre-Cycle-1.3 | `assumptions-expert` + `code-expert` gateway | Pending |  |
 | In-Cycle-1.3 | `test-expert`, `type-expert`, `code-expert` | Pending |  |
@@ -427,6 +436,30 @@ pnpm lint        # Expected: exit 0
 **Parallel-safety**: sequenced after Cycle 1.1.
 
 **Starting state**: Cycle 1.1 landed; scoped fingerprint helper available.
+
+**Pre-Execution Reviewer Absorption (architecture-expert-betty, 2026-05-22 post-`0b7289e9`)**:
+
+- **Verdict: Shape A** — widen `CommitWorkflowDependencies.getStagedBundle` from `() => StagedBundle` to `(input: { pathspec: readonly string[] }) => StagedBundle` (the workflow only knows about `pathspec`; `repoRoot` is absorbed in the runtime closure). Shape B (direct scoped call bypassing the injection seam) is architecturally incoherent: the dependency interface would purport to be the complete external surface while having a hardwired channel outside it, the Cycle 1.3 rename would touch the pure orchestrator unnecessarily, and the workflow would acquire two distinct read-channels for staged state.
+- **Concrete seam change** (`commit-workflow.ts` line 46): `readonly getStagedBundle: (input: { pathspec: readonly string[] }) => StagedBundle;`. Call site (`runVerifyStage` at line 144) becomes `staged: input.deps.getStagedBundle({ pathspec: intent.files })`.
+- **Concrete runtime binding** (`commit-workflow-runtime.ts` line 54): `getStagedBundle: (scopeInput) => getStagedBundleScoped({ repoRoot: input.repoRoot, ...scopeInput })`. `repoRoot` stays closed-over in the runtime exactly as it is for every other side-effecting dep today.
+- **`stagedFileMismatch` semantics (`core.ts:74`/166–179)**: needs **no change**. Under the scoped read, `extra` can no longer contain peer-owned files by construction; the existing error message remains accurate ("staged files do not exactly match intent files" now means "something within the intent's own scope was staged but not declared in intent.files" — a genuine integrity violation worth surfacing with that exact text). Confirm at execution time that `stagedNameOnly` entering `verifyStagedBundle` originates from the scoped read.
+- **`commit-workflow.unit.test.ts` test double**: signature updates to accept `_input` parameter (genuinely unused — fake returns fixture-driven bundles in sequence, not pathspec-driven). This is correct separation of concerns: workflow orchestration is the test target, scoped-read correctness lives in the new `commit-queue-verify-staged-scope.unit.test.ts`. The `_` prefix is fine here because the fake contractually accepts the input but does not route through it (not a lint-suppression rename of a should-be-used symbol).
+- **Cycle 1.3 rename cost under Shape A**: minimal — `commit-workflow-runtime.ts` updates one closure binding; `commit-workflow.ts` is untouched because the workflow goes through the injected slot.
+
+**Live in-production reproduction of the failure mode (2026-05-22, captured during the peer-handoff at `0b7289e9`)**: while running my own `commit-queue verify-staged` ceremony to land Mistbound's t12 work, the unscoped `verify-staged` rejected with 66 extra files because peer Shaded had staged their Cycle 11 jc-→oak- rename in the shared index between my read at queue-enqueue time and verify-staged. The bug is reproducing in production with the exact shape this cycle cures. Resolved out-of-cycle via Path-B explicit-pathspec commit (precisely the structural cure Cycle 1.3 codifies for `git commit`); third worked example added to §Context. **Motivating evidence only — does not substitute for the synthetic invariant test below.** (Shaded's Cycle 11 itself landed at `ff825433` shortly after `0b7289e9`.)
+
+**Pre-Execution Reviewer Absorption (assumptions-expert + code-expert gateway, 2026-05-22 post-betty)**:
+
+- **Line refs verified at `0b7289e9` HEAD**: `commit-workflow.ts:20` (import `verifyStagedBundle` — unchanged under Shape A), `:46` (dep type — widens), `:99/:107/:137` (`runVerifyStage` chain), `:144` (call site — passes scope), `:191` (`verifyStagedBundle` call — receives already-scoped data from the dep, unchanged). `commit-workflow-runtime.ts:27` (imports `getStagedBundle` — flips to `getStagedBundleScoped`), `:39` (`repoRoot` in deps), `:54` (binding — closure absorbs `repoRoot`). `cli.ts:18` already imports both helpers (Cycle 1.1), `:134` already calls scoped (Cycle 1.1), `:151` `runVerifyStagedCommand` def, `:162` **unscoped call site to migrate** (this cycle's CLI mutation), `:199` `verifyStagedBundle` call inside `writeVerificationResult` (receives staged via parameter — unchanged).
+- **Two migration sites, ONE new core function**: `cli.ts:162` migrates to `getStagedBundleScoped({ repoRoot: input.input.repoRoot, pathspec: intent.files })` matching the Cycle 1.1 record-staged pattern; the `staged:` argument feeds `verifyStagedBundle` at line 199 (unchanged). `commit-workflow.ts:144` migrates to `input.deps.getStagedBundle({ pathspec: intent.files })`; `verifyStagedAgainstIntent` keeps calling `verifyStagedBundle` (line 191) on pre-scoped data — **NO** new code path through `verifyScopedStagedBundle` from the workflow.
+- **`verifyScopedStagedBundle` scope**: per code-expert gateway #4 + #5, this NEW core export wraps the **CLI** path's scoped fingerprint-and-compare logic. Internally it delegates to the existing private `verifyFingerprint` (currently at `core.ts:181`) — does NOT duplicate logic. Keeps complexity under 8. The CLI handler at `cli.ts:151` calls `verifyScopedStagedBundle` directly via fixture-fed snapshot chain (in tests) or via real git (in production). **Workflow uses pre-scoped data through `verifyStagedBundle`; CLI uses the new `verifyScopedStagedBundle`** — single concept, two surface adapters, no code-path duplication.
+- **`commit-workflow.unit.test.ts` regression-guard**: the fake dep at lines 126–185 updates signature to `(input) => fixture` (accepts the new pathspec input). Per code-expert #3, **one of the existing tests** captures `pathspec` on a spy and asserts the workflow passes `intent.files` through; remaining tests use `_input` parameter. Stronger than betty's pure-`_input` recommendation; absorbs the seam-change into the regression-guard rather than bypassing it.
+- **Three additional invariant sub-cases** (per assumptions-expert #5):
+  - (c) **Empty `intent.files`**: `getStagedBundleScoped({pathspec: []})` must NOT silently widen to whole-index (git argv assembly risk). Either reject at boundary OR deterministically return empty bundle. Test asserts the chosen behaviour explicitly. (Likely already-rejecting because Cycle 1.1's record-staged tests would have caught widening — confirm at execution time and pin in the new test file.)
+  - (d) **Overlapping scope** (writer A `intent.files = [X, Y]`; writer B `intent.files = [Y, Z]`; B restages Y): A's verify-staged-again correctly trips with the verbatim "staged bundle fingerprint changed since it was recorded" reason. Symmetric and expected; pin to ensure no special-casing creeps in.
+  - (e) **Origin-trace of `stagedNameOnly`** at execution time: when the test asserts that `verifyStagedBundle` (workflow path) operates on already-scoped data, the test must verify the path through the dep wiring — not just the surface result. Fail-loud if origin trace breaks.
+- **Specialists required pre-authoring**: `test-expert` (focused — two-assertion shape correctness; no conditional branching into one it-block) + `type-expert` (focused — confirm Shape A widening introduces no `any`/widening in `commit-workflow-runtime.ts` closure binding). `code-expert` post-delivery only.
+- **ESLint forward-trace**: reuse Cycle 1.1's fixture machinery (`fakeRunGitFor` + dispatch table + `inScopeFilesFor` + `shapeKeyFor`) verbatim — no new exposure to complexity-8 / `sonarjs/no-alphabetical-sort` / `missing-curly`. New core function `verifyScopedStagedBundle` MUST delegate to private `verifyFingerprint` to stay under complexity-8.
 
 **File scope** (corrected from Phase 0 inspection — the `verify-staged` CLI handler is in `cli.ts`, not only `commit-workflow.ts`):
 

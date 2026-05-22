@@ -117,6 +117,7 @@ interface FakeDepsInput {
 
 interface FakeDepsCallLog {
   readonly stagedBundleCalls: { current: number };
+  readonly stagedBundlePathspecs: readonly (readonly string[])[];
   readonly advisoryCalls: { current: number };
   readonly gitCommitCalls: { current: number };
   readonly nowCalls: { current: number };
@@ -128,6 +129,7 @@ function fakeDeps(input: FakeDepsInput): {
   readonly calls: FakeDepsCallLog;
 } {
   const stagedBundleCalls = { current: 0 };
+  const stagedBundlePathspecs: (readonly string[])[] = [];
   const advisoryCalls = { current: 0 };
   const gitCommitCalls = { current: 0 };
   const nowCalls = { current: 0 };
@@ -153,7 +155,8 @@ function fakeDeps(input: FakeDepsInput): {
       transformationCalls.current += 1;
       input.holder.current = transform(input.holder.current);
     },
-    getStagedBundle: () => {
+    getStagedBundle: (scopeInput) => {
+      stagedBundlePathspecs.push(scopeInput.pathspec);
       const bundle = input.stagedBundles[stagedBundleCalls.current];
       stagedBundleCalls.current += 1;
       if (bundle === undefined) {
@@ -180,7 +183,14 @@ function fakeDeps(input: FakeDepsInput): {
 
   return {
     deps,
-    calls: { stagedBundleCalls, advisoryCalls, gitCommitCalls, nowCalls, transformationCalls },
+    calls: {
+      stagedBundleCalls,
+      stagedBundlePathspecs,
+      advisoryCalls,
+      gitCommitCalls,
+      nowCalls,
+      transformationCalls,
+    },
   };
 }
 
@@ -215,6 +225,21 @@ describe('runCommitWorkflow — successful commit landing', () => {
 
     expect(calls.stagedBundleCalls.current).toBe(2);
     expect(calls.advisoryCalls.current).toBe(1);
+  });
+
+  it('reads the staged bundle through the dependency seam with intent.files as the pathspec at both verify-staged sites', async () => {
+    const holder = holderFor(initialRegistry());
+    const { deps, calls } = fakeDeps({
+      holder,
+      stagedBundles: [matchingStagedBundle(), matchingStagedBundle()],
+    });
+
+    await runCommitWorkflow({ intentId, deps });
+
+    expect(calls.stagedBundlePathspecs).toStrictEqual([
+      ['agent-tools/src/commit-queue/commit-workflow.ts'],
+      ['agent-tools/src/commit-queue/commit-workflow.ts'],
+    ]);
   });
 
   it('clears the queued intent_to_commit field on the owning claim when the commit lands so the claim is ready for closure', async () => {

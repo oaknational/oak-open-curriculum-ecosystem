@@ -15,7 +15,7 @@ import {
   usage,
 } from './args.js';
 import { runCommitCommand } from './commit-command.js';
-import { getStagedBundle, getStagedBundleScoped } from './git.js';
+import { getStagedBundleScoped } from './git.js';
 import { createIntent } from './intent.js';
 import { validateCommandOptions } from './options.js';
 import { isCommitQueueReadCommand, runCommitQueueReadCommand } from './read-commands.js';
@@ -159,7 +159,10 @@ function runVerifyStagedCommand(input: VerifyInput): number {
 
   return writeVerificationResult({
     intent,
-    staged: getStagedBundle(input.repoRoot),
+    staged: getStagedBundleScoped({
+      repoRoot: input.repoRoot,
+      pathspec: intent.files,
+    }),
     commitSubject: requireOption(input.options, 'commit-subject'),
   });
 }
