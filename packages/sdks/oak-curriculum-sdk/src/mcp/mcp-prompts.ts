@@ -17,6 +17,7 @@ import {
   getExploreCurriculumMessages,
   getLearningProgressionMessages,
 } from './mcp-prompt-messages.js';
+import { getEefEvidenceGroundedLessonPlanMessages } from './evidence-corpus/eef-evidence-grounded-lesson-plan-messages.js';
 
 /**
  * Prompt argument definition for MCP registration.
@@ -118,6 +119,35 @@ export const MCP_PROMPTS: readonly McpPrompt[] = [
       },
     ],
   },
+  {
+    name: 'eef-evidence-grounded-lesson-plan',
+    description:
+      'Design a lesson plan grounded in EEF Toolkit evidence: combines 2-3 evidence-backed approaches drawn from a typed subgraph of EEF strands, with caveats and implementation guidance, into a structured pedagogical sequence (starter → main → practice → plenary with metacognitive reflection).',
+    arguments: [
+      {
+        name: 'subject',
+        description: 'The subject (e.g., "mathematics", "science", "english")',
+        required: true,
+      },
+      {
+        name: 'keyStage',
+        description: 'The key stage (e.g., "EYFS", "KS1", "KS2", "KS3", "KS4", "KS5")',
+        required: true,
+      },
+      {
+        name: 'topic',
+        description:
+          'The specific topic for the lesson (e.g., "fractions", "the water cycle", "narrative writing")',
+        required: true,
+      },
+      {
+        name: 'focus',
+        description:
+          'Optional pedagogical focus, one of: closing_disadvantage_gap, metacognition, literacy, numeracy, behaviour, feedback',
+        required: false,
+      },
+    ],
+  },
 ] as const;
 
 /**
@@ -143,6 +173,8 @@ export function getPromptMessages(
       return getExploreCurriculumMessages(args);
     case 'learning-progression':
       return getLearningProgressionMessages(args);
+    case 'eef-evidence-grounded-lesson-plan':
+      return getEefEvidenceGroundedLessonPlanMessages(args);
     default:
       return [];
   }

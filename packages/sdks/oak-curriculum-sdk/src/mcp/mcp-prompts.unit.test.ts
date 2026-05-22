@@ -21,8 +21,8 @@ describe('MCP_PROMPTS', () => {
     expect(prompt?.description).toContain('plan');
   });
 
-  it('has exactly 4 prompts', () => {
-    expect(MCP_PROMPTS).toHaveLength(4);
+  it('has exactly 5 prompts', () => {
+    expect(MCP_PROMPTS).toHaveLength(5);
   });
 
   it('has explore-curriculum prompt', () => {
@@ -56,6 +56,28 @@ describe('MCP_PROMPTS', () => {
     const argNames = prompt?.arguments?.map((a) => a.name) ?? [];
     expect(argNames).toContain('topic');
     expect(argNames).toContain('yearGroup');
+  });
+
+  it('has eef-evidence-grounded-lesson-plan prompt', () => {
+    const prompt = MCP_PROMPTS.find((p) => p.name === 'eef-evidence-grounded-lesson-plan');
+    expect(prompt).toBeDefined();
+    expect(prompt?.description).toContain('EEF');
+  });
+
+  it('eef-evidence-grounded-lesson-plan has subject, keyStage, topic required and focus optional', () => {
+    const prompt = MCP_PROMPTS.find((p) => p.name === 'eef-evidence-grounded-lesson-plan');
+    expect(prompt?.arguments).toContainEqual(
+      expect.objectContaining({ name: 'subject', required: true }),
+    );
+    expect(prompt?.arguments).toContainEqual(
+      expect.objectContaining({ name: 'keyStage', required: true }),
+    );
+    expect(prompt?.arguments).toContainEqual(
+      expect.objectContaining({ name: 'topic', required: true }),
+    );
+    expect(prompt?.arguments).toContainEqual(
+      expect.objectContaining({ name: 'focus', required: false }),
+    );
   });
 });
 
