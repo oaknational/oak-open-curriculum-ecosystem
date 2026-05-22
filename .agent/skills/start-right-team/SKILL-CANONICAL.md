@@ -95,7 +95,20 @@ order, before any non-planning source edit:
 6. **Open the work claim** in `active-claims.json` for the agreed
    boundary only after cycle/boundary coordination resolves, the
    gate-state report is observable, and the rename suggestion has been
-   surfaced.
+   surfaced. **If the claim being picked up carries a
+   `handoff_record_path` field**, read the named handoff record under
+   `.agent/state/collaboration/handoffs/` end to end BEFORE any source
+   edit or comms post — this is a mid-cycle pickup per PDR-063 and the
+   record's four named sections (current edit state, in-flight
+   reasoning, decisions made, decisions deferred) carry the substance
+   the prior agent froze at retirement (ADR-182 §Skill amendments).
+   **If a coordinator pre-positioning event is already in the comms
+   stream naming this agent as the incoming coordinator** (PDR-064
+   Moment 1), the team-start broadcast in move 2 may declare
+   intent-to-coordinate, but coordinator authority does not transfer
+   until this agent broadcasts a distinct active-acknowledgement event
+   (PDR-064 Moment 2) — see §Closeout Contract "Coordinator Handoff
+   (Two Moments)".
 7. **Proceed with the work** under the team cadence (§5) and
    traceability discipline (§4).
 
@@ -209,6 +222,44 @@ declare the gap in their team-start post and adopt a polling cadence that
 sweeps the full directory at the team-cadence interval (§5), never a
 single-view filter — because the directed-only view misses the broadcast
 and group events that carry the team-bootstrap coordination itself.
+
+#### Real-time failure-mode capture on the comms stream
+
+Under any team session running under the all-channels watcher
+discipline above, the comms event stream is also the **real-time
+channel for failure-mode capture** per
+[PDR-066](../../practice-core/decision-records/PDR-066-comms-events-as-failure-mode-channel.md).
+Failure modes worth surfacing to peers during their session — verdict
+walk-backs, shell-quoting hazards, premature-optimisation reflex saves,
+audit-shaped test catches, reviewer-dispatch surprises,
+coordination-protocol gaps — are posted as comms-events as they occur,
+not held back to session close.
+
+The substrate-implementation phenotype is
+[ADR-183](../../../docs/architecture/architectural-decisions/183-comms-event-tag-namespace-substrate.md):
+an optional `tags` array on the `narrative`, `lifecycle`, and `directed`
+event kinds, with the namespace exactly `"failure-mode"` (substantive
+failure modes) and `"behaviour-note"` (softer behaviour patterns worth
+peers' attention but not yet failure modes).
+
+The failure-mode event body follows a four-section convention —
+**Observation / Diagnosis / Cure / Pointer** — kept short enough that a
+watcher reading the event inline absorbs the substance in one read pass.
+The convention is not schema-enforced (the body field stays free-form
+prose by design); it is the SKILL-level discipline that makes the
+channel scannable.
+
+**Deferred until ADR-183 has fully landed.** Agents do NOT write events
+with the `tags` field until BOTH ADR-183 Tranche 1 (schema amendment on
+`comms-event.schema.json`) AND ADR-183 Tranche 2 (CLI rendering update
+on `pnpm agent-tools:collaboration-state -- comms watch` composing
+`[FAILURE-MODE]` / `[BEHAVIOUR-NOTE]` tokens with the existing channel
+tokens) have landed, per ADR-183 §"Landing tranche" ordering rule.
+Tranche 2 is currently deferred pending coordination with the
+agent-tools workspace owner. Until both tranches land, capture failure
+modes through the existing consolidation surface (napkin /
+`distilled.md`) as before; the comms-event channel becomes the primary
+capture vehicle once the substrate is live.
 
 ### 1. Register Presence
 
@@ -563,6 +614,116 @@ Team member closeout:
 The closeout owner reads those syntheses, current comms, directed messages,
 claims, queue state, git status/log, and the relevant plan before updating
 canonical continuity surfaces.
+
+### Mid-Cycle Retirement (distinct closeout mode)
+
+Mid-cycle retirement is a distinct closeout mode alongside the
+natural-boundary closeout above, governed by
+[PDR-063](../../practice-core/decision-records/PDR-063-mid-cycle-retirement-protocol.md)
+with substrate phenotype in
+[ADR-182](../../../docs/architecture/architectural-decisions/182-mid-cycle-handoff-record-substrate.md).
+It fires when an agent must retire before the natural boundary they
+were working toward — almost always under context-budget pressure
+during rotating-cast operation. Natural-boundary closeouts continue to
+use the contract above unchanged.
+
+**Triggers** (whichever fires first):
+
+- **Quantitative**: context usage ≥ 80% of the agent's bounded budget.
+- **Post-commit**: immediately after landing any commit, the agent
+  re-evaluates remaining budget against the next-cycle floor (TDD
+  authoring + reviewer absorption + gate suite) and retires if the
+  remaining budget would not cover one more cycle with margin.
+
+The 80% quantitative trigger has priority — an agent at 85% mid-cycle
+does not get to push for one more commit.
+
+**The five-step protocol** (PDR-063 §Decision is authoritative; this
+SKILL names the protocol shape and points at it):
+
+1. **Sense approaching budget** at one of the triggers above.
+2. **Freeze work-in-progress to a structured handoff record** under
+   `.agent/state/collaboration/handoffs/` naming the four required
+   sections — *current edit state*, *in-flight reasoning*, *decisions
+   made*, *decisions deferred*. The record is a first-class artefact,
+   content-addressed by `claim_id`, retained until the claim closes.
+3. **Extend the active claim** by setting the optional
+   `handoff_record_path` field on the active-claims entry pointing at
+   the new handoff record. No other schema field changes; existing
+   readers ignore the field without breakage.
+4. **Hand off via a directed comms-event** carrying `message_kind:
+   "mid-cycle-handoff"` per ADR-182 §"Comms-event message_kind value".
+   The event body carries the claim identifier, a pointer to the
+   handoff record, a ≤200-word human summary, and the retiring agent's
+   identity tuple per PDR-027.
+5. **Retire** with a final retirement broadcast on the existing
+   team-cadence shape, naming the handed-off claim and the receiving
+   agent (if known) so the team sees the retirement is not abandonment.
+
+The receiving agent's pickup contract is named in §"First Moves" move 6:
+read the handoff record before any source edit. The
+`mid-cycle-handoff` `message_kind` is reserved for cycle-claim
+handoffs and **may not be used for coordinator role transitions** —
+those use the two-moments shape below.
+
+### Coordinator Handoff (Two Moments)
+
+Coordinator role transitions have two distinct moments per
+[PDR-064](../../practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md);
+conflating them creates a coordinator-less window the team cannot
+detect.
+
+**Moment 1 — Pre-positioning (information transfer only).** The
+outgoing coordinator broadcasts a `narrative` event with the
+conventional title *"Coordinator pre-positioning: \<outgoing\> →
+\<incoming\>"* carrying the team roster, slice state, outstanding
+work, standing notes, and the proposed incoming coordinator (or the
+criteria for self-selection if not yet known). Pre-positioning is
+information transfer only — the outgoing coordinator retains all
+routing authority, all scheduled coordinator-loop ticks, all
+reviewer-dispatch authority, and all commit-window mediation
+authority.
+
+**Moment 2 — Active-acknowledgement (authority transfer).** Authority
+transfers only when the incoming coordinator broadcasts a distinct
+active-acknowledgement event with the conventional title *"Coordinator
+role acknowledgement: \<incoming\> from \<prior\>"*, referencing the
+pre-positioning event via `in_response_to`, naming the prior
+coordinator, and declaring the cadence the incoming coordinator will
+adopt. The outgoing coordinator continues to hold authority until this
+broadcast lands in the comms stream.
+
+**Cron / cadence boundary.** Any coordinator-cadence cron, scheduled
+wakeup, or persistent monitor owned by the outgoing coordinator
+**continues to run through Moment 1**, **ends at Moment 2**, and
+**never goes dark between them** within the same role-authority
+window. Cancelling the cadence at Moment 1 is the proximate cause of
+the coordinator-less window this rule structurally cures.
+
+**Intersection with PDR-063.** When the outgoing coordinator is
+retiring mid-cycle under token pressure, BOTH protocols fire. The
+per-claim cycle handoff uses the `mid-cycle-handoff` `message_kind`
+(PDR-063 Step 4 / ADR-182); the role-level pre-positioning is a
+distinct `narrative` broadcast covering coordinator-role context
+(which is broader than any single cycle claim). The two are distinct
+events — the handoff record carries cycle-claim substance; the
+pre-positioning event carries coordinator-role substance. **Do not
+use `mid-cycle-handoff` for coordinator role transitions.**
+
+### Closeout consolidation discipline for failure-mode events
+
+Per ADR-183 §"Skill amendments" closeout discipline, once the
+failure-mode capture substrate is live (both ADR-183 tranches landed),
+agents at session close read their OWN session's failure-mode
+comms-events from `.agent/state/collaboration/comms/` and consolidate
+them into napkin / `distilled.md` entries — rather than capturing
+fresh at session close. The consolidation surface remains the
+absorption destination for failure-mode substance; the comms stream
+becomes the first capture vehicle during the session, and closeout
+consolidation reads the session's already-captured events forward into
+the doctrine pipeline (PDR-014 capture → distil → graduate → enforce).
+Until both ADR-183 tranches land, capture continues through the
+consolidation surface directly as today.
 
 ## Failure Handling
 

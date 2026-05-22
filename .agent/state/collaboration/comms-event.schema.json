@@ -67,6 +67,12 @@
           "type": "string",
           "minLength": 1,
           "description": "Optional reference to an earlier event_id this event replies to. Threading affordance (variant of in_response_to)."
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true,
+          "description": "Optional tag namespace per PDR-066 + ADR-183. Initial namespace is exactly 'failure-mode' and 'behaviour-note'; new tags require an ADR amendment with explicit second-instance evidence (the namespace stays small by design). Tags compose with the structural channel discriminator at render time ([BROADCAST]/[GROUP]/[DIRECTED]/[LIFECYCLE]) — they do NOT replace it. Readers that do not understand this field MUST ignore it (additive-extension discipline per PDR-049 + PDR-050)."
         }
       },
       "description": "Default narrative event: an authored, titled, bodied communication addressed to the team. Lives in .agent/state/collaboration/comms/."
@@ -127,7 +133,13 @@
           "minLength": 1,
           "description": "Short summary line. Often duplicates title."
         },
-        "body": { "type": "string", "minLength": 1 }
+        "body": { "type": "string", "minLength": 1 },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true,
+          "description": "Optional tag namespace per PDR-066 + ADR-183. Initial namespace is exactly 'failure-mode' and 'behaviour-note'; new tags require an ADR amendment with explicit second-instance evidence (the namespace stays small by design). Tags compose with the structural channel discriminator at render time ([BROADCAST]/[GROUP]/[DIRECTED]/[LIFECYCLE]) — they do NOT replace it. Readers that do not understand this field MUST ignore it (additive-extension discipline per PDR-049 + PDR-050)."
+        }
       },
       "description": "Lifecycle event: a structured event recording a session, claim, or consolidation lifecycle moment. Carries explicit thread and claim_id context. Lives in .agent/state/collaboration/comms/."
     },
@@ -171,7 +183,13 @@
           "description": "Intended recipient agent identity. Advisory routing; not enforced."
         },
         "subject": { "type": "string", "minLength": 1 },
-        "body": { "type": "string", "minLength": 1 }
+        "body": { "type": "string", "minLength": 1 },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true,
+          "description": "Optional tag namespace per PDR-066 + ADR-183. Initial namespace is exactly 'failure-mode' and 'behaviour-note'; new tags require an ADR amendment with explicit second-instance evidence (the namespace stays small by design). Tags compose with the structural channel discriminator at render time ([BROADCAST]/[GROUP]/[DIRECTED]/[LIFECYCLE]) — they do NOT replace it. Readers that do not understand this field MUST ignore it (additive-extension discipline per PDR-049 + PDR-050)."
+        }
       },
       "description": "Directed message: a point-to-point communication from one agent to another, carrying explicit from/to identities and a message_kind sub-discriminator. Lives in .agent/state/collaboration/comms/."
     }

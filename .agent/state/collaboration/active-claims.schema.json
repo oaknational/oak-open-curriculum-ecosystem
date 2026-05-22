@@ -145,6 +145,11 @@
         "closure": {
           "$ref": "#/$defs/closure",
           "description": "Structured closure metadata required in closed-claims.archive.json. Presence in active-claims.json is a semantic anomaly that consolidate-docs surfaces for owner review."
+        },
+        "handoff_record_path": {
+          "type": "string",
+          "$comment_provenance": "First-principles. Additive optional pointer per ADR-182 + PDR-063; existing readers ignore the field without breakage.",
+          "description": "Optional. Presence signals this claim is mid-cycle and carries a handoff record per PDR-063 + ADR-182; absence signals normal active-claim semantics. Value is a repo-root-relative path to a file under .agent/state/collaboration/handoffs/ (content-addressed by claim_id, with versioned successors <claim_id>.<n>.json). Readers that do not understand this field MUST ignore it (additive-extension discipline per PDR-049 + PDR-050)."
         }
       }
     },

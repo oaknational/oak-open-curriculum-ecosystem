@@ -1047,3 +1047,60 @@ pre-empted that drain.
   handoff was incomplete and that gap is the diagnostic for future
   compaction-boundary handoffs.
   Source plane: `operational` → `process`.
+
+### Topology experiment: dual peer-primary lanes (NOT coordinator+specialists/generalists)
+
+- **Setting** (owner aside, 2026-05-22 ~12:18Z): the current Lane A
+  (Shaded Whispering Dusk) + Lane B (Mistbound Slipping Night)
+  arrangement is a **new team topology experiment**, structurally
+  distinct from the coordinator + specialists/generalists topology
+  the prior 2026-05-22 session ran (Blustery as full-session
+  coordinator routing Ferny / Foamy / Flamebright / Salty / Midnight
+  as helpers under a hub-and-spoke shape).
+- **Distinguishing structure**: two peer primaries running in
+  parallel, each on a file-disjoint lane, each running their own
+  /loop heartbeat, each owning their own sub-agent fan-out as
+  needed. No coordinator role exists. Routing between the two
+  primaries is direct peer-to-peer through comms broadcasts +
+  directed events; the owner is the only escalation surface above
+  the two primaries. Per Shaded's napkin entry on the two-primary
+  model, claim-vs-claim file collision detection becomes load-
+  bearing (no coordinator mediating); both peers run identical
+  `/loop 180s` cadences so silent-peer detection works
+  symmetrically.
+- **Why this is not coordinator+helpers**: a coordinator topology
+  has ONE authority routing decisions and dispatching helpers; the
+  helpers do not own lanes, do not coordinate amongst themselves,
+  and do not maintain their own /loop heartbeats. The peer-primary
+  topology has TWO authorities, each with its own lane, each
+  responsible for its own coordination with the other peer. The
+  shape is symmetric, not hub-and-spoke. (Yesterday's WS2.2 ↔ WS3.2
+  parallel pair captured in `start-right-team` §1
+  cycle-overlap-coordination rule is the closest precedent; today's
+  dual-primary lanes extend that shape to whole-session ownership
+  rather than single-cycle ownership.)
+- **Why this is not specialists/generalists**: a
+  specialists/generalists topology stratifies agents by *capability
+  scope* (reviewer specialists vs generalist implementers, with the
+  primary fanning out to specialists for narrow expertise). The
+  peer-primary lanes do not stratify by capability — both primaries
+  are generalist implementers, file-disjoint by lane assignment, not
+  by expertise. Each primary may itself dispatch reviewer
+  specialists, but the two primaries are peers of each other, not
+  primary+specialist.
+- **What we are testing** with this experiment: (a) whether the
+  peer-pair shape can sustain whole-session lane parallelism with
+  no coordinator mediating; (b) whether the /loop heartbeat +
+  watcher combination provides sufficient inter-peer awareness; (c)
+  whether file-disjoint claim discipline holds without
+  hub-and-spoke routing; (d) whether the owner's escalation surface
+  stays manageable across two parallel comms streams rather than
+  one routed through a coordinator.
+- **Falsifiability**: a session that observes (a) repeated cross-
+  peer claim collisions requiring owner intervention, (b) sub-agent
+  fan-outs from the two primaries colliding on file scope, or (c)
+  the owner spending more attention routing between the peers than
+  a coordinator would have spent — falsifies the topology and
+  points back toward coordinator+helpers for whole-session
+  parallelism.
+  Source plane: `operational` → `topology`.
