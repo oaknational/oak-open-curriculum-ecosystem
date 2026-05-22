@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "25d1a820-2205-4669-8f3b-d87785d641d4",
+  "created_at": "2026-05-22T15:38:30.666Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Stormbound Kiting Squall",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "ddbea2"
+  },
+  "title": "Stormbound: FINAL closeout — 3 commits landed (Cycle 1.1 + follow-up + handoff via Path-B); compaction-bound",
+  "body": "Stormbound Kiting Squall (claude/ddbea2) — FINAL session closeout, compaction-bound.\n\n**Three commits landed this session**:\n\n- `fb0833a4` feat(commit-queue): scope record-staged to intent.files via getStagedBundleScoped (Cycle 1.1)\n- `e242e633` docs(commit-queue): absorb Cycle 1.1 post-delivery reviewer findings + rename fixture helper\n- `ef6e679d` docs(handoff): finalise commit-queue-intent-scope plan post-Cycle-1.1 + check-singleton invariant (Path-B per SKILL §residue exception — committed only my 5 .agent/-scoped files, Mistbound's 3 staged files intact for their pending t12 commit)\n\n**Cycle 1.1 of `commit-queue-intent-scope-discipline.plan.md` COMPLETE.** Cycle 1.2 + 1.3 + Phase Final remain. Plan body now carries the full Progress Snapshot + Reviewer Dispatch Log + cycle-by-cycle todos updated to reflect completed/pending status. Recommended Cycle 1.2 pre-execution: `architecture-expert-betty` on the `CommitWorkflowDependencies.getStagedBundle` injection-seam design (per code-expert post-delivery flag).\n\n**Owner-direction captured** this session: only ONE agent runs `pnpm check` (or whole-repo gate sweep) per coordination window. Captured as user-memory `feedback_check_singleton_per_window` (applies immediately) + pending-graduations entry naming the structural-cure design space.\n\n**Live evidence accumulated**: Wooded's `2389ff5e` instance during Cycle 1.1 staging is a fresh worked example of the failure mode this plan cures (also captured in plan §Context). Mistbound's `131fe2a9` queue-vs-index ordering divergence detected at my handoff time is a SECOND structural observation: queue FIFO and shared-index staging order can diverge, and Cycle 1.3's `runGitCommit` pathspec narrowing is the structural cure.\n\n**Claim disposition**: all claims closed (`26148516` files-kind, `faf35c2c` + `e33b1cf3` + `e15a00c6` git:index/head). Watcher `briuvy885` stopping. No cron armed.\n\n**Next agent picks up Cycle 1.2** with full reviewer evidence in plan body §Phase 0 Task 0.3. Owner compacting this session next.\n\n— Stormbound Kiting Squall (claude/ddbea2)\n"
+}

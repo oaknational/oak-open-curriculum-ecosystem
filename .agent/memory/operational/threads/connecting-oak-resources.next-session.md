@@ -1,5 +1,238 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
+## Cycle 10 LANDED at 2389ff5e (attribution-corrected) — Shaded, 2026-05-22T15:00Z
+
+**Substance** (Cycle 10 / task #10 — stdout/launcher convergence): 2 bin files (`agent-tools/src/bin/commit-queue.ts` + `collaboration-state.ts`) converted from `.then/.catch` Promise chains to top-level try/await. Streaming-asymmetry preserved: `collaboration-state.ts` keeps `stdout: process.stdout` runtime arg (for `comms watch`); `commit-queue.ts` does not (non-streaming).
+
+**Misattribution mechanism**: Wooded's `2389ff5e` (`docs(distilled): add 8 owner-profile observations from .remember/ plugin distillation`) absorbed my Cycle 10 source files because the commit-queue primitive's `record-staged` step fingerprints the FULL git index, not the intersection of `(intent.files, currently-staged)`. My follow-on `2be2a786` (subject says Cycle 10) actually contains ONLY the new directed event `fab05f99`. Live instance of the failure mode that `.agent/plans/agent-tooling/current/commit-queue-intent-scope-discipline.plan.md` (Stormbound implementing) cures. Discipline lesson: `git status --short` immediately before any commit-queue staging operation.
+
+**Reviewer trace**: pre-execution code-expert GO (`aa7d8084d189fd9d7`); post-execution code-expert APPROVED (`af9289ef0af00ad5d`). Workspace gates GREEN pre-stage. Substance is fully reviewer-passed despite the misattribution.
+
+**Coordination**: directed events `fab05f99` (Shaded→Wooded heads-up), Wooded reply (no rollback recommended), `f63b727d` (Shaded→Wooded Option A confirmation), `357d04ff` (Shaded→Stormbound ack). Tempestuous flag on stale `306dcadd` git:index/head claim — closed 15:02Z.
+
+**Claims closed**: `7bc6b37b` (Cycle 10 files-kind) + `306dcadd` (stale Cycle 9.2 git:index/head).
+
+**Tasks**: #10 marked complete. PR-108 snagging open follow-ups remain #8 (boundary.ts error-message, design-tokens-core branch — cross-branch) and #9 (`jc-` prefix default leak in skills-adapter-generate L24 — owner-personal namespace leakage; architectural decision required on cure shape).
+
+**Next-cycle decision deferred to owner**: tackle #9 (needs architectural call), tackle #8 (cross-branch, lower urgency), or close PR-108 snagging entirely.
+
+---
+
+## Tempestuous distilled.md fitness-rotation CLOSED (2026-05-22T15:02Z)
+
+**Identity**: Tempestuous Spiralling Thermal / claude / claude-opus-4-7 / 9205b8.
+
+**Owner direction**: "please carry on" (after substrate-completion graduation pass closed). Treated as continuation of OUTPUT-surface curation; assessed `distilled.md` 829L vs `fitness_line_limit` 500 as the next move.
+
+**Landed at**: `53b00386` (`docs(distilled): rotate earlier graduations audit-trail to archive`).
+
+**Net effect**:
+
+- `distilled.md`: 919L → 874L (-45 lines). Trim covered 4 audit-trail blocks (2026-05-06, 2026-05-09 Woodland Sheltering Glade, 2026-05-10 Quiet Lurking Mask, 2026-05-11 Verdict-not-menu Flamebright Burning Lava) describing already-graduated substance.
+- `archive/distilled-graduations-log-2026-05-14.md`: +97 lines covering frontmatter `appended_passes` record, title range extended to "2026-05-06 → 2026-05-14", and new "Backfill rotation 2026-05-22" section with all 4 blocks preserved verbatim.
+- Substance-preservation discipline applied: no live-distilled entries displaced; only audit-trail moved.
+
+**Coordination**: claim overlap discovered mid-flight with Wooded's `d26e453f` (covered `distilled.md`). Sidebar `b67a3240` sent at 14:55Z; Wooded released `distilled.md` from active edit-scope at 14:56Z via directed reply (their commit `2389ff5e` had already landed 8 complementary owner-profile additions from `.remember/` plugin Haiku distillation). Trim then landed without further blockers. Stale git:index/head claim `306dcadd` (Shaded) flagged via directed event `34f27c35`; Shaded closed at 15:02Z (my Path B commit had already landed pre-close, no collision).
+
+**Gates**: full pre-commit suite GREEN. markdownlint-staged + prettier-staged + repo-validators + shell-lint + turbo type-check/lint/test (FULL TURBO 87/87 cached) all passed.
+
+**Remaining fitness pressure**: distilled.md at 874L still over `fitness_line_limit` 500. Further trim requires substantive judgement calls on Recently-Distilled entry settling (which 2026-05-14 / 2026-05-13 / 2026-05-09 entries have stabilised vs which remain active learning). Deferred to a separate session.
+
+**Claim closed**: `02eadf52`. **Closeout broadcast**: `222fe173`.
+
+**Watcher / cron**: Monitor `bxysr2dvk` stopping. No cron re-armed.
+
+---
+
+## Tempestuous OUTPUT-surface curation CLOSED post-compaction (2026-05-22T14:46Z)
+
+**Identity**: Tempestuous Spiralling Thermal / claude / claude-opus-4-7 / 9205b8.
+
+**Resumption outcome**: Resolution 1 path (per FIFTH handoff "Two possible Shaded resolutions"). All 7 substance files from the coherence-restoration bundle landed via Shaded's absorbed Cycle 9.2 commit at `c7fd0b7b`. No Path B commit required.
+
+**Discharge evidence**:
+
+- `20fcf565` (Wooded) — pending-graduations.md graduation-log table + 4 graduated-pointers (the substrate Wooded landed in their INPUT-surface pass).
+- `c7fd0b7b` (Shaded, absorbed coherence bundle) — PDR-064 §"Partial / Slice-Scoped Coordinator Transfer" amendment + start-right-team SKILL "Coordinator delegates sub-agent launches" amendment + new `.agent/rules/hook-policy-substring-discipline.md` + adapters (`.claude/`, `.cursor/`) + RULES_INDEX entry + pending-graduations-archive header + 4 entry bodies.
+
+**Substance discharged**: 4 graduations from pending-graduations.md → permanent homes. Status counts moved 5 due → 1 due.
+
+**Remaining due entry**: `canonical-tool-definitions-code-adjacent` — `plan-execution-gated` on `coordination-watcher-canonicalisation` plan. Not actionable until that plan executes. No follow-up required on the OUTPUT-surface graduation set this session.
+
+**Claim closed**: `cb6a4cfc-f488-4ae0-adb9-debf508cdccf` (OUTPUT-surface curation).
+
+**Closeout broadcast**: `aa228092-1945-45cc-8687-5ef783d30772`.
+
+**Watcher / cron**: Monitor `bmqh7qznp` was re-armed briefly for closeout absorption; stopping now. No cron re-armed this resumption pass (work was already discharged before resumption — no heartbeat needed).
+
+---
+
+## Cycle 9.2 LANDED post-compaction (2026-05-22T14:21Z) — Shaded
+
+**HEAD**: `c7fd0b7b` — `refactor(pr-108-snagging): consolidate graph-* eslint configs via createGraphBaseConfig`.
+
+**Bundle (18 files)**: 3 graph-* eslint.config.ts rewires (Cycle 9.2 substance) + ff2 plan files (Mistbound, absorbed per owner widen direction) + hook-policy-substring-discipline rule + 2 adapter siblings + RULES_INDEX entry + Tempestuous coherence absorbs (PDR-064 §"Partial / Slice-Scoped Coordinator Transfer", SKILL-CANONICAL §"Coordinator delegates sub-agent launches", pending-graduations-archive header + 4 entry bodies) + pending-graduations.md (graduated-pointer pass already prepared by Tempestuous pre-pause) + 4 own narrative comms.
+
+**Gates**: husky pre-commit GREEN; turbo type-check + lint + test FULL CACHE across 23 packages; commit-message PASS. Advisory fitness orchestrator exit 1 on `pending-graduations.md` + `repo-continuity.md` + `napkin.md` critical zones — NOT a commit gate; substance-led path is "graduated entries can retire as their target substrate is now in HEAD".
+
+**Claims closed**: `47497834` (git:index/head) + `6af12756` (Cycle 9 substance — 3 eslint configs + base.ts).
+
+**Cycle 9 series complete**: 9.1 (oak-eslint factory + index export) landed in sweep `03da8e3d`; 9.2 (3 graph-* consumer rewires) landed at `c7fd0b7b`. Print-config `.rules` + `.settings` byte-identical pre/post on all 3 workspaces.
+
+**Open PR-108 follow-ups** (tasks #8, #9, #10):
+
+- #8 pre-existing boundary.ts error-message mismatch (design-tokens-core)
+- #9 `jc-` prefix default leak in `skills-adapter-generate`
+- #10 stdout arg inconsistency across bin files
+
+**Next-cycle decision deferred to owner**: re-scan PR-108 for fresh findings post-9.x, schedule Cycle 10, or close out PR-108 snagging.
+
+**Landing broadcast**: `004d27ed` (Cycle 9.2 LANDED at c7fd0b7b).
+
+---
+
+## FIFTH compaction-boundary handoff (2026-05-22T14:10Z) — Tempestuous OUTPUT-surface graduations mid-flight
+
+**Identity**: `Tempestuous Spiralling Thermal / claude / claude-opus-4-7 / 9205b8`.
+
+**Owner direction at pause**: "prepare for compaction, then stop, no git operations permitted until post compaction".
+
+**HEAD at pause**: `1b619457` (same as Shaded's FOURTH handoff below — Wooded's comms-archive drain commit).
+
+### Substance landed via Wooded's bundle (in HEAD at `1b619457`)
+
+- pending-graduations.md graduation-log table for "Tempestuous Spiralling Thermal — substrate-completion graduation pass" with 4 entries.
+- 4 graduated-pointer one-liners replacing the original entry bodies: partial-slice-scoped-coordinator-transfer, coordinator-delegates-subagent-launches, cli-body-backtick-cure-pattern, hook-policy-substring-match-cure.
+- Status counts: 5 due → 1 due (remaining: canonical-tool-definitions-code-adjacent, plan-execution-gated).
+
+### Substance in working tree (uncommitted; coherence-restoration bundle)
+
+The graduated-pointers landed via Wooded reference targets that are NOT yet in HEAD. The following 7 files need to land to restore coherence:
+
+- `.agent/practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md` — new §"Partial / Slice-Scoped Coordinator Transfer" subsection between §Cron/cadence boundary and §Intersection with PDR-063; anchor references at §Moment 2 (`[slice]` qualifier) and §Cron/cadence boundary updated to point at the landed subsection. State: modified, unstaged.
+- `.agent/skills/start-right-team/SKILL-CANONICAL.md` — new "Coordinator delegates sub-agent launches" amendment paragraph appended to §"Choose Temporary Responsibilities". State: modified, unstaged.
+- `.agent/rules/hook-policy-substring-discipline.md` — new rule canonical. State: untracked-then-`git add`-ed (A) — **now absorbed into Shaded's commit-queue intent `851d07af` per their FOURTH handoff**.
+- `.claude/rules/hook-policy-substring-discipline.md` — Claude adapter wrapper. State: A; absorbed into Shaded's intent.
+- `.cursor/rules/hook-policy-substring-discipline.mdc` — Cursor adapter with alwaysApply: true frontmatter. State: A; absorbed into Shaded's intent.
+- `RULES_INDEX.md` — new entry between `generator-first-mindset` and `invoke-accessibility-expert`. State: modified, unstaged.
+- `.agent/memory/operational/archive/pending-graduations-archive-2026-05-22.md` — header reorganised to reflect 3 drain passes for 2026-05-22 (initial + Wooded + Tempestuous); 4 entry bodies appended under new "Tempestuous Spiralling Thermal — substrate-completion graduation pass" section. State: modified, unstaged.
+
+### Shaded coordination at pause
+
+At 2026-05-22T14:07:46Z Shaded broadcast that their commit-queue intent `306dcadd` / `851d07af` widened to include my 3 rule + adapter files (in the staged set after my `git add`) plus `pending-graduations.md` (already in HEAD via Wooded's commit, so a no-op for HEAD content).
+
+I sent directed event `0e81b819-ceec-4718-9f84-f213a726aa9d` to Shaded at 14:08Z asking them to absorb the 4 additional substance files (PDR-064, SKILL, RULES_INDEX, archive) into their bundle TOO, since the rule files alone do not complete coherence restoration.
+
+Shaded then paused at 14:09:57Z for FOURTH compaction handoff WITHOUT widening to include my 4 substance files. **Their bundle currently has my 3 rule files + pending-graduations.md but NOT the PDR/SKILL/RULES_INDEX/archive files.**
+
+### Two possible Shaded resolutions on resumption
+
+1. **Shaded reads my directed event at resumption and widens to absorb all 7 files into their commit**. Coherence fully restored in one commit; close my claim `cb6a4cfc` and broadcast closeout naming Shaded's SHA as discharge evidence. Done.
+2. **Shaded commits their bundle as-is (3 rule files + pending-graduations no-op + their 3 graph-* eslint configs + plans + comms residue)**. Coherence partially restored (rule + adapters now in HEAD; PDR-064 + SKILL + RULES_INDEX + archive still in working tree). **Post-compaction Tempestuous action**: Path B commit of the remaining 4 files via `git commit -- <pathspecs>`.
+
+### Wooded coordination at pause
+
+At 2026-05-22T14:01:46Z I sent directed event `cc9da59c-184b-4f9f-b73a-bd6eecfdca86` to Wooded asking how to coordinate the multi-writer overlap on `pending-graduations.md`. Wooded's commit `1b619457` answered indirectly (Option B: separate commits) by landing their broad bundle without my full 7-file set. No verbal reply received pre-pause.
+
+### Active claims at pause
+
+- `cb6a4cfc-f488-4ae0-adb9-debf508cdccf` (Tempestuous, OUTPUT-surface curation: `pending-graduations.md`, `distilled.md`, `repo-continuity.md`) — OPEN. TTL 7200s from 2026-05-22T13:48Z; expires ~2026-05-22T15:48Z.
+
+### Cron + Monitor at pause (Tempestuous)
+
+- Cron `bce50d79` (every 3 min, 8-rule prompt) — running; will be cancelled before this update is saved.
+- Monitor `b42xd4d0r` (all-channels watcher) — running; will be TaskStop-ed before this update is saved.
+- Both unreliable across compaction; re-arm on resumption per start-right-team SKILL §0 + §"First Moves" move 1.
+
+### Resumption first-action (precise sequence) — Tempestuous
+
+1. **Ground state**: identity preflight (`pnpm agent-tools:collaboration-state -- identity preflight --platform claude --model claude-opus-4-7`), read latest comms (look for replies to `cc9da59c` and `0e81b819`), read this section, read active-claims.json.
+2. **Check Shaded's commit outcome**: `git log --oneline -5`. Inspect Shaded's Cycle 9.2 commit (subject likely `refactor(pr-108-snagging): consolidate graph-* eslint configs via createGraphBaseConfig`). Inspect which of my 7 files landed in that commit via `git show --stat <sha>`.
+3. **Re-arm**: all-channels watcher (Monitor), heartbeat cron `*/3 * * * *` with the standard 8-rule prompt.
+4. **Land the residual**: depending on Shaded's outcome (see "Two possible Shaded resolutions" above), either:
+   - (Resolution 1) close claim `cb6a4cfc` and broadcast closeout naming Shaded's SHA. Done.
+   - (Resolution 2) Path B commit the residual files. Verify markdown lint clean first (was clean pre-pause). Use the commit message draft below as a starting point.
+5. **Verify coherence** post-commit: `git show HEAD:.agent/memory/operational/pending-graduations.md | grep -A 2 "Tempestuous"` should show graduated-pointers pointing at targets that exist in HEAD.
+6. **Close claim** `cb6a4cfc` and broadcast closeout.
+
+### Commit message draft for Resolution 2 path (durable here)
+
+Subject: `docs(graduations): land PDR-064 + SKILL + RULES-INDEX + archive coherence-completion`
+
+Body:
+
+> Tempestuous Spiralling Thermal — coherence-restoration completion of the 2026-05-22 substrate-completion graduation pass. Companion to Wooded's `1b619457` (pending-graduations.md graduation log + graduated-pointers landed) and Shaded's Cycle 9.2 commit (hook-policy-substring-discipline rule + adapters absorbed via cross-lane bundle).
+>
+> Substance:
+>
+> - PDR-064 §"Partial / Slice-Scoped Coordinator Transfer" amendment subsection: slice-coordinator authority as a distinct shape from full-session coordinator authority. Two-moments pattern inherited; operational surface reduced (no full-authority transfer, no coordinator-cadence cron rearm, boundary-bounded scope). Anchor references at §Moment 2 and §Cron/cadence boundary updated to point at the landed subsection. Three in-session instances triggered.
+>
+> - start-right-team SKILL §"Choose Temporary Responsibilities" — "Coordinator delegates sub-agent launches" amendment paragraph: codifies coordinator-vs-implementer boundary on Agent-tool invocations. Owner direction observed twice in different framings. Extends to slice-coordinators per PDR-064.
+>
+> - RULES_INDEX entry for `.agent/rules/hook-policy-substring-discipline.md` (rule + adapters landed via Shaded's commit).
+>
+> - Archive bodies for the 4 graduated entries appended to `.agent/memory/operational/archive/pending-graduations-archive-2026-05-22.md` under new "Tempestuous Spiralling Thermal — substrate-completion graduation pass" section. Archive header reorganised to reflect three drain passes.
+>
+> Refs PDR-064, PDR-046. Closes claim cb6a4cfc.
+
+### Open questions to recheck at resumption (Tempestuous scope)
+
+- Has the canonical-tool-definitions-code-adjacent entry's plan executed in the interim? If yes, it would need graduation; if no, it stays as the only remaining `status: due` entry in pending-graduations.md.
+- Has anyone touched `distilled.md` (829L, over fitness hard-limit of 500L) in the interim? It remains a candidate for a separate session.
+- Has `repo-continuity.md` accumulated content since Wooded's earlier drain? Check fitness state.
+
+### Load-bearing context that compaction may drop (Tempestuous)
+
+- Wooded's reply (if any) to my `cc9da59c` event — check comms before acting on resumption.
+- Shaded's reply (if any) to my `0e81b819` event — check comms before acting on resumption.
+- Pre-compaction monitor `b42xd4d0r` and cron `bce50d79` IDs will be invalid post-compaction; re-arm with fresh IDs.
+- Tmp file drafts at `/tmp/tempestuous-graduation-commit-msg.txt`, `/tmp/tempestuous-compaction-handoff.md`, `/tmp/tempestuous-shaded-sidebar.md`, `/tmp/tempestuous-wooded-sidebar.md`, `/tmp/tempestuous-compaction-broadcast.md` — may not survive compaction; durable content lives here.
+
+---
+
+## FOURTH compaction-boundary handoff (2026-05-22T14:08Z)
+
+**HEAD**: `1b619457` (peer consolidation commit — drained 990 stale comms-events).
+
+**Lane A Cycle 9.2 — MID-COMMIT, PAUSED PRE-`git commit`**:
+
+- Substance complete and reviewed-GO: 3 graph-* eslint.config.ts rewired to consume `createGraphBaseConfig` (graph-core 66→23L, graph-ingest 66→25L, graph-project 66→30L). All three print-config diffs `.rules` AND `.settings` byte-identical pre/post. Pre-execution code-expert GO-WITH-CAVEATS + type-expert GO; post-delivery code-expert GO (confirms unscoped lib names `'graph-ingest'`/`'graph-project'` are the only valid form per `LibPackage` type).
+- **Open claims**: `306dcadd` (git:index/head, claimed 14:01:09Z, TTL 900s — expires ~14:16:09Z; may need refresh on resumption), `6af12756` (Cycle 9 file scope), `da769539` (Cycle 6 — keep open through PR-108 close).
+- **Queue intent `851d07af`** at phase `staging` with 12 files staged (6 mine: 3 eslint configs + my comms-seen + 2 new comms event JSONs; + 6 swept peer drift per owner widen direction: 2 plans + 3 hook-policy rule files + pending-graduations.md). Fingerprint recorded.
+- **Halt-stage broadcast `e2dab18e`** posted 14:07Z asking peers to pause `git add` for ~3 min so verify-staged stops chasing.
+- **Commit message** ready at `.git/COMMIT_EDITMSG` — subject `refactor(pr-108-snagging): consolidate graph-* eslint configs via createGraphBaseConfig`. commit-message check PASS.
+
+**Resumption first-move sequence**:
+
+1. Re-ground via `/jc-start-right-team` (identity unchanged: Shaded Whispering Dusk / claude / claude-opus-4-7 / 763ef4).
+2. Re-arm Monitor + cron only if `bdo1r4kxs` / `573030fb` invalidated (both survived prior compactions — check `CronList` + `TaskList` first).
+3. Read `git status --short` + `git diff --staged --name-only`. If claim `306dcadd` has expired (>14:16Z), reopen a fresh `git:index/head` claim.
+4. If staged set is **still exactly the 12 files** the napkin records: invoke `pnpm agent-tools:commit-queue -- commit --intent-id 851d07af-5989-4441-abe2-d9a72508a5e7 --message-file .git/COMMIT_EDITMSG`. Husky pre-commit gate runs (full-tree, INTENTIONAL per owner). On GREEN, SHA prints.
+5. If staged set has **widened further** (peers staged more): abandon intent, enqueue a new one matching current staged set, re-`record-staged`, retry. Owner blocked `git reset HEAD --` for unstaging; widening is the directed path.
+6. If staged set has **narrowed** (peer landed a commit including some of my files): re-enqueue with the actual current staged set.
+7. On commit success: close `306dcadd` git:index/head claim with the SHA. Broadcast lane-complete + mark task #13 complete.
+8. After 9.2 lands: PR-108 next-cycle decision (push for re-scan? Cycle 10? close out?). Cycle 8 disposition is "stale finding — confirm clear after re-scan". Owner direction needed.
+
+**Peer state at pause**:
+
+- Mistbound: Lane B COMPLETE in earlier sweep + own broadcast `2026-05-22T13:48:52`. All Lane B claims closed.
+- Wooded: resumed `/jc-consolidate-docs` with broadened intent on INPUT surfaces (napkins, `.remember/`, vendor memory). Claim `d26e453f` open.
+- Tempestuous: resumed with OUTPUT-surface intent (distilled.md, pending-graduations.md, repo-continuity.md). Likely staged the swept-into-my-bundle pending-graduations.md.
+- The hook-policy rule files swept into my bundle look directly related to the `git restore`/`git reset HEAD --` block I hit — likely Wooded or Tempestuous documenting the hook-policy substring discipline.
+
+**Cron + Monitor**: `573030fb` (cron, every 3 min, 9-rule prompt) + `bdo1r4kxs` (Monitor, comms watcher) both running at pause time.
+
+**Owner directive history this session**:
+
+- 13:36Z: "commit all files, regardless of claims or cause" (drove sweep `03da8e3d` + `2cda69a2`).
+- 14:00Z: "re-ground /jc-start-right-team, re-establish the monitor and cron, and continue the Lane A work" — drove 9.2 fan-out.
+- 14:01Z: "use the fan out tools to launch teams of sub-agents whenever that would be useful. Please broadcast that to all agents" — broadcast as `23847181`.
+- 14:06Z: blocked my `git restore` (hook policy).
+- 14:07Z: AskUserQuestion → "Widen my bundle" (Recommended option).
+- 14:08Z: "please pause" → "prepare for compaction then stop, the work will be resumed post compaction".
+
+---
+
 ## Cross-Thread Program Pointer (2026-05-14)
 
 This thread participates as the **graph-foundations lane (4B)** of the

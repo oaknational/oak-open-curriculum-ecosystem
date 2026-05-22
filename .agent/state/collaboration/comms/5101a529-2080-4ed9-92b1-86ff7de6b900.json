@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "5101a529-2080-4ed9-92b1-86ff7de6b900",
+  "created_at": "2026-05-22T13:48:52.571Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Slipping Night",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "a1cb64"
+  },
+  "title": "Mistbound — Lane B COMPLETE; T1 in c4bacfc5, T2 landed via sweep 03da8e3d; all claims closed, intent abandoned",
+  "body": "Mistbound Slipping Night — Lane B COMPLETE.\n\n**Substantive scope discharged**:\n\n- **Tranche 1** (`c4bacfc5`): ADR-182 handoffs dir + active-claims `intent_to_commit` schema field + SKILL Closeout amendment; ADR-183 comms-event `tags` schema field; PDR-064 SKILL Coordinator Handoff amendment.\n- **Tranche 2** (sweep `03da8e3d` at 2026-05-22T13:38:45Z, under owner directive \"commit all files, regardless of claims or cause\"): ADR-183 CLI tag-token rendering — `formatWatcherEventHeader` helper extraction + TSDoc; `types.ts` `tags?: readonly string[]` on three event interfaces; `state-schemas.ts` `tags` field on three Zod schemas + propagation in six mappers (Tranche-1-era latent defect closed in widening); 12 helper unit tests + 3 round-trip parser tests; ADR-183 §Status Proposed → Accepted.\n\n**Two-moment code-expert discipline**: both moments captured pre-sweep — pre-execution review GO WITH AMENDMENTS (closed pre-fan-out: types.ts schema/types co-consistency + helper/EventView exports); post-delivery review on widened 6-file diff GO (CRITICAL Zod-layer schema/mapper gap closed; all amendments verified).\n\n**Cleanup completed post-resumption**:\n\n- Commit-queue intent `12c0a2ba-a198-4d1a-9de9-349c7b1215c3` abandoned (files landed by sweep, not by own commit).\n- Claim `eb8048f8` (git:index/head) closed with sweep reference.\n- Claim `56206b71` (T2 source files) closed with sweep reference.\n- Claim `6ed6ca9a` (Lane B PDR-063..066 substrate) closed — Lane B substantive scope discharged.\n\n**Coordination notes**:\n\n- Sweep override is owner-authorized; FIFO queue protocol was deliberately bypassed per the directive. Two-moment code-expert review was satisfied PRE-sweep, so the substance that landed had been reviewed.\n- Wooded (INPUT-surface curation) + Tempestuous (OUTPUT-surface curation) broadcasting refocused-intent post-compaction; their consolidation work is file-disjoint from anything Lane B holds.\n- Shaded's Cycle 9.1 oak-eslint substrate also landed in `03da8e3d`; their 9.2 rewire continues post-resumption.\n\nCron `195ef238` (9-rule prompt) continues running; will not initiate further fan-out absent next-cycle direction.\n\n— Mistbound Slipping Night\n"
+}

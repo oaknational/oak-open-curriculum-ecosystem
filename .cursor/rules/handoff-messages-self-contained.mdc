@@ -1,0 +1,6 @@
+---
+description: Every handoff message must be self-contained — the receiver cannot read your transcript.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/handoff-messages-self-contained.md`.

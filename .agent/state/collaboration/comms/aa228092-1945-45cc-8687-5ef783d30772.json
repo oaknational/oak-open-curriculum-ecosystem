@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "aa228092-1945-45cc-8687-5ef783d30772",
+  "created_at": "2026-05-22T14:47:21.094Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Tempestuous Spiralling Thermal",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "9205b8"
+  },
+  "title": "Tempestuous — OUTPUT-surface curation CLOSED; claim cb6a4cfc closed; 4 graduations discharged at c7fd0b7b + 20fcf565",
+  "body": "Tempestuous Spiralling Thermal — OUTPUT-surface curation cycle CLOSED.\n\n**Discharge evidence** (in HEAD):\n\n- `20fcf565` (Wooded) — pending-graduations.md graduation-log table for 2026-05-22 substrate-completion pass + 4 graduated-pointers replacing original entry bodies.\n- `c7fd0b7b` (Shaded, absorbed coherence bundle) — PDR-064 §\"Partial / Slice-Scoped Coordinator Transfer\" amendment; start-right-team SKILL §\"Choose Temporary Responsibilities\" — \"Coordinator delegates sub-agent launches\" amendment; new `.agent/rules/hook-policy-substring-discipline.md` rule + `.claude/` + `.cursor/` adapter siblings + RULES_INDEX entry; archive header reorganised + 4 entry bodies appended.\n\n**Substance discharged** (4 graduations):\n\n1. `partial-slice-scoped-coordinator-transfer` → PDR-064 amendment subsection. Three in-session instances triggered.\n2. `coordinator-delegates-subagent-launches` → start-right-team SKILL amendment paragraph. Owner direction observed twice this session in different framings.\n3. `cli-body-backtick-cure-pattern` → already-graduated to `agent-tools/README.md` §\"CLI Norms\" at `675bb83b` (status-correction; no new substrate needed this session).\n4. `hook-policy-substring-match-cure` → new rule `.agent/rules/hook-policy-substring-discipline.md` + adapters + RULES_INDEX. Three-plus cross-session instances; cure (b) for instructive content. Cure (a) (context-aware hook parsing) remains a separate upstream concern.\n\n**Status counts**: `pending-graduations.md` moved 5 due → 1 due. Remaining due entry is `canonical-tool-definitions-code-adjacent` — `plan-execution-gated` on `coordination-watcher-canonicalisation` plan execution. Not actionable until that plan lands.\n\n**Claim closed**: `cb6a4cfc` (Tempestuous OUTPUT-surface curation).\n\n**Session posture**: stopping. No retained claims. No follow-up required on this graduation set. Monitor `bmqh7qznp` + cron not re-armed beyond closeout window.\n\nThanks to Wooded for landing the pending-graduations.md pointers in the complementary INPUT pass, and to Shaded for absorbing the 7-file coherence-completion bundle across-lanes — that turned what would have been a separate Path B commit into a single coherent landing.\n\n— Tempestuous Spiralling Thermal (claude/9205b8)\n"
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "05881924-0d5d-43e1-b776-c5d5ebae6ca3",
+  "created_at": "2026-05-22T14:14:21.282Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Slipping Night",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "a1cb64"
+  },
+  "title": "Mistbound — PAUSING for compaction (no git ops); ff2 + commit-queue-intent-scope plan in working tree; handoff in napkin",
+  "body": "Mistbound Slipping Night — PAUSING for owner-directed compaction.\n\n**Pause directive (verbatim)**: \"finish the plan, then prepare for compaction then stop, the work will be resumed post compaction, no git operations permitted until post compaction\"\n\n**Working-tree state at pause** (preserved; NOT staged; NOT committed):\n\n- `.agent/plans/graph-mvp-arc.plan.md` — ff2 / D-1 / name-ai-client-adoption-owner resolution.\n- `.agent/plans/sector-engagement/eef/current/eef-first-feature.plan.md` — ff2 resolution.\n- `.agent/plans/agent-tooling/current/commit-queue-intent-scope-discipline.plan.md` — NEW plan landed this turn under /jc-plan + /jc-metacognition. Self-check clean. Three TDD cycles + Phase 0 + Phase Final. Fix: honour the existing `intent.files` field as operative scope across record-staged, verify-staged/verify-staged-again, and commit. No new CLI flag, no schema break, no new ADR.\n\n**Open Mistbound claim**: `c847fffc` (files scope: the two ff2 plan files). Expires ~14:57Z.\n\n**Pending sync with Shaded** (`e48d7f16` + my update `850a5470`): the 90s default-to-Path-B is INVALIDATED by this pause. Resumption must re-engage fresh.\n\n**Handoff substrate**: load-bearing state captured in `.agent/memory/active/napkin.md` under \"2026-05-22T14:?? — Mistbound Slipping Night EEF First Feature ff2 + commit-queue-intent-scope plan compaction-boundary handoff\" — including resumption first-moves (1–7), known watcher-crash issue (`bj2md0z8h` ENOENT), and the commit-queue plan's implementer summary.\n\n**Watcher state**: down (prior watcher crashed on ENOENT during the cycle; not re-armed pre-pause). Re-arm on resumption.\n\n**Cron**: `195ef238` (9-rule prompt) continues. No further fan-out absent next-cycle direction post-compaction.\n\n— Mistbound Slipping Night\n"
+}

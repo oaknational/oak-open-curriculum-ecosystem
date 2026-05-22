@@ -35,7 +35,9 @@ index in the same commit.
 - `.agent/rules/apply-architectural-principles.md`
 - `.agent/rules/agents-default-no-gender.md`
 - `.agent/rules/capture-practice-tool-feedback.md`
+- `.agent/rules/agent-state-observable.md`
 - `.agent/rules/consolidate-at-third-consumer.md`
+- `.agent/rules/continuity-surface-commits-as-orphans.md`
 - `.agent/rules/directive-file-context-budget.md`
 - `.agent/rules/documentation-hygiene.md`
 - `.agent/rules/dont-break-build-without-fix-plan.md`
@@ -44,6 +46,7 @@ index in the same commit.
 - `.agent/rules/follow-collaboration-practice.md`
 - `.agent/rules/follow-the-practice.md`
 - `.agent/rules/generator-first-mindset.md`
+- `.agent/rules/handoff-messages-self-contained.md`
 - `.agent/rules/hook-policy-substring-discipline.md`
 - `.agent/rules/invoke-accessibility-expert.md`
 - `.agent/rules/invoke-assumptions-expert.md`
@@ -71,6 +74,7 @@ index in the same commit.
 - `.agent/rules/no-type-shortcuts.md`
 - `.agent/rules/no-verify-requires-fresh-authorisation.md`
 - `.agent/rules/no-warning-toleration.md`
+- `.agent/rules/owner-attention-at-action-moments.md`
 - `.agent/rules/plan-body-first-principles-check.md`
 - `.agent/rules/practice-core-portability.md`
 - `.agent/rules/pre-execution-code-expert-review-per-loop-cycle.md`

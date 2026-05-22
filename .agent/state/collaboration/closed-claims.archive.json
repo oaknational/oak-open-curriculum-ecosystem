@@ -30037,6 +30037,326 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "38a4b606-64c1-410a-93e4-8a9218d1350f",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "git:index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T16:06:40Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Cycle 12 substance commit (boundary.ts + test)",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T16:11:15Z",
+        "closed_by": {
+          "agent_name": "Shaded Whispering Dusk",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "763ef4"
+        },
+        "summary": "Cycle 12 + PR-108 snagging closeout landed at 6ad17c14 + 360c6e69; arc complete",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "38a4b606-64c1-410a-93e4-8a9218d1350f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "da769539-e0a2-484f-8282-cb5ace1d1fd0",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "thread": "pr-108-snagging",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/bin/agent-identity.ts",
+            "agent-tools/src/bin/agent-tools.ts",
+            "agent-tools/src/bin/branch-touched-files.ts",
+            "agent-tools/src/bin/codex-exec.ts",
+            "agent-tools/src/bin/skills-adapter-generate.ts",
+            "packages/libs/graph-ingest/src/custom-mapping/index.ts",
+            "packages/libs/graph-ingest/src/index.ts",
+            "packages/libs/graph-ingest/src/jsonld-compatible/index.ts",
+            "packages/libs/graph-ingest/src/node-edge-list/index.ts",
+            "packages/libs/graph-ingest/src/plain-json-tree/index.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T12:40:07Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Cycle 6 architectural-judgement cluster (S7785+S7787, 12 sites, pre-execution reviewer first)",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T16:11:15Z",
+        "closed_by": {
+          "agent_name": "Shaded Whispering Dusk",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "763ef4"
+        },
+        "summary": "Cycle 12 + PR-108 snagging closeout landed at 6ad17c14 + 360c6e69; arc complete",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "da769539-e0a2-484f-8282-cb5ace1d1fd0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e32b2e09-709c-490b-9b88-16f44f261b0c",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/bin/skills-adapter-generate.ts",
+            "agent-tools/src/core/health-probe-hook-state.ts",
+            "agent-tools/tests/skills-adapter-generate/**",
+            "agent-tools/tests/health-probe.unit.test.ts",
+            "package.json",
+            ".claude/settings.json",
+            ".claude/settings.local.json",
+            ".claude/skills/**",
+            ".agents/skills/**",
+            "docs/architecture/ADR-117.md",
+            "docs/architecture/ADR-125.md",
+            "docs/architecture/ADR-180.md",
+            "docs/architecture/ADR-181.md",
+            ".agent/rules/executive-memory-drift-capture.md",
+            ".agent/rules/present-verdicts-not-menus.md",
+            ".agent/rules/register-identity-on-thread-join.md",
+            ".agent/directives/operationalisation-contract.md",
+            ".agent/directives/continuity-practice.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T15:36:27Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Cycle 11 / Task #9 / Cure D — jc- to oak- skill prefix migration",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T16:11:15Z",
+        "closed_by": {
+          "agent_name": "Shaded Whispering Dusk",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "763ef4"
+        },
+        "summary": "Cycle 12 + PR-108 snagging closeout landed at 6ad17c14 + 360c6e69; arc complete",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e32b2e09-709c-490b-9b88-16f44f261b0c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ed5aa3db-ebdf-4c53-91c1-db7e904a4780",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/core/oak-eslint/src/rules/boundary.ts",
+            "packages/core/oak-eslint/src/rules/design-boundary.unit.test.ts",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/pr-108-snagging.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T16:03:30Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Cycle 12 / Task #8 — boundary.ts design-tokens-core branch error-message mismatch (Option B)",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T16:11:15Z",
+        "closed_by": {
+          "agent_name": "Shaded Whispering Dusk",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "763ef4"
+        },
+        "summary": "Cycle 12 + PR-108 snagging closeout landed at 6ad17c14 + 360c6e69; arc complete",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ed5aa3db-ebdf-4c53-91c1-db7e904a4780",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1e185a04-346c-48d4-a599-a93e7ccc45fb",
+      "agent_id": {
+        "agent_name": "Stormbound Kiting Squall",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ddbea2"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/commit-queue/cli.ts",
+            "agent-tools/src/commit-queue/commit-workflow.ts",
+            "agent-tools/src/commit-queue/commit-workflow-runtime.ts",
+            "agent-tools/tests/commit-workflow.unit.test.ts",
+            "agent-tools/tests/commit-queue-verify-staged-scope.unit.test.ts",
+            ".agent/plans/agent-tooling/current/commit-queue-intent-scope-discipline.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T16:09:52Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Cycle 1.2 atomic landing: verify-staged adopts scoped read",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T16:13:16Z",
+        "closed_by": {
+          "agent_name": "Stormbound Kiting Squall",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "ddbea2"
+        },
+        "summary": "Cycle 1.2 landed at 6b5c9b4e; verify-staged adoption + Shape A dep widening + 5 reviewers absorbed",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1e185a04-346c-48d4-a599-a93e7ccc45fb",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2d1dec4e-fadd-4257-bf12-a9c7c5449272",
+      "agent_id": {
+        "agent_name": "Stormbound Kiting Squall",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ddbea2"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T16:09:53Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Cycle 1.2 atomic commit",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T16:13:16Z",
+        "closed_by": {
+          "agent_name": "Stormbound Kiting Squall",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "ddbea2"
+        },
+        "summary": "git:index/head released after Cycle 1.2 commit 6b5c9b4e",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2d1dec4e-fadd-4257-bf12-a9c7c5449272",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e09dbb72-2ac3-40ba-8df3-fcd5b883de3a",
+      "agent_id": {
+        "agent_name": "Shaded Whispering Dusk",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "763ef4"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "git:index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T16:14:50Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Archive PR-108 snagging plan",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T16:16:34Z",
+        "closed_by": {
+          "agent_name": "Shaded Whispering Dusk",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "763ef4"
+        },
+        "summary": "Archive move of pr-108-snagging.plan.md landed at 381d64f9; commit subject misattributed (stale COMMIT_EDITMSG content); owner-question pending on fix-forward shape",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e09dbb72-2ac3-40ba-8df3-fcd5b883de3a",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

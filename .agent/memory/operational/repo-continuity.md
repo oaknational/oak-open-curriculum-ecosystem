@@ -36,7 +36,7 @@ for that work but is not itself the active thread.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF first-feature delivery (gate-1a `eef-explore-evidence-for-context`, gate-1b cluster) | [record][eef] | Torrid Glowing Flame / `claude` / Opus 4.7 (1M) / `5ab0ec` / 2026-05-21 |
+| `eef` | EEF first-feature delivery (gate-1a `eef-explore-evidence-for-context`, gate-1b cluster) | [record][eef] | Mistbound Slipping Night / `claude` / Opus 4.7 / `a1cb64` / 2026-05-22 (t12-citation-shape cycle authored end-to-end + commit handed to Stormbound; ff2 + t12 both gate-1a items resolved; **plus seven coordination-substrate graduations** landed under owner-directed promotion — 4 new rules [continuity-surface-orphans, handoff-self-contained, agent-state-observable, owner-attention-at-action-moments (provisional)], 1 rule amendment [pre-execution-review two-shapes], 2 PDR amendments [PDR-063 discontinuity-validation, PDR-014 framing-direction]) |
 
 ## Paused Threads
 

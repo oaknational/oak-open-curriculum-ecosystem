@@ -573,6 +573,85 @@ operational backfill.
 (this amendment is a Practice-governance change to the pattern-graduation
 contract).
 
+### 2026-05-22 — Framing-direction discipline at the capture edge
+
+**Driver**. Owner reframing at 2026-05-22 (Mistbound Slipping Night
+session): five session insights surfaced at session-end were framed
+forward-from-session ("things that happened in this peer-primary
+session"). Owner reframed them backward-from-impact ("improve
+coordination surfaces regardless of topology"). Same observations,
+opposite framing direction, profoundly different home —
+session-forward → napkin anecdote; impact-backward → structural-cure
+candidate for rules / PDR amendments / schema work. The substance did
+not change; the framing determined the destination.
+
+**Insight**. The capture edge of the knowledge-flow pipeline carries
+an invisible decision: the framing direction the agent uses to
+articulate the observation. Two framings produce two destinations:
+
+- **Session-forward framing** ("what did I see this session?") — the
+  observation is anchored to its session context. Natural home: the
+  experience file (subjective texture), or a napkin entry as
+  session-scoped capture.
+- **Impact-backward framing** ("what coordination surface does this
+  cure?") — the observation is anchored to the surface it improves.
+  Natural home: a rule, PDR amendment, schema change, or pattern
+  graduation candidate.
+
+The default direction for most agents at session-end is session-forward
+(observations are most vivid in the session that produced them).
+Impact-backward framing is the more durable shape because it travels
+across the session boundary that produced the observation.
+
+**Change**. At the capture edge (napkin entries, consolidation
+candidate identification, pending-graduations entries), the
+consolidator MUST ask both framing questions and prefer the
+impact-backward framing when the substance supports a structural-cure
+target:
+
+- *"What surface does this cure?"* (impact-backward)
+- *"Where did this observation come from?"* (session-forward)
+
+When the substance is purely subjective (texture, surprise without
+durable cure-shape), session-forward is correct — the experience file
+is the right home. When the substance names a coordination surface
+that could be improved (a rule, a PDR, a schema, a SKILL), the
+impact-backward framing surfaces that destination explicitly. Without
+the impact-backward question, observations with structural-cure
+potential default to napkin-only and never reach the graduation
+pipeline.
+
+This discipline applies at three moments:
+
+1. **Session-handoff step 6a** (capture surprises): the closing
+   agent asks both framing questions for each observation before
+   recording.
+2. **Consolidate-docs step 7a/7b** (graduation scan): the
+   consolidator re-asks the impact-backward framing for napkin
+   entries from prior sessions that may have been captured
+   session-forward only.
+3. **Owner-direction reframing**: when an owner reframes an agent's
+   forward-framed observation impact-backward (as Mistbound's owner
+   did this session), the agent re-homes the substance to the
+   reframed destination. This is itself a worked-instance of the
+   framing-direction discipline.
+
+**Scope**. Practice-governance amendment to the consolidation
+discipline. Applies to every Practice-bearing repo. No new
+artefact surface; the discipline operates at existing capture
+edges (napkin, pending-graduations, consolidate-docs §7).
+
+**Concrete near-term firing trigger**. The next consolidation pass
+that touches a session's napkin entries asks the impact-backward
+question for each entry before deciding the entry's graduation
+target. If applying the question changes the target for ≥1 entry,
+the discipline is firing usefully.
+
+**Reviewer**. `docs-adr-expert` per
+[`invoke-doc-and-onboarding-experts-on-significant-changes`](../../rules/invoke-doc-and-onboarding-experts-on-significant-changes.md)
+(Practice-governance amendment). Owner-direction-evidenced (Mistbound
+reframing worked instance).
+
 ### 2026-05-05 — Archive-scale historical synthesis cadence
 
 **Driver**. Owner observation during a metacognition pass: the original

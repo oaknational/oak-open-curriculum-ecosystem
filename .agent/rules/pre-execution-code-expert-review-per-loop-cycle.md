@@ -68,6 +68,60 @@ intention-review at design-pressure checkpoints; this rule makes that
 moment mandatory and per-cycle inside /loop cadence, rather than
 discretionary by change-class.
 
+## Two dispatch shapes — fan-from-brief vs fan-from-verdict
+
+A cycle's reviewer dispatch shape depends on whether the plan
+already names the per-cycle reviewer set. Two distinct shapes apply,
+and the choice between them is the decision the dispatching agent
+makes at cycle-open:
+
+### Fan-from-brief (named-set cycles)
+
+When the controlling plan names a per-cycle reviewer set explicitly
+(e.g., `eef-first-feature.plan.md` §"Per-cycle reviewer set" lists
+"type-expert + test-expert mandatory" for `t12-citation-shape`), the
+plan-named reviewers are dispatched **in parallel from cycle-open**,
+alongside code-expert's pre-execution review.
+
+Code-expert still runs — but as the **architectural reviewer** of the
+planned cycle scope, not as the **router** for which specialists to
+call. Code-expert's verdict can still surface NEW specialists the
+plan-named set missed (escalation); existing plan-named reviewers do
+not wait on code-expert's verdict.
+
+### Fan-from-verdict (unknown-scope cycles)
+
+When the controlling plan does NOT name the per-cycle reviewer set
+(remediation passes over unstructured finding sets, exploratory
+cycles, cross-workspace investigations, or any cycle where the
+appropriate specialists cannot be determined at brief-time),
+code-expert is briefed first as the **router**. Specialists named in
+code-expert's verdict are dispatched after the verdict is absorbed.
+
+### Decision rule
+
+At cycle-open, the dispatching agent checks the controlling plan's
+per-cycle reviewer specification:
+
+- **Named** → fan-from-brief.
+- **Contingent / unknown / "as code-expert determines"** → fan-from-verdict.
+
+The choice is recorded in the cycle's coordination report alongside
+the reviewer roster.
+
+### Why both shapes
+
+Fan-from-verdict is the safer default for unknown scopes — code-expert
+prevents wasted specialist dispatches that return "not applicable".
+But for named-set cycles, fan-from-verdict adds a wall-clock hop
+without adding signal: code-expert is rubber-stamping the plan's
+named set, not discovering it. Fan-from-brief eliminates the hop while
+preserving code-expert's architectural review function.
+
+The two shapes share the rule's core commitment: code-expert runs
+twice per cycle (pre-execution + post-execution), regardless of
+which dispatch shape applies.
+
 ## How (dispatch mechanics)
 
 The pre-execution review uses the same sub-agent dispatch mechanism as
@@ -99,6 +153,15 @@ Dusk Lane A Cycle 6 (broadcast 2026-05-22T12:40:27Z — pre-execution
 reviewer dispatched as plan-mandated gateway, reviewer called FIX vs
 FALSE_POSITIVE per S7787 site with rationale before any implementer
 fan-out ran).
+
+**Two-dispatch-shape amendment (2026-05-22, Mistbound Slipping Night)**:
+graduated from `.agent/memory/operational/pending-graduations.md`
+candidate `reviewer-dispatch-two-shapes`. Worked-instance: t12-citation-shape
+cycle where plan named "type-expert + test-expert mandatory" — the
+serialised hop through code-expert as router was wall-clock cost
+without signal gain. The fan-from-brief shape preserves code-expert's
+architectural review role while parallelising the named-set specialists
+from cycle-open.
 
 ## Cross-references
 

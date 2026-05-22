@@ -350,3 +350,167 @@ Identity: `Mistbound Slipping Night / claude / claude-opus-4-7 / a1cb64`. Owner 
 **No git operations permitted** until owner clears the constraint. Working-tree edits preserved; no staging, no commits, no resets.
 
 — Mistbound Slipping Night
+
+---
+
+## 2026-05-22T15:?? — Mistbound Slipping Night EEF gate-1a t12-citation-shape cycle (resumed post-compaction) / claude / claude-opus-4-7 / `a1cb64`
+
+### Surprise: pre-execution code-expert review caught a design-time bug before any source code was written
+
+**Observation**: opened the t12-citation-shape cycle (Round 1, EEF gate-1a load-bearing — non-empty tuple compile-time + Zod `min(1)` runtime). Brief gave code-expert the planned shape; their pre-execution verdict surfaced a duplication risk: the corpus-plan §Phase F defined `Citation.source` as a literal `'EEF Teaching and Learning Toolkit'` string field, which collides with the canonical `EEF_ATTRIBUTION` constant in `oak-curriculum-sdk/src/mcp/source-attribution.ts`. Two homes for the same fact; silent drift if either changes.
+
+**Diagnosis**: this bug would NOT have surfaced at type-check or lint or vitest — the literal-string field would have type-checked fine and the schema would have accepted EEF_ATTRIBUTION's string value. Code-expert read across two files (the plan + the existing source-attribution constant) and named the architectural-intent collision. Static gates only catch syntactic problems; pre-execution review catches design-intent collisions.
+
+**Cure**: surfaced to owner as a present-verdicts-not-menus question (Option A: drop source; Option B: import EEF_ATTRIBUTION; Option C: status quo with risk). Owner picked Option A. Cycle widened to include corpus-plan §Phase F amendment cohesively with citation-shape.ts landing.
+
+**Generalisation**: this is a worked-instance counter-argument to "code-expert can run post-write only". Pre-execution review has a measurable hit rate on bugs that static gates do NOT catch. Pattern candidate: *Pre-execution review catches design-time bugs static gates cannot* — graduate to memory/active/patterns/ if a second instance lands within the next two sessions.
+
+### Surprise: Stormbound's graceful abandonment via `intent.notes` field as worked instance of intent-scope discipline
+
+**Observation**: at 15:33Z Stormbound enqueued their own commit intent `cf39fd43` for the commit-queue-intent-scope-discipline plan finalisation. Their `record-staged` step detected my staged files (citation-shape.ts + .unit.test.ts + corpus-plan amendment) already present in the shared index. Rather than sweep my work, Stormbound voluntarily transitioned the intent to `phase: abandoned` and wrote in the `notes` field: *"Foreign-staged Mistbound citation-shape files detected before record-staged; abandoning to avoid sweep of peer work-in-progress (the very failure mode Cycle 1.1 cures)."*
+
+**Diagnosis**: this is the EXACT pattern the intent-scope-discipline plan codifies. An agent locally observes a foreign-staged set, recognises that running `record-staged` would absorb peer work-in-progress, and abandons their intent voluntarily. The whole-index fingerprint discipline structurally enables the detection; the agent's voluntary back-off is the runtime cure. Worked-precedent for the future-state where `record-staged --scope <intent.files>` makes the abandonment unnecessary.
+
+**Cure (already in flight)**: the intent-scope-discipline plan landed conceptually in working tree. Stormbound's session is finalising Cycles 1.1-1.3. This session demonstrated the manual cure (abandonment); the structural cure is the plan's three operative fixes.
+
+**Generalisation**: the intent-record's `notes` field is itself coordination infrastructure. An abandoned intent carrying a substantive `notes` explanation is more durable than a comms-event because it lives inside the queue surface every subsequent committer reads. Pattern candidate: *Use intent.notes for inter-agent abandonment rationale* — adjacent to the intent-scope-discipline plan's substrate work.
+
+### Surprise: workspace bootstrap fragility — 4+ workspaces must be built before lint resolves
+
+**Observation**: ran `pnpm --filter @oaknational/curriculum-sdk lint` after writing citation-shape.ts. Failed at config-load time with `Error [ERR_PACKAGE_PATH_NOT_EXPORTED]: No "exports" main defined in ... @oaknational/eslint-plugin-standards/package.json`. The plugin's `package.json` exports points at `./dist/index.js` which did not exist. Source lives at `packages/core/oak-eslint/` — the workspace ships the package under the `@oaknational/eslint-plugin-standards` name but the dist/ is only present when explicitly built. Same pattern repeated for `@oaknational/sdk-codegen` subpath exports (`/search`, `/zod`, `/api-schema`), `@oaknational/result`, and `@oaknational/type-helpers`. Resolution: `pnpm --filter @oaknational/eslint-plugin-standards build && pnpm --filter @oaknational/sdk-codegen build && pnpm --filter @oaknational/result --filter @oaknational/type-helpers build`. Then lint resolved.
+
+**Diagnosis**: a freshly-checked-out branch cannot lint any consumer workspace until specific producer workspaces have been built first. The implicit build-order graph is invisible to a new agent picking up work. The error mode is opaque (`exports main defined` errors at jiti config-load time, before any file is touched). No `pnpm bootstrap` or equivalent runs the cascade automatically; turbo's caching does it for `pnpm check` but individual workspace commands don't. The same fragility presumably affects type-check, test, dev — any cross-workspace command that needs the producer's dist/.
+
+**Cure (immediate)**: surfaced as a pending-graduations candidate this session. Possible cures: (a) `pnpm bootstrap` script that runs all `build:libs` workspaces in dependency order; (b) producer workspaces ship `development` exports condition that resolves to `src/` so lint works without build (the curriculum-sdk's own package.json shows `"development": "./src/index.ts"` as an example pattern); (c) explicit precondition step in CI / agent onboarding documentation.
+
+**Generalisation**: this is workspace-graph bootstrap fragility — a class of friction that scales poorly with team size because every new agent landing on a fresh checkout hits it. The class is distinct from product-code bugs (it's a tooling-config bug) and from runtime errors (it surfaces at config-load, before any code runs). Worth a focused fix sprint or a graduated rule about producer-workspace conditional exports.
+
+### Surprise: type-expert + test-expert verdicts conflicted at surface; resolved cleanly via more-restrictive rule
+
+**Observation**: dispatched type-expert + test-expert in parallel for the t12 cycle. Type-expert's verdict included a recommendation to write standalone `expectTypeOf<Caveats>().toEqualTypeOf<readonly [string, ...string[]]>()` cases proving the compile-time non-empty-tuple invariant. Test-expert's verdict invoked `test-immediate-fails.md` item 19 ("asserts on types only is an immediate fail") and rejected pure type-only test cases.
+
+**Diagnosis**: the two reviewers operate at different abstraction layers — type-expert sees a load-bearing type invariant and wants to test it; test-expert sees a Practice rule about what tests are FOR (logic, not types). Both are correct within their layers. The conflict is a layer-cake collision at the cycle-shape boundary.
+
+**Cure**: applied the more-restrictive rule (test-expert wins on test policy). Negative compile-time invariants are enforced by the type definition itself + `satisfies Citation` anchors on positive fixtures; standalone type-only tests are dropped. Type-expert's recommendation was honoured WHERE it co-occurred with a runtime assertion (the existing tests already do `expectTypeOf` adjacent to `safeParse` runtime checks).
+
+**Generalisation**: when reviewers in different layers conflict, the more-restrictive Practice-level rule wins. Pattern: *more-restrictive-Practice-rule-wins for inter-reviewer-conflict*. Adjacent to existing `different-lens-reviewer-divergence.md` pattern — that one covers HOW different lenses diverge; this is the resolution discipline WHEN they do.
+
+### Surprise: my own claim-ID typo at commit-queue enqueue not caught by type-check
+
+**Observation**: when running `commit-queue enqueue --claim-id <UUID>`, I mistyped the claim's UUID — mixed the first half of t12-main (`f013f95d-ab63-4e83-a716-`) with the second half of t12-supplementary (`b6ce9b997141`). The CLI returned `unknown claim_id: f013f95d-ab63-4e83-a716-b6ce9b997141`. I had to manually compare strings against the `claims open` output to spot the swap.
+
+**Diagnosis**: the CLI's error mode is correct (it rejects unknown IDs cleanly). The friction is that long opaque UUIDs are visually similar — copying half from one ID and half from another is a class of typo TypeScript's type system cannot catch (the string is a valid UUID format, just a non-existent one).
+
+**Cure (minor UX improvement candidate)**: the CLI could (a) accept claim-id prefixes (first-N chars when unique), or (b) suggest nearest matches on `unknown claim_id`. Either reduces the visual-comparison burden. Not blocking; surfaced as a usability candidate.
+
+**Generalisation**: this is opaque-ID friction. Any CLI that takes a UUID input and produces a plain `unknown <id>` error mode has the same shape. Worth checking other commit-queue and collaboration-state subcommands for the same UX gap. Adjacent to `agent-tool-help-on-invalid-flags` direction.
+
+### Reflection: team coordination model — peer-primary at session scale
+
+**Observation**: this session ran under peer-primary topology with Shaded / Tempestuous / Wooded earlier in the day, then Stormbound joining later. Sub-agent dispatches: code-expert (pre + post), type-expert, test-expert. Output: one cycle landed (t12-citation-shape, staged + handed to Stormbound). Coordination overhead: ~30+ comms-events, three commit-queue intents (two by me, one by Stormbound — abandoned), one compaction-boundary.
+
+**Diagnosis**: per-session throughput-per-agent was low. But the coordination-overhead-vs-throughput ratio is the wrong frame. The session built / proved substrate: the intent-scope-discipline plan (Stormbound landing), the graceful-abandonment-as-coordination pattern (worked instance B), the pre-execution-review catches design-bugs evidence (live instance). Future sessions will run faster because of this session's substrate. The investment shape is exponential, not linear.
+
+**Comparison with prior models**:
+
+- vs **solo agent**: same single-cycle throughput (1 atomic landing). Coordination overhead added. BUT substrate built that future sessions exploit. Solo agents cannot prove peer-coordination patterns.
+- vs **coordinator+helpers (hub-and-spoke)**: peer-primary eliminates the coordinator-class bottleneck without losing the centralised view (comms-event stream is the view). Failure mode: shared-resource bottlenecks (git index) — solved by queue+claim+comms.
+- vs **Cursor Multitask single-brief**: cursor-multitask is execution-class; peer-primary is design-class + execution-class. This session's design moments (source-field question, Zod/TS tension) needed individual peer-owner dialogue, not a team brief.
+- vs **gatekeeper specialisation**: not used directly this session; the commit-queue partially implements it (queue mediates commit windows; each peer enqueues; FIFO + abandonment serialises). A fuller gatekeeper would have ONE agent run husky for all peers' commits.
+- vs **peer sidebar** (the design-work case): used implicitly via directed comms (my exchange with Stormbound about queue ordering; their abandonment as response). Peer sidebar works WELL for two-agent design exchanges; we haven't tested it at 3+ agents.
+
+**Synthesis**: peer-primary is the right default for current Practice scale (2-4 agents). The model's costs are SHARED-resource bottlenecks (the git index, the husky gates), not coordination overhead. The intent-scope-discipline plan is the substrate cure for the git-index bottleneck; a gatekeeper-specialisation amendment would cure the husky-gate redundancy. Both are well-bounded structural cures, not coordination-protocol amendments.
+
+**What surprised me about peer-primary**: emergent properties. Stormbound's graceful abandonment wasn't a planned move — it emerged from each agent following local discipline (detect foreign-staged → abandon → cite). Well-designed local rules produce well-formed global behaviour. This is the strongest argument for peer-primary at scale: cheaper than central coordination, more robust than fully-decentralised, emergent behaviour is informative.
+
+**What didn't surprise but is worth naming**: the FIFO-strict commit-queue serialised disjoint-file commits. Stormbound's files (commit-queue plan + memory) were disjoint from mine (evidence-corpus + corpus plan). They could have committed in parallel if the queue honoured `intent.files`. The intent-scope-discipline plan is the cure. Until it lands, peer-primary at >2 agents committing simultaneously will continue to feel the friction.
+
+**Candidate for distilled.md**: "peer-primary topology cost shape: cost = f(shared-resource contention), not f(coordination protocol)". Subject to second-instance confirmation before graduation.
+
+— Mistbound Slipping Night
+
+---
+
+## 2026-05-22 — Mistbound Slipping Night metacognition pass: framing-direction-determines-graduation-destination
+
+### Insight: framing direction (session-forward vs impact-backward) determines what graduates
+
+**Observation**: at session-close I surfaced five insights from this team session framed forward-from-session ("things that happened in this peer-primary session"). Owner reframed them backward-from-impact ("improve coordination surfaces regardless of topology"). Same observations, opposite framing, profoundly different home: session-forward → session-anecdote in napkin; impact-backward → structural-cure candidate for rules / PDR amendments / schema work.
+
+**Diagnosis**: I was running session-forward by default — reasoning from "what did I see this session" toward "what's worth recording". The owner's reframing inverts the direction: start from "what coordination surface needs cure" and select observations that illuminate it. This is a higher-leverage framing because it makes the observations topology-independent — the cure applies to solo, hub-and-spoke, peer-primary, cursor-multitask, gatekeeper, all of them.
+
+**Cure**: when surfacing insights for graduation, the question is "what surface does this cure?" not "where did this observation come from?" Captured as PDR-014 amendment candidate in pending-graduations.
+
+**Generalisation**: the substance of an observation determines its truth; the framing determines its destination. Impact-backward framing is the more durable shape because it travels across the session boundary that produced the observation. Session-forward framing's natural home is the experience file (subjective texture); impact-backward framing's natural home is the rule / PDR / schema surface (durable substrate). Both are correct — they answer different questions.
+
+### Insight: continuity-surface drift is structurally orphaned from cycle commits
+
+**Observation**: this session produced significant continuity-surface edits (napkin entries, thread record updates, repo-continuity refresh, pending-graduations additions, experience file) AFTER the cycle's product code was drafted. The reflective output cannot ride with the cycle commit because it doesn't exist yet at cycle-commit time. The drift sits in the working tree unowned, waiting for a sweep.
+
+**Diagnosis**: orphaning is structural, not procedural. Continuity-surface commits ratify an OBSERVATION about the session; cycle commits ratify a TESTED CHANGE. The acceptance criteria differ. Bundling them obscures both. The right shape isn't "tie continuity drift to the cycle commit" — it's "continuity-surface commits ARE always separate, and that's correct."
+
+**Cure candidate (rule-shape)**: a rule naming that continuity-surface edits land as their own commit (`chore(continuity): land 2026-05-22 <agent> session reflection`) — either by the closing agent OR by explicit handoff to a follow-on agent. The unowned-ness becomes named pattern, not incidental drift. Topology-independent.
+
+### Insight: reviewer dispatch parallelism has two distinct shapes
+
+**Observation**: this session ran code-expert pre-execution first, then dispatched type-expert + test-expert in parallel after absorbing code-expert's verdict. The fan-from-verdict shape is appropriate for unknown scopes. But for cycles with NAMED reviewer sets in the plan (e.g., t12 named "type-expert + test-expert mandatory" in eef-first-feature plan), the named set could fan-from-brief in parallel from cycle-open.
+
+**Diagnosis**: the current rule (`pre-execution-code-expert-review-per-loop-cycle.md`) prescribes fan-from-verdict (code-expert routes). For named-set cycles this serialises a hop that doesn't need serialising — code-expert is rubber-stamping the named set rather than discovering it.
+
+**Cure candidate (rule-amendment)**: amend the pre-execution review rule to distinguish two shapes: fan-from-brief (named-set cycles, all reviewers parallel from cycle-open) vs fan-from-verdict (unknown-scope cycles, code-expert routes). Code-expert still runs in fan-from-brief — as architectural reviewer, not as router. Saves one wall-clock hop per named-set cycle.
+
+### Insight: handoff messages must be self-contained — the rule isn't named
+
+**Observation**: my Stormbound handoff message was thorough because I knew their session can't read my transcript. The discipline isn't anywhere in the rules. A next agent producing a sparse handoff message wouldn't see anything wrong from their own session view.
+
+**Diagnosis**: receiving agents (peer agents, future self after compaction, cross-platform agents) cannot read the sending agent's transcript. The handoff message IS the entire information transfer. Without an explicit rule, the discipline is implicit and inconsistent across agents.
+
+**Cure candidate (rule-shape)**: a new rule "handoff-messages-self-contained" enforcing: every fact the receiver needs to act NAMED in the message; every decision NAMED with WHO + WHEN; every artefact named by FILE PATH; receiver should act WITHOUT clarifying questions back. Related to but distinct from "comms event stream canonical truth" (which is about the channel; this is about the substance).
+
+### Insight: queue-wait state is invisible to peers and owner
+
+**Observation**: when blocked behind Stormbound's `cf39fd43`, my wait state lived only in my session reasoning. No comms event named the dependency. If Stormbound had committed (rather than abandoned), I would have been silently polling. If a third agent had arrived, they couldn't see I was queued.
+
+**Diagnosis**: dependency state should be a first-class observable. The intent-scope-discipline plan reduces queue waits structurally, but until it lands the waits exist and should be visible.
+
+**Cure candidate (comms-convention or schema amendment)**: when an agent enters "waiting on intent X" state, emit a directed comms-event to the upstream agent + audience naming the queue dependency. Either as a convention on existing `directed` kind (immediate), or as a new event-kind or `tags: ['queue-wait']` once ADR-183 substrate lands. Makes the dependency graph observable to peers + owner.
+
+### Insight: post-compaction resumption needs an explicit "did my prior edits land?" step
+
+**Observation**: my napkin handoff entry listed 7 resumption first-moves. None was "verify my prior session's edits actually landed somewhere." I assumed my ff2 plan edits were lost; only by grepping the file content did I discover they had been swept into a peer commit.
+
+**Diagnosis**: compaction-boundary (and any session-reentry) is a discontinuity. The agent's prior-session reasoning is summarised; volatile facts (working-tree state, recent peer activity) are stale. Without an explicit validation step, agents redo work or assume loss.
+
+**Cure candidate (PDR-063 amendment)**: extend PDR-063's mid-cycle pickup contract with a pre-action validation step: `git log --since "<boundary>" -- <files-I-edited>` BEFORE assuming work was lost; check closed-claims archive for closures during pause; check queue status for phase transitions. Topology-independent — applies to solo resumption, mid-cycle peer handoff, and compaction-boundary equally.
+
+— Mistbound Slipping Night
+
+---
+
+## 2026-05-22 — Mistbound deep reflection after promoting six graduation candidates
+
+### Insight (7th): substrate-building sessions vs production sessions have different work-selection criteria
+
+**Observation**: t12-citation-shape was a defensible pick — load-bearing for both gates, single-file, Round 1 parallel-safe. But the session's actual value was the SUBSTRATE we proved (six graduations), not t12 itself. If I had picked t9-guidance-constant or t13-freshness-gate instead, the same substrate would probably have emerged — Stormbound's abandonment, pre-execution review catching design-bugs, workspace bootstrap discovery, inter-reviewer conflict resolution all came from the OPERATIONAL flow, not from t12 specifically.
+
+**Diagnosis**: at least two session modes exist — substrate-building (value in operational flow) and production (value in shipped cycle). Different work-selection criteria. Substrate-building should pick cycles that EXERCISE the substrate (multi-writer coordination, parallel reviewer dispatch, cross-workspace integration); production should pick highest-leverage cycles for product. Without naming the mode, agents default to production-mode selection criteria even when the team is in substrate-building.
+
+**Cure candidate**: name the two modes; have agent (or owner) signal which applies at session-open. Trigger before promotion: second instance of an agent (or owner) explicitly distinguishing substrate-building from production session modes in cycle-selection reasoning.
+
+### Insight (8th): doctrine encodes scale-of-applicability implicitly; the implicit scale collides in multi-agent contexts
+
+**Observation**: session-handoff SKILL §11 prescribes `pnpm check` before declaring handoff complete. The owner-direction-derived check-singleton-per-window invariant says only ONE agent runs check per window. These collide in multi-agent contexts; the collision was patched in this session via owner override ("skip the gates").
+
+**Diagnosis**: §11 was written at single-agent scale (the closing agent IS the only agent; running check is correct). The singleton invariant is multi-agent. Neither names its scale-of-applicability. Result: doctrine that works at one scale breaks at another, patched ad-hoc rather than structurally.
+
+**Cure candidate (PDR-014 amendment)**: amend the consolidation discipline to require promoted doctrine names its scale-of-applicability (single-agent / multi-agent / either). When doctrine collides across scales, the multi-agent rule takes precedence (single-agent is the degenerate case). Trigger before promotion: second instance of two pieces of doctrine colliding because one is single-agent-scoped and the other multi-agent-scoped without explicit scale tagging.
+
+### Insight (9th, surfacing as question for owner): owner attention is gated at action-moments, not reasoning-moments
+
+**Observation**: owner intervened at three moments this session — (a) my AskUserQuestion about Citation.source (positive — picked Option A); (b) my commit-queue commit attempt (rejection — redirected to Stormbound); (c) my pnpm check attempt (rejection — said skip). NO interventions during reasoning, planning, reviewer dispatches, implementation, or staging.
+
+**Diagnosis**: owner attention gates at action-moments (commit, push, send, alter shared state) — moments of irreversibility-or-expensive-reversal — not reasoning-moments. AskUserQuestion is the right interface because it IS an action-moment with optional redirect.
+
+**Question for owner, not capture**: is this insight worth structural cure? If yes — cure shape could be: structure work to MINIMISE owner interrupts at non-action-moments AND MAXIMISE owner observability at action-moments. The rules implicitly support this but don't name it. If no — useful framing that doesn't need promotion.
+
+— Mistbound Slipping Night

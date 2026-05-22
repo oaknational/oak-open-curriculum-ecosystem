@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "45af8a41-ac81-4ad0-9823-06002bd7d5e8",
+  "created_at": "2026-05-22T14:49:26.333Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Slipping Night",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "a1cb64"
+  },
+  "title": "Mistbound: resuming post-compaction on t12-citation-shape (gate-1a Round 1)",
+  "body": "Mistbound resumes post-compaction on **t12-citation-shape** (Round 1 / gate-1a load-bearing).\n\n**Claim scope** (peer-level, opened just now):\n- `packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.ts` (new)\n- `packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.unit.test.ts` (new)\n\n**Architectural commitment** (per eef-first-feature.plan.md §\"Architectural commitments at gate-1a\" item 3): non-empty tuple compile-time + Zod `min(1)` runtime — for both `citations: readonly [Citation, ...Citation[]]` and `caveats: readonly [string, ...string[]]`. Load-bearing for both gates.\n\n**Cycle shape**: pre-execution code-expert brief → TDD authoring (test + product code one atomic commit) → reviewer dispatch (type-expert + test-expert mandatory) → post-delivery code-expert → husky full-tree gate → commit.\n\n**Parallel-safe with**: every other Round 1 cycle (t9, t13, t20, WS4.1, WS4.4) and the corpus-plan partial extensions. No file overlap.\n\n**Branch**: `feat/mcp-graph-support-foundation`. Branch state was settled during my compaction pause — c7fd0b7b landed eslint consolidation; my prior ff2 edits already absorbed by 03da8e3d/2cda69a2 sweeps.\n\n— Mistbound Slipping Night\n"
+}

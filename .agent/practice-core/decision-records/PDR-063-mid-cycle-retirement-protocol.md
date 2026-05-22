@@ -157,16 +157,64 @@ A receiving agent picking up a claim carrying a handoff-record
 pointer:
 
 1. Reads the handoff record before any source edit or comms post.
-2. Posts a directed acknowledgement event back to the retiring
+2. **Validates the prior agent's state assumptions against current
+   reality** (see "Discontinuity-boundary validation step" below).
+3. Posts a directed acknowledgement event back to the retiring
    agent's identity (the comms record persists even after the
    retiring agent's session ends; the acknowledgement is for the
    audit trail, not for the retired agent to read).
-3. Updates the active-claim entry with their own identity in the
+4. Updates the active-claim entry with their own identity in the
    agent-id block; clears the handoff-record pointer field only
    when they decide the cycle has resumed on a natural footing
    and no further handoff is currently pending.
-4. Proceeds with the cycle, treating Step 2's "decisions made" as
+5. Proceeds with the cycle, treating Step 2's "decisions made" as
    committed and "decisions deferred" as the open work surface.
+
+### Discontinuity-boundary validation step
+
+Added 2026-05-22 (Mistbound Slipping Night). Worked-instance:
+Mistbound's compaction-boundary resumption assumed ff2 plan edits
+were lost; only by grepping file content was the truth discovered
+(edits had been swept into a peer commit during the pause). The
+validation step structurally prevents agents redoing work or
+assuming loss after any discontinuity boundary.
+
+The receiving agent — whether picking up a peer's handoff, resuming
+their own session after compaction, or restarting after crash — runs
+the following validation checks BEFORE any source edit:
+
+1. **Prior-edit landing check** — for every file the retiring agent
+   reported as edited (in `current edit state`):
+   `git log --since "<boundary-time>" -- <file>`.
+   If commits appear in the window, the prior edits MAY have landed
+   already; read the diff before assuming the receiver must re-do
+   the work.
+2. **Claim-closure check** — for every claim referenced in the
+   handoff record:
+   inspect `.agent/state/collaboration/closed-claims.archive.json`
+   for closures during the discontinuity window. A closed-then-archived
+   claim signals the work landed (or was abandoned with rationale).
+3. **Queue-state check** — for every intent referenced in the handoff:
+   `commit-queue show --intent-id <id>` returns the current phase.
+   Abandoned intents during the discontinuity window often signal
+   peer coordination cures (e.g., voluntary back-off per
+   `agent-state-observable.md`).
+4. **Sub-agent transcript recovery** — for any pending sub-agent
+   dispatch named in the handoff, locate the transcript per
+   `feedback_subagent_transcript_recovery` (under
+   `~/.claude/projects/<project>/<session>/subagents/agent-<id>.jsonl`
+   for Claude Code) before re-dispatching.
+
+The validation step is **mandatory** and runs BEFORE the
+acknowledgement event (pickup contract item 3). The receiver's
+acknowledgement reports the validation outcome — what was confirmed
+landed, what was confirmed lost, what was confirmed still in-flight.
+This makes the discontinuity-window state observable.
+
+Topology-independence: applies equally to solo session resumption
+(your future self is a new receiver), mid-cycle peer pickup (the
+classic PDR-063 case), compaction-boundary self-resumption (you are
+the receiver of your prior self's handoff), and post-crash recovery.
 
 ### Handoff-record carriage decision
 

@@ -105,6 +105,7 @@ under the ≥2-of-3 rule (`neighbours × misconception`,
 | `Fragrant Regrowing Root` | `codex` | `GPT-5` | `019e12` | `eef-source-authority-clarification` | 2026-05-10 | 2026-05-10 |
 | `Torrid Glowing Flame` | `claude` | `claude-opus-4-7-1m` | `5ab0ec` | `inc-1d-eef-concurrent-tenant-sequencing-pull-forward-author` | 2026-05-21 | 2026-05-21 |
 | `Salty Charting Harbour` | `codex` | `GPT-5` | `019e4e` | `standby-team-join-identity-drift-surfaced` | 2026-05-22 | 2026-05-22 |
+| `Mistbound Slipping Night` | `claude` | `claude-opus-4-7` | `a1cb64` | `t12-citation-shape-cycle-author-with-stormbound-commit-handoff` | 2026-05-22 | 2026-05-22 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -240,6 +241,96 @@ ordering = operational; coordinator-structure heuristics =
 operational) that did not match owner direction "describe what
 parallel work is possible, not how it is carried out or by whom".
 Substantive content survives in the meta plan.
+
+## Session 2026-05-22 (later) — Mistbound Slipping Night t12-citation-shape cycle
+
+**Substantive progress this session**: t12-citation-shape (gate-1a
+Round 1, load-bearing for both gate-1a and gate-1b) authored end to
+end. Three files reach the staged-and-gate-green state under
+Mistbound; commit was handed to Stormbound Kiting Squall per owner
+direction at session-end.
+
+Files landed in working tree (staged at handoff, not committed by
+Mistbound):
+
++ `packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.ts`
+  — `CitationSchema` + `CaveatsSchema` + `CitationsSchema` with
+  Zod 4 two-arg `z.tuple([T], T).readonly()` producing readonly
+  non-empty tuples via `z.infer`. `z.url()` on `eef_url`.
+  Source-attribution field DROPPED per owner direction (Option A):
+  envelope `_meta.attribution` carries `EEF_ATTRIBUTION` once per
+  response.
++ `.../citation-shape.unit.test.ts` — 17 tests; `satisfies Citation`
+  on fixtures; `safeParse` + `result.success`; `it.each` over
+  literal `keyof Citation` array for parametrised missing-field
+  rejection. No pure type-only tests (per `test-immediate-fails.md`
+  item 19).
++ `.agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md`
+  — §Phase F amendment dropping `source` from `Citation`;
+  frontmatter t12 todo flipped `status: pending` → `completed`.
+
+**Reviewer cadence absorbed**:
+
++ Pre-execution code-expert: CHANGES REQUESTED — surfaced the
+  source-field duplication risk against `EEF_ATTRIBUTION` constant;
+  Zod 4 tuple/min(1) tension; `@ts-expect-error` convention. Owner
+  resolved source-field → Option A (drop).
++ Pre-execution type-expert: `z.tuple([T], T).readonly()` Zod 4
+  two-arg form; `z.url()` not `z.string().url()`; SSoT via `z.infer`.
++ Pre-execution test-expert: no pure type-only tests; `satisfies` +
+  `safeParse` + `it.each` over literal dataset.
++ Post-execution code-expert: CLEAR; all architectural commitments
+  honoured.
+
+**Local gate state at handoff**: lint clean (after
+`pnpm --filter @oaknational/eslint-plugin-standards build &&
+pnpm --filter @oaknational/sdk-codegen build &&
+pnpm --filter @oaknational/result --filter @oaknational/type-helpers build`
+sequence); type-check clean; vitest 17/17 pass; full
+`pnpm turbo run type-check lint test` 87/87 successful.
+
+**Commit handoff to Stormbound**: directed comms-event
+`0f03f45c-a225-4d55-bb15-2e5c44abb678` at 15:42Z carries all
+substance: intent_id `131fe2a9` already verify-staged with
+fingerprint `35a29ef5...`; message file at
+`/tmp/mistbound-t12-commit-message.txt`; three options for landing
+(take over intent, open own intent with same files, Path-B
+selective `git commit --`). Acknowledged Stormbound's graceful
+abandonment of `cf39fd43` (the queue-collision worked instance).
+
+**Claim disposition**: zero Mistbound claims active at handoff. Three
+closed: `c847fffc` (stale ff2, absorbed by sweep), `f013f95d`
+(t12 main, handed), `59eabaea` (t12 supplementary plan amendment,
+handed).
+
+**Workspace-bootstrap blocker surfaced** (pending-graduations
+candidate): consumer-workspace lint, type-check, and test commands
+fail at config-load time on a fresh checkout because producer
+workspaces (`@oaknational/eslint-plugin-standards`,
+`@oaknational/sdk-codegen` subpath exports, `@oaknational/result`,
+`@oaknational/type-helpers`) ship no `dist/` until explicitly built.
+Implicit build-order graph is invisible to new agents. Possible
+cures: `pnpm bootstrap` script, `development` exports condition
+resolving to `src/`, or precondition in onboarding docs.
+
+**EEF gate-1a progress**: ff2 RESOLVED in prior cycle (this session
+inherited the post-resolution state via sweeps `03da8e3d` /
+`2cda69a2`). t12-citation-shape RESOLVED this session (subject to
+Stormbound's commit). Remaining gate-1a items: ff1 (partnership
+opener — owner direction is skip; EEF already aware),
+ff3 (substrate floor tracking — WS4.4 + WS4.5 in graph-stack plan),
+ff4 (corpus todos tracking — t1, t2, t6a, t9, t10, t13, t20 +
+partials), ff5 (shape-understanding evidence — depends on t6a draft),
+ff6 (acceptance bundle — terminal). Round 1 parallel-safe cycles
+remaining: t9, t13, t20, WS4.4.
+
+**Last refreshed**: 2026-05-22 (later) — Mistbound Slipping Night /
+claude / claude-opus-4-7 / `a1cb64`. Topology: peer-primary with
+Stormbound Kiting Squall (`ddbea2`) as the commit-window picker-up.
+
+---
+
+## Session 2026-05-22 — Blustery Lifting Plume coordinator (earlier)
 
 **Last refreshed**: 2026-05-22 — Blustery Lifting Plume / claude /
 claude-opus-4-7 / `d4aad7` (full-session coordinator) + team
