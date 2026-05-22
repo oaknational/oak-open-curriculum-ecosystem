@@ -98,7 +98,7 @@ todos:
     workstream: coordination
   - id: t20-credits
     content: "Add John Roberts to repo authors; record in ATTRIBUTION.md and root README per the strategy doc's standing requirement."
-    status: pending
+    status: completed
     workstream: credits
 ---
 
