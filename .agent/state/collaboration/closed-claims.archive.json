@@ -30810,6 +30810,1336 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "4f5d5bc5-da22-42f3-af81-823662807ade",
+      "agent_id": {
+        "agent_name": "Velvet Veiling Wisp",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "b4bb7a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T20:58:46Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit consolidate-docs archive sweep (20 status:graduated bodies relocated)",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T21:00:09Z",
+        "closed_by": {
+          "agent_name": "Velvet Veiling Wisp",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "b4bb7a"
+        },
+        "summary": "commit 44d23533: docs(consolidate) archive sweep — 20 status:graduated bodies relocated; -382 lines net",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4f5d5bc5-da22-42f3-af81-823662807ade",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "76343d96-07c7-4c2c-a030-e599f48d055a",
+      "agent_id": {
+        "agent_name": "Velvet Veiling Wisp",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "b4bb7a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T21:06:14Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit nested-bullet defect-class archive sweep (7 graduated bodies)",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T21:06:53Z",
+        "closed_by": {
+          "agent_name": "Velvet Veiling Wisp",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "b4bb7a"
+        },
+        "summary": "commit ad67d24f: docs(consolidate) nested-bullet defect-class sweep — 7 more graduated bodies archived; cumulative -629 lines today",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "76343d96-07c7-4c2c-a030-e599f48d055a",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3199c067-8328-4a87-80fa-7e6531e38044",
+      "agent_id": {
+        "agent_name": "Velvet Veiling Wisp",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "b4bb7a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T21:24:09Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit critical-surface curation: repo-continuity + distilled + tdd-as-design",
+      "intent_to_commit": "80a218c1-03ab-41dd-8ca5-c132def5edeb",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T21:25:52Z",
+        "closed_by": {
+          "agent_name": "Velvet Veiling Wisp",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "b4bb7a"
+        },
+        "summary": "abandoned: validate-boundaries red on peer's in-flight @oaknational/graph-corpus-sdk scaffold (Lunar WS4.1); awaiting peer's commit or owner direction. My critical-surface curation edits remain in working tree intact, no commit landed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3199c067-8328-4a87-80fa-7e6531e38044",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2c9799f6-2b88-4b4d-a765-650c546d86ad",
+      "agent_id": {
+        "agent_name": "Foamy Fathoming Compass",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ecb459"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T21:25:40Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit WS4.4 test-partition amendment (two plan files).",
+      "intent_to_commit": "fb6126db-cc5d-42a1-9a1c-733fd5a28e8a",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T21:27:26Z",
+        "closed_by": {
+          "agent_name": "Foamy Fathoming Compass",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "ecb459"
+        },
+        "summary": "abandoned: WS4.4 amendment commit blocked by validate-boundaries gate firing on inherited graph-corpus-sdk inventory mismatch; will retry after Lunar's WS4.1 lands",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2c9799f6-2b88-4b4d-a765-650c546d86ad",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "482d0ea8-f358-453a-8b47-644cd670ffcb",
+      "agent_id": {
+        "agent_name": "Velvet Veiling Wisp",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "b4bb7a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T21:34:03Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit critical-surface curation (retry after validate-boundaries went green)",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T21:37:42Z",
+        "closed_by": {
+          "agent_name": "Velvet Veiling Wisp",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "b4bb7a"
+        },
+        "summary": "commit e1b9561e: landed MY 4 consolidation files (verified by git show --stat) BUT with Lunar's WS4.1 scaffold commit message. Substance correct; label wrong. Root cause incident: .git/COMMIT_EDITMSG is shared single-writer state under concurrent commits; pre-commit's 1m33s window allowed Lunar to overwrite my message between cp and commit-queue's git commit invocation.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "482d0ea8-f358-453a-8b47-644cd670ffcb",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8f1635c8-8216-4a60-b0fb-8c49d03c5a74",
+      "agent_id": {
+        "agent_name": "Secret Dimming Shade",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "5a6e56"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T21:39:52Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit PR-108 SonarCloud clearance bundle (18 pathspecs across 4 lanes plus disposition-policy amendment)",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T21:42:27Z",
+        "closed_by": {
+          "agent_name": "Secret Dimming Shade",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "5a6e56"
+        },
+        "summary": "commit 51a02a93: PR-108 SonarCloud clearance (18 files, 21 violations refactored, 1 hotspot SAFE, cpd.exclusions added)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8f1635c8-8216-4a60-b0fb-8c49d03c5a74",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "7783c228-5639-443d-a3e1-cc8494eb7d90",
+      "agent_id": {
+        "agent_name": "Secret Dimming Shade",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "5a6e56"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/tests/collaboration-state/collaboration-state.integration.test.ts",
+            "agent-tools/tests/repo-check.integration.test.ts",
+            "agent-tools/tests/commit-workflow.unit.test.ts",
+            "agent-tools/scripts/repo-check.ts",
+            "agent-tools/scripts/check-blocked-content.unit.test.ts",
+            "agent-tools/src/context-cost/tokenize-globs.unit.test.ts",
+            "packages/core/graph-core/src/index.ts",
+            "packages/core/graph-core/src/jsonld/index.ts",
+            "packages/core/graph-core/src/jsonld/processor-types.ts",
+            "packages/core/graph-core/src/jsonld/processor.ts",
+            "packages/core/graph-core/src/jsonld/processor.integration.test.ts",
+            "packages/core/graph-core/vitest.config.ts",
+            "packages/libs/graph-project/src/index.ts",
+            "packages/libs/graph-project/src/property-graph/index.ts",
+            "packages/libs/graph-project/vitest.config.ts",
+            "packages/libs/graph-ingest/vitest.config.ts",
+            "sonar-project.properties",
+            "docs/governance/sonar-disposition-policy.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T21:27:23Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "PR-108 SonarCloud quality-gate clearance: 16 file edits across agent-tools, graph-core, graph-project, graph-ingest, plus sonar-project.properties cpd.exclusions and disposition-policy amendment. Disposes 21 new violations, 1 SAFE security hotspot, duplication 5.9% to under 3%. Lanes 1/3/4/6 file-level; Lanes 2/5 already disposed via Sonar MCP.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T21:42:27Z",
+        "closed_by": {
+          "agent_name": "Secret Dimming Shade",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "5a6e56"
+        },
+        "summary": "commit 51a02a93: PR-108 SonarCloud clearance bundle landed",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7783c228-5639-443d-a3e1-cc8494eb7d90",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "45ce1c41-9299-4787-aeb0-c931ede3f38f",
+      "agent_id": {
+        "agent_name": "Foamy Fathoming Compass",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ecb459"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T21:46:34Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit WS4.4 test-partition amendment v2 (post-COMMIT_EDITMSG-incident cure).",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T21:47:56Z",
+        "closed_by": {
+          "agent_name": "Foamy Fathoming Compass",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "ecb459"
+        },
+        "summary": "commit bf7fa545: docs(plans) WS4.4 test-partition amendment per gate-1a addendum; 2 plan files +113/-12; 90 turbo tasks green; advisory fitness gate exit 1 (pre-existing tree pressure, not introduced by this commit)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "45ce1c41-9299-4787-aeb0-c931ede3f38f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "96054c84-2650-4b0e-b26d-d8cf0ff3be4f",
+      "agent_id": {
+        "agent_name": "Secret Vanishing Wisp",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "981cbe"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T21:51:49Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit t9-guidance-constant bundle (eef-evidence-guidance.ts + eef-evidence-corpus.plan.md). Inline-message-file cure: /tmp/svw-t9-commit-message.txt.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T21:53:22Z",
+        "closed_by": {
+          "agent_name": "Secret Vanishing Wisp",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "981cbe"
+        },
+        "summary": "commit acd2a3f3: feat(eef-evidence-corpus): land t9 AGGREGATED_EEF_EVIDENCE_GUIDANCE — 2 files, pathspec discipline clean, Lunar WS4.1 substance untouched",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "96054c84-2650-4b0e-b26d-d8cf0ff3be4f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "78bc143f-5e2c-47ba-98ec-bfcac74ea1e6",
+      "agent_id": {
+        "agent_name": "Secret Vanishing Wisp",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "981cbe"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-guidance.ts",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-guidance.unit.test.ts",
+            ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T21:26:49Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "t9-guidance-constant: author AGGREGATED_EEF_EVIDENCE_GUIDANCE in packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-guidance.ts (preserves R1, R3, R7 from evidence-integration-strategy.md). Gate-1a Round 1 cycle, file-disjoint from Foamy WS4.4, Lunar WS4.1, Velvet markdown, Shade PR-108, both Stormbounds (unbounded), Sparking (unbounded).",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T21:53:22Z",
+        "closed_by": {
+          "agent_name": "Secret Vanishing Wisp",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "981cbe"
+        },
+        "summary": "t9-guidance-constant landed at acd2a3f3; all reviewer nits absorbed in same touch",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "78bc143f-5e2c-47ba-98ec-bfcac74ea1e6",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "b0454484-e728-4971-b14d-9b63d18b042e",
+      "agent_id": {
+        "agent_name": "Foamy Fathoming Compass",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ecb459"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T22:03:50Z",
+      "freshness_seconds": 1200,
+      "sidebar_open": false,
+      "intent": "WS4.4 substantive cycle commit + SVW NITS-FOLLOWUP plan edits.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T22:06:21Z",
+        "closed_by": {
+          "agent_name": "Foamy Fathoming Compass",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "ecb459"
+        },
+        "summary": "commit 1fc5b491: WS4.4 GraphView substantive cycle landed (11 files +540/-3; 90 turbo green; T7a array-stop discipline + 9 new tests)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b0454484-e728-4971-b14d-9b63d18b042e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "49379ef5-0ad4-4fe1-9fb8-e5d436462995",
+      "agent_id": {
+        "agent_name": "Foamy Fathoming Compass",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ecb459"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/core/graph-core/src/graph-view/**",
+            "packages/core/graph-core/src/index.ts",
+            "packages/core/graph-core/package.json",
+            "packages/core/graph-core/tsup.config.ts",
+            ".dependency-cruiser.mjs"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T21:49:48Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "WS4.4 substantive cycle — GraphView<TNode,TEdgeType> interface + inline-fixture T7a smoke-test + scaffold checklist registrations.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T22:06:21Z",
+        "closed_by": {
+          "agent_name": "Foamy Fathoming Compass",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "ecb459"
+        },
+        "summary": "WS4.4 substantive cycle complete; files claim closes alongside commit window",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "49379ef5-0ad4-4fe1-9fb8-e5d436462995",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ccecfb84-bba1-4342-a817-7131ac9b1700",
+      "agent_id": {
+        "agent_name": "Sparking Melting Magma",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "4cdb53"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T21:35:40.000Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "t20-credits gate-1a Round 1: verify EEF + John Roberts attribution substance complete (ATTRIBUTION.md + README.md + package.json contributors); flip frontmatter status:pending -> completed in corpus plan; docs-adr-expert pre-commit; commit when validate-boundaries unblocks via Lunar WS4.1",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T22:07:29.000Z",
+        "closed_by": {
+          "agent_name": "Sparking Melting Magma",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "4cdb53"
+        },
+        "summary": "t20-credits landed at e1d76c54 (1 file, +1/-1); state-flag reconciliation only — substance already in HEAD across ATTRIBUTION.md L38, README.md L401, package.json contributors[2], plus EEF Toolkit citation in both files; intent 3be6c713 (initial 50b5890b abandoned after graph-core lint blocker from Foamy WS4.4 in-flight authoring); pre-commit GREEN after Foamy's 1fc5b491 cleared the lint surface",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ccecfb84-bba1-4342-a817-7131ac9b1700",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6dad1b1b-b1ac-4de2-996b-8eb308d02c88",
+      "agent_id": {
+        "agent_name": "Foamy Fathoming Compass",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ecb459"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T22:11:23Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Land test-expert post-execution absorption on 1fc5b491 (3 audit-shape lines tightened).",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T22:12:20Z",
+        "closed_by": {
+          "agent_name": "Foamy Fathoming Compass",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "ecb459"
+        },
+        "summary": "commit db5271af: test-expert post-exec nits absorbed; 76/76 tests still green",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6dad1b1b-b1ac-4de2-996b-8eb308d02c88",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "915e0677-b9f9-49ff-baa3-c2f2cc496734",
+      "agent_id": {
+        "agent_name": "Foamy Fathoming Compass",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ecb459"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T22:15:04Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "WS3.3 plan-body status flip — adjacency primitives landed at f4ca84f6.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T22:16:16Z",
+        "closed_by": {
+          "agent_name": "Foamy Fathoming Compass",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "ecb459"
+        },
+        "summary": "commit 83179e11: WS3.3 plan-body status flip; substantive code was already in HEAD at f4ca84f6",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "915e0677-b9f9-49ff-baa3-c2f2cc496734",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "4deb1035-8f8e-4e5a-84bb-9f9b1250341a",
+      "agent_id": {
+        "agent_name": "Secret Vanishing Wisp",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "981cbe"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T22:22:04Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit t10-lesson-plan-prompt bundle (5 files). Inline-message-file cure: /tmp/svw-t10-commit-message.txt.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T22:48:10Z",
+        "closed_by": {
+          "agent_name": "Secret Vanishing Wisp",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "981cbe"
+        },
+        "summary": "commit a2136557: feat(mcp-prompts): land t10 eef-evidence-grounded-lesson-plan prompt — 4 files (2 NEW + 2 MOD); pathspec-disciplined; turbo 90/90 green. Cure 1 message file; first attempt abandoned on Sparking freshness.ts lint, retried clean after Sparking cleared surface.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4deb1035-8f8e-4e5a-84bb-9f9b1250341a",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3706825a-bee1-47cf-9a5e-d7535d0b4529",
+      "agent_id": {
+        "agent_name": "Secret Vanishing Wisp",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "981cbe"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-grounded-lesson-plan.ts",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-grounded-lesson-plan.unit.test.ts",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/mcp-prompts.ts",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/mcp-prompt-messages.ts",
+            ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T22:12:15Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "t10-lesson-plan-prompt: author eef-evidence-grounded-lesson-plan prompt + message generator + tests. Gate-1a Round 1 cycle; consumes t9 AGGREGATED_EEF_EVIDENCE_GUIDANCE; orchestrates t6a tool by name. File-disjoint from all in-flight cycles.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T22:48:10Z",
+        "closed_by": {
+          "agent_name": "Secret Vanishing Wisp",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "981cbe"
+        },
+        "summary": "t10-lesson-plan-prompt landed at a2136557; plan-file edits already in HEAD via Sparking's 968e3cb7 sweep (substance correct, attribution wrong — documented in 22:26Z broadcast)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3706825a-bee1-47cf-9a5e-d7535d0b4529",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a1cae162-df06-4599-9af5-04042d9c1840",
+      "agent_id": {
+        "agent_name": "Sparking Melting Magma",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "4cdb53"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/sdks/oak-curriculum-sdk/scripts/refresh-eef-toolkit.ts",
+            ".github/workflows/eef-freshness.yml",
+            ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T22:10:47.000Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "t13-freshness-gate gate-1a Round 1: CI workflow + refresh script + ADR-175 180-day threshold binding; bridge state handles pre-t2 file-not-yet-present cleanly; reviewer set docs-adr-expert + test-expert",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T22:49:26.000Z",
+        "closed_by": {
+          "agent_name": "Sparking Melting Magma",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "4cdb53"
+        },
+        "summary": "t13a freshness-check landed: amendment 968e3cb7 (plan split partial/full) + authoring 745fe919 (freshness.ts + freshness.unit.test.ts + §Phase G narrative); 6 new tests; 763/763 SDK tests pass; type-check + lint clean. t13b refresh-script defers to gate-1b (depends on t2-zod-loader Zod schema). assumptions-expert GO-WITH-CONDITIONS (6); all absorbed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a1cae162-df06-4599-9af5-04042d9c1840",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "5b188bb5-3d07-4a0f-b9fc-8554ecd6cf33",
+      "agent_id": {
+        "agent_name": "Sparking Melting Magma",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "4cdb53"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/freshness.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T22:53:42.000Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Absorb post-exec code-expert nit from SVW reciprocal verdict (22:52Z) on 745fe919: remove stale forward-reference to deleted eef-freshness-binding.unit.test.ts in freshness.ts TSDoc; point at Phase G amendment instead. TSDoc-only docs commit.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T22:55:22.000Z",
+        "closed_by": {
+          "agent_name": "Sparking Melting Magma",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "4cdb53"
+        },
+        "summary": "Absorption commit 8f253280: removed stale forward-reference to deleted eef-freshness-binding.unit.test.ts from freshness.ts TSDoc; replacement points at Phase G amendment for partial/full split rationale. SVW reciprocal post-exec code-expert verdict APPROVE-with-nit absorbed in same touch.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "5b188bb5-3d07-4a0f-b9fc-8554ecd6cf33",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "387eb4c5-fb82-4f9a-8e58-81d083110fde",
+      "agent_id": {
+        "agent_name": "Sparking Melting Magma",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "4cdb53"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/types.ts",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/not-implemented-fixture.ts",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/not-implemented-fixture.unit.test.ts",
+            ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T22:59:15.000Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "t1-corpus-shape Round 2 critical path: EvidenceCorpus<TNode, TEdgeType> wrapping interface + NotImplementedYet discriminator + ExplainOptions + ComparisonDimension union + CompareOptions/RankOptions + Result-payload/error types + not-implemented-fixture (canonical stub for WS4.5 to consume) + co-located unit tests; frontmatter flip + Phase A T1 narrative addition",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T23:20:40.000Z",
+        "closed_by": {
+          "agent_name": "Sparking Melting Magma",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "4cdb53"
+        },
+        "summary": "t1-corpus-shape landed at 7d8f0b0c: EvidenceCorpus<TNode, TEdgeType> + NotImplementedYet + ExplainOptions + ComparisonDimension + CompareOptions + RankOptions + result/error types + EefStrand skeleton (replaced at t2). 5 files +228/-1. Also advances t16-partial via public re-exports. Pre-exec type-expert GO-WITH-CONDITIONS (3); all absorbed. Fixture dropped per consolidate-at-third-consumer (lint-rule friction made stub abstraction premature; WS4.5 will inline its own stubs). All gates green: depcruise + lint + tc + 763/763 tests.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "387eb4c5-fb82-4f9a-8e58-81d083110fde",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "4450ef85-2ce8-4175-9ff8-1d3728b54197",
+      "agent_id": {
+        "agent_name": "Sparking Melting Magma",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "4cdb53"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/sdks/oak-curriculum-sdk/src/public/evidence-corpus.ts",
+            "packages/sdks/oak-curriculum-sdk/src/public/mcp-tools.ts",
+            "packages/sdks/oak-curriculum-sdk/package.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T23:25:49.000Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Absorb architecture-expert-betty post-exec on 7d8f0b0c: (C1) drop plan-file reference from mcp-tools.ts per no-moving-targets-in-permanent-docs; (C2) move 12 corpus type re-exports out of mcp-tools.ts into new public/evidence-corpus.ts subpath for cohesion + add package.json exports entry. No external consumer yet; safe to relocate.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T23:27:32.000Z",
+        "closed_by": {
+          "agent_name": "Sparking Melting Magma",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "4cdb53"
+        },
+        "summary": "architecture-expert-betty absorption commit 5ec02aec: dropped plan-file reference per no-moving-targets rule + relocated 12 corpus re-exports from mcp-tools.ts to dedicated public/evidence-corpus.ts subpath + added package.json exports entry. 3 files +44/-21. All gates green (depcruise + lint + type-check). 2 advisory items deferred to natural future cycles (corpus-errors.ts split at gate-1b; NotImplementedYet third-instance review).",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4450ef85-2ce8-4175-9ff8-1d3728b54197",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d1e32973-fce2-4197-b186-82d8d5a39361",
+      "agent_id": {
+        "agent_name": "Sparking Melting Magma",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "4cdb53"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/types.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T23:29:31.000Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Absorb SVW reciprocal post-exec on 7d8f0b0c: 3 plan-vs-impl divergences in RankOptions.context (focus enum 4->6 members; pp_percentage absent; max_results re-leveled from inside context to outer RankOptions) + 1 TSDoc note recording deliberate non-generic CompareOptions divergence per type-expert C2.",
+      "archived_at": "2026-05-22",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-22T23:31:18.000Z",
+        "closed_by": {
+          "agent_name": "Sparking Melting Magma",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "4cdb53"
+        },
+        "summary": "SVW reciprocal post-exec absorption commit 9425faa0: 3 plan-vs-impl divergences in RankOptions.context cured (focus 4->6 members; pp_percentage added; max_results re-leveled to outer); 1 deliberate CompareOptions non-generic divergence documented inline per type-expert C2. 1 file +26/-2. All gates green. Worked instance of reciprocal-review pattern catching downstream-integration defects at post-exec window.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d1e32973-fce2-4197-b186-82d8d5a39361",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "09446bf6-8f30-4f89-809f-72c0dbc82208",
+      "agent_id": {
+        "agent_name": "Sparking Melting Magma",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "4cdb53"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/libs/graph-ingest/src/jsonld-compatible/index.ts",
+            "packages/libs/graph-ingest/src/turtle/index.ts",
+            "packages/libs/graph-ingest/package.json",
+            "pnpm-lock.yaml",
+            "pnpm-workspace.yaml",
+            "knip.config.ts",
+            ".dependency-cruiser.mjs",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T23:38:37.000Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "WS2.2 ws2-jsonld-compatible Inc.1a closure: jsonld-compatible ingestion mode + generic Turtle/SKOS parse-to-dataset (n3.js + jsonld.js); new src/turtle/ sub-path barrel + co-located unit tests + SKOS/Turtle fixtures + Test discipline invariant #2 contract test (NamedNode predicates only). Multi-turn execution: intent + claim + survey this turn; reviewers next; author + commit after. Reviewer flags: test-expert + type-expert per plan.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T00:16:47.000Z",
+        "closed_by": {
+          "agent_name": "Sparking Melting Magma",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "4cdb53"
+        },
+        "summary": "WS2.2 ws2-jsonld-compatible LANDED across two commits: scaffold f58bcb80 (deps + turtle barrel + depcruise) + substantive ce0abe26 (normalize-rdfjs + parseJsonLdCompatible + parseTurtle + 3 unit-test files / 9 tests). 5 reviewer conditions absorbed (type-expert C1/C2/C3 + test-expert C1/C2). All gates green (lint + tc + depcruise + 9/9 tests).",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "09446bf6-8f30-4f89-809f-72c0dbc82208",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d7823ed5-1de7-4a42-be8c-c6611119690b",
+      "agent_id": {
+        "agent_name": "Sparking Melting Magma",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "4cdb53"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/libs/graph-ingest/src/jsonld-compatible/index.unit.test.ts",
+            "packages/libs/graph-ingest/src/invariant-2-namednode-predicates.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T00:23:34.000Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Absorb SVW reciprocal post-exec on ce0abe26: (important) replace manual-iteration literal-check pattern with dataset.has(quad(..., literal('Ada')/('Engineer'))) to close C2 coverage; (minor 2) inline TSDoc comment documenting invariant-2 fixture sizing rationale vs per-parser fixtures.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T00:24:40.000Z",
+        "closed_by": {
+          "agent_name": "Sparking Melting Magma",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "4cdb53"
+        },
+        "summary": "SVW reciprocal post-exec absorption commit 361cae35: replaced manual-iteration literal-check pattern with dataset.has(quad(..., literal('Ada')/('Engineer'))) closing C2 coverage; added invariant-2 fixture-sizing rationale inline comment. 2 files +13/-17. Gates green (9/9 tests pass — confirms graph-core's structural equality correctly matches parsed literals).",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d7823ed5-1de7-4a42-be8c-c6611119690b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "b00603bf-802e-49d5-a91b-c4ccee85579b",
+      "agent_id": {
+        "agent_name": "Sparking Melting Magma",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "4cdb53"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/libs/graph-ingest/src/source-path/index.ts",
+            "packages/libs/graph-ingest/src/source-path/index.unit.test.ts",
+            "packages/libs/graph-ingest/src/jsonld-compatible/index.ts",
+            "packages/libs/graph-ingest/src/turtle/index.ts",
+            "packages/libs/graph-ingest/src/jsonld-compatible/index.unit.test.ts",
+            "packages/libs/graph-ingest/src/turtle/index.unit.test.ts",
+            "packages/libs/graph-ingest/src/invariant-3-source-path-preserved.unit.test.ts",
+            "packages/libs/graph-ingest/package.json",
+            ".dependency-cruiser.mjs",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T00:20:04.000Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "WS2.3 ws2-source-mapping Inc.1a closure final cycle: SourceMapping primitives (JSON Pointer RFC 6901 + JSONPath subset); source path preserved end-to-end on every Quad; extend WS2.2 parsers to carry source-map metadata; ship invariant-3 contract test alongside the primitive. Reviewer flags per plan: type-expert + test-expert. Multi-turn execution: intent + claim this turn; reviewers next; author + commit after.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T00:40:46.000Z",
+        "closed_by": {
+          "agent_name": "Sparking Melting Magma",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "4cdb53"
+        },
+        "summary": "WS2.3 cycle split per pre-execution reviewer convergence: ws2-source-mapping (primitives only) LANDED at 6cc7b339 (32 unit tests; jsonPointer/parseSegments/serialiseSegments/TurtleSourceLocation/SourceLocation/quadKey/SourceMap). Parser-integration scope reframed as new ws2-source-map-parser-integration entry (pending; future cycle). Plan amendment committed at c03ace9b. All 5 type-expert + 5 test-expert conditions absorbed; CRITICAL Quad-object-keyed-Map unsafety cured via quadKey() canonical string serialisation; convergent BLOCK on JSON-Pointer-for-Turtle cured via SourceLocation discriminated union.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b00603bf-802e-49d5-a91b-c4ccee85579b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f7156898-4514-4783-95ee-12b3f4d6d9f5",
+      "agent_id": {
+        "agent_name": "Secret Vanishing Wisp",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "981cbe"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T00:48:30Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Absorb Sparking reciprocal post-exec on a2136557 (3 important + 1 suggestion). Inline message file.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T00:53:14Z",
+        "closed_by": {
+          "agent_name": "Secret Vanishing Wisp",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "981cbe"
+        },
+        "summary": "commit 11c05ced: chore(mcp-prompts): absorb Sparking reciprocal post-exec on a2136557 — 3 files, 46/22 +/- ; 765/765 tests; pre-commit gate green; advisory orchestrator non-blocker",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f7156898-4514-4783-95ee-12b3f4d6d9f5",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8b7a910c-5e46-48d3-a79b-062886f9bceb",
+      "agent_id": {
+        "agent_name": "Sparking Melting Magma",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "4cdb53"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/telemetry.ts",
+            "packages/sdks/oak-curriculum-sdk/src/public/evidence-corpus.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T00:57:28.000Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "t14-telemetry-pattern gate-1a partial: typed Sentry seam pattern + ExploreSpanAttrs + EvidenceCorpusSpanConfig<Attrs> generic; pure-type module (no runtime helper per consolidate-at-third-consumer); public/evidence-corpus.ts re-exports for non-orphan + SDK API surface. Pattern is full at gate-1a (typed surface for any future span); instrumentation scope is the one tool t6a (gate-1b adds .recommend/.explain/.compare names additively when their tools land).",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T00:59:04.000Z",
+        "closed_by": {
+          "agent_name": "Sparking Melting Magma",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "4cdb53"
+        },
+        "summary": "t14-telemetry gate-1a partial LANDED at 72cd93f0: typed Sentry seam pattern (EvidenceCorpusSpanName + ExploreSpanAttrs + EvidenceCorpusSpanConfig<Attrs> generic) + public/evidence-corpus.ts re-exports. 2 files +87 lines. No runtime; type-checker is the gate (mirror of t1 precedent). All gates green (depcruise 2267 modules, lint, tc, 763/763 tests). t14 plan status stays pending until gate-1b instrumentation (t6/t7/t8) lands additively.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8b7a910c-5e46-48d3-a79b-062886f9bceb",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ba4bfbcb-43cf-4a65-9e73-068950a5bb8f",
+      "agent_id": {
+        "agent_name": "Sparking Melting Magma",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "4cdb53"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T01:03:28.000Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Session-learnings napkin entry: 4 substantive patterns from this loop window — reciprocal-review empirical value, cycle-split-on-reviewer-convergence discipline, lint-rule-chain as architectural signal, pre-execution-reviewer leverage on Quad-keyed-Map + JSON-Pointer-for-Turtle finds. Append-only; ~50 lines under 100/300 fitness limit.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T01:04:42.000Z",
+        "closed_by": {
+          "agent_name": "Sparking Melting Magma",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "4cdb53"
+        },
+        "summary": "Session-learnings napkin entry landed at a7134f82: 4 substantive patterns from the Sparking Inc.1a closure window — reciprocal-review empirical value (6 catches), cycle-split-on-reviewer-convergence discipline (t13, WS2.3), lint-rule-chain as architectural signal (WS2.2 fixture drop, WS2.3 brand → interface), pre-execution reviewer leverage (Quad-keyed-Map unsafety, JSON-Pointer-for-Turtle BLOCK). 1 file +40 lines; markdownlint clean.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ba4bfbcb-43cf-4a65-9e73-068950a5bb8f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "355d2ddb-a240-4cf0-8e76-18fab4345cd8",
+      "agent_id": {
+        "agent_name": "Lunar Illuminating Eclipse",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "326ea7"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "workspace",
+          "patterns": [
+            "packages/sdks/graph-corpus-sdk/**",
+            "pnpm-workspace.yaml",
+            "knip.config.ts",
+            ".dependency-cruiser.mjs",
+            "pnpm-lock.yaml"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T21:17:38Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "WS4.1: Scaffold packages/sdks/graph-corpus-sdk workspace (typed corpus-adapter boundary; mirrors packages/core/result scaffold precedent from WS1.1@ad2abb69; zero tests in this cycle per atomic-landing invariant — first paired bundle lands with WS4.5). Pre-execution reviewers: config-expert, architecture-expert-fred, test-expert. Post-execution: type-expert + code-expert. Parallel-safe with Foamy WS4.4 and Velvet markdown consolidation.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T06:49:01Z",
+        "closed_by": {
+          "agent_name": "Stormbound Spiralling Breeze",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "b8a5c9"
+        },
+        "summary": "Lunar's WS4.1 workspace claim closed via owner-directed ownership override at 2026-05-23 06:39Z; substance landed under Stormbound Spiralling Breeze authorship in commit 3241893d (under Secret Vanishing Wisp coordination); Lunar Co-Authored-By preserved in commit message",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "355d2ddb-a240-4cf0-8e76-18fab4345cd8",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "15465f06-fc62-49c2-8363-21bb71c45045",
+      "agent_id": {
+        "agent_name": "Lunar Illuminating Eclipse",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "326ea7"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-22T21:31:19Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit WS4.1 graph-corpus-sdk scaffold + SDK_PACKAGE_IMPORTS entry (unblocks Velvet/Foamy/Secret commits).",
+      "intent_to_commit": "7195dbe0-b57e-401a-8055-1cf30ef7730f",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T06:49:01Z",
+        "closed_by": {
+          "agent_name": "Stormbound Spiralling Breeze",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "b8a5c9"
+        },
+        "summary": "Lunar's WS4.1 git:index/head claim closed via owner-directed ownership override; commit window discharged at 3241893d",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "15465f06-fc62-49c2-8363-21bb71c45045",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "337d83bd-76fb-49f8-b972-d28f7984870e",
+      "agent_id": {
+        "agent_name": "Stormbound Spiralling Breeze",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "b8a5c9"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T06:46:58Z",
+      "freshness_seconds": 1200,
+      "sidebar_open": false,
+      "intent": "Stage and commit Lunar's WS4.1 graph-corpus-sdk scaffold (owner-directed ownership override after Lunar silent ~10h). Includes knip-cure absorptions per code-expert verdict (src/index.ts type re-exports of GraphView+Result; knip.config.ts removes redundant entry: line).",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T06:49:01Z",
+        "closed_by": {
+          "agent_name": "Stormbound Spiralling Breeze",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "b8a5c9"
+        },
+        "summary": "WS4.1 ownership-override commit landed at 3241893d; 14 files +311; all gates green; Lunar's two claims also closed under same override",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "337d83bd-76fb-49f8-b972-d28f7984870e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

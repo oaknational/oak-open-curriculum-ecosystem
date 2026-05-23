@@ -856,7 +856,310 @@
       "expires_at": "2026-05-22T19:55:50.958Z",
       "phase": "abandoned",
       "notes": "self-contained lifecycle commit per SKILL exception; closing intent before commit to avoid recursion"
+    },
+    {
+      "intent_id": "80a218c1-03ab-41dd-8ca5-c132def5edeb",
+      "claim_id": "3199c067-8328-4a87-80fa-7e6531e38044",
+      "agent_id": {
+        "agent_name": "Velvet Veiling Wisp",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "b4bb7a"
+      },
+      "files": [
+        ".agent/directives/tdd-as-design.md",
+        ".agent/memory/active/distilled.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/operational/archive/repo-continuity-session-history-2026-05-22.md"
+      ],
+      "commit_subject": "docs(consolidate): critical-surface curation across repo-continuity + distilled + tdd-as-design",
+      "queued_at": "2026-05-22T21:24:16.365Z",
+      "updated_at": "2026-05-22T21:25:52.432Z",
+      "expires_at": "2026-05-22T21:39:16.365Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "6382e27b49b35459ebde5c9aee9afc61577d30304025a620ae4f2fff430de400",
+      "staged_name_status": "M\t.agent/directives/tdd-as-design.md\nM\t.agent/memory/active/distilled.md\nM\t.agent/memory/operational/archive/repo-continuity-session-history-2026-05-22.md\nM\t.agent/memory/operational/repo-continuity.md\n",
+      "notes": "validate-boundaries red — peer Lunar mid-authoring graph-corpus-sdk WS4.1; ESLint SDK boundary inventory expects the workspace but it has not yet been registered in pnpm-workspace.yaml. Pre-existing-but-blocking per the all-gates-blocking doctrine. Awaiting Lunar's WS4.1 commit landing or owner direction."
+    },
+    {
+      "intent_id": "fb6126db-cc5d-42a1-9a1c-733fd5a28e8a",
+      "claim_id": "2c9799f6-2b88-4b4d-a765-650c546d86ad",
+      "agent_id": {
+        "agent_name": "Foamy Fathoming Compass",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ecb459"
+      },
+      "files": [
+        ".agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md",
+        ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md"
+      ],
+      "commit_subject": "docs(plans): land WS4.4 test-partition amendment per gate-1a addendum",
+      "queued_at": "2026-05-22T21:25:51.868Z",
+      "updated_at": "2026-05-22T21:27:27.735Z",
+      "expires_at": "2026-05-22T21:40:51.868Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "027cf2dab887ded7b42036875d0e08d8bd2f7f15e04294d12d1e7415271504df",
+      "staged_name_status": "M\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md\nM\t.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md\n",
+      "notes": "Pre-commit gate blocked: SDK boundary inventory expects @oaknational/graph-corpus-sdk (Lunar's in-progress WS4.1 registration) but the workspace does not yet exist. Inherited inconsistency from Lunar's authoring window. Will retry after Lunar's WS4.1 commit lands or boundary registration is rolled back."
+    },
+    {
+      "intent_id": "d2492c0a-a1a3-4e85-8841-b961967db7ee",
+      "claim_id": "15465f06-fc62-49c2-8363-21bb71c45045",
+      "agent_id": {
+        "agent_name": "Lunar Illuminating Eclipse",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "326ea7"
+      },
+      "files": [
+        "packages/sdks/graph-corpus-sdk/package.json",
+        "packages/sdks/graph-corpus-sdk/tsconfig.json",
+        "packages/sdks/graph-corpus-sdk/tsconfig.build.json",
+        "packages/sdks/graph-corpus-sdk/tsconfig.lint.json",
+        "packages/sdks/graph-corpus-sdk/eslint.config.ts",
+        "packages/sdks/graph-corpus-sdk/vitest.config.ts",
+        "packages/sdks/graph-corpus-sdk/tsup.config.ts",
+        "packages/sdks/graph-corpus-sdk/README.md",
+        "packages/sdks/graph-corpus-sdk/src/index.ts",
+        "packages/sdks/graph-corpus-sdk/src/eef-strands/index.ts",
+        "packages/sdks/graph-corpus-sdk/src/threads/index.ts",
+        "pnpm-workspace.yaml",
+        "knip.config.ts",
+        ".dependency-cruiser.mjs",
+        "pnpm-lock.yaml",
+        "packages/core/oak-eslint/src/rules/boundary.ts"
+      ],
+      "commit_subject": "feat(graph-corpus-sdk): scaffold @oaknational/graph-corpus-sdk workspace (WS4.1)",
+      "queued_at": "2026-05-22T21:32:17.624Z",
+      "updated_at": "2026-05-22T21:32:55.666Z",
+      "expires_at": "2026-05-22T21:47:17.624Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "95827fb25a833b149edf06e1287b29a88d3cc990b8dec38ed3ff0e715071545f",
+      "staged_name_status": "M\t.dependency-cruiser.mjs\nM\tknip.config.ts\nM\tpackages/core/oak-eslint/src/rules/boundary.ts\nA\tpackages/sdks/graph-corpus-sdk/README.md\nA\tpackages/sdks/graph-corpus-sdk/eslint.config.ts\nA\tpackages/sdks/graph-corpus-sdk/package.json\nA\tpackages/sdks/graph-corpus-sdk/src/eef-strands/index.ts\nA\tpackages/sdks/graph-corpus-sdk/src/index.ts\nA\tpackages/sdks/graph-corpus-sdk/src/threads/index.ts\nA\tpackages/sdks/graph-corpus-sdk/tsconfig.build.json\nA\tpackages/sdks/graph-corpus-sdk/tsconfig.json\nA\tpackages/sdks/graph-corpus-sdk/tsconfig.lint.json\nA\tpackages/sdks/graph-corpus-sdk/tsup.config.ts\nA\tpackages/sdks/graph-corpus-sdk/vitest.config.ts\nM\tpnpm-lock.yaml\nM\tpnpm-workspace.yaml\n",
+      "notes": "commit-workflow git-commit failure: git commit exited with code 1: 🔍 Running pre-commit checks...\n📝 Checking formatting on staged files...\n$ pnpm --filter @oaknational/agent-tools repo-check prettier-staged\n$ cd .. && pnpm exec tsx agent-tools/scripts/repo-check.ts prettier-staged\nChecking formatting...\n[warn] packages/sdks/graph-corpus-sdk/tsconfig.build.json\n[warn] Code style issues found in the above file. Run Prettier with --write to fix.\n/Users/jim/code/oak/oak-open-curriculum-ecosystem/agent-tools:\n[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @oaknational/agent-tools@0.1.0 repo-check: `cd .. && pnpm exec tsx agent-tools/scripts/repo-check.ts prettier-staged`\nExit status 1\n[ELIFECYCLE] Command failed with exit code 1.\n❌ Formatting issues found!\n💡 Run 'pnpm format:root' to fix formatting issues, then stage the changes\nhusky - pre-commit script failed (code 1)"
+    },
+    {
+      "intent_id": "7195dbe0-b57e-401a-8055-1cf30ef7730f",
+      "claim_id": "15465f06-fc62-49c2-8363-21bb71c45045",
+      "agent_id": {
+        "agent_name": "Lunar Illuminating Eclipse",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "326ea7"
+      },
+      "files": [
+        "packages/sdks/graph-corpus-sdk/package.json",
+        "packages/sdks/graph-corpus-sdk/tsconfig.json",
+        "packages/sdks/graph-corpus-sdk/tsconfig.build.json",
+        "packages/sdks/graph-corpus-sdk/tsconfig.lint.json",
+        "packages/sdks/graph-corpus-sdk/eslint.config.ts",
+        "packages/sdks/graph-corpus-sdk/vitest.config.ts",
+        "packages/sdks/graph-corpus-sdk/tsup.config.ts",
+        "packages/sdks/graph-corpus-sdk/README.md",
+        "packages/sdks/graph-corpus-sdk/src/index.ts",
+        "packages/sdks/graph-corpus-sdk/src/eef-strands/index.ts",
+        "packages/sdks/graph-corpus-sdk/src/threads/index.ts",
+        "pnpm-workspace.yaml",
+        "knip.config.ts",
+        ".dependency-cruiser.mjs",
+        "pnpm-lock.yaml",
+        "packages/core/oak-eslint/src/rules/boundary.ts"
+      ],
+      "commit_subject": "feat(graph-corpus-sdk): scaffold @oaknational/graph-corpus-sdk workspace (WS4.1)",
+      "queued_at": "2026-05-22T21:33:41.013Z",
+      "updated_at": "2026-05-22T21:34:18.040Z",
+      "expires_at": "2026-05-22T21:48:41.013Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "291479b81ee7e598b2109f1bd6869e6e8c0fbe3705994c85e626df3ded983574",
+      "staged_name_status": "M\t.dependency-cruiser.mjs\nM\tknip.config.ts\nM\tpackages/core/oak-eslint/src/rules/boundary.ts\nA\tpackages/sdks/graph-corpus-sdk/README.md\nA\tpackages/sdks/graph-corpus-sdk/eslint.config.ts\nA\tpackages/sdks/graph-corpus-sdk/package.json\nA\tpackages/sdks/graph-corpus-sdk/src/eef-strands/index.ts\nA\tpackages/sdks/graph-corpus-sdk/src/index.ts\nA\tpackages/sdks/graph-corpus-sdk/src/threads/index.ts\nA\tpackages/sdks/graph-corpus-sdk/tsconfig.build.json\nA\tpackages/sdks/graph-corpus-sdk/tsconfig.json\nA\tpackages/sdks/graph-corpus-sdk/tsconfig.lint.json\nA\tpackages/sdks/graph-corpus-sdk/tsup.config.ts\nA\tpackages/sdks/graph-corpus-sdk/vitest.config.ts\nM\tpnpm-lock.yaml\nM\tpnpm-workspace.yaml\n",
+      "notes": "commit-workflow git-commit failure: git commit exited with code 128: fatal: Unable to create '/Users/jim/code/oak/oak-open-curriculum-ecosystem/.git/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue."
+    },
+    {
+      "intent_id": "50b5890b-86f7-4ff1-ae59-3be3f0f0fbf0",
+      "claim_id": "ccecfb84-bba1-4342-a817-7131ac9b1700",
+      "agent_id": {
+        "agent_name": "Sparking Melting Magma",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "4cdb53"
+      },
+      "files": [
+        ".agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md"
+      ],
+      "commit_subject": "chore(eef-evidence-corpus): mark t20-credits gate-1a Round 1 completed",
+      "queued_at": "2026-05-22T21:54:40.299Z",
+      "updated_at": "2026-05-22T22:00:20.786Z",
+      "expires_at": "2026-05-22T22:09:40.299Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "1a68919f3ef58993b6f6858e52efa4618cf3f2335d164b29e25fb6b6320a7ef3",
+      "staged_name_status": "M\t.agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md\n",
+      "notes": "commit-workflow git-commit failure: git commit exited with code 1: 🔍 Running pre-commit checks...\n📝 Checking formatting on staged files...\n$ pnpm --filter @oaknational/agent-tools repo-check prettier-staged\n$ cd .. && pnpm exec tsx agent-tools/scripts/repo-check.ts prettier-staged\nChecking formatting...\nAll matched files use Prettier code style!\n🔍 Running markdownlint on staged Markdown files...\n$ pnpm --filter @oaknational/agent-tools repo-check markdownlint-staged\n$ cd .. && pnpm exec tsx agent-tools/scripts/repo-check.ts markdownlint-staged\n🧭 Running workspace-owned repo validators...\n$ pnpm --filter @oaknational/eslint-plugin-standards validate-boundaries && pnpm --filter @oaknational/agent-tools validate-no-stale-script-invocations\n$ cd ../../.. && pnpm exec tsx packages/core/oak-eslint/scripts/validate-boundaries.ts\n$ cd .. && pnpm exec tsx agent-tools/scripts/validate-no-stale-script-invocations.ts\nvalidate-no-stale-script-invocations: OK (no stale root `scripts/...` invocations)\n🐚 Linting shell scripts...\n$ pnpm lint:shell:syntax\n$ bash -n apps/oak-curriculum-mcp-streamable-http/scripts/*.sh\n🧪 Running type-check, lint, and unit tests...\n• turbo 2.9.12\n\n   • Packages in scope: @oaknational/agent-tools, @oaknational/build-metadata, @oaknational/curriculum-sdk, @oaknational/design-tokens-core, @oaknational/env, @oaknational/env-resolution, @oaknational/eslint-plugin-standards, @oaknational/graph-core, @oaknational/graph-corpus-sdk, @oaknational/graph-ingest, @oaknational/graph-project, @oaknational/logger, @oaknational/oak-curriculum-mcp-streamable-http, @oaknational/oak-design-ink, @oaknational/oak-design-tokens, @oaknational/oak-search-sdk, @oaknational/observability, @oaknational/openapi-zod-client-adapter, @oaknational/result, @oaknational/sdk-codegen, @oaknational/search-cli, @oaknational/search-contracts, @oaknational/sentry-node, @oaknational/type-helpers\n   • Running type-check, lint, test in 24 packages\n   • Remote caching disabled\n\n@oaknational/graph-core:lint: cache miss, executing 40a2cf439e6dc609\n@oaknational/graph-core:lint: $ eslint .\n@oaknational/graph-core:lint: \n@oaknational/graph-core:lint: /Users/jim/code/oak/oak-open-curriculum-ecosystem/packages/core/graph-core/src/graph-view/index.ts\n@oaknational/graph-core:lint:   100:15  error  Array type using 'ReadonlyArray<unknown>' is forbidden. Use 'readonly unknown[]' instead                                @typescript-eslint/array-type\n@oaknational/graph-core:lint:   104:19  error  Don't use `object` as a type. FORBIDDEN: object type is too vague. Use a specific type that describes the actual shape  @typescript-eslint/no-restricted-types\n@oaknational/graph-core:lint:   106:51  error  Array type using 'ReadonlyArray<unknown>' is forbidden. Use 'readonly unknown[]' instead                                @typescript-eslint/array-type\n@oaknational/graph-core:lint:   110:32  error  Don't use `object` as a type. FORBIDDEN: object type is too vague. Use a specific type that describes the actual shape  @typescript-eslint/no-restricted-types\n@oaknational/graph-core:lint:   136:5   error  Array type using 'ReadonlyArray<T>' is forbidden. Use 'readonly T[]' instead                                            @typescript-eslint/array-type\n@oaknational/graph-core:lint:   233:19  error  Array type using 'ReadonlyArray<T>' is forbidden. Use 'readonly T[]' instead                                            @typescript-eslint/array-type\n@oaknational/graph-core:lint:   245:24  error  Array type using 'ReadonlyArray<T>' is forbidden. Use 'readonly T[]' instead                                            @typescript-eslint/array-type\n@oaknational/graph-core:lint:   251:1   error  File has too many lines (400). Maximum allowed is 250                                                                   max-lines\n@oaknational/graph-core:lint: \n@oaknational/graph-core:lint: ✖ 8 problems (8 errors, 0 warnings)\n@oaknational/graph-core:lint:   5 errors and 0 warnings potentially fixable with the `--fix` option.\n@oaknational/graph-core:lint: \n@oaknational/graph-core:lint: [ELIFECYCLE] Command failed with exit code 1.\n@oaknational/graph-core#lint:  WARNING  command finished with error, but continuing...\n ERROR  @oaknational/graph-core#lint: command (/Users/jim/code/oak/oak-open-curriculum-ecosystem/packages/core/graph-core) /Users/jim/Library/pnpm/.tools/@pnpm+exe/11.1.1/bin/pnpm run lint exited (1)\n\n Tasks:    89 successful, 90 total\nCached:    80 cached, 90 total\n  Time:    5.548s \nFailed:    @oaknational/graph-core#lint\n\n ERROR  run failed: command  exited (1)\n❌ Type-check, lint, or unit tests failed!\nhusky - pre-commit script failed (code 1)"
+    },
+    {
+      "intent_id": "57fbb912-2864-496d-86d5-27612c07131e",
+      "claim_id": "4deb1035-8f8e-4e5a-84bb-9f9b1250341a",
+      "agent_id": {
+        "agent_name": "Secret Vanishing Wisp",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "981cbe"
+      },
+      "files": [
+        "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-grounded-lesson-plan-messages.ts",
+        "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-grounded-lesson-plan-messages.unit.test.ts",
+        "packages/sdks/oak-curriculum-sdk/src/mcp/mcp-prompts.ts",
+        "packages/sdks/oak-curriculum-sdk/src/mcp/mcp-prompts.unit.test.ts"
+      ],
+      "commit_subject": "feat(mcp-prompts): land t10 eef-evidence-grounded-lesson-plan prompt",
+      "queued_at": "2026-05-22T22:24:23.861Z",
+      "updated_at": "2026-05-22T22:25:45.417Z",
+      "expires_at": "2026-05-22T22:39:23.861Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "60c766e698319cadd1c77c95a819b06964c67099a8731d1f0564e66bfb1d37d8",
+      "staged_name_status": "A\tpackages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-grounded-lesson-plan-messages.ts\nA\tpackages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-grounded-lesson-plan-messages.unit.test.ts\nM\tpackages/sdks/oak-curriculum-sdk/src/mcp/mcp-prompts.ts\nM\tpackages/sdks/oak-curriculum-sdk/src/mcp/mcp-prompts.unit.test.ts\n",
+      "notes": "Pre-commit hook failed: 4 tsdoc/syntax lint errors in Sparking Melting Magma's untracked packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/freshness.ts (their t13a in-flight authoring) — same failure mode Foamy hit earlier with WS4.4 untracked authoring. Bundle pathspec-disciplined to 4 of my own files; whole-tree lint catches Sparking's broken state. Will retry when Sparking's lint surface clears."
+    },
+    {
+      "intent_id": "830434e9-dc70-4ea8-9be2-4ff7406daf76",
+      "claim_id": "b83a1a3d-a646-4413-bfd2-197c37c5a3b9",
+      "agent_id": {
+        "agent_name": "Sparking Melting Magma",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "4cdb53"
+      },
+      "files": [
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/operational/threads/eef.next-session.md",
+        ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
+        ".agent/memory/operational/pending-graduations.md",
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/active/patterns/reciprocal-cross-agent-reviewer-dispatch.md",
+        ".agent/memory/active/patterns/honest-restructure-over-band-aid.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/state/collaboration/shared-comms-log.md"
+      ],
+      "commit_subject": "chore(continuity): first-out closeout synthesis for 2026-05-22 to 2026-05-23 team-session",
+      "queued_at": "2026-05-23T07:04:48.677Z",
+      "updated_at": "2026-05-23T07:06:28.213Z",
+      "expires_at": "2026-05-23T07:19:48.677Z",
+      "phase": "abandoned",
+      "staged_name_status": "M\t.agent/memory/active/napkin.md\nA\t.agent/memory/active/patterns/honest-restructure-over-band-aid.md\nA\t.agent/memory/active/patterns/reciprocal-cross-agent-reviewer-dispatch.md\nM\t.agent/memory/operational/pending-graduations.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/connecting-oak-resources.next-session.md\nM\t.agent/memory/operational/threads/eef.next-session.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nM\t.agent/state/collaboration/shared-comms-log.md\n",
+      "staged_bundle_fingerprint": "7248bd5a8f12df73f35c8c19097934645bcd295ff7b3d291b2d8c3d305f93c06",
+      "notes": "commit-workflow git-commit failure: git commit exited with code 1: 🔍 Running pre-commit checks...\n📝 Checking formatting on staged files...\n$ pnpm --filter @oaknational/agent-tools repo-check prettier-staged\n$ cd .. && pnpm exec tsx agent-tools/scripts/repo-check.ts prettier-staged\nChecking formatting...\nAll matched files use Prettier code style!\n🔍 Running markdownlint on staged Markdown files...\n$ pnpm --filter @oaknational/agent-tools repo-check markdownlint-staged\n$ cd .. && pnpm exec tsx agent-tools/scripts/repo-check.ts markdownlint-staged\n.agent/memory/active/napkin.md:469:1 error MD004/ul-style Unordered list style [Expected: dash; Actual: plus]\n.agent/memory/active/napkin.md:469 error MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: \"+ identification is the missin...\"]\n.agent/memory/active/napkin.md:473 error MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: \"- **Coordinator-discovery for ...\"]\n.agent/memory/active/napkin.md:564:1 error MD004/ul-style Unordered list style [Expected: dash; Actual: plus]\n.agent/memory/active/napkin.md:564 error MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: \"+ rule name + minimal change)....\"]\n.agent/memory/active/napkin.md:613 error MD012/no-multiple-blanks Multiple consecutive blank lines [Expected: 1; Actual: 2]\n.agent/memory/active/napkin.md:614 error MD012/no-multiple-blanks Multiple consecutive blank lines [Expected: 1; Actual: 3]\n.agent/memory/active/patterns/honest-restructure-over-band-aid.md:60 error MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: \"- `graph-view/index.ts` (28 li...\"]\n/Users/jim/code/oak/oak-open-curriculum-ecosystem/agent-tools:\n[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @oaknational/agent-tools@0.1.0 repo-check: `cd .. && pnpm exec tsx agent-tools/scripts/repo-check.ts markdownlint-staged`\nExit status 1\n[ELIFECYCLE] Command failed with exit code 1.\n❌ Markdownlint issues found!\n💡 Run 'pnpm markdownlint:root' to fix markdown issues, then stage the changes\nhusky - pre-commit script failed (code 1)"
+    },
+    {
+      "intent_id": "57322e29-f2c6-4456-b6f4-77d1ba215c22",
+      "claim_id": "b83a1a3d-a646-4413-bfd2-197c37c5a3b9",
+      "agent_id": {
+        "agent_name": "Sparking Melting Magma",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "4cdb53"
+      },
+      "files": [
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/operational/threads/eef.next-session.md",
+        ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
+        ".agent/memory/operational/pending-graduations.md",
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/active/patterns/reciprocal-cross-agent-reviewer-dispatch.md",
+        ".agent/memory/active/patterns/honest-restructure-over-band-aid.md",
+        ".agent/experience/2026-05-23-first-out-closeout-secret-vanishing-wisp.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/state/collaboration/shared-comms-log.md"
+      ],
+      "commit_subject": "chore(continuity): first-out closeout synthesis for 2026-05-22 to 2026-05-23 team-session",
+      "queued_at": "2026-05-23T07:06:39.647Z",
+      "updated_at": "2026-05-23T07:07:11.486Z",
+      "expires_at": "2026-05-23T07:21:39.647Z",
+      "phase": "pre_commit",
+      "staged_name_status": "A\t.agent/experience/2026-05-23-first-out-closeout-secret-vanishing-wisp.md\nM\t.agent/memory/active/napkin.md\nA\t.agent/memory/active/patterns/honest-restructure-over-band-aid.md\nA\t.agent/memory/active/patterns/reciprocal-cross-agent-reviewer-dispatch.md\nM\t.agent/memory/operational/pending-graduations.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/connecting-oak-resources.next-session.md\nM\t.agent/memory/operational/threads/eef.next-session.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nM\t.agent/state/collaboration/shared-comms-log.md\n",
+      "staged_bundle_fingerprint": "617159268732c8111e9029ed1e4684383425262e008a61984430e5ebdcbb7240"
     }
   ],
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "9c163e1c-0550-4b28-b4e7-853528d40d6a",
+      "agent_id": {
+        "agent_name": "Sparking Melting Magma",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "4cdb53"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/libs/graph-ingest/src/jsonld-compatible/index.ts",
+            "packages/libs/graph-ingest/src/turtle/index.ts",
+            "packages/libs/graph-ingest/src/jsonld-compatible/index.unit.test.ts",
+            "packages/libs/graph-ingest/src/turtle/index.unit.test.ts",
+            "packages/libs/graph-ingest/src/invariant-2-namednode-predicates.unit.test.ts",
+            "packages/libs/graph-ingest/src/invariant-3-source-path-preserved.unit.test.ts",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T01:08:33.000Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "ws2-source-map-parser-integration (WS2.3 follow-on split out at c03ace9b): per-quad source-location attachment in WS2.2 parsers via custom JSON-LD walker (replaces jsonld.toRDF route) + n3 StreamParser refactor for Turtle (line/column); atomic-landing parser return-type change from Result<DatasetCore> to Result<{dataset, sourceMap}>; ships invariant-3 contract test. Multi-turn execution: intent + claim this turn; reviewer dispatch next; author + commit after."
+    },
+    {
+      "claim_id": "a521b84a-8da7-429a-b54a-599c37efac27",
+      "agent_id": {
+        "agent_name": "Secret Dimming Shade",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "5a6e56"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T06:13:29Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "fix(format): whitespace-only prettier normalization on two graph-ingest files to unblock 26-commit push"
+    },
+    {
+      "claim_id": "b83a1a3d-a646-4413-bfd2-197c37c5a3b9",
+      "agent_id": {
+        "agent_name": "Sparking Melting Magma",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "4cdb53"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/eef.next-session.md",
+            ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/patterns/reciprocal-cross-agent-reviewer-dispatch.md",
+            ".agent/memory/active/patterns/honest-restructure-over-band-aid.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T07:03:19.000Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "first-out closeout continuity-surface commit — SVW substance + Sparking small refresh updates",
+      "intent_to_commit": "57322e29-f2c6-4456-b6f4-77d1ba215c22"
+    }
+  ]
 }

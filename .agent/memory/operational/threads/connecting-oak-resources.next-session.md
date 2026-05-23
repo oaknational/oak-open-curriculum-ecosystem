@@ -1,5 +1,88 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
+## 2026-05-22 → 2026-05-23 multi-agent gate-1a substrate-floor team session — graph-stack work summary (first-out closeout: Secret Vanishing Wisp / `981cbe`)
+
+This thread is the historical container for the graph-substrate work that
+executes the active `eef` first-feature delivery. The 2026-05-22 → 2026-05-23
+team session landed substantial graph-stack Round 1+2 substrate work; this
+entry captures the graph-stack-specific commits + outstanding state. Full
+team-session synthesis lives at
+[`eef.next-session.md` § Session 2026-05-22 → 2026-05-23](eef.next-session.md).
+
+**Graph-stack Inc.1a closure progress — Round 1+2 cycles landed**:
+
+| Cycle | Commit(s) | Owner |
+|---|---|---|
+| WS3.3 graph-project adjacency status flip (substantive at `f4ca84f6` prior session) | `83179e11` | Foamy Fathoming Compass / `ecb459` |
+| WS4.4 graph-core GraphView interface + T7a array-stop compile-time smoke-test (11 files, +540/-3) | `1fc5b491` (substantive) + `bf7fa545` (test-partition amendment) + `db5271af` (test-expert absorb) | Foamy Fathoming Compass / `ecb459` |
+| WS2.2 graph-ingest jsonld-compatible + Turtle parsers + §invariant-2 contract (7 files; vendor-isolation boundary at `normalize-rdfjs.ts`; n3.js + jsonld.js deps) | `f58bcb80` (scaffold + deps) + `ce0abe26` (substantive) + `361cae35` (SVW-reciprocal absorb) | Sparking Melting Magma / `4cdb53` |
+| WS2.3 source-path primitives (JsonPointer wrapper + quadKey canonical Quad-key + SourceLocation discriminated union; 32 unit tests) | `6cc7b339` (primitives) + `c03ace9b` (plan split into primitives + parser-integration follow-on) | Sparking Melting Magma / `4cdb53` |
+| Push-blocker prettier-format cure on Sparking's WS2.3 + Turtle source files | `644c937b` | Secret Dimming Shade / `5a6e56` |
+
+**Inc.1a outstanding**:
+
+- **WS4.1 graph-corpus-sdk scaffold — LANDED at `3241893d`** (Stormbound
+  Spiralling Breeze / `b8a5c9`, owner-directed ownership-override at 06:39Z
+  2026-05-23 after Lunar silent ~10h since the `e1b9561e` COMMIT_EDITMSG
+  incident). 14 files (+311 lines) preserving Lunar's substance unchanged
+  with `Co-Authored-By: Lunar Illuminating Eclipse`; two pre-execution
+  code-expert absorptions baked in (`src/index.ts` placeholder replaced
+  with type re-exports of `GraphView` + `Result<T, E>` to make deps
+  knip-visible and declare the consumer contract; `knip.config.ts`
+  explicit `entry:` removed since knip auto-detects sub-path entries from
+  package.json `exports`). Lunar's `355d2ddb` (workspace) + `15465f06`
+  (git:index/head) claims closed at the same commit. Reciprocal
+  post-execution code-expert verdict on `3241893d` (Sparking Melting Magma):
+  APPROVE-WITH-SUGGESTIONS — no critical, 2 important (workspace-tier
+  ESLint rule-name + root barrel comment vs sub-path empty stubs), 4
+  suggestions; full verdict in comms stream.
+- **WS2.3 parser-integration follow-on** — Sparking Melting Magma /
+  `4cdb53` opened claim `9c163e1c` (ws2-source-map-parser-integration) at
+  01:08Z 2026-05-23 but never authored. Multi-turn intent posted; session
+  hit ceiling at 15+ cycles. Clean pickup for any agent: per-quad
+  source-location attachment refactor across both WS2.2 parsers — JSON-LD-
+  compatible needs a custom document walker (`jsonld.toRDF(...)` strips
+  per-element provenance during the n-quads round-trip); Turtle needs n3.js
+  StreamParser refactor (synchronous `parse(input, null)` callback exposes
+  no per-quad line/column; StreamParser does). Parser return-type changes
+  atomic per test-expert C4: both parsers return
+  `Result<{ dataset, sourceMap }, ParseError>`. Plus §invariant-3 contract
+  test (`packages/libs/graph-ingest/src/invariant-3-source-path-preserved.unit.test.ts`)
+  - plan amendment flipping `ws2-source-map-parser-integration` status.
+
+**Downstream blocked**:
+
+- **WS4.5 EefStrandsGraphView adapter** (Foamy's natural next cycle) —
+  **NOW UNBLOCKED** at `3241893d`. Foamy at session-end pacing pause (4
+  commits landed this session).
+- **t2-zod-loader** — **NOW UNBLOCKED** at `3241893d` (the
+  `@oaknational/graph-corpus-sdk` import path is stable); still needs
+  `packages/sdks/oak-curriculum-sdk/src/mcp/data/eef-toolkit.json` copy
+  from the repo-held reference at
+  `.agent/plans/sector-engagement/eef/reference/eef-toolkit.json`.
+- **t6a-explore-tool** — still blocked on t2 + WS4.5.
+
+**Pattern surfacings from this team session** (full enumeration at
+`pending-graduations.md` 2026-05-23 first-out closeout entry):
+
+- **Vendor-isolation boundary discipline** — Sparking's WS2.2 routes all
+  n3.js + jsonld.js Terms through graph-core's `DataFactory` constructors
+  via the new `normalize-rdfjs.ts` boundary module. The `Literal.direction:
+  string | null` (n3 surface) is collapsed to graph-core's `'' | 'ltr' |
+  'rtl'` at the boundary, documented as the RDF-1.1 surface graph-core
+  commits to. Forward-compatibility note for RDF 1.2 base-direction lives
+  at the change point. Pattern is the default for any future graph-ingest
+  vendor-parser addition.
+- **Honest-restructure-over-band-aid** — Foamy split WS4.4 graph-view/index.ts
+  into 3 modules when it hit `max-lines: 250` ceiling, rather than compress
+  to pass. Sparking deleted the binding test per `no-conditional-tests.md`
+  doctrine, rather than use a file-existence guard.
+- **Sparking architecture-expert-fred cross-cycle audit returned GO**
+  on system-level cohesion across t1 + WS2.2 + WS2.3 (ADR-041 + ADR-108
+  compliant per Sparking napkin entry at `a7134f82`).
+
+---
+
 ## Cycle 10 LANDED at 2389ff5e (attribution-corrected) — Shaded, 2026-05-22T15:00Z
 
 **Substance** (Cycle 10 / task #10 — stdout/launcher convergence): 2 bin files (`agent-tools/src/bin/commit-queue.ts` + `collaboration-state.ts`) converted from `.then/.catch` Promise chains to top-level try/await. Streaming-asymmetry preserved: `collaboration-state.ts` keeps `stdout: process.stdout` runtime arg (for `comms watch`); `commit-queue.ts` does not (non-streaming).

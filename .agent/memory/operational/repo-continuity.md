@@ -17,20 +17,36 @@ Earlier archives remain under [`archive/`](archive/).
 ## Current State
 
 - Current branch: `feat/mcp-graph-support-foundation`.
-  HEAD `ad67d24f` (Velvet Veiling Wisp nested-bullet defect-class
-  archive sweep: 7 graduated bodies relocated from pending-graduations.md
-  to the 2026-05-22 archive snapshot; cumulative 2026-05-22 evening
-  drain `−629` lines on pending-graduations.md). Prior:
-  `44d23533` (Velvet Veiling Wisp primary backfill archive sweep: 20
-  graduated bodies relocated; `−382` lines net). Prior:
-  `a6015381` (peer chore continuity for Shadowed pass). Prior:
-  `a49e7a21` (Shadowed Hiding Shade deep-graduation pass under
-  owner direction: 8 Tier A doctrine landings + 9 Tier B pattern/draft
-  captures + 5 Tier C per-user memory marker updates; 34 files
-  +1983/-163; husky pre-commit chain green). Prior: `3f6b258a`
-  (Starlit Phase Final SKILL update for commit-queue-intent-scope-discipline
-  arc; 4 files +154/-0). Prior: `896312d0` (Starlit Cycle 1.3 atomic
-  TDD; 9 files +297/-687 net; 472/472 tests green; 87/87 turbo).
+  HEAD `3241893d` (Stormbound Spiralling Breeze WS4.1 graph-corpus-sdk
+  scaffold landing under owner-directed ownership-override after Lunar
+  silent ~10h since the `e1b9561e` COMMIT_EDITMSG incident; Lunar substance
+  preserved with `Co-Authored-By: Lunar Illuminating Eclipse`; SVW
+  coordination preserved in commit body). The 2026-05-22 → 2026-05-23
+  multi-agent gate-1a substrate-floor team session landed **19 commits across
+  6 active agents over ~10 hours** — Round 1+2 substrate floor for the EEF
+  first-feature delivery contract is now effectively complete (9 of 9
+  gate-1a cycles landed: WS4.4 GraphView interface, WS3.3 adjacency, PR-108
+  SonarCloud clearance, t9 guidance constant, t10 lesson-plan prompt, t12
+  citation shape, t13a freshness check, t20 credits attribution, WS4.1
+  graph-corpus-sdk scaffold; plus Round 2 substrate t1 EvidenceCorpus + t14
+  telemetry seam pattern + WS2.2 jsonld-compatible/Turtle + WS2.3 source-path
+  primitives). Lunar's `355d2ddb` (workspace) + `15465f06` (git:index/head)
+  claims closed at `3241893d` under owner-directed override; commit-queue
+  intent `f34a8f74` auto-cleaned post-landing.
+- **First-out closeout authored by Secret Vanishing Wisp / `claude` /
+  claude-opus-4-7 / `981cbe` on 2026-05-23**. This handoff structures
+  continuity surfaces for follow-on `/oak-consolidate-docs` per owner
+  direction; full session arc + pattern surfacings captured in the
+  `eef.next-session.md`, `connecting-oak-resources.next-session.md`,
+  `pending-graduations.md`, and `napkin.md` entries dated 2026-05-22 → 2026-05-23.
+- **Prior HEAD chain before this team window**: `ad67d24f` (Velvet nested-bullet
+  defect-class archive sweep, `−258` lines on pending-graduations.md); `44d23533`
+  (Velvet primary backfill archive sweep, `−382` lines net); `a6015381` (peer
+  chore continuity for Shadowed pass); `a49e7a21` (Shadowed Hiding Shade
+  deep-graduation pass — 8 Tier A doctrine landings + 9 Tier B captures +
+  5 Tier C audit markers; 34 files +1983/-163). Earlier 2026-05-22 statuses
+  archived to
+  [`archive/repo-continuity-session-history-2026-05-22.md`](archive/repo-continuity-session-history-2026-05-22.md).
 - **2026-05-22 (Shadowed Hiding Shade / `claude` / `claude-opus-4-7[1m]` / `e35155`) — deep-graduation pass drains owner-direction-gated buffer entries.**
 
   Owner directive: *"please run a deep graduation of knowledge source materials, the napkin, the comms records, the .remember directory, the vendor specific memory locations. Ignore fitness metric levels for now."*
@@ -94,7 +110,7 @@ for that work but is not itself the active thread.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF first-feature delivery (gate-1a `eef-explore-evidence-for-context`, gate-1b cluster) | [record][eef] | Mistbound Slipping Night / `claude` / Opus 4.7 / `a1cb64` / 2026-05-22 (t12-citation-shape cycle authored end-to-end + commit handed to Stormbound; ff2 + t12 both gate-1a items resolved; **plus seven coordination-substrate graduations** landed under owner-directed promotion — 4 new rules [continuity-surface-orphans, handoff-self-contained, agent-state-observable, owner-attention-at-action-moments (provisional)], 1 rule amendment [pre-execution-review two-shapes], 2 PDR amendments [PDR-063 discontinuity-validation, PDR-014 framing-direction]) |
+| `eef` | EEF first-feature delivery (gate-1a `eef-explore-evidence-for-context`, gate-1b cluster) | [record][eef] | Secret Vanishing Wisp / `claude` / claude-opus-4-7 / `981cbe` / 2026-05-23 (first-out closeout of the 2026-05-22 → 2026-05-23 multi-agent gate-1a substrate-floor team session; t9 `acd2a3f3` + t10 `a2136557` + t10-nits-absorption `11c05ced` landed; reciprocal-review pattern empirically proven 6 defect-catches across the SVW ↔ Sparking + SVW ↔ Foamy axes; Round 1+2 substrate floor effectively complete; WS4.1 sole outstanding gate). Prior on-thread identities this session: Foamy Fathoming Compass / `claude` / claude-opus-4-7 / `ecb459` (WS4.4 substantive `1fc5b491` + amendment `bf7fa545` + test-expert absorption `db5271af` + WS3.3 flip `83179e11`); Sparking Melting Magma / `claude` / claude-opus-4-7 / `4cdb53` (15 commits including t20 `e1d76c54`, t13a `745fe919` + plan-split `968e3cb7` + TSDoc absorb `8f253280`, t1 `7d8f0b0c` + 2 absorptions `5ec02aec` + `9425faa0`, WS2.2 scaffold `f58bcb80` + substantive `ce0abe26` + SVW absorb `361cae35`, WS2.3 primitives `6cc7b339` + plan-split `c03ace9b`, t14 `72cd93f0`, napkin `a7134f82`); Secret Dimming Shade / `claude` / claude-opus-4-7 / `5a6e56` (PR-108 SonarCloud clearance `51a02a93` + push-blocker format-cure `644c937b`); Velvet Veiling Wisp / `claude` / claude-opus-4-7 / `b4bb7a` (3 consolidation commits including the COMMIT_EDITMSG-misattribution incident at `e1b9561e`). Stormbound Floating Wing / `52f264` returned briefly at 06:14Z under /loop cron with ff5 intent then stood down on owner cron cancellation. Lunar Illuminating Eclipse / `326ea7` silent since 21:21Z 2026-05-22 — WS4.1 substance staged uncommitted. Predecessor identity: Mistbound Slipping Night (`a1cb64`) earlier 2026-05-22, t12-citation-shape cycle + 7 coordination-substrate graduations. |
 
 ## Paused Threads
 
@@ -132,9 +148,73 @@ in each thread's next-session record.
 
 ### EEF First-Feature Delivery (active — sole current focus)
 
-Per owner direction 2026-05-22, the active lane is delivery of the first
-user-facing EEF MCP feature, **`eef-explore-evidence-for-context`**, at
-graph-mvp-arc **gate-1a**. The executable path is the strategic-brief
+**Multi-agent team session 2026-05-22 → 2026-05-23 closeout** (first-out
+closeout owner Secret Vanishing Wisp / `981cbe`): Round 1+2 gate-1a
+substrate floor is effectively complete. Eight Round 1 cycles landed
+(WS4.4 GraphView interface at `1fc5b491` + amendment `bf7fa545` + nits
+`db5271af`, WS3.3 adjacency status flip at `83179e11`, PR-108 SonarCloud
+clearance at `51a02a93`, t9 guidance constant at `acd2a3f3`, t10 lesson-plan
+prompt at `a2136557` + nits-absorb `11c05ced`, t12 citation shape earlier
+2026-05-22, t13a freshness check at `745fe919` + plan-split `968e3cb7`
+
+- TSDoc absorb `8f253280`, t20 credits at `e1d76c54`). Round 2 substrate
+adds t1 EvidenceCorpus types at `7d8f0b0c` + 2 absorptions `5ec02aec` +
+`9425faa0`, WS2.2 jsonld-compatible + Turtle parsers at `ce0abe26` (scaffold
+`f58bcb80` + SVW absorb `361cae35`), WS2.3 source-path primitives at
+`6cc7b339` + plan-split `c03ace9b`, t14 telemetry seam pattern at `72cd93f0`,
+and the push-blocker format cure at `644c937b`.
+
+**Sole outstanding gate-1a substrate item**: WS4.1 graph-corpus-sdk scaffold.
+Lunar Illuminating Eclipse / `326ea7` staged 16 files in the shared git index
+at ~21:21Z 2026-05-22 (workspace registration + boundary.ts inventory +
+knip + pnpm-workspace + pnpm-lock + graph-corpus-sdk package source) but
+their commit window failed (the `e1b9561e` commit landed Velvet's content
+with Lunar's message label via the COMMIT_EDITMSG concurrent-write incident).
+Lunar has been silent since the incident broadcast at 21:38Z. Their two
+claims (`355d2ddb` workspace + `15465f06` git:index/head) remain open
+pending their return.
+
+**Other outstanding cycle claims**: Sparking Melting Magma's parser-integration
+follow-on claim `9c163e1c` (ws2-source-map-parser-integration) was opened
+at 01:08Z 2026-05-23 but never authored — multi-turn intent posted, then
+session went quiet. The cycle is split out of WS2.3 substantive per
+`c03ace9b` and remains a clean pickup for any agent: per-quad source-location
+attachment refactor across both WS2.2 parsers (JSON-LD custom walker +
+n3.js StreamParser refactor), atomic landing per test-expert C4. Sparking
+acknowledged session ceiling (15+ cycles).
+
+**Critical-path beyond Round 2**: WS4.5 EefStrandsGraphView adapter (Foamy's
+natural next cycle, blocked on Lunar WS4.1); t2-zod-loader (blocked on
+WS4.1 substance committed); t6a-explore-tool (blocked on t2 + WS4.5);
+ff3 (substrate floor — partial via WS4.4; WS4.5 pending); ff4 (corpus
+todos — most landed, t1+t6a+t2 outstanding); ff5 (shape-understanding
+evidence — Stormbound Floating Wing began an ff5 intent at 06:14Z then
+stood down on cron cancellation; unclaimed); ff6 (terminal acceptance
+bundle).
+
+**Reciprocal-review pattern empirically validated** across the session:
+six substantive defect-catches via cross-agent post-execution reviewer
+dispatch (3 SVW caught on Sparking's cycles; 3 Sparking caught on SVW's
+t10). Plus Foamy → SVW + SVW → Foamy reciprocal exchanges on WS4.4 +
+t9 cycles caught 2 more findings. Full enumeration in `napkin.md`
+2026-05-22 → 2026-05-23 entry.
+
+**Coordination-pattern surfacings this session** (graduation candidates
+in `pending-graduations.md`): (1) authorial-bundle integrity 3rd known
+instance — `git add <file>` can sweep another agent's unstaged edits in
+the same file; cure shape is per-intent line-scoped staging in the
+commit-queue CLI (patch-mode add with recorded fingerprint per intent),
+not just file-scoped pathspec discipline; (2) Cure-1 emergent default —
+intent-scoped message file passed to `commit-queue commit --message-file`
+bypasses the COMMIT_EDITMSG concurrent-write hazard; adopted by Foamy,
+SVW, Sparking, Stormbound; commit-queue CLI should accept per-intent
+default path natively; (3) untracked-WIP whole-tree lint-blocker recurring
+pattern (3 instances: Foamy graph-view, Sparking freshness.ts, Sparking
+source-path); (4) honest-restructure-over-band-aid pattern (Foamy split
+graph-view/index.ts into 3 modules vs compress-to-pass; Sparking deleted
+the binding test per `no-conditional-tests.md` vs file-existence guard).
+
+Earlier prior-history routing: the executable path is the strategic-brief
 addendum
 [`gate-1a-delivery-parallel-execution-addendum.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/current/gate-1a-delivery-parallel-execution-addendum.plan.md)
 authored by Cirrus Circling Plume on 2026-05-21 — dependency-graph-dictated
@@ -500,7 +580,72 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
-**Status (2026-05-22 evening — Velvet Veiling Wisp consolidation curation pass / `claude` / claude-opus-4-7 / `b4bb7a`)**: critical-surface curation per owner direction.
+**Status (2026-05-23 first-out closeout — Secret Vanishing Wisp / `claude` /
+claude-opus-4-7 / `981cbe`)**: **DUE** — multiple consolidate-docs triggers
+fired during the 2026-05-22 → 2026-05-23 team session. Per the
+[`consolidate-docs` SKILL trigger checklist](../../skills/consolidate-docs/SKILL-CANONICAL.md),
+the following are explicitly DUE for a deliberate next-session deep
+consolidation pass:
+
+- **5 new pending-graduations entries** added this handoff (authorial-bundle
+  integrity 3rd-instance cure, Cure-1 emergent commit-queue default,
+  untracked-WIP whole-tree lint-blocker recurring pattern, honest-restructure-
+  over-band-aid pattern, reciprocal cross-agent reviewer dispatch pattern
+  with empirical 6-catch validation). All carry the schema-compliant
+  `[CANDIDATE: ...]` block with `captured-date`, `source-surface`,
+  `graduation-target`, `trigger-condition`, `status`. See
+  [`pending-graduations.md`](pending-graduations.md) §"2026-05-23 first-out
+  closeout — multi-agent team-session pattern surfacings".
+- **Substantive new content in `napkin.md`** at the team-session entry
+  (already committed by Sparking at `a7134f82`) plus this first-out
+  closeout's additions. Mature observations are candidates for distilled
+  rotation at the next deep-consolidation pass.
+- **Multi-thread session touched both `eef` and (substrate-execution lane)
+  graph-stack work in `connecting-oak-resources`**; both thread records
+  updated this handoff. Active-threads identity-summary table refreshed
+  per step 7b.
+- **`pending-graduations.md`** is at 3820 lines (down from 4439 earlier
+  2026-05-22, 14% reduced via Velvet's backfill sweeps `44d23533` +
+  `ad67d24f`); register hygiene is decent but the line-count is still over
+  the `fitness_line_limit: 750` (advisory). Body-archive rotation candidate
+  for next deep pass.
+- **`distilled.md`** remains at ~874 lines per Tempestuous Spiralling
+  Thermal's earlier 2026-05-22 rotation pass (`53b00386`); pressure
+  partially relieved but stable above `fitness_line_limit: 500`. Substantive
+  graduation pass deferred to a dedicated next session.
+- **One uncommitted authorial residue from the team session**: Lunar's
+  WS4.1 substance is staged in the shared git index but never committed
+  (the `e1b9561e` commit landed Velvet's content with Lunar's message
+  label via the COMMIT_EDITMSG concurrent-write incident). Lunar silent
+  since 21:38Z 2026-05-22. The substance is preserved (working tree +
+  index); commit attribution is missing. This is a documented coordination
+  artefact, not a residue to clean — disposition belongs to Lunar's return
+  or to deliberate owner direction.
+
+**Structure for follow-on `/oak-consolidate-docs`**: the next agent invoking
+consolidate-docs should:
+
+1. Read this Deep Consolidation Status entry + `pending-graduations.md`
+   §"2026-05-23 first-out closeout" + `napkin.md` 2026-05-22 → 2026-05-23
+   team-session entry to load the team-session pattern surfacings.
+2. Evaluate the 5 new candidate triggers — particularly the per-intent
+   line-scoped staging cure (3-instance evidence) and the Cure-1
+   commit-queue CLI native shape (emergent default across 4 agents) —
+   for graduation readiness; both have strong evidence for an amendment
+   to `.agent/skills/commit/SKILL-CANONICAL.md` plus a potential
+   `commit-queue` CLI feature work-item.
+3. Run the consolidate-docs §7c thread-record-identity audit gate
+   against the `eef` and `connecting-oak-resources` records refreshed
+   here. The Latest-identity column should reflect the team-session
+   roster.
+4. Address the standing fitness pressure on `pending-graduations.md`
+   (~3820 lines) + `distilled.md` (~874 lines) per the consolidate-docs
+   substance-led routing (mature distilled entries → permanent homes;
+   register-archive rotation for resolved graduated bodies).
+5. Decide on disposition for Lunar's WS4.1 staged substance + the
+   parser-integration claim Sparking opened but never authored.
+
+**Prior status (2026-05-22 evening — Velvet Veiling Wisp consolidation curation pass / `claude` / claude-opus-4-7 / `b4bb7a`)**: critical-surface curation per owner direction.
 
 Four consolidation passes landed today:
 

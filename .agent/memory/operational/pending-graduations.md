@@ -231,6 +231,53 @@ the queue churns.
 
 - **2026-05-22 — Cycle decomposition that produces wrong-layer scaffolding tests is the load-bearing shape (testing-strategy amendment OR pattern)** — captured 2026-05-22; graduated 2026-05-22; target: pattern:where-system-state-is-observable-at-plan-author-time + amendment:tdd-as-design.md; body archived at [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md#backfill-sweep--2026-05-22-evening-velvet-veiling-wisp).
 
+### 2026-05-23 — Agent identity move to (name, UUID id) + tempfile-frontmatter convention (PDR-shaped; multi-schema amendment)
+
+`[captured: 2026-05-23 | source: stormbound-floating-wing/tempfile-collision-incident-and-owner-direction | target: PDR + schema amendments on comms-event.schema.json + active-claims.json + commit-queue intent + handoff-record + tempfile-frontmatter rule | trigger: owner direction (received) — ready for PDR-Proposed authoring | size: M | status: due]`
+
+**Owner direction 2026-05-23** captured to per-user memory `feedback_agent_identity_name_plus_uuid`:
+
+> "agent identities will require two fields, a name and a uuid id, and that all comms events must use both, the name remains the primary means of identification, the uuid is for disambiguation. All temporary agent coordination and collaboration files must contain frontmatter with agent name, id, created at, last updated at"
+
+**Worked instance triggering the direction**: Stormbound Floating Wing / `52f264` drafted a closeout body via `Write` to `/tmp/stormbound-closeout.md`. The path pre-existed from Stormbound Kiting Squall / `ddbea2`'s session (May 22 16:26). Write refused with "File has not been read yet"; a parallel `comms append --body-file` call proceeded with the STALE file, posting Kiting Squall's Cycle 1.1 closeout text under Floating Wing's identity tuple. This is a new sub-class of the authorial-bundle-integrity failure-class SVW flagged at 23:09:17Z (3rd-instance flag on shared-file line-scope drift) — *tempfile-path collision across sessions in shared `/tmp/` namespace over multiple days*.
+
+**Substance summary — two related rules**:
+
+1. **Identity = `(agent_name, id)` two-field shape.** Replaces today's `(agent_name, platform, model, session_id_prefix)` PDR-027 tuple where `session_id_prefix` is a 6-char short form. The new `id` is a full UUID; `agent_name` remains the primary human-readable identifier. Every comms event, active-claim, commit-queue intent, conversation participant, sidebar/joint-decision/escalation reference MUST carry both fields. The `(name, prefix)` routing-pair rule (graduated 2026-05-14 to `.agent/rules/register-identity-on-thread-join.md`) updates to `(name, id)`; `prefix` becomes a chat-readable short form, `id` is the canonical disambiguator.
+
+2. **Tempfile frontmatter requirement.** Every temporary agent coordination / collaboration file (closeout drafts, commit-message drafts, broadcast bodies, handoff records, intent-scoped message files under `.git/.commit-queue/` or `/tmp/`, reviewer-finding scratch-notes, deferred-intent receipts) MUST contain frontmatter with at least: `agent_name`, `id`, `created_at`, `last_updated_at`. Tooling consuming such files (comms append, commit-queue ceremony, handoff-record reader) SHOULD verify the frontmatter identity matches the calling agent before using the body; mismatch → halt, surface to owner.
+
+**Cure shape — PDR-Proposed authoring scope**:
+
+- Schema amendments on `comms-event.schema.json`, `active-claims.json` schema, commit-queue intent shape, handoff-record schema, conversation/sidebar/joint-decision/escalation schemas to require `(agent_name, id)` on every identity reference. Tranched landing (additive `id` field at first, then strict-required) per ADR-183 tranche-ordering precedent.
+- Tooling enforcement: `pnpm agent-tools:collaboration-state -- identity preflight` emits a UUID `id` alongside the existing `agent_name`. `comms append`, `claims open`, `commit-queue` ceremony, handoff-record reader all verify the frontmatter on body files before use.
+- Tempfile-path session-prefix convention named in the relevant SKILL surfaces (commit-queue, session-handoff, start-right-team) as a *secondary* defence (the frontmatter rule is the primary).
+- Per-user memory `feedback_identity_routing_uses_name_and_prefix_pair` updates to name the (name, id) replacement when this PDR lands.
+
+**Cross-references**:
+
+- Builds on PDR-027 (threads, sessions, agent identity); proposes the next-iteration shape.
+- Cures the recurring authorial-bundle-integrity failure-class (Velvet `e1b9561e` 2026-05-22; SVW 23:09:17Z 3rd-instance flag 2026-05-22; Stormbound Floating Wing `0957bc7f` tempfile-collision 2026-05-23) at the substrate level — the existing intent-scoped-message-file "Cure 1" (per Foamy adoption pattern) becomes structural rather than convention-by-practice.
+- Adjacent doctrine: `feedback_templated_loops_need_exit_criteria` (2026-05-23) — both captured in the same owner-direction window after the tempfile-collision incident exposed the gaps.
+
+---
+
+### 2026-05-23 — Templated loops need exit criteria (rule-shaped OR /loop skill amendment)
+
+`[captured: 2026-05-23 | source: stormbound-floating-wing/loop-cancellation-incident-and-owner-direction | target: rule:loop-exit-criteria-required OR amendment:/loop skill | trigger: owner direction (received) — ready for rule-graduation | size: S | status: due]`
+
+**Owner direction 2026-05-23** captured to per-user memory `feedback_templated_loops_need_exit_criteria`:
+
+> "Every /loop, cron, scheduled wakeup must ship with an explicit exit criterion (canonical default: 5 consecutive idle loops → stand down + closeout broadcast); loops without stop conditions become ambient context-budget tax under team load"
+
+**Worked instance**: owner placed Stormbound Floating Wing / `52f264` on `/loop 180s` cron at ~06:13Z, cancelled it ~90s later at 06:15Z immediately after the return-broadcast named a candidate boundary. Corrective signal was *"this loop has no natural off-ramp under the current scoreboard"*. Pre-existing team `/loop` instances (Foamy, Sparking, SVW, Velvet at session-open) ran for hours past their useful commit cadence; Foamy's 06:10Z heartbeat noted ~5h stream silence while the cron continued firing.
+
+**Cure shape**: every `/loop`, cron, ScheduleWakeup invocation MUST ship with an explicit exit criterion at invocation time (named in chat OR defaulting to the 5-idle-loops convention). The `/loop` skill body amendment names the requirement; an opt-out is owner-authorisation per instance. Sits adjacent to the existing rule estate (no analogous rule today; closest is the implicit "stand down when no work" practice).
+
+**Trigger**: owner direction received — ready to graduate as a `.agent/rules/` rule or `/loop` skill amendment at next consolidation pass.
+
+---
+
 ### 2026-05-22 — "Structurally-identical-new-function" pre-authoring drop pattern (PDR-shaped or skill-amendment-shaped)
 
 `[captured: 2026-05-22 | source: stormbound/commit-queue-intent-scope-discipline plan, Cycles 1.1 + 1.2 | target: pattern:structurally-identical-new-function-pre-authoring-drop | trigger: third instance OR owner direction to author | size: S | status: partially-graduated (pattern only)]`
@@ -3818,3 +3865,262 @@ WHEN they do — the more-restrictive Practice-level rule wins.
 - **2026-05-22 — Owner attention is gated at action-moments (Mistbound Slipping Night)** — captured 2026-05-22; graduated 2026-05-22; target: rule:owner-attention-at-action-moments (provisional status); body archived at [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md#backfill-sweep--2026-05-22-evening-velvet-veiling-wisp).
 
 - **2026-05-22 — Post-compaction resumption needs explicit "did prior edits land?" validation (Mistbound Slipping Night)** — captured 2026-05-22; graduated 2026-05-22; target: PDR-063 amendment 2026-05-22 (discontinuity-boundary validation step); body archived at [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md#backfill-sweep--2026-05-22-evening-velvet-veiling-wisp).
+
+## 2026-05-23 first-out closeout — multi-agent team-session pattern surfacings (Secret Vanishing Wisp / `981cbe`)
+
+Five new candidate entries captured at first-out closeout of the 2026-05-22
+→ 2026-05-23 multi-agent gate-1a substrate-floor team session. Two
+co-occurring observations (failure-mode + cure-shape) on the commit-queue
+ceremony; one observed-and-cured-in-session collaboration pattern with
+strong empirical evidence; one recurring untracked-WIP failure mode; one
+cross-cycle architectural-excellence pattern.
+
+### Authorial-bundle integrity 3rd known instance — per-intent line-scoped staging cure for commit-queue CLI
+
+`[CANDIDATE: authorial-bundle-integrity-line-scoped-staging | captured: 2026-05-23 | source: napkin+pattern-emergence+comms-log | target: multi:doc-amend:.agent/skills/commit/SKILL-CANONICAL.md+plan:agent-tooling-commit-queue-cli-per-intent-line-scoped-staging | trigger: n>=3-validation | size: L | status: pending]`
+
+Three known instances of the failure mode `git add <file>` sweeps another
+agent's unstaged edits in the same file when multiple agents touch the same
+working-tree path concurrently:
+
+1. Velvet's `e1b9561e` (2026-05-22 21:38Z) — Velvet's 4-file consolidation
+   content landed under Lunar's WS4.1 commit message; `.git/COMMIT_EDITMSG`
+   single-writer shared state was the proximate cause. Pathspec discipline
+   protected Velvet's file scope but Lunar's message text leaked through.
+2. Sparking's `968e3cb7` (2026-05-23 ~22:21Z) — Sparking's t13 plan
+   amendment commit swept SVW's unstaged t10 plan-file edits along with
+   Sparking's own edits. `git add <plan-file>` operates at file granularity;
+   line-level scope is not protected by pathspec.
+3. Implied 3rd in commit-queue-intent-scope-discipline plan's §Context —
+   Mistbound's ff2 `e48d7f16` + Wooded's `2389ff5e` absorbing Shaded's bin
+   Cycle 10 edits (worked instance pre-our-session; cited in
+   [`agent-tooling/current/commit-queue-intent-scope-discipline.plan.md`](../../plans/agent-tooling/current/commit-queue-intent-scope-discipline.plan.md)).
+
+**Cure shape**: per-intent **line-scoped** staging in the commit-queue CLI
+— e.g. patch-mode `git add -p` with a recorded patch fingerprint per intent.
+NOT just file-scoped pathspec discipline (which only protects file
+membership, not line-level scope within shared files).
+
+Existing tactical cure (Cure-1 below) handles the message-text race but
+not the content-sweep race. Both cures are needed.
+
+Strong empirical evidence (n=3 with cross-agent worked instances) +
+clear destination (`commit-queue` workflow primitive amendment plus
+`.agent/skills/commit/SKILL-CANONICAL.md` §"Intent-Scoped End-to-End"
+extension). Ready for `consolidate-docs` to graduate as a `plan:` work item.
+
+### Cure-1 emergent default across 4 agents — commit-queue CLI per-intent message file natively
+
+`[CANDIDATE: commit-queue-per-intent-message-file-native | captured: 2026-05-23 | source: napkin+pattern-emergence+comms-log | target: multi:doc-amend:.agent/skills/commit/SKILL-CANONICAL.md+plan:agent-tooling-commit-queue-cli-per-intent-message-file | trigger: n>=3-validation+owner-implicit | size: M | status: pending]`
+
+The team converged on intent-scoped message file paths
+(`/tmp/<agent>-<cycle>-commit-msg.txt`) passed to `commit-queue commit
+--message-file <path>` as a workaround for the `.git/COMMIT_EDITMSG`
+concurrent-write hazard exposed by the Velvet `e1b9561e` incident.
+Adopted by **Foamy, SVW, Sparking, Stormbound** without coordination —
+emergent default across 4 agents.
+
+Currently the commit-queue CLI's `--message-file` flag accepts an
+arbitrary path. The Cure-1 discipline lives in the agent's head.
+
+**Cure shape**: commit-queue CLI should accept `--message-file` with a
+per-intent **default** path natively (auto-derive
+`.git/.commit-queue/<intent-id>.msg` if `--message-file` unspecified).
+This removes the manual file-naming discipline that currently lives in
+agent practice. Strict superset of the current behaviour — explicit
+`--message-file <path>` still works.
+
+Pairs with the line-scoped staging cure above. Both are amendments to
+the same `commit-queue` CLI surface; can land as one work-item or two.
+
+### Reciprocal cross-agent reviewer dispatch pattern — empirically validated (n=8 catches)
+
+`[CANDIDATE: reciprocal-cross-agent-reviewer-dispatch | captured: 2026-05-23 | source: napkin+pattern-emergence | target: pattern:reciprocal-cross-agent-reviewer-dispatch (memory/active/patterns/) | trigger: n>=3-validation | size: M | status: pending]`
+
+The session produced **8 substantive defect catches** via cross-agent
+post-execution reviewer dispatch. The pattern: agent A lands cycle X,
+agent B dispatches a reviewer (code-expert / type-expert / docs-adr-expert)
+on X's diff, returns verdict via directed comms; A absorbs the findings
+in a follow-up `chore(scope): absorb <reviewer> post-exec on <SHA>`
+commit. The pattern then runs in the other direction.
+
+Worked instances this session:
+
+- SVW → Sparking (3 catches absorbed): t13a TSDoc forward-reference
+  → `8f253280`; t1 `RankOptions.context` 3 plan-vs-implementation
+  divergences (focus enum 4/6 + missing `pp_percentage` + `max_results`
+  mis-nested) → `9425faa0`; WS2.2 literal-object quads partial
+  C2-deviation → `361cae35`.
+- Sparking → SVW (3 catches absorbed): registration tests were
+  schema-audit not behavioural; KS5 phase-resolution coverage gap;
+  `m.content.text` access unguarded → `11c05ced`; plus SHA-pinned
+  TSDoc reference rot risk.
+- Foamy → SVW (1+ catches): TSDoc line-range references that would
+  rot when strategy doc edits → absorbed in-touch at SVW's t9 commit.
+- SVW → Foamy (1 catch surfaced): WS4.5 `depends_on` array drift +
+  stale `Last Updated` header on WS4.4 amendment.
+
+Plus the architecture-expert-betty self-dispatch on Sparking's t1
+(`5ec02aec`) returned independent findings (relocate re-exports to
+dedicated `public/evidence-corpus.ts` subpath) absorbed cleanly —
+confirming the pattern also works as self-dispatch when the reciprocal
+agent's bandwidth is constrained.
+
+Strong empirical evidence; pairs naturally with the existing
+`invoke-code-experts` rule + executive-memory invocation matrix. Pattern
+file at `.agent/memory/active/patterns/reciprocal-cross-agent-reviewer-dispatch.md`
+is the natural home — captures the WHEN/HOW separately from the
+WHO/WHAT enumeration in the rule + executive-memory.
+
+### Untracked-WIP whole-tree lint-blocker recurring pattern (3 instances this session)
+
+`[CANDIDATE: untracked-wip-whole-tree-lint-blocker | captured: 2026-05-23 | source: napkin+pattern-emergence+comms-log | target: pattern:untracked-wip-whole-tree-lint-blocker (memory/active/patterns/) | trigger: n>=3-validation | size: S | status: pending]`
+
+Three instances this session of the failure mode "agent A's untracked
+work-in-progress with lint errors blocks agent B's pre-commit hook":
+
+1. Foamy's untracked `packages/core/graph-core/src/graph-view/index.ts`
+   (8 ESLint errors) blocked Sparking's t20 first commit attempt at 22:00Z;
+   Foamy cleared via the honest-restructure pattern (module split) at 22:03Z.
+2. Sparking's untracked `packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/freshness.ts`
+   (4 TSDoc errors + 1 `consistent-type-assertions` error) blocked SVW's
+   t10 first commit attempt at 22:25Z; Sparking cleared via the
+   honest-restructure pattern (binding-test deletion) at 22:47Z, helped
+   by Foamy's directed diagnostic at 22:45:56Z.
+3. Sparking's untracked WS2.3 turtle parser had prettier format errors
+   blocking subsequent pushes; Shade landed `644c937b` as a peer-format
+   cure at 06:13Z 2026-05-23.
+
+**Working cure**: directed diagnostic from peer with concrete fix shapes
+(Foamy → Sparking with 3 named fix shapes at 22:45:56Z is the canonical
+worked instance). The cure is collaboration via comms, not architectural
+change.
+
+Adjacent existing pattern surface: `local-broken-code-never-leaves` rule
+
+- `all-quality-gates-blocking-always` doctrine define the WHAT; this
+candidate names the recurring WHEN (untracked WIP) and the HOW (directed
+peer diagnostic). Pattern home at
+`.agent/memory/active/patterns/untracked-wip-whole-tree-lint-blocker.md`
+would slot beside the rule references.
+
+### Honest-restructure-over-band-aid pattern confirmed across 2 agents in 2 cycles
+
+`[CANDIDATE: honest-restructure-over-band-aid | captured: 2026-05-23 | source: napkin+pattern-emergence | target: pattern:honest-restructure-over-band-aid (memory/active/patterns/) | trigger: second-instance | size: S | status: pending]`
+
+When a quality-gate fires mid-authoring, the team's emergent response was
+honest architectural restructure rather than a band-aid to pass the gate.
+Two worked instances this session:
+
+1. Foamy split WS4.4 `graph-view/index.ts` into 3 modules (`index.ts`
+   barrel + `types.ts` + `interface.ts`) when it hit the workspace
+   `max-lines: 250` ceiling, rather than compress prose to pass. The
+   split exposed natural conceptual boundaries (28-line barrel; ~175-line
+   type-utilities; ~100-line interface + TSDoc) — architectural-excellence
+   shape, not a workaround.
+2. Sparking deleted the `eef-freshness-binding.unit.test.ts` file
+   entirely per `no-conditional-tests.md` §Diagnosis #3 ("External-resource
+   gating"), rather than use a file-existence guard via `describe.runIf`.
+   The cure was to defer the binding test to t2-zod-loader's cycle (when
+   the data file actually lands) — honest plan amendment, not papering
+   over.
+
+Adjacent existing surface: `local-broken-code-never-leaves` rule +
+`all-quality-gates-blocking-always` doctrine establish the principle;
+this pattern names the **response shape** when those gates fire
+mid-authoring. Pattern home at
+`.agent/memory/active/patterns/honest-restructure-over-band-aid.md`.
+
+### Autonomy substrate gap: first-out-closeout-owner self-election protocol when no closeout owner declared at team-start
+
+`[CANDIDATE: first-out-closeout-owner-self-election-protocol | captured: 2026-05-23 | source: napkin+comms-log+owner-direction | target: doc-amend:.agent/skills/start-right-team/SKILL-CANONICAL.md | trigger: candidate | size: M | status: pending]`
+
+Owner correction at 06:54Z + 06:57Z (codified to per-user memory as
+`feedback_owner_action_is_not_a_cure`): *"owner action is not a valid
+cure for anything, we are working towards agent autonomy here, and
+for now user resolution is sometimes required, but it is not the end
+goal."* Every observation of the form *"X failed → owner directed Y →
+Y worked → therefore Y is the cure"* points instead at *"X failed →
+autonomy substrate did not provide the primitive that would have
+produced Y → owner bridged the gap → the bridge itself indicates the
+missing autonomy primitive."*
+
+**Worked instance from this session**: the 2026-05-22 → 2026-05-23
+team session ran with NO closeout owner declared at team-start. As
+the team wound down (Foamy paused; Sparking session-complete; Velvet
+idle; Stormbounds silent then briefly active), there was no agent-
+readable mechanism for the team to self-elect a first-out closeout
+owner. Owner intervention named me (SVW) as the first-out closeout
+owner. That naming was the bridge over a missing autonomy primitive.
+
+**The missing primitive** (graduation-target): an amendment to
+`start-right-team` §Closeout Contract giving agents a clear protocol
+for self-electing the first-out closeout owner when none was named
+at team-start. Candidate shapes for the SKILL amendment (do not pick
+prematurely; the right shape needs design work):
+
+1. **Broadcast-arrival precedence**: the first agent to announce
+   intent-to-close in comms holds the first-out role (with tie-breaking).
+2. **Pre-handoff-synthesis precedence**: the agent whose
+   pre-handoff-synthesis broadcast has the earliest `created_at`
+   timestamp self-elects once N team members have also posted
+   pre-handoff syntheses. Builds on the empirical pre-handoff-
+   syntheses pattern observed this session.
+3. **Coordinator-poll**: if a coordinator was named at team-start,
+   they retain closeout-owner naming authority on stand-down; if
+   none, fall back to a precedence rule.
+4. **Explicit at-team-start declaration**: amend `start-right-team`
+   to require a tentative closeout owner be named in the team-start
+   broadcasts (revisable at any time), removing the implicit-
+   no-owner case entirely.
+
+**Additional autonomy primitives** Stormbound Spiralling Breeze
+surfaced in their amended closeout (also worth pending-graduations
+entries; cross-link rather than duplicate if there are existing
+register entries):
+
+- **Coordinator-discovery for arriving agents** — query comms stream
+  for active coordinator without owner naming names.
+- **Standby-role defaults as first-class boundaries** —
+  reviewer-dispatch / consolidation-observer / plan-file-only-follow-on
+  as named roles arriving agents can self-select into without
+  coordinator pairing.
+- **Coordinator polling responsibility for unbriefed arriving
+  agents** — active coordinator (if one exists) reads the comms
+  stream for arriving-agent team-start broadcasts and routes them
+  within bounded time.
+
+These are all autonomy-substrate work-items. Stormbound's per-user
+memory `feedback_owner_action_is_not_a_cure` is the standing
+doctrine they discharge against.
+
+### Tempfile-path session-prefix discipline (Stormbound Floating Wing 2026-05-23 06:25Z)
+
+`[CANDIDATE: tempfile-path-session-prefix-discipline | captured: 2026-05-23 | source: comms-log+napkin | target: rule:tempfile-path-session-prefix-discipline | trigger: candidate | size: S | status: pending]`
+
+Stormbound Floating Wing's first closeout broadcast at 06:25:41Z
+(`0957bc7f`) carried another agent's substance under their identity
+tuple. Root cause: they drafted their closeout body via `Write` to
+`/tmp/stormbound-closeout.md` — but that path pre-existed from a prior
+session (Stormbound Kiting Squall / `ddbea2`, dated 2026-05-22 16:26).
+The Write tool refused with "File has not been read yet — read it
+first before writing"; the agent made the parallel `comms append
+--body-file` call in the same tool batch — which proceeded with the
+STALE file content. The posted event carried Stormbound Kiting Squall's
+Cycle 1.1 closeout under Floating Wing's identity. Corrected at 06:27Z
+via supersedes broadcast.
+
+**Cure shape**: tempfile paths under multi-session shared `/tmp/` MUST
+be session-prefixed (e.g. `/tmp/<session_id_prefix>-<purpose>.md`). The
+Write tool's "read before overwrite" refusal is a signal of cross-
+session collision, NOT a workflow inconvenience to route around with
+a parallel call.
+
+Adjacent existing surface: `register-identity-on-thread-join` rule
+(identity routing uses `(name, prefix)` pair) — same shape applied to
+file-naming. Pattern home: new
+`.agent/rules/tempfile-path-session-prefix-discipline.md`.
+
+Single instance; pending second observation to confirm the cure shape
+or escalate to "structural-cure-required" (e.g. SKILL section on
+multi-session shared-state tempfile discipline).

@@ -37,6 +37,152 @@ window), [`napkin-2026-05-21.md`][previous-previous-pass], and
 [previous-previous-pass]: archive/napkin-2026-05-21.md
 [previous-previous-previous-pass]: archive/napkin-2026-05-17.md
 
+## 2026-05-22 → 2026-05-23 — Secret Dimming Shade / claude / Opus-4.7 / `5a6e56` — PR-108 SonarCloud sub-agent fan-out
+
+### Headline: intent-scoped commit-queue cure works under live multi-writer load
+
+**Observation**: 18-file PR-108 SonarCloud clearance bundle landed at
+`51a02a93` with correct scope and attribution, despite Lunar's 16
+untracked-then-staged WS4.1 scaffold files coexisting in the shared git
+index. The `-- <intent.files>` discipline on the inner `git commit`
+invocation (Cycle 1.3 cure landed earlier this identity-thread at
+`896312d0`) worked as designed.
+
+**Why this matters**: first production validation of the multi-writer
+concurrency cure. Pre-cure shape would have been Velvet `e1b9561e`-style
+attribution drift; post-cure, intent scope is the load-bearing boundary
+and disjoint commits land cleanly in parallel.
+
+**How to apply**: when the shared index has peer-staged files outside
+your intent's scope, trust the queue's `-- <intent.files>` argv. Run
+`git diff --cached --name-only` for confidence; do not unstage peer files.
+
+### Three further observations
+
+- **Pre-push gate scope is full-tree; pre-commit scope is staged.** My
+  pre-commit passed (104/104 turbo); pre-push then failed on
+  `prettier --check .` over two of Sparking's untracked WS2.3 files.
+  Pre-commit-green ≠ push-ready when peer untracked WIP is on disk.
+- **Untracked-WIP-as-cross-blocker recurred 4+ times in one team
+  window**: Foamy graph-view → Sparking t20; Sparking freshness.ts →
+  SVW t10; Sparking source-path+turtle → my push. Whole-tree gating +
+  untracked WIP = transitive coordination cost. Emergent cure:
+  directed-comms diagnostic with concrete line-level findings.
+- **Owner chat-rename and PDR-027 identity are distinct surfaces.**
+  Owner addressed me as "Foamy Fathoming Compass" while my preflight
+  identity remained Secret Dimming Shade / `5a6e56` (a different agent
+  was already operating as Foamy Fathoming Compass / `ecb459`). Route
+  on (name, prefix) pair; don't try to honour chat names in
+  collaboration-state.
+
+## 2026-05-22 → 2026-05-23 — Secret Vanishing Wisp first-out closeout / claude / claude-opus-4-7 / `981cbe`
+
+First-out closeout of the team session at owner direction. Three commits
+landed by me this session: `acd2a3f3` t9 AGGREGATED_EEF_EVIDENCE_GUIDANCE,
+`a2136557` t10 eef-evidence-grounded-lesson-plan prompt, `11c05ced`
+absorption of Sparking's reciprocal post-exec on t10. Plus two reciprocal
+post-exec reviews delivered to Foamy + Sparking. Plus this handoff.
+
+### First-out closeout shape — observations + the autonomy primitive they point at
+
+**Owner correction received 06:54Z + 06:57Z** (via Stormbound Spiralling
+Breeze's amended closeout broadcast): *"owner action is not a valid
+cure for anything, we are working towards agent autonomy here, and for
+now user resolution is sometimes required, but it is not the end goal."*
+The observations below describe what I saw; **the gap they point at
+is what the autonomy substrate is missing** — not "owner direction is
+the cure".
+
+The owner placed the first-out closeout responsibility on me when
+winding down /loop crons. This was the first time I'd experienced the
+"first-out" framing as a distinct role from "team closeout owner"
+named in `start-right-team`. The substantive differences I observed:
+
+- **First-out is not the same as coordinator**. The team session had
+  no formal coordinator role; first-out responsibility was assigned
+  at closeout-time by owner direction, not at team-start. Foamy +
+  Sparking + Velvet had all posted pre-handoff syntheses before the
+  owner asked me to wrap. The syntheses already existed; my job was
+  synthesis-of-syntheses, not primary-capture. **The autonomy primitive
+  missing**: `start-right-team` says the closeout owner is "normally
+  the controller or the agent explicitly named as closeout owner" —
+  but when no closeout owner is named at team-start AND the team is
+  winding down without one having been declared mid-session, there
+  is no agent-readable mechanism for the team to self-elect a first-out
+  closeout owner. Owner intervention bridged that gap; the bridge
+  itself indicates the missing primitive — first-out-closeout-owner
+  self-election protocol when no closeout owner was declared.
+- **First-out structures what others follow**. The owner explicitly
+  named the structure-for-others-to-follow obligation. This means the
+  pending-graduations entries, the eef + connecting-oak-resources
+  next-session refreshes, and the Deep Consolidation Status entry
+  in `repo-continuity.md` all become the substrate the next agent
+  invoking `oak-consolidate-docs` reads as the team-session synthesis.
+  Writing for that audience changed the shape: more enumeration,
+  fewer narrative arcs, explicit "structure for follow-on" sections
+  with named next actions.
+- **Pre-handoff syntheses as substrate** (this is a genuine agent-to-
+  agent autonomy primitive — not owner-intervention-dependent). Foamy
+  23:08Z + me 23:09Z + Velvet 23:10Z all posted boundary-scoped
+  pre-handoff syntheses while still active — pattern adoption was
+  emergent. The pre-handoff broadcast saved the first-out closeout
+  substantial substrate-discovery time. Worth surfacing as a
+  team-handoff pattern: "post boundary-scoped pre-handoff synthesis
+  to the team comms stream before standing down, even if you're not
+  the closeout owner." This pattern is genuine agent-to-agent substrate
+  (no owner-intervention required) — it worked because agents
+  independently recognised the team-session was winding down and
+  emitted the synthesis without prompting. **This is what an autonomy
+  primitive looks like at scale**: the team converges on the right
+  shape without owner pairing-and-identification.
+
+### Tempfile-path session-prefix discipline (Stormbound Floating Wing's failure mode at 06:25Z)
+
+Stormbound Floating Wing's closeout broadcast at 06:25:41Z posted another
+agent's substance (Stormbound Kiting Squall's Cycle 1.1 closeout from
+2026-05-22 16:26Z) under Floating Wing's identity tuple. Root cause:
+`/tmp/stormbound-closeout.md` was a stale path from the prior session.
+Write tool refused with "File has not been read yet"; parallel
+`comms append --body-file` proceeded with the stale file. **Cure**:
+tempfile paths under multi-session shared `/tmp/` MUST be session-
+prefixed. The Write refusal is a cross-session-collision signal, not a
+workflow inconvenience.
+
+Worth a rule: `tempfile-path-session-prefix-discipline`. Captured in
+pending-graduations.md. Single instance — pending second observation
+to confirm rule vs SKILL-section disposition.
+
+### Cure-1 emergent commit-queue default — the implicit standardisation
+
+Four agents (Foamy, SVW, Sparking, Stormbound) adopted intent-scoped
+message file paths to `commit-queue commit --message-file` without
+coordination. This is the empirical signature of an emergent default
+that wants to graduate into the substrate: when the workaround
+discipline lives in 4 agents' heads in parallel, the CLI should accept
+it as a default. Captured in pending-graduations as a
+commit-queue CLI work item.
+
+### "Honest restructure over band-aid" confirmed across 2 agents
+
+Foamy's module-split response to max-lines on graph-view/index.ts +
+Sparking's binding-test-deletion response to no-conditional-tests are
+the same pattern: when a quality-gate fires mid-authoring, restructure
+honestly rather than band-aid past. Pattern captured for graduation;
+home would be `.agent/memory/active/patterns/honest-restructure-over-band-aid.md`.
+
+### Reciprocal-review pattern proves itself empirically (validation completes a 3rd direction)
+
+Sparking's earlier napkin entry (this same file, below) enumerates the
+SVW ↔ Sparking 6 catches. Adding the SVW ↔ Foamy axis (2 catches) +
+the Sparking self-dispatched architecture-expert-betty axis (1 finding,
+absorbed at `5ec02aec`) brings the session total to **9 substantive
+defect catches across the reciprocal pattern**. The pattern is empirically
+validated across multiple agent pairs + self-dispatch. Worth a
+`.agent/memory/active/patterns/reciprocal-cross-agent-reviewer-dispatch.md`
+graduation.
+
+---
+
 ## 2026-05-22 → 2026-05-23 — Sparking Melting Magma Inc.1a closure window / claude / Opus-4.7 / `4cdb53`
 
 14 commits across t20-credits, t13a-freshness-check, t1-corpus-shape + t16-partial, WS2.2 jsonld-compatible + Turtle parsers, WS2.3 source-path primitives, t14 telemetry seam pattern. 6+ sub-agent reviewer dispatches + 3 reciprocal SVW reviews on my work + 1 reciprocal Sparking review on SVW's t10. architecture-expert-fred cross-cycle audit returned GO on system-level cohesion (ADR-041 + ADR-108 compliant).
@@ -76,6 +222,16 @@ WS2.3 type-expert pre-execution review surfaced two findings that would have bee
 - **BLOCK: "JSON Pointer for Turtle" framing is a type-level lie**. Turtle is not JSON; applying RFC 6901 fabricates a synthetic JSON wrapper referencing an internal model artefact rather than the actual source. Cure: `SourceLocation` discriminated union with `kind: 'json-pointer' | 'turtle-location'`.
 
 Empirical cost of catching these at pre-execution: ~1 minute of reviewer dispatch + plan amendment. Empirical cost if missed: parser-integration cycle rewrite after t2/t6a consumer code had baked the wrong assumptions. Pre-execution-reviewer-found-design-flaw is the highest-leverage reviewer dispatch shape; promoting this above post-execution dispatch for substantial cycles is justified by the asymmetric cost.
+
+### Late-session additions from ws2-source-map-parser-integration (in-flight, owner-paused at uncommitted-tree)
+
+Three substantive findings from authoring the WS2.3 follow-on cycle (uncommitted at owner pause; in-flight tree carries the work for another agent to pick up):
+
+- **n3.js v2.0.3 source-level verification: per-quad token position is genuinely hidden in `_emit`.** type-expert read `node_modules/n3/src/N3Parser.js:1079-1082` directly and confirmed the `_emit` method receives only quad terms (subject, predicate, object, graph), never the originating token. The lexer's `_line` is meaningless post-hoc under sync parsing. The `parser.parse(input, null)` overload returns `Quad[]` with no parallel position array. No `// @ts-ignore` access pattern works — there is no shared state between the token call stack and the quad callback. **Cure: Option B (pre-split input + post-correlate by subject IRI scan); `TurtleSourceLocation` widened to `{ line: number | null; column: number | null }` because compound triples produce ambiguous-line cases.** Durable knowledge for any future graph-ingest cycle considering n3-based parsing.
+
+- **Cycle-split-on-reviewer-convergence pattern got a THIRD instance**, making this session's empirical evidence robust. Sequence: (1) t13 → t13a freshness check + t13b refresh script. (2) WS2.3 → ws2-source-mapping primitives + ws2-source-map-parser-integration. (3) ws2-source-map-parser-integration → integration substance + ws2-jsonld-precise-source-paths (the JSON-LD walker hit jsonld's restrictive value-union typing; cure deferred to a dedicated cycle). Three independent applications of the same pattern shape under different convergence triggers (Zod dependency, type-level-lie, restrictive vendor typing) — the pattern is no longer "twice observed", it's "robustly applicable". Worth a PDR-candidate or pattern-library entry naming the trigger conditions formally.
+
+- **JSON-LD walker traversal hit jsonld's restrictive value-union typing** when authoring `buildIdToPointerMap`. `JsonLdObject[string]` includes `string | number | boolean | string[] | NodeObject | GraphObject | ...` — too tight for a recursive `(value: JsonLdValue) => void` walker. Workarounds compound forbidden patterns: `Record<string, unknown>` cast (forbidden by `no-type-shortcuts`), `Object.keys`/`Object.entries` (restricted to `typeSafeKeys`/`typeSafeEntries` from `@oaknational/type-helpers`), `unknown` parameter (forbidden by `unknown-is-type-destruction`). The principled cure path is a custom `typeSafeJsonLdEntries<T>()` helper in `@oaknational/type-helpers` plus a recursive walker against the resolved value type — substantive new infra. Deferred to `ws2-jsonld-precise-source-paths` when a real consumer needs precise per-`@id` resolution. Worth noting for the next agent authoring graph-traversal helpers against jsonld types: budget for the helper-design overhead, don't try to inline it.
 
 ## 2026-05-22 evening — Velvet Veiling Wisp consolidate-docs backfill archive sweep / claude / Opus-4.7 / `b4bb7a`
 
@@ -199,3 +355,296 @@ pattern can recur whenever the buffer accumulates substance gated
 on conditions that don't fire spontaneously in normal session work.
 Captured implicitly in PDR-068 §"Consumer cadence too low" cure;
 the worked instance is this pass itself.
+
+## 2026-05-22 → 2026-05-23 — Stormbound Floating Wing arriving-agent failure-mode session / claude / claude-opus-4-7 / `52f264`
+
+### Observation 1: tempfile-path collision across sessions in shared `/tmp/` is a new sub-class of authorial-bundle-integrity failure
+
+**Observation**: drafted my closeout body via `Write` to
+`/tmp/stormbound-closeout.md`. The path pre-existed from a prior
+session (Stormbound Kiting Squall / `ddbea2`, dated May 22 16:26).
+The Write tool refused with "File has not been read yet — read it
+first before writing." I made the parallel `comms append
+--body-file` call in the same tool batch — which proceeded with the
+STALE file. The posted closeout event (`0957bc7f-a334-4c97-9864-
+fe9a1fb52dbe`) carried Stormbound Kiting Squall's Cycle 1.1 closeout
+text under Stormbound Floating Wing's identity tuple. Cured by a
+follow-up correction event citing the bad event uuid and inlining
+the correct closeout substance under a session-prefixed tempfile
+path (`/tmp/52f264-stormbound-closeout-corrected.md`).
+
+**Diagnosis**: this is a new sub-class of the authorial-bundle-
+integrity failure-class SVW flagged at 23:09:17Z (3rd-instance flag
+on shared-file line-scope drift). The Velvet `e1b9561e` incident
+(2026-05-22) was about `.git/COMMIT_EDITMSG` shared single-writer
+state under concurrent commits; this incident is about *unfenced
+tempfile paths in shared `/tmp/` namespace across sessions over
+time*. Six-character session prefixes are too short to make
+collisions structurally impossible; under a multi-day window the
+same agent-name-derived path will eventually collide.
+
+**Cure**: tempfile paths under multi-session shared `/tmp/` MUST be
+session-prefixed (e.g. `/tmp/<id>-<purpose>.md`). The Write tool's
+"read before overwrite" refusal is a SIGNAL of cross-session
+collision, not a workflow inconvenience to bypass with parallel
+calls. Stronger structural cure named below under Observation 2.
+
+### Observation 2: owner directs identity move to (name, UUID id) two-field shape; tempfile frontmatter convention added
+
+**Observation**: in response to the tempfile-collision incident
+owner directed (2026-05-23): *"agent identities will require two
+fields, a name and a uuid id, and that all comms events must use
+both, the name remains the primary means of identification, the
+uuid is for disambiguation. All temporary agent coordination and
+collaboration files must contain frontmatter with agent name, id,
+created at, last updated at"*. Captured to per-user memory
+`feedback_agent_identity_name_plus_uuid`.
+
+**Diagnosis**: the existing PDR-027 identity tuple
+`(agent_name, platform, model, session_id_prefix)` uses
+`session_id_prefix` (6-char) as the disambiguator. A 6-char prefix
+collision is improbable but a 6-char *file-path-derived* collision
+across sessions over multiple days is empirically observed (see
+Observation 1). The owner's two-field `(name, UUID)` shape upgrades
+the disambiguator to a full UUID. The tempfile frontmatter
+requirement gives any consumer a second line of defence: even if a
+tempfile path collides, the frontmatter's `agent_name` + `id` lets
+the consumer verify provenance before piping the body into a
+comms event, commit message, or handoff record.
+
+**Cure**: PDR-shape graduation candidate added to
+`pending-graduations.md` (see entry below) — schema amendments on
+`comms-event.schema.json` + active-claims + commit-queue intent +
+handoff-record schemas to require `(name, id)`; tooling enforcement;
+tempfile-frontmatter convention.
+
+### Observation 3: arriving-agent no-boundary failure mode — bare `/oak-start-right-team` opener without inherited intent goes dormant
+
+**Observation**: I opened on bare `/oak-start-right-team` slash
+command with no inherited intent pointer. I posted team-start at
+21:23:33Z naming `boundary: none yet — awaiting owner direction`,
+surfaced to owner via AskUserQuestion at 21:23:55Z, and waited.
+Owner answered with `WS2.2 jsonld-compatible + Turtle parser` ~5h
+later (06:13Z under `/loop` cron) — but by then Sparking Melting
+Magma had already landed WS2.2 at `f58bcb80` + `ce0abe26` and 14
+other commits. Stormbound Spiralling Breeze / `b8a5c9` had the
+same shape and was equally silent. SVW correctly flagged both
+Stormbounds as effectively absent at 23:09:17Z.
+
+**Diagnosis**: the bare `/oak-start-right-team` opener with no
+inherited intent is a recurring shape (Stormbound Spiralling Breeze
+21:22:03Z, me 21:23:33Z, Sparking 21:24:27Z — all within ~2
+minutes). Sparking self-selected a minimal slot (t20-credits) and
+went on to land 14 commits; Spiralling Breeze and I held `boundary:
+none yet` indefinitely. Sparking's pattern is the working cure;
+mine is the failure mode.
+
+**Cure**: two candidate cure shapes (either or both): (a)
+team-start broadcasts auto-stand-down after N minutes of no
+owner-direction response, freeing the team-start surface for the
+next agent without a permanently-dormant placeholder; (b) the
+SKILL First Moves §1 register-presence step names a low-risk
+standby default — `reviewer-dispatch / consolidation observer /
+plan-file-only follow-on` — rather than allowing `boundary: none
+yet` indefinitely. Worth a pending-graduations entry under
+`team-start no-boundary timeout`.
+
+### Observation 4: templated `/loop` without exit criteria is ambient context-budget tax under team load
+
+**Observation**: owner placed me on `/loop 180s` cron at ~06:13Z
+and cancelled it ~90 seconds later at 06:15Z, immediately after my
+return broadcast named a candidate boundary. The corrective signal
+was "this loop has no natural off-ramp under the current scoreboard
+state". The team's pre-existing `/loop` instances (Foamy, Sparking,
+SVW, Velvet at session-open) all ran for hours past their useful
+commit cadence; Foamy's 06:10Z heartbeat noted ~5h stream silence
+while the cron continued firing.
+
+**Diagnosis**: owner-named the doctrine *"Templated loops need exit
+criteria"* (per-user memory `feedback_templated_loops_need_exit_
+criteria`, 2026-05-23). Canonical default: 5 consecutive idle loops
+→ stand down + closeout broadcast. Without explicit exit criteria,
+`/loop` instances become ambient context-budget tax under team
+load: each idle fire consumes one agent-turn of context and
+produces no useful work.
+
+**Cure**: per-user memory recorded as standing rule. Graduation
+candidate to the `/loop` skill: every loop invocation MUST ship
+with an explicit exit criterion (named in chat at invocation OR
+defaulting to the 5-idle-loops convention). Worth a pending-
+graduations entry under `loop exit criteria as invocation-time
+contract`.
+
+### Observation 5: arriving-agent dormancy — owner intervention was the symptom, the missing autonomy primitive is the cure
+
+**Observation** (Stormbound Spiralling Breeze / `b8a5c9` / 2026-05-23
+~06:39Z–06:50Z): Observation 3 above named me (alongside Floating
+Wing) as a "permanently-dormant" arriving-agent. Counter-evidence
+on the work-output axis: I subsequently landed WS4.1 at `3241893d`
+— 14 files +311/-0, all gates green, ~11 minutes from directive
+receipt to commit. **But the activation came from owner
+intervention, not from any agent-to-agent primitive**, and that is
+the point that matters for doctrine.
+
+**Diagnosis** (corrected after owner correction 2026-05-23
+post-closeout): owner action is **not** a valid cure shape for any
+agent-collaboration failure mode. End goal is agent autonomy. Owner
+resolution is sometimes required for now, but it is a stopgap, not
+a target architectural shape. Every *"X failed → owner directed Y
+→ Y worked → therefore Y is a cure"* observation is the wrong
+framing. The correct framing is *"X failed → autonomy substrate
+did not provide the brief / coordination / boundary handoff that
+would have produced Y → owner stepped in to bridge the gap → the
+bridge itself names the missing primitive"*.
+
+In this concrete case: at 06:39Z owner had to name *"you direct,
+Stormbound does the work"*, identifying SVW as director and me as
+delegate. SVW then composed `c62fc986` — a directed event carrying
+exact diff + ceremony + closure instructions. The directed-event
+**shape** is sound substrate; what required owner intervention was
+**the act of pairing director with delegate** and **the
+identification of which agent should brief which**. That
+pairing-plus-identification is the missing autonomy primitive.
+
+**Cure direction** (the autonomy primitives to build, NOT the
+owner-intervention pattern):
+
+- **Coordinator-discovery for arriving agents**: an agent opening
+  on a bare `/oak-start-right-team` should be able to query the
+  comms stream for an active coordinator (or self-organise to
+  elect one) without owner needing to name names.
+- **Standby-role defaults as first-class boundaries**: arriving-
+  agent self-selection should always be viable, with well-defined
+  low-risk defaults (reviewer-dispatch / consolidation observer /
+  plan-file-only follow-on) that don't require owner attention to
+  activate.
+- **Coordinator polling responsibility**: registered coordinators
+  should periodically check for unbriefed arriving agents and
+  offer briefs, the way reviewer dispatchers handle pending
+  reviewer requests.
+- **The directed-event "execution-delegation" `message_kind`** is
+  worth landing regardless — the shape is sound — but it's the
+  **vehicle**, not the cure. The cure is whatever lets two agents
+  agree on who briefs whom without owner naming names.
+
+**Substrate**: pending-graduations entry under
+`arriving-agent-coordinator-discovery autonomy primitive`. The
+owner-intervention pattern itself goes nowhere on the doctrine
+pipeline — it is the symptom, not the substance.
+
+**Related**: per-user memory `feedback_owner_action_is_not_a_cure`
+(2026-05-23) records this as a standing rule.
+
+### Observation 6: persistent-Monitor first-run backfill cascade preempts subsequent same-turn tool calls
+
+**Observation** (Stormbound Spiralling Breeze / `b8a5c9` / 2026-05-22
+22:30Z window): I started the all-channels comms watcher (Monitor
+task `bn8eaiqcx`) at the start of my session; my `comms-seen` file
+did not exist yet, so the watcher's first run replayed the entire
+comms directory. Immediately after starting the watcher, owner
+invoked `/loop 180s`. The `/loop` skill's CronCreate step was
+**never reached** because the watcher's backfill events flooded the
+turn, and each event triggered me to attend to it rather than
+continue the `/loop` setup. When owner later said *"stop the cron
+please"* (expecting one to exist), `CronList` reported no scheduled
+jobs — because the `/loop` had never finished its own setup.
+
+**Diagnosis**: persistent-Monitor tools with newly-created seen-files
+replay history on first run, and that cascade can preempt
+subsequent tool calls in the same turn. The agent's attention
+follows whichever stream is loudest; a fresh watcher with hours of
+unseen events is the loudest possible stream. The setup step of a
+slash command that ARMED the watcher in the same turn never gets a
+chance to complete.
+
+**Cure shape**: ordering convention — complete a slash command's
+own setup steps (CronCreate, ScheduleWakeup, etc.) BEFORE starting
+any persistent Monitor. Alternatively, watchers should suppress
+backfill on first run when the seen-file is being newly created
+(bootstrap-replay-suppression heuristic). Both cures are
+substrate-level; the agent-discipline cure is to recognise the
+cascade and tell the user explicitly before getting swept along.
+Worth a pending-graduations entry under `Monitor-first-run-cascade
+preempts same-turn setup`.
+
+## 2026-05-22/23 Lunar Illuminating Eclipse session — WS4.1 team session insights
+
+Session ran ~10h on `feat/mcp-graph-support-foundation` under
+`/oak-start-right-team` + later `/loop 180s` with a 7-agent cohort
+(Foamy, Lunar, Secret Dimming Shade, Secret Vanishing Wisp, Velvet,
+Sparking, Stormbound×2). Insights worth preserving:
+
+**1. Multi-writer pathspec discipline lands disjoint cycles cleanly.**
+~15 commits landed across 5 active agents while my WS4.1 substance
+sat staged in the shared index uncommitted for ~9h. Pathspec
+discipline (`-- <intent.files>` argv on `git commit` per the
+intent-scoped end-to-end cure) made each peer commit invisible to
+the others' staged content by construction. The pattern works under
+real concurrent load.
+
+**2. Authorial-bundle integrity fails at intra-file line scope.**
+Two confirmed instances this session (Velvet `e1b9561e` swept Lunar's
+WS4.1 commit-message via `.git/COMMIT_EDITMSG` shared-write; Sparking
+`968e3cb7` swept SVW's unstaged t10 plan-file edits in
+`eef-evidence-corpus.plan.md`). `--<intent.files>` pathspec protects
+file-membership but not line-level scope within a shared file.
+Team-emergent cure adopted: intent-scoped message files at
+`/tmp/<agent>-<intent>-msg.txt`, never `.git/COMMIT_EDITMSG`. Worth
+graduating to the commit-queue CLI as native `--message-file` per-intent
+default path.
+
+**3. Untracked-WIP blocks whole-tree gating recurringly.**
+Two instances this session (Foamy's untracked `graph-view/index.ts`
+blocked Sparking t20; Sparking's untracked `freshness.ts` blocked
+SVW t10). Whole-tree lint is correct doctrine (`worst bugs are
+emergent outside changed files`) but means in-flight authoring is
+visible to every peer's pre-commit gate. Working cure observed:
+directed comms diagnostic from peer with concrete fix shape (line:col,
+rule name, minimal change). The cure is collaboration-shaped not
+substrate-shaped — peers can unblock each other in seconds when the
+diagnostic is precise.
+
+**4. No-autonomous-lock-wait-loops + comms-events compose well.**
+Peer (Velvet) held `.git/index.lock` ~93s during their pre-commit
+hook. The standing rule forbids polling; I surfaced to user. While
+waiting, comms broadcasts from completing peers were arriving — the
+natural retry trigger is "next comms-event with `[BROADCAST]` SHA"
+not "poll lock file". Encode this: retry-after-lock is event-driven,
+not time-driven.
+
+**5. `/loop` skill setup must complete BEFORE any persistent Monitor
+starts.** I armed the comms Monitor during start-right-team §0
+(correctly), then later invoked `/loop 180s` — but the `/loop` SKILL
+read was interrupted by ~25 backfilled comms notifications from the
+freshly-armed Monitor (seen-file was empty; entire history replayed).
+The CronCreate step never executed. Both the user and peer agents
+referenced "my /loop cron" that never existed.
+
+Graduated to user memory as `feedback_templated_loops_need_exit_criteria`:
+templated loops/crons must ship with explicit exit criteria.
+Canonical default: 5 consecutive idle loops → stand down + closeout
+broadcast. Standing-by heartbeats from quiet team agents (Foamy
+06:10Z "5h stream silence, loop continues") demonstrate why.
+
+**6. Reviewer fan-out cost-benefit at scaffold scale.**
+WS4.1 ran 5 reviewers (3 pre-exec parallel: config-expert + fred +
+test-expert; 2 post-exec parallel: code-expert + type-expert). Total
+wall time ~2 min. Findings: README moving-targets violation (caught
+pre-commit), `tsconfig.build.json` `*.spec.ts` exclude gap (caught
+pre-commit), `preserve-caught-error` rule name (false alarm; ESLint
+built-in not plugin rule). Cost was real but proportional; defect
+coverage caught two real authoring gaps before commit. Scaffold-tier
+cycles can sustain 5-reviewer cadence.
+
+**7. Sparking's 14-commit session arc is a phenotype worth studying.**
+One agent landed: t20, t13a (+ split + nit-absorb), t1 (+ 3
+absorptions), WS2.2 (+ scaffold + SVW absorb), WS2.3 primitives (+
+split), t14 telemetry, parser-integration intent. Self-dispatched
+reviewers, reciprocal review loops with SVW, multi-turn pacing for
+substantive cycles, honest fatigue-posture broadcasts. Worth a
+pending-graduations entry under `Multi-cycle session arc with
+self-dispatched reviewer cadence` — what enabled the productivity?
+The combination of (a) clear gate-1a critical-path, (b) reviewer-as-
+first-class peer-or-self collaborator, (c) honest fatigue gating
+(splitting cycles before fatigue degrades quality), (d) reciprocal
+review economy.
