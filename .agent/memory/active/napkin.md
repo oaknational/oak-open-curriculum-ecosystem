@@ -37,6 +37,46 @@ window), [`napkin-2026-05-21.md`][previous-previous-pass], and
 [previous-previous-pass]: archive/napkin-2026-05-21.md
 [previous-previous-previous-pass]: archive/napkin-2026-05-17.md
 
+## 2026-05-22 → 2026-05-23 — Sparking Melting Magma Inc.1a closure window / claude / Opus-4.7 / `4cdb53`
+
+14 commits across t20-credits, t13a-freshness-check, t1-corpus-shape + t16-partial, WS2.2 jsonld-compatible + Turtle parsers, WS2.3 source-path primitives, t14 telemetry seam pattern. 6+ sub-agent reviewer dispatches + 3 reciprocal SVW reviews on my work + 1 reciprocal Sparking review on SVW's t10. architecture-expert-fred cross-cycle audit returned GO on system-level cohesion (ADR-041 + ADR-108 compliant).
+
+### Reciprocal-review pattern proves itself empirically (3+ defect catches each direction)
+
+The SVW ↔ Sparking reciprocal-review loop produced six substantive defect catches this session:
+
+- **SVW caught on my work** (3 absorbed): t13a TSDoc filename forward-reference (`8f253280`); t1 `RankOptions.context` had 3 plan-vs-implementation divergences — focus enum 4/6 members + missing `pp_percentage` + `max_results` mis-nested (`9425faa0`); WS2.2 literal-object quads partial C2-deviation — `dataset.has(quad(..., literal('Ada')))` was the cleaner shape vs manual iteration with predicate-value-only checks (`361cae35`).
+- **Sparking caught on SVW's t10** (3+ absorbed by SVW at `11c05ced`): registration tests were schema-audit vs behavioural (removed; added route-correctness via dispatcher); KS5 phase-resolution coverage gap added as F9 edge-case test; `m.content.text` access unguarded narrowed via `messages.filter((m) => m.content.type === 'text')` defensive against future widening; plus SHA-pinned TSDoc `@remarks` ref replaced with stable plan-file path (no-moving-targets discipline extended from plan files to git-SHAs).
+
+Each catch was a downstream-saved-rework — defects that would have propagated into Round 2 generators copying the same patterns, or integration-time discovery at t2/t6a/WS4.5 authoring. Empirical cost: 1 sub-agent dispatch per review (~30-60s context). Empirical value: hours of downstream rework avoided. The pattern is now validated as standard reciprocity discipline for parallel-safe gate-1a cycles.
+
+### Cycle-split-on-reviewer-convergence as a discipline (t13, WS2.3 both used it)
+
+Two cycles this session followed the same shape: pre-execution reviewer convergence identified that the planned single cycle would either ship a type-level lie or conflate independent gate-1a/1b deliverables; the cure was to split.
+
+- **t13-freshness-gate**: split into t13a (gate-1a freshness check, landed at `745fe919`) + t13b refresh script (gate-1b; depends on t2-zod-loader Zod schema). Split rationale: refresh script with Zod-stub would be incomplete-by-design.
+- **WS2.3 source-mapping**: split into primitives (landed at `6cc7b339`) + parser-integration (future cycle). Split rationale: convergent type-expert + test-expert BLOCK on "JSON Pointer for Turtle" (Turtle isn't JSON; would fabricate synthetic wrapper) AND type-expert CRITICAL on Quad-object-keyed Map unsafety (graph-core's structural-equality dedup makes reference-keyed Maps unsafe). Cure required architectural reshape that didn't fit single-cycle scope.
+
+The pattern is doctrinally sound per `plan-body-first-principles-check`: reshape to adopt insights rather than carry on with known-bad scope. architecture-expert-fred verdict on the pattern: "scope-narrowing per reviewer convergence, not scope-creep — each landed cycle delivered LESS than the original plan body, with the deferred portion carried forward in a successor cycle that retains the convergent-verdict surface."
+
+### Lint-rule chains force architectural improvement (WS2.2 fixture drop; WS2.3 branded → interface refactor)
+
+Two cases this session where multiple lint mechanisms converged to forbid a planned pattern, and the cure was architectural rather than lint-suppression.
+
+- **WS2.2 stub fixture**: three rules (`@typescript-eslint/no-unused-vars` on stub method params; `feedback_no_underscore_rename_unused` on `_opts` rename; `sonarjs/void-use` on `void opts;` discard) collectively forbid the stub-as-no-op pattern. Cure: drop the fixture entirely per `consolidate-at-third-consumer` — extracting a stub abstraction before any consumer (WS4.5) exists is YAGNI. WS4.5 authors its own implementation inline. Lint-rule chain correctly named the premature abstraction.
+- **WS2.3 branded JsonPointer**: `@typescript-eslint/consistent-type-assertions: { assertionStyle: 'never' }` forbade the `as JsonPointer` casts required by `string & { __brand }`. Cure: interface wrapper `{ readonly raw: string }` — preserves type-expert's "no sync invariant between two representations" because segments are produced on demand by `parseSegments`, not stored. Refactored mid-authoring; no quality loss.
+
+Pattern lesson: multiple independent lint mechanisms converging on the same construct is a SIGNAL that the construct is architecturally wrong, not friction to suppress. Per `feedback_never_ignore_signals`.
+
+### Pre-execution reviewer discovers design flaws expensive to find later
+
+WS2.3 type-expert pre-execution review surfaced two findings that would have been integration-time defects:
+
+- **CRITICAL: Quad-object-keyed `Map<Quad, SourceLocation>` is unsafe** because graph-core's `Dataset.add()` deduplicates via structural `equals()`, not referential `===`. Two structurally-equal Quads constructed at different sites (e.g., `createDataset([...existing])`) would silently miss each other's source paths through a reference-keyed map. Cure: `quadKey(q): string` canonical N-Quads-style stable string key.
+- **BLOCK: "JSON Pointer for Turtle" framing is a type-level lie**. Turtle is not JSON; applying RFC 6901 fabricates a synthetic JSON wrapper referencing an internal model artefact rather than the actual source. Cure: `SourceLocation` discriminated union with `kind: 'json-pointer' | 'turtle-location'`.
+
+Empirical cost of catching these at pre-execution: ~1 minute of reviewer dispatch + plan amendment. Empirical cost if missed: parser-integration cycle rewrite after t2/t6a consumer code had baked the wrong assumptions. Pre-execution-reviewer-found-design-flaw is the highest-leverage reviewer dispatch shape; promoting this above post-execution dispatch for substantial cycles is justified by the asymmetric cost.
+
 ## 2026-05-22 evening — Velvet Veiling Wisp consolidate-docs backfill archive sweep / claude / Opus-4.7 / `b4bb7a`
 
 ### Two follow-up findings surfaced by assumptions-expert during pre-commit review
