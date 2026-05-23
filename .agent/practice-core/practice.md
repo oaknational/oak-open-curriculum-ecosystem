@@ -128,17 +128,16 @@ Practice consists of.
 
 ### Tooling
 
-Platform-specific implementations follow a canonical-first model: substantive
-content lives in `.agent/`; thin adapters in platform directories point back to
-it. `.agents/skills/` and `.agents/rules/` are portable skill, command, and
-rule adapter layers; `.codex/` holds project-agent config. Entry-point files
-direct each platform to the canonical Practice. Rules and hooks use the same
-split: canonical policy in `.agent/`, thin native activation in platform
-config, and repo-local runtime where needed. Project platform config is
-tracked infrastructure; local overrides are additive. Keep exact supported
-mappings in a local surface matrix and validate authorisation parity as well
-as wrapper presence. This layer defines _how_ the Practice is used in a
-specific environment.
+Platform-specific implementations follow a canonical-first model:
+substantive content lives in `.agent/`; thin adapters and tracked platform
+config activate the canonical Practice for each supported runtime.
+Entry-point files direct each platform to the canonical Practice. Rules and
+hooks use the same split: canonical policy in `.agent/`, thin native
+activation in platform config, and repo-local runtime where needed. Project
+platform config is tracked infrastructure; local overrides are additive.
+Keep exact supported mappings in a local surface matrix and validate
+authorisation parity as well as wrapper presence. This layer defines _how_
+the Practice is used in a specific environment.
 
 ## The Knowledge Flow
 
@@ -182,15 +181,16 @@ option-weighing design-space documents between observation and decision. An expl
 an ADR, inform a plan, or remain `active` indefinitely pending a triggering event. They are
 durable (unlike napkin) and structured (unlike chat), and their conclusions graduate to ADRs or
 plans — the exploration file remains as the reasoning trail the decision cites. The
-`/jc-consolidate-docs` command drives graduation — it checks which distilled entries have settled
-into permanent Practice artefacts and moves them to their discoverable permanent home.
+consolidation workflow drives graduation — it checks which distilled
+entries have settled into permanent Practice artefacts and moves them to
+their discoverable permanent home.
 
 ### Fitness Functions
 
 Every stage has a governor that prevents unbounded growth. Without these, the knowledge flow
 simply moves the accumulation problem downstream.
 
-- **Napkin** → ~500 lines triggers distillation (via the consolidation command): extract
+- **Napkin** → ~500 lines triggers distillation (via the consolidation workflow): extract
   high-signal patterns, archive the rest
 - **Distilled** → target <200 lines; the primary reduction mechanism is extracting settled
   entries to permanent docs, not compression
@@ -239,8 +239,8 @@ hadn't surfaced — different work, different mistakes, different discoveries.
 - **Rules** — `.agent/directives/principles.md` (authoritative policies) + platform trigger
   adapters (e.g. `.cursor/rules/*.mdc`, `.claude/rules/*.md`)
 - **Experience** — `.agent/experience/` — qualitative records of shifts in understanding
-- **Explorations** — `docs/explorations/` (or host-repo equivalent) —
-  durable design-space documents; cited by ADRs and plans
+- **Explorations** — host exploration tier (see the practice-index bridge) — durable design-space
+  documents; cited by ADRs and plans
 
 The previous `practice-core/patterns/` and `practice-context/`
 surfaces were retired 2026-04-29 (PDR-007 amendment). Universal
@@ -254,10 +254,11 @@ Specialist sub-agents provide targeted review after non-trivial changes. The
 canonical `invoke-code-experts` rule owns the roster, triage, timing, and
 depth model. Larger rosters should use a gateway pattern: route by change
 profile, state `focused` vs `deep`, and reintegrate delegated findings before
-completion. `AGENT.md` should list installed roles or say the layer is absent.
-In Codex, reviewer roles belong in `.codex/`, not skills. UI-heavy repos may
-add a browser-facing cluster rather than expecting one generic reviewer to
-cover rendered output and framework structure.
+completion. The practice-index bridge should list installed roles or say the layer is
+absent. Platform-specific reviewer activation belongs in the platform
+adapter/config layer, not in workflow skills. UI-heavy repos may add a
+browser-facing cluster rather than expecting one generic reviewer to cover
+rendered output and framework structure.
 
 Sub-agent prompts, when installed, follow a three-layer composition architecture: components,
 templates, and wrappers.
@@ -320,9 +321,9 @@ graph LR
   6. **Value traceability** — every non-trivial plan states the outcome sought, the impact it
      should create, and the mechanism by which that impact creates value; otherwise the work is
      still under-framed
-  7. **Documentation propagation** — before phase closure, propagate settled outcomes from
-     plans into permanent docs: relevant ADRs, `.agent/practice-core/practice.md`, and any
-     additionally impacted docs/READMEs. Apply the consolidate-docs command
+  7. **Documentation propagation** — before phase closure, propagate
+     settled outcomes from plans into decision records, governance docs,
+     READMEs, and affected Practice surfaces. Apply the consolidation workflow
 - **Quality gates** — a multi-layered verification taxonomy covering
   formatting, type-checking, linting, static analysis, testing, mutation
   testing, build, and accessibility. No single layer is sufficient; the
@@ -347,7 +348,7 @@ graph LR
 | `.agent/sub-agents/`                                                       | Canonical reviewer / domain-expert prompt architecture (optional until installed)                                                                                |
 | `.agent/prompts/`                                                          | Domain-specific handover prompts — stateful session context (local adaptation)                                                                                  |
 | `.agent/research/`                                                         | Research documents and analysis. May contain a transient `notes/` holding bay (see the host repo's `research/` README via the practice-index)                   |
-| `docs/explorations/` (or host equivalent)                                  | Design-space explorations — option-weighing documents that inform ADRs and plans                                                                                |
+| Host exploration tier (see practice-index bridge)                           | Design-space explorations — option-weighing documents that inform ADRs and plans                                                                                |
 | `.agent/reference/` (or equivalent)                                        | Curated library tier — owner-vetted, evergreen, deliberately-promoted read-to-learn material. Promotion-gated per [PDR-032](decision-records/PDR-032-reference-tier-as-curated-library.md) (substantiate / justify / owner-vet). |
 | `.cursor/`, `.claude/`, `.gemini/`, `.github/`, `.agents/`, `.codex/`      | Platform adapters: thin wrappers and project config referencing canonical content                                                                                |
 | Repo's ADR directory                                                       | Permanent architectural decision records (path varies by repo; see [`practice-index`](../practice-index.md))                                                    |
@@ -433,10 +434,11 @@ each host repo's local artefacts.
 is normally empty. When files arrive:
 
 - **At session start** (via start-right), agents alert the user.
-- **At consolidation** (via `/jc-consolidate-docs`), agents perform the full integration
-  flow: check the provenance chain, compare against the full local Practice system (not just
-  `practice.md` — also rules, skills, commands, and directives), apply the three-part bar,
-  propose specific changes, and clear the box after integration.
+- **At consolidation**, agents perform the full integration flow: check
+  the provenance chain, compare against the full local Practice system
+  (not just `practice.md` — also rules, skills, commands, and
+  directives), apply the three-part bar, propose specific changes, and
+  clear the box after integration.
 
 ### Meta-Principles
 
@@ -477,20 +479,21 @@ the links. The Practice will teach itself.
 
 ## Sustainability and Scaling
 
-The Practice spans ~1,000+ files. This volume is managed, not accidental
-— each layer has distinct lifecycles. Three mechanisms keep it
-manageable: knowledge flow fitness functions (§The Knowledge Flow),
-the consolidate-docs command (graduates plan content then archives),
-and sub-agent architecture consolidation (extracts common prompt
-patterns into shared templates).
+The Practice can span many files. This volume is managed, not
+accidental — each layer has distinct lifecycles. Three mechanisms keep
+it manageable: knowledge flow fitness functions (§The Knowledge Flow),
+the consolidation workflow, and sub-agent architecture consolidation
+(extracting common prompt patterns into shared templates).
 
-Intentional repetition is a conscious trade-off: the Cardinal Rule appears in ~66 files so that
-any contributor encounters it within their first few documents. DRY matters for code;
-discoverability matters for onboarding. The risk is formulation drift, mitigated by the
-consolidation command.
+Intentional repetition is a conscious trade-off: load-bearing doctrine may
+appear in multiple first-contact surfaces so that contributors encounter it
+early. DRY matters for code; discoverability matters for onboarding. The risk
+is formulation drift, mitigated by the consolidation workflow.
 
-The Practice should be restructured if: consolidation cannot keep pace with file creation, the
-distillation cycle takes longer than one session, semantic search for a core concept returns more
-than 5 equally-weighted hits, or AI agents consistently exhaust context windows reading
-overlapping content. The last two are leading mechanical indicators measurable before human
-perception catches up.
+The Practice should be restructured if: consolidation cannot keep pace with
+file creation, the distillation cycle takes longer than one session, semantic
+search for a core concept exceeds the host-defined small-result threshold with
+equally-weighted hits, or agents
+consistently exhaust context windows reading overlapping content. The last
+two are leading mechanical indicators measurable before human perception
+catches up.
