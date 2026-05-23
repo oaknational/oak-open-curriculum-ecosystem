@@ -32,3 +32,9 @@ export type {
   RankedItem,
   RankedResults,
 } from '../mcp/evidence-corpus/types.js';
+
+export type {
+  EvidenceCorpusSpanConfig,
+  EvidenceCorpusSpanName,
+  ExploreSpanAttrs,
+} from '../mcp/evidence-corpus/telemetry.js';
