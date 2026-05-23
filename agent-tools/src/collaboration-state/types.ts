@@ -2,6 +2,8 @@
  * Shared collaboration-state types used by the repo-owned state helpers.
  */
 
+import { z } from 'zod';
+
 export interface CollaborationStateEnvironment {
   readonly PRACTICE_AGENT_SESSION_ID_CLAUDE?: string;
   readonly PRACTICE_AGENT_SESSION_ID_CURSOR?: string;
@@ -10,12 +12,25 @@ export interface CollaborationStateEnvironment {
   readonly OAK_AGENT_IDENTITY_OVERRIDE?: string;
 }
 
-export interface CollaborationAgentId {
-  readonly agent_name: string;
-  readonly platform: string;
-  readonly model: string;
-  readonly session_id_prefix: string;
-}
+/**
+ * Canonical Zod schema for an agent identity tuple (PDR-027). The type
+ * `CollaborationAgentId` is `z.infer<typeof collaborationAgentIdSchema>` per
+ * schema-first Commandment 12 — the schema IS the type, statically embedded.
+ *
+ * Any caller that needs to parse an identity from untrusted input (JSON, env,
+ * external source) MUST use this schema rather than hand-crafting a
+ * structural-typing equivalent.
+ */
+export const collaborationAgentIdSchema = z
+  .object({
+    agent_name: z.string(),
+    platform: z.string(),
+    model: z.string(),
+    session_id_prefix: z.string(),
+  })
+  .strict();
+
+export type CollaborationAgentId = Readonly<z.infer<typeof collaborationAgentIdSchema>>;
 
 export interface DerivedCollaborationIdentity {
   readonly agentId: CollaborationAgentId;

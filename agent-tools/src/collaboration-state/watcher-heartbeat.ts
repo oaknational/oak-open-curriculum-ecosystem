@@ -1,15 +1,7 @@
 import { z } from 'zod';
 
 import { type CollaborationStateCliIo } from './cli-runtime.js';
-
-const watcherIdentitySchema = z
-  .object({
-    agent_name: z.string(),
-    platform: z.string(),
-    model: z.string(),
-    session_id_prefix: z.string(),
-  })
-  .strict();
+import { collaborationAgentIdSchema } from './types.js';
 
 /**
  * Pre-stable schema version. The `0.x.y` prefix signals that the schema may
@@ -29,7 +21,7 @@ const watcherHeartbeatSchema = z
     last_error_at: z.string().nullable(),
     emitted_count: z.number(),
     heartbeat_interval_ms: z.number(),
-    watcher_identity: watcherIdentitySchema,
+    watcher_identity: collaborationAgentIdSchema,
   })
   .strict();
 
@@ -50,8 +42,6 @@ const watcherHeartbeatSchema = z
  * See FM-2 cure (2026-05-23): Monitor-harness liveness investigation.
  */
 export type WatcherHeartbeat = z.infer<typeof watcherHeartbeatSchema>;
-
-export type WatcherIdentity = z.infer<typeof watcherIdentitySchema>;
 
 export async function writeWatcherHeartbeat(input: {
   readonly io: Pick<CollaborationStateCliIo, 'writeTextFile'>;

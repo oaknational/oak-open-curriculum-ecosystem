@@ -3,11 +3,7 @@ import { type CollaborationAgentId, type CommsEvent, type DirectedCommsMessage }
 
 export { migrateLegacyCommsRecordCollections } from './comms-migration-records.js';
 export { classifyEventForAgent, drainRelevantEvents } from './comms-relevant-events.js';
-export {
-  watchCommsLoop,
-  type WatcherErrorKind,
-  type WatcherTickStatus,
-} from './comms-watch-loop.js';
+export { watchCommsLoop, type WatcherTickStatus } from './comms-watch-loop.js';
 
 const MAX_REPLY_SUBJECT_LENGTH = 200;
 
