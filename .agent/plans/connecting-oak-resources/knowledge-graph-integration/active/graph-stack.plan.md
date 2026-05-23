@@ -55,7 +55,7 @@ todos:
     sub_increment: 1a
   - id: ws2-jsonld-compatible
     content: "WS2.2: jsonld-compatible ingestion mode (JSON with @context/@id/@type or inferable LD shape) plus generic Turtle/SKOS parse-to-dataset. Acceptance: parse a generic SKOS fixture into a Dataset deterministically; parse a small Turtle fixture identifying terms via the DataFactory from WS1.3. Lands the §Test discipline invariant #2 contract test (every emitted edge carries a NamedNode predicate, never a bare string). Reviewer flags: test-expert (fixture quality and round-trip coverage on both jsonld-compatible and Turtle paths), type-expert (parser return type is Dataset over Quad; no leakage of jsonld.js raw types)."
-    status: pending
+    status: completed
     depends_on: [ws2-ingest-scaffold, ws1-dataset-core]
     sub_increment: 1a
   - id: ws2-source-mapping
