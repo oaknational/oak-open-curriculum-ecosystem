@@ -249,17 +249,19 @@ The convention is not schema-enforced (the body field stays free-form
 prose by design); it is the SKILL-level discipline that makes the
 channel scannable.
 
-**Deferred until ADR-183 has fully landed.** Agents do NOT write events
-with the `tags` field until BOTH ADR-183 Tranche 1 (schema amendment on
-`comms-event.schema.json`) AND ADR-183 Tranche 2 (CLI rendering update
-on `pnpm agent-tools:collaboration-state -- comms watch` composing
-`[FAILURE-MODE]` / `[BEHAVIOUR-NOTE]` tokens with the existing channel
-tokens) have landed, per ADR-183 §"Landing tranche" ordering rule.
-Tranche 2 is currently deferred pending coordination with the
-agent-tools workspace owner. Until both tranches land, capture failure
-modes through the existing consolidation surface (napkin /
-`distilled.md`) as before; the comms-event channel becomes the primary
-capture vehicle once the substrate is live.
+**Activation live as of 2026-05-23.** ADR-183's required substrate has
+landed: `c4bacfc5` added the optional `tags` field to
+`comms-event.schema.json`, and `03da8e3d` added watcher rendering and tests
+for `[FAILURE-MODE]` / `[BEHAVIOUR-NOTE]` tokens composed with the existing
+channel tokens. Agents MAY now write `tags: ["failure-mode"]` or
+`tags: ["behaviour-note"]` on the `narrative`, `lifecycle`, and `directed`
+event kinds when the event's substance matches the namespace above.
+
+The comms-event channel is now the primary first-capture vehicle for
+real-time team-session failure modes and behaviour notes. The consolidation
+surfaces remain the absorption destination: session closeout reads the
+session's tagged events forward into napkin / `distilled.md` / graduation
+surfaces as appropriate.
 
 ### 1. Register Presence
 
@@ -759,8 +761,6 @@ absorption destination for failure-mode substance; the comms stream
 becomes the first capture vehicle during the session, and closeout
 consolidation reads the session's already-captured events forward into
 the doctrine pipeline (PDR-014 capture → distil → graduate → enforce).
-Until both ADR-183 tranches land, capture continues through the
-consolidation surface directly as today.
 
 ## Failure Handling
 

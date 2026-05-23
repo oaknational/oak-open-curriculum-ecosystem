@@ -1049,6 +1049,51 @@
       "staged_bundle_fingerprint": "7248bd5a8f12df73f35c8c19097934645bcd295ff7b3d291b2d8c3d305f93c06",
       "staged_name_status": "M\t.agent/memory/active/napkin.md\nA\t.agent/memory/active/patterns/honest-restructure-over-band-aid.md\nA\t.agent/memory/active/patterns/reciprocal-cross-agent-reviewer-dispatch.md\nM\t.agent/memory/operational/pending-graduations.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/connecting-oak-resources.next-session.md\nM\t.agent/memory/operational/threads/eef.next-session.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nM\t.agent/state/collaboration/shared-comms-log.md\n",
       "notes": "commit-workflow git-commit failure: git commit exited with code 1: 🔍 Running pre-commit checks...\n📝 Checking formatting on staged files...\n$ pnpm --filter @oaknational/agent-tools repo-check prettier-staged\n$ cd .. && pnpm exec tsx agent-tools/scripts/repo-check.ts prettier-staged\nChecking formatting...\nAll matched files use Prettier code style!\n🔍 Running markdownlint on staged Markdown files...\n$ pnpm --filter @oaknational/agent-tools repo-check markdownlint-staged\n$ cd .. && pnpm exec tsx agent-tools/scripts/repo-check.ts markdownlint-staged\n.agent/memory/active/napkin.md:469:1 error MD004/ul-style Unordered list style [Expected: dash; Actual: plus]\n.agent/memory/active/napkin.md:469 error MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: \"+ identification is the missin...\"]\n.agent/memory/active/napkin.md:473 error MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: \"- **Coordinator-discovery for ...\"]\n.agent/memory/active/napkin.md:564:1 error MD004/ul-style Unordered list style [Expected: dash; Actual: plus]\n.agent/memory/active/napkin.md:564 error MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: \"+ rule name + minimal change)....\"]\n.agent/memory/active/napkin.md:613 error MD012/no-multiple-blanks Multiple consecutive blank lines [Expected: 1; Actual: 2]\n.agent/memory/active/napkin.md:614 error MD012/no-multiple-blanks Multiple consecutive blank lines [Expected: 1; Actual: 3]\n.agent/memory/active/patterns/honest-restructure-over-band-aid.md:60 error MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: \"- `graph-view/index.ts` (28 li...\"]\n/Users/jim/code/oak/oak-open-curriculum-ecosystem/agent-tools:\n[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @oaknational/agent-tools@0.1.0 repo-check: `cd .. && pnpm exec tsx agent-tools/scripts/repo-check.ts markdownlint-staged`\nExit status 1\n[ELIFECYCLE] Command failed with exit code 1.\n❌ Markdownlint issues found!\n💡 Run 'pnpm markdownlint:root' to fix markdown issues, then stage the changes\nhusky - pre-commit script failed (code 1)"
+    },
+    {
+      "intent_id": "d87020b5-7222-49ec-b865-49a7312fc31e",
+      "claim_id": "dec71abc-ef26-4de8-8738-1705be394f40",
+      "agent_id": {
+        "agent_name": "Gilded Drifting Meteor",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "files": [
+        ".agent/skills/start-right-team/SKILL-CANONICAL.md",
+        ".agent/state/collaboration/comms/7914816b-5524-4dd9-aaa9-71cc1e0ae2da.json",
+        ".agent/state/collaboration/shared-comms-log.md",
+        ".agent/state/collaboration/active-claims.json"
+      ],
+      "commit_subject": "docs(start-right-team): activate ADR-183 comms tags",
+      "queued_at": "2026-05-23T10:17:55.921Z",
+      "updated_at": "2026-05-23T10:19:44.453Z",
+      "expires_at": "2026-05-23T10:32:55.921Z",
+      "phase": "abandoned"
+    },
+    {
+      "intent_id": "93db5cf0-2b3a-4294-a445-b818b6665e03",
+      "claim_id": "f6fc624b-a65e-47c0-8c24-bcf13d5fd403",
+      "agent_id": {
+        "agent_name": "Stratospheric Streaming Kite",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "files": [
+        ".agent/skills/start-right-team/SKILL-CANONICAL.md",
+        ".agent/state/collaboration/comms/7914816b-5524-4dd9-aaa9-71cc1e0ae2da.json",
+        ".agent/state/collaboration/shared-comms-log.md",
+        ".agent/state/collaboration/active-claims.json"
+      ],
+      "commit_subject": "docs(start-right-team): activate ADR-183 comms tags",
+      "queued_at": "2026-05-23T10:19:47.863Z",
+      "updated_at": "2026-05-23T10:20:42.460Z",
+      "expires_at": "2026-05-23T10:34:47.863Z",
+      "phase": "pre_commit",
+      "staged_bundle_fingerprint": "bc5fcd260eeb48dad5a7137bb16f24550a6e9ef941433f171548077203cf7a1f",
+      "staged_name_status": "M\t.agent/skills/start-right-team/SKILL-CANONICAL.md\nM\t.agent/state/collaboration/active-claims.json\nA\t.agent/state/collaboration/comms/7914816b-5524-4dd9-aaa9-71cc1e0ae2da.json\nM\t.agent/state/collaboration/shared-comms-log.md\n",
+      "notes": "commit-workflow git-commit failure: git commit exited with code 128: fatal: Unable to create '/Users/jim/code/oak/oak-open-curriculum-ecosystem/.git/index.lock': Operation not permitted"
     }
   ],
   "claims": [
@@ -1073,6 +1118,147 @@
       "freshness_seconds": 600,
       "sidebar_open": false,
       "intent": "fix(format): whitespace-only prettier normalization on two graph-ingest files to unblock 26-commit push"
+    },
+    {
+      "claim_id": "f6fc624b-a65e-47c0-8c24-bcf13d5fd403",
+      "agent_id": {
+        "agent_name": "Stratospheric Streaming Kite",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "repo-commit-marshal",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T09:54:25Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "commit marshal only: all team commits must be queued and transferred to Stratospheric Streaming Kite; gate failures route back to owning agent via comms",
+      "heartbeat_at": "2026-05-23T10:00:26Z",
+      "intent_to_commit": "93db5cf0-2b3a-4294-a445-b818b6665e03"
+    },
+    {
+      "claim_id": "dec71abc-ef26-4de8-8738-1705be394f40",
+      "agent_id": {
+        "agent_name": "Gilded Drifting Meteor",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T10:14:29Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "F1 ADR-183 activation flip: amend start-right-team failure-mode capture prose to mark tag substrate live and route commit through Stratospheric.",
+      "intent_to_commit": "d87020b5-7222-49ec-b865-49a7312fc31e"
+    },
+    {
+      "claim_id": "1bff7d48-96ba-4a92-b6b2-df8fe95a1344",
+      "agent_id": {
+        "agent_name": "Starlit Shimmering Dusk",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/architecture/architectural-decisions/184-comms-event-sync-kind-and-urgency-field.md",
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T10:14:30.000Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Author ADR-only comms-event sync kind plus urgency field two-axis separation and partially graduate sync-kind-urgency-flag candidate; no schema/tooling implementation edits."
+    },
+    {
+      "claim_id": "0a4c2a16-9a1c-4066-bab9-bc26f8f6b07e",
+      "agent_id": {
+        "agent_name": "Starlit Shimmering Dusk",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/architecture/architectural-decisions/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T10:16:00.000Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Add ADR-184 index entry for comms-event sync kind and urgency field ADR; paired with Starlit ADR-only route claim 1bff7d48."
+    },
+    {
+      "claim_id": "4fd8da04-09a4-48e1-8839-4b45a21e398c",
+      "agent_id": {
+        "agent_name": "Gilded Drifting Meteor",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/*",
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T10:20:00Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Author coordinator-role-as-allocator-not-gatekeeper Practice Core PDR and flip pending-graduations entry to partially-graduated; no downstream SKILL/directive amendments."
+    },
+    {
+      "claim_id": "b122b8c5-048a-471f-b8c3-3e4f2e0557c4",
+      "agent_id": {
+        "agent_name": "Lacustrine Sailing Lighthouse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/practice.md",
+            ".agent/practice-core/practice-lineage.md",
+            ".agent/practice-core/principles.md",
+            ".agent/practice-core/practice-bootstrap.md",
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T10:20:37Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Seaworthy-routed C practice.md homing-map pass: read Practice Core surfaces and prepare owner-review disposition map before any core file edits; no commit intent until owner gate clears"
     }
   ]
 }
