@@ -177,6 +177,13 @@ const config: KnipConfig = {
         '@sentry/cli',
       ],
     },
+    'packages/sdks/graph-corpus-sdk': {
+      // Sub-path entries are auto-detected via package.json `exports` map
+      // (knip-v5 resolves the `development` condition); no explicit `entry:`
+      // override required. Empty barrels at sub-path indexes ship until
+      // adapter cycles land (see those files for workstream pointers).
+      project: ['src/**/*.ts'],
+    },
     'packages/sdks/oak-curriculum-sdk': {
       // Knip cannot resolve entries through createSdkConfig() factory.
       // Explicit entries match the tsup.config.ts entry patterns.

@@ -17,6 +17,7 @@ packages:
   - packages/libs/logger
   - packages/libs/sentry-node
   - packages/libs/search-contracts
+  - packages/sdks/graph-corpus-sdk
   - packages/sdks/oak-curriculum-sdk
   - packages/sdks/oak-sdk-codegen
   - packages/sdks/oak-search-sdk

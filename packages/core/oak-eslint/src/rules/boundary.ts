@@ -24,6 +24,7 @@ type DesignPackageImport =
 
 export const SDK_PACKAGE_IMPORTS = [
   '@oaknational/curriculum-sdk',
+  '@oaknational/graph-corpus-sdk',
   '@oaknational/sdk-codegen',
   '@oaknational/oak-search-sdk',
 ] as const;
