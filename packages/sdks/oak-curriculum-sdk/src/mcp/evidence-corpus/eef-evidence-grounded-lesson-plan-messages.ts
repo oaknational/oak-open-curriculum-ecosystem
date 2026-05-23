@@ -13,9 +13,11 @@
  * when the prompt name matches `eef-evidence-grounded-lesson-plan`.
  *
  * @remarks
- * The prompt body adapts the predecessor T10 design (sourced from
- * `git show e2796757:.agent/plans/sector-engagement/external-knowledge-sources/current/eef-evidence-mcp-surface.plan.md`)
- * for the 2026-05-21 gate-1a / gate-1b split: where the predecessor
+ * The prompt body adapts the predecessor T10 design (preserved at the
+ * predecessor plan location recoverable through git history; the live
+ * adaptation rationale lives in the current `eef-evidence-corpus.plan.md`
+ * §Phase E T10 narrative) for the 2026-05-21 gate-1a / gate-1b split:
+ * where the predecessor
  * orchestrated a ranked-list response from `recommend-evidence-for-context`
  * (gate-1b), this gate-1a version orchestrates a subgraph response from
  * `eef-explore-evidence-for-context` (gate-1a, t6a). The 5-step

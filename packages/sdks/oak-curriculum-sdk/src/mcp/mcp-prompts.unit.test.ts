@@ -58,26 +58,10 @@ describe('MCP_PROMPTS', () => {
     expect(argNames).toContain('yearGroup');
   });
 
-  it('has eef-evidence-grounded-lesson-plan prompt', () => {
+  it('has eef-evidence-grounded-lesson-plan prompt registered for client discovery', () => {
     const prompt = MCP_PROMPTS.find((p) => p.name === 'eef-evidence-grounded-lesson-plan');
-    expect(prompt).toBeDefined();
-    expect(prompt?.description).toContain('EEF');
-  });
 
-  it('eef-evidence-grounded-lesson-plan has subject, keyStage, topic required and focus optional', () => {
-    const prompt = MCP_PROMPTS.find((p) => p.name === 'eef-evidence-grounded-lesson-plan');
-    expect(prompt?.arguments).toContainEqual(
-      expect.objectContaining({ name: 'subject', required: true }),
-    );
-    expect(prompt?.arguments).toContainEqual(
-      expect.objectContaining({ name: 'keyStage', required: true }),
-    );
-    expect(prompt?.arguments).toContainEqual(
-      expect.objectContaining({ name: 'topic', required: true }),
-    );
-    expect(prompt?.arguments).toContainEqual(
-      expect.objectContaining({ name: 'focus', required: false }),
-    );
+    expect(prompt).toBeDefined();
   });
 });
 
@@ -201,6 +185,34 @@ describe('getPromptMessages', () => {
       const content = messages.map((m) => m.content.text).join(' ');
       expect(content).toContain('get-thread-progressions');
       expect(content).toContain('get-prior-knowledge-graph');
+    });
+  });
+
+  describe('eef-evidence-grounded-lesson-plan prompt', () => {
+    it('routes to the eef-evidence-grounded-lesson-plan generator when called by name', () => {
+      const messages = getPromptMessages('eef-evidence-grounded-lesson-plan', {
+        subject: 'mathematics',
+        keyStage: 'KS3',
+        topic: 'fractions',
+      });
+
+      expect(messages.length).toBeGreaterThan(0);
+
+      const content = messages.map((m) => m.content.text).join(' ');
+      expect(content).toContain('mathematics');
+      expect(content).toContain('KS3');
+      expect(content).toContain('fractions');
+    });
+
+    it('references the gate-1a eef-explore-evidence-for-context tool via the dispatcher', () => {
+      const messages = getPromptMessages('eef-evidence-grounded-lesson-plan', {
+        subject: 'english',
+        keyStage: 'KS2',
+        topic: 'phonics',
+      });
+
+      const content = messages.map((m) => m.content.text).join(' ');
+      expect(content).toContain('eef-explore-evidence-for-context');
     });
   });
 

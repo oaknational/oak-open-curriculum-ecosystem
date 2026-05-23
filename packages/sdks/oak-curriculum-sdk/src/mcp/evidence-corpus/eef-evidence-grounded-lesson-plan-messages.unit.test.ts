@@ -21,7 +21,11 @@ import { getEefEvidenceGroundedLessonPlanMessages } from './eef-evidence-grounde
 
 function getText(args: Readonly<Record<string, string | undefined>>): string {
   const messages = getEefEvidenceGroundedLessonPlanMessages(args);
-  return messages.map((m) => m.content.text).join('\n');
+
+  return messages
+    .filter((m) => m.content.type === 'text')
+    .map((m) => m.content.text)
+    .join('\n');
 }
 
 describe('getEefEvidenceGroundedLessonPlanMessages', () => {
@@ -60,6 +64,12 @@ describe('getEefEvidenceGroundedLessonPlanMessages', () => {
     const text = getText({ subject: 'art', keyStage: 'EYFS', topic: 'colour' });
 
     expect(text.toLowerCase()).toContain('early_years');
+  });
+
+  it('produces a prompt body that resolves KS5 to the secondary phase (F9 edge case)', () => {
+    const text = getText({ subject: 'biology', keyStage: 'KS5', topic: 'genetics' });
+
+    expect(text.toLowerCase()).toContain('secondary');
   });
 
   it('splices the AGGREGATED_EEF_EVIDENCE_GUIDANCE preamble into the prompt body', () => {
