@@ -39,6 +39,11 @@
       "types": "./dist/custom-mapping/index.d.ts",
       "development": "./src/custom-mapping/index.ts",
       "import": "./dist/custom-mapping/index.js"
+    },
+    "./turtle": {
+      "types": "./dist/turtle/index.d.ts",
+      "development": "./src/turtle/index.ts",
+      "import": "./dist/turtle/index.js"
     }
   },
   "main": "./dist/index.js",
@@ -58,8 +63,16 @@
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest"
   },
+  "dependencies": {
+    "@oaknational/graph-core": "workspace:*",
+    "@oaknational/result": "workspace:*",
+    "jsonld": "^9.0.0",
+    "n3": "^2.0.3"
+  },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@types/jsonld": "^1.5.15",
+    "@types/n3": "^1.21.0",
     "@types/node": "^25.7.0",
     "eslint": "^10.3.0",
     "tsup": "^8.5.1",
