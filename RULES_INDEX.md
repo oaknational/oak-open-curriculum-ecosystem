@@ -62,6 +62,7 @@ index in the same commit.
 - `.agent/rules/knowledge-preservation-over-fitness-warnings.md`
 - `.agent/rules/lint-after-edit.md`
 - `.agent/rules/local-broken-code-never-leaves.md`
+- `.agent/rules/loop-exit-criteria-required.md`
 - `.agent/rules/markdown-code-blocks-must-have-language.md`
 - `.agent/rules/monitor-branch-touched-files.md`
 - `.agent/rules/never-disable-checks.md`
@@ -91,6 +92,7 @@ index in the same commit.
 - `.agent/rules/register-identity-on-thread-join.md`
 - `.agent/rules/replace-dont-bridge.md`
 - `.agent/rules/respect-active-agent-claims.md`
+- `.agent/rules/sha-prefix-in-collaboration-content.md`
 - `.agent/rules/sonarqube-mcp-instructions.md`
 - `.agent/rules/stage-by-explicit-pathspec.md`
 - `.agent/rules/strict-validation-at-boundary.md`
