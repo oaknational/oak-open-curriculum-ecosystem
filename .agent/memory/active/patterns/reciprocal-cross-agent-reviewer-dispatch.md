@@ -177,11 +177,50 @@ own reviewers missed. Three forces explain the divergence:
   enum gap; the t10 prompt would have shipped with a duplicate
   AGGREGATED_EEF_EVIDENCE_GUIDANCE if SVW had not caught the
   splice-presence regression in the schema-audit test reshape).
-- **Net**: at the n=8 catches observed in this session, the pattern
+- **Net**: at the n=9 catches observed in this session, the pattern
   is paying multiples of its cost. The diminishing-returns boundary
   is when both agents' reviewers consistently land verdicts with no
   substantive findings — at that point the pattern can drop to
   occasional dispatch rather than every cycle.
+
+## The reciprocity-axis is the load-bearer, not the n-count
+
+Refinement landed 2026-05-23 (Sparking last-agent-out metacognition).
+The pattern's value is in the RECIPROCITY (pair-bidirectional dispatch),
+not in the absolute count of catches across all pairs.
+
+**What the n-count obscures**:
+
+- **Pre-execution self-dispatch** caught the highest-leverage defects
+  this session (WS2.3 Quad-object-keyed-Map unsafety; "JSON Pointer for
+  Turtle" type-level lie; the jsonld walker typing wall). These would
+  have been parser-integration-cycle rewrites if missed. All were
+  *self-dispatched*, not peer-dispatched.
+- **Post-execution peer-reciprocal** caught important-but-tier-2
+  plan-vs-impl divergences (focus enum 4/6 members, `pp_percentage`
+  missing, `max_results` mis-nested) and schema-audit-vs-behavioural
+  test shapes.
+
+**Structural insight**: pre-execution self-dispatch + reciprocal
+post-execution peer-dispatch is the cheapest + highest-value review
+combo (<2 minutes total per cycle). The reciprocity-axis pairs deliver
+depth; adding more reviewers in a fan-out adds breadth without depth.
+**Two agents reviewing each other beats five agents fanning-out to one**
+for substrate-substance quality.
+
+**Implications for application**:
+
+- A reciprocity-axis pair with mutual dispatch is the proven shape; n=9
+  empirical catches arose from three such pairs (SVW ↔ Sparking, SVW ↔
+  Foamy, Sparking ↔ Stormbound Spiralling Breeze).
+- Adding a fourth pair (5 agents fanning to 1) for the same cycle is
+  unlikely to add depth proportional to its cost.
+- Self-dispatched pre-execution review is NOT replaceable by peer
+  post-execution. They cover different failure modes (type-level lies
+  vs plan-vs-impl drift).
+- The pattern graduation is on the reciprocity property, not on the
+  empirical n. n grows in any session with active pairs; reciprocity is
+  the property that determines whether n yields depth or breadth.
 
 ## Adjacent patterns
 

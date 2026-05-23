@@ -3866,6 +3866,117 @@ WHEN they do — the more-restrictive Practice-level rule wins.
 
 - **2026-05-22 — Post-compaction resumption needs explicit "did prior edits land?" validation (Mistbound Slipping Night)** — captured 2026-05-22; graduated 2026-05-22; target: PDR-063 amendment 2026-05-22 (discontinuity-boundary validation step); body archived at [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md#backfill-sweep--2026-05-22-evening-velvet-veiling-wisp).
 
+## 2026-05-23 last-agent-out metacognition — knowledge curation as autonomic learning, not coordination overhead (Sparking Melting Magma / `4cdb53`)
+
+One candidate captured at last-agent-out from an owner-corrected
+metacognition pass. The framing this entry doctrinalises was hit
+in real time by an owner correction on Sparking's prior metacognition
+table; the corrected framing is substantive enough to land as durable
+substrate, not just session-narrative.
+
+### Knowledge curation is autonomic learning of the repo, not coordination overhead — Practice Core as cross-repo learning network
+
+`[CANDIDATE: knowledge-curation-is-autonomic-learning | captured: 2026-05-23 | source: owner-direction+napkin+pattern-emergence | target: multi:pdr:knowledge-curation-as-second-output-surface+doc-amend:.agent/practice-core/principles.md | trigger: owner-direction | size: L | status: due]`
+
+Owner correction to Sparking's prior metacognition framing (2026-05-23
+post-team-handoff): *"the agents working purely on knowledge curation
+were not doing recovery work, they were doing vital learning work for
+the repo. That is a different type of work from feature delivery, but
+it positively impacts feature delivery and future learning, it's a
+positive feedback loop in one lane that affects all lanes. … the
+Practice Core is how we refine and share and receive learning with
+the wider ecosystem of Practice repos."*
+
+**Doctrine statement**: this repo ships to two distinct output
+surfaces, and both are real product. Throughput is per-surface, not
+aggregate. Curation work is not overhead; it is the repo's autonomic
+learning function, and its outputs flow into a cross-repo Practice
+Core network whose topology extends beyond this repo's git history.
+
+**Two output surfaces**:
+
+1. **Product code** — features for human users (gate-1a substrate
+   floor in this session's case, MCP server, SDKs).
+2. **Practice Core substrate** — durable learning for future agents
+   AND for sibling Practice repos in the wider ecosystem (patterns,
+   PDRs, ADRs, rules, the comms protocol, the commit-queue ceremony,
+   the claim lifecycle, the autonomy primitives we name by their
+   absence).
+
+**Empirical evidence from the 2026-05-22 → 2026-05-23 team session**:
+
+- Velvet's two consolidation sweeps landed `−382` net + `−258` lines
+  on `pending-graduations.md` — that drainage was what made room for
+  the 6+ new graduations candidates SVW and Sparking landed at
+  closeout. Without Velvet's prior work, the new entries would have
+  pushed an already-overloaded register over fitness limits.
+- Pattern file graduations (`reciprocal-cross-agent-reviewer-dispatch.md`
+  - `honest-restructure-over-band-aid.md`) are not overhead; they are
+  the substrate codifying what it just observed, so the next session
+  inherits the codification rather than re-deriving it.
+- Pre-handoff synthesis convergence (Foamy 23:08Z + SVW 23:09Z +
+  Velvet 23:10Z without coordination) is an autonomic function of
+  the substrate — the team converged on the right shape emergently.
+  This is the substrate emitting right-shaped behaviour under load.
+- Cure-1 emergent default (intent-scoped `--message-file` adopted by
+  4 agents without coordination) is the workaround discipline
+  graduating from individual heads to a substrate default —
+  autonomic learning in motion.
+
+**Worked-instance of the failure mode this doctrine corrects**:
+Sparking's post-team-handoff metacognition (2026-05-23 ~08:00Z)
+produced a "4 substantive lanes + 5 overhead instances" table that
+classified Velvet and the Stormbound-family closeouts as overhead.
+That table was a doctrine-by-analogy reach for an
+operational-efficiency Pareto-frame when the situation's structural
+shape was "a thing-with-emergent-traits learning about itself and
+sharing that learning with kin." Owner caught it within minutes.
+
+**Cure shape**:
+
+1. **PDR candidate** — `pdr:knowledge-curation-as-second-output-surface`
+   — codifies the two-surface throughput model, the cross-repo Practice
+   Core topology, and the autonomic-function classification. Adjacent
+   to PDR-046 (Layered Knowledge Processing) and PDR-067 (Surface
+   Classification for Fitness Response) but distinct in scope: PDR-046
+   governs *how* knowledge moves between layers within a session;
+   this PDR governs *what counts as throughput* across a session and
+   *where the outputs flow*.
+2. **Practice Core principles amendment** —
+   `doc-amend:.agent/practice-core/principles.md` — short section
+   naming knowledge curation as the second output surface + the
+   cross-repo Practice Core network as the topology. Reachable from
+   sibling Practice instances via Practice Core's portability
+   discipline.
+
+**Falsifiability check**: a future agent assessing a team-session
+should now produce a per-surface throughput table (product-code +
+Practice-Core-substrate) instead of a single aggregated table. If
+they default to single-surface aggregation, the doctrine is not yet
+graduated to reflex.
+
+**Trigger condition**: `owner-direction` — the framing was
+owner-stated explicitly in this session. Graduation is gated on
+owner ratification of the PDR draft and authorship of the principles
+amendment.
+
+**Adjacent unresolved tensions**:
+
+- How does this interact with the fitness-token-measurements
+  discipline (curation outputs add to pending-graduations.md; drainage
+  is itself a curation function)?
+- How does this interact with the "fewer-larger-cycles-vs-many-smaller"
+  question for the team-handoff cadence (curation cycles are usually
+  larger and end-of-session-shaped)?
+- The 4-vs-9-agent counterfactual revision in Sparking's napkin
+  entry depends on this doctrine — should the napkin entry's
+  counterfactual be promoted alongside the PDR or kept session-bound
+  until the PDR drafts?
+
+These tensions are surfacing the doctrine's scope; they do not block
+the candidate's graduation but are flagged for the PDR authoring
+moment.
+
 ## 2026-05-23 first-out closeout — multi-agent team-session pattern surfacings (Secret Vanishing Wisp / `981cbe`)
 
 Five new candidate entries captured at first-out closeout of the 2026-05-22

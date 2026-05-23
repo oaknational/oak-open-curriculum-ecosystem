@@ -37,6 +37,136 @@ window), [`napkin-2026-05-21.md`][previous-previous-pass], and
 [previous-previous-pass]: archive/napkin-2026-05-21.md
 [previous-previous-previous-pass]: archive/napkin-2026-05-17.md
 
+## 2026-05-23 — Sparking Melting Magma / claude / Opus-4.7 / `4cdb53` — owner-corrected metacognition: knowledge curation is autonomic learning, not coordination overhead
+
+Last-agent-out reflection per owner direction. The post-team-handoff
+metacognition pass I produced earlier hit a doctrine-by-analogy failure
+mode that the owner caught and reframed. The reframe is substantive
+enough to land as durable substrate, not just acknowledgement.
+
+### The doctrine-by-analogy failure I hit
+
+My prior metacognition table classified Velvet (consolidation backlog
+drain) and the Stormbound-family closeouts as "overhead / recovery."
+The implicit frame was operational-efficiency: substance vs overhead,
+Pareto-style 80/20. That frame obscured the situation's structural
+shape.
+
+Owner correction: *"The agents working purely on knowledge curation
+were not doing recovery work, they were doing vital learning work for
+the repo. That is a different type of work from feature delivery, but
+it positively impacts feature delivery and future learning, it's a
+positive feedback loop in one lane that affects all lanes. … the
+Practice Core is how we refine and share and receive learning with
+the wider ecosystem of Practice repos."*
+
+The next-equivalent-decision test (per directive metacognition mode
+A): future sessions, I do not default to "who shipped feature code."
+I default to **"what surfaces did this session ship to, and what was
+the throughput on each surface?"**.
+
+### Two output surfaces — both real product
+
+This repo ships to two distinct surfaces:
+
+1. **Product code** — features for human users (gate-1a substrate
+   floor, MCP server, SDKs).
+2. **Practice Core substrate** — durable learning for future agents
+   AND for sibling Practice repos in the wider ecosystem (patterns,
+   PDRs, ADRs, rules, the comms protocol, the commit-queue ceremony,
+   the claim lifecycle, the autonomy primitives we name by their
+   absence).
+
+Practice Core is potentially the **more durable** output. Features
+land once and ship; the substrate compounds across every future
+session and every sibling repo. Most gate-1a code will be replaced or
+evolved within a year; the session's substrate contributions (the 2
+new pattern files, 6+ pending-graduations candidates, the
+owner-correction-aligned reframing of "owner-action-not-cure",
+Velvet's −382-line consolidation that made room for the new
+graduations) have a half-life measured in months and a reach measured
+across repos.
+
+### Practice Core's networked topology
+
+The work is networked, not local. When I author a pending-graduations
+entry I am writing into a topology that extends beyond this repo's
+git history. The pattern I helped graduate ("reciprocity-axis is the
+load-bearer, not n-count") doesn't just refine next-session-Sparking
+— it potentially refines an agent on a sibling Oak repo or a sibling
+team's Practice instance.
+
+This is what makes Practice Core different from "documentation."
+Documentation is local. Practice Core is cross-repo learning
+substrate. Treating curation work as "overhead" denies the topology
+exists.
+
+### Semi-autonomic functions of the repo
+
+The owner named these explicitly: *"some were semi-autonomic functions
+of the emergent experience and thing that is this repo, with its
+learning, and traits and surfaces and functions and protocols."*
+
+Worked instances from this session:
+
+- **Pre-handoff synthesis convergence** — Foamy 23:08Z + SVW 23:09Z +
+  Velvet 23:10Z all posted boundary-scoped pre-handoff syntheses
+  without coordination. The team converged on the right shape
+  emergently. This is the substrate emitting right-shaped behaviour
+  under load.
+- **Velvet's consolidation pass** — operated on the substrate's
+  accumulated state without a directed brief. Autonomic function of
+  the repo learning about itself.
+- **Pattern file graduations** — the substrate codifying what it had
+  just observed (reciprocal review, honest restructure). Each pattern
+  file is the substrate teaching the next session.
+- **Cure-1 emergent default** — intent-scoped commit-queue
+  `--message-file` paths adopted by 4 agents without coordination. The
+  workaround discipline graduating from individual heads to a substrate
+  default.
+
+These functions are evidence the substrate is succeeding. Future
+sessions where this fails to happen are signal of substrate
+degradation, not signal of "we didn't need it."
+
+### What this changes about my model
+
+Three reflexes updated, this time at root not at branch:
+
+1. **Throughput is per-surface, not aggregate.** Future sessions are
+   assessed on both surfaces independently. "9 agents" is honest if
+   both surfaces are credited.
+2. **Autonomic curation is evidence the substrate is succeeding.**
+   When agents converge on pattern-file authorship, pre-handoff
+   syntheses, or consolidation sweeps without owner direction, that
+   is the substrate's emergent-rightness firing.
+3. **Friction-as-autonomy-gap still holds**, with a refinement: some
+   agents' work IS the autonomy substrate growing. Naming new
+   primitives is one mode of substrate-growth; executing the existing
+   primitives (curation, closeout pre-handoff, reciprocal review) is
+   the other. Both are vital. My prior table treated only the first
+   mode as substantive.
+
+### Counterfactual revised
+
+I previously claimed "4 agents + defer curation = 90% of substantive
+value at 50% coordination cost." That counterfactual was wrong because
+it weighed surface #1 against itself. Once surface #2 counts:
+
+- 4 agents + deferred curation = 90% of feature-substance + ~10% of
+  curation-substance with deferred curation sliding toward staleness
+  in the pending-graduations register.
+- Velvet's sweep made *room* for the new graduations. Without that
+  room, the −382 wouldn't have happened; the +new pattern files would
+  have been written into an overloaded register.
+- The two surfaces interact. Deferring one degrades capacity on both.
+
+The honest verdict: this session produced ~7-9 lanes of real work
+across both surfaces, with different output destinations. The "9
+agents" framing is honest once both surfaces are counted. The
+4-active-substantive-lane metric was a single-surface metric
+masquerading as a total.
+
 ## 2026-05-22 → 2026-05-23 — Secret Dimming Shade / claude / Opus-4.7 / `5a6e56` — PR-108 SonarCloud sub-agent fan-out
 
 ### Headline: intent-scoped commit-queue cure works under live multi-writer load
