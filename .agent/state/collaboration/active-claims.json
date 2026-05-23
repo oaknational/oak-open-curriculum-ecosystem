@@ -1344,30 +1344,6 @@
       "intent": "fix(format): whitespace-only prettier normalization on two graph-ingest files to unblock 26-commit push"
     },
     {
-      "claim_id": "f5bd10eb-30a5-4047-a0e9-0a5688f04df4",
-      "agent_id": {
-        "agent_name": "Secret Creeping Moth",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "61d726"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/memory/active/napkin.md",
-            ".agent/memory/operational/pending-graduations.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-23T12:23:57.101Z",
-      "freshness_seconds": 1800,
-      "sidebar_open": false,
-      "intent": "consolidation pass on Seaworthy handoff §6.7-§6.10 worked instances per Director Abyssal routing 2026-05-23T12:20:24Z",
-      "intent_to_commit": "d50d3d9a-befc-4f8d-adc5-f12185016f0f"
-    },
-    {
       "claim_id": "c19371c2-6de6-49d8-9dae-70b5a0918a48",
       "agent_id": {
         "agent_name": "Incandescent Banking Flame",
