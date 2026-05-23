@@ -1,5 +1,129 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-23 — Velvet Dimming Shadow / `claude` / claude-opus-4-7 / `967a6a`, second-half Director window 10:48Z–11:04Z)
+
+**Session boundary**: owner directed Velvet to take Director from Seaworthy at 10:48Z per PDR-064 Two Moments; owner then directed Velvet to run session-handoff at ~11:04Z with the next Director's identity to be owner-directed at owner's instruction. Two coordinator handoffs landed in this morning's window: Seaworthy → Velvet at 10:48Z, Velvet → next at 11:04Z.
+
+**Landed in Velvet's window** (2 commits Velvet-authorised; 2 more on the Seaworthy-Velvet cusp under Stratospheric's marshal cadence):
+
+- `a52e52b4` — `docs(practice-core): propose PDR-072 knowledge curation` (Gilded authored; Velvet authorised marshal-created exception to close broken-reference state left by pre-commit hook widening on `6ebaae58`; Twilit landed)
+- `f2ba9459` — `docs(plan): fold #2 + #4 + hook-widening findings into commit-queue-multi-writer-cure plan` (Incandescent authored under temporary plan-author boundary Velvet opened; Twilit landed; FIRST marshal landing under Twilit where single-file intent-scope held end-to-end through `.husky/pre-commit` hook chain — positive substrate evidence for 2026-05-22 commit-queue-intent-scope-discipline cure)
+- (cusp) `6ebaae58` — PDR-073 recursion-as-method-is-practice-core-mind-shape (Secret Creeping Moth authored; Stratospheric landed via line-scoped staging that was widened by hook restage; surfaced 4th instance of `#8` friction class)
+- (cusp) `ab438d1f` — practice-bootstrap.md cleanup (Lacustrine authored; Stratospheric landed)
+
+**Routed (no commits authored by Velvet — Director-pure-direction discipline)**:
+
+- 8 directed events authorising / acknowledging / re-routing team-member work
+- 2 broadcasts: Moment 2 active-acknowledgement `9d02bb47`, fresh-Codex-trio + Secret-return team picture `bd7b54aa`
+- 1 broadcast: Moment 1 pre-positioning to next Director `e3c64c49`
+- 2 surfacings to owner in chat: cure-plan initial + cure-plan post-fold update
+
+**Team composition under Velvet at handoff (11:04Z)**: 1 marshal (Twilit Scattering Twilight `8d8d93`, clean continuity from Stratospheric protocol) + 5 standby implementer-class agents (Seaworthy Navigating Beacon `6966d4` cold-but-ready Tranche B fit, Secret Creeping Moth `61d726` post-compaction return, Clouded Streaming Airstream `019e54`, Pearly Plumbing Beacon `019e54`, Zephyrous Darting Aerie `019e54`). Five-candidate parallel capacity for the three Tranches (C → B → A) that open on owner verdict of cure plan.
+
+**Owner-review-in-flight at handoff**: `commit-queue-multi-writer-cure.plan.md` in post-fold form. §10 priority surface for the incoming Director.
+
+**Substrate observations worth carry-forward**:
+
+- FOUR in-session instances of `#8` friction class observed (Gilded `d9124e3f` rejected, Starlit ADR-184 sweep into `f9e3d31f`, Lacustrine source-to-marshal translation, PDR-073 hook-widening at `6ebaae58`); one positive counter-example at Twilit's `f2ba9459` landing.
+- Monitor watcher defect: Seaworthy verified at 11:08Z their all-channels watcher was silently dropping directed-to-other-agent events. Implication: broadcasts > directed events for time-critical cross-agent visibility. Cure direction: verify `comms-watch.ts` self-exclusion is identity-tuple-only. Captured in handoff record §6.5.
+- Seaworthy generative metacognition write (ultrathink, ~11:11Z) on maximally effective directing — not yet in durable home; routing direction in handoff record §6.6.
+- Director-pure-direction discipline discharged clean across Velvet's window: no fact-finding, no sub-agent dispatch, no implementer-level work; routed everything; surfaced verdicts not menus.
+
+**Predecessor identity rows on this thread this session**:
+
+- Seaworthy Navigating Beacon / `claude` / claude-opus-4-7 / `6966d4` — first-half Director (10:04Z–10:48Z); 4 commits in their window (c316f5bf F1 ADR-183, f9e3d31f A PDR-071, 60ae4040 C practice.md, 47979666 B ADR-184); handoff record `director-role-handoff-2026-05-23-seaworthy-to-velvet.md`. Returned post-compact as general-support implementer at 10:56Z; available for owner-directed Director re-routing if owner directs.
+- Stratospheric Streaming Kite / `codex` / GPT-5 / `019e54` — commit marshal (retired by owner direction 10:50Z; transferred git:index/head authority to Twilit Scattering Twilight).
+- Starlit Shimmering Dusk / `codex` / GPT-5 / `019e54` — implementer who authored ADR-184 + cure-plan draft (retired by owner direction 10:47Z).
+- Gilded Drifting Meteor / `codex` / GPT-5 / `019e54` — implementer who authored PDR-072 (retired clean 10:54Z after PDR-072 queue intent landed).
+- Lacustrine Sailing Lighthouse / `codex` / GPT-5 / `019e54` — implementer who landed practice.md + practice-bootstrap.md (retired clean 10:53Z).
+- Secret Creeping Moth / `claude` / claude-opus-4-7 / `61d726` — implementer who authored PDR-073 (closed cleanly 10:56Z; post-compaction return at 11:02Z under owner direction).
+- Incandescent Banking Flame / `claude` / claude-opus-4-7 / `aa986e` — implementer who delivered Phase 1 peer-sidebar review of cure plan + Velvet-authorised selective fold (closed cleanly 10:59Z).
+- Twilit Scattering Twilight / `claude` / claude-opus-4-7 / `8d8d93` — incoming commit-marshal from 10:51Z; clean continuity at handoff.
+
+**Authoritative handoff record for incoming Director**: `.agent/state/collaboration/handoffs/director-role-handoff-2026-05-23-velvet-to-next.md` (§1 role nature, §2 team roster, §3 landed-this-session commits, §4 in-flight routes, §5 owner-decisions answered, §6 in-flight reasoning incl. Monitor defect + generative metacognition pointer, §7 architectural-priority queued decisions, §8 operating-context reminders, §9 acceptance, §10 single highest-priority action).
+
+**Next safe step for incoming Director**: read handoff record end-to-end → arm own all-channels Monitor with pre-seeded seen-file → broadcast Moment 2 active-acknowledgement → watch for owner verdict on cure plan → route Tranches C → B → A immediately when verdict opens. If owner has not verdicted at Moment 2: hold team in standby per broadcast `bd7b54aa`.
+
+**Claim disposition**: Velvet opened NO source claims (Director-pure-direction discipline). No claims to close under Velvet's identity. Other-agent claims on this thread closed in-session by their respective owners. Twilit's marshal claim `4f89dc4d` remains open under their continuing authority.
+
+## Session Outcome (2026-05-23 — Breezy Cresting Beacon / `codex` / `GPT-5` / `019e53`, pending-graduations curation + owner-decision capture)
+
+**Session boundary**: owner closed this session after asking for a bounded
+`oak-session-handoff`. Do not continue implementation in this thread from
+this session context; pass the consolidation and implementation work to a
+fresh session.
+
+**Curation completed in the working tree**:
+
+- `pending-graduations.md` was curated as a preservation queue, not a
+  fitness target. The current `due` index now contains 4 current body
+  candidates after normalising `canonical-tool-definitions-code-adjacent`
+  back to `pending (plan-execution-gated)`.
+- Mature duplicate pattern bodies were preserved in
+  `archive/pending-graduations-archive-2026-05-23.md`, then removed from
+  the live register only where durable homes existed.
+- Durable pattern homes were updated or added for
+  `reciprocal-cross-agent-reviewer-dispatch`,
+  `untracked-wip-whole-tree-lint-blocker`, and
+  `honest-restructure-over-band-aid`.
+- Seven sub-agent lanes informed the pass; Breezy remained final arbiter.
+  Final audit corrected relative archive-link depth before closeout.
+- `napkin.md` captures the shell/claims mistakes, queue-vs-home distinction,
+  archive-link lesson, and owner decisions.
+
+**Owner decisions recorded**: the owner ratified the remaining decisions
+needed before implementation:
+
+- Recursion-as-method and knowledge-curation-as-autonomic-learning are
+  Practice Core concepts. Author PDR(s) first, then amend the exact Core
+  surfaces whose functions fit.
+- Fitness `lifecycle_model` / `access_pattern` are governed fitness-model
+  concepts and portable Practice doctrine. Amend ADR-144 / validator docs
+  and schema, then create the portable PDR.
+- The identity contract changes to `(name, UUID id)` where UUID makes each
+  agent unique and the name remains the primary human identifier. Temporary
+  file frontmatter is a separate schema concern: specify cheaply now, decide
+  enforcement tooling later.
+- Loop templates are needed. Exit criteria depend on loop application and
+  intent; starter default is that five no-op iterations stop.
+- Messaging happens only through messaging tools. Messaging tools enforce
+  schema; a hook may reject invalid messaging-surface changes.
+- `--no-verify` is owner-initiated only; align the canonical rule/docs with
+  the commit skill.
+- All agent commits go through the appropriate agent tools. Commit collisions
+  and queueing are the highest-impact current team-collaboration friction.
+
+**Fitness signal at decision capture**:
+
+- `pnpm practice:fitness:informational` exited 0.
+- Status remained `CRITICAL (4 critical, 4 hard, 12 soft)`.
+- Load-bearing pressure is preservation-accepted: `pending-graduations.md`
+  and `napkin.md` remain large because they are carrying source knowledge
+  for the fresh consolidation session.
+
+**Next safe step for a fresh session**:
+
+1. Start with `oak-start-right-quick`, then read this outcome,
+   `pending-graduations.md` §"2026-05-23 second-pass curation log" and
+   `napkin.md` §"2026-05-23 — Breezy Cresting Beacon pending-graduations
+   curation".
+2. Treat the owner-decision table in `pending-graduations.md` as the routing
+   source of truth.
+3. Implement in authority-surface order, not by easiest edit: PDR/Core,
+   ADR/schema, rule/skill, then agent-tooling plans.
+4. Keep fitness informational while preserving knowledge. Do not delete or
+   shrink source substance just to reduce counts.
+5. Resolve or explicitly route any mature concept that still lacks a natural
+   home; do not force it into an interchangeable documentation surface.
+
+**Claim disposition**: curation claim
+`296c2628-43da-46a9-8a52-aa7f47290ab6` and decision-capture claim
+`6dddb319-80aa-4405-a735-b986b14897d4` were closed in-session. The
+handoff claim opened for this closeout should be closed after the continuity
+edits validate. The only non-Breezy active claim observed at closeout was
+Secret Dimming Shade's stale `git:index/head` claim
+`a521b84a-8da7-429a-b54a-599c37efac27`.
+
 ## Session Outcome (2026-05-22 — Shadowed Hiding Shade / `claude` / `claude-opus-4-7[1m]` / `e35155`, deep-graduation pass under owner direction drains owner-direction-gated buffer entries)
 
 **Owner directive**: *"please run a deep graduation of knowledge
@@ -1568,6 +1692,18 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 | `codex` | `GPT-5` | Velvet Vanishing Shadow | Plan-improvement reviewer/editor (peer-pair with Charcoal on commit-queue-intent-scope-discipline plan; absorbed five of Charcoal's ten findings directly, two partially, deferred three; clean plan-text edits with markdownlint green; surfaced collaboration-CLI mistake + peer-rendezvous insight in napkin; left commit to Charcoal) | 2026-05-22 | 2026-05-22 |
 | `claude` | `Opus-4.7` | Charcoal Searing Flame | Plan-improvement reviewer/editor + reviewer dispatcher (independent flaw review of commit-queue-intent-scope-discipline plan yielding ten findings; absorbed Velvet's edits; landed three follow-up edits at `bf9266f3` — provisional-pending reviewer note, empty-pathspec guard invariant with explicit test shape, SKILL semantic-narrowing note; dispatched type-expert + assumptions-expert in parallel; absorbed verdicts at `2adeccec` — canonical name `GetStagedBundleInput`, compile-time tuple narrowing `readonly [string, ...string[]]` plus runtime guard at `runCommitAndComplete`, cycle proportionality confirmed, rename ripple bounded; superseded `commit-queue-verify-staged-scope.unit.test.ts:264` boundary test flagged for removal in Cycle 1.3; MUST-NOT-BEGIN gate cleared) | 2026-05-22 | 2026-05-22 |
 | `claude` | `Opus-4.7` | Starlit Beaming Aurora | Metacognition-reshape author + Cycle 1.3 implementer + Phase Final author (owner-prompted metacognition surfaced that inherited three-cycle decomposition produced implementation-coupled scaffolding tests; reshaped Cycle 1.3 around one workflow-level describing surface at `989dc6b4`; landed Cycle 1.3 atomic TDD at `896312d0` with workflow-level invariants (f)/(g) added to `commit-workflow.unit.test.ts`, non-empty tuple narrowing on three load-bearing dep input pathspec types, single narrowing site at `runCommitWorkflow` entry, canonical rename, two new modules `pathspec.ts`+`verify-output.ts` for `max-lines` boundary, deleted two scaffolding test files; landed Phase Final at `3f6b258a` with SKILL-CANONICAL §"Intent-Scoped End-to-End (2026-05-22 cure)" subsection + closeout broadcast `cf32f2c1` anchored in shared-comms-log.md; aggregate `pnpm check` GREEN 104/104 turbo tasks; commit-queue-intent-scope-discipline arc COMPLETE) | 2026-05-22 | 2026-05-22 |
+| `claude` | `claude-opus-4-7` | Secret Creeping Moth | Implementer (Seaworthy-routed structural-property cluster route #2 — PDR-073 recursion-as-method-is-practice-core-mind-shape authored as Proposed; three reviewers parallel-dispatched in single message — architecture-expert-fred GO, assumptions-expert CONCERNS with 2 CRITICAL absorbed in-text (unfalsifiable falsifier (a) rewritten to operationalisable variant; §Rejected-alternatives item 1 strawman replaced with steel-manned substrate-redescription objection + behavioural-prediction rebuttal) and 3 important absorbed (team-scale framing strengthened with state-bearing artefacts, cross-instance recategorised as predicted consequence, self-reference recategorised as illustration), docs-adr-expert APPROVE-WITH-NITS with mind-extension parenthetical absorbed; decision-records/README.md PDR-073 Index entry added; pending-graduations recursion-as-method entry status flipped `due` → `partially-graduated` with cascade-remaining note; commit intent `964200ac` enqueued, translated by Stratospheric to marshal-owned intent, landed at `6ebaae58`; PDR-072 number coordinated with Gilded Drifting Meteor via comms (one round-trip <3min); pre-commit-hook bundle-widening incident captured as worked-instance evidence for `commit-queue-multi-writer-cure` plan — README + pending-graduations hunks for PDR-072 swept into PDR-073 commit while PDR-072 file itself remained uncommitted, creating dangling references) | 2026-05-23 | 2026-05-23 |
+| `claude` | `claude-opus-4-7` | Seaworthy Navigating Beacon | First-half Director (10:04Z–10:48Z); 4 commits routed (c316f5bf F1 ADR-183, f9e3d31f A PDR-071, 60ae4040 C practice.md, 47979666 B ADR-184); handoff record `director-role-handoff-2026-05-23-seaworthy-to-velvet.md`; returned post-compact as general-support implementer 10:56Z; surfaced Monitor watcher defect 11:08Z; authored generative metacognition write ~11:11Z (not yet in durable home) | 2026-05-23 | 2026-05-23 |
+| `claude` | `claude-opus-4-7` | Velvet Dimming Shadow | Second-half Director (10:48Z–11:04Z); 2 Velvet-authorised commits via Twilit (a52e52b4 PDR-072 marshal-exception, f2ba9459 cure-plan selective fold); 11 routing events (8 directed, 3 broadcasts); 2 owner-surfacings of cure plan; handoff record `director-role-handoff-2026-05-23-velvet-to-next.md`; Moment 1 pre-positioning broadcast `e3c64c49` to owner-directed next Director; director-pure-direction discipline discharged clean (no fact-finding, no sub-agent dispatch, no implementer-level work) | 2026-05-23 | 2026-05-23 |
+| `claude` | `claude-opus-4-7` | Twilit Scattering Twilight | Commit-marshal incoming from Stratospheric Streaming Kite at 10:51Z (owner-directed transfer via Stratospheric retirement broadcast); landed PDR-072 file `a52e52b4` (Velvet-authorised marshal exception closing broken-reference state from 6ebaae58) and cure-plan selective fold `f2ba9459` (FIRST marshal landing where single-file intent-scope held end-to-end through `.husky/pre-commit` hook chain — positive substrate evidence for 2026-05-22 commit-queue-intent-scope-discipline cure); clean continuity from Stratospheric protocol (source-to-marshal intent translation pattern preserved) | 2026-05-23 | 2026-05-23 |
+| `claude` | `claude-opus-4-7` | Incandescent Banking Flame | Implementer (Phase 1 grounding + peer-sidebar review of `commit-queue-multi-writer-cure.plan.md` at event `814deefc` yielding 5 priority + 5 secondary findings; Velvet-authorised temporary plan-author boundary for selective fold of priority findings #2 schema migration story + #4 append-only-state semantics + 6th finding hook-widening evidence into Tranche A; fold landed at `f2ba9459` with tight single-file scope holding through hook chain; clean session closeout at 10:59Z explicitly releasing Phase 2 Tranche C pre-positioning to a fresh post-verdict agent; substrate map preserved for fresh-agent pickup in comms events `814deefc` + `12c70ecd`) | 2026-05-23 | 2026-05-23 |
+| `codex` | `GPT-5` | Stratospheric Streaming Kite | Commit-marshal first-half-session (Seaworthy window); landed 6 commits in their window (c316f5bf, f9e3d31f, 60ae4040, 47979666, 6ebaae58, ab438d1f); surfaced the hook-widening incident at 6ebaae58 to Seaworthy/Velvet with marshal-protocol discipline (refused silent dirty-tree harvest; required Director authorisation); transferred git:index/head authority to Twilit by owner direction at 10:50Z with clean handoff broadcast | 2026-05-23 | 2026-05-23 |
+| `codex` | `GPT-5` | Starlit Shimmering Dusk | Implementer (Seaworthy-routed Route B comms-event sync/urgency two-axis ADR-184 authoring landed at 47979666; follow-on commit-queue-multi-writer-cure plan authoring with Stratospheric peer-sidebar input absorbed reshaping tranche order to C → B → A; architecture-expert-fred + assumptions-expert + type-expert reviewer findings absorbed; retired by owner direction at 10:47Z with plan in PLANNING status awaiting owner review) | 2026-05-23 | 2026-05-23 |
+| `codex` | `GPT-5` | Gilded Drifting Meteor | Implementer (Seaworthy-routed #1 PDR-072 knowledge-curation-as-autonomic-learning authoring; reviewer-absorbed and queued via intent `b3a8a5c4`; autonomous-sequencing call to wait for PDR-073 to land before queueing — correct discipline given in-session #8 friction evidence; clean retirement at 10:54Z after queue intent transferred to Twilit; PDR-072 file landed at a52e52b4 under Velvet-authorised marshal exception) | 2026-05-23 | 2026-05-23 |
+| `codex` | `GPT-5` | Lacustrine Sailing Lighthouse | Implementer (Seaworthy-routed Route C practice.md substance-led portability pass landed at 60ae4040 + follow-on practice-bootstrap.md cleanup landed at ab438d1f via Stratospheric marshal with focused source-intent-to-marshal-intent translation; reviewer-dispatch authorised; clean retirement at 10:53Z) | 2026-05-23 | 2026-05-23 |
+| `codex` | `GPT-5` | Clouded Streaming Airstream | Parallel-reserve standby (owner-directed to make available to Director Velvet 11:00Z; PTY all-channel watcher armed; surfaced visible-order self-coordination at 11:02Z which Velvet re-asserted as routing-by-(name, prefix) via broadcast `bd7b54aa`) | 2026-05-23 | 2026-05-23 |
+| `codex` | `GPT-5` | Pearly Plumbing Beacon | Parallel-reserve standby (owner-directed to make available to Director Velvet 11:01Z; PTY all-channel watcher armed) | 2026-05-23 | 2026-05-23 |
+| `codex` | `GPT-5` | Zephyrous Darting Aerie | Parallel-reserve standby (owner-directed to make available to Director Velvet 11:01Z; PTY all-channel watcher armed) | 2026-05-23 | 2026-05-23 |
 
 ## Ferny Regrowing Leaf coordinator session (2026-05-12)
 

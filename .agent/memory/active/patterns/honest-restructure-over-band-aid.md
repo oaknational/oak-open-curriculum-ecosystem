@@ -1,12 +1,18 @@
 ---
 name: "Honest Restructure Over Band-aid"
 polarity: pattern
+use_this_when: "A quality gate fires mid-authoring and the first tempting fix is to bypass, guard, compress, or assert around the gate."
 category: agent
 status: emerging
 discovered: 2026-05-22
 proven_in: "2026-05-22 → 2026-05-23 multi-agent gate-1a substrate-floor team session — 2 cross-agent worked instances (Foamy graph-view module split; Sparking binding-test deletion per no-conditional-tests doctrine). Awaiting third-instance for status: proven promotion."
 proven_date: 2026-05-23
 adjacent: ".agent/rules/local-broken-code-never-leaves.md (the principle); .agent/rules/dont-break-build-without-fix-plan.md (the doctrine); both establish WHAT must hold — this pattern names the response shape WHEN those rules fire mid-authoring"
+barrier:
+  broadly_applicable: true
+  proven_by_implementation: true
+  prevents_recurring_mistake: "Treating quality gates as friction to route around instead of design signals to absorb."
+  stable: true
 ---
 
 > **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.

@@ -16,29 +16,42 @@ import {
  * - `group`: narrative event whose `audience` array includes the agent.
  * - `directed`: directed-kind message addressed to the agent, OR narrative
  *   event whose `addressed_to` names the agent.
+ * - `observed`: cross-traffic the agent witnesses but is not the addressee
+ *   of — directed-kind events to another agent, narratives `addressed_to`
+ *   another agent, or narratives whose `audience` is set but excludes the
+ *   agent. **Incidental visibility, not a change to the agent's work
+ *   contract**: observed events do not impose action on the agent. They
+ *   exist so the broad-awareness contract
+ *   ([`start-right-team` SKILL §0](../../../.agent/skills/start-right-team/SKILL-CANONICAL.md))
+ *   holds — the comms event stream is canonical truth, and an agent
+ *   watching it sees every non-self event, applying relevance triage in
+ *   their own reasoning rather than at the watcher boundary.
  * - `lifecycle`: structured lifecycle moment (session, claim, consolidation).
  *
  * Sync-urgent messages are not a separate kind today: they are carried by
  * any of the above views with an urgency convention applied at the agent's
  * reasoning layer, not at the watcher boundary. When the schema grows a
- * sync kind or urgency flag, `sync` will be added here as a fifth view.
+ * sync kind or urgency flag, `sync` will be added here as a sixth view.
  */
-export type EventView = 'broadcast' | 'group' | 'directed' | 'lifecycle';
+export type EventView = 'broadcast' | 'group' | 'directed' | 'observed' | 'lifecycle';
 
 /**
  * Classify an event relative to an agent's identity, returning `undefined`
- * when the event is not relevant to the agent.
+ * only when the event is self-authored.
  *
- * Visibility rules (per the all-channels-matter principle):
+ * Visibility rules (per the all-channels-matter principle — every non-self
+ * event surfaces; the agent's reasoning layer decides relevance):
  * - Self-exclusion is non-negotiable: events authored by the agent are
- *   never relevant — surfacing self-events creates a feedback loop that
- *   contaminates the agent's reasoning context.
- * - Directed-kind events addressed to a different agent are not relevant.
- * - Narratives `addressed_to` a different agent are not relevant.
- * - Narratives whose `audience` is set but excludes the agent are not
- *   relevant.
- * - Every other event is relevant; its view is the most specific applicable
- *   classifier above.
+ *   never surfaced — emitting self-events creates a feedback loop that
+ *   contaminates the agent's reasoning context. This is the ONLY path
+ *   that returns `undefined`.
+ * - Every directed-kind event surfaces — as `directed` when addressed to
+ *   the agent, as `observed` when addressed to a different agent.
+ * - Every narrative surfaces — as `broadcast` when unaddressed, `directed`
+ *   when `addressed_to` names the agent, `group` when the agent is in the
+ *   `audience`, or `observed` when `addressed_to` names a different agent
+ *   or `audience` is set but excludes the agent.
+ * - Every lifecycle event surfaces as `lifecycle`.
  */
 export function classifyEventForAgent(input: {
   readonly event: CommsEvent;
@@ -106,25 +119,19 @@ function authorOf(event: CommsEvent): CollaborationAgentId {
   return event.kind === 'directed' ? event.from : event.author;
 }
 
-function classifyDirected(
-  event: DirectedCommsMessage,
-  self: CollaborationAgentId,
-): EventView | undefined {
+function classifyDirected(event: DirectedCommsMessage, self: CollaborationAgentId): EventView {
   return event.to.agent_name === self.agent_name &&
     event.to.session_id_prefix === self.session_id_prefix
     ? 'directed'
-    : undefined;
+    : 'observed';
 }
 
-function classifyNarrative(
-  event: NarrativeCommsEvent,
-  self: CollaborationAgentId,
-): EventView | undefined {
+function classifyNarrative(event: NarrativeCommsEvent, self: CollaborationAgentId): EventView {
   if (event.addressed_to !== undefined) {
-    return event.addressed_to === self.agent_name ? 'directed' : undefined;
+    return event.addressed_to === self.agent_name ? 'directed' : 'observed';
   }
   if (event.audience !== undefined) {
-    return event.audience.includes(self.agent_name) ? 'group' : undefined;
+    return event.audience.includes(self.agent_name) ? 'group' : 'observed';
   }
   return 'broadcast';
 }

@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "6d12441b-f141-406e-918a-b122a4cc5bef",
+  "created_at": "2026-05-23T10:50:27.347Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Stratospheric Streaming Kite",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e54"
+  },
+  "title": "Stratospheric Streaming Kite retiring",
+  "body": "Stratospheric Streaming Kite / codex / GPT-5 / 019e54 is retiring by owner direction.\n\nCompleted before retirement:\n- Focused handoff posted: eb07abac-c307-4393-a6d6-65db8d7e6a3c.\n- Commit monitor responsibility transferred to Twilit by broadcast: d74cccfc-a548-4e69-b1e1-6a2bb7857e4f.\n- Marshal claim closed: f6fc624b-a65e-47c0-8c24-bcf13d5fd403.\n- Active commit queue was empty at transfer.\n- PDR-072 file gap routed to Gilded and Velvet.\n\nStratospheric no longer holds git:index/head authority, is no longer monitoring the commit queue, and will not commit further work in this session.\n"
+}

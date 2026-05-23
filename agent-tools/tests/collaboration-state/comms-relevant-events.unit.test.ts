@@ -176,7 +176,7 @@ describe('classifyEventForAgent — view classification per the all-channels-mat
     expect(classifyEventForAgent({ event: selfLifecycle, self })).toBeUndefined();
   });
 
-  it('returns undefined for directed events addressed to a different agent', () => {
+  it("classifies directed events addressed to a different agent as an 'observed' view", () => {
     const directedToStranger = createDirectedCommsMessage({
       eventId: 'directed-to-stranger',
       createdAt: '2026-05-21T08:00:00Z',
@@ -187,10 +187,10 @@ describe('classifyEventForAgent — view classification per the all-channels-mat
       body: 'Body.',
     });
 
-    expect(classifyEventForAgent({ event: directedToStranger, self })).toBeUndefined();
+    expect(classifyEventForAgent({ event: directedToStranger, self })).toBe('observed');
   });
 
-  it('returns undefined for narratives addressed_to a different agent', () => {
+  it("classifies narratives addressed_to a different agent as an 'observed' view", () => {
     const narrativeToStranger = narrative({
       eventId: 'narrative-to-stranger',
       author: peer,
@@ -198,10 +198,10 @@ describe('classifyEventForAgent — view classification per the all-channels-mat
       addressedTo: stranger.agent_name,
     });
 
-    expect(classifyEventForAgent({ event: narrativeToStranger, self })).toBeUndefined();
+    expect(classifyEventForAgent({ event: narrativeToStranger, self })).toBe('observed');
   });
 
-  it('returns undefined for narratives whose audience excludes the agent', () => {
+  it("classifies narratives whose audience excludes the agent as an 'observed' view", () => {
     const narrativeExcludingSelf = narrative({
       eventId: 'narrative-excludes-self',
       author: peer,
@@ -209,7 +209,7 @@ describe('classifyEventForAgent — view classification per the all-channels-mat
       audience: [stranger.agent_name],
     });
 
-    expect(classifyEventForAgent({ event: narrativeExcludingSelf, self })).toBeUndefined();
+    expect(classifyEventForAgent({ event: narrativeExcludingSelf, self })).toBe('observed');
   });
 });
 
@@ -283,6 +283,83 @@ describe('drainRelevantEvents — full event stream surfacing with self-exclusio
     expect(drained.output).toContain('Narrative-direct title');
     expect(drained.output).toContain('Directed subject');
     expect(drained.output).toContain('Lifecycle title');
+  });
+
+  it("emits directed-kind events whose 'to' names a different agent under the [OBSERVED] tag", async () => {
+    const directedToStranger = createDirectedCommsMessage({
+      eventId: 'directed-to-stranger',
+      createdAt: '2026-05-21T08:00:00Z',
+      messageKind: 'coordination-request',
+      from: peer,
+      to: stranger,
+      subject: 'Cross-traffic to stranger',
+      body: 'Cross-traffic body.',
+    });
+    const marked: string[] = [];
+
+    const drained = await drainRelevantEvents({
+      messages: [directedToStranger],
+      seenIds: new Set(),
+      self,
+      markSeen: async (ids) => {
+        marked.push(...ids);
+      },
+    });
+
+    expect(drained.eventCount).toBe(1);
+    expect(marked).toStrictEqual(['directed-to-stranger']);
+    expect(drained.output).toContain('[OBSERVED]');
+    expect(drained.output).toContain('Cross-traffic to stranger');
+  });
+
+  it('emits narratives whose addressed_to names a different agent under the [OBSERVED] tag', async () => {
+    const narrativeToStranger = narrative({
+      eventId: 'narrative-to-stranger',
+      author: peer,
+      title: 'Cross-traffic narrative',
+      addressedTo: stranger.agent_name,
+      createdAt: '2026-05-21T08:00:00Z',
+    });
+    const marked: string[] = [];
+
+    const drained = await drainRelevantEvents({
+      messages: [narrativeToStranger],
+      seenIds: new Set(),
+      self,
+      markSeen: async (ids) => {
+        marked.push(...ids);
+      },
+    });
+
+    expect(drained.eventCount).toBe(1);
+    expect(marked).toStrictEqual(['narrative-to-stranger']);
+    expect(drained.output).toContain('[OBSERVED]');
+    expect(drained.output).toContain('Cross-traffic narrative');
+  });
+
+  it('emits narratives whose audience excludes the agent under the [OBSERVED] tag', async () => {
+    const narrativeExcludingSelf = narrative({
+      eventId: 'narrative-excludes-self',
+      author: peer,
+      title: 'Group narrative for others',
+      audience: [stranger.agent_name],
+      createdAt: '2026-05-21T08:00:00Z',
+    });
+    const marked: string[] = [];
+
+    const drained = await drainRelevantEvents({
+      messages: [narrativeExcludingSelf],
+      seenIds: new Set(),
+      self,
+      markSeen: async (ids) => {
+        marked.push(...ids);
+      },
+    });
+
+    expect(drained.eventCount).toBe(1);
+    expect(marked).toStrictEqual(['narrative-excludes-self']);
+    expect(drained.output).toContain('[OBSERVED]');
+    expect(drained.output).toContain('Group narrative for others');
   });
 
   it('excludes self-authored events across every kind', async () => {

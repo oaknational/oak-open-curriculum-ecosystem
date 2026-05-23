@@ -65,32 +65,27 @@ describe('CollaborationTuiApp', () => {
 
   it('refreshes from an injected live update source without a keyboard command', async () => {
     const updates = new ManualUpdateSource();
-    const result = render(
+    const result = await render(
       React.createElement(CollaborationTuiApp, {
         initialSnapshot: snapshot('2026-05-13T17:00:00Z', 'Initial message'),
         onRefresh: async () => snapshot('2026-05-13T17:01:00Z', 'Live update arrived'),
         updateSource: updates,
       }),
     );
-    await result.waitUntilRenderFlush();
 
     expect(result.lastFrame()).toContain('Initial message');
 
-    await act(async () => {
-      updates.emit();
-      await Promise.resolve();
-    });
-    await result.waitUntilRenderFlush();
+    await result.actAndFlush(() => updates.emit());
 
     expect(result.lastFrame()).toContain('Live update arrived');
     expect(result.lastFrame()).toContain('refreshed 2026-05-13T17:01:00Z');
 
-    result.unmount();
+    await result.unmount();
   });
 
   it('shows refresh failure state without replacing the last good snapshot', async () => {
     const updates = new ManualUpdateSource();
-    const result = render(
+    const result = await render(
       React.createElement(CollaborationTuiApp, {
         initialSnapshot: snapshot('2026-05-13T17:00:00Z', 'Initial message'),
         onRefresh: async () => {
@@ -99,18 +94,13 @@ describe('CollaborationTuiApp', () => {
         updateSource: updates,
       }),
     );
-    await result.waitUntilRenderFlush();
 
-    await act(async () => {
-      updates.emit();
-      await Promise.resolve();
-    });
-    await result.waitUntilRenderFlush();
+    await result.actAndFlush(() => updates.emit());
 
     expect(result.lastFrame()).toContain('Initial message');
     expect(result.lastFrame()).toContain('refresh source unavailable');
 
-    result.unmount();
+    await result.unmount();
   });
 
   it('keeps the newest refresh when an older refresh resolves late', async () => {
@@ -118,35 +108,30 @@ describe('CollaborationTuiApp', () => {
     const firstRefresh = deferred<CollaborationTuiSnapshot>();
     const secondRefresh = deferred<CollaborationTuiSnapshot>();
     const refreshes = [firstRefresh.promise, secondRefresh.promise];
-    const result = render(
+    const result = await render(
       React.createElement(CollaborationTuiApp, {
         initialSnapshot: snapshot('2026-05-13T17:00:00Z', 'Initial message'),
         onRefresh: async () => refreshes.shift() ?? snapshot('2026-05-13T17:03:00Z', 'Fallback'),
         updateSource: updates,
       }),
     );
-    await result.waitUntilRenderFlush();
 
-    await act(async () => {
+    await result.actAndFlush(() => {
       updates.emit();
       updates.emit();
       secondRefresh.resolve(snapshot('2026-05-13T17:02:00Z', 'Second refresh'));
-      await Promise.resolve();
     });
-    await result.waitUntilRenderFlush();
 
     expect(result.lastFrame()).toContain('Second refresh');
 
-    await act(async () => {
+    await result.actAndFlush(() => {
       firstRefresh.resolve(snapshot('2026-05-13T17:01:00Z', 'Stale first refresh'));
-      await Promise.resolve();
     });
-    await result.waitUntilRenderFlush();
 
     expect(result.lastFrame()).toContain('Second refresh');
     expect(result.lastFrame()).not.toContain('Stale first refresh');
 
-    result.unmount();
+    await result.unmount();
   });
 
   it('ignores a stale refresh failure after a newer refresh succeeds', async () => {
@@ -154,34 +139,29 @@ describe('CollaborationTuiApp', () => {
     const firstRefresh = deferred<CollaborationTuiSnapshot>();
     const secondRefresh = deferred<CollaborationTuiSnapshot>();
     const refreshes = [firstRefresh.promise, secondRefresh.promise];
-    const result = render(
+    const result = await render(
       React.createElement(CollaborationTuiApp, {
         initialSnapshot: snapshot('2026-05-13T17:00:00Z', 'Initial message'),
         onRefresh: async () => refreshes.shift() ?? snapshot('2026-05-13T17:03:00Z', 'Fallback'),
         updateSource: updates,
       }),
     );
-    await result.waitUntilRenderFlush();
 
-    await act(async () => {
+    await result.actAndFlush(() => {
       updates.emit();
       updates.emit();
       secondRefresh.resolve(snapshot('2026-05-13T17:02:00Z', 'Second refresh'));
-      await Promise.resolve();
     });
-    await result.waitUntilRenderFlush();
 
-    await act(async () => {
+    await result.actAndFlush(() => {
       firstRefresh.reject(new Error('stale refresh failed'));
-      await Promise.resolve();
     });
-    await result.waitUntilRenderFlush();
 
     expect(result.lastFrame()).toContain('Second refresh');
     expect(result.lastFrame()).toContain('refreshed 2026-05-13T17:02:00Z');
     expect(result.lastFrame()).not.toContain('stale refresh failed');
 
-    result.unmount();
+    await result.unmount();
   });
 });
 
@@ -202,11 +182,11 @@ class ManualUpdateSource implements CollaborationTuiUpdateSource {
   }
 }
 
-function render(node: React.ReactNode): {
+async function render(node: React.ReactNode): Promise<{
+  readonly actAndFlush: (action: () => void) => Promise<void>;
   readonly lastFrame: () => string | undefined;
-  readonly unmount: Instance['unmount'];
-  readonly waitUntilRenderFlush: Instance['waitUntilRenderFlush'];
-} {
+  readonly unmount: () => Promise<void>;
+}> {
   const originalWrite = process.stdout.write;
   const originalIsTty = process.stdin.isTTY;
   const originalSetRawMode = process.stdin.setRawMode;
@@ -230,19 +210,36 @@ function render(node: React.ReactNode): {
     value: true,
   });
   process.stdin.setRawMode = () => process.stdin;
-  const instance = renderInk(node, {
-    debug: true,
-    exitOnCtrlC: false,
-    interactive: true,
-    patchConsole: false,
+  let instance: Instance | undefined;
+  await act(async () => {
+    instance = renderInk(node, {
+      debug: true,
+      exitOnCtrlC: false,
+      interactive: true,
+      patchConsole: false,
+    });
+    await instance.waitUntilRenderFlush();
   });
 
+  if (instance === undefined) {
+    throw new Error('Ink render did not initialise');
+  }
+  const mountedInstance = instance;
+
   return {
+    actAndFlush: async (action) => {
+      await act(async () => {
+        action();
+        await mountedInstance.waitUntilRenderFlush();
+      });
+    },
     lastFrame: () => frames.findLast((frame) => frame.trim() !== ''),
-    waitUntilRenderFlush: instance.waitUntilRenderFlush,
-    unmount: () => {
-      instance.unmount();
-      instance.cleanup();
+    unmount: async () => {
+      await act(async () => {
+        mountedInstance.unmount();
+        mountedInstance.cleanup();
+        await Promise.resolve();
+      });
       process.stdout.write = originalWrite;
       Object.defineProperty(process.stdin, 'isTTY', {
         configurable: true,

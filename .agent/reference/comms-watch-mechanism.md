@@ -45,7 +45,10 @@ Each event carries at minimum:
 A watcher takes:
 
 - the comms directory path,
-- the addressee identity tuple to filter for,
+- the watcher's own identity tuple (for self-exclusion only — NOT
+  an addressee filter; see step 2 below and the
+  [`start-right-team` SKILL §0](../skills/start-right-team/SKILL-CANONICAL.md)
+  all-channels-matter contract),
 - a path to a per-session "seen events" file (tracks which event
   ids have already been delivered to this session, so a restart
   does not re-deliver),
@@ -54,16 +57,22 @@ A watcher takes:
 On each filesystem-change tick:
 
 1. Enumerate event files under the comms directory.
-2. Filter to events addressed to the watcher's identity tuple (or
-   broadcast events the watcher subscribes to).
-3. Exclude events authored by the watcher's own identity tuple
-   (self-exclusion is non-negotiable — a watcher that echoes its
-   own writes as inbound creates a feedback loop that contaminates
-   the agent's reasoning context).
-4. Exclude event ids already recorded in the seen-events file.
-5. Emit new events to the agent's notice channel.
-6. Append the delivered event ids to the seen-events file.
-7. If a heartbeat sink is configured, call it once per tick with
+2. Emit every event with **self-exclusion only** — events authored
+   by the watcher's own identity tuple are dropped (self-exclusion
+   is non-negotiable — a watcher that echoes its own writes as
+   inbound creates a feedback loop that contaminates the agent's
+   reasoning context). **Addressee-filtering is forbidden**: the
+   comms event stream is canonical truth, and broadcast, group,
+   directed-to-self, observed (cross-traffic), and lifecycle views
+   all carry coordination substance the agent needs. The agent's
+   reasoning layer triages relevance, not the watcher boundary. An
+   event whose addressee is another agent surfaces under the
+   `[OBSERVED]` view-token so the agent knows the channel at a
+   glance.
+3. Exclude event ids already recorded in the seen-events file.
+4. Emit new events to the agent's notice channel.
+5. Append the delivered event ids to the seen-events file.
+6. If a heartbeat sink is configured, call it once per tick with
    `{ last_heartbeat_at, last_heartbeat_source }` so a separate
    liveness surface can record that the watcher is alive.
 

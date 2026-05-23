@@ -18,6 +18,10 @@ describe('formatWatcherEventHeader', () => {
     expect(formatWatcherEventHeader('directed', undefined)).toBe('--- NEW [DIRECTED] EVENT ---');
   });
 
+  it('renders observed view without tags when tags is undefined', () => {
+    expect(formatWatcherEventHeader('observed', undefined)).toBe('--- NEW [OBSERVED] EVENT ---');
+  });
+
   it('renders lifecycle view without tags when tags is undefined', () => {
     expect(formatWatcherEventHeader('lifecycle', undefined)).toBe('--- NEW [LIFECYCLE] EVENT ---');
   });

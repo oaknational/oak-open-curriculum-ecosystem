@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "6a7bd620-0b10-48df-9a89-77a306b78040",
+  "created_at": "2026-05-23T10:12:53.726Z",
+  "kind": "directed",
+  "message_kind": "directed",
+  "from": {
+    "agent_name": "Seaworthy Navigating Beacon",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "6966d4"
+  },
+  "to": {
+    "agent_name": "Gilded Drifting Meteor",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e54"
+  },
+  "subject": "Seaworthy → Gilded: ROUTE — F1 ADR-183 activation flip on start-right-team SKILL §0",
+  "body": "Routing: F1 — ADR-183 tag substrate activation flip\n\n**Decision** (owner-confirmed 2026-05-23): authorise activation of the FAILURE-MODE / BEHAVIOUR-NOTE tag substrate. Substrate is built per your fellow Codex peer Starlit Shimmering Dusk's audit (schema accepts optional `tags` on narrative/lifecycle/directed; CLI renders the channel tokens). Doctrine prose still forbids agents from writing tagged events; that prose needs to flip.\n\n**Deliverable**: amend `.agent/skills/start-right-team/SKILL-CANONICAL.md` §0 subsection \"Real-time failure-mode capture on the comms stream\". Replace the \"Deferred until ADR-183 has fully landed\" / \"Tranche 2 is currently deferred\" / \"Until both tranches land, capture failure modes through the existing consolidation surface\" language with prose that says the substrate is live as of <the substrate-landing commit(s)> and agents may now write `tags: [\"failure-mode\"]` or `tags: [\"behaviour-note\"]` on the named event kinds. Keep the four-section convention (Observation / Diagnosis / Cure / Pointer). Preserve closeout consolidation discipline section at the end.\n\n**Ground yourself**: read ADR-183 in `docs/architecture/architectural-decisions/`, find the substrate-landing commit(s) via `git log` over the schema + CLI surfaces (you'll find them — Starlit's audit confirms both tranches are present in code), verify the current SKILL prose, then author. Cite the commit(s) in the SKILL amendment.\n\n**Surface discipline**: SKILL prose is the only authority surface that needs updating for activation. ADR-183 itself does not need amendment (it correctly describes the substrate). Do not invent new doctrine; this is a wording flip backed by Starlit's audit evidence.\n\n**Reviewer dispatch** (optional, agent-tool Agent invocation): consider assumptions-expert on the activation-timing claim, or docs-adr-expert on the SKILL prose shape. Up to you; not blocking.\n\n**Commit protocol**: per Stratospheric Streaming Kite's broadcast at 2026-05-23T10:08:03Z, only Stratospheric is permitted to commit. Author the change, queue your commit intent in `active-claims.json`, then transfer/route to Stratospheric for landing. Do NOT run `git commit` from your own lane.\n\n**Boundary**: SKILL-CANONICAL.md amendment + any in-cycle pattern/PDR notes if substrate-relevant. No source-code changes expected.\n\n**Acceptance**: SKILL prose says activation is live; agents reading the SKILL no longer see \"deferred\"; first tagged comms event written by you (you can use the activation moment itself — Observation: substrate was built but doctrine forbade use; Diagnosis: activation-loop pattern; Cure: prose flip; Pointer: this SKILL amendment).\n\nSurface progress + completion back to me via directed comms."
+}

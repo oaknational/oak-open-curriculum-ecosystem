@@ -17,22 +17,18 @@ Earlier archives remain under [`archive/`](archive/).
 ## Current State
 
 - Current branch: `feat/mcp-graph-support-foundation`.
-  HEAD `3241893d` (Stormbound Spiralling Breeze WS4.1 graph-corpus-sdk
-  scaffold landing under owner-directed ownership-override after Lunar
-  silent ~10h since the `e1b9561e` COMMIT_EDITMSG incident; Lunar substance
-  preserved with `Co-Authored-By: Lunar Illuminating Eclipse`; SVW
-  coordination preserved in commit body). The 2026-05-22 → 2026-05-23
-  multi-agent gate-1a substrate-floor team session landed **19 commits across
-  6 active agents over ~10 hours** — Round 1+2 substrate floor for the EEF
-  first-feature delivery contract is now effectively complete (9 of 9
-  gate-1a cycles landed: WS4.4 GraphView interface, WS3.3 adjacency, PR-108
-  SonarCloud clearance, t9 guidance constant, t10 lesson-plan prompt, t12
-  citation shape, t13a freshness check, t20 credits attribution, WS4.1
-  graph-corpus-sdk scaffold; plus Round 2 substrate t1 EvidenceCorpus + t14
-  telemetry seam pattern + WS2.2 jsonld-compatible/Turtle + WS2.3 source-path
-  primitives). Lunar's `355d2ddb` (workspace) + `15465f06` (git:index/head)
-  claims closed at `3241893d` under owner-directed override; commit-queue
-  intent `f34a8f74` auto-cleaned post-landing.
+  HEAD `f2ba9459` (`docs(plan): fold #2 + #4 + hook-widening findings into commit-queue-multi-writer-cure plan`). Eight commits landed in the 2026-05-23 morning team session under two Director windows (Seaworthy first half, Velvet second half) spanning the structural-property PDR cluster (PDR-071/072/073), comms-event ADR-184, ADR-183 tag activation, practice.md + practice-bootstrap.md portability passes, and the commit-queue-multi-writer-cure plan body fold. Cure-plan body is now post-fold-landed and in active owner review.
+
+  Working tree carries this session's session-handoff continuity edits + the Breezy Cresting Beacon prior-handoff curation + standard collaboration-state residue (comms events, comms-seen, shared-comms-log regeneration). The next session should treat the session-handoff edits as live handoff state, not as landed history.
+
+- **Second-half Director closeout authored by Velvet Dimming Shadow / `claude` / claude-opus-4-7 / `967a6a` on 2026-05-23 at ~11:04Z.** Two coordinator handoffs landed this morning per PDR-064 Two Moments: Seaworthy → Velvet at ~10:48Z (handoff record `director-role-handoff-2026-05-23-seaworthy-to-velvet.md`), and Velvet → next at ~11:04Z (handoff record `director-role-handoff-2026-05-23-velvet-to-next.md`). The incoming Director identity is owner-directed; Moment 1 pre-positioning broadcast `e3c64c49` is in flight. Full session arc + pattern surfacings captured in:
+  - `.agent/state/collaboration/handoffs/director-role-handoff-2026-05-23-velvet-to-next.md` (§1–§10 broad-awareness substance for incoming Director)
+  - `agentic-engineering-enhancements.next-session.md` updated identity row
+  - cure-plan body at `commit-queue-multi-writer-cure.plan.md` (post-fold; owner-review-in-flight)
+
+  Team composition at handoff: 1 marshal (Twilit `8d8d93`) + 5 standby implementer-class agents (Seaworthy `6966d4`, Secret Creeping Moth `61d726`, Clouded `019e54`, Pearly `019e54`, Zephyrous `019e54`) + outgoing Director Velvet. Five-candidate parallel-capacity pre-positioned for the three Tranches (C → B → A) that open on owner verdict of cure plan.
+
+- **Prior 2026-05-23 first-out closeout authored by Secret Vanishing Wisp / `claude` / claude-opus-4-7 / `981cbe`** structured continuity surfaces for follow-on `/oak-consolidate-docs` per owner direction; full session arc + pattern surfacings captured in the `eef.next-session.md`, `connecting-oak-resources.next-session.md`, `pending-graduations.md`, and `napkin.md` entries dated 2026-05-22 → 2026-05-23.
 - **First-out closeout authored by Secret Vanishing Wisp / `claude` /
   claude-opus-4-7 / `981cbe` on 2026-05-23**. This handoff structures
   continuity surfaces for follow-on `/oak-consolidate-docs` per owner
@@ -120,7 +116,7 @@ are not the current session-priority lane. Reactivation is owner-directed.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `connecting-oak-resources` | Oak resource graph substrate (delivers EEF first feature); **PR #108 blocked on quality-gate snagging plan** | [record][connecting] | Tempestuous Spiralling Thermal / `claude` / Opus 4.7 (1M) / `9205b8` / 2026-05-22 (OUTPUT-surface knowledge curation: substrate-completion graduations + distilled.md fitness-rotation; 53b00386) |
-| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Shadowed Hiding Shade / `claude` / claude-opus-4-7[1m] / `e35155` / 2026-05-22 (deep-graduation pass commit `a49e7a21` — 8 Tier A doctrine landings inc. 5 new rules + PDR-067/PDR-068 Proposed + tdd-as-design and metacognition directive amendments + session-handoff SKILL §11/§11a amendments; 9 Tier B captures inc. 6 patterns + PDR-069/PDR-070 Draft; 5 Tier C per-user memory marker updates) |
+| `agentic-engineering-enhancements` (alias: "agent communication improvements") | Practice continuity + agent-tools improvement | [record][agentic] | Velvet Dimming Shadow / `claude` / claude-opus-4-7 / `967a6a` / 2026-05-23 (second-half Director: 4 commits in Velvet's window — PDR-072 marshal-exception landing `a52e52b4`, cure-plan selective-fold landing `f2ba9459` via temporary plan-author boundary, plus oversight of Seaworthy/Velvet-cusp landings `6ebaae58` PDR-073 + `ab438d1f` bootstrap; Moment 2 active-acknowledgement broadcast `9d02bb47`; Moment 1 pre-positioning to next Director `e3c64c49`; handoff record `director-role-handoff-2026-05-23-velvet-to-next.md`). Prior on-thread Director identity this session: Seaworthy Navigating Beacon / `claude` / claude-opus-4-7 / `6966d4` (first-half Director: 4 commits — F1 ADR-183 activation `c316f5bf`, A PDR-071 `f9e3d31f`, C practice.md `60ae4040`, B ADR-184 `47979666`; handoff record `director-role-handoff-2026-05-23-seaworthy-to-velvet.md`). Predecessor identity: Breezy Cresting Beacon / `codex` / `GPT-5` / `019e53` / 2026-05-23 morning (pending-graduations curation + owner-decision capture; fresh-session implementation route recorded). |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night (commit-only) / `claude-code` / opus-4.7 / `188baa` / 2026-05-10 |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
@@ -579,6 +575,62 @@ Current branch non-goals:
   acceptance work.
 
 ## Deep Consolidation Status
+
+**Status (2026-05-23 second-half Director closeout — Velvet Dimming Shadow / `claude` / claude-opus-4-7 / `967a6a`)**: **DUE**. Multiple session-handoff Step 9 consolidate-docs triggers fired this morning's session window:
+
+- **Two new ADR/PDR candidates surfaced** (napkin entry + handoff record §6.5–§6.6):
+  - `comms-watch-self-exclusion-correctness` (graduation-target: rule + test coverage on `agent-tools/src/collaboration-state/comms-watch.ts`) — Seaworthy verified silent dropping of directed-to-other-agent events at 11:08Z; live operational impact on Director broadcast-vs-directed strategy
+  - Seaworthy generative metacognition write on maximally effective directing (ultrathink ~11:11Z; not yet in durable home; substance still in Seaworthy's session memory)
+- **Substantive new content in `napkin.md`** at the Velvet Director window entry (4 surprises/observations + 2 candidates + 1 process observation; ~70 lines added at the top)
+- **Two thread next-session records refreshed this morning** (Breezy's earlier session + Velvet's second-half Director window in agentic-engineering-enhancements; participating-agent-identities table grew by 12 rows for the 2026-05-23 multi-agent window)
+- **Two coordinator-handoff records authored** (`director-role-handoff-2026-05-23-seaworthy-to-velvet.md` + `director-role-handoff-2026-05-23-velvet-to-next.md`) — both carry §1–§10 broad-awareness substance that should be referenced by future-Director onboarding patterns once the cluster of three Director-windows in one day has settled
+- **Active commit queue empty** and no Velvet source claims to close (Director-pure-direction discharge clean) — consolidation has clean working surface
+- **`pending-graduations.md`** remains at the Breezy-curation-post state (~3820 lines per prior Velvet Veiling Wisp consolidation pass); the two new candidates here add to that surface
+- **`distilled.md`** unchanged this Director window (no consolidation work in scope for Director role)
+
+**Structure for follow-on `/oak-consolidate-docs`** at next opportunity:
+
+1. Read this Deep Consolidation Status entry + the handoff records + the new napkin entry to load the Velvet-window pattern surfacings.
+2. Evaluate the two new candidate triggers (Monitor watcher self-exclusion + generative metacognition durable home) for graduation readiness.
+3. Verify both 2026-05-23 thread-record identity-row sets (Breezy + Velvet) match the repo-continuity identity summary per consolidate-docs §7c gate.
+4. Continue the standing fitness pressure work on `pending-graduations.md` + `distilled.md` per substance-led routing.
+
+**Prior status (2026-05-23 first-out — Breezy Cresting Beacon / `codex` / `GPT-5` / `019e53`)**: **DECISION CAPTURE COMPLETE; FRESH-SESSION CONSOLIDATION DUE**. This earlier session curated `pending-graduations.md` as a knowledge-preservation queue, not a fitness target, and recorded owner decisions for the mature gaps before stopping.
+
+Current handoff state:
+
+- `pending-graduations.md` current `due` index contains 4 body candidates
+  after correcting one plan-execution-gated item back to `pending`.
+- Mature duplicate bodies were copied to
+  `archive/pending-graduations-archive-2026-05-23.md`; only entries with
+  verified durable homes were removed from the live queue.
+- Pattern homes were updated or added for
+  `reciprocal-cross-agent-reviewer-dispatch`,
+  `untracked-wip-whole-tree-lint-blocker`, and
+  `honest-restructure-over-band-aid`.
+- Owner decisions now route the next implementation work: Practice Core
+  PDRs for recursion/curation, ADR-144 fitness-axis/schema work, PDR-027
+  identity amendment plus temporary-file frontmatter schema, loop templates
+  with five-no-op default stop, schema-enforced messaging tools, owner-only
+  `--no-verify`, and high-impact commit-queue/tooling work.
+- `pnpm practice:fitness:informational` remained
+  `CRITICAL (4 critical, 4 hard, 12 soft)` after decision capture. That is
+  expected preservation pressure; do not delete source substance to lower
+  the signal.
+
+Fresh-session opener:
+
+1. Run `oak-start-right-quick`.
+2. Read
+   `threads/agentic-engineering-enhancements.next-session.md` latest
+   outcome, `pending-graduations.md` §"2026-05-23 second-pass curation log",
+   and `napkin.md` §"2026-05-23 — Breezy Cresting Beacon
+   pending-graduations curation".
+3. Implement from the owner-decision table in `pending-graduations.md`,
+   respecting each home function. Do not collapse PDR/Core/rule/schema/tool
+   homes into interchangeable docs.
+4. Keep fitness informational until the knowledge has moved into durable
+   homes through the right authority surfaces.
 
 **Status (2026-05-23 first-out closeout — Secret Vanishing Wisp / `claude` /
 claude-opus-4-7 / `981cbe`)**: **DUE** — multiple consolidate-docs triggers

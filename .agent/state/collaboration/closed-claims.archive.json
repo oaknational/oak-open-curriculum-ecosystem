@@ -32681,6 +32681,598 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "81c2db28-836c-45cf-af17-8434bdd7fe58",
+      "agent_id": {
+        "agent_name": "Lacustrine Sailing Lighthouse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/practice.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T10:26:30Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Seaworthy-routed C practice.md owner-review hold: homing map posted; no edits/commit intent until owner gate clears; practice.md only",
+      "intent_to_commit": "8e6df5b1-ed15-4266-a678-b8b35518de5b",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T10:35:00Z",
+        "closed_by": {
+          "agent_name": "Lacustrine Sailing Lighthouse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e54"
+        },
+        "summary": "completed: Route C practice.md portability pass landed by Stratospheric at 60ae4040; source claim closed after marshal broadcast",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "81c2db28-836c-45cf-af17-8434bdd7fe58",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "4fd8da04-09a4-48e1-8839-4b45a21e398c",
+      "agent_id": {
+        "agent_name": "Gilded Drifting Meteor",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/*",
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T10:20:00Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Author coordinator-role-as-allocator-not-gatekeeper Practice Core PDR and flip pending-graduations entry to partially-graduated; no downstream SKILL/directive amendments.",
+      "intent_to_commit": "d9124e3f-704b-4d38-aae4-d48fdb070d32",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T10:35:00Z",
+        "closed_by": {
+          "agent_name": "Gilded Drifting Meteor",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e54"
+        },
+        "summary": "PDR-071 coordinator allocation docs landed by Stratospheric as f9e3d31f after line-scoped pending-graduations staging.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4fd8da04-09a4-48e1-8839-4b45a21e398c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1e89b6e6-e8b7-4a12-9f08-4689163fc0e9",
+      "agent_id": {
+        "agent_name": "Starlit Shimmering Dusk",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/architecture/architectural-decisions/184-comms-event-sync-kind-and-urgency-field.md",
+            "docs/architecture/architectural-decisions/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T10:34:28Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Queue remaining ADR-184 docs-only bundle after pending-graduations ADR-184 hunk landed in f9e3d31f; source-agent intent for Stratospheric marshal handoff.",
+      "intent_to_commit": "5dda5aeb-a120-4104-9684-f28e939fb34a",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T10:36:12Z",
+        "closed_by": {
+          "agent_name": "Starlit Shimmering Dusk",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e54"
+        },
+        "summary": "Docs-only ADR-184 marshal handoff queued as 5dda5aeb and landed in 47979666; pending-grad hunk had already landed in f9e3d31f.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1e89b6e6-e8b7-4a12-9f08-4689163fc0e9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1bff7d48-96ba-4a92-b6b2-df8fe95a1344",
+      "agent_id": {
+        "agent_name": "Starlit Shimmering Dusk",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/architecture/architectural-decisions/184-comms-event-sync-kind-and-urgency-field.md",
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T10:14:30.000Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Author ADR-only comms-event sync kind plus urgency field two-axis separation and partially graduate sync-kind-urgency-flag candidate; no schema/tooling implementation edits.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T10:36:12Z",
+        "closed_by": {
+          "agent_name": "Starlit Shimmering Dusk",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e54"
+        },
+        "summary": "ADR-184 decision authored; pending-grad partial graduation hunk landed in f9e3d31f and ADR docs landed in 47979666 via Stratospheric.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1bff7d48-96ba-4a92-b6b2-df8fe95a1344",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0a4c2a16-9a1c-4066-bab9-bc26f8f6b07e",
+      "agent_id": {
+        "agent_name": "Starlit Shimmering Dusk",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/architecture/architectural-decisions/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T10:16:00.000Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Add ADR-184 index entry for comms-event sync kind and urgency field ADR; paired with Starlit ADR-only route claim 1bff7d48.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T10:36:12Z",
+        "closed_by": {
+          "agent_name": "Starlit Shimmering Dusk",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e54"
+        },
+        "summary": "ADR decision index updated for ADR-182/183/184; landed in 47979666 via Stratospheric.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0a4c2a16-9a1c-4066-bab9-bc26f8f6b07e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "77ac7735-ae8d-418e-839e-4e720eb027fb",
+      "agent_id": {
+        "agent_name": "Starlit Shimmering Dusk",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/commit-queue-multi-writer-cure.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T10:36:12Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Author commit-queue multi-writer cure plan only: intent-scoped message files, line-scoped staging, and marshal handoff tranches; no implementation edits.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T10:47:23Z",
+        "closed_by": {
+          "agent_name": "Starlit Shimmering Dusk",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e54"
+        },
+        "summary": "Retiring Starlit session by owner direction. Commit-queue multi-writer cure plan drafted and left uncommitted for owner/Director routing; no implementation started.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "77ac7735-ae8d-418e-839e-4e720eb027fb",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f6fc624b-a65e-47c0-8c24-bcf13d5fd403",
+      "agent_id": {
+        "agent_name": "Stratospheric Streaming Kite",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "repo-commit-marshal",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T09:54:25Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "commit marshal only: all team commits must be queued and transferred to Stratospheric Streaming Kite; gate failures route back to owning agent via comms",
+      "heartbeat_at": "2026-05-23T10:49:19Z",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T10:50:14Z",
+        "closed_by": {
+          "agent_name": "Stratospheric Streaming Kite",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e54"
+        },
+        "summary": "Stratospheric commit marshal retiring by owner direction. Focused handoff posted in eb07abac; commit monitor responsibility transferred to Twilit in d74cccfc; active queue empty at transfer; PDR-072 file gap routed to Gilded and Velvet.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f6fc624b-a65e-47c0-8c24-bcf13d5fd403",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "288139da-6d0a-48ff-af54-9df0423fcbdc",
+      "agent_id": {
+        "agent_name": "Lacustrine Sailing Lighthouse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/practice-bootstrap.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T10:36:00Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Seaworthy-routed follow-on: practice-bootstrap.md substance-led review and owner-gated homing map; no edits or commit intent before map approval",
+      "intent_to_commit": "48138a96-851c-4cb3-b9f1-270b91ef62a7",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T10:54:10Z",
+        "closed_by": {
+          "agent_name": "Lacustrine Sailing Lighthouse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e54"
+        },
+        "summary": "Lacustrine session retiring: practice-bootstrap.md landed by marshal at ab438d1f after Seaworthy handoff; Route C practice.md already landed at 60ae4040; no further source ownership retained.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "288139da-6d0a-48ff-af54-9df0423fcbdc",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a3cf911e-1c02-42da-afbf-e9adb5ad480e",
+      "agent_id": {
+        "agent_name": "Gilded Drifting Meteor",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-072-knowledge-curation-as-autonomic-learning.md",
+            ".agent/practice-core/decision-records/README.md",
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T10:35:20Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Author knowledge-curation-is-autonomic-learning Practice Core PDR-072, update decision-records README, and flip pending-graduations entry to partially-graduated; no Core canon amendments.",
+      "intent_to_commit": "b3a8a5c4-cd66-4c7c-a785-03668859189c",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T10:51:00Z",
+        "closed_by": {
+          "agent_name": "Gilded Drifting Meteor",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e54"
+        },
+        "summary": "Retiring after completing and queueing PDR-072. Remaining bundle is the new PDR-072 file only; shared README/pending-grad hunks landed via 6ebaae58. Commit queue intent b3a8a5c4-cd66-4c7c-a785-03668859189c and Stratospheric direct handoff 0aac99d2-53fd-4606-80ab-045f457741a8 carry the commit-marshal follow-up.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a3cf911e-1c02-42da-afbf-e9adb5ad480e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e8b2e93a-3d5f-4dd5-a59e-ff7f29fb34bc",
+      "agent_id": {
+        "agent_name": "Twilit Scattering Twilight",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "8d8d93"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "git:index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T10:51:45.000Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Commit-marshal singleton: sole committer for the team window; mediates all git:index/head operations; translates source-agent intents to marshal-owned intents.",
+      "intent_to_commit": "57065ba2-265c-4de1-a415-a9f82cccb078",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T10:55:00.000Z",
+        "closed_by": {
+          "agent_name": "Twilit Scattering Twilight",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "8d8d93"
+        },
+        "summary": "Re-opening with corrected area-pattern (index/head, not git:index/head); no commits made under this claim.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e8b2e93a-3d5f-4dd5-a59e-ff7f29fb34bc",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "236eaac8-f8e5-4641-b321-f3a0ae4325be",
+      "agent_id": {
+        "agent_name": "Secret Creeping Moth",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "61d726"
+      },
+      "thread": "practice-core-pdr-cluster",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-073-recursion-as-method-is-practice-core-mind-shape.md",
+            ".agent/practice-core/decision-records/README.md",
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T10:30:41.224Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Author PDR-073 recursion-as-method-is-practice-core-mind-shape; update decision-records/README.md discoverability entry; flip pending-graduations recursion-as-method status to partially-graduated. Routed by Seaworthy Navigating Beacon. Commit via Stratospheric Streaming Kite.",
+      "intent_to_commit": "964200ac-83de-444d-bc14-741ea96f398f",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T10:54:59.516Z",
+        "closed_by": {
+          "agent_name": "Secret Creeping Moth",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "61d726"
+        },
+        "summary": "PDR-073 recursion-as-method-is-practice-core-mind-shape landed at 6ebaae58 (Stratospheric-translated marshal intent); README.md Index entry + pending-graduations status flip both included in same commit. Reviewer absorption complete: 3 reviewers parallel-dispatched, assumptions-expert 2 CRITICAL findings absorbed in-text. Cluster sibling PDR-072 file remains uncommitted at session close — pre-commit-hook bundle-widening incident captured in napkin as worked-instance evidence for commit-queue-multi-writer-cure plan; routing PDR-072.md landing handed to Gilded + Velvet per Stratospheric's broadcast.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "236eaac8-f8e5-4641-b321-f3a0ae4325be",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c548fd9f-1d64-4ab9-8005-6480ba599e7e",
+      "agent_id": {
+        "agent_name": "Incandescent Banking Flame",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "aa986e"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/commit-queue-multi-writer-cure.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T10:52:04Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Velvet-authorised selective fold: priority findings #2 (schema migration), #4 (append-only-state semantics), and 6th finding (hook-widening) into plan body. Scope strictly bounded to plan file. Return to Phase 2 standby after fold lands.",
+      "intent_to_commit": "fbf72b68-dff0-4d4f-b764-3874dfbb34a0",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T10:58:14Z",
+        "closed_by": {
+          "agent_name": "Incandescent Banking Flame",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "aa986e"
+        },
+        "summary": "Velvet-authorised selective fold complete: edits applied, staged, intent enqueued and translated to Twilit's marshal intent under claim 4f89dc4d. Source-side work done; commit landing pending in Twilit's queue.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c548fd9f-1d64-4ab9-8005-6480ba599e7e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "82bb5dc2-56be-4f11-9774-62bb5d554cc8",
+      "agent_id": {
+        "agent_name": "Pearly Plumbing Beacon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/tests/collaboration-state/tui-app.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T12:26:30Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Owner-directed diagnostic/fix for @oaknational/agent-tools#test React act warnings; compare TUI test with testing-strategy and update outdated async expectations if needed",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T12:30:00Z",
+        "closed_by": {
+          "agent_name": "Pearly Plumbing Beacon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e54"
+        },
+        "summary": "Updated tui-app unit test to wrap Ink render, refresh emissions, and unmount in React act + waitUntilRenderFlush. @oaknational/agent-tools test/type-check/lint green; Sonar MCP full-file analysis unavailable after retries during server startup.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "82bb5dc2-56be-4f11-9774-62bb5d554cc8",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "210fb745-c4a5-4bba-aa1e-c63086566159",
+      "agent_id": {
+        "agent_name": "Secret Creeping Moth",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "61d726"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T11:48:31.598Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "land Director-effectiveness session insights (5 napkin entries + 8 pending-graduations entries) per acting-Director Seaworthy Bundle 2 routing 2026-05-23T11:42:05Z",
+      "intent_to_commit": "ff8a1f41-b0df-43c2-9bef-3d119bcfd008",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T11:52:46.289Z",
+        "closed_by": {
+          "agent_name": "Secret Creeping Moth",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "61d726"
+        },
+        "summary": "Bundle 2 landed at d19b1301b4a7a37a6cd9bace4d0e640b5d584223 via Twilit marshal-translation (source intent ff8a1f41 abandoned → marshal intent 914caafd landed under claim 4f89dc4d, staged fingerprint preserved). Acting-Director gate-clearance: Seaworthy 2026-05-23T11:42:05Z routing event. Gates green (turbo 90/90, commitlint clean, prettier+markdownlint clean on staged set). Intent-scope held on 2 shared-markdown files through full hook chain — second consecutive successful intent-scope landing under Twilit marshal.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "210fb745-c4a5-4bba-aa1e-c63086566159",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

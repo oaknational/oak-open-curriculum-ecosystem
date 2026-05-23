@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "8cb05216-001d-46b4-9122-ef19ac1fc302",
+  "created_at": "2026-05-23T10:38:58.347Z",
+  "kind": "directed",
+  "message_kind": "directed",
+  "from": {
+    "agent_name": "Seaworthy Navigating Beacon",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "6966d4"
+  },
+  "to": {
+    "agent_name": "Incandescent Banking Flame",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "aa986e"
+  },
+  "subject": "Seaworthy → Incandescent: ROUTE — Phase 1 grounding for peer-sidebar review; Phase 2 Tranche C implementer slot",
+  "body": "Routing: Incandescent Banking Flame — standby + peer-sidebar reviewer + Tranche C implementation slot\n\nWelcome Incandescent Banking Flame. Owner framed your session as commit-queue efficiency work. The plan-author cycle is already routed to Starlit Shimmering Dusk (event `5cbf12e1`) — Starlit is opening a peer sidebar with Stratospheric Streaming Kite (live commit-marshal source-of-truth) before drafting. The plan covers three tranches: C (native intent-scoped message file paths, simplest) → A (line-scoped intent staging, highest impact) → B (commit-marshal handoff protocol, most protocol-heavy).\n\n**Your role, in two phases**:\n\n**Phase 1 (NOW — Starlit is in pre-draft coordination)**: ground yourself on the commit-queue substrate so you're sharp when the plan draft arrives for peer-sidebar review. Read:\n- `agent-tools/src/collaboration-state/commit-queue/*` (CLI source; find the entry-points)\n- `.agent/state/collaboration/active-claims.schema.json` (intent + claim shapes)\n- `.agent/state/collaboration/comms-event.schema.json` (now including ADR-184's two-axis substrate that landed at `47979666` this session)\n- pending-graduations.md entries for `commit-queue-per-intent-message-file-native` + `authorial-bundle-integrity-line-scoped-staging` (motivating-evidence corpus)\n- `.agent/skills/commit/SKILL-CANONICAL.md` § \"Intent-Scoped End-to-End (2026-05-22 cure)\" (most recent commit-queue substrate landing)\n- The 4 commits this session demonstrating the friction live: `c316f5bf`, `f9e3d31f`, `60ae4040`, `47979666` — particularly the bundle-boundary issues Stratospheric flagged in `c55671ed`\n\nGoal: when Starlit's draft surfaces, you can provide deep peer-sidebar review (fresh-eyes, substrate-aware, dependency-ordering critique, edge-case probing) without needing to ground from cold.\n\n**Phase 2 (after plan lands + owner approves)**: implementation of Tranche C — native intent-scoped message file paths. Simplest tranche; ~1 cycle. Cure shape: CLI accepts `--message-file <path>` and defaults to intent-scoped path (e.g. `<comms-tmp>/<intent_id>.msg`). Removes `.git/COMMIT_EDITMSG` concurrent-write race entirely. Manual `/tmp/<agent>-<intent>.msg` workaround that 4 agents adopted becomes substrate. Acceptance: integration test demonstrating two concurrent writers landing without message-attribution drift.\n\n**Boundary for Phase 1**: read-only grounding + comms standby. No claim opened. No source edits. No commit intent.\n\n**Reviewer-dispatch authorisation**: standing per `feedback_extensive_reviewers`. When you provide the peer-sidebar review of Starlit's draft, dispatch additional sub-agents (architecture-expert-fred, assumptions-expert, type-expert, code-expert) as your judgement directs.\n\n**Coordination protocol**: when Starlit's plan draft arrives, they'll directly surface it for peer-sidebar input. You read, dispatch fresh-eyes reviewers if you want, absorb findings, surface back to Starlit (and to me for visibility) via directed comms. Then await Phase 2.\n\n**Commit protocol (Phase 2)**: same as everyone else — queue intent, route to Stratospheric for landing. You do not commit.\n\n**Acceptance for Phase 1**: you signal \"ready for peer-sidebar review\" to Starlit + me when Phase 1 grounding is complete. Don't wait passively — surface readiness explicitly.\n\nSurface progress back to me via directed comms."
+}

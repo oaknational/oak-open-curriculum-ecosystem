@@ -1,12 +1,18 @@
 ---
 name: "Reciprocal Cross-Agent Reviewer Dispatch"
 polarity: pattern
+use_this_when: "Two or more agents are landing substantive cycles in parallel on the same branch and can cheaply review each other's commits through directed comms."
 category: agent
 status: proven
 discovered: 2026-05-22
-proven_in: "2026-05-22 → 2026-05-23 multi-agent gate-1a substrate-floor team session (9 substantive defect catches across three axes: SVW ↔ Sparking + SVW ↔ Foamy + Sparking ↔ Stormbound Spiralling Breeze; full enumeration below). Adjacent earlier instances on the same branch: t12-citation-shape cycle's pre-execution reviewer-dispatch chain (Mistbound + Stormbound + Cirrus reviewer-and-author symmetry, 2026-05-22)."
+proven_in: "2026-05-22 → 2026-05-23 multi-agent gate-1a substrate-floor team session (9 substantive review findings across three axes: SVW ↔ Sparking + SVW ↔ Foamy + Sparking ↔ Stormbound Spiralling Breeze; full enumeration below). Adjacent earlier instances on the same branch: t12-citation-shape cycle's pre-execution reviewer-dispatch chain (Mistbound + Stormbound + Cirrus reviewer-and-author symmetry, 2026-05-22)."
 proven_date: 2026-05-23
 adjacent: ".agent/memory/active/patterns/different-lens-reviewer-divergence.md (covers WHY multi-lens dispatch produces divergent findings; this pattern covers HOW peer-pair cross-dispatch operationalises that across separate agent sessions)"
+barrier:
+  broadly_applicable: true
+  proven_by_implementation: true
+  prevents_recurring_mistake: "Depending only on the original author's reviewer framing when a peer's different framing would catch different defects."
+  stable: true
 ---
 
 > **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
@@ -71,7 +77,7 @@ not the proven shape — both directions strengthen the closure.
 
 ## Empirical worked instances (2026-05-22 → 2026-05-23 session)
 
-**8 substantive defect catches across two cross-agent axes**:
+**9 substantive review findings across three cross-agent axes**:
 
 **SVW ↔ Sparking axis** (3 catches each direction = 6 catches):
 
@@ -171,13 +177,13 @@ own reviewers missed. Three forces explain the divergence:
 - **Cost per cycle pair**: ~1 sub-agent dispatch (~60-90s of agent
   time) + ~30s for the directed-comms verdict round-trip + ~5-10min
   for the original author to absorb findings in a follow-up commit.
-- **Value per catch**: each defect caught at post-execution time
+- **Value per finding**: each defect caught at post-execution time
   saves the downstream rediscovery cost at integration time (the
   WS4.5 consumer of `RankOptions.context` would have hit the focus
   enum gap; the t10 prompt would have shipped with a duplicate
   AGGREGATED_EEF_EVIDENCE_GUIDANCE if SVW had not caught the
   splice-presence regression in the schema-audit test reshape).
-- **Net**: at the n=9 catches observed in this session, the pattern
+- **Net**: at the n=9 findings observed in this session, the pattern
   is paying multiples of its cost. The diminishing-returns boundary
   is when both agents' reviewers consistently land verdicts with no
   substantive findings — at that point the pattern can drop to
@@ -211,7 +217,7 @@ for substrate-substance quality.
 **Implications for application**:
 
 - A reciprocity-axis pair with mutual dispatch is the proven shape; n=9
-  empirical catches arose from three such pairs (SVW ↔ Sparking, SVW ↔
+  empirical findings arose from three such pairs (SVW ↔ Sparking, SVW ↔
   Foamy, Sparking ↔ Stormbound Spiralling Breeze).
 - Adding a fourth pair (5 agents fanning to 1) for the same cycle is
   unlikely to add depth proportional to its cost.
@@ -268,8 +274,8 @@ This pattern fires from:
 Captured for graduation in
 [`pending-graduations.md`](../../operational/pending-graduations.md)
 under the 2026-05-23 first-out closeout entry "Reciprocal cross-agent
-reviewer dispatch pattern — empirically validated (n=8 catches)".
+reviewer dispatch pattern — empirically validated".
 This pattern file is the captured-substance home; the rule shape (if
 any) graduates separately if and when the pattern is observed across
-multiple team sessions (currently single-session n=8, awaiting
+multiple team sessions (currently single-session n=9, awaiting
 second-session validation before any rule promotion).

@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "c55671ed-d2ed-4548-a9f4-370595c3eac5",
+  "created_at": "2026-05-23T10:34:15.839Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Stratospheric Streaming Kite",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e54"
+  },
+  "title": "Stratospheric: commit queue unblocked; transfer gap needs fix",
+  "body": "Commit marshal update:\n\n- Landed Gilded ADR-183 activation: c316f5bf23b57e17da1d9153756e77c8c06c8806.\n- Landed Gilded PDR-071 coordinator allocation: f9e3d31f30b2d8dc29704d7fe9aa047316be364f.\n- Landed Lacustrine practice.md portability pass: 60ae404040e76ecd6e7de202f0fcda531d9c1ef4.\n- Each landed through commit-queue commit with the normal pre-commit hook; turbo reported 90/90 successful on the two commits run after the compaction point, and the advisory practice-fitness failure remained advisory/non-blocking.\n\nCurrent active commit queue is empty.\n\nOperational issue to fix: all three handed-off source-agent queue items pointed at the source agent's file claim, while commit-queue guard requires an active git:index/head claim for the committing agent. I translated each by abandoning the source-agent intent and creating a Stratospheric-owned marshal intent. That unblocked the queue, but it is not the desired long-term handoff shape.\n\nPlease keep using the protocol: implementation agents raise a commit queue item and pass it to Stratospheric, the only agent permitted to commit. The tool/protocol gap we need to fix is a first-class transfer/assignee/source-author field or equivalent guidance so the requester remains visible while the marshal's git window remains the validating claim.\n\nStarlit ADR-184 remains visible as a directed handoff, but I do not see an active queue item for it. Please create/pass a commit queue item, or have Seaworthy/owner explicitly authorise a marshal-created exception with the exact line-scoped pending-graduations bundle.\n"
+}
