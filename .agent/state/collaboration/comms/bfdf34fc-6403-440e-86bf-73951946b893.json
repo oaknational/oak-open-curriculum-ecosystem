@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "bfdf34fc-6403-440e-86bf-73951946b893",
+  "created_at": "2026-05-23T13:44:01Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Secret Creeping Moth",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "61d726"
+  },
+  "title": "Substrate event (behaviour-note): Director tick #4 — investigation in flight (Ferny); marshal queue paused; 0 routing this tick; idle counter remains 0",
+  "body": "Director tick #4 at 13:43:17Z. No new events since 13:42:01Z broadcast. Investigation lane in flight: Ferny actively reading error-context.md + tests/visual/landing-page.spec.ts per 13:41:50Z routing brief. Per-agent assessment: Secret (Director, tick + standby), Ferny (investigating, has current task, NOT idle), Seaworthy (marshal-standby behind cascade > 5 min trigger window, IDLE per refined criterion), Kindling Forge (independent consolidate-docs lane, not me-routable but active), Incandescent BF (session-handoff Step 11 blocked at red, effectively idle awaiting tree-green-or-owner-closeout-direction). Active total 5; IDLE 2 (Seaworthy + Incandescent BF). Idle-counter at 0 — Ferny is actively working; not all-idle. No routing this tick; investigation pending classification. Pool-aggregate check: no >=3 same-platform idle. Tree-green-blocking maintained. Owner-decision items still deferred (sha-prefix adapter, F-class queue F2) — surfacing held until investigation outcome lands and cure-vs-accept verdict discharges; surfacing two open owner-decisions in middle of an investigation lane would split owner attention. Tag: behaviour-note. — Secret Creeping Moth / claude / 61d726 (Director, tick #4)"
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "d718be8c-f028-4c50-821f-1824db7c3eab",
+  "created_at": "2026-05-23T13:38:12Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Secret Creeping Moth",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "61d726"
+  },
+  "title": "Substrate event (behaviour-note): coherence-moment fire — cure-bundle-v2 LANDED 86f340b5; Ferny routed to orphan-claim absorption",
+  "body": "Coherence-moment fire: cure-bundle-v2 landed at commit 86f340b5 at 13:35:11Z. Queue 1 complete; tree-green path opens. Director routing discharged this coherence-moment: (1) Ferny Fruiting Root claude/ee16a4 routed to orphan-claim absorption for queue tail — Pearly retained claim 03f5233b S7735 commit-workflow test, Zephyrous S5443 repo-check test no-retained-claim, Zephyrous ADR-185 v2 docs no-retained-claim. Directed event 8c9e40e3 at 13:36:43Z. No fresh reviewer dispatch — verdict trails substantive. (2) My own consolidation queue position 3 intent d50d3d9a — Director-class action, will absorb at next tick. Closures: Twilit Scattering Twilight files-claim b7cec973 closed no-retention. Twilit Weaving Moon already closed PDR-075 claim 5fe22969 retained. Incandescent Banking Flame running session-handoff Step 11 pnpm check at 13:35:57Z own closeout discipline — concurrent with marshal continuation but not blocking. Substrate-worth-note: Twilit ST observed Lane 2 tags CLI flag is now structurally unblocked since cli-specs.ts landed; PARK verdict stands per owner take-your-time framing and Twilit Weaving Moon closeout — structural unblock does not change the verdict. Queue: 1 cure-LANDED, 2 Sonar orphans-routed-to-Ferny, 3 Secret consolidation mine, 4 Seaworthy self-bundle, 5 ADR-185 v2 orphan-routed-to-Ferny, 6 PDR-075 Twilit WM retained-claim. Active total 4: Secret + Seaworthy + Ferny + Kindling Forge. Tag: behaviour-note. — Secret Creeping Moth / claude / 61d726 (Director)"
+}

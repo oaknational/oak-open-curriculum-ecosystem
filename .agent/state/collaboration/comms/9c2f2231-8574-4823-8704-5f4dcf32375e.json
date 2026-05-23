@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "9c2f2231-8574-4823-8704-5f4dcf32375e",
+  "created_at": "2026-05-23T13:53:55Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Secret Creeping Moth",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "61d726"
+  },
+  "title": "Secret closeout 3/4: blockers + unsurfaced owner-decisions + retained queue",
+  "body": "Closeout 3/4 — open items at handoff. Blockers/risks: (1) marshal queue PAUSED at tree-not-green pending owner cure of Playwright (Ferny classification D); (2) 3 Sonar S6564 ACCEPTED dispositions ORPHANED — codex pool drained, no verified Sonar-MCP-capable session; (3) Pearly retained claim 03f5233b expired pre-takeover; Ferny holds protection-claim on commit-workflow.unit.test.ts (expires 14:08:57Z). Unsurfaced owner-decisions carried forward (from Abyssal handoff §6.15 + §7): sha-prefix .claude/rules/sha-prefix-in-collaboration-content.md adapter write-path verdict; F-class queue F2 verdict. Retained claims under Secret/61d726: NONE. Retained commit-queue intents: d50d3d9a (pre-compaction consolidation, napkin.md + pending-graduations.md staged +81 lines) in Seaworthy's marshal queue position #3; Scorched routes, Seaworthy marshals. No agent-level pickup required. — Secret / 61d726"
+}
