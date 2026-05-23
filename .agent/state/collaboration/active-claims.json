@@ -1072,7 +1072,29 @@
       "phase": "abandoned"
     },
     {
-      "intent_id": "93db5cf0-2b3a-4294-a445-b818b6665e03",
+      "intent_id": "d9124e3f-704b-4d38-aae4-d48fdb070d32",
+      "claim_id": "4fd8da04-09a4-48e1-8839-4b45a21e398c",
+      "agent_id": {
+        "agent_name": "Gilded Drifting Meteor",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "files": [
+        ".agent/practice-core/decision-records/PDR-071-coordinator-allocates-without-gating.md",
+        ".agent/practice-core/decision-records/README.md",
+        ".agent/memory/operational/pending-graduations.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json"
+      ],
+      "commit_subject": "docs(practice-core): propose coordinator allocation PDR",
+      "queued_at": "2026-05-23T10:24:39.068Z",
+      "updated_at": "2026-05-23T10:31:17.120Z",
+      "expires_at": "2026-05-23T10:39:39.068Z",
+      "phase": "abandoned"
+    },
+    {
+      "intent_id": "e2e31604-e179-4d70-87b5-efdbc78cf831",
       "claim_id": "f6fc624b-a65e-47c0-8c24-bcf13d5fd403",
       "agent_id": {
         "agent_name": "Stratospheric Streaming Kite",
@@ -1081,19 +1103,19 @@
         "session_id_prefix": "019e54"
       },
       "files": [
-        ".agent/skills/start-right-team/SKILL-CANONICAL.md",
-        ".agent/state/collaboration/comms/7914816b-5524-4dd9-aaa9-71cc1e0ae2da.json",
-        ".agent/state/collaboration/shared-comms-log.md",
-        ".agent/state/collaboration/active-claims.json"
+        ".agent/practice-core/decision-records/PDR-071-coordinator-allocates-without-gating.md",
+        ".agent/practice-core/decision-records/README.md",
+        ".agent/memory/operational/pending-graduations.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json"
       ],
-      "commit_subject": "docs(start-right-team): activate ADR-183 comms tags",
-      "queued_at": "2026-05-23T10:19:47.863Z",
-      "updated_at": "2026-05-23T10:20:42.460Z",
-      "expires_at": "2026-05-23T10:34:47.863Z",
+      "commit_subject": "docs(practice-core): propose coordinator allocation PDR",
+      "queued_at": "2026-05-23T10:31:22.624Z",
+      "updated_at": "2026-05-23T10:31:55.963Z",
+      "expires_at": "2026-05-23T10:46:22.624Z",
       "phase": "pre_commit",
-      "staged_bundle_fingerprint": "bc5fcd260eeb48dad5a7137bb16f24550a6e9ef941433f171548077203cf7a1f",
-      "staged_name_status": "M\t.agent/skills/start-right-team/SKILL-CANONICAL.md\nM\t.agent/state/collaboration/active-claims.json\nA\t.agent/state/collaboration/comms/7914816b-5524-4dd9-aaa9-71cc1e0ae2da.json\nM\t.agent/state/collaboration/shared-comms-log.md\n",
-      "notes": "commit-workflow git-commit failure: git commit exited with code 128: fatal: Unable to create '/Users/jim/code/oak/oak-open-curriculum-ecosystem/.git/index.lock': Operation not permitted"
+      "staged_name_status": "M\t.agent/memory/operational/pending-graduations.md\nA\t.agent/practice-core/decision-records/PDR-071-coordinator-allocates-without-gating.md\nM\t.agent/practice-core/decision-records/README.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\n",
+      "staged_bundle_fingerprint": "3d9abe46ecd1810ac7b566ba37d0258fac5a34af543e1635bcfb9340307468ed"
     }
   ],
   "claims": [
@@ -1141,30 +1163,7 @@
       "sidebar_open": false,
       "intent": "commit marshal only: all team commits must be queued and transferred to Stratospheric Streaming Kite; gate failures route back to owning agent via comms",
       "heartbeat_at": "2026-05-23T10:00:26Z",
-      "intent_to_commit": "93db5cf0-2b3a-4294-a445-b818b6665e03"
-    },
-    {
-      "claim_id": "dec71abc-ef26-4de8-8738-1705be394f40",
-      "agent_id": {
-        "agent_name": "Gilded Drifting Meteor",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e54"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/skills/start-right-team/SKILL-CANONICAL.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-23T10:14:29Z",
-      "freshness_seconds": 7200,
-      "sidebar_open": false,
-      "intent": "F1 ADR-183 activation flip: amend start-right-team failure-mode capture prose to mark tag substrate live and route commit through Stratospheric.",
-      "intent_to_commit": "d87020b5-7222-49ec-b865-49a7312fc31e"
+      "intent_to_commit": "e2e31604-e179-4d70-87b5-efdbc78cf831"
     },
     {
       "claim_id": "1bff7d48-96ba-4a92-b6b2-df8fe95a1344",
@@ -1232,10 +1231,11 @@
       "claimed_at": "2026-05-23T10:20:00Z",
       "freshness_seconds": 7200,
       "sidebar_open": false,
-      "intent": "Author coordinator-role-as-allocator-not-gatekeeper Practice Core PDR and flip pending-graduations entry to partially-graduated; no downstream SKILL/directive amendments."
+      "intent": "Author coordinator-role-as-allocator-not-gatekeeper Practice Core PDR and flip pending-graduations entry to partially-graduated; no downstream SKILL/directive amendments.",
+      "intent_to_commit": "d9124e3f-704b-4d38-aae4-d48fdb070d32"
     },
     {
-      "claim_id": "b122b8c5-048a-471f-b8c3-3e4f2e0557c4",
+      "claim_id": "81c2db28-836c-45cf-af17-8434bdd7fe58",
       "agent_id": {
         "agent_name": "Lacustrine Sailing Lighthouse",
         "platform": "codex",
@@ -1247,18 +1247,38 @@
         {
           "kind": "files",
           "patterns": [
-            ".agent/practice-core/practice.md",
-            ".agent/practice-core/practice-lineage.md",
-            ".agent/practice-core/principles.md",
-            ".agent/practice-core/practice-bootstrap.md",
+            ".agent/practice-core/practice.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T10:26:30Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Seaworthy-routed C practice.md owner-review hold: homing map posted; no edits/commit intent until owner gate clears; practice.md only"
+    },
+    {
+      "claim_id": "236eaac8-f8e5-4641-b321-f3a0ae4325be",
+      "agent_id": {
+        "agent_name": "Secret Creeping Moth",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "61d726"
+      },
+      "thread": "practice-core-pdr-cluster",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-073-recursion-as-method-is-practice-core-mind-shape.md",
+            ".agent/practice-core/decision-records/README.md",
             ".agent/memory/operational/pending-graduations.md"
           ]
         }
       ],
-      "claimed_at": "2026-05-23T10:20:37Z",
+      "claimed_at": "2026-05-23T10:30:41.224Z",
       "freshness_seconds": 7200,
       "sidebar_open": false,
-      "intent": "Seaworthy-routed C practice.md homing-map pass: read Practice Core surfaces and prepare owner-review disposition map before any core file edits; no commit intent until owner gate clears"
+      "intent": "Author PDR-073 recursion-as-method-is-practice-core-mind-shape; update decision-records/README.md discoverability entry; flip pending-graduations recursion-as-method status to partially-graduated. Routed by Seaworthy Navigating Beacon. Commit via Stratospheric Streaming Kite."
     }
   ]
 }

@@ -186,3 +186,12 @@ Practice-Core portability ratifies both — see the bridge index
 | [PDR-060](PDR-060-tooling-friction-is-first-class-user-feedback.md) | Tooling Friction Is First-Class User Feedback | Accepted |
 | [PDR-061](PDR-061-agent-pronoun-default-and-conduct-correction-graduation.md) | Agent Pronoun Default and Conduct-Correction Graduation | Accepted |
 | [PDR-062](PDR-062-absorption-adjacent-failure-modes.md) | Absorption-Adjacent Failure Modes | Accepted |
+| [PDR-063](PDR-063-mid-cycle-retirement-protocol.md) | Mid-Cycle Retirement Protocol for Token-Bounded Agents | Proposed |
+| [PDR-064](PDR-064-coordinator-handoff-two-moments.md) | Coordinator Handoff — Pre-Positioning vs Active-Acknowledgement | Proposed |
+| [PDR-065](PDR-065-grounding-cost-amortisation-under-rotation.md) | Grounding-Cost Amortisation Under Rotating-Cast Operation | Proposed |
+| [PDR-066](PDR-066-comms-events-as-failure-mode-channel.md) | Comms-Events as Real-Time Failure-Mode Capture Channel | Proposed |
+| [PDR-067](PDR-067-surface-classification-for-fitness-response.md) | Surface Classification for Fitness-Response Routing | Proposed |
+| [PDR-068](PDR-068-pipeline-back-pressure-as-structural-cure-signal.md) | Pipeline Back-Pressure as Structural-Cure Signal | Proposed |
+| [PDR-069](PDR-069-doctrine-first-vs-first-principles-diversity.md) | Doctrine-First and First-Principles Reasoning Are Cognitive-Approach Diversity | Draft |
+| [PDR-070](PDR-070-moment-of-decision-heuristic-consolidation.md) | Moment-of-Decision Heuristic Consolidation | Draft |
+| [PDR-071](PDR-071-coordinator-allocates-without-gating.md) | Coordinator Allocates Without Gating | Proposed |

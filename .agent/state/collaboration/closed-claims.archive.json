@@ -32367,6 +32367,320 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "db42df55-77ab-4ae4-902b-96eb05c1ae2e",
+      "agent_id": {
+        "agent_name": "Breezy Cresting Beacon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e53"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/archive/pending-graduations-archive-2026-05-23.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/patterns/**",
+            ".agent/practice-core/**",
+            ".agent/rules/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T08:13:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "curate pending-graduations knowledge; preserve and graduate substance without fitness-driven trimming",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T08:20:50Z",
+        "closed_by": {
+          "agent_name": "Breezy Cresting Beacon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e53"
+        },
+        "summary": "Curated pending-graduations knowledge preservation slice: graduated mature pattern candidates to active patterns with archive preservation; corrected due/pending dispositions; surfaced PDR/Core approval gates.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "db42df55-77ab-4ae4-902b-96eb05c1ae2e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "296c2628-43da-46a9-8a52-aa7f47290ab6",
+      "agent_id": {
+        "agent_name": "Breezy Cresting Beacon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e53"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/archive/pending-graduations-archive-2026-05-23.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/patterns/**",
+            ".agent/practice-core/incoming/**",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T08:23:25Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "sub-agent-assisted pending-graduations curation; surface mature concepts without durable homes",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T08:36:55Z",
+        "closed_by": {
+          "agent_name": "Breezy Cresting Beacon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e53"
+        },
+        "summary": "Sub-agent-assisted pending-graduations curation completed: preserved/archive-drained verified homes, kept ambiguous Core/PDR/rule candidates pending with explicit home-gap next actions, recorded curation lessons, and reran focused checks plus practice fitness.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "296c2628-43da-46a9-8a52-aa7f47290ab6",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6dddb319-80aa-4405-a735-b986b14897d4",
+      "agent_id": {
+        "agent_name": "Breezy Cresting Beacon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e53"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T09:29:21Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "record owner decisions from metacognition reflection into pending-graduations and napkin",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T09:32:06Z",
+        "closed_by": {
+          "agent_name": "Breezy Cresting Beacon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e53"
+        },
+        "summary": "Captured owner decisions from metacognition reflection in pending-graduations and napkin; converted decision-needed language to approved next authority surfaces without implementing the broader PDR/rule/tooling changes.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6dddb319-80aa-4405-a735-b986b14897d4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "4686716e-45ae-4cea-acc9-f1a7edf7cf05",
+      "agent_id": {
+        "agent_name": "Breezy Cresting Beacon",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e53"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T09:35:37Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "session-handoff continuity update for pending-graduations curation and owner decisions",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T09:40:37Z",
+        "closed_by": {
+          "agent_name": "Breezy Cresting Beacon",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e53"
+        },
+        "summary": "Session handoff continuity update recorded for pending-graduations curation and owner-decision capture; pnpm check green; session closed for fresh consolidation handoff.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4686716e-45ae-4cea-acc9-f1a7edf7cf05",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "b122b8c5-048a-471f-b8c3-3e4f2e0557c4",
+      "agent_id": {
+        "agent_name": "Lacustrine Sailing Lighthouse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/practice.md",
+            ".agent/practice-core/practice-lineage.md",
+            ".agent/practice-core/principles.md",
+            ".agent/practice-core/practice-bootstrap.md",
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T10:20:37Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Seaworthy-routed C practice.md homing-map pass: read Practice Core surfaces and prepare owner-review disposition map before any core file edits; no commit intent until owner gate clears",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T10:21:19Z",
+        "closed_by": {
+          "agent_name": "Lacustrine Sailing Lighthouse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e54"
+        },
+        "summary": "Closed immediately to correct claim surface: initial claim included nonexistent .agent/practice-core/principles.md from route wording before filesystem verification; reopening with actual read surfaces.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b122b8c5-048a-471f-b8c3-3e4f2e0557c4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "dec71abc-ef26-4de8-8738-1705be394f40",
+      "agent_id": {
+        "agent_name": "Gilded Drifting Meteor",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T10:14:29Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "F1 ADR-183 activation flip: amend start-right-team failure-mode capture prose to mark tag substrate live and route commit through Stratospheric.",
+      "intent_to_commit": "d87020b5-7222-49ec-b865-49a7312fc31e",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T10:23:00Z",
+        "closed_by": {
+          "agent_name": "Gilded Drifting Meteor",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e54"
+        },
+        "summary": "F1 ADR-183 activation flip landed by Stratospheric as c316f5bf; source claim closed after marshal confirmation.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "dec71abc-ef26-4de8-8738-1705be394f40",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "b96f25b6-0425-40c1-ac1d-f22d3ff1cf39",
+      "agent_id": {
+        "agent_name": "Lacustrine Sailing Lighthouse",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/practice.md",
+            ".agent/practice-core/practice-lineage.md",
+            ".agent/practice-core/practice-bootstrap.md",
+            ".agent/practice-core/practice-verification.md",
+            ".agent/directives/principles.md",
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T10:21:19Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Seaworthy-routed C practice.md homing-map pass: read actual Practice Core surfaces and host principles directive; prepare owner-review disposition map before any core file edits; no commit intent until owner gate clears",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T10:26:30Z",
+        "closed_by": {
+          "agent_name": "Lacustrine Sailing Lighthouse",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e54"
+        },
+        "summary": "Homing-map read phase complete and posted to Seaworthy in event 635184ba-7b1e-411b-9f12-90b91123d8d7. Closing broad read claim to avoid unnecessary overlap on pending-graduations/directives while waiting at owner-review gate; reopening a narrow practice.md-only hold.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b96f25b6-0425-40c1-ac1d-f22d3ff1cf39",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
