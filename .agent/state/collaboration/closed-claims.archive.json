@@ -32280,6 +32280,50 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "cf1a345a-2825-481e-af09-6b7b716cb963",
+      "agent_id": {
+        "agent_name": "Sparking Melting Magma",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "4cdb53"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/patterns/reciprocal-cross-agent-reviewer-dispatch.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/experience/2026-05-23-sparking-melting-magma-team-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T07:38:29.000Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "owner-corrected metacognition surface updates (napkin + pending-graduations + experience + pattern refinement)",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T07:40:12.000Z",
+        "closed_by": {
+          "agent_name": "Sparking Melting Magma",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "4cdb53"
+        },
+        "summary": "metacognition reframe landed at 7fae994b (4 files +552/-1): napkin section + pending-graduations PDR candidate + pattern refinement + new experience file",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "cf1a345a-2825-481e-af09-6b7b716cb963",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
