@@ -14,8 +14,8 @@ templates for every artefact type. Four companion files travel with the
 trinity: `README.md`, `index.md`, `CHANGELOG.md`, and `provenance.yml`.
 Templates use `{placeholders}` for project-specific content. The Practice uses
 a **canonical-first artefact model**: substantive content lives in `.agent/`,
-and thin platform adapters point back to it. Sections below use Cursor and
-TypeScript/Node.js as examples — adapt them to local platforms and ecosystems.
+and thin platform adapters point back to it. Examples below are scaffolding —
+adapt paths, tools, and platform syntax to the receiving repo.
 
 ## Before You Begin: Ecosystem Survey
 
@@ -23,8 +23,8 @@ TypeScript/Node.js as examples — adapt them to local platforms and ecosystems.
 Fresh-Checkout Acceptance Criteria in
 [practice-verification.md](practice-verification.md).**
 
-The templates below use TypeScript/Node.js/Cursor conventions as concrete
-examples. Before creating any artefacts, the hydrating agent MUST:
+The templates below include concrete ecosystem examples. Before creating any
+artefacts, the hydrating agent MUST:
 
 1. **Survey the existing repo**: language(s), test/lint/build stack,
    package manager, quality standards, and existing Practice
@@ -51,16 +51,15 @@ Four artefact types follow the canonical-first model. Canonical content in
 `.agent/` is the single source of truth; thin platform adapters contain only
 activation metadata and a pointer to the canonical source.
 
-| Type                         | Canonical                          | Platform adapters                                                                                                                                        |
-| ---------------------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Skills**                   | `.agent/skills/*/SKILL.md`         | Native wrappers such as `.cursor/skills/*/SKILL.md`, `.claude/skills/*/SKILL.md`, `.gemini/skills/*/SKILL.md`, `.github/skills/*/SKILL.md`, plus portable `.agents/skills/*/SKILL.md` where supported |
-| **Rules**                    | `.agent/rules/*.md`                | `.cursor/rules/*.mdc`, `.claude/rules/*.md`, or an entry-point chain where the local matrix documents that choice                                     |
-| **Sub-agent templates**      | `.agent/sub-agents/templates/*.md` | `.cursor/agents/`, `.claude/agents/`, `.github/agents/*.agent.md`, Codex project-agent config in `.codex/`; unsupported states stay explicit in the local matrix |
-| **Hooks**                    | `.agent/hooks/` (policy + README)  | Thin native activation in tracked platform config (for example `.claude/settings.json`, with gitignored local overrides where supported). Runtime in a repo-local script surface (`scripts/` or `tools/` as appropriate). Unsupported platforms stay explicit in the local matrix |
+| Type                    | Canonical                          | Adapter contract                                                                                                                                                         |
+| ----------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Skills**              | `.agent/skills/*/SKILL.md`         | Generated thin adapters for supported platforms. The host bridge or surface matrix records emitted names, prefixes, and unsupported states.                              |
+| **Rules**               | `.agent/rules/*.md`                | Thin activation wrappers or an entry-point chain. Each wrapper identifies one canonical source and carries no substantive policy.                                         |
+| **Sub-agent templates** | `.agent/sub-agents/templates/*.md` | Thin platform adapters that point to canonical templates. Unsupported platforms stay explicit in the local matrix.                                                       |
+| **Hooks**               | `.agent/hooks/` (policy + README)  | Tracked platform config activates hooks; local overrides stay machine-specific. Runtime lives in the host's documented tool/script surface.                               |
 
-Canonical rules are short operational reinforcements of policy. Each platform
-trigger wrapper points at either `.agent/rules/*.md` or
-`.agent/skills/*/SKILL.md` — never both, and never at a directive directly.
+Canonical rules are short operational reinforcements of policy. Each
+activation wrapper identifies exactly one canonical source and stays thin.
 
 Two types need no adapters — consumed directly by all platforms:
 
@@ -97,9 +96,9 @@ A thin wrapper MUST NOT contain substantive instructions or logic not in
 the canonical source. Add a portability validation script to the quality
 gates to enforce this.
 
-Where a repo supports multiple agent platforms, keep a local surface matrix
-(e.g. `.agent/memory/executive/cross-platform-agent-surface-matrix.md`) recording
-supported and unsupported mappings explicitly.
+Where a repo supports multiple agent platforms, the practice-index should
+point to the local surface matrix that records supported and unsupported
+mappings explicitly.
 
 **Cross-platform integration order** — never reverse this sequence:
 
@@ -299,12 +298,11 @@ The rules system has three layers:
 2. **Canonical rules** — `.agent/rules/*.md`. Short operational
    reinforcements of policy. Each stands alone — enough to act on without
    reading the full directive.
-3. **Platform triggers** — `.cursor/rules/*.mdc`, `.claude/rules/*.md`,
-   etc. Thin wrappers that point at a canonical rule or skill.
+3. **Platform triggers** — thin activation wrappers or entry-point chains
+   that identify one canonical source.
 
-A trigger MUST point at either `.agent/rules/*.md` or
-`.agent/skills/*/SKILL.md` — never at a directive directly, and never both.
-No double indirection.
+A trigger MUST identify exactly one canonical source and MUST NOT carry
+substantive policy. No double indirection.
 
 ### Canonical Rule Format
 
@@ -316,32 +314,25 @@ No double indirection.
 See `{directive-or-ADR-path}` for the full policy.
 ```
 
-### Trigger Wrapper Formats
+### Trigger Wrapper Format
 
-**Cursor** (`.cursor/rules/*.mdc`):
+Use the receiving platform's native wrapper metadata:
 
 ```text
 ---
 description: {one-line}
-alwaysApply: true  # or globs: '**/*.test.ts'
+{platform activation fields}
 ---
 
-Read and follow `.agent/rules/{name}.md`.
+Read and follow `{canonical-source}`.
 ```
 
-**Claude Code** (`.claude/rules/*.md`) — path-scoped only; `alwaysApply`
-rules are enforced via the entry-point chain. Same body
-(`Read and follow ...`) with `paths` YAML instead of `alwaysApply`.
+Platform-specific notes may appear in the trigger only as activation
+metadata, not policy.
 
-Platform-specific notes (e.g. "In Cursor, use `ReadLints`") may appear in
-the trigger — they are activation metadata, not policy.
-
-`.agents/` note: a Practice-bearing repo MAY keep portable rule adapters in
-`.agents/rules/` alongside `.agents/skills/` wrappers. Codex still picks up
-always-on behaviour through the entry-point chain (`AGENTS.md` →
-`.agent/directives/AGENT.md` → canonical rules). Reviewer roles should be
-configured through Codex project-agent support in `.codex/`, not modelled as
-skills.
+Adapter locations and generated names are host-defined. Record them in the
+practice-index and local surface matrix; Core only requires thin activation
+and a single canonical source.
 
 ## Sub-agents: Templates and Platform Adapters
 
@@ -391,22 +382,19 @@ scope-bounded artefacts (PDR-015 amendment 2026-04-29).
 ## Skills: Canonical and Platform Adapters
 
 Canonical skill bodies live in `.agent/skills/<name>/SKILL-CANONICAL.md`
-and carry the substantive workflow. Platform adapters use the `jc-*`
-prefix consistently and are generated thin wrappers at
-`.agents/skills/jc-<name>/SKILL.md` (cross-tool alias, read by Cursor,
-Codex, Gemini CLI, Amp) and `.claude/skills/jc-<name>/SKILL.md`
-(Claude Code only). Adapters are emitted by
-`pnpm agent-tools:skills-adapter-generate`; manual edits forbidden.
-Skills are the sole user-and-model-invokable workflow surface — custom
-command surfaces are retired. Unsupported states belong in the local
-surface matrix.
+and carry the substantive workflow. Platform adapters are generated thin
+wrappers using the receiving repo's configured owned-skill prefix and
+locations. The host bridge or surface matrix records emitted invocation
+names. Manual adapter edits are forbidden. Skills are the sole
+user-and-model-invokable workflow surface; custom command surfaces are
+retired. Unsupported states belong in the local surface matrix.
 
 ### Required Skills
 
 Each receiving repo MUST provide canonical bodies for these named
 workflows under `.agent/skills/<name>/SKILL-CANONICAL.md`. Generated
-adapters land at `.agents/skills/jc-<name>/` and
-`.claude/skills/jc-<name>/`.
+adapters land at host-configured surfaces using the host's owned-skill
+prefix.
 
 | Skill            | Canonical body                                                | Core logic                                                                                                                                                                                                                             |
 | ---------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -437,19 +425,11 @@ description: {When to invoke this skill — one sentence trigger condition}
 {Body — fully inlined; not a thin pointer.}
 ```
 
-Adapters are emitted by `pnpm agent-tools:skills-adapter-generate` at
-two surfaces and **must not be edited manually** (a header comment in
-each emitted file states this):
-
-- `.agents/skills/jc-{name}/SKILL.md` — cross-tool alias (read by
-  Cursor, Codex, Gemini CLI, Amp).
-- `.claude/skills/jc-{name}/SKILL.md` — Claude Code native.
-
-Each adapter carries thin frontmatter (`name`, `description`) and a
-body that contains the substantive skill content as bytewise-generated
-output. Per-vendor surfaces (`.cursor/skills/`, `.gemini/skills/`,
-`.codex/skills/`, `.windsurf/skills/`) are retired — those platforms
-read the cross-tool alias.
+Adapters are emitted by the host's skill-adapter generator and **must not be
+edited manually**. Each adapter carries thin frontmatter (`name`,
+`description`) and generated body content derived from the canonical skill.
+The practice-index or surface matrix records which native surfaces are active,
+which are generated aliases, and which are unsupported.
 
 ### Session-Entry Skills
 
@@ -537,7 +517,7 @@ returns a paginated object with `.items`" not "Made an error."
 Add `### Mistakes Made` or `### Corrections` subsections as needed.
 
 **Rotation**: When the napkin exceeds ~500 lines, follow the distillation
-step in the consolidation command (`consolidate-docs`).
+step in the consolidation workflow (`consolidate-docs`).
 
 ### Distillation (consolidation step)
 
@@ -615,7 +595,7 @@ short description for each pattern.
 content in PDR form. Specific instances remain in
 `.agent/memory/active/patterns/` as proof; they do not travel.
 
-### Design-Space Explorations (docs/explorations/ or host equivalent)
+### Design-Space Explorations
 
 Explorations are durable option-weighing documents that sit between
 session observations (napkin) and committed decisions (ADRs). They are
@@ -625,10 +605,9 @@ exploration may remain `active` indefinitely if the question is not yet
 ripe — that is acceptable. An exploration that has reached a
 conclusion but has not graduated to ADR or plan is not.
 
-**Home**: host-repo convention is `docs/explorations/` at the top of
-the documentation tree, with a README defining the shape. Alternative
-locations are valid provided the tier is named explicitly in the host
-repo's practice-index.
+**Home**: the host exploration tier, conventionally a documentation
+explorations directory with a README defining the shape. The practice-index
+records the exact path; alternative locations are valid only when named there.
 
 **Filename convention**: `YYYY-MM-DD-<kebab-slug>.md`. The date prefix
 preserves chronological order without requiring metadata reads.
@@ -680,9 +659,8 @@ legitimate Practice Context contribution.
 ### Transplant Manifest (exploration variant)
 
 Wholesale Practice transplantation (PDR-005) uses a specialised
-exploration: the **transplant manifest**. It is authored in the
-destination repo's `docs/explorations/` before any file is copied
-from the source repo.
+exploration: the **transplant manifest**. It is authored in the destination
+repo's exploration home before any file is copied from the source repo.
 
 Filename: `YYYY-MM-DD-transplant-from-<source-repo>.md`.
 
@@ -729,16 +707,15 @@ Body sections:
 6. **Informs** — the destination's practice-index, the destination's
    `CHANGELOG.md` entry, any new PDRs the transplantation surfaced.
 
-The manifest is retained permanently in the destination's
-`docs/explorations/` — it is the reasoning trail for the
-destination's initial Practice shape and the record future agents
-use to understand why certain adaptations were made.
+The manifest is retained permanently in the destination's exploration home —
+it is the reasoning trail for the destination's initial Practice shape and the
+record future agents use to understand why certain adaptations were made.
 
 ### Consolidation Workflow
 
-The consolidation command drives the Knowledge Flow's graduation cycle —
+The consolidation workflow drives the Knowledge Flow's graduation cycle —
 converting captured experience into settled Practice. Every repo should
-implement a consolidation command with this abstract workflow:
+implement an invokable consolidation skill or workflow with this abstract shape:
 
 1. **Verify documentation is current.** Architectural decisions, system
    behaviour, and technical reference should already be in permanent
@@ -801,9 +778,8 @@ implement a consolidation command with this abstract workflow:
 
 Treat platform config like source code: tracked project settings define the
 shared agentic contract, gitignored local settings carry user-specific
-overrides. Each platform has a tracked/local pair (e.g.
-`.claude/settings.json` + `.claude/settings.local.json`), plus
-`.codex/config.toml` and a local override only if documented.
+overrides. Each supported platform should document its tracked/local pair
+(for example `{platform}/settings` plus `{platform}/settings.local`).
 
 Tracked settings carry required permissions, hook activation, plugin state,
 and fresh-checkout affordances. Local settings carry paths, one-off
