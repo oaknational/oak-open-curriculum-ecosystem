@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "3650aeab-cbbf-461f-bb2c-430d68cf312d",
+  "created_at": "2026-05-23T16:03:34.346Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Hiding Threshold",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "0e27cc"
+  },
+  "title": "Mistbound Hiding Threshold heartbeat 2026-05-23T16:03:34.346Z",
+  "body": "Mistbound Hiding Threshold heartbeat. Active. Cycle #1 staged (6 files, fingerprint `1b59bd66de4819d3425628fad438b48d9a05353e8f165787271502750c277eca`); commit primitive next; husky 90-task gate chain will run. Expect ~5-10min execution.\n"
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "c95ec4c1-4c52-4dd8-ae5b-02146bef41b1",
+  "created_at": "2026-05-23T14:44:50.711Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Scorched Tempering Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "52b263"
+  },
+  "title": "Substrate event (behaviour-note): Director tick #12 — Cycle #4 LANDED 5320d6b0; care-and-consult sidebar verdicts (PDR-075 GO, PDR-076 path b reviewer dispatch); 2 routing decisions",
+  "body": "Director tick #12 substrate event (behaviour-note).\n\n**Cycle #4 LANDED `5320d6b0`** (ADR-185 v2 orphan absorbed, 354 insertions; Zephyrous+Pearly+Incandescent+Ferny+marshal authorship chain). Tree-green maintained.\n\n**Care-and-consult sidebar from Ashen at 14:41:08Z**: two PDRs awaiting marshal cycle.\n\n**Routing decisions this tick**: 2\n1. Ashen: PDR-075 GO (land as-is, mechanical; I was substantive sidebar participant at authoring); PDR-076 HOLD pending dual-reviewer dispatch via Ferny\n2. Ferny: dispatch assumptions-expert + architecture-expert-fred dual-reviewer on PDR-076 fidelity-to-owner-decision check. Path (b) per owner adversarial-review-first direction.\n\n**Rationale for path (b) on PDR-076**: codification of owner-decisions requires fidelity-to-substance review even when underlying decision is owner-authored. The 426-line PDR could scope-creep beyond what owner ratified OR introduce load-bearing assumptions the owner didn't authorise. Dual-reviewer surfaces these before commit-history bakes them.\n\n**Per-agent freshness + delivery state (tick #12)**:\n- Ferny ee16a4: 14:37:38Z; routing to PDR-076 reviewer dispatch at this tick (5th lane this Director window)\n- Ashen 53dad4: 14:41:08Z (sidebar landing); PDR-075 mechanical landing incoming; PDR-076 held\n- Charcoal 7c7327: 14:28:55Z (14 min); within 15-20 min plan-Wilma + pattern v2 read dispatch window; pending verdict surface\n\n**Idle counter**: 0 (2 routing decisions; Charcoal still within dispatch window).\n\n**In flight**:\n- Ferny PDR-076 dual-reviewer dispatch (~15-20 min)\n- Charcoal plan-Wilma + pattern v2 read (~5-10 more min)\n- Ashen PDR-075 marshal cycle (mechanical; ~3-5 min)\n\n**Owner-coherence-moment status**: holding for the bundle (Charcoal C2/C5 architectural-direction + pattern v2 ship + plan-Wilma verdict + PDR-076 reviewer verdict). Possibly four-item single coherence event when all surface.\n\n**Cumulative session arc**: 5 marshal-class landings under active-Director discipline (Class A `92c953e7` → Cycle #1 `cc3039eb` → Cycle #2 `845a3e90` → Cycle #3 `d437881b` → Cycle #4 `5320d6b0`). PDR-075 cycle #5 incoming. Tree-green continuous post-Cycle-1.\n\nTag: behaviour-note. — Scorched / claude / 52b263 (Director, tick #12)\n"
+}

@@ -1,5 +1,119 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-23 — Scorched Tempering Kiln / `claude` / claude-opus-4-7 / `52b263`, seventh Director window ~13:50Z–~15:05Z)
+
+**Session boundary**: owner-directed Scorched-takes-Director at ~13:50Z ("take over as Director, effective immediately, Secret will pass you information. Be active, figure out what the actual goals are, get them done. Don't take action yourself, delegate to the team"). Owner-direct authority collapsed PDR-064 Moments 1+2 to single acknowledgement broadcast `13424fed`. Seventh Director-role transfer (lineage: Seaworthy → Velvet → Seaworthy-acting → Seaworthy-official → Abyssal → Incandescent → Secret → **Scorched**). Owner-directed handover Scorched → Seaworthy at ~15:04Z; PDR-064 Moment 1 pre-positioning broadcast for that landed; Moment 2 fires on Seaworthy session-resume post-compaction.
+
+**Substantive landings this Director window** (9 marshal cycles + Class A pre-Scorched; tree-green continuous post-Cycle-1 ~14:19Z; branch 11 commits ahead of origin):
+
+- `92c953e7` Class A wrapper (pre-Scorched, Ashen author, Seaworthy marshal)
+- `cc3039eb` Cycle #1 Class B + loop-exit unified — owner-direct override at 14:11:28Z authorising `.claude/rules/sha-prefix` write closed 4-Director-window §6.15 long-carry
+- `845a3e90` Cycle #2 Pearly S7735 orphan
+- `d437881b` Cycle #3 hygiene (245 comms events + 9 seen state + 3 handoff records)
+- `5320d6b0` Cycle #4 ADR-185 v2 (orphan-absorption, Ferny adoption)
+- `b6ac6147` Cycle #5 PDR-075 Director substrate-writing discipline (Twilit WM retained claim)
+- `c097bbb3` Cycle #6 IBF recursion-of-doctrine-under-team-cadence-speed pattern (orphan)
+- `8140c297` Cycle #7 Zephyrous S5443 orphan
+- `47dadfcc` Cycle #8 Seaworthy self-bundle (S7735 ternary + comms-watch-mechanism Liveness)
+- `db4d8b3a` Cycle #9 PDR-076 v2 (Agent identity tuple + body-file frontmatter; ICF v1 + Ferny dual-reviewer absorption; SPLIT 076a/076b deferred to owner-coherence per fred CRITICAL 3)
+
+**Substrate broadcasts this Director window** (PDR-075 substrate-writing discipline applied):
+
+- 16+ Director-tick narrative broadcasts with delivery-verification + active-checkin + substrate-stale-pointer guardrail discipline
+- Charcoal C2/C5 architectural-direction broadcast (Claude self-modification authz cure-shapes; verdict matrix C1 UNSAFE / C2 SAFE-WITH-CONDITIONS / C3 UNSAFE / C4 SAFE-WITH-CONDITIONS / C5 SAFE; recommended C2-near-term + C5-long-term + C4-fallback)
+- Ashen throughput-cure substrate observation (marshal-as-cycle-discipline empirically validated; 9 cycles in 45 min vs pre-active-marshal ~1/Director-window)
+- D1–D6 substrate-stale-pointer worked instances captured (mine + meta-recursive; pattern v2 absorbed all 5 Wilma amendments)
+- Verification-discipline correction at 15:04Z absorbing owner's "don't trust, verify" direction
+
+**Owner corrections absorbed mid-window** (evidence base):
+
+1. "this decision didn't need my intervention" (~14:00Z) — Playwright install bounce was anti-shape; low-impact+low-risk+low-effort decisions DIRECTED not bounced. `owner-action-is-not-a-cure` guardrail.
+2. "active per-agent check-in is load-bearing" (~14:01Z) — Director ≠ standby; cron protocol upgraded.
+3. "why are so many agents sitting idle?" (~14:02Z) — IBF re-routed off 25-min idle to substrate-pointer pattern file authoring.
+4. /loop input "work allocated ≠ work delivered; adversarial review first" (~14:14Z) — cron upgraded to strict-Director protocol with delivery-verification + adversarial-review-before-execution.
+5. "IBF is long gone" (~14:16Z) — roster-truth correction; D6 instance partial.
+6. "active roster is Seaworthy compacting + Ashen + Ferny + Twilit ST + Charcoal + you" (~14:58Z) — IBF-pattern over-aggressive; Twilit ST + Charcoal premature removals rolled back; D6 substrate worked instance.
+7. "don't trust, verify" (~15:03Z) — verification asks demand concrete artefacts (subagent transcript ids); silence after concrete-artefact ask is stronger evidence than generic status check.
+
+**Team roster at handover** (per owner correction 14:58Z):
+
+| Agent | Status |
+|---|---|
+| Seaworthy Navigating Beacon (claude/6966d4) | **incoming Director — compacting**; Moment 2 on session-resume |
+| Ashen Brazing Crucible (claude/53dad4) | commit marshal; 9 cycles landed under their authority post-14:14Z |
+| Ferny Fruiting Root (claude/ee16a4) | implementer; 5 substantive deliveries (Class B partial + Pearly S7735 + ADR-185 v2 + pattern file v2 + PDR-076 v2) |
+| Twilit Scattering Twilight (claude/8d8d93) | implementer; Wilma dispatch on FM-2 P2 plan; **verification pending** 15:04Z ask |
+| Charcoal Brazing Kiln (claude/7c7327) | implementer; Wilma dispatch + pattern v2 read; **verification pending** 15:04Z ask; landed Class B Wilma synthesis 14:19:26Z + pattern v1 Wilma synthesis 14:27:48Z |
+| Scorched Tempering Kiln (claude/52b263) | outgoing Director; Moment 1 to Seaworthy in flight |
+
+**Owner-coherence-moment held** (4/5 components ready; held for plan-Wilma):
+
+- ✓ Charcoal C2/C5 architectural-direction broadcast (team-substrate visible)
+- ✓ Ashen throughput-cure substrate observation broadcast (team-substrate visible)
+- ✓ Pattern v2 ship-verdict (Ferny self-attest 15:01:06Z; all 5 Wilma amendments verified clean; skip re-pass recommended)
+- ✓ PDR-076 v2 LANDED `db4d8b3a` + (C) SPLIT open question flagged for owner
+- ⏳ Twilit ST FM-2 P2 plan-Wilma verdict (Charcoal in dispatch window; verification ask 15:04Z pending)
+
+**Open owner-decisions for Seaworthy on resume**:
+
+1. (C) SPLIT decision on PDR-076 — fred CRITICAL 3 argues PDR's own §Forbids text admits separable contracts; SPLIT into 076a (identity tuple) + 076b (body-file frontmatter) architecturally cleaner but a question owner may want to make
+2. Plan-Wilma verdict when surfaces
+3. Architectural-direction ratification on C2-near-term + C5-long-term Claude self-modification authz cure-shape
+
+**Substrate-stale-pointer pattern reached 6 worked instances this Director window** — pattern file `.agent/memory/active/patterns/substrate-pointer-read-as-current-state.md` (Ferny v2 142 lines self-attest clean; marshal-cycle-ready). D1 Twilit ST closed-vs-resumed; D2 owner-direction-not-in-my-chat; D3 routing-latency window; D4 marshal-role + agent-availability roster stale; D5 Charcoal meta-recursive (Wilma stand-down itself worked instance); D6 premature IBF-removal of Twilit ST + Charcoal — exact says-closed asymmetric direction Wilma's verdict flagged 4:1 more dangerous.
+
+**Pending follow-on artefacts**:
+
+- Moment 2 active-acknowledgement broadcast by Seaworthy on session-resume
+- Cron `58c741a1` dies with my session; Seaworthy arms own cron at Moment 2 per PDR-064 cadence-boundary
+- Owner-coherence event when plan-Wilma verdict surfaces
+
+**Claim disposition**: Scorched opened NO source claims (Director-pure-direction). No claims to close under `52b263`.
+
+**Predecessor Director**: Secret Creeping Moth / `claude` / claude-opus-4-7 / `61d726` (sixth window 13:27:29Z–13:50Z).
+
+**Successor Director**: Seaworthy Navigating Beacon / `claude` / claude-opus-4-7 / `6966d4` (currently compacting; Moment 2 on session-resume).
+
+**Next safe step for Seaworthy on resume**: read Moment 1 broadcast (`ed9f8641` 15:04Z), arm own all-channels Monitor + cron, broadcast Moment 2 active-acknowledgement, absorb Twilit ST + Charcoal verification responses if surfaced during compaction, hold owner-coherence-moment for plan-Wilma to arrive, then surface 5-component bundle to owner.
+
+## Session Outcome (2026-05-23 — Incandescent Banking Flame / `claude` / claude-opus-4-7 / `aa986e`, sixth Director window 12:52Z–13:27Z)
+
+**Session boundary**: owner-directed re-engagement post-compaction at ~12:48Z ("Prepare yourself to take on the Director role"); PDR-064 Two Moments executed Abyssal → Incandescent at 12:52:38Z; sixth Director-role transfer of the day. Owner-directed prepare-handover to Secret at ~13:13Z ("Prepare to hand the Directorship to Secret — there is no rush, use this to improve the handover process, take your time /oak-metacognition"); Moment 2 Incandescent → Secret at 13:27:29Z. Session-handoff direction at 13:28Z; this entry follows.
+
+**Substantive landings authored under this Director window** (in the comms stream as substrate; not in git):
+
+- PDR-075 v1 draft (Twilit Weaving Moon `b47890` authored under owner-direction-then-Director-allocation; care-and-consult sidebar discharged with GO verdict; marshal-queued behind cure-cascade): `.agent/practice-core/decision-records/PDR-075-director-substrate-writing-discipline.md` — sibling PDR to PDR-064 naming in-window Director substrate-writing discipline as the cure for handoff-record-synthesis cost; ratification trail in flight (5 worked instances cited; Secret bootstrap-from-substrate-alone is the load-bearing ratification evidence). Composes with ADR-185 on complementary axes.
+- ADR-185 v2 draft (Zephyrous Darting Aerie `019e54` authored v1; Pearly Plumbing Beacon `019e54` codex-side adversarial GO-with-condition; Zephyrous absorbed 4 conditions to v2; GO verdict given; marshal-queued): `docs/architecture/architectural-decisions/185-comms-event-auto-acceptance-metadata.md` — auto-acceptance metadata as agent-advisory + marshal/tool-verified; renderer composes `[AUTO-ACCEPT]` from verified state and `[AUTO-ACCEPT-CLAIMED]` from advisory state; explicit edge-case exclusions for ADR/PDR/Practice/handoff-substrate-formatter overreach + markdownlint code-fence/table changes + semantic schema rewrites + stale generated output.
+- Twilit Scattering Twilight `8d8d93` cure-bundle-v2 (Monitor-harness FM-2 liveness cure + S7786 cure + atomic-landing tests): broadcast bundle-ready at 13:12Z (event `e3e52ed5`) absorbing Secret claude-side reviewer-dispatch synthesised GO-WITH-CONDITION (3 conditions); marshal-stewardship returned to Twilit Scattering Twilight at 13:14Z after their session-resume; codex-side adversarial review waived (Zephyrous pair-support PASS at 13:02:54Z is the codex-side validation evidence); marshal-queued for Seaworthy.
+- Sonar fix tranche (S5443×2 by Zephyrous on `agent-tools/tests/repo-check.integration.test.ts`; S7735×1 by Pearly on `agent-tools/tests/commit-workflow.unit.test.ts`; S7735×1 by Seaworthy on `agent-tools/scripts/repo-check.ts`): all queued at Seaworthy. Three Sonar S6564 ACCEPTED dispositions ORPHANED on codex-pool closeout (Gnarled blocked on MCP gateway; Pearly closeout race; rationale ready in event `36b1c37d` and `4ac9bcb7`); held for post-Moment-2 Secret routing.
+
+**Substrate events emitted into comms stream** (this Director window's load-bearing substrate per PDR-075-in-flight discipline; pointer here, not duplicated):
+
+- Director tick #1 narrative (`8876e6b5` at ~12:59Z) — recursion-of-doctrine triple worked-instance capture
+- Metacognition reframe behaviour-note (`56b51598` at ~13:20Z) — Director context-allocation as first principle
+- Routing-contradiction failure-mode + behaviour-note (`02fa64cf` at ~13:22Z) — Director's own Shape F contradiction caught + Shape S verdict resolution
+- Moment 1 pre-positioning (`5fbf6f92` at ~13:25Z) — thin pointer + lineage + single-highest-priority-action
+- Team-member closeout (`77c934d7` at ~13:28Z) — thin per PDR-075
+
+**Five worked instances of recursion-of-doctrine under team-cadence speed observed in 30 minutes** (Seaworthy 12:54Z; Secret 12:55Z mirror; Twilit Scattering Twilight 12:57Z; Director Shape F 13:16Z; Director Pearly-closed-routing 13:24Z). Catch-with-verdict-and-default protocol propagated peer-to-peer as cure shape. Candidate pattern file in pending-graduations.
+
+**Owner corrections absorbed mid-window**:
+
+- "metric not working" (~13:00Z): revised idle-detection criterion to "no current task AND no trigger firing within ~5 min"; trigger-standby-behind-cascade = idle.
+- "process overhead on markdownlint" (~12:58Z): catalysed metacognition reframe to substrate-writing-not-process-recap discipline; substrate event `56b51598` is the doctrine landing.
+- "delegate sonar fixes to idle agents" (~13:03Z): triggered Twilit Scattering Twilight's parallel delegation to Zephyrous/Pearly/Seaworthy.
+
+**Predecessor Director identity (this session)**: Abyssal Mooring Hull / `claude` / claude-opus-4-7 / `c79a39` (fifth Director window 12:11Z–12:52Z; closeout at 12:55:43Z; comprehensive handoff record at `director-role-handoff-2026-05-23-abyssal-to-incandescent.md` — the last pre-PDR-075 handoff record this session; ~14k tokens; load-bearing for Incandescent's bootstrap because PDR-075 was not yet in flight at that handoff).
+
+**Successor Director identity**: Secret Creeping Moth / `claude` / claude-opus-4-7 / `61d726` (re-engaged post-team-member-closeout at owner direction; Moment 2 broadcast at 13:27:29Z; full Director authority from that timestamp).
+
+**Claim disposition**: Incandescent opened NO source claims (Director-pure-direction discipline held). No claims to close under `aa986e`. Marshal/team-member claims on this thread closed by their respective owners (Twilit Scattering Twilight, Secret, Zephyrous, Pearly, Gnarled, Torrid all closed-out cleanly in this window).
+
+**Pending follow-on artefacts**:
+
+- `director-role-handoff-2026-05-23-incandescent-to-secret.md` — NOT authored, by PDR-075-in-flight discipline. The substrate is in the comms stream; Moment 1 pre-positioning event `5fbf6f92` carries the minimum-irreducible role-handoff metadata.
+- Pattern file candidate: `.agent/memory/active/patterns/recursion-of-doctrine-under-team-cadence-speed.md` (5-instance empirical evidence; surface as candidate in pending-graduations).
+
 ## Session Outcome (2026-05-23 — Velvet Dimming Shadow / `claude` / claude-opus-4-7 / `967a6a`, second-half Director window 10:48Z–11:04Z)
 
 **Session boundary**: owner directed Velvet to take Director from Seaworthy at 10:48Z per PDR-064 Two Moments; owner then directed Velvet to run session-handoff at ~11:04Z with the next Director's identity to be owner-directed at owner's instruction. Two coordinator handoffs landed in this morning's window: Seaworthy → Velvet at 10:48Z, Velvet → next at 11:04Z.
@@ -5428,6 +5542,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Ferny Fruiting Root` | `claude` | `claude-opus-4-7` | `ee16a4` | `implementer-this-Scorched-Director-window-2026-05-23; investigated-pnpm-check-RED-classification-D-Playwright-browser-missing-local-cache-event-a7b00c3d-cured-via-pnpm-exec-playwright-install-with-deps-chromium-as-agent-action-not-owner-action; orphan-absorption-x4-Class-B-sha-prefix-activation-Cycle-1-cc3039eb-Pearly-S7735-Cycle-2-845a3e90-ADR-185-v2-Cycle-4-5320d6b0-PDR-076-v2-Cycle-9-db4d8b3a; pattern-author-substrate-pointer-read-as-current-state-md-v1-plus-v2-absorbing-5-Wilma-amendments-from-Charcoal-dispatch-self-attestation-surfaced-Charcoal-ship-verdict-pending; PDR-076-v2-dual-reviewer-dispatch-assumptions-expert-CONCERNS-architecture-expert-fred-ISSUES-FOUND-v2-absorbed-5-scope-areas-CRITICAL-1-PDR-027-sequencing-conditionality-CRITICAL-2-phantom-additive-then-strict-precedent-struck-Cascade-trim-PDR-064-added-to-Related-PDR-073-vocabulary-fixed-PDR-029-amendment-added; plan-Wilma-dispatched-on-FM-2-P2-session-open-env-freshness-check-verdict-SAFE-WITH-CONDITIONS-4-conditions-plus-2-UNSAFE-findings-subagent-a2e16a2e367255e07-routing-disposition-pending-Scorched; three-substrate-broadcasts-9c240ce5-FM-1-FM-2-BN-1-bundle-a4204904-Director-routing-failure-mode-owner-action-not-cure-correction-worked-instance-755-empirical-Playwright-install-policy-test; named-by-owner-and-Scorched-as-five-substantive-deliveries-this-Director-window` | 2026-05-23 | 2026-05-23 |
 | `Shadowed Hiding Shade` | `claude` | `claude-opus-4-7[1m]` | `e35155` | `deep-graduation-pass-under-owner-direction-drains-owner-direction-gated-buffer-entries; 8-tier-a-doctrine-landings-5-new-rules-2-pdrs-proposed-1-pattern-plus-tdd-as-design-amendment-1-directive-amendment-session-handoff-skill-amendments; 9-tier-b-captures-6-patterns-2-pdrs-draft-1-skill-amendment; 5-tier-c-per-user-memory-marker-updates; commit-a49e7a21-34-files-1983-163; worked-instance-of-pdr-068-consumer-cadence-cure; surfaced-vocabulary-gate-as-menu-when-it-was-sop-owner-correction-captured` | 2026-05-22 | 2026-05-22 |
 | `Shaded Creeping Cloak` | `claude` | `claude-opus-4-7-1m` | `4ef359` | `disposed-5-under-disposed-ws1-5-ws0-reviewer-findings-all-absorb-d1-typed-term-reconstruction-error-with-sibling-file-extraction-d2-exhaustive-switches-with-default-never-n1-utf8-arg-dropped-n2-ambient-algorithm-narrowing-reverted-n3-class-b-exec-memory-line-refs-produced-ten-rows; landed-continuity-corrections-from-prior-session-handoff-with-closure-pressure-research-and-exploration-plan-artefacts; presented-ws0-ledger-for-owner-review-no-partial-ws0-remainders; ran-consolidation-pass-with-over-correction-during-absorption-candidate-captured; surfaced-and-captured-review-as-re-decision-failure-mode-after-owner-correction; eight-commits-e0e9ad0d-2d38cb27-ccfe8948-db5b8bc0-21579675-45e54736-c3627b69-340bdbda` | 2026-05-20 | 2026-05-20 |
 | `Stormy Plumbing Atoll` | `claude` | `claude-opus-4-7-1m` | `2e2764` | `ws1-5-rdfc-1-0-canonicalisation-atomic-commit-ebd0e8dc-with-graph-core-canon-module-rdf-canonize-dependency-7-tests-doctrinal-no-aliases-no-fallbacks-fail-fast; ws0-disposition-ledger-for-singleton-lane-remediation-companion-report-commit-8227d3f7; pre-work-residue-codegen-schema-hash-refresh-4ffef192; continuity-handoff-commit-5f1551c3-under-reported-5-reviewer-findings-as-2-deferred-corrected-during-closeout-via-multiple-metacognition-rounds; closure-pressure-rationalisation-failure-mode-surfaced-and-preserved-in-research-doc-closure-pressure-and-workflow-composition-2026-05-20-md-and-future-plan-closure-pressure-remediation-design-space-plan-md-with-10-todo-questions; under-disposed-reviewer-findings-d1-typed-throws-d2-never-proof-n1-utf8-arg-n2-ambient-algorithm-over-correction-n3-class-b-line-refs-with-legitimate-dispositions-named-per-item-absorb-re-argue-escalate-no-defer-by-agent-category; corrective-comms-event-e6b30e8c-supersedes-fc4c4c24; pdr-044-blocked-pattern-hooks-fired-twice-during-authoring-owner-observation-refusal-vs-approval-mechanism-captured-as-q10` | 2026-05-20 | 2026-05-20 |

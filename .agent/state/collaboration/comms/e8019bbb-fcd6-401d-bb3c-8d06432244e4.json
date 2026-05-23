@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "e8019bbb-fcd6-401d-bb3c-8d06432244e4",
+  "created_at": "2026-05-23T14:48:58.535Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Scorched Tempering Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "52b263"
+  },
+  "title": "Substrate event (behaviour-note): Director tick #13 — Cycle #5 b6ac6147 (PDR-075) + Cycle #6 c097bbb3 (IBF pattern) landed; 7 cumulative cycles this Director window; marshal-as-cycle-discipline is the throughput cure",
+  "body": "Director tick #13 substrate event (behaviour-note).\n\n**Two cycles landed this tick window**:\n- Cycle #5 `b6ac6147` (PDR-075 Director substrate-writing discipline, Twilit WM retained claim discharged) at 14:46:29Z\n- Cycle #6 `c097bbb3` (IBF recursion-of-doctrine pattern, orphan-class marshal absorption)\n\n**Per-agent freshness + delivery state (tick #13)**:\n- Ferny ee16a4: 14:37:38Z (10 min); routed PDR-076 reviewer dispatch at 14:44:49Z (3 min ago); within legitimate dispatch window (~15-20 min typical)\n- Ashen 53dad4: 14:46:29Z (1 min); two cycles landed; active marshal queue\n- Charcoal 7c7327: 14:28:55Z (19 min); 12 min into routed plan-Wilma + pattern v2 read; light delivery-verification check sent at this tick\n\n**Routing decisions this tick**: 2 (delivery-verification + throughput-ACK)\n1. Charcoal: light one-line check (within window but past observable-signal threshold)\n2. Ashen: throughput acknowledgement + queue picture update (no new marshal-request)\n\n**Cumulative session arc (7 cycles total under active-Director discipline)**:\n1. `92c953e7` Class A\n2. `cc3039eb` Class B unified (Class B + loop-exit orphan)\n3. `845a3e90` Pearly S7735\n4. `d437881b` hygiene\n5. `5320d6b0` ADR-185 v2\n6. `b6ac6147` PDR-075\n7. `c097bbb3` IBF pattern\n\nMarshal-as-cycle-discipline = the substantive throughput cure. The same §6.15 surface that stalled 4 Director windows before today landed in Cycle #1 under owner-direct authorisation + active marshal. Pre-active-Director throughput ~1 commit per Director window; post-active-Director throughput ~7 commits in single Director window. Worth substrate observation; surfacing as substrate event candidate.\n\n**Idle counter**: 0 (delivery + routing this tick).\n\n**In flight**:\n- Ferny PDR-076 dual-reviewer dispatch (3 min into routing)\n- Charcoal plan-Wilma + pattern v2 read (12 min into routing)\n- Ashen marshal queue tree-green; next cycles by adopter availability\n- Owner-coherence-moment held for bundle (4 items: Charcoal C2/C5 broadcast [landed], pattern v2 ship-verdict [Charcoal], plan-Wilma verdict [Charcoal], PDR-076 reviewer verdict [Ferny])\n\nTag: behaviour-note. — Scorched / claude / 52b263 (Director, tick #13)\n"
+}

@@ -93,16 +93,21 @@ not a verdict.
 ### `due` (current body candidates)
 
 Regenerated 2026-05-23 by Breezy Cresting Beacon during a
-knowledge-preservation curation pass. The body contains **3** due
+knowledge-preservation curation pass. The body contained **3** due
 entries after normalising one plan-execution-gated entry back to
 `pending` and partially graduating `knowledge-curation-is-autonomic-learning`
 to PDR-072.
 
 | Entry | Current disposition |
 | --- | --- |
-| Agent identity move to `(name, UUID id)` + tempfile frontmatter | Due, PDR-shaped and multi-schema-shaped. Keep in register until owner approves the PDR/Core/schema promotion route. |
-| Templated loops need exit criteria | Due, rule-shaped. No repo-local `/loop` skill exists; natural home is a rule plus platform/tooling adapters when owner approves the exact rule surface. |
-| Recursion-as-method is Practice Core mind-shape | Due, Practice Core amendment/PDR-shaped. Requires explicit owner ratification before editing Core surfaces. |
+| Agent identity move to `(name, UUID id)` + tempfile frontmatter | Partially graduated 2026-05-23 (Incandescent Kindling Forge / cursor / `328fac`, separate-lane consolidate-docs pass): PDR-076 (`agent-identity-tuple-and-body-file-frontmatter`) authored as `Proposed`, principle layer. Downstream cascade (PDR-027 amendment, identity-bearing schema tranches, identity preflight UUID emission, body-file frontmatter consumers, identity rendering surfaces) named in PDR-076 §Cascade and explicitly NOT executed in this cycle. |
+| Templated loops need exit criteria | Partially graduated 2026-05-23 (Incandescent Kindling Forge / cursor / `328fac`, same pass): rule `.agent/rules/loop-exit-criteria-required.md` landed with adapters in `.claude/rules/` + `.cursor/rules/` + RULES_INDEX entry. Carries the five-idle-iteration default exit criterion and the stand-down-broadcast shape. Optional `/loop` skill amendment naming the rule is not in scope of this rule landing; if and when a repo-local `/loop` skill exists, that amendment is a separate cycle. |
+| Recursion-as-method is Practice Core mind-shape | Partially graduated 2026-05-23 (Secret Creeping Moth / claude / `61d726`, earlier in the same session): PDR-073 (`recursion-as-method-is-practice-core-mind-shape`) authored as `Proposed`, principle layer. Downstream cascade (trinity amendment to `practice.md` / `practice-lineage.md`, optional new directive at `.agent/directives/recursion-as-method.md`) is named in PDR-073 §Cascade and explicitly NOT executed in this cycle. |
+
+All three former due entries are now `partially-graduated` with
+named first homes. Each retains live downstream cascade work that
+requires owner ratification or separate landing cycles; none has
+yet reached `graduated`.
 
 One former `due` entry, `canonical-tool-definitions-code-adjacent`,
 was corrected to `pending (plan-execution-gated)` because its own body
@@ -193,10 +198,10 @@ architectural-excellence and home-function discipline:
 | Candidate | Owner decision | Consequence |
 | --- | --- | --- |
 | `knowledge-curation-is-autonomic-learning` | PDR-072 proposes the two-output-surface / autonomic-learning principle. | Partially graduated to PDR-072; downstream `practice.md` / `practice-lineage.md` amendments remain. |
-| `recursion-as-method-is-practice-core-mind-shape` | Yes: ratify as Practice Core concept. | Same PDR-first route, then targeted `practice.md` / `practice-lineage.md` amendments if approved by the PDR. |
+| `recursion-as-method-is-practice-core-mind-shape` | Yes: ratify as Practice Core concept. | Partially graduated 2026-05-23 to PDR-073; downstream trinity amendment + optional directive remain. |
 | `fitness-lifecycle-and-access-rhythm` | Yes: governed model concept and portable Practice doctrine. | Amend ADR-144 / fitness-validator docs and schema, then create the portable PDR. |
-| `agent-identity-name-uuid-tempfile-frontmatter` | Amends identity contract: UUID makes each agent unique; name remains primary identifier. Temporary-file frontmatter is valuable but separate. | Amend PDR-027 and identity schemas; specify temporary-file frontmatter schema cheaply now, defer enforcement-tool choice. |
-| `templated-loops-need-exit-criteria` | Need loop templates; exit criteria depend on application/intent. Starter default: five no-op iterations stop. | Author template/rule surface with intent-specific exit criteria and default no-op stop condition. |
+| `agent-identity-name-uuid-tempfile-frontmatter` | Amends identity contract: UUID makes each agent unique; name remains primary identifier. Temporary-file frontmatter is valuable but separate. | Partially graduated 2026-05-23 to PDR-076 (principle layer + body-file frontmatter contract); downstream PDR-027 amendment, identity-bearing schema tranches, identity preflight UUID emission, body-file frontmatter consumers, identity rendering surfaces remain. |
+| `templated-loops-need-exit-criteria` | Need loop templates; exit criteria depend on application/intent. Starter default: five no-op iterations stop. | Partially graduated 2026-05-23 to `.agent/rules/loop-exit-criteria-required.md` with the five-idle-iteration default and stand-down broadcast shape; optional `/loop` skill amendment remains as a separate cycle if a repo-local `/loop` skill is later authored. |
 | `json-event-only-comms-authoring` | Messaging only via messaging tools; tools enforce schema; hook can reject invalid messaging-surface changes. | Rule + schema/tool enforcement, with a validation hook for messaging surfaces. |
 | `agent-initiated-no-verify-forbidden` | Only the owner can initiate `--no-verify`. | Align rule/docs with commit skill; remove agent-asks framing. |
 | `commit-queue-per-intent-message-file-native` + `authorial-bundle-integrity-line-scoped-staging` | All agent commits must go through appropriate agent tools; git commit collisions and queueing are the highest-impact team-collaboration friction. | Promote to high-impact agent-tooling work: commit queue native message files, queueing, and line-scoped staging. |
@@ -213,6 +218,69 @@ Older-entry target-exists sweep:
 | `fitness-lifecycle-and-access-rhythm` | Retained pending as partially implemented; ADR/tooling doctrine remains the live home gap. |
 | `json-event-only-comms-authoring` | Retained pending as a rule-text gap. |
 | `agent-initiated-no-verify-forbidden` | Retained pending as a rule/skill alignment gap. |
+
+### 2026-05-23 third-pass curation log (Incandescent Kindling Forge — separate-lane pending-graduations drain)
+
+Owner direction at session-open: *"your job is to run
+/oak-consolidate-docs, starting with the pending graduations. You are
+part of the team, but your work is a separate lane, so report, but do
+not accept work."* The pass executed as separate-lane consolidate-docs:
+work performed independently within the in-flight team window, progress
+reported, no work accepted from other agents, no Director routing
+adopted. Cure-bundle-v2 (FM-2 Monitor harness) and PDR-075 marshal
+queue were respected — this pass did not touch their surfaces.
+
+Three former `due` entries were drained:
+
+| Entry | Disposition |
+| --- | --- |
+| `agent-identity-name-uuid-tempfile-frontmatter` | Partially graduated to PDR-076 (`agent-identity-tuple-and-body-file-frontmatter`, Proposed). PDR is portability-clean; bundles the identity tuple decision and the body-file frontmatter contract as two structurally separate decisions sharing one PDR. Downstream cascade (PDR-027 amendment + identity-bearing schema tranches + identity preflight UUID emission + body-file frontmatter consumers + identity rendering surfaces) named in §Cascade. |
+| `templated-loops-need-exit-criteria` | Partially graduated to `.agent/rules/loop-exit-criteria-required.md` (canonical + Claude adapter + Cursor `.mdc` adapter with `alwaysApply: true` + RULES_INDEX entry). Five-idle-iteration default, stand-down broadcast shape, owner-override authority, composition with `use-monitor-for-event-driven-wake` for the event-driven-vs-polling distinction. |
+| `recursion-as-method-is-practice-core-mind-shape` | Already partially graduated 2026-05-23 (Secret Creeping Moth, earlier in the same session) to PDR-073. The body entry's `status: partially-graduated` tag and "Partial graduation" annotation were already in place; the due-entry table at the top of this register was the only stale-status surface and is now reconciled. |
+
+Substrate findings surfaced for owner attention but not actioned in
+this pass:
+
+1. **Step 7c finding**: `.agent/memory/operational/tracks/skills-standardisation-followup-timing.md`
+   carries no `expires_at` frontmatter at all — no YAML frontmatter on
+   the file. Per consolidate-docs SKILL §7c #4, track cards must carry
+   `expires_at:` so the audit can compute staleness; a file with no
+   frontmatter cannot be audited. Recommendation: add `expires_at:`
+   (and `created_at:`) frontmatter at next consolidation, or formally
+   retire the card if its items 1–4 (all dated 2026-05-09) are
+   resolved.
+2. **Fitness signals**: `napkin.md` (1657L, 3.7× critical), `distilled.md`
+   (917L, 1.2× critical), this register (4585L → grown slightly with
+   this pass, ~4× critical), `repo-continuity.md` (HARD on chars + prose
+   line width). Per the rule that learning preservation overrides
+   fitness pressure and graduation upward (not compression) is the
+   structural cure: this pass added substance (PDR-076 + rule + register
+   reconciliation) and drained substance only by graduating it. The
+   register's depth is queue-depth proportional to owner-approval-gated
+   cascade tranches; the structural cure is continued graduation
+   throughput, not trimming.
+3. **PDR-072 and PDR-074 reconciliation**: the "Owner decisions
+   captured 2026-05-23" table consequence column already named PDR-072
+   as the partial-graduation home for `knowledge-curation-is-autonomic-learning`;
+   no update needed in this pass. PDR-074 is on a different doctrine
+   axis (director value = mind coherence per owner attention) and is
+   not a pending-graduations entry — no register reconciliation needed.
+
+Live arbitration rules carried from prior passes:
+
+1. **Portability discipline**: PDR-076 was authored portability-clean
+   (no `.agent/...` paths, no specific CLI commands, no commit SHAs)
+   per the standing rule. The Foamy-flagged portability defect on
+   PDR-063/065/066 (assumptions-expert verdict 2026-05-22) was treated
+   as a load-bearing pre-commit check, not stylistic feedback.
+2. **Separate-lane discipline**: no Director ratifications attempted,
+   no in-flight team work touched, no marshal-queue entries added by
+   this pass before commit-window opens. Marshal queue ordering
+   respected: PDR-075 (Twilit Weaving Moon) and FM-2 cure (Twilit
+   Scattering Twilight successor) remain ahead.
+3. **Singleton pnpm check**: Incandescent Banking Flame's in-flight
+   `pnpm check` broadcast (closeout Step 11, ~13:35:57Z) noted; this
+   pass did not run a parallel check.
 
 ### 2026-05-12 due-entry disposition log (Twigged Growing Glade)
 
@@ -352,18 +420,37 @@ the queue churns.
 
 ### 2026-05-23 — Agent identity move to (name, UUID id) + tempfile-frontmatter convention (PDR-shaped; multi-schema amendment)
 
-`[captured: 2026-05-23 | source: stormbound-floating-wing/tempfile-collision-incident-and-owner-direction | target: PDR + schema amendments on comms-event.schema.json + active-claims.json + commit-queue intent + handoff-record + tempfile-frontmatter rule | trigger: owner direction (received) — ready for PDR-Proposed authoring | size: M | status: due]`
+`[captured: 2026-05-23 | source: stormbound-floating-wing/tempfile-collision-incident-and-owner-direction | target: PDR + schema amendments on comms-event.schema.json + active-claims.json + commit-queue intent + handoff-record + tempfile-frontmatter rule | trigger: owner direction (received) — partially graduated to PDR-076 | size: M | status: partially-graduated]`
 
-**Curation note 2026-05-23 (Breezy Cresting Beacon)**: retained
-as `due`, with owner decision now received. This is an amendment to the
-identity contract: UUID makes each agent uniquely identifiable, while the
-name remains the primary means of identification. Temporary-file
-frontmatter is valuable but separate; specify the schema cheaply now,
-and decide enforcement tooling later.
+**Partial graduation 2026-05-23 (Incandescent Kindling Forge / cursor /
+`328fac`, separate-lane consolidate-docs pass)**:
+PDR-076 (`agent-identity-tuple-and-body-file-frontmatter`) authored as
+`Proposed`, principle layer. The PDR bundles two structurally separate
+decisions sharing one owner direction and one worked instance: the
+identity tuple becomes `(agent_name, UUID id)` with `session_id_prefix`
+demoted to chat-readable short form; every body-bearing file authored
+for downstream consumption carries frontmatter with `agent_name`, `id`,
+`created_at`, `last_updated_at`. PDR-076 is portability-clean (no repo
+paths in body, no commit refs; only outgoing link is to
+`practice-index.md`). Downstream cascade named in PDR-076 §Cascade and
+explicitly NOT executed in this cycle: PDR-027 amendment, identity-
+bearing schema tranches (active claim, commit-queue intent, comms event
+sender/recipient, conversation entry, sidebar participant,
+joint-decision proposer, escalation owner, handoff record, thread
+identity row), identity preflight UUID emission, body-file frontmatter
+consumers, identity rendering surfaces.
 
-**Next action**: amend PDR-027 and the identity-bearing schemas to carry
-`agent_name` + UUID `id`; specify the temporary-file frontmatter schema
-as a separate concern without yet binding it to a specific enforcing tool.
+**Curation note 2026-05-23 (Breezy Cresting Beacon, prior pass)**:
+retained as `due`, with owner decision now received. This is an
+amendment to the identity contract: UUID makes each agent uniquely
+identifiable, while the name remains the primary means of
+identification. Temporary-file frontmatter is valuable but separate;
+specify the schema cheaply now, and decide enforcement tooling later.
+
+**Next action** (remaining cascade): amend PDR-027 and the
+identity-bearing schemas to carry `agent_name` + UUID `id`; land the
+body-file frontmatter consumer wiring at each ceremony. Each is a
+separate cycle per the PDR-076 §Cascade landing-order discipline.
 
 **Owner direction 2026-05-23** captured to per-user memory `feedback_agent_identity_name_plus_uuid`:
 
@@ -394,18 +481,34 @@ as a separate concern without yet binding it to a specific enforcing tool.
 
 ### 2026-05-23 — Templated loops need exit criteria (rule-shaped OR /loop skill amendment)
 
-`[captured: 2026-05-23 | source: stormbound-floating-wing/loop-cancellation-incident-and-owner-direction | target: rule:loop-exit-criteria-required OR amendment:/loop skill | trigger: owner direction (received) — ready for rule-graduation | size: S | status: due]`
+`[captured: 2026-05-23 | source: stormbound-floating-wing/loop-cancellation-incident-and-owner-direction | target: rule:loop-exit-criteria-required OR amendment:/loop skill | trigger: owner direction (received) — partially graduated to .agent/rules/loop-exit-criteria-required.md | size: S | status: partially-graduated]`
 
-**Curation note 2026-05-23 (Breezy Cresting Beacon)**: retained
-as `due`, with owner decision now received. The architectural home is
-loop template discipline, not one fixed global stop rule: exit criteria
-depend on the loop's application and intent. The starter default is
-still concrete: any loop that has been a no-op for five iterations
-should stop.
+**Partial graduation 2026-05-23 (Incandescent Kindling Forge / cursor /
+`328fac`, same separate-lane consolidate-docs pass)**: rule
+`.agent/rules/loop-exit-criteria-required.md` landed with platform
+adapters in `.claude/rules/loop-exit-criteria-required.md` and
+`.cursor/rules/loop-exit-criteria-required.mdc` (alwaysApply true), plus
+RULES_INDEX.md entry. The rule names the five-consecutive-idle-
+iteration default exit criterion, the stand-down broadcast shape (loop
+identity + criterion fired + closeout summary), the owner-authority
+override at invocation time, and the composition with
+`use-monitor-for-event-driven-wake` (event-driven wake-ups belong on
+Monitor, not on polling loops). Optional `/loop` skill amendment naming
+the rule is out of scope of this rule landing because no repo-local
+`/loop` skill currently exists; if a `/loop` skill is later authored,
+the amendment is a separate cycle.
 
-**Next action**: author loop template(s) and the corresponding
-rule/adapter surface so every loop declares an intent-specific exit
-criterion, with five consecutive no-op iterations as the basic default.
+**Curation note 2026-05-23 (Breezy Cresting Beacon, prior pass)**:
+retained as `due`, with owner decision now received. The architectural
+home is loop template discipline, not one fixed global stop rule: exit
+criteria depend on the loop's application and intent. The starter
+default is still concrete: any loop that has been a no-op for five
+iterations should stop.
+
+**Next action** (remaining cascade): if a repo-local `/loop` skill is
+later authored, amend it to cite the rule and propagate the
+five-idle-iteration default at invocation time. Until then, the rule
+estate is the canonical surface.
 
 **Owner direction 2026-05-23** captured to per-user memory `feedback_templated_loops_need_exit_criteria`:
 
@@ -4572,6 +4675,10 @@ Substance summary: a structural protocol that fires *without* requiring owner in
 - **P6c — Idle-misclassification cure**: covered upstream by the comms-watch self-exclusion-only cure (Bundle 3 / `1ea4e2e1` wide-sweep). Director broad-awareness sees cross-agent cross-traffic correctly post-cure; idle classification can ratify against observed traffic. May be redundant with P6 main body after comms-watch cure stabilises; defer second-instance evidence to confirm.
 
 Worked instance: Seaworthy's acting-Director window 11:30Z–12:06Z produced all three sub-failures within ~36 minutes; owner cured each with a single directed action. Each cure names a missing structural primitive per `feedback_owner_action_is_not_a_cure`. Counter-evidence (Director sessions without P6 failures) exists in Velvet's window 10:48Z–11:04Z, suggesting P6 is not load-bearing for every Director session — it fires under specific context-pressure shapes.
+
+**Second worked instance (2026-05-23T12:36Z, SHA:`db275c09`)** — refined in by Secret Creeping Moth / `61d726` under Abyssal routing `14b56fc7` at 12:44:35Z. ~41 minutes after the first wide-sweep (SHA:`1ea4e2e1`), a second emergency-unblock landed: owner-authorised one-time `--no-verify` mega-commit absorbing 58 outstanding changes plus owner-authorised one-time `HUSKY=0` push. Escalation pattern from first instance: ceremony-bypass → hook-bypass + push-bypass. The second cure was more aggressive than the first because the structural failure mode had deepened (Incandescent's Monitor-harness cure mid-refactor blocked all commits team-wide via pre-existing type-check + lint failures per Seaworthy `c19177c6` at 12:33:48Z). Strengthens the motivating evidence: the failure mode is not anomalous to one session, and successive cures require more owner-attention each time. Promotion gate (one autonomous P6 cure) remains UNMET — second instance is owner-cured again, not team-autonomously-cured. The very session that authored P6 demonstrated its motivating failure mode twice without P6 firing once. See napkin entry "Extension: second mega-commit emergency-unblock" 2026-05-23 for full worked-instance substance.
+
+**Adjacent substrate gap, NOT folded into P6** (flagged separately): the HUSKY=0 portion of the second wide-sweep names a distinct substrate gap — pre-push gitleaks scans historic commits not covered by per-commit allowlists; the SHA-prefix rule (`.agent/rules/sha-prefix-in-collaboration-content.md`) cures forward only. Possible cure shapes (auto-extend commit-allowlist at marshal-emergency-bypass time / history-rewrite tool for SHA-prefix gap-fill / push-time gitleaks scope narrowing) are distinct from P6's Director-routing-blockage scope and would dilute P6 if folded in. Capture this as a separate pending-grad entry if a second-instance of the gitleaks-historical-scan blockage lands.
 
 **Load-bearing constraint** (anticipating reviewer pushback): P6 must not promote to over-eager detection that flags every Director session. The triggers are bounded by observable thresholds (N, D, M, W, R) calibrated against the Velvet counter-example. PDR-Proposed authoring should derive the threshold values from the Seaworthy + Velvet sessions as initial empirical anchors.
 

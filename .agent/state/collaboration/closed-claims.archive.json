@@ -33574,6 +33574,871 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "c19371c2-6de6-49d8-9dae-70b5a0918a48",
+      "agent_id": {
+        "agent_name": "Incandescent Banking Flame",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "aa986e"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/cli-comms-watch.ts",
+            "agent-tools/src/collaboration-state/cli-comms-inbox.ts",
+            "agent-tools/src/collaboration-state/comms-use-cases.ts",
+            "agent-tools/src/collaboration-state/comms-relevant-events.ts",
+            "agent-tools/src/collaboration-state/cli-runtime.ts",
+            "agent-tools/src/collaboration-state/types.ts",
+            "agent-tools/tests/collaboration-state/comms-use-cases.integration.test.ts",
+            "agent-tools/tests/collaboration-state/comms-relevant-events.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T12:25:35Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Monitor-harness liveness cure (FM-2 structural cure) per Zephyrous spec + Abyssal verdicts: heartbeat-file substrate-typed (D1-A); return-IDs/caller-marks API refactor (D2-A); per-drain error containment (D3). TDD red->green atomic landing.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T12:41:44Z",
+        "closed_by": {
+          "agent_name": "Incandescent Banking Flame",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "aa986e"
+        },
+        "summary": "Boundary owner-transferred to Twilit Scattering Twilight / 8d8d93 per owner direction at 12:39Z (Hand all of your work to Twilit). Full handoff brief at directed event 3af7c05a-b100-417d-b32c-efacb2cc8a58 covering: substance landed in HEAD via mega-commit db275c09 (comms-watch-loop.ts + watcher-heartbeat.ts + types rename + comms-relevant-events trim + comms-use-cases reduction + cli-spec-options.ts cleanup + 8 unit tests refactored); cli-comms-watch.ts working-tree rewire to watchCommsLoop; remaining gates-green gap (cli-comms-inbox.ts + cli-specs.ts usage + 5 test sites with --only-directed + SKILL line 168 + 5 new tests per Zephyrous spec); design verdicts D1-A heartbeat-file substrate-typed / D2-A return-IDs-caller-marks / D3 try-catch error containment; marshal target Seaworthy / 6966d4. Twilit to open fresh files-claim under their identity for continuation.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c19371c2-6de6-49d8-9dae-70b5a0918a48",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "36940f82-48b2-4873-b33e-c3982740e652",
+      "agent_id": {
+        "agent_name": "Secret Creeping Moth",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "61d726"
+      },
+      "thread": "observability-sentry-otel",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T12:49:09.738Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Failure-mode consolidation extension: capture second mega-commit emergency-unblock (SHA:1ea4e2e1 + SHA:db275c09) as worked instance of §6.8 owner-action-as-cure pattern; strengthen P6 autonomy primitive pending-grad with second-instance grounding; honestly capture HUSKY=0 substrate gap (routed by Abyssal event 12:44:35Z; default accepted by Twilit 12:48:39Z)",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T13:12:19.926Z",
+        "closed_by": {
+          "agent_name": "Secret Creeping Moth",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "61d726"
+        },
+        "summary": "Failure-mode consolidation extension discharged: 4 napkin entries (P6 second-instance grounding + HUSKY=0 substrate gap + conditional-default resolution + marshal-idle-absorber) + P6 pending-grad refined with second-worked-instance + adjacent-substrate-gap. Director Incandescent V2 approved substantively. Marshal request 6eb7888f queued with Seaworthy; staged content (napkin.md + pending-graduations.md, +81 lines) preserved in working tree for forward-marshal pickup. Reviewer-dispatch absorber role (V3) also discharged: synthesised verdict a8f8fada GO-WITH-CONDITION absorbed by Incandescent and routed to Twilit. Claim closed per owner direction at ~13:13Z 'close all claims and prepare for handoff and compaction'. No retained claims; staged tree is forward-pickup vehicle.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "36940f82-48b2-4873-b33e-c3982740e652",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "96f00b19-b2b2-4426-80c0-35fc68f2c37d",
+      "agent_id": {
+        "agent_name": "Twilit Scattering Twilight",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "8d8d93"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/cli-comms-watch.ts",
+            "agent-tools/src/collaboration-state/cli-comms-inbox.ts",
+            "agent-tools/src/collaboration-state/cli-specs.ts",
+            "agent-tools/src/collaboration-state/comms-use-cases.ts",
+            "agent-tools/src/collaboration-state/comms-watch-loop.ts",
+            "agent-tools/src/collaboration-state/watcher-heartbeat.ts",
+            "agent-tools/src/collaboration-state/types.ts",
+            "agent-tools/src/collaboration-state/cli-spec-options.ts",
+            "agent-tools/tests/collaboration-state/comms-use-cases.integration.test.ts",
+            "agent-tools/tests/collaboration-state/comms-relevant-events.unit.test.ts",
+            "agent-tools/tests/collaboration-state/unified-comms-format.integration.test.ts",
+            "agent-tools/tests/collaboration-state/collaboration-state.integration.test.ts",
+            "agent-tools/tests/collaboration-state/comms-watch-loop.unit.test.ts",
+            "agent-tools/tests/collaboration-state/watcher-heartbeat.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T12:42:41Z",
+      "freshness_seconds": 5400,
+      "sidebar_open": false,
+      "intent": "Monitor-harness liveness cure handoff from Incandescent (event 3af7c05a, owner-directed 12:39Z). Remaining: cli-comms-inbox.ts drainDirectedInbox removal; cli-specs.ts usage strings; comms-use-cases.ts dead-symbol; --only-directed test-deletes; comms-use-cases.integration test rewrites; watchCommsLoop unit/integration tests (5 Zephyrous slices); watcher-heartbeat.ts unit tests + 5x S7786 specific-exception-types refactor (Pearly Sonar). Atomic-landing required; marshal Seaworthy/6966d4.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T13:13:46Z",
+        "closed_by": {
+          "agent_name": "Twilit Scattering Twilight",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "8d8d93"
+        },
+        "summary": "Owner-directed session-close at 13:13Z before marshal. Cure bundle complete and gates green (497 tests pass; type-check + lint + markdownlint + format all silent). Bundle-ready-v2 broadcast at 13:12Z (event e3e52ed5) carries Secret synthesis conditions 1+2+3 absorbed. Awaiting Torrid codex-side adversarial verdict + Seaworthy marshal cycle. Working-tree state: cure files in agent-tools/src/collaboration-state/* + tests + 1 handoff-record auto-fix all in place; nothing staged from Twilit; bundle handed off via directed event to Incandescent (Director) for re-routing to successor agent. Files-claim closed without retention.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "96f00b19-b2b2-4426-80c0-35fc68f2c37d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ee7e1744-087a-426a-b3ec-9bb016578af0",
+      "agent_id": {
+        "agent_name": "Zephyrous Darting Aerie",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/architecture/architectural-decisions/185-comms-event-auto-acceptance-metadata.md",
+            "docs/architecture/architectural-decisions/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T13:07:30Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Draft ADR and schema-spec sketch for deterministic comms-event auto-acceptance metadata per Incandescent routing 13:06Z",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T13:22:35Z",
+        "closed_by": {
+          "agent_name": "Zephyrous Darting Aerie",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e54"
+        },
+        "summary": "Session complete per owner light handoff. ADR-185 v2 is in working tree with ADR README index update; Pearly GO-with-condition points absorbed and checks green: markdownlint, Prettier --check, practice:vocabulary, git diff --check. Reported to Incandescent in event 8de83c02; no staging by Zephyrous. Successor should reopen claim if further edits are needed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ee7e1744-087a-426a-b3ec-9bb016578af0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "dd08696a-291b-4cb1-8466-4904f642dcf7",
+      "agent_id": {
+        "agent_name": "Zephyrous Darting Aerie",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/tests/repo-check.integration.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T13:06:30Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Fix Sonar S5443 tmpdir-derived fixture strings in repo-check.integration.test.ts per Twilit delegation 13:05Z",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T13:22:35Z",
+        "closed_by": {
+          "agent_name": "Zephyrous Darting Aerie",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e54"
+        },
+        "summary": "Session complete per owner light handoff. S5443 tmpdir-derived fixture fix is in working tree and verified with pnpm --filter @oaknational/agent-tools test tests/repo-check.integration.test.ts; marshal request f9e583d2 was ACKed by Seaworthy 1fab939b; no staging by Zephyrous. Successor or marshal should reopen claim if further edits are needed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "dd08696a-291b-4cb1-8466-4904f642dcf7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "b7cec973-7137-451d-9e72-76de716e2a00",
+      "agent_id": {
+        "agent_name": "Twilit Scattering Twilight",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "8d8d93"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/cli-comms-inbox.ts",
+            "agent-tools/src/collaboration-state/cli-comms-watch.ts",
+            "agent-tools/src/collaboration-state/cli-specs.ts",
+            "agent-tools/src/collaboration-state/comms-relevant-events.ts",
+            "agent-tools/src/collaboration-state/comms-use-cases.ts",
+            "agent-tools/src/collaboration-state/watcher-heartbeat.ts",
+            "agent-tools/tests/collaboration-state/comms-watch-loop.unit.test.ts",
+            "agent-tools/tests/collaboration-state/watcher-heartbeat.unit.test.ts",
+            "agent-tools/tests/collaboration-state/comms-use-cases.integration.test.ts",
+            "agent-tools/tests/collaboration-state/unified-comms-format.integration.test.ts",
+            "agent-tools/tests/collaboration-state/collaboration-state.integration.test.ts",
+            ".agent/state/collaboration/handoffs/director-role-handoff-2026-05-23-seaworthy-to-next.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T13:27:28Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Bundle-marshal stewardship: FM-2 Monitor-harness liveness cure v2 (heartbeat substrate + step-runner + S7786 cure); codex-side adversarial WAIVED by Director Incandescent at 13:24:29Z; proceeding to marshal-cycle via Seaworthy",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T13:35:52Z",
+        "closed_by": {
+          "agent_name": "Twilit Scattering Twilight",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "8d8d93"
+        },
+        "summary": "Cure-bundle-v2 LANDED at commit 86f340b5 (feat(agent-tools): land FM-2 Monitor-harness liveness cure). All 12 paths committed via Seaworthy marshal cycle; full-tree gates green (24 packages, 90 turbo tasks); HUSKY honoured; no --no-verify used. Intent b454cd08 marked complete. No retention.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b7cec973-7137-451d-9e72-76de716e2a00",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "23ad6c43-7e13-468e-830a-96eacf31d9b4",
+      "agent_id": {
+        "agent_name": "Incandescent Kindling Forge",
+        "platform": "cursor",
+        "model": "claude-4.6-sonnet",
+        "session_id_prefix": "328fac"
+      },
+      "thread": "practice-core-graduation",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-076-agent-identity-tuple.md",
+            ".agent/rules/loop-exit-criteria-required.md",
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T13:42:06Z",
+      "freshness_seconds": 5400,
+      "sidebar_open": false,
+      "intent": "consolidate-docs separate-lane: author PDR-076 (agent-identity tuple, due item 1), author rule loop-exit-criteria-required (due item 2), reconcile pending-graduations status entries for PDR-072/073/074. Per Owner instruction to run /oak-consolidate-docs starting with pending graduations.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T13:59:20Z",
+        "closed_by": {
+          "agent_name": "Incandescent Kindling Forge",
+          "platform": "cursor",
+          "model": "claude-4.6-sonnet",
+          "session_id_prefix": "328fac"
+        },
+        "summary": "Separate-lane consolidate-docs landed in working tree (PDR-076, loop-exit-criteria rule, pending-graduations reconciliation). Team-member closeout broadcast event cfd1775b posted. Tree RED at HEAD per Banking Flame 13:38:49Z; commit deferred per local-broken-code-never-leaves. Working tree is the durable record.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "23ad6c43-7e13-468e-830a-96eacf31d9b4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "07cf4487-606c-4a1f-9f96-6e821a8e1527",
+      "agent_id": {
+        "agent_name": "Incandescent Kindling Forge",
+        "platform": "cursor",
+        "model": "claude-4.6-sonnet",
+        "session_id_prefix": "328fac"
+      },
+      "thread": "practice-core-graduation",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".claude/rules/sha-prefix-in-collaboration-content.md",
+            ".agents/rules/sha-prefix-in-collaboration-content.md",
+            "RULES_INDEX.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T14:08:04Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Class B (sha-prefix rule adapters + RULES_INDEX entry) — owner-authorised override of Director's empirical-policy-test routing to Ferny. ICF/Cursor lands the three artefacts: .claude/ + .agents/ forwarders + RULES_INDEX entry.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T14:10:24Z",
+        "closed_by": {
+          "agent_name": "Incandescent Kindling Forge",
+          "platform": "cursor",
+          "model": "claude-4.6-sonnet",
+          "session_id_prefix": "328fac"
+        },
+        "summary": "Over-broad claim opened without checking active-claims first; overlapped Ferny's a3d872b9 (claimed 14:06:58Z) on .agents/rules/sha-prefix...md + RULES_INDEX.md. Procedural violation of respect-active-agent-claims. Substantive damage minimal: my Write to .agents/ adapter was idempotent (same one-line content Ferny had already authored); RULES_INDEX entry was Ferny's, untouched by my StrReplace attempt (which failed with fuzzy-match because Ferny's edit was already present). Re-claiming narrow lane on .claude/ residue only.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "07cf4487-606c-4a1f-9f96-6e821a8e1527",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0db33e0a-59fd-4903-8eea-f5b2a91b5fd7",
+      "agent_id": {
+        "agent_name": "Ashen Brazing Crucible",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "53dad4"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agents/rules/loop-exit-criteria-required.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T14:04:27Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Class A wrapper add: .agents/rules/loop-exit-criteria-required.md (validate-portability cure; authorised by Scorched at 14:03:50Z, e1fa15-ish)",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T14:10:47Z",
+        "closed_by": {
+          "agent_name": "Ashen Brazing Crucible",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "53dad4"
+        },
+        "summary": "Class A wrapper LANDED at 92c953e7 by Seaworthy (validate-portability cleared loop-exit-criteria-required line; 4 issues -> 3 issues; 3 remaining are Class B sha-prefix, Ferny's lane)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0db33e0a-59fd-4903-8eea-f5b2a91b5fd7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "5c5dfcdb-e1b4-48d0-8380-0e2c198e22ab",
+      "agent_id": {
+        "agent_name": "Incandescent Kindling Forge",
+        "platform": "cursor",
+        "model": "claude-4.6-sonnet",
+        "session_id_prefix": "328fac"
+      },
+      "thread": "practice-core-graduation",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".claude/rules/sha-prefix-in-collaboration-content.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T14:10:32Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Class B residue: .claude/rules/sha-prefix-in-collaboration-content.md adapter. Owner-authorised override of Director's empirical-policy-test routing to Ferny. Ferny's empirical test (per their claim a3d872b9 intent) validated the policy boundary — Claude self-mod denied. ICF/Cursor lands the residue. Already authored (matches sibling forwarder pattern); awaiting tree-green for commit.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T14:13:43Z",
+        "closed_by": {
+          "agent_name": "Incandescent Kindling Forge",
+          "platform": "cursor",
+          "model": "claude-4.6-sonnet",
+          "session_id_prefix": "328fac"
+        },
+        "summary": "Class B .claude/ residue landed under owner-authorised override of Director routing. .claude/rules/sha-prefix-in-collaboration-content.md authored at 14:08:11Z (matches sibling forwarder pattern). Class B fully cured in working tree across the ICF + Ferny lane pair: .claude/ (ICF/Cursor), .agents/ + RULES_INDEX (Ferny). Awaiting tree-green for marshal cycle. Collision-repair already broadcast event f2432bb6.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "5c5dfcdb-e1b4-48d0-8380-0e2c198e22ab",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e25a1dcb-6708-4a7c-b21e-231376609f3e",
+      "agent_id": {
+        "agent_name": "Ferny Fruiting Root",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ee16a4"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/tests/commit-workflow.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T13:38:57Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Take over Pearly Plumbing Beacon's retained claim 03f5233b (Pearly session 019e54 closed at 13:23:30Z, freshness expired ~13:36Z). Land S7735 negated-condition cure in commit-workflow.unit.test.ts per Twilit delegation 13:05Z lineage. Consult-decide-log per respect-active-agent-claims: Pearly closed out + claim past freshness window; this entry is the audit-trail successor; staged content already in working tree from Pearly's session unchanged.",
+      "heartbeat_at": "2026-05-23T13:51:08Z",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T14:19:59Z",
+        "closed_by": {
+          "agent_name": "Ashen Brazing Crucible",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "53dad4"
+        },
+        "summary": "Class B partial-bundle ABSORBED into marshal cycle #1 unified rule-activation commit cc3039eb (Option C: 6 files including loop-exit canonical + adapters ICF orphan absorption). Substance unchanged from Ferny authorship; .agents/sha-prefix wrapper + RULES_INDEX line 95 entry preserved. Marshalled by Ashen Brazing Crucible (claude/53dad4) under owner-directed marshal-role transfer at 14:14:36Z.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e25a1dcb-6708-4a7c-b21e-231376609f3e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a3d872b9-bb75-4cf4-9a06-f4c36f1eca2a",
+      "agent_id": {
+        "agent_name": "Ferny Fruiting Root",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ee16a4"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agents/rules/sha-prefix-in-collaboration-content.md",
+            "RULES_INDEX.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T14:06:58Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Class B activation (partial) per Scorched routing 14:03:51Z: sha-prefix-in-collaboration-content rule adapters. Classification: mature doctrine. Authored .agents/rules/ wrapper (single line, matches sibling pattern) + RULES_INDEX.md alphabetical-position entry (line 95). .claude/rules/ wrapper attempted, DENIED by Claude self-modification policy ('routing came from another agent, not explicit user authorization — prior Claude agents correctly recognized this boundary'). Empirical evidence: validator drops 4→1 issue, remaining 1 is exactly the .claude/ wrapper. Single intent partial bundle; .claude/ wrapper flagged as residue for owner-authorisation per Scorched's stated pattern (same shape as Playwright install).",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T14:25:27Z",
+        "closed_by": {
+          "agent_name": "Ferny Fruiting Root",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "ee16a4"
+        },
+        "summary": "Class B partial-bundle content landed in marshal cycle #1 commit cc3039eb (Ashen, 14:19Z); claim purpose discharged",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a3d872b9-bb75-4cf4-9a06-f4c36f1eca2a",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "65365f9e-ce93-4d23-a2aa-5097bc5e5fb8",
+      "agent_id": {
+        "agent_name": "Ferny Fruiting Root",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ee16a4"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/tests/commit-workflow.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T14:25:34Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Pearly S7735 orphan-claim absorption (queue position #2 of post-tree-green cascade per Ashen broadcast f5d75135). Successor to Pearly Plumbing Beacon (codex/019e54) closed at 13:23:30Z. Mechanical Sonar S7735 negated-condition cure already in working tree from Pearly's session (6-line if/else inversion in commit-workflow.unit.test.ts); content unchanged. Will marshal-request Ashen after intent enqueued.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T14:27:20Z",
+        "closed_by": {
+          "agent_name": "Ashen Brazing Crucible",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "53dad4"
+        },
+        "summary": "Pearly S7735 orphan-absorption LANDED at 845a3e90 (cycle #2). 1 file, 3 insertions, 3 deletions; if/else inversion preserving behaviour. Co-Authored-By Pearly + Ferny + me. Husky gate green (90 turbo cached). Queue position #2 of cascade complete.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "65365f9e-ce93-4d23-a2aa-5097bc5e5fb8",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8ffd4111-8a59-4575-809e-76608466bafe",
+      "agent_id": {
+        "agent_name": "Ferny Fruiting Root",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ee16a4"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/architecture/architectural-decisions/185-comms-event-auto-acceptance-metadata.md",
+            "docs/architecture/architectural-decisions/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T14:36:56Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "ADR-185 v2 takeover (queue #5 orphan absorption per Scorched routing 14:35:26Z). Zephyrous-authored draft; Pearly adversarial GO-with-4-conditions absorbed (v2); Incandescent GO verdict at 13:24:27Z; orphaned on codex-pool closeout. Pairs with PDR-075 on complementary axes per Incandescent's broadcast 13:18Z. Bundle: 350-line ADR file (new, Status Proposed 2026-05-23) + 4-line README entry insertion under Recent Additions. Content unchanged from Zephyrous's authoring; substance verified mature ADR shape with explicit out-of-scope discipline + accepted-cost + deferred sections.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T14:39:04Z",
+        "closed_by": {
+          "agent_name": "Ashen Brazing Crucible",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "53dad4"
+        },
+        "summary": "ADR-185 v2 orphan-absorption LANDED at 5320d6b0 (cycle #4). 2 files, 354 insertions (ADR body 350 lines + README index entry 4 lines). Authorship preserved: Zephyrous v1+v2 + Pearly adversarial + Incandescent verdict GO + Ferny adopt + me marshal. Husky gate green; outside .agent/practice-core care-and-consult scope so no Director sidebar required.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8ffd4111-8a59-4575-809e-76608466bafe",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6a160d2e-4a54-41a3-a90e-d556d1e2a91d",
+      "agent_id": {
+        "agent_name": "Ferny Fruiting Root",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ee16a4"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-076-agent-identity-tuple-and-body-file-frontmatter.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T14:45:21Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "PDR-076 dual-reviewer dispatch (assumptions-expert + architecture-expert-fred) per Scorched routing 14:44:49Z. Verdict shape: fidelity-to-owner-decision (does codification match owner-named substance, scope-creep beyond, OR introduce load-bearing assumptions owner did not authorise). Owner direction verbatim per memory feedback_agent_identity_name_plus_uuid + Breezy session-close capture. Practice-Core touch — claim required before dispatch. No file modification; reviewer pass only.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T15:01:18Z",
+        "closed_by": {
+          "agent_name": "Ashen Brazing Crucible",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "53dad4"
+        },
+        "summary": "PDR-076 v2 LANDED at db4d8b3a (cycle #9). 1 file, 444 insertions. ICF v1 + Ferny dual-reviewer dispatch + v2 absorption + Scorched ratification chain discharged. SPLIT (076a/076b) open question deferred to owner-coherence. Subject required one re-trim (initial 103 chars; final 87).",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6a160d2e-4a54-41a3-a90e-d556d1e2a91d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a2ccefa7-0f62-45ca-ac9c-9874a7673928",
+      "agent_id": {
+        "agent_name": "Mistbound Hiding Threshold",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "0e27cc"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T16:02:22Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Cycle #1 marshal-cycle: stage and commit Twilit ST consumer-landing bundle (knip-RED cure + Commandment-12 dedupe + Class A strip + Class T plan-file cure)",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T16:05:54Z",
+        "closed_by": {
+          "agent_name": "Mistbound Hiding Threshold",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "0e27cc"
+        },
+        "summary": "Cycle #1 landed at 43e09287: knip-RED to GREEN via consumer-landing + Commandment-12 dedupe + Class A strip + Class T plan-file cure; 6 files +671/-23; husky 90-task gate green; advisory orchestrator exit 1 on pre-existing fitness critical-zone (not introduced)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a2ccefa7-0f62-45ca-ac9c-9874a7673928",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f8b88745-7a47-4458-be59-b7236ef48320",
+      "agent_id": {
+        "agent_name": "Mistbound Hiding Threshold",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "0e27cc"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T16:07:01Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Cycle #2 marshal-cycle: stage and commit Ferny pattern v2 substrate-pointer-read-as-current-state (single file atomic landing)",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T16:08:27Z",
+        "closed_by": {
+          "agent_name": "Mistbound Hiding Threshold",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "0e27cc"
+        },
+        "summary": "Cycle #2 landed at 8a99ed35: pattern v2 substrate-pointer-read-as-current-state.md (146 lines); single-file atomic; husky 90-task green; closes Safe-Pause Criterion #3",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f8b88745-7a47-4458-be59-b7236ef48320",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "b8da3c0d-42f5-4723-bdb6-423165c62895",
+      "agent_id": {
+        "agent_name": "Twilit Scattering Twilight",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "8d8d93"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/types.ts",
+            "agent-tools/src/collaboration-state/watcher-heartbeat.ts",
+            "agent-tools/src/collaboration-state/comms-use-cases.ts",
+            "agent-tools/src/collaboration-state/watcher-staleness.ts",
+            "agent-tools/src/collaboration-state/watcher-staleness.unit.test.ts",
+            "agent-tools/src/collaboration-state/cli-comms-watch.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T15:31:28.000Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Cycle #10 / Mistbound Cycle #1 — consumer-landing for knip-RED watcher-heartbeat exports + Commandment-12 dedupe (WatcherIdentity ↔ CollaborationAgentId canonical schema) + Class A re-export strip + format-check convergence. Director Seaworthy verdicts 15:28:25Z (DEEPER + ADJACENT); Ferny 4-way fan-out synthesis 15:24:50Z absorbed; Charcoal post-landing armed; Mistbound marshal-request pending.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T16:08:36.000Z",
+        "closed_by": {
+          "agent_name": "Twilit Scattering Twilight",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "8d8d93"
+        },
+        "summary": "Cycle #10 LANDED at commit 43e09287 (16:06:35Z); 6 files +671/-23; husky 90/90 GREEN; knip RED -> GREEN cured via consumer-landing + Commandment-12 dedupe + Class A strip.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b8da3c0d-42f5-4723-bdb6-423165c62895",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "26433756-a070-4184-961a-5300b3b30481",
+      "agent_id": {
+        "agent_name": "Twilit Scattering Twilight",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "8d8d93"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/session-open-env-freshness-check.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T13:57:42Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Plan-author boundary: FM-2 P2 cure plan — session-open environment freshness check (per Scorched routing 13:56:07Z; Ferny FM-2 substrate; P1+P2 primitive design surface)",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T16:08:37.000Z",
+        "closed_by": {
+          "agent_name": "Twilit Scattering Twilight",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "8d8d93"
+        },
+        "summary": "FM-2 P2 plan v2 file landed in Cycle #10 commit 43e09287. Plan-Wilma verdict in hand (Ferny dispatch a2e16a2e367255e07; SAFE-WITH-CONDITIONS 4+2). Owner-verdict-gate is Director-side concern, not claim-scoped. Retention purpose dissolved.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "26433756-a070-4184-961a-5300b3b30481",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e52b6d4b-5234-43f5-8ae4-7588841976da",
+      "agent_id": {
+        "agent_name": "Mistbound Hiding Threshold",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "0e27cc"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T16:12:03Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Cycle #3 marshal-cycle: stage and commit napkin.md (Class H MD024 cure + accumulated session drift)",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T16:13:16Z",
+        "closed_by": {
+          "agent_name": "Mistbound Hiding Threshold",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "0e27cc"
+        },
+        "summary": "Cycle #3 landed at 499d163b: napkin.md drift + Class H MD024 cure; markdownlint tree-wide green",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e52b6d4b-5234-43f5-8ae4-7588841976da",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
