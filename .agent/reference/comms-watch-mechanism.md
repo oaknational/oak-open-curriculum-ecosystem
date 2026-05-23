@@ -122,6 +122,60 @@ platform-capability knowledge that goes stale every time a host
 adds a feature; the free-form `source` field is the
 substrate-primitive equivalent.
 
+### Anchored canonical implementation (this repo, 2026-05-23)
+
+The canonical implementation of the liveness substrate in this
+repo is `agent-tools/src/collaboration-state/watcher-heartbeat.ts`
+(landed `SHA:db275c09`). It implements the same substrate
+primitive described above but with a richer schema sized to the
+operational needs of the in-tree `comms watch` CLI:
+
+```json
+{
+  "schema_version": "1.0.0",
+  "pid": 12345,
+  "started_at": "2026-05-23T12:00:00.000Z",
+  "last_drain_at": "2026-05-23T12:30:00.000Z",
+  "last_emit_at": "2026-05-23T12:30:00.123Z",
+  "last_error_at": null,
+  "emitted_count": 42,
+  "heartbeat_interval_ms": 30000,
+  "watcher_identity": { "...identity tuple..." }
+}
+```
+
+Structural deltas from the minimum-viable shape above:
+
+- `agent_id` is renamed `watcher_identity` (same identity-tuple
+  shape; the rename anchors the field to the watcher's role
+  rather than a generic agent reference).
+- The single `last_alive_at` is replaced by three per-action
+  timestamps (`last_drain_at`, `last_emit_at`, `last_error_at`).
+  The `source` field is absent: the structured tick-tracking
+  names the source implicitly (a recent `last_emit_at` means the
+  emit path is alive; a recent `last_error_at` with no recent
+  emit means the watcher is alive but unhealthy). The doc
+  anti-pattern "Substrate-enforced source enum" still holds — the
+  canonical impl removed `source` rather than enumerating it.
+- Schema versioning (`schema_version`), process identity (`pid`),
+  start time (`started_at`), throughput accounting
+  (`emitted_count`), and cadence declaration
+  (`heartbeat_interval_ms`) are added as operational fields.
+
+Cadence: N = 30 s default; stale-threshold = 3 × N = 90 s.
+Consumers detect a stale watcher by file mtime (`Date.now() -
+mtime > 3 × heartbeat_interval_ms`). The 3× ratio accommodates
+GC pauses, brief filesystem latency, and polling jitter inside
+the watch loop.
+
+The canonical impl exposes `writeWatcherHeartbeat` (atomic write
+of the heartbeat file) and `parseWatcherHeartbeat` (strict
+reverse-parse; throws `TypeError` on schema mismatch). Consumers
+that want to read heartbeats from arbitrary watcher impls should
+adapt: the minimum-viable shape above remains valid for foreign
+implementations, and the canonical shape is one phenotype of the
+substrate primitive.
+
 ## Loop — the theoretical complement (under exploration)
 
 Watch is event-driven, sub-second, and a single failure point. An

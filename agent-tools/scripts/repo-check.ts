@@ -234,7 +234,7 @@ export function buildCheckProfileArtifact(input: {
     exitCode: input.exitCode,
     turboDryGraph: input.turboDryGraph,
     environment: input.environment,
-    ...(input.outputLog === undefined ? {} : { outputLog: input.outputLog }),
+    ...(input.outputLog !== undefined ? { outputLog: input.outputLog } : {}),
     failurePhase,
     postTurboGateStatus: profilePostTurboGateStatus({
       outputCaptured: input.output !== undefined,
