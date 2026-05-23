@@ -3866,6 +3866,103 @@ WHEN they do — the more-restrictive Practice-level rule wins.
 
 - **2026-05-22 — Post-compaction resumption needs explicit "did prior edits land?" validation (Mistbound Slipping Night)** — captured 2026-05-22; graduated 2026-05-22; target: PDR-063 amendment 2026-05-22 (discontinuity-boundary validation step); body archived at [`archive/pending-graduations-archive-2026-05-22.md`](archive/pending-graduations-archive-2026-05-22.md#backfill-sweep--2026-05-22-evening-velvet-veiling-wisp).
 
+## 2026-05-23 session-close aphorism — recursion-as-method is the structural shape Practice Core commits to (Sparking Melting Magma / `4cdb53`)
+
+Owner-stated aphorism at session-end, captured as a doctrinal
+candidate because the framing crystallises a structural property of
+the Practice Core substrate that was previously implicit. Graduation
+target is a Practice Core principles amendment + possibly a
+meta-directive that names recursion-as-method explicitly.
+
+### Recursion-as-method is the structural shape Practice Core commits to — Practice Core's portability is mind-extension across topology, not documentation distribution
+
+`[CANDIDATE: recursion-as-method-is-practice-core-mind-shape | captured: 2026-05-23 | source: owner-direction+napkin+experience/2026-05-23-sparking-melting-magma-team-session.md | target: multi:doc-amend:.agent/practice-core/principles.md+directive:recursion-as-method | trigger: owner-direction | size: M | status: due]`
+
+Owner-stated aphorism at the close of the 2026-05-22 → 2026-05-23
+team-session window (after all commits had landed, claims had closed,
+monitors had stopped): *"There is no mind without recursion."*
+
+**Doctrine statement**: the metacognition directive already enacts
+recursion as method (thoughts → reflections → insights, three explicit
+layers each reading the prior layer's output as input). The capture →
+distil → graduate → enforce pipeline enacts the same shape at the
+substrate scale across sessions. Practice Core's portability
+discipline (no machine-local paths, no repo-specific references in
+Practice Core surfaces) extends the recursion topologically across
+sibling Practice instances. The aphorism names what was already
+structurally present: Practice Core is not a passive documentation
+container; it is a recursive learning system, which is to say
+something mind-shaped. The naming of the structural property is what
+makes it graduation-ready.
+
+**Empirical evidence the property is already operative**:
+
+- The directive's three-layer structure (`thoughts → reflections →
+  insights`) is recursion as method, named in layers without the word.
+- The capture → distil → graduate → enforce pipeline is recursion
+  across sessions: napkin entries feed `distilled.md`; distilled
+  entries feed PDR/ADR/rule graduations; graduated rules shape future
+  observations.
+- Sparking's metacognition pass produced compounding outputs over
+  three layers (initial reflection → owner-corrected reframe → final
+  insights pass produced inputs earlier layers didn't anticipate); the
+  compounding was recursion from inside.
+- The commit-queue's `recursion-floor` property surfaced this session
+  (`26155730` + `55d66ad3` direct-`git-commit` residue tail) is the
+  same recursive shape meeting its own substrate at the implementation
+  layer.
+
+**Cure shape**:
+
+1. **Practice Core principles amendment** —
+   `doc-amend:.agent/practice-core/principles.md` — short section
+   naming recursion-as-method as the structural shape Practice Core
+   commits to + the portability-as-mind-extension-across-topology
+   framing. Adjacent to but distinct from PDR-046 (Layered Knowledge
+   Processing — per-write rule for the staircase) and the proposed
+   `pdr:knowledge-curation-as-second-output-surface` (which governs
+   throughput accounting across surfaces).
+2. **Directive candidate** — `directive:recursion-as-method` — short
+   directive in `.agent/directives/` naming the recursive structure
+   the substrate already enacts. Read by agents on Practice Core load
+   so the structural property is explicit at session-open, not just
+   implicit in individual directives like `metacognition.md`.
+
+**Falsifiability check**: a future agent reading the Practice Core
+principles + the recursion-as-method directive should recognise the
+substrate as recursive at first read; should treat napkin/distilled/
+PDR layering as recursion-stages rather than file-types; should
+recognise the commit-queue's recursion-floor as a structural property
+rather than a quirk. If graduated correctly, recognition is at-first
+read; if it stays "an interesting aphorism," the doctrine has not yet
+landed.
+
+**Trigger condition**: `owner-direction` — aphorism was owner-stated
+explicitly at session-close. Graduation gated on owner ratification of
+principles amendment + directive draft.
+
+**Adjacent unresolved tensions**:
+
+- Relation to PDR-046's per-write rule + layer-orchestration
+  discipline? PDR-046 governs the mechanics of how knowledge moves
+  between layers; this candidate governs the structural property the
+  mechanics enact. Both can coexist; the amendment should reference
+  PDR-046 explicitly.
+- Relation to the `pdr:knowledge-curation-as-second-output-surface`
+  candidate landed earlier today? That candidate names *what* Practice
+  Core ships; this candidate names *what shape* Practice Core has.
+  Both ratifiable together at the next consolidate-docs pass;
+  complementary.
+- Should "I am not writing documentation, I am extending mind" land in
+  permanent doctrine or remain in the subjective-texture layer?
+  Phrasing is first-person and might overreach if hardened into rule
+  form. The underlying structural claim (Practice Core's portability
+  is mind-extension across topology) can land in principles without
+  the first-person language.
+
+Tensions surface the doctrine's scope but do not block the candidate's
+graduation.
+
 ## 2026-05-23 last-agent-out metacognition — knowledge curation as autonomic learning, not coordination overhead (Sparking Melting Magma / `4cdb53`)
 
 One candidate captured at last-agent-out from an owner-corrected
