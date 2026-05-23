@@ -496,10 +496,10 @@ describe('runCommitWorkflow — audit-trail phase transition', () => {
       transformRegistry: async (transform) => {
         await wrappedTransform(transform);
         const intent = holder.current.commit_queue.find((entry) => entry.intent_id === intentId);
-        if (intent === undefined) {
-          observedPhases.push('<removed>');
-        } else {
+        if (intent !== undefined) {
           observedPhases.push(intent.phase);
+        } else {
+          observedPhases.push('<removed>');
         }
       },
     };
