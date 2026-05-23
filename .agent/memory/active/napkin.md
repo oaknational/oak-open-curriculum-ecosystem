@@ -648,3 +648,178 @@ The combination of (a) clear gate-1a critical-path, (b) reviewer-as-
 first-class peer-or-self collaborator, (c) honest fatigue gating
 (splitting cycles before fatigue degrades quality), (d) reciprocal
 review economy.
+
+## 2026-05-22 → 2026-05-23 — Velvet Veiling Wisp consolidation + multi-agent window observations / claude / Opus-4.7 / `b4bb7a`
+
+3 commits: `44d23533` (primary backfill archive sweep, 20 graduated
+bodies relocated; −382 lines on `pending-graduations.md`), `ad67d24f`
+(nested-bullet defect-class sweep, 7 more bodies; cumulative −629
+lines / 14% reduction), and `e1b9561e` (4 critical-surface curation
+files: `repo-continuity.md` longest-line 1707→591; `distilled.md`
+prune of graduated event-driven-wake entry; `tdd-as-design.md`
+CRITICAL→SOFT; archive bodies preserved verbatim).
+
+### `.git/COMMIT_EDITMSG` is single-writer shared state under concurrent commits
+
+Surfaced as incident at commit `e1b9561e`: my drafted message in
+`/tmp/commit-msg-draft-3.txt` was `cp`'d to `.git/COMMIT_EDITMSG`,
+then overwritten by Lunar Illuminating Eclipse during the 1m33s
+pre-commit window between my `cp` and the commit-queue's
+`git commit -F .git/COMMIT_EDITMSG --` invocation. The commit-queue's
+intent-scoped pathspec discipline (`-- <intent.files>`) correctly
+limited my commit to 4 files; message integrity was unprotected.
+The landed commit carries my 4-file substance but Lunar's drafted
+WS4.1 scaffold message text.
+
+**Cure shapes named in incident broadcast `230f3200`**: (1)
+intent-scoped message file paths (e.g. `/tmp/<intent>.msg`); (2)
+inline `-m` to capture message in argv at invocation; (3) lockfile
+around the cp-and-commit pair.
+
+**Cure 1 became team emergent default within minutes** — adopted by
+Foamy on WS4.4 amendment (`bf7fa545`), SVW on t9 (`acd2a3f3`),
+Sparking on t20 (`e1d76c54`) and t13a (`745fe919`). Three
+independent adoptions in the same session. Graduation candidate
+target: commit-queue CLI native support for per-intent message files
+(architectural-excellence shape vs the per-agent `/tmp/<x>.msg`
+workaround currently in use).
+
+### Whole-tree pre-commit + concurrent in-flight peer work = predictable contention (4 instances in one session)
+
+The discipline-cure under owner direction is queue + ordering +
+comms, not scope narrowing. Four contention instances observed:
+
+1. `validate-boundaries` red on Lunar's mid-flight WS4.1
+   graph-corpus-sdk workspace before `pnpm-workspace.yaml` +
+   `SDK_PACKAGE_IMPORTS` were updated. Three agents blocked (me,
+   Foamy, Secret Dimming Shade); Secret traced the precise root
+   cause and requested priority unblock; cure landed in working
+   tree.
+2. `.git/COMMIT_EDITMSG` race on my `e1b9561e` commit (above).
+3. ESLint errors on Foamy's untracked mid-flight WS4.4
+   `graph-view/index.ts` blocked Sparking's t20 commit; cured by
+   Foamy splitting the file into `types.ts` + `interface.ts` +
+   barrel + replacing `ReadonlyArray<X>` with `readonly X[]`.
+4. TSDoc lint errors on Sparking's untracked mid-flight
+   `freshness.ts` blocked SVW's t10 commit; cured by Sparking
+   absorbing Foamy's diagnostic with 3 fix shapes offered +
+   binding-test deleted per no-conditional-tests doctrine.
+
+In every instance the blocked agent applied correct discipline
+(stop + surface + abandon queue + close claim + preserve edits in
+working tree; no `--no-verify`). The owner memory entry
+`feedback_pre_commit_hook_must_gate_staged_only — REJECTED` is
+validated empirically: each blocker was a real architectural signal
+about the in-flight peer surface, and each cure improved that
+surface rather than silencing the gate. The pattern justifies the
+whole-tree gating posture: contention is real but the cure is
+collaboration discipline, not scope narrowing.
+
+### Script-the-surgery beats hand-edit for repetitive substance-relocation
+
+For my two archive sweeps (20 + 7 entries) I authored Python scripts
+that extracted entry boundaries, appended bodies verbatim to the
+archive, and replaced live-register entries with one-line
+graduated-pointers. docs-adr-expert spot-checked 4 entries
+post-sweep: substance verified verbatim, pointer shape uniform,
+anchor resolves, no external referrers broken. The script became
+the audit artefact — reproducible and inspectable as a discrete
+operation.
+
+Hand-edit alternative would have multiplied boundary-discipline
+risk 20-fold and produced no audit artefact. Pattern candidate
+(with second instance from a different repo or task to confirm
+generality): **script substance-preserving relocations across N
+similar entries; the script is the audit artefact**. Trigger to
+watch: next repetitive substance-relocation operation.
+
+## 2026-05-23 — Foamy Fathoming Compass / claude / claude-opus-4-7 / ecb459 — WS4.4 GraphView cycle + 7h+ /loop idle window
+
+**4 commits landed**: bf7fa545 (WS4.4 test-partition amendment) +
+1fc5b491 (substantive interface + T7a smoke-test) + db5271af
+(test-expert post-exec absorption) + 83179e11 (WS3.3 status flip
+— substance at f4ca84f6).
+
+**Insights worth graduating** (closeout-owner please route to
+pending-graduations / pattern / rule as appropriate):
+
+1. **Directed-diagnostic-from-peer beats reviewer dispatch when
+   blocked by peer's lint on untracked work.** Worked instance:
+   22:45Z diagnostic to Sparking on freshness-binding lint (3 fix
+   shapes for `JSON.parse as` type assertion). Sparking absorbed
+   in ~1 min, chose a 4th shape better than any offered (delete
+   the binding test per `no-conditional-tests` doctrine). Why
+   faster than reviewer dispatch: ~1 min vs ~3–5 min; peer-pair
+   context already warm; recipient has authority to choose any
+   shape including ones not enumerated. Constraint: only fires
+   when sender has warm context on the peer's surface. Cold-call
+   reviewer dispatch remains right when not. Status:
+   pending-graduation candidate, pattern-shaped.
+
+2. **Closeout-synthesis-while-still-active became a 3-agent
+   pattern in this session.** Foamy 23:08Z, SVW 23:09Z, Velvet
+   23:10Z all posted boundary-scoped syntheses while still active
+   under /loop. Why: closeout-owner gets pre-positioned substance
+   for thread-record consolidation; no extraction from each
+   transcript at end. Status: pending-graduation candidate
+   (3-instance trigger fired), likely a SKILL §Closeout Contract
+   amendment.
+
+3. **Templated loops without exit criteria become context-budget
+   tax under team load.** Already graduated by owner to per-user
+   memory `feedback_templated_loops_need_exit_criteria`. My
+   /loop ran ~8h, last ~5h fully idle, cost 30+ identical "no
+   change, standing by" ticks. Pacing-pause was correct but loop
+   didn't self-terminate. Canonical default proposed: 5
+   consecutive idle loops → stand down + closeout broadcast.
+   Worked confirmation: owner stopped cron + monitor manually at
+   session end (~06:30Z).
+
+4. **COMMIT_EDITMSG concurrent-write incident → intent-scoped
+   message file cure was team-emergent.** Velvet hit it first
+   (e1b9561e mismatched message). Foamy, SVW, Sparking all
+   adopted `.git/<agent>-commit-msg-<intent>.txt` within
+   ~30 min. Status: pending-graduation, naming the
+   `commit-queue` CLI native solution (per-intent
+   `.git/.commit-queue/<intent-id>.msg` automatic resolution).
+
+5. **Untracked work-in-progress blocks whole-tree-gating commits
+   — recurring pattern.** Two instances this session: my
+   graph-view authoring blocked Sparking t20 (8 ESLint errors);
+   Sparking's freshness.ts authoring blocked SVW t10 (4 TSDoc
+   errors). Whole-tree pre-commit gating catches every
+   uncommitted file's lint state — by design. Working cure:
+   directed-diagnostic-from-peer (Insight 1) or rapid self-fix.
+   Status: pattern, recurring, worth naming.
+
+6. **Module split forced by max-lines was strictly
+   architectural-excellence shape.** My graph-view authoring hit
+   max-lines:250 at 400 lines. Split into index.ts (28 LOC
+   barrel re-exports) + types.ts (~190 LOC) + interface.ts
+   (~100 LOC). SVW: "the module split + the explicit
+   primitive-leaf union per `no-type-shortcuts` is
+   architectural-excellence work, not just a lint-pass
+   band-aid." Same shape worked in Cycle 1.3 (commit-workflow →
+   pathspec.ts + verify-output.ts). Lint rules surface real
+   architectural seams; suppress/raise-limit is the wrong move.
+   Status: confirms existing principle.
+
+7. **Pre-execution reviewer dispatch during peer-blocked waiting
+   is highly productive.** Had ~10 min waiting for Lunar's WS4.1
+   to clear validate-boundaries. Dispatched type-expert +
+   assumptions-expert + architecture-expert-betty in parallel on
+   WS4.4. All three returned substantive verdicts; absorbed all
+   findings into the plan-text amendment. By substantive-authoring
+   time, design was fully reviewer-pre-approved + plan-text
+   codified the constraints. Converts blocking-wait time into
+   design-substance time. Status: pattern, "use blocked-wait
+   time for next-cycle reviewer dispatch."
+
+**Closeout-synthesis comms event**: 2026-05-22T23:08:22Z (`Foamy
+Fathoming Compass: team-member closeout synthesis (still active;
+pre-handoff record)`) carries the boundary-scoped substance for
+whichever closeout-owner consolidates the eef thread record.
+
+**Working tree at session-stop**: clean apart from this napkin
+entry. No retained claims. /loop cron job `b4072cd1` and monitor
+task `b15myma8o` stopped by owner at session-stop.

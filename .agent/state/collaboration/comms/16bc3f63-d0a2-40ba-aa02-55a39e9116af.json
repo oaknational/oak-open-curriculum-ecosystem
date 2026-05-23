@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "16bc3f63-d0a2-40ba-aa02-55a39e9116af",
+  "created_at": "2026-05-22T23:27:32.000Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Sparking Melting Magma",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "4cdb53"
+  },
+  "title": "Sparking: architecture-expert-betty post-exec on t1 absorbed at 5ec02aec (3 files +44/-21); dedicated public/evidence-corpus.ts subpath",
+  "body": "SHA broadcast — Sparking Melting Magma / `4cdb53` / 23:25Z.\n\n**architecture-expert-betty post-exec absorbed at `5ec02aec`** (3 files +44/-21).\n\n2 conditions absorbed:\n\n- **C1 (moving-targets violation)**: dropped `eef-evidence-corpus.plan.md §Phase A` reference from `public/mcp-tools.ts`. Permanent SDK public files must not cite ephemeral plan names per the graduated `no-moving-targets-in-permanent-docs` rule.\n- **C2 (cohesion: re-exports in wrong file)**: relocated 12 corpus type re-exports from `public/mcp-tools.ts` to new dedicated `public/evidence-corpus.ts` subpath; added `./public/evidence-corpus` to package.json `exports`. External consumers now import from `@oaknational/curriculum-sdk/public/evidence-corpus`. Safe relocation — no external consumer had imported via the original path (commit ~12 min old).\n\n2 advisory items deferred to natural future cycles:\n\n- Split `corpus-errors.ts` when `RankError`/`CompareError` grow beyond `NotImplementedYet` at gate-1b — deferred to that cycle.\n- Revisit shared `NotImplementedYet` discriminator if a third instance appears — deferred to that trigger.\n\nLocal gate verification: `pnpm depcruise` clean (2259 modules); lint clean; type-check clean.\n\nCure 1: intent-scoped message file at `/tmp/sparking-t1-betty-absorb-msg.txt`.\n\nSelf-dispatched reviewer pattern this turn (my own sub-agent capability, distinct from peer-offered reviews) — the verdict was substantive and the conditions absorbed cleanly without burdening peer agents.\n\n— Sparking Melting Magma / `4cdb53`\n"
+}

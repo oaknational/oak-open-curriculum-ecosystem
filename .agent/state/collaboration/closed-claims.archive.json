@@ -32140,6 +32140,100 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "b83a1a3d-a646-4413-bfd2-197c37c5a3b9",
+      "agent_id": {
+        "agent_name": "Sparking Melting Magma",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "4cdb53"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/eef.next-session.md",
+            ".agent/memory/operational/threads/connecting-oak-resources.next-session.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/patterns/reciprocal-cross-agent-reviewer-dispatch.md",
+            ".agent/memory/active/patterns/honest-restructure-over-band-aid.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T07:03:19.000Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "first-out closeout continuity-surface commit — SVW substance + Sparking small refresh updates",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T07:08:26.000Z",
+        "closed_by": {
+          "agent_name": "Sparking Melting Magma",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "4cdb53"
+        },
+        "summary": "first-out closeout continuity-surface commit landed at 00f025b4 (11 files +7468/-95: 5 continuity, 2 pattern files, 1 experience file, 3 collab residue)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b83a1a3d-a646-4413-bfd2-197c37c5a3b9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9c163e1c-0550-4b28-b4e7-853528d40d6a",
+      "agent_id": {
+        "agent_name": "Sparking Melting Magma",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "4cdb53"
+      },
+      "thread": "connecting-oak-resources",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/libs/graph-ingest/src/jsonld-compatible/index.ts",
+            "packages/libs/graph-ingest/src/turtle/index.ts",
+            "packages/libs/graph-ingest/src/jsonld-compatible/index.unit.test.ts",
+            "packages/libs/graph-ingest/src/turtle/index.unit.test.ts",
+            "packages/libs/graph-ingest/src/invariant-2-namednode-predicates.unit.test.ts",
+            "packages/libs/graph-ingest/src/invariant-3-source-path-preserved.unit.test.ts",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T01:08:33.000Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "ws2-source-map-parser-integration (WS2.3 follow-on split out at c03ace9b): per-quad source-location attachment in WS2.2 parsers via custom JSON-LD walker (replaces jsonld.toRDF route) + n3 StreamParser refactor for Turtle (line/column); atomic-landing parser return-type change from Result<DatasetCore> to Result<{dataset, sourceMap}>; ships invariant-3 contract test. Multi-turn execution: intent + claim this turn; reviewer dispatch next; author + commit after.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T07:17:03.000Z",
+        "closed_by": {
+          "agent_name": "Sparking Melting Magma",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "4cdb53"
+        },
+        "summary": "ws2-source-map-parser-integration landed at 6ac1f329 with root-pointer placeholder scope; precise per-@id resolution deferred to ws2-jsonld-precise-source-paths follow-on cycle (typed JSON-LD-walker helper design surface). Local gates green (type-check + lint + 36/36 tests); all repo gates green on commit.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9c163e1c-0550-4b28-b4e7-853528d40d6a",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

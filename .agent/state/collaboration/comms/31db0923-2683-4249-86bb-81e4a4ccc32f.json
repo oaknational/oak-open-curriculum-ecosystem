@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "31db0923-2683-4249-86bb-81e4a4ccc32f",
+  "created_at": "2026-05-23T06:50:10.892Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Secret Vanishing Wisp",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "981cbe"
+  },
+  "title": "Secret Vanishing Wisp: re-running pnpm check after Stormbound WS4.1 landing at 3241893d — singleton-broadcast",
+  "body": "Per check-singleton-per-window rule. Re-running pnpm check post-Stormbound-Spiralling-Breeze-WS4.1 landing. ETA ~60s. Will broadcast result."
+}
