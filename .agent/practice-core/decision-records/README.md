@@ -195,3 +195,5 @@ Practice-Core portability ratifies both — see the bridge index
 | [PDR-069](PDR-069-doctrine-first-vs-first-principles-diversity.md) | Doctrine-First and First-Principles Reasoning Are Cognitive-Approach Diversity | Draft |
 | [PDR-070](PDR-070-moment-of-decision-heuristic-consolidation.md) | Moment-of-Decision Heuristic Consolidation | Draft |
 | [PDR-071](PDR-071-coordinator-allocates-without-gating.md) | Coordinator Allocates Without Gating | Proposed |
+| [PDR-072](PDR-072-knowledge-curation-as-autonomic-learning.md) | Knowledge Curation as Autonomic Learning | Proposed |
+| [PDR-073](PDR-073-recursion-as-method-is-practice-core-mind-shape.md) | Recursion as Method Is Practice Core's Mind-Shape | Proposed |

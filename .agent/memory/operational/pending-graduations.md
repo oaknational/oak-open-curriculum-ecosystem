@@ -93,16 +93,16 @@ not a verdict.
 ### `due` (current body candidates)
 
 Regenerated 2026-05-23 by Breezy Cresting Beacon during a
-knowledge-preservation curation pass. The body contains **4** due
+knowledge-preservation curation pass. The body contains **3** due
 entries after normalising one plan-execution-gated entry back to
-`pending`.
+`pending` and partially graduating `knowledge-curation-is-autonomic-learning`
+to PDR-072.
 
 | Entry | Current disposition |
 | --- | --- |
 | Agent identity move to `(name, UUID id)` + tempfile frontmatter | Due, PDR-shaped and multi-schema-shaped. Keep in register until owner approves the PDR/Core/schema promotion route. |
 | Templated loops need exit criteria | Due, rule-shaped. No repo-local `/loop` skill exists; natural home is a rule plus platform/tooling adapters when owner approves the exact rule surface. |
 | Recursion-as-method is Practice Core mind-shape | Due, Practice Core amendment/PDR-shaped. Requires explicit owner ratification before editing Core surfaces. |
-| Knowledge curation is autonomic learning | Due, PDR + Practice Core amendment-shaped. Requires explicit owner ratification before editing Core surfaces. |
 
 One former `due` entry, `canonical-tool-definitions-code-adjacent`,
 was corrected to `pending (plan-execution-gated)` because its own body
@@ -175,7 +175,7 @@ Mature-home gaps surfaced so far:
 
 | Candidate | Gap surfaced | Proposed next home |
 | --- | --- | --- |
-| `knowledge-curation-is-autonomic-learning` | Target points at missing `practice-core/principles.md`; the concept is mature but Core home is not chosen. | New PDR first, then `practice.md` / `practice-lineage.md` amendment if owner ratifies. |
+| `knowledge-curation-is-autonomic-learning` | PDR-072 is the first durable home; Core canon integration remains. | Amend `practice.md` / `practice-lineage.md` from PDR-072; do not create a new `principles.md` surface. |
 | `recursion-as-method-is-practice-core-mind-shape` | Same missing Core target; concept may be foundational or may stay aphoristic until PDR tests it. | New PDR or concise `practice-lineage.md` learned-principle amendment; no new Core surface without owner approval. |
 | `agent-identity-name-uuid-tempfile-frontmatter` | Crosses PDR-027, schemas, body-file provenance, commit queue, handoff records, and skills. | PDR-027 amendment/supersession decision, then schema/tooling tranche plan. |
 | `templated-loops-need-exit-criteria` | No repo-local `/loop` skill exists; invocation-time stop conditions lack a repo authority surface. | New always-applied rule plus platform/tooling adapters after owner chooses exact semantics. |
@@ -192,7 +192,7 @@ architectural-excellence and home-function discipline:
 
 | Candidate | Owner decision | Consequence |
 | --- | --- | --- |
-| `knowledge-curation-is-autonomic-learning` | Yes: ratify as Practice Core concept. | Author PDR first, then amend existing Core surfaces; do not create an interchangeable `principles.md` surface by convenience. |
+| `knowledge-curation-is-autonomic-learning` | PDR-072 proposes the two-output-surface / autonomic-learning principle. | Partially graduated to PDR-072; downstream `practice.md` / `practice-lineage.md` amendments remain. |
 | `recursion-as-method-is-practice-core-mind-shape` | Yes: ratify as Practice Core concept. | Same PDR-first route, then targeted `practice.md` / `practice-lineage.md` amendments if approved by the PDR. |
 | `fitness-lifecycle-and-access-rhythm` | Yes: governed model concept and portable Practice doctrine. | Amend ADR-144 / fitness-validator docs and schema, then create the portable PDR. |
 | `agent-identity-name-uuid-tempfile-frontmatter` | Amends identity contract: UUID makes each agent unique; name remains primary identifier. Temporary-file frontmatter is valuable but separate. | Amend PDR-027 and identity schemas; specify temporary-file frontmatter schema cheaply now, defer enforcement-tool choice. |
@@ -3952,7 +3952,7 @@ meta-directive that names recursion-as-method explicitly.
 
 ### Recursion-as-method is the structural shape Practice Core commits to — Practice Core's portability is mind-extension across topology, not documentation distribution
 
-`[CANDIDATE: recursion-as-method-is-practice-core-mind-shape | captured: 2026-05-23 | source: owner-direction+napkin+experience/2026-05-23-sparking-melting-magma-team-session.md | target: multi:doc-amend:.agent/practice-core/principles.md+directive:recursion-as-method | trigger: owner-direction | size: M | status: due]`
+`[CANDIDATE: recursion-as-method-is-practice-core-mind-shape | captured: 2026-05-23 | source: owner-direction+napkin+experience/2026-05-23-sparking-melting-magma-team-session.md | target: multi:doc-amend:practice.md+practice-lineage.md+optional-directive:recursion-as-method | trigger: owner-direction | size: M | status: partially-graduated]`
 
 **Curation note 2026-05-23 (Breezy Cresting Beacon)**: retained
 as `due`, with owner ratification now received: recursion-as-method is
@@ -3962,9 +3962,39 @@ existing Core surfaces (`practice.md` and/or `practice-lineage.md`) as
 the PDR decides. Creating `.agent/practice-core/principles.md` remains
 out of scope unless separately approved as a Core package change.
 
-**Next action**: author the PDR for recursion-as-method, then use that
-decision to amend the exact Core surfaces that carry the concept's
-function.
+**Partial graduation 2026-05-23 (Secret Creeping Moth, claude / 61d726, Seaworthy-routed)**:
+PDR-073 (`recursion-as-method-is-practice-core-mind-shape`) authored
+and landing this session as `Proposed` under the structural-property
+cluster anchored by PDR-071 and sibling-paired with PDR-072
+(`knowledge-curation-as-autonomic-learning`, Gilded Drifting Meteor /
+codex / 019e54, same session). PDR-073 names the principle layer;
+the downstream cascade (trinity amendment to `practice.md` and/or
+`practice-lineage.md`, plus an optional new directive at
+`.agent/directives/recursion-as-method.md`) is named in the PDR and
+explicitly NOT executed in this cycle. Reviewer absorption: three
+reviewers dispatched in parallel (architecture-expert-fred GO;
+assumptions-expert CONCERNS with two critical findings absorbed —
+falsifier (a) operationalised, §Rejected alternatives item 1
+strawman replaced with behavioural-prediction rebuttal; three
+important findings absorbed — team-scale articulation strengthened
+with state-bearing-artefacts framing, cross-instance recategorised
+as predicted consequence, self-reference recategorised as
+illustration; docs-adr-expert APPROVE-WITH-NITS with mind-extension
+parenthetical absorbed). Cascade-trigger remains owner-direction.
+
+**Remaining work to graduate fully**:
+
+1. Trinity amendment (Practice Core canon surfacing of the
+   recursion-as-method property in `practice.md` Philosophy and/or
+   `practice-lineage.md` learned-principle layer).
+2. Optional directive at `.agent/directives/recursion-as-method.md`
+   making the structural property explicit at session-open.
+
+Each is a separate cycle. Until both land (or the optional directive
+is explicitly declined), this entry stays `partially-graduated`. Once
+the trinity carries the concept and the directive question is settled,
+the entry can move to `graduated` and the body archived per the
+standard graduation flow.
 
 Owner-stated aphorism at the close of the 2026-05-22 → 2026-05-23
 team-session window (after all commits had landed, claims had closed,
@@ -4059,20 +4089,27 @@ substrate, not just session-narrative.
 
 ### Knowledge curation is autonomic learning of the repo, not coordination overhead — Practice Core as cross-repo learning network
 
-`[CANDIDATE: knowledge-curation-is-autonomic-learning | captured: 2026-05-23 | source: owner-direction+napkin+pattern-emergence | target: multi:pdr:knowledge-curation-as-second-output-surface+doc-amend:.agent/practice-core/principles.md | trigger: owner-direction | size: L | status: due]`
+`[CANDIDATE: knowledge-curation-is-autonomic-learning | captured: 2026-05-23 | source: owner-direction+napkin+pattern-emergence | target: multi:pdr:PDR-072+doc-amend:practice.md+doc-amend:practice-lineage.md | trigger: owner-direction | size: L | status: partially-graduated]`
 
-**Curation note 2026-05-23 (Breezy Cresting Beacon)**: retained
-as `due` and promoted in the index as the strongest Core candidate
-from this pass. Owner ratification now received: knowledge curation is
-a Practice Core concept. Because home function is not interchangeable,
-the next architectural move is PDR first, then targeted amendment of
-existing Core surfaces (`practice.md` and/or `practice-lineage.md`) as
-the PDR decides. The register is carrying draft-like substance only as
-a buffer; it must not become the permanent source of truth.
+**Partially graduated 2026-05-23**: [PDR-072](../../practice-core/decision-records/PDR-072-knowledge-curation-as-autonomic-learning.md)
+proposes the portable principle that knowledge curation is an
+autonomic learning function and that Practice-bearing repos ship on two
+output-accounting axes: product deliverables and Practice substrate. The
+remaining cascade is deliberately separate: amend `practice.md` and/or
+`practice-lineage.md` from the PDR rather than creating a new
+interchangeable `principles.md` surface.
 
-**Next action**: author the PDR for knowledge curation as a real output
-surface / autonomic learning function, then amend the exact Core
-surfaces selected by that decision.
+**Curation note 2026-05-23 (Breezy Cresting Beacon)**: originally
+retained as `due` and promoted in the index as the strongest Core
+candidate from this pass. Owner ratification then confirmed knowledge
+curation as a Practice Core concept. PDR-072 is the first durable home;
+the register now carries the residual downstream Core-amendment work,
+not the primary doctrine source.
+
+**Next action**: execute the downstream Core amendments selected by
+PDR-072: `practice.md` for the two-output-surface conceptual map and/or
+`practice-lineage.md` for the learned principle and propagation
+semantics.
 
 Owner correction to Sparking's prior metacognition framing (2026-05-23
 post-team-handoff): *"the agents working purely on knowledge curation
@@ -4084,12 +4121,13 @@ Practice Core is how we refine and share and receive learning with
 the wider ecosystem of Practice repos."*
 
 **Doctrine statement**: this repo ships to two distinct output
-surfaces, and both are real product. Throughput is per-surface, not
-aggregate. Curation work is not overhead; it is the repo's autonomic
-learning function, and its outputs flow into a cross-repo Practice
-Core network whose topology extends beyond this repo's git history.
+accounting axes, and both are real product. Throughput is per axis, not
+aggregate. Curation work is not overhead; it is how agents use the
+repo's Practice substrate to produce reusable learning, and its outputs
+flow into a cross-repo Practice Core network whose topology extends
+beyond this repo's git history.
 
-**Two output surfaces**:
+**Two output-accounting axes**:
 
 1. **Product code** — features for human users (gate-1a substrate
    floor in this session's case, MCP server, SDKs).
@@ -4111,13 +4149,12 @@ Core network whose topology extends beyond this repo's git history.
   the substrate codifying what it just observed, so the next session
   inherits the codification rather than re-deriving it.
 - Pre-handoff synthesis convergence (Foamy 23:08Z + SVW 23:09Z +
-  Velvet 23:10Z without coordination) is an autonomic function of
-  the substrate — the team converged on the right shape emergently.
-  This is the substrate emitting right-shaped behaviour under load.
+  Velvet 23:10Z without coordination) shows agents responding to
+  Practice routines without a fresh coordination script. The team
+  converged on the right shape emergently under load.
 - Cure-1 emergent default (intent-scoped `--message-file` adopted by
   4 agents without coordination) is the workaround discipline
-  graduating from individual heads to a substrate default —
-  autonomic learning in motion.
+  graduating from individual heads to a substrate default.
 
 **Worked-instance of the failure mode this doctrine corrects**:
 Sparking's post-team-handoff metacognition (2026-05-23 ~08:00Z)
@@ -4130,8 +4167,8 @@ sharing that learning with kin." Owner caught it within minutes.
 
 **Cure shape**:
 
-1. **PDR candidate** — `pdr:knowledge-curation-as-second-output-surface`
-   — codifies the two-surface throughput model, the cross-repo Practice
+1. **PDR-072** — `pdr:knowledge-curation-as-autonomic-learning`
+   — codifies the two-axis throughput model, the cross-repo Practice
    Core topology, and the autonomic-function classification. Adjacent
    to PDR-046 (Layered Knowledge Processing) and PDR-067 (Surface
    Classification for Fitness Response) but distinct in scope: PDR-046
@@ -4145,15 +4182,15 @@ sharing that learning with kin." Owner caught it within minutes.
    distinct function.
 
 **Falsifiability check**: a future agent assessing a team-session
-should now produce a per-surface throughput table (product-code +
+should now produce a per-axis throughput table (product-code +
 Practice-Core-substrate) instead of a single aggregated table. If
 they default to single-surface aggregation, the doctrine is not yet
 graduated to reflex.
 
-**Trigger condition**: `owner-direction` — the framing was
-owner-stated explicitly in this session. Graduation is gated on
-owner ratification of the PDR draft and authorship of the principles
-amendment.
+**Residual trigger condition**: execute the downstream Core amendments
+selected by PDR-072. Do not create a new `principles.md` surface; carry
+the concept into `practice.md` and/or `practice-lineage.md` according
+to their existing functions.
 
 **Adjacent unresolved tensions**:
 
