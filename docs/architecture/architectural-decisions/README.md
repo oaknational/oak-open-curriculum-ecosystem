@@ -248,6 +248,15 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-181: Agent Team Start Ritual and Action-Trace Surface](181-agent-team-start-and-action-log.md)
   (`start-right-team`, emergent temporary responsibilities, team handoff
   routing, and future action-trace event surface; Proposed)
+- [ADR-182: Mid-Cycle Handoff Record Substrate](182-mid-cycle-handoff-record-substrate.md)
+  (handoff records, `handoff_record_path`, and `mid-cycle-handoff`
+  directed-message value for token-bounded handoff; Proposed)
+- [ADR-183: Comms-Event Tag Namespace Substrate](183-comms-event-tag-namespace-substrate.md)
+  (`tags` field on comms events, initial failure-mode / behaviour-note
+  namespace, and watcher tag-token rendering; Accepted 2026-05-22)
+- [ADR-184: Comms-Event Sync Kind and Urgency Field](184-comms-event-sync-kind-and-urgency-field.md)
+  (two-axis separation: `sync` as interaction shape and `urgency` as
+  response priority; Proposed 2026-05-23)
 
 ## Key Architectural Decisions
 
