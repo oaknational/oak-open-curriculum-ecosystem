@@ -135,17 +135,31 @@ export function serialiseSegments(segments: readonly string[]): JsonPointer {
 // =====================================================================
 
 /**
- * 1-indexed line/column position from a Turtle source document, as
- * surfaced by n3.js parser internals.
+ * 1-indexed line/column position from a Turtle source document.
  *
  * Distinct from `JsonPointer` because Turtle is not JSON; applying
  * RFC 6901 to a Turtle document would fabricate a synthetic JSON
  * wrapper that references an internal model artefact rather than
  * the actual source.
+ *
+ * **`line` / `column` may be `null`** when the parser cannot
+ * unambiguously resolve the source position. The honest case from
+ * the `ws2-source-map-parser-integration` cycle: n3.js v2.0.3
+ * genuinely hides per-quad token position from the public + private
+ * APIs (verified in `node_modules/n3/src/N3Parser.js:1079-1082` —
+ * the `_emit` method receives only quad terms, never the token).
+ * The Turtle parser pre-splits the source into a line index and
+ * post-correlates quads to lines by scanning for the subject IRI;
+ * compound triples like `ex:a ex:p ex:b, ex:c ;` produce two quads
+ * from one line, only one of which can be unambiguously located.
+ * The unresolvable case emits `{ line: null, column: null }`. The
+ * column position is currently always `null` (line-level
+ * resolution only); preserved in the type for forward compatibility
+ * if a future n3 release exposes column info.
  */
 export interface TurtleSourceLocation {
-  readonly line: number;
-  readonly column: number;
+  readonly line: number | null;
+  readonly column: number | null;
 }
 
 // =====================================================================
@@ -165,7 +179,11 @@ export interface TurtleSourceLocation {
  */
 export type SourceLocation =
   | { readonly kind: 'json-pointer'; readonly pointer: JsonPointer }
-  | { readonly kind: 'turtle-location'; readonly line: number; readonly column: number };
+  | {
+      readonly kind: 'turtle-location';
+      readonly line: number | null;
+      readonly column: number | null;
+    };
 
 // =====================================================================
 // quadKey + SourceMap
