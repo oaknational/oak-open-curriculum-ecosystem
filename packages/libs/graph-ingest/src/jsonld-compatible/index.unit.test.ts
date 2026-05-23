@@ -1,4 +1,4 @@
-import { namedNode, quad } from '@oaknational/graph-core/data-factory';
+import { literal, namedNode, quad } from '@oaknational/graph-core/data-factory';
 import type { JsonLdDocument } from '@oaknational/graph-core/jsonld';
 import { describe, expect, it } from 'vitest';
 
@@ -44,22 +44,10 @@ describe('parseJsonLdCompatible', () => {
     expect(
       dataset.has(quad(namedNode(EX_ADA), namedNode(RDF_TYPE), namedNode(SCHEMA_PERSON))),
     ).toBe(true);
-    // The name/jobTitle quads carry literal objects, which is what the
-    // invariant-2 contract test exercises across both parsers; the
-    // membership check here uses structural Quad equality so it
-    // suffices to verify the predicate and subject.
-    let nameFound = false;
-    let jobTitleFound = false;
-    for (const q of dataset) {
-      if (q.predicate.value === SCHEMA_NAME && q.subject.value === EX_ADA) {
-        nameFound = true;
-      }
-      if (q.predicate.value === SCHEMA_JOB_TITLE && q.subject.value === EX_ADA) {
-        jobTitleFound = true;
-      }
-    }
-    expect(nameFound).toBe(true);
-    expect(jobTitleFound).toBe(true);
+    expect(dataset.has(quad(namedNode(EX_ADA), namedNode(SCHEMA_NAME), literal('Ada')))).toBe(true);
+    expect(
+      dataset.has(quad(namedNode(EX_ADA), namedNode(SCHEMA_JOB_TITLE), literal('Engineer'))),
+    ).toBe(true);
   });
 
   it('returns deterministic Datasets on repeated parses of the same document', async () => {

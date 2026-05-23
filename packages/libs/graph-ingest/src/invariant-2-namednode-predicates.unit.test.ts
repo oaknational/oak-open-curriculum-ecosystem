@@ -22,6 +22,14 @@ import { describe, expect, it } from 'vitest';
 import { parseJsonLdCompatible } from './jsonld-compatible/index.js';
 import { parseTurtle } from './turtle/index.js';
 
+// The invariant-2 contract test uses smaller fixtures than the
+// parser-specific unit tests (3-quad Turtle here vs 5-quad SKOS in
+// `turtle/index.unit.test.ts`; 2-quad JSON-LD here vs 3-quad Person
+// in `jsonld-compatible/index.unit.test.ts`). The smaller fixtures
+// isolate the invariant under test (every emitted edge carries a
+// NamedNode predicate) from richer boundary coverage that belongs
+// in the per-parser test files — the minimum-viable fixture that
+// produces at least one edge in each parser path.
 const TURTLE_FIXTURE = String.raw`
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix ex: <https://example.test/concepts/> .
