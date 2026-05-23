@@ -4415,3 +4415,146 @@ file-naming. Pattern home: new
 Single instance; pending second observation to confirm the cure shape
 or escalate to "structural-cure-required" (e.g. SKILL section on
 multi-session shared-state tempfile discipline).
+
+### 2026-05-23 — SKILL amendment: Director ratification checklist + three-mode standby (start-right-team §3)
+
+`[captured: 2026-05-23 | source: pattern-emergence | target: skill-amend:start-right-team | trigger: second-instance | size: M | status: pending]`
+
+Substance summary: PDR-074 (Candidate, 2026-05-23) names a routing-moment ratification checklist (6-7 per-moment + 4 periodic structural questions per assumptions-expert finding 4 + 5) and a three-mode standby model (silent / substrate-work / routed-slice) as the operational core of effective directing. These belong on the active grounding layer for any agent holding the Director role. The SKILL surface `start-right-team` §3 ("Choose Temporary Responsibilities") is the natural home — it is already read at every team-bootstrapping moment and at every Director handoff (PDR-064 Moment 2).
+
+Cure shape: amend `start-right-team` §3 to embed (a) the routing-moment ratification questions verbatim from PDR-074 §"Routing-moment ratification checklist", (b) the four periodic structural questions (S1–S4), and (c) the three-mode standby model with holding-reason articulation as a Director obligation for any standby period >5 minutes. Cross-link to PDR-074 as substrate authority.
+
+Why pending: PDR-074 is currently `Candidate`; second-instance evidence (a second multi-Director session ratifying the model in practice) is the natural promotion gate. The 2026-05-23 Seaworthy + Velvet + Seaworthy-acting windows are the first instance; a second window applying the checklist in real time strengthens the case from candidate → graduation-ready.
+
+Falsifiability: a future Director session that ratifies decisions against the checklist and produces measurably tighter signal-to-noise / lower owner-attention split / lower busy-work output is the success shape. A session that finds the checklist unwieldy or its questions miscalibrated against real routing moments is the failure mode that revises the substance before graduation.
+
+---
+
+### 2026-05-23 — Rule pointer: director-ratification-checklist (active grounding layer)
+
+`[captured: 2026-05-23 | source: pattern-emergence | target: rule:director-ratification-checklist | trigger: second-instance | size: S | status: pending]`
+
+Substance summary: thin pointer rule at `.agent/rules/director-ratification-checklist.md` that fires whenever an agent holds the Director role, referencing the `start-right-team` SKILL §3 amendment (sibling entry above) for the actual checklist + standby model body. Two-layer pattern matches the existing estate: SKILL holds the substance, rule provides the always-loaded trigger pointer (per the directive-file-context-budget rule and `feedback_30_percent_context_for_directives`).
+
+Cure shape: single-paragraph rule file naming the trigger condition ("when this agent is acting Director — newly assigned, on handoff receipt, or for the duration of a held Director window") and pointing to the SKILL amendment for substance. No content duplication; pure routing surface.
+
+Why pending: gated on (a) PDR-074 promotion from Candidate → Accepted and (b) the sibling SKILL amendment landing. The rule is meaningless without the SKILL substance to point at, so it must land second.
+
+Falsifiability: a Director session that lands the rule first, finds the SKILL substance has drifted from the checklist text, and the rule pointer dangles is the failure mode. Coordinated landing (SKILL first, rule pointer second, both in the same consolidation pass) is the success shape.
+
+---
+
+### 2026-05-23 — Autonomy primitive P1: pre-positioned routing logic (rule + SKILL amendment)
+
+`[captured: 2026-05-23 | source: pattern-emergence | target: multi:rule:pre-positioned-routing,skill-amend:start-right-team | trigger: second-instance | size: M | status: pending]`
+
+Substance summary: PDR-074 §"Autonomy-tend obligation" P1 names pre-positioned routing as a Director obligation: every owner-decision-gated slice carries pre-positioned routing in the comms stream, contingent on verdict shape. Post-verdict moves become light-up of pre-existing intent, not re-think. This shrinks the owner-attention window from "decide + wait for routing + ratify routing" to "decide; routing already in place."
+
+Worked instance: Velvet Dimming Shadow's Tranche C/B/A pre-positioning broadcast (2026-05-23 Director window) named the routing for each tranche before the owner verdict on tranche ordering arrived. When the verdict landed, agents lit up against the pre-positioned slots rather than re-evaluating.
+
+Cure shape: (a) rule at `.agent/rules/pre-positioned-routing.md` naming the obligation and the failure mode (reactive post-verdict routing); (b) SKILL amendment to `start-right-team` §3 listing pre-positioning as one of the routing-moment ratification questions (already Q1 in PDR-074 §"Routing-moment ratification checklist"). The rule is the always-loaded trigger; the SKILL is the substance.
+
+Why pending: one strong worked instance so far (Velvet's Tranche C/B/A). Second instance in a different Director window, with a different verdict-gated slice, confirms the primitive before formal graduation.
+
+Falsifiability: a Director session where the owner decision arrives and the team scrambles to re-evaluate routing (rather than lighting up pre-positioned slots) is the failure mode. A session where the routing was pre-positioned and the verdict produced immediate light-up is the success shape.
+
+---
+
+### 2026-05-23 — Autonomy primitive P2: owner-decision-elision via substrate-resolution (rule-shaped)
+
+`[captured: 2026-05-23 | source: pattern-emergence | target: rule:owner-decision-elision-via-substrate | trigger: second-instance | size: M | status: pending]`
+
+Substance summary: PDR-074 §"Autonomy-tend obligation" P2 names a first-ratification-question discipline: when a decision arrives at the Director surface, the first question is *can the team resolve this via reviewer-dispatch, sidebar, or vote?* If yes, route to substrate; only escalate to owner with substrate-resolution-attempted-and-failed evidence. The primitive shrinks the owner-action surface one decision at a time by tagging every owner-decision arrival with a substrate-resolution check.
+
+Complements per-user memory `feedback_no_question_when_answer_is_forced` (don't surface multiple-choice when analysis already determines the answer) and `feedback_owner_action_is_not_a_cure` (owner intervention is a stopgap, never the architectural goal). P2 names the active discipline that operationalises both: every owner-decision arrival is a candidate for substrate-resolution elision.
+
+**Load-bearing constraint** (per architecture-expert-fred + assumptions-expert review): substrate-resolution is *attempted-and-evidenced*, not silent elision. When the team escalates, evidence-of-substrate-attempt-and-failure accompanies the escalation. This protects against silently skipping owner-decisions that genuinely require owner attention.
+
+Cure shape: rule at `.agent/rules/owner-decision-elision-via-substrate.md` naming (a) the first-ratification-question wording, (b) the three substrate-resolution paths (reviewer-dispatch, sidebar, vote), (c) the substrate-attempted-and-failed evidence requirement when escalation is necessary. Sits adjacent to `feedback_no_question_when_answer_is_forced` and the no-cheap-cure / no-passback rule estate.
+
+Why pending: PDR-074 is the first explicit naming; second-instance evidence (a Director session that visibly elides an owner-decision via substrate-resolution and the elision holds) is the promotion gate.
+
+Falsifiability: a session where the Director escalates a decision to the owner that the team could have resolved via sidebar or reviewer-dispatch (and the owner says so) is the failure mode. A session that runs the substrate-resolution check and either elides successfully or escalates with substrate-attempted-and-failed evidence is the success shape.
+
+---
+
+### 2026-05-23 — Autonomy primitives P3 + P4: standing-direction graduation + slice-routing self-selection (multi-rule)
+
+`[captured: 2026-05-23 | source: pattern-emergence | target: multi:rule:standing-direction-graduation,rule:slice-routing-self-selection | trigger: second-instance | size: M | status: pending]`
+
+Substance summary: PDR-074 §"Autonomy-tend obligation" names two paired primitives that together shrink the owner-action surface at session boundaries and slice-opening moments:
+
+- **P3 (standing-direction graduation)**: the Director actively identifies owner-direction substance worth graduating to standing rules at session close and routes the graduation work to an implementer — rather than waiting for the owner to manually trigger consolidation. Closes the loop between session-scoped direction (`feedback_owner_direction_scope` — direction is session-scoped unless explicitly standing) and the standing-rule estate.
+
+- **P4 (slice-routing self-selection)**: when a slice opens, the Director broadcasts *slice + substrate authority + criteria for fit* and lets agents self-elect via comms with their own fit-assessment. The Director ratifies if multiple elect (first-broadcast convention) or if no one elects (escalate). Shrinks the Director-as-allocator bottleneck named in PDR-074 structural property D.
+
+Partial worked-instance evidence: Clouded's transparent self-organisation broadcast (Velvet handoff §6.2) — agents self-electing into substrate work against Director-broadcast criteria.
+
+Cure shape: two co-landing rules — `.agent/rules/standing-direction-graduation.md` (Director obligation at session-close) and `.agent/rules/slice-routing-self-selection.md` (broadcast-and-self-elect protocol for slice opening). Cross-link each other and PDR-074.
+
+Why pending: P3 has no clear worked instance yet (no session has visibly run the graduation routing as a Director closeout move); P4 has partial evidence (Clouded broadcast) but no second instance. Both promote together because they pair structurally (P3 names the substrate, P4 names the routing protocol that lights it up).
+
+Falsifiability: a session that closes with owner-direction substance left un-graduated and the next session re-discovering the same substance is the P3 failure mode. A slice-opening moment where the Director allocates manually rather than broadcasting criteria-and-self-elect is the P4 failure mode. Co-application of both, with the substance landing as standing rules and slices lighting up via self-election, is the success shape.
+
+---
+
+### 2026-05-23 — Autonomy primitive P5: Director self-selection protocol (CANDIDATE — no worked instance yet)
+
+`[captured: 2026-05-23 | source: pattern-emergence | target: pdr:P5-director-self-selection | trigger: candidate | size: L | status: pending]`
+
+Substance summary: PDR-074 §"Autonomy-tend obligation" P5 (now deferred from PDR-074 main body per assumptions-expert review) names a Director self-selection protocol: when a Director retires, propose a named candidate for next Director in the Moment 1 broadcast with explicit criteria; the candidate self-ratifies or declines; other agents can challenge; owner intervenes only if the team cannot resolve. Shrinks the owner-action surface for one of the highest-friction handoffs (PDR-064 Moment 1 is currently owner-driven).
+
+**Explicit status: CURRENTLY UNPROVEN.** Both 2026-05-23 Director transfers (Seaworthy → Velvet → next) were owner-directed; no session has yet demonstrated the team self-selecting a Director on retirement with owner ratification post-hoc. Deferred per assumptions-expert review during PDR-074 authoring.
+
+Cure shape: own PDR (not a rule) because the protocol is large enough to warrant separate substrate authority — Moment 1 broadcast format, criteria-naming convention, challenge window, escalation path, and the team-can't-resolve owner-fallback. Specifically (per architecture-expert-fred finding 2): bounded challenge window with explicit timeout interlocking with PDR-064 Moment 2 cadence; if no Moment 2 active-ack within bounded window, escalate to owner. PDR drafting itself is gated on first worked instance.
+
+Why pending (with `candidate` trigger): no second-instance gate applies because there is no first-instance evidence yet. The trigger condition is *first worked instance* — a session where the team self-selects a Director on retirement (Director proposes candidate; candidate ratifies; no challenge or resolved challenge; owner ratifies post-hoc). Capture-only until that instance lands.
+
+Falsifiability: a session that attempts P5 and the team-can't-resolve fallback fires (owner must intervene anyway) is the failure mode that revises the protocol. A session where the protocol runs end-to-end without owner intervention until post-hoc ratification is the first-instance success and unblocks PDR drafting.
+
+---
+
+### 2026-05-23 — Three-mode standby model with Director holding-reason articulation (SKILL amendment)
+
+`[captured: 2026-05-23 | source: pattern-emergence | target: skill-amend:start-right-team | trigger: second-instance | size: M | status: pending]`
+
+Substance summary: PDR-074 §"Idle-cost balance" names a three-mode standby model that converts the Director's standby-handling from invisible failure-mode to observable state. Three modes:
+
+- **Silent standby** — Director has articulated an explicit holding-reason; agents read comms, hold context; minimal idle cost, zero busy-work risk.
+- **Substrate work** — Director has named a substrate-work boundary, OR agent self-elects from an authorised standing list (pattern-completion-only: failure-mode capture, reviewer brief preparation, pre-grounding on slices already named in the comms stream, napkin updates, comms-read-forward). Pattern-creation (inventing PDRs, proposing tranches, drafting plans, refactoring unprompted) is NOT authorised substrate work.
+- **Routed slice** — Director has routed an opened slice; normal focused implementer cost profile.
+
+**Director obligation**: every standby period >5 minutes carries an explicit Director-articulated holding-reason in the comms stream. Three legitimate shapes per PDR-074: (a) holding for owner-attention coherence (silent default), (b) holding for gate-clear / cascade-clear (silent default), (c) holding open for substrate work with an authorised standing list (agents self-elect).
+
+Cure shape: amend `start-right-team` SKILL §3 to embed the three-mode model and the holding-reason-articulation obligation alongside the ratification checklist (sibling Entry 1). The pattern-completion-only constraint on substrate work is load-bearing — without it, idle agents drift into pattern-creation busy-work, which PDR-074 names as worse than idle.
+
+Why pending: PDR-074 is `Candidate`; second-instance evidence (a Director session that runs the three-mode model with visible holding-reason broadcasts and clean substrate-work / pattern-creation boundary) is the promotion gate. The 2026-05-23 sessions are first-instance.
+
+Falsifiability: a session where standby periods >5 minutes carry no articulated holding-reason, OR where "substrate work" drifts into pattern-creation (unsolicited PDRs, unprompted tranche proposals), is the failure mode. A session where every standby period carries an explicit holding-reason and substrate-work stays inside the pattern-completion list is the success shape.
+
+---
+
+### 2026-05-23 — comms-watch self-exclusion correctness cure plan (filter-too-broad bug)
+
+`[captured: 2026-05-23 | source: comms-log+napkin | target: multi:code:agent-tools/src/collaboration-state/comms-relevant-events.ts,test:agent-tools/tests/collaboration-state/comms-relevant-events.unit.test.ts,doc-amend:.agent/reference/comms-watch-mechanism.md | trigger: owner-direction | size: M | status: due]`
+
+Substance summary: cure plan for a `classifyDirected` + `classifyNarrative` filter-too-broad bug exposed by failure-mode broadcast `c7fba7db` (2026-05-23 ~11:26Z). Lines 109–130 of `agent-tools/src/collaboration-state/comms-relevant-events.ts` implement addressee-filtering on directed and narrative events — returning `undefined` (filter out) when the addressee is not self — despite the `start-right-team` SKILL §0 contract naming the filter as *self-exclusion only* (filter out only the events the current agent itself authored). The current implementation hides directed events addressed to other agents and narrative events naming other agents, both of which the broad-awareness contract requires the comms-watch to surface.
+
+Three unit tests at `agent-tools/tests/collaboration-state/comms-relevant-events.unit.test.ts` lines 179–213 encode the wrong contract (asserting the broader filter as correct), which is why the bug shipped under green tests.
+
+**View-token verdict**: `'observed'` 5th `EventView` value confirmed by acting-Director Seaworthy 2026-05-23 ~11:38Z based on Twilit Lane T1 audit (zero exhaustiveness ripple; single-line type widen) + Incandescent downstream-consumer audit converging on same. Cure code authoring routed to Abyssal Mooring Hull (TDD-shape: 3 failing tests → invert wrong-contract tests → fix classifiers → widen EventView + update TSDoc + update reference doc).
+
+Cure shape (TDD discipline): (1) author three new failing tests encoding the correct self-exclusion-only contract — directed events to other agents visible as `'observed'`, narrative events naming other agents visible as `'observed'`, self-authored events filtered; (2) invert or replace the three wrong-contract tests at lines 179–213; (3) fix `classifyDirected` and `classifyNarrative` to return `'observed'` (not `undefined`) when the addressee is not self.
+
+Why due (not pending): owner-direction has placed this on the critical path per the 2026-05-23 acting-Director routing. The trigger fired at broadcast time; this entry exists to track the cure-plan substance under the existing register convention rather than as a free-floating napkin note.
+
+Cross-references:
+
+- Failure-mode broadcast: comms-event `c7fba7db` (2026-05-23 ~11:26Z) — names the bug, the three test-line-range citations, and the visibility-token decision (now resolved).
+- Substrate authority: `start-right-team` SKILL §0 ("Start The All-Channels Comms Monitor") — names the self-exclusion-only contract the implementation violates.
+- Adjacent doctrine: per-user memory `feedback_watch_both_broadcast_and_directed` (graduated 2026-05-21 to SKILL §0) names the correctness obligation that comms-watch makes load-bearing.
+- PDR-074 structural property C ("comms-stream-as-canonical-truth … makes comms-watch correctness load-bearing") names this bug as a Director-substrate concern, not a transport-layer detail.
+
+Falsifiability: a fix that lands without the `'observed'` view-token decision (silent design drift) is the process failure mode. A fix that lands TDD-style with three failing-tests-first, the three wrong-contract tests inverted, and the `'observed'` view-token chosen explicitly is the success shape.
+
+---

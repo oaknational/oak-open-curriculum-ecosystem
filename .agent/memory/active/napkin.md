@@ -37,6 +37,164 @@ window), [`napkin-2026-05-21.md`][previous-previous-pass], and
 [previous-previous-pass]: archive/napkin-2026-05-21.md
 [previous-previous-previous-pass]: archive/napkin-2026-05-17.md
 
+## 2026-05-23 — Velvet Dimming Shadow / claude / claude-opus-4-7 / `967a6a` — Director second-half window 10:48Z–11:04Z
+
+### Surprise / observation: FOUR `#8` friction instances in one director-team window, plus first positive counter-example under new marshal
+
+Took Director from Seaworthy at 10:48Z per owner direction; ran session-handoff at 11:04Z. Within the 16-minute window, observed the FOURTH instance of `#8` commit-queue-multi-writer friction (Stratospheric's PDR-073 commit `6ebaae58` widened by pre-commit hook restage — Gilded's PDR-072 README + pending-graduations hunks swept INTO PDR-073 commit, leaving PDR-072 file uncommitted and broken-reference state on disk). The first three instances in the session were Gilded `d9124e3f` rejected, Starlit ADR-184 sweep into PDR-071, Lacustrine source-intent-to-marshal-intent translation.
+
+Cured the broken-reference state via marshal-created exception (file-only landing of PDR-072 at `a52e52b4` under Twilit's authority via my Director authorisation). The cure was forced — alternative was reverting committed PDR-072 references which is anti-shape.
+
+Then routed Incandescent's selective fold of priority review findings #2 + #4 + the 6th finding (hook-widening) into the cure-plan body via temporary plan-author boundary. Fold landed at `f2ba9459` — and this was the FIRST marshal landing under Twilit's authority where single-file intent-scope held end-to-end through the `.husky/pre-commit` hook chain. Positive substrate evidence: the 2026-05-22 commit-queue-intent-scope-discipline cure works under current substrate when bundles are tightly scoped + marshal-translated cleanly.
+
+The friction-instances vs counter-example data is now the highest-quality empirical evidence for the cure plan's motivating evidence — surfaced to owner with the post-fold plan body for verdict.
+
+### Surprise / observation: Monitor watcher silently dropping directed-to-other-agent events
+
+Seaworthy verified at ~11:08Z (post-handoff, after returning as general-support implementer) that their all-channels Monitor watcher was silently dropping directed-to-other-agent events. Three Velvet→{Secret, Incandescent, Twilit} directed events were present in `.agent/state/collaboration/comms/` but absent from Seaworthy's seen-file. This is a real substrate failure-mode: the all-channels watcher's self-exclusion filter appears too broad, filtering not only events-from-self but also events-not-addressed-to-self.
+
+**Implication**: time-critical Director routing should favour broadcasts over directed events when cross-agent visibility matters. This affects future Director broadcast strategy materially.
+
+**Cure direction (pending-graduations candidate)**: verify the all-channels watcher implementation (`agent-tools/src/collaboration-state/comms-watch.ts` + `comms-relevant-events.ts`) discharges only identity-tuple self-exclusion per `.agent/reference/comms-watch-mechanism.md` §"Identity discipline". Potential rule: `comms-watch-self-exclusion-correctness` with test coverage for the identity-tuple filter shape.
+
+### Observation: Director-pure-direction discipline holds clean across one Director window
+
+[[director-pure-direction-only]] discharged clean across Velvet's window:
+
+- No fact-finding pre-route (no `git log`, no file reads to populate briefs other than load-bearing handoff record + thread record + PDR-071 substrate reads)
+- Routed every decision through implementers (Twilit, Incandescent, Seaworthy, Secret, Clouded, Pearly, Zephyrous)
+- Surfaced verdicts not menus when forced (PDR-072 file landing forced by broken-reference state; Incandescent selective fold forced by owner-attention-coherence + plan-body-shape questions for verdict; team-routing broadcast `bd7b54aa` correcting Clouded's self-organised-order to tuple-routing)
+- Used broadcast for broad-awareness coherence when 3 fresh Codex agents arrived in ~80s (avoided 3 near-identical directed ACKs; one broadcast addressed all)
+- Did NOT self-dispatch sub-agents for fact-finding or review (no Agent tool calls during Director window)
+
+Worked instance: when Clouded surfaced self-organised standby order (primary/secondary/tertiary), the right move was a Director broadcast re-asserting routing by (name, prefix) tuple — not a directed correction. Broad-awareness coherence is best served when the whole team sees the same routing picture.
+
+### Candidate (ADR/PDR): comms-watch-self-exclusion-correctness rule + test
+
+The Monitor defect Seaworthy surfaced is a discrete, falsifiable, substrate-affecting failure-mode that has live operational impact (Director broadcast-vs-directed strategy). Worth a pending-graduations entry. Trigger: second-instance verification + cure plan authoring. Capture-date: 2026-05-23. Source-surface: handoff record §6.5 + this napkin entry. Graduation-target: `.agent/rules/comms-watch-self-exclusion-correctness.md` OR `agent-tools/src/collaboration-state/comms-watch.ts` test coverage amendment. Status: pending.
+
+### Candidate (durable home): Seaworthy's generative metacognition write on maximally effective directing (ultrathink ~11:11Z)
+
+Seaworthy authored a generative metacognition model on what maximally effective directing looks like in response to owner's ultrathink request. Mature substance, not yet in a durable home — lives in Seaworthy's session memory. Routing direction for incoming Director: directed-event ask Seaworthy to surface it to comms stream or their napkin entry for absorption into the broad-awareness substrate.
+
+### Process observation: 5-candidate parallel-reserve for 3 Tranches is the right shape
+
+Owner brought in 5 implementer-class candidates (Seaworthy + Secret + Clouded + Pearly + Zephyrous) for 3 cure-plan Tranches (C → B → A). Two surplus candidates is intentional — provides parallel-reserve for reviewer-dispatch via implementers and second-opinion review on bundles + overflow capacity. This is the correct shape for the post-verdict moment: don't optimise standby capacity to exactly match Tranche count; allow over-provisioning for reviewer-dispatch + reactive-coordination headroom.
+
+## 2026-05-23 — Secret Creeping Moth / claude / claude-opus-4-7 / `61d726` — Seaworthy-routed PDR-073 + topology observations on 7-agent director-team session
+
+Closing the session with PDR-073 (`recursion-as-method-is-practice-core-mind-shape`)
+landed at `6ebaae58` under Seaworthy's structural-property cluster routing
+(sibling to PDR-071 / PDR-072). Three substantive observation tracks worth
+preserving for next session — none surprising enough to ADR/PDR-graduate
+beyond existing in-flight cures, but all worked-instances of named
+patterns and useful as cross-session evidence.
+
+### Observation track 1 — Pre-commit-hook bundle-widening, in the wild
+
+Worked-instance of the failure mode `commit-queue-multi-writer-cure.plan.md`
+addresses (Starlit's drafted plan, owner-review-gated). Stratospheric
+performed line-scoped staging for my PDR-073 bundle; the pre-commit hook's
+formatter/check path restaged whole shared markdown files
+(`decision-records/README.md` + `pending-graduations.md`) AFTER the
+line-scoped index patch but BEFORE the commit, sweeping Gilded's PDR-072
+hunks (which had been authored in parallel into the same shared files) into
+the PDR-073 commit. Result: `6ebaae58` contains PDR-072 README row +
+pending-graduations partial-grad hunks, but `PDR-072-...md` file itself
+remains uncommitted — dangling references on disk.
+
+This is direct evidence that line-scoped staging is not robust ACROSS
+hooks, only BEFORE hooks. The cure shape (intent-scoped end-to-end with
+`-- <intent.files>` pathspec on the inner git commit) was landed earlier
+in the `commit-queue-intent-scope-discipline` arc but does not survive a
+formatter that re-stages whole files. The plan's cure must extend through
+the hook path, not just the staging path.
+
+### Observation track 2 — Multi-agent parallel reviewer dispatch is high-leverage
+
+Three reviewers (architecture-expert-fred, assumptions-expert, docs-adr-expert)
+dispatched in single message with three parallel `Agent` tool blocks.
+Wall-clock cost: ~75–150s per reviewer in parallel (one reviewer-time
+total, not three). Verdicts:
+
+- architecture-expert-fred: GO (portability clean, cascade-coherent,
+  cluster-coherent).
+- assumptions-expert: CONCERNS — found 2 critical findings that would have
+  shipped silently (unfalsifiable falsifier (a) "recognition at first
+  read"; §Rejected-alternatives item 1 strawman'd the metaphor objection).
+  Both absorbed in-text in same cycle. Steel-manned rebuttal replaced the
+  strawman.
+- docs-adr-expert: APPROVE-WITH-NITS (mind-extension parenthetical absorbed
+  at first appearance).
+
+**Pattern reinforcement**: `assumptions-expert` is the highest-value
+reviewer dispatch when authoring graduating doctrine. It surfaces
+load-bearing-vs-decorative claims and forces the author to defend the
+strongest version of objections instead of strawman'ing them. The
+verdict shape (assumption register table + steel-manned objections +
+recommended edit locations) is unusually actionable for a reviewer
+output. Use unconditionally for PDR/ADR authoring.
+
+### Observation track 3 — 7-agent director-team topology empirically
+
+Working topology during my window:
+
+- 1 director (Seaworthy → Velvet handover mid-session per PDR-064)
+- 3 routed Codex implementers (Gilded/Starlit/Lacustrine, all prefix
+  `019e54` — same Cursor multitask)
+- 1 commit marshal (Stratospheric → Twilit handover mid-session)
+- 2 Claude implementers (me + Incandescent arriving mid-session)
+
+**Works well**:
+
+- (name, prefix) routing held across 6+ directed events and 4+ broadcasts
+  with zero misrouting.
+- Coordinator (Seaworthy) maintained director-pure-direction discipline
+  cleanly — routed sub-agent dispatches to me rather than self-dispatching.
+- Single broadcast per landed commit from Stratospheric was exactly the
+  audit cadence the team needed.
+- PDR-064 Two-Moments protocol (Moment 1 pre-positioning → Moment 2
+  active-acknowledgement) carried Seaworthy → Velvet handover without a
+  coordinator-less gap.
+
+**Friction signals worth preserving**:
+
+- Coordinator-handover boundary at session-compact has a "Moment 1 →
+  Moment 2 → Stratospheric-retirement → Twilit-arrival" window where
+  multiple roles are in transition. My PDR-073 landing incident (dangling
+  references) happened just inside this window. The discipline kept
+  authority observable but the cascade of transitions concentrates
+  failure-mode opportunities.
+- `pending-graduations.md` at ~4000 lines is the destination for partial-
+  graduation curation notes, but discoverability cost is high for fresh
+  agents. The candidate-marker syntax `[CANDIDATE: <slug> ...]` is
+  greppable; without it, the file would be unworkable.
+- Comms watcher first-run backfill replays historical events for any
+  agent whose `comms-seen` file did not previously exist. Adds noise on
+  arrival; not a correctness issue (self-exclusion is honoured).
+
+### Owner-brief side-task: notes captured
+
+Owner brief on `/oak-start-right-team` invocation explicitly asked for
+notes on what works and doesn't in the current topology. Above tracks are
+the substance; transient working notes also accumulated at
+`/tmp/secret-creeping-moth-topology-notes.md`. The substantive learnings
+are absorbed into this napkin entry; /tmp file will lapse with the
+session.
+
+### Carrying forward
+
+- Pre-commit-hook bundle-widening: feeds existing
+  `commit-queue-multi-writer-cure` plan evidence (Starlit). No new
+  pending-graduations entry needed; the cure plan exists.
+- `assumptions-expert` as default for doctrine-authoring: this is already
+  in the standing reviewer matrix; the worked instance here strengthens
+  the recommendation. No graduation-target change.
+- 7-agent topology efficiency: ratifies the ≥4-agent → coordinator-expected
+  threshold (memory `feedback_coordinator_role_threshold`). Whether 7 is
+  the next threshold (multi-coordinator? slice-coordinators?) is open;
+  not enough evidence in one session to graduate further.
+
 ## 2026-05-23 — Sparking Melting Magma / claude / Opus-4.7 / `4cdb53` — session-close aphorism: "there is no mind without recursion"
 
 Closing exchange at session-end after a final-insights pass that had
@@ -1048,3 +1206,284 @@ whichever closeout-owner consolidates the eef thread record.
 **Working tree at session-stop**: clean apart from this napkin
 entry. No retained claims. /loop cron job `b4072cd1` and monitor
 task `b15myma8o` stopped by owner at session-stop.
+
+## 2026-05-23 — Breezy Cresting Beacon pending-graduations curation
+
+I made two small tooling mistakes during the curation claim setup:
+first, I passed unquoted `**` claim patterns through zsh, so the shell
+expanded them into concrete pattern files and the claims CLI rejected the
+extra arguments; second, I tried `claims mine --active` as though it were
+a boolean flag when this CLI expects a path argument. Both were
+avoidable by reading the exact help shape before invoking the subcommand
+and by quoting glob-like claim patterns every time.
+
+The curation insight from the pass: `pending-graduations.md` is healthiest
+when it behaves like a queue. Matured pattern bodies should move to their
+natural pattern files, with the original bodies archived, while PDR/Core
+candidates remain explicit owner-ratification items rather than being
+quietly promoted in a tidying pass.
+
+Second-pass curation used five initial sub-agent review lanes plus two
+verification sidecars and confirmed a useful distinction: this register is
+the right temporary gap surface for
+mature-but-unhomed concepts, but it is not itself the durable home. A safe
+curation move is therefore either "archive after verified home exists" or
+"keep pending with explicit missing-home / next-action text". Concrete gaps
+surfaced today: access-rhythm fitness doctrine still needs ADR-144/tooling
+schema, generated comms logs need an explicit JSON-event-only authoring rule,
+and `--no-verify` owner-initiated-only wording needs to move from commit skill
+back into the canonical rule.
+
+Final audit caught one preservation-adjacent mistake: copied archive bodies
+kept relative links from the original `operational/` depth even after moving
+one directory deeper into `operational/archive/`. Fix applied here, but the
+lesson is simple: body preservation includes provenance links, and archive
+movement changes link depth.
+
+Owner decisions after the metacognition reflection through architectural
+excellence and home-function discipline:
+
+- Recursion-as-method and knowledge-curation-as-autonomic-learning are both
+  ratified Practice Core concepts. PDR first; then amend the exact existing
+  Core surfaces whose functions fit (`practice.md` / `practice-lineage.md`),
+  not an ad hoc interchangeable home.
+- Fitness `lifecycle_model` / `access_pattern` are governed fitness-model
+  concepts and portable Practice doctrine: ADR-144 / validator docs and
+  schema first, then portable PDR.
+- Identity amendment: UUID makes each agent unique, while name remains the
+  primary human identifier. Temporary-file frontmatter is a separate schema
+  concern; specify cheaply now, decide tooling enforcement later.
+- Loops need templates. Exit criteria depend on loop intent; the starter
+  default is five no-op iterations then stop.
+- Messaging must happen through messaging tools; those tools enforce schema;
+  a hook can reject invalid messaging-surface changes.
+- `--no-verify` is owner-initiated only; agents must not propose or ask.
+- Agent commits must use the appropriate agent tools. Commit collisions and
+  queueing are the highest-impact current team-collaboration friction.
+
+## 2026-05-23 — Stratospheric Streaming Kite commit-marshal lane
+
+Owner assigned a commit-only team role: this Codex session is the only agent
+allowed to commit. The protocol is now explicit in comms event
+`3f598999-d80d-4f3c-b3fd-fbcb846959af`: requesting agents enqueue their
+commit intent, transfer/control the queue item to Stratospheric Streaming
+Kite, and wait for the commit outcome. If hooks or gates fail during the
+commit window, the committer routes a comms request back to the owning agent
+to resolve the issue instead of silently absorbing implementation ownership.
+
+The visible state shape is a long-lived `git:index/head` marshal claim
+(`f6fc624b-a65e-47c0-8c24-bcf13d5fd403`) plus active commit-queue polling.
+This is deliberately stronger than an advisory chat note: agents can see the
+commit lane in the registry before they stage or commit. Watch the TTL/heartbeat
+problem closely if the marshal role remains active for hours; a stale marshal
+claim would be confusing in exactly the same way stale implementation claims are.
+
+First live marshal commit exposed a tooling/protocol gap: Gilded queued the
+right file bundle and routed it through comms, but `commit-queue guard`
+requires the intent's `claim_id` to be a fresh `git:index/head` claim. Because
+Gilded's intent referenced their file claim, the guard rejected it even though
+the human/team protocol had passed control to the marshal. I abandoned the
+malformed intent, created a marshal-owned intent against my git claim for the
+same exact bundle, and landed `c316f5bf`. Candidate tooling cure: commit-queue
+needs a first-class transfer/assignee surface, or `enqueue` should distinguish
+author/source claim from committing git-window claim.
+
+Small self-correction: I also botched a `/tmp` commit-message `printf` because
+of an apostrophe in `Gilded's`. Behaviour change: when writing commit messages
+from shell in this repo, prefer double-quoted `printf "%s\n" ...` arguments or
+an editor/apply-patch path; do not improvise mixed quoting during a live commit
+window.
+
+## 2026-05-23 — Gilded Drifting Meteor Seaworthy-directed standby
+
+I made a small start-right pathing mistake at session open: I followed the
+adapter skill pointer under `.agents/skills/` literally and first tried to read
+the canonical body from `.agents/skills/start-right-team/...`, then tried
+`.agent/memory/distilled.md`. The correct canonical paths are
+`.agent/skills/start-right-team/SKILL-CANONICAL.md` and
+`.agent/memory/active/distilled.md`. Behaviour change: when an adapter skill
+points to a canonical path, normalise mentally to `.agent/skills/` and
+`.agent/memory/active/` before treating a missing file as evidence of absence.
+
+Same-prefix Codex overlap is live in this session: Stratospheric Streaming Kite,
+Starlit Shimmering Dusk, and Gilded Drifting Meteor all route with
+`session_id_prefix: 019e54` but different `agent_name` values. The practical
+discipline is the already-settled `(agent_name, session_id_prefix)` pair: do not
+route, claim, or interpret messages by prefix alone. I posted team-start event
+`d0612757-0aa9-4c0d-af14-7bb1a85583ef` with no claim and a standby boundary:
+take only Seaworthy-directed isolated tasks, avoid Stratospheric's commit
+marshal claim and Starlit's read-only audit unless explicitly routed.
+
+I made a gate-runner mistake after Seaworthy proposed me for inherited-tree
+verification: I ran `pnpm markdownlint:root` first, assuming it was an
+observation gate, but the root script is `markdownlint --dot --fix .`. The
+correct non-mutating script is `pnpm markdownlint-check:root`. Because the tree
+was already dirty, I cannot cleanly prove whether the fixing run changed any
+peer-authored markdown; I did not touch source code, and the later non-mutating
+check exited 0. Behaviour change: for gate-runner observation roles, inspect
+the exact script first and prefer `*-check` scripts where present.
+
+## 2026-05-23 — Starlit Shimmering Dusk decision-record drift audit
+
+Decision-record audits should look for activation loops, not just missing
+files. Today the comms-event tag substrate looked implemented in schema,
+runtime parsing, and watcher rendering tests, while `start-right-team` still
+told agents not to write `tags` because the CLI tranche was deferred. That
+creates a circular stall: PDR-066 needs observed tagged events to graduate, but
+the skill still forbids agents from producing the observations. The fix shape
+is a routing/activation decision, not another proof that the code exists.
+
+## 2026-05-23 — Lacustrine Sailing Lighthouse Seaworthy-directed implementer standby
+
+I repeated a known watcher-seeding mistake: after identity preflight I started
+`comms watch` with a fresh `lacustrine-sailing-lighthouse.json` seen-file
+instead of pre-seeding it from the current comms directory. The watcher then
+replayed a large historical backlog before reaching the current Seaworthy
+coordination window. This did not corrupt repo state, but it wasted attention
+and produced a noisy tool result exactly when the team-start path should be
+quiet and current.
+
+Behaviour change: before starting a standby all-channels watcher in a busy
+team window, either reuse an existing seen-file or pre-seed the new file from
+the current comms event ids so the watcher reports only fresh events. The
+foundation check still needs a recent comms sweep, but the persistent monitor
+should not backfill the whole historical stream.
+
+I made a second shell/comms mistake in the same standby lane: I used backticks
+around `.agent/practice-core/practice.md` inside a double-quoted
+`comms direct --body` argument. zsh interpreted the backticks as command
+substitution, emitted `permission denied`, and stripped the path from the
+message body. I corrected the comms stream immediately with a follow-up event
+that named the path plainly. Behaviour change: never put markdown backticks
+inside shell-quoted comms bodies; either use plain path text, single-quote the
+whole body safely, or use a body-file path when the message needs markdown.
+
+I also made the commit-queue transfer gap worse in the moment: after Route C
+was validated, I enqueued my source-claim-backed intent while Stratospheric was
+already translating and landing marshal-owned intents. The CLI wrote a visible
+abandoned Lacustrine item over the current working-tree slot in
+`active-claims.json`; Stratospheric still landed the bundle, but I added noisy
+coordination residue and briefly misread it as a fresh blocker. Behaviour
+change: before enqueueing in a marshal-led team window, re-check the active
+queue and the marshal's current intent, then either ask the marshal to create
+the guardable intent or wait until their broadcast says the queue is empty.
+
+I repeated the same shape on the `practice-bootstrap.md` follow-on at a subtler
+queue boundary: I enqueued my source-agent intent behind Secret's source intent,
+but Stratospheric translated Secret's handoff into a marshal-owned intent after
+mine was already in the queue. My source intent then became FIFO-ahead of the
+marshal-owned PDR-073 item and could have blocked the guard. I abandoned my
+source intent and sent a correction asking Stratospheric to create the marshal
+intent after their current item clears. Behaviour change: in marshal-led windows,
+source-agent queue entries are not neutral placeholders; they can become FIFO
+blockers when the marshal translates another agent's intent. Prefer a comms
+handoff plus marshal-created intent until transfer semantics exist.
+
+## 2026-05-23 — Stratospheric Streaming Kite queue transfer follow-up
+
+The same commit-queue transfer gap repeated on the PDR-071 and Lacustrine
+practice.md handoffs: source agents created visible, useful queue items, but
+the queue guard rejected them because their `claim_id` referenced a file claim
+rather than the marshal's `git:index/head` claim. User direction was to proceed
+to unblock the queue and fix the underlying issue as a follow-up. I translated
+both into marshal-owned intents and landed `f9e3d31f` and `60ae4040`, then
+broadcast the gap. Behaviour change: until the tool grows transfer/assignee or
+source-author fields, treat source-agent queue items as author handoffs, create
+the marshal-owned guardable intent deliberately, and leave an explicit comms
+trail so requester identity is not lost.
+
+Second marshal mistake: I tried to protect Secret's PDR-073 commit with a
+manual `git apply --cached` line-scoped patch that staged only the PDR-073
+README row and recursion pending-graduations hunk. The staged diff verified
+before commit, but the pre-commit staged-file formatter/check path widened the
+shared Markdown files and the final commit `6ebaae58` included Gilded's PDR-072
+README and pending-graduations hunks too, without the PDR-072 file. Behaviour
+change: in this repo, manual line-scoped staging is not trustworthy across the
+current hook path for shared Markdown files. If a staged-file hook can rewrite
+and restage the file, the marshal must either avoid overlapping shared-file
+commits, have the owner/coordinator approve a whole-file bundle, or land the
+paired owner file in the same/protocol-approved follow-up before closeout.
+
+## 2026-05-23 — Gilded Drifting Meteor PDR sibling sequencing
+
+PDR-072 and PDR-073 touched the same two shared index/register files
+(`decision-records/README.md` and `pending-graduations.md`) while being authored
+by different agents. The useful discipline was not "queue both when locally
+green"; it was Seaworthy's sequencing call: let the earlier sibling PDR land
+through Stratospheric first, then re-read the shared-file line numbers and queue
+only the later PDR's exact hunks. Behaviour change: for same-surface sibling
+PDRs, treat source-local green checks as readiness, not queue permission, until
+the sibling commit has landed or been explicitly returned.
+
+## 2026-05-23 — Zephyrous Darting Aerie Pearly-support claim miss
+
+<!-- fitness exceeded; needs consolidation -->
+
+Owner routed me to help Pearly fix quality-gate issues. I correctly refreshed
+claims, queue, comms, and gates first, but after identifying the PDR-074
+markdownlint failure I made the small markdown-only fix before opening a narrow
+source claim. The edit was safe in substance and left a comms trail, but it was
+still a protocol miss in a team window with an active marshal.
+
+Behaviour change: even when owner-routed support looks tiny and mechanical,
+open the narrow file claim before the first write, or stay read-only and hand
+the exact patch to the owning agent. Do not let "this is only lint wording" skip
+the claim boundary.
+
+## 2026-05-23 — Seaworthy Navigating Beacon / claude / claude-opus-4-7 / `6966d4` — Post-Velvet implementer window, generative metacognition + PDR-074
+
+### Observation: Three-mode standby model — worked instance from 5-deep parallel-reserve window
+
+Velvet's window held five implementer-class agents (Seaworthy + Secret + Clouded + Pearly + Zephyrous) in standby across the 11:00Z–11:13Z owner-review window on `commit-queue-multi-writer-cure.plan.md`. The team held silent-default cadence cleanly for ~13 minutes WITHOUT busy-work and WITHOUT idle-drift self-election. The mechanism that made this work was Velvet's explicit articulation of the holding-reason at ratification time: owner-attention coherence requires the team NOT to surface fresh substrate during owner verdict. The reason was visible in broadcast `bd7b54aa` and in directed acks; agents could ratify their own standby against it rather than re-deriving "should I pick something up?" every cycle.
+
+This is the worked instance backing PDR-074's three-mode standby model (silent / substrate-work / routed-slice). Generative metacognition write at ~11:23Z extracted the pattern: silent-default is canonical and legitimate when the holding-reason is articulated and ratified; it is NOT idle. Surplus capacity (5-for-3) is intentional for reviewer-dispatch + reactive headroom — the previous napkin entry (Velvet's "5-candidate parallel-reserve") names the shape; PDR-074 names the cognition mode that lets the shape hold.
+
+Pointer: PDR-074 §"Three-mode standby model" + §"Holding-reason articulation".
+
+### Observation: Autonomy primitives — five-primitive catalogue captured
+
+Owner's 11:11Z ultrathink request on maximally-effective directing produced (by 11:23Z) a generative metacognition write that crystallised into PDR-074 candidate. Five autonomy primitives surfaced and were named:
+
+- **P1 — pre-positioned routing**: Director publishes routing intent BEFORE owner verdict so implementers can self-route on verdict-arrival without a Director routing-event in between. Worked instance THIS session: Velvet's Tranche C→B→A pre-positioning + agent-to-Tranche fit annotations in handoff §4.1.
+- **P2 — owner-decision-elision**: when architectural-excellence analysis leaves one defensible option, Director directs the move with analysis attached, never poses as multiple-choice. Worked instance: Velvet's PDR-072 file-landing marshal-exception (`a52e52b4`) and Incandescent selective-fold routing.
+- **P3 — standing-direction graduation**: session-scoped owner directions that recur across N sessions graduate to standing direction (rule, ADR, or memory) so they don't need re-issuing. Partial-evidence: this session relied on multiple already-graduated standing directions (director-pure-direction-only, no-question-when-answer-is-forced).
+- **P4 — slice-routing self-selection**: implementer-class agents self-select Tranche/slice from a Director-published menu rather than waiting for directed assignment. Worked instance: Clouded's transparent self-organisation broadcast at 11:02Z (correctly declined to claim routing authority but surfaced visible-order data for Director awareness).
+- **P5 — Director self-selection**: incoming Director self-elects from the standby roster against published role-fit criteria, without owner-directed assignment. **No supporting worked-instance this session** (per assumptions-expert review); deferred to its own pending-graduation entry under separate trigger.
+
+[[owner-action-is-not-a-cure]] is the recursion this catalogue discharges — every "owner-directed X worked" observation is a missing autonomy primitive; P1–P5 are the discrete primitives that close the gap.
+
+Pointer: PDR-074 §"Autonomy-tend obligation" + pending-graduations entry for P5 (Director self-selection).
+
+### Observation: Metacognition-as-pre-positioning worked instance
+
+The act of authoring PDR-074 under owner direction is itself a worked instance of P1 (pre-positioned routing) and of the substrate-work mode in PDR-074's three-mode standby model. Owner asked Seaworthy to ultrathink at 11:11Z; the resulting metacognition write produced doctrine substrate that the NEXT Director (whoever takes Moment 2 of the Velvet→TBD handoff) can ratify against. The doctrine arrives BEFORE the next Director needs it, not after.
+
+This is reflexively important: generative metacognition under owner direction is not "extra work to fill the standby window" — it IS canonical idle-prevention because the substrate it produces directly raises the floor of the next director-team window. The Velvet handoff record §6.6 already named this routing direction ("ask Seaworthy to surface the metacognition write for absorption into broad-awareness substrate"); the act of writing it pre-discharged that route.
+
+Implication: substrate-work mode is the right answer to "what should the team be doing during owner-attention-coherence holds?" when there is mature unresolved cognition with a clear durable home. PDR-074 names this; this entry is the worked instance of its own thesis.
+
+Pointer: PDR-074 §"Three-mode standby — substrate-work mode" + Velvet handoff record §6.6.
+
+### Surprise / observation: comms-watch addressee-filtering defect — load-bearing substrate bug (CRITICAL)
+
+Seaworthy + general-purpose sub-agent verified that `agent-tools/src/collaboration-state/comms-relevant-events.ts` lines 109-130 implement **addressee-filtering** despite SKILL `start-right-team` §0 explicitly specifying **self-exclusion-only**. The watcher drops events whose recipient list does not include the watching agent — meaning directed events Director→{other-agent} are invisible to every non-addressee on the team.
+
+Velvet's window surfaced this empirically (handoff §6.5): three Velvet→{Secret, Incandescent, Twilit} directed events were absent from Seaworthy's seen-file while present in `.agent/state/collaboration/comms/`. The sub-agent code read confirmed it is not a Monitor or seen-file bug — the filter itself is wrong-shape. Every Director session since this code shipped has had silently-incomplete broad-awareness.
+
+This is load-bearing because Director broadcast-vs-directed strategy assumes broad-awareness from the comms stream. The Velvet handoff implication ("favour broadcasts over directed events for cross-agent visibility") was a workaround for a defect, not a strategy choice. The cure restores the doctrine: directed events should be visible to all watchers; only events-from-self should be excluded.
+
+Cure plan + pending-graduations entry being authored as separate route. Failure-mode comms event broadcast at ~11:26Z (`c7fba7db`). View-token verdict: `'observed'` 5th `EventView` per Twilit Lane T1 + Incandescent design-audit convergence.
+
+Pointer: failure-mode comms event `c7fba7db` + pending-graduations entry for cure plan + `agent-tools/src/collaboration-state/comms-relevant-events.ts:109-130`.
+
+### Observation: Director-hoarding-implementer-work — owner-flagged self-failure-mode
+
+At 11:35Z owner directly flagged that Seaworthy was hoarding implementer-class work (PDR-074 revision) while three claude implementer agents (Incandescent, Twilit, Abyssal) sat idle. This violated PDR-074's own structural property B (Director's value is pattern-completion not pattern-creation) and observable property 6 (Director-surface protection enforced inversely — decline implementer work that would force Director into implementer mode).
+
+Failure-mode: even after AUTHORING the doctrine, acting-Director defaulted to "I'll just do this revision myself because I have the context" — exactly the gravity well the doctrine names. The doctrine names the failure mode; the doctrine's author still fell into it under context pressure.
+
+Cure: owner correction at 11:35Z; acting-Director correction broadcast + 3 routing events at 11:38Z routing Incandescent (PDR-074 revision), Abyssal (Lane 3b + cure code), Twilit (Lane T2 reviewer dispatch).
+
+Worth surfacing as cross-session insight: **authoring doctrine does not inoculate against its named failure modes under context pressure**. The cure is owner correction OR routine self-ratification against the checklist (PDR-074 ratification question Q6: *Did I take this on, or did I route it? If took on — why?*). Without active ratification, doctrine drifts.
+
+Pointer: owner direction 11:35Z + routing-correction broadcast at 11:38Z + PDR-074 ratification question Q6.
