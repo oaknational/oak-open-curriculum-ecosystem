@@ -32324,6 +32324,49 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "8b7a157b-557f-45d2-ac4b-4506b01fa60c",
+      "agent_id": {
+        "agent_name": "Sparking Melting Magma",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "4cdb53"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/experience/2026-05-23-sparking-melting-magma-team-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T07:49:10.000Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "session-close recursion aphorism — record exchange in napkin + experience + pending-graduations",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T07:50:22.000Z",
+        "closed_by": {
+          "agent_name": "Sparking Melting Magma",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "4cdb53"
+        },
+        "summary": "session-close recursion aphorism recorded at 29573944 (3 files +250): napkin section + experience addendum + pending-graduations candidate for recursion-as-method principle",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8b7a157b-557f-45d2-ac4b-4506b01fa60c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
