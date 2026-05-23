@@ -2,11 +2,9 @@ import { describe, expect, it } from 'vitest';
 
 import {
   createDirectedCommsMessage,
-  drainDirectedInbox,
   migrateLegacyCommsRecordCollections,
   renderCommsLog,
   replyToDirectedCommsMessage,
-  watchDirectedInbox,
   writeCommsEventWithReadback,
 } from '../../src/collaboration-state/comms-use-cases';
 import { type CollaborationAgentId, type CommsEvent } from '../../src/collaboration-state/types';
@@ -106,67 +104,6 @@ describe('comms use cases', () => {
 
     expect(rendered).toContain('Narrative one');
     expect(writes).toStrictEqual([rendered]);
-  });
-
-  it('drains unseen directed messages and records only emitted ids as seen', async () => {
-    const message = createDirectedCommsMessage({
-      eventId: 'message-one',
-      createdAt: '2026-05-13T09:46:00Z',
-      messageKind: 'coordination-request',
-      from: sender,
-      to: recipient,
-      subject: 'Please check this',
-      body: 'There is useful coordination here.',
-    });
-    const drained = await drainDirectedInbox({
-      messages: [message],
-      seenIds: new Set(),
-      agentName: recipient.agent_name,
-    });
-
-    expect(drained.output).toContain('subject: Please check this');
-    expect(drained.eventCount).toBe(1);
-    expect(drained.eventIds).toStrictEqual(['message-one']);
-  });
-
-  it('watches through an injected update source instead of real timers or watchers', async () => {
-    const messages: CommsEvent[] = [];
-    const seenIds = new Set<string>();
-    const emitted: string[] = [];
-
-    await watchDirectedInbox({
-      maxEvents: 1,
-      drain: () =>
-        drainDirectedInbox({
-          messages,
-          seenIds,
-          agentName: recipient.agent_name,
-        }),
-      waitForChange: async () => {
-        messages.push(
-          createDirectedCommsMessage({
-            eventId: 'message-one',
-            createdAt: '2026-05-13T09:46:00Z',
-            messageKind: 'coordination-request',
-            from: sender,
-            to: recipient,
-            subject: 'Please check this',
-            body: 'There is useful coordination here.',
-          }),
-        );
-      },
-      emit: async (text) => {
-        emitted.push(text);
-      },
-      markSeen: async (eventIds) => {
-        for (const eventId of eventIds) {
-          seenIds.add(eventId);
-        }
-      },
-    });
-
-    expect(emitted.join('')).toContain('subject: Please check this');
-    expect(Array.from(seenIds)).toStrictEqual(['message-one']);
   });
 
   it('migrates legacy record collections without directory traversal', () => {

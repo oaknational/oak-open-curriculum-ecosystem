@@ -1,13 +1,13 @@
 import { renderSharedCommsLog } from './comms.js';
-import {
-  type CollaborationAgentId,
-  type CommsEvent,
-  type DirectedCommsMessage,
-} from './types.js';
+import { type CollaborationAgentId, type CommsEvent, type DirectedCommsMessage } from './types.js';
 
 export { migrateLegacyCommsRecordCollections } from './comms-migration-records.js';
 export { classifyEventForAgent, drainRelevantEvents } from './comms-relevant-events.js';
-export { watchCommsLoop, type WatcherErrorKind, type WatcherTickStatus } from './comms-watch-loop.js';
+export {
+  watchCommsLoop,
+  type WatcherErrorKind,
+  type WatcherTickStatus,
+} from './comms-watch-loop.js';
 
 const MAX_REPLY_SUBJECT_LENGTH = 200;
 
@@ -114,8 +114,4 @@ function assertSameAgent(actual: CollaborationAgentId, expected: CollaborationAg
 
 function formatAgent(agent: CollaborationAgentId): string {
   return `${agent.agent_name} / ${agent.platform} / ${agent.model} / ${agent.session_id_prefix}`;
-}
-
-function isDirectedCommsMessage(event: CommsEvent): event is DirectedCommsMessage {
-  return event.kind === 'directed';
 }

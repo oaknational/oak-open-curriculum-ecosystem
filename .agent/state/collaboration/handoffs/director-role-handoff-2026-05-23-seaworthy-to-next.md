@@ -210,6 +210,7 @@ session-close consolidation pass to capture across all three.**
 
 Twilit's Lane T2 dispatch (Options A + D in parallel, ~11:48Z) caught
 7 amendments to Abyssal's cure before staging — 2 diagnosis narrowings
+
 + 4 cure-design amendments + 1 confirmation of cure semantics. Pre-
 build defect cost = documentation + 1 test; post-build would have
 been rewrite-class. Worth a `tags: ["behaviour-note"]` capture as
@@ -243,17 +244,17 @@ owner-attention returns to the queue.
 All Velvet §8 carries forward. **Additions for the Seaworthy-acting
 window**:
 
-- **Monitor-harness liveness bug is uncured**: directed-to-self events
++ **Monitor-harness liveness bug is uncured**: directed-to-self events
   can be silently dropped if Monitor process dies silently. Until
   Zephyrous's structural cure ships, **directors should redundantly
   broadcast critical routings** (parallel broadcast + directed for
   important assignments) and **periodically health-check known-idle
   agents via owner-mediation if needed**.
-- **`'observed'` view-token is live as of wide-sweep `1ea4e2e1`**:
++ **`'observed'` view-token is live as of wide-sweep `1ea4e2e1`**:
   Bundle 5 (Clouded) documents this in SKILL §0 + watcher help text.
   Watchers post-cure may observe a backfill cascade of previously-
   dropped cross-traffic events on first poll (Twilit Wilma amendment 7).
-- **Practice Core care-and-consult discipline**: edits to
++ **Practice Core care-and-consult discipline**: edits to
   `.agent/practice-core/*` and `.agent/skills/start-right-team/*`
   require Director-authorisation as gate-clearance surface per
   PDR-072/073/074 precedent.
@@ -269,14 +270,15 @@ referencing this handoff record AND the Moment 1 pre-positioning
 broadcast Seaworthy is about to send.
 
 After Moment 2:
-- Next Director holds routing authority + commit-marshal mediation +
+
++ Next Director holds routing authority + commit-marshal mediation +
   owner-decision surfacing.
-- Seaworthy runs the SKILL §"Team member, not closeout owner"
++ Seaworthy runs the SKILL §"Team member, not closeout owner"
   residual closeout (no full handoff steps — this record IS the full
   handoff).
-- Seaworthy's session may continue under team-member capacity if
++ Seaworthy's session may continue under team-member capacity if
   owner directs; otherwise ends at session-close.
-- Substrate state continues through comms stream + active-claims +
++ Substrate state continues through comms stream + active-claims +
   this handoff record (durable in wide-sweep follow-up commit).
 
 ---

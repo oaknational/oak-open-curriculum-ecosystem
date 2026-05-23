@@ -94,9 +94,9 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
     help:
       'comms inbox --comms-dir <dir> --seen-file <path> ' +
       '--platform <platform> --model <model> ' +
-      '[--session-prefix <prefix>] [--only-directed] ' +
-      '(default: emit every relevant event — broadcast, group, directed, observed, lifecycle — ' +
-      'with self-exclusion only; --only-directed narrows to directed-to-me)',
+      '[--session-prefix <prefix>] ' +
+      '(emits every relevant event — broadcast, group, directed, observed, lifecycle — ' +
+      'with self-exclusion only)',
     options: commsInboxOptions,
     handler: inboxComms,
   }),
@@ -104,10 +104,11 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
     help:
       'comms watch --comms-dir <dir> --seen-file <path> ' +
       '--platform <platform> --model <model> ' +
-      '[--session-prefix <prefix>] [--only-directed] ' +
+      '[--session-prefix <prefix>] ' +
       '[--poll-ms <n>] [--max-events <n>] ' +
-      '(default: emit every relevant event — broadcast, group, directed, observed, lifecycle — ' +
-      'with self-exclusion only; --only-directed narrows to directed-to-me)',
+      '[--heartbeat-file <path>] [--heartbeat-interval-ms <n>] ' +
+      '(emits every relevant event — broadcast, group, directed, observed, lifecycle — ' +
+      'with self-exclusion only; heartbeat-file is the FM-2 cure liveness surface, default interval 30000ms)',
     options: commsWatchOptions,
     handler: watchComms,
   }),

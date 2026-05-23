@@ -1,4 +1,4 @@
-import { drainDirectedInbox, drainRelevantEvents } from './comms-use-cases.js';
+import { drainRelevantEvents } from './comms-use-cases.js';
 import { resolveIdentity } from './cli-identity.js';
 import { optional, required, type Options } from './cli-options.js';
 import { cliIo, type CliRuntime } from './cli-runtime.js';
@@ -13,26 +13,14 @@ export async function inboxComms(
   const commsDir = required(options, 'comms-dir');
   const seenFile = required(options, 'seen-file');
   const self = resolveSelfIdentity(options, env);
-  const onlyDirected = optional(options, 'only-directed') !== undefined;
 
   const messages = await io.readCommsEvents(commsDir);
   const seenIds = await io.readSeenIds(seenFile);
 
-  const drained = onlyDirected
-    ? await drainDirectedInbox({
-        messages,
-        seenIds,
-        agentName: self.agent_name,
-        sessionPrefix: self.session_id_prefix === '' ? undefined : self.session_id_prefix,
-      })
-    : await drainRelevantEvents({
-        messages,
-        seenIds,
-        self,
-      });
+  const drained = await drainRelevantEvents({ messages, seenIds, self });
 
   if (drained.eventCount === 0) {
-    return onlyDirected ? 'no new directed messages\n' : 'no new comms events\n';
+    return 'no new comms events\n';
   }
 
   // Mark seen AFTER the events have been "delivered" to the caller. For

@@ -95,7 +95,6 @@ describe('unified comms format CLI behaviour', () => {
         recipient.model,
         '--seen-file',
         seenFile,
-        '--only-directed',
       ],
       env: {},
       io: fake.runtime.io,

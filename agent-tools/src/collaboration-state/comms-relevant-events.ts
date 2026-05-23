@@ -241,7 +241,8 @@ function formatIdentity(agent: CollaborationAgentId): string {
 }
 
 function formatNarrativeAddressee(event: NarrativeCommsEvent): string {
-  if (event.addressed_to !== undefined) return event.addressed_to;
-  if (event.audience !== undefined) return `GROUP(${event.audience.join(', ')})`;
-  return 'BROADCAST';
+  return (
+    event.addressed_to ??
+    (event.audience === undefined ? 'BROADCAST' : `GROUP(${event.audience.join(', ')})`)
+  );
 }

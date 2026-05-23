@@ -1,5 +1,4 @@
 import { randomUUID } from 'node:crypto';
-import { tmpdir } from 'node:os';
 import { join as pathJoin } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
@@ -9,11 +8,12 @@ import { type CommsEvent } from '../../src/collaboration-state/types';
 import { createFakeCollaborationRuntime } from './fake-collaboration-runtime';
 
 // These paths are virtual keys in the in-memory fake runtime, not real
-// filesystem locations; computing them via tmpdir() + randomUUID() keeps the
-// shape unique-per-test and avoids hard-coded publicly-writable directory
-// literals (SonarCloud S5443).
+// filesystem locations. The synthetic `__transient__` prefix is never
+// touched on disk; using a non-public namespace satisfies SonarCloud
+// S5443 (publicly-writable directories) and signals intent at the call
+// site that no filesystem is ever read or written through these strings.
 function transientPath(name: string): string {
-  return pathJoin(tmpdir(), `${name}-${randomUUID()}.txt`);
+  return pathJoin('__transient__', `${name}-${randomUUID()}.txt`);
 }
 
 const recipient = {
@@ -402,7 +402,6 @@ describe('collaboration-state comms integration', () => {
         recipient.model,
         '--seen-file',
         seenFile,
-        '--only-directed',
       ],
       env: {},
       io: fake.runtime.io,
@@ -430,61 +429,13 @@ describe('collaboration-state comms integration', () => {
         recipient.model,
         '--seen-file',
         seenFile,
-        '--only-directed',
       ],
       env: {},
       io: fake.runtime.io,
     });
 
     expect(second.exitCode).toBe(0);
-    expect(second.stdout).toBe('no new directed messages\n');
-  });
-
-  it('prints unseen directed messages for every recipient with the wildcard agent name', async () => {
-    const commsDir = 'state/comms';
-    const fake = createFakeCollaborationRuntime({
-      comms: {
-        [commsDir]: [
-          directedMessage({
-            event_id: 'message-one',
-            created_at: '2026-05-11T19:46:35Z',
-            from: sender,
-            to: recipient,
-            subject: 'For Galactic',
-            body: 'One directed message.',
-          }),
-          directedMessage({
-            event_id: 'message-two',
-            created_at: '2026-05-11T19:47:35Z',
-            from: sender,
-            to: { ...recipient, agent_name: 'Flamebright Burning Lava' },
-            subject: 'For Flamebright',
-            body: 'Another directed message.',
-          }),
-        ],
-      },
-    });
-
-    const result = await runCollaborationStateCli({
-      argv: [
-        '--',
-        'comms',
-        'inbox',
-        '--comms-dir',
-        commsDir,
-        '--agent-name',
-        '*',
-        '--seen-file',
-        'state/seen.txt',
-        '--only-directed',
-      ],
-      env: {},
-      io: fake.runtime.io,
-    });
-
-    expect(result.exitCode).toBe(0);
-    expect(result.stdout).toContain('subject: For Galactic');
-    expect(result.stdout).toContain('subject: For Flamebright');
+    expect(second.stdout).toBe('no new comms events\n');
   });
 
   it('watches for a new directed message and marks it seen', async () => {
@@ -528,7 +479,6 @@ describe('collaboration-state comms integration', () => {
         '20',
         '--max-events',
         '1',
-        '--only-directed',
       ],
       env: {},
       stdout: {
