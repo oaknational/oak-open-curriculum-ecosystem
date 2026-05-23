@@ -1,5 +1,4 @@
 import { randomUUID } from 'node:crypto';
-import { tmpdir } from 'node:os';
 import { join as pathJoin } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
@@ -155,15 +154,14 @@ describe('repo-check staged scanners', () => {
 });
 
 describe('repo-check profile artifact helpers', () => {
-  // Fixture path strings — never touched on disk, but computed via tmpdir() +
-  // randomUUID() so they avoid hard-coded publicly-writable directory literals
-  // (SonarCloud S5443).
+  // Fixture path strings — never touched on disk, but computed with a synthetic
+  // namespace so Sonar does not classify them as publicly writable paths.
   const environment = {
     nodeVersion: 'v24.15.0',
     platform: 'darwin',
     arch: 'arm64',
-    pnpmStorePath: pathJoin(tmpdir(), `pnpm-store-${randomUUID()}`),
-    playwrightBrowserCachePath: pathJoin(tmpdir(), `ms-playwright-${randomUUID()}`),
+    pnpmStorePath: pathJoin('__profile-fixtures__', `pnpm-store-${randomUUID()}`),
+    playwrightBrowserCachePath: pathJoin('__profile-fixtures__', `ms-playwright-${randomUUID()}`),
     playwrightBrowserCacheExists: true,
     sandboxNote: 'sandbox evidence note',
   } as const;
