@@ -257,6 +257,10 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-184: Comms-Event Sync Kind and Urgency Field](184-comms-event-sync-kind-and-urgency-field.md)
   (two-axis separation: `sync` as interaction shape and `urgency` as
   response priority; Proposed 2026-05-23)
+- [ADR-185: Comms-Event Auto-Acceptance Metadata](185-comms-event-auto-acceptance-metadata.md)
+  (structured impact / size / risk metadata for deterministic
+  auto-acceptance of mechanically verifiable comms-event changes;
+  Proposed 2026-05-23)
 
 ## Key Architectural Decisions
 
