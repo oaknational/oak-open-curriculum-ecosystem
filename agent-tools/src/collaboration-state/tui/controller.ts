@@ -4,10 +4,16 @@ import {
   type SetStateAction,
   useCallback,
   useEffect,
+  useReducer,
   useRef,
   useState,
 } from 'react';
 
+import {
+  initialRefreshState,
+  reduceRefreshState,
+  type RefreshEvent,
+} from './reduce-refresh-state.js';
 import { type CollaborationTuiSnapshot } from './snapshot.js';
 
 export type CollaborationTuiPane = 'main' | 'agents' | 'queue' | 'directed';
@@ -38,19 +44,21 @@ export function useCollaborationTuiController({
   updateSource,
 }: CollaborationTuiControllerInput): CollaborationTuiController {
   const { exit } = useApp();
-  const [snapshot, setSnapshot] = useState(initialSnapshot);
+  const [refresh, dispatchRefresh] = useReducer(
+    reduceRefreshState,
+    initialSnapshot,
+    initialRefreshState,
+  );
   const [activePane, setActivePane] = useState<CollaborationTuiPane>('main');
   const [offsets, setOffsets] =
     useState<Readonly<Record<CollaborationTuiPane, number>>>(initialOffsets());
-  const [status, setStatus] = useState('ready');
   const runRefresh = useLiveRefresh({
     onRefresh,
-    setSnapshot,
-    setStatus,
+    dispatchRefresh,
     updateSource,
   });
 
-  useConstrainedOffsets({ setOffsets, snapshot });
+  useConstrainedOffsets({ setOffsets, snapshot: refresh.snapshot });
   useCollaborationTuiInput({
     activePane,
     exit,
@@ -58,10 +66,15 @@ export function useCollaborationTuiController({
     runRefresh,
     setActivePane,
     setOffsets,
-    snapshot,
+    snapshot: refresh.snapshot,
   });
 
-  return { activePane, offsets, snapshot, status };
+  return {
+    activePane,
+    offsets,
+    snapshot: refresh.snapshot,
+    status: refresh.status,
+  };
 }
 
 function useCollaborationTuiInput(input: {
@@ -122,23 +135,29 @@ function useConstrainedOffsets(input: {
 
 function useLiveRefresh(input: {
   readonly onRefresh?: () => Promise<CollaborationTuiSnapshot>;
-  readonly setSnapshot: (snapshot: CollaborationTuiSnapshot) => void;
-  readonly setStatus: (status: string) => void;
+  readonly dispatchRefresh: Dispatch<RefreshEvent>;
   readonly updateSource?: CollaborationTuiUpdateSource;
 }): () => void {
-  const refreshSequence = useRef(0);
+  const attemptCounter = useRef(0);
   const runRefresh = useCallback(() => {
     if (input.onRefresh === undefined) {
       return;
     }
-    refreshSequence.current += 1;
-    refreshSnapshot({
-      requestId: refreshSequence.current,
-      latestRequestId: () => refreshSequence.current,
-      onRefresh: input.onRefresh,
-      setSnapshot: input.setSnapshot,
-      setStatus: input.setStatus,
-    });
+    attemptCounter.current += 1;
+    const attemptId = attemptCounter.current;
+    input.dispatchRefresh({ kind: 'refresh-started', attemptId });
+    input
+      .onRefresh()
+      .then((snapshot) => {
+        input.dispatchRefresh({ kind: 'refresh-succeeded', attemptId, snapshot });
+      })
+      .catch((error: unknown) => {
+        input.dispatchRefresh({
+          kind: 'refresh-failed',
+          attemptId,
+          error: error instanceof Error ? error : new Error(String(error)),
+        });
+      });
   }, [input]);
 
   useEffect(() => {
@@ -150,31 +169,6 @@ function useLiveRefresh(input: {
   }, [runRefresh, input.updateSource]);
 
   return runRefresh;
-}
-
-function refreshSnapshot(input: {
-  readonly requestId: number;
-  readonly latestRequestId: () => number;
-  readonly onRefresh: () => Promise<CollaborationTuiSnapshot>;
-  readonly setSnapshot: (snapshot: CollaborationTuiSnapshot) => void;
-  readonly setStatus: (status: string) => void;
-}): void {
-  input.setStatus('refreshing');
-  input
-    .onRefresh()
-    .then((next) => {
-      if (input.requestId !== input.latestRequestId()) {
-        return;
-      }
-      input.setSnapshot(next);
-      input.setStatus(`refreshed ${next.generated_at}`);
-    })
-    .catch((error: unknown) => {
-      if (input.requestId !== input.latestRequestId()) {
-        return;
-      }
-      input.setStatus(error instanceof Error ? error.message : String(error));
-    });
 }
 
 function initialOffsets(): Readonly<Record<CollaborationTuiPane, number>> {
