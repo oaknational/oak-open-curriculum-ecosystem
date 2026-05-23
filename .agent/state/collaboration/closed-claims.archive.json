@@ -33402,6 +33402,135 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "ecd614f0-b0e1-4b40-beb0-7df56899b703",
+      "agent_id": {
+        "agent_name": "Clouded Streaming Airstream",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md",
+            "agent-tools/src/collaboration-state/cli-comms-watch.ts",
+            "agent-tools/src/collaboration-state/cli-specs.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T12:02:45Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Bundle 5: amend start-right-team comms watcher guidance plus comms watch/inbox help text for observed view token; draft now, stage only after Bundle 3 runtime support lands",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T12:22:46Z",
+        "closed_by": {
+          "agent_name": "Clouded Streaming Airstream",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e54"
+        },
+        "summary": "Bundle 5 observed view-token docs/help landed in HEAD 1bef71cc; queue intent completed after live comms check; no staging by Clouded",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ecd614f0-b0e1-4b40-beb0-7df56899b703",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "4f89dc4d-599d-48ba-afd1-4805f913e1a3",
+      "agent_id": {
+        "agent_name": "Twilit Scattering Twilight",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "8d8d93"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T10:55:01.000Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Commit-marshal singleton: sole committer for the team window; mediates all git:index/head operations; translates source-agent intents to marshal-owned intents.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T12:24:31.000Z",
+        "closed_by": {
+          "agent_name": "Twilit Scattering Twilight",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "8d8d93"
+        },
+        "summary": "Marshal role handed to Seaworthy Navigating Beacon per owner direction 12:23Z. Cumulative landings under Twilit: SHA:a52e52b4 (PDR-072), SHA:f2ba9459 (cure-plan fold), SHA:d19b1301 (Bundle 2), SHA:1ea4e2e1 (wide-sweep). Push blocked by gitleaks false-positive; cure in flight as implementer post-handover.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4f89dc4d-599d-48ba-afd1-4805f913e1a3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1ac70ee6-39a1-4348-853e-80d262d52bfe",
+      "agent_id": {
+        "agent_name": "Twilit Scattering Twilight",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "8d8d93"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".gitleaks.toml",
+            ".agent/rules/sha-prefix-in-collaboration-content.md",
+            ".cursor/rules/sha-prefix-in-collaboration-content.mdc",
+            ".agent/state/collaboration/comms/8d71d494-e2ac-47e4-9cea-a70a00fc3fad.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T12:30:00.000Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Implementer cure for gitleaks false-positive: new collaboration-content SHA-prefix rule + gitleaks line-regex allowlist + commit-specific allowlist for wide-sweep SHA:1ea4e2e1 + sanitised worked-example comms event.",
+      "intent_to_commit": "da6242a0-2283-47f7-ad6c-eacc646ed6f2",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T12:32:30.000Z",
+        "closed_by": {
+          "agent_name": "Twilit Scattering Twilight",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "8d8d93"
+        },
+        "summary": "Owner-directed session-complete at 12:32Z; fix bundle in working tree (4 files: .gitleaks.toml, new rule, .cursor adapter, sanitised comms event 8d71d494). pnpm secrets:scan exit 0. Commit deferred per owner direction; Seaworthy as incoming marshal can pick up if needed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1ac70ee6-39a1-4348-853e-80d262d52bfe",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

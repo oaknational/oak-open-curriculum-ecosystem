@@ -1,4 +1,5 @@
 import { drainDirectedInbox, drainRelevantEvents, watchDirectedInbox } from './comms-use-cases.js';
+import { writeWatcherHeartbeat } from './watcher-heartbeat.js';
 import { resolveIdentity } from './cli-identity.js';
 import { optional, optionalPositiveInteger, required, type Options } from './cli-options.js';
 import {
@@ -10,12 +11,20 @@ import {
 import { type CollaborationAgentId, type CollaborationStateEnvironment } from './types.js';
 
 const DEFAULT_POLL_MS = 500;
+const DEFAULT_HEARTBEAT_INTERVAL_MS = 30000;
 
 /**
  * Watch the comms stream. The default all-channels mode emits every non-self
  * event under the current view-token set: broadcast, group, directed,
  * observed, and lifecycle. `--only-directed` deliberately preserves the
  * legacy narrow inbox path for callers that want only directed-to-me events.
+ *
+ * Liveness surface (FM-2 cure, 2026-05-23): when `--heartbeat-file <path>`
+ * is provided, the watcher writes a substrate-typed heartbeat JSON every
+ * `--heartbeat-interval-ms` milliseconds (default 30000) with
+ * `last_drain_at`, `last_emit_at`, `last_error_at`, `emitted_count`, and the
+ * `pid`. Absence of mtime updates beyond 3x the interval is the stale
+ * signal external liveness checks should use.
  */
 export async function watchComms(
   options: Options,
@@ -29,8 +38,14 @@ export async function watchComms(
   const onlyDirected = optional(options, 'only-directed') !== undefined;
   const pollMs = optionalPositiveInteger(options, 'poll-ms') ?? DEFAULT_POLL_MS;
   const maxEvents = optionalPositiveInteger(options, 'max-events');
+  const heartbeatFile = optional(options, 'heartbeat-file');
+  const heartbeatIntervalMs =
+    optionalPositiveInteger(options, 'heartbeat-interval-ms') ?? DEFAULT_HEARTBEAT_INTERVAL_MS;
 
   await io.ensureDirectory(commsDir);
+
+  const startedAt = new Date().toISOString();
+  let lastHeartbeatAtMs = 0;
 
   const output = await watchDirectedInbox({
     maxEvents,
@@ -47,6 +62,32 @@ export async function watchComms(
     emit: async (text) => {
       runtime.stdout?.write(text);
     },
+    markSeen: (eventIds) => io.appendSeenMessageIds(seenFile, eventIds),
+    tick:
+      heartbeatFile === undefined
+        ? undefined
+        : async (status) => {
+            const nowMs = Date.now();
+            if (nowMs - lastHeartbeatAtMs < heartbeatIntervalMs) {
+              return;
+            }
+            lastHeartbeatAtMs = nowMs;
+            await writeWatcherHeartbeat({
+              io,
+              heartbeatFile,
+              heartbeat: {
+                schema_version: '1.0.0',
+                pid: process.pid,
+                started_at: startedAt,
+                last_drain_at: status.lastDrainAt,
+                last_emit_at: status.lastEmitAt,
+                last_error_at: status.lastErrorAt,
+                emitted_count: status.emittedCount,
+                heartbeat_interval_ms: heartbeatIntervalMs,
+                watcher_identity: self,
+              },
+            });
+          },
   });
 
   return runtime.stdout === undefined ? output : '';
@@ -62,8 +103,6 @@ async function drainAccordingToView(input: {
 }): ReturnType<typeof drainRelevantEvents> {
   const seenIds = await input.io.readSeenIds(input.seenFile);
   const messages = await input.io.readCommsEvents(input.commsDir);
-  const markSeen = (eventIds: readonly string[]): Promise<void> =>
-    input.io.appendSeenMessageIds(input.seenFile, eventIds);
 
   if (input.onlyDirected) {
     return drainDirectedInbox({
@@ -72,7 +111,6 @@ async function drainAccordingToView(input: {
       agentName: input.self.agent_name,
       sessionPrefix: input.self.session_id_prefix === '' ? undefined : input.self.session_id_prefix,
       remainingEvents: input.remainingEvents,
-      markSeen,
     });
   }
   return drainRelevantEvents({
@@ -80,7 +118,6 @@ async function drainAccordingToView(input: {
     seenIds,
     self: input.self,
     remainingEvents: input.remainingEvents,
-    markSeen,
   });
 }
 

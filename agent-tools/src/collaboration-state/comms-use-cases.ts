@@ -3,11 +3,11 @@ import {
   type CollaborationAgentId,
   type CommsEvent,
   type DirectedCommsMessage,
-  type DirectedInboxDrainResult,
 } from './types.js';
 
 export { migrateLegacyCommsRecordCollections } from './comms-migration-records.js';
 export { classifyEventForAgent, drainRelevantEvents } from './comms-relevant-events.js';
+export { watchCommsLoop, type WatcherErrorKind, type WatcherTickStatus } from './comms-watch-loop.js';
 
 const MAX_REPLY_SUBJECT_LENGTH = 200;
 
@@ -91,103 +91,6 @@ export async function renderCommsLog(input: {
   await input.output.writeText(text);
 
   return text;
-}
-
-export async function drainDirectedInbox(input: {
-  readonly messages: readonly CommsEvent[];
-  readonly seenIds: ReadonlySet<string>;
-  readonly agentName: string;
-  readonly sessionPrefix?: string;
-  readonly remainingEvents?: number;
-  readonly markSeen: (eventIds: readonly string[]) => Promise<void>;
-}): Promise<DirectedInboxDrainResult> {
-  const unseen = input.messages
-    .filter(isDirectedCommsMessage)
-    .filter((message) => messageMatchesRecipient(message, input.agentName, input.sessionPrefix))
-    .filter((message) => !input.seenIds.has(message.event_id))
-    .toSorted(compareDirectedMessages)
-    .slice(0, input.remainingEvents);
-
-  if (unseen.length === 0) {
-    return { output: '', eventCount: 0 };
-  }
-
-  await input.markSeen(unseen.map((message) => message.event_id));
-
-  return {
-    output: unseen.map(formatDirectedMessage).join('\n'),
-    eventCount: unseen.length,
-  };
-}
-
-export async function watchDirectedInbox(input: {
-  readonly maxEvents?: number;
-  readonly drain: (remainingEvents?: number) => Promise<DirectedInboxDrainResult>;
-  readonly waitForChange: () => Promise<void>;
-  readonly emit: (text: string) => Promise<void>;
-}): Promise<string> {
-  let emitted = 0;
-  let output = '';
-
-  while (needsMoreEvents({ emitted, maxEvents: input.maxEvents })) {
-    const result = await input.drain(remainingEvents({ emitted, maxEvents: input.maxEvents }));
-    output += result.output;
-    emitted += result.eventCount;
-    await input.emit(result.output);
-
-    if (needsMoreEvents({ emitted, maxEvents: input.maxEvents })) {
-      await input.waitForChange();
-    }
-  }
-
-  return output;
-}
-
-function messageMatchesRecipient(
-  message: DirectedCommsMessage,
-  agentName: string,
-  sessionPrefix?: string,
-): boolean {
-  const nameMatches = agentName === '*' || message.to.agent_name === agentName;
-  const sessionMatches =
-    sessionPrefix === undefined || message.to.session_id_prefix === sessionPrefix;
-  return nameMatches && sessionMatches;
-}
-
-function compareDirectedMessages(left: DirectedCommsMessage, right: DirectedCommsMessage): number {
-  const byTime = Date.parse(left.created_at) - Date.parse(right.created_at);
-  if (byTime !== 0) {
-    return byTime;
-  }
-
-  return left.event_id.localeCompare(right.event_id);
-}
-
-function formatDirectedMessage(message: DirectedCommsMessage): string {
-  return [
-    '--- NEW DIRECTED MESSAGE ---',
-    `from: ${message.from.agent_name} / ${message.from.platform} / ${message.from.session_id_prefix}`,
-    `subject: ${message.subject}`,
-    `created_at: ${message.created_at}`,
-    '',
-    message.body,
-    '--- END MESSAGE ---',
-    '',
-  ].join('\n');
-}
-
-function needsMoreEvents(input: {
-  readonly emitted: number;
-  readonly maxEvents: number | undefined;
-}): boolean {
-  return input.maxEvents === undefined || input.emitted < input.maxEvents;
-}
-
-function remainingEvents(input: {
-  readonly emitted: number;
-  readonly maxEvents: number | undefined;
-}): number | undefined {
-  return input.maxEvents === undefined ? undefined : input.maxEvents - input.emitted;
 }
 
 function defaultReplySubject(sourceSubject: string): string {

@@ -32,9 +32,10 @@ export const commsWatchOptions = [
   'model',
   'agent-name',
   'session-prefix',
-  'only-directed',
   'poll-ms',
   'max-events',
+  'heartbeat-file',
+  'heartbeat-interval-ms',
 ] as const;
 
 export const commsInboxOptions = [
@@ -44,7 +45,6 @@ export const commsInboxOptions = [
   'model',
   'agent-name',
   'session-prefix',
-  'only-directed',
 ] as const;
 
 export const commsDirectOptions = [

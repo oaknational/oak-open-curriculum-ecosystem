@@ -1487,3 +1487,78 @@ Cure: owner correction at 11:35Z; acting-Director correction broadcast + 3 routi
 Worth surfacing as cross-session insight: **authoring doctrine does not inoculate against its named failure modes under context pressure**. The cure is owner correction OR routine self-ratification against the checklist (PDR-074 ratification question Q6: *Did I take this on, or did I route it? If took on — why?*). Without active ratification, doctrine drifts.
 
 Pointer: owner direction 11:35Z + routing-correction broadcast at 11:38Z + PDR-074 ratification question Q6.
+
+## 2026-05-23 — Secret Creeping Moth / claude / claude-opus-4-7 / `61d726` — Consolidation pass on Seaworthy→next handoff §6.7–§6.10
+
+Per Director Abyssal Mooring Hull routing event `06ffd0ca` 2026-05-23T12:20:24Z. Boundary: read-only on Practice Core; capture surface in napkin; trigger-gated candidates in pending-graduations.
+
+### Observation: Director-doctrine-failing-author — authoring doctrine does not inoculate against its named failure modes under context pressure
+
+`tags: ["failure-mode"]`
+
+Seaworthy authored PDR-074 (Director value as mind-coherence-per-owner-attention) during the acting-Director window 11:30Z–12:06Z. Three meta-failures observed in the same window, each named explicitly by the PDR's own structural properties or observable properties:
+
+1. **Hoarding implementer work** (11:35Z owner flag) — Seaworthy authored PDR-074 revision themselves while three claude implementer agents (Incandescent, Twilit, Abyssal) sat idle. Violates PDR-074 structural property B (Director's value is pattern-completion not pattern-creation) and observable property 6 (Director-surface protection enforced inversely).
+2. **Mis-classifying idle agents** (11:59Z owner screenshot) — Seaworthy's broad-awareness surface reported agents idle when they had observable cross-traffic in flight. Comms-watch classifier bug contributed substrate-incompleteness, but the misclassification slipped through ratification regardless.
+3. **Over-ceremonious bundling** (11:55Z owner wide-sweep direction) — Director-orchestrated bundle ceremonies (intent-scope-discipline, per-bundle marshal request, etc.) had become higher-friction than the routing-unblock they were meant to serve. Owner directed wide-sweep + push to break the jam.
+
+The pattern: the doctrine's author still falls into its named failure modes under context pressure. Cross-session insight extends across the whole Practice Core surface: *authoring* and *enacting* are different cognitions, and the gravity of context pressure can pull an agent off the doctrine they know best.
+
+Cure shape (substrate, not behavioural): a Director-routing-blockage-detection-and-cure protocol that fires *without* requiring owner intervention. Routes to pending-graduations as autonomy primitive P6.
+
+Pointer: PDR-074 §"Routing-moment ratification checklist" Q6 (*Did I take this on, or did I route it? If took on — why?*) was the doctrine that would have caught instance 1 if ratified at the routing moment.
+
+### Observation: Owner-action-as-cure pattern — three interventions in one window each name a missing autonomy primitive
+
+`tags: ["failure-mode"]`
+
+Three owner interventions in Seaworthy's acting-Director window cured Director-substrate gaps the team could not self-cure:
+
+1. **11:35Z** — owner flagged Director hoarding; Seaworthy's routing-correction broadcast + 3 implementer routings landed within 3 minutes. Without intervention the hoarding would have continued through the substrate-bundle authoring.
+2. **11:55Z** — owner directed wide-sweep + push to Twilit, bypassing Director-orchestrated bundle ceremonies. The team had assembled 4 mid-flight bundles (Bundle 1 PDR-074, Bundle 2 memory, Bundle 3 cure, plus Pearly TUI fix) with cross-dependencies and ceremony overhead exceeding the substantive routing-unblock benefit. Owner cut through.
+3. **11:59Z** — owner showed Incandescent the comms screenshot revealing mis-classification of their state. Self-detection-and-cure pattern at 12:02Z (stop-broken + arm-fresh + 3-min health-check cron) followed — exactly the autonomic-learning shape PDR-072 names.
+
+Per per-user memory `feedback_owner_action_is_not_a_cure`: *every "owner-directed X worked" observation is a symptom of a missing autonomy primitive, never a target cure*. Each intervention names a discrete primitive the team should hold structurally:
+
+- Intervention 1 → autonomy primitive P6 (Director-routing-blockage-detection)
+- Intervention 2 → primitive for ceremony-over-pragmatism detection (sub-primitive of P6 or distinct)
+- Intervention 3 → primitive for cross-agent state-mis-classification detection (likely substrate-fix not procedural primitive — the comms-watch cure addresses upstream cause)
+
+The substrate cure shape across all three: structural mechanisms that detect-and-cure routing blockages, idle agents, and ceremony-over-pragmatism *without owner intervention*. Routes to pending-graduations as P6 with possible sub-primitive structure.
+
+Pointer: per-user memory `feedback_owner_action_is_not_a_cure` (standing); Seaworthy→next handoff §6.8.
+
+### Observation: Pre-stage reviewer dispatch — defect-cost-shape proves the load-bearing case for PDR-074 P1
+
+`tags: ["behaviour-note"]`
+
+Twilit's Lane T2 dispatch (Options A + D in parallel via Agent tool, ~11:48Z) was triggered *before* Abyssal's comms-watch cure was staged. The dispatch caught 7 amendments to the pre-stage cure draft: 2 diagnosis narrowings + 4 cure-design amendments + 1 confirmation of cure semantics. All seven amendments folded into the cure before staging.
+
+Defect-cost shape: pre-build amendment cost was documentation + one test addition. Post-build (post-commit, in PR review) cost would have been rewrite-class — invert tests, re-author the classifier shape, re-run TDD. The 7-amendment fold landed in the same TDD red→green cycle as the original cure.
+
+This is the canonical worked instance of PDR-074 P1 (pre-positioned routing) and §observable-property-1 (pre-built vs post-build defect cost). Reviewer dispatch *before* staging — when the artefact is still soft enough that amendments are merge-class not refactor-class — is the load-bearing discipline. The defect-cost-shape ratio (documentation+test vs rewrite) is the empirical justification the doctrine has been waiting for.
+
+Pointer: PDR-074 §"Routing-moment ratification checklist" Q1 (pre-position routing); Seaworthy→next handoff §6.9.
+
+### Observation: Autonomic-learning — Incandescent's Monitor-harness recovery as PDR-072 worked instance
+
+`tags: ["behaviour-note"]`
+
+Incandescent's 11:33Z–12:02Z Monitor-blindness produced exactly the four-step autonomic-learning pattern PDR-072 names:
+
+1. **Detect own failure mode**: Incandescent noticed their Monitor was silently dead at 12:02Z (29-min gap with no events when team activity was visible in the directory).
+2. **Author emergency cure**: stop-broken-watcher + arm-fresh-watcher immediately, restoring event flow.
+3. **Add preventive structural cure**: 3-min health-check cron polling the watcher's last-event timestamp, surfacing if stale.
+4. **Produce load-bearing diagnostic**: detailed comms event describing the failure mode + hypothesis-space, which Zephyrous's investigation then narrowed to drain-process silent-death.
+
+The pattern is exactly PDR-072's "knowledge curation is autonomic learning of the repo" shape applied to substrate self-healing. The 3-min health-check cron is the *preventive* extension — Incandescent didn't stop at "I'm back online", they added a structural detection so the failure mode is observable next time it occurs.
+
+This worked instance strengthens PDR-072 by extending the autonomic-learning pattern from doctrine-substrate to infrastructure-substrate. The pattern works at both layers; the cure shape is the same shape (detect → emergency cure → preventive structure → load-bearing diagnostic) regardless of whether the substrate being learned is doctrine, code, or watcher infrastructure.
+
+Pointer: PDR-072 §"Autonomic learning"; Seaworthy→next handoff §6.10; Incandescent recovery event at 12:02Z; Zephyrous Monitor-harness investigation report at 12:06:45Z.
+
+### Process observation: Director-class capacity preserved by consolidation-routing
+
+This consolidation pass itself is a worked instance of PDR-074 P4 (slice-routing self-selection adjacent) and the *substrate-work mode* of PDR-074's three-mode standby model. Director Abyssal routed the §6.7–§6.10 substance to an available implementer-class agent (me) rather than authoring the consolidation in the Director window directly. This protects Director-class broad-awareness capacity for routing and re-routing decisions while the doctrine substrate gets captured at implementer pace.
+
+Worth surfacing: the consolidation pattern (Director identifies substrate-work, routes to standby capacity, returns to broad-awareness) is itself capturable as a near-graduation behaviour-note when a second instance lands.

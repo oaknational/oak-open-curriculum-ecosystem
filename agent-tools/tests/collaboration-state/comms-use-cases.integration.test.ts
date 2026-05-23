@@ -118,20 +118,15 @@ describe('comms use cases', () => {
       subject: 'Please check this',
       body: 'There is useful coordination here.',
     });
-    const markedSeen: string[] = [];
-
     const drained = await drainDirectedInbox({
       messages: [message],
       seenIds: new Set(),
       agentName: recipient.agent_name,
-      markSeen: async (eventIds) => {
-        markedSeen.push(...eventIds);
-      },
     });
 
     expect(drained.output).toContain('subject: Please check this');
     expect(drained.eventCount).toBe(1);
-    expect(markedSeen).toStrictEqual(['message-one']);
+    expect(drained.eventIds).toStrictEqual(['message-one']);
   });
 
   it('watches through an injected update source instead of real timers or watchers', async () => {
@@ -146,11 +141,6 @@ describe('comms use cases', () => {
           messages,
           seenIds,
           agentName: recipient.agent_name,
-          markSeen: async (eventIds) => {
-            for (const eventId of eventIds) {
-              seenIds.add(eventId);
-            }
-          },
         }),
       waitForChange: async () => {
         messages.push(
@@ -167,6 +157,11 @@ describe('comms use cases', () => {
       },
       emit: async (text) => {
         emitted.push(text);
+      },
+      markSeen: async (eventIds) => {
+        for (const eventId of eventIds) {
+          seenIds.add(eventId);
+        }
       },
     });
 

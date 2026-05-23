@@ -17,8 +17,6 @@ export async function inboxComms(
 
   const messages = await io.readCommsEvents(commsDir);
   const seenIds = await io.readSeenIds(seenFile);
-  const markSeen = (eventIds: readonly string[]): Promise<void> =>
-    io.appendSeenMessageIds(seenFile, eventIds);
 
   const drained = onlyDirected
     ? await drainDirectedInbox({
@@ -26,18 +24,21 @@ export async function inboxComms(
         seenIds,
         agentName: self.agent_name,
         sessionPrefix: self.session_id_prefix === '' ? undefined : self.session_id_prefix,
-        markSeen,
       })
     : await drainRelevantEvents({
         messages,
         seenIds,
         self,
-        markSeen,
       });
 
   if (drained.eventCount === 0) {
     return onlyDirected ? 'no new directed messages\n' : 'no new comms events\n';
   }
+
+  // Mark seen AFTER the events have been "delivered" to the caller. For
+  // inbox, function-return IS the delivery, so marking just before return is
+  // analogous to the watcher's post-emit ordering (FM-2 cure 2026-05-23).
+  await io.appendSeenMessageIds(seenFile, drained.eventIds);
 
   return drained.output;
 }

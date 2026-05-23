@@ -4558,3 +4558,34 @@ Cross-references:
 Falsifiability: a fix that lands without the `'observed'` view-token decision (silent design drift) is the process failure mode. A fix that lands TDD-style with three failing-tests-first, the three wrong-contract tests inverted, and the `'observed'` view-token chosen explicitly is the success shape.
 
 ---
+
+### 2026-05-23 — Autonomy primitive P6: Director-routing-blockage-detection-and-cure protocol (PDR-shaped)
+
+`[captured: 2026-05-23 | source: pattern-emergence | target: pdr:P6-director-routing-blockage-detection | trigger: second-instance | size: L | status: pending]`
+
+Substance summary: a structural protocol that fires *without* requiring owner intervention when a Director session exhibits one or more of the failure modes Seaworthy→next handoff §6.7 names — hoarding implementer work, mis-classifying idle agents, over-ceremonious bundling. The protocol detects each via observable signals and cures each via routing actions the Director or peer agents can take inside the existing comms substrate.
+
+**Three sub-primitives** under P6, each cured per the corresponding §6.8 owner-intervention:
+
+- **P6a — Hoarding-detection trigger**: when the Director-class agent has authored ≥N implementer-class artefacts (sub-agent dispatches, source edits beyond routing, drafts that should be routed) within a routing-window of duration D, and ≥M implementer-class agents are idle, surface as observable signal. Cure: peer-agent or self-ratification against PDR-074 ratification question Q6 (*Did I take this on, or did I route it? If took on — why?*).
+- **P6b — Ceremony-over-pragmatism detection**: when total bundle-ceremony overhead (claim-opens + queue-enqueues + marshal-requests + reviewer-dispatches + verdict-windows) across team-window W exceeds the substantive routing-unblock benefit by ratio R, surface as observable signal. Cure: Director-authorised ceremony-bypass for one routing-unblock action (the wide-sweep shape).
+- **P6c — Idle-misclassification cure**: covered upstream by the comms-watch self-exclusion-only cure (Bundle 3 / `1ea4e2e1` wide-sweep). Director broad-awareness sees cross-agent cross-traffic correctly post-cure; idle classification can ratify against observed traffic. May be redundant with P6 main body after comms-watch cure stabilises; defer second-instance evidence to confirm.
+
+Worked instance: Seaworthy's acting-Director window 11:30Z–12:06Z produced all three sub-failures within ~36 minutes; owner cured each with a single directed action. Each cure names a missing structural primitive per `feedback_owner_action_is_not_a_cure`. Counter-evidence (Director sessions without P6 failures) exists in Velvet's window 10:48Z–11:04Z, suggesting P6 is not load-bearing for every Director session — it fires under specific context-pressure shapes.
+
+**Load-bearing constraint** (anticipating reviewer pushback): P6 must not promote to over-eager detection that flags every Director session. The triggers are bounded by observable thresholds (N, D, M, W, R) calibrated against the Velvet counter-example. PDR-Proposed authoring should derive the threshold values from the Seaworthy + Velvet sessions as initial empirical anchors.
+
+Cure shape: PDR-Proposed authoring (not a rule — protocol substance is too large for rule format). Substrate spans observable-signal definitions, ratification-question wording, cure-routing protocols, and the ceremony-bypass authorisation shape. Cross-references PDR-074 (Director value), PDR-072 (autonomic learning), and `feedback_owner_action_is_not_a_cure`.
+
+Why pending: one explicit worked instance (Seaworthy 2026-05-23). Second-instance evidence (a Director session that detects-and-cures one or more of P6a/P6b/P6c without owner intervention) is the promotion gate. Until then, capture-only.
+
+Falsifiability: a session where Director-class failure modes from §6.7 occur and P6 sub-primitives are observable + applicable but do not fire (i.e., the protocol misses its trigger) is the failure mode that revises threshold calibration. A session where one or more sub-primitives fire correctly and cure without owner intervention is the first-instance success that promotes from candidate → PDR-Proposed authoring trigger.
+
+Cross-references:
+
+- Builds on PDR-074 (Director value as mind-coherence-per-owner-attention); §observable-property-6 (Director-surface protection enforced inversely) is the substrate P6 operationalises.
+- Builds on PDR-072 (autonomic learning); P6c's idle-misclassification cure is upstream of PDR-072's autonomic-learning shape applied to broad-awareness.
+- Standing memory: `feedback_owner_action_is_not_a_cure` is the durable doctrine P6 discharges. Each owner intervention cured a missing primitive; P6 codifies the substrate so the primitives are held structurally.
+- Substrate dependency: P6c requires the comms-watch self-exclusion-only cure to be stable (Bundle 3 + Bundle 5 doc-completion); without correct broad-awareness, idle-misclassification cannot be reliably detected.
+
+---

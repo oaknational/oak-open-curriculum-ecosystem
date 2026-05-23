@@ -2,7 +2,7 @@ import {
   type CollaborationAgentId,
   type CommsEvent,
   type DirectedCommsMessage,
-  type DirectedInboxDrainResult,
+  type DrainResult,
   type LifecycleCommsEvent,
   type NarrativeCommsEvent,
 } from './types.js';
@@ -74,18 +74,23 @@ export function classifyEventForAgent(input: {
  *
  * Replaces the legacy `drainDirectedInbox` as the default for `comms watch`
  * and `comms inbox`. Emits every event classified as relevant for `self`
- * (all four views: broadcast, group, directed, lifecycle) with
+ * (all five views: broadcast, group, directed, observed, lifecycle) with
  * self-exclusion only — see `classifyEventForAgent` for the visibility
  * contract. Output lines are tagged `[BROADCAST]` / `[GROUP]` /
- * `[DIRECTED]` / `[LIFECYCLE]` so the agent knows the channel at a glance.
+ * `[DIRECTED]` / `[OBSERVED]` / `[LIFECYCLE]` so the agent knows the channel
+ * at a glance.
+ *
+ * Returns the formatted output and the IDs of drained events; does NOT mark
+ * them seen. The caller is responsible for marking AFTER the emit step
+ * succeeds so a crash between drain and emit produces duplicate (safe)
+ * rather than missed (unsafe) notifications. See FM-2 cure (2026-05-23).
  */
 export async function drainRelevantEvents(input: {
   readonly messages: readonly CommsEvent[];
   readonly seenIds: ReadonlySet<string>;
   readonly self: CollaborationAgentId;
   readonly remainingEvents?: number;
-  readonly markSeen: (eventIds: readonly string[]) => Promise<void>;
-}): Promise<DirectedInboxDrainResult> {
+}): Promise<DrainResult> {
   const classified = input.messages
     .map((event) => ({ event, view: classifyEventForAgent({ event, self: input.self }) }))
     .filter(
@@ -97,14 +102,15 @@ export async function drainRelevantEvents(input: {
     .slice(0, input.remainingEvents);
 
   if (classified.length === 0) {
-    return { output: '', eventCount: 0 };
+    return { output: '', eventCount: 0, eventIds: [] };
   }
 
-  await input.markSeen(classified.map((entry) => entry.event.event_id));
+  const eventIds = classified.map((entry) => entry.event.event_id);
 
   return {
     output: classified.map(formatClassifiedEvent).join('\n'),
     eventCount: classified.length,
+    eventIds,
   };
 }
 
@@ -235,11 +241,7 @@ function formatIdentity(agent: CollaborationAgentId): string {
 }
 
 function formatNarrativeAddressee(event: NarrativeCommsEvent): string {
-  if (event.addressed_to !== undefined) {
-    return event.addressed_to;
-  }
-  if (event.audience !== undefined) {
-    return `GROUP(${event.audience.join(', ')})`;
-  }
+  if (event.addressed_to !== undefined) return event.addressed_to;
+  if (event.audience !== undefined) return `GROUP(${event.audience.join(', ')})`;
   return 'BROADCAST';
 }

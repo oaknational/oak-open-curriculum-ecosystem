@@ -255,19 +255,14 @@ describe('drainRelevantEvents — full event stream surfacing with self-exclusio
         createdAt: '2026-05-21T08:04:00Z',
       }),
     ];
-    const marked: string[] = [];
-
     const drained = await drainRelevantEvents({
       messages: events,
       seenIds: new Set(),
       self,
-      markSeen: async (ids) => {
-        marked.push(...ids);
-      },
     });
 
     expect(drained.eventCount).toBe(5);
-    expect(marked).toStrictEqual([
+    expect(drained.eventIds).toStrictEqual([
       'broadcast-one',
       'group-one',
       'narrative-direct-one',
@@ -295,19 +290,14 @@ describe('drainRelevantEvents — full event stream surfacing with self-exclusio
       subject: 'Cross-traffic to stranger',
       body: 'Cross-traffic body.',
     });
-    const marked: string[] = [];
-
     const drained = await drainRelevantEvents({
       messages: [directedToStranger],
       seenIds: new Set(),
       self,
-      markSeen: async (ids) => {
-        marked.push(...ids);
-      },
     });
 
     expect(drained.eventCount).toBe(1);
-    expect(marked).toStrictEqual(['directed-to-stranger']);
+    expect(drained.eventIds).toStrictEqual(['directed-to-stranger']);
     expect(drained.output).toContain('[OBSERVED]');
     expect(drained.output).toContain('Cross-traffic to stranger');
   });
@@ -320,19 +310,14 @@ describe('drainRelevantEvents — full event stream surfacing with self-exclusio
       addressedTo: stranger.agent_name,
       createdAt: '2026-05-21T08:00:00Z',
     });
-    const marked: string[] = [];
-
     const drained = await drainRelevantEvents({
       messages: [narrativeToStranger],
       seenIds: new Set(),
       self,
-      markSeen: async (ids) => {
-        marked.push(...ids);
-      },
     });
 
     expect(drained.eventCount).toBe(1);
-    expect(marked).toStrictEqual(['narrative-to-stranger']);
+    expect(drained.eventIds).toStrictEqual(['narrative-to-stranger']);
     expect(drained.output).toContain('[OBSERVED]');
     expect(drained.output).toContain('Cross-traffic narrative');
   });
@@ -345,19 +330,14 @@ describe('drainRelevantEvents — full event stream surfacing with self-exclusio
       audience: [stranger.agent_name],
       createdAt: '2026-05-21T08:00:00Z',
     });
-    const marked: string[] = [];
-
     const drained = await drainRelevantEvents({
       messages: [narrativeExcludingSelf],
       seenIds: new Set(),
       self,
-      markSeen: async (ids) => {
-        marked.push(...ids);
-      },
     });
 
     expect(drained.eventCount).toBe(1);
-    expect(marked).toStrictEqual(['narrative-excludes-self']);
+    expect(drained.eventIds).toStrictEqual(['narrative-excludes-self']);
     expect(drained.output).toContain('[OBSERVED]');
     expect(drained.output).toContain('Group narrative for others');
   });
@@ -384,20 +364,15 @@ describe('drainRelevantEvents — full event stream surfacing with self-exclusio
         title: 'My own lifecycle',
       }),
     ];
-    const marked: string[] = [];
-
     const drained = await drainRelevantEvents({
       messages: events,
       seenIds: new Set(),
       self,
-      markSeen: async (ids) => {
-        marked.push(...ids);
-      },
     });
 
     expect(drained.eventCount).toBe(0);
     expect(drained.output).toBe('');
-    expect(marked).toStrictEqual([]);
+    expect(drained.eventIds).toStrictEqual([]);
   });
 
   it('excludes events that have already been seen', async () => {
@@ -406,19 +381,14 @@ describe('drainRelevantEvents — full event stream surfacing with self-exclusio
       author: peer,
       title: 'Already seen',
     });
-    const marked: string[] = [];
-
     const drained = await drainRelevantEvents({
       messages: [event],
       seenIds: new Set(['already-seen']),
       self,
-      markSeen: async (ids) => {
-        marked.push(...ids);
-      },
     });
 
     expect(drained.eventCount).toBe(0);
-    expect(marked).toStrictEqual([]);
+    expect(drained.eventIds).toStrictEqual([]);
   });
 
   it('orders emitted events by created_at then event_id', async () => {
@@ -436,18 +406,13 @@ describe('drainRelevantEvents — full event stream surfacing with self-exclusio
         createdAt: '2026-05-21T08:01:00Z',
       }),
     ];
-    const marked: string[] = [];
-
     const drained = await drainRelevantEvents({
       messages: events,
       seenIds: new Set(),
       self,
-      markSeen: async (ids) => {
-        marked.push(...ids);
-      },
     });
 
-    expect(marked).toStrictEqual(['first', 'second']);
+    expect(drained.eventIds).toStrictEqual(['first', 'second']);
     expect(drained.output.indexOf('First in time')).toBeLessThan(
       drained.output.indexOf('Second in time'),
     );
@@ -474,19 +439,14 @@ describe('drainRelevantEvents — full event stream surfacing with self-exclusio
         createdAt: '2026-05-21T08:03:00Z',
       }),
     ];
-    const marked: string[] = [];
-
     const drained = await drainRelevantEvents({
       messages: events,
       seenIds: new Set(),
       self,
       remainingEvents: 2,
-      markSeen: async (ids) => {
-        marked.push(...ids);
-      },
     });
 
     expect(drained.eventCount).toBe(2);
-    expect(marked).toStrictEqual(['one', 'two']);
+    expect(drained.eventIds).toStrictEqual(['one', 'two']);
   });
 });
