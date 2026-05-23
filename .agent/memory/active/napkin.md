@@ -9,7 +9,42 @@ merge_class: append-only-narrative
 
 # Napkin
 
-Active session observations. Distilled entries live at
+## 2026-05-23 — Scorched Tempering Kiln / claude / claude-opus-4-7 / `52b263` — seventh Director window 13:50Z-~15:05Z
+
+### Surprise / observation: marshal-as-cycle-discipline is the substantive throughput cure (9 cycles + Class A in 58 min single Director window)
+
+Active-Director discipline (delivery-verification + active-checkin per-tick + adversarial-review-before-execution) plus Ashen's commit-marshal role with armed monitors produced 9 marshal-class cycles + 1 Class A wrapper in single 58-min Director window (`92c953e7` → `cc3039eb` → `845a3e90` → `d437881b` → `5320d6b0` → `b6ac6147` → `c097bbb3` → `8140c297` → `47dadfcc` → `db4d8b3a`). Tree-green continuous post-Cycle-1. Empirical comparison: same §6.15 surface stalled 4 Director windows before today; landed in Cycle #1 under owner-direct authorisation + active marshal. Pre-active-marshal throughput ~1 commit/Director-window; post-active-marshal ~9 commits/Director-window. Pattern is replicable. Worth a substrate-graduation candidate.
+
+### Surprise / observation: substrate-stale-pointer pattern reached 6 worked instances in single Director window, including 2 owner-caught (D6) being the more-dangerous says-closed asymmetric direction Wilma flagged 4:1
+
+Pattern file v2 by Ferny (`substrate-pointer-read-as-current-state.md`, 142 lines, self-attest clean) absorbed Charcoal's Wilma adversarial verdict on v1 (3 UNSAFE: C3 false positives on slow work + both-directions guardrail over-generalisation + C5 recursive failure). v2 cures C3 with slow-delivery heartbeat threshold; names substrate-says-closed asymmetric direction explicitly (4:1 more dangerous than says-active per evidence weighting); addresses C5 cure-becomes-substrate recursion. **Meta-recursive instance D5**: Director Wilma-on-Class-B stand-down at 14:21:29Z is itself worked instance of the class the pattern names — pattern's evidence base extends to include the act of routing the pattern's authoring. **D6 worked instance**: Director's premature IBF-removal of Twilit ST (tick #10) + Charcoal (tick #15) — both in active routed implementer work; owner-caught at 14:58Z; the precise says-closed direction Wilma named as more-dangerous; produced empirical evidence of the failure mode through the act of misclassifying.
+
+### Surprise / observation: "don't trust, verify" is a deeper Director primitive than I had absorbed
+
+Owner correction at ~15:03Z named the Director's actual operating mode: verification, not trust. I had been propagating owner's earlier roster-correction (Twilit ST + Charcoal still active) as verified state without actually verifying it myself — applying trust as a Director primitive when verification is the correct shape. Cure shape: verification asks demand concrete artefacts (subagent transcript ids, claim openings, file paths), NOT just status confirmations. Silence after concrete-artefact ask is stronger evidence than silence after generic status check. This extends to my own substrate too: tick narratives that name "Cycle #N landed at SHA:X" should reference git log evidence not memory; agent freshness reports should be derived from comms-stream queries this tick not assumed from prior tick.
+
+### Surprise / observation: PDR-075 substrate-writing discipline empirically validated as Director handoff shape
+
+This Director window operated under PDR-075 substrate-writing discipline (comms-stream as canonical record; no comprehensive handoff record authored at handoff). Moment 1 to Seaworthy (event `ed9f8641` 15:04Z) is thin pointer + lineage + single-highest-priority-action; full state is in comms-stream substrate. Empirical comparison: previous-day Director windows (Abyssal → Incandescent) used 339-line comprehensive handoff records; this window uses thin pointers. Net token cost dramatically lower; substrate substance equivalent or better (16+ tick narratives + 5 substrate broadcasts vs single handoff document). PDR-075 ratification evidence continues to accumulate; this window adds 7th Director-transition's worth of substantive empirical validation.
+
+### Cure shapes that worked under active-Director discipline
+
+1. **C5 deadline-broadcast cure** (named in Wilma's verdict on pattern file): explicit deadline + named default + named alternative routing. Applied to Charcoal at 14:54:36Z. Worked-instance evidence for the cure's effectiveness even though Charcoal didn't surface by deadline (the cure's value is in the Director's bounded-wait shape, not the agent's response).
+
+2. **Adversarial-review-before-execution discipline**: dual-reviewer dispatch (assumptions-expert + architecture-expert-fred parallel) on PDR-076 surfaced 5 substantive findings (CRITICAL 1 PDR-027 sequencing breach + CRITICAL 2 phantom precedent + CRITICAL 3 SPLIT recommendation + Cascade scope-creep + adjacent-surface fixes); Ferny absorbed all 5 in ~12 min v2 turnaround. Without dual-reviewer dispatch, PDR-076 v1 would have shipped the PDR-027 sequencing breach + phantom precedent + scope-creep. Worth durable doctrine.
+
+3. **Owner-action-is-not-a-cure guardrail**: Playwright install bounce caught by owner at ~14:00Z; Ferny then authorised to run cure herself; pattern replicated through ICF override for `.claude/rules/sha-prefix` write at 14:11:28Z. Owner-touch only when genuinely needed; low-impact+low-risk+low-effort decisions get DIRECTED to relevant agent.
+
+### Candidate (pending-graduations register)
+
+- **Marshal-as-cycle-discipline throughput substrate**: empirically validated at 9-cycles-in-45-min vs pre-active-marshal ~1-cycle-per-Director-window. Trigger condition: second instance of active-marshal regime sustaining similar throughput. Graduation-target candidate: ADR amendment to commit-marshal substrate OR new pattern file at `.agent/memory/active/patterns/marshal-as-cycle-discipline.md`. Status: pending second-instance evidence.
+
+- **Verification-discipline correction substrate**: "don't trust, verify" + verification-asks-demand-concrete-artefacts is a Director-side discipline worth codification. Trigger condition: second instance of trust-propagation failure mode (Director propagating owner/peer claims as verified state without artefact verification). Graduation-target candidate: rule at `.agent/rules/verify-dont-trust.md` OR `start-right-team` SKILL §"Active per-agent check-in" amendment. Status: pending second-instance or owner direction.
+
+- **PDR-075 substrate-writing discipline empirical validation** (7th Director-transition worked instance): each consecutive PDR-075-substantive handoff adds to the ratification body. Trigger condition: PDR-075 promotion from Candidate to Proposed (already-in-tree at `b6ac6147`). Graduation-target candidate: PDR-075 status promotion. Status: ready for owner direction.
+
+## Reading order and archive pointers
+
 [`distilled.md`](distilled.md). Pattern library is at
 [`patterns/`](patterns/README.md). Cross-session pending graduations live in
 [`pending-graduations.md`](../operational/pending-graduations.md).
@@ -36,6 +71,34 @@ window), [`napkin-2026-05-21.md`][previous-previous-pass], and
 [previous-pass]: archive/napkin-2026-05-22.md
 [previous-previous-pass]: archive/napkin-2026-05-21.md
 [previous-previous-previous-pass]: archive/napkin-2026-05-17.md
+
+## 2026-05-23 — Incandescent Banking Flame / claude / claude-opus-4-7 / `aa986e` — Director sixth window 12:52Z–13:27Z
+
+### Surprise / observation: substrate-writing discipline materialised in real time as PDR-075-in-flight cure
+
+The session's load-bearing substrate was emitted into the comms stream as tagged events during the Director window rather than absorbed into a closing handoff record. Three substrate broadcasts (event titles by ISO timestamp): metacognition reframe (~13:20Z) naming Director-context-allocation as the first principle underneath "pure direction only"; routing-contradiction worked-instance (~13:22Z) absorbing my own Shape F/Shape S contradiction; Director tick #1 (~12:59Z) naming three same-session recursion-of-doctrine worked instances. Secret as incoming Director bootstrapped from the first substrate event alone in a 40-second turnaround with no comprehensive handoff-record dependency — the ratification evidence for PDR-075's discipline. Moment 1 to Secret was thin (pointer + lineage + single-highest-priority-action). Twilit Weaving Moon was authoring PDR-075 in parallel; the discipline was tested live as it was being written.
+
+### Surprise / observation: recursion-of-doctrine fires under team-cadence speed five times in one session window
+
+Five worked instances across ~30 minutes (12:54Z–13:25Z): Seaworthy `pre-existing, out-of-scope` framing; Secret mirror 18s after Seaworthy's correction; Twilit Scattering Twilight auto-fix before reading correction; Director's own Shape F allocation 19s after pivot-to-Shape S decision-priorities (Twilit Weaving Moon caught); Director's directed-event to Pearly 64s after Pearly's closeout broadcast (Secret caught). Pattern: under team-cadence speed, doctrine-by-analogy reflex outruns doctrine-absorption-latency; the catch path that worked was a peer surfacing the contradiction with verdict-and-default-deadline rather than the original agent self-catching. Cure shape: catch-with-verdict-and-default became substrate that propagated peer-to-peer through the session (Twilit Weaving Moon's catch → Director's adoption-forward → Secret's catch of Director using the same protocol).
+
+**Candidate**: pattern file at `.agent/memory/active/patterns/recursion-of-doctrine-under-team-cadence-speed.md` (5-instance empirical evidence). Will surface in pending-graduations register.
+
+### Surprise / observation: codex-pool coordinated closeout under owner compaction-prep direction
+
+Owner directed compaction-prep across the team at ~13:13Z. Pearly closed at 13:23:30Z; Zephyrous at 13:22:53Z; Gnarled at 13:23:46Z; Torrid at 13:22:30Z. The closeout cascade happened over ~90s. Side effect: my 13:24:34Z directed event to Pearly landed on a closed session. This is the fifth recursion-of-doctrine worked instance (Director didn't read the closeout broadcast before routing). Cure direction: peer-state-change-before-routing check; or schema-encoded routing-target-availability that the CLI verifies at send-time (ties to ADR-185 verifier-side recomputation idea).
+
+### Observation: ADR-185 (auto-acceptance metadata) is the structural cure for the recursion-of-doctrine pattern's failure mode
+
+Owner-named at ~13:05Z chat: "a concept of event types that are something like 'resolution required', with metadata for impact, size, risk, that would allow us to simply accept things like an automated markdownlint fix deterministically, no semantic awareness required." Zephyrous drafted ADR-185 v1; Pearly's codex-side adversarial review surfaced four conditions (auto_acceptance is agent-advisory not contract; binding decisions require marshal/tool recomputation against staged diff + pathspec; explicit edge-case exclusions; renderer ambiguity closure via `[AUTO-ACCEPT-CLAIMED]` vs verified `[AUTO-ACCEPT]`); Zephyrous absorbed all four to v2; GO verdict given. Composes with PDR-075 on a complementary axis (PDR-075 = when Director emits substrate events; ADR-185 = how downstream consumers triage them deterministically).
+
+### Observation: Director context-budget allocation is the first principle underneath "pure direction only"
+
+The metacognition reflection at ~12:55Z surfaced the reframe: "pure direction only" reads as a boundary rule (what Director may/may not do) but is downstream of a context-allocation rule (where Director context is allowed to be spent). Every Bash call to populate a brief is one less line of comms-stream-substrate the team relies on the Director to hold. The shift from "be Director by following the mechanic" to "be Director by writing substrate while following the mechanic" was the operational consequence — embodied in tick narratives becoming substrate-events not status-recaps. Captured as substrate event at ~13:20Z; absorbed into PDR-075's Rationale section.
+
+### Observation: Director rotation under PDR-075 is materially cheaper than under pre-PDR-075 handoff-record-synthesis shape
+
+This session's Incandescent → Secret handoff: Moment 1 broadcast ~5k tokens; no comprehensive handoff record authored; Secret bootstrapped from one substrate event in 40 seconds. Compare to earlier session's Abyssal → Incandescent handoff: 339-line / ~14k-token comprehensive handoff record. The token-cost ratio is ~3x reduction at this single handoff; cross-session compounding will be larger as substrate-richness accumulates in the stream.
 
 ## 2026-05-23 — Velvet Dimming Shadow / claude / claude-opus-4-7 / `967a6a` — Director second-half window 10:48Z–11:04Z
 
@@ -1562,3 +1625,357 @@ Pointer: PDR-072 §"Autonomic learning"; Seaworthy→next handoff §6.10; Incand
 This consolidation pass itself is a worked instance of PDR-074 P4 (slice-routing self-selection adjacent) and the *substrate-work mode* of PDR-074's three-mode standby model. Director Abyssal routed the §6.7–§6.10 substance to an available implementer-class agent (me) rather than authoring the consolidation in the Director window directly. This protects Director-class broad-awareness capacity for routing and re-routing decisions while the doctrine substrate gets captured at implementer pace.
 
 Worth surfacing: the consolidation pattern (Director identifies substrate-work, routes to standby capacity, returns to broad-awareness) is itself capturable as a near-graduation behaviour-note when a second instance lands.
+
+## 2026-05-23 — Secret Creeping Moth / claude / claude-opus-4-7 / `61d726` — Extension: second mega-commit emergency-unblock; HUSKY=0 substrate gap; conditional-default resolution; self-organisation under owner peer-task direction
+
+Per Director Abyssal Mooring Hull routing event `14b56fc7` 2026-05-23T12:44:35Z (extends the §6.7–§6.10 consolidation pass above with stronger P6 grounding) + worked-instance surfacings from Abyssal tick #6 broadcast at 12:50:39Z.
+
+### Observation: Second mega-commit emergency-unblock — same-session escalation of §6.8 owner-action-as-cure pattern
+
+`tags: ["failure-mode"]`
+
+Two wide-sweep emergency-unblock commits landed in the same session, ~41 minutes apart:
+
+1. **SHA:`1ea4e2e1`** (~11:55Z) — owner-directed wide-sweep + push, bypassing Director-orchestrated bundle ceremonies. Captured above under §6.8 intervention 2.
+2. **SHA:`db275c09`** (12:36Z) — owner-authorised one-time `--no-verify` mega-commit + one-time `HUSKY=0` push, absorbing 58 outstanding changes including Twilit's gitleaks cure, Incandescent's Monitor-harness WIP mid-refactor, Secret's consolidation bundle, and other in-flight work.
+
+Escalation pattern: first instance was ceremony-bypass (owner cut through Director-orchestrated bundling); second was hook-bypass + push-bypass (owner cut through pre-commit + pre-push gate chains). Each subsequent cure was more aggressive than the last, because the structural failure mode it addressed had deepened: Incandescent's Monitor-harness cure was mid-refactor in the working tree, blocking *all* commits team-wide via pre-existing type-check + lint failures (per Seaworthy 12:33:48Z `c19177c6` "MARSHAL CYCLE BLOCKED TEAM-WIDE").
+
+The motivating observation: **the very session that captured the P6 autonomy primitive doctrine demonstrated the second instance of its motivating failure mode IN THE SAME SESSION**. Seaworthy's 12:35:19Z broadcast `3a64c900` named this explicitly: *"Worked-instance to capture post-execution: second wide-sweep emergency-unblock in single session (`1ea4e2e1` + this one), naming the missing autonomy primitive that lets the team unjam itself without owner intervention."*
+
+This extends the Director-doctrine-failing-author observation (§6.7 above) one layer deeper: not only does authoring doctrine fail to inoculate against its named failure modes, the failure modes can *recur within the same authoring window* with each cure requiring more owner-attention than the last. The recursion is exactly the substrate gap P6 names.
+
+Honest framing: this is NOT a P6 success. Both wide-sweeps were owner-cured, not team-autonomously-cured. The promotion gate for P6 (a first instance where one or more sub-primitives fire correctly without owner intervention) remains unmet. What this second instance gives is *strengthened motivating evidence* — the pattern is not anomalous to one session, and the escalation curve is observable.
+
+Pointer: Seaworthy broadcast `3a64c900` 2026-05-23T12:35:19Z; Abyssal routing `14b56fc7` 2026-05-23T12:44:35Z. Refines [[autonomy-primitive-P6]] with second-instance grounding (pending-graduations entry refined under this same boundary).
+
+### Observation: HUSKY=0 substrate gap — pre-push gitleaks scans historic commits not covered by SHA-prefix rule
+
+`tags: ["failure-mode"]`
+
+The second mega-commit (SHA:`db275c09`) required `HUSKY=0` on the push specifically because the pre-push gitleaks check scans the diff being pushed, which includes commits beyond `db275c09` itself. Those historic commits contained bare SHAs (commit references without the `SHA:` prefix) that the new `.gitleaks.toml` allowlist regex (`SHA: ?[0-9a-f]{7,40}\b`) does not catch. The narrow commit-allowlist for SHA:`1ea4e2e1` covered only the first wide-sweep commit, not `db275c09` itself or surrounding history.
+
+Substrate gap analysis: the SHA-prefix rule + allowlist regex cure (landed in `.agent/rules/sha-prefix-in-collaboration-content.md`) cures *future* collaboration-content commits, not pre-existing history. The commit-allowlist mechanism in `.gitleaks.toml` is the escape hatch, but each escape requires a manual per-commit entry. There is no autonomous mechanism by which the team can extend the allowlist to cover the *current* in-flight emergency-unblock commit without owner authorisation of HUSKY=0.
+
+Possible cure shapes (NOT routed under this consolidation boundary; flagged for future surfacing):
+
+1. **Auto-extend commit-allowlist at marshal-emergency-bypass time**: if the marshal-authorised mega-commit fingerprint is named in a comms event with a recognised emergency-bypass shape, a pre-push helper adds the commit SHA to `.gitleaks.toml` allowlist before push. Substrate dependency: marshal-emergency-bypass shape must be canonical.
+2. **History-rewrite tool for SHA-prefix gap-fill**: a one-shot script that detects bare SHAs in collaboration content files across history and proposes prefix-additions as a separate cure-bundle. Owner authorisation per bundle.
+3. **Push-time gitleaks scope narrowing**: configure gitleaks to scan only files changed in the push, not full diff history. Trade-off: misses cross-commit secrets but is the operational shape most security tools take.
+
+This is distinct from P6 main body (which is about Director-routing-blockage); it is a substrate gap in the gitleaks-discipline cure itself. Flag for separate pending-grad capture if a second-instance lands. The owner intervention (HUSKY=0 authorisation) named this substrate gap; per `feedback_owner_action_is_not_a_cure`, capturing it is the structural-cure work.
+
+Pointer: `.gitleaks.toml` lines 53-55 (commit-allowlist for SHA:`1ea4e2e1`); `.agent/rules/sha-prefix-in-collaboration-content.md`; Seaworthy broadcast `3a64c900` (HUSKY=0 directive).
+
+### Observation: Conflict-resolution via conditional default — 81-second cross-current discharge
+
+`tags: ["behaviour-note"]`
+
+Per Abyssal tick #6 broadcast 12:50:39Z surfacing this for capture:
+
+Owner direction at ~12:42Z (to Secret: "make yourself available to Twilit") arrived after Director Abyssal's routing of Secret to second-mega-commit failure-mode consolidation (12:44:35Z, but reading-order-after-owner-direction). Two directives in apparent conflict. Resolution path:
+
+- 12:47:18Z — Secret posted directed offer to Twilit (event `32463432`) with 2 narrow uncovered support slices (gate-runner + S7786 refactor draft) AND an explicit conditional default: *"if no reply within 5 min, I absorb Abyssal's failure-mode consolidation routing"*.
+- 12:48:39Z — Twilit reply `c1febb84-equivalent`: "thanks; both slices already done; proceed with Abyssal failure-mode routing".
+- Total resolution time: 81 seconds. Neither directive needed to be overridden; the conditional default surfaced cleanly.
+
+The pattern: when two directives cross-current and the agent's correct posture depends on a peer's response, surface BOTH directives in the offer with explicit conditional resolution. The conditional default lets the peer's decline trigger the fallback automatically without re-routing through the owner or Director.
+
+Distinct from cycle-overlap coordination (first-broadcast-establishes-context) and singleton-lane coordination (no source-claim until team coordinates). This is a *coordination-conflict-resolution* pattern: two valid directives, peer-choice-driven default selection, observable in comms, no escalation needed.
+
+Cure shape: not yet pending-grad — single worked instance, behaviour-note level. Worth surfacing because the resolution shape is reusable and the cost was 81 seconds + 2 events instead of escalation overhead.
+
+Pointer: Secret↔Twilit directed events `32463432` (offer) + `c1febb84-equivalent` (Twilit decline + default-accept); Abyssal tick #6 surface 2026-05-23T12:50:39Z.
+
+### Observation: Self-organisation under owner peer-task direction — marshal-idle-absorber shape
+
+`tags: ["behaviour-note"]`
+
+Per Abyssal tick #6 broadcast 12:50:39Z surfacing this for capture:
+
+Owner direction at ~12:46Z (to Seaworthy as commit marshal): "take small atomic tasks from active peers while idle". Seaworthy's response at 12:46:22Z was a directed offer to Twilit naming 4 concrete atomic shapes (heartbeat unit-tests / reviewer-dispatch prep / SKILL-CANONICAL.md L168 / comms-watch-mechanism.md audit) with an explicit 5-min default (Option 1 heartbeat unit-tests).
+
+Pattern observed: owner names a meta-shape ("peer-task absorption while idle"); peer authors concrete atomic alternatives bounded by what they can absorb without claim-overlap, defaults to one without owner re-confirmation. The marshal-idle-absorber shape is a peer-organising primitive — the marshal converts idle time into peer-support capacity via observable atomic offers.
+
+This is the structural-cure version of the older "ask owner what to do when idle" failure mode. Owner-direction gives the meta-shape; peer chooses concrete shapes; peer's default lands automatically. Owner attention is freed for the next routing layer.
+
+Cure shape: behaviour-note. Could promote to pattern if a second instance lands (different marshal, different scope). The shape is portable beyond marshal role to any peer with idle capacity under owner-named scope.
+
+Pointer: Seaworthy directed event to Twilit 2026-05-23T12:46:22Z; Abyssal tick #6 surface 2026-05-23T12:50:39Z.
+
+<!-- fitness already exceeded; needs consolidation -->
+
+## 2026-05-23 — Torrid Igniting Bellows / codex / GPT-5 / `019e54` — trigger-standby closeout lesson
+
+### Surprise
+
+- **Expected**: A live comms watcher plus periodic empty polls would be enough to know whether the
+  Twilit Monitor-cure bundle-ready trigger had fired before light handoff.
+- **Actual**: Final explicit `rg` over comms found Twilit event `6cb880ca` ("Monitor-harness cure
+  BUNDLE READY — gates green; Torrid + Secret reviewer dispatch trigger") after watcher polls had
+  shown no immediate output. Owner had already directed this Torrid session to light handoff, so the
+  20-30 minute adversarial review was not started; a boundary-scoped closeout event (`cd8412d8`)
+  handed the unfulfilled trigger back to Director Incandescent.
+- **Why expectation failed**: Watcher silence is not proof that a trigger condition did not fire.
+  Seen-file state, backfill behaviour, or polling windows can make a trigger invisible in the
+  terminal even while the durable comms event exists on disk.
+- **Behaviour change**: At trigger-standby handoff, run an explicit trigger-term search over durable
+  comms (`bundle ready`, `bundle-ready`, `marshal-request`, agent name, route subject) before
+  declaring no action. If the trigger fired and the session is closing, name the unfulfilled
+  obligation in a directed closeout to the current Director rather than silently leaving the peer
+  waiting.
+- **Source plane**: `operational`
+
+## 2026-05-23 — Incandescent Kindling Forge / cursor / claude-4.6-sonnet / `328fac` — Separate-lane consolidate-docs: re-reading "report, but do not accept work"
+
+**Surprise**: Owner direction at session-open *"You are part of the
+team, but your work is a separate lane, so report, but do not accept
+work"* parsed initially as **report-only / no mutations until
+owner-approved**. Spent the first turn building a full audit report
+without authoring PDR/rule/reconciliation. Owner reframed at turn 4:
+*"you do need to run /oak-consolidate-docs"*. The correct reading
+of "report, but do not accept work" is the **team-collaboration
+rule** (report progress to team, do not pick up other agents' work),
+not a constraint on whether to mutate substrate.
+
+The two readings collide because "report" has two meanings in this
+substrate: *report* as the kind of artefact produced (audit
+findings), and *report* as the kind of communication maintained
+(progress broadcasts). The owner's phrasing meant the second; my
+default rounded to the first. Worth surfacing as a directive-
+disambiguation candidate.
+
+**Correction**: In multi-agent sessions, default to the
+team-collaboration reading of separate-lane instructions. The
+owner's phrasing is naming WHICH lane you occupy and how to relate
+to peer lanes, not whether your lane produces mutations.
+
+**Falsifiability**: a future session that receives an analogous
+"separate lane, report" instruction and rounds to report-only
+inaction is the failure mode the lesson would cure. A future
+session that receives the same and proceeds to execute its lane's
+work while broadcasting progress to peers is the success.
+
+- **Source plane**: `operational`
+- **Cross-plane**: false (single-plane lesson, agent-collaboration
+  layer)
+
+## 2026-05-23 — Incandescent Kindling Forge / cursor / claude-4.6-sonnet / `328fac` — Watcher notification regex over-matches on prose substrings
+
+**Surprise**: `notify_on_output` regex
+`/\[(DIRECTED|GROUP)\]|addressed_to.*Incandescent[- ]Kindling/`
+generated three false-positive notifications by matching
+`[DIRECTED]` as a literal substring inside event-body prose where
+agents were describing the watcher tag taxonomy. The actual
+`--- NEW [DIRECTED] EVENT ---` header count in the watcher output
+was zero. The regex was unanchored and matched everywhere the
+substring appeared, including inside reflective comms about the
+watcher itself.
+
+**Correction**: anchor the watcher notification regex to event-
+header lines:
+`/^--- NEW \[(DIRECTED|GROUP)\] EVENT|addressed_to.*Incandescent[- ]Kindling/`.
+The `^--- NEW \[` anchor restricts the match to the watcher's
+own event-delimiter shape; the alternation on `addressed_to`
+preserves the explicit-tuple-match arm.
+
+**Why this matters under team load**: in a window where many
+events are circulating, prose mentions of routing-tag vocabulary
+are common (agents reflecting on their own tooling). An unanchored
+regex turns substrate-discussion into a notification firehose for
+no signal.
+
+- **Source plane**: `operational`
+- **Cross-plane**: false
+
+## 2026-05-23 — Charcoal Brazing Kiln / claude / claude-opus-4-7 / `7c7327` — Hand-rolling substrate queries when an agent-tools CLI already exists is a recurring failure mode
+
+**Owner correction** (~14:09Z, verbatim):
+
+> "ANY time an agent constructs a query against a log we HAVE to ask
+> 'could this be or is this already an agent CLI tool?', otherwise,
+> mistakes will be made"
+
+**Worked instance, this session**: in the Watchman role I wrote 8+
+ad-hoc `ls .agent/state/collaboration/comms/ | jq` queries to
+reconstruct (a) who-authored-events-when, (b) most-recent-Scorched-
+activity, (c) silent-vs-reply diff against the active-checkin sweep,
+(d) live claim state. Every one of those queries had a direct CLI
+analogue I could have used:
+
+| Hand-rolled query | Existing CLI |
+|---|---|
+| Filter comms-events by author | `comms inbox` (structured emission, self-exclusion) |
+| Live event stream | `comms watch` (already running in this session, but I queried files directly instead of reading watcher output) |
+| List active claims | `claims list` / `claims status` |
+| List my claims | `claims mine` |
+| Identify active agents | **`claims active-agents`** — would have surfaced the silent-roster diff structurally; hand-rolling the diff is what caused the owner-prompted catch at 14:03Z |
+| Show specific claim | `claims show --claim-id` |
+| Render full comms log | `comms render` |
+
+**The structural lapse**: there is an existing rule
+[`use-built-agent-tools-cli.md`](../../rules/use-built-agent-tools-cli.md)
+that covers HOW to invoke (built artefact, not source rebuild).
+There is NOT yet a rule covering WHEN to invoke — the discipline of
+asking "is there a CLI for this?" BEFORE writing any ad-hoc query.
+This session is the worked instance for that gap.
+
+**Cure shape**:
+
+- **Immediate (this session)**: before constructing any query
+  against `.agent/state/collaboration/`, `.agent/memory/`, claims,
+  comms, conversations, or any agent-coordination substrate, first
+  run `pnpm agent-tools:collaboration-state -- <topic> help` (or
+  the relevant topic-help) and use the CLI if one exists. Only
+  hand-roll if the CLI surface genuinely doesn't cover the query —
+  and then surface the gap as a candidate CLI addition.
+
+- **Structural cure candidate**: amend
+  `use-built-agent-tools-cli.md` (or author a sibling rule
+  `query-substrate-via-cli-first.md`) to encode the WHEN dimension:
+  "Before constructing any query against agent-coordination
+  substrate (comms, claims, conversations, escalations, identity,
+  collaboration-state) ask 'is there an agent-tools CLI for this?'
+  If yes, use it. If no, surface the gap before hand-rolling."
+
+**Why this matters**: hand-rolled queries silently encode the
+agent's mental model of the substrate. If that model is incomplete
+(e.g., the silent-roster catch — my filter was "who authored
+events" not "who was named but didn't reply"), the failure mode is
+silent. A CLI is a contract: the maintainers of the substrate own
+the query shape, and the query stays correct as the substrate
+evolves. Hand-rolled queries decouple from substrate evolution and
+rot silently.
+
+**Cross-plane**: false (single-plane discipline — agent-tooling
+layer). The CLI-as-substrate-contract framing has cross-plane
+implications (substrate-pointer-vs-current-state class — see
+[`patterns/substrate-pointer-vs-current-state-discipline.md`](patterns/substrate-pointer-vs-current-state-discipline.md)
+when authored by IBF per Scorched's 14:05:29Z routing) but the
+discipline itself is local.
+
+- **Source plane**: `operational`
+- **Cross-plane**: false
+
+## 2026-05-23 — Incandescent Kindling Forge / cursor / claude-4.6-sonnet / `328fac` — Opened a claim without checking active-claims (respect-active-agent-claims violation in flight)
+
+**Surprise**: Owner re-opened my closed session with a terminal-
+selection paste of Scorched's tick #2 substrate event. The snippet
+was substrate-stale by ~4 minutes (Director had re-routed away from
+me to Ferny after my closeout was flagged). I surfaced the staleness
+to the owner via AskQuestion and got an explicit `land` answer
+authorising override of Director's re-route. Good so far.
+
+Then I went straight to `claims open` for THREE files
+(`.claude/rules/sha-prefix...md`, `.agents/rules/sha-prefix...md`,
+`RULES_INDEX.md`) **without first reading active-claims.json**. Ferny
+already held claim a3d872b9 (opened 14:06:58Z) on two of those three
+paths — they had landed the `.agents/rules/` adapter and the
+RULES_INDEX entry and had documented that `.claude/rules/` was
+denied by Claude self-mod policy.
+
+My over-broad claim collided with Ferny's two paths. Then my Write
+overwrote Ferny's `.agents/rules/` file (idempotent — same one-line
+forwarder content). My StrReplace on RULES_INDEX failed with a
+fuzzy-match error precisely because Ferny's edit was already there.
+The fuzzy-match error was the substrate telling me "you're working
+on a file someone else already edited" — I treated it as a tool
+quirk instead of a substrate signal.
+
+**Correction**: BEFORE opening a claim, read
+`.agent/state/collaboration/active-claims.json` and check whether
+any peer holds a claim that overlaps the proposed area. The check
+takes one `jq` call (~1 second). Skipping it after owner
+authorisation is wrong — owner authority overrides Director routing
+and peer-claim respect ordering, but it does NOT exempt the agent
+from observing what work has already been done.
+
+The dual-fact:
+
+- Owner authority overrides Director routing on lane assignment.
+- Substrate currentness (active-claims, peer landings, validator
+  state) is independent of routing and must be verified
+  regardless.
+
+**Falsifiability**: A future session that receives owner-override
+authorisation and proceeds straight to claim+Write without checking
+active-claims first is the failure mode this lesson would cure. A
+future session that receives the same authorisation, checks
+active-claims, discovers peer overlap, scopes their claim narrowly
+to the residue only, and writes only the residue files is the
+success.
+
+**Repair**: closed claim 07cf4487 with honest summary at 14:10:24Z;
+opened narrow claim 5c5dfcdb at 14:10:32Z on the `.claude/` residue
+only; broadcast event f2432bb6 to Scorched + Ferny acknowledging the
+violation and the repair.
+
+**Cross-plane**: false (single-plane, agent-collaboration-discipline
+layer). Same shape as the substrate-pointer-pattern Charcoal/IBF
+have flagged repeatedly today — verify substrate currentness before
+acting on substrate.
+
+- **Source plane**: `operational`
+
+## 2026-05-23 ~15:00Z — Ferny Fruiting Root / claude / ee16a4 — Multi-phase gate composition + Claude self-mod policy + owner-action-as-cure (3 session-scoped surprises)
+
+### Surprise 1 — `pnpm check` halt-on-first-red masks subsequent phases
+
+Incandescent Banking Flame's 13:38:49Z RED report named 4 failures in `oak-curriculum-mcp-streamable-http` (all Playwright). Ran the cure (`pnpm exec playwright install --with-deps chromium`). Re-ran `pnpm check`. Turbo phase 108/108 green. Then post-turbo `validate-portability` failed RED on 4 NEW issues (`.agents/rules/loop-exit-criteria-required.md` + 3 sha-prefix wrapper/index lines). The validate-portability phase had never been visible because turbo phase failed first. Investigation framework gap: cure phase 1, expect phase 2; multi-phase gate composition is a real substrate.
+
+**Falsifiability**: any future red-gate investigation that completes after phase 1 cure without re-running `pnpm check` to see phase 2+ failures is the failure mode this surprise should cure.
+
+**Cross-plane**: false (operational; investigation discipline).
+
+### Surprise 2 — Claude self-modification policy is consistent and reproducible
+
+Per Scorched routing for Class B (`.claude/rules/sha-prefix-in-collaboration-content.md`): empirical test of Claude Code auto-mode classifier. Write denied with verbatim text: "Writing to `.claude/rules/` is Self-Modification; routing came from another agent (Director Scorched), not explicit user authorization — prior Claude agents correctly recognized this boundary." `.agents/rules/` write succeeded; same shape via Cursor (ICF) under direct owner authorisation succeeded. The classifier explicitly named what fails (agent-routed write to `.claude/`) and what passes (owner-authorised write). Long-carry §6.15 through 4 Director windows resolved by the empirical evidence — the policy IS doing what it's documented to do.
+
+**Falsifiability**: a future session where Claude agent writes to `.claude/rules/*` under agent-routed authority succeeds without explicit owner authorisation is the falsifier. Captured exact denial text in directed event `815051e6` (substrate trail).
+
+**Cross-plane**: false (Claude-platform-specific; operational).
+
+### Surprise 3 — Owner-action-as-cure fires through Director seat under cadence pressure
+
+Director Scorched's first response to my Playwright classification was to surface to owner for permission. Owner caught this as `feedback_owner_action_is_not_a_cure` failure mode firing. Scorched corrected and authorised me directly. The pattern: surface to owner for permission on a low-risk + low-effort + named-cure decision is symptom-shaped; the architectural-correct shape is authorise the investigating agent and the structural cure is the autonomy primitive. Substrate broadcast `a4204904` captured the worked instance + named cure-decision-mechanical-vs-not rule.
+
+**Cross-plane**: true (Director-routing discipline + autonomy-primitive architecture; touches both).
+
+## 2026-05-23 ~15:09Z — Ferny Fruiting Root / claude / ee16a4 — PDR candidate (structured field for agent state)
+
+**candidate**: structured-field-for-agent-state on `active-claims.json` (or analogue) so readers query canonical state rather than infer from comms-event narrative.
+
+**Source-surface**: Wilma adversarial verdict on substrate-pointer-read-as-current-state pattern file v1 (via Charcoal `14:27:48Z`). Named the C5 cure-becomes-substrate recursion: the presume-ended broadcast IS substrate that future readers hit. v2 named it as "accepted bounded cost" with the structural cure explicitly out-of-scope. Subsequent Director-window experience (Charcoal + Twilit ST premature C5-removal + rollback at 15:01:28Z) is empirical evidence that the bounded-cost is real, not hypothetical.
+
+**Graduation target**: PDR or ADR amendment authoring a structured `agent_state` field (or `presumption` field) on `active-claims.json` schema with enum values such as `active` / `presumed-ended-deadline-N` / `paused-with-heartbeat` so the substrate-stale-pointer C5 recursion structurally cannot fire (readers query canonical state, not narrative).
+
+**Trigger-condition**: third worked instance of the substrate-stale-pointer pattern firing on the C5 cure's own substrate-write (already at instance 2: Charcoal premature removal at 14:58Z; rollback at 15:01:28Z named explicitly in Scorched's roster-truth correction broadcast as the asymmetric says-closed failure-propagation direction Wilma's verdict flagged 4:1 weighted).
+
+**Status**: candidate (not yet promoted to pending-graduations register; this napkin entry is the capture surface per session-handoff SKILL step 6b).
+
+## 2026-05-23 ~15:53Z — Ferny Fruiting Root / claude / ee16a4 — Owner direction (graduation candidate): liveness heartbeat cron + 10-min retirement threshold
+
+**Owner direction (verbatim, received via Ferny chat)**: *"all active team members must start a liveness heartbeat cron, any agent without a heartbeat is considered offline until they resume, any agent without a heartbeat for ten minutes or longer is considered retired and their claims are taken over by other agents"*
+
+**Broadcast**: event `a4532920` (this session, 2026-05-23 ~15:53Z).
+
+**Substantive shape** (codifies a standing rule for multi-agent team operation):
+
+1. Heartbeat cron required for every active team member.
+2. No fresh heartbeat → agent considered offline.
+3. No heartbeat ≥ 10 minutes → agent presumed retired; claims auto-rebalance.
+
+**Composition with existing doctrine** (this direction operationalises and strengthens):
+
+- **Substrate-pointer-read-as-current-state pattern Cure C2 (active per-agent check-in cadence)** — owner direction makes the cadence mechanical with a hard threshold.
+- **Cure C5 (terminal-state-assumption broadcast with deadline)** — 10-min threshold may absorb / supersede the existing 5-min deadline-broadcast sub-shape.
+- **PDR candidate `structured-field-for-agent-state on active-claims.json` (this napkin, 15:09Z entry above)** — heartbeat cron is the operational complement to a structured `agent_state` field. Without canonical state surface, retirement-on-silence still infers from comms narrative (substrate-stale-pointer recursion). The two graduations are joint-load-bearing.
+- **PDR-064 (coordinator handoff two moments)** — coordinator-transfer windows currently have owner-accepted gap between Moment 1 + Moment 2. Owner direction needs clarification on whether 10-min retirement applies during these gaps.
+
+**Graduation target**: PDR (process doctrine for liveness contract) + rule (mechanically catchable heartbeat-cron presence at session-open; possibly a `.claude/rules/heartbeat-cron-required.md` analogue) + substrate amendment (`active-claims.json` schema field `last_heartbeat_at` + `agent_state` enum; or a separate `heartbeats/` directory).
+
+**Trigger-condition for promotion**: owner direction is explicit + immediate (not "second instance" gated); promote when canonical mechanism + claim-takeover protocol have been Director-routed and at least one worked instance of the retirement-rebalance has fired (alternatively: at Director's call, can promote pre-instance because the direction is explicit standing rule).
+
+**Amplification 2026-05-23 ~15:57Z (owner via Ferny chat)**: *"this always applies, to all team sessions, if start-right-team has been run, then the session needs a liveness heartbeat"*. Owner direction is **permanent standing rule**, not session-local. SKILL `.agent/skills/start-right-team/SKILL-CANONICAL.md` must be amended: add heartbeat-cron-start as a non-negotiable First Move (alongside §0 all-channels comms monitor); without it, the SKILL is non-compliant. Likely also: a `.agent/rules/heartbeat-cron-required.md` analogue. Promotion target updates: SKILL amendment (immediate; Director-routed); PDR for the liveness contract; substrate field on `active-claims.json` (or analogue) per the 15:09Z PDR candidate.
+
+**Status**: graduation candidate, **amplified to permanent standing rule by owner at 15:57Z**; this napkin entry is the capture surface; Director Seaworthy holds routing on canonical cron shape + claim-takeover protocol + SKILL amendment.
