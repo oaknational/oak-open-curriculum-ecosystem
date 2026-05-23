@@ -95,7 +95,7 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
       'comms inbox --comms-dir <dir> --seen-file <path> ' +
       '--platform <platform> --model <model> ' +
       '[--session-prefix <prefix>] [--only-directed] ' +
-      '(default: emit every relevant event — broadcast, group, directed, lifecycle — ' +
+      '(default: emit every relevant event — broadcast, group, directed, observed, lifecycle — ' +
       'with self-exclusion only; --only-directed narrows to directed-to-me)',
     options: commsInboxOptions,
     handler: inboxComms,
@@ -106,7 +106,7 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
       '--platform <platform> --model <model> ' +
       '[--session-prefix <prefix>] [--only-directed] ' +
       '[--poll-ms <n>] [--max-events <n>] ' +
-      '(default: emit every relevant event — broadcast, group, directed, lifecycle — ' +
+      '(default: emit every relevant event — broadcast, group, directed, observed, lifecycle — ' +
       'with self-exclusion only; --only-directed narrows to directed-to-me)',
     options: commsWatchOptions,
     handler: watchComms,

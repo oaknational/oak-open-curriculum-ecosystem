@@ -127,12 +127,13 @@ persistent watcher running over the **entire** comms event stream at
 `.agent/state/collaboration/comms/`.
 
 The comms event stream is the canonical truth. Public (broadcast), group
-(narrative with `audience` or `addressed_to`), direct (`directed` kind, and
-narrative with `addressed_to` matching the agent), and lifecycle messages are
-all valid views onto the same stream, and **all are important**. A watcher
-that filters to a single view (e.g. directed-only filters, manual `ls -t`
-polling of the shared dir) discards the others and will miss vital
-coordination.
+(narrative with `audience` including the agent), direct (`directed` kind, and
+narrative with `addressed_to` matching the agent), observed (cross-traffic
+and audience-mismatch events the agent witnesses but is not responsible for),
+and lifecycle messages are all valid views onto the same stream, and **all
+are important**. A watcher that filters to a single view (e.g. directed-only
+filters, manual `ls -t` polling of the shared dir) discards the others and
+will miss vital coordination.
 
 The required shape is **one event-driven watcher** over the full directory,
 emitting one notification per new event, with **self-exclusion only** —
@@ -160,8 +161,9 @@ identity tuple it derives from the platform-specific session-id env var
 `PRACTICE_AGENT_SESSION_ID_CODEX`, or `CODEX_THREAD_ID`) — **one of these
 MUST be set in the shell**, or the CLI exits with `missing collaboration
 identity seed`. Each event is tagged `[BROADCAST]` / `[GROUP]` /
-`[DIRECTED]` / `[LIFECYCLE]` on its first line so the agent knows the
-channel at a glance (event shape:
+`[DIRECTED]` / `[OBSERVED]` / `[LIFECYCLE]` on its first line so the agent
+knows the channel at a glance. `[OBSERVED]` means incidental visibility of
+cross-traffic, not a new work contract for the watching agent (event shape:
 `.agent/state/collaboration/comms-event.schema.json`).
 `--only-directed` opts into the legacy narrow view. Run the command via
 the platform's persistent background-task mechanism (Claude Code: the

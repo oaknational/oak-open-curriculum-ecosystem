@@ -33273,6 +33273,135 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "e8f8abdc-7da5-47aa-8a91-8ba0679e9234",
+      "agent_id": {
+        "agent_name": "Clouded Streaming Airstream",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e54"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md",
+            "agent-tools/src/collaboration-state/cli-comms-watch.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T12:02:18Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Bundle 5: amend start-right-team comms watcher guidance and cli-comms-watch help text for observed view token; draft now, stage only after Bundle 3 runtime support lands",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T12:02:39Z",
+        "closed_by": {
+          "agent_name": "Clouded Streaming Airstream",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e54"
+        },
+        "summary": "Superseded before edits: Bundle 5 actual CLI help text lives in cli-specs.ts, so Clouded is replacing the initial two-file claim with a three-file claim before touching source.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e8f8abdc-7da5-47aa-8a91-8ba0679e9234",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "67801cf6-6d4c-4267-b102-29258fc2bc8e",
+      "agent_id": {
+        "agent_name": "Incandescent Banking Flame",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "aa986e"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-074-director-value-is-mind-coherence-per-owner-attention.md",
+            ".agent/practice-core/decision-records/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T11:43:53Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Revise PDR-074 per Seaworthy's directed routing 2f53c259: demote Status to Candidate; remove P5 to pending-graduations pointer; collapse 10 observables to 6-7; add tie-break sentence; constrain likely-next phrasing; hoist P2 substrate-attempt constraint; add PDR-073 vs PDR-074 distinction sentence; add P5 deferral note; add README index row.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T12:05:31Z",
+        "closed_by": {
+          "agent_name": "Incandescent Banking Flame",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "aa986e"
+        },
+        "summary": "PDR-074 + README substance absorbed into Twilit's owner-directed wide sweep (announced 11:59:30Z, event e7adee01). Seaworthy CONSISTENCY PASS CLEAN recorded at 11:50:32Z (event 4c34fb61). Closure verdict from Seaworthy at 12:04:38Z (event 4c34fb61-style directed; per no-question-when-answer-is-forced architecturally-excellent answer). No further substance-ownership purpose; substance-completion ratifies closure per Stratospheric/Twilit precedent.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "67801cf6-6d4c-4267-b102-29258fc2bc8e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2cf6c693-e5b2-47d9-b0f1-c4a6fc0e367c",
+      "agent_id": {
+        "agent_name": "Abyssal Mooring Hull",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "c79a39"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/comms-relevant-events.ts",
+            "agent-tools/tests/collaboration-state/comms-relevant-events.unit.test.ts",
+            "agent-tools/tests/collaboration-state/format-watcher-event.unit.test.ts",
+            ".agent/reference/comms-watch-mechanism.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T11:57:11.711Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Bundle 3 — comms-watch substrate cure: classifier returns 'observed' (5th EventView) for cross-traffic; self-exclusion-only contract restored",
+      "intent_to_commit": "89b23812-3e72-418f-b0dd-6ef69546233b",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T12:05:38.708Z",
+        "closed_by": {
+          "agent_name": "Abyssal Mooring Hull",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "c79a39"
+        },
+        "summary": "Bundle 3 cure code authored to TDD-shape (4 files: classifier widen with 'observed' 5th EventView; classifier tests inverted+added; format-watcher exhaustiveness; reference doc realigned). Gates green (476/476 tests, type-check, lint, prettier). Pre-stage checkpoint to Seaworthy acked 11:54:18Z (amendment 6 → follow-on Bundle 5). MARSHAL REQUEST submitted to Twilit 11:59:11Z (intent 89b23812; fingerprint aaa7f8e9...). Folded into owner-directed wide-sweep 11:59:30Z; cure substance preserved in 228-file sweep diff. Intent abandoned; no payload loss. Claim closed at owner direction for context compaction.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2cf6c693-e5b2-47d9-b0f1-c4a6fc0e367c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

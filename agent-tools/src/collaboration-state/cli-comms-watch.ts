@@ -11,6 +11,12 @@ import { type CollaborationAgentId, type CollaborationStateEnvironment } from '.
 
 const DEFAULT_POLL_MS = 500;
 
+/**
+ * Watch the comms stream. The default all-channels mode emits every non-self
+ * event under the current view-token set: broadcast, group, directed,
+ * observed, and lifecycle. `--only-directed` deliberately preserves the
+ * legacy narrow inbox path for callers that want only directed-to-me events.
+ */
 export async function watchComms(
   options: Options,
   env: CollaborationStateEnvironment,
