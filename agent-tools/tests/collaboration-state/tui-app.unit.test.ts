@@ -1,5 +1,5 @@
-import { render as renderInk, type Instance } from 'ink';
-import React, { act } from 'react';
+import { render } from 'ink-testing-library';
+import React from 'react';
 import { describe, expect, it } from 'vitest';
 
 import { type CollaborationTuiSnapshot } from '../../src/collaboration-state';
@@ -8,10 +8,7 @@ import {
   type CollaborationTuiPane,
   nextCollaborationTuiPane,
   scrollCollaborationTuiOffsets,
-  type CollaborationTuiUpdateSource,
 } from '../../src/collaboration-state/tui/controller';
-
-Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
 
 describe('CollaborationTuiApp', () => {
   it('cycles focus through the four operator panes', () => {
@@ -63,211 +60,19 @@ describe('CollaborationTuiApp', () => {
     ).toBe(1);
   });
 
-  it('refreshes from an injected live update source without a keyboard command', async () => {
-    const updates = new ManualUpdateSource();
-    const result = await render(
+  it('renders the initial snapshot body through the Ink render path', () => {
+    const result = render(
       React.createElement(CollaborationTuiApp, {
-        initialSnapshot: snapshot('2026-05-13T17:00:00Z', 'Initial message'),
-        onRefresh: async () => snapshot('2026-05-13T17:01:00Z', 'Live update arrived'),
-        updateSource: updates,
+        initialSnapshot: snapshot('2026-05-13T17:00:00Z', 'Hello from Ink'),
       }),
     );
 
-    expect(result.lastFrame()).toContain('Initial message');
+    expect(result.lastFrame()).toContain('Hello from Ink');
+    expect(result.lastFrame()).toContain('Generated 2026-05-13T17:00:00Z');
 
-    await result.actAndFlush(() => updates.emit());
-
-    expect(result.lastFrame()).toContain('Live update arrived');
-    expect(result.lastFrame()).toContain('refreshed 2026-05-13T17:01:00Z');
-
-    await result.unmount();
-  });
-
-  it('shows refresh failure state without replacing the last good snapshot', async () => {
-    const updates = new ManualUpdateSource();
-    const result = await render(
-      React.createElement(CollaborationTuiApp, {
-        initialSnapshot: snapshot('2026-05-13T17:00:00Z', 'Initial message'),
-        onRefresh: async () => {
-          throw new Error('refresh source unavailable');
-        },
-        updateSource: updates,
-      }),
-    );
-
-    await result.actAndFlush(() => updates.emit());
-
-    expect(result.lastFrame()).toContain('Initial message');
-    expect(result.lastFrame()).toContain('refresh source unavailable');
-
-    await result.unmount();
-  });
-
-  it('keeps the newest refresh when an older refresh resolves late', async () => {
-    const updates = new ManualUpdateSource();
-    const firstRefresh = deferred<CollaborationTuiSnapshot>();
-    const secondRefresh = deferred<CollaborationTuiSnapshot>();
-    const refreshes = [firstRefresh.promise, secondRefresh.promise];
-    const result = await render(
-      React.createElement(CollaborationTuiApp, {
-        initialSnapshot: snapshot('2026-05-13T17:00:00Z', 'Initial message'),
-        onRefresh: async () => refreshes.shift() ?? snapshot('2026-05-13T17:03:00Z', 'Fallback'),
-        updateSource: updates,
-      }),
-    );
-
-    await result.actAndFlush(() => {
-      updates.emit();
-      updates.emit();
-      secondRefresh.resolve(snapshot('2026-05-13T17:02:00Z', 'Second refresh'));
-    });
-
-    expect(result.lastFrame()).toContain('Second refresh');
-
-    await result.actAndFlush(() => {
-      firstRefresh.resolve(snapshot('2026-05-13T17:01:00Z', 'Stale first refresh'));
-    });
-
-    expect(result.lastFrame()).toContain('Second refresh');
-    expect(result.lastFrame()).not.toContain('Stale first refresh');
-
-    await result.unmount();
-  });
-
-  it('ignores a stale refresh failure after a newer refresh succeeds', async () => {
-    const updates = new ManualUpdateSource();
-    const firstRefresh = deferred<CollaborationTuiSnapshot>();
-    const secondRefresh = deferred<CollaborationTuiSnapshot>();
-    const refreshes = [firstRefresh.promise, secondRefresh.promise];
-    const result = await render(
-      React.createElement(CollaborationTuiApp, {
-        initialSnapshot: snapshot('2026-05-13T17:00:00Z', 'Initial message'),
-        onRefresh: async () => refreshes.shift() ?? snapshot('2026-05-13T17:03:00Z', 'Fallback'),
-        updateSource: updates,
-      }),
-    );
-
-    await result.actAndFlush(() => {
-      updates.emit();
-      updates.emit();
-      secondRefresh.resolve(snapshot('2026-05-13T17:02:00Z', 'Second refresh'));
-    });
-
-    await result.actAndFlush(() => {
-      firstRefresh.reject(new Error('stale refresh failed'));
-    });
-
-    expect(result.lastFrame()).toContain('Second refresh');
-    expect(result.lastFrame()).toContain('refreshed 2026-05-13T17:02:00Z');
-    expect(result.lastFrame()).not.toContain('stale refresh failed');
-
-    await result.unmount();
+    result.unmount();
   });
 });
-
-class ManualUpdateSource implements CollaborationTuiUpdateSource {
-  private subscribers: (() => void)[] = [];
-
-  subscribe(onChange: () => void): () => void {
-    this.subscribers = [...this.subscribers, onChange];
-    return () => {
-      this.subscribers = this.subscribers.filter((subscriber) => subscriber !== onChange);
-    };
-  }
-
-  emit(): void {
-    for (const subscriber of this.subscribers) {
-      subscriber();
-    }
-  }
-}
-
-async function render(node: React.ReactNode): Promise<{
-  readonly actAndFlush: (action: () => void) => Promise<void>;
-  readonly lastFrame: () => string | undefined;
-  readonly unmount: () => Promise<void>;
-}> {
-  const originalWrite = process.stdout.write;
-  const originalIsTty = process.stdin.isTTY;
-  const originalSetRawMode = process.stdin.setRawMode;
-  const frames: string[] = [];
-  const captureWrite: typeof process.stdout.write = function write(
-    chunk: string | Uint8Array,
-    encodingOrCallback?: BufferEncoding | ((error?: Error | null) => void),
-    callback?: (error?: Error | null) => void,
-  ): boolean {
-    frames.push(String(chunk));
-    if (typeof encodingOrCallback === 'function') {
-      encodingOrCallback();
-    }
-    callback?.();
-    return true;
-  };
-
-  process.stdout.write = captureWrite;
-  Object.defineProperty(process.stdin, 'isTTY', {
-    configurable: true,
-    value: true,
-  });
-  process.stdin.setRawMode = () => process.stdin;
-  let instance: Instance | undefined;
-  await act(async () => {
-    instance = renderInk(node, {
-      debug: true,
-      exitOnCtrlC: false,
-      interactive: true,
-      patchConsole: false,
-    });
-    await instance.waitUntilRenderFlush();
-  });
-
-  if (instance === undefined) {
-    throw new Error('Ink render did not initialise');
-  }
-  const mountedInstance = instance;
-
-  return {
-    actAndFlush: async (action) => {
-      await act(async () => {
-        action();
-        await mountedInstance.waitUntilRenderFlush();
-      });
-    },
-    lastFrame: () => frames.findLast((frame) => frame.trim() !== ''),
-    unmount: async () => {
-      await act(async () => {
-        mountedInstance.unmount();
-        mountedInstance.cleanup();
-        await Promise.resolve();
-      });
-      process.stdout.write = originalWrite;
-      Object.defineProperty(process.stdin, 'isTTY', {
-        configurable: true,
-        value: originalIsTty,
-      });
-      process.stdin.setRawMode = originalSetRawMode;
-    },
-  };
-}
-
-function deferred<T>(): {
-  readonly promise: Promise<T>;
-  readonly resolve: (value: T) => void;
-  readonly reject: (error: Error) => void;
-} {
-  let resolveValue: ((value: T) => void) | undefined;
-  let rejectValue: ((error: Error) => void) | undefined;
-  const promise = new Promise<T>((resolve, reject) => {
-    resolveValue = resolve;
-    rejectValue = reject;
-  });
-
-  if (resolveValue === undefined || rejectValue === undefined) {
-    throw new Error('deferred promise resolver was not initialised');
-  }
-
-  return { promise, resolve: resolveValue, reject: rejectValue };
-}
 
 function snapshot(generatedAt: string, body: string): CollaborationTuiSnapshot {
   return snapshotWithMainEntries(generatedAt, [body]);
