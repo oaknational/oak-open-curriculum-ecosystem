@@ -58,7 +58,7 @@ describe('invariant #2: every emitted edge carries a NamedNode predicate', () =>
     if (!result.ok) {
       return;
     }
-    assertEveryPredicateIsNamedNode(result.value);
+    assertEveryPredicateIsNamedNode(result.value.dataset);
   });
 
   it('holds across parseJsonLdCompatible output', async () => {
@@ -67,6 +67,6 @@ describe('invariant #2: every emitted edge carries a NamedNode predicate', () =>
     if (!result.ok) {
       return;
     }
-    assertEveryPredicateIsNamedNode(result.value);
+    assertEveryPredicateIsNamedNode(result.value.dataset);
   });
 });

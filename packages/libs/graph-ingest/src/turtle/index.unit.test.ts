@@ -43,7 +43,7 @@ describe('parseTurtle', () => {
     if (!result.ok) {
       return;
     }
-    const dataset = result.value;
+    const { dataset } = result.value;
 
     expect(dataset.size).toBe(5);
     expect(
@@ -75,9 +75,9 @@ describe('parseTurtle', () => {
       return;
     }
 
-    expect(first.value.size).toBe(second.value.size);
-    for (const q of first.value) {
-      expect(second.value.has(q)).toBe(true);
+    expect(first.value.dataset.size).toBe(second.value.dataset.size);
+    for (const q of first.value.dataset) {
+      expect(second.value.dataset.has(q)).toBe(true);
     }
   });
 
@@ -98,6 +98,22 @@ describe('parseTurtle', () => {
     if (!result.ok) {
       return;
     }
-    expect(result.value.size).toBe(0);
+    expect(result.value.dataset.size).toBe(0);
+    expect(result.value.sourceMap.size).toBe(0);
+  });
+
+  it('populates sourceMap with a turtle-location entry for every emitted quad', () => {
+    const result = parseTurtle(SKOS_TURTLE_FIXTURE);
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    const { dataset, sourceMap } = result.value;
+
+    expect(sourceMap.size).toBe(dataset.size);
+    for (const location of sourceMap.values()) {
+      expect(location.kind).toBe('turtle-location');
+    }
   });
 });
