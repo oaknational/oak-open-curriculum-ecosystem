@@ -44,6 +44,11 @@
       "types": "./dist/turtle/index.d.ts",
       "development": "./src/turtle/index.ts",
       "import": "./dist/turtle/index.js"
+    },
+    "./source-path": {
+      "types": "./dist/source-path/index.d.ts",
+      "development": "./src/source-path/index.ts",
+      "import": "./dist/source-path/index.js"
     }
   },
   "main": "./dist/index.js",
