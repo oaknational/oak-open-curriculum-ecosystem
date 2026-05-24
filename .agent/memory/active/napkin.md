@@ -2091,3 +2091,53 @@ Director Scorched's first response to my Playwright classification was to surfac
 - **Repair**: abandoned queue intent `afbe3645`, closed claim `cff7bc55`, unstaged only the four files I had staged, verified no staged files remained, left Scorched's working-tree edits intact, and broadcast correction event `641c295e` plus directed corrections to Seaworthy (`ec27b590`) and Mistbound (`21305574`).
 - **Behaviour change**: When a Director broadcast says a substantive role is vacant because of a stand-down, do a final owner-overlay / current-heartbeat check before taking the role. If the user corrects role ownership, immediately relinquish the claim/queue/index and broadcast the correction. Support roles should wait for explicit current routing before becoming marshal.
 - **Source plane**: `operational`
+
+## 2026-05-24 — Mistbound Hiding Threshold / claude / claude-opus-4-7 / `0e27cc` — Mid-session waypoint capture (insights from post-compaction resume arc)
+
+Mid-session light continuity update per owner direction "run a session handoff, not because the session is ending, but to make sure that insights and learnings are safely preserved." Team-member-not-closeout-owner; session-scoped surfaces only (napkin + pending-graduations); skipping repo-continuity and thread record (closeout-owner's territory).
+
+Substantive landings this arc (post-compaction):
+
+- `927d459e` — R2 mechanical Sonar cures (S7735/S7763/S7781/S7750); 4 source files; 10 unanimous reviewer verdicts (Marshal fan-out 7 + Foreman fan-out 3).
+- `760f359a` — Tranche A substantive substrate (SKILL §0.5 heartbeat doctrine + program plan + memory).
+- `64554ac3` — Tranche B 253-file collaboration state + comms noise tail.
+
+### Surprise 1 — heartbeat cron CLI flag drift
+
+- **What happened**: my heartbeat cron used `--kind narrative --tags heartbeat` on `comms append`; neither flag exists on that subcommand. Cron loop fired `heartbeat-FAIL` silently every 4 minutes for the entire active+paused window (~12 hours). Stopped the cron at pause-time; never repaired it because the convenience-CLI idea (now landed in the plan's "Ideas to be integrated" section) is the structural cure.
+- **Why it matters**: hand-rolled heartbeat loops are fragile across CLI evolution. Three agents this session (Mistbound, Scorched, Ferny) all reimplemented the same boilerplate independently; at least one (mine) had flag drift that the CLI did not surface as a structured error. Convenience CLI (`pnpm agent-tools:heartbeat`) absorbs the boilerplate; the per-beat lane+focus must still come from the agent per invocation (load-bearing — not cached at startup).
+- **Behaviour change**: until convenience CLI lands, prefer organic activity-as-liveness via substantive narrative broadcasts at routing boundaries over hand-rolled cron loops; if cron is unavoidable, run one trial emit and verify the event lands before adopting the cadence.
+
+### Surprise 2 — substrate-pointer-pattern v3 candidates accumulating (new variant)
+
+Three additional worked instances this arc, including one new variant:
+
+- **11th instance** (Seaworthy supersede broadcast, 19:30:38Z): Director treated Mistbound's 19:24:01Z standdown broadcast as ratified seat-vacancy + routed Fronded as incoming marshal. Owner re-engaged Mistbound 8 minutes later; supersede broadcast issued. Substrate-current-at-broadcast-time + stale-by-owner-action overlay; team self-organised faster than centralised routing once correction landed. Director's own framing: "this is the 2nd time owner direction has reversed Director routing on Marshal-class state this session."
+
+- **12th instance** (Ferny's self-identified, 19:33:23Z): parallel reviewer dispatch fired 10 seconds AFTER Seaworthy tick #4 emitted (which required sequential pass on Practice Core surfaces) but BEFORE Ferny absorbed it. Substrate-pointer was their pre-tick-#4 state-read; the tick had landed but not been processed. Ferny self-honestly broadcast the discipline-violation.
+
+- **13th instance — NEW variant**: cron-prompt-template-as-substrate-pointer during cron execution. Ferny's pause-absorption-delay: 12 hours of cron-driven heartbeat ticks fired through the owner pause window without absorbing "pause" as an owner-input turn, because each cron firing presented the same prompt template (rather than current owner state). Pause only landed when the NEXT genuine owner-turn arrived. Cure-shape candidates: cron template must include "first read latest owner turn before composing heartbeat" + cron events should not be treated as owner-input by the agent's own classifier.
+
+Pattern v3 condition list now has 4 conditions (Wilma's 3 + new variant) + 3+ new worked instances this session. Ferny holds the v3 outline at `/tmp/ferny-pattern-v3-outline.md`; promotion to PDR remains deferred per owner.
+
+### Surprise 3 — pre-stage verification credit-preservation across role transfers
+
+- **What happened**: Fronded ran full pre-commit verification (curriculum-sdk 765/765 + graph-ingest 36/36 + type-check exit 0 + prettier --check clean on the 4 R2 files) immediately before owner correction reseated me as marshal. Director Seaworthy explicitly ratified that the verification credit carries forward across the role transfer; I relied on it without re-running.
+- **Why it matters**: new substrate primitive — "verification credit" as a transferable artefact between agents, ratified by Director when scope-of-verification is unchanged. Composes with the marshal-cycle gate-chain discipline (husky still runs at my commit) but reduces redundant compute when the scope is provably identical.
+- **Behaviour change**: when a peer's abandoned cycle named full verification on the exact same staged scope, cite their evidence in the marshal commit; husky re-runs at landing-time satisfy the cycle invariant; no need to re-run verifying tests as a pre-stage step.
+
+### Surprise 4 — commitlint footer-max-line-length trap with long backtick paths
+
+- **What happened**: first Tranche A commit attempt failed commitlint with `footer's lines must not be longer than 100 characters [footer-max-line-length]`. The offending line was a body bullet, not a footer: a backtick path 105 chars long. Commitlint appears to treat any line after the first paragraph as footer-class for the max-length rule.
+- **Behaviour change**: in commit message bodies, prefer short identifier-style references over fully-qualified backtick paths. E.g., `start-right-team SKILL-CANONICAL.md` instead of the full `.agent/skills/start-right-team/SKILL-CANONICAL.md`. The fully-qualified path can live in prose; individual lines must stay under 100.
+
+### Observation — Marshal substrate watcher as new operational primitive
+
+- Added a third Marshal-domain watcher this turn: `STATE-DIRTY` / `STATE-CLEAN` events on dirty-file diff over `.agent/memory/` + `.agent/state/collaboration/`. Polls `git status --short` at 30s cadence and emits one event per file becoming dirty or returning to clean. Composes with the existing all-channels comms watcher (which surfaces the comms-event content) and commit-queue watcher (which surfaces phase transitions). Together: three Marshal-domain monitoring surfaces — comms-event stream, queue state, working-tree dirty-file accumulation.
+- **Status**: operational primitive; not a graduation candidate on its own; would warrant capture if a second instance of the watcher pattern appears.
+
+### Observation — owner-direction supremacy over Director routing (2nd worked instance)
+
+- This arc's owner-directed marshal-resume overrode Director Seaworthy's open marshal-vacancy routing (tick #1 declared vacancy; tick #2 routed Cycle #1 to whoever the next marshal would be). Director re-routed within ~2 minutes of owner correction (supersede broadcast at 19:30:38Z). Pattern: owner direction during a Director routing window is absorbed by Director as supersede; does not require a separate authority-resolution conversation.
+- **Composition**: with §0.5 heartbeat contract (still under owner refinement) + PDR-064 coordinator-handoff two moments (substantively confirmed clean under this arc's pressure).
+- **Source plane**: `operational`
