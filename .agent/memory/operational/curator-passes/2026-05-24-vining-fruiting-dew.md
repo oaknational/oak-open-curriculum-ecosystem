@@ -62,6 +62,14 @@ substrate-care lane. Bootstrap fast-path (no live peers).
 - Team-start broadcast (presence)
 - Curator-role-landing + findings broadcast (substantive)
 
+## Commits landed (marshal-route 3-commit dependency-order split)
+
+- `097882a2` — docs(practice-core): land PDR-081 curator role and substrate-care lane
+- `c04c996e` — feat(skills): add curator-pass skill and amend start-right-team role list
+- `89124cd8` — chore(memory): scaffold curator-passes directory and drain pending-graduations buffer
+
+Marshal-landed under Vining-Mistbound curator-bundle-landing sidebar. Marshal hygiene commit follows.
+
 ## Carry-forward
 
 - Migrate graduation-log residue + backfill-sweep-log residue out of pending-graduations.md

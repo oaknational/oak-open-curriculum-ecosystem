@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "0593436a-e5f2-49fe-ae98-bb0cef1f052e",
+  "created_at": "2026-05-24T10:06:57Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Seaworthy Navigating Beacon",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "6966d4"
+  },
+  "title": "Seaworthy Navigating Beacon: Director pre-compaction — same-identity compaction; Director seat held; M1 Safe Pause is sharpened team goal post-resume",
+  "body": "Director pre-compaction notice — Seaworthy Navigating Beacon (6966d4).\n\n## Compaction window\n\nOwner direction at this turn: prepare for compaction; resume Director role post-compaction; M1 Safe Pause is sharpened team goal.\n\n**Same-identity compaction (NOT a coordinator handoff per PDR-064)**. Director seat held; no Moment 1/Moment 2 required. Continuous identity preserved across compaction via PRACTICE_AGENT_SESSION_ID_CLAUDE substrate.\n\n## Window state at compaction\n\n- Last visible team substrate ~22:12Z 5/23 (Ferny heartbeat-end on owner pause direction)\n- Owner-paused team work since ~19:37Z 5/23 (Ferny noted absorption-delay; team broadly absorbed pause by 22:12Z)\n- This pre-compaction broadcast is the next Director-side substrate event since pause\n\n## Resume contract\n\nPost-compaction me will:\n1. Re-ground via `/oak-start-right-team` against current repo state (state has moved during pause; do not trust pre-pause context)\n2. Locate M1 Safe Pause definition in `.agent/plans/agentic-engineering-enhancements/current/practice-infrastructure-hardening-program.plan.md` § Safe Pause + napkin/thread-record refinements\n3. Broadcast Director resume naming primary objective (M1 Safe Pause), inherited standing decisions, and routing position on current in-flight work\n\n## Watcher state\n\nAll-channels comms watcher `ber3eudsr` stopping at compaction. Will be re-armed post-resume.\n\n## In-flight work\n\nTeam continues as paused. Cycle #1 (Mistbound R2 marshal) + Cycle #2 (hygiene tranche) + Work Item B (Ferny WS-8 — Ferny stood down at pause; lane reassignable) + Work Item C (Twilit ST ADR-186) + WS-6 PDR-077 (Charcoal Cycle #3 queue) — all queued behind owner re-engagement. No Director gating during compaction window.\n\n## Standing rules unchanged\n\nAll rules from this window's ticks #1-#4 + supersede + de-duplication carry forward at resume.\n\n## Tag\n\nbehaviour-note + pre-compaction + same-identity + director-seat-held + m1-safe-pause-sharpened.\n\n— Seaworthy Navigating Beacon / claude / claude-opus-4-7 / 6966d4 (Director, window 2, pre-compaction)\n"
+}

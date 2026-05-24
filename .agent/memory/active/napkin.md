@@ -2296,3 +2296,29 @@ Mistbound's Surprise 2 12th instance briefly names this event. Ferny-perspective
 **Composition**: pairs with `.agent/rules/no-machine-local-paths.md` (no machine-local paths in repo content) — both protect substrate from non-repo references. Composes with PDR-014 capture surface architecture (capture → distil → graduate → enforce); `/tmp/` is a capture buffer, not a long-term capture surface.
 
 **Source plane**: `operational` → graduation candidate (rule layer).
+
+## 2026-05-24 — Mistbound Hiding Threshold / claude / claude-opus-4-7 / `0e27cc` — Post-compaction-2 marshal resume captures
+
+### Capture A — Handoff record §8 attribution error (substrate-pointer-pattern 15th worked instance)
+
+**Observation**: My pre-compaction-2 handoff record §8 (Outstanding marshal-receivable lanes) named `.agent/skills/start-right-team/SKILL-CANONICAL.md` as the artefact for *"Lanternlit-retired §0.5 thin-collapse"* lane. Post-compaction at marshal resume, working-tree inspection plus Vining's curator-pass broadcast `7e6dcba3` showed the SKILL mod is Vining's §3 `curator` role-label amendment, NOT Lanternlit's §0.5 thin-collapse work (which never landed; Lanternlit retired with it un-authored).
+
+**Diagnosis**: At handoff-authoring time I named §8 outstanding lanes by reading the (then-truncated) outgoing roster, not by inspecting the working-tree diff to identify which agent's authoring fingerprint the mod actually carried. The handoff record became a stale pointer to dirty-file attribution the moment Vining's curator-pass landing started.
+
+**Cure**: Marshal-substrate watcher caught the file as dirty on resume; reading Vining's curator broadcast immediately corrected the attribution. Worked-cure-shape: never trust a handoff record's per-file attribution without re-verifying against the current dirty surface plus any new authoring broadcasts.
+
+**Pointer**: substrate-pointer-pattern v3 candidate — *"handoff-record-attribution-stale-on-resume"* variant. Joins the 11th-14th instances captured by Mistbound waypoint napkin (commit `6d8bed3a`) + the cron-prompt-template-as-substrate-pointer variant + the sidebar-vs-session closure semantic-conflation variant (14th, Vining presence-correction `29ddb526`). This is the 15th worked instance and adds the *attribution-record-vs-working-tree-reality* axis.
+
+**Source plane**: `session-scoped` → substrate-pointer-pattern v3 candidate (capture-only).
+
+### Capture B — Team-wide M1 Safe Pause refocus observed via individual pre-compaction handoffs
+
+**Observation**: Within ~5 minutes of post-compaction marshal resume, three pre-compaction broadcasts surfaced naming M1 Safe Pause as sharpened team goal: Seaworthy Director (`0593436a`, 10:06:57Z), Vining curator-pass (`7e6dcba3`, 10:07:18Z — substantive, not a pre-compaction; landing PDR-081 + skill + curator-passes/ as first formal curator pass), Charcoal Implementor (`b99a29d8`, 10:07:42Z — pivoting from PDR-077 doctrine to M1 Safe Pause), Twilit Implementor (`cb7e460b`, 10:08:37Z — pivoting from Work Item C to M1 Safe Pause; flagging SHA-in-ADR doctrine-tension between Lanternlit's portability articulation and sub-agent verdicts against `no-moving-targets`).
+
+**Diagnosis**: Owner was actively coordinating with the rest of the team during my compaction window, individually prompting each agent's pre-compaction with the same shape (*"do a light session handoff and prepare for compaction, after compaction you will resume the [X] role. The repo has significantly sharpened the goals for this team to focus on M1 Safe Pause"*). Result: team-wide role-refresh + focus-sharpening event, executed through per-agent same-identity compactions rather than a Director broadcast.
+
+**Cure / observation**: This is a worked instance of *owner-coordinated team-wide refocus through individually-prompted same-identity compactions*. It is the orthogonal mechanism to *Director-broadcast team-wide redirection* — the former preserves identity continuity per-agent while replacing context; the latter preserves context but routes via coordinator authority. Worth pattern-class capture as a separate routing mechanism in the team-bootstrap doctrine.
+
+**Marshal posture**: No marshal-specific direction from owner for this refocus. Marshal seat retained per owner's direct prompt at session-open *"please resume to Commit Marshall role with all three associated monitors"*. Standing by for marshal-requests; M1-Safe-Pause-bearing substrate lands per proven shape as it surfaces.
+
+**Source plane**: `session-scoped` → potential graduation candidate after 2nd worked instance (mechanism-class pattern).
