@@ -647,8 +647,19 @@ Team route:
 ```
 
 Useful responsibility labels include `controller`, `implementer`, `reviewer`,
-`marshal`, `scout`, `standby`, and `consolidator`, but they are examples rather
-than a required ontology.
+`marshal`, `scout`, `standby`, `consolidator`, and `curator`, but they are
+examples rather than a required ontology.
+
+The `curator` label names the substrate-care lane defined by PDR-081
+(`curator-role-and-substrate-care-lane`). Curator is distinct from
+`consolidator` — consolidator is the session-bounded closeout-synthesis
+owner; curator owns the cross-session, lane-shaped substrate-care work
+(routing durable knowledge to permanent homes, draining the
+graduations buffer, surfacing home-gaps as structural-cure proposals,
+maintaining the per-pass curation log). A session may run a curator
+lane in parallel with implementer / reviewer / marshal lanes; the
+curator's traceability surface is the per-pass metadata file under
+the operational-memory curator-passes directory.
 
 **Coordinator delegates sub-agent launches.** The coordinator role is
 to **route** work, not to **execute** it. Sub-agent launches —
