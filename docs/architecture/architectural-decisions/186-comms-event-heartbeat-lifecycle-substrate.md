@@ -118,15 +118,7 @@ non-heartbeat lifecycle events at a glance. The exact token form
 is implementation detail; the substrate guarantee is the
 distinguishability.
 
-**At-most-once render guarantee**: a single heartbeat event MUST
-render the `[HEARTBEAT]` channel token at most once, regardless
-of which mechanism produced it. An event carrying both `lifecycle
-
-- event_type='heartbeat'`and`tags: ["heartbeat"]`(legitimate
-during the migration window) MUST NOT double-render`[HEARTBEAT]
-  [HEARTBEAT]`. The renderer implementation SHALL deduplicate
-  across the tag-namespace path and the lifecycle-special-case
-  path.
+**At-most-once render guarantee**: a single heartbeat event MUST render the `[HEARTBEAT]` channel token at most once, regardless of which mechanism produced it. An event carrying both the lifecycle-substrate discriminator (`event_type='heartbeat'`) and the legacy tag (`tags: ["heartbeat"]`) — legitimate during the migration window — MUST NOT double-render the token. The renderer implementation SHALL deduplicate across the tag-namespace path and the lifecycle-special-case path.
 
 ### Schema posture
 
