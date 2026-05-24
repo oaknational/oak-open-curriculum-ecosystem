@@ -198,3 +198,4 @@ Practice-Core portability ratifies both — see the bridge index
 | [PDR-072](PDR-072-knowledge-curation-as-autonomic-learning.md) | Knowledge Curation as Autonomic Learning | Proposed |
 | [PDR-073](PDR-073-recursion-as-method-is-practice-core-mind-shape.md) | Recursion as Method Is Practice Core's Mind-Shape | Proposed |
 | [PDR-074](PDR-074-director-value-is-mind-coherence-per-owner-attention.md) | Director Value Is Mind-Coherence-Per-Owner-Attention | Candidate |
+| [PDR-080](PDR-080-coordination-event-absorption-is-signal-driven.md) | Coordination-Event Absorption Is Signal-Driven | Accepted |
