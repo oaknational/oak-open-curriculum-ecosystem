@@ -4696,3 +4696,29 @@ Cross-references:
 - Substrate dependency: P6c requires the comms-watch self-exclusion-only cure to be stable (Bundle 3 + Bundle 5 doc-completion); without correct broad-awareness, idle-misclassification cannot be reliably detected.
 
 ---
+
+### Liveness heartbeat contract (PDR-078 + ADR-186 bundle — owner-authorised, mid-authoring at compaction pause)
+
+[captured: 2026-05-23 | source: napkin top entry / 6-subagent pre-draft fan-out + 5-reviewer convergent RE-SHAPE verdict on SKILL §0.5 first draft | graduation-target: PDR-078-liveness-heartbeat-contract.md (principle) + ADR-186-comms-event-heartbeat-lifecycle-substrate.md (repo phenotype) + collapse `start-right-team/SKILL-CANONICAL.md` §0.5 to thin pointer + reciprocal §Related updates to PDR-027 / PDR-063 / PDR-064 | trigger: owner-authorised Option 1 + Director Seaworthy routing 16:02:27Z | status: mid-authoring, paused for compaction]
+
+Owner-codified standing rule 2026-05-23 ~15:53Z (amplified ~15:57Z; permanent + session-wide for every start-right-team session): active team members emit liveness signal at ≤3-min cadence; ≥10-min silence presumes retired with claim auto-rebalance.
+
+Substantive shape: ONE PDR covering both emit-side precondition + observe-side retirement-detection (load-bearing on each other per Fred Q2). Plus repo phenotype ADR carrying the substrate decision (lifecycle event_type "heartbeat" chosen over tag-namespace per docs-adr-expert verdict + fred + betty convergence). Plus thin SKILL §0.5 pointer collapsing the in-tree fat draft.
+
+Resume substrate: full reviewer transcripts + 6-subagent pre-draft fan-out findings captured in napkin top entry; claim 8374e240 retained for plan-author boundary; ADR-186 first write blocked by repo hook on commit-SHA/event-UUID citations (forbidden hash pattern); cure path is to scrub all hash-shaped citations to descriptive event-reference form before re-write.
+
+Cure shape: PDR-Proposed + ADR-Proposed authoring under Lanternlit Listening Dusk continuation post-compaction (owner direction 16:18Z: resume role post 18:10 London credit reset). Landing order ADR-186 → PDR-078 → thin SKILL → reciprocal updates → round-2 reviewer fan-out → owner review → marshal-request to Mistbound.
+
+Why pending: substrate captured but not landed; mid-authoring at compaction boundary. Promotion gate: PDR-078 + ADR-186 files exist in repo + SKILL collapsed + reciprocal references in place + reviewer round-2 + owner ratification.
+
+Falsifiability: PDR-078 file at `.agent/practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md` exists and references ADR-186 via §Related; ADR-186 file at `docs/architecture/architectural-decisions/186-comms-event-heartbeat-lifecycle-substrate.md` exists and references PDR-078; SKILL §0.5 in `.agent/skills/start-right-team/SKILL-CANONICAL.md` is < 30 lines pointing at the two; reciprocal §Related entries in PDR-027 / PDR-063 / PDR-064 cite PDR-078.
+
+Cross-references:
+
+- Sibling to Charcoal's in-flight PDR-077 marshal-as-cycle-discipline (Seaworthy Cycle #4 routing 16:07:07Z); both PDRs cover coordination doctrine but on distinct axes (heartbeat = liveness signal; marshal = commit-cycle discipline).
+- Composes with PDR-064 (coordinator handoff two-moments) — coordinator-transfer windows exempt from retirement-detection during Moment 1 → Moment 2 transitions.
+- Composes with PDR-063 (mid-cycle retirement protocol) — claim auto-rebalance disposition paths cite PDR-063 / ADR-182 as authoritative for handoff-record-equipped claims.
+- Composes with substrate-pointer-read-as-current-state pattern §C2 + §C5 — the heartbeat contract is the structural cure for the says-active-when-closed direction (not the says-closed-when-active direction, which remains cured by PDR-075 substrate-writing-discipline).
+- Adjacent to ADR-183 (comms-event tag namespace) — deliberately not extended; heartbeat is protocol-discrimination not substantive-discrimination per the schema's open `lifecycle.event_type` axis.
+
+---

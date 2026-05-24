@@ -65,16 +65,20 @@ Every participating agent in every team session executes these moves in
 order, before any non-planning source edit:
 
 1. **Start the all-channels comms monitor** (§0 — required precondition
-   before anything else).
-2. **Post a team-start report** broadcast (§1 — §1 is the umbrella
+   for incoming visibility; the agent sees every event the team emits).
+2. **Start the liveness heartbeat cron** (§0.5 — required precondition
+   for outgoing visibility; the team sees every active agent's
+   continued presence at ≤4 min cadence, distinguishing live agents
+   from retired ones).
+3. **Post a team-start report** broadcast (§1 — §1 is the umbrella
    "Register Presence" section that owns the broadcast format AND the
    coordination rules; the broadcast declares identity, foundation
-   status, intended boundary, inherited working-tree status, and any
-   preferred cycle).
-3. **Wait for peer team-starts** to surface, then coordinate cycle /
+   status, intended boundary, inherited working-tree status, heartbeat
+   cron status, and any preferred cycle).
+4. **Wait for peer team-starts** to surface, then coordinate cycle /
    boundary assignment via comms (§1 cycle-overlap coordination rule
    and singleton-lane coordination rule).
-4. **Verify the inherited working-tree state with ONE elected
+5. **Verify the inherited working-tree state with ONE elected
    gate-runner** (§1a — required whenever any agent's team-start reports
    a non-clean inherited tree). One agent runs the relevant gates against
    the inherited state and posts a gate-state report to comms; all other
@@ -82,17 +86,17 @@ order, before any non-planning source edit:
    starts source work until the gate-state report is observable in
    comms. **This step structurally requires coordination and
    communication to be the precondition for work-start.**
-5. **Suggest the user run `/rename`** per the shared start-right rule
+6. **Suggest the user run `/rename`** per the shared start-right rule
    at
    [`start-right-quick/shared/start-right.md` §"Session Title — `/rename` Suggestion"](../start-right-quick/shared/start-right.md).
    The team-shaped intent-clarity moment is **coordination-resolution**
-   (immediately after move 3 settles cycle / boundary assignment and
-   move 4 reports a green inherited tree, or after the team has
+   (immediately after move 4 settles cycle / boundary assignment and
+   move 5 reports a green inherited tree, or after the team has
    coordinated a non-green response with the owner), not session-open
    as in solo sessions. The rename must be surfaced BEFORE any
    significant implementation, source claim, or staging operation in
-   move 6.
-6. **Open the work claim** in `active-claims.json` for the agreed
+   move 7.
+7. **Open the work claim** in `active-claims.json` for the agreed
    boundary only after cycle/boundary coordination resolves, the
    gate-state report is observable, and the rename suggestion has been
    surfaced. **If the claim being picked up carries a
@@ -104,12 +108,12 @@ order, before any non-planning source edit:
    the prior agent froze at retirement (ADR-182 §Skill amendments).
    **If a coordinator pre-positioning event is already in the comms
    stream naming this agent as the incoming coordinator** (PDR-064
-   Moment 1), the team-start broadcast in move 2 may declare
+   Moment 1), the team-start broadcast in move 3 may declare
    intent-to-coordinate, but coordinator authority does not transfer
    until this agent broadcasts a distinct active-acknowledgement event
    (PDR-064 Moment 2) — see §Closeout Contract "Coordinator Handoff
    (Two Moments)".
-7. **Proceed with the work** under the team cadence (§5) and
+8. **Proceed with the work** under the team cadence (§5) and
    traceability discipline (§4).
 
 Source-claim opening BEFORE coordination resolves is the recurring
@@ -117,6 +121,8 @@ failure mode this order exists to prevent — see the singleton-lane
 coordination rule in §1 and the cycle-overlap coordination rule below.
 Source-work starting BEFORE the inherited-tree gate-state is verified
 is the second failure mode this order exists to prevent — see §1a.
+Silent agent retirement going undetected by the team is the third
+failure mode this order exists to prevent — see §0.5.
 
 ### 0. Start The All-Channels Comms Monitor (non-negotiable)
 
@@ -265,6 +271,136 @@ surfaces remain the absorption destination: session closeout reads the
 session's tagged events forward into napkin / `distilled.md` / graduation
 surfaces as appropriate.
 
+### 0.5. Start The Liveness Heartbeat Cron (non-negotiable)
+
+**Liveness is observable, or it is not.** Where §0 ensures *incoming*
+visibility — every event the team emits reaches every agent — §0.5
+ensures *outgoing* visibility — every agent's continued presence reaches
+the team. Both are non-negotiable preconditions; both must be running
+before any team-bootstrap step that follows.
+
+The contract is owner-codified (2026-05-23, permanent + session-wide
+for every session where `start-right-team` runs): every active team
+member emits a heartbeat event at cadence ≤4 minutes. Silence past the
+10-minute threshold causes the agent to be presumed retired and their
+claims auto-rebalanced. This rule structurally cures the failure mode
+where the team cannot distinguish a live but quiet agent from one whose
+session has ended, leaving claims silently orphaned and the team
+operating under a stale roster.
+
+**Mechanism (interim — adopt now):**
+
+A `narrative` comms event with `tags: ["heartbeat"]` per
+[ADR-183](../../../docs/architecture/architectural-decisions/183-comms-event-tag-namespace-substrate.md)
+§"tag namespace substrate", with subject format:
+
+```text
+Heartbeat: <agent_name> (<session_id_prefix>) — <current lane>
+```
+
+Body is a single short sentence: `active; <one-line current focus>`.
+Heartbeats are coordination signal, not narrative content; substrate
+weight should be low so the comms stream stays scannable.
+
+**Mechanism (durable — deferred substrate work):**
+
+A structured `last_heartbeat_at` field on each identity-tuple's row in
+`active-claims.json`, queryable via
+`pnpm agent-tools:collaboration-state -- claims active-agents`, and a
+CLI emit wrapper `pnpm agent-tools:heartbeat`. A PDR candidate exists
+in pending-graduations (napkin entry 2026-05-23 15:09Z) naming this
+shape; the durable mechanism lands as a separate substrate-work cycle,
+not as a precondition for this SKILL revision. Until then the interim
+mechanism above is the contract.
+
+**Canonical invocation — the platform's persistent background-task
+primitive:**
+
+Run a 4-minute-cadence loop that emits a heartbeat event each cycle.
+Platform-specific shapes:
+
+- **Claude Code**: the `Monitor` tool with `persistent: true` and a
+  `while/sleep 240` loop emitting heartbeats; alternatively
+  `CronCreate` with `*/4 * * * *` if the cron primitive is preferred.
+- **Cursor**: the equivalent watch / background-task primitive per
+  platform docs.
+- **Codex**: the equivalent background-task mechanism.
+
+The loop SHOULD swallow stdout on success (failures emit so the agent
+can react). The loop dies when the session ends, which correctly
+satisfies the retirement-on-silence rule for natural session-end.
+
+**State thresholds:**
+
+| Time since last heartbeat | State | Director action |
+|---|---|---|
+| < 4 min | Active | None |
+| 4–10 min | Offline (transient) | None; assume resume imminent |
+| ≥ 10 min | Retired | Claim auto-rebalance fires |
+
+**Claim auto-rebalance protocol on retirement:**
+
+When an agent crosses the 10-minute threshold without heartbeat:
+
+1. **Director surfaces a retirement-detection event** (broadcast;
+   tagged `failure-mode` if the retirement is unexpected, tagged
+   `behaviour-note` if it is a normal session-end without explicit
+   closeout broadcast).
+2. **Per-claim disposition**:
+   - **Claims with `handoff_record_path` field set**: read the named
+     handoff record (PDR-063 / ADR-182); surface to the natural-next
+     agent named in the record or Director-route to a suitable agent.
+   - **Claims without a handoff record**: surface as orphan-class;
+     Director routes through dialogue to a natural-next-agent based
+     on the claim's intent and the team's current shape.
+   - **Claims explicitly retained for handoff** (named in the retiring
+     agent's closeout): wait until the named successor arrives or the
+     retention TTL expires, whichever fires first.
+
+**Exemptions:**
+
+The retirement-on-silence rule does NOT fire for the following
+operational windows — silence is expected during these states and is
+not a retirement signal:
+
+- **Coordinator-transfer 30-minute grace window** (PDR-064
+  §"Coordinator Handoff (Two Moments)"). Between Moment 1
+  pre-positioning and Moment 2 active-acknowledgement, the incoming
+  coordinator may be compacting, bootstrapping, or running their own
+  start-right discipline; the outgoing coordinator continues
+  heartbeats until Moment 2 lands and authority transfers cleanly.
+- **Marshal-cycle contiguous-execution exemption**: while a marshal is
+  inside a cycle (husky gate-chain in flight, staging window open,
+  commit window open), cycle-boundary broadcasts (stage-complete,
+  gate-green, commit-landed, tree-green) satisfy heartbeat semantics
+  during the contiguous window. The marshal MUST emit an explicit
+  heartbeat-tagged event during idle windows between cycles.
+- **Sub-agent dispatch verdict-synthesis exemption**: while the
+  dispatching agent is awaiting reviewer transcripts, verdict-synthesis
+  broadcasts (with subagent transcript ids) satisfy heartbeat
+  semantics. The dispatching agent MUST emit an explicit heartbeat-
+  tagged event if the dispatch window exceeds 8 minutes (one full
+  silence-to-offline transition).
+
+**Cross-references:**
+
+- [ADR-183](../../../docs/architecture/architectural-decisions/183-comms-event-tag-namespace-substrate.md)
+  — the `["heartbeat"]` tag is registered under the comms-event tag
+  namespace; `narrative`, `lifecycle`, and `directed` event kinds may
+  carry it.
+- [PDR-027](../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md)
+  — identity tuple format in the heartbeat subject line.
+- [PDR-064](../../practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md)
+  — grace-window exemption for coordinator transitions.
+- PDR candidate at napkin entry 2026-05-23 15:09Z (structured
+  `agent_state` field on `active-claims.json`) — durable mechanism
+  target.
+- [`.agent/memory/active/patterns/substrate-pointer-read-as-current-state.md`](../../memory/active/patterns/substrate-pointer-read-as-current-state.md)
+  §C2 (active per-agent check-in cadence) and §C5 (terminal-state-
+  assumption broadcast with short default deadline) — the heartbeat
+  contract is the structural cure these substrate-pointer cures were
+  reaching for.
+
 ### 1. Register Presence
 
 Each agent posts a short team-start report **before any source claim** and
@@ -274,6 +410,7 @@ before non-trivial work:
 Team start report:
 - Identity:
 - Foundation: complete / blocked by <path or command>
+- Heartbeat cron status: started <cron_id or monitor task_id> / blocked by <reason>
 - Inherited working-tree status: clean / non-clean (paths listed)
 - Intended boundary: <files / paths / behaviour the agent expects to own>
 - Claim status: none yet / pending team coordination / open <claim_id>
@@ -284,13 +421,16 @@ Team start report:
 ```
 
 `Intended boundary` is a non-binding declaration of *where* the agent expects
-to work; `Claim status` reports the live registry state. `Inherited
-working-tree status` is the agent's observation of `git status` at session
-open; the team uses these reports to decide whether §1a gate-verification
-fires. `Gate-verification offer` declares willingness to take the elected
-gate-runner role; the team uses this to coordinate the election in §1a.
-Role labels in the sections below are examples, not doctrine — describe the
-boundary first and pick a label that fits.
+to work; `Claim status` reports the live registry state. `Heartbeat cron
+status` reports the §0.5 precondition's live state — the cron or monitor
+task id makes the heartbeat surface auditable; `blocked by` explains any
+gap and the recovery plan. `Inherited working-tree status` is the agent's
+observation of `git status` at session open; the team uses these reports
+to decide whether §1a gate-verification fires. `Gate-verification offer`
+declares willingness to take the elected gate-runner role; the team uses
+this to coordinate the election in §1a. Role labels in the sections below
+are examples, not doctrine — describe the boundary first and pick a label
+that fits.
 
 **Singleton-lane coordination rule** (added 2026-05-20 per singleton-lane
 remediation plan §WS1; reframed 2026-05-21 to dialogue-over-competition
@@ -622,6 +762,20 @@ leaving the session, even when they did not own the full handoff. At minimum,
 they tell the other agents that their session is complete, name whether any
 work remains in their boundary, and state the claim disposition.
 
+**Final-heartbeat-end broadcast** (per §0.5 heartbeat contract). When an
+agent closes out cleanly, they MUST emit a final heartbeat event with body
+naming the session-end state and the disposition of their heartbeat cron
+(stopped explicitly, or letting it die with the session). This prevents
+the 10-minute retirement rule from firing false-positive on an agent who
+closed cleanly but whose heartbeat cron stopped emitting. The final
+heartbeat is paired with the team-member closeout broadcast below and
+serves as the team's signal that the agent has stood down by intent.
+Suggested subject format:
+
+```text
+Heartbeat-end: <agent_name> (<session_id_prefix>) — session-end, closeout broadcast follows
+```
+
 The default closeout state is **no active claims retained**. Relinquish every
 claim the session opened before leaving. Keep a claim active only when there is
 a specific handoff reason for a follow-on agent, and make that reason explicit
@@ -647,6 +801,7 @@ Team member closeout:
 - Session complete announcement:
 - Retained claims, if any, and handoff reason:
 - Pickup notification required for follow-on agent:
+- Heartbeat-end broadcast emitted: yes <event_id> / no (reason)
 - Surprise or changed understanding:
 - Blockers or risks:
 - Handoff needed:
