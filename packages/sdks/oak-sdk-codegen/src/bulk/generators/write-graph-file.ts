@@ -7,8 +7,8 @@
  * with proper `as const` annotations and TSDoc comments.
 
  */
-import { writeFile } from 'fs/promises';
-import { join } from 'path';
+import { writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
 import type { Logger } from '@oaknational/logger';
 import type { PriorKnowledgeGraph } from './prior-knowledge-graph-generator.js';
