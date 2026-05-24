@@ -1771,3 +1771,31 @@ Processed 2026-05-24 by Shaded Silencing Dusk under claim
 or PDR was opened because the testing governance docs now carry the behavioural
 requirement and worked cure; the prior `distilled.md` duplicate was already
 graduated.
+
+### Lockfile-in-flux without coordination-layer declaration
+
+Original live-shard body:
+
+`[captured: 2026-05-13 | source: napkin+research:historical-napkin-synthesis-2026-05-13 | target: doc-amend:start-right-quick | trigger: owner-direction | size: S | status: graduated]`
+
+The dependency refresh slice (43 files: pnpm@10.33.4 to pnpm@11.1.1, every
+workspace package.json, lockfile, SDK codegen artefacts) was visible only via
+`repo-continuity.md` Next Safe Steps, not via `active-claims.json` or
+`shared-comms-log.md`. WS1.5 was correctly held on lockfile-collision grounds,
+but the hold could have been avoided. Cure: if `active-claims.json` shows no
+claim on a dirty slice, cross-check `repo-continuity.md` Next Safe Steps for
+owner-direction landing notes before treating the dirty slice as orphaned.
+Single one-line addition to `start-right-quick`'s live-state reading order.
+First-instance; trigger: owner direction to land the cheap addition.
+
+Graduated 2026-05-24 by Sylvan Sprouting Petal to
+`.agent/skills/start-right-quick/shared/start-right.md` § Live state
+(operational memory) — authority order. The durable home now names the
+unclaimed-dirty-slice cross-check against repo-continuity, the touched thread
+record, and active plans before orphan classification.
+
+Processed 2026-05-24 by Hushed Fading Hush under claim
+`96528b72-ab33-4b6e-8faa-61bb49494951` after verifying the durable home still
+contains the cross-check paragraph and removing the already-graduated body from
+the active legacy shard. The archive preserves the source substance; the shard
+now keeps only unresolved live entries.

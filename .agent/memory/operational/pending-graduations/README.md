@@ -19,3 +19,7 @@ route, record the disposition, and keep an audit pointer in the main register.
   — 2026-05-23 first-out closeout, commit-queue ceremony cures, PDR-074
   autonomy primitives P1-P6, and the PDR-078 / ADR-186 liveness heartbeat
   bundle.
+- [`2026-05-24-napkin-tail-candidates.md`](2026-05-24-napkin-tail-candidates.md)
+  — second-instance-gated candidates from the 2026-05-24 napkin tail:
+  redundant config markers, attribution-preserving commit splits,
+  substrate-write windows, and goal-backed handoff state.

@@ -47,6 +47,13 @@ type safety.
   `@typescript-eslint/utils` bridges the
   `Rule.RuleModule` vs `TSESLint.RuleModule` gap —
   eliminates `as unknown as ESLint.Plugin['rules']`
+- Run candidate ESLint rules against the package that owns
+  the shared config when practical. `@typescript-eslint/no-deprecated`
+  caught deprecated `typescript-eslint.config()` usage in the
+  standards plugin before it spread. If ESLint core `defineConfig()`
+  rejects a local plugin typed through `@typescript-eslint/utils`,
+  split the config at the type boundary rather than weakening the
+  plugin type.
 
 ## ESLint Pattern Matching
 

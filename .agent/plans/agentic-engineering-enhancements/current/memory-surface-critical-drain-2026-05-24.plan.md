@@ -77,19 +77,25 @@ The initial strict-hard fitness result recorded by the curator pass was
 `CRITICAL (3 critical, 3 hard, 13 soft)`. The initial critical surfaces were
 the three memory surfaces above, not the active napkin.
 
-Latest live validation in this plan is recorded under the fresh active-napkin
-disposition audit: `SOFT (21 soft)`. There are no current hard or critical
-surfaces. `pending-graduations.md` is soft at 710 lines / 37,141 chars / max
-prose line 260 after unprocessed live queue substance moved to active shards
-and lifecycle metadata was normalised. The active napkin remains healthy at 23
-lines / 942 chars / max prose line 77 before the disposition audit and 36
-lines / 1,508 chars / max prose line 77 after it.
+Latest live validation in this plan is recorded under the 2026-05-24
+Dusky/Hushed soft-tier continuation: `SOFT (20 soft)`. There are no current
+hard or critical surfaces. `pending-graduations.md` is soft at 722 lines /
+37,815 chars / max prose line 260 after unprocessed live queue substance moved
+to active shards and lifecycle metadata was normalised. `repo-continuity.md`,
+`distilled.md`, and the active napkin are healthy.
 
 Re-grounded 2026-05-24T14:21Z under claim
 `280b01ed-7b00-4d77-9025-6eb772686cc1`: strict-hard remains soft-only at
 `SOFT (21 soft)`. No critical or hard surface is currently present, so the next
 useful curation work should prioritise active-shard entry processing and
 near-limit soft surfaces by substance, not by archive pressure.
+
+Re-grounded 2026-05-24T14:47Z under claim
+`96528b72-ab33-4b6e-8faa-61bb49494951`: informational fitness remains
+`SOFT (20 soft)`. The next safe action was active-shard processing, not Core or
+directive edits, because the near-hard Practice Core and directive surfaces are
+owner-approval or context-budget sensitive while the shard contained an
+already-graduated entry with a verified durable home.
 
 ## Non-Goals
 
@@ -300,6 +306,43 @@ Disposition: Phase 2 is still **partial**. The remaining due set is not a
 safe opportunistic promotion target: each live due entry requires owner
 ratification, PDR review, or respect for an existing PDR lane before permanent
 doctrine mutation.
+
+### Phase 2 Continuation — 2026-05-24 Legacy Shard Graduated-Body Drain
+
+Continued by Hushed Fading Hush / `codex` / `GPT-5` / `019e5a` under claim
+`96528b72-ab33-4b6e-8faa-61bb49494951`.
+
+Changes:
+
+1. Verified the `Lockfile-in-flux without coordination-layer declaration`
+   entry in
+   `.agent/memory/operational/pending-graduations/2026-05-06-to-2026-05-21-legacy-backlog.md`
+   was already marked `status: graduated`.
+2. Verified the durable home in
+   `.agent/skills/start-right-quick/shared/start-right.md` still carries the
+   unclaimed-dirty-slice cross-check against repo-continuity, the touched
+   thread record, and active plans before orphan classification.
+3. Moved the full processed body into
+   `.agent/memory/operational/archive/pending-graduations-archive-2026-05-24.md`.
+4. Removed only that already-graduated body from the active legacy shard,
+   leaving unresolved pending and partially-graduated entries live.
+
+Validation:
+
+- Targeted `markdownlint` passed on the active napkin, active legacy shard,
+  pending-graduations archive, and this plan.
+- Targeted `git diff --check` passed on the same touched documentation
+  surfaces.
+- Targeted `rg` verified the processed heading is absent from the active legacy
+  shard, present in the archive, and still homed in
+  `.agent/skills/start-right-quick/shared/start-right.md`.
+- `pnpm practice:fitness:informational`: exit 0;
+  `SOFT (20 soft) — informational mode`.
+- `pnpm practice:fitness --strict-hard`: exit 0; `SOFT (20 soft)`.
+
+Disposition: Phase 2 remains **partial**. This slice reduces processed live
+shard mass but does not alter owner-gated due entries or untriggered pending
+candidates.
 
 ### Repo-Continuity Live-State Correction — 2026-05-24
 

@@ -46,6 +46,7 @@ permanent homes it points to.
 | 2026-05-09 PR closeout distilled observations | `agent-collaboration.md` § PR Closeout Discipline |
 | 2026-05-09 multi-reviewer distilled observation | PDR-015 § Audit-shape surface framing |
 | Current command-shape mistakes | `.agent/memory/active/napkin.md` Mistakes Made |
+| 2026-05-09 self-lint tooling distilled observation | `docs/governance/typescript-gotchas.md` § ESLint Plugin Typing |
 
 ## Findings Surfaced
 
@@ -119,16 +120,26 @@ permanent homes it points to.
 | PR closeout graduation validation | Targeted `rg`, focused formatting, focused `markdownlint`, `git diff --check`, and strict-hard fitness passed |
 | Multi-reviewer distilled graduation | PDR-015 carries the exact 2026-05-09 audit-shape-surface entry; active distilled duplicate removed |
 | Multi-reviewer graduation validation | Targeted `rg`, focused formatting, focused `markdownlint`, `git diff --check`, and strict-hard fitness passed |
-| Tooling mistake capture | Active napkin now records the `comms inbox --seen-file`, `claims open --area-kind`, and shell-pipe evidence-readability mistakes from this continuation |
+| Tooling mistake capture | Active napkin now records the `comms inbox --seen-file`, rejected `comms inbox --thread`, `claims open --area-kind`, and shell-pipe evidence-readability mistakes from this continuation |
+| Self-lint tooling distilled graduation | `typescript-gotchas.md` carries the self-lint and ESLint helper type-boundary guidance; active distilled duplicate removed |
+| Self-lint tooling graduation validation | Targeted `rg`, focused formatting, focused `markdownlint`, `git diff --check`, and strict-hard fitness passed with `SOFT (21 soft)` |
+| Session handoff | Claim `fba31dad-0fbf-465e-b91b-ab706789b444` closed; handoff claim `809d9cff-8146-4fcb-8113-ec1722008d75` opened and closed; thread and repo continuity updated with the no-hard/no-critical fitness state and next safe curator step; closeout broadcast `c155d0c5` emitted |
+| Identity-helper ownership follow-up | Mistbound identified the identity-helper files as source-class residue after `cd4efc15`; claim `5e66df2a-120c-4438-b577-25269f22512f` owns the revalidation and marshal-ready handoff |
+| Identity-helper ownership validation | Focused Vitest, ESLint, agent-tools type-check, Prettier, markdownlint, `git diff --check`, and strict-hard fitness all passed; marshal-ready event `821b7af1` sent to Mistbound |
+| Lockfile-in-flux grounding amendment | Legacy shard entry graduated to `start-right.md` § Live state; dirty unclaimed slices must be checked against repo-continuity, thread record, and active plans before orphan classification |
 
 Fitness disposition: current strict-hard validation is `SOFT (21 soft)`.
 There are no hard or critical files. The active napkin remains healthy at
-36 lines after fresh capture and mistake notes. `user-collaboration.md` is newly
-soft by four lines after receiving the final two owner-profile observations;
-that is a durable-home graduation result, not trim pressure. The plan-author
-distilled graduation moved `distilled.md` to 297 lines / 15,808 chars, the PR
-closeout graduation moved it to 275 lines / 14,627 chars, and the
-multi-reviewer graduation moved it to 266 lines / 14,183 chars. Earlier
+58 lines / 2,955 chars after fresh capture and mistake notes.
+`user-collaboration.md` is newly soft by four lines after receiving the final
+two owner-profile observations; that is a durable-home graduation result, not
+trim pressure. The plan-author distilled graduation moved `distilled.md` to
+297 lines / 15,808 chars, the PR closeout graduation moved it to 275 lines /
+14,627 chars, the multi-reviewer graduation moved it to 266 lines /
+14,183 chars, and the self-lint tooling graduation plus live CLI-shape repair
+moved it to 254 lines / 13,735 chars. `typescript-gotchas.md` is soft at
+97 lines / 3,299 chars because it accepted the durable-home tooling note;
+this is knowledge placement, not trim pressure. Earlier
 distilled pruning moved it to 647 lines /
 33,671 chars, still hard, and the second verified-home slice moved it to 629
 lines / 32,752 chars. The third verified-home slice moved it to

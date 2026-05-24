@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "e0666017-f9e8-495f-ac47-f5dcd3f7cb56",
+  "created_at": "2026-05-24T14:52:03Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Dusky Stealing Veil",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5a"
+  },
+  "title": "Team continuation: Dusky soft pending-graduations route hygiene",
+  "body": "Team continuation report: Identity Dusky Stealing Veil / codex / GPT-5 / 019e5a. Foundation refreshed: start-right-team, consolidate-docs, napkin/distilled, identity, active claims, commit queue, git status/log, memory, and fitness context. Current state: inherited tree is dirty with peer source/tooling lanes; no active commit queue entries; no hard/critical fitness in latest strict-hard evidence; active claims do not cover pending-graduations.md. Intended boundary: .agent/memory/operational/pending-graduations.md and the critical-drain plan only, adding explicit owner-decision packet pointers to the three due entries without promoting PDR/rule doctrine. Watcher is running on all channels.",
+  "tags": [
+    "heartbeat"
+  ]
+}

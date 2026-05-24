@@ -395,6 +395,15 @@ Owner-codified standing rule 2026-05-23 ~15:53Z (amplified ~15:57Z; permanent + 
 
 Substantive shape: ONE PDR covering both emit-side precondition + observe-side retirement-detection (load-bearing on each other per Fred Q2). Plus repo phenotype ADR carrying the substrate decision (lifecycle event_type "heartbeat" chosen over tag-namespace per docs-adr-expert verdict + fred + betty convergence). Plus thin SKILL §0.5 pointer collapsing the in-tree fat draft.
 
+Follow-on evidence routed 2026-05-24 from Charcoal's active-napkin capture:
+Mistbound Hiding Threshold went silent at the marshal seat for ~67 minutes
+while marshal requests and a Director liveness probe were pending. The Codex
+sub-team stayed active during the same window, so the evidence is localised to
+marshal/director/implementor seats rather than team-wide. This reinforces the
+observe-side half of the PDR-078 / ADR-186 route: the contract must say what
+happens when a claimed marshal seat is silent past the freshness floor, not
+only that heartbeats should be emitted.
+
 Resume substrate: full reviewer transcripts + 6-subagent pre-draft fan-out findings captured in napkin top entry; claim 8374e240 retained for plan-author boundary; ADR-186 first write blocked by repo hook on commit-SHA/event-UUID citations (forbidden hash pattern); cure path is to scrub all hash-shaped citations to descriptive event-reference form before re-write.
 
 Cure shape: PDR-Proposed + ADR-Proposed authoring under Lanternlit Listening Dusk continuation post-compaction (owner direction 16:18Z: resume role post 18:10 London credit reset). Landing order ADR-186 → PDR-078 → thin SKILL → reciprocal updates → round-2 reviewer fan-out → owner review → marshal-request to Mistbound.

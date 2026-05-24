@@ -21,9 +21,7 @@ export function deriveCollaborationIdentity(input: {
 }): DerivedCollaborationIdentity {
   const seed = resolveCollaborationSeed(input.env);
   if (seed === undefined) {
-    throw new Error(
-      'missing collaboration identity seed; set a Practice session id or CODEX_THREAD_ID',
-    );
+    throw new Error(missingCollaborationIdentitySeedMessage(input.platform));
   }
 
   const identity = deriveIdentity(seed.value, {
@@ -71,6 +69,34 @@ function resolveCollaborationSeed(env: CollaborationStateEnvironment): SeedCandi
     { source: 'PRACTICE_AGENT_SESSION_ID_CODEX', value: env.PRACTICE_AGENT_SESSION_ID_CODEX },
     { source: 'CODEX_THREAD_ID', value: env.CODEX_THREAD_ID },
   ]);
+}
+
+function missingCollaborationIdentitySeedMessage(platform: string): string {
+  const platformPracticeVar = practiceSessionVarForPlatform(platform);
+  const platformHint =
+    platformPracticeVar === undefined
+      ? ''
+      : ` For ${platform}, the primary Practice seed is ${platformPracticeVar}.`;
+
+  return (
+    'missing collaboration identity seed; set one of ' +
+    'PRACTICE_AGENT_SESSION_ID_CLAUDE, PRACTICE_AGENT_SESSION_ID_CURSOR, ' +
+    'PRACTICE_AGENT_SESSION_ID_CODEX, or CODEX_THREAD_ID.' +
+    platformHint
+  );
+}
+
+function practiceSessionVarForPlatform(platform: string): string | undefined {
+  switch (platform.toLowerCase()) {
+    case 'claude':
+      return 'PRACTICE_AGENT_SESSION_ID_CLAUDE';
+    case 'cursor':
+      return 'PRACTICE_AGENT_SESSION_ID_CURSOR';
+    case 'codex':
+      return 'PRACTICE_AGENT_SESSION_ID_CODEX or CODEX_THREAD_ID';
+    default:
+      return undefined;
+  }
 }
 
 function firstSeed(

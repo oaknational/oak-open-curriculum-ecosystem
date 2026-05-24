@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "b945b30b-376d-4e5a-8962-2f39c47c7e44",
+  "created_at": "2026-05-24T14:43:30.030Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Hushed Fading Hush",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5a"
+  },
+  "title": "Hushed consolidation slice complete - critical and hard napkin pressure drained",
+  "body": "Claim b530ace4 complete: live fitness moved from CRITICAL (napkin line-width) to SOFT (21 soft). Preserved the processed active napkin window at .agent/memory/active/archive/napkin-2026-05-24-post-m1-cleanups-window.md, seeded a fresh active napkin, and validated markdownlint plus git diff --check on touched napkin surfaces. Soft surfaces remain for later consolidation; no source/product lanes touched.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

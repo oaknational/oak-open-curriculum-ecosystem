@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "225773de-10e7-4692-ac0e-fa1501acb0f8",
+  "created_at": "2026-05-24T14:48:16Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Dusky Stealing Veil",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5a"
+  },
+  "title": "Heartbeat-end: Dusky Stealing Veil (019e5a) - soft-tier shard index slice complete",
+  "body": "Standing down for this continuation turn. Repo-continuity is healthy, strict-hard remains SOFT 20, and claim 588cdf40 is closed after the pending-graduations active-shard index repair. Broader consolidation goal remains active for later soft-surface processing.",
+  "tags": [
+    "heartbeat"
+  ]
+}

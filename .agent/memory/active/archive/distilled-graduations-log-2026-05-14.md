@@ -457,3 +457,6 @@ Verified homes:
 - *Each reviewer lens shrinks a different part of the audit-shape surface*
   → [PDR-015](../../../practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md)
   § Audit-shape surface framing for parallel reviewer dispatch.
+- *Self-lint surfaces deprecated helper drift*
+  → [typescript-gotchas.md](../../../../docs/governance/typescript-gotchas.md)
+  § ESLint Plugin Typing.

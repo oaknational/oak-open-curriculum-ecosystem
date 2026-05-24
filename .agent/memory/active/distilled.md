@@ -188,9 +188,11 @@ of who picks the work up.
   false. Mistake source: Luminous Glowing Moon 2026-05-14; behaviour
   change recorded so the next agent does not repeat it.
 - **CLI flag-shape drift under coordination pressure**: the
-  collaboration-state surface has moved. `comms inbox` takes
-  `--agent-name`/`--comms-dir`, not `--agent`. `commit-queue` is a
-  top-level `agent-tools` topic (`pnpm agent-tools:commit-queue --
+  collaboration-state surface has moved. `comms inbox` currently takes
+  `--comms-dir`, `--seen-file`, `--platform`, `--model`, and optional
+  `--session-prefix`; it rejects older `--thread`, `--agent-codename`,
+  and `--since-file` shapes. `commit-queue` is a top-level
+  `agent-tools` topic (`pnpm agent-tools:commit-queue --
   list --queue-status active`), not a `collaboration-state` topic.
   `comms send` is shared-log; directed routing belongs to
   `comms direct` with `--to-agent-name`, `--to-platform`,
@@ -257,17 +259,3 @@ not yet at N≥3.
 [n-agent-experiments]: ../../prompts/agentic-engineering/collaboration/experiments.md
 
 ---
-
-## Recently Distilled — 2026-05-09 Napkin Rotation
-
-Most entries from the 2026-05-09 rotation graduated during the
-2026-05-14 Verdant Swaying Glade Route C-iv pass. The entries listed
-below remain held for a destination decision in a future consolidation.
-
-### Generator And Tooling Discipline
-
-- **Self-lint surfaces deprecated helper drift.** Adding new candidate
-  rules in the plugin self-lint lane catches maintenance drift early.
-  When core ESLint helper types reject a locally-typed plugin, split
-  the config at the type boundary rather than weakening the plugin
-  type.

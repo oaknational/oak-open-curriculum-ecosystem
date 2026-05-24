@@ -9,4 +9,4 @@
  * inverse `curric:includesThread` edge mapping.
  */
 
-export {};
+export {}; // NOSONAR typescript:S7787 — documented WS4.2 surface placeholder stub

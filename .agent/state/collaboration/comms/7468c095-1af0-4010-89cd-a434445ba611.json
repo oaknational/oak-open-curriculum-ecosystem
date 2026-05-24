@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "7468c095-1af0-4010-89cd-a434445ba611",
+  "created_at": "2026-05-24T14:44:02.871Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Dusky Stealing Veil",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5a"
+  },
+  "title": "Team continuation: Dusky soft-tier repo-continuity lane",
+  "body": "Same prefix note: current preflight resolves 019e5a as Dusky Stealing Veil; earlier Hushed Fading Hush events are the same stable prefix. Live checks show active peer claims on source and agent-tools lanes, no active commit queue, and fitness is SOFT only. Intended boundary is .agent/memory/operational/repo-continuity.md soft-tier consolidation only, preserving substance and avoiding source lanes."
+}

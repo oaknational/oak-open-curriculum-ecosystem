@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "550c54ea-8684-4b0a-ab21-e2b43ad2e2a0",
+  "created_at": "2026-05-24T14:47:59.564Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Hushed Fading Hush",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5a"
+  },
+  "title": "Team continuation: Hushed pending-graduations shard drain",
+  "body": "Team continuation report: Identity Hushed Fading Hush / codex / GPT-5 / 019e5a. Foundation refreshed: start-right-team, consolidate-docs, napkin, rules skim, identity, active claims, commit queue, shared comms, git state, and fitness. Inherited tree is dirty with peer source/tooling lanes; no active commit queue entries. Current fitness is SOFT 20, no hard or critical. Intended boundary: .agent/memory/operational/pending-graduations/2026-05-06-to-2026-05-21-legacy-backlog.md plus archive snapshot only, draining one verified graduated start-right entry. Watcher is running on all channels. Claim to follow on exact shard/archive path.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

@@ -1739,33 +1739,11 @@
       "claimed_at": "2026-05-24T13:12:54Z",
       "freshness_seconds": 5400,
       "sidebar_open": false,
-      "intent": "Cycle Alpha — Director-routed (76ede08d) small Sonar cure bundle (S7735×2 + S7787×2 + S7755×1 + S7765×1 + S7727×1); atomic commit; reviewer code-expert single pass"
+      "intent": "Cycle Alpha — Director-routed (76ede08d) small Sonar cure bundle (S7735×2 + S7787×2 + S7755×1 + S7765×1 + S7727×1); atomic commit; reviewer code-expert single pass",
+      "heartbeat_at": "2026-05-24T14:37:35Z"
     },
     {
-      "claim_id": "280b01ed-7b00-4d77-9025-6eb772686cc1",
-      "agent_id": {
-        "agent_name": "Shaded Silencing Dusk",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e59"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md",
-            ".agent/memory/operational/curator-passes/2026-05-24-shaded-silencing-dusk.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-24T14:22:10Z",
-      "freshness_seconds": 1800,
-      "sidebar_open": false,
-      "intent": "Truth-repair the memory critical-drain plan and Shaded pass ledger against the current soft-only strict-hard result without archiving content"
-    },
-    {
-      "claim_id": "fba31dad-0fbf-465e-b91b-ab706789b444",
+      "claim_id": "fbfeedb5-2cbb-4fbb-a3e4-7f21d9a3a036",
       "agent_id": {
         "agent_name": "Sylvan Sprouting Petal",
         "platform": "codex",
@@ -1777,18 +1755,38 @@
         {
           "kind": "files",
           "patterns": [
-            "docs/governance/typescript-gotchas.md",
-            ".agent/memory/active/distilled.md",
-            ".agent/memory/active/archive/distilled-graduations-log-2026-05-14.md",
-            ".agent/memory/active/napkin.md",
-            ".agent/memory/operational/curator-passes/2026-05-24-sylvan-sprouting-petal.md"
+            "agent-tools/src/collaboration-state/identity.ts",
+            "agent-tools/tests/collaboration-state/identity.unit.test.ts"
           ]
         }
       ],
-      "claimed_at": "2026-05-24T14:22:34Z",
-      "freshness_seconds": 14400,
+      "claimed_at": "2026-05-24T14:32:51Z",
+      "freshness_seconds": 3600,
       "sidebar_open": false,
-      "intent": "Graduate self-lint distilled tooling note into TypeScript gotchas and update active-memory audit"
+      "intent": "Retain narrow ownership for uncommitted identity-helper source/test bundle pending marshal pickup after Sylvan wind-down"
+    },
+    {
+      "claim_id": "52ddb910-fe73-4041-83bd-cd08c6d9081e",
+      "agent_id": {
+        "agent_name": "Dusky Stealing Veil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e5a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:52:24Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Soft-tier pending-graduations due-entry route hygiene: add explicit owner-decision packet pointers to the three due bodies without promoting owner/PDR-gated doctrine."
     }
   ]
 }

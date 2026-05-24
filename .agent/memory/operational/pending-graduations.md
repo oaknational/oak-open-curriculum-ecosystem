@@ -173,6 +173,10 @@ list; entry-level summary index is intentionally omitted to avoid
 duplicating entry-body substance and to keep the index honest as
 the queue churns.
 
+Fresh 2026-05-24 napkin-tail candidates live in the
+[`pending-graduations/2026-05-24-napkin-tail-candidates.md`](pending-graduations/2026-05-24-napkin-tail-candidates.md)
+active shard.
+
 ### 2026-05-23 — Agent identity UUID + body-file frontmatter residuals
 
 `[captured: 2026-05-23 | source: stormbound-floating-wing/tempfile-collision-incident-and-owner-direction | target: PDR-076a+PDR-076b operationalisation | trigger: owner direction | size: S | status: partially-graduated]`
@@ -564,6 +568,14 @@ be respected if that lane resumes.
 Falsifiability: PDR-077 or a pattern file lists both worked instances,
 the role boundary, the queue/ordering/comms mechanism, and the
 acceptance evidence for one complete marshal cycle.
+
+Additional evidence routed 2026-05-24 from Mistbound Capture G:
+cross-platform marshal-cycle shape worked without special casing. Estuarine
+Fathoming Sail (codex/GPT-5) emitted the full marshal-request shape, and
+Mistbound Hiding Threshold (claude/opus-4.7) processed it through ACK,
+explicit pathspec staging, full-tree hook, and co-authored commit. This
+strengthens the PDR-077/pattern route because the protocol worked across
+platform families, not only inside one vendor's sessions.
 
 ### Structured field for agent state
 

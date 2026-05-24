@@ -92,6 +92,12 @@ alongside active claims: `intent_id`, `agent_id`, `files`, `commit_subject`,
 `phase`, and `expires_at`. Queue entries are discovery and ordering signals,
 not mechanical refusals.
 
+If a dirty slice has no matching active claim or recent comms event, do not
+classify it as orphaned until `repo-continuity.md` Next Safe Steps, the touched
+thread record, and any active plan have been checked for owner-direction
+landing notes or explicit hold-state. Some legitimate slices become visible
+there before a claim or comms event exists.
+
 Apply the
    [`register-active-areas-at-session-open`](../../../rules/register-active-areas-at-session-open.md)
 rule before any edit: enumerate the areas you intend to touch, register

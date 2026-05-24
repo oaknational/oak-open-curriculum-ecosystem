@@ -9,4 +9,4 @@
  * until Inc.3.
  */
 
-export {};
+export {}; // NOSONAR typescript:S7787 — documented WS4.5 surface placeholder stub

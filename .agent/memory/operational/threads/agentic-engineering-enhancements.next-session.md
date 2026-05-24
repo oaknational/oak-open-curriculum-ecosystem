@@ -1,17 +1,75 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-24 — Shaded Silencing Dusk / `codex` / GPT-5 / `019e59`, Knowledge Curator handoff)
+
+**Session boundary**: owner asked to wind down after the temporary Knowledge
+Curator / consolidate-docs continuation. Treat this as Shaded's boundary-scoped
+handoff, not a team closeout-owner synthesis.
+
+**Landed outcome**: the Shaded curator lane processed the active napkin state
+it owned, repaired stale plan truth, and validated the critical-drain plan's
+hard/critical objective without archiving unprocessed content.
+
+**Evidence**:
+
+- Active napkin entries owned by Shaded are classified under
+  `### Processing Disposition`; no archive move was made because the active
+  napkin is far below rotation threshold.
+- `memory-surface-critical-drain-2026-05-24.plan.md` marks Phase 4 validation
+  complete while keeping Phase 2 and Phase 3 `in_progress`.
+- `.agent/memory/operational/curator-passes/2026-05-24-shaded-silencing-dusk.md`
+  records the Phase 4 truth repair under claim
+  `280b01ed-7b00-4d77-9025-6eb772686cc1`.
+- Wind-down recheck: `pnpm practice:fitness --strict-hard` exits 0 with
+  `SOFT (21 soft)`; active napkin is healthy at 211 lines / 11,171 chars, and
+  `pending-graduations.md` is soft at 723 lines / 37,960 chars / max prose
+  line 260.
+- The final active-napkin tail route created
+  `pending-graduations/2026-05-24-napkin-tail-candidates.md` as a live active
+  shard, not an archive.
+- Shaded owns no active claims at handoff.
+
+**Next safe curator step**: continue processing active shard entries one by one
+only after verifying each durable home or unresolved route. Do not archive
+`pending-graduations/` shards wholesale; they are live queue surfaces, not
+archives. If the next session is not continuing curation, treat this lane as
+paused with a clean soft-only fitness baseline.
+
+**Open owner-gated items**: the live due set remains the three owner/PDR-gated
+entries named in the critical-drain plan: `director-pure-direction-only`,
+`owner-action-is-not-a-cure`, and `marshal-as-cycle-discipline`.
+
 ## Session Outcome (2026-05-24 — Sylvan Sprouting Petal / `codex` / GPT-5 / `019e59`, Knowledge Curator continuation)
 
 **Current continuity verdict**: the active Knowledge Curator lane cleared the
 critical `pending-graduations.md` pressure without archiving unprocessed
 content. The main register is now a compact index/current-routing surface, and
 unprocessed live queue substance remains in active shards under
-`.agent/memory/operational/pending-graduations/`.
+`.agent/memory/operational/pending-graduations/`. The later Sylvan handoff
+slice stopped with no current hard or critical fitness surfaces.
 
-**Latest verified fitness**: `pnpm practice:fitness:informational` exits 0 with
-`SOFT (21 soft)`. There are no current hard or critical surfaces.
-`pending-graduations.md` is soft at 690 lines / 36,308 chars / max prose line
-260.
+**Latest verified fitness**: `pnpm practice:fitness --strict-hard` exits 0 with
+`SOFT (21 soft)`. There are no current hard or critical surfaces. Key checked
+surfaces at handoff: `distilled.md` is healthy at 254 lines / 13,735 chars,
+`napkin.md` is healthy at 58 lines / 2,955 chars, `pending-graduations.md` is
+soft at 710 lines / 37,141 chars / max prose line 260, and
+`typescript-gotchas.md` is soft at 97 lines / 3,299 chars because it accepted a
+durable-home tooling note.
+
+**Curation outcomes preserved in working tree**:
+
+- Identity-seed CLI message refined in
+  `agent-tools/src/collaboration-state/identity.ts` with focused unit coverage
+  in `agent-tools/tests/collaboration-state/identity.unit.test.ts`.
+- Owner-profile, plan-author, PR-closeout, multi-reviewer, and self-lint
+  tooling distilled duplicates were graduated only after durable homes were
+  verified; audit entries live in
+  `active/archive/distilled-graduations-log-2026-05-14.md`.
+- `docs/governance/typescript-gotchas.md` § ESLint Plugin Typing now carries
+  the self-lint / deprecated helper / type-boundary split guidance.
+- The active napkin records the tool-shape and evidence-readability mistakes
+  from this continuation, including the corrected `claims close --closed`
+  command shape.
 
 **Active-shard routing**:
 
@@ -20,10 +78,12 @@ unprocessed live queue substance remains in active shards under
 - `pending-graduations/2026-05-23-team-session-autonomy.md` carries the
   first-out closeout, commit-queue ceremony, autonomy, and heartbeat bundle.
 
-**Next safe curator step**: process active shard entries one by one into their
-real homes, or take a separate hard-surface lane with an explicit claim. Do not
-archive the shards until every entry has a verified durable home or unresolved
-route and the main register keeps an audit pointer.
+**Next safe curator step**: stop this Sylvan session here. A future curator can
+process active shard entries one by one into their real homes, or take a
+separate soft-surface lane with an explicit claim. Do not archive the shards
+until every entry has a verified durable home or unresolved route and the main
+register keeps an audit pointer. If critical fitness reappears, prioritise that
+file first, but current verified state has no critical file.
 
 ## Session Outcome (2026-05-23 — Scorched Tempering Kiln / `claude` / claude-opus-4-7 / `52b263`, seventh Director window ~13:50Z–~15:05Z)
 
@@ -1783,6 +1843,8 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 
 | Platform | Model | Agent name | Role | First-session | Last-session |
 | --- | --- | --- | --- | --- | --- |
+| `codex` | `GPT-5` | Sylvan Sprouting Petal | Knowledge Curator (memory critical-drain continuation; distilled graduations; identity-seed CLI refinement; handoff) | 2026-05-24 | 2026-05-24 |
+| `codex` | `GPT-5` | Shaded Silencing Dusk | Knowledge Curator (active-napkin processing, plan-truth repair, boundary handoff) | 2026-05-24 | 2026-05-24 |
 | `claude` | `claude-opus-4-7-1m` | Lush Sprouting Thicket | Implementer (codex-helper skill, codex-exec CLI, ADR-180, future plan) | 2026-05-12 | 2026-05-12 |
 | `claude` | `claude-haiku-4-5-20251001` | Prismatic Beaming Twilight | Designer (multi-agent delegation orchestration architecture, strategic brief) | 2026-05-12 | 2026-05-12 |
 | `codex` | `GPT-5` | Coastal Cresting Prow | Implementer (cost-of-collaboration P1 B-11 `comms direct/reply`; landed at `f88d0d67`) | 2026-05-12 | 2026-05-12 |
@@ -5668,6 +5730,7 @@ and
 | `Masked Stalking Veil` | `codex` | `GPT-5` | `019dfc` | `quota-recovery-commit-stewardship-and-session-handoff-light-consolidation; committed-Umbral-Cloaking-Silhouette-artefact-portability-audit-and-plans-as-ad03f276; closed-quota-recovery-collaboration-state-as-8bf55080; ran-owner-requested-jc-session-handoff-plus-light-jc-consolidate-docs; no-entrypoint-drift-no-track-cards-no-escalations-vocabulary-green-collaboration-check-green; inherited-fitness-pressure-remains-separate-lane` | 2026-05-06 | 2026-05-06 |
 | `Ashen Burning Anvil` | `codex` | `GPT-5` | `019dfd` | `urgent-skill-load-pressure-relief-phase-1-settings-prune; removed-project-level-mcp-apps-cloudflare-linear-plugin-activations; retained-sentry-remember-mcp-server-dev-sonarqube-vercel; backup-captured; portability-subagents-typecheck-markdownlint-diff-whitespace-and-collaboration-check-green; owner-corrected-doctor-as-session-local-only; phase-2-vercel-triage-next` | 2026-05-06 | 2026-05-06 |
 | `Torrid Glowing Flame` | `claude` | `claude-opus-4-7-1m` | `5ab0ec` | `cross-thread-gate-cure-touching-agent-tools-comms-cli-files-during-eef-planning-session-round-2; knip-fixes-default-bulk-dir-name-export-removed-event-view-re-export-and-source-export-removed; depcruise-cycle-cured-by-moving-directed-inbox-drain-result-interface-from-comms-use-cases-to-shared-types-with-two-import-sites-updated; reviewer-driven-followups-merged-duplicate-types-imports-and-reshaped-tsdoc-to-contract-first; public-api-surface-unchanged-classify-drain-watch-render-all-still-export-with-identical-signatures; pre-existing-result-pattern-violations-on-throws-in-comms-use-cases-surfaced-but-not-actioned-out-of-scope` | 2026-05-21 | 2026-05-21 |
+| `Charcoal Brazing Kiln` | `claude` | `claude-opus-4-7` | `7c7327` | `implementor-Director-Seaworthy-window-2026-05-24-spanning-compaction-2-and-compaction-3-same-identity-continuation-via-PRACTICE-AGENT-SESSION-ID-CLAUDE; PDR-076-SPLIT-landed-d14c74f1-first-in-repo-SPLIT-via-pre-authoring-review-precedent-076a-identity-tuple-name-and-uuid-076b-body-file-frontmatter-contract-supplanted-stub-retained-Cascade-item-2-partition-cure-OPTION-a-narrow-identity-row-class-only; PR-108-reviewer-fan-out-4-parallel-reviewers-code-expert-af3257be-security-expert-ac86214e-test-expert-a4c71422-architecture-expert-fred-a8294497-converged-with-substantive-verdicts-synthesis-broadcast-a15363e5-5-un-routed-finding-classes-surfaced; sonar-cpd-exclusions-owner-authz-exception-edit-landed-79c148e4-Director-routing-73f9c57f-architectural-honesty-substrate-existing-glob-already-matches-recording-class-value-config-expert-PASS-WITH-FOLLOW-UP-a4bf082e; Cycle-Alpha-Sonar-cure-bundle-marshal-pending-625fb072-S7735x2-S7787x2-S7755x1-S7765x1-S7727x1-code-expert-PASS-WITH-NITS-ABSORBED-a6e67fa-NOSONAR-placement-inline-cured-530-of-530-tests-green-Mistbound-silent-67m-at-handoff; substrate-pointer-pattern-v2-18th-19th-instances-captured-to-napkin-compose-vs-emit-window-Director-Seaworthy-team-shape-broadcast-named-me-Twilit-closed-out-64s-after-resume-broadcasts; three-claim-retentions-across-compaction-windows-aacb4c72-then-ccfef0a5-then-abf7f94a-all-closure-rationale-documented; Director-routed-Cycles-Beta-Gamma-owed-post-Cycle-Alpha-landing-S5443-14-fixture-replacement-plus-resolveSelfIdentity-extraction-plus-eslint-config-cpd-entry; standing-by-for-same-identity-post-compaction-3-resume` | 2026-05-24 | 2026-05-24 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):

@@ -40914,6 +40914,772 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "280b01ed-7b00-4d77-9025-6eb772686cc1",
+      "agent_id": {
+        "agent_name": "Shaded Silencing Dusk",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md",
+            ".agent/memory/operational/curator-passes/2026-05-24-shaded-silencing-dusk.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:22:10Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Truth-repair the memory critical-drain plan and Shaded pass ledger against the current soft-only strict-hard result without archiving content",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:22:58Z",
+        "closed_by": {
+          "agent_name": "Shaded Silencing Dusk",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e59"
+        },
+        "summary": "Truth-repaired memory critical-drain plan and Shaded pass ledger against current strict-hard SOFT (21 soft); Phase 4 validation complete, Phase 2/3 remain active curation lanes.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "280b01ed-7b00-4d77-9025-6eb772686cc1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "b9397799-de82-41d7-8740-d8abaf1cf66c",
+      "agent_id": {
+        "agent_name": "Shaded Silencing Dusk",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:23:20Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Correct Shaded claim closure timestamp drift and record the timestamp mistake in the napkin",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:23:41Z",
+        "closed_by": {
+          "agent_name": "Shaded Silencing Dusk",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e59"
+        },
+        "summary": "Corrected Shaded plan truth-repair claim closure timestamp and logged the manual timestamp mistake in the active napkin.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b9397799-de82-41d7-8740-d8abaf1cf66c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "fba31dad-0fbf-465e-b91b-ab706789b444",
+      "agent_id": {
+        "agent_name": "Sylvan Sprouting Petal",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/governance/typescript-gotchas.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/archive/distilled-graduations-log-2026-05-14.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/curator-passes/2026-05-24-sylvan-sprouting-petal.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:22:34Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Graduate self-lint distilled tooling note into TypeScript gotchas and update active-memory audit",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:24:27Z",
+        "closed_by": {
+          "agent_name": "Sylvan Sprouting Petal",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e59"
+        },
+        "summary": "Graduated self-lint tooling distilled note into TypeScript gotchas, removed active distilled duplicate, updated audit/pass log, captured repeated CLI/evidence-shape mistakes, and validated with targeted rg/prettier/markdownlint/diff plus strict-hard fitness SOFT (21 soft).",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "fba31dad-0fbf-465e-b91b-ab706789b444",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "809d9cff-8146-4fcb-8113-ec1722008d75",
+      "agent_id": {
+        "agent_name": "Sylvan Sprouting Petal",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/curator-passes/2026-05-24-sylvan-sprouting-petal.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:24:51Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Knowledge Curator session handoff: update continuity/thread state, capture final tool-shape lessons, and leave boundary closeout",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:25:50Z",
+        "closed_by": {
+          "agent_name": "Sylvan Sprouting Petal",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e59"
+        },
+        "summary": "Knowledge Curator session handoff complete: thread record, repo-continuity, napkin, and Sylvan curator pass log updated; c155d0c5 closeout broadcast emitted; focused formatting/markdown/whitespace checks passed; latest strict-hard fitness SOFT (21 soft), no hard/critical surfaces.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "809d9cff-8146-4fcb-8113-ec1722008d75",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "fefe2ae2-9085-4bcc-a8f7-8e6aa1256887",
+      "agent_id": {
+        "agent_name": "Shaded Silencing Dusk",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:25:11Z",
+      "freshness_seconds": 1200,
+      "sidebar_open": false,
+      "intent": "Session handoff truth repair for Shaded Knowledge Curator closeout",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:25:55Z",
+        "closed_by": {
+          "agent_name": "Shaded Silencing Dusk",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e59"
+        },
+        "summary": "Recorded Shaded Knowledge Curator handoff in thread record, refreshed repo-continuity HEAD, and aligned the critical-drain plan validation text.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "fefe2ae2-9085-4bcc-a8f7-8e6aa1256887",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "7138ca34-43fd-4fb7-88fc-3ef7815b89ca",
+      "agent_id": {
+        "agent_name": "Shaded Silencing Dusk",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/repo-continuity.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:28:50Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Session handoff identity-table and deep-consolidation-status hygiene for Shaded wind-down",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:29:36Z",
+        "closed_by": {
+          "agent_name": "Shaded Silencing Dusk",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e59"
+        },
+        "summary": "Closed Shaded wind-down handoff hygiene: refreshed repo-continuity fitness/deep-consolidation status and added missing Shaded identity row to the agentic-engineering thread record; validation passed markdownlint, diff-check, and strict-hard fitness soft-only.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7138ca34-43fd-4fb7-88fc-3ef7815b89ca",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2ae61a6a-7e87-4332-ae26-46be17939b23",
+      "agent_id": {
+        "agent_name": "Sylvan Sprouting Petal",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/start-right-quick/shared/start-right.md",
+            ".agent/memory/operational/pending-graduations/2026-05-06-to-2026-05-21-legacy-backlog.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:29:50Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Graduate lockfile-in-flux start-right grounding amendment from legacy pending shard",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:30:15Z",
+        "closed_by": {
+          "agent_name": "Sylvan Sprouting Petal",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e59"
+        },
+        "summary": "Graduated the lockfile-in-flux start-right grounding amendment from the legacy pending shard into start-right-quick live-state guidance; marked the shard entry graduated; updated Sylvan curator pass log; validation passed with focused Prettier, markdownlint, git diff --check, and strict-hard fitness SOFT (21 soft).",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2ae61a6a-7e87-4332-ae26-46be17939b23",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "5e66df2a-120c-4438-b577-25269f22512f",
+      "agent_id": {
+        "agent_name": "Sylvan Sprouting Petal",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/identity.ts",
+            "agent-tools/tests/collaboration-state/identity.unit.test.ts",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/curator-passes/2026-05-24-sylvan-sprouting-petal.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:27:30Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Resolve Sylvan identity-helper curation slice ownership after substrate commit and prepare marshal-ready validation",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:32:56Z",
+        "closed_by": {
+          "agent_name": "Sylvan Sprouting Petal",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e59"
+        },
+        "summary": "Superseded by narrow retained identity-helper source/test claim fbfeedb5-2cbb-4fbb-a3e4-7f21d9a3a036 for Sylvan wind-down; shared memory surfaces released to active curator ownership.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "5e66df2a-120c-4438-b577-25269f22512f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a2b115af-96cc-40cb-a7ca-69fd37163277",
+      "agent_id": {
+        "agent_name": "Shaded Silencing Dusk",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/pending-graduations/2026-05-23-team-session-autonomy.md",
+            ".agent/memory/operational/curator-passes/2026-05-24-shaded-silencing-dusk.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:31:54Z",
+      "freshness_seconds": 1200,
+      "sidebar_open": false,
+      "intent": "Process current active-napkin Charcoal/Mistbound tail into durable homes or live routes; shared-state overlap with Sylvan claim 5e66df2a noted, no source-code touch",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:34:03Z",
+        "closed_by": {
+          "agent_name": "Shaded Silencing Dusk",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e59"
+        },
+        "summary": "Processed active napkin tail into durable routes: dispositions added to napkin, heartbeat and marshal pending routes strengthened, pending-graduations pointer added, and focused validation plus strict-hard fitness run clean of hard failures.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a2b115af-96cc-40cb-a7ca-69fd37163277",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e36a92ca-d370-4210-b9fa-49dd4196a637",
+      "agent_id": {
+        "agent_name": "Shaded Silencing Dusk",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations/2026-05-24-napkin-tail-candidates.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:33:08Z",
+      "freshness_seconds": 1200,
+      "sidebar_open": false,
+      "intent": "Register new active pending-graduations shard created while routing napkin-tail candidates; companion to claim a2b115af",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:34:03Z",
+        "closed_by": {
+          "agent_name": "Shaded Silencing Dusk",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e59"
+        },
+        "summary": "Registered the new live pending-graduations shard for napkin-tail candidates, confirmed it is active not archived, and included it in focused formatting, markdownlint, diff, and strict-hard validation.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e36a92ca-d370-4210-b9fa-49dd4196a637",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "fc9c8bd5-d469-4d2d-af2a-d2794a89f557",
+      "agent_id": {
+        "agent_name": "Sylvan Sprouting Petal",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations/2026-05-06-to-2026-05-21-legacy-backlog.md",
+            ".agent/memory/operational/curator-passes/2026-05-24-sylvan-sprouting-petal.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:34:19Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Process one non-overlap legacy-backlog pending-graduation shard entry into durable route while Shaded owns main register and napkin-tail shard",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:34:48Z",
+        "closed_by": {
+          "agent_name": "Sylvan Sprouting Petal",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e59"
+        },
+        "summary": "Closed immediately per owner wind-down direction before any legacy-shard edits; no curation slice was processed under this claim.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "fc9c8bd5-d469-4d2d-af2a-d2794a89f557",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "06fce6ad-9d43-4dc4-b119-8d84f4908a52",
+      "agent_id": {
+        "agent_name": "Shaded Silencing Dusk",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:35:26Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Session handoff final count correction only: align Shaded handoff surfaces with final napkin-tail routing validation; no curation expansion.",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:35:50Z",
+        "closed_by": {
+          "agent_name": "Shaded Silencing Dusk",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e59"
+        },
+        "summary": "Session handoff final count correction applied to repo-continuity and agentic-engineering thread record; focused formatting, markdownlint, and diff checks passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "06fce6ad-9d43-4dc4-b119-8d84f4908a52",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a6098196-5f85-4d60-8c93-0168c251fcf8",
+      "agent_id": {
+        "agent_name": "Shaded Silencing Dusk",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations/2026-05-24-napkin-tail-candidates.md",
+            ".agent/memory/operational/curator-passes/2026-05-24-shaded-silencing-dusk.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:37:22Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Process napkin-tail active shard candidates into verified live-route dispositions; no archive move and no source-code touch.",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:38:57Z",
+        "closed_by": {
+          "agent_name": "Shaded Silencing Dusk",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e59"
+        },
+        "summary": "Napkin-tail active shard entries verified into live pending routes; exact Sonar instance already homed, split-by-attribution and substrate-write candidates kept second-instance-gated; focused checks and strict-hard fitness passed soft-only.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a6098196-5f85-4d60-8c93-0168c251fcf8",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d7fe5974-56b1-45d4-92aa-b09d23911313",
+      "agent_id": {
+        "agent_name": "Shaded Silencing Dusk",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/curator-passes/2026-05-24-shaded-silencing-dusk.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:38:16Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Process fresh Sylvan persistent-goal handoff capture from active napkin into live route; no archive move.",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:38:57Z",
+        "closed_by": {
+          "agent_name": "Shaded Silencing Dusk",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e59"
+        },
+        "summary": "Fresh Sylvan persistent-goal handoff capture processed: active napkin disposition added and pending live-route candidate added to napkin-tail shard without archiving; focused checks and strict-hard fitness passed soft-only.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d7fe5974-56b1-45d4-92aa-b09d23911313",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "b530ace4-8b06-4aa6-907e-78ab156e729c",
+      "agent_id": {
+        "agent_name": "Hushed Fading Hush",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e5a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:41:42Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Critical-first consolidate-docs slice: preserve content and reflow current active napkin prose lines that make practice fitness critical, then rerun fitness.",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:43:28Z",
+        "closed_by": {
+          "agent_name": "Hushed Fading Hush",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e5a"
+        },
+        "summary": "Critical/hard active-napkin fitness pressure drained: preserved processed window in archive, seeded fresh active napkin, validation soft-only.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "b530ace4-8b06-4aa6-907e-78ab156e729c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "fa35ac39-c973-4b0f-8bde-fff312f8aa1d",
+      "agent_id": {
+        "agent_name": "Dusky Stealing Veil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e5a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:44:01Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Soft-tier document consolidation on repo-continuity only after critical/hard fitness cleared; preserve substance and update live operational index without source-lane overlap.",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:46:05Z",
+        "closed_by": {
+          "agent_name": "Hushed Fading Hush",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e5a"
+        },
+        "summary": "Repo-continuity soft-tier consolidation complete: preserved pre-Dusky snapshot in archive, replaced historical routing with live pointers, validated repo-continuity healthy and fitness SOFT 20.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "fa35ac39-c973-4b0f-8bde-fff312f8aa1d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "588cdf40-e0b0-46e9-b9a8-b88d0b771415",
+      "agent_id": {
+        "agent_name": "Dusky Stealing Veil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e5a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/pending-graduations/README.md",
+            ".agent/memory/operational/pending-graduations/2026-05-24-napkin-tail-candidates.md",
+            ".agent/plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:47:32Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Soft-tier pending-graduations active-shard index repair: register the 2026-05-24 napkin-tail shard and keep main-register pointer compact without promoting owner/PDR-gated due entries.",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:48:00Z",
+        "closed_by": {
+          "agent_name": "Dusky Stealing Veil",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e5a"
+        },
+        "summary": "Soft-tier pending-graduations active-shard index repair complete: main register pointer compacted, 2026-05-24 napkin-tail shard added to shard README, plan evidence updated to strict-hard SOFT 20 with pending-graduations at 722 lines.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "588cdf40-e0b0-46e9-b9a8-b88d0b771415",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "96528b72-ab33-4b6e-8faa-61bb49494951",
+      "agent_id": {
+        "agent_name": "Hushed Fading Hush",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e5a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations/2026-05-06-to-2026-05-21-legacy-backlog.md",
+            ".agent/memory/operational/archive/pending-graduations-archive-2026-05-24.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:47:51Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Soft-tier consolidate-docs shard drain: verify durable home for one already-graduated start-right-quick entry, archive its full body, and remove it from the active legacy shard without touching peer source/tooling lanes.",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:50:00Z",
+        "closed_by": {
+          "agent_name": "Hushed Fading Hush",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e5a"
+        },
+        "summary": "Soft-tier pending-graduations shard drain complete: verified the start-right durable home, archived the graduated lockfile-in-flux body, and removed it from the active legacy shard.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "96528b72-ab33-4b6e-8faa-61bb49494951",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

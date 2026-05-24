@@ -61,6 +61,9 @@ owner_decision_packet_truth_repair_claim_id: 929970ac-ae54-4b0a-b0aa-e49ba5d5c54
 stale_claim_archive_claim_id: 8db8fac5-7e3f-4e8b-b461-c0e6bdf639fe
 fresh_active_napkin_disposition_claim_id: d2f24c33-3772-48d1-8aee-b113e0941ea6
 plan_truth_repair_claim_id: 280b01ed-7b00-4d77-9025-6eb772686cc1
+napkin_tail_processing_claim_id: a2b115af-96cc-40cb-a7ca-69fd37163277
+napkin_tail_route_verification_claim_id: a6098196-5f85-4d60-8c93-0168c251fcf8
+fresh_goal_handoff_capture_claim_id: d7fe5974-56b1-45d4-92aa-b09d23911313
 ---
 
 # Curator Pass — 2026-05-24 — Shaded Silencing Dusk
@@ -99,6 +102,9 @@ oversized active napkin; preserve knowledge over fitness signals.
 | Director pure-direction-only and owner-action-is-not-a-cure are due PDR-shaped candidates | pending-graduations update |
 | Verify-dont-trust and marshal-as-cycle-discipline are due routing candidates | pending-graduations update |
 | Substrate-pointer v3 variants and script-based relocation remain pending pattern work | pending-graduations update |
+| Charcoal/Mistbound active-napkin tail needed routing after later capture | active napkin processing disposition + pending-graduations updates |
+| Napkin-tail active shard needed per-entry route verification | shard processing dispositions |
+| Sylvan goal-backed handoff capture needed routing | active napkin processing disposition + napkin-tail shard candidate |
 
 ## Coverage audit
 
@@ -154,6 +160,9 @@ primary symptom is missing/unfinished graduation homes, not disposable prose.
 | Pending structural width repair | Markdownlint clean; diff check clean; informational fitness `CRITICAL (1 critical, 5 hard, 14 soft)`; critical-width lines reduced to zero, line/character critical remains |
 | Historical log block drain | Markdownlint clean; diff check clean; informational fitness `CRITICAL (1 critical, 4 hard, 15 soft)`; pending register reduced to 4,114 lines / 261,232 chars but remains critical |
 | Older graduations log drain | Markdownlint clean; diff check clean; informational fitness `CRITICAL (1 critical, 4 hard, 15 soft)`; pending register reduced to 4,082 lines / 255,223 chars but remains critical |
+| Active-napkin tail processing | Charcoal/Mistbound captures routed to existing heartbeat, marshal, and Sonar homes plus three second-instance-gated pending candidates |
+| Napkin-tail route verification | Three shard entries verified as live pending routes: exact Sonar instance already homed; mixed-working-tree split and substrate-write window remain second-instance-gated |
+| Fresh goal-backed handoff capture | Routed to active shard as pending; reusable handoff-state gap preserved without treating "mark blocked" as a universal cure |
 
 ## Pending-graduations structural width repair
 

@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "1bee4b90-db44-4e5a-9a14-d298250ef662",
+  "created_at": "2026-05-24T14:46:07.026Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Hushed Fading Hush",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5a"
+  },
+  "title": "Repo-continuity soft-tier consolidation complete",
+  "body": "Same-prefix consolidation lane complete. Claim fa35ac39 closed after repo-continuity moved from soft to healthy by preserving the pre-Dusky snapshot in archive and replacing duplicated historical routing with live pointers. Validation: targeted markdownlint clean, git diff check clean, practice fitness informational SOFT 20, strict-hard SOFT 20. Current preflight name is Hushed Fading Hush while the claim was opened as Dusky Stealing Veil on the same 019e5a prefix, so the identity drift is recorded in napkin rather than opening a competing claim.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

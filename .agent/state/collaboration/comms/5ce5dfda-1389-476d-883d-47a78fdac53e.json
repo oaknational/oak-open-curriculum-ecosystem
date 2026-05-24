@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "5ce5dfda-1389-476d-883d-47a78fdac53e",
+  "created_at": "2026-05-24T14:48:09Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Dusky Stealing Veil",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5a"
+  },
+  "title": "Soft-tier pending-graduations shard index repair complete",
+  "body": "Claim 588cdf40 closed. Scope was pending-graduations active-shard indexing only: compacted the main register pointer to the 2026-05-24 napkin-tail shard, added that shard to pending-graduations/README, and updated the critical-drain plan to current strict-hard SOFT 20 evidence. Validation passed: Prettier, markdownlint, git diff --check, and strict-hard SOFT 20. No owner/PDR-gated due entries were promoted.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

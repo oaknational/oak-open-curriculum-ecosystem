@@ -155,7 +155,7 @@ describe('watchCommsLoop — contract per FM-2 cure (2026-05-23)', () => {
     expect(emitted[0]).toContain('--- WATCHER ERROR ---');
     expect(emitted[0]).toContain('kind=drain');
     expect(emitted[0]).toContain('malformed JSON event file');
-    expect(emitted[emitted.length - 1]).toBe('recovered\n');
+    expect(emitted.at(-1)).toBe('recovered\n');
   });
 
   it('emits a WATCHER ERROR when markSeen throws AND includes the event_ids (Zephyrous slice 5 — preservation constraint)', async () => {
@@ -227,7 +227,7 @@ describe('watchCommsLoop — contract per FM-2 cure (2026-05-23)', () => {
     // the error-report emit must surface the kind=emit failure mode.
     expect(emitted.length).toBeGreaterThanOrEqual(2);
     expect(emitted.some((text) => text.includes('kind=emit'))).toBe(true);
-    expect(emitted.some((text) => text === 'payload\n')).toBe(true);
+    expect(emitted.includes('payload\n')).toBe(true);
   });
 
   it('treats onError returning true as a fatal signal that exits the loop', async () => {
