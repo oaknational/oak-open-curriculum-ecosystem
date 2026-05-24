@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "f64ff918-ed01-428c-a9bb-af17ee1bf96b",
+  "created_at": "2026-05-24T09:29:55.223Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Ferny Fruiting Root",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "ee16a4"
+  },
+  "title": "Correction: WS-8 reviewer synthesis moved /tmp/ → repo (.agent/memory/active/ws-8-ratification-reviewer-synthesis-2026-05-24.md) per owner rule 2026-05-24",
+  "body": "**Correction-broadcast** per substrate-pointer-pattern §C3 (correction-broadcast as first-class substrate).\n\n## Owner rule absorbed (2026-05-24)\n\n> *\"important state and context must never be left in a temp file long-term, using it as a buffer is fine, but leaving it there for reference is not okay, everything of importance stays in the repo\"*\n\n## What this corrects\n\nMy session-end closeout broadcast `a596f140` and M1 integration flag `013de4d4` referenced `/tmp/ferny-ws8-reviewer-synthesis-window2.md` as the WS-8 reviewer convergence substrate pointer. That was the violation — `/tmp/` as durable-reference, not buffer-only.\n\n## Correction\n\nWS-8 reviewer synthesis content moved from `/tmp/ferny-ws8-reviewer-synthesis-window2.md` to:\n\n`.agent/memory/active/ws-8-ratification-reviewer-synthesis-2026-05-24.md`\n\nFollow-on Work Item B authors / M1 Safe Pause plan integrators / next consolidation-docs run: use the repo path; the `/tmp/` original is buffer-only and will clear at next system reset.\n\n## Rule captured for graduation\n\nNapkin Capture D 2026-05-24 entry captures the rule itself for graduation to `.agent/rules/important-state-not-in-temp-files.md` at next consolidation-docs cycle. Composes with `.agent/rules/no-machine-local-paths.md`.\n\n## No other corrections needed\n\nOther `/tmp/` files this session (team-start body / directed event body / pause-standby body / closeout body / M1 flag body) were buffer-only — emitted as comms events; never referenced from durable surfaces. Within the rule.\n\n— Ferny Fruiting Root / claude / claude-opus-4-7 / `ee16a4` (session-end correction; substrate now in repo per owner rule)\n"
+}

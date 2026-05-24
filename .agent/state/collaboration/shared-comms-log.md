@@ -42840,3 +42840,76 @@ None claim-bound from Ferny. Director Seaworthy owns the team session closeout i
 
 — Ferny Fruiting Root / claude / claude-opus-4-7 / `ee16a4` (window 2 session-end; team-member-not-closeout-owner; substrate fully discharged to napkin + /tmp/)
 
+
+---
+
+## 2026-05-24T09:27:56.547Z — `Ferny Fruiting Root` / `claude` / `claude-opus-4-7` / `ee16a4` — Investigation requirement: Ferny window-2 follow-on artefacts (WS-8 lane + PDR-079 requirement + cron-prompt cure-shape) integration into M1 Safe Pause plan
+
+**Investigation requirement** (not a verdict; flagged for whoever picks up M1 Safe Pause planning at next consolidation cycle).
+
+## The open question
+
+How do Ferny's window-2 follow-on artefacts integrate into the M1 Safe Pause plan?
+
+## The artefacts
+
+Three substrate surfaces authored during window 2 that the Safe Pause plan does not yet account for:
+
+1. **WS-8 ratification authoring lane** — paused mid-uptake at owner direction "pause" (~19:37Z); never resumed; lane is in the M1 Safe Pause plan as "any active agent at authoring-capability" but no author currently claims it. Substrate paste-ready (10 architectural conditions + 4 reviewer transcript IDs in napkin Capture B 2026-05-24 entry; full synthesis at `/tmp/ferny-ws8-reviewer-synthesis-window2.md`).
+
+2. **PDR-079 canonical-home requirement** (docs-adr-expert verdict): comms-broadcast alone is under-durable for the WS-8 ratification; the Safe Pause plan's existing Q2 verdict-treatment may not name PDR-079 authoring as a sub-deliverable. If the plan expects only a comms-broadcast, the docs-adr drift surface stays open.
+
+3. **Cron-prompt cure-shape text** (napkin Capture A 2026-05-24): concrete drop-in owner-input-precedence text for cron-prompt body. Adjacent to Mistbound's heartbeat-CLI convenience-wrapper proposal (Surprise 1). Plan may want to compose: convenience-CLI ships with the cure-shape embedded, OR cure-shape ships separately as cron-prompt amendment, OR both. Open framing question.
+
+## What needs investigating
+
+For the Safe Pause plan owner (or whoever runs next consolidation-docs):
+
+- **Q1**: Does WS-8 ratification close at "comms-broadcast emitted" OR at "PDR-079 + comms-broadcast both landed"? Owner verdict at Seaworthy tick #2 said "ratify shape now" — docs-adr-expert verdict says "comms-broadcast alone under-durable". Reconciliation needed before WS-8 satisfies M1 closure-criterion.
+- **Q2**: Is the 10-condition reviewer convergence list (Capture B) authoritative substrate for the PDR-079 + broadcast author, OR does it need fresh sequential reviewer pass per `feedback_practice_docs_sacred` if PDR-079 is Practice Core surface?
+- **Q3**: Does cron-prompt cure-shape (Capture A) land in M1 Safe Pause as a side-deliverable, OR defer to M2/post-Safe-Pause work, OR fold into the heartbeat-convenience-CLI proposal Mistbound named?
+- **Q4**: Lane reassignment — if no author surfaces for WS-8 + PDR-079 during M1 window, does the plan auto-defer the lane, OR escalate to owner for re-routing, OR carry forward as an open M1 item indefinitely?
+
+## What is NOT being investigated by Ferny
+
+Ferny's session ends at this broadcast. No further authoring, no claims, no routing. Substrate is durable in napkin Captures A/B/C; reviewer transcripts named by ID for retrieval; synthesis at `/tmp/ferny-ws8-reviewer-synthesis-window2.md`.
+
+## Pointer
+
+Whoever next opens the M1 Safe Pause plan or runs consolidation-docs over the napkin should read the 2026-05-24 Ferny entry end-to-end (Captures A + B + C + boundary-state) before deciding plan integration shape. The four questions above are the load-bearing ones.
+
+— Ferny Fruiting Root / claude / claude-opus-4-7 / `ee16a4` (window 2 session-end; integration-investigation requirement flagged)
+
+
+---
+
+## 2026-05-24T09:29:55.223Z — `Ferny Fruiting Root` / `claude` / `claude-opus-4-7` / `ee16a4` — Correction: WS-8 reviewer synthesis moved /tmp/ → repo (.agent/memory/active/ws-8-ratification-reviewer-synthesis-2026-05-24.md) per owner rule 2026-05-24
+
+**Correction-broadcast** per substrate-pointer-pattern §C3 (correction-broadcast as first-class substrate).
+
+## Owner rule absorbed (2026-05-24)
+
+> *"important state and context must never be left in a temp file long-term, using it as a buffer is fine, but leaving it there for reference is not okay, everything of importance stays in the repo"*
+
+## What this corrects
+
+My session-end closeout broadcast `a596f140` and M1 integration flag `013de4d4` referenced `/tmp/ferny-ws8-reviewer-synthesis-window2.md` as the WS-8 reviewer convergence substrate pointer. That was the violation — `/tmp/` as durable-reference, not buffer-only.
+
+## Correction
+
+WS-8 reviewer synthesis content moved from `/tmp/ferny-ws8-reviewer-synthesis-window2.md` to:
+
+`.agent/memory/active/ws-8-ratification-reviewer-synthesis-2026-05-24.md`
+
+Follow-on Work Item B authors / M1 Safe Pause plan integrators / next consolidation-docs run: use the repo path; the `/tmp/` original is buffer-only and will clear at next system reset.
+
+## Rule captured for graduation
+
+Napkin Capture D 2026-05-24 entry captures the rule itself for graduation to `.agent/rules/important-state-not-in-temp-files.md` at next consolidation-docs cycle. Composes with `.agent/rules/no-machine-local-paths.md`.
+
+## No other corrections needed
+
+Other `/tmp/` files this session (team-start body / directed event body / pause-standby body / closeout body / M1 flag body) were buffer-only — emitted as comms events; never referenced from durable surfaces. Within the rule.
+
+— Ferny Fruiting Root / claude / claude-opus-4-7 / `ee16a4` (session-end correction; substrate now in repo per owner rule)
+
