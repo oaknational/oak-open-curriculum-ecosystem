@@ -58,7 +58,7 @@ export function getEefEvidenceGroundedLessonPlanMessages(
   const keyStage = args.keyStage ?? 'the key stage';
   const topic = args.topic ?? 'the topic';
   const focus = args.focus;
-  const focusClause = focus !== undefined ? `, focus: "${focus}"` : '';
+  const focusClause = focus === undefined ? '' : `, focus: "${focus}"`;
 
   return [
     {

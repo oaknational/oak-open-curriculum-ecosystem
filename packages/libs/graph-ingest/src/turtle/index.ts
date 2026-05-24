@@ -81,11 +81,7 @@ export interface TurtleParseOutput {
  */
 function resolveSubjectLine(subjectIri: string, lineIndex: readonly string[]): number | null {
   const angleBracketed = `<${subjectIri}>`;
-  const localPart =
-    subjectIri
-      .split(/[#/]/)
-      .filter((s) => s.length > 0)
-      .pop() ?? subjectIri;
+  const localPart = subjectIri.split(/[#/]/).findLast((s) => s.length > 0) ?? subjectIri;
   let matchedLine: number | null = null;
   for (let i = 0; i < lineIndex.length; i += 1) {
     const line = lineIndex[i] ?? '';

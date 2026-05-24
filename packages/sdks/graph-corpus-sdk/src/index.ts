@@ -14,7 +14,5 @@
  * named workstream pointers.
  */
 
-import type { GraphView } from '@oaknational/graph-core/graph-view';
-import type { Result } from '@oaknational/result';
-
-export type { GraphView, Result };
+export type { GraphView } from '@oaknational/graph-core/graph-view';
+export type { Result } from '@oaknational/result';

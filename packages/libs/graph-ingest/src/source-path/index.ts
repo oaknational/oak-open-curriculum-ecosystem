@@ -109,7 +109,7 @@ export function parseSegments(p: JsonPointer): readonly string[] {
     return [];
   }
   const body = p.raw.slice(1);
-  return body.split('/').map((token) => token.replace(/~1/g, '/').replace(/~0/g, '~'));
+  return body.split('/').map((token) => token.replaceAll('~1', '/').replaceAll('~0', '~'));
 }
 
 /**
@@ -126,7 +126,7 @@ export function serialiseSegments(segments: readonly string[]): JsonPointer {
   if (segments.length === 0) {
     return { raw: '' };
   }
-  const encoded = segments.map((s) => s.replace(/~/g, '~0').replace(/\//g, '~1'));
+  const encoded = segments.map((s) => s.replaceAll('~', '~0').replaceAll('/', '~1'));
   return { raw: `/${encoded.join('/')}` };
 }
 
