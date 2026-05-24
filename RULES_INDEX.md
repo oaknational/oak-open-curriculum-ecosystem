@@ -49,6 +49,7 @@ index in the same commit.
 - `.agent/rules/generator-first-mindset.md`
 - `.agent/rules/handoff-messages-self-contained.md`
 - `.agent/rules/hook-policy-substring-discipline.md`
+- `.agent/rules/important-state-not-in-temp-files.md`
 - `.agent/rules/invoke-accessibility-expert.md`
 - `.agent/rules/invoke-assumptions-expert.md`
 - `.agent/rules/invoke-clerk-expert.md`
