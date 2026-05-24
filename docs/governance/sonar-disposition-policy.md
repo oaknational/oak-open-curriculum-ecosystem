@@ -405,7 +405,10 @@ standards; they stay in the human-review path.
 
 Encoded via the `sonar.cpd.exclusions` key (a single comma-separated
 list). This block narrows the **duplication-analyser denominator scope**
-per the "Duplications (cpd.exclusions)" class above. It currently covers:
+per the "Duplications (cpd.exclusions)" class above. The root
+`sonar-project.properties` carries the CI-based-analysis encoding, and
+the root `.sonarcloud.properties` mirrors the same list for SonarQube
+Cloud automatic analysis. It currently covers:
 
 - `**/src/types/generated/**` — generator output.
 - `**/*.test.ts`, `**/*.test.tsx`, `**/tests/**`, `**/e2e-tests/**` —
