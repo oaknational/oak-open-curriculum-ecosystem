@@ -2261,7 +2261,7 @@ Author paused mid-uptake on Work Item B (WS-8 C2+C5+C4 ratification record + PDR
 | architecture-expert-wilma | SAFE-WITH-CONDITIONS (5 failure modes) | `a64d82df5d94c44ca` |
 | docs-adr-expert | DOCS-DRIFT-MEDIUM (5 findings inc. PDR-079 recommendation) | `a8f083c2f9986abbc` |
 
-Full synthesis substrate at `/tmp/ferny-ws8-reviewer-synthesis-window2.md` (durable through session-end; copy to `.agent/memory/active/` if WS-8 lane is reassigned before that `/tmp/` surface clears).
+Full synthesis substrate at `.agent/memory/active/ws-8-ratification-reviewer-synthesis-2026-05-24.md` (moved from `/tmp/` per owner rule 2026-05-24 — see Capture D below).
 
 **Source substrate**: Charcoal's verdict matrix at comms event `1e2c83eb`; owner verdict at Seaworthy tick #2 broadcast 19:28:47Z.
 
@@ -2280,3 +2280,19 @@ Mistbound's Surprise 2 12th instance briefly names this event. Ferny-perspective
 - **All-channels watcher `bgrzs488c`**: stopping at this session-end closeout.
 - **Final-heartbeat-end emitted**: `c5daa226` (at pause-time; satisfies §0.5 rule).
 - **Source plane**: `session-scoped`
+
+### Capture D — Owner rule (2026-05-24): no important state long-term in temp files
+
+**Owner-stated rule (direct quote)**: *"important state and context must never be left in a temp file long-term, using it as a buffer is fine, but leaving it there for reference is not okay, everything of importance stays in the repo"*.
+
+**Distinction**: `/tmp/` as compose-buffer (write → emit broadcast or commit → done) is correct. `/tmp/` as durable-reference (a `.agent/` surface points at `/tmp/` for ongoing substrate) is the violation.
+
+**Applied to Ferny window 2**: my Capture B pointer at `/tmp/ferny-ws8-reviewer-synthesis-window2.md` was the violation — a napkin entry referenced `/tmp/` for ongoing follow-on-author substrate. Cured this turn: synthesis content moved to `.agent/memory/active/ws-8-ratification-reviewer-synthesis-2026-05-24.md`; Capture B pointer updated. Other `/tmp/` files this session (team-start broadcast body, directed event body, pause-standby body, closeout body, M1 integration flag body) were buffer-only — emitted as comms events and never referenced from durable surfaces; those are within the rule.
+
+**Earlier session referenced /tmp/ in closeout broadcast `a596f140` and M1 integration flag `013de4d4`** — those references are now stale-by-rule. Comms events are immutable; correction-broadcast naming the new repo location follows this Capture.
+
+**Graduation candidate**: this rule is concrete enough for direct enforcement; suggest graduation to `.agent/rules/important-state-not-in-temp-files.md` at next consolidation-docs cycle. The rule's existing-language frame: temp files are buffers, not references; durable substrate stays in repo.
+
+**Composition**: pairs with `.agent/rules/no-machine-local-paths.md` (no machine-local paths in repo content) — both protect substrate from non-repo references. Composes with PDR-014 capture surface architecture (capture → distil → graduate → enforce); `/tmp/` is a capture buffer, not a long-term capture surface.
+
+**Source plane**: `operational` → graduation candidate (rule layer).
