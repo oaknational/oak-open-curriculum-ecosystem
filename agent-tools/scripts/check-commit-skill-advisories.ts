@@ -46,8 +46,9 @@
  * commit-message check (e.g. `-F .git/COMMIT_EDITMSG`, `-m "subject"`).
  */
 
-import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+
+import { runInheritedProcess } from '../src/commit-queue/process.js';
 
 const ADVISORY_BANNER = '[ADVISORY ONLY — NOT A COMMIT GATE]';
 
@@ -117,40 +118,6 @@ export async function runCommitSkillAdvisories(input: {
   return { ok: true };
 }
 
-interface SpawnOptions {
-  readonly command: string;
-  readonly args: readonly string[];
-  readonly cwd: string;
-}
-
-async function runProcess(options: SpawnOptions): Promise<AdvisoryCheckResult> {
-  return new Promise((resolve, reject) => {
-    const child = spawn(options.command, options.args, {
-      cwd: options.cwd,
-      stdio: ['ignore', 'inherit', 'pipe'],
-    });
-
-    const stderrChunks: Buffer[] = [];
-    child.stderr.on('data', (chunk: Buffer) => {
-      stderrChunks.push(chunk);
-      process.stderr.write(chunk);
-    });
-
-    child.on('error', (error) => {
-      reject(error);
-    });
-
-    child.on('close', (code, signal) => {
-      const stderr = Buffer.concat(stderrChunks).toString('utf8');
-      if (code === null && signal !== null) {
-        resolve({ exitCode: 128, stderr });
-        return;
-      }
-      resolve({ exitCode: code ?? 0, stderr });
-    });
-  });
-}
-
 function describeFailure(
   failure: Extract<CommitSkillAdvisoriesResult, { readonly ok: false }>,
 ): string {
@@ -176,19 +143,19 @@ async function main(forwardedArgs: readonly string[]): Promise<number> {
 
   const result = await runCommitSkillAdvisories({
     fitnessCheck: async () =>
-      runProcess({
+      runInheritedProcess({
         command: 'pnpm',
         args: ['practice:fitness:strict-hard'],
         cwd: repoRoot,
       }),
     vocabularyCheck: async () =>
-      runProcess({
+      runInheritedProcess({
         command: 'pnpm',
         args: ['practice:vocabulary'],
         cwd: repoRoot,
       }),
     messageCheck: async () =>
-      runProcess({
+      runInheritedProcess({
         command: 'pnpm',
         args: ['agent-tools:check-commit-message', ...forwardedArgs],
         cwd: repoRoot,

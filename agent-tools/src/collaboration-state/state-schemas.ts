@@ -104,20 +104,7 @@ export function parseNarrativeCommsEventValue(value: unknown): NarrativeCommsEve
     value,
   });
 
-  return {
-    event_id: parsed.event_id,
-    schema_version: parsed.schema_version,
-    created_at: parsed.created_at,
-    kind: parsed.kind,
-    author: agentId(parsed.author),
-    title: parsed.title,
-    body: parsed.body,
-    ...(parsed.audience === undefined ? {} : { audience: parsed.audience }),
-    ...(parsed.addressed_to === undefined ? {} : { addressed_to: parsed.addressed_to }),
-    ...(parsed.in_response_to === undefined ? {} : { in_response_to: parsed.in_response_to }),
-    ...(parsed.in_reply_to === undefined ? {} : { in_reply_to: parsed.in_reply_to }),
-    ...(parsed.tags === undefined ? {} : { tags: parsed.tags }),
-  };
+  return narrativeEvent(parsed);
 }
 
 /**
@@ -130,22 +117,7 @@ export function parseLifecycleCommsEventValue(value: unknown): LifecycleCommsEve
     value,
   });
 
-  return {
-    schema_version: parsed.schema_version,
-    event_id: parsed.event_id,
-    created_at: parsed.created_at,
-    kind: parsed.kind,
-    event_type: parsed.event_type,
-    occurred_at: parsed.occurred_at,
-    author: agentId(parsed.author),
-    agent_id: agentId(parsed.agent_id),
-    thread: parsed.thread,
-    claim_id: parsed.claim_id,
-    title: parsed.title,
-    subject: parsed.subject,
-    body: parsed.body,
-    ...(parsed.tags === undefined ? {} : { tags: parsed.tags }),
-  };
+  return lifecycleEvent(parsed);
 }
 
 /**
@@ -158,18 +130,7 @@ export function parseDirectedCommsMessageValue(value: unknown): DirectedCommsMes
     value,
   });
 
-  return {
-    schema_version: parsed.schema_version,
-    event_id: parsed.event_id,
-    created_at: parsed.created_at,
-    kind: parsed.kind,
-    message_kind: parsed.message_kind,
-    from: agentId(parsed.from),
-    to: agentId(parsed.to),
-    subject: parsed.subject,
-    body: parsed.body,
-    ...(parsed.tags === undefined ? {} : { tags: parsed.tags }),
-  };
+  return directedEvent(parsed);
 }
 
 function narrativeEvent(parsed: z.infer<typeof narrativeCommsEventSchema>): NarrativeCommsEvent {

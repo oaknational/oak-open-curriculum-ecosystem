@@ -297,8 +297,7 @@ Sonar's copy-paste detector (cpd) measures duplication as a
 maintainability smell on the **maintainable code corpus**. The classes
 below are excluded from that corpus because the structural repetition is
 either inherent to the artefact (generator output) or intentional (test
-isolation, CLI shebang dispatch wrappers) — duplication there is not
-signal.
+isolation, package-local config shape) — duplication there is not signal.
 
 This is a denominator-scope decision, not a rule disablement.
 Hand-written library, application, and service code remains fully in
@@ -327,11 +326,12 @@ signal under the standard quality gate.
   arrange/act/assert intent of individual cases. Repetition here is an
   affordance of the testing style, not a quality smell.
 
-- `agent-tools/src/bin/**` — tiny shebang wrappers (`#!/usr/bin/env
-node`, argv parsing, dispatch into shared library code). The repetition
-  is the CLI entry-point convention; the dispatch logic itself is already
-  centralised in `agent-tools/src/lib/` and is the place where
-  duplication signal would matter.
+- `**/*.config.*` — package-local config files intentionally repeat the
+  shape of the project boundary: imports from shared standards helpers,
+  local `tsconfigRootDir` / resolver setup, and package-specific rule
+  deltas. Real shared behaviour belongs in imported config helpers; the
+  remaining repeated file shape is a readability and ownership boundary,
+  not a maintainability smell.
 
 ### What this does NOT do
 
@@ -410,7 +410,7 @@ per the "Duplications (cpd.exclusions)" class above. It currently covers:
 - `**/src/types/generated/**` — generator output.
 - `**/*.test.ts`, `**/*.test.tsx`, `**/tests/**`, `**/e2e-tests/**` —
   test isolation.
-- `agent-tools/src/bin/**` — CLI shebang entry-point wrappers.
+- `**/*.config.*` — package-local config boundary shape.
 - `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/**` —
   owner-authorised audit-trail exception recorded on 2026-05-24. The broader
   `**/src/types/generated/**` glob already covers this generated path, so the

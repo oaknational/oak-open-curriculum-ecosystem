@@ -35,6 +35,11 @@ interface BootstrapPhaseContext extends LogContextInput {
 
 type BootstrapObservability = Pick<HttpObservability, 'withSpan' | 'withSpanSync'>;
 
+interface ActiveBootstrapPhase {
+  readonly context: BootstrapPhaseContext;
+  readonly phaseHandle: ReturnType<PhasedTimer['startPhase']>;
+}
+
 /** Executes a synchronous bootstrap phase with instrumentation logging and optional span wrapping. */
 export function runBootstrapPhase<T>(
   log: Logger,
@@ -44,9 +49,7 @@ export function runBootstrapPhase<T>(
   operation: () => T,
   observability?: BootstrapObservability,
 ): T {
-  const context: BootstrapPhaseContext = { appId, phase };
-  log.debug('bootstrap.phase.start', context);
-  const phaseHandle = timer.startPhase(phase);
+  const activePhase = startBootstrapPhase(log, timer, phase, appId);
 
   try {
     const result = observability
@@ -59,24 +62,10 @@ export function runBootstrapPhase<T>(
           run: () => operation(),
         })
       : operation();
-    const durationResult = phaseHandle.end();
-    log.info('bootstrap.phase.finish', {
-      ...context,
-      duration: durationResult.duration.formatted,
-      durationMs: durationResult.duration.ms,
-    });
+    finishBootstrapPhase(log, activePhase);
     return result;
   } catch (error: unknown) {
-    const durationResult = phaseHandle.end();
-    const errorAsError =
-      error instanceof Error
-        ? error
-        : new Error(`Bootstrap phase "${phase}" threw non-error value: ${String(error)}`);
-    log.error('bootstrap.phase.error', normalizeError(errorAsError), {
-      ...context,
-      duration: durationResult.duration.formatted,
-      durationMs: durationResult.duration.ms,
-    });
+    logBootstrapPhaseError(log, activePhase, error);
     throw error;
   }
 }
@@ -94,9 +83,7 @@ export async function runAsyncBootstrapPhase<T>(
   operation: () => Promise<T>,
   observability?: BootstrapObservability,
 ): Promise<T> {
-  const context: BootstrapPhaseContext = { appId, phase };
-  log.debug('bootstrap.phase.start', context);
-  const phaseHandle = timer.startPhase(phase);
+  const activePhase = startBootstrapPhase(log, timer, phase, appId);
 
   try {
     const result = observability
@@ -109,26 +96,51 @@ export async function runAsyncBootstrapPhase<T>(
           run: async () => await operation(),
         })
       : await operation();
-    const durationResult = phaseHandle.end();
-    log.info('bootstrap.phase.finish', {
-      ...context,
-      duration: durationResult.duration.formatted,
-      durationMs: durationResult.duration.ms,
-    });
+    finishBootstrapPhase(log, activePhase);
     return result;
   } catch (error: unknown) {
-    const durationResult = phaseHandle.end();
-    const errorAsError =
-      error instanceof Error
-        ? error
-        : new Error(`Bootstrap phase "${phase}" threw non-error value: ${String(error)}`);
-    log.error('bootstrap.phase.error', normalizeError(errorAsError), {
-      ...context,
-      duration: durationResult.duration.formatted,
-      durationMs: durationResult.duration.ms,
-    });
+    logBootstrapPhaseError(log, activePhase, error);
     throw error;
   }
+}
+
+function startBootstrapPhase(
+  log: Logger,
+  timer: PhasedTimer,
+  phase: BootstrapPhaseName,
+  appId: number,
+): ActiveBootstrapPhase {
+  const context: BootstrapPhaseContext = { appId, phase };
+  log.debug('bootstrap.phase.start', context);
+  return { context, phaseHandle: timer.startPhase(phase) };
+}
+
+function finishBootstrapPhase(log: Logger, activePhase: ActiveBootstrapPhase): void {
+  const durationResult = activePhase.phaseHandle.end();
+  log.info('bootstrap.phase.finish', {
+    ...activePhase.context,
+    duration: durationResult.duration.formatted,
+    durationMs: durationResult.duration.ms,
+  });
+}
+
+function logBootstrapPhaseError(
+  log: Logger,
+  activePhase: ActiveBootstrapPhase,
+  error: unknown,
+): void {
+  const durationResult = activePhase.phaseHandle.end();
+  const errorAsError =
+    error instanceof Error
+      ? error
+      : new Error(
+          `Bootstrap phase "${activePhase.context.phase}" threw non-error value: ${String(error)}`,
+        );
+  log.error('bootstrap.phase.error', normalizeError(errorAsError), {
+    ...activePhase.context,
+    duration: durationResult.duration.formatted,
+    durationMs: durationResult.duration.ms,
+  });
 }
 
 /**

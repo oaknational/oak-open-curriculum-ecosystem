@@ -43,6 +43,14 @@ export interface McpPrompt {
   readonly arguments?: readonly PromptArgument[];
 }
 
+function requiredArgument(name: string, description: string): PromptArgument {
+  return { name, description, required: true };
+}
+
+function optionalArgument(name: string, description: string): PromptArgument {
+  return { name, description, required: false };
+}
+
 /**
  * MCP prompts for common curriculum workflows.
  *
@@ -55,17 +63,14 @@ export const MCP_PROMPTS: readonly McpPrompt[] = [
     description:
       'Find curriculum lessons on a specific topic using semantic search. Searches across all subjects and key stages to find relevant lessons.',
     arguments: [
-      {
-        name: 'topic',
-        description:
-          'The topic or concept to search for (e.g., "photosynthesis", "fractions", "World War 2")',
-        required: true,
-      },
-      {
-        name: 'keyStage',
-        description: 'Optional: Filter by key stage (e.g., "ks1", "ks2", "ks3", "ks4")',
-        required: false,
-      },
+      requiredArgument(
+        'topic',
+        'The topic or concept to search for (e.g., "photosynthesis", "fractions", "World War 2")',
+      ),
+      optionalArgument(
+        'keyStage',
+        'Optional: Filter by key stage (e.g., "ks1", "ks2", "ks3", "ks4")',
+      ),
     ],
   },
   {
@@ -73,16 +78,11 @@ export const MCP_PROMPTS: readonly McpPrompt[] = [
     description:
       'Gather materials for planning a lesson on a topic, including objectives, transcript, quiz questions, and resources.',
     arguments: [
-      {
-        name: 'topic',
-        description: 'The topic for the lesson (e.g., "adding fractions", "the water cycle")',
-        required: true,
-      },
-      {
-        name: 'yearGroup',
-        description: 'The year group (e.g., "Year 4", "Year 9")',
-        required: true,
-      },
+      requiredArgument(
+        'topic',
+        'The topic for the lesson (e.g., "adding fractions", "the water cycle")',
+      ),
+      requiredArgument('yearGroup', 'The year group (e.g., "Year 4", "Year 9")'),
     ],
   },
   {
@@ -90,16 +90,14 @@ export const MCP_PROMPTS: readonly McpPrompt[] = [
     description:
       'Explore what Oak has on a topic across the whole curriculum. Searches lessons, units, and learning threads in parallel to give a broad overview before drilling down.',
     arguments: [
-      {
-        name: 'topic',
-        description: 'The topic to explore (e.g., "volcanos", "electricity", "the Romans")',
-        required: true,
-      },
-      {
-        name: 'subject',
-        description: 'Optional: Narrow to a specific subject (e.g., "science", "history")',
-        required: false,
-      },
+      requiredArgument(
+        'topic',
+        'The topic to explore (e.g., "volcanos", "electricity", "the Romans")',
+      ),
+      optionalArgument(
+        'subject',
+        'Optional: Narrow to a specific subject (e.g., "science", "history")',
+      ),
     ],
   },
   {
@@ -107,16 +105,11 @@ export const MCP_PROMPTS: readonly McpPrompt[] = [
     description:
       'Understand how a concept builds across year groups by searching learning progression threads and mapping unit dependencies.',
     arguments: [
-      {
-        name: 'concept',
-        description: 'The concept to trace (e.g., "algebra", "cells", "narrative writing")',
-        required: true,
-      },
-      {
-        name: 'subject',
-        description: 'The subject area (e.g., "maths", "science", "english")',
-        required: true,
-      },
+      requiredArgument(
+        'concept',
+        'The concept to trace (e.g., "algebra", "cells", "narrative writing")',
+      ),
+      requiredArgument('subject', 'The subject area (e.g., "maths", "science", "english")'),
     ],
   },
   {
@@ -124,28 +117,19 @@ export const MCP_PROMPTS: readonly McpPrompt[] = [
     description:
       'Design a lesson plan grounded in EEF Toolkit evidence: combines 2-3 evidence-backed approaches drawn from a typed subgraph of EEF strands, with caveats and implementation guidance, into a structured pedagogical sequence (starter → main → practice → plenary with metacognitive reflection).',
     arguments: [
-      {
-        name: 'subject',
-        description: 'The subject (e.g., "mathematics", "science", "english")',
-        required: true,
-      },
-      {
-        name: 'keyStage',
-        description: 'The key stage (e.g., "EYFS", "KS1", "KS2", "KS3", "KS4", "KS5")',
-        required: true,
-      },
-      {
-        name: 'topic',
-        description:
-          'The specific topic for the lesson (e.g., "fractions", "the water cycle", "narrative writing")',
-        required: true,
-      },
-      {
-        name: 'focus',
-        description:
-          'Optional pedagogical focus, one of: closing_disadvantage_gap, metacognition, literacy, numeracy, behaviour, feedback',
-        required: false,
-      },
+      requiredArgument('subject', 'The subject (e.g., "mathematics", "science", "english")'),
+      requiredArgument(
+        'keyStage',
+        'The key stage (e.g., "EYFS", "KS1", "KS2", "KS3", "KS4", "KS5")',
+      ),
+      requiredArgument(
+        'topic',
+        'The specific topic for the lesson (e.g., "fractions", "the water cycle", "narrative writing")',
+      ),
+      optionalArgument(
+        'focus',
+        'Optional pedagogical focus, one of: closing_disadvantage_gap, metacognition, literacy, numeracy, behaviour, feedback',
+      ),
     ],
   },
 ] as const;

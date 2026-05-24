@@ -14,7 +14,7 @@
  * ADR-176.
  */
 
-import { spawn, execFileSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 
 import {
@@ -26,6 +26,7 @@ import {
 } from './commit-workflow.js';
 import { getStagedBundle } from './git.js';
 import { type CommitWorkflowPathspec } from './pathspec.js';
+import { runInheritedProcess } from './process.js';
 import { readRegistry, updateRegistry } from './registry.js';
 
 const ADVISORY_BANNER = '[ADVISORY ONLY — NOT A COMMIT GATE]';
@@ -80,7 +81,7 @@ async function runAdvisoryOrchestrator(
   input: CommitWorkflowRuntimeInput,
 ): Promise<CommitWorkflowProcessResult> {
   process.stderr.write(`${ADVISORY_BANNER}\n`);
-  return spawnProcess({
+  return runInheritedProcess({
     command: 'pnpm',
     args: ['agent-tools:check-commit-skill-advisories', '-F', input.messageFilePath],
     cwd: input.repoRoot,
@@ -90,7 +91,7 @@ async function runAdvisoryOrchestrator(
 async function runGitCommit(
   input: CommitWorkflowRuntimeInput & { readonly pathspec: CommitWorkflowPathspec },
 ): Promise<CommitWorkflowGitCommitResult> {
-  const commit = await spawnProcess({
+  const commit = await runInheritedProcess({
     command: 'git',
     args: ['commit', '-F', input.messageFilePath, '--', ...input.pathspec],
     cwd: input.repoRoot,
@@ -102,41 +103,6 @@ async function runGitCommit(
 
   return { ...commit, sha: readHeadSha(input.repoRoot) };
 }
-
-interface SpawnOptions {
-  readonly command: string;
-  readonly args: readonly string[];
-  readonly cwd: string;
-}
-
-async function spawnProcess(options: SpawnOptions): Promise<CommitWorkflowProcessResult> {
-  return new Promise((resolve, reject) => {
-    const child = spawn(options.command, options.args, {
-      cwd: options.cwd,
-      stdio: ['ignore', 'inherit', 'pipe'],
-    });
-
-    const stderrChunks: Buffer[] = [];
-    child.stderr.on('data', (chunk: Buffer) => {
-      stderrChunks.push(chunk);
-      process.stderr.write(chunk);
-    });
-
-    child.on('error', (error) => {
-      reject(error);
-    });
-
-    child.on('close', (code, signal) => {
-      const stderr = Buffer.concat(stderrChunks).toString('utf8');
-      if (code === null && signal !== null) {
-        resolve({ exitCode: 128, stderr });
-        return;
-      }
-      resolve({ exitCode: code ?? 0, stderr });
-    });
-  });
-}
-
 function readHeadSha(repoRoot: string): string {
   return execFileSync('git', ['rev-parse', 'HEAD'], {
     cwd: repoRoot,

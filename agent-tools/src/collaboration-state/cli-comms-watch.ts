@@ -1,6 +1,5 @@
 import { drainRelevantEvents, watchCommsLoop, type WatcherTickStatus } from './comms-use-cases.js';
 import { writeWatcherHeartbeat, WATCHER_HEARTBEAT_SCHEMA_VERSION } from './watcher-heartbeat.js';
-import { resolveIdentity } from './cli-identity.js';
 import { optional, optionalPositiveInteger, required, type Options } from './cli-options.js';
 import {
   cliIo,
@@ -8,6 +7,7 @@ import {
   type CliRuntime,
   waitForCommsChange,
 } from './cli-runtime.js';
+import { resolveSelfIdentity } from './cli-self-identity.js';
 import { type CollaborationAgentId, type CollaborationStateEnvironment } from './types.js';
 
 const DEFAULT_POLL_MS = 500;
@@ -113,33 +113,4 @@ async function drainComms(input: {
     self: input.self,
     remainingEvents: input.remainingEvents,
   });
-}
-
-/**
- * Resolve the watcher's identity tuple. Two routes:
- * - Override (admin/test): when `--agent-name` is provided, the explicit
- *   `--agent-name` + `--session-prefix` + `--platform` + `--model` tuple is
- *   used directly.
- * - Derived (canonical agent path): otherwise, identity is derived from the
- *   Practice session-id env vars via `resolveIdentity`, matching the rest
- *   of the comms commands (`send`, `direct`, `reply`).
- */
-function resolveSelfIdentity(
-  options: Options,
-  env: CollaborationStateEnvironment,
-): CollaborationAgentId {
-  const explicitAgentName = optional(options, 'agent-name');
-  if (explicitAgentName !== undefined) {
-    return {
-      agent_name: explicitAgentName,
-      platform: optional(options, 'platform') ?? 'override',
-      model: optional(options, 'model') ?? 'override',
-      session_id_prefix: optional(options, 'session-prefix') ?? '',
-    };
-  }
-  const identity = resolveIdentity(options, env);
-  const overridePrefix = optional(options, 'session-prefix');
-  return overridePrefix === undefined
-    ? identity.agent_id
-    : { ...identity.agent_id, session_id_prefix: overridePrefix };
 }

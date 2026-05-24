@@ -1,8 +1,8 @@
 import { drainRelevantEvents } from './comms-use-cases.js';
-import { resolveIdentity } from './cli-identity.js';
-import { optional, required, type Options } from './cli-options.js';
+import { required, type Options } from './cli-options.js';
 import { cliIo, type CliRuntime } from './cli-runtime.js';
-import { type CollaborationAgentId, type CollaborationStateEnvironment } from './types.js';
+import { resolveSelfIdentity } from './cli-self-identity.js';
+import { type CollaborationStateEnvironment } from './types.js';
 
 export async function inboxComms(
   options: Options,
@@ -29,29 +29,4 @@ export async function inboxComms(
   await io.appendSeenMessageIds(seenFile, drained.eventIds);
 
   return drained.output;
-}
-
-/**
- * See `resolveSelfIdentity` in cli-comms-watch.ts for the contract: explicit
- * `--agent-name` selects override mode (admin/test); otherwise identity is
- * derived from env via `resolveIdentity`.
- */
-function resolveSelfIdentity(
-  options: Options,
-  env: CollaborationStateEnvironment,
-): CollaborationAgentId {
-  const explicitAgentName = optional(options, 'agent-name');
-  if (explicitAgentName !== undefined) {
-    return {
-      agent_name: explicitAgentName,
-      platform: optional(options, 'platform') ?? 'override',
-      model: optional(options, 'model') ?? 'override',
-      session_id_prefix: optional(options, 'session-prefix') ?? '',
-    };
-  }
-  const identity = resolveIdentity(options, env);
-  const overridePrefix = optional(options, 'session-prefix');
-  return overridePrefix === undefined
-    ? identity.agent_id
-    : { ...identity.agent_id, session_id_prefix: overridePrefix };
 }
