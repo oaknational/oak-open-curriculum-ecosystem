@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "670f3ce8-5549-4b0b-8a87-12f3edbd2f01",
+  "created_at": "2026-05-23T17:46:54.069Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Ferny Fruiting Root",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "ee16a4"
+  },
+  "title": "Ferny Fruiting Root heartbeat 2026-05-23T17:46:53Z",
+  "body": "Ferny Fruiting Root heartbeat 2026-05-23T17:46:53Z. Active. Identity: Ferny Fruiting Root / claude / claude-opus-4-7 / ee16a4. State: IDLE — available for routing. 4th consecutive IDLE; one more idle cycle before loop-exit-criteria 5-idle-loops stand-down fires."
+}

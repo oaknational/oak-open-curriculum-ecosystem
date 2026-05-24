@@ -34439,6 +34439,171 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "8a6e18d5-9360-4377-a731-b55c4a34040e",
+      "agent_id": {
+        "agent_name": "Mistbound Hiding Threshold",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "0e27cc"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T16:14:43Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Cycle #4 marshal-cycle: hygiene sweep of accumulated session state (memory + collaboration state + comms-seen + untracked comms events + handoff record + plan)",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T16:18:11Z",
+        "closed_by": {
+          "agent_name": "Mistbound Hiding Threshold",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "0e27cc"
+        },
+        "summary": "Cycle #4 landed at ccc47de2: 186-file hygiene sweep; memory + collaboration state + comms events + handoff + plan; bundle re-enqueued once for 4 new comms files mid-stage",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8a6e18d5-9360-4377-a731-b55c4a34040e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "7839c661-3398-4869-8736-702f42e52a9d",
+      "agent_id": {
+        "agent_name": "Dawnlit Glimmering Meteor",
+        "platform": "cursor",
+        "model": "claude-4.6-sonnet",
+        "session_id_prefix": "46a73d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T16:53:35Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Extract pure reduceRefreshState reducer with deterministic unit tests for stale-refresh discrimination",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T17:04:19Z",
+        "closed_by": {
+          "agent_name": "Dawnlit Glimmering Meteor",
+          "platform": "cursor",
+          "model": "claude-4.6-sonnet",
+          "session_id_prefix": "46a73d"
+        },
+        "summary": "Closed: cycles 62def8d3 + 82afc0a8 + 5fedf9a4 landed (reducer extraction, controller wiring, ink-testing-library swap)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7839c661-3398-4869-8736-702f42e52a9d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "cff7bc55-fc51-4955-a51f-0d25f7cab1f4",
+      "agent_id": {
+        "agent_name": "Fronded Rustling Stamen",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e55"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T19:28:17Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Marshal Scorched R2 mechanical Sonar cure bundle as local commit only.",
+      "intent_to_commit": "afbe3645-d4ce-443f-9693-04e31acd9cc0",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T19:29:56Z",
+        "closed_by": {
+          "agent_name": "Fronded Rustling Stamen",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e55"
+        },
+        "summary": "aborted: owner corrected that Mistbound is the Commit Marshal; Fronded stands down from git:index/head window before commit",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "cff7bc55-fc51-4955-a51f-0d25f7cab1f4",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "ebc446c6-4975-4938-ba1a-86ab5428e5fc",
+      "agent_id": {
+        "agent_name": "Ferny Fruiting Root",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "ee16a4"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/patterns/substrate-pointer-read-as-current-state.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-23T14:18:17Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Author pattern file capturing substrate-pointer-read-as-current-state anti-pattern. Re-routed from IBF (no-delivery 14:05Z routing → re-allocated 14:17Z per Scorched's work-allocated-vs-delivered discipline). Five worked instances on 2026-05-23 in the Scorched Director window: (1) repo-continuity Marshal-stale, (2) Scorched tick #1 Twilit ST closed-vs-resumed, (3) Scorched identity-tuple unknown, (4) Ashen retraction crossover with Scorched ACCEPT, (5) IBF treated as maybe-active vs ground-truth-ended (opposite direction). Cure shapes from team protocol: substrate-pointer-vs-synthesis discipline (Twilit ST framing), active per-agent check-in cadence, delivery-verification, correction-broadcast as first-class substrate, two-direction guardrail with escalation rule. Composes with recursion-of-doctrine-under-team-cadence-speed sibling. Reviewer: assumptions-expert after first draft.",
+      "archived_at": "2026-05-23",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-23T19:33:23Z",
+        "closed_by": {
+          "agent_name": "Ferny Fruiting Root",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "ee16a4"
+        },
+        "summary": "Pattern v2 (substrate-pointer-read-as-current-state) LANDED via Mistbound Cycle #2 commit 8a99ed35; closing stale claim record (substrate-truth-drift; claim should have closed at landing time).",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "ebc446c6-4975-4938-ba1a-86ab5428e5fc",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

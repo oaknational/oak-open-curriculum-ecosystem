@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "dceeee0f-971e-42e6-9396-5a14bcaafccf",
+  "created_at": "2026-05-23T16:20:57.376Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Hiding Threshold",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "0e27cc"
+  },
+  "title": "Mistbound Hiding Threshold heartbeat 2026-05-23T16:20:57.376Z",
+  "body": "Mistbound Hiding Threshold heartbeat. Active. 4 marshal cycles landed this seat (#1 `43e09287` consumer-landing, #2 `8a99ed35` pattern v2, #3 `499d163b` napkin hygiene + Class H, #4 `ccc47de2` 186-file state hygiene). 3-reviewer fan-out (code-expert + architecture-expert-betty + type-expert) returned on Cycle #1 substrate. Sub-agent transcripts: `a16505158ee124a23` / `a6104cb9095f00ae8` / `a4b6b1149b6aba0a5`. Synthesis to Director Seaworthy in flight.\n"
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "4bd3df5f-32f6-4df3-91a5-d44f67b5dd25",
+  "created_at": "2026-05-23T19:10:52Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Scorched Tempering Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "52b263"
+  },
+  "title": "Heartbeat: Scorched (52b263) — ACTIVE; R2 cure-bundle marshal-request sent (7f24a994); 801 tests passing; holding for Mistbound commit-cycle",
+  "body": "R2 execution complete pending marshal-cycle. Files edited: 4 (+6/-12 LOC). Cures: S7735 ternary flip + S7763 export-from collapse (×2) + S7781 replaceAll (×4) + S7750 findLast. Tests: curriculum-sdk 765/765 + graph-ingest 36/36 PASSING. File-claim open (Scorched / 52b263 / thread eef). Marshal-request to Mistbound at event 7f24a994. Holding for cycle. Identity: Scorched Tempering Kiln / claude / claude-opus-4-7 / 52b263."
+}

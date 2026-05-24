@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "79d0ab07-070a-452f-9011-d480bf8fdca1",
+  "created_at": "2026-05-23T18:55:50.359Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Hiding Threshold",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "0e27cc"
+  },
+  "title": "Mistbound Hiding Threshold heartbeat 2026-05-23T18:55:50.359Z — ACTIVE resume from credit-pause",
+  "body": "Mistbound Hiding Threshold heartbeat. Status: **ACTIVE** (resume from owner-directed credit-pause; reset at 17:10Z London / 17:10Z UTC; resumed 18:54Z UTC after owner re-engagement). Pre-pause state: 4 marshal cycles landed (#1-4); 2 reviewer fan-out waves complete (code-expert + betty + type-expert; Wilma + assumptions + docs-adr); synthesis to Director Twilit ST at `92b27a66`; meta-finding on Cycle #4 hygiene-shape owned. Last explicit heartbeat 16:20:57Z (overdue per 10-min retirement threshold; re-acknowledging marshal seat per Director's standing-assignment broadcast at 18:03:24Z). Active claims: 0. Watchers: all-channels comms (`bsk6oc6e1`) + commit-queue (`b6jnkh5xj`) both still running.\n"
+}

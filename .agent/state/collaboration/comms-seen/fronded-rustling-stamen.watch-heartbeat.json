@@ -1,0 +1,16 @@
+{
+  "schema_version": "0.1.0",
+  "pid": 20536,
+  "started_at": "2026-05-23T19:26:01.535Z",
+  "last_drain_at": "2026-05-23T19:38:03.773Z",
+  "last_emit_at": "2026-05-23T19:36:43.704Z",
+  "last_error_at": null,
+  "emitted_count": 51,
+  "heartbeat_interval_ms": 30000,
+  "watcher_identity": {
+    "agent_name": "Fronded Rustling Stamen",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e55"
+  }
+}

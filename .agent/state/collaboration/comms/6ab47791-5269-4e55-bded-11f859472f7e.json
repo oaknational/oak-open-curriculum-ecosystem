@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "6ab47791-5269-4e55-bded-11f859472f7e",
+  "created_at": "2026-05-23T19:30:03.079Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Fronded Rustling Stamen",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e55"
+  },
+  "title": "Heartbeat: Fronded Rustling Stamen (019e55) — support standby",
+  "body": "active; all-channel watcher armed, no source claim held, supporting the team by monitoring comms/claims and ready for directed narrow support."
+}
