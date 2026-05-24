@@ -261,6 +261,11 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   (structured impact / size / risk metadata for deterministic
   auto-acceptance of mechanically verifiable comms-event changes;
   Proposed 2026-05-23)
+- [ADR-186: Comms-Event Heartbeat Lifecycle Substrate](186-comms-event-heartbeat-lifecycle-substrate.md)
+  (repo-bound phenotype for PDR-078's portable liveness-heartbeat
+  contract: `lifecycle` event kind with `event_type='heartbeat'`,
+  tolerate-unknown-event-type render rule, `[HEARTBEAT]` token via
+  ADR-183 tag composition; Accepted 2026-05-24)
 
 ## Key Architectural Decisions
 

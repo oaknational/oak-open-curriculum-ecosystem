@@ -24,7 +24,13 @@ contract defers to PDR-064 for the boundary specification);
 PDR-079's portability rule: the contract is portable; the
 repo-bound phenotype that operationalises it lives in a separate
 ADR, named in the practice-index bridge rather than linked from
-this body).
+this body);
+ADR-186 (the repo-bound phenotype substrate that operationalises
+this contract in the current host repository — heartbeat events
+bind to the comms-event substrate's `lifecycle` kind with
+`event_type='heartbeat'`, rendering via the ADR-183 tag-namespace
+`[HEARTBEAT]` token; cited by ADR identifier only, per PDR-079
+PDR↔ADR cross-reference discipline).
 
 ## Context
 
@@ -146,21 +152,24 @@ apply and the threshold fires normally.
 ## Mechanism
 
 The contract operates on the existing comms-event substrate
-without introducing a new event schema. Heartbeats use the
-narrative-event shape with the canonical heartbeat tag; the
-emit-side cadence is enforced by per-host scheduling (cron,
-timer, scheduled-task primitive — host-local choice); the
-observe-side threshold is enforced by per-host watcher tooling
-that tails the comms-event stream and applies the threshold
-window per identity-row.
+without introducing a new event schema. The repo-bound
+phenotype ADR (named in the practice-index bridge) chooses the
+specific event kind, discriminator field, and render-token
+shape for heartbeat events. The emit-side cadence is enforced
+by per-host scheduling (cron, timer, scheduled-task primitive
+— host-local choice); the observe-side threshold is enforced
+by per-host watcher tooling that tails the comms-event stream
+and applies the threshold window per identity-row.
 
 The contract names the boundary discipline (cadence, threshold,
-redundancy rule, exemptions) and the substrate (comms-event
-stream + identity tuple + canonical heartbeat tag). The
-host-specific implementation (which scheduler, which watcher,
-how the threshold is rendered to peers, which CLI surfaces emit
-and consume heartbeats) lives in a repo-bound phenotype ADR
-recorded in the practice-index bridge, not in this PDR body.
+redundancy rule, exemptions) and the substrate-shape invariants
+(comms-event stream + identity tuple + a host-chosen canonical
+heartbeat discriminator). The host-specific implementation
+(which event kind, which discriminator field, which scheduler,
+which watcher, how the threshold is rendered to peers, which
+CLI surfaces emit and consume heartbeats) lives in a repo-bound
+phenotype ADR recorded in the practice-index bridge, not in
+this PDR body.
 
 ## Cascade
 
