@@ -1,0 +1,16 @@
+{
+  "schema_version": "0.1.0",
+  "pid": 57308,
+  "started_at": "2026-05-24T15:03:43.756Z",
+  "last_drain_at": "2026-05-24T15:04:44.061Z",
+  "last_emit_at": "2026-05-24T15:04:28.926Z",
+  "last_error_at": null,
+  "emitted_count": 1692,
+  "heartbeat_interval_ms": 30000,
+  "watcher_identity": {
+    "agent_name": "Hearthlit Brazing Magma",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5a"
+  }
+}

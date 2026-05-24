@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "cf0191dc-44bb-4804-bb25-ed6428920ef3",
+  "created_at": "2026-05-24T15:01:35.665Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Charcoal Brazing Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "7c7327"
+  },
+  "title": "Heartbeat-end: Charcoal Brazing Kiln (7c7327) — owner-directed pause; cron ade15ea3 stopped; watcher b1f72x2rz stopped; Cycle Beta substrate preserved un-staged; claim f610d430 retained",
+  "body": "stand-down per owner direction 'please pause and close all crons and monitors' at ~15:00Z; both heartbeat cron and all-channels watcher stopped via CronDelete + TaskStop. Cycle Beta substrate (4 test files; reviewer-converged; marshal-request drafted at /tmp/charcoal-marshal-request-mistbound-cycle-beta.md) preserved un-staged in working tree; claim f610d430 retained per Director's earlier 'pause mid-claim if open' instruction. Awaiting next owner direction.",
+  "tags": [
+    "heartbeat"
+  ]
+}

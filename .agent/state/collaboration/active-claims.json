@@ -1631,32 +1631,6 @@
   ],
   "claims": [
     {
-      "claim_id": "8326bf9c-0786-45bb-989c-ec6202163000",
-      "agent_id": {
-        "agent_name": "Breezy Anchoring Rudder",
-        "platform": "claude",
-        "model": "opus-4.7",
-        "session_id_prefix": "20fc29"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/rules/important-state-not-in-temp-files.md",
-            ".claude/rules/important-state-not-in-temp-files.md",
-            ".cursor/rules/important-state-not-in-temp-files.mdc",
-            "RULES_INDEX.md",
-            ".agent/memory/operational/curator-passes/2026-05-24-breezy-anchoring-rudder.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-24T10:42:10Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Curator pass cycle #1 — important-state-not-in-temp-files rule landing (canonical + 2 platform adapters + RULES_INDEX entry + per-pass log). Owner-direction-fired graduation per Ferny Capture D 2026-05-24. Substrate authored; awaiting Twilit --tags + Charcoal PDR-076 marshal queue. Survey §2.1."
-    },
-    {
       "claim_id": "6d75ad02-ffde-4a8b-8043-700b9750de76",
       "agent_id": {
         "agent_name": "Estuarine Fathoming Sail",
@@ -1709,29 +1683,6 @@
       "freshness_seconds": 3600,
       "sidebar_open": false,
       "intent": "Retain narrow ownership for uncommitted identity-helper source/test bundle pending marshal pickup after Sylvan wind-down"
-    },
-    {
-      "claim_id": "5809c478-fec7-46af-97fe-606d0a933e17",
-      "agent_id": {
-        "agent_name": "Hushed Fading Hush",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e5a"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "docs/operations/troubleshooting.md",
-            "apps/oak-search-cli/operations/ingestion/README.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-24T14:53:29Z",
-      "freshness_seconds": 3600,
-      "sidebar_open": false,
-      "intent": "Soft-tier operations-doc consolidation: move search reindex boundary details from the repo-level troubleshooting guide into the oak-search-cli ingestion operations README, preserving a top-level pointer and avoiding Dusky's pending-graduations claim."
     },
     {
       "claim_id": "f610d430-2009-4f95-bdbb-dc0ad824d96e",

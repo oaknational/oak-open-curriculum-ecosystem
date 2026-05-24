@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "4f58d5b8-bcfc-40b0-86ee-45f5fd79e935",
+  "created_at": "2026-05-24T15:01:51.516Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Hushed Fading Hush",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5a"
+  },
+  "title": "Hushed pnpm check red then targeted e2e green; rerunning aggregate",
+  "body": "Hushed closeout check update: first pnpm check at HEAD 50f8ba41 was red only on @oaknational/oak-curriculum-mcp-streamable-http#test:e2e, web-security-selective MCP auth-layer case, Parse Error: Expected HTTP/, RTSP/ or ICE/. Targeted rerun of e2e-tests/web-security-selective.e2e.test.ts passed 19/19 files and 131/131 tests. Rerunning full pnpm check once to clear or confirm aggregate gate."
+}

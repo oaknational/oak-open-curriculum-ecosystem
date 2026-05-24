@@ -1,5 +1,42 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-24 — Hushed Fading Hush / `codex` / GPT-5 / `019e5a`, operations-doc consolidation handoff)
+
+**Session boundary**: owner explicitly asked for full `oak-session-handoff` and
+full `oak-consolidate-docs`, then stated that this session is over. Treat this
+as Hushed's closeout, not a claim on whole-team completion.
+
+**Landed outcome**: soft-tier operations-doc consolidation landed at
+`50f8ba41`. The repo-level troubleshooting guide now carries the
+symptom-level `Search Reindex Boundary` pointer, while the detailed search URL
+field reindex runbook lives in
+`apps/oak-search-cli/operations/ingestion/README.md`.
+
+**Evidence**:
+
+- Claim `5809c478-fec7-46af-97fe-606d0a933e17` was closed explicitly after
+  validation.
+- `docs/operations/troubleshooting.md` is healthy at 301 fitness-counted lines,
+  below its 315 target.
+- Link-path checks passed for ADR-145, ADR-066, ADR-080, ADR-083, ADR-087, and
+  the archived semantic-search `current-state.md`.
+- Targeted `markdownlint`, `git diff --check`, and heading/link `rg` checks
+  passed for the two touched docs.
+- `pnpm practice:fitness:informational` and
+  `pnpm practice:fitness --strict-hard` both exit 0 with `SOFT (19 soft)`.
+- `pnpm agent-tools:collaboration-state -- check` reports `ok`.
+
+**Consolidation audit verdict**: no new ADR-shaped or PDR-shaped doctrine was
+introduced by this slice. The active due register remains the three
+owner/PDR-gated entries named in the critical-drain plan. Napkin rotation is
+not due; `.remember/` current entries and recent experience files did not
+surface a new permanent-home move for this narrow closeout.
+
+**Next safe step**: this Hushed session should not continue. A future
+consolidator can continue soft-surface processing from live fitness and active
+claims. Do not treat the operations-doc slice as completion of the broader
+document-consolidation goal; it is one landed soft item.
+
 ## Session Outcome (2026-05-24 — Shaded Silencing Dusk / `codex` / GPT-5 / `019e59`, Knowledge Curator handoff)
 
 **Session boundary**: owner asked to wind down after the temporary Knowledge
@@ -1843,6 +1880,7 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 
 | Platform | Model | Agent name | Role | First-session | Last-session |
 | --- | --- | --- | --- | --- | --- |
+| `codex` | `GPT-5` | Hushed Fading Hush | Consolidator (operations-doc soft-tier split and session handoff) | 2026-05-24 | 2026-05-24 |
 | `codex` | `GPT-5` | Sylvan Sprouting Petal | Knowledge Curator (memory critical-drain continuation; distilled graduations; identity-seed CLI refinement; handoff) | 2026-05-24 | 2026-05-24 |
 | `codex` | `GPT-5` | Shaded Silencing Dusk | Knowledge Curator (active-napkin processing, plan-truth repair, boundary handoff) | 2026-05-24 | 2026-05-24 |
 | `claude` | `claude-opus-4-7-1m` | Lush Sprouting Thicket | Implementer (codex-helper skill, codex-exec CLI, ADR-180, future plan) | 2026-05-12 | 2026-05-12 |

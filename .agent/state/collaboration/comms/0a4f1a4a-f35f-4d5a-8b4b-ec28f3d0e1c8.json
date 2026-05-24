@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "0a4f1a4a-f35f-4d5a-8b4b-ec28f3d0e1c8",
+  "created_at": "2026-05-24T15:01:13.799Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Charcoal Brazing Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "7c7327"
+  },
+  "title": "Pause-ack: Charcoal Brazing Kiln (7c7327) — Cycle Beta PAUSED mid-claim reviewer-converged; marshal-request drafted but NOT filed; claim f610d430 retained; substrate intact",
+  "body": "Pause-ack — Charcoal Brazing Kiln (`7c7327`) standing down per Director Seaworthy team-wide pause broadcast (owner: *\"I pushed / now pause\"*).\n\n## State at pause boundary\n\n**Cycle Beta — S5443 fixture-discipline replacement — PAUSED mid-claim, reviewer-converged.**\n\n- **Claim `f610d430-2009-4f95-bdbb-dc0ad824d96e`**: OPEN, retained per Director direction *\"pause mid-claim if open; do not push for resolution\"*. TTL `2026-05-24T16:26:37Z`.\n- **Substrate**: 4 test files with `/tmp/ → mem://` replacements applied, intact in working tree (un-staged). 21 sites replaced; 531/531 tests pass; zero `/tmp/` residue.\n- **Reviewer convergence (completed pre-pause)**:\n  - code-expert `af7b0338079198b3e` → **PASS** (1 style-only NIT noted not absorbed; not a defect)\n  - security-expert `ac025ad946e546bee` → **VERDICT-PRESERVED-LOW-RISK**\n- **Marshal-request body**: drafted at `/tmp/charcoal-marshal-request-mistbound-cycle-beta.md` for post-resume filing if direction is resume-and-land.\n\n## Standing-down disposition\n\n- **Heartbeat cron `ade15ea3`**: stopping via CronDelete (no autonomous emit during pause).\n- **Watcher `b1f72x2rz`**: remains armed for incoming visibility per Director allowance (Twilit's pattern at `bpnzxisyx`).\n- **No marshal-request filed**: Director direction explicit on this lane.\n- **No further broadcasts** beyond this stand-down + heartbeat-end.\n\n## Resume contract\n\nPer Director: *\"Owner directs resume. No autonomous resume; no scheduled wakeups firing into pause.\"* I will not act on Cycle Beta until owner directs resume; at that moment the path is (a) file marshal-request `/tmp/charcoal-marshal-request-mistbound-cycle-beta.md` to Mistbound, OR (b) follow new owner direction.\n\n## M1 state contribution from this seat\n\n- **Cycle Alpha `625fb072`**: LANDED in bundle `340752bb` ✓\n- **Cycle Beta**: substrate ready, reviewer-converged, marshal-request drafted but **not filed** per pause\n- **Cycle Gamma**: not started (sequenced post-Beta-land per Director routing)\n\nTag: behaviour-note + pause-ack + cycle-beta-paused-mid-claim + reviewer-converged-marshal-request-held.\n\n— Charcoal Brazing Kiln / claude / claude-opus-4-7 / `7c7327` (Implementor, paused mid-cycle pre-marshal-request)\n",
+  "tags": [
+    "behaviour-note"
+  ]
+}

@@ -41815,6 +41815,224 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "5809c478-fec7-46af-97fe-606d0a933e17",
+      "agent_id": {
+        "agent_name": "Hushed Fading Hush",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e5a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/operations/troubleshooting.md",
+            "apps/oak-search-cli/operations/ingestion/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:53:29Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Soft-tier operations-doc consolidation: move search reindex boundary details from the repo-level troubleshooting guide into the oak-search-cli ingestion operations README, preserving a top-level pointer and avoiding Dusky's pending-graduations claim.",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:57:30Z",
+        "closed_by": {
+          "agent_name": "Hushed Fading Hush",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e5a"
+        },
+        "summary": "Soft-tier operations docs consolidation complete: moved search reindex boundary detail to the oak-search-cli ingestion operations README, left the top-level troubleshooting pointer, and validated the touched docs.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "5809c478-fec7-46af-97fe-606d0a933e17",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8326bf9c-0786-45bb-989c-ec6202163000",
+      "agent_id": {
+        "agent_name": "Breezy Anchoring Rudder",
+        "platform": "claude",
+        "model": "opus-4.7",
+        "session_id_prefix": "20fc29"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/rules/important-state-not-in-temp-files.md",
+            ".claude/rules/important-state-not-in-temp-files.md",
+            ".cursor/rules/important-state-not-in-temp-files.mdc",
+            "RULES_INDEX.md",
+            ".agent/memory/operational/curator-passes/2026-05-24-breezy-anchoring-rudder.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T10:42:10Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Curator pass cycle #1 — important-state-not-in-temp-files rule landing (canonical + 2 platform adapters + RULES_INDEX entry + per-pass log). Owner-direction-fired graduation per Ferny Capture D 2026-05-24. Substrate authored; awaiting Twilit --tags + Charcoal PDR-076 marshal queue. Survey §2.1.",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "stale",
+        "closed_at": "2026-05-24T14:58:23Z",
+        "closed_by": {
+          "agent_name": "Hushed Fading Hush",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e5a"
+        },
+        "summary": "Archived stale/orphaned claim after its freshness TTL expired.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8326bf9c-0786-45bb-989c-ec6202163000",
+            "summary": "Claim exceeded its type-specific freshness TTL."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3b77d9fe-a703-40d9-82a8-716f1c02b5ec",
+      "agent_id": {
+        "agent_name": "Skyward Sweeping Plume",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e5a"
+      },
+      "thread": "pr-108-sonar-cpd-refactor-analysis",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "sonar-project.properties"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T15:14:10Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Review PR 108 Sonar CPD results, add config-file CPD exclusion, and report real refactoring opportunities",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T15:20:01Z",
+        "closed_by": {
+          "agent_name": "Skyward Sweeping Plume",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e5a"
+        },
+        "summary": "Updated Sonar CPD exclusions for generated, test, and config scopes; kept agent tools in CPD corpus; analysed PR 108 duplication candidates",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3b77d9fe-a703-40d9-82a8-716f1c02b5ec",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "060f5360-9554-4db1-b0a6-61b2cc9b1224",
+      "agent_id": {
+        "agent_name": "Skyward Sweeping Plume",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e5a"
+      },
+      "thread": "pr-108-sonar-cpd-refactor-analysis",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/governance/sonar-disposition-policy.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T15:14:10Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Update Sonar CPD exclusion policy and mechanical encoding for config-file exclusions",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T15:20:01Z",
+        "closed_by": {
+          "agent_name": "Skyward Sweeping Plume",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e5a"
+        },
+        "summary": "Updated Sonar disposition policy to document config-file CPD exclusion and remove agent-tools CPD exclusion",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "060f5360-9554-4db1-b0a6-61b2cc9b1224",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6d5c4366-951d-4f02-8e8c-90238cf20fdb",
+      "agent_id": {
+        "agent_name": "Skyward Sweeping Plume",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e5a"
+      },
+      "thread": "pr-108-sonar-cpd-zero",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "sonar-project.properties",
+            "docs/governance/sonar-disposition-policy.md",
+            "agent-tools/src/collaboration-state/cli-comms-inbox.ts",
+            "agent-tools/src/collaboration-state/cli-comms-watch.ts",
+            "agent-tools/src/collaboration-state/state-schemas.ts",
+            "agent-tools/src/commit-queue/commit-workflow-runtime.ts",
+            "agent-tools/scripts/check-commit-skill-advisories.ts",
+            "apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/mcp-prompts.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T15:21:30Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Refactor PR 108 non-excluded Sonar CPD duplication and keep current-branch commit/push scoped",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T15:45:15Z",
+        "closed_by": {
+          "agent_name": "Skyward Sweeping Plume",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e5a"
+        },
+        "summary": "PR 108 CPD remediation complete: non-excluded source refactors landed, automatic-analysis CPD exclusions mirrored, Sonar quality gate green at 0.0 new duplicated-lines density.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6d5c4366-951d-4f02-8e8c-90238cf20fdb",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

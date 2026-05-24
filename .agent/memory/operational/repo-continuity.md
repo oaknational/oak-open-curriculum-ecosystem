@@ -17,16 +17,17 @@ Earlier archives remain under [`archive/`](archive/).
 ## Current State
 
 - Current branch: `feat/mcp-graph-support-foundation`.
-- Current local HEAD: `d9f21a01`. Remote state was not refreshed during this
+- Current local HEAD: `50f8ba41`. Remote state was not refreshed during this
   soft-tier consolidation slice; check primary git evidence before push or PR
   claims.
 - Owner has reactivated a multi-lane push. Active peer claims currently cover
   source and agent-tools bundles; this consolidation lane is limited to
   memory-state documentation surfaces. Treat active claims and comms as live
   routing truth, not this paragraph.
-- Critical and hard memory-surface fitness pressure is currently drained.
-  `pnpm practice:fitness:informational` on 2026-05-24T14:44Z reports
-  `SOFT (21 soft)`.
+- Critical and hard fitness pressure is currently drained.
+  `pnpm practice:fitness:informational` and
+  `pnpm practice:fitness --strict-hard` on 2026-05-24T14:57Z both report
+  `SOFT (19 soft)`.
 - Recent active napkin rotations are preserved under
   [`archive/`](../active/archive/). The current active napkin is healthy at
   28 lines / 1,050 chars after the Hushed critical line-width slice.
@@ -69,7 +70,7 @@ not the current session-priority lane. Reactivation is owner-directed.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `connecting-oak-resources` | Oak resource graph substrate for EEF | [record][connecting] | Tempestuous Spiralling Thermal / claude / Opus 4.7 (1M) / 9205b8 / 2026-05-22 |
-| `agentic-engineering-enhancements` | Practice continuity and agent-tools improvement | [record][agentic] | Sylvan Sprouting Petal / codex / GPT-5 / Knowledge Curator handoff / 2026-05-24; Shaded Silencing Dusk / codex / GPT-5 / 019e59 / 2026-05-24 |
+| `agentic-engineering-enhancements` | Practice continuity and agent-tools improvement | [record][agentic] | Hushed Fading Hush / codex / GPT-5 / operations-doc consolidation handoff / 2026-05-24; Sylvan Sprouting Petal / codex / GPT-5 / Knowledge Curator handoff / 2026-05-24; Shaded Silencing Dusk / codex / GPT-5 / 019e59 / 2026-05-24 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night / claude-code / opus-4.7 / 188baa / 2026-05-10 |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / claude-code / unknown / 228bc5 / 2026-05-06 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / claude-code / unknown / e18e2c / 2026-05-01 |
