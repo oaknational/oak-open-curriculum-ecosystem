@@ -26,6 +26,11 @@ to cure (iii) stale-claims and cure (viii) worker-side discoveries);
 (coordinator-handoff two moments — coordinator-role mid-cycle
 handoff intersection; join-point at the active-acknowledgement
 boundary);
+[PDR-077](PDR-077-marshal-as-cycle-discipline.md)
+(commit marshal as cycle-discipline role — when the marshal seat
+retires mid-cycle, this PDR governs the per-cycle handoff and
+PDR-077 governs the marshal-role transfer; the two events are
+distinct and MUST use distinct message kinds);
 [`practice-index.md`](../practice-index.md) (substrate-implementation
 ADR carrying the repo-specific phenotype of this PDR).
 
