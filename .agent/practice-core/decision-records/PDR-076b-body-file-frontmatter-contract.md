@@ -4,8 +4,9 @@ pdr_kind: governance
 
 # PDR-076b: Body-File Frontmatter Contract
 
-**Status**: Proposed
+**Status**: Accepted
 **Date**: 2026-05-23
+**Adopted**: 2026-05-24
 **Related**:
 [PDR-076a](PDR-076a-agent-identity-tuple-name-and-uuid.md)
 (agent identity tuple — co-emerged from the same owner

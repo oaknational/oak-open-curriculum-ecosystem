@@ -200,4 +200,5 @@ Practice-Core portability ratifies both — see the bridge index
 | [PDR-074](PDR-074-director-value-is-mind-coherence-per-owner-attention.md) | Director Value Is Mind-Coherence-Per-Owner-Attention | Candidate |
 | [PDR-076](PDR-076-agent-identity-tuple-and-body-file-frontmatter.md) | Agent Identity Tuple and Body-File Frontmatter (SPLIT stub) | Superseded |
 | [PDR-076a](PDR-076a-agent-identity-tuple-name-and-uuid.md) | Agent Identity Tuple `(name, UUID id)` | Accepted |
+| [PDR-076b](PDR-076b-body-file-frontmatter-contract.md) | Body-File Frontmatter Contract | Accepted |
 | [PDR-080](PDR-080-coordination-event-absorption-is-signal-driven.md) | Coordination-Event Absorption Is Signal-Driven | Accepted |
