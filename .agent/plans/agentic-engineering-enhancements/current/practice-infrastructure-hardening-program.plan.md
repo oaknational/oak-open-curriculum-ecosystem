@@ -67,12 +67,18 @@ isProject: true
 
 # Practice Infrastructure Hardening Program 2026-05-23
 
-**Last Updated**: 2026-05-24 (refinement R1.1 — M1/M2 milestone framing)
+**Last Updated**: 2026-05-24 (refinement R1.5 — owner verdicts resolved across 5 decisions; WS-2 SPLIT confirmed; E4 reframed via PDR/ADR portability distinction; WS-8 author NOW; PDR-079 added as new WS-12; R1.4 broadcast bundled-and-emitted)
 **Status**: SEQUENCE-LIVE — racing toward **M1 — Safe-Pause Milestone**.
 M1 gates 3 + 4 MET; gates 1, 2, 5 PENDING. M1 reachable when WS-7 cure
-lands + WS-2 partition-cure verdict surfaces + queue items (WS-11
-bundle, PDR-077, Cycle #5/#6) each land-or-stand-down. M2 (Completion)
-is open-ended; M2-pursuit work deferred until M1 reached.
+executes (Scorched claim `4e6e18b2` active) + WS-2 partition-cure
+verdict surfaces + Gate 5 queue items each land-or-stand-down (7
+queue entries per Mistbound §8). M2 (Completion) is open-ended;
+M2-pursuit work deferred until M1 reached.
+**Plan held under claim**: `8374e240-0faa-4011-a9fd-a5789cc006a9`
+(Lanternlit Listening Dusk / claude / claude-opus-4-7 / `78683a`).
+Future agents observing drift between this plan and live state should
+read the plan, then verify against live substrate, then file a new
+§Plan Refinement Log entry rather than opening a parallel claim.
 **Collection**: `agentic-engineering-enhancements/current`.
 **Threads Touched**:
 [`agentic-engineering-enhancements`](../../../memory/operational/threads/agentic-engineering-enhancements.next-session.md)
@@ -164,6 +170,368 @@ record at `.agent/state/collaboration/handoffs/marshal-role-handoff-2026-05-23-m
   the new Emergent Observations section, not promoted to WS rows
   (per Non-Goals: doctrine inflation guard).
 - Authoring agent + R0 history — preserved as audit trail.
+
+### R1.5 — 2026-05-24 — Lanternlit Listening Dusk — all owner decisions resolved
+
+**Why**: Owner-directed resolution of all outstanding owner-decision
+items in one session. AskUserQuestion call surfaced 4 decisions; owner
+answered 5 (one of the answers — the citation policy — triggered a
+deeper architectural distinction that became a 5th decision).
+
+**Owner verdicts captured**:
+
+1. **WS-2 partition-cure**: **SPLIT** confirmed. Ferny authors
+   PDR-076a (identity tuple) + PDR-076b (body-file frontmatter) via
+   Cycle #6. Cascade §2 + §5 body-file-adjacency overlap cured by
+   partition. Gate 2 unblocked; awaiting Ferny re-engagement.
+2. **E4 citation policy → PDR/ADR portability distinction**: owner
+   reframed the question. The recurring vagueness was not "which
+   citation style?" but "what are PDRs and ADRs fundamentally?"
+   Verdict: PDRs are portable practice doctrine (NO SHAs / repo paths
+   / branch names); ADRs are repo-specific architectural decisions
+   (SHAs / event-UUIDs welcome). SHA-in-PDR = misclassification
+   signal: move the SHA-bearing substance to an ADR. Binding cure for
+   the WS-11 bundle: PDR-078 SHA-free, ADR-186 SHAs allowed. Replaces
+   R1's hybrid framing entirely.
+3. **WS-8 codification author**: **Author it NOW** (Lanternlit). ADR
+   codifying C2+C5+C4 shape + C2-platform-deferred trigger is
+   AUTHOR-IN-FLIGHT.
+4. **R1.4 deployment broadcast**: **Emit bundled with owner verdicts**
+   — single comprehensive broadcast covering R1.4 + R1.5 changes.
+   Emitted at end of R1.5 plan refresh.
+5. **PDR/ADR distinction capture**: **Author new PDR (PDR-079)** —
+   heavier option chosen. WS-12 added.
+
+**Changes**:
+
+- Frontmatter `todos:` YAML:
+  - WS-2 content updated to reflect SPLIT verdict + Ferny Cycle #6.
+  - WS-8 content updated to AUTHOR-IN-FLIGHT (Lanternlit, NOW); status
+    flipped from `pending` to `in_progress`.
+  - WS-11 content updated to reflect E4 RESOLVED (PDR-078 SHA-free /
+    ADR-186 SHAs allowed); Fred-vs-owner tension removed.
+  - WS-12 NEW entry added: PDR-079 PDR-vs-ADR portability distinction
+    (Lanternlit, AUTHOR-IN-FLIGHT). Status `in_progress`.
+  - gate-safe-pause content refreshed to name SPLIT verdict + the 7
+    Gate 5 queue entries.
+  - gate-complete `depends_on` extended to include `ws-12-pdr-079-pdr-adr-portability`.
+- §Workstream Roll-up table: WS-2 / WS-8 / WS-11 rows refreshed; new
+  WS-12 row added.
+- §M1 — Safe-Pause Milestone Criteria → Gate 2: status flipped from
+  BLOCKED-ON-OWNER-VERDICT to "PENDING (OWNER-VERDICT RECEIVED,
+  AWAITING FERNY EXECUTION)".
+- §M2 — Completion Milestone Criteria → Criterion 3: flipped from
+  CODIFICATION-PENDING to AUTHOR-IN-FLIGHT.
+- §Emergent Observations → E4: marked **RESOLVED 2026-05-24 (R1.5)**
+  with full reframing per PDR/ADR portability distinction.
+- §Path Forward → P1.C1: rewritten as "Ferny resumes Cycle #6" (was
+  "owner reads Ferny prestage").
+- §Path Forward → P2.A1: rewritten — E4 prerequisite cleared, LAND
+  path now recommended.
+- §Path Forward → Phase 4 (M2-PURSUIT): P4.C2 (WS-8) flipped to
+  AUTHOR-IN-FLIGHT; new P4.C3 (WS-12) added.
+
+**M1 status after R1.5**:
+
+- Gate 1 (WS-7 cure): CLAIMED, awaiting Scorched execution
+- Gate 2 (WS-2 SPLIT): CLAIMED conceptually (Ferny named author),
+  awaiting re-engagement
+- Gate 3 (WS-5 pattern): MET ✅ `8a99ed35`
+- Gate 4 (WS-9 cure): MET ✅ `43e09287`
+- Gate 5 (queue closure): 7 entries; Marshal hygiene cycle pending
+  next tree-green window; WS-11 bundle now LAND-recommended;
+  PDR-077 awaiting Charcoal re-engagement
+
+**No owner decisions remain outstanding for M1**. All M1-critical
+items now have named actors and triggers. Director Seaworthy operates
+M1 Gate Monitor duty.
+
+**Bundled broadcast emitted at end of R1.5** (covers R1.4 + R1.5
+substance for team).
+
+**Authoring queue (in-flight, parallel to M1 monitoring)**:
+
+- Lanternlit: PDR-078 + ADR-186 + thin SKILL + reciprocal amendments
+  (WS-11 bundle); ADR for WS-8; PDR-079 + rule scope-update (WS-12)
+- Ferny: PDR-076a + PDR-076b (Cycle #6, WS-2)
+- Charcoal: PDR-077 R3-absorption (WS-6)
+- Scorched: PR #108 R2 cure (WS-7)
+- Mistbound: marshal-cycle for all of the above + Marshal hygiene cycle
+
+### R1.4 — 2026-05-24 — Lanternlit Listening Dusk — sidebar co-authoring model + heartbeat CLI integration
+
+**Why**: Owner-directed integration response to R1.3's Gap 5
+surfacing. Owner verdict: **sidebar is the right model**. Owner
+also directed: integrate the Mistbound "Ideas to be integrated"
+section into the plan proper, with the first question being whether
+it is part of M1 or not.
+
+**M1-or-not verdict on heartbeat CLI**: **NOT part of M1.** The
+heartbeat CLI is scope detail for WS-10, which is explicitly
+not-M1-gated. WS-10's closure condition is "schema field + CLI
+wrapper + claim auto-rebalance protocol shipped" — Mistbound's CLI
+shape is the specification of the *CLI wrapper sub-component*.
+Interim heartbeat mechanism (narrative+tags per ADR-183) is workable
+per the plan, so M1 (EEF pivot-ready) does not depend on this work
+landing. The CLI is quality-of-life infrastructure that reduces
+M1-execution-risk indirectly (preventing the hand-rolled-heartbeat-
+loop failure mode Mistbound flagged) but is not M1-pivot-blocking.
+
+**Changes**:
+
+- WS-10 frontmatter content rewritten to embed the CLI specification
+  Mistbound contributed: identity-tuple resolution, subject template,
+  body prefix, tag wiring, comms-append plumbing, AND the load-bearing
+  constraint that per-beat `--lane` + `--focus` MUST come from the
+  agent each invocation (silent-staleness anti-pattern named as
+  equivalent failure mode to substrate-pointer-read).
+- WS-10 row in §Workstream Roll-up table updated similarly, with
+  pointer to frontmatter for full CLI shape.
+- §Ideas to be integrated into the plan section REMOVED — its
+  substance is now integrated into WS-10; the section header was
+  itself a violation of the sidebar model (multi-writer direct edit).
+- New §Plan Coordination — co-authoring model section ADOPTED:
+  sidebar model formalised. Location convention
+  (`sidebars/<contributor-prefix>-<topic-slug>.md`), append-only
+  contributor conventions, plan-holder integration cadence (at
+  Refinement Log boundaries), retroactive note on Mistbound's R1.2
+  contribution.
+- Gap 5 in R1.3 marked RESOLVED with sidebar adoption.
+
+**Deferred (out of R1.4 scope)**:
+
+- Creating actual sidebar files for current/future contributors.
+  Convention is documented; first contributor under the new model
+  creates the directory when they need it. Premature directory
+  creation is unjustified.
+- Migrating Mistbound's "Ideas to be integrated" section to a
+  retroactive sidebar file. The substance is integrated; recreating
+  history-via-sidebar is unnecessary ceremony.
+- Migrating WS-10 to a different status (e.g., "ACCEPTED-DEFERRED"
+  vs current "NOT-M1-GATED, PENDING"). The current vocabulary serves;
+  WS-10 was not changed in scope, only specified in detail.
+
+**Steady-state assessment**: R1.4 is a targeted integration pass on
+owner-directed scope (Mistbound substance + sidebar model). Not a
+full review-and-absorption pass. No new gaps surfaced; the M1-path
+specification from R1.3 remains the foundation. Next refinement
+boundary will be Charcoal's PDR-077 absorption or owner direction.
+
+### R1.3 — 2026-05-24 — Lanternlit Listening Dusk — path-trigger completeness
+
+**Why**: Owner-directed metacognitive critique on R1.2 exposed that
+the path to M1 was substantially clearer but not fully specified.
+R1.2 corrected accuracy and state; it did not close the *trigger
+ambiguity*: actions named the actor and the action but not what
+triggers the actor to act.
+
+**5 gaps found on honest self-critique** (the questions: is the path
+absolutely clear, decision complete, fully specified?):
+
+1. **Trigger ambiguity** — Scorched re-engagement, owner attention
+   to Ferny's prestage, Safe-Pause detection — actors named, triggers
+   unnamed.
+2. **Decision-owner ambiguity for stand-down** — Gate 5 queue entries
+   say "responsible agent" without naming the agent per entry.
+3. **Monitoring duty** — no explicit "M1 Gate Monitor" responsibility;
+   detection of "all 5 gates MET" was implicit Director.
+4. **Substrate-in-/tmp durability** — PDR-077 + R3 synthesis at
+   session-loss risk; cure named, ownership and timing unspecified.
+5. **Parallel-writer coordination** — Mistbound's R1.2 contribution
+   exposed multi-writer pattern; coordination model undefined.
+
+**Cures applied (4 of 5; architecturally forced)**:
+
+- New §Path Forward subsection "**Roles + triggers**" naming:
+  - **M1 Gate Monitor** = Director Seaworthy (continuous duty;
+    transfers on rotation per PDR-064).
+  - **Surfacing-to-owner duty** = Director Seaworthy (with explicit
+    escalation framing if no response within 1 active team session).
+  - **Stand-down authority per Gate 5 queue entry** = table mapping
+    each queue entry to its stand-down authoriser (author / Director /
+    owner / Mistbound per entry).
+  - **Re-engagement triggers per silent-actor item** = table mapping
+    each silent-actor risk (Scorched, Charcoal, owner-on-WS-2, etc.)
+    to its named trigger and default-action-if-no-response, grounded
+    on the PDR-076 retirement threshold (10 min).
+- §P1.Gate5 amended with explicit reference to stand-down authoriser
+  table + **capture-to-durable substrate rule** for `/tmp` content.
+- §P3.E1 amended to name the Director M1 Gate Monitor duty as the
+  detection mechanism for "all 5 gates MET".
+
+**Cure surfaced for owner (1 of 5)**:
+
+- **Parallel-writer coordination (Gap 5)**: the plan body is co-
+  authored. Lanternlit (claim `8374e240`) authored R0+R1+R1.1+R1.2+R1.3;
+  Mistbound authored the "Ideas to be integrated" section in parallel.
+  No coordination decision yet. **Surfacing to owner**: should plan
+  body be (a) single-author with marshal-mediated merges, (b) sidebar-
+  shaped collaborative authoring, or (c) current free-for-all
+  (acceptable if all writers acknowledge each other's contributions)?
+  R1.3 default if no owner response within 1 active team session:
+  continue with (c) and capture Gap 5 as a deferred-cure pending
+  future worked-instance evidence.
+
+**Post-cure verdict (the question that prompted R1.3)**:
+
+| Criterion | Before R1.3 | After R1.3 |
+|-----------|--------------|-------------|
+| Absolutely clear | NO (gaps 1, 2, 3) | YES for path-trigger; Gap 5 explicitly surfaced for owner |
+| Decision complete | NO (gaps 1, 4, 5) | YES for all M1-critical decisions; Gap 5 surfaced |
+| Fully specified | NO (actor named, trigger absent) | YES for all M1-critical items; Gap 5 specified as open-decision-with-default-action |
+
+**Steady-state assessment after R1.3**: the path is now fully
+specified except for Gap 5 (parallel-writer coordination), which is
+explicitly an owner-decision with default-action recorded. A 3rd
+reviewer-pass iteration would catch NIT-level inconsistencies at
+diminishing return. Declared steady-state on M1-critical specification.
+
+### R1.2 — 2026-05-24 — Lanternlit Listening Dusk — reviewer absorption pass
+
+**Why**: Owner-directed reviewer-pass + critical-analysis loop with
+docs-adr-expert + code-expert. Both reviewers returned
+GO-WITH-CONDITIONS. 21 findings tabulated across CRITICAL (2),
+IMPORTANT (8), NIT (5), and surprise-by-absence (3) categories.
+
+**Evidence ground** (parallel reviewer dispatch + verification):
+
+- docs-adr-expert dispatched on plan + Mistbound handoff +
+  pending-graduations. Returned GO-WITH-CONDITIONS with 15 findings.
+- code-expert dispatched on plan + SHA/state spot-checks via git +
+  gh + active-claims jq. Returned GO-WITH-CONDITIONS with 6 findings.
+- 3 highest-stakes findings independently re-verified by me before
+  absorption: (a) Scorched `4e6e18b2` + Mistbound `00375e07` claims
+  ACTIVE via jq on active-claims.json; (b) Mistbound 4-cycle arc git
+  author timestamps 17:03:45 BST → 17:17:45 BST = ~14 min (not 22 min
+  as inherited from upstream handoff); (c) `/tmp/charcoal-pdr077-postresume-fanout-synthesis.md`
+  exists (6.8KB) — confirms 3-round review state for PDR-077.
+
+**Metacognitive observation**: the dominant failure mode in my R1
+authoring was *trust-without-reverification* — I trusted Mistbound's
+handoff numbers, subagent C's earlier snapshot, and my own
+cross-references without checking internal consistency. This is the
+substrate-pointer-read-as-current-state failure mode (named in WS-5)
+firing on my own authoring of the plan that names the failure mode.
+The reviewer-pass + critical-analysis loop is the cure-shape working
+as intended.
+
+**CRITICAL absorptions**:
+
+- **WS-7 active-claim state corrected** (docs F1). R1 said "no active
+  cure-claim retained" based on subagent C's earlier snapshot which
+  checked claim ID `7f24a994` (Mistbound's handoff-cited claim). The
+  current active claims are Scorched `4e6e18b2` (R2 author) + Mistbound
+  `00375e07` (marshal), both opened post-handoff. Updated: frontmatter
+  WS-7 content; Workstream Roll-up WS-7 row; M1 Gate 1 section;
+  Path Forward P1.B1 ("Scorched executes" not "fresh claim needed");
+  Safe-Pause Criteria roll-up table; Risk #5 (execution stall, not
+  claim void); Gate 5 queue entry.
+- **WS-10 ADR-186 contradiction resolved** (docs F2 / code F1, convergent).
+  R1 said "INTERIM live (lifecycle-event-shape per ADR-186 landing)" in
+  the Roll-up table; ADR-186 does not exist. Interim is actually
+  narrative+tags['heartbeat'] per ADR-183. Updated: Workstream Roll-up
+  WS-10 row; M2 Criterion 4 body text.
+
+**IMPORTANT absorptions**:
+
+- **22-min arithmetic discrepancy** (docs F3, F15). Mistbound's
+  compaction handoff §4 said "22 min including husky (~5.5 min/cycle)".
+  Git author timestamps show 14 min (~3.5 min/cycle). The thesis still
+  holds — 4 cycles in <25 min is the substantive claim. Updated:
+  Empirical Thesis Under Test; frontmatter WS-6; both note the
+  discrepancy honestly.
+- **Section-reference drift after R1.1 renames** (docs F4). "Sections
+  that follow" pointer box used pre-R1.1 names. Updated to M1/M2-prefixed.
+- **Duplicate paragraph in Readiness Reviewers** (docs F5). Editing
+  residue from R1 → R1.1. Replaced second paragraph with R1.2-specific
+  reviewer-pass record.
+- **§Mechanism collision with "mechanism" word in §Empirical Thesis**
+  (docs F6/F7). Renamed §Mechanism to §Substrate-Cure Loop; reworded
+  §Empirical Thesis opening line to avoid the word "mechanism".
+- **LANDED vocabulary masking doctrine status** (docs F8). Refined
+  status vocabulary definition to clarify: file-LANDED ≠ doctrine-
+  ratified. PDR Status:Candidate/Proposed/Adopted/Cured is independent
+  of file-landing.
+- **Lifecycle Triggers owner-decision list incomplete** (docs F9).
+  Added E3 verification-discipline-correction owner-direction
+  graduation path. Moved Safe-Pause Attestation to Director-decision
+  bucket (not owner-decision). Removed WS-7 implementer assignment
+  (moot now that claim is held). Added WS-7 execution-monitoring as
+  Director-decision touch point.
+- **E5 graduation-target misclassification** (docs F10). Corrected
+  "currently rule-shape" to "currently memory-feedback-shape" —
+  `feedback_gatekeeper_specialisation` is a memory feedback entry,
+  not a rule file.
+- **WS-6 review state understated** (code F2). R1 said "docs-adr-expert
+  reviewer dispatched"; actual state is 3 review rounds complete with
+  final docs-adr-expert GO. Updated: frontmatter WS-6; Workstream
+  Roll-up WS-6 row; M2 Criterion 2; Path Forward P2.A2 (with /tmp-
+  substrate-risk caveat); Gate 5 queue.
+- **t12 SHA wrong** (code F3). R1 said "rolled into `3241893d` umbrella";
+  actual landing is `0b7289e9` (2026-05-22 16:51 BST). Updated EEF
+  lane state table.
+- **Gate 5 queue missing Marshal hygiene cycle** (code F4). Mistbound
+  handoff §8 listed 6 items; R1 enumerated 5. Added 6th entry
+  ("Marshal hygiene cycle") + Gate 5 queue count updated from 5 to 7
+  (with Queue-Cycle #7 also added).
+
+**Surprise-by-absence absorptions** (per docs-adr-expert "what I did
+not find" section):
+
+- **R1.2 explicit ratification status entry**: this Refinement Log
+  entry itself serves; plus a note in §Readiness Reviewers naming the
+  reviewer pass.
+- **Plan's own claim_id pointer**: added to header
+  (`8374e240` Lanternlit). Future agents observing drift now know who
+  to direct refinement-coordination to rather than opening parallel
+  claims.
+- **Plan-archive-lifetime declaration**: clarified in Lifecycle
+  Triggers Archive touch point (R1.2 amendment below).
+
+**NIT absorptions**:
+
+- "Cycle #N" terminology overload disambiguated as "Mistbound Cycle #N"
+  (commits) vs "Queue-Cycle #N" (pending items) throughout (docs F11).
+- "Safe-Pause GO" mis-attributed as owner-decision; corrected to
+  Director-decision (docs F13).
+- Risk #6 future-tense reference to "R2" reworded to discipline-shape
+  reference (docs F14).
+- Post-WS commit list labelled as newest-first ordering (code F5).
+
+**Deferred (out of R1.2 scope)**:
+
+- SHA citation density (docs F12) — would require descriptive prefixes
+  on many citations; cosmetic; future hygiene pass.
+- WS-11 ADR-183-amendment vs ADR-186-standalone framing ambiguity
+  (code F6) — already resolved in the chosen bundle shape; no action.
+
+**Parallel multi-writer observation (caught during R1.2 self-check)**:
+
+A new section "§Ideas to be integrated into the plan" appeared between
+§Emergent Observations and §Owner Ratification Status during my R1.2
+editing window. The content is attributed to Mistbound session
+`0e27cc` and describes a `pnpm agent-tools:heartbeat` convenience CLI
+candidate. The section is well-formed and substantively accurate — it
+is NOT part of R1.2; it is a separate, parallel-authored contribution
+from Mistbound's session while I was running R1.2 absorption.
+
+Meta-observation: this is the second instance this session of parallel-
+agent activity I was not initially tracking — first the Scorched +
+Mistbound active claims on PR #108, now Mistbound writing to the plan
+body in parallel. The plan claims to be held under `8374e240`
+(Lanternlit) but in practice other agents are also writing it. The
+coordination model is partially fictional. This is itself a worked
+instance of the substrate-pointer-read failure mode firing on the
+plan's own claim-state declaration. Captured here for future
+refinement consideration; not absorbed in R1.2 because the right cure
+is a coordination decision (multi-author allowed? marshal-mediated?
+sidebar-shaped?) not a doctrine edit.
+
+**Steady-state assessment**: after R1.2 absorption, the most
+consequential reviewer findings are absorbed. A 2nd reviewer pass on
+R1.2 would primarily catch (a) any contradictions introduced by R1.2's
+edits, (b) NIT-level findings of diminishing return. Decision: declare
+steady state at R1.2 unless owner directs another iteration.
 
 ### R1.1 — 2026-05-24 — Lanternlit Listening Dusk — M1/M2 milestone framing
 
@@ -265,9 +633,11 @@ What the End Goal enables that the *status quo ante* prevented:
 
 ## Empirical Thesis Under Test
 
-The mechanism by which the End Goal is reached. **Not the End Goal
+The cause-and-effect claim that this program tests. **Not the End Goal
 itself** — the thesis is the testable claim that the proposed cures
-produce the named impact.
+produce the named impact. (Distinct from the §Substrate-Cure Loop
+below, which describes the operational *mechanism* by which cures are
+authored.)
 
 > Marshal-as-cycle-discipline + substrate-writing discipline +
 > identity-tuple disambiguation, in simultaneous force, collapse
@@ -281,10 +651,13 @@ Evidence to date spans two marshal regimes:
 - **Ashen Brazing Crucible**: 9 cycles + Class A in a 58-min Director
   window (2026-05-23 13:50Z – 15:05Z). First worked instance; thesis
   formation evidence.
-- **Mistbound Hiding Threshold**: 4 cycles in a 22-min marshal window
-  (2026-05-23 16:02:22Z – 16:18:11Z), including husky 90-task gate-
-  chains. Second worked instance; thesis confirmation evidence.
-  PDR-077 candidate trigger fires on this 2nd instance.
+- **Mistbound Hiding Threshold**: 4 cycles in a ~14-min marshal window
+  per git author timestamps (`43e09287` 17:03:45 BST → `ccc47de2`
+  17:17:45 BST), including husky 90-task gate-chains. Mistbound's
+  compaction handoff §4 stated "22 min including husky" — git evidence
+  shows ~14 min. Either way: 4 cycles in <25 min. Second worked
+  instance; thesis confirmation evidence. PDR-077 candidate trigger
+  fires on this 2nd instance.
 
 The thesis is strongest when read in both directions: not just
 "marshal authority enables high throughput" but "high throughput
@@ -328,12 +701,14 @@ items first.
 Sections that follow:
 
 - **§Workstream Roll-up** — the catalogue of all in-flight work.
-- **§Safe-Pause Criteria** — the M1 gates (renamed for terminology
-  clarity).
-- **§Completion Criteria** — the M2 gates.
-- **§Path Forward** — sequenced for M1 first.
+- **§M1 — Safe-Pause Milestone Criteria** — the M1 gates.
+- **§M2 — Completion Milestone Criteria** — the M2 gates.
+- **§Path Forward — the M1-focused sequence** — sequenced for M1 first.
 
-## Mechanism
+## Substrate-Cure Loop
+
+(Previously titled §Mechanism; renamed in R1.2 to avoid collision with
+the word "mechanism" appearing in §Empirical Thesis Under Test.)
 
 Every coordination defect caught in the team's own work becomes durable
 substrate (PDR / ADR / pattern / rule). The closed loop:
@@ -614,50 +989,109 @@ queue entry on Gate 5; stand-down is acceptable cure), or
 **M2-PURSUIT** (does not feed M1; deferred unless owner directs
 otherwise).
 
+### Roles + triggers (added R1.3)
+
+For the path to be fully specified, each action needs not only an
+actor but also a **trigger** (who pings whom when) and a **stand-down
+authoriser** (who can decide "this entry is stood down"). R1.3 names
+these explicitly.
+
+**M1 Gate Monitor**: **Director Seaworthy Navigating Beacon**. The
+duty: include M1 gate status (G1/G2/G3/G4/G5 MET / PENDING) in every
+Director tick narrative. When all 5 gates MET, attestation broadcast
+triggers (P3.E1). The duty transfers to incoming Director on rotation
+per PDR-064 two-moments. If Director leaves before transfer, the
+duty falls to whichever agent next holds Director authority.
+
+**Surfacing-to-owner duty**: **Director Seaworthy** is responsible
+for surfacing owner-decision items (P1.C1 partition-cure verdict; E3
+graduation direction; parallel-writer coordination per Gap 5) via
+directed comms event referencing this plan + the specific decision
+needed. If a decision item has been outstanding for >1 active team
+session without owner response, Director escalates with explicit
+"decision required by N to unblock path" framing.
+
+**Stand-down authority per Gate 5 queue entry**:
+
+| Queue entry | Stand-down authoriser |
+|-------------|------------------------|
+| WS-11 bundle | Lanternlit (author) |
+| Queue-Cycle #5 | Director (no implementer assigned) |
+| Queue-Cycle #6 | Owner (gated on partition-cure verdict; standing-down means parking WS-2 SPLIT) |
+| PDR-077 | Charcoal (author) — if Charcoal silent past retirement threshold, Director |
+| PR #108 cure | Director (claim is held; Director routes execution-or-rebalance) |
+| Marshal hygiene cycle | Mistbound (active marshal) |
+| Queue-Cycle #7 | Director (already deferred; stand-down means explicit "this stays deferred to next session") |
+
+**Re-engagement triggers per silent-actor item**:
+
+| Silent actor / item | Trigger |
+|---------------------|---------|
+| Scorched / PR #108 cure | Director ticks include Scorched heartbeat status. If silent for >10 min (per PDR-076 retirement threshold), Director directly surfaces "re-engage OR rebalance" via directed comms event to Scorched, with default action ("rebalance to follow-on implementer in N min if no signal"). |
+| Charcoal / PDR-077 finalisation | Director ticks include Charcoal heartbeat status. Same 10-min threshold; Director directs "re-engage OR stand-down" with default action. |
+| Owner / WS-2 partition-cure verdict | Director surfaces via directed comms event including: Ferny prestage pointer + Cascade §2/§5 boundary question + "this blocks M1 Gate 2" framing. Surfacing is one-shot; if no response within 1 active team session, Director escalates with named alternative ("park WS-2 SPLIT, accept single-PDR shape, remove open-decision marker"). |
+| Owner / E3 graduation direction | Director surfaces only if E3 promotion trigger fires (2nd worked instance accumulates OR owner explicitly queries). Not a forcing function. |
+| Owner / parallel-writer coordination (Gap 5) | Director surfaces once; if no response within 1 active team session, plan continues with current free-for-all multi-writer pattern and Gap 5 is captured as a deferred-cure pending future evidence. |
+
 ### Phase 1 — M1-CRITICAL items (the only must-do work for the next milestone)
 
-**P1.B1 — Fresh PR #108 cure-claim — M1-CRITICAL → Gate 1**
+**P1.B1 — Scorched executes PR #108 R2 cure under Mistbound marshal — M1-CRITICAL → Gate 1**
 
-- Status: UNASSIGNED. Scorched's pre-pause R2 retained-claim path
-  lapsed; no active claim. PR #108 SonarCloud + run-quality-gates
-  RED.
-- Action: any-implementer opens new claim on PR #108 cure path;
-  executes R2 mechanical Sonar findings cure; commit-hygiene tranche
-  per owner's tick #2 verdict ("commit hygiene tranche then push");
-  push.
+- Status: **CLAIMED, AWAITING EXECUTION**. Scorched author claim
+  `4e6e18b2` ACTIVE (opened 19:07:14Z, R2 mechanical Sonar cures on
+  4 files in graph-ingest + sdks). Mistbound marshal claim
+  `00375e07` ACTIVE (opened 19:33:07Z).
+- Action: Scorched re-engages → executes the R2 mechanical Sonar
+  cures per claim intent (S7735 ternary flip + S7763 export-from
+  collapse + S7781×4 replaceAll + S7750 findLast) + commit-hygiene
+  tranche per owner's tick #2 verdict ("commit hygiene tranche then
+  push") → marshal-cycles via Mistbound → push.
 - Owner direction: Seaworthy tick #2 19:28:47Z — "commit hygiene
   tranche then push". Direction stands.
-- Prerequisite: implementer with capacity. Candidates: Scorched
-  re-engagement; any other implementer per hat-switch-dissolved
-  direction. **If no implementer is assignable this session, the item
-  must be explicitly stood down (handoff record + comms broadcast) so
-  the next session does not inherit ghost-queue.**
+- Prerequisite: Scorched re-engagement. **If Scorched does not
+  re-engage within a Director-defined window, Director surfaces to
+  Scorched first for re-engagement signal; if none, routes the claim
+  to a follow-on implementer via claim-rebalance OR explicitly stands
+  the cure down (handoff record + comms broadcast). The claim is owned
+  end-to-end — stand-down is an explicit hand-off, not a default.**
 - Unlocks: **Gate 1 MET** + EEF merge-path GREEN.
 
-**P1.C1 — Owner WS-2 partition-cure verdict — M1-CRITICAL → Gate 2**
+**P1.C1 — Ferny resumes Cycle #6 to author PDR-076a + 076b — M1-CRITICAL → Gate 2**
 
-- Status: owner-decision-gated; cannot be done by team alone.
-- Action: owner reads Ferny's `/tmp/ferny-ws2-partition-prestage-synthesis.md`
-  partition-cure section; verdicts on the §Cascade item 2 vs item 5
-  body-file-adjacency boundary; either ratifies single-PDR shape (and
-  the open-decision marker on landed PDR-076 is removed) OR confirms
-  SPLIT direction.
-- Prerequisite: owner attention to Ferny's prestage.
-- Unlocks: **Gate 2 MET** + (if SPLIT) Ferny resumes Cycle #6 →
-  PDR-076a + PDR-076b authored and landed.
+- Status: **OWNER-VERDICT RECEIVED 2026-05-24 (R1.5)**: SPLIT
+  confirmed. Awaiting Ferny re-engagement.
+- Action: Ferny re-engages → authors PDR-076a (identity tuple) +
+  PDR-076b (body-file frontmatter) from the paste-ready blocks in
+  `/tmp/ferny-ws2-partition-prestage-synthesis.md` → marshal-cycle
+  via Mistbound → both child PDRs land.
+- Prerequisite: Ferny re-engagement. Director Seaworthy monitors
+  Ferny's heartbeat per §Roles + triggers; if silent past retirement
+  threshold, Director directs re-engagement OR rebalances per claim
+  auto-rebalance protocol.
+- Unlocks: **Gate 2 MET** + landed PDR-076's open-decision marker is
+  removed (or PDR-076 is archived if children fully supersede).
 
 **P1.Gate5 — Queue closure (each entry lands OR explicitly stands down) — M1-CRITICAL → Gate 5**
 
-- Status: 5 queue entries open (WS-11 bundle, PDR-077, Cycle #5,
-  Cycle #6, PR #108 cure). Each entry must reach a terminal state
-  (landed OR explicit stand-down) for Gate 5 to close.
-- Action: for each queue entry, the responsible agent either lands or
-  emits an explicit stand-down comms broadcast with a named resumption
-  trigger. Stand-down records go to a handoff file so the next session
+- Status: 7 queue entries open (WS-11 bundle, Queue-Cycle #5,
+  Queue-Cycle #6, PDR-077, PR #108 cure, Marshal hygiene cycle,
+  Queue-Cycle #7). Each entry must reach a terminal state (landed OR
+  explicit stand-down) for Gate 5 to close.
+- Action: for each queue entry, the **named stand-down authoriser**
+  (per §Roles + triggers table above) either lands or emits an
+  explicit stand-down comms broadcast with a named resumption trigger.
+  Stand-down records go to a handoff file so the next session
   inherits clean queue state, not ghost-queue.
-- **Minimum-cost M1 path: stand-down is acceptable cure for every
+- **Capture-to-durable substrate**: any queue entry whose evidence
+  lives in `/tmp` (PDR-077 draft + R3 synthesis) MUST be captured to
+  `.agent/state/collaboration/handoffs/` before stand-down or
+  marshal-request. Owner of the capture: the agent who authored the
+  `/tmp` content (Charcoal for PDR-077).
+- **Minimum-cost M1 path**: stand-down is acceptable cure for every
   queue entry except Gate 1 (PR #108 cure must land or M1 cannot
-  attest).**
+  attest). Queue-Cycle #7 is already NON-BLOCKING (deferred to natural
+  follow-on); Marshal hygiene cycle is in-flight as part of next
+  tree-green window under Mistbound's marshal authority.
 - Unlocks: **Gate 5 MET**.
 
 ### Phase 2 — M1-INCIDENTAL items (land-or-stand-down branching)
@@ -671,27 +1105,35 @@ or-Director-routed per item.
 - M1 contribution: closes one Gate 5 queue entry (whether by landing
   OR stand-down).
 - M2 contribution: landing feeds Completion Criterion 4.
-- LAND path (heavier): resolve E4 citation tension → author PDR-078 +
-  ADR-186 + thin SKILL + reciprocal §Related amendments → round-2
-  reviewer fan-out → owner review → marshal-request to Mistbound.
-- STAND-DOWN path (cheaper for M1): emit explicit stand-down broadcast
-  with "resume on E4 resolution + next-session pickup" trigger; archive
+- **E4 RESOLVED R1.5 (2026-05-24) via PDR/ADR portability distinction**:
+  prerequisite cleared. LAND path is now unblocked.
+- LAND path: author PDR-078 (SHA-free portable principle) + ADR-186
+  (SHAs/UUIDs allowed as repo phenotype) + thin SKILL pointer +
+  reciprocal §Related amendments to PDR-027/063/064 → round-2 reviewer
+  fan-out → owner review → marshal-request to Mistbound.
+- STAND-DOWN path (still available as cheaper M1 cure): emit explicit
+  stand-down broadcast with "resume next session" trigger; archive
   SKILL §0.5 fat-draft as pending-graduations candidate.
-- **Prerequisite for LAND path: E4 citation-policy reconciliation
-  must resolve first** (see §Emergent Observations).
-- Recommendation: **STAND-DOWN if E4 doesn't resolve quickly**; the
-  cheapest M1 path. Landing is preferable only if E4 resolves cheaply
-  and the team has capacity.
+- Recommendation: **LAND** — E4 is resolved, bundle shape ratified,
+  reviewer convergence complete; the architecturally-excellent path
+  is now achievable in-session.
 
 **P2.A2 — Charcoal Brazing Kiln → WS-6 PDR-077 finalisation**
 
 - M1 contribution: closes one Gate 5 queue entry.
 - M2 contribution: landing feeds Completion Criterion 2.
-- LAND path: Charcoal re-engages, absorbs docs-adr-expert review +
-  Twilit ST tick #1 must-cure gaps, marshal-cycles into the tree.
+- LAND path: Charcoal re-engages, absorbs 7 R3 SHOULD-ABSORB items in
+  `/tmp/charcoal-pdr077-postresume-fanout-synthesis.md` + 1 Director-
+  verdict item (claim-state immutability clause); marshal-cycles into
+  the tree (3 review rounds already complete with final
+  docs-adr-expert GO).
 - STAND-DOWN path: emit explicit stand-down broadcast with
   "resume on Charcoal re-engagement OR next-session pickup" trigger;
-  PDR-077 draft remains in `/tmp` as evidence of prior work.
+  PDR-077 draft + R3 synthesis file remain in `/tmp` as evidence of
+  prior work. **RISK on STAND-DOWN: `/tmp` substrate is session-local
+  to the authoring machine; rotation may lose the R3 synthesis file.
+  Capture R3 synthesis in a durable handoff record before standing
+  down.**
 - Prerequisite for LAND path: Charcoal re-engagement post-credit-pause.
 - Recommendation: **LAND if Charcoal returns this session**; otherwise
   STAND-DOWN. Substrate evidence is strong (2 worked instances) but
@@ -711,10 +1153,14 @@ or-Director-routed per item.
 
 ### Phase 3 — M1 attestation + EEF pivot
 
-**P3.E1 — Director (Seaworthy) → Safe-Pause Attestation broadcast**
+**P3.E1 — Director (Seaworthy, as M1 Gate Monitor) → Safe-Pause Attestation broadcast**
 
 - Trigger: all 5 M1 gates MET (Gates 3 + 4 already MET; Gates 1, 2,
   5 pending).
+- **Detection mechanism**: Director Seaworthy holds the M1 Gate Monitor
+  duty (per §Roles + triggers). Each Director tick narrative includes
+  M1 gate status. When all 5 gates flip to MET in a single tick,
+  attestation broadcast triggers immediately — same tick, not next.
 - Action: Director broadcasts Safe-Pause Attestation with gate-by-gate
   evidence (commit SHAs for landed gates; owner-decision evidence for
   verdict gates; explicit-deferral records for stood-down items).
@@ -726,21 +1172,40 @@ See §Relationship to EEF First Feature Delivery for lane-by-lane
 state and next-actions (WS4.5 unblocked, t2-zod-loader ready, WS2.3
 parser-integration clean pickup, etc.).
 
-### Phase 4 — M2-PURSUIT items (DEFERRED until post-M1 unless owner directs otherwise)
+### Phase 4 — M2-PURSUIT items (mostly deferred until post-M1; some now in-flight per R1.5 owner direction)
 
-These items do NOT feed M1. They feed M2 (Completion Milestone) only.
-**Do not let them crowd into the M1 critical path.**
+These items do NOT feed M1 directly. They feed M2 (Completion
+Milestone). **Do not let them crowd into the M1 critical path.** Per
+R1.5 owner direction (2026-05-24): WS-8 + WS-12 are AUTHOR-IN-FLIGHT
+NOW (parallel to M1 work, doesn't block M1).
 
-**P4.C2 — WS-8 ADR-or-deferral codification — M2-PURSUIT → Criterion 3**
+**P4.C2 — WS-8 ADR-or-deferral codification — M2-PURSUIT, AUTHOR-IN-FLIGHT → Criterion 3**
 
-- Status: owner shape-verdict received (ratify C2+C5+C4 with
-  C2-deferred-until-platform-support). Codification not yet authored.
-- Action: assign author for ADR-or-deferral record. Author drafts.
-  Reviewer fan-out. Marshal-request.
-- Defer rationale: codification can land post-M1 without stranding any
-  work; the owner verdict is already recorded in comms substrate
-  (Seaworthy tick #2). The codification turns substrate-record into
-  durable doctrine but is not blocking EEF pivot.
+- Status: **AUTHOR-IN-FLIGHT** (Lanternlit, owner-directed R1.5
+  2026-05-24 'Author it now'). Owner shape-verdict received via
+  Seaworthy tick #2: ratify C2+C5+C4 with C2-deferred-until-platform-
+  support.
+- Action: Lanternlit drafts ADR codifying the shape + the C2-platform-
+  deferred trigger ('when Anthropic platform supports binding self-mod
+  authz'). Reviewer fan-out (assumptions-expert + docs-adr-expert at
+  minimum). Owner review. Marshal-request to Mistbound.
+- M1 impact: none — Lanternlit can author this in parallel with WS-11
+  bundle and WS-12 PDR-079; all are author-in-flight queue items, not
+  M1-blocking.
+
+**P4.C3 — WS-12 PDR-079 PDR-vs-ADR portability distinction — M2-PURSUIT, AUTHOR-IN-FLIGHT (NEW R1.5)**
+
+- Status: **AUTHOR-IN-FLIGHT** (Lanternlit, owner-directed R1.5
+  2026-05-24).
+- Action: Lanternlit authors PDR-079 codifying the owner-articulated
+  distinction (PDRs portable, ADRs repo-bound; SHA-in-PDR is a
+  misclassification signal; composition with PDR-066). Plus
+  mechanical co-cure: scope `no-moving-targets-in-permanent-docs.md`
+  rule to apply strictly to portable surfaces (PDRs + rules +
+  patterns), NOT to ADRs. Reviewer fan-out (assumptions-expert +
+  docs-adr-expert + architecture-expert-fred). Owner review.
+  Marshal-request to Mistbound.
+- M1 impact: none — parallel to M1 work.
 
 **P4.A1-LAND / P4.A2-LAND** — only if Phase 2 LAND path was chosen
 above; landing is M2-pursuit work that happens to also close a Gate 5
@@ -820,7 +1285,7 @@ This program is *enabling infrastructure* for EEF. Specifically:
 | t1 EvidenceCorpus type substrate + re-exports | **LANDED** | `7d8f0b0c` + `5ec02aec` + `9425faa0` (Sparking) |
 | t9 AGGREGATED_EEF_EVIDENCE_GUIDANCE constant | **LANDED** | `acd2a3f3` (SVW) |
 | t10 eef-evidence-grounded-lesson-plan prompt | **LANDED** | `a2136557` + `11c05ced` (SVW + Sparking) |
-| t12 citation-shape Zod types | **LANDED** | rolled into `3241893d` umbrella |
+| t12 citation-shape Zod types | **LANDED** | `0b7289e9` (Mistbound, 2026-05-22 16:51 BST) |
 | t13a freshness check function | **LANDED** | `968e3cb7` + `745fe919` + `8f253280` (Sparking) |
 | t14 telemetry seam pattern | **LANDED** | `72cd93f0` (Sparking) |
 | t20 credits attribution | **LANDED** | `e1d76c54` (Sparking) |
@@ -924,38 +1389,40 @@ without artefact verification.
 mode (Director or any agent propagating owner / peer claims as
 verified state without artefact verification).
 
-### E4 — Citation-policy reconciliation between owner verdict and architectural verdict
+### E4 — Citation-policy reconciliation — **RESOLVED 2026-05-24 (R1.5)**
 
-*Evidence*: Q3 (ADR-186 hook-blocker citation cure) generated
-contradicting verdicts within hours:
+*Resolution*: Owner R1.5 verdict reframed the question. The tension
+was not "which citation style?" but "what are PDRs and ADRs
+fundamentally?". Owner articulated PDRs and ADRs as **fundamentally
+different types of thing**:
 
-- Owner verdict via Seaworthy tick #2 (2026-05-23 19:28:47Z):
-  "revise citation style to use event-ids".
-- Architecture-expert-fred post-pause verdict: "descriptive citation
-  only; permanent → ephemeral forbidden per `.agent/rules/no-moving-targets-in-permanent-docs.md`
-  §Citation Directionality. The hook is correctly tuned. A registry
-  or auto-acceptance-metadata structural alternative re-introduces
-  the forbidden direction behind an abstraction. Use the
-  `(historical reference)` escape-hatch for the few places audit-trail
-  citation has substantive value."
+- **PDR** = portable practice doctrine (claim about how multi-agent
+  practice works; applies to ANY repo with multi-agent collaboration;
+  CANNOT contain SHAs, repo paths, branch names, plan filenames —
+  anything that ties it to *this* git history).
+- **ADR** = repo-specific architectural decision (choice about how
+  *this* repo's substrate implements something; repo-bound by
+  definition; SHAs and event-UUIDs welcome as appropriate evidence).
 
-*Substantive question*: does the project want
-(a) descriptive-only,
-(b) full event-UUID-with-hyphens (which evade the hook regex but
-violate the rule's substantive doctrine per Fred), or
-(c) a hybrid (descriptive default + `(historical reference)` marker for
-audit-cite-warranted spots)?
+*SHA-in-PDR = misclassification signal*: when content wants a SHA in
+a PDR, the SHA-bearing substance belongs in an ADR, not a PDR.
 
-*Graduation-target*: explicit reconciliation either by owner amending
-the rule, or by recording the resolution in an ADR / rule update so
-future bundle authoring has a single source of truth.
+*Binding cure for the WS-11 bundle*:
 
-*Promotion trigger*: this question MUST resolve before WS-11 bundle
-authoring can resume. Once resolved, the resolution either ratifies
-the rule as-is (and Fred's verdict stands) or amends it (in which case
-the rule needs an update). Either path closes E4 inline; this
-observation is a *pre-condition* for WS-11 progress, not a
-follow-on graduation.
+- PDR-078 (liveness-heartbeat-contract): zero SHAs/UUIDs; pure
+  portable principle.
+- ADR-186 (comms-event-heartbeat-lifecycle-substrate): SHAs and
+  event-UUIDs allowed as repo-specific evidence.
+
+*Follow-on substrate (WS-12)*: codify the PDR-vs-ADR portability
+distinction in PDR-079 (new) + scope the `no-moving-targets` rule to
+apply strictly to portable surfaces (PDRs + rules + patterns), not to
+repo-bound ADRs. See WS-12 in §Workstream Roll-up.
+
+*Lessons captured into the plan*: substrate-pointer-read failure mode
+named in WS-5 fired on the plan itself during R1 authoring (named in
+R1.2 Refinement Log); now the analogous PDR/ADR-class failure mode is
+codified.
 
 ### E5 — Gatekeeper-specialisation (multi-writer commit-marshal discipline)
 
@@ -965,76 +1432,91 @@ windows, ONLY one agent runs full pre-commit gates; others queue
 commit-intents and the gatekeeper validates the shared tree once per
 round. No new worked-instance evidence accumulated this session.
 
-*Graduation-target*: already in feedback memory; may need PDR if it
-becomes a Practice Core surface (vs current feedback-rule-shape).
+*Graduation-target*: currently lives as a memory-feedback entry (NOT
+a rule file at `.agent/rules/`). If a 3rd worked instance accumulates,
+candidate for promotion to either a `.agent/rules/` entry OR a PDR if
+it becomes a Practice Core surface.
 
 *Promotion trigger*: 3rd worked-instance with novel coordination
-shape, OR owner direction to elevate. Currently rule-shape; no
-elevation pressure.
+shape, OR owner direction to elevate. Currently memory-feedback-shape;
+no elevation pressure.
 
 ### E6 — Marshal-as-cycle-discipline 2nd instance evidence in flight
 
 *Evidence*: Mistbound's 4-cycle marshal arc (`43e09287` / `8a99ed35`
-/ `499d163b` / `ccc47de2`) landed 16:02:22Z → 16:18:11Z (22 minutes
-including husky 90-task gate-chains, ~5.5 min/cycle). This is the
-SECOND worked instance of marshal-as-cycle-discipline (first: Ashen's
-9-cycles-in-45-min) and EXCEEDS the original throughput in
-cycles-per-minute. PDR-077 trigger fired.
+/ `499d163b` / `ccc47de2`) landed by git author timestamps 17:03:45
+BST → 17:17:45 BST = ~14 min including husky 90-task gate-chains
+(~3.5 min/cycle). Mistbound's compaction handoff §4 stated 22 min;
+git evidence shows 14 min. Either way: SECOND worked instance of
+marshal-as-cycle-discipline (first: Ashen's 9-cycles-in-45-min)
+EXCEEDS the original throughput in cycles-per-minute. PDR-077 trigger
+fired.
 
 *Graduation-target*: PDR-077 (Charcoal authoring; see WS-6).
 
 *Promotion trigger*: ALREADY FIRED. PDR-077 draft in `/tmp` awaiting
 Charcoal re-engagement. Tracked via WS-6, not a separate workstream.
 
-## Ideas to be integrated into the plan
+## Plan Coordination — co-authoring model (sidebar)
 
-Candidate ideas surfaced during execution but not yet absorbed into a
-workstream, milestone, or emergent-observation. Each entry names the
-shape and the load-bearing constraint that must survive integration; the
-integration decision (which workstream / milestone / new section) is
-deferred to the next plan-refinement pass.
+**Adopted 2026-05-24 by owner direction.** Resolves R1.3 Gap 5
+(parallel-writer coordination).
 
-### Heartbeat convenience command (`pnpm agent-tools:heartbeat`)
+The plan body is held under a single primary-author claim (currently
+`8374e240`, Lanternlit Listening Dusk). Other agents who need to
+contribute substrate to the plan author do so via **sidebar files**,
+NOT direct plan-body edits.
 
-*Source*: Mistbound session 0e27cc, 2026-05-24 owner direction following
-multiple hand-rolled heartbeat loops across this session (Mistbound,
-Scorched, Fronded, Ferny, Charcoal) all reimplementing the same
-boilerplate, plus my own loop emitting `heartbeat-FAIL` for hours due to
-CLI flag drift (`--kind` / `--tags` not accepted on `comms append`).
+### Sidebar conventions
 
-*Shape*: a single CLI that absorbs the static portion of the heartbeat
-contract:
+**Location**:
+`.agent/plans/agentic-engineering-enhancements/current/sidebars/<contributor-prefix>-<topic-slug>.md`
 
-- identity tuple resolution from `PRACTICE_AGENT_SESSION_ID_*`
-- subject template (`Heartbeat: <agent_name> (<prefix>) — <lane>`)
-- body prefix (`active; <focus>`)
-- tag wiring (`["heartbeat"]`)
-- `comms append` plumbing (`--now`, `--created-at`, `--active`, dirs)
+Example: `sidebars/0e27cc-heartbeat-cli.md` for a Mistbound
+contribution on the heartbeat CLI.
 
-Indicative invocation:
+**File shape**:
 
-```bash
-pnpm agent-tools:heartbeat --lane marshal --focus "R2 cycle: queueing intent"
-```
+- Frontmatter: contributor identity tuple (name, platform, model,
+  session_id_prefix), created_at, last_updated_at, topic, target
+  integration section in the plan (e.g., "WS-10 description" or
+  "new emergent observation").
+- Body: append-only by convention. Contributors add new sections at
+  the bottom; they do NOT edit each other's prior sections.
+- Plan-holder reviews sidebar contributions at refinement boundary
+  (each Plan Refinement Log pass) and integrates the substance into
+  the plan body. The sidebar file remains as audit trail of the
+  pre-integration substance.
 
-*Load-bearing constraint that must survive integration*: the per-beat
-`lane` + `focus` strings MUST come from the agent on each invocation,
-NOT be cached at cron startup. A cron loop that hardcodes a single focus
-string at startup and keeps repeating it degrades into "agent technically
-alive but reporting stale state" — worse than no heartbeat because it
-gives false confidence in the substrate stream. This is the same failure
-mode as substrate-pointer-read-as-current-state. The CLI removes the
-boilerplate burden but the agent retains responsibility for cadence
-(platform-specific background-task primitive) and per-beat content.
+### When sidebar vs direct edit
 
-*What this idea does NOT solve*: silent staleness if the agent invokes
-the same `--focus` repeatedly without updating. That is a discipline
-issue, not a tooling one — the convenience just stops the static
-boilerplate from being hand-rolled (and mis-flagged).
+- **Direct plan-body edit**: only by the plan-holder (current
+  primary-author claim).
+- **Sidebar contribution**: any other agent contributing substrate
+  to the plan author. Includes proposed amendments, new emergent
+  observations, new workstream candidates, refinement suggestions.
 
-*Candidate integration sites*: WS-3 (agent-tools CLI surface hardening)
-or a new dedicated workstream under the Practice Infrastructure
-umbrella. Decision deferred to next refinement pass.
+### Why this model
+
+Per `feedback_peer_sidebar_beats_coordinator_helpers` (graduated
+2026-05-22): peer-pair sidebars in shared append-only files produce
+better design collaboration than hub-and-spoke coordination.
+Plan-authoring is design work; sidebar is the architecturally-
+correct shape. The model also closes the substrate-pointer-read
+attack surface on the plan body: a reader sees a single coherent
+artefact, with the sidebar files providing audit-trail of how
+contributions arrived.
+
+### Mistbound's R1.2 contribution
+
+The "Ideas to be integrated into the plan" section that appeared in
+the plan body during R1.2's editing window (Mistbound session
+`0e27cc`, owner-directed) was a *retroactive* multi-writer event —
+authored before this co-authoring model was adopted. R1.4 integrates
+Mistbound's substance into the plan body (WS-10, see §Workstream
+Roll-up for the integrated specification) and removes the in-body
+"Ideas to be integrated" section. Future contributions from any
+non-primary-author follow the sidebar model.
 
 ## Owner Ratification Status
 
@@ -1050,6 +1532,17 @@ ratification signal — stronger than verbal acknowledgement.
 
 No prior owner re-direction altered the End Goal / Mechanism / Safe-
 Pause Criteria framing.
+
+### R1.1 + R1.2 (sub-refinements of R1, 2026-05-24)
+
+R1.1 (M1/M2 milestone framing) and R1.2 (reviewer absorption pass) are
+sub-refinements of R1's accuracy-restoration framing. They do not
+introduce substantive new architectural decisions; they refine
+*terminology + accuracy*. Owner ratification of R1 carries forward
+unless owner queries the milestone framing (R1.1) or the reviewer-
+absorption decisions (R1.2). Both sub-refinements are surfaced
+in-band via the §Plan Refinement Log and via direct broadcast to
+Director Seaworthy on next comms emission.
 
 ### R1 (current-state refresh, 2026-05-24)
 
@@ -1131,14 +1624,32 @@ Per [`templates/components/lifecycle-triggers.md`](../../templates/components/li
   refines End Goal / Intended Impact / Empirical Thesis / Mechanism /
   M1 + M2 Milestone Criteria; refinements land as amendment commits
   with a new Plan Refinement Log entry.
-- **Owner-decision touch point**: outstanding owner decisions per R1
-  refresh — WS-2 partition-cure verdict (Gate 2), WS-8 codification
-  author assignment (Criterion 3), E4 citation-policy reconciliation
-  (Path Forward A1 prerequisite), Safe-Pause GO. The plan is
-  surfaced to owner at each.
-- **Archive touch point**: when Completion gate holds, this plan
-  moves to `archive/completed/` and its substance is mined to the
-  permanent doctrine homes (PDRs / ADRs / patterns) referenced above.
+- **Owner-decision touch point**: outstanding owner decisions per R1.2
+  refresh — WS-2 partition-cure verdict (Gate 2); WS-8 codification
+  author assignment (Criterion 3); E4 citation-policy reconciliation
+  (Path Forward A1 prerequisite); E3 verification-discipline-correction
+  graduation by owner-direction (per E3 promotion trigger). The plan
+  is surfaced to owner at each. **Director-decision touch points**
+  (NOT owner-gated): Safe-Pause Attestation timing (Director Seaworthy
+  broadcasts when M1 gates 1–5 all MET); WS-7 cure-claim execution
+  monitoring (Director routes rebalance-or-stand-down if Scorched
+  ages out).
+- **Archive touch point**: when M2 — Completion Milestone holds, this
+  plan moves to
+  `.agent/plans/agentic-engineering-enhancements/archive/completed/`.
+  At archive time: (a) §Workstream Roll-up + §Path Forward sections
+  remain in the archived plan as historical record of how the program
+  reached completion; (b) §Emergent Observations entries that have NOT
+  graduated by archive time migrate to `.agent/memory/operational/pending-graduations.md`
+  with their original promotion triggers preserved; (c) §Plan
+  Refinement Log preserves the full R0 → R1 → R1.1 → R1.2 → … audit
+  trail; (d) durable substance (the doctrine that the program codified)
+  lives in the PDRs / ADRs / patterns referenced by each WS row, NOT
+  in this plan body — the plan body is the *coordination substrate*
+  for landing that doctrine, not the doctrine itself. Future readers
+  looking for the doctrine read the PDRs / ADRs / patterns; readers
+  looking for the *path that landed the doctrine* read the archived
+  plan.
 - **Refinement touch point**: when the plan drifts (a worked instance
   appears that the plan doesn't reflect; a status changes; a new
   workstream candidate emerges), the next agent who notices files a
@@ -1174,23 +1685,29 @@ Per [`templates/components/lifecycle-triggers.md`](../../templates/components/li
    to Safe-Pause Gate 5 staying open. Mitigation: surface tension to
    Seaworthy + owner explicitly as part of Path Forward A1
    prerequisite; do not silently choose one verdict.
-5. **PR #108 cure-claim void** — WS-7's cure-claim path has lapsed
-   (Scorched's R2 retained-claim is no longer in active-claims); no
-   implementer is currently committed to executing the owner-directed
-   hygiene-then-push. Risk: Gate 1 remains PENDING indefinitely while
-   the team waits for self-organisation. Mitigation: surface the void
-   to Director Seaworthy with explicit "assign or stand-down" framing;
-   if no implementer is assignable this session, explicitly stand the
-   item down and record in handoff so the next session opens with
-   clean queue, not ghost-queue.
-6. **Plan refinement drift between R1 and next-rev** — this plan
-   captures state at R1 (2026-05-24). State will continue to shift
-   under team activity. Risk: future agents read R1 as canonical
-   without recognising it as a snapshot. Mitigation: the Plan
-   Refinement Log header date is the read-date marker. Any agent
-   detecting drift between R1's claims and live state files a new R2
-   entry rather than acting on the stale snapshot. This is the
-   substrate-pointer-read pattern (WS-5) applied to this plan body.
+5. **PR #108 cure-claim execution stall** — WS-7's cure-claim is held
+   end-to-end (Scorched author `4e6e18b2` + Mistbound marshal `00375e07`)
+   but execution pending. Risk: if Scorched does not re-engage, the
+   active claim ages without closing and Gate 1 remains PENDING
+   indefinitely. Mitigation: Director Seaworthy monitors Scorched's
+   heartbeat cadence; if the claim ages past the agreed staleness
+   threshold, surface to Director with explicit "re-engagement signal
+   OR rebalance to follow-on implementer OR stand-down" framing. The
+   failure mode is execution timing, not author assignment.
+6. **Plan refinement drift between current rev and next-rev** — this
+   plan captures state at the latest entry in §Plan Refinement Log
+   (currently R1.2, 2026-05-24). State will continue to shift under
+   team activity. Risk: future agents read the snapshot as canonical
+   without recognising it as a snapshot. Mitigation: the most-recent
+   Plan Refinement Log header date is the read-date marker. Any agent
+   detecting drift between the latest entry's claims and live state
+   files a new refinement entry per §Plan Refinement Log discipline
+   rather than acting on the stale snapshot. This is the substrate-
+   pointer-read pattern (WS-5) applied to this plan body. R1.2 itself
+   is an instance of this discipline working — docs-adr-expert + code-
+   expert review caught state drift between R1's "no active cure-claim
+   retained" claim and the actual active-claims state, producing R1.2's
+   corrected WS-7 reading.
 
 ## Readiness Reviewers
 
@@ -1213,7 +1730,7 @@ Observations promotion-trigger framing), the expected set is
 sequencing + promotion-trigger shape) and Director Seaworthy as
 routing arbiter.
 
-If owner directs reviewer dispatch on this plan body itself, the
-expected set is `assumptions-expert` (proportionality of the
-program-plan shape and Safe-Pause criteria) and the incoming Director
-(Seaworthy) as routing arbiter.
+R1.2 specifically: docs-adr-expert + code-expert reviewed and returned
+GO-WITH-CONDITIONS. 15 + 6 findings absorbed across CRITICAL (2),
+IMPORTANT (8), and NIT (5) severities. See §Plan Refinement Log R1.2
+entry for the absorption list.
