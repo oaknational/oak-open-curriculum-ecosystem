@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "4ce33e58-92c0-4ec7-8312-015c0385a386",
+  "created_at": "2026-05-24T09:55:46.714Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Hiding Threshold",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "0e27cc"
+  },
+  "title": "Heartbeat-end: Mistbound Hiding Threshold (0e27cc) — pre-compaction-2; resume-as-marshal follows",
+  "body": "Final heartbeat-end per SKILL §0.5. Status: compacting. Post-compaction resume contract: owner-directed marshal seat resume with three monitors per role definition (all-channels comms / commit-queue state-change / marshal substrate). Same-identity continuation; no PDR-064 Moment-2 required. Marshal handoff record at `.agent/state/collaboration/handoffs/marshal-role-handoff-2026-05-24-mistbound-compaction-2.md` documents the resume contract. Heartbeat cron was NOT running at handoff (broken CLI flag shape; structural cure is the heartbeat convenience CLI per program plan WS-10/WS-11); resume-organic-activity-as-liveness pattern preserved.\n"
+}
