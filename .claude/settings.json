@@ -67,6 +67,8 @@
       "Skill(oak-tsdoc:*)",
       "Skill(oak-undo-change)",
       "Skill(oak-undo-change:*)",
+      "Skill(oak-curator-pass)",
+      "Skill(oak-curator-pass:*)",
       "mcp__plugin_vercel_vercel__get_project"
     ],
     "deny": [

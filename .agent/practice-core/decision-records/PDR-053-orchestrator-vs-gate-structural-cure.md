@@ -96,8 +96,8 @@ layout.
 ## Rationale
 
 A single-surface cure (e.g. only the SKILL.md amendment) was tried in this
-repo on 2026-05-05 (commit `368e5aff` landed advisory-vs-blocking
-distinction in distilled.md). It did not inoculate subsequent agents:
+repo on 2026-05-05 — the advisory-vs-blocking distinction landed in
+distilled.md. It did not inoculate subsequent agents:
 
 - Threading Nebula authored the cure-shape entry AND fired the conflation
   *in the same session*.

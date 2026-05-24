@@ -87,8 +87,8 @@ including content authored by other agents through their explicit
 | Date | Source agent (applied pathspec) → absorbing agent (did not) | Result |
 | --- | --- | --- |
 | 2026-04-30 | Vining Spreading Seed initial incident | Peer-staged renames bled via `git add` |
-| 2026-05-04 | Lacustrine → Moonlit (`8fa339f4`) | Lacustrine's staged plan content absorbed into Moonlit's commit |
-| 2026-05-05 | Dawnlit → Ethereal (`36102937`) | Dawnlit's C1 closure substance (12 consumer rewrites + fixture relocation + reviewer evidence) absorbed into Ethereal's `chore(continuity)` commit; substance correct at HEAD; commit-message attribution distorted |
+| 2026-05-04 | Lacustrine → Moonlit | Lacustrine's staged plan content absorbed into Moonlit's commit |
+| 2026-05-05 | Dawnlit → Ethereal | Dawnlit's C1 closure substance (12 consumer rewrites + fixture relocation + reviewer evidence) absorbed into Ethereal's `chore(continuity)` commit; substance correct at HEAD; commit-message attribution distorted |
 
 Three instances now make the asymmetry observable as substance: a
 cure that protects only the applier is not really a structural cure

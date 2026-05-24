@@ -57,7 +57,7 @@ The rule is "state that affects another agent's next action", not "all agent sta
 
 ## Source attribution
 
-Graduated 2026-05-22 from `.agent/memory/operational/pending-graduations.md` candidate `queue-wait-observable-signal`, broadened from queue-wait-specific to general agent-state-observability. Worked instance: Mistbound Slipping Night blocked behind Stormbound's `cf39fd43` queue intent 2026-05-22T15:33Z with no observable signal — wait state lived only in Mistbound's reasoning; would have been silent polling if Stormbound had committed rather than abandoned.
+Graduated 2026-05-22 from `.agent/memory/operational/pending-graduations.md` candidate `queue-wait-observable-signal`, broadened from queue-wait-specific to general agent-state-observability. Worked instance: Mistbound Slipping Night blocked behind Stormbound's queue intent (timestamped 2026-05-22T15:33Z) with no observable signal — wait state lived only in Mistbound's reasoning; would have been silent polling if Stormbound had committed rather than abandoned.
 
 ## Cross-references
 

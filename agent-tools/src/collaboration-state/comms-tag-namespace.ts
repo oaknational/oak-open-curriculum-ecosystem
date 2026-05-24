@@ -23,7 +23,7 @@ export const COMMS_EVENT_TAG_NAMESPACE = Object.freeze([
   'heartbeat',
 ] as const);
 
-export type CommsEventTag = (typeof COMMS_EVENT_TAG_NAMESPACE)[number];
+type CommsEventTag = (typeof COMMS_EVENT_TAG_NAMESPACE)[number];
 
 /**
  * Validate that every tag in `tags` is a canonical ADR-183 tag and that

@@ -14,33 +14,37 @@ load_bearing_handover_record: .agent/state/collaboration/handoffs/curator-role-h
 
 Full owner-directed handover of the Knowledge Curator role from
 Vining Fruiting Dew (`5149c2`) to Breezy Anchoring Rudder (`20fc29`).
-Vining is compacting via `/oak-session-handoff` after the handover;
-the curator lane is wholly transferred, not a director/executor
-split. This corrects the framing in broadcast `10:34:04Z` —
-substance lives at the corrected directed event Vining `5149c2` →
-Breezy `20fc29` (event `10:36:08Z`) and at this log file's frontmatter.
+Substance pointers:
 
-Owner direction binding this pass: *"They are not to worry about
-fitness limits while doing this, knowledge curation matters,
-numerical limits are secondary signals."*
-
-Predecessor pass `2026-05-24-vining-fruiting-dew.md` carries the
-four-item carry-forward this pass inherits. A separately commissioned
-deep-curation survey at `/tmp/breezy-deep-curation-survey-2026-05-24.md`
-(authored by a one-shot Agent-tool sub-agent dispatched by Vining;
-distinct from the top-level Breezy peer) is the load-bearing working
-artefact this pass absorbs by reference. Per the very rule landing
-in cycle #1 below, that `/tmp/` artefact is allowed as a
-compose-buffer and not as durable reference; substance routes to
-permanent homes through this pass and the artefact is no longer
-needed once routed.
+- Predecessor pass: `2026-05-24-vining-fruiting-dew.md`
+- Handover framing correction (full transfer, not director/executor
+  split): Vining directed event 10:36:08Z
+- Owner direction binding (curation priority over fitness limits):
+  directed event Vining → Breezy 10:37:06Z
+- Load-bearing handover record (deep-curation survey from one-shot
+  Agent-tool sub-agent dispatched by Vining): see
+  `load_bearing_handover_record` frontmatter pointer
 
 ## Surfaces surveyed
 
-By reference to the deep-curation survey report §1 (10 surfaces
-spanning Practice Core, active memory, operational memory, plans
-directory, Claude per-user memory, `.remember/` plugin buffers,
-comms event stream). Disposition pointers preserved at the report.
+| Surface | Disposition pointer |
+|---|---|
+| `.agent/practice-core/decision-records/PDR-081-curator-role-and-substrate-care-lane.md` | Doctrine; ratified workflow basis (handover survey §1) |
+| `.agent/skills/curator-pass/SKILL-CANONICAL.md` | Workflow contract (handover survey §1) |
+| `.agent/memory/operational/curator-passes/README.md` | Metadata-only contract (handover survey §1) |
+| `.agent/memory/operational/curator-passes/2026-05-24-vining-fruiting-dew.md` | Predecessor pass; carry-forward absorbed (handover survey §1) |
+| `.agent/memory/active/distilled.md` | Healthy; no action (handover survey §1) |
+| `.agent/memory/active/napkin.md` | Source for cycle #1 (Ferny Capture D); carry-forward for rotation pass (handover survey §1) |
+| `.agent/memory/operational/pending-graduations.md` | Carry-forward to dedicated pass (handover survey §1, §7.6) |
+| `.agent/memory/operational/repo-continuity.md` | Healthy; carry-forward (handover survey §1) |
+| `.agent/plans/**/current/*.plan.md` | Carry-forward to plans-staleness pass (handover survey §1, §7.1) |
+| `~/.claude/projects/<project>/memory/MEMORY.md` | 88 entries; 4 principle-class graduations identified (handover survey §2.1–§2.5) |
+| `.remember/now.md` | Currently clean; rotated since Vining defect-broadcast (handover survey §1, §5.1) |
+| `.remember/today-2026-05-24.md`, `today-2026-05-22.done.md` | Contamination confirmed; carry-forward to upstream-plugin defect surface (handover survey §1, §5.1) |
+| Comms event stream | Adoption-gap defects surfaced previous pass; carry-forward at +1 week (handover survey §7.5) |
+
+Full disposition substance lives at the handover record's §1; this
+table is the navigation index.
 
 ## Cycles in this pass
 
@@ -55,13 +59,25 @@ comms event stream). Disposition pointers preserved at the report.
   - `.claude/rules/important-state-not-in-temp-files.md` (NEW; adapter)
   - `.cursor/rules/important-state-not-in-temp-files.mdc` (NEW; adapter with frontmatter)
   - `RULES_INDEX.md` (one-line entry insertion)
-- Status: substrate authored; awaiting Twilit `--tags` cycle convergence + Charcoal PDR-076 SPLIT landing before commit window opens (per Mistbound marshal-coordination broadcast 10:37:42Z). Cycle is parallel-safe with M1 lanes; gating sequence is queue + ordering + comms, not contention.
-- Cross-references in canonical: PDR-014 (capture→distil→graduate→enforce), PDR-067 (surface classification), PDR-081 (curator-role per-pass log contract).
-- Self-instantiation note: this rule's first enforcement is on the load-bearing handover artefact this very pass absorbs — Vining copied `/tmp/breezy-deep-curation-survey-2026-05-24.md` to `.agent/state/collaboration/handoffs/curator-role-handoff-2026-05-24-vining-to-breezy.md` as final substantive act, making the migration cure the rule prescribes the pass's first concrete move.
+- Status: LANDED at `c60cda01` via Mistbound marshal queue 10:47:56Z (Twilit `24eb6c91` → Charcoal `d14c74f1` → Breezy `c60cda01` → hygiene `70a08cdc`).
+- Cross-references in canonical: PDR-014 (knowledge-flow pipeline), PDR-067 (surface classification), PDR-081 (curator-role per-pass log contract).
+- Self-instantiation: load-bearing handover artefact migration cure prescribed by this rule executed as final-Vining-act of curator-transfer (see `load_bearing_handover_record` frontmatter pointer).
+
+### Cycle #1.1 — reviewer-cure for cycle #1
+
+- Reviewer transcripts: docs-adr-expert `af15d7a71b13e19a4` (3 SHOULD-ABSORB), code-expert `a71a126f3286254e7` (4 SHOULD-ABSORB incl. BLOCKER-ADJACENT missing `.agents/` adapter)
+- Vining QM finding: marginal `a596f140` / `013de4d4` in cycle #1 rule worked example — Vining ruled out of QM cure scope (broadcast 10:53:20Z)
+- Files in cure scope:
+  - `.agents/rules/important-state-not-in-temp-files.md` (NEW; completes 4-adapter coverage)
+  - `.agent/rules/important-state-not-in-temp-files.md` (tightening: header, PDR-014 phrasing, grep comms-exclusion, `/tmp/`-class prose)
+  - `.agent/memory/operational/curator-passes/2026-05-24-breezy-anchoring-rudder.md` (PDR-081 contract hygiene: surfaces-table, owner-direction-as-pointer, self-instantiation-as-pointer)
+- Status: substrate authored; awaiting Mistbound resume + marshal-cycle.
 
 ## Knowledge routed by this pass
 
-(populated as cycles land)
+| Concept | Permanent home |
+|---|---|
+| Important state not in temp files (rule graduation from owner-direction-fired napkin Capture D) | `.agent/rules/important-state-not-in-temp-files.md` + adapters; landed `c60cda01` |
 
 ## Findings surfaced (substance at routed home)
 

@@ -1,10 +1,13 @@
 # Important State Not In Temp Files
 
-Operationalises [`principles.md` §Code Design and Architectural Principles](../directives/principles.md)
-"No machine-local paths" and PDR-014's capture-layer architecture
-(capture → distil → graduate → enforce). Composes with
-[`no-machine-local-paths`](no-machine-local-paths.md): both protect
-durable substrate from non-repo references.
+Specialises [`no-machine-local-paths`](no-machine-local-paths.md)
+for the durable-reference failure mode at the `/tmp/` class, and
+operationalises PDR-014's knowledge-flow pipeline (capture,
+distillation, graduation, enforcement) at the buffer-vs-reference
+boundary. Both companion surfaces protect durable substrate from
+non-repo references; this rule is the semantic distinction
+(*how* the path is used downstream) where `no-machine-local-paths`
+is the syntactic distinction (*what* the path looks like).
 
 Worked instance that prompted graduation: Ferny Capture D in
 `.agent/memory/active/napkin.md` (2026-05-24) — a synthesis file at
@@ -19,9 +22,9 @@ times across sessions — this rule fixes the class.
 ## Rule
 
 **Important state and context must never be left in a temp file
-long-term. Using a temp file as a compose-buffer is fine. Leaving it
-there for reference is not. Everything of importance stays in the
-repo.**
+(`/tmp/` or equivalent platform temp root) long-term. Using a temp
+file as a compose-buffer is fine. Leaving it there for reference is
+not. Everything of importance stays in the repo.**
 
 Owner-stated 2026-05-24 (direct quote): *"important state and context
 must never be left in a temp file long-term, using it as a buffer is
@@ -99,11 +102,12 @@ failure mode this rule prevents.
   particular machine-local class (`/tmp/`). A path under
   `/tmp/breezy-survey.md` is both — machine-local *and* not durable
   for repo reference.
-- **PDR-014 capture → distil → graduate → enforce**: `/tmp/` is
-  acceptable at the capture-buffer layer (transient pre-consumption);
-  it is forbidden as a distillation or graduation surface. This rule
-  is the enforce layer for the misuse-as-distillation-surface failure
-  mode.
+- **PDR-014 knowledge-flow pipeline** (capture, distillation,
+  graduation, enforcement): `/tmp/` and equivalent platform temp
+  roots are acceptable at the capture-buffer layer (transient
+  pre-consumption); they are forbidden as a distillation or
+  graduation surface. This rule is the enforce layer for the
+  misuse-as-distillation-surface failure mode.
 - **PDR-067 (surface classification)**: per-user-memory is a buffer,
   not a personal store. By the same logic, `/tmp/` is a buffer, not
   a substrate store.
@@ -124,14 +128,24 @@ links and prose-references into `/tmp/`):
 grep -rn -E "(^|[^a-zA-Z0-9_])/tmp/" \
   --include="*.md" --include="*.json" --include="*.yml" \
   .agent/ docs/ \
-  2>/dev/null | grep -v "/archive/" | grep -v "/logs/"
+  2>/dev/null \
+  | grep -v "/archive/" \
+  | grep -v "/logs/" \
+  | grep -v "/state/collaboration/comms/" \
+  | grep -v "/state/collaboration/shared-comms-log.md"
 ```
 
-Comms-event JSON files are intentionally not gated by this grep —
-event bodies are immutable historical records of substrate-at-emit-
-time, and a comms event that *named* a `/tmp/` artefact at the moment
-it was a compose-buffer is honest historical capture. The rule applies
-to *current* references in version-controlled durable substrate.
+The `comms/` and `shared-comms-log.md` exclusions are necessary
+because event bodies are immutable historical records of
+substrate-at-emit-time; a comms event that *named* a `/tmp/` artefact
+at the moment it was a compose-buffer is honest historical capture.
+The rule applies to *current* references in version-controlled
+durable substrate, not to historical event records. Equivalent
+platform temp roots (`/var/folders/`, `${TMPDIR}` expansions on
+macOS, `/private/tmp/`) are not in this grep's literal scope; in
+practice every worked instance to date has used `/tmp/` directly,
+so the narrow grep matches the observed failure mode. Extend the
+regex if a non-`/tmp/` instance surfaces.
 
 A future repo-invariant validator should encode this grep as a
 structural test. Until then, the discipline is review-time + the

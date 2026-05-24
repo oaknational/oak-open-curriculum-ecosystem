@@ -258,10 +258,10 @@ prose by design); it is the SKILL-level discipline that makes the
 channel scannable.
 
 **Activation live as of 2026-05-23.** ADR-183's required substrate has
-landed: `c4bacfc5` added the optional `tags` field to
-`comms-event.schema.json`, and `03da8e3d` added watcher rendering and tests
-for `[FAILURE-MODE]` / `[BEHAVIOUR-NOTE]` tokens composed with the existing
-channel tokens. Agents MAY now write `tags: ["failure-mode"]` or
+landed: the optional `tags` field is on `comms-event.schema.json`, and
+watcher rendering with tests for `[FAILURE-MODE]` / `[BEHAVIOUR-NOTE]`
+tokens composed with the existing channel tokens is active. Agents MAY
+now write `tags: ["failure-mode"]` or
 `tags: ["behaviour-note"]` on the `narrative`, `lifecycle`, and `directed`
 event kinds when the event's substance matches the namespace above.
 
