@@ -4,8 +4,9 @@ pdr_kind: contract
 
 # PDR-078: Liveness-Heartbeat Contract
 
-**Status**: Candidate
+**Status**: Accepted
 **Date**: 2026-05-24
+**Adopted**: 2026-05-25
 **Related**:
 [PDR-027](PDR-027-threads-sessions-and-agent-identity.md)
 (threads, sessions, and agent identity — the heartbeat subject

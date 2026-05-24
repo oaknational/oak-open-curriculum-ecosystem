@@ -23,7 +23,11 @@ under this PDR's identity model, not thread identities themselves);
 [PDR-029](PDR-029-perturbation-mechanism-bundle.md)
 (perturbation-mechanism bundle — Family A Class A.2 installs the
 tripwires that make the additive-identity rule environmental
-rather than passive guidance).
+rather than passive guidance);
+[PDR-078](PDR-078-liveness-heartbeat-contract.md)
+(liveness-heartbeat contract — heartbeat subject lines carry the
+identity tuple this PDR defines; PDR-078's identity-rendering
+discipline binds to this PDR's tuple format).
 
 ## Amendment Log
 

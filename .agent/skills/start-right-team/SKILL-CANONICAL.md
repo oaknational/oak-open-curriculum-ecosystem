@@ -279,39 +279,44 @@ ensures *outgoing* visibility — every agent's continued presence reaches
 the team. Both are non-negotiable preconditions; both must be running
 before any team-bootstrap step that follows.
 
-The contract is owner-codified (2026-05-23, permanent + session-wide
-for every session where `start-right-team` runs): every active team
-member emits a heartbeat event at cadence ≤4 minutes. Silence past the
-10-minute threshold causes the agent to be presumed retired and their
-claims auto-rebalanced. This rule structurally cures the failure mode
-where the team cannot distinguish a live but quiet agent from one whose
-session has ended, leaving claims silently orphaned and the team
-operating under a stale roster.
+The portable contract — cadence, threshold, redundancy rule, exemption
+set, and the structural cure they compose — is authoritatively
+specified by
+[PDR-078](../../practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md)
+(liveness-heartbeat contract; Adopted 2026-05-25). The repo-bound
+phenotype substrate that operationalises the contract in this
+repository — the comms-event substrate shape, the canonical event
+kind / discriminator field, the watcher render token — is recorded in
+[ADR-186](../../../docs/architecture/architectural-decisions/186-comms-event-heartbeat-lifecycle-substrate.md)
+(comms-event heartbeat lifecycle substrate; Accepted 2026-05-24).
+This SKILL section is the operational adoption point: it cites the
+contract + phenotype pair as authoritative and prescribes the
+team-cadence-shaped operational discipline that every participating
+agent runs.
 
-**Mechanism (interim — adopt now):**
+**Operational summary** (binding norms preserved here for fast read;
+PDR-078 + ADR-186 are the authoritative source of substance):
 
-A `narrative` comms event with `tags: ["heartbeat"]` per
-[ADR-183](../../../docs/architecture/architectural-decisions/183-comms-event-tag-namespace-substrate.md)
-§"tag namespace substrate", with subject format:
+- Every active team member emits a heartbeat event at cadence ≤ 4
+  minutes (PDR-078 §Emit-side).
+- Silence past the 10-minute threshold presumes retirement and fires
+  claim auto-rebalance (PDR-078 §Observe-side).
+- The current repo phenotype (per ADR-186) emits heartbeats as
+  comms events with `tags: ["heartbeat"]` per
+  [ADR-183](../../../docs/architecture/architectural-decisions/183-comms-event-tag-namespace-substrate.md)'s
+  namespace substrate, rendering as a `[HEARTBEAT]` channel token.
+  ADR-186 names `lifecycle + event_type='heartbeat'` as the canonical
+  shape going forward; both shapes are operationally valid during the
+  migration window (per ADR-186 §Migration discipline). The
+  identity-tuple subject-line format:
 
 ```text
 Heartbeat: <agent_name> (<session_id_prefix>) — <current lane>
 ```
 
-Body is a single short sentence: `active; <one-line current focus>`.
-Heartbeats are coordination signal, not narrative content; substrate
-weight should be low so the comms stream stays scannable.
-
-**Mechanism (durable — deferred substrate work):**
-
-A structured `last_heartbeat_at` field on each identity-tuple's row in
-`active-claims.json`, queryable via
-`pnpm agent-tools:collaboration-state -- claims active-agents`, and a
-CLI emit wrapper `pnpm agent-tools:heartbeat`. A PDR candidate exists
-in pending-graduations (napkin entry 2026-05-23 15:09Z) naming this
-shape; the durable mechanism lands as a separate substrate-work cycle,
-not as a precondition for this SKILL revision. Until then the interim
-mechanism above is the contract.
+  Body is a single short sentence: `active; <one-line current focus>`.
+  Heartbeats are coordination signal, not narrative content; substrate
+  weight should be low so the comms stream stays scannable.
 
 **Canonical invocation — the platform's persistent background-task
 primitive:**
@@ -396,17 +401,26 @@ not a retirement signal:
 
 **Cross-references:**
 
+- [PDR-078](../../practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md)
+  — the portable liveness-heartbeat contract this SKILL section
+  adopts as authoritative; cadence, threshold, redundancy rule,
+  exemption set, and the structural cure live there.
+- [ADR-186](../../../docs/architecture/architectural-decisions/186-comms-event-heartbeat-lifecycle-substrate.md)
+  — the repo-bound phenotype substrate that operationalises PDR-078
+  here: `lifecycle + event_type='heartbeat'` as canonical event
+  shape (`narrative + tags: ["heartbeat"]` valid during migration),
+  `[HEARTBEAT]` watcher token, at-most-once render guarantee,
+  consumer dual-filter contract during migration. See ADR-186
+  §Migration discipline for the migration-window exit criterion.
 - [ADR-183](../../../docs/architecture/architectural-decisions/183-comms-event-tag-namespace-substrate.md)
-  — the `["heartbeat"]` tag is registered under the comms-event tag
-  namespace; `narrative`, `lifecycle`, and `directed` event kinds may
-  carry it.
+  — the tag-namespace substrate ADR-186 composes through for the
+  `[HEARTBEAT]` render token during the migration window; the
+  `["heartbeat"]` tag is registered under that namespace and
+  `narrative`, `lifecycle`, and `directed` event kinds may carry it.
 - [PDR-027](../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md)
   — identity tuple format in the heartbeat subject line.
 - [PDR-064](../../practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md)
   — grace-window exemption for coordinator transitions.
-- PDR candidate at napkin entry 2026-05-23 15:09Z (structured
-  `agent_state` field on `active-claims.json`) — durable mechanism
-  target.
 - [`.agent/memory/active/patterns/substrate-pointer-read-as-current-state.md`](../../memory/active/patterns/substrate-pointer-read-as-current-state.md)
   §C2 (active per-agent check-in cadence) and §C5 (terminal-state-
   assumption broadcast with short default deadline) — the heartbeat
@@ -455,6 +469,13 @@ report is the coordination surface, not the claim. Concretely:
   yet"*, NOT *"safe solo ownership of the singleton slice"*. Other
   identically-prompted agents may be in the same window and have not yet
   reached the registration step.
+- A named peer in the owner's prompt can arrive after the first live
+  registry and comms checks. Keep the all-channels watcher alive through
+  final closeout, treat early solo analysis as provisional, and run a final
+  comms reconciliation before claiming completion. If the named peer appears,
+  explicitly map their findings against yours as accepted, partially accepted,
+  or deferred rather than letting the first private review become the whole
+  story.
 - Each agent posts presence with `Claim status: none yet / pending team
   coordination` before opening any source claim on the singleton lane.
 - An agent may open a source claim on the singleton lane only after one of:
