@@ -1765,6 +1765,103 @@
       "freshness_seconds": 1800,
       "sidebar_open": false,
       "intent": "Marshal R2 cycle: mechanical Sonar cures (S7735/S7763/S7781/S7750) on 4 source files; Scorched authored content; cycle-claim per owner-directed marshal-resume + Seaworthy tick #2 work item A step 1"
+    },
+    {
+      "claim_id": "aacb4c72-7898-40cd-b3c8-3a4d8a7a37de",
+      "agent_id": {
+        "agent_name": "Charcoal Brazing Kiln",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "7c7327"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-076-agent-identity-tuple-and-body-file-frontmatter.md",
+            ".agent/practice-core/decision-records/PDR-076a-agent-identity-tuple-name-and-uuid.md",
+            ".agent/practice-core/decision-records/PDR-076b-body-file-frontmatter-contract.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T10:21:47Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "WS-2 Gate 2 — author PDR-076a (identity tuple) + PDR-076b (body-file frontmatter) SPLIT + PDR-076 superseded stub. Cycle #6. Seaworthy routing 10:18:22Z. Sequential care-and-consult discipline (Practice Core, no parallel compression). Proposed partition cure: narrow Cascade item 2 in 076a to identity-row-schema-only; body-file substrate falls under 076b frontmatter contract by construction."
+    },
+    {
+      "claim_id": "f7b8bac8-c123-4b8d-a16c-f8ebafc952f1",
+      "agent_id": {
+        "agent_name": "Twilit Scattering Twilight",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "8d8d93"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/practice-infrastructure-hardening-program.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T10:23:23.143Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Gate 1 verification + push readiness lane (M1 Safe Pause) per Seaworthy routing 10:18:22Z — verify PR #108 branch-vs-origin state, SonarCloud Quality Gate, CodeQL #90, run-quality-gates workflow; surface verdict to Director. Read-only verification — no source edits expected."
+    },
+    {
+      "claim_id": "be07a516-aefe-4435-be46-bbb2e11af32b",
+      "agent_id": {
+        "agent_name": "Twilit Scattering Twilight",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "8d8d93"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "workspace",
+          "patterns": [
+            "agent-tools/src/cli/comms/**",
+            "agent-tools/src/cli/comms.ts",
+            "agent-tools/src/comms/**",
+            "agent-tools/tests/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T10:27:46.138Z",
+      "freshness_seconds": 5400,
+      "sidebar_open": false,
+      "intent": "agent-tools --tags CLI flag on comms append/send/direct (M1 Safe Pause scope per Seaworthy 676b7458 ordering #2) — TDD: parser + namespace validation (failure-mode/behaviour-note/heartbeat per ADR-183) + JSON construction passthrough + tests; sympathetic update of any README/SKILL pointer to canonical-CLI path."
+    },
+    {
+      "claim_id": "8326bf9c-0786-45bb-989c-ec6202163000",
+      "agent_id": {
+        "agent_name": "Breezy Anchoring Rudder",
+        "platform": "claude",
+        "model": "opus-4.7",
+        "session_id_prefix": "20fc29"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/rules/important-state-not-in-temp-files.md",
+            ".claude/rules/important-state-not-in-temp-files.md",
+            ".cursor/rules/important-state-not-in-temp-files.mdc",
+            "RULES_INDEX.md",
+            ".agent/memory/operational/curator-passes/2026-05-24-breezy-anchoring-rudder.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T10:42:10Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Curator pass cycle #1 — important-state-not-in-temp-files rule landing (canonical + 2 platform adapters + RULES_INDEX entry + per-pass log). Owner-direction-fired graduation per Ferny Capture D 2026-05-24. Substrate authored; awaiting Twilit --tags + Charcoal PDR-076 marshal queue. Survey §2.1."
     }
   ]
 }

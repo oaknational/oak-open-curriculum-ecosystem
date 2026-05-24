@@ -9,6 +9,60 @@ merge_class: append-only-narrative
 
 # Napkin
 
+## 2026-05-24 — Vining Fruiting Dew / claude / claude-opus-4-7 / `5149c2` — first formal curator pass; PDR-081 (curator role) landed; substrate-care lane named and handed over to Breezy
+
+### What Was Done
+
+- Owner-directed knowledge-curation lane (bootstrap fast-path; no live peers at session-open). Surveyed distilled (924L), napkin (2299L), pending-graduations (4806L), repo-continuity (758L), `.remember/*`, Claude per-user MEMORY, comms event stream.
+- Authored PDR-081 (`curator-role-and-substrate-care-lane`) — portable Practice doctrine; cross-refs PDR-014/046/067/071/072; pdr_kind governance. Names the `curator` role as the lane owner for substrate-care, distinct from `consolidator` (session-bounded). Operationalises PDR-072 (autonomic-learning principle).
+- Scaffolded `.agent/memory/operational/curator-passes/` with metadata-only README + 4 pass files (1 new + 3 retroactive migration pointers for the Twigged 2026-05-12 + Breezy 2026-05-23 first/second-pass curation logs).
+- Authored `oak-curator-pass` skill (canonical + Claude wrapper).
+- Amended `start-right-team` SKILL §3 — `curator` added to role-label list with boundary-vs-`consolidator` clarification.
+- Migrated three in-buffer curation logs out of `pending-graduations.md` by reference; pending-graduations is now genuinely buffer-shaped post-migration (residue remains — see carry-forward).
+- Sidebar opened with marshal Mistbound on landing path + commit cadence + timing; Mistbound accepted all three answers (marshal-route, 3-commit dependency-order, tree-green NOW); landed cleanly in 4 commits ending at `9d4f8204` (`097882a2`, `c04c996e`, `89124cd8`, `9d4f8204` hygiene).
+- Dispatched a sub-agent (Breezy persona, general-purpose) for the deep-curation pass on napkin / old platform plans / Claude per-user memory / `.remember/`. Returned a 339-line survey at `/tmp/breezy-deep-curation-survey-2026-05-24.md` — 10 routing candidates, 5 home-gaps, 5 confirmed structural defects, 6 cross-surface observations, 5 stale items, 7 carry-forward.
+- Owner-directed handover of the Knowledge Curator role to Breezy Anchoring Rudder (top-level peer agent, distinct from the sub-agent of the same persona). Full role transfer (not director/executor split); Breezy accepted, committed to §2.1 `important-state-not-in-temp-files` rule landing as cycle #1, requested copy of survey to durable in-repo location.
+- Copied survey to `.agent/state/collaboration/handoffs/curator-role-handoff-2026-05-24-vining-to-breezy.md` (339L, 32KB) as durable substrate.
+
+### Insights / Surprises
+
+- **First-instance adoption of the curator role was immediate**. Seaworthy's next Director-routing broadcast after PDR-081 landed (~12 min later) explicitly named the team roster as *"Seaworthy (Director) + Vining (knowledge curator; own remit) + Mistbound (commit marshal; own remit) + Twilit (implementer) + Charcoal (implementer)"*. The role name moved from doctrine to active routing within the same window. Pattern: well-shaped role doctrine paired with substrate (skill + log + SKILL amendment) reaches adoption in one cycle when the team is operationally ready for the lane.
+- **Sidebar protocol N=2 ratified in the same session as PDR-081 landing**. First instance: Mistbound-Lanternlit R1.4 sidebar earlier today (commits `3615f1f1` / `48081bef`). Second instance: Mistbound-Vining curator-bundle-landing sidebar (this session). Both ran the same opener-with-structured-questions + deadline + default → reply accepting/overriding → resolution close shape. The second-instance trigger condition is satisfied; ready for PDR or pattern graduation in a future curator pass. Mistbound named it in their sidebar resolution as a graduation candidate.
+- **Pass-file metadata-only contract caught its own substance-drift mid-pass**. Owner-corrected at 10:54Z that my draft pass file carried descriptive substance for the four findings rather than pure metadata pointers. The correction was substantive: substance has one permanent home (comms broadcast for the findings here); the pass file is a navigation index, not a parallel substance store. Cure applied immediately; pass file rewrote to strict pointer tables. Built into PDR-081 §Per-pass log contract + curator-pass SKILL § Forbidden-moves + curator-passes README. The contract is load-bearing — without it the pass-log surface becomes the next buffer that needs a curator.
+- **Comms-tag adoption gap (Finding 2 in broadcast `7e6dcba3`) cured within ~30 minutes** by Twilit's M1 lane #2 routing. The gap (1 tagged event in 1466 total since ADR-183 ratified the namespace 2026-05-23) is structurally cured by the `--tags` CLI flag work landing in M1 Safe Pause. Empirical signal landed; cure-in-flight before pass closed. Worked example of the curator-pass surfacing-routes-to-cure cycle compressed to a single team window.
+- **`.remember/now.md` contamination empirically substantiated**. Sub-agent's deep curation pass confirmed: the `now.md` buffer drained between my session-open survey and the sub-agent's pass (good), but TWO new contamination instances surfaced in `today-2026-05-24.md` (lines 9-21) + `today-2026-05-22.done.md` (line 17), and direct log evidence at `.remember/logs/memory-2026-05-24.log` line `10:09:39 [ndc] ERROR: produced empty result` confirms the `ndc` compression pipeline fails reproducibly. The `/remember` plugin write-time contract gap is not a single-event fluke; it's an autonomic-curation defect with a reproducible failure mode.
+- **Two-Breezy disambiguation worked**. Sub-agent dispatch (persona-named "Breezy" by owner) returned a load-bearing report. Top-level peer agent Breezy Anchoring Rudder arrived independently. Both legitimate, non-confusable in context. The sub-agent transcript path (`a322380edc83687b5`) is recoverable via SendMessage for next-layer work.
+
+### Candidates Surfaced (capture-only per Step 6b)
+
+- **Sidebar-protocol-with-default-action** (PDR or pattern; N=2 worked instances satisfied). Source: this session's curator-bundle-landing sidebar + Mistbound-Lanternlit R1.4 sidebar earlier today. Trigger-condition: SATISFIED. Graduation-target: PDR (lane-shaped doctrine) OR pattern (situational shape). Owner-decision-gated on PDR vs pattern. Routed to Breezy for next curator pass.
+- **Curator-pass file substance drift as recurring failure mode** (rule or SKILL amendment candidate). Source: owner correction this session that my draft pass-file carried substance instead of metadata pointers. Trigger-condition: needs second instance (my own pass alone is N=1). Target: amend curator-pass SKILL § Forbidden-moves to make the metadata-only contract more prominent OR a new rule. Routed to Breezy.
+- **`/remember` plugin write-time contract gap** (plugin defect surfacing; cure shape candidates a/b/c named in comms broadcast `7e6dcba3`). Sub-agent confirmed reproducibility. Routed to owner attention via comms broadcast; cure-route is `/remember` plugin maintenance (out of this repo).
+- **10 durable-knowledge routing candidates from sub-agent survey** — full enumeration at `.agent/state/collaboration/handoffs/curator-role-handoff-2026-05-24-vining-to-breezy.md`. Breezy's cycle plan absorbs these. Highest-leverage four: `important-state-not-in-temp-files` rule (Breezy cycle #1), `director-pure-direction-only` PDR, `owner-action-is-not-a-cure` PDR, `start-right-team` SKILL §0.5 cron-template amendment.
+- **`current/` ↔ `active/` plan directory taxonomy is undocumented**. 99 of 111 `current/` plans lack `status:` frontmatter. Surfaced by sub-agent; structural defect — needs a directive or README clarifying the two directory shapes. Carry-forward to Breezy.
+
+### What Lives Where for Post-Compaction Resume
+
+- Curator role doctrine: PDR-081 (landed `097882a2`)
+- Curator-pass workflow: `.agent/skills/curator-pass/SKILL-CANONICAL.md` (landed `c04c996e`)
+- Curator-pass log directory: `.agent/memory/operational/curator-passes/` (landed `89124cd8`)
+- This session's pass log (metadata-only): `.agent/memory/operational/curator-passes/2026-05-24-vining-fruiting-dew.md`
+- Substantive findings broadcast: comms event `7e6dcba3-e67b-4b3d-8d94-61fa5471cca3`
+- Handover record + deep-curation survey: `.agent/state/collaboration/handoffs/curator-role-handoff-2026-05-24-vining-to-breezy.md` (durable copy of /tmp survey)
+- Sidebar with Mistbound (closed at resolution): `.agent/state/collaboration/sidebars/curator-bundle-landing-2026-05-24-vining-mistbound.md`
+- Successor curator: Breezy Anchoring Rudder (20fc29); will open `2026-05-24-breezy-anchoring-rudder.md` per their ACK
+
+### Direction Received From Owner During Session
+
+- *"care for the knowledge encoded in the many logs and memories and state files in this repo"* — knowledge-curation lane direction.
+- *"this is a role and it needs a name. Ultrathink about all of it."* — role-naming + structural-shape question.
+- *"pending-graduations is a buffer to be drained. The curation logs are not for storing content, ONLY for storing metadata about curation"* — metadata-only contract clarification mid-pass.
+- *"sidebar with Mistbound on the best approach. And make sure your monitor is running"* — marshal-route coordination + comms watcher.
+- *"The hygiene edit belongs to the commit marshal"* — owner reinforcement of marshal authority on the hygiene-commit-edit question.
+- *"carefully and thoughtfully process the napkin, old platform plans, platform memories, and the .remember directory. They are not to worry about fitness limits while doing this, knowledge curation matters, numerical limits are secondary signals"* — sub-agent dispatch direction.
+- *"begin the handover of the Knowledge Curator role to Breezy Anchoring Rudder, then prepare yourself for compaction"* — full role transfer + session-handoff direction.
+- *"as part of the handover make sure that /tmp/breezy-deep-curation-survey-2026-05-24.md is fully understood and will be acted on"* — absorption-confirmation requirement on the survey.
+
 ## 2026-05-24 — Lanternlit Listening Dusk / claude / claude-opus-4-7 / `78683a` — R0→R1.5 program-plan refinement chain; PDR/ADR portability distinction received; sidebar model first deployment
 
 ### What Was Done
