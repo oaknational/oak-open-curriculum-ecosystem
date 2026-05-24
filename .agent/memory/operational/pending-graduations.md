@@ -115,172 +115,23 @@ states graduation lands when
 `coordination-watcher-canonicalisation.plan.md` executes, and that plan
 is still `status: future`.
 
-### 2026-05-23 curation log (Breezy Cresting Beacon — knowledge-preservation pass)
+### Curator-pass logs migrated 2026-05-24
 
-This pass treated the register as a queue, not as a fitness target. The
-goal was to preserve matured knowledge in its natural home, remove
-duplicate live-queue bodies only after preserving them in archive, and
-surface Core/PDR candidates without silently promoting them.
+Previously this register carried three in-buffer curation-pass logs
+(Breezy Cresting Beacon knowledge-preservation pass, Breezy Cresting
+Beacon sub-agent-assisted home-gap review, Incandescent Kindling
+Forge separate-lane drain). Per the owner-stated buffer-only
+contract for pending-graduations, those logs were migrated to the
+per-pass curator-passes directory at
+`.agent/memory/operational/curator-passes/` under PDR-081. The
+metadata-only pass files are:
 
-| Entry | Disposition |
-| --- | --- |
-| `reciprocal-cross-agent-reviewer-dispatch` | Graduated to existing proven pattern file; original register body archived to `archive/pending-graduations-archive-2026-05-23.md`. |
-| `untracked-wip-whole-tree-lint-blocker` | Graduated to new proven anti-pattern file under `active/patterns/`; original register body archived. |
-| `honest-restructure-over-band-aid` | Pattern home already existed and now carries schema-complete frontmatter; register body archived as duplicate. Pattern remains `status: emerging` until the third-instance trigger fires. |
-| `canonical-tool-definitions-code-adjacent` | Retained pending and corrected from `due` to plan-execution-gated pending because the future plan has not executed. |
-| `tempfile-path-session-prefix-discipline` | Retained pending as a worked instance and secondary defence inside the larger identity/frontmatter PDR candidate; not promoted as a standalone rule on a single instance. |
+- `2026-05-23-breezy-cresting-beacon.md`
+- `2026-05-23-incandescent-kindling-forge.md`
 
-### 2026-05-23 second-pass curation log (Breezy Cresting Beacon — sub-agent-assisted home-gap review)
-
-Owner direction for this pass: use sub-agents extensively, keep final
-arbitration local, surface mature concepts with no obvious home as
-documentation / long-term-memory system gaps, and write as the pass
-progresses to reduce context-loss risk.
-
-Sub-agent review lanes dispatched:
-
-| Lane | Reviewer | Question |
-| --- | --- | --- |
-| Home-gap ranking | docs-adr-expert | Which mature candidates lack a clear durable ADR/PDR/rule/pattern/Core home? |
-| Promotion-risk audit | assumptions-expert | Which apparent graduations are premature, overfit, or missing owner-approval boundaries? |
-| Practice Core routing | architecture-expert-fred | Where should recursion, autonomic curation, identity, and loop-exit doctrine land? |
-| Older-entry scan | explorer | Which older entries have fired triggers, existing homes, or hidden home gaps? |
-| Memory-topology check | architecture-expert-betty | Does the current memory topology already have a gap surface for mature-but-homeless concepts? |
-| Access-rhythm verification | explorer | Is the fitness lifecycle/access-rhythm entry fully housed or only partially implemented? |
-| Final preservation audit | docs-adr-expert | Did the curation preserve bodies, avoid premature archives, and keep archive links valid? |
-
-Live arbitration rules for this pass:
-
-1. If a mature concept already has a durable home, archive the original
-   register body only after preserving it in the dated archive.
-2. If a mature concept has no obvious home, do not force it into the
-   nearest file. Record the home-gap explicitly in this register and
-   route the gap to owner decision.
-3. If a candidate touches the Practice Core, PDRs, or always-applied
-   rule estate, keep the source substance intact and surface the
-   proposed home before editing those authority surfaces.
-
-As-we-go finding from the memory-topology review: this register is the
-right **temporary gap surface** for mature-but-unhomed concepts, because
-it is the working queue, but it is not itself a permanent home. The
-system gap to surface is smaller than a new directory: the homing
-methodology should likely gain a "home-gap disposition" clause saying
-that useful mature substance with no verified home stays intact here,
-gets an explicit owner-decision trigger, and repeated home-gaps become
-evidence for a future topology change.
-
-As-we-go finding from the promotion-risk audit: `status: due` currently
-mixes two meanings — "ready to write" and "ready for owner decision".
-Until the schema is refined, every due entry touched by this pass should
-carry an explicit `next_action` note so a future grep of `status: due`
-does not silently author Core, PDR, or rule changes before the owner has
-approved the exact target shape.
-
-Mature-home gaps surfaced so far:
-
-| Candidate | Gap surfaced | Proposed next home |
-| --- | --- | --- |
-| `knowledge-curation-is-autonomic-learning` | PDR-072 is the first durable home; Core canon integration remains. | Amend `practice.md` / `practice-lineage.md` from PDR-072; do not create a new `principles.md` surface. |
-| `recursion-as-method-is-practice-core-mind-shape` | Same missing Core target; concept may be foundational or may stay aphoristic until PDR tests it. | New PDR or concise `practice-lineage.md` learned-principle amendment; no new Core surface without owner approval. |
-| `agent-identity-name-uuid-tempfile-frontmatter` | Crosses PDR-027, schemas, body-file provenance, commit queue, handoff records, and skills. | PDR-027 amendment/supersession decision, then schema/tooling tranche plan. |
-| `templated-loops-need-exit-criteria` | No repo-local `/loop` skill exists; invocation-time stop conditions lack a repo authority surface. | New always-applied rule plus platform/tooling adapters after owner chooses exact semantics. |
-| `coordinator-role-as-allocator-not-gatekeeper` | PDR-071 proposes the portable allocator-without-gating principle as the first durable home. | Partially graduated to PDR-071; downstream collaboration directive / `start-right-team` amendments remain. |
-| `authorial-bundle-integrity-line-scoped-staging` | `n>=3` evidence but no current implementation plan for line-scoped staging. | Agent-tooling plan paired with commit-skill amendment. |
-| `commit-queue-per-intent-message-file-native` | Four-agent emergent default still lives in agent convention rather than CLI default. | Same agent-tooling plan as the line-scoped staging cure. |
-| `sync-kind-urgency-flag` | ADR-184 resolves the representation as two axes: top-level `sync` kind plus composable `urgency` field. | Partially graduated to ADR-184; schema/tooling implementation tranches remain. |
-| `fitness-lifecycle-and-access-rhythm` | Frontmatter on this register proves the local cure, but ADR-144/tooling docs do not yet name `lifecycle_model` / `access_pattern` as a general fitness-axis doctrine; PDR-067/PDR-068 are adjacent but not sufficient. | ADR-144 / fitness-validator docs and schema first; cross-repo PDR only if the access-rhythm axis proves portable beyond this repo. |
-| `json-event-only-comms-authoring` | Current comms rule says events render into the shared log, and state docs say the shared log is generated, but no rule explicitly forbids direct edits to the generated markdown. | Rule amendment to `use-agent-comms-log.md` naming JSON event files as the only authoring surface. |
-| `agent-initiated-no-verify-forbidden` | Commit skill says `--no-verify` is owner-initiated only, but the canonical rule still tells agents to ask for per-invocation authorisation. | Rule alignment so the owner-initiated asymmetry is canonical, not only skill-local. |
-
-Owner decisions captured 2026-05-23 after metacognition reflection through
-architectural-excellence and home-function discipline:
-
-| Candidate | Owner decision | Consequence |
-| --- | --- | --- |
-| `knowledge-curation-is-autonomic-learning` | PDR-072 proposes the two-output-surface / autonomic-learning principle. | Partially graduated to PDR-072; downstream `practice.md` / `practice-lineage.md` amendments remain. |
-| `recursion-as-method-is-practice-core-mind-shape` | Yes: ratify as Practice Core concept. | Partially graduated 2026-05-23 to PDR-073; downstream trinity amendment + optional directive remain. |
-| `fitness-lifecycle-and-access-rhythm` | Yes: governed model concept and portable Practice doctrine. | Amend ADR-144 / fitness-validator docs and schema, then create the portable PDR. |
-| `agent-identity-name-uuid-tempfile-frontmatter` | Amends identity contract: UUID makes each agent unique; name remains primary identifier. Temporary-file frontmatter is valuable but separate. | Partially graduated 2026-05-23 to PDR-076 (principle layer + body-file frontmatter contract); downstream PDR-027 amendment, identity-bearing schema tranches, identity preflight UUID emission, body-file frontmatter consumers, identity rendering surfaces remain. |
-| `templated-loops-need-exit-criteria` | Need loop templates; exit criteria depend on application/intent. Starter default: five no-op iterations stop. | Partially graduated 2026-05-23 to `.agent/rules/loop-exit-criteria-required.md` with the five-idle-iteration default and stand-down broadcast shape; optional `/loop` skill amendment remains as a separate cycle if a repo-local `/loop` skill is later authored. |
-| `json-event-only-comms-authoring` | Messaging only via messaging tools; tools enforce schema; hook can reject invalid messaging-surface changes. | Rule + schema/tool enforcement, with a validation hook for messaging surfaces. |
-| `agent-initiated-no-verify-forbidden` | Only the owner can initiate `--no-verify`. | Align rule/docs with commit skill; remove agent-asks framing. |
-| `commit-queue-per-intent-message-file-native` + `authorial-bundle-integrity-line-scoped-staging` | All agent commits must go through appropriate agent tools; git commit collisions and queueing are the highest-impact team-collaboration friction. | Promote to high-impact agent-tooling work: commit queue native message files, queueing, and line-scoped staging. |
-
-Older-entry target-exists sweep:
-
-| Entry | Disposition |
-| --- | --- |
-| `different-lens-reviewer-divergence` | Existing durable pattern verified; original body archived. |
-| `fitness-validator non-reactive reminder` | Formatter and ADR-144 amendment verified; original body archived. |
-| `spine-drift-via-comprehensive-cataloguing` | Broader durable pattern verified; original body archived. |
-| `inter-agent-comms-first-class-primitive` | Directive/rule homes verified; original body archived. |
-| `re-apply-first-question-at-elaboration-boundaries` | Existing durable rule and governance references verified; original body archived. |
-| `fitness-lifecycle-and-access-rhythm` | Retained pending as partially implemented; ADR/tooling doctrine remains the live home gap. |
-| `json-event-only-comms-authoring` | Retained pending as a rule-text gap. |
-| `agent-initiated-no-verify-forbidden` | Retained pending as a rule/skill alignment gap. |
-
-### 2026-05-23 third-pass curation log (Incandescent Kindling Forge — separate-lane pending-graduations drain)
-
-Owner direction at session-open: *"your job is to run
-/oak-consolidate-docs, starting with the pending graduations. You are
-part of the team, but your work is a separate lane, so report, but do
-not accept work."* The pass executed as separate-lane consolidate-docs:
-work performed independently within the in-flight team window, progress
-reported, no work accepted from other agents, no Director routing
-adopted. Cure-bundle-v2 (FM-2 Monitor harness) and PDR-075 marshal
-queue were respected — this pass did not touch their surfaces.
-
-Three former `due` entries were drained:
-
-| Entry | Disposition |
-| --- | --- |
-| `agent-identity-name-uuid-tempfile-frontmatter` | Partially graduated to PDR-076 (`agent-identity-tuple-and-body-file-frontmatter`, Proposed). PDR is portability-clean; bundles the identity tuple decision and the body-file frontmatter contract as two structurally separate decisions sharing one PDR. Downstream cascade (PDR-027 amendment + identity-bearing schema tranches + identity preflight UUID emission + body-file frontmatter consumers + identity rendering surfaces) named in §Cascade. |
-| `templated-loops-need-exit-criteria` | Partially graduated to `.agent/rules/loop-exit-criteria-required.md` (canonical + Claude adapter + Cursor `.mdc` adapter with `alwaysApply: true` + RULES_INDEX entry). Five-idle-iteration default, stand-down broadcast shape, owner-override authority, composition with `use-monitor-for-event-driven-wake` for the event-driven-vs-polling distinction. |
-| `recursion-as-method-is-practice-core-mind-shape` | Already partially graduated 2026-05-23 (Secret Creeping Moth, earlier in the same session) to PDR-073. The body entry's `status: partially-graduated` tag and "Partial graduation" annotation were already in place; the due-entry table at the top of this register was the only stale-status surface and is now reconciled. |
-
-Substrate findings surfaced for owner attention but not actioned in
-this pass:
-
-1. **Step 7c finding**: `.agent/memory/operational/tracks/skills-standardisation-followup-timing.md`
-   carries no `expires_at` frontmatter at all — no YAML frontmatter on
-   the file. Per consolidate-docs SKILL §7c #4, track cards must carry
-   `expires_at:` so the audit can compute staleness; a file with no
-   frontmatter cannot be audited. Recommendation: add `expires_at:`
-   (and `created_at:`) frontmatter at next consolidation, or formally
-   retire the card if its items 1–4 (all dated 2026-05-09) are
-   resolved.
-2. **Fitness signals**: `napkin.md` (1657L, 3.7× critical), `distilled.md`
-   (917L, 1.2× critical), this register (4585L → grown slightly with
-   this pass, ~4× critical), `repo-continuity.md` (HARD on chars + prose
-   line width). Per the rule that learning preservation overrides
-   fitness pressure and graduation upward (not compression) is the
-   structural cure: this pass added substance (PDR-076 + rule + register
-   reconciliation) and drained substance only by graduating it. The
-   register's depth is queue-depth proportional to owner-approval-gated
-   cascade tranches; the structural cure is continued graduation
-   throughput, not trimming.
-3. **PDR-072 and PDR-074 reconciliation**: the "Owner decisions
-   captured 2026-05-23" table consequence column already named PDR-072
-   as the partial-graduation home for `knowledge-curation-is-autonomic-learning`;
-   no update needed in this pass. PDR-074 is on a different doctrine
-   axis (director value = mind coherence per owner attention) and is
-   not a pending-graduations entry — no register reconciliation needed.
-
-Live arbitration rules carried from prior passes:
-
-1. **Portability discipline**: PDR-076 was authored portability-clean
-   (no `.agent/...` paths, no specific CLI commands, no commit SHAs)
-   per the standing rule. The Foamy-flagged portability defect on
-   PDR-063/065/066 (assumptions-expert verdict 2026-05-22) was treated
-   as a load-bearing pre-commit check, not stylistic feedback.
-2. **Separate-lane discipline**: no Director ratifications attempted,
-   no in-flight team work touched, no marshal-queue entries added by
-   this pass before commit-window opens. Marshal queue ordering
-   respected: PDR-075 (Twilit Weaving Moon) and FM-2 cure (Twilit
-   Scattering Twilight successor) remain ahead.
-3. **Singleton pnpm check**: Incandescent Banking Flame's in-flight
-   `pnpm check` broadcast (closeout Step 11, ~13:35:57Z) noted; this
-   pass did not run a parallel check.
+The full substance of those passes lives in
+`archive/pending-graduations-archive-2026-05-23.md` (preserved by
+the standard archive flow).
 
 ### 2026-05-12 due-entry disposition log (Twigged Growing Glade)
 
