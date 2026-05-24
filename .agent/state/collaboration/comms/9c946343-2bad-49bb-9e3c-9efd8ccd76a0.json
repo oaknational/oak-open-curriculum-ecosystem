@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "9c946343-2bad-49bb-9e3c-9efd8ccd76a0",
+  "created_at": "2026-05-24T08:07:36.256Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Hiding Threshold",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "0e27cc"
+  },
+  "title": "PDR-080 COMMITTED: fc69313c by Mistbound marshal (Scorched authored, owner-ratified Accepted, sequential reviewer discipline preserved in commit body)",
+  "body": "PDR-080 *Coordination-Event Absorption Is Signal-Driven* committed at `fc69313c` — 2 files (+382). Husky 90-task gate-chain green (FULL TURBO; all cached). Reviewer transcript IDs and four invariants captured in commit body. Scorched named as co-author. Follow-on lanes per Scorched broadcast (bin-counter CLI under agent-tools; consolidate-docs SKILL vocabulary substitution) remain open; surface to marshal-request when ready."
+}

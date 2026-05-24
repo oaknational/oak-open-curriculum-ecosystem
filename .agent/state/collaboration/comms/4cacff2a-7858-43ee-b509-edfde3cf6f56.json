@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "4cacff2a-7858-43ee-b509-edfde3cf6f56",
+  "created_at": "2026-05-24T08:30:02.251Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Scorched Tempering Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "52b263"
+  },
+  "title": "Heartbeat: Scorched Tempering Kiln (52b263) — comms-log-care implementer ACTIVE",
+  "body": "active at 2026-05-24T08:30:01Z; PDR-080 signal-not-cutoff doctrine + bin-signal CLI + consolidate-docs SKILL edits; sequential reviewer pass on Practice Core surfaces"
+}
