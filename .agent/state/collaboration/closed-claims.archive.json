@@ -34604,6 +34604,93 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "be07a516-aefe-4435-be46-bbb2e11af32b",
+      "agent_id": {
+        "agent_name": "Twilit Scattering Twilight",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "8d8d93"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "workspace",
+          "patterns": [
+            "agent-tools/src/cli/comms/**",
+            "agent-tools/src/cli/comms.ts",
+            "agent-tools/src/comms/**",
+            "agent-tools/tests/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T10:27:46.138Z",
+      "freshness_seconds": 5400,
+      "sidebar_open": false,
+      "intent": "agent-tools --tags CLI flag on comms append/send/direct (M1 Safe Pause scope per Seaworthy 676b7458 ordering #2) — TDD: parser + namespace validation (failure-mode/behaviour-note/heartbeat per ADR-183) + JSON construction passthrough + tests; sympathetic update of any README/SKILL pointer to canonical-CLI path.",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T10:54:45.723Z",
+        "closed_by": {
+          "agent_name": "Twilit Scattering Twilight",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "8d8d93"
+        },
+        "summary": "agent-tools --tag CLI flag on comms append/send/direct landed at 24eb6c91 (Mistbound marshal queue 10:43:35Z; husky 90/90 GREEN). ADR-183 namespace validation (failure-mode/behaviour-note/heartbeat) live; conditional-spread additive-extension; dogfood verified via heartbeat #4 (332f73c5) + canonical-CLI heartbeat #5 (b13474ab) + team-start broadcast (2849b623). Reviewer convergence pre-marshal: code-expert + type-expert PASS-WITH-NITS (Important finding on schema heartbeat-prose drift fixed in-cycle). Closing — work complete.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "be07a516-aefe-4435-be46-bbb2e11af32b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "aacb4c72-7898-40cd-b3c8-3a4d8a7a37de",
+      "agent_id": {
+        "agent_name": "Charcoal Brazing Kiln",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "7c7327"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-076-agent-identity-tuple-and-body-file-frontmatter.md",
+            ".agent/practice-core/decision-records/PDR-076a-agent-identity-tuple-name-and-uuid.md",
+            ".agent/practice-core/decision-records/PDR-076b-body-file-frontmatter-contract.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T10:21:47Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "WS-2 Gate 2 — author PDR-076a (identity tuple) + PDR-076b (body-file frontmatter) SPLIT + PDR-076 superseded stub. Cycle #6. Seaworthy routing 10:18:22Z. Sequential care-and-consult discipline (Practice Core, no parallel compression). Proposed partition cure: narrow Cascade item 2 in 076a to identity-row-schema-only; body-file substrate falls under 076b frontmatter contract by construction.",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T10:55:20Z",
+        "closed_by": {
+          "agent_name": "Charcoal Brazing Kiln",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "7c7327"
+        },
+        "summary": "PDR-076 SPLIT landed at d14c74f1 (Twilit-first ordering honoured; Mistbound marshal-cycle clean). Substrate authored + reviewer-converged + landed: PDR-076a (333 LOC NEW), PDR-076b (313 LOC NEW), PDR-076 stub (96 LOC REWRITTEN). Gate 2 attested MET by Director Seaworthy in M1 Gate Monitor broadcast. First-in-repo SPLIT-via-pre-authoring-review precedent.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "aacb4c72-7898-40cd-b3c8-3a4d8a7a37de",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "816bb225-49a8-4b1f-b513-244dee364426",
+  "created_at": "2026-05-24T10:53:49Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Breezy Anchoring Rudder",
+    "platform": "claude",
+    "model": "opus-4.7",
+    "session_id_prefix": "20fc29"
+  },
+  "title": "Heartbeat: Breezy Anchoring Rudder (20fc29) — Knowledge Curator, cycle #1 landed, cycle #1.1 cure opening",
+  "body": "active; cycle #1 important-state-not-in-temp-files rule landed at c60cda01; absorbing reviewer SHOULD-ABSORB items + Vining QM hex-token finding into cycle #1.1 cure; canonical CLI heartbeat dogfooding",
+  "tags": [
+    "heartbeat"
+  ]
+}
