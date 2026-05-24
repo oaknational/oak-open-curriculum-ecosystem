@@ -41680,6 +41680,141 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "52ddb910-fe73-4041-83bd-cd08c6d9081e",
+      "agent_id": {
+        "agent_name": "Dusky Stealing Veil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e5a"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:52:24Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Soft-tier pending-graduations due-entry route hygiene: add explicit owner-decision packet pointers to the three due bodies without promoting owner/PDR-gated doctrine.",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:53:23Z",
+        "closed_by": {
+          "agent_name": "Dusky Stealing Veil",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e5a"
+        },
+        "summary": "Soft-tier pending-graduations due-entry route hygiene complete: added entry-local owner-decision packet pointers to the three live due bodies, left them status due, and updated the critical-drain plan with strict-hard SOFT 20 evidence.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "52ddb910-fe73-4041-83bd-cd08c6d9081e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "abf7f94a-8f30-46d1-8e5b-dc0c47a5796c",
+      "agent_id": {
+        "agent_name": "Charcoal Brazing Kiln",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "7c7327"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/scripts/repo-check.ts",
+            "agent-tools/tests/commit-workflow.unit.test.ts",
+            "packages/sdks/graph-corpus-sdk/src/eef-strands/index.ts",
+            "packages/sdks/graph-corpus-sdk/src/threads/index.ts",
+            "agent-tools/tests/collaboration-state/comms-watch-loop.unit.test.ts",
+            "agent-tools/src/collaboration-state/tui/reduce-refresh-state.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T13:12:54Z",
+      "freshness_seconds": 5400,
+      "sidebar_open": false,
+      "intent": "Cycle Alpha — Director-routed (76ede08d) small Sonar cure bundle (S7735×2 + S7787×2 + S7755×1 + S7765×1 + S7727×1); atomic commit; reviewer code-expert single pass",
+      "heartbeat_at": "2026-05-24T14:37:35Z",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:54:54Z",
+        "closed_by": {
+          "agent_name": "Charcoal Brazing Kiln",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "7c7327"
+        },
+        "summary": "Cycle Alpha LANDED in Mistbound's M1-Pause single-bundle commit 340752bb (14:54:14Z). 6 files / +10/-8 LOC / 5 cure-types / 7 sites: S7735 ternary inversion + if/else swap (repo-check.ts, commit-workflow.unit.test.ts); S7755 .at(-1) + S7765 .includes() (comms-watch-loop.unit.test.ts); S7787 NOSONAR documented placeholder stubs (eef-strands/threads/index.ts); S7727 NOSONAR inline (reduce-refresh-state.unit.test.ts). Reviewer: code-expert PASS-WITH-NITS-ABSORBED (a6e67fa930d59df56). Pre-marshal 530/530 tests green. Next: open Cycle Beta per Director routing 76ede08d (S5443 × 14 + consistency sweep).",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "abf7f94a-8f30-46d1-8e5b-dc0c47a5796c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "a8aabbc7-90bc-41d4-8b23-0a2dad6dc122",
+      "agent_id": {
+        "agent_name": "Twilit Scattering Twilight",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "8d8d93"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/bin/branch-touched-files.ts",
+            "agent-tools/src/bin/commit-queue.ts",
+            "agent-tools/src/bin/agent-identity.ts",
+            "agent-tools/src/bin/codex-exec.ts",
+            "agent-tools/src/bin/run-cli-bin.ts",
+            "agent-tools/src/bin/run-cli-bin.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T12:48:44.199Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Extract shared CLI bootstrap from agent-tools/src/bin/*.ts cluster (4 byte-identical-except-command-name files) into agent-tools/src/bin/run-cli-bin.ts with DI-testable runCliBin(deps) + thin process-binding runCliBinFromProcess(command); each consumer becomes 3 lines (shebang+import+await). TDD: unit tests on the extracted module's behaviour first (happy + Error + non-Error throw). Director routing 12:46:32Z. Sonar duplication target <30% per consumer.",
+      "archived_at": "2026-05-24",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-24T14:55:14.742Z",
+        "closed_by": {
+          "agent_name": "Twilit Scattering Twilight",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "8d8d93"
+        },
+        "summary": "CLI bootstrap extraction LANDED at 340752bb (chore(m1-pause) bundle) — 6 files (2 new + 4 collapsed 16→3); PR-108 Sonar new_duplicated_lines_density 76-92% → 0%; reviewers code-expert APPROVED WITH SUGGESTIONS (a1914530a3e1879f3) + type-expert SAFE (addabf579ef4021c2); 4 Important findings absorbed in-cycle; 1 deferred (adapter integration coverage, conflicts with feedback_tests_no_global_state, separate cycle); 530/530 tests green pre-marshal; owner-directed single-commit bundle with Charcoal Cycle Alpha + substrate per M1 Safe Pause path.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a8aabbc7-90bc-41d4-8b23-0a2dad6dc122",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

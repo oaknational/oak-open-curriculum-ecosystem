@@ -521,6 +521,10 @@ Natural home: new PDR, related to PDR-074 (Director value), PDR-075
 owner direction and the concept has already been consumed by sibling
 memory surfaces.
 
+Owner-decision pointer: keep this entry in the live due set until the
+Memory Surface Critical Drain owner-decision packet item 2 approves the
+principle-class PDR route.
+
 Falsifiability: PDR exists with a decision section naming the
 broad-awareness / focused-awareness split and a consequence section
 specifying which work the Director must not absorb.
@@ -543,6 +547,10 @@ cluster. This should name the diagnostic distinction: owner
 intervention is evidence of a substrate gap unless the decision is
 genuinely owner-only.
 
+Owner-decision pointer: keep this entry in the live due set until the
+Memory Surface Critical Drain owner-decision packet item 3 approves the
+principle-class PDR route.
+
 Falsifiability: future notes about owner interventions classify each
 case into owner-only decision vs missing autonomy primitive, and route
 the latter into protocol/tooling substrate.
@@ -564,6 +572,10 @@ Natural home: PDR-077 if the doctrine is portable marshal-role
 governance; repo-local pattern if the current evidence remains
 implementation-shaped. Charcoal's in-flight PDR-077 ownership should
 be respected if that lane resumes.
+
+Owner-decision pointer: keep this entry in the live due set until the
+Memory Surface Critical Drain owner-decision packet item 5 decides
+whether the evidence routes to PDR-077 or a repo-local pattern.
 
 Falsifiability: PDR-077 or a pattern file lists both worked instances,
 the role boundary, the queue/ordering/comms mechanism, and the

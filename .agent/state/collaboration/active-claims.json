@@ -1688,61 +1688,6 @@
       "intent_to_commit": "550a33ac-feeb-4263-a83c-874aa2218a6b"
     },
     {
-      "claim_id": "a8aabbc7-90bc-41d4-8b23-0a2dad6dc122",
-      "agent_id": {
-        "agent_name": "Twilit Scattering Twilight",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "8d8d93"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "agent-tools/src/bin/branch-touched-files.ts",
-            "agent-tools/src/bin/commit-queue.ts",
-            "agent-tools/src/bin/agent-identity.ts",
-            "agent-tools/src/bin/codex-exec.ts",
-            "agent-tools/src/bin/run-cli-bin.ts",
-            "agent-tools/src/bin/run-cli-bin.unit.test.ts"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-24T12:48:44.199Z",
-      "freshness_seconds": 7200,
-      "sidebar_open": false,
-      "intent": "Extract shared CLI bootstrap from agent-tools/src/bin/*.ts cluster (4 byte-identical-except-command-name files) into agent-tools/src/bin/run-cli-bin.ts with DI-testable runCliBin(deps) + thin process-binding runCliBinFromProcess(command); each consumer becomes 3 lines (shebang+import+await). TDD: unit tests on the extracted module's behaviour first (happy + Error + non-Error throw). Director routing 12:46:32Z. Sonar duplication target <30% per consumer."
-    },
-    {
-      "claim_id": "abf7f94a-8f30-46d1-8e5b-dc0c47a5796c",
-      "agent_id": {
-        "agent_name": "Charcoal Brazing Kiln",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "7c7327"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "agent-tools/scripts/repo-check.ts",
-            "agent-tools/tests/commit-workflow.unit.test.ts",
-            "packages/sdks/graph-corpus-sdk/src/eef-strands/index.ts",
-            "packages/sdks/graph-corpus-sdk/src/threads/index.ts",
-            "agent-tools/tests/collaboration-state/comms-watch-loop.unit.test.ts",
-            "agent-tools/src/collaboration-state/tui/reduce-refresh-state.unit.test.ts"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-24T13:12:54Z",
-      "freshness_seconds": 5400,
-      "sidebar_open": false,
-      "intent": "Cycle Alpha — Director-routed (76ede08d) small Sonar cure bundle (S7735×2 + S7787×2 + S7755×1 + S7765×1 + S7727×1); atomic commit; reviewer code-expert single pass",
-      "heartbeat_at": "2026-05-24T14:37:35Z"
-    },
-    {
       "claim_id": "fbfeedb5-2cbb-4fbb-a3e4-7f21d9a3a036",
       "agent_id": {
         "agent_name": "Sylvan Sprouting Petal",
@@ -1766,9 +1711,9 @@
       "intent": "Retain narrow ownership for uncommitted identity-helper source/test bundle pending marshal pickup after Sylvan wind-down"
     },
     {
-      "claim_id": "52ddb910-fe73-4041-83bd-cd08c6d9081e",
+      "claim_id": "5809c478-fec7-46af-97fe-606d0a933e17",
       "agent_id": {
-        "agent_name": "Dusky Stealing Veil",
+        "agent_name": "Hushed Fading Hush",
         "platform": "codex",
         "model": "GPT-5",
         "session_id_prefix": "019e5a"
@@ -1778,15 +1723,40 @@
         {
           "kind": "files",
           "patterns": [
-            ".agent/memory/operational/pending-graduations.md",
-            ".agent/plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md"
+            "docs/operations/troubleshooting.md",
+            "apps/oak-search-cli/operations/ingestion/README.md"
           ]
         }
       ],
-      "claimed_at": "2026-05-24T14:52:24Z",
+      "claimed_at": "2026-05-24T14:53:29Z",
       "freshness_seconds": 3600,
       "sidebar_open": false,
-      "intent": "Soft-tier pending-graduations due-entry route hygiene: add explicit owner-decision packet pointers to the three due bodies without promoting owner/PDR-gated doctrine."
+      "intent": "Soft-tier operations-doc consolidation: move search reindex boundary details from the repo-level troubleshooting guide into the oak-search-cli ingestion operations README, preserving a top-level pointer and avoiding Dusky's pending-graduations claim."
+    },
+    {
+      "claim_id": "f610d430-2009-4f95-bdbb-dc0ad824d96e",
+      "agent_id": {
+        "agent_name": "Charcoal Brazing Kiln",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "7c7327"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/tests/collaboration-state/watcher-staleness.unit.test.ts",
+            "agent-tools/tests/collaboration-state/watcher-heartbeat.unit.test.ts",
+            "agent-tools/tests/runtime.integration.test.ts",
+            "agent-tools/tests/claude/session-identity-hook.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:56:37Z",
+      "freshness_seconds": 5400,
+      "sidebar_open": false,
+      "intent": "Cycle Beta — Director-routed (76ede08d) S5443 fixture-discipline replacement: replace /tmp/ literals with opaque mem:// sentinels across 4 test files (watcher-staleness.unit.test.ts ×10 + watcher-heartbeat.unit.test.ts ×4 + runtime.integration.test.ts ×1 + session-identity-hook.unit.test.ts ×6 = 21 sites). IO is injected so literal /tmp/ is fixture-discipline smell; pure string replacement; reviewer dispatch code-expert + security-expert (confirm fixture replacement preserves prior LOW-RISK verdict)"
     }
   ]
 }

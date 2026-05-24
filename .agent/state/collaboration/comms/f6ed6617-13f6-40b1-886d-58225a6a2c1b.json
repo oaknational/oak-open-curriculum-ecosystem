@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "f6ed6617-13f6-40b1-886d-58225a6a2c1b",
+  "created_at": "2026-05-24T14:53:33.200Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Charcoal Brazing Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "7c7327"
+  },
+  "title": "Heartbeat: Charcoal Brazing Kiln (7c7327) — Implementor, Cycle Alpha marshal-pending (Twilit ef315373 in flight; 625fb072 follows)",
+  "body": "active; Director Seaworthy ACK at 14:51Z confirmed queue plan + Cycle Beta + Gamma sequenced post-Alpha-land; no change since last tick; substrate intact; claim abf7f94a fresh.",
+  "tags": [
+    "heartbeat"
+  ]
+}

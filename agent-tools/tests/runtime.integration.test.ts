@@ -9,7 +9,7 @@ describe('runtime integration', () => {
   });
 
   it('returns no sessions when projects path is absent', () => {
-    const sessions = discoverSessionsWithFs('/tmp/does-not-exist', '/repo', {
+    const sessions = discoverSessionsWithFs('mem://does-not-exist', '/repo', {
       existsSync: () => false,
       readdirSync: () => [],
       statSync: () => ({ mtimeMs: 0, size: 0, isFile: () => true, isDirectory: () => false }),

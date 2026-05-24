@@ -141,12 +141,12 @@ describe('writeWatcherHeartbeat — substrate writer', () => {
           writes.push({ filePath, text });
         },
       },
-      heartbeatFile: '/tmp/twilit-test-heartbeat.json',
+      heartbeatFile: 'mem://twilit-test-heartbeat.json',
       heartbeat,
     });
 
     expect(writes).toHaveLength(1);
-    expect(writes[0]?.filePath).toBe('/tmp/twilit-test-heartbeat.json');
+    expect(writes[0]?.filePath).toBe('mem://twilit-test-heartbeat.json');
     expect(writes[0]?.text.endsWith('\n')).toBe(true);
     // Round-trip via parseWatcherHeartbeat confirms the written text is the
     // exact heartbeat — schema-driven verification rather than string
@@ -165,8 +165,8 @@ describe('writeWatcherHeartbeat — substrate writer', () => {
       },
     };
 
-    await writeWatcherHeartbeat({ io, heartbeatFile: '/tmp/x.json', heartbeat: first });
-    await writeWatcherHeartbeat({ io, heartbeatFile: '/tmp/x.json', heartbeat: second });
+    await writeWatcherHeartbeat({ io, heartbeatFile: 'mem://x.json', heartbeat: first });
+    await writeWatcherHeartbeat({ io, heartbeatFile: 'mem://x.json', heartbeat: second });
 
     expect(writes).toHaveLength(2);
     expect(parseWatcherHeartbeat(writes[0]?.text ?? '').emitted_count).toBe(1);

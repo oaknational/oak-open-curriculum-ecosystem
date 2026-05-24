@@ -98,103 +98,16 @@ than missing env vars.
 
 ## Search Reindex Boundary
 
-When deploying code changes that affect how search documents are built or how
-canonical URLs are generated, some improvements only take effect in the search
-index after a full re-ingest. This section separates deploy-safe correctness
-from stale-index evidence so operators know what to expect at each stage.
+After deploying code that changes search document building or URL generation,
+existing indexed documents keep old field values until they are re-ingested.
+Symptoms such as legacy `thread_url` values or older `lesson_url` patterns in
+search results are stale-index evidence, not necessarily code bugs.
 
-### Deploy-safe code correctness
+Run the reindex and validation workflow from the `oak-search-cli` ingestion
+operations guide:
+[Search URL Field Reindex Boundary][ingestion-reindex-boundary].
 
-These URL fields are generated correctly by current code in
-`apps/oak-search-cli/src/lib/indexing/`. Any documents created by a fresh
-ingest will have correct values:
-
-All `generate*OakUrl()` functions are defined in `oak-url-convenience.ts`
-(in `@oaknational/curriculum-sdk`) and called from the respective document
-builders/cores listed below. See
-[ADR-145](../architecture/architectural-decisions/145-oak-url-naming-collision-remediation.md)
-for the rename from `canonicalUrl` to `oakUrl`.
-
-| Field          | Source file                    | Status                                               |
-| -------------- | ------------------------------ | ---------------------------------------------------- |
-| `lesson_url`   | `lesson-document-builder.ts`   | Required; emitted via `generateLessonOakUrl()`       |
-| `unit_url`     | `unit-document-core.ts`        | Required; emitted via `generateUnitOakUrl()`         |
-| `unit_urls`    | `lesson-document-core.ts`      | Required; array of Oak unit URLs                     |
-| `sequence_url` | `sequence-document-builder.ts` | Required; emitted via `generateSequenceOakUrl()`     |
-| `thread_url`   | `thread-document-builder.ts`   | Intentionally omitted (threads have no Oak web page) |
-
-The `thread_url` field remains in the Elasticsearch mapping and Zod schema as
-optional for backward compatibility with existing indexed documents (see
-`packages/sdks/oak-sdk-codegen/code-generation/typegen/search/field-definitions/curriculum.ts`).
-
-### Stale index evidence
-
-After deploying code that changes URL generation or document-building logic,
-existing indexed documents retain their old field values until a re-ingest
-replaces them. Common symptoms of stale index data:
-
-- Search results contain `thread_url` values even though current code omits
-  the field — these are legacy documents from before the field was dropped.
-- `lesson_url` values use an older URL pattern — documents indexed before the
-  canonical URL fix still carry the previous format.
-
-These are **not** code bugs. They clear after a re-ingest.
-
-### Post-deploy reindex validation
-
-After deploying code changes that affect document building or URL generation,
-run the following from the `apps/oak-search-cli` workspace to refresh the
-indices.
-
-**Authoritative source**: The complete ingestion workflow, CLI flags, and
-architecture details are documented in the
-[ingestion README][ingestion-readme].
-The commands below are a summary — consult the ingestion
-README for the full reference.
-
-[ingestion-readme]: ../../apps/oak-search-cli/operations/ingestion/README.md
-
-**Full re-ingest** (replaces all documents):
-
-```bash
-# 1. Ensure Redis is running (required for SDK response caching)
-pnpm redis:status   # check if already running
-pnpm redis:up       # start if not
-
-# 2. Re-download bulk data from the upstream API
-pnpm bulk:download
-
-# 3. Regenerate codegen artefacts from fresh bulk data
-pnpm bulk:codegen
-
-# 4. Reset indices and re-create mappings from current schema
-pnpm es:reset
-
-# 5. Full re-ingest all subjects (API mode)
-pnpm es:ingest -- --api --all --verbose
-
-# 6. Verify document counts and coverage
-pnpm ingest:verify
-
-# 7. Check index health
-pnpm es:status
-```
-
-**Targeted thread-only re-ingest** (if only thread documents are stale):
-
-```bash
-pnpm es:ingest -- --index threads --verbose
-```
-
-**Validation checklist** after re-ingest:
-
-1. Run `pnpm ingest:verify` — all subjects should report expected counts.
-2. Run `pnpm es:status` — all indices should be green with expected document
-   counts.
-3. Spot-check search results for `thread_url` — field should be absent from
-   newly indexed thread documents.
-4. Spot-check `lesson_url`, `unit_url`, `sequence_url` values — all should
-   use the current canonical URL format.
+[ingestion-reindex-boundary]: ../../apps/oak-search-cli/operations/ingestion/README.md#search-url-field-reindex-boundary
 
 ## Known Gate Caveats
 

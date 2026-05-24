@@ -56,7 +56,7 @@ describe('detectStaleWatcher — discriminated-union liveness result', () => {
     const mtimeMs = nowMs - HEARTBEAT_INTERVAL_MS; // 1 × interval — well under threshold
 
     const result = await detectStaleWatcher({
-      heartbeatFile: '/tmp/heartbeat.json',
+      heartbeatFile: 'mem://heartbeat.json',
       nowMs,
       io: ioWithText(mtimeMs, JSON.stringify(heartbeat)),
     });
@@ -75,7 +75,7 @@ describe('detectStaleWatcher — discriminated-union liveness result', () => {
     const mtimeMs = nowMs - STALENESS_THRESHOLD_MS; // exactly at threshold — NOT stale (uses strict >)
 
     const result = await detectStaleWatcher({
-      heartbeatFile: '/tmp/heartbeat.json',
+      heartbeatFile: 'mem://heartbeat.json',
       nowMs,
       io: ioWithText(mtimeMs, JSON.stringify(heartbeat)),
     });
@@ -89,7 +89,7 @@ describe('detectStaleWatcher — discriminated-union liveness result', () => {
     const mtimeMs = nowMs - STALENESS_THRESHOLD_MS - 1; // one ms past threshold
 
     const result = await detectStaleWatcher({
-      heartbeatFile: '/tmp/heartbeat.json',
+      heartbeatFile: 'mem://heartbeat.json',
       nowMs,
       io: ioWithText(mtimeMs, JSON.stringify(heartbeat)),
     });
@@ -109,7 +109,7 @@ describe('detectStaleWatcher — discriminated-union liveness result', () => {
     const mtimeMs = nowMs - 100; // very fresh
 
     const result = await detectStaleWatcher({
-      heartbeatFile: '/tmp/heartbeat.json',
+      heartbeatFile: 'mem://heartbeat.json',
       nowMs,
       io: ioWithText(mtimeMs, JSON.stringify(heartbeat)),
     });
@@ -123,34 +123,34 @@ describe('detectStaleWatcher — discriminated-union liveness result', () => {
 
   it('returns kind "absent" when statMtimeMs reports the heartbeat file missing', async () => {
     const result = await detectStaleWatcher({
-      heartbeatFile: '/tmp/no-such-heartbeat.json',
+      heartbeatFile: 'mem://no-such-heartbeat.json',
       nowMs: 1_000_000_000_000,
       io: ioWithText('missing', ''),
     });
 
     expect(result.kind).toBe('absent');
     if (result.kind === 'absent') {
-      expect(result.heartbeatFile).toBe('/tmp/no-such-heartbeat.json');
+      expect(result.heartbeatFile).toBe('mem://no-such-heartbeat.json');
     }
   });
 
   it('returns kind "malformed" when the heartbeat text is not valid JSON', async () => {
     const result = await detectStaleWatcher({
-      heartbeatFile: '/tmp/heartbeat.json',
+      heartbeatFile: 'mem://heartbeat.json',
       nowMs: 1_000_000_000_000,
       io: ioWithText(999, '{not valid json'),
     });
 
     expect(result.kind).toBe('malformed');
     if (result.kind === 'malformed') {
-      expect(result.heartbeatFile).toBe('/tmp/heartbeat.json');
+      expect(result.heartbeatFile).toBe('mem://heartbeat.json');
       expect(result.reason).toContain('JSON parse failed');
     }
   });
 
   it('returns kind "malformed" when the heartbeat JSON does not match the schema', async () => {
     const result = await detectStaleWatcher({
-      heartbeatFile: '/tmp/heartbeat.json',
+      heartbeatFile: 'mem://heartbeat.json',
       nowMs: 1_000_000_000_000,
       io: ioWithText(999, JSON.stringify({ wrong: 'shape' })),
     });
@@ -163,7 +163,7 @@ describe('detectStaleWatcher — discriminated-union liveness result', () => {
 
   it('returns kind "malformed" when readTextFile rejects (post-existence read failure)', async () => {
     const result = await detectStaleWatcher({
-      heartbeatFile: '/tmp/heartbeat.json',
+      heartbeatFile: 'mem://heartbeat.json',
       nowMs: 1_000_000_000_000,
       io: ioWithReadFailure(999, async () => {
         throw new Error('EACCES: permission denied');

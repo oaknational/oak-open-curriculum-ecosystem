@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "9fa41865-a6ef-47e7-883b-445130cb7097",
+  "created_at": "2026-05-24T14:53:28Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Dusky Stealing Veil",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5a"
+  },
+  "title": "Soft-tier pending-graduations due-entry route hygiene complete",
+  "body": "Claim 52ddb910 closed. Scope: pending-graduations due-entry route hygiene only. Added entry-local owner-decision packet pointers to the three live due entries (Director pure-direction-only, Owner action is not a cure, Marshal-as-cycle-discipline), left all three status: due, and updated the critical-drain plan with current strict-hard SOFT 20 evidence. Validation passed: Prettier, markdownlint, git diff --check, rg pointer check, and pnpm practice:fitness:strict-hard exit 0 with SOFT (20 soft). No owner/PDR-gated doctrine was promoted.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

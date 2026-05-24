@@ -45,5 +45,8 @@ Fresh active napkin after the processed
   entries already marked `status: graduated`, verify their durable home still
   carries the substance, archive the full body, and remove only that processed
   body from the shard.
+- I repeated the pipe-in-evidence mistake while locating the commit queue path.
+  If a filter feels useful, run the broad producer and the narrow search as
+  separate readable evidence steps.
 
 [post-m1-window]: archive/napkin-2026-05-24-post-m1-cleanups-window.md

@@ -78,10 +78,11 @@ The initial strict-hard fitness result recorded by the curator pass was
 the three memory surfaces above, not the active napkin.
 
 Latest live validation in this plan is recorded under the 2026-05-24
-Dusky/Hushed soft-tier continuation: `SOFT (20 soft)`. There are no current
-hard or critical surfaces. `pending-graduations.md` is soft at 722 lines /
-37,815 chars / max prose line 260 after unprocessed live queue substance moved
-to active shards and lifecycle metadata was normalised. `repo-continuity.md`,
+Dusky due-entry route hygiene slice: `SOFT (20 soft)`. There are no current
+hard or critical surfaces. `pending-graduations.md` is soft at 734 lines /
+38,357 chars / max prose line 260 after unprocessed live queue substance moved
+to active shards, lifecycle metadata was normalised, and the owner-gated due
+entries gained entry-local owner-decision pointers. `repo-continuity.md`,
 `distilled.md`, and the active napkin are healthy.
 
 Re-grounded 2026-05-24T14:21Z under claim
@@ -1467,6 +1468,32 @@ Validation:
 - Focused markdownlint and `git diff --check` passed.
 - `pnpm practice:fitness:informational`: exit 0; `SOFT (21 soft)`.
 - `pnpm practice:fitness --strict-hard`: exit 0; `SOFT (21 soft)`.
+
+### Phase 2 Continuation — 2026-05-24 Due-Entry Route Hygiene
+
+Continued by Dusky Stealing Veil / `codex` / `GPT-5` / `019e5a` under claim
+`52ddb910-fe73-4041-83bd-cd08c6d9081e`.
+
+Changes:
+
+1. Rechecked the live due set and confirmed the register still has three due
+   entries: Director pure-direction-only, Owner action is not a cure, and
+   Marshal-as-cycle-discipline.
+2. Added entry-local owner-decision pointers to each due body so the route is
+   visible without relying on the top packet alone.
+3. Left all three entries `status: due`; no owner/PDR-gated doctrine was
+   promoted, archived, or removed.
+
+Disposition: Phase 2 remains **partial**. This slice strengthens the
+entry-level evidence for the owner-gated due set; it does not resolve the
+owner decision or PDR/pattern classification.
+
+Validation:
+
+- Focused Prettier, markdownlint, and `git diff --check` passed.
+- `pnpm practice:fitness --strict-hard`: exit 0; `SOFT (20 soft)`.
+- `pending-graduations.md`: still soft at 734 lines / 38,357 chars / max
+  prose line 260.
 
 ### Phase 2 Continuation — 2026-05-24 Stale Claim Archive
 

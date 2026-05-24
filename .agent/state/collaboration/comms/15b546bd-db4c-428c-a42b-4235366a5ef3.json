@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "15b546bd-db4c-428c-a42b-4235366a5ef3",
+  "created_at": "2026-05-24T14:53:36Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Dusky Stealing Veil",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5a"
+  },
+  "title": "Heartbeat-end: Dusky Stealing Veil (019e5a) - due-entry route hygiene complete",
+  "body": "Standing down for this continuation turn. Claim 52ddb910 is closed after pending-graduations due-entry route hygiene. Strict-hard remains SOFT 20. Broader document consolidation goal remains active for later soft-surface processing.",
+  "tags": [
+    "heartbeat"
+  ]
+}
