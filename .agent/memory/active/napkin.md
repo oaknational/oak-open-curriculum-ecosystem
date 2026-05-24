@@ -2376,3 +2376,37 @@ Mistbound's Surprise 2 12th instance briefly names this event. Ferny-perspective
 **Marshal posture**: No marshal-specific direction from owner for this refocus. Marshal seat retained per owner's direct prompt at session-open *"please resume to Commit Marshall role with all three associated monitors"*. Standing by for marshal-requests; M1-Safe-Pause-bearing substrate lands per proven shape as it surfaces.
 
 **Source plane**: `session-scoped` → potential graduation candidate after 2nd worked instance (mechanism-class pattern).
+
+## 2026-05-24 — Mistbound Hiding Threshold / claude / claude-opus-4-7 / `0e27cc` — Pre-compaction-3 marshal-queue completion captures
+
+### Capture C — Marshal queue + ordering + comms cure shape worked end-to-end
+
+**Observation**: Owner-rejected staged-only-gating feedback (`feedback_pre_commit_hook_must_gate_staged_only`) prescribes that multi-writer coordination be solved by "queue + ordering + comms, not narrowing gate scope". This resume arc gave the cure-shape a worked end-to-end test:
+
+1. Twilit's `--tag` CLI TDD cycle mid-flight in agent-tools → full-tree husky gate red.
+2. Charcoal's reviewer-converged PDR-076 SPLIT marshal-request arrived during the red window.
+3. Marshal could not land Charcoal's substrate without resolving the gate.
+4. Marshal emitted coordination broadcast `1583fd2b` (10:37:42Z) naming the diagnosis + Twilit-first / Charcoal-second ordering + Charcoal's substrate-preserved disposition.
+5. Director ratified the ordering at `10:38:34Z`.
+6. Twilit's cycle converged at `10:42:30Z`; landed `24eb6c91`.
+7. Charcoal's cycle landed next at `d14c74f1`.
+8. Breezy's cycle queued-third per their own broadcast; landed `c60cda01`.
+9. Hygiene tail landed `70a08cdc`. Tree clean.
+
+**Diagnosis**: The cure works because the comms event stream is the canonical truth for queue state. Single gatekeeper (commit marshal) + agents queueing through marshal authority + broadcast naming the order = clean serialisation without any scope-narrowing temptation. Atomic-landing invariant honoured by each cycle.
+
+**Pointer**: Pending-graduations candidate — *"marshal-queue-coordination-via-broadcast-ordering"* pattern. Trigger: this 1st worked instance + the 2nd instance whenever the next full-tree-gate block hits.
+
+**Source plane**: `session-scoped` → pattern graduation candidate after 2nd worked instance.
+
+### Capture D — Twilit pre-compaction stale-framing (17th substrate-pointer-pattern worked instance)
+
+**Observation**: Twilit emitted pre-compaction broadcast at 10:46:15Z saying *"Marshal Mistbound (0e27cc) — pickup pending on my marshal-request"*. By the time the broadcast hit the wire, my marshal-cycle had already landed Twilit's bundle at `24eb6c91` (10:44:07Z, ~2 min before Twilit's broadcast).
+
+**Diagnosis**: Twilit's pre-compaction body was composed at compose-time (probably 10:44–10:46 wall-clock) when the marshal cycle was in flight; the body was emitted after the cycle landed but before Twilit's watcher had processed the landing event. This is **pre-compaction-broadcast-body-vs-emit-window** drift — Twilit didn't see their own landing because their watcher hadn't surfaced the new commits before they composed and emitted.
+
+**Cure**: Post-compaction Twilit will read comms tail forward at resume per `start-right-team` discipline; the stale framing self-corrects when they see `24eb6c91` + my completion broadcast `af29866b`. Same cure-shape as Director's compaction-2 substrate-pointer instance (read forward, not freeze-state).
+
+**Pointer**: 17th worked instance of substrate-pointer-pattern. Joins the 11th-16th catalogued earlier; adds the *compose-vs-emit-window* axis (related to but distinct from the *pre-compaction-snapshot-vs-running-state* variant Director hit).
+
+**Source plane**: `session-scoped` → substrate-pointer-pattern v3 candidate (capture-only).
