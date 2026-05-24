@@ -79,7 +79,7 @@ shaped**.
   sibling failure mode: more words arranged to appear answer-shaped
   without containing the answer; citation-as-reasoning is a
   compressed form of the same shape.
-- `.agent/memory/operational/pending-graduations.md` 2026-05-21 —
-  capture entry retained; second instance promotes this to either a
-  formal rule (e.g. `no-dogma-vocabulary`) or a PDR with
-  `pdr_kind: pattern`.
+- This pattern now carries the live trigger: a second observed instance, or
+  owner direction, promotes this to either a formal rule or a PDR with
+  `pdr_kind: pattern`. The duplicate pending-register body was drained on
+  2026-05-24 after this home was verified.

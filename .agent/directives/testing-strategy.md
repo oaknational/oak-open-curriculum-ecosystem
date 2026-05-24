@@ -118,6 +118,7 @@ plan][doctrine-plan].
   `process.env`.
 
 [di]: ../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md
+[testing-patterns-value-proxies]: ../../docs/engineering/testing-patterns.md#acceptance-value-proxies
 
 - **No process spawning in in-process tests** - Test code MUST NOT
   spawn child processes, create test-authored workers, or
@@ -397,30 +398,10 @@ server output against the same stub path.
 ## Acceptance Value-Proxies
 
 Acceptance value-proxies must compare against independent ground-truth
-measures. A value-proxy acceptance criterion ("the new CLI produces a
-value within ±N% of the prior baseline") is **tautological** if the
-new implementation and the baseline use the same method. Reproducing
-the baseline value does not validate correctness; it validates only
-internal consistency.
-
-Worked example: a token-count CLI defines acceptance as "the chars/4
-output agrees with the prior chars/4 baseline ±5%." The baseline is
-itself chars/4. The CLI cannot fail the acceptance check by
-construction — chars/4 reproducing chars/4 proves nothing.
-
-The cure is to compare against a **method-independent ground-truth
-measure**. For token-count, that is `wc -c` for total characters; the
-chars/4 conversion then becomes a mechanical step verified
-independently. For other domains, the ground-truth measure is the
-authoritative external observation (file size from `stat`, byte count
-from the filesystem, response time from a stopwatch, etc.) that the
-proxy is supposed to approximate.
-
-Acceptance criteria framed as "agrees with prior baseline ±N%" without
-naming an independent ground-truth measure are tautological and fail
-under normal churn (any drift looks like baseline error rather than
-proxy error). Reject the framing at plan-author time, not at WS
-execution.
+measures, not against a prior baseline produced by the same method. If a
+criterion says "agrees with prior baseline ±N%" without naming an independent
+measure, reject the framing at plan-author time. Worked recipe:
+[`testing-patterns.md` §Acceptance Value-Proxies][testing-patterns-value-proxies].
 
 ## Test Configuration Gotchas
 
@@ -444,24 +425,17 @@ execution.
 
 ## Test Data Anchoring
 
-Tests that agree with code on the wrong contract are worse than
-no tests. The snagging bugs that this repo encountered were
-invisible because tests encoded the same wrong assumptions (e.g.
-`keyStageSlugs` instead of the API's `keyStages`). Anchor test
-fixtures to the schema or captured API responses, not to code
-assumptions. Use `as const satisfies SDKType` to couple test data
-to SDK type evolution.
+Tests that agree with code on the wrong contract are worse than no tests.
+Anchor fixtures to schemas or captured API responses, not code assumptions
+(e.g. `keyStageSlugs` instead of API `keyStages`). Use
+`as const satisfies SDKType` to couple test data to SDK type evolution.
 
 ## Test Isolation
 
-- Replace Express `_router` access in tests with HTTP assertions
-  via supertest — more resilient, tests actual behaviour.
-- Repeated multi-line test setup → extract scoped helper inside
-  `describe` block (e.g. `registerWithOverrides`, `baseEnv`).
-- For large mechanical migrations (30+ files), use subagents to
-  parallelise the work.
-- Bulk operation factories should accept `startIndex` rather than
-  mutating readonly `_id` after creation.
+- Replace Express `_router` access with supertest HTTP assertions.
+- Extract repeated setup into scoped helpers inside `describe`.
+- For 30+ file migrations, use subagents.
+- Bulk factories accept `startIndex`; do not mutate readonly `_id`.
 
 ## Browser Proof Surfaces
 

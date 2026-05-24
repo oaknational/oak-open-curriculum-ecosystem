@@ -1601,193 +1601,35 @@
       "staged_bundle_fingerprint": "13ee3f41647861829c62dfc2da5d61251f7b9e19f84c5aaaf3326d144f927e52",
       "staged_name_status": "M\tpackages/libs/graph-ingest/src/source-path/index.ts\nM\tpackages/libs/graph-ingest/src/turtle/index.ts\nM\tpackages/sdks/graph-corpus-sdk/src/index.ts\nM\tpackages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-grounded-lesson-plan-messages.ts\n",
       "notes": "commit-workflow git-commit failure: git commit exited with code 128: fatal: Unable to create '/Users/jim/code/oak/oak-open-curriculum-ecosystem/.git/index.lock': Operation not permitted"
+    },
+    {
+      "intent_id": "550a33ac-feeb-4263-a83c-874aa2218a6b",
+      "claim_id": "6d75ad02-ffde-4a8b-8043-700b9750de76",
+      "agent_id": {
+        "agent_name": "Estuarine Fathoming Sail",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
+      },
+      "files": [
+        "packages/sdks/oak-sdk-codegen/src/bulk/extractors/unit-lesson-extractor.ts",
+        "packages/sdks/oak-sdk-codegen/src/bulk/extractors/why-this-why-now-extractor.ts",
+        "packages/sdks/oak-sdk-codegen/src/bulk/generators/analysis-report-generator.ts",
+        "packages/sdks/oak-sdk-codegen/src/bulk/generators/nc-coverage-generator.unit.test.ts",
+        "packages/sdks/oak-sdk-codegen/src/bulk/generators/synonym-miner.ts",
+        "packages/sdks/oak-sdk-codegen/src/bulk/generators/vocabulary-graph-generator.unit.test.ts",
+        "packages/sdks/oak-sdk-codegen/src/bulk/generators/write-graph-file.ts",
+        "packages/sdks/oak-sdk-codegen/src/bulk/generators/write-json-dataset.ts",
+        "packages/sdks/oak-sdk-codegen/src/bulk/generators/write-json-graph-file.integration.test.ts"
+      ],
+      "commit_subject": "fix(sdk-codegen): apply useful Sonar remediation hunks",
+      "queued_at": "2026-05-24T12:38:36.969Z",
+      "updated_at": "2026-05-24T12:38:36.969Z",
+      "expires_at": "2026-05-24T12:53:36.969Z",
+      "phase": "queued"
     }
   ],
   "claims": [
-    {
-      "claim_id": "a521b84a-8da7-429a-b54a-599c37efac27",
-      "agent_id": {
-        "agent_name": "Secret Dimming Shade",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "5a6e56"
-      },
-      "thread": "connecting-oak-resources",
-      "areas": [
-        {
-          "kind": "git",
-          "patterns": [
-            "index/head"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-23T06:13:29Z",
-      "freshness_seconds": 600,
-      "sidebar_open": false,
-      "intent": "fix(format): whitespace-only prettier normalization on two graph-ingest files to unblock 26-commit push"
-    },
-    {
-      "claim_id": "03f5233b-ea5d-4967-bffb-71c23eae3261",
-      "agent_id": {
-        "agent_name": "Pearly Plumbing Beacon",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e54"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "agent-tools/tests/commit-workflow.unit.test.ts"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-23T13:06:00Z",
-      "freshness_seconds": 1800,
-      "sidebar_open": false,
-      "intent": "Fix Sonar S7735 negated condition in commit-workflow.unit.test.ts per Twilit delegation 13:05Z",
-      "intent_to_commit": "d2fb943e-a94a-4985-9ed1-9add9c2a12aa"
-    },
-    {
-      "claim_id": "5fe22969-7d6d-4cdb-9b1b-ea044f366076",
-      "agent_id": {
-        "agent_name": "Twilit Weaving Moon",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "b47890"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/practice-core/decision-records/PDR-075-director-substrate-writing-discipline.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-23T13:28:16Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Author PDR-075 director substrate-writing discipline",
-      "intent_to_commit": "c24cbd11-1c22-491e-a047-7e61e4ba166b"
-    },
-    {
-      "claim_id": "8374e240-0faa-4011-a9fd-a5789cc006a9",
-      "agent_id": {
-        "agent_name": "Lanternlit Listening Dusk",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "78683a"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "plan",
-          "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/current/practice-infrastructure-hardening-program.plan.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-23T15:40:00Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Author overarching program-plan tracking practice-infrastructure-hardening workstreams; define safe-pause + completion criteria so team can pivot back to EEF First Feature without stranding work (owner direction)"
-    },
-    {
-      "claim_id": "81c93b39-9eb7-474a-91ab-35c80d950729",
-      "agent_id": {
-        "agent_name": "Lanternlit Listening Dusk",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "78683a"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/skills/start-right-team/SKILL-CANONICAL.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-23T16:03:00Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Author heartbeat doctrine amendment (Seaworthy-routed 16:02:24Z from Ferny withdrawal per feedback_practice_docs_sacred); §0.5 First Move + state thresholds + claim auto-rebalance + coordinator-transfer + marshal-cycle + sub-agent-dispatch exemptions"
-    },
-    {
-      "claim_id": "4e6e18b2-7c52-4d99-b336-39e6f3b36936",
-      "agent_id": {
-        "agent_name": "Scorched Tempering Kiln",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "52b263"
-      },
-      "thread": "eef",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-grounded-lesson-plan-messages.ts",
-            "packages/sdks/graph-corpus-sdk/src/index.ts",
-            "packages/libs/graph-ingest/src/source-path/index.ts",
-            "packages/libs/graph-ingest/src/turtle/index.ts"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-23T19:07:14.000Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "R2 mechanical Sonar cures per Seaworthy 1b556a14 routing: S7735 ternary flip + S7763 export-from collapse + S7781x4 replaceAll + S7750 findLast"
-    },
-    {
-      "claim_id": "00375e07-d67a-4023-b8e5-fb148d9e2d56",
-      "agent_id": {
-        "agent_name": "Mistbound Hiding Threshold",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "0e27cc"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "packages/libs/graph-ingest/src/source-path/index.ts",
-            "packages/libs/graph-ingest/src/turtle/index.ts",
-            "packages/sdks/graph-corpus-sdk/src/index.ts",
-            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/eef-evidence-grounded-lesson-plan-messages.ts"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-23T19:33:07.844Z",
-      "freshness_seconds": 1800,
-      "sidebar_open": false,
-      "intent": "Marshal R2 cycle: mechanical Sonar cures (S7735/S7763/S7781/S7750) on 4 source files; Scorched authored content; cycle-claim per owner-directed marshal-resume + Seaworthy tick #2 work item A step 1"
-    },
-    {
-      "claim_id": "f7b8bac8-c123-4b8d-a16c-f8ebafc952f1",
-      "agent_id": {
-        "agent_name": "Twilit Scattering Twilight",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "8d8d93"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "plan",
-          "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/current/practice-infrastructure-hardening-program.plan.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-24T10:23:23.143Z",
-      "freshness_seconds": 7200,
-      "sidebar_open": false,
-      "intent": "Gate 1 verification + push readiness lane (M1 Safe Pause) per Seaworthy routing 10:18:22Z — verify PR #108 branch-vs-origin state, SonarCloud Quality Gate, CodeQL #90, run-quality-gates workflow; surface verdict to Director. Read-only verification — no source edits expected."
-    },
     {
       "claim_id": "8326bf9c-0786-45bb-989c-ec6202163000",
       "agent_id": {
@@ -1815,29 +1657,138 @@
       "intent": "Curator pass cycle #1 — important-state-not-in-temp-files rule landing (canonical + 2 platform adapters + RULES_INDEX entry + per-pass log). Owner-direction-fired graduation per Ferny Capture D 2026-05-24. Substrate authored; awaiting Twilit --tags + Charcoal PDR-076 marshal queue. Survey §2.1."
     },
     {
-      "claim_id": "f155aa2f-04cc-468f-99a7-0604d31f643e",
+      "claim_id": "6d75ad02-ffde-4a8b-8043-700b9750de76",
       "agent_id": {
-        "agent_name": "Vining Fruiting Dew",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "5149c2"
+        "agent_name": "Estuarine Fathoming Sail",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
       },
-      "thread": "quality-marshall-hex-token-cure-2026-05-24",
+      "thread": "main-critical-sonar-remediation",
       "areas": [
         {
           "kind": "files",
           "patterns": [
-            ".agent/skills/start-right-team/SKILL-CANONICAL.md",
-            ".agent/practice-core/decision-records/PDR-053-orchestrator-vs-gate-structural-cure.md",
-            ".agent/rules/stage-by-explicit-pathspec.md",
-            ".agent/rules/agent-state-observable.md"
+            "packages/sdks/oak-sdk-codegen/src/bulk/extractors/unit-lesson-extractor.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/extractors/why-this-why-now-extractor.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/generators/analysis-report-generator.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/generators/nc-coverage-generator.unit.test.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/generators/synonym-miner.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/generators/vocabulary-graph-generator.unit.test.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/generators/write-graph-file.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/generators/write-json-dataset.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/generators/write-json-graph-file.integration.test.ts"
           ]
         }
       ],
-      "claimed_at": "2026-05-24T10:53:54.651Z",
-      "freshness_seconds": 3600,
+      "claimed_at": "2026-05-24T12:42:00Z",
+      "freshness_seconds": 14400,
       "sidebar_open": false,
-      "intent": "Quality Marshall first cycle: cure 6 hex-token leaks in 4 permanent-doc surfaces (no-moving-targets-in-permanent-docs rule violation). SKILL §0, PDR-053 §Rationale, stage-by-explicit-pathspec table, agent-state-observable graduation-provenance. Mechanical substance-preserving cure; reviewer dispatch docs-adr-expert; marshal-request to Mistbound."
+      "intent": "Marshal handoff for applied Sonar-agent PR hunks under oak-sdk-codegen bulk code; source-authored by Estuarine and ready for Mistbound commit marshal",
+      "intent_to_commit": "550a33ac-feeb-4263-a83c-874aa2218a6b"
+    },
+    {
+      "claim_id": "a8aabbc7-90bc-41d4-8b23-0a2dad6dc122",
+      "agent_id": {
+        "agent_name": "Twilit Scattering Twilight",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "8d8d93"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/bin/branch-touched-files.ts",
+            "agent-tools/src/bin/commit-queue.ts",
+            "agent-tools/src/bin/agent-identity.ts",
+            "agent-tools/src/bin/codex-exec.ts",
+            "agent-tools/src/bin/run-cli-bin.ts",
+            "agent-tools/src/bin/run-cli-bin.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T12:48:44.199Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Extract shared CLI bootstrap from agent-tools/src/bin/*.ts cluster (4 byte-identical-except-command-name files) into agent-tools/src/bin/run-cli-bin.ts with DI-testable runCliBin(deps) + thin process-binding runCliBinFromProcess(command); each consumer becomes 3 lines (shebang+import+await). TDD: unit tests on the extracted module's behaviour first (happy + Error + non-Error throw). Director routing 12:46:32Z. Sonar duplication target <30% per consumer."
+    },
+    {
+      "claim_id": "abf7f94a-8f30-46d1-8e5b-dc0c47a5796c",
+      "agent_id": {
+        "agent_name": "Charcoal Brazing Kiln",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "7c7327"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/scripts/repo-check.ts",
+            "agent-tools/tests/commit-workflow.unit.test.ts",
+            "packages/sdks/graph-corpus-sdk/src/eef-strands/index.ts",
+            "packages/sdks/graph-corpus-sdk/src/threads/index.ts",
+            "agent-tools/tests/collaboration-state/comms-watch-loop.unit.test.ts",
+            "agent-tools/src/collaboration-state/tui/reduce-refresh-state.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T13:12:54Z",
+      "freshness_seconds": 5400,
+      "sidebar_open": false,
+      "intent": "Cycle Alpha — Director-routed (76ede08d) small Sonar cure bundle (S7735×2 + S7787×2 + S7755×1 + S7765×1 + S7727×1); atomic commit; reviewer code-expert single pass"
+    },
+    {
+      "claim_id": "280b01ed-7b00-4d77-9025-6eb772686cc1",
+      "agent_id": {
+        "agent_name": "Shaded Silencing Dusk",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md",
+            ".agent/memory/operational/curator-passes/2026-05-24-shaded-silencing-dusk.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:22:10Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Truth-repair the memory critical-drain plan and Shaded pass ledger against the current soft-only strict-hard result without archiving content"
+    },
+    {
+      "claim_id": "fba31dad-0fbf-465e-b91b-ab706789b444",
+      "agent_id": {
+        "agent_name": "Sylvan Sprouting Petal",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/governance/typescript-gotchas.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/archive/distilled-graduations-log-2026-05-14.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/curator-passes/2026-05-24-sylvan-sprouting-petal.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:22:34Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Graduate self-lint distilled tooling note into TypeScript gotchas and update active-memory audit"
     }
   ]
 }

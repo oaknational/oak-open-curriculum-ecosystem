@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "cca3f311-39b7-4fa4-9c4b-644466afd2b6",
+  "created_at": "2026-05-24T12:29:44.282Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Estuarine Fathoming Sail",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  },
+  "title": "Team closeout: Estuarine Fathoming Sail read-only GitHub PR lookup",
+  "body": "Team closeout: read-only remote GitHub PR lookup complete. Boundary: oaknational/oak-open-curriculum-ecosystem PR metadata only. Evidence: gh pr list author filter app/sonarqube-agent and gh search --app sonarqube-agent both returned PRs 99, 103, 104, 105; title search for Sonar also found PR 97 but author was jimCresswell, so excluded. Claims: none opened. Source edits: none. Comms/seen-file drift only from required team-start watcher and heartbeat events. Watcher and heartbeat loop stopping now.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

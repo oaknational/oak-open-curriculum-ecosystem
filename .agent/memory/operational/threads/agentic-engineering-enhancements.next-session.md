@@ -1,5 +1,30 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-24 — Sylvan Sprouting Petal / `codex` / GPT-5 / `019e59`, Knowledge Curator continuation)
+
+**Current continuity verdict**: the active Knowledge Curator lane cleared the
+critical `pending-graduations.md` pressure without archiving unprocessed
+content. The main register is now a compact index/current-routing surface, and
+unprocessed live queue substance remains in active shards under
+`.agent/memory/operational/pending-graduations/`.
+
+**Latest verified fitness**: `pnpm practice:fitness:informational` exits 0 with
+`SOFT (21 soft)`. There are no current hard or critical surfaces.
+`pending-graduations.md` is soft at 690 lines / 36,308 chars / max prose line
+260.
+
+**Active-shard routing**:
+
+- `pending-graduations/2026-05-06-to-2026-05-21-legacy-backlog.md` carries the
+  unresolved early-May live backlog.
+- `pending-graduations/2026-05-23-team-session-autonomy.md` carries the
+  first-out closeout, commit-queue ceremony, autonomy, and heartbeat bundle.
+
+**Next safe curator step**: process active shard entries one by one into their
+real homes, or take a separate hard-surface lane with an explicit claim. Do not
+archive the shards until every entry has a verified durable home or unresolved
+route and the main register keeps an audit pointer.
+
 ## Session Outcome (2026-05-23 — Scorched Tempering Kiln / `claude` / claude-opus-4-7 / `52b263`, seventh Director window ~13:50Z–~15:05Z)
 
 **Session boundary**: owner-directed Scorched-takes-Director at ~13:50Z ("take over as Director, effective immediately, Secret will pass you information. Be active, figure out what the actual goals are, get them done. Don't take action yourself, delegate to the team"). Owner-direct authority collapsed PDR-064 Moments 1+2 to single acknowledgement broadcast `13424fed`. Seventh Director-role transfer (lineage: Seaworthy → Velvet → Seaworthy-acting → Seaworthy-official → Abyssal → Incandescent → Secret → **Scorched**). Owner-directed handover Scorched → Seaworthy at ~15:04Z; PDR-064 Moment 1 pre-positioning broadcast for that landed; Moment 2 fires on Seaworthy session-resume post-compaction.
@@ -2041,10 +2066,10 @@ uncertainty from the `6027e182` correction as P4 design input.
 - Entry-point drift sweep was clean for `AGENTS.md`, `CLAUDE.md`, and
   `GEMINI.md`.
 - No relevant open conversation or escalation needed handoff action.
-- The tactical track card present in
-  `.agent/memory/operational/tracks/skills-standardisation-followup-timing.md`
-  is an older skills-standardisation follow-up surface, not part of this P3/P4
-  lane.
+- The old skills-standardisation tactical track card was not part of this
+  P3/P4 lane. It was resolved by the 2026-05-24 Knowledge Curator pass after
+  its useful substance was verified in this record and the commands-retirement
+  follow-up route.
 - `.remember` and session comms surfaces did not add a new next-session action
   beyond the already-recorded P4 routing and strategic delegation brief.
 
@@ -3497,7 +3522,7 @@ is agent-executable next session; Phase 2 awaits owner A/B/C choice.
 - `17176e29` — Item 4 reviewer dispatch BLOCKER fix: `parseFrontmatter` returns a freshly-constructed `{ name, description }` instead of the raw narrowed value; dead `LEGACY_CANONICAL_FILENAME` fallback removed.
 - `3191a120` — Timing artefact recording the punch list and reviewer dispositions.
 
-**Reviewer dispatch (Item 4)**: code-reviewer (`ad0605e2…`), type-reviewer (`a75a364b…`), architecture-reviewer-fred (`a5613d0e…`) ran in parallel. One BLOCKER and two cheap WARNs landed in `17176e29`. Five WARNs deferred with reasons in [`tracks/skills-standardisation-followup-timing.md`][followup-timing]; see Deferred follow-up below.
+**Reviewer dispatch (Item 4)**: code-reviewer (`ad0605e2…`), type-reviewer (`a75a364b…`), architecture-reviewer-fred (`a5613d0e…`) ran in parallel. One BLOCKER and two cheap WARNs landed in `17176e29`. Five WARNs deferred with reasons in the table below.
 
 **Wall-clock**: 82 minutes vs 60-minute budget (22 over). Contributors logged in the timing file: `--clear` regression recovery (~5 min), lint cleanup on extracted module (~15 min), reviewer-dispatch synthesis + BLOCKER fix (~10 min). The overrun is information about the punch list's true size, not a confession.
 
@@ -3519,8 +3544,6 @@ is agent-executable next session; Phase 2 awaits owner A/B/C choice.
 - Reviewer-rule cascade re-emerged at smaller scale: type-reviewer's BLOCKER pattern (narrow-and-return-raw rather than narrow-and-construct-fresh) is recurring. Worth a rule extraction.
 
 **Branch state**: `feat/mcp-graph-support-foundation` at HEAD `3191a120` (8 commits ahead of session start `708e2964` once the parallel agent's commit is included).
-
-[followup-timing]: ../tracks/skills-standardisation-followup-timing.md
 
 ### 2026-05-09 session record — Scorched Stoking Crucible (impact landed, follow-ups deferred)
 

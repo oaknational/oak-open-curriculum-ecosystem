@@ -110,6 +110,12 @@ messages.
    §Coordinator Role; workers respond once when addressed, then resume unless a
    deadline pause applies.
 
+   During selective pauses, owner or coordinator unblock hints apply only to
+   the named audience. A paused agent may resume only when the hint names them,
+   names all paused agents, or explicitly says the signal is general. If scope
+   is ambiguous, stay paused and ask whether the unblock applies to you instead
+   of self-routing from a hint aimed at another agent.
+
 ## Comms-system tooling improvements route as proposals
 
 Improvements to the comms-system tooling — the agent-tools

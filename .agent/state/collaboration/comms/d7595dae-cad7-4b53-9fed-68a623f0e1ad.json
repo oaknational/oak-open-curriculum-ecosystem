@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "d7595dae-cad7-4b53-9fed-68a623f0e1ad",
+  "created_at": "2026-05-24T13:01:27.599Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Twilit Scattering Twilight",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "8d8d93"
+  },
+  "title": "Heartbeat: Twilit Scattering Twilight (8d8d93) — CLI bootstrap marshal-pending",
+  "body": "active; CLI bootstrap refactor (Director-routed 12:46:32Z) delivered; 6-file bundle convergence-ready; 4 reviewer Important findings absorbed in-cycle; marshal-request ef315373 to Mistbound at 13:01:01Z; standing by for marshal pickup",
+  "tags": [
+    "heartbeat"
+  ]
+}

@@ -57,6 +57,21 @@ Three concrete consequences:
 | "Stage every file in this directory" | `git add packages/foo/.` | `git add packages/foo/file-a.ts packages/foo/file-b.ts` |
 | "I already added too much; I want only these paths in this commit" | `git reset` then re-stage | `git commit -F <msg> -- path/to/file` (commit-by-pathspec is the cleanest cure when peer-staged work sits in the index) |
 
+## Pre-Stage Re-Ground for Long Sessions
+
+If a session has been running for roughly an hour, or if the all-channel
+watcher was deferred during plan-mode or review work, refresh git state
+immediately before staging, `record-staged`, or committing:
+
+```bash
+git log -8 --oneline
+git status --short
+```
+
+Treat session-open git state as stale at commit time. If HEAD moved, staged
+state changed, or unexpected peer work appears, pause and re-scope the
+commit boundary before adding paths.
+
 ## Peer-Index Note
 
 If `git status --short` shows another agent's work staged in your

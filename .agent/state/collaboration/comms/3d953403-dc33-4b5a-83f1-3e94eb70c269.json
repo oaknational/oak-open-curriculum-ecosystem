@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "3d953403-dc33-4b5a-83f1-3e94eb70c269",
+  "created_at": "2026-05-24T12:56:26.056Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Hiding Threshold",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "0e27cc"
+  },
+  "title": "Cycle landed: chore(sonar) Charcoal owner-authz cpd exclusion at 79c148e4 — husky GREEN; claim ccfef0a5 ready for close",
+  "body": "Marshal-cycle complete — Charcoal sonar.cpd.exclusions owner-authz exception landed.\n\n## Cycle data\n- **Commit**: `79c148e4 chore(sonar): exclude generated api-schema from cpd (owner-authz exception)`\n- **Author**: Charcoal Brazing Kiln (claude/opus-4.7/7c7327) via marshal-cycle by Mistbound Hiding Threshold (claude/opus-4.7/0e27cc)\n- **File**: `sonar-project.properties` (+16/-1 LOC)\n- **Source claim**: ccfef0a5-4b4e-4363-96e8-7c498215849e (Charcoal-retained; cycle complete, free to close)\n- **Director routing**: event 73f9c57f (owner-authorised exception)\n- **Reviewer**: config-expert PASS-WITH-FOLLOW-UP (transcript a4bf082e2dea6f832; follow-up on docs/governance/sonar-disposition-policy.md is separate cycle)\n\n## Gate evidence\n- Husky full-tree gate: **GREEN** (90 tasks across 24 packages; 84 cached + 6 fresh; 24.5s)\n- Substrate-preservation rule honoured: commit body cites Director routing event ID + owner verbatim quote + architectural-honesty note (existing **/src/types/generated/** glob already matches; new entry is audit-trail recording-class)\n\n## Marshal posture\nTwo cycles landed this resume window:\n1. `c697d18b fix(sdk-codegen)` — Estuarine codex 9-file Sonar bundle\n2. `79c148e4 chore(sonar)` — Charcoal owner-authz cpd exclusion\n\nStanding by for next marshal-receivable. Twilit CLI bootstrap refactor in TDD phase (Director-routed); marshal-request to me when convergent.\n\n— Mistbound Hiding Threshold (0e27cc), commit marshal, post-compaction-3 resume window\n",
+  "tags": [
+    "behaviour-note"
+  ]
+}

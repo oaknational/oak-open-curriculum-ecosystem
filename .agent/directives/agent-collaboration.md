@@ -187,50 +187,20 @@ rule operationalises the consult-and-register half of the same tripwire.
 ### c. Treat Commit as a Short-Lived Shared Transaction Surface
 
 The git lock prevents repository corruption, but it does not communicate
-intent or queue order before agents race the shared index and `HEAD`. Before
-staging or committing, use the commit skill to enqueue the intended bundle,
-open and close a short-lived `git:index/head` claim, and verify the exact
-staged bundle immediately before `git commit`. This is awareness, ordering,
-and auditability, not a mechanical lock.
+intent or queue order before agents race the shared index and `HEAD`. Use the
+commit skill: enqueue the intended bundle, open a short-lived
+`git:index/head` claim, verify the exact staged bundle, then close the claim
+after success, failure, or abort. This is awareness, ordering, and
+auditability, not a mechanical lock.
 
 Peer-pair review is not commit authorship: implementers own staging/commit;
 reviewers gate by verdict.
 
-When a peer's pre-staged-but-uncommitted files share the working tree, blanket
-`git add -A` and bare `git commit` both absorb foreign work into your bundle
-and erase peer attribution. Stage by explicit pathspec (`git add -- <paths>`)
-**and** commit by explicit pathspec (`git commit -- <paths>`); the operational
-recipe lives in the [`stage-by-explicit-pathspec`](../rules/stage-by-explicit-pathspec.md)
-rule. Five foreign-stage absorptions across 2026-05-05 → 2026-05-09 grounded
-the cure on both sides — staging discipline alone is insufficient when the
-index is already populated.
-
-The queue protects authorial-bundle integrity; it does not make whole-repo
-hooks local to the staged files. Commit hooks are intentionally whole-tree
-checks because the only useful repository state is one where the whole repo
-passes. If a hook fails on a minor issue such as formatting or markdown style,
-fix it immediately, even when the file belongs to another active slice, and
-record the repair. If the failure is substantial, make it the highest-priority
-next item with a named plan or owner-visible route. Do not narrow quality-gate
-scope, bypass hooks, introduce compatibility layers, or leave the repo broken
-as a coordination tactic.
-
-Files under `.agent/` are shared Practice and coordination state. Active claims
-there are visibility signals, not commit blockers. Commit `.agent` updates when
-they belong to the current bundle or are needed to keep handoff / claim /
-queue / thread state durable; otherwise shared-state residue never lands.
-Current memory/state means current-session state; peer-session dirty files
-follow the [shared-state rule][shared-state-rule]. Current-session writes land
-or become explicit post-commit residue.
-
-Helper-mediated state writes need a peer-claim re-read. After any commit-queue
-completion or claim close, re-read `active-claims.json` before the final state
-commit; the helper applies its mutation against the snapshot it took at
-invocation, and a peer claim opened in the intervening window is silently
-overwritten when the helper writes back. Pathspec discipline prevents absorbing
-peer-staged files; the re-read prevents overwriting peer-authored claim state.
-Both fire at the same moment in the commit window, both prevent the same
-coordination class.
+The load-bearing coordination rules are explicit pathspec staging and commit,
+whole-tree hook respect, durable `.agent` state when it belongs to the current
+bundle, and a peer-claim re-read after helper-mediated state writes. Operational
+recipes live in [`stage-by-explicit-pathspec`][stage-by-explicit-pathspec],
+[lifecycle][lifecycle] §Commit Queue, and the [channel card][channels-card].
 
 ### d. Cleanup Ethics for Apparently Orphaned Claims
 
@@ -243,42 +213,16 @@ claim and closure kind before writing the close. Recipe in
 
 ## PR Closeout Discipline
 
-A PR closeout has two **independent** evidence loops — both must
-report green before the PR is considered closed.
+A PR closeout has two **independent** evidence loops: gate state and
+reviewer-comment state. A green check suite does not prove comments,
+threads, or review summaries are settled. Fetch and classify reviewer
+comments before the next edit, and report planning PRs with two verdicts:
+technical readiness and plan decision-completeness.
 
-### Gate State And Reviewer-Comment State Are Distinct
-
-Gate state (checks, Sonar, CI) and reviewer-comment state are
-independent. A green PR can still need a comment-harvest pass:
-top-level comments, review summaries, and threads marked
-`resolved`/`outdated` may carry live feedback outside the check
-surface. Fetch and classify reviewer comments before the next edit;
-do not infer comment state from check state.
-
-### PR Title And Body Are An Active Review Surface
-
-Branch scope drift makes stale PR metadata an actionable defect, not
-a wrapper. After every push that materially changes scope, rewrite
-the title and body against `origin/main...HEAD` before disposing of
-any metadata-shaped review comment as `fixed`. The PR description is
-the document reviewers read first; stale wording wastes their cycles.
-
-### Planning PRs Report Two Verdicts Separately
-
-For PRs whose primary substance is a plan or set of plans, the gate
-state ("PR technical readiness") and the plan substance state ("plan
-decision-completeness") are independent gates. A green PR must not
-collapse unresolved planning questions (topology findings, slice-plan
-findings, plan-internal contradictions) into implicit acceptance. Each
-verdict is reported separately in the closeout summary.
-
-### Remote Metadata Transitions Are Part Of State Handoff
-
-When a closeout moves from local/pending to pushed, refresh the live
-PR body and next-session records in the same handoff pass so the next
-session does not inherit stale blockers or stale "ready to land"
-wording. State handoff is a complete operation; partial refreshes are
-themselves the bug they appear to fix.
+PR metadata is part of the review surface. When scope changes or the
+closeout moves from local/pending to pushed, refresh title/body and
+next-session records together so reviewers and future sessions inherit the
+current state. Routing notes live in the [channel card][channels-card].
 
 ## Communication Channels
 
@@ -288,38 +232,17 @@ at-a-glance routing card is
 the operational state index is
 [`collaboration-state-conventions.md`](../memory/operational/collaboration-state-conventions.md).
 
-The high-frequency rule is: use active claims for live "I am touching
-this area now" signals, `commit_queue` for advisory commit turn order and
-staged-bundle verification, the shared communication log for discovery notes,
-decision threads for structured async coordination, sidebars for focused short
-exchanges inside a conversation, escalations for owner-facing unresolved
-cases, and owner questions for final tiebreakers. Reviewer dispatch is draft
-review inside one agent's session, not peer collaboration.
-
 ## Identity vs Liveness
 
-These are different concerns and live in different surfaces.
-
-- **Identity** is who-I-am-on-this-thread, additive across sessions per
-  [PDR-027](../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md).
-  Identity rows live in thread records; the
-  [`register-identity-on-thread-join`](../rules/register-identity-on-thread-join.md)
-  rule installs the session-open tripwire. Every shared-state mutation
-  runs identity preflight before write; Codex sessions with
-  `CODEX_THREAD_ID` available must derive the PDR-027 identity block and
-  must not fall back to `Codex` / `unknown`. Recipe in
-  [`collaboration-state-conventions.md`][state-conventions]
-  §Write-Safety Contract.
-- **Liveness** is when-was-this-agent-last-active-here, a *freshness
-  signal* on a claim. Liveness lives on the structured-claims surface;
-  each claim carries `claimed_at`, optional `heartbeat_at`, and a
-  `freshness_seconds` budget (default 14400 = 4 hours). After expiry the
-  claim is **stale** — noise to be audited at consolidation, not a blocker
-  that strands other agents. Closed claims are archived, not silently
-  deleted: explicit, stale, and owner-forced closes all preserve
-  `closure.kind`, `closed_at`, `closed_by`, and evidence refs. Commit-window
-  claims normally use 900 seconds because the index / HEAD transaction should
-  last minutes, not hours.
+Identity is who-I-am-on-this-thread; liveness is when this claim was last
+fresh. Identity rows live in thread records per
+[PDR-027](../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md)
+and the
+[`register-identity-on-thread-join`](../rules/register-identity-on-thread-join.md)
+tripwire. Liveness lives on structured claims through `claimed_at`, optional
+`heartbeat_at`, and `freshness_seconds`; stale claims are consolidation noise,
+not blockers. Recipes live in [state conventions][state-conventions] and
+[lifecycle][lifecycle].
 
 ## Bootstrap Fast-Path
 
@@ -399,7 +322,8 @@ and [escalations][escalations-dir]. Operational companions:
 [`agent-collaboration-channels.md`][channels-card], and
 [`threads/README.md`][threads-readme]. Reviewer-comment-state harvesting
 (§PR Closeout Discipline §Gate State And Reviewer-Comment State Are
-Distinct) composes with [PDR-015 reviewer authority and dispatch](../practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md):
+Distinct) composes with
+[PDR-015 reviewer authority and dispatch][pdr-015]:
 PR closeout names *when* reviewer-comment state must be harvested;
 PDR-015 names *whose* review authority applies on which abstraction
 layer.
@@ -407,6 +331,8 @@ layer.
 [p]: ../plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md
 [channels-card]: ../memory/executive/agent-collaboration-channels.md
 [threads-readme]: ../memory/operational/threads/README.md
+[pdr-015]: ../practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md
+[stage-by-explicit-pathspec]: ../rules/stage-by-explicit-pathspec.md
 [founding-pattern]: ../memory/collaboration/parallel-track-pre-commit-gate-coupling.md
 [lifecycle]: ../memory/operational/collaboration-state-lifecycle.md
 [napkin]: ../memory/active/napkin.md
@@ -417,4 +343,3 @@ layer.
 [escalation-schema]: ../state/collaboration/escalation.schema.json
 [escalations-dir]: ../state/collaboration/escalations/
 [state-conventions]: ../memory/operational/collaboration-state-conventions.md
-[shared-state-rule]: ../rules/respect-active-agent-claims.md#shared-state-files-are-always-writable-and-always-commit-includable

@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "17b4ea96-9c89-4250-8a10-31a7cc70f12b",
+  "created_at": "2026-05-24T12:40:33.692Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Twilit Scattering Twilight",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "8d8d93"
+  },
+  "title": "Heartbeat: Twilit Scattering Twilight (8d8d93) — Gate 1 standing-by; Sonar QG RED on PR-108 (21 violations + 5.9% duplication per Pelagic inventory)",
+  "body": "active; Gate 1 path now has substantive blocker — Pelagic surfaced 21 new Sonar violations + 5.9% duplication on PR-108 at 12:37:45Z; Codex sub-team working Sonar cures (Estuarine marshal-request to Mistbound at 12:38:54Z); Director routing to me unchanged; standing by",
+  "tags": [
+    "heartbeat"
+  ]
+}

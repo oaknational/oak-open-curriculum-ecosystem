@@ -2,7 +2,8 @@
 
 **Audience**: working agents (Claude Code, Codex, Cursor) and human reviewers driving quality remediation across this monorepo.
 
-**Status**: living knowledge document. Last updated 2026-04-27 by Briny Ebbing Lagoon during PR-87 quality remediation.
+**Status**: living knowledge document. Last updated 2026-05-24 by Shaded
+Silencing Dusk during knowledge-curator consolidation.
 
 This document captures the operational knowledge for driving repo quality up using three coupled tools — SonarCloud (with the Sonar MCP), CodeQL (via GitHub), and Sentry (with the Sentry MCP) — and the discipline that turns each tool's signal into a principled fix or a defensible dismissal.
 
@@ -22,6 +23,25 @@ This document captures the operational knowledge for driving repo quality up usi
 ### Invocation patterns
 
 The Sonar MCP server (`mcp__sonarqube__*`) provides read-only inspection plus per-issue and per-hotspot status changes. The project key resolution discipline is documented in MCP server instructions; for this repo it is `oaknational_oak-open-curriculum-ecosystem` (default project for the MCP integration).
+
+### Codex / Docker MCP fallback
+
+Codex sessions may not expose the direct `mcp__sonarqube__*` namespace even
+when Docker MCP can provide the same Sonar tools. Before declaring Sonar
+unavailable, inspect the Docker MCP tool list:
+
+```bash
+docker mcp tools ls --format json
+```
+
+Docker MCP tool calls use the positional tool name followed by `key=value`
+arguments, not a JSON object.
+
+If a profile-backed gateway such as `sonarqube_oak` exits during initialisation
+with EOF, check the Docker Desktop secrets-engine socket at
+`~/Library/Caches/docker-secrets-engine/engine.sock`. A missing socket means
+Docker cannot inject the stored Sonar token; it is a local gateway setup issue,
+not evidence that the issue key, project key, or Sonar token value is wrong.
 
 **Always at session-open** when working on a quality-remediation branch:
 

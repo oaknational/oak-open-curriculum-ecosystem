@@ -35,6 +35,14 @@ work or an observation worth acting on.
   repeating prompts. The monitor's exit criterion is part of its
   setup, not an afterthought.
 
+## Template Authorship
+
+If a repo-local `/loop` skill, cron wrapper, scheduled-wakeup
+template, or repeating-prompt helper is authored later, it cites this
+rule instead of duplicating the doctrine. The template's invocation
+contract names the exit criterion field and carries the five-idle-
+iteration default by reference to this rule.
+
 ## When the Rule Does Not Fire
 
 - One-shot tasks. A single invocation with no repeating template

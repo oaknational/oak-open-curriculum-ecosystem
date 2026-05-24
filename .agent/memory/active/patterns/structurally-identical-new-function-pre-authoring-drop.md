@@ -46,6 +46,7 @@ existing function, not in a parallel function.
   the gateway where this check fires.
 - `.agent/skills/oak-plan/` — the plan-authoring surface that
   benefits from this check.
-- `.agent/memory/operational/pending-graduations.md` 2026-05-22 —
-  the original capture entry remains until the third-instance
-  trigger fires from a different author or plan.
+- This pattern now carries the live trigger: a third instance from a
+  different author or plan, or owner direction, promotes the substance to a
+  PDR or skill amendment. The duplicate pending-register body was drained on
+  2026-05-24 after this home was verified.

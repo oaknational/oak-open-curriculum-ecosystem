@@ -14,13 +14,22 @@ impulse is the **diagnostic, not the cure**. Write the entry. If
 rotation is needed, surface that as a separate question after the
 entry lands.
 
+Archive is also downstream of curation. Never archive unprocessed
+content as a way to make the live surface smaller. First read the
+source, extract the behaviour-changing substance, route each item to
+its correct home or explicit unresolved queue, and only then archive
+the source as the preserved historical record. Archive-after-processing
+protects knowledge; archive-before-processing hides unfinished
+curation.
+
 Owner-stated 2026-05-11 as already-established repo doctrine:
 *"never, ever withhold knowledge preservation to keep a mechanical
 warning lower, that is already repo doctrine"*.
 
 ## Scope
 
-This rule applies to **memory and state surfaces**:
+The preservation-over-fitness invariant applies to **memory and state
+surfaces**:
 
 - `.agent/memory/active/napkin.md` (current session observations)
 - `.agent/memory/active/distilled.md` (cross-session hard-won
@@ -32,12 +41,20 @@ This rule applies to **memory and state surfaces**:
   `.agent/memory/operational/threads/`
 - Per-user platform-specific memory stores (own platform only)
 
-This rule does **not** apply to **buffer surfaces** like
+That preservation-over-fitness branch does **not** apply to **buffer
+surfaces** like
 `.agent/memory/operational/pending-graduations.md`. Buffers are
 flow-control surfaces; fitness pressure on a buffer is a producer-
 or-consumer rate diagnostic, not a preservation question. See
 [surface classification PDR](../practice-core/decision-records/PDR-067-surface-classification-for-fitness-response.md)
 for the four-surface taxonomy.
+
+The archive-after-processing invariant is broader: it applies to
+every curation archive move, including buffers. A buffer can be drained
+only by processing its entries first: verify the destination or
+remaining live route, record the disposition, and only then archive the
+source body. Buffer scope changes the fitness diagnosis; it does not
+permit archive-before-processing.
 
 ## Why
 
@@ -67,7 +84,10 @@ substance change behaviour or carry durable understanding?**
   event) rather than the durable memory.
 
 If the destination surface is overflowing, raise the rotation
-question separately, **after the entry lands**. Never:
+question separately, **after the entry lands**. If archive or
+rotation is the right structural move, complete the curation pass
+first: every source item must have a disposition before the archive
+move. Never:
 
 - Truncate substance to stay under a line count.
 - Defer the entry "until the next rotation".
@@ -75,6 +95,8 @@ question separately, **after the entry lands**. Never:
 - Drop the entry because "the substance is similar to existing
   content" (similarity ≠ duplication; the new instance is its own
   evidence).
+- Archive unprocessed source material and call the live-surface
+  shrink a completed curation pass.
 
 ## Composition
 
@@ -97,3 +119,5 @@ question separately, **after the entry lands**. Never:
   four-surface classification.
 - 2026-05-22 — graduation from per-user memory to in-repo rule
   surface so the doctrine is visible to all platforms.
+- 2026-05-24 — owner sharpened the archival boundary: knowledge
+  curation comes first, always; never archive unprocessed content.

@@ -22,6 +22,11 @@ the options by evidence already in context, surfacing them as a quiz to
 the owner is the failure pattern, regardless of how the question is
 phrased.
 
+If the available doctrine, evidence, and long-term architectural
+excellence frame leave only one defensible answer, there is no
+question to ask. State the forced verdict and the evidence that makes
+alternatives non-viable.
+
 ## Legitimate Uses of AskUserQuestion
 
 `AskUserQuestion` (and equivalent multi-choice surfaces) is reserved for:
@@ -42,6 +47,8 @@ phrased.
 
 - Converting completed analysis into a multiple-choice form ("Which of
   these three findings is correct?" when the agent already knows).
+- Asking the owner to choose after the evidence has forced a single
+  defensible route.
 - Spreading a single position across options to avoid commitment
   ("Option A: my verdict. Option B: the opposite. Option C: a hedge.").
 - "Do these look fine?" after analysing them oneself.

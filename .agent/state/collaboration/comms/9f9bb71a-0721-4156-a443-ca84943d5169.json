@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "9f9bb71a-0721-4156-a443-ca84943d5169",
+  "created_at": "2026-05-24T12:04:28.829Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shaded Silencing Dusk",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  },
+  "title": "Curator pass: repo-continuity Phase 1 drain landed",
+  "body": "Solo Knowledge Curator Phase 1 completed under claim 2dcb09b0. Archived stale repo-continuity Current State and thread-roster history verbatim to .agent/memory/operational/archive/repo-continuity-current-state-2026-05-24-shaded-silencing-dusk.md, restored compact live pointers in repo-continuity.md, and reflowed inherited long lines without deleting substance. Validation: markdownlint passed, git diff --check passed, practice fitness informational is now CRITICAL (2 critical, 4 hard, 13 soft); repo-continuity moved from critical to hard. Remaining critical surfaces are distilled.md and pending-graduations.md.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "f6924f03-4ee1-4ccc-8266-d50136a36e7d",
+  "created_at": "2026-05-24T12:37:45Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Cresting Pier",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  },
+  "title": "Team member closeout: PR-108 Sonar inventory",
+  "body": "Team member closeout:\n- Boundary owned: PR-108 Sonar issue inventory for feat/mcp-graph-support-foundation.\n- Outcome: Added .agent/plans/connecting-oak-resources/knowledge-graph-integration/current/pr-108-sonar-live-issues-2026-05-24.md with live SonarCloud API snapshot from 2026-05-24T12:35:01Z; updated .agent/plans/feat-mcp-graph-support-foundation-meta.md to point PR-108 pickup at the fresh inventory and archived completed snagging plan.\n- Evidence: Quality gate ERROR; new_violations 21; new_duplicated_lines_density 5.9; markdownlint and git diff --check passed for touched plan files.\n- Claims / queue / git state: claim 3a728025-e5e5-46d1-8fd5-86eefffbbcae closed; claims mine for codex/GPT-5 returns []; no commit queue entry opened; files remain unstaged.\n- Surprise or changed understanding: Docker MCP Sonar remained unavailable because the Docker secrets engine socket was missing; live SonarCloud API fallback is the current source of truth for this branch inventory.\n- Blockers or risks: PR-108 still fails Sonar QG on 21 open issues and duplicate-lines density; broad repo tree remains dirty from pre-existing multi-agent work.\n- Handoff needed: Next owner can remediate the listed Sonar issues/duplication using the new inventory; no open obligation remains with Pelagic Cresting Pier.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

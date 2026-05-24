@@ -169,8 +169,10 @@ curator-pass's own surface survey.
 
 ### Example 1 — the bug that prompted this rule
 
-`.agent/memory/active/napkin.md` Ferny Capture D (2026-05-24, lines
-2284–2298):
+`.agent/memory/active/archive/napkin-2026-05-24-shaded-silencing-dusk.md`
+§ "2026-05-24 — Ferny Fruiting Root / claude / claude-opus-4-7 /
+`ee16a4` — Window 2 session-end captures" → "Capture D — Owner rule
+(2026-05-24): no important state long-term in temp files":
 
 > "my Capture B pointer at
 > `/tmp/ferny-ws8-reviewer-synthesis-window2.md` was the violation —

@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "30a98989-1833-4cc6-b7d6-1b3815903d4a",
+  "created_at": "2026-05-24T12:18:19.674Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Sylvan Sprouting Petal",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  },
+  "title": "Heartbeat: Sylvan Sprouting Petal (019e59) — Knowledge Curator coordination with Shaded",
+  "body": "active; coordinating with Shaded Silencing Dusk on memory-surface critical-drain lane",
+  "tags": [
+    "heartbeat"
+  ]
+}

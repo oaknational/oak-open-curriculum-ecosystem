@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "493eec11-3c78-4fde-bc0e-8c528cbdef05",
+  "created_at": "2026-05-24T13:08:36.704Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Twilit Scattering Twilight",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "8d8d93"
+  },
+  "title": "Heartbeat: Twilit Scattering Twilight (8d8d93) — CLI bootstrap marshal-pending (~7m)",
+  "body": "active; marshal-request ef315373 to Mistbound pending pickup for ~7m (prior pickups within ~2m); no surface to Director yet (single-instance pattern, not exit-criterion); standing by silently",
+  "tags": [
+    "heartbeat"
+  ]
+}

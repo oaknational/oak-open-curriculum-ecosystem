@@ -46,9 +46,10 @@ now "learning before fitness".
 
 Two conservation moves are part of the pattern:
 
-- **Archive before compaction.** Preserve a full-file snapshot before
-  rotating an oversized active-memory surface so live prose can shrink
-  without historical loss.
+- **Archive after processing, before compaction.** Read and route the
+  source substance first; then preserve the processed full-file snapshot
+  before shrinking an oversized active-memory surface so live prose can
+  shrink without historical loss.
 - **Reconcile status, do not silently graduate.** If a due marker is stale
   because a durable home already exists, name that home and correct the
   metadata; do not present the correction as a fresh doctrine promotion.

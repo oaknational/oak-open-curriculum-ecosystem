@@ -13,6 +13,9 @@ Invoke `assumptions-expert` when:
 - A plan proposes 3+ new specialist agents
 - A plan proposes new workspace categories or package topology changes
 - A plan commits to technology choices before research phases complete
+- A related PDR, ADR, or plan set is drafted in one session or depends on
+  cross-document coupling; review the set boundary, not only each document
+  in isolation
 - A user or agent requests an assumption audit or proportionality check
 
 ## Non-Goals
@@ -35,3 +38,8 @@ Do not invoke `assumptions-expert` for:
 ## Invocation
 
 See `.agent/memory/executive/invoke-code-experts.md` for the full reviewer catalogue and invocation policy. The `assumptions-expert` canonical template is at `.agent/sub-agents/templates/assumptions-expert.md`.
+
+For a related decision set, name the whole set in the reviewer prompt and ask
+for cross-document coupling defects. The set-scope review is what catches
+premature dependency closure, namespace coupling, or one Proposed decision
+foreclosing another Proposed decision's open question.

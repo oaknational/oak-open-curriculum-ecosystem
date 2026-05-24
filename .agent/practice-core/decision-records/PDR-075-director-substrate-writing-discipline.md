@@ -29,6 +29,17 @@ namespaces this discipline writes into);
 specifies when the Director emits substrate events, ADR-185 specifies
 how downstream consumers triage them).
 
+## Status Review
+
+**2026-05-24 — remains Candidate.** A Knowledge Curator status review
+found that later Director-transition and substrate-writing evidence
+strengthens the case for this PDR, but does not by itself authorize a
+status promotion. The promotion trigger below still requires fourth-
+instance worked validation in a distinct session, with refinements
+absorbed, or explicit owner ratification. Until that happens, agents
+should cite PDR-075 as Candidate doctrine with useful evidence, not as
+Proposed or Accepted doctrine.
+
 ## Context
 
 This PDR addresses the failure mode worked-instanced four times in one

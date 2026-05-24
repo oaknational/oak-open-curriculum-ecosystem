@@ -49,6 +49,11 @@ A receiver should be able to act WITHOUT a clarifying question back to the sende
 
 After compaction, your future self IS a new receiver. Compaction-boundary handoff records (napkin entries, thread next-session records, claim notes) MUST follow this rule. A receiving-agent that happens to share your `agent_name` does NOT share your transcript memory after the compaction summary replaces it.
 
+If runtime monitors, cron jobs, watchers, or loop instructions matter after the
+compaction, flush their exact commands and intended state into the handoff and
+verify them on first wake-up. Do not rely on the compaction summary or the
+runtime process table to preserve that contract reliably.
+
 ## Source attribution
 
 Graduated 2026-05-22 from `.agent/memory/operational/pending-graduations.md` candidate `handoff-messages-self-contained`. Worked-instance evidence: Mistbound Slipping Night → Stormbound Kiting Squall t12 commit handoff at 2026-05-22T15:42Z (`0f03f45c-a225-4d55-bb15-2e5c44abb678`), where the message named every staged file by path, the verify-staged fingerprint, the intent_id, three commit-landing options, all four reviewer verdicts, and the closed claim disposition — all substance the receiver needed to act without a clarifying question back.

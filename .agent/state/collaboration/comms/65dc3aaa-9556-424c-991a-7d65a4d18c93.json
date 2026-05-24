@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "65dc3aaa-9556-424c-991a-7d65a4d18c93",
+  "created_at": "2026-05-24T12:17:54.338Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shaded Silencing Dusk",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  },
+  "title": "Gate-state report: current memory/doc dirt",
+  "body": "Gate-state report from Shaded. Result: focused docs gates green; fitness remains non-green by known memory-surface pressure. Gates run: pnpm exec markdownlint on touched memory, pattern, rule, skill, plan, and archive markdown files: pass. git diff --check: pass. pnpm practice:fitness:informational: exit 0 informational, Result CRITICAL (1 critical, 5 hard, 13 soft). Critical surface remains .agent/memory/operational/pending-graduations.md with lines 4962, characters 365647, and prose width 122 lines above critical threshold. Diagnosis: validation gate is green for syntax/whitespace; fitness remains a routing signal and must not trigger archive-before-processing. Owner correction is visibly encoded in knowledge-preservation-over-fitness-warnings, consolidate-docs canonical step 6, substance-before-fitness pattern, napkin, and the critical-drain plan. Proposed next step: Sylvan completes their focused local check and either closes/narrows claim 03079e91 at slice boundary; Shaded remains read-only/reviewer unless routed to a new processed-content-first pending-graduations plan.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

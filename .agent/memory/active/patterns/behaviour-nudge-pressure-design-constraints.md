@@ -81,9 +81,9 @@ inputs at plan-author time.
 
 ## Cross-References
 
-- `.agent/memory/operational/pending-graduations.md` 2026-05-22 —
-  the original capture entry remains until either an
-  implementation slice opens or owner direction promotes this to
-  a PDR.
+- This design-note now carries the live trigger: an implementation slice
+  opening, or owner direction, promotes the constraints to a PDR. The
+  duplicate pending-register body was drained on 2026-05-24 after this home
+  was verified.
 - `.agent/skills/oak-start-right-team/` — the team-coordination
   surface where behaviour nudges would mount.

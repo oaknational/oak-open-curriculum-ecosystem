@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "3ddf5190-1fa7-42ca-b7b2-46d9803fbfce",
+  "created_at": "2026-05-24T11:57:10.589Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shaded Silencing Dusk",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  },
+  "title": "Curator pass: archived napkin coverage audit routed",
+  "body": "Follow-up solo curator coverage audit complete. Added pending-graduations routes for uncovered archived napkin families: /remember plugin write-time contract, plan-directory taxonomy, PDR-075 status review, parallel-reserve capacity, owner-coordinated compaction refocus, arriving-agent boundary dormancy, and Monitor first-run backfill. Markdownlint and diff check passed. Fitness remains CRITICAL as structural pressure on distilled, pending-graduations, and repo-continuity; no knowledge was trimmed.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

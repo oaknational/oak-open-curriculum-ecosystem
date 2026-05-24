@@ -174,6 +174,8 @@ State snapshot — refresh on session pickup.
 ### Blocked
 
 - PR-108 cannot merge until residual SonarCloud QG conditions clear (`new_violations`, `new_duplicated_lines_density`) and CI re-runs clean for the hotspot + CodeQL dismissal.
+- Current PR-108 Sonar issue inventory is captured in
+  [`pr-108-sonar-live-issues-2026-05-24.md`](connecting-oak-resources/knowledge-graph-integration/current/pr-108-sonar-live-issues-2026-05-24.md).
 - gate-1a promotion to ACTIVE waits for the substrate (WS4.4 + WS4.5) + corpus (gate-1a tokens) + ff1/ff2/ff5/ff6 + PR-108 merging to main.
 
 ## Entry points for a fresh session
@@ -182,10 +184,11 @@ State snapshot — refresh on session pickup.
 
 ### …PR-108 snagging work
 
-1. [`pr-108-snagging.plan.md`](connecting-oak-resources/knowledge-graph-integration/current/pr-108-snagging.plan.md) end-to-end.
-2. [`docs/governance/sonar-disposition-policy.md`](../../docs/governance/sonar-disposition-policy.md).
-3. [`.agent/rules/never-disable-checks.md`](../rules/never-disable-checks.md).
-4. The relevant cycle's file scope.
+1. [`pr-108-sonar-live-issues-2026-05-24.md`](connecting-oak-resources/knowledge-graph-integration/current/pr-108-sonar-live-issues-2026-05-24.md) for the current live Sonar issue inventory.
+2. [`pr-108-snagging.plan.md`](connecting-oak-resources/knowledge-graph-integration/archive/completed/pr-108-snagging.plan.md) for the completed historical snagging plan.
+3. [`docs/governance/sonar-disposition-policy.md`](../../docs/governance/sonar-disposition-policy.md).
+4. [`.agent/rules/never-disable-checks.md`](../rules/never-disable-checks.md).
+5. The relevant cycle's file scope.
 
 ### …gate-1a substrate authoring (WS4.4 or WS4.5)
 

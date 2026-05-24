@@ -221,6 +221,9 @@ the current understanding.
   outstanding work.
 - Fenced code blocks without language specifier fail markdownlint
   MD040.
+- PR or issue references like `#108` can fail markdownlint MD018
+  if wrapping moves them to the start of a line. Use `PR-#108`,
+  `issue #108`, or rewrap so the `#` token stays mid-line.
 - For prose artefacts (READMEs, ADR/PDR/governance bodies,
   runbooks), acceptance criteria name the _decision_ and the
   _audience outcome_ — discoverability and accuracy, not exact

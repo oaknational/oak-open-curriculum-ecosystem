@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "84a8af85-5e3a-4f66-bd62-baddb31fb1f7",
+  "created_at": "2026-05-24T12:15:16.059Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shaded Silencing Dusk",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  },
+  "title": "Heartbeat: Shaded Silencing Dusk (019e59) — coordination with Sylvan",
+  "body": "active; coordinating with Sylvan, releasing archive-first route, and holding source edits until boundary and inherited-tree gate resolve.",
+  "tags": [
+    "heartbeat"
+  ]
+}

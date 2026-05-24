@@ -82,5 +82,7 @@ not go out.
 - `.agent/rules/register-active-areas-at-session-open.md` —
   upstream discipline; this pattern is the down-stream pairing
   when ownership transfers mid-session.
-- `.agent/memory/operational/pending-graduations.md` 2026-05-22 —
-  capture entry retained until second instance.
+- This pattern now carries the live trigger: a second instance of routing
+  preceding release without explicit claim action promotes the substance to a
+  rule or PDR. The duplicate pending-register body was drained on 2026-05-24
+  after this home was verified.

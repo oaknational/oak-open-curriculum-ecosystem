@@ -51,6 +51,23 @@ directories are omitted because the collection does not need them yet:
 └── {plan-documents}      # Collection-owned plans outside lifecycle subdirs
 ```
 
+### Lifecycle Taxonomy
+
+Use the lifecycle directory as a status contract before reading the body of a
+plan:
+
+| Directory | Meaning | Plan form | Promotion rule |
+|-----------|---------|-----------|----------------|
+| `active/` | **NOW** — in-progress execution | Executable plan | Only plans being worked now live here; update `active/README.md` as the execution index. |
+| `current/` | **NEXT** — queued and ready, not started | Executable plan | Move the plan to `active/` and update both indexes before work starts. |
+| `future/` | **LATER** — deferred strategic intent | Strategic plan | Promote to `current/` before writing execution tasks or treating it as ready-to-run. |
+| `archive/completed/` | **DONE** — completed, read-only history | Archived plan | Extract durable outcomes first, then archive and update references. |
+
+`current/` is not a synonym for "currently active": it means next-up
+executable work. `active/` is the only lifecycle lane for work in flight.
+This distinction is the shared vocabulary used by `/jc-plan`, the plan
+templates, and collection READMEs.
+
 ### Reachability Invariant — Leaf-To-Root
 
 Every plan file MUST be a leaf node reachable from this root README via the

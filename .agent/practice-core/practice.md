@@ -15,7 +15,11 @@ specification aspect is a portability tool: it lets processes, flows,
 contracts, approaches, structures, and vocabularies travel without binding them
 to one host. It creates the conditions for safe, high-quality human-AI
 collaboration. The Practice is what produces the host repo's deliverables —
-but it is not the deliverables themselves. It is deliberately plain text and
+but it is not the deliverables themselves. Practice-bearing repos ship on two
+output surfaces: product surface, and Practice-substrate surface. Product
+surface is the host deliverable; Practice substrate is durable learning that
+improves future work conditions. Both are real throughput, and neither should
+be mistaken for the other. The Practice is deliberately plain text and
 vendor-portable: agents from major platforms can collaborate, continually learn
 and adapt, and preserve institutional and operational knowledge where future
 work can inspect it.
@@ -150,6 +154,13 @@ capture to graduation is the progression from instance to concept.
 PDR-014 defines the content roles in this loop: doctrine, recipe books,
 troubleshooting, patterns, rules, command rubrics, scanners/gates,
 decision records, and operational state.
+
+Knowledge curation is not administrative overhead around that loop. It is the
+Practice's autonomic learning function: the substrate prompts agents to capture,
+distil, graduate, enforce, and repair the learning surfaces because those moves
+make future work safer and cheaper. A session can therefore produce value by
+shipping product surface, by shipping Practice-substrate surface, or by doing
+both.
 
 ### The Cycle
 
@@ -457,6 +468,12 @@ validate the output. Where installed, sub-agents review work against the
 same rules that guided its creation.
 The napkin captures what went wrong, distillation extracts rules, and the rules
 prevent repetition.
+
+This self-teaching chain is recursion as method. Each layer reads the prior
+layer's output as input and writes material the next layer can read: work feeds
+capture, capture feeds refinement, refinement feeds graduation, graduation
+feeds enforcement, and enforcement shapes future work. Practice Core is
+therefore a recursive learning substrate, not a passive documentation store.
 
 This self-teaching chain depends on the **Core → Repo orientation
 surfaces** (Category A of the vital integration surfaces per

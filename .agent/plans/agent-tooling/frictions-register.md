@@ -963,6 +963,31 @@ below is a cross-reference index, not a second source of truth.
   "make sure the other options are included in the appropriate,
   discoverable plan surface").
 
+### F-33 — `/remember` compression can write assistant-prose contamination
+
+- **Source**: curator handoff
+  `.agent/state/collaboration/handoffs/curator-role-handoff-2026-05-24-vining-to-breezy.md`
+  §§3.5 and 5.1; pending-graduations entry
+  "`/remember` plugin write-time contract gap".
+- **Surface**: external `/remember` plugin `ndc` pipeline (`now.md` →
+  `today-YYYY-MM-DD.md`) and `.remember/logs/memory-2026-05-24.log`.
+- **Observed**: daily compressed `.remember` files contained Claude assistant
+  draft prose interleaved with legitimate waypoint summaries; the same audit
+  found `[ndc] ERROR: produced empty result` at 10:09:39 on 2026-05-24.
+- **Expected**: plugin-managed capture buffers preserve waypoint-summary shape;
+  empty or assistant-prose output is rejected before write or recorded as a
+  structured validation failure.
+- **Candidate cure**: upstream write-time output validation for the compression
+  contract: reject empty output, detect assistant-prose contamination, and keep
+  the previous valid buffer state when validation fails.
+- **Target surface**: upstream `/remember` plugin contract or issue; this
+  repo-local entry is the routing pointer and evidence index, not the buffer
+  mutation site.
+- **Status**: open — routed from pending-graduations 2026-05-24; external
+  plugin implementation still required.
+- **Owner direction status**: standing (curators must not mutate plugin-managed
+  buffers directly; route the contract gap).
+
 ### F-31 — Commit-msg hook depends on unpinned `pnpm dlx commitlint`
 
 - **Source**: Radiant Illuminating Twilight attempting the WS2.1 graph-ingest

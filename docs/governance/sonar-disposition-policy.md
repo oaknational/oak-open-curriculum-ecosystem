@@ -314,6 +314,12 @@ signal under the standard quality gate.
   generator's chosen shape; the durable fix path is upstream in the
   schema or generator, not at the site.
 
+- `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/**` —
+  owner-authorised audit-trail exception recorded on 2026-05-24. This path is
+  already covered by `**/src/types/generated/**`; the narrower glob is retained
+  because the owner explicitly authorised this generated-code boundary as a
+  specific exception and the config should preserve that decision visibly.
+
 - `**/*.test.ts`, `**/*.test.tsx`, `**/tests/**`, `**/e2e-tests/**` —
   test isolation requires that each test arranges its own fixtures and
   collaborators without coupling to a sibling test's setup. DRYing across
@@ -405,6 +411,11 @@ per the "Duplications (cpd.exclusions)" class above. It currently covers:
 - `**/*.test.ts`, `**/*.test.tsx`, `**/tests/**`, `**/e2e-tests/**` —
   test isolation.
 - `agent-tools/src/bin/**` — CLI shebang entry-point wrappers.
+- `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/**` —
+  owner-authorised audit-trail exception recorded on 2026-05-24. The broader
+  `**/src/types/generated/**` glob already covers this generated path, so the
+  entry is functionally redundant for analyser scope; it exists to make the
+  owner-ratified boundary visible in the mechanical encoding.
 
 Block 2 is mechanically distinct from Block 1: it touches only the cpd
 analyser, never any rule analyser. All other Sonar rules continue to see

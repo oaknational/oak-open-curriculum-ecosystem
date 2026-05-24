@@ -36,6 +36,24 @@ The pattern is named for its structural feature: each substrate surface is a *po
 | Durable prose | `repo-continuity.md` Current-State sections; thread next-session records; handoff records | Re-author at consolidation boundaries; no per-event update |
 | Comms-event lifecycle field | A prior Moment-1 broadcast naming an agent as "closed" | Set at the moment the broadcast was authored; never updated |
 
+**V3 real-time absorption variants, folded in 2026-05-24**: the
+second-day napkin pass added variants where the substrate was not always
+wrong at write-time. The common failure is still pointer absorption at
+decision-time: the agent acts on a value whose freshness no longer matches
+the decision being made.
+
+| Variant | Disposition in this pattern |
+| --- | --- |
+| Fresh-on-disk comms not yet absorbed | Covered by the stream-tail check: on-disk freshness is insufficient if the agent has not absorbed the relevant tail before routing. |
+| Stale handoff-record attribution on resume | Covered by durable-prose pointer discipline: handoff records are hypotheses until live claims, comms, and git state re-ground them. |
+| Cron prompt template as substrate pointer | Covered as a template pointer across owner-pause windows: the latest owner turn supersedes the prompt's "resume" wording. |
+| Pre-compaction stale framing | Covered by pointer-and-hypothesis discipline: compacted continuation facts must be recomputed from live surfaces before action. |
+| Compose-vs-emit interval staleness | Covered as a routing-construction interval: a broadcast can be accurate when drafted and stale by peer absorption time. |
+
+These variants do not require a sibling pattern yet. They extend the
+same cure family: before a load-bearing action, compare the pointer's
+last-fresh moment with the live stream-tail and latest owner turn.
+
 **Two structural directions** observed firing the same class — and *the two directions are not symmetric in failure cost*. The substrate-says-closed direction propagates O(N) cascading misses across each Director / peer who relies on the stale substrate, until the misrepresented agent self-surfaces or another agent posts a correction. The substrate-says-active direction produces O(1) routing-overshoots per stale read (a directed event lands on a dead session; the dead session does not propagate the miss further). The asymmetry matters at cure-design time:
 
 | Direction | Shape | Failure propagation | Worked instance |

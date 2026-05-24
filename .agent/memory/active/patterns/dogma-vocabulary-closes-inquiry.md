@@ -78,8 +78,8 @@ authority vocabulary:
   closely related: dogma-vocabulary often arrives in the same
   utterance as citation-as-reasoning. The two compress past the
   active reasoning step from different angles.
-- `.agent/memory/operational/pending-graduations.md` 2026-05-21 —
-  rule candidate retained until second instance or owner direction
-  to graduate to a new rule (likely `no-dogma-vocabulary.md` or an
-  extension of the no-hedging-vocabulary rule to make it
-  bidirectional).
+- This pattern now carries the live trigger: a second instance, or owner
+  direction, promotes this to a new rule (likely `no-dogma-vocabulary.md`) or
+  an extension of the no-hedging-vocabulary rule to make it bidirectional. The
+  duplicate pending-register body was drained on 2026-05-24 after this home
+  was verified.

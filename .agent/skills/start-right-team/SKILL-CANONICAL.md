@@ -330,6 +330,18 @@ The loop SHOULD swallow stdout on success (failures emit so the agent
 can react). The loop dies when the session ends, which correctly
 satisfies the retirement-on-silence rule for natural session-end.
 
+**Owner-input precedence on every scheduled tick:** a cron, scheduled
+wakeup, or persistent monitor prompt is itself substrate. Before it
+emits a heartbeat or resumes prior work, it MUST read the latest owner
+turn. If the owner has issued a direction that supersedes task
+continuation — pause, stop, wait, hold, standby, paused-until-X, or an
+equivalent direction — do not resume the previous task. Instead emit
+the final-heartbeat-end / pause-standby signal that matches the new
+owner direction, stop the scheduled loop if the direction requires it,
+and wait for the next real owner turn. Only when no superseding owner
+direction has landed should the tick emit a heartbeat and return to
+the in-flight task.
+
 **State thresholds:**
 
 | Time since last heartbeat | State | Director action |

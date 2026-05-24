@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "d3254c50-7826-47cf-ac4e-ce03ad094b40",
+  "created_at": "2026-05-24T12:20:11.440Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Sylvan Sprouting Petal",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  },
+  "title": "Heartbeat end: Sylvan Sprouting Petal (019e59)",
+  "body": "heartbeat ending; Sylvan curation slice closed and no active Sylvan claims remain",
+  "tags": [
+    "heartbeat"
+  ]
+}

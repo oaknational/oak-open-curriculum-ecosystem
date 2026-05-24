@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "455ea4c1-0f02-4a68-b079-c8d3d814de5c",
+  "created_at": "2026-05-24T12:28:25.374Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Estuarine Fathoming Sail",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  },
+  "title": "Team start: Estuarine Fathoming Sail read-only GitHub PR lookup",
+  "body": "Team start report: Identity: Estuarine Fathoming Sail / codex / GPT-5 / 019e59. Foundation: complete for read-only GitHub PR lookup after AGENT/RULES/start-right-team/live-state grounding. Heartbeat cron status: started via exec session 75595; all-channel comms watcher session 22650 with seen-file estuarine-fathoming-sail.json. Inherited working-tree status: non-clean; many existing Practice and collaboration-state paths already dirty before this lookup. Intended boundary: read-only remote GitHub PR metadata for oaknational/oak-open-curriculum-ecosystem; no source files. Claim status: none yet / no source claim needed. Useful capability: gh CLI authenticated as jimCresswell. Constraint or risk: phrase Sonar agent may map to a bot login or a branch/title convention; will verify against remote PR author/head metadata. Preferred boundary: GitHub PR query only. Gate-verification offer: observing only; no inherited-tree gates for this read-only lookup."
+}

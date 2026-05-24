@@ -111,4 +111,24 @@ From predecessor pass + survey §7:
 
 ## Summary outcome
 
-(populated at pass close)
+Pass paused at session-end per owner team-wide pause direction
+(11:09:44Z, relayed by Twilit). Cycle #1 LANDED (`c60cda01`);
+cycle #1.1 cure substrate AUTHORED (5 files in working tree, all
+SHOULD-ABSORB + missing-adapter items absorbed) but UNCOMMITTED —
+marshal-cycle was queued behind Mistbound's compaction-3 resume
+and was overtaken by the owner-pause + push event.
+
+Substrate-care signal: knowledge curation produced one durable
+graduation this session (rule landing on the very `/tmp/`-as-
+durable-reference failure mode that the load-bearing handover
+artefact itself exemplified).
+
+Claim disposition: RETAINED as-is per owner pause direction (claims
+must not be closed, retired, or handed off unilaterally during the
+pause). Cycle #1.1 substrate is the load-bearing in-flight state.
+Pickup contract for resumption is named in the closeout broadcast.
+
+## Closeout broadcast pointer
+
+Team-member closeout: comms event (Breezy → BROADCAST, session-end
+under owner pause; pointer added at emission).

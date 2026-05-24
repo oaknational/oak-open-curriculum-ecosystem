@@ -1,0 +1,16 @@
+{
+  "schema_version": "0.1.0",
+  "pid": 41624,
+  "started_at": "2026-05-24T12:26:23.246Z",
+  "last_drain_at": "2026-05-24T12:30:53.991Z",
+  "last_emit_at": "2026-05-24T12:29:44.574Z",
+  "last_error_at": null,
+  "emitted_count": 1578,
+  "heartbeat_interval_ms": 30000,
+  "watcher_identity": {
+    "agent_name": "Pelagic Cresting Pier",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "cc39f4d6-6910-46b1-af60-5134b2466df1",
+  "created_at": "2026-05-24T12:06:53.066Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shaded Silencing Dusk",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  },
+  "title": "Curator pass: pending-graduations Phase 2 partial landed",
+  "body": "Solo Knowledge Curator Phase 2 partial completed under claim ba32e198. Removed two live resolved pending-graduations stubs after verifying archive bodies and permanent pattern homes, then regenerated the stale due index to name nine current due entries with owner-decision, implementation-lane, plugin-contract, or plan-hygiene routes. Validation: markdownlint passed, git diff --check passed, practice fitness informational remains CRITICAL (2 critical, 4 hard, 13 soft). pending-graduations.md remains critical; this is a partial drain, not closure.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

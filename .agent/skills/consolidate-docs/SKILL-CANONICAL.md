@@ -298,10 +298,17 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    **Cross-plane path scan** (Family B complement; per PDR-028 Executive-Memory Feedback Loop): for each napkin entry or pattern candidate in this pass, ask — *"Does this carry `Source plane: executive` or `cross_plane: true` as an origin / span tag (per [PDR-030](../../practice-core/decision-records/PDR-030-plane-tag-vocabulary.md))?"* Entries tagged across planes route through the graduation channels defined in PDR-028 rather than the default same-plane channel.
 6. **Rotate the napkin if needed.** If `.agent/memory/active/napkin.md` exceeds ~500 lines, perform the distillation rotation:
 
+   **Process before archive**: archiving is the final preservation move for an
+   already-processed source, not a parking place for unfinished curation. Do
+   not archive unprocessed napkin content. Steps (a) through (c) must leave each
+   behaviour-changing item with a disposition — merged, refined, explicitly
+   skipped as duplicate, routed to pending graduation, or investigated as a
+   contradiction — before step (d) moves the outgoing source.
+
    a. **Extract** — read every "Patterns to Remember", "Mistakes Made", "Key Insight", and "Lessons" section from the outgoing napkin. Collect all entries that would change behaviour if read next session.
    b. **Merge** — compare extracted entries against existing `distilled.md`. For each entry: new insight → add it to the appropriate section; duplicate → skip; refinement of existing rule → update with the sharper formulation; contradiction → investigate (the more recent finding usually wins, but verify before overwriting).
    c. **Prune** — remove entries from `distilled.md` that have already been captured in permanent documentation. No duplication across tiers. (Graduation of settled content happens in step 7.)
-   d. **Archive** — move the outgoing napkin to `.agent/memory/active/archive/napkin-YYYY-MM-DD.md` using the current date.
+   d. **Archive** — move the processed outgoing napkin to `.agent/memory/active/archive/napkin-YYYY-MM-DD.md` using the current date.
    e. **Start fresh** — create a new `.agent/memory/active/napkin.md` with a session heading documenting the distillation.
 
    Target: `distilled.md` should stay under 200 lines of high-signal content.

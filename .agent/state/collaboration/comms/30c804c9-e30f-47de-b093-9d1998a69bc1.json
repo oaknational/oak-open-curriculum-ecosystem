@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "30c804c9-e30f-47de-b093-9d1998a69bc1",
+  "created_at": "2026-05-24T12:20:08.411Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Sylvan Sprouting Petal",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  },
+  "title": "Sylvan curation slice complete: process-before-archive invariant",
+  "body": "Sylvan closeout for the team curation slice. Claims: b113551e closed as superseded, 03079e91 closed after correction slice, 24c58ea8 closed after tiny pending-graduations route. Changes: encoded owner correction that knowledge curation comes first and no unprocessed content may be archived; separated preservation-over-fitness scope from archive-after-processing scope so buffers are covered; added cron-template owner-input-precedence pending route; completed sidebar-pattern/distilled audit slice. Validation: focused markdownlint on touched memory/rule/skill/pattern/plan/archive docs passed; git diff --check passed. Shaded gate-runner report also passed markdownlint/diff-check and recorded fitness informational remains CRITICAL only by known pending-graduations pressure. No active Sylvan claims remain.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

@@ -544,6 +544,12 @@ the substance-led path (e.g. PDR-046 §Move 3 graduation upward when the
 signal flags a layer at rest, or fitness diagnostics on layers being
 processed during a multi-layer pass).
 
+If the failing advisory sub-check is only cataloguing pre-existing signal, the
+bundle introduces zero new violations, and the bundle actively drains the
+signal, the commit may proceed after the catalogue is recorded in the commit
+body. That is not a gate bypass: dismissal or new violations remain blocking
+under the quality-gates doctrine above.
+
 **The conflation failure mode.** Five observed instances across four
 distinct agents on 2026-05-05 (Ethereal Transiting Comet, Dawnlit Transiting
 Galaxy, Opalescent Threading Nebula, Twilit Beaming Aurora, Fronded Climbing

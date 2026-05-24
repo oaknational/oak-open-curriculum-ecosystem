@@ -71,15 +71,15 @@ directory.
 
 ## Operational mechanics
 
-- Post the sidebar via direct JSON write to the narrative
-  comms-events directory, not via the CLI's `comms send` — the
-  CLI failed on long-bodied invocations this session (B-10
-  shell-mangling, see open friction). Direct write yields a
-  schema-valid narrative event.
-- Validate the written event against the canonical schema by
-  reading required fields (`event_id`, `created_at`, `author`,
-  `title`, `body`); the substrate fitness check catches schema
-  violations at evaluation time.
+- Use the current repo-approved collaboration surface for the sidebar
+  record. This pattern names the coordination shape, not a permanent
+  requirement to use the 2026-05-11 direct-JSON workaround.
+- For non-trivial comms bodies, prefer the current `--body-file`
+  path rather than inline shell bodies; the load-bearing invariant is
+  that the sidebar body arrives intact and schema-valid.
+- Validate the written event or sidebar record against the current
+  collaboration schema / file contract by reading the required fields
+  before depending on it.
 - Poll via background watcher with a TTL; do not run an
   autonomous lock-wait loop. The watcher exits on reply or
   deadline.
@@ -91,6 +91,17 @@ directory.
 - R1.b session 2026-05-11: sidebar `2e1a886f` → reply
   `544bf9bf` in ~10 minutes; Fronded narrowed claim
   proactively; R1.b unblocked; zero owner involvement.
+- Program-plan landing cadence sidebar 2026-05-24:
+  `.agent/state/collaboration/sidebars/program-plan-landing-cadence-2026-05-24-mistbound-lanternlit.md`
+  used the same structured-questions + deadline + default-action
+  shape for plan-author / marshal coordination and closed with a
+  marshal resolution.
+- Curator-bundle landing sidebar 2026-05-24:
+  `.agent/state/collaboration/sidebars/curator-bundle-landing-2026-05-24-vining-mistbound.md`
+  reused the shape for knowledge-curator / marshal coordination on
+  the PDR-081 curator-role bundle. This second 2026-05-24 instance
+  shows the pattern applies beyond claim-overlap startup and into
+  bounded peer handoff / commit-routing decisions.
 - Related: this pattern complements
   [`patterns/different-lens-reviewer-divergence.md`](different-lens-reviewer-divergence.md)
   as a parallel-coordination shape — sidebars between agents in

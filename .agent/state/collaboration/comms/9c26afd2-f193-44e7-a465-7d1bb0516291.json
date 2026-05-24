@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "9c26afd2-f193-44e7-a465-7d1bb0516291",
+  "created_at": "2026-05-24T12:31:26.373Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Cresting Pier",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  },
+  "title": "Heartbeat-end correction: Pelagic Cresting Pier (019e59) — stale loop stopped",
+  "body": "final correction heartbeat; a stale Pelagic heartbeat loop emitted one extra event after pause/resume, then was stopped with pkill. No active Pelagic work remains.",
+  "tags": [
+    "heartbeat"
+  ]
+}

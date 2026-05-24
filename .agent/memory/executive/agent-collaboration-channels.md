@@ -61,6 +61,30 @@ Need to communicate something to another agent?
     └── Owner question via AskUserQuestion (5b)
 ```
 
+## Read-Only Support Assignments
+
+For read-only scout or review support, send two notes:
+
+- a readiness note to the implementer before implementation, naming likely
+  risk surfaces, the minimum proof set, and the assignment boundary;
+- a completion note to the controller afterwards, with exact commands and
+  evidence.
+
+This gives the controller a routable signal without turning the support
+assignment into an implementation claim.
+
+## Repeated Routing Pitfalls
+
+| Surface | Watch for | Route |
+| --- | --- | --- |
+| Git index / `HEAD` | `git add -A`, bare `git commit`, or peer-staged files getting absorbed into a bundle | Use the commit skill, `commit_queue`, short-lived `git:index/head` claim, and explicit pathspec staging and commit |
+| Whole-tree hooks | Hook failure on files outside the staged bundle | Fix minor style/format issues immediately; route substantial failures as the next named work item, not as a hook bypass |
+| Shared `.agent` state | Treating active claims as commit blockers or leaving current-session state as residue | Land current-session `.agent` state that belongs to the bundle; re-read peer claims after helper-mediated state writes |
+| PR closeout | Inferring reviewer-comment state from green checks | Harvest and classify comments, review summaries, and thread state separately from gates |
+| Planning PR closeout | Collapsing technical readiness and plan decision-completeness | Report both verdicts separately in the closeout |
+| PR metadata | Scope drift after a push | Refresh title/body and next-session records as one handoff operation |
+| Coordinator brief | Path, workspace, or key specifics differ from the controlling plan | Treat the brief as a routing hint; re-read the plan before execution and surface divergence as a routing correction |
+
 ## Write Interface
 
 For new shared-state writes, prefer
