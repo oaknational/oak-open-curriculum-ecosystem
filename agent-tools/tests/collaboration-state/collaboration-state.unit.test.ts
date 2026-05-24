@@ -205,6 +205,30 @@ describe('runCollaborationStateCli', () => {
     });
   });
 
+  it('parses repeated tag flags as an ordered collection', () => {
+    const parsed = parseOptions([
+      '--',
+      'comms',
+      'append',
+      '--tag',
+      'heartbeat',
+      '--tag',
+      'behaviour-note',
+    ]);
+
+    expect(parsed).toMatchObject({
+      tags: ['heartbeat', 'behaviour-note'],
+      files: [],
+      areaPatterns: [],
+    });
+  });
+
+  it('exposes an empty tags array when no --tag is provided', () => {
+    const parsed = parseOptions(['--', 'comms', 'append', '--title', 'no tags here']);
+
+    expect(parsed.tags).toStrictEqual([]);
+  });
+
   it('builds claim areas from repeated area-pattern values', () => {
     const opened = createClaimFromOptions(
       options(
@@ -651,11 +675,19 @@ function options(
   values: Readonly<Record<string, string>>,
   files: readonly string[] = [],
   areaPatterns: readonly string[] = [],
+  tags: readonly string[] = [],
 ): Options {
   const parsedValues = new Map<string, string>();
   for (const key in values) {
     parsedValues.set(key, values[key] ?? '');
   }
 
-  return { command: undefined, topic: undefined, values: parsedValues, files, areaPatterns };
+  return {
+    command: undefined,
+    topic: undefined,
+    values: parsedValues,
+    files,
+    areaPatterns,
+    tags,
+  };
 }

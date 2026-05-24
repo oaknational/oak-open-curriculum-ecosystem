@@ -24,8 +24,9 @@ export function createDirectedCommsMessage(input: {
   readonly to: CollaborationAgentId;
   readonly subject: string;
   readonly body: string;
+  readonly tags?: readonly string[];
 }): DirectedCommsMessage {
-  return {
+  const base: DirectedCommsMessage = {
     schema_version: '2.0.0',
     event_id: input.eventId,
     created_at: input.createdAt,
@@ -36,6 +37,7 @@ export function createDirectedCommsMessage(input: {
     subject: input.subject,
     body: input.body,
   };
+  return input.tags !== undefined && input.tags.length > 0 ? { ...base, tags: input.tags } : base;
 }
 
 export async function writeCommsEventWithReadback(input: {

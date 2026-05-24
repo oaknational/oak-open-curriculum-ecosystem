@@ -6,9 +6,10 @@ import { renderCommsLog, writeCommsEventWithReadback } from './comms-use-cases.j
 import { resolveIdentity } from './cli-identity.js';
 import { optional, required, valueOrDefault, type Options } from './cli-options.js';
 import { cliIo, type CollaborationStateCliIo, type CliRuntime } from './cli-runtime.js';
+import { validateCommsEventTags } from './comms-tag-namespace.js';
 import { assertIdentityCanWrite } from './identity-write-guard.js';
 import { validateSharedStateAgentId } from './identity.js';
-import { type CollaborationStateEnvironment } from './types.js';
+import { type CollaborationStateEnvironment, type NarrativeCommsEvent } from './types.js';
 
 const DEFAULT_COMMS_DIR = '.agent/state/collaboration/comms';
 const DEFAULT_SHARED_LOG = '.agent/state/collaboration/shared-comms-log.md';
@@ -69,6 +70,16 @@ export async function appendComms(
   });
 
   const body = await resolveCommsBody(options, io);
+  const tags = validateCommsEventTags(options.tags);
+  const baseEvent: NarrativeCommsEvent = {
+    schema_version: '2.0.0',
+    event_id: valueOrDefault(options, 'event-id', randomUUID()),
+    created_at: required(options, 'created-at'),
+    kind: 'narrative',
+    author: identity.agent_id,
+    title: required(options, 'title'),
+    body,
+  };
   await writeCommsEventWithReadback({
     nowIso,
     store: {
@@ -76,15 +87,7 @@ export async function appendComms(
         io.writeCommsEvent({ commsDir, event, nowIso: currentNowIso }),
       read: () => io.readCommsEvents(commsDir),
     },
-    event: {
-      schema_version: '2.0.0',
-      event_id: valueOrDefault(options, 'event-id', randomUUID()),
-      created_at: required(options, 'created-at'),
-      kind: 'narrative',
-      author: identity.agent_id,
-      title: required(options, 'title'),
-      body,
-    },
+    event: tags.length > 0 ? { ...baseEvent, tags } : baseEvent,
   });
 
   return '';
@@ -136,6 +139,9 @@ export async function sendComms(
 
   return formatCommsSendResult(resolvedOptions, eventId);
 }
+
+// `withDefaults` merges only the `values` Map; `tags`, `files`, and
+// `areaPatterns` arrays pass through unchanged on the spread.
 
 export function commsSendDefaults(
   options: Options,

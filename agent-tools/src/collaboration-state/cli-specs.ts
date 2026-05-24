@@ -59,9 +59,11 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
       'comms append --comms-dir <dir> --now <iso> --created-at <iso> ' +
       '--title <title> (--body <body> | --body-file <path>) ' +
       '--platform <platform> --model <model> ' +
-      '--active <path> [--event-id <id>] ' +
+      '--active <path> [--event-id <id>] [--tag <tag>...] ' +
       '(--body and --body-file are mutually exclusive; --body-file is the cure ' +
-      'for shell-quoting hazards on bodies that contain backticks or dollar signs)',
+      'for shell-quoting hazards on bodies that contain backticks or dollar signs; ' +
+      '--tag is repeatable, accepts ADR-183 namespace ' +
+      '[failure-mode, behaviour-note, heartbeat])',
     options: commsAppendOptions,
     handler: appendComms,
   }),
@@ -70,8 +72,10 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
       'comms send --title <title> (--body <body> | --body-file <path>) ' +
       '--platform <platform> --model <model> ' +
       '[--comms-dir <dir>] [--output <path>] [--active <path>] [--repo-root <path>] [--now <iso>] ' +
-      '[--event-id <id>] (--body and --body-file are mutually exclusive; --body-file reads ' +
-      'the file literally and bypasses shell interpretation) ' +
+      '[--event-id <id>] [--tag <tag>...] (--body and --body-file are mutually exclusive; ' +
+      '--body-file reads the file literally and bypasses shell interpretation; ' +
+      '--tag is repeatable, accepts ADR-183 namespace ' +
+      '[failure-mode, behaviour-note, heartbeat]) ' +
       '(identity seed: PRACTICE_AGENT_SESSION_ID_CLAUDE, ' +
       'PRACTICE_AGENT_SESSION_ID_CURSOR, PRACTICE_AGENT_SESSION_ID_CODEX, CODEX_THREAD_ID, ' +
       'or OAK_AGENT_IDENTITY_OVERRIDE)',
@@ -118,9 +122,10 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
       '--to-model <model> --to-session-prefix <prefix> --kind <kind> ' +
       '--subject <subject> (--body <body> | --body-file <path>) ' +
       '--platform <platform> --model <model> ' +
-      '--active <path> [--event-id <id>] [--now <iso>] ' +
+      '--active <path> [--event-id <id>] [--now <iso>] [--tag <tag>...] ' +
       '(--body and --body-file are mutually exclusive; --body-file reads the file ' +
-      'literally and bypasses shell interpretation)',
+      'literally and bypasses shell interpretation; --tag is repeatable, accepts ' +
+      'ADR-183 namespace [failure-mode, behaviour-note, heartbeat])',
     options: commsDirectOptions,
     handler: directComms,
   }),

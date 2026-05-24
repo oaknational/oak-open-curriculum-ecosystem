@@ -10,6 +10,7 @@ import {
 import { resolveIdentity } from './cli-identity.js';
 import { optional, required, valueOrDefault, type Options } from './cli-options.js';
 import { cliIo, type CollaborationStateCliIo, type CliRuntime } from './cli-runtime.js';
+import { validateCommsEventTags } from './comms-tag-namespace.js';
 import { assertIdentityCanWrite } from './identity-write-guard.js';
 import { validateSharedStateAgentId } from './identity.js';
 import {
@@ -30,6 +31,7 @@ export async function directComms(
   const io = cliIo(runtime);
   const eventId = valueOrDefault(options, 'event-id', randomUUID());
   const nowIso = valueOrDefault(options, 'now', new Date().toISOString());
+  const tags = validateCommsEventTags(options.tags);
   const message = createDirectedCommsMessage({
     eventId,
     createdAt: nowIso,
@@ -38,6 +40,7 @@ export async function directComms(
     to: recipientAgent(options),
     subject: nonEmptyRequired(options, 'subject'),
     body: await resolveNonEmptyBody(options, io),
+    tags,
   });
 
   return writeDirectedMessage({

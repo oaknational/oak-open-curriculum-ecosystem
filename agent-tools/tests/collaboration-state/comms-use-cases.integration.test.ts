@@ -45,6 +45,61 @@ describe('comms use cases', () => {
     expect(store.events()).toStrictEqual([event]);
   });
 
+  it('includes tags on a directed event when supplied (ADR-183 tag namespace)', () => {
+    const event = createDirectedCommsMessage({
+      eventId: 'message-tagged',
+      createdAt: '2026-05-24T10:18:00Z',
+      messageKind: 'directed',
+      from: sender,
+      to: recipient,
+      subject: 'Tagged surface',
+      body: 'tagged body',
+      tags: ['failure-mode'],
+    });
+
+    expect(event).toStrictEqual({
+      schema_version: '2.0.0',
+      event_id: 'message-tagged',
+      created_at: '2026-05-24T10:18:00Z',
+      kind: 'directed',
+      message_kind: 'directed',
+      from: sender,
+      to: recipient,
+      subject: 'Tagged surface',
+      body: 'tagged body',
+      tags: ['failure-mode'],
+    });
+  });
+
+  it('omits the tags field on a directed event when not supplied (additive-extension discipline)', () => {
+    const event = createDirectedCommsMessage({
+      eventId: 'message-untagged',
+      createdAt: '2026-05-24T10:18:00Z',
+      messageKind: 'directed',
+      from: sender,
+      to: recipient,
+      subject: 'Untagged surface',
+      body: 'untagged body',
+    });
+
+    expect(event).not.toHaveProperty('tags');
+  });
+
+  it('omits the tags field on a directed event when supplied as an empty array', () => {
+    const event = createDirectedCommsMessage({
+      eventId: 'message-empty-tags',
+      createdAt: '2026-05-24T10:18:00Z',
+      messageKind: 'directed',
+      from: sender,
+      to: recipient,
+      subject: 'Empty-tag surface',
+      body: 'empty-tag body',
+      tags: [],
+    });
+
+    expect(event).not.toHaveProperty('tags');
+  });
+
   it('builds a reply by reading source messages and swapping sender and recipient', () => {
     const source = createDirectedCommsMessage({
       eventId: 'message-one',

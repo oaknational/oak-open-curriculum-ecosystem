@@ -9,6 +9,7 @@ export const commsAppendOptions = [
   'model',
   'active',
   'event-id',
+  'tag',
 ] as const;
 
 export const commsSendOptions = [
@@ -23,6 +24,7 @@ export const commsSendOptions = [
   'repo-root',
   'now',
   'event-id',
+  'tag',
 ] as const;
 
 export const commsWatchOptions = [
@@ -62,6 +64,7 @@ export const commsDirectOptions = [
   'active',
   'event-id',
   'now',
+  'tag',
 ] as const;
 
 export const commsReplyOptions = [

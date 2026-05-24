@@ -72,7 +72,7 @@
           "type": "array",
           "items": { "type": "string" },
           "uniqueItems": true,
-          "description": "Optional tag namespace per PDR-066 + ADR-183. Initial namespace is exactly 'failure-mode' and 'behaviour-note'; new tags require an ADR amendment with explicit second-instance evidence (the namespace stays small by design). Tags compose with the structural channel discriminator at render time ([BROADCAST]/[GROUP]/[DIRECTED]/[LIFECYCLE]) — they do NOT replace it. Readers that do not understand this field MUST ignore it (additive-extension discipline per PDR-049 + PDR-050)."
+          "description": "Optional tag namespace per PDR-066 + ADR-183. Canonical namespace is 'failure-mode', 'behaviour-note', and 'heartbeat' (the third added operationally by SKILL §0.5 heartbeat contract; ADR-183 amendment pending to formalise). The namespace stays small by design: new tags require an ADR amendment with explicit second-instance evidence. Tags compose with the structural channel discriminator at render time ([BROADCAST]/[GROUP]/[DIRECTED]/[LIFECYCLE]) — they do NOT replace it. Readers that do not understand this field MUST ignore it (additive-extension discipline per PDR-049 + PDR-050)."
         }
       },
       "description": "Default narrative event: an authored, titled, bodied communication addressed to the team. Lives in .agent/state/collaboration/comms/."
@@ -138,7 +138,7 @@
           "type": "array",
           "items": { "type": "string" },
           "uniqueItems": true,
-          "description": "Optional tag namespace per PDR-066 + ADR-183. Initial namespace is exactly 'failure-mode' and 'behaviour-note'; new tags require an ADR amendment with explicit second-instance evidence (the namespace stays small by design). Tags compose with the structural channel discriminator at render time ([BROADCAST]/[GROUP]/[DIRECTED]/[LIFECYCLE]) — they do NOT replace it. Readers that do not understand this field MUST ignore it (additive-extension discipline per PDR-049 + PDR-050)."
+          "description": "Optional tag namespace per PDR-066 + ADR-183. Canonical namespace is 'failure-mode', 'behaviour-note', and 'heartbeat' (the third added operationally by SKILL §0.5 heartbeat contract; ADR-183 amendment pending to formalise). The namespace stays small by design: new tags require an ADR amendment with explicit second-instance evidence. Tags compose with the structural channel discriminator at render time ([BROADCAST]/[GROUP]/[DIRECTED]/[LIFECYCLE]) — they do NOT replace it. Readers that do not understand this field MUST ignore it (additive-extension discipline per PDR-049 + PDR-050)."
         }
       },
       "description": "Lifecycle event: a structured event recording a session, claim, or consolidation lifecycle moment. Carries explicit thread and claim_id context. Lives in .agent/state/collaboration/comms/."
@@ -188,7 +188,7 @@
           "type": "array",
           "items": { "type": "string" },
           "uniqueItems": true,
-          "description": "Optional tag namespace per PDR-066 + ADR-183. Initial namespace is exactly 'failure-mode' and 'behaviour-note'; new tags require an ADR amendment with explicit second-instance evidence (the namespace stays small by design). Tags compose with the structural channel discriminator at render time ([BROADCAST]/[GROUP]/[DIRECTED]/[LIFECYCLE]) — they do NOT replace it. Readers that do not understand this field MUST ignore it (additive-extension discipline per PDR-049 + PDR-050)."
+          "description": "Optional tag namespace per PDR-066 + ADR-183. Canonical namespace is 'failure-mode', 'behaviour-note', and 'heartbeat' (the third added operationally by SKILL §0.5 heartbeat contract; ADR-183 amendment pending to formalise). The namespace stays small by design: new tags require an ADR amendment with explicit second-instance evidence. Tags compose with the structural channel discriminator at render time ([BROADCAST]/[GROUP]/[DIRECTED]/[LIFECYCLE]) — they do NOT replace it. Readers that do not understand this field MUST ignore it (additive-extension discipline per PDR-049 + PDR-050)."
         }
       },
       "description": "Directed message: a point-to-point communication from one agent to another, carrying explicit from/to identities and a message_kind sub-discriminator. Lives in .agent/state/collaboration/comms/."

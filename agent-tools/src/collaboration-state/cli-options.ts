@@ -4,6 +4,7 @@ export interface Options {
   readonly values: ReadonlyMap<string, string>;
   readonly files: readonly string[];
   readonly areaPatterns: readonly string[];
+  readonly tags: readonly string[];
 }
 
 const KNOWN_OPTION_KEYS = new Set([
@@ -40,6 +41,7 @@ const KNOWN_OPTION_KEYS = new Set([
   'seen-file',
   'subject',
   'summary',
+  'tag',
   'thread',
   'thread-record',
   'title',
@@ -59,12 +61,13 @@ export function parseOptions(argv: readonly string[]): Options {
   const values = new Map<string, string>();
   const files: string[] = [];
   const areaPatterns: string[] = [];
+  const tags: string[] = [];
 
   for (let index = 0; index < rest.length; ) {
-    index = parseToken({ rest, index, values, files, areaPatterns });
+    index = parseToken({ rest, index, values, files, areaPatterns, tags });
   }
 
-  return { command, topic, values, files, areaPatterns };
+  return { command, topic, values, files, areaPatterns, tags };
 }
 
 export function required(options: Options, key: string): string {
@@ -112,6 +115,7 @@ function parseToken(input: {
   readonly values: Map<string, string>;
   readonly files: string[];
   readonly areaPatterns: string[];
+  readonly tags: string[];
 }): number {
   const token = input.rest[input.index] ?? '';
   const next = input.rest[input.index + 1];
@@ -126,6 +130,10 @@ function parseToken(input: {
   }
   if (token === '--area-pattern') {
     input.areaPatterns.push(requireFlagValue(token, next));
+    return input.index + 2;
+  }
+  if (token === '--tag') {
+    input.tags.push(requireFlagValue(token, next));
     return input.index + 2;
   }
   if (token.startsWith('--')) {
