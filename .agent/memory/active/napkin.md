@@ -2199,3 +2199,84 @@ Pattern v3 condition list now has 4 conditions (Wilma's 3 + new variant) + 3+ ne
 - This arc's owner-directed marshal-resume overrode Director Seaworthy's open marshal-vacancy routing (tick #1 declared vacancy; tick #2 routed Cycle #1 to whoever the next marshal would be). Director re-routed within ~2 minutes of owner correction (supersede broadcast at 19:30:38Z). Pattern: owner direction during a Director routing window is absorbed by Director as supersede; does not require a separate authority-resolution conversation.
 - **Composition**: with §0.5 heartbeat contract (still under owner refinement) + PDR-064 coordinator-handoff two moments (substantively confirmed clean under this arc's pressure).
 - **Source plane**: `operational`
+
+## 2026-05-24 — Ferny Fruiting Root / claude / claude-opus-4-7 / `ee16a4` — Window 2 session-end captures (cron-prompt cure-shape text + WS-8 4-reviewer substrate paste-ready)
+
+Team-member-not-closeout-owner session-end captures. Closeout owner is Director Seaworthy (`6966d4`). Three Ferny-specific captures complementary to Mistbound's Surprise 1-4 + Observations above; not duplicating Mistbound's Surprise 2 12th-instance reference or 13th-instance cron-prompt-template-as-substrate-pointer naming (both already captured); adding cure-shape text + substrate pointers Ferny owns.
+
+### Capture A — Cron-prompt cure-shape: concrete owner-input-precedence text (extends Mistbound Surprise 2 instance 13)
+
+Mistbound's capture names the failure mode (cron-prompt-as-substrate-pointer overlays current owner-input during cron execution) and gestures at the cure shape ("cron template must include 'first read latest owner turn before composing heartbeat'"). My Ferny-perspective lived-experience: the actual prompt body that produced the 12-hour absorption delay was:
+
+> "Heartbeat tick (Ferny / ee16a4 / Marshal). Emit a narrative comms event with tags:[\"heartbeat\"] [...] After emit, do one short comms sweep for new events you might want to act on, then return to whatever task is in flight."
+
+The load-bearing failure phrase is **"return to whatever task is in flight"**. It directs the agent to resume task-continuation as the default, presuming task-state is the active context. When owner has issued a turn that supersedes task-continuation ("pause" / "stop" / "wait" / "hold"), this template overrides it because the cron firing presents BEFORE the agent reads the current owner-input turn.
+
+**Concrete cure-shape text** for the cron-prompt body (drop-in replacement for the final paragraph):
+
+```text
+FIRST: read the latest owner-input turn in the conversation. If owner has
+issued a direction that supersedes task-continuation (pause, stop, wait,
+hold, standby, paused-until-X, or any equivalent direction), do NOT emit
+a heartbeat — instead, emit a final-heartbeat-end + pause-standby broadcast
+naming the absorbed owner-direction, then call CronDelete on this job's id
+and STOP. Only if no superseding direction has landed: emit the heartbeat
+event and return to whatever task is in flight.
+```
+
+The owner-input-precedence check must FIRE on every cron-fire, not just at cron-creation time. The cron template is itself substrate (per Mistbound's framing); the cure-shape is structural — the prompt MUST self-check owner-input-precedence before executing its default action.
+
+**Composition**: pairs with §0.5 heartbeat contract's final-heartbeat-end-broadcast rule (SKILL line 766-777); the cure-shape text invokes that protocol cleanly. Pattern v3 candidate cure for the cron-prompt-as-substrate-pointer instance.
+
+**Source plane**: `operational` → graduation candidate (cure-shape text concrete enough to embed in CLI documentation or future `pnpm agent-tools:heartbeat` convenience wrapper).
+
+### Capture B — WS-8 4-reviewer pre-draft convergence substrate (paste-ready for follow-on Work Item B authoring)
+
+Author paused mid-uptake on Work Item B (WS-8 C2+C5+C4 ratification record + PDR-079 authoring lane); reviewer fan-out completed pre-pause. 10 architectural conditions for whoever resumes the lane (or any future agent picking up the record authoring):
+
+**Convergent (all 4 reviewers agreed)**:
+
+1. **Operative-state distinction MUST be load-bearing**: three distinct sections in record/PDR, not one combined claim. **In-effect-now (operative)**: C4 routing-discipline. **Platform-deferred (target shape)**: C2 near-term + C5 long-term. **Explicitly rejected**: C1, C3.
+2. **Platform-engagement vehicle dependency needs concrete pointer**: "Anthropic platform" has no inbox; track as owner-action item if engagement vehicle is TBD.
+3. **Comms-broadcast alone is under-durable**: author PDR-079 alongside the comms-broadcast (Practice Core canonical home); comms-broadcast is the announcement, PDR is the source-of-truth.
+4. **Rejection rationale inline, not by-reference**: one-sentence per rejected shape (C1 rubber-stamp cascade + organisational SPOF; C3 silent gitleaks violation surface).
+5. **Re-ratification triggers explicit**: (A) Anthropic responds to C2/C5; (B) owner direction amends; (C) pattern v3 cure lands with schema amendment; (D) Cursor unavailability >4 hours → owner-escalate.
+
+**Divergent (reviewer-specific; adopt-or-defer)**:
+
+6. **5-shape closure named** (assumptions): one line stating "5-shape space treated as complete based on Charcoal/Wilma analysis; surfacing of new shape supersedes ratification on its merits".
+7. **C5 substrate-as-API schema-versioning reserved** (wilma + betty): clause naming downstream cost of schema-as-platform-API contract; critical amendments require coordination.
+8. **Upstream alternative rejection noted** (betty): one line stating "upstream alternative (agent → staging-file → human-promote pipeline) is structurally equivalent to C1; already rejected in C1-rejection rationale".
+9. **Cross-reference destinations corrected** (docs-adr): PDR-079 (new, alongside) + WS-8 plan-record + start-right-team SKILL §"Cross-Platform Routing Posture" + new `.agent/rules/README.md`. **Drop** PDR-077 (orthogonal axis; marshal-cycle-discipline) and pending-graduations (decision is owner-ratified, not graduation-pending).
+10. **Citation-discipline line codified** (docs-adr): "event-id for substrate cross-references; SHA-prefix legitimate for git-landing references". Flag follow-up amendment to `.agent/rules/sha-prefix-in-collaboration-content.md` to name this distinction.
+
+**Suggested title** (per docs-adr): `[DECISION-OF-RECORD] Claude .claude/* self-modification authorisation — C2 near-term + C5 long-term + C4 fallback ratified (C1/C3 rejected; cites verdict matrix 1e2c83eb)`
+
+**Reviewer transcripts** (for substrate forwarding):
+
+| Reviewer | Verdict | Transcript |
+|---|---|---|
+| assumptions-expert | CONCERNS (5 findings) | `abd6fb0a2f95d4b25` |
+| architecture-expert-betty | CONCERNS (5 findings) | `a52790a31593562f9` |
+| architecture-expert-wilma | SAFE-WITH-CONDITIONS (5 failure modes) | `a64d82df5d94c44ca` |
+| docs-adr-expert | DOCS-DRIFT-MEDIUM (5 findings inc. PDR-079 recommendation) | `a8f083c2f9986abbc` |
+
+Full synthesis substrate at `/tmp/ferny-ws8-reviewer-synthesis-window2.md` (durable through session-end; copy to `.agent/memory/active/` if WS-8 lane is reassigned before that `/tmp/` surface clears).
+
+**Source substrate**: Charcoal's verdict matrix at comms event `1e2c83eb`; owner verdict at Seaworthy tick #2 broadcast 19:28:47Z.
+
+### Capture C — Director-tick-#4 pre-absorption parallel-dispatch (12th instance; Ferny-perspective on the 10-second timing window)
+
+Mistbound's Surprise 2 12th instance briefly names this event. Ferny-perspective addendum: the substrate-pointer was **substrate-current-at-broadcast-time** (Seaworthy tick #4 emitted 19:33:13Z; my parallel-dispatch fired 19:33:23Z), but the tick had landed in the comms event stream and NOT been absorbed in my reasoning when the dispatch composed. This is structurally distinct from "substrate stale at broadcast time" (the failure mode pattern v2 originally named): here the substrate was fresh-on-disk but not-yet-folded-into-decision. **Read-cadence-gap variant**: a real-time event stream + agent decision composition can be N-seconds-apart even with no system delay. Cure-shape under pattern v2 §C3 (correction-broadcast as first-class substrate) absorbed via my pause-standby broadcast `c5daa226` self-honesty framing.
+
+**Composition**: with Mistbound's instance-13 cron-prompt variant — both are "substrate landed but not folded into decision" variants, differentiated by source (real-time team broadcast vs cron-prompt template).
+
+### Boundary-state at session-end
+
+- **Active claims under (Ferny / ee16a4)**: NONE. Stale `ebc446c6` retired via `claims close` at 19:33:23Z (closure summary referencing Mistbound Cycle #2 `8a99ed35` landing).
+- **Commit-queue intents**: NONE.
+- **Working-tree authored by Ferny still uncommitted**: napkin entries (this session-end capture + earlier Captures). Closeout-owner's hygiene-cycle territory.
+- **Heartbeat cron `7395efee`**: STOPPED at pause-time (~19:37Z absorption).
+- **All-channels watcher `bgrzs488c`**: stopping at this session-end closeout.
+- **Final-heartbeat-end emitted**: `c5daa226` (at pause-time; satisfies §0.5 rule).
+- **Source plane**: `session-scoped`
