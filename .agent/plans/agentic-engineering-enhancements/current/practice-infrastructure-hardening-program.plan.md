@@ -15,7 +15,7 @@ todos:
     content: "WS-1 — PDR-075 Director substrate-writing discipline. Status: LANDED at b6ac6147 (Twilit Weaving Moon authored; Seaworthy/Scorched-window verification). Closes when: ratification trail has ≥1 cross-session worked instance after a fresh Director takes the role under PDR-075 discipline (first such instance was Secret bootstrapping from substrate alone in 40s — already in evidence base)."
     status: completed
   - id: ws-2-pdr-076
-    content: "WS-2 — PDR-076 v2 Agent identity tuple + body-file frontmatter. Status: LANDED at db4d8b3a with open owner-decision on (C) SPLIT 076a / 076b. Closes when: owner verdicts on SPLIT vs single PDR; if SPLIT, both child PDRs land."
+    content: "WS-2 — PDR-076 v2 Agent identity tuple + body-file frontmatter. Status: OWNER-VERDICT-RECEIVED 2026-05-24 — SPLIT into PDR-076a (identity tuple) + PDR-076b (body-file frontmatter); Ferny authors both child PDRs via Cycle #6. Cascade §2 body-file-adjacency overlap with §5 cured by partition. Gate 2 unblocked. Closes when: PDR-076a + PDR-076b land via Cycle #6 marshal-cycle."
     status: pending
     depends_on: []
   - id: ws-3-adr-185
@@ -28,36 +28,40 @@ todos:
     content: "WS-5 — substrate-pointer-read-as-current-state pattern. Status: LANDED at 8a99ed35 under Mistbound marshal Cycle #2 (2026-05-23 ~16:11Z). Pattern v2 absorbs 6 worked instances D1–D6 + Wilma SAFE-WITH-CONDITIONS verdict (3 conditions C2/C3/C5 cadence + handoff-boundary substrate-emission). Wilma's 3 unexposed edge cases (cross-channel temporal inversion, partial-state drain window, subagent-chain propagation) tracked as v3 candidates in pending-graduations, not blocking this WS."
     status: completed
   - id: ws-6-marshal-cycle-discipline
-    content: "WS-6 — Marshal-as-cycle-discipline. Status: PDR-077 DRAFT AUTHORED + REVIEWER DISPATCHED — Charcoal Brazing Kiln authored PDR-077 draft in /tmp at 2026-05-23 16:14:10Z; docs-adr-expert sequential pass dispatched same time; awaiting Charcoal re-engagement post-credit-pause. SECOND worked instance now in evidence: Mistbound's 4-commit marshal arc (43e09287 / 8a99ed35 / 499d163b / ccc47de2) landed 16:02:22Z → 16:18:11Z (22 min including husky 90-task gate-chains, ~5.5 min/cycle). First instance: Ashen's 9-cycles-in-45-min. Twilit ST tick #1 named 3 must-cure gaps for PDR-077 draft: self-referential ratification risk; Director-Marshal claim-state ownership invariant; ADR-185 reciprocal-ref. Closes when: PDR-077 lands with role definition, cycle protocol, gate-singleton invariant, throughput observation, standing-duty intersection (feedback_marshal_queues_comms_and_memory_state), PDR-063/PDR-064 cross-references."
+    content: "WS-6 — Marshal-as-cycle-discipline. Status: PDR-077 DRAFT + 3 REVIEW ROUNDS COMPLETE — Charcoal Brazing Kiln authored PDR-077 draft in /tmp (2026-05-23 16:14:10Z); 3 review rounds dispatched (R1 sequential docs-adr-expert; R2 3-way parallel assumptions-expert + architecture-expert-wilma + architecture-expert-betty; R3 3-way parallel re-engagements + final docs-adr-expert returning GO on marshal-request with citation-discipline clean). Remaining: absorb 7 R3 SHOULD-ABSORB items in /tmp/charcoal-pdr077-postresume-fanout-synthesis.md + 1 Director-verdict item (reviewer disagreement on claim-state immutability clause); then marshal-request. CAVEAT: review-trail substrate is in /tmp (session-local), not durable substrate — risk of loss across rotation. SECOND worked instance of marshal-as-cycle-discipline in evidence: Mistbound's 4-commit marshal arc (43e09287 / 8a99ed35 / 499d163b / ccc47de2) by git author timestamps 17:03:45→17:17:45 BST = ~14 min (Mistbound's handoff §4 stated 22 min; git evidence shows 14 min — either way 4 cycles in <25 min including husky 90-task gate-chains). First instance: Ashen's 9-cycles-in-45-min. Twilit ST tick #1 named 3 must-cure gaps; R3 fan-out absorbed them. Closes when: PDR-077 lands with role definition, cycle protocol, gate-singleton invariant, throughput observation, standing-duty intersection (feedback_marshal_queues_comms_and_memory_state), PDR-063/PDR-064 cross-references."
     status: pending
     depends_on: []
   - id: ws-7-pr-108-sonar-clearance
-    content: "WS-7 — PR #108 SonarCloud + CodeQL quality-gate clearance. Status: PR #108 OPEN/MERGEABLE; CodeQL PASSING; SonarCloud + run-quality-gates FAILING. No active cure-claim retained at last snapshot — Scorched's pre-pause R2 retained-claim path appears to have lapsed (not in active-claims.json at 2026-05-23 22:33Z). Original pr-108-snagging.plan.md ARCHIVED as complete (gate-1a Round 1 cycles landed) but underlying gates re-redded by subsequent commits. Owner-directed via Seaworthy tick #2 (2026-05-23 19:28:47Z): 'commit hygiene tranche then push' — verdict not yet executed. Fresh author-claim required for cure-and-push. Closes when: PR #108 SonarCloud + run-quality-gates flip GREEN and merge becomes possible. SHARED SUBSTRATE — also EEF merge-path unblock."
+    content: "WS-7 — PR #108 SonarCloud + CodeQL quality-gate clearance. Status: PR #108 OPEN/MERGEABLE; CodeQL PASSING; SonarCloud + run-quality-gates FAILING. ACTIVE CLAIMS HELD: Scorched Tempering Kiln author claim 4e6e18b2 (opened 2026-05-23 19:07:14Z; R2 mechanical Sonar cures — S7735 ternary flip + S7763 export-from collapse + S7781x4 replaceAll + S7750 findLast — on 4 files in graph-ingest + sdks); Mistbound Hiding Threshold marshal claim 00375e07 (opened 19:33:07Z). Original pr-108-snagging.plan.md ARCHIVED as complete (gate-1a Round 1 cycles landed) but underlying gates re-redded by subsequent commits. Owner-directed via Seaworthy tick #2 (2026-05-23 19:28:47Z): 'commit hygiene tranche then push' — verdict not yet executed. Awaiting Scorched re-engagement to execute R2 cure under Mistbound marshal authority. Closes when: PR #108 SonarCloud + run-quality-gates flip GREEN and merge becomes possible. SHARED SUBSTRATE — also EEF merge-path unblock."
     status: pending
     depends_on: []
   - id: ws-8-architectural-direction-self-mod-authz
-    content: "WS-8 — Architectural-direction ratification on Claude self-modification authorisation cure-shapes. Status: OWNER SHAPE-VERDICT SURFACED via Seaworthy Director tick #2 (2026-05-23 19:28:47Z) — owner ratified C2-near-term + C5-long-term + C4-fallback shape with C2-deferred-until-platform-support. CODIFICATION PENDING: ADR draft or explicit-deferral-with-named-trigger record needed. Author not yet assigned. Closes when: ADR drafted (codifying the shape + the C2-platform-deferred trigger) OR explicit-deferral record with named trigger lands."
-    status: pending
+    content: "WS-8 — Architectural-direction ratification on Claude self-modification authorisation cure-shapes. Status: AUTHOR-IN-FLIGHT (Lanternlit, owner-directed 2026-05-24 'Author it now'). Shape verdict received via Seaworthy Director tick #2 (2026-05-23 19:28:47Z): C2-near-term + C5-long-term + C4-fallback with C2-deferred-until-platform-support. AUTHORING NOW: ADR codifying the shape + the C2-platform-deferred trigger ('when Anthropic platform supports binding self-mod authz'). Closes when: ADR drafted + reviewer-converged + marshal-landed."
+    status: in_progress
     depends_on: []
   - id: ws-9-twilit-fm2-p2-cure
     content: "WS-9 — Twilit ST FM-2 P2 plan-Wilma verdict + cure landing. Status: LANDED at 43e09287 under Mistbound marshal Cycle #1 (2026-05-23 ~16:02Z) — watcher-staleness consumer + CollaborationAgentId schema dedupe; knip RED→GREEN. FM-2 (session-open environment freshness check) substrate complete. Pre-existing critical-zone fitness advisory exit-1 NOT introduced by this cycle (ADR-176 advisory-vs-gate distinction)."
     status: completed
   - id: ws-10-heartbeat-cron-mechanism
-    content: "WS-10 — Heartbeat contract operationalisation (durable mechanism). Status: PENDING — interim mechanism is narrative comms event with tags ['heartbeat'] per Seaworthy tick #4 (2026-05-23 15:58:52Z); durable mechanism is structured `last_heartbeat_at` field on active-claims.json per identity tuple + `pnpm agent-tools:heartbeat` CLI wrapper (PDR candidate at napkin 15:09Z; named in Director tick #4 substrate). Owner-directed permanent + session-wide rule for all start-right-team sessions. Closes when: durable mechanism shipped (schema field + CLI wrapper + claim auto-rebalance protocol substrate). Interim mechanism is workable; durable substrate work deferred until knip-RED + WS-9 land."
+    content: "WS-10 — Heartbeat contract operationalisation (durable mechanism). Status: NOT-M1-GATED, PENDING — interim mechanism is `narrative` comms event with `tags: ['heartbeat']` per ADR-183 tag-namespace substrate (Seaworthy tick #4 direction 2026-05-23 15:58:52Z). Durable mechanism has 3 sub-components: (a) per-identity-tuple `last_heartbeat_at` field on active-claims.json schema; (b) `pnpm agent-tools:heartbeat` CLI wrapper absorbing identity-tuple resolution from PRACTICE_AGENT_SESSION_ID_* + subject template (`Heartbeat: <agent_name> (<prefix>) — <lane>`) + body prefix (`active; <focus>`) + tag wiring (['heartbeat']) + `comms append` plumbing (--now / --created-at / --active / dirs); per-beat --lane + --focus strings MUST come from the agent on each invocation, NOT cached at cron startup (anti-pattern: silent-staleness if hardcoded focus repeats — equivalent failure mode to substrate-pointer-read-as-current-state); (c) lifecycle.event_type='heartbeat' per pending ADR-186. CLI shape contributed by Mistbound session 0e27cc (R1.4 integration). Owner-directed permanent + session-wide rule for all start-right-team sessions. Closes when: durable mechanism shipped (schema field + CLI wrapper + claim auto-rebalance protocol substrate). Interim mechanism is workable; durable substrate work deferred until WS-11 bundle + schema field + CLI ship together."
     status: pending
     depends_on: []
   - id: ws-11-heartbeat-doctrine-bundle
-    content: "WS-11 — Heartbeat doctrine bundle (RESTRUCTURED from SKILL-only). Status: BUNDLE SHAPE RATIFIED via 5-reviewer fan-out RE-SHAPE convergence (docs-adr-expert + assumptions-expert + fred + betty + wilma): PDR-078 liveness-heartbeat-contract (principle, emit-side + observe-side) + ADR-186 comms-event-heartbeat-lifecycle-substrate (repo phenotype: lifecycle.event_type='heartbeat'; no schema amendment because event_type is open-string; renderer composes [HEARTBEAT] + [LIFECYCLE]; MUST-tolerate-unknown-event-type rule) + thin SKILL pointer (collapse fat §0.5 to PDR-078 reference; preserve §1 Register Presence cron-status field + §Closeout heartbeat-end clause) + reciprocal §Related amendments to PDR-027 + PDR-063 + PDR-064. Working-tree state: SKILL-CANONICAL.md fat §0.5 draft uncommitted (Director-gated per Practice-Core protection); PDR-078 + ADR-186 not yet authored; ADR-186 first-write blocked by no-moving-targets hook on commit-SHA + event-UUID inline citations. UNRESOLVED TENSION: Q3 owner verdict via Seaworthy tick #2 ('revise citation style to use event-ids') vs architecture-expert-fred post-pause verdict ('descriptive citation only; permanent→ephemeral forbidden per no-moving-targets §Citation Directionality'). Owner-paused at compaction; resumed post-credit-reset; user-paused for plan refinement direction. Cadence: empirical 3-min (Foamy quiet-stream precedent); PDR-064 coordinator-handoff exemption is unbounded per current PDR-064 text (the 30-min number cited in pre-pause SKILL draft was invented, not in PDR-064). Closes when: PDR-078 + ADR-186 + thin SKILL + reciprocal §Related amendments authored + round-2 reviewer convergence + owner ratification + marshal-landed via Mistbound."
+    content: "WS-11 — Heartbeat doctrine bundle (RESTRUCTURED from SKILL-only). Status: BUNDLE SHAPE RATIFIED via 5-reviewer fan-out RE-SHAPE convergence + E4 RESOLVED via PDR/ADR portability distinction (owner R1.5 2026-05-24). Bundle: PDR-078 liveness-heartbeat-contract (portable principle, emit-side + observe-side, ZERO SHAs/UUIDs per PDR portability constraint) + ADR-186 comms-event-heartbeat-lifecycle-substrate (repo phenotype: lifecycle.event_type='heartbeat'; no schema amendment because event_type is open-string; renderer composes [HEARTBEAT] + [LIFECYCLE]; MUST-tolerate-unknown-event-type rule; SHAs and event-UUIDs ALLOWED per ADR repo-bound nature) + thin SKILL pointer (collapse fat §0.5 to PDR-078 reference; preserve §1 Register Presence cron-status field + §Closeout heartbeat-end clause) + reciprocal §Related amendments to PDR-027 + PDR-063 + PDR-064. Working-tree state: SKILL-CANONICAL.md fat §0.5 draft uncommitted (Director-gated per Practice-Core protection); PDR-078 + ADR-186 not yet authored. Cadence: empirical 3-min (Foamy quiet-stream precedent); PDR-064 coordinator-handoff exemption is unbounded per current PDR-064 text (the 30-min number cited in pre-pause SKILL draft was invented, not in PDR-064). Closes when: PDR-078 (SHA-free) + ADR-186 (SHAs OK) + thin SKILL + reciprocal §Related amendments authored + round-2 reviewer convergence + owner ratification + marshal-landed via Mistbound."
+    status: in_progress
+    depends_on: []
+  - id: ws-12-pdr-079-pdr-adr-portability
+    content: "WS-12 — PDR-079 PDR-vs-ADR portability distinction (NEW R1.5 2026-05-24, owner-directed). Status: AUTHOR-IN-FLIGHT (Lanternlit). Scope: new PDR codifying the long-standing-vague distinction owner articulated 2026-05-24: PDRs are portable practice doctrine (apply to any repo with multi-agent collaboration; NO SHAs, NO repo-paths, NO branch names); ADRs are repo-specific architectural decisions (repo-bound by definition; SHAs and event-UUIDs welcome). SHA-in-PDR signal: misclassification — the SHA-bearing content belongs in an ADR, not a PDR. Composition with PDR-066 (PDR↔ADR pattern). Plus mechanical co-cure: scope `.agent/rules/no-moving-targets-in-permanent-docs.md` to apply strictly to portable surfaces (PDRs + rules + patterns), NOT to repo-bound ADRs. Closes when: PDR-079 + rule scope-update authored + reviewer-converged + marshal-landed via Mistbound."
     status: in_progress
     depends_on: []
   - id: gate-safe-pause
-    content: "M1 — Safe-Pause Milestone. The near-term target. Reached when ALL 5 gates hold: Gate 1 WS-7 GREEN (PR #108 cure lands); Gate 2 WS-2 owner-verdict on partition-cure shape recorded; Gate 3 WS-5 pattern landed (MET 8a99ed35); Gate 4 WS-9 Wilma verdict + cure landed (MET 43e09287); Gate 5 all queued items (WS-11 bundle, PDR-077, Cycle #5, Cycle #6, PR #108 cure) reach a terminal state (LAND or explicit STAND-DOWN). On Director Safe-Pause Attestation broadcast, team pivots focus to EEF First Feature lane."
+    content: "M1 — Safe-Pause Milestone. The near-term target. Reached when ALL 5 gates hold: Gate 1 WS-7 GREEN (PR #108 cure lands); Gate 2 WS-2 SPLIT children land (PDR-076a + PDR-076b via Cycle #6, per owner R1.5 verdict 2026-05-24); Gate 3 WS-5 pattern landed (MET 8a99ed35); Gate 4 WS-9 Wilma verdict + cure landed (MET 43e09287); Gate 5 all queued items (WS-11 bundle, PDR-077, Cycle #5, Cycle #6, PR #108 cure, Marshal hygiene cycle, Cycle #7) reach a terminal state (LAND or explicit STAND-DOWN). On Director Safe-Pause Attestation broadcast, team pivots focus to EEF First Feature lane."
     status: pending
     depends_on: [ws-2-pdr-076, ws-5-substrate-pointer-pattern, ws-7-pr-108-sonar-clearance, ws-9-twilit-fm2-p2-cure]
   - id: gate-complete
     content: "M2 — Completion Milestone. The program-archive target. Reached when ALL of: M1 (Safe-Pause) held AND WS-6 marshal-cycle-discipline PDR-077 landed AND WS-8 architectural-direction codified (ADR or explicit-deferral-with-named-trigger) AND WS-11 heartbeat-doctrine bundle landed AND observable next-window evidence (next team session runs without producing new substrate-stale-pointer instances OR produces a new cure-shape the substrate absorbs). M2-pursuit work is deferred until M1 reached unless owner directs otherwise."
     status: pending
-    depends_on: [gate-safe-pause, ws-6-marshal-cycle-discipline, ws-8-architectural-direction-self-mod-authz, ws-11-heartbeat-doctrine-bundle]
+    depends_on: [gate-safe-pause, ws-6-marshal-cycle-discipline, ws-8-architectural-direction-self-mod-authz, ws-11-heartbeat-doctrine-bundle, ws-12-pdr-079-pdr-adr-portability]
 isProject: true
 ---
 
@@ -354,31 +358,39 @@ substrate.
 
 ## Workstream Roll-up
 
-Status vocabulary: **LANDED** (commit exists on branch); **PENDING**
-(active work, not yet landed); **BLOCKED-ON-X** (waiting on a named
-prerequisite); **DRAFT-IN-FLIGHT** (authored but not yet review-converged
-or marshal-landed); **OWNER-VERDICT-PENDING** (waiting on owner
-decision); **OWNER-VERDICT-RECEIVED, CODIFICATION-PENDING** (owner
-decided, doctrine codification not yet authored).
+Status vocabulary: **LANDED** (commit exists on branch — i.e.,
+*file-landed*; this does NOT imply the doctrine inside is ratified.
+PDRs in the Practice Core surface carry their own `Status: Candidate /
+Proposed / Adopted / Cured` field which is independent of file-landing.
+A WS marked LANDED means the artefact is in the tree, not that the
+team has adopted the discipline it codifies); **PENDING** (active
+work, not yet landed); **BLOCKED-ON-X** (waiting on a named
+prerequisite); **DRAFT-IN-FLIGHT** (authored but not yet
+review-converged or marshal-landed); **OWNER-VERDICT-PENDING** (waiting
+on owner decision); **OWNER-VERDICT-RECEIVED, CODIFICATION-PENDING**
+(owner decided, doctrine codification not yet authored).
 
 | WS | Artefact | Status | Closes when |
 |----|----------|--------|-------------|
 | WS-1 | PDR-075 Director substrate-writing discipline | **LANDED** `b6ac6147` | Cross-session ratification (already in evidence: Secret bootstrap from substrate alone in 40s) |
-| WS-2 | PDR-076 v2 Agent identity tuple + body-file frontmatter | **LANDED** `db4d8b3a`; SPLIT prestage at `/tmp/ferny-ws2-partition-prestage-synthesis.md`; **BLOCKED-ON-OWNER-VERDICT** (Cascade §2 body-file-adjacency partition-cure shape) | Owner verdict on partition-cure shape; if SPLIT, both child PDRs (076a + 076b) land |
+| WS-2 | PDR-076 v2 Agent identity tuple + body-file frontmatter | **LANDED** `db4d8b3a`; **OWNER-VERDICT-RECEIVED 2026-05-24: SPLIT confirmed** — Ferny authors PDR-076a (identity tuple) + PDR-076b (body-file frontmatter) via Cycle #6; Cascade §2 body-file-adjacency overlap with §5 cured by partition | PDR-076a + PDR-076b both land via Cycle #6 marshal-cycle |
 | WS-3 | ADR-185 v2 comms-event auto-acceptance metadata | **LANDED** `5320d6b0` | Renderer wiring (separate executable plan) |
 | WS-4 | Recursion-of-doctrine pattern | **LANDED** `c097bbb3` | PDR promotion on 2nd cross-session instance |
 | WS-5 | substrate-pointer-read-as-current-state pattern v2 | **LANDED** `8a99ed35` (Mistbound Cycle #2) — 6 instances D1–D6 absorbed; Wilma SAFE-WITH-CONDITIONS verdict folded | (closed) — 3 unexposed edge cases tracked as v3 candidates in pending-graduations |
-| WS-6 | Marshal-as-cycle-discipline (PDR-077) | **DRAFT-IN-FLIGHT** — Charcoal authored draft in `/tmp` at 16:14:10Z; docs-adr-expert reviewer dispatched; awaiting Charcoal re-engagement. **2nd worked instance now in evidence** (Mistbound 4-commits-in-22-min). Twilit ST tick #1 named 3 must-cure gaps. | PDR-077 lands with role definition + cycle protocol + gate-singleton invariant + throughput observation + standing-duty intersection + PDR-063/PDR-064 cross-references |
-| WS-7 | PR #108 SonarCloud + CodeQL clearance | **PENDING** — PR #108 OPEN/MERGEABLE; CodeQL PASSING; SonarCloud + run-quality-gates FAILING; **no active cure-claim retained** (Scorched's R2 retained-claim path lapsed); owner-directed 'hygiene-then-push' verdict not yet executed | PR #108 SonarCloud + run-quality-gates flip GREEN and merge becomes possible |
-| WS-8 | Claude self-modification authz cure-shape ratification | **OWNER-VERDICT-RECEIVED, CODIFICATION-PENDING** — owner ratified C2-near-term + C5-long-term + C4-fallback shape with C2-deferred-until-platform-support via Seaworthy tick #2 (19:28:47Z) | ADR drafted (codifying shape + C2-platform-deferred trigger) OR explicit-deferral-with-named-trigger record lands |
+| WS-6 | Marshal-as-cycle-discipline (PDR-077) | **DRAFT-IN-FLIGHT, REVIEW-CONVERGED** — Charcoal authored draft in `/tmp` at 16:14:10Z; **3 review rounds complete** (R1 docs-adr-expert; R2 3-way assumptions+wilma+betty; R3 3-way re-engagements + final docs-adr-expert GO on marshal-request with citation-discipline clean); 7 R3 SHOULD-ABSORB items + 1 Director-verdict item pending Charcoal re-engagement → marshal-request. Review-trail in `/tmp/charcoal-pdr077-postresume-fanout-synthesis.md` (session-local; not durable substrate). **2nd worked instance now in evidence** (Mistbound 4-commits ~14 min by git author timestamps; handoff §4 stated 22 min). | PDR-077 lands with role definition + cycle protocol + gate-singleton invariant + throughput observation + standing-duty intersection + PDR-063/PDR-064 cross-references |
+| WS-7 | PR #108 SonarCloud + CodeQL clearance | **PENDING (CLAIMED, AWAITING EXECUTION)** — PR #108 OPEN/MERGEABLE; CodeQL PASSING; SonarCloud + run-quality-gates FAILING. Scorched author claim `4e6e18b2` ACTIVE (R2 mechanical Sonar cures on 4 files in graph-ingest + sdks, claimed 19:07:14Z); Mistbound marshal claim `00375e07` ACTIVE (claimed 19:33:07Z). Owner-directed 'hygiene-then-push' verdict not yet executed; awaiting Scorched re-engagement | PR #108 SonarCloud + run-quality-gates flip GREEN and merge becomes possible |
+| WS-8 | Claude self-modification authz cure-shape ratification | **AUTHOR-IN-FLIGHT** (Lanternlit, owner-directed 2026-05-24 'Author it now') — Shape verdict: C2-near-term + C5-long-term + C4-fallback with C2-deferred-until-platform-support. Authoring NOW: ADR codifying the shape + the C2-platform-deferred trigger | ADR drafted + reviewer-converged + marshal-landed |
 | WS-9 | Twilit ST FM-2 P2 plan-Wilma verdict + cure | **LANDED** `43e09287` (Mistbound Cycle #1) — watcher-staleness consumer + CollaborationAgentId schema dedupe; knip RED→GREEN | (closed) |
-| WS-10 | Heartbeat contract durable mechanism | INTERIM live (lifecycle-event-shape per ADR-186 landing); durable substrate (per-identity-tuple `last_heartbeat_at` + CLI wrapper) deferred | Schema field + CLI wrapper + claim auto-rebalance protocol shipped |
-| WS-11 | Heartbeat doctrine bundle (PDR-078 + ADR-186 + thin SKILL) | **PENDING (BUNDLE-SHAPE-RATIFIED)** — Lanternlit; 5-reviewer fan-out converged on RE-SHAPE (PDR-078 + ADR-186 + thin SKILL); ADR-186 hook-blocked on citation pattern; Fred-vs-owner-verdict tension surfaced unresolved | PDR-078 + ADR-186 + thin SKILL + reciprocal §Related amendments authored + round-2 reviewer convergence + owner ratification + marshal-landed |
+| WS-10 | Heartbeat contract durable mechanism | **NOT-M1-GATED, PENDING** — INTERIM live (`narrative` comms event with `tags: ["heartbeat"]` per ADR-183). Durable substrate = 3 sub-components: (a) `last_heartbeat_at` schema field; (b) `pnpm agent-tools:heartbeat` CLI wrapper (shape spec'd by Mistbound R1.4 contribution — see WS-10 frontmatter for full shape); (c) lifecycle.event_type='heartbeat' per pending ADR-186. Per-beat `--lane` + `--focus` MUST come from agent each call, NOT be cached (silent-staleness anti-pattern). | Schema field + CLI wrapper + claim auto-rebalance protocol shipped |
+| WS-11 | Heartbeat doctrine bundle (PDR-078 + ADR-186 + thin SKILL) | **PENDING (BUNDLE-SHAPE-RATIFIED, E4 RESOLVED)** — Lanternlit; 5-reviewer convergence on RE-SHAPE; E4 RESOLVED via PDR/ADR portability distinction (R1.5 2026-05-24): PDR-078 SHA-free portable principle; ADR-186 SHAs/UUIDs allowed as repo-bound phenotype. Authoring ready. | PDR-078 (SHA-free) + ADR-186 (SHAs OK) + thin SKILL + reciprocal §Related amendments authored + round-2 reviewer convergence + owner ratification + marshal-landed |
+
+| WS-12 | PDR-079 PDR-vs-ADR portability distinction (NEW R1.5) | **AUTHOR-IN-FLIGHT** — Lanternlit (owner-directed 2026-05-24). New PDR codifying owner-articulated portability constraint (PDRs portable, no SHAs; ADRs repo-bound, SHAs allowed; SHA-in-PDR = misclassification signal). Co-cure: scope `no-moving-targets` rule strictly to portable surfaces (PDRs + rules + patterns), not ADRs. | PDR-079 + rule scope-update authored + reviewer-converged + marshal-landed |
 
 **Post-WS commits since `ccc47de2`** (recorded for branch hygiene, not
-WS-changing): `5fedf9a4` (ink-testing-library TUI test refactor),
-`82afc0a8` (reduceRefreshState controller wire), `62def8d3`
-(reduceRefreshState pure unit tests). Current branch HEAD: `5fedf9a4`.
+WS-changing; newest-first ordering matches `git log`): `5fedf9a4`
+(ink-testing-library TUI test refactor) ← HEAD; `82afc0a8`
+(reduceRefreshState controller wire); `62def8d3` (reduceRefreshState
+pure unit tests). Current branch HEAD: `5fedf9a4`.
 
 ## M1 — Safe-Pause Milestone Criteria
 
@@ -389,36 +401,45 @@ substrate cleared.
 
 Each gate carries a current MET / PENDING marker.
 
-### Gate 1 — WS-7 GREEN — **PENDING**
+### Gate 1 — WS-7 GREEN — **PENDING (CLAIMED, AWAITING EXECUTION)**
 
 PR #108 quality gate clears. PR #108 is the substrate-blocker for the
 EEF merge path; pausing with it still red strands all EEF graph-substrate
 work behind a closed merge gate.
 
 *Current state*: PR #108 OPEN, MERGEABLE. CodeQL PASSING. SonarCloud
-and run-quality-gates FAILING. No active cure-claim retained. Owner-
-directed via Seaworthy tick #2 19:28:47Z: "commit hygiene tranche then
-push" — verdict not yet executed.
+and run-quality-gates FAILING. **ACTIVE CLAIMS HELD**: Scorched
+Tempering Kiln author claim `4e6e18b2` (opened 2026-05-23 19:07:14Z,
+R2 mechanical Sonar cures on 4 files: `eef-evidence-grounded-lesson-plan-messages.ts`,
+`graph-corpus-sdk/src/index.ts`, `graph-ingest/src/source-path/index.ts`,
+`graph-ingest/src/turtle/index.ts`); Mistbound Hiding Threshold marshal
+claim `00375e07` (opened 19:33:07Z). The work IS owned end-to-end.
+Owner-directed via Seaworthy tick #2 19:28:47Z: "commit hygiene tranche
+then push" — verdict not yet executed.
 
-*What closes it*: fresh author-claim on the R2 mechanical cures →
-hygiene-bundle landing → push → gates flip GREEN.
+*What closes it*: Scorched re-engages → executes the R2 cure (S7735
+ternary flip + S7763 export-from collapse + S7781×4 replaceAll + S7750
+findLast per claim intent) + commit-hygiene tranche → marshal-cycles
+via Mistbound → push → gates flip GREEN.
 
-### Gate 2 — WS-2 owner-decision recorded — **PENDING (BLOCKED-ON-OWNER-VERDICT)**
+### Gate 2 — WS-2 SPLIT children land — **PENDING (OWNER-VERDICT RECEIVED, AWAITING FERNY EXECUTION)**
 
-Owner has either ratified PDR-076 v2 as-is (single PDR) or verdicted
-SPLIT and both child PDRs (076a + 076b) are landed.
+Owner verdicted SPLIT (R1.5 2026-05-24): PDR-076a (identity tuple) +
+PDR-076b (body-file frontmatter) both land via Cycle #6.
 
-*Current state*: Ferny's partition prestage at `/tmp/ferny-ws2-partition-prestage-synthesis.md`
-is 3-way-fan-out-converged. Critical gap caught pre-authoring: §Cascade
-item 2 (identity-bearing schemas) has body-file-adjacency overlap with
-item 5 — partition shape needs **owner sight before authoring**. Owner
-verdicts via Seaworthy tick #2 covered Q1 / Q2 / Q3 but NOT WS-2
-partition-cure shape. Ferny in standby pause at 22:12:40Z.
+*Current state*: Owner verdict received and recorded R1.5
+(2026-05-24). Ferny's partition prestage at
+`/tmp/ferny-ws2-partition-prestage-synthesis.md` is 3-way-fan-out-
+converged with paste-ready blocks for both child PDRs. Cascade §2
+body-file-adjacency overlap with §5 cured by partition shape. Cycle #6
+unblocked; awaiting Ferny re-engagement to author both child PDRs.
 
-*What closes it*: owner surfaces verdict on the partition-cure
-(specifically the §Cascade item 2 vs item 5 boundary) → Ferny resumes
-Cycle #6 → both PDRs land OR owner ratifies single-PDR shape and the
-open-decision marker is removed from the landed PDR-076.
+*What closes it*: Ferny resumes Cycle #6 → authors PDR-076a + PDR-076b
+from prestage blocks → marshal-cycle via Mistbound → both land →
+landed PDR-076 v2's open-decision marker is removed (or PDR-076 is
+archived if SPLIT children fully supersede). **Stand-down authority**:
+Owner (if WS-2 SPLIT itself is to be parked, which is now contrary to
+the verdict; full stand-down requires owner re-direction).
 
 ### Gate 3 — WS-5 pattern file landed — **MET ✅**
 
@@ -444,25 +465,42 @@ complete.
 *Current queue state* (per Mistbound's compaction handoff §8 +
 post-handoff observation):
 
-- **Mistbound's 4-cycle arc** (`43e09287` / `8a99ed35` / `499d163b` /
-  `ccc47de2`): **LANDED**. Closed.
+- **Mistbound's 4-cycle marshal arc** (`43e09287` / `8a99ed35` /
+  `499d163b` / `ccc47de2`): **LANDED**. Closed.
 - **WS-11 heartbeat doctrine bundle** (Lanternlit): **IN-FLIGHT** —
   PDR-078 + ADR-186 + thin SKILL bundle not yet authored; uncommitted
   SKILL §0.5 fat-draft in working tree (Director-gated). Bundle shape
   ratified by 5-reviewer convergence; Fred-vs-owner-verdict tension on
   citation cure path unresolved.
-- **Cycle #5** (Cycle #1 verdict-absorption compound: Charcoal F2/F3/F5
-  - Betty CONDITION + 2 code-expert findings + META API-shape drift):
-  awaiting any-implementer pickup (hat-switch dissolved per Twilit ST
-  tick #3 fred citation).
-- **Cycle #6** (WS-2 SPLIT): **BLOCKED-ON-OWNER-VERDICT** (see Gate 2).
-- **PDR-077** (Charcoal's WS-6 doctrine home): **DRAFT-IN-FLIGHT** —
-  draft in `/tmp`; docs-adr-expert reviewer dispatched; awaiting
-  Charcoal re-engagement.
-- **Cycle #7** (C-12 dedupe follow-up — pre-existing duplicate private
-  `agentIdSchema` in two files): NON-BLOCKING; deferred to natural
-  follow-on cycle.
-- **PR #108 cure**: NO ACTIVE CLAIM (Gate 1 lapse).
+- **Queue-Cycle #5** (Cycle #1 verdict-absorption compound: Charcoal
+  F2/F3/F5 + Betty CONDITION + 2 code-expert findings + META API-shape
+  drift): awaiting any-implementer pickup (hat-switch dissolved per
+  Twilit ST tick #3 fred citation).
+- **Queue-Cycle #6** (WS-2 SPLIT): **BLOCKED-ON-OWNER-VERDICT** (see
+  Gate 2).
+- **PDR-077** (Charcoal's WS-6 doctrine home): **DRAFT-IN-FLIGHT,
+  REVIEW-CONVERGED** — draft in `/tmp`; 3 review rounds complete
+  (final docs-adr-expert GO with citation-discipline clean); 7 R3
+  SHOULD-ABSORB items + 1 Director-verdict item pending Charcoal
+  re-engagement → marshal-request.
+- **PR #108 cure** (WS-7): **CLAIMED, AWAITING EXECUTION** — Scorched
+  author claim `4e6e18b2` + Mistbound marshal claim `00375e07` both
+  active; awaiting Scorched re-engagement.
+- **Marshal hygiene cycle** (per Mistbound handoff §8 6th queue
+  entry — was missing from R1 enumeration): **PENDING** — accumulated
+  working-tree state from second-wave reviewer dispatch + credit-pause
+  peer activity + R1+R1.1+R1.2 plan edits + comms-seen files + comms
+  events + memory drift. Marshal performs hygiene cycle on next
+  tree-green window per `feedback_marshal_queues_comms_and_memory_state`
+  standing duty.
+- **Queue-Cycle #7** (C-12 dedupe follow-up — pre-existing duplicate
+  private `agentIdSchema` in two files): NON-BLOCKING; deferred to
+  natural follow-on cycle.
+
+Note on Cycle terminology: "Mistbound Cycle #N" refers to commits
+landed in Mistbound's marshal arc (the 4-cycle arc above);
+"Queue-Cycle #N" refers to pending items in this queue. Disambiguated
+in R1.2 to avoid overload.
 
 *What closes it*: each queue entry either lands (marshal cycle) or is
 explicitly stood down (handoff record + comms broadcast) so the next
@@ -474,7 +512,7 @@ named trigger).
 
 | Gate | State | Evidence |
 |------|-------|----------|
-| 1 — WS-7 GREEN | **PENDING** | PR #108 gates still red; no active cure-claim |
+| 1 — WS-7 GREEN | **PENDING (CLAIMED)** | PR #108 gates still red; Scorched `4e6e18b2` + Mistbound `00375e07` claims active; awaiting execution |
 | 2 — WS-2 owner-decision | **PENDING (BLOCKED)** | Partition-cure shape needs owner sight |
 | 3 — WS-5 pattern landed | **MET ✅** | `8a99ed35` |
 | 4 — WS-9 verdict + cure | **MET ✅** | `43e09287` + Wilma verdict |
@@ -497,28 +535,35 @@ All five M1 gates hold (no stranded work). Current state per
 §M1 — Safe-Pause Milestone Criteria: Gates 3 + 4 MET; Gates 1, 2, 5
 in-flight or blocked.
 
-### Criterion 2 — WS-6 has a durable doctrine home — **DRAFT-IN-FLIGHT**
+### Criterion 2 — WS-6 has a durable doctrine home — **DRAFT-IN-FLIGHT, REVIEW-CONVERGED**
 
 PDR-077 (or ADR) landed capturing marshal-as-cycle-discipline. The
-empirical 9-cycles-in-45-min + 4-cycles-in-22-min results are not
+empirical 9-cycles-in-45-min + 4-cycles-in-~14-min results are not
 durable substrate — only a PDR or ADR is. Without this, the cure dies
 when the team rotates.
 
 *Current state*: Charcoal Brazing Kiln authored PDR-077 draft in `/tmp`
-at 16:14:10Z; docs-adr-expert reviewer dispatched; awaiting Charcoal
-re-engagement post-credit-pause. Twilit ST tick #1 named 3 must-cure
-gaps for the draft.
+at 16:14:10Z. **3 review rounds complete** (R1 sequential
+docs-adr-expert; R2 3-way parallel assumptions-expert +
+architecture-expert-wilma + architecture-expert-betty; R3 3-way
+parallel re-engagements + final docs-adr-expert returning GO on
+marshal-request with citation-discipline clean). Remaining: absorb 7
+R3 SHOULD-ABSORB items + 1 Director-verdict item (claim-state
+immutability clause) pending Charcoal re-engagement → marshal-request.
+CAVEAT: review-trail substrate is in `/tmp` (session-local), not
+durable substrate.
 
-### Criterion 3 — WS-8 architectural-direction ratified — **OWNER-SHAPE-VERDICT-RECEIVED, CODIFICATION-PENDING**
+### Criterion 3 — WS-8 architectural-direction ratified — **AUTHOR-IN-FLIGHT (Lanternlit)**
 
 Owner has verdicted on C2-near-term + C5-long-term + C4-fallback
-cure-shapes for Claude self-modification authz, AND either an ADR is
-drafted or an explicit owner-deferral with a named trigger is recorded.
+cure-shapes for Claude self-modification authz, AND an ADR is being
+drafted (owner-directed 2026-05-24 'Author it now').
 
 *Current state*: Owner shape-verdict received via Seaworthy Director
 tick #2 (2026-05-23 19:28:47Z): ratify C2+C5+C4 with C2-deferred-
-until-platform-support. Codification (ADR or explicit-deferral record)
-not yet authored. No author assigned.
+until-platform-support. Authoring NOW (R1.5 owner-direction): Lanternlit
+drafts ADR codifying the shape + the C2-platform-deferred trigger
+('when Anthropic platform supports binding self-mod authz').
 
 ### Criterion 4 — WS-11 heartbeat doctrine bundle landed — **PENDING**
 
