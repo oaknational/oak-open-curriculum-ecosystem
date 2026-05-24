@@ -4722,3 +4722,85 @@ Cross-references:
 - Adjacent to ADR-183 (comms-event tag namespace) — deliberately not extended; heartbeat is protocol-discrimination not substantive-discrimination per the schema's open `lifecycle.event_type` axis.
 
 ---
+
+## 2026-05-24 owner-decision-batch candidates (Lanternlit Listening Dusk / `78683a`)
+
+### PDR-079 PDR-vs-ADR portability distinction (owner-articulated; codification authored in-flight as WS-12)
+
+[captured: 2026-05-24 | source: owner /oak-metacognition critique of R1.4 plan E4 citation-policy framing | graduation-target: PDR-079 at `.agent/practice-core/decision-records/PDR-079-pdr-vs-adr-portability-distinction.md` (NEW; portable practice doctrine) + scope amendment to `.agent/rules/no-moving-targets-in-permanent-docs.md` restricting it to portable surfaces (PDRs + rules + patterns), NOT to repo-bound ADRs | trigger: owner direction 2026-05-24 explicit doctrinal stance ("PDRs and ADRs are fundamentally different types of thing") + 3 worked-instance evidence base (E4 confusion in this session + Mistbound's heartbeat-CLI classification confusion + pre-pause PDR-vs-ADR uncertainty on PDR-077) | status: AUTHOR-IN-FLIGHT (Lanternlit, WS-12 in `practice-infrastructure-hardening-program.plan.md`)]
+
+Owner-articulated 2026-05-24: PDRs are portable practice doctrine — claims about how multi-agent practice WORKS that apply to ANY repo with multi-agent collaboration. PDRs CANNOT contain SHAs, repo paths, branch names, or any artefact-reference tied to *this* git history. ADRs are repo-specific architectural decisions — choices about how *this* repo's substrate IMPLEMENTS something. ADRs are repo-bound by definition; SHAs and event-UUIDs are welcome as appropriate evidence.
+
+**SHA-in-PDR = misclassification signal**: when content wants a SHA in a PDR, that's not a citation-style question — it's a routing question. The SHA-bearing substance belongs in an ADR, not the PDR.
+
+Cure shape: PDR-079 authors the portability constraint as explicit practice doctrine. Co-cure: scope the existing `no-moving-targets-in-permanent-docs.md` rule strictly to portable surfaces (PDRs + rules + patterns); ADRs are out of scope.
+
+Resume substrate: substance fully captured in program plan R1.5 §Emergent Observations E4 (RESOLVED) + §Workstream Roll-up WS-12 row + R1.5 Refinement Log entry. Composes with PDR-066 (PDR↔ADR composition pattern as principle/phenotype pair).
+
+Falsifiability: PDR-079 file exists at canonical location with §Decision naming the portability constraint; rule scope-amendment lands at `.agent/rules/no-moving-targets-in-permanent-docs.md` with explicit "in-scope: portable surfaces; out-of-scope: ADRs" framing; PDR-066 §Related cross-references PDR-079.
+
+Cross-references: composes with PDR-066 (PDR↔ADR composition); dissolves R1.4 E4 hybrid framing; binds WS-11 bundle authoring (PDR-078 SHA-free, ADR-186 SHAs allowed).
+
+---
+
+### Reviewer-pass + critical-analysis loop as cure for trust-without-reverification
+
+[captured: 2026-05-24 | source: program plan R1.2 reviewer absorption pass + R1.3 self-critique loop | graduation-target: pattern file at `.agent/memory/active/patterns/reviewer-pass-cures-trust-without-reverification.md` OR amendment to substrate-pointer-pattern v3 sub-instances | trigger: 2nd worked instance of single-author substrate exhibiting trust-without-reverification at authoring time, cured by dual-reviewer + critical-analysis loop | status: pending second instance]
+
+Worked instance: program plan R1 authoring (Lanternlit, 2026-05-24) exhibited trust-without-reverification in 3 sub-failures — (a) trusted Mistbound's 22-min throughput number without git-checking (actually ~14 min by author timestamps); (b) trusted earlier subagent C's snapshot of "no active cure-claim" without re-verifying current claim state (Scorched `4e6e18b2` + Mistbound `00375e07` both active post-handoff); (c) introduced ADR-186 references in WS-10 contradicting my own WS-11 statement. The recursion-of-doctrine pattern fired on the plan that catalogues it.
+
+Cure shape: dispatch dual reviewer pass (docs-adr-expert + code-expert) with sharp specialty briefs; receive findings; **critically analyse before absorbing** (verify highest-stakes findings against live state; identify reviewer-blind-spots; reflect-on-reflection for self-checks). The "step back and reflect on the reflection" loop converged at R1.2 with 21 findings absorbed, then R1.3 self-critique caught 2 more (residual stale 22-min reference + parallel-author observation).
+
+Why pending: 1 worked instance. Promotion gate: 2nd worked instance of single-author substrate that the reviewer-pass loop catches authoring-time trust-without-reverification failures.
+
+Falsifiability: pattern file lists ≥2 worked instances with named upstream-trust signals + named reviewer findings + named critical-analysis verifications + named steady-state declarations. If 2nd instance fails to converge or produces different cure-shape, pattern needs refinement before promotion.
+
+Cross-references: composes with WS-5 substrate-pointer-read-as-current-state pattern; composes with WS-4 recursion-of-doctrine pattern; instance-of WS-5 pattern firing on plan body that catalogues it.
+
+---
+
+### Sidebar co-authoring model — first deployment worked instance
+
+[captured: 2026-05-24 | source: program plan R1.4 §Plan Coordination (owner adoption) + first-instance deployment by Mistbound (`d7c918cf` sidebar opener for R1.4-landing path) | graduation-target: PDR or pattern file capturing sidebar-mediated peer co-authoring model after 2nd worked instance | trigger: 2nd worked instance of sidebar-mediated peer collaboration outside the originating plan's coordination | status: pending second instance]
+
+Worked instance: Mistbound Hiding Threshold (0e27cc) opened sidebar at `.agent/state/collaboration/sidebars/program-plan-landing-cadence-2026-05-24-mistbound-lanternlit.md` 2026-05-24T08:55Z with structured 2-question + deadline + default-action-if-silent shape. Lanternlit (78683a) appended reply within ~75 min of opener. Sidebar resolution pending Mistbound marshal-success on R1.4-R1.5 land.
+
+Mechanism that worked: structured opener with explicit questions + deadline + default-action-if-silent; participant identity tuples in frontmatter; append-only convention; resolution slot. Sidebar-file polling by sidebar-opener via comms-watcher (not file mtime).
+
+Why pending: 1 worked instance. Promotion gate: 2nd worked instance, ideally across a different plan or substrate surface, demonstrating the model generalises beyond the originating program plan.
+
+Falsifiability: 2nd sidebar opens with consistent shape (frontmatter + structured questions + deadline + default + reply slot + resolution slot); resolves cleanly without contention; substrate-pointer-stale-state risks remain bounded.
+
+Cross-references: composes with `feedback_peer_sidebar_beats_coordinator_helpers` (graduated 2026-05-22 — peer-pair sidebars for design work). The sidebar model is the operational shape of that feedback's claim.
+
+---
+
+### M1-vs-M2 milestone-priority-asymmetry framing for multi-WS programs
+
+[captured: 2026-05-24 | source: program plan R1.1 (M1/M2 milestone framing added per owner metacognitive critique) | graduation-target: PDR or plan-template amendment naming milestone-priority-asymmetry as the default shape for multi-WS programs that have BOTH near-term-pivot-readiness AND long-term-completion concerns | trigger: 2nd multi-WS program adopting the M1/M2 explicit-asymmetry shape, demonstrating reproducibility beyond this program | status: pending second instance]
+
+Worked instance: program plan R1 originally framed Safe-Pause Criteria + Completion Criteria as two parallel "criteria to land" surfaces without priority asymmetry. Owner critique 2026-05-24 exposed the framing gap: "are end goals separate from the milestone that fulfils 'first safe stopping point'?" R1.1 reframed as M1 — Safe-Pause Milestone (near-term target; pivot-ready) and M2 — Completion Milestone (open-ended; full end-state), with explicit M2-pursuit-deferred-until-M1 priority asymmetry. R1.3 added M1 Gate Monitor duty + path-trigger completeness specs. R1.4 added sidebar model. R1.5 resolved all owner verdicts.
+
+Effect: path-forward sequencing became M1-focused; M2-pursuit work clearly tagged and deferred; reader sees priority at a glance.
+
+Why pending: applied to 1 plan only. Promotion gate: 2nd multi-WS program that adopts the same explicit M1/M2 asymmetry, ideally without further owner intervention (proving the pattern is teachable from existing substrate).
+
+Falsifiability: 2nd plan body contains explicit "M1 — <near-term-milestone-name>" + "M2 — <completion-milestone-name>" sections with priority asymmetry table + Path Forward sequenced for M1 first + M2-pursuit deferred unless owner directs.
+
+Cross-references: composes with PDR-018 (plan body shape) — extends the plan-template surface for programs with multi-milestone concerns.
+
+---
+
+### Owner-direction-reshapes-the-question pattern (AskUserQuestion misframe signal)
+
+[captured: 2026-05-24 | source: AskUserQuestion call Q3 (E4 citation-policy 3-option menu) — owner reframed the question entirely to PDR-vs-ADR portability distinction | graduation-target: rule or skill amendment naming "when owner reframes an AskUserQuestion option, the misframe is the signal — re-shape options around the new framing rather than re-presenting old options" | trigger: 2nd worked instance of owner-reframe exposing AskUserQuestion misframe | status: pending second instance]
+
+Worked instance: AskUserQuestion Q3 offered 3 citation-policy options (descriptive-only / event-IDs / hybrid-with-historical-reference). Owner answered the hybrid option BUT in a follow-up turn reframed the question: "actually it was the citations I wanted to discuss. Anything involving specific SHAs necessarily belongs to the repo, and is therefore not portable, and therefore should not be in a PDR." The reframe exposed that all 3 options were the wrong shape — the real shape was PDR-vs-ADR classification, not citation-style choice.
+
+Cure shape: when an AskUserQuestion answer triggers an owner reframe (rather than a clean selection), absorb the reframe as the new question shape and re-author options if needed. The reframe is the data, not noise.
+
+Why pending: 1 worked instance. Promotion gate: 2nd instance of owner-reframe exposing question misframe in a different decision context.
+
+Falsifiability: documented protocol for AskUserQuestion-misframe detection at the asking-agent boundary, with examples of reframe-signal recognition.
+
+Cross-references: composes with `present-verdicts-not-menus` rule (when only one defensible option exists, direct don't ask — sometimes the menu itself is the wrong shape).

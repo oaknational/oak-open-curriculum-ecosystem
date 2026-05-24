@@ -9,6 +9,64 @@ merge_class: append-only-narrative
 
 # Napkin
 
+## 2026-05-24 — Lanternlit Listening Dusk / claude / claude-opus-4-7 / `78683a` — R0→R1.5 program-plan refinement chain; PDR/ADR portability distinction received; sidebar model first deployment
+
+### What Was Done
+
+- Resumed Director-adjacent steering role post-compaction. Refined canonical program plan at `.agent/plans/agentic-engineering-enhancements/current/practice-infrastructure-hardening-program.plan.md` through six successive iterations: R1 (current-state refresh after 6-subagent fan-out), R1.1 (M1/M2 milestone framing per owner metacognitive critique), R1.2 (dual-reviewer absorption pass; docs-adr-expert + code-expert returned 21 findings), R1.3 (path-trigger completeness specs after self-critique exposed 5 gaps), R1.4 (sidebar co-authoring model adoption + heartbeat-CLI integration), R1.5 (all 5 owner decisions resolved). Plan file 332→~1500 lines.
+- Owner-directed AskUserQuestion call resolved 5 decisions in one batch: WS-2 SPLIT confirmed; E4 reframed via PDR/ADR portability distinction; WS-8 author NOW (Lanternlit); R1.4 broadcast bundled emit; PDR-079 NEW WS-12.
+- Responded to Mistbound's sidebar (first sidebar-model instance) at `program-plan-landing-cadence-2026-05-24-mistbound-lanternlit.md`: HAND-OFF + SPLIT with marshal shaping pass. Deadline 09:20Z missed (apologised); Mistbound was still polling.
+- Emitted bundled R1.5 broadcast comms event `dd166522-7edf-4770-87ca-5ea80b29372d` covering all owner verdicts + M1 Gate Monitor duty + sidebar model + authoring queue.
+- Re-armed all-channels comms watcher (task `bwnkm79th`, baseline 1458 events).
+- Dispatched dual reviewer pass (docs-adr-expert + code-expert) + 6-subagent ground-truth fan-out + architecture-expert-fred critical-question on hook-cure path.
+
+### Insights / Surprises
+
+- **PDR/ADR portability distinction is doctrine-shaping**. Owner articulated PDRs and ADRs as fundamentally different types of thing: PDRs are portable practice doctrine (claim about how multi-agent practice works; apply to ANY repo; cannot contain SHAs/repo-paths/branch-names); ADRs are repo-specific architectural decisions (choice about how *this* repo's substrate implements something; SHAs welcome). **SHA-in-PDR = misclassification signal**: the SHA-bearing substance belongs in an ADR. This dissolves the long-standing PDR-vs-ADR vagueness and turns E4 from a citation-style question into a classification question. Worth substrate-graduation as PDR-079 (NEW WS-12, in-flight).
+- **Trust-without-reverification failure mode firing on my own plan authoring**. The plan I refined names the substrate-pointer-read failure mode (WS-5), yet R1 itself exhibited the failure mode in 3 instances: (a) trusted Mistbound's 22-min throughput number without git-checking (actually ~14 min by author timestamps); (b) trusted subagent C's stale snapshot of active-claims without re-verifying (Scorched `4e6e18b2` + Mistbound `00375e07` both active post-handoff, not "lapsed"); (c) introduced ADR-186 references in WS-10 contradicting my own WS-11 statement. The recursion-of-doctrine pattern fired on the plan that catalogues it. Cure-shape that worked: dual-reviewer pass + critical-analysis loop with verification of highest-stakes findings before absorption.
+- **Reviewer-pass + critical-analysis loop as proven cure-shape**. Dispatched docs-adr-expert (15 findings) + code-expert (6 findings); 21 total findings tabulated CRITICAL/IMPORTANT/NIT/surprise-by-absence. Critical analysis verified the 3 highest-stakes findings (active claims, git timestamps, /tmp file existence) before absorbing. Steady-state at R1.2; iteration 2 (another reviewer pass) judged diminishing-return. The "reflect-on-reflection" loop the user prompted produced a substantively better foundation than any single-author pass could have.
+- **Sidebar co-authoring model worked on first deployment**. Owner adopted sidebar R1.4 (resolving R1.3 Gap 5: parallel-writer coordination). Mistbound deployed it as the FIRST INSTANCE within hours: sidebar opener `d7c918cf` with structured questions, deadline, default-action-if-silent. Worked perfectly — clean handoff surface, no contention, polled-and-graceful. The model is operational. Worth substrate-graduation as pattern after second-instance.
+- **M1-vs-M2 priority asymmetry was a foundational reframe**. Original plan structure (End Goal / Safe-Pause Criteria / Completion Criteria) blurred priority — both Safe-Pause and Completion read as "criteria to land" with no asymmetry. R1.1 named milestones explicitly (M1 near-term target / M2 open-ended) + explicit deferral of M2-pursuit work. Owner's question "are the end goals separate from the milestone that fulfils 'first safe stopping point'?" exposed this gap. Owner's metacognitive critique-loop kept finding gaps R1 → R1.4 didn't see.
+- **Path-trigger completeness gap (R1.3 self-critique)**. Even after R1.2 reviewer absorption, R1.3 self-critique on "is the path absolutely clear, decision complete, fully specified?" exposed 5 trigger-ambiguity gaps: actors named, triggers absent. The discipline of asking "who pings whom when?" rather than "who acts?" surfaced gaps the reviewer-pass didn't probe. R1.3 added §Roles + triggers with stand-down authority + re-engagement triggers + M1 Gate Monitor duty.
+- **Owner-direction-reshapes-the-question pattern**. AskUserQuestion call's Q3 (E4 citation-policy with 3 options) prompted owner to reframe the question entirely. The 3 options I offered were all wrong shape; the real shape was PDR-vs-ADR classification, not citation-style choice. Worth recognising that AskUserQuestion options can be a SIGNAL of misframed problem.
+
+### Mistakes Made (and cures)
+
+- **Trusted upstream substrate without re-verification** (3 instances). Cure: reviewer pass + critical-analysis loop caught all 3. Behaviour change: at synthesis time, verify highest-stakes claims against live state before absorbing.
+- **Wrote "(historical reference SHA:abc1234)" hybrid as the E4 verdict** when the actual architectural truth was PDR-vs-ADR portability distinction. The hybrid was an over-engineered workaround for a misclassification problem. Cure: owner reframe; absorbed as R1.5 binding doctrine.
+- **Missed 09:20Z sidebar deadline** because of deep R1.5 authoring + lapsed comms-stream polling. Cure: re-armed monitor on user direction. Behaviour change: when refining substrate, periodically check comms-stream for directed events (independent of authoring flow). The comms-monitor isn't optional during multi-agent work.
+- **Cron-emitted "Heartbeat tick" prompts repeatedly during quiet session** (earlier in this same context window before user's "pause"). Killed cron. Behaviour change: heartbeat cron should fire-and-forget, NOT enqueue prompts to me; need a different mechanism (per WS-10 CLI spec).
+- **AskUserQuestion options were sometimes misframed** (Q3 E4). Cure: when user reframes the question entirely, the misframe is the data — re-shape options around the new framing rather than re-presenting old options.
+
+### Candidates Surfaced (capture-only per Step 6b)
+
+- **PDR-079 candidate**: `pdr-vs-adr-portability-distinction`. Owner-articulated 2026-05-24. PDRs portable practice doctrine; ADRs repo-bound architectural decisions; SHA-in-PDR = misclassification signal. Mechanical co-cure: scope `.agent/rules/no-moving-targets-in-permanent-docs.md` strictly to portable surfaces. Status: AUTHOR-IN-FLIGHT (Lanternlit, WS-12 in program plan). Substance fully captured in plan body §Emergent Observations E4 RESOLVED + WS-12 description.
+- **Reviewer-pass-as-cure-for-trust-without-reverification pattern**: 1 worked instance (this session). Trigger: 2nd worked instance of single-author substrate that catches authoring-time failure modes through reviewer-pass loop. Graduation-target: pattern file at `.agent/memory/active/patterns/reviewer-pass-cures-trust-without-reverification.md` OR amendment to substrate-pointer-pattern v3.
+- **Sidebar co-authoring model first-instance evidence**: 1 worked instance (Mistbound R1.4-landing sidebar). Trigger: 2nd worked instance of sidebar-mediated peer collaboration. Graduation-target: PDR or pattern after 2nd instance.
+- **Owner-direction-reshapes-question pattern**: 1 worked instance (Q3 E4 reframe). Trigger: 2nd instance of owner-direction exposing AskUserQuestion misframe. Graduation-target: rule or skill amendment naming "watch for owner reframe as misframe signal".
+- **M1-vs-M2 milestone-priority asymmetry framing**: applied successfully to one plan (this program). Trigger: 2nd plan adopting the M1/M2 explicit-asymmetry shape. Graduation-target: PDR or plan-template amendment naming milestone-priority-asymmetry as the default shape for multi-WS programs.
+- **Trust-without-reverification failure mode at single-author synthesis** (substrate-pointer-pattern v3 sub-instance candidate): 1 instance with 3 sub-failures. Already covered by WS-5 v3 candidates (3 unexposed edge cases including subagent-chain propagation without source verification). Trigger: subsumed.
+
+### What Lives Where for Post-Compaction Resume
+
+- Program plan: `.agent/plans/agentic-engineering-enhancements/current/practice-infrastructure-hardening-program.plan.md` (uncommitted at session-end; Mistbound marshal-cycle will land 3-split per sidebar reply)
+- Sidebar: `.agent/state/collaboration/sidebars/program-plan-landing-cadence-2026-05-24-mistbound-lanternlit.md` (response appended; resolution pending Mistbound marshal-success)
+- Bundled R1.5 broadcast: comms event `dd166522-7edf-4770-87ca-5ea80b29372d`
+- My claim `8374e240` stays OPEN through marshal cycle; closes on marshal-success per sidebar contract
+- Reviewer transcript IDs captured in §Workstream Roll-up (WS-6 references `/tmp/charcoal-pdr077-postresume-fanout-synthesis.md` for R3 substrate)
+- PDR-080 landed `fc69313c` + phenotype plan `66121bde` during my session; R1.6 absorption pending
+- Authoring queue for next session: PDR-078 (SHA-free) + ADR-186 (SHAs OK) + ADR-for-WS-8 + PDR-079 + thin SKILL §0.5 collapse + reciprocal §Related amendments to PDR-027/063/064. Substance fully specified in plan body; ready for next-session pickup.
+
+### Direction Received From Owner During Session
+
+- "Resolve all user decisions now" → 5 verdicts captured via AskUserQuestion + follow-up Q3-reframe
+- "PDR/ADR portability — fundamentally different types of thing; SHA-in-PDR is misclassification signal" → durable doctrine articulation → PDR-079 NEW WS-12
+- "Sidebar is the right model" → R1.4 adoption → first instance worked validation (Mistbound)
+- "Smaller and more frequent commits are probably helpful" → Q2 sidebar verdict: SPLIT with marshal shaping pass
+- "Author WS-8 ADR NOW" → flipped from M2-deferred to AUTHOR-IN-FLIGHT
+- "Check messages + restart comms monitor" → re-armed `bwnkm79th`; absorbed PDR-080 + Scorched closeout via plan-body context
+- "Prepare for compaction" → /oak-session-handoff in progress
+
 ## 2026-05-23 — Lanternlit Listening Dusk / claude / claude-opus-4-7 / `78683a` — Owner-directed compaction pause; PDR-078 + ADR-186 + thin-SKILL bundle in substantive flight
 
 ### What Was Done
