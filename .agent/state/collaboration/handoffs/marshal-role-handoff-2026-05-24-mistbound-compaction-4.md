@@ -146,14 +146,36 @@ under 5+ fold-check threshold.
 
 ## 8. Outstanding marshal-receivable lanes
 
+**TOP PRIORITY — unprocessed during this resume window arc (failure
+mode: watcher missed surfacing these as marshal-requests; post-resume
+self must process FIRST):**
+
+| Event | Filed | From | Subject |
+|---|---|---|---|
+| `ef315373-bffe-43c6-ae67-8296719078c7` | 13:01:01Z | Twilit (`8d8d93`) | **Marshal-request: agent-tools CLI bootstrap extraction** (6 files: 2 new + 4 collapsed-to-3-lines; all 6 gates GREEN; reviewers code-expert + type-expert PASS-WITH-IMPORTANTS-ABSORBED; 4 Important findings cured in-cycle; 1 adapter-coverage gap tracked separately) |
+| `b2258cf5-fb4c-4bc6-9c35-3de9a7fd9bdb` | 13:11:02Z | Seaworthy (`6966d4`) | **Director liveness probe** — Twilit MR pending; owner accelerating M1 push path; marshal-seat is gating surface; short status reply requested |
+| `625fb072-1149-4f27-9866-428bb7eca7bf` | 13:18:16Z | Charcoal (`7c7327`) | **Marshal-request: Cycle Alpha Sonar cure bundle** (5 cure-types / 7 sites / 6 files; code-expert PASS-WITH-NITS-ABSORBED; 530/530 tests green) |
+
+**Post-resume action**: read each event body in full, then process each
+marshal-request via the proven cycle shape (stage by explicit pathspec
+→ husky → commit with Co-authored-by attribution). For Director's
+liveness probe — reply with explicit status. DM apology to all three
+named in this same record at commit-this-hygiene-tail.
+
+Twilit and Charcoal's source-class files were the same 8 files I just
+broadcast asking for "ownership identification" (broadcast `c155d0c5`)
+— without realising they had been pre-claimed and pre-marshal-requested
+~75-90 minutes earlier. The work-product was sitting ready in the
+working tree the entire time.
+
+**Other lanes** (lower priority; not yet marshal-requested):
+
 | Lane | Author | Status |
 |---|---|---|
-| Twilit CLI bootstrap refactor (6 files atomic bundle) | Twilit (`8d8d93`) | reviewer dispatch in flight; marshal-request expected when convergent |
-| mcp-handler bug-fix | UNATTRIBUTED | broadcast `c155d0c5` requested claim-owner identification |
-| 7 other source-class files (`agent-tools/scripts/repo-check.ts`, `agent-tools/src/collaboration-state/{identity.ts,tui/reduce-refresh-state.unit.test.ts}`, `agent-tools/tests/{collaboration-state/comms-watch-loop,collaboration-state/identity,commit-workflow}.unit.test.ts`, `packages/sdks/graph-corpus-sdk/src/{eef-strands,threads}/index.ts`) | UNATTRIBUTED | same broadcast `c155d0c5` |
+| mcp-handler bug-fix | UNATTRIBUTED | broadcast `c155d0c5` asked for identification (still pending) |
 | PR-108 remaining un-routed finding-classes (5 classes per Charcoal synthesis `a15363e5`) | n/a | Director-routing pending |
-| Charcoal carry-on lane: S5443 false-positive bundling for agent-tools/tests | Charcoal (`7c7327`) | mentioned in Director's earlier routing as "worth bundling if Sonar MCP available" |
-| docs/governance/sonar-disposition-policy.md follow-up (paired with `79c148e4`) | TBD | config-expert flagged this as non-blocking follow-up |
+| Charcoal carry-on: S5443 false-positive bundling for agent-tools/tests | Charcoal (`7c7327`) | conditional on Sonar MCP availability |
+| docs/governance/sonar-disposition-policy.md follow-up (paired with `79c148e4`) | TBD | config-expert flagged as non-blocking |
 
 If any of these surface as marshal-requests post-resume, proven shape:
 confirm scope is reviewer-ratified → stage by explicit pathspec → run
@@ -174,20 +196,63 @@ husky → commit with Co-authored-by attribution.
 
 ## 10. Open marshal obligations
 
-NONE blocking at handoff. Two outbound coordination signals open:
+**THREE BLOCKING marshal obligations carried into compaction-4** (per
+§8 TOP PRIORITY table):
 
-- DM `34c33577` to Twilit (refactor bundle ready-state notice)
-- Broadcast `c155d0c5` requesting claim-owner identification on 8
-  unattributed source-class files
+1. **Twilit marshal-request `ef315373`** (filed 13:01Z, 90+ min
+   overdue at handoff) — CLI bootstrap extraction; 6 files atomic
+   bundle; all gates green pre-marshal; reviewers converged.
+   Work-product is sitting in working tree at handoff.
+
+2. **Director liveness probe `b2258cf5`** (filed 13:11Z, 80+ min
+   overdue at handoff) — explicit short-status reply requested.
+
+3. **Charcoal Cycle Alpha marshal-request `625fb072`** (filed 13:18Z,
+   75+ min overdue at handoff) — Sonar cure bundle; 6 files;
+   code-expert PASS; 530 tests green pre-marshal. Work-product likely
+   sitting in working tree at handoff (overlap with the 7 "unattributed"
+   source files I broadcast about in `c155d0c5`).
+
+Outbound coordination signals open (now requiring follow-up apology
+DMs landed in this same hygiene tail):
+
+- DM `34c33577` to Twilit (was: refactor ready-state notice; needs
+  apology amendment naming the missed `ef315373` event)
+- Broadcast `c155d0c5` requesting claim-owner identification (now
+  partially answered: Twilit owns 6 of the 8 named files; Charcoal
+  owns the rest minus mcp-handler)
 
 If responses arrive during compaction window, the post-compaction self
-processes them as normal marshal-requests via the proven cycle shape.
+absorbs them as additional context for the §11 first-actions.
 
 ## 11. What next-marshal-cycle-Mistbound does first
 
+**Critical**: §10 blocking obligations come FIRST, before idle-standby.
+
 1. Restart three monitors per §5.
-2. Brief resume broadcast tagged `heartbeat` (no PDR-064 Moment-2).
-3. Read recent comms tail; in particular look for Twilit marshal-request
-   on `agent-tools/src/bin/*` refactor bundle + any ownership responses
-   on `c155d0c5` broadcast.
-4. Stand by for marshal-requests; process via proven cycle shape.
+2. Brief resume broadcast tagged `heartbeat` (no PDR-064 Moment-2),
+   ACKNOWLEDGING the 3 overdue events from §10 and naming intent to
+   process them immediately.
+3. Read each event body in full (`ef315373`, `b2258cf5`, `625fb072`).
+4. **Reply to Director's liveness probe FIRST** (`b2258cf5`) — even a
+   one-line status acknowledgement is correct; Director gates further
+   routing on marshal-seat liveness.
+5. **Process Twilit marshal-request `ef315373`** via proven cycle
+   shape — stage by explicit pathspec (the 6 files named in event
+   body) → husky → commit with `Co-authored-by: Twilit Scattering
+   Twilight (8d8d93)`. Twilit's reviewer-convergence attribution
+   (code-expert + type-expert; 4 Important findings cured) should
+   be cited in commit body.
+6. **Process Charcoal Cycle Alpha marshal-request `625fb072`** via
+   proven cycle shape — stage by explicit pathspec (6 files named in
+   event body) → husky → commit with `Co-authored-by: Charcoal Brazing
+   Kiln (7c7327)`. code-expert PASS-WITH-NITS-ABSORBED + 530-test
+   convergence cited.
+7. Stand by for further marshal-requests; process via proven cycle
+   shape.
+
+If watcher silently skips events again post-resume, the cure-shape
+must be investigated: either (a) re-read full comms event dir
+periodically as backup to the watcher stream, OR (b) file
+failure-mode-tagged event documenting the watcher behaviour for
+graduation-pipeline pickup.
