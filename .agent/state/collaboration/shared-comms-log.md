@@ -42755,3 +42755,88 @@ Cron-style heartbeat not arming this turn (was previously misbehaving via prompt
 
 — Lanternlit Listening Dusk / claude / claude-opus-4-7 / 78683a / 2026-05-24
 
+
+---
+
+## 2026-05-24T09:23:06.142Z — `Ferny Fruiting Root` / `claude` / `claude-opus-4-7` / `ee16a4` — Team-member closeout (session-end): Ferny Fruiting Root (ee16a4) — Window 2 substrate fully discharged to napkin; no retained claims; watcher stopping
+
+Team-member closeout — Ferny Fruiting Root / claude / claude-opus-4-7 / `ee16a4` — session-end (not compaction; owner direction "continue, but for session end, not compaction" via `/oak-session-handoff`).
+
+Team-member-not-closeout-owner. Closeout owner is Director Seaworthy Navigating Beacon (`6966d4`). Boundary-scoped synthesis per SKILL §"Closeout Contract".
+
+## Boundary owned
+
+Window 2 resume → Work Item B (WS-8 C2+C5+C4 ratification record + PDR-079 authoring lane per docs-adr verdict). Lane paused mid-uptake at owner direction "pause" (~19:37Z); never resumed by owner direction; closing at session-end.
+
+## Outcome
+
+Substantive deliverables:
+
+| Surface | Status | Substance |
+|---|---|---|
+| Team-start broadcast `7c1a5e5f` | EMITTED | Window 2 resume; Work Item B uptake; ACK Fronded marshal pickup (overturned ~3 min later by owner) |
+| Directed event to Director Seaworthy `40104e55` | EMITTED | Work Item B plan + supersede ACK + housekeeping |
+| Stale claim `ebc446c6` (pattern v2) | RETIRED | Closed via `claims close` at 19:33:23Z with summary citing Mistbound Cycle #2 landing `8a99ed35`; substrate-truth-drift on claim record cured |
+| 4-reviewer pre-draft fan-out | COMPLETED | assumptions + betty + wilma + docs-adr; 4-way convergence on 5 conditions + 5 reviewer-specific findings = 10 architectural conditions documented |
+| WS-8 reviewer convergence substrate | DURABLE | `/tmp/ferny-ws8-reviewer-synthesis-window2.md` + napkin Capture B (paste-ready 10-condition list + 4 transcript IDs) |
+| Pause-standby broadcast `c5daa226` | EMITTED | Final-heartbeat-end per §0.5; cron `7395efee` deleted; WS-8 authoring held |
+| Cron-prompt cure-shape text | AUTHORED | Concrete drop-in replacement text (napkin Capture A) extending Mistbound Surprise 2 instance-13 framing |
+| Napkin window 2 session-end captures | LANDED | Captures A (cron-prompt cure-shape) + B (WS-8 substrate) + C (12th-instance Ferny perspective on 10-second timing window) |
+
+Substantive substrate NOT authored (paused before drafting; substrate is paste-ready for follow-on author):
+
+- WS-8 ratification comms-broadcast (announcement class)
+- PDR-079 (Practice Core canonical home for the ratification; sequential reviewer pass required)
+
+## Evidence
+
+- HEAD per session-open: `5fedf9a4`; commits landed by Mistbound during window 2: `927d459e` (R2 cures) + `760f359a` (Tranche A substrate) + `64554ac3` (Tranche B 253-file collaboration state)
+- 4 reviewer transcripts: `abd6fb0a2f95d4b25` (assumptions), `a52790a31593562f9` (betty), `a64d82df5d94c44ca` (wilma), `a8f083c2f9986abbc` (docs-adr)
+- 4 comms events emitted by Ferny this window: `7c1a5e5f` (team-start), `40104e55` (directed to Seaworthy), `c5daa226` (pause-standby + final-heartbeat-end); also stale-claim closure event from `claims close`
+- Synthesis substrate: `/tmp/ferny-ws8-reviewer-synthesis-window2.md` (10 architectural conditions paste-ready)
+- Napkin entries: Capture A (cure-shape text) + Capture B (WS-8 substrate) + Capture C (10-second timing variant)
+
+## Claims / queue / git state
+
+- **Active claims under (Ferny / ee16a4)**: NONE.
+- **Commit-queue intents**: NONE.
+- **Working-tree authored by Ferny still uncommitted**: napkin entries (Captures A/B/C; session-end capture-surface writes; closeout-owner's hygiene-cycle territory per `feedback_marshal_queues_comms_and_memory_state`).
+- **Heartbeat cron `7395efee`**: STOPPED at pause-absorption (`c5daa226` final-heartbeat-end).
+- **All-channels watcher `bgrzs488c`**: stopping at this closeout.
+
+## Session complete announcement
+
+Ferny Fruiting Root session ending per owner direction "continue, but for session end, not compaction". Final closeout broadcast follows. No retained claims; no commit-queue intents; no in-flight reviewer dispatches.
+
+## Retained claims, if any, and handoff reason
+
+NONE retained. WS-8 ratification lane is named in Seaworthy tick #2 as "any active agent at authoring-capability"; substrate at `/tmp/ferny-ws8-reviewer-synthesis-window2.md` + napkin Capture B is paste-ready for any future authoring agent. If `/tmp/` is cleared between sessions, the napkin Capture B carries the 10 architectural conditions + 4 transcript IDs durably.
+
+## Pickup notification required for follow-on agent
+
+No claim-bound pickup. If WS-8 lane is reassigned: substrate-paste-points are:
+- 10 architectural conditions (napkin Capture B)
+- Reviewer transcripts (4 IDs in Capture B)
+- Cure-shape text for cron-prompt (napkin Capture A; not on critical path for WS-8 but worth carrying forward)
+
+## Heartbeat-end broadcast emitted
+
+YES — `c5daa226` at pause-time (~19:37Z absorption). Final-heartbeat-end per SKILL §0.5 rule; satisfies the "agent who closed cleanly but whose heartbeat cron stopped emitting" false-positive guard. No second heartbeat-end needed for this session-end closeout.
+
+## Surprise or changed understanding
+
+Three Ferny-specific captures absorbed into napkin (Captures A + B + C; Capture B is substrate-pointer for follow-on Work Item B author; Capture A is concrete cure-shape text for cron-prompt-template-as-substrate-pointer extending Mistbound Surprise 2 instance 13; Capture C is Ferny-perspective on 10-second pre-tick-#4 dispatch window — a read-cadence-gap variant of substrate-pointer-pattern).
+
+Single most-load-bearing window 2 finding: **owner-input-precedence check MUST be the first instruction in any cron-prompt-template body** (not just present but FIRST), or the template substrate overrides the current owner-input. Concrete drop-in replacement text in napkin Capture A.
+
+## Blockers or risks
+
+- **WS-8 ratification lane never authored**: Work Item B paused-and-not-resumed. Substrate is paste-ready but no author has claimed it post-pause. If team continues with this Work Item, picking it up requires reading napkin Capture B + the 4 reviewer transcripts.
+- **Cron-prompt cure-shape text not yet ratified**: Capture A is a concrete proposal; needs owner/Director ratification before adoption as the default cron-prompt body. If team adopts heartbeat convenience CLI (Mistbound Surprise 1's named structural cure), Capture A's owner-input-precedence check should be embedded in that CLI's wrapper logic.
+
+## Handoff needed
+
+None claim-bound from Ferny. Director Seaworthy owns the team session closeout if/when team session ends. Director Seaworthy / future Director / next-active Marshal can absorb napkin Captures A/B/C at next consolidation-docs run.
+
+— Ferny Fruiting Root / claude / claude-opus-4-7 / `ee16a4` (window 2 session-end; team-member-not-closeout-owner; substrate fully discharged to napkin + /tmp/)
+
