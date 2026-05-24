@@ -2,9 +2,20 @@
 
 Operationalises [`.agent/directives/principles.md` § Code Quality](../directives/principles.md) — *"Never disable any quality gates, never disable Git hooks (`--no-verify`)"*.
 
-NEVER pass `--no-verify` (or any equivalent hook-skip flag — `--no-pre-commit`, `HUSKY=0`, `SKIP_HOOKS=1`, etc.) to `git commit`, `git push`, or any other Git operation that would normally trigger a pre-commit, commit-msg, pre-push, or post-commit hook.
+NEVER skip Git hooks. The prohibition is on the **act of skipping hooks**, not on any single flag spelling. Concretely, this covers (non-exhaustive):
 
-**Authorisation is per-invocation, not per-session.** A prior owner approval to skip hooks does not authorise the next skip. Each `--no-verify` invocation requires fresh, explicit, in-the-moment owner authorisation naming this specific commit or push.
+- `--no-verify` / `-n` on `git commit` or `git push`
+- `--no-pre-commit`, `--no-commit-msg`, `--no-post-commit`
+- `--no-gpg-sign` / `--no-edit` when those bypass a hook-driven check
+- `HUSKY=0`, `SKIP_HOOKS=1`, `LEFTHOOK=0`, or any equivalent env-var hook-skip
+- `git -c core.hooksPath=/dev/null …` or `git -c core.hooksPath=…` pointed at any empty / no-op directory
+- `GIT_HOOKS_PATH` environment override to a no-op location
+- deleting, renaming, or chmod-ing `.husky/` (or `.git/hooks/`) to disarm hooks
+- any future Git flag, env var, config setting, or filesystem manipulation that has the effect of preventing hooks from running
+
+If the repo's hook policy refuses one mechanism (e.g. blocks `--no-verify`), **that refusal is a second signal to stop and surface**, not an obstacle to route around with a different mechanism. Reaching for a less-named workaround after a named one is refused reproduces the exact failure mode this rule blocks.
+
+**Authorisation is per-invocation AND per-mechanism, not per-session.** A prior owner approval to skip hooks does not authorise the next skip. Owner authorisation binds to *this commit, with hooks skipped* — the syntax used to achieve the skip is the agent's responsibility, and any mechanism above counts as a skip whether the owner's authorisation language named that specific spelling or not.
 
 If a hook is failing:
 

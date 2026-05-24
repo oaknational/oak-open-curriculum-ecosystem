@@ -63,13 +63,22 @@ if ! pnpm depcruise; then
   exit 1
 fi
 
-echo "🧪 Running root-level script tests..."
-if ! pnpm test:root-scripts; then
-  echo "❌ Root-level script tests failed!"
+echo "🧪 Running workspace-owned repo validators..."
+if ! pnpm repo-validators:check; then
+  echo "❌ Repo validator checks failed!"
+  exit 1
+fi
+
+echo "🐚 Linting shell scripts..."
+if ! pnpm lint:shell; then
+  echo "❌ Shell script lint failed!"
   exit 1
 fi
 
 echo "🔤 Running build, type-check, lint, and tests..."
-pnpm turbo run sdk-codegen build type-check lint test test:e2e test:ui
+if ! pnpm turbo run --continue sdk-codegen build type-check lint test test:e2e test:ui; then
+  echo "❌ Turbo quality gate checks failed!"
+  exit 1
+fi
 
 echo "✅ Pre-push checks completed!"

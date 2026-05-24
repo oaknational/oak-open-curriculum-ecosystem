@@ -15,7 +15,7 @@
 | `active/README.md` | Active index | Atomic executable plans mapped one-to-one to roadmap phases |
 | `current/README.md` | Current index | Next-up plans that are queued and ready |
 | `future/README.md` | Future index | Deferred strategic plans and ideas with promotion triggers |
-| `documentation-sync-log.md` | Tracking log | Per-phase record of required ADR/directive/reference-doc and README updates |
+| `documentation-sync-log.md` | Tracking log | Per-phase documentation update record |
 | `[plan-a].plan.md` | Strategic source plan | Policy intent, rationale, success criteria |
 | `[research-a].research.md` | Research | Evidence base and external context |
 | `evidence-bundle.template.md` | Template | Claim/evidence artefact format for non-trivial claims |
@@ -39,7 +39,8 @@
   executable until promoted to `current/` or `active/`.
 - **Strategic source plans (`*.plan.md`)**: intent and rationale only.
 - **Research docs (`*.research.md`)**: evidence base only, not execution instructions.
-- **Tracking artefacts** (`documentation-sync-log.md`, `evidence/`): proof of documentation propagation and evidence-backed claims.
+- **Tracking artefacts** (`documentation-sync-log.md`, `evidence/`):
+  proof of documentation propagation and evidence-backed claims.
 
 If strategy and execution disagree, update the active plan first, then reconcile
 the strategic source plan and roadmap.
@@ -54,7 +55,7 @@ No phase is complete until update handling is recorded for:
 4. any additionally impacted ADRs, `/docs/` pages, and README files
 
 Also apply:
-[`jc-consolidate-docs`](../../commands/consolidate-docs.md)
+[`jc-consolidate-docs`](../../skills/consolidate-docs/SKILL-CANONICAL.md)
 
 ## Milestone Alignment
 

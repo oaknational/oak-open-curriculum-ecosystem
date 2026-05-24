@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-014
 name: Learning Before Fitness
+polarity: pattern
 aliases:
   - Substance Before Fitness
 use_this_when: >-
@@ -15,6 +16,10 @@ barrier:
   prevents_recurring_mistake: "Artificially compressed concepts that fail to teach because they were shaped by a character budget rather than by their own substance"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 ## Principle
 
@@ -38,6 +43,16 @@ now "learning before fitness".
    stable entries to permanent homes, split the file by responsibility,
    or record owner-approved hard-limit changes. Agents may raise soft
    targets modestly with rationale; hard limits belong to the owner.
+
+Two conservation moves are part of the pattern:
+
+- **Archive after processing, before compaction.** Read and route the
+  source substance first; then preserve the processed full-file snapshot
+  before shrinking an oversized active-memory surface so live prose can
+  shrink without historical loss.
+- **Reconcile status, do not silently graduate.** If a due marker is stale
+  because a durable home already exists, name that home and correct the
+  metadata; do not present the correction as a fresh doctrine promotion.
 
 ## Anti-pattern
 

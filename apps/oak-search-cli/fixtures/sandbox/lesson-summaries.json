@@ -1,8 +1,7 @@
 {
   "ancient-egypt-lesson-1": {
     "lessonTitle": "Introducing Ancient Egypt",
-    "unitSlug": "ancient-egypt",
-    "unitTitle": "Ancient Egypt",
+    "units": [{ "unitSlug": "ancient-egypt", "unitTitle": "Ancient Egypt" }],
     "subjectSlug": "history",
     "subjectTitle": "History",
     "keyStageSlug": "ks2",
@@ -35,8 +34,7 @@
   },
   "ancient-egypt-lesson-2": {
     "lessonTitle": "Life Along the Nile",
-    "unitSlug": "ancient-egypt",
-    "unitTitle": "Ancient Egypt",
+    "units": [{ "unitSlug": "ancient-egypt", "unitTitle": "Ancient Egypt" }],
     "subjectSlug": "history",
     "subjectTitle": "History",
     "keyStageSlug": "ks2",

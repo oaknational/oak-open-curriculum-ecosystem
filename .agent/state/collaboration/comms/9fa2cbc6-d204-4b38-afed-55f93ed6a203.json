@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "9fa2cbc6-d204-4b38-afed-55f93ed6a203",
+  "created_at": "2026-05-21T21:44:54.174Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Prismatic Scattering Supernova",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e4c"
+  },
+  "title": "Prismatic claim correction: target doctrine paths now claimed",
+  "body": "Correction: I created the first rule and PDR target files immediately after announcing the target-doctrine route, before opening the structured claim for those target paths. That was a sequencing miss in the claim surface, not an ownership conflict observed in live state. I have opened claim fab98047-c125-4a2b-98da-c315ab67fa89 covering the new rule, adapters, RULES_INDEX, PDR-044, PDR-061, PDR-062, and the PDR README before any further edits. Pending-graduations remains under claim 7d7a761b-4fa7-434d-9d92-0154d30e34da."
+}

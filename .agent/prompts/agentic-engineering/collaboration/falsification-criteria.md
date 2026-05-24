@@ -27,15 +27,52 @@ roles. Mode transitions are recorded in the comms log.
 - **Falsifies**: at N≥3, an agent refuses to enter a needed mode (e.g.,
   declines to switch from Orchestrator to Executor when work shape
   demands it), AND the refusal blocks progress. Indicates territorial
-  roles are operating despite the mode framing.
+  roles are operating despite the mode framing. **Also falsifies (added
+  2026-05-14)**: across N≥3 multi-agent sessions on the same thread,
+  one or more role labels (e.g., `controller`, `marshal`, `reviewer`,
+  `scout`, `standby`, `consolidator`) consistently re-emerge despite the
+  pressure shape changing — evidence the labels are stable enough to be
+  territorial rather than transient. If this happens, the
+  [coordinator-PDR candidate in pending-graduations.md](../../memory/operational/pending-graduations.md)
+  becomes promotable on its own evidence (with the persistent labels
+  named explicitly), but P1's claim that all coordination is mode-not-role
+  is falsified for those labels.
 - **Weakens**: mode transitions occur but are systematically not
   recorded in the comms log. Suggests the mode model is correct but the
   recording discipline is unsupported (needs an explicit transition
-  event type).
+  event type). **Also weakens (added 2026-05-14)**: a role label proposed
+  for transient use during one session is reused by a different agent in
+  a later session on the same thread without explicit re-justification
+  from live pressure — calcification by inheritance rather than by
+  pressure recurrence. The mode model still holds, but the
+  pressure-to-label mapping needs an explicit per-session derivation
+  ritual to prevent silent label propagation.
 - **Strengthens**: an agent fluidly moves through three or more modes in
   a single session, with each transition surfaced via comms event, and
   the peer agent reads the transition correctly without coordination
-  cost.
+  cost. **Also strengthens (added 2026-05-14)**: across the
+  [`start-right-team`](../../skills/start-right-team/SKILL-CANONICAL.md)
+  experiment at N≥3 multi-agent sessions, role labels chosen by agents
+  emerge from the named coordination pressure each time, dissolve when
+  the pressure ends, and **vary across sessions on the same thread when
+  the work shape changes** — i.e. labels are downstream of pressure, not
+  upstream. This strengthening pattern is the evidence base that would
+  let the coordinator-PDR candidate graduate as a *pressure-to-role
+  mapping protocol* PDR rather than as a fixed-role-set PDR.
+
+**Co-tested PDR candidate** (added 2026-05-14): the pending
+[coordinator-role-as-allocator-not-gatekeeper PDR candidate](../../memory/operational/pending-graduations.md#entries)
+in the graduations register is held back from promotion until P1
+falsification criteria above produce stable evidence. Both the PDR
+candidate and P1 are claims about the same substrate phenomenon — how
+agents coordinate work without territorial role assignment — but the
+PDR candidate names a *concrete role-set* and P1 names a *generative
+principle*. Graduation order matters: if the PDR's role-set graduates
+before P1 matures, future agents read the role-set as canonical
+topology (P1's failure mode); if P1 matures first, the PDR can graduate
+in whichever shape the evidence supports. Capture observations during
+multi-agent sessions in `napkin.md` tagged with the affected primitive
+and the role labels actually used.
 
 ## P2 — Identity-without-negotiation
 
@@ -68,8 +105,8 @@ than mechanical refusal.
 
 ## P4 — Atomic-isolated task offers
 
-**Claim**: scope + acceptance + output format and path + word/scope cap
-+ overflow protocol is the minimum viable shape.
+**Claim**: scope + acceptance + output format and path + word/scope cap +
+overflow protocol is the minimum viable shape.
 
 - **Falsifies**: a class of work *cannot* be decomposed into
   atomic-isolated units (e.g., open-ended exploratory research that

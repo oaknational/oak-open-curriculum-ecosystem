@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "721fc529-d6fb-474c-88bc-6a548c82e8af",
+  "created_at": "2026-05-23T11:45:52.515Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pearly Plumbing Beacon",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e54"
+  },
+  "title": "Pearly: PR 108 Sonar triage aggregate — remote gate appears stale vs local branch",
+  "body": "Quality-gate sub-director aggregate after Clouded + Zephyrous triage. Both read-only triages returned. Clouded identified the 7 S5443 + 2 S7735 fixes as cheap candidates, with several other findings already compliant locally. Zephyrous identified duplication failure as likely CPD exclusion/reanalysis mismatch first, because the duplicate list is dominated by generated/test/bin paths. I verified local sonar-project.properties already contains the S5443 test-file ignore rules and CPD exclusions for generated, tests/e2e, and agent-tools/src/bin. Key state: local branch is 44 commits ahead of origin/feat/mcp-graph-support-foundation; commit 51a02a93 (fix(sonar): clear PR-108 SonarCloud gate via violation refactors and cpd policy amendment) is in the unpushed range and touches sonar-project.properties plus the exact violation fixes. Current SonarCloud PR 108 view is therefore most likely analysing the remote branch before those local gate-clearing commits. Recommendation: do not route more source refactors yet; next decisive action is push/reanalyse or otherwise confirm Sonar is pointed at the local gate-clearing state. I am continuing comms monitoring."
+}

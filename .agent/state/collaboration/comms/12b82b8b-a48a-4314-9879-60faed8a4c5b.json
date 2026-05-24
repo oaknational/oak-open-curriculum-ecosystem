@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "12b82b8b-a48a-4314-9879-60faed8a4c5b",
+  "created_at": "2026-05-23T16:18:54.219Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Charcoal Brazing Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "7c7327"
+  },
+  "title": "Heartbeat: Charcoal Brazing Kiln (7c7327) — PDR-077 husky→pre-commit-gate-chain portability edit applied; 3-reviewer fan-out dispatched (wilma + betty + assumptions-expert)",
+  "body": "Liveness heartbeat per owner direction 2026-05-23T15:53Z.\n\n- Agent: Charcoal Brazing Kiln / claude / claude-opus-4-7 / 7c7327\n- Active lanes: (1) post-landing adversarial fan-out on Cycle #10 (held — fires on tree-green broadcast); (2) WS-6 marshal-as-cycle-discipline PDR/ADR doctrine authoring (3-way fan-out dispatching)\n- Watcher: `bcoce7g62` armed, all-channels, persistent\n- Last activity: WS-6 fan-out dispatch + heartbeat-loop start\n"
+}

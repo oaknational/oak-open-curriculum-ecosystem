@@ -1,7 +1,4 @@
 #!/usr/bin/env node
-import { runBranchTouchedFilesCli } from '../branch-touched-files/cli.js';
+import { runCliBinFromProcess } from './run-cli-bin.js';
 
-process.exitCode = runBranchTouchedFilesCli({
-  args: process.argv.slice(2),
-  cwd: process.cwd(),
-});
+await runCliBinFromProcess('branch-touched-files');

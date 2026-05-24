@@ -319,8 +319,8 @@ local language, it is not yet ready for durable capture.
 ### Task 4.1: Define the closeout reviewer set
 
 - Required reviewers for the later active execution:
-  - `assumptions-reviewer`
-  - `docs-adr-reviewer`
+  - `assumptions-expert`
+  - `docs-adr-expert`
   - an architecture reviewer if the findings propose doctrine, boundary, or
     system-model changes
 - Validation:

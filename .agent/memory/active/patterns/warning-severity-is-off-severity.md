@@ -1,5 +1,6 @@
 ---
 name: "Warning Severity Is Off Severity"
+polarity: anti-pattern
 use_this_when: "Setting or reviewing lint rule severity, especially when considering 'warn' as a transitional step toward 'error'"
 category: process
 proven_in: "packages/core/oak-eslint — testRules had consistent-type-assertions at warn, allowing 13 violations to accumulate across 4 workspaces unnoticed"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Rules at warn severity accumulate violations silently because warnings scroll past in CI output and are never blocking"
   stable: true
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Warning Severity Is Off Severity
 

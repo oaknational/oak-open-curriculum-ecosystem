@@ -45,7 +45,6 @@ export function sameAgent(left: CollaborationAgentId, right: CollaborationAgentI
   return (
     left.agent_name === right.agent_name &&
     left.platform === right.platform &&
-    left.model === right.model &&
     left.session_id_prefix === right.session_id_prefix
   );
 }

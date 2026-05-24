@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-033
 name: Vendor-Doc Review for Unknown Unknowns
+polarity: pattern
 use_this_when: >-
   Authoring or reviewing a plan that targets a third-party platform,
   or reviewing substantive implementation choices that interact with
@@ -14,6 +15,10 @@ barrier:
   prevents_recurring_mistake: "Plans authored from internal knowledge silently miss vendor capabilities (capability gaps) AND ship implementations that violate vendor-documented contracts (contract violations) — both invisible to in-house reviewers operating inside the same worldview."
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 ## Principle
 
@@ -57,8 +62,8 @@ in-repo proof and operational mechanics.
    query shape, retry policy), dispatch the matching
    vendor-specialist reviewer alongside the in-house reviewers.
 2. **Vendor-specialist reviewers ground against the official
-   documentation**; in-house reviewers (`code-reviewer`,
-   `test-reviewer`, `type-reviewer`, `architecture-reviewer-*`)
+   documentation**; in-house reviewers (`code-expert`,
+   `test-expert`, `type-expert`, `architecture-expert-*`)
    check shape and discipline but cannot detect a vendor-contract
    violation from inside the codebase.
 3. **Routine, not exceptional**: the dispatch is a default member
@@ -72,7 +77,7 @@ in-repo proof and operational mechanics.
   surface what the author did not know to write down. Internal
   confidence is structurally insufficient.
 - Treating in-house reviewers as adequate for vendor-contract
-  questions. Code-reviewer + test-reviewer can pass a contract
+  questions. Code-expert + test-expert can pass a contract
   violation with NIT/MINOR findings while the implementation
   collapses every event of a class into one Sentry issue (the
   empirical case below).
@@ -98,8 +103,8 @@ Two empirical instances on Sentry on the same repo on 2026-04-26:
 2. **Contract violation (afternoon)**. Frolicking Toast drafted
    `event.fingerprint = ['<class-name>']` for known error families
    while implementing the Tier 2 fingerprinting sub-item.
-   `code-reviewer` and `test-reviewer` both passed the shape with
-   NIT/MINOR findings. `sentry-reviewer` flagged a MAJOR by reading
+   `code-expert` and `test-expert` both passed the shape with
+   NIT/MINOR findings. `sentry-expert` flagged a MAJOR by reading
    Sentry's [official fingerprinting docs](https://docs.sentry.io/platforms/javascript/guides/node/usage/sdk-fingerprinting/):
    single-element fingerprint is a full override; the canonical
    shape is the hybrid form `['{{ default }}', '<class-name>']`
@@ -122,6 +127,6 @@ of reviewer is "vendor specialist".
 - `.agent/memory/active/napkin.md` 2026-04-26 entries — original
   evidence captures.
 - Vendor-specialist reviewers currently in this Practice:
-  `sentry-reviewer`, `clerk-reviewer`, `elasticsearch-reviewer`,
-  `vercel:*`, `mcp-reviewer`. New vendor specialists are authored
+  `sentry-expert`, `clerk-expert`, `elasticsearch-expert`,
+  `vercel:*`, `mcp-expert`. New vendor specialists are authored
   as new vendors are integrated.

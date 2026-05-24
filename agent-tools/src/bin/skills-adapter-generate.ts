@@ -1,0 +1,80 @@
+#!/usr/bin/env node
+/**
+ * CLI for the skills adapter generator.
+ *
+ * Usage:
+ *   skills-adapter-generate            # generate adapters into the current repo
+ *   skills-adapter-generate --check    # exit non-zero if any adapter is stale
+ *   skills-adapter-generate --clear    # clear all adapter dirs before generating
+ */
+import { argv, exit, stderr, stdout } from 'node:process';
+
+import { checkAdapters } from '../skills-adapter-generate/checker.js';
+import { clearGeneratedAdapters, generateAdapters } from '../skills-adapter-generate/generator.js';
+
+interface CliFlags {
+  readonly clear: boolean;
+  readonly check: boolean;
+  readonly prefix: string;
+}
+
+function parseFlags(args: readonly string[]): CliFlags {
+  let clear = false;
+  let check = false;
+  let prefix = '';
+  for (const arg of args) {
+    if (arg === '--clear') {
+      clear = true;
+    } else if (arg === '--check') {
+      check = true;
+    } else if (arg.startsWith('--prefix=')) {
+      prefix = arg.slice('--prefix='.length);
+    }
+  }
+  return { clear, check, prefix };
+}
+
+async function runCheck(repoRoot: string, prefix: string): Promise<number> {
+  const result = await checkAdapters({ repoRoot, prefix });
+  if (result.drifted.length === 0 && result.missing.length === 0) {
+    stdout.write('All adapters are up to date.\n');
+    return 0;
+  }
+  if (result.missing.length > 0) {
+    const missingList = result.missing.map((p) => `  ${p}`).join('\n');
+    stderr.write(`Missing adapters:\n${missingList}\n`);
+  }
+  if (result.drifted.length > 0) {
+    const driftedList = result.drifted.map((p) => `  ${p}`).join('\n');
+    stderr.write(`Drifted adapters:\n${driftedList}\n`);
+  }
+  stderr.write('Run `pnpm skills:check` after regenerating to confirm.\n');
+  return 1;
+}
+
+async function runGenerate(repoRoot: string, flags: CliFlags): Promise<number> {
+  if (flags.clear) {
+    await clearGeneratedAdapters(repoRoot);
+    stdout.write('Cleared adapter directories.\n');
+  }
+  const outcome = await generateAdapters({ repoRoot, prefix: flags.prefix });
+  stdout.write(`Wrote ${String(outcome.written.length)} adapter files.\n`);
+  if (outcome.skipped.length > 0) {
+    stderr.write(`Skipped (no canonical SKILL): ${outcome.skipped.join(', ')}\n`);
+  }
+  return 0;
+}
+
+async function main(): Promise<number> {
+  const flags = parseFlags(argv.slice(2));
+  const repoRoot = process.cwd();
+  return flags.check ? await runCheck(repoRoot, flags.prefix) : await runGenerate(repoRoot, flags);
+}
+
+try {
+  const code = await main();
+  exit(code);
+} catch (error: unknown) {
+  stderr.write(`skills-adapter-generate failed: ${String(error)}\n`);
+  exit(1);
+}

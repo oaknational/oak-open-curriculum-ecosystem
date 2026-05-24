@@ -39,8 +39,8 @@ Do not mark a phase complete without an entry.
   practice-index, lifecycle templates/components, roadmap, current index,
   start-right, session-handoff, plan command, and reviewer invocation memory.
 - Consolidation review (`jc-consolidate-docs`): Closeout pass run after
-  owner direction on 2026-04-26. `docs-adr-reviewer` and
-  `assumptions-reviewer` findings were absorbed: WS5 status now separates
+  owner direction on 2026-04-26. `docs-adr-expert` and
+  `assumptions-expert` findings were absorbed: WS5 status now separates
   completed WS3 evidence harvest from remaining post-WS4A observation,
   reviewer guidance now distinguishes preferred review evidence from
   blocking findings, and stale WS3/WS4 wording was corrected.
@@ -103,7 +103,7 @@ Do not mark a phase complete without an entry.
 - Status: in-progress (2026-03-07)
 - ADR-119 update or rationale: No-change — ADR-119 covers specialist reviewers generically ("Agents — specialist reviewers, their three-layer prompt architecture (ADR-114)") and does not enumerate individual specialists. Adding the Elasticsearch reviewer does not change the practice's conceptual boundary.
 - practice.md update or rationale: Updated provenance metadata — specialist reviewer count incremented from 13 to 14.
-- Other ADR/docs/README updates: ADR-129 References section updated (template count 12 → 13). Artefact inventory updated (skills 16 → 18, rules 16 → 21). AGENT.md specialist roster updated. invoke-code-reviewers.md triage/examples updated. Collection indexes (README, roadmap, current, active) updated to reflect plan promotion.
+- Other ADR/docs/README updates: ADR-129 References section updated (template count 12 → 13). Artefact inventory updated (skills 16 → 18, rules 16 → 21). AGENT.md specialist roster updated. invoke-code-experts.md triage/examples updated. Collection indexes (README, roadmap, current, active) updated to reflect plan promotion.
 - Consolidation review (`jc-consolidate-docs`): pending
 - Notes: Phases 0–3 of the execution plan are complete. Phase 4 (review + doc sync) is in progress.
 
@@ -114,16 +114,16 @@ Do not mark a phase complete without an entry.
 - practice.md update or rationale: No-change — `practice.md` does not contain hardcoded artefact counts; validation scripts (`portability:check`, `subagents:check`) dynamically enumerate. The MCP upgrade adds a skill to an existing reviewer, not a new specialist, so no provenance metadata change is needed.
 - Other ADR/docs/README updates:
   - Completed:
-    - Canonical situational rule exists at `.agent/rules/invoke-mcp-reviewer.md`
-    - Live-spec-first doctrine is present in `.agent/sub-agents/templates/mcp-reviewer.md`
-    - ext-apps coverage is present in `.agent/sub-agents/templates/mcp-reviewer.md`
+    - Canonical situational rule exists at `.agent/rules/invoke-mcp-expert.md`
+    - Live-spec-first doctrine is present in `.agent/sub-agents/templates/mcp-expert.md`
+    - ext-apps coverage is present in `.agent/sub-agents/templates/mcp-expert.md`
     - Collection entrypoints aligned to `IN PROGRESS` status for MCP specialist work (`README.md`, `current/README.md`, `roadmap.md`)
     - Created `.agent/skills/mcp-expert/SKILL.md` with doctrine hierarchy, tiered context, capability routing, and boundary definitions
     - Created `.cursor/skills/mcp-expert/SKILL.md` (Cursor wrapper)
     - Created `.agents/skills/mcp-expert/SKILL.md` (Codex wrapper)
     - Wrapper parity audit complete — all reviewer, rule, and skill wrappers exist across Cursor/Claude/Codex
-    - Added MCP quick-triage question (#9) to `.agent/memory/executive/invoke-code-reviewers.md`
-    - Added MCP worked example to `.agent/memory/executive/invoke-code-reviewers.md`
+    - Added MCP quick-triage question (#9) to `.agent/memory/executive/invoke-code-experts.md`
+    - Added MCP worked example to `.agent/memory/executive/invoke-code-experts.md`
   - Validation evidence:
     - `pnpm subagents:check` passed (17 wrappers, 14 templates)
     - `pnpm portability:check` passed (21 skills, 28 rules, 30 Cursor triggers)
@@ -265,8 +265,8 @@ round. The plan now lives in `archive/completed/`.
     results.
   - Reviewer history recorded in the active execution plan: prior planning
     findings were absorbed before editing, the execution rounds absorbed
-    findings from `assumptions-reviewer`, `docs-adr-reviewer`, and
-    `architecture-reviewer-fred`, and a final rerun of all three reviewers
+    findings from `assumptions-expert`, `docs-adr-expert`, and
+    `architecture-expert-fred`, and a final rerun of all three reviewers
     returned clean.
 - Notes: Value extraction was treated as a hard constraint in this closeout.
   Concepts only counted when they changed a local contract, evidence shape,
@@ -294,7 +294,7 @@ this pass:
    (learning loop), `operational/` (continuity — absorbed prior
    `.agent/state/` and `.agent/runtime/tracks/`), and `executive/`
    (contracts — absorbed `artefact-inventory.md`,
-   `invoke-code-reviewers.md`, and `cross-platform-agent-surface-matrix.md`).
+   `invoke-code-experts.md`, and `cross-platform-agent-surface-matrix.md`).
    New READMEs at each layer plus updated memory/README.md.
    Reference sweep via sed + manual edits across ~200 files.
 2. Prompt dissolution: `.agent/prompts/session-continuation.prompt.md`
@@ -353,7 +353,7 @@ intentionally preserved):
   `REQUIRED_CONTINUITY_FIELDS` + `readPromptPracticeBoxCount`
   removed; 44/44 tests pass after rewrite.
 
-Reviewer closeout: `docs-adr-reviewer` (independent wiring review).
+Reviewer closeout: `docs-adr-expert` (independent wiring review).
 Returned ACCEPT WITH NOTES. All blocker + important findings
 applied in-session.
 
@@ -429,7 +429,7 @@ surfaces (`.agent/memory/operational/repo-continuity.md` +
   flagged in the 2026-04-20 session close. Deferred to a dedicated pass
   after plan-time reviewers land; a handoff node here keeps the boundary
   clean.
-- Reviewers: `docs-adr-reviewer` + `assumptions-reviewer` dispatched as
+- Reviewers: `docs-adr-expert` + `assumptions-expert` dispatched as
   the closeout of this phase. Both returned ACCEPT WITH NOTES. Findings
   applied in-session:
   - ADR-150 Rationale §"Why keep the continuity contract in the prompt"

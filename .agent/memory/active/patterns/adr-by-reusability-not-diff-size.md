@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-019
 name: "ADR by Reusability, Not Diff Size"
+polarity: pattern
 use_this_when: "closing a small implementation lane and deciding whether the decision it encoded deserves to be promoted to an ADR"
 category: process
 proven_in: ".agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md (hygiene closure, 2026-04-17)"
@@ -11,6 +12,10 @@ barrier:
   prevents_recurring_mistake: "Scoping ADR-worthiness by size of the originating diff, so that pattern-establishing lanes leave their decision implicit and force the next adopter to re-derive it"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # ADR by Reusability, Not Diff Size
 

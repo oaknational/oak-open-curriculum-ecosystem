@@ -2,8 +2,8 @@
 
 **Status**: Accepted
 **Date**: 2026-02-25
-**Updated**: 2026-04-12
-**Related**: [ADR-013 (Husky and lint-staged)](013-husky-and-lint-staged.md), [ADR-043 (Type Generation in Build and CI)](043-codegen-in-build-and-ci.md), [ADR-111 (Secret Scanning Quality Gate)](111-secret-scanning-quality-gate.md), [ADR-147 (Browser Accessibility)](147-browser-accessibility-as-blocking-quality-gate.md)
+**Updated**: 2026-05-10
+**Related**: [ADR-013 (Husky and lint-staged)](013-husky-and-lint-staged.md), [ADR-043 (Type Generation in Build and CI)](043-codegen-in-build-and-ci.md), [ADR-111 (Secret Scanning Quality Gate)](111-secret-scanning-quality-gate.md), [ADR-147 (Browser Accessibility)](147-browser-accessibility-as-blocking-quality-gate.md), [ADR-161 (Network-Free PR Checks)](161-network-free-pr-check-ci-boundary.md), [ADR-174 (Dependency Vulnerability Scanning)](174-dependency-vulnerability-scanning-quality-gate.md)
 
 ## Context
 
@@ -46,14 +46,15 @@ or configuration issue, never a missing check.
 | sdk-codegen       | --         | Yes      | Yes         | Yes                     |
 | build             | --         | Yes      | Yes         | Yes                     |
 | format-check      | Yes        | Yes      | Yes         | Yes (format:root)       |
-| markdownlint      | Yes        | Yes      | Yes         | Yes (markdownlint:root) |
+| markdownlint      | Staged     | Yes      | Yes         | Yes (markdownlint:root) |
 | subagents:check   | --         | Yes      | Yes         | Yes                     |
 | portability:check | --         | Yes      | Yes         | Yes                     |
 | knip              | Yes        | Yes      | Yes         | Yes                     |
 | depcruise         | Yes        | Yes      | Yes         | Yes                     |
-| test:root-scripts | --         | Yes      | Yes         | Yes                     |
+| repo-validators   | --         | Yes      | Yes         | Yes                     |
 | type-check        | Yes        | Yes      | Yes         | Yes                     |
 | lint              | Yes        | Yes      | Yes         | Yes (lint:fix)          |
+| lint:shell        | --         | Yes      | Yes         | Yes                     |
 | test              | Yes        | Yes      | Yes         | Yes                     |
 | test:widget       | --         | --       | --          | Yes                     |
 | test:widget:ui    | --         | --       | --          | Yes                     |
@@ -62,6 +63,7 @@ or configuration issue, never a missing check.
 | test:ui           | --         | Yes      | Yes         | Yes                     |
 | test:a11y         | --         | --       | --          | Yes                     |
 | doc-gen           | --         | --       | --          | Yes                     |
+| SonarCloud        | --         | --       | PR analysis | --                      |
 
 ### Rationale for exclusions
 
@@ -75,6 +77,12 @@ or configuration issue, never a missing check.
   equality.
 - **Pre-push and CI exclude doc-gen**: documentation generation is a
   build-time convenience, not a correctness gate.
+- **Pre-commit markdownlint is staged-only**: the repo still requires full
+  markdownlint in pre-push, CI, and `pnpm check`, while pre-commit limits this
+  one check to staged Markdown files to keep the hook proportional.
+- **SonarCloud is a remote quality surface**: Sonar analysis runs outside local
+  hooks and is governed by the Sonar disposition policy. It is not reproduced
+  by pre-push today.
 - **`pnpm check` includes clean**: the canonical aggregate gate
   intentionally proves clean rebuild readiness instead of relying on an
   already-built working tree.
@@ -106,9 +114,10 @@ adds no enforcement value. It is not part of any routine gate surface.
 
 ### Design principles
 
-1. **Pre-push === CI** — pre-push and CI run the same check set. A
+1. **Pre-push === CI is the target invariant** — pre-push and CI should run the same check set wherever the check is locally reproducible. A
    CI-only failure indicates an environmental or configuration issue,
-   not a missing check.
+   not a missing check. Current exceptions (`lint:shell`, SonarCloud, and any
+   networked external analysis) must stay visible in this ADR until reconciled.
 2. **Pre-commit is fast** — format, markdown, knip, depcruise, type-check,
    lint, and unit tests only. No builds or codegen.
 3. **Pre-push is comprehensive** — secret scan, full build chain, all
@@ -121,6 +130,21 @@ adds no enforcement value. It is not part of any routine gate surface.
    (assuming equivalent environment).
 6. **Developer surfaces fix; hook and remote surfaces verify** — see
    §Verify vs Mutate above.
+
+### Dependency vulnerability gate status
+
+ADR-174 defines the dependency vulnerability policy, but this ADR does not yet
+claim a dependency-audit gate in pre-push, CI, or `pnpm check`. Add that row
+only after the gate is implemented. Until then, references to dependency
+vulnerability scanning in governance docs are policy references, not evidence
+that CI already runs a dependency audit.
+
+### Network-free PR-check boundary
+
+ADR-161 remains binding: PR and push checks must not depend on live vendor or
+schema network calls. Any schema drift check, dependency audit, or vendor CLI
+that reaches the network belongs outside PR/push checks unless this ADR and
+ADR-161 are amended together.
 
 ## Consequences
 
@@ -145,13 +169,13 @@ adds no enforcement value. It is not part of any routine gate surface.
 
 - Pre-push runs: `secrets:scan`, `format-check:root`,
   `markdownlint-check:root`, `subagents:check`, `portability:check`,
-  `knip`, `depcruise`, `test:root-scripts`, then Turbo: `sdk-codegen
-build type-check lint test test:e2e test:ui`.
+  `knip`, `depcruise`, `repo-validators:check`, `lint:shell`, then Turbo:
+  `sdk-codegen build type-check lint test test:e2e test:ui`.
 - CI runs: `secrets:scan` (with Docker gitleaks fallback),
   `format-check:root`, `markdownlint-check:root`, `subagents:check`,
-  `portability:check`, `knip`, `depcruise`, `test:root-scripts`,
-  Playwright install, then Turbo: `sdk-codegen build type-check lint
-test test:e2e test:ui`.
+  `portability:check`, `knip`, `depcruise`, `repo-validators:check`,
+  `lint:shell`, Playwright install, then Turbo: `sdk-codegen build
+type-check lint test test:e2e test:ui`.
 - `pnpm check` runs the broadest set with fix-mode and clean rebuild.
 - Coverage matrix maintained in this ADR and referenced from
   `docs/engineering/build-system.md` and `docs/engineering/workflow.md`.
@@ -169,3 +193,4 @@ test test:e2e test:ui`.
 | 2026-04-12 | Promoted depcruise to all four gate surfaces. Added depcruise row to coverage matrix. 87 violations (44 circular deps, 43 orphans) resolved to 0. `no-orphans` promoted from `warn` to `error`. Depcruise runs in ~2s so pre-commit speed is preserved.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | 2026-04-29 | **Pre-reconciliation findings preserved for audit** (graduated from `quality-gate-hardening.plan.md` body during 2026-04-29 deep consolidation pass). 2026-04-11 reconciliation resolved six matrix factual errors (CI included `test:e2e`/`smoke:dev:stub`/`test:ui` despite the ADR claiming exclusion; `pnpm check` used `secrets:scan` not `secrets:scan:all`; `markdownlint:root` and `lint:fix` were mutating, not check-only); prose drift in rationale/consequences/principle #4; ADR-147 contradiction on `test:a11y` (resolved by recording `test:a11y` as `pnpm check`-only with promotion in the quality-gate-hardening plan); and the verify-vs-mutate decision was codified as §Verify vs Mutate. Audit detail preserved at this Change Log entry; the plan-body restatement was retired in the same consolidation. |
 | 2026-05-04 | Removed `smoke:dev:stub` row from coverage matrix and pre-push/CI Turbo invocations. The smoke-tests directory, `smoke:*` scripts, and `vitest.smoke.config.ts` were retired. Coverage previously held by the dev-server-boot smoke check is now provided by the in-process invariant test (`apps/oak-curriculum-mcp-streamable-http/src/dev-boot-without-observability.integration.test.ts`); broader real-IO coverage moves to a frozen IO Inventory plus a `no-real-io-in-tests` ESLint rule.                                                                                                                                                                                                                                                                                                                                  |
+| 2026-05-10 | Added visible rows/notes for `lint:shell`, SonarCloud, dependency vulnerability policy, and ADR-161 network-free PR-check interaction. This records current drift without over-claiming local gate parity.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |

@@ -167,10 +167,35 @@ Practice-Core portability ratifies both — see the bridge index
 | [PDR-041](PDR-041-composition-obscurity-investigation-methodology.md) | Composition-Obscurity Investigation Methodology | Accepted |
 | [PDR-042](PDR-042-signal-distinguishing-pre-action-gate.md) | Signal-Distinguishing Pre-Action Gate | Accepted |
 | [PDR-043](PDR-043-rush-impulse-three-structural-cues.md) | Rush-Impulse Three Structural Cues | Accepted |
-| [PDR-044](PDR-044-memetic-immune-system.md) | Memetic Immune System | Accepted |
+| [PDR-044](PDR-044-memetic-immune-system.md) | Memetic Immune System | Accepted (amended 2026-05-21) |
 | [PDR-045](PDR-045-workspace-first-investigation-discipline.md) | Workspace-First Investigation Discipline | Accepted |
 | [PDR-046](PDR-046-layered-knowledge-processing.md) | Layered Knowledge Processing — Preserve First, Restructure Second | Accepted |
 | [PDR-047](PDR-047-rule-applies-always-doctrine-authoring.md) | The Rule Applies, Always — Doctrine-Authoring Discipline | Accepted |
 | [PDR-048](PDR-048-insight-capture-at-moment-of-occurrence.md) | Insight Capture at the Moment of Occurrence | Accepted |
 | [PDR-049](PDR-049-memory-and-state-file-merge-semantics.md) | Memory and State File Merge Semantics | Accepted |
 | [PDR-050](PDR-050-state-memory-substrate-contracts.md) | State and Memory Substrate Contracts | Accepted |
+| [PDR-051](PDR-051-vendor-agnostic-skills-standardisation.md) | Vendor-Agnostic Skills Standardisation | Accepted |
+| [PDR-052](PDR-052-directive-file-context-budget.md) | Directive-File Context Budget | Accepted |
+| [PDR-053](PDR-053-orchestrator-vs-gate-structural-cure.md) | Orchestrator-vs-Gate Structural Cure (Advisory Polarity) | Accepted |
+| [PDR-054](PDR-054-asymmetric-cure-discipline.md) | Asymmetric-Cure Discipline | Accepted |
+| [PDR-055](PDR-055-cli-affordance-set-discipline.md) | CLI Affordance-Set Discipline for Coordination Tooling | Accepted |
+| [PDR-056](PDR-056-inter-agent-collaboration-protocol.md) | Inter-Agent Collaboration Protocol — Ten Named Cures | Accepted |
+| [PDR-057](PDR-057-empirical-answerability.md) | Empirical-Answerability Pre-Question Gate | Accepted (supersedes quarantined `apply-don't-ask`) |
+| [PDR-058](PDR-058-three-tier-optionality-decomposition.md) | Three-Tier Optionality Decomposition | Accepted (supersedes quarantined `stop-inventing-optionality`) |
+| [PDR-059](PDR-059-regenerator-output-classification.md) | Regenerator-Output Classification Discipline | Accepted |
+| [PDR-060](PDR-060-tooling-friction-is-first-class-user-feedback.md) | Tooling Friction Is First-Class User Feedback | Accepted |
+| [PDR-061](PDR-061-agent-pronoun-default-and-conduct-correction-graduation.md) | Agent Pronoun Default and Conduct-Correction Graduation | Accepted |
+| [PDR-062](PDR-062-absorption-adjacent-failure-modes.md) | Absorption-Adjacent Failure Modes | Accepted |
+| [PDR-063](PDR-063-mid-cycle-retirement-protocol.md) | Mid-Cycle Retirement Protocol for Token-Bounded Agents | Proposed |
+| [PDR-064](PDR-064-coordinator-handoff-two-moments.md) | Coordinator Handoff — Pre-Positioning vs Active-Acknowledgement | Proposed |
+| [PDR-065](PDR-065-grounding-cost-amortisation-under-rotation.md) | Grounding-Cost Amortisation Under Rotating-Cast Operation | Proposed |
+| [PDR-066](PDR-066-comms-events-as-failure-mode-channel.md) | Comms-Events as Real-Time Failure-Mode Capture Channel | Proposed |
+| [PDR-067](PDR-067-surface-classification-for-fitness-response.md) | Surface Classification for Fitness-Response Routing | Proposed |
+| [PDR-068](PDR-068-pipeline-back-pressure-as-structural-cure-signal.md) | Pipeline Back-Pressure as Structural-Cure Signal | Proposed |
+| [PDR-069](PDR-069-doctrine-first-vs-first-principles-diversity.md) | Doctrine-First and First-Principles Reasoning Are Cognitive-Approach Diversity | Draft |
+| [PDR-070](PDR-070-moment-of-decision-heuristic-consolidation.md) | Moment-of-Decision Heuristic Consolidation | Draft |
+| [PDR-071](PDR-071-coordinator-allocates-without-gating.md) | Coordinator Allocates Without Gating | Proposed |
+| [PDR-072](PDR-072-knowledge-curation-as-autonomic-learning.md) | Knowledge Curation as Autonomic Learning | Proposed |
+| [PDR-073](PDR-073-recursion-as-method-is-practice-core-mind-shape.md) | Recursion as Method Is Practice Core's Mind-Shape | Proposed |
+| [PDR-074](PDR-074-director-value-is-mind-coherence-per-owner-attention.md) | Director Value Is Mind-Coherence-Per-Owner-Attention | Candidate |
+| [PDR-080](PDR-080-coordination-event-absorption-is-signal-driven.md) | Coordination-Event Absorption Is Signal-Driven | Accepted |

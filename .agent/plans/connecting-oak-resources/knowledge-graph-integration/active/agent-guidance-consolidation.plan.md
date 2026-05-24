@@ -7,7 +7,7 @@ parent_plan: "open-education-knowledge-surfaces.plan.md"
 sibling_plans:
   - "misconception-graph-mcp-surface.plan.md"
   - "../../sector-engagement/eef/current/eef-evidence-corpus.plan.md"
-specialist_reviewer: "mcp-reviewer, code-reviewer, docs-adr-reviewer"
+specialist_reviewer: "mcp-expert, code-expert, docs-adr-expert"
 isProject: false
 todos:
   - id: t1-audit-current-state

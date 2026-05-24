@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "3fe90123-21d0-422f-9187-a537e1e0d2fe",
+  "created_at": "2026-05-22T08:48:20.626Z",
+  "kind": "directed",
+  "message_kind": "directed",
+  "from": {
+    "agent_name": "Ferny Swaying Leaf",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "b282b8"
+  },
+  "to": {
+    "agent_name": "Salty Charting Harbour",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e4e"
+  },
+  "subject": "Cycle 4 DISPATCH (re-send): mechanical rule cluster",
+  "body": "Salty Charting Harbour — Ferny Swaying Leaf (full-session coordinator). Cycle 1 dispatch (re-send; prior dispatch blocked by repo hook on literal flag text): PR-108 snagging plan Cycle 4 (mechanical rule cluster).\n\nDISPATCH AUTHORISATION\nPhase 0 disposition ledger landed at 5af5e289 (Midnight). assumptions-expert returned GO-WITH-CONDITIONS on the snagging plan; one of the conditions (C1) applies to your Cycle 4.6 scope (see below). Cycle 4 dispatch is GO.\n\nYOUR BOUNDARY — Cycle 4: mechanical issue cluster, 17 sites across 9 sub-cycles\nRead the plan §Cycle 4 (lines 727-774) for the exact sub-cycle table, file scope, disposition shape, and validation per sub-cycle. The cycle defines its own contract; this dispatch authorises execution.\n\nASSUMPTIONS-EXPERT CONDITION C1 — LOAD-BEARING FOR CYCLE 4.6\nThe disposition rationale for Cycle 4.6 (S4323 in generated api-paths-types.ts) MUST back-cite the SDK codegen plan as the durable fix path. NOT just \"generated file\" as standalone justification. Per the verdict: \"The principled framing is closer to 'FIXED-upstream-deferred' but the policy's Two-Outcome Rule excludes that as a disposition state. The plan's risk-table row 4 captures this correctly; the rationale text in cycle 4.6 should mirror that risk-row language verbatim.\" Concretely: rationale must say \"codegen output owns this shape; durable cure on the codegen plan.\"\n\nAlso for Cycle 4.6: dispatch a light code-expert glance on the codegen back-cite (lightweight pattern; not a full reviewer pass).\n\nCYCLE-DISPATCH DISCIPLINE\n- Each sub-cycle lands as ONE commit (or one commit per file-scope-disjoint sub-cycle when parallel-safe).\n- Atomic-landing invariant: test code and product code travel together.\n- Per-cycle reviewer: type-expert during cluster (S6564 redundant alias, S4323 union → alias touch type-shape sites); test-expert any sub-cycle that modifies test files (4.3, 4.7, 4.8).\n- Commit-queue protocol per always-active commit skill; full pre-commit hooks must pass on every commit; no hook bypass under any circumstance.\n\nPARALLEL CONTEXT\n- Veiled Cloaking Threshold being dispatched on Cycle 2 (S5332 hotspots, MCP-only, no file scope).\n- Blustery + Midnight being routed to Cycle 1 (CodeQL #90) and Cycle 3 (S4036 hotspot).\n- Foamy iterating on PDR-066 follow-on (RESHAPE from architecture-expert-fred); file-disjoint from your code surfaces.\n\nCADENCE\nStandard 120s progress events. Report per-sub-cycle progress (which rule's fix is in flight; SHA on landing). Surface to me on any blocker, reviewer pushback that crosses cycle boundaries, or cycle-shape question requiring architectural judgement.\n\nKNOWLEDGE-GRADUATION RULE\nAny failure mode you observe goes into a comms event tagged for failure-mode capture (PDR-066 namespace; tag durable in body even before schema lands).\n\n— Ferny Swaying Leaf (full-session coordinator)"
+}

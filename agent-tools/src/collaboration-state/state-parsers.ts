@@ -1,5 +1,11 @@
 import { getJsonValue, isJsonObject, parseStringArray, requireString } from './json.js';
 import {
+  parseCommsEventValue,
+  parseDirectedCommsMessageValue,
+  parseLifecycleCommsEventValue,
+  parseNarrativeCommsEventValue,
+} from './state-schemas.js';
+import {
   type ClosedClaimsArchive,
   type CollaborationAgentId,
   type CollaborationArea,
@@ -7,6 +13,9 @@ import {
   type CollaborationCommitQueueEntry,
   type CollaborationRegistry,
   type CommsEvent,
+  type DirectedCommsMessage,
+  type LifecycleCommsEvent,
+  type NarrativeCommsEvent,
 } from './types.js';
 
 /**
@@ -49,19 +58,52 @@ export function parseClosedClaimsArchive(text: string): ClosedClaimsArchive {
   };
 }
 
+/**
+ * Parse a canonical communication event from JSON text.
+ */
 export function parseCommsEvent(text: string): CommsEvent {
   const parsed: unknown = JSON.parse(text);
   if (!isJsonObject(parsed)) {
     throw new Error('communication event must be a JSON object');
   }
 
-  return {
-    event_id: requireString(parsed, 'event_id'),
-    created_at: requireString(parsed, 'created_at'),
-    author: parseAgentId(getJsonValue(parsed, 'author')),
-    title: requireString(parsed, 'title'),
-    body: requireString(parsed, 'body'),
-  };
+  return parseCommsEventValue(parsed);
+}
+
+/**
+ * Parse a narrative communication event from JSON text.
+ */
+export function parseNarrativeCommsEvent(text: string): NarrativeCommsEvent {
+  const parsed: unknown = JSON.parse(text);
+  if (!isJsonObject(parsed)) {
+    throw new Error('narrative communication event must be a JSON object');
+  }
+
+  return parseNarrativeCommsEventValue(parsed);
+}
+
+/**
+ * Parse a lifecycle communication event from JSON text.
+ */
+export function parseLifecycleCommsEvent(text: string): LifecycleCommsEvent {
+  const parsed: unknown = JSON.parse(text);
+  if (!isJsonObject(parsed)) {
+    throw new Error('lifecycle communication event must be a JSON object');
+  }
+
+  return parseLifecycleCommsEventValue(parsed);
+}
+
+/**
+ * Parse a directed communication message from JSON text.
+ */
+export function parseDirectedCommsMessage(text: string): DirectedCommsMessage {
+  const parsed: unknown = JSON.parse(text);
+  if (!isJsonObject(parsed)) {
+    throw new Error('directed communication message must be a JSON object');
+  }
+
+  return parseDirectedCommsMessageValue(parsed);
 }
 
 function parseCommitQueueEntry(value: unknown): CollaborationCommitQueueEntry {

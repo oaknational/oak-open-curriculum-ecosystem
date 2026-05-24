@@ -2,7 +2,7 @@
 name: "Sector reusable components adoption contract"
 overview: "Partner-facing contract for external reuse of Oak's reusable sector-component fabric anchored in docs/foundation/VISION.md canonical inventory-playbooks inputs, differentiated from upstream API access and Oak-hosted deployments."
 status: current
-specialist_reviewer: "docs-adr-reviewer, architecture-reviewer-betty"
+specialist_reviewer: "docs-adr-expert, architecture-expert-betty"
 isProject: false
 last_updated: 2026-04-30
 related_plans:

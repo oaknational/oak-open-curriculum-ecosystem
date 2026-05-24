@@ -25,17 +25,25 @@ export interface ToolPathParams {
   /** The lesson slug identifier */
   readonly lesson: string;
 }
+/**
+ * Query parameters derived from the OpenAPI schema.
+ */
+export interface ToolQueryParams {
+  /** Optional filter for question results. Use `images` to return only questions with a question image or image answer. Allowed values: images */
+  readonly filter?: 'images';
+}
 export interface ToolParams {
   readonly path: ToolPathParams;
+  readonly query?: ToolQueryParams;
 }
 
 export interface ToolArgs { readonly params: ToolParams; }
 
-export const toolInputJsonSchema = { type: 'object' as const, properties: {"lesson":{"type":"string","description":"The lesson slug identifier","examples":["imagining-you-are-the-characters-the-three-billy-goats-gruff"]}} as const, additionalProperties: false as const, required: ["lesson"] };
-export const toolZodSchema = z.object({ params: z.object({ path: z.object({ lesson: z.string().describe("The lesson slug identifier") }) }) });
-export const toolMcpFlatInputSchema = z.strictObject({ lesson: z.string().describe("The lesson slug identifier").meta({ examples: ["imagining-you-are-the-characters-the-three-billy-goats-gruff"] }) });
+export const toolInputJsonSchema = { type: 'object' as const, properties: {"lesson":{"type":"string","description":"The lesson slug identifier","examples":["imagining-you-are-the-characters-the-three-billy-goats-gruff"]},"filter":{"type":"string","description":"Optional filter for question results. Use `images` to return only questions with a question image or image answer.","enum":["images"]}} as const, additionalProperties: false as const, required: ["lesson"] };
+export const toolZodSchema = z.object({ params: z.object({ path: z.object({ lesson: z.string().describe("The lesson slug identifier") }), query: z.object({ filter: z.enum(["images"] as const).describe("Optional filter for question results. Use `images` to return only questions with a question image or image answer.").optional() }).optional() }) });
+export const toolMcpFlatInputSchema = z.strictObject({ lesson: z.string().describe("The lesson slug identifier").meta({ examples: ["imagining-you-are-the-characters-the-three-billy-goats-gruff"] }), filter: z.enum(["images"] as const).describe("Optional filter for question results. Use `images` to return only questions with a question image or image answer.").optional() });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
-const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"lesson":{"type":"string","description":"The lesson slug identifier","examples":["imagining-you-are-the-characters-the-three-billy-goats-gruff"]}},"additionalProperties":false,"required":["lesson"]}\nRequired: lesson';
+const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"lesson":{"type":"string","description":"The lesson slug identifier","examples":["imagining-you-are-the-characters-the-three-billy-goats-gruff"]},"filter":{"type":"string","description":"Optional filter for question results. Use `images` to return only questions with a question image or image answer.","enum":["images"]}},"additionalProperties":false,"required":["lesson"]}\nRequired: lesson';
 export const describeToolArgs = () => toolArgsDescription;
 /**
  * Transform flat MCP arguments to nested SDK format.
@@ -50,6 +58,9 @@ export function transformFlatToNestedArgs(flatArgs: z.infer<typeof toolMcpFlatIn
   const params: ToolParams = {
     path: {
       lesson: flatArgs.lesson,
+    },
+    query: {
+      filter: flatArgs.filter,
     },
   };
   return { params };

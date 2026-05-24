@@ -201,7 +201,7 @@ as the next session's directive-file work and stop.
 4. **30%-context rule honoured** at the Layer 2 boundary. If
    exceeded, finish Layer 1.5 cleanly and queue fresh session for
    directive-file work.
-5. **Reviewer dispatch on every commit** — docs-adr-reviewer at
+5. **Reviewer dispatch on every commit** — docs-adr-expert at
    minimum; specialists per the invocation matrix.
 6. **Polling discipline applied** — comms-events directory at session-
    open AND at workflow-boundary moments. Never request user

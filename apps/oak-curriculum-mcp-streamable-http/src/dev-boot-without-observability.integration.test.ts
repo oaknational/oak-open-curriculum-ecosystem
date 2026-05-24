@@ -5,6 +5,7 @@ import { type Env } from './env.js';
 import { HttpEnvSchema } from './env.js';
 import { createRuntimeConfigFromValidatedEnv } from './runtime-config-from-validated-env.js';
 import { createFakeHttpObservability } from './test-helpers/observability-fakes.js';
+import { createFakeRateLimiterFactory } from './test-helpers/rate-limiter-fakes.js';
 import { TEST_UPSTREAM_METADATA } from './test-helpers/upstream-metadata-fixture.js';
 
 /**
@@ -68,6 +69,7 @@ describe('dev server boots without observability or Vercel deploy env', () => {
       observability: createFakeHttpObservability(),
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
       upstreamMetadata: TEST_UPSTREAM_METADATA,
+      rateLimiterFactory: createFakeRateLimiterFactory().factory,
     });
 
     expect(app).toBeDefined();

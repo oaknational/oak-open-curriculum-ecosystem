@@ -4,7 +4,7 @@ overview: "Future extension of the EEF x misconceptions cross-corpus surface bey
 status: future
 graph_layer: oak-graph-surface
 graph_portfolio_index: "../../../graph-portfolio-index.md"
-parent_plan: "../current/oak-misconceptions-eef-cross-corpus-surface.plan.md"
+parent_plan: "./oak-misconceptions-eef-cross-corpus-surface.plan.md"
 isProject: false
 todos:
   - id: select-next-context

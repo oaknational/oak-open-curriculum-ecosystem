@@ -228,7 +228,7 @@ function assertBypassLeaksEveryErrorEventField(event: SentryErrorEvent): void {
 // Each hook payload places PII across multiple sub-fields so a redactor
 // regression that misses one walk would be caught.
 
-// Additional PII classes per A.6 SR-4 (sentry-reviewer). Each value is a
+// Additional PII classes per A.6 SR-4 (sentry-expert). Each value is a
 // string the current redaction policy in `@oaknational/observability`
 // actively recognises (either by key-name or pattern match), so every
 // class is a genuine closure test — not a behaviour change proposal.
@@ -447,7 +447,7 @@ describe('ADR-160 Part 3: redacted-at-destination', () => {
     const options = buildInitOptions();
     const beforeSend = requireDefined(options.beforeSend, 'Expected beforeSend');
 
-    // Pass a meaningful `hint` (per A.6 SR-7, sentry-reviewer) so the hint
+    // Pass a meaningful `hint` (per A.6 SR-7, sentry-expert) so the hint
     // pathway is exercised even if the current redactor doesn't branch on
     // hint content. Forward-compatible with any future hint-aware rule.
     const originalException = new Error('pii-bearing: super-secret-abc123');
@@ -494,7 +494,7 @@ describe('ADR-160 Part 3: redacted-at-destination', () => {
 
     const result = beforeSendLog(buildPiiLog());
     // Explicit never-null assertions for consistency with beforeSendSpan
-    // (per A.6 TR-8, test-reviewer). Typed return admits `| null` but the
+    // (per A.6 TR-8, test-expert). Typed return admits `| null` but the
     // adapter never drops; this test pins that behaviour.
     expect(result).not.toBeNull();
     expect(result).not.toBeUndefined();

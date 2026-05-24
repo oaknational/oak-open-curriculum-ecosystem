@@ -8,7 +8,7 @@
 
 The repo already has:
 
-- `security-reviewer` for practical cross-cutting exploitability review
+- `security-expert` for practical cross-cutting exploitability review
 - planned Express, Clerk, and MCP specialists for framework/protocol correctness
 
 What it does not yet have is a **narrow-remit web/API security specialist**
@@ -38,7 +38,7 @@ deep reasoning.
 
 This is a future **agent capability**, not just a reviewer label.
 
-- **`web-api-security-reviewer`** would provide read-only assessment of web and
+- **`web-api-security-expert`** would provide read-only assessment of web and
   API attack-surface correctness.
 - **`web-api-security-expert`** would support planning, research, and advisory
   work during implementation.
@@ -72,13 +72,13 @@ situational rule makes the capability discoverable.
 ### Out of scope
 
 - Broad security posture and system-wide defence-in-depth doctrine
-  (`cyber-security-reviewer`)
+  (`cyber-security-expert`)
 - Broad privacy-by-design and retention/minimisation governance
-  (`privacy-reviewer`)
+  (`privacy-expert`)
 - GDPR/UK GDPR and personal-data obligations at API boundaries
-  (`web-api-gdpr-reviewer`)
-- Framework correctness that is not security-specific (`express-reviewer`,
-  `clerk-reviewer`, `mcp-reviewer`)
+  (`web-api-gdpr-expert`)
+- Framework correctness that is not security-specific (`express-expert`,
+  `clerk-expert`, `mcp-expert`)
 - Generic code quality, type, or architecture concerns
 
 ## Doctrine Hierarchy
@@ -106,30 +106,30 @@ Key constraints:
 ## Deliverables
 
 1. Canonical reviewer template:
-   `.agent/sub-agents/templates/web-api-security-reviewer.md`
+   `.agent/sub-agents/templates/web-api-security-expert.md`
 2. Canonical skill: `.agent/skills/web-api-security-expert/SKILL.md`
 3. Canonical situational rule:
-   `.agent/rules/invoke-web-api-security-reviewer.md`
+   `.agent/rules/invoke-web-api-security-expert.md`
 4. Platform adapters (Claude, Cursor, Gemini CLI, Codex)
 5. Discoverability updates
 6. Validation
 
 ## Overlap Boundaries
 
-- **`web-api-security-reviewer`** owns HTTP/API attack surface, endpoint trust
+- **`web-api-security-expert`** owns HTTP/API attack surface, endpoint trust
   boundaries, and request/response security behaviour. It does **not** own
   broad security posture, privacy-governance doctrine, GDPR obligations, or
   generic framework correctness.
-- **`security-reviewer`** owns the practical default exploitability review
+- **`security-expert`** owns the practical default exploitability review
   across all security-sensitive changes. It does **not** own exhaustive
   web/API-specific doctrine.
-- **`cyber-security-reviewer`** owns broad security posture, threat models, and
+- **`cyber-security-expert`** owns broad security posture, threat models, and
   defence-in-depth strategy. It does **not** own narrow HTTP/API boundary
   detail.
-- **`web-api-gdpr-reviewer`** owns personal-data and GDPR/UK GDPR obligations
+- **`web-api-gdpr-expert`** owns personal-data and GDPR/UK GDPR obligations
   at web/API boundaries. It does **not** own general web/API attack-surface
   hardening.
-- **`express-reviewer`**, **`clerk-reviewer`**, and **`mcp-reviewer`** own
+- **`express-expert`**, **`clerk-expert`**, and **`mcp-expert`** own
   framework and protocol correctness. They do **not** own the narrow security
   posture of the web/API boundary itself.
 

@@ -48,8 +48,7 @@ function buildUnitSummary(overrides: Partial<SearchUnitSummary> = {}): SearchUni
 function buildLessonSummary(overrides: Partial<SearchLessonSummary> = {}): SearchLessonSummary {
   const base = {
     lessonTitle: 'Lesson Title',
-    unitSlug: 'unit-slug',
-    unitTitle: 'Unit Title',
+    units: [{ unitSlug: 'unit-slug', unitTitle: 'Unit Title' }],
     subjectSlug: 'maths',
     subjectTitle: 'Mathematics',
     lessonKeywords: [
@@ -115,14 +114,14 @@ describe('document-transform-helpers', () => {
   });
 
   describe('extractLessonDocumentFields', () => {
-    it('extracts all lesson document fields', () => {
+    it('extracts all lesson document fields (excluding unit membership)', () => {
       const summary = buildLessonSummary();
       const fields = extractLessonDocumentFields(summary);
 
-      expect(fields.unitSlug).toBe('unit-slug');
-      expect(fields.unitTitle).toBe('Unit Title');
       expect(fields.oakUrl).toBe('https://teachers.thenational.academy/lessons/lesson-slug');
       expect(fields.lessonKeywords).toEqual(['fractions', 'ratio']);
+      expect(fields.subjectTitle).toBe('Mathematics');
+      expect(fields.keyStageTitle).toBe('Key Stage 2');
     });
   });
 

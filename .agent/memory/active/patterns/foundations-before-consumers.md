@@ -1,5 +1,6 @@
 ---
 name: "Foundations Before Consumers in Multi-Emitter Plans"
+polarity: pattern
 use_this_when: "sequencing a plan with N parallel consumer lanes that share a foundation (a schema contract, an ESLint rule, an extracted core). The foundation must land in an earlier wave than any consumer that depends on it, or every consumer retrofits."
 category: process
 proven_in: ".agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md \u00a7Phase Structure; .agent/plans/observability/high-level-observability-plan.md \u00a7Execution Waves; .agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md \u00a7Post-Phase-5 Execution Plan. Reshape landed 2026-04-19 in commits 7f5b18e7 + 2e8a140d."
@@ -11,6 +12,10 @@ barrier:
   stable: true
 related_pattern: warning-severity-is-off-severity.md
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Foundations Before Consumers in Multi-Emitter Plans
 

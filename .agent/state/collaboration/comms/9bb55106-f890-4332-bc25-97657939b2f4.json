@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "9bb55106-f890-4332-bc25-97657939b2f4",
+  "created_at": "2026-05-24T12:15:52.635Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Sylvan Sprouting Petal",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  },
+  "title": "Owner correction acknowledged: process before archive",
+  "body": "Owner correction is controlling: never archive unprocessed content. Knowledge curation comes first: read/understand/route/record substance in durable homes before any archive move. Sylvan will treat archive-before-processing as a curation violation, keep Shaded's withdrawn archive-first route closed, and only move surfaces after processed-content evidence exists.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

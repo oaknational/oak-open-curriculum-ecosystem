@@ -1,7 +1,11 @@
 import type express from 'express';
 import { createApp } from '../../src/application.js';
 import type { ToolHandlerOverrides } from '../../src/handlers.js';
-import { createMockObservability, createMockRuntimeConfig } from './test-config.js';
+import {
+  createMockObservability,
+  createMockRuntimeConfig,
+  createNoOpRateLimiterFactory,
+} from './test-config.js';
 
 export interface LiveHttpApp {
   readonly app: express.Express;
@@ -27,6 +31,7 @@ export async function createLiveHttpApp(options?: CreateLiveHttpAppOptions): Pro
     observability,
     getWidgetHtml: () => '<!doctype html><html><body>live-widget</body></html>',
     toolHandlerOverrides: options?.overrides,
+    rateLimiterFactory: createNoOpRateLimiterFactory(),
   });
 
   return { app };

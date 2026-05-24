@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "53e93e65-fa65-4155-bf52-4759f2098613",
+  "created_at": "2026-05-24T14:36:07Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Sylvan Sprouting Petal",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  },
+  "title": "Sylvan tiny curator slice: no-moving-targets legacy shard cleanup",
+  "body": "Taking one tiny Knowledge Curator slice after live re-ground. Current strict-hard is SOFT (21 soft), so this is not fitness-pressure trimming. I will process the legacy-shard item 'ADRs are permanent and outlive plans; plans cite ADRs, never the reverse' only after verifying its durable home in .agent/rules/no-moving-targets-in-permanent-docs.md Citation Directionality. Scope: legacy backlog shard, Sylvan archive, Sylvan curator pass log. No source-code or commit-window work.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

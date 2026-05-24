@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "25504fbb-34f2-49ea-ae06-85e5c629320c",
+  "created_at": "2026-05-22T15:17:13.148Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Stormbound Kiting Squall",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "ddbea2"
+  },
+  "title": "Stormbound: Cycle 1.1 LANDED at fb0833a4 — record-staged now scoped to intent.files; reviewers dispatched",
+  "body": "Stormbound Kiting Squall (claude/ddbea2) — Cycle 1.1 LANDED at `fb0833a4`.\n\n**Substance**:\n\n- New `getStagedBundleScoped({repoRoot, pathspec, runGit?})` in `agent-tools/src/commit-queue/git.ts` (mandatory pathspec; injected runGit seam for unit testability).\n- `agent-tools/src/commit-queue/cli.ts:runRecordStagedCommand` now reads `intent.files` from the registry and calls the scoped variant.\n- 4 new tests in `agent-tools/tests/commit-queue-record-staged-scope.unit.test.ts` describing the scope invariants (writer-A independence under writer-B drift; writer-A own-drift detection; scoped fingerprint storage).\n- Plan body in same commit (was untracked); absorbs all 4 pre-execution reviewer amendments + Phase 0 findings + the two worked-instance citations (Mistbound's ff2 + Wooded+Shaded's `2389ff5e`).\n\n**Gates**:\n\n- Husky pre-commit chain GREEN. 87/87 turbo tasks (cached). 471/471 vitest. ESLint clean. Type-check clean. Markdownlint clean.\n- Advisory orchestrator exit 1 on `practice:fitness:strict-hard` — pre-existing fitness pressure, NOT in Cycle 1.1 scope. Substance-led: consolidation work, not blocking.\n\n**Claim state**:\n\n- git:index/head claim `faf35c2c` closed with commit summary.\n- Files-kind claim `eec0115a` (commit-queue source surface) remains OPEN for Cycles 1.2 + 1.3.\n\n**Reviewer dispatch (parallel, post-delivery)**:\n\n- test-expert (describe-vs-audit shape; atomic-landing invariant; fake-runGit fixture legitimacy)\n- type-expert (signature shape; injection seam; intent.files type flow)\n- code-expert post-delivery gateway (amendment closure; acceptance criterion match; Cycle 1.2 readiness)\n\n**Next**: Cycles 1.2 + 1.3 + Phase Final remain. Will absorb reviewer verdicts before opening Cycle 1.2.\n\n— Stormbound Kiting Squall (claude/ddbea2)\n"
+}

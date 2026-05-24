@@ -11,7 +11,7 @@
  * bursts from many clients sharing a Vercel PoP IP would 429 metadata
  * discovery if it shared the OAuth flow's strict 30-req/15-min bucket.
  *
- * @see architecture-reviewer-betty MAJOR-A absorption in
+ * @see architecture-expert-betty MAJOR-A absorption in
  *   `.agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md`.
  */
 import { describe, it, expect } from 'vitest';

@@ -134,9 +134,9 @@ implementation phase.
 analysis and the graduation route for planning discipline. The
 dedicated [Planning specialist capability](planning-specialist-capability.plan.md)
 plan owns creation of the ADR-129 expert triplet:
-`.agent/sub-agents/templates/planning-reviewer.md`,
+`.agent/sub-agents/templates/planning-expert.md`,
 `.agent/skills/planning-expert/SKILL.md`, and
-`.agent/rules/invoke-planning-reviewer.md`. Do not create a
+`.agent/rules/invoke-planning-expert.md`. Do not create a
 parallel `.agent/skills/planning/SKILL.md`.
 
 **Practice-first deliverable**: the handoff is complete when this
@@ -162,9 +162,9 @@ scope, and deferral. No Planning artefact creation is required here.
 2. Add process guidance to plan templates after the Planning skill
    exists and has one canonical path.
 
-3. Record the expert boundary: `assumptions-reviewer` challenges
+3. Record the expert boundary: `assumptions-expert` challenges
    proportionality and blocking legitimacy, while
-   `planning-reviewer` reviews plan architecture, lifecycle,
+   `planning-expert` reviews plan architecture, lifecycle,
    discoverability, and integration routing. The two are
    complementary, not substitutes.
 
@@ -177,8 +177,8 @@ scope, and deferral. No Planning artefact creation is required here.
 - This plan does not create `.agent/skills/planning/SKILL.md`
 - Practice-first execution does not create or edit
   `.agent/skills/planning-expert/SKILL.md`,
-  `.agent/sub-agents/templates/planning-reviewer.md`,
-  `.agent/rules/invoke-planning-reviewer.md`, or plan-template
+  `.agent/sub-agents/templates/planning-expert.md`,
+  `.agent/rules/invoke-planning-expert.md`, or plan-template
   references to the Planning skill
 - Distilled §Process entries that describe planning discipline
   remain routed to the Planning specialist plan until that plan

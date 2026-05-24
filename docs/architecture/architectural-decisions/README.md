@@ -172,10 +172,10 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   retains its original ADR-144 slug because the ADR was amended in place; see
   Status block in the ADR for history
 - [ADR-145: Oak URL Naming Collision Remediation](145-oak-url-naming-collision-remediation.md)
-- [ADR-146: Assumptions Reviewer — Meta-Level Plan Assessment](146-assumptions-reviewer-meta-level-plan-assessment.md)
+- [ADR-146: Assumptions Expert — Meta-Level Plan Assessment](146-assumptions-expert-meta-level-plan-assessment.md)
 - [ADR-147: Browser Accessibility as a Blocking Quality Gate](147-browser-accessibility-as-blocking-quality-gate.md)
 - [ADR-148: Design Token Architecture](148-design-token-architecture.md)
-- [ADR-149: Frontend Specialist Reviewer Gateway Cluster](149-frontend-specialist-reviewer-gateway-cluster.md)
+- [ADR-149: Frontend Specialist Expert Gateway Cluster](149-frontend-specialist-expert-gateway-cluster.md)
 - [ADR-150: Continuity Surfaces, Session Handoff, and Surprise Pipeline](150-continuity-surfaces-session-handoff-and-surprise-pipeline.md)
 - [ADR-151: MCP App Styling Independence from Oak Web Application and Oak Components](151-mcp-app-styling-independence.md)
 - [ADR-152: Provenance UUID Migration](152-provenance-uuid-migration.md)
@@ -183,7 +183,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-154: Separate Framework from Consumer](154-separate-framework-from-consumer.md)
 - [ADR-155: Decompose at the Tension](155-decompose-at-the-tension.md)
 - [ADR-156: Embed Widget HTML as Committed TypeScript Constant](156-embed-widget-html-at-build-time.md)
-- [ADR-157: Multi-Source Open Education Knowledge Integration](157-multi-source-open-education-integration.md)
+- [ADR-157: Multi-Source Open Education Knowledge Integration](157-multi-source-open-education-integration.md) ← **Proposed**
 - [ADR-158: Multi-Layer Security Architecture and Application Rate Limiting](158-multi-layer-security-and-rate-limiting.md)
 - [ADR-159: Per-Workspace Vendor CLI Ownership with Repo-Tracked Configuration](159-per-workspace-vendor-cli-ownership.md)
 - [ADR-160: Non-Bypassable Redaction Barrier as Principle](160-non-bypassable-redaction-barrier-as-principle.md) (supersedes ADR-143 §6 in part)
@@ -215,9 +215,52 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   vocabulary trip-list as a cohesive output-time defence;
   Accepted 2026-05-03)
 - [ADR-173: Graph Stack Topology — Standards-First, Layered, MCP-Agnostic](173-graph-stack-topology.md)
-  (proposed topology for the graph substrate: RDF-native internals,
-  standards-based wire projection, consumer/substrate workspace tiers,
-  and standards-evolution tripwires; Proposed 2026-05-07)
+  (eight-workspace graph topology — seven active plus one deferred —
+  with RDF 1.2-native internals, standards-based wire projection,
+  build-vs-buy attestation per library, and standards-evolution
+  tripwires; Accepted 2026-05-11)
+- [ADR-174: Dependency Vulnerability Scanning as a Quality Gate](174-dependency-vulnerability-scanning-quality-gate.md)
+  (dependency vulnerability triage, blocking/disposition policy,
+  Dependabot/override governance, and relationship to quality gates;
+  Accepted 2026-05-10)
+- [ADR-175: External Evidence Corpus Freshness Governance](175-external-evidence-corpus-freshness-governance.md)
+  (freshness metadata, ownership, threshold, stale-data behaviour, and
+  attribution requirements for EEF and future external evidence corpora;
+  Accepted 2026-05-10)
+- [ADR-176: Commit-Skill Advisory Orchestrator Naming](176-commit-skill-advisory-orchestrator-naming.md)
+  (commit-skill remains advisory, stages by explicit pathspec, and treats
+  commit queue / index facts as coordination signals; Accepted 2026-05-11)
+- [ADR-177: Asymmetric-Cure Enforcement for Staging](177-asymmetric-cure-enforcement-in-staging.md)
+  (`git commit -- <pathspec>` may cure unstaged noise outside the intended
+  bundle, but must not hide defects inside the staged boundary; Accepted
+  2026-05-11)
+- [ADR-178: Agent-Tools Build Isolation](178-agent-tools-build-isolation.md)
+  (`agent-tools` is consumed as built `dist/`, not via hidden source-on-each-
+  invocation runtime compilation; Accepted 2026-05-11)
+- [ADR-179: Transport-Agnostic Graph Substrate — Surfacing Is A Consumer-Side Concern](179-transport-agnostic-graph-substrate.md)
+  (transport-discipline corollary of ADR-154 applied across the graph
+  stack: substrate ships no MCP/HTTP/CLI/transport-shaped code;
+  at-most-one-home per consumer surface; extracted from ADR-173 on
+  2026-05-11; Accepted 2026-05-11)
+- [ADR-180: Codex-Exec Agent Delegation Pattern](180-codex-exec-agent-delegation-pattern.md)
+  (`codex exec` is the preferred scripted delegation surface; `read-only` is
+  the default sandbox; Accepted 2026-05-12)
+- [ADR-181: Agent Team Start Ritual and Action-Trace Surface](181-agent-team-start-and-action-log.md)
+  (`start-right-team`, emergent temporary responsibilities, team handoff
+  routing, and future action-trace event surface; Proposed)
+- [ADR-182: Mid-Cycle Handoff Record Substrate](182-mid-cycle-handoff-record-substrate.md)
+  (handoff records, `handoff_record_path`, and `mid-cycle-handoff`
+  directed-message value for token-bounded handoff; Proposed)
+- [ADR-183: Comms-Event Tag Namespace Substrate](183-comms-event-tag-namespace-substrate.md)
+  (`tags` field on comms events, initial failure-mode / behaviour-note
+  namespace, and watcher tag-token rendering; Accepted 2026-05-22)
+- [ADR-184: Comms-Event Sync Kind and Urgency Field](184-comms-event-sync-kind-and-urgency-field.md)
+  (two-axis separation: `sync` as interaction shape and `urgency` as
+  response priority; Proposed 2026-05-23)
+- [ADR-185: Comms-Event Auto-Acceptance Metadata](185-comms-event-auto-acceptance-metadata.md)
+  (structured impact / size / risk metadata for deterministic
+  auto-acceptance of mechanically verifiable comms-event changes;
+  Proposed 2026-05-23)
 
 ## Key Architectural Decisions
 
@@ -226,7 +269,8 @@ For understanding our API integration approach:
 - **[ADR-029](029-no-manual-api-data.md)** - No manual API data structures in MCP
 - **[ADR-030](030-sdk-single-source-truth.md)** - SDK as single source of truth for API contracts
 - **[ADR-141](141-mcp-apps-standard-primary.md)** - MCP Apps standard as the only UI surface (supersedes ChatGPT-specific coupling)
-- **[ADR-157](157-multi-source-open-education-integration.md)** - Multi-source open education knowledge integration across API, ontology, EEF, MCP, and graph surfaces
+- **[ADR-157](157-multi-source-open-education-integration.md)** - Proposed multi-source open education knowledge integration across API, ontology, EEF, MCP, and graph surfaces
+- **[ADR-175](175-external-evidence-corpus-freshness-governance.md)** - Accepted freshness governance for EEF and future external evidence corpora
 - **[ADR-066](066-sdk-response-caching.md)** - SDK response caching with Redis
 - **[ADR-070](070-sdk-rate-limiting-and-retry.md)** - SDK rate limiting and exponential backoff retry
 - **[ADR-063](063-sdk-domain-synonyms-source-of-truth.md)** - SDK as single source of truth for domain synonyms
@@ -246,6 +290,7 @@ For understanding authentication, authorization, and observability:
 - **[ADR-159](159-per-workspace-vendor-cli-ownership.md)** - Per-workspace vendor CLI ownership with repo-tracked configuration (formalises the Sentry CLI adoption pattern; applies to all future vendor CLIs)
 - **[ADR-160](160-non-bypassable-redaction-barrier-as-principle.md)** - Non-bypassable redaction barrier as principle (generalises ADR-143 §6 from enumerated list to closure property + test gate; covers every current and future fan-out path)
 - **[ADR-161](161-network-free-pr-check-ci-boundary.md)** - Network-free PR-check CI boundary (PR-check CI runs unit + integration + E2E without network; Vercel deploy and smoke tests own network-capable work)
+- **[ADR-174](174-dependency-vulnerability-scanning-quality-gate.md)** - Dependency vulnerability scanning as a quality gate policy (implementation wiring still belongs in ADR-121/build docs)
 - **[ADR-051](051-opentelemetry-compliant-logging.md)** - OpenTelemetry-compliant single-line JSON logging (supersedes ADR-017)
 - **[ADR-033](033-centralised-log-level-configuration.md)** - Centralised log level configuration
 
@@ -255,17 +300,18 @@ For understanding the agentic engineering practice:
 - **[ADR-117](117-plan-templates-and-components.md)** - Plan templates and reusable plan components (document hierarchy, lifecycle, TDD phases)
 - **[ADR-119](119-agentic-engineering-practice.md)** - Practice naming, boundary, three-layer model, and self-teaching property
 - **[ADR-124](124-practice-propagation-model.md)** - Practice propagation: five-file package, self-containment, practice-index bridge
-- **[ADR-125](125-agent-artefact-portability.md)** - Agent artefact portability: three-layer model for skills, commands, and rules across Cursor, Claude, Gemini, and Codex
-- **[ADR-129](129-domain-specialist-capability-pattern.md)** - Domain specialist capability pattern: reviewer + skill + rule triplet with doctrine hierarchy
-- **[ADR-137](137-specialist-operational-tooling-layer.md)** - Specialist operational tooling layer: optional fourth layer for agent-accessible CLI/MCP interaction with live domain systems
+- **[ADR-125](125-agent-artefact-portability.md)** - Agent artefact portability: canonical `.agent/` source plus thin platform adapters; commands retired into skills by PDR-051
+- **[ADR-129](129-domain-specialist-capability-pattern.md)** - Domain specialist capability pattern: unified `*-expert` model with situational invocation
+- **[ADR-137](137-specialist-operational-tooling-layer.md)** - Specialist operational tooling layer: optional live-system tooling for domain experts
 - **[ADR-131](131-self-reinforcing-improvement-loop.md)** - Self-reinforcing improvement loop: knowledge flow, consolidation hub, self-referential governance, inter-repo propagation
 - **[ADR-135](135-agent-classification-taxonomy.md)** - Agent classification taxonomy: domain_expert, process_executor, specialist; operational modes; Practice domain trio
 - **[ADR-144](144-two-threshold-fitness-model.md)** - Three-zone fitness model: `healthy` / `soft` / `hard` / `critical` graduated scale with `CRITICAL_RATIO = 1.5`; `critical` is a loop-failure signal requiring a three-question post-mortem (§Loop Health)
-- **[ADR-146](146-assumptions-reviewer-meta-level-plan-assessment.md)** - Assumptions reviewer: independent proportionality and plan-assumption challenge with an inverted doctrine hierarchy
+- **[ADR-146](146-assumptions-expert-meta-level-plan-assessment.md)** - Assumptions expert: independent proportionality and plan-assumption challenge with an inverted doctrine hierarchy
 - **[ADR-150](150-continuity-surfaces-session-handoff-and-surprise-pipeline.md)** - Continuity surfaces, lightweight session handoff, conditional deep consolidation, and the surprise pipeline
+- **[ADR-181](181-agent-team-start-and-action-log.md)** - Proposed team start ritual, emergent temporary responsibilities, and future action-trace surface
 - **[ADR-147](147-browser-accessibility-as-blocking-quality-gate.md)** - Browser accessibility as a 9th blocking quality gate: WCAG 2.2 AA, Playwright + axe-core, two-level MCP App testing
 - **[ADR-148](148-design-token-architecture.md)** - Design token architecture: DTCG JSON source, three-tier model, CSS custom properties output, `packages/design/` location
-- **[ADR-149](149-frontend-specialist-reviewer-gateway-cluster.md)** - Frontend specialist reviewer gateway cluster: accessibility-reviewer, design-system-reviewer, react-component-reviewer cohort with MCP boundary rule
+- **[ADR-149](149-frontend-specialist-expert-gateway-cluster.md)** - Frontend specialist expert gateway cluster: accessibility-expert, design-system-expert, react-component-expert cohort with MCP boundary rule
 - **[ADR-151](151-mcp-app-styling-independence.md)** - MCP App styling independence: CSS custom properties over styled-components, self-contained HTML resources, host theme composition
 - **[ADR-165](165-agent-work-practice-phenotype-boundary.md)** - Agent work Practice phenotype boundary: local implementation surfaces for PDR-035 agent-work authority
 

@@ -2,7 +2,9 @@
 
 **Status**: Accepted
 **Date**: 2026-02-22
-**Related**: [ADR-114 (Layered Sub-agent Prompt Composition Architecture)](114-layered-sub-agent-prompt-composition-architecture.md)
+**Related**: [ADR-114][adr-114]
+
+[adr-114]: 114-layered-sub-agent-prompt-composition-architecture.md
 
 ## Context
 
@@ -10,9 +12,9 @@ Over the course of 39+ completed plans spanning SDK extraction, MCP tool
 wiring, OAuth compliance, developer onboarding, and search quality work,
 recurring structural patterns emerged organically. Each plan independently
 converged on similar shapes: YAML frontmatter for progress tracking, TDD
-phase structure (RED/GREEN/REFACTOR), quality gate checkpoints, foundation
-document alignment, deterministic validation commands, and risk assessment
-tables.
+cycle structure (Red → Green → Refactor), quality gate checkpoints,
+foundation document alignment, deterministic validation commands, and risk
+assessment tables.
 
 The same building blocks appeared in plan after plan, but were written from
 scratch each time. This created three problems:
@@ -41,40 +43,36 @@ Adopt a template-and-component architecture for plans in `.agent/plans/templates
 
 Full plan scaffolds for common workstream types. A template is a complete
 starting point — copy, fill in the bracketed placeholders, and begin.
-
-| Template                            | Use When                                            |
-| ----------------------------------- | --------------------------------------------------- |
-| `quality-fix-plan-template.md`      | Quality improvement, refactoring, technical debt    |
-| `feature-workstream-template.md`    | New feature delivery with TDD phases                |
-| `adoption-rollout-plan-template.md` | Policy/process/tooling adoption across workflows    |
-| `collection-roadmap-template.md`    | Strategic roadmap with phase-to-active-plan mapping |
+The live template inventory is
+[`.agent/plans/templates/README.md`](/.agent/plans/templates/README.md)
+and the `.agent/plans/templates/` directory. This ADR defines the
+architecture; it does not duplicate the inventory.
 
 ### 2. Plan Components
 
 Reusable building blocks that appear across multiple plan types. Components
 live in `.agent/plans/templates/components/` and are referenced (not
 inlined) by templates.
-
-| Component                      | Purpose                                                     |
-| ------------------------------ | ----------------------------------------------------------- |
-| `quality-gates.md`             | Standard quality gate sequence and rationale                |
-| `tdd-phases.md`                | RED/GREEN/REFACTOR phase structure with acceptance criteria |
-| `foundation-alignment.md`      | Foundation document commitment checklist                    |
-| `risk-assessment.md`           | Risk/mitigation table structure                             |
-| `adversarial-review.md`        | Post-implementation specialist review phase                 |
-| `evidence-and-claims.md`       | Claim classification and evidence/verification requirements |
-| `documentation-propagation.md` | Required ADR/directive/reference-doc and README propagation |
+The live component inventory is the same README and the
+`.agent/plans/templates/components/` directory.
 
 ### 3. Document Hierarchy
 
 Four document types serve distinct purposes and must not duplicate content:
 
-| Document            | Purpose                                                                                     | Location                           | Mutability                                       |
-| ------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------- | ------------------------------------------------ |
-| **Session prompt**  | Operational entry point — "where are we now, what to read, what to do"                      | `.agent/prompts/`                  | Updated every session                            |
-| **Strategic plan**  | Later/backlog intent, boundaries, sequencing assumptions, promotion triggers                | `.agent/plans/*/future/`           | Updated during backlog grooming and promotion    |
-| **Executable plan** | Per-workstream task list with TDD phases, acceptance criteria, and deterministic validation | `.agent/plans/*/{current,active}/` | Updated during execution, archived on completion |
-| **Roadmap**         | Strategic milestone sequence — phases, dependencies, completion status                      | `.agent/plans/*/roadmap.md`        | Updated at milestone boundaries                  |
+- **Session prompt** (`.agent/prompts/`) — operational entry point:
+  "where are we now, what to read, what to do"; updated every session.
+- **Strategic plan** (`.agent/plans/*/future/`) — later/backlog
+  intent, boundaries, sequencing assumptions, strategic acceptance
+  criteria, and promotion triggers; updated during backlog grooming
+  and promotion.
+- **Executable plan** (`.agent/plans/*/{current,active}/`) —
+  per-workstream task list with TDD cycles, acceptance criteria, and
+  deterministic validation; updated during execution and archived on
+  completion.
+- **Roadmap** (`.agent/plans/*/roadmap.md`) — strategic milestone
+  sequence: phases, dependencies, and completion status; updated at
+  milestone boundaries.
 
 **Content flows one way**: facts are authoritative in one document and
 referenced (not restated) by the others. Specifically:
@@ -113,9 +111,12 @@ quality gates, and frontmatter todos apply in these lanes.
 ### 5. Promotion Process (`future/` → `current/` → `active/`)
 
 1. Select a `future/` strategic plan when prerequisites and sequencing are clear.
+   Record evidence that the promotion trigger has fired, the readiness
+   verdict, and any assumptions carried forward.
 2. Create a new executable plan in `current/` from the appropriate template.
-3. Mine strategic intent from `future/` into executable tasks, RED/GREEN/REFACTOR
-   phases, acceptance criteria, and deterministic validation commands.
+3. Mine strategic intent from `future/` into executable tasks or cycles,
+   acceptance criteria, prerequisite classifications, and deterministic
+   validation commands.
 4. Keep traceability by linking the new `current/` plan back to the source
    `future/` strategic plan.
 5. Move the executable plan to `active/` only when implementation starts.
@@ -184,8 +185,8 @@ the plan content.
 ### Positive
 
 - New plans start from a proven structure rather than a blank page.
-- Common patterns (quality gates, TDD phases, risk tables) are consistent
-  across all plans.
+- Common patterns (quality gates, TDD cycles, acceptance criteria, risk
+  tables) are consistent across all plans.
 - Document hierarchy prevents content duplication and fact contradiction.
 - Plan lifecycle is explicit: `active` (now), `current` (next), `future`
   (later), and `archive/completed` (historical record).
@@ -222,11 +223,11 @@ the plan content.
 - `current/` and `future/` hold not-yet-started work only — no in-progress
   execution in these directories.
 - No stubs, no redirects, no compatibility layers.
-- Run the consolidation flow (`/jc-consolidate-docs`) after every milestone.
+- Run the consolidation flow (`/oak-consolidate-docs`) after every milestone.
 
 ## References
 
 - `.agent/plans/templates/` — templates and components
 - `.agent/plans/templates/README.md` — usage instructions
 - ADR-114 — analogous pattern for sub-agent prompts
-- `.cursor/commands/jc-consolidate-docs.md` — consolidation flow
+- `.agent/skills/consolidate-docs/SKILL-CANONICAL.md` — consolidation flow

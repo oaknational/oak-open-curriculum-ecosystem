@@ -35,7 +35,7 @@ const LEGACY_LOGGER_KEYS = [
  * Per-key operator-facing rename message for each legacy `MCP_LOGGER_*`
  * env var. Each message is self-contained and names the orthogonal-axes
  * replacement (or explains there isn't one) without requiring the
- * operator to consult another doc — addresses onboarding-reviewer
+ * operator to consult another doc — addresses onboarding-expert
  * 2026-05-02 finding 1.
  */
 const LEGACY_LOGGER_RENAME_MESSAGES = {

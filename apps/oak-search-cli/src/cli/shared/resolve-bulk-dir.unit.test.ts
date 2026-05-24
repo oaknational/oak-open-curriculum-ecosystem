@@ -116,29 +116,57 @@ describe('resolveBulkDirFromInputs', () => {
     }
   });
 
-  it('fails when both sources are missing', () => {
+  it('defaults to <appRoot>/bulk-downloads when both flag and env are missing', () => {
     const result = resolveBulkDirFromInputs({
       bulkDirFlag: undefined,
       bulkDirFromEnv: undefined,
       appRoot,
       fs: validFs,
     });
-    expect(result.ok).toBe(false);
-    if (!result.ok) {
-      expect(result.error.message).toContain('Provide --bulk-dir');
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value).toBe('/app/bulk-downloads');
     }
   });
 
-  it('fails when env source is empty string', () => {
+  it('defaults when env value is empty or whitespace-only', () => {
     const result = resolveBulkDirFromInputs({
       bulkDirFlag: undefined,
       bulkDirFromEnv: '   ',
       appRoot,
       fs: validFs,
     });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value).toBe('/app/bulk-downloads');
+    }
+  });
+
+  it('defaults when flag value is empty or whitespace-only', () => {
+    const result = resolveBulkDirFromInputs({
+      bulkDirFlag: '   ',
+      bulkDirFromEnv: undefined,
+      appRoot,
+      fs: validFs,
+    });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value).toBe('/app/bulk-downloads');
+    }
+  });
+
+  it('returns bulk_dir_not_found when default directory does not exist', () => {
+    const result = resolveBulkDirFromInputs({
+      bulkDirFlag: undefined,
+      bulkDirFromEnv: undefined,
+      appRoot,
+      fs: missingFs,
+    });
     expect(result.ok).toBe(false);
     if (!result.ok) {
       expect(result.error.type).toBe('bulk_dir_not_found');
+      expect(result.error.message).toContain('/app/bulk-downloads');
+      expect(result.error.message).toContain('bulk:download');
     }
   });
 });

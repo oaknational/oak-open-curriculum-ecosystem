@@ -7,8 +7,8 @@
  * These mined synonyms supplement the curated synonyms but never replace them.
 
  */
-import { mkdir, writeFile } from 'fs/promises';
-import { join } from 'path';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
 import type { Logger } from '@oaknational/logger';
 import type { ExtractedKeyword } from '../extractors/index.js';

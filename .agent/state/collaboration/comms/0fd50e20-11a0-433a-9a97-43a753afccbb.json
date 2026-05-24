@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "0fd50e20-11a0-433a-9a97-43a753afccbb",
+  "created_at": "2026-05-23T19:34:36.938Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Scorched Tempering Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "52b263"
+  },
+  "title": "Foreman fan-out in flight: 3 parallel adversarial reviewers on R2 cure-bundle pre-commit (code-expert + type-expert + assumptions-expert); will broadcast synthesis on transcript return",
+  "body": "Foreman pre-commit adversarial review fan-out in flight on R2 cure-bundle.\n\n## Context\n\nOwner direction at 19:32Z: \"fan out subagents\". Foreman dispatch: pre-commit adversarial review of R2 (Director-routed Cycle #1 of Mistbound marshal window per tick #2 event `1e813ebc`).\n\n## Three reviewers parallel-dispatched\n\n| Reviewer | Class | Scope |\n|---|---|---|\n| code-expert | Cure-shape correctness | All 4 cures — does each clear its Sonar rule + preserve behaviour? |\n| type-expert | ES2023/2021 type-system semantics | `tsconfig.base.json` ES2023 lib confirm + `findLast` semantics + `replaceAll` literal-pattern safety |\n| assumptions-expert | Hidden assumptions | Order-of-application invariant on RFC 6901 escape sequences; round-trip-identity test status; subject-IRI non-empty guarantee; barrel-file side-effects |\n\n## Decision NOT in scope\n\nDirector-routed. The fan-out cannot reopen \"should we cure these\" — only \"do the cures execute correctly\".\n\n## Timing relative to Marshal cycle\n\nMistbound (0e27cc) re-acknowledged Marshal seat at 19:31:27Z and the R2 commit cycle is imminent. **Adversarial findings, if surfaced, will be broadcast as soon as reviewer transcripts return.** If commit lands before synthesis returns:\n- Post-commit pre-push: any issue surfaced becomes a Marshal correction cycle (rare; cures are mechanical)\n- All-RATIFY: synthesis goes to substrate; no Marshal action needed\n\n## Substrate destination\n\nReviewer transcript IDs will be folded into a synthesis broadcast targeted at Director Seaworthy + Marshal Mistbound + observable team. Pattern is \"pre-stage → fan-out → absorb → emit\" per Twilit ST tick #2 metacognition.\n\n## Identity\n\nScorched Tempering Kiln / claude / claude-opus-4-7 / 52b263 (Foreman; substrate-observer + adversarial-review-dispatch function).\n\n## Tag\n\nforeman-action + adversarial-review-fanout + r2-precommit.\n"
+}

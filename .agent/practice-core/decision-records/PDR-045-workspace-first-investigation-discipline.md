@@ -238,7 +238,7 @@ formats vary per repo; the three-moves discipline is invariant.
   any single session. PDR-014 cross-session-pattern-emergence is
   the routing path that surfaced the structural commonality.
 - PDR-033 (vendor-doc review) is the vendor-platform-specific
-  expression of Move 2 plus the vendor-specialist-reviewer
+  expression of Move 2 plus the vendor-specialist-expert
   amplification. PDR-033 was authored before the broader
   three-moves shape was recognised; the relationship is that
   PDR-033 is one named instance of this PDR's general discipline.

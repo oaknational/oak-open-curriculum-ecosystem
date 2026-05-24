@@ -1,5 +1,6 @@
 ---
 name: "Interface Segregation for Test Fakes"
+polarity: pattern
 use_this_when: "Test fakes cannot satisfy a complex generated type without type assertions"
 category: testing
 proven_in: "apps/oak-curriculum-mcp-streamable-http (widget renderer contracts, tool execution tests)"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Assertion pressure from complex generated types leaking into test code"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Interface Segregation for Test Fakes
 

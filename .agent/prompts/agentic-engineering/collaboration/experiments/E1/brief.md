@@ -135,6 +135,6 @@ clean the observations are.
   for Agent 2, the executor / feedback. Copy-paste as-is to the
   agent at session start.
 
-If a third agent (Reviewer mode) joins, an `agent-3-reviewer.md`
+If a third agent (Reviewer mode) joins, an `agent-3-expert.md`
 prompt should be authored before that session opens. The current
 two-prompt set is the minimum viable for the next session.

@@ -202,9 +202,9 @@ cited from canonical surfaces)`.
 
 ## Reviewers
 
-- `docs-adr-reviewer` — verify the refinement preserves load-bearing
+- `docs-adr-expert` — verify the refinement preserves load-bearing
   audit evidence.
-- `code-reviewer` — final pass.
+- `code-expert` — final pass.
 
 ## Risk
 

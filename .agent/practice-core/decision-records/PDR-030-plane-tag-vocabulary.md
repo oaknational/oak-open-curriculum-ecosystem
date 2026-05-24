@@ -327,7 +327,7 @@ retains it as provenance.
 ### Authoring provenance
 
 This PDR originated as an owner-decision item surfaced by the
-Session 3 bundle's docs-adr-reviewer pass (OWNER-DECISION 1):
+Session 3 bundle's docs-adr-expert pass (OWNER-DECISION 1):
 the reviewer observed that the sibling PDR-028 and PDR-029
 were introducing two distinct plane-aware tags without a
 coordinating vocabulary, and flagged the risk of fragmentation

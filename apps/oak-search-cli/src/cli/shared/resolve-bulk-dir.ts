@@ -92,12 +92,22 @@ export function resolveBulkDir(
   return ok(resolvedPath);
 }
 
+/** Workspace-relative default bulk-download directory name. */
+const DEFAULT_BULK_DIR_NAME = 'bulk-downloads';
+
 /**
- * Resolve bulk directory using CLI-over-env precedence and validate it.
+ * Resolve bulk directory using CLI-over-env-over-default precedence and validate it.
  *
  * Precedence:
- * 1. `--bulk-dir`
- * 2. `BULK_DOWNLOAD_DIR`
+ * 1. `--bulk-dir` CLI flag (when non-empty after trim).
+ * 2. `BULK_DOWNLOAD_DIR` env value (when non-empty after trim).
+ * 3. Workspace-relative default `<appRoot>/bulk-downloads`.
+ *
+ * `appRoot` is the oak-search-cli workspace root (computed in
+ * `pass-through.ts` from `import.meta.url`), so the default resolves
+ * to `<repoRoot>/apps/oak-search-cli/bulk-downloads` regardless of the
+ * invocation directory. Empty-string and whitespace-only flag/env
+ * values are treated as not configured and fall through to the default.
  */
 export function resolveBulkDirFromInputs(
   input: ResolveBulkDirFromInputs,
@@ -112,8 +122,5 @@ export function resolveBulkDirFromInputs(
     return resolveBulkDir(fromEnv, input.appRoot, input.fs);
   }
 
-  return err({
-    type: 'bulk_dir_not_found',
-    message: 'Missing bulk directory. Provide --bulk-dir <path> or set BULK_DOWNLOAD_DIR in env.',
-  });
+  return resolveBulkDir(DEFAULT_BULK_DIR_NAME, input.appRoot, input.fs);
 }

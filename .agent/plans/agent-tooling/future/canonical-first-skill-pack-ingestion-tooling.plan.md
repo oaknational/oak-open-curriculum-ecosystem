@@ -199,16 +199,16 @@ Promotion to `current/` is justified when **at least one** is true:
 
 | Risk | Direction | Reviewer treatment at promotion |
 |---|---|---|
-| Source-fetcher CLI interface drift | Pin version; keep behind a single `fetchSourceToStage()` adapter so swap-out cost is one file. | architecture-reviewer-betty: validate adapter boundary and long-term change-cost. |
-| Vendor-specific behaviour creeps in to handle one awkward source pack | Validator-enforced boundary: tool source must contain no vendor-keyed conditionals. | architecture-reviewer-fred: PDR-009 vendor-agnostic rule is the binding ADR; assumptions-reviewer: confirm the validator check is sufficient. |
-| Namespace collision between plugin-namespaced and canonical names | Default `--prefix <source-org>-` if collision; refuse-on-collision otherwise. | assumptions-reviewer: validate prefix policy is sufficient for foreseeable packs. |
-| Local edits to vendored canonical lost on update | v1 forbids local edits; overlays via sibling `<n>-local-overrides`. | architecture-reviewer-fred: ADR-125 amendment must record the policy. |
-| Bundled subdirs (`scripts/`, `evals/`, `references/`) ship empty in upstream | Lock-hash strategy must cover the subdir tree, not only `SKILL.md`. | architecture-reviewer-wilma: stress-test partial-content cases. |
-| Plugin still installed after canonicalisation → both surfaces load | Document uninstall step; consider a `prefer` field in lock. | assumptions-reviewer: confirm dual-load is acceptable in the interim. |
-| Hash provenance ambiguity (source-CLI vs local) | Record both, validate against local hash for drift, record upstream hash for provenance. | architecture-reviewer-barney: dependency-graph and schema evolution. |
-| Update conflicts produce silent overwrite | v1 ships `add` only; `update` is v2 with explicit diff-and-confirm. | test-reviewer at execution time. |
-| Network failures mid-fetch leave partial stage | Atomic stage→rename only after successful end-to-end stage write. | architecture-reviewer-wilma: enumerate adversarial fetch failure modes. |
-| Concurrent agent edits during ingestion | Use the existing `git index/HEAD` write window discipline; CLI must claim before writing. | architecture-reviewer-wilma: race conditions across active agent sessions. |
+| Source-fetcher CLI interface drift | Pin version; keep behind a single `fetchSourceToStage()` adapter so swap-out cost is one file. | architecture-expert-betty: validate adapter boundary and long-term change-cost. |
+| Vendor-specific behaviour creeps in to handle one awkward source pack | Validator-enforced boundary: tool source must contain no vendor-keyed conditionals. | architecture-expert-fred: PDR-009 vendor-agnostic rule is the binding ADR; assumptions-expert: confirm the validator check is sufficient. |
+| Namespace collision between plugin-namespaced and canonical names | Default `--prefix <source-org>-` if collision; refuse-on-collision otherwise. | assumptions-expert: validate prefix policy is sufficient for foreseeable packs. |
+| Local edits to vendored canonical lost on update | v1 forbids local edits; overlays via sibling `<n>-local-overrides`. | architecture-expert-fred: ADR-125 amendment must record the policy. |
+| Bundled subdirs (`scripts/`, `evals/`, `references/`) ship empty in upstream | Lock-hash strategy must cover the subdir tree, not only `SKILL.md`. | architecture-expert-wilma: stress-test partial-content cases. |
+| Plugin still installed after canonicalisation → both surfaces load | Document uninstall step; consider a `prefer` field in lock. | assumptions-expert: confirm dual-load is acceptable in the interim. |
+| Hash provenance ambiguity (source-CLI vs local) | Record both, validate against local hash for drift, record upstream hash for provenance. | architecture-expert-barney: dependency-graph and schema evolution. |
+| Update conflicts produce silent overwrite | v1 ships `add` only; `update` is v2 with explicit diff-and-confirm. | test-expert at execution time. |
+| Network failures mid-fetch leave partial stage | Atomic stage→rename only after successful end-to-end stage write. | architecture-expert-wilma: enumerate adversarial fetch failure modes. |
+| Concurrent agent edits during ingestion | Use the existing `git index/HEAD` write window discipline; CLI must claim before writing. | architecture-expert-wilma: race conditions across active agent sessions. |
 
 ## Promotion Trigger
 
@@ -219,18 +219,18 @@ This plan promotes to `current/` only when **all** of the following are true:
 2. **Deep sub-agent reviews PASS** — the reviews below have run on this
    strategic brief and returned PASS or PASS-WITH-CONDITIONS. Reviews are
    **blocking** for promotion; they need not run now.
-   - `assumptions-reviewer` — proportionality, vendor-agnostic claim scope,
+   - `assumptions-expert` — proportionality, vendor-agnostic claim scope,
      namespace policy sufficiency, build-vs-buy attestation, blocking-relation
      legitimacy.
-   - `architecture-reviewer-fred` — ADR/PDR compliance: PDR-009
+   - `architecture-expert-fred` — ADR/PDR compliance: PDR-009
      vendor-agnostic rule, ADR-125 three-layer model, validator-enforced
      boundary against vendor-specific code paths.
-   - `architecture-reviewer-betty` — boundaries: source-fetcher adapter, lock
+   - `architecture-expert-betty` — boundaries: source-fetcher adapter, lock
      schema, validator integration; long-term change-cost trade-offs.
-   - `architecture-reviewer-barney` — dependency direction and structural
+   - `architecture-expert-barney` — dependency direction and structural
      simplification (does the new CLI reduce overall moving parts vs the
      manual flow?).
-   - `architecture-reviewer-wilma` — adversarial: failure modes (network
+   - `architecture-expert-wilma` — adversarial: failure modes (network
      failures mid-fetch, partial canonical writes, hash collisions, race with
      concurrent agent edits, bundled-subdir empty-file edge cases, namespace
      collisions across three platforms simultaneously).

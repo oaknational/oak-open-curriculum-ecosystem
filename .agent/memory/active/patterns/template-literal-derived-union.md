@@ -1,5 +1,6 @@
 ---
 name: "Template Literal Derived Union with Builder"
+polarity: pattern
 use_this_when: "A string union type is the cross-product of two smaller unions joined by a separator, and code constructs members at runtime via template literals"
 category: code
 proven_in: "apps/oak-search-cli/src/lib/indexing/curriculum-pattern-config.ts"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Hand-written large unions that drift from their constituent parts, and `as` casts to construct members at runtime"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Template Literal Derived Union with Builder
 

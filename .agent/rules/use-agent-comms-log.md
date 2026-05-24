@@ -48,6 +48,88 @@ If those responsibilities start to blur, capture that as a domain-model
 signal in the napkin or an active plan rather than adding another
 ad-hoc field to an existing surface.
 
+## Coordinated-session comms cadence (non-blocking)
+
+Single team protocol: keep discoverability warm without turning comms into a
+gate on implementation.
+
+This discipline applies to every in-session agent, including in-IDE Cursor
+agents — the foreground Cursor chat agent and any in-IDE Cursor worker
+subagents — on equal footing with platform-isolated sessions (Codex,
+Claude Code, etc.). In-IDE Cursor agents perform comms passes
+**event-driven, between tool batches, at the checkpoints below** — never on
+a fixed wall-clock loop. Any continuous wall-clock polling cadence (e.g. a
+30-second `sleep` loop) belongs only to the dedicated sidecar / coordinator
+monitor process running under the coordinator's identity; in-IDE agents
+must not block their own work on such a timer.
+
+When a session joins a coordinated team with an identified coordinator, its
+first comms-log write MUST be a concise introduction addressed to that
+coordinator before non-trivial work begins. This introduction requirement
+applies identically to in-IDE Cursor agents (foreground and any in-IDE
+worker subagents); each in-IDE agent's first non-trivial comms write must
+be its own introduction. For the current coordinated team, address the
+introduction to **Wooded Spreading Thicket** and include: agent
+identity/name; role or scope; claimed paths, or `none` if no claim is held;
+expected update cadence; and how the agent will respond to coordinator
+messages.
+
+1. **Three checkpoints only** — run one **comms pass** (read sequence below)
+   capped at **90 seconds**: **(a)** after identity rows are current per
+   [`register-identity-on-thread-join`](register-identity-on-thread-join.md)
+   and before the first non-trivial edit; **(b)** immediately before
+   delegating work to another agent, opening a commit or staging window outside
+   your claim bundle, or editing paths another peer names in a fresh log
+   heading or active claim; **(c)** at turn-close **only when** this turn
+   mutated collaboration state (claims, comms events, `commit_queue`,
+   conversations, escalations) or chose overlap-risk paths. Do **not** insert a
+   pass after every tool batch during uninterrupted work inside your declared
+   scope.
+
+2. **Read order (every pass)** — (1)
+   [`active-claims.json`](../state/collaboration/active-claims.json)
+   (includes advisory root `commit_queue`); (2) the newest slice of
+   [`shared-comms-log.md`](../state/collaboration/shared-comms-log.md) until
+   recent peer intent is clear (typically the latest handful of headings,
+   expanding into bodies only when overlap is plausible); (3) **only if** the
+   next action depends on structured async coordination — the specific thread
+   file under [`conversations/`](../state/collaboration/conversations/) or
+   [`escalations/`](../state/collaboration/escalations/), not a directory-wide
+   crawl.
+
+3. **Write minimum** — append one rendered log entry when you discover
+   overlap, change coordination intent, complete a coordination-visible
+   milestone, or exercise the coordinator role; keep the body short (tight
+   prose or a few bullets); sign with the PDR-027 identity row per §Identity
+   below.
+
+4. **Coordinator vs worker** — workers follow 1–3. An agent claiming the
+   coordinator role uses the same checkpoints but **also** posts
+   bounded-deadline comms and ordering signals (`commit_queue`, pause/resume
+   notes) as defined in [`agent-collaboration.md`](../directives/agent-collaboration.md)
+   §Coordinator Role; workers respond once when addressed, then resume unless a
+   deadline pause applies.
+
+   During selective pauses, owner or coordinator unblock hints apply only to
+   the named audience. A paused agent may resume only when the hint names them,
+   names all paused agents, or explicitly says the signal is general. If scope
+   is ambiguous, stay paused and ask whether the unblock applies to you instead
+   of self-routing from a hint aimed at another agent.
+
+## Comms-system tooling improvements route as proposals
+
+Improvements to the comms-system tooling — the agent-tools
+`collaboration-state` CLI surface, its supporting state schemas, and the
+sidecar / monitor patterns that wrap them — are proposed to the active
+coordinator as candidate additions, not implemented unilaterally. Author a
+narrative comms event addressed to the coordinator that names the proposed
+CLI shape (command + key flags), its inputs and outputs, the recurring
+manual step it replaces, and a status line marking each item as proposed
+(not approved). Await coordinator approval before opening an implementation
+claim, a branch, or any source edit under `agent-tools/src/collaboration-state/`.
+The coordinator may accept, reject, sequence, or batch the proposal; the
+worker takes the implementation slice only after the verdict lands.
+
 ## Authority
 
 - [`agent-collaboration.md`](../directives/agent-collaboration.md) — the

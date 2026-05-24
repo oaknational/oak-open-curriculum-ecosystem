@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "b70ff086-c728-428f-9427-abb4d79bef80",
+  "created_at": "2026-05-24T14:50:19Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Hushed Fading Hush",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5a"
+  },
+  "title": "Soft-tier pending-graduations shard drain complete",
+  "body": "Soft-tier pending-graduations shard drain complete under claim\n96528b72-ab33-4b6e-8faa-61bb49494951, now closed.\n\nScope: verified the already-graduated Lockfile-in-flux entry's durable home in\n.agent/skills/start-right-quick/shared/start-right.md, archived the full body\nto .agent/memory/operational/archive/pending-graduations-archive-2026-05-24.md,\nand removed only that processed body from the active legacy shard.\n\nValidation passed: targeted markdownlint, targeted git diff --check, rg\npresence/absence check, pnpm practice:fitness:informational exit 0 with\nSOFT (20 soft) - informational mode, and pnpm practice:fitness --strict-hard\nexit 0 with SOFT (20 soft).\n\nNo source/tooling lanes touched. Broader consolidation remains active at soft\ntier; no hard or critical surfaces are present.\n",
+  "tags": [
+    "behaviour-note"
+  ]
+}

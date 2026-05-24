@@ -155,11 +155,11 @@ Map each responsibility to the right layer:
 
 Run reviewers against the doctrine and adoption plan:
 
-- `docs-adr-reviewer` for PDR/bridge quality;
-- `assumptions-reviewer` for proportionality and hidden deferrals;
-- `architecture-reviewer-fred` for boundary discipline.
-- `code-reviewer` for the closure gate and specialist coverage;
-- `test-reviewer` for doctor Phase 0/1 validation sequencing.
+- `docs-adr-expert` for PDR/bridge quality;
+- `assumptions-expert` for proportionality and hidden deferrals;
+- `architecture-expert-fred` for boundary discipline.
+- `code-expert` for the closure gate and specialist coverage;
+- `test-expert` for doctor Phase 0/1 validation sequencing.
 
 **Acceptance criteria**:
 
@@ -173,7 +173,7 @@ Run reviewers against the doctrine and adoption plan:
   provenance.
 - Merge-topology blocking policy is routed to the doctor Phase 0 defect ledger
   and Phase 1 topology fixtures.
-- The prior `test-reviewer` hold is closed for this plan and becomes a
+- The prior `test-expert` hold is closed for this plan and becomes a
   mandatory checkpoint after Doctor Phase 0 and before Phase 1 fixture work.
 
 ### Phase 5: Closure
@@ -280,5 +280,5 @@ The local immune-layer responsibilities are routed as follows:
 - 2026-05-07: Phase 4 review closure fixed the PDR-049 Core-portability leak
   by moving host-state and host-policy-path guidance into the host bridge. It
   also recorded dispositions for the legacy event terminal state and merge
-  topology policy, and moved the doctor test-reviewer hold to the post-Phase-0,
+  topology policy, and moved the doctor test-expert hold to the post-Phase-0,
   pre-Phase-1 checkpoint.

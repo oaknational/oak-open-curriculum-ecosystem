@@ -235,6 +235,47 @@ it('produces the expected result', () => {
 The correct test survives refactoring because it proves behaviour, not the
 private route to that behaviour.
 
+### Adding To Existing IO Debt In A Unit Test File
+
+Existing IO in a `*.unit.test.ts` file is **not** licence to add more.
+The unit-test taxonomy ([Testing
+Strategy](../../.agent/directives/testing-strategy.md) §Test Types)
+fixes the contract: pure, in-process, mock-free, no IO. A
+historically non-conformant file is a known gap, not a permission
+slip. When new behaviour you want to prove unit-style touches IO,
+the move is to **factor the pure logic out and unit-test the
+extract** — not to grow the IO fixture in place.
+
+Wrong shape (IO debt grows under the precedent argument):
+
+```typescript
+// some-thing.unit.test.ts (already imports fs and runs against the
+// real repo file system; "everyone else does it here so I will too")
+it('rejects malformed config', () => {
+  const config = JSON.parse(readFileSync('agent-tools/fixtures/bad-config.json', 'utf8'));
+  expect(parseConfig(config)).toEqual({ ok: false, error: 'malformed' });
+});
+```
+
+Correct shape (factor the pure parser; unit-test the extract):
+
+```typescript
+// agent-tools/src/lib/parse-config.ts (pure)
+export function parseConfig(input: unknown): ParseConfigResult {
+  /* ... */
+}
+
+// agent-tools/src/lib/parse-config.test.ts (unit, no FS)
+it('rejects malformed config', () => {
+  expect(parseConfig({ foo: 'bar' })).toEqual({ ok: false, error: 'malformed' });
+});
+```
+
+Walking around the file's existing debt with one more violation
+makes the next refactor harder; routing the new proof to a pure
+extract makes the next refactor land that pure extract for free.
+Local precedent is not a TDD authority; the test-type taxonomy is.
+
 ### Validator Script vs Integration Test
 
 Per [Testing Strategy § Test Types](../../.agent/directives/testing-strategy.md):
@@ -247,7 +288,7 @@ that do not match what the file is actually doing.
 Wrong shape (validator wearing a vitest harness):
 
 ```typescript
-// scripts/validate-portability.integration.test.ts
+// agent-tools/scripts/validate-portability.integration.test.ts
 it('every canonical skill has a Claude adapter', () => {
   const skills = readdirSync('.agent/skills');
   for (const skill of skills) {
@@ -269,7 +310,7 @@ it('reports canonical skills with no adapter', () => {
   expect(adapterMissingFor(['a', 'b'], ['a'])).toEqual(['b']);
 });
 
-// scripts/validate-portability.ts (runtime script wired into pnpm test:root-scripts)
+// agent-tools/scripts/validate-portability.ts (runtime script wired into a workspace command)
 const missing = adapterMissingFor(await listCanonicalSkills(), await listClaudeAdapters());
 if (missing.length > 0) {
   console.error(`Missing: ${missing.join(', ')}`);
@@ -283,3 +324,7 @@ Structural cue: if the test body is `readdirSync` / `existsSync` /
 the test runner. "Look at peers" is a useful first orientation, but
 peers can be drift — the canonical-pattern test is _named guidance in
 the directives_, not the count of similar sibling files.
+
+Root `scripts/` is intentionally retired. Runtime validators belong in a
+workspace-owned command surface such as `agent-tools/scripts/` or the package
+that owns the contract being validated.

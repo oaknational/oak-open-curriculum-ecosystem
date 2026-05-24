@@ -8,7 +8,7 @@
  * lands in WS3 once `ObservabilityEnvSchema` flows through `resolveEnv`.
  *
  * **This is a type-shape witness, not a runtime behaviour test** —
- * addresses test-reviewer 2026-05-02 finding 5 by stating the intent
+ * addresses test-expert 2026-05-02 finding 5 by stating the intent
  * explicitly. Each `it` block constructs a literal of the exported type
  * (`EnvResolveOk`, `EnvResolveErr`, `EnvResolveResult`, `EnvWarning`)
  * and the `runtime` assertions exist solely to provide a frame for the

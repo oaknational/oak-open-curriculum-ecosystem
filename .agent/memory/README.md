@@ -65,7 +65,7 @@ evolves (rarely).
 **Contents**:
 
 - [`executive/artefact-inventory.md`](executive/artefact-inventory.md) — canonical-vs-adapter taxonomy + how-to create new artefacts.
-- [`executive/invoke-code-reviewers.md`](executive/invoke-code-reviewers.md) — reviewer catalogue, triage ladder, worked examples.
+- [`executive/invoke-code-experts.md`](executive/invoke-code-experts.md) — reviewer catalogue, triage ladder, worked examples.
 - [`executive/cross-platform-agent-surface-matrix.md`](executive/cross-platform-agent-surface-matrix.md) — platform-adapter surface matrix.
 - [`executive/memory-state-substrate-contracts.md`](executive/memory-state-substrate-contracts.md) — human-facing host-local substrate instance for `.agent/state/`, `.agent/memory/`, generated read models, and historical roots; strict data lives beside it in `memory-state-substrate-contracts.manifest.json` and `memory-state-substrate-contracts.schema.json`; portable specification lives in PDR-050.
 

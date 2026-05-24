@@ -1,5 +1,6 @@
 ---
 name: "Drift Detection Test"
+polarity: pattern
 use_this_when: "A manually maintained list should match a canonical source but cannot be derived due to structural constraints, or repo-state drift needs detecting between maintained copies and canonical sources"
 category: code
 proven_in: "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-help.unit.test.ts"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Manual lists silently drifting from canonical sources when derivation is structurally blocked"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Drift Detection Test
 

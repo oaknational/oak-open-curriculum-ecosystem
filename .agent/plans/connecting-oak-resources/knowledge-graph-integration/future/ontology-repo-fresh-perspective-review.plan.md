@@ -10,7 +10,7 @@ related_plans:
   - "ontology-integration-strategy.md"
   - "../active/open-education-knowledge-surfaces.plan.md"
   - "../current/kg-alignment-audit.execution.plan.md"
-specialist_reviewer: "docs-adr-reviewer, assumptions-reviewer, onboarding-reviewer"
+specialist_reviewer: "docs-adr-expert, assumptions-expert, onboarding-expert"
 todos:
   - id: fp-1-source-lock
     content: "Pin the ontology repo commit or release being reviewed, and record the exact files, scripts, and generated artefacts used in the review."
@@ -95,7 +95,7 @@ Produce a short write-up that:
 ## Completion Note
 
 Executed 19 April 2026 as a narrowed single-deliverable synthesis rather
-than five independent documents, following an assumptions-reviewer
+than five independent documents, following an assumptions-expert
 assessment that the existing integration report already covered ~80% of
 the plan's stated purpose. The synthesis was appended as a
 "Fresh-Perspective Addendum" section to the

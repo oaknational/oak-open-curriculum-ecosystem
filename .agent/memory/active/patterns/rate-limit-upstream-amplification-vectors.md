@@ -1,5 +1,6 @@
 ---
 name: "Rate-Limit Upstream Amplification Vectors"
+polarity: pattern
 use_this_when: "A route produces an upstream request (API call, redirect, proxy fetch) as a side effect of handling an inbound request"
 category: architecture
 proven_in: "apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-handlers.ts, apps/oak-curriculum-mcp-streamable-http/src/asset-download/asset-download-route.ts"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Unprotected routes that amplify inbound requests into upstream API load, exhausting per-key quotas or third-party rate limits"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Rate-Limit Upstream Amplification Vectors
 

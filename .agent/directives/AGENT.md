@@ -44,9 +44,9 @@ Start with:
 - [practice-lineage.md](../practice-core/practice-lineage.md) — cross-repo
   propagation and plasmid exchange
 
-All work MUST start with the `start-right-quick` or `start-right-thorough`
-skills. If neither has been specified then read
-[`.agent/skills/start-right-quick/SKILL.md`](../skills/start-right-quick/SKILL.md)
+All work MUST start with the `start-right-quick`, `start-right-thorough`,
+or `start-right-team` skill. If none has been specified then read
+[`start-right-quick/SKILL-CANONICAL.md`](../skills/start-right-quick/SKILL-CANONICAL.md)
 immediately after reading this file, and apply it.
 
 For the layering contract, authority order, and routing rule, see
@@ -100,7 +100,7 @@ file listed in `RULES_INDEX.md` at session open.
 Apply your own critical thinking, then use reviewers when the platform and
 owner direction allow it. Reviewer routing, timing, roster, depth, and reporting
 requirements live in
-[invoke-code-reviewers.md](../memory/executive/invoke-code-reviewers.md).
+[invoke-code-experts.md](../memory/executive/invoke-code-experts.md).
 
 Agent workflow CLIs live in [agent-tools](../../agent-tools/README.md). Use
 root scripts such as `pnpm agent-tools:claude-agent-ops health` from the repo
@@ -112,9 +112,9 @@ Agent artefacts follow ADR-125's three-layer model: canonical content in
 [docs/engineering/extending.md](../../docs/engineering/extending.md) before
 adding rules, skills, commands, sub-agents, adapters, or ADRs.
 
-Use the [commit skill](../skills/commit/SKILL.md) for commits. It enumerates
-live commitlint constraints and validates the drafted message via
-`scripts/check-commit-message.sh` before `git commit`.
+Use the [commit skill canonical](../skills/commit/SKILL-CANONICAL.md) for
+commits. It enumerates live commitlint constraints and validates the drafted
+message via `scripts/check-commit-message.sh` before `git commit`.
 
 ## Memory And Continuity
 
@@ -127,6 +127,12 @@ Institutional memory lives in `.agent/memory/`:
   failure modes
 - [threads/](../memory/operational/threads/README.md) — thread convention,
   identity discipline, and next-session records
+
+Before inventing a new approach for code, architecture, process, testing, or
+agent infrastructure, check the repo-grounded patterns in
+[`patterns/`](../memory/active/patterns/README.md). If the problem is a
+portable Practice-governance shape, also check PDRs with `pdr_kind: pattern`
+in [`.agent/practice-core/decision-records/`](../practice-core/decision-records/README.md).
 
 Before joining an active thread, read the thread record and follow the
 additive identity rule.

@@ -25,17 +25,31 @@ export interface ToolPathParams {
   /** The unit slug */
   readonly unit: string;
 }
+/**
+ * Query parameters derived from the OpenAPI schema.
+ */
+export interface ToolQueryParams {
+  /** Allowed values: aqa, edexcel, eduqas, ocr, wjec, edexcelb */
+  readonly examBoard?: 'aqa' | 'edexcel' | 'eduqas' | 'ocr' | 'wjec' | 'edexcelb';
+  /** Allowed values: core, gcse */
+  readonly pathway?: 'core' | 'gcse';
+  /** Allowed values: core, foundation, higher */
+  readonly tier?: 'core' | 'foundation' | 'higher';
+  /** Allowed values: biology, chemistry, combined-science, physics */
+  readonly childSubject?: 'biology' | 'chemistry' | 'combined-science' | 'physics';
+}
 export interface ToolParams {
   readonly path: ToolPathParams;
+  readonly query?: ToolQueryParams;
 }
 
 export interface ToolArgs { readonly params: ToolParams; }
 
-export const toolInputJsonSchema = { type: 'object' as const, properties: {"unit":{"type":"string","description":"The unit slug","examples":["simple-compound-and-adverbial-complex-sentences"]}} as const, additionalProperties: false as const, required: ["unit"] };
-export const toolZodSchema = z.object({ params: z.object({ path: z.object({ unit: z.string().describe("The unit slug") }) }) });
-export const toolMcpFlatInputSchema = z.strictObject({ unit: z.string().describe("The unit slug").meta({ examples: ["simple-compound-and-adverbial-complex-sentences"] }) });
+export const toolInputJsonSchema = { type: 'object' as const, properties: {"unit":{"type":"string","description":"The unit slug","examples":["programming-subroutines"]},"examBoard":{"type":"string","enum":["aqa","edexcel","eduqas","ocr","wjec","edexcelb"]},"pathway":{"type":"string","enum":["core","gcse"]},"tier":{"type":"string","enum":["core","foundation","higher"]},"childSubject":{"type":"string","enum":["biology","chemistry","combined-science","physics"]}} as const, additionalProperties: false as const, required: ["unit"] };
+export const toolZodSchema = z.object({ params: z.object({ path: z.object({ unit: z.string().describe("The unit slug") }), query: z.object({ examBoard: z.enum(["aqa", "edexcel", "eduqas", "ocr", "wjec", "edexcelb"] as const).optional(), pathway: z.enum(["core", "gcse"] as const).optional(), tier: z.enum(["core", "foundation", "higher"] as const).optional(), childSubject: z.enum(["biology", "chemistry", "combined-science", "physics"] as const).optional() }).optional() }) });
+export const toolMcpFlatInputSchema = z.strictObject({ unit: z.string().describe("The unit slug").meta({ examples: ["programming-subroutines"] }), examBoard: z.enum(["aqa", "edexcel", "eduqas", "ocr", "wjec", "edexcelb"] as const).optional(), pathway: z.enum(["core", "gcse"] as const).optional(), tier: z.enum(["core", "foundation", "higher"] as const).optional(), childSubject: z.enum(["biology", "chemistry", "combined-science", "physics"] as const).optional() });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
-const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"unit":{"type":"string","description":"The unit slug","examples":["simple-compound-and-adverbial-complex-sentences"]}},"additionalProperties":false,"required":["unit"]}\nRequired: unit';
+const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"unit":{"type":"string","description":"The unit slug","examples":["programming-subroutines"]},"examBoard":{"type":"string","enum":["aqa","edexcel","eduqas","ocr","wjec","edexcelb"]},"pathway":{"type":"string","enum":["core","gcse"]},"tier":{"type":"string","enum":["core","foundation","higher"]},"childSubject":{"type":"string","enum":["biology","chemistry","combined-science","physics"]}},"additionalProperties":false,"required":["unit"]}\nRequired: unit';
 export const describeToolArgs = () => toolArgsDescription;
 /**
  * Transform flat MCP arguments to nested SDK format.
@@ -50,6 +64,12 @@ export function transformFlatToNestedArgs(flatArgs: z.infer<typeof toolMcpFlatIn
   const params: ToolParams = {
     path: {
       unit: flatArgs.unit,
+    },
+    query: {
+      examBoard: flatArgs.examBoard,
+      pathway: flatArgs.pathway,
+      tier: flatArgs.tier,
+      childSubject: flatArgs.childSubject,
     },
   };
   return { params };
@@ -113,7 +133,7 @@ export const getUnitsSummary = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Unit summary\n\nThis tool returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
+  description: "Unit summary\n\nThis tool returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit. Optional programme-factor filters can narrow the returned variant. The childSubject filter is only available for science units and accepts biology, chemistry, combined-science, or physics.\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
   path,
   method,
   documentedStatuses,

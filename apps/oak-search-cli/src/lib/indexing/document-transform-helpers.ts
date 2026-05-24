@@ -17,18 +17,17 @@ import type { AggregatedUnitContext } from './ks4-context-builder';
 export { extractPedagogicalData, createEnrichedRollupText };
 
 /**
- * KS4 fields for Elasticsearch documents.
- * Optional arrays following the denormalisation pattern in ADR-080.
+ * KS4 fields for Elasticsearch documents derived from sequence responses.
+ *
+ * Only tier and exam-subject fields are sourced here — exam-board and
+ * ks4-option fields are owned by the bulk-data pipeline (the live-API path
+ * does not have authoritative variant info per ADR-080).
  */
 export interface Ks4DocumentFields {
   readonly tiers?: string[];
   readonly tier_titles?: string[];
-  readonly exam_boards?: string[];
-  readonly exam_board_titles?: string[];
   readonly exam_subjects?: string[];
   readonly exam_subject_titles?: string[];
-  readonly ks4_options?: string[];
-  readonly ks4_option_titles?: string[];
 }
 
 /** Converts non-empty readonly array to mutable, or undefined. */
@@ -46,12 +45,8 @@ export function extractKs4DocumentFields(ks4Context: AggregatedUnitContext): Ks4
   return {
     tiers: nonEmptyOrUndefined(ks4Context.tiers),
     tier_titles: nonEmptyOrUndefined(ks4Context.tierTitles),
-    exam_boards: nonEmptyOrUndefined(ks4Context.examBoards),
-    exam_board_titles: nonEmptyOrUndefined(ks4Context.examBoardTitles),
     exam_subjects: nonEmptyOrUndefined(ks4Context.examSubjects),
     exam_subject_titles: nonEmptyOrUndefined(ks4Context.examSubjectTitles),
-    ks4_options: nonEmptyOrUndefined(ks4Context.ks4Options),
-    ks4_option_titles: nonEmptyOrUndefined(ks4Context.ks4OptionTitles),
   };
 }
 
@@ -121,14 +116,19 @@ export function extractLessonPlanningFields(summary: LessonDocumentSummaryInput)
 }
 
 /**
- * Extracts all fields from lesson summary for document creation.
+ * Extracts fields from a lesson summary for ES document creation.
  *
- * @param summary - Lesson summary (typed SDK data)
- * @returns Extracted fields for lesson document
+ * Unit membership is carried on the lesson document via the multi-unit
+ * `units[]` array passed separately into the document builder (see
+ * `CreateLessonDocumentParams.units` in `document-transforms.ts`), so this
+ * helper does not project a single `unitSlug` / `unitTitle` — the lesson
+ * resource is many-to-many with units per ADR-080 §"Context".
+ *
+ * @param summary - Lesson summary (typed SDK data, `SearchLessonSummary`).
+ * @returns Extracted fields for the lesson document, excluding unit
+ *   membership (passed in via `CreateLessonDocumentParams.units`).
  */
 export function extractLessonDocumentFields(summary: LessonDocumentSummaryInput): {
-  unitSlug: string;
-  unitTitle: string;
   oakUrl: string;
   lessonKeywords?: string[];
   keyLearningPoints?: string[];
@@ -142,15 +142,13 @@ export function extractLessonDocumentFields(summary: LessonDocumentSummaryInput)
   downloadsAvailable?: boolean;
 } {
   if (!summary.oakUrl) {
-    throw new Error(`Missing oak URL for lesson in unit ${summary.unitSlug}`);
+    throw new Error(`Missing oak URL for lesson "${summary.lessonTitle}"`);
   }
 
   const { lessonKeywords, keyLearningPoints, misconceptions, teacherTips, contentGuidance } =
     extractLessonPlanningFields(summary);
 
   return {
-    unitSlug: summary.unitSlug,
-    unitTitle: summary.unitTitle,
     oakUrl: summary.oakUrl,
     lessonKeywords,
     keyLearningPoints,

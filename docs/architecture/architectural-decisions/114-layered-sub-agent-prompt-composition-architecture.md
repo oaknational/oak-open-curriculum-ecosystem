@@ -1,6 +1,7 @@
 # ADR-114: Layered Sub-agent Prompt Composition Architecture
 
-**Status**: Accepted
+**Status**: Accepted. Amended 2026-05-10 to align examples with the
+`*-expert` agent naming model.
 **Date**: 2026-02-21
 **Related**: [ADR-060 (Agent Support Metadata System)](060-agent-support-metadata-system.md), [ADR-065 (Turbo Task Dependencies)](065-turbo-task-dependencies.md), [ADR-125 (Agent Artefact Portability)](125-agent-artefact-portability.md) — extends this model to all artefact types
 
@@ -37,7 +38,7 @@ This structure is documented in `.agent/sub-agents/README.md`.
 
 - `components/*` -> no local dependencies.
 - `templates/*` -> may reference `components/*`.
-- `.cursor/agents/*` -> should reference `templates/*` (preferred).
+- platform agent wrappers -> should reference `templates/*` (preferred).
 
 This creates a simple, acyclic relationship tree and makes prompt reuse explicit.
 
@@ -46,9 +47,9 @@ This creates a simple, acyclic relationship tree and makes prompt reuse explicit
 - Canonical prompt content moved into `.agent/sub-agents/templates/*`.
 - Shared DRY/YAGNI guidance moved to `.agent/sub-agents/components/principles/subagent-principles.md`.
 - Shared architecture reviewer team guidance moved to `.agent/sub-agents/components/architecture/reviewer-team.md`.
-- `.cursor/agents/*.md` simplified into thin wrappers that reference templates.
+- platform agent adapters simplified into thin wrappers that reference templates.
 - Compatibility aliases removed; canonical references are:
-  - `.agent/sub-agents/templates/code-reviewer.md`
+  - `.agent/sub-agents/templates/code-expert.md`
   - `.agent/sub-agents/components/principles/subagent-principles.md`
 
 ## Rationale
@@ -72,7 +73,7 @@ This creates a simple, acyclic relationship tree and makes prompt reuse explicit
 
 - Faster, safer updates to shared agent behaviour.
 - Lower risk of prompt inconsistency.
-- Clear separation between identity/dispatch (`.cursor/agents`) and canonical logic (`templates`).
+- Clear separation between identity/dispatch (platform adapters) and canonical logic (`templates`).
 - Easier onboarding for contributors editing sub-agents.
 
 ### Trade-offs
@@ -93,4 +94,4 @@ This creates a simple, acyclic relationship tree and makes prompt reuse explicit
 - `.agent/sub-agents/components/principles/subagent-principles.md`
 - `.agent/sub-agents/components/architecture/reviewer-team.md`
 - `.agent/sub-agents/templates/`
-- `.cursor/agents/`
+- `.cursor/agents/`, `.claude/agents/`, `.codex/agents/`, `.gemini/commands/`

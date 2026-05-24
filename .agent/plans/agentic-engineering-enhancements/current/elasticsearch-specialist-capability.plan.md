@@ -9,7 +9,7 @@ todos:
   - id: es-capability-doctrine
     content: "Define the Elasticsearch specialist doctrine, scope, and authority hierarchy."
     status: pending
-  - id: es-capability-reviewer
+  - id: es-capability-expert
     content: "Design the canonical Elasticsearch reviewer template and wrapper strategy."
     status: pending
   - id: es-capability-skill-rule
@@ -89,8 +89,8 @@ Without that capability, agents risk:
 ### Out of Scope
 
 - Creating a generic "search reviewer"
-- Replacing existing specialists such as `code-reviewer`, `test-reviewer`,
-  `security-reviewer`, `mcp-reviewer`, or the architecture reviewers
+- Replacing existing specialists such as `code-expert`, `test-expert`,
+  `security-expert`, `mcp-expert`, or the architecture reviewers
 - Committing product roadmap changes to Elastic capabilities as part of this
   artefact rollout
 - Treating the specialist as a substitute for benchmark evidence, ground truth,
@@ -120,7 +120,7 @@ The capability must follow these rules:
 
 Keep the reviewer and the skill distinct:
 
-- **`elasticsearch-reviewer`** is a read-only specialist reviewer. It assesses
+- **`elasticsearch-expert`** is a read-only specialist reviewer. It assesses
   correctness, best practice, Serverless applicability, and higher-value
   opportunity against official Elastic sources first.
 - **`elasticsearch-expert`** is an active workflow skill for the working agent.
@@ -195,17 +195,17 @@ retrieval methods, evaluation, ingest, or search tuning:
 ## Deliverables
 
 1. Canonical reviewer template:
-   `.agent/sub-agents/templates/elasticsearch-reviewer.md`
+   `.agent/sub-agents/templates/elasticsearch-expert.md`
 2. Reviewer adapters:
-   `.cursor/agents/elasticsearch-reviewer.md`
-   `.claude/agents/elasticsearch-reviewer.md`
+   `.cursor/agents/elasticsearch-expert.md`
+   `.claude/agents/elasticsearch-expert.md`
    `.gemini/commands/review-elasticsearch.toml`
-   `.agents/skills/elasticsearch-reviewer/SKILL.md`
+   `.agents/skills/elasticsearch-expert/SKILL.md`
 3. Canonical active-workflow skill:
    `.agent/skills/elasticsearch-expert/SKILL.md`
 4. Active-workflow skill adapters where required by platform conventions
 5. Canonical situational rule:
-   `.agent/rules/invoke-elasticsearch-reviewer.md`
+   `.agent/rules/invoke-elasticsearch-expert.md`
 6. Rule adapters where required by platform conventions
 7. Discoverability updates in collection indexes and relevant agent guidance
 8. Validation updates and deterministic checks for structural compliance

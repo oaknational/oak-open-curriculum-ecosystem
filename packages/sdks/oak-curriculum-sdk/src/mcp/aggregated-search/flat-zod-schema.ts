@@ -52,17 +52,23 @@ export const SEARCH_INPUT_SCHEMA: z.ZodRawShape = {
   unitSlug: z
     .string()
     .optional()
-    .describe('Filter lessons to a specific unit by slug. Lessons scope only.')
+    .describe(
+      'Filter lessons whose `units[]` contains an entry with this unit slug. A lesson can belong to multiple units across programme variants, so this filter matches a lesson if any of its unit entries has the supplied slug. Lessons scope only.',
+    )
     .meta({ examples: ['fractions', 'the-romans'] }),
   tier: z
     .string()
     .optional()
-    .describe('Filter by tier (foundation/higher). Lessons scope only, KS4.')
+    .describe(
+      "Filter to lessons available in this KS4 tier (foundation/higher). Tier is a programme-factor on the lesson's units; matching a lesson means at least one of its unit entries has this tier. Lessons scope only, KS4.",
+    )
     .meta({ examples: ['foundation', 'higher'] }),
   examBoard: z
     .string()
     .optional()
-    .describe('Filter by exam board. Lessons scope only.')
+    .describe(
+      "Filter to lessons offered by this exam board. Exam board is a programme-factor on the lesson's units; matching a lesson means at least one of its unit entries is tagged with this exam board. Lessons scope only.",
+    )
     .meta({ examples: ['aqa', 'edexcel', 'ocr'] }),
   year: z
     .union([z.string(), z.number().int().min(1).max(11)])

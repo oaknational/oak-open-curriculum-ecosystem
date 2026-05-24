@@ -1,6 +1,10 @@
-import { type CommitIntent, type CommitQueueRegistry } from './types.js';
-
-type CommitQueueEntryStatus = 'active' | 'expired' | 'abandoned';
+import { secondsUntilExpiry } from './time.js';
+import {
+  type CommitIntent,
+  type CommitQueueEntryStatus,
+  type CommitQueuePhase,
+  type CommitQueueRegistry,
+} from './types.js';
 
 interface CommitQueueStatusEntry {
   readonly intent_id: string;
@@ -27,6 +31,13 @@ interface CommitQueueStatusReport {
   readonly entries: readonly CommitQueueStatusEntry[];
 }
 
+interface CommitQueueListFilters {
+  readonly prefix?: string;
+  readonly phase?: CommitQueuePhase;
+  readonly agentName?: string;
+  readonly queueStatus?: CommitQueueEntryStatus;
+}
+
 /**
  * Format the advisory commit queue for machine-readable operator inspection.
  */
@@ -49,6 +60,37 @@ export function formatCommitQueueStatusText(registry: CommitQueueRegistry, nowIs
   return `${JSON.stringify(formatCommitQueueStatus(registry, nowIso), null, 2)}\n`;
 }
 
+/**
+ * Format filtered commit-queue entries for exact operator inspection.
+ */
+export function formatCommitQueueListText(
+  registry: CommitQueueRegistry,
+  nowIso: string,
+  filters: CommitQueueListFilters = {},
+): string {
+  const entries = registry.commit_queue
+    .map((entry) => statusEntry(entry, nowIso))
+    .filter((entry) => matchesListFilters(entry, filters));
+
+  return `${JSON.stringify(entries, null, 2)}\n`;
+}
+
+/**
+ * Format a single commit-queue entry by exact intent id.
+ */
+export function formatCommitQueueShowText(
+  registry: CommitQueueRegistry,
+  nowIso: string,
+  intentId: string,
+): string {
+  const entry = registry.commit_queue.find((candidate) => candidate.intent_id === intentId);
+  if (entry === undefined) {
+    throw new Error(`unknown intent_id: ${intentId}`);
+  }
+
+  return `${JSON.stringify(statusEntry(entry, nowIso), null, 2)}\n`;
+}
+
 export function writeCommitQueueStatus(
   registry: CommitQueueRegistry,
   nowIso: string,
@@ -58,8 +100,47 @@ export function writeCommitQueueStatus(
   return 0;
 }
 
+/**
+ * Write filtered commit-queue entries to stdout.
+ */
+export function writeCommitQueueList(
+  registry: CommitQueueRegistry,
+  nowIso: string,
+  filters: CommitQueueListFilters,
+  stdout: { write(chunk: string): void } = process.stdout,
+): number {
+  stdout.write(formatCommitQueueListText(registry, nowIso, filters));
+  return 0;
+}
+
+/**
+ * Write one exact commit-queue entry to stdout.
+ */
+export function writeCommitQueueShow(
+  registry: CommitQueueRegistry,
+  nowIso: string,
+  intentId: string,
+  stdout: { write(chunk: string): void } = process.stdout,
+): number {
+  stdout.write(formatCommitQueueShowText(registry, nowIso, intentId));
+  return 0;
+}
+
+function matchesListFilters(
+  entry: CommitQueueStatusEntry,
+  filters: CommitQueueListFilters,
+): boolean {
+  return (
+    (filters.prefix === undefined || startsWithIgnoreCase(entry.intent_id, filters.prefix)) &&
+    (filters.phase === undefined || entry.phase === filters.phase) &&
+    (filters.agentName === undefined ||
+      startsWithIgnoreCase(entry.agent_id.agent_name, filters.agentName)) &&
+    (filters.queueStatus === undefined || entry.queue_status === filters.queueStatus)
+  );
+}
+
 function statusEntry(entry: CommitIntent, nowIso: string): CommitQueueStatusEntry {
-  const secondsUntilExpiry = Math.floor((Date.parse(entry.expires_at) - Date.parse(nowIso)) / 1000);
+  const secondsUntilExpiryValue = secondsUntilExpiry(entry.expires_at, nowIso);
 
   return {
     intent_id: entry.intent_id,
@@ -71,8 +152,8 @@ function statusEntry(entry: CommitIntent, nowIso: string): CommitQueueStatusEntr
     updated_at: entry.updated_at,
     expires_at: entry.expires_at,
     phase: entry.phase,
-    queue_status: queueStatus(entry, secondsUntilExpiry),
-    seconds_until_expiry: secondsUntilExpiry,
+    queue_status: queueStatus(entry, secondsUntilExpiryValue),
+    seconds_until_expiry: secondsUntilExpiryValue,
     ...(entry.staged_bundle_fingerprint === undefined
       ? {}
       : { staged_bundle_fingerprint: entry.staged_bundle_fingerprint }),
@@ -81,6 +162,10 @@ function statusEntry(entry: CommitIntent, nowIso: string): CommitQueueStatusEntr
       : { staged_name_status: entry.staged_name_status }),
     ...(entry.notes === undefined ? {} : { notes: entry.notes }),
   };
+}
+
+function startsWithIgnoreCase(value: string, prefix: string): boolean {
+  return value.toLocaleLowerCase().startsWith(prefix.toLocaleLowerCase());
 }
 
 function queueStatus(entry: CommitIntent, secondsUntilExpiry: number): CommitQueueEntryStatus {

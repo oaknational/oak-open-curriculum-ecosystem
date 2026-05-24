@@ -14,6 +14,7 @@ import { resolveEnv } from '@oaknational/env-resolution';
 import { ok, err, type Result } from '@oaknational/result';
 import { SearchCliEnvSchema, type SearchCliEnv } from './env.js';
 import {
+  formatConfigError,
   resolveApplicationVersion,
   resolveGitSha,
   type ConfigError,
@@ -116,16 +117,16 @@ export function createSearchCliEnvLoader(options: LoadRuntimeConfigOptions): Sea
 /**
  * Print structured config diagnostics to stderr.
  *
+ * Thin side-effect wrapper around `formatConfigError` (from
+ * `runtime-config-support.ts`). The formatter is pure and tested
+ * directly; this wrapper exists only to attach the stderr side
+ * effect.
+ *
  * @param error - Config validation error from the runtime config pipeline
  * @returns void
  */
 export function printConfigError(error: ConfigError): void {
-  process.stderr.write(`Environment validation failed: ${error.message}\n`);
-  for (const diagnostic of error.diagnostics) {
-    if (!diagnostic.present) {
-      process.stderr.write(`  ${diagnostic.key}: MISSING\n`);
-    }
-  }
+  process.stderr.write(formatConfigError(error));
 }
 
 /**

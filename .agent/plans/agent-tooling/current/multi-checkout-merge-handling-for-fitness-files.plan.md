@@ -47,7 +47,9 @@ isProject: false
 
 **Last Updated**: 2026-05-07
 **Status**: 🔴 NOT STARTED — broad fitness-file driver work remains
-blocked on *fitness-frontmatter-manifest-sweep.plan.md*; the
+blocked on
+[`fitness-token-measurements-and-frontmatter-mandation.plan.md`](../../agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md),
+which supersedes *fitness-frontmatter-manifest-sweep.plan.md*; the
 state/memory contract-doctor slice is unblocked and owned by
 [`memory-state-contract-doctor.plan.md`](../archive/completed/memory-state-contract-doctor.plan.md).
 **Scope**: Make multi-checkout work safe for the repo's
@@ -120,9 +122,11 @@ checkout; multi-checkout merges hit a different seam.
 
 The fitness frontmatter (`fitness_line_target` etc.) is the
 natural manifest of "knowledge-accretion surface with bounded size."
-The *fitness-frontmatter-manifest-sweep* plan (sibling, in flight)
-makes this manifest coherent. Without that work, this plan cannot
-key its routing on the manifest.
+The
+[`fitness-token-measurements-and-frontmatter-mandation`](../../agentic-engineering-enhancements/current/fitness-token-measurements-and-frontmatter-mandation.plan.md)
+plan is in review and supersedes the older *fitness-frontmatter-manifest-sweep*
+plan. It makes this manifest coherent. Without that work, this plan cannot key
+its routing on the manifest.
 
 ### Issue 6: Content reconciliation without git topology loses future merge data
 
@@ -281,25 +285,25 @@ Bespoke drivers + a focused first-party reconcile command, both built
 on top of native git's `gitattributes` extension point. Sunk-cost
 reasoning is *not* the rationale: the alternatives genuinely do not
 fit (markdown-with-fitness-semantics is not a shape vendor tools
-target). `assumptions-reviewer` runs against this attestation
+target). `assumptions-expert` runs against this attestation
 pre-ExitPlanMode at Phase 0.
 
 ---
 
 ## Reviewer Scheduling (phase-aligned)
 
-- **Pre-execution (Phase 0)**: `assumptions-reviewer` (challenge:
+- **Pre-execution (Phase 0)**: `assumptions-expert` (challenge:
   is the layered shape right? Are there valid options not surveyed?
   Should some files leave git entirely?). Vendor specialist *not*
   applicable — bespoke first-party.
-- **During Phases 2–3**: `test-reviewer` (RED proves the right
-  thing); `architecture-reviewer-betty` (cohesion / coupling of the
-  driver shape); `code-reviewer` gateway.
-- **During Phases 4–5**: `architecture-reviewer-fred` (principles-
-  first; reconcile must not silently mutate); `test-reviewer`.
-- **During Phase 6**: `architecture-reviewer-wilma` (adversarial:
+- **During Phases 2–3**: `test-expert` (RED proves the right
+  thing); `architecture-expert-betty` (cohesion / coupling of the
+  driver shape); `code-expert` gateway.
+- **During Phases 4–5**: `architecture-expert-fred` (principles-
+  first; reconcile must not silently mutate); `test-expert`.
+- **During Phase 6**: `architecture-expert-wilma` (adversarial:
   what hides under "in-fitness" or "no broken cross-refs"?).
-- **Post**: `docs-adr-reviewer`, `release-readiness-reviewer`.
+- **Post**: `docs-adr-expert`, `release-readiness-expert`.
 
 Scheduling all reviewers at close is phase-misalignment.
 
@@ -329,8 +333,9 @@ Before beginning work and at the start of each phase:
    substrate; collisions with peer work are particularly likely.
 3. Register active areas before edits — drivers under `scripts/`
    or `.git/`-adjacent infrastructure; reconcile command in
-   `.agent/commands/`; CI workflow files; precommit hook
-   configuration.
+   `.agent/skills/consolidate-docs/`, `agent-tools/`, scripts, or
+   the final package/tooling surface; CI workflow files; precommit
+   hook configuration.
 4. Apply
    [`lifecycle-triggers`](../../templates/components/lifecycle-triggers.md)
    for the cross-cutting Phases 6–7.
@@ -389,7 +394,7 @@ to make the trade-offs visible.
 5. ✅ Pre-commit warning scope: every fitness file, or only those
    already touched by another active claim?
 
-**Build-vs-buy attestation review**: assumptions-reviewer challenges
+**Build-vs-buy attestation review**: assumptions-expert challenges
 the bespoke choice; owner confirms or redirects.
 
 **Task Complete When**: Owner has confirmed the architectural shape;
@@ -423,7 +428,8 @@ test them against actual current state, not the abstract typology.
 **Acceptance Criteria**:
 
 1. ✅ Every fitness-managed file (per the manifest produced by the
-   *fitness-frontmatter-manifest-sweep* plan) has a recorded shape.
+   *fitness-token-measurements-and-frontmatter-mandation* plan) has a recorded
+   shape.
 2. ✅ Files needing custom drivers vs reconcile vs both are
    itemised.
 3. ✅ Edge cases recorded — e.g. a PDR with both static body and
@@ -553,10 +559,9 @@ file in each, merges, and asserts the result]
 
 #### Task 5.1: `pnpm consolidate-docs:reconcile`
 
-**Likely shape**: a new command in `.agent/commands/`, invoked as
-`/jc-consolidate-docs:reconcile` or as the `pnpm` script. Reads
-fitness frontmatter; iterates touched files; surfaces issues; walks
-the agent through cures.
+**Likely shape**: a `pnpm` script backed by the current skill/tooling surface,
+not the retired `.agent/commands/` path. Reads fitness frontmatter; iterates
+touched files; surfaces issues; walks the agent through cures.
 
 **Acceptance Criteria**:
 
@@ -567,9 +572,9 @@ the agent through cures.
    fitness AND no broken cross-refs remain AND owner has confirmed
    the section-level merges (where applicable).
 4. ✅ Command is invoked from any branch; not main-only.
-5. ✅ Documented in the appropriate canonical location (the existing
-   `.agent/commands/consolidate-docs.md` is the natural sibling; the
-   reconcile variant is a narrower entry point).
+5. ✅ Documented in the appropriate canonical location, currently
+   `.agent/skills/consolidate-docs/SKILL-CANONICAL.md` or the package/tooling
+   surface that owns the final `pnpm` entrypoint.
 
 **Deterministic Validation**:
 
@@ -600,7 +605,7 @@ pnpm test:root-scripts
    `pnpm consolidate-docs:reconcile` and update
    `last_reconciled_at`."
 3. ✅ Gate is keyed on fitness frontmatter (per the manifest from the
-   *fitness-frontmatter-manifest-sweep* plan), not on a hand-
+   *fitness-token-measurements-and-frontmatter-mandation* plan), not on a hand-
    maintained path-list.
 4. ✅ Owner waiver path documented (rare cases where the gate must
    be bypassed; the waiver is owner-explicit, not agent-explicit).
@@ -786,8 +791,8 @@ pnpm markdownlint:root
 
 **Blocking**:
 
-- *Fitness-frontmatter manifest sweep* — must complete before this
-  plan can key its routing on the manifest.
+- *Fitness-token measurements and frontmatter mandation* — must complete
+  before this plan can key its routing on the manifest.
 
 **Related Plans**:
 
@@ -856,7 +861,7 @@ files?
 ## References
 
 - Existing fitness infrastructure: `pnpm practice:fitness:*`.
-- Existing consolidation: `.agent/commands/consolidate-docs.md`.
+- Existing consolidation: `.agent/skills/consolidate-docs/SKILL-CANONICAL.md`.
 - Existing collaboration directive: `.agent/directives/agent-collaboration.md`.
 - Existing collision-safety rule:
   `.agent/rules/respect-active-agent-claims.md` (write-time analogue).
@@ -925,7 +930,7 @@ passes end-to-end.
 
 ```bash
 # 1. No type shortcuts in drivers or reconcile.
-git diff main..HEAD -- scripts/git-merge-drivers/ .agent/commands/ \
+git diff main..HEAD -- scripts/git-merge-drivers/ .agent/skills/consolidate-docs/ agent-tools/ scripts/ \
   | grep -E '\b(as |any\b|@ts-expect-error)'
 # Expected: no new matches.
 

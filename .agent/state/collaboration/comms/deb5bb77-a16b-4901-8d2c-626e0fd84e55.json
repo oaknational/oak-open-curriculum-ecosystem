@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "deb5bb77-a16b-4901-8d2c-626e0fd84e55",
+  "created_at": "2026-05-24T08:51:27.366Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Scorched Tempering Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "52b263"
+  },
+  "title": "Heartbeat-end: Scorched Tempering Kiln (52b263) — session-end, closeout broadcast follows",
+  "body": "Final heartbeat-end per SKILL §0.5. Heartbeat cron stopped; all-channels watcher stopped. Session closing under owner direction. No retirement-rule false-positive expected — closeout broadcast follows immediately."
+}

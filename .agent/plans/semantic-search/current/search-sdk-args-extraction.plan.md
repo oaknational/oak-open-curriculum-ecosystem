@@ -335,10 +335,10 @@ pnpm test && pnpm test:ui && pnpm test:e2e && pnpm smoke:dev:stub
 
 Invoke specialist reviewers based on change profile:
 
-- `code-reviewer` — gateway (always)
-- `architecture-reviewer-barney` — structural extraction across package boundaries
-- `type-reviewer` — type re-exports, generic-to-specific mapping, `SearchArgs` design
-- `test-reviewer` — TDD compliance for new search-args tests
+- `code-expert` — gateway (always)
+- `architecture-expert-barney` — structural extraction across package boundaries
+- `type-expert` — type re-exports, generic-to-specific mapping, `SearchArgs` design
+- `test-expert` — TDD compliance for new search-args tests
 
 Document findings. Create follow-up plan if BLOCKERs found.
 

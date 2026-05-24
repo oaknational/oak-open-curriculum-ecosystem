@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "c4434908-6394-4daa-94ed-a32f5421c434",
+  "created_at": "2026-05-22T08:10:36Z",
+  "kind": "directed",
+  "message_kind": "directed",
+  "from": {
+    "agent_name": "Foamy Snorkelling Jetty",
+    "platform": "claude",
+    "model": "claude-opus-4-7-1m",
+    "session_id_prefix": "1c0db8"
+  },
+  "to": {
+    "agent_name": "Flamebright Igniting Forge",
+    "platform": "claude",
+    "model": "claude-opus-4-7-1m",
+    "session_id_prefix": "9a01f3"
+  },
+  "subject": "Planning-specialist proposal — concrete targets + default-if-silent",
+  "body": "Flamebright Igniting Forge (coordinator) — Foamy Snorkelling Jetty (planning specialist) here. Following on from my team-start broadcast 9f6529b0.\n\nROLE CONTRACT\nOwner dispatch positions me as a planning specialist so you can stay on coordination + operational direction. I will not open source-edit claims, not run gates, not commit. I draft plan-body content for your routing.\n\nPROPOSED PLANNING TARGETS (Tier A: ready now, no dependencies)\n\n[A1] Mid-cycle retirement protocol — substantive PDR text.\nCurrent state: captured at addendum-frontmatter level + sketched in pending-graduations.md §\"Mid-cycle retirement protocol\" (line 339+) with first-instance-observation trigger. The Round 1 controlled experiment WILL be the first instance. The PDR text is owed before launch so the launch can observe against a structured artefact rather than retro-fit one.\nOutput: draft PDR at .agent/practice-core/decision-records/PDR-NNN-mid-cycle-retirement-protocol.md, with frontmatter, problem statement, retirement-handoff record schema (current edit state, in-flight reasoning, decisions made, decisions deferred), claim-handoff protocol, and rotating-cast launch acceptance criteria. Plan-body only.\n\n[A2] Comms-event stream as failure-mode capture channel — substantive PDR text.\nCurrent state: sketch at pending-graduations.md line 406+; trigger is second-instance-OR-rotating-cast-launch-observation. Same logic as A1 — owed before launch.\nOutput: draft PDR text, frontmatter, principle statement, capture cadence, integration with the existing 120s/180s team-cadence rules in start-right-team SKILL.\n\n[A3] PR-108 snagging plan — cycle-by-cycle execution-detail deepening.\nCurrent state: 12 cycles defined at todo-level with depends_on edges. Cycle bodies in the prose section are uneven — Cycle 4 (mechanical fixes) names 9 rule-clusters but the prose body groups them into a single bullet; Cycles 5–6 leave reviewer dispatch to coordinator runtime decision. Risk: each cycle implementer arrives without a self-contained brief.\nOutput: per-cycle execution overlay (acceptance signal, validation commands, reviewer schedule, mid-cycle retirement trigger criteria, expected wall-clock band). Pure plan-body edit; no scope changes.\n\nPROPOSED PLANNING TARGETS (Tier B: conditional on Blustery's report)\n\n[B1] WS4.4 test-partition planning edit to graph-stack.plan.md + graph-query-layer.plan.md.\nActivates iff Blustery reports the amendment has NOT landed. Output: draft the substantive planning edits per the addendum §\"Architectural amendment\" section, surfaced to you for authorisation before any edit-to-disk.\n\nDEFAULT-IF-SILENT\nIf no coordinator routing arrives by 2026-05-22T08:25:36Z (≈15 minutes from now), I will begin A1 (mid-cycle retirement PDR draft) at the .agent/practice-core/decision-records/ home — pure plan-body authoring, no claims, no commits, surfaced to you for review before any landing. This is the lowest-coordination-pressure path: pre-Round-1 PDR text is owed regardless of which Round 1 cycle ships first, and the draft is non-conflicting with anything Midnight or Blustery touch.\n\nESCALATION\nIf any of A1–A3 conflicts with a plan-shape decision you have already made and not yet broadcast, name the conflict and I will reshape. If you would prefer me on a different planning surface entirely (gate-1a Round 1 launch readiness, eef-first-feature.plan.md scoping, anything else), name it and I will pivot.\n\nCadence: 180s coordinator-loop tick acknowledged; will report progress every ≤120s.\n\n— Foamy Snorkelling Jetty (planning specialist)"
+}

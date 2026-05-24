@@ -11,8 +11,7 @@ import {
 function buildLessonSummary(overrides: Partial<SearchLessonSummary> = {}): SearchLessonSummary {
   const base = {
     lessonTitle: 'Lesson Title',
-    unitSlug: 'unit-slug',
-    unitTitle: 'Unit Title',
+    units: [{ unitSlug: 'unit-slug', unitTitle: 'Unit Title' }],
     subjectSlug: 'maths',
     subjectTitle: 'Mathematics',
     lessonKeywords: [{ keyword: 'fraction', description: 'A part of a whole' }],

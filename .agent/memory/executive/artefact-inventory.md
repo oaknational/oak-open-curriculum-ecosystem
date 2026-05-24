@@ -20,9 +20,8 @@ For the live platform support matrix, see
 
 | Location | Purpose |
 |----------|---------|
-| `.agent/skills/*/SKILL.md` | Canonical skills |
+| `.agent/skills/<name>/SKILL-CANONICAL.md` | Canonical skills (sole user-and-model-invokable workflow surface) |
 | `.agent/rules/*.md` | Canonical rules — reinforcements of policy |
-| `.agent/commands/*.md` | Canonical commands |
 | `.agent/directives/*.md` | Policy documents (AGENT.md, principles.md, etc.) |
 | `.agent/sub-agents/templates/*.md` | Canonical sub-agent prompts (ADR-114) |
 | `.agent/memory/active/patterns/` | Reusable solutions ([README](../active/patterns/README.md)) |
@@ -49,12 +48,11 @@ boundary is ADR-165.
 
 ## Platform Adapters (Layer 2)
 
-| Surface | Cursor | Claude Code | Codex | Gemini |
+| Surface | Cursor | Claude Code | Codex (`.agents/` alias) | Gemini |
 |---------|--------|-------------|-------|--------|
-| Skills | `.cursor/skills/*/SKILL.md` | `.claude/skills/*/SKILL.md` | `.agents/skills/*/SKILL.md` | — |
-| Commands | `.cursor/commands/*.md` | `.claude/commands/*.md` | `.agents/skills/jc-*/SKILL.md` | `.gemini/commands/*.toml` |
+| Skills | (reads `.agents/skills/`) | `.claude/skills/jc-*/SKILL.md` | `.agents/skills/jc-*/SKILL.md` | (reads `.agents/skills/`) |
 | Rules | `.cursor/rules/*.mdc` | `.claude/rules/*.md` | `.agents/rules/*.md` | — |
-| Sub-agents | `.cursor/agents/*.md` | `.claude/agents/*.md` | `.codex/agents/*.toml` | — |
+| Sub-agents | `.cursor/agents/*.md` | `.claude/agents/*.md` | `.codex/agents/*.toml` | (`review-*.toml` transitional, sub-agent only) |
 
 Platform adapters are thin pointers. Canonical content lives under
 `.agent/`; adapters preserve platform activation semantics without copying
@@ -68,33 +66,18 @@ Run `pnpm portability:check` after adding to verify parity.
 
 ### New Skill
 
-1. **Canonical**: `.agent/skills/<name>/SKILL.md`
-2. **Cursor**: `.cursor/skills/<name>/SKILL.md`
-3. **Claude Code**: `.claude/skills/<name>/SKILL.md`
-4. **`.agents/`**: `.agents/skills/<name>/SKILL.md`
-5. **Claude settings**: add `Skill(<name>)` to
-   `.claude/settings.json` `permissions.allow`
+1. **Canonical**: `.agent/skills/<name>/SKILL-CANONICAL.md` (with
+   `classification: active | passive` frontmatter)
+2. **Adapters (generated)**: `.agents/skills/jc-<name>/SKILL.md` and
+   `.claude/skills/jc-<name>/SKILL.md` — emitted by
+   `pnpm agent-tools:skills-adapter-generate`; **manual edits forbidden**
+3. **Claude settings**: add `Skill(jc-<name>)` and
+   `Skill(jc-<name>:*)` to `.claude/settings.json` `permissions.allow`
+4. **Verification**: `pnpm skills:check` (adapter drift) and
+   `pnpm portability:check` (permission + canonical frontmatter)
 
-Adapter (same for Cursor/Claude/Codex): YAML front-matter with
-`name` + `description`, body = `Read and follow
-.agent/skills/<name>/SKILL.md`.
-
-### New Command
-
-1. **Canonical**: `.agent/commands/<name>.md`
-2. **Cursor**: `.cursor/commands/jc-<name>.md`
-3. **Claude Code**: `.claude/commands/jc-<name>.md`
-4. **`.agents/`**: `.agents/skills/jc-<name>/SKILL.md`
-5. **Gemini**: `.gemini/commands/jc-<name>.toml`
-6. **Claude settings**: add `Skill(jc-<name>)` and
-   `Skill(jc-<name>:*)` to `.claude/settings.json`
-
-Adapter bodies all delegate: `Read and follow .agent/commands/<name>.md`.
-
-- **Cursor**: plain markdown heading + `@.agent/commands/<name>.md`
-- **Claude**: YAML front-matter (`description`, `allowed-tools: Read, Bash`)
-- **`.agents/`**: YAML front-matter (`name: jc-<name>`, `description`)
-- **Gemini**: TOML (`description`, `prompt`)
+Skills are the sole user-and-model-invokable workflow surface; custom
+command surfaces are retired (see ADR-125 §2026-05-10).
 
 ### New Rule
 

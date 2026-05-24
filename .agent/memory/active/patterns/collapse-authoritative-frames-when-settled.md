@@ -1,5 +1,6 @@
 ---
 name: "Collapse Authoritative Frames When the Decision Is Settled"
+polarity: pattern
 use_this_when: "a document or plan carries multiple authoritative descriptions of the same concept (headings + tables + inline notes), especially after a reorganisation. Each frame becomes a drift trap; 'transitional dual-frame with sunset note' is unstable."
 category: process
 proven_in: ".agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md reshape (initial 5-wave commit 7f5b18e7 left historical \u00a7Phase N headers + per-lane execution-phase notes + authoritative \u00a7Phase Structure table; physical-reorder commit 2e8a140d collapsed to a single frame at owner direction)"
@@ -11,6 +12,10 @@ barrier:
   stable: true
 related_pattern: findings-route-to-lane-or-rejection.md
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Collapse Authoritative Frames When the Decision Is Settled
 

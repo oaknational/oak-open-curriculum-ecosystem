@@ -1,9 +1,14 @@
 ---
 name: "Narrow re-exports at package boundaries"
+polarity: pattern
 use_this_when: "A wrapper library re-exports types from an underlying SDK"
 category: code
 proven_in: "packages/libs/sentry-node/src/index.ts"
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Narrow Re-exports at Package Boundaries
 

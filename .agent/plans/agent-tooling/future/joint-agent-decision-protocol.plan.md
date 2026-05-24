@@ -211,35 +211,35 @@ schema, directive, command, rule, and collaboration state surfaces.
 
 ## Reviewer Scheduling (phase-aligned)
 
-The implementation plan was reviewed by `assumptions-reviewer` before
+The implementation plan was reviewed by `assumptions-expert` before
 landing. Future refinements should follow the standard three-phase
 rhythm:
 
 ### Plan-phase (PRE-ExitPlanMode in `current/`) — challenges solution-class
 
-- `assumptions-reviewer` — proportionality (do we genuinely need a
+- `assumptions-expert` — proportionality (do we genuinely need a
   fifth-and-sixth WS3A entry kind? is signalling really insufficient?
   is the role vocabulary too rigid?); blocking-legitimacy (the protocol
   is advisory; ensure no path makes it a refusal mechanism); two-agent
   vs three-agent assumption (does the phase-transition framing hold up
   under scrutiny?).
-- `architecture-reviewer-betty` — cohesion/coupling: where does
+- `architecture-expert-betty` — cohesion/coupling: where does
   joint-decision live (decision threads, sidebar, both)? Does role
   assignment couple too tightly to identity?
 
 ### Mid-cycle (DURING execution) — challenges solution-execution
 
-- `architecture-reviewer-wilma` — adversarial failure modes: what
+- `architecture-expert-wilma` — adversarial failure modes: what
   happens when a recorder forgets? When two agents claim recorder for
   the same decision? When the actor's session ends mid-action?
-- `test-reviewer` — RED fixtures for the new entry kinds, the
+- `test-expert` — RED fixtures for the new entry kinds, the
   acknowledgement requirement, the role-handoff path.
 
 ### Close (POST-execution) — verifies coherence
 
-- `docs-adr-reviewer` — directive, command, and consolidation surfaces
+- `docs-adr-expert` — directive, command, and consolidation surfaces
   align with the schema.
-- `release-readiness-reviewer` — protocol is observable, advisory, and
+- `release-readiness-expert` — protocol is observable, advisory, and
   does not block other agents under any path.
 
 ---
@@ -371,8 +371,8 @@ When promoted to `current/`:
 
 - [ ] Move file from `future/` to `current/`; rename if scope tightens.
 - [ ] Add Phase 0 owner gates (role-vocabulary granularity, sidebar
-      integration timing) — resolve via `assumptions-reviewer` +
-      `architecture-reviewer-betty` dispatch before WS1.
+      integration timing) — resolve via `assumptions-expert` +
+      `architecture-expert-betty` dispatch before WS1.
 - [ ] Add WS1 RED fixtures for the schema extension and
       acknowledgement-required path.
 - [ ] Update parent

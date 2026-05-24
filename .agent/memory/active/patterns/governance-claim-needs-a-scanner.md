@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-022
 name: "Governance Claim Needs a Scanner"
+polarity: pattern
 use_this_when: "An ADR or governance document asserts that some property holds 'everywhere' across a set of live surfaces (one vocabulary, a required citation, a mandatory field, a platform-adapter parity), and prose alone is the only enforcement."
 category: agent
 proven_in: "scripts/validate-fitness-vocabulary.mjs"
@@ -11,6 +12,10 @@ barrier:
   prevents_recurring_mistake: "Universal governance claims drifting out of compliance silently because prose says 'must' but no scanner enforces it"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Governance Claim Needs a Scanner
 

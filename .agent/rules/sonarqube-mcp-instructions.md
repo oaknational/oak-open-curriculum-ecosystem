@@ -38,6 +38,13 @@ Per-issue dismissals via `change_sonar_issue_status` (status `accept` / `falsepo
 
 For Security Hotspots, the QG condition `new_security_hotspots_reviewed = 100%` requires each hotspot to move from `TO_REVIEW` to `REVIEWED` with a resolution (`FIXED` / `SAFE` / `ACKNOWLEDGED`). Use `change_security_hotspot_status` with an explicit comment carrying the rationale at each hotspot. Without rationale comments, the audit trail is too thin for future readers.
 
+After changing a hotspot status, do not use `show_security_hotspot.comments` as
+the audit-trail verification surface. That MCP read model can return an empty
+`comments` array and no changelog field even when the write accepted a
+rationale. Verify rationale visibility through the Sonar REST hotspot endpoint
+instead: `/api/hotspots/show?hotspot=<hotspot-key>` and inspect its
+`changelog` entries for the rationale-bearing transition.
+
 ## Common troubleshooting
 
 ### Authentication

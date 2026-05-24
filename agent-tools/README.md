@@ -22,10 +22,15 @@ adjacent mechanisms are Practice substance by default per
 This repository's local implementation boundary is recorded in
 [ADR-165](../docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md).
 
-It provides five operator tools:
+It provides a unified `agent-tools` entrypoint with topic dispatch for the
+hot collaboration tools, plus specialised operator tools that still own their
+domain-specific flows:
 
 - `agent-identity`: derive deterministic agent display names from explicit stable seeds.
 - `collaboration-state`: safely mutate shared collaboration state with identity preflight, immutable comms events, transaction-guarded JSON writes, and TTL cleanup.
+- `commit-queue`: coordinate short-lived git index/head commit windows and verify staged bundles before commit.
+- `branch-touched-files`: report the files touched by a branch against a base ref.
+- `context-cost`: estimate chars/4 token cost for an arbitrary fileset from repeatable glob inputs.
 - `claude-agent-ops`: monitor background agents, inspect logs, diff worktrees, run preflight checks, and run a summary-first health probe for agent infrastructure drift.
 - `cursor-session-from-claude-session`: find/inspect Claude sessions and generate Cursor takeover bundles with an explicit reintegration contract.
 - `codex-reviewer-resolve`: resolve a repo-local Codex reviewer adapter to the exact `.codex` and canonical `.agent` files that should ground a review.
@@ -36,7 +41,9 @@ It provides five operator tools:
 agent-tools/
 ├─ src/bin/      # CLI entrypoints
 ├─ src/core/     # Shared runtime/session helpers
-└─ tests/        # Unit/integration/e2e coverage
+├─ tests/        # Shared test fakes and legacy co-located coverage
+├─ e2e-tests/    # E2E suites
+└─ smoke-tests/  # Local running-command smoke checks
 ```
 
 ## Commands
@@ -48,12 +55,171 @@ pnpm agent-tools:build
 pnpm agent-tools:lint
 pnpm agent-tools:test
 pnpm agent-tools:test:e2e
-pnpm agent-tools:agent-identity --seed example-session-id-001 --format display
-pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5
+pnpm agent-tools:smoke:collaboration-tui
+pnpm agent-tools agent-identity --seed example-session-id-001 --format display
+pnpm agent-tools collaboration-state identity preflight --platform codex --model GPT-5
+pnpm agent-tools context-cost --glob '.agent/rules/*.md'
 pnpm agent-tools:claude-agent-ops status
 pnpm agent-tools:claude-agent-ops health
 pnpm agent-tools:cursor-session-from-claude-session find --last-hours 2
-pnpm agent-tools:codex-reviewer-resolve code-reviewer
+pnpm agent-tools:codex-reviewer-resolve code-expert
+```
+
+## Unified entrypoint
+
+`pnpm agent-tools <topic> <action> [options]` is the stable hot path for
+collaboration tooling. The package scripts for `agent-identity`,
+`collaboration-state`, `commit-queue`, `branch-touched-files`, and
+`context-cost` are thin
+shortcuts to the same built `dist/src/bin/agent-tools.js` file; they no longer
+run `pnpm -s build` before every invocation. After editing `agent-tools`
+source, run `pnpm agent-tools:build` once before using those built CLI scripts.
+
+Examples:
+
+```bash
+pnpm agent-tools agent-identity --seed example-session-id-001 --format json
+pnpm agent-tools collaboration-state claims list --active .agent/state/collaboration/active-claims.json
+pnpm agent-tools commit-queue status
+pnpm agent-tools branch-touched-files --json
+pnpm agent-tools context-cost --glob '.agent/rules/*.md'
+pnpm agent-tools --log-json agent-identity --seed example-session-id-001
+```
+
+## CLI Norms
+
+Every agent-tools CLI command — top-level `agent-tools`, every topic
+subcommand (`agent-identity`, `collaboration-state`, `commit-queue`,
+`branch-touched-files`, `context-cost`, `claude-agent-ops`, etc.), and
+every action within those topics — MUST satisfy the following help
+contract. This is a hard requirement.
+
+- **`--help` accepts no value** and prints the full usage block for the
+  command at hand: command name, all required flags marked clearly
+  (asterisk, `REQUIRED` tag, or grouping header), all optional flags
+  with defaults, expected value formats (uuid, ISO-8601, glob, enum with
+  allowed values), and at least one example invocation.
+- **On invalid flags, missing required flags, or unsupported enum values,
+  print the error line AND the same full help block, then exit non-zero.**
+  A single-line error response (`missing required option --xyz`;
+  `unsupported area kind: foo`; `Exit status 2` with no detail) is
+  insufficient.
+- **Enum-shaped flags (`--area-kind`, `--platform`, `--phase`, similar)
+  must list allowed values on validation failure**, not just say
+  `unsupported`. The error message names the offered value, the allowed
+  set, and the flag.
+- **`--help` is wired at every subcommand depth**, not just at the top
+  level: `pnpm agent-tools collaboration-state claims open --help` MUST
+  print the `claims open` usage block, not the `collaboration-state`
+  overview.
+
+The norm exists because source-grep is an unreliable fallback under
+in-flight refactors (see [`use-built-agent-tools-cli.md`](../.agent/rules/use-built-agent-tools-cli.md)):
+the source structure can change between agent invocations, so the CLI
+help text must be the canonical discovery surface. Owner direction
+2026-05-05 after the 7-agent coordination session. Source: Claude
+per-user memory `feedback_agent_tool_help_on_invalid_flags`.
+
+### Comms body input: `--body` vs `--body-file`
+
+`collaboration-state comms append / send / direct / reply` accept the
+event body via either `--body <inline-string>` or
+`--body-file <path>`. The two flags are mutually exclusive.
+
+Use `--body-file` when:
+
+- the body contains backticks `` ` `` (markdown code fences,
+  identifier references like `` `field_name` ``);
+- the body contains dollar signs `$` that should NOT be expanded as
+  variables;
+- the body contains shell history-expansion characters like `!`;
+- the body contains unmatched single quotes that would break single-
+  quoted shell strings;
+- you want the body composition entirely outside the shell argv
+  layer (programmatic or template-generated content).
+
+Use `--body` (inline) when:
+
+- the body is short and plain-text;
+- the body's content is known to be free of shell-special characters
+  AND the caller controls outer quoting (e.g. inline strings without
+  backticks or unescaped dollars).
+
+The hazard: a double-quoted `--body "..."` argument allows the shell
+to evaluate backtick-wrapped spans as command substitution and
+dollar-prefixed tokens as variable expansion BEFORE the CLI receives
+them. The body that the CLI then writes is silently corrupted. This
+failure mode was observed at least three times across separate
+agent sessions (see `.agent/memory/operational/pending-graduations.md`
+entry "CLI body backtick-shell-substitution cure pattern" for the
+cross-session trace).
+
+`--body-file` is the cure: the shell parses only the file path; the
+file contents are read literally by the CLI without any shell
+interpretation. Typical usage:
+
+```bash
+# Write body to a tmp file (any heredoc / printf / editor-generated file works)
+cat > /tmp/event-body.txt <<'EOF'
+Body with backticks like `agent-tools` and dollars like $HOME survive intact.
+Multi-line content is fine.
+EOF
+
+# Pass the path; shell only parses the path, not the content
+pnpm agent-tools:collaboration-state comms direct \
+  --comms-dir .agent/state/collaboration/comms \
+  --to-agent-name 'Other Agent' \
+  --to-platform claude \
+  --to-model claude-opus-4-7 \
+  --to-session-prefix d4aad7 \
+  --kind directed \
+  --subject 'A subject' \
+  --body-file /tmp/event-body.txt \
+  --platform claude --model claude-opus-4-7 \
+  --active .agent/state/collaboration/active-claims.json
+```
+
+For directed messages (`comms direct` / `comms reply`), the body
+(whether inline or from file) must contain at least one non-
+whitespace character after trimming; an empty file is rejected as
+"--body (or --body-file contents) must not be empty".
+
+Further hardening of comms body input (event-spec JSON file mode,
+write-time body sanitisation) is tracked in
+[`.agent/plans/agent-tooling/frictions-register.md`](../.agent/plans/agent-tooling/frictions-register.md)
+entry F-32.
+
+### Human collaboration TUI
+
+The collaboration TUI is a human observer surface about agent collaboration,
+not an agent command-reading protocol. It lives in `agent-tools` because it
+reads the same collaboration-state registry, comms, and claim data that the
+agent commands maintain; that is a deliberate boundary choice with tension.
+To keep that choice contained, the terminal app uses local Ink primitives and
+does not depend on a separately built design workspace.
+
+Humans use the live terminal view:
+
+```bash
+pnpm agent-tools collaboration-state tui
+```
+
+Agents and logs should prefer non-interactive outputs:
+
+```bash
+pnpm agent-tools collaboration-state tui --format text
+pnpm agent-tools collaboration-state claims active-agents \
+  --active .agent/state/collaboration/active-claims.json
+pnpm agent-tools collaboration-state comms render \
+  --comms-dir .agent/state/collaboration/comms \
+  --shared-log .agent/state/collaboration/shared-comms-log.md
+```
+
+The automated startup smoke is intentionally separate from E2E:
+
+```bash
+pnpm agent-tools:build
+pnpm agent-tools:smoke:collaboration-tui
 ```
 
 ## `agent-identity` quick reference
@@ -74,10 +240,10 @@ Claude/Codex/Cursor wrapper status is documented in
 Examples:
 
 ```bash
-pnpm agent-tools:agent-identity --seed example-session-id-001 --format display
+pnpm agent-tools agent-identity --seed example-session-id-001 --format display
 pnpm agent-tools:build
-node agent-tools/dist/src/bin/agent-identity.js --seed example-session-id-001 --format json
-OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" pnpm agent-tools:agent-identity --seed any --format display
+node agent-tools/dist/src/bin/agent-tools.js agent-identity --seed example-session-id-001 --format json
+OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" pnpm agent-tools agent-identity --seed any --format display
 ```
 
 ## `collaboration-state` quick reference
@@ -86,34 +252,114 @@ OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" pnpm agent-tools:agent-identity -
   `agent_name`, `platform`, `model`, `session_id_prefix`, and seed source.
 - `comms append` / `comms send` / `comms render` — append immutable
   communication events and render `shared-comms-log.md`. Use `send` for the
-  low-boilerplate append-and-render path.
+  low-boilerplate append-and-render path. `send` prints JSON with `event_id`,
+  `event_path`, and `shared_log_path` so agents can verify the write target.
+  Comms writes check the active-claims registry and refuse live identity-route
+  collisions on `(agent_name, platform, session_id_prefix)`.
+- `comms inbox` / `comms watch` / `comms direct` / `comms reply` — read the
+  canonical comms event stream, keep a long-lived watcher open, author
+  first-strike directed messages, and reply to an existing directed message
+  without hand-writing JSON. **`inbox` and `watch` default to all-channels
+  behaviour**: every event relevant to the agent — broadcast narrative,
+  narrative whose `audience` includes the agent, narrative `addressed_to` the
+  agent, directed-kind messages to the agent, and lifecycle moments — is
+  surfaced with self-exclusion only (by full identity tuple). Each emitted
+  event is tagged `[BROADCAST]`, `[GROUP]`, `[DIRECTED]`, or `[LIFECYCLE]` on
+  its first line so the agent knows the channel at a glance. Pass
+  `--only-directed` to narrow to the legacy directed-to-me view. Identity
+  defaults to the platform-derived Practice session id (matching `comms send`
+  / `comms direct`); explicit `--agent-name` + optional `--session-prefix` is
+  available for admin/test overrides, with `--agent-name '*'` matching all
+  recipients in `--only-directed` mode. `watch` uses `fs.watch` with polling
+  fallback and records seen event ids in the caller-supplied `--seen-file`.
+  `reply` swaps the source `from` / `to` identities and defaults the subject
+  to `re: <source subject>` unless `--subject` is supplied.
 - `claims open|heartbeat|close|archive-stale` — mutate active and closed
   claim state through the JSON transaction helper. `claims open` prints the
-  generated or supplied `claim_id` as JSON.
-- `claims list|mine|show|status` — inspect active claims, including freshness
-  from `heartbeat_at ?? claimed_at` plus the claim TTL.
+  generated or supplied `claim_id` as JSON and refuses live identity-route
+  collisions.
+- `claims list|mine|show|status|active-agents` — inspect active claims,
+  active-agent routing tuples, and freshness from `heartbeat_at ?? claimed_at`
+  plus the claim TTL.
 - `conversation append` — append a structured decision-thread entry.
 - `escalation open|close` — write an owner-escalation record.
 - `check` — parse collaboration JSON and comms events for a quick sanity check.
 
 Codex sessions with `CODEX_THREAD_ID` available must not write shared state as
-`Codex` / `unknown`; run preflight first and use the derived identity.
+`Codex` / `unknown`; run preflight first and use the derived identity. Pass
+`--active` when preflighting before a write so reused live routing tuples fail
+before the shared-state mutation.
 
 Example:
 
 ```bash
 CODEX_THREAD_ID=019dd34d-cb6a-74e0-a29d-6cb8a65ea14b \
-  pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5
-pnpm agent-tools:collaboration-state -- claims list --active .agent/state/collaboration/active-claims.json
-pnpm agent-tools:collaboration-state -- claims mine --active .agent/state/collaboration/active-claims.json --platform cursor --model GPT-5.5
-pnpm agent-tools:collaboration-state -- comms send --title "Heads-up" --body "Rendered via immutable event." --platform cursor --model GPT-5.5
-pnpm agent-tools:commit-queue -- status
+  pnpm agent-tools collaboration-state identity preflight \
+    --platform codex \
+    --model GPT-5 \
+    --active .agent/state/collaboration/active-claims.json
+pnpm agent-tools collaboration-state claims list --active .agent/state/collaboration/active-claims.json
+pnpm agent-tools collaboration-state claims mine --active .agent/state/collaboration/active-claims.json --platform cursor --model GPT-5.5
+pnpm agent-tools collaboration-state claims active-agents \
+  --active .agent/state/collaboration/active-claims.json \
+  --closed .agent/state/collaboration/closed-claims.archive.json
+pnpm agent-tools collaboration-state claims open \
+  --active .agent/state/collaboration/active-claims.json \
+  --thread agentic-engineering-enhancements \
+  --area-kind files \
+  --file agent-tools/src/collaboration-state/cli.ts \
+  --intent "Implement collaboration-state CLI ergonomics." \
+  --now 2026-05-10T12:15:00Z \
+  --platform cursor \
+  --model GPT-5.5
+pnpm agent-tools collaboration-state claims open \
+  --active .agent/state/collaboration/active-claims.json \
+  --thread agentic-engineering-enhancements \
+  --area-kind files \
+  --area-pattern "agent-tools/src/collaboration-state/*.ts" \
+  --area-pattern "agent-tools/tests/collaboration-state/*.test.ts" \
+  --intent "Inspect collaboration-state CLI surfaces." \
+  --now 2026-05-10T12:15:00Z \
+  --platform cursor \
+  --model GPT-5.5
+pnpm agent-tools collaboration-state comms send --title "Heads-up" --body "Rendered via immutable event." --platform cursor --model GPT-5.5
+pnpm agent-tools collaboration-state comms direct \
+  --active .agent/state/collaboration/active-claims.json \
+  --messages-dir .agent/state/collaboration/comms-messages \
+  --to-agent-name "Coastal Cresting Prow" \
+  --to-platform codex \
+  --to-model GPT-5 \
+  --to-session-prefix 019e1b \
+  --kind coordination-request \
+  --subject "Please check this" \
+  --body "Short directed message body." \
+  --platform cursor \
+  --model GPT-5.5
+pnpm agent-tools collaboration-state comms reply \
+  --active .agent/state/collaboration/active-claims.json \
+  --messages-dir .agent/state/collaboration/comms-messages \
+  --to-event-id 11111111-1111-4111-8111-111111111111 \
+  --kind coordination-ack \
+  --body "Acknowledged." \
+  --platform codex \
+  --model GPT-5
+pnpm agent-tools collaboration-state comms watch \
+  --comms-dir .agent/state/collaboration/comms \
+  --seen-file .agent/state/collaboration/comms-seen/penumbral-veiling-raven.txt \
+  --platform codex \
+  --model GPT-5
+# default: all-channels — broadcast, group, directed, lifecycle
+# add --only-directed to narrow to directed-to-me events
+pnpm agent-tools commit-queue status
 ```
 
 ## `commit-queue` quick reference
 
 - `enqueue` — register a commit intent against an active claim and print the
   generated or supplied `intent_id`.
+- `guard` — pre-stage check that refuses path staging unless the current
+  identity has a fresh matching queue intent backed by a `git:index/head`
+  claim.
 - `phase` — move an intent through `queued`, `staging`, `pre_commit`, or
   `abandoned`.
 - `record-staged` / `verify-staged` — capture and verify the exact staged
@@ -121,6 +367,31 @@ pnpm agent-tools:commit-queue -- status
 - `complete` — remove a landed intent and clear the owning claim pointer.
 - `status` — print queued, active, expired, and abandoned entries as JSON
   without parsing `active-claims.json` manually.
+- `list [--prefix <intent-prefix>]
+[--phase <queued|staging|pre_commit|abandoned>]
+[--agent-name <prefix>] [--queue-status <active|expired|abandoned>]` —
+  print matching queue entries only.
+- `show --intent-id <uuid>` — print one exact queue entry.
+
+Example:
+
+```bash
+pnpm agent-tools commit-queue guard \
+  --agent-name "Embered" \
+  --platform codex \
+  --model GPT-5 \
+  --session-id-prefix 019e1c \
+  --file agent-tools/src/commit-queue/index.ts
+pnpm agent-tools commit-queue list --agent-name "Embered" --queue-status active
+pnpm agent-tools commit-queue show --intent-id 11111111-1111-4111-8111-111111111111
+```
+
+When `.agent/state/collaboration/active-claims.json` is part of the staged
+bundle, run `record-staged` once and do not re-stage that file afterwards.
+`record-staged` writes the staged fingerprint into the working tree so
+`verify-staged` can compare it with the already-staged payload. Re-staging the
+registry after that changes the payload being verified and `verify-staged`
+reports the recursion with corrective guidance.
 
 ## `claude-agent-ops` quick reference
 
@@ -131,7 +402,7 @@ pnpm agent-tools:commit-queue -- status
 - `diff [id]` — diff the main repo or one agent worktree
 - `commit-ready` — count changed files in the main tree and each agent worktree
 - `preflight` — run quick cleanliness plus non-mutating infrastructure checks
-  (`pnpm portability:check`, `pnpm test:root-scripts`)
+  (`pnpm portability:check`, `pnpm repo-validators:check`)
 - `cleanup` — remove clean leftover agent worktrees
 
 The `health` command is intentionally content-free by default. It reports
@@ -174,8 +445,8 @@ registration plus a self-describing `.codex/agents/*.toml` adapter whose
 Examples:
 
 ```bash
-pnpm agent-tools:codex-reviewer-resolve sentry-reviewer
-pnpm agent-tools:codex-reviewer-resolve architecture-reviewer-fred --json
+pnpm agent-tools:codex-reviewer-resolve sentry-expert
+pnpm agent-tools:codex-reviewer-resolve architecture-expert-fred --json
 ```
 
 ## Repo gate status
@@ -186,3 +457,4 @@ pnpm agent-tools:codex-reviewer-resolve architecture-reviewer-fred --json
 - `pnpm agent-tools:lint`
 - `pnpm agent-tools:test`
 - `pnpm agent-tools:test:e2e`
+- `pnpm agent-tools:smoke:collaboration-tui`

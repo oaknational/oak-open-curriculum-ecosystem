@@ -12,7 +12,12 @@ import {
   updateJsonFileWithRetry,
   writeJsonFileWithinTransaction,
 } from './transaction.js';
-import { type ClosedClaimsArchive, type CollaborationRegistry, type CommsEvent } from './types.js';
+import {
+  type ClosedClaimsArchive,
+  type CollaborationRegistry,
+  type CommsEvent,
+  type DirectedCommsMessage,
+} from './types.js';
 
 export { parseClosedClaimsArchive, parseCollaborationRegistry } from './state-parsers.js';
 
@@ -24,37 +29,47 @@ export async function readActiveClaimsFile(activePath: string): Promise<Collabor
 }
 
 /**
- * Append an immutable communication event by exclusive file create.
+ * Read and parse the closed claims archive.
+ */
+export async function readClosedClaimsFile(closedPath: string): Promise<ClosedClaimsArchive> {
+  return parseClosedClaimsArchive(await readFile(closedPath, 'utf8'));
+}
+
+/**
+ * Append an immutable communication event to the canonical comms directory by
+ * exclusive file create.
  */
 export async function writeCommsEvent(input: {
-  readonly eventsDir: string;
+  readonly commsDir: string;
   readonly event: CommsEvent;
   readonly nowIso: string;
 }): Promise<void> {
-  await mkdir(input.eventsDir, { recursive: true });
-  const existingIds = await listCommsEventIds(input.eventsDir);
+  await mkdir(input.commsDir, { recursive: true });
+  const existingIds = await listCommsEventIds(input.commsDir);
   const event = createCommsEvent(input.event, {
     nowIso: input.nowIso,
     existingEventIds: existingIds,
   });
 
-  await writeFile(eventPath(input.eventsDir, event.event_id), eventJson(event), { flag: 'wx' });
+  await writeFile(eventPath(input.commsDir, event.event_id), eventJson(event), { flag: 'wx' });
 }
 
 /**
- * Read all immutable communication events from an event directory.
+ * Read all canonical immutable communication events from the unified comms
+ * directory.
  */
-export async function readCommsEvents(eventsDir: string): Promise<readonly CommsEvent[]> {
-  const filenames = await readdir(eventsDir);
-  const events: CommsEvent[] = [];
+export async function readCommsEvents(commsDir: string): Promise<readonly CommsEvent[]> {
+  return readEventDirectory(commsDir, parseCommsEvent);
+}
 
-  for (const filename of filenames
-    .filter((entry) => entry.endsWith('.json'))
-    .toSorted((left, right) => left.localeCompare(right))) {
-    events.push(parseCommsEvent(await readFile(join(eventsDir, filename), 'utf8')));
-  }
-
-  return events;
+/**
+ * Read all immutable directed communication messages from the canonical comms
+ * directory.
+ */
+export async function readDirectedCommsMessages(
+  commsDir: string,
+): Promise<readonly DirectedCommsMessage[]> {
+  return filterEvents(await readCommsEvents(commsDir), 'directed');
 }
 
 /**
@@ -99,6 +114,22 @@ export async function updateClaimStateFiles(input: {
   });
 }
 
+async function readEventDirectory<TEvent>(
+  directory: string,
+  parser: (text: string) => TEvent,
+): Promise<readonly TEvent[]> {
+  const filenames: readonly string[] = await readdir(directory).catch(() => []);
+  const events: TEvent[] = [];
+
+  for (const filename of filenames
+    .filter((entry) => entry.endsWith('.json'))
+    .toSorted((left, right) => left.localeCompare(right))) {
+    events.push(parser(await readFile(join(directory, filename), 'utf8')));
+  }
+
+  return events;
+}
+
 function listCommsEventIds(eventsDir: string): Promise<readonly string[]> {
   return readdir(eventsDir)
     .then((entries) =>
@@ -115,4 +146,13 @@ function eventPath(eventsDir: string, eventId: string): string {
 
 function eventJson(event: CommsEvent): string {
   return `${JSON.stringify(event, null, 2)}\n`;
+}
+
+function filterEvents<TKind extends CommsEvent['kind']>(
+  events: readonly CommsEvent[],
+  kind: TKind,
+): readonly Extract<CommsEvent, { readonly kind: TKind }>[] {
+  return events.filter((event): event is Extract<CommsEvent, { readonly kind: TKind }> => {
+    return event.kind === kind;
+  });
 }

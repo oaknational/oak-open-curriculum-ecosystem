@@ -43,7 +43,7 @@ plane-origin tag:
 ```
 
 The tag is load-bearing: without it, consolidation treats the entry as
-ordinary active-plane learning. With it, `/jc-consolidate-docs` step 5
+ordinary active-plane learning. With it, `/oak-consolidate-docs` step 5
 cross-plane scan routes the observation to the affected executive surface
 for amendment.
 

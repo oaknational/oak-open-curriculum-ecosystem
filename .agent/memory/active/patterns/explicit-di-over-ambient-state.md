@@ -1,5 +1,6 @@
 ---
 name: "Explicit DI Over Ambient State"
+polarity: pattern
 use_this_when: "You are tempted to use AsyncLocalStorage, module-level singletons, or thread-local context to propagate request-scoped data through a call chain"
 category: code
 proven_in: "apps/oak-curriculum-mcp-streamable-http/src/handlers.ts"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "AsyncLocalStorage context leaks in per-request handlers; ambient state makes testing require global mocks; request context is invisible in function signatures"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Explicit DI Over Ambient State
 

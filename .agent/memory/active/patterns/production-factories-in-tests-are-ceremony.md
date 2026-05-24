@@ -1,5 +1,6 @@
 ---
 name: "Production Factories In Tests Are Ceremony Unless They ARE The Subject"
+polarity: anti-pattern
 use_this_when: "Writing or reviewing a test that imports a production factory (config loader, observability factory, SDK initialiser) to satisfy a downstream call's signature"
 category: test-architecture
 proven_in: "apps/oak-curriculum-mcp-streamable-http — `loadRuntimeConfig` + `createHttpObservabilityOrThrow` pulled into 16+ tests as incidental infrastructure; surfaced via MaxListenersExceededWarning; commits 276ea9bd + follow-up"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Tests that import production factories they do not assert on couple to unrelated refactors, carry hidden side effects (disk reads, SDK init, process listeners), and widen the test boundary beyond the named unit — bugs like Sentry-init listener leaks accumulate silently"
   stable: true
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Production Factories In Tests Are Ceremony Unless They ARE The Subject
 
@@ -97,7 +102,7 @@ Not just production factories. Any complex function imported into a
 test that isn't the directly-tested unit is suspect. A "simple helper
 function" that happens to be in product code and happens to be
 convenient to call from a test is a candidate ceremony case. The
-test-reviewer applies this broadly.
+test-expert applies this broadly.
 
 ## Related
 

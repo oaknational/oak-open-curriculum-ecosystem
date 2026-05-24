@@ -628,10 +628,6 @@ const AllSubjectsResponseSchema = z.array(
             ),
             phaseSlug: z.string(),
             phaseTitle: z.string(),
-            ks4Options: z.union([
-              z.object({ title: z.string(), slug: z.string() }).strict(),
-              z.null(),
-            ]),
           })
           .strict()
       ),
@@ -661,10 +657,6 @@ const SubjectResponseSchema = z
           ),
           phaseSlug: z.string(),
           phaseTitle: z.string(),
-          ks4Options: z.union([
-            z.object({ title: z.string(), slug: z.string() }).strict(),
-            z.null(),
-          ]),
         })
         .strict()
     ),
@@ -672,6 +664,23 @@ const SubjectResponseSchema = z
     keyStages: z.array(
       z.object({ keyStageTitle: z.string(), keyStageSlug: z.string() }).strict()
     ),
+    ks4ProgrammeFactors: z
+      .object({
+        examBoard: z.array(
+          z.object({ title: z.string(), slug: z.string() }).strict()
+        ),
+        pathway: z.array(
+          z.object({ title: z.string(), slug: z.string() }).strict()
+        ),
+        tier: z.array(
+          z.object({ title: z.string(), slug: z.string() }).strict()
+        ),
+        childSubject: z.array(
+          z.object({ title: z.string(), slug: z.string() }).strict()
+        ),
+      })
+      .partial()
+      .strict(),
     oakUrl: z.url().optional(),
   })
   .strict();
@@ -687,10 +696,6 @@ const SubjectSequenceResponseSchema = z.array(
       ),
       phaseSlug: z.string(),
       phaseTitle: z.string(),
-      ks4Options: z.union([
-        z.object({ title: z.string(), slug: z.string() }).strict(),
-        z.null(),
-      ]),
       oakUrl: z.url().optional(),
     })
     .strict()
@@ -1506,8 +1511,38 @@ const LessonSummaryResponseSchema = z
     lessonTitle: z.string(),
     canonicalUrl: z.url(),
     oakUrl: z.url(),
-    unitSlug: z.string(),
-    unitTitle: z.string(),
+    units: z.array(
+      z
+        .object({
+          unitSlug: z.string(),
+          unitTitle: z.string(),
+          programmeFactors: z
+            .object({
+              examBoard: z
+                .object({ slug: z.string(), title: z.string() })
+                .strict(),
+              pathway: z
+                .object({ slug: z.string(), title: z.string() })
+                .strict(),
+              tier: z.object({ slug: z.string(), title: z.string() }).strict(),
+              childSubject: z
+                .object({
+                  slug: z.enum([
+                    "biology",
+                    "chemistry",
+                    "combined-science",
+                    "physics",
+                  ]),
+                  title: z.string(),
+                })
+                .strict(),
+            })
+            .partial()
+            .strict()
+            .optional(),
+        })
+        .strict()
+    ),
     subjectSlug: z.string(),
     subjectTitle: z.string(),
     keyStageSlug: z.string(),
@@ -1591,6 +1626,26 @@ const UnitSummaryResponseSchema = z
           })
           .strict()
       )
+      .optional(),
+    programmeFactors: z
+      .object({
+        examBoard: z.object({ slug: z.string(), title: z.string() }).strict(),
+        pathway: z.object({ slug: z.string(), title: z.string() }).strict(),
+        tier: z.object({ slug: z.string(), title: z.string() }).strict(),
+        childSubject: z
+          .object({
+            slug: z.enum([
+              "biology",
+              "chemistry",
+              "combined-science",
+              "physics",
+            ]),
+            title: z.string(),
+          })
+          .strict(),
+      })
+      .partial()
+      .strict()
       .optional(),
     unitLessons: z.array(
       z
@@ -1987,6 +2042,11 @@ export const endpoints: readonly Endpoint[] = ([
         type: "Query",
         schema: z.number().lte(100).optional().default(10),
       },
+      {
+        name: "filter",
+        type: "Query",
+        schema: z.literal("images").optional(),
+      },
     ],
     response: QuestionsForKeyStageAndSubjectResponseSchema,
     errors: [
@@ -2239,6 +2299,11 @@ There is no response returned for this endpoint as it returns a content attachme
         name: "lesson",
         type: "Path",
         schema: z.string(),
+      },
+      {
+        name: "filter",
+        type: "Query",
+        schema: z.literal("images").optional(),
       },
     ],
     response: QuestionForLessonsResponseSchema,
@@ -2525,6 +2590,11 @@ This endpoint contains licence information for any third-party content contained
         type: "Query",
         schema: z.number().lte(100).optional().default(10),
       },
+      {
+        name: "filter",
+        type: "Query",
+        schema: z.literal("images").optional(),
+      },
     ],
     response: QuestionsForSequenceResponseSchema,
     errors: [
@@ -2629,7 +2699,25 @@ This endpoint contains licence information for any third-party content contained
       {
         name: "subject",
         type: "Path",
-        schema: z.string(),
+        schema: z.enum([
+          "art",
+          "citizenship",
+          "computing",
+          "cooking-nutrition",
+          "design-technology",
+          "english",
+          "french",
+          "geography",
+          "german",
+          "history",
+          "maths",
+          "music",
+          "physical-education",
+          "religious-education",
+          "rshe-pshe",
+          "science",
+          "spanish",
+        ]),
       },
     ],
     response: SubjectResponseSchema,
@@ -2802,13 +2890,37 @@ This endpoint contains licence information for any third-party content contained
   {
     method: "get",
     path: "/units/:unit/summary",
-    description: `This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit`,
+    description: `This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit. Optional programme-factor filters can narrow the returned variant. The childSubject filter is only available for science units and accepts biology, chemistry, combined-science, or physics.`,
     requestFormat: "json",
     parameters: [
       {
         name: "unit",
         type: "Path",
         schema: z.string(),
+      },
+      {
+        name: "examBoard",
+        type: "Query",
+        schema: z
+          .enum(["aqa", "edexcel", "eduqas", "ocr", "wjec", "edexcelb"])
+          .optional(),
+      },
+      {
+        name: "pathway",
+        type: "Query",
+        schema: z.enum(["core", "gcse"]).optional(),
+      },
+      {
+        name: "tier",
+        type: "Query",
+        schema: z.enum(["core", "foundation", "higher"]).optional(),
+      },
+      {
+        name: "childSubject",
+        type: "Query",
+        schema: z
+          .enum(["biology", "chemistry", "combined-science", "physics"])
+          .optional(),
       },
     ],
     response: UnitSummaryResponseSchema,

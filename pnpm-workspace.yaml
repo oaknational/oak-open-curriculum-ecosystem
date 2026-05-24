@@ -7,16 +7,26 @@ packages:
   - packages/core/openapi-zod-client-adapter
   - packages/core/build-metadata
   - packages/core/env
+  - packages/core/graph-core
   - packages/core/result
   - packages/core/type-helpers
   - packages/design/*
   - packages/libs/env-resolution
+  - packages/libs/graph-ingest
+  - packages/libs/graph-project
   - packages/libs/logger
   - packages/libs/sentry-node
   - packages/libs/search-contracts
+  - packages/sdks/graph-corpus-sdk
   - packages/sdks/oak-curriculum-sdk
   - packages/sdks/oak-sdk-codegen
   - packages/sdks/oak-search-sdk
+
+allowBuilds:
+  '@clerk/shared': true
+  '@sentry/cli': true
+  esbuild: true
+  unrs-resolver: true
 
 onlyBuiltDependencies:
   - '@sentry/cli'

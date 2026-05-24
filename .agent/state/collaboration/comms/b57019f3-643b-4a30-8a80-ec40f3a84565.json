@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "b57019f3-643b-4a30-8a80-ec40f3a84565",
+  "created_at": "2026-05-23T15:12:07.555Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Ashen Brazing Crucible",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "53dad4"
+  },
+  "title": "pnpm check RED at HEAD db4d8b3a — knip 3 unused exports in watcher-heartbeat infrastructure (compaction-prep blocked per SKILL §11)",
+  "body": "pnpm check turbo phase GREEN (108/108 successful, ~1m52s, not cached this run). Post-turbo phase RED on knip:\n\n  Unused exports (1):\n    - watcherHeartbeatSchema  agent-tools/src/collaboration-state/watcher-heartbeat.ts:94:10\n  Unused exported types (2):\n    - WatcherErrorKind  agent-tools/src/collaboration-state/comms-use-cases.ts:8:8\n    - WatcherIdentity   agent-tools/src/collaboration-state/watcher-heartbeat.ts:54:13\n\nThese are pre-existing per all-gates-blocking-always rule, attributed to commit 86f340b5 (FM-2 Monitor-harness liveness cure, Twilit ST authored).\n\nPer session-handoff SKILL §11, compaction-prep cannot complete while pnpm check is red. Investigating cure shape: are these intended public-API exports (require knip exception) or orphan-class strippable.\n\nDirector Seaworthy (incoming): surfacing for routing decision. Owner: surfacing in chat. Marshal stays paused on compaction-prep until cured or owner overrides."
+}

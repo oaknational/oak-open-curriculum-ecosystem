@@ -1,0 +1,85 @@
+{
+  "name": "@oaknational/graph-project",
+  "version": "0.0.0-development",
+  "private": true,
+  "description": "Property-graph projection over RDF datasets: types, projection, and adjacency primitives",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts",
+      "import": "./dist/index.js"
+    },
+    "./property-graph": {
+      "types": "./dist/property-graph/index.d.ts",
+      "development": "./src/property-graph/index.ts",
+      "import": "./dist/property-graph/index.js"
+    },
+    "./projection": {
+      "types": "./dist/projection/index.d.ts",
+      "development": "./src/projection/index.ts",
+      "import": "./dist/projection/index.js"
+    },
+    "./adjacency": {
+      "types": "./dist/adjacency/index.d.ts",
+      "development": "./src/adjacency/index.ts",
+      "import": "./dist/adjacency/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**/*",
+    "src/**/*",
+    "!**/*.test.ts",
+    "!**/*.integration.test.ts"
+  ],
+  "scripts": {
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "clean": "rm -rf dist .turbo",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "type-check": "tsc -p tsconfig.lint.json --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@oaknational/graph-core": "workspace:*"
+  },
+  "devDependencies": {
+    "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@types/node": "^25.7.0",
+    "eslint": "^10.3.0",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oaknational/oak-open-curriculum-ecosystem.git",
+    "directory": "packages/libs/graph-project"
+  },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-open-curriculum-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/packages/libs/graph-project#readme",
+  "keywords": [
+    "rdf",
+    "graph",
+    "property-graph",
+    "knowledge-graph"
+  ],
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
+  ],
+  "license": "MIT"
+}

@@ -1,7 +1,7 @@
 ---
 name: "Upstream API Reference Metadata"
 overview: "Add an upstreamApi field to every generated MCP tool descriptor, providing the full upstream Oak API URL template, HTTP method, separated path/query parameters, and documented statuses — both in _meta (visible to MCP clients) and as a top-level descriptor field (for SDK consumers)."
-specialist_reviewer: "code-reviewer, type-reviewer, mcp-reviewer"
+specialist_reviewer: "code-expert, type-expert, mcp-expert"
 isProject: false
 todos:
   - id: t1-add-types
@@ -184,8 +184,8 @@ emit-index.ts — builds descriptor object literal
 ## Pre-Implementation Review Findings
 
 These are open questions and potential issues to resolve before or
-during implementation. A pre-implementation review with code-reviewer,
-type-reviewer, and mcp-reviewer is recommended.
+during implementation. A pre-implementation review with code-expert,
+type-expert, and mcp-expert is recommended.
 
 ### F1: `_meta` payload size
 

@@ -7,6 +7,7 @@ thread: eef
 related_plans:
   - "../current/eef-evidence-corpus.plan.md"
   - "../../../graph-mvp-arc.plan.md"
+  - "../../../graph-combinatorial-arc.plan.md"
 isProject: false
 todos:
   - id: define-rubric-and-owner

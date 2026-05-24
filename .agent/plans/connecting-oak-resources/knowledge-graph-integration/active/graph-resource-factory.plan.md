@@ -9,7 +9,7 @@ sibling_plans:
   - "../../sector-engagement/eef/current/eef-evidence-corpus.plan.md"
   - "nc-knowledge-taxonomy-surface.plan.md"
   - "agent-guidance-consolidation.plan.md"
-specialist_reviewer: "code-reviewer, type-reviewer, test-reviewer"
+specialist_reviewer: "code-expert, type-expert, test-expert"
 isProject: false
 todos:
   - id: t1-analyse-pattern

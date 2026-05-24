@@ -21,7 +21,7 @@ todos:
     content: "Phase 3: Activate the rule in `recommended.ts`. Run repo-wide lint. For each violation, re-derive the cure from first principles per-file (not from any prior cure). Serial discipline; phase-boundary re-read of `principles.md`. Narrate each cure aloud before applying."
     status: pending
   - id: phase-4-reviewers
-    content: "Phase 4: Reviewer dispatch (architecture-fred for ADR-024 alignment, code-reviewer for rule body quality, test-reviewer for test coverage, assumptions-reviewer for stress-test against drift recurrence)."
+    content: "Phase 4: Reviewer dispatch (architecture-fred for ADR-024 alignment, code-expert for rule body quality, test-expert for test coverage, assumptions-expert for stress-test against drift recurrence)."
     status: pending
   - id: phase-5-docs-and-adr
     content: "Phase 5: Documentation. README in `packages/core/oak-eslint/`. ADR-or-PDR if the rule embodies a new architectural decision. TSDoc on the rule and on each helper function within it."
@@ -102,10 +102,10 @@ The sweep produces multiple commits, each scoped to one architectural shape (not
 
 ## Phase 4 — Reviewer dispatch
 
-- `architecture-reviewer-fred` — ADR-024 (DI) alignment, rule-body discipline.
-- `code-reviewer` — rule-body quality, idiomatic ESLint plugin patterns.
-- `test-reviewer` — test coverage of every archetype.
-- `assumptions-reviewer` — stress-test against drift recurrence (specifically: are any allowlists/exemptions creeping back in? Is the rule body matching the principle text exactly, or is it softer?).
+- `architecture-expert-fred` — ADR-024 (DI) alignment, rule-body discipline.
+- `code-expert` — rule-body quality, idiomatic ESLint plugin patterns.
+- `test-expert` — test coverage of every archetype.
+- `assumptions-expert` — stress-test against drift recurrence (specifically: are any allowlists/exemptions creeping back in? Is the rule body matching the principle text exactly, or is it softer?).
 
 Reviewers run in parallel; reviewer findings are action items by default per `principles.md`.
 

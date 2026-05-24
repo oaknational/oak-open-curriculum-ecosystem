@@ -16,7 +16,11 @@ import {
   parseToolSuccessPayload,
 } from './helpers/sse.js';
 import { stubSearchRetrieval } from './helpers/stub-search-retrieval.js';
-import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
+import {
+  createMockObservability,
+  createMockRuntimeConfig,
+  createNoOpRateLimiterFactory,
+} from './helpers/test-config.js';
 
 const ACCEPT = 'application/json, text/event-stream';
 
@@ -68,6 +72,7 @@ async function executeToolCall(): Promise<{
     runtimeConfig,
     observability: createMockObservability(runtimeConfig),
     getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
+    rateLimiterFactory: createNoOpRateLimiterFactory(),
   });
   const response = await request(app)
     .post('/mcp')

@@ -96,7 +96,7 @@ claims and walk through how authority order resolves.
 
 **Test case**: `repo-continuity.md` next-safe-step says "Continue
 OAC Phase 3 pilot scenarios". `workstreams/observability-sentry-otel.md`
-next-safe-step says "dispatch assumptions-reviewer + sentry-reviewer
+next-safe-step says "dispatch assumptions-expert + sentry-expert
 against the migration plan". These look like two different "next
 safe steps" — which wins?
 

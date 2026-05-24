@@ -140,17 +140,17 @@ blocking it.
 
 Per PDR-015 and the standard schedule:
 
-- **Pre-execution (now, before Phase 0 runs)**: `assumptions-reviewer`
+- **Pre-execution (now, before Phase 0 runs)**: `assumptions-expert`
   (proportionality, self-application check, phase-alignment), plus
-  `docs-adr-reviewer` (ADR/PDR impact surface). Reviewers fire
+  `docs-adr-expert` (ADR/PDR impact surface). Reviewers fire
   against this plan's body before Phase 0 starts so solution-class
   drift is caught before any doctrine lands.
-- **Mid-cycle**: `docs-adr-reviewer` after each phase that touches
-  a doctrine surface (Phases 1, 2, 5, 6); `architecture-reviewer-barney`
-  - `architecture-reviewer-betty` after Phase 3 (cross-plane paths
+- **Mid-cycle**: `docs-adr-expert` after each phase that touches
+  a doctrine surface (Phases 1, 2, 5, 6); `architecture-expert-barney`
+  - `architecture-expert-betty` after Phase 3 (cross-plane paths
   are boundary changes).
-- **Close**: `assumptions-reviewer`, `docs-adr-reviewer`,
-  `release-readiness-reviewer`, `onboarding-reviewer` — see
+- **Close**: `assumptions-expert`, `docs-adr-expert`,
+  `release-readiness-expert`, `onboarding-expert` — see
   Phase 7.3.
 
 ---
@@ -318,7 +318,7 @@ bar is hit. This pattern passed that bar with four instances.
    four napkin instances by date.
 2. ✅ `repo-continuity.md § Deep consolidation status` reflects
    the completion.
-3. ✅ `docs-adr-reviewer` agrees the extraction meets the barrier
+3. ✅ `docs-adr-expert` agrees the extraction meets the barrier
    and frontmatter schema.
 
 **Deterministic Validation**:
@@ -549,7 +549,7 @@ surface needs updating (estimated: once every few sessions).
 - New rule at `.agent/rules/executive-memory-drift-capture.md` that
   operationalises the path: *"When a napkin entry or distilled
   entry identifies an executive-memory surface (`artefact-inventory`,
-  `invoke-code-reviewers`, `cross-platform-agent-surface-matrix`)
+  `invoke-code-experts`, `cross-platform-agent-surface-matrix`)
   as stale, inaccurate, or one-behind-reality, add a pending-
   graduations register entry with source-surface: executive and
   trigger-condition: `next consolidate-docs pass or when surface
@@ -562,7 +562,7 @@ surface needs updating (estimated: once every few sessions).
 1. ✅ Rule file exists and is cross-linked.
 2. ✅ Rule cites ADR-131 and the Executive-Memory Feedback Loop
    doctrine landing in Phase 6.
-3. ✅ `docs-adr-reviewer` agrees the rule is well-formed and cites
+3. ✅ `docs-adr-expert` agrees the rule is well-formed and cites
    its establishing ADRs/PDRs.
 
 **Deterministic Validation**:
@@ -656,7 +656,7 @@ multiple times per session, often passively).
 Each of the following files gets a new short section near the top:
 
 - `.agent/memory/executive/artefact-inventory.md`
-- `.agent/memory/executive/invoke-code-reviewers.md`
+- `.agent/memory/executive/invoke-code-experts.md`
 - `.agent/memory/executive/cross-platform-agent-surface-matrix.md`
 
 Section content:
@@ -688,7 +688,7 @@ condition for the pending-graduations register.
 
 ```bash
 for f in .agent/memory/executive/artefact-inventory.md \
-         .agent/memory/executive/invoke-code-reviewers.md \
+         .agent/memory/executive/invoke-code-experts.md \
          .agent/memory/executive/cross-platform-agent-surface-matrix.md; do
   grep -q "Last verified accurate" "$f" || echo "MISSING: $f"
 done
@@ -886,7 +886,7 @@ ls .agent/practice-core/decision-records/PDR-*-executive-memory-feedback-loop.md
 **Acceptance Criteria**:
 
 1. ✅ ADR-131 cross-references the Phase 6.1 doctrine.
-2. ✅ Any amendment passes `docs-adr-reviewer`.
+2. ✅ Any amendment passes `docs-adr-expert`.
 
 **Deterministic Validation**:
 
@@ -973,18 +973,18 @@ review at phase close) fires at every plan close.
 
 Dispatch in parallel:
 
-- `assumptions-reviewer` — has proportionality held across all
+- `assumptions-expert` — has proportionality held across all
   seven phases? Are any non-goals suspect in hindsight?
-- `docs-adr-reviewer` — do all new/amended rules, PDRs, and
+- `docs-adr-expert` — do all new/amended rules, PDRs, and
   ADR references cite their establishing doctrine correctly?
-- `architecture-reviewer-barney` — are the new cross-plane paths
+- `architecture-expert-barney` — are the new cross-plane paths
   well-placed at the right boundaries?
-- `architecture-reviewer-betty` — what is the long-term
+- `architecture-expert-betty` — what is the long-term
   change-cost of the new loops? Where will the next reframing
   pressure come from?
-- `release-readiness-reviewer` — GO / GO-WITH-CONDITIONS /
+- `release-readiness-expert` — GO / GO-WITH-CONDITIONS /
   NO-GO for closing this plan.
-- `onboarding-reviewer` — do the new conventions (tags,
+- `onboarding-expert` — do the new conventions (tags,
   register schema, drift-detection surfaces) appear in the
   onboarding paths a new contributor would follow?
 

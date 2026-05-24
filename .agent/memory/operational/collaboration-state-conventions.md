@@ -9,8 +9,8 @@ merge_class: index-narrative-tables
 
 # Collaboration State Conventions
 
-Operational guide to `.agent/state/collaboration/`: where it lives, how it
-evolves, and how stale entries are cleaned up. Authority:
+Operational index for `.agent/state/collaboration/`: where it lives, how it
+evolves, and where to find lifecycle recipes. Authority:
 [`agent-collaboration.md`][directive], [PDR-035][pdr-035] for agent-work
 ownership, and [PDR-029 Family A Class A.3][pdr-029] for the shared git
 transaction tripwire. Detailed lifecycle recipes live in
@@ -55,65 +55,57 @@ canonical value for staleness and freshness calculations and durable state.
 
 ## Schema Provenance
 
-Field-level provenance is co-located with each field in
-[`active-claims.schema.json`][active-claims-schema] and the sibling
-[`closed-claims.schema.json`][closed-claims-schema],
-[`conversation.schema.json`][conversation-schema], and
-[`escalation.schema.json`][escalation-schema] via `$comment_provenance`
-annotations. The schemas are the canonical home for field-level metadata;
-this conventions file keeps the state-surface index compact and
-[`collaboration-state-lifecycle.md`][lifecycle] keeps operational recipes.
+Field-level provenance lives in the state schemas via
+`$comment_provenance`. The schemas carry field metadata; this file keeps the
+surface index compact and [`collaboration-state-lifecycle.md`][lifecycle]
+keeps operational recipes.
 
 ## Default `freshness_seconds = 14400` (rationale)
 
-Four hours errs slightly long, deliberately. Typical sessions on this
-branch run ~1–3 hours; a 4-hour budget covers most sessions without
-`heartbeat_at` refresh and still cycles well within a day. Premature
-staleness is worse than delayed staleness because it creates false noise
-during live edits. WS5 evidence is the planned re-evaluation gate.
-Commit-window claims intentionally override this to 900 seconds because
-staging/commit should be brief.
+Four hours errs slightly long: it covers most live work without heartbeat
+noise while still cycling within a day. Premature staleness creates false
+coordination noise; WS5 evidence is the re-evaluation gate. Commit-window
+claims intentionally override this to 900 seconds because staging/commit
+should be brief.
 
 ## Write-Safety Contract
 
-Shared state is intentionally read/write, even when multiple agents touch it.
-An active claim on shared-state docs is a coordination signal, not a read-only
-lock. Agents should read the current surface, write the needed lifecycle or
-handoff update, and use the transaction helpers plus commit queue to make
-overlap visible and serializable.
+Shared state is intentionally read/write. An active claim on shared-state docs
+is a coordination signal, not a read-only lock; agents read the current
+surface, write the needed lifecycle or handoff update, and use transaction
+helpers plus the commit queue to make overlap visible and serializable.
 
 New shared-state writes use the
 [`collaboration-state-write-safety`][csw-plan] contract:
 
-- derive identity before mutation; Codex writes with `CODEX_THREAD_ID`
-  available must not write as `Codex` / `unknown`;
-- append discovery notes as immutable comms events and render
-  `shared-comms-log.md` as a read model;
-- mutate active claims, commit queue entries, closed claims, conversations,
-  and escalations through the transaction helper exposed by
+- derive identity before mutation;
+- append discovery notes as immutable comms events and render the shared log;
+- mutate claims, queue entries, conversations, and escalations through
   `pnpm agent-tools:collaboration-state -- ...`;
+- keep lifecycle writes sequential unless the helper provides a transaction;
 - keep hooks as later polish. TTL cleanup is the portable baseline.
 
-The canonical communication-event directory is `comms-events/`. The older
-`comms/events/` path is legacy historical state; do not create new events
-there. Merges reconcile both eras as `exclusive-create-fragments` and keep all
-unique event files.
+The canonical communication-event directory is `comms-events/`; the older
+`comms/events/` path is legacy historical state. Do not create new events in
+the legacy path. Merges reconcile both eras as `exclusive-create-fragments`.
+
+Old comms events are buffers, not permanent archives. During consolidation,
+read events older than seven days for reusable substance, route any substance to
+napkin, distilled, patterns, pending graduations, or permanent docs, then delete
+the processed buffer file and regenerate the rendered log.
 
 ## Session-Close and Resume Semantics
 
-Live claims belong to the live session that opened or inherited them. The
-current terminal-session model does not support reclaiming old live claims on
-resume. When a session closes, its claims should close explicitly into
-`closed-claims.archive.json`; if the agent misses that closeout, a later
-janitor archives the claim as orphaned (with `closure.kind: "stale"`)
-rather than successful.
+Live claims belong to the session that opened or inherited them. Terminal
+resume does not reclaim old claims; close live claims explicitly, or a later
+janitor archives missed closeouts as stale rather than successful. Type-
+specific TTLs and orphan recipes live in
+[`collaboration-state-lifecycle.md`](collaboration-state-lifecycle.md)
+§Claims.
 
-TTL is type-specific. Normal active-work claims use the heartbeat freshness
-window above; commit-window claims use a short expiry; attention pings and
-sidebar response windows may use minutes-scale expiries; known session-close
-misses should use a short grace TTL before orphaning. A future SDK-driven
-one-turn invocation model may add external shared session-state reclaim, but
-that would be a new lifecycle transition, not the default today.
+Detached monitors are owned lifecycle actors with an owner session, start
+condition, stop condition, expiry, and owner-visible status. The event stream
+is the reality signal if handoff prose and fresh monitor events disagree.
 
 ## Lifecycle Summary
 

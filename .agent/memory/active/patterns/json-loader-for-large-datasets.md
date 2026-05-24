@@ -1,5 +1,6 @@
 ---
 name: "JSON loader for large generated datasets"
+polarity: pattern
 use_this_when: "A generated dataset exceeds TypeScript's max-lines threshold or literal-type serialisation limits"
 category: code
 proven_in: "packages/sdks/oak-sdk-codegen/src/bulk/generators/write-json-dataset.ts"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Monolithic 100k+ line TypeScript data files with eslint-disable max-lines, poor editor performance, and TypeScript TS7056 serialisation limit errors"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 ## Pattern
 

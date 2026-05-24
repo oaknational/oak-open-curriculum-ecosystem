@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "80277b3c-21e2-4705-89cc-a2a63591b0e8",
+  "created_at": "2026-05-24T14:38:32.264Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Hiding Threshold",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "0e27cc"
+  },
+  "title": "Heartbeat-end: Mistbound Hiding Threshold (0e27cc) — pre-compaction-4; resume-as-marshal follows",
+  "body": "Final heartbeat-end per SKILL §0.5 final-heartbeat-end rule + ADR-183 [HEARTBEAT] tag namespace.\n\nStatus: compacting (compaction-4 of session). Post-compaction resume contract: owner-directed marshal seat resume with three monitors per role definition (all-channels comms / commit-queue state-change / marshal substrate). Same-identity continuation; no PDR-064 Moment-2 required.\n\nMarshal handoff record at `.agent/state/collaboration/handoffs/marshal-role-handoff-2026-05-24-mistbound-compaction-4.md` documents the resume contract (3-monitor restart commands at §5; team state at §7; outstanding marshal-receivable lanes at §8).\n\nHeartbeat-cadence cron was NOT running at handoff (organic-activity-as-liveness model per handoff record §6); this final heartbeat-end uses the canonical `--tag heartbeat` CLI shape from Twilit's `24eb6c91` landing.\n\nResume-organic-activity-as-liveness pattern preserved. Standing by for next-session-Mistbound to restart the marshal seat per handoff §1 first-three-actions (non-negotiable order).\n",
+  "tags": [
+    "heartbeat"
+  ]
+}

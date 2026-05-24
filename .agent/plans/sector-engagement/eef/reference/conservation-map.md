@@ -41,7 +41,7 @@ the additions are intentional.
 |---|---|---|
 | `parent_plan: open-education-knowledge-surfaces.plan.md` | unchanged in `eef-evidence-corpus.plan.md` | preserved |
 | sibling: misconception-graph-mcp-surface | unchanged | preserved |
-| specialist_reviewer: mcp-reviewer, code-reviewer, test-reviewer | expanded to also include `type-reviewer, sentry-reviewer` in new plan | preserved + expanded (citation type discipline + telemetry warrant the additions) |
+| specialist_reviewer: mcp-expert, code-expert, test-expert | expanded to also include `type-expert, sentry-expert` in new plan | preserved + expanded (citation type discipline + telemetry warrant the additions) |
 | `isProject: false` | unchanged | preserved |
 | Status: QUEUED — all 12 findings resolved | new plan: CURRENT — predecessor superseded; resolutions inlined into todo bodies | preserved (resolutions still bind) |
 | Branch field: `planning/kg_eef_integration` | new plan: `feat/eef_exploration` originating session, ACTIVE branch TBD | updated (was already drift; the previous branch may have been merged) |
@@ -54,7 +54,7 @@ into todo bodies and decision sections.
 | Finding | Resolution preserved | New home (todo or section) |
 |---|---|---|
 | **F1** Data placement (SDK `src/mcp/data/`, not codegen) | YES | `eef-evidence-corpus.plan.md` T2; ADR-157 reaffirmed |
-| **F2** Type all fields, no `Record<string, unknown>` | YES, **strengthened** | T2 — the predecessor exempted `school_context_schema.properties` from this rule as a `Record<string, unknown>` carve-out. Reading the actual JSON shows the field is itself a JSON Schema document with a known closed shape (9 named properties, each a standard JSON Schema property descriptor). The carve-out is removed and the field is now typed concretely as a `SchoolContextSchema` interface with a recursive `JsonSchemaProperty` shape. F2 holds without exemption. |
+| **F2** Type all fields, no `Record<string, unknown>` | YES, **strengthened** | T2 — the predecessor exempted `school_context_schema.properties` from this rule as a `Record<string, unknown>` exemption. Reading the actual JSON shows the field is itself a JSON Schema document with a known closed shape (9 named properties, each a standard JSON Schema property descriptor). The exemption is removed and the field is now typed concretely as a `SchoolContextSchema` interface with a recursive `JsonSchemaProperty` shape. F2 holds without exemption. |
 | **F3** Meta — all 7 fields typed | YES, **strengthened** | T2 — `meta.last_updated` and `meta.data_version` are now validated to their known formats (`z.string().date()` and a semver regex respectively) rather than bare `z.string()`. |
 | **F4** Direct Zod `.parse()` at load, not `as const satisfies` | YES | T2 |
 | **F5** Null-impact guard — pre-filter 4 strands before scoring | YES, expanded with explicit IDs in scoring engine docstring | T5 ScoringEngine; 4 strand IDs preserved verbatim |
@@ -111,7 +111,7 @@ not reproduce them inline, it points back to the original via path.
 | Composite scoring algorithm (`40/30/20/10` weighting, context_relevance accumulation) | preserved verbatim in `eef-evidence-corpus.plan.md` T5 |
 | Null-impact strand IDs (4) | preserved verbatim in T5 docstring; cross-referenced in scoring engine source |
 | Focus enum (the 7 most teacher-relevant priorities) | preserved verbatim in T6 |
-| Note on `school_context_schema.properties` typing | **revised, not preserved verbatim**: the predecessor's `z.record(z.string(), z.unknown())` carve-out has been removed (commit `2a3f69b5`, 2026-04-30). The field is now typed concretely as `SchoolContextSchema` with 9 named properties, each a recursive `JsonSchemaProperty`. See §B F2 row for the strengthening rationale. |
+| Note on `school_context_schema.properties` typing | **revised, not preserved verbatim**: the predecessor's `z.record(z.string(), z.unknown())` exemption has been removed (commit `2a3f69b5`, 2026-04-30). The field is now typed concretely as `SchoolContextSchema` with 9 named properties, each a recursive `JsonSchemaProperty`. See §B F2 row for the strengthening rationale. |
 | Loader pattern (`createRequire(import.meta.url)` + `EefToolkitDataSchema.parse(rawData)`) | preserved in T2 implementation guidance |
 | Unit test approach (Zod parses real EEF data without throwing) | **revised under owner direction (2026-04-30)**, not preserved verbatim: the predecessor's exact-count assertions (30 strands, 4 null-impact with named IDs, 17/30 with school_context, 9 caveats, 4 with implementation, 6 with behind_the_average) were judged to assert implementation properties of the upstream EEF dataset rather than Oak code behaviour, and would break loudly every time EEF legitimately publishes a new strand or caveat. T2 now tests one product behaviour: real EEF data parses through the Zod schema without throwing. Framework-surface questions ("does enumerate_nodes expose all nodes correctly?") are addressed by fixture-based integration tests, not exact counts on production data. See §J for the owner-direction removal log. |
 | ADR-123 row content (resources + tool entries) | preserved in T18; aggregated tool count update from 11→14 reflects three new tools (recommend, explain, compare) |
@@ -248,10 +248,14 @@ restructure:
   neighbours, subgraph, find_by_tag)** — now in
   [`../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md).
   EEF strands becomes a `GraphView` adapter (T5 of that plan).
-- **Cross-source journeys** (search × misconception × EEF) — now in
-  [`../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md).
-  Out of scope for the EEF corpus plan; the journey primitive is
-  generic.
+- **Cross-source primitives + journeys** — split across two layers:
+  substrate-layer cross-corpus primitives in
+  [`../../../graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md)
+  (first concrete tool: EEF × Oak misconceptions for a Thread IRI);
+  feature-layer journey orchestration in
+  [`../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md)
+  (consumes the substrate-layer primitives). Out of scope for the EEF
+  corpus plan in both cases.
 - **R1/R7 structural enforcement** — the *citation type* is in this
   plan (T12), but the propagation discipline through journeys is in
   the journeys plan (T4 of that plan).
@@ -276,7 +280,8 @@ restructure:
   in git history.
 - [`../current/eef-evidence-corpus.plan.md`](../current/eef-evidence-corpus.plan.md) — successor
 - [`../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md) — Increment 1 (foundation)
-- [`../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) — Increment 3 (journeys)
+- [`../../../graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md) — Increment 3 substrate-layer cross-corpus primitives (combinatorial arc, authored 2026-05-11)
+- [`../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/cross-source-journeys.plan.md) — Increment 3b feature-layer journey orchestration
 - [`../../../../memory/active/napkin.md` § 2026-04-30 EEF graph-and-corpus architecture session](../../../../memory/active/napkin.md) — full session insight
 
 ## N. Verification log (the "double check" the owner asked for)
@@ -302,3 +307,44 @@ and patched in the new plan before deletion of `originals/`:
 
 After these three patches, the verification recorded **no further
 gaps**. The conservation property holds.
+
+## O. Extraction trail — gate-1a first-feature plan (2026-05-21)
+
+**Context**: the 2026-05-21 Inc.1d sequencing pull-forward (Torrid Glowing
+Flame session) introduced gate-1a as a new MVP-arc gate ahead of the
+existing gate-1 (renamed to gate-1b). The first user-facing EEF MCP
+feature ships at gate-1a; the remaining slice-1 surface ships at gate-1b.
+This created a `gate-1a delivery contract` with no natural home in the
+existing plan tree.
+
+**Resolution**: a new plan
+[`../current/eef-first-feature.plan.md`](../current/eef-first-feature.plan.md)
+was authored (Charcoal Searing Ember session) to absorb the
+docs-adr-expert P0 finding (missing-owning-plan for gate-1a). The new
+plan owns the gate-1a delivery contract **by reference** — it points at
+canonical todo IDs in the substrate plan (`graph-stack.plan.md`) and the
+corpus plan (`./eef-evidence-corpus.plan.md`) rather than duplicating
+content.
+
+**What was extracted from this plan's successor
+(`../current/eef-evidence-corpus.plan.md`) into
+`../current/eef-first-feature.plan.md`**: nothing was relocated — the
+gate-1a tranche of corpus todos (t1, t2, t6a, t9, t10, t12, t13, t20 +
+partials of t14/t15/t16/t17/t18/t19) remains authored in
+`eef-evidence-corpus.plan.md`. The new plan adds a delivery-contract
+overlay (`ff1`–`ff6`) and the two non-technical preconditions
+(`ff1-partnership-opener`, `ff2-adoption-tracking-owner`) that have no
+natural home in substrate or corpus plans.
+
+**Conservation property for the extraction**: every gate-1a todo
+remains canonically owned by the corpus plan; every gate-1a substrate
+todo remains canonically owned by `graph-stack.plan.md`. The new plan
+is an observation point for the delivery contract, not a third
+authoring home. No item was relocated, duplicated, or lost.
+
+**Cross-references for the extraction**:
+
+- [`../current/eef-first-feature.plan.md`](../current/eef-first-feature.plan.md) — new owning plan for gate-1a (CURRENT, 2026-05-21)
+- [`../../../graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md) — gate-0a/gate-1a vs gate-0b/gate-1b definitions
+- [`../../../connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md) — substrate todos (WS4.4 + WS4.5)
+- [`../../../graph-portfolio-index.md`](../../../graph-portfolio-index.md) — slice 1a / 1b portfolio rows (split applied 2026-05-21)

@@ -79,7 +79,7 @@ It does not imply full review, commit, push, or deep convergence.
 
 ### Deep Consolidation Loop
 
-Use `jc-consolidate-docs` only when deep convergence is due.
+Use `oak-consolidate-docs` only when deep convergence is due.
 
 Triggers include:
 
@@ -132,7 +132,7 @@ Use it after `start-right-quick` when:
 
 `GO` starts from the session-start workflow, `repo-continuity.md`,
 the relevant thread record, and the active plan set. Close ordinary
-sessions with `session-handoff`. Use `jc-consolidate-docs` only when
+sessions with `session-handoff`. Use `oak-consolidate-docs` only when
 the trigger checklist says deep convergence is due.
 
 ## Surprise Pipeline

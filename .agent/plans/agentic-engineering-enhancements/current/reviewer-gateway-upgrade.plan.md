@@ -9,7 +9,7 @@ review-depth selection, and coverage tracking.
 
 ## Problem and Intent
 
-`code-reviewer` currently serves as the gateway agent — it triages which
+`code-expert` currently serves as the gateway agent — it triages which
 specialist reviewers to invoke. But with the growing specialist roster (already
 large and still expanding across code quality, architecture, type safety,
 testing, security, docs, config, onboarding, Elasticsearch, Clerk, Sentry,
@@ -45,7 +45,7 @@ It does not create new experts itself. It must track:
 
 ### Identity
 
-- **Current**: `code-reviewer` — a code quality reviewer that also triages
+- **Current**: `code-expert` — a code quality reviewer that also triages
 - **Proposed**: Reviewer Gateway agent — a triage and orchestration agent that
   also does baseline code quality assessment
 
@@ -83,8 +83,8 @@ plan). It must:
 2. **Invoke fast agents in parallel**: sentinels and scanners are cheap and
    independent — run them concurrently
 3. **Act on escalation recommendations**: when a sentinel reports "ESCALATION
-   RECOMMENDED: security-reviewer", the gateway invokes the deep specialist
-4. **Select depth for dual-tier agents**: type-reviewer as sentinel (find
+   RECOMMENDED: security-expert", the gateway invokes the deep specialist
+4. **Select depth for dual-tier agents**: type-expert as sentinel (find
    assertions) vs deep (trace type flow) — the gateway decides based on WS6
    depth selection guidance
 
@@ -112,7 +112,7 @@ nonsensical (a Clerk change doesn't need ES review).
 | **Domain** | Clerk, ES, Sentry, MCP, Express, cyber security, web/API security, privacy, web/API GDPR | Gateway picks by technology signal | Auth/OAuth → Clerk; search/mappings → ES; transport/protocol → MCP; HTTP boundary risk → web/API security; privacy-by-design issue → privacy; personal-data API semantics → web/API GDPR |
 | **Practice** | planning, TDD, DevX, onboarding, docs-adr | Gateway picks by change type | Agent artefacts → planning; test changes → TDD; CLI/SDK → DevX; onboarding paths → onboarding; ADR/docs → docs-adr |
 
-**Important note**: `security-reviewer` remains part of the **standard roster**
+**Important note**: `security-expert` remains part of the **standard roster**
 for security-sensitive changes. It is the default exploitability-first pass and
 **complements** the domain specialists above rather than being replaced by
 them.
@@ -122,7 +122,7 @@ they're a mental model that makes the gateway's triage checklist manageable.
 The gateway reads the change profile, identifies the cluster, then selects
 the specific members within it.
 
-For architecture specifically, the existing pattern works well: code-reviewer
+For architecture specifically, the existing pattern works well: code-expert
 (soon: gateway) already recommends specific architecture reviewers based on
 whether the concern is boundaries, ADR compliance, coupling, or resilience.
 That pattern generalises to all signal-routed clusters.
@@ -144,9 +144,9 @@ triage:
 
 - Auth/OAuth/Clerk → clerk specialist, security specialist
 - Broad security posture / threat model / defence in depth → cyber security
-  specialist (often alongside `security-reviewer`)
+  specialist (often alongside `security-expert`)
 - HTTP/API boundary hardening → web/API security specialist (often alongside
-  `security-reviewer`)
+  `security-expert`)
 - Privacy by design / retention / minimisation → privacy specialist
 - Personal-data API semantics / deletion / export / consent → web/API GDPR
   specialist
@@ -234,7 +234,7 @@ choice.
 
 ### Directive Updates
 
-`.agent/memory/executive/invoke-code-reviewers.md` should be renamed and restructured
+`.agent/memory/executive/invoke-code-experts.md` should be renamed and restructured
 to reflect the gateway's broader role. The current content is good but needs:
 
 1. Rename to `invoke-reviewers.md` (or equivalent — decided during taxonomy work)
@@ -245,8 +245,8 @@ to reflect the gateway's broader role. The current content is good but needs:
 
 ### Rule Updates
 
-`.agent/rules/invoke-code-reviewers.md` and its platform adapters
-(`.claude/rules/invoke-code-reviewers.md`, `.cursor/rules/invoke-code-reviewers.mdc`)
+`.agent/rules/invoke-code-experts.md` and its platform adapters
+(`.claude/rules/invoke-code-experts.md`, `.cursor/rules/invoke-code-experts.mdc`)
 should be renamed to match the directive rename.
 
 ## Relationship to Other Plans
@@ -273,10 +273,10 @@ should be renamed to match the directive rename.
 
 This plan does NOT create new files from scratch — it upgrades existing ones:
 
-1. Redesign the triage model in `.agent/memory/executive/invoke-code-reviewers.md`
+1. Redesign the triage model in `.agent/memory/executive/invoke-code-experts.md`
    (layered triage, depth selection, coverage tracking)
 2. Expand the worked examples for the full specialist roster
-3. Update the gateway agent template (currently `code-reviewer`) to reflect
+3. Update the gateway agent template (currently `code-expert`) to reflect
    the broader triage and orchestration role
 4. Rename directive, rule, and platform adapters (coordinated with taxonomy
    plan WS2/WS5)
@@ -342,7 +342,7 @@ ID Metadata, RFC 9728 alignment. Backstage v1.50 fixes MCP OAuth 2.0
 PRM endpoint. No recorded audit of this repo's MCP PRM endpoint
 against RFC 9728.
 
-One-off scope addition: schedule a Clerk/MCP-reviewer joint pass
+One-off scope addition: schedule a Clerk/MCP-expert joint pass
 against the MCP server's Protected Resource Metadata endpoint to
 verify RFC 9728 compliance.
 

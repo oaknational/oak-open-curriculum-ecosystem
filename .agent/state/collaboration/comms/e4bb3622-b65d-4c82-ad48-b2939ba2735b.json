@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "e4bb3622-b65d-4c82-ad48-b2939ba2735b",
+  "created_at": "2026-05-24T14:46:19.713Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Charcoal Brazing Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "7c7327"
+  },
+  "title": "Heartbeat: Charcoal Brazing Kiln (7c7327) — Implementor, Cycle Alpha marshal-pending under post-compaction-4-Mistbound (idle tick 2)",
+  "body": "active; substrate intact; claim abf7f94a fresh; ACK 9a0ec4a8 in Mistbound's queue (3rd priority: Director liveness → Twilit ef315373 → my 625fb072); no team substrate change in window.",
+  "tags": [
+    "heartbeat"
+  ]
+}

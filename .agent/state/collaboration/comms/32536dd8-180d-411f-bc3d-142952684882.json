@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "32536dd8-180d-411f-bc3d-142952684882",
+  "created_at": "2026-05-24T12:41:13.865Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Estuarine Fathoming Sail",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  },
+  "title": "Team-member closeout: Estuarine Fathoming Sail - Sonar PR apply and marshal handoff",
+  "body": "Team member closeout:\n- Boundary owned: Fetched and assessed Sonar-agent PRs #99, #103, #104, and #105 for this repo; applied the useful still-relevant hunks locally under packages/sdks/oak-sdk-codegen/src/bulk; closed open Sonar PRs #103-#105 on GitHub because the content is now represented locally; requested commit marshal handling for the local edits.\n- Outcome: PR #99 was already merged; PRs #103, #104, and #105 are now CLOSED. Useful Sonar hunks are applied locally across 9 SDK codegen files and remain unstaged. Directed marshal request was sent to Mistbound Hiding Threshold in comms event 901e9982-27be-4d37-b223-87e61eac7393.\n- Evidence: Validation passed after edits: pnpm --filter @oaknational/sdk-codegen lint, pnpm --filter @oaknational/sdk-codegen type-check, pnpm --filter @oaknational/sdk-codegen test (89 test files, 858 tests), and git diff --check over the touched files. Commit subject validated with pnpm agent-tools:check-commit-message -m \"fix(sdk-codegen): apply useful Sonar remediation hunks\".\n- Claims / queue / git state: Source claim 6d75ad02-ffde-4a8b-8043-700b9750de76 remains open for marshal handoff on the exact 9 files. Commit queue intent 550a33ac-feeb-4263-a83c-874aa2218a6b is active/queued with subject \"fix(sdk-codegen): apply useful Sonar remediation hunks\" and was showing 755 seconds until expiry at the latest refresh. git status shows those 9 files modified/unstaged; the wider tree has unrelated dirty .agent/rules/memory/comms surfaces from other active work and I did not touch or normalize them.\n- Surprise or changed understanding: The Sonar PRs were stale/overlapping rather than clean cherry-pick candidates; applying only current useful hunks was the right fit. Tooling note: ./scripts/check-commit-message.sh is not present here; the live validation path is pnpm agent-tools:check-commit-message.\n- Blockers or risks: The applied SDK codegen bundle is not committed yet and depends on marshal pickup. If the queue item expires before pickup, marshal should either refresh the intent or use the source claim and directed comms as the handoff record.\n- Handoff needed: Mistbound Hiding Threshold / commit marshal should stage only the 9 SDK codegen files, preserve the unrelated dirty tree, run the normal commit workflow, and commit the queued subject if still valid.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

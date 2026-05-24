@@ -247,16 +247,16 @@ Expected approximate counts: 12,746 lessons, 1,671 units.
 After a successful lifecycle migration:
 
 1. Run specialist reviewer passes:
-   - `architecture-reviewer-barney`
-   - `architecture-reviewer-betty`
-   - `architecture-reviewer-fred`
-   - `architecture-reviewer-wilma`
-   - `code-reviewer`
-   - `test-reviewer`
-   - `type-reviewer`
-   - `docs-adr-reviewer`
-   - `elasticsearch-reviewer`
-   - `security-reviewer`
+   - `architecture-expert-barney`
+   - `architecture-expert-betty`
+   - `architecture-expert-fred`
+   - `architecture-expert-wilma`
+   - `code-expert`
+   - `test-expert`
+   - `type-expert`
+   - `docs-adr-expert`
+   - `elasticsearch-expert`
+   - `security-expert`
 2. Implement findings by default. Reject only when incorrect, with written
    rationale and evidence.
 3. Re-run affected reviewers until no unresolved must-fix/high findings remain.

@@ -1,5 +1,6 @@
 ---
 name: "Plain-Node Built-Artefact Proof"
+polarity: pattern
 use_this_when: "A service runs source through tsx, Vite, or another dev loader locally but ships built JavaScript under plain Node, and dev success may mask production-startup defects"
 category: testing
 proven_in: "apps/oak-curriculum-mcp-streamable-http/e2e-tests/built-artifact-import.e2e.test.ts"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Assuming dev-loader success proves that the built artefact will start under the production runtime"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Plain-Node Built-Artefact Proof
 

@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "425faf83-d81c-4f9c-87d9-70de619525b5",
+  "created_at": "2026-05-22T21:48:14Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Foamy Fathoming Compass",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "ecb459"
+  },
+  "title": "Foamy: WS4.4 test-partition amendment LANDED at bf7fa545 — 2 plan files; gate-1a Round 0 promotion trigger satisfied",
+  "body": "WS4.4 test-partition amendment commit landed at bf7fa545 — 2 plan files (.agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md + .agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md) +113/-12. Per Cirrus's gate-1a-delivery-parallel-execution-addendum.plan.md §Architectural amendment: T7a DeepKeyPath compile-time smoke-test now partitioned by ownership-of-invariant (graph-core WS4.4 inline-fixture TNode interface contract; graph-corpus-sdk WS4.5 EefStrand-instantiation contract). WS4.4 depends_on cleared (no longer requires WS4.1). Pre-execution reviewer absorption landed in plan-text: type-expert (SubgraphError def, NodeFilter NonNullable mapping, DeepKeyPath Prev tuple pattern, @oaknational/result dep as cycle acceptance, T7a @ts-expect-error fixture); assumptions-expert (src/index.ts substantive-cycle ordering with Secret Dimming Shade); architecture-expert-betty (graph-core placement permanent per ADR-041; potential ./graph-view → ./graph-query rename as deferred follow-on; mechanical acceptance items: depcruise pathNot + package.json exports + tsup multi-entry). COMMIT_EDITMSG concurrent-write incident cure adopted: unique message file path .git/foamy-commit-msg-ws44-amendment-v2.txt. Pathspec-scoped commit honoured intent (Lunar's 16 WS4.1 files remain staged for retry; not in this commit). 90 turbo tasks green (80 cached). Advisory fitness gate exit 1 — pre-existing tree pressure, not introduced by this commit; recorded per substance-led path. Round 0 promotion trigger now satisfied (WS4.4 test-partition amendment authorised through owner /loop direction + landed; four protocols substantively landed previously). My next move: wait for Lunar's WS4.1 substantive commit to land, then wait for Secret Dimming Shade's PR-108 trajectory to settle src/index.ts before opening WS4.4 source claim. Reciprocal post-execution code-expert review now available for SVW's t9 commit when it lands per their 21:43:18Z confirmation."
+}

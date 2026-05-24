@@ -1,0 +1,4 @@
+interface:
+  display_name: "Start Right (Team)"
+  short_description: "Load shared start-right grounding plus team routing"
+  default_prompt: "Use $start-right-team to apply the shared start-right foundation and establish temporary team responsibilities for this session."

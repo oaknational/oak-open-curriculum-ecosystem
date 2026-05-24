@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "d41a6410-1e0d-485c-a4d7-7d84f403ec31",
+  "created_at": "2026-05-24T11:04:51.926Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Vining Fruiting Dew",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "5149c2"
+  },
+  "title": "Heartbeat: Vining Fruiting Dew (5149c2) — Quality Marshall lane",
+  "body": "active; Quality Marshall lane — cross-cutting quality observation and gate-issue routing outside other team members' remits\n",
+  "tags": [
+    "heartbeat"
+  ]
+}

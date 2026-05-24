@@ -2,7 +2,8 @@
 
 ## Status
 
-Accepted (2025-09-07)
+Accepted (2025-09-07). Amended 2026-05-10 to align the summary and
+requirements with the proxy-AS and opaque-token runtime shape.
 
 **Related**: ADR-052 (OAuth 2.1 for MCP), ADR-040 (Neutral Architecture)
 
@@ -11,7 +12,7 @@ Accepted (2025-09-07)
 Per ADR-052, we've decided to use OAuth 2.1 for MCP HTTP server authentication. This requires an external **Authorization Server** (Identity Provider) to:
 
 1. Manage user authentication (login, logout, MFA)
-2. Issue OAuth 2.1 access tokens (JWT)
+2. Issue OAuth 2.1 access tokens
 3. Provide OAuth discovery endpoints (RFC 8414)
 4. Manage user sessions and refresh tokens
 5. Integrate with social identity providers (Google, Microsoft)
@@ -25,7 +26,7 @@ Per ADR-052, we've decided to use OAuth 2.1 for MCP HTTP server authentication. 
 - Email domain allowlist (`.thenational.academy` initially)
 - Multi-factor authentication (MFA)
 - Session management with refresh tokens
-- JWKS endpoint for token verification
+- Token verification support for the selected Clerk OAuth token shape
 
 **Operational**:
 
@@ -92,19 +93,33 @@ Use **Clerk** as the Identity Provider and Authorization Server for the MCP HTTP
 
 ### Integration Approach
 
-**MCP Server Role**: Resource Server only
+**Historical MCP Server Role**: Resource Server only
 
-- Validates Clerk-issued JWT tokens
+- Historically validated Clerk-issued JWT tokens
 - Proxies Clerk's OAuth discovery to `/.well-known/oauth-authorization-server`
-- Uses Clerk's JWKS for signature verification
+- Historically used Clerk's JWKS for signature verification
 - Does NOT handle user login/signup flows
 
-**Token Flow**:
+The "Resource Server only" and JWT/JWKS bullets above describe the original
+2025 decision. The binding current interpretation is the 2026-02-21 proxy-AS
+amendment plus ADR-142: Clerk remains the upstream IdP/AS, while the MCP server
+presents a same-origin proxy AS to clients and verifies Clerk opaque OAuth
+tokens through Clerk-supported verification.
+
+**Current Binding MCP Runtime Shape**:
+
+1. Clerk remains the canonical upstream IdP/AS.
+2. The MCP server presents a same-origin proxy AS to clients for compatibility.
+3. Clerk OAuth access tokens for this flow are opaque `oat_...` tokens.
+4. The MCP server verifies those opaque tokens through Clerk-supported
+   verification rather than local JWT/JWKS validation.
+
+**Historical Token Flow**:
 
 1. User authenticates via Clerk (in client application or browser)
 2. Client receives Clerk session token (JWT)
 3. Client sends `Authorization: Bearer <token>` to MCP server
-4. MCP server validates token against Clerk's JWKS
+4. MCP server historically validates token against Clerk's JWKS
 5. MCP server extracts user identity from validated token
 
 ## Rationale
@@ -122,7 +137,8 @@ Use **Clerk** as the Identity Provider and Authorization Server for the MCP HTTP
 
 - Full OAuth 2.1 and OpenID Connect support
 - RFC 8414 Authorization Server Metadata
-- Standard JWKS endpoint for token verification
+- Provider-supported token verification; the original JWKS-based validation
+  path is historical for the current opaque-token flow
 - Battle-tested OAuth implementation
 
 **3. Developer Experience**
@@ -226,7 +242,8 @@ Use **Clerk** as the Identity Provider and Authorization Server for the MCP HTTP
 **Vendor Lock-In**:
 
 - Use standard OAuth/OIDC (portable to other providers)
-- Validate tokens via JWKS (standard approach)
+- Verify tokens through provider-supported mechanisms; use JWKS validation only
+  when the upstream access-token format is JWT
 - Keep MCP server code provider-agnostic
 - Document migration strategy if needed
 
@@ -343,7 +360,11 @@ Clerk is the **canonical user-ID provider for the Oak Open Curriculum ecosystem 
 
 - New alpha-scope services adopt the shared Clerk instance, not a parallel one.
 - User-identity primitives in code, schemas, and audit logs are typed against the Clerk `userId` shape (per ADR-024 dependency injection patterns).
-- Vendor-lock mitigations from the original §Mitigations section remain active — token validation via standard OIDC/JWKS, provider-agnostic MCP code paths — so the alpha-end revisit is not foreclosed.
+- Vendor-lock mitigations from the original §Mitigations section remain active
+  in intent — provider-supported token verification and provider-agnostic MCP
+  code paths — so the alpha-end revisit is not foreclosed. For the current
+  Clerk OAuth flow, that means Clerk-supported opaque-token verification rather
+  than local JWT/JWKS validation.
 
 **Why named explicitly now**: prior to this amendment, the temporal scope of the Clerk decision was implicit. The retracted standing-decisions register entry `Clerk canonical user-ID provider through public alpha` captured the owner's explicit decision that the canonical-IdP commitment is bounded to alpha. Graduated to this amendment in 2026-04-21 Session 5 per the standing-decisions decomposition arc.
 

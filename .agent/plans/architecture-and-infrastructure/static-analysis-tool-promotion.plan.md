@@ -1,7 +1,7 @@
 ---
 name: "Static Analysis Tool Promotion"
 overview: "Triage and resolve findings from knip and dependency-cruiser so both tools can be promoted to blocking quality gates."
-specialist_reviewer: "config-reviewer"
+specialist_reviewer: "config-expert"
 todos:
   - id: triage-depcruise-circular
     content: "Resolve all circular dependency findings from dependency-cruiser"
@@ -268,6 +268,6 @@ This is the largest finding category. Breakdown:
 
 - Config files: `knip.config.ts`, `.dependency-cruiser.mjs`
 - Scripts: `pnpm knip`, `pnpm depcruise`, `pnpm knip:fix`, `pnpm depcruise:report`
-- Config-reviewer findings: `.dependency-cruiser.mjs` must be exact name
+- Config-expert findings: `.dependency-cruiser.mjs` must be exact name
   (not `.dependency-cruiserrc.mjs`); no turbo plugin in knip v6; no
   `--ts-pre-compilation-deps` CLI flag (config-only)

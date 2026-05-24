@@ -272,12 +272,12 @@ if blockers found.
 
 Recommended reviewers:
 
-- `architecture-reviewer-fred` — boundary discipline for exports across
+- `architecture-expert-fred` — boundary discipline for exports across
   sdk-codegen → search-cli
-- `architecture-reviewer-wilma` — failure modes when reference map is
+- `architecture-expert-wilma` — failure modes when reference map is
   stale, absent, or loading fails mid-ingestion
-- `test-reviewer` — coverage adequacy for the new validation paths
-- `code-reviewer` — gateway review for all changes
+- `test-expert` — coverage adequacy for the new validation paths
+- `code-expert` — gateway review for all changes
 
 ---
 

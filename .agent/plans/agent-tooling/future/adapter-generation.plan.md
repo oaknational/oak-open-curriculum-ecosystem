@@ -33,13 +33,13 @@ A single `specialist-manifest.yaml` in `.agent/`:
 
 ```yaml
 agents:
-  - name: clerk-reviewer
-    canonical_template: .agent/sub-agents/templates/clerk-reviewer.md
+  - name: clerk-expert
+    canonical_template: .agent/sub-agents/templates/clerk-expert.md
     tier: deep  # gateway | sentinel | deep
     default_depth: deep  # deep | focused | both
     readonly: true
     skill: .agent/skills/clerk-expert/SKILL.md
-    rule: .agent/rules/invoke-clerk-reviewer.md
+    rule: .agent/rules/invoke-clerk-expert.md
     platforms:
       claude:
         tools: [Read, Grep, Glob, Bash, WebFetch, WebSearch]

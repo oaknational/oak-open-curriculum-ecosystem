@@ -1,11 +1,16 @@
 ---
 name: Tool Error as Question
+polarity: pattern
 category: process
 status: provisional
 discovered: 2026-04-29
 proven_in: "TS6 migration session (Verdant Swaying Fern) — five distinct surfaces in a single session where the agent treated a tool-or-signal returning an error as a problem to bypass rather than as a question about state. Surfaces: reviewer-as-prosthetic (reviewer findings substituted for grounding), confirmation-reading-vs-exploration (read diff for hypothesis match not for what diff was telling), hook-as-obstacle (failing hooks treated as friction), fitness-as-constraint (fitness signal treated as ceiling on capture), sed-bypass-of-Read-then-Edit (Edit safety check bypassed via sed). Owner-flagged the meta-pattern."
 related_pdr: PDR-018
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Tool Error as Question
 
@@ -59,8 +64,8 @@ The forbidden response is to skip understanding and go straight to
 The 2026-04-29 TS6-migration session captured five distinct
 manifestations of the same instinct in one continuous arc:
 
-1. **Reviewer findings as grounding** — code-reviewer +
-   config-reviewer findings became the picture of "what's broken"
+1. **Reviewer findings as grounding** — code-expert +
+   config-expert findings became the picture of "what's broken"
    without independent grounding. Captured as
    [`ground-before-framing.md`](ground-before-framing.md). The
    reviewer was treated as a prosthetic for direct observation.

@@ -1,5 +1,6 @@
 ---
 name: Passive Guidance Loses to Artefact Gravity
+polarity: anti-pattern
 use_this_when: Designing a guardrail against an agent failure mode — choose between documented-but-not-enforced guidance (passive) and an environmentally-triggered rule, hook, or read-on-entry surface (active); passive guidance alone is a watchlist item, not a guardrail
 category: agent
 proven_in: .agent/memory/active/napkin.md (three instances, 2026-04-20/21)
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Installing documented guidance (a register entry, a prose bullet, a non-goal) as the countermeasure to a repeated failure mode, then observing the failure mode continue because the agent in the moment has no firing mechanism forcing the check"
   stable: true
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 ## Principle
 

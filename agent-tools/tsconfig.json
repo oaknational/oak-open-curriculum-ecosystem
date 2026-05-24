@@ -3,7 +3,17 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "types": ["node", "vitest/globals"],
+    "jsx": "react-jsx",
     "noEmit": true
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts", "vitest.config.ts"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "e2e-tests/**/*.ts",
+    "smoke-tests/**/*.ts",
+    "vitest.config.ts",
+    "vitest.e2e.config.ts"
+  ]
 }

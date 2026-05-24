@@ -1,9 +1,9 @@
 ---
-fitness_line_target: 240
-fitness_line_limit: 320
+fitness_line_target: 280
+fitness_line_limit: 360
 fitness_char_limit: 19500
 fitness_line_length: 100
-split_strategy: "Extract per-channel protocol detail to companion docs as channels grow (Communication Channels content has a natural home in agent-collaboration-channels.md if needed); keep this file as the agent-to-agent working model and channel index"
+split_strategy: "Per-channel protocol detail extracts to companion docs as channels grow (the routing card in agent-collaboration-channels.md is the natural home). Cross-channel governance — meta-doctrine about when to add mechanism, which authority resolves a coordination need, how surfaces interact — stays here, parented under Working Model. Keep this file as the agent-to-agent working model and channel index."
 ---
 
 # Agent Collaboration Practice
@@ -82,9 +82,74 @@ sidebar for a short focused exchange, a joint decision when agents need a
 shared commitment with recorder or actor follow-through, and an owner
 escalation when peer agreement cannot resolve the block.
 
+### Coordinator Role
+
+Peer collaboration is the default. A **coordinator role** is an opt-in
+affordance for small collaborations (2-3 agents), where it would
+otherwise be unnecessary structure undermining the reasoning-peers stance.
+
+The coordinator role becomes the *expected* default when a super-
+linear coordination chain becomes visible — format-drift loops
+bouncing the pre-commit hook across multiple agents, repeated
+commit-queue collisions, or peer-pause cascades. The trigger is the
+symptom, not an agent count; calibration of any numerical threshold
+is held in the friction register and napkin so it can move as
+evidence accumulates.
+
+The role is a *commitment to coordinate*, not a new primitive. Any
+agent observing the chain claims it by posting a shared-comms-log
+entry naming the role and the chain symptom. Authority is bounded:
+pause peers via canonical comms events with deadlines, queue commits via
+`commit_queue`, resume once the chain clears. Conflicts between two
+claimants resolve by sidebar. Termination is automatic — when the
+chain clears the role dissolves; the opening shared-comms-log entry
+is the durable record.
+
+### Coordination Surface Discipline
+
+Before adding a new always-visible coordination surface, widen the regular
+state audit first. Active claims, closure history, decision threads,
+unresolved decision requests, evidence bundles, and schema validation became
+usable once `consolidate-docs` reported them together. Structured state plus
+consolidation output is usually the first dashboard.
+
+Split evidenced durability gaps from speculative coordination mechanisms.
+Claim-history and decision-thread work were grounded in real harvest
+evidence; sidebar, timeout, and file-backed owner-escalation primitives were
+held promotion-gated until async decision threads proved insufficient. The
+discipline: **ground each new coordination mechanism in observed need before
+promoting it.** Speculative coordination shapes accumulate as dead surfaces
+the moment they ship without an evidence-of-need claim.
+
+### Inter-Agent Comms Is a First-Class Primitive
+
+Not all coordination needs owner-mediation. When another agent's state
+blocks mine and they may still be active, the correct first move is a direct
+comms-event to that agent (with a deadline + a named default action if no
+response), brief poll for reply, then escalate to owner only if no response
+by deadline. The reverse order — surface options to the owner first —
+over-uses owner mediation for coordination the agents can resolve between
+themselves.
+
+Operating shape: **bounded-deadline + default-action format** on the
+comms-event; agent posts, polls briefly, acts on default if silent.
+Owner-mediation remains the right channel for **owner-owned decisions**
+(authorisation chain lifts on owner-directed deferrals; strategic
+redirection; cross-thread scope changes). The discipline: route through the
+**lowest-authority resolver** that can decide.
+
+Worked instance (graduated to this directive 2026-05-09): doc-cleanup
+`verify-staged` blocked on three pre-staged-but-deferred files from a peer's
+session. Initial options surfaced to the owner were all owner-mediated
+(authorise unstage; commit peer's first; wait). Owner direction redirected
+to a comms-event with bounded deadline + default action; coordination
+resolved between the two agents within the deadline. Owner-stated principle
+on close: communicating with other agents is always an option; not all
+communication needs to be mediated through the owner.
+
 ## Scope Discipline Across Agent Boundaries
 
-Three foundational rules, named here as load-bearing principles:
+Four foundational rules, named here as load-bearing principles:
 
 ### a. Don't Break the Build Without a Fix Plan
 
@@ -122,26 +187,20 @@ rule operationalises the consult-and-register half of the same tripwire.
 ### c. Treat Commit as a Short-Lived Shared Transaction Surface
 
 The git lock prevents repository corruption, but it does not communicate
-intent or queue order before agents race the shared index and `HEAD`. Before
-staging or committing, use the commit skill to enqueue the intended bundle,
-open and close a short-lived `git:index/head` claim, and verify the exact
-staged bundle immediately before `git commit`. This is awareness, ordering,
-and auditability, not a mechanical lock.
+intent or queue order before agents race the shared index and `HEAD`. Use the
+commit skill: enqueue the intended bundle, open a short-lived
+`git:index/head` claim, verify the exact staged bundle, then close the claim
+after success, failure, or abort. This is awareness, ordering, and
+auditability, not a mechanical lock.
 
-The queue protects authorial-bundle integrity; it does not make whole-repo
-hooks local to the staged files. Commit hooks are intentionally whole-tree
-checks because the only useful repository state is one where the whole repo
-passes. If a hook fails on a minor issue such as formatting or markdown style,
-fix it immediately, even when the file belongs to another active slice, and
-record the repair. If the failure is substantial, make it the highest-priority
-next item with a named plan or owner-visible route. Do not narrow quality-gate
-scope, bypass hooks, introduce compatibility layers, or leave the repo broken
-as a coordination tactic.
+Peer-pair review is not commit authorship: implementers own staging/commit;
+reviewers gate by verdict.
 
-Files under `.agent/` are shared Practice and coordination state. Active claims
-there are visibility signals, not commit blockers. Commit `.agent` updates when
-they belong to the current bundle or are needed to keep handoff / claim /
-queue / thread state durable; otherwise shared-state residue never lands.
+The load-bearing coordination rules are explicit pathspec staging and commit,
+whole-tree hook respect, durable `.agent` state when it belongs to the current
+bundle, and a peer-claim re-read after helper-mediated state writes. Operational
+recipes live in [`stage-by-explicit-pathspec`][stage-by-explicit-pathspec],
+[lifecycle][lifecycle] §Commit Queue, and the [channel card][channels-card].
 
 ### d. Cleanup Ethics for Apparently Orphaned Claims
 
@@ -152,6 +211,19 @@ before deletion is the discipline: post a shared-log note naming the
 claim and closure kind before writing the close. Recipe in
 [lifecycle][lifecycle] §Apparently Orphaned Claims.
 
+## PR Closeout Discipline
+
+A PR closeout has two **independent** evidence loops: gate state and
+reviewer-comment state. A green check suite does not prove comments,
+threads, or review summaries are settled. Fetch and classify reviewer
+comments before the next edit, and report planning PRs with two verdicts:
+technical readiness and plan decision-completeness.
+
+PR metadata is part of the review surface. When scope changes or the
+closeout moves from local/pending to pushed, refresh title/body and
+next-session records together so reviewers and future sessions inherit the
+current state. Routing notes live in the [channel card][channels-card].
+
 ## Communication Channels
 
 Pick the channel that fits the shape of the coordination need. The
@@ -160,38 +232,17 @@ at-a-glance routing card is
 the operational state index is
 [`collaboration-state-conventions.md`](../memory/operational/collaboration-state-conventions.md).
 
-The high-frequency rule is: use active claims for live "I am touching
-this area now" signals, `commit_queue` for advisory commit turn order and
-staged-bundle verification, the shared communication log for discovery notes,
-decision threads for structured async coordination, sidebars for focused short
-exchanges inside a conversation, escalations for owner-facing unresolved
-cases, and owner questions for final tiebreakers. Reviewer dispatch is draft
-review inside one agent's session, not peer collaboration.
-
 ## Identity vs Liveness
 
-These are different concerns and live in different surfaces.
-
-- **Identity** is who-I-am-on-this-thread, additive across sessions per
-  [PDR-027](../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md).
-  Identity rows live in thread records; the
-  [`register-identity-on-thread-join`](../rules/register-identity-on-thread-join.md)
-  rule installs the session-open tripwire. Every shared-state mutation
-  runs identity preflight before write; Codex sessions with
-  `CODEX_THREAD_ID` available must derive the PDR-027 identity block and
-  must not fall back to `Codex` / `unknown`. Recipe in
-  [`collaboration-state-conventions.md`][state-conventions]
-  §Write-Safety Contract.
-- **Liveness** is when-was-this-agent-last-active-here, a *freshness
-  signal* on a claim. Liveness lives on the structured-claims surface;
-  each claim carries `claimed_at`, optional `heartbeat_at`, and a
-  `freshness_seconds` budget (default 14400 = 4 hours). After expiry the
-  claim is **stale** — noise to be audited at consolidation, not a blocker
-  that strands other agents. Closed claims are archived, not silently
-  deleted: explicit, stale, and owner-forced closes all preserve
-  `closure.kind`, `closed_at`, `closed_by`, and evidence refs. Commit-window
-  claims normally use 900 seconds because the index / HEAD transaction should
-  last minutes, not hours.
+Identity is who-I-am-on-this-thread; liveness is when this claim was last
+fresh. Identity rows live in thread records per
+[PDR-027](../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md)
+and the
+[`register-identity-on-thread-join`](../rules/register-identity-on-thread-join.md)
+tripwire. Liveness lives on structured claims through `claimed_at`, optional
+`heartbeat_at`, and `freshness_seconds`; stale claims are consolidation noise,
+not blockers. Recipes live in [state conventions][state-conventions] and
+[lifecycle][lifecycle].
 
 ## Bootstrap Fast-Path
 
@@ -269,11 +320,19 @@ Core state: [log](../state/collaboration/shared-comms-log.md), [active claims][a
 and [escalations][escalations-dir]. Operational companions:
 [`collaboration-state-conventions.md`][state-conventions],
 [`agent-collaboration-channels.md`][channels-card], and
-[`threads/README.md`][threads-readme].
+[`threads/README.md`][threads-readme]. Reviewer-comment-state harvesting
+(§PR Closeout Discipline §Gate State And Reviewer-Comment State Are
+Distinct) composes with
+[PDR-015 reviewer authority and dispatch][pdr-015]:
+PR closeout names *when* reviewer-comment state must be harvested;
+PDR-015 names *whose* review authority applies on which abstraction
+layer.
 
 [p]: ../plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md
 [channels-card]: ../memory/executive/agent-collaboration-channels.md
 [threads-readme]: ../memory/operational/threads/README.md
+[pdr-015]: ../practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md
+[stage-by-explicit-pathspec]: ../rules/stage-by-explicit-pathspec.md
 [founding-pattern]: ../memory/collaboration/parallel-track-pre-commit-gate-coupling.md
 [lifecycle]: ../memory/operational/collaboration-state-lifecycle.md
 [napkin]: ../memory/active/napkin.md

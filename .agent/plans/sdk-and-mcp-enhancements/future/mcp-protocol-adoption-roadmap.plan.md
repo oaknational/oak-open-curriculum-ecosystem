@@ -1,7 +1,7 @@
 ---
 name: "MCP Protocol Adoption Roadmap"
 overview: "Strategic plan for adopting remaining MCP protocol features: resource templates, prompt completion, curriculum asset downloads, and per-primitive icons."
-specialist_reviewer: "mcp-reviewer, architecture-reviewer-barney"
+specialist_reviewer: "mcp-expert, architecture-expert-barney"
 isProject: false
 todos:
   - id: r1-resource-templates

@@ -1,5 +1,8 @@
 # Directive-File Work Requires <30% Context Budget
 
+Operationalises
+[PDR-052 (Directive-File Context Budget)](../practice-core/decision-records/PDR-052-directive-file-context-budget.md).
+
 Editing any file under `.agent/directives/` requires the agent's
 session context-usage to be below 30%. If context is at or above
 30%, finish current-step work, write a session-handoff opener, and

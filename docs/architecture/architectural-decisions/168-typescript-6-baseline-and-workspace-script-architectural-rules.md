@@ -1,6 +1,7 @@
 # ADR-168: TypeScript 6 Baseline and Workspace-Script Architectural Rules
 
-**Status**: Accepted
+**Status**: Accepted; amended 2026-05-10 to separate the current base config
+from stricter compiler options that remain deferred.
 **Date**: 2026-04-29
 **Related**:
 [ADR-150](150-continuity-surfaces-session-handoff-and-surprise-pipeline.md) —
@@ -90,15 +91,11 @@ The canonical base config carries:
     "declaration": true,
     "declarationMap": true,
     "erasableSyntaxOnly": true, // schema-first execution invariant
-    "sourceMap": true,
     "skipLibCheck": true,
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
     "noFallthroughCasesInSwitch": true,
-    "noEmit": true,
   },
 }
 ```
@@ -114,6 +111,11 @@ does not set `rootDir`; it inherits from the base. Build configs that
 emit declarations (`declaration: true`) MUST set `rootDir` explicitly
 to avoid TS6's stricter inference picking the workspace root and
 emitting `dist/` files at the wrong nesting.
+
+`sourceMap`, `noUncheckedIndexedAccess`, `noImplicitOverride`, and root-level
+`noEmit` are not part of the current accepted base-config contract. They may be
+adopted later, but doing so is a separate migration because it changes emitted
+debug artefacts or strictness across many workspaces.
 
 ### 2. Workspace-script-ban: workspaces MUST NOT call scripts from the repo root
 
@@ -193,12 +195,11 @@ access.
 
 ### Pre-existing exception: Husky entry points
 
-Husky's hook entry points (`.husky/{pre-commit,commit-msg,pre-push}`,
-`scripts/check-commit-message.sh`, `scripts/log-commit-attempt.sh`)
+Husky's hook entry points (`.husky/{pre-commit,commit-msg,pre-push}`)
 remain `.sh` because Husky requires shell-script entry points. This
-is a pre-existing exception, not a new one. The hooks delegate to
-TypeScript implementations via `pnpm exec tsx` wherever the work
-itself is non-trivial.
+is a pre-existing exception, not a root-tooling exception. The hooks
+delegate to workspace-owned package scripts wherever the work itself is
+non-trivial.
 
 ## Consequences
 

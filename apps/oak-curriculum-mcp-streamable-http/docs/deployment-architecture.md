@@ -105,7 +105,7 @@ const loadConfiguredApp = async () => {
     observability,
     getWidgetHtml: () => WIDGET_HTML_CONTENT,
     setupSentryErrorHandler:
-      runtimeConfig.env.SENTRY_MODE !== 'off' ? setupExpressErrorHandler : undefined,
+      runtimeConfig.env.SENTRY_MODE === 'sentry' ? setupExpressErrorHandler : undefined,
   });
 };
 
@@ -113,6 +113,11 @@ export default createDeployEntryHandler({
   loadHandler: loadConfiguredApp,
 });
 ```
+
+Note: ADR-162 records a target migration from `SENTRY_MODE` to
+`OBSERVABILITY_SINKS` and `OBSERVABILITY_FIXTURES`, but this HTTP MCP runtime
+still uses `SENTRY_MODE` in its app env schema and server wiring. Update this
+snippet only when the code migration lands.
 
 `createApp` remains async because startup includes OAuth metadata work and MCP
 factory/readiness setup. `src/server.ts` keeps that async work behind a
@@ -244,7 +249,7 @@ The build pipeline has two independent steps:
 ### Widget Codegen (`build:widget`)
 
 ```json
-"build:widget": "vite build --config widget/vite.config.ts && pnpm exec tsx scripts/embed-widget-html.ts"
+"build:widget": "vite build --config widget/vite.config.ts && <package-local widget HTML embed step>"
 ```
 
 1. **Vite** builds the widget React app into `.widget-build/oak-banner.html`

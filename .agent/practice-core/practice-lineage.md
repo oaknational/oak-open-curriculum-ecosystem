@@ -142,17 +142,17 @@ This process is universal. It costs nothing and prevents shallow execution.
 ### Agent Pattern
 
 The Practice can use specialist sub-agents for review. When a repo installs a reviewer layer, the
-minimum viable roster is **code-reviewer** (gateway -- correctness, security, performance, test
-coverage; triages to specialists), **test-reviewer** (classification, mock simplicity, TDD
-compliance; recommends deletion for tests that test mocks or types), and **type-reviewer** (type
+minimum viable roster is **code-expert** (gateway -- correctness, security, performance, test
+coverage; triages to specialists), **test-expert** (classification, mock simplicity, TDD
+compliance; recommends deletion for tests that test mocks or types), and **type-expert** (type
 flow tracing, widening detection; "why solve at runtime what you can embed at compile time?"). Each
 reads directives first, applies the First Question, and reports with severity levels and actionable
 fixes. A repo may stage this layer after the Core itself is installed; until then, `AGENT.md` should
 say explicitly that reviewer infrastructure is not yet installed.
 
-For production, expand: security-reviewer, config-reviewer,
-architecture-reviewer(s). UI-heavy projects may add a small browser-facing
-cluster routed by the gateway code-reviewer. Use layered composition at scale;
+For production, expand: security-expert, config-expert,
+architecture-expert(s). UI-heavy projects may add a small browser-facing
+cluster routed by the gateway code-expert. Use layered composition at scale;
 inline for short-lived projects.
 
 ### Workflow Commands
@@ -257,8 +257,8 @@ Practice is applied at session start.
 ## Adaptation Levels
 
 **POC (days to weeks)**: Inline agents. Simplified gates. No layered composition, no ADR
-infrastructure, no full learning loop. Metacognition and napkin retained. 3 agents: code-reviewer,
-test-reviewer, type-reviewer.
+infrastructure, no full learning loop. Metacognition and napkin retained. 3 agents: code-expert,
+test-expert, type-expert.
 
 **Production (months to years)**: Layered agent architecture. Full specialist roster. Learning loop
 (napkin -> distilled -> rules). ADR infrastructure. Full quality gate sequence.
@@ -645,19 +645,13 @@ validated across 3+ repos.
   responsibility, not compression.
 - **Practice Core files must be self-contained.** No navigable links outside `practice-core/` except
   `../practice-index.md`. All other external paths as code-formatted text.
-- **Concepts are the unit of exchange.** All Practice exchange —
-  outgoing content, incoming integration, two-way comparison — operates
-  at the concept level: what something is, how it works, why it
-  matters. Not at the file level, not at the pointer level. A name
-  like "the three-zone fitness model" is better than an opaque
-  identifier such as "ADR-N", but a name alone is still a pointer —
-  the substance must travel. Two
-  repos may implement the same concept under different names and
-  structures; concept-level comparison reveals equivalences that
-  file-level diffing misses. This is both a self-containment guard
-  (no host-repo references in travelling content) and the correct
-  abstraction for Practice evolution. The practice-index bridges
-  portable concepts to each host's local artefacts.
+- **Concepts are the unit of exchange.** Practice exchange moves concepts:
+  what something is, how it works, and why it matters. File locations, names,
+  and identifiers are only pointers; the substance must travel. Repos may
+  implement the same concept under different names, so concept-level comparison
+  finds equivalence that file-level diffing misses. This guards
+  self-containment and lets the practice-index bridge portable concepts to
+  local artefacts.
 - **Paused is not future.**
 - **Agent files are first-class infrastructure.** They are executable agent code in markdown —
   subject to DRY, SOLID, and production-code rigour.
@@ -672,13 +666,16 @@ validated across 3+ repos.
   structural pass. Constraining learning to avoid exceeding a count
   artificially underweights vital understanding. The concept must arrive
   fully formed; the container adjusts to hold it. Two valid responses
-  to a write that pushes a shared-state knowledge surface past
-  target/limit: write the insight in full and flag the file for
-  attention, OR thoughtful holistic promotion of mature concepts to
-  permanent homes. Forbidden: naive cutting, compression,
-  summarisation, splitting-for-budget, skipping the write, drafting a
-  "concise version" alongside the full version. (Codified at PDR-026
-  amendment 2026-04-29.)
+  to a shared-state knowledge surface over target/limit: write the insight in
+  full and flag the file for attention, or thoughtfully promote mature concepts
+  to permanent homes. Forbidden: naive cutting, compression, summarisation,
+  splitting-for-budget, skipping the write, or drafting a "concise version"
+  alongside the full version. (Codified at PDR-026 amendment 2026-04-29.)
+- **Knowledge curation is autonomic learning.** Practice-bearing repos ship
+  product output and Practice-substrate output. Consolidation, distillation,
+  graduation, rule/index repair, and queue drainage are throughput when they
+  improve future work; healthy substrate prompts agents to preserve, route, and
+  enforce reusable learning.
 
 ### Active Principles
 
@@ -701,6 +698,11 @@ validated across 3+ repos.
 - **Metacognition is a technology, not a checklist.** Preserve named
   recursion, the affective break, and the grounding anchor. Replacing this with
   a planning template destroys the mechanism.
+- **Recursion as method is the Practice Core shape.** Core layers read prior
+  output and write next input: thoughts -> reflections -> insights; work ->
+  capture -> refinement -> graduation -> enforcement; portable substrate ->
+  sibling Practice input. New Core layers preserve this recursion or they are
+  documentation-adjacent.
 - **Intent over mechanics.** Vague rules create escape hatches. Agents need to
   understand what matters and what failure looks like, not just the verb.
 - **The recursive failure mode.** When the metacognition tool is broken, you cannot use

@@ -1,6 +1,7 @@
 # ADR-131: Self-Reinforcing Improvement Loop
 
-**Status**: Accepted
+**Status**: Accepted. Amended 2026-05-10 to mark command-specific examples as
+historical during command retirement.
 **Date**: 2026-03-08
 **Related**: [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md), [ADR-124 (Practice Propagation Model)](124-practice-propagation-model.md), [ADR-144 (Three-Zone Fitness Model)](144-two-threshold-fitness-model.md), [How the Agentic Engineering System Works](../../foundation/agentic-engineering-system.md) (human-readable engineering narrative)
 
@@ -16,8 +17,7 @@ property alongside the related "self-replicating" property.
 
 What is not recorded in any of these is: (a) the full map of
 mechanism-to-mechanism interactions that form the closed circuit, (b)
-the role of the `consolidate-docs` command
-(`.agent/commands/consolidate-docs.md`) as the convergence point where
+the role of the consolidation workflow as the convergence point where
 intra-repo graduation, inter-repo integration, and fitness regulation
 all meet, and (c) the practical impact of the loop — enabling agentic
 engineering speed and optionality without sacrificing quality.
@@ -53,10 +53,9 @@ existing operational documentation:
 | Code patterns     | Work                      | Proven abstractions inform implementation                                                                                           |
 | Fitness functions | All stages                | Governors trigger distillation, graduation, tightening (see [ADR-144](144-two-threshold-fitness-model.md) for the three-zone model) |
 
-### Consolidate-Docs as the Convergence Point
+### Consolidation as the Convergence Point
 
-The `consolidate-docs` command (`.agent/commands/consolidate-docs.md`)
-is where the intra-repo loop, the inter-repo loop, and the fitness
+The consolidation workflow is where the intra-repo loop, the inter-repo loop, and the fitness
 regulation system all converge in a single workflow. It drives
 graduation (ephemeral to permanent), processes the practice box
 (inter-repo integration via ADR-124), checks fitness ceilings across
@@ -125,7 +124,6 @@ mechanism that produces rules, not just the rules themselves.
 
 - This ADR records architectural properties not captured by the
   existing operational documentation. The operational detail remains
-  in `practice.md` (`.agent/practice-core/practice.md`) §The
-  Knowledge Flow and the consolidate-docs command
-  (`.agent/commands/consolidate-docs.md`), which contains the
-  distillation protocol inline
+  in `practice.md` (`.agent/practice-core/practice.md`) and the
+  repository consolidation workflow, which contains the distillation
+  protocol inline

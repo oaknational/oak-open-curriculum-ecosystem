@@ -9,200 +9,203 @@ merge_class: append-only-narrative
 
 # Napkin
 
-Active session observations. Distilled entries live at
-[`distilled.md`](distilled.md). Pattern library is at
-[`patterns/`](patterns/README.md). Cross-session pending graduations
-live in
-[`pending-graduations.md`](../operational/pending-graduations.md).
+## 2026-05-24 — Hushed Fading Hush / codex / GPT-5 / `019e5a`
 
-The most recent rotation is archived at
-[`napkin-2026-05-07-doctor-safe-merge.md`][archive-pass]. The prior
-rotation is
-[`napkin-2026-05-06-evening-graduation-pass.md`][previous-pass].
+Fresh active napkin after the processed
+[post-M1 cleanup window][post-m1-window] was archived.
 
-[archive-pass]: archive/napkin-2026-05-07-doctor-safe-merge.md
-[previous-pass]: archive/napkin-2026-05-06-evening-graduation-pass.md
-[graph-planning-pass]: archive/napkin-2026-05-07-graph-mvp-planning.md
+### What Was Done
 
-The graph MVP-arc planning observations from Windward Darting Horizon,
-Pelagic Rolling Harbour, and Breezy Navigating Sail are preserved in
-[`napkin-2026-05-07-graph-mvp-planning.md`][graph-planning-pass].
+- Re-grounded under `start-right-team` and `consolidate-docs`.
+- Ran the live fitness report and found the current critical item:
+  active-napkin prose line width.
+- Reflowed the overlong Seaworthy Window 2 capture without removing substance.
+- Archived the processed active window only after every entry in it had an
+  explicit processing disposition or live route.
 
-The previous two archived napkins still need a deep analysis and
-consolidation pass before treating their captured material as fully
-homed: [`napkin-2026-05-07-doctor-safe-merge.md`][archive-pass] and
-[`napkin-2026-05-06-evening-graduation-pass.md`][previous-pass].
+### Patterns to Remember
 
-## 2026-05-07 — Doctor safe-merge consolidation / codex / GPT-5 / `019e03`
+- `comms watch` with a fresh seen-file can replay a large historical backlog.
+  Seed or expect the backlog explicitly before treating watcher quietness as
+  current-state evidence.
+- Fitness critical-by-line-width can be fixed by faithful reflow first. If that
+  exposes hard line-count pressure on already-processed capture, archive the
+  processed napkin window instead of trimming substance.
+- Same `session_id_prefix` continuity can still show generated display-name
+  drift in comms and active claims after compaction or resumed goal turns.
+  Treat the prefix plus live claim evidence as the stronger continuity signal,
+  then name the drift in closeout instead of opening a competing claim.
+- Repo-continuity soft-tier consolidation worked by preserving the outgoing
+  live-index snapshot in archive, then replacing duplicated historical routing
+  with pointers to thread records and active plans. Validate with targeted
+  markdownlint, `git diff --check`, and both practice fitness modes.
+- `claims open` uses `--ttl-seconds`, not `--freshness-seconds`. The rendered
+  claim still stores `freshness_seconds`, but the CLI flag is the TTL form.
+- For active pending-graduations shards, a low-risk soft-tier drain is to find
+  entries already marked `status: graduated`, verify their durable home still
+  carries the substance, archive the full body, and remove only that processed
+  body from the shard.
+- I repeated the pipe-in-evidence mistake while locating the commit queue path.
+  If a filter feels useful, run the broad producer and the narrow search as
+  separate readable evidence steps.
+- End-session consolidation can validly finish a small soft slice without
+  claiming the broader consolidation goal. Close the owned claim, update the
+  touched thread and repo-continuity facts, then stop when the owner says the
+  session is over.
+- `comms send` no longer accepts the old `--shared-log` flag. Let the command
+  use its built-in shared-log path, and check topic help before old flag shapes
+  leak into closeout muscle memory.
+- I misread Jim's Sonar CPD correction once: the intended boundary is generated
+  code, tests, and config files excluded from CPD, with agent tools kept inside
+  the CPD corpus. Treat owner wording as the control surface when policy text
+  and live intent need reconciliation.
 
-### Rotation Summary — memory/state doctor safe-merge arc
+[post-m1-window]: archive/napkin-2026-05-24-post-m1-cleanups-window.md
 
-This consolidation rotated the active napkin after it crossed the critical
-fitness threshold. The outgoing napkin is preserved verbatim in
-[`napkin-2026-05-07-doctor-safe-merge.md`][archive-pass].
+## 2026-05-24 — Mistbound Hiding Threshold / claude / claude-opus-4-7 / `0e27cc`
 
-Distilled behaviour changes from the rotation:
+### Capture H — small-PRs / push-often / branch-fitness protocol (owner-directed; paused)
 
-+ focused validation lanes must prove they selected tests;
-+ fixture-slice branches need literal fixtures;
-+ generated read models must be refreshed after event writes;
-+ portability review must include examples and narrative, not only normative
-  prose;
-+ git index operations are serial commit-window work, not parallel work;
-+ deleted live state is gone and should not remain a continuity topic.
+Owner direction this turn (verbatim, paused-state capture):
 
-The memory/state substrate doctrine and merge semantics are already durable in
-PDR-049, PDR-050, the local substrate contract, and the archived doctor plan.
-The consolidation therefore did not create a new ADR or PDR. Future arcs remain
-repair mode and consolidation integration, each requiring its own plan.
+> create protocols and guidance around committing, pushing, PR state
+> monitoring and Sonar state monitoring, including a preference towards
+> small commits, pushing often, monitoring GH state for PRs, monitoring
+> Sonar state for PR, and measuring the total number of files touched on
+> a branch and the total number of changes made on a branch as reported
+> by git, and setting soft, hard and critical feedback for them, in an
+> automated way, probably a hook, with the goal of keeping PRs small
+> enough to be easily reviewed by a human, and simple to reason about.
+> This implies many more small PRs happening, potentially in parallel,
+> that is fine, the worktree models lends itself well to that.
 
-## 2026-05-07 — Sonar remediation follow-up / codex / GPT-5 / `019e03`
+**Capture scope**: not a plan, not a decision. Substrate-buffer of the
+direction + my ultrathink surfacing the moves required when owner
+unpauses. Future-me opens a plan / PDR / ADR pair when authorised.
 
-### Practice/tooling feedback
+**Stated dimensions (5)**:
 
-+ **Surface**: `agent-tools:collaboration-state claims open`
-+ **Signal**: bug / recurrence
-+ **Observation**: Repeated `--area-pattern` flags still behave as
-  last-write-wins. During the Sonar remediation claim I supplied four
-  patterns, but the persisted claim retained only the final
-  `.agent/state/collaboration/**` pattern. I manually edited
-  `active-claims.json` to restore the intended areas.
-+ **Behaviour change / candidate follow-up**: F-14 in
-  `.agent/plans/agent-tooling/frictions-register.md` now has a fresh
-  recurrence note and should be treated as a real CLI bug: either make
-  `--area-pattern` repeatable like `--file`, or reject repeated usage
-  with an explicit error and full help.
+1. Commit cadence: prefer small commits.
+2. Push cadence: prefer pushing often.
+3. PR state monitoring: GH state surfaced automatically.
+4. Sonar state monitoring: PR-scoped Sonar surfaced automatically.
+5. Branch-size fitness: files-touched + total-changes, with soft/hard/
+   critical bands, probably a hook.
 
-The single small new pending-graduations entry from this
-napkin pass — Briny's "/doctor is session-local evidence, not
-a shell gate" behavioural correction — is added directly to
-[`pending-graduations.md`](../operational/pending-graduations.md)
-as part of Step 2 processing.
+**Unstated but implied / inferred**:
 
-### Session-shape note: Step 1 of the opener completed; Step 2 (pending-graduations) follows
+- Marshal seat as currently shaped serialises commits. Small + parallel +
+  worktree-per-slice means the marshal role's serialisation value drops.
+  Either marshal becomes per-worktree, or dissolves into self-marshal
+  with a discovery surface for cross-worktree conflicts.
+- Push authz is currently owner-gated and accumulates 50+ commits before
+  release (see M1 Safe Pause framing). "Push often" cannot land without
+  shifting where push-authz lives — either pre-authorised by policy on
+  green-marshal-cycle, or a dedicated push role on a different cadence,
+  or pre-defined push windows.
+- "Branch" is ambiguous in a multi-worktree world. Files-touched +
+  changes-aggregate must name a measurement boundary (current-worktree-
+  HEAD vs branch-vs-main vs PR-base). Pre-commit measures intent;
+  pre-push measures realised PR shape. Different decisions; the hook
+  shape may need to live at pre-push, not pre-commit.
+- Worktree-isolation is named with confidence but
+  `feedback_worktree_isolation_unreliable` says parallel worktree
+  agents can land on different bases than parent HEAD. Either the
+  worktree primitive needs reinforcement, or protocols compensate via
+  base-snapshot pinning + gate-check on parent HEAD.
+- Hook output appears on every commit/push. Verbose output eats the
+  ~80k reliable-context budget. Output must be terse — one line per
+  signal class — to stay in the budget.
+- Existing `pnpm practice:fitness` is the natural home for branch-size
+  fitness as a new dimension. Single CLI entry preserves the
+  observability discipline already in place.
 
-This session uses checkpoint-commit discipline between Steps 1
-and 2 to keep the diff readable and let the napkin-graduation
-batch land cleanly before the larger pending-graduations walk
-begins. Step 2 may not fully drain in this session — that is
-honest output per the opener; the residual queue substance
-becomes the next audit's input rather than this session's brake.
+**Tensions and gaps surfaced via ultrathink**:
 
-## 2026-05-07 — PR 102 snagging close / codex / GPT-5 / `019e03`
+- *Source vs substrate in change-count*: 466 commits ahead of origin on
+  this branch includes huge substrate writes (`.agent/**`,
+  `.agent/state/collaboration/comms/**`). Substrate is not reviewable
+  the way source is. The branch-fitness metric likely needs **two axes**
+  — reviewable-LOC (source only) and total-LOC (push payload). Different
+  thresholds; different consumers.
+- *CI capacity*: small-many-parallel multiplies CI runs. CI minutes
+  burn rises; wall-clock may improve via parallelism. Worth surfacing
+  the cost trade-off when proposing thresholds.
+- *Reviewer-load*: many small PRs mean many reviews. Reviewer dispatch
+  already scales via sub-agents but throughput pressure grows.
+- *Branch-naming proliferation*: many short-lived branches need a
+  cleanup primitive (auto-delete on merge; naming convention rule).
+- *Hook-bypass culture risk*: SOFT signals that nag get bypassed. SOFT
+  must be informative not nagging or `--no-verify` rate rises (already
+  named as recurring friction). Tie this to the existing
+  `no-verify-requires-fresh-authorisation` rule explicitly.
+- *Existing tooling*: `gh pr` shows file-count + LOC in the diff
+  natively; Sonar shows PR-scoped quality gates natively. The hook
+  cures PRE-push pressure; the monitoring cures POST-push observability.
+  Two different surfaces with two different mechanisms.
+- *Threshold defaulting*: common practice is 500/1000/2000 reviewable
+  LOC for soft/hard/critical and 10/30/50 files. These need empirical
+  validation against this repo's slice shape; not invent-from-thin-air.
+- *Push-authz mechanism*: the cleanest shape is policy-based (green
+  marshal cycle + branch-fitness GREEN → push-authz implicit) rather
+  than role-based. Role-based reintroduces the marshal-as-bottleneck
+  shape.
 
-### Surprise: green checks do not exhaust the PR feedback surface
+**Cure-shape implications (provisional, paused-state names)**:
 
-**Expectation**: after PR #102 snagging landed, GitHub checks and Sonar
-would be the closeout verification surface.
+- **Branch-fitness CLI**: `pnpm practice:fitness:branch` — measures
+  reviewable-LOC + total-LOC + files-touched + commits-ahead-of-base;
+  emits SOFT/HARD/CRITICAL with named thresholds.
+- **Pre-push hook**: invokes the CLI; emits at HEAD-snapshot; advisory
+  at SOFT/HARD; blocking at CRITICAL.
+- **Pre-commit hook addition** (optional): surfaces current branch
+  fitness in single-line summary so agents see the pressure building
+  before push.
+- **PR observer agent or CLI**: `pnpm pr:watch` — polls `gh pr checks`
+  and Sonar PR-scoped API; surfaces state changes to comms as
+  PR-state-changed events.
+- **Push-authz policy**: an ADR specifying when push is implicitly
+  authorised (small branch + green gates + green marshal cycle) vs when
+  it requires explicit owner authz (over CRITICAL threshold or atomic-
+  M1-pause class).
+- **Per-worktree marshal**: a PDR specifying the marshal role's
+  per-worktree shape; or an ADR specifying the self-marshal-with-
+  discovery shape. The choice depends on whether worktree-isolation
+  gets reinforced first.
 
-**What happened**: the checks all passed and Sonar became clean, but the
-owner explicitly named a separate next-session duty: fetch remaining PR
-comments and analyse them. The four known Copilot review threads are
-obsolete/outdated, yet top-level comments, review summaries, or newly
-created comments can still carry live feedback outside that check surface.
+**What HAS been said elsewhere (cross-refs)**:
 
-**Insight**: PR closeout has two distinct evidence loops: gate state and
-reviewer-comment state. A green PR can still need a comment-harvest pass
-before the next edit. This reinforces the existing PR lifecycle skill
-promotion watchlist rather than creating a new ADR/PDR candidate.
+- `feedback_build_vs_buy_first` — check `gh pr` + Sonar native shapes
+  before designing bespoke hooks.
+- `feedback_all_quality_gates_blocking_always` — branch-fitness CRITICAL
+  is a gate; cannot be framed as "out of scope".
+- `feedback_new_eslint_rules_start_warn` — analogous: branch-fitness
+  thresholds start at SOFT, escalate after stability.
+- `feedback_no_moving_targets_in_permanent_docs` — protocol docs cite
+  measurable thresholds, never "small" handwaves.
+- `feedback_worktree_isolation_unreliable` — worktree-confident
+  framing in the proposal needs reinforcement work before parallel
+  small-PR shape can land cleanly.
+- `feedback_hook_failures_are_questions` — hook output is a question
+  not a nag; threshold framing matters.
 
-**Behaviour change**: the next `planning/graph-tooling` session starts by
-fetching PR #102 top-level comments, review summaries, review threads with
-resolved/outdated state, and Sonar/check state, then classifies comments
-before editing.
+**What HAS NOT been said (gaps the owner left for the team)**:
 
-## 2026-05-07 — PR 102 follow-up and lint hardening close / codex / GPT-5 / `019e03`
+- Whether CRITICAL is blocking or advisory.
+- Whether substrate writes count toward the metric or are excluded.
+- Whether the metric is per-worktree, per-branch, or per-PR.
+- Whether push-authz policy moves with this protocol or stays owner-
+  gated separately.
+- Whether the Commit Marshal role transforms or persists in current shape.
+- Whether the M1 Safe Pause push is itself the last big push before
+  the protocol takes effect, or whether the protocol applies retroactively
+  to that push too.
 
-### Practice/tooling feedback
+**Pickup hook for next-me / next-team (when owner unpauses)**:
 
-+ **Surface**: `@oaknational/eslint-plugin-standards` self-lint
-+ **Signal**: insight
-+ **Observation**: adding `@typescript-eslint/no-deprecated` to the package
-  self-lint immediately caught the deprecated `typescript-eslint.config()`
-  helper in the shared config exports. Replacing it with ESLint core
-  `defineConfig()` was straightforward for standard plugins, but the local
-  `@oaknational` plugin had to stay in a separately typed
-  `TSESLint.FlatConfig.Config` segment because core `defineConfig()` expects
-  the newer ESLint plugin type surface.
-+ **Behaviour change / candidate follow-up**: keep new candidate rules in the
-  self-lint lane when practical: they are useful for surfacing maintenance
-  drift early. When core ESLint helper types do not accept a local plugin
-  typed through `@typescript-eslint/utils`, split the config at the type
-  boundary rather than weakening the plugin type.
-
-## 2026-05-08 — PR 102 fresh-session handoff / codex / GPT-5 / `019e03`
-
-### Surprise: PR metadata is an active review surface, not a wrapper
-
-**Expectation**: after code/config/documentation fixes land, the remaining PR
-work is source comments and quality gates.
-
-**What happened**: the PR body still described the branch as
-"Documentation-only / Low Risk" even though the current diff now includes
-agent-tools runtime code, Oak ESLint config changes, and search/codegen
-generator edits. Copilot correctly flagged the PR description itself as a live
-review issue.
-
-**Insight**: PR title/body need the same source-of-truth discipline as code
-comments: when branch scope changes, stale metadata can mislead reviewers and
-become an actionable defect. A comment-harvest pass should classify PR metadata
-comments separately from source-code comments.
-
-**Behaviour change**: the next PR #102 session rewrites title/body after
-`origin/main...HEAD` comparison before disposing the metadata comment as
-`fixed`. No ADR/PDR candidate: this reinforces existing review-surface
-discipline rather than changing governance.
-
-## 2026-05-08 — PR 102 final closeout / codex / GPT-5 / `019e06`
-
-### Practice/tooling feedback
-
-+ **Surface**: `agent-tools:collaboration-state claims open`
-+ **Signal**: friction
-+ **Observation**: The session-open claim attempt used `--area-kind file`,
-  mirroring the natural language of "file paths", but the CLI accepts
-  `files`, `workspace`, `plan`, `adr`, or `git`. The command failed cleanly
-  with `unsupported area kind: file`, and the schema confirmed `files` is the
-  correct area kind for explicit file path lists.
-+ **Behaviour change / candidate follow-up**: Prefer checking
-  `active-claims.schema.json` or `claims open --help` before authoring claims
-  from memory. If this repeats, consider making the CLI error list the accepted
-  values.
-
-### Surprise: ground-truth generation needs real bulk data present
-
-**Expected**: rerunning the ground-truth generator after a schema-emitter fix
-would refresh only the generated schema/docstring surfaces.
-
-**Actual**: the first direct generator invocation ran against an empty
-`apps/oak-search-cli/bulk-downloads` directory and collapsed the generated
-lesson data to zero lessons. Running the real `bulk:download` composition root
-with `BULK_DOWNLOAD_DIR=bulk-downloads` fetched the 30 bulk files and the
-post-download generator restored the 12,391-lesson generated data shape.
-
-**Why expectation failed**: the generator is source-of-truth, but it is only
-valid when its source data directory is populated. A code-only generator run in
-a sparse checkout can produce structurally valid but semantically empty output.
-
-**Behaviour change**: for ground-truth generated files, use the full
-download-then-codegen path when local bulk data is absent; verify
-`Total lessons: 12391` or equivalent before trusting generated output.
-
-### Surprise: merge-ready can still be planning-blocked
-
-**Expected**: once PR #102 technical checks, review threads, Sonar, and PR
-metadata were clean, the branch would be ready to merge.
-
-**Actual**: owner direction added a stronger pre-merge gate: the branch should
-not merge until the graph MVP plans themselves are finalised and
-decision-complete. The remaining blockers are not PR mechanics; they are plan
-truthfulness issues: topology findings, slice-plan findings, and the EEF t19
-contradiction.
-
-**Why expectation failed**: I treated "merge-ready" as a property of the pull
-request surface. For planning branches, the merge gate can also be a property
-of the planning artefacts' decision completeness.
-
-**Behaviour change**: when closing a planning PR, report two verdicts
-separately: PR technical readiness and plan decision-completeness. Do not let a
-green PR collapse unresolved planning questions into implicit acceptance.
+1. Open a thread record `branch-fitness-and-push-cadence.next-session.md`.
+2. Survey existing `pnpm practice:fitness` shape + `gh pr` + Sonar APIs.
+3. Resolve the 6 gap-questions above via owner sidebar before drafting.
+4. Author a PDR for the doctrine shape + an ADR for the substrate
+   phenotype (hook + CLI + observer).
+5. Ship at SOFT-only initially; escalate after observation window.

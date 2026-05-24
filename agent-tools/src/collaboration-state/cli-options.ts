@@ -3,34 +3,53 @@ export interface Options {
   readonly topic: string | undefined;
   readonly values: ReadonlyMap<string, string>;
   readonly files: readonly string[];
+  readonly areaPatterns: readonly string[];
+  readonly tags: readonly string[];
 }
 
 const KNOWN_OPTION_KEYS = new Set([
   'active',
+  'agent-name',
   'area-kind',
   'area-pattern',
   'body',
+  'body-file',
   'body-json',
   'claim-id',
   'closed',
+  'comms-dir',
   'created-at',
+  'closure-summary',
   'entry-json',
   'event-id',
   'events-dir',
   'file',
+  'format',
   'help',
   'intent',
+  'kind',
+  'lifecycle-dir',
+  'messages-dir',
   'model',
   'notes',
   'now',
   'output',
   'platform',
+  'poll-ms',
   'repo-root',
   'shared-log',
+  'seen-file',
+  'subject',
   'summary',
+  'tag',
   'thread',
   'thread-record',
   'title',
+  'to-agent-name',
+  'to-event-id',
+  'to-model',
+  'to-platform',
+  'to-session-prefix',
   'ttl-seconds',
 ]);
 
@@ -41,12 +60,14 @@ export function parseOptions(argv: readonly string[]): Options {
   const rest = topic === undefined ? normalizedArgv.slice(1) : normalizedArgv.slice(2);
   const values = new Map<string, string>();
   const files: string[] = [];
+  const areaPatterns: string[] = [];
+  const tags: string[] = [];
 
   for (let index = 0; index < rest.length; ) {
-    index = parseToken({ rest, index, values, files });
+    index = parseToken({ rest, index, values, files, areaPatterns, tags });
   }
 
-  return { command, topic, values, files };
+  return { command, topic, values, files, areaPatterns, tags };
 }
 
 export function required(options: Options, key: string): string {
@@ -66,6 +87,20 @@ export function valueOrDefault(options: Options, key: string, fallback: string):
   return optional(options, key) ?? fallback;
 }
 
+export function optionalPositiveInteger(options: Options, key: string): number | undefined {
+  const raw = optional(options, key);
+  if (raw === undefined) {
+    return undefined;
+  }
+
+  const value = Number.parseInt(raw, 10);
+  if (!Number.isInteger(value) || value <= 0 || String(value) !== raw) {
+    throw new Error(`--${key} must be a positive integer`);
+  }
+
+  return value;
+}
+
 function requireFlagValue(flag: string, value: string | undefined): string {
   if (value === undefined || value.startsWith('--')) {
     throw new Error(`flag '${flag}' requires a value`);
@@ -79,6 +114,8 @@ function parseToken(input: {
   readonly index: number;
   readonly values: Map<string, string>;
   readonly files: string[];
+  readonly areaPatterns: string[];
+  readonly tags: string[];
 }): number {
   const token = input.rest[input.index] ?? '';
   const next = input.rest[input.index + 1];
@@ -91,9 +128,16 @@ function parseToken(input: {
     input.files.push(requireFlagValue(token, next));
     return input.index + 2;
   }
-  if (token.startsWith('--')) {
-    parseValueOption({ token, next, values: input.values });
+  if (token === '--area-pattern') {
+    input.areaPatterns.push(requireFlagValue(token, next));
     return input.index + 2;
+  }
+  if (token === '--tag') {
+    input.tags.push(requireFlagValue(token, next));
+    return input.index + 2;
+  }
+  if (token.startsWith('--')) {
+    return parseValueOption({ token, next, values: input.values, index: input.index });
   }
 
   throw new Error(`unknown argument: ${token}`);
@@ -103,10 +147,18 @@ function parseValueOption(input: {
   readonly token: string;
   readonly next: string | undefined;
   readonly values: Map<string, string>;
-}): void {
+  readonly index: number;
+}): number {
   const key = input.token.slice(2);
   if (!KNOWN_OPTION_KEYS.has(key)) {
-    throw new Error(`unknown option: ${input.token}`);
+    input.values.set(
+      key,
+      input.next === undefined || input.next.startsWith('--') ? 'true' : input.next,
+    );
+    return input.next === undefined || input.next.startsWith('--')
+      ? input.index + 1
+      : input.index + 2;
   }
   input.values.set(key, requireFlagValue(input.token, input.next));
+  return input.index + 2;
 }

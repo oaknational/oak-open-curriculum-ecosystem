@@ -12,7 +12,7 @@ todos:
     content: "WS3: Define and apply a consistent MCP-side response surface for empty / no-match / unsupported / upstream-failure cases across tools. Coordinate with the upstream response doctrine proposal so the MCP layer either passes the discriminator through (when upstream adds it) or synthesises one safely (until then)."
     status: pending
   - id: ws4-quality-and-review
-    content: "WS4: Quality gates and reviewer pass (mcp-reviewer + elasticsearch-reviewer for WS1, code-reviewer + type-reviewer for WS2/WS3)."
+    content: "WS4: Quality gates and reviewer pass (mcp-expert + elasticsearch-expert for WS1, code-expert + type-expert for WS2/WS3)."
     status: pending
 isProject: false
 ---
@@ -207,10 +207,10 @@ ad-hoc per tool.
 ## WS4 — Quality Gates and Reviewers
 
 - `pnpm check` from repo root.
-- `mcp-reviewer` for WS1 and WS3 (tool surface, response shape).
-- `elasticsearch-reviewer` for WS1 (RRF / threshold work in the search
+- `mcp-expert` for WS1 and WS3 (tool surface, response shape).
+- `elasticsearch-expert` for WS1 (RRF / threshold work in the search
   service).
-- `code-reviewer` and `type-reviewer` for WS2 / WS3 implementation.
+- `code-expert` and `type-expert` for WS2 / WS3 implementation.
 - Update ADR or `docs/operations/troubleshooting.md` if the MCP-side
   response envelope (WS3) introduces a new contract worth recording.
 

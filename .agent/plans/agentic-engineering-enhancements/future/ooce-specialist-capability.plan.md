@@ -79,8 +79,8 @@ OpenAPI spec (external)
 
 - External library usage (Express, Clerk, ES, Sentry — each has own specialist)
 - Architecture decisions about boundaries (architecture reviewers own this)
-- Generic TypeScript patterns (type-reviewer owns this)
-- Generic code quality (code-reviewer owns this)
+- Generic TypeScript patterns (type-expert owns this)
+- Generic code quality (code-expert owns this)
 
 ## Doctrine Hierarchy
 
@@ -107,9 +107,9 @@ This specialist is unique — its primary authority is **internal**, not externa
 
 ## Deliverables
 
-1. Canonical reviewer template: `.agent/sub-agents/templates/ooce-reviewer.md`
+1. Canonical reviewer template: `.agent/sub-agents/templates/ooce-expert.md`
 2. Canonical skill: `.agent/skills/ooce-expert/SKILL.md`
-3. Canonical situational rule: `.agent/rules/invoke-ooce-reviewer.md`
+3. Canonical situational rule: `.agent/rules/invoke-ooce-expert.md`
 4. Platform adapters (Claude, Cursor, Codex)
 5. Discoverability updates
 6. Validation
@@ -132,11 +132,11 @@ Every internal package README:
 
 | Specialist | Owns | Does NOT own |
 |-----------|------|-------------|
-| **ooce-reviewer** | Internal package API usage, composition patterns, generated file handling | External lib usage, boundary direction, generic TS |
+| **ooce-expert** | Internal package API usage, composition patterns, generated file handling | External lib usage, boundary direction, generic TS |
 | **architecture reviewers** | Dependency direction, boundary correctness | Internal API correctness |
-| **type-reviewer** | Generic TypeScript type safety | Package-specific type patterns |
-| **code-reviewer** | General code quality, gateway triage | Internal package domain knowledge |
-| **test-reviewer** | Test structure and TDD compliance | Package-specific test patterns (stubs vs fakes) |
+| **type-expert** | Generic TypeScript type safety | Package-specific type patterns |
+| **code-expert** | General code quality, gateway triage | Internal package domain knowledge |
+| **test-expert** | Test structure and TDD compliance | Package-specific test patterns (stubs vs fakes) |
 
 ## Gap Analysis Findings (2026-03-14)
 
@@ -157,13 +157,13 @@ routed to OOCE as sub-scopes rather than separate specialists:
 
 ### Routed elsewhere
 
-- **CI/CD config** (GitHub Actions, semantic-release): routed to config-reviewer
+- **CI/CD config** (GitHub Actions, semantic-release): routed to config-expert
   scope expansion — CI config is tooling config.
 - **Vercel deployment specifics**: routed to Express specialist — already in
   scope as "Vercel deployment specifics".
 - **Redis/caching**: surface area too small for any specialist — a few files in
-  one CLI. Code-reviewer + architecture reviewers suffice.
-- **Secrets lifecycle**: routed to security-reviewer — secret rotation is a
+  one CLI. Code-expert + architecture reviewers suffice.
+- **Secrets lifecycle**: routed to security-expert — secret rotation is a
   security concern.
 - **Hono**: pinned dependency override, not actively used as framework. Monitor;
   if it becomes active, route to Express/web-framework specialist.

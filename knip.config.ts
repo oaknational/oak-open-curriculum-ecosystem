@@ -6,8 +6,6 @@ const config: KnipConfig = {
     '@stryker-mutator/core',
     '@stryker-mutator/typescript-checker',
     '@stryker-mutator/vitest-runner',
-    // Commitlint is wired via husky hooks, not direct import
-    '@commitlint/cli',
     // ESLint ecosystem: consumed transitively via typescript-eslint flat config
     '@typescript-eslint/eslint-plugin',
     '@typescript-eslint/parser',
@@ -41,16 +39,21 @@ const config: KnipConfig = {
 
   workspaces: {
     '.': {
-      entry: ['scripts/**/*.ts'],
-      project: ['scripts/**/*.ts'],
+      // The repo root intentionally has no source scripts; logic belongs in
+      // workspaces. Keep the root workspace narrow so Knip does not treat
+      // operational notes and platform shims as default source.
+      entry: ['package.json'],
+      project: [],
     },
     'agent-tools': {
       // Platform adapters (src/claude/, future src/codex/, src/cursor/) are
       // entry points: the built JS is invoked via spawn from the platform's
       // own thin shim (e.g. `.claude/scripts/statusline-identity.mjs`), which
       // knip cannot trace as a TS import.
-      entry: ['src/bin/**/*.ts', 'src/claude/**/*.ts', 'src/cursor/**/*.ts'],
-      project: ['src/**/*.ts'],
+      // scripts/**/*.ts are tsx-invoked entry points from package.json scripts
+      // (validate-practice-fitness, validate-subagents, repo-check, etc.).
+      entry: ['src/bin/**/*.ts', 'src/claude/**/*.ts', 'src/cursor/**/*.ts', 'scripts/**/*.ts'],
+      project: ['src/**/*.{ts,tsx}', 'scripts/**/*.ts'],
     },
     'apps/oak-curriculum-mcp-streamable-http': {
       entry: [
@@ -121,11 +124,11 @@ const config: KnipConfig = {
       ],
     },
     'packages/core/oak-eslint': {
-      project: ['src/**/*.ts'],
+      entry: ['scripts/**/*.ts'],
+      project: ['src/**/*.ts', 'scripts/**/*.ts'],
       ignoreDependencies: [
         // ESLint plugins are peer dependencies used at runtime
         'eslint-plugin-prettier',
-        'globals',
       ],
     },
     'packages/core/openapi-zod-client-adapter': {
@@ -135,6 +138,9 @@ const config: KnipConfig = {
       project: ['src/**/*.ts'],
     },
     'packages/core/env': {
+      project: ['src/**/*.ts'],
+    },
+    'packages/core/graph-core': {
       project: ['src/**/*.ts'],
     },
     'packages/core/result': {
@@ -147,6 +153,12 @@ const config: KnipConfig = {
       project: ['src/**/*.ts'],
     },
     'packages/libs/env-resolution': {
+      project: ['src/**/*.ts'],
+    },
+    'packages/libs/graph-ingest': {
+      project: ['src/**/*.ts'],
+    },
+    'packages/libs/graph-project': {
       project: ['src/**/*.ts'],
     },
     'packages/libs/logger': {
@@ -164,6 +176,13 @@ const config: KnipConfig = {
         // docs/operations/sentry-cli-usage.md.
         '@sentry/cli',
       ],
+    },
+    'packages/sdks/graph-corpus-sdk': {
+      // Sub-path entries are auto-detected via package.json `exports` map
+      // (knip-v5 resolves the `development` condition); no explicit `entry:`
+      // override required. Empty barrels at sub-path indexes ship until
+      // adapter cycles land (see those files for workstream pointers).
+      project: ['src/**/*.ts'],
     },
     'packages/sdks/oak-curriculum-sdk': {
       // Knip cannot resolve entries through createSdkConfig() factory.

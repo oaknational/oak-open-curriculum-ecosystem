@@ -67,8 +67,7 @@ function createMockLessonSummary(
     lessonTitle: 'Test Lesson',
     canonicalUrl: 'https://www.thenational.academy/teachers/lessons/test-lesson',
     oakUrl: 'https://teachers.thenational.academy/lessons/test-lesson',
-    unitSlug: 'test-unit',
-    unitTitle: 'Test Unit',
+    units: [{ unitSlug: 'test-unit', unitTitle: 'Test Unit' }],
     subjectSlug: 'maths',
     subjectTitle: 'Maths',
     keyStageSlug: 'ks4',
@@ -133,7 +132,6 @@ function createMockSubjectSequences() {
       ],
       phaseSlug: 'primary',
       phaseTitle: 'Primary',
-      ks4Options: null,
     },
   ];
 }
@@ -237,7 +235,7 @@ describe('SDK API Methods - Network Exception Handling', () => {
       expect(result.ok).toBe(true);
       if (result.ok) {
         expect(result.value.lessonTitle).toBe('Test Lesson');
-        expect(result.value.unitSlug).toBe('test-unit');
+        expect(result.value.units[0]?.unitSlug).toBe('test-unit');
       }
     });
   });

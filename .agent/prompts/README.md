@@ -14,7 +14,7 @@ and
 its ritual moved to
 [`start-right-quick`](../skills/start-right-quick/shared/start-right.md)
 (session open) and
-[`session-handoff`](../commands/session-handoff.md) (session close).
+[`session-handoff`](../skills/session-handoff/SKILL-CANONICAL.md) (session close).
 Live state lives in
 [`.agent/memory/operational/`](../memory/operational/). Remaining
 prompts below are domain-specific handover briefs for focused work.
@@ -29,10 +29,8 @@ prompts below are domain-specific handover briefs for focused work.
 | [semantic-search/approaches-to-knowledge.prompt.md](semantic-search/approaches-to-knowledge.prompt.md) | handover | Research prompt exploring MCP, hybrid search, knowledge graphs, and atomic concepts as a unified quality system | Research-phase exploration; no single canonical execution plan |
 | [architecture-and-infrastructure/sentry-otel-foundation.prompt.md](architecture-and-infrastructure/sentry-otel-foundation.prompt.md) | handover | Sentry + OTel observability foundation session entry point | [sentry-otel-integration.execution.plan.md](../plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md) |
 
-Complementary execution cadence: use
-[`/jc-go`](../../.cursor/commands/jc-go.md), which reads
-[`.agent/commands/go.md`](../commands/go.md) and the shared
-[GO workflow](../skills/go/shared/go.md).
+Complementary execution cadence: use the [`go` skill](../skills/go/SKILL-CANONICAL.md)
+and its [shared GO workflow](../skills/go/shared/go.md).
 
 ## Retained Completed Prompts
 

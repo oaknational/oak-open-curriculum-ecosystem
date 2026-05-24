@@ -11,8 +11,17 @@ dist
 dependency-graph.dot
 dependency-graph.svg
 
+# Root script logic is intentionally forbidden; checked logic belongs in a
+# workspace such as agent-tools or a package-owned tooling surface.
+/scripts/
+
 # Agent Interactions
 collaboration.txt
+
+# /team-onboarding slash command output (paste-into-Claude buddy guide).
+# Personal usage stats + Claude-only runbook; durable content lives in
+# README.md, CONTRIBUTING.md, and docs/engineering/.
+ONBOARDING.md
 
 # Local MCP server config
 .mcp.json
@@ -53,6 +62,10 @@ collaboration.txt
 # (TS6's empty `types: []` default removed implicit `vite/client` triple-slash
 # resolution; the widget's CSS side-effect imports need it explicit).
 !apps/oak-curriculum-mcp-streamable-http/widget/src/vite-env.d.ts
+
+# Hand-authored ambient declaration for `rdf-canonize` (no upstream types).
+# Sole consumer is graph-core's canon runtime; see canon/runtime.ts.
+!packages/core/graph-core/src/canon/rdf-canonize.d.ts
 
 # File system artefacts (macOS, Windows, Linux desktops)
 .DS_Store

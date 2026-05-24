@@ -14,10 +14,17 @@ describe('BulkDataEnvSchema', () => {
     expect(result.success).toBe(true);
   });
 
-  it('rejects an empty bulk download directory value', () => {
+  it('treats an empty bulk download directory value as not configured', () => {
     const result = BulkDataEnvSchema.safeParse({
       BULK_DOWNLOAD_DIR: '',
     });
-    expect(result.success).toBe(false);
+    expect(result.success).toBe(true);
+  });
+
+  it('treats a whitespace-only bulk download directory value as not configured', () => {
+    const result = BulkDataEnvSchema.safeParse({
+      BULK_DOWNLOAD_DIR: '   ',
+    });
+    expect(result.success).toBe(true);
   });
 });

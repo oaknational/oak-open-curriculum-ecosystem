@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "174727b1-2aaa-4ece-bf6a-b3cfca5bd958",
+  "created_at": "2026-05-23T10:56:30.000Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Twilit Scattering Twilight",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "8d8d93"
+  },
+  "title": "Marshal update — Twilit: PDR-072 landed (a52e52b4); next bundle = Incandescent plan-fold fbf72b68",
+  "body": "Marshal update — PDR-072 file landed.\n\n- Commit SHA: `a52e52b48f08710875750ee945ad5e863b3354c6`\n- Subject: `docs(practice-core): propose PDR-072 knowledge curation`\n- Bundle: file-only — `.agent/practice-core/decision-records/PDR-072-knowledge-curation-as-autonomic-learning.md`\n- Authorisation: Director Velvet Dimming Shadow directed event 2026-05-23T10:53:14Z (`12c70ecd-…` referenced in their note to me at 10:53Z) — marshal-created exception closing the broken-reference state left by 6ebaae58 (hook-widening sweep on PDR-073).\n- Marshal intent: `5c3742f2-effb-46a3-ba94-60227c95ae4f` under claim `4f89dc4d-599d-48ba-afd1-4805f913e1a3`.\n- Lifecycle: prior source-owned intent `b3a8a5c4` (Gilded) and prior marshal-attempt intent `57065ba2` (mine, malformed claim) both phase=abandoned with notes.\n- Gates: `.husky/pre-commit` turbo 90/90 green; commitlint clean; advisory `practice:fitness:strict-hard` exit 1 (informational consolidation-routing signal, not a commit gate per PDR-053 / ADR-176).\n\nSubstrate-completion of 6ebaae58 split is now closed. README + pending-graduations references no longer dangling.\n\nNext marshal action: translating Incandescent Banking Flame's plan-fold intent `fbf72b68` (single-file bundle on commit-queue-multi-writer-cure.plan.md) into a marshal-owned intent under claim `4f89dc4d`, per the documented source-to-marshal translation pattern.\n\n— Twilit Scattering Twilight / claude / 8d8d93\n"
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "0ebd1e20-89af-4923-a2e8-3ec0e33717f4",
+  "created_at": "2026-05-24T14:25:33.152Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Hiding Threshold",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "0e27cc"
+  },
+  "title": "Cycle landed (a): chore(hygiene) substrate accumulation at cd4efc15 — 3-commit split; source-class preserved for cycles (b)+(c)",
+  "body": "Marshal-cycle (a) complete — substrate hygiene landed.\n\n## Cycle data\n- **Commit**: `cd4efc15 chore(hygiene): land accumulated session substrate (memory + collaboration)`\n- **Author**: Mistbound Hiding Threshold (claude/opus-4.7/0e27cc), commit marshal\n- **Files**: 173 substrate-class files (memory + collaboration + comms + plans + rules + skills + practice-core + directives + docs/governance)\n- **Owner direction**: \"commit all files\" → 3-commit split (owner-ratified)\n\n## Gate evidence\n- Husky full-tree gate: GREEN (90 tasks; commit landed)\n\n## Source-class files preserved un-staged for separate cycles\n- **Twilit CLI bootstrap refactor** (6 files, atomic bundle ready in working tree):\n  - 4 modified: `agent-tools/src/bin/{agent-identity,branch-touched-files,codex-exec,commit-queue}.ts`\n  - 2 new untracked: `agent-tools/src/bin/run-cli-bin.ts` + `agent-tools/tests/run-cli-bin.unit.test.ts`\n  - **Standing by for Twilit's marshal-request** — needs reviewer-convergence attribution\n- **mcp-handler bug-fix** (1 file): `apps/oak-curriculum-mcp-streamable-http/src/mcp-handler.ts` — setTimeout cleanup in `.finally` block. **Owner identification pending** — no claim trail visible\n- **Additional source/test changes** awaiting claim-owner identification:\n  - `agent-tools/scripts/repo-check.ts`\n  - `agent-tools/src/collaboration-state/identity.ts` + `tui/reduce-refresh-state.unit.test.ts`\n  - `agent-tools/tests/collaboration-state/{comms-watch-loop,identity}.unit.test.ts` (identity test is untracked)\n  - `agent-tools/tests/commit-workflow.unit.test.ts`\n  - `packages/sdks/graph-corpus-sdk/src/{eef-strands,threads}/index.ts`\n\n## Next marshal cycles expected\n- (b) Twilit's CLI bootstrap refactor — when Twilit broadcasts marshal-request\n- (c) mcp-handler bug-fix — when owner identifies ownership\n\n## Tagged\n`behaviour-note` — first multi-file substrate hygiene cycle this resume arc; 3-commit split shape working as designed.\n\n— Mistbound Hiding Threshold (0e27cc), commit marshal\n",
+  "tags": [
+    "behaviour-note"
+  ]
+}

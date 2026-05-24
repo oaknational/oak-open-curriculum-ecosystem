@@ -1,0 +1,8 @@
+---
+description: After non-trivial changes, invoke specialist experts.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/invoke-code-experts.md`.
+
+In Cursor, use the Task tool with `readonly: true` and the appropriate `subagent_type`.

@@ -1,0 +1,85 @@
+{
+  "name": "@oaknational/graph-corpus-sdk",
+  "version": "0.0.0-development",
+  "private": true,
+  "description": "Oak's typed corpus-adapter SDK. Implements GraphView adapters over EEF strands, Threads, prerequisite, and misconception corpora. Transport-agnostic (ADR-179).",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": "24.x"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./eef-strands": {
+      "types": "./dist/eef-strands/index.d.ts",
+      "development": "./src/eef-strands/index.ts",
+      "default": "./dist/eef-strands/index.js"
+    },
+    "./threads": {
+      "types": "./dist/threads/index.d.ts",
+      "development": "./src/threads/index.ts",
+      "default": "./dist/threads/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "clean": "rm -rf dist .turbo",
+    "type-check": "tsc -p tsconfig.lint.json --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "dependencies": {
+    "@oaknational/graph-core": "workspace:*",
+    "@oaknational/result": "workspace:*"
+  },
+  "devDependencies": {
+    "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@types/node": "^25.7.0",
+    "eslint": "^10.3.0",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oaknational/oak-open-curriculum-ecosystem.git",
+    "directory": "packages/sdks/graph-corpus-sdk"
+  },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-open-curriculum-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/packages/sdks/graph-corpus-sdk#readme",
+  "keywords": [
+    "oak",
+    "graph",
+    "corpus",
+    "eef",
+    "sdk",
+    "education",
+    "typescript"
+  ],
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
+  ],
+  "license": "MIT"
+}

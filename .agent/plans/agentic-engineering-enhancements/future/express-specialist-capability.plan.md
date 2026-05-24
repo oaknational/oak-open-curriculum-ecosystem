@@ -33,10 +33,10 @@ signatures, and routing). Without a dedicated specialist, agents:
 
 ### Out of scope
 
-- Clerk-specific OAuth flows (covered by clerk-reviewer)
-- MCP protocol compliance (covered by mcp-reviewer)
-- Generic security vulnerabilities (covered by security-reviewer)
-- Generic TypeScript patterns (covered by type-reviewer)
+- Clerk-specific OAuth flows (covered by clerk-expert)
+- MCP protocol compliance (covered by mcp-expert)
+- Generic security vulnerabilities (covered by security-expert)
+- Generic TypeScript patterns (covered by type-expert)
 
 ## Doctrine Hierarchy
 
@@ -57,9 +57,9 @@ signatures, and routing). Without a dedicated specialist, agents:
 
 ## Deliverables
 
-1. Canonical reviewer template: `.agent/sub-agents/templates/express-reviewer.md`
+1. Canonical reviewer template: `.agent/sub-agents/templates/express-expert.md`
 2. Canonical skill: `.agent/skills/express-expert/SKILL.md`
-3. Canonical situational rule: `.agent/rules/invoke-express-reviewer.md`
+3. Canonical situational rule: `.agent/rules/invoke-express-expert.md`
 4. Platform adapters (Claude, Cursor, Codex)
 5. Discoverability updates
 6. Validation
@@ -68,10 +68,10 @@ signatures, and routing). Without a dedicated specialist, agents:
 
 | Specialist | Owns | Does NOT own |
 |-----------|------|-------------|
-| **express-reviewer** | Express middleware, routing, error handling, Vercel deployment | Auth logic, MCP protocol, security vulns |
-| **clerk-reviewer** | Clerk middleware configuration | Express middleware ordering |
-| **mcp-reviewer** | MCP transport protocol | HTTP server implementation |
-| **security-reviewer** | Exploitability | Express configuration correctness |
+| **express-expert** | Express middleware, routing, error handling, Vercel deployment | Auth logic, MCP protocol, security vulns |
+| **clerk-expert** | Clerk middleware configuration | Express middleware ordering |
+| **mcp-expert** | MCP transport protocol | HTTP server implementation |
+| **security-expert** | Exploitability | Express configuration correctness |
 
 ## Promotion Trigger
 

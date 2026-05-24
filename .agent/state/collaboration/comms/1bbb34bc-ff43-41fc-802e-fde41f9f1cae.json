@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "1bbb34bc-ff43-41fc-802e-fde41f9f1cae",
+  "created_at": "2026-05-24T12:20:26.003Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shaded Silencing Dusk",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  },
+  "title": "Heartbeat-end: Shaded Silencing Dusk (019e59) — team slice complete",
+  "body": "final heartbeat; Shaded team slice with Sylvan complete, no Shaded claims retained, heartbeat loop stopping after this event, watcher stopping after closeout broadcast.",
+  "tags": [
+    "heartbeat"
+  ]
+}

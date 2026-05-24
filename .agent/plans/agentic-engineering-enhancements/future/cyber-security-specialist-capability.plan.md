@@ -6,7 +6,7 @@
 
 ## Problem and Intent
 
-The repo already has a useful `security-reviewer`: a cross-cutting, practical,
+The repo already has a useful `security-expert`: a cross-cutting, practical,
 exploitability-first security and privacy reviewer that should remain the
 default security specialist for day-to-day work.
 
@@ -29,7 +29,7 @@ conflate **broad vs narrow remit** with **deep vs focused engagement**.
 
 This plan is about an **agent capability**, not just a reviewer persona.
 
-- **`cyber-security-reviewer`** would provide read-only specialist assessment
+- **`cyber-security-expert`** would provide read-only specialist assessment
   against current cyber-security doctrine.
 - **`cyber-security-expert`** would provide active research, planning, and
   advisory support during implementation.
@@ -63,11 +63,11 @@ situational rule makes the capability discoverable.
 ### Out of scope
 
 - The default exploitability-focused security pass on ordinary changes
-  (`security-reviewer` keeps that role)
-- Narrow HTTP/web/API boundary hardening (`web-api-security-reviewer`)
+  (`security-expert` keeps that role)
+- Narrow HTTP/web/API boundary hardening (`web-api-security-expert`)
 - Privacy-governance correctness, retention policy, and privacy-by-design
-  doctrine (`privacy-reviewer`)
-- Web/API personal-data compliance details (`web-api-gdpr-reviewer`)
+  doctrine (`privacy-expert`)
+- Web/API personal-data compliance details (`web-api-gdpr-expert`)
 - Framework-specific implementation correctness for Express, Clerk, MCP, or
   Elasticsearch specialists
 - Generic code quality, architecture, or type-system concerns
@@ -98,27 +98,27 @@ situational rule makes the capability discoverable.
 ## Deliverables
 
 1. Canonical reviewer template:
-   `.agent/sub-agents/templates/cyber-security-reviewer.md`
+   `.agent/sub-agents/templates/cyber-security-expert.md`
 2. Canonical skill: `.agent/skills/cyber-security-expert/SKILL.md`
 3. Canonical situational rule:
-   `.agent/rules/invoke-cyber-security-reviewer.md`
+   `.agent/rules/invoke-cyber-security-expert.md`
 4. Platform adapters (Claude, Cursor, Gemini CLI, Codex)
 5. Discoverability updates
 6. Validation
 
 ## Overlap Boundaries
 
-- **`cyber-security-reviewer`** owns broad security posture, defence in depth,
+- **`cyber-security-expert`** owns broad security posture, defence in depth,
   supply-chain posture, threat models, and control interaction. It does **not**
   own the default exploitability triage, narrow HTTP/API hardening, or
   privacy-governance correctness.
-- **`security-reviewer`** owns the practical default security/privacy review,
+- **`security-expert`** owns the practical default security/privacy review,
   exploitability, and auth/secrets/input-risk triage. It does **not** own the
   deeper broad-remit doctrine and posture lens.
-- **`web-api-security-reviewer`** owns narrow web/API attack-surface and
+- **`web-api-security-expert`** owns narrow web/API attack-surface and
   boundary hardening. It does **not** own broad security posture across the
   whole repo.
-- **`privacy-reviewer`** owns privacy-by-design and privacy-governance
+- **`privacy-expert`** owns privacy-by-design and privacy-governance
   correctness. It does **not** own security posture or exploitability.
 - **Architecture reviewers** own structural dependency and boundary trade-offs.
   They do **not** own security doctrine or control sufficiency.
@@ -130,5 +130,5 @@ This plan promotes to `current/` when:
 1. Significant security architecture, threat-model, supply-chain, or
    secret-lifecycle work is scheduled
 2. The gateway/roster work needs an explicit broad-remit security capability
-   rather than relying only on the current `security-reviewer`
+   rather than relying only on the current `security-expert`
 3. No conflicting work is in progress on the agent artefact layer

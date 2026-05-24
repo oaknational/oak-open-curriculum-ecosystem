@@ -4,6 +4,159 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-05-11 — PDR-059 regenerator-output-classification graduated (Fronded Flowering Seed session)
+
+Graduated the 2026-05-10 Quiet Lurking Mask pending-graduations entry
+"Hook-chain re-staging absorbs files post-verify-staged" to a new PDR
+on owner-direction trigger. Cure-shape selected by owner at session
+open: option iii (classification by intent), authored as a
+structurally distinct PDR rather than an amendment to PDR-054 because
+the taxonomy over hook-staged files is a new concept not present in
+the PDR-054 asymmetric-cure framing.
+
+Practice Core changes:
+
+- **Authored**: `PDR-059-regenerator-output-classification.md`. Three-
+  class taxonomy (Class A intentional regenerator output; Class B
+  intentional auto-fix of already-queued files; Class C arbitrary
+  peer-work absorption — forbidden). Enumeratively-bounded Class A
+  producer manifest as the structural gate. Post-hook-pre-commit
+  classification gate as the trailing complement to PDR-054's
+  pre-hook `verify-staged` fingerprint check.
+- **Amended**: `decision-records/README.md` index — PDR-059 row added.
+- **Cross-reference**: PDR-054 §Related extended with PDR-059
+  pointer (the post-hook absorption case is governed by PDR-059's
+  classification doctrine).
+- **Host-repo operational application**: amendment to ADR-177
+  authored separately (host phenotype; PDR substance is portable).
+
+## [oak-open-curriculum-ecosystem] 2026-05-10 — `.agent/commands/` retirement (Tempestuous Darting Zephyr session)
+
+Closed the PDR-051 / ADR-125 §2026-05-09 commands-retirement loop on
+`feat/mcp-graph-support-foundation`. Five commits landed; five
+reviewers dispatched in parallel; all actionable findings applied.
+
+Practice Core changes:
+
+- **Amended**: `practice.md` Three-Layers Mermaid diagram — `CANON`
+  node label drops `.agent/commands` (was wrongly teaching the retired
+  surface to hydrating repos).
+- **Amended**: `practice-bootstrap.md` §Skills section retitled to
+  describe the two-surface adapter contract
+  (`.agents/skills/jc-<name>/SKILL.md` + `.claude/skills/jc-<name>/SKILL.md`)
+  with manual-edit prohibition surfaced explicitly. Removed §Required
+  Commands subsection and replaced with §Required Skills using
+  canonical `SKILL-CANONICAL.md` paths. Renamed §SKILL.md Format to
+  §SKILL-CANONICAL.md Format and removed the retired multi-surface
+  model reference (`.cursor/skills/`, `.gemini/skills/`,
+  `.github/skills/`).
+- **Confirmed portable**: practice-core-portability rule fired
+  in-session and caught an attempted repo-specific ADR reference
+  during authoring; reworded before commit. Worked instance of the
+  rule operating during authoring, not just at review.
+
+## [oak-open-curriculum-ecosystem] 2026-05-10 — QUAR-1 reformulation (Quiet Lurking Mask session)
+
+Owner-directed graduation of the quarantined `apply-don't-ask` /
+`stop-inventing-optionality` doctrine candidates per the 2026-05-01
+reframings. The carry-over briefing surfaced the owner-decision; the
+owner chose (a) reformulate-and-land. Pair-reviewed by docs-adr-expert,
+onboarding-expert, and assumptions-expert before staging. Practice
+Core changes:
+
+- **Added**: `PDR-057 empirical-answerability`. Pre-question gate:
+  before posing a fork to the owner, the agent first determines
+  whether the question is empirically answerable from code, data,
+  vendor docs, generator output, schema, or log files; if so, the
+  agent reads those surfaces. The discharge action is reading, not
+  acting — the destructive-operation guard problem that quarantined
+  the predecessor doctrine is structurally absent. Supersedes the
+  quarantined `apply-don't-ask` candidate.
+- **Added**: `PDR-058 three-tier-optionality-decomposition`.
+  Decomposes `stop-inventing-optionality` into three impact-named
+  surfaces — decision optionality (subsumed by PDR-057), design
+  optionality (closed-shape cure), outcome optionality
+  (falsifiability cure) — each with its own diagnostic and home in
+  the Practice graph. The single-rule shape is rejected as
+  wrong-layer. Decomposition is open to further surfaces as evidence
+  emerges (interface, sequencing, scope optionality). Supersedes the
+  quarantined `stop-inventing-optionality` candidate.
+- **Updated**: `quarantine/apply-dont-ask-doctrine.md` frontmatter
+  flipped to `status: quarantine-cleared` with PDR-057/058 cleared-by
+  reference; original substance preserved as historical evidence of
+  the 2026-05-01 destructive incident.
+- **Updated**: `pending-graduations.md` quarantined-status section
+  drained to empty; QUAR-1 entry body updated to graduated; new
+  routing-label entries opened for design-optionality and
+  outcome-optionality per PDR-058 §Surfaces 2 and 3.
+- **Updated**: PDR README index now lists PDR-057 and PDR-058.
+
+## [oak-open-curriculum-ecosystem] 2026-05-10 — pending-graduations full drain (knowledge graduation session)
+
+Owner-invoked deep consolidation pass (Sylvan Fruiting Glade / claude-code /
+claude-opus-4-7-1m). Owner reframed the pending-graduations register's
+self-deferral vocabulary as fabricated avoidance and directed full drain in
+session. Practice Core changes:
+
+- **Added**: `PDR-052 directive-file-context-budget`. Standing rule:
+  directive-file work (editing `.agent/directives/*` and host equivalents)
+  runs only when context usage is below 30% of the active session's budget.
+  Sequencing corollary fixes directive-file work as the FINAL step of any
+  consolidation pass. Self-applying clause: this PDR is itself directive-
+  shape doctrine and the rule applies to its own edits.
+- **Added**: `PDR-053 orchestrator-vs-gate-structural-cure (advisory
+  polarity)`. Polarity-at-three-surfaces structural cure for the recurring
+  conflation of advisory enforcement orchestrators with blocking hook
+  chains: filename + banner + skill-doctrine. Five evidence instances
+  across four agents in 24 hours; reading-only cures lose to artefact
+  gravity.
+- **Added**: `PDR-054 asymmetric-cure-discipline`. A behavioural cure for
+  a shared-state failure mode that fires only when *every* operator
+  follows it is asymmetric: it protects the applier but not peer-
+  triggered manifestations. Third-instance trigger graduates the cure to
+  symmetric structural enforcement; cure documentation must record its
+  symmetry classification.
+- **Amended PDR-014** (Consolidation and Knowledge-Flow Discipline) —
+  polarity required at pattern graduation. Every pattern instance MUST
+  declare polarity (`pattern` | `anti-pattern`) in frontmatter and as a
+  blockquote header. Categories remain orthogonal to polarity.
+- **Added**: `PDR-055 cli-affordance-set-discipline-for-coordination-tooling`. Coordination CLIs on a Practice-bearing repo's collaboration
+  surfaces (`claims`, `commit-queue`, `comms`, identity) implement the
+  affordance triple (`list`, `show`, `watch`) with consistent filter
+  flags. Full help on every flag-validation failure. Robust render
+  boundaries (one bad entry does not block the surface). CLIs invoked
+  via built dist, not source-on-each-invocation. Owner-stated cures
+  graduated.
+- **Added**: `PDR-056 inter-agent-collaboration-protocol`. Ten named
+  cures for multi-agent coordination on shared state: out-of-band
+  brief acknowledgement; read/write claim mode; heartbeat-or-die;
+  overflow protocol; comms CLI ergonomics; wall-clock authority;
+  threaded render; worker initiates on empirical surface; deferred
+  commit until task-close + ack; wait-for-ack on deadlined defaults.
+  Each cure carries inline validation status (Hypothesis →
+  Validated as N≥3 evidence accumulates).
+
+## [oak-open-curriculum-ecosystem] 2026-05-09 — focused distilled.md graduation pass
+
+Owner-directed focused consolidation pass on `distilled.md` (Woodland
+Sheltering Glade / claude-code / claude-opus-4-7-1m). Three PDR amendments
+land Practice-governance substance previously held in distilled:
+
+- **PDR-018 (AMENDED)** — five planning-discipline rules graduated:
+  lead-with-narrative, CLI-first enumeration before owner questions,
+  locally-producible-evidence-first for validation closures, split
+  client-compatibility from deployment-validation lanes, dry-run
+  multi-step workflows against accumulated state. Held-on-future-plan
+  unblocked per the Sequenced-Deferral graduation in the same pass.
+- **PDR-026 (AMENDED, two amendments)** —
+  *Sequenced-Deferral Discipline (three modes)* graduated: sequenced
+  deferral (preferred), sequencing-sequenced deferral (rare), hidden
+  declaration of non-action (forbidden). Three corpus-window instances
+  confirmed in `historical-napkin-synthesis-2026-05-09.md` §F4 + §F11.
+  *Per-Session Closure Owns the Loop* graduated: loop-cost reframed
+  from inherent to artefactual; closure discipline is the steady-state,
+  reactive graduation passes are recovery work.
+
 ## [oak-open-curriculum-ecosystem] 2026-05-07 — state/memory substrate contract split clarified
 
 Owner-directed consolidation after the first host-local substrate inventory

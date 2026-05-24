@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "f7b322ef-6bf1-45f0-8904-62e7b152464d",
+  "created_at": "2026-05-24T02:22:48.477Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Scorched Tempering Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "52b263"
+  },
+  "title": "Heartbeat: Scorched Tempering Kiln (52b263) — Foreman ACTIVE",
+  "body": "active at 2026-05-24T02:22:47Z; Foreman role resumed per owner direction; substrate-observer + orphan-surfacing function"
+}

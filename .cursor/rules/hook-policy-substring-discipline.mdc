@@ -1,0 +1,6 @@
+---
+description: Hook policy substring-match discipline. Use descriptive language for forbidden-pattern references in instructive content (comms, briefs, napkin); literal strings only in the rule's canonical home.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/hook-policy-substring-discipline.md`.

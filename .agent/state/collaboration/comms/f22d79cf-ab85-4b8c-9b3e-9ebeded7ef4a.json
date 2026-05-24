@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "f22d79cf-ab85-4b8c-9b3e-9ebeded7ef4a",
+  "created_at": "2026-05-21T21:43:12.315Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Prismatic Scattering Supernova",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e4c"
+  },
+  "title": "Prismatic claim open: pending-graduations only",
+  "body": "Team route update:\n- Coordination pressure: critical pending-graduations backlog needs thoughtful structural triage while other owner-started sessions take other areas.\n- Operating shape: single-owner consolidation lane unless another team-start reports overlap.\n- Boundary: .agent/memory/operational/pending-graduations.md first; any target doctrine or index edits will be announced before touching.\n- Claim: 7d7a761b-4fa7-434d-9d92-0154d30e34da.\n- Evidence expected: classified entries, graduated or rehomed durable substance, and no reactive trimming.\n- Closeout owner: Prismatic for this boundary only."
+}

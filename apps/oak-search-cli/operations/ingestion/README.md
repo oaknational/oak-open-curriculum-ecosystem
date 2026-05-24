@@ -116,6 +116,80 @@ pnpm es:setup reset
 pnpm es:ingest -- --api --all --verbose
 ```
 
+### Search URL Field Reindex Boundary
+
+When deploying code changes that affect search document building or Oak URL
+generation, some improvements only appear in the search index after a
+re-ingest. Current code in `src/lib/indexing/` emits the following URL fields
+for fresh documents:
+
+| Field          | Source file                    | Status                                               |
+| -------------- | ------------------------------ | ---------------------------------------------------- |
+| `lesson_url`   | `lesson-document-builder.ts`   | Required; emitted via `generateLessonOakUrl()`       |
+| `unit_url`     | `unit-document-core.ts`        | Required; emitted via `generateUnitOakUrl()`         |
+| `unit_urls`    | `lesson-document-core.ts`      | Required; array of Oak unit URLs                     |
+| `sequence_url` | `sequence-document-builder.ts` | Required; emitted via `generateSequenceOakUrl()`     |
+| `thread_url`   | `thread-document-builder.ts`   | Intentionally omitted (threads have no Oak web page) |
+
+The `generate*OakUrl()` helpers live in `oak-url-convenience.ts` in
+`@oaknational/curriculum-sdk`. See
+[ADR-145](../../../../docs/architecture/architectural-decisions/145-oak-url-naming-collision-remediation.md)
+for the rename from `canonicalUrl` to `oakUrl`.
+
+Existing indexed documents retain their old values until a re-ingest replaces
+them. Common stale-index symptoms:
+
+- Search results contain `thread_url` values even though current code omits
+  the field.
+- `lesson_url` values use an older URL pattern from before the Oak URL rename.
+
+These are not code bugs when fresh documents emit the current shape; they clear
+after overwrite-mode ingestion.
+
+The `thread_url` field remains optional in the Elasticsearch mapping and Zod
+schema for backward compatibility with existing indexed documents. The generated
+field definitions live at
+`packages/sdks/oak-sdk-codegen/code-generation/typegen/search/field-definitions/curriculum.ts`.
+
+### Post-deploy Reindex Validation
+
+After deploying document-building or URL-generation changes, run this workflow
+from the `apps/oak-search-cli` workspace:
+
+```bash
+# 1. Ensure Redis is running (required for SDK response caching)
+pnpm redis:status
+pnpm redis:up
+
+# 2. Re-download bulk data from the upstream API
+pnpm bulk:download
+
+# 3. Regenerate codegen artefacts from fresh bulk data
+pnpm bulk:codegen
+
+# 4. Reset indices and re-create mappings from current schema
+pnpm es:reset
+
+# 5. Full re-ingest all subjects (API mode)
+pnpm es:ingest -- --api --all --verbose
+
+# 6. Verify document counts and coverage
+pnpm ingest:verify
+
+# 7. Check index health
+pnpm es:status
+```
+
+Validation checklist after re-ingest:
+
+1. Run `pnpm ingest:verify` and confirm all subjects report expected counts.
+2. Run `pnpm es:status` and confirm indices are green with expected document
+   counts.
+3. Spot-check search results for `thread_url`; the field should be absent from
+   newly indexed thread documents.
+4. Spot-check `lesson_url`, `unit_url`, and `sequence_url`; values should use
+   the current Oak URL format.
+
 ### Stale `thread_url` Cleanup
 
 When `thread_url` is made optional in thread index documents, existing
@@ -147,7 +221,7 @@ pnpm es:ingest -- --api --all --ignore-cached-404 --verbose
 ```
 
 **Note**: This does NOT clear the entire cache, only bypasses cached 404s for
-transcript endpoints. See [ADR-066](../../docs/architecture/architectural-decisions/066-sdk-response-caching.md)
+transcript endpoints. See [ADR-066](../../../../docs/architecture/architectural-decisions/066-sdk-response-caching.md)
 for details on negative caching.
 
 ---
@@ -186,7 +260,7 @@ the 7 different curriculum structural patterns:
 
 ## Related Documentation
 
-- [ADR-080](../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md) - Curriculum patterns
-- [ADR-083](../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md) - Lesson enumeration strategy
-- [ADR-087](../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md) - Batch-atomic ingestion
-- [current-state.md](../../../.agent/plans/archive/semantic-search-archive-dec25/current-state.md) - Archived system snapshot
+- [ADR-080](../../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md) - Curriculum patterns
+- [ADR-083](../../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md) - Lesson enumeration strategy
+- [ADR-087](../../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md) - Batch-atomic ingestion
+- [current-state.md](../../../../.agent/plans/archive/semantic-search-archive-dec25/current-state.md) - Archived system snapshot

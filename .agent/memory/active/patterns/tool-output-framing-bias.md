@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-013
 name: "Tool Output Framing Bias"
+polarity: anti-pattern
 use_this_when: "building a plan from a single tool run and the tool's groupings, counts, or categories are being adopted as plan structure without independent verification"
 category: process
 proven_in: ".agent/plans/architecture-and-infrastructure/current/depcruise-triage-and-remediation.plan.md"
@@ -11,6 +12,10 @@ barrier:
   prevents_recurring_mistake: "Plans adopt tool framing as authority; 3 of 4 knip-2.5 assumptions and 4 of 12 depcruise assumptions were materially wrong when investigated"
   stable: true
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Tool Output Framing Bias
 

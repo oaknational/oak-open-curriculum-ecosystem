@@ -1,5 +1,5 @@
 import express, { json as expressJson } from 'express';
-import type { Express, RequestHandler } from 'express';
+import type { Express } from 'express';
 import {
   createRequestLogger,
   logLevelToSeverityNumber,
@@ -35,6 +35,11 @@ interface BootstrapPhaseContext extends LogContextInput {
 
 type BootstrapObservability = Pick<HttpObservability, 'withSpan' | 'withSpanSync'>;
 
+interface ActiveBootstrapPhase {
+  readonly context: BootstrapPhaseContext;
+  readonly phaseHandle: ReturnType<PhasedTimer['startPhase']>;
+}
+
 /** Executes a synchronous bootstrap phase with instrumentation logging and optional span wrapping. */
 export function runBootstrapPhase<T>(
   log: Logger,
@@ -44,9 +49,7 @@ export function runBootstrapPhase<T>(
   operation: () => T,
   observability?: BootstrapObservability,
 ): T {
-  const context: BootstrapPhaseContext = { appId, phase };
-  log.debug('bootstrap.phase.start', context);
-  const phaseHandle = timer.startPhase(phase);
+  const activePhase = startBootstrapPhase(log, timer, phase, appId);
 
   try {
     const result = observability
@@ -59,24 +62,10 @@ export function runBootstrapPhase<T>(
           run: () => operation(),
         })
       : operation();
-    const durationResult = phaseHandle.end();
-    log.info('bootstrap.phase.finish', {
-      ...context,
-      duration: durationResult.duration.formatted,
-      durationMs: durationResult.duration.ms,
-    });
+    finishBootstrapPhase(log, activePhase);
     return result;
   } catch (error: unknown) {
-    const durationResult = phaseHandle.end();
-    const errorAsError =
-      error instanceof Error
-        ? error
-        : new Error(`Bootstrap phase "${phase}" threw non-error value: ${String(error)}`);
-    log.error('bootstrap.phase.error', normalizeError(errorAsError), {
-      ...context,
-      duration: durationResult.duration.formatted,
-      durationMs: durationResult.duration.ms,
-    });
+    logBootstrapPhaseError(log, activePhase, error);
     throw error;
   }
 }
@@ -94,9 +83,7 @@ export async function runAsyncBootstrapPhase<T>(
   operation: () => Promise<T>,
   observability?: BootstrapObservability,
 ): Promise<T> {
-  const context: BootstrapPhaseContext = { appId, phase };
-  log.debug('bootstrap.phase.start', context);
-  const phaseHandle = timer.startPhase(phase);
+  const activePhase = startBootstrapPhase(log, timer, phase, appId);
 
   try {
     const result = observability
@@ -109,33 +96,61 @@ export async function runAsyncBootstrapPhase<T>(
           run: async () => await operation(),
         })
       : await operation();
-    const durationResult = phaseHandle.end();
-    log.info('bootstrap.phase.finish', {
-      ...context,
-      duration: durationResult.duration.formatted,
-      durationMs: durationResult.duration.ms,
-    });
+    finishBootstrapPhase(log, activePhase);
     return result;
   } catch (error: unknown) {
-    const durationResult = phaseHandle.end();
-    const errorAsError =
-      error instanceof Error
-        ? error
-        : new Error(`Bootstrap phase "${phase}" threw non-error value: ${String(error)}`);
-    log.error('bootstrap.phase.error', normalizeError(errorAsError), {
-      ...context,
-      duration: durationResult.duration.formatted,
-      durationMs: durationResult.duration.ms,
-    });
+    logBootstrapPhaseError(log, activePhase, error);
     throw error;
   }
+}
+
+function startBootstrapPhase(
+  log: Logger,
+  timer: PhasedTimer,
+  phase: BootstrapPhaseName,
+  appId: number,
+): ActiveBootstrapPhase {
+  const context: BootstrapPhaseContext = { appId, phase };
+  log.debug('bootstrap.phase.start', context);
+  return { context, phaseHandle: timer.startPhase(phase) };
+}
+
+function finishBootstrapPhase(log: Logger, activePhase: ActiveBootstrapPhase): void {
+  const durationResult = activePhase.phaseHandle.end();
+  log.info('bootstrap.phase.finish', {
+    ...activePhase.context,
+    duration: durationResult.duration.formatted,
+    durationMs: durationResult.duration.ms,
+  });
+}
+
+function logBootstrapPhaseError(
+  log: Logger,
+  activePhase: ActiveBootstrapPhase,
+  error: unknown,
+): void {
+  const durationResult = activePhase.phaseHandle.end();
+  const errorAsError =
+    error instanceof Error
+      ? error
+      : new Error(
+          `Bootstrap phase "${activePhase.context.phase}" threw non-error value: ${String(error)}`,
+        );
+  log.error('bootstrap.phase.error', normalizeError(errorAsError), {
+    ...activePhase.context,
+    duration: durationResult.duration.formatted,
+    durationMs: durationResult.duration.ms,
+  });
 }
 
 /**
  * Sets up base Express middleware: JSON, correlation, and debug request logging.
  * Error handlers register later for Sentry compatibility. Not a route handler:
- * CodeQL #69 (line 146, `app.use(createCorrelationMiddleware(...))`) is a
- * misclassification — correlation middleware is cross-cutting, not auth-bearing.
+ * CodeQL #69 and #90 (lines 146 `app.use(createCorrelationMiddleware(...))`
+ * and 151 `app.use(createRequestLogger(...))`) are misclassifications —
+ * correlation and request-logger middleware are cross-cutting, not
+ * auth-bearing. Rate limiting applies at auth-bearing routes
+ * (see `auth-routes.ts`).
  */
 export function setupBaseMiddleware(
   app: Express,
@@ -154,32 +169,6 @@ export function setupBaseMiddleware(
       }),
     );
   }
-}
-
-/**
- * Creates middleware that ensures MCP connection is ready before processing requests.
- * Responds with 503 if connection is not ready within 5 seconds.
- */
-export function createMcpReadinessMiddleware(ready: Promise<void>, log: Logger): RequestHandler {
-  return async (_req, _res, next) => {
-    try {
-      await Promise.race([
-        ready,
-        new Promise((_, reject) => {
-          setTimeout(() => {
-            reject(new Error('MCP connection timeout'));
-          }, 5000);
-        }),
-      ]);
-      next();
-    } catch (error: unknown) {
-      log.error('MCP connection failed', normalizeError(error));
-      _res.status(503).json({
-        error: 'MCP server not ready',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      });
-    }
-  };
 }
 
 /**
@@ -224,18 +213,26 @@ export function logRegisteredRoutes(log: Logger, appId: number, routes: unknown[
  */
 export type ExpressWithAppId = Express & { __appId?: number };
 
+// Module-encapsulated counter for diagnostic app IDs. Production constructs
+// one app per process so the counter is always 1; tests construct many apps
+// per worker and use the increment to disambiguate bootstrap-phase logs and
+// OTel attributes. The counter is intentionally not exposed: callers receive
+// the next id via `initializeAppInstance`, not by mutating module state.
+let appInstanceCounter = 0;
+
 /**
  * Initializes a new Express app instance with tracking and timing infrastructure.
  *
- * @param appCounter - Current app instance counter (will be incremented)
  * @param log - Logger instance
  * @returns Object containing the initialized app, timer, and app ID
  */
-export function initializeAppInstance(
-  appCounter: number,
-  log: Logger,
-): { app: ExpressWithAppId; timer: PhasedTimer; appId: number } {
-  const appId = appCounter + 1;
+export function initializeAppInstance(log: Logger): {
+  app: ExpressWithAppId;
+  timer: PhasedTimer;
+  appId: number;
+} {
+  appInstanceCounter += 1;
+  const appId = appInstanceCounter;
   log.debug(`Creating app #${String(appId)}`);
   const app: ExpressWithAppId = express();
   app.__appId = appId;

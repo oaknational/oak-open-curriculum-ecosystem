@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-023
 name: "README as Index"
+polarity: pattern
 use_this_when: "A plan-directory README is growing to contain session instructions, outcome narratives, or design rationale that duplicates or replaces .plan.md content"
 category: process
 proven_in: "Plan architecture refactor (2026-03-23, algo-experiments)"
@@ -11,6 +12,10 @@ barrier:
   prevents_recurring_mistake: "Plan content accumulating in index files, making them bloated and stale across tranche boundaries"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # README as Index
 

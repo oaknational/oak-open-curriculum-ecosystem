@@ -480,7 +480,7 @@ high enough to require the fallback?
 primary-inference and fallback-inference distributions on the same
 session data; switch if divergence exceeds 10% at the cohort level.
 
-**Owner**. Plan WS5 `react-component-reviewer` pass reviews the
+**Owner**. Plan WS5 `react-component-expert` pass reviews the
 implementation; plan WS6 absorbs the switch if required.
 
 ### 5.3 Font-scaling detection approach
@@ -516,10 +516,10 @@ level emission sufficient, or does the cohort-level aggregation need to
 coarsen further?
 
 **Trigger for answer**. Schema-design review at
-`observability-events-workspace.plan.md` WS1 RED; `security-reviewer`
+`observability-events-workspace.plan.md` WS1 RED; `security-expert`
 assesses combined-field entropy and recommends coarsening if needed.
 
-**Owner**. `security-reviewer` + `docs-adr-reviewer` at schema-landing
+**Owner**. `security-expert` + `docs-adr-expert` at schema-landing
 time.
 
 ### 5.6 `prefers-reduced-data` and `prefers-reduced-transparency` stability

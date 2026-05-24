@@ -49,7 +49,7 @@ biggest-impact item:
   enhancements thread, OR Hidden Slipping Moth's session-close claim
   is properly archived.
 - Reviewer dispatches recommended in the snagging plan
-  (`fred`, `wilma`, `assumptions-reviewer`) have NOT yet been
+  (`fred`, `wilma`, `assumptions-expert`) have NOT yet been
   dispatched against the strategic plan; this opener does not block
   on them — they assess the *broader* plan; the single-extraction
   work is bounded enough to proceed without the architectural
@@ -132,7 +132,7 @@ pointed at from the moved sections must remain valid.
 ### Step 8 — Run the gate orchestrator
 
 Per the commit skill, run
-`pnpm exec tsx scripts/check-commit-skill-gates.ts -F /tmp/<msg>`
+`pnpm exec tsx scripts/check-commit-skill-advisories.ts -F /tmp/<msg>`
 before staging. If fitness on `principles.md` improves (HARD →
 under), record that in the commit message.
 
@@ -169,7 +169,7 @@ landed.
 - The S-numbered snags from the reviewer dispatch (S1–S6, P-1–P-3) —
   those are scoped to their own next-session work where applicable.
 - Specialist reviewer dispatch on the strategic plan as a whole
-  (fred, wilma, assumptions-reviewer) — those land separately; they
+  (fred, wilma, assumptions-expert) — those land separately; they
   assess the plan, not the first extraction.
 
 ## Source Documents

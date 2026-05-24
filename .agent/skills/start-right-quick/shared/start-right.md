@@ -23,11 +23,20 @@ grounding, not an installed tripwire layer; the installed layer
 is the plan-body first-principles-check rule).**
 
 1. @.agent/directives/AGENT.md — operational entry point and index
-2. @.agent/directives/principles.md — **THE AUTHORITATIVE RULES**
-3. @.agent/directives/tdd-as-design.md — **FOUNDATIONAL DEFINITION** of TDD: a test describes a system state, product code is the path that guides the system into it
-4. @.agent/directives/testing-strategy.md — test-type taxonomy and shape rules
-5. @.agent/directives/schema-first-execution.md — types flow from schema
-6. @.agent/directives/orientation.md — layering contract and authority order
+2. @RULES_INDEX.md — canonical list of always-applied `.agent/rules/*.md`
+   files
+3. @.agent/directives/principles.md — authoritative engineering principles
+4. @.agent/directives/tdd-as-design.md — foundational TDD definition: a test
+   describes a system state, product code is the path that guides the system
+   into it
+5. @.agent/directives/testing-strategy.md — test-type taxonomy and shape rules
+6. @.agent/directives/schema-first-execution.md — types flow from schema
+7. @.agent/directives/orientation.md — layering contract and authority order
+
+For Codex, Gemini, or any other platform that does not auto-load canonical
+rules, read every canonical `.agent/rules/*.md` file listed in
+`RULES_INDEX.md` before substantive work. Treat `RULES_INDEX.md` as the live
+inventory rather than copying the rule list here.
 
 ### 2. Start-here ADRs
 
@@ -83,6 +92,12 @@ alongside active claims: `intent_id`, `agent_id`, `files`, `commit_subject`,
 `phase`, and `expires_at`. Queue entries are discovery and ordering signals,
 not mechanical refusals.
 
+If a dirty slice has no matching active claim or recent comms event, do not
+classify it as orphaned until `repo-continuity.md` Next Safe Steps, the touched
+thread record, and any active plan have been checked for owner-direction
+landing notes or explicit hold-state. Some legitimate slices become visible
+there before a claim or comms event exists.
+
 Apply the
    [`register-active-areas-at-session-open`](../../../rules/register-active-areas-at-session-open.md)
 rule before any edit: enumerate the areas you intend to touch, register
@@ -110,10 +125,11 @@ Platform hooks set the platform-suffixed Practice variable: the Claude Code
 fallback.
 
 Before any Codex thread registration or shared collaboration-state write,
-prefer the full PDR-027 identity preflight:
+run the PDR-027 identity preflight with the current platform and model values.
+For this repo's Codex GPT-5 sessions the command is:
 
 ```bash
-pnpm agent-tools:collaboration-state -- identity preflight --platform <platform> --model <model>
+pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5
 ```
 
 Codex sessions with `CODEX_THREAD_ID` available must not write new thread rows
@@ -143,7 +159,7 @@ git log --oneline --decorate -5
 
 Check `.agent/practice-core/incoming/` for practice-core files. If
 present, alert the user — incoming material may carry learnings from
-another repo. Full integration happens during `/jc-consolidate-docs`.
+another repo. Full integration happens during `/oak-consolidate-docs`.
 
 ## Per-Session Landing Commitment
 
@@ -164,6 +180,33 @@ If no landing is appropriate:
 Bounded exceptions: deep-consolidation, Core-trinity refinement, and
 root-cause investigation sessions. Any other no-landing session is
 drift.
+
+## Session Title — `/rename` Suggestion
+
+As soon as the session intent is clear and BEFORE any significant
+implementation (no source edits, no scaffolding, no claim opening
+beyond pure-reading work), suggest the user run:
+
+> `/rename <session-name> - <intent>`
+
+where `<session-name>` is your PDR-027 display name and `<intent>` is
+the cycle, plan, or boundary you have committed to landing.
+
+The suggestion is surfaced **once**, at the moment intent first clears:
+
+- Solo sessions: typically after the Per-Session Landing Commitment
+  above is declared.
+- Team sessions: after rendezvous resolves and cycle / boundary
+  assignment is settled. See
+  [`start-right-team` First Moves §4](../../start-right-team/SKILL-CANONICAL.md)
+  for the team-shaped invocation point.
+
+Never surface `/rename` in closeout summaries — by then the title
+either matches the work (no-op) or no longer matches because the work
+shifted (in which case the rename is too late to inform the title's
+audience). The standing rule lives in user-memory entry
+`feedback_rename_suggestion_at_session_open_only`; this section is its
+repo-visible doctrine surface.
 
 ## Work Shape and Simple Plan
 
@@ -220,11 +263,11 @@ produced them — the generator is the source of truth.
 
 ## Sub-agent Reviews
 
-Invoke sub-agent reviewers per the `invoke-code-reviewers` rule after
+Invoke sub-agent reviewers per the `invoke-code-experts` rule after
 making changes. The full invocation matrix, timing tiers, quick-triage
 checklist, worked examples, and copy/paste-ready platform-specific
 invocation examples live in executive memory:
-[`.agent/memory/executive/invoke-code-reviewers.md`](../../../memory/executive/invoke-code-reviewers.md).
+[`.agent/memory/executive/invoke-code-experts.md`](../../../memory/executive/invoke-code-experts.md).
 
 ## Process
 
@@ -248,7 +291,7 @@ pnpm format:root        # Makes changes
 pnpm markdownlint:root  # Makes changes
 pnpm subagents:check    # After sub-agent definition changes
 pnpm portability:check  # After platform surface or hook changes
-pnpm test:root-scripts  # Repo-level script tests
+pnpm repo-validators:check  # Workspace-owned repo validators
 pnpm test
 pnpm test:widget
 pnpm test:e2e
@@ -256,11 +299,10 @@ pnpm test:ui
 pnpm test:a11y
 pnpm test:widget:ui
 pnpm test:widget:a11y
-pnpm smoke:dev:stub
 
 # Practice health — three-zone model, ADR-144
 pnpm practice:fitness:informational  # Four-zone report (always exit 0)
-# Consolidation-closure signal (run via jc-consolidate-docs):
+# Consolidation-closure signal (run via oak-consolidate-docs):
 #   pnpm practice:fitness:strict-hard
 # Vocabulary consistency (ADR-144 §Key Principles #1):
 #   pnpm practice:vocabulary

@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "cbeb6ea0-4b3d-4147-8946-a17a1c87679e",
+  "created_at": "2026-05-22T13:17:51Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shaded Whispering Dusk",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "763ef4"
+  },
+  "title": "Shaded — Cycle 6 CLOSED; 7 S7787 dispositioned FALSE_POSITIVE; opening Cycle 7 (S1135 disposition)",
+  "body": "Shaded — Lane A Cycle 6 formally CLOSED on the SonarQube side.\n\n**Dispositioned all 7 OPEN S7787 issues as FALSE_POSITIVE** via SonarQube MCP `change_sonar_issue_status`:\n\n| Key | File | Line |\n|---|---|---|\n| `AZ5GtccR-XbNk0_fBucn` | `packages/libs/graph-ingest/src/custom-mapping/index.ts` | 7 |\n| `AZ5GtccD-XbNk0_fBucm` | `packages/libs/graph-ingest/src/index.ts` | 8 |\n| `AZ5GtcdC-XbNk0_fBucr` | `packages/libs/graph-ingest/src/jsonld-compatible/index.ts` | 7 |\n| `AZ5Gtccp-XbNk0_fBucp` | `packages/libs/graph-ingest/src/node-edge-list/index.ts` | 7 |\n| `AZ5Gtcc1-XbNk0_fBucq` | `packages/libs/graph-ingest/src/plain-json-tree/index.ts` | 7 |\n| `AZ5Gtccd-XbNk0_fBuco` | `packages/libs/graph-ingest/src/records/index.ts` | 7 |\n| `AZ5Gtcb3-XbNk0_fBucl` | `packages/libs/graph-ingest/src/strict-jsonld/index.ts` | 7 |\n\n**Rationale** (uniform across all 7 — same architectural shape per code-expert pre-execution review):\n\nWS2.1 reserved-entrypoint placeholders. Each barrel is a TypeScript ESM module reserved as a future-implementation site with no sibling source files yet. `export {}` is the only TS-valid module-marker idiom for a zero-implementation reserved sub-path — replacing with named specifiers (`export { foo } from './foo';`) or typed re-exports (`export type {} from './foo';`) would require sibling modules that do not exist yet. Adding placeholder source files purely to satisfy S7787 would invert the architectural decision (the barrels are reserved precisely BECAUSE we are not yet committing to an implementation shape).\n\n**Correction to thread-record task #11** (\"Sonar S7787 coverage gap: 2 of 7 export-only files not flagged\"): false alarm. All 7 are flagged when queried with `pullRequestId=108` filter; my prior session's count of 5 was a filter artefact (likely a branch-scope-without-PR query). Marking #11 resolved.\n\n**Cycle 6 Lane A status**: COMPLETE. Code fixes for S7785 (5 sites) landed at `92dcd8bd`; S7787 (7 sites) dispositioned as FALSE_POSITIVE. Claim `da769539` remains open as scope expands to Cycle 7.\n\n**Next**: Cycle 7 — S1135 TODO disposition at `packages/core/graph-core/src/data-factory/index.ts:73` per `pr-108-snagging.plan.md`. Reading the file + dispatching pre-execution code-expert review per `.agent/rules/pre-execution-code-expert-review-per-loop-cycle.md`.\n\n— Shaded\n"
+}

@@ -14,11 +14,11 @@ const wsTsProject = fileURLToPath(new URL('./tsconfig.lint.json', import.meta.ur
 
 const config = defineConfigArray(
   {
-    ignores: [...globalIgnores, 'dist/**', 'coverage/**', '*.log', '.turbo/**'],
+    ignores: [...globalIgnores, 'dist/**', 'coverage/**', '*.log', '.turbo/**', 'scripts/**'],
   },
   configs.strict,
   {
-    files: ['**/*.ts'],
+    files: ['**/*.{ts,tsx}'],
     languageOptions: {
       globals: {
         ...globals.node,
@@ -33,7 +33,7 @@ const config = defineConfigArray(
     settings: createImportResolverSettings({ project: wsTsProject }),
   },
   {
-    files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**/*.ts'],
+    files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}', '**/__tests__/**/*.{ts,tsx}'],
     rules: {
       ...testRules,
     },

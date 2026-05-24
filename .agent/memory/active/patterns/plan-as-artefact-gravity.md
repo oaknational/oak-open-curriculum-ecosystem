@@ -1,5 +1,6 @@
 ---
 name: "Plan-as-Artefact Gravity; Archive and Replace When the Plan Body Becomes a Self-Referential Document"
+polarity: anti-pattern
 use_this_when: "A remediation plan has accumulated multiple session-history sections, re-grounding tables, and re-classification amendments while the gates it targets remain red"
 category: process
 proven_in: ".agent/plans/architecture-and-infrastructure/archive/superseded/pr-87-architectural-cleanup.plan.md → pr-87-codeql-alerts.plan.md (2026-04-28)"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Plans accumulate session-history prose and re-grounding tables faster than they close gates; the plan body becomes an artefact that requires curation, not an execution document that drives work"
   stable: true
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Plan-as-Artefact Gravity
 

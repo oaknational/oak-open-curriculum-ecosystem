@@ -1,5 +1,6 @@
 ---
 name: "Templates Can Institutionalise Failure Modes; Doctrine and Template Update Together"
+polarity: anti-pattern
 use_this_when: "Sharpening a doctrine, principle, or rule that flows through templates, scaffolds, or generators that produce future plans or artefacts"
 category: process
 proven_in: ".agent/plans/templates/feature-workstream-template.md and .agent/directives/tdd-phases.md (TDD-as-pairs sharpening 2026-05-03)"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Updating a directive but not its templates leaves the failure mode alive in every future artefact derived from the template — passive guidance loses to artefact gravity"
   stable: true
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Templates Can Institutionalise Failure Modes
 

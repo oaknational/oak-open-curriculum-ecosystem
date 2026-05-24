@@ -3,14 +3,18 @@ name: "[Phase Name] - Atomic Execution"
 overview: >
   [One-line execution summary with deterministic outcomes.]
 todos:
+  - id: cycle-1
+    content: >
+      Cycle 1: [failing test/check] + [minimal implementation].
+      One commit. Tree green at end.
+    status: pending
+  - id: cycle-2
+    content: >
+      Cycle 2: [next failing test/check] + [minimal implementation].
+      One commit. Tree green at end.
+    status: pending
   - id: phase-kickoff
     content: "Prepare baseline and execution order."
-    status: pending
-  - id: phase-policy
-    content: "[Define/update policy or contract for this phase.]"
-    status: pending
-  - id: phase-implementation
-    content: "[Deliver implementation tasks with deterministic validation.]"
     status: pending
   - id: phase-evidence
     content: "[Capture evidence artefact(s) for non-trivial claims.]"
@@ -43,14 +47,15 @@ Before any non-planning edits:
    name why bespoke was chosen OR which first-party option was
    adopted. Sunk-cost reasoning is not a valid answer. See
    `feature-workstream-template.md` §Build-vs-Buy Attestation for the
-   canonical prose. `assumptions-reviewer` must run against this
+   canonical prose. `assumptions-expert` must run against this
    attestation before the plan is marked READY FOR EXECUTION.
-3. **Reviewer phase-alignment**: plan-phase reviewers
-   (`assumptions-reviewer`, vendor specialist) fire PRE-execution;
-   mid-cycle reviewers (`test-reviewer`, `type-reviewer`, architecture
-   family, `code-reviewer`) fire DURING; close reviewers
-   (`docs-adr-reviewer`, `onboarding-reviewer`,
-   `release-readiness-reviewer`) fire POST. Scheduling all reviewers
+3. **Reviewer phase-alignment**: plan-phase reviewers fire
+   PRE-execution (`assumptions-expert`, plus a vendor specialist only
+   for vendor-touching plans); mid-cycle reviewers (`test-expert`,
+   `type-expert`, architecture family, `code-expert`) fire DURING;
+   close reviewers
+   (`docs-adr-expert`, `onboarding-expert`,
+   `release-readiness-expert`) fire POST. Scheduling all reviewers
    at close is a phase-misalignment anti-pattern.
 4. **Lifecycle triggers**: apply
    [`lifecycle-triggers.md`](components/lifecycle-triggers.md). Record
@@ -70,17 +75,48 @@ cp .agent/plans/[collection]/evidence-bundle.template.md \
   .agent/plans/[collection]/evidence/$(date +%F)-[phase-slug]-run-001.evidence.md
 ```
 
-## Atomic Tasks
+## Atomic Cycles and Tasks
 
-### Task 1: [Task Name]
+### Cycle 1: [Cycle Name]
+
+**Parallel-safety**: [parallel-safe with evidence | sequenced after `<cycle-id>`]
+
+**Starting state**: [branch HEAD at dispatch | after `<cycle-id>` lands]
+
+**File scope**:
+
+- `[test-or-check-file]`
+- `[product-file]`
+
+**Failing test or check**:
+
+- [File and assertion/check shape]
+
+**Minimal implementation**:
+
+- [Product change that greens the test/check]
+
+**Acceptance criteria**:
+
+1. [Outcome-based criterion]
+2. [Quality or documentation criterion]
+
+**Deterministic validation**:
+
+```bash
+[command]
+# Expected: [exit 0 and expected output]
+```
+
+### Cycle 2: [Cycle Name]
+
+[Repeat the cycle shape above for each product-code landing.]
+
+### Task: [Verification, Evidence, or Documentation Task]
 
 - Output: [Expected artefact(s)]
-- Deterministic validation:
-  - `[command]`
-
-### Task 2: [Task Name]
-
-- Output: [Expected artefact(s)]
+- Acceptance criteria:
+  - [Outcome-based criterion]
 - Deterministic validation:
   - `[command]`
 
@@ -115,7 +151,8 @@ changes.
    - Expected: exit 0
 
 6. **Commit**
-   - `git add [files] && git commit -m "[message]"`
+   - Use the commit skill and commit queue. Stage and commit only the
+     explicit pathspecs for this task; do not use wildcard staging.
 ```
 
 When the approach is known (e.g., from a deep review or prior phase),
@@ -160,11 +197,23 @@ blocked protocol above.
   - Phase entry updated in `documentation-sync-log.md`
   - required canonical docs updated or explicitly marked no-change with rationale
   - consolidation review completed using `jc-consolidate-docs`
+- Acceptance criteria:
+  - Documentation update or no-change rationale is recorded for every
+    required canonical surface.
+  - Consolidation review has run or is explicitly referenced with evidence.
 - Deterministic validation:
-  - `rg -n "## [Phase]|Status:|ADR-119 update or rationale|ADR-124 update or rationale|practice.md update or rationale|Consolidation review" .agent/plans/[collection]/documentation-sync-log.md`
-  - `test -f docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`
-  - `test -f docs/architecture/architectural-decisions/124-practice-propagation-model.md`
-  - `test -f .agent/practice-core/practice.md`
+
+  ```bash
+  rg -n "## <phase>|Status:|Consolidation review" \
+    .agent/plans/[collection]/documentation-sync-log.md
+  rg -n "ADR-119 update or rationale|ADR-124 update or rationale" \
+    .agent/plans/[collection]/documentation-sync-log.md
+  rg -n "practice.md update or rationale" \
+    .agent/plans/[collection]/documentation-sync-log.md
+  test -f docs/architecture/architectural-decisions/119-agentic-engineering-practice.md
+  test -f docs/architecture/architectural-decisions/124-practice-propagation-model.md
+  test -f .agent/practice-core/practice.md
+  ```
 
 ## Evidence and Claims
 

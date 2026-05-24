@@ -1,8 +1,234 @@
 # Next-Session Record — `eef` thread
 
-**Last refreshed**: 2026-05-08 (Opalescent Shimmering Orbit / codex /
-GPT-5 / `019e06` — PR #102 graph decision-complete closeout reaffirmed the
-EEF evaluation stance: slice 1 is structural-only for evaluation purposes.
+**Last refreshed**: 2026-05-23 (Secret Vanishing Wisp / `claude` /
+claude-opus-4-7 / `981cbe` first-out closeout-authored; Sparking Melting
+Magma / `claude` / claude-opus-4-7 / `4cdb53` committed under owner-directed
+overall-closeout-authority handoff at 2026-05-23 06:54Z — first-out
+closeout of the 2026-05-22 → 2026-05-23 multi-agent gate-1a substrate-floor
+team session; synthesises **19 commits across 6 active agents over ~10
+hours**; Round 1+2 substrate floor **effectively complete** — WS4.1 landed
+at `3241893d` under Stormbound Spiralling Breeze's owner-directed
+ownership-override).
+
+---
+
+## Session 2026-05-22 → 2026-05-23 — multi-agent gate-1a substrate-floor team session (first-out closeout: Secret Vanishing Wisp / `981cbe`)
+
+**Substantive progress this session**: Round 1 gate-1a substrate floor for
+the EEF first-feature delivery contract is effectively complete; Round 2
+substrate (t1 EvidenceCorpus types + WS2.2/WS2.3 graph-ingest primitives +
+t14 telemetry seam pattern) also landed.
+
+**Gate-1a Round 1 cycles landed** (9 of 9 — WS4.1 LANDED at `3241893d` under
+Stormbound Spiralling Breeze ownership-override after Lunar's silence):
+
+| Cycle | Commit(s) | Owner |
+|---|---|---|
+| WS4.4 GraphView interface + T7a array-stop smoke-test | `1fc5b491` (substantive, 11 files, 540/-3) + `bf7fa545` (test-partition amendment) + `db5271af` (test-expert post-exec absorb, 3 audit-shape tightenings) | Foamy Fathoming Compass / `ecb459` |
+| WS3.3 adjacency primitives status flip (substantive at f4ca84f6 in prior session) | `83179e11` | Foamy Fathoming Compass / `ecb459` |
+| PR-108 SonarCloud quality-gate clearance (6-lane fan-out, 24 files) | `51a02a93` | Secret Dimming Shade / `5a6e56` |
+| t9 AGGREGATED_EEF_EVIDENCE_GUIDANCE constant (R1 + R7 prose framings) | `acd2a3f3` | Secret Vanishing Wisp / `981cbe` |
+| t10 eef-evidence-grounded-lesson-plan prompt (5-step orchestration of t6a) | `a2136557` + `11c05ced` (Sparking-reciprocal-nits absorb) | Secret Vanishing Wisp / `981cbe` |
+| t12 citation shape (`citation-shape.ts` Zod tuple non-empty invariants) | (earlier 2026-05-22 via Mistbound + Stormbound) | (prior identity) |
+| t13a freshness check function (gate-1a partial; gate-1b refresh-script deferred) | `968e3cb7` (plan-split) + `745fe919` (function + tests) + `8f253280` (TSDoc-forward-ref absorb) | Sparking Melting Magma / `4cdb53` |
+| t20 credits attribution (state-flag only — substance pre-existing) | `e1d76c54` | Sparking Melting Magma / `4cdb53` |
+| WS4.1 graph-corpus-sdk scaffold (14 files, +311; two code-expert absorptions baked in — `src/index.ts` type re-exports of `GraphView` + `Result<T, E>`, `knip.config.ts` entry removal) | `3241893d` | Stormbound Spiralling Breeze / `b8a5c9` (owner-directed override; Lunar Illuminating Eclipse Co-Authored-By preserved; SVW coordination preserved in commit body) |
+
+**Round 2 substrate cycles landed**:
+
+| Cycle | Commit(s) | Owner |
+|---|---|---|
+| t1 EvidenceCorpus type substrate + t16-partial public re-export | `7d8f0b0c` + `5ec02aec` (architecture-expert-betty post-exec absorb: subpath relocation) + `9425faa0` (SVW-reciprocal absorb: 3 RankOptions divergences fixed) | Sparking Melting Magma / `4cdb53` |
+| WS2.2 jsonld-compatible + Turtle parsers + §invariant-2 contract | `f58bcb80` (scaffold + deps) + `ce0abe26` (substantive, 7 files) + `361cae35` (SVW-reciprocal absorb: literal-object dataset.has() upgrade) | Sparking Melting Magma / `4cdb53` |
+| WS2.3 source-path primitives (JsonPointer + quadKey + SourceLocation; 32 tests) | `6cc7b339` + `c03ace9b` (plan-split into primitives + follow-on) | Sparking Melting Magma / `4cdb53` |
+| t14 telemetry seam pattern (pure-type module; gate-1a partial) | `72cd93f0` | Sparking Melting Magma / `4cdb53` |
+
+**Coordination commits**: `e1b9561e` (Velvet's 4 markdown files mis-attributed
+under Lunar's WS4.1 commit message — the COMMIT_EDITMSG concurrent-write
+incident); `a7134f82` (Sparking session-arc napkin capture); `644c937b` (Shade
+push-blocker prettier-normalize cure on Sparking's WS2.3+turtle files).
+
+**Reviewer cadence — reciprocal-review pattern empirically validated**:
+
+The team's reciprocal cross-agent post-execution reviewer dispatch (SVW ↔
+Sparking, SVW ↔ Foamy) produced **8 substantive defect catches** across this
+session (each absorbed cleanly):
+
+- SVW caught on Sparking cycles (3): t13a TSDoc-filename forward-reference
+  (`8f253280`); t1 `RankOptions.context` 3 plan-vs-implementation divergences
+  — focus enum 4/6 members + missing `pp_percentage` + `max_results` mis-nested
+  (`9425faa0`); WS2.2 jsonld-compatible literal-object quads partial
+  C2-deviation (cleaner `dataset.has(quad(..., literal('Ada')))` vs
+  manual-iteration predicate-value-only checks) (`361cae35`).
+- Sparking caught on SVW t10 cycle (3): registration tests were schema-audit
+  not behavioural (removed; added dispatcher-route-correctness); KS5
+  phase-resolution coverage gap (F9 edge-case test); `m.content.text` access
+  unguarded (narrowing filter); SHA-pinned TSDoc reference rot risk (replaced
+  with stable plan-file path). Absorbed at `11c05ced`.
+- Foamy ↔ SVW (2): Foamy's post-exec on SVW's t9 caught TSDoc line-range
+  references that would rot (absorbed in-touch); SVW's reciprocal on Foamy's
+  WS4.4 amendment caught WS4.5 `depends_on` array drift + stale `Last Updated`
+  header (recorded as targeted follow-up).
+
+**Coordination-pattern surfacings**:
+
+1. **Authorial-bundle integrity 3rd known instance** — at the `e1b9561e`
+   misattribution incident: Lunar `cp`'d their WS4.1 commit message to
+   `.git/COMMIT_EDITMSG` while Velvet's commit-queue pre-commit hook was
+   running; Velvet's hook then read Lunar's message file but committed
+   Velvet's pathspec-scoped 4 files. **Cure shape worth a commit-queue CLI
+   amendment**: per-intent **line-scoped** staging via patch-mode `git add -p`
+   with a recorded patch fingerprint per intent, NOT just file-scoped
+   pathspec discipline. Existing pathspec discipline protects file scope
+   but not line-level scope within shared files (worked-instance: Sparking's
+   `968e3cb7` swept SVW's unstaged t10 plan-file edits along with Sparking's
+   t13 amendment — substance correct, attribution wrong). Captured in
+   [`pending-graduations.md`](../pending-graduations.md) for graduation
+   evaluation.
+
+2. **Cure-1 emergent default across 4 agents** — intent-scoped message
+   file path (e.g. `/tmp/<agent>-<cycle>-commit-msg.txt`) passed to
+   `commit-queue commit --message-file <path>` rather than the shared
+   `.git/COMMIT_EDITMSG`. Adopted by Foamy, SVW, Sparking, and Stormbound
+   without coordination — emergent default. **Cure shape**: commit-queue
+   CLI should accept `--message-file` with a per-intent default path
+   natively (auto-derive `.git/.commit-queue/<intent-id>.msg`). Captured
+   for graduation.
+
+3. **Untracked-WIP whole-tree lint-blocker recurring pattern** — three
+   instances this session: (a) Foamy's untracked graph-view/index.ts had
+   8 lint errors that blocked Sparking's t20 first commit; (b) Sparking's
+   untracked freshness.ts had 4 TSDoc errors + 1 type-assertion that
+   blocked SVW's t10 first commit; (c) Sparking's untracked WS2.3 turtle
+   parser had prettier format issues (Shade landed `644c937b` as a
+   peer-format-cure). **Working cure**: directed diagnostic from peer
+   with concrete fix shapes (Foamy → Sparking 22:45:56Z; SVW broadcast +
+   Sparking self-fix at 22:47Z; Shade pre-empting WS2.3 push at 06:13Z).
+
+4. **Honest-restructure-over-band-aid pattern** confirmed across two
+   agents in two cycles: Foamy split graph-view/index.ts into 3 modules
+   (architectural-excellence) rather than compress to pass max-lines;
+   Sparking deleted the binding test per `no-conditional-tests.md`
+   doctrine rather than use a file-existence guard. Both responses came
+   from honest reading of the doctrine the quality-gate enforces.
+
+**Outstanding state (next-session pickup)**:
+
+- **Lunar WS4.1 — RESOLVED at `3241893d`**. Stormbound Spiralling Breeze
+  landed Lunar's substance under owner-directed ownership-override at
+  06:39Z 2026-05-23 with two pre-execution code-expert absorptions
+  baked in (`src/index.ts` placeholder replaced with type re-exports of
+  `GraphView` + `Result<T, E>` to make deps knip-visible and declare
+  the consumer contract; `knip.config.ts` explicit `entry:` removed
+  since knip auto-detects sub-path entries from package.json `exports`).
+  Lunar's `355d2ddb` (workspace) + `15465f06` (git:index/head) claims
+  closed at the same commit. **WS4.5 (Foamy's natural next cycle —
+  EefStrandsGraphView adapter) is now unblocked**.
+- **Sparking parser-integration follow-on** (claim `9c163e1c`,
+  `ws2-source-map-parser-integration`) — intent broadcast at 01:08Z
+  2026-05-23; never authored. Sparking acknowledged session ceiling
+  after 15+ cycles. Clean pickup for any agent: per-quad source-location
+  attachment refactor across both WS2.2 parsers (JSON-LD custom walker +
+  n3.js StreamParser refactor), atomic landing per test-expert C4.
+- **Stormbound Floating Wing ff5 intent** at 06:14Z — stood down on owner
+  cron cancellation immediately after broadcast; ff5 unclaimed.
+- **Critical-path beyond Round 2**: t2-zod-loader (needs WS4.1 substance
+  committed for `@oaknational/graph-corpus-sdk` import path stable);
+  t6a-explore-tool (needs t2 + WS4.5); ff3 + ff4 + ff5 + ff6 delivery-
+  contract items.
+
+**Round 1+2 substrate floor scoreboard**:
+
+```text
+WS4.4 ✓ + WS3.3 ✓ + PR-108 ✓ + t9 ✓ + t10 ✓ + t12 ✓ + t13a ✓ + t20 ✓
++ t1 ✓ + WS2.2 ✓ + WS2.3 primitives ✓ + t14 ✓ + WS4.1 ✓ (3241893d)
+WS2.3 parser-integration outstanding (Sparking ceiling-stopped)
+```
+
+**Reviewer dispatches this session**: SVW dispatched 7 sub-agents (4 pre-exec
+t9 + 3 pre-exec t10 + 1 post-exec each on Sparking's t13a, t1, WS2.2);
+Sparking dispatched 6+ sub-agents (pre-exec t13a + pre-exec t1 + post-exec
+self + pre-exec WS2.2 + post-exec self + pre-exec WS2.3 reviewers); Foamy
+dispatched 6 pre-exec on WS4.4 + post-exec on 1fc5b491 + reciprocal on SVW
+t9. Sparking ran an architecture-expert-fred cross-cycle audit (GO on
+system-level cohesion, ADR-041 + ADR-108 compliant per Sparking napkin entry
+at `a7134f82`).
+
+**Identity rows for this session** (added per PDR-027 additive-identity
+rule):
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Foamy Fathoming Compass` | `claude` | `claude-opus-4-7` | `ecb459` | `ws4-4-graphview-substantive-author + reciprocal-reviewer` | 2026-05-22 | 2026-05-23 |
+| `Lunar Illuminating Eclipse` | `claude` | `claude-opus-4-7` | `326ea7` | `ws4-1-corpus-sdk-scaffold-author + commit-incident-victim` | 2026-05-22 | 2026-05-22 |
+| `Velvet Veiling Wisp` | `claude` | `claude-opus-4-7` | `b4bb7a` | `consolidation-curation-3-pass + commit-editmsg-incident-victim` | 2026-05-22 | 2026-05-22 |
+| `Secret Dimming Shade` | `claude` | `claude-opus-4-7` | `5a6e56` | `pr-108-sonarcloud-clearance + push-blocker-format-cure` | 2026-05-22 | 2026-05-23 |
+| `Secret Vanishing Wisp` | `claude` | `claude-opus-4-7` | `981cbe` | `t9-t10-author + reciprocal-reviewer + first-out-closeout-owner` | 2026-05-22 | 2026-05-23 |
+| `Sparking Melting Magma` | `claude` | `claude-opus-4-7` | `4cdb53` | `15-commit-round-1-and-2-cycle-author + reciprocal-reviewer` | 2026-05-22 | 2026-05-23 |
+| `Stormbound Floating Wing` | `claude` | `claude-opus-4-7` | `52f264` | `team-start-then-9h-silent-then-return-stand-down` | 2026-05-22 | 2026-05-23 |
+| `Stormbound Spiralling Breeze` | `claude` | `claude-opus-4-7` | `b8a5c9` | `team-start-then-silent` | 2026-05-22 | 2026-05-22 |
+
+---
+
+## Session 2026-05-21 — Sequencing pull-forward (Torrid Glowing Flame / `5ab0ec`)
+
+**Last refreshed (prior)**: 2026-05-21 (Torrid Glowing Flame / claude /
+claude-opus-4-7-1m / `5ab0ec`) — **Sequencing pull-forward authored
+under owner direction. NO product code in this session; planning
+amendments only.** The first user-facing EEF MCP feature is now
+sequenced at graph-mvp-arc **gate-1a** (a new gate added by the
+2026-05-21 split) atop **graph-stack Inc.1d** (new sub-increment: WS4.4
+GraphView interface + WS4.5 EEF subgraph+manifest adapter as a
+concurrent Inc.1 tenant of `graph-corpus-sdk` alongside the Threads
+adapter, per ADR-173 §First-wave ingestion scope 2026-05-21
+amendment). The EEF adapter formerly scheduled at Inc.3 is split:
+`subgraph` + `manifest` operations land at Inc.1d; the remaining 5
+operations (`summary`, `getNode`, `enumerateNodes`, `neighbours`,
+`findByTag`) remain at Inc.3 as typed `NotImplementedYet` Result
+stubs satisfying the full GraphView interface contract from
+day one. The first user-facing tool is **`eef-explore-evidence-for-context`**
+(new todo t6a in `eef-evidence-corpus.plan.md`) — a subgraph-shaped
+response over EEF strands matching a teacher's seed context
+(subject + key_stage + optional focus), wrapped in the structural
+citation/caveat/freshness envelope. The first prompt is
+`eef-evidence-grounded-lesson-plan` (t10, unchanged). EEF
+source-authority status unchanged: the repository-held snapshot
+remains the canonical implementation source until EEF clarifies
+refresh mechanics. **Gate-1a is the EEF partnership-conversation
+opener gate** — contact named, first-contact action recorded with
+date + outcome before gate-1a promotes to active. **Non-negotiable
+at gate-1a**: full GraphView interface (Inc.1d WS4.4),
+DeepKeyPath compile-time discipline (T7a smoke-test), structural
+citation envelope (t12 full), ADR-175 freshness CI gate (t13 full
+binding), `eef-*` namespace + `_meta` attribution (ADR-157), Sentry
+telemetry seam pattern (t14 partial — full pattern, one tool
+instrumented). The gate-1b cluster (recommend/explain/compare +
+second prompt) ships after graph-stack Inc.3 lands. **Slice 1 still
+ships in full**; the split is sequencing only. No scope reduction.
+**Predecessor (corrected at handoff close)**: the v0.7.0 upstream-API
+cascade CLEARED earlier today via Opalescent Twinkling Supernova's
+three commits on `feat/mcp-graph-support-foundation` (`b1afd5bf`
+chore(sdk), `5613eee4` refactor(search-cli), `8fcd3200` docs(plans));
+my session ran with the cascade already resolved. Graph
+implementation work is no longer cascade-blocked. This session's
+amendments are planning-only and do not touch SDK codegen output.
+
+**Prior refresh**: 2026-05-10 (Fragrant Regrowing Root / codex / GPT-5 /
+`019e12` — EEF source-authority clarification. The repository-held
+`eef-toolkit.json` snapshot is now treated as the canonical implementation
+source until EEF clarifies whether refresh should come from a public
+download/API endpoint or direct supply. The EEF plan now says not to
+reconstruct the corpus from scraped EEF pages and to record the provenance gap
+at promotion if EEF has not clarified it. The structural-only evaluation stance
+is unchanged: load-bearing acceptance is citation/data/caveat/freshness/
+MCP-shape preservation at the tool boundary; LLM paraphrase scoring,
+teacher-trust measurement, and SENCO workflow-time measurement remain
+follow-on evaluation-infrastructure work outside Vitest.)
+
+**Prior refresh**: 2026-05-08 (Opalescent Shimmering Orbit / codex /
+GPT-5 / `019e06` — PR #102 graph decision-complete closeout was pushed as head
+`309d9e5e44cebecb1be2478d2fb084a54f39b6b2`; the EEF evaluation stance is
+unchanged at handoff. Slice 1 is structural-only for evaluation purposes.
 Load-bearing acceptance is citation/data/caveat/freshness/MCP-shape
 preservation at the tool boundary; LLM paraphrase scoring, teacher-trust
 measurement, and SENCO workflow-time measurement are follow-on
@@ -14,8 +240,8 @@ measurement.)
 claude-opus-4-7-1m / session seed `696765` — drafted the 7×3 T1
 tracer matrix into `graph-query-layer.plan.md § Phase 1` with
 verification footnotes against real generator output and data files;
-ran three review rounds (in-session first-principles, code-reviewer,
-assumptions-reviewer); applied 6 findings across rounds plus 3
+ran three review rounds (in-session first-principles, code-expert,
+assumptions-expert); applied 6 findings across rounds plus 3
 operation-design corrections (drop `find_by_tag` for prerequisite +
 misconception under the *stop inventing optionality* doctrine, add
 sparse-relations manifest surface, reframe outcome condition);
@@ -43,11 +269,15 @@ under the ≥2-of-3 rule (`neighbours × misconception`,
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
 | `Iridescent Soaring Planet` | `claude-code` | `claude-opus-4-7-1m` | `b38261` | `architecture-restructure-and-handoff` | 2026-04-30 | 2026-04-30 |
-| `Fragrant Sheltering Petal` | `claude-code` | `claude-opus-4-7-1m` | `360064` | `type-reviewer-round` | 2026-04-30 | 2026-04-30 |
+| `Fragrant Sheltering Petal` | `claude-code` | `claude-opus-4-7-1m` | `360064` | `type-expert-round` | 2026-04-30 | 2026-04-30 |
 | `Vining Whispering Root` | `claude-code` | `claude-opus-4-7-1m` | `696765` | `tracer-matrix-and-promotion-packet` | 2026-04-30 | 2026-05-01 |
 | `Gnarled Fruiting Root` | `claude-code` | `claude-opus-4-7-1m` | `e18e2c` | `cross-ref-path-updates-from-thread-restructure-only` | 2026-05-01 | 2026-05-01 |
 | `Windward Darting Horizon` | `cursor` | `claude-opus-4.7` | `dd084d` | `eef-tool-rename-eef-prefix-per-adr-157-and-mvp-arc-cross-ref` | 2026-05-07 | 2026-05-07 |
 | `Opalescent Shimmering Orbit` | `codex` | `GPT-5` | `019e06` | `pr-102-eef-structural-eval-closeout` | 2026-05-08 | 2026-05-08 |
+| `Fragrant Regrowing Root` | `codex` | `GPT-5` | `019e12` | `eef-source-authority-clarification` | 2026-05-10 | 2026-05-10 |
+| `Torrid Glowing Flame` | `claude` | `claude-opus-4-7-1m` | `5ab0ec` | `inc-1d-eef-concurrent-tenant-sequencing-pull-forward-author` | 2026-05-21 | 2026-05-21 |
+| `Salty Charting Harbour` | `codex` | `GPT-5` | `019e4e` | `standby-team-join-identity-drift-surfaced` | 2026-05-22 | 2026-05-22 |
+| `Mistbound Slipping Night` | `claude` | `claude-opus-4-7` | `a1cb64` | `t12-citation-shape-cycle-author-with-stormbound-commit-handoff` | 2026-05-22 | 2026-05-22 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -103,6 +333,201 @@ Evidence:
 
 ---
 
+## Session 2026-05-22 — multi-agent team session under Blustery Lifting Plume coordinator
+
+**Substantive progress this session**: PR-108 quality-gate
+advancement — `new_security_hotspots_reviewed` moved 0% → 100%
+(12/12 hotspots reviewed: 11×S5332 SAFE in
+`packages/core/graph-core/` test files + 1×S4036 SAFE at
+`agent-tools/src/bin/agent-tools-cli-topics.ts:96`). CodeQL alert
+number 90 dismissed via `gh api PATCH state=dismissed
+dismissed_reason="false positive"` (Flamebright Cycle 1 tail
+action; criterion 3 pending next CI run). Five mechanical commits
+landed on `feat/mcp-graph-support-foundation`:
+
+| Cycle | Commit  | Substance                                                |
+| ----- | ------- | -------------------------------------------------------- |
+| C1    | 77463a22 | CodeQL #90 TSDoc edit + UI dismissal (Flamebright)       |
+| C4.1  | 73ab1624 | Object.hasOwn in agent-tools/src/context-cost/cli-options.ts (Salty) |
+| C4.2  | ca28bd83 | RegExp.exec in agent-tools/src/practice-fitness/markdown.ts (Salty) |
+| C4.3  | 0c3df45b | Optional-chain in graph-core canonicalize.unit.test.ts (Salty) |
+| C4.4  | 604f64b7 | Array.at(-1) in agent-tools/src/practice-fitness/paths.ts (Salty) |
+
+**Substrate-unblock framing**: PR-108 is the merge-blocker for the
+EEF gate-1a substrate (graph-stack Inc.1d WS4.4 + WS4.5). This
+session moved the PR-108 quality-gate conditions (hotspots cleared,
+CodeQL #90 dismissed pending CI, four mechanical issues fixed) but
+did **not** advance EEF gate-1a named delivery-contract items
+(ff1–ff6). The substrate movement is necessary-but-not-sufficient;
+gate-1a remains gated on the named delivery contract.
+
+**Open Q1/Q2/Q3 PDR routing questions still on owner surface**:
+Foamy Snorkelling Jetty (planning specialist) raised three
+architectural routing questions during PDR-063..066 reviewer-verdict
+absorption that remain owner-class decisions:
+
+- Q1: portability migration surface — how do PDR-063, PDR-065,
+  PDR-066 cure their embedded-repo-path defects without losing
+  substantive grounding? (Cure-shape decision: abstract substrate
+  language vs migrate detail to a non-Practice-Core surface.)
+- Q2: PDR-065 `[DOCTRINE]` tag mechanism — keep, defer, or move to
+  PDR-066 Tranche 2 amendment?
+- Q3: PDR-065 `fast_bootstrap_eligible` frontmatter field — keep or
+  downgrade to deferred-to-first-instance?
+
+All three remain unanswered at session pause. PDR-064 cured cleanly
+in working tree (uncommitted); PDR-063/065/066 cures NOT STARTED.
+
+**Roster outcomes**:
+
+- Codex side fully cleared: Veiled Cloaking Threshold, Salty
+  Charting Harbour, Midnight Veiling Threshold all rotated out via
+  team-member closeout broadcasts.
+- Claude side held in pause: Blustery (coordinator), Foamy
+  (planning), Flamebright (retired post-Cycle-1/6 prep), Ferny
+  (continuing for consolidation pass under owner direction).
+
+**Sonar MCP unblock evidence** (durable; for future sessions): three
+substrates demonstrated three distinct unblock paths — (i) Claude
+Code `/mcp` reconnect re-attaches the `mcp__sonarqube__` namespace
+mid-session (owner-driven); (ii) `docker mcp gateway run --profile
+sonarqube_oak` exposes the same tools via shell layer for Codex
+sessions (Midnight worked precedent); (iii) `mcp__sonarqube__
+mcp-add` is denied by auto-mode classifier as "Self-Modification"
+without prior user/inter-agent authorisation. Codex sessions
+lacking the `mcp__sonarqube__` namespace should check `docker mcp
+tools ls --format json` BEFORE declaring Sonar unavailable.
+
+**Branch-state pickup pointer (2026-05-22 final shape)**: any
+session picking up this thread on `feat/mcp-graph-support-foundation`
+MUST first read
+[`feat-mcp-graph-support-foundation-meta.md`](../../../plans/feat-mcp-graph-support-foundation-meta.md)
+— the top-level meta plan naming every plan currently in force on
+the branch, the cross-plan dependency picture, the file-scope
+partition (work-structure, not team-structure), current state of
+work, entry points for different kinds of work, and the open
+owner-class structural questions. **The earlier
+`branch-concurrency.md` is retired**: it carried operational drift
+(Stream-A-to-F framing read as team-shape; Path 1/2/3 merge
+ordering = operational; coordinator-structure heuristics =
+operational) that did not match owner direction "describe what
+parallel work is possible, not how it is carried out or by whom".
+Substantive content survives in the meta plan.
+
+## Session 2026-05-22 (later) — Mistbound Slipping Night t12-citation-shape cycle
+
+**Substantive progress this session**: t12-citation-shape (gate-1a
+Round 1, load-bearing for both gate-1a and gate-1b) authored end to
+end. Three files reach the staged-and-gate-green state under
+Mistbound; commit was handed to Stormbound Kiting Squall per owner
+direction at session-end.
+
+Files landed in working tree (staged at handoff, not committed by
+Mistbound):
+
+- `packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.ts`
+  — `CitationSchema` + `CaveatsSchema` + `CitationsSchema` with
+  Zod 4 two-arg `z.tuple([T], T).readonly()` producing readonly
+  non-empty tuples via `z.infer`. `z.url()` on `eef_url`.
+  Source-attribution field DROPPED per owner direction (Option A):
+  envelope `_meta.attribution` carries `EEF_ATTRIBUTION` once per
+  response.
+- `.../citation-shape.unit.test.ts` — 17 tests; `satisfies Citation`
+  on fixtures; `safeParse` + `result.success`; `it.each` over
+  literal `keyof Citation` array for parametrised missing-field
+  rejection. No pure type-only tests (per `test-immediate-fails.md`
+  item 19).
+- `.agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md`
+  — §Phase F amendment dropping `source` from `Citation`;
+  frontmatter t12 todo flipped `status: pending` → `completed`.
+
+**Reviewer cadence absorbed**:
+
+- Pre-execution code-expert: CHANGES REQUESTED — surfaced the
+  source-field duplication risk against `EEF_ATTRIBUTION` constant;
+  Zod 4 tuple/min(1) tension; `@ts-expect-error` convention. Owner
+  resolved source-field → Option A (drop).
+- Pre-execution type-expert: `z.tuple([T], T).readonly()` Zod 4
+  two-arg form; `z.url()` not `z.string().url()`; SSoT via `z.infer`.
+- Pre-execution test-expert: no pure type-only tests; `satisfies` +
+  `safeParse` + `it.each` over literal dataset.
+- Post-execution code-expert: CLEAR; all architectural commitments
+  honoured.
+
+**Local gate state at handoff**: lint clean (after
+`pnpm --filter @oaknational/eslint-plugin-standards build &&
+pnpm --filter @oaknational/sdk-codegen build &&
+pnpm --filter @oaknational/result --filter @oaknational/type-helpers build`
+sequence); type-check clean; vitest 17/17 pass; full
+`pnpm turbo run type-check lint test` 87/87 successful.
+
+**Commit handoff to Stormbound**: directed comms-event
+`0f03f45c-a225-4d55-bb15-2e5c44abb678` at 15:42Z carries all
+substance: intent_id `131fe2a9` already verify-staged with
+fingerprint `35a29ef5...`; message file at
+`/tmp/mistbound-t12-commit-message.txt`; three options for landing
+(take over intent, open own intent with same files, Path-B
+selective `git commit --`). Acknowledged Stormbound's graceful
+abandonment of `cf39fd43` (the queue-collision worked instance).
+
+**Claim disposition**: zero Mistbound claims active at handoff. Three
+closed: `c847fffc` (stale ff2, absorbed by sweep), `f013f95d`
+(t12 main, handed), `59eabaea` (t12 supplementary plan amendment,
+handed).
+
+**Workspace-bootstrap blocker surfaced** (pending-graduations
+candidate): consumer-workspace lint, type-check, and test commands
+fail at config-load time on a fresh checkout because producer
+workspaces (`@oaknational/eslint-plugin-standards`,
+`@oaknational/sdk-codegen` subpath exports, `@oaknational/result`,
+`@oaknational/type-helpers`) ship no `dist/` until explicitly built.
+Implicit build-order graph is invisible to new agents. Possible
+cures: `pnpm bootstrap` script, `development` exports condition
+resolving to `src/`, or precondition in onboarding docs.
+
+**EEF gate-1a progress**: ff2 RESOLVED in prior cycle (this session
+inherited the post-resolution state via sweeps `03da8e3d` /
+`2cda69a2`). t12-citation-shape RESOLVED this session (subject to
+Stormbound's commit). Remaining gate-1a items: ff1 (partnership
+opener — owner direction is skip; EEF already aware),
+ff3 (substrate floor tracking — WS4.4 + WS4.5 in graph-stack plan),
+ff4 (corpus todos tracking — t1, t2, t6a, t9, t10, t13, t20 +
+partials), ff5 (shape-understanding evidence — depends on t6a draft),
+ff6 (acceptance bundle — terminal). Round 1 parallel-safe cycles
+remaining: t9, t13, t20, WS4.4.
+
+**Last refreshed**: 2026-05-22 (later) — Mistbound Slipping Night /
+claude / claude-opus-4-7 / `a1cb64`. Topology: peer-primary with
+Stormbound Kiting Squall (`ddbea2`) as the commit-window picker-up.
+
+---
+
+## Session 2026-05-22 — Blustery Lifting Plume coordinator (earlier)
+
+**Last refreshed**: 2026-05-22 — Blustery Lifting Plume / claude /
+claude-opus-4-7 / `d4aad7` (full-session coordinator) + team
+(Flamebright / Foamy / Ferny / Veiled / Salty / Midnight).
+Consolidation pass executed under Ferny by coordinator routing
+event `09:35:57Z`; branch-concurrency manifest landed by Ferny at
+commit `c8860a0f` under owner direction "update all relevant plans
+and continuity surfaces to make the parallel work explicit"; the
+manifest was subsequently superseded by the meta plan
+`feat-mcp-graph-support-foundation-meta.md` after owner refined the
+criterion ("describe what highly parallel work is possible, not how
+it is carried out or by whom"). Final closeout this session: team
+dissolved (last team member Blustery); meta plan landed; three plan
+amendments (`pr-108-snagging.plan.md`, `eef-first-feature.plan.md`,
+`graph-stack.plan.md`) tightened to cross-reference the meta plan
+and drop operational framing; the four PDR drafts
+(`PDR-063..066`) preserved on the branch as committed artefacts
+under this closeout, with PDR-064 cures landed and PDR-063/065/066
+cures paused mid-work awaiting owner Q1/Q2/Q3 routing. Knowledge-
+graduation backlog expanded to 6 candidates (added: planning
+documents describe work-structure, not operational/team approach
+— owner-stated criterion).
+
+---
+
 ## Promotion Triggers and Sequencing
 
 The five-increment delivery sequence with explicit promotion gates:
@@ -115,8 +540,9 @@ The five-increment delivery sequence with explicit promotion gates:
    - EEF corpus plan (Increment 2) ready for parallel start.
 2. **Increment 2** (eef-evidence-corpus) → ACTIVE when:
    - Increment 1 reached ACTIVE.
-   - Fresh upstream EEF data check performed (snapshot is 28 days old
-     at handoff; living systematic review updates twice yearly).
+   - EEF provenance/refresh check performed with EEF or Oak's EEF contact. If
+     unresolved, promotion notes must explicitly record that the checked-in
+     JSON remains the definitive implementation source pending clarification.
    - Conservation map signed off by owner.
    - Plan-body first-principles check applied to citation type, corpus
      operations, test shapes.
@@ -139,9 +565,9 @@ real interface when it lands. See Increment 2 § Risks.
 
 ---
 
-## Type-Reviewer Round Outcome (2026-04-30, Fragrant Sheltering Petal)
+## Type-Expert Round Outcome (2026-04-30, Fragrant Sheltering Petal)
 
-**Status**: type-reviewer round complete. Verdict: AT-RISK with concrete
+**Status**: type-expert round complete. Verdict: AT-RISK with concrete
 remediations applied. Of 11 findings:
 
 - **Bucket (a) principles-decided** — applied: Result<T, E> on fallible
@@ -196,11 +622,12 @@ If the owner approves promotion, the natural next move is the
 structural verification that the type designs work in actual SDK
 code, not just plan-body sketches.
 
-**Out-of-band next-session candidate**: graduate *stop inventing
-optionality* to `.agent/rules/apply-dont-ask.md` per the
-pending-graduations register's `due` entry. Belongs to the
-`agentic-engineering-enhancements` thread, not `eef`; flagged here
-so the next EEF session does not re-trip on the pattern.
+**Out-of-band next-session candidate** (resolved 2026-05-10):
+*stop inventing optionality* graduated to PDR-058 (three-tier
+optionality decomposition). The `.agent/rules/apply-dont-ask.md`
+rule shape was rejected; the substance now lives at PDR-058 (with
+PDR-057 covering the empirical-answerability surface). No EEF
+follow-up action.
 
 ---
 
@@ -222,7 +649,7 @@ under the ≥2-of-3 rule:
 
 - `neighbours × misconception` — no edges in current `MisconceptionGraph` data (round-1 finding).
 - `subgraph × misconception` — same root cause (round-1 finding).
-- `find_by_tag × prerequisite` — no tag taxonomy in source data (round-2 finding from assumptions-reviewer); the synthetic-compound `${subject}-${keyStage}` proxy initially drafted was the *invented optionality* anti-pattern. Agents wanting subject+keyStage filtering use `enumerate_nodes`.
+- `find_by_tag × prerequisite` — no tag taxonomy in source data (round-2 finding from assumptions-expert); the synthetic-compound `${subject}-${keyStage}` proxy initially drafted was the *invented optionality* anti-pattern. Agents wanting subject+keyStage filtering use `enumerate_nodes`.
 - `find_by_tag × misconception` — same root cause (round-2 finding).
 
 Final MCP tool count: **17**, not 21. Per-graph: prerequisite 6 +
@@ -246,7 +673,7 @@ Inline location: `.agent/plans/connecting-oak-resources/knowledge-graph-integrat
 Status: **complete.**
 
 Each tracer was drafted with the actual generator-source or data file
-open. Initial pass surfaced four findings; a code-reviewer round
+open. Initial pass surfaced four findings; a code-expert round
 (2026-04-30) caught two more genuine data-shape gaps that the initial
 pass had missed. All six findings have been applied to the plan body
 in this session:
@@ -301,7 +728,7 @@ Verified against `.agent/plans/sector-engagement/eef/current/eef-evidence-corpus
 
 1. ✓ Status `current`; `parent_plan` and all four `sibling_plans`
    references resolve to existing files.
-2. ✓ T1, T2, T5, T8, T12 are in their post-type-reviewer form
+2. ✓ T1, T2, T5, T8, T12 are in their post-type-expert form
    (`EvidenceCorpus` wrapping shape with `Result<T, E>`; precise Zod
    for `last_updated` and `data_version`; non-empty tuple types on
    `caveats` and `citations`; `ComparisonDimension` literal union;
@@ -316,7 +743,7 @@ Verified against `.agent/plans/sector-engagement/eef/current/eef-evidence-corpus
    not block Increment 2; finding #4 is the carve-out that is
    already explicit in T6).
 
-### Plan-body diff summary (since type-reviewer round)
+### Plan-body diff summary (since type-expert round)
 
 Modifications to `.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`
 this session, across two review rounds:
@@ -359,16 +786,16 @@ the gate, not to invent optionality around it.
 
 ## Previous First Task (resolved)
 
-**Run the type-reviewer over the current plan estate** — code-reviewer
+**Run the type-expert over the current plan estate** — code-expert
 explicitly recommended this in its session-close report; the
 NodeProjection deep-path types and the EvidenceCorpus wrapping shape
 are the load-bearing review questions. Owner direction (2026-04-30):
 "this isn't something that needs my intervention, the code reviewer
 suggested type reviewer follow up, stop inventing optionality and do
-it." **Status**: complete (this session, see Type-Reviewer Round Outcome
+it." **Status**: complete (this session, see Type-Expert Round Outcome
 above).
 
-Brief the type-reviewer with:
+Brief the type-expert with:
 
 - Branch: `feat/eef_exploration` at HEAD.
 - Primary files: `graph-query-layer.plan.md` (NodeProjection recursive
@@ -418,7 +845,7 @@ been settled by owner direction on 2026-04-30:
    boxes.
 8. **Outcome operationalisation (named rubric/owner/cadence)** →
    REMOVED. Speculative fantasy without infrastructure to back it.
-9. **Type-reviewer escalation** → first task of next session (see
+9. **Type-expert escalation** → first task of next session (see
    above).
 10. **Parent plan child_plans drift** → fixed in this session.
 11. **Refresh script location** → relocated to SDK workspace.

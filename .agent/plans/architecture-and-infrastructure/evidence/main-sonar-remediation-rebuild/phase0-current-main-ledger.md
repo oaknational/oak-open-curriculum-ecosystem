@@ -151,11 +151,11 @@ Reviewer dispositions:
 
 | Reviewer | Finding | Disposition |
 |---|---|---|
-| `architecture-reviewer` | `teacherPaths` must preserve code-unit binary-search ordering. | Fixed with `compareCodeUnits` in sitemap generation. |
-| `type-reviewer` | Generated-code ordering and versioned-index cleanup must not use locale collation. | Fixed with local code-unit comparators in generator and admin surfaces. |
-| `type-reviewer` | Temporary `delete rest.issuer` rewrite was a TS2790 blocker. | Fixed with typed rest destructuring. |
-| `elasticsearch-reviewer` | Sequence years need curriculum display order, not alphabetic order. | Fixed with `compareCurriculumYears` and a unit test. |
-| `test-reviewer` | Evidence undercounted extra local comparator repairs. | Ledger corrected to describe additional local repairs rather than one extra site. |
+| `architecture-expert` | `teacherPaths` must preserve code-unit binary-search ordering. | Fixed with `compareCodeUnits` in sitemap generation. |
+| `type-expert` | Generated-code ordering and versioned-index cleanup must not use locale collation. | Fixed with local code-unit comparators in generator and admin surfaces. |
+| `type-expert` | Temporary `delete rest.issuer` rewrite was a TS2790 blocker. | Fixed with typed rest destructuring. |
+| `elasticsearch-expert` | Sequence years need curriculum display order, not alphabetic order. | Fixed with `compareCurriculumYears` and a unit test. |
+| `test-expert` | Evidence undercounted extra local comparator repairs. | Ledger corrected to describe additional local repairs rather than one extra site. |
 
 ## Phase 2 Slice Evidence: `typescript:S3735`
 
@@ -209,13 +209,13 @@ Reviewer dispositions:
 
 | Reviewer | Finding | Disposition |
 |---|---|---|
-| `code-reviewer` | Widget source changed but served generated widget HTML was stale. | Fixed by rebuilding and embedding widget HTML. |
-| `code-reviewer` | One generated-code ordering path still used locale collation. | Fixed with `compareCodeUnits` in `typegen-extraction.ts`. |
-| `test-reviewer` | Add widget rejection coverage for `app.openLink`. | Fixed with `openHostLink` unit coverage and `test:widget`. |
-| `test-reviewer` | Add year-ordering coverage through sequence extraction and document creation. | Fixed with bulk sequence/facet tests and `createSequenceFacetDoc` ordering coverage. |
-| `test-reviewer` | Add generator regression proving no `void flatArgs`. | Fixed in `emit-schema.header.unit.test.ts`. |
-| `type-reviewer` | Avoid `as Assert` in logger contract checks. | Fixed with exported annotated constants. |
-| `type-reviewer` | Avoid broad underscore unused bindings introduced by S3735 rewrites. | Fixed with assertions, structural guards, schema input validation, and explicit fake observability context. |
+| `code-expert` | Widget source changed but served generated widget HTML was stale. | Fixed by rebuilding and embedding widget HTML. |
+| `code-expert` | One generated-code ordering path still used locale collation. | Fixed with `compareCodeUnits` in `typegen-extraction.ts`. |
+| `test-expert` | Add widget rejection coverage for `app.openLink`. | Fixed with `openHostLink` unit coverage and `test:widget`. |
+| `test-expert` | Add year-ordering coverage through sequence extraction and document creation. | Fixed with bulk sequence/facet tests and `createSequenceFacetDoc` ordering coverage. |
+| `test-expert` | Add generator regression proving no `void flatArgs`. | Fixed in `emit-schema.header.unit.test.ts`. |
+| `type-expert` | Avoid `as Assert` in logger contract checks. | Fixed with exported annotated constants. |
+| `type-expert` | Avoid broad underscore unused bindings introduced by S3735 rewrites. | Fixed with assertions, structural guards, schema input validation, and explicit fake observability context. |
 
 ## Phase 3 Slice Evidence: `typescript:S3776` / `typescript:S2004`
 

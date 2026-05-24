@@ -1,10 +1,15 @@
 ---
 related_pdr: PDR-017
 name: Re-evaluate removal conditions on workarounds
+polarity: pattern
 category: process
 barrier: proven by implementation, prevents recurring mistake, stable
 source_session: 2026-04-05
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Re-evaluate Removal Conditions on Workarounds
 

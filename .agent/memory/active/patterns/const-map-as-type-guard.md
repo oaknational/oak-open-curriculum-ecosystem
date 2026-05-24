@@ -1,5 +1,6 @@
 ---
 name: Const Map as Type Guard
+polarity: pattern
 use_this_when: a runtime conversion mirrors a compile-time type transformation and all possible values are known at generation or build time
 category: code
 proven_in: packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-index.ts
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: Runtime conversion functions that use `as` casts to satisfy conditional types
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Const Map as Type Guard
 

@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "0105e3d0-1a38-4db1-82f9-f08f8eedd6f4",
+  "created_at": "2026-05-24T11:00:10Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Breezy Anchoring Rudder",
+    "platform": "claude",
+    "model": "opus-4.7",
+    "session_id_prefix": "20fc29"
+  },
+  "title": "Heartbeat: Breezy Anchoring Rudder (20fc29) — Knowledge Curator",
+  "body": "active; Knowledge Curator lane",
+  "tags": [
+    "heartbeat"
+  ]
+}

@@ -2,7 +2,9 @@
 
 ## Status
 
-Accepted
+Accepted. Amended 2026-05-10 to clarify that graph substrate workspace
+topology is outside this SDK decomposition ADR and remains governed by proposed
+ADR-173 until accepted.
 
 ## Context
 
@@ -109,6 +111,13 @@ infrastructure.
 
 Decompose `@oaknational/curriculum-sdk` along two
 orthogonal axes into four workspaces:
+
+This decision covers SDK and SDK-codegen decomposition. It does not authorise
+new graph substrate, graph corpus, or agent graph workspaces. Those workspace
+families have different lifecycle and ownership pressures and are addressed by
+ADR-173 while it remains Proposed. Until ADR-173 or a broader monorepo topology
+ADR is accepted, graph workspace planning must not treat ADR-108 as sufficient
+coverage for new non-SDK workspace types.
 
 |                  | Generation-time       | Runtime              |
 | ---------------- | --------------------- | -------------------- |

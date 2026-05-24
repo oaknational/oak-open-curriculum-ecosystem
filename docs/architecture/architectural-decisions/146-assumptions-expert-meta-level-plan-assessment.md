@@ -1,0 +1,87 @@
+# ADR-146: Assumptions Expert — Meta-Level Plan Assessment
+
+**Status**: Accepted. Amended 2026-05-10 to rename the capability from
+`assumptions-reviewer` to `assumptions-expert` and to promote Build-vs-buy
+to the first assessment area (raising the area count from six to seven).
+**Date**: 2026-04-02
+**Related**: [ADR-129 (Domain Specialist Capability Pattern)](129-domain-specialist-capability-pattern.md), [ADR-114 (Layered Sub-agent Prompt Composition)](114-layered-sub-agent-prompt-composition-architecture.md), [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md), [ADR-125 (Agent Artefact Portability)](125-agent-artefact-portability.md)
+
+## Context
+
+The existing expert roster questions code quality, architecture, security, types, tests, and documentation — but no expert questions whether the plan itself is proportional to the problem, whether blocking relationships are legitimate, or whether assumptions have evidence.
+
+This gap was surfaced during the frontend-practice-integration plan's assumption audit (2026-04-01), which challenged proportionality, consumer evidence, technology commitment timing, and agent proliferation. The audit produced actionable amendments that simplified the plan. The methodology itself is transferable.
+
+Existing experts apply their doctrine hierarchy with external expertise at the top (per ADR-129). An assumptions expert requires the opposite: project principles (especially "could it be simpler?") must outrank external expertise, because the expert's job is to question whether the proposed work is proportional, not whether it follows best practice.
+
+## Decision
+
+Create an `assumptions-expert` following the ADR-129 Domain Specialist
+Capability Pattern with an **inverted doctrine hierarchy**. Historical
+references to `assumptions-reviewer` name the original review-only form of the
+same capability before the 2026-05-10 rename to `assumptions-expert`.
+
+### Inverted Doctrine Hierarchy
+
+1. **Project principles and directives** — especially the first question ("could it be simpler without compromising quality?"), proportionality, and simplicity-first assessment.
+2. **Architectural decisions (ADRs)** — existing constraints and accepted trade-offs in the repository.
+3. **Practice governance** — development practice, testing strategy, and quality gate framework.
+4. **External expertise** — domain knowledge relevant to the plan's technology choices (lowest priority, consulted for fact-checking, not for driving decisions).
+
+This inverts the standard ADR-129 hierarchy where external documentation ranks first. The inversion is intentional: the assumptions expert questions whether work is necessary and proportional, not whether it follows external best practice.
+
+### Assessment Areas
+
+The assumptions expert assesses seven areas:
+
+1. **Build-vs-buy** (solution-class challenge) — For any plan that integrates a third-party vendor or proposes a bespoke build, has the plan evaluated the vendor's first-party integrations, off-the-shelf alternatives, and the cost of bespoke build versus reuse? Solution-class challenge precedes solution-execution challenge.
+2. **Proportionality** (solution-execution challenge) — Given the solution-class is correct, is the proposed work proportional to the problem it solves? Could fewer artefacts, simpler architecture, or a smaller scope deliver equivalent value?
+3. **Assumption validity** — For each assumption the plan makes, what evidence exists? What evidence is missing? Are unvalidated assumptions treated as decisions?
+4. **Blocking legitimacy** — Do blocking relationships between workstreams reflect genuine technical dependencies, or are they sequencing preferences disguised as hard gates?
+5. **Consumer evidence** — Do proposed artefacts (packages, agents, documents) have identified consumers? If a package has no consumer at plan time, is there evidence one will materialise?
+6. **Technology commitment timing** — Are technology choices being committed to before research phases complete? Is the commitment reversible if research produces different conclusions?
+7. **Simplification opportunities** — Where could the plan achieve the same outcome with less machinery?
+
+### Output Format
+
+The expert produces a structured Assumption Audit with per-assumption evidence ratings:
+
+- **Validated** — evidence exists and supports the assumption.
+- **Partially validated** — some evidence exists but gaps remain.
+- **Unvalidated** — no evidence; the assumption is treated as a decision without basis.
+
+## Rationale
+
+### Why an inverted hierarchy
+
+Standard experts question whether work is done correctly. The assumptions expert questions whether the work should be done at all, or at the proposed scale. External expertise answers "how should we do X?" but project principles answer "should we do X?" The latter must take priority for this expert.
+
+### Why a separate expert, not a planning step
+
+Assumption auditing is most valuable as an independent assessment after a plan is drafted — similar to how code review happens after implementation. Embedding it in the planning workflow risks the planner self-validating their own assumptions. An independent expert with a distinct prompt and doctrine provides genuine challenge.
+
+### Why this is transferable
+
+The seven assessment areas (build-vs-buy, proportionality, assumption validity, blocking legitimacy, consumer evidence, technology commitment timing, simplification opportunities) apply to any agentic engineering practice, not just this repository. The pattern can propagate through the Practice Core.
+
+## Consequences
+
+### Positive
+
+- Plans receive independent challenge on proportionality and assumptions before execution begins.
+- Blocking relationships between workstreams must justify themselves with evidence.
+- The inverted doctrine hierarchy creates a natural counterweight to complexity-accepting experts.
+- The methodology is transferable to any repository carrying the agentic engineering practice.
+
+### Trade-offs
+
+- Adds one more expert to the ecosystem. Mitigated by targeted trigger conditions — this expert is not invoked on every change, only on plan-level events.
+- The inverted doctrine hierarchy departs from ADR-129's standard hierarchy. This is documented and intentional, not a drift.
+- Risk of false simplification — questioning proportionality could undermine genuinely necessary complexity. Mitigated by requiring evidence-based findings, not opinion.
+
+## References
+
+- `.agent/sub-agents/templates/assumptions-expert.md` — expert template
+- `.agent/rules/invoke-assumptions-expert.md` — situational invocation rule
+- `.agent/memory/executive/invoke-code-experts.md` — expert invocation guidance
+- `.agent/directives/principles.md` — project principles (first question, simplicity)

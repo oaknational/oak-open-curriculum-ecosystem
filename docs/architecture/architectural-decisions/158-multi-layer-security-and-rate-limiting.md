@@ -8,6 +8,8 @@ Trust Boundaries accordingly. The amendment landed on PR-87 Phase 2.0.5
 as defence-in-depth, not exploit closure — see the security re-review
 at `.agent/plans/observability/active/pr-87-cluster-a-security-review.md`
 for the FIND-001/002 reclassification (MUST-FIX → HARDENING).
+Amended 2026-05-10 to record the fourth metadata profile and current
+OAuth-proxy limiter wiring.
 
 **Related**: [ADR-078 (Dependency Injection for Testability)](078-dependency-injection-for-testability.md), [ADR-126 (Asset download proxy — HMAC trust discipline at boundaries)](126-asset-download-proxy.md), [ADR-143 (Coherent Structured Fan-Out for Observability)](143-coherent-structured-fan-out-for-observability.md)
 
@@ -52,14 +54,15 @@ Two amplification vectors exist:
 ## Decision
 
 Add per-IP application-layer rate limiting using `express-rate-limit`
-with dependency injection for testability. Three rate limit profiles
-cover six routes:
+with dependency injection for testability. Four rate limit profiles cover
+MCP, OAuth proxy, metadata, and asset routes:
 
-| Profile   | Routes                                                        | Window     | Limit  | Rationale                                             |
-| --------- | ------------------------------------------------------------- | ---------- | ------ | ----------------------------------------------------- |
-| **MCP**   | POST /mcp, GET /mcp (both auth modes)                         | 1 minute   | 120/IP | 2 req/s sustained — generous for interactive tool use |
-| **OAuth** | POST /oauth/register, POST /oauth/token, GET /oauth/authorize | 15 minutes | 30/IP  | Low-frequency operations; prevents amplification      |
-| **Asset** | GET /assets/download/:lesson/:type                            | 1 minute   | 60/IP  | Prevents replay-based upstream API exhaustion         |
+| Profile      | Routes                                                        | Window     | Limit  | Rationale                                             |
+| ------------ | ------------------------------------------------------------- | ---------- | ------ | ----------------------------------------------------- |
+| **MCP**      | POST /mcp, GET /mcp (both auth modes)                         | 1 minute   | 120/IP | 2 req/s sustained — generous for interactive tool use |
+| **OAuth**    | POST /oauth/register, POST /oauth/token, GET /oauth/authorize | 15 minutes | 30/IP  | Low-frequency operations; prevents amplification      |
+| **Metadata** | OAuth and protected-resource metadata endpoints               | 1 minute   | 60/IP  | Public discovery routes; protects CPU/egress          |
+| **Asset**    | GET /assets/download/:lesson/:type                            | 1 minute   | 60/IP  | Prevents replay-based upstream API exhaustion         |
 
 ### Multi-Layer Architecture
 
@@ -145,8 +148,8 @@ must be re-reviewed:
 
 The rate limiter factory is injected via `CreateAppOptions.rateLimiterFactory`,
 following ADR-078. Production uses `express-rate-limit`; tests inject a
-no-op or recording fake. The factory is called three times during
-bootstrap with the MCP, OAuth, and asset profiles.
+no-op or recording fake. The factory is called once per profile during
+bootstrap with the MCP, OAuth, metadata, and asset profiles.
 
 ### Honest Limitations
 
@@ -176,12 +179,12 @@ When both CDN and application rate limits are active:
 
 ### Failure Modes
 
-| Failure                         | Consequence                                          | Mitigation                                     |
-| ------------------------------- | ---------------------------------------------------- | ---------------------------------------------- |
-| CDN down                        | All traffic hits origin directly; app limiter active | App limiter provides partial protection        |
-| App limiter exhausted           | 429s for legitimate clients                          | Generous defaults; CDN handles sustained abuse |
-| All counters reset (cold start) | Brief window of unprotected traffic                  | Acceptable for defence-in-depth                |
-| Upstream API returns 429        | Asset downloads fail; tool calls return errors       | Observability captures the event; alerting     |
+| Failure                         | Consequence                                          | Mitigation                                                                    |
+| ------------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------------------- |
+| CDN down                        | All traffic hits origin directly; app limiter active | App limiter provides partial protection                                       |
+| App limiter exhausted           | 429s for legitimate clients                          | Generous defaults; CDN handles sustained abuse                                |
+| All counters reset (cold start) | Brief window of unprotected traffic                  | Acceptable for defence-in-depth                                               |
+| Upstream API returns 429        | Asset downloads fail; tool calls return errors       | Logs/spans capture status; alerting depends on configured observability rules |
 
 ### 429 Response Format
 
@@ -209,7 +212,7 @@ consistency:
 ## Consequences
 
 - CodeQL `js/missing-rate-limiting` alerts #5, #6, #7, #8 are cleared.
-- All six routes on three profiles have per-IP rate limiting.
+- Public runtime routes across four profiles have per-IP rate limiting.
 - The multi-layer security architecture is explicitly documented.
 - Tests verify rate limiting behaviour via DI without `vi.mock`.
 - Operators are honestly informed that application-layer rate limiting

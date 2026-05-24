@@ -2,6 +2,8 @@
  * Shared collaboration-state types used by the repo-owned state helpers.
  */
 
+import { z } from 'zod';
+
 export interface CollaborationStateEnvironment {
   readonly PRACTICE_AGENT_SESSION_ID_CLAUDE?: string;
   readonly PRACTICE_AGENT_SESSION_ID_CURSOR?: string;
@@ -10,12 +12,25 @@ export interface CollaborationStateEnvironment {
   readonly OAK_AGENT_IDENTITY_OVERRIDE?: string;
 }
 
-export interface CollaborationAgentId {
-  readonly agent_name: string;
-  readonly platform: string;
-  readonly model: string;
-  readonly session_id_prefix: string;
-}
+/**
+ * Canonical Zod schema for an agent identity tuple (PDR-027). The type
+ * `CollaborationAgentId` is `z.infer<typeof collaborationAgentIdSchema>` per
+ * schema-first Commandment 12 — the schema IS the type, statically embedded.
+ *
+ * Any caller that needs to parse an identity from untrusted input (JSON, env,
+ * external source) MUST use this schema rather than hand-crafting a
+ * structural-typing equivalent.
+ */
+export const collaborationAgentIdSchema = z
+  .object({
+    agent_name: z.string(),
+    platform: z.string(),
+    model: z.string(),
+    session_id_prefix: z.string(),
+  })
+  .strict();
+
+export type CollaborationAgentId = Readonly<z.infer<typeof collaborationAgentIdSchema>>;
 
 export interface DerivedCollaborationIdentity {
   readonly agentId: CollaborationAgentId;
@@ -108,10 +123,80 @@ export interface ClosedClaimsArchive {
   readonly claims: readonly CollaborationClaim[];
 }
 
-export interface CommsEvent {
+interface BaseCommsEvent {
+  readonly schema_version: '2.0.0';
   readonly event_id: string;
   readonly created_at: string;
+}
+
+/**
+ * Narrative communication event — an authored, titled, bodied communication
+ * addressed to the team or a narrower audience. Lives in the canonical
+ * `.agent/state/collaboration/comms/` directory.
+ */
+export interface NarrativeCommsEvent extends BaseCommsEvent {
+  readonly kind: 'narrative';
   readonly author: CollaborationAgentId;
   readonly title: string;
   readonly body: string;
+  readonly audience?: readonly string[];
+  readonly addressed_to?: string;
+  readonly in_response_to?: string;
+  readonly in_reply_to?: string;
+  readonly tags?: readonly string[];
+}
+
+/**
+ * Lifecycle communication event — a structured record of a session, claim, or
+ * consolidation lifecycle moment. `claim_id` may be empty when the event is
+ * not claim-scoped.
+ */
+export interface LifecycleCommsEvent extends BaseCommsEvent {
+  readonly kind: 'lifecycle';
+  readonly event_type: string;
+  readonly occurred_at: string;
+  readonly author: CollaborationAgentId;
+  readonly agent_id: CollaborationAgentId;
+  readonly thread: string;
+  readonly claim_id: string;
+  readonly title: string;
+  readonly subject: string;
+  readonly body: string;
+  readonly tags?: readonly string[];
+}
+
+/**
+ * Directed communication message — a point-to-point message from one agent to
+ * another. `kind` is the top-level comms discriminator; `message_kind` carries
+ * the directed-message sub-kind.
+ */
+export interface DirectedCommsMessage extends BaseCommsEvent {
+  readonly kind: 'directed';
+  readonly message_kind: string;
+  readonly from: CollaborationAgentId;
+  readonly to: CollaborationAgentId;
+  readonly subject: string;
+  readonly body: string;
+  readonly tags?: readonly string[];
+}
+
+export type CommsEvent = NarrativeCommsEvent | LifecycleCommsEvent | DirectedCommsMessage;
+
+/**
+ * Result of draining the canonical comms stream for an agent. `output` is
+ * the formatted text the caller emits to its destination (stdout, file,
+ * log); `eventCount` is the number of events drained (zero means nothing
+ * new was emitted); `eventIds` is the IDs of those drained events for the
+ * caller to mark seen AFTER successful emit.
+ *
+ * The drain function does NOT mark events seen — the caller is responsible
+ * for marking AFTER the emit step succeeds, so that a crash between drain
+ * and emit produces a duplicate notification (safe) rather than a missed
+ * notification (unsafe). See FM-2 cure (2026-05-23): Monitor-harness
+ * liveness investigation.
+ */
+export interface DrainResult {
+  readonly output: string;
+  readonly eventCount: number;
+  readonly eventIds: readonly string[];
 }

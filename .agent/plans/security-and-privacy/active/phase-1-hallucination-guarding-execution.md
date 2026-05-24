@@ -11,7 +11,7 @@ todos:
   - id: p1-prompt-integration
     content: "Integrate hallucination guard requirements into start-right and review prompts."
     status: pending
-  - id: p1-reviewer-integration
+  - id: p1-expert-integration
     content: "Integrate unsupported-claim checks into reviewer templates."
     status: pending
   - id: p1-pilot

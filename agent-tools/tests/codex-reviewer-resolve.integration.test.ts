@@ -25,15 +25,15 @@ describe('formatResolutionFailure', () => {
     mkdirSync(join(repoRoot, '.codex'), { recursive: true });
     writeFileSync(
       join(repoRoot, '.codex', 'config.toml'),
-      `[agents."code-reviewer"]
+      `[agents."code-expert"]
 description = "Gateway reviewer."
-config_file = "agents/code-reviewer.toml"
+config_file = "agents/code-expert.toml"
 `,
       'utf8',
     );
 
     expect(formatResolutionFailure(repoRoot, 'Broken adapter.')).toContain(
-      'Available agents: code-reviewer',
+      'Available agents: code-expert',
     );
   });
 
@@ -42,8 +42,8 @@ config_file = "agents/code-reviewer.toml"
     mkdirSync(join(repoRoot, '.codex'), { recursive: true });
     writeFileSync(
       join(repoRoot, '.codex', 'config.toml'),
-      `[agents."code-reviewer"]
-config_file = "agents/code-reviewer.toml"
+      `[agents."code-expert"]
+config_file = "agents/code-expert.toml"
 `,
       'utf8',
     );

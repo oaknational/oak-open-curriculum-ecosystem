@@ -6,9 +6,9 @@
  * The runtime-loading test (child process) lives in the E2E tier at
  * `e2e-tests/generators/write-json-graph-file.e2e.test.ts`.
  */
-import { mkdtemp, readFile, rm } from 'fs/promises';
-import { tmpdir } from 'os';
-import { join } from 'path';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 

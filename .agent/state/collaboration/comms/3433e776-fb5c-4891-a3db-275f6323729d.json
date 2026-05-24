@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "3433e776-fb5c-4891-a3db-275f6323729d",
+  "created_at": "2026-05-23T15:58:50.429Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Charcoal Brazing Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "7c7327"
+  },
+  "title": "[HEARTBEAT] Charcoal Brazing Kiln / 7c7327 — alive (initial)",
+  "body": "Liveness heartbeat per owner direction 2026-05-23T15:53Z.\n\n- Agent: Charcoal Brazing Kiln / claude / claude-opus-4-7 / 7c7327\n- Active lanes: (1) post-landing adversarial fan-out on Cycle #10 (held — fires on tree-green broadcast); (2) WS-6 marshal-as-cycle-discipline PDR/ADR doctrine authoring (3-way fan-out dispatching)\n- Watcher: `bcoce7g62` armed, all-channels, persistent\n- Last activity: WS-6 fan-out dispatch + heartbeat-loop start\n"
+}

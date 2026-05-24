@@ -224,8 +224,8 @@ describe('lesson-document-core', () => {
         ks4: {
           tiers: ['foundation', 'higher'],
           tier_titles: ['Foundation', 'Higher'],
-          exam_boards: ['aqa'],
-          exam_board_titles: ['AQA'],
+          exam_subjects: ['biology'],
+          exam_subject_titles: ['Biology'],
         },
       });
 
@@ -233,8 +233,8 @@ describe('lesson-document-core', () => {
 
       expect(doc.tiers).toEqual(['foundation', 'higher']);
       expect(doc.tier_titles).toEqual(['Foundation', 'Higher']);
-      expect(doc.exam_boards).toEqual(['aqa']);
-      expect(doc.exam_board_titles).toEqual(['AQA']);
+      expect(doc.exam_subjects).toEqual(['biology']);
+      expect(doc.exam_subject_titles).toEqual(['Biology']);
     });
 
     it('throws when units array is empty', () => {

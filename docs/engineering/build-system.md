@@ -23,8 +23,9 @@ Internal `@oaknational/*` dependencies must use the `workspace:` protocol in
 registry by semver alone.
 
 Source-executed TypeScript entrypoints are part of the workspace contract.
-Invoke source-executed TS scripts via `pnpm exec tsx scripts/<script>.ts` (or
-the package-relative equivalent). Running through `pnpm exec` enables the
+Invoke source-executed TS tooling through workspace-owned package scripts, such
+as `pnpm --filter @oaknational/agent-tools <command>` or the corresponding root
+wrapper. Running through `pnpm exec` within the owning workspace enables the
 workspace `development` export condition while loading `tsx`, so packages
 participating in source execution must publish matching `development` export
 entries for their supported subpaths instead of assuming `dist/` already
@@ -112,14 +113,15 @@ for the full decision record.
 | sdk-codegen       | --         | Yes      | Yes         | Yes                     |
 | build             | --         | Yes      | Yes         | Yes                     |
 | format-check      | Yes        | Yes      | Yes         | Yes (format:root)       |
-| markdownlint      | Yes        | Yes      | Yes         | Yes (markdownlint:root) |
+| markdownlint      | Staged     | Yes      | Yes         | Yes (markdownlint:root) |
 | subagents:check   | --         | Yes      | Yes         | Yes                     |
 | portability:check | --         | Yes      | Yes         | Yes                     |
 | knip              | Yes        | Yes      | Yes         | Yes                     |
 | depcruise         | Yes        | Yes      | Yes         | Yes                     |
-| test:root-scripts | --         | Yes      | Yes         | Yes                     |
+| repo-validators   | --         | Yes      | Yes         | Yes                     |
 | type-check        | Yes        | Yes      | Yes         | Yes                     |
 | lint              | Yes        | Yes      | Yes         | Yes (lint:fix)          |
+| lint:shell        | --         | Yes      | Yes         | Yes                     |
 | test              | Yes        | Yes      | Yes         | Yes                     |
 | test:widget       | --         | --       | --          | Yes                     |
 | test:widget:ui    | --         | --       | --          | Yes                     |
@@ -127,7 +129,6 @@ for the full decision record.
 | test:e2e          | --         | Yes      | Yes         | Yes                     |
 | test:ui           | --         | Yes      | Yes         | Yes                     |
 | test:a11y         | --         | --       | --          | Yes                     |
-| smoke:dev:stub    | --         | Yes      | Yes         | Yes                     |
 | doc-gen           | --         | --       | --          | Yes                     |
 
 **Key principle**: pre-push and CI run the same check set. A CI-only failure
@@ -178,6 +179,17 @@ pnpm check
 `pnpm qg` surface was removed to avoid having two competing “full gate”
 stories.
 
+To inspect the many-process shape without running the full gate, use:
+
+```bash
+pnpm check:profile --dry-run
+```
+
+This writes the Turbo dry graph for the `pnpm check` Turbo task set under
+`.turbo/profiles/`. Run `pnpm check:profile` without `--dry-run` when you want
+the same graph snapshot plus wall-clock timing for the full `pnpm check`
+process.
+
 #### Aggregate gate doctrine
 
 - `pnpm check` is executable truth and the only canonical aggregate
@@ -186,8 +198,8 @@ stories.
 - Design target: a human-facing aggregate gate should own one package-graph run.
   In practice, that means extending `pnpm check` rather than adding a
   second competing full-gate surface. The underlying implementation may still
-  compose multiple root scripts today, but discoverability and future
-  convergence should stay centred on this one gate.
+  compose multiple workspace-owned validator commands today, but
+  discoverability and future convergence should stay centred on this one gate.
 - Repo-wide claims must stay within the workspace task exports that back them.
   A workspace is only in the repo-wide `clean`, `type-check`, `lint`, or
   `test` story if it actually exports that task.
@@ -199,7 +211,7 @@ stories.
 
 Runs all test surfaces declared in the root `package.json` script. The script
 currently covers `test`, `test:widget`, `test:e2e`, `test:ui`, `test:a11y`,
-`test:widget:ui`, `test:widget:a11y`, and `smoke:dev:stub`.
+`test:widget:ui`, and `test:widget:a11y`.
 
 ```bash
 pnpm test:all
@@ -239,9 +251,8 @@ See [ADR 065: Turbo Task Dependencies](../architecture/architectural-decisions/0
 ```text
 sdk-codegen ──┐ (package-specific override on sdk-codegen#build only)
               ▼
-         build → test, type-check, lint / lint:fix, doc-gen  (via ^build)
-              ↘ test:e2e, test:ui  (via same-package build)
-              ↘ smoke:dev:stub    (via same-package build + test:e2e)
+          build → test, type-check, lint / lint:fix, doc-gen  (via ^build)
+               ↘ test:e2e, test:ui  (via same-package build)
 ```
 
 | Task                | Depends On            | Why                                                   |
@@ -255,7 +266,6 @@ sdk-codegen ──┐ (package-specific override on sdk-codegen#build only)
 | `doc-gen`           | `^build`              | Source must be built before doc generation            |
 | `test:e2e`          | `build`               | Same-package build needed for built-server tests      |
 | `test:ui`           | `build`               | Same-package build needed for Playwright tests        |
-| `smoke:dev:stub`    | `build`, `test:e2e`   | Needs built app and passing E2E tests                 |
 
 ## Caching
 
@@ -393,7 +403,7 @@ After renaming or adding commands in `package.json`:
    - `CONTRIBUTING.md`
    - `docs/governance/development-practice.md`
    - `.agent/directives/AGENT.md`
-   - `.claude/commands/jc-quality-gates.md`
+   - `.agent/skills/gates/SKILL-CANONICAL.md`
 
 ## Documentation Link Integrity
 

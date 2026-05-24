@@ -1,5 +1,6 @@
 ---
 name: Additive-Only Schema Decoration
+polarity: pattern
 use_this_when: a decorator or enrichment pass modifies a third-party schema and must not overwrite properties that the upstream source already defines
 category: code
 proven_in: packages/sdks/oak-sdk-codegen/code-generation/schema-separation-decorators.ts
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: Overwriting upstream schema properties with locally-generated definitions, losing type precision and creating naming collisions
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Additive-Only Schema Decoration
 

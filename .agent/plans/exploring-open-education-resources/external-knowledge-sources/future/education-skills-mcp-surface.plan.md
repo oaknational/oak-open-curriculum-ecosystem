@@ -6,7 +6,7 @@ sibling_plans:
   - "../../eef/current/eef-evidence-corpus.plan.md"
   - "../../../connecting-oak-resources/knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md"
   - "../../../connecting-oak-resources/knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md"
-specialist_reviewer: "mcp-reviewer, code-reviewer, test-reviewer, architecture-reviewer-barney"
+specialist_reviewer: "mcp-expert, code-expert, test-expert, architecture-expert-barney"
 status: future
 todos:
   - id: t0-licence-clarification

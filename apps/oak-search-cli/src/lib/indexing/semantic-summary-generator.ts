@@ -8,6 +8,7 @@
  */
 
 import type { SearchLessonSummary, SearchUnitSummary } from '../../types/oak';
+import { formatPrimaryUnit } from '@oaknational/curriculum-sdk/public/search.js';
 
 /** Adds a formatted line to parts array if items exist. */
 function addSection(parts: string[], label: string, items: string[]): void {
@@ -65,9 +66,16 @@ function extractLessonPedagogicalContent(summary: SearchLessonSummary): string[]
  * Generates a semantic summary for a lesson (~200-400 tokens).
  *
  * Enhanced in Phase 4 to include all available fields for richer embeddings.
+ *
+ * The lesson resource now exposes lesson↔unit cardinality structurally
+ * (ADR-080 §"Context"). The context line projects to the primary unit via
+ * `formatPrimaryUnit` so the embedding string stays bounded; richer
+ * multi-unit context is a search-quality concern routed to a future plan.
  */
 export function generateLessonSemanticSummary(summary: SearchLessonSummary): string {
-  const contextLine = `${summary.lessonTitle} is a ${summary.keyStageTitle} ${summary.subjectTitle} lesson in the unit "${summary.unitTitle}".`;
+  const primaryUnit = formatPrimaryUnit(summary);
+  const unitClause = primaryUnit ? ` in the unit "${primaryUnit.unitTitle}"` : '';
+  const contextLine = `${summary.lessonTitle} is a ${summary.keyStageTitle} ${summary.subjectTitle} lesson${unitClause}.`;
   const pedagogicalParts = extractLessonPedagogicalContent(summary);
   return [contextLine, ...pedagogicalParts].join('\n\n');
 }

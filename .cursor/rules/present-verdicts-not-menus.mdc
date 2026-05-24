@@ -1,0 +1,6 @@
+---
+description: Present verdicts when analysis is complete; AskUserQuestion is reserved for genuine permission gates, owner-only decisions, and unknown-to-agent design intent. Converting completed findings into a multiple-choice form is responsibility-passback.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/present-verdicts-not-menus.md`.

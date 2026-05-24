@@ -1,0 +1,15 @@
+name = "design-system-expert"
+description = "Design token and visual consistency specialist for both read-only review and active-workflow planning around DTCG JSON, CSS custom properties, three-tier token model, and theming in UI-shipping workspaces."
+model_reasoning_effort = "high"
+sandbox_mode = "read-only"
+approval_policy = "never"
+
+developer_instructions = """
+Read and follow `.agent/sub-agents/templates/design-system-expert.md`.
+
+This file is a thin Codex adapter. The canonical expert instructions live in
+the template referenced above.
+
+Mode: Review or recommend. Do not modify code. The calling agent executes any
+changes you propose.
+"""

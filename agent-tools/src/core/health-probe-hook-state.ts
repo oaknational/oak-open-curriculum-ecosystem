@@ -85,7 +85,7 @@ export function evaluatePracticeBoxState(practiceBoxFileCount: number): HealthCh
     status: 'warn',
     summary: `${practiceBoxFileCount} incoming Practice artefact${practiceBoxFileCount === 1 ? ' is' : 's are'} waiting for integration.`,
     details: [
-      'Use jc-consolidate-docs or a dedicated integration session before the incoming box drifts from local doctrine.',
+      'Use oak-consolidate-docs or a dedicated integration session before the incoming box drifts from local doctrine.',
       `Incoming Practice artefacts live in ${PRACTICE_BOX_DIR}.`,
     ],
   };
@@ -170,8 +170,8 @@ function collectSurfaceMatrixDetails(surfaceMatrixText: string | null): string[]
   pushIfMissing(
     details,
     surfaceMatrixText,
-    'scripts/check-blocked-patterns.ts',
-    `${SURFACE_MATRIX_PATH} does not describe the repo-local hook runtime script.`,
+    CLAUDE_HOOK_COMMAND,
+    `${SURFACE_MATRIX_PATH} does not describe the workspace-owned hook runtime command.`,
   );
   pushIfMissing(
     details,

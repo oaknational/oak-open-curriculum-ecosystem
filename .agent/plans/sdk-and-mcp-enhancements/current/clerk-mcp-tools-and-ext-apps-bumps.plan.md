@@ -190,19 +190,19 @@ already adopted via earlier build-vs-buy decisions:
 
 ## Reviewer Scheduling (phase-aligned)
 
-Per the always-applied `invoke-clerk-reviewer`, `invoke-mcp-reviewer`,
-and `invoke-code-reviewers` rules:
+Per the always-applied `invoke-clerk-expert`, `invoke-mcp-expert`,
+and `invoke-code-experts` rules:
 
 - **Pre-execution (Phase 0)**: none — invariant grep is the gate.
-- **Post-Phase 1**: `clerk-reviewer` (validates `@clerk/backend` 3.3 +
-  `@clerk/express` 2.1.7 alignment in our middleware), `mcp-reviewer`
+- **Post-Phase 1**: `clerk-expert` (validates `@clerk/backend` 3.3 +
+  `@clerk/express` 2.1.7 alignment in our middleware), `mcp-expert`
   (reviews ext-apps 1.7.0 surface — particularly `csp`/`permissions`
   type tightening and the new `allowUnsafeEval=false` default).
-- **Post-Phase 2**: `clerk-reviewer` (mandatory — Clerk middleware/PRM
-  surface bumped two minors), `mcp-reviewer` (server still consumes
+- **Post-Phase 2**: `clerk-expert` (mandatory — Clerk middleware/PRM
+  surface bumped two minors), `mcp-expert` (server still consumes
   `verifyClerkToken` and `generateClerkProtectedResourceMetadata` which
   sit on the MCP-auth boundary).
-- **Post-Phase 3**: `assumptions-reviewer` on the captured forward-
+- **Post-Phase 3**: `assumptions-expert` on the captured forward-
   planning candidates (validates promotion triggers are falsifiable and
   blocking relationships are legitimate).
 
@@ -312,7 +312,7 @@ pnpm test:widget:ui    # Expected: exit 0
 pnpm test:widget:a11y  # Expected: exit 0
 ```
 
-**Reviewer Dispatch**: `clerk-reviewer` and `mcp-reviewer` (parallel,
+**Reviewer Dispatch**: `clerk-expert` and `mcp-expert` (parallel,
 read-only).
 
 **Commit**:
@@ -429,10 +429,10 @@ pnpm test        # Expected: exit 0
 pnpm test:e2e    # Expected: exit 0
 ```
 
-**Reviewer Dispatch**: `clerk-reviewer` (mandatory — Clerk
+**Reviewer Dispatch**: `clerk-expert` (mandatory — Clerk
 middleware/PRM surface; specifically asked to validate that the Core 3
 re-pinning in 0.5.0 is consistent with our `@clerk/express` 2.1.7 +
-`@clerk/backend` 3.3.0 from Phase 1) and `mcp-reviewer` (validates the
+`@clerk/backend` 3.3.0 from Phase 1) and `mcp-expert` (validates the
 auth boundary still satisfies the `Authorization` and `WWW-Authenticate`
 discipline of the MCP spec).
 
@@ -534,11 +534,11 @@ under a new "MCP SDK 2.0 Migration Evaluation" subsection.
    trigger (alpha → beta), and a link to the MCP SDK 2.0 changelog
    findings in this plan's Context section.
 
-**Reviewer Dispatch**: `assumptions-reviewer` against the three captured
+**Reviewer Dispatch**: `assumptions-expert` against the three captured
 candidates' promotion triggers — checks that each trigger is falsifiable
 and the blocking relationships (or absence thereof) are honest.
 
-**Task Complete When**: three captures landed, `assumptions-reviewer`
+**Task Complete When**: three captures landed, `assumptions-expert`
 returns clean.
 
 ---
@@ -577,7 +577,7 @@ Add this plan to
 
 | Risk | Likelihood | Impact | Mitigation |
 |---|---|---|---|
-| `@clerk/backend` 3.3.0 introduces a behaviour change in the auth path despite changelog reading | Low | Medium | Phase 1 quality gates include `pnpm test:e2e` which exercises the full Clerk-protected MCP boundary. `clerk-reviewer` post-Phase-1 catches anything the test did not. |
+| `@clerk/backend` 3.3.0 introduces a behaviour change in the auth path despite changelog reading | Low | Medium | Phase 1 quality gates include `pnpm test:e2e` which exercises the full Clerk-protected MCP boundary. `clerk-expert` post-Phase-1 catches anything the test did not. |
 | `@clerk/mcp-tools` 0.5.0 changes `verifyClerkToken` `resource`-set behaviour | Low | Medium | Phase 2 Task 2.2 runs the version-bump-reminder canary test against the new version *before* full gates. Failure stops the plan and we update the schema in lockstep (Task 2.3 fallback branch). |
 | `@modelcontextprotocol/ext-apps` 1.7.0 type-tightening on `csp`/`permissions` (`?: never`) breaks our widget metadata declarations | Low | Low | Phase 1 `pnpm type-check` catches this immediately. If it fires, the fix is removing the misplaced declaration (the type tightening exists *because* the misplacement was a bug). |
 | Caret on `^0.5.0` for `@clerk/mcp-tools` allows future minor that breaks us | Low | Low | Caret on `0.x` allows only `0.5.x`. The next minor (`0.6.0`) would require an explicit manifest edit, re-grounding the canary test. The `pnpm outdated` audit cadence catches it. |
@@ -596,7 +596,7 @@ Add this plan to
 - ✅ Three packages updated; lockfile shows new versions; manifest
   unchanged.
 - ✅ All quality gates exit 0.
-- ✅ `clerk-reviewer` and `mcp-reviewer` clean or dispositioned.
+- ✅ `clerk-expert` and `mcp-expert` clean or dispositioned.
 - ✅ One commit landed.
 
 ### Phase 2 (Deliberate `@clerk/mcp-tools` bump)
@@ -606,7 +606,7 @@ Add this plan to
   documented and schema updated in lockstep).
 - ✅ Pinned comment updated to cite `@clerk/mcp-tools@0.5.0`.
 - ✅ All quality gates exit 0.
-- ✅ `clerk-reviewer` and `mcp-reviewer` clean or dispositioned.
+- ✅ `clerk-expert` and `mcp-expert` clean or dispositioned.
 - ✅ One commit landed.
 
 ### Phase 3 (Forward candidates)
@@ -615,7 +615,7 @@ Add this plan to
 - ✅ ext-apps 1.7.0 capability candidates captured.
 - ✅ MCP SDK 2.0 evaluation candidate captured in
   `future/mcp-protocol-adoption-roadmap.plan.md`.
-- ✅ `assumptions-reviewer` returns clean on promotion triggers.
+- ✅ `assumptions-expert` returns clean on promotion triggers.
 
 ### Phase 4 (Consolidation)
 
@@ -672,7 +672,7 @@ Add this plan to
 **System-Level Impact**:
 
 - **Reviewer-pair maintenance**: cheap dependency-bump plans like this
-  one are how the `clerk-reviewer` + `mcp-reviewer` invocation
+  one are how the `clerk-expert` + `mcp-expert` invocation
   discipline stays calibrated. Skipping reviewer dispatch on "small"
   changes is how reviewer skill atrophies.
 - **Forward-candidate hygiene**: capturing `AppOptions.strict`, ext-
@@ -748,9 +748,9 @@ the Standard Schema direction.
   - `https://github.com/modelcontextprotocol/ext-apps/releases`
   - `https://github.com/modelcontextprotocol/typescript-sdk/releases`
 - Always-applied invocation rules:
-  - `.cursor/rules/invoke-clerk-reviewer.mdc`
-  - `.cursor/rules/invoke-mcp-reviewer.mdc`
-  - `.cursor/rules/invoke-code-reviewers.mdc`
+  - `.cursor/rules/invoke-clerk-expert.mdc`
+  - `.cursor/rules/invoke-mcp-expert.mdc`
+  - `.cursor/rules/invoke-code-experts.mdc`
 
 ---
 

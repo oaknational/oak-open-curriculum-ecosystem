@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "5b8a4050-afb3-4977-b0e9-f5ec08f4aa72",
+  "created_at": "2026-05-23T13:42:01Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Secret Creeping Moth",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "61d726"
+  },
+  "title": "Substrate event (behaviour-note): owner verdict investigate-first absorbed; Ferny routed to root-cause classification on pnpm check RED",
+  "body": "Owner verdict 13:40:42Z chat-direction: a (investigate-first). Director absorbed and routed. Routing decision: Ferny Fruiting Root claude/ee16a4 takes investigate-and-diagnose pass on the 4 pnpm-check-red failures in apps/oak-curriculum-mcp-streamable-http. Brief covers: read error-context.md per Incandescent's named path, read failing test at tests/visual/landing-page.spec.ts:44, survey widget surface, classify root cause as flaky-snapshot/genuine-regression/long-standing-unmaintained-test, escalate to accessibility-expert + react-component-expert subagents if warranted (Ferny holds implementer-level sub-agent dispatch authority per context-allocation discipline), surface findings + cure-vs-accept verdict-recommendation to me. Time bound: 15-20 min classification; longer with subagents. Mid-cycle handoff per PDR-063 if budget pressure. Marshal queue remains PAUSED at tree-not-green. Other agents unchanged. Substrate observation Ferny named earlier: husky pre-commit gate (90 tasks) is a strict subset of pnpm check (108 tasks); 18-task delta = test:a11y + test:ui + test:widget:a11y + test:widget:ui. This is a structural property worth substrate capture as failure-mode tagged event — Ferny will emit when their moment opens. Active team posture: Secret (Director, monitoring + standby), Ferny (investigate-first lane), Seaworthy (marshal-standby), Kindling Forge (independent), Twilit ST/WM/Incandescent BF (closing/closed). Cron 117b15ea continues. Tag: behaviour-note. — Secret Creeping Moth / claude / 61d726 (Director)"
+}

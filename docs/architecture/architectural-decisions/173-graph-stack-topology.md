@@ -1,9 +1,70 @@
 # ADR-173: Graph Stack Topology — Standards-First, Layered, MCP-Agnostic
 
-**Status**: Proposed (skeleton, 2026-05-07) — pending owner approval
-before ratification.
+**Status**: Accepted 2026-05-11 (Sparking Charring Ash session, owner
+final-approval following reviewer absorption against
+architecture-expert-betty, architecture-expert-fred,
+assumptions-expert, and architecture-expert-barney
+PROMOTION-READY verdict on `graph-stack.plan.md`). Skeleton 2026-05-07;
+NC-boundary amendment 2026-05-10; reviewer-absorption amendment
+2026-05-11; EEF concurrent-tenant amendment 2026-05-21.
 
-**Date**: 2026-05-07
+**Date**: 2026-05-07; amended 2026-05-10; amended 2026-05-11; amended 2026-05-21
+
+**2026-05-11 amendment summary** (Flamebright Burning Lava session,
+reviewer absorption against architecture-expert-betty,
+architecture-expert-fred, assumptions-expert):
+
+- Tripwire #2 ↔ #5 cross-reference: explicit note that #5 review must
+  re-check #2 status (RDF 1.2 REC may land before RDF/JS WG publishes
+  the data-model extension).
+- Tripwire #6 reformulated from "deferred tripwire awaiting first
+  triple-term corpus" to "continuous contract test on `graph-ingest`
+  asserts triple-term inputs round-trip" — reframes a structurally-
+  ambiguous deferred tripwire as named continuous validation.
+- Tripwire #8 added: upstream `oaknational/oak-curriculum-ontology`
+  breaking-change tripwire. Higher-probability near-term risk than
+  spec REC tripwires given ontology IRIs are canonical identity.
+- Open Question 2 (MCP-agnostic principle as separate ADR) —
+  **Resolved 2026-05-11**: extracted to
+  [ADR-179](179-transport-agnostic-graph-substrate.md) per owner
+  direction; ADR-173 §"Transport discipline (see ADR-179)" now
+  references ADR-179 rather than restating the rule inline.
+- Plan-body routed findings (graph-enhance/graph-validate seam
+  protocol, graph-ingest/graph-corpus-sdk corpus-local parse
+  extension protocol, build-vs-buy attestation expansion, JSON-LD
+  framing performance contract test) absorbed into the active graph
+  stack plan rather than this ADR — they are sequencing and
+  test-discipline concerns, not topology decisions.
+
+**2026-05-21 amendment summary** (owner-directed sequencing
+pull-forward to ship the first user-facing graph-stack consumer
+earlier without scope reduction):
+
+- Workspace #6 (`graph-corpus-sdk`) Inc.1 activation expanded: the
+  Oak Curriculum Ontology Threads adapter and the EEF strands adapter
+  are concurrent tenants in Inc.1. Prerequisite and misconception
+  adapters remain at Inc.3.
+- §First-wave ingestion scope amended to record two concurrent
+  attached corpora with disjoint ingestion paths: Threads via
+  `graph-ingest` Turtle/SHACL from the pinned ontology raw import,
+  EEF strands via a corpus-local Zod loader inside `graph-corpus-sdk`
+  with no `graph-ingest` participation.
+- The topology of seven active workspaces plus one deferred is
+  unchanged. Increment activation for the EEF adapter shifts forward;
+  no workspace is added, no boundary moves, no transport rule
+  changes.
+- §Corpus source authority is unchanged: the repository-held EEF
+  Toolkit JSON snapshot remains the canonical implementation source
+  until EEF clarifies refresh mechanics; the corpus must not be
+  reconstructed from scraped pages.
+- Tripwire set unchanged: EEF data does not exercise triple terms,
+  so tripwire #6 (triple-term ingestion contract test) is unaffected
+  by the earlier EEF adapter activation. Tripwire #8 (upstream
+  ontology breaking change) is also unaffected because the EEF
+  adapter does not consume the Oak Curriculum Ontology IRI surface.
+- Per-increment sequencing and plan-body decomposition continue to
+  live in the active substrate and vertical-slice plan bodies in
+  operational memory, not in this ADR.
 
 **Related**:
 [ADR-123](123-mcp-server-primitives-strategy.md) — MCP server primitives
@@ -16,7 +77,16 @@ graph workspaces plus one deferred future-standards workspace;
 [ADR-157](157-multi-source-open-education-integration.md) — multi-source
 open education integration; this ADR is the structural carrier for that
 integration (Oak API + Oak Curriculum Ontology + EEF, with the EEF
-cross-cutting thread fully named).
+cross-cutting thread fully named);
+[ADR-179](179-transport-agnostic-graph-substrate.md) — transport-agnostic
+graph substrate; the cross-cutting transport-discipline rule that the
+substrate ships no MCP/HTTP/CLI/transport-shaped code (extracted from
+ADR-173 on 2026-05-11);
+[ADR-157](157-multi-source-open-education-integration.md) (cited
+above) — the first vertical-slice consumer of this topology is
+the graph MVP arc that ADR-157 carries structurally; the active
+plan body in operational memory carries the per-increment
+sequencing.
 
 ## Context
 
@@ -67,62 +137,166 @@ packages.
 
 ### Topology
 
-Seven active graph workspaces plus one deferred:
+Seven active graph workspaces plus one deferred. Each item carries its
+sequenced activation increment; the topology decision commits the full
+set, but workspaces are stood up in increment order rather than all at
+once. Increment sequencing is owned by the implementing plan.
 
 1. `packages/core/graph-core/` — RDF/JS-aligned terms/quads/datasets,
    JSON-LD 1.1 expansion+compaction+framing, canonicalisation, vocabulary
-   registry. Pure, no I/O.
+   registry. Pure, no I/O. **Activates in Inc.1 (foundation).**
 2. `packages/libs/graph-ingest/` — JSON-LD-compatible, record, generic
    Turtle/SKOS parse-to-dataset support, and other consumer-agnostic
-   ingestion modes. Oak/NC corpus mapping does not live here.
+   ingestion modes. Oak-specific corpus mapping does not live here.
+   **Activates in Inc.1 with `jsonld-compatible` plus generic
+   Turtle/SKOS parsing; remaining ingestion modes in Inc.2.**
 3. `packages/libs/graph-enhance/` — stable IRI minting, predicate mapping,
    type inference, link detection, `EnhancementRecord` and
-   `RelationshipRecord` discipline.
+   `RelationshipRecord` discipline. **Activates in Inc.2 (second-wave
+   substrate); the adapter seam ships from Inc.1 inside `graph-core`.**
 4. `packages/libs/graph-validate/` — JSON Schema (raw shape) + SHACL
-   (graph meaning).
+   (graph meaning). **Activates in Inc.2 (second-wave substrate); the
+   adapter seam ships from Inc.1 inside `graph-core`.**
 5. `packages/libs/graph-project/` — property-graph projection, adjacency,
    neighbours/match/traverse primitives, visualisation/export hooks.
-6. `packages/sdks/graph-corpus-sdk/` — Oak's typed corpus adapters (NC
-   knowledge taxonomy, prerequisite, misconception, EEF strands, future
-   corpora). Cross-corpus join primitives. Ontology IRIs as canonical
-   identity.
+   **Activates in Inc.1 with property-graph projection plus adjacency
+   primitives; full traversal and visualisation surface in later
+   increments.**
+6. `packages/sdks/graph-corpus-sdk/` — Oak's typed corpus adapters (Oak
+   Curriculum Ontology Threads graph, prerequisite, misconception, EEF
+   strands, future corpora). Cross-corpus join primitives. Ontology IRIs as
+   canonical identity. **Activates in Inc.1 with the Oak Curriculum
+   Ontology Threads adapter and the EEF strands adapter as concurrent
+   tenants (per the 2026-05-21 amendment); prerequisite and misconception
+   adapters activate in Inc.3. Cross-corpus join primitives activate in
+   Inc.3.**
 7. `agent-graphs/practice-graph/` — markdown-corpus graph for Oak's
    engineering practice. It is an agent-tooling-adjacent consumer, not a
    substrate library, and proves the substrate works for non-curriculum data.
+   **Activates in Inc.4 (second-consumer proof); the `agent-graphs/`
+   organisation plan unblocks it.**
 8. `packages/libs/graph-future/` — _deferred_. Workspace not created until
    a consumer needs RDF 1.2 / JSON-LD 1.2 / SPARQL 1.2 / SHACL 1.2
    adapters; the adapter seams ship from day one in the active workspaces.
+   **Tripwire-gated (not increment-sequenced).**
 
-### MCP-agnostic principle (proposed)
+### Transport discipline (see ADR-179)
 
-**No graph workspace ships MCP-shaped code.** Tool definitions, resource
-constants, and registration helpers live with the application that surfaces
-them, not with the graph SDK that produces them. If a graph workspace starts
-wanting an MCP type or factory, that is the signal to extract a thin sibling
-adapter workspace — not to leak MCP into the substrate. ADR-123 is therefore
-unaffected by this ADR; future graph-derived MCP primitives amend ADR-123 at
-the point a consumer surfaces them.
+The transport-agnostic principle (no graph substrate workspace ships
+MCP/HTTP/CLI/transport-shaped code; surfacing is a consumer-side concern with
+at most one home per transport) is recorded as
+[ADR-179](179-transport-agnostic-graph-substrate.md) following the
+2026-05-11 reviewer absorption (architecture-expert-fred's advisory
+amendment). ADR-173 references ADR-179 rather than restating the principle
+inline so transport-discipline doctrine and topology doctrine evolve
+independently.
 
-The same discipline applies to HTTP, CLI, and JSON-LD export: each transport
-is a consumer-side concern with at most one home per transport.
+ADR-123 (MCP server primitives strategy) is unaffected by either ADR. Future
+graph-derived MCP primitives amend ADR-123 at the point a consumer surfaces
+them, and live in the home named by ADR-179.
 
-### First-wave ingestion scope (proposed topology constraint)
+### Corpus source authority
 
-The foundation wave targets the smallest end-to-end attached corpus:
+The graph stack does not replace the Oak Open Curriculum API contract or the
+bulk-data extraction pipeline. It adds an ontology-identity layer that composes
+with them.
 
-1. **Oak Curriculum Ontology** — Turtle + SHACL, ingested directly from the
-   sibling `oak-curriculum-ontology` repo. TTL is canonical; the repo's
-   PG-JSONL, Neo4j-export, SQL, and WIDOCO projections are _not_ first-wave
-   ingestion targets. Round-trip equivalence between TTL and the derived
-   projections is asserted upstream and not re-verified by the graph stack.
-   `graph-ingest` owns generic Turtle/SKOS parsing; `graph-corpus-sdk` owns
-   the NC/Oak knowledge-taxonomy mapping and typed adapter.
+The source-authority split is:
+
+- **OpenAPI / SDK authority**: API-shaped request, response, and MCP tool
+  execution types still flow from the OpenAPI schema through `pnpm
+sdk-codegen`. Thread slugs, API endpoint shapes, unit response fields, and
+  generated validators remain API-owned.
+- **Bulk-data authority**: graph-shaped resources derived from Oak bulk API
+  data, such as thread progressions, prior knowledge, and misconception
+  graphs, remain generated from bulk-data processing in this repository. The
+  misconception graph is constructed here from bulk data as part of that
+  processing path; it is not an external raw corpus and is not hand-authored as
+  a replacement source of curriculum truth.
+- **Ontology authority**: the Oak Curriculum Ontology owns ontology IRIs,
+  classes, predicates, and graph semantics such as `curric:Thread` and
+  `curric:includesThread`. `graph-corpus-sdk` maps ontology identity to typed
+  corpus adapters and joins, but it does not become the source of API-shaped
+  unit or thread definitions.
+- **EEF authority**: until EEF clarifies whether Oak should refresh from a
+  public download/API endpoint or direct supply, the repository-held EEF
+  Toolkit JSON snapshot is the canonical implementation source for EEF strand
+  data. The graph stack may validate, copy, index, and enhance that snapshot,
+  but it must not reconstruct the corpus from scraped EEF pages.
+
+Where the same educational concept appears in more than one source, identity is
+joined explicitly rather than collapsed silently. The two first-wave attached
+corpora carry distinct identity schemes (per the 2026-05-21 amendment):
+the Oak Curriculum Ontology Threads corpus uses ontology Thread IRIs as graph
+identity, while API/bulk slugs and unit metadata remain generated API/bulk
+projections; the EEF strands corpus uses the corpus-native `strands[].id`
+(e.g. `eef-tl-metacognition-and-self-regulation`) as graph identity, with
+the `id → strand_id` rename happening at the corpus boundary inside the EEF
+adapter's loader, not inside graph traversal code. A consumer that needs
+API shape uses the generated SDK types; a consumer that needs graph traversal
+uses each corpus's canonical identity through `graph-corpus-sdk`; a
+cross-corpus tool states the join boundary in its adapter and output metadata.
+
+### First-wave ingestion scope (amended 2026-05-21 — two concurrent attached corpora)
+
+The foundation wave targets two end-to-end attached corpora, each
+with its own ingestion path. Both are first-wave; neither is a
+follow-on. The corpora share no ingestion machinery — Threads
+exercises the substrate Turtle/SHACL path; EEF strands exercises a
+corpus-local Zod loader without `graph-ingest` participation.
+
+1. **Oak Curriculum Ontology Threads graph** — Turtle + SHACL, ingested
+   from the source-of-truth `oaknational/oak-curriculum-ontology` GitHub
+   repository. TTL and SHACL are canonical; derived release bundles and
+   projection formats are not first-wave ingestion targets. Round-trip
+   equivalence between TTL and the derived projections is asserted upstream and
+   not re-verified by the graph stack. `graph-ingest` owns generic Turtle/SKOS
+   parsing; `graph-enhance` owns derived graph enrichments and IRI/link records;
+   `graph-corpus-sdk` owns the `curric:Thread` enumeration and
+   `curric:includesThread` inverse-edge typed adapter.
+2. **EEF strands corpus** — corpus-local JSON snapshot, ingested via
+   a Zod-validated loader inside `graph-corpus-sdk` against the
+   repository-held canonical snapshot. `graph-ingest` does not
+   participate in this path; the loader carries its own schema and
+   typing discipline (consistent with §Typing Discipline of
+   [ADR-157](157-multi-source-open-education-integration.md)). Source
+   authority is governed by §Corpus source authority below: the
+   repository-held snapshot is canonical until EEF clarifies refresh
+   mechanics. Concurrent tenancy with the Threads adapter inside
+   `graph-corpus-sdk` is structurally valid because the two adapters
+   have disjoint ingestion paths and disjoint identity schemes
+   (ontology IRIs for Threads, EEF strand IDs for EEF strands); no
+   cross-corpus join primitive ships in Inc.1, so the two adapters
+   are independent at this increment.
+
+### Ontology source-of-truth boundary
+
+The source of truth for ontology definitions and ontology source data is the
+`oaknational/oak-curriculum-ontology` GitHub repository. This repository may
+consume those ontology files as raw material for ingestion and enhancement, but
+it does not author, curate, fork, or reduce the ontology definition corpus.
+
+Raw ontology imports in this repository are reproducibility artefacts, not a
+second source of truth. They preserve upstream source files as straight copies
+from a pinned upstream revision and remain distinct from derived graph artefacts.
+Implementation plans own the operational mechanics for fetching, pinning,
+validating, and storing those imports.
+
+Any cleanup, indexing, join records, graph enhancements, JSON-LD projections, or
+typed SDK surfaces are derived from the raw imported corpus with provenance back
+to the upstream ontology revision. Normal graph code consumes the pinned import
+or generated derived artefacts, not a developer's local ontology checkout and
+not live network URLs.
 
 Pre-requisite, misconception, and EEF strand adapters are outside the foundation
-topology decision and are sequenced by the executable graph-stack plan. Other
-Oak ontology projections and third-party knowledge graphs are tracked
-separately and re-introduced as ingestion modes or adapters only when concrete
-consumers require them.
+topology decision and are sequenced by the executable graph-stack plan. The
+source-authority decision above still constrains those later adapters:
+misconceptions are bulk-derived, EEF strands are repository-snapshot-derived
+until EEF clarifies refresh mechanics, and ontology adapters are upstream
+GitHub-derived. Other ontology-derived adapters or surfaces, including NC
+knowledge taxonomy work, and third-party knowledge graphs are tracked separately
+and introduced only when concrete consumers require them and the owner promotes
+that work separately.
 
 ## Consequences
 
@@ -138,9 +312,19 @@ consumers require them.
 - The RDF 1.2-native internal stance minimises the JSON-LD 1.2 upgrade
   cost: when JSON-LD 1.2 reaches Recommendation (tripwire #1), we add an
   emit/parse adapter rather than reshape the canonical model.
-- The foundation ingestion scope is small enough to ship while still proving
-  ontology IRI identity and generic Turtle/SKOS parsing through one real
-  attached corpus.
+- The foundation ingestion scope is bounded to two concurrent attached corpora
+  with disjoint ingestion paths (per the 2026-05-21 amendment): the Oak
+  Curriculum Ontology Threads corpus is imported as full straight-copy
+  Turtle/SHACL source files, proving ontology IRI identity and generic
+  Turtle/SKOS parsing against real Oak ontology data; the EEF strands corpus
+  is ingested through a corpus-local Zod-validated loader inside
+  `graph-corpus-sdk`, proving the substrate composes with a corpus-native
+  identity scheme through a path independent of `graph-ingest`.
+- The API/bulk/ontology split prevents a new graph adapter from becoming a
+  shadow schema layer for thread or unit data. Joins are explicit and
+  inspectable instead of hidden behind shared names.
+- A pinned straight-copy raw import gives reproducible CI without making the
+  ontology repository or GitHub network access a runtime dependency.
 
 **Negative / cost accepted**:
 
@@ -154,6 +338,9 @@ consumers require them.
   formalisation. If the eventual published spec differs, `graph-core`
   migrates the `Term` union — a typed refactor confined to one workspace.
   Tripwire #2 covers this.
+- The pinned raw import introduces a provenance-maintenance obligation.
+  Provenance-free ontology files in this repository are documentation/data
+  drift, not an acceptable import.
 
 ## Standards evolution and tripwires
 
@@ -163,15 +350,16 @@ the ecosystem catches up. This ADR proposes seven tripwires by name.
 **Each tripwire becomes a named follow-on plan when triggered, not an inline
 sweep.**
 
-| #   | Tripwire                                               | Trigger signal                                                                                                                                     | Modules affected                                                  | What changes (high-level)                                                                                                                                                           |
-| --- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | **JSON-LD 1.2 reaches W3C Recommendation**             | <https://www.w3.org/TR/json-ld12/> CR → REC (WG charter target Q4 2027)                                                                            | `graph-core/jsonld`; `graph-future` activates                     | JSON-LD 1.2 emit/parse adapter; default version may shift from `"1.1"` to `"1.2"` after consumer-compat check; RelationshipRecord becomes one wire profile, not the canonical shape |
-| 2   | **RDF/JS WG formalises RDF 1.2 data-model extension**  | RDF/JS spec publishes `TripleTerm` as a canonical type                                                                                             | `graph-core` only                                                 | Migrate `Term` union if our shape differs from the published spec (typed refactor confined to `graph-core`)                                                                         |
-| 3   | **SHACL 1.2 reaches W3C Recommendation**               | SHACL 1.2 Core / Rules WD → REC                                                                                                                    | `graph-validate`; `graph-future` may activate                     | Add `shacl-1.2` profile to ShapeValidator adapter; re-evaluate `rdf-validate-shacl` for SHACL 1.2 conformance                                                                       |
-| 4   | **SPARQL 1.2 reaches W3C Recommendation**              | SPARQL 1.2 Query Language WD → REC                                                                                                                 | `graph-future` activates                                          | Author SPARQL 1.2 export/query adapter behind versioned interface                                                                                                                   |
-| 5   | **RDF 1.2 itself reaches W3C Recommendation**          | RDF 1.2 Concepts / Semantics CR → REC                                                                                                              | Documentation and package metadata                                | Update declared spec version; pre-Recommendation risk window closes                                                                                                                 |
-| 6   | **First triple-term-using corpus enters ingestion**    | Any first-wave corpus or future corpus emits triple-term-shaped data (none do today)                                                               | `graph-ingest`, `graph-validate`, `graph-enhance`, contract tests | Verify ingestion preserves triple terms; verify SHACL shape constraints; verify provenance for triple-term derivations                                                              |
-| 7   | **Adapter implementation diverges from targeted spec** | Contract test failure on `jsonld.js`, `rdf-canonize`, `rdf-validate-shacl`, or any future adapter; includes RDF Dataset Canonicalization 1.0 → 2.0 | The diverging adapter only                                        | Pin to last-known-good version, file upstream issue, evaluate alternatives; intervention point is always the version/profile discriminator                                          |
+| #   | Tripwire                                                                      | Trigger signal                                                                                                                                                                   | Modules affected                                                                                                      | What changes (high-level)                                                                                                                                                                                                                                                                                                         |
+| --- | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **JSON-LD 1.2 reaches W3C Recommendation**                                    | <https://www.w3.org/TR/json-ld12/> CR → REC (WG charter target Q4 2027)                                                                                                          | `graph-core/jsonld`; `graph-future` activates                                                                         | JSON-LD 1.2 emit/parse adapter; default version may shift from `"1.1"` to `"1.2"` after consumer-compat check; RelationshipRecord becomes one wire profile, not the canonical shape                                                                                                                                               |
+| 2   | **RDF/JS WG formalises RDF 1.2 data-model extension**                         | RDF/JS spec publishes `TripleTerm` as a canonical type. **Cross-reference tripwire #5**: any review of #5 must check #2 status, and vice versa.                                  | `graph-core` only                                                                                                     | Migrate `Term` union if our shape differs from the published spec (typed refactor confined to `graph-core`)                                                                                                                                                                                                                       |
+| 3   | **SHACL 1.2 reaches W3C Recommendation**                                      | SHACL 1.2 Core / Rules WD → REC                                                                                                                                                  | `graph-validate`; `graph-future` may activate                                                                         | Add `shacl-1.2` profile to ShapeValidator adapter; re-evaluate `rdf-validate-shacl` for SHACL 1.2 conformance                                                                                                                                                                                                                     |
+| 4   | **SPARQL 1.2 reaches W3C Recommendation**                                     | SPARQL 1.2 Query Language WD → REC                                                                                                                                               | `graph-future` activates                                                                                              | Author SPARQL 1.2 export/query adapter behind versioned interface                                                                                                                                                                                                                                                                 |
+| 5   | **RDF 1.2 itself reaches W3C Recommendation**                                 | RDF 1.2 Concepts / Semantics CR → REC. **Cross-reference tripwire #2**: REC may land before RDF/JS WG publishes the data-model extension; #5 review must explicitly re-check #2. | Documentation and package metadata; revisit `graph-core` `TripleTerm` shape against finalised RDF 1.2 abstract syntax | Update declared spec version; pre-Recommendation risk window closes; if RDF/JS WG has not yet acted, retain bespoke `TripleTerm` and continue watching #2                                                                                                                                                                         |
+| 6   | **Triple-term ingestion contract test fails**                                 | Continuous contract test in `graph-ingest` asserts triple-term inputs round-trip preserving annotations; test failure is the trigger                                             | `graph-ingest`, `graph-validate`, `graph-enhance`                                                                     | Diagnose ingestion regression; verify SHACL shape constraints; verify provenance for triple-term derivations. Reformulated 2026-05-11 from deferred-tripwire to continuous-contract-test per assumptions-expert review.                                                                                                           |
+| 7   | **Adapter implementation diverges from targeted spec**                        | Contract test failure on `jsonld.js`, `rdf-canonize`, `rdf-validate-shacl`, or any future adapter; includes RDF Dataset Canonicalization 1.0 → 2.0                               | The diverging adapter only                                                                                            | Pin to last-known-good version, file upstream issue, evaluate alternatives; intervention point is always the version/profile discriminator                                                                                                                                                                                        |
+| 8   | **`oaknational/oak-curriculum-ontology` upstream introduces breaking change** | Upstream commit between pinned revisions renames a predicate, deprecates an IRI, or restructures the source-file globs `graph-corpus-sdk` relies on                              | `graph-corpus-sdk` Threads adapter; `graph-core/vocab` registry; pinned-import manifest                               | Re-pin revision; map the breaking change inside the adapter (or refuse migration with a named plan); surface in the import manifest; assess downstream cross-corpus joins. Added 2026-05-11 per assumptions-expert review — higher-probability near-term risk than spec REC tripwires given ontology IRIs are canonical identity. |
 
 **Tripwire discipline (proposed for ratification)**:
 
@@ -212,13 +400,22 @@ sweep.**
 
 ## Open questions to resolve before promotion
 
-1. Confirm the workspace path conventions
+1. ~~Confirm the workspace path conventions~~ **Resolved 2026-05-11**:
+   the workspace path conventions
    (`packages/core/graph-core/`, `packages/libs/...`,
-   `packages/sdks/graph-corpus-sdk/`, `agent-graphs/practice-graph/`) match
-   repository workspace policy. The `agent-graphs/` physical organisation is
-   sequenced outside this ADR.
-2. Confirm the ADR is the right artefact for the MCP-agnostic principle, or
-   whether it should be a separate ADR with this one referencing it.
+   `packages/sdks/graph-corpus-sdk/`, `agent-graphs/practice-graph/`)
+   are matrix-recorded in
+   [ADR-041](041-workspace-structure-option-a.md) (2026-05-11
+   amendment). `agent-graphs/` is a distinct top-level tier with
+   permitted importer/importee rows; `practice-graph` is the first
+   occupant. The `agent-graphs/` physical organisation is sequenced
+   outside this ADR.
+2. ~~Confirm the ADR is the right artefact for the MCP-agnostic principle~~
+   **Resolved 2026-05-11**: extracted to
+   [ADR-179](179-transport-agnostic-graph-substrate.md) per owner
+   direction (Flamebright Burning Lava session). ADR-173 references
+   ADR-179 in §"Transport discipline (see ADR-179)". Rule substance
+   unchanged; only the home moved.
 3. Confirm Mark Hodierne's author addition is required at ratification or
    only on first ontology ingestion.
 

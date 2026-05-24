@@ -3,12 +3,12 @@ boundary: B2-Architecture
 doc_role: index
 authority: architecture-navigation
 status: active
-last_reviewed: 2026-04-19
+last_reviewed: 2026-05-10
 ---
 
 # Architecture
 
-**Last Updated**: 2026-04-19
+**Last Updated**: 2026-05-10
 **Status**: Active architectural index
 
 ## Start Here
@@ -71,6 +71,8 @@ block in the ADR index:
 - [ADR-031: Generation-Time Extraction](./architectural-decisions/031-generation-time-extraction.md)
 - [ADR-040: Transition to Neutral Architecture and Allowlist Identity Check](./architectural-decisions/040-neutral-architecture-and-identity-allowlist.md)
 - [ADR-041: Workspace Structure Option A Adopted](./architectural-decisions/041-workspace-structure-option-a.md)
+- [ADR-174: Dependency Vulnerability Scanning as a Quality Gate](./architectural-decisions/174-dependency-vulnerability-scanning-quality-gate.md)
+- [ADR-175: External Evidence Corpus Freshness Governance](./architectural-decisions/175-external-evidence-corpus-freshness-governance.md)
 - [All ADRs](./architectural-decisions/) - Complete decision record (historical ADRs preserved)
 
 ## Related Agent Guidance
@@ -88,9 +90,9 @@ repository's local bridge.
 
 ## Implementation Plans
 
-- [Architectural Refinements Plan (completed)](../../.agent/plans/archive/completed/architectural-refinements-plan.md)
-- [Workspace Structure Options (completed analysis)](../../.agent/plans/archive/completed/workspace-structure-options.md)
-- [Serverless Hosting Plan (deferred)](../../.agent/plans/icebox/serverless-hosting-plan.md)
+Implementation plans are execution artefacts, not canonical architecture
+documentation. Durable decisions belong in ADRs; plan-path provenance belongs
+in plans and session notes.
 
 ## Historical Context
 

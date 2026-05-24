@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 
+import { assertNoLiveIdentityRoutingCollision } from './active-agents.js';
 import { archiveStaleClaims } from './claims.js';
 import { resolveIdentity } from './cli-identity.js';
 import { optional, required, valueOrDefault, type Options } from './cli-options.js';
@@ -20,10 +21,19 @@ export async function openClaim(
 
   await updateActiveClaimsFile({
     activePath: required(options, 'active'),
-    transform: (registry) => ({
-      ...registry,
-      claims: [...registry.claims, openedClaim],
-    }),
+    transform: (registry) => {
+      assertNoLiveIdentityRoutingCollision({
+        registry,
+        nowIso: required(options, 'now'),
+        agentId: identity,
+        surface: 'claims open',
+      });
+
+      return {
+        ...registry,
+        claims: [...registry.claims, openedClaim],
+      };
+    },
   });
 
   return formatOpenClaimResult(openedClaim);
@@ -83,7 +93,7 @@ export async function closeClaim(
         {
           closedAt: required(options, 'now'),
           closedBy,
-          summary: required(options, 'summary'),
+          summary: closeSummaryFromOptions(options),
         },
       );
 
@@ -116,6 +126,19 @@ export async function archiveClaims(
   });
 
   return '';
+}
+
+export function closeSummaryFromOptions(options: Options): string {
+  const summary = optional(options, 'summary');
+  const closureSummary = optional(options, 'closure-summary');
+  if (summary !== undefined && closureSummary !== undefined) {
+    throw new Error('claims close accepts either --summary or --closure-summary, not both');
+  }
+  if (summary === undefined && closureSummary === undefined) {
+    throw new Error('claims close requires either --summary or --closure-summary');
+  }
+
+  return summary ?? required(options, 'closure-summary');
 }
 
 function splitClosingClaims(
@@ -171,8 +194,25 @@ function closeExplicitly(
 function areaFromOptions(options: Options): CollaborationArea {
   return {
     kind: parseAreaKind(required(options, 'area-kind')),
-    patterns: options.files.length > 0 ? options.files : [required(options, 'area-pattern')],
+    patterns: areaPatternsFromOptions(options),
   };
+}
+
+function areaPatternsFromOptions(options: Options): readonly string[] {
+  const hasFiles = options.files.length > 0;
+  const hasAreaPatterns = options.areaPatterns.length > 0;
+
+  if (hasFiles && hasAreaPatterns) {
+    throw new Error('claims open accepts either --file or --area-pattern, not both');
+  }
+  if (hasFiles) {
+    return options.files;
+  }
+  if (hasAreaPatterns) {
+    return options.areaPatterns;
+  }
+
+  throw new Error('claims open requires either --file or --area-pattern');
 }
 
 function parseAreaKind(value: string): 'files' | 'workspace' | 'plan' | 'adr' | 'git' {
@@ -186,5 +226,7 @@ function parseAreaKind(value: string): 'files' | 'workspace' | 'plan' | 'adr' | 
     return value;
   }
 
-  throw new Error(`unsupported area kind: ${value}`);
+  throw new Error(
+    `unsupported area kind: ${value}. Expected one of: files | workspace | plan | adr | git`,
+  );
 }

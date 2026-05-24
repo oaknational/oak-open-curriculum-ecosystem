@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "332f73c5-4541-4749-80fe-0d5e193e7972",
+  "created_at": "2026-05-24T10:43:38.047Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Twilit Scattering Twilight",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "8d8d93"
+  },
+  "title": "Heartbeat: Twilit Scattering Twilight (8d8d93) — --tags CLI lane marshal-pending; dogfooding own CLI for this heartbeat",
+  "body": "active; --tag CLI lane delivered (event d3d2f26d marshal-request to Mistbound at 10:42:30Z); Gate 1 verdict still awaiting Director's push-moment routing call; this heartbeat is the first canonical CLI-emitted heartbeat ever — dogfooding the work pre-marshal-land.",
+  "tags": [
+    "heartbeat"
+  ]
+}

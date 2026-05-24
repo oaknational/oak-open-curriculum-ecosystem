@@ -118,6 +118,7 @@ plan][doctrine-plan].
   `process.env`.
 
 [di]: ../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md
+[testing-patterns-value-proxies]: ../../docs/engineering/testing-patterns.md#acceptance-value-proxies
 
 - **No process spawning in in-process tests** - Test code MUST NOT
   spawn child processes, create test-authored workers, or
@@ -394,6 +395,14 @@ Keep E2E assertions on system/transport invariants; prove runtime
 stub semantics in SDK unit/integration tests, not by asserting
 server output against the same stub path.
 
+## Acceptance Value-Proxies
+
+Acceptance value-proxies must compare against independent ground-truth
+measures, not against a prior baseline produced by the same method. If a
+criterion says "agrees with prior baseline ±N%" without naming an independent
+measure, reject the framing at plan-author time. Worked recipe:
+[`testing-patterns.md` §Acceptance Value-Proxies][testing-patterns-value-proxies].
+
 ## Test Configuration Gotchas
 
 - `tsconfig.json` `include` patterns `**/*.test.ts` and
@@ -416,24 +425,17 @@ server output against the same stub path.
 
 ## Test Data Anchoring
 
-Tests that agree with code on the wrong contract are worse than
-no tests. The snagging bugs that this repo encountered were
-invisible because tests encoded the same wrong assumptions (e.g.
-`keyStageSlugs` instead of the API's `keyStages`). Anchor test
-fixtures to the schema or captured API responses, not to code
-assumptions. Use `as const satisfies SDKType` to couple test data
-to SDK type evolution.
+Tests that agree with code on the wrong contract are worse than no tests.
+Anchor fixtures to schemas or captured API responses, not code assumptions
+(e.g. `keyStageSlugs` instead of API `keyStages`). Use
+`as const satisfies SDKType` to couple test data to SDK type evolution.
 
 ## Test Isolation
 
-- Replace Express `_router` access in tests with HTTP assertions
-  via supertest — more resilient, tests actual behaviour.
-- Repeated multi-line test setup → extract scoped helper inside
-  `describe` block (e.g. `registerWithOverrides`, `baseEnv`).
-- For large mechanical migrations (30+ files), use subagents to
-  parallelise the work.
-- Bulk operation factories should accept `startIndex` rather than
-  mutating readonly `_id` after creation.
+- Replace Express `_router` access with supertest HTTP assertions.
+- Extract repeated setup into scoped helpers inside `describe`.
+- For 30+ file migrations, use subagents.
+- Bulk factories accept `startIndex`; do not mutate readonly `_id`.
 
 ## Browser Proof Surfaces
 

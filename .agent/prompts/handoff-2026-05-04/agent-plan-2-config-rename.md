@@ -113,16 +113,16 @@ default-empty boot acceptance is independent.
 
 ## Reviewer dispatch
 
-- `type-reviewer` (discriminated-union cross-product correctness;
+- `type-expert` (discriminated-union cross-product correctness;
   no `as`/`!`/`unknown`; warnings-channel typing).
-- `sentry-reviewer` (vendor semantics preserved; redaction barrier
+- `sentry-expert` (vendor semantics preserved; redaction barrier
   intact across the rename).
-- `test-reviewer` (TDD-as-pairs cycle; the 4 RED tests unskip in the
+- `test-expert` (TDD-as-pairs cycle; the 4 RED tests unskip in the
   same commit as their product code).
-- `architecture-reviewer-fred` (boundary discipline; framework vs
+- `architecture-expert-fred` (boundary discipline; framework vs
   consumer placement; no cross-package leakage of vendor shapes).
-- `code-reviewer` gateway.
-- `docs-adr-reviewer` + `onboarding-reviewer` for cycle 2 + 3.
+- `code-expert` gateway.
+- `docs-adr-expert` + `onboarding-expert` for cycle 2 + 3.
 
 ## Session-close
 

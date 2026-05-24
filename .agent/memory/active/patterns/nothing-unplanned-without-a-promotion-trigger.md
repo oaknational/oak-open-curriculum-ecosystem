@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-012
 name: "Nothing Unplanned Without a Promotion Trigger"
+polarity: pattern
 category: process
 status: proven
 discovered: 2026-04-18
@@ -8,6 +9,10 @@ proven_in: "Observability strategy restructure (commit 2319a614) — fourteen pr
 related_pattern: findings-route-to-lane-or-rejection.md
 informs_deeper_pattern: "no-smuggled-drops (pending consolidation — see docs/explorations/2026-04-18-depth-of-generalisation-in-pattern-extraction.md)"
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Nothing Unplanned Without a Promotion Trigger
 

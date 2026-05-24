@@ -51,7 +51,53 @@ Deliver_](docs/foundation/VISION.md#what-we-deliver) in the Vision.
 ## Developers and AI agents
 
 - **Developers** — continue to [Quick Start](#quick-start) below
+- **Oak teammates joining via Claude Code (or another AI coding agent)** — Quick Start as above, then [MCP servers for contributors](docs/engineering/mcp-servers-for-contributors.md) for the sanctioned MCP set, and [good first issues](.agent/plans/good-first-issues.md) for what to pick up first
 - **AI agents** — read the [start-right-quick workflow](.agent/skills/start-right-quick/shared/start-right.md), then [AGENT.md](.agent/directives/AGENT.md), then scan the [five foundational ADRs](docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes) — the architectural source of truth
+
+### Working with agents
+
+This repository is designed for agentic development. Start agent sessions by
+naming the relevant start-right workflow and the outcome you want. The
+start-right workflow grounds the agent in the repo's live rules, plans,
+claims, comms, and git state before it acts.
+
+For Claude Code, Cursor, Gemini, or another slash-command surface, a single
+agent session might start with:
+
+```text
+/oak-start-right-quick find the most frequent user-impact bug from Sentry,
+create a plan for resolving it, then execute it
+```
+
+For a coordinated team:
+
+```text
+/oak-start-right-team you are part of a team of agents working on the
+knowledge graph enhancement plan, please continue
+```
+
+For existing threads, prefer a pointer to the thread continuation record rather
+than restating live state in the prompt:
+
+```text
+/oak-start-right-team continue agentic-engineering-enhancements from
+.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md.
+Treat this opener as a hypothesis until live grounding confirms it.
+```
+
+In Codex, use the same skill names through `/skills` or `$skill-name` mentions:
+
+```text
+$oak-start-right-team continue agentic-engineering-enhancements from
+.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md.
+Treat this opener as a hypothesis until live grounding confirms it.
+```
+
+Use `oak-session-handoff` at the end of a meaningful solo session so the next
+agent inherits the real state rather than a chat transcript guess. In team
+sessions, `oak-start-right-team` should name the closeout owner; only that owner
+runs the full handoff, while other team members leave boundary-scoped closeout
+notes.
 
 **Browse the documentation by section**:
 [Foundation](docs/foundation/README.md) (vision and the agentic
@@ -137,7 +183,10 @@ and
 - **pnpm** — run `corepack enable` (ships with Node.js) to auto-install the pinned version
 - **bun** (optional, for `pnpm dev:widget-in-host`) — install via [bun.sh](https://bun.sh/docs/installation)
 - **lsof** (optional, for `apps/oak-curriculum-mcp-streamable-http/scripts/restart-dev-server.sh`) — pre-installed on macOS; on Debian/Ubuntu use `sudo apt install lsof`; source/build instructions at [github.com/lsof-org/lsof](https://github.com/lsof-org/lsof)
-- **sentry** (optional, for dev-time Sentry issue triage, event inspection, and Sentry Seer via `sentry issue list` / `sentry api`) — install via [cli.sentry.dev](https://cli.sentry.dev/) (`curl https://cli.sentry.dev/install -fsS | bash`) or `brew install getsentry/tools/sentry`. Required only for humans and agents using Seer or `sentry api` locally; the HTTP MCP server's Vercel-build source-map upload + release/deploy linkage is performed by [`@sentry/esbuild-plugin`](https://docs.sentry.io/platforms/javascript/sourcemaps/uploading/esbuild/) inside the workspace's `build` script (see [`apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts`](apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts) and [ADR-163 §6 amendment 2026-04-21](docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md)). Operator-driven `sentry-cli` invocations resolve via `pnpm exec sentry-cli` from the MCP app workspace (where `@sentry/cli` arrives as a transitive devDependency of `@sentry/esbuild-plugin`), or via `pnpm dlx @sentry/cli` from elsewhere. Any script that invokes the dev `sentry` CLI must wrap the invocation in the `require_command "sentry" "https://cli.sentry.dev/"` fail-fast pattern; each script currently defines `require_command` inline — see [`apps/oak-curriculum-mcp-streamable-http/scripts/dev-widget-in-host.sh`](apps/oak-curriculum-mcp-streamable-http/scripts/dev-widget-in-host.sh) for the canonical dev-`sentry` helper. Both patterns and the full `sentry-cli` vs dev-`sentry` split are documented in [docs/operations/sentry-cli-usage.md](docs/operations/sentry-cli-usage.md) (see also [ADR-159](docs/architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md)).
+- **sentry** (optional, for dev-time Sentry issue triage, event inspection,
+  and Sentry Seer) — install only when you need local Sentry operator tooling;
+  see [Sentry CLI usage](docs/operations/sentry-cli-usage.md) for the
+  `sentry-cli` vs dev-`sentry` split and workspace invocation details.
 
 ### Install and verify
 
@@ -157,18 +206,25 @@ If these pass, your toolchain is working. No API keys are required for unit test
 Many tasks work without environment variables. To run dev servers, integration tests, or search workflows, you need an Oak API key:
 
 1. Request a free key: <https://open-api.thenational.academy/docs/about-oaks-api/api-keys>
-2. Copy the example environment file and add your key:
+2. Copy the example environment file for the workspace you are running and add
+   your key there:
 
 ```bash
-cp .env.example .env
-# Edit .env: set OAK_API_KEY=your_key_here
+# HTTP MCP server
+cp apps/oak-curriculum-mcp-streamable-http/.env.example \
+  apps/oak-curriculum-mcp-streamable-http/.env.local
+
+# Search CLI
+cp apps/oak-search-cli/.env.example apps/oak-search-cli/.env.local
+
+# Edit the relevant .env.local and set OAK_API_KEY=your_key_here
 ```
 
 See [environment variables guide](docs/operations/environment-variables.md) for Elasticsearch, Clerk, and other service credentials.
 
 ### Next steps
 
-The [Architecture](#architecture) section below summarises the schema-first design and key directories. For the development process, commit conventions, and quality expectations, see [CONTRIBUTING.md](CONTRIBUTING.md). Each workspace README provides area-specific setup (see links in the capability table above).
+The [Architecture](#architecture) section below summarises the schema-first design and key directories. For the development process, commit conventions, and quality expectations, see [CONTRIBUTING.md](CONTRIBUTING.md). For a curated list of starter tasks, see [good first issues](.agent/plans/good-first-issues.md). Each workspace README provides area-specific setup (see links in the capability table above).
 
 For the shape of the curriculum data and per-key-stage variance, see the [Curriculum Guide](docs/domain/curriculum-guide.md) and [Data Variances](docs/domain/DATA-VARIANCES.md). For how MCP tools execute against the OpenAPI schema at runtime, see [openapi-pipeline.md → Schema-First Tool Invocation](docs/architecture/openapi-pipeline.md#execution-model-schema-first-tool-invocation).
 
@@ -216,15 +272,15 @@ Everything flows from the OpenAPI schema:
 
 Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vectors, BM25, synonym expansion, and phrase boosting) to achieve high-accuracy retrieval across curriculum structures. See the [search architecture](apps/oak-search-cli/docs/ARCHITECTURE.md) for details and the [OpenAPI pipeline](docs/architecture/openapi-pipeline.md) for the generation architecture.
 
-| Directory          | Purpose                                                                                                                  |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| `apps/`            | The canonical HTTP MCP server and the semantic search CLI                                                                |
-| `packages/sdks/`   | Curriculum SDK (code-generation, MCP metadata) and Search SDK (ES retrieval)                                             |
-| `packages/core/`   | Foundational packages: `Result<T, E>` type, env schema contracts, observability primitives, type helpers, ESLint configs |
-| `packages/libs/`   | Shared libraries: env-resolution, structured logging, search contracts, and Sentry adapters                              |
-| `packages/design/` | Design token pipeline: DTCG source format, CSS custom property generation, WCAG AA contrast validation                   |
-| `agent-tools/`     | Agent workflow CLIs: `claude-agent-ops`, `cursor-session-from-claude-session`, and `codex-reviewer-resolve`              |
-| `docs/`            | Developer documentation, guides, and the full ADR index                                                                  |
+| Directory          | Purpose                                                                                                                                                  |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `apps/`            | The canonical HTTP MCP server and the semantic search CLI                                                                                                |
+| `packages/sdks/`   | Curriculum SDK (code-generation, MCP metadata) and Search SDK (ES retrieval)                                                                             |
+| `packages/core/`   | Foundational packages: `Result<T, E>` type, env schema contracts, observability primitives, type helpers, ESLint configs                                 |
+| `packages/libs/`   | Shared libraries: env-resolution, structured logging, search contracts, and Sentry adapters                                                              |
+| `packages/design/` | Design token pipeline and reusable design primitives: DTCG source format, CSS custom property generation, WCAG AA contrast validation, Ink UI primitives |
+| `agent-tools/`     | Agent workflow CLIs: `claude-agent-ops`, `cursor-session-from-claude-session`, and `codex-reviewer-resolve`                                              |
+| `docs/`            | Developer documentation, guides, and the full ADR index                                                                                                  |
 
 ### Workspace Summaries
 
@@ -270,6 +326,7 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 | ----------------------------------------------------------- | ---------------------------------------------------------------------------------- |
 | [`design-tokens-core`](packages/design/design-tokens-core/) | Pure functions for DTCG token parsing and WCAG AA contrast validation              |
 | [`oak-design-tokens`](packages/design/oak-design-tokens/)   | Oak-specific token definitions (palette, semantic, component) and CSS build output |
+| [`oak-design-ink`](packages/design/oak-design-ink/)         | Reusable Oak React primitives for Ink-based terminal interfaces                    |
 
 Architectural Decision Records (ADRs) are the architectural source of truth. These three foundational ADRs define the schema-first approach that underpins the codebase:
 

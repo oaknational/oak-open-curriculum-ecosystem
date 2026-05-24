@@ -1,2 +1,0 @@
-description = "Follow the GO execution workflow"
-prompt = "Read and follow the instructions in .agent/commands/go.md"

@@ -49,8 +49,8 @@ frequently:
 ### Out of scope
 
 - Content of plans (architecture reviewers, domain specialists own correctness)
-- Code quality within plan-driven work (code-reviewer owns this)
-- ADR content and format (docs-adr-reviewer owns this)
+- Code quality within plan-driven work (code-expert owns this)
+- ADR content and format (docs-adr-expert owns this)
 - Creating a second generic planning skill at `.agent/skills/planning/`
 
 ## Doctrine Hierarchy
@@ -67,9 +67,9 @@ frequently:
 
 ## Deliverables
 
-1. Canonical reviewer template: `.agent/sub-agents/templates/planning-reviewer.md`
+1. Canonical reviewer template: `.agent/sub-agents/templates/planning-expert.md`
 2. Canonical skill: `.agent/skills/planning-expert/SKILL.md`
-3. Canonical situational rule: `.agent/rules/invoke-planning-reviewer.md`
+3. Canonical situational rule: `.agent/rules/invoke-planning-expert.md`
 4. Platform adapters (Claude, Cursor, Codex)
 5. Discoverability updates
 6. Validation
@@ -101,7 +101,7 @@ All three promotion criteria are met:
    surface, classifying each across 5 disposition types, updating 7 files,
    archiving 2 plans, creating 1 new plan, and recording a durable routing
    register. Owner observed this is the level of complexity that justifies
-   a specialist. The `docs-adr-reviewer` handles documentation quality but
+   a specialist. The `docs-adr-expert` handles documentation quality but
    lacks the plan-architecture lens (lifecycle stages, promotion triggers,
    scope-and-sequencing, density invariants, absorption-vs-new-plan
    decisions). Additionally, this session produced a new pattern candidate
@@ -157,7 +157,7 @@ Planning expert triplet:
 - **Dry-run accumulated workflows**: run multi-step workflow recipes against the
   current accumulated state before committing to a staging order.
 
-Boundary with `assumptions-reviewer`: assumptions review challenges
+Boundary with `assumptions-expert`: assumptions review challenges
 proportionality, blocking relationships, and whether a plan should exist in its
 chosen shape. Planning review challenges lifecycle fit, discoverability,
 template compliance, integration routing, and whether planning knowledge is in

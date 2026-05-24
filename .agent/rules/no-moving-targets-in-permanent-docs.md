@@ -1,5 +1,13 @@
 # No Moving Targets in Permanent Docs
 
+Operationalises the moving-targets-in-permanent-docs doctrine. The
+write-time hook enforcement at
+`.agent/hooks/policy.json` `preToolUseContent.scoped_blocks` is the
+machine layer; this rule names the discipline. The hook now distinguishes
+prose-narrative context from data-shaped lines (cure landed 2026-05-10):
+backticked SHAs in prose fire the rule; backticked SHAs inside YAML/JSON-
+shaped data lines do not.
+
 Permanent documentation (ADRs, PDRs, governance docs, principles,
 testing-strategy, rules) must not embed values that drift over time.
 Commit SHAs, deployment IDs, version numbers, count-of-something
@@ -35,7 +43,7 @@ hook's literal scope does not list them.
   themselves part of the record.
 - `fixtures/`, `/tests/`, `.test.ts` — test corpora.
 
-## Hook Exclusions (And Why They Are Not The Rule)
+## Hook Exclusions
 
 The regex matcher applies three line-level exclusions before
 detection:
@@ -43,20 +51,23 @@ detection:
 1. **Fenced code blocks** (between ` ``` ` markers) are skipped —
    YAML/JSON examples and code samples that embed SHAs as *data*
    are intentional.
-2. **Inline-code spans** (text wrapped in single backticks) are
-   stripped from the line before the regex test — within YAML
-   keys, embedded snippets, and similar code-shaped tokens.
+2. **Inline-code spans on data-shaped lines** are stripped from the
+   line before the regex test. A *data-shaped line* is one whose
+   non-backticked content does NOT contain three consecutive
+   alphabetic words (a sentence fragment) — YAML field values,
+   JSON snippets, table cells with short text, list items that are
+   essentially the backticked token itself. **Prose-narrative lines
+   are tested verbatim**: a backticked SHA inside a sentence (the
+   *"see commit `abc1234` for the change"* shape) fires the rule
+   because the prose ties the doc's claim to a moving target.
 3. **Lines containing `(historical reference)`** are skipped —
    citing a past commit SHA in narrative prose is permitted when
    the historical-reference marker is explicit.
 
-**These exclusions describe what the hook does not block; they do
-not describe the full reach of the rule.** A bare backticked SHA
-in narrative prose ("commit `abc1234` landed X") slips through the
-inline-code exclusion but still violates the rule's spirit — the
-backticks treat the SHA as a code-shaped token, but the prose still
-ties the doc's claim to a moving target. Author as if the hook were
-stricter than its implementation.
+The prose-vs-data distinction is implemented at
+`scripts/check-blocked-content.ts` `lineIsPredominantlyCodeShaped`.
+This closes the *"hook is more permissive than the rule"* gap that
+existed before 2026-05-10.
 
 ## Hex-Class Caveat
 
@@ -125,15 +136,11 @@ THEM"*.
 - PDR-044 §Innate immunity (write-time fingerprints)
 - PDR-038 §2026-05-04 amendment (stated principles require structural enforcement)
 
-## Pending Graduation
+## History
 
-This rule is gated on a graduation pass that authors a permanent
-PDR or ADR home for the *moving-targets-in-permanent-docs* doctrine.
-The hook enforcement is live; the canonical doctrinal anchor will
-land separately. Tracked on `pending-graduations.md`.
-
-The hook/spirit gap surfaced above (inline-code exclusion is more
-permissive than the rule's full reach) is itself a refinement
-candidate — either tighten the hook to detect SHA-shaped tokens
-even inside backticks when the surrounding context is prose, or
-leave the hook as-is and rely on the rule for the stricter case.
+The earlier version of this rule named a refinement candidate (the
+hook/spirit gap on prose-context backticks) as either-or: tighten the
+hook OR leave the hook as-is and rely on the rule. The 2026-05-10
+hook tightening graduated this candidate by tightening the hook —
+prose-context backticked SHAs now fire at write-time, matching the
+rule's full reach.

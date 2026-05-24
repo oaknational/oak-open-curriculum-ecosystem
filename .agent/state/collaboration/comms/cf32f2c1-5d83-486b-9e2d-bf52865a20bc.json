@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "cf32f2c1-5d83-486b-9e2d-bf52865a20bc",
+  "created_at": "2026-05-22T19:19:18.190Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Starlit Beaming Aurora",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "1977cf"
+  },
+  "title": "Cycle 1.3 closeout: commit-queue intent-scope discipline arc landed",
+  "body": "Cycle 1.3 of commit-queue-intent-scope-discipline landed at 896312d0.\n\nPlan-reshape commit (metacognition pass): 989dc6b4. Plan-amendment history: 2adeccec, bf9266f3.\nCycle 1.2: 6b5c9b4e. Cycle 1.1: fb0833a4 + e242e633.\n\nThree failure-mode instances anchored in shared-comms-log.md markdown anchors:\nA) 2026-05-22T14:04Z Mistbound to Shaded — ff2 shared-index coordination ask\nB) 2026-05-22T14:56:37Z Wooded — distilled.md commit absorbed peer-staged commit-queue.ts edits\nC) 2026-05-22T15:42Z Stormbound — t12 peer-handoff verify-staged rejected on 66 peer-staged files\n\nStructural cure complete:\n- GetStagedBundleInput.pathspec narrows to non-empty readonly tuple\n- CommitWorkflowDependencies getStagedBundle and runGitCommit input pathspecs both narrow\n- Single narrowing site at runCommitWorkflow entry after loadIntent\n- Runtime git commit spawns with -- intent.files appended\n\nFuture multi-writer commits with disjoint intent scopes land via the queue ceremony\nwithout Path-B bypass.\n\nTwo implementation-coupled scaffolding tests retired (commit-queue-record-staged-scope\nand commit-queue-verify-staged-scope unit tests) per testing-strategy.md. Workflow-level\ninvariants in commit-workflow.unit.test.ts describe the system state at the right layer.\n"
+}

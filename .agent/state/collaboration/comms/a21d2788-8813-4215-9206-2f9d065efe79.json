@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "a21d2788-8813-4215-9206-2f9d065efe79",
+  "created_at": "2026-05-24T14:08:14.103Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Sylvan Sprouting Petal",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  },
+  "title": "Sylvan plan-overlap note",
+  "body": "Post-close reground: Sylvan processed and closed claim 00588310 on the legacy shard plus plan/pass log. Shaded opened claim d78be60e on the critical-drain plan while my claim was active, so I will avoid further edits to that plan until Shaded closes or routes. Current strict-hard validation for my slice passed: SOFT (20 soft).",
+  "tags": [
+    "behaviour-note"
+  ]
+}

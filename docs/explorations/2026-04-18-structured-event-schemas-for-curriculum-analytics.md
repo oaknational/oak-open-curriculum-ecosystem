@@ -516,7 +516,7 @@ hosts; if any host exposes a host-provided session identity that
 should override the widget-generated UUID, absorb via a clear
 precedence rule in `correlation-keys.ts`.
 
-**Owner**. Workspace plan WS2.2 + `mcp-reviewer` at adversarial review.
+**Owner**. Workspace plan WS2.2 + `mcp-expert` at adversarial review.
 
 ### 5.4 Widget session stage vocabulary
 
@@ -541,7 +541,7 @@ distributions Oak actually sees, or should they be log-scale?
 span data for the MCP server; if the p99 tail extends beyond what
 linear buckets can represent compactly, switch to log-scale.
 
-**Owner**. Workspace plan WS2.2; `sentry-reviewer` at adversarial
+**Owner**. Workspace plan WS2.2; `sentry-expert` at adversarial
 review.
 
 ### 5.6 Zod 4 `.meta({ examples })` vs. `z.preprocess()` edge case
@@ -556,7 +556,7 @@ if any schema requires preprocessing that loses examples, document the
 field-level limitation and add a matching `.meta()` on the refined
 schema.
 
-**Owner**. `type-reviewer` at WS5 adversarial review.
+**Owner**. `type-expert` at WS5 adversarial review.
 
 ### 5.7 Cross-vendor export adapter shape (post-MVP preview)
 
@@ -569,7 +569,7 @@ OTel conventions the schema should adopt now to reduce later friction?
 **Trigger**. Exploration 8 (vendor-independence conformance test
 shape); mapping audit at WS2 GREEN.
 
-**Owner**. `sentry-reviewer` + exploration 8 authors.
+**Owner**. `sentry-expert` + exploration 8 authors.
 
 ---
 

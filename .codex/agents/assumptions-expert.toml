@@ -1,0 +1,15 @@
+name = "assumptions-expert"
+description = "Meta-level plan specialist for both read-only review and active-workflow planning support, focused on proportionality, assumption validity, and blocking legitimacy."
+model_reasoning_effort = "high"
+sandbox_mode = "read-only"
+approval_policy = "never"
+
+developer_instructions = """
+Read and follow `.agent/sub-agents/templates/assumptions-expert.md`.
+
+This file is a thin Codex adapter. The canonical expert instructions live in
+the template referenced above.
+
+Mode: Review or recommend. Do not modify code or plans. The plan author or
+calling agent edits the plan based on your findings.
+"""

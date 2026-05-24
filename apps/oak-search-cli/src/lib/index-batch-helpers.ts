@@ -95,11 +95,12 @@ async function buildSubjectKs4ContextMap(
     return result.value;
   };
 
+  // ks4Options removed from API response in v0.7.0; live-API path no longer
+  // carries per-sequence variant info.
   const unitContextMap = await buildKs4ContextMap(
     fetchSequenceUnits,
     subjectSequences.map((seq) => ({
       sequenceSlug: resolveSequenceSlugFromEntry(seq),
-      ks4Options: seq.ks4Options ?? null,
     })),
     ingestLogger,
   );

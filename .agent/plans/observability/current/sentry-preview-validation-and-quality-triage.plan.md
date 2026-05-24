@@ -128,21 +128,21 @@ gates apply per `.agent/commands/gates.md` after any commits.
 ## Reviewer Scheduling
 
 + **Pre-execution (already completed 2026-04-25)**:
-  + `code-reviewer` ran on the plan body; 3 MAJOR + 2 MINOR + 1 NIT
+  + `code-expert` ran on the plan body; 3 MAJOR + 2 MINOR + 1 NIT
     absorbed into the Reviewer Dispositions table below.
-  + `assumptions-reviewer` ran on the plan body (retry after credit
+  + `assumptions-expert` ran on the plan body (retry after credit
     exhaustion); 3 MAJOR + 2 MINOR + 2 POSITIVE absorbed into the same
     table.
 + **During**:
-  + `sentry-reviewer` after Phase 2 if the validation surfaces a wiring
+  + `sentry-expert` after Phase 2 if the validation surfaces a wiring
     concern (release attribution wrong, source maps missing, deploy event
     absent).
-  + `security-reviewer` after Phase 3 if any CodeQL alert is reclassified
+  + `security-expert` after Phase 3 if any CodeQL alert is reclassified
     as a real correctness risk.
-  + `assumptions-reviewer` re-dispatch after Phase 5 if any net-new
+  + `assumptions-expert` re-dispatch after Phase 5 if any net-new
     finding introduces a new task to PR-87 Phase 1/2 (per the absorbed
     cross-finding from both reviewers — the assumption-challenge gate
-    PDR-015 names assumptions-reviewer as Phase 0 close on PR-87, so
+    PDR-015 names assumptions-expert as Phase 0 close on PR-87, so
     PR-87 Phase 0 effectively re-opens for any added scope).
 + **Post**:
   + none until PR-87 fixes land.
@@ -161,8 +161,8 @@ Before starting:
    but the current rule still applies: walk the complete artefact before
    forming a hypothesis.
 3. **Read** `.agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md`
-   — particularly the Reviewer Dispositions tables (code-reviewer 2026-04-25 +
-   assumptions-reviewer 2026-04-25) and the Phase 0 findings block.
+   — particularly the Reviewer Dispositions tables (code-expert 2026-04-25 +
+   assumptions-expert 2026-04-25) and the Phase 0 findings block.
 4. **Read** the prior-session brief at the top of
    `.agent/memory/operational/threads/observability-sentry-otel.next-session.md`
    for the day's commit set and the open follow-up.
@@ -205,7 +205,7 @@ mcp__plugin_vercel_vercel__list_deployments({
   teamId: 'oak-national-academy'
 })
 # Filter results client-side by SHA equality, not by `since` timestamp.
-# (Per absorbed code-reviewer MINOR-4: a deployment that predates the
+# (Per absorbed code-expert MINOR-4: a deployment that predates the
 # session-open timestamp would be silently filtered out by `since`.)
 ```
 
@@ -250,7 +250,7 @@ Use the project-scoped Sentry MCP (`mcp__sentry-ooc-mcp__find_releases`) to
 find the release event that should have been registered when the preview
 build deployed. **Expected release name** comes from Task 1.1's
 session-open derivation, NOT a hard-coded literal (per absorbed
-assumptions-reviewer MINOR-D — branch renames or re-deploys would
+assumptions-expert MINOR-D — branch renames or re-deploys would
 otherwise leave the literal stale silently).
 
 Verify:
@@ -282,7 +282,7 @@ wired correctly. Look for:
 + Transactions in Sentry tagged with the captured release name
 + At least one auth-failure event from the unauthenticated `POST /mcp`
   probe (auth failures ARE useful telemetry per the absorbed
-  assumptions-reviewer POSITIVE finding)
+  assumptions-expert POSITIVE finding)
 
 If passive evidence shows transactions: pipe is verified, test-error
 not needed.
@@ -294,9 +294,9 @@ authorises)** — generate a deliberate test error. Mechanisms:
 + A controlled curl against an authenticated-required path
 + Skip if owner does not want test events polluting the release
 
-This addresses the absorbed code-reviewer MAJOR-3 finding (no fallback
+This addresses the absorbed code-expert MAJOR-3 finding (no fallback
 evidence path if owner is absent) without compromising the absorbed
-assumptions-reviewer POSITIVE on test-error gating proportionality —
+assumptions-expert POSITIVE on test-error gating proportionality —
 the active path is still owner-gated; the passive path is the
 no-authorisation-required fallback.
 
@@ -321,7 +321,7 @@ toleration rule applies — every alert needs a recorded outcome.
 
 Per `read-diagnostic-artefacts-in-full`: fetch with explicit pagination
 so a future net-new alert batch cannot land on page 2 silently
-(absorbed code-reviewer MAJOR-1).
+(absorbed code-expert MAJOR-1).
 
 ```bash
 gh api --paginate \
@@ -369,7 +369,7 @@ mcp__sonarqube__search_sonar_issues_in_projects({
 ```
 
 Plus security hotspots — **must include `pullRequest: '87'` to scope to
-this PR** (absorbed code-reviewer MAJOR-2: an unscoped hotspot search
+this PR** (absorbed code-expert MAJOR-2: an unscoped hotspot search
 returns cross-branch noise that corrupts the drift table against the
 PR-87 plan body's specific hotspot keys):
 
@@ -386,7 +386,7 @@ availability variable), fall back to the SonarCloud web UI's PR view
 and export issues + hotspots to CSV. The same scoping discipline
 applies; cross-branch results are not acceptable.
 
-**Time-budget fallback** (absorbed assumptions-reviewer MAJOR-A): if
+**Time-budget fallback** (absorbed assumptions-expert MAJOR-A): if
 the combined CodeQL + Sonar triage budget is pressed, complete
 CRITICAL + MAJOR tables fully first; flag the MINOR table as partial
 with the explicit truncation rule recorded in Phase 4 findings — e.g.,
@@ -422,7 +422,7 @@ For each Phase 3 / Phase 4 finding:
   outcome
 + New / drifted ⇒ add to PR-87 with an owner-gate call-out
 
-**Override gate (absorbed code-reviewer MINOR-5 + assumptions-reviewer
+**Override gate (absorbed code-expert MINOR-5 + assumptions-expert
 MAJOR-C)** — surface to owner for review BEFORE editing the PR-87 plan
 body when ANY of the following apply:
 
@@ -430,7 +430,7 @@ body when ANY of the following apply:
   `dismissed-with-rationale` in PR-87 appears on the new scan as a
   higher-severity or new-category finding
 + A net-new finding introduces a new task to PR-87 Phase 1 or Phase 2
-  (correctness phases) — these warrant a fresh `assumptions-reviewer`
+  (correctness phases) — these warrant a fresh `assumptions-expert`
   dispatch on the PR-87 plan delta before commit, since PR-87's Phase 0
   close-gate effectively reopens for any added scope (PDR-015
   assumption-challenge gate)
@@ -491,10 +491,10 @@ different workspace (`oak-search-sdk`) than PR-87's current scope
 + Possibly require a parity check across other oak-search-sdk regex
   patterns (the file uses 8 patterns; only 2 flagged but the
   approach has structural weakness)
-+ Re-trigger `assumptions-reviewer` per the substrate plan's
++ Re-trigger `assumptions-expert` per the substrate plan's
   override-gate rule (PR-87 Phase 0 close-gate effectively reopens)
 
-**Reachability check (verified 2026-04-26 after `code-reviewer`
+**Reachability check (verified 2026-04-26 after `code-expert`
 MINOR-2 nudge)**:
 
 ```text
@@ -518,7 +518,7 @@ search-SDK is reachable on PR-87's release scope.
   (e.g., bound the noise-pattern matches with possessive
   quantifiers, anchor with `\b…\b` boundaries that prevent
   overlap, or migrate to a non-regex token-based approach). Run
-  `assumptions-reviewer` on the PR-87 delta. **Higher-coherence
+  `assumptions-expert` on the PR-87 delta. **Higher-coherence
   answer given the verified reachability — single PR ships a
   user-input-DoS-safe MCP server.**
 + **Option B**: Add as a separate, scoped follow-up plan (e.g.,
@@ -537,7 +537,7 @@ DoS vector.
 
 **Gate state**: trigger condition (b) fires; conditions (a) and
 (c) do not. Sub-agent budget for option A: one
-`assumptions-reviewer` dispatch on the PR-87 plan delta.
+`assumptions-expert` dispatch on the PR-87 plan delta.
 
 ### Phase 6: Continuity refresh + handoff (~15 min)
 
@@ -546,7 +546,7 @@ DoS vector.
 + Close session claim
 + Commit + push as a single docs commit
 
-**Hook discipline (absorbed assumptions-reviewer MINOR-E)**: if any
+**Hook discipline (absorbed assumptions-expert MINOR-E)**: if any
 pre-commit hook fails, fix the underlying issue and create a NEW
 commit. Never `--no-verify` without fresh per-commit owner
 authorisation; the `feedback_no_verify_fresh_permission` rule is in
@@ -603,7 +603,7 @@ PR-87 (which owns the fix sequence + test additions).
 
 | Risk | Severity | Mitigation |
 |---|---|---|
-| Sentry release event missing despite green build | MEDIUM | sentry-reviewer dispatch with the captured deployment ID + the resolveRelease output |
+| Sentry release event missing despite green build | MEDIUM | sentry-expert dispatch with the captured deployment ID + the resolveRelease output |
 | Source maps missing despite build success | MEDIUM | check `dist/server.js.map` size; check Sentry release-files API; cross-reference Sentry CLI upload step in CI logs |
 | CodeQL alert numbering changes between scans | LOW | use rule_id + file+line as the key, not alert number |
 | Sonar rule disposition drifts mid-triage | LOW | snapshot the plan body's table at session start; compare at end |
@@ -664,8 +664,8 @@ get fixed before blockers.
 fix. Reviewers fire downstream when fixes land in PR-87.
 
 **Post-execution**: if Phase 2 surfaces a Sentry wiring concern, the
-sentry-reviewer takes it. If Phase 3 surfaces a real correctness risk in
-auth-routes, the security-reviewer takes it. Both are Phase 1/2 work in
+sentry-expert takes it. If Phase 3 surfaces a real correctness risk in
+auth-routes, the security-expert takes it. Both are Phase 1/2 work in
 PR-87, not this plan.
 
 ---
@@ -1087,14 +1087,14 @@ closed:
 not `66de47a2` because subsequent commits don't ship new artifacts)
 is a benign, expected outcome of release-name-by-branch + idempotent
 publish. **It is NOT a regression.** No re-dispatch of
-`sentry-reviewer` warranted — the wiring concern the substrate plan
-budgets `sentry-reviewer` for (release attribution wrong, source
+`sentry-expert` warranted — the wiring concern the substrate plan
+budgets `sentry-expert` for (release attribution wrong, source
 maps missing, deploy event absent, OR — Absorption B — issues stream
 silent while transactions populate) is partially triggered by the
 issues-stream observation. **However, the issues-stream silence is
 explained by the 401-only probe set, not a wiring gap**, so
 re-dispatch would only confirm the explanation. Skipping the
-sentry-reviewer dispatch on time-budget grounds; surfacing as a
+sentry-expert dispatch on time-budget grounds; surfacing as a
 recorded note instead.
 
 ## Phase 3 findings (populated during execution)
@@ -1255,34 +1255,34 @@ trio).
 
 ## Reviewer Dispositions (2026-04-25 pre-execution gates)
 
-`code-reviewer` (id `ad038da1d3f9b1a44`, 2026-04-25) and
-`assumptions-reviewer` (initial id `a83f379f8286fdfe8` exhausted credits;
+`code-expert` (id `ad038da1d3f9b1a44`, 2026-04-25) and
+`assumptions-expert` (initial id `a83f379f8286fdfe8` exhausted credits;
 retry id `a2e4f4a4f9023ff21`, 2026-04-25) ran on the plan body. Both
 gates satisfied; findings absorbed into the plan revisions above.
 
 | # | Reviewer | Severity | Finding | Disposition |
 |---|---|---|---|---|
-| 1 | code-reviewer | MAJOR | Task 3.1 CodeQL `gh api` not paginated | **Absorbed** — Task 3.1 now uses `--paginate` + `per_page=100` + ref-scoped query. |
-| 2 | code-reviewer | MAJOR | Task 4.1 Sonar hotspot search missing `pullRequest: '87'` scope | **Absorbed** — added `pullRequest: '87'` to the hotspot call alongside the issues call. |
-| 3 | code-reviewer | MAJOR | Phase 2 has no fallback evidence path if owner is absent | **Absorbed differently** — Task 2.2 reshaped: passive evidence path (Phase 1 probe transactions in Sentry, no auth needed) becomes the primary; active test-error path is owner-gated supplement. Honours both code-reviewer's "need a fallback" and assumptions-reviewer's POSITIVE on the test-error gating proportionality. |
-| 4 | code-reviewer | MINOR | Task 1.1 `since` placeholder may filter target deployment | **Absorbed** — dropped `since` argument; SHA equality is the deterministic check. |
-| 5 | code-reviewer | MINOR | Task 5.1 override threshold underspecified | **Absorbed** — Phase 5 §Override gate now names three explicit trigger conditions. |
-| 6 | code-reviewer | NIT | `assumptions-reviewer` not named for net-new findings affecting PR-87 Phase 0 | **Absorbed** — Reviewer Scheduling now lists `assumptions-reviewer` re-dispatch after Phase 5 for net-new PR-87 Phase 1/2 scope additions. |
-| 7 | assumptions-reviewer | MAJOR | "Exhaustive triage" assumption undertested for 75-min Phase 3+4 budget | **Absorbed** — Task 4.1 §Time-budget fallback now records explicit truncation rule (CRITICAL+MAJOR fully; MINOR partial with rule recorded). |
-| 8 | assumptions-reviewer | MAJOR | Dependency assumptions lack explicit graceful-degradation paths | **Absorbed** — Task 1.1, 2.1, 3.1, 4.1 each now name a per-tool fallback (web UI, CLI, gh api). |
-| 9 | assumptions-reviewer | MAJOR | Phase 5 routing-only boundary leaks; net-new PR-87 tasks need fresh assumption-challenge gate | **Absorbed** — Phase 5 §Override gate explicitly triggers `assumptions-reviewer` re-dispatch for net-new PR-87 Phase 1/2 tasks (merges with code-reviewer NIT-6). |
-| 10 | assumptions-reviewer | MINOR | Task 2.1 release name hard-coded | **Absorbed** — Task 1.1 captures expected-release-name at session-open from Vercel branch-alias derivation; Task 2.1 references the captured value. (Also closes code-reviewer's MINOR-4 brittleness concern for the same task.) |
-| 11 | assumptions-reviewer | MINOR | Phase 6 commit assumes hooks pass first time; no `--no-verify` reminder | **Absorbed** — Phase 6 §Hook discipline cites `feedback_no_verify_fresh_permission` explicitly. |
-| 12 | assumptions-reviewer | POSITIVE | Test-error gating (Task 2.2) correctly proportionate | Acknowledged; preserved. The reshape under code-reviewer MAJOR-3 (item 3 above) keeps the gating; the passive evidence path is supplement, not substitute. |
-| 13 | assumptions-reviewer | POSITIVE | Plan boundary between this plan and PR-87 is real | Acknowledged; preserved as the §Notes framing. |
+| 1 | code-expert | MAJOR | Task 3.1 CodeQL `gh api` not paginated | **Absorbed** — Task 3.1 now uses `--paginate` + `per_page=100` + ref-scoped query. |
+| 2 | code-expert | MAJOR | Task 4.1 Sonar hotspot search missing `pullRequest: '87'` scope | **Absorbed** — added `pullRequest: '87'` to the hotspot call alongside the issues call. |
+| 3 | code-expert | MAJOR | Phase 2 has no fallback evidence path if owner is absent | **Absorbed differently** — Task 2.2 reshaped: passive evidence path (Phase 1 probe transactions in Sentry, no auth needed) becomes the primary; active test-error path is owner-gated supplement. Honours both code-expert's "need a fallback" and assumptions-expert's POSITIVE on the test-error gating proportionality. |
+| 4 | code-expert | MINOR | Task 1.1 `since` placeholder may filter target deployment | **Absorbed** — dropped `since` argument; SHA equality is the deterministic check. |
+| 5 | code-expert | MINOR | Task 5.1 override threshold underspecified | **Absorbed** — Phase 5 §Override gate now names three explicit trigger conditions. |
+| 6 | code-expert | NIT | `assumptions-expert` not named for net-new findings affecting PR-87 Phase 0 | **Absorbed** — Reviewer Scheduling now lists `assumptions-expert` re-dispatch after Phase 5 for net-new PR-87 Phase 1/2 scope additions. |
+| 7 | assumptions-expert | MAJOR | "Exhaustive triage" assumption undertested for 75-min Phase 3+4 budget | **Absorbed** — Task 4.1 §Time-budget fallback now records explicit truncation rule (CRITICAL+MAJOR fully; MINOR partial with rule recorded). |
+| 8 | assumptions-expert | MAJOR | Dependency assumptions lack explicit graceful-degradation paths | **Absorbed** — Task 1.1, 2.1, 3.1, 4.1 each now name a per-tool fallback (web UI, CLI, gh api). |
+| 9 | assumptions-expert | MAJOR | Phase 5 routing-only boundary leaks; net-new PR-87 tasks need fresh assumption-challenge gate | **Absorbed** — Phase 5 §Override gate explicitly triggers `assumptions-expert` re-dispatch for net-new PR-87 Phase 1/2 tasks (merges with code-expert NIT-6). |
+| 10 | assumptions-expert | MINOR | Task 2.1 release name hard-coded | **Absorbed** — Task 1.1 captures expected-release-name at session-open from Vercel branch-alias derivation; Task 2.1 references the captured value. (Also closes code-expert's MINOR-4 brittleness concern for the same task.) |
+| 11 | assumptions-expert | MINOR | Phase 6 commit assumes hooks pass first time; no `--no-verify` reminder | **Absorbed** — Phase 6 §Hook discipline cites `feedback_no_verify_fresh_permission` explicitly. |
+| 12 | assumptions-expert | POSITIVE | Test-error gating (Task 2.2) correctly proportionate | Acknowledged; preserved. The reshape under code-expert MAJOR-3 (item 3 above) keeps the gating; the passive evidence path is supplement, not substitute. |
+| 13 | assumptions-expert | POSITIVE | Plan boundary between this plan and PR-87 is real | Acknowledged; preserved as the §Notes framing. |
 
-**Open questions from assumptions-reviewer** (recorded for next-session
+**Open questions from assumptions-expert** (recorded for next-session
 agent rather than blocking):
 
 + Q1: Phase 4 truncation rule specifics — answered by absorbed item 7
   (CRITICAL+MAJOR fully; MINOR partial with rule).
 + Q2: Phase 5 PR-87 plan-body edit triggers reviewer cycle? — answered
-  by absorbed item 9 (assumptions-reviewer re-dispatch for PR-87 Phase
+  by absorbed item 9 (assumptions-expert re-dispatch for PR-87 Phase
   1/2 net-new tasks; Phase 5 stylistic additions don't trigger).
 + Q3: Derive expected release name at runtime? — answered by absorbed
   item 10 (yes, at session-open in Task 1.1).

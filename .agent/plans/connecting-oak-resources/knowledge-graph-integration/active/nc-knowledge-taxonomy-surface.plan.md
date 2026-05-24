@@ -10,7 +10,7 @@ sibling_plans:
   - "misconception-graph-mcp-surface.plan.md"
   - "../../sector-engagement/eef/current/eef-evidence-corpus.plan.md"
   - "agent-guidance-consolidation.plan.md"
-specialist_reviewer: "mcp-reviewer, code-reviewer, test-reviewer"
+specialist_reviewer: "mcp-expert, code-expert, test-expert"
 isProject: false
 todos:
   - id: t1-extraction-script

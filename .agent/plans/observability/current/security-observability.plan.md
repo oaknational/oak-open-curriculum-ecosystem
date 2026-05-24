@@ -29,7 +29,7 @@ todos:
     content: "WS4: pnpm check exit 0."
     status: pending
   - id: ws5-adversarial-review
-    content: "WS5: security-reviewer (trust-boundary shape, PII redaction of auth fields) + clerk-reviewer (Clerk error-path enumeration) + sentry-reviewer."
+    content: "WS5: security-expert (trust-boundary shape, PII redaction of auth fields) + clerk-expert (Clerk error-path enumeration) + sentry-expert."
     status: pending
   - id: ws6-doc-propagation
     content: "WS6: security runbook; ADR-158 cross-references; event catalog updates."
@@ -194,10 +194,10 @@ Exit 0.
 
 ## WS5 — Adversarial Review
 
-- `security-reviewer` — trust-boundary correctness; PII redaction of
+- `security-expert` — trust-boundary correctness; PII redaction of
   auth fields; cardinality of emitted values.
-- `clerk-reviewer` — completeness of Clerk error-path enumeration.
-- `sentry-reviewer` — emission wiring; alert-rule fit.
+- `clerk-expert` — completeness of Clerk error-path enumeration.
+- `sentry-expert` — emission wiring; alert-rule fit.
 
 ---
 
@@ -205,7 +205,7 @@ Exit 0.
 
 | Risk | Mitigation |
 |------|------------|
-| Identity leaks into security events | Conformance test asserts redaction; security-reviewer verifies. |
+| Identity leaks into security events | Conformance test asserts redaction; security-expert verifies. |
 | Cloudflare + app double-coverage creates noise | Exploration 6 defines the boundary; MVP scope accepts minor overlap. |
 | Rate-limit emission fires at high volume during attack → cost | Emission path uses the logger sink model (stdout + Sentry); Sentry `beforeSendMetric` sampling can cap if needed. |
 | Auth-middleware changes while this plan drafts | Ground-before-framing per PDR-013; WS2 re-reads the interceptor before wiring. |

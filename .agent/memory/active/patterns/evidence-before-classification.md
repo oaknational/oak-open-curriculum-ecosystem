@@ -1,11 +1,16 @@
 ---
 related_pdr: PDR-013
 name: evidence-before-classification
+polarity: pattern
 category: process
 status: active
 discovered: 2026-04-11
 proven_by: "Knip triage plan initially labelled 96 unused files and 749 unused exports as 'false positives' or 'likely leftover' without any investigation — user corrected: no finding may be classified without evidence."
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Evidence Before Classification
 

@@ -110,7 +110,7 @@ writing it", "we have tests for the current approach", or "switching
 would be expensive" are SUNK-COST reasoning — not valid answers. Future
 maintenance cost of the bespoke shape is the only relevant cost.
 
-**Reviewer**: `assumptions-reviewer` MUST run against this attestation
+**Reviewer**: `assumptions-expert` MUST run against this attestation
 pre-ExitPlanMode for any vendor-integration plan (see Reviewer
 Scheduling below).
 
@@ -205,13 +205,13 @@ Reviewers are scheduled in three phases, chosen by what they challenge:
 These reviewers ask "should this work exist at all, in this shape?"
 They are cheapest to act on because no commitment has been made.
 
-- `assumptions-reviewer` — proportionality, build-vs-buy attestation,
+- `assumptions-expert` — proportionality, build-vs-buy attestation,
   phase-alignment, blocking legitimacy, sunk-cost reasoning detection
-- [specialist reviewer for vendor, if applicable — e.g. `sentry-reviewer`,
-  `clerk-reviewer`, `elasticsearch-reviewer`, `mcp-reviewer`] — first-
+- [specialist reviewer for vendor, if applicable — e.g. `sentry-expert`,
+  `clerk-expert`, `elasticsearch-expert`, `mcp-expert`] — first-
   party integration surface, canonical idiom for this vendor
 
-If `assumptions-reviewer` is requested mid-session AFTER code is
+If `assumptions-expert` is requested mid-session AFTER code is
 committed, that is a phase-misalignment signal, not a volume signal —
 the invocation still runs, but the review MUST name the misalignment so
 the scheduling pattern is corrected next time.
@@ -222,21 +222,21 @@ These reviewers ask "is this well-structured within the chosen shape?"
 They fire at natural checkpoints (after RED, after GREEN, after
 integration wiring).
 
-- `test-reviewer`, `type-reviewer` — after each RED/GREEN cycle
-- `architecture-reviewer-*` (barney/betty/fred/wilma) — after
+- `test-expert`, `type-expert` — after each RED/GREEN cycle
+- `architecture-expert-*` (barney/betty/fred/wilma) — after
   structural changes
-- `security-reviewer` — after trust-boundary changes
-- `code-reviewer` — gateway; routes to missing specialists; fires the
+- `security-expert` — after trust-boundary changes
+- `code-expert` — gateway; routes to missing specialists; fires the
   friction-ratchet counter when 3+ independent friction signals
-  accumulate against the same shape (see code-reviewer template)
+  accumulate against the same shape (see code-expert template)
 
 ### Close (POST-execution) — verifies coherence
 
 These reviewers ask "is the landed state internally consistent?"
 
-- `docs-adr-reviewer` — documentation drift; ADR intent-vs-implementation
-- `onboarding-reviewer` — contributor first-contact quality
-- `release-readiness-reviewer` — GO / GO-WITH-CONDITIONS / NO-GO
+- `docs-adr-expert` — documentation drift; ADR intent-vs-implementation
+- `onboarding-expert` — contributor first-contact quality
+- `release-readiness-expert` — GO / GO-WITH-CONDITIONS / NO-GO
 
 ---
 
@@ -305,7 +305,7 @@ pnpm test
 ```
 
 **Reviewer dispatch (optional)**: [specialists for this cycle's
-substance — e.g., `type-reviewer`, `mcp-reviewer`]
+substance — e.g., `type-expert`, `mcp-expert`]
 
 ### Cycle 1.2: [Next cycle name]
 

@@ -1,0 +1,100 @@
+import { literal, namedNode, quad } from '@oaknational/graph-core/data-factory';
+import type { JsonLdDocument } from '@oaknational/graph-core/jsonld';
+import { describe, expect, it } from 'vitest';
+
+import { parseJsonLdCompatible } from './index.js';
+
+// A minimal JSON-LD-compatible fixture. The document declares one
+// `Person` with two named-literal properties (name + jobTitle) under
+// the schema.org context — three quads total:
+//   1 rdf:type Person
+//   1 schema:name "Ada"
+//   1 schema:jobTitle "Engineer"
+// = 3 quads. The named-domain rationale (a typed entity with two
+// distinguishing string properties) makes the count a domain fact.
+const PERSON_JSONLD_FIXTURE: JsonLdDocument = {
+  '@context': {
+    name: 'https://schema.org/name',
+    jobTitle: 'https://schema.org/jobTitle',
+    Person: 'https://schema.org/Person',
+  },
+  '@id': 'https://example.test/people/ada',
+  '@type': 'Person',
+  name: 'Ada',
+  jobTitle: 'Engineer',
+};
+
+const RDF_TYPE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+const SCHEMA_PERSON = 'https://schema.org/Person';
+const SCHEMA_NAME = 'https://schema.org/name';
+const SCHEMA_JOB_TITLE = 'https://schema.org/jobTitle';
+const EX_ADA = 'https://example.test/people/ada';
+
+describe('parseJsonLdCompatible', () => {
+  it('parses a minimal typed Person document into the three expected quads', async () => {
+    const result = await parseJsonLdCompatible(PERSON_JSONLD_FIXTURE);
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    const { dataset } = result.value;
+
+    expect(dataset.size).toBe(3);
+    expect(
+      dataset.has(quad(namedNode(EX_ADA), namedNode(RDF_TYPE), namedNode(SCHEMA_PERSON))),
+    ).toBe(true);
+    expect(dataset.has(quad(namedNode(EX_ADA), namedNode(SCHEMA_NAME), literal('Ada')))).toBe(true);
+    expect(
+      dataset.has(quad(namedNode(EX_ADA), namedNode(SCHEMA_JOB_TITLE), literal('Engineer'))),
+    ).toBe(true);
+  });
+
+  it('returns deterministic Datasets on repeated parses of the same document', async () => {
+    const first = await parseJsonLdCompatible(PERSON_JSONLD_FIXTURE);
+    const second = await parseJsonLdCompatible(PERSON_JSONLD_FIXTURE);
+
+    expect(first.ok).toBe(true);
+    expect(second.ok).toBe(true);
+    if (!first.ok || !second.ok) {
+      return;
+    }
+
+    expect(first.value.dataset.size).toBe(second.value.dataset.size);
+    for (const q of first.value.dataset) {
+      expect(second.value.dataset.has(q)).toBe(true);
+    }
+  });
+
+  it('returns ok with an empty Dataset for an empty JSON-LD document', async () => {
+    const result = await parseJsonLdCompatible({});
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    expect(result.value.dataset.size).toBe(0);
+    expect(result.value.sourceMap.size).toBe(0);
+  });
+
+  it('populates sourceMap with a json-pointer entry for every emitted quad of the root @id', async () => {
+    const result = await parseJsonLdCompatible(PERSON_JSONLD_FIXTURE);
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    const { dataset, sourceMap } = result.value;
+
+    expect(sourceMap.size).toBe(dataset.size);
+    for (const location of sourceMap.values()) {
+      expect(location.kind).toBe('json-pointer');
+      if (location.kind !== 'json-pointer') {
+        return;
+      }
+      // The Person fixture has a single root @id whose JSON Pointer is
+      // the empty pointer (root). All three quads share this subject.
+      expect(location.pointer.raw).toBe('');
+    }
+  });
+});

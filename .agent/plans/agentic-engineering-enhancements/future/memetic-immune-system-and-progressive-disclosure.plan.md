@@ -165,7 +165,7 @@ A given workstream promotes from `future/` to `current/` when:
   2026-05-04 owner-named pattern that produced PDR-018 §Beneficial
   prerequisites.
 - A draft canonical template for `practice-applied` exists and has
-  been reviewed by `assumptions-reviewer` for proportionality.
+  been reviewed by `assumptions-expert` for proportionality.
 
 ### For the adaptive-immunity surveillance agent
 
@@ -282,7 +282,7 @@ sub-agent template directory:
 - `practice` — broad gateway, must-read tier: `index.md`,
   `AGENT.md`, the artefact inventory overview.
 - `practice-applied` — deep, this-repo doctrine consultant.
-  Must-read tier: ADR index, `invoke-code-reviewers.md`, the artefact
+  Must-read tier: ADR index, `invoke-code-experts.md`, the artefact
   inventory, quality-gate configuration, the fingerprint registry.
 - `practice-core` — deep, Practice lifecycle. Must-read tier: the
   six practice-core files, ADR-124, ADR-131.
@@ -339,6 +339,14 @@ methodology is sufficient.
 
 **Eventual home**: `agent-tools/` workspace.
 
+**Promoted and landed (2026-05-14)**: scope-narrowed to fileset-glob token
+estimation (no JSONL harvest in the first slice), authored as an executable
+plan at
+[`context-cost-cli.plan.md`](../../agent-tooling/current/context-cost-cli.plan.md),
+and implemented in `7bf05c6b` with reviewer-fix follow-up in the same landing
+window. Session-JSONL passive harvest remains in scope of this strategic
+register item; it can promote separately when a JSONL-shaped consumer emerges.
+
 ### 2. Token-estimate fields in standard fitness frontmatter
 
 **Substance**: extend the fitness frontmatter schema to include
@@ -353,6 +361,11 @@ to be set by owner.
 **Eventual home**: fitness validator schema and all files currently
 carrying fitness frontmatter.
 
+**Promoted for review (2026-05-14)**: promoted with §3 and §4 into
+[`fitness-token-measurements-and-frontmatter-mandation.plan.md`](../current/fitness-token-measurements-and-frontmatter-mandation.plan.md)
+so token fields, reporter behaviour, and manifest mandation share one
+execution authority.
+
 ### 3. Fitness reporter renders tokens alongside chars
 
 **Substance**: extend the fitness report
@@ -365,6 +378,9 @@ target/limit comparison. The informational figure can land
 independently before targets are authored per file.
 
 **Eventual home**: the fitness reporter implementation.
+
+**Promoted for review (2026-05-14)**: promoted with §2 and §4 into
+[`fitness-token-measurements-and-frontmatter-mandation.plan.md`](../current/fitness-token-measurements-and-frontmatter-mandation.plan.md).
 
 ### 4. Fitness frontmatter mandation across agent guidance files
 
@@ -379,6 +395,9 @@ aggregation) identifies guidance files whose size warrants per-file
 targets/limits rather than uniform treatment; three+ files showing
 meaningful divergence from a uniform default justifies the cross-cutting
 mandate.
+
+**Promoted for review (2026-05-14)**: promoted with §2 and §3 into
+[`fitness-token-measurements-and-frontmatter-mandation.plan.md`](../current/fitness-token-measurements-and-frontmatter-mandation.plan.md).
 
 **Eventual home**: rule, skill, command, and practice-core file
 authoring conventions; documented in

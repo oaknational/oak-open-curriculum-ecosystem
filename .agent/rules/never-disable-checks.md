@@ -47,7 +47,7 @@ state.
   rule already enforces this; the rule itself must never be exempted.
 - **Adding `// @ts-expect-error` / `// @ts-ignore`** to bypass a
   type error. Fix the type flow upstream — see
-  [type-reviewer](../sub-agents/type-reviewer.md) and the schema-first
+  [type-expert](../sub-agents/type-expert.md) and the schema-first
   doctrine.
 - **Adding a path to `.markdownlintignore`, `.eslintignore`, or any
   ignore list** to dodge a finding. Per
@@ -157,14 +157,14 @@ during the window — which they will not.
 
 ## Reviewer cadence
 
-- `code-reviewer` enforces the rule on every PR.
-- `config-reviewer` enforces the rule on every PR that touches
+- `code-expert` enforces the rule on every PR.
+- `config-expert` enforces the rule on every PR that touches
   ESLint, Prettier, vitest, tsconfig, husky, or CI workflow
   configuration. A config diff that weakens any check (rule
   severity, ignore-list growth, test-file exclusion, hook
   removal) is a hard reject.
-- `release-readiness-reviewer` enforces the rule at PR-ready gate.
-- `architecture-reviewer-fred` (principles-first) enforces the rule
+- `release-readiness-expert` enforces the rule at PR-ready gate.
+- `architecture-expert-fred` (principles-first) enforces the rule
   on any architectural decision that proposes a gate-off-fix-gate-on
   shape.
 

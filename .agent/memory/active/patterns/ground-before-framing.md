@@ -1,11 +1,16 @@
 ---
 related_pdr: PDR-013
 name: "Ground Before Framing"
+polarity: pattern
 category: process
 status: proven
 discovered: 2026-04-17
 proven_in: "Sentry observability maximisation pivot — `wrapMcpServerWithSentry` was already wired at `core-endpoints.ts:98` but claimed as missing in the first pivot summary because scope was inferred from SDK exports rather than read from the composition root"
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Ground Before Framing
 
@@ -59,8 +64,8 @@ composition root explicitly.
 **2026-04-29 TS6 migration session** — Owner reported "everything
 broke" after a TypeScript ^5 → ^6 version bump and pasted one error
 (TS5011). The agent fixed the literal error in four
-`tsconfig.build.json` files, dispatched config-reviewer and
-code-reviewer, and built a 5-phase plan on their findings. The agent
+`tsconfig.build.json` files, dispatched config-expert and
+code-expert, and built a 5-phase plan on their findings. The agent
 never ran `pnpm build` or `pnpm type-check` independently to capture
 the full failure surface. The plan inherited the reviewers' frame —
 {TS5011, TS5101, four pre-existing inconsistencies} — when the actual
@@ -82,7 +87,7 @@ would not — the `satisfies` constraint only validates that each
 listed name is a valid `NodeOptions` key, not that every
 `NodeOptions` hook key is listed. The authored test file's own
 TSDoc acknowledged the limitation; the plan prose overclaimed.
-Both assumptions-reviewer and sentry-reviewer caught the gap. The
+Both assumptions-expert and sentry-expert caught the gap. The
 corrective edit reframed the risk-row mitigation to "code review
 plus the explicit registry" — the honest enforce-edge. General
 lesson: when writing plan prose about compiler-enforced gates,

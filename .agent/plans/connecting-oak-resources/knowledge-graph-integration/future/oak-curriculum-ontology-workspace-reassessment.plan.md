@@ -10,7 +10,7 @@ related_plans:
   - "ontology-integration-strategy.md"
   - "ontology-repo-fresh-perspective-review.plan.md"
   - "../current/kg-alignment-audit.execution.plan.md"
-specialist_reviewer: "architecture-reviewer-betty, architecture-reviewer-barney, type-reviewer, docs-adr-reviewer"
+specialist_reviewer: "architecture-expert-betty, architecture-expert-barney, type-expert, docs-adr-expert"
 ---
 
 # Oak Curriculum Ontology Workspace Reassessment

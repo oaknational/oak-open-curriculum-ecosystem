@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "49a69d17-e834-4935-a75d-ac164715eb9b",
+  "created_at": "2026-05-23T14:39:12.482Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Scorched Tempering Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "52b263"
+  },
+  "title": "Substrate event (behaviour-note): Director tick #11 — quiet tick; delivery momentum running (Ferny ADR-185 v2 marshal-request landing; Charcoal in dispatch window; Ashen trigger-standby); 0 routing this tick; counter remains 0",
+  "body": "Director tick #11 substrate event (behaviour-note).\n\n**Delivery observed (no new routing this tick)**:\n- Ferny: ADR-185 v2 marshal-request to Ashen at 14:37:38Z (~30s ago); claim `8ffd4111`; 2 files; substance unchanged from Zephyrous draft. ~2 min from my ADR-185 routing at 14:35:26Z to marshal-request landing — fast adoption.\n\n**Per-agent freshness + delivery state (tick #11)**:\n- Ferny ee16a4: 14:37:38Z (active; ADR-185 v2 marshal-request just landed; 4th delivery this Director window — pattern v2 + Class B + Pearly S7735 + ADR-185 v2)\n- Ashen 53dad4: 14:30:40Z (8 min); trigger-standby on incoming Ferny marshal-request (queue-change watcher will fire); NOT idle per protocol\n- Charcoal 7c7327: 14:28:55Z (10 min); within 15-20 min dispatch window for plan-Wilma + pattern v2 read; NOT yet conclusion-ready\n\n**Routing decisions this tick**: 0 (no agents idle; all in observed-delivery or legitimate-dispatch-window states)\n\n**Idle counter increment**: NO — delivery observed (Ferny) + active dispatch windows (Charcoal). Counter remains at 0.\n\n**Marshal-throughput observation extending tick #10**: ADR-185 v2 lands as Cycle #4 candidate in ~3-5 min (Ashen engagement on queue-change event). Cumulative session arc: Class A `92c953e7` (~12:09Z) → Cycle #1 `cc3039eb` (~14:21Z) → Cycle #2 `845a3e90` (~14:27Z) → Cycle #3 `d437881b` (~14:30Z) → Cycle #4 ADR-185 v2 (incoming). Five marshal-class landings under owner-active-Director discipline; tree-green throughout post-Cycle-1.\n\n**Next coherence-moments expected**:\n- Charcoal pattern v2 ship-verdict (~5-10 min)\n- Charcoal plan-Wilma verdict (~10-15 min)\n- Ashen Cycle #4 ADR-185 v2 (~3-5 min)\n- After Cycle #4: queue #4 (Seaworthy self-bundle) and queue #6 (PDR-075 Twilit WM retained claim) become next candidates\n- Owner-coherence event bundling Charcoal C2/C5 + pattern v2 + plan-Wilma verdict — pending all three resolving\n\n**Open routing slots when capacity opens**: Seaworthy self-bundle adoption (2 files, repo-check.ts S7735 + comms-watch-mechanism.md; orphan); PDR-075 marshal cycle (Twilit WM retained claim, care-and-consult sidebar incoming from Ashen); Secret consolidation intent `d50d3d9a` retention verification (queue #9).\n\nTag: behaviour-note. — Scorched / claude / 52b263 (Director, tick #11)\n"
+}

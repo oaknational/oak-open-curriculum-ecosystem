@@ -48,9 +48,9 @@ export interface ExtractedUnitLessons {
  * Derives key stage slug from year number.
  */
 function deriveKeyStageFromYear(year: number | string): string {
-  const yearNum = typeof year === 'string' ? parseInt(year, 10) : year;
+  const yearNum = typeof year === 'string' ? Number.parseInt(year, 10) : year;
 
-  if (isNaN(yearNum)) {
+  if (Number.isNaN(yearNum)) {
     return 'unknown';
   }
 

@@ -8,7 +8,6 @@ import {
   archiveStaleClaims,
   createCommsEvent,
   deriveCollaborationIdentity,
-  renderSharedCommsLog,
   runCollaborationStateCli,
   updateJsonFileWithRetry,
   updateJsonStateWithRetry,
@@ -18,12 +17,16 @@ import {
   type CollaborationRegistry,
 } from '../../src/collaboration-state';
 import {
+  closeSummaryFromOptions,
   createClaimFromOptions,
   formatOpenClaimResult,
 } from '../../src/collaboration-state/cli-claim-commands';
-import { commsSendDefaults } from '../../src/collaboration-state/cli-comms-commands';
+import {
+  commsSendDefaults,
+  formatCommsSendResult,
+} from '../../src/collaboration-state/cli-comms-commands';
 import { claimReport } from '../../src/collaboration-state/claim-reports';
-import { type Options } from '../../src/collaboration-state/cli-options';
+import { parseOptions, type Options } from '../../src/collaboration-state/cli-options';
 
 const codexThreadId = '019dd34d-cb6a-74e0-a29d-6cb8a65ea14b';
 const nowIso = '2026-04-28T09:37:11Z';
@@ -96,16 +99,63 @@ describe('runCollaborationStateCli', () => {
     expect(result.stdout).toContain('"session_id_prefix": "019dd3"');
   });
 
+  it('fails identity preflight when the live routing tuple is claimed by another model', async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), 'collaboration-state-preflight-'));
+    const activePath = join(tempDir, 'active.json');
+    const registry: CollaborationRegistry = {
+      schema_version: '1.3.0',
+      commit_queue: [],
+      claims: [claim({ agent_id: { ...woodland, model: 'GPT-5.1' } })],
+    };
+    await writeFile(activePath, `${JSON.stringify(registry)}\n`);
+
+    try {
+      const result = await runCollaborationStateCli({
+        argv: [
+          '--',
+          'identity',
+          'preflight',
+          '--platform',
+          'codex',
+          '--model',
+          'GPT-5',
+          '--active',
+          activePath,
+          '--now',
+          nowIso,
+        ],
+        env: { CODEX_THREAD_ID: codexThreadId },
+      });
+
+      expect(result.exitCode).toBe(2);
+      expect(result.stderr).toContain(
+        'identity preflight identity route Woodland Creeping Petal / codex / 019dd3 collides with live identity Woodland Creeping Petal / codex / GPT-5.1 / 019dd3',
+      );
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
   it('accepts command-only check flags without a topic', async () => {
     const tempDir = await mkdtemp(join(tmpdir(), 'collaboration-state-check-'));
     const activePath = join(tempDir, 'active.json');
     const closedPath = join(tempDir, 'closed.json');
+    const eventsDir = join(tempDir, 'events');
     await writeFile(activePath, '{"schema_version":"1.3.0","commit_queue":[],"claims":[]}\n');
     await writeFile(closedPath, '{"schema_version":"1.3.0","claims":[]}\n');
 
     try {
       const result = await runCollaborationStateCli({
-        argv: ['--', 'check', '--active', activePath, '--closed', closedPath],
+        argv: [
+          '--',
+          'check',
+          '--active',
+          activePath,
+          '--closed',
+          closedPath,
+          '--comms-dir',
+          eventsDir,
+        ],
         env: {},
       });
 
@@ -113,6 +163,141 @@ describe('runCollaborationStateCli', () => {
     } finally {
       await rm(tempDir, { recursive: true, force: true });
     }
+  });
+
+  it('parses repeated area-pattern flags as an ordered collection', () => {
+    const parsed = parseOptions([
+      '--',
+      'claims',
+      'open',
+      '--area-pattern',
+      'agent-tools/src/collaboration-state/cli-options.ts',
+      '--area-pattern',
+      'agent-tools/src/collaboration-state/cli-claim-commands.ts',
+    ]);
+
+    expect(parsed).toMatchObject({
+      files: [],
+      areaPatterns: [
+        'agent-tools/src/collaboration-state/cli-options.ts',
+        'agent-tools/src/collaboration-state/cli-claim-commands.ts',
+      ],
+    });
+  });
+
+  it('parses repeated file flags as an ordered collection', () => {
+    const parsed = parseOptions([
+      '--',
+      'claims',
+      'open',
+      '--file',
+      'agent-tools/src/collaboration-state/cli-options.ts',
+      '--file',
+      'agent-tools/src/collaboration-state/cli-claim-commands.ts',
+    ]);
+
+    expect(parsed).toMatchObject({
+      files: [
+        'agent-tools/src/collaboration-state/cli-options.ts',
+        'agent-tools/src/collaboration-state/cli-claim-commands.ts',
+      ],
+      areaPatterns: [],
+    });
+  });
+
+  it('parses repeated tag flags as an ordered collection', () => {
+    const parsed = parseOptions([
+      '--',
+      'comms',
+      'append',
+      '--tag',
+      'heartbeat',
+      '--tag',
+      'behaviour-note',
+    ]);
+
+    expect(parsed).toMatchObject({
+      tags: ['heartbeat', 'behaviour-note'],
+      files: [],
+      areaPatterns: [],
+    });
+  });
+
+  it('exposes an empty tags array when no --tag is provided', () => {
+    const parsed = parseOptions(['--', 'comms', 'append', '--title', 'no tags here']);
+
+    expect(parsed.tags).toStrictEqual([]);
+  });
+
+  it('builds claim areas from repeated area-pattern values', () => {
+    const opened = createClaimFromOptions(
+      options(
+        {
+          active: 'active.json',
+          thread: 'agentic-engineering-enhancements',
+          'area-kind': 'files',
+          intent: 'Exercise area pattern claim construction.',
+          now: nowIso,
+          'claim-id': '33333333-3333-4333-8333-333333333333',
+        },
+        [],
+        [
+          'agent-tools/src/collaboration-state/cli-options.ts',
+          'agent-tools/src/collaboration-state/cli-claim-commands.ts',
+        ],
+      ),
+      woodland,
+    );
+
+    expect(opened).toMatchObject({
+      claim_id: '33333333-3333-4333-8333-333333333333',
+      areas: [
+        {
+          patterns: [
+            'agent-tools/src/collaboration-state/cli-options.ts',
+            'agent-tools/src/collaboration-state/cli-claim-commands.ts',
+          ],
+        },
+      ],
+    });
+  });
+
+  it('rejects mixed file and area-pattern sources when opening a claim', async () => {
+    const result = await runCollaborationStateCli({
+      argv: [
+        '--',
+        'claims',
+        'open',
+        '--active',
+        'active.json',
+        '--thread',
+        'agentic-engineering-enhancements',
+        '--area-kind',
+        'files',
+        '--file',
+        'agent-tools/src/collaboration-state/cli-options.ts',
+        '--area-pattern',
+        'agent-tools/src/collaboration-state/cli-claim-commands.ts',
+        '--intent',
+        'Exercise mixed area source validation.',
+        '--now',
+        nowIso,
+        '--platform',
+        'cursor',
+        '--model',
+        'GPT-5.5',
+      ],
+      env: {
+        OAK_AGENT_IDENTITY_OVERRIDE: 'Moonlit Transiting Prism',
+        PRACTICE_AGENT_SESSION_ID_CURSOR: 'e86710',
+      },
+    });
+
+    expect(result.exitCode).toBe(2);
+    expect(result.stdout).toBe('');
+    expect(result.stderr).toContain(
+      'Error: claims open accepts either --file or --area-pattern, not both',
+    );
   });
 
   it('returns help for top-level, topic, and action requests', async () => {
@@ -130,32 +315,126 @@ describe('runCollaborationStateCli', () => {
     });
     expect(action.exitCode).toBe(0);
     expect(action.stdout).toContain('claims open --active <path>');
+    expect(action.stdout).toContain('--area-kind <files|workspace|plan|adr|git>');
+    expect(action.stdout).toContain('use either repeatable --file or repeatable --area-pattern');
   });
 
   it('reports unknown options before missing required options', async () => {
-    await expect(
-      runCollaborationStateCli({
-        argv: ['--', 'claims', 'open', '--bogus'],
-        env: {},
-      }),
-    ).resolves.toStrictEqual({
-      exitCode: 2,
-      stdout: '',
-      stderr: 'unknown option: --bogus\n',
+    const result = await runCollaborationStateCli({
+      argv: ['--', 'claims', 'open', '--bogus'],
+      env: {},
     });
+
+    expect(result.exitCode).toBe(2);
+    expect(result.stdout).toBe('');
+    expect(result.stderr).toContain('unknown option for claims open: --bogus');
   });
 
   it('reports command-specific unknown options before missing required options', async () => {
-    await expect(
-      runCollaborationStateCli({
-        argv: ['--', 'claims', 'list', '--thread', 'wrong-place'],
-        env: {},
-      }),
-    ).resolves.toStrictEqual({
-      exitCode: 2,
-      stdout: '',
-      stderr: 'unknown option for claims list: --thread\n',
+    const result = await runCollaborationStateCli({
+      argv: ['--', 'claims', 'list', '--thread', 'wrong-place'],
+      env: {},
     });
+
+    expect(result.exitCode).toBe(2);
+    expect(result.stdout).toBe('');
+    expect(result.stderr).toContain('claims list --active <path> [--now <iso>]');
+  });
+
+  it('prints command help with the specific validation error', async () => {
+    const result = await runCollaborationStateCli({
+      argv: ['--', 'claims', 'open', '--bogus'],
+      env: {},
+    });
+
+    expect(result.exitCode).toBe(2);
+    expect(result.stderr).toContain('claims open --active <path>');
+    expect(result.stderr).toContain('Error: unknown option for claims open: --bogus');
+  });
+
+  it('lists supported area kinds when an unsupported kind is supplied', async () => {
+    const result = await runCollaborationStateCli({
+      argv: [
+        '--',
+        'claims',
+        'open',
+        '--active',
+        'active.json',
+        '--thread',
+        'agentic-engineering-enhancements',
+        '--area-kind',
+        'file',
+        '--file',
+        'agent-tools/src/collaboration-state/cli-options.ts',
+        '--intent',
+        'Exercise area kind validation.',
+        '--now',
+        nowIso,
+        '--platform',
+        'cursor',
+        '--model',
+        'GPT-5.5',
+      ],
+      env: {
+        OAK_AGENT_IDENTITY_OVERRIDE: 'Moonlit Transiting Prism',
+        PRACTICE_AGENT_SESSION_ID_CURSOR: 'e86710',
+      },
+    });
+
+    expect(result.exitCode).toBe(2);
+    expect(result.stderr).toContain('claims open --active <path>');
+    expect(result.stderr).toContain(
+      'Error: unsupported area kind: file. Expected one of: files | workspace | plan | adr | git',
+    );
+  });
+
+  it('documents identity seed inputs in comms send help', async () => {
+    const result = await runCollaborationStateCli({
+      argv: ['--', 'comms', 'send', '--help'],
+      env: {},
+    });
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain('PRACTICE_AGENT_SESSION_ID_CURSOR');
+    expect(result.stdout).toContain('OAK_AGENT_IDENTITY_OVERRIDE');
+  });
+
+  it('does not fall back to production IO for imported comms commands', async () => {
+    const result = await runCollaborationStateCli({
+      argv: ['--', 'comms', 'render', '--comms-dir', 'state/comms', '--output', 'state/log.md'],
+      env: {},
+    });
+
+    expect(result.exitCode).toBe(2);
+    expect(result.stderr).toContain(
+      'collaboration-state CLI IO must be provided by the composition layer',
+    );
+  });
+
+  it('resolves closure-summary as an alias for summary', () => {
+    expect(closeSummaryFromOptions(options({ 'closure-summary': 'Closed via alias.' }))).toBe(
+      'Closed via alias.',
+    );
+    expect(() =>
+      closeSummaryFromOptions(
+        options({ summary: 'Primary summary.', 'closure-summary': 'Alias summary.' }),
+      ),
+    ).toThrow('claims close accepts either --summary or --closure-summary, not both');
+    expect(() => closeSummaryFromOptions(options({}))).toThrow(
+      'claims close requires either --summary or --closure-summary',
+    );
+  });
+
+  it('prints comms send help when an identity-name flag is unsupported', async () => {
+    const result = await runCollaborationStateCli({
+      argv: ['--', 'comms', 'send', '--agent-name', 'Moonlit Transiting Prism'],
+      env: {},
+    });
+
+    expect(result.exitCode).toBe(2);
+    expect(result.stderr).toContain('comms send --title <title>');
+    expect(result.stderr).toContain('PRACTICE_AGENT_SESSION_ID_CURSOR');
+    expect(result.stderr).toContain('Error: unknown option for comms send: --agent-name');
   });
 });
 
@@ -216,12 +495,28 @@ describe('claim CLI reports', () => {
   it('builds comms send defaults from the repo root', () => {
     expect(commsSendDefaults(options({ 'repo-root': '/repo' }), nowIso, 'event-one')).toStrictEqual(
       {
-        'events-dir': '/repo/.agent/state/collaboration/comms-events',
+        'comms-dir': '/repo/.agent/state/collaboration/comms',
+        active: '/repo/.agent/state/collaboration/active-claims.json',
         now: nowIso,
         'created-at': nowIso,
         'event-id': 'event-one',
         output: '/repo/.agent/state/collaboration/shared-comms-log.md',
       },
+    );
+  });
+
+  it('formats comms send output from resolved write paths', () => {
+    expect(
+      formatCommsSendResult(
+        options({ 'comms-dir': '/custom/comms', output: '/custom/shared-comms-log.md' }),
+        'event-one',
+      ),
+    ).toBe(
+      '{\n' +
+        '  "event_id": "event-one",\n' +
+        '  "event_path": "/custom/comms/event-one.json",\n' +
+        '  "shared_log_path": "/custom/shared-comms-log.md"\n' +
+        '}\n',
     );
   });
 });
@@ -231,8 +526,10 @@ describe('createCommsEvent', () => {
     expect(() =>
       createCommsEvent(
         {
+          schema_version: '2.0.0',
           event_id: 'event-one',
           created_at: '2026-04-28T10:00:00Z',
+          kind: 'narrative',
           author: woodland,
           title: 'future event',
           body: 'This should not render yet.',
@@ -244,8 +541,10 @@ describe('createCommsEvent', () => {
     expect(() =>
       createCommsEvent(
         {
+          schema_version: '2.0.0',
           event_id: 'event-two',
           created_at: '2026-04-28 09:37:11',
+          kind: 'narrative',
           author: woodland,
           title: 'local-looking event',
           body: 'This lacks the UTC Z suffix.',
@@ -259,8 +558,10 @@ describe('createCommsEvent', () => {
     expect(() =>
       createCommsEvent(
         {
+          schema_version: '2.0.0',
           event_id: 'event-one',
           created_at: nowIso,
+          kind: 'narrative',
           author: woodland,
           title: 'duplicate event',
           body: 'Duplicate event ids would overwrite immutable history.',
@@ -268,41 +569,6 @@ describe('createCommsEvent', () => {
         { nowIso, existingEventIds: ['event-one'] },
       ),
     ).toThrow('communication event already exists: event-one');
-  });
-});
-
-describe('renderSharedCommsLog', () => {
-  it('renders immutable communication events chronologically', () => {
-    const rendered = renderSharedCommsLog({
-      events: [
-        createCommsEvent(
-          {
-            event_id: 'event-two',
-            created_at: '2026-04-28T09:05:00Z',
-            author: woodland,
-            title: 'second event',
-            body: 'Rendered second.',
-          },
-          { nowIso },
-        ),
-        createCommsEvent(
-          {
-            event_id: 'event-one',
-            created_at: '2026-04-28T09:00:00Z',
-            author: woodland,
-            title: 'first event',
-            body: 'Rendered first.',
-          },
-          { nowIso },
-        ),
-      ],
-    });
-
-    expect(rendered.indexOf('first event')).toBeLessThan(rendered.indexOf('second event'));
-    expect(rendered).toContain('merge_class: append-only-narrative');
-    expect(rendered).toContain('Generated from `.agent/state/collaboration/comms-events/`');
-    expect(rendered).toContain('# Agent-to-Agent Shared Communication Log');
-    expect(rendered).toContain('Rendered first.\n\n---\n\n## 2026-04-28T09:05:00Z');
   });
 });
 
@@ -405,7 +671,12 @@ function parseCounterState(text: string): CounterState {
   throw new Error('invalid counter state');
 }
 
-function options(values: Readonly<Record<string, string>>, files: readonly string[] = []): Options {
+function options(
+  values: Readonly<Record<string, string>>,
+  files: readonly string[] = [],
+  areaPatterns: readonly string[] = [],
+  tags: readonly string[] = [],
+): Options {
   const parsedValues = new Map<string, string>();
   for (const key in values) {
     parsedValues.set(key, values[key] ?? '');
@@ -416,5 +687,7 @@ function options(values: Readonly<Record<string, string>>, files: readonly strin
     topic: undefined,
     values: parsedValues,
     files,
+    areaPatterns,
+    tags,
   };
 }

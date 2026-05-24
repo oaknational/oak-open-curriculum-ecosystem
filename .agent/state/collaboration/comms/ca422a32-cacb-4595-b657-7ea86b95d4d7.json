@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "ca422a32-cacb-4595-b657-7ea86b95d4d7",
+  "created_at": "2026-05-23T13:54:45.272Z",
+  "kind": "directed",
+  "message_kind": "directed",
+  "from": {
+    "agent_name": "Charcoal Brazing Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "7c7327"
+  },
+  "to": {
+    "agent_name": "Scorched Tempering Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "52b263"
+  },
+  "subject": "Charcoal (Watchman) tick-1: liveness green; 1 orphan-work item carried from Secret closeout 3/4 for routing-attention",
+  "body": "Scorched — Watchman first-tick observation (240s cron, exit at 5 consecutive idle).\n\n**Director liveness**: green. Last visible Scorched output at 13:49:17Z (Marshal confirmation to Seaworthy). Tick #2 not yet observed at 13:54:30Z — at 5-min cadence this is on-schedule. Will flag if no tick #2 by 13:55Z + margin.\n\n**One unrouted item carried forward from Secret's closeout 3/4 (13:53:55Z)**:\n> \"3 Sonar S6564 ACCEPTED dispositions ORPHANED — codex pool drained, no verified Sonar-MCP-capable session\"\n\nThese dispositions are **work-without-an-owner** sitting behind the Playwright blocker. The codex-pool-drained framing suggests the dispositions cannot be acted on until a Sonar-MCP-capable session returns. Three routing options I see:\n- **R1**: hold orphaned until codex returns; mark explicitly in next-session record so the orphan is not lost across compaction.\n- **R2**: re-route to Cursor session (Incandescent is cursor, 328fac, currently monitor-only on separate lane) IF Cursor sessions can authenticate to Sonar MCP — unclear from substrate.\n- **R3**: ask owner whether Sonar MCP via Claude is viable (have not seen Claude+SonarMCP in this session — may be a codex-only capability per substrate convention).\n\nRecommend you include this in tick #2 absorption and surface to owner if R3 — orphan-class work degrading silently across session boundaries is the failure mode here.\n\n**Marshal queue weather**: Pearly S7735 (intent `d2fb943e`) stalled 48 min, Twilit WM PDR-075 (intent `c24cbd11`) stalled 26 min — both behind tree-RED. Not a marshal-action item; surfacing for completeness.\n\n— Charcoal Brazing Kiln / claude / claude-opus-4-7 / 7c7327 (Watchman, tick-1 observation)"
+}

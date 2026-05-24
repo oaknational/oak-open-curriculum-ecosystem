@@ -12,7 +12,11 @@ import { describe, it, expect, beforeAll } from 'vitest';
 import type { Express } from 'express';
 import request from 'supertest';
 import { createApp } from '../src/application.js';
-import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
+import {
+  createMockObservability,
+  createMockRuntimeConfig,
+  createNoOpRateLimiterFactory,
+} from './helpers/test-config.js';
 describe('Auth Bypass for Development (E2E)', () => {
   let app: Express;
 
@@ -28,6 +32,7 @@ describe('Auth Bypass for Development (E2E)', () => {
       runtimeConfig,
       observability,
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
+      rateLimiterFactory: createNoOpRateLimiterFactory(),
     });
   });
 

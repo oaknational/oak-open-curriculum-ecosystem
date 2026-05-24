@@ -17,7 +17,7 @@ todos:
     status: pending
     depends_on: []
   - id: 0-3-reviewer-alignment
-    content: "0.3 Reviewer phase-alignment incl. config-reviewer + type-reviewer for migration safety."
+    content: "0.3 Reviewer phase-alignment incl. config-expert + type-expert for migration safety."
     status: pending
     depends_on: []
   - id: 1-1-list-skill-cycle
@@ -395,27 +395,27 @@ records the wrapping shape, not a build-vs-buy decision.
 ### 0.3 Reviewer phase-alignment
 
 Pulled forward to Phase 0 (was previously mid-phases) on the
-recommendation of the code-reviewer review of this plan: Findings P1#1
+recommendation of the code-expert review of this plan: Findings P1#1
 and P1#2 are architectural and must be resolved before any code lands.
 
 - **Pre-Phase-1**:
-  - `assumptions-reviewer` — challenge plan assumptions about CLI
+  - `assumptions-expert` — challenge plan assumptions about CLI
     shape and migration scope; cover the lock-file concurrency gap
     flagged in §Risks.
-  - `architecture-reviewer-fred` — ADR compliance check on the
+  - `architecture-expert-fred` — ADR compliance check on the
     runVerify migration boundary (ADR-024 / ADR-038 implications);
     pulled forward from mid-phases.
-  - `architecture-reviewer-barney` — boundary and dependency mapping
+  - `architecture-expert-barney` — boundary and dependency mapping
     for the new `agent-tools/src/artefacts/` module.
-  - `config-reviewer` — CI build-ordering implications of Phase 2
+  - `config-expert` — CI build-ordering implications of Phase 2
     (the legacy shim importing from `dist/`).
-  - `type-reviewer` — `skills-lock.json` schema-validated parsing
+  - `type-expert` — `skills-lock.json` schema-validated parsing
     per ADR-038; the lock file is an external data boundary.
-- **Mid-phases**: `code-reviewer` per phase; `test-reviewer` per
-  cycle; `architecture-reviewer-wilma` at Phase 3 (failure-mode
+- **Mid-phases**: `code-expert` per phase; `test-expert` per
+  cycle; `architecture-expert-wilma` at Phase 3 (failure-mode
   probe on adapter-generation).
-- **Post**: `docs-adr-reviewer` after Phase 8 ADR amendment;
-  `code-reviewer` final pass.
+- **Post**: `docs-adr-expert` after Phase 8 ADR amendment;
+  `code-expert` final pass.
 
 ---
 
@@ -457,8 +457,8 @@ Goal: replace ADR-125 count tables with CLI-emitted output.
 
 - All cycles green; `pnpm agent-tools:artefacts -- inventory --output .agent/memory/executive/artefact-inventory.md`
   generates a fresh inventory page.
-- Reviewer dispatch: `code-reviewer`, `test-reviewer`,
-  `architecture-reviewer-barney` (boundary check on the new module).
+- Reviewer dispatch: `code-expert`, `test-expert`,
+  `architecture-expert-barney` (boundary check on the new module).
 
 ---
 
@@ -531,8 +531,8 @@ fixture-injection in tests and violate ADR-024.
 - Legacy script is now a 4-line shim; new CLI is the truth.
 - Quality gates transition from `tsx src/` invocation to built
   `dist/` invocation per the `use-built-agent-tools-only` memory rule.
-- Reviewer dispatch: `code-reviewer`, `architecture-reviewer-fred`,
-  `config-reviewer` (CI gate change), `docs-adr-reviewer` (verify
+- Reviewer dispatch: `code-expert`, `architecture-expert-fred`,
+  `config-expert` (CI gate change), `docs-adr-expert` (verify
   behaviour is moving).
 
 ---
@@ -545,7 +545,7 @@ authoring + adapter generation are atomic.
 ### 3.0 (Red→Green) Extract shared adapter-generation helpers
 
 This cycle is a precondition for 3.1+ and is called out explicitly to
-preserve cycle independence (the code-reviewer flagged 3.1 → 3.2
+preserve cycle independence (the code-expert flagged 3.1 → 3.2
 helper-dependency as an atomic-landing risk; this 3.0 cycle resolves
 it).
 
@@ -609,8 +609,8 @@ canonicalisation post-step. There is no bespoke fetcher.
 - All authoring commands green; the manual canonicalisation flow
   documented in `agent-infrastructure-portability-remediation.plan.md`
   §Phase 1 is provably no longer needed.
-- Reviewer dispatch: `code-reviewer`, `test-reviewer`,
-  `architecture-reviewer-fred`, `architecture-reviewer-wilma`
+- Reviewer dispatch: `code-expert`, `test-expert`,
+  `architecture-expert-fred`, `architecture-expert-wilma`
   (failure-mode probe on adapter-generation).
 
 ---
@@ -788,7 +788,7 @@ plans archived.
   ADRs-permanent-plans-ephemeral memory rule: permanent docs do not
   cite plan names).
 - **Action**: add an amendment-log entry dated at execution.
-- **Reviewer**: `docs-adr-reviewer` MID + POST.
+- **Reviewer**: `docs-adr-expert` MID + POST.
 
 ### 8.2 Predecessor plan archival
 
@@ -947,11 +947,11 @@ prematurely rewritten.
 
 Per `.agent/plans/templates/components/lifecycle-triggers.md`:
 
-- **Pre-edit per phase**: assumptions-reviewer dispatch.
-- **Mid-phase**: code-reviewer + architecture domain coverage
+- **Pre-edit per phase**: assumptions-expert dispatch.
+- **Mid-phase**: code-expert + architecture domain coverage
   (boundaries, ADR compliance, failure modes) per the Phase 0.3
   matrix.
-- **Phase-close**: test-reviewer; consolidate insights into
+- **Phase-close**: test-expert; consolidate insights into
   `.remember/now.md`.
 - **Plan close**: `/jc-consolidate-docs`; Phase 8 ADR amendment.
 

@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+Accepted. Revised 2026-05-10 to align routine gate scope with ADR-121.
 
 ## Context
 
@@ -11,18 +11,22 @@ of secrets in future commits. The policy requirements are:
 
 - Real credentials are only held in local untracked `.env*` files.
 - `.env.example` and other tracked docs/examples use placeholders.
-- Full-history scans are required during CI and before pushes.
+- Routine gates must prevent new secret-like values from entering branch and
+  tag history. Full-history scans remain required for bootstrap, incident
+  response, and repository forensics.
 
 ## Decision
 
 Introduce secrets scanning as a mandatory quality gate across local workflow and CI:
 
 - Keep `.env` and `.env.local` as local-only files for credentials.
-- Enforce a repository-wide scan via `pnpm secrets:scan:all` (branches + tags,
-  full history) in `pnpm check`.
+- Enforce routine branch/tag scanning via `pnpm secrets:scan` in normal gate
+  surfaces, matching ADR-121.
+- Retain `pnpm secrets:scan:all` for bootstrap and audit scans across branches
+  and tags with full history.
 - Enforce an additional forensic scan via `pnpm secrets:scan:all-refs` for
   repository forensics and audits.
-- Add secrets scan to CI using checked-out full history.
+- Add secrets scan to CI without requiring a routine full-history scan.
 - Add a pre-push Husky check to block pushes with detected secret-like values.
 - Keep allowlisting strict:
   - Scoped path allowlist for `.agent/reference/**`.
@@ -41,7 +45,8 @@ Introduce secrets scanning as a mandatory quality gate across local workflow and
 ### Negative
 
 - Pushes from machines without `gitleaks` installed fail earlier unless installed.
-- Pre-push checks take longer due full-history scanning.
+- Pre-push checks take longer than a plain push, but do not pay the full-history
+  scan cost on every routine run.
 
 ### Neutral
 

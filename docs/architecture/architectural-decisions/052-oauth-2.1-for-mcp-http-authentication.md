@@ -2,7 +2,9 @@
 
 ## Status
 
-Accepted (2025-09-07)
+Accepted (2025-09-07). Amended 2026-05-10 to mark the
+resource-server-only/JWT/JWKS implementation details as superseded by the
+Clerk proxy-AS and opaque-token decisions in ADR-053, ADR-115, and ADR-142.
 
 **Related**: ADR-053 (Clerk as IdP), ADR-040 (Neutral Architecture)
 
@@ -74,7 +76,33 @@ The MCP specification mandates OAuth 2.1 for HTTP-based transports:
 
 Implement **OAuth 2.1** for HTTP server authentication, with the MCP server acting as a **Resource Server** that verifies tokens issued by an external **Authorization Server**.
 
-### Architecture
+### Current Runtime Shape (2026-05-10)
+
+The original Resource Server architecture remains the conceptual security
+boundary — MCP requests carry `Authorization: Bearer <token>` and the MCP
+server authenticates the caller before protected methods run. The
+implementation details below are historical where they describe direct JWT
+signature validation through Clerk JWKS.
+
+The current runtime shape is:
+
+- Clerk remains the canonical identity provider through public alpha (ADR-053).
+- The MCP server also presents a same-origin proxy Authorisation Server for
+  client compatibility (ADR-115).
+- Clerk OAuth access tokens are opaque `oat_...` tokens rather than JWT access
+  tokens for this flow (ADR-142).
+- Runtime token verification uses Clerk-supported verification rather than
+  local JWT/JWKS claim validation.
+
+If Clerk later moves this OAuth flow to JWT access tokens, this ADR must be
+revisited with ADR-115 because issuer/audience validation would become
+load-bearing again.
+
+### Historical 2025 Architecture
+
+The diagram below records the original token-validation shape. It is not the
+current binding implementation posture after the 2026 proxy-AS and Clerk
+opaque-token amendments.
 
 ```text
 ┌─────────────────┐
@@ -108,19 +136,19 @@ Implement **OAuth 2.1** for HTTP server authentication, with the MCP server acti
 └─────────────────┘
 ```
 
-### Key Principles
+### Current Binding Principles
 
 1. **MCP Server = Resource Server Only**
    - Does NOT manage user sessions
    - Does NOT handle login/logout flows
    - Does NOT store passwords or credentials
-   - ONLY validates access tokens
+   - Validates bearer access tokens through Clerk-supported verification
 
-2. **Stateless Token Validation**
-   - Verify JWT signature using JWKS from Authorization Server
-   - Check token expiration (`exp` claim)
-   - Validate audience (`aud` claim matches MCP server URI)
-   - Validate issuer (`iss` claim matches Authorization Server)
+2. **Token Verification**
+   - Clerk opaque OAuth access tokens are verified through Clerk-supported
+     verification
+   - JWT/JWKS local claim validation is historical for this flow unless Clerk
+     changes the OAuth token format
 
 3. **Standards Compliance**
    - Expose `/.well-known/oauth-authorization-server` (RFC 8414)
@@ -129,10 +157,10 @@ Implement **OAuth 2.1** for HTTP server authentication, with the MCP server acti
    - Never accept tokens in URL parameters (security risk)
 
 4. **Token Format**
-   - JWT with standard claims (`iss`, `aud`, `exp`, `sub`, `iat`)
-   - Short-lived access tokens (10-15 minutes)
-   - Optional refresh tokens for longer sessions
-   - Custom claims for authorization (email, org, roles)
+   - The runtime must not assume JWT access-token structure for Clerk OAuth
+     access tokens in this flow
+   - If JWT access tokens become load-bearing later, this ADR and ADR-115 must
+     be revisited together
 
 ## Rationale
 
@@ -213,8 +241,10 @@ Separating the Authorization Server from the MCP server:
 
 2. **Token Validation Middleware**:
    - Extract token from `Authorization: Bearer` header
-   - Verify JWT signature using JWKS
-   - Check standard claims (iss, aud, exp)
+   - Verify the token through Clerk-supported verification for the current
+     opaque-token flow
+   - Treat local JWT/JWKS claim validation as historical unless the upstream
+     token format changes
    - Reject expired or invalid tokens
 
 3. **401 Responses**:

@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "7ff80ed4-8206-4d49-a7dd-801ac305381c",
+  "created_at": "2026-05-24T13:57:40.764Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Charcoal Brazing Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "7c7327"
+  },
+  "title": "Heartbeat: Charcoal Brazing Kiln (7c7327) — Implementor, post-compaction-2 resume, standing by",
+  "body": "active; PDR-076 SPLIT landed at d14c74f1; claim aacb4c72 closed; Gate 2 attested MET by Director Seaworthy; standing by under team cadence; no claim open",
+  "tags": [
+    "heartbeat"
+  ]
+}

@@ -26,6 +26,7 @@ import { setupExpressErrorHandler } from '@sentry/node';
 import { createApp } from '../src/application.js';
 import { bootstrapApp } from '../src/bootstrap-app.js';
 import { WIDGET_HTML_CONTENT } from '../src/generated/widget-html-content.js';
+import { createDefaultRateLimiterFactory } from '../src/rate-limiting/index.js';
 import {
   createHttpObservability,
   describeHttpObservabilityError,
@@ -163,6 +164,9 @@ async function main() {
       await createApp({
         ...options,
         getWidgetHtml: () => WIDGET_HTML_CONTENT,
+        rateLimiterFactory: createDefaultRateLimiterFactory({
+          isVercelRuntime: runtimeConfig.env.VERCEL_ENV !== undefined,
+        }),
         setupSentryErrorHandler:
           runtimeConfig.env.SENTRY_MODE === 'off' ? undefined : setupExpressErrorHandler,
       }),

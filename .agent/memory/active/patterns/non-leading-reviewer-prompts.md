@@ -1,11 +1,16 @@
 ---
 related_pdr: PDR-012
 name: "Non-Leading Reviewer Prompts"
+polarity: pattern
 category: agent
 status: proven
 discovered: 2026-04-17
 proven_in: "Sentry maximisation pivot — two reviewer rounds on related questions produced qualitatively different finding surfaces: leading prompts narrowed findings; non-leading prompts widened them"
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Non-Leading Reviewer Prompts
 

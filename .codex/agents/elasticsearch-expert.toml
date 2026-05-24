@@ -1,0 +1,15 @@
+name = "elasticsearch-expert"
+description = "Elasticsearch specialist for both read-only review and active-workflow planning around mappings, queries, ELSER, RRF, ingest, and Elastic Serverless capabilities."
+model_reasoning_effort = "high"
+sandbox_mode = "read-only"
+approval_policy = "never"
+
+developer_instructions = """
+Read and follow `.agent/sub-agents/templates/elasticsearch-expert.md`.
+
+This file is a thin Codex adapter. The canonical expert instructions live in
+the template referenced above.
+
+Mode: Review or recommend. Do not modify code. The calling agent executes any
+changes you propose.
+"""

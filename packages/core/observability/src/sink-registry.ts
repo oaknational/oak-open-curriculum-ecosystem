@@ -77,7 +77,7 @@ export type ObservabilitySinkKind = (typeof OBSERVABILITY_SINK_KINDS)[number];
  * file-sink will expose its own at WS5). The plan-body §WS2 wiring of
  * the unified-logger to the new `OBSERVABILITY_SINKS` axis goes via the
  * sink-implementation-owned log adapters, not via this registry surface
- * (sentry-reviewer 2026-05-02 finding P2-3).
+ * (sentry-expert 2026-05-02 finding P2-3).
  *
  * @typeParam K - The discriminator literal identifying this sink.
  */

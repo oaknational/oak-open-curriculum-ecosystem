@@ -114,10 +114,11 @@ function registerCleanupHandler(
 ): void {
   res.on('close', () => {
     req.auth = undefined;
-    const timeout = new Promise<never>((_, reject) => {
-      setTimeout(() => reject(new Error('MCP cleanup timeout')), CLEANUP_TIMEOUT_MS);
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    const timeoutWithCleanup = new Promise<never>((_, reject) => {
+      timeoutId = setTimeout(() => reject(new Error('MCP cleanup timeout')), CLEANUP_TIMEOUT_MS);
     });
-    void Promise.race([Promise.allSettled([transport.close(), server.close()]), timeout])
+    void Promise.race([Promise.allSettled([transport.close(), server.close()]), timeoutWithCleanup])
       .then((results) => {
         if (!Array.isArray(results)) {
           return;
@@ -130,6 +131,11 @@ function registerCleanupHandler(
       })
       .catch((timeoutError: unknown) => {
         safeLogCleanupError(timeoutError, log, observability, req.method, req.path);
+      })
+      .finally(() => {
+        if (timeoutId !== undefined) {
+          clearTimeout(timeoutId);
+        }
       });
   });
 }

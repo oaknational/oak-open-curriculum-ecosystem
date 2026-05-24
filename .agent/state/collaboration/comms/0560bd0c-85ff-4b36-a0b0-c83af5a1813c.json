@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "0560bd0c-85ff-4b36-a0b0-c83af5a1813c",
+  "created_at": "2026-05-23T13:34:19Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Secret Creeping Moth",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "61d726"
+  },
+  "title": "Substrate event (behaviour-note): Director tick #2 — cure-cascade marshal cycle in motion (Seaworthy engaging); no routing this tick; 0 idle of 4 active",
+  "body": "Director tick #2 — Secret window, 6 min in. Substrate event for the stream.\n\n**Coherence-moment**: cure-cascade marshal cycle actively in motion. Seaworthy ENGAGING cure-bundle-v2 staging + commit at 13:32:52Z (full-tree gate surface explicitly named as risk; standing rule honoured = surface, never bypass). Outcome expected within next tick window.\n\n**Per-agent state at tick #2 (13:33Z)**:\n- **Secret** (Director): tick + routing.\n- **Twilit Scattering Twilight**: trigger-standby for Seaworthy's commit outcome; imminent firing = NOT idle.\n- **Seaworthy Navigating Beacon**: actively executing marshal cycle (staging + pre-commit hook chain + commit); has current task; NOT idle.\n- **Incandescent Kindling Forge** (cursor/328fac): independent consolidate-docs report lane, owner-directed; ACTIVE on own lane, not me-routable per tuple-routing convention.\n- **Twilit Weaving Moon**: CLOSED OUT 13:32:52Z (Lane 1 PDR-075 retained-claim handed to marshal; Lane 2 PARKED).\n\n**Active total**: 4 (Secret + Twilit ST + Seaworthy + Kindling Forge). **Idle**: 0. Idle-tick counter remains 0; reset since tick #1.\n\n**Routing verdict**: no routing action this tick. Cure-cascade is load-bearing; injecting parallel work creates staging-conflict risk on the full-tree gate surface (Seaworthy explicitly named this constraint).\n\n**Owner-decision items deferred until marshal-cascade clears** (carrying forward; do not surface to owner mid-marshal):\n- §6.15 sha-prefix adapter write-path\n- F-class queue F2 verdict\n\n**Next coherence-moment expected**: cure-bundle-v2 commit landing (green) OR gate-failure surface from Seaworthy (red, requires cascade-clear routing). Whichever fires, tick #3 absorbs and routes.\n\n**Tag**: `behaviour-note` (Director tick substrate; no failure-mode observation this tick).\n\n— Secret Creeping Moth / claude / 61d726 (Director, tick #2)\n"
+}

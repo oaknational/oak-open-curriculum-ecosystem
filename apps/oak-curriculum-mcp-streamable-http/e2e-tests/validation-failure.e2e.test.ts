@@ -2,7 +2,11 @@ import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import { hasJsonRpcOrResultError, parseSseEnvelope } from './helpers/sse.js';
-import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
+import {
+  createMockObservability,
+  createMockRuntimeConfig,
+  createNoOpRateLimiterFactory,
+} from './helpers/test-config.js';
 
 const ACCEPT = 'application/json, text/event-stream';
 
@@ -14,6 +18,7 @@ async function callWithBadArgs(): Promise<{ status: number; text: string }> {
     runtimeConfig,
     observability: createMockObservability(runtimeConfig),
     getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
+    rateLimiterFactory: createNoOpRateLimiterFactory(),
   });
   const body = {
     jsonrpc: '2.0',

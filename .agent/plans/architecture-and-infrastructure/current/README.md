@@ -8,6 +8,7 @@ Current queued work for this collection.
 |----------|------|-------|--------|
 | P0 | [workspace-layer-separation-audit.plan.md](./workspace-layer-separation-audit.plan.md) | Repo-wide audit and migration preparation for the rule that distinct architectural layers must live in distinct workspaces | Queued |
 | P1 | [config-architecture-standardisation-plan.md](./config-architecture-standardisation-plan.md) | Shared config DI and runtime-config standardisation | Queued |
+| P1A | [no-io-test-boundary-and-di-recovery.plan.md](./no-io-test-boundary-and-di-recovery.plan.md) | Repo-wide recovery of ADR-078 testability boundaries: unit, integration, and E2E tests directly invoke domain/application code with simple fakes and no IO | Queued |
 | P2 | [security-dependency-triage.plan.md](./security-dependency-triage.plan.md) | Dependabot, CodeQL, and outdated dependency triage | Queued |
 | P3 | [doc-architecture-phase-a-immediate.plan.md](./doc-architecture-phase-a-immediate.plan.md) | QA register, ADR-166 / ADR-121 gate-mapping follow-up, ADR index, C4 diagrams, layer contract | Queued |
 | P4 | [doc-architecture-phase-b-dependent.plan.md](./doc-architecture-phase-b-dependent.plan.md) | Deduplication, operability practice, trade-off guidance, Practice Core | Queued (blocked by Phase A) |

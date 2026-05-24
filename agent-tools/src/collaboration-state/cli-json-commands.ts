@@ -43,8 +43,8 @@ export async function checkState(options: Options): Promise<string> {
   if (optional(options, 'closed') !== undefined) {
     parseClosedClaimsArchive(await readFile(required(options, 'closed'), 'utf8'));
   }
-  if (optional(options, 'events-dir') !== undefined) {
-    await readCommsEvents(required(options, 'events-dir'));
+  if (optional(options, 'comms-dir') !== undefined) {
+    await readCommsEvents(required(options, 'comms-dir'));
   }
 
   return 'ok\n';

@@ -6,9 +6,11 @@ Complete reference for all environment variables used across the Oak Open Curric
 
 The repository policy is:
 
-- Real credentials are only in local `.env` and `.env.local` files.
-- `.env` and `.env.local` are ignored by git and must never be committed.
-- `.env.example` files are placeholders only and must not contain live credentials.
+- Real credentials are only in local workspace `.env` and `.env.local` files.
+- Workspace `.env` and `.env.local` files are ignored by git and must never be
+  committed.
+- Workspace `.env.example` files are placeholders only and must not contain
+  live credentials.
 - Other tracked files should contain placeholders, fixtures, or comments instead of secrets.
 
 A useful guardrail is to run:
@@ -27,21 +29,25 @@ exceptions only if required.
 | ------------------------------------------------------- | ----------------------------------------------------------- | ------------------ | ------------- |
 | **Level 1**: Unit tests, type-checking, linting         | None                                                        | None               | 0 minutes     |
 | **Level 2**: Local dev servers, integration tests       | `OAK_API_KEY`, `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY` | `LOG_LEVEL`        | 10-15 minutes |
-| **Level 3**: Smoke, search functionality, OAuth testing | `OAK_API_KEY`, `CLERK_*`, `ELASTICSEARCH_*`                 | `SEARCH_API_KEY`   | 1-2 hours     |
+| **Level 3**: Live search and OAuth-backed local testing | `OAK_API_KEY`, `CLERK_*`, `ELASTICSEARCH_*`                 | `SEARCH_API_KEY`   | 1-2 hours     |
 
 > **Note**: `pnpm test:e2e` itself uses mocks and dependency injection
 > and does not require credentials. The Level 3 row above covers the
-> related but distinct workflows of smoke testing, live search, and
-> OAuth testing — see
+> related but distinct workflows of live search and OAuth-backed local testing — see
 > [troubleshooting → E2E Tests Fail](./troubleshooting.md#e2e-tests-fail).
 
-## Monorepo-Wide Variables
+## Workspace Environment Files
 
-Set these in the root `.env` file (copy from `.env.example`):
+Copy the example file for the workspace you are running. There is no root
+`.env.example`; root-level onboarding and gates work without credentials.
 
 ```bash
-cp .env.example .env
-# Edit .env with your values
+# HTTP MCP server
+cp apps/oak-curriculum-mcp-streamable-http/.env.example \
+  apps/oak-curriculum-mcp-streamable-http/.env.local
+
+# Search CLI
+cp apps/oak-search-cli/.env.example apps/oak-search-cli/.env.local
 ```
 
 ### Required for Most Development
@@ -61,10 +67,9 @@ cp .env.example .env
 
 | Variable                   | Purpose                                                   | Default                                 | Used By                                   |
 | -------------------------- | --------------------------------------------------------- | --------------------------------------- | ----------------------------------------- |
-| `LOG_LEVEL`                | Logging verbosity (`debug`, `info`, `warn`, `error`)      | `info`                                  | All apps                                  |
+| `LOG_LEVEL`                | Logging verbosity (`debug`, `info`, `warn`, `error`)      | `info`                                  | Workspace runtime                         |
 | `DANGEROUSLY_DISABLE_AUTH` | **Development only** - completely bypasses authentication | `false`                                 | HTTP MCP server (NEVER use in production) |
 | `ALLOWED_HOSTS`            | Comma-separated list of allowed hostnames                 | Auto-detected (localhost or Vercel URL) | HTTP MCP server                           |
-| `SMOKE_REMOTE_BASE_URL`    | Base URL for remote smoke tests                           | -                                       | Smoke tests                               |
 
 ## Workspace-Specific Variables
 
@@ -78,7 +83,7 @@ The search app requires its own `.env.local` file with additional variables for 
 | ----------------------- | --------------------------------------- | ------------------------------------ |
 | `ELASTICSEARCH_URL`     | Elasticsearch Serverless HTTPS endpoint | Elasticsearch Cloud console          |
 | `ELASTICSEARCH_API_KEY` | API key with manage + search privileges | Elasticsearch Cloud - Create API key |
-| `OAK_API_KEY`           | Oak Curriculum API access               | Same as root `.env`                  |
+| `OAK_API_KEY`           | Oak Curriculum API access               | Same key as other workspaces         |
 | `SEARCH_API_KEY`        | Shared secret for admin/status routes   | `openssl rand -hex 32`               |
 | `SEARCH_INDEX_VERSION`  | Monotonic cache/version tag             | Set manually (e.g., `v2026-03-01`)   |
 
@@ -92,7 +97,7 @@ The search app requires its own `.env.local` file with additional variables for 
 
 **Complete reference**: See `apps/oak-search-cli/README.md` for detailed setup instructions.
 
-### HTTP MCP Server (via root `.env`)
+### HTTP MCP Server (`apps/oak-curriculum-mcp-streamable-http/.env.local`)
 
 **Minimal configuration**:
 
@@ -168,7 +173,7 @@ Environment variables are only required for:
 
 - Running dev servers (`pnpm dev`)
 - Integration tests that call real APIs
-- Smoke tests
+- Live-service workflows in workspaces that still expose them
 
 This allows you to contribute code, tests, and documentation without needing to set up external services.
 
@@ -203,12 +208,19 @@ This allows you to contribute code, tests, and documentation without needing to 
 
 ### "API key is required but not found"
 
-**Solution**: Ensure you've created `.env` file and set `OAK_API_KEY`:
+**Solution**: Ensure you created the workspace `.env.local` file and set
+`OAK_API_KEY` there:
 
 ```bash
-cp .env.example .env
-# Edit .env and add your key
-echo "OAK_API_KEY=your_key_here" >> .env
+# HTTP MCP server
+cp apps/oak-curriculum-mcp-streamable-http/.env.example \
+  apps/oak-curriculum-mcp-streamable-http/.env.local
+
+# Search CLI
+cp apps/oak-search-cli/.env.example apps/oak-search-cli/.env.local
+
+# Edit the relevant .env.local and add your key
+echo "OAK_API_KEY=your_key_here" >> apps/oak-curriculum-mcp-streamable-http/.env.local
 ```
 
 ### "Clerk keys not configured"

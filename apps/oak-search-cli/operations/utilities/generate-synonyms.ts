@@ -7,7 +7,7 @@
  *
  * @example
  * ```bash
- * pnpm exec tsx scripts/generate-synonyms.ts > /tmp/synonyms.json
+ * pnpm --filter @oaknational/search-cli exec tsx operations/utilities/generate-synonyms.ts > /tmp/synonyms.json
  * ```
  */
 

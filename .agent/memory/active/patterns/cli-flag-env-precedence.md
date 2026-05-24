@@ -1,5 +1,6 @@
 ---
 name: "CLI Flag Over Env Precedence"
+polarity: pattern
 use_this_when: "A CLI command accepts both explicit flags and environment defaults for the same setting, and hidden defaults previously caused ambiguous behaviour."
 category: code
 proven_in: "apps/oak-search-cli/src/cli/shared/resolve-bulk-dir.ts"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Hidden path defaults and command-specific precedence drift that produce surprising runtime behaviour."
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 When a command supports both a flag and an env default for the same value, resolve with one shared function and a fixed precedence:
 

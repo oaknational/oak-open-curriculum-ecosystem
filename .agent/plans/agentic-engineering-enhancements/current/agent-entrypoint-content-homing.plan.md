@@ -147,7 +147,7 @@ Likely target homes:
 
 | Content cluster | Likely durable home |
 |---|---|
-| Reviewer timing, roster, invocation detail | `.agent/memory/executive/invoke-code-reviewers.md` |
+| Reviewer timing, roster, invocation detail | `.agent/memory/executive/invoke-code-experts.md` |
 | Agent tool command catalogue | `agent-tools/README.md` |
 | Artefact authoring and adapter architecture | `.agent/memory/executive/artefact-inventory.md`, `docs/engineering/extending.md`, ADR-125 |
 | Development command list | `docs/engineering/build-system.md` |

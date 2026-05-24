@@ -8,7 +8,11 @@ import {
   type ToolExecutionResult,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { ok } from '@oaknational/result';
-import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
+import {
+  createMockObservability,
+  createMockRuntimeConfig,
+  createNoOpRateLimiterFactory,
+} from './helpers/test-config.js';
 import {
   getContentArray,
   parseJsonRpcResult,
@@ -74,6 +78,7 @@ describe('HTTP boundary argument validation', () => {
       runtimeConfig,
       observability: createMockObservability(runtimeConfig),
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
+      rateLimiterFactory: createNoOpRateLimiterFactory(),
     });
     const res = await request(app)
       .post('/mcp')
@@ -97,6 +102,7 @@ describe('HTTP boundary argument validation', () => {
       runtimeConfig,
       observability: createMockObservability(runtimeConfig),
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
+      rateLimiterFactory: createNoOpRateLimiterFactory(),
     });
     const res = await request(app)
       .post('/mcp')
@@ -120,6 +126,7 @@ describe('HTTP boundary argument validation', () => {
       runtimeConfig,
       observability: createMockObservability(runtimeConfig),
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
+      rateLimiterFactory: createNoOpRateLimiterFactory(),
     });
     const res = await request(app)
       .post('/mcp')
@@ -145,6 +152,7 @@ describe('HTTP boundary argument validation', () => {
       runtimeConfig,
       observability: createMockObservability(runtimeConfig),
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
+      rateLimiterFactory: createNoOpRateLimiterFactory(),
     });
     const res = await request(app)
       .post('/mcp')

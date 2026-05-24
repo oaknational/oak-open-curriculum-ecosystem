@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-021
 name: test-claim-assertion-parity
+polarity: pattern
 category: testing
 proven_by: "Sentry wrapping-order test rewrite (2026-04-16)"
 summary: >
@@ -9,6 +10,10 @@ summary: >
   cannot distinguish the regressed state from the correct state,
   the test creates false confidence.
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Test Claim-Assertion Parity
 
@@ -64,7 +69,7 @@ The assertion is structurally always true because the two names
 point at the same array — it tests aliasing, not coverage. The test
 narrative claimed "BYPASS_CANDIDATES covers every BARRIER_HOOKS
 entry"; the assertion could not distinguish the correct state from
-any regression. Code-reviewer flagged it. The correction: replace
+any regression. Code-expert flagged it. The correction: replace
 the runtime tautology with a type-level set-equality gate against
 `keyof SentryRedactionHooks` (the exported return type of
 `createSentryHooks`). That check genuinely fails at `pnpm type-check`

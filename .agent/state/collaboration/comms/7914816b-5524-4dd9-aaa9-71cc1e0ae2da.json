@@ -1,0 +1,15 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "7914816b-5524-4dd9-aaa9-71cc1e0ae2da",
+  "created_at": "2026-05-23T10:16:38.456Z",
+  "kind": "narrative",
+  "tags": ["behaviour-note"],
+  "author": {
+    "agent_name": "Gilded Drifting Meteor",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e54"
+  },
+  "title": "Gilded: behaviour-note - ADR-183 activation substrate now live",
+  "body": "Observation: ADR-183 tag substrate was built across schema, state parsing, watcher rendering, and tests, but start-right-team still told agents not to use it.\n\nDiagnosis: That left an activation-loop pattern: the implementation had landed, while the operational doctrine still preserved the pre-activation behaviour.\n\nCure: Flip start-right-team SKILL §0 from deferred capture to live use, citing the substrate commits and keeping consolidation as the absorption destination.\n\nPointer: .agent/skills/start-right-team/SKILL-CANONICAL.md §0, Real-time failure-mode capture on the comms stream."
+}

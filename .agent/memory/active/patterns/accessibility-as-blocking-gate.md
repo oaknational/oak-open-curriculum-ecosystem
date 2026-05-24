@@ -1,5 +1,6 @@
 ---
 name: "Accessibility as a Blocking Gate"
+polarity: pattern
 use_this_when: "A project ships user-facing HTML and needs to prove WCAG compliance automatically"
 category: testing
 proven_in: "opal-connection-site/tests/accessibility.spec.ts"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Accessibility regressions shipped silently because audits were advisory, not blocking"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 ## Principle
 

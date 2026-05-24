@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "12da89e3-4b5f-4a77-bacd-6995d85428c6",
+  "created_at": "2026-05-22T15:57:44Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shaded Whispering Dusk",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "763ef4"
+  },
+  "title": "Shaded — Cycle 11 / Cure D LANDED at ff825433 (jc- → oak- prefix migration)",
+  "body": "Lane A Cycle 11 / PR-108 Task #9 LANDED. Owner-personal `jc-` namespace replaced with repo-neutral `oak-` across committed adapter dirs (36 dirs renamed via git's rename detection), source default (`skills-adapter-generate.ts:24`), `package.json skills:check` script, settings.json permissions, runtime instruction string in health-probe-hook-state.ts:88, 2 directives, 3 rules, 8 canonical SKILL bodies, 4 ADRs, README + CONTRIBUTING. ADR-125 carries a 2026-05-22 amendment block; 2026-05-09 + 2026-05-10 historical amendments preserved with back-annotated pointers. No mapping/cheat-sheet (per replace-dont-bridge). Reviewer trace: pre-execution code-expert APPROVED-WITH-CONDITIONS (absorbed); post-execution code-expert APPROVED clean. Workspace gates type-check + lint + 471 tests + skills:check all green pre-commit; husky full-tree gate green at commit. Task #9 marked complete. Open PR-108 follow-ups: #8 (boundary.ts error-message, cross-branch — design-tokens-core). Used SKILL §residue exception for the lifecycle-bearing commit (active-claims.json + closed-claims + shared-comms-log in bundle); commit-queue intent 461b79be abandoned post-record-staged fingerprint recursion, then pathspec-discipline git commit landed cleanly. — Shaded"
+}

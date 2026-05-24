@@ -1,0 +1,109 @@
+{
+  "name": "@oaknational/graph-core",
+  "version": "0.0.0-development",
+  "private": true,
+  "description": "RDF/JS-aligned graph primitives: Term, Dataset, JSON-LD wrappers, canonicalisation, vocabulary registry",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts",
+      "import": "./dist/index.js"
+    },
+    "./term": {
+      "types": "./dist/term/index.d.ts",
+      "development": "./src/term/index.ts",
+      "import": "./dist/term/index.js"
+    },
+    "./data-factory": {
+      "types": "./dist/data-factory/index.d.ts",
+      "development": "./src/data-factory/index.ts",
+      "import": "./dist/data-factory/index.js"
+    },
+    "./dataset": {
+      "types": "./dist/dataset/index.d.ts",
+      "development": "./src/dataset/index.ts",
+      "import": "./dist/dataset/index.js"
+    },
+    "./jsonld": {
+      "types": "./dist/jsonld/index.d.ts",
+      "development": "./src/jsonld/index.ts",
+      "import": "./dist/jsonld/index.js"
+    },
+    "./canon": {
+      "types": "./dist/canon/index.d.ts",
+      "development": "./src/canon/index.ts",
+      "import": "./dist/canon/index.js"
+    },
+    "./vocab": {
+      "types": "./dist/vocab/index.d.ts",
+      "development": "./src/vocab/index.ts",
+      "import": "./dist/vocab/index.js"
+    },
+    "./graph-view": {
+      "types": "./dist/graph-view/index.d.ts",
+      "development": "./src/graph-view/index.ts",
+      "import": "./dist/graph-view/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**/*",
+    "src/**/*",
+    "!**/*.test.ts",
+    "!**/*.integration.test.ts"
+  ],
+  "scripts": {
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "clean": "rm -rf dist .turbo",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "type-check": "tsc -p tsconfig.lint.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@oaknational/result": "workspace:*",
+    "@oaknational/type-helpers": "workspace:*",
+    "jsonld": "^9.0.0",
+    "rdf-canonize": "^5.0.0"
+  },
+  "devDependencies": {
+    "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@types/jsonld": "^1.5.15",
+    "@types/node": "^25.7.0",
+    "eslint": "^10.3.0",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oaknational/oak-open-curriculum-ecosystem.git",
+    "directory": "packages/core/graph-core"
+  },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-open-curriculum-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/packages/core/graph-core#readme",
+  "keywords": [
+    "rdf",
+    "graph",
+    "json-ld",
+    "knowledge-graph"
+  ],
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
+  ],
+  "license": "MIT"
+}

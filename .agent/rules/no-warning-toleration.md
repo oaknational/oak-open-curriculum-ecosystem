@@ -118,13 +118,13 @@ Two rules follow:
    bind is the normal way doctrine spreads.** Canon surfaces
    (`.agent/directives/`, `.agent/memory/`, `.agent/plans/`,
    `.agent/practice-core/`, `.agent/rules/`,
-   `.agent/skills/`, `.agent/commands/`, `.agent/sub-agents/`, plus
+   `.agent/skills/`, `.agent/sub-agents/`, plus
    workspace source, configs, and shared infrastructure) belong inside
    each relevant gate by default. Reference / synthesis / archive /
    third-party / generated material stays outside until someone
    deliberately moves it in. A gate-config edit that expands scope is
    a doctrine-application act and is reviewed accordingly
-   (config-reviewer during planning, code-reviewer after fixes land).
+   (config-expert during planning, code-expert after fixes land).
 
 Concretely for markdown: `.markdownlintignore` is the canonical record
 of the gate's footprint. `.agent/` is no longer blanket-ignored — the
@@ -157,13 +157,13 @@ This is the only legitimate shape; "I'll get to it" is not.
 
 ## Reviewer cadence
 
-- `code-reviewer` enforces the rule on every PR that touches
+- `code-expert` enforces the rule on every PR that touches
   build scripts, quality-gate config, or vendor plugin
   integrations.
-- `sentry-reviewer` enforces the monitoring half of the rule
+- `sentry-expert` enforces the monitoring half of the rule
   on every PR that touches Sentry init, uptime monitor config,
   alert rules, or breadcrumb policy.
-- `release-readiness-reviewer` enforces the rule at PR-ready
+- `release-readiness-expert` enforces the rule at PR-ready
   gate: any warning surfaced by any gate is an automatic
   no-go.
 

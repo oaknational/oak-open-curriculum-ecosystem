@@ -1,5 +1,6 @@
 ---
 name: "Preprocess for Type-Preserving Coercion"
+polarity: pattern
 use_this_when: "A Zod schema needs to accept multiple input types but preserve a narrow output type, and z.union with .transform() would widen the output"
 category: code
 proven_in: "packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/build-zod-type.ts"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "z.union with .transform() widens output type to the transform's return type, destroying literal type information"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Preprocess for Type-Preserving Coercion
 

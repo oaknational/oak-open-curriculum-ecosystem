@@ -61,7 +61,7 @@ and the substance plan at
   (740/13/1). Skip-with-audit-trail acceptance pattern.
 - **ARC B0 LANDED 2026-05-03 at c0d17634 + 23abeabe + e86af3e0**
   (Woodland Sprouting Glade): plan-body corrections per
-  architecture-reviewer-betty Q2-Q6 + ADR number verification +
+  architecture-expert-betty Q2-Q6 + ADR number verification +
   reviewer findings absorbed (assumptions/docs-adr/onboarding).
 - WS1 RED arc landed earlier at a3a0222a (Moonlit Drifting Nebula).
   WS1 RED skip register entries 1+2 are in the napkin and must
@@ -174,18 +174,18 @@ Plus the always-on disciplines:
 
 ## Reviewer dispatch
 
-ARC A2 reviewer matrix (per plan §A2): test-reviewer (every mode
-conversion), architecture-reviewer-fred (boundary: env-builder pure
-functions, no global state), code-reviewer gateway, plus
-mandatory-always docs-adr-reviewer + onboarding-reviewer for any
+ARC A2 reviewer matrix (per plan §A2): test-expert (every mode
+conversion), architecture-expert-fred (boundary: env-builder pure
+functions, no global state), code-expert gateway, plus
+mandatory-always docs-adr-expert + onboarding-expert for any
 docs/Practice mutation.
 
-ARC B1/WS2 reviewer matrix (per plan §B1): type-reviewer
+ARC B1/WS2 reviewer matrix (per plan §B1): type-expert
 (discriminated-union cross-product correctness; no
-as/!/unknown), sentry-reviewer (vendor semantics preserved;
-redaction barrier intact), test-reviewer (RED→GREEN signal; mocks
-remain simple), code-reviewer gateway, mandatory-always
-docs-adr-reviewer + onboarding-reviewer (TSDoc on every renamed
+as/!/unknown), sentry-expert (vendor semantics preserved;
+redaction barrier intact), test-expert (RED→GREEN signal; mocks
+remain simple), code-expert gateway, mandatory-always
+docs-adr-expert + onboarding-expert (TSDoc on every renamed
 export).
 
 ## Session-open identity discipline (PDR-027)
@@ -207,7 +207,7 @@ thread before first edit. Open an active claim via the CLI
   link from .agent/practice-core/ is to .agent/practice-index.md
   (with two ratified carve-outs).
 - Reviewer-subagent dispatch is mandatory — including
-  docs-adr-reviewer + onboarding-reviewer automatically on every
+  docs-adr-expert + onboarding-expert automatically on every
   significant documentation/Practice change.
 - Tests must not read or mutate process.env. ARC A2 specifically
   retires the smoke-tests architectural debt at

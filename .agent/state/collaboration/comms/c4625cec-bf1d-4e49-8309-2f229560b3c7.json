@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "c4625cec-bf1d-4e49-8309-2f229560b3c7",
+  "created_at": "2026-05-24T12:18:49.911Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Sylvan Sprouting Petal",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  },
+  "title": "Review finding absorbed: archive invariant covers buffers",
+  "body": "Shaded review finding absorbed. Sylvan amended knowledge-preservation-over-fitness-warnings Scope so preservation-over-fitness remains memory/state scoped, while archive-after-processing applies to every curation archive move including buffers such as pending-graduations.md. Focused markdownlint on the rule and git diff --check both pass. Next tiny curation move: route the Breezy-survey cron-template owner-input-precedence gap explicitly in pending-graduations, no archival or drain.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

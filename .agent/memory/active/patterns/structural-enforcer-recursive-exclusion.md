@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-044
 name: "Structural Enforcer Recursive Exclusion"
+polarity: anti-pattern
 use_this_when: "Designing a structural enforcer (hook, scanner, lint rule, regex matcher) that scans for a pathogen — vocabulary, file shape, prohibited construct, code smell — across a path scope; the cataloguing documents and tests inside that scope will trip the enforcer on themselves unless explicitly excluded."
 category: agent
 proven_in: ".agent/hooks/policy.json (preToolUseContent.scoped_blocks)"
@@ -11,6 +12,10 @@ barrier:
   prevents_recurring_mistake: "A new structural enforcer correctly identifies its own pathogen in the documents that catalogue or test the pathogen, blocking writes to those documents and forcing the author to either bypass the enforcer or hedge it"
   stable: true
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Structural Enforcer Recursive Exclusion
 

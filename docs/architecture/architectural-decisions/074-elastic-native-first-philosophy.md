@@ -1,9 +1,10 @@
 # ADR-074: Elastic-Native-First Philosophy
 
-**Status**: Accepted  
+**Status**: Accepted; amended 2026-05-10 to mark dense-vector three-way
+hybrid language as historical where superseded by ADR-076.
 **Date**: 2025-12-07  
 **Decision Makers**: Development Team  
-**Related**: [ADR-118](118-elastic-native-dense-vector-strategy.md), [ADR-072](072-three-way-hybrid-search-architecture.md)
+**Related**: [ADR-118](118-elastic-native-dense-vector-strategy.md), [ADR-072](072-three-way-hybrid-search-architecture.md), [ADR-076](076-elser-only-embedding-strategy.md)
 
 ## Context
 
@@ -26,6 +27,12 @@ Should we default to external AI services (OpenAI, Cohere, etc.) or explore the 
 ## Decision
 
 **We adopt an "Elastic-Native-First" philosophy for all AI/ML features in this project.**
+
+The current accepted search baseline is BM25 + ELSER/RRF per ADR-076. Dense
+vector and three-way hybrid examples below are historical exploration context,
+not current implementation guidance. Future rerank, Graph API, RAG, entity
+extraction, or dense-vector work still needs fresh accepted coverage before
+implementation if it changes the production search architecture.
 
 When evaluating any AI/ML capability, we follow this **decision hierarchy**:
 
@@ -87,26 +94,27 @@ Services that require external API calls:
 
 **We suspect Elasticsearch Serverless can handle much more than typically assumed:**
 
-| Capability                                      | Hypothesis  | Status      |
-| ----------------------------------------------- | ----------- | ----------- |
-| **Curriculum vocabulary** (keyword definitions) | ✅ Proven   | Available   |
-| **Hybrid search** (BM25 + ELSER)                | ✅ Proven   | Complete    |
-| **Three-way hybrid** (+ dense vectors)          | ✅ Likely   | In Progress |
-| **Advanced relevance** (reranking)              | ✅ Likely   | Planned     |
-| **Knowledge graphs** (ES Graph API)             | 🤔 Possible | Planned     |
-| **RAG** (Elastic Native LLM + chunks)           | 🤔 Possible | Planned     |
-| **Graph RAG** (knowledge + RAG)                 | 🤔 Possible | Planned     |
-| **Chat-based search** (conversational)          | 🤔 Possible | Planned     |
-| **Entity extraction** (deployed NER)            | 🤔 Possible | Planned     |
+| Capability                                      | Hypothesis  | Status                |
+| ----------------------------------------------- | ----------- | --------------------- |
+| **Curriculum vocabulary** (keyword definitions) | ✅ Proven   | Available             |
+| **Hybrid search** (BM25 + ELSER)                | ✅ Proven   | Complete              |
+| **Three-way hybrid** (+ dense vectors)          | Historical  | Superseded by ADR-076 |
+| **Advanced relevance** (reranking)              | ✅ Likely   | Planned               |
+| **Knowledge graphs** (ES Graph API)             | 🤔 Possible | Planned               |
+| **RAG** (Elastic Native LLM + chunks)           | 🤔 Possible | Planned               |
+| **Graph RAG** (knowledge + RAG)                 | 🤔 Possible | Planned               |
+| **Chat-based search** (conversational)          | 🤔 Possible | Planned               |
+| **Entity extraction** (deployed NER)            | 🤔 Possible | Planned               |
 
 **This project exists to test these hypotheses systematically.**
 
 ## Architecture
 
-### Current Implementation (Phase 1A)
+### Historical Implementation Sketch (Superseded by ADR-076)
 
 ```typescript
-// Three-way hybrid using ONLY Elastic-native services
+// Historical three-way hybrid sketch using ONLY Elastic-native services.
+// Current accepted baseline is BM25 + ELSER/RRF per ADR-076.
 const results = await buildThreeWayLessonRrfRequest(esClient, {
   text: 'pythagoras theorem',
   size: 20,
@@ -120,7 +128,11 @@ const results = await buildThreeWayLessonRrfRequest(esClient, {
 // 3. E5 dense vectors (.multilingual-e5-small-elasticsearch)
 ```
 
-### Planned Implementation (Phase 1B-3)
+### Historical Planned Implementation Sketch (Phase 1B-3)
+
+The following sketch is historical where it refers to dense-vector
+`three-way-hybrid` retrieval. The current accepted retrieval baseline is
+BM25 + ELSER with RRF per ADR-076.
 
 ```typescript
 // Phase 1B: Elastic Native ReRank
@@ -137,7 +149,7 @@ const entities = await extractEntities(transcript, {
 // Phase 3: RAG with Elastic Native LLM
 const answer = await generateRAGResponse(query, {
   llm: '.gp-llm-v2-chat_completion',
-  retrievalStrategy: 'three-way-hybrid',
+  retrievalStrategy: 'bm25-elser-rrf',
   contextWindow: 5,
 });
 ```

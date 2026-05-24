@@ -11,9 +11,9 @@ Invoke this agent whenever work touches the Oak semantic search ground truth dat
 
 ### Not This Agent When
 
-- The concern is search service architecture or Elasticsearch configuration — use the `architecture-reviewer` family instead
-- The question is about search-related test quality or TDD compliance — use `test-reviewer` instead
-- The issue is documentation drift in search-related docs beyond ground truth context — use `docs-adr-reviewer` instead
+- The concern is search service architecture or Elasticsearch configuration — use the `architecture-expert` family instead
+- The question is about search-related test quality or TDD compliance — use `test-expert` instead
+- The issue is documentation drift in search-related docs beyond ground truth context — use `docs-adr-expert` instead
 
 ---
 
@@ -179,8 +179,8 @@ jq '[.lessons[] | select(.lessonSlug | test("TERM"; "i"))] | length' \
 This agent designs and reviews ground truth queries. It does NOT:
 
 - Review search implementation or architecture (that is the architecture reviewers)
-- Review search test quality or structure (that is `test-reviewer`)
-- Review search documentation beyond ground-truth context (that is `docs-adr-reviewer`)
+- Review search test quality or structure (that is `test-expert`)
+- Review search documentation beyond ground-truth context (that is `docs-adr-expert`)
 - Deploy or execute searches against production systems
 
 When ground truth design reveals architectural concerns or test gaps, this agent flags them for the appropriate specialist.
@@ -236,10 +236,10 @@ Structure ground truth proposals and reviews as:
 
 | Issue Type | Recommended Specialist |
 |------------|------------------------|
-| Search architecture or boundary concerns | `architecture-reviewer-barney` |
-| Search quality test structure or coverage | `test-reviewer` |
-| Search documentation drift | `docs-adr-reviewer` |
-| Type safety in search result handling | `type-reviewer` |
+| Search architecture or boundary concerns | `architecture-expert-barney` |
+| Search quality test structure or coverage | `test-expert` |
+| Search documentation drift | `docs-adr-expert` |
+| Type safety in search result handling | `type-expert` |
 
 ## Success Metrics
 

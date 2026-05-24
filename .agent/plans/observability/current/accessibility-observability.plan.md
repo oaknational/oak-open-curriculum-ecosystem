@@ -37,7 +37,7 @@ todos:
     content: "WS4: pnpm check exit 0; widget a11y suite still passes (axe-core dev-time coverage unchanged)."
     status: pending
   - id: ws5-adversarial-review
-    content: "WS5: accessibility-reviewer (WCAG mapping of emissions) + react-component-reviewer (widget component hooks correctness) + sentry-reviewer."
+    content: "WS5: accessibility-expert (WCAG mapping of emissions) + react-component-expert (widget component hooks correctness) + sentry-expert."
     status: pending
   - id: ws6-doc-propagation
     content: "WS6: a11y runbook; event catalog; exploration 3 conclusions carried into this plan body."
@@ -63,7 +63,7 @@ open question for further exploration.
 ### Problem Statement
 
 Oak's a11y discipline today is dev-time: axe-core runs in widget tests,
-the a11y-reviewer gates PRs, keyboard navigation is a first-class
+the a11y-expert gates PRs, keyboard navigation is a first-class
 requirement. Runtime evidence of how the widget behaves for users with
 specific accessibility preferences is absent — we cannot tell whether
 a user with reduced-motion reached the intended outcome.
@@ -211,11 +211,11 @@ unchanged).
 
 ## WS5 — Adversarial Review
 
-- `accessibility-reviewer` — WCAG mapping of preference keys; whether
+- `accessibility-expert` — WCAG mapping of preference keys; whether
   emitted categories are WCAG-aligned or ad-hoc.
-- `react-component-reviewer` — hooks correctness; re-render safety of
+- `react-component-expert` — hooks correctness; re-render safety of
   preference/outcome capture.
-- `sentry-reviewer` — browser Sentry emission shape.
+- `sentry-expert` — browser Sentry emission shape.
 
 ---
 

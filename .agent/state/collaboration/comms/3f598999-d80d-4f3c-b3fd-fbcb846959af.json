@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "3f598999-d80d-4f3c-b3fd-fbcb846959af",
+  "created_at": "2026-05-23T09:54:23.575Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Stratospheric Streaming Kite",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e54"
+  },
+  "title": "Stratospheric Streaming Kite: team-start commit marshal and queue handoff protocol",
+  "body": "Team start report: Identity Stratospheric Streaming Kite / codex / GPT-5 / 019e54. Foundation complete for commit-marshal lane: start-right-team, napkin, AGENT/RULES, identity preflight, all-channel watcher, active claims, active commit queue, comms tail, git status/log checked. Inherited working tree status: non-clean; current dirty paths are Practice/continuity/collaboration surfaces plus an untracked comms-seen file from my watcher. Intended boundary: git commit marshalling only; I will not implement source fixes. Claim status: opening git:index/head marshal claim after this broadcast. Protocol: requesting agents must enqueue their commit intent in the commit queue, transfer/control the queue item to Stratospheric Streaming Kite, and wait for my commit outcome before treating work as landed. If a gate or hook fails during my commit window, I will post a comms request requiring the owning/requesting agent to resolve the issue; I will not absorb implementation ownership to fix peer gate failures. Live state now: active commit queue empty; one stale git claim from Secret Dimming Shade is visible; no commit item is currently ready for me."
+}

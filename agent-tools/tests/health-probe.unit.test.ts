@@ -15,7 +15,7 @@ const wiredClaudeSettingsText = JSON.stringify({
         hooks: [
           {
             type: 'command',
-            command: 'pnpm exec tsx scripts/check-blocked-patterns.ts',
+            command: 'pnpm agent-tools:check-blocked-patterns',
           },
         ],
       },
@@ -25,7 +25,7 @@ const wiredClaudeSettingsText = JSON.stringify({
 
 const documentedSurfaceMatrix = [
   '.agent/hooks/policy.json',
-  'scripts/check-blocked-patterns.ts',
+  'pnpm agent-tools:check-blocked-patterns',
   'Policy Spine',
   'override prune block',
 ].join('\n');
@@ -102,7 +102,7 @@ describe('health report formatting', () => {
           label: 'Practice box state',
           status: 'warn',
           summary: 'Incoming artefacts are waiting.',
-          details: ['Use jc-consolidate-docs.'],
+          details: ['Use oak-consolidate-docs.'],
         },
       ],
     };
@@ -113,6 +113,6 @@ describe('health report formatting', () => {
     expect(output).toContain('Summary');
     expect(output).toContain('Practice box state');
     expect(output).toContain('Details');
-    expect(output).toContain('Use jc-consolidate-docs.');
+    expect(output).toContain('Use oak-consolidate-docs.');
   });
 });

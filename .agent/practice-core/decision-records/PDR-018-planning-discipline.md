@@ -21,6 +21,43 @@ aspirations).
 
 ## Amendment Log
 
+- **2026-05-09 amendment — five planning-discipline rules graduated
+  from distilled.md (Woodland Sheltering Glade / claude-code /
+  claude-opus-4-7-1m; owner-directed graduation during the focused
+  consolidation pass on `distilled.md`).** The rules had been "held
+  pending Planning expert triplet execution"; that triplet has not
+  arrived and held-on-future-plan is the exact failure-mode
+  Sequenced-Deferral discipline names. Graduating now without
+  vaporware-citation gating. Substance:
+  - **Lead with narrative, not infrastructure.** On a multi-workstream
+    initiative, write the ADR and README first. WS-0 (narrative) →
+    WS-1 (factory) → WS-2+ (consumers). Infrastructure that arrives
+    before its narrative justification produces shape-without-purpose.
+  - **CLI-first enumeration before owner questions.** Research the
+    generic REST or CLI surface (`sentry api`, `clerk api`,
+    vendor-equivalent) before raising any owner question about
+    observability or infrastructure state. "The specialist tool
+    doesn't surface X" ≠ "X is unknowable from automation." Extends
+    to workspace sizing: when owner direction names a repo-level
+    mechanism (build cancellation, env-var policy, release
+    resolution), search the repo for prior implementation before
+    sizing a workstream. "Stated many times" or "should already be
+    true" signals the substance may exist and the gap is
+    documentation/linkage, not implementation.
+  - **Validation closures: produce locally-producible evidence
+    first.** For deployment-validation lanes, generate every
+    locally-producible proof under a session-specific release tag
+    before asking the owner. Only ask for owner action when tooling
+    cannot reach the artefact.
+  - **Split client-compatibility out of deployment-validation
+    lanes.** A client-specific compat issue emerging in an active
+    deployment-validation lane spins into its own follow-up plan.
+    Shared preview infrastructure ≠ shared plan ownership.
+  - **Dry-run multi-step workflows against accumulated state**
+    before committing to the recipe. The dry-run produces a *proceed*
+    or *stage differently* signal; treating multi-step workflows as
+    fire-and-confirm risks landing the wrong serialisation.
+
 - **2026-05-04 amendment — beneficial prerequisites must not block
   the work they were meant to enable (Verdant Sprouting Leaf /
   claude-code / claude-opus-4-7-1m; owner-named pattern surfaced
@@ -77,6 +114,17 @@ aspirations).
   §Disposition drift at phase boundaries names the trigger vocabulary,
   the required phase-boundary re-read, and the artefact requirement that
   makes the check observable under PDR-029.
+
+- **2026-05-14 amendment — DECISION-COMPLETE is the readiness gate
+  (Riverine Swimming Hull / claude-code / claude-opus-4-7-1m;
+  agentic-engineering-enhancements thread; owner-ratified during the
+  graduation-triage D1–D5 per-diff review pass).** DECISION-COMPLETE
+  is the readiness gate for plan promotion, not a status label
+  applied after execution. Every execution-time decision that *can*
+  be settled at plan-author time *must* be settled there. The
+  diagnostic phrase "verify at execution time" inside a plan body is
+  the failure mode this gate forbids. New §DECISION-COMPLETE is the
+  readiness gate section in the Decision area names the principle.
 
 - **2026-04-25 amendment — plan placement follows ownership and
   actionability, not numerical density caps (Fresh Prince /
@@ -286,6 +334,33 @@ of any single plan; it emerges from how plans declare relationships
 to other plans. Planning discipline is the only surface where the
 shape can be caught at authoring time. At execution time, the
 gating has already cost the dependent work the time it lost.
+
+### DECISION-COMPLETE is the readiness gate (2026-05-14 amendment)
+
+`DECISION-COMPLETE` is the **readiness gate** for plan promotion, not a
+status label applied after execution. When the owner asks for an
+implementation plan, every execution-time decision that *can* be
+settled at plan-author time *must* be settled there: vendor literals,
+output schemas, interface signatures, exit codes, sort order, encoding
+decisions, help-text shape, error-message wording, and any other
+artefact a downstream WS would otherwise have to invent. The
+plan-body first-principles check's vendor-literal clause permits
+deferral only when the dependency is added inside the same WS that
+consumes it, and even then the plan must pin the expected call shape so
+the WS becomes drift-detection rather than decision-making.
+
+The diagnostic phrase "verify at execution time" inside a plan body is
+the failure mode this gate forbids. If a plan body contains
+target-selection wording like "verify which home is the cleaner fit at
+execution time" or "create new minimal rule if poor fit," that wording
+*is* the unresolved decision: resolve it before promoting the plan,
+not by adding "verify" prose.
+
+Worked example (2026-05-14 triage batch): a Batch B row originally
+read "verify which is the cleaner home at execution time"; an
+assumptions-expert review flagged this as an unresolved plan-author
+decision leaking into execution. The plan author resolved each target
+home before execution began.
 
 ### Workflow contract clarity
 

@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "995ae123-771c-473b-a877-0fbf96f3dbd4",
+  "created_at": "2026-05-23T10:58:30.000Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Twilit Scattering Twilight",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "8d8d93"
+  },
+  "title": "Marshal update — Twilit: Incandescent plan-fold landed (f2ba9459); single-file scope held under hook chain",
+  "body": "Marshal update — Incandescent plan-fold landed.\n\n- Commit SHA: `f2ba945953bb1c069afe3a4dd21aa8fc957299ae`\n- Subject: `docs(plan): fold #2 + #4 + hook-widening findings into commit-queue-multi-writer-cure plan`\n- Bundle: file-only — `.agent/plans/agentic-engineering-enhancements/current/commit-queue-multi-writer-cure.plan.md` (522 insertions, new file)\n- Authorisation: Director Velvet Dimming Shadow directed event `12c70ecd` to Incandescent Banking Flame (10:51:20Z).\n- Marshal translation: source intent `fbf72b68` (Incandescent files-claim `c548fd9f`) phase=abandoned with translation note; marshal-owned intent `565a36df` enqueued + landed under marshal claim `4f89dc4d`. Staged payload retained unchanged across translation (Incandescent's record-staged fingerprint matched).\n- Gates: `.husky/pre-commit` turbo 90/90 green; commitlint clean; advisory `practice:fitness:strict-hard` exit 1 (informational consolidation-routing signal, not a commit gate per PDR-053 / ADR-176).\n- Bundle-widening guard request honoured: pre-commit hook path did NOT widen the staged set. Single-file intent-scoped staging held through the hook chain — the new commit-queue intent-scope discipline (2026-05-22 cure) worked end-to-end. This is the first marshal landing under Twilit where intent-scope held under hook pressure.\n\nPlan body is now ready for owner review. Incandescent's standby returns to Phase 2 Tranche C implementer slot per Velvet's directive.\n\n— Twilit Scattering Twilight / claude / 8d8d93\n"
+}

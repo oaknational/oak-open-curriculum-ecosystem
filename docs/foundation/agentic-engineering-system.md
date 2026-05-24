@@ -63,7 +63,7 @@ The system prevents entropy through interlocking negative feedback loops.
 
 **Quality gates** are the primary enforcement mechanism. Every change must pass: type-check, lint, build, test, format, markdownlint. The critical design choice: **all gates are always blocking** — there is no "non-blocking warning" category inside the gate set. This is enforced through [architectural principles](../../.agent/directives/principles.md) (§Code Quality) that fire on every agent interaction and the canonical `pnpm check` command. Informational health checks such as `pnpm practice:fitness:informational` sit outside `pnpm check`; they surface drift without redefining it as a quality gate. Gates catch entropy within seconds.
 
-**Specialist reviewers** provide targeted review after non-trivial changes. The [specialist roster](../../.agent/memory/executive/invoke-code-reviewers.md) includes a gateway reviewer (`code-reviewer`) that triages to specialists: architecture reviewers (4, each with a different lens), test-reviewer, type-reviewer, security-reviewer, config-reviewer, docs-adr-reviewer, and domain specialists. Reviewers catch entropy within the session — they assess not just code correctness but architectural alignment with the Practice itself.
+**Specialist reviewers** provide targeted review after non-trivial changes. The [specialist roster](../../.agent/memory/executive/invoke-code-experts.md) includes a gateway reviewer (`code-expert`) that triages to specialists: architecture reviewers (4, each with a different lens), test-expert, type-expert, security-expert, config-expert, docs-adr-expert, and domain specialists. Reviewers catch entropy within the session — they assess not just code correctness but architectural alignment with the Practice itself.
 
 **Strict rules** ([`principles.md`](../../.agent/directives/principles.md)) encode non-negotiable constraints: TDD at all levels, no type shortcuts, fail fast with helpful errors, no disabled checks, no compatibility layers. These are not guidelines — they are enforced by lint rules, compiler checks, and reviewer scrutiny. Rules catch entropy at authoring time.
 
@@ -73,7 +73,7 @@ The system improves over time through the [Knowledge Flow](../../.agent/practice
 
 **Capture** → **Refine** → **Graduate** → **Enforce** → **Work** → repeat.
 
-Each stage serves a broader audience: the napkin serves the current session, distilled learnings serve future agents, permanent docs (ADRs, governance, READMEs) serve everyone. Each transition raises the bar for what passes through. The [`/jc-consolidate-docs`](../../.agent/commands/consolidate-docs.md) command drives graduation and is where the intra-repo loop, inter-repo integration, and fitness regulation all converge ([ADR-131 §Consolidate-Docs](../architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md)).
+Each stage serves a broader audience: the napkin serves the current session, distilled learnings serve future agents, permanent docs (ADRs, governance, READMEs) serve everyone. Each transition raises the bar for what passes through. The [`/jc-consolidate-docs`](../../.agent/skills/consolidate-docs/SKILL-CANONICAL.md) skill drives graduation and is where the intra-repo loop, inter-repo integration, and fitness regulation all converge ([ADR-131 §Consolidate-Docs](../architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md)).
 
 **Fitness functions** prevent unbounded growth at every stage. The napkin
 triggers distillation at ~500 lines. Distilled targets <200 lines. Permanent

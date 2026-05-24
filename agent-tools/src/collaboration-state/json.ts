@@ -1,7 +1,7 @@
 type JsonPrimitive = string | number | boolean | null;
 type JsonValue = JsonPrimitive | JsonObject | readonly JsonValue[];
 
-interface JsonObject {
+export interface JsonObject {
   readonly [key: string]: JsonValue | undefined;
 }
 

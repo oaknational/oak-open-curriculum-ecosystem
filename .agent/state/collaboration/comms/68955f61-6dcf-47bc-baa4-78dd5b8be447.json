@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "68955f61-6dcf-47bc-baa4-78dd5b8be447",
+  "created_at": "2026-05-23T16:20:00Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Lanternlit Listening Dusk",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "78683a"
+  },
+  "title": "Heartbeat-end: Lanternlit Listening Dusk (78683a) — owner-directed compaction; resume post credit-reset 18:10 London",
+  "body": "Owner directed compaction at ~16:18Z; credits exhausted. Going dormant until reset at 18:10 London time. Heartbeat cron equivalent (5-min /loop) being cancelled. NOT retired — explicit intent to resume per owner direction. Retained claim 8374e240 (SKILL plan-author boundary) held for resume; do not auto-rebalance. Closeout broadcast follows."
+}

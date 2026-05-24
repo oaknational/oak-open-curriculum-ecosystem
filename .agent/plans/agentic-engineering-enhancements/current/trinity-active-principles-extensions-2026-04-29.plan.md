@@ -21,7 +21,7 @@ todos:
   - id: ext-3-tool-error-as-question
     content: "Extension 3: add Active Principle 'Tool error as question' to practice-lineage.md."
     status: drafting
-  - id: ext-4-reviewer-scope-equals-prompted-scope
+  - id: ext-4-expert-scope-equals-prompted-scope
     content: "Extension 4: add Active Principle 'Reviewer scope equals prompted scope' to practice-lineage.md + brief mention in practice-bootstrap.md §Sub-agents."
     status: drafting
   - id: ext-5-testing-classification-by-behaviour-shape
@@ -291,10 +291,10 @@ order.
 
 ## Reviewers
 
-- `assumptions-reviewer` may be dispatched per-extension if the
+- `assumptions-expert` may be dispatched per-extension if the
   owner's first reaction is uncertain; otherwise per-diff approval
   is the gate.
-- `docs-adr-reviewer` final pass on applied extensions to verify
+- `docs-adr-expert` final pass on applied extensions to verify
   cross-references resolve.
 
 ## Risk

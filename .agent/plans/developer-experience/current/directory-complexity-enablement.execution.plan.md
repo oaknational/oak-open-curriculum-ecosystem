@@ -279,14 +279,14 @@ git diff --check
 
 ## Reviewer Gate Strategy
 
-- Phase 0: `assumptions-reviewer`, `config-reviewer`
-- Phase 1: `docs-adr-reviewer`, `architecture-reviewer-fred`
-- Phase 2 and Phase 3: `code-reviewer`, `test-reviewer`,
-  `config-reviewer`
-- Phase 4: `architecture-reviewer-betty`,
-  `architecture-reviewer-wilma`
-- Phase 5: `code-reviewer`, `docs-adr-reviewer`,
-  `assumptions-reviewer`
+- Phase 0: `assumptions-expert`, `config-expert`
+- Phase 1: `docs-adr-expert`, `architecture-expert-fred`
+- Phase 2 and Phase 3: `code-expert`, `test-expert`,
+  `config-expert`
+- Phase 4: `architecture-expert-betty`,
+  `architecture-expert-wilma`
+- Phase 5: `code-expert`, `docs-adr-expert`,
+  `assumptions-expert`
 
 ## Risks and Mitigations
 

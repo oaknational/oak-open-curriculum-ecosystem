@@ -150,7 +150,7 @@ sequencing if owner schedules them together:
 1. Trinity Active Principles extensions (in this session, per owner
    direction; lowest external dependency).
 2. Build-vs-Buy PDR + ADR-163 amendment (next session; needs PDR
-   number assignment + assumptions-reviewer + docs-adr-reviewer).
+   number assignment + assumptions-expert + docs-adr-expert).
 3. multi-agent-collaboration-protocol concept-home refinement (next session;
    substantive subtractive work, preserves audit trail).
 4. Pre-2026-02-15 experience corpus extraction (queued in future/;

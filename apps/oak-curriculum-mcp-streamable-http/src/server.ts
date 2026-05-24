@@ -21,6 +21,7 @@ import type { RuntimeConfig } from './runtime-config.js';
 import { WIDGET_HTML_CONTENT } from './generated/widget-html-content.js';
 import { createApp } from './application.js';
 import { createDeployEntryHandler } from './deploy-entry-handler.js';
+import { createDefaultRateLimiterFactory } from './rate-limiting/index.js';
 import {
   createHttpObservability,
   describeHttpObservabilityError,
@@ -73,6 +74,9 @@ async function loadConfiguredApp(): Promise<NodeRequestHandler> {
     runtimeConfig,
     observability,
     getWidgetHtml: () => WIDGET_HTML_CONTENT,
+    rateLimiterFactory: createDefaultRateLimiterFactory({
+      isVercelRuntime: runtimeConfig.env.VERCEL_ENV !== undefined,
+    }),
     setupSentryErrorHandler:
       runtimeConfig.env.SENTRY_MODE === 'sentry' ? setupExpressErrorHandler : undefined,
   });

@@ -4,76 +4,14 @@ import { join } from 'node:path';
 import { CODEX_CONFIG_PATH, readCodexAgentRegistrations } from './codex-project-agent-registry';
 import {
   CLAUDE_AGENTS_DIR,
-  CLAUDE_COMMANDS_DIR,
   CODEX_AGENTS_DIR,
   CURSOR_AGENTS_DIR,
-  CURSOR_COMMANDS_DIR,
-  GEMINI_COMMANDS_DIR,
   listBasenames,
-  listCanonicalCommandNames,
-  listCommandAdapterNames,
-  listPortableCommandAdapterNames,
 } from './health-probe-shared';
 import type { HealthCheckResult } from './health-probe-types';
 
 export function evaluateParityChecks(repoRoot: string): readonly HealthCheckResult[] {
-  return [
-    evaluateCommandAdapterParity(repoRoot),
-    evaluateReviewerAdapterParity(repoRoot),
-    evaluateReviewerRegistrationParity(repoRoot),
-  ];
-}
-
-function evaluateCommandAdapterParity(repoRoot: string): HealthCheckResult {
-  const canonicalCommands = listCanonicalCommandNames(repoRoot);
-  const platformCommandNames: readonly [string, string[]][] = [
-    ['Cursor', listCommandAdapterNames(repoRoot, CURSOR_COMMANDS_DIR, '.md')],
-    ['Claude Code', listCommandAdapterNames(repoRoot, CLAUDE_COMMANDS_DIR, '.md')],
-    ['Gemini CLI', listCommandAdapterNames(repoRoot, GEMINI_COMMANDS_DIR, '.toml')],
-    ['.agents', listPortableCommandAdapterNames(repoRoot)],
-  ];
-  const details = collectCommandAdapterParityDetails(canonicalCommands, platformCommandNames);
-
-  if (details.length > 0) {
-    return {
-      key: 'command-adapter-parity',
-      label: 'Command adapter parity',
-      status: 'fail',
-      summary: 'Supported command adapters have drifted from the canonical command set.',
-      details,
-    };
-  }
-
-  return {
-    key: 'command-adapter-parity',
-    label: 'Command adapter parity',
-    status: 'pass',
-    summary: `${canonicalCommands.length} canonical commands are present across Cursor, Claude Code, Gemini CLI, and .agents.`,
-    details: [],
-  };
-}
-
-function collectCommandAdapterParityDetails(
-  canonicalCommands: readonly string[],
-  platformCommandNames: readonly (readonly [string, readonly string[]])[],
-): string[] {
-  const details: string[] = [];
-
-  for (const [label, adapterNames] of platformCommandNames) {
-    const missing = canonicalCommands.filter((commandName) => !adapterNames.includes(commandName));
-    const unexpected = adapterNames.filter(
-      (commandName) => !canonicalCommands.includes(commandName),
-    );
-
-    if (missing.length > 0) {
-      details.push(`${label}: missing adapters for ${missing.join(', ')}`);
-    }
-    if (unexpected.length > 0) {
-      details.push(`${label}: unexpected adapters for ${unexpected.join(', ')}`);
-    }
-  }
-
-  return details;
+  return [evaluateReviewerAdapterParity(repoRoot), evaluateReviewerRegistrationParity(repoRoot)];
 }
 
 function evaluateReviewerAdapterParity(repoRoot: string): HealthCheckResult {

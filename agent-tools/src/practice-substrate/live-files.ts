@@ -3,7 +3,7 @@ import { lstat, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
 
-import { LEGACY_EVENTS_ROOT, absolutePath } from './live-types.js';
+import { LEGACY_COMMS_ROOTS, absolutePath } from './live-types.js';
 import { evaluateLegacyEventRoot } from './path-evaluators.js';
 import { evaluateMergeTopology } from './topology-evaluators.js';
 import { type SubstrateFinding } from './types.js';
@@ -13,14 +13,25 @@ const execFileAsync = promisify(execFile);
 export async function evaluateLegacyEventsRoot(
   repoRoot: string,
 ): Promise<readonly SubstrateFinding[]> {
-  const rootPath = absolutePath(repoRoot, LEGACY_EVENTS_ROOT);
+  const findings = await Promise.all(
+    LEGACY_COMMS_ROOTS.map((root) => evaluateLegacyRoot(repoRoot, root)),
+  );
+
+  return findings.flat();
+}
+
+async function evaluateLegacyRoot(
+  repoRoot: string,
+  legacyRoot: string,
+): Promise<readonly SubstrateFinding[]> {
+  const rootPath = absolutePath(repoRoot, legacyRoot);
   const stats = await lstat(rootPath).catch(() => undefined);
   const entries =
-    stats?.isDirectory() === true ? await listLegacyRootEntries(repoRoot, LEGACY_EVENTS_ROOT) : [];
+    stats?.isDirectory() === true ? await listLegacyRootEntries(repoRoot, legacyRoot) : [];
 
   return evaluateLegacyEventRoot({
-    surface: 'collaboration-comms-events-legacy',
-    legacyRoot: LEGACY_EVENTS_ROOT,
+    surface: 'collaboration-comms-legacy',
+    legacyRoot,
     rootExists: stats !== undefined,
     entries: entries.toSorted((left, right) => left.path.localeCompare(right.path)),
   });

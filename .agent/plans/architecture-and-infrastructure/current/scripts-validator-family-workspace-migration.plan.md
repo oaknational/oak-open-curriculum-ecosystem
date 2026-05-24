@@ -3,7 +3,7 @@ name: "Scripts Validator Family — Workspace Migration"
 overview: "Migrate the scripts/validate-* family of repo-invariant validators (helpers + runtimes + tests) into a declared workspace, eliminating ADR-041 / §Separate-Framework-from-Consumer drift, and graduate the owner-direction rule that prevents future drift."
 todos:
   - id: phase-0-foundation
-    content: "Phase 0: Resolve Build-vs-Buy (agent-tools/ vs new workspace) via assumptions-reviewer; graduate the owner-direction rule to a canonical .agent/rules/*.md file; author the ADR delta or peer ADR."
+    content: "Phase 0: Resolve Build-vs-Buy (agent-tools/ vs new workspace) via assumptions-expert; graduate the owner-direction rule to a canonical .agent/rules/*.md file; author the ADR delta or peer ADR."
     status: pending
   - id: phase-1-pilot
     content: "Phase 1: Migrate validate-no-stale-script-invocations (the cleanest test case, no cross-workspace imports) as the first concrete consumer of the chosen home; verify tests + CI green."
@@ -21,7 +21,7 @@ todos:
     content: "Phase 5: Re-wire test execution (retire or sharply scope `pnpm test:root-scripts`); update CI workflow YAML; sweep documentation (ADR-168 reference, build-system.md, governance-claim-needs-a-scanner.md, etc.)."
     status: pending
   - id: phase-6-validation
-    content: "Phase 6: Full quality-gate sweep + docs-adr-reviewer + release-readiness-reviewer; archive plan; close claim."
+    content: "Phase 6: Full quality-gate sweep + docs-adr-expert + release-readiness-expert; archive plan; close claim."
     status: pending
 ---
 
@@ -38,7 +38,7 @@ todos:
 
 ## Context
 
-PR #90 added a sixth validator (`scripts/validate-no-stale-script-invocations`) following the existing `scripts/validate-*` peer pattern. The owner challenged the placement and four parallel architecture reviewers (architecture-reviewer-{barney, betty, fred, wilma}) confirmed the existing pattern is **structural drift**, not canon. The whole family wants a workspace home.
+PR #90 added a sixth validator (`scripts/validate-no-stale-script-invocations`) following the existing `scripts/validate-*` peer pattern. The owner challenged the placement and four parallel architecture reviewers (architecture-expert-{barney, betty, fred, wilma}) confirmed the existing pattern is **structural drift**, not canon. The whole family wants a workspace home.
 
 ### Issue 1: validators with helpers and tests in `scripts/` evade workspace tooling
 
@@ -140,11 +140,11 @@ This exemplifies the first question from `principles.md`: **"Could it be simpler
 
 ### Strategy
 
-- Phase 0 resolves the open Build-vs-Buy question via `assumptions-reviewer` and graduates the owner-direction rule before any code moves. **Default destination**: `agent-tools/` (Barney + Fred + Wilma majority); pivot to a new workspace iff Betty's cohesion argument survives review.
+- Phase 0 resolves the open Build-vs-Buy question via `assumptions-expert` and graduates the owner-direction rule before any code moves. **Default destination**: `agent-tools/` (Barney + Fred + Wilma majority); pivot to a new workspace iff Betty's cohesion argument survives review.
 - Phases 1–3 migrate validators in increasing order of coupling: zero-coupling first (Phase 1 pilot, then Phase 2 batch), then the cross-workspace-coupled `validate-eslint-boundaries` (Phase 3) where the relative-import bypass is fixed in the same commit.
 - Phase 4 consolidates the duplicated filesystem walker into one shared utility within the workspace.
 - Phase 5 retires `pnpm test:root-scripts` (or scopes it to genuinely thin shell residue) and rewires CI + docs.
-- Phase 6 invokes `docs-adr-reviewer` and `release-readiness-reviewer` for closure.
+- Phase 6 invokes `docs-adr-expert` and `release-readiness-expert` for closure.
 
 **Non-Goals** (YAGNI):
 
@@ -170,7 +170,7 @@ The destination workspace question is the load-bearing Build-vs-Buy decision in 
 - Pros: clean semantic home; clear cohesion; future validators have an obvious destination.
 - Cons: ~1–2 hours of new infrastructure (tsconfig, eslint, vitest, package.json, pnpm-workspace.yaml entry); a third tooling-tier alongside `agent-tools/` and `scripts/`.
 
-**Resolution mechanism**: Phase 0 invokes `assumptions-reviewer` with both options framed and the reviewers' positions cited. The reviewer's brief is to challenge the default (`agent-tools/`) and either confirm it or surface a concrete cohesion blocker that justifies the new-workspace cost.
+**Resolution mechanism**: Phase 0 invokes `assumptions-expert` with both options framed and the reviewers' positions cited. The reviewer's brief is to challenge the default (`agent-tools/`) and either confirm it or surface a concrete cohesion blocker that justifies the new-workspace cost.
 
 **Default if reviewer is silent**: `agent-tools/` (3-of-4 reviewer majority + simpler infrastructure path).
 
@@ -178,13 +178,13 @@ The destination workspace question is the load-bearing Build-vs-Buy decision in 
 
 ## Reviewer Scheduling (phase-aligned)
 
-- **Phase 0**: `assumptions-reviewer` (resolve Build-vs-Buy); `architecture-reviewer-fred` (confirm rule-graduation wording aligns with ADR-168/041); `docs-adr-reviewer` (size ADR delta vs new ADR vs rule-only landing).
-- **Phase 1 (pilot)**: `code-reviewer` gateway after the pilot commit; `test-reviewer` to confirm migrated tests match the workspace's vitest conventions; `architecture-reviewer-barney` to verify the boundary line.
-- **Phase 2 (batch)**: `code-reviewer` after the batch commit. `test-reviewer` if any test-file logic shifts during migration.
-- **Phase 3 (coupling fix)**: `code-reviewer` + `architecture-reviewer-fred` (the public-API-bypass fix is principle-load-bearing).
-- **Phase 4 (consolidation)**: `code-reviewer` after the shared-walker commit.
-- **Phase 5 (rewire)**: `architecture-reviewer-wilma` (adversarial: probe failure modes of the rewiring — CI race conditions, duplicate runs, silent gate skips).
-- **Phase 6 (closure)**: `docs-adr-reviewer` + `release-readiness-reviewer`.
+- **Phase 0**: `assumptions-expert` (resolve Build-vs-Buy); `architecture-expert-fred` (confirm rule-graduation wording aligns with ADR-168/041); `docs-adr-expert` (size ADR delta vs new ADR vs rule-only landing).
+- **Phase 1 (pilot)**: `code-expert` gateway after the pilot commit; `test-expert` to confirm migrated tests match the workspace's vitest conventions; `architecture-expert-barney` to verify the boundary line.
+- **Phase 2 (batch)**: `code-expert` after the batch commit. `test-expert` if any test-file logic shifts during migration.
+- **Phase 3 (coupling fix)**: `code-expert` + `architecture-expert-fred` (the public-API-bypass fix is principle-load-bearing).
+- **Phase 4 (consolidation)**: `code-expert` after the shared-walker commit.
+- **Phase 5 (rewire)**: `architecture-expert-wilma` (adversarial: probe failure modes of the rewiring — CI race conditions, duplicate runs, silent gate skips).
+- **Phase 6 (closure)**: `docs-adr-expert` + `release-readiness-expert`.
 
 Reviewer scheduling is phase-aligned, not closure-batched.
 
@@ -231,7 +231,7 @@ If no update is needed for a required surface, record an explicit no-change rati
 
 **Key Principle**: Resolve the destination workspace before moving any code; graduate the doctrine before extending the pattern.
 
-#### Task 0.1: Resolve Build-vs-Buy via `assumptions-reviewer`
+#### Task 0.1: Resolve Build-vs-Buy via `assumptions-expert`
 
 **Current Assumption**: Default destination is `agent-tools/` (3-of-4 reviewer majority).
 
@@ -239,7 +239,7 @@ If no update is needed for a required surface, record an explicit no-change rati
 
 **Acceptance Criteria**:
 
-1. ✅ `assumptions-reviewer` invoked with both options framed and cited.
+1. ✅ `assumptions-expert` invoked with both options framed and cited.
 2. ✅ Reviewer report either confirms `agent-tools/` or names a concrete cohesion blocker (Betty's argument operationalised).
 3. ✅ Decision recorded in this plan body and in a comms-log entry.
 4. ✅ If the decision is a new workspace, the workspace name and tier home (`packages/core/`, `packages/devx/`, etc.) is named in the same record.
@@ -290,7 +290,7 @@ pnpm subagents:check
 
 **Acceptance Criteria**:
 
-1. ✅ `docs-adr-reviewer` consulted to choose between ADR-168 amendment, peer ADR, or rule-only landing.
+1. ✅ `docs-adr-expert` consulted to choose between ADR-168 amendment, peer ADR, or rule-only landing.
 2. ✅ ADR amendment landed (or new ADR authored) per the reviewer's recommendation.
 3. ✅ ADR cross-references the rule file from Task 0.2.
 
@@ -489,11 +489,11 @@ pnpm practice:fitness:informational
 
 **Acceptance Criteria**: every command exits 0.
 
-#### Task 6.2: `docs-adr-reviewer`
+#### Task 6.2: `docs-adr-expert`
 
 Verify ADR-168 amendment / peer ADR + rule file land cleanly; cross-references resolve; no documentation drift.
 
-#### Task 6.3: `release-readiness-reviewer`
+#### Task 6.3: `release-readiness-expert`
 
 Synthesise quality-gate evidence + breaking-change risk (no public API changes; `pnpm test:root-scripts` semantics may change) + migration impact + operational readiness into a GO / GO WITH CONDITIONS / NO-GO recommendation.
 
@@ -586,7 +586,7 @@ Not affected by this plan.
 
 **Prerequisites**:
 
-- ✅ Architecture-reviewer consensus (recorded in PR #90 comment `4346908971`).
+- ✅ Architecture-expert consensus (recorded in PR #90 comment `4346908971`).
 - ✅ Strategic brief at `future/`.
 - ⚪ PR #90 merged to `main` (pending owner MCP manual validation).
 

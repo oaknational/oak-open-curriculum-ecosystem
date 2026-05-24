@@ -31,6 +31,25 @@ export interface ConfigError {
 }
 
 /**
+ * Format structured config diagnostics as a single user-facing string.
+ *
+ * The validation `error.message` already names failing keys and the
+ * validation issue text; this formatter just prefixes it and appends
+ * a trailing newline. Per-key MISSING lines for optional-and-absent
+ * keys are intentionally NOT emitted — that information belongs on
+ * a debug logger surface, not on the user-facing stderr stream.
+ *
+ * Pure function: no I/O, no global access. The thin stderr wrapper
+ * lives at `printConfigError` in `runtime-config.ts`.
+ *
+ * @param error - Config validation error from the runtime config pipeline
+ * @returns Formatted single-string output suitable for stderr
+ */
+export function formatConfigError(error: ConfigError): string {
+  return `Environment validation failed: ${error.message}\n`;
+}
+
+/**
  * Options for loading runtime configuration.
  */
 export interface LoadRuntimeConfigOptions {

@@ -1,12 +1,17 @@
 # ADR-137: Specialist Operational Tooling Layer
 
-**Status**: Accepted
+**Status**: Accepted. Amended 2026-05-10 to align with the unified
+`*-expert` model from ADR-129.
 **Date**: 2026-03-13
 **Related**: [ADR-129 (Domain Specialist Capability Pattern)](129-domain-specialist-capability-pattern.md), [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md)
 
 ## Context
 
-ADR-129 defines the domain specialist triplet (reviewer + skill + situational rule) as the standard shape for adding domain-specific expertise to the agent ecosystem. The Elasticsearch and Clerk specialists have been implemented following this pattern.
+ADR-129 originally defined the domain specialist triplet (reviewer + skill +
+situational rule). As amended in 2026-05-10, the durable pattern is now a
+unified `*-expert` template with situational invocation and optional operational
+tooling. The Elasticsearch and Clerk specialists were early consumers of the
+old split and are migration examples for the unified model.
 
 In practice, a gap has emerged: agents can **assess code** that interacts with a domain system (via the reviewer) and receive **guidance** during implementation (via the skill), but they cannot **inspect or interact with the live domain system itself**. The reviewer can tell you "this mapping doesn't follow current Elastic guidance" by reading code, but it cannot check what the actual deployed index mapping looks like. The skill can advise on Clerk configuration, but it cannot inspect the live Clerk app's social connections or allowlist settings.
 
@@ -23,14 +28,15 @@ Extend the domain specialist capability pattern with an optional fourth layer: *
 
 ### The Extended Pattern
 
-| Layer                   | Purpose                                                | Location                                           | Required? |
-| ----------------------- | ------------------------------------------------------ | -------------------------------------------------- | --------- |
-| **Reviewer**            | Read-only assessment against authoritative sources     | `.agent/sub-agents/templates/<domain>-reviewer.md` | Yes       |
-| **Skill**               | Active workflow for planning, research, implementation | `.agent/skills/<domain>-expert/SKILL.md`           | Yes       |
-| **Situational rule**    | Trigger conditions for reviewer invocation             | `.agent/rules/invoke-<domain>-reviewer.md`         | Yes       |
-| **Operational tooling** | Agent-accessible CLI/MCP for live system interaction   | Domain-specific (CLI app, MCP tools, or both)      | Optional  |
+| Layer                   | Purpose                                                   | Location                                         | Required? |
+| ----------------------- | --------------------------------------------------------- | ------------------------------------------------ | --------- |
+| **Expert**              | Domain expertise across explore, advise, and review modes | `.agent/sub-agents/templates/<domain>-expert.md` | Yes       |
+| **Situational rule**    | Trigger conditions for expert invocation                  | `.agent/rules/invoke-<domain>-expert.md`         | Yes       |
+| **Operational tooling** | Agent-accessible CLI/MCP for live system interaction      | Domain-specific (CLI app, MCP tools, or both)    | Optional  |
 
-The first three layers remain as defined in ADR-129. The operational tooling layer is optional — not every domain has a live system to interact with, and some domains may be adequately served by code-level review alone.
+The operational tooling layer is optional — not every domain has a live system
+to interact with, and some domains may be adequately served by code-level
+review alone.
 
 ### Operational Tooling Design Principles
 
@@ -50,7 +56,7 @@ The first three layers remain as defined in ADR-129. The operational tooling lay
 
 - This ADR does not mandate that every specialist must have operational tooling.
 - This ADR does not prescribe a specific implementation technology (CLI vs MCP tools vs both).
-- This ADR does not change the triplet requirements from ADR-129 — the first three layers remain as defined.
+- This ADR does not require operational tooling for every expert.
 
 ## Rationale
 

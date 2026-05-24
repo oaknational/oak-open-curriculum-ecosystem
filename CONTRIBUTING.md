@@ -45,6 +45,25 @@ that apply equally to humans and agents. For the wider Practice, see
 and [Practice Index](.agent/practice-index.md) (this repository's
 local bridge).
 
+### Working with Claude Code (and other AI coding agents)
+
+Oak teammates whose primary AI coding tool is Claude Code (or Cursor, Codex,
+Gemini CLI, Copilot, Windsurf) start with two additional surfaces:
+
+- [MCP servers for contributors](docs/engineering/mcp-servers-for-contributors.md) —
+  the sanctioned MCP set; note that the Vercel CLI is forbidden, all Vercel
+  work goes through the project-scoped Vercel MCP plugin
+- [Sibling repositories](docs/engineering/sibling-repos.md) — related Oak
+  repos a teammate may need to clone
+
+The team's skill and command vocabulary lives under
+[`.agent/skills/`](.agent/skills/) (canonical) with platform adapters under
+[`.claude/skills/`](.claude/skills/) and equivalents for other agents. Open
+every session with the platform adapter for `oak-start-right-quick` and close
+it with the platform adapter for `oak-session-handoff`. The docs index keeps
+the current platform invocation forms in
+[`docs/README.md`](docs/README.md#getting-started).
+
 ## Where the documentation lives
 
 Most of what you need as a contributor is grouped by section under
@@ -162,19 +181,33 @@ Before making changes, follow the install and verify steps in the
 3. Set up environment (skip for Level 1 contributions — no env vars needed):
 
    ```bash
-   cp .env.example .env
-   # Populate OAK_API_KEY (see below for which variables go where)
+   # HTTP MCP server
+   cp apps/oak-curriculum-mcp-streamable-http/.env.example \
+     apps/oak-curriculum-mcp-streamable-http/.env.local
+
+   # Search CLI
+   cp apps/oak-search-cli/.env.example apps/oak-search-cli/.env.local
+
+   # Populate OAK_API_KEY in the workspace .env.local you will use
    ```
 
-   `.env` and `.env.local` are local-only, untracked files.
+   Workspace `.env` and `.env.local` files are local-only, untracked files.
    Real credentials should never be added to source control.
-   Keep `.env.example` as placeholders only; do not copy secrets into it.
+   Keep workspace `.env.example` files as placeholders only; do not copy
+   secrets into them.
 
 4. Run tests to verify setup:
 
    ```bash
    pnpm test
    ```
+
+### Picking a first task
+
+For a curated list of starter tasks, see
+[good first issues](.agent/plans/good-first-issues.md) — a thin index that
+points to the live GitHub `good first issue` label plus a short list of stable
+area onramps.
 
 ### Contribution Levels
 
@@ -215,8 +248,11 @@ With an API key, you can:
 - Work on application features
 
 ```bash
-cp .env.example .env
-# Add:
+# HTTP MCP server
+cp apps/oak-curriculum-mcp-streamable-http/.env.example \
+  apps/oak-curriculum-mcp-streamable-http/.env.local
+
+# Edit apps/oak-curriculum-mcp-streamable-http/.env.local and add:
 # OAK_API_KEY=your_key_here
 # ELASTICSEARCH_URL=https://your-es-endpoint
 # ELASTICSEARCH_API_KEY=your_es_api_key
@@ -230,12 +266,15 @@ Get your Oak API key from the public form:
 
 **Requires: Multiple service credentials**
 
-For smoke testing and search functionality (E2E tests use mocks and DI — no
-real credentials needed; see [Build System](docs/engineering/build-system.md)):
+For live search functionality and OAuth-backed local HTTP MCP work (E2E tests
+use mocks and DI — no real credentials needed; see
+[Build System](docs/engineering/build-system.md)):
 
-- `OAK_API_KEY` — Curriculum API (root `.env`)
-- `ELASTICSEARCH_URL` + `ELASTICSEARCH_API_KEY` — Search indices (root `.env`)
-- `CLERK_PUBLISHABLE_KEY` + `CLERK_SECRET_KEY` — OAuth smoke testing (root `.env`)
+- `OAK_API_KEY` — Curriculum API (workspace `.env.local`)
+- `ELASTICSEARCH_URL` + `ELASTICSEARCH_API_KEY` — Search indices
+  (workspace `.env.local`)
+- `CLERK_PUBLISHABLE_KEY` + `CLERK_SECRET_KEY` — OAuth-backed local HTTP MCP
+  work (HTTP MCP server workspace `.env.local`)
 - `SEARCH_API_KEY` — Search admin endpoints (`apps/oak-search-cli/.env.local`)
 
 See [environment variables guide](docs/operations/environment-variables.md) and
@@ -294,7 +333,8 @@ detected.
 Use conventional commit format:
 
 ```bash
-git add .
+git status --short
+git add -- path/to/changed-file another/path
 git commit -m "feat: add new search filter option"
 # or
 git commit -m "fix: handle empty database queries"

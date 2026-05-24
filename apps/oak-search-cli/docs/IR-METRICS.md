@@ -266,13 +266,12 @@ pnpm benchmark --phase primary --verbose          # Detailed output
 
 ---
 
-## Running Smoke Tests
+## Running Live Search Verification
 
 **Purpose**: Verify search service meets baseline expectations.
 
 ```bash
-# Runs all smoke tests including search-baseline
-pnpm smoke:dev:stub
+pnpm -C apps/oak-search-cli test:smoke
 ```
 
 **What it checks**:

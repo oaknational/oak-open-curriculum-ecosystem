@@ -182,7 +182,7 @@ Rules:
 #### `packages/core/graph-core/`
 
 This workspace is provided by
-[`graph-stack.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md),
+[`graph-stack.plan.md`](../../connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md),
 not created conditionally by this pilot. Practice graph consumes it only after
 the graph-stack foundation increment lands; it must not fork local graph-core
 types inside `agent-graphs/practice-graph/`.
@@ -304,22 +304,22 @@ Plan-specific amendments:
 
 ### Plan-Phase (PRE-execution)
 
-- `assumptions-reviewer` — validate that this is truly the payoff-peak slice,
+- `assumptions-expert` — validate that this is truly the payoff-peak slice,
   not a disguised platform build
-- `architecture-reviewer-fred` — validate workspace boundaries and ADR-154
+- `architecture-expert-fred` — validate workspace boundaries and ADR-154
   discipline
 
 ### Mid-Cycle (DURING execution)
 
-- `test-reviewer` — after RED fixtures and contracts are written
-- `architecture-reviewer-betty` — after workspace scaffold and extraction
+- `test-expert` — after RED fixtures and contracts are written
+- `architecture-expert-betty` — after workspace scaffold and extraction
   boundary land
-- `code-reviewer` — after CLI/report/query/path wiring
+- `code-expert` — after CLI/report/query/path wiring
 
 ### Close (POST-execution)
 
-- `docs-adr-reviewer` — documentation/acknowledgement/drift coherence
-- `onboarding-reviewer` — confirm the graph outputs actually help first-contact
+- `docs-adr-expert` — documentation/acknowledgement/drift coherence
+- `onboarding-expert` — confirm the graph outputs actually help first-contact
   discovery
 
 ---
@@ -677,7 +677,7 @@ After all work is complete and quality gates pass, run
 
 - [graphify-and-graph-memory-exploration.plan.md](../future/graphify-and-graph-memory-exploration.plan.md)
   — strategic parent and acknowledgement boundary
-- [graph-stack.plan.md](../../connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md)
+- [graph-stack.plan.md](../../connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md)
   — provides `packages/core/graph-core/` foundation consumed by this pilot
 - [agent-graphs-workspace-organisation.plan.md](../../agent-tooling/future/agent-graphs-workspace-organisation.plan.md)
   — creates the top-level `agent-graphs/` organisation and workspace wiring

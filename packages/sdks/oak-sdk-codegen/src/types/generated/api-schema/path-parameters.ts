@@ -1124,6 +1124,25 @@ export const PATH_OPERATIONS = [
         "required": true,
         "schema": {
           "type": "string",
+          "enum": [
+            "art",
+            "citizenship",
+            "computing",
+            "cooking-nutrition",
+            "design-technology",
+            "english",
+            "french",
+            "geography",
+            "german",
+            "history",
+            "maths",
+            "music",
+            "physical-education",
+            "religious-education",
+            "rshe-pshe",
+            "science",
+            "spanish"
+          ],
           "description": "The slug identifier for the subject",
           "example": "art"
         }
@@ -1818,6 +1837,17 @@ export const PATH_OPERATIONS = [
           "description": "The lesson slug identifier",
           "example": "imagining-you-are-the-characters-the-three-billy-goats-gruff"
         }
+      },
+      {
+        "in": "query",
+        "name": "filter",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "images"
+          ],
+          "description": "Optional filter for question results. Use `images` to return only questions with a question image or image answer."
+        }
       }
     ],
     "responses": {
@@ -1909,6 +1939,17 @@ export const PATH_OPERATIONS = [
           "maximum": 100,
           "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
           "example": 10
+        }
+      },
+      {
+        "in": "query",
+        "name": "filter",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "images"
+          ],
+          "description": "Optional filter for question results. Use `images` to return only questions with a question image or image answer."
         }
       }
     ],
@@ -2028,6 +2069,17 @@ export const PATH_OPERATIONS = [
           "maximum": 100,
           "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
           "example": 10
+        }
+      },
+      {
+        "in": "query",
+        "name": "filter",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "images"
+          ],
+          "description": "Optional filter for question results. Use `images` to return only questions with a question image or image answer."
         }
       }
     ],
@@ -2255,7 +2307,7 @@ export const PATH_OPERATIONS = [
     "method": "get",
     "operationId": "getUnits-getUnit",
     "summary": "Unit summary",
-    "description": "This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit",
+    "description": "This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit. Optional programme-factor filters can narrow the returned variant. The childSubject filter is only available for science units and accepts biology, chemistry, combined-science, or physics.",
     "parameters": [
       {
         "in": "path",
@@ -2265,7 +2317,58 @@ export const PATH_OPERATIONS = [
         "schema": {
           "type": "string",
           "description": "The unit slug",
-          "example": "simple-compound-and-adverbial-complex-sentences"
+          "example": "programming-subroutines"
+        }
+      },
+      {
+        "in": "query",
+        "name": "examBoard",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "aqa",
+            "edexcel",
+            "eduqas",
+            "ocr",
+            "wjec",
+            "edexcelb"
+          ]
+        }
+      },
+      {
+        "in": "query",
+        "name": "pathway",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "core",
+            "gcse"
+          ]
+        }
+      },
+      {
+        "in": "query",
+        "name": "tier",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "core",
+            "foundation",
+            "higher"
+          ]
+        }
+      },
+      {
+        "in": "query",
+        "name": "childSubject",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "biology",
+            "chemistry",
+            "combined-science",
+            "physics"
+          ]
         }
       }
     ],
@@ -2460,19 +2563,18 @@ export const PATH_OPERATIONS = [
               },
               "example": [
                 {
+                  "version": "0.7.0",
+                  "date": "2026-05-21",
+                  "changes": [
+                    "/subjects/{subject} now exposes `ks4ProgrammeFactors.childSubject` for subjects split into child subjects at KS4 (currently science → biology, chemistry, combined-science, physics)",
+                    "Removed the per-sequence `ks4Options` field from `sequenceSlugs[]` in /subjects, /subjects/{subject}, and /subjects/{subject}/sequences responses; the variant is still encoded in the sequenceSlug suffix"
+                  ]
+                },
+                {
                   "version": "0.6.0",
                   "date": "2026-02-19",
                   "changes": [
                     "Change to how blocked content is handled, using BAD_REQUEST & .data.cause instead of 451"
-                  ]
-                },
-                {
-                  "version": "0.5.0",
-                  "date": "2025-03-06",
-                  "changes": [
-                    "PPTX used for slideDeck assets",
-                    "All video assets now fully downloadable in mp4 format",
-                    "New /threads/* endpoints"
                   ]
                 }
               ]
@@ -2546,10 +2648,11 @@ export const PATH_OPERATIONS = [
               ],
               "additionalProperties": false,
               "example": {
-                "version": "0.6.0",
-                "date": "2026-02-19",
+                "version": "0.7.0",
+                "date": "2026-05-21",
                 "changes": [
-                  "Change to how blocked content is handled, using BAD_REQUEST & .data.cause instead of 451"
+                  "/subjects/{subject} now exposes `ks4ProgrammeFactors.childSubject` for subjects split into child subjects at KS4 (currently science → biology, chemistry, combined-science, physics)",
+                  "Removed the per-sequence `ks4Options` field from `sequenceSlugs[]` in /subjects, /subjects/{subject}, and /subjects/{subject}/sequences responses; the variant is still encoded in the sequenceSlug suffix"
                 ]
               }
             }

@@ -8,7 +8,7 @@ describe('planClaudeSessionIdentityHook', () => {
     expect(
       planClaudeSessionIdentityHook({
         stdinText: 'not json',
-        environment: { CLAUDE_ENV_FILE: '/tmp/env-file' },
+        environment: { CLAUDE_ENV_FILE: 'mem://env-file' },
       }),
     ).toStrictEqual({ hookOutput: {} });
   });
@@ -17,7 +17,7 @@ describe('planClaudeSessionIdentityHook', () => {
     expect(
       planClaudeSessionIdentityHook({
         stdinText: JSON.stringify({ source: 'startup', model: 'claude-opus-4-7' }),
-        environment: { CLAUDE_ENV_FILE: '/tmp/env-file' },
+        environment: { CLAUDE_ENV_FILE: 'mem://env-file' },
       }),
     ).toStrictEqual({ hookOutput: {} });
   });
@@ -26,7 +26,7 @@ describe('planClaudeSessionIdentityHook', () => {
     expect(
       planClaudeSessionIdentityHook({
         stdinText: JSON.stringify({ session_id: '   ' }),
-        environment: { CLAUDE_ENV_FILE: '/tmp/env-file' },
+        environment: { CLAUDE_ENV_FILE: 'mem://env-file' },
       }),
     ).toStrictEqual({ hookOutput: {} });
   });
@@ -40,7 +40,7 @@ describe('planClaudeSessionIdentityHook', () => {
         source: 'startup',
         model: 'claude-opus-4-7',
       }),
-      environment: { CLAUDE_ENV_FILE: '/tmp/env-file' },
+      environment: { CLAUDE_ENV_FILE: 'mem://env-file' },
     });
 
     expect(plan.hookOutput).toStrictEqual({
@@ -66,11 +66,11 @@ describe('planClaudeSessionIdentityHook', () => {
     const displayName = deriveIdentity(sessionId).displayName;
     const plan = planClaudeSessionIdentityHook({
       stdinText: JSON.stringify({ session_id: sessionId }),
-      environment: { CLAUDE_ENV_FILE: '/tmp/claude-env-file-abc' },
+      environment: { CLAUDE_ENV_FILE: 'mem://claude-env-file-abc' },
     });
 
     expect(plan.envFileWrite).toStrictEqual({
-      absolutePath: '/tmp/claude-env-file-abc',
+      absolutePath: 'mem://claude-env-file-abc',
       appendLine:
         `export PRACTICE_AGENT_SESSION_ID_CLAUDE='${sessionId}'\n` +
         `export OAK_AGENT_IDENTITY_OVERRIDE='${displayName}'\n`,

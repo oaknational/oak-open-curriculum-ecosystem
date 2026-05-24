@@ -27,7 +27,8 @@ The quality gates must be run after all major changes, and before each commit:
 
 Locally we can also run
 
-- `pnpm test:e2e` - E2E tests (requires appropriate API keys set in the root `.env`)
+- `pnpm test:e2e` - E2E tests (use mocks and dependency injection; no service
+  credentials required)
 
 For AI agent execution order, follow directive-defined one-gate-at-a-time runs
 from the grounding directives/prompts first; aggregate commands remain
@@ -69,7 +70,7 @@ Each layer catches a different class of defect; the layers compose:
 Reviewer findings are action items by default. Accepted findings are
 implementation work; rejected findings need written rationale; non-blocking
 deferrals need owner-visible next action. Full invocation and disposition
-policy lives at `.agent/memory/executive/invoke-code-reviewers.md`.
+policy lives at `.agent/memory/executive/invoke-code-experts.md`.
 
 ## Problem-Hiding Patterns
 
@@ -220,6 +221,9 @@ the current understanding.
   outstanding work.
 - Fenced code blocks without language specifier fail markdownlint
   MD040.
+- PR or issue references like `#108` can fail markdownlint MD018
+  if wrapping moves them to the start of a line. Use `PR-#108`,
+  `issue #108`, or rewrap so the `#` token stays mid-line.
 - For prose artefacts (READMEs, ADR/PDR/governance bodies,
   runbooks), acceptance criteria name the _decision_ and the
   _audience outcome_ — discoverability and accuracy, not exact

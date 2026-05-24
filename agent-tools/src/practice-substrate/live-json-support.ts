@@ -7,6 +7,7 @@ import Ajv from 'ajv/dist/2020.js';
 import {
   ACTIVE_CLAIMS_SCHEMA_PATH,
   CLOSED_CLAIMS_SCHEMA_PATH,
+  COMMS_EVENT_SCHEMA_PATH,
   CONVERSATION_SCHEMA_PATH,
   ESCALATION_SCHEMA_PATH,
   absolutePath,
@@ -29,6 +30,7 @@ export async function collaborationAjv(repoRoot: string): Promise<Ajv> {
   for (const path of [
     ACTIVE_CLAIMS_SCHEMA_PATH,
     CLOSED_CLAIMS_SCHEMA_PATH,
+    COMMS_EVENT_SCHEMA_PATH,
     CONVERSATION_SCHEMA_PATH,
     ESCALATION_SCHEMA_PATH,
   ]) {

@@ -30,7 +30,7 @@ todos:
     content: "WS4: pnpm check exit 0; ESLint rule runs in CI at warn; emission-persistence test runs in deploy pipeline (not PR check per ADR-161 unless network-free)."
     status: pending
   - id: ws5-adversarial-review
-    content: "WS5: architecture-reviewer-wilma (adversarial: what failure modes bypass the conformance test) + architecture-reviewer-fred (boundary correctness) + type-reviewer (ESLint rule shape)."
+    content: "WS5: architecture-expert-wilma (adversarial: what failure modes bypass the conformance test) + architecture-expert-fred (boundary correctness) + type-expert (ESLint rule shape)."
     status: pending
   - id: ws6-doc-propagation
     content: "WS6: ADR-162 Enforcement Open Question closure; rule documentation in eslint-plugin-standards README; runbook."
@@ -53,7 +53,7 @@ isProject: false
 (structural import lint) together prove the vendor-independence clause.
 Mechanism #4 alone is insufficient — it can miss a consumer that
 imports a vendor SDK directly but still emits to stdout (finding
-P2-1 from architecture-reviewer-fred's Phase 1 review). Mechanism #5
+P2-1 from architecture-expert-fred's Phase 1 review). Mechanism #5
 closes that gap structurally.
 
 ### Problem Statement
@@ -254,14 +254,14 @@ Exit 0. Emission-persistence test may be gated by environment
 
 ## WS5 — Adversarial Review
 
-- `architecture-reviewer-wilma` — pressure-test the conformance design:
+- `architecture-expert-wilma` — pressure-test the conformance design:
   what failure modes bypass both tests? (Example: a consumer dynamically
   imports the vendor SDK via `await import(...)` — does the ESLint rule
   catch it? A consumer wraps vendor SDK in an internal package facade
   that re-exports — does anything catch the re-export path?)
-- `architecture-reviewer-fred` — boundary correctness; allowlist
+- `architecture-expert-fred` — boundary correctness; allowlist
   discipline.
-- `type-reviewer` — ESLint rule type shape; RuleTester case coverage.
+- `type-expert` — ESLint rule type shape; RuleTester case coverage.
 
 ---
 

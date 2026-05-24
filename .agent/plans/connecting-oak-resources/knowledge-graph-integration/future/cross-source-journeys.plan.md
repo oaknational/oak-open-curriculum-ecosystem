@@ -8,7 +8,7 @@ sibling_plans:
   - "../current/graph-query-layer.plan.md"
   - "../../sector-engagement/eef/current/eef-evidence-corpus.plan.md"
   - "../active/agent-guidance-consolidation.plan.md"
-specialist_reviewer: "mcp-reviewer, code-reviewer, architecture-reviewer-betty, docs-adr-reviewer"
+specialist_reviewer: "mcp-expert, code-expert, architecture-expert-betty, docs-adr-expert"
 status: future
 isProject: false
 todos:
@@ -35,9 +35,24 @@ todos:
 # Cross-Source Journeys
 
 **Status**: FUTURE — design-only until Increments 1 (graph layer) and 2
-(EEF corpus) reach ACTIVE.
-**Last Updated**: 2026-04-30
-**Increment**: 3 of 5 in the EEF graph-and-corpus delivery sequence.
+(EEF corpus) reach ACTIVE, plus the substrate-layer cross-corpus
+primitives in [`../../../graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md)
+have shipped (this plan consumes those primitives).
+**Last Updated**: 2026-05-11 (layer-distinction note added during the
+MVP-arc reshape; plan body otherwise unchanged from 2026-04-30 authoring).
+**Increment**: 3b of the EEF graph-and-corpus delivery sequence —
+**feature-layer** journey orchestration over multiple substrate-layer
+cross-corpus primitives.
+
+**Layer distinction (added 2026-05-11)**: this plan is feature-layer
+journey orchestration (playbook primitive or rich prompts composing
+multiple tool calls). It is **distinct from**
+[`../../../graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md),
+which is substrate-layer combinatorial primitive delivery (MCP tools
+whose body composes corpora through `graph-corpus-sdk`). Journeys
+consume substrate-layer primitives; this plan does not duplicate or
+replace them. Two layers, two plans, sequential dependency direction
+(this plan consumes those primitives once they ship).
 
 ## Why This Plan Exists
 

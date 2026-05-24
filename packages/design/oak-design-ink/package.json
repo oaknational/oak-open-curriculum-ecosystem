@@ -1,0 +1,52 @@
+{
+  "name": "@oaknational/oak-design-ink",
+  "version": "0.0.0-development",
+  "private": true,
+  "description": "Reusable Oak Ink primitives for terminal user interfaces",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist .turbo",
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "type-check": "tsc -p tsconfig.lint.json --noEmit",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
+  },
+  "dependencies": {
+    "@oaknational/oak-design-tokens": "workspace:*"
+  },
+  "peerDependencies": {
+    "ink": "^7.0.2",
+    "react": "^19.2.6"
+  },
+  "devDependencies": {
+    "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@types/node": "^25.7.0",
+    "@types/react": "^19.2.14",
+    "eslint": "^10.3.0",
+    "globals": "^17.6.0",
+    "ink": "^7.0.2",
+    "ink-testing-library": "^4.0.0",
+    "react": "^19.2.6",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.6"
+  },
+  "engines": {
+    "node": "24.x"
+  }
+}

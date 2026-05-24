@@ -60,7 +60,7 @@ loops or introducing new subsystems.
 1. Add `## Drift Detection` sections to these three executive-memory
    files only:
    - `.agent/memory/executive/artefact-inventory.md`
-   - `.agent/memory/executive/invoke-code-reviewers.md`
+   - `.agent/memory/executive/invoke-code-experts.md`
    - `.agent/memory/executive/cross-platform-agent-surface-matrix.md`
 2. Update executive-memory guidance so the lookup-time verification and
    drift-capture expectations are discoverable in the local memory docs.
@@ -157,11 +157,11 @@ The answer must remain: **strengthening existing loops**.
 
 ## Reviewer Scheduling
 
-- **Pre-execution**: `assumptions-reviewer` — validate that the
+- **Pre-execution**: `assumptions-expert` — validate that the
   tranche is genuinely incremental and not a disguised overhaul.
-- **Mid-tranche**: `docs-adr-reviewer` after Phase 1 and Phase 2 —
+- **Mid-tranche**: `docs-adr-expert` after Phase 1 and Phase 2 —
   confirm that the local doctrine/command surfaces stay aligned.
-- **Close**: `code-reviewer` gateway + `docs-adr-reviewer` —
+- **Close**: `code-expert` gateway + `docs-adr-expert` —
   validate that the changes are coherent, discoverable, and tightly
   scoped.
 
@@ -191,7 +191,7 @@ on the three local executive files.
 ```bash
 rg -n "## Drift Detection|Last verified accurate|Known drift / pending update" \
   .agent/memory/executive/artefact-inventory.md \
-  .agent/memory/executive/invoke-code-reviewers.md \
+  .agent/memory/executive/invoke-code-experts.md \
   .agent/memory/executive/cross-platform-agent-surface-matrix.md
 # Expected before implementation: no matches, or partial matches that are
 # explicitly captured as pre-existing state.
@@ -243,7 +243,7 @@ plan has not expanded beyond the chosen tranche.
 3. ✅ The section contains `Known drift / pending update`.
 4. ✅ The healthy-state placeholder is present and grep-visible.
 
-#### Task 1.2: Add drift-detection block to `invoke-code-reviewers.md`
+#### Task 1.2: Add drift-detection block to `invoke-code-experts.md`
 
 **Acceptance Criteria**:
 
@@ -275,7 +275,7 @@ plan has not expanded beyond the chosen tranche.
 ```bash
 rg -n "## Drift Detection|Last verified accurate|Known drift / pending update" \
   .agent/memory/executive/artefact-inventory.md \
-  .agent/memory/executive/invoke-code-reviewers.md \
+  .agent/memory/executive/invoke-code-experts.md \
   .agent/memory/executive/cross-platform-agent-surface-matrix.md
 # Expected: each file contains the required markers.
 

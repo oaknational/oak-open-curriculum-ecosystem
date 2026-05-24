@@ -17,8 +17,7 @@
         }
       ],
       "phaseSlug": "primary",
-      "phaseTitle": "Primary",
-      "ks4Options": null
+      "phaseTitle": "Primary"
     },
     {
       "sequenceSlug": "science-secondary-aqa",
@@ -34,11 +33,7 @@
         }
       ],
       "phaseSlug": "secondary",
-      "phaseTitle": "Secondary",
-      "ks4Options": {
-        "title": "AQA",
-        "slug": "aqa"
-      }
+      "phaseTitle": "Secondary"
     },
     {
       "sequenceSlug": "science-secondary-edexcel",
@@ -54,11 +49,7 @@
         }
       ],
       "phaseSlug": "secondary",
-      "phaseTitle": "Secondary",
-      "ks4Options": {
-        "title": "Edexcel",
-        "slug": "edexcel"
-      }
+      "phaseTitle": "Secondary"
     },
     {
       "sequenceSlug": "science-secondary-ocr",
@@ -74,11 +65,7 @@
         }
       ],
       "phaseSlug": "secondary",
-      "phaseTitle": "Secondary",
-      "ks4Options": {
-        "title": "OCR",
-        "slug": "ocr"
-      }
+      "phaseTitle": "Secondary"
     }
   ],
   "lessonsSample": [

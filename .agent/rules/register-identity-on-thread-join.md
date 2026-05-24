@@ -100,7 +100,7 @@ The complementary layers are, per PDR-029's 2026-04-21 Amendment Log
   on any platform performs the same walkthrough by reading the same
   markdown.
 - **Stale-identity audit** — a six-check documentation walkthrough in
-  [`/jc-consolidate-docs § Thread-register freshness`](../commands/consolidate-docs.md#thread-register-freshness)
+  [`/oak-consolidate-docs § Thread-register freshness`](../commands/consolidate-docs.md#thread-register-freshness)
   that the agent performs at consolidation time: stale `last_session`,
   orphan threads, missing fields, expired track cards, duplicate
   identity rows, active-threads ↔ next-session-file correspondence.
@@ -143,6 +143,26 @@ Per PDR-027 and
 
 Derived identity is a helper for choosing `agent_name`; it does not change
 the additive-identity rule, the identity key, or historical rows.
+
+## Identity Routing Uses (name, prefix) As A Pair
+
+`agent_name` can change within a session (wordlist refactors, CLI seed
+remapping) and can persist across sessions; `session_id_prefix` is stable
+within a session and is the durable coordinate. Routing logic should use
+the **pair** `(agent_name, session_id_prefix)` rather than either coordinate
+alone. Mismatches between the two carry information: same prefix /
+different name signals tooling drift mid-session (attribution-by-name is
+suspect, substance is from the prefix's session); same name / different
+prefix signals a returning agent adopting prior identity (additive row
+update on `last_session`); different both signals a genuinely new identity
+(standard new-row case). Treat any single-coordinate mismatch as a
+**request-further-information** signal — name the divergence in any reply
+or coordination decision rather than rounding it off — and when archiving
+or closing claims for a "gone" identity, cite the **prefix** (stable) over
+the name (which may have wiped) so audit trails remain durable. Source:
+Claude per-user memory `feedback_identity_routing_uses_name_and_prefix_pair`
+(owner stated 2026-05-05 after the Twilit→Ashen drift and Asteroid
+identity-wipe).
 
 ## Self-application
 

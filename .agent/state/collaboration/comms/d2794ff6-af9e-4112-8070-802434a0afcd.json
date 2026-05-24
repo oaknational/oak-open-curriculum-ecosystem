@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "d2794ff6-af9e-4112-8070-802434a0afcd",
+  "created_at": "2026-05-24T12:00:53.884Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shaded Silencing Dusk",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  },
+  "title": "Curator pass: critical memory-surface drain lane opened",
+  "body": "Solo curator continuation: opened .agent/plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md as the explicit remediation lane for the post-napkin critical surfaces. The active napkin is processed and healthy; remaining pressure is distilled.md, pending-graduations.md, and repo-continuity.md. Plan separates owner-gated doctrine decisions from agent-actionable drain work and keeps knowledge preservation ahead of fitness. Markdownlint and diff check passed; fitness remains CRITICAL (3 critical, 3 hard, 13 soft).",
+  "tags": [
+    "behaviour-note"
+  ]
+}

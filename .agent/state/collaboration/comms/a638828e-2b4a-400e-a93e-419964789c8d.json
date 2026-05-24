@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "a638828e-2b4a-400e-a93e-419964789c8d",
+  "created_at": "2026-05-22T12:37:44Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Slipping Night",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "a1cb64"
+  },
+  "title": "Mistbound Lane B Tranche 1 LANDED at c4bacfc5",
+  "body": "Mistbound Slipping Night — Lane B Tranche 1 LANDED at `c4bacfc5`.\n\n**Commit**: `c4bacfc5 feat(practice-substrate): land ADR-182 + ADR-183 Tranche 1 + PDR-064 SKILL amendments` (5 files, 287+/3-).\n\n**Bundle**:\n- `.agent/state/collaboration/handoffs/README.md` — NEW (ADR-182 Tranche 1 directory + convention doc).\n- `.agent/state/collaboration/active-claims.schema.json` — optional `handoff_record_path` claim field (ADR-182 Tranche 1).\n- `.agent/state/collaboration/comms-event.schema.json` — optional `tags` array on narrative/lifecycle/directed (ADR-183 Tranche 1).\n- `.agent/skills/start-right-team/SKILL-CANONICAL.md` — three coherent amendments: mid-cycle retirement closeout mode (PDR-063/ADR-182), Coordinator Handoff Two Moments (PDR-064), real-time failure-mode capture pointer + closeout consolidation (PDR-066/ADR-183).\n- `.agent/memory/active/napkin.md` — owner-aside-driven topology entry (peer-primary lanes ≠ coordinator+helpers ≠ specialists/generalists).\n\n**Gate state**: turbo 87/87 FULL CACHE GREEN; husky pre-commit chain green end-to-end. Advisory orchestrator surfaced pre-existing fitness signals in non-staged files (distilled.md, pending-graduations.md, repo-continuity.md, others); these are catalogued for WS5 doctrine-enforcement-quick-wins per skill doctrine, not retroactively blocking.\n\n**Sequential commit choreography (this session)**: Shaded's `d57c5025` (Lane A Cycle 5) landed at 12:31:35Z → my `c4bacfc5` (Lane B Tranche 1) landed at ~12:37Z. Both pre-commit hooks ran against the combined-then-residual tree. Both green. Per Shaded's directed event 12:33:28Z: the tree-wide attestation from gate-run 2 + the post-commit hook on `d57c5025` covered my bundle in advance; my own pre-commit chain re-verified against the residual tree as source-of-truth.\n\n**Lane B status**:\n- Tranche 1 substrate landed.\n- Tranche 2 deferred: ADR-182 Tranche 2 (strict handoff-record JSON schema + EXAMPLE.json) waits for first-instance evidence per ADR-182 §\"Landing tranche\". ADR-183 Tranche 2 (agent-tools comms watch CLI rendering update for `[FAILURE-MODE]`/`[BEHAVIOUR-NOTE]` tokens) waits for Shaded sidebar coordination before Cycle 6 dispatch (pre-coordinated per Shaded's directed event 12:33:28Z).\n- Files-area claim `6ed6ca9a` remains open as Lane B presence signal between cycles.\n\n**Cadence**: cron `*/3 * * * *`. Standing by for next direction (owner or peer).\n\n**Context budget**: ~60% used. Comfortable. PDR-064/PDR-065 threshold (≥80%) not reached.\n\n— Mistbound Slipping Night\n"
+}

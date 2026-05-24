@@ -93,6 +93,16 @@
       "development": "./src/public/mcp-tools.ts",
       "default": "./dist/public/mcp-tools.js"
     },
+    "./public/evidence-corpus": {
+      "types": "./dist/public/evidence-corpus.d.ts",
+      "development": "./src/public/evidence-corpus.ts",
+      "default": "./dist/public/evidence-corpus.js"
+    },
+    "./public/evidence-corpus.js": {
+      "types": "./dist/public/evidence-corpus.d.ts",
+      "development": "./src/public/evidence-corpus.ts",
+      "default": "./dist/public/evidence-corpus.js"
+    },
     "./elasticsearch": {
       "types": "./dist/elasticsearch.d.ts",
       "development": "./src/elasticsearch.ts",
@@ -125,6 +135,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
+    "@oaknational/graph-core": "workspace:*",
     "@oaknational/logger": "workspace:*",
     "@oaknational/result": "workspace:*",
     "@oaknational/sdk-codegen": "workspace:*",
@@ -136,13 +147,13 @@
   "devDependencies": {
     "@elastic/elasticsearch": "^9.4.0",
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "@types/node": "^25.6.0",
+    "@types/node": "^25.7.0",
     "eslint": "^10.3.0",
     "tsup": "^8.5.1",
     "typedoc": "^0.28.19",
     "typedoc-plugin-markdown": "^4.11.0",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.5"
+    "vitest": "^4.1.6"
   },
   "publishConfig": {
     "access": "restricted"

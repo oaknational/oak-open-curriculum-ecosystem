@@ -8,7 +8,7 @@ related_plans:
   - "../ooc-api-wishlist/index.md"
   - "../external-material-triage.md"
   - "../../connecting-oak-resources/knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md"
-specialist_reviewer: "architecture-reviewer-betty, architecture-reviewer-barney, type-reviewer, docs-adr-reviewer"
+specialist_reviewer: "architecture-expert-betty, architecture-expert-barney, type-expert, docs-adr-expert"
 ---
 
 # Oak OpenAPI Monorepo Integration

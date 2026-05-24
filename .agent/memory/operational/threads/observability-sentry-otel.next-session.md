@@ -7,9 +7,9 @@
 — Steps 01–10 closed.
 
 **Step 10 closing summary**: Reviewer dispatch for step 10 completed. Three
-parallel reviewers (security-reviewer, clerk-reviewer, sentry-reviewer) had been
+parallel reviewers (security-expert, clerk-expert, sentry-expert) had been
 quota-stopped in the prior context-compacted session; this session recovered their
-findings from subagent jsonl transcripts and restarted the sentry-reviewer (which
+findings from subagent jsonl transcripts and restarted the sentry-expert (which
 completed cleanly on quota reset). All four reviewer verdicts appended to
 `/tmp/mcp-tool-exercise.log`. Three P2 snags added to
 `pr-93-merge-snagging-2026-05-05.md` (clerk stale-version-comment, sentry
@@ -22,7 +22,7 @@ has landed since the branch diverged; assess conflict potential (dry-run merge
 or `git merge-tree`). Note: the `pre-merge-divergence-analysis` rule applies to
 two diverged feature branches, not to a feature-branch vs main comparison — this
 step is the standard pre-merge sanity check, not that workflow. Findings feed
-step 12 (owner-gated merge readiness declaration with release-readiness-reviewer
+step 12 (owner-gated merge readiness declaration with release-readiness-expert
 synthesis).
 
 ---
@@ -135,7 +135,7 @@ plan's resumption preconditions before committing. The §IO Inventory
 and the allowlist start identical; the **allowlist is the canonical
 live enforcement surface**, the §IO Inventory is the **historical
 snapshot** at merge time. Land via full commit-skill protocol with
-config-reviewer (allowlist shape) + docs-adr-reviewer (Inventory
+config-expert (allowlist shape) + docs-adr-expert (Inventory
 completeness + cross-reference discipline) dispatch.
 
 **Step 06 closing summary**: `no-real-io-in-tests.ts` rule authored at
@@ -151,15 +151,15 @@ schema for step-07 additions. Paired
 `no-real-io-in-tests.unit.test.ts` RuleTester suite: 73 cases (15
 valid, 58 invalid). Plugin registration in `plugin.ts`. Root
 `eslint.config.ts` UNCHANGED (step-08 boundary respected). Reviewer
-dispatch parallel: code-reviewer APPROVED WITH SUGGESTIONS,
-config-reviewer ISSUES FOUND (no P1), test-reviewer ISSUES FOUND
+dispatch parallel: code-expert APPROVED WITH SUGGESTIONS,
+config-expert ISSUES FOUND (no P1), test-expert ISSUES FOUND
 (P1-gating). All P1 + P2 findings closed pre-commit (4 missing
 node-prefix invalid cases, 2 dynamic-import + 1 require gaps,
 `globalThis.process.chdir`, bracket-notation `process['env'/'cwd'/'chdir']`
 
 - `globalThis['process']` hardening, plan-citation removal in test
 comment, defence-in-depth allowlist comment). P3 dispositions deferred:
-config-reviewer dual-enforcement with `index.ts testRules` is step-08
+config-expert dual-enforcement with `index.ts testRules` is step-08
 decision territory; schema `minItems: 1` is informational-only and not
 adopted.
 
@@ -193,8 +193,8 @@ vitest.setup.ts` at workspace roots; `**/test-helpers/**` |
 each denylist sub-form, positive for each allowlist sub-glob).
 Plugin registration in `plugin.ts`. **Do NOT yet wire into root
 eslint.config.ts** — that is step 08. Reviewer dispatch at commit
-close: code-reviewer (gateway) + config-reviewer (allowlist shape) +
-test-reviewer (RuleTester describe-vs-audit + Node.js IO API surface
+close: code-expert (gateway) + config-expert (allowlist shape) +
+test-expert (RuleTester describe-vs-audit + Node.js IO API surface
 coverage exhaustiveness).
 
 **Step 05 closing summary**: BF-1a/b CI hook + workflow at commit
@@ -204,12 +204,12 @@ import (relocate `upstream-metadata-fixture.ts` from
 `e2e-tests/helpers/` to `src/test-helpers/`; update 12 consumers +
 own internal type import) substance at commit `36102937` (Dawnlit,
 `0ddc89` — substance correct under misleading peer-subject due to
-foreign-stage absorption; architecture-reviewer-fred CLEAN +
-code-reviewer APPROVED WITH SUGGESTIONS pre-landing); CR1
+foreign-stage absorption; architecture-expert-fred CLEAN +
+code-expert APPROVED WITH SUGGESTIONS pre-landing); CR1
 conditional-branch test-immediate-fail × 2 integration tests at this
-commit (Dawnlit; test-reviewer CLEAN + code-reviewer APPROVED, used
+commit (Dawnlit; test-expert CLEAN + code-expert APPROVED, used
 `unwrap` from `@oaknational/result` rather than inline throw per
-test-reviewer's confirmation that the substitution is "strictly
+test-expert's confirmation that the substitution is "strictly
 better"). Step 05 §Sequence Summary row flipped to DONE.
 **Out-of-scope follow-ups recorded** (not closed in this branch):
 BF-T1 (duplicated assertions), P3 dispositions (BF-9, BF-T2, BF-T3),
@@ -234,7 +234,7 @@ remaining step.
 `feat/eef_exploration` (post Round-2 collapse from 17 steps; HEAD
 `75dbcdb6`). Steps 01–02 closed at `75dbcdb6` (Pelagic Diving
 Atoll: Round 1 + Round 2 architecture-led review with
-six-reviewer dispatch each round; capture-not-clean shape adopted
+six-expert dispatch each round; capture-not-clean shape adopted
 under owner direction 2026-05-04).
 
 **Current step**: step 03 — integrate `.agent/rules/no-speed-pressure.md`
@@ -249,7 +249,7 @@ failure-mode feedback files (performed-grounding, rule-conflict-is-signal,
 auto-mode-not-permission-slip) are NOT authored at this step —
 graduate only when a second instance is observed. Post-commit:
 verify all four adapter paths exist and resolve identically.
-Reviewer dispatch at commit close: code-reviewer (gateway).
+Reviewer dispatch at commit close: code-expert (gateway).
 
 **Live discipline**: `.agent/rules/no-speed-pressure.md` is the
 just-landed rule the unified plan exists to operationalise.
@@ -260,7 +260,7 @@ step.
 **Step 03 closing commit**: `2b78aa93` (HEAD of `feat/eef_exploration`
 post-step-03). All eight bundled files landed clean through the full
 pre-commit chain (prettier check, markdownlint, knip, depcruise,
-turbo gates — full cache hit). Code-reviewer dispatch returned
+turbo gates — full cache hit). Code-expert dispatch returned
 CLEAN-WITH-FINDINGS: one plan-body hygiene gap — §Sequence Summary
 row 3 promises commit SHA recording but the actual SHA `2b78aa93`
 was not inserted (reviewer judged this not worth an isolated
@@ -288,10 +288,10 @@ unified plan body **and the relevant code surface** (the four
 landed plan-3 commits, `.agent/rules/no-speed-pressure.md`, and
 the observability/env package areas the plan touches). Owner
 direction (2026-05-04 Pelagic Diving Atoll session): start with
-the architecture-led pass (code-reviewer gateway +
-architecture-reviewer-barney/betty/fred/wilma + assumptions-reviewer);
+the architecture-led pass (code-expert gateway +
+architecture-expert-barney/betty/fred/wilma + assumptions-expert);
 escalate to specialists driven by findings rather than the full
-fifteen-reviewer dispatch up front. The plan's named fifteen-reviewer
+fifteen-expert dispatch up front. The plan's named fifteen-expert
 set remains the contract — escalation, not curtailment.
 
 **Live discipline**: `.agent/rules/no-speed-pressure.md` is the
@@ -372,8 +372,8 @@ plan body literal "exits non-zero with expected RED messages" to the
 WS1-pattern skip-register (describe.skip + SKIP-UNTIL-An header) under
 trunk-green discipline; surface acknowledgement at comms event
 `claude-7402c9-prismatic-a1-acceptance-criterion-shift`. Four reviewers
-dispatched in parallel (test-reviewer, architecture-reviewer-fred,
-architecture-reviewer-betty, mcp-reviewer) all returned COMPLIANT
+dispatched in parallel (test-expert, architecture-expert-fred,
+architecture-expert-betty, mcp-expert) all returned COMPLIANT
 with findings; absorbable findings implemented in-A1 (remote-mode
 factory, spawn error contract, vitest config inheritance fix, clock
 fake simplification, classification doc), deferred findings recorded
@@ -425,7 +425,7 @@ collision; apply at WS3 atomic rename for the others):
 4. Prove MCP server works in the Vercel preview build
 
 Reviewer-subagent dispatch is mandatory throughout — including
-`docs-adr-reviewer` + `onboarding-reviewer` automatically on every
+`docs-adr-expert` + `onboarding-expert` automatically on every
 significant documentation/Practice change (doctrine landed in plan
 WS10 and queued for graduation to a permanent rule in WS11.3).
 
@@ -464,7 +464,7 @@ matching `platform + model + agent_name` updates `last_session`.
 | Frodo | claude-code | claude-opus-4-7-1m | `*unknown*` | commit-owner pre-staged plan-body tightening; release-identifier plan revision; WS2 §2.0 split | 2026-04-24 | 2026-04-24 |
 | Jazzy | claude-code | claude-sonnet-4-6 | `*unknown*` | release-identifier WS3 drafting; §3.0 reviewer-gate amendment; paused at pre-commit knip on parallel-track coupling | 2026-04-25 | 2026-04-25 |
 | Jiggly Pebble | claude-code | claude-opus-4-7-1m | `*unknown*` | PR-87 comment analysis; PR-87 quality-finding resolution plan author | 2026-04-25 | 2026-04-25 |
-| Keen Dahl | claude-code | claude-opus-4-7-1m | `*unknown*` | PR-87 phase-0 walk + assumptions-reviewer close; vercel-branch-url bug fix; magic-strings refactor; build-env schema; sentry-validation plan | 2026-04-25 | 2026-04-26 |
+| Keen Dahl | claude-code | claude-opus-4-7-1m | `*unknown*` | PR-87 phase-0 walk + assumptions-expert close; vercel-branch-url bug fix; magic-strings refactor; build-env schema; sentry-validation plan | 2026-04-25 | 2026-04-26 |
 | Sharded Stroustrup | claude-code | claude-opus-4-7-1m | `*unknown*` | sentry preview-validation end-to-end empirical closure; test-error route shipped; correlation-id Sentry tag; L-IMM/L-OPS into maximisation | 2026-04-26 | 2026-04-26 |
 | Frolicking Toast | claude-code | claude-opus-4-7-1m | `*unknown*` | L-IMM execution; tier-1 flush-timeout; tier-3a/3b verifications; tier-3c ignore-errors scaffold; tier-2 fingerprinting | 2026-04-26 | 2026-04-26 |
 | Ethereal Alpaca | claude-code | claude-opus-4-7-1m | `*unknown*` | PR-87 phase-1 1a/2 execution; semver dry; redos critical Sonar; agent-identity-derivation plan author | 2026-04-26 | 2026-04-26 |
@@ -478,26 +478,26 @@ matching `platform + model + agent_name` updates `last_session`.
 | Vining Ripening Leaf | claude-code | claude-opus-4-7-1m | `bce99d` | Sentry env-missing diagnosis; observability-config-coherence strategic plan; substrate-vs-axis-plans component (new convention); ADR-162 closure-property cross-reference; build verification via Sentry MCP + Vercel MCP for PR #91 preview | 2026-04-30 | 2026-04-30 |
 | Leafy Bending Dew | cursor | composer | `8d0db5` | MCP HTTP Sentry esbuild helpers: dedup `trimToUndefined`, explicit absent shapes (`undefined` vs post-trim `''`); Cursor handoff — **commit owned by Claude Code** | 2026-04-30 | 2026-04-30 |
 | Abyssal Diving Stern | claude-code | claude-opus-4-7-1m | `87ccac` | Doctrine graduation (rush-impulse → principles.md § Architectural Excellence Over Expediency); observability-multi-sink-and-fixtures-shape plan author + WS0 promotion + supersession routing | 2026-05-02 | 2026-05-02 |
-| Moonlit Drifting Nebula | cursor | claude-opus-4-7 | `92470a` | observability-multi-sink-and-fixtures-shape WS1 RED phase (env schemas + SinkRegistry types + warnings channel + outermost regression-guard E2E + per-layer RED tests with describe.skip / it.todo arc); D7a build-time orthogonality verification; four-reviewer round (test/docs-adr/onboarding/sentry) with cross-confirmed P1/P2 fixes addressed in-WS1; six deferred items recorded as plan-body amendment candidates | 2026-05-03 | 2026-05-03 |
-| Pelagic Washing Anchor | claude-code | claude-opus-4-7-1m | `f730bd` | plan-author / orchestrator: there-is-no-time-hashed-starfish.plan.md authored and landed in repo plan tree; smoke-harness-shape correction captured (owner-named; superseded prior Shape A proposal); architecture-reviewer-betty findings Q2/Q3/Q4 folded into ARC B0 corrections; coordinating Misty Ebbing Pier via comms log (atomic isolated tasks) | 2026-05-03 | 2026-05-03 |
+| Moonlit Drifting Nebula | cursor | claude-opus-4-7 | `92470a` | observability-multi-sink-and-fixtures-shape WS1 RED phase (env schemas + SinkRegistry types + warnings channel + outermost regression-guard E2E + per-layer RED tests with describe.skip / it.todo arc); D7a build-time orthogonality verification; four-expert round (test/docs-adr/onboarding/sentry) with cross-confirmed P1/P2 fixes addressed in-WS1; six deferred items recorded as plan-body amendment candidates | 2026-05-03 | 2026-05-03 |
+| Pelagic Washing Anchor | claude-code | claude-opus-4-7-1m | `f730bd` | plan-author / orchestrator: there-is-no-time-hashed-starfish.plan.md authored and landed in repo plan tree; smoke-harness-shape correction captured (owner-named; superseded prior Shape A proposal); architecture-expert-betty findings Q2/Q3/Q4 folded into ARC B0 corrections; coordinating Misty Ebbing Pier via comms log (atomic isolated tasks) | 2026-05-03 | 2026-05-03 |
 | Misty Ebbing Pier | claude-code | claude-opus-4-7-1m | `ba3961` | parallel session under owner direction; Task M1 (smoke-tests harness reconnaissance, read-only) executed and delivered (`claude-ba3961-misty-task-1-harness-recon-reply` event); polling-discipline self-correction (`claude-ba3961-override-acknowledgement` event); claim 42c9e362 closed cleanly; subjective reflection at `experience/2026-05-03-misty-two-agent-comms-reflection.md`; owner-prompted metacognition pivot reframing collaboration cures as N-agent hypothesis under test; produced four companion artefacts at `.agent/prompts/agentic-engineering/collaboration/` (hypothesis.md / falsification-criteria.md / experiments.md / README.md); next session running first-attempts.md prompts is effectively the first experiment | 2026-05-03 | 2026-05-03 |
 | Prismatic Illuminating Eclipse | claude-code | claude-opus-4-7-1m | `7402c9` | ARC A1 executor — canonical smoke harness module landed at `792c2cad` (run-smoke.ts + types.ts + boot-outcome.ts + boot-server.ts + spawn-vitest.ts + modes.ts + cli.ts + run-smoke.unit.test.ts + run-smoke.integration.test.ts + smoke-context.ts + vitest.smoke.config.ts); §A1 plan-body refresh applied per recon-driven uniform-in-process design shift; acceptance criterion shifted from RED-fail to skip-with-audit-trail (WS1-pattern); four reviewers dispatched (test/architecture-fred/architecture-betty/mcp); polling-discipline self-correction at session-open recorded as P5 falsification candidate. | 2026-05-03 | 2026-05-03 |
-| Woodland Sprouting Glade | claude-code | claude-opus-4-7-1m | `978cba` | ARC B0 orchestrator — plan-body corrections to observability-multi-sink-and-fixtures-shape.plan.md per architecture-reviewer-betty Q2-Q6 + ADR-170/171 verification (`c0d17634`) + claim-close + b0-landed disclosure (`23abeabe`) + E1 observations event (`e86af3e0`); first-claim-wins coordination at preflight (pivoted from primary ARC A1 to parallelisable ARC B0 when Prismatic claim 9cad0bab visible); three reviewers dispatched in parallel (assumptions/docs-adr/onboarding); 16 findings absorbed; orchestrator-owns-shared-housekeeping rule applied at session-close per owner-stated experiment observation. | 2026-05-03 | 2026-05-03 |
+| Woodland Sprouting Glade | claude-code | claude-opus-4-7-1m | `978cba` | ARC B0 orchestrator — plan-body corrections to observability-multi-sink-and-fixtures-shape.plan.md per architecture-expert-betty Q2-Q6 + ADR-170/171 verification (`c0d17634`) + claim-close + b0-landed disclosure (`23abeabe`) + E1 observations event (`e86af3e0`); first-claim-wins coordination at preflight (pivoted from primary ARC A1 to parallelisable ARC B0 when Prismatic claim 9cad0bab visible); three reviewers dispatched in parallel (assumptions/docs-adr/onboarding); 16 findings absorbed; orchestrator-owns-shared-housekeeping rule applied at session-close per owner-stated experiment observation. | 2026-05-03 | 2026-05-03 |
 | Lush Spreading Seed | claude-code | claude-opus-4-7-1m | `06776a` | corrective consolidation + TDD-as-pairs + atomic-parallel cycles. Three commits: `60b9ff4c` (deleted incorrect Cardinal Rule extension PDR/ADR pair + multi-commit-TDD triple; renumbered rush-impulse to PDR-043/ADR-172; stripped hedging vocabulary across principles/distilled/practice-index/ADR README/pending-graduations/testing-strategy/napkin); `797766c0` (tests + product code as PAIRS in one landing landed in directives + plan command + tdd-phases component + workstream template + 6 active plans restructured to cycle-pair landings); `755811ac` (atomic, independent cycles for optional parallel-agent dispatch added to plan command requirement 3 + tdd-phases + workstream template + self-contained-brief checklist). Owner reframings sharpened: tests + code = one practice; no special-case framing of any kind regardless of vocabulary; always strict everywhere all the time. | 2026-05-03 | 2026-05-03 |
 | Salty Navigating Jetty | claude-code | claude-opus-4-7-1m | `900b17` | session-open as ARC A2 cycle 1 executor (local-stub mode conversion to canonical harness). Bootstrap fast-path (Tidal Flowing Reef opened a coexisting claim ~5 min after Salty; lanes disjoint per plan). Drafted env-builder refactor + 5 `*.smoke.test.ts` files + harness/modes.ts registration. Owner /jc-metacognition challenge mid-session surfaced that local-stub smoke is duplicative coverage of `e2e-tests/stub-mode.e2e.test.ts` + tool-call-success/validation-failure/multi-request-session/auth-bypass e2e tests; residual distinct value reduces to "Express listens" — testing the framework, textbook anti-pattern. Owner direction: delete the needless complexity, contemplate what should actually be done. Salty's first move was `git checkout HEAD --` rollback — owner correction: rollback is amnesia, the right shape is forward Edit/Write removal of needless code while capturing realisations. NO COMMIT LANDED. Lost two doc edits to working-tree-only revert (this row + a napkin entry on strict-reading interpretation of TDD-as-pairs). Reconstructing from transcript. | 2026-05-03 | 2026-05-03 |
 | Tidal Flowing Reef | claude-code | claude-opus-4-7-1m | `f879e0` | session-open Lane B / WS2 (sentry-node SinkRegistry consumption per multi-sink plan §WS2). Honoured Salty's Lane A claim at preflight; pivoted to disjoint Lane B. Posted session-open verification event `claude-f879e0-tidal-session-open-and-verification` reading 5 facts from sentry-node + observability source. Claim 99717aca opened on 12 sentry-node files. Survived Salty's `git checkout HEAD --` revert untouched (had no in-flight napkin/thread-record edits at the time; comms event was untracked). Grounding revealed empirical cascade: WS2 plan-body strict scope (sentry-node only) leaves ~10-15 app-level tests RED awaiting WS4/WS5 — the multi-commit-TDD-skip-register shape deleted earlier today (`60b9ff4c`). Surfaced framing-trap (asking "A vs B between violations" is itself the failure; reshape work to adopt new insights). Posted step-back comms event `claude-f879e0-tidal-step-back-and-cascade-finding` recommending plan-body restructure to collapse WS2+WS3+WS4+WS5 into one atomic landing per replace-don't-bridge + TDD-as-pairs. Empirically verified `dev-server-boots-without-observability-config.e2e.test.ts` RED today via `pnpm test:e2e` (1 failed/154 passed) — multi-sink rename arc IS load-bearing for branch-push, distinct from the smoke-harness arc Salty halted. Napkin Tidal entry under 2026-05-03 day captures cascade finding + framing-trap + arc-level first-question. Two platform-memory feedback entries authored: `feedback_no_ritual_framing` and `feedback_question_shape_known_bad_vs_adopt`. Claim 99717aca closed cleanly at session-close. NO COMMIT, no product code authored. Salty now drafting fresh plans based in part on this feedback. | 2026-05-03 | 2026-05-03 |
 | Pelagic Diving Atoll | claude-code | claude-opus-4-7-1m | `6814a4` | unified-plan execution opener: hygiene-first under no-speed-pressure (thread-record refresh + identity registration + active claim) followed by architecture-led review pass over plan body AND code surface (commits `fd4eabaa..b226670d`, `.agent/rules/no-speed-pressure.md`, observability/env package areas). | 2026-05-04 | 2026-05-04 |
-| Lacustrine Navigating Rudder | claude-code | claude-opus-4-7-1m | `dd239f` | step 3 executor — integrate `.agent/rules/no-speed-pressure.md` across the rule estate via single atomic commit. Canonical rule + four adapter paths (`.agent/`, `.claude/`, `.cursor/`, `.agents/`) + `RULES_INDEX.md` entry already present at session-open; this commit adds principles.md cross-reference (§Architectural Excellence Over Expediency), distilled.md entry (sibling to "cheap cure framing"), user-memory feedback file `feedback_no_speed_pressure.md` with `MEMORY.md` index update, plan-body status update for step 03, and bundles inherited handoff working-tree state (napkin/repo-continuity/active-claims/closed-claims-archive) per Pelagic's direction. Post-commit: verify all four adapter paths exist and resolve identically. Reviewer dispatch: code-reviewer at commit close. | 2026-05-04 | 2026-05-04 |
+| Lacustrine Navigating Rudder | claude-code | claude-opus-4-7-1m | `dd239f` | step 3 executor — integrate `.agent/rules/no-speed-pressure.md` across the rule estate via single atomic commit. Canonical rule + four adapter paths (`.agent/`, `.claude/`, `.cursor/`, `.agents/`) + `RULES_INDEX.md` entry already present at session-open; this commit adds principles.md cross-reference (§Architectural Excellence Over Expediency), distilled.md entry (sibling to "cheap cure framing"), user-memory feedback file `feedback_no_speed_pressure.md` with `MEMORY.md` index update, plan-body status update for step 03, and bundles inherited handoff working-tree state (napkin/repo-continuity/active-claims/closed-claims-archive) per Pelagic's direction. Post-commit: verify all four adapter paths exist and resolve identically. Reviewer dispatch: code-expert at commit close. | 2026-05-04 | 2026-05-04 |
 | Fronded Climbing Thicket | claude | claude-opus-4-7-1m | `8da3d3` | dev-server-proof three-plan arc descope and reframe. Audit found plan 1 (fix-dev-boot-release-resolution) already landed in commit `2a2d1b05`; archived to `observability/archive/completed/`. Boot probe verified server reaches `listening` on port 3333 in ~142ms with `SENTRY_MODE=sentry` and no Vercel env. Plan 2 (SENTRY_MODE → OBSERVABILITY_SINKS rename) closed and moved to `observability/future/replace-sentry-mode-with-observability-sinks.plan.damaged-paused-2026-05-04.md` per owner direction (foundational tension unnamed; rename concept paused, requires PDR/ADR before re-attempt). Authored `observability/current/eef-branch-merge-readiness.plan.md` (7 steps) parallel to Moonlit Shimmering Comet's `architecture-and-infrastructure/current/smoke-test-retirement-recovery-and-completion.plan.md` (41 steps) — plans had overlapping verification work; owner directed unification. Result: `observability/current/feat-eef-exploration-completion.plan.md` (17 linear steps; comprehensive sub-agent review as step 1; integrate `no-speed-pressure` rule across estate; backfill reviewer dispatch on commits `fd4eabaa..b226670d`; cycles 2a–2f real-IO audits; cycles 3a–3b ESLint rule; `pnpm check` green; dev boot + MCP tool exercise via protocol; pre-merge divergence; owner-gated merge declaration). Both predecessor plans archived to their respective `archive/superseded/` with `superseded-by-unified-2026-05-04` suffix. Foreign-stage absorption observed twice during session (Moonlit's `git commit` without `--only` swept Fronded's staged files into commit `8fa339f4`; recurrence prevention codified in unified plan §Discipline as mandatory `git commit -- <pathspec>` filter). Three comms events authored: `e28b0985-...` arc-opening, `461457ad-...` plan-2 close + new plan announcement, `cb209019-...` unification + archive announcement. Claim `f2cabfad-...` closed via `owner_forced` kind. NO product code in this session; planning + descope + unification only. | 2026-05-04 | 2026-05-04 |
 | Gnarled Climbing Bark | claude | claude-opus-4-7-1m | `40a044` | read-and-reference only on this thread (no edits). Read EEF plan + thread record at start-right grounding; used Lacustrine `dd239f` session as the illustrative-journey sample in the practice-context-cost baseline harvested at `.agent/analysis/practice-context-cost-baseline.md`. The session journey baseline shows Lacustrine's dominant Read targets were this thread record (5×, ~214K tokens) and the EEF plan (5×, ~72K tokens), accounting for 79% of journey budget. Substantive work on agentic-engineering-enhancements thread; this row is the cross-thread reference per session-handoff §7c hard gate. | 2026-05-05 | 2026-05-05 |
 | Lacustrine Navigating Rudder | claude | claude-opus-4-7-1m | `dd239f` | step-04 reviewer backfill (per-commit dispatch on `fd4eabaa..b226670d`; 5 must-close violations + 8 P2 + 4 P3 findings; commit closing steps 02 + 04) followed by step-05 partial application (BF-1a/b CI hook + workflow; BF-2/3/4/5/6/7/8 stale-smoke-reference doc cleanup across ADR-121/147/083/063, root README, MCP README, TESTING.md, vercel-environment-config, three e2e test inline comments, three ops docs, agent-tools spec). Landed Gnarled Climbing Bark's deferred practice-context-cost-baseline bundle on their behalf under owner direction "commit all files in sensible chunks"; coordinated with Gnarled via comms-event with 2-min deadline + default-action when their pre-staged files blocked my verify-staged check. Three new user-memory feedback files: `feedback_adrs_permanent_plans_ephemeral.md` (owner correction: ADRs are permanent and outlive plans, plans cite ADRs not the reverse), `feedback_inter_agent_comms_first_class.md` (owner observation: agent-to-agent comms is a first-class coordination primitive, not always owner-mediated), and second-instance reinforcement of `feedback_no_verify_fresh_permission.md` (sharpened by Gnarled earlier same day: agent never asks for `--no-verify`). One AGENTS.md drift incident self-corrected: stripped the `RULES_INDEX.md` pointer thinking it was drift; owner clarified it is a documented Codex-specific contract; restored and amended session-handoff §6d to encode the contract as a named exception. Five-chunk commit landing closing the session: doc-cleanup + Gnarled's bundle + comms events + Gnarled's second experience capture + claim closures. Tree clean at session-close; only Moonlit's smoke-tests files-claim remains open (theirs to close). Step-05 named violations C1 (boundary-crossing import × 13 consumers), CR1 (conditional-branch test-immediate-fail × 2 integration tests), BF-T1 (duplicated assertions), P3 dispositions (BF-9, BF-T2, BF-T3), and BF-C1-ESLint guard remain pending for the continuation session. | 2026-05-05 | 2026-05-05 |
-| Dawnlit Transiting Galaxy | claude-code | claude-opus-4-7-1m | `0ddc89` | step-05 final closure executor — close C1 (boundary-crossing import: relocate `upstream-metadata-fixture.ts` from `e2e-tests/helpers/` to `src/test-helpers/` with all 12 consumer paths updated) and CR1 (conditional-branch test-immediate-fail: refactor two `it()` blocks in `dev-boot-without-observability.integration.test.ts` to use a typed `unwrapOk` helper) as two separate atomic commits. Commit 1 reviewed by code-reviewer + architecture-reviewer-fred (the specialist who identified C1). Commit 2 reviewed by code-reviewer + test-reviewer (the specialist who identified CR1). After this session, step 05 flips to `completed` in the plan body and the next pickup is step 06 (author `no-real-io-in-tests` ESLint rule). | 2026-05-05 | 2026-05-05 |
-| Twilit Beaming Aurora | claude-code | claude-opus-4-7-1m | `7cf730` | step-06 executor — author `packages/core/oak-eslint/src/rules/no-real-io-in-tests.ts` at `error` severity with comprehensive Node.js IO denylist (child_process / worker_threads / fs / fs-promises / http / https / net / dgram across static, dynamic, and require import forms; both unprefixed and `node:`-prefixed specifiers) + process surface (env reads/writes including `globalThis.process.env`; cwd/chdir calls) + non-localhost fetch literal-arg detection. Hardcoded allowlist defaults: `**/test-helpers/**`, `**/test-fakes/**`, `vitest.config.ts`, `vitest.*.config.ts`, `vitest.setup.ts`. Optional `allowlistPathShapes: string[]` rule schema for step-07 IO-Inventory additions. Pair with `no-real-io-in-tests.unit.test.ts` (RuleTester cases — negative for every denylist sub-form, positive for every allowlist sub-glob). Plugin registration in `plugin.ts`. Do NOT yet wire into root `eslint.config.ts` (that is step 08). Reviewer dispatch at commit close (parallel): code-reviewer (gateway) + config-reviewer (allowlist shape correctness + rule-options schema) + test-reviewer (RuleTester describe-vs-audit shape + Node.js IO API surface coverage exhaustiveness). | 2026-05-05 | 2026-05-05 |
+| Dawnlit Transiting Galaxy | claude-code | claude-opus-4-7-1m | `0ddc89` | step-05 final closure executor — close C1 (boundary-crossing import: relocate `upstream-metadata-fixture.ts` from `e2e-tests/helpers/` to `src/test-helpers/` with all 12 consumer paths updated) and CR1 (conditional-branch test-immediate-fail: refactor two `it()` blocks in `dev-boot-without-observability.integration.test.ts` to use a typed `unwrapOk` helper) as two separate atomic commits. Commit 1 reviewed by code-expert + architecture-expert-fred (the specialist who identified C1). Commit 2 reviewed by code-expert + test-expert (the specialist who identified CR1). After this session, step 05 flips to `completed` in the plan body and the next pickup is step 06 (author `no-real-io-in-tests` ESLint rule). | 2026-05-05 | 2026-05-05 |
+| Twilit Beaming Aurora | claude-code | claude-opus-4-7-1m | `7cf730` | step-06 executor — author `packages/core/oak-eslint/src/rules/no-real-io-in-tests.ts` at `error` severity with comprehensive Node.js IO denylist (child_process / worker_threads / fs / fs-promises / http / https / net / dgram across static, dynamic, and require import forms; both unprefixed and `node:`-prefixed specifiers) + process surface (env reads/writes including `globalThis.process.env`; cwd/chdir calls) + non-localhost fetch literal-arg detection. Hardcoded allowlist defaults: `**/test-helpers/**`, `**/test-fakes/**`, `vitest.config.ts`, `vitest.*.config.ts`, `vitest.setup.ts`. Optional `allowlistPathShapes: string[]` rule schema for step-07 IO-Inventory additions. Pair with `no-real-io-in-tests.unit.test.ts` (RuleTester cases — negative for every denylist sub-form, positive for every allowlist sub-glob). Plugin registration in `plugin.ts`. Do NOT yet wire into root `eslint.config.ts` (that is step 08). Reviewer dispatch at commit close (parallel): code-expert (gateway) + config-expert (allowlist shape correctness + rule-options schema) + test-expert (RuleTester describe-vs-audit shape + Node.js IO API surface coverage exhaustiveness). | 2026-05-05 | 2026-05-05 |
 | Opalescent Eclipsing Asteroid | cursor | GPT-5.5 | `0c263b` | owner-directed step-06 takeover executor after Twilit Beaming Aurora and Opalescent Threading Nebula hit usage limits. Completed gate blockers and landed review hardening: Knip CSS/Vite coverage, public rule-options type export through the package API, URL-parser localhost hardening against lookalike hostnames, `global.process` process-surface coverage, paired RuleTester regressions, reviewer re-checks, and commit/index coordination through the high-intensity sync. | 2026-05-05 | 2026-05-05 |
 | Deep Rolling Archipelago | cursor | GPT-5.5 | `02f5f5` | PR 93 merge-readiness closeout support — fetched GitHub comments/statuses/reviews, compared stale PR body with actual `feat/eef_exploration` branch contents, wrote `pr-93-merge-snagging-2026-05-05.md`, updated PR 93's remote description to lead with the blocking `thread-units` / `unitOrder` upstream API-shape fix, and posted comms events before/completion/session-close. | 2026-05-05 | 2026-05-05 |
 | Glassy Drifting Dock | codex | GPT-5 | `019df8` | PR 93 Sonar remediation — implemented and committed the main unclaimed findings (`da4288cd`), created the future paused-claim overlap plan for `oak-eslint` TODO-comment findings, kept generated SDK duplication non-blocking and routed to future codegen workspace-decomposition, and refreshed handoff surfaces for the remote reanalysis step. | 2026-05-05 | 2026-05-05 |
 | Opalescent Glowing Constellation | codex | GPT-5 | `019df9` | PR 93 remote verification and Sonar disposition — pushed/synced `feat/eef_exploration` through `cebbca83`, verified Sonar state, marked the three remaining `oak-eslint` S1135 findings false positive after owner clarified they document the gate itself, and confirmed Sonar `new_violations=0` / hotspots `0`; duplication remains deferred to the codegen workspace-decomposition plan. | 2026-05-05 | 2026-05-06 |
-| Silvered Hiding Silhouette | claude-code | claude-sonnet-4-6 | `924167` | step 10 reviewer-dispatch completion — recovered security-reviewer and clerk-reviewer findings from quota-stopped subagent jsonl transcripts; restarted sentry-reviewer after quota reset; appended all four reviewer verdicts to `/tmp/mcp-tool-exercise.log`; added three P2 snags to `pr-93-merge-snagging-2026-05-05.md`; step 10 verdict ACCEPTED. | 2026-05-05 | 2026-05-06 |
+| Silvered Hiding Silhouette | claude-code | claude-sonnet-4-6 | `924167` | step 10 reviewer-dispatch completion — recovered security-expert and clerk-expert findings from quota-stopped subagent jsonl transcripts; restarted sentry-expert after quota reset; appended all four reviewer verdicts to `/tmp/mcp-tool-exercise.log`; added three P2 snags to `pr-93-merge-snagging-2026-05-05.md`; step 10 verdict ACCEPTED. | 2026-05-05 | 2026-05-06 |
 
 (Two-table normalisation 2026-04-29: prior versions of this record
 held a duplicate identity table near the bottom of the file. Merged
@@ -546,14 +546,14 @@ events rather than a misleading claim. Captured in `napkin.md`.
 
 **Session-close 2026-05-03 (Moonlit Drifting Nebula, cursor, claude-opus-4-7, session seed prefix `92470a`)** — Branch: `feat/eef_exploration` (30 commits ahead of `origin/main`, push pending owner authorisation per the broader 2026-05-02 owner roadmap). Two-phase sequential foreground execution after subagent timeouts (PING timeouts on both Practice-Core and observability-WS1 worker subagents; user directed sequential foreground finalisation).
 
-**Phase 1 landing — `a471b66c docs(practice-core): tighten Core portability — Rounds 1+2+3`**: 43-file Practice-Core portability sweep across PDRs, trinity files (`README`, `practice.md`, `practice-bootstrap.md`, `practice-lineage.md`, `practice-verification.md`, `CHANGELOG.md`, `practice-index.md`), `decision-records/README.md`, and `distilled.md` amendment incorporating owner decisions C6 (Practice-canonical directory references as portable structural contract) and C7 (external http(s) citations permitted). Round-1 mechanical sweep (subagent) → Round-2 reviewer-driven refinement incorporating docs-adr-reviewer NO-GO/GO-WITH-CONDITIONS feedback (tightened Portability Constraint clause; deleted §Host context note sections; fixed PDR-007 broken-link cluster; abstracted host-repo names; generalised trinity files for the retirement model) → Round-3 inline host-anchoring sweep across 11 PDRs + fixture string abstraction in PDR-034 + recognition of CHANGELOG attribution headers + provenance.yml entries as structurally-required attribution metadata distinct from content leakage. Pre-existing fitness violations (practice.md, principles.md, etc.) flagged as graduation candidates per PDR-042 (Learning Preservation forbids compressing substance to meet size limits) — explicitly NOT compressed.
+**Phase 1 landing — `a471b66c docs(practice-core): tighten Core portability — Rounds 1+2+3`**: 43-file Practice-Core portability sweep across PDRs, trinity files (`README`, `practice.md`, `practice-bootstrap.md`, `practice-lineage.md`, `practice-verification.md`, `CHANGELOG.md`, `practice-index.md`), `decision-records/README.md`, and `distilled.md` amendment incorporating owner decisions C6 (Practice-canonical directory references as portable structural contract) and C7 (external http(s) citations permitted). Round-1 mechanical sweep (subagent) → Round-2 reviewer-driven refinement incorporating docs-adr-expert NO-GO/GO-WITH-CONDITIONS feedback (tightened Portability Constraint clause; deleted §Host context note sections; fixed PDR-007 broken-link cluster; abstracted host-repo names; generalised trinity files for the retirement model) → Round-3 inline host-anchoring sweep across 11 PDRs + fixture string abstraction in PDR-034 + recognition of CHANGELOG attribution headers + provenance.yml entries as structurally-required attribution metadata distinct from content leakage. Pre-existing fitness violations (practice.md, principles.md, etc.) flagged as graduation candidates per PDR-042 (Learning Preservation forbids compressing substance to meet size limits) — explicitly NOT compressed.
 
 **Phase 2 landing — `a3a0222a feat(observability): add WS1 multi-sink + fixtures axes scaffolding (RED)`**: 26 files / +2205/-62. Replaces single `SENTRY_MODE = off | fixture | sentry` switch with two orthogonal axes via Zod schemas + vendor-neutral runtime types + per-layer RED contract tests. New surfaces:
 
 - 4 env schema files: [`packages/core/env/src/schemas/observability{,-axes,-base,-refinements}.ts`](../../../../packages/core/env/src/schemas/observability.ts) — orthogonal axes, base shape, cross-field `superRefine` rules + legacy-rename rejection messages, public composition.
 - [`packages/core/observability/src/sink-registry.ts`](../../../../packages/core/observability/src/sink-registry.ts) — vendor-neutral `SinkRegistry` typed map (`{ readonly [K in ObservabilitySinkKind]?: ObservabilitySink<K> }`) + `ServerInstrumenter<TMcpServer, TExpressApp>` port closing ADR-162 §Open Questions on direct vendor imports (`wrapMcpServerWithSentry`, `setupExpressErrorHandler`). Zero `@sentry/*` imports.
 - [`packages/libs/env-resolution/src/types.ts`](../../../../packages/libs/env-resolution/src/types.ts) — structured warnings channel types (`EnvWarning` discriminated union including `ObservabilitySinksEmptyInPreviewWarning`).
-- [`apps/oak-curriculum-mcp-streamable-http/e2e-tests/dev-server-boots-without-observability-config.e2e.test.ts`](../../../../apps/oak-curriculum-mcp-streamable-http/e2e-tests/dev-server-boots-without-observability-config.e2e.test.ts) — outermost regression-guard E2E. Spawned `pnpm dev` boots cleanly with NO observability env vars; `NODE_ENV: 'development'` pinned in child env per test-reviewer P2-1.
+- [`apps/oak-curriculum-mcp-streamable-http/e2e-tests/dev-server-boots-without-observability-config.e2e.test.ts`](../../../../apps/oak-curriculum-mcp-streamable-http/e2e-tests/dev-server-boots-without-observability-config.e2e.test.ts) — outermost regression-guard E2E. Spawned `pnpm dev` boots cleanly with NO observability env vars; `NODE_ENV: 'development'` pinned in child env per test-expert P2-1.
 
 **RED-arc test artefacts (subsequently deleted)**: WS1 originally
 landed four `describe.skip` / `it.todo` placeholders intended to pin
@@ -567,12 +567,12 @@ moment each workstream's product code lands, not before.
 
 **D7a verification (read of [`apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-environment.ts`](../../../../apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-environment.ts) end-to-end)**: build-time path is structurally orthogonal to `SENTRY_MODE`. `resolveSentryRegistrationPolicy` drives off `VERCEL_ENV` + `VERCEL_GIT_COMMIT_REF` + override pair only. The dead `SENTRY_MODE` projection on `sentry-build-environment.ts:23` becomes a deterministic WS4 cleanup signal when WS2 deletes the field from `SentryConfigEnvironment`. No additional comment added today; the type-check at WS4 names the file.
 
-**Reviewer round (test-reviewer + docs-adr-reviewer + onboarding-reviewer + sentry-reviewer)**: all four returned GO-WITH-CONDITIONS. Cross-confirmed P1/P2 fixes addressed in-WS1:
+**Reviewer round (test-expert + docs-adr-expert + onboarding-expert + sentry-expert)**: all four returned GO-WITH-CONDITIONS. Cross-confirmed P1/P2 fixes addressed in-WS1:
 
-- TSDoc on `config-from-registry.unit.test.ts` rewritten to accurately describe its design-pinning role (was inaccurately claiming type-check canary status — sentry-reviewer P1-1 + P2-1; test-reviewer P3-4).
-- `NODE_ENV: 'development'` pinned in E2E child env so the spawned `pnpm dev` is hermetic across host shells and CI (test-reviewer P2-1).
-- WS4/WS5 contents-check `it.todo()` placeholders added so vitest's reporter surfaces the obligation (test-reviewer P2-2).
-- `ObservabilitySink` TSDoc gains an `@remarks` paragraph documenting the intentional narrow façade (capture-only at the registry surface; span / breadcrumb / log / transaction fan-out is adapter-internal) and the log fan-out path through sink-implementation-owned log adapters rather than via the registry (sentry-reviewer P2-2 + P2-3).
+- TSDoc on `config-from-registry.unit.test.ts` rewritten to accurately describe its design-pinning role (was inaccurately claiming type-check canary status — sentry-expert P1-1 + P2-1; test-expert P3-4).
+- `NODE_ENV: 'development'` pinned in E2E child env so the spawned `pnpm dev` is hermetic across host shells and CI (test-expert P2-1).
+- WS4/WS5 contents-check `it.todo()` placeholders added so vitest's reporter surfaces the obligation (test-expert P2-2).
+- `ObservabilitySink` TSDoc gains an `@remarks` paragraph documenting the intentional narrow façade (capture-only at the registry surface; span / breadcrumb / log / transaction fan-out is adapter-internal) and the log fan-out path through sink-implementation-owned log adapters rather than via the registry (sentry-expert P2-2 + P2-3).
 
 **Quality gates this session**: full pre-commit pipeline passed for both commits (74-task turbo run × 2; type-check; lint; prettier; markdownlint; knip; depcruise — 2050 modules, 4443 dependencies, no violations; portability:check). Unit suites green: env (7/48), observability (6/63), env-resolution (4/29), sentry-node (9/120 + 4 todo + 2 skipped), MCP streamable-http (87/725 + 2 skipped + 1 todo), search-cli (101/1001 + 2 skipped + 1 todo). `practice:fitness` shows pre-existing critical-zone violations on `napkin.md`, `distilled.md`, `pending-graduations.md`, `repo-continuity.md`, `principles.md` — out of scope per PDR-042 and noted as graduation candidates.
 
@@ -617,7 +617,7 @@ moment each workstream's product code lands, not before.
 
 **Session-close 2026-04-28T~15:30Z (Abyssal Cresting Compass, claude-code, claude-opus-4-7-1m, session seed `6efc47...`)** — Phase 2.0.5 (keyGenerator) landed; doc alignment landed; PR-87 mega-plan archived; one-page CodeQL plan opened. PR-87 head = origin = `d6693239`. Three commits this session:
 
-- `a7ce1a39` — `fix(rate-limit): add Vercel-aware keyGenerator with runtime-gated header trust`. New `vercelAwareKeyGenerator` + `RateLimiterFactoryOptions`; `createDefaultRateLimiterFactory` now requires explicit `isVercelRuntime` (no default-arg footgun). Wired through `createRateLimiters` + `application.ts` (derives from `runtimeConfig.env.VERCEL_ENV !== undefined`). 14 unit + 2 integration tests. **Mid-session re-classification** — security-reviewer found Vercel docs contradict the original "Vercel appends to X-Forwarded-For" premise; FIND-001/002 reclassified MUST-FIX → HARDENING. Cure landed as defence-in-depth + configuration-drift insurance, not exploit closure.
+- `a7ce1a39` — `fix(rate-limit): add Vercel-aware keyGenerator with runtime-gated header trust`. New `vercelAwareKeyGenerator` + `RateLimiterFactoryOptions`; `createDefaultRateLimiterFactory` now requires explicit `isVercelRuntime` (no default-arg footgun). Wired through `createRateLimiters` + `application.ts` (derives from `runtimeConfig.env.VERCEL_ENV !== undefined`). 14 unit + 2 integration tests. **Mid-session re-classification** — security-expert found Vercel docs contradict the original "Vercel appends to X-Forwarded-For" premise; FIND-001/002 reclassified MUST-FIX → HARDENING. Cure landed as defence-in-depth + configuration-drift insurance, not exploit closure.
 - `d3e86fd1` — `docs(observability): align ADR-158 + governance docs with PR-87 keyGenerator cure`. ADR-158 amended with Runtime-Aware Key Extraction sub-section, dual-edge framing (Cloudflare + Vercel as two distinct layers per owner direction), read-only blast-radius callout, configuration-drift tripwires. `safety-and-security.md`, workspace `README.md`, and `middleware-chain.md` aligned.
 - `d6693239` — `docs(observability): archive PR-87 mega-plan; open one-page CodeQL-only plan`. Owner-directed reset: `pr-87-architectural-cleanup.plan.md` superseded by `pr-87-codeql-alerts.plan.md` (one-page table, CodeQL-only, Sonar deferred). Plan-as-artefact-gravity lesson distilled.
 
@@ -657,7 +657,7 @@ moment each workstream's product code lands, not before.
 
 **Phase 2 verification result**: Coastal Mooring Atoll's deep-consolidation pass (commit `7c589a0a`, claim 1271c798 closed 11:26:31Z) substantively landed all eight Edits the Phase 2 brief required — §Stance, 12-phase sequencing, brand-preservation Cluster A contract, Cluster C/H/D §Stance alignment, Cluster B-COMPLETE marker, frontmatter todos, Lifecycle "in-repo plan is single source of truth". Phase 2.0 collapsed to verification only.
 
-**Phase 2.1 pre-phase adversarial security review COMPLETE (2026-04-28T11:54Z, security-reviewer claude-opus)**. Findings landed at `.agent/plans/observability/archive/completed/pr-87-cluster-a-security-review.md` (archived 2026-04-29 alongside its now-superseded source plan):
+**Phase 2.1 pre-phase adversarial security review COMPLETE (2026-04-28T11:54Z, security-expert claude-opus)**. Findings landed at `.agent/plans/observability/archive/completed/pr-87-cluster-a-security-review.md` (archived 2026-04-29 alongside its now-superseded source plan):
 
 - **2 MUST-FIX**: FIND-001/002 — `app.set('trust proxy', 1)` (`bootstrap-helpers.ts:246`) plus default `keyGenerator` (no override at `rate-limiter-factory.ts:71-80`) means a single attacker can rotate `X-Forwarded-For` to bypass *every* rate limiter. Vercel appends client IP to incoming XFF; Express trusts the right-most-but-one entry; attacker controls it. **Brand preservation alone does NOT fix this. The CodeQL `js/missing-rate-limiting` alerts point at a real exploitable problem.**
 - **2 SHOULD-FIX**: FIND-003 OAuth proxy single-bucket sharing (cross-endpoint amplification + legitimate self-DoS); FIND-004 `/healthz` unlimited at app layer.
@@ -685,7 +685,7 @@ moment each workstream's product code lands, not before.
 
 **Phase 1 outcome (commits on PR-87)**:
 
-- `9b2b2ed7` — `refactor(vercel-ignore): lock down git capabilities; add boundary sha validation; scrub git env`. Architectural cure: `validateGitSha` at trust boundary, named `gitShowFileAtSha` + `gitFetchShallow` capabilities (replacing the generic `runGitCommand` runner), `scrubbedGitEnv` (HOME omitted, GIT_CONFIG_* pinned to `/dev/null`, GIT_TERMINAL_PROMPT=0), defence-in-depth filePath validation, symmetric stderr diagnostics on current/previous-version probes. Reviewers absorbed: `code-reviewer`, `security-reviewer`, `architecture-reviewer-fred`, `test-reviewer` inline; `architecture-reviewer-wilma` flagged a non-trivial PATH-detection finding (eager check at `runVercelIgnoreCommand` entry) which was absorbed in this commit and then unwound in `84571ccf`. MUST-FIX argv-injection class via `VERCEL_GIT_PREVIOUS_SHA` closed at trust boundary.
+- `9b2b2ed7` — `refactor(vercel-ignore): lock down git capabilities; add boundary sha validation; scrub git env`. Architectural cure: `validateGitSha` at trust boundary, named `gitShowFileAtSha` + `gitFetchShallow` capabilities (replacing the generic `runGitCommand` runner), `scrubbedGitEnv` (HOME omitted, GIT_CONFIG_* pinned to `/dev/null`, GIT_TERMINAL_PROMPT=0), defence-in-depth filePath validation, symmetric stderr diagnostics on current/previous-version probes. Reviewers absorbed: `code-expert`, `security-expert`, `architecture-expert-fred`, `test-expert` inline; `architecture-expert-wilma` flagged a non-trivial PATH-detection finding (eager check at `runVercelIgnoreCommand` entry) which was absorbed in this commit and then unwound in `84571ccf`. MUST-FIX argv-injection class via `VERCEL_GIT_PREVIOUS_SHA` closed at trust boundary.
 - `5d6622d0` — `fix(agent-identity-cli): align e2e expectation with renamed seed env vars`. Surgical 1-line fix unblocking pre-push. The parallel session's `Prismatic Glowing Sun` rename of seed env vars (`CLAUDE_SESSION_ID`/`OAK_AGENT_SEED` → `PRACTICE_AGENT_SESSION_ID_{CLAUDE,CURSOR,CODEX}`) updated source + unit tests but missed the e2e expectation; the file was outside both active claims so this was a clean cross-claim fix with comms-log notification.
 - `84571ccf` — `refactor(vercel-ignore): use absolute git binary; drop path inheritance from scrubbed env`. Phase 1.1 followup after CI showed S4036 had moved (not dropped) and 5 new TO_REVIEW hotspots had appeared on my new code. Cure: `GIT_BINARY = '/usr/bin/git'` constant, capabilities call `execFileSync(GIT_BINARY, ...)`, `scrubbedGitEnv` no longer reads PATH, eager PATH check unwound, `safeReadPreviousVersion` decomposed via `attemptShowAfterShallowFetch` + `readPackageJsonText` (S3776 cognitive complexity 19 → <15), `/tmp/evil` test fixtures removed (S5443 ×3 closed). E2E test uses `/usr/bin/git` directly to mirror the production posture.
 
@@ -696,7 +696,7 @@ moment each workstream's product code lands, not before.
 - `new_duplicated_lines_density`: 5.6% → 5.7% (residual from the new `.d.mts` declaration file; addressed at Cluster D / Phase 11)
 - CodeQL OPEN: 7 unchanged (5 × Cluster A rate-limit + 2 × Cluster C schema-cache; explicit Phase 2 + Phase 3 targets)
 
-**What next session does**: open Phase 2 (Cluster A) per the plan-of-record §"Phase 2". First action is the pre-phase `security-reviewer` adversarial dispatch on rate-limit bypass paths (key extraction, key collision, IP spoofing under `trust proxy = 1`, header bypass, OAuth-proxy double-counting). Then narrow `RateLimiterFactory` return type from `RequestHandler` → `RateLimitRequestHandler` and propagate the brand through `auth-routes.ts`, `oauth-proxy/oauth-proxy-routes.ts`, `app/bootstrap-helpers.ts`, and the test fake at `test-helpers/rate-limiter-fakes.ts` (which needs stub `getKey` and `resetKey` methods to satisfy the brand). CodeQL `js/missing-rate-limiting` should close all 5 alerts when the brand reaches the `app.post(...)` registration sites; if not, locate the remaining widening site and close it (no fallback dispositions). Active claim `6395ea9c-bd44-417e-8b17-c3f9c5dc3f65` is being archived as part of this session-close (Phase 1 closure evidence: the three commits above).
+**What next session does**: open Phase 2 (Cluster A) per the plan-of-record §"Phase 2". First action is the pre-phase `security-expert` adversarial dispatch on rate-limit bypass paths (key extraction, key collision, IP spoofing under `trust proxy = 1`, header bypass, OAuth-proxy double-counting). Then narrow `RateLimiterFactory` return type from `RequestHandler` → `RateLimitRequestHandler` and propagate the brand through `auth-routes.ts`, `oauth-proxy/oauth-proxy-routes.ts`, `app/bootstrap-helpers.ts`, and the test fake at `test-helpers/rate-limiter-fakes.ts` (which needs stub `getKey` and `resetKey` methods to satisfy the brand). CodeQL `js/missing-rate-limiting` should close all 5 alerts when the brand reaches the `app.post(...)` registration sites; if not, locate the remaining widening site and close it (no fallback dispositions). Active claim `6395ea9c-bd44-417e-8b17-c3f9c5dc3f65` is being archived as part of this session-close (Phase 1 closure evidence: the three commits above).
 
 **Discipline carried forward**: no fallback dispositions; no `accept` / `false_positive` / `cpd.exclusions` in any phase; generated code is fully our responsibility. The Stance section of the plan is operational at every phase boundary. The drift-pattern register (Vining → Pelagic → Opalescent → Tidal) gains a fifth instance below.
 
@@ -710,7 +710,7 @@ moment each workstream's product code lands, not before.
 - **32-test unit suite** at `vercel-ignore-production-non-release-build.unit.test.mjs` covering: `validateGitSha` (positive + 5 negative classes); `scrubbedGitEnv` (PATH preservation, GIT_CONFIG pinning, HOME omission, exhaustive whole-object equality, throws on missing PATH); capability-internal SHA + filePath defence-in-depth; ADR-163 §10 truth-table with new DI shape; boundary validation (length-only, reason-class, hostile-never-logged, whitespace-as-unset).
 - **New e2e runtime test** at `apps/oak-curriculum-mcp-streamable-http/e2e-tests/vercel-ignore-runtime.e2e.test.ts` exercising `gitShowFileAtSha` against the actual repo under `scrubbedGitEnv` to prove HOME-absence does not break git on Vercel-equivalent runtimes.
 - **Old integration test deleted** (`vercel-ignore-production-non-release-build.integration.test.mjs`) per testing-strategy item 8 (in-process tests must not spawn child processes).
-- **Reviewer dispatch (4-of-5)**: `code-reviewer`, `security-reviewer`, `architecture-reviewer-fred`, `test-reviewer` — all run; findings absorbed inline. **`architecture-reviewer-wilma` is deferred** to next session (recommended by both code-reviewer and architect-fred for fail-open posture under ADR-163 §10 + shallow-clone fetch reachability for arbitrary previous-deploy SHAs). Brief is in the plan body.
+- **Reviewer dispatch (4-of-5)**: `code-expert`, `security-expert`, `architecture-expert-fred`, `test-expert` — all run; findings absorbed inline. **`architecture-expert-wilma` is deferred** to next session (recommended by both code-expert and architect-fred for fail-open posture under ADR-163 §10 + shallow-clone fetch reachability for arbitrary previous-deploy SHAs). Brief is in the plan body.
 - **Sweep**: agent-tools `runtime.ts:130` + `commit-queue/git.ts:16` are sibling generic-runner sites with internal-literal-args consumers. Threat model differs (no untrusted-input boundary). Surfaced for owner direction; not in PR-87 scope.
 - **Gates run pre-second-wave** (✓): `pnpm test` (721/721), `pnpm test:root-scripts` (110/110), `pnpm type-check`, `pnpm lint:fix`, `pnpm format:root`, `pnpm markdownlint:root`, `pnpm build`, `pnpm sdk-codegen`. **Gates pending re-run after second-wave edits**: lint:fix, type-check, full test, test:e2e, markdownlint, format, build.
 
@@ -775,7 +775,7 @@ brand at every authorising route's `app.post(...)` registration site.
 No widening to `RequestHandler` anywhere on the path from
 `rateLimit()` to the route registration.
 
-**Pre-phase**: dispatch `security-reviewer` BEFORE implementation, with
+**Pre-phase**: dispatch `security-expert` BEFORE implementation, with
 a brief that enumerates rate-limit *bypass* paths a malicious actor
 could exploit at the existing routes (key extraction, key collision, IP
 spoofing under `trust proxy = 1`, header bypass, OAuth-proxy
@@ -804,7 +804,7 @@ brief is in `.agent/plans/observability/active/pr-87-architectural-cleanup.plan.
 
 **Sequence**:
 
-1. Pre-phase `security-reviewer` adversarial dispatch + absorb findings
+1. Pre-phase `security-expert` adversarial dispatch + absorb findings
    into the contract.
 2. RED: TypeScript compile-time test that route registration only
    typechecks when the limiter satisfies `RateLimitRequestHandler` at
@@ -818,10 +818,10 @@ brief is in `.agent/plans/observability/active/pr-87-architectural-cleanup.plan.
    the alerts stay OPEN and the blocker is escalated to the owner with
    file:line evidence — brand preservation without CodeQL recognition
    is NOT a substitute for closing the alerts.
-7. Post-substantive parallel reviewer dispatch: `code-reviewer`,
-   `architecture-reviewer-fred`, `architecture-reviewer-wilma`,
-   `security-reviewer` (re-verify), `mcp-reviewer`, `test-reviewer`,
-   `type-reviewer`. Cluster commit absorbs findings inline.
+7. Post-substantive parallel reviewer dispatch: `code-expert`,
+   `architecture-expert-fred`, `architecture-expert-wilma`,
+   `security-expert` (re-verify), `mcp-expert`, `test-expert`,
+   `type-expert`. Cluster commit absorbs findings inline.
 
 ### Discipline carried forward
 
@@ -1091,8 +1091,8 @@ on PR-87 merge. The `CodeQL combined` check should clear once the
 alerts are re-evaluated against the post-merge default branch state.
 
 **Reviewer dispatch this session**: 4 reviewers ran in parallel
-(`code-reviewer`, `type-reviewer`, `architecture-reviewer-betty`,
-`test-reviewer`). All returned with positive verdict (PASS / SAFE /
+(`code-expert`, `type-expert`, `architecture-expert-betty`,
+`test-expert`). All returned with positive verdict (PASS / SAFE /
 APPROVED WITH SUGGESTIONS / COMPLIANT). Two actionable findings absorbed
 in commit `f0e3b0be` (split mixed value+type local import for
 verbatimModuleSyntax future-proofing). One enhancement suggestion
@@ -1134,7 +1134,7 @@ file for a comparator-determinism enhancement is disproportionate.
 4. **Hotspot AZ3D3iflrIk5eL0ceU__** — owner authorisation OR Sonar UI mark.
 5. **Push** — owner-authorised when corrected dispositions land.
 6. **Verify Sonar QG status** post-push via `mcp__sonarqube__get_project_quality_gate_status`.
-7. **PR description** — code-reviewer's suggestion was to enumerate the
+7. **PR description** — code-expert's suggestion was to enumerate the
    6 Sonar dismissals + 9 hotspot reviews so reviewers see them without
    a Sonar login.
 
@@ -1263,12 +1263,12 @@ claude-code / claude-opus-4-7-1m / 4e2cbc5c — PR-87 Phase 3
 substantive work complete locally; commits `fc253664`, `3beaf039`,
 `64c8ba5e`, `3d80d8c6`, `b1a4cd79` landed on
 `feat/otel_sentry_enhancements`, not yet pushed. Phase 3 mid-phase
-reviewer batch in flight: code-reviewer + test-reviewer returned
-findings to absorb (test-reviewer BLOCKING: rename
+reviewer batch in flight: code-expert + test-expert returned
+findings to absorb (test-expert BLOCKING: rename
 `schema-cache.unit.test.ts` → `.integration.test.ts` since it uses
-real fs IO; test-reviewer MAJOR: DI-chain proof gap; code-reviewer
+real fs IO; test-expert MAJOR: DI-chain proof gap; code-expert
 MAJOR: test type-annotation should be `SchemaCacheLogger` not
-`Pick<Logger, 'warn'>`); security-reviewer still running. Once
+`Pick<Logger, 'warn'>`); security-expert still running. Once
 absorbed, Phase 4 MAJOR Sonar fixes start. Push deferred to Phase 6
 per the master plan and pre-authorised auto-push direction.)
 
@@ -1300,8 +1300,8 @@ branch-primary blocker.)
   deferred. The `feat/otel_sentry_enhancements` branch is ready for
   merge once PR-87 quality lane closes too.
 - **Reviewer dispatch on Tier 2** (custom error fingerprinting):
-  three reviewers (`code-reviewer`, `sentry-reviewer`, `test-reviewer`)
-  ran in parallel. `sentry-reviewer` flagged a MAJOR — single-element
+  three reviewers (`code-expert`, `sentry-expert`, `test-expert`)
+  ran in parallel. `sentry-expert` flagged a MAJOR — single-element
   fingerprint shape `['<class-name>']` is a full override and would
   collapse intra-family stack-aware grouping. Absorbed by switching
   to the canonical hybrid form `['{{ default }}', '<class-name>']`,
@@ -1512,8 +1512,8 @@ all day, not test miscategorisation). Plus today's session-handoff
 work: `325605a4` adds the next-session plan
 `sentry-preview-validation-and-quality-triage.plan.md`. Both close-gate
 reviewers ran on the new plan and 12 findings (3 MAJOR + 2 MINOR + 1
-NIT from code-reviewer, 3 MAJOR + 2 MINOR + 2 POSITIVE from
-assumptions-reviewer retry) are absorbed in the plan body's Reviewer
+NIT from code-expert, 3 MAJOR + 2 MINOR + 2 POSITIVE from
+assumptions-expert retry) are absorbed in the plan body's Reviewer
 Dispositions table. **Vercel preview is GREEN** at deploy
 `dpl_FtjdEbwRN2qwM1m78hzoQoEDG95R` (commit `6485773f`'s pred);
 re-confirm at next session-open against current HEAD `325605a4`. CodeQL
@@ -1529,7 +1529,7 @@ in executable form. Memories captured today:
 `feedback_subagent_transcript_recovery`.)
 
 **Prior refresh**: 2026-04-25 (Keen Dahl / claude-code /
-claude-opus-4-7-1m — Phase 0 walk + assumptions-reviewer close.
+claude-opus-4-7-1m — Phase 0 walk + assumptions-expert close.
 Eight unpushed commits (`b0c565b4 … 2484066b`) pushed at session
 open; remote moved `d318b8bd..b0c565b4` after pre-push hook
 ran clean (84 tasks, all green; one local cache miss on
@@ -1539,18 +1539,18 @@ Quality Gate still fail until Phase 1+ work lands. Phase 0
 findings populated for all four tasks: 0.1 OAuth metadata
 rate-limit (REAL GAP — fix in Phase 3 Task 3.2 via route-level
 attach); 0.2 stylistic-rule policy (per-rule ACCEPT/DISABLE
-table; owner gate now at Phase 0 close per assumptions-reviewer
+table; owner gate now at Phase 0 close per assumptions-expert
 MAJOR-B; default-to-ACCEPT fallback); 0.3 semver extraction
 home (`packages/core/build-metadata/src/semver.ts` using **npm
-`semver` package** per assumptions-reviewer MAJOR-A — sibling
+`semver` package** per assumptions-expert MAJOR-A — sibling
 `release-internals.ts:14` already imports from npm `semver`;
 two inline copies retained with a parity-test anti-drift gate);
 0.4 Vercel PATH safety (ACCEPT-with-rationale; date-stamped
-docs citation per MINOR-B). `assumptions-reviewer` ran 18:53Z
+docs citation per MINOR-B). `assumptions-expert` ran 18:53Z
 post-Task-0.4: three MAJOR + one MINOR + one POSITIVE absorbed
 into a new Reviewer Dispositions table in the plan body. Both
-Phase 0 close gates (`code-reviewer` 2026-04-25 commit `0c04e7d5`,
-`assumptions-reviewer` 2026-04-25 this session) satisfied.
+Phase 0 close gates (`code-expert` 2026-04-25 commit `0c04e7d5`,
+`assumptions-expert` 2026-04-25 this session) satisfied.
 **Phase 1 entry is unblocked subject to two owner-gate items**:
 DISABLE-list confirmation for S6594/S6644/S7748 (default-to-ACCEPT
 applies if owner is async-only); Phase 1's RED→GREEN sequencing
@@ -1610,7 +1610,7 @@ unresolved import (`apps/oak-curriculum-mcp-streamable-http/smoke-tests/modes/lo
 → `./local-stub-env.js`, owned by the parallel
 `mcp-local-startup-release-boundary.plan.md` Phase 2 GREEN agent).
 **§3.0 reviewer gate caught two BLOCKING enumeration gaps**
-(`assumptions-reviewer` Disposition #6 + `architecture-reviewer-fred`
+(`assumptions-expert` Disposition #6 + `architecture-expert-fred`
 Disposition #3 / positive-note #4 sub-clauses); enumeration expanded
 **13 → 15 items**; MAJORs and MINORs absorbed before staging.
 Resume instructions, exact pause-time `git status`, drafted commit
@@ -1665,8 +1665,8 @@ spiral-session experience file).
 after a planning + reviewer-cycle session that did not land code.
 The session opened on WS1 RED but pivoted into a structural
 collapse decision (two resolvers → one, accepted by owner), then
-Tier 1 review (Fred + Betty + Barney + assumptions-reviewer),
-plan revision, Tier 2 review (Wilma + 2 docs-adr-reviewer
+Tier 1 review (Fred + Betty + Barney + assumptions-expert),
+plan revision, Tier 2 review (Wilma + 2 docs-adr-expert
 rounds), full plan revision addressing all findings, and a
 3-layer pre-flight WS1 audit (string-pattern `rg`, import-site
 `rg` including dynamic imports, `pnpm knip` + `pnpm depcruise`).
@@ -1942,11 +1942,11 @@ discipline (per PDR-026):
     `'build-scripts/**/*.mjs'` to the streamable-http workspace's
     `entry` + `project` globs so knip detects the new devDeps as
     used). Must fold into the WS3 commit on resume.
-- **What landed in the §3.0 reviewer gate**: `docs-adr-reviewer` +
-  `assumptions-reviewer` dispatched on the drafted amendment.
+- **What landed in the §3.0 reviewer gate**: `docs-adr-expert` +
+  `assumptions-expert` dispatched on the drafted amendment.
   **Both reported two BLOCKING findings** in the original 13-item
-  enumeration: `assumptions-reviewer` Disposition #6 (primary
-  anti-drift gate claim) and `architecture-reviewer-fred`
+  enumeration: `assumptions-expert` Disposition #6 (primary
+  anti-drift gate claim) and `architecture-expert-fred`
   Disposition #3 (devDep edge for the contract test) +
   positive-note #4 sub-clauses (boundary discipline for the
   cross-resolver and wiring integration test placements). All
@@ -1956,10 +1956,10 @@ discipline (per PDR-026):
   (Item 1 line range narrowing to preserve the
   `**Cancellation truth table**:` label; Item 10 line range
   narrowing to preserve the trailing blockquote separator) and
-  MINORs (Item 11 retract-with-note framing per assumptions-reviewer
+  MINORs (Item 11 retract-with-note framing per assumptions-expert
   I1; Item 7 final bullet-order note; Item 9 grep-friendly commit-hash
   placeholder later filled with `2822e525`; Item 2 phrasing
-  softened per assumptions-reviewer I3) all absorbed before the
+  softened per assumptions-expert I3) all absorbed before the
   staged diff was finalised. Full disposition record is in the
   ADR's `## Reviewer Dispositions (2026-04-24 second amendment)`
   block (staged).
@@ -2127,7 +2127,7 @@ discipline):
   (eager `readFileSync` at module init via `ROOT_PACKAGE_VERSION`
   → resolved via new WS2 §2.0 module-split prerequisite),
   plus 7 MAJOR/MINOR Wilma findings, plus 3 BLOCKING / 8 MAJOR /
-  5 MINOR/NIT docs-adr-reviewer findings that materially reshaped
+  5 MINOR/NIT docs-adr-expert findings that materially reshaped
   WS1, WS2, WS3, WS3.4 (ADR-163 §10 second amendment), and the
   Documentation Propagation table. WS1 audit (3 layers,
   read-only) confirmed no architectural surprises blocking WS2.
@@ -2201,8 +2201,8 @@ in commit `06bf25d7`:
   Enforcement items (#5 cross-resolver contract; #6 cancellation
   wiring integration).
 - Reviewer Dispositions block records the WS0.2 reviewer pass:
-  `assumptions-reviewer`, `sentry-reviewer`,
-  `architecture-reviewer-fred` — all BLOCKING + IMPORTANT findings
+  `assumptions-expert`, `sentry-expert`,
+  `architecture-expert-fred` — all BLOCKING + IMPORTANT findings
   ACCEPTED and applied (notably: qualifying `VERCEL_BRANCH_URL` as
   an Oak operational assumption rather than a Vercel guarantee;
   noting Oak's `SENTRY_RELEASE_NAME_PATTERN` diverges from Sentry's

@@ -104,8 +104,7 @@ describe('validateCurriculumResponse', () => {
     ): SearchLessonSummary {
       return lessonSummarySchema.parse({
         lessonTitle: 'Introduction to Algebra',
-        unitSlug: 'algebra-basics',
-        unitTitle: 'Algebra Basics',
+        units: [{ unitSlug: 'algebra-basics', unitTitle: 'Algebra Basics' }],
         subjectSlug: 'maths',
         subjectTitle: 'Mathematics',
         keyStageSlug: 'ks3',

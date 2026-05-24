@@ -129,7 +129,7 @@ mechanism.
 
 Without the upward link, drift accumulates silently — a rule's
 meaning shifts without the principle moving, or vice versa.
-`/jc-consolidate-docs` audits this alignment at consolidation time.
+`/oak-consolidate-docs` audits this alignment at consolidation time.
 
 ## Citation Directionality
 

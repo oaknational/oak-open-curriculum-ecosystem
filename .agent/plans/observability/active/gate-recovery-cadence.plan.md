@@ -232,11 +232,11 @@ continues.
 
 ## Reviewer Routing
 
-- `test-reviewer`: confirm RED tests fail for behaviour and do not break
+- `test-expert`: confirm RED tests fail for behaviour and do not break
   non-test gates.
-- `config-reviewer`: if package scripts, turbo config, or gate cadence docs
+- `config-expert`: if package scripts, turbo config, or gate cadence docs
   change.
-- `architecture-reviewer-fred`: if build identity moves into a new workspace or
+- `architecture-expert-fred`: if build identity moves into a new workspace or
   changes ADR-owned release boundaries.
-- `sentry-reviewer`: before changing `resolveRelease` or Sentry sink metadata
+- `sentry-expert`: before changing `resolveRelease` or Sentry sink metadata
   semantics.

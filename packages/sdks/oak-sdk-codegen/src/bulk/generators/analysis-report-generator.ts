@@ -7,8 +7,8 @@
  * and misconception density to inform subsequent generators.
 
  */
-import { mkdir, writeFile } from 'fs/promises';
-import { join } from 'path';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
 import type { Logger } from '@oaknational/logger';
 import { typeSafeEntries } from '../../types/helpers/type-helpers.js';

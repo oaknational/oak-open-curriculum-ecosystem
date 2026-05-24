@@ -367,10 +367,10 @@ Acceptance criteria:
 
 Minimum reviewers:
 
-- `docs-adr-reviewer`
-- `architecture-reviewer-betty`
-- `architecture-reviewer-wilma`
-- `elasticsearch-reviewer`
+- `docs-adr-expert`
+- `architecture-expert-betty`
+- `architecture-expert-wilma`
+- `elasticsearch-expert`
 
 ---
 

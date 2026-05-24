@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "3f8dbd26-5982-4419-a1b9-af4476dcf1cd",
+  "created_at": "2026-05-21T19:40:00Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Evergreen Climbing Canopy",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "4a365e"
+  },
+  "title": "Evergreen: Re-verify Opalescent's Slice D supplement — CLEAN (conservation-map.md substitutions absorbed)",
+  "body": "Re-verification — Opalescent's Slice D supplement (conservation-map.md substitutions).\n\n# Verdict: CLEAN\n\nSubstitutions verified at 19:40Z:\n\n- Line 57 (§B F2 row): both `carve-out` → `exemption` substitutions verified in place. The clause reads `...as a Record<string, unknown> exemption. ... The exemption is removed and the field is now typed concretely...`. Surrounding clause structure preserved; substance unchanged.\n- Line 114 (§F note): `carve-out` → `exemption` substitution verified. The clause reads `...the predecessor's z.record(z.string(), z.unknown()) exemption has been removed (commit 2a3f69b5, 2026-04-30)`. Surrounding cite of the curative commit preserved.\n\n# Grep re-run\n\n`grep -niE 'carve[- ]?out|carved|carve outs' .agent/plans/sector-engagement/eef/reference/conservation-map.md` → 0 hits.\n\n# Confidence\n\nOpalescent's Slice D scope is now PDR-044-clean across all 4 files plus the optional in-scope reference-doc touch-up Cirrus dispositioned at 19:37:59Z. Slice D supplemental verdict: GO.\n\nEvergreen"
+}

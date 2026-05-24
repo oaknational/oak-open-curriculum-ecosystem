@@ -431,7 +431,7 @@ export interface paths {
         };
         /**
          * Unit summary
-         * This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit
+         * This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit. Optional programme-factor filters can narrow the returned variant. The childSubject filter is only available for science units and accepts biology, chemistry, combined-science, or physics.
          */
         get: operations["getUnits-getUnit"];
         put?: never;
@@ -1188,8 +1188,7 @@ export interface components {
          *               \}
          *             ],
          *             "phaseSlug": "primary",
-         *             "phaseTitle": "Primary",
-         *             "ks4Options": null
+         *             "phaseTitle": "Primary"
          *           \},
          *           \{
          *             "sequenceSlug": "art-secondary",
@@ -1211,8 +1210,7 @@ export interface components {
          *               \}
          *             ],
          *             "phaseSlug": "secondary",
-         *             "phaseTitle": "Secondary",
-         *             "ks4Options": null
+         *             "phaseTitle": "Secondary"
          *           \}
          *         ],
          *         "years": [
@@ -1271,10 +1269,6 @@ export interface components {
                 phaseSlug: string;
                 /** The title for the phase to which this sequence belongs */
                 phaseTitle: string;
-                ks4Options: {
-                    title: string;
-                    slug: string;
-                } | null;
             }[];
             /** The years for which this subject has content available for */
             years: number[];
@@ -1294,11 +1288,11 @@ export interface components {
         }[];
         /**
          * @example \{
-         *       "subjectTitle": "Art and design",
-         *       "subjectSlug": "art",
+         *       "subjectTitle": "Science",
+         *       "subjectSlug": "science",
          *       "sequenceSlugs": [
          *         \{
-         *           "sequenceSlug": "art-primary",
+         *           "sequenceSlug": "science-primary",
          *           "years": [
          *             1,
          *             2,
@@ -1318,32 +1312,73 @@ export interface components {
          *             \}
          *           ],
          *           "phaseSlug": "primary",
-         *           "phaseTitle": "Primary",
-         *           "ks4Options": null
+         *           "phaseTitle": "Primary"
          *         \},
          *         \{
-         *           "sequenceSlug": "art-secondary",
+         *           "sequenceSlug": "science-secondary-aqa",
          *           "years": [
-         *             1,
-         *             2,
-         *             3,
-         *             4,
-         *             5,
-         *             6
+         *             7,
+         *             8,
+         *             9,
+         *             10,
+         *             11
          *           ],
          *           "keyStages": [
          *             \{
-         *               "keyStageTitle": "Key Stage 1",
-         *               "keyStageSlug": "ks1"
+         *               "keyStageTitle": "Key Stage 3",
+         *               "keyStageSlug": "ks3"
          *             \},
          *             \{
-         *               "keyStageTitle": "Key Stage 2",
-         *               "keyStageSlug": "ks2"
+         *               "keyStageTitle": "Key Stage 4",
+         *               "keyStageSlug": "ks4"
          *             \}
          *           ],
          *           "phaseSlug": "secondary",
-         *           "phaseTitle": "Secondary",
-         *           "ks4Options": null
+         *           "phaseTitle": "Secondary"
+         *         \},
+         *         \{
+         *           "sequenceSlug": "science-secondary-edexcel",
+         *           "years": [
+         *             7,
+         *             8,
+         *             9,
+         *             10,
+         *             11
+         *           ],
+         *           "keyStages": [
+         *             \{
+         *               "keyStageTitle": "Key Stage 3",
+         *               "keyStageSlug": "ks3"
+         *             \},
+         *             \{
+         *               "keyStageTitle": "Key Stage 4",
+         *               "keyStageSlug": "ks4"
+         *             \}
+         *           ],
+         *           "phaseSlug": "secondary",
+         *           "phaseTitle": "Secondary"
+         *         \},
+         *         \{
+         *           "sequenceSlug": "science-secondary-ocr",
+         *           "years": [
+         *             7,
+         *             8,
+         *             9,
+         *             10,
+         *             11
+         *           ],
+         *           "keyStages": [
+         *             \{
+         *               "keyStageTitle": "Key Stage 3",
+         *               "keyStageSlug": "ks3"
+         *             \},
+         *             \{
+         *               "keyStageTitle": "Key Stage 4",
+         *               "keyStageSlug": "ks4"
+         *             \}
+         *           ],
+         *           "phaseSlug": "secondary",
+         *           "phaseTitle": "Secondary"
          *         \}
          *       ],
          *       "years": [
@@ -1376,7 +1411,51 @@ export interface components {
          *           "keyStageTitle": "Key Stage 4",
          *           "keyStageSlug": "ks4"
          *         \}
-         *       ]
+         *       ],
+         *       "ks4ProgrammeFactors": \{
+         *         "examBoard": [
+         *           \{
+         *             "title": "AQA",
+         *             "slug": "aqa"
+         *           \},
+         *           \{
+         *             "title": "Edexcel",
+         *             "slug": "edexcel"
+         *           \},
+         *           \{
+         *             "title": "OCR",
+         *             "slug": "ocr"
+         *           \}
+         *         ],
+         *         "tier": [
+         *           \{
+         *             "title": "Foundation",
+         *             "slug": "foundation"
+         *           \},
+         *           \{
+         *             "title": "Higher",
+         *             "slug": "higher"
+         *           \}
+         *         ],
+         *         "childSubject": [
+         *           \{
+         *             "title": "Biology",
+         *             "slug": "biology"
+         *           \},
+         *           \{
+         *             "title": "Chemistry",
+         *             "slug": "chemistry"
+         *           \},
+         *           \{
+         *             "title": "Combined science",
+         *             "slug": "combined-science"
+         *           \},
+         *           \{
+         *             "title": "Physics",
+         *             "slug": "physics"
+         *           \}
+         *         ]
+         *       \}
          *     \}
          */
         SubjectResponseSchema: {
@@ -1401,10 +1480,6 @@ export interface components {
                 phaseSlug: string;
                 /** The title for the phase to which this sequence belongs */
                 phaseTitle: string;
-                ks4Options: {
-                    title: string;
-                    slug: string;
-                } | null;
             }[];
             /** The years for which this subject has content available for */
             years: number[];
@@ -1415,6 +1490,37 @@ export interface components {
                 /** The unique identifier for a given key stage */
                 keyStageSlug: string;
             }[];
+            /** The programme factors that apply to this subject at key stage 4, with the valid values for each factor. */
+            ks4ProgrammeFactors: {
+                /** The valid exam board values offered by Oak for this subject at key stage 4. */
+                examBoard?: {
+                    /** The display title for a valid programme factor value */
+                    title: string;
+                    /** The slug identifier for a valid programme factor value */
+                    slug: string;
+                }[];
+                /** The valid pathway values offered by Oak for this subject at key stage 4. */
+                pathway?: {
+                    /** The display title for a valid programme factor value */
+                    title: string;
+                    /** The slug identifier for a valid programme factor value */
+                    slug: string;
+                }[];
+                /** The valid tier values offered by Oak for this subject at key stage 4. */
+                tier?: {
+                    /** The display title for a valid programme factor value */
+                    title: string;
+                    /** The slug identifier for a valid programme factor value */
+                    slug: string;
+                }[];
+                /** The child subjects offered by Oak for this subject at key stage 4 (e.g. biology, chemistry, physics and combined-science under science). Only present for Science, which is split into child subjects at KS4. */
+                childSubject?: {
+                    /** The display title for a valid programme factor value */
+                    title: string;
+                    /** The slug identifier for a valid programme factor value */
+                    slug: string;
+                }[];
+            };
             /**
              * Format: uri
              * The Oak URL for this resource — a direct, slug-based URL generated by the SDK. Distinct from canonicalUrl, which encodes full curriculum context.
@@ -1445,8 +1551,7 @@ export interface components {
          *           \}
          *         ],
          *         "phaseSlug": "primary",
-         *         "phaseTitle": "Primary",
-         *         "ks4Options": null
+         *         "phaseTitle": "Primary"
          *       \},
          *       \{
          *         "sequenceSlug": "art-secondary",
@@ -1469,8 +1574,7 @@ export interface components {
          *           \}
          *         ],
          *         "phaseSlug": "secondary",
-         *         "phaseTitle": "Secondary",
-         *         "ks4Options": null
+         *         "phaseTitle": "Secondary"
          *       \}
          *     ]
          */
@@ -1490,10 +1594,6 @@ export interface components {
             phaseSlug: string;
             /** The title for the phase to which this sequence belongs */
             phaseTitle: string;
-            ks4Options: {
-                title: string;
-                slug: string;
-            } | null;
             /**
              * Format: uri
              * The Oak URL for this resource — a direct, slug-based URL generated by the SDK. Distinct from canonicalUrl, which encodes full curriculum context.
@@ -2750,10 +2850,14 @@ export interface components {
         /**
          * @example \{
          *       "lessonTitle": "Using vector tools to draw and modify shapes",
-         *       "canonicalUrl": "https://www.thenational.academy/teachers/programmes/computing-secondary-ks3/units/developing-vector-graphics/lessons/using-vector-tools-to-draw-and-modify-shapes",
+         *       "canonicalUrl": "https://www.thenational.academy/teachers/lessons/using-vector-tools-to-draw-and-modify-shapes",
          *       "oakUrl": "https://www.thenational.academy/teachers/lessons/using-vector-tools-to-draw-and-modify-shapes",
-         *       "unitSlug": "developing-vector-graphics",
-         *       "unitTitle": "Developing vector graphics",
+         *       "units": [
+         *         \{
+         *           "unitSlug": "developing-vector-graphics",
+         *           "unitTitle": "Developing vector graphics"
+         *         \}
+         *       ],
          *       "subjectSlug": "computing",
          *       "subjectTitle": "Computing",
          *       "keyStageSlug": "ks3",
@@ -2813,10 +2917,55 @@ export interface components {
              * The Oak National URL for the lesson
              */
             oakUrl: string;
-            /** The unit slug identifier */
-            unitSlug: string;
-            /** The unit title */
-            unitTitle: string;
+            /**
+             * All the units (including programme variants) this lesson is part of. Each entry is a unique combination of unit slug and programme factors.
+             * @example [
+             *       \{
+             *         "unitSlug": "developing-vector-graphics",
+             *         "unitTitle": "Developing vector graphics"
+             *       \}
+             *     ]
+             */
+            units: {
+                /** The unit slug identifier */
+                unitSlug: string;
+                /** The unit title */
+                unitTitle: string;
+                /** The programme-factor values that identify which variant of the unit this lesson sits in. Omitted when the unit has no programme factors. */
+                programmeFactors?: {
+                    /** The exam board that identifies this unit variant */
+                    examBoard?: {
+                        /** The slug identifier for the programme factor */
+                        slug: string;
+                        /** The title of the programme factor */
+                        title: string;
+                    };
+                    /** The pathway that identifies this unit variant */
+                    pathway?: {
+                        /** The slug identifier for the programme factor */
+                        slug: string;
+                        /** The title of the programme factor */
+                        title: string;
+                    };
+                    /** The tier that identifies this unit variant */
+                    tier?: {
+                        /** The slug identifier for the programme factor */
+                        slug: string;
+                        /** The title of the programme factor */
+                        title: string;
+                    };
+                    /** The science child subject that identifies this unit variant */
+                    childSubject?: {
+                        /**
+                         * The slug identifier for the science child subject
+
+                         */
+                        slug: "biology" | "chemistry" | "combined-science" | "physics";
+                        /** The title of the science child subject */
+                        title: string;
+                    };
+                };
+            }[];
             /** The subject slug identifier */
             subjectSlug: string;
             /** The subject slug identifier */
@@ -2923,40 +3072,43 @@ export interface components {
         }[];
         /**
          * @example \{
-         *       "unitSlug": "simple-compound-and-adverbial-complex-sentences",
-         *       "unitTitle": "Simple, compound and adverbial complex sentences",
-         *       "yearSlug": "year-3",
-         *       "year": 3,
-         *       "phaseSlug": "primary",
-         *       "subjectSlug": "english",
-         *       "keyStageSlug": "ks2",
+         *       "unitSlug": "programming-subroutines",
+         *       "unitTitle": "Programming subroutines",
+         *       "yearSlug": "year-10",
+         *       "year": 10,
+         *       "phaseSlug": "secondary",
+         *       "subjectSlug": "computing",
+         *       "keyStageSlug": "ks4",
          *       "priorKnowledgeRequirements": [
-         *         "A simple sentence is about one idea and makes complete sense.",
-         *         "Any simple sentence contains one verb and at least one noun.",
-         *         "Two simple sentences can be joined with a co-ordinating conjunction to form a compound sentence."
+         *         "Variables can be used to store values in a program.",
+         *         "Selection can be used to choose between paths in a program.",
+         *         "Iteration can be used to repeat a set of instructions."
          *       ],
          *       "nationalCurriculumContent": [
-         *         "Ask relevant questions to extend their understanding and knowledge",
-         *         "Articulate and justify answers, arguments and opinions",
-         *         "Speak audibly and fluently with an increasing command of Standard English"
+         *         "Use two or more programming languages, at least one of which is textual, to solve a variety of computational problems.",
+         *         "Make appropriate use of data structures.",
+         *         "Design and develop modular programs."
          *       ],
-         *       "threads": [
-         *         \{
-         *           "slug": "developing-grammatical-knowledge",
-         *           "title": "Developing grammatical knowledge",
-         *           "order": 10
+         *       "programmeFactors": \{
+         *         "examBoard": \{
+         *           "slug": "aqa",
+         *           "title": "AQA"
+         *         \},
+         *         "pathway": \{
+         *           "slug": "gcse",
+         *           "title": "GCSE"
          *         \}
-         *       ],
+         *       \},
          *       "unitLessons": [
          *         \{
-         *           "lessonSlug": "four-types-of-simple-sentence",
-         *           "lessonTitle": "Four types of simple sentence",
+         *           "lessonSlug": "structured-programs",
+         *           "lessonTitle": "Structured programs",
          *           "lessonOrder": 1,
          *           "state": "published"
          *         \},
          *         \{
-         *           "lessonSlug": "three-ways-for-co-ordination-in-compound-sentences",
-         *           "lessonTitle": "Three ways for co-ordination in compound sentences",
+         *           "lessonSlug": "subroutines-with-parameters",
+         *           "lessonTitle": "Subroutines with parameters",
          *           "lessonOrder": 2,
          *           "state": "new"
          *         \}
@@ -3043,6 +3195,52 @@ export interface components {
                 categoryTitle: string;
                 categorySlug?: string;
             }[];
+            /**
+             * The programme-factor values that identify which variant of this unit is returned. Omitted when the unit has no programme factors.
+             * @example \{
+             *       "examBoard": \{
+             *         "slug": "aqa",
+             *         "title": "AQA"
+             *       \},
+             *       "pathway": \{
+             *         "slug": "gcse",
+             *         "title": "GCSE"
+             *       \}
+             *     \}
+             */
+            programmeFactors?: {
+                /** The exam board that identifies this unit variant */
+                examBoard?: {
+                    /** The slug identifier for the programme factor */
+                    slug: string;
+                    /** The title of the programme factor */
+                    title: string;
+                };
+                /** The pathway that identifies this unit variant */
+                pathway?: {
+                    /** The slug identifier for the programme factor */
+                    slug: string;
+                    /** The title of the programme factor */
+                    title: string;
+                };
+                /** The tier that identifies this unit variant */
+                tier?: {
+                    /** The slug identifier for the programme factor */
+                    slug: string;
+                    /** The title of the programme factor */
+                    title: string;
+                };
+                /** The science child subject that identifies this unit variant */
+                childSubject?: {
+                    /**
+                     * The slug identifier for the science child subject
+
+                     */
+                    slug: "biology" | "chemistry" | "combined-science" | "physics";
+                    /** The title of the science child subject */
+                    title: string;
+                };
+            };
             unitLessons: {
                 /**
                  * The lesson slug identifier
@@ -3099,8 +3297,12 @@ export interface components {
          *         "unitSlug": "unitising-and-coin-recognitions-counting-in-2s-5s-and-10s"
          *       \},
          *       \{
-         *         "unitTitle": "Solving problems in a range of contexts",
-         *         "unitSlug": "unitising-and-coin-recognition-solving-problems-involving-money"
+         *         "unitTitle": "Programming subroutines",
+         *         "unitSlug": "programming-subroutines"
+         *       \},
+         *       \{
+         *         "unitTitle": "Programming subroutines",
+         *         "unitSlug": "programming-subroutines"
          *       \}
          *     ]
          */
@@ -3504,7 +3706,7 @@ export interface operations {
             header?: never;
             path: {
                 /** The slug identifier for the subject */
-                subject: string;
+                subject: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
             };
             cookie?: never;
         };
@@ -3855,7 +4057,9 @@ export interface operations {
     };
     "getQuestions-getQuestionsForLessons": {
         parameters: {
-            query?: never;
+            query?: {
+                filter?: "images";
+            };
             header?: never;
             path: {
                 /** The lesson slug identifier */
@@ -3901,6 +4105,7 @@ export interface operations {
                 year?: number;
                 offset?: number;
                 limit?: number;
+                filter?: "images";
             };
             header?: never;
             path: {
@@ -3946,6 +4151,7 @@ export interface operations {
             query?: {
                 offset?: number;
                 limit?: number;
+                filter?: "images";
             };
             header?: never;
             path: {
@@ -4077,7 +4283,12 @@ export interface operations {
     };
     "getUnits-getUnit": {
         parameters: {
-            query?: never;
+            query?: {
+                examBoard?: "aqa" | "edexcel" | "eduqas" | "ocr" | "wjec" | "edexcelb";
+                pathway?: "core" | "gcse";
+                tier?: "core" | "foundation" | "higher";
+                childSubject?: "biology" | "chemistry" | "combined-science" | "physics";
+            };
             header?: never;
             path: {
                 /** The unit slug */

@@ -1,5 +1,6 @@
 ---
 name: "String-Based Codegen Type-Safety Gap"
+polarity: anti-pattern
 use_this_when: "A code generator emits code as string templates rather than AST nodes, and the output includes API calls with specific argument names or shapes"
 category: code
 proven_in: "packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/build-zod-type.ts — .meta({ examples }) emitted as string literal"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Semantic errors in string-based codegen (typos in property names, wrong argument shapes) compile successfully but silently produce incorrect output"
   stable: true
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # String-Based Codegen Type-Safety Gap
 

@@ -1,0 +1,6 @@
+---
+description: Verify external-dependency call shapes against installed-or-published docs at plan-author time, never from memory.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/verify-vendor-call-shapes-at-plan-author-time.md`.

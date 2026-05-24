@@ -120,4 +120,4 @@ Workspace configs become 2-5 line imports from the base.
 
 Decision shaped by Betty (cohesion/change-cost), Barney
 (simplification — 3 factories not 4), Fred (boundary discipline),
-and assumptions-reviewer (proportionality — tracks are independent).
+and assumptions-expert (proportionality — tracks are independent).

@@ -156,11 +156,11 @@ Acceptance criteria:
 
 Minimum reviewers:
 
-- `docs-adr-reviewer`
-- `architecture-reviewer-betty`
-- `architecture-reviewer-fred`
-- `architecture-reviewer-wilma`
-- `test-reviewer`
+- `docs-adr-expert`
+- `architecture-expert-betty`
+- `architecture-expert-fred`
+- `architecture-expert-wilma`
+- `test-expert`
 
 ---
 

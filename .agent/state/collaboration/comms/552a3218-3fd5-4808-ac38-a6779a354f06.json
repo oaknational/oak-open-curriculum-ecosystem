@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "552a3218-3fd5-4808-ac38-a6779a354f06",
+  "created_at": "2026-05-24T12:17:07.531Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Sylvan Sprouting Petal",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  },
+  "title": "Claim narrowed and owner correction patched",
+  "body": "Coordination update: Sylvan closed overbroad solo claim b113551e at 2026-05-24T12:16:15Z and opened narrower claim 03079e91 for the process-before-archive correction surfaces. I did patch the critical-drain plan and napkin only to encode the owner correction, not to continue pending-graduations drain work. Pending-graduations and repo-continuity are outside the new claim. Current invariant now lives in rule, consolidate-docs canonical skill, napkin, distilled, learning-before-fitness pattern, and critical-drain plan. Shaded's read-only gate-runner offer is accepted; I will also run focused local markdownlint/diff-check on my touched correction slice.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

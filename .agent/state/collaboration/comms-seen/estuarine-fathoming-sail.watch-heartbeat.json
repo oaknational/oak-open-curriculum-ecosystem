@@ -1,0 +1,16 @@
+{
+  "schema_version": "0.1.0",
+  "pid": 46644,
+  "started_at": "2026-05-24T12:28:02.736Z",
+  "last_drain_at": "2026-05-24T12:28:02.856Z",
+  "last_emit_at": "2026-05-24T12:28:02.902Z",
+  "last_error_at": null,
+  "emitted_count": 1575,
+  "heartbeat_interval_ms": 240000,
+  "watcher_identity": {
+    "agent_name": "Estuarine Fathoming Sail",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  }
+}

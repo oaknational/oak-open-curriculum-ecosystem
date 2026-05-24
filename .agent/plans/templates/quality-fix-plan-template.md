@@ -5,13 +5,26 @@ todos:
   - id: phase-0-foundation
     content: "Phase 0: Verify foundation assumptions."
     status: pending
-  - id: phase-1-resolution
-    content: "Phase 1: Implement and validate fixes."
+  - id: cycle-1-resolution
+    content: >
+      Cycle 1: [failing test/check] + [minimal fix]. One commit.
+      Tree green at end.
     status: pending
-  - id: phase-2-hardening
+  - id: cycle-2-resolution
+    content: >
+      Cycle 2: [next test/check] + [minimal fix]. One commit.
+      Tree green at end.
+    status: pending
+  - id: phase-final-hardening
     content: "Phase 2: Quality gates, documentation, and follow-up hardening."
     status: pending
 ---
+
+<!-- After copying this template, replace the example cycle todo ids
+     with the real TDD/refactoring cycles for the quality fix. Product
+     code changes still land as test+code pairs. Pure documentation,
+     evidence, and verification tasks may remain phase/task todos when
+     they do not change product behaviour. -->
 
 # [Plan Title: Brief, Action-Oriented Name]
 
@@ -43,29 +56,30 @@ todos:
 
 ## Quality Gate Strategy
 
-**Critical**: Run ALL quality gates across ALL workspaces after EACH sub-task to catch regressions immediately.
+**Critical**: every task or cycle names deterministic validation with
+expected output. Final readiness uses the canonical aggregate gate.
 
-**Why Not `--filter`?** [Explain why we need full monorepo verification - e.g., SDK changes affect multiple workspaces]
+See
+[`components/quality-gates.md`](components/quality-gates.md)
+for the current gate doctrine. Do not duplicate the full `pnpm check`
+expansion into this plan; root `package.json` is the executable source
+of truth.
 
-### After Each Task
+### After Each Task or Cycle
 
 ```bash
-# Run all quality gates across all workspaces
-pnpm type-check  # Type check ALL workspaces
-pnpm lint        # Lint ALL workspaces
-pnpm test        # Test ALL workspaces
+[task-specific deterministic command]
+# Expected: [exit 0 and expected output]
+
+pnpm type-check
+pnpm lint
+pnpm test
 ```
 
-### After Each Phase
+### Final Aggregate Gate
 
 ```bash
-# Full quality gate sequence
-pnpm sdk-codegen # Regenerate types (SDK changes)
-pnpm build       # Build ALL workspaces
-pnpm type-check  # Type check ALL workspaces
-pnpm lint        # Lint ALL workspaces
-pnpm test        # Test ALL workspaces
-pnpm test:e2e    # E2E tests for ALL apps (if applicable)
+pnpm check
 ```
 
 **Rationale** (from @principles.md):
@@ -126,17 +140,18 @@ state vendor + first-party integrations surveyed + why bespoke was
 chosen or which first-party option was adopted. Sunk-cost reasoning is
 not a valid answer. Canonical prose lives in
 `feature-workstream-template.md` §Build-vs-Buy Attestation.
-`assumptions-reviewer` runs against this attestation pre-ExitPlanMode.
+`assumptions-expert` runs against this attestation pre-ExitPlanMode.
 
 ---
 
 ## Reviewer Scheduling (phase-aligned)
 
-- **Pre-execution**: `assumptions-reviewer` + vendor specialist
-  (challenges solution-class: "should this fix take this shape?").
-- **During**: `test-reviewer`, `type-reviewer`, architecture family,
-  `code-reviewer` gateway.
-- **Post**: `docs-adr-reviewer`, `release-readiness-reviewer`.
+- **Pre-execution**: `assumptions-expert`, plus a vendor specialist
+  only for vendor-touching plans (challenges solution-class: "should
+  this fix take this shape?").
+- **During**: `test-expert`, `type-expert`, architecture family,
+  `code-expert` gateway.
+- **Post**: `docs-adr-expert`, `release-readiness-expert`.
 
 Scheduling all reviewers at close is phase-misalignment. See
 `feature-workstream-template.md` §Reviewer Scheduling for rationale.
@@ -175,11 +190,11 @@ Before the first non-planning edit:
 
 Before marking a phase complete:
 
-1. Update `docs/architecture/architectural-decisions/119-agentic-engineering-practice.md` if impacted
-2. Update `docs/architecture/architectural-decisions/124-practice-propagation-model.md` if impacted
-3. Update `.agent/practice-core/practice.md` if impacted
-4. Update any additionally impacted ADRs, `/docs/` pages, or README files
-5. Apply `/jc-consolidate-docs` to ensure settled documentation is not trapped in plans
+1. Update ADR-119 if impacted.
+2. Update ADR-124 if impacted.
+3. Update `.agent/practice-core/practice.md` if impacted.
+4. Update any additionally impacted ADRs, `/docs/` pages, or README files.
+5. Apply `/jc-consolidate-docs` so settled documentation is not trapped in plans.
 
 If no update is needed for a required surface, record an explicit no-change rationale.
 
@@ -201,7 +216,27 @@ Each task has:
 4. Check all acceptance criteria
 5. Only mark task complete when ALL criteria met AND ALL validations pass
 
-**Red Flag**: If validation commands don't produce expected results, STOP and fix before proceeding to next task.
+**Red Flag**: If validation commands don't produce expected results,
+STOP and fix before proceeding to next task.
+
+---
+
+## TDD / Refactoring Cycle Discipline
+
+Every product-code quality fix is decomposed into cycles. A cycle is
+one landing unit: the failing test or failing deterministic check, the
+minimal product change that greens it, and any refactor, all committed
+together. If a quality fix is verification-only or documentation-only,
+state that explicitly in the task and provide deterministic validation.
+
+Each cycle must name:
+
+1. starting state and file scope;
+2. the failing test or check;
+3. the minimal product change;
+4. outcome-based acceptance criteria;
+5. deterministic validation commands;
+6. whether it is parallel-safe or sequenced behind another cycle.
 
 ---
 
@@ -254,7 +289,9 @@ Each task has:
 
 Proceed directly to Phase 1.
 
-**Task Complete When**: All [N] acceptance criteria checked AND validation shows [expected state] OR violations fixed and quality gates pass.
+**Task Complete When**: All [N] acceptance criteria checked and
+validation shows [expected state], or violations are fixed and quality
+gates pass.
 
 **Foundation Alignment**: [How this validates core principles]
 
@@ -266,7 +303,16 @@ Proceed directly to Phase 1.
 
 **Key Principle**: [Core principle guiding this phase]
 
-#### Task 1.1: [Task Name]
+#### Cycle 1.1: [Cycle Name]
+
+**Parallel-safety**: [parallel-safe with evidence | sequenced after `<cycle-id>`]
+
+**Starting state**: [branch HEAD at dispatch | after `<cycle-id>` lands]
+
+**File scope**:
+
+- `[test-or-check-file]`
+- `[product-file]`
 
 **Current Implementation** (line [N]) — expected when the approach is known:
 
@@ -280,7 +326,11 @@ Proceed directly to Phase 1.
 // Show desired code after fix
 ```
 
-**Changes**:
+**Failing Test or Check**:
+
+- [File and assertion/check shape]
+
+**Product Changes**:
 
 - [Specific change 1]
 - [Specific change 2]
@@ -315,25 +365,23 @@ pnpm test        # Expected: exit 0, all tests pass
 # Expected: [Expected result]
 ```
 
-**Task Complete When**: All [N] acceptance criteria checked AND all validation commands pass.
+**Cycle Complete When**: All [N] acceptance criteria checked, all
+validation commands pass, and the cycle lands as one test/check +
+product-code commit.
 
 ---
 
-#### Task 1.2: [Next Task Name]
+#### Cycle 1.2: [Next Cycle Name]
 
-[Repeat structure for each task in the phase]
+[Repeat structure for each product-code cycle. Use task sections only
+for verification-only, documentation-only, or evidence-only work.]
 
 ---
 
 **Phase 1 Complete Validation**:
 
 ```bash
-# Run full quality gate after Phase 1
-pnpm sdk-codegen
-pnpm build
-pnpm type-check
-pnpm lint
-pnpm test
+pnpm check
 ```
 
 **Success Criteria**: All commands exit 0, no regressions introduced.
@@ -344,13 +392,16 @@ pnpm test
 
 **Foundation Check-In**: Re-read [relevant foundation doc sections].
 
-[Repeat phase structure with tasks]
+[Repeat cycle or verification-task structure]
 
 ---
 
 ### Phase N: Validation ([Estimated Time])
 
-**Foundation Check-In**: Re-read all three foundation documents (principles.md, testing-strategy.md, schema-first-execution.md). Verify all principles followed throughout implementation.
+**Foundation Check-In**: Re-read all three foundation documents:
+`principles.md`, `testing-strategy.md`, and
+`schema-first-execution.md`. Verify all principles followed throughout
+implementation.
 
 #### Task N.1: [Primary Validation Task]
 
@@ -389,7 +440,8 @@ done
 **Final verification against foundation documents**:
 
 - [ ] **principles.md - Cardinal Rule**: [Verify schema-first principle maintained]
-- [ ] **principles.md - No Type Shortcuts**: Verified no `as`, `any`, `Record<string, unknown>` added
+- [ ] **principles.md - No Type Shortcuts**: Verified no `as`, `any`,
+  `Record<string, unknown>` added
 - [ ] **principles.md - No Global State**: [Verification relevant to this plan]
 - [ ] **principles.md - No Compatibility Layers**: We replaced old approach, not wrapped it
 - [ ] **principles.md - Quality Gates**: All gates pass across all workspaces
@@ -489,16 +541,21 @@ done
 
 ## Dependencies
 
-**Blocking**: [What must be completed before this can start?]
+**Blocking prerequisites**:
+
+- [What must be completed before this can start, and why it is blocking]
 
 **Related Plans**:
 
 - [Other plan name] - [Relationship]
 
-**Prerequisites**:
+**Beneficial prerequisites**:
 
-- ✅ [What must already exist]
-- ✅ [Another prerequisite]
+- [What improves this work but does not block it]
+
+**Minimum shippable shape without beneficial prerequisites**:
+
+- [What can land if beneficial prerequisites are deferred]
 
 ---
 
@@ -582,17 +639,14 @@ done
 
 ## Validation Checklist
 
-Run these commands to verify all fixes:
+Run the task-specific deterministic checks named in the plan, then the
+canonical aggregate gate:
 
 ```bash
-# Full quality gate sequence
-cd oak-open-curriculum-ecosystem
-pnpm sdk-codegen # Generate types
-pnpm build      # Build all packages
-pnpm type-check # Type check
-pnpm lint       # Lint
-pnpm test       # Unit & integration tests
-pnpm test:e2e   # E2E tests (if applicable)
+[task-specific deterministic command]
+# Expected: [exit 0 and expected output]
+
+pnpm check
 
 # Stability check (run multiple times if needed)
 for i in {1..10}; do
@@ -603,9 +657,8 @@ done
 
 **Expected Results**:
 
-- ✅ All commands exit 0
-- ✅ No type errors
-- ✅ No lint errors
+- ✅ Task-specific deterministic checks produce expected output
+- ✅ `pnpm check` exits 0
 - ✅ [Specific test count/result]
 - ✅ [Stability result]
 

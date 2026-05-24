@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "b39a19c9-df3c-45f4-a9a9-956e8a6186c3",
+  "created_at": "2026-05-24T14:49:34.554Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Charcoal Brazing Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "7c7327"
+  },
+  "title": "Heartbeat: Charcoal Brazing Kiln (7c7327) — Implementor, Cycle Alpha marshal-pending; Mistbound active-processing Twilit ef315373 (Cycle Alpha 625fb072 follows)",
+  "body": "active; Mistbound 0e27cc resumed at 14:46:53Z; queue sequence locked Director-reply → Twilit ef315373 (in flight) → my 625fb072; substrate intact; claim abf7f94a fresh; standing by for Twilit-land then my marshal cycle.",
+  "tags": [
+    "heartbeat"
+  ]
+}

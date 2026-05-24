@@ -40,6 +40,64 @@ continuity unit).
 
 ## Amendment Log
 
+- **2026-05-09 amendment — Sequenced-Deferral Discipline (three
+  modes) graduated from distilled.md (Woodland Sheltering Glade /
+  claude-code / claude-opus-4-7-1m; owner-directed graduation during
+  the focused consolidation pass on `distilled.md`; three
+  corpus-window instances confirmed in
+  `historical-napkin-synthesis-2026-05-09.md` §F4 + §F11).** The
+  doctrine had been held pending the doctrine-scanner CLI in
+  `future/memetic-immune-system-and-progressive-disclosure.plan.md`
+  — that gating was itself the vaporware-shape the discipline names
+  ("hidden declaration of non-action" wearing the costume of a
+  sequenced deferral). Graduating now without the citation gating.
+  Three modes:
+  - **Sequenced deferral** (preferred) — "we will do X after Y, per
+    plan Z phase N", where plan Z is `current/` or has hit its
+    promotion gate, not parked indefinitely in `future/`.
+  - **Sequencing-sequenced deferral** (rare) — "we will decide when
+    to do X at decision point Y, per plan Z phase N".
+  - **Hidden declaration of non-action** (forbidden) — "we'll do X
+    later" without structural placement, OR with structural
+    placement that points at unmet/unmet-able promotion gates. The
+    second shape is the more dangerous because it looks like
+    discipline.
+  Non-action can be the architecturally correct answer; it must be
+  visible, explicit, and sometimes discussed. The discipline
+  composes with the existing deferral-honesty Session 6 amendment:
+  honest deferrals satisfy named-constraint + evidence +
+  falsifiability AND avoid the three-mode failure shape.
+
+- **2026-05-09 amendment — per-session closure owns the loop
+  (Woodland Sheltering Glade / claude-code / claude-opus-4-7-1m;
+  owner-reframed 2026-05-06; graduated during the focused
+  consolidation pass on `distilled.md`).** Earlier framing — "cyclical
+  learning-loop maintenance is a full-time process even at small N"
+  — treated the loop's maintenance cost as inherent. Owner reframe
+  on 2026-05-06: the cost is **artefactual** — a symptom of letting
+  fitness pressure accumulate across sessions rather than each
+  session running its own handoff plus consolidation at close.
+  Implications:
+  - **The diagnostic is closure discipline, not loop cost.** When
+    fitness goes hard or distilled bloats, the question is *which
+    sessions skipped closure* — not *the loop is overweight again,
+    queue another graduation pass*.
+  - **Each session owns its loop contribution.** Closure is
+    non-negotiable. `jc-session-handoff` plus `jc-consolidate-docs`
+    at session-end is the unit of loop maintenance. Per-session
+    landing extends to per-session closure: a session that landed
+    its outcome but skipped closure has not completed its
+    contribution to the learning loop.
+  - **Reactive graduation passes are recovery work, not
+    steady-state.** When a multi-session corpus needs deep
+    consolidation, the pass exists *because* closure was skipped in
+    upstream sessions. The cure is structural: closure discipline at
+    every session, not periodic graduation passes.
+  This composes with the existing 2026-04-29 absolute-capture
+  amendment: capture happens at the moment of the surprise; closure
+  graduates the captured substance into napkin → distilled →
+  rules/governance before the session ends.
+
 - **2026-04-29 amendment — knowledge preservation is absolute and is
   never a deferrable landing (Nebulous Illuminating Satellite /
   claude-code / claude-opus-4-7-1m; owner-directed graduation during

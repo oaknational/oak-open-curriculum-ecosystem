@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "5ead4a4f-e3fa-42ea-a00a-7b70cbd84e45",
+  "created_at": "2026-05-23T13:40:04Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Secret Creeping Moth",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "61d726"
+  },
+  "title": "Substrate event (failure-mode + behaviour-note): Director tick #3 — pnpm check RED at HEAD 86f340b5; marshal queue PAUSED at tree-not-green; surfacing to owner for verdict",
+  "body": "Director tick #3 — coherence-moment fire on Incandescent pnpm check RED at HEAD 86f340b5 13:38:49Z. 4 failures in apps/oak-curriculum-mcp-streamable-http: test:a11y (visual landing-page WCAG), test:ui, test:widget:a11y, test:widget:ui. First blocker: tests/visual/landing-page.spec.ts:44 WCAG accessibility checks. Surface attribution: NOT in this session working-tree scope (changes were scoped to .agent/state, .agent/memory, agent-tools/src/collaboration-state, .agent/practice-core/decision-records, docs/architecture/architectural-decisions; no apps/oak-curriculum-mcp-streamable-http touches). Pre-existing-red revealed by pnpm check broader gate surface vs pre-commit. Per standing rule all-quality-gates-blocking-always owner reminder 12:55Z: every red gate is blocking regardless of cause/location/scope; pre-existing/out-of-scope framings are the recurring failure mode anti-pattern. Director routing actions: (1) Ferny PAUSE Item 1 (Pearly S7735 takeover) — directed event posted; do not modify files. (2) Marshal queue PAUSED at tree-not-green requirement — Seaworthy already constrained by their own marshal discipline; no commit cycles fire until tree-green. (3) Surfacing to owner for verdict: cure-in-window, accept-pre-existing-red as carry-forward, or investigate-root-cause-first. Awaiting owner direction. Standing rule honoured: no rationalisation, no bypass. This is the 4th or 5th worked instance this session of the pre-existing-red-blocks-cascade pattern; substrate-rich evidence accumulating. Active team posture during pause: Secret (Director, surfacing), Ferny (paused mid-Item-1), Seaworthy (marshal-standby tree-not-green), Twilit ST (closed), Twilit WM (closed retained), Incandescent BF (session-handoff Step 11 blocked at this red). Kindling Forge independent lane unaffected. Tag: failure-mode + behaviour-note. — Secret Creeping Moth / claude / 61d726 (Director)"
+}

@@ -9,11 +9,13 @@ child_plans:
   - "misconception-graph-mcp-surface.plan.md"
   - "../../sector-engagement/eef/current/eef-evidence-corpus.plan.md"
   - "../current/graph-query-layer.plan.md"
+  - "../../../graph-mvp-arc.plan.md"
+  - "../../../graph-combinatorial-arc.plan.md"
   - "../future/cross-source-journeys.plan.md"
   - "nc-knowledge-taxonomy-surface.plan.md"
   - "../../sector-engagement/external-knowledge-sources/future/education-skills-mcp-surface.plan.md"
   - "agent-guidance-consolidation.plan.md"
-specialist_reviewer: "mcp-reviewer, code-reviewer, docs-adr-reviewer, architecture-reviewer-betty"
+specialist_reviewer: "mcp-expert, code-expert, docs-adr-expert, architecture-expert-betty"
 todos:
   - id: ws-0-narrative
     content: "WS-0: Write ADR for multi-source open education integration and update root README"
@@ -108,10 +110,10 @@ The next session (WS-0, WS-1, WS-2) MUST begin with an **iterative
 plan review** before any code is written. Launch these specialist
 reviewers against the full plan family:
 
-- `architecture-reviewer-betty` — cohesion, coupling, change-cost
-- `architecture-reviewer-barney` — boundary simplification
-- `mcp-reviewer` — MCP protocol compliance and patterns
-- `code-reviewer` — gateway quality, correctness
+- `architecture-expert-betty` — cohesion, coupling, change-cost
+- `architecture-expert-barney` — boundary simplification
+- `mcp-expert` — MCP protocol compliance and patterns
+- `code-expert` — gateway quality, correctness
 
 Fix all findings before starting WS-0 implementation.
 
@@ -124,7 +126,7 @@ Fix all findings before starting WS-0 implementation.
 - LICENCE-DATA.md updated with ontology + EEF sections
 - package.json contributors added (Hodierne, Roberts)
 - ADR count updated to 155+
-- `docs-adr-reviewer` passed — COMPLIANT
+- `docs-adr-expert` passed — COMPLIANT
 
 ### WS-1 + WS-2 (merged into WS-A): DONE
 
@@ -219,7 +221,7 @@ propagated — no trace of old `prerequisite-graph` in running server.
    generated-contract bypass.
 4. **Downstream cleanup**: Removed duplicate `SourceAttribution` from
    curriculum-sdk, reverted intersection type hack, updated imports.
-5. **Reviewed** by code-reviewer, type-reviewer, architecture-reviewer-betty.
+5. **Reviewed** by code-expert, type-expert, architecture-expert-betty.
    All fixes applied. `pnpm check` passes.
 6. **Cursor plan**: `.cursor/plans/extract_mcp_protocol_types_b9d696d0.plan.md` — COMPLETED.
 

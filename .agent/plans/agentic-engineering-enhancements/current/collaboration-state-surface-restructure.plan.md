@@ -31,7 +31,7 @@ todos:
     content: "Run `pnpm practice:fitness:informational`, `pnpm practice:vocabulary`, `pnpm markdownlint:root`, and the collaboration-state CLI `check` action. Confirm fitness pressure on lifecycle.md is resolved by structural moves, not by trim."
     status: completed
   - id: reviewer-dispatch
-    content: "Dispatch docs-adr-reviewer and code-reviewer on the change set with execution-legitimacy-given-decisions framing (placement is owner-fixed by the contract; do not re-open the contract decision)."
+    content: "Dispatch docs-adr-expert and code-expert on the change set with execution-legitimacy-given-decisions framing (placement is owner-fixed by the contract; do not re-open the contract decision)."
     status: completed
   - id: napkin-graduation
     content: "If the restructure surfaces any standing-rule-shaped insight (beyond the wrong-file-by-adjacency pattern already captured), add a napkin entry and queue for distilled.md."
@@ -146,7 +146,7 @@ Each item lands as its own commit so review is decoupled.
 ### Phase 4 — Validation and reviewer dispatch
 
 - `validation`: gates and `collaboration-state -- check`.
-- `reviewer-dispatch`: docs-adr-reviewer + code-reviewer with
+- `reviewer-dispatch`: docs-adr-expert + code-expert with
   execution-legitimacy framing. The contract is owner-decided;
   reviewer remit is *did the moves apply the contract correctly*,
   not *should the contract differ*.
@@ -185,7 +185,7 @@ sufficient but empirically unvalidated.
   (catches malformed `$comment_provenance` blocks if any are
   required by the schemas; expect them to be ignored as
   custom annotations).
-- Reviewer dispatch per `invoke-code-reviewers` rule.
+- Reviewer dispatch per `invoke-code-experts` rule.
 
 ## 8. Cross-References
 

@@ -3,44 +3,38 @@
 # Disable turbo TUI
 export TURBO_UI=0
 
-
-
 echo "🔍 Running pre-commit checks..."
 
-echo "📝 Checking formatting..."
-if ! pnpm format-check:root; then
+echo "📝 Checking formatting on staged files..."
+if ! pnpm agent-tools:repo-check prettier-staged; then
   echo "❌ Formatting issues found!"
-  echo "💡 Run 'pnpm format:root' to fix formatting issues, then commit the changes"
+  echo "💡 Run 'pnpm format:root' to fix formatting issues, then stage the changes"
   exit 1
 fi
 
-echo "🔍 Running full markdownlint..."
-if ! pnpm markdownlint-check:root; then
+echo "🔍 Running markdownlint on staged Markdown files..."
+if ! pnpm agent-tools:repo-check markdownlint-staged; then
   echo "❌ Markdownlint issues found!"
-  echo "💡 Run 'pnpm markdownlint:root' to fix markdown issues, then commit again"
+  echo "💡 Run 'pnpm markdownlint:root' to fix markdown issues, then stage the changes"
   exit 1
 fi
 
-echo "🔬 Running knip (unused code detection)..."
-if ! pnpm knip; then
-  echo "❌ Knip found unused code, exports, or dependencies!"
-  echo "💡 Run 'pnpm knip' to see details, then fix or remove unused items"
+echo "🧭 Running workspace-owned repo validators..."
+if ! pnpm repo-validators:check; then
+  echo "❌ Repo validator checks failed!"
   exit 1
 fi
 
-echo "🔗 Running depcruise (circular deps, orphans, layer violations)..."
-if ! pnpm depcruise; then
-  echo "❌ Dependency-cruiser found violations!"
-  echo "💡 Run 'pnpm depcruise' to see details, then fix circular dependencies or orphan modules"
+echo "🐚 Linting shell scripts..."
+if ! pnpm lint:shell; then
+  echo "❌ Shell lint failed!"
   exit 1
 fi
 
-echo "🔤 Running quality gate checks..."
+echo "🧪 Running type-check, lint, and unit tests..."
 if ! pnpm turbo run --continue --output-logs=errors-only type-check lint test; then
-  echo "❌ Quality gate checks failed!"
-  echo "💡 Run 'pnpm turbo run --continue type-check lint test' to see full output"
+  echo "❌ Type-check, lint, or unit tests failed!"
   exit 1
 fi
 
 echo "✅ Pre-commit checks completed!"
-

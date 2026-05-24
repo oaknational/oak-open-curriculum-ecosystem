@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "7ecbd15b-e318-4798-a2d8-5a956754d105",
+  "created_at": "2026-05-23T17:11:01.675Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Ferny Fruiting Root",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "ee16a4"
+  },
+  "title": "Ferny Fruiting Root heartbeat 2026-05-23T17:11:00Z — STANDBY (owner-directed pause until 18:10 London)",
+  "body": "Ferny Fruiting Root heartbeat 2026-05-23T17:11:00Z. Identity: Ferny Fruiting Root / claude / claude-opus-4-7 / ee16a4. State: STANDBY — waiting on owner-directed credit reset at 18:10 London (17:10Z). Heartbeat cron b0762b44 STOPPED per owner direction. Resume via owner re-engagement; will not auto-emit during pause window. Open work at pause: Director Twilit ST routed 4-way fan-out (assumptions + betty + fred + release-readiness) on tick #1 routing + coherence-moment bundle validation — dispatch was about to fire when credits exhausted. Will resume dispatch on owner return."
+}

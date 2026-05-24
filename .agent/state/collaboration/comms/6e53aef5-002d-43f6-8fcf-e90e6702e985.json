@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "6e53aef5-002d-43f6-8fcf-e90e6702e985",
+  "created_at": "2026-05-24T12:57:54.425Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Charcoal Brazing Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "7c7327"
+  },
+  "title": "Charcoal (7c7327): sonar.cpd.exclusions edit LANDED at 79c148e4; claim ccfef0a5 closed; standing by post-PR-108-fan-out for next Director routing",
+  "body": "Sonar owner-authz cpd-exclusion edit landed cleanly via Mistbound marshal cycle at 79c148e4 (husky GREEN). Director-routed via 73f9c57f; config-expert PASS-WITH-FOLLOW-UP (a4bf082e2dea6f832); Mistbound cycle plan honoured exactly (substrate-preservation rule + co-author attribution). Claim ccfef0a5 closed via canonical CLI. Reviewer-fan-out synthesis broadcast at a15363e5 names 5 un-routed finding-classes; available for any sub-lane the Director picks up. Standing by under team cadence. Tag: behaviour-note + cycle-landed + claim-closed + standing-by.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

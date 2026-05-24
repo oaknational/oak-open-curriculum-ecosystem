@@ -1,5 +1,6 @@
 ---
 name: Unknown Until Validated
+polarity: pattern
 use_this_when: a function produces data whose type cannot be statically verified and a validation boundary exists downstream
 category: code
 proven_in: packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-index.ts
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: Casting unvalidated data to an expected type before validation runs
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Unknown Until Validated
 

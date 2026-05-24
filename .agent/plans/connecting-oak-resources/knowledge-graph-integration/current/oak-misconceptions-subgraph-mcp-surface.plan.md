@@ -1,6 +1,6 @@
 ---
 name: "Oak Misconceptions Sub-Graph MCP Surface (Slice 3a of MVP arc)"
-overview: "Author the executable plan for the slice-3a MCP surface: `oak-misconceptions-subgraph-for-thread` (and optional `-for-unit`) tool(s) on the legacy graph factory. Bounded sub-graph extraction is the blocking primitive the misconception graph needs to fit `maxResponseTokens = 16000`. Substance inherited from the MVP-arc spine; this plan adds TDD cycle structure, file scopes, and reviewer dispatch."
+overview: "Author the executable plan for the slice-3a MCP surface: `oak-misconceptions-subgraph-for-thread` (and optional `-for-unit`) tool(s) on the bulk-derived legacy misconception graph factory plus graph-stack Inc.1 Thread-to-Unit lookup. Bounded sub-graph extraction is the blocking primitive the misconception graph needs to fit `maxResponseTokens = 16000`. Substance inherited from the MVP-arc spine; this plan adds TDD cycle structure, file scopes, and reviewer dispatch."
 plan_id: oak-misconceptions-subgraph-mcp-surface
 type: feature-workstream
 status: current
@@ -8,24 +8,25 @@ graph_layer: oak-graph-surface
 spine_plan: ".agent/plans/graph-mvp-arc.plan.md"
 spine_slice: 3a
 namespace: "oak-misconceptions-*"
-substrate_path: "legacy graph factory (interim)"
+substrate_path: "bulk-derived legacy misconception graph factory (interim) + graph-stack Inc.1 Thread-to-Unit lookup"
 substrate_floor:
-  - "legacy graph factory (already shipped; see existing `misconception-graph-resource.ts` + `aggregated-misconception-graph.ts`)"
+  - "bulk-derived legacy graph factory (already shipped; see existing `misconception-graph-resource.ts` + `aggregated-misconception-graph.ts`)"
+  - "graph-stack Inc.1 Oak Ontology Threads foundation (Thread IRI -> Unit lookup)"
   - "ADR-157 amendment for `oak-misconceptions-*` prefix (landed Phase 0 of MVP-arc spine)"
-sequencing_gate: "STRICT after gate-1-eef-ships (owner sequencing); PARALLEL-SAFE with gate-2-threads-ships"
-last_updated: 2026-05-08
+sequencing_gate: "PARALLEL-SAFE with slice 2 (gate-2) and slice 1 (gate-1a + gate-1b) after graph-stack Inc.1b (Thread → Unit lookup) lands. Per the 2026-05-21 gate-split amendment: gate-3a does not depend on the slice-1 EEF gates and the EEF gates do not depend on Inc.1b — substrate streams are co-primary. Thread IRI input requires Inc.1b Thread → Unit lookup; misconception traversal remains on the legacy factory until graph-stack Inc.3's misconception adapter ships."
+last_updated: 2026-05-11
 related_indices:
   - ".agent/plans/graph-portfolio-index.md"
   - ".agent/plans/connecting-oak-resources/knowledge-graph-integration/README.md"
 adr_amendments_required:
-  - "ADR-123: record `oak-misconceptions-subgraph-for-thread` (and `-for-unit` if shipped)"
+  - "ADR-123: record `oak-misconceptions-subgraph-for-thread` (and `-for-unit` if shipped), recalculate primitive counts, and capture `_meta` legacy-substrate disclosure as non-contractual metadata"
   - "ADR-157: confirm `oak-misconceptions-*` prefix is recorded (already amended Phase 0 of MVP-arc spine)"
 specialist_reviewers:
-  - mcp-reviewer
-  - test-reviewer
-  - type-reviewer
-  - code-reviewer
-  - architecture-reviewer-betty
+  - mcp-expert
+  - test-expert
+  - type-expert
+  - code-expert
+  - architecture-expert-betty
 foundation_alignment:
   - .agent/directives/principles.md
   - .agent/directives/testing-strategy.md
@@ -33,15 +34,15 @@ foundation_alignment:
 isProject: false
 todos:
   - id: ws1-cycle-1-bounded-extraction-thread
-    content: "WS1 cycle 1: `oak-misconceptions-subgraph-for-thread.integration.test.ts` (RED) — Thread IRI + bound parameter → bounded sub-graph of misconceptions associated with units in that thread, sized to fit `maxResponseTokens = 16000`; `oak-misconceptions-subgraph-for-thread.ts` (GREEN) implements via legacy graph factory. One commit. Tree green."
+    content: "WS1 cycle 1: `oak-misconceptions-subgraph-for-thread.integration.test.ts` (RED) — Thread IRI + bound parameter → bounded sub-graph of misconceptions associated with units in that thread, sized to fit `maxResponseTokens = 16000`; `oak-misconceptions-subgraph-for-thread.ts` (GREEN) resolves Thread->Units via graph-stack Inc.1 and traverses misconceptions via the bulk-derived legacy graph factory. One commit. Tree green."
     status: pending
     depends_on: []
   - id: ws1-cycle-2-bound-default
-    content: "WS1 cycle 2: extend test to assert default bound chosen so 95th-percentile responses from the committed `20`-context fixture manifest fit `maxResponseTokens = 16000` (per spine acceptance #1); product-code adjustment minimal. One commit."
+    content: "WS1 cycle 2: extend test to assert the default bound keeps every context in the committed `20`-context fixture manifest within `maxResponseTokens = 16000`, including model-visible serialized content; product-code adjustment minimal. One commit."
     status: pending
     depends_on: [ws1-cycle-1-bounded-extraction-thread]
   - id: ws1-cycle-3-completeness-control
-    content: "WS1 cycle 3: completeness test — for sample queries, all reachable misconceptions WITHIN THE BOUND are present versus a full-graph control. Property-style assertion across the committed `20`-context fixture manifest selected deterministically from reachable-misconception counts. One commit."
+    content: "WS1 cycle 3: bounded-traversal behaviour tests over small literal graph fixtures — include high/median/low/zero density shapes without implementing a second full traversal in the test. Integration keeps using the committed 20-context manifest for response-budget proof. One commit."
     status: pending
     depends_on: [ws1-cycle-1-bounded-extraction-thread]
   - id: ws1-cycle-4-error-shapes
@@ -53,7 +54,7 @@ todos:
     status: pending
     depends_on: [ws1-cycle-3-completeness-control]
   - id: ws3-cycle-1-mcp-wiring
-    content: "WS3 cycle 1: integration test wires the tool(s) through MCP server registration; assert tool discoverable + invocable end-to-end. One commit; tests + wiring together."
+    content: "WS3 cycle 1: integration test wires the tool(s) through the current in-process MCP registration surfaces (`AGGREGATED_TOOL_DEFS` + `AGGREGATED_HANDLERS`; `handlers.ts` lists universal tools automatically); assert registry discoverability + executor invocation. Transport-level list/invoke coverage, if needed, belongs in an e2e test. One commit; tests + wiring together."
     status: pending
     depends_on: [ws1-cycle-3-completeness-control, ws1-cycle-4-error-shapes]
   - id: ws3-cycle-2-tool-meta-legacy-disclosure
@@ -69,25 +70,25 @@ todos:
     status: pending
     depends_on: [ws4-adr-123-and-157-update]
   - id: ws6-adversarial-review
-    content: "WS6: dispatch `mcp-reviewer` (MCP spec + tool shape + `_meta` legacy disclosure + namespace) + `test-reviewer` (TDD pair audit) + `architecture-reviewer-betty` (legacy-factory boundary — ensure the surface does not couple to legacy internals beyond the disclosed `_meta` path) + `code-reviewer` (gateway). Document findings; remediate or queue."
+    content: "WS6: dispatch `mcp-expert` (MCP spec + tool shape + `_meta` legacy disclosure + namespace) + `test-expert` (TDD pair audit) + `architecture-expert-betty` (legacy-factory boundary — ensure the surface does not couple to legacy internals beyond the disclosed `_meta` path) + `code-expert` (gateway). Document findings; remediate or queue."
     status: pending
     depends_on: [ws5-quality-gates]
   - id: ws7-spine-gate-3a-close-and-migration-followup
-    content: "WS7: update spine `gate-3a-mcg-subgraph-ships` todo to `completed`; record acceptance evidence; refresh thread next-session record; refresh the named follow-up plan `oak-misconceptions-substrate-migration.plan.md` (future/) per spine cut-scope row 3a (migration onto graph-corpus-sdk + GraphView when graph-stack Inc.3 misconception adapter ships). Triggers gate-3b authoring readiness check."
+    content: "WS7: update spine `gate-3a-mcg-subgraph-ships` todo to `completed`; record acceptance evidence (including the shape-understanding paragraph required by the MVP-arc gate-3a acceptance criterion — graph-from-bulk-data design lessons + token-sensitive sub-graph extraction lessons); refresh thread next-session record; refresh/verify the existing named follow-up plan `oak-misconceptions-substrate-migration.plan.md` (future/) per spine cut-scope row 3a (migration onto graph-corpus-sdk + GraphView when graph-stack Inc.3 misconception adapter ships). This gate contributes to the combinatorial-arc promotion trigger (combinatorial arc activates when MVP-arc gate-1a + gate-3a ship + Inc.3 design-stable per 2026-05-21 gate-split amendment)."
     status: pending
     depends_on: [ws6-adversarial-review]
 ---
 
 # Oak Misconceptions Sub-Graph MCP Surface — Slice 3a of the MVP Arc
 
-**Last Updated**: 2026-05-08
-**Status**: 🟡 PLANNING (current/) — pending gate-1-eef-ships
-(STRICT, owner sequencing). PARALLEL-SAFE with slice 2 — different
-substrate path, different namespace, different files.
+**Last Updated**: 2026-05-21 (substrate-floor + parallel-safety wording aligned with the 2026-05-21 gate-split amendment; previous: 2026-05-10).
+**Status**: 🟡 PLANNING (current/) — pending graph-stack Inc.1b
+(Thread → Unit lookup). PARALLEL-SAFE with slice 2 (gate-2) and slice 1 (gate-1a + gate-1b) — different substrate paths, different namespaces, different files. Per the 2026-05-21 gate-split amendment, the previous "pending gate-1-eef-ships" framing no longer applies: substrate streams are co-primary and slice 3a does not depend on the slice-1 EEF gates.
 **Scope**: Slice 3a of the
 [`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md) — author and
 ship `oak-misconceptions-subgraph-for-thread` (and optionally
-`-for-unit`) on the **legacy graph factory** path. Bounded sub-graph
+`-for-unit`) on the **bulk-derived legacy graph factory** path. Bounded
+sub-graph
 extraction is the blocking primitive the misconception graph needs to
 fit `maxResponseTokens = 16000`.
 
@@ -97,24 +98,34 @@ Owner direction, 2026-05-07: *"slice 3 the misconception graph, but it
 requires the ability to query sub-graphs as the misconception graph is
 too large to use without using an impractical amount of context."* The
 sub-graph query primitive is the BLOCKING problem to fix; cross-corpus
-composition (slice 3b) is the user-value framing on top. This slice
-solves the blocking problem on the substrate available **today**
-(legacy graph factory), with the substrate-replatform follow-up
-named explicitly.
+composition (now in the follow-on
+[`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md))
+will consume the bounded-sub-graph response shape this slice establishes.
+This slice solves the blocking problem on the substrate available
+**today** (bulk-derived legacy graph factory), with the
+substrate-replatform follow-up named explicitly.
+
+### Source authority
+
+The misconception graph is constructed in this repository from Oak bulk data as
+part of bulk-data processing. This slice consumes that generated,
+bulk-derived graph through the available legacy graph factory path; it does
+not introduce an external misconception raw corpus and does not hand-author
+replacement misconception data.
 
 ### What ships (locked from spine)
 
 | Primitive | Name | Substrate path |
 |---|---|---|
-| Tool | `oak-misconceptions-subgraph-for-thread` | legacy graph factory |
-| Tool (optional) | `oak-misconceptions-subgraph-for-unit` | legacy graph factory |
+| Tool | `oak-misconceptions-subgraph-for-thread` | bulk-derived legacy graph factory |
+| Tool (optional) | `oak-misconceptions-subgraph-for-unit` | bulk-derived legacy graph factory |
 
 The tools return **bounded** sub-graphs sized to fit
 `maxResponseTokens = 16000`. Bound is a parameter; default chosen so
-95th-percentile responses from the committed `20`-context fixture manifest fit
-that budget. The budget is measured by a shared response-budget helper against
-the serialized model-visible `content` text payload, including citations,
-caveats, and duplicated JSON required for MCP compatibility.
+every response from the committed `20`-context fixture manifest fits that
+budget. The budget is measured by a shared response-budget helper against the
+serialized model-visible `content` text payload, including citations, caveats,
+and duplicated JSON required for MCP compatibility.
 
 Fixture manifest path:
 `packages/sdks/oak-curriculum-sdk/src/mcp/oak-misconceptions-subgraph-for-thread.fixture-manifest.ts`.
@@ -132,10 +143,20 @@ and record the fill in the manifest comment.
 - The legacy misconception graph factory currently surfaced by
   `packages/sdks/oak-curriculum-sdk/src/mcp/misconception-graph-resource.ts`
   and `aggregated-misconception-graph.ts`
+- Graph-stack Inc.1 Oak Ontology Threads foundation for resolving the input
+  Thread IRI to Units before misconception traversal.
 - The SDK's `classify-error-response` convention
 - The SDK's tool-guidance surface
-- The MCP server registration in
-  `apps/oak-curriculum-mcp-streamable-http`
+- Current MCP registration surfaces:
+  `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/types.ts`
+  (`AggregatedToolName`),
+  `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/definitions.ts`
+  (`AGGREGATED_TOOL_DEFS`),
+  `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/executor.ts`
+  (`AGGREGATED_HANDLERS`), and
+  `packages/sdks/oak-curriculum-sdk/src/public/mcp-tools.ts` (public
+  exports). `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts`
+  lists universal tools automatically via `listUniversalTools`.
 
 ### Why legacy substrate now (not later)
 
@@ -151,17 +172,20 @@ contract is named, and the migration is sequenced.
 
 1. **Spine-locked names** — `oak-misconceptions-subgraph-for-thread`
    is named in the MVP-arc spine. Renaming requires a spine amendment,
-   not just this plan. Note: slice 3b does NOT call this tool at
-   runtime — slice 3b reaches misconception data through
-   `graph-corpus-sdk` directly (per slice 3b Design Principle 1) once
-   graph-stack Inc.3 has replatformed the misconception substrate.
-   Slice 3a's contribution to slice 3b is the bounded-sub-graph SHAPE,
-   not a runtime MCP composition.
+   not just this plan. Note: the combinatorial-arc cross-corpus tool
+   (formerly slice 3b, now in
+   [`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md))
+   does NOT call this tool at runtime — that tool reaches misconception
+   data through `graph-corpus-sdk` directly once graph-stack Inc.3 has
+   replatformed the misconception substrate. Slice 3a's contribution to
+   the combinatorial-arc is the bounded-sub-graph SHAPE, not a runtime
+   MCP composition.
 2. **Bounded by parameter, defaulted by data** — the bound is exposed
-   to callers; the default is chosen empirically so 95th-percentile
-   responses fit `maxResponseTokens = 16000`.
+   to callers; the default is chosen empirically so every committed manifest
+   response fits `maxResponseTokens = 16000`.
 3. **Legacy disclosed in `_meta`** — every consumer of the tool sees
-   from `_meta` that the substrate is the legacy graph factory, with a
+   from `_meta` that the substrate is the bulk-derived legacy graph factory,
+   with a
    pointer to the substrate-migration follow-up plan. This is the
    contract the substrate replatform must preserve.
 4. **No new direct legacy-factory imports outside the tool file** —
@@ -178,8 +202,9 @@ contract is named, and the migration is sequenced.
   `misconception-graph-mcp-surface.plan.md`).
 - Topic-string sub-graph without IRI (cut-scope; future plan
   `oak-misconceptions-topic-extraction.plan.md`).
-- Cross-corpus composition with EEF (slice 3b
-  [`oak-misconceptions-eef-cross-corpus-surface.plan.md`](oak-misconceptions-eef-cross-corpus-surface.plan.md)).
+- Cross-corpus composition with EEF (combinatorial arc;
+  [`../future/oak-misconceptions-eef-cross-corpus-surface.plan.md`](../future/oak-misconceptions-eef-cross-corpus-surface.plan.md),
+  spine [`graph-combinatorial-arc.plan.md`](../../../graph-combinatorial-arc.plan.md)).
 
 ## Acceptance Criteria (inherited from spine §"Acceptance — Slice 3a")
 
@@ -187,9 +212,9 @@ contract is named, and the migration is sequenced.
    `maxResponseTokens = 16000` across the committed `20`-context fixture
    manifest. Unit IRI context is accepted only if the optional unit variant is
    explicitly authorised at slice opening.
-2. Sub-graph completeness verified versus full-graph control: for each
-   sample query, all reachable misconceptions within the bound are
-   present.
+2. Bounded-traversal completeness is verified with small literal graph tests:
+   for each sample query, all reachable misconceptions within the bound are
+   present, without a second full traversal implementation in the test.
 3. The legacy-factory interim path is explicit in the plan body, in
    tool `_meta`, and in ADR-123 — every consumer can see this is a
    contract the substrate must preserve.
@@ -202,8 +227,12 @@ contract is named, and the migration is sequenced.
 
 Four TDD cycles. Tool lives at
 `packages/sdks/oak-curriculum-sdk/src/mcp/oak-misconceptions-subgraph-for-thread.ts`
-with `tool-definition.ts` and `integration.test.ts` siblings.
-Because these cycles exercise the legacy graph factory, the test file is
+with descriptor/schema exports wired into the universal-tool registry
+(`AggregatedToolName`, `AGGREGATED_TOOL_DEFS`, and `AGGREGATED_HANDLERS`).
+If the implementation uses an `aggregated-oak-misconceptions-subgraph/`
+subdirectory, its `tool-definition.ts` follows the existing `aggregated-*`
+convention; the central registry surfaces remain the source of truth.
+Because these cycles exercise the bulk-derived legacy graph factory, the test file is
 classified as `integration.test.ts` at implementation time.
 
 #### Cycle 1.1 — bounded extraction happy path
@@ -212,15 +241,15 @@ classified as `integration.test.ts` at implementation time.
   of misconceptions attached (transitively, within the bound) to units
   in that thread; sub-graph fits `maxResponseTokens = 16000` for the
   committed `20`-context fixture manifest.
-- **Product code**: legacy graph factory traversal bounded by the
+- **Product code**: bulk-derived legacy graph factory traversal bounded by the
   parameter; project to MCP-friendly response shape.
 - **Acceptance**: test passes; full tree green.
 
 #### Cycle 1.2 — default bound
 
-- **Test**: with no bound supplied, the default chosen makes 95th
-  percentile of the committed `20`-context fixture manifest fit
-  `maxResponseTokens = 16000`.
+- **Test**: with no bound supplied, the default chosen makes every context
+  in the committed `20`-context fixture manifest fit `maxResponseTokens =
+  16000`, including model-visible serialized `content` text.
 - **Product code**: default constant + comment naming the empirical
   basis. The fixture manifest is selected deterministically from
   reachable-misconception counts, covering high, median, low, and
@@ -232,16 +261,13 @@ containing a short summary plus serialized JSON, `structuredContent` containing
 the bounded sub-graph payload, a declared `outputSchema`, and `isError: true`
 on tool execution errors.
 
-#### Cycle 1.3 — completeness control
+#### Cycle 1.3 — bounded traversal behaviour
 
-- **Test**: for each fixture in the committed `20`-context manifest, assert
-  that every
-  misconception reachable within the bound IS present in the
-  response (versus a full-graph control walked separately in the
-  test).
-- **Product code**: any traversal-completeness fixes the test
-  exposes.
-- **Acceptance**: completeness test passes; cycles 1.1 + 1.2 still
+- **Test**: small literal graph fixtures describe the expected bounded
+  traversal behaviour directly, including high/median/low/zero density
+  shapes. Do not implement a second full traversal in the test.
+- **Product code**: any traversal fixes the behaviour tests expose.
+- **Acceptance**: behaviour tests pass; cycles 1.1 + 1.2 still
   pass.
 
 #### Cycle 1.4 — error paths
@@ -259,15 +285,24 @@ variant on the same legacy substrate, OR skip and capture as a
 post-arc follow-up. Default is **skip** — the per-thread tool covers
 the slice-3b composition use case; per-unit is incremental value.
 
-If shipped, mirrors WS1 cycles 1.1 + 1.4 over a Unit IRI surface.
+If shipped, mirrors WS1 cycles 1.1 + 1.4 over a Unit IRI surface. (The
+"slice-3b composition use case" referenced above is now the
+combinatorial-arc cross-corpus tool — see
+[`../future/oak-misconceptions-eef-cross-corpus-surface.plan.md`](../future/oak-misconceptions-eef-cross-corpus-surface.plan.md).)
 
 ### WS3 — MCP wiring + `_meta` legacy disclosure
 
 #### Cycle 3.1 — MCP integration test
 
-- **Test**: integration exercises the full MCP path; tool discoverable
-  and invocable end-to-end.
-- **Product code**: registration in MCP app's tool registration path.
+- **Test**: integration exercises in-process registry composition and the
+  universal-tool executor; tool is discoverable and invocable through those
+  surfaces. A transport-level MCP list/invoke proof uses an e2e test file if
+  execution needs it.
+- **Product code**: add the tool to the SDK universal registry
+  (`AggregatedToolName`, `AGGREGATED_TOOL_DEFS`, `AGGREGATED_HANDLERS`) and
+  export it through `public/mcp-tools.ts`. `handlers.ts` registers tools by
+  iterating `listUniversalTools`, so no separate per-tool app handler is
+  expected.
 
 #### Cycle 3.2 — tool `_meta` declares legacy substrate
 
@@ -282,7 +317,9 @@ If shipped, mirrors WS1 cycles 1.1 + 1.4 over a Unit IRI surface.
 
 ### WS4 — ADR-123 + ADR-157 confirmation
 
-- ADR-123: record the new tool(s).
+- ADR-123: record the new tool(s), recalculate primitive counts, and capture
+  `_meta` legacy-substrate disclosure as non-contractual metadata alongside
+  structured output and annotation expectations.
 - ADR-157: confirm `oak-misconceptions-*` row already present
   (Phase 0 amendment); add cross-reference if needed.
 
@@ -298,23 +335,24 @@ pnpm test && pnpm test:ui && pnpm test:e2e
 
 Dispatch:
 
-- `mcp-reviewer` — MCP spec, tool shape, `_meta` legacy disclosure,
+- `mcp-expert` — MCP spec, tool shape, `_meta` legacy disclosure,
   and namespace conformance
-- `test-reviewer` — TDD pair audit; no audit-shaped tests; no skipped
+- `test-expert` — TDD pair audit; no audit-shaped tests; no skipped
   tests
-- `architecture-reviewer-betty` — legacy-factory boundary; ensure the
+- `architecture-expert-betty` — legacy-factory boundary; ensure the
   tool does not couple to legacy internals beyond the disclosed
   `_meta` path; the substrate-migration follow-up plan should replace
   a small surface, not a wide one
-- `code-reviewer` — gateway
+- `code-expert` — gateway
 
 ### WS7 — Spine gate-3a close + migration follow-up plan
 
 1. Update spine
    [`graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md)
    `gate-3a-mcg-subgraph-ships` todo to `completed`; record evidence.
-2. Create `oak-misconceptions-substrate-migration.plan.md` in
-   `future/` per spine cut-scope row 3a.
+2. Refresh/verify the existing
+   [`oak-misconceptions-substrate-migration.plan.md`](../future/oak-misconceptions-substrate-migration.plan.md)
+   in `future/` per spine cut-scope row 3a.
 3. Refresh
    [`connecting-oak-resources.next-session.md`](../../../../memory/operational/threads/connecting-oak-resources.next-session.md).
 
@@ -322,10 +360,10 @@ Dispatch:
 
 | Risk | Mitigation |
 |---|---|
-| Empirical bound default poorly chosen; 95th percentile drifts as misconception data evolves | Cycle 1.2's default constant carries the empirical basis in a comment + committed `20`-context fixture manifest; substrate-migration plan re-validates the default. |
-| Legacy graph factory has surprising completeness edges that the bounded traversal misses | Cycle 1.3's full-graph control test surfaces this directly. |
-| Tool `_meta` legacy disclosure omitted by reviewer or by drift, breaking the replatform contract | WS6 `mcp-reviewer` gate; substrate-migration plan re-validates `_meta` shape. |
-| Slice 3b authoring (parallel) ends up coupled to a tool name we rename here | Tool name is locked from spine; renaming requires spine + slice-3b amendment. |
+| Empirical bound default poorly chosen; manifest coverage drifts as misconception data evolves | Cycle 1.2's default constant carries the empirical basis in a comment + committed `20`-context fixture manifest; substrate-migration plan re-validates the default. |
+| Legacy graph factory has surprising completeness edges that the bounded traversal misses | Cycle 1.3's small literal graph behaviour tests describe the traversal contract without a second full traversal implementation in the test. |
+| Tool `_meta` legacy disclosure omitted by reviewer or by drift, breaking the replatform contract | WS6 `mcp-expert` gate; substrate-migration plan re-validates `_meta` shape. |
+| Combinatorial-arc plan ends up coupled to a tool name we rename here | Tool name is locked from spine; renaming requires spine + combinatorial-arc amendment. |
 
 ## Foundation Alignment
 
@@ -338,28 +376,38 @@ Dispatch:
 - ADR-157 (multi-source integration) — `oak-misconceptions-*` namespace
   already present.
 - ADR-173 (graph stack topology, Proposed) — names the substrate
-  workspaces; this slice intentionally lives on the legacy substrate
-  pending Inc.3 misconception replatform.
+  workspaces; this slice intentionally uses Inc.1 for Thread lookup while
+  keeping misconception traversal on the legacy substrate pending Inc.3
+  misconception replatform.
 
 ## Dependencies
 
 **Blocking**:
 
-- Spine `gate-1-eef-ships` (STRICT — owner sequencing; slice 1 first
-  establishes the MVP-arc spine pattern + namespace discipline).
+- Graph-stack Inc.1b Oak Ontology Threads foundation for Thread→Unit
+  lookup (the only substrate dependency; per the 2026-05-21 gate-split
+  amendment, gate-3a does not depend on the slice-1 EEF gates because
+  misconception traversal stays on the legacy factory until graph-stack
+  Inc.3's misconception adapter ships).
 
 **Parallel-safe with**:
 
 - [`oak-kg-threads-surface.plan.md`](oak-kg-threads-surface.plan.md)
-  (slice 2) — different substrate path (legacy vs Inc.2 substrate),
-  different namespace (`oak-misconceptions-*` vs `oak-kg-*`), different
-  tool / resource files.
+  (slice 2, gate-2) — shared Inc.1b Thread lookup but different
+  implementation path after lookup (legacy misconception factory vs
+  Oak Ontology Threads surface), different namespace
+  (`oak-misconceptions-*` vs `oak-kg-*`), different tool / resource
+  files.
+- Slice 1 gates (gate-1a + gate-1b) — per the 2026-05-21 gate-split
+  amendment, gate-3a does not depend on the slice-1 EEF gates and the
+  EEF gates do not depend on Inc.1b. Substrate streams are co-primary.
 
 **Consumed by**:
 
-- [`oak-misconceptions-eef-cross-corpus-surface.plan.md`](oak-misconceptions-eef-cross-corpus-surface.plan.md)
-  (slice 3b) reuses the bounded-sub-graph response SHAPE established
-  here, but reaches misconception data through `graph-corpus-sdk`
+- [`../future/oak-misconceptions-eef-cross-corpus-surface.plan.md`](../future/oak-misconceptions-eef-cross-corpus-surface.plan.md)
+  (first concrete combinatorial-arc exploration, formerly MVP slice 3b)
+  reuses the bounded-sub-graph response SHAPE established here, but
+  reaches misconception data through `graph-corpus-sdk`
   directly once Inc.3 has replatformed the misconception substrate;
   it does NOT call this tool at runtime.
 

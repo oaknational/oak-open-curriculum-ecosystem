@@ -1,10 +1,15 @@
 ---
 title: "Don't test SDK internals"
+polarity: pattern
 category: testing
 barrier_met: true
 source_sessions:
   - "2026-04-06b: legacy _meta['ui/resourceUri'] test deleted"
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 ## Pattern
 

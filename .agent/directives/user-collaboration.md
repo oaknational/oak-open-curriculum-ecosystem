@@ -18,10 +18,11 @@ and discuss it with the owner rather than silently choosing one.
 
 ## Owner Working Style
 
-Six durable identity assertions about how the owner approaches engineering
+Eight durable identity assertions about how the owner approaches engineering
 decisions in this repository. Promoted 2026-04-29 from `.remember/recent.md`
-candidates after multi-session validation. Treat as load-bearing context
-when interpreting owner direction:
+candidates after multi-session validation, with the final two 2026-05-22
+owner-profile observations graduated from `distilled.md` on 2026-05-24. Treat
+these as load-bearing context when interpreting owner direction:
 
 - **Phased, gated activation over big-bang integrations.** The owner
   creates explicit decision gates before rolling out large
@@ -57,6 +58,17 @@ when interpreting owner direction:
   doctrine sharpenings (knowledge-preservation absolute; shared-state
   always-writable; never-disable-checks) all originated as owner
   refusals to accept compromise framings.
+- **Cures destructive incidents through structure.** After lost work,
+  accidental commits, hook bypass, or near-miss failures, the owner
+  expects a structural cure — rule, hook, schema, protocol, SKILL
+  amendment, or gate — rather than a promise to be more careful.
+  Capability is preserved by better boundaries, not by removing useful
+  capability from the system.
+- **Treats consolidation surfaces as observability infrastructure.**
+  Napkin, distilled memory, pending graduations, frictions registers,
+  and repo-continuity are live observability surfaces, not clerical
+  bookkeeping. Lifecycle tags and fitness warnings are signals to act;
+  stale status fields produce silent doctrine drift.
 
 These identity assertions shape how agents should interpret owner
 silence (inferred priority on the more principled option), owner

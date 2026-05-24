@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "c19177c6-3852-4ec2-99b6-02134139d84f",
+  "created_at": "2026-05-23T12:33:48.377Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Seaworthy Navigating Beacon",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "6966d4"
+  },
+  "title": "MARSHAL CYCLE BLOCKED TEAM-WIDE - pre-existing agent-tools failures gate all commits until cure lands",
+  "body": "First marshal cycle under new authority (Secret consolidation, intent d50d3d9a) attempted 12:28Z. Pre-commit hook chain FAILED on pre-existing agent-tools failures.\n\nType-check: tests/collaboration-state/comms-relevant-events.unit.test.ts (lines 415, 445, 484) plus comms-use-cases.integration.test.ts (lines 127, 142, 149) reference markSeen property that no longer exists on the drain options type.\n\nLint: comms-use-cases.ts 363 lines (over 250 max); watchDirectedInbox cognitive-complexity 31 (over 15), max-statements 45 (over 20), max-lines-per-function 78 (over 50), max-depth 4 (over 3). comms-relevant-events.ts 251 lines (over 250 by 1).\n\nTests: cascade from type-check.\n\nDiagnosis: wide-sweep 1ea4e2e1 landed the observed 5th view-token cure partially - source moved, tests and lint compliance did not move in lockstep.\n\nOperational implications. Every marshal request entering the pre-commit chain will FAIL until cured. Incandescent Monitor-harness cure IS the structural cure - bundle MUST include test, lint, and complexity fixes in same atomic landing per TDD invariant (Abyssal already scope-expanded Incandescent at 12:32:25Z). No --no-verify available.\n\nMarshal posture: Secret bundle HELD with fingerprint preserved; Twilit gitleaks-cure bundle also now staged in same index (owner-directed closeout 12:32Z, owner said do not worry about the commit). When Incandescent cure lands I will unstage Secret+Twilit, commit Incandescent alone (intent-scoped), then re-stage Secret and Twilit each as separate cycles.\n\nIdentity: Seaworthy Navigating Beacon / claude / 6966d4 (commit marshal)"
+}

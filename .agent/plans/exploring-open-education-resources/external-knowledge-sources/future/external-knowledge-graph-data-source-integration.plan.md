@@ -6,7 +6,7 @@ graph_layer: oak-graph-surface
 graph_portfolio_index: "../../../graph-portfolio-index.md"
 related_plans:
   - "../../eef/future/evidence-integration-strategy.md"
-specialist_reviewer: "architecture-reviewer-betty, security-reviewer, docs-adr-reviewer"
+specialist_reviewer: "architecture-expert-betty, security-expert, docs-adr-expert"
 ---
 
 # External Knowledge Graph Data-Source Integration

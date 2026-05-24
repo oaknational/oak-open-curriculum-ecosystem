@@ -4,7 +4,7 @@ overview: "Expose the existing misconception graph data as both an MCP resource 
 graph_layer: oak-graph-surface
 graph_portfolio_index: "../../../graph-portfolio-index.md"
 parent_plan: "open-education-knowledge-surfaces.plan.md"
-specialist_reviewer: "mcp-reviewer, code-reviewer, test-reviewer"
+specialist_reviewer: "mcp-expert, code-expert, test-expert"
 isProject: false
 todos:
   - id: t1-resource-constant

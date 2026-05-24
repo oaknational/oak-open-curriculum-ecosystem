@@ -3,9 +3,9 @@ import { join, relative } from 'node:path';
 
 import {
   ACTIVE_CLAIMS_PATH,
-  CANONICAL_EVENTS_ROOT,
+  CANONICAL_COMMS_ROOT,
   CLOSED_CLAIMS_PATH,
-  LEGACY_EVENTS_ROOT,
+  LEGACY_COMMS_ROOTS,
   MANIFEST_PATH,
   SHARED_COMMS_LOG,
   absolutePath,
@@ -28,7 +28,7 @@ export async function evaluateRetiredPathScan(
     retiredPathRoots(manifest),
     retiredPathExclusions(manifest),
   );
-  const snapshots = await Promise.all(
+  const textSnapshots = await Promise.all(
     paths.map(async (path) => {
       const text = await readFile(absolutePath(repoRoot, path), 'utf8');
       return {
@@ -36,10 +36,15 @@ export async function evaluateRetiredPathScan(
         path,
         lifecycle: retiredPathLifecycle(manifest, path, text),
         text,
-        retiredPath: LEGACY_EVENTS_ROOT,
-        canonicalPath: CANONICAL_EVENTS_ROOT,
       };
     }),
+  );
+  const snapshots = textSnapshots.flatMap((snapshot) =>
+    LEGACY_COMMS_ROOTS.map((retiredPath) => ({
+      ...snapshot,
+      retiredPath,
+      canonicalPath: CANONICAL_COMMS_ROOT,
+    })),
   );
 
   return evaluateRetiredPathReferences(snapshots);
@@ -61,7 +66,7 @@ function retiredPathExclusions(manifest: ManifestDocument): readonly string[] {
     ...(manifest.discovery?.exclusions?.map((entry) => entry.pattern).filter(isString) ?? []),
     MANIFEST_PATH,
     SHARED_COMMS_LOG,
-    CANONICAL_EVENTS_ROOT,
+    CANONICAL_COMMS_ROOT,
   ];
 }
 
@@ -140,7 +145,7 @@ function isKnownHistoricalPath(path: string, text: string): boolean {
   return (
     path === CLOSED_CLAIMS_PATH ||
     path.includes('/archive/') ||
-    path.includes('/comms-events/') ||
+    LEGACY_COMMS_ROOTS.some((root) => path.startsWith(root)) ||
     (path === ACTIVE_CLAIMS_PATH && activeClaimMentionsAreAbandonedEvidence(text))
   );
 }
@@ -206,24 +211,21 @@ function isHistoricalDiscussion(text: string): boolean {
   return contexts.length > 0 && contexts.every(isHistoricalContext);
 }
 
+const HISTORICAL_CONTEXT_PATTERN =
+  /historical|legacy|migration|migrated|source evidence|provenance/;
+
 function isHistoricalContext(context: string): boolean {
-  return (
-    !context.includes('.gitkeep') &&
-    (context.includes('historical') ||
-      context.includes('legacy') ||
-      context.includes('migration') ||
-      context.includes('migrated') ||
-      context.includes('source evidence') ||
-      context.includes('provenance'))
-  );
+  return !context.includes('.gitkeep') && HISTORICAL_CONTEXT_PATTERN.test(context);
 }
 
 function retiredPathContexts(text: string): readonly string[] {
   const contexts: string[] = [];
-  let index = text.indexOf(LEGACY_EVENTS_ROOT);
-  while (index >= 0) {
-    contexts.push(text.slice(Math.max(0, index - 1000), index + LEGACY_EVENTS_ROOT.length + 1000));
-    index = text.indexOf(LEGACY_EVENTS_ROOT, index + LEGACY_EVENTS_ROOT.length);
+  for (const root of LEGACY_COMMS_ROOTS) {
+    let index = text.indexOf(root);
+    while (index >= 0) {
+      contexts.push(text.slice(Math.max(0, index - 1000), index + root.length + 1000));
+      index = text.indexOf(root, index + root.length);
+    }
   }
 
   return contexts;
@@ -231,7 +233,7 @@ function retiredPathContexts(text: string): readonly string[] {
 
 function containsRetiredPath(value: unknown): boolean {
   if (typeof value === 'string') {
-    return value.includes(LEGACY_EVENTS_ROOT);
+    return LEGACY_COMMS_ROOTS.some((root) => value.includes(root));
   }
   if (Array.isArray(value)) {
     return value.some(containsRetiredPath);

@@ -1,0 +1,6 @@
+---
+description: Continuity-surface edits land as their own session-end commit, never bundled with the cycle commit that produced them.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/continuity-surface-commits-as-orphans.md`.

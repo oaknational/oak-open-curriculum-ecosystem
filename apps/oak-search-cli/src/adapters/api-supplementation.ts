@@ -76,9 +76,10 @@ export async function buildKs4SupplementationContext(
   const sequences = sequencesResult.value;
 
   // Convert to SubjectSequenceInfo format
+  // ks4Options was removed from the API response in v0.7.0; the live-API path
+  // no longer carries per-sequence variant info. Bulk-data path still does.
   const sequenceInfos: SubjectSequenceInfo[] = sequences.map((seq) => ({
     sequenceSlug: seq.sequenceSlug,
-    ks4Options: seq.ks4Options ?? null,
   }));
 
   // Build context map by fetching sequence units
@@ -113,10 +114,7 @@ export function getKs4FieldsForUnit(
 ): Ks4SupplementationResult {
   const aggregatedContext = getKs4ContextForUnit(context.unitContextMap, unitSlug);
   const ks4Fields = extractKs4DocumentFields(aggregatedContext);
-  const hasKs4Data =
-    hasValues(ks4Fields.tiers) ||
-    hasValues(ks4Fields.exam_boards) ||
-    hasValues(ks4Fields.exam_subjects);
+  const hasKs4Data = hasValues(ks4Fields.tiers) || hasValues(ks4Fields.exam_subjects);
 
   return { ks4Fields, hasKs4Data };
 }

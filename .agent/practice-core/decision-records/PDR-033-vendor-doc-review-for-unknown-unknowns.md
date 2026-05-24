@@ -69,9 +69,9 @@ conformance.
 host-local identifiers omitted from this portable record)*: an
 implementation drafted
 `event.fingerprint = ['<class-name>']` for known error families.
-`code-reviewer` and `test-reviewer` both passed the shape with
+`code-expert` and `test-expert` both passed the shape with
 NIT/MINOR findings; both implicitly accepted the single-element
-form. `sentry-reviewer` flagged a MAJOR by reading Sentry's
+form. `sentry-expert` flagged a MAJOR by reading Sentry's
 official fingerprinting docs: a single-element fingerprint is a
 **full override** that collapses every event of the class into one
 issue, losing stack-aware discrimination within the family. The
@@ -131,8 +131,8 @@ test, type, architecture) check shape and discipline but cannot
 detect a vendor-contract violation from inside the codebase.
 
 Existing vendor-specialist reviewers in this Practice include
-`sentry-reviewer`, `clerk-reviewer`, `elasticsearch-reviewer`,
-`vercel:*`, `mcp-reviewer`. New vendor-specialist reviewers are
+`sentry-expert`, `clerk-expert`, `elasticsearch-expert`,
+`vercel:*`, `mcp-expert`. New vendor-specialist reviewers are
 authored as new ones become needed.
 
 The two review acts compose: vendor-doc review at plan time finds
@@ -197,5 +197,5 @@ review at implementation time" is invariant.
 - The discipline of dispatching the vendor-specialist reviewer at
   implementation time is amplified by PDR-015's parallel-dispatch
   amendment (2026-04-26 amendment). Vendor specialists are
-  routinely dispatched in parallel with `code-reviewer` /
-  `test-reviewer`, not sequentially.
+  routinely dispatched in parallel with `code-expert` /
+  `test-expert`, not sequentially.

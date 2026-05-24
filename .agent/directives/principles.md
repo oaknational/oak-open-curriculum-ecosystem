@@ -323,6 +323,24 @@ paths, setup files) don't apply.
   Sentry runtime/uptime surfaces).
 - **Fix things** - All quality gates are blocking at all times,
   regardless of location, cause, or context.
+- **Local broken code never leaves** — Broken code is never
+  acceptable. The local-only constraint is not an excuse to tolerate
+  brokenness; it is the discipline that prevents brokenness from
+  reaching other agents, reviewers, CI, and production before you
+  finish fixing it. Two halves, both held: (1) broken code must be
+  fixed, not tolerated — "it's just broken locally" is not a stable
+  resting position, it is an in-progress fix that has not yet landed;
+  (2) local broken code never leaves the local environment — no
+  `git push` until the change is proven to work, built, gated, and
+  observed running in the form it is supposed to run (test passing,
+  dev server returning the expected response, CLI exiting clean, UI
+  rendering the expected state). "It compiles" is not "it works";
+  the proof is observed behaviour, not the absence of red. Pushing
+  broken code burns peer-agent and reviewer cycles on diagnosis the
+  author could have closed with one more local check, and pollutes
+  the shared branch with state nobody can trust. See
+  [`local-broken-code-never-leaves.md`](../rules/local-broken-code-never-leaves.md)
+  for the operational discipline.
 - **Never weaken a gate to solve a testing problem** - If a test
   needs content that a gate forbids (e.g. an `eslint-disable`
   comment to test the `no-eslint-disable` rule), solve via string
@@ -357,6 +375,19 @@ paths, setup files) don't apply.
   docs prompt verification; misleading docs are trusted and acted
   on. Fix immediately — never defer, never TODO. Pairs with PDR-026
   §Landing target definition.
+- **Target-architecture wording needs consuming-runtime evidence** -
+  Present-tense architectural claims ("the SDK exposes the target
+  schema", "all consumers migrated", "the app uses the new
+  endpoint") MUST be backed by at least one consuming-runtime
+  instance verified at write time. A shared package exposing a
+  target schema is not proof that an app has migrated; the proof
+  is the import resolved in a built composition root. Use future
+  tense or "intended" when authoring without runtime evidence;
+  reserve present tense for verified state. ADRs, runbooks, and
+  operator docs fail this rule loudest because they are cited as
+  authority. Companion to "Misleading docs are blocking": that rule
+  fires after the misstatement lands; this rule prevents authoring
+  the misstatement in the first place.
 
 ### Compiler Time Types and Runtime Validation
 

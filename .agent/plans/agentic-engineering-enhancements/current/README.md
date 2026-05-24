@@ -6,6 +6,21 @@ These files are not the atomic execution plans in `active/`, but they do
 represent strategic/capability work to promote into explicit active execution
 plans when scheduled.
 
+## Cross-Collection Boundary
+
+Agent communication and collaboration-tooling implementation now routes through
+[`../../agent-tooling/current/cost-of-collaboration.plan.md`](../../agent-tooling/current/cost-of-collaboration.plan.md).
+That plan is the current single source of truth for the `agent-tools/`
+workspace, collaboration-state substrate, hooks, commit queue, comms, and
+identity-plumbing work. The old
+[`../../agent-tooling/current/primary-agent-tooling-enhancements.plan.md`](../../agent-tooling/current/primary-agent-tooling-enhancements.plan.md)
+is superseded and retained only as a back-pointer.
+
+Keep this collection focused on Practice/governance questions: how agents
+collaborate, plan, communicate, learn, review, and shape doctrine. If the work
+would still exist without `agent-tools/`, it belongs here; if it changes the
+tooling substrate, it belongs under `agent-tooling/`.
+
 ## Source Plans
 
 | Source Plan | Serves | Status |
@@ -24,6 +39,8 @@ plans when scheduled.
 | ↪️ MOVED | `collaboration-doc-fitness-remediation.plan.md` → [`../../agent-tooling/current/`](../../agent-tooling/current/collaboration-doc-fitness-remediation.plan.md) | (relocated 2026-05-05) |
 | ↪️ MOVED | `agent-infrastructure-portability-remediation.plan.md` → [`../../agent-tooling/current/`](../../agent-tooling/current/agent-infrastructure-portability-remediation.plan.md) | (relocated 2026-05-05) |
 | [learning-loop-negative-feedback-tightening.plan.md](learning-loop-negative-feedback-tightening.plan.md) | Adjacent: narrow balancing-loop tightening for executive-memory drift detection and consolidation-time memory-quality dispositions | QUEUED |
+| [completion-claim-proof-pipeline.plan.md](completion-claim-proof-pipeline.plan.md) | Adjacent: completion claims as computed verdicts, plan proof contracts, source-anchored multi-level test-first TDD, and deterministic enforcement routing | QUEUED |
+| [fitness-token-measurements-and-frontmatter-mandation.plan.md](fitness-token-measurements-and-frontmatter-mandation.plan.md) | Follow-on to `agent-tools context-cost`: add chars/4 token measurements to Practice fitness, introduce token target/limit frontmatter, and absorb the old frontmatter manifest sweep into one sequenced lane. | DECISION-COMPLETE / READY FOR EXECUTION |
 | [agent-entrypoint-content-homing.plan.md](agent-entrypoint-content-homing.plan.md) | Adjacent: lossless homing of non-entrypoint AGENT.md content into durable homes while preserving discovery parity | QUEUED |
 | [practice-graph-payoff-peak-pilot.plan.md](practice-graph-payoff-peak-pilot.plan.md) | Adjacent: payoff-peak pilot for a derived Practice graph with bounded workspaces, explicit-edge extraction, local graph/report outputs, and CLI build/query/path surfaces | QUEUED |
 | [knowledge-role-documentation-restructure.plan.md](knowledge-role-documentation-restructure.plan.md) | Adjacent: restructure testing, TypeScript, development, and troubleshooting docs around PDR-014 knowledge artefact roles | QUEUED |
@@ -35,6 +52,7 @@ plans when scheduled.
 | [doctrine-enforcement-quick-wins.plan.md](doctrine-enforcement-quick-wins.plan.md) | Six structural enforcement workstreams against the highest-frequency doctrine-violation patterns named in the post-/insights reflection round; PDR-044 innate-immunity layer host adoption | NOT STARTED |
 | ~~[practice-core-surface-retirement.plan.md](../archive/completed/practice-core-surface-retirement.plan.md)~~ | Retire `.agent/practice-core/patterns/` and `.agent/practice-context/`; update doctrine, navigation, validators, count-prose | **COMPLETE** — all four phases landed 2026-04-29; PDR-007/PDR-024/PDR-014 amendments; trinity navigation updated; directories deleted; validators green |
 | ~~[codex-session-identity-plumbing.plan.md](../archive/completed/codex-session-identity-plumbing.plan.md)~~ | Promoted high-impact slice from the Codex identity follow-up: SessionStart context, full preflight guidance for thread rows, and report-only anonymous-record audit | COMPLETE |
+| [plan-index-reachability-remediation.plan.md](plan-index-reachability-remediation.plan.md) | Restore the leaf-to-root reachability invariant for `.agent/plans/`: add 3 missing collections to root README, add lifecycle READMEs to observability + security-and-privacy/future, thread 5 orphan plans into their lifecycle indexes, and add a repo-validator that fails CI on new orphans | DECISION-INCOMPLETE |
 
 Recently completed:
 [multi-agent-collaboration-decision-thread-and-claim-history.plan.md](../archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)

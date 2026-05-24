@@ -131,9 +131,9 @@ calibration audit if any graduation lands substance there.
 
 After Phase 1 and Phase 2:
 
-- `docs-adr-reviewer` — verify executed graduations landed
+- `docs-adr-expert` — verify executed graduations landed
   substance in correct homes per the placement-contract analogue.
-- `code-reviewer` — verify markdown/yaml/json validity, links
+- `code-expert` — verify markdown/yaml/json validity, links
   resolve.
 
 Brief on **execution-legitimacy, not decision-validation** — the

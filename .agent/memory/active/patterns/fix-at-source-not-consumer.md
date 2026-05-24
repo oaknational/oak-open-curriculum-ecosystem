@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-017
 name: "Fix at source, not consumer"
+polarity: pattern
 use_this_when: "Multiple workaround attempts fail at the consumer because the producer's type/function/interface is wrong"
 category: process
 proven_in: "packages/sdks/oak-sdk-codegen/code-generation/typegen/paths/path-generators.ts"
@@ -11,6 +12,10 @@ barrier:
   prevents_recurring_mistake: "Accumulating consumer-side workarounds that each fail for related reasons, when a single upstream fix resolves all of them"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Fix at Source, Not Consumer
 

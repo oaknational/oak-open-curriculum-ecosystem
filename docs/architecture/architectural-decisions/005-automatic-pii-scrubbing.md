@@ -2,7 +2,8 @@
 
 ## Status
 
-Accepted
+Accepted. Amended 2026-05-10 to clarify that implementation coverage must be
+proven at the current redaction barrier, not assumed from this historical ADR.
 
 ## Context
 
@@ -18,6 +19,13 @@ We need a systematic approach to prevent PII exposure.
 ## Decision
 
 Automatically scrub email addresses in all outputs, displaying them as `abc...@domain.com` format. Implement this as a pure function that processes all user-related data before it leaves the system.
+
+As of the 2026-05-10 ADR coverage review, this remains a binding privacy
+decision but the current implementation must be assessed through ADR-160's
+non-bypassable redaction barrier. If the shared redaction policy does not scrub
+arbitrary email-like strings, either implementation follow-through is required
+or this ADR must be amended with a data-flow proof that email-like values cannot
+enter the relevant output or telemetry paths.
 
 ## Rationale
 
@@ -45,7 +53,11 @@ Automatically scrub email addresses in all outputs, displaying them as `abc...@d
 - May need exemptions for certain use cases
 - Pattern matching might miss edge cases
 
-## Implementation
+## Historical Implementation Direction
+
+The original implementation sketch below is superseded by ADR-160 as the
+current proof surface. Email-like value redaction now belongs at the shared
+redaction barrier, not only in ad hoc user-data transformations.
 
 - Create pure function `scrubEmail(email: string): string`
 - Apply to all user data transformations

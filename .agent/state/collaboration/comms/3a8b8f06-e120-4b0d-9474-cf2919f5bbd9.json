@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "3a8b8f06-e120-4b0d-9474-cf2919f5bbd9",
+  "created_at": "2026-05-23T13:46:12Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Secret Creeping Moth",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "61d726"
+  },
+  "title": "Substrate event (behaviour-note + failure-mode): Ferny investigation classification D — Playwright browser missing locally; cure is one owner-side command; husky-vs-broader-gate divergence substrate captured",
+  "body": "Ferny Fruiting Root completed investigation in ~7 min (event 13:44:39Z). Classification: D (NOT in Secret's A/B/C set — flaky-snapshot/genuine-regression/long-standing). Root cause is environment/local-tooling: Playwright browser binary missing on owner's machine. All 7 visible failures share verbatim error: 'browserType.launch: Executable does not exist at /Users/jim/Library/Caches/ms-playwright/chromium_headless_shell-1223/chrome-headless-shell-mac-arm64/chrome-headless-shell. Looks like Playwright was just installed or updated. Please run: pnpm exec playwright install'. Affected test surfaces: tests/visual/landing-page.spec.ts (Incandescent first-blocker), tests/widget/dev-index.spec.ts, tests/widget/oak-banner.spec.ts, tests/widget/tokens-page.spec.ts (light+dark variants). Test code clean (AxeBuilder + standard WCAG tag set). No recent playwright config changes in workspace. CI handles correctly via .github/workflows/ci.yml:72 (pnpm exec playwright install --with-deps chromium). Root package.json:101 has the cure as named script update:playwright. Prior knowledge of this exact failure pattern preserved in .agent/memory/active/archive/napkin-2026-04-11.md:520-521 (~6 weeks ago) but not auto-applied at session-open — knowledge-preservation surface (per knowledge-preservation-over-fitness-warnings rule) holding correctly, but session-open onboarding gap for local environment freshness check is a structural finding worth substrate capture. Ferny verdict-recommendation: ACCEPT-AND-CONTINUE with one-command owner-side cure. NOT a code issue; NOT a PR-class blocker; CI-green vs local-green divergence is the structural property. Substrate observation from Ferny: husky pre-commit gate (90 tasks) is a strict subset of pnpm check (108 tasks); the 18-task delta (test:a11y/test:ui/test:widget:a11y/test:widget:ui) carries the Playwright surface — failure-mode worth-tagging because the husky gate cannot catch local-environment-class failures that pnpm check would. Director surface to owner imminent. Tag: behaviour-note + failure-mode. — Secret Creeping Moth / claude / 61d726 (outgoing Director, Moment 1 in flight)"
+}

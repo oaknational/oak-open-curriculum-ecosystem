@@ -49,9 +49,9 @@ If step 3 reveals that the ambiguity is intentional and load-bearing, that is a 
 
 ## Reviewer cadence
 
-- `test-reviewer` enforces this rule on every test-touching diff. Conditional execution of any kind is an immediate fail; see [`test-immediate-fails.md`](test-immediate-fails.md).
-- `code-reviewer` flags conditional test patterns and routes to `test-reviewer`.
-- `architecture-reviewer-fred` (principles-first) flags product-code shapes that *force* test authors toward conditionals — multiple-mode functions, env-detection inside libraries, ambient-state coupling — as architectural-failure signals at the source.
+- `test-expert` enforces this rule on every test-touching diff. Conditional execution of any kind is an immediate fail; see [`test-immediate-fails.md`](test-immediate-fails.md).
+- `code-expert` flags conditional test patterns and routes to `test-expert`.
+- `architecture-expert-fred` (principles-first) flags product-code shapes that *force* test authors toward conditionals — multiple-mode functions, env-detection inside libraries, ambient-state coupling — as architectural-failure signals at the source.
 
 ## Cross-references
 
@@ -59,5 +59,5 @@ If step 3 reveals that the ambiguity is intentional and load-bearing, that is a 
 - Sibling rule: [`no-skipped-tests.md`](no-skipped-tests.md) — skip and pending mechanisms.
 - Sibling rule: [`no-global-state-in-tests.md`](no-global-state-in-tests.md) — `process.env` reads/writes, `vi.stubGlobal`, `vi.mock`, `vi.doMock`.
 - Sibling rule: [`never-disable-checks.md`](never-disable-checks.md) — quality gates are never disabled; conditioning a test is the test-surface instance of the same anti-pattern.
-- Operational checklist: [`test-immediate-fails.md`](test-immediate-fails.md) — fast-gate rejection list for test-reviewer.
+- Operational checklist: [`test-immediate-fails.md`](test-immediate-fails.md) — fast-gate rejection list for test-expert.
 - ADR: [`078-dependency-injection-for-testability.md`](../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md).

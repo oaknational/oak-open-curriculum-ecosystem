@@ -1,5 +1,6 @@
 ---
 name: Inherited Framing Without First-Principles Check
+polarity: anti-pattern
 use_this_when: About to execute a plan body, rewrite an existing artefact, or translate an "old X to new X" — before writing code, tests, or doctrine, check whether the inherited shape is the right shape for the behaviour being proven
 category: process
 proven_in: .agent/memory/active/napkin.md (six instances, 2026-04-20/21)
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Executing a plan's literal shape, non-goal, assertion-kind, file naming, or vendor-API literal without asking whether the artefact in front of the agent actually fits first principles — the artefact's gravity overrides the check"
   stable: true
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 ## Principle
 

@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "0f03f45c-a225-4d55-bb15-2e5c44abb678",
+  "created_at": "2026-05-22T15:42:19.591Z",
+  "kind": "directed",
+  "message_kind": "notification",
+  "from": {
+    "agent_name": "Mistbound Slipping Night",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "a1cb64"
+  },
+  "to": {
+    "agent_name": "Stormbound Kiting Squall",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "ddbea2"
+  },
+  "subject": "Mistbound closing claims — t12 commit handed to you",
+  "body": "Stormbound — owner direction at session-end: I'm closing my claims and asking you to land my t12 work.\n\n**State you'll inherit**:\n- Three files staged in the shared index (`git ls-files --staged` will confirm):\n  - `packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.ts` (NEW, ~70 lines)\n  - `packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/citation-shape.unit.test.ts` (NEW, 17 tests, all passing)\n  - `.agent/plans/sector-engagement/eef/current/eef-evidence-corpus.plan.md` (AMENDED §Phase F: drops the `source: 'EEF Teaching and Learning Toolkit'` field from `Citation` per owner direction; flips frontmatter t12 todo status: pending → completed)\n\n- My commit-queue intent `131fe2a9-edde-4481-abc7-6838ddad4eec` enqueued at `queued` phase with `record-staged` + `verify-staged` already passed (fingerprint `35a29ef59ee73c924994c460a5b1ac543062695255eed382342b4ddf320c7790`). Either:\n  (a) Take over my intent by running `commit-queue commit --intent-id 131fe2a9-edde-4481-abc7-6838ddad4eec --message-file /tmp/mistbound-t12-commit-message.txt` (if the queue accepts your identity tuple), OR\n  (b) Open your own intent with these three files + use my message file, OR\n  (c) Path-B selective commit (`git commit -- <pathspecs> -F /tmp/mistbound-t12-commit-message.txt`) — preserves your own queued work.\n\n- Pre-commit hooks WILL run (full-tree husky gate — confirmed green locally: 87/87 turbo tasks, lint clean after `pnpm --filter @oaknational/eslint-plugin-standards build && pnpm --filter @oaknational/sdk-codegen build && pnpm --filter @oaknational/result --filter @oaknational/type-helpers build`). If you've also re-built these in your session, lint will resolve.\n\n**Commit message** drafted and verified subject ≤72 chars: at `/tmp/mistbound-t12-commit-message.txt`. Subject: `feat(evidence-corpus): land t12 citation shape primitives`. Body cites reviewer cadence + atomic-landing invariant + Co-Authored-By.\n\n**Reviewer cadence absorbed** (all in this session):\n- Pre-execution code-expert: CHANGES REQUESTED (source-field duplication + Zod/TS tuple tension + ts-expect-error convention). Owner resolved source-field → Option A (drop).\n- Pre-execution type-expert: Approach 2 + `.readonly()`; `z.tuple([T], T).readonly()` (Zod 4 two-arg form); `z.url()`; SSoT via `z.infer`.\n- Pre-execution test-expert: no pure type-only tests (item 19); `satisfies` + `safeParse` + `it.each` over literal dataset.\n- Post-execution code-expert: CLEAR.\n\n**Claims I'm closing now**:\n- `c847fffc-e81b-4a1b-b4d2-e09251803111` (stale ff2 — work absorbed by sweep `03da8e3d`/`2cda69a2`)\n- `f013f95d-ab63-4e83-a716-f198da3ee19f` (t12 main — handed to you)\n- `59eabaea-73bd-412d-aeb2-b6ce9b997141` (t12 supplementary plan amendment — handed to you)\n\nAfter my closures, no Mistbound claim covers these files; the staged content is yours to commit under your own claim/intent or path-B.\n\n**Acknowledgement of your earlier abandonment**: your graceful abandonment of `cf39fd43` when detecting my staged files in the index (note: *\"abandoning to avoid sweep of peer work-in-progress (the very failure mode Cycle 1.1 cures)\"*) is itself a worked instance of the discipline the intent-scope plan codifies. Beautifully demonstrated.\n\n**Session-handoff substance** I'm about to record in continuity surfaces: cycle landed-status will read *\"staged but not committed by Mistbound — handed to Stormbound per owner direction\"* with falsifiability via your eventual commit + the closed-claims archive entries. Your commit subject will land the cycle; my handoff records the hand-off.\n\n— Mistbound Slipping Night"
+}

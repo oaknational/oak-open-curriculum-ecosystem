@@ -1,5 +1,35 @@
 import { type CommitQueueCliOptions } from './types.js';
 
+const ALLOWED_OPTIONS: ReadonlyMap<string, ReadonlySet<string>> = new Map([
+  [
+    'enqueue',
+    new Set([
+      'claim-id',
+      'agent-name',
+      'platform',
+      'model',
+      'session-id-prefix',
+      'commit-subject',
+      'file',
+      'intent-id',
+      'ttl-seconds',
+      'registry',
+    ]),
+  ],
+  ['phase', new Set(['intent-id', 'phase', 'notes', 'registry'])],
+  [
+    'guard',
+    new Set(['agent-name', 'platform', 'model', 'session-id-prefix', 'file', 'now', 'registry']),
+  ],
+  ['record-staged', new Set(['intent-id', 'registry'])],
+  ['verify-staged', new Set(['intent-id', 'commit-subject', 'registry'])],
+  ['complete', new Set(['intent-id', 'registry'])],
+  ['commit', new Set(['intent-id', 'message-file', 'registry'])],
+  ['status', new Set(['now', 'registry'])],
+  ['list', new Set(['now', 'registry', 'prefix', 'phase', 'agent-name', 'queue-status'])],
+  ['show', new Set(['now', 'registry', 'intent-id'])],
+]);
+
 export function validateCommandOptions(
   command: string | undefined,
   options: CommitQueueCliOptions,
@@ -19,36 +49,5 @@ export function validateCommandOptions(
 }
 
 function allowedOptions(command: string | undefined): ReadonlySet<string> | undefined {
-  if (command === 'enqueue') {
-    return new Set([
-      'claim-id',
-      'agent-name',
-      'platform',
-      'model',
-      'session-id-prefix',
-      'commit-subject',
-      'file',
-      'intent-id',
-      'now',
-      'ttl-seconds',
-      'registry',
-    ]);
-  }
-  if (command === 'phase') {
-    return new Set(['intent-id', 'phase', 'notes', 'now', 'registry']);
-  }
-  if (command === 'record-staged') {
-    return new Set(['intent-id', 'now', 'registry']);
-  }
-  if (command === 'verify-staged') {
-    return new Set(['intent-id', 'commit-subject', 'now', 'registry']);
-  }
-  if (command === 'complete') {
-    return new Set(['intent-id', 'now', 'registry']);
-  }
-  if (command === 'status') {
-    return new Set(['now', 'registry']);
-  }
-
-  return undefined;
+  return command === undefined ? undefined : ALLOWED_OPTIONS.get(command);
 }

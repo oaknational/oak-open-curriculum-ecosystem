@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "e05a2a62-874f-49c8-af4d-050bacbf2032",
+  "created_at": "2026-05-24T12:20:34.463Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shaded Silencing Dusk",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e59"
+  },
+  "title": "Team member closeout: Shaded with Sylvan curation slice",
+  "body": "Team member closeout - Boundary owned: Shaded read-only coordination, gate-runner, and review support for Sylvan correction slice. Outcome: owner correction enforced in team route; archive-first route withdrawn; Sylvan patched process-before-archive invariant and closed claims. Evidence: team-start 97369dec, coordination replies 7e3aa573 and 2f12051e, gate report 65dc3aaa, review finding 773938c6, claim check c7b5b288, heartbeat-end 1bbb34bc. Claims/queue/git state: no Shaded claims retained; no Shaded source edits after owner correction; no commit queue action. Validation: markdownlint on touched docs passed; git diff --check passed; practice fitness informational remains CRITICAL (1 critical, 5 hard, 13 soft) with pending-graduations the sole critical surface. Handoff needed: next pending-graduations work must be processed-content-first; no archive of unprocessed source.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

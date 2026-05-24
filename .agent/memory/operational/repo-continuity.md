@@ -3,158 +3,85 @@ fitness_line_target: 400
 fitness_line_limit: 525
 fitness_char_limit: 35000
 fitness_line_length: 200
-split_strategy: "Archive historical session-close summaries to a companion archive file; keep only live operational state and most recent session summary here"
+split_strategy: 'Archive historical session-close summaries to a companion archive file; keep only live operational state and most recent session summary here'
 merge_class: index-narrative-tables
 ---
 
 # Repo Continuity
 
-**Session close (2026-05-08 — Fronded Branching Grove / `codex` /
-`GPT-5` / `019e06`, PR #102 final closeout + decision-complete session
-planning)**:
-closed the PR #102 technical merge blockers and then captured the owner's
-pre-merge graph-planning requirement. PR #102 is green on
-`a8ef3ad1be343d2b786416ce12dcfeca270fb56e`: GitHub merge state is `CLEAN`,
-root `run-quality-gates`, CodeQL, SonarCloud Code Analysis, and Vercel passed;
-Sonar MCP reports quality gate `OK`, `new_violations=0`, and zero open PR
-issues; unresolved review threads are zero. Owner direction after that closeout:
-do not merge until the graph plans are finalised and decision-complete. New
-current plan:
-[`2026-05-08-pr102-graph-decision-complete-closeout.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-pr102-graph-decision-complete-closeout.plan.md).
-
-**Session update (2026-05-08 — Opalescent Shimmering Orbit / `codex` /
-`GPT-5` / `019e06`, PR #102 graph decision-complete closeout)**:
-applied the latest owner discussion to the graph plan estate. EEF slice 1 is
-structural-only for evaluation now: citation/data/caveat/freshness/MCP-shape
-preservation is load-bearing; LLM/outcome evaluation is follow-on
-infrastructure outside Vitest. Practice-facing graph tooling is now planned
-under `agent-graphs/practice-graph/`, with
-`agent-tooling/future/agent-graphs-workspace-organisation.plan.md` owning the
-future top-level workspace organisation. Refreshed evidence on PR head
-`d5e32a3c7ba47f3f21de138c7752afb8d6362171`: GitHub checks pass; Sonar quality
-gate `OK`, zero open PR issues, zero `TO_REVIEW` hotspots; branch touched files
-`107`, so pre-merge divergence analysis is required; one live Copilot review
-thread remains on `emit-index.ts` whitespace and must be classified before
-merge.
-
-**Session close (2026-05-08 — Lush Rustling Bark / `codex` /
-`GPT-5` / `019e03`, PR #102 fresh-session handoff)**:
-ran the owner-requested `jc-session-handoff` refresh for PR #102. Current PR
-evidence is explicit: title/body are stale and must be rewritten against
-`origin/main...HEAD`; PR head is `df66b742694d1bfdd757019c97414945540eabf5`;
-the branch differs from `origin/main` by 93 files, 6595 insertions, and 770
-deletions; GitHub merge state is `BLOCKED`; SonarCloud Code Analysis is
-failing; Sonar PR quality gate is `ERROR` on four open issues and zero
-`TO_REVIEW` hotspots; nine review threads remain unresolved, with graph
-taxonomy/wording threads outdated-and-fixed, three fixed-but-undismissed live
-threads, one schema docstring mismatch still live, and one PR metadata thread
-still live. No implementation edits were made in this handoff.
-
-**Session close (2026-05-07 — Lush Rustling Bark / `codex` /
-`GPT-5` / `019e03`, PR #102 follow-up + lint hardening)**:
-completed the owner-directed PR #102 comment harvest before editing, found two
-new live Copilot threads after `e8050400`, and fixed them narrowly in
-`branch-touched-files`: positional branch/ref is now exclusive with
-`--head`/`--branch`, `--branch` and `--git` are documented, repo-root
-resolution uses the CLI cwd, and explicit Git overrides must be absolute paths
-to an executable named `git`. The same closeout replaced deprecated
-`typescript-eslint.config()` calls in the Oak ESLint configs with ESLint core
-`defineConfig()`, preserved the local `@oaknational` plugin at the typed config
-boundary, accepted the owner's additional candidate-rule activation, cleared
-the resulting single-call lint findings, and re-ran `pnpm lint` successfully.
-
-**Session close (2026-05-07 — Twigged Shedding Fern / `codex` /
-`GPT-5` / `019e03`, PR #102 snagging)**:
-implemented and pushed the narrow PR #102 snagging pass on
-`planning/graph-tooling` as `e8050400`. The pass fixed the three
-graph-layer taxonomy comments, the primitive-wording comment, the
-branch-touched-files parser index issue, and the Git subprocess-boundary
-hotspots. Local focused gates, `pnpm check`, pre-commit hooks, pre-push
-hooks, GitHub checks, and SonarCloud are green. Sonar PR quality gate is
-`OK` with zero open issues and zero `TO_REVIEW` hotspots. The four known
-Copilot review threads are obsolete/outdated on the new head, but the
-owner-directed next session must still fetch remaining PR #102 comments and
-review threads before editing, then analyse whether any live reviewer
-comments remain.
-
-**Session close (2026-05-07 — Silvered Masking Moth / `codex` /
-`GPT-5` / `019e03`, Doctor safe-merge gate implemented)**:
-completed the memory/state substrate doctor safe-merge gate. Starting from
-`bc56562c` on `fix/sonar-fixes-20260506`, the session reviewed `44c73e4d`,
-normalised the closed-claims archive and two conversation files to satisfy the
-collaboration schemas without deleting historical evidence, added strict mode
-to the built `agent-tools` substrate CLI, added the root
-`practice:substrate:check` alias through built output, refreshed the generated
-shared comms log, and archived the doctor plan. Report mode now returns
-`ok: true` with `blocking: 0`; strict mode returns `0` on the clean live
-substrate. Follow-up owner direction deleted the whole legacy collaboration
-comms tree and removed it from the live manifest/read-model header. The
-requested `code-reviewer` pass found stale
-live references and too-narrow retired-root scanning; those findings are fixed.
-Repair mode, `--apply`, `--dry-run`, and consolidation integration remain
-future arcs.
-
-Historical session summaries and old next-safe-step queues moved to
-[repo-continuity-session-history-2026-05-07.md](archive/repo-continuity-session-history-2026-05-07.md).
-
-**Session close (2026-05-07 — Breezy Navigating Sail / `cursor` /
-`claude-opus-4.7` / `9edbd1`, graph MVP-arc planning)**:
-closed the `connecting-oak-resources` graph MVP-arc PLANNING arc in one
-session per owner direction. Six commits landed the spine remediation, reviewer
-pass, three slice plans, BLOCKER remediation, owner-decision log, and refreshed
-thread handoff. Remaining execution-prep work is deliberately planning-only:
-absorb topology BLOCKERs into `graph-stack.plan.md` + ADR-173, absorb four
-Phase 4 findings into the slice plans, and resolve the EEF t19 contradiction.
-That historical queue is superseded by the 2026-05-08 structural-only EEF
-decision above. Slice execution, graph-stack ACTIVE promotion, and ADR-173
-ratification remain out of scope for this branch.
+Repo-level operational index for active thread state. Historical session-close
+prose was archived verbatim during the 2026-05-12 consolidation pass at
+[`archive/repo-continuity-session-history-2026-05-12.md`](archive/repo-continuity-session-history-2026-05-12.md).
+Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
-- Branch `planning/graph-tooling` is in final pre-merge planning closeout. Last
-  pushed/refreshed PR #102 head before the local closeout bundle is
-  `d5e32a3c7ba47f3f21de138c7752afb8d6362171`; evidence must be refreshed after
-  this bundle is committed and pushed.
-- PR #102 technical gates on that last pushed head are mostly clean: GitHub
-  checks pass, Sonar MCP quality gate `OK`, zero open Sonar PR issues, and zero
-  `TO_REVIEW` hotspots. One live Copilot review thread remains on
-  `emit-index.ts` whitespace and must be classified before merge.
-- Owner direction 2026-05-08: PR #102 must not merge until the graph plans are
-  finalised and decision-complete. Local closeout docs now record
-  `Decision-complete: YES`; merge-ready remains `NO`.
-- Latest eval/structure decisions: EEF slice 1 structural-only now; LLM/outcome
-  eval is follow-on infrastructure; Practice graph home is
-  `agent-graphs/practice-graph/`.
-- Branch-touched-files is `107`, so pre-merge divergence analysis is required.
-- The live final-session plan is
-  `.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/2026-05-08-pr102-graph-decision-complete-closeout.plan.md`.
-- Remaining merge blockers: commit/push the local closeout bundle and re-check
-  GitHub/Sonar on the final pushed head; dispose the live Copilot
-  `emit-index.ts` thread; run the final pre-merge divergence workflow for the
-  107-file branch.
-- Opalescent Shimmering Orbit's closeout collaboration claims are closed;
-  `claims status` reports zero active claims. The advisory commit queue only
-  contains stale/abandoned historical entries.
-- Residual Practice fitness pressure is routed, not hidden: `practice.md`
-  remains HARD on character count and needs an owner-approved Core edit or
-  threshold decision before a strict-hard fitness gate can be clean.
+- Current branch: `feat/mcp-graph-support-foundation`.
+- Current local HEAD: `50f8ba41`. Remote state was not refreshed during this
+  soft-tier consolidation slice; check primary git evidence before push or PR
+  claims.
+- Owner has reactivated a multi-lane push. Active peer claims currently cover
+  source and agent-tools bundles; this consolidation lane is limited to
+  memory-state documentation surfaces. Treat active claims and comms as live
+  routing truth, not this paragraph.
+- Critical and hard fitness pressure is currently drained.
+  `pnpm practice:fitness:informational` and
+  `pnpm practice:fitness --strict-hard` on 2026-05-24T14:57Z both report
+  `SOFT (19 soft)`.
+- Recent active napkin rotations are preserved under
+  [`archive/`](../active/archive/). The current active napkin is healthy at
+  28 lines / 1,050 chars after the Hushed critical line-width slice.
+- Remaining consolidation pressure is tracked by
+  [`memory-surface-critical-drain-2026-05-24.plan.md`](../../plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md).
+  Phase 2 and Phase 3 remain open for active-shard processing and distilled
+  home-gap review; Phase 4 validates the hard/critical objective only.
+- Unprocessed live queue bodies split out of `pending-graduations.md` now live
+  in active shards under
+  [`pending-graduations/`](pending-graduations/). These shards are not
+  archives; process every entry before removing its live pointer.
+- Historical Current State prose removed from this live index is preserved
+  verbatim at
+  [`repo-continuity-current-state-2026-05-24-shaded-silencing-dusk.md`](archive/repo-continuity-current-state-2026-05-24-shaded-silencing-dusk.md).
+- The outgoing pre-Dusky soft-tier live file snapshot is preserved at
+  [`repo-continuity-soft-tier-pre-dusky-2026-05-24.md`](archive/repo-continuity-soft-tier-pre-dusky-2026-05-24.md).
+- Current working tree is dirty with peer-owned source bundles, memory-state
+  consolidation surfaces, and fresh comms events. Treat `git status --short`
+  as the source of truth before any commit-window work.
 
 ## Active Threads
 
 A **thread** is the continuity unit. Full identity tables and lane state live in
 each thread record; this table is the repo-level index.
 
+Per owner direction 2026-05-22, the only currently active product thread is
+**EEF first-feature delivery**. The temporary Knowledge Curator work in this
+session is an agentic-engineering consolidation lane and does not reactivate the
+paused implementation program.
+
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / `claude-code` / `228bc5` / 2026-05-06 |
-| `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Twilit -> Ashen / `claude-code` / `7cf730` / 2026-05-05 |
-| `agentic-engineering-enhancements` | Practice continuity | [record][agentic] | Lush / `codex` / `019e03` / 2026-05-07 |
-| `connecting-oak-resources` | Oak resource graph | [record][connecting] | Lush / `codex` / `019e03` / 2026-05-08 |
-| `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / `claude-code` / `e18e2c` / 2026-05-01 |
-| `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / `codex` / 2026-04-29 |
-| `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / `codex` / 2026-04-28 |
-| `sector-engagement` | External adoption | [record][sector] | Squally / `cursor` / 2026-04-30 |
-| `eef` | EEF evidence corpus | [record][eef] | Windward / `cursor` / `dd084d` / 2026-05-07 |
+| `eef` | EEF first-feature delivery | [record][eef] | Secret Vanishing Wisp / claude / claude-opus-4-7 / 981cbe / 2026-05-23 |
+
+## Paused Threads
+
+Paused threads retain their next-session records and identity history; they are
+not the current session-priority lane. Reactivation is owner-directed.
+
+| Thread | Purpose | Record | Latest identity |
+| --- | --- | --- | --- |
+| `connecting-oak-resources` | Oak resource graph substrate for EEF | [record][connecting] | Tempestuous Spiralling Thermal / claude / Opus 4.7 (1M) / 9205b8 / 2026-05-22 |
+| `agentic-engineering-enhancements` | Practice continuity and agent-tools improvement | [record][agentic] | Hushed Fading Hush / codex / GPT-5 / operations-doc consolidation handoff / 2026-05-24; Sylvan Sprouting Petal / codex / GPT-5 / Knowledge Curator handoff / 2026-05-24; Shaded Silencing Dusk / codex / GPT-5 / 019e59 / 2026-05-24 |
+| `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night / claude-code / opus-4.7 / 188baa / 2026-05-10 |
+| `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / claude-code / unknown / 228bc5 / 2026-05-06 |
+| `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / claude-code / unknown / e18e2c / 2026-05-01 |
+| `sector-engagement` | External adoption | [record][sector] | Squally / cursor / unknown / unknown / 2026-04-30 |
+| `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / codex / unknown / unknown / 2026-04-29 |
+| `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / codex / unknown / unknown / 2026-04-28 |
+
+Compact identity rule (per [PDR-027](../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md)
+and the 2026-05-17 structural refactor): this table carries only the latest
+identity. Full per-thread identity history and per-session context live in each
+thread's next-session record.
 
 [main-critical]: threads/main-critical-sonar-remediation.next-session.md
 [observability]: threads/observability-sentry-otel.next-session.md
@@ -166,120 +93,142 @@ each thread record; this table is the repo-level index.
 [sector]: threads/sector-engagement.next-session.md
 [eef]: threads/eef.next-session.md
 
-## Branch-Primary Lane State
+## Next Safe Steps
 
-Current branch-primary lane state for `planning/graph-tooling` lives in
-[threads/connecting-oak-resources.next-session.md](threads/connecting-oak-resources.next-session.md).
-This branch also depends on the Practice/tooling substrate work from main in
-[threads/agentic-engineering-enhancements.next-session.md](threads/agentic-engineering-enhancements.next-session.md).
+### EEF First-Feature Delivery (active — sole current focus)
 
-## Current Session Focus
+The 2026-05-22 → 2026-05-23 multi-agent gate-1a substrate-floor session is
+closed out in the [`eef` thread record][eef]. Repo-level status, verified
+2026-05-24 against that record:
 
-**2026-05-08 (PR #102 graph decision-complete planning)**:
-absorb remaining graph-plan findings and apply the latest structural-only EEF
-evaluation decision before PR #102 merges. This is a planning closeout session,
-not implementation.
+- Round 1+2 substrate floor is effectively complete; WS4.1 landed at
+  `3241893d` under Stormbound Spiralling Breeze's owner-directed
+  ownership-override, so older repo-continuity notes treating Lunar's WS4.1
+  as outstanding are stale.
+- Remaining pickup state and the full cycle ledger live in the thread record,
+  including the Sparking parser-integration follow-on, WS4.5/t2/t6a/ff3-ff6
+  critical path, reciprocal-review evidence, and coordination-pattern
+  surfacings routed to `pending-graduations.md`.
+- This repo-level index should be treated as the routing pointer only; do not
+  reconstruct the EEF lane from old duplicated prose here.
 
-## Repo-Wide Invariants / Non-Goals
+PR #108 / graph-substrate details live in the connecting-oak-resources thread
+record and snagging plan. Historical long-form routing that previously lived
+in this file is preserved in
+[`repo-continuity-soft-tier-pre-dusky-2026-05-24.md`](archive/repo-continuity-soft-tier-pre-dusky-2026-05-24.md).
 
-Foundational invariants live in directives, rules, ADRs, and PDRs.
-Resume with these branch-relevant constraints:
+### Agentic-Engineering Consolidation Lane
 
-- no compatibility layers; replace, do not bridge;
-- distinct architectural layers live in distinct workspaces; folders/modules
-inside one workspace do not satisfy layer separation;
-- TDD at all levels;
-- tests prove product behaviour, not configuration or file presence;
-- strict boundary validation only;
-- no `process.env` read/write in test files or setup files;
-- `--no-verify` requires fresh per-invocation owner authorisation;
-- no warning toleration;
-- owner direction beats plan;
-- curriculum data in this monorepo comes only through the published Oak Open
-Curriculum HTTP API and generated SDK, not direct Hasura/materialised views;
-- **knowledge preservation is absolute** — writing to shared-state
-knowledge surfaces is never blocked by fitness limits;
-- **shared-state files are always writable and always commit-includable**
-regardless of any active claim (deliberate anti-log-jam tradeoff).
+The current owner-provided goal is a `start-right-team` plus
+`consolidate-docs` continuation. The hard/critical drain is validated as
+soft-only, so the next aligned work is soft-surface consolidation by explicit
+claim.
 
-Current branch non-goals:
+Current soft-tier order:
 
-- do not implement intent-to-commit as claim metadata only; owner direction
-requires an explicit minimal queue mechanic;
-- do not reopen broader canonicalisation opportunistically;
-- do not treat monitor setup or owner-handled preview validation as in-repo
-acceptance work;
-- do not guess Vercel, Sentry, or GitHub state before checking primary
-evidence.
+1. Keep active-shard processing under the critical-drain plan moving entry by
+   entry, without archiving shards wholesale.
+2. Keep this repo-continuity file as a live index; move historical routing into
+   archive snapshots before shrinking the live prose.
+3. After repo-continuity is comfortably inside target, resume the Phase 2 and
+   Phase 3 per-entry work named in the critical-drain plan.
 
-## Next Safe Step
+Paused implementation programme details live in the
+[`agentic-engineering-enhancements` thread record][agentic]. Do not treat old
+repo-continuity prose as current route authority.
 
-**Clear PR #102 merge blockers**:
+### Connecting-Oak-Resources / PR #108 Routing
 
-1. Commit and push the local planning closeout bundle, then re-check GitHub and
-   Sonar on the final pushed head.
-2. Classify or fix the remaining live Copilot `emit-index.ts` review thread
-   before any merge-ready verdict; this planning closeout did not silently edit
-   production code.
-3. Because branch-touched-files is `107`, run the final pre-merge divergence
-   workflow on a clean worktree before merge. The 2026-05-08 non-mutating probe
-   found no changed-both files, no ADR/plan numbering add/add collisions, and
-   no merge-tree conflict signal.
-4. After PR #102 merges, start graph MVP implementation-prep; do not start
-   slice implementation before the post-merge type-check and full gate chain.
+`connecting-oak-resources` is paused as a thread but remains the graph-substrate
+execution history for EEF. Current routing belongs in the thread record and
+the PR #108 snagging plan, not duplicated here:
 
-Do not start slice implementation, graph-stack ACTIVE promotion, ADR-173
-ratification, or production code changes in this final closeout session.
+- [connecting-oak-resources thread record][connecting]
+- [PR #108 snagging plan](../../plans/connecting-oak-resources/knowledge-graph-integration/current/pr-108-snagging.plan.md)
+- [gate-1a delivery addendum](../../plans/connecting-oak-resources/knowledge-graph-integration/current/gate-1a-delivery-parallel-execution-addendum.plan.md)
+
+Before resuming product work, re-check current PR, CI, Sonar, CodeQL, active
+claims, commit queue, and git state. Do not rely on historical issue counts in
+archived prose.
 
 ## Open Owner-Decision Items
 
-Visible owner-appetite items, not blockers for the current branch state:
+1. `practice.md` HARD character pressure remains owner-gated under the Core
+   care-and-consult rule. Falsifiability:
+   `pnpm practice:fitness:strict-hard`.
+2. [`pending-graduations.md`](pending-graduations.md) is a consolidation-pass
+   queue, not a daily session-open file. Its 2026-05-12 due queue is drained;
+   future passes should preserve pending entries until their trigger fires and
+   must not trim for metrics.
+3. Monorepo workspace topology (superseding ADR-108, S0-S6 strategic plan) is
+   parked until after the graph MVP implementation tranche unless the owner
+   explicitly reopens it.
+4. Cost-of-collaboration P0, P-Foundation, P1, P2, P3, P4, and P5 are
+   complete; P1 landed at `f88d0d67`, P2 at `0d3af914`, P3 at `c083a1ab`, P4
+   at `1bb369a5`, and the P5 DI/no-IO repair at `07ffee1d`.
 
-1. Residual `practice.md` HARD character pressure needs an owner-approved
-   Core edit, threshold decision, or dedicated remediation lane. Constraint:
-   Practice Core edits require owner approval under the Core care-and-consult
-   rule; falsifiability is `pnpm practice:fitness --strict-hard`.
-2. The pending-graduations queue remains SOFT and is intentionally calibrated
-   for consolidation-pass access rhythm. Continue draining due entries in
-   dedicated consolidation sessions.
-3. Future doctor arcs are separate owner-choice lanes: repair mode and
-   consolidation integration.
+## Repo-Wide Invariants / Non-Goals
+
+Each invariant below has a canonical home; this section is a resume aid, not
+the authority.
+
+- no compatibility layers; replace, do not bridge —
+  [`replace-dont-bridge`](../../rules/replace-dont-bridge.md);
+- distinct architectural layers live in distinct workspaces —
+  [ADR-154](../../../docs/architecture/architectural-decisions/154-separate-framework-from-consumer.md)
+  and [`principles.md`](../../directives/principles.md);
+- TDD at all levels —
+  [`tdd-as-design.md`](../../directives/tdd-as-design.md);
+- tests prove product behaviour, not configuration or file presence —
+  [`testing-strategy.md`](../../directives/testing-strategy.md);
+- strict boundary validation only —
+  [`strict-validation-at-boundary`](../../rules/strict-validation-at-boundary.md);
+- no `process.env` read/write in test files or setup files —
+  [`no-global-state-in-tests`](../../rules/no-global-state-in-tests.md);
+- `--no-verify` requires fresh per-invocation owner authorisation —
+  [`no-verify-requires-fresh-authorisation`](../../rules/no-verify-requires-fresh-authorisation.md);
+- no warning toleration —
+  [`no-warning-toleration`](../../rules/no-warning-toleration.md);
+- owner direction beats plan —
+  [`AGENT.md`](../../directives/AGENT.md);
+- curriculum data in this monorepo comes only through the published Oak Open
+  Curriculum HTTP API and generated SDK;
+- knowledge preservation is absolute — writing to shared-state knowledge
+  surfaces is never blocked by fitness limits —
+  [PDR-026](../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md);
+- shared-state files are always writable and commit-includable regardless of
+  active claims —
+  [`respect-active-agent-claims`](../../rules/respect-active-agent-claims.md).
+- current memory/state files should be included in every commit when dirty —
+  owner clarification, 2026-05-12.
+
+Current branch non-goals:
+
+- do not reopen broader canonicalisation opportunistically;
+- do not guess Vercel, Sentry, SonarCloud, or GitHub state before checking
+  primary evidence;
+- do not treat monitor setup or owner-handled preview validation as in-repo
+  acceptance work.
 
 ## Deep Consolidation Status
 
-**Status (2026-05-07 Breezy Navigating Sail, cursor, claude-opus-4.7,
-`9edbd1`, graph MVP-arc PLANNING closeout): `not due — capture-edge
-planning closure; two owner-correction candidates already captured in
-pending-graduations`.** Three additional napkin observations remain for future
-consolidation: reviewer convergence can point to an upstream conceptual mistake;
-owner-bounded reviewer scope may be another instance of over-broadening;
-session-handoff JSON edits require agent mode.
+Current live consolidation state is the 2026-05-24 Knowledge Curator drain:
+the active napkin has been processed, the former critical
+`pending-graduations.md` surface is now soft-only, and the active execution ledger is
+[`memory-surface-critical-drain-2026-05-24.plan.md`](../../plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md).
 
-**Status (2026-05-07 Silvered Masking Moth, codex, GPT-5, `019e03`,
-owner-requested `jc-session-handoff` + `jc-consolidate-docs`):
-`completed this handoff — explicit owner request triggered deep convergence`.**
-Completed actions: active napkin rotated to
-[napkin-2026-05-07-doctor-safe-merge.md](../active/archive/napkin-2026-05-07-doctor-safe-merge.md),
-repo-continuity historical material archived to
-[repo-continuity-session-history-2026-05-07.md](archive/repo-continuity-session-history-2026-05-07.md),
-active-thread register compacted, and collaboration-state schema checks passed.
-No new ADR/PDR was promoted: the memory/state doctrine already lives in
-PDR-049, PDR-050, the local substrate contract, and the archived doctor plan.
-Residual hard pressure on `practice.md` is routed to owner-approved Core
-remediation rather than edited reactively.
+Historical deep-consolidation status prose from 2026-05-22 and 2026-05-23 has
+been processed into the current plan, thread records, archives, and live
+pending routes. It is preserved verbatim at
+[`archive/repo-continuity-session-history-2026-05-24.md`](archive/repo-continuity-session-history-2026-05-24.md)
+§ "Historical Deep Consolidation Status Archived 2026-05-24".
 
-**Status (2026-05-07 Twigged Shedding Fern, codex, GPT-5, `019e03`,
-PR #102 snagging handoff): `not due — tactical PR snagging closure is already
-recorded in the plan and checks; no new doctrine, ADR/PDR candidate, or
-cross-session convergence work surfaced. Next session is evidence refresh and
-PR comment analysis, not consolidation`.**
+Previous deep-consolidation and session-close prose lives in:
 
-**Status (2026-05-07 Lush Rustling Bark, codex, GPT-5, `019e03`,
-PR #102 follow-up + lint hardening handoff): `not due — the session produced
-local code/config fixes, plan/continuity refresh, and a napkin tooling note;
-no new ADR/PDR candidate or cross-session convergence trigger fired`.**
-
-**Status (2026-05-08 Lush Rustling Bark, codex, GPT-5, `019e03`,
-PR #102 fresh-session handoff): `not due — owner requested a session-scoped
-handoff/update of current PR/Sonar surfaces; no plan closed, no new doctrine or
-ADR/PDR candidate surfaced, and the next work is tactical PR closeout`.**
+- [`archive/repo-continuity-session-history-2026-05-24.md`](archive/repo-continuity-session-history-2026-05-24.md)
+- [`archive/repo-continuity-session-history-2026-05-22.md`](archive/repo-continuity-session-history-2026-05-22.md)
+- [`archive/repo-continuity-session-history-2026-05-17.md`](archive/repo-continuity-session-history-2026-05-17.md)
+- [`archive/repo-continuity-session-history-2026-05-12.md`](archive/repo-continuity-session-history-2026-05-12.md)
+- [`archive/repo-continuity-session-history-2026-05-10.md`](archive/repo-continuity-session-history-2026-05-10.md)
+- [`archive/repo-continuity-session-history-2026-05-07.md`](archive/repo-continuity-session-history-2026-05-07.md)
+- earlier dated archive files under [`archive/`](archive/)

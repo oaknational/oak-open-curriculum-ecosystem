@@ -8,7 +8,7 @@ related_plans:
   - "../../../connecting-oak-resources/knowledge-graph-integration/README.md"
   - "../../../connecting-oak-resources/knowledge-graph-integration/future/oak-curriculum-ontology-workspace-reassessment.plan.md"
   - "../../current/sector-reusable-components-adoption.plan.md"
-specialist_reviewer: "docs-adr-reviewer, security-reviewer, architecture-reviewer-betty"
+specialist_reviewer: "docs-adr-expert, security-expert, architecture-expert-betty"
 ---
 
 # Oak Knowledge Graph External Adoption

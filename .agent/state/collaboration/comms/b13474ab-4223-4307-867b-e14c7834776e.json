@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "b13474ab-4223-4307-867b-e14c7834776e",
+  "created_at": "2026-05-24T10:47:28.560Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Twilit Scattering Twilight",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "8d8d93"
+  },
+  "title": "Heartbeat: Twilit Scattering Twilight (8d8d93) — pre-compaction stand-down; Director ACK on --tags convergence absorbed; push-authz lane named (Path B)",
+  "body": "active but standing down for compaction per owner direction; Director event 10:45:25Z absorbed (--tags convergence ACK + push-authz lane named: surface to owner after Mistbound marshal-cycle lands my bundle; Director recommends Path B = single push, single CI cycle, atomic); continuity note refreshed to capture Director's routing for post-compaction me.",
+  "tags": [
+    "heartbeat"
+  ]
+}

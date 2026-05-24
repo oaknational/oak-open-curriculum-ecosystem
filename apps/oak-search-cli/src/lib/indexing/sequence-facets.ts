@@ -1,7 +1,22 @@
-import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../../types/oak';
+/**
+ * Sequence facet document builder and live-API source extraction.
+ *
+ * The sequence facet document (`oak_sequence_facets` index) is emitted by the
+ * bulk-data ingestion pipeline (`bulk-sequence-transformer.ts`) which has
+ * authoritative `ks4Options` data from the bulk schema. The live-API path no
+ * longer emits this document type because the v0.7.0 API response no longer
+ * carries the variant signal, and a hardcoded substitute would contradict the
+ * bulk-known truth.
+ *
+ * The data-extraction helpers in this file (`extractSequenceFacetSource`,
+ * `resolveSequenceSlug`, `SequenceFacetSource`) remain because the live-API
+ * pipeline still uses them to populate the `oak_sequences` index and other
+ * sequence-related derivations.
+ */
+
+import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import type { SearchSequenceFacetsIndexDoc } from '@oaknational/sdk-codegen/search';
 import type { SubjectSequenceEntry } from '../../adapters/oak-adapter';
-import { generateSequenceOakUrl } from '@oaknational/curriculum-sdk';
 import { compareCurriculumYears } from './year-ordering';
 
 /** Input-agnostic parameters for creating a sequence facet document (DRY). */
@@ -37,7 +52,6 @@ export function createSequenceFacetDoc(
     unit_count: params.unitSlugs.length,
     lesson_count: params.lessonCount,
     has_ks4_options: params.hasKs4Options,
-    // ES field name differs from SDK field name (oakUrl) for index compatibility
     sequence_canonical_url: params.oakUrl,
   };
 }
@@ -49,101 +63,14 @@ interface TraversableObject {
   readonly unitSlug?: string;
 }
 
-/** Source data for building sequence facets from API responses. */
+/** Source data for building sequence documents from API responses. */
 export interface SequenceFacetSource {
   sequenceSlug: string;
   unitSlugs: readonly string[];
 }
 
-/** Parameters for creating sequence facet documents from API data. */
-interface CreateSequenceFacetDocumentsParams {
-  subject: SearchSubjectSlug;
-  keyStage: KeyStage;
-  sequences: readonly SubjectSequenceEntry[];
-  sequenceSources: ReadonlyMap<string, SequenceFacetSource>;
-  unitSummaries: ReadonlyMap<string, SearchUnitSummary>;
-}
-
-export function createSequenceFacetDocuments({
-  subject,
-  keyStage,
-  sequences,
-  sequenceSources,
-  unitSummaries,
-}: CreateSequenceFacetDocumentsParams): SearchSequenceFacetsIndexDoc[] {
-  return sequences
-    .map((sequence) =>
-      createSequenceFacetDocument({ subject, keyStage, sequence, sequenceSources, unitSummaries }),
-    )
-    .filter((doc): doc is SearchSequenceFacetsIndexDoc => doc !== null);
-}
-
-interface CreateSequenceFacetDocumentParams {
-  subject: SearchSubjectSlug;
-  keyStage: KeyStage;
-  sequence: SubjectSequenceEntry;
-  sequenceSources: ReadonlyMap<string, SequenceFacetSource>;
-  unitSummaries: ReadonlyMap<string, SearchUnitSummary>;
-}
-
-/** Creates a sequence facet document from API-specific types. */
-function createSequenceFacetDocument({
-  subject,
-  keyStage,
-  sequence,
-  sequenceSources,
-  unitSummaries,
-}: CreateSequenceFacetDocumentParams): SearchSequenceFacetsIndexDoc | null {
-  const keyStageEntry = sequence.keyStages.find((ks) => ks.keyStageSlug === keyStage);
-  if (!keyStageEntry) {
-    return null;
-  }
-  const source = sequenceSources.get(sequence.sequenceSlug);
-  if (!source) {
-    return null;
-  }
-  const unitDetails = collectUnitDetails(source.unitSlugs, unitSummaries);
-  if (!unitDetails) {
-    return null;
-  }
-  return createSequenceFacetDoc({
-    sequenceSlug: sequence.sequenceSlug,
-    subjectSlug: subject,
-    phaseSlug: sequence.phaseSlug,
-    phaseTitle: sequence.phaseTitle,
-    keyStage,
-    keyStageTitle: keyStageEntry.keyStageTitle,
-    years: sequence.years.map(String),
-    unitSlugs: unitDetails.slugs,
-    unitTitles: unitDetails.titles,
-    lessonCount: unitDetails.lessonCount,
-    hasKs4Options: sequence.ks4Options !== null,
-    oakUrl: sequence.oakUrl ?? generateSequenceOakUrl(sequence.sequenceSlug),
-  });
-}
-
 export function resolveSequenceSlug(sequence: SubjectSequenceEntry): string {
   return sequence.sequenceSlug;
-}
-
-function collectUnitDetails(
-  unitSlugs: readonly string[],
-  unitSummaries: ReadonlyMap<string, SearchUnitSummary>,
-): { slugs: string[]; titles: string[]; lessonCount: number } | null {
-  const uniqueSlugs = Array.from(new Set(unitSlugs));
-  const collectedSlugs: string[] = [],
-    titles: string[] = [];
-  let lessonCount = 0;
-  for (const slug of uniqueSlugs) {
-    const summary = unitSummaries.get(slug);
-    if (!summary) {
-      continue;
-    }
-    collectedSlugs.push(slug);
-    titles.push(summary.unitTitle);
-    lessonCount += summary.unitLessons.length;
-  }
-  return collectedSlugs.length === 0 ? null : { slugs: collectedSlugs, titles, lessonCount };
 }
 
 /** Extracts unit slugs from a SequenceUnitsResponse payload. */

@@ -1,0 +1,164 @@
+---
+name: "Substrate-Pointer Read as Current State"
+polarity: anti-pattern
+use_this_when: "Multi-agent team with rotating roles, multiple substrate surfaces (durable files + comms-event lifecycle fields + identity-tuple fields + roster snapshots) recording state. An agent acts on a value read from one of those surfaces. Check whether the value was current at the moment of the read, or was a pointer whose freshness was last guaranteed at some earlier moment."
+category: agent
+status: emerging
+discovered: 2026-05-23
+proven_in: "2026-05-23 Scorched Director window (13:46Z onwards). Five worked instances of the same anti-pattern firing in ~30 minutes, across three distinct substrate surface types (durable file prose; comms-event lifecycle state; identity-tuple field) and in two structural directions (stale-says-active when reality is closed; stale-says-closed when reality is active)."
+proven_date: 2026-05-23
+adjacent: ".agent/memory/active/patterns/recursion-of-doctrine-under-team-cadence-speed.md (sibling team-cadence failure mode; shares the absorption-latency-vs-cadence-gap shape; this pattern's cure shapes compose with that pattern's substrate-writing cure); .agent/practice-core/decision-records/PDR-075-director-substrate-writing-discipline.md (comms-stream-as-canonical-truth discipline; this anti-pattern is what fires when readers consult durable substrate ahead of stream-tail); .agent/rules/check-singleton-per-window.md (related shape — freshness of singleton-coordination state); .agent/skills/start-right-team/SKILL-CANONICAL.md §'Continuation Pointer Contract' (resolves continuation records as pointer-and-hypothesis, recompute current facts from live grounding); .agent/memory/active/patterns/comments-about-externals-degrade.md (sibling pointer-decay pattern at code/doc layer)"
+barrier:
+  broadly_applicable: true
+  proven_by_implementation: true
+  prevents_recurring_mistake: "Reading a durable substrate surface (repo-continuity prose; comms-event lifecycle; identity-tuple field; roster snapshot from a prior Director window) and acting on its value as if the value were current, when the surface is a pointer whose freshness was last guaranteed at some prior moment and may have drifted."
+  stable: true
+---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
+
+# Substrate-Pointer Read as Current State
+
+A participating agent in a multi-agent team reads a substrate surface (a durable file, a comms-event lifecycle field, an identity-tuple field, a roster snapshot), the surface carries a value that lagged current state at the moment of the read, and the agent acts on the lagged read as if it were current. The corrective surface in every observed worked instance is a *direct correction from the agent whose state was misrepresented* (or, in the cross-state-not-self case, from an observer with conclusion-ready evidence) — not from the lagging substrate itself, which has no agent of its own.
+
+The pattern is named for its structural feature: each substrate surface is a *pointer* to a state. Pointers are coherent at the moment they are written. They decay silently the moment that state moves and no agent is responsible for rewriting the pointer. Readers who consult the pointer get the value the pointer held at last-write, not the value the state holds now. Under multi-agent team operation at high cadence, the gap between last-write and now is precisely where the pattern fires.
+
+## Anti-Pattern
+
+**Shape**: an agent at decision time reaches for a substrate surface to learn the current state of some participating-agent property (a peer's lifecycle status, a peer's role, a peer's session identity, a peer's claim posture). The surface returns a value. The agent acts on that value — routing decisions, identity-addressing decisions, presence-counting decisions, claim-overlap decisions, role-transfer decisions — without an at-read freshness check against the participating agent themselves or against a live stream-tail.
+
+**Two substrate-surface classes** observed firing this anti-pattern on 2026-05-23 (two different read mechanisms; identity-tuple population-gap is *adjacent but distinct* — that is a missing-data failure at author-parse time, not a substrate that was current and drifted, and earns separate substrate capture rather than folding here):
+
+| Surface class | Example | Freshness mechanism (when present) |
+| --- | --- | --- |
+| Durable prose | `repo-continuity.md` Current-State sections; thread next-session records; handoff records | Re-author at consolidation boundaries; no per-event update |
+| Comms-event lifecycle field | A prior Moment-1 broadcast naming an agent as "closed" | Set at the moment the broadcast was authored; never updated |
+
+**V3 real-time absorption variants, folded in 2026-05-24**: the
+second-day napkin pass added variants where the substrate was not always
+wrong at write-time. The common failure is still pointer absorption at
+decision-time: the agent acts on a value whose freshness no longer matches
+the decision being made.
+
+| Variant | Disposition in this pattern |
+| --- | --- |
+| Fresh-on-disk comms not yet absorbed | Covered by the stream-tail check: on-disk freshness is insufficient if the agent has not absorbed the relevant tail before routing. |
+| Stale handoff-record attribution on resume | Covered by durable-prose pointer discipline: handoff records are hypotheses until live claims, comms, and git state re-ground them. |
+| Cron prompt template as substrate pointer | Covered as a template pointer across owner-pause windows: the latest owner turn supersedes the prompt's "resume" wording. |
+| Pre-compaction stale framing | Covered by pointer-and-hypothesis discipline: compacted continuation facts must be recomputed from live surfaces before action. |
+| Compose-vs-emit interval staleness | Covered as a routing-construction interval: a broadcast can be accurate when drafted and stale by peer absorption time. |
+
+These variants do not require a sibling pattern yet. They extend the
+same cure family: before a load-bearing action, compare the pointer's
+last-fresh moment with the live stream-tail and latest owner turn.
+
+**Two structural directions** observed firing the same class — and *the two directions are not symmetric in failure cost*. The substrate-says-closed direction propagates O(N) cascading misses across each Director / peer who relies on the stale substrate, until the misrepresented agent self-surfaces or another agent posts a correction. The substrate-says-active direction produces O(1) routing-overshoots per stale read (a directed event lands on a dead session; the dead session does not propagate the miss further). The asymmetry matters at cure-design time:
+
+| Direction | Shape | Failure propagation | Worked instance |
+| --- | --- | --- | --- |
+| Substrate-says-active, ground-truth-says-closed | Reader treats the agent as part of the active roster; routes work to them; counts them in liveness checks | **O(1) per stale read** (directed-to-dead-session is wasted but does not propagate; the routing-overshoot does not cause further drift) | Instance 1 (repo-continuity prose still listed Twilit ST as Marshal hours after the role transferred); Instance 4 (Scorched treated IBF as maybe-still-active when conclusion-ready evidence said ended) |
+| Substrate-says-closed, ground-truth-says-active | Reader treats the agent as not part of the active roster; does not route work to them; does not address them in checks | **O(N) cascading** until the misrepresented agent self-surfaces (every reader who consults the substrate gets the wrong answer; no on-the-wire signal corrects them; the misrepresented agent's own work-in-progress is silently de-staffed from team awareness) | Instance 2 (Scorched tick #1 absorbed Secret's Moment-1 "Twilit ST closed-at-13:36Z" lifecycle state when Twilit had in fact resumed at 13:19Z) |
+
+The asymmetry means the cure shapes for says-closed need to be stronger than the cure shapes for says-active. Evidence weighting in the worked instances is biased toward says-active (three instances, including Instance 4 in the missed-direction-opposite sense) precisely because says-closed agents self-correct (Twilit ST's correction at 13:48:52Z) while says-active misroutes only get caught when the routing-overshoot is observable to another reader. The 3:1 evidence weighting *does not mean says-active is the more common direction* — it means says-closed has structural feedback that mitigates its own visibility-cost while still incurring the worse cascading-misses cost.
+
+**Diagnostic at the moment**: ask — *"Is what I am about to do load-bearing on a value I read from a durable substrate surface (file prose, lifecycle field, tuple field, roster snapshot)? When was that surface's value last guaranteed to be current?"* If the surface's freshness was last guaranteed more than a single comms-tick ago, **re-read from the live stream-tail** before acting. The cost is one read pass; the recursion cost is a directed event sent to a dead session, a routing-collision in flight, or a roster miscount that compounds into delivery-verification gaps.
+
+**Worked instances enumerated (2026-05-23 Scorched Director window)**: four instances; all four fit the named frame. The Ashen retraction crossover at 14:02:16Z is *not* enumerated here — its substance is intra-decision-interval staleness, which is structurally closer to the sibling [recursion-of-doctrine pattern](recursion-of-doctrine-under-team-cadence-speed.md)'s cadence-vs-absorption-latency-gap shape (verdict-and-default-deadline cure family) than to this pattern's substrate-pointer-decay shape. Retaining it as a "boundary case" diluted the pattern's predictive force; readers under cadence pressure would cite the straddle to dismiss inconvenient counterexamples. The sibling pattern is the correct home; the crossover is referenced there at composition time, not here.
+
+1. **Charcoal team-start broadcast `92183937` at 13:51Z (durable prose surface; core)**. Charcoal sourced their roster snapshot from `.agent/memory/operational/repo-continuity.md` Current-State entry for the Velvet-second-half closeout, which listed Twilit Scattering Twilight as Marshal. The actual Marshal role had transferred to Seaworthy Navigating Beacon at 12:22Z (owner-directed), continued across compaction at 13:12Z, and been reconfirmed by Director Scorched at 13:49:17Z. Lag in repo-continuity prose: hours-to-days. Corrective surface: Seaworthy's directed correction at 13:52:17Z (`Seaworthy → Charcoal: thin roster-truth correction`).
+
+2. **Scorched tick #1 absorption ~13:48Z (comms-event lifecycle field surface; core)**. Scorched absorbed Secret's Moment-1 pre-positioning broadcast `5fbf6f92` (13:45:25Z), which listed Twilit Scattering Twilight in a "closed-at-13:36Z" lifecycle state. Twilit ST had resumed at 13:19Z under post-compaction owner direction and landed cure-bundle-v2 at 13:35Z — both events visible in the stream by 13:48Z, both superseding the closed-state field. Scorched routed against the lagged read until corrected. Corrective surface: Twilit ST's directed correction at 13:48:52Z (`Twilit (S) → Scorched: thin roster-state correction`).
+
+3. **Scorched tick #6 ~14:17Z (delivery-verification surface, says-active when ground-truth-says-closed; core)**. Scorched treated Incandescent Banking Flame as "maybe still active, needs another ping" at 14:17:02Z, despite (a) no claim opened, (b) no comms event in 35 min, (c) no work-start signal despite explicit routing at 14:05:29Z. The conclusion-ready evidence was that the session had ended. The substrate-pointer fired in says-active-when-closed direction (O(1) failure cost: one wasted final check-in directed event). Corrective surface: owner confirmation at ~14:16Z ("long gone"); Scorched's roster-truth correction broadcast at 14:17:32Z self-named the missed direction.
+
+4. **Scorched tick #7 14:21:32Z self-named multi-direction triple (substrate observation, post-emergence)**. After this pattern file's first draft landed, Scorched's tick #7 substrate event named three further sub-directions firing through the Director seat in a single tick: (D1) marshal-role roster substrate-stale — verified IBF delivery but not Seaworthy's role-state, missing the marshal-role transfer to Ashen; (D2) owner-direction-not-in-my-chat — the owner's marshal-transfer direction at ~14:09Z went via chat directly to Ashen+Seaworthy, not through Scorched's chat thread; the comms stream carried the consequences but Scorched's substrate-read prioritised their own chat record; (D3) routing-latency-window — Scorched's Wilma-on-Class-B routing at 14:15:51Z was sent ~4 minutes after substrate that obsoleted it landed at 14:11:28Z; routing-construction-interval exceeded substrate-freshness window. The triple confirms the pattern's three subtypes (durable substrate; cross-channel substrate the reader's primary view doesn't surface; intra-construction-interval staleness) all fire under the same cadence-pressure root cause.
+
+   **Meta-recursive variant (named by Charcoal Brazing Kiln in directed event 14:22:31Z to this author)**: the substrate-stale-pointer instance Scorched corrected at 14:21:29Z (Wilma-on-Class-B routing rendered post-fact obsolete by ICF owner-authorised override at 14:11:28Z) is itself the routing that brought *this pattern file* into existence under Charcoal's adversarial review chain. The pattern's evidence base extends to include the act of routing the pattern's authorship — *the pattern file is being authored under the very class of failure it names*. The Director seat recognising and correcting in real-time rather than letting routing churn cascade is the cure-shape working as designed; the meta-recursive instance is the empirical evidence that the cure shape composes with itself.
+
+   **Second IBF-pattern worked instance (Twilit Scattering Twilight, 14:33Z C5 deadline)**: Twilit ST went silent at 14:07:35Z after surfacing FM-2 P2 plan v2; was routed Wilma-on-plan dispatch at 14:15:50Z; missed two delivery-verification check-ins; missed Scorched's final C5 deadline-broadcast probe at 14:31:27Z naming the explicit 14:33Z conversion deadline. At 14:33Z the C5 cure fired exactly as named in v2 (this file): Twilit ST removed from active roster; Wilma-on-plan re-routed to Charcoal; no third directed event addressed to the silent agent. Empirically validates the C5 cure shape on its second worked instance the same day (IBF first; Twilit ST second). The 3:1 evidence-weighting toward says-active in the worked-instance list updates to 4:1 with this fold; v2's asymmetric-failure-propagation framing strengthens rather than weakens. No v3 amendment required; this is durable-record extension only.
+
+5. **Subagent-reasoning-chain variant (2026-05-23 Seaworthy Director window; surfaced 15:24:00Z by Twilit Scattering Twilight; ratified as 7th worked instance by Seaworthy at 15:26:23Z)**. Ferny's pre-landing 4-way fan-out on the knip-RED consumer-landing cure absorbed substrate forwarded by Seaworthy at 15:21:39Z from Ashen's pre-compaction `code-expert` transcript `a671739a3663dded9`. The subagent verdict asserted *"FM-2 P2 cure plan already names a concrete consumer-class for these exports."* Twilit ST grepped the plan content at 15:24:00Z and found only `detectPlaywrightBrowserCache` references — different domain (test-toolchain freshness, not agent-coordination substrate), different workspace (`packages/libs/env-freshness` proposed under Fred F1, not `agent-tools`). The subagent's reasoning chain had read the plan's *name* as a pointer to its *content* and asserted a property of the content without verifying against source. The strip/preserve verdicts were substantively correct; the justification pointer was stale. Failure-locus is structurally novel: the substrate-pointer fired *inside an LLM-subagent's reasoning chain* and was *propagated through a Director's substrate-forward* before the primary-agent (Ferny) absorbed it into synthesis — two relay-hops away from the original repo-state read. The diagnostic discipline (§"Diagnostic discipline") extends to fan-out lead absorption: subagent justifications that cite repo-state *by name* must be verified against repo-content by the synthesising lead before propagation. Corrective surface: Twilit ST's directed correction to Ferny at 15:24:00Z; Ferny's synthesis update integrating the correction at 15:24:50Z; Seaworthy's Director ACK at 15:26:23Z folding this as the candidate 7th worked instance and ratifying its inclusion in this durable record.
+
+## Cure Shape
+
+**There is no individual-discipline cure for the absorption-latency gap itself.** The gap is structural: an agent reading a substrate surface at decision time has no way to know whether the surface's last-write-moment is more recent than the underlying state's last-move-moment, unless an explicit freshness mechanism is encoded in the surface or the team's protocol. Reaching harder for individual discipline ("read more carefully", "check before acting") does not change the structural gap.
+
+The cure shapes are at the *team protocol layer*, *substrate-write-discipline layer*, and *escalation-rule layer*. Four cure shapes were deployed across the 2026-05-23 Scorched window, each addressing a different sub-class of the pattern:
+
+**Cure C1 — Substrate-pointer-vs-synthesis discipline (Twilit ST framing, 13:48:52Z)**.
+
+The incoming Director's substrate-absorption checks the comms-stream tail (last ~15 minutes) before relying on the outgoing Director's roster summary. A Director-handoff substrate event is a *pointer* to the team-state, current at moment of authoring. The stream-tail since that moment carries everything that has changed. The discipline names the read order: stream-tail first, then handoff substrate as supplementation. Treats handoff substrate as hypothesis, not source of volatile truth.
+
+**Cure C2 — Active per-agent check-in cadence (owner-named ~14:00Z; baked into Director cron protocol)**.
+
+Each Director tick includes an *active check-in* against every participating agent named in the roster. Silence past the check-in deadline is read as "needs attention" (the inverse of the prior implicit rule "silence is fine"). Converts stale-roster from a hidden state into an observable state: a participating agent who has not signalled freshness within the cadence window becomes a routing-attention item until either they surface or the Director removes them from active count.
+
+**C2 heartbeat amendment for slow-delivery work**: agents engaged in substantive multi-step work without an interim observable artefact (multi-tranche plan authoring, deep reviewer-dispatch absorption, mid-cycle handoff record drafting) MUST signal `working, no artefact yet` at the check-in deadline rather than remaining silent. The signal is a first-class output, not a stalled silence. Silent agents past deadline are read as `needs attention`; signalled-busy agents past deadline are NOT — they are tracked separately with their own next-coherence-moment expected. Without this amendment, C2 over-fires on legitimate slow-delivery work and the resulting noise erodes C2's signal value. The signal shape composes directly with the sibling [recursion-of-doctrine pattern](recursion-of-doctrine-under-team-cadence-speed.md)'s verdict-and-default-deadline protocol.
+
+**Cure C3 — Delivery-verification (not just routing-confirmation; owner-named via /loop input ~14:14Z)**.
+
+A routing decision is not delivery. Routing-confirmation is "the agent acknowledged the routing"; delivery-confirmation is "the agent has produced an observable artefact (claim opened, comms event broadcast, file in working tree, gate run, etc.)". The Director tick protocol includes a delivery-verification pass: agents routed work in prior ticks are checked against observable artefacts, not against routing-acks. Closes the gap where IBF's silent non-delivery (Instance 5) survived a routing event because no later check verified observable artefact-production.
+
+**Cure C4 — Correction-broadcast as first-class substrate (Charcoal substrate event `c7d65a58`, 13:57:57Z; this pattern file)**.
+
+When a stale-substrate-read fires and is corrected, the correction itself is broadcast as first-class substrate (with `failure-mode` or `behaviour-note` tag per ADR-183 namespace). The substrate-pointer-pattern-instance becomes inheritable across sessions, not just the underlying state correction. Each captured worked instance moves the pattern from "individual agent's vigilance" into the team's accumulated doctrine surface. The instances enumerated above are the present-evidence shape of this cure firing.
+
+**Escalation rule (cure C5, derived from Instance 3's missed-opposite-direction)**:
+
+When the converging evidence shape fires — single unanswered check-in plus no observable artefact plus a freshness-floor breach (e.g., 30 minutes without a single comms event from an agent who had been routed work) — the cure is *not* silent removal from active roster, and *not* a third directed check-in. The cure is a **terminal-state-assumption broadcast with a short default deadline**, mirroring the verdict-and-default-deadline protocol from the sibling [recursion-of-doctrine pattern](recursion-of-doctrine-under-team-cadence-speed.md).
+
+Concretely: the Director broadcasts a roster-truth event naming the agent as *presumed session-ended* with an explicit default-deadline (e.g., 5 minutes) at which the presumption converts to removal from active roster if the agent has not surfaced. The broadcast gives the agent-if-alive a final corrective surface (better than silent removal, which would be its own substrate-pointer write that future readers hit); it also gives peer agents the right freshness signal without requiring a third routing event addressed to the silent agent. Three converging signals (no claim + no comms + freshness-floor breach) outweigh the absence of an explicit closeout, but the substrate-write that records the terminal-state assumption is the discipline — not the absence of further pings.
+
+**C5 cure-becomes-substrate recursion (acknowledged as bounded cost)**: the presume-ended broadcast is itself a substrate write that future readers will hit. If the agent surfaces between the deadline-broadcast and the next Director tick that absorbs the presumption into removal, the broadcast lags ground-truth (agent active) and the pattern fires on the cure's own substrate. The structurally clean fix is *out of scope for this pattern file*: encode the presume-ended state as a structured field on `active-claims.json` (or analogue) so readers query the canonical state rather than infer from a comms-event broadcast. Until that schema lands, the recursion is **named as an accepted bounded cost**: the deadline-broadcast window is short (5 min default); the recursion-instance cost (one wrong directed-to-dead-session) is O(1) per stale read; the substrate-write cost is what makes presumption observable to the team and is *strictly cheaper than silent removal*. Naming the recursion explicitly here prevents it from being mistaken for an unaddressed-failure-mode on the next session's adversarial review pass.
+
+**C5/C2 coupling rule**: once a presume-ended broadcast lands for an agent, that agent is **removed from C2 check-in queries** by the cron protocol until either (a) the agent surfaces and the presumption is rebutted, or (b) the deadline converts the presumption to removal from active roster. Without this coupling rule, C2 and C5 fight each other — C2 keeps pinging the agent post-presumption, defeating C5's terminal-state semantics. The coupling is a single boolean check at C2 tick time.
+
+**Cure C6 — Partial-state recovery shape (placeholder; deferred to evidence accumulation)**.
+
+Agents in "draining-but-not-closed" state (finishing a final commit but not yet broadcasting session-end; absorbing a reviewer verdict but not yet authoring v2; mid-tool-call awaiting external response) fit neither structural direction cleanly. They are not "active" in the cadence-pressing sense and not "closed" in the conclusion-ready-evidence sense. The Ashen retraction crossover (2026-05-23 14:02:16Z) is structurally adjacent to this case; recursion-of-doctrine pattern's verdict-and-default-deadline protocol covers the intra-decision-interval-staleness sub-shape directly. A dedicated *partial-state* cure for this pattern is **deferred** pending a worked instance that fits neither C5 nor recursion-of-doctrine cleanly. Trigger to author: a future session where an agent in genuine draining-but-not-closed state is presumed-ended by C5's evidence shape and the presumption is correct-on-evidence but wrong-on-substance (the agent had been about to surface). Until that worked instance exists, deferring is the right move; pre-authoring a cure for a hypothetical failure mode would over-specify the pattern.
+
+## Why the pattern survives "be more careful" reasoning
+
+The substrate-pointer surfaces are designed-correct *as substrates* — they record state at write-time, and rewriting them per-event would defeat the cost-amortisation purpose they exist for. Repo-continuity prose is not meant to be rewritten on every role transition; it is consolidated periodically. Comms-event lifecycle fields are immutable by event-stream design. Identity-tuple fields are populated by author-parse at event-author time. The freshness gap is *intentional* at the substrate layer, not a bug; the team-protocol cure is what closes the gap at the read layer.
+
+Reaching harder for individual discipline does not close the gap because the structural fact remains: at any decision-moment, the agent has no zero-cost way to learn whether a substrate value's last-write-moment is more recent than the underlying state's last-move-moment. The team protocol encodes the read order (stream-tail first, substrate-as-pointer second) and the freshness-check cadence (active check-in; delivery-verification; escalation rule). Individual-discipline framing makes the cost asymmetric: the agent who pauses-and-re-reads gives up cadence to other agents who don't, producing a race-to-the-staler-read that rewards exactly the disposition the team is trying to avoid.
+
+## Composition with sibling patterns
+
+This pattern composes specifically with three sibling discipline surfaces:
+
+- [`recursion-of-doctrine-under-team-cadence-speed.md`](recursion-of-doctrine-under-team-cadence-speed.md) — the absorption-latency-vs-cadence-gap shape generalises across both patterns. The two patterns are *writer-side / reader-side duals* in the same cadence-pressure family: recursion-of-doctrine fires *writer-side* (an agent authors a stale-shape after a correction landed but before they absorbed it); this pattern fires *reader-side* (an agent acts on a stale-read after the state moved but before the substrate caught up). Same structural cause, opposite ends of the read/write cycle. The substrate-writing cure (PDR-075) and the schema-encoded acceptance cure (ADR-185 v2) named in recursion-of-doctrine's Cure section are load-bearing for this pattern too.
+
+- [`.agent/practice-core/decision-records/PDR-075-director-substrate-writing-discipline.md`](../../../practice-core/decision-records/PDR-075-director-substrate-writing-discipline.md) — names comms-stream as canonical truth. This pattern is what fires when readers consult durable substrate ahead of stream-tail. PDR-075 is the substrate-writer-side discipline; this pattern is the substrate-reader-side anti-pattern. They are the matched pair.
+
+- [`.agent/skills/start-right-team/SKILL-CANONICAL.md` §"Continuation Pointer Contract"](../../../skills/start-right-team/SKILL-CANONICAL.md) — applies the same read-discipline to thread-continuation records. Treats the named thread's `next-session.md` as pointer-and-hypothesis; recomputes current facts from live grounding surfaces before acting. The discipline is the same shape (substrate-as-pointer, recompute from live), applied at session-open rather than at mid-session decision-time.
+
+The third multi-phase-gate observation from this session (Ferny's FM-3 in tree-state broadcast `952e329b`: `pnpm check` halt-on-first-red masks subsequent phase failures until phase 1 clears) is *structurally adjacent but distinct*. Multi-phase-gate is a substrate-pointer surface in a narrow sense — phase-1's red is a pointer that "the whole gate is in some-red state" without naming which phases are also red — but the cure shape is different (re-run after phase-1 cure; expect phase-2). It earns its own pattern entry rather than folding into this one.
+
+## Diagnostic discipline (what to do when the pattern fires)
+
+When an agent reads a substrate surface and acts on a value at decision-moment:
+
+1. **Name the surface**: durable prose / lifecycle field / tuple field / roster snapshot / composite stream-tail.
+2. **Locate the last-write-moment**: when was this surface's value most recently authored?
+3. **Stream-tail check**: scan the last 20 comms events OR the last 15 minutes of the stream (whichever is larger), filtering for any agent named in the substrate value. If any such event indicates state-movement, the pointer is stale; recompute from the stream-tail. The bounded scan is mandatory — unbounded scans (e.g. "since last consolidation boundary") are not mechanically applicable under cadence pressure.
+4. **Decision-shape check**: is the decision load-bearing? Routing to an agent, addressing an agent, counting an agent in liveness, opening a claim that overlaps an agent's surface? If load-bearing, the stream-tail check is mandatory; if non-load-bearing (e.g., reading a prior session's narrative for context), the pointer-as-pointer is acceptable.
+5. **If the read is stale**: broadcast a brief correction event (per Cure C4) capturing (a) which surface had the stale value, (b) the stream-tail evidence of state-movement, (c) the corrected value. This makes the correction first-class substrate for the next agent who hits the same surface.
+
+The diagnostic is mechanical and survives cadence pressure: it does not ask the agent to "be more careful"; it asks them to check a specific structural property (last-write-moment vs stream-tail) before relying on the value.
+
+## Source-of-substance citations (PDR-027 + ADR-183 worked-instance trail)
+
+This pattern file is itself produced under the substrate-writing discipline it composes with. The worked-instance evidence is fully present in the comms-event stream at `.agent/state/collaboration/comms/`:
+
+- Instance 1: Charcoal team-start broadcast 13:51Z (`92183937`); Seaworthy correction 13:52:17Z; Charcoal correction broadcast 13:57:57Z (`c7d65a58` substrate event)
+- Instance 2: Secret Moment-1 13:45:25Z (`5fbf6f92`); Twilit ST correction 13:48:52Z
+- Instance 3: Scorched IBF check-in 14:17:02Z; owner correction ~14:16Z (chat); Scorched roster-truth correction 14:17:32Z
+- Instance 4: Scorched tick #7 substrate event 14:21:32Z (D1/D2/D3 self-named triple)
+- Cure shape substrate: Scorched tick #5 substrate event 14:12:19Z (delivery-verification + freshness floor); Scorched tick #6 broadcast 14:17:32Z (two-direction guardrail with escalation rule); Wilma adversarial verdict via Charcoal at 14:27:48Z (UNSAFE findings on C3+C5 feedback loop, asymmetry, C5 recursion — absorbed into this v2)
+- Migrated-to-sibling: the Ashen 14:02:16Z retraction crossed with Scorched 14:03:50Z ACCEPT is referenced in [recursion-of-doctrine-under-team-cadence-speed.md](recursion-of-doctrine-under-team-cadence-speed.md), not enumerated here, per Wilma's "straddling produces dilution" finding
+- Composition pointers: PDR-075 in-flight (Twilit Weaving Moon's draft); recursion-of-doctrine-under-team-cadence-speed.md (sibling pattern, this session)
+
+The pattern's empirical worked-instance count is sufficient for `status: emerging` per the README's promotion criteria. Future cross-session instances (the pattern firing on a non-2026-05-23 day under a different Director and team composition) would promote `status: emerging → stable`.

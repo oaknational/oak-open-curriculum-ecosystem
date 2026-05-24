@@ -2,7 +2,7 @@
 
 **Status**: Accepted
 **Date**: 2026-04-02
-**Related**: [ADR-041 (Workspace Structure)](041-workspace-structure-option-a.md), [ADR-129 (Domain Specialist Capability Pattern)](129-domain-specialist-capability-pattern.md), [ADR-141 (MCP Apps Standard)](141-mcp-apps-standard-primary.md), [ADR-149 (Frontend Specialist Reviewer Gateway Cluster)](149-frontend-specialist-reviewer-gateway-cluster.md)
+**Related**: [ADR-041 (Workspace Structure)](041-workspace-structure-option-a.md), [ADR-129 (Domain Specialist Capability Pattern)](129-domain-specialist-capability-pattern.md), [ADR-141 (MCP Apps Standard)](141-mcp-apps-standard-primary.md), [ADR-149 (Frontend Specialist Expert Gateway Cluster)](149-frontend-specialist-expert-gateway-cluster.md)
 
 ## Context
 
@@ -51,12 +51,17 @@ Tokens are organised in three tiers with strict referencing rules:
 Referencing direction: component → semantic → palette. Skipping tiers
 (component referencing palette directly) is a violation.
 
-### Output Format: CSS Custom Properties
+### Output Formats
 
 CSS custom properties are the primary delivery format. This is
 framework-agnostic — consumable by React, Astro, static HTML, or any
-CSS-capable environment. Optional secondary outputs (TypeScript types,
-JSON) may be generated but are not the primary consumption path.
+CSS-capable environment.
+
+Secondary package outputs may project the same token source into constrained
+runtime surfaces where CSS is not directly consumable. The terminal theme
+export resolves Oak tokens into an explicit TypeScript colour contract for
+Ink-based terminal tools. These secondary outputs must remain projections of
+the token source, not a parallel token system.
 
 ### Workspace Location: `packages/design/`
 
@@ -65,13 +70,17 @@ workspace structure (ADR-041 amended). Design tokens produce CSS
 artefacts, not TypeScript APIs — categorically different from foundation
 libs, adapter libs, and SDKs.
 
-Two workspaces:
+Current workspaces:
 
 - **`@oaknational/design-tokens-core`** — framework-agnostic token
   infrastructure: schema, build pipeline, tier enforcement, contrast
   validation
 - **`@oaknational/oak-design-tokens`** — Oak-specific token set: palette,
-  semantic layer, themes, generated CSS
+  semantic layer, themes, generated CSS, and generated terminal theme
+- **`@oaknational/oak-design-ink`** — reusable React primitives for
+  Ink-based terminal interfaces. This package may depend on
+  `@oaknational/oak-design-tokens`; it must not contain domain behaviour from
+  the terminal tools that consume it.
 
 ### Build-Time Contrast Validation
 
@@ -93,6 +102,10 @@ inlines it into `mcp-app.html`. No separate CDN or
 
 Future consumers (Astro sites, other apps) import the same CSS through
 their own build systems.
+
+Terminal tools that use Ink consume the resolved terminal theme from
+`@oaknational/oak-design-tokens/terminal-theme` and shared primitives from
+`@oaknational/oak-design-ink`.
 
 ### oak-components Relationship
 
@@ -131,12 +144,17 @@ standard. Style Dictionary, Figma Tokens, and Tokens Studio all converge
 toward DTCG compatibility. Adopting the standard now avoids migration
 later. The format is JSON-based, tool-friendly, and well-documented.
 
-### Why a separate package, not in a component library
+### Why a separate token package, not in a component library
 
 Tokens are consumed by surfaces that never import React components (Astro
 sites, static HTML, MCP App resources). Coupling tokens to a component
 library forces those consumers to depend on React. A separate package
 with CSS output is the minimal, correct dependency.
+
+React-based design primitives can still live in `packages/design/` when the
+consumer surface requires them, as with Ink terminal interfaces. Those
+packages sit downstream of token generation and must stay small,
+surface-specific, and free of app or tooling domain behaviour.
 
 ## Consequences
 
@@ -145,19 +163,24 @@ with CSS output is the minimal, correct dependency.
 - MCP App views get a correct, lightweight token foundation from the start
 - Any future Oak surface can consume the same tokens without framework
   coupling
+- Ink terminal interfaces can reuse Oak-themed React primitives without
+  duplicating colour semantics inside operational tooling
 - The three-tier model prevents the token sprawl seen in existing repos
 - DTCG format aligns with industry direction and tool ecosystem
 
 ### Negative
 
-- Two new workspaces to maintain. Mitigation: the harness is generic and
-  stable; the token set grows incrementally driven by consumer needs
+- Design workspaces to maintain. Mitigation: the harness is generic and
+  stable; token and primitive surfaces grow incrementally driven by consumer
+  needs
+- Each new design primitive workspace needs dependency-direction guardrails
+  so it does not become a back door for app or tooling domain code
 - DTCG spec may evolve (pre-W3C-Recommendation). Mitigation: the format
   is simple JSON; migration cost is low if the spec changes
 
 ### Cross-References
 
 - ADR-041 amended to add `packages/design/` category
-- `design-system-reviewer` (ADR-149) enforces token governance
+- `design-system-expert` (ADR-149) enforces token governance
 - `docs/governance/design-token-practice.md` provides authoring and build
   pipeline guidance

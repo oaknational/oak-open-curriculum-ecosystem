@@ -1,5 +1,6 @@
 ---
 name: "Conformance tests for library adoption"
+polarity: pattern
 use_this_when: "Replacing hand-rolled code with a library import and keeping existing unit tests"
 category: testing
 proven_in: "apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/verify-clerk-token.unit.test.ts"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Library upgrades silently changing behaviour that callers depend on"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Conformance Tests for Library Adoption
 

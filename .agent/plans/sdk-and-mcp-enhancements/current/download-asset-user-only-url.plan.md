@@ -141,8 +141,8 @@ Implementation is not done until all of these are true:
    proxy.
 6. Tests prove URL absence from model-visible result fields and prove asset
    content is not fetched or surfaced during automated verification.
-7. `docs-adr-reviewer`, `mcp-reviewer`, `security-reviewer`, `test-reviewer`,
-   and `code-reviewer` have reviewed the landed change or their findings have
+7. `docs-adr-expert`, `mcp-expert`, `security-expert`, `test-expert`,
+   and `code-expert` have reviewed the landed change or their findings have
    explicit owner disposition.
 
 ## Foundation Alignment
@@ -177,14 +177,14 @@ This is a non-trivial MCP runtime contract change. Apply
 
 ## Reviewer Scheduling
 
-- Pre-execution: `mcp-reviewer` on the planned result-field contract.
-- During implementation: `test-reviewer` for the red/green cycles and
-  `security-reviewer` for signed URL exposure boundaries.
+- Pre-execution: `mcp-expert` on the planned result-field contract.
+- During implementation: `test-expert` for the red/green cycles and
+  `security-expert` for signed URL exposure boundaries.
 - If Phase 1.3 adds or materially changes an MCP App resource:
-  `react-component-reviewer`, `accessibility-reviewer`, and any other
+  `react-component-expert`, `accessibility-expert`, and any other
   frontend specialist required by ADR-149 for the touched UI surface.
-- Post-implementation: `code-reviewer` gateway, `mcp-reviewer`,
-  `docs-adr-reviewer`, and `release-readiness-reviewer`.
+- Post-implementation: `code-expert` gateway, `mcp-expert`,
+  `docs-adr-expert`, and `release-readiness-expert`.
 
 ## Resolution Plan
 
@@ -421,7 +421,7 @@ pnpm markdownlint:root \
 
 **Review Validation**:
 
-Ask `docs-adr-reviewer` to review the ADR and ADR-126 update against the
+Ask `docs-adr-expert` to review the ADR and ADR-126 update against the
 acceptance criteria above. The reviewer should assess the communicated decision,
 cross-reference direction, and future-change mechanism, not exact wording.
 
@@ -461,7 +461,7 @@ pnpm markdownlint:root \
 
 **Review Validation**:
 
-Ask `docs-adr-reviewer` to review the README/reference updates against the
+Ask `docs-adr-expert` to review the README/reference updates against the
 acceptance criteria above. The reviewer should confirm the design boundary is
 discoverable across the relevant surfaces without requiring a specific phrase in
 any markdown file.
@@ -501,13 +501,13 @@ pnpm test
 
 **Acceptance Criteria**:
 
-1. `test-reviewer`, `security-reviewer`, `mcp-reviewer`, and `code-reviewer`
+1. `test-expert`, `security-expert`, `mcp-expert`, and `code-expert`
    findings are resolved or explicitly accepted with owner direction.
-2. `docs-adr-reviewer` confirms the ADR and documentation propagation are
+2. `docs-adr-expert` confirms the ADR and documentation propagation are
    complete and do not drift from the implemented behaviour.
 3. If an MCP App resource changes, the frontend specialist reviewers required
    by ADR-149 have reviewed the rendered user control.
-4. `release-readiness-reviewer` confirms the deployment/user-facing contract is
+4. `release-readiness-expert` confirms the deployment/user-facing contract is
    clear enough for preview promotion.
 5. `/jc-consolidate-docs` is run after implementation and gates.
 6. Plan todos and the current index reflect final status.

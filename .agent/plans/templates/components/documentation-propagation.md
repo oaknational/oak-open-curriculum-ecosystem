@@ -24,7 +24,7 @@ For each phase or major workstream:
 No phase is complete until one of those outcomes is documented.
 
 Also apply the
-[`jc-consolidate-docs` workflow](../../../commands/consolidate-docs.md)
+[`jc-consolidate-docs` workflow](../../../skills/consolidate-docs/SKILL-CANONICAL.md)
 before closure to ensure settled documentation is extracted from plans.
 
 ## Recommended Tracking Pattern

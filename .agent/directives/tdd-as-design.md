@@ -3,7 +3,11 @@ fitness_line_target: 180
 fitness_line_limit: 240
 fitness_char_limit: 14000
 fitness_line_length: 100
-split_strategy: "Grow the methodology depth (cycle worked examples, atomic-landing scenarios, refactoring TDD detail) into docs/engineering/testing-tdd-recipes.md; this directive holds only the foundational definition and load-bearing invariants."
+split_strategy: >-
+  Grow the methodology depth (cycle worked examples, atomic-landing
+  scenarios, refactoring TDD detail) into
+  docs/engineering/testing-tdd-recipes.md; this directive holds only
+  the foundational definition and load-bearing invariants.
 ---
 
 # TDD as Design
@@ -21,7 +25,7 @@ sits below `principles.md` for any question about repository-wide rules.
 > them separately, in either order, is a category error.
 
 This is the load-bearing definition. Every other rule in this directive,
-and every check the test-reviewer applies, derives from it.
+and every check the test-expert applies, derives from it.
 
 ## Three Corollaries
 
@@ -77,6 +81,35 @@ slip):
 signature changes, not runtime test failures. Update the test call
 sites first. Existing tests *are* the safety net; no new tests are
 needed for internal restructuring.
+
+## One State, One Describing Surface
+
+A multi-cycle plan moves the system toward a system state. That state
+has **one place where it is observable from a test, in the form the
+code actually runs** — the workflow seam, the persisted record, the
+rendered output, or the effect on an external surface. Every cycle's
+tests in the plan describe that surface, even when the cycles'
+internal mechanics differ.
+
+Cycles that produce tests below the describing surface are
+**scaffolding tests**. They exist for the implementer's confidence
+in an internal seam, not for the system's durable description.
+Scaffolding tests are coupled to implementation choices — a refactor
+that changes the internal seam without changing observable state
+breaks the scaffolding without removing user-observable behaviour.
+
+The cure fires at plan-author time, not at test-review time: state
+the describing surface in one sentence before the cycle decomposition
+is settled, and tag each cycle's test boundary against it. Cycles
+that "need to describe an internal seam" are asking for scaffolding
+unless the seam genuinely produces new observable state; the default
+is scaffolding.
+
+See the [`where-system-state-is-observable-at-plan-author-time`][observable-pattern]
+pattern for the diagnostic question, the worked instance, and how to
+apply the constraint during cycle decomposition.
+
+[observable-pattern]: ../memory/active/patterns/where-system-state-is-observable-at-plan-author-time.md
 
 ## Why Scales Are Complementary
 
@@ -149,11 +182,11 @@ refactoring. They should be deleted or rewritten as descriptions.
   `no-global-state-in-tests.md`, `test-immediate-fails.md` — the
   rule surface operationalising this directive.
 - `docs/engineering/testing-tdd-recipes.md` — recipe-level worked
-  examples of the cycle at each scale; loaded by the test-reviewer
+  examples of the cycle at each scale; loaded by the test-expert
   on every invocation.
 - `docs/engineering/testing-patterns.md` — composition and DI
   patterns that make tests describable rather than audit-shaped;
-  loaded by the test-reviewer on every invocation.
+  loaded by the test-expert on every invocation.
 
 ## What This Directive Is Not
 

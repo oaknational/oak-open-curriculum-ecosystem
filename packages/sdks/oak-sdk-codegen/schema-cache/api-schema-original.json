@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Oak OpenAPI",
-    "version": "0.6.0-0c6d4433c5ad52e49b3b41fd99087612656424f5"
+    "version": "0.7.0-3804b95b2b38a67f085077b82b763226a06966a2"
   },
   "servers": [
     {
@@ -728,6 +728,25 @@
             "name": "subject",
             "schema": {
               "type": "string",
+              "enum": [
+                "art",
+                "citizenship",
+                "computing",
+                "cooking-nutrition",
+                "design-technology",
+                "english",
+                "french",
+                "geography",
+                "german",
+                "history",
+                "maths",
+                "music",
+                "physical-education",
+                "religious-education",
+                "rshe-pshe",
+                "science",
+                "spanish"
+              ],
               "description": "The slug identifier for the subject",
               "example": "art"
             },
@@ -1444,6 +1463,15 @@
             },
             "required": true,
             "description": "The lesson slug identifier"
+          },
+          {
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string",
+              "enum": ["images"],
+              "description": "Optional filter for question results. Use `images` to return only questions with a question image or image answer."
+            }
           }
         ],
         "responses": {
@@ -1541,6 +1569,15 @@
               "maximum": 100,
               "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
               "example": 10
+            }
+          },
+          {
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string",
+              "enum": ["images"],
+              "description": "Optional filter for question results. Use `images` to return only questions with a question image or image answer."
             }
           }
         ],
@@ -1661,6 +1698,15 @@
               "maximum": 100,
               "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
               "example": 10
+            }
+          },
+          {
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string",
+              "enum": ["images"],
+              "description": "Optional filter for question results. Use `images` to return only questions with a question image or image answer."
             }
           }
         ],
@@ -1895,7 +1941,7 @@
       "get": {
         "operationId": "getUnits-getUnit",
         "summary": "Unit summary",
-        "description": "This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit",
+        "description": "This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit. Optional programme-factor filters can narrow the returned variant. The childSubject filter is only available for science units and accepts biology, chemistry, combined-science, or physics.",
         "tags": ["units"],
         "security": [
           {
@@ -1909,10 +1955,42 @@
             "schema": {
               "type": "string",
               "description": "The unit slug",
-              "example": "simple-compound-and-adverbial-complex-sentences"
+              "example": "programming-subroutines"
             },
             "required": true,
             "description": "The unit slug"
+          },
+          {
+            "in": "query",
+            "name": "examBoard",
+            "schema": {
+              "type": "string",
+              "enum": ["aqa", "edexcel", "eduqas", "ocr", "wjec", "edexcelb"]
+            }
+          },
+          {
+            "in": "query",
+            "name": "pathway",
+            "schema": {
+              "type": "string",
+              "enum": ["core", "gcse"]
+            }
+          },
+          {
+            "in": "query",
+            "name": "tier",
+            "schema": {
+              "type": "string",
+              "enum": ["core", "foundation", "higher"]
+            }
+          },
+          {
+            "in": "query",
+            "name": "childSubject",
+            "schema": {
+              "type": "string",
+              "enum": ["biology", "chemistry", "combined-science", "physics"]
+            }
           }
         ],
         "responses": {
@@ -2118,19 +2196,18 @@
                   },
                   "example": [
                     {
+                      "version": "0.7.0",
+                      "date": "2026-05-21",
+                      "changes": [
+                        "/subjects/{subject} now exposes `ks4ProgrammeFactors.childSubject` for subjects split into child subjects at KS4 (currently science → biology, chemistry, combined-science, physics)",
+                        "Removed the per-sequence `ks4Options` field from `sequenceSlugs[]` in /subjects, /subjects/{subject}, and /subjects/{subject}/sequences responses; the variant is still encoded in the sequenceSlug suffix"
+                      ]
+                    },
+                    {
                       "version": "0.6.0",
                       "date": "2026-02-19",
                       "changes": [
                         "Change to how blocked content is handled, using BAD_REQUEST & .data.cause instead of 451"
-                      ]
-                    },
-                    {
-                      "version": "0.5.0",
-                      "date": "2025-03-06",
-                      "changes": [
-                        "PPTX used for slideDeck assets",
-                        "All video assets now fully downloadable in mp4 format",
-                        "New /threads/* endpoints"
                       ]
                     }
                   ]
@@ -2205,10 +2282,11 @@
                   "required": ["version", "date", "changes"],
                   "additionalProperties": false,
                   "example": {
-                    "version": "0.6.0",
-                    "date": "2026-02-19",
+                    "version": "0.7.0",
+                    "date": "2026-05-21",
                     "changes": [
-                      "Change to how blocked content is handled, using BAD_REQUEST & .data.cause instead of 451"
+                      "/subjects/{subject} now exposes `ks4ProgrammeFactors.childSubject` for subjects split into child subjects at KS4 (currently science → biology, chemistry, combined-science, physics)",
+                      "Removed the per-sequence `ks4Options` field from `sequenceSlugs[]` in /subjects, /subjects/{subject}, and /subjects/{subject}/sequences responses; the variant is still encoded in the sequenceSlug suffix"
                     ]
                   }
                 }
@@ -3642,37 +3720,9 @@
                   "phaseTitle": {
                     "type": "string",
                     "description": "The title for the phase to which this sequence belongs"
-                  },
-                  "ks4Options": {
-                    "anyOf": [
-                      {
-                        "type": "object",
-                        "properties": {
-                          "title": {
-                            "type": "string"
-                          },
-                          "slug": {
-                            "type": "string"
-                          }
-                        },
-                        "required": ["title", "slug"],
-                        "additionalProperties": false,
-                        "description": "The key stage 4 study pathway that this sequence represents. May be null."
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
                   }
                 },
-                "required": [
-                  "sequenceSlug",
-                  "years",
-                  "keyStages",
-                  "phaseSlug",
-                  "phaseTitle",
-                  "ks4Options"
-                ],
+                "required": ["sequenceSlug", "years", "keyStages", "phaseSlug", "phaseTitle"],
                 "additionalProperties": false
               },
               "description": "Information about the years, key stages and key stage 4 variance for each sequence"
@@ -3726,8 +3776,7 @@
                   }
                 ],
                 "phaseSlug": "primary",
-                "phaseTitle": "Primary",
-                "ks4Options": null
+                "phaseTitle": "Primary"
               },
               {
                 "sequenceSlug": "art-secondary",
@@ -3743,8 +3792,7 @@
                   }
                 ],
                 "phaseSlug": "secondary",
-                "phaseTitle": "Secondary",
-                "ks4Options": null
+                "phaseTitle": "Secondary"
               }
             ],
             "years": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
@@ -3822,37 +3870,9 @@
                 "phaseTitle": {
                   "type": "string",
                   "description": "The title for the phase to which this sequence belongs"
-                },
-                "ks4Options": {
-                  "anyOf": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "title": {
-                          "type": "string"
-                        },
-                        "slug": {
-                          "type": "string"
-                        }
-                      },
-                      "required": ["title", "slug"],
-                      "additionalProperties": false,
-                      "description": "The key stage 4 study pathway that this sequence represents. May be null."
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
                 }
               },
-              "required": [
-                "sequenceSlug",
-                "years",
-                "keyStages",
-                "phaseSlug",
-                "phaseTitle",
-                "ks4Options"
-              ],
+              "required": ["sequenceSlug", "years", "keyStages", "phaseSlug", "phaseTitle"],
               "additionalProperties": false
             },
             "description": "Information about the years, key stages and key stage 4 variance for each sequence"
@@ -3882,16 +3902,106 @@
               "additionalProperties": false
             },
             "description": "The key stage slug identifiers for which this subject has content available for."
+          },
+          "ks4ProgrammeFactors": {
+            "type": "object",
+            "properties": {
+              "examBoard": {
+                "description": "The valid exam board values offered by Oak for this subject at key stage 4.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "The display title for a valid programme factor value"
+                    },
+                    "slug": {
+                      "type": "string",
+                      "description": "The slug identifier for a valid programme factor value"
+                    }
+                  },
+                  "required": ["title", "slug"],
+                  "additionalProperties": false
+                }
+              },
+              "pathway": {
+                "description": "The valid pathway values offered by Oak for this subject at key stage 4.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "The display title for a valid programme factor value"
+                    },
+                    "slug": {
+                      "type": "string",
+                      "description": "The slug identifier for a valid programme factor value"
+                    }
+                  },
+                  "required": ["title", "slug"],
+                  "additionalProperties": false
+                }
+              },
+              "tier": {
+                "description": "The valid tier values offered by Oak for this subject at key stage 4.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "The display title for a valid programme factor value"
+                    },
+                    "slug": {
+                      "type": "string",
+                      "description": "The slug identifier for a valid programme factor value"
+                    }
+                  },
+                  "required": ["title", "slug"],
+                  "additionalProperties": false
+                }
+              },
+              "childSubject": {
+                "description": "The child subjects offered by Oak for this subject at key stage 4 (e.g. biology, chemistry, physics and combined-science under science). Only present for Science, which is split into child subjects at KS4.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "The display title for a valid programme factor value"
+                    },
+                    "slug": {
+                      "type": "string",
+                      "description": "The slug identifier for a valid programme factor value"
+                    }
+                  },
+                  "required": ["title", "slug"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false,
+            "description": "The programme factors that apply to this subject at key stage 4, with the valid values for each factor."
           }
         },
-        "required": ["subjectTitle", "subjectSlug", "sequenceSlugs", "years", "keyStages"],
+        "required": [
+          "subjectTitle",
+          "subjectSlug",
+          "sequenceSlugs",
+          "years",
+          "keyStages",
+          "ks4ProgrammeFactors"
+        ],
         "additionalProperties": false,
         "example": {
-          "subjectTitle": "Art and design",
-          "subjectSlug": "art",
+          "subjectTitle": "Science",
+          "subjectSlug": "science",
           "sequenceSlugs": [
             {
-              "sequenceSlug": "art-primary",
+              "sequenceSlug": "science-primary",
               "years": [1, 2, 3, 4, 5, 6],
               "keyStages": [
                 {
@@ -3904,25 +4014,55 @@
                 }
               ],
               "phaseSlug": "primary",
-              "phaseTitle": "Primary",
-              "ks4Options": null
+              "phaseTitle": "Primary"
             },
             {
-              "sequenceSlug": "art-secondary",
-              "years": [1, 2, 3, 4, 5, 6],
+              "sequenceSlug": "science-secondary-aqa",
+              "years": [7, 8, 9, 10, 11],
               "keyStages": [
                 {
-                  "keyStageTitle": "Key Stage 1",
-                  "keyStageSlug": "ks1"
+                  "keyStageTitle": "Key Stage 3",
+                  "keyStageSlug": "ks3"
                 },
                 {
-                  "keyStageTitle": "Key Stage 2",
-                  "keyStageSlug": "ks2"
+                  "keyStageTitle": "Key Stage 4",
+                  "keyStageSlug": "ks4"
                 }
               ],
               "phaseSlug": "secondary",
-              "phaseTitle": "Secondary",
-              "ks4Options": null
+              "phaseTitle": "Secondary"
+            },
+            {
+              "sequenceSlug": "science-secondary-edexcel",
+              "years": [7, 8, 9, 10, 11],
+              "keyStages": [
+                {
+                  "keyStageTitle": "Key Stage 3",
+                  "keyStageSlug": "ks3"
+                },
+                {
+                  "keyStageTitle": "Key Stage 4",
+                  "keyStageSlug": "ks4"
+                }
+              ],
+              "phaseSlug": "secondary",
+              "phaseTitle": "Secondary"
+            },
+            {
+              "sequenceSlug": "science-secondary-ocr",
+              "years": [7, 8, 9, 10, 11],
+              "keyStages": [
+                {
+                  "keyStageTitle": "Key Stage 3",
+                  "keyStageSlug": "ks3"
+                },
+                {
+                  "keyStageTitle": "Key Stage 4",
+                  "keyStageSlug": "ks4"
+                }
+              ],
+              "phaseSlug": "secondary",
+              "phaseTitle": "Secondary"
             }
           ],
           "years": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
@@ -3943,7 +4083,51 @@
               "keyStageTitle": "Key Stage 4",
               "keyStageSlug": "ks4"
             }
-          ]
+          ],
+          "ks4ProgrammeFactors": {
+            "examBoard": [
+              {
+                "title": "AQA",
+                "slug": "aqa"
+              },
+              {
+                "title": "Edexcel",
+                "slug": "edexcel"
+              },
+              {
+                "title": "OCR",
+                "slug": "ocr"
+              }
+            ],
+            "tier": [
+              {
+                "title": "Foundation",
+                "slug": "foundation"
+              },
+              {
+                "title": "Higher",
+                "slug": "higher"
+              }
+            ],
+            "childSubject": [
+              {
+                "title": "Biology",
+                "slug": "biology"
+              },
+              {
+                "title": "Chemistry",
+                "slug": "chemistry"
+              },
+              {
+                "title": "Combined science",
+                "slug": "combined-science"
+              },
+              {
+                "title": "Physics",
+                "slug": "physics"
+              }
+            ]
+          }
         }
       },
       "SubjectSequenceResponseSchema": {
@@ -3988,37 +4172,9 @@
             "phaseTitle": {
               "type": "string",
               "description": "The title for the phase to which this sequence belongs"
-            },
-            "ks4Options": {
-              "anyOf": [
-                {
-                  "type": "object",
-                  "properties": {
-                    "title": {
-                      "type": "string"
-                    },
-                    "slug": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["title", "slug"],
-                  "additionalProperties": false,
-                  "description": "The key stage 4 study pathway that this sequence represents. May be null."
-                },
-                {
-                  "type": "null"
-                }
-              ]
             }
           },
-          "required": [
-            "sequenceSlug",
-            "years",
-            "keyStages",
-            "phaseSlug",
-            "phaseTitle",
-            "ks4Options"
-          ],
+          "required": ["sequenceSlug", "years", "keyStages", "phaseSlug", "phaseTitle"],
           "additionalProperties": false
         },
         "example": [
@@ -4036,8 +4192,7 @@
               }
             ],
             "phaseSlug": "primary",
-            "phaseTitle": "Primary",
-            "ks4Options": null
+            "phaseTitle": "Primary"
           },
           {
             "sequenceSlug": "art-secondary",
@@ -4053,8 +4208,7 @@
               }
             ],
             "phaseSlug": "secondary",
-            "phaseTitle": "Secondary",
-            "ks4Options": null
+            "phaseTitle": "Secondary"
           }
         ]
       },
@@ -6625,13 +6779,102 @@
             "format": "uri",
             "description": "The Oak National URL for the lesson"
           },
-          "unitSlug": {
-            "type": "string",
-            "description": "The unit slug identifier"
-          },
-          "unitTitle": {
-            "type": "string",
-            "description": "The unit title"
+          "units": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "unitSlug": {
+                  "type": "string",
+                  "description": "The unit slug identifier"
+                },
+                "unitTitle": {
+                  "type": "string",
+                  "description": "The unit title"
+                },
+                "programmeFactors": {
+                  "type": "object",
+                  "properties": {
+                    "examBoard": {
+                      "description": "The exam board that identifies this unit variant",
+                      "type": "object",
+                      "properties": {
+                        "slug": {
+                          "type": "string",
+                          "description": "The slug identifier for the programme factor"
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "The title of the programme factor"
+                        }
+                      },
+                      "required": ["slug", "title"],
+                      "additionalProperties": false
+                    },
+                    "pathway": {
+                      "description": "The pathway that identifies this unit variant",
+                      "type": "object",
+                      "properties": {
+                        "slug": {
+                          "type": "string",
+                          "description": "The slug identifier for the programme factor"
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "The title of the programme factor"
+                        }
+                      },
+                      "required": ["slug", "title"],
+                      "additionalProperties": false
+                    },
+                    "tier": {
+                      "description": "The tier that identifies this unit variant",
+                      "type": "object",
+                      "properties": {
+                        "slug": {
+                          "type": "string",
+                          "description": "The slug identifier for the programme factor"
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "The title of the programme factor"
+                        }
+                      },
+                      "required": ["slug", "title"],
+                      "additionalProperties": false
+                    },
+                    "childSubject": {
+                      "description": "The science child subject that identifies this unit variant",
+                      "type": "object",
+                      "properties": {
+                        "slug": {
+                          "type": "string",
+                          "enum": ["biology", "chemistry", "combined-science", "physics"],
+                          "description": "The slug identifier for the science child subject"
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "The title of the science child subject"
+                        }
+                      },
+                      "required": ["slug", "title"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "The programme-factor values that identify which variant of the unit this lesson sits in. Omitted when the unit has no programme factors."
+                }
+              },
+              "required": ["unitSlug", "unitTitle"],
+              "additionalProperties": false
+            },
+            "description": "All the units (including programme variants) this lesson is part of. Each entry is a unique combination of unit slug and programme factors.",
+            "example": [
+              {
+                "unitSlug": "developing-vector-graphics",
+                "unitTitle": "Developing vector graphics"
+              }
+            ]
           },
           "subjectSlug": {
             "type": "string",
@@ -6780,8 +7023,7 @@
           "lessonTitle",
           "canonicalUrl",
           "oakUrl",
-          "unitSlug",
-          "unitTitle",
+          "units",
           "subjectSlug",
           "subjectTitle",
           "keyStageSlug",
@@ -6797,10 +7039,14 @@
         "additionalProperties": false,
         "example": {
           "lessonTitle": "Using vector tools to draw and modify shapes",
-          "canonicalUrl": "https://www.thenational.academy/teachers/programmes/computing-secondary-ks3/units/developing-vector-graphics/lessons/using-vector-tools-to-draw-and-modify-shapes",
+          "canonicalUrl": "https://www.thenational.academy/teachers/lessons/using-vector-tools-to-draw-and-modify-shapes",
           "oakUrl": "https://www.thenational.academy/teachers/lessons/using-vector-tools-to-draw-and-modify-shapes",
-          "unitSlug": "developing-vector-graphics",
-          "unitTitle": "Developing vector graphics",
+          "units": [
+            {
+              "unitSlug": "developing-vector-graphics",
+              "unitTitle": "Developing vector graphics"
+            }
+          ],
           "subjectSlug": "computing",
           "subjectTitle": "Computing",
           "keyStageSlug": "ks3",
@@ -7071,6 +7317,88 @@
             },
             "description": "The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted."
           },
+          "programmeFactors": {
+            "type": "object",
+            "properties": {
+              "examBoard": {
+                "description": "The exam board that identifies this unit variant",
+                "type": "object",
+                "properties": {
+                  "slug": {
+                    "type": "string",
+                    "description": "The slug identifier for the programme factor"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "The title of the programme factor"
+                  }
+                },
+                "required": ["slug", "title"],
+                "additionalProperties": false
+              },
+              "pathway": {
+                "description": "The pathway that identifies this unit variant",
+                "type": "object",
+                "properties": {
+                  "slug": {
+                    "type": "string",
+                    "description": "The slug identifier for the programme factor"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "The title of the programme factor"
+                  }
+                },
+                "required": ["slug", "title"],
+                "additionalProperties": false
+              },
+              "tier": {
+                "description": "The tier that identifies this unit variant",
+                "type": "object",
+                "properties": {
+                  "slug": {
+                    "type": "string",
+                    "description": "The slug identifier for the programme factor"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "The title of the programme factor"
+                  }
+                },
+                "required": ["slug", "title"],
+                "additionalProperties": false
+              },
+              "childSubject": {
+                "description": "The science child subject that identifies this unit variant",
+                "type": "object",
+                "properties": {
+                  "slug": {
+                    "type": "string",
+                    "enum": ["biology", "chemistry", "combined-science", "physics"],
+                    "description": "The slug identifier for the science child subject"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "The title of the science child subject"
+                  }
+                },
+                "required": ["slug", "title"],
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false,
+            "description": "The programme-factor values that identify which variant of this unit is returned. Omitted when the unit has no programme factors.",
+            "example": {
+              "examBoard": {
+                "slug": "aqa",
+                "title": "AQA"
+              },
+              "pathway": {
+                "slug": "gcse",
+                "title": "GCSE"
+              }
+            }
+          },
           "unitLessons": {
             "type": "array",
             "items": {
@@ -7118,40 +7446,43 @@
         ],
         "additionalProperties": false,
         "example": {
-          "unitSlug": "simple-compound-and-adverbial-complex-sentences",
-          "unitTitle": "Simple, compound and adverbial complex sentences",
-          "yearSlug": "year-3",
-          "year": 3,
-          "phaseSlug": "primary",
-          "subjectSlug": "english",
-          "keyStageSlug": "ks2",
+          "unitSlug": "programming-subroutines",
+          "unitTitle": "Programming subroutines",
+          "yearSlug": "year-10",
+          "year": 10,
+          "phaseSlug": "secondary",
+          "subjectSlug": "computing",
+          "keyStageSlug": "ks4",
           "priorKnowledgeRequirements": [
-            "A simple sentence is about one idea and makes complete sense.",
-            "Any simple sentence contains one verb and at least one noun.",
-            "Two simple sentences can be joined with a co-ordinating conjunction to form a compound sentence."
+            "Variables can be used to store values in a program.",
+            "Selection can be used to choose between paths in a program.",
+            "Iteration can be used to repeat a set of instructions."
           ],
           "nationalCurriculumContent": [
-            "Ask relevant questions to extend their understanding and knowledge",
-            "Articulate and justify answers, arguments and opinions",
-            "Speak audibly and fluently with an increasing command of Standard English"
+            "Use two or more programming languages, at least one of which is textual, to solve a variety of computational problems.",
+            "Make appropriate use of data structures.",
+            "Design and develop modular programs."
           ],
-          "threads": [
-            {
-              "slug": "developing-grammatical-knowledge",
-              "title": "Developing grammatical knowledge",
-              "order": 10
+          "programmeFactors": {
+            "examBoard": {
+              "slug": "aqa",
+              "title": "AQA"
+            },
+            "pathway": {
+              "slug": "gcse",
+              "title": "GCSE"
             }
-          ],
+          },
           "unitLessons": [
             {
-              "lessonSlug": "four-types-of-simple-sentence",
-              "lessonTitle": "Four types of simple sentence",
+              "lessonSlug": "structured-programs",
+              "lessonTitle": "Structured programs",
               "lessonOrder": 1,
               "state": "published"
             },
             {
-              "lessonSlug": "three-ways-for-co-ordination-in-compound-sentences",
-              "lessonTitle": "Three ways for co-ordination in compound sentences",
+              "lessonSlug": "subroutines-with-parameters",
+              "lessonTitle": "Subroutines with parameters",
               "lessonOrder": 2,
               "state": "new"
             }
@@ -7210,8 +7541,12 @@
             "unitSlug": "unitising-and-coin-recognitions-counting-in-2s-5s-and-10s"
           },
           {
-            "unitTitle": "Solving problems in a range of contexts",
-            "unitSlug": "unitising-and-coin-recognition-solving-problems-involving-money"
+            "unitTitle": "Programming subroutines",
+            "unitSlug": "programming-subroutines"
+          },
+          {
+            "unitTitle": "Programming subroutines",
+            "unitSlug": "programming-subroutines"
           }
         ]
       },

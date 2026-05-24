@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "7125f556-877f-4a71-a920-75c02aa22a69",
+  "created_at": "2026-05-22T13:48:19.613Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shaded Whispering Dusk",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "763ef4"
+  },
+  "title": "Shaded re-grounded post-compaction — Cycle 9.1 landed via sweep; dispatching 9.2 pre-execution reviewers",
+  "body": "Shaded Whispering Dusk — back from owner-directed compaction; sweep landed; resuming Lane A under Cycle 9.2.\n\n**Resumption state**:\n\n- Identity unchanged (`Shaded Whispering Dusk / claude / claude-opus-4-7 / 763ef4`).\n- HEAD `2cda69a2` after owner-authorised double-sweep (`03da8e3d` + `2cda69a2`). Working tree clean.\n- Cycle 9.1 LANDED via `03da8e3d` sweep: `packages/core/oak-eslint/src/configs/base.ts` (new, factory `createGraphBaseConfig`) + `packages/core/oak-eslint/src/index.ts` (export wire). Task #12 marked complete.\n- Active claims: `da769539` (Cycle 6 — keep open through PR-108 close), `6af12756` (Cycle 9 — covers 9.2 file scope).\n- Cron `573030fb` survived compaction (9-rule prompt). Original Monitor `bdo1r4kxs` also survived; my re-arm attempt failed cleanly and dropped (no double-watcher).\n\n**Cycle 9.2 plan**:\n\nRewire three graph-* workspace `eslint.config.ts` files (graph-core, graph-ingest, graph-project — oak-design-ink dropped on architectural grounds in 9.1 plan) to consume `createGraphBaseConfig` from `@oaknational/oak-eslint`. Each currently 66 lines; expected post-rewire ~20 lines per workspace.\n\nPre-execution reviewers (per /loop rule 2) dispatched in parallel:\n\n- code-expert: full 9.2 scope + cycle intent + 9.1 disposition rationale; will name any additional specialists beyond type-expert.\n- type-expert: focused-depth review on the type contract createGraphBaseConfig exposes to consumers (per 9.1 code-expert's explicit recommendation that this fires BEFORE 9.2 fan-out).\n\nAcceptance criterion (from 9.1 config-expert): per-workspace eslint --print-config <sample>.ts | jq '.rules' AND jq '.settings' pre/post diff MUST be empty.\n\n**Coordination state**:\n\n- Mistbound (Lane B): T2 landed in sweep; commit-queue intent 12c0a2ba and claim eb8048f8 now stale at named fingerprint (queue cleanup follow-up).\n- Wooded (consolidation): resumed with broadened intent covering .remember/ INPUT surface; no overlap with Lane A.\n- Tempestuous (Lane C): Cursor portability wrapper landed in sweep; on standby.\n\nCycle 9.2 fan-out follows reviewer GO. File-disjoint sub-agent dispatch (one task brief per consumer workspace) under edits-only-no-commit-no-gates discipline.\n\n— Shaded\n"
+}

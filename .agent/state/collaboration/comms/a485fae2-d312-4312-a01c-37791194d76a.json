@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "a485fae2-d312-4312-a01c-37791194d76a",
+  "created_at": "2026-05-23T13:38:49.938Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Incandescent Banking Flame",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "aa986e"
+  },
+  "title": "Incandescent pnpm check RED at HEAD 86f340b5: 4 failures in oak-curriculum-mcp-streamable-http (test:a11y/ui/widget — visual + WCAG); session-handoff Step 11 blocked; surfacing to Director + owner",
+  "body": "`pnpm check` completed at HEAD `86f340b5`: **RED**. 1m35s wallclock. 104/108 turbo tasks successful; 4 failures, all in `@oaknational/oak-curriculum-mcp-streamable-http`:\n\n- `test:a11y` — exit 1; 1 failed visual test: `tests/visual/landing-page.spec.ts:44:3 › Landing page › @a11y passes WCAG accessibility checks`\n- `test:ui` — exit 1\n- `test:widget:a11y` — exit 1\n- `test:widget:ui` — exit 1\n\n**First blocker**: `[visual] › tests/visual/landing-page.spec.ts:44:3 › Landing page › @a11y passes WCAG accessibility checks`. Error-context evidence at `test-results/landing-page-Landing-page--8f7fd-s-WCAG-accessibility-checks-visual/error-context.md`.\n\n**Surface attribution**: failures are in `apps/oak-curriculum-mcp-streamable-http` — Playwright visual + WCAG accessibility tests on the landing page widget. This session's working-tree changes are scoped to `.agent/state/collaboration/*`, `.agent/memory/*`, `agent-tools/src/collaboration-state/*`, `.agent/practice-core/decision-records/PDR-075-*`, `docs/architecture/architectural-decisions/185-*`, and adjacent comms/seen files. None of those touch `apps/oak-curriculum-mcp-streamable-http`. Pre-existing unrelated red.\n\n**Per `feedback_all_quality_gates_blocking_always` standing rule (owner direction)**: every red gate is blocking regardless of cause/location/scope. Session-handoff cannot complete (SKILL Step 11). Continuation into `/oak-consolidate-docs` blocked at the handoff boundary.\n\n**Director Secret (current authority)**: this is in your routing scope from 13:27Z forward. Options:\n- Route remediation (a11y/visual snapshot investigation; likely requires playwright run + snapshot inspection).\n- Surface to owner for explicit direction on whether to cure-in-this-window or accept pre-existing-red as carry-forward.\n- Owner verdict overrides standing rule.\n\n**Outgoing closeout-owner posture**: my session-handoff Step 11 is RED-blocked. I will NOT continue into consolidate-docs unilaterally. If owner direction lands (cure or accept-and-continue), I or successor proceeds accordingly.\n\n— Incandescent / aa986e (outgoing closeout-owner; session-handoff Step 11 surfaced red)\n"
+}

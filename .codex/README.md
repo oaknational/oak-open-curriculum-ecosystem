@@ -6,7 +6,7 @@ This directory contains the Codex project-agent configuration for the Oak Open C
 
 Codex uses two directories:
 
-- **`.agents/skills/`** — Codex skill and command adapters (thin wrappers referencing canonical content in `.agent/skills/` and `.agent/commands/`)
+- **`.agents/skills/`** — Codex skill adapters (thin wrappers referencing canonical content in `.agent/skills/`)
 - **`.codex/`** — Codex project-agent configuration for reviewer sub-agents
 
 Reviewer sub-agents are **not** skills. They require `sandbox_mode = "read-only"`, `approval_policy = "never"`, and `model_reasoning_effort = "high"` — settings only available to project agents.
@@ -25,21 +25,21 @@ documentation.
 .codex/
 ├── config.toml           # Agent roster and feature flags
 ├── README.md             # This file
-└── agents/               # Thin per-reviewer adapter TOMLs
-    ├── code-reviewer.toml
-    ├── test-reviewer.toml
+└── agents/               # Thin per-expert adapter TOMLs
+    ├── code-expert.toml
+    ├── test-expert.toml
     ├── ...
-    └── architecture-reviewer-wilma.toml
+    └── architecture-expert-wilma.toml
 ```
 
 ## Reviewer Roster
 
 All reviewer adapters are registered in `config.toml`, alongside the
-non-reviewer helper agents `ground-truth-designer` and `subagent-architect`.
+non-expert helper agents `ground-truth-designer` and `subagent-architect`.
 Each `.toml` adapter in `agents/` is a self-describing project-scoped custom
 agent: it declares `name`, `description`, the required Codex execution
 settings, and `developer_instructions` that point to the canonical reviewer
-template in `.agent/sub-agents/templates/`. The architecture-reviewer variants
+template in `.agent/sub-agents/templates/`. The architecture-expert variants
 additionally reference an individual persona component in
 `.agent/sub-agents/components/personas/`.
 
@@ -47,14 +47,14 @@ In `.codex/config.toml`, each `agents.<name>.config_file` value is relative to
 `.codex/config.toml` itself, so entries point to `agents/<name>.toml`, not
 `.codex/agents/<name>.toml`.
 
-For the full reviewer invocation matrix and timing guidance, see `.agent/memory/executive/invoke-code-reviewers.md`.
+For the full reviewer invocation matrix and timing guidance, see `.agent/memory/executive/invoke-code-experts.md`.
 
 ## Resolver Workflow
 
 When reviewing from Codex, do not assume the runtime has automatically loaded the repo-local reviewer adapter. Resolve the reviewer first:
 
 ```bash
-pnpm agent-tools:codex-reviewer-resolve code-reviewer
+pnpm agent-tools:codex-reviewer-resolve code-expert
 ```
 
 That command prints the exact `.codex/agents/*.toml` adapter and canonical `.agent` files that should ground the review, and `--json` is available for audit or automation.

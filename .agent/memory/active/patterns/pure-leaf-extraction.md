@@ -1,5 +1,6 @@
 ---
 name: "Pure Leaf Module Extraction"
+polarity: pattern
 use_this_when: "Pure functions and I/O functions coexist in a module, and other modules need only the pure functions"
 category: code
 proven_in: "packages/sdks/oak-search-sdk/src/admin/lifecycle-version-identity.ts"
@@ -10,6 +11,10 @@ barrier:
   prevents_recurring_mistake: "Inverted dependency direction where detection/identification modules depend on mutation/I/O modules for pure logic"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Pure Leaf Module Extraction
 

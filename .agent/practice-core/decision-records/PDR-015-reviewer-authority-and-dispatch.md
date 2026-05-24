@@ -8,7 +8,7 @@ pdr_kind: governance
 **Date**: 2026-04-18 (amended 2026-04-21 — dispatch discipline
 extended in two ways: (a) friction-ratchet trigger — accumulated
 friction on a single topic within a session escalates to
-`assumptions-reviewer` for solution-class review; (b) reviewer
+`assumptions-expert` for solution-class review; (b) reviewer
 phase alignment — the existing design-intent + implementation
 two-stage model extended explicitly to three phases (plan-time,
 mid-cycle, close) so that reviewers fire at the lifecycle moment
@@ -25,6 +25,20 @@ substance unchanged.)
 against each other).
 
 ## Amendment Log
+
+- **2026-05-14 amendment — audit-shape surface framing for parallel
+  reviewer dispatch (Riverine Swimming Hull / claude-code /
+  claude-opus-4-7-1m; agentic-engineering-enhancements thread;
+  owner-ratified during the graduation-triage D1–D5 per-diff review
+  pass).** Each parallel reviewer lens shrinks a different part of
+  the audit-shape surface; reviewers are not redundant proxies for
+  one another. The corollary for plan WS0 dispatch is to expect
+  concrete cycle-shape correctives from each reviewer, not just
+  nudges. Each reviewer's absence is a specific gap in the
+  audit-shape coverage, not a generic loss of redundancy. New
+  §Audit-shape surface framing sub-section in the Decision area
+  (under the 2026-04-25 assumption-challenge amendment) names the
+  framing.
 
 - **2026-04-29 amendment — brief reviewers with full merge-gate
   scope when gating merge (Nebulous Illuminating Satellite /
@@ -69,7 +83,7 @@ against each other).
      sequentially. Different reviewer roles see different things —
      adversarial structural reviewers (Wilma family) catch boundary,
      threat-model, and lifecycle gaps; pre-landing reviewers
-     (`docs-adr-reviewer`, `assumptions-reviewer`) catch substance-
+     (`docs-adr-expert`, `assumptions-expert`) catch substance-
      level errors that survive structural review (broken paths
      inherited from imprecise plan-body glosses; markdownlint
      violations; unobservable tripwires); vendor-specialist reviewers
@@ -80,8 +94,8 @@ against each other).
      protocol (2026-04-25) used four parallel lenses to produce four
      orthogonal finding sets; sequential dispatch would have been
      ~4× slower for the same outcome. The 2026-04-26 Tier 2
-     fingerprinting commit ran code-reviewer + sentry-reviewer +
-     test-reviewer in parallel; sentry-reviewer caught a MAJOR
+     fingerprinting commit ran code-expert + sentry-expert +
+     test-expert in parallel; sentry-expert caught a MAJOR
      vendor-contract violation that the other two passed with only
      NIT/MINOR findings.
 
@@ -91,11 +105,11 @@ against each other).
      three-phase lifecycle alignment (plan-time / mid-cycle / close,
      2026-04-21 amendment) layers on top of this two-phase review-
      class distinction:
-     - Structural review (Wilma family, architecture-reviewer-*)
+     - Structural review (Wilma family, architecture-expert-*)
        fires at plan-time and at major inflection points; its lens
        is "is the boundary right?" / "is the threat model right?"
-     - Pre-landing review (`code-reviewer`, `test-reviewer`,
-       `docs-adr-reviewer`, `assumptions-reviewer`, vendor
+     - Pre-landing review (`code-expert`, `test-expert`,
+       `docs-adr-expert`, `assumptions-expert`, vendor
        specialists) fires at close; its lens is "does the
        implementation faithfully embody the design that structural
        review approved?" Pre-landing review can find substance-
@@ -122,7 +136,7 @@ against each other).
   agentic-engineering-enhancements thread; owner-ratified during
   pending-graduations promotion pass after WS0+WS1+WS2 of the
   multi-agent collaboration protocol landed).** When an adversarial-
-  class reviewer (Wilma family, `assumptions-reviewer`, or any
+  class reviewer (Wilma family, `assumptions-expert`, or any
   reviewer whose lens is "what is wrong with this design" rather
   than "how can this design be improved") surfaces BLOCKING
   findings on a plan body or design, the agent MUST dispatch an
@@ -163,7 +177,7 @@ against each other).
   session (a friction signal is any of: a hook failure, a reviewer
   rejection, an owner correction, a quality-gate breach, a
   retracted plan-body section, a missing-evidence finding), the
-  agent MUST escalate to `assumptions-reviewer` for a
+  agent MUST escalate to `assumptions-expert` for a
   solution-class review of the topic, rather than continuing to
   apply local fixes. The third signal is the trigger — at that
   point the local-fix lens has demonstrably failed, and the
@@ -186,7 +200,7 @@ against each other).
   required for non-trivial work. Captured originally in the
   retracted standing-decisions register entries
   `friction-ratchet-counter-3-plus-signals-escalates-to-
-  assumptions-reviewer` and
+  assumptions-expert` and
   `reviewer-phases-aligned-plan-time-mid-cycle-close`; graduated
   to this PDR in 2026-04-21 Session 5 per the decomposition arc.
 
@@ -325,8 +339,8 @@ and characteristic findings:
 
 | Phase | When it fires | Characteristic reviewers | Characteristic findings |
 |---|---|---|---|
-| **Plan-time** | Before exiting planning mode | `assumptions-reviewer`, the domain-specialist most relevant to the proposed work, structural reviewers (`architecture-reviewer-*`) | Missing assumptions, unjustified scope, missing build-vs-buy attestation (PDR-031), plan-body framing risks |
-| **Mid-cycle** | At major inflection points within execution (phase boundaries, surface introductions, risk thresholds reached, accumulated friction) | The domain-specialist for the current phase; `assumptions-reviewer` if friction-ratchet has fired | Framing-outlives-the-plan failures, drift between plan body and execution, missed mid-execution simplification opportunities |
+| **Plan-time** | Before exiting planning mode | `assumptions-expert`, the domain-specialist most relevant to the proposed work, structural reviewers (`architecture-expert-*`) | Missing assumptions, unjustified scope, missing build-vs-buy attestation (PDR-031), plan-body framing risks |
+| **Mid-cycle** | At major inflection points within execution (phase boundaries, surface introductions, risk thresholds reached, accumulated friction) | The domain-specialist for the current phase; `assumptions-expert` if friction-ratchet has fired | Framing-outlives-the-plan failures, drift between plan body and execution, missed mid-execution simplification opportunities |
 | **Close** | On the landed change, before the close summary | Multi-layer dispatch per §Route by abstraction layer (domain semantics, docs/ADR mesh, code/file polish, architectural boundary) | Cumulative quality issues, Practice-fit, doc-mesh integrity, missed amendments to durable surfaces |
 
 Each phase has its own dispatch decision; missing a phase is a
@@ -347,7 +361,7 @@ phases substitutes for the others.
 
 When **three or more distinct friction signals accumulate on a
 single topic within a session**, the agent MUST escalate to
-`assumptions-reviewer` for a **solution-class review** of the
+`assumptions-expert` for a **solution-class review** of the
 topic, rather than continuing to apply local fixes.
 
 A **friction signal** on a topic is any of:
@@ -364,7 +378,7 @@ A **friction signal** on a topic is any of:
 The **third** distinct signal is the trigger: at that point the
 local-fix lens has demonstrably failed, and the question is no
 longer "how do I fix this signal" but "is the assumption set
-underlying my approach to this topic wrong." `assumptions-reviewer`
+underlying my approach to this topic wrong." `assumptions-expert`
 returns a solution-class assessment; the agent then either
 re-frames the topic per the reviewer's findings or surfaces the
 disagreement to the owner.
@@ -384,7 +398,7 @@ is a dispatch-discipline failure.
 ### Assumption-challenge gate before absorbing adversarial-review findings (2026-04-25 amendment)
 
 When an **adversarial-class reviewer** (Wilma family,
-`assumptions-reviewer`, or any reviewer whose lens is *"what is
+`assumptions-expert`, or any reviewer whose lens is *"what is
 wrong with this design"* rather than *"how can this design be
 improved"*) surfaces **BLOCKING findings** on a plan body or
 design, the agent MUST run an **assumption-challenge gate**
@@ -417,8 +431,8 @@ Three outcomes:
   carry.
 
 The gate fires per adversarial-class review, not per finding.
-Friendly-class reviewers (`docs-adr-reviewer`,
-`code-reviewer`, etc.) whose lens is improvement-not-rejection
+Friendly-class reviewers (`docs-adr-expert`,
+`code-expert`, etc.) whose lens is improvement-not-rejection
 do not require the gate; their findings absorb directly.
 
 Why the gate exists: adversarial reviews surface findings that
@@ -430,6 +444,24 @@ territory rather than at design-time. The gate names the
 reviewer-discipline statement of the same principle that PDR-029
 v2 names mechanism-side: the Practice prefers reframing to
 mechanical hardening when the underlying claim may be wrong.
+
+### Audit-shape surface framing (2026-05-14 amendment)
+
+Each parallel reviewer lens shrinks a **different part** of the
+audit-shape surface; reviewers are not redundant proxies for one
+another. Empirical observation (WS0 dispatch, 2026-05-09):
+
+- `test-expert` caught literal-text assertions in test bodies that
+  no other reviewer surfaced.
+- `architecture-expert-fred` caught a deferred boundary decision that
+  no other reviewer surfaced.
+- `docs-adr-expert` caught propagation-surface omissions (README,
+  thread record, ADR back-cite) that no other reviewer surfaced.
+
+The corollary for plan WS0 dispatch: expect **concrete cycle-shape
+correctives** from each reviewer, not just nudges. Each reviewer's
+absence is a specific gap in the audit-shape coverage, not a
+generic loss of redundancy.
 
 ## Rationale
 
@@ -493,7 +525,7 @@ Alternatives rejected:
   phases (plan-time, mid-cycle, close) per §Reviewer phases
   aligned to lifecycle.
 - Three accumulated friction signals on a single topic in a
-  session escalate to `assumptions-reviewer` for solution-class
+  session escalate to `assumptions-expert` for solution-class
   review per §Friction-ratchet trigger.
 
 ### Forbidden
@@ -510,7 +542,7 @@ Alternatives rejected:
 - Skipping the mid-cycle phase on non-trivial work; the
   characteristic finding (framing-outlives-the-plan) is missed.
 - Continuing to apply local fixes past the third friction signal
-  on a single topic without escalating to `assumptions-reviewer`.
+  on a single topic without escalating to `assumptions-expert`.
 
 ### Accepted cost
 

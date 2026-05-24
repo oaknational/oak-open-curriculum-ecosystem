@@ -125,11 +125,11 @@ the queue draining cadence.
 
 After Steps 1 and 2, dispatch:
 
-- `docs-adr-reviewer` — verify graduations landed substance in correct
+- `docs-adr-expert` — verify graduations landed substance in correct
   homes per the placement contract analogue (substance-kind → canonical
   home), no doctrine-as-prose in operational files, no recipe-as-prose
   in directives.
-- `code-reviewer` — verify any rule, ADR, or PDR additions are
+- `code-expert` — verify any rule, ADR, or PDR additions are
   syntactically valid markdown / yaml frontmatter, links resolve.
 
 Framing: execution-legitimacy, not decision-validation. The decisions

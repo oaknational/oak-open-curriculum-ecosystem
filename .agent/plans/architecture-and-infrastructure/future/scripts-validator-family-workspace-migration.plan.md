@@ -57,7 +57,7 @@ The drift is invisible to:
 - **Barney + Fred** recommend `agent-tools/` because it already exists, has the build/test infrastructure, and is governed by ADR-165.
 - **Betty** argues against `agent-tools/` on cohesion grounds — its README scopes it to "operational CLIs for agents" (e.g. `claude-agent-ops`, `collaboration-state`, `agent-identity`); repo-invariant validators are a different semantic category. Betty recommends a new workspace (`packages/devx/repo-invariants` or `packages/core/repo-invariants`).
 
-This is a Build-vs-Buy decision (use `agent-tools/` vs build a new workspace) that must be resolved at promotion time, not deferred indefinitely. An `assumptions-reviewer` pass at promotion will challenge the choice.
+This is a Build-vs-Buy decision (use `agent-tools/` vs build a new workspace) that must be resolved at promotion time, not deferred indefinitely. An `assumptions-expert` pass at promotion will challenge the choice.
 
 **Coupling cleanup opportunity**: `scripts/validate-eslint-boundaries.ts` currently imports `../packages/core/oak-eslint/src/rules/boundary.js` — a cross-workspace relative-path import that bypasses the package's declared `@oaknational/eslint-plugin-standards` public API. The migration is the natural occasion to convert this to a proper `devDependency` import.
 
@@ -108,5 +108,5 @@ Execution decisions (which validators move first, ordering, ADR amendment vs new
 - ADR-165 (agent-work-practice-phenotype-boundary) — relevant to `agent-tools/` placement
 - ADR-168 (TS6 baseline + workspace-script architectural rules) — Rule 2 covers workspace→root direction; this brief addresses the inverse
 - Pattern: `.agent/memory/active/patterns/governance-claim-needs-a-scanner.md` — predicts more validators will arrive
-- Reviewer consensus from PR #90 (architecture-reviewer-{barney,betty,fred,wilma} parallel pass on 2026-04-29)
+- Reviewer consensus from PR #90 (architecture-expert-{barney,betty,fred,wilma} parallel pass on 2026-04-29)
 - PR #90 commit `62ea5032` (the most recent file added to `scripts/`; cleanest test case for migration shape because the framework/consumer split already exists and the surface area is small)

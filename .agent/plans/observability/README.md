@@ -120,7 +120,7 @@ Per [`high-level-observability-plan.md` §Substrate](./high-level-observability-
   (author + wire to root); step 14 `pnpm check` green; step 15 dev
   boot + MCP tool exercise + clean shutdown; step 16 pre-merge
   divergence analysis; step 17 owner-gated merge readiness with
-  release-readiness-reviewer synthesis. Supersedes two predecessor
+  release-readiness-expert synthesis. Supersedes two predecessor
   plans:
   [`archive/superseded/eef-branch-merge-readiness.plan.superseded-by-unified-2026-05-04.md`](./archive/superseded/eef-branch-merge-readiness.plan.superseded-by-unified-2026-05-04.md)
   and

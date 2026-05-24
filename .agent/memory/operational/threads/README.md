@@ -14,37 +14,18 @@ sessions and may be touched by multiple agents over time. Threads
 are the continuity unit. A *session* is a time-bounded agent
 occurrence that participates in one or more threads.
 
-Currently active threads (2026-04-29):
-
-- `observability-sentry-otel` — product thread; Sentry/OTel public-
-  alpha integration on branch `feat/otel_sentry_enhancements`.
-- `agentic-engineering-enhancements` — Practice thread; documentation
-  roles, continuity surfaces, and fitness-pressure remediation.
-- `sector-engagement` — planning thread; external organisation adoption,
-  partner reviews, and external data-source impact routing for Oak's open
-  curriculum infrastructure.
-- `cloudflare-mcp-security-and-token-economy-plans` — product/security
-  planning thread; Cloudflare MCP public-beta gate and token-efficient MCP
-  tool-use strategy.
-- `architectural-budget-system` — architecture/devx planning thread;
-  cross-scale architectural budget doctrine, visibility, and staged
-  enforcement planning.
-- `pr-90-build-fix-landing` — single-PR closure thread; quality-gate
-  closure for PR #90 (`fix/build_issues` → `main`), covering
-  TS-invocation pattern consistency and the Sonar mechanical sweep,
-  with owner MCP manual validation as the merge precondition.
-
-Archived threads:
-
-- `memory-feedback` — Practice thread; feedback loops across the
-  three-mode memory taxonomy, emergent-whole observation, pending-
-  graduations register, executive-memory drift detection.
+The live inventory of currently-active threads lives in
+[`../repo-continuity.md § Active Threads`](../repo-continuity.md#active-threads).
+Treat the repo-continuity table as the source of truth; this README is
+the convention document, not the inventory.
 
 ## What lives in this directory
 
 One `*.next-session.md` file per active thread. Each file contains:
 
 - **Thread identity** — which thread this record belongs to.
+- **Current continuation** — the branch, invocation pointer, controlling plan,
+  next safe step, team expectation, and acceptance bar for the next agent.
 - **Participating agent identities** — every session that has
   touched the thread, additive (per the proposed rule: joining a
   thread adds an identity; never replaces).
@@ -106,6 +87,45 @@ chat opener that invokes this checklist only needs to name what is
 unique to the session (thread name, plan reference, any
 session-specific signal); the checklist handles the rest.
 
+The preferred opener is a pointer, not a state dump:
+
+```text
+$jc-start-right-team continue <thread-slug> from
+.agent/memory/operational/threads/<thread-slug>.next-session.md.
+Treat this opener as a hypothesis until live grounding confirms it.
+```
+
+Use `start-right-quick` or `start-right-thorough` instead when the session is
+not a team session. The continuation record owns current facts; the skill owns
+the routing behaviour. Keep volatile state, live commit ids, branch state, next
+safe step, and team expectation in the record rather than copying them into a
+chat opener or permanent skill text.
+
+### Continuation record template
+
+Thread records should start with a compact current-state block before older
+session history:
+
+```markdown
+## Current Continuation
+
+- Branch:
+- Invocation pointer:
+- Controlling plan:
+- Next safe step:
+- Completed prerequisites:
+- Recent relevant commits:
+- Team expectation:
+- Suggested team split if a team forms:
+- Acceptance bar:
+```
+
+Use `Team expectation: unknown until live grounding` when no owner-assigned team
+shape exists. Do not encode fixed roles unless they have already been assigned
+by owner direction or live coordination. Avoid `ready to land` wording in
+continuation records unless the work is genuinely uncommitted and pending; once
+landed, cite the commit instead.
+
 ### Read, in order
 
 1. [`../repo-continuity.md`](../repo-continuity.md) end-to-end —
@@ -161,12 +181,12 @@ session-specific signal); the checklist handles the rest.
 Only the session-unique signal:
 
 - Thread name.
+- Pointer to the thread's next-session record.
 - Session number and plan reference (path to the plan + which
   session within it, if multi-session).
 - Any owner-chosen session-scoped decision (e.g. "Bundle rhythm
   chosen for this session" per a plan's optional branches).
-- Optional: pointer to the next-session record's landing target
-  block for convenience.
+- Optional: a short note about why team routing is expected.
 
 The chat opener should **not** restate the checklist above. If an
 opener finds itself listing grounding order, identity discipline,

@@ -1,0 +1,115 @@
+{
+  "name": "@oaknational/graph-ingest",
+  "version": "0.0.0-development",
+  "private": true,
+  "description": "Transport-agnostic graph ingestion modes and source mapping primitives",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts",
+      "import": "./dist/index.js"
+    },
+    "./strict-jsonld": {
+      "types": "./dist/strict-jsonld/index.d.ts",
+      "development": "./src/strict-jsonld/index.ts",
+      "import": "./dist/strict-jsonld/index.js"
+    },
+    "./jsonld-compatible": {
+      "types": "./dist/jsonld-compatible/index.d.ts",
+      "development": "./src/jsonld-compatible/index.ts",
+      "import": "./dist/jsonld-compatible/index.js"
+    },
+    "./plain-json-tree": {
+      "types": "./dist/plain-json-tree/index.d.ts",
+      "development": "./src/plain-json-tree/index.ts",
+      "import": "./dist/plain-json-tree/index.js"
+    },
+    "./records": {
+      "types": "./dist/records/index.d.ts",
+      "development": "./src/records/index.ts",
+      "import": "./dist/records/index.js"
+    },
+    "./node-edge-list": {
+      "types": "./dist/node-edge-list/index.d.ts",
+      "development": "./src/node-edge-list/index.ts",
+      "import": "./dist/node-edge-list/index.js"
+    },
+    "./custom-mapping": {
+      "types": "./dist/custom-mapping/index.d.ts",
+      "development": "./src/custom-mapping/index.ts",
+      "import": "./dist/custom-mapping/index.js"
+    },
+    "./turtle": {
+      "types": "./dist/turtle/index.d.ts",
+      "development": "./src/turtle/index.ts",
+      "import": "./dist/turtle/index.js"
+    },
+    "./source-path": {
+      "types": "./dist/source-path/index.d.ts",
+      "development": "./src/source-path/index.ts",
+      "import": "./dist/source-path/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**/*",
+    "src/**/*",
+    "!**/*.test.ts",
+    "!**/*.integration.test.ts"
+  ],
+  "scripts": {
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "clean": "rm -rf dist .turbo",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "type-check": "tsc -p tsconfig.lint.json --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@oaknational/graph-core": "workspace:*",
+    "@oaknational/result": "workspace:*",
+    "jsonld": "^9.0.0",
+    "n3": "^2.0.3"
+  },
+  "devDependencies": {
+    "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@types/jsonld": "^1.5.15",
+    "@types/n3": "^1.21.0",
+    "@types/node": "^25.7.0",
+    "eslint": "^10.3.0",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oaknational/oak-open-curriculum-ecosystem.git",
+    "directory": "packages/libs/graph-ingest"
+  },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-open-curriculum-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/packages/libs/graph-ingest#readme",
+  "keywords": [
+    "rdf",
+    "graph",
+    "json-ld",
+    "knowledge-graph"
+  ],
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
+  ],
+  "license": "MIT"
+}

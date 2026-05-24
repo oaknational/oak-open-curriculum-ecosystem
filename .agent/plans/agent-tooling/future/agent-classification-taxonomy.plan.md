@@ -84,7 +84,7 @@ known rules). Other applications include:
 
 | Fast Agent Type | Purpose | Example |
 |----------------|---------|---------|
-| **Sentinel** | Fast review against known checklists/rules | config-reviewer, type-assertion scan, naming check |
+| **Sentinel** | Fast review against known checklists/rules | config-expert, type-assertion scan, naming check |
 | **Scanner** | Fast codebase scan for a specific pattern | "find all `process.env` direct accesses", "find all `as` assertions" |
 | **Validator** | Fast schema/contract validation | "does this plan follow the template?", "are all exports present?" |
 | **Formatter** | Fast format/lint compliance check | markdownlint pass, import ordering |
@@ -110,7 +110,7 @@ tier by default.
 |---------------------|---------|----------|
 | **Domain expert** | Reason about correct usage against live official docs | Clerk, ES, Sentry, MCP, Express, cyber security, web/API security, privacy, web/API GDPR |
 | **Architecture assessor** | Reason about structural trade-offs | fred, barney, betty, wilma |
-| **Security analyst** | Assess exploitability and threat models | security-reviewer |
+| **Security analyst** | Assess exploitability and threat models | security-expert |
 | **Ecosystem expert** | Reason about internal contract correctness | OOCE |
 
 **Common properties of all deep specialists:**
@@ -128,10 +128,10 @@ Some agents operate at either tier depending on what they're asked:
 
 | Agent | Sentinel Mode | Deep Mode |
 |-------|--------------|-----------|
-| type-reviewer | Find assertions (`as`, `!`, `any`) | Trace type flow from schema to app layer |
-| docs-adr-reviewer | Detect documentation drift | Assess ADR accuracy and completeness |
+| type-expert | Find assertions (`as`, `!`, `any`) | Trace type flow from schema to app layer |
+| docs-adr-expert | Detect documentation drift | Assess ADR accuracy and completeness |
 | DevX | Check naming, --help, progress indicators | Assess API surface design quality |
-| test-reviewer | Check structure, naming, mock patterns | Assess test strategy and coverage adequacy |
+| test-expert | Check structure, naming, mock patterns | Assess test strategy and coverage adequacy |
 | TDD specialist | Check test-level selection | Design multi-level test strategy |
 | planning specialist | Check plan template compliance | Assess plan fitness and scope |
 
@@ -203,8 +203,8 @@ Create the new artefacts that the classification model requires.
 
 Add classification metadata and rename all canonical templates.
 
-- [ ] Add `classification` field to all existing templates in `.agent/sub-agents/templates/` (including `clerk-reviewer.md` added 2026-03-13, and `sentry-reviewer.md` when created)
-- [ ] Rename template files (e.g. `code-reviewer.md` → `code-quality.md`, `architecture-reviewer.md` → `architecture.md`, `clerk-reviewer.md` → `clerk.md`, `sentry-reviewer.md` → `sentry.md`)
+- [ ] Add `classification` field to all existing templates in `.agent/sub-agents/templates/` (including `clerk-expert.md` added 2026-03-13, and `sentry-expert.md` when created)
+- [ ] Rename template files (e.g. `code-expert.md` → `code-quality.md`, `architecture-expert.md` → `architecture.md`, `clerk-expert.md` → `clerk.md`, `sentry-expert.md` → `sentry.md`)
 - [ ] Update template cross-references (delegation triggers, boundary sections, "when to recommend other reviews" tables)
 - [ ] Update persona components to reference new template names
 - [ ] Create `practice.md` template (broad, gateway)
@@ -237,8 +237,8 @@ Update automated checks to enforce the new model.
 Update all references to old agent names across the entire repo.
 
 - [ ] Update `.agent/directives/AGENT.md` — agent roster, sub-agent section
-- [ ] Update `.agent/memory/executive/invoke-code-reviewers.md` — rename to `invoke-agents.md` or equivalent, update all agent references
-- [ ] Update all `.agent/rules/*.md` that reference agent names (e.g. `invoke-code-reviewers.md`, `invoke-elasticsearch-reviewer.md`, `invoke-clerk-reviewer.md`, `invoke-sentry-reviewer.md`)
+- [ ] Update `.agent/memory/executive/invoke-code-experts.md` — rename to `invoke-agents.md` or equivalent, update all agent references
+- [ ] Update all `.agent/rules/*.md` that reference agent names (e.g. `invoke-code-experts.md`, `invoke-elasticsearch-expert.md`, `invoke-clerk-expert.md`, `invoke-sentry-expert.md`)
 - [ ] Update all `.claude/rules/*.md` and `.cursor/rules/*.mdc` that reference agent names
 - [ ] Update ADRs that reference agent names by old names (ADR-114, ADR-119, ADR-125, ADR-129, ADR-131, ADR-137)
 - [ ] Update `.agent/sub-agents/components/architecture/reviewer-team.md`

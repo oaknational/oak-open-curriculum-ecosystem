@@ -1,6 +1,12 @@
 # ADR-162: Observability-First — Every Capability Emits Across Five Axes
 
-**Status**: Accepted (2026-04-19)
+**Status**: Proposed. Amended 2026-05-10 to record that
+vendor-independence enforcement and the sink/fixture axis migration are
+partially implemented and still have follow-through work before acceptance.
+The orthogonal-axes configuration shape this ADR's lifecycle commitment
+requires is now codified at
+[ADR-171](171-observability-configuration-orthogonal-axes.md) — citing
+that ADR rather than re-deriving the shape inline.
 **Date**: 2026-04-18
 **Related**:
 [ADR-051](051-opentelemetry-compliant-logging.md) — OpenTelemetry-compliant
@@ -21,10 +27,7 @@ to Cloudflare-layer telemetry;
 companion principle that every emission passes through redaction before
 any sink sees it;
 [`docs/explorations/2026-04-18-observability-strategy-and-restructure.md`](../../explorations/2026-04-18-observability-strategy-and-restructure.md)
-— the session report that derived this ADR;
-[`.agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md`](../../../.agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md)
-— the execution plan under which this ADR is drafted, accepted, and
-operationalised.
+— the session report that derived this ADR.
 
 ## Context
 
@@ -112,6 +115,14 @@ The enforcement boundary for this clause is therefore feature code, not
 wiring code. Phase 5 operationalises this distinction with a structural
 import lint (see Enforcement Mechanism #5).
 
+**Current enforcement status (2026-05-10).** The provider-neutral port and
+adapter direction is the target, but the structural
+`no-vendor-observability-import` rule is not yet the complete enforcement
+boundary. Existing composition-root imports of `@sentry/node` are allowed only
+as DI wiring. Any direct vendor SDK import in feature code remains a violation
+of this ADR, and the lint rule is the implementation follow-through that makes
+that boundary mechanically visible.
+
 ### The Closure Property and Test Gate
 
 For the principle to remain enforceable rather than aspirational:
@@ -124,24 +135,18 @@ For the principle to remain enforceable rather than aspirational:
    vendor lock-in is not shippable.** The reviewer matrix at phase
    close interrogates each of the five axes per new capability.
 3. **The vendor-independence clause is tested programmatically.** A
-   vendor-independence conformance test runs emitting workspaces in
-   `SENTRY_MODE=off` and asserts all structural event information
+   vendor-independence conformance test runs emitting workspaces with no
+   Sentry sink configured and asserts all structural event information
    persists via stdout/err.
 
-The plans that implement this closure property are catalogued under
-[`.agent/plans/observability/high-level-observability-plan.md`
-§Substrate (cross-axis infrastructure)](../../../.agent/plans/observability/high-level-observability-plan.md).
-The substrate distinction follows the convention recorded at
-[`.agent/plans/templates/components/substrate-vs-axis-plans.md`](../../../.agent/plans/templates/components/substrate-vs-axis-plans.md):
-substrate plans enable axis-shipping work without themselves
-shipping axis output. The substrate inventory is the ADR-to-plan
-bridge for this section.
+The plans that implement this closure property maintain a substrate inventory:
+substrate plans enable axis-shipping work without themselves shipping axis
+output. The substrate inventory is the ADR-to-plan bridge for this section.
 
 ### Enforcement Mechanisms
 
-Four mechanisms, each concrete and testable. Details may be refined in
-Phase 5 of the
-[observability strategy restructure plan](../../../.agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md).
+Four mechanisms, each concrete and testable. Details may be refined in the
+Phase 5 implementation work.
 
 1. **ESLint rule** `require-observability-emission` in
    `@oaknational/eslint-plugin-standards`:
@@ -161,7 +166,7 @@ Phase 5 of the
 2. **Reviewer-matrix question** at every phase close:
    "Does this capability have a loop across each applicable axis?"
    Codified in
-   [`.agent/rules/invoke-code-reviewers.md`](../../../.agent/rules/invoke-code-reviewers.md)
+   [`.agent/rules/invoke-code-experts.md`](../../../.agent/rules/invoke-code-experts.md)
    (or its canonical counterpart) so it is asked routinely, not
    remembered ad-hoc.
 3. **Conformance test** in
@@ -173,7 +178,7 @@ Phase 5 of the
 4. **Vendor-independence emission test** in
    `multi-sink-vendor-independence-conformance.plan.md`'s output (plan
    to be authored under Phase 2 of the restructure): runs the MCP app
-   server + browser widget + Search CLI in `SENTRY_MODE=off` and
+   server + browser widget + Search CLI with no Sentry sink configured and
    asserts structural event information persists via stdout/err with
    no loss beyond the network hop. This proves the **stdout-sink
    fallback**.
@@ -244,7 +249,7 @@ through ADR-160's barrier before reaching any sink.
 2. **Retain the single-axis engineering framing and treat other axes
    as per-plan concerns.** Rejected: the MVP is a function of launch
    context (public beta, long-lived, important); a single-axis frame
-   cannot answer data-scientist / a11y-reviewer / product-owner
+   cannot answer data-scientist / a11y-expert / product-owner
    questions without forcing each subsequent plan to re-derive the
    gap. The direction-setting session report derives this rejection
    in full.
@@ -298,9 +303,7 @@ through ADR-160's barrier before reaching any sink.
 
 ## Implementation Notes
 
-Phased execution is owned by the
-[observability strategy restructure plan](../../../.agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md).
-In summary:
+Phased execution remains implementation follow-through. In summary:
 
 1. **Phase 1** (this ADR in `Proposed`; directory skeleton; plan moves).
 2. **Phase 2** (six MVP `current/` plans — including
@@ -315,14 +318,13 @@ In summary:
    MVP-vs-MVP-deferred classification; `metrics.*` primary over
    span-metrics transitional).
 5. **Phase 5** (acceptance — ESLint rule landed at `warn`; reviewer-
-   matrix question codified; status flipped `Proposed` → `Accepted`).
+   matrix question codified; status can flip `Proposed` → `Accepted` once the
+   remaining acceptance follow-through is complete).
 
 ## Related Documentation
 
 - Direction-setting session report:
   [`docs/explorations/2026-04-18-observability-strategy-and-restructure.md`](../../explorations/2026-04-18-observability-strategy-and-restructure.md).
-- Execution plan:
-  [`observability-strategy-restructure.plan.md`](../../../.agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md).
 - Companion principles: ADR-143 (structural fan-out), ADR-160
   (redaction barrier), ADR-161 (network-free PR checks).
 - Implementation seams: ADR-078 (DI), ADR-154 (framework/consumer
@@ -334,7 +336,7 @@ In summary:
   specified. Phase 5 authors the rule implementation and RuleTester
   cases; the opt-out comment format is decided there.
 - Whether the reviewer-matrix question should live in
-  `.agent/rules/invoke-code-reviewers.md` directly or in a dedicated
+  `.agent/rules/invoke-code-experts.md` directly or in a dedicated
   `.agent/rules/axis-coverage-interrogation.md` file is a Phase 5
   structural choice. Either placement satisfies this ADR.
 - Whether the vendor-independence conformance test should run in CI
@@ -343,7 +345,7 @@ In summary:
   for `multi-sink-vendor-independence-conformance.plan.md`.
 - `wrapMcpServerWithSentry` at `core-endpoints.ts:98` is currently an
   unconditional call into `@sentry/node` — inertness under
-  `SENTRY_MODE=off` is a vendor-SDK behaviour, not a structural
+  no configured Sentry sink is a vendor-SDK behaviour, not a structural
   property. To prove "adding, replacing, or removing a vendor adapter
   MUST NOT require changes in consumer code", the wrapping call must
   move behind a `ServerInstrumenter` port injected from
@@ -356,20 +358,21 @@ In summary:
 
 - **2026-04-18** — Proposed. Structural skeleton (Phase 1 of the
   restructure plan) landed in commit `502af060`.
-- **2026-04-19** — Accepted. Phase 5 close: `require-observability-emission`
+- **2026-04-19** — Proposed implementation progress. Phase 5 close work:
+  `require-observability-emission`
   ESLint rule landed at `warn` in `packages/core/oak-eslint/src/rules/require-observability-emission.ts`
   and wired at `warn` into every `apps/*` and `packages/sdks/*`
   workspace's `eslint.config.ts`. Reviewer-matrix axis-coverage
   question codified at
-  [`.agent/memory/executive/invoke-code-reviewers.md §Coverage Tracking`](../../../.agent/memory/executive/invoke-code-reviewers.md).
+  [`.agent/memory/executive/invoke-code-experts.md §Coverage Tracking`](../../../.agent/memory/executive/invoke-code-experts.md).
   Wave-1 enforcement covers `logger.*` / `Sentry.*` / delegate-pattern
   emission sites; the schema-usage detection path (Enforcement
   Mechanism #3) remains deferred to Wave 2 when the
   `@oaknational/observability-events` workspace lands. The
   vendor-independence conformance test (Enforcement Mechanism #4) and
   the `no-vendor-observability-import` structural import lint
-  (Enforcement Mechanism #5) are Phase-2-plan deliverables, not
-  blockers for acceptance.
+  (Enforcement Mechanism #5) remain follow-through items before this ADR can
+  be treated as fully accepted.
 - **2026-04-19** (later same day) — Wave-1 L-EH initial landed. The
   engineering-axis error-cause gate was re-scoped from a planned
   custom `require-error-cause` rule in
@@ -406,10 +409,8 @@ In summary:
   closure-rule redaction policy per sink. **This ADR's
   vendor-independence clause is unchanged**; the three-sink shape is
   a confirmation of the clause, not an extension of it. Sequencing
-  and per-sink promotion triggers are owned by
-  [`future/second-backend-evaluation.plan.md`](../../../.agent/plans/observability/future/second-backend-evaluation.plan.md)
-  (reframed 2026-04-19 from "second backend evaluation" to "three-sink
-  strategic brief"). The vendor-independence conformance scope
+  and per-sink promotion triggers are owned by the future three-sink
+  strategic brief. The vendor-independence conformance scope
   expands per sink as each adapter lands. The MVP usage question
   ("how many people are using the MCP and roughly for what") is
   Sentry-addressable via `wrapMcpServerWithSentry` traces +
@@ -417,19 +418,13 @@ In summary:
   deferred to public beta (warehouse) and post-public-beta on a
   named question (PostHog). Cross-referenced from the
   [Sentry vs PostHog capability matrix exploration](../../explorations/2026-04-18-sentry-vs-posthog-capability-matrix.md)
-  and the
-  [strategic-parent maximisation plan](../../../.agent/plans/observability/future/sentry-observability-maximisation.plan.md)
-  L-15 input framing.
+  and the strategic-parent maximisation planning lane.
 - **2026-04-30** — §"The Closure Property and Test Gate" gained an
-  explicit ADR-to-plan bridge naming the substrate inventory at
-  [`.agent/plans/observability/high-level-observability-plan.md`
-  §Substrate (cross-axis infrastructure)](../../../.agent/plans/observability/high-level-observability-plan.md).
+  explicit ADR-to-plan bridge naming the substrate inventory.
   No principle change. Trigger: a new substrate plan
-  ([`future/observability-config-coherence.plan.md`](../../../.agent/plans/observability/future/observability-config-coherence.plan.md))
+  for observability config coherence
   exposed the implicit substrate category — the plan author had to
   invent a justification for not placing the plan under any single
   axis, signalling the categorisation was incomplete. The convention
-  is recorded as a reusable plan-collection component at
-  [`.agent/plans/templates/components/substrate-vs-axis-plans.md`](../../../.agent/plans/templates/components/substrate-vs-axis-plans.md)
-  so future multi-axis collections (security, semantic-search,
+  is recorded as a reusable plan-collection component so future multi-axis collections (security, semantic-search,
   agentic-engineering) inherit the shape without re-deriving it.

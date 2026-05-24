@@ -111,8 +111,21 @@ function getMatchingPatternGroups(
 
 describe('createLibBoundaryRules', () => {
   it('keeps observability out of the library inventory', () => {
-    expect(LIB_PACKAGES).toEqual(['env-resolution', 'logger', 'search-contracts', 'sentry-node']);
-    expect(FOUNDATION_LIB_PACKAGES).toEqual(['env-resolution', 'logger', 'search-contracts']);
+    expect(LIB_PACKAGES).toEqual([
+      'env-resolution',
+      'graph-ingest',
+      'graph-project',
+      'logger',
+      'search-contracts',
+      'sentry-node',
+    ]);
+    expect(FOUNDATION_LIB_PACKAGES).toEqual([
+      'env-resolution',
+      'graph-ingest',
+      'graph-project',
+      'logger',
+      'search-contracts',
+    ]);
     expect(ADAPTER_LIB_PACKAGES).toEqual(['sentry-node']);
   });
 
@@ -125,6 +138,8 @@ describe('createLibBoundaryRules', () => {
 
     expect(blockedLibs).toEqual([
       '../env-resolution/**',
+      '../graph-ingest/**',
+      '../graph-project/**',
       '../search-contracts/**',
       '../sentry-node/**',
     ]);
@@ -137,6 +152,7 @@ describe('createLibBoundaryRules', () => {
     const patterns = getRestrictedImportPatterns(createLibBoundaryRules('logger'));
     const blockedLibPrefixes = [
       '@oaknational/env-resolution',
+      '@oaknational/graph-ingest',
       '@oaknational/search-contracts',
       '@oaknational/sentry-node',
     ] as const;
@@ -149,6 +165,9 @@ describe('createLibBoundaryRules', () => {
       '@oaknational/env-resolution',
       '@oaknational/env-resolution/*',
       '@oaknational/env-resolution/**',
+      '@oaknational/graph-ingest',
+      '@oaknational/graph-ingest/*',
+      '@oaknational/graph-ingest/**',
       '@oaknational/search-contracts',
       '@oaknational/search-contracts/*',
       '@oaknational/search-contracts/**',

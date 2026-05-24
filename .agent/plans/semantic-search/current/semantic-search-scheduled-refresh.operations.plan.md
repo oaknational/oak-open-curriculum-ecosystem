@@ -500,17 +500,17 @@ scripted update prohibition, full re-ingest fallback.
 
 Required reviewers:
 
-- `architecture-reviewer-barney`
-- `architecture-reviewer-betty`
-- `architecture-reviewer-fred`
-- `architecture-reviewer-wilma`
-- `code-reviewer`
-- `test-reviewer`
-- `type-reviewer`
-- `docs-adr-reviewer`
-- `elasticsearch-reviewer`
-- `security-reviewer`
-- `release-readiness-reviewer`
+- `architecture-expert-barney`
+- `architecture-expert-betty`
+- `architecture-expert-fred`
+- `architecture-expert-wilma`
+- `code-expert`
+- `test-expert`
+- `type-expert`
+- `docs-adr-expert`
+- `elasticsearch-expert`
+- `security-expert`
+- `release-readiness-expert`
 
 #### Task 6.2 — Full quality gates
 

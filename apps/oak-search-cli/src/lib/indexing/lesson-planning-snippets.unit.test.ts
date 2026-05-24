@@ -10,8 +10,7 @@ import { selectLessonPlanningSnippet } from './lesson-planning-snippets';
 function buildLessonSummary(overrides: Partial<SearchLessonSummary> = {}): SearchLessonSummary {
   const base = {
     lessonTitle: 'Lesson Title',
-    unitSlug: 'unit-slug',
-    unitTitle: 'Unit Title',
+    units: [{ unitSlug: 'unit-slug', unitTitle: 'Unit Title' }],
     subjectSlug: 'history',
     subjectTitle: 'History',
     keyStageSlug: 'ks4',

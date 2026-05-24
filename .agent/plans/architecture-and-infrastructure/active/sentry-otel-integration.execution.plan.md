@@ -194,20 +194,20 @@ Two rounds of specialist reviews ran during the remediation sessions:
 
 | Reviewer | Initial verdict | Findings resolved? |
 |---|---|---|
-| code-reviewer | CHANGES REQUESTED | Yes — F1-F7 gate blockers |
-| test-reviewer | CRITICAL VIOLATIONS | Yes (except F10, out of scope) |
-| architecture-reviewer-fred | ISSUES FOUND | Yes — F9 boundary, F5 splits |
-| architecture-reviewer-wilma | CRITICAL ISSUES | Yes — F11-F13 guards |
-| security-reviewer | LOW RISK | Yes — F15-F16 hardening |
-| sentry-reviewer | ISSUES FOUND | Yes — F8 logger API |
+| code-expert | CHANGES REQUESTED | Yes — F1-F7 gate blockers |
+| test-expert | CRITICAL VIOLATIONS | Yes (except F10, out of scope) |
+| architecture-expert-fred | ISSUES FOUND | Yes — F9 boundary, F5 splits |
+| architecture-expert-wilma | CRITICAL ISSUES | Yes — F11-F13 guards |
+| security-expert | LOW RISK | Yes — F15-F16 hardening |
+| sentry-expert | ISSUES FOUND | Yes — F8 logger API |
 
 **Round 2 (2026-03-29)**: 3 reviewers against Phase B fixes
 
 | Reviewer | Verdict | Action taken |
 |---|---|---|
-| sentry-reviewer | ISSUES FOUND | Flattened attributes with dot-prefixed keys |
-| architecture-reviewer-fred | ISSUES FOUND | Removed NodeOptions/CaptureContext re-exports; narrowed boundary |
-| test-reviewer | PASS | DI patterns ADR-078 compliant |
+| sentry-expert | ISSUES FOUND | Flattened attributes with dot-prefixed keys |
+| architecture-expert-fred | ISSUES FOUND | Removed NodeOptions/CaptureContext re-exports; narrowed boundary |
+| test-expert | PASS | DI patterns ADR-078 compliant |
 
 ### What the remediation changed (summary)
 
@@ -516,18 +516,18 @@ closure):**
 1. **ADR and architecture**
    - `docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md`
 2. **Sentry specialist capability surfaces**
-   - `.agent/sub-agents/templates/sentry-reviewer.md`
+   - `.agent/sub-agents/templates/sentry-expert.md`
    - `.agent/skills/sentry-expert/SKILL.md`
-   - `.agent/rules/invoke-sentry-reviewer.md`
-   - `.cursor/agents/sentry-reviewer.md`
-   - `.claude/agents/sentry-reviewer.md`
-   - `.codex/agents/sentry-reviewer.toml`
-   - `.cursor/rules/invoke-sentry-reviewer.mdc`
-   - `.claude/rules/invoke-sentry-reviewer.md`
+   - `.agent/rules/invoke-sentry-expert.md`
+   - `.cursor/agents/sentry-expert.md`
+   - `.claude/agents/sentry-expert.md`
+   - `.codex/agents/sentry-expert.toml`
+   - `.cursor/rules/invoke-sentry-expert.mdc`
+   - `.claude/rules/invoke-sentry-expert.md`
    - `.cursor/skills/sentry-expert/SKILL.md`
 3. **Workflow and reviewer discovery alignment**
    - `.agent/directives/AGENT.md`
-   - `.agent/memory/executive/invoke-code-reviewers.md`
+   - `.agent/memory/executive/invoke-code-experts.md`
    - `.agent/practice-context/outgoing/reviewer-system-guide.md`
    - `docs/engineering/workflow.md`
    - `docs/governance/development-practice.md`
@@ -1313,12 +1313,12 @@ If session context compresses again, re-ground from these files in order:
 The 2026-03-28 committed-state refresh reran the following handover reviewer
 set, and the checkpoint records the clean result:
 
-1. code-reviewer
-2. docs-adr-reviewer
-3. onboarding-reviewer
+1. code-expert
+2. docs-adr-expert
+3. onboarding-expert
 4. all four architecture reviewers
-5. config-reviewer
-6. security-reviewer
+5. config-expert
+6. security-expert
 
 That rerun was intentionally belt-and-braces: the committed-state refresh
 removes the stale local-only framing, and the broader reviewer set clears the

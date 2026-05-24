@@ -1,0 +1,6 @@
+---
+description: On every /loop cycle, code-expert reviews the planned dispatch (per-site dispositions, file scope, risk surface) before the implementer fan-out runs. The post-execution gateway review continues unchanged. Two review moments per cycle, never one.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/pre-execution-code-expert-review-per-loop-cycle.md`.

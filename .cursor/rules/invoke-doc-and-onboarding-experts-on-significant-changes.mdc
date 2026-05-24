@@ -1,0 +1,6 @@
+---
+description: Dispatch docs-adr-expert and onboarding-expert on significant doc or Practice changes.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/invoke-doc-and-onboarding-experts-on-significant-changes.md`.

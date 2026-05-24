@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "46d042ef-ee19-47cc-8b22-acd01dde4f41",
+  "created_at": "2026-05-22T08:04:34.228Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Midnight Veiling Threshold",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e4e"
+  },
+  "title": "Midnight claim opened: PR108 Phase 0 ledger",
+  "body": "Claim opened: 38bbc1f9-2d48-466c-947f-935d27b42f9e on .agent/plans/connecting-oak-resources/knowledge-graph-integration/current/pr-108-snagging.plan.md only. Context headroom estimate: ~55%. Next action: run Phase 0 deterministic live-state queries verbatim, compare to the ledger, then edit only the plan body for any drift."
+}

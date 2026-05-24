@@ -1,12 +1,12 @@
 ---
 name: "Validation and TDD Doctrine Restructure (index)"
-overview: "Single index for the multi-plan arc that splits testing-strategy.md into validation-strategy.md (umbrella), testing-strategy.md (slimmed), and tdd-as-design.md (foundational), and refreshes the test-reviewer to carry the deepened stance."
+overview: "Single index for the multi-plan arc that splits testing-strategy.md into validation-strategy.md (umbrella), testing-strategy.md (slimmed), and tdd-as-design.md (foundational), and refreshes the test-expert to carry the deepened stance."
 todos:
   - id: s1-index-plan
     content: "S1 (this session): land this index plan."
     status: pending
-  - id: s2-test-reviewer-refresh
-    content: "S2 (this session): refresh test-reviewer — stance, depth, suggestions, recipe/pattern read path wiring."
+  - id: s2-test-expert-refresh
+    content: "S2 (this session): refresh test-expert — stance, depth, suggestions, recipe/pattern read path wiring."
     status: pending
     depends_on: [s1-index-plan]
   - id: s3-tdd-as-design-directive
@@ -20,7 +20,7 @@ todos:
   - id: p1-validation-strategy-umbrella
     content: "P1 (future plan): draft .agent/directives/validation-strategy.md as the umbrella directive."
     status: pending
-    depends_on: [s2-test-reviewer-refresh, s3-tdd-as-design-directive]
+    depends_on: [s2-test-expert-refresh, s3-tdd-as-design-directive]
   - id: p2-tdd-playbook
     content: "P2 (future plan): grow tdd-as-design.md into the full TDD playbook (methodology, atomic landing, parallel scales, refactoring TDD)."
     status: pending
@@ -37,8 +37,8 @@ todos:
     content: "P5 (future plan): mechanical sweep — every cross-reference to testing-strategy.md across rules, principles, subagents, ADRs, and skills updated to point at the right new directive."
     status: pending
     depends_on: [p1-validation-strategy-umbrella, p2-tdd-playbook, p3-testing-strategy-refactor]
-  - id: p6-test-reviewer-round-2
-    content: "P6 (future plan): test-reviewer Round 2 — alignment with the new directive topology after P1–P3 land."
+  - id: p6-test-expert-round-2
+    content: "P6 (future plan): test-expert Round 2 — alignment with the new directive topology after P1–P3 land."
     status: pending
     depends_on: [p3-testing-strategy-refactor]
 ---
@@ -47,7 +47,7 @@ todos:
 
 **Last Updated**: 2026-05-04
 **Status**: 🟢 IN PROGRESS (S1 landing now; S2–S4 this session; P1–P6 sequenced)
-**Scope**: Multi-plan arc that splits the current sprawling `testing-strategy.md` directive into three single-responsibility documents (validation-strategy umbrella, testing-strategy slim, tdd-as-design foundational) and uses the test-reviewer as the carrier of the deepened doctrine.
+**Scope**: Multi-plan arc that splits the current sprawling `testing-strategy.md` directive into three single-responsibility documents (validation-strategy umbrella, testing-strategy slim, tdd-as-design foundational) and uses the test-expert as the carrier of the deepened doctrine.
 
 ---
 
@@ -63,7 +63,7 @@ Three corollaries:
 2. The atomic landing rule is a TDD invariant, not a process rule. Test and product code are co-defined; landing them in separate commits treats one act as two outputs.
 3. A unit test is never enough on its own to show that value is delivered. Scales (unit / integration / E2E / UI / a11y) are complementary and parallel; the higher-scale tests describe value flow that lower-scale tests cannot reach.
 
-This reframe is the seed of `tdd-as-design.md` (S3) and the stance the refreshed test-reviewer (S2) carries.
+This reframe is the seed of `tdd-as-design.md` (S3) and the stance the refreshed test-expert (S2) carries.
 
 ---
 
@@ -93,9 +93,9 @@ The owner has explicitly named the operational failure: **TDD simply isn't happe
 
 **Root cause**: The current doctrine treats TDD as a process rule ("write the test first") rather than as a foundational design discipline. Process rules are easy to perform mechanically without internalising the design intent.
 
-### Issue 3: test-reviewer is not yet the carrier of this stance
+### Issue 3: test-expert is not yet the carrier of this stance
 
-The test-reviewer enforces structural test quality (no skipped, no global state, no complex mocks, no conditional execution) but does not yet ask the deeper question — *does this test describe an interface, or audit one?* — and does not load the recipe/pattern content that would make its suggestions concrete.
+The test-expert enforces structural test quality (no skipped, no global state, no complex mocks, no conditional execution) but does not yet ask the deeper question — *does this test describe an interface, or audit one?* — and does not load the recipe/pattern content that would make its suggestions concrete.
 
 **Evidence**: Recipe and pattern files in `docs/engineering/testing-{patterns,tdd-recipes}.md` are referenced from authority documents but are not part of any reviewer's mandatory read path. There is no observed instance of a reviewer citing them.
 
@@ -119,7 +119,7 @@ docs/engineering/
 └── testing-tdd-recipes.md          ← (P3) recipe-level: TDD cycle worked examples
 
 .agent/sub-agents/
-└── test-reviewer.md                ← (S2 → P6) carries the deepened stance + loads recipes
+└── test-expert.md                ← (S2 → P6) carries the deepened stance + loads recipes
 ```
 
 ### Single-responsibility boundaries
@@ -134,7 +134,7 @@ Per owner direction §2: the browser is a *mechanism*, not a class of validation
 
 - **Whole-system browser testing** → testing-strategy §System (E2E)
 - **UI element behaviour** → testing-strategy §Integration or §Unit (UI-level)
-- **Accessibility (a11y)** → its own validation surface in validation-strategy (cross-cutting; cites WCAG and the accessibility-reviewer)
+- **Accessibility (a11y)** → its own validation surface in validation-strategy (cross-cutting; cites WCAG and the accessibility-expert)
 - **Visual regression** → its own validation surface in validation-strategy (regression-shape, not behaviour-shape)
 - **Theme / mode correctness** → either testing-strategy §System or validation-strategy §Visual depending on whether the assertion is about behaviour (system) or appearance (regression)
 
@@ -159,11 +159,11 @@ The four most-impactful low-effort deliverables, sequenced.
 
 **Validation**: file exists; `pnpm markdownlint:root` exit 0; `pnpm portability:check` exit 0.
 
-### S2. Refresh test-reviewer — stance, depth, recipe wiring
+### S2. Refresh test-expert — stance, depth, recipe wiring
 
 **Acceptance**:
 
-1. ✅ test-reviewer subagent definition leads with the foundational reframing as its operating stance.
+1. ✅ test-expert subagent definition leads with the foundational reframing as its operating stance.
 2. ✅ Adds the *describe vs audit* test (does this test describe an interface, or could it be derived mechanically from product code?) as a first-class check.
 3. ✅ Adds explicit checks for the immediate failure mode: ratified-not-described tests; split test+code commits; absence of a genuine RED phase.
 4. ✅ Mandatory read path on every invocation now includes `docs/engineering/testing-tdd-recipes.md` and `docs/engineering/testing-patterns.md`.
@@ -176,8 +176,8 @@ The four most-impactful low-effort deliverables, sequenced.
 pnpm subagents:check
 pnpm portability:check
 pnpm markdownlint:root
-grep -c "describes a system state" .claude/agents/test-reviewer.md  # Expected: ≥1
-grep -c "testing-tdd-recipes\|testing-patterns" .claude/agents/test-reviewer.md  # Expected: ≥2
+grep -c "describes a system state" .claude/agents/test-expert.md  # Expected: ≥1
+grep -c "testing-tdd-recipes\|testing-patterns" .claude/agents/test-expert.md  # Expected: ≥2
 ```
 
 ### S3. Create `.agent/directives/tdd-as-design.md`
@@ -216,7 +216,7 @@ Each future plan gets its own file when it is promoted from this index to `curre
 
 - Every gate in `pnpm check` and `pnpm make` is named in the directive with its role.
 - Cross-references from `principles.md` §Code Quality added.
-- Test-reviewer (P6) updated to read the new umbrella as part of its read path.
+- Test-expert (P6) updated to read the new umbrella as part of its read path.
 
 **Depends on**: S2, S3.
 
@@ -238,7 +238,7 @@ Each future plan gets its own file when it is promoted from this index to `curre
 **Acceptance signals**:
 
 - testing-strategy.md fits comfortably under the line budget without "soft warn".
-- Recipe files are referenced from test-reviewer's mandatory read path (already wired in S2).
+- Recipe files are referenced from test-expert's mandatory read path (already wired in S2).
 - Browser proof concerns each have a single home; no concern duplicated across documents.
 
 **Depends on**: P1, P2.
@@ -257,9 +257,9 @@ Each future plan gets its own file when it is promoted from this index to `curre
 
 **Depends on**: P1, P2, P3.
 
-### P6. test-reviewer Round 2
+### P6. test-expert Round 2
 
-**Scope**: Align test-reviewer's read path and references with the post-refactor topology. The S2 refresh used today's surfaces; once P1–P3 land, the reviewer needs a second pass to point at the new homes.
+**Scope**: Align test-expert's read path and references with the post-refactor topology. The S2 refresh used today's surfaces; once P1–P3 land, the reviewer needs a second pass to point at the new homes.
 
 **Depends on**: P3.
 
@@ -283,7 +283,7 @@ Per `.agent/plans/templates/components/lifecycle-triggers.md`:
 
 - **Session entry**: re-read this index plan and the next-session record before any non-planning edit.
 - **Work-shape declaration**: each S-cycle is a bounded non-trivial change shipped as one commit; each P-plan is multi-session work warranting its own plan file when promoted.
-- **Active-claim registration**: register `.agent/directives/`, `.agent/sub-agents/test-reviewer.md`, `.agent/rules/no-conditional-tests.md` (already landed) as touched areas during S-cycle execution.
+- **Active-claim registration**: register `.agent/directives/`, `.agent/sub-agents/test-expert.md`, `.agent/rules/no-conditional-tests.md` (already landed) as touched areas during S-cycle execution.
 - **Handoff closure**: this thread's next-session record updated when each S-cycle lands.
 - **Consolidation**: run `/jc-consolidate-docs` when each S-cycle and each P-plan completes.
 
@@ -300,7 +300,7 @@ S-cycle level:
 P-plan level:
 
 - P1: new directive → ADR-121 marked for refresh; cross-references from principles.md, AGENT.md, start-right-quick.md, start-right-thorough.md.
-- P2: directive growth → cross-references from principles.md, test-reviewer.
+- P2: directive growth → cross-references from principles.md, test-expert.
 - P3: directive refactor → reference migration sweep (P5) handles propagation.
 - P4: ADR refresh → propagation to validation-strategy.md and to any directive citing ADR-121.
 
@@ -309,8 +309,8 @@ P-plan level:
 ## Reviewer Scheduling
 
 - **Pre-execution (S1)**: none — this is a doctrinal index, not code.
-- **During (S2–S4)**: `code-reviewer` gateway on each commit; `docs-adr-reviewer` on the new directive (S3); `subagent-architect` if the test-reviewer refresh feels structurally novel (S2).
-- **Post (each S-cycle)**: `architecture-reviewer-fred` for principles-first compliance; `assumptions-reviewer` if any S-cycle commits an assumption load-bearing for P1–P6.
+- **During (S2–S4)**: `code-expert` gateway on each commit; `docs-adr-expert` on the new directive (S3); `subagent-architect` if the test-expert refresh feels structurally novel (S2).
+- **Post (each S-cycle)**: `architecture-expert-fred` for principles-first compliance; `assumptions-expert` if any S-cycle commits an assumption load-bearing for P1–P6.
 - **Per-P-plan**: each future plan re-evaluates its reviewer slate when promoted.
 
 Phase-misalignment risk: scheduling all reviewers at close. Mitigated by phase-aligned invocation as listed.
@@ -321,11 +321,11 @@ Phase-misalignment risk: scheduling all reviewers at close. Mitigated by phase-a
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|-----------|--------|-----------|
-| S2's refreshed test-reviewer drifts from S3's tdd-as-design.md | Medium | Medium | Land S3 *first* in the same session; S2 cites it. |
+| S2's refreshed test-expert drifts from S3's tdd-as-design.md | Medium | Medium | Land S3 *first* in the same session; S2 cites it. |
 | Recipe files (testing-patterns.md, testing-tdd-recipes.md) do not yet exist or are sparse | High | Medium | S2 wires the read path even if files are stubs; P3 populates them. Stub files are acceptable as the forcing function. |
 | Reference migration sweep (P5) is mechanically large and easy to get wrong | Medium | Low | Sequence P5 last, after the new topology is stable; rely on `pnpm portability:check` to catch broken references. |
 | testing-strategy.md fitness budget tightens further during P3 refactor and pushes other directives over their limits | Low | Low | P3 explicitly moves content to engineering docs; doesn't relocate to other directives. |
-| The "describe vs audit" test in test-reviewer is too subjective to enforce reliably | Medium | Medium | S2 ships concrete cues (test names that describe behaviour, substitute-implementation thought experiment, mechanical-derivation test) rather than a vibe check. |
+| The "describe vs audit" test in test-expert is too subjective to enforce reliably | Medium | Medium | S2 ships concrete cues (test names that describe behaviour, substitute-implementation thought experiment, mechanical-derivation test) rather than a vibe check. |
 | Owner direction shifts after S2–S4 land but before P1 starts | Low | Low | Index plan is the single source of truth; updates happen here, not in scattered docs. |
 
 ---
@@ -355,7 +355,7 @@ pnpm check                   # Full canonical aggregate
 ### Session-scope (this session)
 
 - ✅ This index plan landed (S1).
-- ✅ Test-reviewer carries the deepened stance and reads recipes/patterns on every invocation (S2).
+- ✅ Test-expert carries the deepened stance and reads recipes/patterns on every invocation (S2).
 - ✅ `tdd-as-design.md` directive exists and is referenced from principles.md (S3).
 - ✅ Stryker reframe applied; mutation testing positioned as the coverage-meaningfulness constraint (S4).
 - ✅ All quality gates green at every commit.
@@ -364,9 +364,9 @@ pnpm check                   # Full canonical aggregate
 
 - ✅ Three single-responsibility directives replace the current sprawling testing-strategy.md.
 - ✅ "Right tool for each job" is operationalised via validation-strategy.md, not buried as a principles bullet.
-- ✅ TDD doctrine carries the design-discipline framing; the immediate failure mode (test/code separation) has named cures the test-reviewer enforces.
+- ✅ TDD doctrine carries the design-discipline framing; the immediate failure mode (test/code separation) has named cures the test-expert enforces.
 - ✅ Browser proof concerns are distributed by validation type, not collected by access surface.
-- ✅ Recipes and patterns are load-bearing because the test-reviewer reads them.
+- ✅ Recipes and patterns are load-bearing because the test-expert reads them.
 - ✅ ADR-121 reflects the new gate inventory.
 - ✅ No stale cross-references to the old testing-strategy.md remain anywhere in the doctrine surface.
 
@@ -396,8 +396,8 @@ pnpm check                   # Full canonical aggregate
 **Immediate value**:
 
 - The named TDD failure mode gets a named cure within one session.
-- The test-reviewer becomes the carrier of the doctrine, not just an auditor of structural compliance.
-- Recipes that have sat unread become load-bearing on every test-reviewer invocation.
+- The test-expert becomes the carrier of the doctrine, not just an auditor of structural compliance.
+- Recipes that have sat unread become load-bearing on every test-expert invocation.
 
 **System-level impact**:
 
@@ -427,7 +427,7 @@ pnpm check                   # Full canonical aggregate
 
 - ✅ Operationalises "right tool for each job" as a directive (validation-strategy), not a buried bullet.
 - ✅ Names tests as *descriptions of system state* — the ambition that "do not constrain implementation" already gestures at.
-- ✅ Treats the test-reviewer as the local enforcer of the doctrine, with a forcing function (mandatory recipe reads) that survives session pressure.
+- ✅ Treats the test-expert as the local enforcer of the doctrine, with a forcing function (mandatory recipe reads) that survives session pressure.
 - ✅ Sequences architectural changes so each commit ends green at every level.
 
 ---

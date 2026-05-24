@@ -1,9 +1,14 @@
 ---
 title: "Prefer Native SDK Over Custom Plumbing"
+polarity: pattern
 category: architecture
 barrier_met: true
 source_sessions: ["2026-04-14d", "2026-04-14g"]
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Prefer Native SDK Over Custom Plumbing
 

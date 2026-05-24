@@ -1,10 +1,15 @@
 ---
 name: Hook as Question Not Obstacle
+polarity: pattern
 category: process
 status: provisional
 discovered: 2026-04-29
 proven_in: "TS6 migration session — pre-commit hook chain (prettier, markdownlint, knip) caught accumulating signals about working-tree state; agent treated each as friction to push past instead of as questions about repo state, and on the third hook requested --no-verify authorisation"
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Hook as Question Not Obstacle
 

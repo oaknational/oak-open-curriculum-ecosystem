@@ -299,7 +299,7 @@ ownership, or conflict resolution. The proposal is to install one.
    if you find a claim." The substance of the decision is agent
    judgement.
 11. **Sub-agent dispatch ≠ peer collaboration**. Reviewer sub-agents
-    (docs-adr-reviewer, etc.) are fork-blocking-rejoin within ONE
+    (docs-adr-expert, etc.) are fork-blocking-rejoin within ONE
     agent's session. Peer collaboration is asynchronous between
     independent sessions. The directive names the distinction so
     agents pick the right channel.
@@ -470,7 +470,7 @@ files-first / schema-later in its strictest form.
    `.agent/memory/executive/agent-collaboration-channels.md` — a one-page
    reference card naming the communication channels and the
    when-to-use-which decision tree. Executive entries are short, durable,
-   index-card-shaped (per existing convention with `invoke-code-reviewers.md`).
+   index-card-shaped (per existing convention with `invoke-code-experts.md`).
 9. **Bootstrap the `.agent/state/` directory** with a `README.md` that
    names the state-vs-memory distinction (state: live, ephemeral,
    signal-like, truth-of-now; memory: durable, lessons-learned,
@@ -622,10 +622,10 @@ landing under enforced isolation.
 
 #### Reviewer Routing (mandatory)
 
-- `docs-adr-reviewer` — pre-landing review of the new
+- `docs-adr-expert` — pre-landing review of the new
   `agent-collaboration.md` directive content and the cross-reference
   sweep completeness. Same discipline as ADR-163 §3.0 pre-landing gates.
-- `assumptions-reviewer` — pre-landing review of the new directive's
+- `assumptions-expert` — pre-landing review of the new directive's
   behavioural-rule framing (proportionality of the two foundational
   rules; whether the gate-recovery-cadence citation is the right
   authority surface).
@@ -814,12 +814,12 @@ usage shows agents need, and remove fields that no entry needed.
 
 #### Reviewer Routing
 
-- `architecture-reviewer-fred` — pre-landing review of the
+- `architecture-expert-fred` — pre-landing review of the
   state-vs-memory boundary discipline. Boundary correctness is the
   central concern of WS1 and Fred's specialty.
-- `config-reviewer` — review of the JSON schema for the additive-only
+- `config-expert` — review of the JSON schema for the additive-only
   versioning model and integration with any validation tooling.
-- `assumptions-reviewer` — confirm that the single-level claim model
+- `assumptions-expert` — confirm that the single-level claim model
   (no exclusivity gradient) holds under the advisory framing; surface
   any scenario where strength differentiation would be required at
   WS1 land time rather than as a WS5-driven refinement.
@@ -884,7 +884,7 @@ founding entry — the pattern that motivated this entire plan.
 
 #### Reviewer Routing
 
-- `docs-adr-reviewer` — review the pattern file's evidence chain (three
+- `docs-adr-expert` — review the pattern file's evidence chain (three
   instances, their cross-references) and its placement.
 
 ### WS3 Split — Decision Threads First, Sidebar Later
@@ -936,11 +936,11 @@ Authoritative split plans:
 
 #### Reviewer Routing
 
-- `assumptions-reviewer` — proportionality of decision-thread-first
+- `assumptions-expert` — proportionality of decision-thread-first
   sequencing and any later sidebar promotion.
-- `docs-adr-reviewer` — review the conversation / decision-thread schema,
+- `docs-adr-expert` — review the conversation / decision-thread schema,
   claim-history durability, and thread-record distinction.
-- `architecture-reviewer-wilma` — if WS3B promotes, review sidebar
+- `architecture-expert-wilma` — if WS3B promotes, review sidebar
   timeout, parallel-sidebar, and owner-escalation failure modes.
 
 ### WS4A — Lifecycle Integration (Completed 2026-04-26)
@@ -1010,12 +1010,12 @@ dashboard. Those remain evidence-gated follow-up work.
 
 #### Reviewer Routing
 
-- `docs-adr-reviewer` — preferred closeout review for coherence across
+- `docs-adr-expert` — preferred closeout review for coherence across
   updated workflow, Practice, ADR, and plan surfaces.
-- `assumptions-reviewer` — preferred closeout review for proportionality:
+- `assumptions-expert` — preferred closeout review for proportionality:
   confirm lifecycle integration remains narrow, WS3B is still gated, and
   dashboard / hook automation has not slipped in by implication.
-- `architecture-reviewer-fred` — boundary verification on the
+- `architecture-expert-fred` — boundary verification on the
   platform-adapter rule-loading mechanism if later WS5 evidence
   reveals any platform-specific complexity.
 
@@ -1136,9 +1136,9 @@ in 2026-04-24/25 pre-protocol).
 
 #### Reviewer Routing
 
-- `docs-adr-reviewer` — review the napkin's seed-harvest entries for
+- `docs-adr-expert` — review the napkin's seed-harvest entries for
   evidentiary rigour before any subsequent amendment commit.
-- `assumptions-reviewer` — when refinement amendments are drafted,
+- `assumptions-expert` — when refinement amendments are drafted,
   review their proportionality before they land.
 
 ## Critical Files
@@ -1181,7 +1181,7 @@ in 2026-04-24/25 pre-protocol).
 - `.agent/skills/commit/SKILL.md` and commit skill adapters (commit-window refinement)
 - `.agent/skills/start-right-quick/`, `start-right-thorough/`, `session-handoff/` and platform adapters (WS4A)
 - `.agent/commands/consolidate-docs.md` (WS1; WS3A; WS3B if promoted; WS4A)
-- `.agent/memory/executive/invoke-code-reviewers.md` (WS4A)
+- `.agent/memory/executive/invoke-code-experts.md` (WS4A)
 
 ## Verification
 
@@ -1269,7 +1269,7 @@ schemas, but those amendments are separate commits with their own gates.
 | Risk | Mitigation |
 |---|---|
 | Rename sweep misses a reference and breaks discoverability | `rg "collaboration\.md"` at execution time; reviewer dispatch on the cross-reference set; one atomic commit so no partial-state intermediate. |
-| State-vs-memory confusion at adoption time | Explicit READMEs in both `.agent/state/` and `.agent/memory/collaboration/` naming the distinction; reviewer dispatch by `architecture-reviewer-fred` on boundary discipline. |
+| State-vs-memory confusion at adoption time | Explicit READMEs in both `.agent/state/` and `.agent/memory/collaboration/` naming the distinction; reviewer dispatch by `architecture-expert-fred` on boundary discipline. |
 | Schema crystallises wrong fields, requires v2 retrofit | `schema_version` field from day one with additive-only major-version compatibility model named in schema and directive; WS5 observation checks "what fields were never used / what was missing"; refinement amendments are normal lifecycle. (Wilma MAJOR-4 absorbed.) |
 | Claims become a graveyard (stale entries cluttering the registry) | Under advisory model, stale claims are noise not blockers — no agent is stranded by them. Consolidate-docs archives stale claims to `closed-claims.archive.json`; pilot run proves archival end-to-end before WS2 starts. (Wilma MAJOR-5, MAJOR-6 absorbed.) |
 | Shared communication log read after parallel writes shows interleaving | Shared communication log is a *discovery* surface, not synchronisation. Eventually-consistent appends are fine for sequential agents reading later. (Wilma MAJOR-3 absorbed via reframing.) |
@@ -1288,7 +1288,7 @@ schemas, but those amendments are separate commits with their own gates.
 
 ## Wilma's Adversarial Review — Findings Absorbed
 
-The plan was reviewed by `architecture-reviewer-wilma` 2026-04-25 against
+The plan was reviewed by `architecture-expert-wilma` 2026-04-25 against
 2 BLOCKING, 7 MAJOR, 7 MINOR, and 4 POSITIVE findings. Disposition table
 (maintained as the audit trail for the review cycle):
 

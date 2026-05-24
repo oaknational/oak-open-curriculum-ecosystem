@@ -237,7 +237,7 @@ The separation of concerns also affects:
    `src/bulk/`, `src/synonyms/`, `src/domain-models/`
 6. Keep `rootDir: ./src`, keep generated output inside `src/generated/`
    **[OWNER REJECTED — generated output goes outside `src/`]**
-7. Invoke `config-reviewer` for tsconfig/package.json/eslint alignment
+7. Invoke `config-expert` for tsconfig/package.json/eslint alignment
 
 ---
 

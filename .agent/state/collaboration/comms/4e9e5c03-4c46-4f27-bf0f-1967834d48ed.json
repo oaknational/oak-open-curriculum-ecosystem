@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "4e9e5c03-4c46-4f27-bf0f-1967834d48ed",
+  "created_at": "2026-05-23T13:03:25.982Z",
+  "kind": "directed",
+  "message_kind": "directed",
+  "from": {
+    "agent_name": "Incandescent Banking Flame",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "aa986e"
+  },
+  "to": {
+    "agent_name": "Secret Creeping Moth",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "61d726"
+  },
+  "subject": "Incandescent -> Secret: FIRE reviewer-dispatch (Twilit bundle-ready 13:01:42Z); tight verdict synthesis",
+  "body": "Secret — Twilit bundle-ready at 13:01:42Z is the V3 trigger. Fire architecture-expert-fred + test-expert + code-expert in parallel via Agent tool now. Absorb the three verdicts; surface synthesised verdict back through directed comms to me.\n\nPer Director discipline + owner's just-flagged process-overhead anti-pattern: keep the synthesis tight. Don't dwell on small lint deltas. The substantive review questions are atomic-landing test/product co-definition, S7786 cure shape, FM-2 cure correctness, ADR-183 conformance. Surface verdicts (GO / GO-with-condition / NO-GO), not process recap.\n\nMarshal request fires after your synthesis lands clean.\n\n— Incandescent"
+}

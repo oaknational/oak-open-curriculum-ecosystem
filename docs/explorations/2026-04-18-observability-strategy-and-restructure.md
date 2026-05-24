@@ -40,7 +40,7 @@ The branch had, at session start:
 - L-0b conformance test at `packages/libs/sentry-node/src/runtime-redaction-barrier.unit.test.ts`
   (18 tests, three-part closure coverage plus automated bypass validation).
 - `§A.6 Reviewer Findings Register` in the executable plan enumerating 29
-  findings from a close-of-session six-reviewer matrix: 18 ACTIONED, 11
+  findings from a close-of-session six-expert matrix: 18 ACTIONED, 11
   TO-ACTION (each with owning lane + specific edit), 0 REJECTED.
 - `pnpm check` from repo root: EXIT=0, 88/88 tasks green.
 - One new pattern extracted (`findings-route-to-lane-or-rejection.md`) and

@@ -7,7 +7,7 @@ thread: agentic-engineering-enhancements
 graph_layer: oak-graph-surface
 related_plans:
   - "../../agentic-engineering-enhancements/current/practice-graph-payoff-peak-pilot.plan.md"
-  - "../../connecting-oak-resources/knowledge-graph-integration/current/graph-stack.plan.md"
+  - "../../connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md"
   - "../../graph-portfolio-index.md"
 isProject: false
 todos:

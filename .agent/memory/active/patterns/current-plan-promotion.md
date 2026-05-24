@@ -1,6 +1,7 @@
 ---
 related_pdr: PDR-014
 name: "Current Plan Promotion"
+polarity: pattern
 use_this_when: "A review or planning pass has resolved 'what comes next' and the repo needs a concrete next-session entry point rather than a mere intended future direction"
 category: process
 proven_in: "Statistical roadmap review plus observational tranche promotion (2026-03-22, algo-experiments)"
@@ -11,6 +12,10 @@ barrier:
   prevents_recurring_mistake: "Decision-ready plans lacking cold-start context, queue surfaces pointing at a plan that is not yet session-entry-ready"
   stable: true
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Current Plan Promotion
 

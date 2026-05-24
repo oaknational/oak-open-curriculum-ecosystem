@@ -42,14 +42,32 @@ doubt, ask: "could this plan exist if `agent-tools/` did not?" If yes,
 it is broader than this collection.
 
 **Status**: 🔄 Active + queued execution
-**Last Updated**: 2026-05-05
+**Last Updated**: 2026-05-12
+
+## Current Controlling Plan
+
+[`current/cost-of-collaboration.plan.md`](current/cost-of-collaboration.plan.md)
+is the current single source of truth for agent communication and
+agent-tooling improvement work. It subsumes
+[`current/primary-agent-tooling-enhancements.plan.md`](current/primary-agent-tooling-enhancements.plan.md),
+which remains only as a superseded back-pointer for older handoffs, napkin
+entries, and comms references.
+
+Use this relationship when routing work:
+
+- implementation changes to `agent-tools/`, `.agent/state/collaboration/`,
+  hooks, identity plumbing, commit queue, comms, or collaboration-state
+  substrate route through `cost-of-collaboration.plan.md`;
+- broader doctrine about how agents collaborate, plan, communicate, learn, or
+  govern the Practice remains in
+  [`agentic-engineering-enhancements/`](../agentic-engineering-enhancements/).
 
 ---
 
 ## Why This Collection Exists
 
 Agent tooling work has a different change-cost profile than practice
-doctrine, governance, or specialist-reviewer work:
+doctrine, governance, or specialist-expert work:
 
 - **Tooling changes are code** — they move through TDD cycles, type-check,
   lint, tests, and build gates. Doctrine and governance changes are

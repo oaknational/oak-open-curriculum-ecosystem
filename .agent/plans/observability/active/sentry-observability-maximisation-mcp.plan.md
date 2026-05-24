@@ -81,16 +81,16 @@ todos:
   - id: l-eh-initial
     content: "L-EH initial (Phase 1 / Wave 1 per 2026-04-18 reshape): enable ESLint built-in `preserve-caught-error` (added in 9.35.0) with `requireCatchParameter: true` at `error` severity in `src/**/*.ts` of the 5 Wave-1 workspaces. Supersedes the originally planned custom `require-error-cause` rule — the built-in is a documented superset covering missing cause, cause-mismatch, destructured-parameter loss, variable shadowing, and re-throw / nested / AggregateError / async-wrapper cases by construction. Audit (2026-04-19): 0 violations in-scope; enforcement landed at `error` per `warning-severity-is-off-severity` (with no violations to clean up, `warn`-with-deadline would be vacuous)."
     status: completed
-    note: "Landed 2026-04-19. Rule wired in each of the 5 workspace `eslint.config.ts` files as a sibling block to the `require-observability-emission` block, scoped to `src/**/*.ts`. Pre-enable audit: 0 violations (MCP app 0; search-cli 0; curriculum-sdk 0; search-sdk 0; sdk-codegen 0) — consistent with ADR-088 + `.agent/rules/use-result-pattern.md` discipline already in practice. pnpm check exit 0 post-enable at `error`. Architecture-reviewer-fred TO-ACTION driving the `warn` → `error` flip actioned in the same lane closure; comment preamble updated with trust-boundary rationale."
+    note: "Landed 2026-04-19. Rule wired in each of the 5 workspace `eslint.config.ts` files as a sibling block to the `require-observability-emission` block, scoped to `src/**/*.ts`. Pre-enable audit: 0 violations (MCP app 0; search-cli 0; curriculum-sdk 0; search-sdk 0; sdk-codegen 0) — consistent with ADR-088 + `.agent/rules/use-result-pattern.md` discipline already in practice. pnpm check exit 0 post-enable at `error`. Architecture-expert-fred TO-ACTION driving the `warn` → `error` flip actioned in the same lane closure; comment preamble updated with trust-boundary rationale."
   - id: l-eh-final
     content: "L-EH final (Phase 5 per 2026-04-18 reshape; was Phase 4 pre-reshape): author prefer-result-pattern ESLint rule with concrete heuristic spec + valid/invalid RuleTester cases; apply to sentry-node, core/observability, MCP app observability as first adoption tranche; update ADR-088 and .agent/rules/use-result-pattern.md"
     status: pending
   - id: l-doc-initial
     content: "L-DOC initial (Phase 1): expand packages/libs/sentry-node/README.md + author apps/oak-curriculum-mcp-streamable-http/docs/observability.md + shrink app README Observability section to summary+link; cross-link from workspace READMEs and docs mesh (docs/README.md, quick-start.md, docs/operations/README.md, sentry-deployment-runbook § Redaction). DONE 2026-04-19."
     status: completed
-    note: "Landed 2026-04-19 (commit 9e1a26b2). §RED reshaped mid-execution: the prescribed structural content-presence test was authored, run red, then removed after testing-strategy.md review (tests must prove behaviour, not constrain doc wording). Acceptance moved to the reviewer matrix (docs-adr-reviewer + onboarding-reviewer) plus the manual reader-test. Both reviewers returned; P1/Critical findings actioned in-place (11 broken ADR filename slugs, SentryPostRedactionHooks vs SentryRedactionHooks conflation, userId/setUser scope correction, discoverability mesh). Follow-ups recorded in lane close evidence."
+    note: "Landed 2026-04-19 (commit 9e1a26b2). §RED reshaped mid-execution: the prescribed structural content-presence test was authored, run red, then removed after testing-strategy.md review (tests must prove behaviour, not constrain doc wording). Acceptance moved to the reviewer matrix (docs-adr-expert + onboarding-expert) plus the manual reader-test. Both reviewers returned; P1/Critical findings actioned in-place (11 broken ADR filename slugs, SentryPostRedactionHooks vs SentryRedactionHooks conflation, userId/setUser scope correction, discoverability mesh). Follow-ups recorded in lane close evidence."
   - id: l-doc-final
-    content: "L-DOC final: DISSOLVED 2026-04-20. Docs are definition-of-done on every lane, not a separate phase — a separate L-DOC-final lane creates a drift window where code lands in Phases 3 and 4 without matching docs, which violates the repo's no-drift discipline. Each lane's REFACTOR phase now gates on: per-loop TSDoc on owning functions; ADR index entries for any new ADR touched; propagation to `sentry-deployment-runbook.md`, `sentry-cli-usage.md`, `production-debugging-runbook.md`, and `environment-variables.md` for the specific signals that lane emits; `docs-adr-reviewer` close review. `documentation-sync-log.md` entries land per-lane at lane close, not in a final sweep."
+    content: "L-DOC final: DISSOLVED 2026-04-20. Docs are definition-of-done on every lane, not a separate phase — a separate L-DOC-final lane creates a drift window where code lands in Phases 3 and 4 without matching docs, which violates the repo's no-drift discipline. Each lane's REFACTOR phase now gates on: per-loop TSDoc on owning functions; ADR index entries for any new ADR touched; propagation to `sentry-deployment-runbook.md`, `sentry-cli-usage.md`, `production-debugging-runbook.md`, and `environment-variables.md` for the specific signals that lane emits; `docs-adr-expert` close review. `documentation-sync-log.md` entries land per-lane at lane close, not in a final sweep."
     status: dissolved
   - id: l-imm-operational-hardening
     content: "L-IMM (Phase 3, IMMEDIATE post-2026-04-26 Sentry validation): operational hardening bundle covering custom error fingerprinting (event.fingerprint logic in beforeSend for known error families), ignoreErrors/denyUrls allow-list for known-noise patterns, shutdownTimeout/flush review (raise DEFAULT_SENTRY_FLUSH_TIMEOUT_MS from 2_000 to ~5_000 to reduce Lambda drop risk under burst load), maxBreadcrumbs tuning (verify default 100 is sufficient for long-running MCP sessions), sendClientReports verification (default true, confirm enabled), and Vercel ↔ Sentry Marketplace integration verification (confirm what's wired vs hand-rolled). Identified 2026-04-26 by gap analysis against Sentry official docs."
@@ -310,7 +310,7 @@ finding. Update this table if a lane's classification changes.
 | **L-11** | **MVP-deferred** | [ADR-162 §Principle](../../../../docs/architecture/architectural-decisions/162-observability-first.md#the-principle): omission justified — **(a) not applicable at MVP**. No Oak MCP tool currently calls an LLM. L-11 ships scaffolding only (TSDoc extension point) per owner decision 2026-04-17; the first real LLM tool's integration is a separate lane. |
 | L-12-prereq, L-12 | MVP-in | Engineering + usability + accessibility axes — widget instrumentation. Widget is a second emitting workspace under ADR-162's vendor-independence clause. |
 | L-13 | MVP-in | Engineering + usability + security + accessibility axes — per-loop alerts are the launch-day operational surface. |
-| **L-14** | **MVP-deferred** | [ADR-162 §Principle](../../../../docs/architecture/architectural-decisions/162-observability-first.md#the-principle): omission justified — **(c) a decision, not a runtime capability, with a latent security-axis emission obligation**. L-14 records an allow/deny trust-boundary propagation decision per outbound host (Oak API, Clerk, Elastic) with security-reviewer attribution. Any `allow` decision recorded here creates a post-MVP security-axis emission obligation (who propagated to whom, with what trust-boundary classification) that is discharged in [`security-observability.plan.md`](../current/security-observability.plan.md); any runtime wiring that follows the decision is therefore post-MVP but not unbounded. |
+| **L-14** | **MVP-deferred** | [ADR-162 §Principle](../../../../docs/architecture/architectural-decisions/162-observability-first.md#the-principle): omission justified — **(c) a decision, not a runtime capability, with a latent security-axis emission obligation**. L-14 records an allow/deny trust-boundary propagation decision per outbound host (Oak API, Clerk, Elastic) with security-expert attribution. Any `allow` decision recorded here creates a post-MVP security-axis emission obligation (who propagated to whom, with what trust-boundary classification) that is discharged in [`security-observability.plan.md`](../current/security-observability.plan.md); any runtime wiring that follows the decision is therefore post-MVP but not unbounded. |
 | L-15 | MVP-in | Close-out / strategy ADR — required to discharge the parent plan's strategy-close-out obligation. |
 | L-DOC (initial + final), L-EH (initial + final) | MVP-in | Cross-axis discipline — documentation coverage and error-handling standards bind on every axis. |
 
@@ -396,7 +396,7 @@ The original Phase 5 "L-DOC final" lane has been dissolved (2026-04-20).
 Every lane's REFACTOR gate includes: per-loop TSDoc on owning functions;
 ADR index entries for any new ADR touched; propagation to the operational
 runbooks and `environment-variables.md` for the specific signals that
-lane emits; `docs-adr-reviewer` close review; a `documentation-sync-log.md`
+lane emits; `docs-adr-expert` close review; a `documentation-sync-log.md`
 entry for the lane. Docs drift is not permitted between lanes.
 
 L-EH retains its "initial + final" structure (rule enablement in Phase 1;
@@ -645,7 +645,7 @@ trigger is discoverable per-workspace).
   correctly, confirming ADR-088 + `use-result-pattern.md` discipline
   is followed in practice. `pnpm check` exit 0 at `error` severity
   (88/88 tasks; pre-existing 96 `require-observability-emission`
-  warnings unchanged). Architecture-reviewer-fred TO-ACTION
+  warnings unchanged). Architecture-expert-fred TO-ACTION
   flipped `warn` → `error` mid-lane (with 0 violations and no
   backlog trigger, `warn` violates `warning-severity-is-off-severity`).
 - **Proven result**: in `src/**/*.ts` of the 5 Wave-1 workspaces,
@@ -685,8 +685,8 @@ the test constrains implementation (doc wording) rather than proving
 behaviour; legitimate rewording of the docs would fail the test. The
 authoring concept-checklist below is retained as the *authoring and
 reviewer walkthrough* guide, but it is not enforced by an automated test.
-Acceptance falls on the reviewer matrix (`docs-adr-reviewer`,
-`onboarding-reviewer`) plus the manual reader-test in Acceptance #2.
+Acceptance falls on the reviewer matrix (`docs-adr-expert`,
+`onboarding-expert`) plus the manual reader-test in Acceptance #2.
 
 Authoring concept checklist (for reviewer walkthrough, not automated):
 
@@ -711,7 +711,7 @@ Authoring concept checklist (for reviewer walkthrough, not automated):
    replaced by reviewer-matrix pass (Acceptance #2).
 2. Manual review: a reader unfamiliar with the code can answer "is
    MCP auto-instrumented?" and "where does redaction happen?" from
-   docs alone. Verified by `docs-adr-reviewer` and `onboarding-reviewer`
+   docs alone. Verified by `docs-adr-expert` and `onboarding-expert`
    specialist passes.
 3. AGENT.md Essential Links edit is deferred to owner (tracked as follow-up in executable plan todos).
 
@@ -736,7 +736,7 @@ Authoring concept checklist (for reviewer walkthrough, not automated):
   `what-the-system-emits-today.md`.
 - **Observed outcome**: `pnpm check` exit 0 from repo root with no
   filter (PDR-025). Pre-commit hooks passed on Step 0 governance-lane
-  commit. Reviewer matrix (`docs-adr-reviewer`, `onboarding-reviewer`)
+  commit. Reviewer matrix (`docs-adr-expert`, `onboarding-expert`)
   run at lane close; results recorded in the commit body.
 - **Proven result**: a reader unfamiliar with the code can answer
   "is MCP auto-instrumented?" (yes — `wrapMcpServerWithSentry` named
@@ -754,7 +754,7 @@ Authoring concept checklist (for reviewer walkthrough, not automated):
 
 **Reviewer rounds (2026-04-19)**:
 
-- `onboarding-reviewer` P1s actioned in-place: fixed 11 broken ADR
+- `onboarding-expert` P1s actioned in-place: fixed 11 broken ADR
   filename links (actual slugs `078-dependency-injection-for-testability`,
   `143-coherent-structured-fan-out-for-observability`,
   `160-non-bypassable-redaction-barrier-as-principle`); added forward
@@ -766,7 +766,7 @@ Authoring concept checklist (for reviewer walkthrough, not automated):
   citations to symbol names for `src/mcp-handler.ts` and
   `src/handlers.ts`; retained the plan-required `core-endpoints.ts:98`
   and `src/index.ts:40-41` references.
-- `docs-adr-reviewer` Critical Gaps actioned:
+- `docs-adr-expert` Critical Gaps actioned:
   - ADR filename mismatches — fixed (shared with the onboarding P1).
   - `SentryPostRedactionHooks` vs `SentryRedactionHooks` conflation —
     corrected in both docs: the barrier wires five hooks as
@@ -789,14 +789,14 @@ Authoring concept checklist (for reviewer walkthrough, not automated):
 
 **Follow-up items (not in this lane)**:
 
-1. **Architectural question raised by docs-adr-reviewer**: should
+1. **Architectural question raised by docs-adr-expert**: should
    `userId` reach the Sentry user scope at all, or is Oak's
    observability boundary meant to exclude it entirely? Today the
    code sets `user.id = userId` via `observability.setUser` at
    `src/mcp-handler.ts`. If the intent is exclusion, the `setUser`
    call is a code defect; if inclusion is intended, ADR-143's
    observability boundary should be clarified. Route: open a
-   bounded architecture-reviewer-fred question lane on the next
+   bounded architecture-expert-fred question lane on the next
    session, or raise via PR discussion.
 2. **MCP-specific telemetry shape is not tested at the Oak
    boundary**: the claim that MCP observations retain only kind,
@@ -826,7 +826,7 @@ Authoring concept checklist (for reviewer walkthrough, not automated):
 >
 > **Original body retained below** as the record of the scaffolded attempt that surfaced the architectural repair. The extraction-focused decomposition rationale is historical; the actual landing shape is the fold documented above.
 
-**Objective** (A.2 item 6, per architecture-reviewer-fred + sentry-reviewer). Extract a pure, runtime-agnostic redactor core into a new browser-safe package so both the Node adapter (`@oaknational/sentry-node`) and the forthcoming browser adapter (L-12) compose it. **Proposes** (pending ADR-160 amendment) to close the ADR's "Open Question" on redactor core placement in favour of a new package. ADR-160 is Accepted 2026-04-17 with Open Questions intact; L-12-prereq GREEN is conditional on either a minor ADR-160 amendment closing the question or owner confirmation that plan-prose is sufficient authority for the decision.
+**Objective** (A.2 item 6, per architecture-expert-fred + sentry-expert). Extract a pure, runtime-agnostic redactor core into a new browser-safe package so both the Node adapter (`@oaknational/sentry-node`) and the forthcoming browser adapter (L-12) compose it. **Proposes** (pending ADR-160 amendment) to close the ADR's "Open Question" on redactor core placement in favour of a new package. ADR-160 is Accepted 2026-04-17 with Open Questions intact; L-12-prereq GREEN is conditional on either a minor ADR-160 amendment closing the question or owner confirmation that plan-prose is sufficient authority for the decision.
 
 **Package placement — new `packages/core/telemetry-redaction-core/`, NOT a submodule**. Rationale: `@oaknational/sentry-node`'s `runtime-redaction.ts` imports types from `@sentry/node` (`Breadcrumb`, `Exception`, `NodeOptions`, `RequestEventData`), coupling it to Node. A subpath export from `@oaknational/sentry-node` would still pull `@sentry/node` into the browser graph transitively. Only a separate core package with zero `@sentry/*` dependencies can be composed from both runtimes. Precedent: `design-tokens-core/oak-design-tokens` split per ADR-154 § Examples. Tier `packages/core/` matches ADR-041 workspace structure.
 
@@ -1199,7 +1199,7 @@ Per-integration behaviour assertions (under `packages/libs/sentry-node/src/` or 
 
 Integration registration may be verified as a sanity check, but it is not the primary assertion — the behaviour (event shape / content / redaction) is.
 
-**Fixture envelope-observability prerequisite** (per A.6 AR-3, assumptions-reviewer). Before any of the per-integration behaviour assertions can be meaningful, the fixture runtime must be able to observe the envelope types the integrations emit. `createFixtureRuntime` in `runtime.ts` today captures a closed set (`log | exception | set_user | set_tag | set_context | metric (pending L-4b)`) via direct `store.push(...)`; it does NOT route envelopes through the `beforeSend*` adapter pipeline. L-1 GREEN must land one of the following first:
+**Fixture envelope-observability prerequisite** (per A.6 AR-3, assumptions-expert). Before any of the per-integration behaviour assertions can be meaningful, the fixture runtime must be able to observe the envelope types the integrations emit. `createFixtureRuntime` in `runtime.ts` today captures a closed set (`log | exception | set_user | set_tag | set_context | metric (pending L-4b)`) via direct `store.push(...)`; it does NOT route envelopes through the `beforeSend*` adapter pipeline. L-1 GREEN must land one of the following first:
 
 1. **Option A (preferred)** — extend `createFixtureRuntime` to route every envelope through the same `createSentryHooks` composition used by the live SDK, so fixture mode observes the same hook transformations. This aligns fixture and live behaviour and lets L-1 assertions re-use the hook pipeline.
 2. **Option B** — add per-envelope capture paths to the fixture store (`ANREvent`, `StreamedSpanEnvelope`, `RuntimeMetricSample`) with their own `beforeSend*` routing. Higher engineering cost; chosen only if Option A conflicts with existing fixture semantics.
@@ -1260,7 +1260,7 @@ app to import the shared version. Leave the CLI's
 **REFACTOR**: TSDoc on the exported seam. Note in README that the
 seam is shared across app-layer observability objects.
 
-**Explicit-superset discipline** (A.2 item 8, per architecture-reviewer-fred): `SentryObservabilityDelegates` is a **structural intersection at the composition root** — each consumer declares the delegate slice it injects; the library publishes the method factory, not a monolithic interface. Divergence between MCP and CLI consumers is explicit at each composition site, not smuggled in as an "implicit superset with silent discard." When the Search CLI branch adopts the shared factory, its composition root declares its own slice; methods it does not expose never become no-ops of an omnibus interface.
+**Explicit-superset discipline** (A.2 item 8, per architecture-expert-fred): `SentryObservabilityDelegates` is a **structural intersection at the composition root** — each consumer declares the delegate slice it injects; the library publishes the method factory, not a monolithic interface. Divergence between MCP and CLI consumers is explicit at each composition site, not smuggled in as an "implicit superset with silent discard." When the Search CLI branch adopts the shared factory, its composition root declares its own slice; methods it does not expose never become no-ops of an omnibus interface.
 
 **Acceptance**:
 
@@ -1269,7 +1269,7 @@ seam is shared across app-layer observability objects.
 2. MCP app tests unchanged in behaviour.
 3. Type-check green.
 4. The shared seam exports a method factory (not a closed omnibus interface); each consumer's composition root names its own delegate slice.
-5. **Structural-intersection test** (per A.6 AF-3, architecture-reviewer-fred): a type-level test asserts that the published method factory's inferred return type is a structural **intersection** over the consumers' declared delegate slices at each composition root. No method name appears in the public factory type that is not consumed by at least one caller in this repo. This closes the residual silent-discard back-door that "opt-in via method presence" wording alone leaves open.
+5. **Structural-intersection test** (per A.6 AF-3, architecture-expert-fred): a type-level test asserts that the published method factory's inferred return type is a structural **intersection** over the consumers' declared delegate slices at each composition root. No method name appears in the public factory type that is not consumed by at least one caller in this repo. This closes the residual silent-discard back-door that "opt-in via method presence" wording alone leaves open.
 
 ### L-3 MCP request context enrichment
 
@@ -1277,7 +1277,7 @@ seam is shared across app-layer observability objects.
 scope at the handler boundary. Complements, not replaces, the
 attributes that `wrapMcpServerWithSentry` writes on spans.
 
-**Location — MCP app, not the shared library** (A.2 item 4, per architecture-reviewer-betty + ADR-154 framework/consumer separation). `enrichMcpRequestContext` is MCP-specific domain logic and MUST live under `apps/oak-curriculum-mcp-streamable-http/src/observability/enrich-mcp-request-context.ts` (sibling to `sentry-observability-delegates.ts`, `sanitise-mcp-events.ts`, `http-observability.ts`). It MUST NOT be exported from `packages/libs/sentry-node/`. Enforcement is two-part today: (a) `packages/core/oak-eslint/src/rules/boundary.ts` (factory `createLibBoundaryRules`, tested by `lib-boundary.unit.test.ts`) governs cross-workspace import direction; (b) `import-x/no-extraneous-dependencies` transitively catches any `@modelcontextprotocol/sdk` import from `sentry-node` because the SDK is not declared in `sentry-node/package.json`. A named "no MCP-specific symbol" pattern is a follow-up lane candidate rather than an existing rule. Putting the function in the shared library would regress ADR-154 and invite a dependency-direction inversion between app domain and shared framework.
+**Location — MCP app, not the shared library** (A.2 item 4, per architecture-expert-betty + ADR-154 framework/consumer separation). `enrichMcpRequestContext` is MCP-specific domain logic and MUST live under `apps/oak-curriculum-mcp-streamable-http/src/observability/enrich-mcp-request-context.ts` (sibling to `sentry-observability-delegates.ts`, `sanitise-mcp-events.ts`, `http-observability.ts`). It MUST NOT be exported from `packages/libs/sentry-node/`. Enforcement is two-part today: (a) `packages/core/oak-eslint/src/rules/boundary.ts` (factory `createLibBoundaryRules`, tested by `lib-boundary.unit.test.ts`) governs cross-workspace import direction; (b) `import-x/no-extraneous-dependencies` transitively catches any `@modelcontextprotocol/sdk` import from `sentry-node` because the SDK is not declared in `sentry-node/package.json`. A named "no MCP-specific symbol" pattern is a follow-up lane candidate rather than an existing rule. Putting the function in the shared library would regress ADR-154 and invite a dependency-direction inversion between app domain and shared framework.
 
 **Sensitivity** (A.1 factual correction 7): `recordInputs`/`recordOutputs` on `wrapMcpServerWithSentry` default to `sendDefaultPii`, which Oak pins to `false`. MCP tool inputs/outputs are not captured today. Any future flip of `sendDefaultPii` cascades into L-3's context shape — the deny-list MUST still apply regardless of the top-level flag.
 
@@ -1340,7 +1340,7 @@ as code)
 per ADR-162's event-schema contract — `metrics.*` emissions are part
 of the downstream-analytics contract, not a Sentry-internal concern.
 
-**Ground-truth corrections** (from sentry-reviewer, 2026-04-17):
+**Ground-truth corrections** (from sentry-expert, 2026-04-17):
 
 - Fixture `type: 'counter'` (not `'count'`).
 - `beforeSendMetric` is **synchronous, single-argument** `(metric) =>
@@ -1350,7 +1350,7 @@ of the downstream-analytics contract, not a Sentry-internal concern.
 - Redactor must defensively handle non-primitive attribute values
   because upstream `Metric.attributes` is `Record<string, unknown>`.
 
-**Ground-truth corrections** (from architecture-reviewer-fred):
+**Ground-truth corrections** (from architecture-expert-fred):
 
 - `SentryOffConfig.enableMetrics: false` as a literal (mirror
   `enableLogs`).
@@ -1392,7 +1392,7 @@ Metric emission guide in `observability.md`.
    Sentry under the branch release tag (owner-verified, informational
    not merge-gate).
 4. **Metric-names catalog conformance** (2026-04-18 reshape, per
-   sentry-reviewer TO-ACTION): fixture-capture metric names are
+   sentry-expert TO-ACTION): fixture-capture metric names are
    validated against the `@oaknational/observability-events`
    metric-names catalog (Phase 2 deliverable) via the conformance
    helper; unlisted names fail RED.
@@ -1489,9 +1489,9 @@ the landing sequence has rotated to
   verification closed 2026-04-26
 - Tier 2 — hybrid error fingerprinting: `6c65e75d`
 
-**Reviewer findings absorbed at Tier 2**: sentry-reviewer MAJOR
+**Reviewer findings absorbed at Tier 2**: sentry-expert MAJOR
 (single-element fingerprint override → hybrid `['{{ default }}',
-'<class-name>']` shape); code-reviewer + test-reviewer MINOR (early-
+'<class-name>']` shape); code-expert + test-expert MINOR (early-
 return guard → positive `not.toHaveProperty` assertion; consumer-hook
 composition test added; constants-only KNOWN_ERROR_FAMILIES test
 dropped); README addition pattern wording tightened to "MUST".
@@ -1677,7 +1677,7 @@ branch.
 
 **Depends on L-12-prereq**: widget imports `@oaknational/telemetry-redaction-core` for the shared redaction policy. Widget bundle does NOT import `@oaknational/sentry-node`.
 
-**Test boundary declaration** (A.2 item 11, per test-reviewer): `test:widget` runs in `jsdom`. If `@sentry/browser` init requires browser globals (`window`, `document`, `performance`), the integration test uses `jsdom`; if it does not, the fixture-equivalent browser adapter is used directly without a DOM. E2E is NOT the home for this test — E2E is stdio-only per `testing-strategy.md`, and widget Sentry init is an in-process collaboration test. Do not push the test to E2E without a written rationale.
+**Test boundary declaration** (A.2 item 11, per test-expert): `test:widget` runs in `jsdom`. If `@sentry/browser` init requires browser globals (`window`, `document`, `performance`), the integration test uses `jsdom`; if it does not, the fixture-equivalent browser adapter is used directly without a DOM. E2E is NOT the home for this test — E2E is stdio-only per `testing-strategy.md`, and widget Sentry init is an in-process collaboration test. Do not push the test to E2E without a written rationale.
 
 **Process**:
 
@@ -1795,7 +1795,7 @@ including the Oak API from the MCP server boundary.
 1. Enumerate current outbound HTTP callees (Oak API, Clerk, Elastic).
 2. For each, record: data sensitivity, cross-org trust boundary,
    existing propagation config.
-3. Security-reviewer pass.
+3. Security-expert pass.
 4. Decision recorded in an ADR amendment or a note in the runbook.
 
 **Acceptance**: decision documented per host with reviewer
@@ -1888,7 +1888,7 @@ against.
   change.
 - **`.agent/directives/AGENT.md § Essential Links`** — updated in
   the lane that establishes the link target.
-- **`docs-adr-reviewer` close review** — runs at every lane close,
+- **`docs-adr-expert` close review** — runs at every lane close,
   not once at the end.
 - **`documentation-sync-log.md`** — entry per lane, not per phase.
 
@@ -1974,7 +1974,7 @@ env)` function.
 **Objective**. Add `@sentry/profiling-node`, wire
 `nodeProfilingIntegration`, measure overhead.
 
-**API shape — v10** (A.2 item 7, per sentry-reviewer): `@sentry/profiling-node` v10 uses `profileSessionSampleRate` + `profileLifecycle: 'trace' | 'manual'`, NOT the legacy `profilesSampleRate` / `profilesSampler` / `SENTRY_PROFILES_SAMPLE_RATE` env names from v9. Env variable surface: `SENTRY_PROFILE_SESSION_SAMPLE_RATE` and `SENTRY_PROFILE_LIFECYCLE` (confirm exact names against the live `@sentry/profiling-node` v10 docs at lane-open time — do not pin from plan prose).
+**API shape — v10** (A.2 item 7, per sentry-expert): `@sentry/profiling-node` v10 uses `profileSessionSampleRate` + `profileLifecycle: 'trace' | 'manual'`, NOT the legacy `profilesSampleRate` / `profilesSampler` / `SENTRY_PROFILES_SAMPLE_RATE` env names from v9. Env variable surface: `SENTRY_PROFILE_SESSION_SAMPLE_RATE` and `SENTRY_PROFILE_LIFECYCLE` (confirm exact names against the live `@sentry/profiling-node` v10 docs at lane-open time — do not pin from plan prose).
 
 **RED — behaviour-first** (A.2 item 9 tightening):
 
@@ -2011,7 +2011,7 @@ before a real consumer risks locking in a wrong API.
 agreed extension anchor (e.g. a dedicated comment block at the top
 of `runtime-sdk.ts`). This is not a behaviour test; it is an
 integrity test for the documentation contract — acknowledged
-explicitly per test-reviewer's finding.
+explicitly per test-expert's finding.
 
 **GREEN**: Author the TSDoc + README section.
 
@@ -2048,7 +2048,7 @@ agreed extension anchor.
 **GREEN**: Author the TSDoc + README section.
 
 **REFACTOR**: Cross-link from `observability.md` (app doc); note the
-Vercel AI SDK version-range caveat from the sentry-reviewer (v4 vs
+Vercel AI SDK version-range caveat from the sentry-expert (v4 vs
 v5 semantics diverged) so a future author reaches for the right
 integration.
 
@@ -2221,12 +2221,12 @@ deleted in WS2. The only local code that remains is
 which are vendor-agnostic policy functions — not a wrapper around
 Sentry behaviour.
 
-**Reviewer**: `assumptions-reviewer` MUST run against this attestation
+**Reviewer**: `assumptions-expert` MUST run against this attestation
 pre-ExitPlanMode. Documentation check: Sentry canonical-idiom
 already confirmed via `mcp__sentry-ooc-mcp__search_docs` +
 `get_doc` + direct inspection of
 `sentry-javascript-bundler-plugins/packages/bundler-plugin-core/src/types.ts`.
-`sentry-reviewer` MAY be invoked for a second-pass verification if
+`sentry-expert` MAY be invoked for a second-pass verification if
 solution-class doubt returns.
 
 #### L-8 Reviewer Scheduling (phase-aligned)
@@ -2234,61 +2234,61 @@ solution-class doubt returns.
 **Plan-phase (PRE-ExitPlanMode)** — challenges solution-class. Before
 WS1 begins:
 
-- **`assumptions-reviewer`** — challenge the Build-vs-Buy Attestation
+- **`assumptions-expert`** — challenge the Build-vs-Buy Attestation
   rows (are any "RULED OUT" reasons sunk-cost rather than concrete?
   Any vendor integrations not named?). Challenge scope proportionality
   (is raw esbuild the right blast radius, or should more workspaces
   migrate?). Expected finding: attestation holds; scope is right.
-- **`sentry-reviewer`** (optional, second-pass) — verify the
+- **`sentry-expert`** (optional, second-pass) — verify the
   esbuild-plugin config shape (release, setCommits, deploy, sourcemaps)
   matches the canonical types in the plugin repo and that no fields
   are missing for Oak's required outcomes.
 
 **Mid-cycle (DURING execution)** — challenges solution-execution:
 
-- **`test-reviewer`** — after WS1 RED; challenge whether tests assert
+- **`test-expert`** — after WS1 RED; challenge whether tests assert
   product behaviour (build output carries Debug IDs; plugin logs
   release-registration + upload + deploy) rather than asserting
   plugin internals.
-- **`type-reviewer`** — after WS2 esbuild config lands; challenge any
+- **`type-expert`** — after WS2 esbuild config lands; challenge any
   type widening at the plugin config boundary (must use
   `@sentry/esbuild-plugin` and `esbuild` vendor types; no `as
   unknown` escapes).
-- **`architecture-reviewer-fred`** — after WS2 file deletions;
+- **`architecture-expert-fred`** — after WS2 file deletions;
   challenge boundary discipline around `@oaknational/sentry-node`
   now that the policy functions are the sole remaining Oak
   contribution to the release/deploy surface.
-- **`code-reviewer`** — gateway after WS2; triggers the
+- **`code-expert`** — gateway after WS2; triggers the
   friction-ratchet counter if 3+ independent friction signals
   accumulate against the esbuild-native shape. If friction accrues,
-  escalate to `assumptions-reviewer` for a solution-class re-review
+  escalate to `assumptions-expert` for a solution-class re-review
   — do not tactical-patch.
 
 **Close (POST-execution)** — verifies coherence:
 
-- **`docs-adr-reviewer`** — verify ADR-163 §6 rewrite states WHAT
+- **`docs-adr-expert`** — verify ADR-163 §6 rewrite states WHAT
   not HOW; verify runbook + `observability.md` +
   `sentry-cli-usage.md` (archived) are internally consistent with
   the landed esbuild config.
-- **`release-readiness-reviewer`** — GO / GO-WITH-CONDITIONS / NO-GO
+- **`release-readiness-expert`** — GO / GO-WITH-CONDITIONS / NO-GO
   before merge, with evidence that a Vercel preview deployment
   produced the expected Sentry UI state (release registered,
   commits attached, deploy event).
 
 #### L-8 WS0 — Plan-Time Review (PRE-ExitPlanMode)
 
-Dispatch `assumptions-reviewer` against this §L-8 body. Record
+Dispatch `assumptions-expert` against this §L-8 body. Record
 findings in an L-8 WS0 Findings sub-section. Amend this section in
 response to findings before proceeding to WS1.
 
 **Block type**: WS0 is a **process block**, not a technical
 dependency. WS1's tests would compile and run without it; the block
 exists to ensure solution-class challenge lands at the cheapest
-phase per `.agent/sub-agents/templates/assumptions-reviewer.md`.
+phase per `.agent/sub-agents/templates/assumptions-expert.md`.
 
 **Acceptance Criteria**:
 
-1. `assumptions-reviewer` returns without rejecting the solution-class
+1. `assumptions-expert` returns without rejecting the solution-class
    or returns a refined shape that this section adopts.
 2. Build-vs-Buy Attestation rows are all concrete (no sunk-cost
    reasoning, no undefined "X unavailable" hand-waves).
@@ -2299,7 +2299,7 @@ phase per `.agent/sub-agents/templates/assumptions-reviewer.md`.
 **WS0 Findings** (2026-04-20, dispatched against an earlier draft of
 this §L-8 body):
 
-`assumptions-reviewer` returned **ACCEPT WITH NOTES**. Four Important
+`assumptions-expert` returned **ACCEPT WITH NOTES**. Four Important
 findings + three nits were all applied to this plan body before
 commit:
 
@@ -2559,7 +2559,7 @@ pnpm test && pnpm test:ui && pnpm test:e2e && pnpm smoke:dev:stub
 ```
 
 **Additional release-state verification** (not a gate, but a
-blocker for WS5's `release-readiness-reviewer`): push branch to
+blocker for WS5's `release-readiness-expert`): push branch to
 GitHub; Vercel preview deployment completes green; Sentry UI shows
 the preview-env release registered with commits attached and a
 deploy event.
@@ -2589,7 +2589,7 @@ lane; FIX-BEFORE-MERGE findings land inside the same PR.
 | Raw esbuild config misses a tsup-provided behaviour the MCP app relied on (e.g. entry-point convention, external resolution, specific target flag) | WS1.2 "build-output equivalence" contract-surface test catches regression before WS2 lands. If a gap is found, name the specific tsup option and its esbuild equivalent in the plan before proceeding. |
 | `@sentry/esbuild-plugin` version upgrade later breaks the build | Pin plugin version explicitly in `package.json`; document the upgrade path in the runbook; rely on the existing gate chain to catch upgrade regressions. |
 | Vercel preview deployment fails on first build after `vercel.json.buildCommand` removed | Preview failures are cheap; a fresh branch re-run with the override restored is one commit. Production is gated by `vercel-ignore-production-non-release-build.mjs` + the version-bump invariant. |
-| Sentry UI does not show a distinct deploy event, only release metadata | Per `@sentry/esbuild-plugin` types (`DeployOptions`), setting `release.deploy.env` is the canonical path; if UI shows only metadata, the WS5 `release-readiness-reviewer` flags it and we escalate to `sentry-reviewer` for canonical-idiom re-check. |
+| Sentry UI does not show a distinct deploy event, only release metadata | Per `@sentry/esbuild-plugin` types (`DeployOptions`), setting `release.deploy.env` is the canonical path; if UI shows only metadata, the WS5 `release-readiness-expert` flags it and we escalate to `sentry-expert` for canonical-idiom re-check. |
 | ADR-163 §6 rewrite is perceived as rewriting history | History entry records the 2026-04-20 supersession and the reason (HOW-vs-WHAT calcification lesson from `4bccba71`). Prior §6 prose stays as a versioned History entry in the ADR itself. |
 | Other workspaces break because they shared a tsup config surface the MCP app relied on | Not applicable — `tsup.config.base.ts` is untouched; the MCP app's `tsup.config.ts` deletion removes a call site, not the shared base. Other workspaces continue to consume the base unchanged. |
 
@@ -2640,18 +2640,18 @@ invariant installed in commit `363037af`:
   runtime evidence for the tsup+plugin ruling-out (Sentry issues
   608/614; tsup issue 1260). No sunk-cost phrasing.
 - **Reviewer Scheduling** (above) — plan-time reviewers scheduled
-  BEFORE ExitPlanMode. `assumptions-reviewer` is WS0, blocking
+  BEFORE ExitPlanMode. `assumptions-expert` is WS0, blocking
   execution start.
 - **Friction-ratchet counter** — if 3+ friction signals accumulate
   against the esbuild-native shape during execution,
-  `code-reviewer` escalates to `assumptions-reviewer` rather than a
+  `code-expert` escalates to `assumptions-expert` rather than a
   tactical fix.
 - **Sunk-cost phrase detector** — the tsup-retention framing of
   the prior standalone plan (2026-04-20 morning) was itself
   sunk-cost reasoning; this lane's scope statement names it
   explicitly as such to close the loop.
 - **ADRs state WHAT, not HOW** — WS3.1 rewrites ADR-163 §6 from
-  HOW to WHAT. Audit via `docs-adr-reviewer` close review.
+  HOW to WHAT. Audit via `docs-adr-expert` close review.
 - **Solution-class challenge at dispatch frame** — WS0 framing
   asks "should the esbuild-native shape exist?" not "is the
   esbuild config well-structured?". If reviewers answer the
@@ -2999,20 +2999,20 @@ Per phase, invoke reviewers (non-leading prompts). Matrix:
 
 | Execution phase | Reviewers |
 |-----------------|-----------|
-| **Phase 1 — Gates & Foundation Extractions** | code-reviewer (gateway), test-reviewer, type-reviewer, config-reviewer, docs-adr-reviewer, sentry-reviewer, architecture-reviewer-fred (L-12-prereq workspace extraction is structural; runs at GREEN close too), architecture-reviewer-barney (L-12-prereq boundary; workspace creation), **assumptions-reviewer** |
-| **Phase 2 — Schema Foundation** | code-reviewer, docs-adr-reviewer (schema/contract completeness), type-reviewer (Zod 4 usage; io='input' vs 'output' semantics), sentry-reviewer (schema/emission fit), architecture-reviewer-fred (workspace boundary), **assumptions-reviewer**; the vendor-independence `no-vendor-observability-import` ESLint carve-out lands here — type-reviewer + architecture-reviewer-fred |
-| **Phase 3 — Primary Emitters (Server)** | code-reviewer, test-reviewer, type-reviewer, sentry-reviewer, architecture-reviewer-betty, architecture-reviewer-wilma, security-reviewer (L-3 context shape), **docs-adr-reviewer** (L-4b / L-7-linked env-var edits — L-7 already landed in Phase 1), **assumptions-reviewer** |
-| **Phase 4 — Cross-axis & Widget** | code-reviewer, test-reviewer, type-reviewer, sentry-reviewer, react-component-reviewer (L-12), accessibility-reviewer (L-12 + accessibility-observability plan), design-system-reviewer (L-12), security-reviewer (security-observability plan), **architecture-reviewer-fred + architecture-reviewer-barney** (2026-04-18 reshape per fred-review TO-ACTION: Phase 4 touches three concurrent architectural boundaries — browser bundle, auth middleware, widget runtime — all composing the Phase 1 telemetry-redaction-core through Phase 2 events-workspace schemas; Fred for ADR-162 vendor-independence-clause compliance + events-workspace import direction; Barney for cross-plan boundary cartography), **docs-adr-reviewer** (widget README, cross-axis plan READMEs), **assumptions-reviewer** |
-| **Phase 5 — Operations + Conformance + Close-out** | code-reviewer, docs-adr-reviewer, sentry-reviewer, architecture-reviewer-fred, architecture-reviewer-wilma, security-reviewer (L-14 + vendor-independence emission-persistence test), release-readiness-reviewer, **assumptions-reviewer** |
+| **Phase 1 — Gates & Foundation Extractions** | code-expert (gateway), test-expert, type-expert, config-expert, docs-adr-expert, sentry-expert, architecture-expert-fred (L-12-prereq workspace extraction is structural; runs at GREEN close too), architecture-expert-barney (L-12-prereq boundary; workspace creation), **assumptions-expert** |
+| **Phase 2 — Schema Foundation** | code-expert, docs-adr-expert (schema/contract completeness), type-expert (Zod 4 usage; io='input' vs 'output' semantics), sentry-expert (schema/emission fit), architecture-expert-fred (workspace boundary), **assumptions-expert**; the vendor-independence `no-vendor-observability-import` ESLint carve-out lands here — type-expert + architecture-expert-fred |
+| **Phase 3 — Primary Emitters (Server)** | code-expert, test-expert, type-expert, sentry-expert, architecture-expert-betty, architecture-expert-wilma, security-expert (L-3 context shape), **docs-adr-expert** (L-4b / L-7-linked env-var edits — L-7 already landed in Phase 1), **assumptions-expert** |
+| **Phase 4 — Cross-axis & Widget** | code-expert, test-expert, type-expert, sentry-expert, react-component-expert (L-12), accessibility-expert (L-12 + accessibility-observability plan), design-system-expert (L-12), security-expert (security-observability plan), **architecture-expert-fred + architecture-expert-barney** (2026-04-18 reshape per fred-review TO-ACTION: Phase 4 touches three concurrent architectural boundaries — browser bundle, auth middleware, widget runtime — all composing the Phase 1 telemetry-redaction-core through Phase 2 events-workspace schemas; Fred for ADR-162 vendor-independence-clause compliance + events-workspace import direction; Barney for cross-plan boundary cartography), **docs-adr-expert** (widget README, cross-axis plan READMEs), **assumptions-expert** |
+| **Phase 5 — Operations + Conformance + Close-out** | code-expert, docs-adr-expert, sentry-expert, architecture-expert-fred, architecture-expert-wilma, security-expert (L-14 + vendor-independence emission-persistence test), release-readiness-expert, **assumptions-expert** |
 
 Additions per A.6 register (pre-reshape) — still apply under reshape:
 
-- `assumptions-reviewer` runs at **every** phase close, not only branch close (AR-11).
-- `architecture-reviewer-fred` + `architecture-reviewer-barney` run at L-12-prereq GREEN close within Phase 1 (structural workspace extraction; AR-12).
-- `type-reviewer` in Phase 1 covers L-0b follow-through (the `satisfies` gate and the `SentryRedactionHooks` type export from `runtime-sdk.ts`); same reviewer also runs Phase 3 for L-4b's hook-union extension (CR-7, AF-10).
+- `assumptions-expert` runs at **every** phase close, not only branch close (AR-11).
+- `architecture-expert-fred` + `architecture-expert-barney` run at L-12-prereq GREEN close within Phase 1 (structural workspace extraction; AR-12).
+- `type-expert` in Phase 1 covers L-0b follow-through (the `satisfies` gate and the `SentryRedactionHooks` type export from `runtime-sdk.ts`); same reviewer also runs Phase 3 for L-4b's hook-union extension (CR-7, AF-10).
 - Reshape-specific additions:
-  - `docs-adr-reviewer` runs at Phase 2 close (events-workspace schema completeness + vendor-independence ESLint-rule documentation health) AND at Phase 4 close (cross-axis plan READMEs and the widget observability doc).
-  - `assumptions-reviewer` runs at the **reshape commit** itself (this plan revision) to verify proportionality of the lane migrations across phases.
+  - `docs-adr-expert` runs at Phase 2 close (events-workspace schema completeness + vendor-independence ESLint-rule documentation health) AND at Phase 4 close (cross-axis plan READMEs and the widget observability doc).
+  - `assumptions-expert` runs at the **reshape commit** itself (this plan revision) to verify proportionality of the lane migrations across phases.
 
 Reviewer outputs feed back into the plan's todo list. Findings are
 actioned unless explicitly rejected with written rationale (per
@@ -3032,17 +3032,17 @@ Phase-specific risks:
 | Execution Phase | Risk | Mitigation |
 |-----------------|------|------------|
 | 1 | L-0b `satisfies` gate does NOT auto-detect new fan-out hooks added to `NodeOptions` (e.g. a future `beforeSendMetric` wiring) — it only validates that BARRIER_HOOKS entries are valid `NodeOptions` keys | Resolved by A.6 SR-5: `runtime-sdk.ts` now exports `SentryRedactionHooks` (the `Pick<NodeOptions, ...>` return of `createSentryHooks`); the test imports it and constrains `MinimalHooks` to it. Any new hook wired in `createSentryHooks` without an update to the test's `BARRIER_HOOKS` registry now fails the type-check via a set-equality assertion between the imported type's keys and the registry. Code review remains the backstop. |
-| 1 | **L-12-prereq extraction may accidentally couple the new `telemetry-redaction-core` workspace to Node-specific payload types** if the pure redactor functions' signatures leak `@sentry/node` generics | Run `architecture-reviewer-fred` + `architecture-reviewer-barney` at L-12-prereq GREEN close specifically on boundary and zero `@sentry/*` imports in the new workspace; a dedicated test asserts zero `@sentry/*` imports in `packages/core/telemetry-redaction-core/**`. |
+| 1 | **L-12-prereq extraction may accidentally couple the new `telemetry-redaction-core` workspace to Node-specific payload types** if the pure redactor functions' signatures leak `@sentry/node` generics | Run `architecture-expert-fred` + `architecture-expert-barney` at L-12-prereq GREEN close specifically on boundary and zero `@sentry/*` imports in the new workspace; a dedicated test asserts zero `@sentry/*` imports in `packages/core/telemetry-redaction-core/**`. |
 | 1 | **L-7 scripts run in Vercel deploy pipeline only** (ADR-161); accidental CI PR-check invocation would reintroduce network calls to PR-check runs | Explicit pipeline-attachment documentation in deployment runbook; GitHub Actions workflows grep-audited for zero `sentry-cli` references at L-7 acceptance (already named in L-7's acceptance criterion 3). |
 | 1 | **Two custom ESLint rules in quick succession** (`require-observability-emission` in Wave 1 / restructure Phase 5; `no-vendor-observability-import` in Wave 2) create authorship load | Accepted: upfront authorship cost buys compile-time-gated quality for all Phases 3–5. The older assumption that custom rules would stage at `warn` first is no longer generally safe on this branch: `require-observability-emission` is already `error` in the five scoped workspaces, and any future `no-vendor-observability-import` rollout must satisfy the repo's no-warning doctrine based on the real audit state of the sibling lane. L-EH initial's third authorship slot is reclaimed by ESLint built-in `preserve-caught-error` (added in 9.35.0), which supersedes the planned `require-error-cause` custom rule at a fraction of the authoring cost and with strictly-better coverage (adds destructured-parameter loss and variable shadowing). |
-| 2 | **Events workspace schema drift between authoring (Phase 2) and first emission (Phase 3)** — if Phase 2 authors schemas from exploration 4 alone without a Phase 3 consumer in the loop, schemas may not match real emission shapes | Run `sentry-reviewer` + `docs-adr-reviewer` at Phase 2 close against the specific MVP event set; Phase 3 emitters import schemas by type, so any drift breaks type-check (compile-time gate). |
+| 2 | **Events workspace schema drift between authoring (Phase 2) and first emission (Phase 3)** — if Phase 2 authors schemas from exploration 4 alone without a Phase 3 consumer in the loop, schemas may not match real emission shapes | Run `sentry-expert` + `docs-adr-expert` at Phase 2 close against the specific MVP event set; Phase 3 emitters import schemas by type, so any drift breaks type-check (compile-time gate). |
 | 2 | **Vendor-independence carve-out** (`no-vendor-observability-import` ESLint rule authored in Phase 2, emission-persistence test authored in Phase 5) — the ESLint rule alone does not prove the stdout-sink property; a consumer could pass the import lint while still emitting only to a vendor | Accepted: the ESLint rule is a structural gate (prevents import leakage); the emission-persistence test in Phase 5 is the behavioural gate (proves the stdout-sink property). Both are required for ADR-162 Mechanism #4 + #5 satisfaction. Phase 5 is still pre-launch, not post-launch. |
 | 3 | Integration composition changes default behaviour unexpectedly (L-1) | Behaviour-level fixture tests assert per-integration event emission (ANR / Zod / runtime-metric / etc.); SDK version pinned. Per A.2 item 9, RED is not config-shape presence on `NodeOptions`. |
 | 3 | **Fixture runtime does not observe non-event envelopes** (ANR stack frames, streamed-span payloads, runtime-metric samples) without adapter extension — L-1 behaviour-level assertions cannot land against the current `createFixtureRuntime` (per A.6 AR-3) | L-1 GREEN has a prerequisite step named in §L-1 to route fixture-mode envelopes through `createSentryHooks` (Option A) OR add per-envelope capture paths (Option B). L-1 does not close until the prerequisite lands. Schedule impact: expect L-1 to take longer than a naive "turn on six integrations" estimate. |
 | 3 | **Per-phase RED tightening fans test-author load across six L-1 integrations** (ANR / Zod / node-runtime / span-streaming / rewrite-frames / extraErrorData), each needing behaviour-level fixture capture rather than integration-registered presence — doubles or triples Phase 3 authorship versus the earlier config-presence posture (per A.6 AR-9) | Recognised: split L-1 into sub-lanes per integration if author-load becomes a bottleneck (L-1a / L-1b / ... ). Reviewer discipline at phase close remains fixed even under split. |
 | 3 | **Sentry `metrics.*` API shifts during the beta window** (L-4b is the primary metric surface per the restructure Phase 4 swap; the beta API may introduce breaking-shape changes within the `^10.x` caret range `packages/libs/sentry-node/package.json` currently pins) | Adapter insulates consumers (consumers never import `Sentry.metrics.*` directly); conservative version-pin in `packages/libs/sentry-node`. **Concrete changelog-review trigger**: re-read the Sentry Node SDK `metrics.*` changelog at (a) every L-4b closure milestone, (b) the next monthly dependency-audit cadence, and (c) any `@sentry/node` minor-or-major bump inside the 10.x range (patch bumps within the current range can still ship shape changes under beta conventions), whichever fires first; raise any breaking-shape change as a new risk row immediately. Owner: L-4b implementer at each milestone review; dependency auditor at each bump. |
 | 4 | Widget bundle size regression from adding `@sentry/browser` | Bundle-size test gate on widget build; L-12-prereq extracts browser-safe redactor core to avoid pulling `@sentry/node` transitively (L-12-prereq landed in Phase 1 under the reshape, so widget never risks transitively pulling `@sentry/node`). |
-| 4 | **Cross-axis plan coordination** — security-observability + accessibility-observability + L-12 all emit to the events workspace concurrently | Phase 2 events-workspace schemas were authored with all three consumers in the loop; schemas are stable before any consumer imports them. Reviewer matrix includes `accessibility-reviewer` + `security-reviewer` at Phase 4 close. |
+| 4 | **Cross-axis plan coordination** — security-observability + accessibility-observability + L-12 all emit to the events workspace concurrently | Phase 2 events-workspace schemas were authored with all three consumers in the loop; schemas are stable before any consumer imports them. Reviewer matrix includes `accessibility-expert` + `security-expert` at Phase 4 close. |
 | 5 | `tracesSampler` regresses sampling coverage during rollout (L-5, MVP-deferred) | Roll out behind env flag with a fixed-rate fallback; measure first. |
 | 5 | Profiling-node precompiled-binary install consent not granted in CI (L-6, MVP-deferred) | `onlyBuiltDependencies` entry; document in CI runbook. Per A.1 factual correction 3, precompiled binaries ship for Node 18/20/22/24 across Linux/macOS/Windows. |
 | 5 | Alert fatigue (L-13) | Each alert has an SLO-style intent and dedupe before enablement. |
@@ -3062,7 +3062,7 @@ Per phase, propagate:
 - Runbook entries for alerts and operational procedures.
 - `.agent/rules/` updates for error-handling (L-EH).
 
-**Propagation targets added 2026-04-17** (A.2 item 13, per docs-adr-reviewer):
+**Propagation targets added 2026-04-17** (A.2 item 13, per docs-adr-expert):
 
 - `apps/oak-curriculum-mcp-streamable-http/docs/observability.md` — first-class app observability doc (L-DOC initial writes it; L-3 / L-4b / L-6 / L-9 / L-10 / L-11 / L-12 all update it throughout later phases).
 - `packages/libs/sentry-node/README.md` — expanded from the 4-line stub to cover modes, redaction barrier (ADR-160), DI seam (ADR-078), fixture store, logger sink, shared delegates (L-DOC initial).
@@ -3091,7 +3091,7 @@ Per phase, propagate:
 Under ADR-162's five-axis principle, several lanes of this plan carry
 obligations that are discharged in sibling `current/` plans. The
 authoritative cross-references live in the lane bodies; listing
-them here gives docs-adr-reviewer a single surface to audit:
+them here gives docs-adr-expert a single surface to audit:
 
 - **L-0/L-0b/L-1/L-3 → [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)** — the downstream-analytics event-schema authority. L-0b's redaction barrier gates every schema-conformant emission; L-1's free-signal integrations emit events that the workspace will catalogue; L-3's `mcp_request` context is the correlation substrate for `tool_invoked`.
 - **L-4b → [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)** — metric-names catalog. `Sentry.metrics.*` emissions are part of the downstream-analytics schema contract per ADR-162; metric names the adapter emits (e.g. `oak.mcp.handler.request.count`, `oak.mcp.tool.duration_ms`) are catalogued alongside event schemas.
@@ -3151,9 +3151,9 @@ Claims in this plan are one of:
 ## Appendix A — Reviewer Findings (2026-04-17)
 
 Seven reviewers audited this plan before the fresh session opens:
-`assumptions-reviewer`, `architecture-reviewer-barney`, `architecture-reviewer-betty`,
-`architecture-reviewer-fred`, `sentry-reviewer`, `docs-adr-reviewer`,
-`test-reviewer`. Findings are recorded here so nothing is lost between sessions.
+`assumptions-expert`, `architecture-expert-barney`, `architecture-expert-betty`,
+`architecture-expert-fred`, `sentry-expert`, `docs-adr-expert`,
+`test-expert`. Findings are recorded here so nothing is lost between sessions.
 
 ### A.1 Factual Corrections Applied Before Session Close
 
@@ -3165,50 +3165,50 @@ These were factual errors or broken links and have been fixed in situ:
    (`target_plans:` + body rows), `active/search-observability.plan.md` (notes and
    body), `active/sentry-otel-integration.execution.plan.md` (multiple references),
    `.agent/plans/high-level-plan.md` (line 76), and the active README + top-level
-   README + roadmap + future README indices. Source: docs-adr-reviewer.
+   README + roadmap + future README indices. Source: docs-adr-expert.
 2. **ESLint package name clarified**. `@oaknational/eslint-plugin-standards` is
    the correct package name (`packages/core/oak-eslint/package.json:"name"`). The
    directory name `oak-eslint/` differs from the package name. Source:
-   assumptions-reviewer raised the concern; package.json verified during
+   assumptions-expert raised the concern; package.json verified during
    close-out.
 3. **`@sentry/profiling-node` native-binary framing**. Strategic-brief risk row
    will read "optional install-script consent" (via `onlyBuiltDependencies`)
    rather than "native binary build cost" when Phase 2 begins — precompiled
    binaries ship for Node 18/20/22/24 on Linux/macOS/Windows. Source:
-   sentry-reviewer.
+   sentry-expert.
 4. **L-1 `spanStreamingIntegration`/`withStreamedSpan` scope**. Must be treated as
    *additive* to `wrapMcpServerWithSentry` (which already patches
    transport `send`/`onmessage`), not as a replacement around
-   `handleRequest`. Phase 1 RED will reflect this. Source: sentry-reviewer.
+   `handleRequest`. Phase 1 RED will reflect this. Source: sentry-expert.
 5. **L-1 "eight default runtime metrics" wording**. Must cite the live Sentry
    docs page or state "runtime metrics integration (default metric set per SDK
    version)" — the fixed count is not currently citation-grounded. Source:
-   sentry-reviewer.
+   sentry-expert.
 6. **ADR-144 citation style**. Instances of "fitness zones" will read
    "three-zone fitness model" for canonical label parity. Source:
-   architecture-reviewer-fred.
+   architecture-expert-fred.
 7. **`wrapMcpServerWithSentry` `recordInputs`/`recordOutputs` note**. Both
    default to the value of `sendDefaultPii` (pinned `false` at Oak), so MCP
    tool inputs/outputs are not captured today. L-3 must cite this explicitly
    so the cascade is visible if `sendDefaultPii` ever flips. Source:
-   sentry-reviewer.
+   sentry-expert.
 8. **Sentry Metrics predecessor history**. L-4b must note that the current
    `Sentry.metrics.*` pipeline is a second-wave product after the 2024
    deprecation of the first-generation Sentry Metrics. Strengthens the
    dual-pattern framing (span metrics is the production path; dedicated
-   metrics is the beta opt-in). Source: sentry-reviewer.
+   metrics is the beta opt-in). Source: sentry-expert.
 9. **Hook contract non-uniformity**. Plan language must acknowledge that
    `beforeSendSpan` cannot drop (no `| null` return), that `beforeSend` and
    `beforeSendTransaction` may be async (Promise-returning), and that
    `beforeSendLog` / `beforeSendMetric` are synchronous. Source:
-   sentry-reviewer.
+   sentry-expert.
 10. **`sentry-node/README.md` status**. Existing file is a 4-line stub.
     L-DOC initial slice should read "expand" not "write new". Source:
-    docs-adr-reviewer.
+    docs-adr-expert.
 11. **Strategic brief `parent_plan` wording**. The strategic brief is the
     parent of this executable plan but itself depends on the foundation plan.
     Phrasing to be adjusted to avoid the inversion appearance in frontmatter.
-    Source: architecture-reviewer-fred.
+    Source: architecture-expert-fred.
 
 ### A.2 Structural Corrections for the Fresh Session
 
@@ -3225,17 +3225,17 @@ of reviewer findings consistent with the plan's own principles:
    ADR-160 (§6 only)". The amendment must keep a closure property
    ("every adapter fan-out hook is covered by the shared redactor") plus
    a test gate, not just a principle statement. Source:
-   docs-adr-reviewer + architecture-reviewer-fred.
+   docs-adr-expert + architecture-expert-fred.
 2. **Split L-0 into two lanes**. Separate the ground-truth doc correction
    from the ADR-160 authorship — they are different risk classes.
-   Source: architecture-reviewer-barney.
+   Source: architecture-expert-barney.
 3. **Split L-DOC and L-EH into phased pairs in the todos list** — they are
    effectively four lanes across Phase 1 and Phase 5. Source:
-   architecture-reviewer-barney.
+   architecture-expert-barney.
 4. **L-3 `enrichMcpRequestContext` lives in the MCP app**, not in
    `@oaknational/sentry-node`. It is MCP-specific domain logic; keeping it
    in the shared library regresses ADR-154 framework/consumer separation.
-   Source: architecture-reviewer-betty.
+   Source: architecture-expert-betty.
 5. **L-7 sibling scripts, not fused script**. Release-lifecycle operations
    (`set-commits`, `deploys new`) get their own scripts
    (`sentry-release-set-commits.sh`, `sentry-deploy-register.sh`) alongside
@@ -3244,21 +3244,21 @@ of reviewer findings consistent with the plan's own principles:
    names are `sentry-`-prefixed to match the plan body at § L-7; early
    A.2 drafts used unprefixed names (`release-set-commits.sh` /
    `deploy-register.sh`) — the body is authoritative.
-   Source: architecture-reviewer-fred.
+   Source: architecture-expert-fred.
 6. **L-12 browser-safe redactor extraction**. Before L-12 opens, extract a
    pure redactor core into a browser-safe shared package (e.g.
    `@oaknational/telemetry-redaction-core`). `@oaknational/sentry-node` is
    Node-only (depends on `@sentry/node`); the widget cannot reach into it.
-   Source: architecture-reviewer-fred + sentry-reviewer.
+   Source: architecture-expert-fred + sentry-expert.
 7. **L-4b profiling options API shape** (if the session touches profiling
    in the same window): use the v10 `profileSessionSampleRate` +
    `profileLifecycle: 'trace' | 'manual'` knobs, not legacy
-   `profilesSampleRate`/`profilesSampler`. Source: sentry-reviewer.
+   `profilesSampleRate`/`profilesSampler`. Source: sentry-expert.
 8. **`createSentryDelegates` divergence for CLI**. When L-2 lands and the
    Search CLI branch adopts it, the CLI's `CliObservability` will silently
    ignore methods it does not expose (e.g. `setUser`). Plan the shared
    surface as an explicit superset with per-consumer opt-in, not
-   implicit-superset-with-silent-discard. Source: architecture-reviewer-betty.
+   implicit-superset-with-silent-discard. Source: architecture-expert-betty.
 9. **Per-phase RED tightening**. Several RED phases (L-0, L-1, L-4b, L-6,
    L-7, L-DOC) were described as configuration-shape/presence assertions
    rather than product-behaviour specifications. Each RED must test
@@ -3273,7 +3273,7 @@ of reviewer findings consistent with the plan's own principles:
    create the expected Sentry API state, not that the commands appear
    in a shell-script string; for L-0 no "docs test" — the ADR is
    authored and the successor ADR number is registered. Source:
-   test-reviewer.
+   test-expert.
 10. **L-EH edge-case coverage** (historical — superseded 2026-04-19).
     Originally required a custom `require-error-cause` RuleTester suite
     covering re-throw of the original binding, cause-mismatch against
@@ -3289,18 +3289,18 @@ of reviewer findings consistent with the plan's own principles:
     `@oaknational/no-eslint-disable` governance (requires a reason).
     `prefer-result-pattern` (L-EH final) still needs a concrete
     heuristic spec and valid/invalid RuleTester cases. Source:
-    test-reviewer (original); re-scoping rationale captured 2026-04-19.
+    test-expert (original); re-scoping rationale captured 2026-04-19.
 11. **L-12 test-boundary**. Settle the widget Sentry test location before
     the RED is written: `test:widget` is in-process with `jsdom`; if
     `@sentry/browser` init requires browser globals, the integration
     test uses `jsdom`; if it does not, the test uses the fixture adapter
     directly without a DOM. Do not push the test to E2E without stating
-    why. Source: test-reviewer.
+    why. Source: test-expert.
 12. **Cross-phase dependency graph made explicit**. The phase table hides
     the real dependencies (L-4b → L-0, L-13 → L-1/L-4a/L-4b/L-5/L-12,
     intra-Phase-1 L-1+L-2 order, L-DOC depends on L-2 landing first, etc.).
     Add a dependency graph at the top of Phase 1 RED. Source:
-    architecture-reviewer-barney + assumptions-reviewer.
+    architecture-expert-barney + assumptions-expert.
 13. **Documentation propagation additions**. Add these to §Documentation
     Propagation (currently missing): `docs/operations/sentry-deployment-runbook.md`
     (L-7, L-13), `docs/operations/sentry-cli-usage.md` (L-7, L-8),
@@ -3309,7 +3309,7 @@ of reviewer findings consistent with the plan's own principles:
     `apps/oak-curriculum-mcp-streamable-http/README.md` (cross-link to
     `docs/observability.md`), `packages/core/observability/README.md`
     (L-4a naming convention), ADR index entry for ADR-160 (L-0), and
-    ADR-088 / ADR-144 amendment obligations. Source: docs-adr-reviewer.
+    ADR-088 / ADR-144 amendment obligations. Source: docs-adr-expert.
     **OWNER-ONLY** (per [PDR-003](../../../../.agent/practice-core/decision-records/PDR-003-sub-agent-protection-of-foundational-practice-docs.md)):
     the `.agent/directives/AGENT.md § Essential Links` edit for the observability
     doc is a foundational Practice doc change. Sub-agents MUST NOT edit AGENT.md
@@ -3320,10 +3320,10 @@ of reviewer findings consistent with the plan's own principles:
     existing `packages/libs/sentry-node/README.md` stub, and
     `docs/operations/sentry-cli-usage.md` to the session prompt's "Read
     First" list so an agent starting fresh does not have to discover
-    them. Source: docs-adr-reviewer.
+    them. Source: docs-adr-expert.
 15. **Executable plan template derivation**. Name the template this plan
     derives from (feature-workstream) at the top of the file. Source:
-    docs-adr-reviewer.
+    docs-adr-expert.
 
 ### A.3 Owner Decisions — RESOLVED (2026-04-17)
 
@@ -3400,13 +3400,13 @@ re-openable framing.
 
 ### A.6 Reviewer Findings Register — Session 2026-04-17 close
 
-Six reviewers ran at session close: `docs-adr-reviewer`, `assumptions-reviewer`, `code-reviewer`, `test-reviewer`, `sentry-reviewer`, `architecture-reviewer-fred`. All returned non-blocking verdicts. Full enumeration below. Every finding has a status: **ACTIONED** (edit already applied, citing location), **TO-ACTION** (scheduled with owning lane + specific edit), or **REJECTED** (with written rationale). No finding is "deferred" without an owning lane.
+Six reviewers ran at session close: `docs-adr-expert`, `assumptions-expert`, `code-expert`, `test-expert`, `sentry-expert`, `architecture-expert-fred`. All returned non-blocking verdicts. Full enumeration below. Every finding has a status: **ACTIONED** (edit already applied, citing location), **TO-ACTION** (scheduled with owning lane + specific edit), or **REJECTED** (with written rationale). No finding is "deferred" without an owning lane.
 
 #### Status counts
 
 29 findings total: 18 ACTIONED, 11 TO-ACTION, 0 REJECTED.
 
-#### docs-adr-reviewer (7 findings)
+#### docs-adr-expert (7 findings)
 
 | # | Finding | Status | Home |
 |---|---------|--------|------|
@@ -3418,7 +3418,7 @@ Six reviewers ran at session close: `docs-adr-reviewer`, `assumptions-reviewer`,
 | DR-6 | L-7 script-name drift between plan body (`sentry-*`-prefixed) and A.2 item 5 (unprefixed) | ACTIONED | A.2 item 5 now names the prefixed forms matching body |
 | DR-7 | Todo-status lifecycle: ADR-117 defines only `pending` / `completed`; `dropped` on L-8 is non-compliant (pre-existing, not session-introduced) | TO-ACTION | **Owning lane: L-8 body** (not this session). Edit: either amend ADR-117 to recognise `dropped`, or change L-8's frontmatter status to `completed` with body note documenting park status. Track via new frontmatter todo `ws-reconcile-dropped-status`. |
 
-#### assumptions-reviewer (15 findings)
+#### assumptions-expert (15 findings)
 
 | # | Finding | Status | Home |
 |---|---------|--------|------|
@@ -3431,14 +3431,14 @@ Six reviewers ran at session close: `docs-adr-reviewer`, `assumptions-reviewer`,
 | AR-7 | ADR-160 Open Questions resolved in plan prose not ADR amendment | TO-ACTION → **ACTIONED** this session | **Owning lane: ADR-160 amendment** — applied at this session close in the same commit as the register. Amendment folds the package-placement answer (`packages/core/telemetry-redaction-core/`) and conformance-test-centralisation answer (per-consuming-workspace) into the ADR body; Open Questions section replaced with "Closed Questions — 2026-04-17" noting the resolution. |
 | AR-8 | Fixture runtime may not observe non-event envelopes — L-1 schedule risk not called out | ACTIONED | New risk row added (see Risk table, Phase 1 row "fixture envelope observability"). |
 | AR-9 | Per-phase RED tightening creates test-scope fan-out (six integrations × behaviour-level capture in L-1) not called out as schedule risk | ACTIONED | New risk row added (see Risk table, Phase 1 row "RED test-author fan-out"). |
-| AR-10 | Reviewer matrix gap: no `docs-adr-reviewer` in Phase 2 | ACTIONED | § Adversarial Review matrix updated — Phase 2 now includes `docs-adr-reviewer` (L-4b / L-7 touch runbooks + env-variable docs). |
-| AR-11 | Reviewer matrix gap: no `assumptions-reviewer` at each phase close | ACTIONED | § Adversarial Review matrix updated — `assumptions-reviewer` added at every phase close, not only session close. |
-| AR-12 | No reviewer specifically targets L-12-prereq package-extraction decision before L-12 Phase 3 | ACTIONED | § Adversarial Review matrix updated — `architecture-reviewer-fred` and `architecture-reviewer-barney` scheduled at L-12-prereq GREEN close, not only at Phase 3 close. |
+| AR-10 | Reviewer matrix gap: no `docs-adr-expert` in Phase 2 | ACTIONED | § Adversarial Review matrix updated — Phase 2 now includes `docs-adr-expert` (L-4b / L-7 touch runbooks + env-variable docs). |
+| AR-11 | Reviewer matrix gap: no `assumptions-expert` at each phase close | ACTIONED | § Adversarial Review matrix updated — `assumptions-expert` added at every phase close, not only session close. |
+| AR-12 | No reviewer specifically targets L-12-prereq package-extraction decision before L-12 Phase 3 | ACTIONED | § Adversarial Review matrix updated — `architecture-expert-fred` and `architecture-expert-barney` scheduled at L-12-prereq GREEN close, not only at Phase 3 close. |
 | AR-13 | `L-0b → L-12-prereq` blocking relationship over-strict | ACTIONED | Graph edge relaxed to `L-0b ↔ L-12-prereq` (coordinating, not strict blocking) with rationale. |
 | AR-14 | Graph edge `L-2 → L-DOC-initial` is sequencing preference, not technical dependency | ACTIONED | Graph wording updated to "(sequencing — shared delegate seam should land before doc describes it; not a hard technical block)". |
 | AR-15 | `L-12-prereq → L-DOC-initial` is only blocking if same phase | ACTIONED | Edge dropped (see DR-5). |
 
-#### code-reviewer (7 findings)
+#### code-expert (7 findings)
 
 | # | Finding | Status | Home |
 |---|---------|--------|------|
@@ -3448,9 +3448,9 @@ Six reviewers ran at session close: `docs-adr-reviewer`, `assumptions-reviewer`,
 | CR-4 | Maintenance JSDoc only at file head — consider inline comment above `BARRIER_HOOKS` edit point | ACTIONED | Inline comment block above `BARRIER_HOOKS` added, pointing at file-header protocol |
 | CR-5 | Part 2 helper duplicates Part 3 inline URL assertion | ACTIONED | Part 3 tests call the `assertRedacted*` helpers where shape matches; inline assertions retained only where helper shape differs |
 | CR-6 | `buildPiiSpan` uses literal `'Bearer oak-span-secret-zzz'` in two places — extract constant | ACTIONED | Test file: `OAK_SPAN_BEARER_TOKEN` constant introduced |
-| CR-7 | Recommend `type-reviewer` as additional specialist for `satisfies` gate + `MinimalHooks` type coupling | ACTIONED | § Adversarial Review matrix updated — `type-reviewer` added to Phase 1 reviewers for L-0b follow-through and to L-4b/L-12-prereq |
+| CR-7 | Recommend `type-expert` as additional specialist for `satisfies` gate + `MinimalHooks` type coupling | ACTIONED | § Adversarial Review matrix updated — `type-expert` added to Phase 1 reviewers for L-0b follow-through and to L-4b/L-12-prereq |
 
-#### test-reviewer (9 findings)
+#### test-expert (9 findings)
 
 | # | Finding | Status | Home |
 |---|---------|--------|------|
@@ -3464,7 +3464,7 @@ Six reviewers ran at session close: `docs-adr-reviewer`, `assumptions-reviewer`,
 | TR-8 | `beforeSendLog` has no explicit "never returns null" assertion (only via `requireDefined`) | ACTIONED | Explicit `expect(result).not.toBeNull()` added for consistency with `beforeSendSpan` |
 | TR-9 | `REDACTION_SENTINEL` hardcoded and duplicated across two test files | ACTIONED | Test file imports `REDACTED_VALUE` from `@oaknational/observability` (already an exported constant at `packages/core/observability/src/redaction.ts:18`); local alias `REDACTION_SENTINEL` deleted |
 
-#### sentry-reviewer (10 findings; 7 substantive + 3 details)
+#### sentry-expert (10 findings; 7 substantive + 3 details)
 
 | # | Finding | Status | Home |
 |---|---------|--------|------|
@@ -3479,7 +3479,7 @@ Six reviewers ran at session close: `docs-adr-reviewer`, `assumptions-reviewer`,
 | SR-9 | Cite ADR-143 §6 alongside ADR-160 in test-file JSDoc | ACTIONED | File header @see block now cites ADR-160 + ADR-143 §6 |
 | SR-10 | No false positives observed | ACTIONED (confirmation) | n/a |
 
-#### architecture-reviewer-fred (10 findings)
+#### architecture-expert-fred (10 findings)
 
 | # | Finding | Status | Home |
 |---|---------|--------|------|
@@ -3491,8 +3491,8 @@ Six reviewers ran at session close: `docs-adr-reviewer`, `assumptions-reviewer`,
 | AF-6 | Missing graph edge `L-12-prereq → L-12` | ACTIONED | Edge added to Phase 1 dependency graph |
 | AF-7 | L-0b test file ADR-161 compliant (in-process, no network, no vendor CLI) | ACTIONED (confirmation) | n/a |
 | AF-8 | AGENT.md OWNER-ONLY flag correctly placed in main Documentation Propagation block; two nits — parallel flag in A.2 historical block (item 13), cross-reference PDR-003 file path | ACTIONED | A.2 item 13 historical block now carries the OWNER-ONLY flag + `.agent/practice-core/decision-records/PDR-003-sub-agent-protection-of-foundational-practice-docs.md` path |
-| AF-9 | Delegation suggestion: `test-reviewer` on `MinimalHooks` coupling | ACTIONED | Resolved by CR-7 + SR-5 (type-reviewer in matrix; MinimalHooks removed) |
-| AF-10 | Delegation suggestion: `type-reviewer` confirm the `satisfies` gate's compile-time behaviour | ACTIONED | Resolved by CR-7 — `type-reviewer` in Phase 1 matrix for L-0b follow-through and Phase 2 L-4b hook-union extension |
+| AF-9 | Delegation suggestion: `test-expert` on `MinimalHooks` coupling | ACTIONED | Resolved by CR-7 + SR-5 (type-expert in matrix; MinimalHooks removed) |
+| AF-10 | Delegation suggestion: `type-expert` confirm the `satisfies` gate's compile-time behaviour | ACTIONED | Resolved by CR-7 — `type-expert` in Phase 1 matrix for L-0b follow-through and Phase 2 L-4b hook-union extension |
 
 #### AGENT.md edit — exact text (owner-applied at L-DOC-initial close)
 
@@ -3507,22 +3507,22 @@ This is **the only AGENT.md edit required** by the maximisation work. Owner-appl
 
 ### A.5 Reviewers' Closing Posture
 
-- **assumptions-reviewer**: CONCERNS IDENTIFIED (proportionality, blocking
+- **assumptions-expert**: CONCERNS IDENTIFIED (proportionality, blocking
   legitimacy, unstated assumptions). Not merge-blocking; resolve via A.3.
-- **architecture-reviewer-barney**: ISSUES FOUND (structural, not blocking).
+- **architecture-expert-barney**: ISSUES FOUND (structural, not blocking).
   Shape simplifications recommended — see A.2 items 2, 3, 12.
-- **architecture-reviewer-betty**: ISSUES FOUND (scaffolding shapes, widget
+- **architecture-expert-betty**: ISSUES FOUND (scaffolding shapes, widget
   coupling, divergence semantics). Long-term change cost higher than plan
   states on L-11 and L-12.
-- **architecture-reviewer-fred**: ISSUES FOUND (one critical — ADR-160
+- **architecture-expert-fred**: ISSUES FOUND (one critical — ADR-160
   successor ADR required — plus L-7 sibling-scripts and L-12 browser-safe
   redactor). All actionable in A.2.
-- **sentry-reviewer**: ISSUES FOUND (API accuracy — L-6 env name, L-1
+- **sentry-expert**: ISSUES FOUND (API accuracy — L-6 env name, L-1
   streaming scope, metrics history). All actionable in A.1 and A.2.
-- **docs-adr-reviewer**: GAPS FOUND (dangling references — now fixed;
+- **docs-adr-expert**: GAPS FOUND (dangling references — now fixed;
   missing propagation targets; ADR-160 successor convention). Actionable in
   A.1 and A.2 items 1, 13, 14, 15.
-- **test-reviewer**: ISSUES FOUND (RED phases framed as config-shape, not
+- **test-expert**: ISSUES FOUND (RED phases framed as config-shape, not
   behaviour; L-EH edge cases; L-12 boundary). Actionable in A.2 items 9,
   10, 11.
 

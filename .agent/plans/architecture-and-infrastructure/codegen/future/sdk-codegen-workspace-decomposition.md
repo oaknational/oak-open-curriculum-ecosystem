@@ -276,7 +276,7 @@ informed this plan:
 
 - [SDK Codegen Architecture Analysis](../sdk-codegen-architecture-analysis.md) —
   complete structural analysis of the current workspace
-- [Reviewer Findings and Owner Response](../sdk-codegen-reviewer-findings.md) —
+- [Reviewer Findings and Owner Response](../sdk-codegen-expert-findings.md) —
   full findings from Barney, Betty, Fred, Wilma, plus three owner corrections
 
 ### Key Findings Summary
@@ -353,7 +353,7 @@ naturally into the workspace split.
 ## References
 
 - [Architecture analysis](../sdk-codegen-architecture-analysis.md)
-- [Reviewer findings](../sdk-codegen-reviewer-findings.md)
+- [Reviewer findings](../sdk-codegen-expert-findings.md)
 - [Release Plan M1](../../../archive/completed/release-plan-m1.plan.md)
 - [Rules](../../../../directives/principles.md)
 - [Schema-First Execution](../../../../directives/schema-first-execution.md)
