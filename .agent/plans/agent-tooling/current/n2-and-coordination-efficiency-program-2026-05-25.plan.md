@@ -107,6 +107,72 @@ These eight axes are structurally invisible to E+I+S. The plan's sequencing refl
 
 ## Workstreams
 
+## Next session — n=2 ENFORCEMENT BUNDLE (priority brief; read this first)
+
+**Context**: the prior session (2026-05-25 Mistbound + Quiet) landed doctrine without enough structural enforcement. Owner direction at session-close: *"Doctrine without enforcement is debt."* The next session is **n=2 (two agents)**. The brief below is the only thing the next session opens. It ships four landed structural enforcements, each closing a named failure mode at the structural layer.
+
+**Acceptance for the n=2 session**: all four items land as commits pushed green. The session is not complete until each enforcement is tested in code or hook, not just authored as prose.
+
+**Lane split (n=2)**:
+
+### Lane A — substantive code enforcement (one agent's session)
+
+**A1. Heartbeat emitter mechanical state-binding** — enforces PDR-078 §5 (just landed at `3ca71a40`). Sources [WS4 §item 2 below](#ws4--heartbeat-and-owner-attention-cures-tier-2).
+
+- File: `agent-tools/src/collaboration-state/watcher-heartbeat.ts` (verify exact path during execution; emitter wrapper is the surface).
+- Cure: heartbeat body MUST be constructed from typed state fields (`--claim-id`, `--intent-id`, `--branch`, `--current-cycle-label`); free-form `--body` argv is rejected at CLI validation for heartbeat events.
+- Acceptance: integration test asserts heartbeat events have structured-only body; free-form input exits non-zero with cure-naming error.
+- Effort estimate: ~2-3 hours.
+- Why critical: without this, PDR-078 §5 is paper. The category invariant (substrate is liveness infrastructure, not delivery substrate) lives only as doctrine until the emitter enforces it programmatically.
+
+### Lane B — hook + rule + CLI gate enforcements (parallel, second agent's session)
+
+**B1. Hook policy block on menu framing for architectural decisions** — enforces [`re-apply-first-question-at-elaboration-boundaries`](../../../rules/re-apply-first-question-at-elaboration-boundaries.md) at the linguistic layer.
+
+- File: `.agent/hooks/policy.json`
+- Cure: block agent prose matching patterns like `(a) / (b) / (c)` + `for owner verdict` + architectural-context co-occurrence. Same shape as the existing owner-only token blocks in `policy.json` (PDR-044 innate-immunity layer).
+- Acceptance: agent writing menu-shaped option-set for architectural decisions is blocked at write time; the block message names the LTAE-frame-test cure. Worked example regression-tested.
+- Effort estimate: ~1 hour.
+- Risk: false positives — pattern needs careful tuning. Test against historic content first.
+
+**B2. CLI hard-gate: `--body` argv rejected for comms events over threshold** — enforces [WS1 §item 2 below](#ws1--tooling-friction-at-the-moment-of-shipping-tier-1) structurally.
+
+- Files: `agent-tools/src/collaboration-state/cli-spec-options.ts` + `agent-tools/src/collaboration-state/cli-comms-commands.ts` + `cli-comms-messages.ts`
+- Cure: `comms send` / `comms append` / `comms direct` / `comms reply` reject `--body "$LONG_STRING"` when string length exceeds threshold (1500 chars proposed); error names `--body-file` as the cure.
+- Acceptance: regression test on each verb that >1500-char `--body` argv exits non-zero with cure-naming error.
+- Effort estimate: ~1 hour.
+
+**B3. Ping-before-escalate as agent-general rule** — enforces [WS4 §item 3 below](#ws4--heartbeat-and-owner-attention-cures-tier-2) at rule-corpus level.
+
+- File: new `.agent/rules/ping-before-escalate.md`
+- Cure: codify "cross-check git work-evidence + queue + DM before retirement-detection broadcast". Cite WS4 item 3 worked-instance evidence (Lunar→Mistbound false positives 2026-05-24).
+- Acceptance: rule file exists; cites PDR-078 + worked-instance evidence; enumerated in `RULES_INDEX.md`.
+- Effort estimate: ~30 min.
+
+### Why this set, not WS0 corpus refactor
+
+WS0 (extract §0/§0.5 of `start-right-team`; two-tier rule corpus classification) is high-value but **dominates one agent's whole session**. It blocks lane parallelism. Its impact is lower per-session-of-effort than A1 above, because:
+
+- A1 (PDR-078 §5 enforcement) immediately changes behaviour in every multi-agent session that emits heartbeats.
+- WS0 reduces per-session load cost over time but doesn't directly close a failure mode by itself.
+
+WS0 stays directed (verdict (c)+partial(a) at `04d5cefa`) and opens in a **dedicated future session** where the corpus refactor + four-reviewer dispatch (Fred/Betty/docs-adr-expert/assumptions-expert) can fill the whole arc.
+
+### Out-of-scope this session (transparent deferral)
+
+- WS0 substantive corpus refactor — separate dedicated session.
+- WS3 amendments (α / β / γ) — gated by WS0 SKILL shape AND WS10 PDR-082 second-instance.
+- WS4 SKILL-level cross-references — the B3 rule file is sufficient for one cycle; SKILL cross-reference can follow.
+- Identity routing-tuple disambiguation (WS1 #4) — step (a) decision still needed before step (b) implementation.
+- WS2, WS5, WS6, WS7, WS8, WS9, WS11 — all pending.
+
+### Coordination shape for the n=2 session
+
+- Apply the worked-instance from `agentic-engineering-enhancements.next-session.md` 2026-05-25 entry: lane separation, separate intent-scoped commits, gate-runner singleton, homing-to-shard for any curation residue.
+- Both agents post team-start broadcast at session-open per `start-right-team` SKILL §1.
+- Run `pnpm check` once per round (gatekeeper-specialisation per memory).
+- Each enforcement lands as its own commit; commit subject names the file changed.
+
 ### WS0 — P9 rule/skill topology refinement (TIER 0 meta-constraint)
 
 **Goal**: Refactor the rule corpus + SKILL surface so doctrine additions cost less per session-forever.
