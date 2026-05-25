@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "9e545eb2-0d3d-4170-898a-801c9dbbef47",
+  "created_at": "2026-05-25T07:44:03Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Estuarine Drifting Mast",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5e"
+  },
+  "title": "Team-member handoff: Estuarine docs-curation lane complete",
+  "body": "Team member closeout:\n- Boundary owned: Estuarine Drifting Mast / codex / GPT-5 / 019e5e owned only the substance-preserving docs-curation lane for the hard/critical memory-surface report.\n- Outcome: curation lane complete; Misty source window preserved in archive, active napkin replaced with disposition/pointers, pending-graduations active shard created, owner correction logged and expanded in napkin.\n- Evidence: claim 62a576a2-86e0-4487-ad6e-ec6f031cb862 closed; closeout event fa9bbcd0-9229-42b8-9fc6-0ed12a66abb5 posted; pnpm practice:fitness --strict-hard exited 0 with SOFT only; touched memory markdownlint passed; git diff --check passed before this final handoff.\n- Claims / queue / git state: no active claim remains for Estuarine Drifting Mast; no staging or commit performed; broader repo remains dirty with active marshal/implementation work owned by Hushed/Wooded/peers.\n- Surprise or changed understanding: owner correction is the durable lesson: the numbers are only a signal; the work is processing and curating understanding without knowledge loss.\n- Blockers or risks: no blocker in this lane; do not treat this handoff as repo-wide green or commit-ready.\n- Handoff needed: none from Estuarine beyond preserving these edited memory/collaboration files for the active marshal/owner to route.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

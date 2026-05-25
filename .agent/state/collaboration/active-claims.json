@@ -1733,6 +1733,68 @@
       "updated_at": "2026-05-25T06:08:19.708Z",
       "expires_at": "2026-05-25T06:21:16.550Z",
       "phase": "abandoned"
+    },
+    {
+      "intent_id": "6603dd26-2557-4bcf-9bf7-8a367d27be42",
+      "claim_id": "3f13eb5b-46aa-4cfa-99ff-7e4947326fb9",
+      "agent_id": {
+        "agent_name": "Eclipsed Watching Secret",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "00d760"
+      },
+      "files": [
+        "agent-tools/tests/commit-workflow.unit.test.ts",
+        ".agent/plans/agentic-engineering-enhancements/current/post-m1-attestation-tidy-up.plan.md"
+      ],
+      "commit_subject": "refactor(agent-tools): remove 2 audit-shaped commit-workflow tests (tidy cycle 14)",
+      "queued_at": "2026-05-25T07:12:58.974Z",
+      "updated_at": "2026-05-25T07:12:58.974Z",
+      "expires_at": "2026-05-25T07:27:58.974Z",
+      "phase": "queued"
+    },
+    {
+      "intent_id": "e270d2f2-d4ab-4306-a26c-8607eb8925ab",
+      "claim_id": "bfde2de0-bd70-4158-9199-5973572fe2f6",
+      "agent_id": {
+        "agent_name": "Wooded Flowering Leaf",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "f03dbd"
+      },
+      "files": [
+        "agent-tools/src/collaboration-state/comms-watch-auto-seed.ts",
+        "agent-tools/tests/collaboration-state/comms-watch-auto-seed.unit.test.ts",
+        "agent-tools/src/collaboration-state/cli-options.ts",
+        "agent-tools/src/collaboration-state/cli-spec-options.ts",
+        "agent-tools/src/collaboration-state/cli-specs.ts",
+        "agent-tools/src/collaboration-state/cli-comms-watch.ts",
+        "agent-tools/tests/collaboration-state/cli-options-parser.integration.test.ts",
+        ".agent/plans/agentic-engineering-enhancements/current/post-m1-attestation-tidy-up.plan.md"
+      ],
+      "commit_subject": "feat(agent-tools): comms-watch auto-seed + --seed-from-now/--no-auto-seed flags (tidy cycle 9)",
+      "queued_at": "2026-05-25T07:20:17.211Z",
+      "updated_at": "2026-05-25T07:20:17.211Z",
+      "expires_at": "2026-05-25T07:35:17.211Z",
+      "phase": "queued"
+    },
+    {
+      "intent_id": "ddd9dd11-a74e-4903-bbd1-e4fa03629847",
+      "claim_id": "fd8d39fb-7aae-47bb-af79-2cd437055fe3",
+      "agent_id": {
+        "agent_name": "Eclipsed Watching Secret",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "00d760"
+      },
+      "files": [
+        "agent-tools/src/practice-substrate/open-questions-evaluator.ts"
+      ],
+      "commit_subject": "fix(practice-substrate): use String.raw for 2 regex patterns (PR114 Sonar S7780)",
+      "queued_at": "2026-05-25T07:47:11.841Z",
+      "updated_at": "2026-05-25T07:48:16.710Z",
+      "expires_at": "2026-05-25T08:02:11.841Z",
+      "phase": "abandoned"
     }
   ],
   "claims": [
@@ -1791,58 +1853,6 @@
       "intent": "Retain narrow ownership for uncommitted identity-helper source/test bundle pending marshal pickup after Sylvan wind-down"
     },
     {
-      "claim_id": "e097d5a1-d63f-44e3-aafd-9f49856f188b",
-      "agent_id": {
-        "agent_name": "Misty Drifting Sail",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "02b325"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "docs/architecture/architectural-decisions/187-claude-self-modification-authorisation-cure-shape.md",
-            "docs/architecture/architectural-decisions/README.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-24T23:14:43Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Cycle 8a — author ADR-187 (Claude self-modification authz cure-shape, WS-8 R2 Lanternlit absorption): ratify C2-near-term + C5-long-term + C4-fallback combination with C2-platform-deferred trigger; C1/C3 rejected; 10 architectural conditions from Ferny WS-2 reviewer synthesis embedded",
-      "intent_to_commit": "cac31098-6ef4-47e9-b9d5-b2ce998b41ca"
-    },
-    {
-      "claim_id": "bfde2de0-bd70-4158-9199-5973572fe2f6",
-      "agent_id": {
-        "agent_name": "Wooded Flowering Leaf",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "f03dbd"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "agent-tools/src/collaboration-state/comms-watch-auto-seed.ts",
-            "agent-tools/tests/collaboration-state/comms-watch-auto-seed.unit.test.ts",
-            "agent-tools/src/collaboration-state/cli-options.ts",
-            "agent-tools/src/collaboration-state/cli-spec-options.ts",
-            "agent-tools/src/collaboration-state/cli-specs.ts",
-            "agent-tools/src/collaboration-state/cli-comms-watch.ts",
-            ".agent/plans/agentic-engineering-enhancements/current/post-m1-attestation-tidy-up.plan.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-25T06:48:58Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Cycle 9 PDR-063 resume from Eclipsed: 4 integration edits (cli-options/cli-spec-options/cli-specs/cli-comms-watch) + parser unit test + plan landing record. Module + auto-seed test already authored by Eclipsed (6 tests green, 543/543 suite)."
-    },
-    {
       "claim_id": "fec8e243-049a-4efb-b371-a9ea4a533369",
       "agent_id": {
         "agent_name": "Hushed Stalking Shade",
@@ -1881,7 +1891,32 @@
       "intent": "Absorbing-orphan marshal of Twilit Orbiting Galaxy (019e5d codex GPT-5) open-questions memory-system bundle per owner direction at 06:55Z; Twilit retired before CLI enqueue per owner 07:00Z. Bundle files per Twilit broadcast 4825fb5f."
     },
     {
-      "claim_id": "3f13eb5b-46aa-4cfa-99ff-7e4947326fb9",
+      "claim_id": "3b76b802-f9fe-4f2c-8f2d-5fd64a7160be",
+      "agent_id": {
+        "agent_name": "Briny Fathoming Dock",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "95a27b"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/role-emission-citation-binding.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/README.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/repo-continuity.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T07:42:02Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Briny closeout: stage role-emission citation-binding plan + plan-tree README + thread record + repo-continuity for Marshal pickup (no-impl session per owner)"
+    },
+    {
+      "claim_id": "617b1fc7-141c-4158-970f-94e733c66120",
       "agent_id": {
         "agent_name": "Eclipsed Watching Secret",
         "platform": "claude",
@@ -1893,15 +1928,14 @@
         {
           "kind": "files",
           "patterns": [
-            "agent-tools/tests/commit-workflow.unit.test.ts",
             ".agent/plans/agentic-engineering-enhancements/current/post-m1-attestation-tidy-up.plan.md"
           ]
         }
       ],
-      "claimed_at": "2026-05-25T07:03:21Z",
+      "claimed_at": "2026-05-25T07:51:02Z",
       "freshness_seconds": 14400,
       "sidebar_open": false,
-      "intent": "Cycle 14 (Twilit cycle 3 audit-shaped deletion): delete lines 221-247 in commit-workflow.unit.test.ts (two audit-shaped it-blocks: stagedBundleCalls call-count + stagedBundlePathspecs pathspec audit; both reviewer-confirmed audit-shape on prior direct read). Reviewer dispatch test-expert + code-expert (Sonnet). Marshal-cycle through Hushed. One commit. Tests stay green pre+post. Plan landing record bundled. Parallel-safe with Wooded Cycle 9 (zero file overlap)."
+      "intent": "Cycle 12+13 plan amendment (R4): mark dead-scope cycles completed; add §R4 plan refinement entry citing my prior broadcasts 86be55d7 + 22dc45ff as evidence"
     }
   ]
 }

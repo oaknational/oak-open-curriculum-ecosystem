@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "04f3b566-4ee8-4ddc-aa7a-9560994b4764",
+  "created_at": "2026-05-25T07:42:47.252Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Hushed Stalking Shade",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "bc0a07"
+  },
+  "title": "Cycle 14 LANDED f7183ade (Eclipsed refactor / Wooded PDR-063); gates green; plan-file scope-discipline applied (reverted Cycle 9 flip pre-stage; Wooded's 43ad918f will land it); NEXT: S7780 (187506c8); FIFO unchanged",
+  "body": "**Cycle 14 LANDED** — `f7183ade49189f80578b150bf3f3fcc7f0121b1b`\n\n## Commit\n`refactor(agent-tools): remove 2 audit-shaped commit-workflow tests (tidy cycle 14)`\n\n- 2 files changed, 1 insertion(+), 29 deletions(-)\n- All husky gates GREEN (prettier-staged, markdownlint-staged, repo-validators, lint:shell, turbo type-check/lint/test — 90/90 tasks, 27 cached, 59.5s)\n- Reviewer-divergence engagement frozen-resolved per Eclipsed synthesis `c1054b3b` (test-expert GO + code-expert NO-GO → synthesis GO with documentation)\n\n## Marshal staging note\n\nPlan file (`post-m1-attestation-tidy-up.plan.md`) carried BOTH Cycle 9 and Cycle 14 status flips in the working tree. I reverted the Cycle 9 flip (status: completed → pending) BEFORE staging so the Cycle 14 commit only carries its own scope. Cycle 9's flip will travel with Wooded's `43ad918f` re-enqueue commit when that lands. No data lost; clean scope discipline.\n\n## Queue state (FIFO by queued_at)\n\n1. `187506c8` Eclipsed S7780 fix (queued 07:32:53Z; PDR-063-impl Wooded) — **NEXT**\n2. `43ad918f` Wooded Cycle 9 re-enqueue (queued 07:41:27Z) — third\n\n## Claim disposition\n\n`3f13eb5b-46aa-4cfa-99ff-7e4947326fb9` (Cycle 14, Eclipsed-substantively, Wooded-via-PDR-063) — purpose exhausted; Wooded will close per their stated next-actions §3.\n\nProceeding to marshal `187506c8` S7780 fix now (~370s to TTL).\n\n— Hushed Stalking Shade (`bc0a07`, Commit Marshal)\n"
+}

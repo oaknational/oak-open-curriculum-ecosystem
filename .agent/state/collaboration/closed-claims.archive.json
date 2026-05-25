@@ -43629,6 +43629,222 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "e097d5a1-d63f-44e3-aafd-9f49856f188b",
+      "agent_id": {
+        "agent_name": "Misty Drifting Sail",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "02b325"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/architecture/architectural-decisions/187-claude-self-modification-authorisation-cure-shape.md",
+            "docs/architecture/architectural-decisions/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T23:14:43Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Cycle 8a — author ADR-187 (Claude self-modification authz cure-shape, WS-8 R2 Lanternlit absorption): ratify C2-near-term + C5-long-term + C4-fallback combination with C2-platform-deferred trigger; C1/C3 rejected; 10 architectural conditions from Ferny WS-2 reviewer synthesis embedded",
+      "intent_to_commit": "cac31098-6ef4-47e9-b9d5-b2ce998b41ca",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T07:09:46.015Z",
+        "closed_by": {
+          "agent_name": "Misty Drifting Sail",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "02b325"
+        },
+        "summary": "Cycle 8a (ADR-187, Claude self-modification authz cure-shape, WS-8) landed at HEAD 7f7ad862 via Hushed marshal at 06:05Z; pre-format cure applied; 591-insertion ADR + README index entry; reviewer absorption (docs-adr-expert + assumptions-expert + security-expert + architecture-expert-wilma) embedded; trailing-task closeout of Director's pre-compaction Implementer claim; Director seat dissolved 07:03Z.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e097d5a1-d63f-44e3-aafd-9f49856f188b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "62a576a2-86e0-4487-ad6e-ec6f031cb862",
+      "agent_id": {
+        "agent_name": "Estuarine Drifting Mast",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e5e"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T07:38:30Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Substance-preserving docs curation for current hard/critical fitness: reflow or route critical-width knowledge in napkin.md and pending-graduations.md without trimming, deleting, or weakening content; no staging or commit-window work.",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T07:41:25Z",
+        "closed_by": {
+          "agent_name": "Estuarine Drifting Mast",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e5e"
+        },
+        "summary": "Substance-preserving memory curation complete: Misty Director source window archived, pending-graduations active shard created, active napkin processed with owner correction logged. Evidence: practice fitness strict-hard SOFT only; markdownlint passed for touched memory files; git diff --check passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "62a576a2-86e0-4487-ad6e-ec6f031cb862",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3f13eb5b-46aa-4cfa-99ff-7e4947326fb9",
+      "agent_id": {
+        "agent_name": "Eclipsed Watching Secret",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "00d760"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/tests/commit-workflow.unit.test.ts",
+            ".agent/plans/agentic-engineering-enhancements/current/post-m1-attestation-tidy-up.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T07:03:21Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Cycle 14 (Twilit cycle 3 audit-shaped deletion): delete lines 221-247 in commit-workflow.unit.test.ts (two audit-shaped it-blocks: stagedBundleCalls call-count + stagedBundlePathspecs pathspec audit; both reviewer-confirmed audit-shape on prior direct read). Reviewer dispatch test-expert + code-expert (Sonnet). Marshal-cycle through Hushed. One commit. Tests stay green pre+post. Plan landing record bundled. Parallel-safe with Wooded Cycle 9 (zero file overlap).",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T07:44:24Z",
+        "closed_by": {
+          "agent_name": "Eclipsed Watching Secret",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "00d760"
+        },
+        "summary": "Cycle 14 (audit-shaped test deletion) landed at f7183ade by Hushed marshal-cycle; eclipsed post-compaction-resume confirms HEAD matches",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "3f13eb5b-46aa-4cfa-99ff-7e4947326fb9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "bfde2de0-bd70-4158-9199-5973572fe2f6",
+      "agent_id": {
+        "agent_name": "Wooded Flowering Leaf",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "f03dbd"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/comms-watch-auto-seed.ts",
+            "agent-tools/tests/collaboration-state/comms-watch-auto-seed.unit.test.ts",
+            "agent-tools/src/collaboration-state/cli-options.ts",
+            "agent-tools/src/collaboration-state/cli-spec-options.ts",
+            "agent-tools/src/collaboration-state/cli-specs.ts",
+            "agent-tools/src/collaboration-state/cli-comms-watch.ts",
+            ".agent/plans/agentic-engineering-enhancements/current/post-m1-attestation-tidy-up.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T06:48:58Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Cycle 9 PDR-063 resume from Eclipsed: 4 integration edits (cli-options/cli-spec-options/cli-specs/cli-comms-watch) + parser unit test + plan landing record. Module + auto-seed test already authored by Eclipsed (6 tests green, 543/543 suite).",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T07:48:14Z",
+        "closed_by": {
+          "agent_name": "Wooded Flowering Leaf",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "f03dbd"
+        },
+        "summary": "Cycle 9 LANDED 75e47923 (Hushed marshal-cycle); comms-watch auto-seed + --seed-from-now/--no-auto-seed flags; all gates green. Substantive author Wooded; PDR-063-traveled (Eclipsed pickup at 06:42Z; Wooded reverse at 07:00Z; Eclipsed PDR-063 pickup again at 07:26Z; Eclipsed PDR-063 reverse to Wooded at 07:37Z; re-enqueued 43ad918f at 07:41Z under same claim_id; landed 75e47923). Closing per Wooded resume contract step 3.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "bfde2de0-bd70-4158-9199-5973572fe2f6",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "fd8d39fb-7aae-47bb-af79-2cd437055fe3",
+      "agent_id": {
+        "agent_name": "Eclipsed Watching Secret",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "00d760"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/practice-substrate/open-questions-evaluator.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T07:31:23Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "PR #114 SonarCloud S7780 fix: replace 2 sites of escaped-backslash regex patterns with String.raw template-literals (lines 152, 159 in open-questions-evaluator.ts, originally landed in ee241b4b as Twilit orphan-absorption). Surfaced by Celestial Glimmering Galaxy via SonarQube MCP at 07:26:45Z; Hushed named Eclipsed as natural pickup in compaction-prep closeout at 07:29:14Z. Mechanical refactor; tests stay green pre+post; unblocks PR #114 quality gate. Parallel-safe with Cycle 9 (e270d2f2) + Cycle 14 (296ab803) — different file.",
+      "intent_to_commit": "ddd9dd11-a74e-4903-bbd1-e4fa03629847",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T07:48:19Z",
+        "closed_by": {
+          "agent_name": "Eclipsed Watching Secret",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "00d760"
+        },
+        "summary": "S7780 fix landed at 9f746c2a (Hushed marshalled before intent 187506c8 expired); duplicate ddd9dd11 abandoned",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "fd8d39fb-7aae-47bb-af79-2cd437055fe3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

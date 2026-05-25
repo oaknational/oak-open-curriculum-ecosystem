@@ -1,0 +1,93 @@
+chore(substrate): land team-session substrate batch (memory + plans + comms + config)
+
+Orphan-absorption commit per PDR-077 §Cycle Protocol step 1 (absorbing-
+orphan marshal path). Owner directed at 2026-05-25T07:01Z to commit and
+push all working-tree changes. This bundle captures the team-session-arc
+coordination substrate, memory deltas, plan additions, and config drift
+accumulated across the 2026-05-22 → 2026-05-25 multi-agent session arc
+(prior teams: Charcoal/Pelagic/Mistbound/Lunar/Misty/Eclipsed/Wooded/
+Starless/Shadowed/Twilit; current peer team: Hushed Marshal +
+Eclipsed + Wooded with Misty retiring).
+
+## Bundle scope
+
+### Memory substrate
+
+- Active memory: napkin.md (failure-mode + behaviour-note captures
+  across the session arc), distilled.md (consolidated lessons),
+  patterns/* (different-lens-reviewer-divergence,
+  inter-agent-sidebar-with-default-action — pattern record updates),
+  archive/ (napkin-2026-05-24-pelagic-hard-napkin-window archive,
+  distilled-graduations-log-2026-05-14 archive).
+- Operational memory: repo-continuity.md (session-arc continuity
+  updates), pending-graduations/* (2026-05-06-to-21 legacy backlog +
+  2026-05-23 team-session-autonomy candidates), threads/* (3 thread
+  next-session records: agentic-engineering-enhancements,
+  connecting-oak-resources, agent-collaboration-research,
+  branch-fitness-and-push-cadence).
+
+### Plans
+
+- post-m1-attestation-tidy-up.plan.md (M) — 17-cycle tidy plan with
+  Cycles 1-8a complete, Cycle 9 mid-flight, 10-15 in flight.
+- memory-surface-critical-drain-2026-05-24.plan.md (M) — Shadowed
+  consolidation lane validation update.
+- practice-infrastructure-hardening-program.plan.md (M).
+- branch-fitness-and-push-cadence.plan.md (new) — Mistbound's
+  pre-retirement plan-author work.
+- hook-matcher-string-awareness-cure.plan.md (new) — Starless's
+  hook-policy cure plan (owner-review HOLD; substantively complete
+  with 4 reviewer APPROVE-WITH-NITS absorbed).
+
+### Coordination substrate (canonical comms-event stream)
+
+- ~600 new comms event JSONs under .agent/state/collaboration/comms/
+  — the canonical truth substrate per PDR-066 / ADR-183 / ADR-186
+  capturing the team-session arc's broadcasts, directed messages,
+  heartbeats, failure-modes, and behaviour-notes.
+- 9 new comms-seen JSONs (per-agent watcher state).
+- 4 modified comms-seen JSONs (existing agents updated their seen-state).
+- 2 handoff records (PDR-063 first-class artefacts):
+  - 2026-05-25-mistbound-to-hushed-stalking-shade-marshal-handoff.md
+    (Mistbound → Hushed marshal-seat handoff at PDR-064 Moment 1).
+  - 2026-05-25-eclipsed-cycle9-compaction-handoff.md (Eclipsed →
+    Wooded Cycle 9 mid-cycle handoff at PDR-063 freeze).
+- active-claims.json (M) + closed-claims.archive.json (M) — claim
+  registry snapshot post team-session-arc.
+- shared-comms-log.md (M) — coordination log updates.
+
+### Configuration drift
+
+- .claude/settings.json (M) — Claude Code settings adjustments.
+- .cursor/mcp.json (M) — Cursor MCP config.
+- .sonarcloud.properties (M) — SonarCloud project properties.
+
+### Practice substrate
+
+- .agent/practice-index.md is in the Twilit bundle (ee241b4b); not
+  re-included here.
+
+## Explicit exclusions
+
+The following dirty paths are NOT part of this commit:
+
+- agent-tools/src/collaboration-state/cli-{comms-watch,options,
+  spec-options,specs}.ts — Cycle 9 WIP on Wooded (PDR-063 pickup
+  from Eclipsed); will land via Wooded's marshal cycle.
+- agent-tools/tests/commit-workflow.unit.test.ts — Cycle 14 WIP on
+  Eclipsed (audit-shaped test deletion); will land via Eclipsed's
+  marshal cycle.
+- .agent/state/collaboration/_tmp-*.txt and _tmp-*.md — transient
+  body-file inputs to comms events / heartbeat crons / commit-msg
+  composition. Substrate by-product, not substrate of record. Per
+  the standing rule "important state never in /tmp" they live in
+  the repo workdir but they are NOT for commit.
+
+## Marshal attribution
+
+Marshalled by Hushed Stalking Shade (`bc0a07`, claude-opus-4-7) under
+owner-directed mass-commit orphan-absorption mode. Multiple substantive
+authors across the session arc (Charcoal, Mistbound, Lunar, Misty,
+Eclipsed, Wooded, Starless, Shadowed, Twilit); attribution within each
+file's git history rather than a single Co-Authored-By trailer would
+overstate any single author's role on this omnibus commit.

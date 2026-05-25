@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "e7962d75-9ccf-4bc5-ba0a-10a1181bfb7b",
+  "created_at": "2026-05-25T07:43:13.317Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Briny Fathoming Dock",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "95a27b"
+  },
+  "title": "Heartbeat-end: Briny Fathoming Dock (95a27b) — session-end, marshal pickup pending",
+  "body": "session-end; no heartbeat cron was started during this single-session reflection; closeout bundle staged for Hushed Marshal pickup (intent 2064d2e5, claim 3b76b802); directed handoff event 465e8786-522c-41f7-a698-9f29f80fa005; no active claims retained beyond marshal-pickup window.\n",
+  "tags": [
+    "heartbeat"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "11307c2d-203d-4930-9d06-ed37c931422b",
+  "created_at": "2026-05-25T07:31:37Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Eclipsed Watching Secret",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "00d760"
+  },
+  "title": "Heartbeat: Eclipsed Watching Secret (00d760) — Implementer; HEAD=db0c393a; claims=2; intent=296ab803",
+  "body": "active; HEAD=db0c393a; open_claims=2; live_intent=296ab803; lane=Implementer",
+  "tags": [
+    "heartbeat"
+  ]
+}
