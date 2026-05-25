@@ -166,21 +166,16 @@ record and snagging plan. Historical long-form routing that previously lived
 in this file is preserved in
 [`repo-continuity-soft-tier-pre-dusky-2026-05-24.md`](archive/repo-continuity-soft-tier-pre-dusky-2026-05-24.md).
 
-### Agentic-Engineering Tidy-Plan Lane
+### Agentic-Engineering Tidy-Plan Lane (closed 2026-05-25)
 
-The current owner-provided goal is to complete and deliver
-[`post-m1-attestation-tidy-up.plan.md`](../../plans/agentic-engineering-enhancements/current/post-m1-attestation-tidy-up.plan.md)
-while optimising every decision for long-term architectural excellence.
-
-Next safe step: let Eclipsed complete and enqueue Cycle 9. After Cycle 9 lands,
-Wooded opens Cycle 10. Shadowed's handoff adds two readiness notes for later
-cycles: Cycle 10 must satisfy its crash-hardening claim with a real fsync-capable
-state writer or helper extension, and Cycle 11 must deliberately handle the
-ADR-182 `comms-seen` reference before making a zero-reference cleanup claim.
-
-The earlier consolidation hard/critical objective is complete for now
-(`SOFT (20 soft)`). Deeper soft-tier consolidation remains useful but is not
-the active delivery lane while tidy cycles 9-15 are in flight.
+The post-M1 attestation tidy-up plan delivered via PR #114 (merged at
+`77fcf746`). The plan is archived at
+[`post-m1-attestation-tidy-up.plan.md`](../../plans/agentic-engineering-enhancements/archive/completed/post-m1-attestation-tidy-up.plan.md);
+cycles 10 + 11 (comms-watch storage redesign WS2 + WS3) were superseded into
+[`comms-watch-storage-redesign.plan.md`](../../plans/agent-tooling/current/comms-watch-storage-redesign.plan.md)
+per the archive supersession mapping. The earlier consolidation hard/critical
+objective remains complete (`SOFT (20 soft)`). Owner has pivoted back to
+graph work; deeper soft-tier consolidation is not the active delivery lane.
 
 ### Connecting-Oak-Resources / PR #108 Routing
 
@@ -190,7 +185,7 @@ the PR #108 snagging plan, not duplicated here:
 
 - [connecting-oak-resources thread record][connecting]
 - [PR #108 snagging plan](../../plans/connecting-oak-resources/knowledge-graph-integration/archive/completed/pr-108-snagging.plan.md) (archived; gate cycles landed)
-- [M1 Safe Pause program plan](../../plans/agentic-engineering-enhancements/current/practice-infrastructure-hardening-program.plan.md) (Gate 1 WS-7 authority)
+- [M1 Safe Pause program plan](../../plans/agentic-engineering-enhancements/archive/completed/practice-infrastructure-hardening-program.plan.md) (archived 2026-05-25; Gate 1 WS-7 historical authority — PR #108 merged at `2462952a`)
 - [gate-1a delivery addendum](../../plans/connecting-oak-resources/knowledge-graph-integration/current/gate-1a-delivery-parallel-execution-addendum.plan.md)
 
 **Preview MCP validation**: PR #108 black-box pass documented 2026-05-24

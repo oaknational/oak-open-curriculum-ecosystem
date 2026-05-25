@@ -25,6 +25,7 @@ next-session cleanup pass before merge.
 | [agent-infrastructure-portability-remediation.plan.md](agent-infrastructure-portability-remediation.plan.md) | Portability remediation for the expanding expert/skill/rule collection; Phase 5 is the documentation dependency for portability PDR/ADR work | QUEUED |
 | [pr-102-snagging.plan.md](pr-102-snagging.plan.md) | Queued next-session plan to clear PR #102 review threads and Sonar quality-gate blockers | QUEUED |
 | [context-cost-cli.plan.md](context-cost-cli.plan.md) | New `agent-tools context-cost` subcommand: token-cost estimate over arbitrary file globs (chars/4 baseline, swap seam for real tokenizer). Delivers §1 of the strategic source plan's Scope Expansion Register; §2/§3/§4 now route through `fitness-token-measurements-and-frontmatter-mandation.plan.md`. | IMPLEMENTED |
+| [comms-watch-storage-redesign.plan.md](comms-watch-storage-redesign.plan.md) | WS2 + WS3 of the comms-watch trilogy: storage redesign (mtime-watermark + per-session XDG cache) + cleanup. Promoted 2026-05-25 from archived `practice-infrastructure-hardening-program.plan.md §P5.W1`. WS1 (auto-seed) landed at `75e47923`. WS3 BLOCKED on comms-research-plan completion per owner standing direction 2026-05-25. | QUEUED / WS3 BLOCKED |
 
 ## Related
 
