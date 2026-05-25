@@ -16,6 +16,15 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
+- **Next session direction (n=2 ENFORCEMENT BUNDLE)**: the plan body
+  [`n2-and-coordination-efficiency-program-2026-05-25.plan.md`](../../plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md)
+  opens `## Workstreams` with a **"Next session — n=2 ENFORCEMENT BUNDLE
+  (priority brief; read this first)"** section landed at commit
+  `81839e47`. Four structural enforcements split across two lanes;
+  acceptance is all four land as commits pushed green with code or hook
+  tests. WS0 corpus refactor explicitly deferred. **The next n=2
+  session reads that brief first; everything else in this register is
+  context for understanding it.**
 - **Deep consolidation status (2026-05-25 Mistbound + Quiet)**: completed this
   handoff. Actions: (1) WS4 first move landed at `3ca71a40` — PDR-078 §5
   substrate-category amendment; (2) WS0 directed verdict landed at `04d5cefa`
@@ -179,7 +188,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF first-feature delivery | [record][eef] | Fiery Kindling Brazier / claude / claude-opus-4-7 / 9f4026 / commit-marshal+pr-115-merged / 2026-05-25 |
-| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Mistbound Passing Candle / claude / claude-opus-4-7 / `e77243` / WS4-item-1 + WS0-directed-verdict + n=2 lane partner / 2026-05-25, Quiet Whispering Veil / codex / GPT-5 / `019e60` / knowledge-curation lane / 2026-05-25 |
+| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Mistbound Passing Candle / claude / claude-opus-4-7 / `e77243` / WS4-item-1 + WS0-directed-verdict + n=2-enforcement-bundle-brief / 2026-05-25, Quiet Whispering Veil / codex / GPT-5 / `019e60` / knowledge-curation lane / 2026-05-25 |
 
 ## Paused Threads
 
