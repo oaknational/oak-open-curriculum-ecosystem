@@ -44378,6 +44378,48 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "43a21f79-0660-4f3e-9b42-d2d43fd02f93",
+      "agent_id": {
+        "agent_name": "Stormy Surfing Dock",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "2a7b65"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/architecture/architectural-decisions/184-comms-event-sync-kind-and-urgency-field.md",
+            ".agent/plans/agent-tooling/current/human-composer-tui.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T14:39:38Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Amend ADR-184 to admit owner-as-author for sync kind + refine human-composer-tui.plan.md composition (HC-A5 + WS6 + assumption #2)",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T15:02:27Z",
+        "closed_by": {
+          "agent_name": "Stormy Surfing Dock",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "2a7b65"
+        },
+        "summary": "ADR-184 owner-as-author amendment + HC-TUI plan composition refinement landed at 46d96c88; intent 7aa89fd4 complete; Bugbot finding resolved",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "43a21f79-0660-4f3e-9b42-d2d43fd02f93",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

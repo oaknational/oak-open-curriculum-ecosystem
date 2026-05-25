@@ -348,6 +348,19 @@ surfaces and must be processed before any archive move:
 The shard bodies listed in the index remain live queue substance, not archives.
 Process entries there before removing their pointers from this register.
 
+### 2026-05-25 — Fiery collaboration decomposition + n=2 efficiency candidates
+
+Active shard:
+[`pending-graduations/2026-05-25-fiery-collaboration-decomposition-and-n2-efficiency.md`](pending-graduations/2026-05-25-fiery-collaboration-decomposition-and-n2-efficiency.md).
+
+Route-state: split out by Fiery Kindling Brazier on 2026-05-25 immediately on capture
+to keep the main register under hard-line-limit per buffer back-pressure discipline.
+The shard carries two `status: due` owner-direction-triggered candidates from the
+PR #115 marshal cycle retrospective metacognition pass: "Collaboration ceremony —
+decomposition discipline for marshal cycles" and "n=2 coordination efficiency". Process
+the shard entry by entry before removing this pointer. Composes with PDR-082 (n=2
+collaboration mode, drafted in parallel by Stormy Surfing Dock on the same substrate).
+
 ## 2026-05-24 owner-decision-batch candidates (Lanternlit Listening Dusk / `78683a`)
 
 Route note 2026-05-24 (Shaded Silencing Dusk): the active `distilled.md`

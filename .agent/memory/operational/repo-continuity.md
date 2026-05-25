@@ -16,8 +16,18 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
-- Current branch: `feat/education-evidence-foundational-graphs-take2`.
-- Current local HEAD: `18c2ca06` (`chore: formatting`).
+- Current branch: `main` after PR #115 merge;
+  `feat/education-evidence-foundational-graphs-take2` exists locally and on origin but
+  is now merged.
+- **PR #115 MERGED 2026-05-25T~15:09Z** at merge commit `9fa3a180` on `origin/main`.
+  Two cycle commits landed: `3dd2c317` (Fiery marshal bundle covering Breezy
+  curator-pass, PR-115 Copilot review fixes, Hearthlit retirement substrate, and
+  coordination drain) and `46d96c88` (Stormy ADR-184 owner-as-author amendment plus
+  HC-TUI plan refinement).
+  All 6 CI gates green on merge; Copilot's re-flag of the UUID fix was stale auto-bot
+  noise (file content verified fixed at HEAD).
+- Current local HEAD on the merged branch: `46d96c88`. After fetch, `origin/main` is
+  at `9fa3a180`.
 - PR #114 merged at `77fcf746` (post-m1-attestation-tidy-up landing). PR #108
   merged earlier at `2462952a`. M1 + M2 milestones both achieved. Owner has
   explicitly pivoted back to graph work (2026-05-25).
@@ -115,7 +125,7 @@ paused implementation program.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF first-feature delivery | [record][eef] | Secret Vanishing Wisp / claude / claude-opus-4-7 / 981cbe / 2026-05-23 |
+| `eef` | EEF first-feature delivery | [record][eef] | Fiery Kindling Brazier / claude / claude-opus-4-7 / 9f4026 / commit-marshal+pr-115-merged / 2026-05-25 |
 | `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Breezy Flowing Dock / codex / GPT-5 / `019e5f` / Knowledge Curator critical/hard memory curation + light handoff / 2026-05-25 |
 
 ## Paused Threads
@@ -125,7 +135,7 @@ not the current session-priority lane. Reactivation is owner-directed.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `connecting-oak-resources` | Oak resource graph substrate for EEF | [record][connecting] | Salty Mooring Dock / cursor / Composer / dc4dd7 / PR #114 preview MCP smoke scripts / 2026-05-25 |
+| `connecting-oak-resources` | Oak resource graph substrate for EEF | [record][connecting] | Riverine Navigating Rudder / cursor / Composer / 27d9af / oak-preview-1 full manual UAT PASS / 2026-05-25 |
 | `branch-fitness-and-push-cadence` | Small-PR, push-often, branch-fitness, PR/Sonar monitoring protocol substrate | [record][branch-fitness] | Pelagic Snorkelling Sextant / codex / GPT-5 / 019e5b / Cycle 1 substrate capture from active napkin / 2026-05-24 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night / claude-code / opus-4.7 / 188baa / 2026-05-10 |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / claude-code / unknown / 228bc5 / 2026-05-06 |
@@ -199,10 +209,14 @@ the PR #108 snagging plan, not duplicated here:
 - [gate-1a delivery addendum](../../plans/connecting-oak-resources/knowledge-graph-integration/current/gate-1a-delivery-parallel-execution-addendum.plan.md)
 
 **Preview MCP validation**: PR #108 black-box pass documented 2026-05-24
-(Velvet Stalking Moth). PR #114 branch adds a manual agent preview test checklist (see
+(Velvet Stalking Moth). Education-evidence preview (`oak-preview-1`) full
+checklist A–H pass documented 2026-05-25 (Riverine Navigating Rudder); suggest
+empty `url` tracked as WS5 in
+[`oak-preview-mcp-snagging-2026-04-23.plan.md`](../../plans/sdk-and-mcp-enhancements/current/oak-preview-mcp-snagging-2026-04-23.plan.md).
+Manual procedure:
 [agent-preview-test-checklist.md](../../../apps/oak-curriculum-mcp-streamable-http/docs/agent-preview-test-checklist.md)
-and [connecting thread § 2026-05-25 Salty Mooring Dock][connecting]). Sonar on
-PR #114 was green after fake-test-path fixture fix at `2f5e1871`.
+and [connecting thread § 2026-05-25 Riverine Navigating Rudder][connecting].
+Sonar on PR #114 was green after fake-test-path fixture fix at `2f5e1871`.
 
 Before resuming product work, re-check current PR, CI, Sonar, CodeQL, active
 claims, commit queue, and git state. Do not rely on historical issue counts in
@@ -269,20 +283,30 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
-Breezy Flowing Dock ran a bounded critical/hard memory-curation pass and light
-`oak-session-handoff` after the earlier Knowledge Curator consolidation. This
-handoff does not fire a new deep-consolidation trigger: the affected items were
-already routed into the active napkin, the active pending-graduations shard, the
-thread record, repo-continuity, and the controlling critical-drain plan. Broader
-Phase 2/3 soft-file work remains trigger/owner-gated; do not reopen it from
-soft fitness alone. Falsifiability for the next consolidator: re-check
-`git log --oneline -5`, `git status --short`, active claims, active queue,
-the Seaworthy attestation event, and the tidy-plan cycle ledger before starting.
+**due — owner-directed post-PR-115-merge consolidate-docs pass** (Fiery
+Kindling Brazier `9f4026`, 2026-05-25T15:09Z). PR #115 merged at
+`9fa3a180` on origin/main; owner directed both Fiery and Stormy to run
+a final session handoff and docs consolidation pass. Triggers: plan
+milestone closed (PR-0 of 4-PR gate-1a sequence + hardening-arc
+closeout); new graduation candidates captured (Collaboration ceremony
+decomposition discipline + n=2 coordination efficiency, both
+`status: due`, owner-direction-triggered); ADR-184 amendment landed
+into main; Stormy actively drafting PDR-082 (n=2 collaboration mode)
+on the cure substrate Fiery captured. Consolidate-docs invocation
+follows this handoff.
 
-Current live consolidation state is the 2026-05-24 Knowledge Curator drain:
-the active napkin has been processed, the former critical
-`pending-graduations.md` surface is now soft-only, and the active execution ledger is
-[`memory-surface-critical-drain-2026-05-24.plan.md`](../../plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md).
+Prior state (Riverine Navigating Rudder, 2026-05-25): read-only MCP
+UAT + plan WS5 capture + continuity handoff only; no plan milestone
+closed at that close.
+
+Prior state (Breezy Flowing Dock bounded critical/hard curation, 2026-05-25):
+the active napkin, pending-graduations shards, thread records, and
+memory-surface-critical-drain plan remain the live consolidation ledger.
+Broader Phase 2/3 soft-file work remains trigger/owner-gated. Falsifiability for
+the next consolidator: re-check `git log --oneline -5`, `git status --short`,
+active claims, active queue, and
+[`memory-surface-critical-drain-2026-05-24.plan.md`](../../plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md)
+before starting.
 
 Historical deep-consolidation status prose from 2026-05-22 and 2026-05-23 has
 been processed into the current plan, thread records, archives, and live
