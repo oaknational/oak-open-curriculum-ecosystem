@@ -1,5 +1,30 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
+## 2026-05-25 — Salty Mooring Dock / cursor / Composer / `dc4dd7` — PR #114 preview ops + agent smoke scripts
+
+**Landed** (commit pending owner push): remote MCP verification tooling in
+`apps/oak-curriculum-mcp-streamable-http`:
+
+- `scripts/probe-remote-mcp.sh` + `pnpm probe:remote` — unauthenticated baseline
+- `scripts/agent-preview-smoke.ts` + `pnpm smoke:agent-preview` — agent path when
+  `MCP_PROBE_BEARER_TOKEN` is set
+- [docs/agent-preview-verification.md](../../../apps/oak-curriculum-mcp-streamable-http/docs/agent-preview-verification.md)
+
+**Also this session** (prior commits on branch): Sonar S5443 fix in
+`agent-tools` CLI parser integration tests (`2f5e1871`); `.cursor/mcp.json`
+`oak-preview-1` URL pointed at education-evidence preview host.
+
+**Validated**: both scripts green against
+`https://poc-oak-open-curriculum-mcp-git-feat-education-evidence-c19788.vercel.thenational.academy`
+(unauthenticated layer). Full MCP tool exercise in Cursor confirmed earlier in
+session (same preview).
+
+**Next safe step**: owner push branch; open or refresh PR #114 if not already;
+run `pnpm smoke:agent-preview` with Bearer after OAuth when validating auth path
+in CI or locally.
+
+---
+
 ## 2026-05-24 — Velvet Stalking Moth / cursor / Composer / `bde2f8` — PR #108 preview MCP black-box validation (owner-directed closeout)
 
 **Landed**: PR #108 preview-deployment MCP server verified end-to-end via Cursor

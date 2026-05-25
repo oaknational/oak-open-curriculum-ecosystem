@@ -17,8 +17,10 @@ Earlier archives remain under [`archive/`](archive/).
 ## Current State
 
 - Current branch: `feat/education-evidence-foundational-graphs`.
-- Current local HEAD: `26f8e7cb`
-  (`fix(plan): cure 7 markdownlint errors in post-m1-attestation-tidy-up.plan.md`).
+- Current local HEAD: `2f5e1871`
+  (`test(agent-tools): use fake-test-path in cli parser integration tests`) —
+  agent-preview verification scripts staged for commit at session close
+  (Salty Mooring Dock / `dc4dd7`).
 - PR #108 has merged via `2462952a`, and Seaworthy's M1 Safe Pause attestation
   event `703de8dd` says M1 Safe Pause is achieved. The current live
   multi-agent lane is now the post-M1 tidy-plan delivery sequence, not PR #108
@@ -107,7 +109,7 @@ not the current session-priority lane. Reactivation is owner-directed.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `connecting-oak-resources` | Oak resource graph substrate for EEF | [record][connecting] | Velvet Stalking Moth / cursor / Composer / bde2f8 / PR #108 preview MCP validation / 2026-05-24 |
+| `connecting-oak-resources` | Oak resource graph substrate for EEF | [record][connecting] | Salty Mooring Dock / cursor / Composer / dc4dd7 / PR #114 preview MCP smoke scripts / 2026-05-25 |
 | `branch-fitness-and-push-cadence` | Small-PR, push-often, branch-fitness, PR/Sonar monitoring protocol substrate | [record][branch-fitness] | Pelagic Snorkelling Sextant / codex / GPT-5 / 019e5b / Cycle 1 substrate capture from active napkin / 2026-05-24 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night / claude-code / opus-4.7 / 188baa / 2026-05-10 |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / claude-code / unknown / 228bc5 / 2026-05-06 |
@@ -185,11 +187,12 @@ the PR #108 snagging plan, not duplicated here:
 - [M1 Safe Pause program plan](../../plans/agentic-engineering-enhancements/current/practice-infrastructure-hardening-program.plan.md) (Gate 1 WS-7 authority)
 - [gate-1a delivery addendum](../../plans/connecting-oak-resources/knowledge-graph-integration/current/gate-1a-delivery-parallel-execution-addendum.plan.md)
 
-**Preview MCP validation (2026-05-24)**: owner confirmed the PR #108 Vercel
-preview deployment passes black-box MCP exercise via Cursor `oak-preview-1`
-(25 tool calls; graph + search + fetch + lesson depth). Evidence in
-[connecting thread record § 2026-05-24 Velvet Stalking Moth][connecting].
-Remaining Gate 1 blockers: SonarCloud + `run-quality-gates` (WS-7).
+**Preview MCP validation**: PR #108 black-box pass documented 2026-05-24
+(Velvet Stalking Moth). PR #114 branch adds repeatable scripts:
+`pnpm probe:remote` and `pnpm smoke:agent-preview` (see
+[agent-preview-verification.md](../../../apps/oak-curriculum-mcp-streamable-http/docs/agent-preview-verification.md)
+and [connecting thread § 2026-05-25 Salty Mooring Dock][connecting]). Sonar on
+PR #114 was green after fake-test-path fixture fix at `2f5e1871`.
 
 Before resuming product work, re-check current PR, CI, Sonar, CodeQL, active
 claims, commit queue, and git state. Do not rely on historical issue counts in

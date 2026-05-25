@@ -9,6 +9,26 @@ merge_class: append-only-narrative
 
 # Napkin
 
+## 2026-05-25 — Salty Mooring Dock / cursor / Composer / `dc4dd7`
+
+### What worked
+
+- Retired `smoke:remote` gap filled with `probe-remote-mcp.sh` (curl, no `/tmp`
+  paths) plus `agent-preview-smoke.ts` reusing e2e `parseSseEnvelope` — both
+  green on education-evidence preview without a Bearer token.
+- Operational docs belong in MCP app `docs/` + README checklist, not a new ADR.
+
+### Surprise
+
+- `prod:requests` treats unauth `/mcp` 401 as failure; preview baseline needs a
+  script that expects 401 as success.
+
+### candidate
+
+- None — script placement is operational, not architectural.
+
+---
+
 ## 2026-05-25 — Briny Fathoming Dock / claude / claude-opus-4-7 / `95a27b`
 
 ### What Was Done

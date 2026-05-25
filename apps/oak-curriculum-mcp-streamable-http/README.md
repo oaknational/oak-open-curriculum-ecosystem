@@ -263,6 +263,14 @@ Vercel production builds have an additional repo-owned gate:
 
 ### Smoke-test checklist (post-deploy)
 
+Automated helpers (replaces retired `pnpm smoke:remote`):
+
+- [Agent preview verification](./docs/agent-preview-verification.md) — when to run and how to obtain a Bearer token
+- `MCP_PROBE_BASE_URL=https://<host> pnpm probe:remote` — fast unauthenticated baseline (health, OAuth PRM, `/mcp` 401)
+- `MCP_PROBE_BASE_URL=https://<host> MCP_PROBE_BEARER_TOKEN=<token> pnpm smoke:agent-preview` — agent path (`initialize`, `tools/list`, `get-curriculum-model`)
+
+Manual checks still worth doing:
+
 - Confirm Node runtime (not Edge) in project settings
 - Verify envs set: `OAK_API_KEY`, `ALLOWED_HOSTS`
 - Curl `/.well-known/oauth-protected-resource` returns resource + auth servers
