@@ -44466,6 +44466,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "907b02b6-4470-4fa4-ac02-2317dbb3307d",
+      "agent_id": {
+        "agent_name": "Mistbound Passing Candle",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "e77243"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T17:35:41Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit session-arc bundle: n=2 program plan + survey + integration + consolidation edits",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T17:38:04Z",
+        "closed_by": {
+          "agent_name": "Mistbound Passing Candle",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "e77243"
+        },
+        "summary": "commit 4b69aab8: docs(n2-plan): land program plan, survey, and integration edits",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "907b02b6-4470-4fa4-ac02-2317dbb3307d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

@@ -123,7 +123,7 @@ question; cross-link rather than duplicate.
   the emission-vs-absorption gap analogue (silent-API-failure cure: heartbeat
   retention at n=2 unless explicitly owner-opted-out, OR all-channels watcher
   emits silent-detection event after N min of zero peer activity). See
-  [`n2-and-coordination-efficiency-program-2026-05-25.plan.md`](../../plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md).
+  [the n=2/coordination-efficiency program plan][n2-plan].
   Q-001 remains `open` because the plan is pending owner ratification with
   execution deferred to next session; mark `answered-in-place` when WS3 + WS4
   land.
@@ -198,4 +198,7 @@ question; cross-link rather than duplicate.
   obligation classifies its scale-sensitivity (size + timing + chat-visibility)
   independently. Second-instance evidence for either Q-003 OR PDR-082 informs
   both. See
-  [`n2-and-coordination-efficiency-program-2026-05-25.plan.md`](../../plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md).
+  [the n=2/coordination-efficiency program plan][n2-plan].
+
+[n2-plan]:
+  ../../plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md
