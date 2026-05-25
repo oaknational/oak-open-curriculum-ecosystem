@@ -1,13 +1,13 @@
 {
   "$schema": "./memory-state-substrate-contracts.schema.json",
   "schema_version": "1.0.0",
-  "contract_version": "0.2",
-  "generated_at": "2026-05-07T09:57:48Z",
+  "contract_version": "0.3",
+  "generated_at": "2026-05-25T06:45:18Z",
   "generated_by": {
-    "agent_name": "Floating Vaulting Updraft",
+    "agent_name": "Twilit Orbiting Galaxy",
     "platform": "codex",
     "model": "GPT-5",
-    "session_id_prefix": "019e01"
+    "session_id_prefix": "019e5d"
   },
   "human_contract": ".agent/memory/executive/memory-state-substrate-contracts.md",
   "doctrine": {
@@ -886,6 +886,58 @@
       ],
       "portability_tier": "repo-local-contract",
       "owner_reviewer_route": "consolidation + assumptions"
+    },
+    {
+      "id": "memory-operational-open-questions",
+      "path": ".agent/memory/operational/open-questions.md",
+      "plane": "memory",
+      "purpose": "Register of non-urgent unresolved planning, design, or process questions for consolidation-time drain and owner surfacing.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics",
+        "PDR-014-knowledge-artefact-roles"
+      ],
+      "lifecycle": "live unresolved-decision register",
+      "writer_or_write_api": "any agent appends; consolidate-docs drains and updates status",
+      "entry_identity": "Q-NNN heading",
+      "merge_class": "mostly-append-register",
+      "schema_or_parser": "Markdown frontmatter plus open-questions Q-entry shape",
+      "generated_outputs": [],
+      "validator": "practice fitness plus pnpm practice:substrate:check open-questions evaluator",
+      "severity": [
+        {
+          "invariant": "invalid frontmatter",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "duplicate Q-NNN identity",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "missing required entry field or unsupported status",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "more than ten open entries",
+          "severity": "informational"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "add missing structural fields when provenance is available",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "mark answered, surfaced, or withdrawn only with linked evidence",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "delete unanswered questions to satisfy fitness or cadence pressure",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "consolidation + assumptions + docs-adr"
     },
     {
       "id": "memory-operational-collaboration-contracts",

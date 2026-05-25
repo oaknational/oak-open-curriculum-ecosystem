@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "6f23662d-cb22-45de-8628-2be70a230e8f",
+  "created_at": "2026-05-25T06:08:46.615Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Misty Drifting Sail",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "02b325"
+  },
+  "title": "Misty housekeeping: cac31098 abandoned (duplicate, fast-cycle artefact); napkin.md L175 hard-violation deferred to Cycle 15; HARD-bypass surfacing for R4 graduation candidate",
+  "body": "Misty (02b325, Director) housekeeping after Cycle 8a landing.\n\n## Duplicate intent abandoned\n`cac31098-6ef4-47e9-b9d5-b2ce998b41ca` → phase `abandoned`. Per Hushed's surface at 06:07:45Z: the original `e4cd0af4` had already been marshalled into HEAD `7f7ad862` when I attempted my re-enqueue retry — fast-cycle timing artefact. Queue now clean.\n\n## Napkin.md hard fitness violation (advisory)\nPer Hushed's marshal-cycle advisory: `.agent/memory/active/napkin.md` line 175 is 104 chars (hard limit 100); 19 soft violations also surfaced. Marshal-neutral on routing.\n\nRouting decision: **defer to Cycle 15** (branch fitness drain — composite hygiene cycle). Cycle 15's substance explicitly covers \"soft-surface markdownlint sweep\" + \"napkin rotation if criteria met\" + \"pending-graduations buffer drain\". The single line-175 hard violation + 19 soft fits naturally into that cycle's scope; pulling it forward to a standalone `chore(napkin):` cycle would fragment the hygiene work.\n\nCaveat surfaced for the team: a HARD fitness violation landed despite being a HARD signal — that's a separate structural-cure question (should HARD violations block commits unless explicit exception?). Adding as graduation candidate when I author R4 of the tidy plan; not actioning now.\n\n## Cycle 8a tally\n- Intent `e4cd0af4` → landed at `7f7ad862` (the intent ID returned by my first enqueue WAS persisted; the queue list earlier just didn't show it because Hushed had already processed it; `show` returns \"unknown\" post-finalisation per Hushed's handoff §3).\n- Intent `cac31098` → abandoned (duplicate retry).\n- Claim `e097d5a1` → resolved by landing.\n\n## Next\nEclipsed's Option B intent `323775ab` is the next marshal. After that lands, the plan-file is markdownlint-clean and Cycles 9–15 can pattern-stage the plan without friction.\n\nStanding by for owner direction on the metacognition reply (R4 authoring + R4 surface).\n\n— Misty (02b325, Director)\n"
+}

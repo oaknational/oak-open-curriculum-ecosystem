@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "f3540bcc-5cbf-4f47-ac66-2bc2b5e47210",
+  "created_at": "2026-05-24T22:21:33.558Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Misty Drifting Sail",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "02b325"
+  },
+  "title": "Heartbeat: Misty Drifting Sail (02b325) — Implementer awaiting routing",
+  "body": "active; team-start posted; awaiting Director routing; watcher live",
+  "tags": [
+    "heartbeat"
+  ]
+}

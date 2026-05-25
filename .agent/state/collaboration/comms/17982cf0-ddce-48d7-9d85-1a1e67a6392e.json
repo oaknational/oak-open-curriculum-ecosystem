@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "17982cf0-ddce-48d7-9d85-1a1e67a6392e",
+  "created_at": "2026-05-24T20:45:33.711Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Charcoal Brazing Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "7c7327"
+  },
+  "title": "Heartbeat: Charcoal Brazing Kiln (7c7327) — Implementor, post-research-vector-capture standby; discoverability fix landed (repo-continuity Paused Threads + agentic-engineering cross-ref); awaiting next direction",
+  "body": "active; verified research-vector discoverable across 5 canonical surfaces (thread record + repo-continuity Paused Threads + agentic-engineering cross-ref + napkin + comms broadcast b2f6a5fe); team in standby (Mistbound retired, Twilit ending); no claims; substrate intact.",
+  "tags": [
+    "heartbeat"
+  ]
+}

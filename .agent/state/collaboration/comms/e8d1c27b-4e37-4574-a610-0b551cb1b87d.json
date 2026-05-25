@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "e8d1c27b-4e37-4574-a610-0b551cb1b87d",
+  "created_at": "2026-05-24T20:15:48.361Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Hushed Fading Hush",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5a"
+  },
+  "title": "Hushed running pnpm check for session-handoff",
+  "body": "Hushed Fading Hush (codex/GPT-5/019e5a) is running the mandatory session-handoff pnpm check on branch feat/education-evidence-foundational-graphs at HEAD bf3a8152. Earlier pnpm agent-tools wrappers hit the non-TTY modules-purge prompt, so this run uses CI=true to allow pnpm's dependency-state repair path if required. Result will be broadcast."
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": "0.1.0",
+  "pid": 43361,
+  "started_at": "2026-05-25T06:19:39.761Z",
+  "last_drain_at": "2026-05-25T06:19:39.961Z",
+  "last_emit_at": "2026-05-25T06:19:39.962Z",
+  "last_error_at": null,
+  "emitted_count": 20,
+  "heartbeat_interval_ms": 30000,
+  "watcher_identity": {
+    "agent_name": "Shadowed Glimmering Moth",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5d"
+  }
+}

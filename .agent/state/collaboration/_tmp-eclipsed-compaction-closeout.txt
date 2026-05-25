@@ -1,0 +1,80 @@
+Team-member closeout for compaction-prep — Eclipsed Watching Secret (`00d760` / claude / claude-opus-4-7).
+
+## 0. Owner direction triggering this closeout
+
+Owner: *"prepare for compaction, after compaction you will resume your role. /oak-session-handoff. Hand all your work to the Director for re-assignment."*
+
+I am Implementer (team member, NOT closeout owner) — per SKILL §"Team Member, Not Closeout Owner" I leave this boundary-scoped synthesis for Misty (Director) rather than updating repo-wide continuity surfaces. Cycle 9 is mid-flight; this closeout doubles as PDR-063 mid-cycle handoff so post-compaction resume is clean.
+
+## 1. Boundary owned
+
+- Cycle 9 (WS1 comms-watch CLI auto-seed) implementer slice on `agentic-engineering-enhancements` thread, 4-file scope (cli-comms-watch + comms-watch-loop + the unit test + the plan landing record).
+- §1a gate-runner (satisfied earlier this session via gate-state report `4fa3a0b3` 05:56:32Z; NON-GREEN found 14 substrate markdownlint errors).
+
+## 2. Outcome
+
+**Landed this session**:
+
+- Option B plan-file MD cure (the §1a-routed pre-cycle-9 cleanup) — landed at **HEAD `26f8e7cb`** via Hushed marshal. 7 markdownlint errors cured in the plan file.
+
+**Cycle 9 — partial, NOT landed**:
+
+- ✅ Extracted module `agent-tools/src/collaboration-state/comms-watch-auto-seed.ts` (new file).
+- ✅ Unit test `agent-tools/tests/collaboration-state/comms-watch-auto-seed.unit.test.ts` (new file, 6 tests, ALL GREEN against full 537-test suite).
+- ✅ TSDoc lint fix applied (cure for Shadowed's lint failure surface in event from 06:40:54Z: `Pick<>` was unescaped TSDoc HTML; replaced with `Pick` type prose).
+- ❌ Integration edits (4 files) — NOT YET LANDED. Design fully captured in handoff record §1 with exact edits as TypeScript snippets.
+- ❌ Reviewer dispatch — DEFERRED to resume.
+- ❌ Intent enqueue / marshal landing — DEFERRED to resume.
+
+## 3. Evidence
+
+- HEAD `26f8e7cb` Option B landing.
+- Auto-seed test green at 06:40Z (vitest 537/537).
+- Lint-fix verified clean at 06:43Z (eslint exit 0 on agent-tools workspace).
+- §1a gate-state report event `4fa3a0b3` (05:56:32Z).
+- Option B intent broadcast `2cd66a07`-ish (06:06:35Z, landed as 26f8e7cb).
+- Cycle 9 take-broadcast (06:30:43Z).
+- Handoff record: `.agent/state/collaboration/handoffs/2026-05-25-eclipsed-cycle9-compaction-handoff.md` (PDR-063 4-section format; complete resume contract in §5).
+
+## 4. Claims / queue / git state
+
+- **Active claim RETAINED**: Cycle 9 4-file scope opened 06:01:09Z. Will add `handoff_record_path` field pointing to the handoff record so resume can locate it.
+- **Commit queue**: no live intent under my identity (the previous `323775ab` Option B intent was finalised at 26f8e7cb landing).
+- **Git state**: 2 new files in working tree (auto-seed module + test); 1 edit to that module (lint fix); all other plan/state modifications are unrelated peer activity.
+
+## 5. Surprise or changed understanding
+
+- **Scope-drift framing (per Misty's directed message at 06:42:54Z)**: I extracted the auto-seed logic to a new module (`comms-watch-auto-seed.ts`) instead of inlining in `cli-comms-watch.ts`. This is the plan's named "Refactor: extract auto-seed into a small named function for testability" step (plan body §Cycle 9 line ~1321). The "or equivalent test file" language at line 1301-1302 gave the flexibility I used. The new module is **within scope**, but the team-shape visibility was poor on my side — I should have broadcast the design-shape decision before authoring. **Behaviour-note** for next session: announce module-extraction decisions BEFORE authoring, not after, so the team can object early.
+- **TSDoc lint hazard with TypeScript generic syntax** (`Pick<>`): TSDoc parses `<>` as HTML, fires `tsdoc-malformed-html-name` + `tsdoc-escape-greater-than`. Cure: backtick-wrap or rephrase to avoid raw `<>` in TSDoc comments. Worth a graduation-candidate note — this hazard will hit anyone documenting TypeScript generics inline.
+- **`pnpm check` pipeline-exit-code-via-tail hazard**: my background invocation reported exit-0 because `tail -200` masked `pnpm check`'s actual exit-1. Caught on log read. Already flagged as `failure-mode` tagged event earlier in session.
+- **Heartbeat-content-drift cure attempt**: my second-restart heartbeat cron now derives title/body mechanically from git HEAD + active-claims jq each tick (no cached state files). If the cure holds across compaction, that's a worked-instance of Misty's earlier graduation candidate.
+
+## 6. Blockers or risks
+
+- **Scope-visibility blocker (mine)**: per §5, I authored a module extraction without broadcasting the design first. Fixed forward in this closeout; resume-agent should re-confirm extraction is acceptable before applying the remaining 4 integration edits.
+- **None on the cycle substance itself**: green tests, green lint, clean handoff record with exact edits captured.
+- **Wooded waiting**: Wooded's `06:41:47Z` heartbeat says "standing by for Eclipsed Cycle 9 landing" — Cycle 10 is sequentially after 9. The compaction-pause delays the chain. Misty's call on whether to re-route Cycle 9 to another agent or let post-compaction-me resume.
+
+## 7. Session complete announcement
+
+**NOT a session-end** — this is compaction-prep with owner-stated role-resume after compaction. Watcher + heartbeat monitors STAY RUNNING through compaction; they emit mechanically from a shell loop, independent of Claude context.
+
+## 8. Retained claims and handoff reason
+
+- **Claim Cycle 9 4-file scope**: RETAINED for post-compaction-me OR Misty re-assignment.
+- **Handoff record path**: `.agent/state/collaboration/handoffs/2026-05-25-eclipsed-cycle9-compaction-handoff.md` — read end-to-end before any source edit per PDR-063.
+- **Retention TTL**: until owner-defined window expires OR Misty re-routes to another agent (in which case agent reads §5 resume contract).
+
+## 9. Pickup notification required for follow-on agent
+
+YES — if Misty re-routes Cycle 9 to another agent during the compaction window, that agent MUST broadcast pickup-notification per the SKILL closeout contract, then read the handoff record §5 resume contract before any source edit.
+
+## 10. Heartbeat-end broadcast emitted
+
+NO — heartbeat cron continues. This is compaction-prep, not retirement. The cron's mechanical fact-derivation should survive context-reset.
+
+## 11. Handoff needed
+
+YES — to Director (Misty) for re-assignment decision. Directed event with `mid-cycle-handoff` message_kind follows this broadcast.
+
+— Eclipsed Watching Secret (`00d760`)

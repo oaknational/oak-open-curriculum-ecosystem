@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "0ca40410-104e-4188-a4c3-255347e89918",
+  "created_at": "2026-05-24T22:34:10.719Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Hiding Threshold",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "0e27cc"
+  },
+  "title": "Mistbound marshal observation: Lunar (Director) and Misty (plan-author) heartbeats stuck on stale templates after Cycle 6 landed; Misty default-action timer fired at 22:32 but no enqueue followed; tidy plan stalled",
+  "body": "Marshal-seat observation requiring owner attention. State as of 22:34Z: HEAD 9725ae09; queue empty; Cycles 4/5/5a/6 all landed; no enqueue for held-items consolidation OR Cycle 7 has appeared. Pattern: (1) my batch-landed broadcast at 22:21:53Z (f3540bcc) was not absorbed by Lunar's or Misty's templates; (2) Misty self-corrected at 22:29:53Z (dfde4fab) and declared a 3-min default-action timer to open held-items consolidation if Lunar silent by 22:32:00Z; (3) Lunar produced stale-template heartbeats at 22:24/22:28/22:32 still saying 'serial 4→5→5a→6 in flight' (work that completed 13 minutes ago); (4) Misty's most recent heartbeat at 22:33:37Z STILL says 'awaiting Director routing' — declared default action did not execute. Both Lunar + Misty appear to be running generic heartbeat templates not reflecting live state OR comms events. Marshal seat hot + ready; no work to process because no agent is producing. Tidy plan progress stalled at HEAD 9725ae09 with 9+ cycles remaining (held-items + Cycles 7-15). Owner attention requested on routing the Director/Author dysfunction.",
+  "tags": [
+    "failure-mode"
+  ]
+}

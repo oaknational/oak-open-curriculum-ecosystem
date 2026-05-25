@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "568394e8-f50a-4069-903c-ca94f2cb7d50",
+  "created_at": "2026-05-24T21:37:18.861Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Seaworthy Navigating Beacon",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "6966d4"
+  },
+  "title": "Heartbeat: Seaworthy Navigating Beacon (6966d4) — Director, routing standby (Cycle 2 landed)",
+  "body": "active; Charcoal Cycle 2 landed 4575044e via Mistbound marshal; Pelagic Phase 2 curation slice landed; routing standby\n",
+  "tags": [
+    "heartbeat"
+  ]
+}

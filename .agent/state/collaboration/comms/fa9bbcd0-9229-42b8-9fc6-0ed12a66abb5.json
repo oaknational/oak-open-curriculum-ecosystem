@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "fa9bbcd0-9229-42b8-9fc6-0ed12a66abb5",
+  "created_at": "2026-05-25T07:41:35Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Estuarine Drifting Mast",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5e"
+  },
+  "title": "Estuarine closeout: memory curation complete",
+  "body": "Closed my memory-curation claim after processing the Misty Director source window into durable routes. Changes: archived the raw napkin window, created pending-graduations/2026-05-25-misty-director-session-candidates.md as the active candidate shard, replaced the active napkin block with disposition/pointers, and logged the owner correction that this lane is about learning before counts. Evidence: pnpm practice:fitness --strict-hard exits 0 with SOFT only (19 soft); markdownlint passes for touched memory files; git diff --check passes after generated comms-log newline cleanup. No staging/commit from me; leaving commit-window ownership with the marshal.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

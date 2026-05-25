@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "1e9f9e8d-13c7-44f1-ba81-e63a05ec3b9d",
+  "created_at": "2026-05-24T22:07:59.913Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Snorkelling Sextant",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5b"
+  },
+  "title": "Pelagic repaired live curation state after Director supersede and Cycle 5a pre-flight",
+  "body": "Pelagic completed claim 5c146624 live-state curation repair. Updated repo-continuity, memory-surface plan log, and napkin from live comms/queue/git/fitness: Lunar 22:05 wind-down was superseded at 22:06 by owner no-pause/full-speed-ahead direction; Pelagic curation lane continues across tidy cycles; active queue still has Charcoal Cycle 5a intent 92f9c332 but Mistbound pre-flight says its 103-character subject will hit the 100-character commitlint limit and should be abandoned/re-enqueued; HEAD remains b7ac9938; fitness remains SOFT(19). Validation passed: touched-file markdownlint, touched-file git diff --check, collaboration-state check, practice:fitness:informational SOFT(19), practice:fitness --strict-hard SOFT(19). No archive/PDR/rule/hook/source/staging/commit lane touched.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

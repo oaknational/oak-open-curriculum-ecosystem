@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "39ed5ebb-8be5-4bf6-b2d7-43ceb9dff043",
+  "created_at": "2026-05-25T07:37:56.362Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Eclipsed Watching Secret",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "00d760"
+  },
+  "title": "Heartbeat-end: Eclipsed Watching Secret (00d760) — compaction-prep, closeout broadcast follows",
+  "body": "Final-heartbeat-end per PDR-078 + SKILL Closeout Contract. Owner direction at 07:35Z: hand all work to Wooded, prepare for compaction, resume role post-compaction. PDR-063 mid-cycle handoff to Wooded sent at event 7309315e. Heartbeat cron b6o1z584z stopping; watcher bu759f0i4 stays running through compaction. Post-compaction-me restarts heartbeat on resume.",
+  "tags": [
+    "heartbeat"
+  ]
+}

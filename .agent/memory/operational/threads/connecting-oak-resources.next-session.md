@@ -1,5 +1,53 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
+## 2026-05-25 — Salty Mooring Dock / cursor / Composer / `dc4dd7` — PR #114 preview agent test checklist
+
+**Intent**: manual black-box checklist (what / how / expected results) for preview
+MCP validation in Cursor — not automated curl/npm probes.
+
+**Doc**: [agent-preview-test-checklist.md](../../../apps/oak-curriculum-mcp-streamable-http/docs/agent-preview-test-checklist.md)
+
+**Also on branch**: Sonar S5443 fix (`2f5e1871`); `.cursor/mcp.json` `oak-preview-1`
+URL for education-evidence preview.
+
+**Validated in Cursor** (same preview host): `get-curriculum-model`,
+`get-changelog-latest`, `browse-curriculum`, `search`, `explore-topic`,
+`get-subjects`, and related tools — usable data, no blocking 5xx.
+
+**Next safe step**: work through checklist sections A–H on each new preview URL;
+record pass/fail in PR notes.
+
+---
+
+## 2026-05-24 — Velvet Stalking Moth / cursor / Composer / `bde2f8` — PR #108 preview MCP black-box validation (owner-directed closeout)
+
+**Landed**: PR #108 preview-deployment MCP server verified end-to-end via Cursor
+`oak-preview-1` (25 tool calls; all returned usable data).
+
+**Endpoint**:
+`https://poc-oak-open-curriculum-mcp-git-feat-mcp-graph-support-f-a47d40.vercel.thenational.academy/mcp`
+
+**Evidence exercised**:
+
+- Orientation: `get-curriculum-model`, `get-rate-limit` (unlimited), `get-changelog-latest` (API **0.7.0**, 2026-05-21)
+- Discovery: `browse-curriculum`, `get-subjects`, `get-subject-detail`, `get-key-stages`, `get-keywords`
+- Search (all scopes): lessons (photosynthesis KS3 science), units (fractions maths), threads (maths, no query), sequences (`maths-secondary`), suggest (`photo` + science)
+- Cross-scope: `explore-topic` (volcanoes + geography)
+- Fetch: `subject:maths`, `lesson:photosynthesis`, `unit:mountains-and-volcanoes-what-where-and-why`, `thread:number-multiplication-and-division`
+- Lesson depth: `get-lessons-summary`, `get-lessons-quiz`, `get-lessons-transcript`, `get-lessons-assets`
+- Unit: `get-units-summary`
+- Graph (feat-mcp-graph-support branch): `get-thread-progressions` (164 threads), `get-prior-knowledge-graph` (1,607 units / 3,452 edges), `get-misconception-graph` (12,858 misconceptions)
+- Error path: invalid lesson slug → clean **"Lesson not found"** (no crash)
+- Filter: KS4 higher-tier trigonometry search returned tier-tagged lessons
+
+**Minor quirks (non-blocking)**: `search` suggest returns empty `url`; `fetch` thread units have `oakUrl: null`.
+
+**Owner routing (2026-05-24)**: this session satisfies the **PR #108 preview MCP validation** requirement on the merge path and contributes to **M1 Safe Pause** completion criteria. Gate 1 SonarCloud + `run-quality-gates` remain the open blockers per [`practice-infrastructure-hardening-program.plan.md`](../../plans/agentic-engineering-enhancements/current/practice-infrastructure-hardening-program.plan.md) WS-7.
+
+**Commits**: none (read-only black-box validation).
+
+---
+
 ## 2026-05-22 → 2026-05-23 multi-agent gate-1a substrate-floor team session — graph-stack work summary (first-out closeout: Secret Vanishing Wisp / `981cbe`)
 
 This thread is the historical container for the graph-substrate work that
@@ -1304,6 +1352,7 @@ promotion.)
 | `Feathered Circling Horizon` | `cursor` | `claude-opus-4.7` | `9e1c24` | `pr-108-quality-gate-snagging-plan-author-no-code-no-commits-codeql-90-and-sonarcloud-quality-gate-analysed-via-public-api-after-mcp-failure-disposition-plan-aligned-with-sonar-disposition-policy-and-never-disable-checks-rule-merge-blocker-cross-referenced-from-active-graph-stack-plan-top` | 2026-05-21 | 2026-05-21 |
 | `Soaring Flying Gale` | `claude` | `claude-opus-4-7-1m` | `ffa6ce` | `gate-1a-execution-partition-deepening-author-eef-first-feature-plan-md-gains-unified-dependency-graph-plus-round-assignment-plus-per-cycle-reviewer-set-plus-named-user-facing-scenarios-across-substrate-ws4-x-corpus-t1-t20-and-ff-coordination-tokens-plus-addendum-plan-refocused-to-point-at-unified-partition-plus-three-pending-graduations-protocol-pdr-candidates-mid-cycle-retirement-grounding-cost-amortisation-comms-event-failure-mode-channel-plus-pr-108-hard-gate-recognised-and-cross-referenced-throughout-no-source-code-touched-commits-24ab73c9-and-f6170504` | 2026-05-21 | 2026-05-22 |
 | `Tempestuous Spiralling Thermal` | `claude` | `claude-opus-4-7` | `9205b8` | `lane-c-of-triple-peer-primary-topology-jc-commit-skill-critical-review-pdr-046-substance-verdict-and-commit-queue-commit-workflow-primitive-landed-at-97bf9e97-four-operational-moves-collapse-from-ten-distinct-cli-calls-five-invariant-ledger-added-advisory-polarity-pdr-053-adr-176-preserved-by-construction-fifteen-new-atomic-landing-tests-husky-full-tree-gating-unchanged-per-owner-stance` | 2026-05-22 | 2026-05-22 |
+| `Velvet Stalking Moth` | `cursor` | `Composer` | `bde2f8` | `pr-108-preview-mcp-black-box-validation-via-oak-preview-1-twenty-five-tool-calls-all-pass-owner-confirmed-merge-and-m1-safe-pause-requirement-met-no-commits` | 2026-05-24 | 2026-05-24 |
 
 ## Plan Locations
 

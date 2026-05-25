@@ -21,7 +21,17 @@ transitions);
 [PDR-063](PDR-063-mid-cycle-retirement-protocol.md)
 (mid-cycle retirement protocol — coordinator retirement under
 token pressure exercises both this PDR's two-moments boundary
-and PDR-063's mid-cycle handoff; the join-point is named below).
+and PDR-063's mid-cycle handoff; the join-point is named below);
+[PDR-077](PDR-077-marshal-as-cycle-discipline.md)
+(commit marshal as cycle-discipline role — the marshal seat uses
+this PDR's two-moments shape for role transitions, with
+`git index/HEAD` authority as the analogue of the coordinator-cadence
+cron; both seats are slice-class authority bearers);
+[PDR-078](PDR-078-liveness-heartbeat-contract.md)
+(liveness-heartbeat contract — the coordinator-handoff 30-minute
+grace window is one of PDR-078's named heartbeat-exemption classes;
+PDR-078 defers to this PDR for the boundary specification while
+naming the exemption itself).
 
 ## Context
 

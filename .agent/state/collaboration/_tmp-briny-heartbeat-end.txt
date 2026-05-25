@@ -1,0 +1,1 @@
+session-end; no heartbeat cron was started during this single-session reflection; closeout bundle staged for Hushed Marshal pickup (intent 2064d2e5, claim 3b76b802); directed handoff event 465e8786-522c-41f7-a698-9f29f80fa005; no active claims retained beyond marshal-pickup window.

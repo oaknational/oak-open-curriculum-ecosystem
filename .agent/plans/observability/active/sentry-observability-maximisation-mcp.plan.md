@@ -1982,7 +1982,12 @@ env)` function.
 - A transaction produced while a profile is active carries the profile linkage in its event data (fixture capture asserts `profile_id` or equivalent linkage attribute on the captured transaction).
 - `profileLifecycle: 'manual'` mode does not emit a profile envelope unless explicitly started — off-behaviour check.
 
-**GREEN**: Install `@sentry/profiling-node` (opt-in `onlyBuiltDependencies` entry — precompiled binaries ship for Node 18/20/22/24 on Linux/macOS/Windows per A.1 factual correction 3). Thread `profileSessionSampleRate` + `profileLifecycle` through `InitialiseSentryOptions` via DI (ADR-078); expose as env-resolvable but do not read `process.env` in library code.
+**GREEN**: Install `@sentry/profiling-node` (opt-in `allowBuilds` entry in
+`pnpm-workspace.yaml` — `'@sentry/profiling-node': true`; precompiled binaries
+ship for Node 18/20/22/24 on Linux/macOS/Windows per A.1 factual correction 3).
+Thread `profileSessionSampleRate` + `profileLifecycle` through
+`InitialiseSentryOptions` via DI (ADR-078); expose as env-resolvable but do not
+read `process.env` in library code.
 
 **REFACTOR**: Measure overhead on the harness. Document rollout (env-gated initially; revisit continuous after measurement) in `docs/operations/sentry-deployment-runbook.md` and `packages/libs/sentry-node/README.md`.
 
@@ -3044,7 +3049,7 @@ Phase-specific risks:
 | 4 | Widget bundle size regression from adding `@sentry/browser` | Bundle-size test gate on widget build; L-12-prereq extracts browser-safe redactor core to avoid pulling `@sentry/node` transitively (L-12-prereq landed in Phase 1 under the reshape, so widget never risks transitively pulling `@sentry/node`). |
 | 4 | **Cross-axis plan coordination** — security-observability + accessibility-observability + L-12 all emit to the events workspace concurrently | Phase 2 events-workspace schemas were authored with all three consumers in the loop; schemas are stable before any consumer imports them. Reviewer matrix includes `accessibility-expert` + `security-expert` at Phase 4 close. |
 | 5 | `tracesSampler` regresses sampling coverage during rollout (L-5, MVP-deferred) | Roll out behind env flag with a fixed-rate fallback; measure first. |
-| 5 | Profiling-node precompiled-binary install consent not granted in CI (L-6, MVP-deferred) | `onlyBuiltDependencies` entry; document in CI runbook. Per A.1 factual correction 3, precompiled binaries ship for Node 18/20/22/24 across Linux/macOS/Windows. |
+| 5 | Profiling-node precompiled-binary install consent not granted in CI (L-6, MVP-deferred) | `allowBuilds` entry (`'@sentry/profiling-node': true` in `pnpm-workspace.yaml`); document in CI runbook. Per A.1 factual correction 3, precompiled binaries ship for Node 18/20/22/24 across Linux/macOS/Windows. |
 | 5 | Alert fatigue (L-13) | Each alert has an SLO-style intent and dedupe before enablement. |
 | 5 | **Emission-persistence test shape TBD** (vendor-independence conformance runs MCP server + widget + Search CLI in `SENTRY_MODE=off`; test scaffolding is non-trivial and exploration 8 deliberately left shape open) | Exploration 8 closure is a Phase 5 prerequisite; if the emission-persistence test shape cannot be resolved in time, Phase 5 close documents the gap as a launch caveat (never silently deferred per PDR-012). |
 
@@ -3172,10 +3177,10 @@ These were factual errors or broken links and have been fixed in situ:
    assumptions-expert raised the concern; package.json verified during
    close-out.
 3. **`@sentry/profiling-node` native-binary framing**. Strategic-brief risk row
-   will read "optional install-script consent" (via `onlyBuiltDependencies`)
-   rather than "native binary build cost" when Phase 2 begins — precompiled
-   binaries ship for Node 18/20/22/24 on Linux/macOS/Windows. Source:
-   sentry-expert.
+   will read "optional install-script consent" (via `allowBuilds` in
+   `pnpm-workspace.yaml`) rather than "native binary build cost" when Phase 2
+   begins — precompiled binaries ship for Node 18/20/22/24 on
+   Linux/macOS/Windows. Source: sentry-expert.
 4. **L-1 `spanStreamingIntegration`/`withStreamedSpan` scope**. Must be treated as
    *additive* to `wrapMcpServerWithSentry` (which already patches
    transport `send`/`onmessage`), not as a replacement around

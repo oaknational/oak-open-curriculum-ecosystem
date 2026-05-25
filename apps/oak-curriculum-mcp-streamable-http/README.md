@@ -263,6 +263,12 @@ Vercel production builds have an additional repo-owned gate:
 
 ### Smoke-test checklist (post-deploy)
 
+Manual agent test checklist (replaces retired `pnpm smoke:remote`):
+
+- [Agent preview test checklist](./docs/agent-preview-test-checklist.md) — what to test, how to run each check, and expected results (Cursor or curl)
+
+Infrastructure checks still worth doing:
+
 - Confirm Node runtime (not Edge) in project settings
 - Verify envs set: `OAK_API_KEY`, `ALLOWED_HOSTS`
 - Curl `/.well-known/oauth-protected-resource` returns resource + auth servers

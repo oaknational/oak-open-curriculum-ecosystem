@@ -8,12 +8,18 @@ prose-narrative context from data-shaped lines (cure landed 2026-05-10):
 backticked SHAs in prose fire the rule; backticked SHAs inside YAML/JSON-
 shaped data lines do not.
 
-Permanent documentation (ADRs, PDRs, governance docs, principles,
-testing-strategy, rules) must not embed values that drift over time.
-Commit SHAs, deployment IDs, version numbers, count-of-something
-figures, and other moving targets belong in ephemeral state
-(plans, threads, comms, napkins, release notes) — not in the
-permanent record.
+**Portable** permanent documentation (PDRs, governance docs in
+practice-core, principles, testing-strategy, rules, patterns) must
+not embed values that drift over time. Commit SHAs, deployment IDs,
+version numbers, count-of-something figures, and other moving
+targets belong in ephemeral state (plans, threads, comms, napkins,
+release notes) — not in the portable permanent record.
+
+ADRs, which are repo-bound by definition (see
+[PDR-079](../practice-core/decision-records/PDR-079-pdr-vs-adr-portability-distinction.md)),
+are explicitly out of scope for this rule. ADRs may carry SHAs,
+event UUIDs, repo paths, package names, and branch conventions as
+appropriate evidence. See §Scope below.
 
 ## The Rule
 
@@ -24,16 +30,37 @@ catches 7- to 40-character hexadecimal tokens (with at least one
 a-f character) at write-time. The deny payload surfaces the citation
 *"Moving targets do not belong in permanent docs"*.
 
-## In-Scope Surfaces
+## Scope: Portable Surfaces Only
 
-- `docs/architecture/architectural-decisions/`
-- `.agent/practice-core/`
-- `.agent/directives/principles.md`
-- `.agent/directives/testing-strategy.md`
+Per [PDR-079](../practice-core/decision-records/PDR-079-pdr-vs-adr-portability-distinction.md)
+(PDR-vs-ADR portability distinction), the rule applies strictly to
+**portable surfaces** and explicitly **NOT** to **repo-bound surfaces**.
 
-The spirit of the rule extends to other permanent-doc surfaces —
-including rule files in `.agent/rules/` themselves — even when the
-hook's literal scope does not list them.
+### Portable surfaces (rule applies strictly)
+
+- `.agent/practice-core/decision-records/PDR-*.md` — Practice Decision
+  Records carry portable doctrine; SHAs, repo paths, plan filenames,
+  branch prefixes, and event UUIDs are all forbidden in PDR bodies.
+- `.agent/rules/*.md` — rule files codify portable discipline;
+  same content constraints apply.
+- `.agent/memory/active/patterns/*.md` — pattern files distill
+  portable observations; same content constraints apply.
+- `.agent/directives/principles.md` — first-principles directives.
+- `.agent/directives/testing-strategy.md` — testing-strategy
+  directive.
+
+### Repo-bound surfaces (rule does NOT apply)
+
+- `docs/architecture/architectural-decisions/ADR-*.md` — ADRs are
+  repository-specific by definition. SHAs, event UUIDs, repo paths,
+  package names, and branch conventions appear in ADRs as appropriate
+  evidence and operational specificity. Forcing ADRs to soften
+  repo-bound evidence into portable-vocabulary phrasing loses the
+  load-bearing operational bite the ADR class exists for.
+
+The spirit of the rule extends to other permanent-doc surfaces that
+behave as portable doctrine even when the hook's literal scope does
+not list them.
 
 ## Excluded Surfaces (Why)
 
@@ -65,7 +92,7 @@ detection:
    the historical-reference marker is explicit.
 
 The prose-vs-data distinction is implemented at
-`scripts/check-blocked-content.ts` `lineIsPredominantlyCodeShaped`.
+`agent-tools/scripts/check-blocked-content.ts` `lineIsPredominantlyCodeShaped`.
 This closes the *"hook is more permissive than the rule"* gap that
 existed before 2026-05-10.
 
@@ -94,12 +121,16 @@ Three reasons:
    session-of-origin and rotated. Commit SHAs, timestamps,
    instance counts, and other transient values belong there.
 
-## Citation Directionality: Permanent → Ephemeral Is Forbidden
+## Citation Directionality: Portable → Ephemeral Is Forbidden
 
-Permanent docs (ADRs, PDRs, governance docs, principles,
-testing-strategy, rules) MUST NOT cite plans, plan paths, plan
-section identifiers, workstream identifiers, track-card paths, or
-other ephemeral surfaces. Plans archive, get renamed, get split or
+Portable permanent docs (PDRs, governance docs in practice-core,
+principles, testing-strategy, rules, patterns) MUST NOT cite plans,
+plan paths, plan section identifiers, workstream identifiers,
+track-card paths, or other ephemeral surfaces.
+
+ADRs, being repo-bound, may cite ephemeral surfaces as evidence
+where appropriate; the directionality rule applies in its strict
+form only to portable surfaces. Plans archive, get renamed, get split or
 merged; a permanent doc citing a plan name becomes a dead pointer
 the moment that plan archives.
 

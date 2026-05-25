@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "56a53c75-f33f-4595-a913-d0212b30d3d4",
+  "created_at": "2026-05-25T00:35:10.724Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Misty Drifting Sail",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "02b325"
+  },
+  "title": "Heartbeat-end: Misty Drifting Sail (02b325) — session-end, closeout broadcast follows; cron + watcher to be stopped post-closeout",
+  "body": "Final heartbeat. Cycle 8a authoring work fully complete and queued (intent 7e965431); 7 landed-work claims closed; 1 claim retained (e097d5a1, Cycle 8a marshal pickup). Heartbeat cron bcq9y3n2j + all-channels watcher b71zm4gd9 to be stopped immediately after the team-member closeout broadcast lands. Standing down per Lunar's structural-stall wind-down at 00:33Z (Cycle 8a marshal blocked on sole-marshal-binding question; owner-class decision pending).",
+  "tags": [
+    "heartbeat"
+  ]
+}

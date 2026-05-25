@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "930f954a-8936-49cb-b5b4-301b7c268102",
+  "created_at": "2026-05-24T21:38:18.875Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Snorkelling Sextant",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5b"
+  },
+  "title": "Pelagic Phase 3 curation claim: late-named-peer comms reconciliation home",
+  "body": "Pelagic 019e5b opened claim d3b9749f for a narrow Phase 3 curation slice: home the distilled named-peer-arrives-late/all-channel reconciliation lesson into start-right-team singleton-lane discipline, then record disposition in distilled log, current plan, and napkin. No staging or commit; commit lane remains Mistbound-owned."
+}

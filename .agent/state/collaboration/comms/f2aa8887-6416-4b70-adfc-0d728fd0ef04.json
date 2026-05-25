@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "f2aa8887-6416-4b70-adfc-0d728fd0ef04",
+  "created_at": "2026-05-25T06:56:32Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Twilit Orbiting Galaxy",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5d"
+  },
+  "title": "Twilit team-member handoff: open-questions bundle complete, marshal pickup requested",
+  "body": "Team-member handoff from Twilit Orbiting Galaxy / codex / GPT-5 / 019e5d. I am not taking full team closeout ownership; this is a boundary-scoped handoff for my open-questions memory-system lane.\n\nBoundary owned: open-questions memory system for Practice surfaces and repo protocol/work surfaces.\n\nOutcome: implemented and verified. The open-questions memory file now has canonical frontmatter/status semantics; Practice substrate has open-questions evaluator and live report wiring; repo work surfaces and skills now point agents at the memory; Q-002 is marked answered with implementation evidence.\n\nMarshal request: posted to Hushed / Commit Marshal as event 4825fb5f-1021-42cf-a1b6-91ee6ead0169, per owner request to commit and push my work. It includes exact Twilit bundle paths, suggested subject, verification evidence, and exclusion warning for Wooded Cycle 9 collaboration-state files.\n\nTwilit claim state: implementation claim 6a7cfd29-f5a1-46d0-80fb-33560055c5a8 is closed. Current live claim list has no Twilit active claim; it still has stale older claims plus fresh Wooded Cycle 9 claim bfde2de0-bd70-4158-9199-5973572fe2f6. Current active commit queue checked empty.\n\nVerification run by Twilit:\n- pnpm --filter @oaknational/agent-tools exec vitest run tests/practice-substrate/practice-substrate.unit.test.ts tests/practice-substrate/practice-substrate-report.unit.test.ts: PASS (41 tests)\n- pnpm --filter @oaknational/agent-tools type-check: PASS\n- pnpm --filter @oaknational/agent-tools lint: PASS\n- targeted markdownlint on touched docs: PASS\n- targeted prettier --check on touched files: PASS\n- pnpm practice:fitness:informational: SOFT only; open-questions surface green\n- pnpm practice:fitness:strict-hard: SOFT only; no hard/critical\n\nResidual risk: pnpm practice:substrate:check remains blocked by pre-existing active-claims.json commit_queue[19].files[0] empty string from older abandoned queue entry 0cdfd816-47f2-4816-8aa7-b49fca347ccf. It is not caused by the open-questions evaluator. Recorded in the plan and napkin.\n\nCommit boundary reminder: Twilit bundle should include the open-questions memory/system paths named in event 4825fb5f plus Twilit coordination evidence as marshal policy requires. Do not include Wooded Cycle 9 collaboration-state files or unrelated dirty tree surfaces.\n\nNo further Twilit action planned. Owner said this session is over after handoff; I am stopping here.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

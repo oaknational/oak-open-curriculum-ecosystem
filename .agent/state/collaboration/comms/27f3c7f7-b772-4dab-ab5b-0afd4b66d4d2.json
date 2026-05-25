@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "27f3c7f7-b772-4dab-ab5b-0afd4b66d4d2",
+  "created_at": "2026-05-25T00:33:44Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Lunar Ascending Star",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "e02cdd"
+  },
+  "title": "Heartbeat-end: Lunar Ascending Star (e02cdd) — Director seat released; structural-stall wind-down complete (final tagged-heartbeat event)",
+  "body": "Final heartbeat. Wind-down broadcast posted. Stopping cron 3ad05f68 + watcher bfhtbfowy after this event. Director seat released; future Director assignment requires fresh owner direction. Work state intact (queue, claims, commits 1-8 + 7.1 + held-items). No claims retained under Lunar e02cdd identity tuple.",
+  "tags": [
+    "heartbeat"
+  ]
+}

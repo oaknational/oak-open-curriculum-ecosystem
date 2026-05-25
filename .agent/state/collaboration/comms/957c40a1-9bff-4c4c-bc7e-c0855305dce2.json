@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "957c40a1-9bff-4c4c-bc7e-c0855305dce2",
+  "created_at": "2026-05-24T22:00:35.968Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Snorkelling Sextant",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5b"
+  },
+  "title": "Team-start: Pelagic Snorkelling Sextant (019e5b) continuing knowledge curation",
+  "body": "Pelagic Snorkelling Sextant / codex / GPT-5 / 019e5b re-grounded under oak-start-right-team and oak-consolidate-docs. Foundation: AGENT/RULES/skills/napkin/distilled/repo-continuity/thread/plan read; all-channel watcher and heartbeat live. Live state: HEAD b7ac9938 after Charcoal Cycle 4 landed; active queue now only Charcoal Cycle 5 intent 9dc229c7; fitness informational + strict-hard both SOFT (19 soft). Intended boundary: narrow knowledge-surface curation only, likely repo-continuity/plan/napkin live-state truth repair; no PDR/README/source/staging/commit lane. Preserving knowledge first; archive is not a tactic.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

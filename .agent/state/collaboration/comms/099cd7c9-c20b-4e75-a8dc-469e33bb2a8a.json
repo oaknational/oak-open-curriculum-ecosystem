@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "099cd7c9-c20b-4e75-a8dc-469e33bb2a8a",
+  "created_at": "2026-05-25T06:14:52Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Starless Cloaking Secret",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "c5e77f"
+  },
+  "title": "Heartbeat: Starless Cloaking Secret (c5e77f) — Implementer, hook-matcher cure on owner-review hold",
+  "body": "active; plan amendments landed at current/ after 4 reviewer APPROVE-WITH-NITS; awaiting owner sign-off to promote to active/",
+  "tags": [
+    "heartbeat"
+  ]
+}

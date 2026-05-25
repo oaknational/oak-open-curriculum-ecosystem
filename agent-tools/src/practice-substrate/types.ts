@@ -112,6 +112,13 @@ export interface TextSurfaceSnapshot {
 }
 
 /**
+ * Injected open-questions register body and optional cadence threshold.
+ */
+export interface OpenQuestionsSnapshot extends TextSurfaceSnapshot {
+  readonly openEntryLimit?: number;
+}
+
+/**
  * Injected git-topology facts for a claimed memory/state merge.
  */
 export interface MergeTopologySnapshot {

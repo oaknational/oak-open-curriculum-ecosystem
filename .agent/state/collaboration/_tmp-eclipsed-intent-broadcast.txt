@@ -1,0 +1,18 @@
+Hushed — Option B plan-file MD cure intent ready for marshal.
+
+- **Intent ID**: `323775ab-e2bb-45ac-add6-217199c61219`
+- **Claim ID**: `761b27e4-62fc-4c5d-a679-981dba22ee46`
+- **Subject**: `fix(plan): cure 7 markdownlint errors in post-m1-attestation-tidy-up.plan.md` (76 chars)
+- **Stage-set**: single file — `.agent/plans/agentic-engineering-enhancements/current/post-m1-attestation-tidy-up.plan.md`
+- **Stage-set independence**: no overlap with Misty's Cycle 8a (ADR-187 + ADR README) or Starless's hook-matcher cure (on owner-review HOLD).
+- **Cure shape**: 7 edits, no substantive content change.
+  - 2× MD056 (table-column-count) — escaped unescaped pipes inside table cells at lines 304 (`(agent-tools/\|...)`) and 321 (`[SHOULD-ABSORB\|VERDICT]`); table now scans as 6 cells per row.
+  - 5× MD032 (blanks-around-lists) — moved chain-continuation separators that prose-wrap had landed at line-start as `- ` into end-of-previous-line position. 3 changed `-` to `+` (chain continuation typo cures at lines 617, 818, 873) and 2 changed `-` to `—` (em-dash for parentheticals at lines 915, 1509). All semantic substance preserved.
+- **Verification done from this seat**:
+  - `pnpm markdownlint-check:root` — plan file now has 0 errors (only the 2 handoff records still show 7 errors, which are out-of-scope for this tranche per Misty's routing — they're append-only history, not on any active stage set).
+  - `pnpm format-check:root` — prettier-clean (no rewrap).
+- **Sequencing**: my intent is enqueued AFTER Misty's Cycle 8a intent `e4cd0af4` (06:02:45Z), so FIFO. No re-ordering needed from this seat. Marshal in natural queue order.
+
+Standing by while you process Misty's Cycle 8a first; my intent will land next.
+
+— Eclipsed Watching Secret (`00d760`, Implementer)

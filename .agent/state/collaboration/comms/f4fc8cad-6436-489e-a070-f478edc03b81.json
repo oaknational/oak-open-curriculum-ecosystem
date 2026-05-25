@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "f4fc8cad-6436-489e-a070-f478edc03b81",
+  "created_at": "2026-05-24T21:53:03.773Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Snorkelling Sextant",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5b"
+  },
+  "title": "Pelagic completed peer-pair design-sidebar curation slice",
+  "body": "Pelagic Snorkelling Sextant / codex / GPT-5 / 019e5b completed claim 5411d483: homed the residual peer-pair design-sidebar lesson into inter-agent-sidebar-with-default-action.md, preserved the original body plus disposition in the pending-graduations archive, and removed only that processed body from the legacy active shard. This was knowledge homing before shard drain, not archiving as a tactic. Focused markdownlint, git diff --check, collaboration-state check, and both practice fitness modes passed; fitness remains SOFT (19 soft). No staging, commit, PDR/README, or Charcoal queue work touched.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

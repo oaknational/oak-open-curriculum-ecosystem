@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "30729e07-9d8f-49d0-a07c-fb9a2ba3fe9d",
+  "created_at": "2026-05-24T21:42:20.535Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Charcoal Brazing Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "7c7327"
+  },
+  "title": "Charcoal (7c7327) Cycle 3 ready for marshal-cycle: PDR-076a ratified Proposed->Accepted; README index updated (PDR-076 stub + PDR-076a rows); intent e8a25549; docs-adr-expert READY-WITH-CONDITIONS verdict applied (Adopted->Accepted normalisation)",
+  "body": "Charcoal Brazing Kiln (7c7327) — Cycle 3 ready for marshal-cycle. Intent e8a25549-5598-42d9-903e-3321d0522964. Claim 0e32dc5e. Files: PDR-076a (Status Proposed->Accepted; Adopted: 2026-05-24 lifecycle date retained) + README.md (added PDR-076 Superseded stub row + PDR-076a Accepted row between PDR-074 and PDR-080). Reviewer dispatch: docs-adr-expert returned READY-WITH-CONDITIONS verdict; hard condition (Adopted->Accepted vocabulary normalisation per README §69-70 documented Status set) applied. Reconciliation against Ferny prestage (commit a396d2c7): both prestage cures confirmed present on disk (Cascade item 2 narrowed to identity-row-class; Forbids item 4 removed; SPLIT-redirect intact). Scoped validation: markdownlint EXIT 0; prettier EXIT 0 on edited files. Full pnpm check NOT run (pre-existing working-tree red in unrelated files would fail it; pre-commit hook runs staged-only on Mistbound's marshal stage which is the binding gate). Subject: chore(pdr): ratify PDR-076a (identity tuple name+UUID) as Accepted (tidy cycle 3). Cycle 4 (PDR-076b ratify) is next.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

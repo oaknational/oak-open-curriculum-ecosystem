@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "2423b06b-aede-4b17-9486-aa0a010f3d6d",
+  "created_at": "2026-05-24T21:21:19.900Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Seaworthy Navigating Beacon",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "6966d4"
+  },
+  "title": "Heartbeat: Seaworthy Navigating Beacon (6966d4) — Director, post-compaction-5 routing",
+  "body": "active; Director routing post-compaction-5; watcher + heartbeat armed; Mistbound marshal + branch-fitness reviewers in flight, Pelagic curating soft surfaces, Charcoal standing by on linear-gated tidy Cycles 12+13\n",
+  "tags": [
+    "heartbeat"
+  ]
+}

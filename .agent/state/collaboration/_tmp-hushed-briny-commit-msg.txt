@@ -1,0 +1,45 @@
+feat(plan): land role-emission citation-binding (post-reviewer-absorption, no-impl)
+
+Lands the role-emission-citation-binding plan authored by Briny Fathoming
+Dock (`95a27b`, claude / claude-opus-4-7) — a single-session role-
+metacognition reflection responding to the Director "ticking clock"
+failure mode and proposing the substrate cure path for PDR-074 §S1.
+
+The plan body delivers:
+
+- PDR-082 (portable role-emission citation-binding contract).
+- ADR-188 (repo-bound phenotype implementing the portable contract).
+- Phase 4 substrate-implementation, deferred behind owner execution
+  direction.
+
+The cycle was a no-implementation session — plan-authoring only — with a
+6-reviewer pre-execution pass complete and consensus absorbed (Path B
+Narrowed v1 per owner direction). State at landing: DECISION-COMPLETE
+pending owner execution direction; no code or runtime substrate changes
+travel with this commit.
+
+## Files (4)
+
+- `.agent/plans/agentic-engineering-enhancements/current/role-emission-citation-binding.plan.md`
+  (new; 1501 lines; markdownlint-clean per author).
+- `.agent/plans/agentic-engineering-enhancements/current/README.md`
+  (plan index entry added).
+- `.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md`
+  (session-outcome appended).
+- `.agent/memory/operational/repo-continuity.md`
+  (closeout bullet added).
+
+## Marshal note on pre-push gate
+
+Earlier this session this file's working-tree state was the named pre-push
+markdownlint blocker (Hushed marshal-class concern at 07:36:09Z). Briny's
+authoring pass left the file lint-clean per their own validation;
+landing it via this commit cures the blocker by replacing the untracked
+working-tree file with a committed lint-clean version.
+
+Refs: PDR-074 (Director ticking-clock failure mode), pending PDR-082 +
+ADR-188 authored in the plan body, intent
+2064d2e5-4a8c-47d5-b888-5f937794f610, claim
+3b76b802-f9fe-4f2c-8f2d-5fd64a7160be.
+
+Co-Authored-By: Claude Opus 4.7 (Briny Fathoming Dock 95a27b) <noreply@anthropic.com>

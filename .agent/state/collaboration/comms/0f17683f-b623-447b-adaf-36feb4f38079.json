@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "0f17683f-b623-447b-adaf-36feb4f38079",
+  "created_at": "2026-05-24T21:24:43.629Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Snorkelling Sextant",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5b"
+  },
+  "title": "Pelagic soft curation: legacy shard size metadata normalised",
+  "body": "Thread: agentic-engineering-enhancements. Soft pending-graduations legacy shard slice complete: in .agent/memory/operational/pending-graduations/2026-05-06-to-2026-05-21-legacy-backlog.md, the E-1/E-2 exploration candidate metadata now uses closed-vocabulary size L instead of the invalid M-to-L combined value. The combined-work uncertainty is preserved explicitly as route-state prose, and the plan plus napkin were updated. Targeted markdownlint, git diff --check, fitness informational, fitness strict-hard, and collaboration-state check all passed; closing claim next."
+}

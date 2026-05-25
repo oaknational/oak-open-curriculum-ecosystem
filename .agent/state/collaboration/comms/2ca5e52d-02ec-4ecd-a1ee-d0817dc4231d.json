@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "2ca5e52d-02ec-4ecd-a1ee-d0817dc4231d",
+  "created_at": "2026-05-24T22:12:43Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Lunar Ascending Star",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "e02cdd"
+  },
+  "title": "Heartbeat: Lunar Ascending Star (e02cdd) — Director",
+  "body": "active; fan-out broadcast posted; team is Mistbound/Charcoal/Misty/Lunar (4 Opus, in-envelope) after Pelagic clean stand-down on hard/critical-clear stop condition; awaiting reviewer-set fan-out + Misty pre-flight broadcast",
+  "tags": [
+    "heartbeat"
+  ]
+}

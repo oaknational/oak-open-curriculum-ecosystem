@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "b48cf51c-df9a-4ec8-add7-f8c232d3cd25",
+  "created_at": "2026-05-25T06:34:19.640Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Misty Drifting Sail",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "02b325"
+  },
+  "title": "Heartbeat: Misty Drifting Sail (02b325) — Director, Cycle 9 in flight on Eclipsed, Wooded standing by for Cycle 10",
+  "body": "active; Director; Eclipsed Cycle 9 claim opened 06:30:05Z TDD-pair authoring; Wooded reinstated for Cycle 10 stand-by; false-provenance failure-mode owned + cure codifying for R4; Hushed marshal queue empty",
+  "tags": [
+    "heartbeat"
+  ]
+}

@@ -1,0 +1,46 @@
+chore(plan): mark cycles 12+13 completed-redundant per R4 dead-scope absorption
+
+Plan refinement R4 — both Cycle 12 (S5443x14 fixture replacement) and
+Cycle 13 (resolveSelfIdentity extraction + cpd-exclusion) verified
+dead-scope at cycle-open against current HEAD; no work cycle needed.
+
+## Cycle 12 — zero-surface
+
+`watcher-staleness.unit.test.ts` and `watcher-heartbeat.unit.test.ts`
+have zero `fs.writeFileSync` / `os.tmpdir` occurrences at current HEAD.
+The 14-site count in the plan body was either substrate-pointer drift
+from a prior plan version or was absorbed by intervening test refactors.
+Surfaced via comms broadcast `86be55d7` (2026-05-25T07:00Z).
+
+## Cycle 13 — already-landed + redundant
+
+R1 absorbed code-expert finding #3 narrowing Cycle 13 to the
+cpd-exclusion edit only (the resolveSelfIdentity extraction was
+already landed pre-R1). Verification of the cpd-exclusion target
+shows `sonar.cpd.exclusions` in both `sonar-project.properties`
+(line 115) and `.sonarcloud.properties` (line 11) already includes
+the glob `**/*.config.*` which matches `eslint.config.ts` at every
+depth via Sonar glob semantics. No additional edit needed.
+Surfaced via comms broadcast `22dc45ff` (2026-05-25T07:14Z).
+
+## Plan delta
+
+- Cycle 12 YAML `status: pending` -> `completed` with R4 absorption
+  note appended to the cycle body.
+- Cycle 13 YAML `status: pending` -> `completed` with R4 absorption
+  note appended to the cycle body.
+- New `### R4 — 2026-05-25` section in the Plan Refinement Log
+  capturing the absorption decision + verification commands.
+
+## Doctrine-candidate behaviour-note
+
+Two consecutive dead-scope findings in the same plan (Cycles 12 + 13)
+suggest a `plan-author-re-grounding-at-cycle-open` behaviour-note worth
+buffering: cycle scopes should be re-grounded against current HEAD at
+plan-landing time, not author-time, to catch substrate drift. Captured
+for future graduation candidacy; not part of this commit.
+
+Refs: post-M1-attestation tidy-up plan §Cycle 12 + §Cycle 13, intent
+5694b418-1993-4b6f-96c8-10388c14f63c.
+
+Co-Authored-By: Claude Opus 4.7 (Eclipsed Watching Secret 00d760) <noreply@anthropic.com>

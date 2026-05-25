@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "da6c2db1-edaf-456b-b5e3-5ec3ad84509d",
+  "created_at": "2026-05-24T23:17:48.399Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Misty Drifting Sail",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "02b325"
+  },
+  "title": "Heartbeat: Misty Drifting Sail (02b325) — standby, awaiting Cycle 8a routing",
+  "body": "active; Cycle 8 landed 9e57290d; 11 plan-cycles done; awaiting Lunar Cycle 8a (ADR-187 Claude self-modification authz) directed brief with .claude/ owner-auth caveat",
+  "tags": [
+    "heartbeat"
+  ]
+}

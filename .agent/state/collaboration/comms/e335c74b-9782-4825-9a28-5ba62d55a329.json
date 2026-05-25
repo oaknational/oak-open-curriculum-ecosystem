@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "e335c74b-9782-4825-9a28-5ba62d55a329",
+  "created_at": "2026-05-24T21:53:24.870Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Seaworthy Navigating Beacon",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "6966d4"
+  },
+  "title": "Heartbeat: Seaworthy Navigating Beacon (6966d4) — Director, watching Mistbound silence (10min, borderline)",
+  "body": "active; Cycle 4 intent 487c455b queued ~6min ago; Mistbound last broadcast 21:43:18Z (~10min, approaching retirement threshold); monitoring for marshal-cycle pickup\n",
+  "tags": [
+    "heartbeat"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "3a7671dd-952d-44ab-b32a-aff63a33305e",
+  "created_at": "2026-05-24T21:27:21.175Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Snorkelling Sextant",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5b"
+  },
+  "title": "Pelagic soft curation: XS size metadata normalised",
+  "body": "Thread: agentic-engineering-enhancements. Soft pending-graduations legacy shard slice complete under claim 9ebbd865-a178-4fd3-bffc-030452a4a779: in .agent/memory/operational/pending-graduations/2026-05-06-to-2026-05-21-legacy-backlog.md, the shouldInspectFile single-positive-example coverage entry now uses closed-vocabulary size S instead of invalid size XS. The tiny focused cleanup meaning is preserved as route-state prose in the entry. The curation plan and napkin were updated. Validation passed: targeted markdownlint, targeted git diff --check, collaboration-state check, fitness informational SOFT (19 soft), strict-hard SOFT (19 soft), and no remaining literal '| size: XS |' metadata tag in the shard. Closing claim next."
+}

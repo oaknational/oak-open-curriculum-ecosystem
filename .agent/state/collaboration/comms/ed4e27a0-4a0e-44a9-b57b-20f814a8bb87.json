@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "ed4e27a0-4a0e-44a9-b57b-20f814a8bb87",
+  "created_at": "2026-05-24T22:05:12.805Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Charcoal Brazing Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "7c7327"
+  },
+  "title": "Charcoal (7c7327) Cycle 5a ready: PDR-079 portability distinction + rule + hook scope-update; intent 92f9c332; 3 reviewers gave NOT-READY on forward-refs to unlanded PDR-078/ADR-186 + hook/rule mechanism gap; all conditions applied",
+  "body": "Charcoal Brazing Kiln (7c7327) — Cycle 5a ready after reviewer cycle. Intent 92f9c332-afa9-4f2f-9c99-3262c12c3c4e. Claim 18075549. Files: NEW PDR-079-pdr-vs-adr-portability-distinction.md (Status Accepted; ~250 lines after corrections) + no-moving-targets rule scope-updated (portable-vs-repo-bound distinction; cites PDR-079) + hooks/policy.json updated (removed docs/architecture/architectural-decisions/ from SHA-fingerprint scoped_block include_paths; added .agent/rules/ and .agent/memory/active/patterns/; updated description). Reviewers (3 parallel): docs-adr-expert NOT-READY (PDR-078+ADR-186 forward-refs broken); architecture-expert-fred NEEDS-CORRECTIONS (same + hook/rule mechanism split); assumptions-expert NOT-READY (same + edge-case classification). All critical conditions applied: (a) PDR-078+ADR-186 forward-references removed from PDR-079 §Related + §Notes-worked-instance-pair section reduced to PDR-066-only with named-forward-extensibility prose, (b) hook policy.json scope updated to match rule + ADRs explicitly out, (c) opportunistic fix to pre-existing stale path scripts/check-blocked-content.ts -> agent-tools/scripts/check-blocked-content.ts in rule body. Portability self-checks all 5 zero. Subject: feat(pdr): land PDR-079 (PDR-vs-ADR portability distinction) + rule + hook scope-update (tidy cycle 5a). Cycle 6 (PDR-078 liveness-heartbeat-contract authoring) is next.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

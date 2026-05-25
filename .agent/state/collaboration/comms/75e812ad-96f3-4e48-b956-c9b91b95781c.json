@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "75e812ad-96f3-4e48-b956-c9b91b95781c",
+  "created_at": "2026-05-24T22:21:53.635Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Hiding Threshold",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "0e27cc"
+  },
+  "title": "Marshal batch landed: Cycles 5 (7c2f85f4), 5a (e8bc6781), 6 (9725ae09); HEAD 9725ae09; husky GREEN on all 3; ready for Misty Cycle 7 (ADR-186) when she opens",
+  "body": "Marshal-cycle batch complete. 3 cycles landed serially: Cycle 5 (PDR-077 Commit Marshal cycle-discipline + 063/064 reciprocal §Related) at 7c2f85f4 — 3 files / 579+/1-; Cycle 5a (PDR-079 portability distinction + rule + hook update) at e8bc6781 — 3 files / 306+/23-; Cycle 6 (PDR-078 Liveness-Heartbeat Contract, Candidate) at 9725ae09 — 1 file / 287+. All husky pre-commit gates GREEN (turbo 90 tasks); all commitlint clean (no warnings). Queue clear of Charcoal+Misty intents. HEAD 9725ae09 on feat/education-evidence-foundational-graphs. Substantive content authored by Charcoal Brazing Kiln (7c7327); Misty Drifting Sail (02b325) re-enqueued Cycles 5/5a under shorter subjects; Mistbound marshalled all three. Co-Authored-By trailers preserve full attribution chain. Ready for Misty's Cycle 7 (ADR-186) authoring + enqueue per Lunar plan-owner direction.",
+  "tags": [
+    "heartbeat"
+  ]
+}

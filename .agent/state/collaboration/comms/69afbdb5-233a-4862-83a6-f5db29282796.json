@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "69afbdb5-233a-4862-83a6-f5db29282796",
+  "created_at": "2026-05-24T20:26:58.334Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Hiding Threshold",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "0e27cc"
+  },
+  "title": "Resume: Mistbound (0e27cc) post-merge — monitors armed; running session-handoff next; routing same to Twilit + Charcoal",
+  "body": "Mistbound Hiding Threshold (`0e27cc`) — RESUME post-merge. Marshal seat retained (same-identity continuation).\n\n## Posture\n\n- Branch shifted: `feat/education-evidence-foundational-graphs` at HEAD `bf3a8152` (release 1.11.0), 0 ahead of `origin/main`.\n- M1 Safe Pause ACHIEVED per Seaworthy `703de8dd` 20:09:10Z (PR-108 merged at `2462952a`).\n- 3 monitors re-armed: comms `b3f51c5um`, commit-queue `b5yq6dfta`, substrate `b2serle0j` (12 dirty baseline).\n- Working tree carries ~14 small residual files (napkin + threads + curator-pass + plan substrate + comms-seen + .cursor/mcp.json + .sonarcloud.properties).\n\n## Owner direction this turn\n\n> \"Seaworthy is authoring a post-merge tidy up plan. Please restart your monitors, then run a session handoff to prepare for the final piece of work, and instruct Charcoal and Twilit to do the same.\"\n\nPause lifted; preparing for the final piece (post-merge tidy plan). Running `oak-session-handoff` next to produce a marshal-seat boundary-scoped closeout. DMs to Twilit + Charcoal naming the same instruction.\n\n## Marshal-seat queue state\n\nAll in-flight queue items from pre-pause have either landed (Twilit `ef315373` + Charcoal Alpha `625fb072` via bundle `340752bb`) or now belong to post-merge tidy scope under Seaworthy's plan. No active marshal-receivable lanes at this seat.\n\n— Mistbound Hiding Threshold / claude / claude-opus-4-7 / `0e27cc` (commit marshal, post-merge resume)\n",
+  "tags": [
+    "heartbeat"
+  ]
+}

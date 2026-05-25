@@ -261,6 +261,17 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   (structured impact / size / risk metadata for deterministic
   auto-acceptance of mechanically verifiable comms-event changes;
   Proposed 2026-05-23)
+- [ADR-186: Comms-Event Heartbeat Lifecycle Substrate](186-comms-event-heartbeat-lifecycle-substrate.md)
+  (repo-bound phenotype for PDR-078's portable liveness-heartbeat
+  contract: `lifecycle` event kind with `event_type='heartbeat'`,
+  tolerate-unknown-event-type render rule, `[HEARTBEAT]` token via
+  ADR-183 tag composition; Accepted 2026-05-24)
+- [ADR-187: Claude Self-Modification Authorisation Cure-Shape](187-claude-self-modification-authorisation-cure-shape.md)
+  (WS-8 ratification: C2-near-term + C5-long-term + C4-fallback
+  combination with C2/C5 platform-deferred triggers; C1 + C3
+  rejected; C4 operative-in-effect-now; 4 named re-ratification
+  triggers; platform-engagement vehicle as named owner-action;
+  Accepted 2026-05-25)
 
 ## Key Architectural Decisions
 

@@ -8,7 +8,12 @@ the genotype this ADR implements);
 [ADR-181](181-agent-team-start-and-action-log.md) (team-start ritual
 and action-trace surface — peer team-state substrate);
 ADR-182 (mid-cycle handoff record substrate — orthogonal schema
-layer; tags here vs message_kind values there).
+layer; tags here vs message_kind values there);
+[ADR-186](186-comms-event-heartbeat-lifecycle-substrate.md)
+(comms-event heartbeat lifecycle substrate — registered consumer
+of the `"heartbeat"` tag in this ADR's namespace; the watcher's
+`[HEARTBEAT]` render token composes through this ADR's tag-
+namespace renderer).
 
 ## Context
 

@@ -45,10 +45,10 @@ points. A worked Sentry example sits in
    wrapper shell script that re-exports `--org`/`--project`. Secrets (auth
    tokens) arrive via environment variables only and are never committed.
 
-3. **`onlyBuiltDependencies` lists the binary explicitly.** If the CLI ships
-   a native postinstall step (the `@sentry/cli` download script is the
-   prototype), add it to `onlyBuiltDependencies` in `pnpm-workspace.yaml` so
-   pnpm runs the build script without prompting per-developer.
+3. **`allowBuilds` lists the binary explicitly.** If the CLI ships a native
+   postinstall step (the `@sentry/cli` download script is the prototype), add
+   it to `allowBuilds` in `pnpm-workspace.yaml` (`'<package>': true`) so pnpm
+   runs the build script without prompting per-developer.
 
 4. **`knip` ignores pnpm-exec usage explicitly.** `knip` cannot trace
    `pnpm exec <cli>` invocations inside shell scripts, so add the CLI

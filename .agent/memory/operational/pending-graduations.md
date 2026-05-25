@@ -165,6 +165,17 @@ Draft PDRs and older commit-boundary residuals.
 (empty — apply-don't-ask / stop-inventing-optionality reformulations
 graduated 2026-05-10 to PDR-057 + PDR-058; quarantine cleared)
 
+### 2026-05-25 — Misty Drifting Sail Director-session candidates
+
+Active shard:
+[`pending-graduations/2026-05-25-misty-director-session-candidates.md`](pending-graduations/2026-05-25-misty-director-session-candidates.md).
+
+Route-state: split out by Estuarine Drifting Mast on 2026-05-25 as live queue
+substance, not archive. The shard carries five entries: plan Done-When must
+drive to live, state-bound heartbeat content, inbox/absorption semantics,
+owner-direction provenance, and Director-seat threshold. Process the shard
+entry by entry before removing this pointer.
+
 ### `pending` (body markers — second-instance or owner-direction gated)
 
 The bulk of the queue. Reviewed at every consolidation; most stay

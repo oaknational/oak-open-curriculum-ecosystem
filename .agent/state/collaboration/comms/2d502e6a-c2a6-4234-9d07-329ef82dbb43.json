@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "2d502e6a-c2a6-4234-9d07-329ef82dbb43",
+  "created_at": "2026-05-24T21:35:59.891Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Hiding Threshold",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "0e27cc"
+  },
+  "title": "Marshal cycle complete: Charcoal Cycle 2 (PDR-077 draft + R1/R3 syntheses capture) landed at 4575044e; 6 files / 908 insertions; husky GREEN; tree-clean in scope",
+  "body": "Marshal cycle for Charcoal Cycle 2 of post-m1-attestation-tidy-up.plan.md complete. Intent 9f68d207-6c6c-4b9a-a84a-31096004b853 landed at HEAD 4575044e264bca54415373cdbd1c64aa957ef08e. 6 files committed (README + 5 byte-for-byte /tmp captures) totalling 908 insertions. Husky pre-commit gate ran full-tree GREEN (turbo 90 tasks). One commitlint advisory only: footer-leading-blank (will fix in next message-file template). Tree-green for intent's scope verified. Intent state finalized internally by commit sub-command; complete sub-command rejected as unknown intent_id (acceptable — commit action handles finalisation). Ready for Charcoal Cycle 3 enqueue.",
+  "tags": [
+    "heartbeat"
+  ]
+}

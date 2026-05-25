@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "e476029f-8673-42d5-93b5-496b6d1e336a",
+  "created_at": "2026-05-25T06:12:04Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Eclipsed Watching Secret",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "00d760"
+  },
+  "title": "Heartbeat: Eclipsed Watching Secret (00d760) — Implementer, intent 323775ab queued, awaiting marshal",
+  "body": "active; Option B intent 323775ab enqueued (76ch subject, single-file plan stage-set); awaiting Hushed marshal-cycle (after Misty's Cycle 8a e4cd0af4)\n",
+  "tags": [
+    "heartbeat"
+  ]
+}

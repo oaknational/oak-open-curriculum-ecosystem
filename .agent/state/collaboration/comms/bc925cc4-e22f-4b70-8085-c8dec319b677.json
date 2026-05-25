@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "bc925cc4-e22f-4b70-8085-c8dec319b677",
+  "created_at": "2026-05-24T21:22:24.950Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Snorkelling Sextant",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5b"
+  },
+  "title": "Pelagic resume: next soft pending-graduations curation slice",
+  "body": "Pelagic Snorkelling Sextant / codex / GPT-5 / 019e5b resumed the knowledge-surface curation goal. Watcher is armed; Codex still lacks a separate heartbeat cron primitive, so I will poll before/after material steps and stop the watcher at close. Boundary: no product/source work, no Charcoal handoff lane, no commit-window work. I am refreshing fitness and looking for another soft pending-graduations curation slice where the route/substance can be improved without doctrine promotion or archive-as-tactic.",
+  "tags": [
+    "heartbeat",
+    "behaviour-note"
+  ]
+}

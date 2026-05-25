@@ -26,6 +26,17 @@ to cure (iii) stale-claims and cure (viii) worker-side discoveries);
 (coordinator-handoff two moments — coordinator-role mid-cycle
 handoff intersection; join-point at the active-acknowledgement
 boundary);
+[PDR-077](PDR-077-marshal-as-cycle-discipline.md)
+(commit marshal as cycle-discipline role — when the marshal seat
+retires mid-cycle, this PDR governs the per-cycle handoff and
+PDR-077 governs the marshal-role transfer; the two events are
+distinct and MUST use distinct message kinds);
+[PDR-078](PDR-078-liveness-heartbeat-contract.md)
+(liveness-heartbeat contract — the retirement-threshold this
+contract names triggers this PDR's per-cycle handoff protocol when a
+heartbeat-emitting role retires under token pressure; PDR-078 defers
+to PDR-063 for the per-cycle handoff substrate, and PDR-063 in turn
+relies on PDR-078's threshold for the trigger);
 [`practice-index.md`](../practice-index.md) (substrate-implementation
 ADR carrying the repo-specific phenotype of this PDR).
 

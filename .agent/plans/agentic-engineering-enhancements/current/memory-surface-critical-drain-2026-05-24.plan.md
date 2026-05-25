@@ -98,6 +98,26 @@ directive edits, because the near-hard Practice Core and directive surfaces are
 owner-approval or context-budget sensitive while the shard contained an
 already-graduated entry with a verified durable home.
 
+Re-grounded 2026-05-24T21:11Z under Pelagic claims
+`312c937f-94c6-4d39-b85b-82ff0b97b88a`,
+`19a8bdac-dc03-4378-8835-a14214be1ce7`, and
+`7e990bf5-8e6e-45ea-9d8a-9b4a457a044d`: informational fitness had no critical
+files; the hard surface was the active napkin at 441 lines / 22,689 chars. The
+substance-preserving action was not "archive to lower a score". It was
+entry-by-entry extraction, routing, and disposition: Capture H plus the
+marshal-monitoring highlight moved to the branch-fitness thread record and
+repo-continuity index; Charcoal's comms-research vector was verified against
+its thread record and repo-continuity route; first-instance discoverability and
+cron-shape drift observations stayed as promotion-triggered carry-forward. The
+outgoing active window archive is only mechanical evidence after curation.
+
+Re-grounded 2026-05-24T22:06Z under Pelagic claim
+`5c146624-63c1-4006-a477-96d3d1b3c016`: informational and strict-hard fitness
+remain soft-only at `SOFT (19 soft)`. The next useful work is still Phase 2 /
+Phase 3 curation by verified substance, not critical/hard triage. Lunar's
+22:06Z supersede also confirms the curation lane continues across tidy cycles
+rather than closing at Cycle 5 land.
+
 ## Non-Goals
 
 - Do not trim, compress, or weaken substance to satisfy fitness.
@@ -1569,6 +1589,351 @@ Validation:
 
 - `pnpm practice:fitness --strict-hard`: exit 0; `SOFT (21 soft)`.
 
+### Phase 2 Continuation — 2026-05-24 Shard Status Hygiene
+
+Continued by Pelagic Snorkelling Sextant / `codex` / `GPT-5` / `019e5b` under
+claim `989ab7a1-0dff-46e2-a303-7876593cb87d`.
+
+Changes:
+
+1. Re-ran live fitness and confirmed there are no critical or hard files:
+   `SOFT (19 soft)` in informational and strict-hard modes.
+2. Selected the soft pending-graduations lane because Phase 2 and Phase 3 remain
+   the live curation lanes while Practice Core and directive soft pressure is
+   owner/context-budget sensitive.
+3. Corrected the liveness heartbeat contract entry in
+   `.agent/memory/operational/pending-graduations/2026-05-23-team-session-autonomy.md`
+   from malformed lifecycle status `mid-authoring, paused for compaction` to
+   valid `status: pending`.
+4. Preserved the mid-authoring pause as route-state prose in the same entry;
+   no doctrine was promoted, archived, or compressed.
+
+Disposition: Phase 2 remains **partial**. This slice handles one malformed
+status value from an active shard and leaves owner/PDR-gated substance live.
+The next useful soft work is another per-entry shard pass, not broad Practice
+Core or directive editing.
+
+### Phase 2 Continuation — 2026-05-24 Legacy Shard Size Hygiene
+
+Continued by Pelagic Snorkelling Sextant / `codex` / `GPT-5` / `019e5b` under
+claim `d8772846-c453-495e-bda1-557a8148fcc2`.
+
+Changes:
+
+1. Re-ran live fitness and confirmed the curation lane remains soft-only:
+   `SOFT (19 soft)` in informational and strict-hard modes.
+2. Selected the legacy active shard because the current due entries remain
+   owner/PDR-route gated and because shard metadata hygiene helps future
+   per-entry processing without mutating doctrine.
+3. Corrected the E-1/E-2 exploration-candidates entry in
+   `.agent/memory/operational/pending-graduations/2026-05-06-to-2026-05-21-legacy-backlog.md`
+   from invalid `size: M-to-L combined` to valid `size: L`.
+4. Preserved the combined-work uncertainty as route-state prose in the same
+   entry; no archive move, doctrine promotion, or content compression happened.
+
+Disposition: Phase 2 remains **partial**. This slice handles one malformed
+size value from an active shard and leaves the workstream scoping question live.
+
+### Phase 2 Continuation — 2026-05-24 Legacy Shard XS Size Hygiene
+
+Continued by Pelagic Snorkelling Sextant / `codex` / `GPT-5` / `019e5b` under
+claim `9ebbd865-a178-4fd3-bffc-030452a4a779`.
+
+Changes:
+
+1. Re-ran live fitness and confirmed the curation lane remains soft-only:
+   `SOFT (19 soft)` in informational and strict-hard modes.
+2. Selected the legacy active shard because it still contained invalid
+   closed-vocabulary metadata that could mislead future per-entry processing.
+3. Corrected the `shouldInspectFile` single-positive-example coverage entry in
+   `.agent/memory/operational/pending-graduations/2026-05-06-to-2026-05-21-legacy-backlog.md`
+   from invalid `size: XS` to valid `size: S`.
+4. Preserved the tiny focused cleanup meaning as route-state prose in the same
+   entry; no archive move, doctrine promotion, or content compression happened.
+
+Disposition: Phase 2 remains **partial**. This slice handles one malformed
+size value from an active shard and leaves the validator-suite cleanup route
+live for the next real touch of that code.
+
+### Phase 3 Continuation — 2026-05-24 Peer-Pair Plan-Review Home
+
+Continued by Pelagic Snorkelling Sextant / `codex` / `GPT-5` / `019e5b` under
+claim `9a66f89b-4dbf-4d4d-9ce2-62aab5ac89fa`.
+
+Changes:
+
+1. Re-grounded after Charcoal's tidy-plan takeover broadcast and Mistbound's
+   commit-marshal reminder; stayed off tidy-plan and commit-window lanes.
+2. Re-ran live fitness and confirmed the curation lane remains soft-only:
+   `SOFT (19 soft)` in informational and strict-hard modes.
+3. Verified that the distilled peer-pair plan-review observation had a natural
+   home in
+   `.agent/memory/active/patterns/different-lens-reviewer-divergence.md`.
+4. Added the plan-readiness peer-pair application to that pattern, preserving
+   the Velvet/Charcoal Codex-vs-Claude finding distribution and when to apply
+   it.
+5. Added the disposition to the distilled graduations log and removed only the
+   duplicate live distilled body; the late-peer all-channel watcher observation
+   remains live in `distilled.md`.
+
+Disposition: Phase 3 remains **partial**. This slice proves and removes one
+verified duplicate distilled entry without claiming the full per-entry
+home-gap walk complete.
+
+### Phase 2 Continuation — 2026-05-24 Team-Shard Tempfile Candidate Drain
+
+Continued by Pelagic Snorkelling Sextant / `codex` / `GPT-5` / `019e5b` under
+claim `68758860-14c7-4b3d-b148-6280ccba349a`.
+
+Changes:
+
+1. Re-grounded after Seaworthy's Director routing update: Pelagic remains on
+   the soft-surface curation lane, while Charcoal owns tidy cycles and
+   Mistbound owns the commit-marshal lane.
+2. Re-ran live fitness and confirmed the curation lane remains soft-only:
+   `SOFT (19 soft)` in informational and strict-hard modes.
+3. Selected the `2026-05-23-team-session-autonomy.md` active shard entry
+   `Tempfile-path session-prefix discipline` because it had a verified durable
+   home in PDR-076b.
+4. Verified PDR-076b carries the worked tempfile-collision instance, the
+   primary body-file frontmatter contract, and the explicit note that
+   tempfile-path session-prefixing remains a secondary defence rather than a
+   standalone primary rule.
+5. Removed the processed body from the active shard and preserved the original
+   body plus disposition in the 2026-05-24 pending-graduations archive.
+
+Disposition: Phase 2 remains **partial**. This is a processed-body drain from
+an active shard, not an archive tactic; the entry was removed only after the
+durable PDR home was verified.
+
+### Phase 3 Continuation — 2026-05-24 Late-Named-Peer Comms Home
+
+Continued by Pelagic Snorkelling Sextant / `codex` / `GPT-5` / `019e5b` under
+claim `d3b9749f-330d-4d79-8742-7151b08587ad`.
+
+Changes:
+
+1. Re-grounded after Mistbound landed Charcoal Cycle 2 at `4575044e` and after
+   Seaworthy confirmed Pelagic remains on the soft-surface curation lane.
+2. Re-ran live fitness and confirmed the curation lane remains soft-only:
+   `SOFT (19 soft)` in informational and strict-hard modes.
+3. Verified that the remaining distilled peer-pair plan-review observation had
+   a natural home in `start-right-team`'s singleton-lane coordination rule.
+4. Amended the singleton-lane rule so a named peer arriving after the first
+   registry/comms check keeps early solo analysis provisional and requires
+   final all-channel reconciliation before completion.
+5. Added the disposition to the distilled graduations log and removed only the
+   duplicate live distilled body.
+
+Disposition: Phase 3 remains **partial**. This homes the late-named-peer
+reconciliation lesson in the active team-start surface without claiming the
+full per-entry distilled home-gap walk complete.
+
+### Soft-Surface Continuation — 2026-05-24 Repo-Continuity Live-State Repair
+
+Continued by Pelagic Snorkelling Sextant / `codex` / `GPT-5` / `019e5b` under
+claim `9e7473d7-b112-4a58-a605-2bd02bdc848a`.
+
+Changes:
+
+1. Re-grounded after the Director heartbeat and confirmed the curation lane
+   remains soft-only: `SOFT (19 soft)` in informational and strict-hard modes.
+2. Selected `repo-continuity.md` because its live `## Current State` still
+   pointed at stale HEAD `bf3a8152` and said only stale historical claims were
+   present.
+3. Updated the live index to current HEAD `4575044e`, Charcoal's fresh Cycle 3
+   PDR-076a claim, the latest soft-only validation, and the current
+   commit-marshal boundary.
+4. Preserved the owner correction that archive moves are mechanical only after
+   extraction, routing, and disposition; no archive move, content compression,
+   doctrine promotion, staging, or commit action happened in this slice.
+5. Follow-up claim `6fd81df6-7431-4857-b6d7-6c92ebc2a598` refreshed the same
+   live index after the watcher caught Mistbound landing Charcoal Cycle 3 at
+   `e8ca6d08`; the active commit queue was then empty.
+
+Disposition: Phase 2 and Phase 3 remain **partial**. This slice keeps an active
+operational knowledge surface truthful so future curation and commit routing do
+not start from stale live-state prose.
+
+Validation:
+
+- Focused markdownlint on touched markdown: passed.
+- Focused `git diff --check`: passed.
+- `pnpm agent-tools:collaboration-state -- check`: passed.
+- `pnpm practice:fitness:informational`: exit 0; `SOFT (19 soft)`.
+- `pnpm practice:fitness --strict-hard`: exit 0; `SOFT (19 soft)`.
+- Follow-up `pnpm agent-tools:commit-queue -- list --queue-status active`:
+  `[]`.
+
+### Soft-Surface Continuation — 2026-05-24 Cycle 4 Queue Drift Repair
+
+Continued by Pelagic Snorkelling Sextant / `codex` / `GPT-5` / `019e5b` under
+claim `8e48a99b-7f53-4b28-a504-de3d8aae73cb`.
+
+Changes:
+
+1. Re-grounded after Charcoal queued and then abandoned Cycle 4 intent
+   `7dc6f8cc` from a stale view of whether Cycle 3 had already landed.
+2. Confirmed from live git and queue evidence that HEAD remains `e8ca6d08`.
+   The active queue first went empty after Charcoal abandoned `7dc6f8cc`, then
+   a final queue sweep before claim close found Charcoal had re-enqueued Cycle
+   4 as active intent `487c455b`.
+3. Updated `repo-continuity.md` so its live state no longer says only Cycle 3
+   was fresh or treats the Cycle 3 empty-queue snapshot as current after the
+   Cycle 4 abandon and re-enqueue events.
+4. Repaired the Deep Consolidation Status block so older `bf3a8152` prose is
+   no longer presented as current HEAD proof; the durable trigger evidence is
+   PR #108 merge `2462952a` plus Seaworthy event `703de8dd`.
+
+Disposition: Phase 2 and Phase 3 remain **partial**. This slice preserves live
+operational truth for future consolidation and commit routing; it does not
+archive, compress, promote doctrine, stage, or commit.
+
+Validation:
+
+- Focused markdownlint on touched markdown: passed.
+- Focused `git diff --check`: passed.
+- `pnpm agent-tools:collaboration-state -- check`: passed.
+- `pnpm agent-tools:commit-queue -- list --queue-status active`: one active
+  Charcoal Cycle 4 intent, `487c455b`.
+- `pnpm practice:fitness:informational`: exit 0; `SOFT (19 soft)`.
+- `pnpm practice:fitness --strict-hard`: exit 0; `SOFT (19 soft)`.
+
+### Phase 2 Continuation — 2026-05-24 Peer-Pair Design Sidebar Home
+
+Continued by Pelagic Snorkelling Sextant / `codex` / `GPT-5` / `019e5b` under
+claim `5411d483-f559-47a5-8d3c-2b0b15e07326`.
+
+Changes:
+
+1. Re-grounded with watcher and heartbeat live, then refreshed claims, queue,
+   git, repo-continuity, and fitness before opening the claim.
+2. Confirmed the curation lane remains soft-only: `SOFT (19 soft)` in
+   informational and strict-hard modes.
+3. Selected the legacy active-shard peer-pair sidebar entry because its
+   remaining residual target was a durable home for the design-collaboration
+   variant, not because the shard should be archived wholesale.
+4. Added the design-collaboration variant to
+   `.agent/memory/active/patterns/inter-agent-sidebar-with-default-action.md`:
+   comparable agents, one shared append-only file, numbered turns, explicit
+   joint-decision closure, helpers reserved for already-decided execution, and
+   owner routing for owner-shaped questions.
+5. Preserved the original active-shard body plus disposition in the 2026-05-24
+   pending-graduations archive, then removed only that processed body from the
+   legacy active shard.
+
+Disposition: Phase 2 remains **partial**. This slice homes one residual
+peer-pair design-sidebar lesson before removing the live pending body; it does
+not archive for score reduction, stage, commit, or touch Charcoal's PDR/README
+lane.
+
+### Phase 2 Continuation — 2026-05-24 ADR-184 Residual Route-State
+
+Continued by Pelagic Snorkelling Sextant / `codex` / `GPT-5` / `019e5b` under
+claim `b92377f8-d305-465c-8303-a961924d1c6d`.
+
+Changes:
+
+1. Re-grounded with watcher and heartbeat live, then refreshed claims, queue,
+   git, repo-continuity, thread state, and both fitness modes.
+2. Confirmed the curation lane remains soft-only: `SOFT (19 soft)` in
+   informational and strict-hard modes.
+3. Selected the ADR-184 `sync` / `urgency` active-shard residual because live
+   verification showed the implementation trigger has not fired, while the
+   representation decision itself is already homed in ADR-184.
+4. Added route-state evidence to the legacy shard: current comms schema still
+   enumerates narrative, lifecycle, and directed event kinds without `sync`,
+   and collaboration-state parser/rendering surfaces still treat `sync` /
+   `urgency` as planned work rather than a supported protocol.
+
+Disposition: Phase 2 remains **partial**. This slice preserves a live residual
+with stronger falsifiability; it does not archive, remove, promote doctrine,
+stage, commit, or touch Charcoal's PDR/README lane.
+
+### Soft-Surface Continuation — 2026-05-24 Cycle 5 Queue Drift Repair
+
+Continued by Pelagic Snorkelling Sextant / `codex` / `GPT-5` / `019e5b` under
+claim `dd55a435-73b8-4862-85a5-6c30ba66748e`.
+
+Changes:
+
+1. Monitored all-channel comms after the ADR-184 residual slice and caught
+   Charcoal's Cycle 5 ready-for-marshal broadcast for intent `9dc229c7`.
+2. Refreshed active claims and the commit queue before closeout; live state now
+   includes Charcoal Cycle 4 intent `487c455b` plus Cycle 5 intent `9dc229c7`,
+   while HEAD remains `e8ca6d08`.
+3. Repaired `repo-continuity.md` so its `## Current State` block no longer
+   treats the earlier Cycle 4-only queue snapshot as current.
+4. Preserved Seaworthy's Director broadcast `20eb10fc`: Mistbound silence after
+   Cycle 3 is an owner-class marshal disposition question because the two
+   Charcoal intents remain queued and no fallback marshal path is defined.
+5. Logged the local `claims open` CLI-shape mistake in the napkin: use
+   `--area-kind files` and explicit `--now` when opening a file-scoped claim.
+
+Disposition: Phase 2 and Phase 3 remain **partial**. This is live-state truth
+repair from comms monitoring, not archive/removal/doctrine promotion/staging or
+commit-window work.
+
+### Soft-Surface Continuation — 2026-05-24 Cycle 4 Landing And Cycle 5 Commit-Message Repair
+
+Continued by Pelagic Snorkelling Sextant / `codex` / `GPT-5` / `019e5b` under
+claim `72f57b05-3f1b-4310-b6c8-638a7f0af661`.
+
+Changes:
+
+1. Kept the all-channel watcher live and caught Mistbound's correction of the
+   retirement-detection story: event `95c43df6` says Mistbound was alive and
+   working queue-management, not retired.
+2. Verified from git that Cycle 4 intent `487c455b` landed at `b7ac9938`, so
+   `repo-continuity.md` no longer carries `e8ca6d08` as current HEAD.
+3. Refreshed active claims and queue after the watcher surfaced the Cycle 5
+   failure. The active queue is now empty, while Cycle 5 intent `9dc229c7` is
+   preserved in `active-claims.json` as `abandoned`.
+4. Routed the Cycle 5 failure as knowledge: pre-commit passed, but commit-msg
+   rejected the 105-character subject against the 100-character commitlint
+   limit; Charcoal must re-enqueue a shortened subject before Mistbound can
+   marshal it.
+5. Logged the coordination lesson in the napkin so future continuity repairs
+   distinguish a successful queue item removed from the active list from a
+   failed/abandoned item preserved in queue history.
+
+Disposition: Phase 2 and Phase 3 remain **partial**. This slice repairs live
+operational truth from comms, claims, queue, and git evidence; it does not
+archive, remove, promote doctrine, touch Charcoal's PDR files, stage, or enter
+the commit lane.
+
+### Soft-Surface Continuation — 2026-05-24 Director Supersede And Cycle 5a Queue Truth
+
+Continued by Pelagic Snorkelling Sextant / `codex` / `GPT-5` / `019e5b` under
+claim `5c146624-63c1-4006-a477-96d3d1b3c016`.
+
+Changes:
+
+1. Re-grounded after Lunar's Director handoff and the brief 22:05Z wind-down
+   routing, then caught Lunar's 22:06Z supersede from fresh owner direction:
+   no pause, full speed ahead, complete the tidy plan, and keep instrumentation
+   live.
+2. Re-ran live fitness before editing. Both
+   `pnpm practice:fitness:informational` and
+   `pnpm practice:fitness --strict-hard` report `SOFT (19 soft)`.
+3. Refreshed live claims and queue after Charcoal's Cycle 5a broadcast.
+   Charcoal claim `18075549` is fresh on PDR-079 / rule / hook-scope files,
+   and active queue intent `92f9c332` is still queued, but Mistbound's 22:06Z
+   pre-flight says its 103-character subject will hit the same commitlint
+   header limit unless Charcoal abandons and re-enqueues with a shorter
+   subject. HEAD remains `b7ac9938`.
+4. Updated `repo-continuity.md` so the live index no longer preserves the
+   superseded wind-down as current direction and no longer says Cycle 5 is the
+   only moving tidy-plan queue item. Follow-up watcher evidence also records
+   the Cycle 5a subject-length pre-flight before closeout.
+5. Logged the curation lesson in the napkin: when Director routing is
+   superseded minutes later, preserve both events with their timestamps and
+   repair the live surface from the newer controlling direction.
+
+Disposition: Phase 2 and Phase 3 remain **partial**. This is live-state truth
+repair while the curation lane continues; it does not archive, remove, promote
+doctrine, touch Charcoal's PDR/rule/hook files, stage, or enter the commit lane.
+
 ## Phase 4 — Validation And Closure
 
 Run one gate at a time:
@@ -1589,6 +1954,36 @@ Closure is allowed only when one of these is true:
    explicit remediation or owner-approved deferral; or
 2. the owner explicitly accepts a remaining critical surface with a named
    constraint, evidence, and falsifiability check.
+
+### Phase 4 Continuation — 2026-05-25 Shadowed Hard-Width Reflow
+
+Continued by Shadowed Glimmering Moth / `codex` / `GPT-5` / `019e5d` under
+claim `35b40096-3922-43f2-8731-8a60fe2c7dae`.
+
+Actions:
+
+1. Re-grounded under `oak-start-right-team` and `oak-consolidate-docs` with
+   PDR-027 identity:
+   Shadowed Glimmering Moth / codex / GPT-5 / `019e5d`.
+2. Re-ran live fitness. `pnpm practice:fitness:informational` exited 0 with
+   `HARD (1 hard, 19 soft)`, and `pnpm practice:fitness --strict-hard`
+   exited 1 on the same single hard surface:
+   `.agent/memory/active/napkin.md` had one prose-width line at 104 chars.
+3. Reflowed the overlong napkin heading by moving the cycle list into adjacent
+   body prose. No substance was deleted, compressed, or weakened.
+4. Preserved the session learning in the napkin: fresh `comms watch` seen-files
+   can replay historical backlog before live events, so live grounding needs
+   the rendered comms tail plus claims and queue reads.
+
+Disposition: Phase 4 remains complete for the hard/critical drain objective.
+The single hard signal was structural line-width pressure in an active memory
+surface, not a content-removal prompt. It is now remediated by reflow, while
+the added learning remains preserved in the correct active-memory home.
+
+Validation:
+
+- `pnpm exec markdownlint .agent/memory/active/napkin.md`: exit 0.
+- `pnpm practice:fitness --strict-hard`: exit 0; `SOFT (20 soft)`.
 
 ## Carry-Forward From The Shaded Curator Pass
 

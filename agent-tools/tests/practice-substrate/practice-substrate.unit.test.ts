@@ -7,6 +7,7 @@ import {
   evaluateLegacyEventRoot,
   evaluateMergeClassDeclarations,
   evaluateMergeTopology,
+  evaluateOpenQuestions,
   evaluateParseState,
   evaluateRetiredPathReferences,
   evaluateStableIdentityCollisions,
@@ -345,6 +346,123 @@ describe('practice substrate derived-output and structural fixtures', () => {
         message:
           'Surface .agent/memory/operational/repo-continuity.md contains unresolved conflict markers.',
         evidence: ['.agent/memory/operational/repo-continuity.md'],
+      },
+    ]);
+  });
+});
+
+describe('practice substrate open-questions register fixtures', () => {
+  const validEntry = [
+    '### Q-001: Should the register drain through consolidate-docs?',
+    '',
+    '- Raised by: Example Agent (abc123) @ 2026-05-25T06:25Z',
+    '- Context: A non-urgent decision-shape surfaced while wiring memory.',
+    '- Why deferred: The answer belongs to a consolidation pass.',
+    '- Suggested resolution path: consolidate-docs owner-facing report.',
+    '- Status: open',
+    '- Linked: `.agent/skills/consolidate-docs/SKILL-CANONICAL.md`',
+  ].join('\n');
+
+  it('accepts an empty open-questions register', () => {
+    expect(
+      evaluateOpenQuestions({
+        surface: 'memory-operational-open-questions',
+        path: '.agent/memory/operational/open-questions.md',
+        text: '# Open Questions\n\n## Open\n',
+      }),
+    ).toStrictEqual([]);
+  });
+
+  it('accepts a structurally complete open-questions entry', () => {
+    expect(
+      evaluateOpenQuestions({
+        surface: 'memory-operational-open-questions',
+        path: '.agent/memory/operational/open-questions.md',
+        text: validEntry,
+      }),
+    ).toStrictEqual([]);
+  });
+
+  it('blocks duplicate question identities', () => {
+    expect(
+      evaluateOpenQuestions({
+        surface: 'memory-operational-open-questions',
+        path: '.agent/memory/operational/open-questions.md',
+        text: `${validEntry}\n\n${validEntry}`,
+      }),
+    ).toStrictEqual([
+      {
+        id: 'open-questions-duplicate-id',
+        surface: 'memory-operational-open-questions',
+        severity: 'blocking',
+        repair: 'manual-with-provenance',
+        message: 'Open questions register repeats question identity Q-001.',
+        evidence: ['.agent/memory/operational/open-questions.md'],
+      },
+    ]);
+  });
+
+  it('blocks entries that omit required fields', () => {
+    expect(
+      evaluateOpenQuestions({
+        surface: 'memory-operational-open-questions',
+        path: '.agent/memory/operational/open-questions.md',
+        text: validEntry.replace(
+          '- Linked: `.agent/skills/consolidate-docs/SKILL-CANONICAL.md`',
+          '',
+        ),
+      }),
+    ).toStrictEqual([
+      {
+        id: 'open-questions-missing-field',
+        surface: 'memory-operational-open-questions',
+        severity: 'blocking',
+        repair: 'manual-with-provenance',
+        message: 'Open question Q-001 is missing required field Linked.',
+        evidence: ['.agent/memory/operational/open-questions.md'],
+      },
+    ]);
+  });
+
+  it('blocks entries with statuses outside the open-questions lifecycle', () => {
+    expect(
+      evaluateOpenQuestions({
+        surface: 'memory-operational-open-questions',
+        path: '.agent/memory/operational/open-questions.md',
+        text: validEntry.replace('- Status: open', '- Status: stalled'),
+      }),
+    ).toStrictEqual([
+      {
+        id: 'open-questions-invalid-status',
+        surface: 'memory-operational-open-questions',
+        severity: 'blocking',
+        repair: 'manual-with-provenance',
+        message: 'Open question Q-001 has unsupported status stalled.',
+        evidence: ['.agent/memory/operational/open-questions.md'],
+      },
+    ]);
+  });
+
+  it('reports open-entry backpressure without blocking the gate', () => {
+    const entries = Array.from({ length: 11 }, (_, index) =>
+      validEntry.replace('Q-001', `Q-${String(index + 1).padStart(3, '0')}`),
+    );
+
+    expect(
+      evaluateOpenQuestions({
+        surface: 'memory-operational-open-questions',
+        path: '.agent/memory/operational/open-questions.md',
+        text: entries.join('\n\n'),
+      }),
+    ).toStrictEqual([
+      {
+        id: 'open-questions-backpressure',
+        surface: 'memory-operational-open-questions',
+        severity: 'informational',
+        repair: 'manual-with-provenance',
+        message:
+          'Open questions register has 11 open entries; consolidation cadence should drain entries above 10.',
+        evidence: ['.agent/memory/operational/open-questions.md'],
       },
     ]);
   });

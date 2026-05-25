@@ -33,8 +33,11 @@ exists. `clean` must remove build artefacts only; if generated files are
 committed source, keep them in `clean` and reserve destructive regeneration
 steps for explicit package-local commands such as `generate:clean`.
 
-`onlyBuiltDependencies` in `pnpm-workspace.yaml` is an **intentional** allowlist:
-only those packages may run install lifecycle scripts.
+`allowBuilds` in `pnpm-workspace.yaml` is an **intentional** allowlist: only
+packages mapped to `true` may run install lifecycle scripts (pnpm v11
+replaced the older `onlyBuiltDependencies` list with this map). Security
+`overrides` and `peerDependencyRules` also belong in `pnpm-workspace.yaml`,
+not in root `package.json` — see the current file for examples.
 
 **Project `.npmrc` is optional.** Use it for npm-compatible registry and auth
 only (`registry`, scoped registry maps, tokens). Avoid pnpm-only keys in

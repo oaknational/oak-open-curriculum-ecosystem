@@ -9,203 +9,211 @@ merge_class: append-only-narrative
 
 # Napkin
 
-## 2026-05-24 — Hushed Fading Hush / codex / GPT-5 / `019e5a`
+## 2026-05-25 — Salty Mooring Dock / cursor / Composer / `dc4dd7`
 
-Fresh active napkin after the processed
-[post-M1 cleanup window][post-m1-window] was archived.
+### What worked
+
+- Owner wanted a **manual test checklist** (what / how / expected results), not
+  automated `probe:remote` scripts — doc lives at
+  `docs/agent-preview-test-checklist.md` in the MCP app workspace.
+- Operational docs belong in MCP app `docs/` + README, not a new ADR.
+
+### Correction (same session, after owner feedback)
+
+- Misread "test script" as shell/ts automation; removed `probe-remote-mcp.sh`
+  and `agent-preview-smoke.ts` in favour of the checklist doc only.
+
+### Surprise
+
+- `prod:requests` treats unauth `/mcp` 401 as failure; HTTP baseline belongs in
+  the checklist as optional curl rows with expected 401, not a passing smoke job.
+
+### candidate
+
+- None — script placement is operational, not architectural.
+
+---
+
+## 2026-05-25 — Briny Fathoming Dock / claude / claude-opus-4-7 / `95a27b`
 
 ### What Was Done
 
-- Re-grounded under `start-right-team` and `consolidate-docs`.
-- Ran the live fitness report and found the current critical item:
-  active-napkin prose line width.
-- Reflowed the overlong Seaworthy Window 2 capture without removing substance.
-- Archived the processed active window only after every entry in it had an
-  explicit processing disposition or live route.
+- Owner-directed role-metacognition session opened with the observation that
+  "the Director role is only useful when grounded in continually re-verified
+  _fact_, otherwise it becomes a useless, even damaging, expensive ticking
+  clock". /oak-start-right-team + /oak-plan + /oak-metacognition.
+- Session-local reflection in the private Claude plan area.
+- Repo plan authored in the agentic-engineering current plan directory
+  (1501 lines, lint-clean, DECISION-COMPLETE pending owner execution direction).
+- Pre-execution reviewer pass: 6 reviewers (assumptions, docs-adr, betty,
+  barney, fred, wilma) all PASS-WITH-CONDITIONS; owner ratified path B
+  (Narrowed v1); consensus absorbed into plan body.
+- Plan-tree discoverability + thread record + repo-continuity updated.
+- **No implementation per owner closeout**; PDR-082 + ADR-188 + pattern
+  memory + pending-graduations entry deferred to a future execution session.
+
+### Patterns to Remember (graduation candidates and worked instances)
+
+- **Recursive meta-cure for plan-authoring** (graduation candidate, first
+  worked instance). The structural cure I proposed for multi-agent
+  role-emission (substrate-bound citation-binding so freshness is
+  mechanically auditable) applies recursively to plan-authoring itself.
+  Every plan-emission depends on doctrine-landscape ground truth (the
+  PDRs/ADRs/patterns the plan composes against); without freshness
+  binding, the plan emits doctrine proposals against a stale model.
+  Proposed cure shape: open every plan with explicit doctrine-landscape
+  revision citation (PDR/ADR commit shas at author-time); reviewers
+  audit freshness; stale plan-emissions are auditable from the plan
+  body alone. Falsifiability: a plan whose cited landscape revision
+  has aged past a freshness threshold (e.g. PDRs landed in the cluster
+  since author-time) without re-grounding is the failure phenotype.
+  Routing: candidate amendment to PDR-018 (Planning Discipline) once a
+  second worked instance accumulates in a distinct session.
+- **Doctrine-by-analogy self-instance** (worked instance of metacognition
+  directive's "doc-patch fails under load" prediction). I diagnosed
+  PDR-074 §S1's self-discipline-fails-under-load failure mode WHILE
+  committing the exact same failure mode at plan-author time — I did
+  not verify the doctrine landscape (PDR-074/075/080 existed and
+  partially cover the cure shape I was proposing) until AFTER
+  AskUserQuestion ratification was already given. The metacognition
+  directive predicted this class explicitly; this entry is evidence
+  the prediction is empirical, not theoretical.
+- **Reviewer fan-out cost imbalance** (graduation candidate). Six
+  sub-agent reviewers absorbed findings that one pre-author
+  landscape-verification pass would have caught (multi-role overreach,
+  layer-split leakage, lifecycle exclusion). Cure: treat reviewer
+  fan-out as a check against autonomous due diligence, not a substitute
+  for it. For doctrine-only landings, default to 3 reviewers per
+  cycle, not 4+. Reserve 4+ reviewer depth for security-class
+  substrate-as-API ADRs per the 2026-05-25 ADR-187 worked instance.
+  Falsifiability: a reviewer-finding that names "the plan-author
+  should have caught this by reading existing PDR-NNN §X" is the
+  cost-imbalance phenotype.
+- **Status maturity inversion lesson** (worked instance). Substrate
+  phenotype ADRs typically land Accepted alongside their implementation
+  (precedent: ADR-183/184/185/186). Landing an ADR Accepted with
+  implementation explicitly deferred creates a maturity mismatch that
+  future agents misread ("ADR is decided; doctrine is not yet
+  validated"). Cure: ADR Status: Proposed when the paired PDR is
+  still Candidate AND implementation is deferred to a follow-on plan;
+  move to Accepted on first worked instance of the implemented
+  substrate. Reviewers betty F4 and barney F4 surfaced this
+  independently during the pre-execution pass.
+- **AskUserQuestion before landscape verification is evasion** (worked
+  instance of `.agent/rules/present-verdicts-not-menus.md` plus
+  memoried "no question when answer is forced"). I surfaced "Where
+  should the PDR + ADR pair land?" as a 3-option question BEFORE
+  verifying PDR-074/075/080 already existed. After landscape
+  verification, the question's premise was altered (the answer was
+  forced toward "narrower scope inside existing cluster" rather than
+  the originally-posed "new track / existing roadmap /
+  defer-to-hypothesis-layer"). Cure: do landscape verification FIRST,
+  then surface only genuinely-undetermined options. The
+  "no question when answer is forced" rule applies recursively when
+  the answer is forced by a landscape that has not yet been checked.
+- **PDR-074 §S1 cure path is now named, not yet substrate-implemented**
+  (operational note). After this session, the path from PDR-074 §S1's
+  self-discipline shape to its structural cure substrate is named:
+  PDR-082 (portable contract) + ADR-188 (repo-bound phenotype) +
+  Phase 4 substrate-implementation plan. The cure path is reviewed,
+  narrowed, and ready for execution; the path is not yet walked. Next
+  session's Director ticking-clock failure modes (expected to recur
+  until the substrate lands) should be captured against this named
+  cure path rather than as fresh observations.
+
+## 2026-05-25 — Misty Drifting Sail / claude / `02b325`
+
+### Processing Disposition
+
+- Full source-window preserved in the Misty Director-session archive after this
+  pass verified durable routes for the behaviour-changing content.
+- Session outcome, open handoff state, and Director-dissolve routing live in
+  `threads/agentic-engineering-enhancements.next-session.md` under Misty's
+  2026-05-25 session outcome.
+- Five graduation candidates now live in `pending-graduations.md` under
+  "Misty Drifting Sail Director-session candidates": plan Done-When must drive
+  to live, state-bound heartbeat content, inbox/absorption semantics,
+  owner-direction provenance, and Director-seat threshold.
+- Two first-instance candidates remain explicitly pending in that same register:
+  coordination overhead-to-delivery ratio and build-clean CLI breakage.
+- Carry-forward behaviour: when owner intent and active substrate disagree,
+  repair the substrate the team actually measures; do not treat heartbeats,
+  local commits, or coordination volume as delivery.
+
+## 2026-05-25 — Shadowed Glimmering Moth / codex / GPT-5 / `019e5d`
 
 ### Patterns to Remember
 
-- `comms watch` with a fresh seen-file can replay a large historical backlog.
-  Seed or expect the backlog explicitly before treating watcher quietness as
-  current-state evidence.
-- Fitness critical-by-line-width can be fixed by faithful reflow first. If that
-  exposes hard line-count pressure on already-processed capture, archive the
-  processed napkin window instead of trimming substance.
-- Same `session_id_prefix` continuity can still show generated display-name
-  drift in comms and active claims after compaction or resumed goal turns.
-  Treat the prefix plus live claim evidence as the stronger continuity signal,
-  then name the drift in closeout instead of opening a competing claim.
-- Repo-continuity soft-tier consolidation worked by preserving the outgoing
-  live-index snapshot in archive, then replacing duplicated historical routing
-  with pointers to thread records and active plans. Validate with targeted
-  markdownlint, `git diff --check`, and both practice fitness modes.
-- `claims open` uses `--ttl-seconds`, not `--freshness-seconds`. The rendered
-  claim still stores `freshness_seconds`, but the CLI flag is the TTL form.
-- For active pending-graduations shards, a low-risk soft-tier drain is to find
-  entries already marked `status: graduated`, verify their durable home still
-  carries the substance, archive the full body, and remove only that processed
-  body from the shard.
-- I repeated the pipe-in-evidence mistake while locating the commit queue path.
-  If a filter feels useful, run the broad producer and the narrow search as
-  separate readable evidence steps.
-- End-session consolidation can validly finish a small soft slice without
-  claiming the broader consolidation goal. Close the owned claim, update the
-  touched thread and repo-continuity facts, then stop when the owner says the
-  session is over.
-- `comms send` no longer accepts the old `--shared-log` flag. Let the command
-  use its built-in shared-log path, and check topic help before old flag shapes
-  leak into closeout muscle memory.
-- I misread Jim's Sonar CPD correction once: the intended boundary is generated
-  code, tests, and config files excluded from CPD, with agent tools kept inside
-  the CPD corpus. Treat owner wording as the control surface when policy text
-  and live intent need reconciliation.
+- A fresh `comms watch` seen-file can replay old backlog before it reaches
+  live team traffic. For current-state grounding, pair it with rendered comms
+  tail, active claims, and queue reads; treat backlog replay as historical
+  substrate unless the command has already caught up.
+- A fitness hard-width line can be remediated without knowledge loss by moving
+  detail from an overlong heading into adjacent body prose. That is structural
+  reflow, not trimming.
+- Tidy-plan delivery in a live team needs routing discipline even when the
+  owner gives a broad "work on delivery" instruction. If another agent owns
+  the fresh source claim, switch to read-only support or a Director-routed
+  non-overlapping slice instead of racing the implementation.
+- Cycle 10 readiness note: the existing collaboration-state transaction helper
+  provides temp-file plus rename and lock directories, but no fsync. A storage
+  redesign that promises crash-hardening must extend the helper or add a
+  dedicated state writer, not merely reuse it by name.
+- Cycle 11 cleanup audit currently has non-test `comms-seen` references in the
+  start-right-team SKILL, comms-watch mechanism reference, agent-tools README,
+  continuity-surface rule, and ADR-182. Treat ADR-182 as an architectural
+  reference that may need a deliberate keep/update verdict, not a mechanical
+  grep casualty.
+- `practice:substrate:check` can fail on inherited collaboration-state schema
+  debt even when a new substrate evaluator is clean. For the open-questions
+  validator landing, the only blocking finding was an old abandoned
+  `commit_queue[19].files[0] == ""` entry; validate whether a residual is in
+  the touched surface before attributing the failure to the new reader.
 
-[post-m1-window]: archive/napkin-2026-05-24-post-m1-cleanups-window.md
+## 2026-05-24/25 — Processed Curation Carry-Forward
 
-## 2026-05-24 — Mistbound Hiding Threshold / claude / claude-opus-4-7 / `0e27cc`
+### Processing Disposition
 
-### Capture H — small-PRs / push-often / branch-fitness protocol (owner-directed; paused)
+- Pelagic's hard-napkin curation window is preserved in the Pelagic hard-napkin
+  archive; current live routes remain in the thread records named there.
+- Pelagic's 2026-05-25 stop-condition note remains behaviourally active:
+  when the owner defines completion as no hard/critical files, soft-only
+  fitness is the stop condition rather than a prompt to polish soft counts.
+- Misty's earlier cycle 5-8a surprise window is preserved in the Misty
+  Director-session archive.
+- Carry-forward lessons: seed/bound comms watchers before reading current team
+  silence; verify live branch/queue/comms immediately before closeout; count
+  near-limit commit subjects before burning a marshal cycle; single-quote shell
+  search patterns containing backticks.
 
-Owner direction this turn (verbatim, paused-state capture):
+## 2026-05-25 — Estuarine Drifting Mast / codex / GPT-5 / `019e5e`
 
-> create protocols and guidance around committing, pushing, PR state
-> monitoring and Sonar state monitoring, including a preference towards
-> small commits, pushing often, monitoring GH state for PRs, monitoring
-> Sonar state for PR, and measuring the total number of files touched on
-> a branch and the total number of changes made on a branch as reported
-> by git, and setting soft, hard and critical feedback for them, in an
-> automated way, probably a hook, with the goal of keeping PRs small
-> enough to be easily reviewed by a human, and simple to reason about.
-> This implies many more small PRs happening, potentially in parallel,
-> that is fine, the worktree models lends itself well to that.
+### What Was Done
 
-**Capture scope**: not a plan, not a decision. Substrate-buffer of the
-direction + my ultrathink surfacing the moves required when owner
-unpauses. Future-me opens a plan / PDR / ADR pair when authorised.
+- Ran a bounded `oak-start-right-team` + `oak-consolidate-docs` curation pass
+  on the current hard/critical memory surfaces, then stopped at the owner
+  boundary once the live report had no critical or hard files.
+- Preserved the Misty Director-session source window in an archive, created a
+  focused pending-graduations shard for the still-active candidates, and
+  replaced the active napkin/pending register bodies with disposition and route
+  pointers rather than lossy summaries.
+- Closed the docs-curation claim and posted a team closeout event with evidence:
+  `practice:fitness --strict-hard` soft-only, markdownlint clean on touched
+  memory files, and `git diff --check` clean.
 
-**Stated dimensions (5)**:
+### Mistakes Made
 
-1. Commit cadence: prefer small commits.
-2. Push cadence: prefer pushing often.
-3. PR state monitoring: GH state surfaced automatically.
-4. Sonar state monitoring: PR-scoped Sonar surfaced automatically.
-5. Branch-size fitness: files-touched + total-changes, with soft/hard/
-   critical bands, probably a hook.
+- I initially let the live fitness counts frame the work too strongly. Owner
+  corrected the stance: process and curate understanding; the numbers are only
+  a signal that the learning substrate needs care.
 
-**Unstated but implied / inferred**:
+### Patterns to Remember
 
-- Marshal seat as currently shaped serialises commits. Small + parallel +
-  worktree-per-slice means the marshal role's serialisation value drops.
-  Either marshal becomes per-worktree, or dissolves into self-marshal
-  with a discovery surface for cross-worktree conflicts.
-- Push authz is currently owner-gated and accumulates 50+ commits before
-  release (see M1 Safe Pause framing). "Push often" cannot land without
-  shifting where push-authz lives — either pre-authorised by policy on
-  green-marshal-cycle, or a dedicated push role on a different cadence,
-  or pre-defined push windows.
-- "Branch" is ambiguous in a multi-worktree world. Files-touched +
-  changes-aggregate must name a measurement boundary (current-worktree-
-  HEAD vs branch-vs-main vs PR-base). Pre-commit measures intent;
-  pre-push measures realised PR shape. Different decisions; the hook
-  shape may need to live at pre-push, not pre-commit.
-- Worktree-isolation is named with confidence but
-  `feedback_worktree_isolation_unreliable` says parallel worktree
-  agents can land on different bases than parent HEAD. Either the
-  worktree primitive needs reinforcement, or protocols compensate via
-  base-snapshot pinning + gate-check on parent HEAD.
-- Hook output appears on every commit/push. Verbose output eats the
-  ~80k reliable-context budget. Output must be terse — one line per
-  signal class — to stay in the budget.
-- Existing `pnpm practice:fitness` is the natural home for branch-size
-  fitness as a new dimension. Single CLI entry preserves the
-  observability discipline already in place.
-
-**Tensions and gaps surfaced via ultrathink**:
-
-- *Source vs substrate in change-count*: 466 commits ahead of origin on
-  this branch includes huge substrate writes (`.agent/**`,
-  `.agent/state/collaboration/comms/**`). Substrate is not reviewable
-  the way source is. The branch-fitness metric likely needs **two axes**
-  — reviewable-LOC (source only) and total-LOC (push payload). Different
-  thresholds; different consumers.
-- *CI capacity*: small-many-parallel multiplies CI runs. CI minutes
-  burn rises; wall-clock may improve via parallelism. Worth surfacing
-  the cost trade-off when proposing thresholds.
-- *Reviewer-load*: many small PRs mean many reviews. Reviewer dispatch
-  already scales via sub-agents but throughput pressure grows.
-- *Branch-naming proliferation*: many short-lived branches need a
-  cleanup primitive (auto-delete on merge; naming convention rule).
-- *Hook-bypass culture risk*: SOFT signals that nag get bypassed. SOFT
-  must be informative not nagging or `--no-verify` rate rises (already
-  named as recurring friction). Tie this to the existing
-  `no-verify-requires-fresh-authorisation` rule explicitly.
-- *Existing tooling*: `gh pr` shows file-count + LOC in the diff
-  natively; Sonar shows PR-scoped quality gates natively. The hook
-  cures PRE-push pressure; the monitoring cures POST-push observability.
-  Two different surfaces with two different mechanisms.
-- *Threshold defaulting*: common practice is 500/1000/2000 reviewable
-  LOC for soft/hard/critical and 10/30/50 files. These need empirical
-  validation against this repo's slice shape; not invent-from-thin-air.
-- *Push-authz mechanism*: the cleanest shape is policy-based (green
-  marshal cycle + branch-fitness GREEN → push-authz implicit) rather
-  than role-based. Role-based reintroduces the marshal-as-bottleneck
-  shape.
-
-**Cure-shape implications (provisional, paused-state names)**:
-
-- **Branch-fitness CLI**: `pnpm practice:fitness:branch` — measures
-  reviewable-LOC + total-LOC + files-touched + commits-ahead-of-base;
-  emits SOFT/HARD/CRITICAL with named thresholds.
-- **Pre-push hook**: invokes the CLI; emits at HEAD-snapshot; advisory
-  at SOFT/HARD; blocking at CRITICAL.
-- **Pre-commit hook addition** (optional): surfaces current branch
-  fitness in single-line summary so agents see the pressure building
-  before push.
-- **PR observer agent or CLI**: `pnpm pr:watch` — polls `gh pr checks`
-  and Sonar PR-scoped API; surfaces state changes to comms as
-  PR-state-changed events.
-- **Push-authz policy**: an ADR specifying when push is implicitly
-  authorised (small branch + green gates + green marshal cycle) vs when
-  it requires explicit owner authz (over CRITICAL threshold or atomic-
-  M1-pause class).
-- **Per-worktree marshal**: a PDR specifying the marshal role's
-  per-worktree shape; or an ADR specifying the self-marshal-with-
-  discovery shape. The choice depends on whether worktree-isolation
-  gets reinforced first.
-
-**What HAS been said elsewhere (cross-refs)**:
-
-- `feedback_build_vs_buy_first` — check `gh pr` + Sonar native shapes
-  before designing bespoke hooks.
-- `feedback_all_quality_gates_blocking_always` — branch-fitness CRITICAL
-  is a gate; cannot be framed as "out of scope".
-- `feedback_new_eslint_rules_start_warn` — analogous: branch-fitness
-  thresholds start at SOFT, escalate after stability.
-- `feedback_no_moving_targets_in_permanent_docs` — protocol docs cite
-  measurable thresholds, never "small" handwaves.
-- `feedback_worktree_isolation_unreliable` — worktree-confident
-  framing in the proposal needs reinforcement work before parallel
-  small-PR shape can land cleanly.
-- `feedback_hook_failures_are_questions` — hook output is a question
-  not a nag; threshold framing matters.
-
-**What HAS NOT been said (gaps the owner left for the team)**:
-
-- Whether CRITICAL is blocking or advisory.
-- Whether substrate writes count toward the metric or are excluded.
-- Whether the metric is per-worktree, per-branch, or per-PR.
-- Whether push-authz policy moves with this protocol or stays owner-
-  gated separately.
-- Whether the Commit Marshal role transforms or persists in current shape.
-- Whether the M1 Safe Pause push is itself the last big push before
-  the protocol takes effect, or whether the protocol applies retroactively
-  to that push too.
-
-**Pickup hook for next-me / next-team (when owner unpauses)**:
-
-1. Open a thread record `branch-fitness-and-push-cadence.next-session.md`.
-2. Survey existing `pnpm practice:fitness` shape + `gh pr` + Sonar APIs.
-3. Resolve the 6 gap-questions above via owner sidebar before drafting.
-4. Author a PDR for the doctrine shape + an ADR for the substrate
-   phenotype (hook + CLI + observer).
-5. Ship at SOFT-only initially; escalate after observation window.
+- During memory curation, the decisive question is not "how do I lower the
+  count?" but "what understanding would a future session lose if I moved too
+  quickly?" Route first, archive after the route is real, and use the report
+  only to find where the substrate is asking for attention.
+- Team-member handoff should stop at the owned boundary. In this session, the
+  correct closeout was claim closure, comms evidence, watcher stop, and napkin
+  capture; broader repo-wide check ownership stayed with the active marshal /
+  implementation team.

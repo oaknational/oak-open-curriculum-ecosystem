@@ -1,0 +1,61 @@
+feat(practice): wire open-questions memory system
+
+Orphan-absorption commit per PDR-077 §Cycle Protocol step 1 (absorbing-
+orphan marshal path). Substantive author Twilit Orbiting Galaxy (codex
+GPT-5, 019e5d) retired before CLI enqueue per owner direction at
+2026-05-25T07:00Z. Owner authorised commit + push of all working-tree
+changes at 07:01Z; Twilit's bundle is the first logical group landed.
+
+Bundle contents (per Twilit marshal-request broadcast 4825fb5f at
+06:55:56Z, verified author-side: 41 vitest tests pass, type-check pass,
+lint pass, markdownlint+prettier on touched docs pass, practice-fitness
+informational/strict-hard both SOFT-only):
+
+1. .agent/memory/operational/open-questions.md (new) — canonical
+   open-questions memory file with frontmatter and status semantics.
+2. .agent/plans/agentic-engineering-enhancements/current/
+   open-questions-memory-system.plan.md (new) — implementation plan
+   with evidence trail.
+3. .agent/plans/agentic-engineering-enhancements/current/README.md
+   (M) — register the new plan.
+4. .agent/memory/README.md (M) — pointer to operational/open-questions.
+5. .agent/memory/operational/README.md (M) — open-questions surface
+   description.
+6. .agent/memory/executive/memory-state-substrate-contracts.manifest.json
+   (M) — open-questions contract registered.
+7. .agent/practice-index.md (M) — practice-substrate evaluator
+   registry update.
+8. .agent/skills/consolidate-docs/SKILL-CANONICAL.md (M) — drain
+   workflow wires open-questions absorption.
+9. .agent/skills/session-handoff/SKILL-CANONICAL.md (M) — capture
+   workflow wires open-questions emission.
+10. agent-tools/src/practice-substrate/open-questions-evaluator.ts
+    (new) — substrate evaluator implementation.
+11. agent-tools/src/practice-substrate/live-open-questions.ts (new) —
+    live-report wiring for open-questions surface.
+12. agent-tools/src/practice-substrate/evaluators.ts (M) —
+    evaluator registry includes open-questions.
+13. agent-tools/src/practice-substrate/index.ts (M) — module exports.
+14. agent-tools/src/practice-substrate/live-report.ts (M) — live
+    report includes open-questions section.
+15. agent-tools/src/practice-substrate/live-types.ts (M) — live
+    type extensions.
+16. agent-tools/src/practice-substrate/types.ts (M) — shared types.
+17. agent-tools/tests/practice-substrate/practice-substrate.unit.test.ts
+    (M) — unit tests for open-questions evaluator.
+
+Q-002 in the new open-questions memory file is marked answered with
+implementation evidence (this commit).
+
+Residual risk acknowledged by Twilit, not introduced by this bundle:
+pnpm practice:substrate:check remains red on a pre-existing abandoned
+commit-queue[19].files[0] empty-string from older queue entry
+0cdfd816-47f2-4816-8aa7-b49fca347ccf. Out of scope for this commit;
+captured in plan and napkin.
+
+Marshalled by Hushed Stalking Shade (bc0a07) under owner-directed
+orphan-absorption (Twilit retired post-broadcast). Substantive author
+Twilit Orbiting Galaxy (codex GPT-5, 019e5d). Claim
+fec8e243-049a-4efb-b371-a9ea4a533369 opened for marshal traceability.
+
+Co-Authored-By: Codex GPT-5 (Twilit Orbiting Galaxy 019e5d) <noreply@anthropic.com>

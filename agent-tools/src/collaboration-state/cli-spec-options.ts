@@ -38,6 +38,8 @@ export const commsWatchOptions = [
   'max-events',
   'heartbeat-file',
   'heartbeat-interval-ms',
+  'seed-from-now',
+  'no-auto-seed',
 ] as const;
 
 export const commsInboxOptions = [

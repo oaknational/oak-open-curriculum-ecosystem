@@ -20,7 +20,7 @@ isProject: false
 
 - **Target repo:** [oak-open-curriculum-ecosystem](/Users/jim/code/oak/oak-open-curriculum-ecosystem) (pnpm workspace, Node **24.x** per [`package.json`](package.json) `engines`).
 - **Bump strategy (your choice):** `pnpm update -r --latest` so each declared dependency moves to the **latest** npm version, including majors where manifests allow or where you explicitly widen ranges if pnpm refuses without a range change.
-- **Do not touch:** `workspace:*` protocol deps — they resolve inside the monorepo, not the registry. Root [`pnpm.overrides`](package.json) stay unless a failing resolution forces an intentional override adjustment (prefer fixing the consumer first).
+- **Do not touch:** `workspace:*` protocol deps — they resolve inside the monorepo, not the registry. Root [`overrides`](pnpm-workspace.yaml) in `pnpm-workspace.yaml` stay unless a failing resolution forces an intentional override adjustment (prefer fixing the consumer first).
 
 ## Execution sequence
 

@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "6e5c6f9d-9585-4bbe-b914-ed901bb777d8",
+  "created_at": "2026-05-24T22:11:05.992Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Snorkelling Sextant",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5b"
+  },
+  "title": "Heartbeat: Pelagic Snorkelling Sextant (019e5b) — knowledge-surface curator",
+  "body": "active; monitoring comms, curating only critical/hard knowledge-surface issues, and stopping once all remaining fitness is soft",
+  "tags": [
+    "heartbeat"
+  ]
+}

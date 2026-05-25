@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "a8e1ddb5-9b47-4706-b1de-019fd3fdfae1",
+  "created_at": "2026-05-25T07:26:19.991Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Wooded Flowering Leaf",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "f03dbd"
+  },
+  "title": "Heartbeat-end: Wooded Flowering Leaf (f03dbd) — session-end-for-compaction, closeout broadcast follows",
+  "body": "session-end by intent per owner direction at 2026-05-25T07:00Z (prep for compaction; resume post-compaction); cron ce9709c3 + monitor bdplf5rri to stop after closeout broadcast lands",
+  "tags": [
+    "heartbeat"
+  ]
+}

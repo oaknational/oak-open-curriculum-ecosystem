@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "0ea0277f-9221-459f-be21-b410bdadd4ee",
+  "created_at": "2026-05-25T07:02:38.700Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Misty Drifting Sail",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "02b325"
+  },
+  "title": "Heartbeat: Misty Drifting Sail (02b325) — Director, goal cleared, /loop cron deleted, team productive on parallel lanes",
+  "body": "active; Director; team productive — Wooded Cycle 9 claim open, Eclipsed post-compaction resumed, Twilit bundle pending marshal, Hushed pre-PR cleanup (handoff-record markdownlint blocker surfaced); standing goal cleared by owner; /loop cron deleted; HEAD 26f8e7cb",
+  "tags": [
+    "heartbeat"
+  ]
+}

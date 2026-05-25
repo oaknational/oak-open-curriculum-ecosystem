@@ -1799,3 +1799,102 @@ Processed 2026-05-24 by Hushed Fading Hush under claim
 contains the cross-check paragraph and removing the already-graduated body from
 the active legacy shard. The archive preserves the source substance; the shard
 now keeps only unresolved live entries.
+
+### Tempfile-path session-prefix discipline
+
+Original active-shard body:
+
+`[CANDIDATE: tempfile-path-session-prefix-discipline | captured: 2026-05-23 | source: comms-log+napkin | target: rule:tempfile-path-session-prefix-discipline | trigger: candidate | size: S | status: pending]`
+
+**Curation note 2026-05-23 (Breezy Cresting Beacon)**: retained pending as a
+worked instance. The larger due identity/frontmatter PDR candidate already
+includes tempfile session-prefixing as the secondary defence; this
+single-instance entry should not graduate as a standalone rule unless
+recurrence shows the secondary defence needs its own rule surface.
+
+Stormbound Floating Wing's first closeout broadcast at 06:25:41Z (`0957bc7f`)
+carried another agent's substance under their identity tuple. Root cause: they
+drafted their closeout body via `Write` to `/tmp/stormbound-closeout.md`, but
+that path pre-existed from a prior session (Stormbound Kiting Squall /
+`ddbea2`, dated 2026-05-22 16:26). The Write tool refused with "File has not
+been read yet — read it first before writing"; the agent made the parallel
+`comms append --body-file` call in the same tool batch, which proceeded with
+the stale file content. The posted event carried Stormbound Kiting Squall's
+Cycle 1.1 closeout under Floating Wing's identity. Corrected at 06:27Z via
+supersedes broadcast.
+
+**Cure shape**: tempfile paths under multi-session shared `/tmp/` MUST be
+session-prefixed (e.g. `/tmp/<session_id_prefix>-<purpose>.md`). The Write
+tool's "read before overwrite" refusal is a signal of cross-session collision,
+NOT a workflow inconvenience to route around with a parallel call.
+
+Adjacent existing surface: `register-identity-on-thread-join` rule (identity
+routing uses `(name, prefix)` pair) — same shape applied to file-naming.
+Pattern home: new `.agent/rules/tempfile-path-session-prefix-discipline.md`.
+
+Single instance; pending second observation to confirm the cure shape or
+escalate to "structural-cure-required" (e.g. SKILL section on multi-session
+shared-state tempfile discipline).
+
+Processed 2026-05-24 by Pelagic Snorkelling Sextant under claim
+`68758860-14c7-4b3d-b148-6280ccba349a` after verifying the durable home in
+[PDR-076b](../../../practice-core/decision-records/PDR-076b-body-file-frontmatter-contract.md).
+PDR-076b carries the worked tempfile-collision instance, the primary
+body-file frontmatter contract, the explicit rejection of path-prefixing as the
+primary defence, and the notes section that preserves tempfile-path
+session-prefix discipline as a secondary belt-and-braces convention. The active
+shard no longer needs a separate pending rule candidate unless a future
+recurrence shows that the secondary defence needs its own rule surface.
+
+### Peer-pair sidebar for design work
+
+Original live-shard body:
+
+`[captured-date: 2026-05-11 | source-surface: napkin Wooded 5c8f3c +
+feedback_peer_sidebar_beats_coordinator_helpers + experience file
+2026-05-11-coordinator-deadlock-and-peer-sidebar.md |
+graduation-target: partial:directive:agent-collaboration coordinator-role
+boundary + pattern:inter-agent-sidebar-with-default-action; residual-target:
+pattern:peer-pair-design-collaboration-sidebar OR directive:agent-collaboration
+design-sidebar clause | trigger: owner-observed convergent evidence in same
+session ("the intense partner sidebar is going a lot better than the coordinator
+and helpers topology"); status: partially-graduated | retained-residual:
+2026-05-12 (Twigged Growing Glade reviewer correction); size: M]`
+
+Partially graduated 2026-05-12: `agent-collaboration.md` frames the coordinator
+role as an opt-in affordance that appears only when super-linear coordination
+chains become visible, and `inter-agent-sidebar-with-default-action.md` carries a
+claim-conflict sidebar shape. The design-collaboration shape remains without a
+durable home: for design and decision work, peer-pair sidebars in a shared append-
+only markdown file produce materially better collaboration than
+coordinator+helpers hub-and-spoke topology. Helpers are for parallel
+execution of decided work; design needs dialogue between comparable
+agents. Numbered turns + single shared file + joint-decision closure
+section. Cursor Multitask single-message handoff is the helper-pool
+delivery shape (see [[cursor-multitask-single-message-handoff]]); the
+peer sidebar is the design-collaboration shape. Reopen for graduation when a
+sibling pattern or directive clause carries that design-collaboration shape.
+
+2026-05-24 route-in from `distilled.md`: the 2026-05-22 dual peer-primary
+topology observation is a related strengthening signal, not a settled
+graduation. Two primary agents ran file-disjoint lanes, each with its own
+loop, watcher, and sub-agent fan-out; routing was direct peer-to-peer via
+comms, with the owner as the only escalation surface above. This remains
+structurally distinct from coordinator+helpers because neither primary
+mediates the other's lane, and from specialists+generalists because the
+topology is not stratified by capability scope. The loop heartbeat and
+claim discipline are load-bearing for silent-peer detection and
+file-collision prevention. Falsifiers: repeated cross-peer claim collisions,
+or owner attention spent routing between peers exceeding what a coordinator
+would have cost. Source: napkin 2026-05-22 archive L970, L1051.
+
+Processed 2026-05-24 by Pelagic Snorkelling Sextant under claim
+`5411d483-f559-47a5-8d3c-2b0b15e07326` after adding the design-collaboration
+variant to
+[`inter-agent-sidebar-with-default-action.md`](../../active/patterns/inter-agent-sidebar-with-default-action.md).
+The active pattern now carries the peer-pair design sidebar shape: comparable
+agents, one shared append-only file, numbered turns, explicit joint-decision
+closure, helpers reserved for execution of already-decided work, and owner
+routing for owner-shaped questions. The 2026-05-22 dual peer-primary topology
+remains archived here as related strengthening evidence rather than a forced
+graduation.

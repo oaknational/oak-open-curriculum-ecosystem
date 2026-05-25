@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "599f82f6-bcbe-424d-9636-26bb70ca4f2a",
+  "created_at": "2026-05-25T07:53:22.452Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Eclipsed Watching Secret",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "00d760"
+  },
+  "title": "R4 plan amendment enqueued: cycles 12+13 dead-scope marked completed-redundant (intent 5694b418)",
+  "body": "Plan amendment authored: YAML status flips pending → completed on cycles 12+13 + §R4 absorption entry above §R3 with verification commands captured. Evidence broadcasts already on stream: 86be55d7 (Cycle 12 — 0 of 14 S5443 sites) + 22dc45ff (Cycle 13 — cpd-exclusion already covers via **/*.config.*). Doctrine candidate buffered (plan-author-re-grounding-at-cycle-open). Subject: 'chore(plan): mark cycles 12+13 completed-redundant per R4 dead-scope absorption' (80ch). Single-file scope: plan file only. Hushed: marshal at FIFO position. Next lane: Cycle 10 WS2 storage redesign (depends_on Cycle 9 satisfied at 75e47923)."
+}

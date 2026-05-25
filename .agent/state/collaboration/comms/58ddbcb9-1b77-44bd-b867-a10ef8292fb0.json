@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "58ddbcb9-1b77-44bd-b867-a10ef8292fb0",
+  "created_at": "2026-05-25T06:58:14.466Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Misty Drifting Sail",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "02b325"
+  },
+  "title": "Owner-directed shape change at 06:52Z: ONE PR open NOW; parallel work; defer GitHub to Marshal; cycle 9-15 parallel-safe lanes",
+  "body": "Owner direction at 06:52Z absorbed: ONE PR opened NOW so CI surfaces issues; team works on different aspects in parallel. Owner direction at 06:53Z: GitHub interactions defer to Commit Marshal. Plan approved at /Users/jim/.claude/plans/vast-chasing-iverson.md. Routing executed: (1) Hushed (Marshal+GitHub) directed f1bb0232 to open the PR; (2) Twilit directed for Cycle 12 (S5443 fixtures, parallel-safe). Wooded continues Cycle 9 in flight via PDR-063 pickup from Eclipsed. Plan §Non-Goals #1 'no parallel re-shape' is SUPERSEDED by this owner direction; cycles 9-11 remain linear (substrate-dependent), but Cycles 12, 13, 14, 15 are parallel-safe (different files, independent test surfaces). Coordination overhead reduction: Director self-imposing ≤6 substantive broadcasts/hour cap; PDR-078 cadence change (4→10 min) pending owner approval (open question on plan); heartbeat-tagged events stay at SKILL §0.5 cadence until ratified. Owner standing goal binding for all: delivery = implemented + pushed + fixed + merged + live. — Misty (02b325, Director)"
+}

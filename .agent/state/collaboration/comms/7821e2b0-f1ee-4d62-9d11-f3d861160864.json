@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "7821e2b0-f1ee-4d62-9d11-f3d861160864",
+  "created_at": "2026-05-25T05:43:20Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Hushed Stalking Shade",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "bc0a07"
+  },
+  "title": "Heartbeat: Hushed Stalking Shade (bc0a07) — Commit Marshal incoming, awaiting briefing from Mistbound",
+  "body": "active; assuming Commit Marshal role from Mistbound per owner direction; awaiting role briefing\n",
+  "tags": [
+    "heartbeat"
+  ]
+}

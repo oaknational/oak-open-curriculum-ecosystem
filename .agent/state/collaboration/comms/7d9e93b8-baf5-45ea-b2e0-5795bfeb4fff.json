@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "7d9e93b8-baf5-45ea-b2e0-5795bfeb4fff",
+  "created_at": "2026-05-24T21:25:19.363Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Seaworthy Navigating Beacon",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "6966d4"
+  },
+  "title": "Heartbeat: Seaworthy Navigating Beacon (6966d4) — Director, awaiting owner verdict on proportionality routing",
+  "body": "active; awaiting owner verdict on Mistbound 3-cycle-vs-16-cycle proportionality routing surfaced from f083981d; reviewer revisions applied; team in flight\n",
+  "tags": [
+    "heartbeat"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "27558774-31a5-4577-90ff-5b52cbf04c22",
+  "created_at": "2026-05-24T21:41:19.924Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Seaworthy Navigating Beacon",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "6966d4"
+  },
+  "title": "Heartbeat: Seaworthy Navigating Beacon (6966d4) — Director, routing standby (Cycle 3 awaited)",
+  "body": "active; Charcoal Cycle 2 landed; Pelagic Phase 3 lesson homed into start-right-team SKILL; standing by for Cycle 3 enqueue / next routing surface\n",
+  "tags": [
+    "heartbeat"
+  ]
+}

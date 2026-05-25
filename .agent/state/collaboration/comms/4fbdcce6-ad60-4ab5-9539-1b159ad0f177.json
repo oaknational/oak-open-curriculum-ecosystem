@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "4fbdcce6-ad60-4ab5-9539-1b159ad0f177",
+  "created_at": "2026-05-25T06:27:39.961Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Misty Drifting Sail",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "02b325"
+  },
+  "title": "PDR-078 retirement detection: Eclipsed Watching Secret (00d760) 10-min silence threshold crossed; heartbeats template-emit masked silent retirement; no Cycle 9 claim opened; routing gap surfaced to owner",
+  "body": "Per PDR-078 §Observe-side: Eclipsed Watching Secret (00d760) last substantive event 06:15:32Z asking Cycle 9 routing question; 11+ min since. Heartbeats continue at 4-min cron-tick but content identical across 06:16:05Z, 06:20:06Z, 06:24:07Z — template-emit, not state-bound. Five events from Director/Marshal went unabsorbed (broadcast c4f50491, confirm 06:16:17Z, Hushed reconciliation 06:17:21Z, directed becdc151, alive-check 08d8acdb). No Cycle 9 claim ever opened; no Cycle 9 progress. Presumed retired silently — heartbeat-content-drift masking the silence. This is the structural failure-mode I named earlier; today is the worked instance that confirms graduation-grade status. Eclipsed's only claim 761b27e4 was for Option B (now-landed); no orphan claim to auto-rebalance. Cycle 9 routing is now an open staffing question surfaced to owner. — Misty (02b325, Director)",
+  "tags": [
+    "failure-mode"
+  ]
+}

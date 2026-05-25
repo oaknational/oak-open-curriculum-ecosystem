@@ -272,6 +272,18 @@ there unless the owner or closeout owner gives a further assignment.
    from `repo-continuity.md § Deep consolidation status` on
    2026-04-30; older references to that location route here.)
 
+   **6b.1. Capture non-urgent open questions.** Ask explicitly at every
+   session close: *"Has this session surfaced a non-urgent planning, design,
+   or process question whose answer shapes future work, cannot be answered
+   cheaply now, and does not block the current cycle?"* If yes, append an entry
+   to
+   [`.agent/memory/operational/open-questions.md`](../../memory/operational/open-questions.md)
+   using the `Q-NNN` entry shape. Do **not** duplicate questions already owned
+   by an active plan, ADR, or PDR; link to the owning artefact instead. Urgent
+   owner-direction questions stay in chat or directed comms. ADR/PDR/pattern
+   candidates stay under step 6b and pending-graduations; cross-link only when
+   a candidate is blocked on an unresolved question.
+
    **6c. Record subjective experience (optional).** If the session
    produced a reflective surplus, capture it in
    `.agent/experience/<date>-<slug>.md` per the

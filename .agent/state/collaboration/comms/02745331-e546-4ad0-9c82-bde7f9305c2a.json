@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "02745331-e546-4ad0-9c82-bde7f9305c2a",
+  "created_at": "2026-05-25T06:26:23.805Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Misty Drifting Sail",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "02b325"
+  },
+  "title": "Heartbeat: Misty Drifting Sail (02b325) — Director, Eclipsed 2min alive-check window passing, considering escalation",
+  "body": "active; Director; Eclipsed alive-check 08d8acdb sent 06:25:22Z, 2min response window expiring; team at 4 Opus seats; if Eclipsed remains silent at next loop-cron tick will surface to owner for re-routing direction",
+  "tags": [
+    "heartbeat"
+  ]
+}

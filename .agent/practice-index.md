@@ -86,6 +86,13 @@ opens/closes `git:index/head` claims before staging or committing,
 `session-handoff` closes the agent's own active state, and
 `consolidate-docs` audits stale or unresolved entries.
 
+Operational questions that are non-urgent, not cheaply answerable, and not
+already owned by a plan, ADR, or PDR route to
+[`memory/operational/open-questions.md`](memory/operational/open-questions.md).
+That register is sibling to pending-graduations: pending-graduations captures
+candidate doctrine or patterns, while open-questions captures unresolved
+decision-shapes for consolidation-time drain or owner surfacing.
+
 PDR-049 keeps the portable merge semantics in Practice Core. This host's
 concrete active-claims registry is
 [`state/collaboration/active-claims.json`](state/collaboration/active-claims.json).
@@ -161,6 +168,9 @@ evidence.
 | [PDR-064](practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md) — coordinator handoff: pre-positioning vs active-acknowledgement | No phenotype ADR. Substrate is an amendment to the [`start-right-team`](skills/start-right-team/SKILL-CANONICAL.md) SKILL §Closeout / handoff sections; the two-moments boundary lives in the SKILL surface, not in a separate substrate file |
 | [PDR-065](practice-core/decision-records/PDR-065-grounding-cost-amortisation-under-rotation.md) — grounding-cost amortisation under rotating-cast operation (Mode A / Mode B) | Phenotype **explicitly deferred** to first-instance evidence. Both load-bearing mechanisms — see PDR-065 §"Doctrine-change visibility under Mode B (deferred mechanism)" and §"Eligibility-signal carriage (deferred)" — are pending the first observed rotating-cast Round 1 instance. A substrate ADR will be authored only when the deferred mechanisms graduate |
 | [PDR-066](practice-core/decision-records/PDR-066-comms-events-as-failure-mode-channel.md) — comms-events as real-time failure-mode capture channel | [ADR-183](../docs/architecture/architectural-decisions/183-comms-event-tag-namespace-substrate.md) — comms-event tag namespace substrate (schema `tags` field on `narrative` / `lifecycle` / `directed` event definitions, tag namespace governance, CLI rendering convention, landing tranche) |
+| [PDR-077](practice-core/decision-records/PDR-077-marshal-as-cycle-discipline.md) — Commit Marshal as a distinct cycle-discipline role separable from Director and implementer | No standalone phenotype ADR. The substrate is the role itself, composed with the [`start-right-team`](skills/start-right-team/SKILL-CANONICAL.md) SKILL (responsibility labels in §3 already include `marshal`; the SKILL §Closeout discipline carries the marshal-cycle contiguous-execution exemption) and with [ADR-185](../docs/architecture/architectural-decisions/185-comms-event-auto-acceptance-metadata.md) (comms-event auto-acceptance metadata composes with the marshal-as-role observation: throughput improves on multiple axes at once, of which marshal-as-role is one) |
+| [PDR-078](practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md) — liveness-heartbeat contract (portable cadence + threshold + redundancy + exemption shape; Status Candidate) | [ADR-186](../docs/architecture/architectural-decisions/186-comms-event-heartbeat-lifecycle-substrate.md) — comms-event heartbeat lifecycle substrate (`lifecycle` event kind with `event_type='heartbeat'`, tolerate-unknown-event-type render rule, `[HEARTBEAT]` watcher token composed with the existing ADR-183 tag namespace, at-most-once render guarantee, consumer dual-filter contract during migration; Accepted 2026-05-24). PDR-078 ratifies Candidate→Accepted at Cycle 8 of [`post-m1-attestation-tidy-up.plan.md`](plans/agentic-engineering-enhancements/current/post-m1-attestation-tidy-up.plan.md) concurrent with the thin `start-right-team` SKILL §0.5 pointer landing |
+| [PDR-079](practice-core/decision-records/PDR-079-pdr-vs-adr-portability-distinction.md) — the PDR-vs-ADR portability distinction (PDRs are portable content; ADRs are repo-bound; embed-instinct for commit/event identifiers is a misclassification signal) | No standalone phenotype ADR. Substrate is the [`no-moving-targets-in-permanent-docs`](rules/no-moving-targets-in-permanent-docs.md) rule (scope-updated per PDR-079 §Cascade to apply strictly to portable surfaces — PDR files, rule files, pattern files — and explicitly NOT to ADR files) plus the corresponding hook-policy scope-update at [`.agent/hooks/policy.json`](hooks/policy.json) |
 
 ### Rules cited by Practice Core
 

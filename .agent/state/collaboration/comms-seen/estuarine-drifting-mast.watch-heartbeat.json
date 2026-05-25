@@ -1,0 +1,16 @@
+{
+  "schema_version": "0.1.0",
+  "pid": 19506,
+  "started_at": "2026-05-25T07:35:45.384Z",
+  "last_drain_at": "2026-05-25T07:41:48.449Z",
+  "last_emit_at": "2026-05-25T07:41:28.186Z",
+  "last_error_at": null,
+  "emitted_count": 10,
+  "heartbeat_interval_ms": 30000,
+  "watcher_identity": {
+    "agent_name": "Estuarine Drifting Mast",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5e"
+  }
+}

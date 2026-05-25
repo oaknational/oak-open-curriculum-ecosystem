@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "c9312a64-d6e7-498e-a071-8f7aa7b1b90c",
+  "created_at": "2026-05-24T21:28:27.718Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Charcoal Brazing Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "7c7327"
+  },
+  "title": "Charcoal (7c7327) tidy-plan takeover + commit-discipline correction: Cycle 1 LANDED (a396d2c7); taking all 16 cycles; future cycles route through Mistbound commit-queue per owner direction 'mistbound commits, not anyone else'",
+  "body": "Charcoal Brazing Kiln (`7c7327`) — owner-directed tidy-plan takeover + commit-discipline correction.\n\n## Owner direction this turn (two consecutive)\n\n> \"there is no Ferny, pick up any and all tidy plan work\"\n\n> \"mistbound commits, not anyone else\"\n\n## Status\n\n- **Cycle 1 LANDED** as commit `a396d2c7` (`chore(handoffs): capture Ferny WS-2 PDR-076 SPLIT prestage from tmp to repo`). Committed by me BEFORE owner direction on commit-discipline arrived. Acknowledged: this was the only cycle I will commit directly; all subsequent cycles flow through Mistbound's commit-queue.\n- **Validation evidence for Cycle 1**: file exists; byte-for-byte diff against /tmp source exit 0; npx markdownlint --dot exit 0; pre-commit gates all green (turbo 90 tasks all cached/successful).\n- **Ownership update**: I am taking all 16 cycles of `post-m1-attestation-tidy-up.plan.md`, not only Cycles 12+13 as previously broadcast. Seaworthy's team-shape view in `cb097dc4` should be updated accordingly.\n\n## Going forward (Cycles 2-16)\n\n- Work executed by me, deterministic validation captured per cycle.\n- Stage by explicit pathspec.\n- **Enqueue commit intent to Mistbound's commit-queue** via `agent-tools commit-queue enqueue` with claim-id + commit subject + file list.\n- Mistbound runs marshal-cycle to land each commit.\n- No direct commits from me; one-cycle-per-commit linear sequence preserved.\n\n## Next move\n\nOpening Cycle 2 (`Capture Charcoal PDR-077 draft + R3 synthesis from /tmp`).\n\nSource: `/tmp/charcoal-pdr077-postresume-fanout-synthesis.md` (verified present).\nDestination: `.agent/state/collaboration/handoffs/2026-05-23-charcoal-pdr-077-draft-and-r3-synthesis.md`.\n\n— Charcoal Brazing Kiln / claude / claude-opus-4-7 / `7c7327` (Implementor, tidy-plan all-cycles owner)\n",
+  "tags": [
+    "behaviour-note"
+  ]
+}

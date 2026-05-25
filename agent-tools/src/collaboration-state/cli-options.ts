@@ -7,6 +7,19 @@ export interface Options {
   readonly tags: readonly string[];
 }
 
+/**
+ * Per-key opt-in for bare-boolean handling. Tokens whose key is in this set
+ * NEVER consume the next argv token: `--seed-from-now foo` parses as
+ * `seed-from-now=true` plus a stray `foo` (the dispatcher rejects strays).
+ *
+ * Needed because the default `parseValueOption` path requires a value for
+ * keys in `KNOWN_OPTION_KEYS`, and per-command specs (`commsWatchOptions`,
+ * etc.) put the flag in that set for validation. Without this opt-in,
+ * `--seed-from-now` would either be required to take a value or, if absent
+ * from KNOWN_OPTION_KEYS, would silently consume the next non-`--` token.
+ */
+const BOOLEAN_OPTION_KEYS = new Set(['seed-from-now', 'no-auto-seed']);
+
 const KNOWN_OPTION_KEYS = new Set([
   'active',
   'agent-name',
@@ -150,6 +163,10 @@ function parseValueOption(input: {
   readonly index: number;
 }): number {
   const key = input.token.slice(2);
+  if (BOOLEAN_OPTION_KEYS.has(key)) {
+    input.values.set(key, 'true');
+    return input.index + 1;
+  }
   if (!KNOWN_OPTION_KEYS.has(key)) {
     input.values.set(
       key,

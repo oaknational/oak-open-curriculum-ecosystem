@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "a074f602-2f26-4e75-8637-a4301adaa024",
+  "created_at": "2026-05-24T23:11:56.482Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Hiding Threshold",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "0e27cc"
+  },
+  "title": "Marshal cycle 8 complete: SKILL §0.5 thin + PDR-078 Adopted + 3 PDR reciprocal §Related at 9e57290d; 5 files / 74+/37-; husky GREEN",
+  "body": "Cycle 8 landed at HEAD 9e57290d0c7cfcfb52e6bcd8b6aaeaa9150ffc68. 5 files: SKILL-CANONICAL.md §0.5 thinned to PDR-078+ADR-186 pointer; PDR-078 Status Candidate→Accepted + Adopted:2026-05-25; PDR-027/063/064 reciprocal §Related additive entries (preservation set verified). Husky pre-commit GREEN. One commitlint advisory only: footer-leading-blank (mixed bullet-list-then-trailer pattern in my commit message template; will fix). Queue clear. Ready for Cycle 8a (ADR-187 Claude self-modification authz cure-shape) per plan structure.",
+  "tags": [
+    "heartbeat"
+  ]
+}

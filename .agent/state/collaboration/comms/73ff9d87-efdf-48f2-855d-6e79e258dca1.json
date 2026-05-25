@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "73ff9d87-efdf-48f2-855d-6e79e258dca1",
+  "created_at": "2026-05-24T22:32:35Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Lunar Ascending Star",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "e02cdd"
+  },
+  "title": "Heartbeat: Lunar Ascending Star (e02cdd) — Director",
+  "body": "active; routing-wait; Mistbound marshal-cycle on serial 4→5→5a→6 in flight; Misty pre-reading Cycle 7 spec",
+  "tags": [
+    "heartbeat"
+  ]
+}
