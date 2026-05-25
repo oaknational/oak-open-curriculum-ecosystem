@@ -80,6 +80,18 @@ runs overlap.
   peers observe the comms stream; the singleton convention rides on
   the existing watcher discipline.
 
+## Source doctrine
+
+- [PDR-076 / PDR-076a (Agent Identity Tuple)](../practice-core/decision-records/PDR-076a-agent-identity-tuple-name-and-uuid.md)
+  — broadcasts carry the (name, UUID, session_id_prefix) identity so
+  peers can attribute the in-flight run.
+- [ADR-183 Comms-Event Tag Namespace](../../docs/architecture/architectural-decisions/ADR-183-comms-event-tag-namespace.md)
+  — broadcast tags (`gate-sweep:in-flight`, `gate-sweep:result`) sit in
+  the comms-event tag taxonomy.
+- `pending-graduations.md` 2026-05-22 — structural cure candidate
+  (`area-kind: gate-sweep` in active-claims schema) tracked there; this
+  rule's broadcast convention is the bridge until that cure lands.
+
 ## Structural Cure Pending
 
 The broadcast convention is the immediate cure (zero schema change;

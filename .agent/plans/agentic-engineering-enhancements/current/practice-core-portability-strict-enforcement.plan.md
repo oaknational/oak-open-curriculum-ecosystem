@@ -130,6 +130,22 @@ practice-index. The migration is mostly a relocation, not a rewrite.
 
 ---
 
+## Foundation Alignment
+
+- **PDR-079 (PDR-vs-ADR Portability Distinction)** — canonical statement
+  of the portability boundary this plan enforces. PDRs are
+  repo-agnostic Practice doctrine; ADRs are repo-local phenotype
+  decisions. Cross-references from PDRs into local repo paths violate
+  this distinction; this plan installs the structural enforcement.
+- **ADR-124 / PDR-007 (Core self-containment framing)** — predecessor
+  framing that this plan refines; not replaced wholesale, only made
+  enforceable.
+- **`metacognition.md §Cure Shape — Structural, Not Doc-Patch`** —
+  the scanner is the structural cure; doc-patch fixes alone would
+  drift again.
+
+---
+
 ## Quality Gate Strategy
 
 **Critical**: Run all quality gates after each task. Practice

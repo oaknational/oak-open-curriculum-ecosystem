@@ -176,6 +176,14 @@ is applicable at install time, not merely documented.
   — thread convention and identity schema (source doctrine).
 - [PDR-027 Threads, Sessions, and Agent Identity](../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md)
   — portable ratification of the additive-identity rule.
+- [PDR-076 Agent Identity Tuple and Body File Frontmatter](../practice-core/decision-records/PDR-076-agent-identity-tuple-and-body-file-frontmatter.md)
+  — parent identity-tuple decision.
+- [PDR-076a Agent Identity Tuple — Name and UUID](../practice-core/decision-records/PDR-076a-agent-identity-tuple-name-and-uuid.md)
+  — canonical (name, UUID, session_id_prefix) tuple that the routing-pair
+  section above ratifies.
+- [PDR-076b Body File Frontmatter Contract](../practice-core/decision-records/PDR-076b-body-file-frontmatter-contract.md)
+  — frontmatter shape carrying agent identity in temporary coordination
+  files.
 - [`agent-tools/docs/agent-identity.md`](../../agent-tools/docs/agent-identity.md)
   — deterministic identity derivation CLI and platform wrapper status.
 - [PDR-029 Perturbation-Mechanism Bundle](../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md)
