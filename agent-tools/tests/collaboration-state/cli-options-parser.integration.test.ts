@@ -10,11 +10,11 @@ describe('parseOptions — bare-boolean flags', () => {
       'watch',
       '--seed-from-now',
       '--comms-dir',
-      '/tmp/comms',
+      '/fake-test-path/comms',
     ]);
 
     expect(parsed.values.get('seed-from-now')).toBe('true');
-    expect(parsed.values.get('comms-dir')).toBe('/tmp/comms');
+    expect(parsed.values.get('comms-dir')).toBe('/fake-test-path/comms');
   });
 
   it('parses --no-auto-seed as a bare-boolean flag without consuming the next token', () => {
@@ -24,11 +24,11 @@ describe('parseOptions — bare-boolean flags', () => {
       'watch',
       '--no-auto-seed',
       '--seen-file',
-      '/tmp/seen.json',
+      '/fake-test-path/seen.json',
     ]);
 
     expect(parsed.values.get('no-auto-seed')).toBe('true');
-    expect(parsed.values.get('seen-file')).toBe('/tmp/seen.json');
+    expect(parsed.values.get('seen-file')).toBe('/fake-test-path/seen.json');
   });
 
   it('parses both --seed-from-now and --no-auto-seed together as bare booleans', () => {
@@ -39,12 +39,12 @@ describe('parseOptions — bare-boolean flags', () => {
       '--seed-from-now',
       '--no-auto-seed',
       '--comms-dir',
-      '/tmp/comms',
+      '/fake-test-path/comms',
     ]);
 
     expect(parsed.values.get('seed-from-now')).toBe('true');
     expect(parsed.values.get('no-auto-seed')).toBe('true');
-    expect(parsed.values.get('comms-dir')).toBe('/tmp/comms');
+    expect(parsed.values.get('comms-dir')).toBe('/fake-test-path/comms');
   });
 
   it('parses --seed-from-now at the end of argv without consuming a non-existent next token', () => {
