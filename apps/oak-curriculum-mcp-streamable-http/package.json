@@ -19,8 +19,6 @@
     "start": "bash scripts/start-server.sh",
     "prod:harness": "pnpm exec tsx scripts/server-harness.ts",
     "prod:requests": "pnpm exec tsx scripts/run-requests.ts",
-    "probe:remote": "bash scripts/probe-remote-mcp.sh",
-    "smoke:agent-preview": "pnpm exec tsx scripts/agent-preview-smoke.ts",
     "prod:diagnostics": "pnpm build && pnpm prod:harness",
     "type-check": "tsc -p tsconfig.lint.json --noEmit && tsc -p widget/tsconfig.json --noEmit",
     "lint": "eslint .",

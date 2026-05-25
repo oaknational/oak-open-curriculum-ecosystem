@@ -1,27 +1,21 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
-## 2026-05-25 — Salty Mooring Dock / cursor / Composer / `dc4dd7` — PR #114 preview ops + agent smoke scripts
+## 2026-05-25 — Salty Mooring Dock / cursor / Composer / `dc4dd7` — PR #114 preview agent test checklist
 
-**Landed**: `dcf92bb5` — remote MCP verification tooling in
-`apps/oak-curriculum-mcp-streamable-http`:
+**Intent**: manual black-box checklist (what / how / expected results) for preview
+MCP validation in Cursor — not automated curl/npm probes.
 
-- `scripts/probe-remote-mcp.sh` + `pnpm probe:remote` — unauthenticated baseline
-- `scripts/agent-preview-smoke.ts` + `pnpm smoke:agent-preview` — agent path when
-  `MCP_PROBE_BEARER_TOKEN` is set
-- [docs/agent-preview-verification.md](../../../apps/oak-curriculum-mcp-streamable-http/docs/agent-preview-verification.md)
+**Doc**: [agent-preview-test-checklist.md](../../../apps/oak-curriculum-mcp-streamable-http/docs/agent-preview-test-checklist.md)
 
-**Also this session** (prior commits on branch): Sonar S5443 fix in
-`agent-tools` CLI parser integration tests (`2f5e1871`); `.cursor/mcp.json`
-`oak-preview-1` URL pointed at education-evidence preview host.
+**Also on branch**: Sonar S5443 fix (`2f5e1871`); `.cursor/mcp.json` `oak-preview-1`
+URL for education-evidence preview.
 
-**Validated**: both scripts green against
-`https://poc-oak-open-curriculum-mcp-git-feat-education-evidence-c19788.vercel.thenational.academy`
-(unauthenticated layer). Full MCP tool exercise in Cursor confirmed earlier in
-session (same preview).
+**Validated in Cursor** (same preview host): `get-curriculum-model`,
+`get-changelog-latest`, `browse-curriculum`, `search`, `explore-topic`,
+`get-subjects`, and related tools — usable data, no blocking 5xx.
 
-**Next safe step**: owner push branch; open or refresh PR #114 if not already;
-run `pnpm smoke:agent-preview` with Bearer after OAuth when validating auth path
-in CI or locally.
+**Next safe step**: work through checklist sections A–H on each new preview URL;
+record pass/fail in PR notes.
 
 ---
 

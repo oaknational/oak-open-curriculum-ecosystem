@@ -13,15 +13,20 @@ merge_class: append-only-narrative
 
 ### What worked
 
-- Retired `smoke:remote` gap filled with `probe-remote-mcp.sh` (curl, no `/tmp`
-  paths) plus `agent-preview-smoke.ts` reusing e2e `parseSseEnvelope` — both
-  green on education-evidence preview without a Bearer token.
-- Operational docs belong in MCP app `docs/` + README checklist, not a new ADR.
+- Owner wanted a **manual test checklist** (what / how / expected results), not
+  automated `probe:remote` scripts — doc lives at
+  `docs/agent-preview-test-checklist.md` in the MCP app workspace.
+- Operational docs belong in MCP app `docs/` + README, not a new ADR.
+
+### Correction (same session, after owner feedback)
+
+- Misread "test script" as shell/ts automation; removed `probe-remote-mcp.sh`
+  and `agent-preview-smoke.ts` in favour of the checklist doc only.
 
 ### Surprise
 
-- `prod:requests` treats unauth `/mcp` 401 as failure; preview baseline needs a
-  script that expects 401 as success.
+- `prod:requests` treats unauth `/mcp` 401 as failure; HTTP baseline belongs in
+  the checklist as optional curl rows with expected 401, not a passing smoke job.
 
 ### candidate
 

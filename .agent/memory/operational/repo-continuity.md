@@ -187,9 +187,8 @@ the PR #108 snagging plan, not duplicated here:
 - [gate-1a delivery addendum](../../plans/connecting-oak-resources/knowledge-graph-integration/current/gate-1a-delivery-parallel-execution-addendum.plan.md)
 
 **Preview MCP validation**: PR #108 black-box pass documented 2026-05-24
-(Velvet Stalking Moth). PR #114 branch adds repeatable scripts:
-`pnpm probe:remote` and `pnpm smoke:agent-preview` (see
-[agent-preview-verification.md](../../../apps/oak-curriculum-mcp-streamable-http/docs/agent-preview-verification.md)
+(Velvet Stalking Moth). PR #114 branch adds a manual agent preview test checklist (see
+[agent-preview-test-checklist.md](../../../apps/oak-curriculum-mcp-streamable-http/docs/agent-preview-test-checklist.md)
 and [connecting thread § 2026-05-25 Salty Mooring Dock][connecting]). Sonar on
 PR #114 was green after fake-test-path fixture fix at `2f5e1871`.
 
