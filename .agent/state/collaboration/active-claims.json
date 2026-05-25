@@ -1862,6 +1862,37 @@
       "phase": "abandoned",
       "staged_bundle_fingerprint": "108b11e7c5f0bbc18062dd453d8ab7ff8d709ee56846c8ca28d2d6253e5a7769",
       "staged_name_status": "A\t.agent/experience/2026-05-25-stormy-surfing-dock-pr-0-and-sweep-incident.md\nM\t.agent/memory/active/napkin.md\nA\t.agent/memory/operational/curator-passes/2026-05-25-thermal-buffeting-plume.md\nM\t.agent/memory/operational/curator-passes/README.md\nM\t.agent/memory/operational/open-questions.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nM\t.agent/plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md\nM\t.agent/practice-core/decision-records/PDR-081-curator-role-and-substrate-care-lane.md\nM\t.agent/skills/curator-pass/SKILL-CANONICAL.md\nM\t.agent/skills/start-right-team/SKILL-CANONICAL.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nA\t.agent/state/collaboration/comms-seen/Fiery-Kindling-Brazier.json\nM\t.agent/state/collaboration/comms-seen/hushed-stalking-shade.json\nA\t.agent/state/collaboration/comms-seen/thermal-buffeting-plume.json\nA\t.agent/state/collaboration/comms-seen/thermal-buffeting-plume.watch-heartbeat.json\nA\t.agent/state/collaboration/comms/15e84895-9a6d-4f1b-aeba-6d247f5e90fc.json\nA\t.agent/state/collaboration/comms/18e6f341-03ea-46e2-9577-6d27fe4642b3.json\nA\t.agent/state/collaboration/comms/19e1a300-c4ab-4f18-bc88-088c2ccbf568.json\nA\t.agent/state/collaboration/comms/275ed1c1-5381-4e6d-899e-9fca19948147.json\nA\t.agent/state/collaboration/comms/4a537d1e-5061-47d7-8ead-b8189edec53a.json\nA\t.agent/state/collaboration/comms/50473b3e-f8dc-45a7-8c25-4fad6ae5b20c.json\nA\t.agent/state/collaboration/comms/53fa079e-a42e-469b-a1c9-d4f5be165f23.json\nA\t.agent/state/collaboration/comms/5cbf6539-7624-4638-b63f-6b1ab6ee52f3.json\nA\t.agent/state/collaboration/comms/6ec248cc-eddd-45af-aba4-3519888512f1.json\nA\t.agent/state/collaboration/comms/7d8cbd94-2e3b-4d3a-8d97-f8c625b6a576.json\nA\t.agent/state/collaboration/comms/8abe0644-ce03-4442-9dce-e86f611129e3.json\nA\t.agent/state/collaboration/comms/8b0da0eb-56d0-44f9-bd15-ca8665541cab.json\nA\t.agent/state/collaboration/comms/8e79bd1e-be2b-4182-a1da-8a922f88bec3.json\nA\t.agent/state/collaboration/comms/91311a26-59e7-4f3b-9771-9a2e9e45afae.json\nA\t.agent/state/collaboration/comms/a05b857d-6bc3-41dc-99b5-12faa9712ade.json\nA\t.agent/state/collaboration/comms/a185a793-6263-4468-9223-58e8a0480e37.json\nA\t.agent/state/collaboration/comms/ab01da4e-dce4-4489-856d-3ff545a41cf4.json\nA\t.agent/state/collaboration/comms/abca6444-8fae-4fdf-8032-fb9b9916f647.json\nA\t.agent/state/collaboration/comms/ae48f2a6-bb17-4a0d-93e9-b7643d316dc0.json\nA\t.agent/state/collaboration/comms/b62854f6-5965-4000-9143-0c13182f9d9e.json\nA\t.agent/state/collaboration/comms/c2474279-c706-4b45-8e94-fc751bbc8acd.json\nA\t.agent/state/collaboration/comms/c562a1bd-2395-479b-b968-5f60e5e27ef6.json\nA\t.agent/state/collaboration/comms/c5d50c08-df06-432f-9758-9494105014e7.json\nA\t.agent/state/collaboration/comms/c92720bf-106a-4060-81df-079115efe305.json\nA\t.agent/state/collaboration/comms/cf0557fa-5dd0-45a7-a31a-9e93d3a6ffc3.json\nA\t.agent/state/collaboration/comms/d93320d1-b61d-4c66-8896-93c32d9fd07e.json\nA\t.agent/state/collaboration/comms/e4f12390-e8a0-41e2-8a6e-2e431339c929.json\nA\t.agent/state/collaboration/comms/f7a20db6-b42d-4886-898f-0baf1dd16b6a.json\nA\t.agent/state/collaboration/comms/fabe96d6-8fa1-4da5-850d-0bf2abf4ed49.json\nA\t.agent/state/collaboration/comms/fc5561c8-078d-4b1b-afa0-5df4459b293f.json\nM\t.agent/state/collaboration/shared-comms-log.md\n"
+    },
+    {
+      "intent_id": "7c8faabb-31f1-41d2-9b9e-ab480658be92",
+      "claim_id": "75210b4c-9c15-4853-80a5-ccbfe1740a03",
+      "agent_id": {
+        "agent_name": "Fiery Kindling Brazier",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "9f4026"
+      },
+      "files": [
+        ".agent/experience/2026-05-25-hushed-stalking-shade-the-sweep-and-the-reinvitation.md",
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/operational/pending-graduations.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/state/collaboration/comms-seen/Fiery-Kindling-Brazier.json",
+        ".agent/state/collaboration/comms-seen/Stormy-Surfing-Dock.json",
+        ".agent/state/collaboration/comms/492f57c3-830c-4d8a-a21c-77d644ae4d38.json",
+        ".agent/state/collaboration/comms/89bbb056-ce20-4fd2-9b22-f07a69950f0a.json",
+        ".agent/state/collaboration/comms/8b258b9d-b6e7-4387-b3e5-5aed90076cf2.json",
+        ".agent/state/collaboration/comms/e8910fc7-57c1-43a9-8ffe-c483fcb0998e.json",
+        ".agent/state/collaboration/shared-comms-log.md"
+      ],
+      "commit_subject": "chore(handoff): land Hushed experience + auto-fix-awareness graduation entry + comms drain",
+      "queued_at": "2026-05-25T13:27:37.979Z",
+      "updated_at": "2026-05-25T13:28:44.676Z",
+      "expires_at": "2026-05-25T13:42:37.979Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "39c5e878e9dcb2c36d3686461cb82fbb41862839b94c35d551219d9776971d9a",
+      "staged_name_status": "A\t.agent/experience/2026-05-25-hushed-stalking-shade-the-sweep-and-the-reinvitation.md\nM\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/pending-graduations.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/comms-seen/Fiery-Kindling-Brazier.json\nA\t.agent/state/collaboration/comms-seen/Stormy-Surfing-Dock.json\nA\t.agent/state/collaboration/comms/492f57c3-830c-4d8a-a21c-77d644ae4d38.json\nA\t.agent/state/collaboration/comms/89bbb056-ce20-4fd2-9b22-f07a69950f0a.json\nA\t.agent/state/collaboration/comms/8b258b9d-b6e7-4387-b3e5-5aed90076cf2.json\nA\t.agent/state/collaboration/comms/e8910fc7-57c1-43a9-8ffe-c483fcb0998e.json\nM\t.agent/state/collaboration/shared-comms-log.md\n"
     }
   ],
   "claims": []

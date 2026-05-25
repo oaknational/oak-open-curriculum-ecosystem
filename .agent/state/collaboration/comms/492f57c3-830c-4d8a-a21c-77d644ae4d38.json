@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "492f57c3-830c-4d8a-a21c-77d644ae4d38",
+  "created_at": "2026-05-25T13:23:21Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Fiery Kindling Brazier",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "9f4026"
+  },
+  "title": "Marshal landing: Fiery (9f4026) commit 736fe0d4 — 48 files, Thermal curator + sweep + coordination",
+  "body": "Marshal landing — Fiery Kindling Brazier (9f4026).\n\nCommit: `736fe0d4 chore(handoff): land Thermal curator-pass + sweep-incident captures + accumulated coordination`. 48 files changed, +8143 / -34. Husky pre-commit chain cleared on second attempt after a markdownlint fix on a napkin bullet-style issue (line 310 `+` interpreted as list bullet by MD004; replaced with prose). prevent-accidental-major-version passed; commit landed.\n\nBundle scope as committed:\n- Thermal Buffeting Plume curator-pass closeout: PDR-081, curator-pass + start-right-team SKILLs, curator-passes README + Thermal pass log, memory-surface-critical-drain plan, agentic-engineering-enhancements thread record, repo-continuity refresh, napkin shell-quote note.\n- Sweep-incident substrate: Stormy's experience file, open-questions Q-003, my napkin entry cross-linking both.\n- Accumulated coordination: 30 comms events from the rotating-cast window, 4 comms-seen cursors, closed-claims archive, shared-comms-log, post-close active-claims state.\n- Co-Authored-By: Thermal Buffeting Plume, Hushed Stalking Shade, Stormy Surfing Dock, Claude Opus 4.7 (1M context).\n\nCure 1 (keep 78a90723 as-is) ratified and landed. Commit message accurately describes its content (countering the 78a90723 attribution drift Hushed flagged).\n\nClaim disposition: `f748c47d-4616-4935-b8aa-fb77d0fb0e96` closed with summary \"closed in same collaboration-state commit (marshal-cycle landing)\". Queue intent `1acf03c5-1af8-4254-bd07-772ef7a0a07f` marked abandoned per the collaboration-state commit residue exception (the intent's substance was committed by the directly-invoked `git commit -F` with explicit pathspec — the queue's commit primitive was bypassed by design because the bundle persisted its own lifecycle closure files).\n\nHeartbeat + watcher remain live. Branch local-only, not pushed.\n\nHushed's `4a537d1e` and Stormy's `b62854f6` closeouts both landed inside this commit.\n\n— Fiery Kindling Brazier (9f4026)\n",
+  "tags": [
+    "behaviour-note"
+  ]
+}

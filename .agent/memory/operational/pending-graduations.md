@@ -792,3 +792,63 @@ landing target.
 No graduation pending — the plan body is the substance; this entry is the
 audit trail so a future agent can locate the plan from the
 pending-graduations register without first knowing its filename.
+
+### 2026-05-25 — Multi-agent auto-fix awareness (first-instance, second-instance-trigger gated)
+
+[captured: 2026-05-25 | source: Hushed Stalking Shade `bc0a07` post-closeout
+broadcast `89bbb056` + experience file
+`.agent/experience/2026-05-25-hushed-stalking-shade-the-sweep-and-the-reinvitation.md`
+| target: rule:multi-agent-auto-fix-awareness | trigger: second-instance |
+size: S | status: pending]
+
+**Substance**: before running any repo-wide auto-fix command in a multi-agent
+window — `pnpm markdownlint:root` (which runs `markdownlint --dot --fix .`),
+`pnpm format:root` (`prettier --write .`), and similar — name the peer-owned
+files in the working tree and confirm whether the auto-fix should touch them.
+The `husky` pre-commit hook chain then promotes the auto-fix output into the
+staged set; in a single-agent window this is correct behaviour, in a
+multi-agent window it sweeps peer-owned files into the agent's commit.
+
+**Worked instance**: commit `78a90723` (2026-05-25 13:00Z Hushed Stalking
+Shade). Hushed used `pnpm markdownlint:root` to auto-fix an MD032 violation
+in their own `.agent/memory/operational/pending-graduations.md`. The
+whole-repo auto-fix touched 4 of Stormy Surfing Dock's plan-freshness files
+(active claim `cc4b1190` EEF plan-freshness lane). The husky pre-commit
+chain promoted those auto-fix changes into the staged set and a `git add`
+side-effect somewhere in the chain added an untracked file
+(`please-do-a-deep-mighty-peach.plan.md`, 432 lines). The result: a commit
+titled `chore(memory): capture human-composer-tui session insights in
+pending-graduations` actually landed 5 files (1 intended + 4 peer-owned),
+described as a sweep-incident by both Hushed (incident analysis) and
+Stormy (ratification — substance intact, attribution drifted).
+
+**Composition with existing doctrine**: this candidate composes with
+[`monitor-branch-touched-files`](../../rules/monitor-branch-touched-files.md)
+(which already names the multi-agent-tree-meaning-shift); the new candidate
+narrows to the specific class of *repo-wide auto-fix commands* whose
+working-tree footprint is invisible at invocation time.
+
+**Hypothesised cure shape**: a rule (e.g.
+`.agent/rules/check-peer-files-before-repo-wide-autofix.md`) requiring an
+agent to (a) read `git status --short` for peer-owned files before running
+any `*:root` auto-fix command in a multi-agent window, and (b) either
+restrict the auto-fix to their own files (`markdownlint --fix <files>`,
+`prettier --write <files>`) or coordinate with the peer-owner before
+proceeding. The husky hook chain's auto-promotion behaviour is correct in
+isolation; the cure is at the agent's invocation discipline, not at the
+hook chain.
+
+**Falsifiability**: a second multi-agent session has the same sweep
+incident with a different repo-wide auto-fix command (`format:root`,
+`markdownlint:root` again on a different agent's session, etc.). If
+second-instance lands, graduation is due; if no second instance accrues
+across a sustained multi-agent window, the first instance was solvable
+without a rule install and the candidate stays pending.
+
+**Source**: Hushed's experience file under
+`.agent/experience/2026-05-25-hushed-stalking-shade-the-sweep-and-the-reinvitation.md`
+carries the long-form narrative. Stormy's experience file under
+`.agent/experience/2026-05-25-stormy-surfing-dock-pr-0-and-sweep-incident.md`
+carries the affected-peer perspective. Stormy's file landed in commit
+`736fe0d4`; Hushed's file lands in the follow-on marshal commit alongside
+this entry.

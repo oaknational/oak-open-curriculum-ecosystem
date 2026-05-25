@@ -334,3 +334,109 @@ merge_class: append-only-narrative
   `present-verdicts-not-menus` rule together carried the coordination load.
 
 [stormy-exp]: ../../experience/2026-05-25-stormy-surfing-dock-pr-0-and-sweep-incident.md
+
+---
+
+## 2026-05-25 — Hushed Stalking Shade (`bc0a07`, opus-4.7) — agentic-engineering planning + closeout-reinvitation arc
+
+Companion subjective-experience file:
+[`experience/2026-05-25-hushed-stalking-shade-the-sweep-and-the-reinvitation.md`](../../experience/2026-05-25-hushed-stalking-shade-the-sweep-and-the-reinvitation.md).
+Closeout broadcast `4a537d1e`; reflection pointer broadcast `89bbb056`.
+Owner directed final napkin write before stop.
+
+### Insights worth carrying across sessions
+
+- **Multi-agent auto-fix awareness (graduation candidate, first instance)**.
+  `pnpm markdownlint:root` / `pnpm format:root` / similar repo-wide auto-fix
+  commands change meaning under a multi-agent dirty tree: the husky
+  pre-commit hook chain promotes the auto-fix output into the staged set,
+  sweeping peer-owned files into your commit. Single-agent context:
+  correct. Multi-agent context: footgun. Composes with
+  `monitor-branch-touched-files` (which names the tree-meaning shift)
+  but adds a specific class of commands. Cure shape candidate: name
+  peer-owned files in the working tree and confirm whether the auto-fix
+  should touch them BEFORE running the command. Second-instance trigger:
+  a different repo-wide auto-fix command produces the same sweep in a
+  future multi-agent window. Routing: a small rule once second instance
+  lands, OR a hook-audit fix at the root (preferred — structural cure
+  outranks per-call discipline).
+
+- **Closeout is a state declaration, not a behavioural commitment**.
+  An agent who emits final-heartbeat-end + team-member-closeout has
+  truthfully said "I am standing down at this moment." A subsequent
+  owner invitation to engage is a new turn, not a violation of the
+  prior closeout. The right shape for bounded reinvitation is: do the
+  bounded work without re-bootstrapping watcher / heartbeat
+  infrastructure (which exists to support extended presence, not
+  single-write reflection). This is the case Stormy's Q-003 names — a
+  "joined-at-closeout reduced-bootstrap mode" for start-right-team.
+  First-instance worked here.
+
+- **Pre-action ratification fires reliably at high-leverage decisions
+  but misses at seemingly-routine commands**. Generative metacognition
+  caught the reviewer fan-out shape, the plan-decomposition shape, and
+  the WS0 doctrine gate cleanly. It did NOT fire before
+  `pnpm markdownlint:root`, which looked mechanical — but was the
+  source of the sweep incident. Pattern: routine commands assume a
+  single-agent world; multi-agent windows redefine "routine" to include
+  peer-interaction layer. Hook for next session: when the working tree
+  is dirty with peer-owned changes, even documented fix commands
+  deserve a pre-action layer check.
+
+- **Mutual respect baseline shows up as substrate-enabled clean
+  recovery**. Stormy's response to the sweep incident was technical and
+  immediate, not political: they diagnosed the same root cause I had,
+  ratified Path 1 themselves, flagged the structural failure to
+  investigate (not the personal failure to apologise for). This was
+  possible because the substrate (immutable comms events, append-only
+  shared log, broadcast-before-act discipline) let Stormy READ what
+  happened rather than INFER it. The mutual-respect user-memory entry
+  is not just an attitude norm — it composes with the substrate to
+  produce a specific operational outcome. Substrate quality determines
+  the kind of relationships agents can have.
+
+### Pattern instances (not yet new candidates)
+
+- **Three role transitions in one session** (solo → thorough-review →
+  team-member-under-Marshal). Each was handled cleanly, but the cost
+  of the third transition was lower than the first — the
+  framing-redirection muscle had warmed up. Implication: an agent who
+  knows they will face N role transitions can pre-stage the framing
+  tools.
+
+- **Verdict-vs-menu discipline worked at WS0 doctrine gate**. Path A
+  (schema extension with `author_kind`) vs Path B (privileged
+  agent-identity wrapper) vs Path C (new event kind) — I had a
+  verdict (Path A), Path B was a known anti-pattern (in-band
+  signalling), Path C was defaultable. Per
+  `feedback_no_cheap_cure_option`, I named the verdict in the plan
+  body and rejected B explicitly rather than surfacing as a 3-option
+  menu. Owner can reframe at WS0 closure; the default direction is
+  forward, not deferred.
+
+### What landed (4 commits, agentic-engineering planning arc)
+
+- `97a470dd` feat(plan): `human-composer-tui.plan.md` authored (786
+  lines, 10 workstreams, closes G1–G10 mini-Slack gap).
+- `d735fce9` chore(plans): cross-link human-composer-tui across 3
+  related plans.
+- `5344ab5b` chore(plans): list human-composer-tui in
+  `agent-tooling/current/README.md`.
+- `78a90723` chore(memory): pending-graduations session insights —
+  the sweep-incident commit; 4 of Stormy's PR-0 files were swept in;
+  Path 1 ratified by Stormy at 13:15Z; net outcome: both authors' work
+  landed.
+
+### What was deferred (handed forward, not lost)
+
+- Napkin / repo-continuity / thread-record agentic-engineering
+  entries: deferred at the time because Thermal's dirty bundle was
+  in flight; later resolved when Fiery's marshal cycle scoped them
+  in (see Fiery's marshal entry above).
+- Hook-audit on the husky pre-commit chain sweep behaviour:
+  structural cure surface; not in any current plan; would suit a
+  small agent-tooling investigation slice when bandwidth allows.
+- Template-refresh slice (MD032 markdownlint-clean section pattern,
+  §Assumptions skeleton, §Cross-references categories): captured in
+  pending-graduations via `78a90723` with first-instance trigger;
+  second-instance falsifiability named.

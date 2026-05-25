@@ -44210,6 +44210,48 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "75210b4c-9c15-4853-80a5-ccbfe1740a03",
+      "agent_id": {
+        "agent_name": "Fiery Kindling Brazier",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "9f4026"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T13:26:38Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Follow-on marshal cycle: land Hushed experience file + multi-agent-auto-fix-awareness pending-graduations entry + comms drain",
+      "intent_to_commit": "7c8faabb-31f1-41d2-9b9e-ab480658be92",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T13:28:42Z",
+        "closed_by": {
+          "agent_name": "Fiery Kindling Brazier",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "9f4026"
+        },
+        "summary": "closed in same collaboration-state commit (cycle-2 marshal landing)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "75210b4c-9c15-4853-80a5-ccbfe1740a03",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
