@@ -9,6 +9,68 @@ merge_class: append-only-narrative
 
 # Napkin
 
+## 2026-05-25 — Mistbound Passing Candle / claude / claude-opus-4-7 / `e77243`
+
+### What Worked
+
+- **Reviewer dispatch surfaced a doctrine-by-analogy error mid-process**.
+  I treated plan-shape work like code-shape work (write → review). For code,
+  axes are stable (does it work / is it tested / is it idiomatic). For
+  plan-shape, the axes ARE the design choice; reviewers should challenge axes
+  *at the inventory step*, not after the ranking is committed. The
+  user-specified 4 axes (E/I/S/Philosophy) constrained the ranking framework
+  but not the inventory expansion — Betty surfaced obligation-tier taxonomy,
+  Fred surfaced P9-first, Wilma surfaced silent-API-failure cure, all of which
+  should have entered the inventory before scoring. Cure: future plan-shape
+  work dispatches reviewers at the inventory step too.
+- **Verifying before applying reviewer findings paid off twice this session**:
+  rejected Wilma's "decomposition default bypasses commit-queue" (verified P3
+  serialises regardless); rejected Wilma's strict-sequencing claim (verified
+  P9 triggers are mostly context-load shape, not coordination-state reads).
+  The reviewer's authority does not substitute for verification at the moment
+  of applying.
+
+### Mistakes Made (retrospective metacognition surfaced these in real time)
+
+- **Metacognition over-engineering at ~20%**. I ran four /oak-metacognition
+  passes (#1, LTAE-as-metacognition, #2, #2.5) before plan authoring, plus a
+  final pass. Pass #2 ("why does this matter") was the most compressible; the
+  substance was useful but the framing produced one error (the
+  "agents-hurt-above-threshold" model) that assumptions-expert later refuted.
+  Cure: pre-commit explicit acceptance criteria for each metacognition pass;
+  reject the pass if it only restates earlier insight.
+- **Missed docs-adr-expert at the initial reviewer dispatch**. Only caught it
+  via the final metacognition pass. The reviewer found 4 cross-reference
+  defects (PDR-074 mislinked to graduation shard; n-agent-experiments path;
+  hypothesis.md path; ADR-186 unlinked). All small, but the under-engineering
+  pattern is: when a plan has many cross-references, docs-adr-expert is
+  mandatory at first dispatch, not as a follow-up.
+- **Linear-ranking-as-deliverable framing risk**. The user asked for "an
+  ordered list of improvements." I initially started writing the plan
+  structured around the ranked list as spine. Metacognition pass #2.5 caught
+  this. The deliverable is the plan; the ranking is an input. Cure: at
+  plan-authoring start, distinguish the user's request shape from the user's
+  actual impact target; if they diverge, surface the choice rather than
+  auto-resolve.
+
+### Pattern Crystallising
+
+- **The single biggest substantive insight of the session is structural, not
+  n=2-specific**: the ~6× friction multiplier observed in the Fiery/Stormy
+  PR-115 cycle is the most legible instance of a general scale-sensitivity gap
+  in the coordination substrate. PDR-082's discrete-mode shape is the right
+  first-step cure (Betty verified); the long-term shape is the obligation-tier
+  taxonomy where each obligation carries scale-sensitivity as metadata. The
+  plan's WS3γ seeds this; WS8 captures the verdict for non-re-derivation.
+- **"Doctrine additions ARE coordination cost"** is a non-obvious framing that
+  re-shapes the rest of the inventory. Every rule, SKILL amendment, PDR loads
+  at session-open; the skill-load budget (~80 active-skill ceiling) and
+  directive-file-context-budget (30%) are pressured budgets that compound
+  across every future session. P9 (rule/skill topology refinement) is the only
+  inventory item with **negative** cost-direction; it lowers load
+  per-session-forever. Linear ranking by E+I+S buries this because the
+  convolution is structurally blind to cost-direction sign.
+
 ## 2026-05-25 — Breezy Flowing Dock / codex / GPT-5 / `019e5f`
 
 ### Processing Disposition

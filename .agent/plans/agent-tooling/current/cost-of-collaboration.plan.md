@@ -1825,6 +1825,27 @@ foundational-rule-drop instance observed during P6/P7/residual
 execution becomes input to P9 sub-WS-A and the honour-rate harness
 scenario library.
 
+**Sequencing amendment (2026-05-25)** — the sibling plan
+[`n2-and-coordination-efficiency-program-2026-05-25.plan.md`](n2-and-coordination-efficiency-program-2026-05-25.plan.md)
+re-evaluated P9's place in the P-order following the 2026-05-25 owner
+direction *"massively tighten coordination efficiency for teams of two
+agents, n=2"* and the four-reviewer dispatch on the resulting candidate
+inventory (assumptions-expert + architecture-experts Betty/Fred/Wilma).
+The reviewer-converged verdict: **P9 is the meta-constraint and must
+land first**, not after P6/P7/residual. The rule corpus (~78) is already
+near the active-skill discovery ceiling (~80 per
+`feedback_skill_load_budget`); SKILL `start-right-team` is at 973 lines
+/ 26 sections (past coherence threshold); the candidate-inventory adds
+6+ new rules + 3 SKILL amendments that would push the corpus past its
+operational limits. The sibling plan accepts Fred's *"block all
+rule/SKILL authoring until P9 lands"* verdict and re-sequences P9 as
+its WS0 (Tier 0). The sibling plan also flags P9 and P6/P7 as
+**coupled at the trigger-design interface but not strictly
+sequenced** — they can run in parallel; the original "P9 after P6/P7"
+sequence is superseded by "P9 lands first, P6/P7 run concurrently."
+This paragraph supersedes the strict P-order above for the
+P9/P6/P7 sub-segment; the rest of the P-order stands.
+
 ## Validation
 
 Each workstream defines its own acceptance. The plan-level validation:

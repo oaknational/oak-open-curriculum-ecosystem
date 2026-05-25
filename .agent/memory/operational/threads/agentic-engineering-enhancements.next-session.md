@@ -1,5 +1,57 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-25 — Mistbound Passing Candle / claude / claude-opus-4-7 / `e77243`, n=2/coordination-efficiency survey + plan + integration)
+
+**Session boundary**: Owner-directed multi-step goal — survey collaboration-efficiency substance across napkin/distilled/pending-graduations/plans/recent-comms; reflect via /oak-metacognition at three checkpoints; score candidate actions on user-specified 4 axes; fan out specialist reviewers; create plan; integrate with discovery surfaces. Sole-contributor session on branch `docs/agent-collaboration-enhancements` (created mid-session after PR #116 merged into main).
+
+**Landed outcome**:
+
+- Authored research note `.agent/research/agentic-engineering/agent-coordination-efficiency-survey-2026-05-25.md` — 30-item candidate inventory across napkin, distilled, four pending-graduations shards, eight existing plans, recent comms records.
+- Authored plan `.agent/plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md` — 11 workstreams structured around dependency graph (option (a) ratified by owner); linear ranking as Appendix A; 8 hidden axes documented as Appendix B; sibling to `cost-of-collaboration.plan.md`.
+- Integration: `agent-tooling/current/README.md` lists the new plan; `cost-of-collaboration.plan.md` amended with explicit "Sequencing amendment (2026-05-25)" paragraph making P9 (rule/skill topology refinement) the first move ahead of P6/P7; survey points forward to the plan.
+- Reviewer dispatch: assumptions-expert + architecture-experts Betty/Fred/Wilma in parallel; docs-adr-expert dispatched as a follow-up after final metacognition surfaced under-engineering. Critically analysed each finding before applying; rejected Wilma's "queue bypass" claim and over-coupled-sequencing claim; verified Fred's corpus-count (77 actual vs 78 claimed — principle holds); applied 4 docs-adr cross-reference corrections.
+- Three /oak-metacognition passes during the arc; one final pass on the entire process; ultrathinking applied at every step per owner direction.
+
+**Evidence**:
+
+- Survey at `.agent/research/agentic-engineering/agent-coordination-efficiency-survey-2026-05-25.md` (~9KB).
+- Plan at `.agent/plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md` (~22KB after corrections; frontmatter `todos` block normalised by linter).
+- README cross-reference at `.agent/plans/agent-tooling/current/README.md` line 30.
+- Parent-plan amendment at `.agent/plans/agent-tooling/current/cost-of-collaboration.plan.md` lines 1828–1847.
+- Working tree at handoff: 2 modified + 2 new files on branch `docs/agent-collaboration-enhancements`. No commits yet — owner-deferred execution to next session.
+
+**Owner ratification**: option (a) — dependency-graph-as-spine structure stands. Execution deferred to next session.
+
+**Next session's first move (per the plan's first-move recommendation)**: WS0 + WS1 + WS4 open in parallel.
+
+- **WS0** (Tier 0 meta-constraint): land cost-of-collaboration P9 — rule/skill topology refinement. Two-tier classification (always-on invariants vs trigger-loaded skills); SKILL `start-right-team` decomposition shape (currently 973 lines / 26 sections); rule-vs-clause-in-existing-PDR decision rule. Gates WS3, WS5, WS6, WS7 directly.
+- **WS1** (Tier 1 parallel-able): tooling friction at moment of shipping — `comms direct` flag-discoverability; `--body-file` / `--subject-file` for long content; husky pre-commit hook sweep-into-staged cure; identity routing-tuple disambiguation (two-step).
+- **WS4** (Tier 2 amendments to landed doctrine): owner-attention-budget cures — Heartbeats-are-infrastructure as PDR-078 amendment; heartbeat-content mechanical state-binding; ping-before-escalate as agent-general rule.
+
+**Open at handoff**:
+
+- 2 modified + 2 new files in working tree; no commits made this session. Whether to commit them as a single session-arc commit, or to land them as part of the next session's WS0 opening, is an open question for the owner's first move next session.
+- The new plan defers two owner-direction decisions: WS0's `start-right-team` SKILL decomposition shape (inline vs sibling SKILL); WS3 amendment β shape (heartbeat retention vs watcher silent-detection event). Surfacing these at next-session-open is the right move.
+- No active claims for Mistbound; no commit-queue ownership; no open conversations or escalations.
+
+**Surprise or changed understanding**:
+
+- Single biggest insight: the ~6× friction multiplier observed in the Fiery/Stormy PR-115 cycle (25 min coordination ceremony for 4 min fix work) is not "the n=2 problem" — it is the most legible instance of a general scale-sensitivity gap in the coordination substrate. The plan's design-evaluation track (WS8) preserves this insight for future architecture evolution; the obligation-tier taxonomy is the long-term shape Betty's review surfaced.
+- Doctrine-by-analogy in my own process: I treated plan-shape work like code-shape work (write, then review) when I should have dispatched reviewers at the inventory step, not the ranking step. Captured in the metacognition pass; the cure is to dispatch reviewers at the inventory step for future plan-shape work.
+- Linear-ranking-as-deliverable risk: user asked for "an ordered list of improvements" but the linear E+I+S convolution is structurally blind to 8 hidden axes (leverage, amortisation horizon, cost-direction sign, information value, reframing potential, agent-count variance, failure-mode coverage, dependency depth). The plan's spine is the dependency graph; the ranking is Appendix A. Owner ratified (a).
+
+**Pending-graduations status changes**:
+
+- `pending-graduations/2026-05-25-fiery-collaboration-decomposition-and-n2-efficiency.md` — both `status: due` items (Coordination-as-precondition + n=2 over-coordination) are now ROUTED to the new plan (WS2 + WS3 respectively). Items remain `due` until the plan workstreams land; the plan IS the cure-shape evidence.
+- `pending-graduations/2026-05-23-team-session-autonomy.md` — Director-class items now ROUTED to WS5 bundled doctrine pass.
+- `pending-graduations/2026-05-25-misty-director-session-candidates.md` — items routed to WS4 (heartbeat) and WS5 (Director-seat-on threshold).
+
+**Heartbeat-end broadcast emitted**: N/A — sole-contributor session; no team substrate active.
+
+**Retained claims**: none.
+
+**Blockers or risks**: none active. The plan body §"Risks" section enumerates per-workstream risks for the implementation phase.
+
 ## Session Outcome (2026-05-25 — Breezy Flowing Dock / `codex` / GPT-5 / `019e5f`, critical/hard memory curation + light handoff)
 
 **Session boundary**: owner asked Breezy to re-ground in
@@ -2173,6 +2225,7 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 | `codex` | `GPT-5` | Shadowed Glimmering Moth | Consolidator / observation-only tidy-plan support (`019e5d`; hard/critical consolidation objective closed at `SOFT (20 soft)`, then Cycle 10/11 readiness notes broadcast without racing Eclipsed Cycle 9 or Wooded Cycle 10) | 2026-05-25 | 2026-05-25 |
 | `codex` | `GPT-5` | Thermal Buffeting Plume | Knowledge Curator (`019e5f`; role-substrate clarification, hard/critical curation completion, handoff/consolidation closeout) | 2026-05-25 | 2026-05-25 |
 | `codex` | `GPT-5` | Breezy Flowing Dock | Knowledge Curator (`019e5f`; critical/hard memory curation, napkin rotation, pending-graduations active shard, light handoff) | 2026-05-25 | 2026-05-25 |
+| `claude` | `claude-opus-4-7` | Mistbound Passing Candle | Plan author (`e77243`; n=2/coordination-efficiency survey + plan + integration with `cost-of-collaboration.plan.md`; 4 reviewer dispatches; 4 metacognition passes; owner-ratified option (a) dependency-graph-as-spine structure; execution deferred to next session) | 2026-05-25 | 2026-05-25 |
 | `claude` | `claude-opus-4-7` | Misty Drifting Sail | Implementer / plan-AUTHOR (`02b325`, post-m1-attestation-tidy-up.plan.md Cycles 5+5a re-enqueue + held-items consolidation + 7 + 7.1 + 8 + 8a). Joined fresh under Lunar-Director routing 2026-05-24T22:10Z for commit-subject pre-flight (read-only), re-routed at 22:14Z to plan-AUTHOR under pure-direction split (Lunar = plan-OWNER, Misty = plan-AUTHOR, Mistbound = Commit Marshal). 7 cycles landed via Mistbound: `7c2f85f4` Cycle 5 (PDR-077 + reciprocals); `e8bc6781` Cycle 5a (PDR-079 + rule + hook); `93c4fdc0` held-items consolidation (README + practice-index PDR-077/078/079); `48c8ac22` Cycle 7 (ADR-186 + reciprocal §Related to ADR-183 + PDR-078 + practice-index line-165 fix); `75a2cd25` Cycle 7.1 (ADR-186 prettier-mangle repair); `9e57290d` Cycle 8 (SKILL §0.5 thin + PDR-078 Candidate→Accepted Adopted 2026-05-25 + reciprocal §Related to PDR-027/063/064). Cycle 8a ADR-187 (Claude self-modification authz cure-shape, WS-8 Lanternlit absorption — C2-near-term + C5-long-term + C4-fallback combination; C1/C3 rejected; 10 architectural conditions from Ferny WS-2 reviewer synthesis embedded; **4-reviewer absorption depth** docs-adr APPROVE-AS-IS + assumptions 2 CRITICAL + security 1 RES-CRITICAL + 5 MEDIUM + 1 LOW + wilma 2 RES-CRITICAL + 4 MEDIUM) authored 585 lines and **enqueued under intent `7e965431` / claim `e097d5a1`** awaiting marshal at compaction-prep time. Cycle 8a marshal blocked on Mistbound silence (≥83 min at wind-down; ping-before-escalate cure validated false-positive twice in session; sole-marshal binding means owner-class decision required). Surfaced 3 recurring failure modes for closeout consolidation: **heartbeat-content-drift** (3 Misty + 3+ Lunar instances of stale templated heartbeat body despite live state changes; graduation candidate: mechanical state-binding via structured field); **platform-wide Monitor cron-drift** (Misty 20-min + Lunar 17-min concurrent gaps at 23:28-23:47Z; graduation candidate: heartbeat-cron health-monitoring via existing watcher-staleness substrate); **ping-before-escalate cure validation** (cross-check git work-evidence before retirement-detection; validated twice in single session). Plan-author seat released 2026-05-25T00:35Z per Lunar's structural-stall wind-down at 00:33Z; team-member closeout broadcast `86d1fe2e`. **1 claim retained** for Cycle 8a marshal pickup (`e097d5a1`). | 2026-05-24 | 2026-05-25 |
 | `claude` | `claude-opus-4-7` | Mistbound Hiding Threshold | Sole Commit Marshal (`0e27cc`, post-m1-attestation-tidy-up.plan.md across compaction-5 resume → retirement; duty span ~8h35min 2026-05-24T21:08Z → 2026-05-25T05:47Z). 10 commits landed: `4575044e` Cycle 2 (Charcoal PDR-077 captures); `e8ca6d08` Cycle 3 (PDR-076a Accepted); `b7ac9938` Cycle 4 (PDR-076b Accepted); `7c2f85f4` Cycle 5 (PDR-077 + 063/064 reciprocals); `e8bc6781` Cycle 5a (PDR-079 + rule + hook); `9725ae09` Cycle 6 (PDR-078 Candidate); `93c4fdc0` held-items consolidation; `48c8ac22` Cycle 7 (ADR-186); `75a2cd25` Cycle 7.1 (ADR-186 prettier-mangle repair); `9e57290d` Cycle 8 (SKILL §0.5 + PDR-078 Adopted + reciprocals). Cycle 8a (intent `7e965431`) abandoned 23:26Z on husky format-issues; substantive work preserved as `??`+`M` in working tree for next author. Two false-positive retirement-detections fired (21:57Z Seaworthy + 22:57Z Lunar) — Director cure-discipline `cross-ref git log before escalation` named at 22:58Z + 23:01Z; pattern named for graduation. Branch-fitness-and-push-cadence.plan.md authored (16-cycle revised structure; 11 reviewer-driven revisions applied; uncommitted in tree). Marshal seat handed cleanly to Hushed Stalking Shade (`bc0a07`) via PDR-064 Moment-2 at 05:46Z (handoff record `.agent/state/collaboration/handoffs/2026-05-25-mistbound-to-hushed-stalking-shade-marshal-handoff.md`; Moment-1 broadcast `e2a21c5d`). Retired 2026-05-25T05:47Z. Closeout broadcast 05:47:50Z. | 2026-05-22 | 2026-05-25 |
 | `claude` | `claude-opus-4-7-1m` | Lush Sprouting Thicket | Implementer (codex-helper skill, codex-exec CLI, ADR-180, future plan) | 2026-05-12 | 2026-05-12 |

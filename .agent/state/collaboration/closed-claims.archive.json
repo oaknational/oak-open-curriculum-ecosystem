@@ -44420,6 +44420,52 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "531342fd-54f5-4ace-a35c-9c7f35f0995d",
+      "agent_id": {
+        "agent_name": "Stormy Surfing Dock",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "2a7b65"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-082-n2-collaboration-mode.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T15:06:20Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "First-draft PDR-082: n=2 collaboration mode (lightweight protocol for two-agent teams)",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "stale",
+        "closed_at": "2026-05-25T17:30:00Z",
+        "closed_by": {
+          "agent_name": "Mistbound Passing Candle",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "e77243"
+        },
+        "summary": "Stale claim archived by Mistbound during /oak-consolidate-docs step 7e. Stormy Surfing Dock retired via closeout broadcast at 15:49:49Z without explicit-closing this claim. The PDR-082 first-draft was authored to the working tree and remains uncommitted. Staleness: freshness_threshold 15:36:20Z exceeded by ~2 hours at consolidation time.",
+        "evidence": [
+          {
+            "kind": "comms_event",
+            "ref": "75eb893f-232b-4d8f-b90d-4736e3559dfc",
+            "summary": "Stormy team-member closeout broadcast at 15:49:49Z naming PDR-082 first-draft as uncommitted-in-working-tree with no claim retention."
+          },
+          {
+            "kind": "comms_event",
+            "ref": "46dbd615-25a4-4c1b-a6c8-54baaf230d98",
+            "summary": "Stormy heartbeat-end broadcast at 15:49:13Z — Stormy retired."
+          }
+        ]
+      }
     }
   ]
 }

@@ -16,9 +16,38 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
-- Current branch: `main` after PR #115 merge;
-  `feat/education-evidence-foundational-graphs-take2` exists locally and on origin but
-  is now merged.
+- **Deep consolidation status (2026-05-25 Mistbound)**: completed this handoff.
+  Actions: (1) two CRITICAL prose-line-width fitness signals (napkin + repo-
+  continuity) cured by wrapping lines at sentence boundaries; (2) Stormy
+  Surfing Dock's stale claim on PDR-082 file (45 min past freshness threshold;
+  Stormy already retired via comms `75eb893f`) archived to
+  `closed-claims.archive.json` with `closure.kind: "stale"`; active-claims now
+  empty; (3) open-questions register Q-001 (comms-substrate cure home) and
+  Q-003 (start-right-team joined-at-closeout) cross-linked to the new
+  n=2-coordination-efficiency plan; (4) `pnpm practice:fitness --strict-hard`
+  exits 0 with only SOFT entries (no HARD or CRITICAL). No new ADR/PDR/pattern
+  candidates emerged; no Practice Core refinements triggered; comms-retention
+  pass remains BLOCKED per owner standing direction.
+- **`pnpm check` cleanliness gate (2026-05-25 Mistbound)**: GREEN after one fixup
+  (duplicated "Participating agent identities" heading in thread record; cured by
+  removing the new heading and adding Mistbound's row to the existing table at
+  line 2228).
+- **Current branch (2026-05-25 Mistbound session-handoff)**:
+  `docs/agent-collaboration-enhancements`. PR #116 (post-PR-115 handoff substrate)
+  has merged into main at `7ef357a6`; the new branch carries the
+  n=2/coordination-efficiency survey + plan + integration work. Working tree:
+  2 modified + 2 new uncommitted files (`agent-tooling/current/README.md`,
+  `cost-of-collaboration.plan.md`, new plan, new survey). Owner-deferred commit
+  decision to next session.
+- **New plan landed 2026-05-25 (Mistbound Passing Candle / `e77243`)**:
+  [`n2-and-coordination-efficiency-program-2026-05-25.plan.md`](../../plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md) —
+  11 workstreams, dependency-graph spine (owner-ratified option (a)), linear
+  ranking preserved as Appendix A. Sibling to `cost-of-collaboration.plan.md`;
+  amends its P-sequence by making P9 (rule/skill topology refinement) the first
+  move ahead of P6/P7. Substrate input:
+  [`agent-coordination-efficiency-survey-2026-05-25.md`](../../research/agentic-engineering/agent-coordination-efficiency-survey-2026-05-25.md).
+  Next session opens WS0 + WS1 + WS4 in parallel.
+- Previous branch: `main` after PR #115 merge (now folded into history via PR #116 merge `7ef357a6`).
 - **PR #115 MERGED 2026-05-25T~15:09Z** at merge commit `9fa3a180` on `origin/main`.
   Two cycle commits landed: `3dd2c317` (Fiery marshal bundle covering Breezy
   curator-pass, PR-115 Copilot review fixes, Hearthlit retirement substrate, and
@@ -126,7 +155,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF first-feature delivery | [record][eef] | Fiery Kindling Brazier / claude / claude-opus-4-7 / 9f4026 / commit-marshal+pr-115-merged / 2026-05-25 |
-| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Breezy Flowing Dock / codex / GPT-5 / `019e5f` / Knowledge Curator critical/hard memory curation + light handoff / 2026-05-25 |
+| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Mistbound Passing Candle / claude / claude-opus-4-7 / `e77243` / n=2 + coordination-efficiency survey + plan + integration / 2026-05-25 |
 
 ## Paused Threads
 

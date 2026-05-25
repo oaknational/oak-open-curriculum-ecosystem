@@ -115,6 +115,18 @@ question; cross-link rather than duplicate.
   open as a meta-question about plan-update authority, but the specific
   §R4 anchor refers to the archived audit trail rather than a live
   decision lane.
+- Route-named (2026-05-25 Mistbound consolidation): the long-term home for the
+  three named comms-substrate failure-mode cures is **PDR-078 and PDR-082
+  amendments via the new plan's WS3 + WS4**, not a new dedicated plan. WS4
+  covers heartbeat-content-drift (mechanical state-binding) and
+  heartbeats-are-infrastructure (PDR-078 amendment, not new rule). WS3β covers
+  the emission-vs-absorption gap analogue (silent-API-failure cure: heartbeat
+  retention at n=2 unless explicitly owner-opted-out, OR all-channels watcher
+  emits silent-detection event after N min of zero peer activity). See
+  [`n2-and-coordination-efficiency-program-2026-05-25.plan.md`](../../plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md).
+  Q-001 remains `open` because the plan is pending owner ratification with
+  execution deferred to next session; mark `answered-in-place` when WS3 + WS4
+  land.
 
 ### Q-002: Should consolidate-docs explicitly reference this file?
 
@@ -178,3 +190,12 @@ question; cross-link rather than duplicate.
   §"What surprised me about the team-protocol arc"; comms event posted
   2026-05-25T13:15Z titled "Stormy Surfing Dock: PR-0 landed at 78a90723;
   Fiery marshal acknowledged; standing down for compaction".
+- Composes with (2026-05-25 Mistbound consolidation): PDR-082 n=2 mode and the
+  new plan's WS3 SKILL amendment. Q-003 names a *timing-axis* reduced-bootstrap
+  shape ("team formed late"); PDR-082 names a *size-axis* reduced-bootstrap
+  shape (n=2 from session-start). Both are scale-sensitivity expressions; the
+  long-term shape may be the obligation-tier taxonomy (WS3γ / WS8) where each
+  obligation classifies its scale-sensitivity (size + timing + chat-visibility)
+  independently. Second-instance evidence for either Q-003 OR PDR-082 informs
+  both. See
+  [`n2-and-coordination-efficiency-program-2026-05-25.plan.md`](../../plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md).
