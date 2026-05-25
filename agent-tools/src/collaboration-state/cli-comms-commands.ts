@@ -6,6 +6,7 @@ import { renderCommsLog, writeCommsEventWithReadback } from './comms-use-cases.j
 import { resolveIdentity } from './cli-identity.js';
 import { optional, required, valueOrDefault, type Options } from './cli-options.js';
 import { cliIo, type CollaborationStateCliIo, type CliRuntime } from './cli-runtime.js';
+import { composeHeartbeatBodyFromOptions } from './comms-heartbeat-cli.js';
 import { validateCommsEventTags } from './comms-tag-namespace.js';
 import { assertIdentityCanWrite } from './identity-write-guard.js';
 import { validateSharedStateAgentId } from './identity.js';
@@ -69,8 +70,8 @@ export async function appendComms(
     readActiveClaimsFile: io.readActiveClaimsFile,
   });
 
-  const body = await resolveCommsBody(options, io);
   const tags = validateCommsEventTags(options.tags);
+  const body = await resolveAppendBody({ options, io, tags });
   const baseEvent: NarrativeCommsEvent = {
     schema_version: '2.0.0',
     event_id: valueOrDefault(options, 'event-id', randomUUID()),
@@ -205,4 +206,22 @@ function withDefaults(options: Options, defaults: Readonly<Record<string, string
   }
 
   return { ...options, values };
+}
+
+/**
+ * Dispatch to the heartbeat-aware body composer (in `comms-heartbeat-cli.ts`)
+ * when the event carries the canonical heartbeat tag (Lane A —
+ * PDR-078 §5 typed-origin invariant); otherwise fall through to the
+ * existing `--body` / `--body-file` resolution path used for narrative
+ * and behaviour-note events.
+ */
+async function resolveAppendBody(input: {
+  readonly options: Options;
+  readonly io: CollaborationStateCliIo;
+  readonly tags: readonly string[];
+}): Promise<string> {
+  if (input.tags.includes('heartbeat')) {
+    return composeHeartbeatBodyFromOptions(input.options);
+  }
+  return resolveCommsBody(input.options, input.io);
 }

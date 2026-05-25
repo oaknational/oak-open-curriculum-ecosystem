@@ -10,6 +10,10 @@ export const commsAppendOptions = [
   'active',
   'event-id',
   'tag',
+  'claim-id',
+  'intent-id',
+  'branch',
+  'current-cycle-label',
 ] as const;
 
 export const commsSendOptions = [
@@ -25,6 +29,10 @@ export const commsSendOptions = [
   'now',
   'event-id',
   'tag',
+  'claim-id',
+  'intent-id',
+  'branch',
+  'current-cycle-label',
 ] as const;
 
 export const commsWatchOptions = [
