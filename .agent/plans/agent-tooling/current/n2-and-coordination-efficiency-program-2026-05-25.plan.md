@@ -111,10 +111,12 @@ These eight axes are structurally invisible to E+I+S. The plan's sequencing refl
 
 **Goal**: Refactor the rule corpus + SKILL surface so doctrine additions cost less per session-forever.
 
+**Status**: PENDING-OWNER-VERDICT on SKILL decomposition shape. Pre-positioned 2026-05-25.
+
 **Substance**:
 
 - Two-tier classification of the rule corpus: always-on invariants (load every session) vs trigger-loaded skills (load when condition fires). Falsifiable firing triggers, not vibes.
-- Decomposition shape for SKILL `start-right-team`: 26 sections is past operational coherence. Options: extract §"Mode Selection" front-matter; sibling SKILLs for n=2 mode and Director-mode; or section-trimming via amendment-via-PDR-pointer. Owner direction may be required for the shape choice.
+- Decomposition shape for SKILL `start-right-team`: 26 sections is past operational coherence. See §"SKILL decomposition shape — pre-positioned options" below for the option-table; owner verdict required before WS0 substantive work opens.
 - Rule-vs-clause-in-existing-PDR decision rule: when should new substance be a new rule under `.agent/rules/`, vs a clause inside an existing PDR or ADR? Several items in this plan (8, 11, 26, 27) are debatably PDR-clauses rather than new rules.
 
 **Acceptance**:
@@ -125,26 +127,67 @@ These eight axes are structurally invisible to E+I+S. The plan's sequencing refl
 - Net rule count after WS0 is **lower** than before (P9 must remove more than it adds).
 - Skill-load budget headroom restored to at least 20% below the ~80 ceiling.
 
-**Blocked-by**: nothing.
+**Blocked-by**: owner verdict on SKILL decomposition shape (see §"SKILL decomposition shape — pre-positioned options" below).
 
 **Blocks**: WS3 (SKILL amendment shape), WS5 (Director-class bundle), WS9 (if any new rule wiring required).
 
-**Owner-direction-gate**: probably yes — the decomposition shape for `start-right-team` is owner-class architecture.
+**Owner-direction-gate**: YES — pre-positioned 2026-05-25 with options + recommendation. Owner verdict opens WS0 substantive work.
 
-**Reviewer dispatch**: architecture-expert-betty (cohesion of new topology); architecture-expert-fred (ADR compliance: ADR-119 three-layer model, ADR-125 portability, ADR-150 continuity surfaces); docs-adr-expert (PDR/ADR/rule home decisions); assumptions-expert (proportionality of corpus-wide refactor).
+**Reviewer dispatch** (after owner verdict, before any rule file is moved): architecture-expert-betty (cohesion of new topology); architecture-expert-fred (ADR compliance: ADR-119 three-layer model, ADR-125 portability, ADR-150 continuity surfaces); docs-adr-expert (PDR/ADR/rule home decisions); assumptions-expert (proportionality of corpus-wide refactor).
+
+#### SKILL decomposition shape — pre-positioned options (2026-05-25)
+
+The SKILL `start-right-team` is currently 973 lines across 26 sections. Three decomposition shapes are surfaced; one is the recommendation. The owner verdict on (a)/(b)/(c)/hybrid opens WS0 substantive work.
+
+| Option | Substance | Net rule + SKILL surface direction | Composition with two-tier classification | Notes |
+|---|---|---|---|---|
+| **(a) Inline §"Mode Selection" front-matter** | Extract mode-routing (n=2 / standard team / Director-class team) to a short front-matter block at the top of `start-right-team`. Body sections become mode-tagged; bootstrapping agent reads front-matter then loads only the sections relevant to its mode. | Removes ~5 sections from the body surface; net SKILL-line count drops ~30%; no new files. | Front-matter selects which SKILL body sections load; two-tier classification refines further by tagging individual sections as always-on vs trigger-loaded. Composes. | PDR-082 first-draft favoured this shape during plan authoring. |
+| **(b) Sibling SKILLs** | New `start-right-pair` SKILL for n=2; new `start-right-director-team` for ≥4; trim canonical `start-right-team` to common-ground for n=3 only. | Adds 2 files; canonical trims ~50%; net SKILL surface count **increases** by 2 across the trio. | Each sibling SKILL is independently two-tier-classifiable, but corpus-wide budget pressure rises. | Fred recommended this during plan authoring. **Violates WS0 acceptance criterion "net rule + SKILL surface count is lower than before."** |
+| **(c) Section-trimming via amendment-via-PDR-pointer** | Move large body sections (e.g. §0 Comms watcher, §0.5 Liveness heartbeat) out to dedicated rule files; SKILL becomes a routing-surface that cites the rule files. SKILL canonical retains §"Mode Selection" + §"Acceptance criteria" + cross-references. | Trim ~40% from SKILL; new rule files (1–3 small files); net rule + SKILL surface count varies depending on count of extracted rules. | Composes strongly with two-tier classification — extracted rules become first-class trigger-loaded entries; the SKILL becomes the always-on routing surface. | Pattern consistent with `.agent/rules/` corpus structure. |
+
+**Recommendation: (c) plus partial (a).** Combination shape:
+
+- Apply (c) as the structural cure — extract §0 (Comms watcher) and §0.5 (Liveness heartbeat) sections into dedicated rule files. Both are operational invariants already candidate for rule-shape; extracting them aligns with the two-tier classification's trigger-loaded category.
+- Apply partial (a) — keep a short mode-selection front-matter block at the top of `start-right-team` so bootstrapping agents see the routing surface at first read.
+- Pure (b) is rejected against the WS0 acceptance criterion: it grows the SKILL surface rather than shrinking it.
+
+**Trade-offs to weigh in the verdict**:
+
+- (a) is the lowest-risk move but the smallest net reduction.
+- (c) has higher up-front cost (authoring the extracted rule files) but the largest amortisation horizon (every subsequent doctrine addition can route via the same pattern).
+- (c)+partial(a) gets the structural cure plus the routing-surface clarity at modest authoring cost.
+
+**Owner verdict required**: which of (a) / (b) / (c) / (c)+partial(a) / other to land. Surface to chat or as inline plan-amendment.
+
+**After owner verdict**: WS0 opens with the proposal-draft cycle — author the two-tier rule corpus classification (every file under `.agent/rules/` classified as `always-on` or `trigger-loaded` with a falsifiable firing trigger) + the rule-vs-PDR-clause decision rule, surfaced as an amendment to this WS0 for reviewer dispatch BEFORE any rule file is moved or amended.
 
 ### WS1 — Tooling friction at the moment of shipping (TIER 1)
 
 **Goal**: Remove invisible per-session friction in CLI ergonomics and hook-chain behaviour.
 
+**Status (2026-05-25 revision)**: WS1 needs re-survey before substantive work — first-move attempt revealed items 1 and 2 are substantially done already. The plan-as-authored was based on stale state; the finding itself is the worked-instance evidence for the verify-before-applying discipline. See §"WS1 re-survey finding (2026-05-25)" below.
+
 **Items** (parallel-able with WS0):
 
-1. **`comms direct` flag-discoverability** — `--help` documents `--platform`/`--model`/`--active`. Hushed observed three retry attempts (2026-05-25 13:11Z).
-2. **`--body-file` / `--subject-file` on comms verbs** — eliminates shell argv corruption class for long content (Celestial Glimmering Moon's ~3300-char `--body` failure, 2026-05-21).
+1. **`comms direct` flag-discoverability** — `--help` documents `--platform`/`--model`/`--active`. Hushed observed three retry attempts (2026-05-25 13:11Z). **Status (2026-05-25 verify)**: current help text lists all flags including `--platform`/`--model`/`--active` and the mutual-exclusion guidance on `--body`/`--body-file`. The discoverability friction is plausibly cured by the existing help text; Hushed's three retries may have been a different surface or a transient.
+2. **`--body-file` / `--subject-file` on comms verbs** — eliminates shell argv corruption class for long content (Celestial Glimmering Moon's ~3300-char `--body` failure, 2026-05-21). **Status (2026-05-25 verify)**: `--body-file` is implemented on all four comms verbs (`append`, `send`, `direct`, `reply`) with mutex against `--body` and empty-file rejection. Integration tests cover `comms direct` (4 cases including shell-special-char body). Gaps: no direct tests for `comms append --body-file` and `comms send --body-file` argv paths; `--subject-file` is not implemented but subjects are short by design (low-value addition).
 3. **Husky pre-commit hook sweep-into-staged cure** — separate friction lane; hook-chain auto-fix output must not be silently swept into staged set. Distinct from the rejected `pre-commit hook must gate staged-only` direction. Friction-register entry + investigation pass.
 4. **Identity routing-tuple disambiguation (#18)** — two-step: (a) decide cure shape (session-aware identity discipline / `rename-within-session` event class / claims-surface aggregation by `session_id_prefix`); (b) implement chosen cure. N≥10 instances captured already.
 
 **Acceptance** per item: regression test or worked-instance evidence; no new always-on doctrine added.
+
+#### WS1 re-survey finding (2026-05-25)
+
+The 2026-05-25 Mistbound session opened WS1 expecting item #2 to be the first move. Verification (per the verify-before-applying discipline) revealed `--body-file` was already shipped and tested. Items #1 and #2 are substantially complete; items #3 and #4 remain.
+
+Implication for execution sequencing:
+
+- The Tier-1 next move on WS1 is **item #4 step (a) — identity routing-tuple disambiguation, decide cure shape**. Decision-shape work, no code; surfaces well to a single reviewer-dispatched cycle.
+- Item #3 (husky hook sweep cure) remains a friction-register investigation pass, not a known-shape fix.
+- Item #2 residual work — extending `--body-file` test coverage to `comms append` and `comms send` argv paths — is a small bookkeeping cycle, ship-anytime.
+- Item #1 may be closeable on the next worked-instance: if an agent finds the help text sufficient on first attempt, capture the verified-instance and close the item.
+
+The finding itself is the founding worked-instance for the verify-before-applying discipline: had this session not verified state, it would have spent a cycle re-implementing already-shipped substrate. Cure shape: at every plan-execution opening, the first action is a state verification pass on the named substrate.
 
 **Reviewer dispatch**: code-expert (per item); type-expert (if CLI option types change); test-expert (worked-instance tests).
 
