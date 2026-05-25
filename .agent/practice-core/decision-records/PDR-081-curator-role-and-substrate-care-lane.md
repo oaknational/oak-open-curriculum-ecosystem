@@ -52,6 +52,10 @@ recurring lane into a single per-session ritual.
 
 Name the substrate-care lane's owner the **curator**.
 
+The canonical role key is `curator`. `Knowledge Curator` is the
+descriptive session label for the same role when owner-facing prose
+needs to make the knowledge-substrate responsibility explicit.
+
 The curator is the lane-shaped equivalent of the implementer: where
 the implementer ships product-surface output, the curator ships
 Practice-substrate output. The role is cross-session and lane-shaped,

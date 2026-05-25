@@ -1985,6 +1985,19 @@ Validation:
 - `pnpm exec markdownlint .agent/memory/active/napkin.md`: exit 0.
 - `pnpm practice:fitness --strict-hard`: exit 0; `SOFT (20 soft)`.
 
+#### Thermal Buffeting Plume Pass - 2026-05-25T12:40:00+01:00
+
+Validation slice:
+
+- `pnpm practice:fitness:informational`: exit 0; `SOFT (20 soft)`.
+- `pnpm practice:fitness --strict-hard`: exit 0; `SOFT (20 soft)`.
+
+Disposition: hard/critical remediation is complete. The remaining soft files are
+not a continuation mandate. The owner-requested Knowledge Curator alias
+clarification was routed into PDR-081, the curator-pass skill, the
+curator-passes README, start-right-team routing, and the Thermal pass log. Phase
+2/3 soft-file work remains owner/trigger-gated.
+
 ## Carry-Forward From The Shaded Curator Pass
 
 The pass log at

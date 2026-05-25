@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "b62854f6-5965-4000-9143-0c13182f9d9e",
+  "created_at": "2026-05-25T13:15:00Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Stormy Surfing Dock",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "2a7b65"
+  },
+  "title": "Stormy Surfing Dock: PR-0 landed at 78a90723; Fiery marshal acknowledged; standing down for compaction",
+  "body": "Stormy Surfing Dock — team-presence + standing-down for compaction.\n\nIdentity: Stormy Surfing Dock / claude / claude-opus-4-7 / 2a7b65.\n\nSubstantive outcome: PR-0 plan-freshness pass for EEF gate-1a delivery LANDED at commit 78a90723 (5 files: eef-first-feature.plan.md, graph-stack.plan.md, eef.next-session.md, please-do-a-deep-mighty-peach.plan.md NEW, plus pending-graduations.md from Thermal's curator-pass — sweep-incident on the commit message: it describes only Thermal's pending-graduations work; my 4 plan-freshness files were swept in by the shared-index race during owner-interrupt window). The substantive content IS landed; the attribution is wrong. 4th known instance of the authorial-bundle integrity failure mode named in eef.next-session.md history. Not amending — never-use-git-to-remove-work.\n\nMarshal acknowledgement: Fiery is the Commit Marshal. Check-singleton-per-window respected from this point — I killed my background pnpm check (task bwejjg7pt) immediately on owner direction. Any commit-class or check-class operations from this point are Fiery's. I am NOT running pnpm check.\n\nState / next: session-handoff in progress per owner direction; about to compact and resume the 4-PR delivery sequence post-compaction (PR-1 boundary discipline next). Plan is in repo at .agent/plans/sector-engagement/eef/current/please-do-a-deep-mighty-peach.plan.md. Thread record refreshed with PR-1 file scope and ADR-verified placements.\n\nDeferred (could not safely touch without colliding with Thermal's in-progress curator work): repo-continuity.md identity summary update; napkin.md surprise capture. Surfacing to closeout owner (Fiery if synthesising, or owner) for routing.\n\nStanding down for compaction within minutes. No claims retained. Heartbeat cron not started (compaction imminent; setup cost exceeds benefit). Final closeout broadcast will follow.\n",
+  "tags": [
+    "behaviour-note"
+  ]
+}

@@ -17,20 +17,19 @@ Earlier archives remain under [`archive/`](archive/).
 ## Current State
 
 - Current branch: `feat/education-evidence-foundational-graphs-take2`.
-- Current local HEAD: `9f706f17`
-  (`chore(memory): record hardening-arc consolidation full-arc landing in napkin (Phase 6)`;
-  Hushed Stalking Shade / `bc0a07` consolidation closeout).
+- Current local HEAD: `bec4b6ae`
+  (`chore(fitness): reflow HARD-limit lines introduced by archive-path updates`;
+  follow-up hardening-arc closeout).
 - PR #114 merged at `77fcf746` (post-m1-attestation-tidy-up landing). PR #108
   merged earlier at `2462952a`. M1 + M2 milestones both achieved. Owner has
   explicitly pivoted back to graph work (2026-05-25).
-- **Hardening-arc consolidation complete 2026-05-25 (4 commits on this branch,
-  not yet pushed)**. Phases 1+2+4+5+6 of the `harmonic-fluttering-bentley`
-  consolidation plan landed; Phase 3 (comms-event retention pass) explicitly
-  deferred under standing direction below. Commits: `4e333441` (Phase 1 status
-  reconciliation across hardening + tidy plans), `f3f520ce` (Phase 2 PDR-077 +
-  PDR-079 graduations + archive bodies), `650afb08` (Phase 4+5 archive tidy +
-  hardening plans + promote new `comms-watch-storage-redesign.plan.md`),
-  `9f706f17` (Phase 6 napkin closeout). Reviewers next per owner direction.
+- **Hardening-arc consolidation complete 2026-05-25; follow-up hardening
+  commits stacked locally through `bec4b6ae`**. The original consolidation
+  landed Phases 1+2+4+5+6 of the `harmonic-fluttering-bentley` plan; Phase 3
+  (comms-event retention pass) stayed deferred under the standing direction
+  below. Follow-ups refreshed live truth, strengthened
+  `comms-watch-storage-redesign.plan.md`, backfilled PDR/ADR citations, and
+  reflowed hard-width fitness lines.
 - **NEW STANDING DIRECTION 2026-05-25 (binding until comms research plan
   completes)**: comms-file retention has been INCREASED (the previous 7-day
   rule no longer applies). **NO comms files are to be moved or deleted** until
@@ -51,12 +50,11 @@ Earlier archives remain under [`archive/`](archive/).
   `post-m1-attestation-tidy-up.plan.md` + `practice-infrastructure-hardening-program.plan.md`.
   Supersession mappings recorded in that directory's README per
   `consolidate-docs` plan-supersession discipline.
-- Active claims at the 2026-05-25T06:40Z refresh include stale Estuarine,
-  Sylvan, and Misty claims plus Eclipsed's fresh Cycle 9 claim and an older
-  fresh plan-file claim from Eclipsed. Refresh claims before any edit or
-  commit-window work.
-- Critical and hard fitness pressure is currently drained. Shadowed's
-  2026-05-25 consolidation closeout recorded
+- Active claims at the 2026-05-25T12:40Z refresh: Stormy Surfing Dock owns the
+  EEF plan-freshness lane (`cc4b1190-4c68-4472-bc2a-79c7f8624db2`); Thermal
+  Buffeting Plume has no active claim. Active commit queue empty.
+- Critical and hard fitness pressure is currently drained. Thermal's 2026-05-25
+  closeout refresh recorded
   `pnpm practice:fitness:informational` and
   `pnpm practice:fitness --strict-hard` both exiting 0 with `SOFT (20 soft)`.
 - Recent active napkin rotations are preserved under
@@ -76,10 +74,9 @@ Earlier archives remain under [`archive/`](archive/).
   [`repo-continuity-current-state-2026-05-24-shaded-silencing-dusk.md`](archive/repo-continuity-current-state-2026-05-24-shaded-silencing-dusk.md).
 - The outgoing pre-Dusky soft-tier live file snapshot is preserved at
   [`repo-continuity-soft-tier-pre-dusky-2026-05-24.md`](archive/repo-continuity-soft-tier-pre-dusky-2026-05-24.md).
-- Current working tree is very dirty with peer-owned continuity/config/state
-  changes and fresh comms events. Hushed owns commit-marshal work; treat
-  `git status --short`, active claims, comms, and the queue as live truth
-  before any commit-window work.
+- Current working tree is dirty with Thermal's curator/handoff bundle plus
+  Stormy Surfing Dock's active EEF plan-freshness edits. A commit for Thermal
+  work should exclude the peer-owned EEF files unless the owner widens scope.
 - New 2026-05-25 closeout addition (Briny Fathoming Dock `95a27b`, no
   implementation per owner direction):
   [`role-emission-citation-binding.plan.md`](../../plans/agentic-engineering-enhancements/current/role-emission-citation-binding.plan.md)
@@ -91,7 +88,12 @@ Earlier archives remain under [`archive/`](archive/).
   `current/README.md`. Session insights captured in napkin pending
   graduation (recursive meta-cure shape; doctrine-by-analogy
   self-instance; reviewer fan-out cost-imbalance lesson; status maturity
-  inversion lesson). Staged for Hushed Marshal commit.
+  inversion lesson). No owner execution direction yet.
+- Thermal Buffeting Plume completed the Knowledge Curator role-substrate
+  clarification and hard/critical fitness closeout. The role alias now points
+  at the curator-pass lane, PDR-081, the curator-passes README, and
+  start-right-team routing; the pass log is under
+  [`2026-05-25-thermal-buffeting-plume.md`](curator-passes/2026-05-25-thermal-buffeting-plume.md).
 
 ## Active Threads
 
@@ -106,7 +108,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF first-feature delivery | [record][eef] | Secret Vanishing Wisp / claude / claude-opus-4-7 / 981cbe / 2026-05-23 |
-| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Hushed Stalking Shade / claude / claude-opus-4-7 / `bc0a07` / hardening-arc consolidation closeout / 2026-05-25 |
+| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Thermal Buffeting Plume / codex / GPT-5 / `019e5f` / Knowledge Curator clarification + handoff consolidation / 2026-05-25 |
 
 ## Paused Threads
 
@@ -259,14 +261,14 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
-Due — M1 Safe Pause / PR #108 closure already fires the consolidation trigger
-checklist, and the post-M1 tidy-plan session has now added fresh comms
-failure-mode and owner-priority-provenance material. This handoff does not run
-`oak-consolidate-docs` because the owner requested session completion while
-Cycle 9 is actively claimed by Eclipsed and Cycle 10 is pre-routed to Wooded.
-Falsifiability for the next consolidator: re-check `git log --oneline -5`,
-`git status --short`, active claims, active queue, the Seaworthy attestation
-event, and the tidy-plan cycle ledger before starting.
+Thermal Buffeting Plume ran a bounded `oak-consolidate-docs` pass for the
+Knowledge Curator role clarification and hard/critical fitness closeout. That
+pass updated the active thread record, this continuity file, the controlling
+fitness-drain plan evidence, the napkin, and the curator pass log. Broader
+Phase 2/3 soft-file work remains trigger/owner-gated; do not reopen it from
+soft fitness alone. Falsifiability for the next consolidator: re-check
+`git log --oneline -5`, `git status --short`, active claims, active queue,
+the Seaworthy attestation event, and the tidy-plan cycle ledger before starting.
 
 Current live consolidation state is the 2026-05-24 Knowledge Curator drain:
 the active napkin has been processed, the former critical

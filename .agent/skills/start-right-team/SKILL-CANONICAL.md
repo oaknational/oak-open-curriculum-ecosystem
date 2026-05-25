@@ -684,9 +684,11 @@ Useful responsibility labels include `controller`, `implementer`, `reviewer`,
 examples rather than a required ontology.
 
 The `curator` label names the substrate-care lane defined by PDR-081
-(`curator-role-and-substrate-care-lane`). Curator is distinct from
-`consolidator` — consolidator is the session-bounded closeout-synthesis
-owner; curator owns the cross-session, lane-shaped substrate-care work
+(`curator-role-and-substrate-care-lane`). `Knowledge Curator` is the
+owner-facing session label for the same responsibility. Curator is
+distinct from `consolidator` — consolidator is the session-bounded
+closeout-synthesis owner; curator owns the cross-session, lane-shaped
+substrate-care work
 (routing durable knowledge to permanent homes, draining the
 graduations buffer, surfacing home-gaps as structural-cure proposals,
 maintaining the per-pass curation log). A session may run a curator

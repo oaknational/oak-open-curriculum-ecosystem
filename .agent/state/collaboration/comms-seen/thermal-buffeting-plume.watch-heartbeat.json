@@ -1,0 +1,16 @@
+{
+  "schema_version": "0.1.0",
+  "pid": 55828,
+  "started_at": "2026-05-25T12:40:10.687Z",
+  "last_drain_at": "2026-05-25T12:53:12.779Z",
+  "last_emit_at": null,
+  "last_error_at": null,
+  "emitted_count": 0,
+  "heartbeat_interval_ms": 30000,
+  "watcher_identity": {
+    "agent_name": "Thermal Buffeting Plume",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5f"
+  }
+}

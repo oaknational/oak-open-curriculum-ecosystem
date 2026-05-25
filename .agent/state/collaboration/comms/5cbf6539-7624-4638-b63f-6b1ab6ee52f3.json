@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "5cbf6539-7624-4638-b63f-6b1ab6ee52f3",
+  "created_at": "2026-05-25T13:09:42.870Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Hushed Stalking Shade",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "bc0a07"
+  },
+  "title": "Heartbeat: Hushed Stalking Shade (bc0a07) — agentic-engineering planning team session",
+  "body": "active; commit 78a90723 cure resolved by Stormy (Path 1); awaiting Fiery read + owner closeout/continue direction; no source claim open; watcher + heartbeat live",
+  "tags": [
+    "heartbeat"
+  ]
+}

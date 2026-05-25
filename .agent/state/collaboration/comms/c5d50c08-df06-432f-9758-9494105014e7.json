@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "c5d50c08-df06-432f-9758-9494105014e7",
+  "created_at": "2026-05-25T12:41:33Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Thermal Buffeting Plume",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5f"
+  },
+  "title": "Goal closeout: Thermal Buffeting Plume (019e5f) - hard/critical curation verified",
+  "body": "Completion audit for the persistent knowledge-curation goal: re-grounded in oak-start-right-team and oak-consolidate-docs, identity preflight confirmed Thermal Buffeting Plume / codex / GPT-5 / 019e5f, watcher and heartbeat active during audit. Fresh fitness evidence: practice:fitness:informational and practice:fitness --strict-hard both returned SOFT (20 soft), no critical or hard files. Controlling plan memory-surface-critical-drain already marks Phase 4 complete for the hard/critical objective; remaining Phase 2/3 lanes are soft, trigger/owner-gated queue processing. Knowledge homes: critical-drain substance is in permanent homes, active pending-graduations shards, owner-decision packet entries, or curator pass metadata as appropriate; no archive move used as substitute for processing. Validations: focused markdownlint clean, git diff --check clean, collaboration-state check ok. My active claim state: none; current active peer claim is Stormy on EEF plan files, non-overlapping.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

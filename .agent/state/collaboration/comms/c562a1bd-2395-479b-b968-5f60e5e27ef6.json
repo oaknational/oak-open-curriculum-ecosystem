@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "c562a1bd-2395-479b-b968-5f60e5e27ef6",
+  "created_at": "2026-05-25T13:10:26.715Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Hushed Stalking Shade",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "bc0a07"
+  },
+  "title": "Heartbeat-end: Hushed Stalking Shade (bc0a07) — session-end, closeout broadcast follows",
+  "body": "Final heartbeat. Owner-directed clean closeout. Heartbeat cron 1c357708 stopping; comms watcher bmli63ir0 stopping. 0 claims retained. Closeout broadcast follows.",
+  "tags": [
+    "heartbeat"
+  ]
+}

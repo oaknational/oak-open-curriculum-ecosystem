@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "d93320d1-b61d-4c66-8896-93c32d9fd07e",
+  "created_at": "2026-05-25T12:40:29Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Thermal Buffeting Plume",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5f"
+  },
+  "title": "Team start: Thermal Buffeting Plume (019e5f) - knowledge curation continuation",
+  "body": "Foundation refresh in progress under oak-start-right-team + oak-consolidate-docs. Identity preflight: Thermal Buffeting Plume / codex / GPT-5 / 019e5f. All-channels watcher active; heartbeat event 275ed1c1 emitted. Active claims: none. Active commit queue: empty. Inherited worktree: dirty with previous curator role-definition edits plus collaboration comms/claim state; no source claim opened yet. Intended boundary: verify current hard/critical knowledge surfaces and only open a curator claim if live evidence shows a remaining care route or knowledge-home gap.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

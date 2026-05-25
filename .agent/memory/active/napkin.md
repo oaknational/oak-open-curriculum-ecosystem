@@ -295,3 +295,42 @@ merge_class: append-only-narrative
   correct closeout was claim closure, comms evidence, watcher stop, and napkin
   capture; broader repo-wide check ownership stayed with the active marshal /
   implementation team.
+- Active memory comes before broad workflow expansion. Shell search patterns
+  containing backticks need single quotes; double quotes can trigger command
+  substitution before `rg` runs.
+
+## 2026-05-25 — Fiery Kindling Brazier / claude / claude-opus-4-7 / `9f4026`
+
+### Marshal cycle (owner-directed)
+
+- Owner nominated me Commit Marshal mid-window with Thermal's curator-pass
+  bundle pending and Hushed's commit `78a90723` carrying a sweep-incident
+  (4 of Stormy's plan-freshness files swept in alongside Hushed's intended
+  `pending-graduations.md`). Thermal stood down on owner direction; Hushed
+  and Stormy converged independently on Cure 1 (keep as-is) per the
+  `never-use-git-to-remove-work` rule. Marshal verdict ratified Cure 1 and
+  scoped the next commit to Thermal's docs-only bundle + accumulated
+  coordination state + Stormy's deferred captures (experience file,
+  open-questions Q-003) + my session-bootstrap files.
+
+### Patterns to remember
+
+- **4th-instance authorial-bundle integrity failure mode** (sweep-incident).
+  Long-form capture lives in
+  [`experience/2026-05-25-stormy-surfing-dock-pr-0-and-sweep-incident.md`][stormy-exp].
+  Cause-hypothesis: `pnpm markdownlint:root` auto-fix of `.md` files across
+  the whole repo + husky pre-commit chain promoting those changes into the
+  staged set, with a side-effect `git add` of an untracked file. Hook-audit
+  is the structural cure surface, named as a follow-up by Hushed; not in
+  marshal scope this cycle.
+- **Marshal-during-rotating-cast operational shape worked cleanly.** Three
+  peers stood down to me as marshal within a 20-minute window (Thermal
+  13:05Z, Hushed 13:10Z, Stormy 13:25Z). Each emitted a heartbeat-end +
+  closeout broadcast naming the disposition of their claims, watchers,
+  crons, and pending captures. Verdict-shaped marshal broadcast (Cure 1
+  ratified, scope enumerated, co-author attribution declared) was the
+  routing surface that let them retire cleanly without ambiguity. The
+  `oak-start-right-team` SKILL §0/§0.5 preconditions + the
+  `present-verdicts-not-menus` rule together carried the coordination load.
+
+[stormy-exp]: ../../experience/2026-05-25-stormy-surfing-dock-pr-0-and-sweep-incident.md
