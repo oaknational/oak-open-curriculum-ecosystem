@@ -45,7 +45,7 @@ todos:
     status: pending
     depends_on: [ws2-cycle-1]
   - id: ws6-cycle-1
-    content: "WS6 cycle 1: sync-kind composer — failing test (accepts ≥2 participants from roster + title + body; emits valid ADR-184 sync event; rejects self-only selection; rejects author-not-in-participants) + composer-state sync mode + UI hotkey. One commit."
+    content: "WS6 cycle 1: sync-kind composer — failing test (accepts ≥2 distinct agent participants from roster + title + body; emits valid ADR-184 sync event with `author_kind: \"owner\"` and `author.owner_id` per Path A; participants are agents only — owner is NOT a participant; rejects <2 distinct agent participants; does NOT enforce author-in-participants when `author_kind === \"owner\"` per ADR-184 owner-composition amendment 2026-05-25) + composer-state sync mode + UI hotkey. One commit."
     status: pending
     depends_on: [ws3-cycle-2, ws4-cycle-1]
   - id: ws7-cycle-1
@@ -108,8 +108,11 @@ defines:
 - `narrative.in_response_to: event_id` for threading.
 - `directed.from` / `directed.to` for point-to-point.
 - `sync.participants: agent_id[]` (ADR-184) for multi-agent synchronous
-  coordination, with required ≥2 participants and author-must-be-
-  participant validation.
+  coordination, with required ≥2 distinct agent participants. The
+  author-must-be-participant invariant is conditional on
+  `author_kind === "agent"` (ADR-184 owner-composition amendment
+  2026-05-25); for owner-authored sync, the owner originates the
+  multi-agent coordination loop but is not a participant.
 - `tags: string[]` (ADR-183) for namespace routing.
 - `urgency` (ADR-184) composes with every kind.
 
@@ -190,14 +193,18 @@ lands:
    *Falsifiability*: WS4 test suite verifies XDG resolution + fallback
    path on missing/malformed config + `--owner-as` flag override.
 
-2. **Path A (schema extension with `author_kind`) is owner-ratified**.
-   This plan recommends Path A; the owner ratifies at WS0. If the owner
-   directs Path C (new event kind) instead, WS1–WS7 file scopes shift
-   but the workstream structure remains. Path B (privileged
+2. **Path A (schema extension with `author_kind`) is owner-ratified**,
+   and ADR-184 admits owner-as-author for sync events via the
+   owner-composition amendment 2026-05-25. This plan recommends Path A;
+   the owner ratifies at WS0. If the owner directs Path C (new event
+   kind) instead, WS1–WS7 file scopes shift, the ADR-184
+   owner-composition amendment becomes inert (sync stays agent-only),
+   and the workstream structure remains. Path B (privileged
    agent-identity wrapper) is rejected as in-band signalling per
    architectural-excellence discipline and is NOT a valid alternative.
    *Falsifiability*: WS0 records the decision before WS1 starts; the
-   PDR-083 draft documents the rejected alternatives.
+   PDR-083 draft documents the rejected alternatives and references the
+   ADR-184 owner-composition amendment.
 
 3. **Roster from active-claims is the right recipient source**.
    Active-claims drives currently-engaged agents; closed-claim agents
@@ -434,21 +441,26 @@ hotkey-handler integration test.
 
 **TDD cycle 1** (one commit):
 
-1. **Failing test** per ADR-184 sync-kind requirements:
-   - Sync-composer accepts ≥2 participants from the roster + title +
-     body.
+1. **Failing test** per ADR-184 sync-kind requirements (with
+   owner-composition amendment 2026-05-25):
+   - Sync-composer accepts ≥2 distinct agent participants from the
+     roster + title + body.
    - Emits valid `sync`-kind event: `kind: "sync"`,
-     `participants: [agent_id, …]`, author present in participants,
-     urgency field optional.
-   - Rejects self-only participants list.
-   - Rejects author-not-in-participants (per ADR-184 validation).
+     `author_kind: "owner"`, `author.owner_id: {...}` per Path A,
+     `participants: [agent_id, …]` (agents only — owner is NOT a
+     participant), urgency field optional.
+   - Rejects <2 distinct agent participants (self-only or single-agent
+     participants lists).
+   - Does NOT enforce author-in-participants when
+     `author_kind === "owner"` (per ADR-184 owner-composition amendment).
 2. **Product code**: composer-state sync mode + UI hotkey (`s` to enter
    sync mode); audience picker reused as participants picker (no
-   `*` row in sync context — sync is always targeted).
+   `*` row in sync context — sync is always targeted; owner does not
+   self-add since they are not a participant under the amendment).
 
 **Acceptance**:
 
-- Sync events validate per ADR-184.
+- Sync events validate per ADR-184 (with owner-composition amendment).
 - UI distinguishes sync mode visually from narrative/directed modes.
 
 **Files**: Extend composer-state; sync-mode test cases.
@@ -583,7 +595,7 @@ The plan is `complete` when ALL of the following hold:
 | `HC-A2` | E2E | Owner can compose a group message to a selected subset; only selected agents see it via audience routing. |
 | `HC-A3` | E2E | Owner can compose a directed message to one agent. |
 | `HC-A4` | integration | Reply mode inherits recipient + `in_response_to` from the focused event. |
-| `HC-A5` | integration + value-proxy | Sync mode validates ≥2 participants per ADR-184 and emits a valid sync event. |
+| `HC-A5` | integration + value-proxy | Sync mode validates ≥2 distinct agent participants per ADR-184 (with owner-composition amendment 2026-05-25); emits a valid sync event with `author_kind: "owner"` and owner-not-in-participants. |
 | `HC-A6` | component + snapshot | Owner-authored events render with `[OWNER]` label / visual stripe in both text and interactive modes. |
 | `HC-A7` | integration | Owner identity persists across TUI sessions via XDG config; `--owner-as` flag overrides. |
 | `HC-A8` | integration + value-proxy | Receipt-state ("seen by X/Y") visible for recently-sent owner events. |

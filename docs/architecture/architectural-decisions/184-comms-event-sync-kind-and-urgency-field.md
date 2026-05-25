@@ -1,6 +1,7 @@
 # ADR-184: Comms-Event Sync Kind and Urgency Field
 
-**Status**: Proposed 2026-05-23
+**Status**: Proposed 2026-05-23 (amended 2026-05-25 for owner-as-author
+composition with `human-composer-tui.plan.md` WS0 Path A)
 **Date**: 2026-05-23
 **Related**:
 [ADR-181](181-agent-team-start-and-action-log.md) (team-start ritual
@@ -11,6 +12,8 @@ the `directed` event kind);
 [ADR-183](183-comms-event-tag-namespace-substrate.md) (tag namespace
 substrate; tags classify event substance, not interaction shape or
 response priority);
+[`.agent/plans/agent-tooling/current/human-composer-tui.plan.md`](../../../.agent/plans/agent-tooling/current/human-composer-tui.plan.md)
+WS0 Path A (the owner-as-author doctrine this ADR composes with);
 pending-graduations candidate `sync-kind-urgency-flag` (the source
 candidate this ADR resolves).
 
@@ -127,6 +130,49 @@ replacement for:
   but not a synchronised decision loop;
 - decision-thread or sidebar records, when the coordination state
   needs a longer structured lifecycle than a single comms event.
+
+#### Sub-axis: owner-as-author composition (amendment 2026-05-25)
+
+This sub-axis records the composition rule between the `sync` kind and
+the `author_kind: "agent" | "owner"` doctrine recommended by
+[`human-composer-tui.plan.md`](../../../.agent/plans/agent-tooling/current/human-composer-tui.plan.md)
+WS0 Path A. Owner ratification of Path A is the trigger for this
+sub-axis; if WS0 instead ratifies Path C (separate owner-direction event
+kind), this sub-axis is inert and `sync` retains agent-only semantics
+unchanged.
+
+Two cases, dispatched on `author_kind`:
+
+- **`author_kind === "agent"`** — the original rule applies unchanged.
+  `author` is `agent_id`-shaped. `participants` is an array of `agent_id`
+  identities with ≥2 distinct members. The author-must-be-participant
+  invariant is enforced.
+- **`author_kind === "owner"`** — `author` is `owner_id`-shaped per
+  Path A. `participants` remains `agent_id[]` (sync is a multi-agent
+  decision loop semantically; the owner is not a participant).
+  `participants` still requires ≥2 distinct agent identities. The
+  author-must-be-participant invariant does **not** apply: the owner
+  originates the sync between agents without being part of the
+  coordination loop's decision quorum.
+
+The semantic framing is: "the owner starts a sync between agents." The
+owner triggers the multi-agent coordination loop; the loop itself is
+between agents.
+
+Write-side validation must dispatch on `author_kind`:
+
+- For agent-authored sync: require `author` ∈ `participants` (by agent
+  identity tuple equality); reject self-only `participants`; enforce ≥2
+  distinct agent identities.
+- For owner-authored sync: skip the author-in-participants check;
+  enforce ≥2 distinct agent identities in `participants`. Owner identity
+  shape validation lives in Path A's schema extension; this ADR
+  specifies only the participant invariant.
+
+The ≥2-distinct-agent-participants invariant is unconditional. It
+remains the write-side guard against false coordination pressure
+(self-only or single-agent participants lists) regardless of who
+authored the sync event.
 
 ### Axis 2: `urgency` field
 
@@ -272,6 +318,20 @@ named coordination loop with at least two participants. The participant
 set is the write-side invariant that prevents self-only sync events from
 creating false pressure.
 
+**Why owner-as-author is conditional and outside the
+author-in-participants invariant** (added by 2026-05-25 amendment). The
+original author-in-participants rule prevents self-only sync events from
+creating false coordination pressure — a single agent cannot pretend to
+be syncing with themselves. The owner is not an agent; they originate
+sync coordination between agents on the owner→agents trust gradient.
+The participant set still requires ≥2 distinct agents so the
+coordination loop is genuinely multi-agent. Owner-not-in-participants is
+the honest representation: the owner triggers the coordination loop but
+is not part of its decision quorum. Forcing the owner to declare
+themselves a participant would either pollute `participants` with a
+non-agent identity (contradicting Path A) or smuggle the owner in via
+an `agent_id` wrapper (the rejected Path B anti-pattern).
+
 **Why no acknowledgements or read receipts in this ADR.** Sync events
 make the interaction shape visible. They do not create a full state
 machine for request/ack/resolve. Longer-lived coordination belongs in
@@ -297,6 +357,10 @@ appropriate.
   urgency values before writing JSON event files.
 - Schema, Zod, TypeScript fixtures, CLI authoring, and watcher rendering
   tests land in lockstep; these surfaces must not drift independently.
+- Write-side validation dispatches on `author_kind` for sync events: the
+  author-in-participants invariant is enforced only when
+  `author_kind === "agent"`; the ≥2-distinct-agent-participants
+  invariant is unconditional (2026-05-25 amendment).
 
 ### Forbidden
 
@@ -348,3 +412,8 @@ axes that compose with tags.
 5. Whether non-normal urgency should also alter inbox sorting or only
    render as a token. This ADR requires rendering; reordering is a
    separate behaviour decision.
+6. The schema/parser tranche encodes the conditional
+   author-in-participants invariant by branching on `author_kind`, not
+   by introducing a separate event sub-kind. "Owner-authored sync" and
+   "agent-authored sync" remain the same `kind: "sync"` event with
+   different `author_kind` discriminators (2026-05-25 amendment).
