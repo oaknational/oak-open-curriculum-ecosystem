@@ -162,16 +162,14 @@ todos:
     depends_on: [cycle-13-charcoal-gamma-extraction]
   - id: cycle-15-branch-fitness-drain
     content: >
-      Cycle 15 (R3 owner-directed): branch fitness drain composite —
-      soft-surface markdownlint sweep + napkin rotation + pending-
-      graduations buffer drain. Highest-impact-per-effort fitness
-      selection (not exhaustive). Comms-events archival EXCLUDED per
-      owner correction: comms-events are critical resource; handling
-      problem addressed by cycles 9-11, not by their removal. Reviewer
-      dispatch (docs-adr-expert + onboarding-expert + curator pass).
-      Marshal-cycle. One commit (or 2-3 commits if curator conventions
-      require). Tree green at end. SOFT count materially reduced.
-    status: pending
+      Cycle 15 (R3 owner-directed): branch fitness drain composite.
+      REMOVED per owner direction 2026-05-25: this cycle was a
+      misunderstanding. The work it framed (markdownlint sweep + napkin
+      rotation + pending-graduations buffer drain) is not a single-cycle
+      shape; it is ongoing curator/consolidation discipline absorbed by
+      `consolidate-docs` SKILL and the per-write-rule learning-preservation
+      doctrine (PDR-046). No commit needed; no follow-on plan needed.
+    status: removed
     depends_on: [cycle-14-twilit-cycle-3]
 isProject: false
 ---
