@@ -9,7 +9,7 @@ merge_class: append-only-narrative
 
 # Napkin
 
-## 2026-05-25 — Hushed Stalking Shade / claude / claude-opus-4-7 / `bc0a07` (hardening-arc consolidation Phases 1+2+4+5)
+## 2026-05-25 — Hushed Stalking Shade (`bc0a07`, opus-4.7) — hardening-arc Phases 1+2+4+5
 
 ### What worked
 

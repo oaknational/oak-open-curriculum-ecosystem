@@ -107,13 +107,14 @@ question; cross-link rather than duplicate.
 - Status: open
 - Linked: comms-events `c4f50491` (Cycle 9 routing), `[06:13:41Z]` (fold-check
   verdict), `[06:17:21Z]` (Hushed reconciliation), `[06:18:14Z]` (Misty
-  three-failure-mode broadcast); plan
-  `.agent/plans/agentic-engineering-enhancements/archive/completed/post-m1-attestation-tidy-up.plan.md`
-  §R4 (plan archived 2026-05-25; PR #114 merged at `77fcf746`). The R4
-  plan-update-decision shape is now stale — the decision-shape concern that
-  motivated Q-001 remains open as a meta-question about plan-update authority,
-  but the specific §R4 anchor refers to the archived audit trail rather than a
-  live decision lane.
+  three-failure-mode broadcast); audit trail §R4 in the archived
+  `post-m1-attestation-tidy-up.plan.md` under
+  `.agent/plans/agentic-engineering-enhancements/archive/completed/`
+  (PR #114 merged at `77fcf746`). The R4 plan-update-decision shape is
+  now stale — the decision-shape concern that motivated Q-001 remains
+  open as a meta-question about plan-update authority, but the specific
+  §R4 anchor refers to the archived audit trail rather than a live
+  decision lane.
 
 ### Q-002: Should consolidate-docs explicitly reference this file?
 

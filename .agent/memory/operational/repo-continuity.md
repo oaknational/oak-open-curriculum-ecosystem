@@ -185,7 +185,7 @@ the PR #108 snagging plan, not duplicated here:
 
 - [connecting-oak-resources thread record][connecting]
 - [PR #108 snagging plan](../../plans/connecting-oak-resources/knowledge-graph-integration/archive/completed/pr-108-snagging.plan.md) (archived; gate cycles landed)
-- [M1 Safe Pause program plan](../../plans/agentic-engineering-enhancements/archive/completed/practice-infrastructure-hardening-program.plan.md) (archived 2026-05-25; Gate 1 WS-7 historical authority — PR #108 merged at `2462952a`)
+- [M1 Safe Pause program plan](../../plans/agentic-engineering-enhancements/archive/completed/practice-infrastructure-hardening-program.plan.md) (archived; PR #108 at `2462952a`)
 - [gate-1a delivery addendum](../../plans/connecting-oak-resources/knowledge-graph-integration/current/gate-1a-delivery-parallel-execution-addendum.plan.md)
 
 **Preview MCP validation**: PR #108 black-box pass documented 2026-05-24
