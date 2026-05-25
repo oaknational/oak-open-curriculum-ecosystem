@@ -1,5 +1,65 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-25 — Mistbound Passing Candle / claude / claude-opus-4-7 / `e77243` + Quiet Whispering Veil / codex / GPT-5 / `019e60`, n=2 post-compaction execution + curation)
+
+**Session boundary**: n=2 mode with explicit lane separation per owner direction. Mistbound (post-compaction continuation from the plan-authoring session) executed plan/PDR substantive work; Quiet Whispering Veil joined mid-session as knowledge-curation specialist after owner appointment. Owner directed Mistbound to ignore fitness functions (Quiet's lane). Branch: `docs/agent-collaboration-enhancements`. Five owner-directed metacognition passes during the arc (LTAE on inherited option-set, then NEVER-compress-findings-reactively, then semantic-cause of blocked phrase).
+
+**Landed outcome** (6 commits pushed to `origin/docs/agent-collaboration-enhancements`):
+
+- `4b69aab8` — `docs(n2-plan): land program plan, survey, and integration edits` (the 10-file session-arc commit owner-deferred from prior plan-authoring session; serves as founding worked-instance for WS2 decomposition discipline).
+- `445bf0e1` — `docs(state): cure CRITICAL on open-questions; persist commit-window closure` (reference-style link cure for fitness CRITICAL).
+- `3ca71a40` — `docs(pdr-078): amend with substrate-category clause (ws4 item 1)` — **WS4 first move landed**. Added clause §5 ("Substrate category: heartbeats are liveness infrastructure") inside Decision; two companion entries under Forbids; fourth Falsifiability axis; Revision history. Worked-instance ratification fires opportunistically in a later session.
+- `0d2f0dd8` — `docs(n2-plan): pre-position ws0 skill decomposition options; ws1 re-survey finding` (later superseded for WS0 by `04d5cefa`).
+- `93657434` — `chore(state): drain commit-queue residue from prior intent`.
+- `04d5cefa` — `docs(n2-plan): direct ws0 verdict to (c)+partial(a) via ltae frame test` — **WS0 directed verdict landed**: applied [`re-apply-first-question-at-elaboration-boundaries`](../../rules/re-apply-first-question-at-elaboration-boundaries.md) to the option-set itself. (b) struck as anti-shape (violates WS0 acceptance criterion); (a) standalone as under-engineered; (c)+partial(a) as directed verdict. WS0 substantive work cleared to open.
+
+Reviewer dispatch: Plan agent (in plan mode at session-open) challenged the WS0+WS1+WS4 parallel-open framing; critical analysis kept the structural insight, rejected new-plan-file recommendation, accepted commit-shape and within-workstream sequencing.
+
+**WS1 re-survey finding** (captured in plan body §WS1): items #1 and #2 substantially done already — `--body-file` is implemented across all four comms verbs with mutex against `--body` and empty-file rejection; integration tests cover `comms direct`. Plan body was based on stale state. Worked-instance for the verify-before-applying discipline.
+
+**Evidence**:
+
+- Plan amendments at `agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md` (WS0 directed verdict, WS1 re-survey finding, WS4 amendment-via-PDR pattern).
+- PDR-078 amendment at `.agent/practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md` §5 + Forbids + Falsifiability + Revision history.
+- Quiet's curation: napkin entry homed to `pending-graduations/2026-05-25-mistbound-inherited-frame-and-hook-signal-candidates.md` with full substance preserved + disposition section identifying which items are likely existing-rule worked-instances vs candidate patterns. Napkin replaced with disposition pointer.
+- Plan mode execution plan at `~/.claude/plans/sunny-imagining-wreath.md` captures the design-time framing reasoning (off-repo, won't survive long-term).
+
+**Substantive findings captured for graduation** (in pending-graduations shard):
+
+- **Inherited-frame credulity** — when a prior session's artefact is inherited, default is to work within its boundaries rather than questioning them. The audit-shape inherits authority it doesn't deserve. Cure: re-apply the first question at every elaboration boundary, INCLUDING the boundary at which options are surfaced. Already covered by `re-apply-first-question-at-elaboration-boundaries`; this is a worked-instance, not new doctrine.
+- **Hook-as-diagnostic, not obstacle** — owner-named: when a `policy.json` hook fires, the right response is to ask what the block reveals about the agent's conceptual framing, not to mechanically rewrite the prose to comply. The block existed at the linguistic layer because the rejected category in agent voice is itself the failure mode (PDR-044 innate immunity). Worked-instance of `never-ignore-signals` applied at the hook-policy layer.
+- **NEVER compress findings reactively** (owner-named explicit rule) — buffer-pressure signals (fitness HARD/CRITICAL) call for rotation/homing, never for finding-trimming. Quiet's curation demonstrated the architecturally-correct shape: substance preserved verbatim in a pending-graduations shard, napkin compressed structurally via disposition pointer. Mistbound near-violated this twice (heading compression + considered prose compression); the rule resolved both.
+- **The pattern is fractal** — every "this is mechanical, just work around it" moment is potentially a "this is conceptual, look deeper" layer. Three structural surfaces enforcing one principle: hook-policy (linguistic layer); rule corpus `re-apply-first-question` + `never-ignore-signals` (semantic layer); fitness gate (buffer-management layer). All compensate for inherited self-trust.
+
+**Owner-direction-gates at handoff**:
+
+- WS0 SKILL decomposition shape: RESOLVED to (c)+partial(a). WS0 substantive work cleared to open in a future session.
+- WS3 amendment β shape (silent-API-failure cure: heartbeat retention vs watcher silent-detection event): DEFERRED until WS3 opens (gated by WS0 SKILL shape AND WS10 PDR-082 second-instance). Not surfaced this session.
+
+**Next session's first move**:
+
+- WS0 substantive work: author the two-tier rule corpus classification + rule-vs-PDR-clause decision rule + (c)-shape extraction plan for `start-right-team` §0 and §0.5, surfaced as plan amendment before reviewer dispatch (Fred + Betty + docs-adr-expert + assumptions-expert) BEFORE any rule file is moved or amended.
+- OR: alternative track of WS4 items #2 (heartbeat-content mechanical state-binding) and #3 (ping-before-escalate as agent-general rule), now unblocked architecturally by the §5 amendment.
+
+**Pending-graduations status changes**:
+
+- New shard authored: `pending-graduations/2026-05-25-mistbound-inherited-frame-and-hook-signal-candidates.md` with 4 candidate dispositions.
+- WS4 item #1 (heartbeats-are-infrastructure) — LANDED at `3ca71a40`; can be marked graduated in any shard that tracked it.
+
+**Owner directions captured this session**:
+
+- "Quiet Whispering Veil will handle the knowledge curation, you can ignore the fitness functions" — lane separation directive; Mistbound owns plan/PDR; Quiet owns memory/curation/coordination-state.
+- "NEVER compress findings reactively" — explicit rule statement.
+- "reflect on the semantic and conceptual cause of the blocked phrase, not just work around it" — directs deeper metacognitive layer on signal interpretation.
+
+**Heartbeat-end broadcast emitted**: Mistbound team-start at `83f75634`; Mistbound handoff at `ee486a2d`. Quiet team-start, gate-state, heartbeat-end captured in their respective comms-events.
+
+**Retained claims**: none. All session claims explicitly closed.
+
+**Blockers or risks**: none active. Owner standing direction on comms file retention (NO moves or deletes until comms research plan completes) preserved — no comms event files touched this session.
+
+---
+
 ## Session Outcome (2026-05-25 — Mistbound Passing Candle / claude / claude-opus-4-7 / `e77243`, n=2/coordination-efficiency survey + plan + integration)
 
 **Session boundary**: Owner-directed multi-step goal — survey collaboration-efficiency substance across napkin/distilled/pending-graduations/plans/recent-comms; reflect via /oak-metacognition at three checkpoints; score candidate actions on user-specified 4 axes; fan out specialist reviewers; create plan; integrate with discovery surfaces. Sole-contributor session on branch `docs/agent-collaboration-enhancements` (created mid-session after PR #116 merged into main).
@@ -2225,7 +2285,8 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 | `codex` | `GPT-5` | Shadowed Glimmering Moth | Consolidator / observation-only tidy-plan support (`019e5d`; hard/critical consolidation objective closed at `SOFT (20 soft)`, then Cycle 10/11 readiness notes broadcast without racing Eclipsed Cycle 9 or Wooded Cycle 10) | 2026-05-25 | 2026-05-25 |
 | `codex` | `GPT-5` | Thermal Buffeting Plume | Knowledge Curator (`019e5f`; role-substrate clarification, hard/critical curation completion, handoff/consolidation closeout) | 2026-05-25 | 2026-05-25 |
 | `codex` | `GPT-5` | Breezy Flowing Dock | Knowledge Curator (`019e5f`; critical/hard memory curation, napkin rotation, pending-graduations active shard, light handoff) | 2026-05-25 | 2026-05-25 |
-| `claude` | `claude-opus-4-7` | Mistbound Passing Candle | Plan author (`e77243`; n=2/coordination-efficiency survey + plan + integration with `cost-of-collaboration.plan.md`; 4 reviewer dispatches; 4 metacognition passes; owner-ratified option (a) dependency-graph-as-spine structure; execution deferred to next session) | 2026-05-25 | 2026-05-25 |
+| `claude` | `claude-opus-4-7` | Mistbound Passing Candle | Plan author + executor (`e77243`; first session: n=2/coordination-efficiency survey + plan + integration. Second session post-compaction: WS4 first move PDR-078 §5 substrate-category amendment at `3ca71a40`; WS0 directed verdict (c)+partial(a) via LTAE-frame-test at `04d5cefa`; 6 commits pushed; 5 metacognition passes; owner-named NEVER-compress-findings-reactively rule integrated; lane partner with Quiet Whispering Veil for second session) | 2026-05-25 | 2026-05-25 |
+| `codex` | `GPT-5` | Quiet Whispering Veil | Knowledge Curator (`019e60`; second-session arrival; homed Mistbound's dense post-compaction napkin entry into live shard `pending-graduations/2026-05-25-mistbound-inherited-frame-and-hook-signal-candidates.md` with full substance preserved + 4-item disposition section; ran inherited-tree fitness gate as self-elected gate-runner; cured HARD on napkin via rotation not compression; team-member handoff to Mistbound for commits) | 2026-05-25 | 2026-05-25 |
 | `claude` | `claude-opus-4-7` | Misty Drifting Sail | Implementer / plan-AUTHOR (`02b325`, post-m1-attestation-tidy-up.plan.md Cycles 5+5a re-enqueue + held-items consolidation + 7 + 7.1 + 8 + 8a). Joined fresh under Lunar-Director routing 2026-05-24T22:10Z for commit-subject pre-flight (read-only), re-routed at 22:14Z to plan-AUTHOR under pure-direction split (Lunar = plan-OWNER, Misty = plan-AUTHOR, Mistbound = Commit Marshal). 7 cycles landed via Mistbound: `7c2f85f4` Cycle 5 (PDR-077 + reciprocals); `e8bc6781` Cycle 5a (PDR-079 + rule + hook); `93c4fdc0` held-items consolidation (README + practice-index PDR-077/078/079); `48c8ac22` Cycle 7 (ADR-186 + reciprocal §Related to ADR-183 + PDR-078 + practice-index line-165 fix); `75a2cd25` Cycle 7.1 (ADR-186 prettier-mangle repair); `9e57290d` Cycle 8 (SKILL §0.5 thin + PDR-078 Candidate→Accepted Adopted 2026-05-25 + reciprocal §Related to PDR-027/063/064). Cycle 8a ADR-187 (Claude self-modification authz cure-shape, WS-8 Lanternlit absorption — C2-near-term + C5-long-term + C4-fallback combination; C1/C3 rejected; 10 architectural conditions from Ferny WS-2 reviewer synthesis embedded; **4-reviewer absorption depth** docs-adr APPROVE-AS-IS + assumptions 2 CRITICAL + security 1 RES-CRITICAL + 5 MEDIUM + 1 LOW + wilma 2 RES-CRITICAL + 4 MEDIUM) authored 585 lines and **enqueued under intent `7e965431` / claim `e097d5a1`** awaiting marshal at compaction-prep time. Cycle 8a marshal blocked on Mistbound silence (≥83 min at wind-down; ping-before-escalate cure validated false-positive twice in session; sole-marshal binding means owner-class decision required). Surfaced 3 recurring failure modes for closeout consolidation: **heartbeat-content-drift** (3 Misty + 3+ Lunar instances of stale templated heartbeat body despite live state changes; graduation candidate: mechanical state-binding via structured field); **platform-wide Monitor cron-drift** (Misty 20-min + Lunar 17-min concurrent gaps at 23:28-23:47Z; graduation candidate: heartbeat-cron health-monitoring via existing watcher-staleness substrate); **ping-before-escalate cure validation** (cross-check git work-evidence before retirement-detection; validated twice in single session). Plan-author seat released 2026-05-25T00:35Z per Lunar's structural-stall wind-down at 00:33Z; team-member closeout broadcast `86d1fe2e`. **1 claim retained** for Cycle 8a marshal pickup (`e097d5a1`). | 2026-05-24 | 2026-05-25 |
 | `claude` | `claude-opus-4-7` | Mistbound Hiding Threshold | Sole Commit Marshal (`0e27cc`, post-m1-attestation-tidy-up.plan.md across compaction-5 resume → retirement; duty span ~8h35min 2026-05-24T21:08Z → 2026-05-25T05:47Z). 10 commits landed: `4575044e` Cycle 2 (Charcoal PDR-077 captures); `e8ca6d08` Cycle 3 (PDR-076a Accepted); `b7ac9938` Cycle 4 (PDR-076b Accepted); `7c2f85f4` Cycle 5 (PDR-077 + 063/064 reciprocals); `e8bc6781` Cycle 5a (PDR-079 + rule + hook); `9725ae09` Cycle 6 (PDR-078 Candidate); `93c4fdc0` held-items consolidation; `48c8ac22` Cycle 7 (ADR-186); `75a2cd25` Cycle 7.1 (ADR-186 prettier-mangle repair); `9e57290d` Cycle 8 (SKILL §0.5 + PDR-078 Adopted + reciprocals). Cycle 8a (intent `7e965431`) abandoned 23:26Z on husky format-issues; substantive work preserved as `??`+`M` in working tree for next author. Two false-positive retirement-detections fired (21:57Z Seaworthy + 22:57Z Lunar) — Director cure-discipline `cross-ref git log before escalation` named at 22:58Z + 23:01Z; pattern named for graduation. Branch-fitness-and-push-cadence.plan.md authored (16-cycle revised structure; 11 reviewer-driven revisions applied; uncommitted in tree). Marshal seat handed cleanly to Hushed Stalking Shade (`bc0a07`) via PDR-064 Moment-2 at 05:46Z (handoff record `.agent/state/collaboration/handoffs/2026-05-25-mistbound-to-hushed-stalking-shade-marshal-handoff.md`; Moment-1 broadcast `e2a21c5d`). Retired 2026-05-25T05:47Z. Closeout broadcast 05:47:50Z. | 2026-05-22 | 2026-05-25 |
 | `claude` | `claude-opus-4-7-1m` | Lush Sprouting Thicket | Implementer (codex-helper skill, codex-exec CLI, ADR-180, future plan) | 2026-05-12 | 2026-05-12 |

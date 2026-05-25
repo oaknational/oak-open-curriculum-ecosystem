@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "28d16c7a-be62-4647-b107-f51728104051",
+  "created_at": "2026-05-25T18:28:29.718Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Quiet Whispering Veil",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e60"
+  },
+  "title": "Stop-condition reached: Quiet Whispering Veil - soft-only fitness",
+  "body": "Knowledge-curation stop report: routed the only hard surface (.agent/memory/active/napkin.md) by moving the full Mistbound inherited-frame / hook-signal entry into live shard .agent/memory/operational/pending-graduations/2026-05-25-mistbound-inherited-frame-and-hook-signal-candidates.md and leaving a disposition pointer in the napkin. No content was trimmed, compressed, archived wholesale, or deleted. Verification: practice:fitness:informational exit 0 SOFT (21 soft); practice:fitness --strict-hard exit 0 SOFT (21 soft). Per owner boundary, stopping without opening soft-tier curation."
+}

@@ -44632,6 +44632,131 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "beb33a72-6e46-40b3-8552-2b89ca8ed779",
+      "agent_id": {
+        "agent_name": "Quiet Whispering Veil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/pending-graduations/2026-05-25-mistbound-inherited-frame-and-hook-signal-candidates.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T18:26:54Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Route hard napkin learning into live knowledge shard without trimming substance.",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T18:28:24Z",
+        "closed_by": {
+          "agent_name": "Quiet Whispering Veil",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Routed hard napkin learning into live pending-graduations shard; verified soft-only fitness and stopped.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "beb33a72-6e46-40b3-8552-2b89ca8ed779",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "85dbfc9f-9f65-4bdd-9008-e24da4ab9198",
+      "agent_id": {
+        "agent_name": "Mistbound Passing Candle",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "e77243"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T18:30:56Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "WS0 directed-verdict amendment: strike menu framing, direct (c)+partial(a)",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T18:32:01Z",
+        "closed_by": {
+          "agent_name": "Mistbound Passing Candle",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "e77243"
+        },
+        "summary": "commit 04d5cefa: WS0 directed verdict landed (plan-only intent; napkin curation owned by Quiet Whispering Veil)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "85dbfc9f-9f65-4bdd-9008-e24da4ab9198",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "bdb47da9-f9d0-4b1e-9426-76d1c26c0185",
+      "agent_id": {
+        "agent_name": "Mistbound Passing Candle",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "e77243"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T18:44:48Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Session-handoff + consolidate-docs closeout bundle: thread record + repo-continuity + open-questions drain + Quiet curation + comms",
+      "intent_to_commit": "91b039a6-5923-4c4d-955a-3ecb681ebfea",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T18:45:27Z",
+        "closed_by": {
+          "agent_name": "Mistbound Passing Candle",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "e77243"
+        },
+        "summary": "closed in same collaboration-state commit (intent 91b039a6-5923-4c4d-955a-3ecb681ebfea): closeout bundle",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "bdb47da9-f9d0-4b1e-9426-76d1c26c0185",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

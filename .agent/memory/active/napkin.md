@@ -9,6 +9,28 @@ merge_class: append-only-narrative
 
 # Napkin
 
+## 2026-05-25 — Mistbound post-compaction execution
+
+### Processing Disposition
+
+- Full inherited-frame, LTAE option-set, hook-signal, and fractal
+  stopping-criterion substance moved intact to
+  `pending-graduations/2026-05-25-mistbound-inherited-frame-and-hook-signal-candidates.md`.
+  This is a live processing shard, not an archive. The entry was
+  already above ordinary napkin-capture density and pushed the active
+  napkin into HARD; the structural response is homing the full
+  understanding for consolidation, not trimming it.
+
+## 2026-05-25 — Quiet Whispering Veil / codex / GPT-5 / `019e60`
+
+### Mistakes Made
+
+- While homing the Mistbound entry, I fixed the napkin line-count
+  HARD but created a new CRITICAL prose-width signal with an overly
+  long inline markdown link. Behaviour change: use readable path
+  pointers or reference-style links on fitness-governed memory files,
+  and rerun fitness immediately after structural curation edits.
+
 ## 2026-05-25 — Mistbound Passing Candle / claude / claude-opus-4-7 / `e77243`
 
 ### What Worked

@@ -127,6 +127,16 @@ question; cross-link rather than duplicate.
   Q-001 remains `open` because the plan is pending owner ratification with
   execution deferred to next session; mark `answered-in-place` when WS3 + WS4
   land.
+- Partial-landing (2026-05-25 Mistbound+Quiet, second session): **WS4 first
+  move landed at commit `3ca71a40`** — PDR-078 §5 substrate-category clause
+  cures the `heartbeat-tag-overloading` failure mode (one of Misty's three).
+  Two Forbids now codify: substantive-broadcast-as-heartbeat-by-tagging is
+  forbidden; substantive payloads in heartbeat bodies are forbidden. WS4
+  remaining items (#2 heartbeat-content mechanical state-binding for
+  heartbeat-content-drift; #3 ping-before-escalate) and WS3 amendments
+  (including β silent-API-failure cure for emission-vs-absorption gap)
+  remain pending. Q-001 stays `open`; promote to `answered-in-place` when
+  WS4 items #2/#3 + WS3 amendments land.
 
 ### Q-002: Should consolidate-docs explicitly reference this file?
 
@@ -199,6 +209,22 @@ question; cross-link rather than duplicate.
   independently. Second-instance evidence for either Q-003 OR PDR-082 informs
   both. See
   [the n=2/coordination-efficiency program plan][n2-plan].
+- **Second instance observed** (2026-05-25 Mistbound+Quiet, post-compaction
+  session): Quiet Whispering Veil joined mid-session as knowledge-curation
+  specialist after Mistbound was already in flight on plan/PDR substantive
+  work. Quiet ran `start-right-team` foundation moves at the joining moment
+  (heartbeat cron, all-channels watcher, team-start broadcast) — full
+  protocol bootstrap at mid-session, not closeout. The cure shape Q-003
+  predicted (reduced-bootstrap for late-formed teams) was NOT applied here
+  because Quiet was joining for substantive curation work (multi-cycle), not
+  for closeout-only participation. Refined formulation: the genuinely
+  reduced-bootstrap case is *closeout-only participation* (single-broadcast
+  acknowledgement, no persistent watcher/heartbeat), NOT *mid-session join
+  for substantive work*. Quiet's instance refines Q-003's scope: cure
+  candidates (a) named exemption set on §0/§0.5; (b) "team-formed-late"
+  sub-section apply specifically when the joining agent is participating in
+  closeout-only, not in substantive multi-cycle work. Status remains `open`
+  but the scope is now sharper.
 
 [n2-plan]:
   ../../plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md

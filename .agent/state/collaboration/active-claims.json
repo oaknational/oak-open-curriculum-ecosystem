@@ -1923,6 +1923,44 @@
       "phase": "abandoned",
       "staged_bundle_fingerprint": "5cd13c8b58c60db5a7927f71efafb2f2c75c2e8904e5bebcf01e96b8140bafcb",
       "staged_name_status": "M\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/comms-seen/Fiery-Kindling-Brazier.json\nM\t.agent/state/collaboration/comms-seen/Stormy-Surfing-Dock.json\nA\t.agent/state/collaboration/comms/06cd67d4-0e42-4056-82b6-1075536f2b1a.json\nA\t.agent/state/collaboration/comms/4bf240b9-39e4-42c0-a487-0191a553e264.json\nA\t.agent/state/collaboration/comms/607220f3-cc46-4811-a9ce-8b7e2c0b8897.json\nA\t.agent/state/collaboration/comms/729beb59-6e26-4ae4-a25e-c705fe735276.json\nA\t.agent/state/collaboration/comms/a6058082-f0f3-467a-ba59-7617e5100e8b.json\nA\t.agent/state/collaboration/comms/bb6e4203-3214-40a3-b796-74500188a55f.json\nA\t.agent/state/collaboration/comms/c44a28f8-7936-4b6d-9142-1647dbd35a58.json\n"
+    },
+    {
+      "intent_id": "91b039a6-5923-4c4d-955a-3ecb681ebfea",
+      "claim_id": "bdb47da9-f9d0-4b1e-9426-76d1c26c0185",
+      "agent_id": {
+        "agent_name": "Mistbound Passing Candle",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "e77243"
+      },
+      "files": [
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/operational/open-questions.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/state/collaboration/shared-comms-log.md",
+        ".agent/memory/operational/pending-graduations/2026-05-25-mistbound-inherited-frame-and-hook-signal-candidates.md",
+        ".agent/state/collaboration/comms-seen/quiet-whispering-veil.json",
+        ".agent/state/collaboration/comms-seen/quiet-whispering-veil.watch-heartbeat.json",
+        ".agent/state/collaboration/comms/28d16c7a-be62-4647-b107-f51728104051.json",
+        ".agent/state/collaboration/comms/39af95d2-e41c-41d4-ab55-402832f95a67.json",
+        ".agent/state/collaboration/comms/45b27b9a-875d-4d72-bdd5-663083b88c56.json",
+        ".agent/state/collaboration/comms/45f75bcf-d7db-4cc6-8165-e8901207c2e7.json",
+        ".agent/state/collaboration/comms/5f9e45fa-51d1-40b4-aa3d-67f6cf8baa1f.json",
+        ".agent/state/collaboration/comms/83f75634-e9c5-4d15-a4f8-d918209ebec9.json",
+        ".agent/state/collaboration/comms/a5571079-f022-4d57-b1fb-0bee38538974.json",
+        ".agent/state/collaboration/comms/e47fa139-9fc4-415b-8c51-9d4139887470.json",
+        ".agent/state/collaboration/comms/ee486a2d-b6b2-43ae-98ad-c613ad845c2d.json",
+        ".agent/state/collaboration/active-claims.json"
+      ],
+      "commit_subject": "chore(handoff): n=2 closeout — thread record, repo-continuity, open-questions drain, quiet curation, comms",
+      "queued_at": "2026-05-25T18:45:05.133Z",
+      "updated_at": "2026-05-25T18:46:36.774Z",
+      "expires_at": "2026-05-25T19:00:05.133Z",
+      "phase": "pre_commit",
+      "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/open-questions.md\nA\t.agent/memory/operational/pending-graduations/2026-05-25-mistbound-inherited-frame-and-hook-signal-candidates.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nA\t.agent/state/collaboration/comms-seen/quiet-whispering-veil.json\nA\t.agent/state/collaboration/comms-seen/quiet-whispering-veil.watch-heartbeat.json\nA\t.agent/state/collaboration/comms/28d16c7a-be62-4647-b107-f51728104051.json\nA\t.agent/state/collaboration/comms/39af95d2-e41c-41d4-ab55-402832f95a67.json\nA\t.agent/state/collaboration/comms/45b27b9a-875d-4d72-bdd5-663083b88c56.json\nA\t.agent/state/collaboration/comms/45f75bcf-d7db-4cc6-8165-e8901207c2e7.json\nA\t.agent/state/collaboration/comms/5f9e45fa-51d1-40b4-aa3d-67f6cf8baa1f.json\nA\t.agent/state/collaboration/comms/83f75634-e9c5-4d15-a4f8-d918209ebec9.json\nA\t.agent/state/collaboration/comms/a5571079-f022-4d57-b1fb-0bee38538974.json\nA\t.agent/state/collaboration/comms/e47fa139-9fc4-415b-8c51-9d4139887470.json\nA\t.agent/state/collaboration/comms/ee486a2d-b6b2-43ae-98ad-c613ad845c2d.json\nM\t.agent/state/collaboration/shared-comms-log.md\n",
+      "staged_bundle_fingerprint": "3b7bc96eebc9f9ea01121d4498a96e0c71aad414729c4f82ae2559598fef2790"
     }
   ],
   "claims": []
