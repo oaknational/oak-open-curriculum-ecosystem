@@ -44590,6 +44590,48 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "c5760da6-988b-46d8-80fc-63ebfbd3d225",
+      "agent_id": {
+        "agent_name": "Mistbound Passing Candle",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "e77243"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T17:55:54Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "WS0 pre-position: SKILL decomposition option-table + WS1 re-survey finding",
+      "intent_to_commit": "33dc2e38-fc11-4619-9633-4637e553f2b9",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T17:56:11Z",
+        "closed_by": {
+          "agent_name": "Mistbound Passing Candle",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "e77243"
+        },
+        "summary": "closed in same collaboration-state commit (intent 33dc2e38-fc11-4619-9633-4637e553f2b9): WS0 pre-position",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c5760da6-988b-46d8-80fc-63ebfbd3d225",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
