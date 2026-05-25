@@ -111,8 +111,13 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
       '[--session-prefix <prefix>] ' +
       '[--poll-ms <n>] [--max-events <n>] ' +
       '[--heartbeat-file <path>] [--heartbeat-interval-ms <n>] ' +
+      '[--seed-from-now] [--no-auto-seed] ' +
       '(emits every relevant event — broadcast, group, directed, observed, lifecycle — ' +
-      'with self-exclusion only; heartbeat-file is the FM-2 cure liveness surface, default interval 30000ms)',
+      'with self-exclusion only; heartbeat-file is the FM-2 cure liveness surface, default interval 30000ms; ' +
+      'auto-seed-on-empty default seeds the seen-file with current events so a fresh ' +
+      'watcher starts forward from now rather than replaying full history; ' +
+      'pass --no-auto-seed for legacy replay-on-empty behaviour; ' +
+      'pass --seed-from-now to force a seed regardless of existing seen-file content)',
     options: commsWatchOptions,
     handler: watchComms,
   }),

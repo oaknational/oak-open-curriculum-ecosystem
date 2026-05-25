@@ -1,3 +1,4 @@
+import { seedSeenStateIfNeeded } from './comms-watch-auto-seed.js';
 import { drainRelevantEvents, watchCommsLoop, type WatcherTickStatus } from './comms-use-cases.js';
 import { writeWatcherHeartbeat, WATCHER_HEARTBEAT_SCHEMA_VERSION } from './watcher-heartbeat.js';
 import { optional, optionalPositiveInteger, required, type Options } from './cli-options.js';
@@ -38,8 +39,11 @@ export async function watchComms(
   const heartbeatFile = optional(options, 'heartbeat-file');
   const heartbeatIntervalMs =
     optionalPositiveInteger(options, 'heartbeat-interval-ms') ?? DEFAULT_HEARTBEAT_INTERVAL_MS;
+  const seedFromNow = optional(options, 'seed-from-now') !== undefined;
+  const noAutoSeed = optional(options, 'no-auto-seed') !== undefined;
 
   await io.ensureDirectory(commsDir);
+  await seedSeenStateIfNeeded({ io, commsDir, seenFile, seedFromNow, noAutoSeed });
 
   const tick = composeHeartbeatTick({
     heartbeatFile,

@@ -100,7 +100,7 @@ todos:
       proves backflood-on-empty-file is impossible; product code
       auto-seeds. Reviewer dispatch (code-expert + type-expert +
       test-expert). Marshal-cycle. One commit. Tree green at end.
-    status: pending
+    status: completed
     depends_on: [cycle-8a-ws8-adr]
   - id: cycle-10-comms-watch-ws2
     content: >
