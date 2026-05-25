@@ -2,7 +2,7 @@
 
 ## 2026-05-25 — Salty Mooring Dock / cursor / Composer / `dc4dd7` — PR #114 preview ops + agent smoke scripts
 
-**Landed** (commit pending owner push): remote MCP verification tooling in
+**Landed**: `dcf92bb5` — remote MCP verification tooling in
 `apps/oak-curriculum-mcp-streamable-http`:
 
 - `scripts/probe-remote-mcp.sh` + `pnpm probe:remote` — unauthenticated baseline

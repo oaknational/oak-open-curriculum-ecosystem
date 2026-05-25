@@ -17,10 +17,9 @@ Earlier archives remain under [`archive/`](archive/).
 ## Current State
 
 - Current branch: `feat/education-evidence-foundational-graphs`.
-- Current local HEAD: `2f5e1871`
-  (`test(agent-tools): use fake-test-path in cli parser integration tests`) —
-  agent-preview verification scripts staged for commit at session close
-  (Salty Mooring Dock / `dc4dd7`).
+- Current local HEAD: `dcf92bb5`
+  (`feat(oak-curriculum-mcp): add agent preview smoke and remote probe scripts`;
+  Salty Mooring Dock / `dc4dd7` session close).
 - PR #108 has merged via `2462952a`, and Seaworthy's M1 Safe Pause attestation
   event `703de8dd` says M1 Safe Pause is achieved. The current live
   multi-agent lane is now the post-M1 tidy-plan delivery sequence, not PR #108
