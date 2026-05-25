@@ -923,6 +923,19 @@ script runs build before each poll."
 **Routing**: implemented by Penumbral Veiling Raven / `codex` / GPT-5 /
 `019e1c` on 2026-05-12.
 
+**Storage-shape follow-on** (added 2026-05-25 per architecture-expert-betty
+review): the seen-state storage primitive used by this watcher is being
+redesigned in
+[`comms-watch-storage-redesign.plan.md`](comms-watch-storage-redesign.plan.md)
+(WS2 + WS3). Any future modification to
+`agent-tools/src/collaboration-state/cli-comms-watch.ts` or
+`comms-watch-auto-seed.ts` MUST verify compatibility with the new
+storage primitive. Do not read or write
+`.agent/state/collaboration/comms-seen/` directly; once WS2 lands, use
+the `seen-state-storage` module. WS3 (removal of the legacy directory)
+is BLOCKED on the comms research plan completing per the owner standing
+direction 2026-05-25.
+
 ---
 
 ### P3 — Enforced commit queue
