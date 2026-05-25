@@ -9,6 +9,49 @@ merge_class: append-only-narrative
 
 # Napkin
 
+## 2026-05-25 — Hushed Stalking Shade / claude / claude-opus-4-7 / `bc0a07` (hardening-arc consolidation Phase 1+2)
+
+### What worked
+
+- Pre-consolidation reflection (generative-mode metacognition) surfaced
+  status drift across the three operational plans BEFORE the doctrine drain
+  pass — five hardening workstreams (WS-2/6/8/11/12) were marked
+  pending/in_progress despite their PDR/ADR landings via the companion
+  tidy plan. Status reconciliation with SHA evidence cured the drift.
+- Owner-direction packet items in pending-graduations resolved by direct
+  graduation: PDR-077 (marshal-as-cycle-discipline) + PDR-079 (PDR-ADR
+  portability) both landed during the arc but their pending-graduations
+  entries hadn't been flipped. Trivial graduation moves left undone.
+
+### Pattern instance (not yet a new candidate)
+
+- **Strategic-plan status drift when execution routes through a companion
+  executable plan**: hardening (strategic roll-up) named workstream
+  landings done via tidy (executable companion). Strategic plan's status
+  fields did NOT auto-update on companion landings. Symptom: zombie
+  pending/in_progress workstreams masking complete arcs. Cure shape: the
+  status-reconciliation pass in `consolidate-docs` Cardinal Rule + plan
+  supersession discipline. This is an instance of the existing
+  `substrate-pointer-read-as-current-state` pattern (the strategic plan's
+  status field is the pointer; the companion plan's landed commits are
+  the current state). No new pattern file; mark on the existing one if
+  a second instance appears.
+
+### Deferral with named constraint (per consolidate-docs deferral-honesty)
+
+- Full pending-graduations register drain (86 entries across main + 3
+  shards) NOT completed this session. **Constraint**: owner pivoted to
+  graph work mid-session (explicit direction 2026-05-25). **Evidence**:
+  user message *"fully pivoted back to the graph work"*. **Falsifiability**:
+  a future consolidation pass can check whether graph-work commit
+  activity dominates the branch in the window after this session;
+  if yes, the deferral was honest; if no, this triage pass was
+  premature. Triaged + graduated: 3 clear-fire entries (PDR-077,
+  PDR-079, heartbeat-bundle which Misty had already done). Remaining:
+  ~83 entries stay pending-or-due awaiting next consolidation cadence.
+
+---
+
 ## 2026-05-25 — Salty Mooring Dock / cursor / Composer / `dc4dd7`
 
 ### What worked
@@ -40,7 +83,7 @@ merge_class: append-only-narrative
 
 - Owner-directed role-metacognition session opened with the observation that
   "the Director role is only useful when grounded in continually re-verified
-  _fact_, otherwise it becomes a useless, even damaging, expensive ticking
+  *fact*, otherwise it becomes a useless, even damaging, expensive ticking
   clock". /oak-start-right-team + /oak-plan + /oak-metacognition.
 - Session-local reflection in the private Claude plan area.
 - Repo plan authored in the agentic-engineering current plan directory
