@@ -1,3 +1,28 @@
+# [1.12.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.11.0...v1.12.0) (2026-05-25)
+
+
+### Bug Fixes
+
+* **adr:** repair prettier-mangled inline-code span in ADR-186 §Render rule (cycle 7.1) ([75a2cd2](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/75a2cd250f6f4f986f2908d9ae4da512736b448e))
+* migrate pnpm config to v11 ([5de276b](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/5de276b74fbcd71e7914894a70c7403b86bd5f9b))
+* **plan:** cure 7 markdownlint errors in post-m1-attestation-tidy-up.plan.md ([26f8e7c](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/26f8e7cbcf530dd8b102c01880fc96dce272f239))
+* **practice-substrate:** use String.raw for 2 regex patterns (PR114 Sonar S7780) ([9f746c2](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/9f746c2a33cd810ed36ef8d8aa702408688b9353)), closes [#114](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/114) [#114](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/114)
+* security updates ([b40eeb0](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/b40eeb042bcb31c5f4ebee952d51849e6f6daf81))
+
+
+### Features
+
+* **adr:** land ADR-186 (comms-event-heartbeat-lifecycle-substrate) (tidy cycle 7) ([48c8ac2](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/48c8ac225d26bd43603c3e1ea880c21ae794f8ae))
+* **adr:** land ADR-187 (Claude self-modification authz cure-shape, WS-8) (tidy cycle 8a) ([7f7ad86](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/7f7ad862bb5f37cd87970def0c61810bed164a00))
+* **agent-tools:** comms-watch auto-seed + --seed-from-now/--no-auto-seed flags (tidy cycle 9) ([75e4792](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/75e479239a04338eba7840de31ff680143709f74))
+* **oak-curriculum-mcp:** add agent preview smoke and remote probe scripts ([dcf92bb](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/dcf92bb5bdb3d261db1d95b438f028aafcf4cd90))
+* **pdr:** land PDR-077 Commit Marshal cycle-discipline + 063/064 §Related (tidy cycle 5) ([7c2f85f](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/7c2f85f431b4e294e1e1536ddce19ae364292a33))
+* **pdr:** land PDR-078 (Liveness-Heartbeat Contract, portable, Candidate) (tidy cycle 6) ([9725ae0](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/9725ae0940a642c72619e016578fbb5a652b7ddb))
+* **pdr:** land PDR-079 portability distinction + rule + hook update (tidy cycle 5a) ([e8bc678](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/e8bc6781bc60d18acb2771a19bc271a678958a17))
+* **plan:** land role-emission citation-binding (post-reviewer-absorption, no-impl) ([626e43d](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/626e43d84dac89e96cbe4a80753d1f05081a31f5))
+* **practice:** wire open-questions memory system ([ee241b4](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ee241b4b9bc7758bebc8e6b71b74d73c40884bd5))
+* **skill:** collapse §0.5 to PDR-078 pointer + PDR-027/063/064 §Related (tidy cycle 8) ([9e57290](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/9e57290d0c7cfcfb52e6bcd8b6aaeaa9150ffc68)), closes [#21](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/21) [#20](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/20) [#20](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/20)
+
 # [1.11.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.10.0...v1.11.0) (2026-05-24)
 
 
