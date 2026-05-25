@@ -144,6 +144,7 @@ Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 ```
 
 ## 5. Decisions deferred (the part post-compaction-me will need to drive
+
 or wait on)
 
 - **Push and merge mechanics**: the owner is handling the push directly
