@@ -150,7 +150,7 @@ todos:
       per audit-shape definition; code-expert: confirm no coverage
       regression at the system-state level). Marshal-cycle. One commit.
       Tree green at end.
-    status: pending
+    status: completed
     depends_on: [cycle-13-charcoal-gamma-extraction]
   - id: cycle-15-branch-fitness-drain
     content: >
