@@ -11,7 +11,7 @@ import {
   parseHookInput,
   parseScopedContentBlocks,
   readStreamText,
-} from './check-blocked-content.js';
+} from '../../src/hook-policy/check-blocked-content.js';
 
 describe('parseHookInput', () => {
   it('parses valid JSON text', () => {
@@ -280,7 +280,7 @@ describe('findAddedScopedBlock', () => {
 describe('findAddedScopedBlock — regex with context-aware exclusions (WS4)', () => {
   const shaBlock = {
     pattern: String.raw`\b[a-f0-9]{7,40}\b`,
-    kind: /** @type {'regex'} */ 'regex',
+    kind: 'regex' as const,
     include_paths: ['docs/architecture/architectural-decisions/', '.agent/practice-core/'],
     exclude_paths: [],
     excludes_inline_code: true,

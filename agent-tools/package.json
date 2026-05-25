@@ -28,7 +28,7 @@
     "skills-adapter-generate": "tsx src/bin/skills-adapter-generate.ts",
     "repo-check": "cd .. && pnpm exec tsx agent-tools/scripts/repo-check.ts",
     "check-blocked-patterns": "cd .. && pnpm exec tsx agent-tools/scripts/check-blocked-patterns.ts",
-    "check-blocked-content": "cd .. && pnpm exec tsx agent-tools/scripts/check-blocked-content.ts",
+    "check-blocked-content": "cd .. && pnpm exec tsx agent-tools/src/hook-policy/check-blocked-content.ts",
     "check-commit-message": "cd .. && bash agent-tools/scripts/check-commit-message.sh",
     "check-commit-skill-advisories": "cd .. && pnpm exec tsx agent-tools/scripts/check-commit-skill-advisories.ts",
     "prevent-accidental-major-version": "cd .. && pnpm exec tsx agent-tools/scripts/prevent-accidental-major-version.ts",
