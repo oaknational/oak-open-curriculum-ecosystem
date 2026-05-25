@@ -111,12 +111,12 @@ These eight axes are structurally invisible to E+I+S. The plan's sequencing refl
 
 **Goal**: Refactor the rule corpus + SKILL surface so doctrine additions cost less per session-forever.
 
-**Status**: PENDING-OWNER-VERDICT on SKILL decomposition shape. Pre-positioned 2026-05-25.
+**Status**: SKILL decomposition shape DIRECTED 2026-05-25 — verdict (c) plus partial (a). WS0 substantive work cleared to open. See §"SKILL decomposition shape — directed verdict" below.
 
 **Substance**:
 
 - Two-tier classification of the rule corpus: always-on invariants (load every session) vs trigger-loaded skills (load when condition fires). Falsifiable firing triggers, not vibes.
-- Decomposition shape for SKILL `start-right-team`: 26 sections is past operational coherence. See §"SKILL decomposition shape — pre-positioned options" below for the option-table; owner verdict required before WS0 substantive work opens.
+- Decomposition shape for SKILL `start-right-team`: 26 sections is past operational coherence. Verdict directed 2026-05-25 — see §"SKILL decomposition shape — directed verdict" below.
 - Rule-vs-clause-in-existing-PDR decision rule: when should new substance be a new rule under `.agent/rules/`, vs a clause inside an existing PDR or ADR? Several items in this plan (8, 11, 26, 27) are debatably PDR-clauses rather than new rules.
 
 **Acceptance**:
@@ -127,39 +127,72 @@ These eight axes are structurally invisible to E+I+S. The plan's sequencing refl
 - Net rule count after WS0 is **lower** than before (P9 must remove more than it adds).
 - Skill-load budget headroom restored to at least 20% below the ~80 ceiling.
 
-**Blocked-by**: owner verdict on SKILL decomposition shape (see §"SKILL decomposition shape — pre-positioned options" below).
+**Blocked-by**: nothing — SKILL decomposition shape resolved 2026-05-25.
 
 **Blocks**: WS3 (SKILL amendment shape), WS5 (Director-class bundle), WS9 (if any new rule wiring required).
 
-**Owner-direction-gate**: YES — pre-positioned 2026-05-25 with options + recommendation. Owner verdict opens WS0 substantive work.
+**Owner-direction-gate**: RESOLVED 2026-05-25 — verdict (c) plus partial (a) directed by LTAE-applied-to-the-frame. The original "pending owner verdict" framing was itself the failure mode; see §"SKILL decomposition shape — directed verdict" below.
 
 **Reviewer dispatch** (after owner verdict, before any rule file is moved): architecture-expert-betty (cohesion of new topology); architecture-expert-fred (ADR compliance: ADR-119 three-layer model, ADR-125 portability, ADR-150 continuity surfaces); docs-adr-expert (PDR/ADR/rule home decisions); assumptions-expert (proportionality of corpus-wide refactor).
 
-#### SKILL decomposition shape — pre-positioned options (2026-05-25)
+#### SKILL decomposition shape — directed verdict (2026-05-25)
 
-The SKILL `start-right-team` is currently 973 lines across 26 sections. Three decomposition shapes are surfaced; one is the recommendation. The owner verdict on (a)/(b)/(c)/hybrid opens WS0 substantive work.
+**Verdict: (c) plus partial (a).** WS0 substantive work cleared to open.
 
-| Option | Substance | Net rule + SKILL surface direction | Composition with two-tier classification | Notes |
-|---|---|---|---|---|
-| **(a) Inline §"Mode Selection" front-matter** | Extract mode-routing (n=2 / standard team / Director-class team) to a short front-matter block at the top of `start-right-team`. Body sections become mode-tagged; bootstrapping agent reads front-matter then loads only the sections relevant to its mode. | Removes ~5 sections from the body surface; net SKILL-line count drops ~30%; no new files. | Front-matter selects which SKILL body sections load; two-tier classification refines further by tagging individual sections as always-on vs trigger-loaded. Composes. | PDR-082 first-draft favoured this shape during plan authoring. |
-| **(b) Sibling SKILLs** | New `start-right-pair` SKILL for n=2; new `start-right-director-team` for ≥4; trim canonical `start-right-team` to common-ground for n=3 only. | Adds 2 files; canonical trims ~50%; net SKILL surface count **increases** by 2 across the trio. | Each sibling SKILL is independently two-tier-classifiable, but corpus-wide budget pressure rises. | Fred recommended this during plan authoring. **Violates WS0 acceptance criterion "net rule + SKILL surface count is lower than before."** |
-| **(c) Section-trimming via amendment-via-PDR-pointer** | Move large body sections (e.g. §0 Comms watcher, §0.5 Liveness heartbeat) out to dedicated rule files; SKILL becomes a routing-surface that cites the rule files. SKILL canonical retains §"Mode Selection" + §"Acceptance criteria" + cross-references. | Trim ~40% from SKILL; new rule files (1–3 small files); net rule + SKILL surface count varies depending on count of extracted rules. | Composes strongly with two-tier classification — extracted rules become first-class trigger-loaded entries; the SKILL becomes the always-on routing surface. | Pattern consistent with `.agent/rules/` corpus structure. |
+The SKILL `start-right-team` is currently 973 lines across 26 sections.
+The verdict was directed under the
+[`re-apply-first-question-at-elaboration-boundaries`][rule-elab] rule
+applied to the *option-set itself* — not to choices within it. The
+rule prescribes re-asking the first question at every elaboration
+boundary; an option-set inherited from a prior session is one such
+boundary, and the long-term-architectural-excellence lens applied to
+the framing reveals only one architecturally-excellent shape.
 
-**Recommendation: (c) plus partial (a).** Combination shape:
+[rule-elab]:
+  ../../../rules/re-apply-first-question-at-elaboration-boundaries.md
 
-- Apply (c) as the structural cure — extract §0 (Comms watcher) and §0.5 (Liveness heartbeat) sections into dedicated rule files. Both are operational invariants already candidate for rule-shape; extracting them aligns with the two-tier classification's trigger-loaded category.
-- Apply partial (a) — keep a short mode-selection front-matter block at the top of `start-right-team` so bootstrapping agents see the routing surface at first read.
-- Pure (b) is rejected against the WS0 acceptance criterion: it grows the SKILL surface rather than shrinking it.
+**Shape directed**:
 
-**Trade-offs to weigh in the verdict**:
+- Apply (c) as the structural fix — extract §0 (Comms watcher) and
+  §0.5 (Liveness heartbeat) sections of `start-right-team` into
+  dedicated rule files. Both are operational invariants already
+  candidate for rule-shape; extracting them aligns with the two-tier
+  classification's trigger-loaded category and removes substrate from
+  the over-large SKILL.
+- Apply partial (a) — keep a short mode-selection front-matter block
+  at the top of `start-right-team` so bootstrapping agents see the
+  routing surface at first read. Additive over pure (c): centralises
+  mode-routing in a visible block rather than dispersing it through
+  section structure.
 
-- (a) is the lowest-risk move but the smallest net reduction.
-- (c) has higher up-front cost (authoring the extracted rule files) but the largest amortisation horizon (every subsequent doctrine addition can route via the same pattern).
-- (c)+partial(a) gets the structural cure plus the routing-surface clarity at modest authoring cost.
+**Options considered and rejected** (audit trail for the LTAE pass):
 
-**Owner verdict required**: which of (a) / (b) / (c) / (c)+partial(a) / other to land. Surface to chat or as inline plan-amendment.
+| Option | Verdict | Reason |
+|---|---|---|
+| **(a) inline §"Mode Selection" front-matter alone** | Rejected as under-engineered | Reduces *cognitive* load by mode-tagging body sections, but leaves the substrate in place. Treats the symptom (973 lines too many to hold), not the structural cause (substrate that belongs at the rule layer sitting in the SKILL layer). Not an anti-shape; just under-engineered for WS0's stated goal of *"doctrine additions cost less per session-forever."* |
+| **(b) sibling SKILLs** (`start-right-pair` + `start-right-director-team` + trimmed canonical) | Rejected as anti-shape | Net SKILL surface count *increases* by 2 across the trio. Directly violates the WS0 acceptance criterion at line 127 ("Net rule count after WS0 is lower than before"). Worsens the ~80 active-skill discovery ceiling (currently 77 → 79). Surfacing this as a peer option to (c) was the failure mode the LTAE pass caught. |
+| **(c) section-trimming via amendment-via-PDR-pointer (alone)** | Subsumed by directed verdict | Architecturally excellent on its own; the directed verdict adds partial (a) for the additive ergonomic benefit. Pure (c) without partial (a) is acceptable if mode-selection visibility is judged sufficient via section structure alone. |
 
-**After owner verdict**: WS0 opens with the proposal-draft cycle — author the two-tier rule corpus classification (every file under `.agent/rules/` classified as `always-on` or `trigger-loaded` with a falsifiable firing trigger) + the rule-vs-PDR-clause decision rule, surfaced as an amendment to this WS0 for reviewer dispatch BEFORE any rule file is moved or amended.
+**Doctrine applied**: the directed verdict is a worked-instance of
+[`re-apply-first-question-at-elaboration-boundaries`][rule-elab]
+§"Failure Mode 1: Elaboration Without Re-Asking" applied at the
+option-set surface. The original framing surfaced (a)/(b)/(c)/hybrid
+as peer choices "for owner verdict"; the rule prescribes re-asking
+the first question at the elaboration boundary, which reveals (b) as
+an anti-shape and the verdict as directed-not-menu. Per
+`principles.md` §Architectural Excellence Over Expediency, the
+expedient option is not a respectable third choice next to
+"do it right" — it is categorically excluded, and presenting it as a
+legitimate trade-off is itself the failure mode.
+
+**Next action under the verdict**: WS0 opens with the proposal-draft
+cycle — author the two-tier rule corpus classification (every file
+under `.agent/rules/` classified as `always-on` or `trigger-loaded`
+with a falsifiable firing trigger) + the rule-vs-PDR-clause decision
+rule + the (c)-shape extraction plan for §0 and §0.5 of
+`start-right-team`. Surface as an amendment to this WS0 for reviewer
+dispatch (Fred + Betty + docs-adr-expert + assumptions-expert) BEFORE
+any rule file is moved or amended.
 
 ### WS1 — Tooling friction at the moment of shipping (TIER 1)
 
