@@ -43,8 +43,8 @@ todos:
     content: "WS-9 — Twilit ST FM-2 P2 plan-Wilma verdict + cure landing. Status: LANDED at 43e09287 under Mistbound marshal Cycle #1 (2026-05-23 ~16:02Z) — watcher-staleness consumer + CollaborationAgentId schema dedupe; knip RED→GREEN. FM-2 (session-open environment freshness check) substrate complete. Pre-existing critical-zone fitness advisory exit-1 NOT introduced by this cycle (ADR-176 advisory-vs-gate distinction)."
     status: completed
   - id: ws-10-heartbeat-cron-mechanism
-    content: "WS-10 — Heartbeat contract operationalisation (durable mechanism). Status: NOT-M1-GATED, PENDING — interim mechanism is `narrative` comms event with `tags: ['heartbeat']` per ADR-183 tag-namespace substrate (Seaworthy tick #4 direction 2026-05-23 15:58:52Z). Durable mechanism has 3 sub-components: (a) per-identity-tuple `last_heartbeat_at` field on active-claims.json schema; (b) `pnpm agent-tools:heartbeat` CLI wrapper absorbing identity-tuple resolution from PRACTICE_AGENT_SESSION_ID_* + subject template (`Heartbeat: <agent_name> (<prefix>) — <lane>`) + body prefix (`active; <focus>`) + tag wiring (['heartbeat']) + `comms append` plumbing (--now / --created-at / --active / dirs); per-beat --lane + --focus strings MUST come from the agent on each invocation, NOT cached at cron startup (anti-pattern: silent-staleness if hardcoded focus repeats — equivalent failure mode to substrate-pointer-read-as-current-state); (c) lifecycle.event_type='heartbeat' per pending ADR-186. CLI shape contributed by Mistbound session 0e27cc (R1.4 integration). Owner-directed permanent + session-wide rule for all start-right-team sessions. Closes when: durable mechanism shipped (schema field + CLI wrapper + claim auto-rebalance protocol substrate). Interim mechanism is workable; durable substrate work deferred until WS-11 bundle + schema field + CLI ship together."
-    status: pending
+    content: "WS-10 — Heartbeat contract operationalisation (durable mechanism). Status: SUPERSEDED 2026-05-25; substance deferred to a future bandwidth window. The doctrine layer (PDR-078 + ADR-186) is LANDED; the operational mechanism (per-identity `last_heartbeat_at` schema field, `pnpm agent-tools:heartbeat` CLI wrapper, claim auto-rebalance protocol substrate) remains unbuilt. Interim mechanism (`narrative` comms-event with `tags: ['heartbeat']` per ADR-183) is workable. Deferred-honesty: no immediate executable plan re-home; substance captured in the hardening-program archive supersession mapping for a future agent to pick up under explicit owner direction or a comms-watch-storage-redesign.plan.md completion follow-on (the two are agent-tools-CLI sibling concerns)."
+    status: superseded
     depends_on: []
   - id: ws-11-heartbeat-doctrine-bundle
     content: "WS-11 — Heartbeat doctrine bundle. Status: COMPLETED — PDR-078 (Liveness-Heartbeat Contract, portable, SHA-free) LANDED at 9725ae09 (tidy cycle 6); ADR-186 (comms-event-heartbeat-lifecycle-substrate, repo phenotype) LANDED at 48c8ac22 (tidy cycle 7) with prettier-defect fix at 75a2cd25 (cycle 7.1); thin SKILL §0.5 pointer collapse LANDED at 9e57290d (tidy cycle 8) with reciprocal §Related amendments to PDR-027 + PDR-063 + PDR-064. Round-2 reviewer convergence + owner ratification done pre-landing."
@@ -1487,11 +1487,22 @@ implementation** (per [`metacognition.md`](../../../directives/metacognition.md)
 explicit manual step into implicit CLI / mechanism behaviour, reducing
 resume-protocol overhead × team-size × time.
 
-### P5.W1 — Comms-watch seen-state redesign — **PROMOTION-ELIGIBLE 2026-05-24** (M1 attestation fired)
+### P5.W1 — Comms-watch seen-state redesign — **SUPERSEDED 2026-05-25** — re-homed to `comms-watch-storage-redesign.plan.md`
 
-**Executable form**: companion plan
-[`post-m1-attestation-tidy-up.plan.md`](post-m1-attestation-tidy-up.plan.md)
-cycles 9 (WS1 CLI auto-seed) + 10 (WS2 storage redesign) + 11 (WS3 cleanup).
+**Original status**: PROMOTION-ELIGIBLE 2026-05-24 (M1 attestation fired).
+
+**Supersession 2026-05-25**: WS1 (CLI auto-seed) landed at `75e47923` via
+post-m1-attestation-tidy-up.plan.md cycle 9. WS2 + WS3 substance re-homed
+to
+[`../../agent-tooling/current/comms-watch-storage-redesign.plan.md`](../../agent-tooling/current/comms-watch-storage-redesign.plan.md)
+as a focused executable plan at consolidation archival (the tidy plan
+closed simultaneously). The four-dimension problem statement + WS2/WS3
+decomposition + acceptance signals below are preserved verbatim in the
+new plan as its Problem section; this section retained as audit trail
+of the original strategic shaping.
+
+**Executable form (now)**:
+[`comms-watch-storage-redesign.plan.md`](../../agent-tooling/current/comms-watch-storage-redesign.plan.md).
 
 **Problem (four dimensions)**:
 

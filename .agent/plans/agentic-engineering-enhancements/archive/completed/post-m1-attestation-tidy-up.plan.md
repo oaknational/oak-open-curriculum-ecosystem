@@ -104,25 +104,21 @@ todos:
     depends_on: [cycle-8a-ws8-adr]
   - id: cycle-10-comms-watch-ws2
     content: >
-      Cycle 10: Comms-watch storage redesign (WS2) — mtime watermark
-      + ephemeral per-session location at
-      ${XDG_CACHE_HOME:-$HOME/.cache}/oak/practice/<session_prefix>/comms-watch.json
-      + legacy UUID-list migration on first read. TDD: failing test
-      proves new-format roundtrip + legacy-migration; product code
-      implements. Reviewer dispatch (code-expert + type-expert +
-      architecture-expert-wilma). Marshal-cycle. One commit. Tree green
-      at end.
-    status: pending
+      Cycle 10: Comms-watch storage redesign (WS2) — SUPERSEDED
+      2026-05-25; substance re-homed to
+      `.agent/plans/agent-tooling/current/comms-watch-storage-redesign.plan.md`
+      §"WS2 — Storage redesign". This plan closes complete via that
+      supersession; the new executable plan is the authoritative home
+      for WS2 + WS3 going forward.
+    status: superseded
     depends_on: [cycle-9-comms-watch-ws1]
   - id: cycle-11-comms-watch-ws3
     content: >
-      Cycle 11: Comms-watch cleanup (WS3) — remove
-      .agent/state/collaboration/comms-seen/ from repo; drop
-      legacy-location compat read; update start-right-team SKILL §0
-      and reference/comms-watch-mechanism.md to remove re-seed
-      instruction. Reviewer dispatch (docs-adr-expert + onboarding-expert).
-      Marshal-cycle. One commit. Tree green at end.
-    status: pending
+      Cycle 11: Comms-watch cleanup (WS3) — SUPERSEDED 2026-05-25;
+      substance re-homed to
+      `.agent/plans/agent-tooling/current/comms-watch-storage-redesign.plan.md`
+      §"WS3 — Cleanup". This plan closes complete via that supersession.
+    status: superseded
     depends_on: [cycle-10-comms-watch-ws2]
   - id: cycle-12-charcoal-beta-s5443
     content: >
