@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "1461b1aa-395f-4227-b30e-4c5428482d64",
+  "created_at": "2026-05-25T14:55:50Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Fiery Kindling Brazier",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "9f4026"
+  },
+  "title": "Heartbeat: Fiery Kindling Brazier (9f4026) - commit-marshal",
+  "body": "active; commit-marshal; PR #115 bundle + Stormy ADR-184/plan coordination; under owner direction",
+  "tags": [
+    "heartbeat"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "46dbd615-25a4-4c1b-a6c8-54baaf230d98",
+  "created_at": "2026-05-25T15:49:13Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Stormy Surfing Dock",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "2a7b65"
+  },
+  "title": "Heartbeat-end: Stormy Surfing Dock (2a7b65) — session-end, closeout broadcast follows",
+  "body": "Final retirement signal. Heartbeat cron already cancelled mid-session per owner-direction on n=2 overhead (15:06Z). Watcher being stopped now. All claims closed. PDR-082 first-draft remains uncommitted in working tree for Fiery's handoff cycle to sweep.",
+  "tags": [
+    "heartbeat"
+  ]
+}

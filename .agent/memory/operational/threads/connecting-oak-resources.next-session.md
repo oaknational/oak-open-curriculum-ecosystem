@@ -1,5 +1,38 @@
 # Next-Session Record — `connecting-oak-resources` thread
 
+## 2026-05-25 — Riverine Navigating Rudder / cursor / Composer / `27d9af` — oak-preview-1 full manual UAT + suggest URL WS5
+
+**Landed**: Full black-box UAT against education-evidence preview via Cursor
+`oak-preview-1` per
+[agent-preview-test-checklist.md](../../../apps/oak-curriculum-mcp-streamable-http/docs/agent-preview-test-checklist.md)
+sections A–H (29 MCP tool calls; **PASS**).
+
+**Endpoint**:
+`https://poc-oak-open-curriculum-mcp-git-feat-education-evidence-8b5f67.vercel.thenational.academy/mcp`
+
+**Evidence**: HTTP baseline A1–A3 green; orientation B1–B3; discovery C1–C5;
+search D1–D6; fetch E1–E4; lesson/unit depth F1–F5; graph G1–G3; error/filter
+H1–H2. API **0.7.0** (2026-05-21). No EEF-specific MCP tools on this preview yet.
+
+**Clarifications from owner Q&A**:
+
+- Empty `url` affects **`search` suggest scope only** — other scopes return
+  populated URLs (`lesson_url`, `unit_url`, `sequence_url`).
+- Thread `oakUrl: null` on thread + thread-unit fetch is **by design** (no Oak
+  website page); documented in adapter/schema/checklist as non-blocking.
+- Suggest empty `url` is a **search-sdk gap** (both suggest legs hardcode
+  `url: ''`), not a preview deploy defect. Routed to
+  [`oak-preview-mcp-snagging-2026-04-23.plan.md`](../../plans/sdk-and-mcp-enhancements/current/oak-preview-mcp-snagging-2026-04-23.plan.md)
+  **WS5**.
+
+**Next safe step**: When implementing WS5, derive canonical URLs in
+`packages/sdks/oak-search-sdk/src/retrieval/` and re-run checklist row D5 on
+the active preview URL. For new preview deploys, repeat full checklist A–H.
+
+**Commits**: none (read-only UAT + plan markdown).
+
+---
+
 ## 2026-05-25 — Salty Mooring Dock / cursor / Composer / `dc4dd7` — PR #114 preview agent test checklist
 
 **Intent**: manual black-box checklist (what / how / expected results) for preview
@@ -1353,6 +1386,7 @@ promotion.)
 | `Soaring Flying Gale` | `claude` | `claude-opus-4-7-1m` | `ffa6ce` | `gate-1a-execution-partition-deepening-author-eef-first-feature-plan-md-gains-unified-dependency-graph-plus-round-assignment-plus-per-cycle-reviewer-set-plus-named-user-facing-scenarios-across-substrate-ws4-x-corpus-t1-t20-and-ff-coordination-tokens-plus-addendum-plan-refocused-to-point-at-unified-partition-plus-three-pending-graduations-protocol-pdr-candidates-mid-cycle-retirement-grounding-cost-amortisation-comms-event-failure-mode-channel-plus-pr-108-hard-gate-recognised-and-cross-referenced-throughout-no-source-code-touched-commits-24ab73c9-and-f6170504` | 2026-05-21 | 2026-05-22 |
 | `Tempestuous Spiralling Thermal` | `claude` | `claude-opus-4-7` | `9205b8` | `lane-c-of-triple-peer-primary-topology-jc-commit-skill-critical-review-pdr-046-substance-verdict-and-commit-queue-commit-workflow-primitive-landed-at-97bf9e97-four-operational-moves-collapse-from-ten-distinct-cli-calls-five-invariant-ledger-added-advisory-polarity-pdr-053-adr-176-preserved-by-construction-fifteen-new-atomic-landing-tests-husky-full-tree-gating-unchanged-per-owner-stance` | 2026-05-22 | 2026-05-22 |
 | `Velvet Stalking Moth` | `cursor` | `Composer` | `bde2f8` | `pr-108-preview-mcp-black-box-validation-via-oak-preview-1-twenty-five-tool-calls-all-pass-owner-confirmed-merge-and-m1-safe-pause-requirement-met-no-commits` | 2026-05-24 | 2026-05-24 |
+| `Riverine Navigating Rudder` | `cursor` | `Composer` | `27d9af` | `oak-preview-1-education-evidence-full-manual-uat-checklist-a-h-pass-suggest-url-gap-routed-to-snagging-ws5-no-commits` | 2026-05-25 | 2026-05-25 |
 
 ## Plan Locations
 

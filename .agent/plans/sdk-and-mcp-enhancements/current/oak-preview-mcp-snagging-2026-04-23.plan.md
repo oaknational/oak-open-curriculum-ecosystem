@@ -1,6 +1,6 @@
 ---
 name: "Oak Preview MCP Snagging — 2026-04-23 Pass"
-overview: "Investigate and resolve the in-repo findings from the 2026-04-23 black-box validation of the oak-preview MCP surface. Covers explore-topic relevance tuning, the empty-questions response investigation, and a consistent MCP-side response surface for empty / no-match / unsupported cases. Upstream-only findings from the same pass are tracked separately under .agent/plans/sector-engagement/ooc-issues/."
+overview: "Investigate and resolve the in-repo findings from black-box validation of the oak-preview MCP surface. Covers explore-topic relevance tuning, the empty-questions response investigation, a consistent MCP-side response surface for empty / no-match / unsupported cases, and suggest-scope URL population in the search SDK. Upstream-only findings from the 2026-04-23 pass are tracked separately under .agent/plans/sector-engagement/ooc-issues/."
 todos:
   - id: ws1-explore-topic-snagging
     content: "WS1: Reproduce the explore-topic relevance regression with a curated nonsense-input fixture set, isolate which scope (lessons / units / threads) is most permissive, and decide whether the fix sits in the search service (RRF / threshold) or in the MCP tool's headline composition."
@@ -12,17 +12,21 @@ todos:
     content: "WS3: Define and apply a consistent MCP-side response surface for empty / no-match / unsupported / upstream-failure cases across tools. Coordinate with the upstream response doctrine proposal so the MCP layer either passes the discriminator through (when upstream adds it) or synthesises one safely (until then)."
     status: pending
   - id: ws4-quality-and-review
-    content: "WS4: Quality gates and reviewer pass (mcp-expert + elasticsearch-expert for WS1, code-expert + type-expert for WS2/WS3)."
+    content: "WS4: Quality gates and reviewer pass (mcp-expert + elasticsearch-expert for WS1, code-expert + type-expert for WS2/WS3/WS5)."
+    status: pending
+  - id: ws5-suggest-url-population
+    content: "WS5: Populate canonical URLs on search(scope: suggest) items in oak-search-sdk (completion + bool_prefix legs); regression-test via MCP search suggest; update preview checklist quirk note when fixed."
     status: pending
 isProject: false
 ---
 
 # Oak Preview MCP Snagging — 2026-04-23 Pass
 
-**Last Updated**: 2026-04-23
+**Last Updated**: 2026-05-25
 **Status**: QUEUED — work to start in a future session, not in the current PR
-**Scope**: In-repo MCP and search-service findings from the 2026-04-23
-black-box validation pass against the oak-preview MCP surface.
+**Scope**: In-repo MCP and search-service findings from black-box validation
+passes against the oak-preview MCP surface (2026-04-23 pass plus 2026-05-25
+oak-preview-1 re-validation on the education-evidence preview).
 
 ---
 
@@ -42,8 +46,9 @@ The owner has classified them as follows:
 | 6 | KS3 science questions returns silent `[]` | **Both** — upstream Issue 3 of the API issue report; in-repo investigation in this plan (WS2). |
 | 7 | `browse-curriculum` exposes a sequence slug not listed by `/sequences` | Upstream design / data constraint — see Issue 4 of the API issue report. |
 | 8 | Inconsistent shapes across empty / no-match / unsupported / failure | **Both** — upstream Issue 5 (doctrine) of the API issue report; in-repo MCP-side pass in this plan (WS3). |
+| 9 | `search` suggest returns empty `url` on every suggestion | **In-repo (this plan, WS5)** — search SDK suggest pipeline never populates URLs; March 2026 schema fix only allowed empty strings to pass validation. Reconfirmed on oak-preview-1 UAT 2026-05-25. |
 
-This plan tracks only the in-repo work (items 4, 6, 8). It is queued
+This plan tracks only the in-repo work (items 4, 6, 8, 9). It is queued
 for a future session; **none of this is in the current PR**.
 
 ---
@@ -204,13 +209,80 @@ ad-hoc per tool.
 
 ---
 
+## WS5 — Suggest-Scope URL Population
+
+### Problem
+
+`search` with `scope: "suggest"` returns usable labels but every suggestion
+item has `url: ""`. Other search scopes return populated URLs (`lesson_url`,
+`unit_url`, `sequence_url`, etc.). Thread resources correctly use
+`oakUrl: null` because threads have no website page — that is by design and
+is **not** part of this workstream.
+
+Black-box evidence:
+
+- 2026-05-25 oak-preview-1 UAT (`search` suggest, query `photo`, subject
+  `science`): three suggestions, all with empty `url`.
+- Code inspection: both suggest legs hardcode `url: ''`:
+  - `packages/sdks/oak-search-sdk/src/retrieval/suggest-completion.ts`
+    (`extractSuggestionItems`)
+  - `packages/sdks/oak-search-sdk/src/retrieval/suggest-bool-prefix.ts`
+    (`runBoolPrefix`)
+
+The March 2026 predecessor pass
+([`../archive/completed/oak-preview-mcp-snagging.execution.plan.md`](../archive/completed/oak-preview-mcp-snagging.execution.plan.md))
+relaxed `SearchSuggestionItemSchema` so empty strings pass validation
+(`z.string().optional().default('')`). That cured schema/runtime friction
+but did **not** populate canonical URLs.
+
+### What good looks like
+
+- Each suggest item for `lessons`, `units`, and `sequences` scopes carries a
+  non-empty canonical Oak URL when the indexed document provides enough
+  identity to derive one (slug + scope + subject/key-stage context as needed).
+- Completion and bool_prefix legs behave consistently after merge/dedup in
+  `packages/sdks/oak-search-sdk/src/retrieval/suggestions.ts`.
+- MCP `search(scope: suggest)` and CLI `search suggest` both benefit without
+  MCP-layer special casing.
+- Preview checklist row D5 and sign-off quirk note in
+  [`apps/oak-curriculum-mcp-streamable-http/docs/agent-preview-test-checklist.md`](../../../../apps/oak-curriculum-mcp-streamable-http/docs/agent-preview-test-checklist.md)
+  are updated when the behaviour is fixed (or the quirk is narrowed to
+  documented exceptions only).
+
+### Investigation steps
+
+1. Inventory which `_source` fields each suggest leg already reads and which
+   slug/context fields are available on indexed lesson, unit, and sequence
+   documents (including whether `lesson_url` / `unit_url` / `sequence_url`
+   are stored at index time vs must be generated at read time).
+2. Reuse the existing canonical URL helpers from
+   `@oaknational/sdk-codegen` / curriculum SDK URL generation where possible
+   rather than inventing ad-hoc string concatenation in the retrieval layer.
+3. Extend completion suggest to request any additional `_source` fields needed
+   for URL derivation (if completion options do not already expose them).
+4. Update bool_prefix mapping to derive `url` from hit `_source` instead of
+   hardcoding `''`.
+5. Add unit tests for both legs covering at least one lesson, unit, and
+   sequence fixture; assert non-empty `url` and stable slug→URL mapping.
+6. Re-run manual UAT row D5 against a preview deploy after merge.
+
+### Out of scope
+
+- Thread suggest URLs (threads have no Oak website page; `oakUrl: null`
+  remains correct).
+- Changing suggest ranking, completion vs bool_prefix merge policy, or ES
+  index mappings unless URL derivation requires additional stored fields.
+- MCP tool argument or headline changes.
+
+---
+
 ## WS4 — Quality Gates and Reviewers
 
 - `pnpm check` from repo root.
 - `mcp-expert` for WS1 and WS3 (tool surface, response shape).
 - `elasticsearch-expert` for WS1 (RRF / threshold work in the search
-  service).
-- `code-expert` and `type-expert` for WS2 / WS3 implementation.
+  service) and WS5 (suggest index field availability).
+- `code-expert` and `type-expert` for WS2 / WS3 / WS5 implementation.
 - Update ADR or `docs/operations/troubleshooting.md` if the MCP-side
   response envelope (WS3) introduces a new contract worth recording.
 
@@ -223,3 +295,7 @@ ad-hoc per tool.
   - [`../../sector-engagement/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md`](../../sector-engagement/ooc-issues/oak-open-curriculum-api-issues-2026-04-23.md)
 - Predecessor in-repo snagging pass (provenance):
   - [`../archive/completed/oak-preview-mcp-snagging.execution.plan.md`](../archive/completed/oak-preview-mcp-snagging.execution.plan.md)
+- Preview UAT checklist (manual black-box procedure):
+  - [`../../../../apps/oak-curriculum-mcp-streamable-http/docs/agent-preview-test-checklist.md`](../../../../apps/oak-curriculum-mcp-streamable-http/docs/agent-preview-test-checklist.md)
+- 2026-05-25 oak-preview-1 UAT evidence (thread record):
+  - [`.agent/memory/operational/threads/connecting-oak-resources.next-session.md`](../../../memory/operational/threads/connecting-oak-resources.next-session.md)

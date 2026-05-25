@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "f03dbeac-69cd-445b-bc0b-01884317f365",
+  "created_at": "2026-05-25T14:57:24Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Stormy Surfing Dock",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "2a7b65"
+  },
+  "title": "Heartbeat: Stormy Surfing Dock (2a7b65) — pr-115-watcher",
+  "body": "active; awaiting Fiery bad4d097 tree-green signal to stage + commit 7aa89fd4",
+  "tags": [
+    "heartbeat"
+  ]
+}
