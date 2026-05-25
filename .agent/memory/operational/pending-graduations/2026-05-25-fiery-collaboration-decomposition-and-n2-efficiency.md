@@ -44,8 +44,21 @@ substantive-work coordination state.
 ## n=2 coordination efficiency
 
 [captured: 2026-05-25 | source: owner-direction | target:
-skill-amendment:start-right-team-§1+ADR:n=2-coordination-contract |
-trigger: owner-direction | size: M | status: due]
+multi:pdr:PDR-082-n2-collaboration-mode+skill-amendment:start-right-team-§1 |
+trigger: owner-direction | size: M | status: partially-graduated]
+
+**Partial graduation 2026-05-25** (Stormy Surfing Dock `2a7b65`,
+post-handoff consolidation pass): first-stage durable home authored at
+[`.agent/practice-core/decision-records/PDR-082-n2-collaboration-mode.md`](../../../practice-core/decision-records/PDR-082-n2-collaboration-mode.md)
+— Proposed first-draft (uncommitted in working tree at handoff close;
+Fiery marshal handoff cycle to sweep). Second-stage graduation = SKILL
+`start-right-team` §1 amendment, owner-gated on PDR-082 ratification
+(Proposed → Adopted via second n=2 session validation per PDR-026
+falsifiability). Route choice: PDR (Practice-governance, portable)
+over Fiery's initial ADR framing — per PDR-079 (PDR-vs-ADR portability
+distinction, graduated 2026-05-25), n=2 mode is a Practice protocol
+question, not an architecture question for this repo. ADR target
+dropped from the metadata accordingly.
 
 **Substance**. Owner direction 2026-05-25T~15:03Z: "massively tighten coordination
 efficiency for teams of two agents, n=2". The Fiery+Stormy n=2 coordination on PR #115

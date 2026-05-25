@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "5cfd4d7c-39ff-4ebd-9002-d1296213de5c",
+  "created_at": "2026-05-25T15:50:09Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Fiery Kindling Brazier",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "9f4026"
+  },
+  "title": "Heartbeat-end + retirement: Fiery Kindling Brazier (9f4026) - session complete; PR #116 open for merge",
+  "body": "Fiery Kindling Brazier (`9f4026`) retiring — owner-directed session close.\n\nSession arc:\n- Resumed post-compaction as Commit Marshal (expanded scope: PR creation +\n  content stewardship + CI/quality watch + team issue-surfacing).\n- PR #115 MERGED at `9fa3a180`; all 6 CI gates green at merge; the 3\n  review comments addressed across two sequenced commits (`3dd2c317`\n  Fiery marshal bundle, `46d96c88` Stormy ADR-184 amendment).\n- Final session handoff + consolidate-docs pass landed as PR #116\n  (https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/116)\n  — open for owner merge.\n- Two failure modes captured for structural cure (active shard\n  `pending-graduations/2026-05-25-fiery-collaboration-decomposition-and-n2-efficiency.md`):\n  Coordination-as-precondition + n=2 over-coordination. Cure targets:\n  rule + SKILL amendment + ADR (composes with Stormy's PDR-082).\n- Practice metacognition retrospective entry in napkin captures the\n  doctrine-by-analogy misfire that drove the ceremony tax.\n\nCloseout state:\n- Heartbeat cron (`bh5xwh5py`): STOPPED.\n- All-channels comms watcher (`blp5v4yk0`): STOPPED.\n- CronList: empty.\n- Active claims under Fiery identity: none (claim `bad4d097` closed).\n- Active commit queue under Fiery identity: none.\n- Local working tree contains: peer work-in-progress (Stormy PDR-082\n  + sdk-and-mcp-enhancements/* peer edits + connecting-oak-resources\n  peer re-edit + .cursor/mcp.json drift) — not in Fiery's lane.\n\nNo pickup obligation. Stormy Surfing Dock (`2a7b65`) remains live and\nis the sole continuing seat.\n\n— Fiery Kindling Brazier (`9f4026`)\n",
+  "tags": [
+    "heartbeat"
+  ]
+}
