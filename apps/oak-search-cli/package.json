@@ -46,7 +46,7 @@
     "doc-gen": "pnpm -s docs:api:html && pnpm -s docs:api:json && pnpm -s docs:verify"
   },
   "dependencies": {
-    "@elastic/elasticsearch": "^9.4.0",
+    "@elastic/elasticsearch": "^9.4.1",
     "@oaknational/build-metadata": "workspace:*",
     "@oaknational/curriculum-sdk": "workspace:*",
     "@oaknational/env": "workspace:*",
@@ -66,22 +66,22 @@
   "description": "Semantic search CLI for Oak curriculum — ingestion, hybrid search, ground truth evaluation",
   "devDependencies": {
     "@asteasolutions/zod-to-openapi": "^8.5.0",
-    "@elastic/transport": "^9.3.5",
+    "@elastic/transport": "^9.3.6",
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@oaknational/search-contracts": "workspace:*",
     "@types/unzipper": "^0.10.11",
     "dotenv": "^17.4.2",
-    "eslint": "^10.3.0",
+    "eslint": "^10.4.0",
     "prettier": "^3.8.3",
     "tsup": "^8.5.1",
-    "tsx": "^4.21.0",
+    "tsx": "^4.22.3",
     "typedoc": "^0.28.19",
     "typedoc-plugin-markdown": "^4.11.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.59.3",
+    "typescript-eslint": "^8.59.4",
     "unzipper": "^0.12.3",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.1.6"
+    "vitest": "^4.1.7"
   },
   "repository": {
     "type": "git",
