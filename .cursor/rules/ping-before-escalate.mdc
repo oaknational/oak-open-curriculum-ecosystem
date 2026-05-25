@@ -1,0 +1,6 @@
+---
+description: Before broadcasting a retirement-detection event, cross-check git work-evidence, commit-queue, and directed-comms inbox, then send a direct ping. Suppress the broadcast if any surface shows recent activity.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/ping-before-escalate.md`.
