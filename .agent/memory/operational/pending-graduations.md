@@ -179,6 +179,17 @@ drive to live, state-bound heartbeat content, inbox/absorption semantics,
 owner-direction provenance, and Director-seat threshold. Process the shard
 entry by entry before removing this pointer.
 
+### 2026-05-25 — Planning and auto-fix candidates
+
+Active shard:
+[`pending-graduations/2026-05-25-planning-and-autofix-candidates.md`](pending-graduations/2026-05-25-planning-and-autofix-candidates.md).
+
+Route-state: split out by Breezy Flowing Dock on 2026-05-25 as live queue
+substance, not archive. The shard carries Briny/Hushed planning, role-emission,
+template, and multi-agent auto-fix candidates plus the human-composer plan
+audit-trail pointer. Process the shard entry by entry before removing this
+pointer.
+
 ### `pending` (body markers — second-instance or owner-direction gated)
 
 The bulk of the queue. Reviewed at every consolidation; most stay
@@ -720,135 +731,3 @@ Falsifiability: a future role-transfer prompt contains wording that could mean
 either temporary transition support or a permanent split of role authority, and
 the agent confirms against the named source or records the interpretation
 without broadcasting the wrong permanent shape.
-
-### Plan-template friction surfaced during human-composer-tui authoring
-
-[captured: 2026-05-25 | source: Hushed Stalking Shade `bc0a07` session writing
-`.agent/plans/agent-tooling/current/human-composer-tui.plan.md` |
-target:plan-templates-or-skill:plan-templates-refresh | trigger: owner aside
-2026-05-25 (`make a note if the plan templates need updating or refactoring`)
-
-- first worked instance | size: M | status: pending]
-
-Authoring the 786-line `human-composer-tui.plan.md` against the SKILL §
-"Executable Plan Requirements" surfaced three template-shape observations
-that may compose into a templates-refresh slice:
-
-1. **Markdownlint MD032 friction** — repeated `**Acceptance**:\n- bullet`
-   shapes hit MD032 (`blanks-around-lists`) on first commit. The
-   `feature-workstream-template.md` body sketch does not include a
-   markdownlint-clean section pattern, so authors hand-roll the spacing
-   and discover the lint error at pre-commit time. A template skeleton
-   with the literal `**Section**:\n\n- bullet` shape (blank line between
-   the header and the list) would remove this floor cost.
-2. **§Assumptions (load-bearing; PDR-026 falsifiability) is reviewer-
-   demanded but template-absent** — the `assumptions-expert` reviewer
-   findings on `comms-watch-storage-redesign.plan.md` (2026-05-25) gave
-   GO WITH CONDITIONS specifically because the original draft omitted
-   the §Assumptions block. The author of the next plan
-   (`human-composer-tui.plan.md`) pre-empted by including the block,
-   but a template-level skeleton section labelled
-   `## Assumptions (load-bearing; PDR-026 falsifiability)` with the
-   "name + falsifiability + held-if-fails" sentence shape would
-   propagate the reviewer-validated pattern without requiring each plan
-   author to reconstruct it from review evidence.
-3. **§Cross-references discoverability gap** — plans need to be
-   discoverable from neighbouring plans, but `feature-workstream-
-   template.md` does not yet include a §Cross-references section with
-   the explicit categories (Read-side companion / Sibling / Downstream
-   consumer / Strategic origin / Schema source / Doctrine landing
-   target). The pattern is now well-formed across two recent plans
-   (`comms-watch-storage-redesign.plan.md`,
-   `human-composer-tui.plan.md`) and could graduate into the template
-   skeleton.
-
-Natural home: refresh `.agent/plans/templates/feature-workstream-
-template.md` to incorporate the markdownlint-clean section pattern, the
-§Assumptions block, and the §Cross-references categories. Alternatively
-ratify these as SKILL-level requirements in
-`.agent/skills/plan/SKILL-CANONICAL.md` §"Executable Plan Requirements"
-(in which case the template inherits structurally).
-
-Falsifiability: a third plan-authoring session in the next consolidation
-cadence either repeats the same three frictions (template-refresh slice
-becomes due) or does not (the friction was author-specific and the
-template is fine as-is).
-
-### Human-composer-tui plan landing (audit-trail entry)
-
-[captured: 2026-05-25 | source: Hushed Stalking Shade `bc0a07` |
-target:audit-trail | trigger: plan-completion landing reference | size: S |
-status: graduated]
-
-`.agent/plans/agent-tooling/current/human-composer-tui.plan.md` authored at
-`97a470dd` (786 insertions), cross-references at `d735fce9` (3 plans:
-`cost-of-collaboration §P8`, `comms-watch-storage-redesign §Cross-references`,
-`agent-coordination-cli-ergonomics §Problem and Intent`), discoverability at
-`5344ab5b` (`agent-tooling/current/README.md` row). Closes gaps G1–G10 from
-the 2026-05-25 review-and-consistency fan-out. WS0 owner-ratification gate is
-the only blocker before WS1+ implementation. PDR-083 proposed as the doctrine
-landing target.
-
-No graduation pending — the plan body is the substance; this entry is the
-audit trail so a future agent can locate the plan from the
-pending-graduations register without first knowing its filename.
-
-### 2026-05-25 — Multi-agent auto-fix awareness (first-instance, second-instance-trigger gated)
-
-[captured: 2026-05-25 | source: Hushed Stalking Shade `bc0a07` post-closeout
-broadcast `89bbb056` + experience file
-`.agent/experience/2026-05-25-hushed-stalking-shade-the-sweep-and-the-reinvitation.md`
-| target: rule:multi-agent-auto-fix-awareness | trigger: second-instance |
-size: S | status: pending]
-
-**Substance**: before running any repo-wide auto-fix command in a multi-agent
-window — `pnpm markdownlint:root` (which runs `markdownlint --dot --fix .`),
-`pnpm format:root` (`prettier --write .`), and similar — name the peer-owned
-files in the working tree and confirm whether the auto-fix should touch them.
-The `husky` pre-commit hook chain then promotes the auto-fix output into the
-staged set; in a single-agent window this is correct behaviour, in a
-multi-agent window it sweeps peer-owned files into the agent's commit.
-
-**Worked instance**: commit `78a90723` (2026-05-25 13:00Z Hushed Stalking
-Shade). Hushed used `pnpm markdownlint:root` to auto-fix an MD032 violation
-in their own `.agent/memory/operational/pending-graduations.md`. The
-whole-repo auto-fix touched 4 of Stormy Surfing Dock's plan-freshness files
-(active claim `cc4b1190` EEF plan-freshness lane). The husky pre-commit
-chain promoted those auto-fix changes into the staged set and a `git add`
-side-effect somewhere in the chain added an untracked file
-(`please-do-a-deep-mighty-peach.plan.md`, 432 lines). The result: a commit
-titled `chore(memory): capture human-composer-tui session insights in
-pending-graduations` actually landed 5 files (1 intended + 4 peer-owned),
-described as a sweep-incident by both Hushed (incident analysis) and
-Stormy (ratification — substance intact, attribution drifted).
-
-**Composition with existing doctrine**: this candidate composes with
-[`monitor-branch-touched-files`](../../rules/monitor-branch-touched-files.md)
-(which already names the multi-agent-tree-meaning-shift); the new candidate
-narrows to the specific class of *repo-wide auto-fix commands* whose
-working-tree footprint is invisible at invocation time.
-
-**Hypothesised cure shape**: a rule (e.g.
-`.agent/rules/check-peer-files-before-repo-wide-autofix.md`) requiring an
-agent to (a) read `git status --short` for peer-owned files before running
-any `*:root` auto-fix command in a multi-agent window, and (b) either
-restrict the auto-fix to their own files (`markdownlint --fix <files>`,
-`prettier --write <files>`) or coordinate with the peer-owner before
-proceeding. The husky hook chain's auto-promotion behaviour is correct in
-isolation; the cure is at the agent's invocation discipline, not at the
-hook chain.
-
-**Falsifiability**: a second multi-agent session has the same sweep
-incident with a different repo-wide auto-fix command (`format:root`,
-`markdownlint:root` again on a different agent's session, etc.). If
-second-instance lands, graduation is due; if no second instance accrues
-across a sustained multi-agent window, the first instance was solvable
-without a rule install and the candidate stays pending.
-
-**Source**: Hushed's experience file under
-`.agent/experience/2026-05-25-hushed-stalking-shade-the-sweep-and-the-reinvitation.md`
-carries the long-form narrative. Stormy's experience file under
-`.agent/experience/2026-05-25-stormy-surfing-dock-pr-0-and-sweep-incident.md`
-carries the affected-peer perspective. Stormy's file landed in commit
-`736fe0d4`; Hushed's file lands in the follow-on marshal commit alongside
-this entry.

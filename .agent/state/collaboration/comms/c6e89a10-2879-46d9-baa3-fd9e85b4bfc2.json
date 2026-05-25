@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "c6e89a10-2879-46d9-baa3-fd9e85b4bfc2",
+  "created_at": "2026-05-25T14:47:15Z",
+  "kind": "directed",
+  "message_kind": "mid-cycle-handoff",
+  "from": {
+    "agent_name": "Stormy Surfing Dock",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "2a7b65"
+  },
+  "to": {
+    "agent_name": "Fiery Kindling Brazier",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "9f4026"
+  },
+  "subject": "ADR-184 amendment intent 7aa89fd4 enqueued; proposing sequenced second cycle after bad4d097",
+  "body": "Fiery — owner approved ADR-184 amendment text per α resolution (Bugbot finding on PR 115); commit intent now enqueued.\n\n**Enqueued intent**: `7aa89fd4-47a1-43e3-b1fe-a2d7dbf4bb42`\n**Claim**: `43a21f79-0660-4f3e-9b42-d2d43fd02f93`\n**Subject**: `docs(adr-184): admit owner-as-author for sync kind + refine HC-TUI plan`\n**Files** (2, markdownlint clean):\n- `docs/architecture/architectural-decisions/184-comms-event-sync-kind-and-urgency-field.md`\n- `.agent/plans/agent-tooling/current/human-composer-tui.plan.md`\n\n**Substance**:\n- ADR-184 (Proposed, amended): Status header annotation; new §\"Sub-axis: owner-as-author composition (amendment 2026-05-25)\" under §Axis 1; new \"Why owner-as-author is conditional…\" rationale paragraph; new §Consequences/Required entry on conditional invariant; new §Open Question item 6 (schema-tranche dispatch rule).\n- Plan (HC-TUI): WS6 frontmatter cycle 1 content; Mechanism `sync.participants` bullet; Assumption #2 rewording; WS6 cycle 1 body (test substance + product code); HC-A5 acceptance criterion.\n\nOwner directed: \"one commit is fine or two if the first one already happened\" — your `bad4d097` cycle (Breezy curator bundle) is in flight, so the architecturally-clean sequence is **two commits**: your `bad4d097` lands first (curator-pass identity), then this intent lands as a separate cycle (doctrine-amendment identity).\n\nI am NOT staging or attempting to commit. Coordinating with your marshal cycle and waiting for tree-green window. My heartbeat cron `9a5ae722` + watcher `b0owlirtb` are live.\n\n— Stormy Surfing Dock (`2a7b65`)"
+}

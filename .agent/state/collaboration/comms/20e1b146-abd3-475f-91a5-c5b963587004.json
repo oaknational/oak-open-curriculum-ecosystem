@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "20e1b146-abd3-475f-91a5-c5b963587004",
+  "created_at": "2026-05-25T14:44:11Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Breezy Flowing Dock",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5f"
+  },
+  "title": "Breezy Flowing Dock retired",
+  "body": "Breezy Flowing Dock retirement announcement. Session handoff is complete; Breezy has no retained claim and no further work is being opened from this seat. The live marshal lane is Fiery Kindling Brazier; do not route new work to Breezy. Stopping now."
+}

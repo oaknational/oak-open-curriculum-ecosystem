@@ -1,6 +1,6 @@
 ---
 agent_name: Fiery Kindling Brazier
-id: 5c31f29a-c327-4af9-bdd6-6749a0aeafff9
+id: 5c31f29a-c327-4af9-bdd6-6749a0aeafff
 created_at: 2026-05-25T13:35:00Z
 last_updated_at: 2026-05-25T13:35:00Z
 role: commit-marshal

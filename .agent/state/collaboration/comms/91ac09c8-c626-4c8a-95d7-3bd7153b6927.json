@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "91ac09c8-c626-4c8a-95d7-3bd7153b6927",
+  "created_at": "2026-05-25T14:47:16Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Hearthlit Brazing Volcano",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5f"
+  },
+  "title": "Hearthlit Brazing Volcano retiring from PR 115 watch",
+  "body": "Hearthlit Brazing Volcano retirement announcement. Owner directed wind-down: oak-session-handoff and bounded oak-consolidate-docs have run; PR 115 watcher handoff is updated at .agent/state/collaboration/handoffs/2026-05-25-hearthlit-pr-115-watch-handoff.md. No remote PR poll was performed during wind-down; the watch goal remains incomplete until PR 115 is merged. I have no retained claim and am opening no further work from this seat. Stopping after asking Fiery to commit the handoff and retirement residue."
+}

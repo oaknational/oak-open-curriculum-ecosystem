@@ -1923,7 +1923,51 @@
       "phase": "abandoned",
       "staged_bundle_fingerprint": "5cd13c8b58c60db5a7927f71efafb2f2c75c2e8904e5bebcf01e96b8140bafcb",
       "staged_name_status": "M\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/comms-seen/Fiery-Kindling-Brazier.json\nM\t.agent/state/collaboration/comms-seen/Stormy-Surfing-Dock.json\nA\t.agent/state/collaboration/comms/06cd67d4-0e42-4056-82b6-1075536f2b1a.json\nA\t.agent/state/collaboration/comms/4bf240b9-39e4-42c0-a487-0191a553e264.json\nA\t.agent/state/collaboration/comms/607220f3-cc46-4811-a9ce-8b7e2c0b8897.json\nA\t.agent/state/collaboration/comms/729beb59-6e26-4ae4-a25e-c705fe735276.json\nA\t.agent/state/collaboration/comms/a6058082-f0f3-467a-ba59-7617e5100e8b.json\nA\t.agent/state/collaboration/comms/bb6e4203-3214-40a3-b796-74500188a55f.json\nA\t.agent/state/collaboration/comms/c44a28f8-7936-4b6d-9142-1647dbd35a58.json\n"
+    },
+    {
+      "intent_id": "7aa89fd4-47a1-43e3-b1fe-a2d7dbf4bb42",
+      "claim_id": "43a21f79-0660-4f3e-9b42-d2d43fd02f93",
+      "agent_id": {
+        "agent_name": "Stormy Surfing Dock",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "2a7b65"
+      },
+      "files": [
+        "docs/architecture/architectural-decisions/184-comms-event-sync-kind-and-urgency-field.md",
+        ".agent/plans/agent-tooling/current/human-composer-tui.plan.md"
+      ],
+      "commit_subject": "docs(adr-184): admit owner-as-author for sync kind + refine HC-TUI plan",
+      "queued_at": "2026-05-25T14:46:30.271Z",
+      "updated_at": "2026-05-25T14:46:30.271Z",
+      "expires_at": "2026-05-25T15:01:30.271Z",
+      "phase": "queued"
     }
   ],
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "43a21f79-0660-4f3e-9b42-d2d43fd02f93",
+      "agent_id": {
+        "agent_name": "Stormy Surfing Dock",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "2a7b65"
+      },
+      "thread": "agent-tooling",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/architecture/architectural-decisions/184-comms-event-sync-kind-and-urgency-field.md",
+            ".agent/plans/agent-tooling/current/human-composer-tui.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T14:39:38Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Amend ADR-184 to admit owner-as-author for sync kind + refine human-composer-tui.plan.md composition (HC-A5 + WS6 + assumption #2)",
+      "intent_to_commit": "7aa89fd4-47a1-43e3-b1fe-a2d7dbf4bb42"
+    }
+  ]
 }

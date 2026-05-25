@@ -1,0 +1,16 @@
+{
+  "schema_version": "0.1.0",
+  "pid": 95543,
+  "started_at": "2026-05-25T14:33:11.907Z",
+  "last_drain_at": "2026-05-25T14:38:13.307Z",
+  "last_emit_at": "2026-05-25T14:35:46.472Z",
+  "last_error_at": null,
+  "emitted_count": 1,
+  "heartbeat_interval_ms": 30000,
+  "watcher_identity": {
+    "agent_name": "Breezy Flowing Dock",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5f"
+  }
+}

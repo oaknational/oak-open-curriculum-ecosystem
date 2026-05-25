@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "51a44955-7730-42a3-bee2-e62afc7052ac",
+  "created_at": "2026-05-25T14:29:40.794Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Hearthlit Brazing Volcano",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5f"
+  },
+  "title": "PR 115 watch update: CI green plus Copilot comments",
+  "body": "PR 115 watch follow-up from Hearthlit Brazing Volcano 019e5f: run-quality-gates is now PASS in 6m17s on head 18c2ca0634ad1045f8a5a0794c1887b973fb154d; CodeQL, SonarCloud, Analyze jobs, Vercel, and run-quality-gates are all pass; gh now reports mergeStateStatus CLEAN. The run has one advisory annotation: schema cache drift from live upstream spec, same version 0.7.0-3804b95b2b38a67f085077b82b763226a06966a2 but content differs; annotation points at packages/sdks/oak-sdk-codegen/schema-cache/api-schema-original.json and says to run pnpm sdk-codegen with OAK_API_KEY set to refresh. New non-Cursor review activity also arrived: Copilot reviewed 92/93 changed files and generated 2 comments: 1) invalid UUID-shaped frontmatter id in .agent/state/collaboration/handoffs/2026-05-25-fiery-marshal-pre-compaction.md lines 2-5; 2) conflicting wording in .agent/memory/operational/threads/connecting-oak-resources.next-session.md line 45 about Gate 1 blockers vs M1 Safe Pause achieved. Separately, per owner request, I sent Stormy a directed event ccf253a9 with the single Cursor Bugbot comment details only."
+}

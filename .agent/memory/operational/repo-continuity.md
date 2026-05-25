@@ -17,9 +17,7 @@ Earlier archives remain under [`archive/`](archive/).
 ## Current State
 
 - Current branch: `feat/education-evidence-foundational-graphs-take2`.
-- Current local HEAD: `bec4b6ae`
-  (`chore(fitness): reflow HARD-limit lines introduced by archive-path updates`;
-  follow-up hardening-arc closeout).
+- Current local HEAD: `18c2ca06` (`chore: formatting`).
 - PR #114 merged at `77fcf746` (post-m1-attestation-tidy-up landing). PR #108
   merged earlier at `2462952a`. M1 + M2 milestones both achieved. Owner has
   explicitly pivoted back to graph work (2026-05-25).
@@ -50,17 +48,21 @@ Earlier archives remain under [`archive/`](archive/).
   `post-m1-attestation-tidy-up.plan.md` + `practice-infrastructure-hardening-program.plan.md`.
   Supersession mappings recorded in that directory's README per
   `consolidate-docs` plan-supersession discipline.
-- Active claims at the 2026-05-25T12:40Z refresh: Stormy Surfing Dock owns the
-  EEF plan-freshness lane (`cc4b1190-4c68-4472-bc2a-79c7f8624db2`); Thermal
-  Buffeting Plume has no active claim. Active commit queue empty.
-- Critical and hard fitness pressure is currently drained. Thermal's 2026-05-25
+- Active claims at the 2026-05-25T14:44Z refresh: Stormy Surfing Dock owns
+  agent-tooling plan/ADR files under claim
+  `43a21f79-0660-4f3e-9b42-d2d43fd02f93`; Fiery Kindling Brazier owns
+  `git:index/head` under claim `bad4d097-c488-4200-9464-58591cef6af1` for a
+  marshal cycle that explicitly includes the Breezy curator bundle. Breezy
+  Flowing Dock has no active claim. Active commit queue empty.
+- Critical and hard fitness pressure is currently drained. Breezy's 2026-05-25
   closeout refresh recorded
   `pnpm practice:fitness:informational` and
-  `pnpm practice:fitness --strict-hard` both exiting 0 with `SOFT (20 soft)`.
+  `pnpm practice:fitness --strict-hard` both exiting 0 with `SOFT (19 soft)`.
 - Recent active napkin rotations are preserved under
-  [`archive/`](../active/archive/). The current active napkin remains healthy
-  after Pelagic curation slices; preserve and route new lessons there before
-  any mechanical archive step.
+  [`archive/`](../active/archive/). Breezy's 2026-05-25 rotation preserved the
+  processed source window at
+  [`napkin-2026-05-25-breezy-critical-hard-curation.md`](../active/archive/napkin-2026-05-25-breezy-critical-hard-curation.md)
+  and started a fresh active napkin after routing live queue substance.
 - Remaining consolidation pressure is tracked by
   [`memory-surface-critical-drain-2026-05-24.plan.md`](../../plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md).
   Phase 2 and Phase 3 remain open for active-shard processing and distilled
@@ -74,9 +76,10 @@ Earlier archives remain under [`archive/`](archive/).
   [`repo-continuity-current-state-2026-05-24-shaded-silencing-dusk.md`](archive/repo-continuity-current-state-2026-05-24-shaded-silencing-dusk.md).
 - The outgoing pre-Dusky soft-tier live file snapshot is preserved at
   [`repo-continuity-soft-tier-pre-dusky-2026-05-24.md`](archive/repo-continuity-soft-tier-pre-dusky-2026-05-24.md).
-- Current working tree is dirty with Thermal's curator/handoff bundle plus
-  Stormy Surfing Dock's active EEF plan-freshness edits. A commit for Thermal
-  work should exclude the peer-owned EEF files unless the owner widens scope.
+- Current working tree is dirty with Breezy's curator/handoff bundle, fresh
+  collaboration-state events, and peer Stormy/Hearthlit/Fiery changes. Do not
+  sweep peer-owned files into a Breezy commit if one is later requested; the
+  live Fiery marshal claim owns the current git index/head window.
 - New 2026-05-25 closeout addition (Briny Fathoming Dock `95a27b`, no
   implementation per owner direction):
   [`role-emission-citation-binding.plan.md`](../../plans/agentic-engineering-enhancements/current/role-emission-citation-binding.plan.md)
@@ -94,6 +97,11 @@ Earlier archives remain under [`archive/`](archive/).
   at the curator-pass lane, PDR-081, the curator-passes README, and
   start-right-team routing; the pass log is under
   [`2026-05-25-thermal-buffeting-plume.md`](curator-passes/2026-05-25-thermal-buffeting-plume.md).
+- Breezy Flowing Dock completed the follow-up critical/hard memory curation
+  slice. The active napkin is fresh, the main pending-graduations register is
+  soft-only with a pointer to the new active shard, and the controlling
+  critical-drain plan records the `SOFT (19 soft)` validation. No comms files
+  were moved, deleted, or rotated.
 
 ## Active Threads
 
@@ -108,7 +116,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF first-feature delivery | [record][eef] | Secret Vanishing Wisp / claude / claude-opus-4-7 / 981cbe / 2026-05-23 |
-| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Thermal Buffeting Plume / codex / GPT-5 / `019e5f` / Knowledge Curator clarification + handoff consolidation / 2026-05-25 |
+| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Breezy Flowing Dock / codex / GPT-5 / `019e5f` / Knowledge Curator critical/hard memory curation + light handoff / 2026-05-25 |
 
 ## Paused Threads
 
@@ -261,10 +269,11 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
-Thermal Buffeting Plume ran a bounded `oak-consolidate-docs` pass for the
-Knowledge Curator role clarification and hard/critical fitness closeout. That
-pass updated the active thread record, this continuity file, the controlling
-fitness-drain plan evidence, the napkin, and the curator pass log. Broader
+Breezy Flowing Dock ran a bounded critical/hard memory-curation pass and light
+`oak-session-handoff` after the earlier Knowledge Curator consolidation. This
+handoff does not fire a new deep-consolidation trigger: the affected items were
+already routed into the active napkin, the active pending-graduations shard, the
+thread record, repo-continuity, and the controlling critical-drain plan. Broader
 Phase 2/3 soft-file work remains trigger/owner-gated; do not reopen it from
 soft fitness alone. Falsifiability for the next consolidator: re-check
 `git log --oneline -5`, `git status --short`, active claims, active queue,

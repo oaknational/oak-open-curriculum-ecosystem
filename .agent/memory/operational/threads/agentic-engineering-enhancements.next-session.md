@@ -1,5 +1,56 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-25 — Breezy Flowing Dock / `codex` / GPT-5 / `019e5f`, critical/hard memory curation + light handoff)
+
+**Session boundary**: owner asked Breezy to re-ground in
+`oak-start-right-team` and `oak-consolidate-docs`, then curate critical and
+hard knowledge surfaces with no shortcuts and no comms-log rotation. Owner then
+closed the session and requested `$oak-session-handoff`. This is a
+boundary-scoped Knowledge Curator closeout, not a new team-wide completion
+claim.
+
+**Landed outcome**:
+
+- Cleared the live critical/hard memory fitness regression without trimming
+  substance: active napkin critical width and hard size pressure plus
+  `pending-graduations.md` hard line pressure are now soft-only.
+- Rotated the processed active napkin to
+  `active/archive/napkin-2026-05-25-breezy-critical-hard-curation.md` and
+  started a fresh active napkin with the session disposition and quoting
+  mistake recorded.
+- Split fresh Briny/Hushed planning, role-emission, template, and multi-agent
+  auto-fix candidates into active shard
+  `pending-graduations/2026-05-25-planning-and-autofix-candidates.md`; the
+  main register now carries a pointer instead of duplicating the full bodies.
+- Updated the controlling
+  `memory-surface-critical-drain-2026-05-24.plan.md` with the 2026-05-25
+  re-ground, regression, route, and final validation evidence.
+- Preserved the 2026-05-25 comms-retention research direction: no
+  `.agent/state/collaboration/comms/` or `comms-seen/` files were moved,
+  deleted, or rotated.
+
+**Evidence**:
+
+- `pnpm practice:fitness:informational` exited 0 with `SOFT (19 soft)`.
+- `pnpm practice:fitness --strict-hard` exited 0 with `SOFT (19 soft)`.
+- Focused `pnpm exec markdownlint` passed on the touched memory/plan surfaces.
+- Focused `git diff --check` passed on the touched memory/plan surfaces.
+- `pnpm agent-tools:collaboration-state -- check` reported `ok`.
+- Claim `f0062af4-2aef-4182-aefa-cee0fe837b78` closed explicitly.
+- Final live refresh: Breezy has no active claim; active commit queue is empty.
+
+**Open at handoff**:
+
+- Peer claims remain fresh: Stormy Surfing Dock owns agent-tooling plan/ADR
+  files, and Fiery Kindling Brazier owns `git:index/head` for a marshal cycle
+  that explicitly includes the Breezy curator bundle. Do not infer repo-wide
+  idleness from Breezy's clean closeout.
+- Full `pnpm check` was not run by Breezy after Fiery's marshal claim appeared;
+  keep the check-singleton with the active marshal lane.
+- Broader Phase 2/3 soft-file work in the critical-drain plan remains
+  trigger/owner-gated. Current hard/critical objective is complete.
+- No relevant open conversation or escalation needed a Breezy handoff action.
+
 ## Session Outcome (2026-05-25 — Thermal Buffeting Plume / `codex` / GPT-5 / `019e5f`, Knowledge Curator clarification + handoff consolidation)
 
 **Session boundary**: Owner asked to make `Knowledge Curator` a well-defined
@@ -2121,6 +2172,7 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 | `codex` | `GPT-5` | Pelagic Snorkelling Sextant | Knowledge Curator (hard active-napkin pressure pass under start-right-team/consolidate-docs) | 2026-05-24 | 2026-05-24 |
 | `codex` | `GPT-5` | Shadowed Glimmering Moth | Consolidator / observation-only tidy-plan support (`019e5d`; hard/critical consolidation objective closed at `SOFT (20 soft)`, then Cycle 10/11 readiness notes broadcast without racing Eclipsed Cycle 9 or Wooded Cycle 10) | 2026-05-25 | 2026-05-25 |
 | `codex` | `GPT-5` | Thermal Buffeting Plume | Knowledge Curator (`019e5f`; role-substrate clarification, hard/critical curation completion, handoff/consolidation closeout) | 2026-05-25 | 2026-05-25 |
+| `codex` | `GPT-5` | Breezy Flowing Dock | Knowledge Curator (`019e5f`; critical/hard memory curation, napkin rotation, pending-graduations active shard, light handoff) | 2026-05-25 | 2026-05-25 |
 | `claude` | `claude-opus-4-7` | Misty Drifting Sail | Implementer / plan-AUTHOR (`02b325`, post-m1-attestation-tidy-up.plan.md Cycles 5+5a re-enqueue + held-items consolidation + 7 + 7.1 + 8 + 8a). Joined fresh under Lunar-Director routing 2026-05-24T22:10Z for commit-subject pre-flight (read-only), re-routed at 22:14Z to plan-AUTHOR under pure-direction split (Lunar = plan-OWNER, Misty = plan-AUTHOR, Mistbound = Commit Marshal). 7 cycles landed via Mistbound: `7c2f85f4` Cycle 5 (PDR-077 + reciprocals); `e8bc6781` Cycle 5a (PDR-079 + rule + hook); `93c4fdc0` held-items consolidation (README + practice-index PDR-077/078/079); `48c8ac22` Cycle 7 (ADR-186 + reciprocal §Related to ADR-183 + PDR-078 + practice-index line-165 fix); `75a2cd25` Cycle 7.1 (ADR-186 prettier-mangle repair); `9e57290d` Cycle 8 (SKILL §0.5 thin + PDR-078 Candidate→Accepted Adopted 2026-05-25 + reciprocal §Related to PDR-027/063/064). Cycle 8a ADR-187 (Claude self-modification authz cure-shape, WS-8 Lanternlit absorption — C2-near-term + C5-long-term + C4-fallback combination; C1/C3 rejected; 10 architectural conditions from Ferny WS-2 reviewer synthesis embedded; **4-reviewer absorption depth** docs-adr APPROVE-AS-IS + assumptions 2 CRITICAL + security 1 RES-CRITICAL + 5 MEDIUM + 1 LOW + wilma 2 RES-CRITICAL + 4 MEDIUM) authored 585 lines and **enqueued under intent `7e965431` / claim `e097d5a1`** awaiting marshal at compaction-prep time. Cycle 8a marshal blocked on Mistbound silence (≥83 min at wind-down; ping-before-escalate cure validated false-positive twice in session; sole-marshal binding means owner-class decision required). Surfaced 3 recurring failure modes for closeout consolidation: **heartbeat-content-drift** (3 Misty + 3+ Lunar instances of stale templated heartbeat body despite live state changes; graduation candidate: mechanical state-binding via structured field); **platform-wide Monitor cron-drift** (Misty 20-min + Lunar 17-min concurrent gaps at 23:28-23:47Z; graduation candidate: heartbeat-cron health-monitoring via existing watcher-staleness substrate); **ping-before-escalate cure validation** (cross-check git work-evidence before retirement-detection; validated twice in single session). Plan-author seat released 2026-05-25T00:35Z per Lunar's structural-stall wind-down at 00:33Z; team-member closeout broadcast `86d1fe2e`. **1 claim retained** for Cycle 8a marshal pickup (`e097d5a1`). | 2026-05-24 | 2026-05-25 |
 | `claude` | `claude-opus-4-7` | Mistbound Hiding Threshold | Sole Commit Marshal (`0e27cc`, post-m1-attestation-tidy-up.plan.md across compaction-5 resume → retirement; duty span ~8h35min 2026-05-24T21:08Z → 2026-05-25T05:47Z). 10 commits landed: `4575044e` Cycle 2 (Charcoal PDR-077 captures); `e8ca6d08` Cycle 3 (PDR-076a Accepted); `b7ac9938` Cycle 4 (PDR-076b Accepted); `7c2f85f4` Cycle 5 (PDR-077 + 063/064 reciprocals); `e8bc6781` Cycle 5a (PDR-079 + rule + hook); `9725ae09` Cycle 6 (PDR-078 Candidate); `93c4fdc0` held-items consolidation; `48c8ac22` Cycle 7 (ADR-186); `75a2cd25` Cycle 7.1 (ADR-186 prettier-mangle repair); `9e57290d` Cycle 8 (SKILL §0.5 + PDR-078 Adopted + reciprocals). Cycle 8a (intent `7e965431`) abandoned 23:26Z on husky format-issues; substantive work preserved as `??`+`M` in working tree for next author. Two false-positive retirement-detections fired (21:57Z Seaworthy + 22:57Z Lunar) — Director cure-discipline `cross-ref git log before escalation` named at 22:58Z + 23:01Z; pattern named for graduation. Branch-fitness-and-push-cadence.plan.md authored (16-cycle revised structure; 11 reviewer-driven revisions applied; uncommitted in tree). Marshal seat handed cleanly to Hushed Stalking Shade (`bc0a07`) via PDR-064 Moment-2 at 05:46Z (handoff record `.agent/state/collaboration/handoffs/2026-05-25-mistbound-to-hushed-stalking-shade-marshal-handoff.md`; Moment-1 broadcast `e2a21c5d`). Retired 2026-05-25T05:47Z. Closeout broadcast 05:47:50Z. | 2026-05-22 | 2026-05-25 |
 | `claude` | `claude-opus-4-7-1m` | Lush Sprouting Thicket | Implementer (codex-helper skill, codex-exec CLI, ADR-180, future plan) | 2026-05-12 | 2026-05-12 |

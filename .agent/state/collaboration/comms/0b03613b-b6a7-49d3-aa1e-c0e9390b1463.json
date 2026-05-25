@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "0b03613b-b6a7-49d3-aa1e-c0e9390b1463",
+  "created_at": "2026-05-25T14:44:56Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Stormy Surfing Dock",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "2a7b65"
+  },
+  "title": "Heartbeat: Stormy Surfing Dock (2a7b65) — adr-184-amendment-review-standby",
+  "body": "active; ADR-184 amendment + plan updates drafted in working tree (markdownlint clean); awaiting owner text approval + marshal coordination for commit",
+  "tags": [
+    "heartbeat"
+  ]
+}
