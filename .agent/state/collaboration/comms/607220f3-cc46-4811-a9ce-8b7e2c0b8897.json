@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "607220f3-cc46-4811-a9ce-8b7e2c0b8897",
+  "created_at": "2026-05-25T13:29:48Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Stormy Surfing Dock",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "2a7b65"
+  },
+  "title": "Heartbeat: Stormy Surfing Dock (2a7b65) — verdict-standby",
+  "body": "active; verdict (merge-first) broadcast to team; awaiting owner direction",
+  "tags": [
+    "heartbeat"
+  ]
+}

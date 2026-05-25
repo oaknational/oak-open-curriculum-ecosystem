@@ -1893,6 +1893,36 @@
       "phase": "abandoned",
       "staged_bundle_fingerprint": "39c5e878e9dcb2c36d3686461cb82fbb41862839b94c35d551219d9776971d9a",
       "staged_name_status": "A\t.agent/experience/2026-05-25-hushed-stalking-shade-the-sweep-and-the-reinvitation.md\nM\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/pending-graduations.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/comms-seen/Fiery-Kindling-Brazier.json\nA\t.agent/state/collaboration/comms-seen/Stormy-Surfing-Dock.json\nA\t.agent/state/collaboration/comms/492f57c3-830c-4d8a-a21c-77d644ae4d38.json\nA\t.agent/state/collaboration/comms/89bbb056-ce20-4fd2-9b22-f07a69950f0a.json\nA\t.agent/state/collaboration/comms/8b258b9d-b6e7-4387-b3e5-5aed90076cf2.json\nA\t.agent/state/collaboration/comms/e8910fc7-57c1-43a9-8ffe-c483fcb0998e.json\nM\t.agent/state/collaboration/shared-comms-log.md\n"
+    },
+    {
+      "intent_id": "8981fa51-0c9e-420a-8c92-bf1f05dcecb2",
+      "claim_id": "8b710e49-81e8-47b1-81a2-3c7109bb4edb",
+      "agent_id": {
+        "agent_name": "Fiery Kindling Brazier",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "9f4026"
+      },
+      "files": [
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/state/collaboration/comms-seen/Fiery-Kindling-Brazier.json",
+        ".agent/state/collaboration/comms-seen/Stormy-Surfing-Dock.json",
+        ".agent/state/collaboration/comms/06cd67d4-0e42-4056-82b6-1075536f2b1a.json",
+        ".agent/state/collaboration/comms/4bf240b9-39e4-42c0-a487-0191a553e264.json",
+        ".agent/state/collaboration/comms/607220f3-cc46-4811-a9ce-8b7e2c0b8897.json",
+        ".agent/state/collaboration/comms/729beb59-6e26-4ae4-a25e-c705fe735276.json",
+        ".agent/state/collaboration/comms/a6058082-f0f3-467a-ba59-7617e5100e8b.json",
+        ".agent/state/collaboration/comms/bb6e4203-3214-40a3-b796-74500188a55f.json",
+        ".agent/state/collaboration/comms/c44a28f8-7936-4b6d-9142-1647dbd35a58.json"
+      ],
+      "commit_subject": "chore(handoff): final marshal-cycle drain + closeout broadcasts (Fiery standing down)",
+      "queued_at": "2026-05-25T13:32:26.294Z",
+      "updated_at": "2026-05-25T13:32:46.950Z",
+      "expires_at": "2026-05-25T13:47:26.294Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "5cd13c8b58c60db5a7927f71efafb2f2c75c2e8904e5bebcf01e96b8140bafcb",
+      "staged_name_status": "M\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/comms-seen/Fiery-Kindling-Brazier.json\nM\t.agent/state/collaboration/comms-seen/Stormy-Surfing-Dock.json\nA\t.agent/state/collaboration/comms/06cd67d4-0e42-4056-82b6-1075536f2b1a.json\nA\t.agent/state/collaboration/comms/4bf240b9-39e4-42c0-a487-0191a553e264.json\nA\t.agent/state/collaboration/comms/607220f3-cc46-4811-a9ce-8b7e2c0b8897.json\nA\t.agent/state/collaboration/comms/729beb59-6e26-4ae4-a25e-c705fe735276.json\nA\t.agent/state/collaboration/comms/a6058082-f0f3-467a-ba59-7617e5100e8b.json\nA\t.agent/state/collaboration/comms/bb6e4203-3214-40a3-b796-74500188a55f.json\nA\t.agent/state/collaboration/comms/c44a28f8-7936-4b6d-9142-1647dbd35a58.json\n"
     }
   ],
   "claims": []

@@ -44252,6 +44252,48 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "8b710e49-81e8-47b1-81a2-3c7109bb4edb",
+      "agent_id": {
+        "agent_name": "Fiery Kindling Brazier",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "9f4026"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T13:31:21Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Cycle 3: final marshal drain + closeout broadcast",
+      "intent_to_commit": "8981fa51-0c9e-420a-8c92-bf1f05dcecb2",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T13:32:45Z",
+        "closed_by": {
+          "agent_name": "Fiery Kindling Brazier",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "9f4026"
+        },
+        "summary": "closed in same collaboration-state commit (cycle-3 final marshal landing)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8b710e49-81e8-47b1-81a2-3c7109bb4edb",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
