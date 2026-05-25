@@ -167,6 +167,19 @@ and `agent-tools/tests/collaboration-state/comms-watch-auto-seed.unit.test.ts`.
 
 **Depends on WS2 landing.**
 
+**Blocked-until-cleared 2026-05-25 (owner standing direction)**: NO
+comms files are to be moved or deleted until the comms research plan
+completes. Comms-file retention has been increased; the previous 7-day
+rule no longer applies. WS3 removes `.agent/state/collaboration/comms-seen/`
+which is part of the comms substrate namespace under the
+broadest-interpretation reading of "comms files". WS3 cannot execute
+until the comms research plan completes and explicitly clears the
+`comms-seen/` removal OR confirms it sits outside the "comms files"
+scope. Until then: even if WS2 lands, WS3 must NOT proceed. The
+narrower documentation updates (SKILL §0 + reference doc) are also
+held until the constraint clears, because they semantically depend on
+the directory removal landing first.
+
 **TDD cycle** (one commit):
 
 1. **Failing test** — author or extend a test asserting the CLI no
@@ -213,8 +226,14 @@ and `agent-tools/tests/collaboration-state/comms-watch-auto-seed.unit.test.ts`.
   instruction without regressing the cold-start contract.
 - **Blocking**: WS2 must land before WS3 — WS3 removes the legacy
   location which WS2's compat-read uses during the migration window.
+- **Blocking (owner standing 2026-05-25)**: comms research plan
+  completion before WS3 executes. Owner-stated direction:
+  comms-file retention has been increased and NO comms files are to
+  be moved or deleted until the comms research plan is complete. The
+  `comms-seen/` directory is under the comms substrate namespace; WS3
+  removes it. WS3 cannot execute until the constraint clears.
 
-No external blockers. No beneficial-only prerequisites.
+No other external blockers. No beneficial-only prerequisites.
 
 ## Acceptance Criteria (whole plan)
 

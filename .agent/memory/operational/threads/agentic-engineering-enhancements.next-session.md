@@ -1,5 +1,32 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-25 — Hushed Stalking Shade / `claude` / claude-opus-4-7 / `bc0a07`, hardening-arc consolidation closeout)
+
+**Session boundary**: Owner-directed consolidation pass after PR #114 merge + pivot back to graph work. Plan-mode plan at `~/.claude/plans/harmonic-fluttering-bentley.md` approved by owner; executed Phases 1+2+4+5+6 in sequence with continuous knowledge preservation. Phase 3 explicitly deferred under named constraint.
+
+**Landed outcome**: 4 commits on `feat/education-evidence-foundational-graphs-take2`, all pre-commit + lint-staged gates GREEN. Not yet pushed; reviewers next per owner direction.
+
+- `4e333441` chore(plans): reconcile hardening + tidy statuses to landed doctrine (Phase 1). 7 WSes + 2 gates flipped to completed with SHA evidence; cycle-15 marked removed per owner direction.
+- `f3f520ce` chore(memory): graduate PDR-077 + PDR-079 pending entries; archive bodies (Phase 2). Register dropped from HARD (783) → SOFT (722) via archive snapshot move.
+- `650afb08` chore(plans): archive tidy + hardening plans; promote comms-watch-storage-redesign (Phase 4+5). New plan (364 lines) + supersession-mapping README + 2 plan moves to archive/completed/ + cost-of-collaboration back-pointer.
+- `9f706f17` chore(memory): record hardening-arc consolidation full-arc landing in napkin (Phase 6).
+
+**Standing direction recorded 2026-05-25 (binding until comms research plan completes)**: comms-file retention has been INCREASED. NO comms files to be moved or deleted until the comms research plan completes (the `agent-collaboration-research` thread carries it; currently owner-gated). Consequence: WS3 of new `comms-watch-storage-redesign.plan.md` is blocked. Phase 3 of the consolidation plan (comms-event retention pass) deferred under same constraint.
+
+**Open at handoff**:
+
+- 4 commits stacked locally; not yet pushed. Reviewers will inspect.
+- New plan `comms-watch-storage-redesign.plan.md` queued in `agent-tooling/current/`; not active. WS3 blocked on comms research plan.
+- Hardening WS-10 (heartbeat-cron mechanism) deferred with named constraint; no immediate new owner (see archive README).
+- ~83 pending-graduations entries remain; trigger conditions not fired for most; next consolidation cadence reviews.
+
+**Insights surfaced** (captured in napkin):
+
+- Pattern instance: strategic-plan status drift when execution routes through a companion executable plan. Instance of existing `substrate-pointer-read-as-current-state` pattern.
+- Deferral-honesty discipline applied throughout; named constraint (owner pivot to graph work) + evidence + falsifiability for every deferred phase / un-completed entry.
+
+---
+
 ## Session Outcome (2026-05-25 — Briny Fathoming Dock / `claude` / claude-opus-4-7 / `95a27b`, owner-directed role metacognition session, no implementation)
 
 **Session boundary**: Owner-prompted reflection on "How can roles work better in teams?" with explicit observation that "the Director role is only useful when grounded in continually re-verified _fact_, otherwise it becomes a useless, even damaging, expensive ticking clock". /oak-start-right-team + /oak-plan + /oak-metacognition.

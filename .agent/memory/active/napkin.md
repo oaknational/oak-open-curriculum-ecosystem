@@ -57,6 +57,19 @@ merge_class: append-only-narrative
   cadence. The retention rule is unchanged; only its execution this
   session was deferred.
 
+### Owner standing direction recorded 2026-05-25 (binding)
+
+- Comms-file retention has been INCREASED; the previous 7-day rule no
+  longer applies. **NO comms files are to be moved or deleted** until
+  the comms research plan completes. The comms research plan lives on
+  the `agent-collaboration-research` thread (currently owner-gated,
+  buffered). Affects all `.agent/state/collaboration/comms/` events;
+  broadest-interpretation reading also affects `comms-seen/`. Concrete
+  consequence: WS3 of `comms-watch-storage-redesign.plan.md` is now
+  blocked until the constraint clears. Phase 3 of the
+  harmonic-fluttering-bentley consolidation plan (comms-event retention
+  pass) was deferred under same constraint.
+
 ### What landed (3 commits)
 
 - `4e333441` chore(plans): reconcile hardening + tidy statuses to

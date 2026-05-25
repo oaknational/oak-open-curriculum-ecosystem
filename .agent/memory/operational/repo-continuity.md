@@ -16,34 +16,41 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
-- Current branch: `feat/education-evidence-foundational-graphs`.
-- Current local HEAD: `dcf92bb5`
-  (`feat(oak-curriculum-mcp): add agent preview smoke and remote probe scripts`;
-  Salty Mooring Dock / `dc4dd7` session close).
-- PR #108 has merged via `2462952a`, and Seaworthy's M1 Safe Pause attestation
-  event `703de8dd` says M1 Safe Pause is achieved. The current live
-  multi-agent lane is now the post-M1 tidy-plan delivery sequence, not PR #108
-  implementation.
-- Tidy plan current state at the 2026-05-25T07:05Z Misty Director-dissolve handoff:
-  cycles 1-8 + 5a + 7.1 fix + 8a have landed (11/17 with Option B plan-file MD cure
-  also landed); Cycle 9 mid-flight on Wooded Flowering Leaf via PDR-063 pickup from
-  Eclipsed Watching Secret (compaction-prep handoff at 06:45Z); Eclipsed resumed
-  post-compaction at 06:53Z. Hushed Stalking Shade holds commit-marshal + GitHub-
-  interactions seat per owner direction 06:53Z. PR not yet opened; pre-PR cleanup
-  in flight (9 markdownlint errors in Eclipsed handoff record per Hushed `06:58:12Z`
-  blocker surface). Owner reset delivery frame 06:45Z: "implemented + pushed +
-  fixed + merged + live". Plan §Non-Goals #1 (linear-only) superseded by owner
-  direction 06:52Z for cycles 12-15 (parallel-safe); Twilit Orbiting Galaxy
-  (`019e5d`) routed to Cycle 12 (S5443 fixtures). Director seat dissolved by
-  owner direction 07:03Z; Wooded/Eclipsed/Hushed coordinate amongst themselves
-  in peer mode per SKILL §3 (≤3 agents → peer-default). Closeout plan
-  `/Users/jim/.claude/plans/vast-chasing-iverson.md` (one-PR-now + parallel
-  cycles 12-15) approved by owner.
-- Shadowed Glimmering Moth completed the earlier consolidation hard/critical
-  objective and then worked observation-only on tidy-plan delivery support.
-  Useful read-only outputs are in comms events `3a534015` (Cycle 10 readiness:
-  transaction helper has temp-file + rename but no fsync) and `52a220ae`
-  (Cycle 11 readiness: current `comms-seen` references, including ADR-182).
+- Current branch: `feat/education-evidence-foundational-graphs-take2`.
+- Current local HEAD: `9f706f17`
+  (`chore(memory): record hardening-arc consolidation full-arc landing in napkin (Phase 6)`;
+  Hushed Stalking Shade / `bc0a07` consolidation closeout).
+- PR #114 merged at `77fcf746` (post-m1-attestation-tidy-up landing). PR #108
+  merged earlier at `2462952a`. M1 + M2 milestones both achieved. Owner has
+  explicitly pivoted back to graph work (2026-05-25).
+- **Hardening-arc consolidation complete 2026-05-25 (4 commits on this branch,
+  not yet pushed)**. Phases 1+2+4+5+6 of the `harmonic-fluttering-bentley`
+  consolidation plan landed; Phase 3 (comms-event retention pass) explicitly
+  deferred under standing direction below. Commits: `4e333441` (Phase 1 status
+  reconciliation across hardening + tidy plans), `f3f520ce` (Phase 2 PDR-077 +
+  PDR-079 graduations + archive bodies), `650afb08` (Phase 4+5 archive tidy +
+  hardening plans + promote new `comms-watch-storage-redesign.plan.md`),
+  `9f706f17` (Phase 6 napkin closeout). Reviewers next per owner direction.
+- **NEW STANDING DIRECTION 2026-05-25 (binding until comms research plan
+  completes)**: comms-file retention has been INCREASED (the previous 7-day
+  rule no longer applies). **NO comms files are to be moved or deleted** until
+  the comms research plan completes. The comms research plan lives on the
+  `agent-collaboration-research` thread (currently owner-gated, buffered).
+  Affects: all `.agent/state/collaboration/comms/` events; broadest-interpretation
+  reading also affects `.agent/state/collaboration/comms-seen/` (the seen-state
+  cursor substrate). Concrete consequence: WS3 of the new
+  `comms-watch-storage-redesign.plan.md` is BLOCKED on this constraint
+  clearing.
+- **New plan promoted**:
+  [`comms-watch-storage-redesign.plan.md`](../../plans/agent-tooling/current/comms-watch-storage-redesign.plan.md)
+  in `agent-tooling/current/` — covers WS2 + WS3 of the comms-watch trilogy
+  (WS1 landed at `75e47923` via tidy cycle 9). Strategic substance lifted
+  verbatim from archived hardening program §P5.W1. Queued, not active.
+- **Plans archived 2026-05-25** to
+  [`agentic-engineering-enhancements/archive/completed/`](../../plans/agentic-engineering-enhancements/archive/completed/):
+  `post-m1-attestation-tidy-up.plan.md` + `practice-infrastructure-hardening-program.plan.md`.
+  Supersession mappings recorded in that directory's README per
+  `consolidate-docs` plan-supersession discipline.
 - Active claims at the 2026-05-25T06:40Z refresh include stale Estuarine,
   Sylvan, and Misty claims plus Eclipsed's fresh Cycle 9 claim and an older
   fresh plan-file claim from Eclipsed. Refresh claims before any edit or
@@ -99,7 +106,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF first-feature delivery | [record][eef] | Secret Vanishing Wisp / claude / claude-opus-4-7 / 981cbe / 2026-05-23 |
-| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Shadowed Glimmering Moth / codex / GPT-5 / observation-only tidy-plan support + handoff / 2026-05-25 |
+| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Hushed Stalking Shade / claude / claude-opus-4-7 / `bc0a07` / hardening-arc consolidation closeout / 2026-05-25 |
 
 ## Paused Threads
 

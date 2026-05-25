@@ -43845,6 +43845,236 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "617b1fc7-141c-4158-970f-94e733c66120",
+      "agent_id": {
+        "agent_name": "Eclipsed Watching Secret",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "00d760"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/post-m1-attestation-tidy-up.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T07:51:02Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Cycle 12+13 plan amendment (R4): mark dead-scope cycles completed; add §R4 plan refinement entry citing my prior broadcasts 86be55d7 + 22dc45ff as evidence",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T10:41:58Z",
+        "closed_by": {
+          "agent_name": "Eclipsed Watching Secret",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "00d760"
+        },
+        "summary": "R4 plan amendment landed at f10ffea8 (Cycles 12+13 marked completed-redundant); PR #114 since merged at 77fcf746",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "617b1fc7-141c-4158-970f-94e733c66120",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6d75ad02-ffde-4a8b-8043-700b9750de76",
+      "agent_id": {
+        "agent_name": "Estuarine Fathoming Sail",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
+      },
+      "thread": "main-critical-sonar-remediation",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/sdks/oak-sdk-codegen/src/bulk/extractors/unit-lesson-extractor.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/extractors/why-this-why-now-extractor.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/generators/analysis-report-generator.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/generators/nc-coverage-generator.unit.test.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/generators/synonym-miner.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/generators/vocabulary-graph-generator.unit.test.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/generators/write-graph-file.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/generators/write-json-dataset.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/generators/write-json-graph-file.integration.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T12:42:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Marshal handoff for applied Sonar-agent PR hunks under oak-sdk-codegen bulk code; source-authored by Estuarine and ready for Mistbound commit marshal",
+      "intent_to_commit": "550a33ac-feeb-4263-a83c-874aa2218a6b",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "owner_forced",
+        "closed_at": "2026-05-25T12:05:34Z",
+        "closed_by": {
+          "agent_name": "Hushed Stalking Shade",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "bc0a07"
+        },
+        "summary": "Owner-directed bulk closure 2026-05-25 — Hushed sole remaining team member at session-handoff; all claims closed per owner direction.",
+        "evidence": [
+          {
+            "kind": "owner-message",
+            "ref": "user message 2026-05-25T12:04Z: you are the only team member left, close all claims"
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "fbfeedb5-2cbb-4fbb-a3e4-7f21d9a3a036",
+      "agent_id": {
+        "agent_name": "Sylvan Sprouting Petal",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/identity.ts",
+            "agent-tools/tests/collaboration-state/identity.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:32:51Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Retain narrow ownership for uncommitted identity-helper source/test bundle pending marshal pickup after Sylvan wind-down",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "owner_forced",
+        "closed_at": "2026-05-25T12:05:34Z",
+        "closed_by": {
+          "agent_name": "Hushed Stalking Shade",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "bc0a07"
+        },
+        "summary": "Owner-directed bulk closure 2026-05-25 — Hushed sole remaining team member at session-handoff; all claims closed per owner direction.",
+        "evidence": [
+          {
+            "kind": "owner-message",
+            "ref": "user message 2026-05-25T12:04Z: you are the only team member left, close all claims"
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "fec8e243-049a-4efb-b371-a9ea4a533369",
+      "agent_id": {
+        "agent_name": "Hushed Stalking Shade",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "bc0a07"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/open-questions.md",
+            ".agent/plans/agentic-engineering-enhancements/current/open-questions-memory-system.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/README.md",
+            ".agent/memory/README.md",
+            ".agent/memory/operational/README.md",
+            ".agent/memory/executive/memory-state-substrate-contracts.manifest.json",
+            ".agent/practice-index.md",
+            ".agent/skills/consolidate-docs/SKILL-CANONICAL.md",
+            ".agent/skills/session-handoff/SKILL-CANONICAL.md",
+            "agent-tools/src/practice-substrate/open-questions-evaluator.ts",
+            "agent-tools/src/practice-substrate/live-open-questions.ts",
+            "agent-tools/src/practice-substrate/evaluators.ts",
+            "agent-tools/src/practice-substrate/index.ts",
+            "agent-tools/src/practice-substrate/live-report.ts",
+            "agent-tools/src/practice-substrate/live-types.ts",
+            "agent-tools/src/practice-substrate/types.ts",
+            "agent-tools/tests/practice-substrate/practice-substrate.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T07:01:08Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Absorbing-orphan marshal of Twilit Orbiting Galaxy (019e5d codex GPT-5) open-questions memory-system bundle per owner direction at 06:55Z; Twilit retired before CLI enqueue per owner 07:00Z. Bundle files per Twilit broadcast 4825fb5f.",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "owner_forced",
+        "closed_at": "2026-05-25T12:05:34Z",
+        "closed_by": {
+          "agent_name": "Hushed Stalking Shade",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "bc0a07"
+        },
+        "summary": "Owner-directed bulk closure 2026-05-25 — Hushed sole remaining team member at session-handoff; all claims closed per owner direction.",
+        "evidence": [
+          {
+            "kind": "owner-message",
+            "ref": "user message 2026-05-25T12:04Z: you are the only team member left, close all claims"
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3b76b802-f9fe-4f2c-8f2d-5fd64a7160be",
+      "agent_id": {
+        "agent_name": "Briny Fathoming Dock",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "95a27b"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/role-emission-citation-binding.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/README.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/repo-continuity.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T07:42:02Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Briny closeout: stage role-emission citation-binding plan + plan-tree README + thread record + repo-continuity for Marshal pickup (no-impl session per owner)",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "owner_forced",
+        "closed_at": "2026-05-25T12:05:34Z",
+        "closed_by": {
+          "agent_name": "Hushed Stalking Shade",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "bc0a07"
+        },
+        "summary": "Owner-directed bulk closure 2026-05-25 — Hushed sole remaining team member at session-handoff; all claims closed per owner direction.",
+        "evidence": [
+          {
+            "kind": "owner-message",
+            "ref": "user message 2026-05-25T12:04Z: you are the only team member left, close all claims"
+          }
+        ]
+      }
     }
   ]
 }
