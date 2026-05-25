@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.12.0...v1.13.0) (2026-05-25)
+
+
+### Features
+
+* **plan:** author human-composer-tui (mini-Slack write surface) ([97a470d](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/97a470dd8373bbc3d90bc59ee081c4bdcdf45d7d))
+
 # [1.12.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.11.0...v1.12.0) (2026-05-25)
 
 
