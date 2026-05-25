@@ -149,12 +149,12 @@ function readStatus(entryBody: string): string | undefined {
 }
 
 function readField(entryBody: string, field: (typeof REQUIRED_FIELDS)[number]): string | undefined {
-  const fieldPattern = new RegExp(`^- ${escapeRegExp(field)}:\\s*(.+)$`, 'm');
+  const fieldPattern = new RegExp(String.raw`^- ${escapeRegExp(field)}:\s*(.+)$`, 'm');
   const value = fieldPattern.exec(entryBody)?.[1]?.trim();
 
   return value === undefined || value.length === 0 ? undefined : value;
 }
 
 function escapeRegExp(value: string): string {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return value.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
 }
