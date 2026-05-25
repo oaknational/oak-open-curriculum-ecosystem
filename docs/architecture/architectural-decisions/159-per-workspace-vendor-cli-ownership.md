@@ -78,11 +78,11 @@ the root README prerequisites).
    `--org`/`--project`. Secrets (auth tokens) are supplied via
    environment variables only and are never committed.
 
-3. **`onlyBuiltDependencies` lists the binary explicitly.** Any CLI
-   that ships a native postinstall step (e.g. `@sentry/cli` running
-   its download script) MUST be added to `onlyBuiltDependencies` in
-   `pnpm-workspace.yaml` so pnpm allows the build script to run
-   without prompting per-developer.
+3. **`allowBuilds` lists the binary explicitly.** Any CLI that ships a
+   native postinstall step (e.g. `@sentry/cli` running its download script)
+   MUST be added to `allowBuilds` in `pnpm-workspace.yaml` (`'<package>':
+true`) so pnpm allows the build script to run without prompting
+   per-developer.
 
 4. **`knip` ignores pnpm-exec usage explicitly.** `knip` cannot trace
    `pnpm exec <cli>` invocations inside shell scripts (knip only
@@ -180,11 +180,10 @@ login` locally. Repo-tracked config beats user-global state for
   ancestor-discovery-reachable settings; for credentials, environment
   variables are the canonical surface (never `cli.db`).
 
-The explicit `knip` and `onlyBuiltDependencies` steps are the practical
-consequences of choosing pnpm-local-install — without them, the first
-contributor to run the aggregate quality gate hits false-positive
-`knip` failures or `pnpm install` prompts, and the pattern gets
-silently abandoned.
+The explicit `knip` and `allowBuilds` steps are the practical consequences
+of choosing pnpm-local-install — without them, the first contributor to
+run the aggregate quality gate hits false-positive `knip` failures or
+`pnpm install` prompts, and the pattern gets silently abandoned.
 
 ## Consequences
 
@@ -209,10 +208,9 @@ silently abandoned.
 ### Negative
 
 - Each new vendor CLI adoption has to touch four surfaces at once
-  (`package.json` devDep, `pnpm-workspace.yaml`
-  `onlyBuiltDependencies`, workspace `.<vendor>rc`, `knip.config.ts`
-  ignore). This ADR exists in part to make that checklist
-  non-obvious-to-forget.
+  (`package.json` devDep, `pnpm-workspace.yaml` `allowBuilds`, workspace
+  `.<vendor>rc`, `knip.config.ts` ignore). This ADR exists in part to
+  make that checklist non-obvious-to-forget.
 - Lockfile churn when a CLI is upgraded is slightly larger than it
   would be for a user-global install, but that is the same trade-off
   we accept for every other `devDependency`.
@@ -243,8 +241,9 @@ pattern end-to-end):
   [`apps/oak-curriculum-mcp-streamable-http/package.json`](../../../apps/oak-curriculum-mcp-streamable-http/package.json),
   [`apps/oak-search-cli/package.json`](../../../apps/oak-search-cli/package.json),
   [`packages/libs/sentry-node/package.json`](../../../packages/libs/sentry-node/package.json).
-- Added to `onlyBuiltDependencies` in
-  [`pnpm-workspace.yaml`](../../../pnpm-workspace.yaml).
+- Added to `allowBuilds` in
+  [`pnpm-workspace.yaml`](../../../pnpm-workspace.yaml) (`'@sentry/cli':
+true`).
 - Added to `ignoreDependencies` in
   [`knip.config.ts`](../../../knip.config.ts) for all three
   workspaces, with inline comments.

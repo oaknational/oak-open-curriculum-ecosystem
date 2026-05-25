@@ -8,7 +8,7 @@ status: "queued"
 created: 2026-03-05
 todos:
   - id: batch-1-overrides
-    content: "Add pnpm.overrides for axios >=1.13.5, rollup >=4.59.0, qs >=6.14.2"
+    content: "Add overrides in pnpm-workspace.yaml for axios >=1.13.5, rollup >=4.59.0, qs >=6.14.2"
     status: pending
   - id: batch-1-mcp-sdk
     content: "Update @modelcontextprotocol/sdk to 1.27.1 across all workspaces"
@@ -79,9 +79,11 @@ lockfile resolution pulls patched versions.
 |-------|---------|----------|---------|-------------|
 | #44 | axios | HIGH | >= 1.13.5 | DoS via `__proto__` key in mergeConfig |
 
-Currently pinned as `pnpm.overrides` to `^1.12.2`.
+Currently pinned via `overrides` in `pnpm-workspace.yaml` to `>=1.15.1`
+(axios floor already satisfies `>=1.13.5`).
 
-**Fix**: Bump override to `^1.13.5`.
+**Fix**: Confirm override remains at or above `>=1.13.5` in
+`pnpm-workspace.yaml` (already landed for the pnpm v11 config migration).
 
 ### Group 3: rollup (1 alert, HIGH)
 
@@ -91,7 +93,8 @@ Currently pinned as `pnpm.overrides` to `^1.12.2`.
 
 Transitive via vite (vitest) and tsup. Build tooling only.
 
-**Fix**: Add `pnpm.overrides` for `rollup >= 4.59.0`.
+**Fix**: Add `overrides` in `pnpm-workspace.yaml` for `rollup >= 4.59.0`
+(already landed for the pnpm v11 config migration — verify on execution).
 
 ### Group 4: minimatch (11 alerts, all HIGH)
 
@@ -102,7 +105,8 @@ Transitive via vite (vitest) and tsup. Build tooling only.
 Transitive via eslint 9 → `@eslint/config-array`, `@eslint/eslintrc`,
 and eslint plugins. Dev-only.
 
-**Fix (immediate)**: Add `pnpm.overrides` for `minimatch >= 3.1.3`.
+**Fix (immediate)**: Add `overrides` in `pnpm-workspace.yaml` for
+`minimatch >= 3.1.3`.
 **Fix (permanent)**: Migrate to eslint 10 — drops `@eslint/eslintrc`
 entirely and uses `minimatch@^10.2.1`.
 
@@ -114,7 +118,8 @@ entirely and uses `minimatch@^10.2.1`.
 
 Transitive via eslint → `@eslint/eslintrc`. Dev-only.
 
-**Fix (immediate)**: Add `pnpm.overrides` for `ajv >= 6.14.0`.
+**Fix (immediate)**: Add `overrides` in `pnpm-workspace.yaml` for
+`ajv >= 6.14.0`.
 **Fix (permanent)**: eslint 10 pins `ajv@^6.14.0` directly.
 
 ### Group 6: markdown-it (1 alert, MEDIUM)
@@ -136,7 +141,8 @@ Transitive via `markdownlint-cli@0.47.0`.
 Two versions in lockfile: `6.14.0` (vulnerable) and `6.15.0` (patched).
 The vulnerable `6.14.0` is pulled by transitive dependencies.
 
-**Fix**: Add `pnpm.overrides` for `qs >= 6.14.2`.
+**Fix**: Add `overrides` in `pnpm-workspace.yaml` for `qs >= 6.14.2`
+(already landed for the pnpm v11 config migration — verify on execution).
 
 ---
 
@@ -226,7 +232,9 @@ The vulnerable `6.14.0` is pulled by transitive dependencies.
 ## Priority Order
 
 1. **Pin GitHub Actions by SHA** — supply chain risk
-2. **pnpm.overrides** for axios, rollup, qs — one-line fixes
+2. **`overrides` in `pnpm-workspace.yaml`** for axios, rollup, qs — one-line
+   fixes (axios / rollup / qs floors already present post–pnpm v11 migration;
+   minimatch and ajv still outstanding)
 3. **@modelcontextprotocol/sdk** → 1.27.1 — resolves 5 hono alerts
 4. **markdownlint-cli** → 0.48.0 — resolves markdown-it alert
 5. **Remaining patch/minor updates** — quality posture

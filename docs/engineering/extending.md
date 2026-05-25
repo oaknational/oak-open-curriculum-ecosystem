@@ -156,7 +156,7 @@ and the four live validators under `scripts/`.
 
 Follow the eight-point checklist in
 [docs/engineering/vendor-cli-adoption.md](./vendor-cli-adoption.md) —
-pnpm-first install, repo-tracked config, `onlyBuiltDependencies` entry,
+pnpm-first install, repo-tracked config, `allowBuilds` entry,
 `knip.config.ts` ignore, shared libraries never pin `project`, fail-fast
 preflight, post-condition verification, root README prereq for interactive
 CLIs.

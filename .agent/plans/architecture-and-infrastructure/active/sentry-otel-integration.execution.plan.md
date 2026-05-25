@@ -385,8 +385,9 @@ What landed:
   and was deliberately **not** expanded into this lane.
 - **Pattern formalised as an ADR**: the per-workspace vendor CLI
   ownership pattern encoded by the bullets above (workspace-local
-  `devDependency`, repo-tracked `.sentryclirc`, `onlyBuiltDependencies`
-  plus `knip` ignore wiring, shared-library "no default project" rule,
+  `devDependency`, repo-tracked `.sentryclirc`, `allowBuilds` entry in
+  `pnpm-workspace.yaml` plus `knip` ignore wiring, shared-library "no default
+  project" rule,
   fail-fast preflight, Debug-ID post-condition, user-global carve-out
   for interactive CLIs) is captured as
   [ADR-159: Per-Workspace Vendor CLI Ownership with Repo-Tracked

@@ -55,7 +55,8 @@ Affected tasks: every `#build` task across 17 packages plus `sdk-codegen#sdk-cod
 
 - Root-cause fix for both warnings.
 - `turbo.json` updates (`globalEnv` or per-task `env`).
-- `.pnpmfile.cjs` patch (or alternative: `pnpm.overrides` pin) for `@humanfs/node`.
+- `.pnpmfile.cjs` patch (or alternative: `overrides` pin in
+  `pnpm-workspace.yaml`) for `@humanfs/node`.
 - Verification: `pnpm install --frozen-lockfile` produces no `WARN`; `pnpm build` produces no Turbo `WARNING`.
 - A short ADR amendment or note on `no-warning-toleration` rule wording, if applicable.
 
@@ -110,7 +111,8 @@ function readPackage(pkg) {
 module.exports = { hooks: { readPackage } };
 ```
 
-Alternative: pin a working version via `pnpm.overrides` in root `package.json` if upstream has fixed the issue in a newer release.
+Alternative: pin a working version via `overrides` in `pnpm-workspace.yaml`
+if upstream has fixed the issue in a newer release.
 
 ### Warning 2 fix
 
