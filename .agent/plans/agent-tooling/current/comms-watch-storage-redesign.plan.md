@@ -99,6 +99,54 @@ patched separately — exactly the structural cure shape from
 `.agent/directives/metacognition.md §Cure Shape — Structural, Not
 Doc-Patch`.
 
+## Assumptions (load-bearing; falsifiability per PDR-026 §Deferral-honesty)
+
+Three architectural assumptions underlie the WS2 design. Each is named so a
+future reviewer or executor can falsify it before WS2 product code lands:
+
+1. **XDG cache path resolves correctly under every agent platform**.
+   `${XDG_CACHE_HOME:-$HOME/.cache}/oak/practice/<session_id_prefix>/comms-watch.json`
+   must resolve to a writeable directory on macOS (Claude Code, Cursor), Linux
+   (Codex container, agent-tools CLIs), and WSL.
+   *Falsifiability*: WS2 test suite includes explicit cases for (a)
+   `XDG_CACHE_HOME` unset on macOS → defaults to `$HOME/.cache`; (b)
+   `XDG_CACHE_HOME` set to a non-existent directory → path is created on first
+   write; (c) `session_id_prefix` asserted free of whitespace (PDR-027
+   guarantees a hex digest; a defensive assertion in the storage module
+   enforces).
+2. **Lazy legacy-migration is concurrency-safe**. When two watcher instances
+   start simultaneously on a host with a legacy UUID-list file, exactly one
+   migration write succeeds and both subsequent reads see the same migrated
+   state — never a partial or corrupted file.
+   *Falsifiability*: WS2 test mocks two concurrent migration attempts;
+   verifies the write uses atomic temp+rename (not `fs.appendFile`); verifies
+   the second reader gets an idempotent result.
+3. **mtime watermark + filename array invariant**. The `last_seen_filenames`
+   array is the tie-breaker when multiple events share the same mtime (FS
+   granularity is 1s on ext4, sub-second on APFS). The array stays bounded
+   because it only carries filenames at the most-recent mtime tick, not the
+   historical set. On a new mtime, the array is reset to the new tick's
+   filenames.
+   *Falsifiability*: WS2 test writes two events at identical mtime; verifies
+   both are tracked in `last_seen_filenames`; writes one new event at a later
+   mtime; verifies the array is reset to only that new filename.
+
+If any assumption fails empirically during WS2 execution, the plan is held
+and re-architected — not patched with workarounds.
+
+## Comms-Event Substrate Contract
+
+This plan reads from `.agent/state/collaboration/comms/` but does not write
+to it. The design assumes comms-event files are immutable until purged by
+the `consolidate-docs` retention pipeline — never deleted ad-hoc. If that
+contract is violated (e.g., an operator removes files from the comms
+directory mid-session), the watcher may re-emit prior events after cache
+loss because auto-seed will re-seed from the smaller event set. The owner
+standing direction 2026-05-25 (no comms files moved or deleted until the
+comms research plan completes) currently strengthens this contract; if the
+direction lifts and a new retention policy permits ad-hoc deletion, this
+contract assumption must be re-evaluated.
+
 ## Means (workstreams)
 
 ### WS1 — CLI auto-seed (PREREQUISITE, LANDED)
@@ -127,10 +175,37 @@ and `agent-tools/tests/collaboration-state/comms-watch-auto-seed.unit.test.ts`.
      in the path.
    - Idempotent re-read: reading the same file twice produces identical
      result without side-effects on disk.
+   - **mtime tie-breaking** (architecture-expert-wilma 2026-05-25): write
+     two events at identical mtime; verify both tracked in
+     `last_seen_filenames`; write a third event at a later mtime; verify
+     `last_seen_filenames` resets to only that new filename.
+   - **Lazy-migration race-safety** (architecture-expert-wilma 2026-05-25):
+     mock two concurrent migration attempts on the same legacy file;
+     verify only one write succeeds and the second reader gets the same
+     migrated state (no partial reads, no corruption).
+   - **XDG default on macOS** (architecture-expert-wilma 2026-05-25):
+     `XDG_CACHE_HOME` unset; verify path resolves to `$HOME/.cache/...`.
+   - **WS3-blocked coexistence read-order** (architecture-expert-wilma
+     2026-05-25): pre-populate both legacy `.agent/state/collaboration/
+     comms-seen/<agent>.json` AND new XDG-cache file; verify the new
+     path wins on read regardless of mtime ordering; verify legacy file
+     newer than XDG cache does NOT cause regression to legacy state.
+   - **Cache-corruption recovery** (architecture-expert-wilma 2026-05-25):
+     write malformed JSON into the XDG cache; verify the watcher logs a
+     warning and falls back to auto-seed-on-missing rather than crashing.
 2. **Product code** — implement the storage primitive (likely
    `agent-tools/src/collaboration-state/seen-state-storage.ts`) with a
    narrow IO surface (Pick-typed; tests substitute a tiny fake per the
    pattern established in `comms-watch-auto-seed.ts`).
+
+   **Critical implementation finding** (architecture-expert-wilma
+   2026-05-25 review): `agent-tools/src/collaboration-state/cli-runtime.ts`
+   currently uses `fs.appendFile` for seen-state writes. The WS2 migration
+   write (converting legacy UUID-list to new format) MUST use atomic
+   temp+rename or `writeFile` with `flag: 'wx'` — never `appendFile`,
+   which would corrupt the new shape under concurrent writes. The
+   storage primitive must own this contract; verify in the
+   race-safety test above.
 3. **Wiring** — wire the new primitive into `cli-comms-watch.ts` and
    `comms-watch-auto-seed.ts`. The auto-seed module already lives at
    the right abstraction layer; the storage primitive plugs in beneath
@@ -180,11 +255,24 @@ narrower documentation updates (SKILL §0 + reference doc) are also
 held until the constraint clears, because they semantically depend on
 the directory removal landing first.
 
+**Programmatic clearance signal** (assumptions-expert 2026-05-25): the
+WS3 readiness check polls for one of (a) a comms-event with a tag
+naming the comms-research-plan completion (e.g.,
+`owner-direction:comms-research-plan-complete` or equivalent), OR (b) a
+new ADR / PDR amendment recording the comms research plan outcome and
+explicitly addressing the `comms-seen/` substrate scope. The executor
+checks both surfaces at session-open; absence of both = WS3 remains
+held with no further action.
+
 **TDD cycle** (one commit):
 
-1. **Failing test** — author or extend a test asserting the CLI no
-   longer attempts to read `.agent/state/collaboration/comms-seen/`
-   (the legacy-location compat path is gone).
+1. **Failing test reframe** (assumptions-expert 2026-05-25): rather than
+   a negative-existence assertion on the legacy path, the WS3 product
+   change deletes the compat-read code path. WS3's executable test is
+   that the existing CLI test suite stays green after the legacy compat
+   shim is removed. If any existing test depends on the legacy path,
+   that dependency is the failing-test surface for WS3 — fix the
+   dependency rather than assert absence.
 2. **Product code** —
    - Remove `.agent/state/collaboration/comms-seen/` directory from the
      repo (~100 files, 3.2 MB).
@@ -231,7 +319,18 @@ the directory removal landing first.
   comms-file retention has been increased and NO comms files are to
   be moved or deleted until the comms research plan is complete. The
   `comms-seen/` directory is under the comms substrate namespace; WS3
-  removes it. WS3 cannot execute until the constraint clears.
+  removes it. WS3 cannot execute until the constraint clears. See
+  the **Programmatic clearance signal** under WS3 for the readiness
+  check shape.
+- **Read-dependency: PDR-027 identity-tuple contract**
+  (architecture-expert-betty 2026-05-25), specifically the
+  `session_id_prefix` format. The XDG cache path includes the prefix
+  as a segment; any future amendment to PDR-027 that changes the
+  prefix format (e.g., from hex digest to UUID slug) requires WS2
+  path-resolution logic re-evaluation AND a migration plan for cached
+  state under the old path format. Not blocking today; recorded so
+  any future PDR-027 amendment touching prefix format triggers a WS2
+  re-evaluation.
 
 No other external blockers. No beneficial-only prerequisites.
 
