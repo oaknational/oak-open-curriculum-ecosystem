@@ -23,11 +23,21 @@ Earlier archives remain under [`archive/`](archive/).
   event `703de8dd` says M1 Safe Pause is achieved. The current live
   multi-agent lane is now the post-M1 tidy-plan delivery sequence, not PR #108
   implementation.
-- Tidy plan current state at the 2026-05-25T06:33Z Shadowed handoff:
-  cycles through 8a have landed; Cycle 9 is freshly claimed by Eclipsed
-  Watching Secret (`2583e153`) for comms-watch CLI auto-seed; Wooded Flowering
-  Leaf is standing by for Cycle 10 after Cycle 9 lands; Hushed Stalking Shade
-  holds the commit-marshal seat; the active commit queue is empty.
+- Tidy plan current state at the 2026-05-25T07:05Z Misty Director-dissolve handoff:
+  cycles 1-8 + 5a + 7.1 fix + 8a have landed (11/17 with Option B plan-file MD cure
+  also landed); Cycle 9 mid-flight on Wooded Flowering Leaf via PDR-063 pickup from
+  Eclipsed Watching Secret (compaction-prep handoff at 06:45Z); Eclipsed resumed
+  post-compaction at 06:53Z. Hushed Stalking Shade holds commit-marshal + GitHub-
+  interactions seat per owner direction 06:53Z. PR not yet opened; pre-PR cleanup
+  in flight (9 markdownlint errors in Eclipsed handoff record per Hushed `06:58:12Z`
+  blocker surface). Owner reset delivery frame 06:45Z: "implemented + pushed +
+  fixed + merged + live". Plan §Non-Goals #1 (linear-only) superseded by owner
+  direction 06:52Z for cycles 12-15 (parallel-safe); Twilit Orbiting Galaxy
+  (`019e5d`) routed to Cycle 12 (S5443 fixtures). Director seat dissolved by
+  owner direction 07:03Z; Wooded/Eclipsed/Hushed coordinate amongst themselves
+  in peer mode per SKILL §3 (≤3 agents → peer-default). Closeout plan
+  `/Users/jim/.claude/plans/vast-chasing-iverson.md` (one-PR-now + parallel
+  cycles 12-15) approved by owner.
 - Shadowed Glimmering Moth completed the earlier consolidation hard/critical
   objective and then worked observation-only on tidy-plan delivery support.
   Useful read-only outputs are in comms events `3a534015` (Cycle 10 readiness:
@@ -62,6 +72,18 @@ Earlier archives remain under [`archive/`](archive/).
   changes and fresh comms events. Hushed owns commit-marshal work; treat
   `git status --short`, active claims, comms, and the queue as live truth
   before any commit-window work.
+- New 2026-05-25 closeout addition (Briny Fathoming Dock `95a27b`, no
+  implementation per owner direction):
+  [`role-emission-citation-binding.plan.md`](../../plans/agentic-engineering-enhancements/current/role-emission-citation-binding.plan.md)
+  landed in `current/` with full 6-reviewer pre-execution pass complete and
+  consensus absorbed (path B narrowed v1: Director + Heartbeat-emitter
+  required scope; ADR-188 status Proposed; lifecycle kind included;
+  wilma's HIGH migration findings absorbed). DECISION-COMPLETE pending
+  owner execution direction. Plan-tree discoverability updated in
+  `current/README.md`. Session insights captured in napkin pending
+  graduation (recursive meta-cure shape; doctrine-by-analogy
+  self-instance; reviewer fan-out cost-imbalance lesson; status maturity
+  inversion lesson). Staged for Hushed Marshal commit.
 
 ## Active Threads
 
