@@ -201,6 +201,22 @@ Consolidation did not surface a new ADR/PDR promotion candidate. The Practice
 governance remains homed in PDR-029 / PDR-035, while this repo's phenotype
 boundary remains homed in ADR-165.
 
+## Foundation Alignment
+
+- **PDR-027** (Threads, Sessions, and Agent Identity) — identity preflight
+  is the deterministic mechanism this plan installs at write boundaries
+  for collaboration state.
+- **PDR-076a / PDR-076b** (Identity Tuple) — the canonical (name, UUID,
+  session_id_prefix) identity that immutable comms events and claim
+  records carry. Write-safety guarantees on shared JSON must preserve
+  the PDR-076 tuple integrity per row.
+- **PDR-078** (Liveness-Heartbeat Contract) — claim records under TTL
+  cleanup observe the PDR-078 heartbeat cadence and stale-detection
+  rules; write-safety must not lose or rewrite `heartbeat_at` fields.
+- **PDR-029 / PDR-035 / ADR-165** — Practice governance / phenotype
+  split (already cited above); the write-safety transaction helper is
+  a phenotype-layer cure, not a Practice doctrine change.
+
 ## Reviewer Scheduling
 
 - **Pre-execution**: assumptions review of proportionality and hook deferral.

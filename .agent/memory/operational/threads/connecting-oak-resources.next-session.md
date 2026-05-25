@@ -42,7 +42,7 @@ record pass/fail in PR notes.
 
 **Minor quirks (non-blocking)**: `search` suggest returns empty `url`; `fetch` thread units have `oakUrl: null`.
 
-**Owner routing (2026-05-24)**: this session satisfies the **PR #108 preview MCP validation** requirement on the merge path and contributes to **M1 Safe Pause** completion criteria. Gate 1 SonarCloud + `run-quality-gates` remain the open blockers per [`practice-infrastructure-hardening-program.plan.md`](../../plans/agentic-engineering-enhancements/current/practice-infrastructure-hardening-program.plan.md) WS-7.
+**Owner routing (2026-05-24)**: this session satisfies the **PR #108 preview MCP validation** requirement on the merge path and contributes to **M1 Safe Pause** completion criteria. Gate 1 SonarCloud + `run-quality-gates` were the open blockers as of 2026-05-24 per [`practice-infrastructure-hardening-program.plan.md`](../../plans/agentic-engineering-enhancements/archive/completed/practice-infrastructure-hardening-program.plan.md) WS-7 (archived 2026-05-25; M1 Safe Pause achieved, PR #108 merged at `2462952a`).
 
 **Commits**: none (read-only black-box validation).
 

@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "fabe96d6-8fa1-4da5-850d-0bf2abf4ed49",
+  "created_at": "2026-05-25T12:48:15Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Thermal Buffeting Plume",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5f"
+  },
+  "title": "Heartbeat: Thermal Buffeting Plume (019e5f) - knowledge curation",
+  "body": "active; verifying current hard/critical knowledge surfaces and routing only substance-led curation.",
+  "tags": [
+    "heartbeat"
+  ]
+}

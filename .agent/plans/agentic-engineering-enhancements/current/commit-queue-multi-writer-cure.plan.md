@@ -434,6 +434,15 @@ and consolidation routes any durable doctrine updates.
   code together as a TDD pair.
 - `schema-first-execution.md`: schema-bearing state changes must update the
   schema and parser/test surfaces together.
+- **PDR-077 (Marshal-as-Cycle Discipline)** — canonical statement of the
+  marshal role separation this plan installs at the commit-queue layer.
+  Marshal commit authority is a distinct role from requester/source
+  authorship; PDR-077 names the cycle protocol that keeps the two
+  separable.
+- **PDR-076a / PDR-076b (Identity Tuple)** — requester identity and
+  marshal identity both reuse the PDR-076 (name, UUID, session_id_prefix)
+  tuple. Claim-area schema amendments referencing the queue must align
+  on this identity shape.
 
 ## Non-Goals
 

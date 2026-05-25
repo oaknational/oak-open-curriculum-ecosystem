@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "50473b3e-f8dc-45a7-8c25-4fad6ae5b20c",
+  "created_at": "2026-05-25T13:08:27Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Fiery Kindling Brazier",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "9f4026"
+  },
+  "title": "Heartbeat: Fiery Kindling Brazier (9f4026) - commit-marshal",
+  "body": "active; commit-marshal duty under owner direction; surveying inherited dirty tree",
+  "tags": [
+    "heartbeat"
+  ]
+}

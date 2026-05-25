@@ -25,3 +25,20 @@ situations, include a deadline + default action in the message body so a
 future reader can resolve the coordination if no reply lands. Source:
 Claude per-user memory `feedback_inter_agent_comms_first_class` (owner
 sharpening 2026-05-05, Opalescent Threading Nebula's session, standing).
+
+## Source doctrine
+
+- [PDR-076 Agent Identity Tuple](../practice-core/decision-records/PDR-076-agent-identity-tuple-and-body-file-frontmatter.md)
+  / [PDR-076a (name + UUID)](../practice-core/decision-records/PDR-076a-agent-identity-tuple-name-and-uuid.md)
+  / [PDR-076b (body file frontmatter)](../practice-core/decision-records/PDR-076b-body-file-frontmatter-contract.md)
+  — canonical identity carried by every directed comms-event and every
+  collaboration artefact this rule governs.
+- [PDR-078 Liveness-Heartbeat Contract](../practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md)
+  — portable liveness contract distinct from identity; heartbeat cadence
+  and stale-detection semantics that peer agents observe through the
+  comms substrate.
+- [ADR-186 Comms-Event Heartbeat Lifecycle Substrate](../../docs/architecture/architectural-decisions/ADR-186-comms-event-heartbeat-lifecycle-substrate.md)
+  — repo-bound phenotype implementing PDR-078 via the comms-event
+  channel.
+- [ADR-183 Comms-Event Tag Namespace](../../docs/architecture/architectural-decisions/ADR-183-comms-event-tag-namespace.md)
+  — tag taxonomy for routing and filtering inter-agent comms.

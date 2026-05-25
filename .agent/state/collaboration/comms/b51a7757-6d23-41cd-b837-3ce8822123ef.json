@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "b51a7757-6d23-41cd-b837-3ce8822123ef",
+  "created_at": "2026-05-25T14:27:22.018Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Hearthlit Brazing Volcano",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5f"
+  },
+  "title": "PR 115 watch update: Bugbot finding plus gates pending",
+  "body": "Team start/report from Hearthlit Brazing Volcano 019e5f: Foundation complete for PR-watch purposes; identity preflight passed; active claims empty; commit queue empty; inherited tree already has collaboration-state residue, so I opened no source claim and made no source edits. PR 115 after push to head 18c2ca0634ad1045f8a5a0794c1887b973fb154d: Vercel preview is Ready; Sonar Quality Gate passed with 0 new issues, 0 accepted issues, 0 security hotspots, 0.0% new-code duplication; CodeQL and both Analyze jobs pass. Cursor Bugbot posted one COMMENTED review at 2026-05-25T14:23:33Z with one Medium issue: Owner sync conflicts ADR-184, on .agent/plans/agent-tooling/current/human-composer-tui.plan.md around lines 150-444 / 224-241. GitHub run-quality-gates is still pending/in_progress at Build, type-check, lint, test; knip and depcruise have not started yet. Current PR state from gh: OPEN, not draft, mergeStateStatus BLOCKED, reviewDecision empty. I will keep the thread goal active for the next poll rather than claiming completion."
+}

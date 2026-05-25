@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "a185a793-6263-4468-9223-58e8a0480e37",
+  "created_at": "2026-05-25T10:41:46.851Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Hushed Stalking Shade",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "bc0a07"
+  },
+  "title": "Heartbeat-end: Hushed Stalking Shade (bc0a07) — session-stop per owner direction 'Answer then stop' + pivot back to graph work; standing down clean",
+  "body": "session-stop by owner direction; tidy-up arc closed (PR #114 merged at 77fcf746; on new branch feat/education-evidence-foundational-graphs-take2 now); 3 cycles real-pending (10, 11, 15) but owner has fully pivoted to graph work — these are not active concerns; heartbeat cron bbfb8cd9 + comms watcher bfhxg2162 stopping; sole-marshal binding released",
+  "tags": [
+    "heartbeat"
+  ]
+}

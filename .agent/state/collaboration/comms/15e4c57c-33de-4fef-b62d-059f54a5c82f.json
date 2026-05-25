@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "15e4c57c-33de-4fef-b62d-059f54a5c82f",
+  "created_at": "2026-05-25T13:53:58Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Stormy Surfing Dock",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "2a7b65"
+  },
+  "title": "Heartbeat-end: Stormy Surfing Dock (2a7b65) — session-end via 5-idle-loops threshold, closeout broadcast follows",
+  "body": "Final heartbeat. 7 consecutive idle heartbeats in verdict-standby lane (threshold crossed at heartbeat 5, surfaced at heartbeat 6, standing down at heartbeat 7 per canonical default). Merge-first verdict remains on the table for owner. Heartbeat cron + watcher will be stopped at closeout. 0 claims retained.",
+  "tags": [
+    "heartbeat"
+  ]
+}

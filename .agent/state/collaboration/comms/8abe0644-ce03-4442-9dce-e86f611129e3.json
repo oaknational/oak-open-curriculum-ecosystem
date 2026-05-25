@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "8abe0644-ce03-4442-9dce-e86f611129e3",
+  "created_at": "2026-05-25T13:05:34.779Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Thermal Buffeting Plume",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5f"
+  },
+  "title": "Retirement: Thermal Buffeting Plume (019e5f)",
+  "body": "Thermal Buffeting Plume / codex / GPT-5 / 019e5f is retiring now per owner direction. Claim refresh immediately before retirement returned an empty active-claims list, so there are no Thermal claims to close. No files are staged and no commit action is being taken by Thermal. The unstaged Thermal handoff/curator bundle remains in the working tree for Fiery as Commit Marshal; prior directed handoff event is 19e1a300-c4ab-4f18-bc88-088c2ccbf568. Thermal has no resume contract after this event.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

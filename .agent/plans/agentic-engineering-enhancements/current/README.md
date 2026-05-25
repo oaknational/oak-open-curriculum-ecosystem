@@ -56,7 +56,24 @@ tooling substrate, it belongs under `agent-tooling/`.
 | [plan-index-reachability-remediation.plan.md](plan-index-reachability-remediation.plan.md) | Restore the leaf-to-root reachability invariant for `.agent/plans/`: add 3 missing collections to root README, add lifecycle READMEs to observability + security-and-privacy/future, thread 5 orphan plans into their lifecycle indexes, and add a repo-validator that fails CI on new orphans | DECISION-INCOMPLETE |
 | [role-emission-citation-binding.plan.md](role-emission-citation-binding.plan.md) | Substrate cure for the PDR-074 §S1 "Director ticking-clock" failure mode: PDR-082 portable contract + ADR-188 repo-bound phenotype convert self-discipline checklist question into mechanically-enforced citation-binding (Director + Heartbeat-emitter required scope v1; other roles Reserved). 6-reviewer pre-execution pass complete; consensus absorbed | DECISION-COMPLETE pending owner execution direction |
 
-Recently completed:
+Recently completed 2026-05-25 (multi-agent practice-infrastructure hardening
+arc closeout; see
+[`../archive/completed/README.md`](../archive/completed/README.md) for the
+supersession mappings):
+
+- [`post-m1-attestation-tidy-up.plan.md`](../archive/completed/post-m1-attestation-tidy-up.plan.md)
+  delivered via PR #114 (merged at `77fcf746`); cycles 10 + 11 (comms-watch
+  storage redesign) superseded into
+  [`../../agent-tooling/current/comms-watch-storage-redesign.plan.md`](../../agent-tooling/current/comms-watch-storage-redesign.plan.md);
+  cycle 15 removed as misunderstanding per owner direction.
+- [`practice-infrastructure-hardening-program.plan.md`](../archive/completed/practice-infrastructure-hardening-program.plan.md)
+  delivered via PR #108 (merged at `2462952a`) + arc-wide doctrine landings
+  (PDR-076a/b/077/078/079 + ADR-182/183/184/185/186/187); §P5.W1 substance
+  promoted to
+  [`../../agent-tooling/current/comms-watch-storage-redesign.plan.md`](../../agent-tooling/current/comms-watch-storage-redesign.plan.md);
+  WS-10 (heartbeat-cron mechanism) deferred with named constraint.
+
+Earlier closures:
 [multi-agent-collaboration-decision-thread-and-claim-history.plan.md](../archive/completed/multi-agent-collaboration-decision-thread-and-claim-history.plan.md)
 closed WS3A on 2026-04-26. A narrow WS4A lifecycle integration pass then
 made start-right, session-handoff, plan templates, and Practice/ADR surfaces

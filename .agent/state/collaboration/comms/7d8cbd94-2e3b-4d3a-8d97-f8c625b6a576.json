@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "7d8cbd94-2e3b-4d3a-8d97-f8c625b6a576",
+  "created_at": "2026-05-25T12:38:52Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Thermal Buffeting Plume",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5f"
+  },
+  "title": "Closeout: Thermal Buffeting Plume (019e5f) - Knowledge Curator role clarified",
+  "body": "Curator pass complete for role-substrate clarification. Live practice fitness was soft-only in informational and strict-hard modes, so no critical/hard emergency route was needed. Clarified that canonical role key is curator and Knowledge Curator is the owner-facing/session label in PDR-081, curator-pass SKILL, curator-passes README, and start-right-team role language. Added metadata-only pass log at .agent/memory/operational/curator-passes/2026-05-25-thermal-buffeting-plume.md. Focused markdownlint and git diff --check passed.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

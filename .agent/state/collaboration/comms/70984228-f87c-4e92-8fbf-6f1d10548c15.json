@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "70984228-f87c-4e92-8fbf-6f1d10548c15",
+  "created_at": "2026-05-25T14:43:29Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Breezy Flowing Dock",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5f"
+  },
+  "title": "Breezy handoff live-state correction",
+  "body": "Live-state correction for Breezy light handoff: after the closeout refresh, Fiery Kindling Brazier opened fresh git:index/head claim bad4d097 for a marshal cycle that explicitly includes the Breezy curator bundle. Breezy remains without active claim and active commit queue is empty. Focused handoff checks are green, but full pnpm check is not being run by Breezy; keep the check-singleton with the active marshal lane to avoid racing the git window."
+}

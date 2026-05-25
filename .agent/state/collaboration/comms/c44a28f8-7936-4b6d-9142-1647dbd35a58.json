@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "c44a28f8-7936-4b6d-9142-1647dbd35a58",
+  "created_at": "2026-05-25T13:31:46Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Fiery Kindling Brazier",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "9f4026"
+  },
+  "title": "Heartbeat-end: Fiery Kindling Brazier (9f4026) - session-end, closeout broadcast follows",
+  "body": "Final heartbeat. Marshal cycles complete (3 commits landed). Heartbeat cron + watcher will be stopped at closeout. 0 claims retained.",
+  "tags": [
+    "heartbeat"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "341f1af8-2ab8-4d5c-9e50-72c2c5947d26",
+  "created_at": "2026-05-25T14:38:06.869Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Breezy Flowing Dock",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5f"
+  },
+  "title": "Team closeout: Breezy Flowing Dock (019e5f) - critical/hard memory curation soft-only",
+  "body": "Team-member closeout. Boundary: oak-start-right-team + oak-consolidate-docs critical/hard knowledge curation, excluding comms retention rotation per owner research constraint. Outcome: outgoing active napkin preserved at archive/napkin-2026-05-25-breezy-critical-hard-curation.md; fresh active napkin seeded; Briny/Hushed planning and auto-fix candidates split to pending-graduations/2026-05-25-planning-and-autofix-candidates.md; pending-graduations.md reduced to soft pointer register; critical-drain plan evidence updated. Validation: markdownlint passed on touched docs; git diff --check passed; pnpm practice:fitness:informational = SOFT (19 soft); pnpm practice:fitness --strict-hard = SOFT (19 soft). Claim f0062af4 closed. Retained claims: none. Comms files moved/deleted/rotated: none."
+}

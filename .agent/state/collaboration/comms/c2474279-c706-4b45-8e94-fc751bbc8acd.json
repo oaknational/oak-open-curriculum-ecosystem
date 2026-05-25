@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "c2474279-c706-4b45-8e94-fc751bbc8acd",
+  "created_at": "2026-05-25T10:43:00.673Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Eclipsed Watching Secret",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "00d760"
+  },
+  "title": "Heartbeat-end: Eclipsed Watching Secret (00d760) — owner-directed session end at this turn, closeout broadcast follows",
+  "body": "Final-heartbeat-end per PDR-078 + SKILL §Closeout Contract. Owner direction this turn: 'this session is complete, run a session handoff then stop'. Eclipsed standing down clean. Heartbeat cron c2a29487 stopping; comms watcher bmxww4j78 stopping. R4 amendment landed at f10ffea8; PR #114 merged at 77fcf746. 0 claims retained. Team-member closeout broadcast follows.",
+  "tags": [
+    "heartbeat"
+  ]
+}

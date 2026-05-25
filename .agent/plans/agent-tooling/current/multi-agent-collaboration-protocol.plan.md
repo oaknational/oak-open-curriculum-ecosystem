@@ -1321,6 +1321,18 @@ This plan extends:
   per-session granularity for area-of-work commitment.
 - **PDR-027** (Threads, Sessions, and Agent Identity) — identity rows
   in claims reuse the schema already in thread records.
+- **PDR-076a / PDR-076b** (Identity Tuple) — the canonical (name, UUID,
+  session_id_prefix) identity carried by every comms event and every
+  claim entry; this plan's identity-bearing surfaces consume the
+  PDR-076 contract.
+- **PDR-078** (Liveness-Heartbeat Contract) — portable contract for the
+  `heartbeat_at` field used in claim records and active-tracking
+  surfaces. Heartbeat shape, cadence semantics, and stale-detection
+  rules all live in PDR-078; this plan applies them.
+- **ADR-186** (Comms-Event Heartbeat Lifecycle Substrate) — the
+  repo-bound substrate decision implementing PDR-078's portable
+  contract via the comms-event channel. The local-phenotype anchor
+  for heartbeat persistence and read paths.
 - **PDR-029** (Perturbation-Mechanism Bundle) — Family-A Class-A.2
   tripwire pattern: `register-active-areas-at-session-open.md` is the
   parallel of `register-identity-on-thread-join.md`.

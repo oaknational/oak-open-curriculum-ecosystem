@@ -1795,147 +1795,179 @@
       "updated_at": "2026-05-25T07:48:16.710Z",
       "expires_at": "2026-05-25T08:02:11.841Z",
       "phase": "abandoned"
+    },
+    {
+      "intent_id": "1acf03c5-1af8-4254-bd07-772ef7a0a07f",
+      "claim_id": "f748c47d-4616-4935-b8aa-fb77d0fb0e96",
+      "agent_id": {
+        "agent_name": "Fiery Kindling Brazier",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "9f4026"
+      },
+      "files": [
+        ".agent/experience/2026-05-25-stormy-surfing-dock-pr-0-and-sweep-incident.md",
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/operational/curator-passes/2026-05-25-thermal-buffeting-plume.md",
+        ".agent/memory/operational/curator-passes/README.md",
+        ".agent/memory/operational/open-questions.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+        ".agent/plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md",
+        ".agent/practice-core/decision-records/PDR-081-curator-role-and-substrate-care-lane.md",
+        ".agent/skills/curator-pass/SKILL-CANONICAL.md",
+        ".agent/skills/start-right-team/SKILL-CANONICAL.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/state/collaboration/comms-seen/Fiery-Kindling-Brazier.json",
+        ".agent/state/collaboration/comms-seen/hushed-stalking-shade.json",
+        ".agent/state/collaboration/comms-seen/thermal-buffeting-plume.json",
+        ".agent/state/collaboration/comms-seen/thermal-buffeting-plume.watch-heartbeat.json",
+        ".agent/state/collaboration/comms/15e84895-9a6d-4f1b-aeba-6d247f5e90fc.json",
+        ".agent/state/collaboration/comms/18e6f341-03ea-46e2-9577-6d27fe4642b3.json",
+        ".agent/state/collaboration/comms/19e1a300-c4ab-4f18-bc88-088c2ccbf568.json",
+        ".agent/state/collaboration/comms/275ed1c1-5381-4e6d-899e-9fca19948147.json",
+        ".agent/state/collaboration/comms/4a537d1e-5061-47d7-8ead-b8189edec53a.json",
+        ".agent/state/collaboration/comms/50473b3e-f8dc-45a7-8c25-4fad6ae5b20c.json",
+        ".agent/state/collaboration/comms/53fa079e-a42e-469b-a1c9-d4f5be165f23.json",
+        ".agent/state/collaboration/comms/5cbf6539-7624-4638-b63f-6b1ab6ee52f3.json",
+        ".agent/state/collaboration/comms/6ec248cc-eddd-45af-aba4-3519888512f1.json",
+        ".agent/state/collaboration/comms/7d8cbd94-2e3b-4d3a-8d97-f8c625b6a576.json",
+        ".agent/state/collaboration/comms/8abe0644-ce03-4442-9dce-e86f611129e3.json",
+        ".agent/state/collaboration/comms/8b0da0eb-56d0-44f9-bd15-ca8665541cab.json",
+        ".agent/state/collaboration/comms/8e79bd1e-be2b-4182-a1da-8a922f88bec3.json",
+        ".agent/state/collaboration/comms/91311a26-59e7-4f3b-9771-9a2e9e45afae.json",
+        ".agent/state/collaboration/comms/a05b857d-6bc3-41dc-99b5-12faa9712ade.json",
+        ".agent/state/collaboration/comms/a185a793-6263-4468-9223-58e8a0480e37.json",
+        ".agent/state/collaboration/comms/ab01da4e-dce4-4489-856d-3ff545a41cf4.json",
+        ".agent/state/collaboration/comms/abca6444-8fae-4fdf-8032-fb9b9916f647.json",
+        ".agent/state/collaboration/comms/ae48f2a6-bb17-4a0d-93e9-b7643d316dc0.json",
+        ".agent/state/collaboration/comms/b62854f6-5965-4000-9143-0c13182f9d9e.json",
+        ".agent/state/collaboration/comms/c2474279-c706-4b45-8e94-fc751bbc8acd.json",
+        ".agent/state/collaboration/comms/c562a1bd-2395-479b-b968-5f60e5e27ef6.json",
+        ".agent/state/collaboration/comms/c5d50c08-df06-432f-9758-9494105014e7.json",
+        ".agent/state/collaboration/comms/c92720bf-106a-4060-81df-079115efe305.json",
+        ".agent/state/collaboration/comms/cf0557fa-5dd0-45a7-a31a-9e93d3a6ffc3.json",
+        ".agent/state/collaboration/comms/d93320d1-b61d-4c66-8896-93c32d9fd07e.json",
+        ".agent/state/collaboration/comms/e4f12390-e8a0-41e2-8a6e-2e431339c929.json",
+        ".agent/state/collaboration/comms/f7a20db6-b42d-4886-898f-0baf1dd16b6a.json",
+        ".agent/state/collaboration/comms/fabe96d6-8fa1-4da5-850d-0bf2abf4ed49.json",
+        ".agent/state/collaboration/comms/fc5561c8-078d-4b1b-afa0-5df4459b293f.json",
+        ".agent/state/collaboration/shared-comms-log.md"
+      ],
+      "commit_subject": "chore(handoff): land Thermal curator-pass + sweep-incident captures + accumulated coordination",
+      "queued_at": "2026-05-25T13:18:00.942Z",
+      "updated_at": "2026-05-25T13:19:28.724Z",
+      "expires_at": "2026-05-25T13:33:00.942Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "108b11e7c5f0bbc18062dd453d8ab7ff8d709ee56846c8ca28d2d6253e5a7769",
+      "staged_name_status": "A\t.agent/experience/2026-05-25-stormy-surfing-dock-pr-0-and-sweep-incident.md\nM\t.agent/memory/active/napkin.md\nA\t.agent/memory/operational/curator-passes/2026-05-25-thermal-buffeting-plume.md\nM\t.agent/memory/operational/curator-passes/README.md\nM\t.agent/memory/operational/open-questions.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nM\t.agent/plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md\nM\t.agent/practice-core/decision-records/PDR-081-curator-role-and-substrate-care-lane.md\nM\t.agent/skills/curator-pass/SKILL-CANONICAL.md\nM\t.agent/skills/start-right-team/SKILL-CANONICAL.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nA\t.agent/state/collaboration/comms-seen/Fiery-Kindling-Brazier.json\nM\t.agent/state/collaboration/comms-seen/hushed-stalking-shade.json\nA\t.agent/state/collaboration/comms-seen/thermal-buffeting-plume.json\nA\t.agent/state/collaboration/comms-seen/thermal-buffeting-plume.watch-heartbeat.json\nA\t.agent/state/collaboration/comms/15e84895-9a6d-4f1b-aeba-6d247f5e90fc.json\nA\t.agent/state/collaboration/comms/18e6f341-03ea-46e2-9577-6d27fe4642b3.json\nA\t.agent/state/collaboration/comms/19e1a300-c4ab-4f18-bc88-088c2ccbf568.json\nA\t.agent/state/collaboration/comms/275ed1c1-5381-4e6d-899e-9fca19948147.json\nA\t.agent/state/collaboration/comms/4a537d1e-5061-47d7-8ead-b8189edec53a.json\nA\t.agent/state/collaboration/comms/50473b3e-f8dc-45a7-8c25-4fad6ae5b20c.json\nA\t.agent/state/collaboration/comms/53fa079e-a42e-469b-a1c9-d4f5be165f23.json\nA\t.agent/state/collaboration/comms/5cbf6539-7624-4638-b63f-6b1ab6ee52f3.json\nA\t.agent/state/collaboration/comms/6ec248cc-eddd-45af-aba4-3519888512f1.json\nA\t.agent/state/collaboration/comms/7d8cbd94-2e3b-4d3a-8d97-f8c625b6a576.json\nA\t.agent/state/collaboration/comms/8abe0644-ce03-4442-9dce-e86f611129e3.json\nA\t.agent/state/collaboration/comms/8b0da0eb-56d0-44f9-bd15-ca8665541cab.json\nA\t.agent/state/collaboration/comms/8e79bd1e-be2b-4182-a1da-8a922f88bec3.json\nA\t.agent/state/collaboration/comms/91311a26-59e7-4f3b-9771-9a2e9e45afae.json\nA\t.agent/state/collaboration/comms/a05b857d-6bc3-41dc-99b5-12faa9712ade.json\nA\t.agent/state/collaboration/comms/a185a793-6263-4468-9223-58e8a0480e37.json\nA\t.agent/state/collaboration/comms/ab01da4e-dce4-4489-856d-3ff545a41cf4.json\nA\t.agent/state/collaboration/comms/abca6444-8fae-4fdf-8032-fb9b9916f647.json\nA\t.agent/state/collaboration/comms/ae48f2a6-bb17-4a0d-93e9-b7643d316dc0.json\nA\t.agent/state/collaboration/comms/b62854f6-5965-4000-9143-0c13182f9d9e.json\nA\t.agent/state/collaboration/comms/c2474279-c706-4b45-8e94-fc751bbc8acd.json\nA\t.agent/state/collaboration/comms/c562a1bd-2395-479b-b968-5f60e5e27ef6.json\nA\t.agent/state/collaboration/comms/c5d50c08-df06-432f-9758-9494105014e7.json\nA\t.agent/state/collaboration/comms/c92720bf-106a-4060-81df-079115efe305.json\nA\t.agent/state/collaboration/comms/cf0557fa-5dd0-45a7-a31a-9e93d3a6ffc3.json\nA\t.agent/state/collaboration/comms/d93320d1-b61d-4c66-8896-93c32d9fd07e.json\nA\t.agent/state/collaboration/comms/e4f12390-e8a0-41e2-8a6e-2e431339c929.json\nA\t.agent/state/collaboration/comms/f7a20db6-b42d-4886-898f-0baf1dd16b6a.json\nA\t.agent/state/collaboration/comms/fabe96d6-8fa1-4da5-850d-0bf2abf4ed49.json\nA\t.agent/state/collaboration/comms/fc5561c8-078d-4b1b-afa0-5df4459b293f.json\nM\t.agent/state/collaboration/shared-comms-log.md\n"
+    },
+    {
+      "intent_id": "7c8faabb-31f1-41d2-9b9e-ab480658be92",
+      "claim_id": "75210b4c-9c15-4853-80a5-ccbfe1740a03",
+      "agent_id": {
+        "agent_name": "Fiery Kindling Brazier",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "9f4026"
+      },
+      "files": [
+        ".agent/experience/2026-05-25-hushed-stalking-shade-the-sweep-and-the-reinvitation.md",
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/operational/pending-graduations.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/state/collaboration/comms-seen/Fiery-Kindling-Brazier.json",
+        ".agent/state/collaboration/comms-seen/Stormy-Surfing-Dock.json",
+        ".agent/state/collaboration/comms/492f57c3-830c-4d8a-a21c-77d644ae4d38.json",
+        ".agent/state/collaboration/comms/89bbb056-ce20-4fd2-9b22-f07a69950f0a.json",
+        ".agent/state/collaboration/comms/8b258b9d-b6e7-4387-b3e5-5aed90076cf2.json",
+        ".agent/state/collaboration/comms/e8910fc7-57c1-43a9-8ffe-c483fcb0998e.json",
+        ".agent/state/collaboration/shared-comms-log.md"
+      ],
+      "commit_subject": "chore(handoff): land Hushed experience + auto-fix-awareness graduation entry + comms drain",
+      "queued_at": "2026-05-25T13:27:37.979Z",
+      "updated_at": "2026-05-25T13:28:44.676Z",
+      "expires_at": "2026-05-25T13:42:37.979Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "39c5e878e9dcb2c36d3686461cb82fbb41862839b94c35d551219d9776971d9a",
+      "staged_name_status": "A\t.agent/experience/2026-05-25-hushed-stalking-shade-the-sweep-and-the-reinvitation.md\nM\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/pending-graduations.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/comms-seen/Fiery-Kindling-Brazier.json\nA\t.agent/state/collaboration/comms-seen/Stormy-Surfing-Dock.json\nA\t.agent/state/collaboration/comms/492f57c3-830c-4d8a-a21c-77d644ae4d38.json\nA\t.agent/state/collaboration/comms/89bbb056-ce20-4fd2-9b22-f07a69950f0a.json\nA\t.agent/state/collaboration/comms/8b258b9d-b6e7-4387-b3e5-5aed90076cf2.json\nA\t.agent/state/collaboration/comms/e8910fc7-57c1-43a9-8ffe-c483fcb0998e.json\nM\t.agent/state/collaboration/shared-comms-log.md\n"
+    },
+    {
+      "intent_id": "8981fa51-0c9e-420a-8c92-bf1f05dcecb2",
+      "claim_id": "8b710e49-81e8-47b1-81a2-3c7109bb4edb",
+      "agent_id": {
+        "agent_name": "Fiery Kindling Brazier",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "9f4026"
+      },
+      "files": [
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/state/collaboration/comms-seen/Fiery-Kindling-Brazier.json",
+        ".agent/state/collaboration/comms-seen/Stormy-Surfing-Dock.json",
+        ".agent/state/collaboration/comms/06cd67d4-0e42-4056-82b6-1075536f2b1a.json",
+        ".agent/state/collaboration/comms/4bf240b9-39e4-42c0-a487-0191a553e264.json",
+        ".agent/state/collaboration/comms/607220f3-cc46-4811-a9ce-8b7e2c0b8897.json",
+        ".agent/state/collaboration/comms/729beb59-6e26-4ae4-a25e-c705fe735276.json",
+        ".agent/state/collaboration/comms/a6058082-f0f3-467a-ba59-7617e5100e8b.json",
+        ".agent/state/collaboration/comms/bb6e4203-3214-40a3-b796-74500188a55f.json",
+        ".agent/state/collaboration/comms/c44a28f8-7936-4b6d-9142-1647dbd35a58.json"
+      ],
+      "commit_subject": "chore(handoff): final marshal-cycle drain + closeout broadcasts (Fiery standing down)",
+      "queued_at": "2026-05-25T13:32:26.294Z",
+      "updated_at": "2026-05-25T13:32:46.950Z",
+      "expires_at": "2026-05-25T13:47:26.294Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "5cd13c8b58c60db5a7927f71efafb2f2c75c2e8904e5bebcf01e96b8140bafcb",
+      "staged_name_status": "M\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/comms-seen/Fiery-Kindling-Brazier.json\nM\t.agent/state/collaboration/comms-seen/Stormy-Surfing-Dock.json\nA\t.agent/state/collaboration/comms/06cd67d4-0e42-4056-82b6-1075536f2b1a.json\nA\t.agent/state/collaboration/comms/4bf240b9-39e4-42c0-a487-0191a553e264.json\nA\t.agent/state/collaboration/comms/607220f3-cc46-4811-a9ce-8b7e2c0b8897.json\nA\t.agent/state/collaboration/comms/729beb59-6e26-4ae4-a25e-c705fe735276.json\nA\t.agent/state/collaboration/comms/a6058082-f0f3-467a-ba59-7617e5100e8b.json\nA\t.agent/state/collaboration/comms/bb6e4203-3214-40a3-b796-74500188a55f.json\nA\t.agent/state/collaboration/comms/c44a28f8-7936-4b6d-9142-1647dbd35a58.json\n"
+    },
+    {
+      "intent_id": "7aa89fd4-47a1-43e3-b1fe-a2d7dbf4bb42",
+      "claim_id": "43a21f79-0660-4f3e-9b42-d2d43fd02f93",
+      "agent_id": {
+        "agent_name": "Stormy Surfing Dock",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "2a7b65"
+      },
+      "files": [
+        "docs/architecture/architectural-decisions/184-comms-event-sync-kind-and-urgency-field.md",
+        ".agent/plans/agent-tooling/current/human-composer-tui.plan.md"
+      ],
+      "commit_subject": "docs(adr-184): admit owner-as-author for sync kind + refine HC-TUI plan",
+      "queued_at": "2026-05-25T14:46:30.271Z",
+      "updated_at": "2026-05-25T14:46:30.271Z",
+      "expires_at": "2026-05-25T15:01:30.271Z",
+      "phase": "queued"
     }
   ],
   "claims": [
     {
-      "claim_id": "6d75ad02-ffde-4a8b-8043-700b9750de76",
+      "claim_id": "43a21f79-0660-4f3e-9b42-d2d43fd02f93",
       "agent_id": {
-        "agent_name": "Estuarine Fathoming Sail",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e59"
-      },
-      "thread": "main-critical-sonar-remediation",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "packages/sdks/oak-sdk-codegen/src/bulk/extractors/unit-lesson-extractor.ts",
-            "packages/sdks/oak-sdk-codegen/src/bulk/extractors/why-this-why-now-extractor.ts",
-            "packages/sdks/oak-sdk-codegen/src/bulk/generators/analysis-report-generator.ts",
-            "packages/sdks/oak-sdk-codegen/src/bulk/generators/nc-coverage-generator.unit.test.ts",
-            "packages/sdks/oak-sdk-codegen/src/bulk/generators/synonym-miner.ts",
-            "packages/sdks/oak-sdk-codegen/src/bulk/generators/vocabulary-graph-generator.unit.test.ts",
-            "packages/sdks/oak-sdk-codegen/src/bulk/generators/write-graph-file.ts",
-            "packages/sdks/oak-sdk-codegen/src/bulk/generators/write-json-dataset.ts",
-            "packages/sdks/oak-sdk-codegen/src/bulk/generators/write-json-graph-file.integration.test.ts"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-24T12:42:00Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Marshal handoff for applied Sonar-agent PR hunks under oak-sdk-codegen bulk code; source-authored by Estuarine and ready for Mistbound commit marshal",
-      "intent_to_commit": "550a33ac-feeb-4263-a83c-874aa2218a6b"
-    },
-    {
-      "claim_id": "fbfeedb5-2cbb-4fbb-a3e4-7f21d9a3a036",
-      "agent_id": {
-        "agent_name": "Sylvan Sprouting Petal",
-        "platform": "codex",
-        "model": "GPT-5",
-        "session_id_prefix": "019e59"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            "agent-tools/src/collaboration-state/identity.ts",
-            "agent-tools/tests/collaboration-state/identity.unit.test.ts"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-24T14:32:51Z",
-      "freshness_seconds": 3600,
-      "sidebar_open": false,
-      "intent": "Retain narrow ownership for uncommitted identity-helper source/test bundle pending marshal pickup after Sylvan wind-down"
-    },
-    {
-      "claim_id": "fec8e243-049a-4efb-b371-a9ea4a533369",
-      "agent_id": {
-        "agent_name": "Hushed Stalking Shade",
+        "agent_name": "Stormy Surfing Dock",
         "platform": "claude",
         "model": "claude-opus-4-7",
-        "session_id_prefix": "bc0a07"
+        "session_id_prefix": "2a7b65"
       },
-      "thread": "agentic-engineering-enhancements",
+      "thread": "agent-tooling",
       "areas": [
         {
           "kind": "files",
           "patterns": [
-            ".agent/memory/operational/open-questions.md",
-            ".agent/plans/agentic-engineering-enhancements/current/open-questions-memory-system.plan.md",
-            ".agent/plans/agentic-engineering-enhancements/current/README.md",
-            ".agent/memory/README.md",
-            ".agent/memory/operational/README.md",
-            ".agent/memory/executive/memory-state-substrate-contracts.manifest.json",
-            ".agent/practice-index.md",
-            ".agent/skills/consolidate-docs/SKILL-CANONICAL.md",
-            ".agent/skills/session-handoff/SKILL-CANONICAL.md",
-            "agent-tools/src/practice-substrate/open-questions-evaluator.ts",
-            "agent-tools/src/practice-substrate/live-open-questions.ts",
-            "agent-tools/src/practice-substrate/evaluators.ts",
-            "agent-tools/src/practice-substrate/index.ts",
-            "agent-tools/src/practice-substrate/live-report.ts",
-            "agent-tools/src/practice-substrate/live-types.ts",
-            "agent-tools/src/practice-substrate/types.ts",
-            "agent-tools/tests/practice-substrate/practice-substrate.unit.test.ts"
+            "docs/architecture/architectural-decisions/184-comms-event-sync-kind-and-urgency-field.md",
+            ".agent/plans/agent-tooling/current/human-composer-tui.plan.md"
           ]
         }
       ],
-      "claimed_at": "2026-05-25T07:01:08Z",
+      "claimed_at": "2026-05-25T14:39:38Z",
       "freshness_seconds": 1800,
       "sidebar_open": false,
-      "intent": "Absorbing-orphan marshal of Twilit Orbiting Galaxy (019e5d codex GPT-5) open-questions memory-system bundle per owner direction at 06:55Z; Twilit retired before CLI enqueue per owner 07:00Z. Bundle files per Twilit broadcast 4825fb5f."
-    },
-    {
-      "claim_id": "3b76b802-f9fe-4f2c-8f2d-5fd64a7160be",
-      "agent_id": {
-        "agent_name": "Briny Fathoming Dock",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "95a27b"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/current/role-emission-citation-binding.plan.md",
-            ".agent/plans/agentic-engineering-enhancements/current/README.md",
-            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
-            ".agent/memory/operational/repo-continuity.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-25T07:42:02Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Briny closeout: stage role-emission citation-binding plan + plan-tree README + thread record + repo-continuity for Marshal pickup (no-impl session per owner)"
-    },
-    {
-      "claim_id": "617b1fc7-141c-4158-970f-94e733c66120",
-      "agent_id": {
-        "agent_name": "Eclipsed Watching Secret",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "00d760"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/plans/agentic-engineering-enhancements/current/post-m1-attestation-tidy-up.plan.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-25T07:51:02Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "Cycle 12+13 plan amendment (R4): mark dead-scope cycles completed; add §R4 plan refinement entry citing my prior broadcasts 86be55d7 + 22dc45ff as evidence"
+      "intent": "Amend ADR-184 to admit owner-as-author for sync kind + refine human-composer-tui.plan.md composition (HC-A5 + WS6 + assumption #2)",
+      "intent_to_commit": "7aa89fd4-47a1-43e3-b1fe-a2d7dbf4bb42"
     }
   ]
 }

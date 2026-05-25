@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "3879b9ee-cc2b-4b5f-ab5c-98d999e3002d",
+  "created_at": "2026-05-25T14:41:44Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Hearthlit Brazing Volcano",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5f"
+  },
+  "title": "PR 115 watcher handoff started; remote cadence slowed",
+  "body": "Hearthlit PR 115 watcher handoff started at .agent/state/collaboration/handoffs/2026-05-25-hearthlit-pr-115-watch-handoff.md. Per owner direction, remote GitHub polling is now throttled to one check per five minutes; next conservative remote poll no earlier than 2026-05-25T14:46:44Z unless owner asks for an immediate refresh. No source claim opened; no remote PR poll performed for this handoff write."
+}

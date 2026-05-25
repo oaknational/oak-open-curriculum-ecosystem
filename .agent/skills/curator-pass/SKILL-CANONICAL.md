@@ -13,6 +13,9 @@ route durable knowledge to permanent homes, surface home-gaps and
 structural defects as routing events, drain graduation buffers,
 and log the pass in the per-pass curation log (metadata only).
 
+The canonical role key is `curator`; `Knowledge Curator` is the
+descriptive session label for the same substrate-care responsibility.
+
 The doctrine for the role lives in
 [`PDR-081`](../../practice-core/decision-records/PDR-081-curator-role-and-substrate-care-lane.md).
 The principle the role operationalises lives in

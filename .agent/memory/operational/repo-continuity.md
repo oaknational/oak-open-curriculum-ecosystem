@@ -16,46 +16,53 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
-- Current branch: `feat/education-evidence-foundational-graphs`.
-- Current local HEAD: `dcf92bb5`
-  (`feat(oak-curriculum-mcp): add agent preview smoke and remote probe scripts`;
-  Salty Mooring Dock / `dc4dd7` session close).
-- PR #108 has merged via `2462952a`, and Seaworthy's M1 Safe Pause attestation
-  event `703de8dd` says M1 Safe Pause is achieved. The current live
-  multi-agent lane is now the post-M1 tidy-plan delivery sequence, not PR #108
-  implementation.
-- Tidy plan current state at the 2026-05-25T07:05Z Misty Director-dissolve handoff:
-  cycles 1-8 + 5a + 7.1 fix + 8a have landed (11/17 with Option B plan-file MD cure
-  also landed); Cycle 9 mid-flight on Wooded Flowering Leaf via PDR-063 pickup from
-  Eclipsed Watching Secret (compaction-prep handoff at 06:45Z); Eclipsed resumed
-  post-compaction at 06:53Z. Hushed Stalking Shade holds commit-marshal + GitHub-
-  interactions seat per owner direction 06:53Z. PR not yet opened; pre-PR cleanup
-  in flight (9 markdownlint errors in Eclipsed handoff record per Hushed `06:58:12Z`
-  blocker surface). Owner reset delivery frame 06:45Z: "implemented + pushed +
-  fixed + merged + live". Plan §Non-Goals #1 (linear-only) superseded by owner
-  direction 06:52Z for cycles 12-15 (parallel-safe); Twilit Orbiting Galaxy
-  (`019e5d`) routed to Cycle 12 (S5443 fixtures). Director seat dissolved by
-  owner direction 07:03Z; Wooded/Eclipsed/Hushed coordinate amongst themselves
-  in peer mode per SKILL §3 (≤3 agents → peer-default). Closeout plan
-  `/Users/jim/.claude/plans/vast-chasing-iverson.md` (one-PR-now + parallel
-  cycles 12-15) approved by owner.
-- Shadowed Glimmering Moth completed the earlier consolidation hard/critical
-  objective and then worked observation-only on tidy-plan delivery support.
-  Useful read-only outputs are in comms events `3a534015` (Cycle 10 readiness:
-  transaction helper has temp-file + rename but no fsync) and `52a220ae`
-  (Cycle 11 readiness: current `comms-seen` references, including ADR-182).
-- Active claims at the 2026-05-25T06:40Z refresh include stale Estuarine,
-  Sylvan, and Misty claims plus Eclipsed's fresh Cycle 9 claim and an older
-  fresh plan-file claim from Eclipsed. Refresh claims before any edit or
-  commit-window work.
-- Critical and hard fitness pressure is currently drained. Shadowed's
-  2026-05-25 consolidation closeout recorded
+- Current branch: `feat/education-evidence-foundational-graphs-take2`.
+- Current local HEAD: `18c2ca06` (`chore: formatting`).
+- PR #114 merged at `77fcf746` (post-m1-attestation-tidy-up landing). PR #108
+  merged earlier at `2462952a`. M1 + M2 milestones both achieved. Owner has
+  explicitly pivoted back to graph work (2026-05-25).
+- **Hardening-arc consolidation complete 2026-05-25; follow-up hardening
+  commits stacked locally through `bec4b6ae`**. The original consolidation
+  landed Phases 1+2+4+5+6 of the `harmonic-fluttering-bentley` plan; Phase 3
+  (comms-event retention pass) stayed deferred under the standing direction
+  below. Follow-ups refreshed live truth, strengthened
+  `comms-watch-storage-redesign.plan.md`, backfilled PDR/ADR citations, and
+  reflowed hard-width fitness lines.
+- **NEW STANDING DIRECTION 2026-05-25 (binding until comms research plan
+  completes)**: comms-file retention has been INCREASED (the previous 7-day
+  rule no longer applies). **NO comms files are to be moved or deleted** until
+  the comms research plan completes. The comms research plan lives on the
+  `agent-collaboration-research` thread (currently owner-gated, buffered).
+  Affects: all `.agent/state/collaboration/comms/` events; broadest-interpretation
+  reading also affects `.agent/state/collaboration/comms-seen/` (the seen-state
+  cursor substrate). Concrete consequence: WS3 of the new
+  `comms-watch-storage-redesign.plan.md` is BLOCKED on this constraint
+  clearing.
+- **New plan promoted**:
+  [`comms-watch-storage-redesign.plan.md`](../../plans/agent-tooling/current/comms-watch-storage-redesign.plan.md)
+  in `agent-tooling/current/` — covers WS2 + WS3 of the comms-watch trilogy
+  (WS1 landed at `75e47923` via tidy cycle 9). Strategic substance lifted
+  verbatim from archived hardening program §P5.W1. Queued, not active.
+- **Plans archived 2026-05-25** to
+  [`agentic-engineering-enhancements/archive/completed/`](../../plans/agentic-engineering-enhancements/archive/completed/):
+  `post-m1-attestation-tidy-up.plan.md` + `practice-infrastructure-hardening-program.plan.md`.
+  Supersession mappings recorded in that directory's README per
+  `consolidate-docs` plan-supersession discipline.
+- Active claims at the 2026-05-25T14:44Z refresh: Stormy Surfing Dock owns
+  agent-tooling plan/ADR files under claim
+  `43a21f79-0660-4f3e-9b42-d2d43fd02f93`; Fiery Kindling Brazier owns
+  `git:index/head` under claim `bad4d097-c488-4200-9464-58591cef6af1` for a
+  marshal cycle that explicitly includes the Breezy curator bundle. Breezy
+  Flowing Dock has no active claim. Active commit queue empty.
+- Critical and hard fitness pressure is currently drained. Breezy's 2026-05-25
+  closeout refresh recorded
   `pnpm practice:fitness:informational` and
-  `pnpm practice:fitness --strict-hard` both exiting 0 with `SOFT (20 soft)`.
+  `pnpm practice:fitness --strict-hard` both exiting 0 with `SOFT (19 soft)`.
 - Recent active napkin rotations are preserved under
-  [`archive/`](../active/archive/). The current active napkin remains healthy
-  after Pelagic curation slices; preserve and route new lessons there before
-  any mechanical archive step.
+  [`archive/`](../active/archive/). Breezy's 2026-05-25 rotation preserved the
+  processed source window at
+  [`napkin-2026-05-25-breezy-critical-hard-curation.md`](../active/archive/napkin-2026-05-25-breezy-critical-hard-curation.md)
+  and started a fresh active napkin after routing live queue substance.
 - Remaining consolidation pressure is tracked by
   [`memory-surface-critical-drain-2026-05-24.plan.md`](../../plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md).
   Phase 2 and Phase 3 remain open for active-shard processing and distilled
@@ -69,10 +76,10 @@ Earlier archives remain under [`archive/`](archive/).
   [`repo-continuity-current-state-2026-05-24-shaded-silencing-dusk.md`](archive/repo-continuity-current-state-2026-05-24-shaded-silencing-dusk.md).
 - The outgoing pre-Dusky soft-tier live file snapshot is preserved at
   [`repo-continuity-soft-tier-pre-dusky-2026-05-24.md`](archive/repo-continuity-soft-tier-pre-dusky-2026-05-24.md).
-- Current working tree is very dirty with peer-owned continuity/config/state
-  changes and fresh comms events. Hushed owns commit-marshal work; treat
-  `git status --short`, active claims, comms, and the queue as live truth
-  before any commit-window work.
+- Current working tree is dirty with Breezy's curator/handoff bundle, fresh
+  collaboration-state events, and peer Stormy/Hearthlit/Fiery changes. Do not
+  sweep peer-owned files into a Breezy commit if one is later requested; the
+  live Fiery marshal claim owns the current git index/head window.
 - New 2026-05-25 closeout addition (Briny Fathoming Dock `95a27b`, no
   implementation per owner direction):
   [`role-emission-citation-binding.plan.md`](../../plans/agentic-engineering-enhancements/current/role-emission-citation-binding.plan.md)
@@ -84,7 +91,17 @@ Earlier archives remain under [`archive/`](archive/).
   `current/README.md`. Session insights captured in napkin pending
   graduation (recursive meta-cure shape; doctrine-by-analogy
   self-instance; reviewer fan-out cost-imbalance lesson; status maturity
-  inversion lesson). Staged for Hushed Marshal commit.
+  inversion lesson). No owner execution direction yet.
+- Thermal Buffeting Plume completed the Knowledge Curator role-substrate
+  clarification and hard/critical fitness closeout. The role alias now points
+  at the curator-pass lane, PDR-081, the curator-passes README, and
+  start-right-team routing; the pass log is under
+  [`2026-05-25-thermal-buffeting-plume.md`](curator-passes/2026-05-25-thermal-buffeting-plume.md).
+- Breezy Flowing Dock completed the follow-up critical/hard memory curation
+  slice. The active napkin is fresh, the main pending-graduations register is
+  soft-only with a pointer to the new active shard, and the controlling
+  critical-drain plan records the `SOFT (19 soft)` validation. No comms files
+  were moved, deleted, or rotated.
 
 ## Active Threads
 
@@ -99,7 +116,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF first-feature delivery | [record][eef] | Secret Vanishing Wisp / claude / claude-opus-4-7 / 981cbe / 2026-05-23 |
-| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Shadowed Glimmering Moth / codex / GPT-5 / observation-only tidy-plan support + handoff / 2026-05-25 |
+| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Breezy Flowing Dock / codex / GPT-5 / `019e5f` / Knowledge Curator critical/hard memory curation + light handoff / 2026-05-25 |
 
 ## Paused Threads
 
@@ -159,21 +176,16 @@ record and snagging plan. Historical long-form routing that previously lived
 in this file is preserved in
 [`repo-continuity-soft-tier-pre-dusky-2026-05-24.md`](archive/repo-continuity-soft-tier-pre-dusky-2026-05-24.md).
 
-### Agentic-Engineering Tidy-Plan Lane
+### Agentic-Engineering Tidy-Plan Lane (closed 2026-05-25)
 
-The current owner-provided goal is to complete and deliver
-[`post-m1-attestation-tidy-up.plan.md`](../../plans/agentic-engineering-enhancements/current/post-m1-attestation-tidy-up.plan.md)
-while optimising every decision for long-term architectural excellence.
-
-Next safe step: let Eclipsed complete and enqueue Cycle 9. After Cycle 9 lands,
-Wooded opens Cycle 10. Shadowed's handoff adds two readiness notes for later
-cycles: Cycle 10 must satisfy its crash-hardening claim with a real fsync-capable
-state writer or helper extension, and Cycle 11 must deliberately handle the
-ADR-182 `comms-seen` reference before making a zero-reference cleanup claim.
-
-The earlier consolidation hard/critical objective is complete for now
-(`SOFT (20 soft)`). Deeper soft-tier consolidation remains useful but is not
-the active delivery lane while tidy cycles 9-15 are in flight.
+The post-M1 attestation tidy-up plan delivered via PR #114 (merged at
+`77fcf746`). The plan is archived at
+[`post-m1-attestation-tidy-up.plan.md`](../../plans/agentic-engineering-enhancements/archive/completed/post-m1-attestation-tidy-up.plan.md);
+cycles 10 + 11 (comms-watch storage redesign WS2 + WS3) were superseded into
+[`comms-watch-storage-redesign.plan.md`](../../plans/agent-tooling/current/comms-watch-storage-redesign.plan.md)
+per the archive supersession mapping. The earlier consolidation hard/critical
+objective remains complete (`SOFT (20 soft)`). Owner has pivoted back to
+graph work; deeper soft-tier consolidation is not the active delivery lane.
 
 ### Connecting-Oak-Resources / PR #108 Routing
 
@@ -183,7 +195,7 @@ the PR #108 snagging plan, not duplicated here:
 
 - [connecting-oak-resources thread record][connecting]
 - [PR #108 snagging plan](../../plans/connecting-oak-resources/knowledge-graph-integration/archive/completed/pr-108-snagging.plan.md) (archived; gate cycles landed)
-- [M1 Safe Pause program plan](../../plans/agentic-engineering-enhancements/current/practice-infrastructure-hardening-program.plan.md) (Gate 1 WS-7 authority)
+- [M1 Safe Pause program plan](../../plans/agentic-engineering-enhancements/archive/completed/practice-infrastructure-hardening-program.plan.md) (archived; PR #108 at `2462952a`)
 - [gate-1a delivery addendum](../../plans/connecting-oak-resources/knowledge-graph-integration/current/gate-1a-delivery-parallel-execution-addendum.plan.md)
 
 **Preview MCP validation**: PR #108 black-box pass documented 2026-05-24
@@ -257,14 +269,15 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
-Due — M1 Safe Pause / PR #108 closure already fires the consolidation trigger
-checklist, and the post-M1 tidy-plan session has now added fresh comms
-failure-mode and owner-priority-provenance material. This handoff does not run
-`oak-consolidate-docs` because the owner requested session completion while
-Cycle 9 is actively claimed by Eclipsed and Cycle 10 is pre-routed to Wooded.
-Falsifiability for the next consolidator: re-check `git log --oneline -5`,
-`git status --short`, active claims, active queue, the Seaworthy attestation
-event, and the tidy-plan cycle ledger before starting.
+Breezy Flowing Dock ran a bounded critical/hard memory-curation pass and light
+`oak-session-handoff` after the earlier Knowledge Curator consolidation. This
+handoff does not fire a new deep-consolidation trigger: the affected items were
+already routed into the active napkin, the active pending-graduations shard, the
+thread record, repo-continuity, and the controlling critical-drain plan. Broader
+Phase 2/3 soft-file work remains trigger/owner-gated; do not reopen it from
+soft fitness alone. Falsifiability for the next consolidator: re-check
+`git log --oneline -5`, `git status --short`, active claims, active queue,
+the Seaworthy attestation event, and the tidy-plan cycle ledger before starting.
 
 Current live consolidation state is the 2026-05-24 Knowledge Curator drain:
 the active napkin has been processed, the former critical

@@ -1,6 +1,6 @@
 ---
 name: cost of collaboration — agent-tools improvement plan
-overview: Unified single-source-of-truth plan for improving agent-tools so that multi-agent collaboration windows produce more substance than coordination overhead. Subsumes primary-agent-tooling-enhancements.plan.md and lifts the structural insights from the 2026-05-11 four-agent session (Wooded / Galactic / Flamebright / Sparking Charring Ash) into P-ordered workstreams. The single guiding metric is **cost-per-coordination-event in agent-count-aware terms** — a protocol that works at N=1 may be fatal at N=4.
+overview: Unified single-source-of-truth plan for improving agent-tools so that multi-agent collaboration windows produce more substance than coordination overhead. Subsumes primary-agent-tooling-enhancements.plan.md and lifts the structural insights from the 2026-05-11 four-agent session (Wooded / Galactic / Flamebright / Sparking Charring Ash) into P-ordered workstreams. The single guiding metric is **cost-per-coordination-event in agent-count-aware terms** — a protocol that works at N=1 may be fatal at N=4. Storage-shape follow-on to `ws-p2-comms-watch` is `comms-watch-storage-redesign.plan.md` (sibling executable plan promoted from `practice-infrastructure-hardening-program.plan.md §P5.W1` at 2026-05-25 consolidation archival; covers WS2 + WS3 of the comms-watch trilogy).
 todos:
   - id: ws-p0-precommit-scope-gates
     content: Reshape the pre-commit hook without weakening its purpose: it must stop detectably broken code entering git history. Only file-content scanners may be narrowed to staged files; type-check, lint, shell lint, and the current unit-test lane still run before commit. Load-bearing pre-condition for every other multi-agent workstream.
@@ -923,6 +923,19 @@ script runs build before each poll."
 **Routing**: implemented by Penumbral Veiling Raven / `codex` / GPT-5 /
 `019e1c` on 2026-05-12.
 
+**Storage-shape follow-on** (added 2026-05-25 per architecture-expert-betty
+review): the seen-state storage primitive used by this watcher is being
+redesigned in
+[`comms-watch-storage-redesign.plan.md`](comms-watch-storage-redesign.plan.md)
+(WS2 + WS3). Any future modification to
+`agent-tools/src/collaboration-state/cli-comms-watch.ts` or
+`comms-watch-auto-seed.ts` MUST verify compatibility with the new
+storage primitive. Do not read or write
+`.agent/state/collaboration/comms-seen/` directly; once WS2 lands, use
+the `seen-state-storage` module. WS3 (removal of the legacy directory)
+is BLOCKED on the comms research plan completing per the owner standing
+direction 2026-05-25.
+
 ---
 
 ### P3 — Enforced commit queue
@@ -1248,6 +1261,19 @@ the value of the current work in a way that is more visible to humans than
 - Make the audience explicit: the interactive TUI is for human observers.
   Agents should keep using structured commands and text snapshots unless a
   human explicitly asks them to report what the TUI shows.
+
+**Write-side companion** (added 2026-05-25): P8 is read-only by design.
+The owner-facing **write** surface (composer pane, recipient picker,
+reply / sync mode, owner-identity persistence, owner-event visual
+distinction) is the scope of
+[`human-composer-tui.plan.md`](human-composer-tui.plan.md). That plan
+emerged from the 2026-05-25 review-and-consistency fan-out gap analysis
+(gaps G1–G10) and depends on a doctrine decision (Path A schema
+extension recommended; PDR-083 proposed). Coordinate P8's remaining
+slices (`p8-attention-state`, `p8-reader-resilience`,
+`p8-hot-path-boundary-review`) with the composer plan: unread/seen
+triage in the read view composes with the composer plan's WS8
+receipt-state surface.
 
 **Acceptance**:
 

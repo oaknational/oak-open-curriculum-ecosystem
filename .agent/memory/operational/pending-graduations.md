@@ -128,15 +128,18 @@ not a verdict.
 
 Regenerated 2026-05-24 by Sylvan Sprouting Petal after routing the
 `/remember` plugin write-time contract gap. Updated by Shaded Silencing Dusk
-after the PDR-075 status review drain. The live body now contains **3** due
-entries:
+after the PDR-075 status review drain. Updated 2026-05-25 by Hushed Stalking
+Shade after the hardening-arc consolidation Phase 2 graduation pass.
+
+The live body now contains **2** due entries:
 
 1. `director-pure-direction-only` — owner-decision packet item 2:
    principle-class PDR route needs owner approval.
 2. `owner-action-is-not-a-cure` — owner-decision packet item 3:
    principle-class PDR route needs owner approval.
-3. `marshal-as-cycle-discipline` — owner-decision packet item 5:
-   decide PDR-077 vs repo-local pattern and respect existing ownership.
+
+(`marshal-as-cycle-discipline` graduated 2026-05-25 — PDR-077 landed at
+`7c2f85f4`; owner-decision packet item 5 resolved.)
 
 The former 2026-05-23 due set is now `partially-graduated`; the body
 entries remain under the partially-graduated section because each still
@@ -175,6 +178,17 @@ substance, not archive. The shard carries five entries: plan Done-When must
 drive to live, state-bound heartbeat content, inbox/absorption semantics,
 owner-direction provenance, and Director-seat threshold. Process the shard
 entry by entry before removing this pointer.
+
+### 2026-05-25 — Planning and auto-fix candidates
+
+Active shard:
+[`pending-graduations/2026-05-25-planning-and-autofix-candidates.md`](pending-graduations/2026-05-25-planning-and-autofix-candidates.md).
+
+Route-state: split out by Breezy Flowing Dock on 2026-05-25 as live queue
+substance, not archive. The shard carries Briny/Hushed planning, role-emission,
+template, and multi-agent auto-fix candidates plus the human-composer plan
+audit-trail pointer. Process the shard entry by entry before removing this
+pointer.
 
 ### `pending` (body markers — second-instance or owner-direction gated)
 
@@ -342,45 +356,16 @@ owner-reframe-as-misframe, and marshal queue discipline were removed after
 verifying this register carries their live status. These entries remain live
 queue substance, not archived or graduated content.
 
-### PDR-079 PDR-vs-ADR portability distinction (owner-articulated; codification authored in-flight as WS-12)
+### PDR-079 PDR-vs-ADR portability distinction (owner-articulated; codified)
 
-[captured: 2026-05-24 | source: owner /oak-metacognition critique |
-graduation-target: PDR-079 + no-moving-targets scope amendment | trigger:
-owner direction + 3 worked-instance evidence base | status: pending]
+[captured: 2026-05-24 | target: PDR-079 + no-moving-targets scope amendment | status: graduated 2026-05-25]
 
-Routing note: authoring is routed through Lanternlit's WS-12 lane in
-`practice-infrastructure-hardening-program.plan.md`; this entry stays pending
-until that lane lands or its route changes.
-
-Owner-articulated 2026-05-24: PDRs are portable practice doctrine — claims
-about how multi-agent practice WORKS that apply to ANY repo with multi-agent
-collaboration. PDRs CANNOT contain SHAs, repo paths, branch names, or any
-artefact-reference tied to *this* git history. ADRs are repo-specific
-architectural decisions: choices about how *this* repo's substrate IMPLEMENTS
-something. ADRs are repo-bound by definition; SHAs and event-UUIDs are welcome
-as appropriate evidence.
-
-**SHA-in-PDR = misclassification signal**: when content wants a SHA in a PDR,
-that's not a citation-style question — it's a routing question. The SHA-bearing
-substance belongs in an ADR, not the PDR.
-
-Cure shape: PDR-079 authors the portability constraint as explicit practice
-doctrine. Co-cure: scope the existing `no-moving-targets-in-permanent-docs.md`
-rule strictly to portable surfaces (PDRs + rules + patterns); ADRs are out of
-scope.
-
-Resume substrate: substance fully captured in program plan R1.5 §Emergent
-Observations E4 (RESOLVED) + §Workstream Roll-up WS-12 row + R1.5 Refinement
-Log entry. Composes with PDR-066 (PDR↔ADR composition pattern as
-principle/phenotype pair).
-
-Falsifiability: PDR-079 file exists at canonical location with §Decision naming
-the portability constraint; rule scope-amendment lands at
-`.agent/rules/no-moving-targets-in-permanent-docs.md` with explicit "in-scope:
-portable surfaces; out-of-scope: ADRs" framing; PDR-066 §Related
-cross-references PDR-079.
-
-Cross-references: composes with PDR-066 (PDR↔ADR composition); dissolves R1.4 E4 hybrid framing; binds WS-11 bundle authoring (PDR-078 SHA-free, ADR-186 SHAs allowed).
+**Graduated 2026-05-25**: PDR-079 LANDED at `e8bc6781` via
+post-m1-attestation-tidy-up.plan.md cycle 5a, with the co-cure
+`.agent/rules/no-moving-targets-in-permanent-docs.md` scope-amendment
+in the same commit. Hardening program WS-12 completed at `4e333441`
+2026-05-25. Full body archived at
+[`archive/pending-graduations-archive-2026-05-25-hardening-arc-graduations.md`](archive/pending-graduations-archive-2026-05-25-hardening-arc-graduations.md).
 
 ---
 
@@ -568,37 +553,16 @@ the latter into protocol/tooling substrate.
 
 ### Marshal-as-cycle-discipline throughput substrate
 
-[captured: 2026-05-24 | source: active-napkin rotation (Scorched
-Director window + Mistbound marshal arc) | target:pdr:PDR-077 or
-pattern:marshal-as-cycle-discipline | trigger: second worked instance
-fired | size: L | status: due]
+[captured: 2026-05-24 | target: PDR-077 | status: graduated 2026-05-25]
 
-The original Scorched entry recorded 9 marshal-class cycles plus one
-Class A wrapper in a single Director window. The later Mistbound marshal
-arc gives the second worked instance: queue ordering, explicit comms,
-pre-stage verification, and marshal-owned commit turns converted
-coordination contention into repeated small landings.
-
-Natural home: PDR-077 if the doctrine is portable marshal-role
-governance; repo-local pattern if the current evidence remains
-implementation-shaped. Charcoal's in-flight PDR-077 ownership should
-be respected if that lane resumes.
-
-Owner-decision pointer: keep this entry in the live due set until the
-Memory Surface Critical Drain owner-decision packet item 5 decides
-whether the evidence routes to PDR-077 or a repo-local pattern.
-
-Falsifiability: PDR-077 or a pattern file lists both worked instances,
-the role boundary, the queue/ordering/comms mechanism, and the
-acceptance evidence for one complete marshal cycle.
-
-Additional evidence routed 2026-05-24 from Mistbound Capture G:
-cross-platform marshal-cycle shape worked without special casing. Estuarine
-Fathoming Sail (codex/GPT-5) emitted the full marshal-request shape, and
-Mistbound Hiding Threshold (claude/opus-4.7) processed it through ACK,
-explicit pathspec staging, full-tree hook, and co-authored commit. This
-strengthens the PDR-077/pattern route because the protocol worked across
-platform families, not only inside one vendor's sessions.
+**Graduated 2026-05-25**: PDR-077 LANDED at `7c2f85f4` via
+post-m1-attestation-tidy-up.plan.md cycle 5; Practice-Core index entry
+added at `93c4fdc0`; draft + R1/R3 syntheses captured at `4575044e`
+(cycle 2); PDR-063 + PDR-064 §Related cross-references added. Owner-
+decision packet item 5 resolved: portable Practice-governance route
+(evidence base spans cross-platform marshal cycles). Full body archived
+at
+[`archive/pending-graduations-archive-2026-05-25-hardening-arc-graduations.md`](archive/pending-graduations-archive-2026-05-25-hardening-arc-graduations.md).
 
 ### Structured field for agent state
 

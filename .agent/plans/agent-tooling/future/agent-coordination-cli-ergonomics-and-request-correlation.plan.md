@@ -45,6 +45,16 @@ without expanding the state-record taxonomy. The
 remains authoritative for state-record boundaries; this plan is about
 ergonomics and one missing primitive.
 
+**Scope boundary (added 2026-05-25)**: this plan is **agent-side** —
+CLI ergonomics for agents authoring `comms direct` / `comms reply` /
+similar substrate writes. The **owner-side** equivalent (a TUI composer
+for the human owner to send broadcasts, group messages, directed
+messages, replies, and sync events) lives in
+[`../current/human-composer-tui.plan.md`](../current/human-composer-tui.plan.md).
+The two plans are parallel-safe and share the comms-event schema; this
+plan does **not** address owner-as-author identity or human compose
+UX.
+
 ### Evidence (live use, 2026-04-28, Choppy Lapping Rudder session on PR-87)
 
 Three concrete classes of friction surfaced inside a single session:

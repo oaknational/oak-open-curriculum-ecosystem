@@ -8,6 +8,10 @@ store curated content.** Substance lives at its permanent home (PDRs,
 ADRs, rules, patterns, directives, skills, napkin, comms events,
 archive); pass files point at those homes.
 
+The role key is `curator`. `Knowledge Curator` is the owner-facing
+session label for the same role when the knowledge-substrate lane needs
+to be unambiguous in team-start, claim, or handoff prose.
+
 The portable doctrine for the curator role lives in
 [`PDR-081`](../../../practice-core/decision-records/PDR-081-curator-role-and-substrate-care-lane.md).
 The actionable workflow for a single pass lives in the

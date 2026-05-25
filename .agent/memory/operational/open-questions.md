@@ -107,9 +107,14 @@ question; cross-link rather than duplicate.
 - Status: open
 - Linked: comms-events `c4f50491` (Cycle 9 routing), `[06:13:41Z]` (fold-check
   verdict), `[06:17:21Z]` (Hushed reconciliation), `[06:18:14Z]` (Misty
-  three-failure-mode broadcast); plan
-  `.agent/plans/agentic-engineering-enhancements/current/post-m1-attestation-tidy-up.plan.md`
-  §R4.
+  three-failure-mode broadcast); audit trail §R4 in the archived
+  `post-m1-attestation-tidy-up.plan.md` under
+  `.agent/plans/agentic-engineering-enhancements/archive/completed/`
+  (PR #114 merged at `77fcf746`). The R4 plan-update-decision shape is
+  now stale — the decision-shape concern that motivated Q-001 remains
+  open as a meta-question about plan-update authority, but the specific
+  §R4 anchor refers to the archived audit trail rather than a live
+  decision lane.
 
 ### Q-002: Should consolidate-docs explicitly reference this file?
 
@@ -129,3 +134,47 @@ question; cross-link rather than duplicate.
 - Linked: `.agent/skills/consolidate-docs/` (canonical),
   `.agent/skills/session-handoff/` (canonical),
   `.agent/plans/agentic-engineering-enhancements/current/open-questions-memory-system.plan.md`.
+
+### Q-003: Does start-right-team need a "joined-at-closeout" reduced-bootstrap mode?
+
+- Raised by: Stormy Surfing Dock (2a7b65) @ 2026-05-25T13:15Z
+- Context: The `start-right-team` SKILL §0/§0.5/§1 protocols (all-channels
+  comms watcher, liveness heartbeat cron, team-start broadcast) are stated
+  as non-negotiable preconditions that EVERY participating agent runs in
+  EVERY team session. The skill's worked precedents all start the team at
+  the same time the agents start work — the protocols' setup cost is
+  amortised over hours of coordinated work. There is no named shape for
+  the case where a team forms partway through a session (e.g., the owner
+  appoints a Commit Marshal late, after several agents are already in
+  flight). An agent reaching that signal at closeout faces an asymmetry:
+  full protocol bootstrap (persistent watcher + 4-min heartbeat cron +
+  broadcast) creates infrastructure that runs for minutes before being
+  torn down at compaction or session-end, while a single broadcast +
+  acknowledgement could carry the same coordination signal at far lower
+  cost. Worked instance this session: Stormy was solo for most of the
+  audit/decomposition work, the owner appointed Fiery as marshal during
+  closeout, and the minimum-coordination path (single comms broadcast
+  acknowledging Fiery, no persistent watcher/heartbeat) was the
+  pragmatically chosen shape; the skill body does not name this as
+  legitimate.
+- Why deferred: editing the start-right-team SKILL is a substrate edit;
+  a single worked instance is not enough evidence to graduate a new
+  protocol mode. The next instance of late-formed-team or
+  closeout-only participation will be the second data point that ripens
+  this for cure-shape work.
+- Suggested resolution path: capture this question's existence; let a
+  future curator lane (or `consolidate-docs` pass) reconcile it once a
+  second instance lands. Cure candidates if it graduates: (a) named
+  exemption set on §0/§0.5 for closeout-only participation; (b) a
+  "team-formed-late" sub-section with a minimum-coordination contract
+  (single broadcast acknowledging the marshal/coordinator, identity-row
+  update on thread record, deferred handoff state surfaced in closeout
+  rather than recorded via heartbeat).
+- Status: open
+- Linked: `.agent/skills/start-right-team/SKILL-CANONICAL.md` §0
+  (all-channels watcher), §0.5 (liveness heartbeat), §1 (register
+  presence); experience file
+  `.agent/experience/2026-05-25-stormy-surfing-dock-pr-0-and-sweep-incident.md`
+  §"What surprised me about the team-protocol arc"; comms event posted
+  2026-05-25T13:15Z titled "Stormy Surfing Dock: PR-0 landed at 78a90723;
+  Fiery marshal acknowledged; standing down for compaction".

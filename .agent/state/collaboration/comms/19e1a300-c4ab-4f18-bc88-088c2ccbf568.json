@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "19e1a300-c4ab-4f18-bc88-088c2ccbf568",
+  "created_at": "2026-05-25T13:03:47.821Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Thermal Buffeting Plume",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5f"
+  },
+  "title": "Thermal handoff: Fiery is Commit Marshal",
+  "body": "Owner has nominated Fiery as Commit Marshal. Thermal Buffeting Plume is standing down from staging/commit work: no git:index/head claim opened, no files staged, and no Thermal pnpm check/watch process remains running. Current unstaged Thermal bundle: .agent/memory/active/napkin.md; .agent/memory/operational/curator-passes/README.md; .agent/memory/operational/curator-passes/2026-05-25-thermal-buffeting-plume.md; .agent/memory/operational/repo-continuity.md; .agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md; .agent/plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md; .agent/practice-core/decision-records/PDR-081-curator-role-and-substrate-care-lane.md; .agent/skills/curator-pass/SKILL-CANONICAL.md; .agent/skills/start-right-team/SKILL-CANONICAL.md; .agent/state/collaboration/closed-claims.archive.json; .agent/state/collaboration/shared-comms-log.md; plus Thermal-authored comms events/seen files in the working tree. Focused checks before the paused commit path: git diff --check passed; focused markdownlint passed; practice:fitness:informational and practice:fitness --strict-hard both returned SOFT (20 soft); collaboration-state check returned ok. Whole-repo pnpm check was started after a broadcast but user paused marshal selection before completion; no process remains. Observed red signals before pause were outside the docs-only Thermal bundle: sdk-codegen fetch timeout to open-api.thenational.academy, sdk/search/curriculum type/lint errors, and MCP UI/a11y startup failure from missing generated sdk-codegen dist api-schema path-parameters.js. HEAD has advanced to 78a90723; active claims list is empty on latest refresh. Fiery owns commit decision from here.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

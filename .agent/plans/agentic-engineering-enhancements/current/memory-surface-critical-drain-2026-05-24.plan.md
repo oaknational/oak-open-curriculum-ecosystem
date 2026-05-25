@@ -118,6 +118,20 @@ Phase 3 curation by verified substance, not critical/hard triage. Lunar's
 22:06Z supersede also confirms the curation lane continues across tidy cycles
 rather than closing at Cycle 5 land.
 
+Re-grounded 2026-05-25T14:35Z under Breezy Flowing Dock claim
+`f0062af4-2aef-4182-aefa-cee0fe837b78`: live fitness had regressed to
+`CRITICAL (1 critical, 1 hard, 18 soft)` because the active napkin had reached
+critical prose-width pressure and hard line/character pressure, while
+`pending-graduations.md` was hard by line count. Substance-preserving response:
+rotate the processed active napkin to
+`archive/napkin-2026-05-25-breezy-critical-hard-curation.md`, split fresh
+Briny/Hushed planning and auto-fix candidates into active shard
+`pending-graduations/2026-05-25-planning-and-autofix-candidates.md`, and keep
+the main register as a pointer-bearing queue. Follow-up validation:
+`pnpm practice:fitness:informational` and `pnpm practice:fitness --strict-hard`
+both exit 0 with `SOFT (19 soft)`. No comms files were moved, deleted, or
+rotated; the 2026-05-25 comms-retention research constraint remains binding.
+
 ## Non-Goals
 
 - Do not trim, compress, or weaken substance to satisfy fitness.
@@ -1984,6 +1998,19 @@ Validation:
 
 - `pnpm exec markdownlint .agent/memory/active/napkin.md`: exit 0.
 - `pnpm practice:fitness --strict-hard`: exit 0; `SOFT (20 soft)`.
+
+#### Thermal Buffeting Plume Pass - 2026-05-25T12:40:00+01:00
+
+Validation slice:
+
+- `pnpm practice:fitness:informational`: exit 0; `SOFT (20 soft)`.
+- `pnpm practice:fitness --strict-hard`: exit 0; `SOFT (20 soft)`.
+
+Disposition: hard/critical remediation is complete. The remaining soft files are
+not a continuation mandate. The owner-requested Knowledge Curator alias
+clarification was routed into PDR-081, the curator-pass skill, the
+curator-passes README, start-right-team routing, and the Thermal pass log. Phase
+2/3 soft-file work remains owner/trigger-gated.
 
 ## Carry-Forward From The Shaded Curator Pass
 

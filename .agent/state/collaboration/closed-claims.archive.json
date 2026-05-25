@@ -43845,6 +43845,539 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "617b1fc7-141c-4158-970f-94e733c66120",
+      "agent_id": {
+        "agent_name": "Eclipsed Watching Secret",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "00d760"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/post-m1-attestation-tidy-up.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T07:51:02Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Cycle 12+13 plan amendment (R4): mark dead-scope cycles completed; add §R4 plan refinement entry citing my prior broadcasts 86be55d7 + 22dc45ff as evidence",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T10:41:58Z",
+        "closed_by": {
+          "agent_name": "Eclipsed Watching Secret",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "00d760"
+        },
+        "summary": "R4 plan amendment landed at f10ffea8 (Cycles 12+13 marked completed-redundant); PR #114 since merged at 77fcf746",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "617b1fc7-141c-4158-970f-94e733c66120",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6d75ad02-ffde-4a8b-8043-700b9750de76",
+      "agent_id": {
+        "agent_name": "Estuarine Fathoming Sail",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
+      },
+      "thread": "main-critical-sonar-remediation",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/sdks/oak-sdk-codegen/src/bulk/extractors/unit-lesson-extractor.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/extractors/why-this-why-now-extractor.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/generators/analysis-report-generator.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/generators/nc-coverage-generator.unit.test.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/generators/synonym-miner.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/generators/vocabulary-graph-generator.unit.test.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/generators/write-graph-file.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/generators/write-json-dataset.ts",
+            "packages/sdks/oak-sdk-codegen/src/bulk/generators/write-json-graph-file.integration.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T12:42:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Marshal handoff for applied Sonar-agent PR hunks under oak-sdk-codegen bulk code; source-authored by Estuarine and ready for Mistbound commit marshal",
+      "intent_to_commit": "550a33ac-feeb-4263-a83c-874aa2218a6b",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "owner_forced",
+        "closed_at": "2026-05-25T12:05:34Z",
+        "closed_by": {
+          "agent_name": "Hushed Stalking Shade",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "bc0a07"
+        },
+        "summary": "Owner-directed bulk closure 2026-05-25 — Hushed sole remaining team member at session-handoff; all claims closed per owner direction.",
+        "evidence": [
+          {
+            "kind": "owner-message",
+            "ref": "user message 2026-05-25T12:04Z: you are the only team member left, close all claims"
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "fbfeedb5-2cbb-4fbb-a3e4-7f21d9a3a036",
+      "agent_id": {
+        "agent_name": "Sylvan Sprouting Petal",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e59"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/identity.ts",
+            "agent-tools/tests/collaboration-state/identity.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-24T14:32:51Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Retain narrow ownership for uncommitted identity-helper source/test bundle pending marshal pickup after Sylvan wind-down",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "owner_forced",
+        "closed_at": "2026-05-25T12:05:34Z",
+        "closed_by": {
+          "agent_name": "Hushed Stalking Shade",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "bc0a07"
+        },
+        "summary": "Owner-directed bulk closure 2026-05-25 — Hushed sole remaining team member at session-handoff; all claims closed per owner direction.",
+        "evidence": [
+          {
+            "kind": "owner-message",
+            "ref": "user message 2026-05-25T12:04Z: you are the only team member left, close all claims"
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "fec8e243-049a-4efb-b371-a9ea4a533369",
+      "agent_id": {
+        "agent_name": "Hushed Stalking Shade",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "bc0a07"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/open-questions.md",
+            ".agent/plans/agentic-engineering-enhancements/current/open-questions-memory-system.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/README.md",
+            ".agent/memory/README.md",
+            ".agent/memory/operational/README.md",
+            ".agent/memory/executive/memory-state-substrate-contracts.manifest.json",
+            ".agent/practice-index.md",
+            ".agent/skills/consolidate-docs/SKILL-CANONICAL.md",
+            ".agent/skills/session-handoff/SKILL-CANONICAL.md",
+            "agent-tools/src/practice-substrate/open-questions-evaluator.ts",
+            "agent-tools/src/practice-substrate/live-open-questions.ts",
+            "agent-tools/src/practice-substrate/evaluators.ts",
+            "agent-tools/src/practice-substrate/index.ts",
+            "agent-tools/src/practice-substrate/live-report.ts",
+            "agent-tools/src/practice-substrate/live-types.ts",
+            "agent-tools/src/practice-substrate/types.ts",
+            "agent-tools/tests/practice-substrate/practice-substrate.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T07:01:08Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Absorbing-orphan marshal of Twilit Orbiting Galaxy (019e5d codex GPT-5) open-questions memory-system bundle per owner direction at 06:55Z; Twilit retired before CLI enqueue per owner 07:00Z. Bundle files per Twilit broadcast 4825fb5f.",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "owner_forced",
+        "closed_at": "2026-05-25T12:05:34Z",
+        "closed_by": {
+          "agent_name": "Hushed Stalking Shade",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "bc0a07"
+        },
+        "summary": "Owner-directed bulk closure 2026-05-25 — Hushed sole remaining team member at session-handoff; all claims closed per owner direction.",
+        "evidence": [
+          {
+            "kind": "owner-message",
+            "ref": "user message 2026-05-25T12:04Z: you are the only team member left, close all claims"
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "3b76b802-f9fe-4f2c-8f2d-5fd64a7160be",
+      "agent_id": {
+        "agent_name": "Briny Fathoming Dock",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "95a27b"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agentic-engineering-enhancements/current/role-emission-citation-binding.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/README.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/repo-continuity.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T07:42:02Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Briny closeout: stage role-emission citation-binding plan + plan-tree README + thread record + repo-continuity for Marshal pickup (no-impl session per owner)",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "owner_forced",
+        "closed_at": "2026-05-25T12:05:34Z",
+        "closed_by": {
+          "agent_name": "Hushed Stalking Shade",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "bc0a07"
+        },
+        "summary": "Owner-directed bulk closure 2026-05-25 — Hushed sole remaining team member at session-handoff; all claims closed per owner direction.",
+        "evidence": [
+          {
+            "kind": "owner-message",
+            "ref": "user message 2026-05-25T12:04Z: you are the only team member left, close all claims"
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "57a8986e-d817-4423-9d6b-b641a3c1db31",
+      "agent_id": {
+        "agent_name": "Thermal Buffeting Plume",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e5f"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/pending-graduations/2026-05-06-to-2026-05-21-legacy-backlog.md",
+            ".agent/memory/operational/pending-graduations/2026-05-23-team-session-autonomy.md",
+            ".agent/memory/operational/pending-graduations/2026-05-24-napkin-tail-candidates.md",
+            ".agent/memory/operational/pending-graduations/2026-05-25-misty-director-session-candidates.md",
+            ".agent/plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T12:36:10Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Curate knowledge surfaces surfaced by live fitness as critical/hard, preserving and homing knowledge rather than trimming for score.",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T12:38:58Z",
+        "closed_by": {
+          "agent_name": "Thermal Buffeting Plume",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e5f"
+        },
+        "summary": "Curator role-substrate clarification complete. Fitness was soft-only; clarified Knowledge Curator alias for canonical curator role across PDR-081, curator-pass SKILL, curator-passes README, and start-right-team role language; pass log added; closeout comms event 7d8cbd94-2e3b-4d3a-8d97-f8c625b6a576.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "57a8986e-d817-4423-9d6b-b641a3c1db31",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "cc4b1190-4c68-4472-bc2a-79c7f8624db2",
+      "agent_id": {
+        "agent_name": "Stormy Surfing Dock",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "2a7b65"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/sector-engagement/eef/current/eef-first-feature.plan.md",
+            ".agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md",
+            ".agent/memory/operational/threads/eef.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T12:40:27Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "PR-0 plan-freshness pass for EEF First Feature — drift A–I fixes across eef-first-feature, graph-stack, eef.next-session",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T12:55:00Z",
+        "closed_by": {
+          "agent_name": "Stormy Surfing Dock",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "2a7b65"
+        },
+        "summary": "PR-0 plan-freshness pass landed. Drift A–I corrections applied across eef-first-feature.plan.md, graph-stack.plan.md, eef.next-session.md. Companion plan please-do-a-deep-mighty-peach.plan.md landed for safe-keeping (cures machine-local path violation noted via owner directive). _meta.attribution canonical-field correction propagated. Cardinal-rule framing re-stated as 'one rule, multiple compliant mechanisms' per owner correction.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "cc4b1190-4c68-4472-bc2a-79c7f8624db2",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f748c47d-4616-4935-b8aa-fb77d0fb0e96",
+      "agent_id": {
+        "agent_name": "Fiery Kindling Brazier",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "9f4026"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T13:14:04Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit Thermal curator-pass closeout + accumulated coordination substrate + Stormy/Hushed deferred captures",
+      "intent_to_commit": "1acf03c5-1af8-4254-bd07-772ef7a0a07f",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T13:19:27Z",
+        "closed_by": {
+          "agent_name": "Fiery Kindling Brazier",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "9f4026"
+        },
+        "summary": "closed in same collaboration-state commit (marshal-cycle landing)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f748c47d-4616-4935-b8aa-fb77d0fb0e96",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "75210b4c-9c15-4853-80a5-ccbfe1740a03",
+      "agent_id": {
+        "agent_name": "Fiery Kindling Brazier",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "9f4026"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T13:26:38Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Follow-on marshal cycle: land Hushed experience file + multi-agent-auto-fix-awareness pending-graduations entry + comms drain",
+      "intent_to_commit": "7c8faabb-31f1-41d2-9b9e-ab480658be92",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T13:28:42Z",
+        "closed_by": {
+          "agent_name": "Fiery Kindling Brazier",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "9f4026"
+        },
+        "summary": "closed in same collaboration-state commit (cycle-2 marshal landing)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "75210b4c-9c15-4853-80a5-ccbfe1740a03",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8b710e49-81e8-47b1-81a2-3c7109bb4edb",
+      "agent_id": {
+        "agent_name": "Fiery Kindling Brazier",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "9f4026"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T13:31:21Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Cycle 3: final marshal drain + closeout broadcast",
+      "intent_to_commit": "8981fa51-0c9e-420a-8c92-bf1f05dcecb2",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T13:32:45Z",
+        "closed_by": {
+          "agent_name": "Fiery Kindling Brazier",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "9f4026"
+        },
+        "summary": "closed in same collaboration-state commit (cycle-3 final marshal landing)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8b710e49-81e8-47b1-81a2-3c7109bb4edb",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f0062af4-2aef-4182-aefa-cee0fe837b78",
+      "agent_id": {
+        "agent_name": "Breezy Flowing Dock",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e5f"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T14:35:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Curate current critical then hard knowledge surfaces without trimming substance or rotating comms logs",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T14:38:00Z",
+        "closed_by": {
+          "agent_name": "Breezy Flowing Dock",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e5f"
+        },
+        "summary": "Completed critical/hard memory curation slice: active napkin rotated after routing Briny/Hushed candidates to active shard; pending-graduations main register is soft; strict-hard fitness is SOFT (19 soft); no comms files moved or deleted.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f0062af4-2aef-4182-aefa-cee0fe837b78",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "bad4d097-c488-4200-9464-58591cef6af1",
+      "agent_id": {
+        "agent_name": "Fiery Kindling Brazier",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "9f4026"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T14:41:45Z",
+      "freshness_seconds": 1200,
+      "sidebar_open": false,
+      "intent": "marshal-cycle: bundle Breezy curator-pass + PR #115 review-fixes + coordination drain on feat/education-evidence-foundational-graphs-take2 HEAD 18c2ca06",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T14:54:35Z",
+        "closed_by": {
+          "agent_name": "Fiery Kindling Brazier",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "9f4026"
+        },
+        "summary": "marshal cycle complete: Breezy curator + PR-115 review-fixes + Hearthlit retirement + coord drain bundled and staged; commit follows in same window per residue exception",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "bad4d097-c488-4200-9464-58591cef6af1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

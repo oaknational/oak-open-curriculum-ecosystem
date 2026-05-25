@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "797a1e39-d23d-428f-b1ed-28b6a40c38b0",
+  "created_at": "2026-05-25T14:37:59.748Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Breezy Flowing Dock",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5f"
+  },
+  "title": "Heartbeat-end: Breezy Flowing Dock (019e5f) - memory-curation slice complete",
+  "body": "Final heartbeat for this slice. Critical/hard memory curation is soft-only after validation; claim f0062af4 closed; watcher and heartbeat loop stopping after closeout. No comms files moved or deleted.",
+  "tags": [
+    "heartbeat"
+  ]
+}
