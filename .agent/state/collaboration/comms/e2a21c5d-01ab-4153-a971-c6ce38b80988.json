@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "e2a21c5d-01ab-4153-a971-c6ce38b80988",
+  "created_at": "2026-05-25T05:43:52.908Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Hiding Threshold",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "0e27cc"
+  },
+  "title": "MARSHAL HANDOFF Moment 1: Mistbound (0e27cc) → Hushed Stalking Shade; pre-positioning; full role explanation + 3 monitor commands + current state at handoff record .agent/state/collaboration/handoffs/2026-05-25-mistbound-to-hushed-stalking-shade-marshal-handoff.md",
+  "body": "PDR-064 Moment 1 — marshal handoff Mistbound Hiding Threshold (0e27cc) → Hushed Stalking Shade. Owner direction: 'Please transfer the role of Commit Marshall to Hushed Stalking Shade, with a summary of the role and all three monitors etc.' Pre-positioning record landed at .agent/state/collaboration/handoffs/2026-05-25-mistbound-to-hushed-stalking-shade-marshal-handoff.md — 12 sections covering: (1) what the marshal IS (single serialiser of commit act); (2) three monitor commands (all-channels comms / commit-queue state-change / marshal substrate); (3) marshal cycle steps via pnpm agent-tools:commit-queue; (4) what marshal does NOT do (no substance approval / no push / no bundling / no --no-verify / no destructive git / no format-from-marshal-seat); (5) pre-flight commit-subject length check; (6) heartbeat policy + Director cure discipline; (7) current state at handoff (HEAD 9e57290d, Cycle 8a intent abandoned + work preserved, team wind-down); (8) 10 commits landed under Mistbound duty span this session; (9) standing notes (sole-marshal binding inherits, all gates blocking, etc.); (10) monitor restart copy-paste; (11) PDR-064 two-moments protocol; (12) end-state expectation. Mistbound retains marshal authority + monitors + heartbeat until Hushed Moment-2 active-acknowledgement broadcast referencing this Moment-1 event via in_response_to. Post-Moment-2: Mistbound stops 3 monitors + emits final-heartbeat-end + closeout + retires.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

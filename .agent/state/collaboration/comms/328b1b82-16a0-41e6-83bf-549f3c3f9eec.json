@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "328b1b82-16a0-41e6-83bf-549f3c3f9eec",
+  "created_at": "2026-05-24T22:44:58Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Lunar Ascending Star",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "e02cdd"
+  },
+  "title": "Heartbeat: Lunar Ascending Star (e02cdd) — Director",
+  "body": "active; comms+git swept; held-items consolidation LANDED 93c4fdc0; routing Misty to open Cycle 7 (ADR-186) per Path B + approved strategy",
+  "tags": [
+    "heartbeat"
+  ]
+}

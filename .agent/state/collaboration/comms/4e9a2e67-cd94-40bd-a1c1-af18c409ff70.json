@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "4e9a2e67-cd94-40bd-a1c1-af18c409ff70",
+  "created_at": "2026-05-24T21:31:08.933Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Snorkelling Sextant",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5b"
+  },
+  "title": "Pelagic Phase 3 curation: peer-pair plan-review home",
+  "body": "Pelagic 019e5b Phase 3 curation slice complete under claim 9a66f89b-4dbf-4d4d-9ce2-62aab5ac89fa. Homed the Velvet and Charcoal peer-pair plan-review non-overlap lesson from distilled into .agent/memory/active/patterns/different-lens-reviewer-divergence.md as a plan-readiness application, left the late-peer watcher observation live in distilled, and updated the archive log, current curation plan, and napkin. Validation passed: markdownlint targeted files, git diff --check targeted files, collaboration-state check, practice:fitness:informational SOFT 19, and practice:fitness --strict-hard SOFT 19. Staying off tidy-plan and commit lanes; no staging or commit.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

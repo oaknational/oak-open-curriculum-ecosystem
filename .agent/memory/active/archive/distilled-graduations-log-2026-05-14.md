@@ -460,3 +460,11 @@ Verified homes:
 - *Self-lint surfaces deprecated helper drift*
   → [typescript-gotchas.md](../../../../docs/governance/typescript-gotchas.md)
   § ESLint Plugin Typing.
+- *Peer-pair plan reviews produce non-overlapping coverage*
+  → [different-lens-reviewer-divergence.md](../patterns/different-lens-reviewer-divergence.md)
+  § Peer-Pair Plan Reviews, with the plan-readiness application of lens
+  divergence across Codex/GPT-5 and Claude/Opus-4.7 reviewers.
+- *Named peers can arrive late; keep all-channel comms reconciliation alive*
+  → [start-right-team/SKILL-CANONICAL.md](../../../skills/start-right-team/SKILL-CANONICAL.md)
+  § Singleton-lane coordination rule, which now treats first registry/comms
+  checks as provisional and requires final reconciliation before completion.

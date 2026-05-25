@@ -1627,6 +1627,112 @@
       "updated_at": "2026-05-24T12:38:36.969Z",
       "expires_at": "2026-05-24T12:53:36.969Z",
       "phase": "queued"
+    },
+    {
+      "intent_id": "7dc6f8cc-4d81-4ffd-ac75-87a39cf9d9a2",
+      "claim_id": "b8cb39de-065a-4d99-9bc2-81fba1dd5c5b",
+      "agent_id": {
+        "agent_name": "Charcoal Brazing Kiln",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "7c7327"
+      },
+      "files": [
+        ".agent/practice-core/decision-records/PDR-076b-body-file-frontmatter-contract.md",
+        ".agent/practice-core/decision-records/README.md"
+      ],
+      "commit_subject": "chore(pdr): ratify PDR-076b (body-file frontmatter contract) as Accepted (tidy cycle 4)",
+      "queued_at": "2026-05-24T21:45:09.387Z",
+      "updated_at": "2026-05-24T21:58:16.408Z",
+      "expires_at": "2026-05-24T22:00:09.387Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "67142adadcf29f3a48185c7dfc609594391e7aeed6e9ea653f822dfca312e837",
+      "staged_name_status": "M\t.agent/practice-core/decision-records/PDR-076b-body-file-frontmatter-contract.md\n",
+      "notes": "commit-workflow verify-staged-before failure: staged files do not exactly match intent files; extra: none; missing: .agent/practice-core/decision-records/README.md"
+    },
+    {
+      "intent_id": "9dc229c7-d58a-4970-8ec9-95b090a6b478",
+      "claim_id": "dc9e22dd-9894-4243-b01f-fcce6e8fe149",
+      "agent_id": {
+        "agent_name": "Charcoal Brazing Kiln",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "7c7327"
+      },
+      "files": [
+        ".agent/practice-core/decision-records/PDR-077-marshal-as-cycle-discipline.md",
+        ".agent/practice-core/decision-records/PDR-063-mid-cycle-retirement-protocol.md",
+        ".agent/practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md"
+      ],
+      "commit_subject": "feat(pdr): land PDR-077 (Commit Marshal cycle-discipline) + reciprocal refs on PDR-063+064 (tidy cycle 5)",
+      "queued_at": "2026-05-24T21:56:00.184Z",
+      "updated_at": "2026-05-24T22:01:01.115Z",
+      "expires_at": "2026-05-24T22:11:00.184Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "05e1be19d320edcd523479a6b7db5c4dd7cf8a7d1ccc564c5b7449987790151c",
+      "staged_name_status": "M\t.agent/practice-core/decision-records/PDR-063-mid-cycle-retirement-protocol.md\nM\t.agent/practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md\nA\t.agent/practice-core/decision-records/PDR-077-marshal-as-cycle-discipline.md\n",
+      "notes": "commit-workflow git-commit failure: git commit exited with code 1: 🔍 Running pre-commit checks...\n📝 Checking formatting on staged files...\n$ pnpm --filter @oaknational/agent-tools repo-check prettier-staged\n$ cd .. && pnpm exec tsx agent-tools/scripts/repo-check.ts prettier-staged\nChecking formatting...\nAll matched files use Prettier code style!\n🔍 Running markdownlint on staged Markdown files...\n$ pnpm --filter @oaknational/agent-tools repo-check markdownlint-staged\n$ cd .. && pnpm exec tsx agent-tools/scripts/repo-check.ts markdownlint-staged\n🧭 Running workspace-owned repo validators...\n$ pnpm --filter @oaknational/eslint-plugin-standards validate-boundaries && pnpm --filter @oaknational/agent-tools validate-no-stale-script-invocations\n$ cd ../../.. && pnpm exec tsx packages/core/oak-eslint/scripts/validate-boundaries.ts\n$ cd .. && pnpm exec tsx agent-tools/scripts/validate-no-stale-script-invocations.ts\nvalidate-no-stale-script-invocations: OK (no stale root `scripts/...` invocations)\n🐚 Linting shell scripts...\n$ pnpm lint:shell:syntax\n$ bash -n apps/oak-curriculum-mcp-streamable-http/scripts/*.sh\n🧪 Running type-check, lint, and unit tests...\n• turbo 2.9.12\n\n   • Packages in scope: @oaknational/agent-tools, @oaknational/build-metadata, @oaknational/curriculum-sdk, @oaknational/design-tokens-core, @oaknational/env, @oaknational/env-resolution, @oaknational/eslint-plugin-standards, @oaknational/graph-core, @oaknational/graph-corpus-sdk, @oaknational/graph-ingest, @oaknational/graph-project, @oaknational/logger, @oaknational/oak-curriculum-mcp-streamable-http, @oaknational/oak-design-ink, @oaknational/oak-design-tokens, @oaknational/oak-search-sdk, @oaknational/observability, @oaknational/openapi-zod-client-adapter, @oaknational/result, @oaknational/sdk-codegen, @oaknational/search-cli, @oaknational/search-contracts, @oaknational/sentry-node, @oaknational/type-helpers\n   • Running type-check, lint, test in 24 packages\n   • Remote caching disabled\n\n\n Tasks:    90 successful, 90 total\nCached:    90 cached, 90 total\n  Time:    423ms >>> FULL TURBO\n\n✅ Pre-commit checks completed!\n$ pnpm --filter @oaknational/agent-tools prevent-accidental-major-version .git/COMMIT_EDITMSG\n$ cd .. && pnpm exec tsx agent-tools/scripts/prevent-accidental-major-version.ts .git/COMMIT_EDITMSG\n⧗   --- input ---\nfeat(pdr): land PDR-077 (Commit Marshal cycle-discipline) + reciprocal refs on PDR-063+064 (tidy cycle 5)\n\nPer post-m1-attestation-tidy-up.plan.md Cycle 5 (doctrine landing phase).\nLands PDR-077 (Commit Marshal as Cycle Discipline) as new record at\nStatus: Accepted; Adopted 2026-05-24. Absorbs 7 R3 SHOULD-ABSORB items\n+ 1 Director-VERDICT item per Charcoal R1+R3 synthesis (captured Cycle 2\nat 4575044e). Adds reciprocal §Related references to PDR-063 (mid-cycle\nretirement) and PDR-064 (coordinator two-moments handoff) so the marshal\nrole's cycle-discipline boundary is discoverable from both directions.\n\nSource substrate: handoffs/2026-05-23-charcoal-pdr-077/{pdr-077-draft,\npdr-077-r1-fanout-synthesis,pdr-077-r3-final-iteration-fanout-synthesis,\npdr-077-scope-question,pdr-077-status-update}.md (landed Cycle 2).\n\nReviewer verdicts: docs-adr-expert READY-AS-IS; assumptions-expert\nREADY-AS-IS. §Absorption Trail 8 entries schema-compliant.\n\nIntended consumer: future ratification of marshal-role per-worktree\nshape (deferred per `branch-fitness-and-push-cadence.plan.md` Cycle 14).\n\nMarshalled by Mistbound Hiding Threshold on intent\n9dc229c7-d58a-4970-8ec9-95b090a6b478; substantive author Charcoal Brazing\nKiln (7c7327).\n\nCo-Authored-By: Claude Opus 4.7 (Charcoal Brazing Kiln 7c7327) <noreply@anthropic.com>\n✖   header must not be longer than 100 characters, current length is 105 [header-max-length]\n\n✖   found 1 problems, 0 warnings\nⓘ   Get help: https://github.com/conventional-changelog/commitlint/#what-is-commitlint\n\nhusky - commit-msg script failed (code 1)"
+    },
+    {
+      "intent_id": "92f9c332-afa9-4f2f-9c99-3262c12c3c4e",
+      "claim_id": "18075549-c804-48e5-a467-88f9ce160cb1",
+      "agent_id": {
+        "agent_name": "Charcoal Brazing Kiln",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "7c7327"
+      },
+      "files": [
+        ".agent/practice-core/decision-records/PDR-079-pdr-vs-adr-portability-distinction.md",
+        ".agent/rules/no-moving-targets-in-permanent-docs.md",
+        ".agent/hooks/policy.json"
+      ],
+      "commit_subject": "feat(pdr): land PDR-079 (PDR-vs-ADR portability distinction) + rule + hook scope-update (tidy cycle 5a)",
+      "queued_at": "2026-05-24T22:04:55.198Z",
+      "updated_at": "2026-05-24T22:18:42.336Z",
+      "expires_at": "2026-05-24T22:19:55.198Z",
+      "phase": "abandoned"
+    },
+    {
+      "intent_id": "7e965431-1f57-4975-8f8a-0941fd9583fd",
+      "claim_id": "e097d5a1-d63f-44e3-aafd-9f49856f188b",
+      "agent_id": {
+        "agent_name": "Misty Drifting Sail",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "02b325"
+      },
+      "files": [
+        "docs/architecture/architectural-decisions/187-claude-self-modification-authorisation-cure-shape.md",
+        "docs/architecture/architectural-decisions/README.md"
+      ],
+      "commit_subject": "feat(adr): land ADR-187 (Claude self-modification authz cure-shape, WS-8) (tidy cycle 8a)",
+      "queued_at": "2026-05-24T23:25:35.197Z",
+      "updated_at": "2026-05-25T05:37:17.314Z",
+      "expires_at": "2026-05-24T23:40:35.197Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "d304faf3d30561e2059833373999652f7dd9bd9cd22b35b732966711b7b6d5cb",
+      "staged_name_status": "A\tdocs/architecture/architectural-decisions/187-claude-self-modification-authorisation-cure-shape.md\nM\tdocs/architecture/architectural-decisions/README.md\n",
+      "notes": "commit-workflow git-commit failure: git commit exited with code 1: 🔍 Running pre-commit checks...\n📝 Checking formatting on staged files...\n$ pnpm --filter @oaknational/agent-tools repo-check prettier-staged\n$ cd .. && pnpm exec tsx agent-tools/scripts/repo-check.ts prettier-staged\nChecking formatting...\n[warn] docs/architecture/architectural-decisions/187-claude-self-modification-authorisation-cure-shape.md\n[warn] Code style issues found in the above file. Run Prettier with --write to fix.\n/Users/jim/code/oak/oak-open-curriculum-ecosystem/agent-tools:\n[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @oaknational/agent-tools@0.1.0 repo-check: `cd .. && pnpm exec tsx agent-tools/scripts/repo-check.ts prettier-staged`\nExit status 1\n[ELIFECYCLE] Command failed with exit code 1.\n❌ Formatting issues found!\n💡 Run 'pnpm format:root' to fix formatting issues, then stage the changes\nhusky - pre-commit script failed (code 1)"
+    },
+    {
+      "intent_id": "cac31098-6ef4-47e9-b9d5-b2ce998b41ca",
+      "claim_id": "e097d5a1-d63f-44e3-aafd-9f49856f188b",
+      "agent_id": {
+        "agent_name": "Misty Drifting Sail",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "02b325"
+      },
+      "files": [
+        "docs/architecture/architectural-decisions/187-claude-self-modification-authorisation-cure-shape.md",
+        "docs/architecture/architectural-decisions/README.md"
+      ],
+      "commit_subject": "feat(adr): land ADR-187 (Claude self-modification authz cure-shape, WS-8) (tidy cycle 8a)",
+      "queued_at": "2026-05-25T06:06:16.550Z",
+      "updated_at": "2026-05-25T06:08:19.708Z",
+      "expires_at": "2026-05-25T06:21:16.550Z",
+      "phase": "abandoned"
     }
   ],
   "claims": [
@@ -1685,29 +1791,117 @@
       "intent": "Retain narrow ownership for uncommitted identity-helper source/test bundle pending marshal pickup after Sylvan wind-down"
     },
     {
-      "claim_id": "f610d430-2009-4f95-bdbb-dc0ad824d96e",
+      "claim_id": "e097d5a1-d63f-44e3-aafd-9f49856f188b",
       "agent_id": {
-        "agent_name": "Charcoal Brazing Kiln",
+        "agent_name": "Misty Drifting Sail",
         "platform": "claude",
         "model": "claude-opus-4-7",
-        "session_id_prefix": "7c7327"
+        "session_id_prefix": "02b325"
       },
       "thread": "agentic-engineering-enhancements",
       "areas": [
         {
           "kind": "files",
           "patterns": [
-            "agent-tools/tests/collaboration-state/watcher-staleness.unit.test.ts",
-            "agent-tools/tests/collaboration-state/watcher-heartbeat.unit.test.ts",
-            "agent-tools/tests/runtime.integration.test.ts",
-            "agent-tools/tests/claude/session-identity-hook.unit.test.ts"
+            "docs/architecture/architectural-decisions/187-claude-self-modification-authorisation-cure-shape.md",
+            "docs/architecture/architectural-decisions/README.md"
           ]
         }
       ],
-      "claimed_at": "2026-05-24T14:56:37Z",
-      "freshness_seconds": 5400,
+      "claimed_at": "2026-05-24T23:14:43Z",
+      "freshness_seconds": 14400,
       "sidebar_open": false,
-      "intent": "Cycle Beta — Director-routed (76ede08d) S5443 fixture-discipline replacement: replace /tmp/ literals with opaque mem:// sentinels across 4 test files (watcher-staleness.unit.test.ts ×10 + watcher-heartbeat.unit.test.ts ×4 + runtime.integration.test.ts ×1 + session-identity-hook.unit.test.ts ×6 = 21 sites). IO is injected so literal /tmp/ is fixture-discipline smell; pure string replacement; reviewer dispatch code-expert + security-expert (confirm fixture replacement preserves prior LOW-RISK verdict)"
+      "intent": "Cycle 8a — author ADR-187 (Claude self-modification authz cure-shape, WS-8 R2 Lanternlit absorption): ratify C2-near-term + C5-long-term + C4-fallback combination with C2-platform-deferred trigger; C1/C3 rejected; 10 architectural conditions from Ferny WS-2 reviewer synthesis embedded",
+      "intent_to_commit": "cac31098-6ef4-47e9-b9d5-b2ce998b41ca"
+    },
+    {
+      "claim_id": "bfde2de0-bd70-4158-9199-5973572fe2f6",
+      "agent_id": {
+        "agent_name": "Wooded Flowering Leaf",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "f03dbd"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/comms-watch-auto-seed.ts",
+            "agent-tools/tests/collaboration-state/comms-watch-auto-seed.unit.test.ts",
+            "agent-tools/src/collaboration-state/cli-options.ts",
+            "agent-tools/src/collaboration-state/cli-spec-options.ts",
+            "agent-tools/src/collaboration-state/cli-specs.ts",
+            "agent-tools/src/collaboration-state/cli-comms-watch.ts",
+            ".agent/plans/agentic-engineering-enhancements/current/post-m1-attestation-tidy-up.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T06:48:58Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Cycle 9 PDR-063 resume from Eclipsed: 4 integration edits (cli-options/cli-spec-options/cli-specs/cli-comms-watch) + parser unit test + plan landing record. Module + auto-seed test already authored by Eclipsed (6 tests green, 543/543 suite)."
+    },
+    {
+      "claim_id": "fec8e243-049a-4efb-b371-a9ea4a533369",
+      "agent_id": {
+        "agent_name": "Hushed Stalking Shade",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "bc0a07"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/open-questions.md",
+            ".agent/plans/agentic-engineering-enhancements/current/open-questions-memory-system.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/README.md",
+            ".agent/memory/README.md",
+            ".agent/memory/operational/README.md",
+            ".agent/memory/executive/memory-state-substrate-contracts.manifest.json",
+            ".agent/practice-index.md",
+            ".agent/skills/consolidate-docs/SKILL-CANONICAL.md",
+            ".agent/skills/session-handoff/SKILL-CANONICAL.md",
+            "agent-tools/src/practice-substrate/open-questions-evaluator.ts",
+            "agent-tools/src/practice-substrate/live-open-questions.ts",
+            "agent-tools/src/practice-substrate/evaluators.ts",
+            "agent-tools/src/practice-substrate/index.ts",
+            "agent-tools/src/practice-substrate/live-report.ts",
+            "agent-tools/src/practice-substrate/live-types.ts",
+            "agent-tools/src/practice-substrate/types.ts",
+            "agent-tools/tests/practice-substrate/practice-substrate.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T07:01:08Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Absorbing-orphan marshal of Twilit Orbiting Galaxy (019e5d codex GPT-5) open-questions memory-system bundle per owner direction at 06:55Z; Twilit retired before CLI enqueue per owner 07:00Z. Bundle files per Twilit broadcast 4825fb5f."
+    },
+    {
+      "claim_id": "3f13eb5b-46aa-4cfa-99ff-7e4947326fb9",
+      "agent_id": {
+        "agent_name": "Eclipsed Watching Secret",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "00d760"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/tests/commit-workflow.unit.test.ts",
+            ".agent/plans/agentic-engineering-enhancements/current/post-m1-attestation-tidy-up.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T07:03:21Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Cycle 14 (Twilit cycle 3 audit-shaped deletion): delete lines 221-247 in commit-workflow.unit.test.ts (two audit-shaped it-blocks: stagedBundleCalls call-count + stagedBundlePathspecs pathspec audit; both reviewer-confirmed audit-shape on prior direct read). Reviewer dispatch test-expert + code-expert (Sonnet). Marshal-cycle through Hushed. One commit. Tests stay green pre+post. Plan landing record bundled. Parallel-safe with Wooded Cycle 9 (zero file overlap)."
     }
   ]
 }

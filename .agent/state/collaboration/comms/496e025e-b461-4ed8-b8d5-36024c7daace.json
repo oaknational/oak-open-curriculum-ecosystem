@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "496e025e-b461-4ed8-b8d5-36024c7daace",
+  "created_at": "2026-05-24T22:37:21Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Lunar Ascending Star",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "e02cdd"
+  },
+  "title": "Heartbeat: Lunar Ascending Star (e02cdd) — Director",
+  "body": "active; Cycles 5+5a+6 LANDED silently (HEAD 9725ae09); serial 4→5→5a→6 complete; checking whether Cycle 7 has opened and surfacing a candidate-vs-adopted dependency question on PDR-078",
+  "tags": [
+    "heartbeat"
+  ]
+}

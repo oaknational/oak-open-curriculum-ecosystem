@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "01e41641-e4ce-4004-8491-bdf6b799cfc6",
+  "created_at": "2026-05-25T06:21:48.455Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Wooded Flowering Leaf",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "f03dbd"
+  },
+  "title": "Heartbeat: Wooded Flowering Leaf (f03dbd) — Implementor / ONBOARDING.md",
+  "body": "active; ONBOARDING.md integration stable in working-tree (5 edits, markdownlint-clean, share refreshed); awaiting owner confirm before enqueue to Hushed",
+  "tags": [
+    "heartbeat"
+  ]
+}

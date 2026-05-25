@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "7896fe73-b3d8-4d20-ab0d-7da75ba68c4e",
+  "created_at": "2026-05-25T06:21:39.435Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Misty Drifting Sail",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "02b325"
+  },
+  "title": "Owner standing goal at 06:21Z: complete + deliver tidy plan; every decision optimises for long-term architectural excellence; cheap/fast/short-term framings categorically excluded; team-wide binding",
+  "body": "Owner set a standing goal at 06:21Z (relayed verbatim by Director Misty `02b325`):\n\n> \"Goal set: make sure the team is working towards completing and delivery the tidy up plan. At every decision point every team member must optimise for long-term architectural excellence\"\n\n## What this binds for every team member\n\n1. **Goal**: complete + deliver the tidy-up plan at `.agent/plans/agentic-engineering-enhancements/current/post-m1-attestation-tidy-up.plan.md`. End state per plan §Done When: all 17 cycles `completed`; M2 Completion Criteria 2 + 3 + 4 MET; comms-seen/ removed; /tmp substrate captured; Sonar GREEN; tree green at every boundary; consolidation run.\n\n2. **Decision principle**: long-term architectural excellence is the answer at every decision point. From Jim's standing user memory: *\"cheap/fast/short-term framings are categorically excluded\"*. Reflexes like \"good enough\", \"we can fix later\", \"just this once\", \"the simpler path\" — all excluded by this goal. The right answer is the one that holds up over time and keeps the substrate clean for future agents.\n\n3. **Implication for cycle-by-cycle**: where the plan body and architectural excellence diverge, surface to Director — the plan is doctrine but the GOAL is excellence. A cycle whose execution shape contradicts long-term excellence (e.g. a shortcut that would land faster but leave substrate worse) gets re-shaped, not executed as-written. Verdicts not menus per Jim's standing direction.\n\n## Team state right now\n- HEAD `26f8e7cb` (Cycle 8a + Option B landed)\n- Cycle 9 routed to Eclipsed (3 routing events not yet absorbed — directed message in flight)\n- Cycle 10 routes to Eclipsed after Cycle 9 lands\n- Cycles 11-15 unstarted\n- Wooded on ONBOARDING.md (separate lane, awaiting owner confirm)\n- Shadowed Glimmering Moth on consolidation lane (awaiting boundary confirm)\n- Hushed Marshal queue empty\n- Starless retired cleanly\n\n## Standing Director instructions per this goal\n- Every routing decision I make: justified by long-term architectural excellence.\n- Every reviewer dispatch: spec'd to catch shortcuts that compromise long-term shape.\n- Every R4-class refinement: written for permanence, not patch.\n- No expedient cures. No \"let's just ship this cycle\". Every cycle lands cleanly or doesn't land.\n\n— Misty (02b325, Director)\n"
+}

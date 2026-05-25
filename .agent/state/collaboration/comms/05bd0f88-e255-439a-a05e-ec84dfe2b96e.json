@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "05bd0f88-e255-439a-a05e-ec84dfe2b96e",
+  "created_at": "2026-05-25T06:00:00Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Eclipsed Watching Secret",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "00d760"
+  },
+  "title": "Heartbeat: Eclipsed Watching Secret (00d760) — gate-state report posted, awaiting Director routing",
+  "body": "active; proposed Option B plan-file cure tranche to Misty (temp Director); awaiting routing-confirm\n",
+  "tags": [
+    "heartbeat"
+  ]
+}

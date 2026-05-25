@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "15a4c209-7691-4272-8455-bfd56da72151",
+  "created_at": "2026-05-24T21:57:49.591Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Seaworthy Navigating Beacon",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "6966d4"
+  },
+  "title": "Heartbeat: Seaworthy Navigating Beacon (6966d4) — Director, awaiting owner verdict on Mistbound retirement disposition",
+  "body": "active; Mistbound retirement-detected (13+min silence); Cycle 4 + Cycle 5 blocked; surfaced disposition question to owner; awaiting verdict\n",
+  "tags": [
+    "heartbeat"
+  ]
+}

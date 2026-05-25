@@ -67,13 +67,19 @@ isProject: true
 
 # Practice Infrastructure Hardening Program 2026-05-23
 
-**Last Updated**: 2026-05-24 (refinement R1.5 — owner verdicts resolved across 5 decisions; WS-2 SPLIT confirmed; E4 reframed via PDR/ADR portability distinction; WS-8 author NOW; PDR-079 added as new WS-12; R1.4 broadcast bundled-and-emitted)
-**Status**: SEQUENCE-LIVE — racing toward **M1 — Safe-Pause Milestone**.
-M1 gates 3 + 4 MET; gates 1, 2, 5 PENDING. M1 reachable when WS-7 cure
-executes (Scorched claim `4e6e18b2` active) + WS-2 partition-cure
-verdict surfaces + Gate 5 queue items each land-or-stand-down (7
-queue entries per Mistbound §8). M2 (Completion) is open-ended;
-M2-pursuit work deferred until M1 reached.
+**Last Updated**: 2026-05-24 (refinement R2 — M1 attestation + post-M1 re-shape; PR #108 merged; companion executable plan landed)
+**Status**: **M1 ACHIEVED 2026-05-24T20:09:10Z** (attestation broadcast
+`2849b623-5026-4e9d-9938-7ebaffb727fd`; PR #108 merged at
+2026-05-24T20:06:12Z via merge commit
+`2462952a957c69d4c614ddb95eb880c105839c1e`). Team pivots to EEF First
+Feature delivery per P3.E1 (team currently paused; pivot fires on
+owner unpause). Carry-forward executable plan landed at
+[`post-m1-attestation-tidy-up.plan.md`](post-m1-attestation-tidy-up.plan.md)
+covering all post-M1 tidy-up items (PDR-076 SPLIT, PDR-077, WS-11
+bundle, comms-watch redesign, test-debt + Sonar residue). M2
+(Completion) carries forward: Criterion 1 MET; Criteria 2/3/4 named
+in companion plan; Criterion 5 (next-window evidence) BLOCKED ON NEXT
+SESSION.
 **Plan held under claim**: `8374e240-0faa-4011-a9fd-a5789cc006a9`
 (Lanternlit Listening Dusk / claude / claude-opus-4-7 / `78683a`).
 Future agents observing drift between this plan and live state should
@@ -170,6 +176,126 @@ record at `.agent/state/collaboration/handoffs/marshal-role-handoff-2026-05-23-m
   the new Emergent Observations section, not promoted to WS rows
   (per Non-Goals: doctrine inflation guard).
 - Authoring agent + R0 history — preserved as audit trail.
+
+### R2.1 — 2026-05-24 — Seaworthy Navigating Beacon — Lanternlit lane absorption (owner-directed)
+
+**Why**: Owner direction this turn: *"Lanternlit has been gone for a
+long time, whatever needs doing, integrate it into the plan as a
+step"*. Lanternlit's two AUTHOR-IN-FLIGHT lanes (WS-8 self-mod authz
+ADR; WS-12 PDR-079 + rule scope-update) had no in-flight author and
+WS-12 was a BLOCKING prerequisite for companion plan cycles 6 + 7.
+R2.1 relocates both to the companion plan as new cycles 5a + 8a.
+
+**Changes**:
+
+- WS-8 row: AUTHOR-IN-FLIGHT (Lanternlit) → CARRY FORWARD to companion
+  plan cycle 8a. ADR-187 lands there.
+- WS-12 row: AUTHOR-IN-FLIGHT (Lanternlit) → CARRY FORWARD to companion
+  plan cycle 5a. PDR-079 + rule scope-update land there.
+- §M2 Criterion 3: CARRY FORWARD pointer updated to companion plan
+  cycle 8a.
+- Companion plan refinement R2 (in
+  `post-m1-attestation-tidy-up.plan.md` §Plan Refinement Log) carries
+  the substantive insertion (cycle 5a + cycle 8a bodies, dependency
+  re-wiring, prerequisite-classification update).
+- Cycle count in companion plan: 14 → 16 (cycles 5a + 8a inserted;
+  existing cycle numbers preserved via letter-suffix to avoid
+  cascading rewrites of primary plan cycle-number references).
+
+**M1 impact**: none.
+
+### R2 — 2026-05-24 — Seaworthy Navigating Beacon — M1 attestation + post-M1 re-shape (owner-directed deep update)
+
+**Why**: PR #108 merged at `2026-05-24T20:06:12Z` via merge commit
+`2462952a957c69d4c614ddb95eb880c105839c1e`; M1 Safe Pause Attestation
+broadcast emitted by Director Seaworthy at comms event
+`2849b623-5026-4e9d-9938-7ebaffb727fd` (`2026-05-24T20:09:10Z`). Owner
+direction this turn: *"we have completed M1, I think you have
+identified a handfull of tidy up follow ons?"* followed by *"do a
+deep update of the primary plan, and then write a separate, highly
+focussed, highly linear, utterly defined plan for items 1-6"*.
+R2 records the M1 attestation in the plan body, reshapes WS / gate /
+phase status against attestation evidence, folds the R1.7
+verification-primitive cure (formerly carry-forward item 6) into
+§Roles + triggers M1 Gate Monitor, and lands a §Post-M1 Cleanups
+pointer to the new executable plan covering carry-forward items 1–5.
+
+**Owner-authority override of plan-coordination model**: Same
+justification as R1.6 — owner-direct direction; the recorded
+substrate is M1 attestation evidence (Director Seaworthy duty
+discharge) not Lanternlit's plan body design; sidebar would strand the
+M1-attestation-recording substrate. Lanternlit (when re-engaged) may
+reshape sections at next plan stewardship pass; the sidebar convention
+remains the architecturally-correct shape for future
+non-owner-directed contributions.
+
+**Companion plan landing** (this refinement's pair-commit):
+[`post-m1-attestation-tidy-up.plan.md`](post-m1-attestation-tidy-up.plan.md)
+— executable linear cycle sequence covering all post-M1-attestation
+carry-forward items: PDR-076 SPLIT (PDR-076a + PDR-076b), PDR-077
+R3-absorption, WS-11 bundle (PDR-078 + ADR-186 + thin SKILL +
+reciprocal amendments), §P5.W1 comms-watch seen-state redesign
+(promoted from `future/`-shape inside this plan to executable cycles),
+and test-debt + Sonar residue (Twilit Cycle 3 + Charcoal Beta
+substance + Charcoal Gamma substance). The companion plan is the
+canonical executable surface for the carry-forwards; this primary
+plan's §Post-M1 Cleanups + §Path Forward Phase 4 reference it as the
+actionable substrate.
+
+**Changes** (section-by-section):
+
+1. Header `**Status**:` flipped from *"SEQUENCE-LIVE — racing toward
+   M1"* to *"M1 ACHIEVED 2026-05-24T20:09:10Z"* with attestation event
+   ID + merge SHA + companion plan link.
+2. §Workstream Roll-up table: WS-7 → LANDED + MERGED (PR #108 via
+   merge `2462952a`; bundle `340752bb` + hygiene tail `efe13aae` /
+   `9e8079c8` / `58feff48`). WS-2 → LANDED v2 foundation + SPLIT
+   children carry-forward to companion plan. WS-6 → STOOD DOWN to
+   companion plan (draft + R3 synthesis in `/tmp` pending capture).
+   WS-11 → STOOD DOWN to companion plan (bundle shape ratified). WS-8
+   - WS-12 carry-forward AUTHOR-IN-FLIGHT (unaffected).
+3. §M1 — Safe-Pause Milestone Criteria: All 5 gates flipped to MET
+   with terminal-state evidence (per attestation broadcast). Per-gate
+   sections updated with stand-down dispositions for un-landed items.
+   M1 Roll-up table refreshed.
+4. §M2 — Completion Milestone Criteria → Criterion 1 (M1 held)
+   flipped MET. Criteria 2/3/4 carry forward via companion plan.
+   Criterion 5 (next-window evidence) → BLOCKED ON NEXT SESSION
+   (untestable until next team window opens post-pause).
+5. §Path Forward Phase 1/2/3 closure markers added; P3.E1 marked
+   EXECUTED; Phase 4 (M2-PURSUIT) carries forward with sub-section
+   "P4-via-companion-plan" pointing at the new executable surface.
+6. §Roles + triggers / M1 Gate Monitor: new "**Verification primitive
+   (R1.7 fold)**" paragraph codifies that the M1 Gate Monitor MUST
+   verify gate state against actual artefacts (`gh pr checks`, commit
+   log, file presence, comms-events), NEVER against the plan body's
+   own enumeration. Worked-instance evidence captured in §Emergent
+   Observations E7.
+7. §Post-M1 Cleanups → P5.W1 marked **PROMOTION-ELIGIBLE 2026-05-24
+   (M1 attestation fired)**; pointer to companion plan cycles 8–10.
+8. New §Emergent Observation E7 — substrate-pointer-read on plan's
+   own gate enumeration (Director Seaworthy worked instance,
+   2026-05-24 ~16:30Z; cured by R1.7 verification-primitive landing
+   in §Roles + triggers).
+9. §Risks: #3 (M1 attestation flake) → MITIGATED via R1.7
+   verification-primitive landing; #4 (E4 blocking WS-11) → RESOLVED
+   via R1.5 PDR/ADR portability distinction; #5 (PR #108 cure-claim
+   execution stall) → RESOLVED via PR merge.
+10. §Owner Ratification Status → R2 entry added (owner direction
+    *"we have completed M1"* is direct ratification of the M1
+    attestation).
+
+**M1 impact**: confirms and records the attestation in the canonical
+plan body. Does not change the M1 outcome itself; the attestation
+broadcast `2849b623` is the source-of-truth event, this plan is the
+authoritative reference. Next-window readers reading this plan have
+authoritative M1-attestation evidence with broadcast event ID + merge
+commit SHA + Director identity tuple.
+
+**Carry-forward to next session (canonical post-R2 list)**: 5 items
+absorbed into companion plan as 13 linear cycles. See
+[`post-m1-attestation-tidy-up.plan.md`](post-m1-attestation-tidy-up.plan.md)
+§Atomic Cycles for executable substrate.
 
 ### R1.6 — 2026-05-24 — Seaworthy Navigating Beacon — Post-M1 Cleanups section integration (owner-directed correction)
 
@@ -792,73 +918,77 @@ on owner decision); **OWNER-VERDICT-RECEIVED, CODIFICATION-PENDING**
 | WS | Artefact | Status | Closes when |
 |----|----------|--------|-------------|
 | WS-1 | PDR-075 Director substrate-writing discipline | **LANDED** `b6ac6147` | Cross-session ratification (already in evidence: Secret bootstrap from substrate alone in 40s) |
-| WS-2 | PDR-076 v2 Agent identity tuple + body-file frontmatter | **LANDED** `db4d8b3a`; **OWNER-VERDICT-RECEIVED 2026-05-24: SPLIT confirmed** — Ferny authors PDR-076a (identity tuple) + PDR-076b (body-file frontmatter) via Cycle #6; Cascade §2 body-file-adjacency overlap with §5 cured by partition | PDR-076a + PDR-076b both land via Cycle #6 marshal-cycle |
+| WS-2 | PDR-076 v2 Agent identity tuple + body-file frontmatter | **LANDED** `db4d8b3a` (v2 foundation); **SPLIT children CARRY FORWARD** to companion plan cycles 3–4 — PDR-076a (identity tuple) + PDR-076b (body-file frontmatter) author from Ferny's `/tmp` prestage. M1 Gate 2: MET via stand-down (v2 substrate is foundation; SPLIT is doctrine refinement). | PDR-076a + PDR-076b both land per companion plan cycles 3–4 |
 | WS-3 | ADR-185 v2 comms-event auto-acceptance metadata | **LANDED** `5320d6b0` | Renderer wiring (separate executable plan) |
 | WS-4 | Recursion-of-doctrine pattern | **LANDED** `c097bbb3` | PDR promotion on 2nd cross-session instance |
 | WS-5 | substrate-pointer-read-as-current-state pattern v2 | **LANDED** `8a99ed35` (Mistbound Cycle #2) — 6 instances D1–D6 absorbed; Wilma SAFE-WITH-CONDITIONS verdict folded | (closed) — 3 unexposed edge cases tracked as v3 candidates in pending-graduations |
-| WS-6 | Marshal-as-cycle-discipline (PDR-077) | **DRAFT-IN-FLIGHT, REVIEW-CONVERGED** — Charcoal authored draft in `/tmp` at 16:14:10Z; **3 review rounds complete** (R1 docs-adr-expert; R2 3-way assumptions+wilma+betty; R3 3-way re-engagements + final docs-adr-expert GO on marshal-request with citation-discipline clean); 7 R3 SHOULD-ABSORB items + 1 Director-verdict item pending Charcoal re-engagement → marshal-request. Review-trail in `/tmp/charcoal-pdr077-postresume-fanout-synthesis.md` (session-local; not durable substrate). **2nd worked instance now in evidence** (Mistbound 4-commits ~14 min by git author timestamps; handoff §4 stated 22 min). | PDR-077 lands with role definition + cycle protocol + gate-singleton invariant + throughput observation + standing-duty intersection + PDR-063/PDR-064 cross-references |
-| WS-7 | PR #108 SonarCloud + CodeQL clearance | **PENDING (CLAIMED, AWAITING EXECUTION)** — PR #108 OPEN/MERGEABLE; CodeQL PASSING; SonarCloud + run-quality-gates FAILING. Scorched author claim `4e6e18b2` ACTIVE (R2 mechanical Sonar cures on 4 files in graph-ingest + sdks, claimed 19:07:14Z); Mistbound marshal claim `00375e07` ACTIVE (claimed 19:33:07Z). Owner-directed 'hygiene-then-push' verdict not yet executed; awaiting Scorched re-engagement | PR #108 SonarCloud + run-quality-gates flip GREEN and merge becomes possible |
-| WS-8 | Claude self-modification authz cure-shape ratification | **AUTHOR-IN-FLIGHT** (Lanternlit, owner-directed 2026-05-24 'Author it now') — Shape verdict: C2-near-term + C5-long-term + C4-fallback with C2-deferred-until-platform-support. Authoring NOW: ADR codifying the shape + the C2-platform-deferred trigger | ADR drafted + reviewer-converged + marshal-landed |
+| WS-6 | Marshal-as-cycle-discipline (PDR-077) | **STOOD DOWN, CARRY FORWARD** to companion plan cycle 5 — Charcoal authored draft in `/tmp` at 16:14:10Z; 3 review rounds complete (R1 docs-adr-expert; R2 3-way assumptions+wilma+betty; R3 3-way re-engagements + final docs-adr-expert GO); 7 R3 SHOULD-ABSORB items + 1 Director-verdict item pending absorption. Pre-cycle: capture `/tmp` draft + R3 synthesis to durable handoff record (companion plan cycle 1). M1 Gate 5: MET via stand-down. M2 Criterion 2: carries forward. | PDR-077 lands per companion plan cycle 5 |
+| WS-7 | PR #108 SonarCloud + CodeQL clearance | **LANDED + MERGED** — PR #108 MERGED `2026-05-24T20:06:12Z` via merge commit `2462952a957c69d4c614ddb95eb880c105839c1e`. Cure cycles: bundle `340752bb` (Twilit ef315373 CLI bootstrap + Charcoal Cycle Alpha 625fb072 Sonar cures + 93-file owner-directed bundle) + hygiene tail `efe13aae` / `9e8079c8` / `58feff48`. All quality gates GREEN pre-merge: `run-quality-gates` PASS, `SonarCloud Code Analysis` PASS, `CodeQL` (all variants) PASS, `Vercel` PASS. M1 Gate 1: MET. | (closed) |
+| WS-8 | Claude self-modification authz cure-shape ratification | **CARRY FORWARD** to companion plan cycle 8a (R2.1 owner-directed Lanternlit absorption, 2026-05-24). Was AUTHOR-IN-FLIGHT (Lanternlit, owner-directed R1.5 *"Author it now"*); never landed. Shape verdict: C2-near-term + C5-long-term + C4-fallback with C2-deferred-until-platform-support. Authoring relocated to [`post-m1-attestation-tidy-up.plan.md`](post-m1-attestation-tidy-up.plan.md) cycle 8a. | ADR-187 lands per companion plan cycle 8a |
 | WS-9 | Twilit ST FM-2 P2 plan-Wilma verdict + cure | **LANDED** `43e09287` (Mistbound Cycle #1) — watcher-staleness consumer + CollaborationAgentId schema dedupe; knip RED→GREEN | (closed) |
 | WS-10 | Heartbeat contract durable mechanism | **NOT-M1-GATED, PENDING** — INTERIM live (`narrative` comms event with `tags: ["heartbeat"]` per ADR-183). Durable substrate = 3 sub-components: (a) `last_heartbeat_at` schema field; (b) `pnpm agent-tools:heartbeat` CLI wrapper (shape spec'd by Mistbound R1.4 contribution — see WS-10 frontmatter for full shape); (c) lifecycle.event_type='heartbeat' per pending ADR-186. Per-beat `--lane` + `--focus` MUST come from agent each call, NOT be cached (silent-staleness anti-pattern). | Schema field + CLI wrapper + claim auto-rebalance protocol shipped |
-| WS-11 | Heartbeat doctrine bundle (PDR-078 + ADR-186 + thin SKILL) | **PENDING (BUNDLE-SHAPE-RATIFIED, E4 RESOLVED)** — Lanternlit; 5-reviewer convergence on RE-SHAPE; E4 RESOLVED via PDR/ADR portability distinction (R1.5 2026-05-24): PDR-078 SHA-free portable principle; ADR-186 SHAs/UUIDs allowed as repo-bound phenotype. Authoring ready. | PDR-078 (SHA-free) + ADR-186 (SHAs OK) + thin SKILL + reciprocal §Related amendments authored + round-2 reviewer convergence + owner ratification + marshal-landed |
+| WS-11 | Heartbeat doctrine bundle (PDR-078 + ADR-186 + thin SKILL) | **STOOD DOWN, CARRY FORWARD** to companion plan cycles 6–8 — 5-reviewer convergence on RE-SHAPE; E4 RESOLVED via PDR/ADR portability distinction (R1.5 2026-05-24). PDR-078 SHA-free portable principle; ADR-186 SHAs/UUIDs allowed as repo-bound phenotype. Interim mechanism (`narrative` + `tags: ["heartbeat"]`) carried session-traffic without incident. M1 Gate 5: MET via stand-down. M2 Criterion 4: carries forward. | Per companion plan cycles 6 (PDR-078) + 7 (ADR-186) + 8 (thin SKILL + reciprocal amendments) |
 
-| WS-12 | PDR-079 PDR-vs-ADR portability distinction (NEW R1.5) | **AUTHOR-IN-FLIGHT** — Lanternlit (owner-directed 2026-05-24). New PDR codifying owner-articulated portability constraint (PDRs portable, no SHAs; ADRs repo-bound, SHAs allowed; SHA-in-PDR = misclassification signal). Co-cure: scope `no-moving-targets` rule strictly to portable surfaces (PDRs + rules + patterns), not ADRs. | PDR-079 + rule scope-update authored + reviewer-converged + marshal-landed |
+| WS-12 | PDR-079 PDR-vs-ADR portability distinction | **CARRY FORWARD** to companion plan cycle 5a (R2.1 owner-directed Lanternlit absorption, 2026-05-24). Was AUTHOR-IN-FLIGHT (Lanternlit, owner-directed R1.5); never landed. Co-cure: scope `no-moving-targets` rule to portable surfaces (PDRs + rules + patterns), not ADRs. Authoring relocated to [`post-m1-attestation-tidy-up.plan.md`](post-m1-attestation-tidy-up.plan.md) cycle 5a. | PDR-079 + rule scope-update land per companion plan cycle 5a |
 
 **Post-WS commits since `ccc47de2`** (recorded for branch hygiene, not
-WS-changing; newest-first ordering matches `git log`): `5fedf9a4`
-(ink-testing-library TUI test refactor) ← HEAD; `82afc0a8`
-(reduceRefreshState controller wire); `62def8d3` (reduceRefreshState
-pure unit tests). Current branch HEAD: `5fedf9a4`.
+WS-changing; newest-first ordering matches `git log`). HEAD-on-main
+post-merge: `2462952a` (PR #108 merge commit). HEAD-on-feature-branch
+post-merge / pre-pause: `58feff48` (chore(agent): land collaboration
+state cleanup) — followed by `9e8079c8` (chore(sonar): mirror cpd
+exclusions for automatic analysis) + `efe13aae` (refactor(sonar):
+reduce pr 108 cpd duplication) + bundle `340752bb` + earlier
+session-substrate commits. Current local + origin: in sync.
 
 ## M1 — Safe-Pause Milestone Criteria
 
-**M1 is the near-term target.** When all 5 gates hold, the **Safe-Pause
-Attestation** broadcasts and the team pivots focus to EEF First Feature
-delivery. M1 means: pivot-ready, no stranded work, EEF-merge-blocking
-substrate cleared.
+**M1 ACHIEVED 2026-05-24T20:09:10Z.** Attestation broadcast `2849b623`
+emitted by Director Seaworthy. All 5 gates MET. Team pivots focus to
+EEF First Feature delivery on owner unpause.
 
-Each gate carries a current MET / PENDING marker.
+### Attestation discharge
 
-### Gate 1 — WS-7 GREEN — **PENDING (CLAIMED, AWAITING EXECUTION)**
+| Field | Value |
+|-------|-------|
+| Discharging actor | Seaworthy Navigating Beacon / claude / claude-opus-4-7 / `6966d4` (M1 Gate Monitor duty per §Roles + triggers) |
+| Broadcast event ID | `2849b623-5026-4e9d-9938-7ebaffb727fd` |
+| Broadcast timestamp | `2026-05-24T20:09:10.000Z` |
+| Owner ratification | Direct: *"we have completed M1"* (2026-05-24 post-merge turn) |
+| Source body | `/tmp/seaworthy-m1-safe-pause-attestation.md` (capture-to-durable: companion plan cycle 1) |
 
-PR #108 quality gate clears. PR #108 is the substrate-blocker for the
-EEF merge path; pausing with it still red strands all EEF graph-substrate
-work behind a closed merge gate.
+Each gate carries a MET marker with terminal-state evidence.
 
-*Current state*: PR #108 OPEN, MERGEABLE. CodeQL PASSING. SonarCloud
-and run-quality-gates FAILING. **ACTIVE CLAIMS HELD**: Scorched
-Tempering Kiln author claim `4e6e18b2` (opened 2026-05-23 19:07:14Z,
-R2 mechanical Sonar cures on 4 files: `eef-evidence-grounded-lesson-plan-messages.ts`,
-`graph-corpus-sdk/src/index.ts`, `graph-ingest/src/source-path/index.ts`,
-`graph-ingest/src/turtle/index.ts`); Mistbound Hiding Threshold marshal
-claim `00375e07` (opened 19:33:07Z). The work IS owned end-to-end.
-Owner-directed via Seaworthy tick #2 19:28:47Z: "commit hygiene tranche
-then push" — verdict not yet executed.
+### Gate 1 — WS-7 GREEN — **MET ✅**
 
-*What closes it*: Scorched re-engages → executes the R2 cure (S7735
-ternary flip + S7763 export-from collapse + S7781×4 replaceAll + S7750
-findLast per claim intent) + commit-hygiene tranche → marshal-cycles
-via Mistbound → push → gates flip GREEN.
+PR #108 quality gate cleared. PR #108 was the substrate-blocker for
+the EEF merge path; with it now MERGED, the EEF graph-substrate work
+is unblocked.
 
-### Gate 2 — WS-2 SPLIT children land — **PENDING (OWNER-VERDICT RECEIVED, AWAITING FERNY EXECUTION)**
+*Terminal evidence*: PR #108 **MERGED** `2026-05-24T20:06:12Z` via
+merge commit `2462952a957c69d4c614ddb95eb880c105839c1e`. All quality
+gates GREEN on pre-merge HEAD `58feff48`: `run-quality-gates` PASS
+(3m22s), `SonarCloud Code Analysis` PASS (2m21s), `CodeQL`
+javascript-typescript + actions PASS, `Vercel` PASS. Cure path: bundle
+`340752bb` (Twilit `ef315373` CLI bootstrap extraction collapsing
+cpd density 76-92% → 0% on touched files + Charcoal Cycle Alpha
+`625fb072` Sonar cures + 93-file owner-directed bundle) followed by
+hygiene tail `efe13aae` (refactor(sonar): reduce pr 108 cpd
+duplication) + `9e8079c8` (chore(sonar): mirror cpd exclusions for
+automatic analysis) + `58feff48` (chore(agent): land collaboration
+state cleanup). Owner pushed; CI re-graded GREEN; owner merged.
 
-Owner verdicted SPLIT (R1.5 2026-05-24): PDR-076a (identity tuple) +
-PDR-076b (body-file frontmatter) both land via Cycle #6.
+### Gate 2 — WS-2 SPLIT children land — **MET (via stand-down)**
 
-*Current state*: Owner verdict received and recorded R1.5
-(2026-05-24). Ferny's partition prestage at
-`/tmp/ferny-ws2-partition-prestage-synthesis.md` is 3-way-fan-out-
-converged with paste-ready blocks for both child PDRs. Cascade §2
-body-file-adjacency overlap with §5 cured by partition shape. Cycle #6
-unblocked; awaiting Ferny re-engagement to author both child PDRs.
+*Terminal evidence*: PDR-076 v2 foundation already LANDED at
+`db4d8b3a`; agents operated under v2 substrate without confusion all
+session. SPLIT children (PDR-076a + PDR-076b) are doctrine refinement
+of an already-foundation substrate; **stood down to companion plan
+cycles 3–4**. Pre-cycle hygiene gate: capture Ferny's `/tmp` prestage
+to durable handoff record (companion plan cycle 1). Stand-down impact:
+zero on EEF; zero on team operation across this session.
 
-*What closes it*: Ferny resumes Cycle #6 → authors PDR-076a + PDR-076b
-from prestage blocks → marshal-cycle via Mistbound → both land →
-landed PDR-076 v2's open-decision marker is removed (or PDR-076 is
-archived if SPLIT children fully supersede). **Stand-down authority**:
-Owner (if WS-2 SPLIT itself is to be parked, which is now contrary to
-the verdict; full stand-down requires owner re-direction).
+*Carry-forward action*: companion plan cycles 3 (PDR-076a) + 4
+(PDR-076b) author both from the captured Ferny prestage.
 
 ### Gate 3 — WS-5 pattern file landed — **MET ✅**
 
@@ -879,67 +1009,44 @@ staleness consumer + CollaborationAgentId schema dedupe; knip
 RED→GREEN. FM-2 (session-open environment freshness check) substrate
 complete.
 
-### Gate 5 — All marshal-queued cure-bundles land or stand down — **PARTIALLY MET, PENDING**
+### Gate 5 — All marshal-queued cure-bundles land or stand down — **MET ✅**
 
-*Current queue state* (per Mistbound's compaction handoff §8 +
-post-handoff observation):
+*Queue terminal state inventory* (per attestation `2849b623`):
 
-- **Mistbound's 4-cycle marshal arc** (`43e09287` / `8a99ed35` /
-  `499d163b` / `ccc47de2`): **LANDED**. Closed.
-- **WS-11 heartbeat doctrine bundle** (Lanternlit): **IN-FLIGHT** —
-  PDR-078 + ADR-186 + thin SKILL bundle not yet authored; uncommitted
-  SKILL §0.5 fat-draft in working tree (Director-gated). Bundle shape
-  ratified by 5-reviewer convergence; Fred-vs-owner-verdict tension on
-  citation cure path unresolved.
-- **Queue-Cycle #5** (Cycle #1 verdict-absorption compound: Charcoal
-  F2/F3/F5 + Betty CONDITION + 2 code-expert findings + META API-shape
-  drift): awaiting any-implementer pickup (hat-switch dissolved per
-  Twilit ST tick #3 fred citation).
-- **Queue-Cycle #6** (WS-2 SPLIT): **BLOCKED-ON-OWNER-VERDICT** (see
-  Gate 2).
-- **PDR-077** (Charcoal's WS-6 doctrine home): **DRAFT-IN-FLIGHT,
-  REVIEW-CONVERGED** — draft in `/tmp`; 3 review rounds complete
-  (final docs-adr-expert GO with citation-discipline clean); 7 R3
-  SHOULD-ABSORB items + 1 Director-verdict item pending Charcoal
-  re-engagement → marshal-request.
-- **PR #108 cure** (WS-7): **CLAIMED, AWAITING EXECUTION** — Scorched
-  author claim `4e6e18b2` + Mistbound marshal claim `00375e07` both
-  active; awaiting Scorched re-engagement.
-- **Marshal hygiene cycle** (per Mistbound handoff §8 6th queue
-  entry — was missing from R1 enumeration): **PENDING** — accumulated
-  working-tree state from second-wave reviewer dispatch + credit-pause
-  peer activity + R1+R1.1+R1.2 plan edits + comms-seen files + comms
-  events + memory drift. Marshal performs hygiene cycle on next
-  tree-green window per `feedback_marshal_queues_comms_and_memory_state`
-  standing duty.
-- **Queue-Cycle #7** (C-12 dedupe follow-up — pre-existing duplicate
-  private `agentIdSchema` in two files): NON-BLOCKING; deferred to
-  natural follow-on cycle.
+| Entry | Terminal state | Evidence |
+|-------|----------------|----------|
+| Mistbound's 4-cycle marshal arc | LANDED | `43e09287` / `8a99ed35` / `499d163b` / `ccc47de2` |
+| PR #108 cure (WS-7) | LANDED + MERGED | bundle `340752bb` + hygiene tail `efe13aae` / `9e8079c8` / `58feff48`; merge `2462952a` |
+| Marshal hygiene cycle | LANDED | absorbed into bundle `340752bb` (93 files; owner-directed single commit) |
+| Twilit `ef315373` (CLI bootstrap extraction) | LANDED | bundle `340752bb`; PR-108 cpd 76-92% → 0% on touched files |
+| Charcoal Cycle Alpha `625fb072` | LANDED | bundle `340752bb`; 5 cure-types / 7 sites |
+| WS-11 heartbeat doctrine bundle | STOOD DOWN → companion plan cycles 6–8 | Bundle shape ratified; interim mechanism carried session-traffic without incident |
+| PDR-077 (Charcoal R3-absorption) | STOOD DOWN → companion plan cycle 5 (after capture in cycle 1) | Empirical discipline proven 3+ times; codification is the carry-forward |
+| Queue-Cycle #5 (verdict-absorption compound) | STOOD DOWN | Unclaimed all session; Director-default per stand-down authority table; no downstream dependency |
+| Queue-Cycle #6 (WS-2 SPLIT) | STOOD DOWN → companion plan cycles 3–4 | Coextensive with Gate 2 stand-down |
+| Queue-Cycle #7 (C-12 dedupe) | STOOD DOWN | Already plan-classified non-blocking / deferred |
+| Charcoal Cycle Beta (S5443×14 + consistency sweep) | STOOD DOWN → companion plan cycle 12 | Pause broadcast `e4f680c6` covered; Sonar gate GREEN without this cycle |
+| Charcoal Cycle Gamma (resolveSelfIdentity + eslint cpd-exclusion) | STOOD DOWN → companion plan cycle 13 | Pause broadcast `e4f680c6` covered; Sonar gate GREEN without this cycle |
+| Twilit Cycle 3 (audit-shaped test deletion) | STOOD DOWN → companion plan cycle 14 | Pause broadcast `e4f680c6` covered; test-debt cleanup independent of milestone |
 
 Note on Cycle terminology: "Mistbound Cycle #N" refers to commits
-landed in Mistbound's marshal arc (the 4-cycle arc above);
-"Queue-Cycle #N" refers to pending items in this queue. Disambiguated
-in R1.2 to avoid overload.
-
-*What closes it*: each queue entry either lands (marshal cycle) or is
-explicitly stood down (handoff record + comms broadcast) so the next
-session does not inherit ghost-queue. Owner direction can also stand
-items down explicitly (e.g., "park PDR-077 until next session" with
-named trigger).
+landed in Mistbound's marshal arc; "Queue-Cycle #N" refers to
+queue entries; "companion plan cycle N" refers to cycles in
+[`post-m1-attestation-tidy-up.plan.md`](post-m1-attestation-tidy-up.plan.md).
 
 ### Roll-up
 
 | Gate | State | Evidence |
 |------|-------|----------|
-| 1 — WS-7 GREEN | **PENDING (CLAIMED)** | PR #108 gates still red; Scorched `4e6e18b2` + Mistbound `00375e07` claims active; awaiting execution |
-| 2 — WS-2 owner-decision | **PENDING (BLOCKED)** | Partition-cure shape needs owner sight |
+| 1 — WS-7 GREEN | **MET ✅** | PR #108 MERGED via merge commit `2462952a` (`2026-05-24T20:06:12Z`); all CI gates GREEN on `58feff48` |
+| 2 — WS-2 SPLIT children | **MET (stand-down)** | v2 foundation landed `db4d8b3a`; SPLIT children carry-forward to companion plan cycles 3–4 |
 | 3 — WS-5 pattern landed | **MET ✅** | `8a99ed35` |
 | 4 — WS-9 verdict + cure | **MET ✅** | `43e09287` + Wilma verdict |
-| 5 — Queued bundles closed | **PARTIALLY MET** | Mistbound arc landed; WS-11 + Cycle #5 + Cycle #6 + PDR-077 + WS-7 cure all in-flight or blocked |
+| 5 — Queued bundles closed | **MET ✅** | All queue entries terminal-state — see §Gate 5 queue terminal state inventory above |
 
-Each gate is a strand. Cutting any of them mid-flight produces recovery
-cost in the next session. Holding all five is the bar for "safe pivot
-to EEF without leaving knot-ends".
+**All gates MET. Attestation broadcast `2849b623` emitted by Director
+Seaworthy at `2026-05-24T20:09:10Z`. Team pivots to EEF First Feature
+delivery on owner unpause.**
 
 ## M2 — Completion Milestone Criteria
 
@@ -997,24 +1104,27 @@ is deferred work.)
 authored; ADR-186 first-write hook-blocked on citation pattern;
 Fred-vs-owner-verdict tension on citation cure path surfaced unresolved.
 
-### Criterion 5 — Observable next-window evidence — **NOT YET TESTED**
+### Criterion 5 — Observable next-window evidence — **BLOCKED ON NEXT SESSION**
 
 The next team window applies the substrate and either (a) produces no
 new substrate-stale-pointer instances OR (b) produces a new cure-shape
 that the program absorbs as a new workstream.
 
-*Current state*: requires team to return post-Safe-Pause-pivot. Cannot
-be tested until Safe-Pause holds and the next session opens.
+*Current state*: M1 achieved + pause in force; cannot test until owner
+unpauses + next team window opens. Companion plan
+`current/post-m1-attestation-tidy-up.plan.md` cycles 1–13 land the
+remaining doctrine + infrastructure substrate that determines whether
+Criteria 2, 3, 4 close before Criterion 5 is testable.
 
 ### Roll-up
 
 | Criterion | State | Evidence / Next |
 |-----------|-------|-----------------|
-| 1 — Safe-Pause held | **PENDING** | 2 of 5 gates MET |
-| 2 — WS-6 PDR-077 landed | **DRAFT-IN-FLIGHT** | Awaiting Charcoal re-engagement |
-| 3 — WS-8 ADR-or-deferral landed | **CODIFICATION-PENDING** | Owner shape-verdict received; author unassigned |
-| 4 — WS-11 bundle landed | **PENDING** | Bundle shape ratified; authoring blocked on citation-cure tension |
-| 5 — Next-window evidence | **NOT YET TESTED** | Requires post-pivot session |
+| 1 — Safe-Pause held | **MET ✅** | Attestation `2849b623` 2026-05-24T20:09:10Z; all 5 gates terminal-state |
+| 2 — WS-6 PDR-077 landed | **CARRY FORWARD** | Companion plan cycle 5 (preceded by cycle 1 capture-to-durable) |
+| 3 — WS-8 ADR-or-deferral landed | **CARRY FORWARD** | Lanternlit lane absorbed R2.1 into companion plan cycle 8a; ADR-187 |
+| 4 — WS-11 bundle landed | **CARRY FORWARD** | Companion plan cycles 6 (PDR-078) + 7 (ADR-186) + 8 (thin SKILL + reciprocal amendments) |
+| 5 — Next-window evidence | **BLOCKED ON NEXT SESSION** | Untestable until owner unpauses + next team window opens |
 
 Completion is observable, not ceremonial: the next team window runs
 faster and produces less doctrine debt. If it does not, the program
@@ -1026,12 +1136,13 @@ This section answers the question owner posed in R1: "where we are
 going, and the precise path between" current state and the next
 milestone.
 
-**The next milestone is M1 — Safe-Pause.** M2-pursuit work is
-deferred until M1 holds. Every action in this section is tagged
-**M1-CRITICAL** (must close to reach M1), **M1-INCIDENTAL** (closes a
-queue entry on Gate 5; stand-down is acceptable cure), or
-**M2-PURSUIT** (does not feed M1; deferred unless owner directs
-otherwise).
+**M1 — Safe-Pause ACHIEVED 2026-05-24T20:09:10Z.** Phases 1, 2, and 3
+of this section are CLOSED. Phase 4 (M2-PURSUIT) carries forward via
+the companion plan
+[`post-m1-attestation-tidy-up.plan.md`](post-m1-attestation-tidy-up.plan.md).
+The original action tags (**M1-CRITICAL** / **M1-INCIDENTAL** /
+**M2-PURSUIT**) are preserved below as audit trail of the path that
+reached M1.
 
 ### Roles + triggers (added R1.3)
 
@@ -1040,12 +1151,37 @@ actor but also a **trigger** (who pings whom when) and a **stand-down
 authoriser** (who can decide "this entry is stood down"). R1.3 names
 these explicitly.
 
-**M1 Gate Monitor**: **Director Seaworthy Navigating Beacon**. The
+**M1 Gate Monitor**: **Director Seaworthy Navigating Beacon
+(DISCHARGED 2026-05-24T20:09:10Z via attestation `2849b623`)**. The
 duty: include M1 gate status (G1/G2/G3/G4/G5 MET / PENDING) in every
 Director tick narrative. When all 5 gates MET, attestation broadcast
 triggers (P3.E1). The duty transfers to incoming Director on rotation
 per PDR-064 two-moments. If Director leaves before transfer, the
 duty falls to whichever agent next holds Director authority.
+
+**Verification primitive (R1.7 fold, ratified in R2)**. The M1 Gate
+Monitor MUST verify gate state against actual artefacts, never against
+this plan body's own enumeration:
+
+| Gate class | Verification primitive |
+|------------|------------------------|
+| Quality-gate landing (e.g. Gate 1) | `gh pr checks <N>` + `gh pr view <N> --json state,mergeable,statusCheckRollup` |
+| Commit landing (e.g. Gate 3/4) | `git log --oneline -<N>` + verify named SHA present on the relevant branch |
+| Doctrine landing (e.g. file presence) | `test -f <path>` + `head -<N> <path>` for content verification |
+| Queue entry terminal state (Gate 5) | Comms-event stream search for stand-down broadcasts + landing-broadcast confirmations |
+
+**The failure mode this primitive cures**: substrate-pointer-read on
+the plan body's gate enumeration itself. The plan is a snapshot; live
+state is the artefacts. Reading the plan as authoritative is the same
+failure mode WS-5 names, fired on the plan that names the pattern —
+exact recursion-of-doctrine instance. Worked precedent: Director
+Seaworthy 2026-05-24 ~16:30Z (post-bundle-land) read the plan's Gate 5
+queue enumeration as live work-state and concluded *"M1 NOT achieved
+bar merge"* across multiple turns without running `gh pr checks 108`;
+owner correction *"forget ceremony, measure reality"* applied the
+verification primitive; CI was GREEN; M1 was achievable. The
+verification-primitive paragraph is the structural cure. See
+§Emergent Observations E7 for the full worked-instance trace.
 
 **Surfacing-to-owner duty**: **Director Seaworthy** is responsible
 for surfacing owner-decision items (P1.C1 partition-cure verdict; E3
@@ -1077,7 +1213,9 @@ session without owner response, Director escalates with explicit
 | Owner / E3 graduation direction | Director surfaces only if E3 promotion trigger fires (2nd worked instance accumulates OR owner explicitly queries). Not a forcing function. |
 | Owner / parallel-writer coordination (Gap 5) | Director surfaces once; if no response within 1 active team session, plan continues with current free-for-all multi-writer pattern and Gap 5 is captured as a deferred-cure pending future evidence. |
 
-### Phase 1 — M1-CRITICAL items (the only must-do work for the next milestone)
+### Phase 1 — M1-CRITICAL items (the only must-do work for the next milestone) — **CLOSED 2026-05-24**
+
+All P1.* items reached terminal state. Audit trail preserved below.
 
 **P1.B1 — Scorched executes PR #108 R2 cure under Mistbound marshal — M1-CRITICAL → Gate 1**
 
@@ -1138,7 +1276,9 @@ session without owner response, Director escalates with explicit
   tree-green window under Mistbound's marshal authority.
 - Unlocks: **Gate 5 MET**.
 
-### Phase 2 — M1-INCIDENTAL items (land-or-stand-down branching)
+### Phase 2 — M1-INCIDENTAL items (land-or-stand-down branching) — **CLOSED 2026-05-24**
+
+All P2.* items reached terminal state via stand-down (companion plan carries forward). Audit trail preserved below.
 
 Each item below closes a queue entry on Gate 5 either way. Landing
 *also* feeds M2; stand-down is faster to M1. The branch is owner-
@@ -1195,9 +1335,9 @@ or-Director-routed per item.
 - Recommendation: **STAND-DOWN by default**; LAND only as genuine
   idle-fill if implementer truly idle and other work blocked.
 
-### Phase 3 — M1 attestation + EEF pivot
+### Phase 3 — M1 attestation + EEF pivot — **P3.E1 EXECUTED 2026-05-24T20:09:10Z**
 
-**P3.E1 — Director (Seaworthy, as M1 Gate Monitor) → Safe-Pause Attestation broadcast**
+**P3.E1 — Director (Seaworthy, as M1 Gate Monitor) → Safe-Pause Attestation broadcast** — **EXECUTED**. Broadcast event `2849b623-5026-4e9d-9938-7ebaffb727fd`. Gate-by-gate evidence captured in §M1 — Safe-Pause Milestone Criteria above. P3.E2 EEF pivot deferred to owner unpause.
 
 - Trigger: all 5 M1 gates MET (Gates 3 + 4 already MET; Gates 1, 2,
   5 pending).
@@ -1216,12 +1356,16 @@ See §Relationship to EEF First Feature Delivery for lane-by-lane
 state and next-actions (WS4.5 unblocked, t2-zod-loader ready, WS2.3
 parser-integration clean pickup, etc.).
 
-### Phase 4 — M2-PURSUIT items (mostly deferred until post-M1; some now in-flight per R1.5 owner direction)
+### Phase 4 — M2-PURSUIT items — **CARRY FORWARD via companion plan**
 
-These items do NOT feed M1 directly. They feed M2 (Completion
-Milestone). **Do not let them crowd into the M1 critical path.** Per
-R1.5 owner direction (2026-05-24): WS-8 + WS-12 are AUTHOR-IN-FLIGHT
-NOW (parallel to M1 work, doesn't block M1).
+M1 is achieved; Phase 4 carries forward. The canonical executable
+surface for the M2-PURSUIT items is
+[`post-m1-attestation-tidy-up.plan.md`](post-m1-attestation-tidy-up.plan.md)
+(13-cycle linear sequence). The companion plan covers: PDR-076 SPLIT
+children, PDR-077 R3-absorption, WS-11 bundle, comms-watch redesign
+(§P5.W1 promoted), and test-debt + Sonar residue. WS-8 + WS-12 remain
+AUTHOR-IN-FLIGHT in Lanternlit's lane (not in the companion plan;
+tracked here as P4.C2 + P4.C3 below).
 
 **P4.C2 — WS-8 ADR-or-deferral codification — M2-PURSUIT, AUTHOR-IN-FLIGHT → Criterion 3**
 
@@ -1343,7 +1487,11 @@ implementation** (per [`metacognition.md`](../../../directives/metacognition.md)
 explicit manual step into implicit CLI / mechanism behaviour, reducing
 resume-protocol overhead × team-size × time.
 
-### P5.W1 — Comms-watch seen-state redesign
+### P5.W1 — Comms-watch seen-state redesign — **PROMOTION-ELIGIBLE 2026-05-24** (M1 attestation fired)
+
+**Executable form**: companion plan
+[`post-m1-attestation-tidy-up.plan.md`](post-m1-attestation-tidy-up.plan.md)
+cycles 9 (WS1 CLI auto-seed) + 10 (WS2 storage redesign) + 11 (WS3 cleanup).
 
 **Problem (four dimensions)**:
 
@@ -1629,6 +1777,50 @@ fired.
 *Promotion trigger*: ALREADY FIRED. PDR-077 draft in `/tmp` awaiting
 Charcoal re-engagement. Tracked via WS-6, not a separate workstream.
 
+### E7 — Substrate-pointer-read on the plan's own gate enumeration (recursion-of-doctrine, post-bundle)
+
+*Evidence*: Director Seaworthy Navigating Beacon (`6966d4`) worked
+instance, 2026-05-24 ~16:30Z post-bundle-land. After the M1-Pause
+bundle `340752bb` landed, Director read the plan's §M1 Safe-Pause
+Milestone Criteria + Gate 5 queue enumeration as live work-state and
+concluded *"M1 NOT achieved bar merge"* across multiple turns. Owner
+correction: *"most of those agents closed out a while back, I don't
+trust that analysis. Make a concise list of the actual work that
+remains and what impact that work is intended to bring about, and
+compare that to the state of the actual repo: forget ceremony,
+measure reality."* Director ran `gh pr checks 108` for the first
+time, found ALL gates GREEN, inverted the analysis: M1 achievable bar
+merge.
+
+*Pattern*: this is exactly the substrate-pointer-read failure mode
+WS-5 names — *the snapshot is not the live state* — fired on the plan
+that names the pattern. **Recursion-of-doctrine instance**: WS-4
+recursion-of-doctrine pattern (LANDED `c097bbb3`) firing on a plan
+whose §Risks Risk #2 explicitly warns about the same failure mode on
+this plan body. The doctrine warned of itself; the warning did not
+prevent the instance.
+
+*Graduation-target*: structural cure landed in this refinement R2
+under §Roles + triggers → "**Verification primitive (R1.7 fold)**" —
+the M1 Gate Monitor MUST verify gate state against actual artefacts
+(`gh pr checks`, commit log, file presence, comms-events), NEVER
+against the plan body's own enumeration. R1.7 was originally listed
+as carry-forward item 6; folded into R2 because the cure shape was
+clear and the worked instance evidence is in-band.
+
+*Promotion trigger*: ALREADY FIRED in R2. Substrate cure is
+in-tree as the verification-primitive paragraph above. Next-window
+agents reading the M1 Gate Monitor section receive the cure
+automatically; no further graduation needed unless cure proves
+insufficient (next worked instance of same failure mode).
+
+*Meta-meta-observation*: this Emergent Observation entry itself,
+authored by the same Director who executed the failure mode, captures
+the metacognitive recovery loop as worked evidence. The plan now
+carries both the warning (Risk #2) and the cure (verification
+primitive) plus a worked-instance trace (this entry) — three pieces
+of substrate from one event.
+
 ## Plan Coordination — co-authoring model (sidebar)
 
 **Adopted 2026-05-24 by owner direction.** Resolves R1.3 Gap 5
@@ -1843,29 +2035,27 @@ Per [`templates/components/lifecycle-triggers.md`](../../templates/components/li
    between reads. Mitigation: every WS row carries a commit SHA when
    landed; absence of SHA means "not landed yet, check live state"; the
    Plan Refinement Log records when the snapshot was last refreshed.
-3. **M1 attestation flake** — M1 (Safe-Pause) gates are checkable but
-   require the next agent to actually read them. Mitigation: Lifecycle
-   Trigger at session-open points all `agentic-engineering-enhancements`
-   sessions at the Workstream Roll-up + M1 Criteria + Path Forward
-   sections. R1 added per-gate MET / PENDING markers so the read is
-   single-glance. R1.1 added explicit M1/M2 priority asymmetry so the
-   reader cannot confuse M2-pursuit work with M1-blocking work.
+3. **M1 attestation flake** — **MITIGATED 2026-05-24 (R2)**. Original
+   risk: M1 gates are checkable but require the next agent to actually
+   read them. Worked-instance evidence in R2 §Emergent Observations E7
+   shows the risk fired in-session (Director read plan enumeration not
+   live artefacts). Structural cure landed in R2 §Roles + triggers
+   "Verification primitive (R1.7 fold)" — M1 Gate Monitor MUST verify
+   gate state against actual artefacts. Risk re-classifies from
+   detection-reliant to cure-reliant; re-fires only if verification
+   primitive is not applied by next M1 Gate Monitor (a different,
+   smaller failure mode).
 4. **Citation-policy reconciliation (E4) blocking WS-11 indefinitely** —
-   the Fred-vs-owner-verdict tension on ADR-186 cure path must resolve
-   before WS-11 bundle authoring can resume. If left unresolved, WS-11
-   stalls indefinitely, blocking Completion Criterion 4 + contributing
-   to Safe-Pause Gate 5 staying open. Mitigation: surface tension to
-   Seaworthy + owner explicitly as part of Path Forward A1
-   prerequisite; do not silently choose one verdict.
-5. **PR #108 cure-claim execution stall** — WS-7's cure-claim is held
-   end-to-end (Scorched author `4e6e18b2` + Mistbound marshal `00375e07`)
-   but execution pending. Risk: if Scorched does not re-engage, the
-   active claim ages without closing and Gate 1 remains PENDING
-   indefinitely. Mitigation: Director Seaworthy monitors Scorched's
-   heartbeat cadence; if the claim ages past the agreed staleness
-   threshold, surface to Director with explicit "re-engagement signal
-   OR rebalance to follow-on implementer OR stand-down" framing. The
-   failure mode is execution timing, not author assignment.
+   **RESOLVED 2026-05-24 (R1.5)** via PDR/ADR portability distinction
+   (PDR-078 SHA-free + ADR-186 SHAs/UUIDs allowed). Original tension
+   dissolved; WS-11 bundle authoring path is clear; carries forward to
+   companion plan cycles 6–8.
+5. **PR #108 cure-claim execution stall** — **RESOLVED 2026-05-24**
+   via PR merge. PR #108 MERGED at `2026-05-24T20:06:12Z` via merge
+   commit `2462952a957c69d4c614ddb95eb880c105839c1e`. Cure cycles
+   landed in bundle `340752bb` + hygiene tail; original Scorched
+   re-engagement risk superseded by owner-directed bundle-and-merge
+   path. WS-7 closed.
 6. **Plan refinement drift between current rev and next-rev** — this
    plan captures state at the latest entry in §Plan Refinement Log
    (currently R1.2, 2026-05-24). State will continue to shift under

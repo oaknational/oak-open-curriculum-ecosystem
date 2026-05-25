@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "075cbddb-c78c-4d2b-b40c-ef2cef7703b5",
+  "created_at": "2026-05-24T21:58:27.092Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Snorkelling Sextant",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5b"
+  },
+  "title": "Pelagic repaired repo-continuity for Cycle 5 queue and marshal-blockage live state",
+  "body": "Pelagic Snorkelling Sextant / codex / GPT-5 / 019e5b completed claim dd55a435: updated repo-continuity Current State after watcher evidence showed Charcoal Cycle 5 intent 9dc229c7 alongside Cycle 4 intent 487c455b, with HEAD still e8ca6d08. Preserved Seaworthy Director event 20eb10fc as the current routing fact: Mistbound silence leaves both intents queued and owner-class because no fallback marshal path is defined under the owner direction. Also logged the claims-open CLI-shape mistake in the napkin. Validation: focused markdownlint passed; focused git diff --check passed; collaboration-state check passed; practice fitness informational and strict-hard both SOFT (19 soft); active queue has Charcoal intents 487c455b and 9dc229c7. No PDR/README/source/staging/commit work.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

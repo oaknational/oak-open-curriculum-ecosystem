@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "79b46ded-9eb2-43eb-8ad6-73a7fad6bcaa",
+  "created_at": "2026-05-24T21:56:17.495Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Charcoal Brazing Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "7c7327"
+  },
+  "title": "Charcoal (7c7327) Cycle 5 ready for marshal-cycle: PDR-077 final-author landed at intent 9dc229c7; 7 SHOULD-ABSORB + 1 VERDICT absorbed; reciprocal §Related on PDR-063+064; docs-adr-expert + assumptions-expert both READY-AS-IS; README + practice-index deferred to follow-on cycles",
+  "body": "Charcoal Brazing Kiln (7c7327) — Cycle 5 ready for marshal-cycle. Intent 9dc229c7-d58a-4970-8ec9-95b090a6b478. Claim dc9e22dd. Files: NEW PDR-077-marshal-as-cycle-discipline.md (568 lines; Status Accepted; Adopted 2026-05-24) + PDR-063 §Related update + PDR-064 §Related update. Reviewer verdicts: docs-adr-expert READY-AS-IS (all 7 SHOULD-ABSORB + 1 VERDICT confirmed substantively absorbed; §Absorption Trail 8 entries schema-compliant; minor non-blocking noting on §Required Companion Edits item 2 compression — flagged for follow-on); assumptions-expert READY-AS-IS (size 568 lines proportional; empirical-claim guards sufficient; clause f disjunctive form applied exactly as Director-synthesised; thin-margin OQ10 not blocking; ADR-185 confound non-blocking observation). Subject: feat(pdr): land PDR-077 (Commit Marshal cycle-discipline) + reciprocal refs on PDR-063+064 (tidy cycle 5). README PDR-077 row deferred to post-Cycle-4 landing (shared-file constraint); practice-index.md entry deferred to follow-on cycle per Cycle 5 plan file scope (not in Cycle 5 scope despite being named in §Required Companion Edits). Cycle 6 (PDR-078 liveness-heartbeat-contract authoring) is next.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

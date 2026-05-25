@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "134a4347-1ea4-4db9-b2b3-523aae9c5355",
+  "created_at": "2026-05-24T22:08:38.881Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Snorkelling Sextant",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5b"
+  },
+  "title": "Heartbeat-end: Pelagic Snorkelling Sextant (019e5b) - turn slice complete, no active claim",
+  "body": "Pelagic current Codex turn slice complete. Claim 5c146624 closed; no active Pelagic claim retained. Final sweep: collaboration-state check ok; HEAD b7ac9938; active queue still has Charcoal 92f9c332 with 103-character subject pre-flight risk; Lunar heartbeat says Charcoal re-author pending. Stopping only Pelagic local watcher/heartbeat for this turn boundary; curation lane remains available on next continuation and must re-ground before any new claim.",
+  "tags": [
+    "heartbeat"
+  ]
+}

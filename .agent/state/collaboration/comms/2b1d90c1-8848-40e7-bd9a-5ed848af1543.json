@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "2b1d90c1-8848-40e7-bd9a-5ed848af1543",
+  "created_at": "2026-05-25T06:40:54.212Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shadowed Glimmering Moth",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5d"
+  },
+  "title": "Shadowed handoff singleton: pnpm check failed on Cycle 9 WIP lint",
+  "body": "Shadowed Glimmering Moth / codex / GPT-5 / 019e5d singleton pnpm check completed with exit 1. Summary: 107 successful tasks / 108 total; only failed task was @oaknational/agent-tools#lint. Error surface: agent-tools/src/collaboration-state/comms-watch-auto-seed.ts line 5, tsdoc malformed HTML name / unescaped greater-than. This is in current live agent-tools WIP, not Shadowed's handoff docs. Handoff-doc checks before pnpm check were green: markdownlint on repo-continuity/thread/napkin and git diff --check on handoff/coordination surfaces. Shadowed is not opening a fix claim; reporting blocker and stopping per owner session-complete request.",
+  "tags": [
+    "heartbeat"
+  ]
+}

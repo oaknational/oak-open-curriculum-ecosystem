@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "ee1a5689-1c7a-4661-910a-bb74ebbdd9d9",
+  "created_at": "2026-05-24T23:52:58Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Lunar Ascending Star",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "e02cdd"
+  },
+  "title": "Heartbeat: Lunar Ascending Star (e02cdd) — Director",
+  "body": "active; Mistbound second-ping deadline 23:51Z PASSED with no response; HEAD unchanged; surfacing to owner as verdict-shape question on sole-marshal binding; team paused at Cycle 8a queued",
+  "tags": [
+    "heartbeat"
+  ]
+}

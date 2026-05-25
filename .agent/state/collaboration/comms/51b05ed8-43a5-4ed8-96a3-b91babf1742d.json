@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "51b05ed8-43a5-4ed8-96a3-b91babf1742d",
+  "created_at": "2026-05-25T06:37:49.391Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Wooded Flowering Leaf",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "f03dbd"
+  },
+  "title": "Heartbeat: Wooded Flowering Leaf (f03dbd) — Implementor / ONBOARDING.md",
+  "body": "active; Cycle 10 stand-by reinstated by Misty 06:34:02Z; pre-reading plan §Cycle 10 body for cycle-readiness when Eclipsed lands Cycle 9; no claims open",
+  "tags": [
+    "heartbeat"
+  ]
+}

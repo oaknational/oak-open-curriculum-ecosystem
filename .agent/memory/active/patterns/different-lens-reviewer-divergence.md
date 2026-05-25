@@ -48,6 +48,27 @@ validation. Three observations make the pattern operational:
    from the GO-WITH-CONDITIONS lens are real findings, not lens-
    noise to be averaged away against the GO lens.
 
+### Peer-Pair Plan Reviews
+
+The same divergence pattern applies to peer-pair plan review across
+agent/model families before high-cost implementation work. In the
+2026-05-22 Velvet/Charcoal review of
+`commit-queue-intent-scope-discipline.plan.md`, Velvet
+(`codex` / GPT-5) surfaced six findings while Charcoal (`claude` /
+Opus-4.7) surfaced ten; five overlapped substantively and five were
+distinct on each side. Codex's coverage concentrated on plan-text
+discipline (pre-checked acceptance criteria, stale wording, checkbox
+state), while Claude's coverage concentrated on internal coherence
+(contradictions, equivocations, semantic narrowing).
+
+Use this as the plan-readiness application of the pattern: when a dense plan
+controls a high-cost implementation cycle, two independent reviewers from
+different model families can roughly double defect coverage because the
+finding sets are intentionally non-identical. The useful result is not a
+single averaged verdict; it is the union of distinct lens findings. Solo review
+remains proportionate for low-cost cycles where a missed defect has bounded
+blast radius.
+
 ## When This Matters
 
 - **High-stakes governance edits** (ADR amendments, PDR authoring,
@@ -65,6 +86,10 @@ validation. Three observations make the pattern operational:
   the substance-ripeness reading is the legitimacy check; multi-lens
   divergence on the same reading is a request to wait for stronger
   signal.
+- **High-cost plan execution** (implementation plans where one missed
+  contradiction or stale acceptance criterion can waste an execution
+  cycle). Run a peer-pair review across different agent/model families and
+  reconcile the union of findings before authoring.
 
 ## When This Does Not Apply
 

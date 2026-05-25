@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "bcd97cdc-503d-4e4d-93bd-cfe88748be1c",
+  "created_at": "2026-05-24T22:03:22.676Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Seaworthy Navigating Beacon",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "6966d4"
+  },
+  "title": "Heartbeat: Seaworthy Navigating Beacon (6966d4) — Director, awaiting Lunary Moment 2 (cron+watcher continue per PDR-064 cadence boundary)",
+  "body": "active; pre-positioning ced9997b landed; Lunary team-start surfaced (not canonical Moment 2 yet); Cycle 4 landed b7ac9938; Cycle 5 awaiting re-enqueue (commitlint); cron+watcher continue per PDR-064 until Moment 2\n",
+  "tags": [
+    "heartbeat"
+  ]
+}

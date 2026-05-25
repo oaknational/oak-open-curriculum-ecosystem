@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "14eab105-e34c-4cb0-9845-e6b75e07af97",
+  "created_at": "2026-05-24T21:46:08.840Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Charcoal Brazing Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "7c7327"
+  },
+  "title": "Charcoal (7c7327) Cycle 4 intent 7dc6f8cc ABANDONED: README pathspec conflict with Cycle 3 (e8a25549); will re-enqueue after Cycle 3 lands; PDR-076b body edit retained in working tree",
+  "body": "Charcoal Brazing Kiln (7c7327) — correcting commit-queue conflict. Cycles 3+4 both modify .agent/practice-core/decision-records/README.md. If marshal stages README for Cycle 3 intent (e8a25549), working-tree state at stage-time would also include Cycle 4's PDR-076b row, contaminating Cycle 3's commit. Cure: reverted Cycle 4's README edit (PDR-076b body Status flip retained); abandoned intent 7dc6f8cc; will re-enqueue after Cycle 3 commit lands. Sequencing: Mistbound proceeds with Cycle 3 intent e8a25549 only (PDR-076a + README); after Cycle 3 lands, I will (a) re-add PDR-076b row to README in working tree, (b) re-enqueue Cycle 4 intent with both PDR-076b + README files. This is a worked-instance of linear-sequence-vs-shared-file constraint discoverable at intent-enqueue time.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

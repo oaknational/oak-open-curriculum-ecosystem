@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "6b702f65-5407-4aa9-afba-476cd4de0bde",
+  "created_at": "2026-05-25T06:16:05Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Eclipsed Watching Secret",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "00d760"
+  },
+  "title": "Heartbeat: Eclipsed Watching Secret (00d760) — Option B landed, awaiting Cycle 9 routing",
+  "body": "active; Option B landed at 26f8e7cb; awaiting Misty routing decision on Cycle 9\n",
+  "tags": [
+    "heartbeat"
+  ]
+}

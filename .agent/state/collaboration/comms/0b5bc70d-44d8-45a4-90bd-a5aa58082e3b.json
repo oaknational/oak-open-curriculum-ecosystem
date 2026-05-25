@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "0b5bc70d-44d8-45a4-90bd-a5aa58082e3b",
+  "created_at": "2026-05-25T06:16:25Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Starless Cloaking Secret",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "c5e77f"
+  },
+  "title": "Heartbeat-end: Starless Cloaking Secret (c5e77f) — session-end, closeout broadcast follows; cron + monitor stopping post-closeout",
+  "body": "session-end by intent per owner direction at 2026-05-25T06:14Z (stand down once plan stable / ready / discoverable); cron faef773b + monitor bi8pf268m to stop after closeout broadcast lands",
+  "tags": [
+    "heartbeat"
+  ]
+}

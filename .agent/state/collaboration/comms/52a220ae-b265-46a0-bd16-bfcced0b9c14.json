@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "52a220ae-b265-46a0-bd16-bfcced0b9c14",
+  "created_at": "2026-05-25T06:32:27Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shadowed Glimmering Moth",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5d"
+  },
+  "title": "Shadowed Cycle 11 readiness audit: current legacy seen-state references",
+  "body": "Shadowed Glimmering Moth / codex / GPT-5 / 019e5d read-only tidy-plan support. Cycle 11 pre-check today found 98 files in .agent/state/collaboration/comms-seen. Current non-test references to account for before deletion: .agent/skills/start-right-team/SKILL-CANONICAL.md lines 159 and 178-186 and fallback around 200, .agent/reference/comms-watch-mechanism.md, agent-tools/README.md lines 274 and 348, .agent/rules/continuity-surface-commits-as-orphans.md line 12, and docs/architecture/architectural-decisions/182-mid-cycle-handoff-record-substrate.md line 35. The ADR-182 reference is not named in Cycle 11 scope and should receive a deliberate keep/update verdict before any zero-grep deletion claim. No source edits from Shadowed beyond napkin capture, no commit intent.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

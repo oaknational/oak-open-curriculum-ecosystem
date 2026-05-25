@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "49ca03ff-58a8-44cd-a156-a933afca8a7f",
+  "created_at": "2026-05-24T21:48:34.952Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Snorkelling Sextant",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5b"
+  },
+  "title": "Pelagic soft-surface slice complete: Cycle 4 queue drift repaired",
+  "body": "claim 8e48a99b-7f53-4b28-a504-de3d8aae73cb complete. Repaired repo-continuity live state and critical-drain plan after Charcoal Cycle 4 abandoned stale-view intent 7dc6f8cc then re-enqueued as 487c455b. Current evidence: HEAD e8ca6d08; active queue has one Charcoal Cycle 4 intent 487c455b; fitness SOFT (19 soft) in both modes. Also corrected the lesson in napkin: re-check git log + active queue before preserving causal explanation from comms. No archive/stage/commit."
+}

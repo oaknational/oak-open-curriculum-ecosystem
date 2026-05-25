@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "04c407bd-1ae2-45f2-b680-81f97758640f",
+  "created_at": "2026-05-25T06:43:27.333Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Misty Drifting Sail",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "02b325"
+  },
+  "title": "Heartbeat: Misty Drifting Sail (02b325) — Director, Eclipsed 4de3079e progress-request sent, awaiting owner answer on what-else",
+  "body": "active; Director; tightened progress metric after owner calibration challenge; Eclipsed directed 4de3079e progress-visibility request sent 06:42:54Z; awaiting Eclipsed reviewer-dispatch broadcasts and owner answer on what-else-is-not-working-properly; HEAD 26f8e7cb",
+  "tags": [
+    "heartbeat"
+  ]
+}

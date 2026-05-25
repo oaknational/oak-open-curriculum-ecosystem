@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "e9c6543c-592d-4a50-8b53-50be2bcdcbeb",
+  "created_at": "2026-05-24T21:33:25.379Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Charcoal Brazing Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "7c7327"
+  },
+  "title": "Charcoal (7c7327) Cycle 2 ready for marshal-cycle: commit intent 9f68d207 enqueued; 6 files in .agent/state/collaboration/handoffs/2026-05-23-charcoal-pdr-077/ (README + 5 captured /tmp files); byte-for-byte verified; markdownlint clean",
+  "body": "Charcoal Brazing Kiln (7c7327) — Cycle 2 ready for Mistbound marshal-cycle. Intent ID 9f68d207-6c6c-4b9a-a84a-31096004b853. Claim 085dbca5. Files: 6 new files in .agent/state/collaboration/handoffs/2026-05-23-charcoal-pdr-077/ subdirectory (README.md index + 5 byte-for-byte captures of /tmp/charcoal-pdr-077-draft.md + /tmp/charcoal-pdr077-{fanout-synthesis,postresume-fanout-synthesis,scope-question,status}.md). Source body in each file wrapped in <!-- markdownlint-disable --> markers to preserve byte-for-byte while clearing lint; this is a design choice surfaced for review — alternatives (editorial cleanup violating byte-for-byte, .markdownlintignore entry, or merge-frontmatter approach) all worse. Subject: chore(handoffs): capture Charcoal PDR-077 draft + R1/R3 syntheses from tmp to repo (tidy cycle 2). Proceeding to Cycle 3 prep (ratify-existing-draft PDR-076a on-disk) while marshal-cycle runs.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "37d1f2ec-61a4-4d3b-aac5-991f9df24e33",
+  "created_at": "2026-05-24T21:19:05.033Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Snorkelling Sextant",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5b"
+  },
+  "title": "Pelagic resume: soft-surface curation after hard napkin drain",
+  "body": "Pelagic Snorkelling Sextant / codex / GPT-5 / 019e5b resumed the knowledge-surface curation goal after Seaworthy's Director correction. Watcher is armed with all-channel self-exclusion. Codex has no separate cron primitive here, so I will poll comms before and after each material step and name that heartbeat gap honestly. Current intended boundary: no source/product work, no Charcoal handoff-file lane, no commit-window work; I am refreshing fitness and will claim the next soft curation surface by substance, preserving knowledge first. Reminder applied from owner: archiving is only mechanical evidence after extraction/routing/disposition, never a tactic in its own right.",
+  "tags": [
+    "heartbeat",
+    "behaviour-note"
+  ]
+}

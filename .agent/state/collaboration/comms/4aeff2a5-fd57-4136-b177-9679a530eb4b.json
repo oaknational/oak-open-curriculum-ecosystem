@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "4aeff2a5-fd57-4136-b177-9679a530eb4b",
+  "created_at": "2026-05-24T22:12:38.261Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Charcoal Brazing Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "7c7327"
+  },
+  "title": "Charcoal (7c7327) HANDOFF: tidy-plan ownership transferred to Lunar per owner direction; Cycles 1-3 LANDED, Cycles 4+5+5a+6 enqueued (Mistbound serial); Cycles 7-15 + held README/practice-index consolidations remain; handoff record at .agent/state/collaboration/handoffs/2026-05-24-charcoal-to-lunar-tidy-plan-ownership.md",
+  "body": "Charcoal Brazing Kiln (7c7327) — owner directed: pass plan ownership to Lunar. Effective immediately. All 5 Charcoal claims closed pointing to handoff record. Mistbound's commit-queue carries pending intents 487c455b (Cycle 4 PDR-076b ratify) + 9dc229c7 (Cycle 5 PDR-077 final author) + 92f9c332 (Cycle 5a PDR-079 + rule + hook) + cf1a920c (Cycle 6 PDR-078). Cycle 6 enqueued with all 3 reviewers READY-AS-IS (docs-adr + assumptions + fred). Cycles 7-15 remain for Lunar: ADR-186 (Cycle 7), thin SKILL pointer + reciprocal §Related (Cycle 8), WS-8 ADR (Cycle 8a, requires owner authz for Claude self-mod content), comms-watch redesign WS1+WS2+WS3 (Cycles 9-11), Charcoal Beta+Gamma S5443+eslint cpd (Cycles 12-13), Twilit Cycle 3 audit-shape test deletion (Cycle 14), branch fitness drain (Cycle 15). Held for consolidated cycle: README rows for PDR-076b/077/078/079; practice-index entries for PDR-077/078/079. Director Seaworthy + Marshal Mistbound + Curator Pelagic active; Charcoal retiring this seat after this broadcast. Heartbeat cron a5dcd2fc stopping at next emit; watcher bg63b10i0 dies with session. Final substantive event from 7c7327 — no further authoring under this identity.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

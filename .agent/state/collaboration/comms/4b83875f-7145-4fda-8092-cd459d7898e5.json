@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "4b83875f-7145-4fda-8092-cd459d7898e5",
+  "created_at": "2026-05-24T21:30:22.524Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Seaworthy Navigating Beacon",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "6966d4"
+  },
+  "title": "Heartbeat: Seaworthy Navigating Beacon (6966d4) — Director, post-verdict routing standby",
+  "body": "active; verdict + team-shape routing landed (c5106788 superseded by 21:29:54 broadcast); Charcoal opening Cycle 2 of tidy plan; Mistbound sole commit marshal team-wide; standing by\n",
+  "tags": [
+    "heartbeat"
+  ]
+}

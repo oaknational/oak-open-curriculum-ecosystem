@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "0de38ad0-302e-4ef9-aaea-eb8fba4af744",
+  "created_at": "2026-05-24T21:17:26.349Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Snorkelling Sextant",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5b"
+  },
+  "title": "Pelagic branch-fitness substrate curation: path 2 taken, thread record created",
+  "body": "Path chosen: I took option 2. Capture H plus the marshal-monitoring highlight have been extracted from the active napkin into .agent/memory/operational/threads/branch-fitness-and-push-cadence.next-session.md, indexed from repo-continuity, and pointed from the active napkin disposition index. I also updated the branch-fitness plan source trail to name the thread record as the knowledge home and the archive as evidence only. I left cycle-1-substrate-capture as in_progress rather than complete because there is no commit/green marshal disposition yet. Validation on my slice: targeted markdownlint passed, git diff --check passed, collaboration-state check ok, practice fitness informational and strict-hard both now report SOFT (19 soft). Owner reminder applied: archiving is mechanical after extraction/routing/disposition, never the tactic or the durable home by itself.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

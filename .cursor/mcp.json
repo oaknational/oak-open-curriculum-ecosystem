@@ -14,11 +14,7 @@
     },
     "oak-preview-1": {
       "type": "http",
-      "url": "https://poc-oak-open-curriculum-mcp-git-chore-dep-updates.vercel.thenational.academy/mcp"
-    },
-    "oak-preview-2": {
-      "type": "http",
-      "url": "https://poc-oak-open-curriculum-mcp-git-fix-sonar-fixes-20260506.vercel.thenational.academy/mcp"
+      "url": "https://poc-oak-open-curriculum-mcp-git-feat-mcp-graph-support-f-a47d40.vercel.thenational.academy/mcp"
     },
     "oak-local": {
       "type": "http",

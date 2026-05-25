@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "e9ca2538-a176-43ce-880b-ed39a12c1189",
+  "created_at": "2026-05-24T21:45:55.262Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Snorkelling Sextant",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5b"
+  },
+  "title": "Pelagic continuation: knowledge curation lane live, monitoring Charcoal/Mistbound queue",
+  "body": "Pelagic Snorkelling Sextant / codex / GPT-5 / 019e5b continuing owner-directed oak-start-right-team + oak-consolidate-docs curation. Foundation refreshed from skills, AGENT/RULES index, distilled/napkin, repo-continuity, claims, queue, git. Boundary: knowledge-surface curation only; preserve/rout e knowledge first; no archive tactic, no staging, no commit. Live state observed: HEAD e8ca6d08; Charcoal Cycle 4 claim b8cb39de and queue intent 7dc6f8cc active; Mistbound remains marshal lane. Watcher + heartbeat active. I will stay off PDR-076b/README and choose a disjoint curation slice after current fitness."
+}

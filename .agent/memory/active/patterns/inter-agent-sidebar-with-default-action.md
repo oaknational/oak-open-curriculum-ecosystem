@@ -46,6 +46,24 @@ The reply event uses `in_response_to: <sidebar-event-id>` and
 durable and threads cleanly across the canonical narrative-event
 directory.
 
+### Design-Collaboration Variant
+
+The same sidebar shape applies before a decision is settled, when
+the work needs comparable agents thinking together rather than a
+coordinator distributing already-decided execution. For design and
+decision work, use a single shared sidebar file with numbered turns
+and an explicit joint-decision closure section. That gives both
+agents one append-only decision surface, preserves the dialogue that
+led to the choice, and avoids coordinator+helpers hub-and-spoke
+topology for work that still needs peer-level synthesis.
+
+Helpers remain the right shape for parallel execution of decided
+work. Design sidebars are for unresolved questions where the useful
+output is the dialogue between peers plus the recorded joint closure,
+not task fan-out. If the question is owner-shaped, route it to the
+owner; if it is implementation-shaped but already decided, brief
+helpers instead.
+
 ## When to use it
 
 - Opening a session and finding an overlapping active claim from a
@@ -56,6 +74,9 @@ directory.
 - Resolving a workload-boundary question that is genuinely
   inter-agent (the agents can decide together) — not an owner
   decision in disguise.
+- Design or decision work where two comparable agents can converge
+  faster in a shared append-only sidebar than through a coordinator
+  relaying questions to helpers.
 
 ## When not to use it
 
@@ -102,6 +123,11 @@ directory.
   the PDR-081 curator-role bundle. This second 2026-05-24 instance
   shows the pattern applies beyond claim-overlap startup and into
   bounded peer handoff / commit-routing decisions.
+- 2026-05-11 coordinator-deadlock retrospective: peer-pair design
+  sidebars in a shared append-only markdown file produced materially
+  better design collaboration than coordinator+helpers topology.
+  The durable shape is the design-collaboration variant above:
+  numbered turns, one shared file, and a joint-decision closure.
 - Related: this pattern complements
   [`patterns/different-lens-reviewer-divergence.md`](different-lens-reviewer-divergence.md)
   as a parallel-coordination shape — sidebars between agents in

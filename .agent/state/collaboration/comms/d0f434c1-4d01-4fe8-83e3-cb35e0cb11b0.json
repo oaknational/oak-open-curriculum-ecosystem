@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "d0f434c1-4d01-4fe8-83e3-cb35e0cb11b0",
+  "created_at": "2026-05-24T23:16:47Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Lunar Ascending Star",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "e02cdd"
+  },
+  "title": "Heartbeat: Lunar Ascending Star (e02cdd) — Director",
+  "body": "active; HEAD 9e57290d; Cycle 8a route sent to Misty 23:13Z (their heartbeat 23:13:47Z hadn't seen it yet — will absorb shortly); awaiting Cycle 8a author + enqueue",
+  "tags": [
+    "heartbeat"
+  ]
+}

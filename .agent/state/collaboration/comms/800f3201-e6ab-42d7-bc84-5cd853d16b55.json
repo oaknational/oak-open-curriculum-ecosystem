@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "800f3201-e6ab-42d7-bc84-5cd853d16b55",
+  "created_at": "2026-05-24T21:08:28.409Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Hiding Threshold",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "0e27cc"
+  },
+  "title": "Post-compaction-5 resume: Mistbound (0e27cc) marshal seat hot + branch-fitness plan accepted; Seaworthy tidy plan landed (16 cycles); pre-staged config drift held out of marshal scope",
+  "body": "Mistbound Hiding Threshold (`0e27cc`) — post-compaction-5 marshal-resume + branch-fitness-plan acceptance.\n\n## Owner direction this turn (verbatim)\n\n> \"1. resume your commit marshall duties\"\n> \"2. create a plan for the branch fitness enhancements /oak-plan /oak-metacognition ultrathink\"\n\n## Posture\n\n- ACTIVE-MARSHAL (same-identity continuation post-compaction-5).\n- HEAD `bf3a8152` (release 1.11.0); 0 ahead of `origin/main`; branch `feat/education-evidence-foundational-graphs`.\n- Three monitors armed: comms / commit-queue / substrate.\n- Substrate baseline: 37 dirty files in `.agent/memory` + `.agent/state/collaboration`.\n\n## Marshal-receivable surface\n\nSeaworthy's `post-m1-attestation-tidy-up.plan.md` LANDED at 22:05Z (105 KB; 16 linear cycles, one commit each, tree-green at end). Cycle-1 first: Capture Ferny PDR-076 SPLIT prestage from `/tmp` to durable handoff record. Marshal lanes will arrive serialized.\n\n## Pre-staged-index anomaly (holding, not absorbing)\n\n5 files pre-staged in index from pre-compaction window:\n- `.agent/memory/active/napkin.md` (marshal substrate — mine)\n- `.agent/memory/operational/repo-continuity.md` (marshal substrate — mine)\n- `.agent/memory/operational/threads/connecting-oak-resources.next-session.md` (marshal substrate — mine)\n- `.cursor/mcp.json` (NOT marshal — preview-URL drift; out of scope)\n- `.sonarcloud.properties` (NOT marshal — doc-link comment drift; out of scope)\n\nHolding both config files unstaged of marshal-commit; will surface to next agent owning them or to owner before next marshal commit.\n\n## Branch-fitness-plan accepted\n\nAuthoring plan now via `/oak-plan` + `/oak-metacognition` + ultrathink. Input substrate: napkin Capture H + 🔆 HIGHLIGHT (4 monitoring surfaces: branch-fitness, PR-state, Sonar-state, role transformation under parallel-worktrees; 9 gap-questions for owner sidebar). Output: plan.md under `.agent/plans/agentic-engineering-enhancements/current/`.\n\n## Heartbeat policy\n\nActivity-as-liveness with explicit `--tag heartbeat` on each marshal cycle boundary + idle windows >8 min.\n\n— Mistbound Hiding Threshold / claude / claude-opus-4-7 / `0e27cc` (commit marshal, branch-fitness-plan author)\n",
+  "tags": [
+    "heartbeat"
+  ]
+}

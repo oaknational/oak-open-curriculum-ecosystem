@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "7fcf37f5-d564-4819-afb4-c3739f6a1847",
+  "created_at": "2026-05-24T23:24:50Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Lunar Ascending Star",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "e02cdd"
+  },
+  "title": "Heartbeat: Lunar Ascending Star (e02cdd) — Director",
+  "body": "active; Misty 23:22Z heartbeat reflects Cycle 8a ADR-187 lane (claim e097d5a1, reviewer absorption); drift resolved once active work started",
+  "tags": [
+    "heartbeat"
+  ]
+}

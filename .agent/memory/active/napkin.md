@@ -9,203 +9,264 @@ merge_class: append-only-narrative
 
 # Napkin
 
-## 2026-05-24 — Hushed Fading Hush / codex / GPT-5 / `019e5a`
-
-Fresh active napkin after the processed
-[post-M1 cleanup window][post-m1-window] was archived.
-
-### What Was Done
-
-- Re-grounded under `start-right-team` and `consolidate-docs`.
-- Ran the live fitness report and found the current critical item:
-  active-napkin prose line width.
-- Reflowed the overlong Seaworthy Window 2 capture without removing substance.
-- Archived the processed active window only after every entry in it had an
-  explicit processing disposition or live route.
+## 2026-05-25 — Shadowed Glimmering Moth / codex / GPT-5 / `019e5d`
 
 ### Patterns to Remember
 
-- `comms watch` with a fresh seen-file can replay a large historical backlog.
-  Seed or expect the backlog explicitly before treating watcher quietness as
-  current-state evidence.
-- Fitness critical-by-line-width can be fixed by faithful reflow first. If that
-  exposes hard line-count pressure on already-processed capture, archive the
-  processed napkin window instead of trimming substance.
-- Same `session_id_prefix` continuity can still show generated display-name
-  drift in comms and active claims after compaction or resumed goal turns.
-  Treat the prefix plus live claim evidence as the stronger continuity signal,
-  then name the drift in closeout instead of opening a competing claim.
-- Repo-continuity soft-tier consolidation worked by preserving the outgoing
-  live-index snapshot in archive, then replacing duplicated historical routing
-  with pointers to thread records and active plans. Validate with targeted
-  markdownlint, `git diff --check`, and both practice fitness modes.
-- `claims open` uses `--ttl-seconds`, not `--freshness-seconds`. The rendered
-  claim still stores `freshness_seconds`, but the CLI flag is the TTL form.
-- For active pending-graduations shards, a low-risk soft-tier drain is to find
-  entries already marked `status: graduated`, verify their durable home still
-  carries the substance, archive the full body, and remove only that processed
-  body from the shard.
-- I repeated the pipe-in-evidence mistake while locating the commit queue path.
-  If a filter feels useful, run the broad producer and the narrow search as
-  separate readable evidence steps.
-- End-session consolidation can validly finish a small soft slice without
-  claiming the broader consolidation goal. Close the owned claim, update the
-  touched thread and repo-continuity facts, then stop when the owner says the
-  session is over.
-- `comms send` no longer accepts the old `--shared-log` flag. Let the command
-  use its built-in shared-log path, and check topic help before old flag shapes
-  leak into closeout muscle memory.
-- I misread Jim's Sonar CPD correction once: the intended boundary is generated
-  code, tests, and config files excluded from CPD, with agent tools kept inside
-  the CPD corpus. Treat owner wording as the control surface when policy text
-  and live intent need reconciliation.
+- A fresh `comms watch` seen-file can replay old backlog before it reaches
+  live team traffic. For current-state grounding, pair it with rendered comms
+  tail, active claims, and queue reads; treat backlog replay as historical
+  substrate unless the command has already caught up.
+- A fitness hard-width line can be remediated without knowledge loss by moving
+  detail from an overlong heading into adjacent body prose. That is structural
+  reflow, not trimming.
+- Tidy-plan delivery in a live team needs routing discipline even when the
+  owner gives a broad "work on delivery" instruction. If another agent owns
+  the fresh source claim, switch to read-only support or a Director-routed
+  non-overlapping slice instead of racing the implementation.
+- Cycle 10 readiness note: the existing collaboration-state transaction helper
+  provides temp-file plus rename and lock directories, but no fsync. A storage
+  redesign that promises crash-hardening must extend the helper or add a
+  dedicated state writer, not merely reuse it by name.
+- Cycle 11 cleanup audit currently has non-test `comms-seen` references in the
+  start-right-team SKILL, comms-watch mechanism reference, agent-tools README,
+  continuity-surface rule, and ADR-182. Treat ADR-182 as an architectural
+  reference that may need a deliberate keep/update verdict, not a mechanical
+  grep casualty.
+- `practice:substrate:check` can fail on inherited collaboration-state schema
+  debt even when a new substrate evaluator is clean. For the open-questions
+  validator landing, the only blocking finding was an old abandoned
+  `commit_queue[19].files[0] == ""` entry; validate whether a residual is in
+  the touched surface before attributing the failure to the new reader.
 
-[post-m1-window]: archive/napkin-2026-05-24-post-m1-cleanups-window.md
+## 2026-05-24 — Pelagic Snorkelling Sextant / codex / GPT-5 / `019e5b`
 
-## 2026-05-24 — Mistbound Hiding Threshold / claude / claude-opus-4-7 / `0e27cc`
+### What Was Done
 
-### Capture H — small-PRs / push-often / branch-fitness protocol (owner-directed; paused)
+- Re-grounded under `oak-start-right-team` and `oak-consolidate-docs`.
+- Confirmed identity with PDR-027 preflight:
+  Pelagic Snorkelling Sextant / codex / GPT-5 / `019e5b`.
+- Refreshed live state: branch `feat/education-evidence-foundational-graphs`,
+  HEAD `bf3a8152`, active commit queue empty, only stale claims visible.
+- Ran live fitness and found no critical files; the only hard file was this
+  active napkin at 441 lines / 22,689 chars.
+- After reading the outgoing entries and recording their dispositions, made a
+  mechanical preservation copy at the Pelagic hard-napkin window archive before
+  replacing the live napkin with this disposition index.
 
-Owner direction this turn (verbatim, paused-state capture):
+### Processing Disposition
 
-> create protocols and guidance around committing, pushing, PR state
-> monitoring and Sonar state monitoring, including a preference towards
-> small commits, pushing often, monitoring GH state for PRs, monitoring
-> Sonar state for PR, and measuring the total number of files touched on
-> a branch and the total number of changes made on a branch as reported
-> by git, and setting soft, hard and critical feedback for them, in an
-> automated way, probably a hook, with the goal of keeping PRs small
-> enough to be easily reviewed by a human, and simple to reason about.
-> This implies many more small PRs happening, potentially in parallel,
-> that is fine, the worktree models lends itself well to that.
+- **Hushed Fading Hush handoff rerun**: source-window preserved as processed
+  session evidence. Live behavioural carry-forward remains here: refresh
+  branch, HEAD, claims, queue, and current comms before repeating any closeout
+  claim; stale CLI flag memory must be checked against command help.
+- **Mistbound Hiding Threshold Capture H and marshal-monitoring highlight**:
+  routed into
+  `threads/branch-fitness-and-push-cadence.next-session.md` and indexed from
+  `repo-continuity.md`, after Mistbound confirmed in live comms that the
+  branch-fitness plan's Cycle 1 depended on this substrate. The archive is only
+  the verbatim outgoing-window evidence; the durable knowledge home is now the
+  thread record plus the executable branch-fitness plan. The post-M1 tidy
+  plan's cycle 15 only covers a branch-fitness drain slice; it is not the full
+  protocol home for Capture H.
+- **Velvet Stalking Moth preview-MCP validation**: source-window preserved after
+  verifying the durable route in `connecting-oak-resources.next-session.md` and
+  `repo-continuity.md` PR #108 routing.
+- **Hushed/Hearthlit closeout refresh observations**: source-window preserved as
+  session-specific evidence. Behavioural carry-forward: PR, Sonar, branch, and
+  comms evidence can change during closeout; refresh them immediately before a
+  final handoff claim.
+- **Charcoal comms-corpus research vector**: source-window preserved after
+  verifying the durable route in
+  `threads/agent-collaboration-research.next-session.md`,
+  `repo-continuity.md`, the source-thread cross-reference, and comms event
+  `b2f6a5fe`.
+- **Charcoal discoverability five-surface capture**: source-window preserved as
+  first worked instance. Promotion trigger remains a second new-thread
+  discoverability gap; do not graduate it silently from one instance.
+- **Charcoal cron CLI-shape drift capture**: source-window preserved as first
+  worked instance. Promotion trigger remains a second stale cron / loop prompt
+  whose command shape silently fails across compaction.
 
-**Capture scope**: not a plan, not a decision. Substrate-buffer of the
-direction + my ultrathink surfacing the moves required when owner
-unpauses. Future-me opens a plan / PDR / ADR pair when authorised.
+### Patterns to Remember
 
-**Stated dimensions (5)**:
+- Extraction, routing, and disposition are the curation work. Archiving is only
+  a mechanical preservation step after that work has happened; it is never a
+  tactic in its own right and never the durable knowledge home by itself.
+- Pending-graduations metadata can need curation even when the underlying route
+  is right. If a tag uses prose as `status`, preserve that prose as route-state
+  context and set the lifecycle value back to the closed vocabulary.
+- The same applies to `size`: if an entry says `M-to-L combined`, keep the
+  combined-work uncertainty as route prose and set metadata to the nearest
+  closed-vocabulary value.
+- The closed size vocabulary has no `XS`. If a candidate is truly tiny, set
+  `size: S` and preserve the narrower "tiny focused cleanup" meaning in
+  route-state prose.
+- When a distilled entry already has a natural pattern home, move the reusable
+  behaviour into the pattern and leave only still-live observations in
+  `distilled.md`; this is curation, not score chasing.
+- When a distilled entry belongs in a skill's live coordination rule, home the
+  behaviour there and then remove the duplicate distilled body. The 2026-05-22
+  late-named-peer observation now lives in `start-right-team`'s singleton-lane
+  rule, not in `distilled.md`.
+- If a shell search pattern contains backticks, single-quote it. I repeated
+  the zsh command-substitution mistake while checking whether
+  `session_id_prefix` already existed in durable homes.
+- I repeated the same backtick mistake while searching Codex memory with
+  double quotes; the behaviour change is still to use single-quoted `rg`
+  patterns whenever the search text includes backticks.
+- Keep validation searches boring. I tried to prove a metadata correction with
+  an over-clever `rg` character class and made the regex itself invalid; simple
+  literal alternatives were the right proof.
+- `comms inbox` with a fresh seen-file replayed the whole multi-day backlog.
+  For current-state checks, prefer a seeded seen-file or a bounded watch; treat
+  backlog replay as historical evidence, not current team silence.
+- A pending-shard entry can be closed when a later PDR preserves both the
+  primary cure and the rejected/secondary cure. For the tempfile collision
+  entry, PDR-076b is the durable home: frontmatter is primary; path
+  session-prefixing remains secondary defence, so a separate pending rule
+  would duplicate the processed lesson unless recurrence shows a new need.
+- The all-channels watcher is alive for this session, but Codex does not have
+  the Claude Monitor/Cron tools. When closing this session, stop any local
+  watch process explicitly and name any heartbeat gap honestly.
+- `comms send --tag` only accepts the ADR-183 namespace
+  (`failure-mode`, `behaviour-note`, `heartbeat`). I tried `--tag status`; send
+  ordinary status broadcasts without a tag unless one of those meanings applies.
+- `repo-continuity.md` is a live operational index, so stale HEAD/claim prose is
+  a knowledge problem even when fitness is soft-only. Repair it from live git,
+  claims, comms, and fitness before using it as route authority.
+- During closeout, poll the watcher before finalising any live-state edit. A
+  commit can land between validation and claim close; if it does, reopen a
+  narrow truth-repair claim and update the live index from the new evidence.
+- Under active marshalling, a "ready for marshal" or "abandoned" event can be
+  stale by the time it is read. Re-check git log and active queue before
+  preserving the causal lesson; in Cycle 4 the abandonment was from a stale
+  view after Cycle 3 had already landed, and the real current state was the
+  re-enqueued intent.
+- A partially-graduated pending entry is safe to remove from an active shard
+  only after the residual lesson has a durable home. For peer-pair design
+  sidebars, the home is the active inter-agent sidebar pattern: comparable
+  agents, one shared append-only file, numbered turns, and joint-decision
+  closure; the archive keeps the original route body.
+- Route-state sharpening is valid curation when a residual is tempting to
+  treat as done. For ADR-184, the representation decision is homed, but
+  schema/parser/renderer/authoring support for `sync` and `urgency` has not
+  landed; preserve the live residual with falsifiable evidence instead of
+  removing it for neatness.
+- Comms monitoring can create its own curation slice. If a watcher catches a
+  new queue event after validation, refresh claims and queue before closeout,
+  and repair `repo-continuity.md` when the live index would otherwise misroute
+  the next agent. If the Director also surfaces owner-class marshal blockage,
+  preserve that routing fact with the queue state. Also, `claims open` requires
+  `--area-kind files` and explicit `--now`; I hit that shape mistake once
+  during the repair claim.
+- A retirement-detection broadcast can become stale minutes later if the
+  supposedly retired agent corrects it and git/queue state moves. Preserve the
+  original broadcast as timestamped evidence, but repair live continuity from
+  the newer evidence instead of treating the older owner-class blockage as
+  current.
+- Successful commit-queue entries may disappear from the active list, while
+  failed entries remain as `abandoned` with notes. Use git commit bodies,
+  active queue output, and queue history together before deciding whether a
+  missing intent landed or failed.
+- A Director wind-down or pause broadcast can be superseded by newer owner
+  direction within minutes. Preserve the superseded event as evidence, but make
+  live continuity follow the newer controlling broadcast and name the
+  supersession explicitly so future agents do not inherit the older pause as
+  current truth.
+- Commit-message length failures can be caught before burning a marshal cycle.
+  If a queued intent subject is near the 100-character limit, count it before
+  staging/commit; in Cycle 5a Mistbound caught a 103-character subject by
+  pre-flight before the same commitlint failure repeated.
 
-1. Commit cadence: prefer small commits.
-2. Push cadence: prefer pushing often.
-3. PR state monitoring: GH state surfaced automatically.
-4. Sonar state monitoring: PR-scoped Sonar surfaced automatically.
-5. Branch-size fitness: files-touched + total-changes, with soft/hard/
-   critical bands, probably a hook.
+## 2026-05-25 — Pelagic Snorkelling Sextant / codex / GPT-5 / `019e5b`
 
-**Unstated but implied / inferred**:
+### What Was Done
 
-- Marshal seat as currently shaped serialises commits. Small + parallel +
-  worktree-per-slice means the marshal role's serialisation value drops.
-  Either marshal becomes per-worktree, or dissolves into self-marshal
-  with a discovery surface for cross-worktree conflicts.
-- Push authz is currently owner-gated and accumulates 50+ commits before
-  release (see M1 Safe Pause framing). "Push often" cannot land without
-  shifting where push-authz lives — either pre-authorised by policy on
-  green-marshal-cycle, or a dedicated push role on a different cadence,
-  or pre-defined push windows.
-- "Branch" is ambiguous in a multi-worktree world. Files-touched +
-  changes-aggregate must name a measurement boundary (current-worktree-
-  HEAD vs branch-vs-main vs PR-base). Pre-commit measures intent;
-  pre-push measures realised PR shape. Different decisions; the hook
-  shape may need to live at pre-push, not pre-commit.
-- Worktree-isolation is named with confidence but
-  `feedback_worktree_isolation_unreliable` says parallel worktree
-  agents can land on different bases than parent HEAD. Either the
-  worktree primitive needs reinforcement, or protocols compensate via
-  base-snapshot pinning + gate-check on parent HEAD.
-- Hook output appears on every commit/push. Verbose output eats the
-  ~80k reliable-context budget. Output must be terse — one line per
-  signal class — to stay in the budget.
-- Existing `pnpm practice:fitness` is the natural home for branch-size
-  fitness as a new dimension. Single CLI entry preserves the
-  observability discipline already in place.
+- Closed the updated curation objective exactly at the owner-stated boundary:
+  both `practice:fitness:informational` and `practice:fitness --strict-hard`
+  reported `SOFT (19 soft)`, so no critical or hard file remained.
+- Posted the stop-condition comms event and heartbeat-end, opened no new
+  curation claim, and did not process soft surfaces.
+- Verified no active Pelagic claim remained at session handoff.
 
-**Tensions and gaps surfaced via ultrathink**:
+### Patterns to Remember
 
-- *Source vs substrate in change-count*: 466 commits ahead of origin on
-  this branch includes huge substrate writes (`.agent/**`,
-  `.agent/state/collaboration/comms/**`). Substrate is not reviewable
-  the way source is. The branch-fitness metric likely needs **two axes**
-  — reviewable-LOC (source only) and total-LOC (push payload). Different
-  thresholds; different consumers.
-- *CI capacity*: small-many-parallel multiplies CI runs. CI minutes
-  burn rises; wall-clock may improve via parallelism. Worth surfacing
-  the cost trade-off when proposing thresholds.
-- *Reviewer-load*: many small PRs mean many reviews. Reviewer dispatch
-  already scales via sub-agents but throughput pressure grows.
-- *Branch-naming proliferation*: many short-lived branches need a
-  cleanup primitive (auto-delete on merge; naming convention rule).
-- *Hook-bypass culture risk*: SOFT signals that nag get bypassed. SOFT
-  must be informative not nagging or `--no-verify` rate rises (already
-  named as recurring friction). Tie this to the existing
-  `no-verify-requires-fresh-authorisation` rule explicitly.
-- *Existing tooling*: `gh pr` shows file-count + LOC in the diff
-  natively; Sonar shows PR-scoped quality gates natively. The hook
-  cures PRE-push pressure; the monitoring cures POST-push observability.
-  Two different surfaces with two different mechanisms.
-- *Threshold defaulting*: common practice is 500/1000/2000 reviewable
-  LOC for soft/hard/critical and 10/30/50 files. These need empirical
-  validation against this repo's slice shape; not invent-from-thin-air.
-- *Push-authz mechanism*: the cleanest shape is policy-based (green
-  marshal cycle + branch-fitness GREEN → push-authz implicit) rather
-  than role-based. Role-based reintroduces the marshal-as-bottleneck
-  shape.
+- When the owner defines a stop condition as "once all files are soft then
+  STOP", soft-only fitness is a completion condition for that objective, not
+  a prompt to keep improving soft counts.
+- In Codex, a long-running `exec_command` background process can lose stdin,
+  so `write_stdin` cannot always stop it. If a watcher or heartbeat loop needs
+  cleanup at closeout, verify the process table and kill only the exact
+  session-owned process family.
 
-**Cure-shape implications (provisional, paused-state names)**:
+## 2026-05-25 — Misty Drifting Sail / claude / claude-opus-4-7 / `02b325`
 
-- **Branch-fitness CLI**: `pnpm practice:fitness:branch` — measures
-  reviewable-LOC + total-LOC + files-touched + commits-ahead-of-base;
-  emits SOFT/HARD/CRITICAL with named thresholds.
-- **Pre-push hook**: invokes the CLI; emits at HEAD-snapshot; advisory
-  at SOFT/HARD; blocking at CRITICAL.
-- **Pre-commit hook addition** (optional): surfaces current branch
-  fitness in single-line summary so agents see the pressure building
-  before push.
-- **PR observer agent or CLI**: `pnpm pr:watch` — polls `gh pr checks`
-  and Sonar PR-scoped API; surfaces state changes to comms as
-  PR-state-changed events.
-- **Push-authz policy**: an ADR specifying when push is implicitly
-  authorised (small branch + green gates + green marshal cycle) vs when
-  it requires explicit owner authz (over CRITICAL threshold or atomic-
-  M1-pause class).
-- **Per-worktree marshal**: a PDR specifying the marshal role's
-  per-worktree shape; or an ADR specifying the self-marshal-with-
-  discovery shape. The choice depends on whether worktree-isolation
-  gets reinforced first.
+### Surprises captured
 
-**What HAS been said elsewhere (cross-refs)**:
+Post-M1 attestation tidy-up plan cycles: 5, 5a, held-items, 7, 7.1, 8, and
+8a authoring.
 
-- `feedback_build_vs_buy_first` — check `gh pr` + Sonar native shapes
-  before designing bespoke hooks.
-- `feedback_all_quality_gates_blocking_always` — branch-fitness CRITICAL
-  is a gate; cannot be framed as "out of scope".
-- `feedback_new_eslint_rules_start_warn` — analogous: branch-fitness
-  thresholds start at SOFT, escalate after stability.
-- `feedback_no_moving_targets_in_permanent_docs` — protocol docs cite
-  measurable thresholds, never "small" handwaves.
-- `feedback_worktree_isolation_unreliable` — worktree-confident
-  framing in the proposal needs reinforcement work before parallel
-  small-PR shape can land cleanly.
-- `feedback_hook_failures_are_questions` — hook output is a question
-  not a nag; threshold framing matters.
-
-**What HAS NOT been said (gaps the owner left for the team)**:
-
-- Whether CRITICAL is blocking or advisory.
-- Whether substrate writes count toward the metric or are excluded.
-- Whether the metric is per-worktree, per-branch, or per-PR.
-- Whether push-authz policy moves with this protocol or stays owner-
-  gated separately.
-- Whether the Commit Marshal role transforms or persists in current shape.
-- Whether the M1 Safe Pause push is itself the last big push before
-  the protocol takes effect, or whether the protocol applies retroactively
-  to that push too.
-
-**Pickup hook for next-me / next-team (when owner unpauses)**:
-
-1. Open a thread record `branch-fitness-and-push-cadence.next-session.md`.
-2. Survey existing `pnpm practice:fitness` shape + `gh pr` + Sonar APIs.
-3. Resolve the 6 gap-questions above via owner sidebar before drafting.
-4. Author a PDR for the doctrine shape + an ADR for the substrate
-   phenotype (hook + CLI + observer).
-5. Ship at SOFT-only initially; escalate after observation window.
+- **Heartbeat-content-drift is a recurring failure mode, not a one-off**
+  (graduation candidate). Three Misty instances (23:13/23:17/23:22Z) + 3+
+  Lunar instances (22:24/22:28/22:32Z) of templated heartbeat body
+  staying stale despite live state changes. Mechanism: free-form prose
+  bodies in a Monitor `while/sleep 240` loop don't get refreshed unless
+  the agent manually stops + restarts the loop. The structural cure is
+  mechanical state-binding: heartbeat body should reflect a single
+  observable current-claim or current-cycle-state field (e.g. by reading
+  `active-claims.json` and emitting the current claim's intent verbatim),
+  rather than free-form prose an agent must remember to refresh.
+  Falsifiability: a heartbeat body whose content was authored ≥ 1 cycle
+  ago but whose state has since changed is the failure phenotype.
+- **Platform-wide Monitor-primitive cron-drift episode** (substrate-level
+  graduation candidate). Misty heartbeat cron silent 20 min (23:26 →
+  23:47Z) AND Lunar's silent 17 min (23:28 → 23:45Z) in the same window.
+  Two independent Claude-platform Monitor cron loops degraded concurrently
+  — strongly suggests platform/harness-side cause, not agent-side.
+  Mistbound's silence-without-work-evidence at 23:11-onwards may have been
+  the same episode. Structural cure candidate: heartbeat-cron
+  health-monitoring via the existing
+  `agent-tools/src/collaboration-state/watcher-staleness.ts` substrate —
+  the same surface ADR-186 §C5 reserves for substrate-as-API. A healthy-
+  cron staleness file written per-tick would let peers detect "cron loop
+  alive, just silent" vs "cron loop dead".
+- **Ping-before-escalate cure validated TWICE in single session**
+  (graduation candidate; pattern is genuine). First false-positive at
+  22:57Z (Lunar declared retirement-detection on Mistbound; Mistbound
+  responded alive at 22:58:53Z); second false-positive at 23:46Z (Lunar
+  declared again; Mistbound responded alive). Both used the cure shape
+  (cross-check git work-evidence before declaring retirement). The cure
+  works; the failure mode it prevents (false-positive Director retirement-
+  detection cascading to unauthorised claim auto-rebalance) is real and
+  recurring. Worth graduating to a Director-discipline rule citing the
+  empirical evidence.
+- **Reviewer fan-out depth pays its way on security-class ADRs**.
+  ADR-187 authored at 480 lines; 4-reviewer absorption (docs-adr +
+  assumptions + security + wilma) surfaced 3 RES-CRITICAL findings
+  (security: C4 provenance requirement to defend against confused-deputy;
+  wilma: owner-bottleneck under N agents; wilma: mixed-tenant fleet-wide
+  impact disclosure) that the draft completely missed. Final ADR grew to
+  585 lines (+22%) after absorption. Generalisation: for security-class or
+  substrate-as-API ADRs, retain the full 4 reviewers even when
+  proportionality reviewer asks.
+- **Hook-policy `carve-out` block fired correctly** (PDR-044 memetic
+  immune system worked-instance). My ADR-187 reviewer absorption Edit
+  used the forbidden word "carve-out"; the policy hook rejected with the
+  citation. Rephrased to "scope clarification" — substance identical,
+  vocabulary compliant. Evidence the hook is firing as designed.
+- **ADR-186 prettier-mangle through husky recovery** (substrate worked-
+  instance). Multi-line inline-code-span pattern in a markdown body got
+  mangled when Mistbound ran `pnpm format:root` during husky recovery —
+  prettier interpreted the wrap as a list item, corrupting the prose
+  mid-sentence. Cycle 7 landed with broken text; Cycle 7.1 fix-cycle
+  followed. Cure shape: prefer single-line inline-code spans in markdown
+  body prose; avoid multi-line code spans that prettier can re-interpret
+  as list items.
+- **State-field vs date-field vocab-slip caught at reviewer time**.
+  Lunar's Cycle 8 routing brief said *"add `**Accepted**: 2026-05-25`
+  lifecycle-record line"* but the canonical PDR-076a/076b/077/079
+  precedent uses `**Adopted**:` (state-field `Status: Accepted` is
+  distinct from date-field `Adopted: YYYY-MM-DD`). docs-adr-expert
+  confirmed Adopted is correct via grep over 4 precedent files. Worked-
+  instance for the reviewer-as-vocab-guardrail discipline.

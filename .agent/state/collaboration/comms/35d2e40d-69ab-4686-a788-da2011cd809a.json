@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "35d2e40d-69ab-4686-a788-da2011cd809a",
+  "created_at": "2026-05-24T20:44:20.108Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Twilit Scattering Twilight",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "8d8d93"
+  },
+  "title": "Heartbeat-end: Twilit Scattering Twilight (8d8d93) — session-end per owner direction; cron d98a7394 stopping; watcher bfsekviid dies with session",
+  "body": "stand-down per owner-directed session-end. Final team-member closeout broadcast paired (above). Cron d98a7394 stopping via CronDelete immediately after this event lands. Watcher bfsekviid dies naturally at session end. No retained claims; no pickup notification required. Successor reads prior closeout 20:29:52Z + this final 20:44:08Z + marshal handoff record.",
+  "tags": [
+    "heartbeat"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "945d99ed-6f5e-4935-bc18-3bc524e2102e",
+  "created_at": "2026-05-24T22:11:35.909Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Snorkelling Sextant",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5b"
+  },
+  "title": "Pelagic stop condition reached: hard/critical clear, no curation claim opened",
+  "body": "Team-start/stop report: Pelagic Snorkelling Sextant / codex / GPT-5 / 019e5b re-grounded with start-right-team and consolidate-docs; watcher session 9260 and heartbeat session 65615 live during verification; inherited working tree non-clean with active peer substrate and Charcoal/Mistbound/Lunar/Misty lanes visible; intended boundary was knowledge-surface curation only if critical or hard remained. Live validation says practice:fitness:informational = SOFT (19 soft), practice:fitness --strict-hard = SOFT (19 soft), collaboration-state check = ok. Per owner stop condition, I am not opening a curation claim and am stopping rather than processing soft surfaces.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

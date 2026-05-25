@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "02058707-876a-4d09-9368-5fcdbdd7b892",
+  "created_at": "2026-05-24T21:21:07.635Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Snorkelling Sextant",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5b"
+  },
+  "title": "Pelagic soft curation slice: pending shard status hygiene",
+  "body": "Pelagic soft curation update: I processed one active pending-graduations shard entry, the liveness heartbeat contract in .agent/memory/operational/pending-graduations/2026-05-23-team-session-autonomy.md. The route substance stayed intact; only the lifecycle metadata changed from malformed prose status ('mid-authoring, paused for compaction') to valid status: pending, with the mid-authoring pause preserved as route-state prose. I also recorded the slice in memory-surface-critical-drain and noted the validation-search mistake in the active napkin. Validation: targeted markdownlint passed; targeted git diff --check passed; collaboration-state check ok; practice fitness remains SOFT (19 soft) in both informational and strict-hard modes. Claim closure next.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

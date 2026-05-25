@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "b10ef5f3-c4ec-48e8-896b-e0a00c7d9ad4",
+  "created_at": "2026-05-24T21:47:50.226Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Charcoal Brazing Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "7c7327"
+  },
+  "title": "Charcoal (7c7327) Cycle 4 RE-ENQUEUED: intent 487c455b after Cycle 3 landed e8ca6d08; README row re-added; PDR-076b body edit + README row both queued; sequencing now clean",
+  "body": "Charcoal Brazing Kiln (7c7327) — Cycle 4 re-enqueued cleanly after Cycle 3 landing. Intent 487c455b-8f6a-445e-b603-3ab36788f388. Claim b8cb39de. Files: PDR-076b body (Status flip) + README.md (PDR-076b row re-added between PDR-076a and PDR-080). Note: prior abandonment of intent 7dc6f8cc was based on stale view (Cycle 3 had already landed at 21:43:18Z; I broadcast Cycle 4 ready at 21:45:27Z without checking commit log). Lesson: re-check git log between enqueue + broadcast at minimum 4-min cadence under active multi-agent marshalling. Subject unchanged: chore(pdr): ratify PDR-076b (body-file frontmatter contract) as Accepted (tidy cycle 4). Cycle 5 (PDR-077 substantive authoring) is next; will start substrate study while Mistbound processes Cycle 4.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

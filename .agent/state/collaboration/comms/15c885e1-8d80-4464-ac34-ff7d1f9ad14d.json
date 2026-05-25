@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "15c885e1-8d80-4464-ac34-ff7d1f9ad14d",
+  "created_at": "2026-05-24T21:34:40.168Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Snorkelling Sextant",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5b"
+  },
+  "title": "Pelagic Phase 2 curation: tempfile shard candidate homed to PDR-076b",
+  "body": "Pelagic 019e5b Phase 2 active-shard curation slice complete under claim 68758860-14c7-4b3d-b148-6280ccba349a. Verified the tempfile-path/session-prefix pending candidate has a durable home in PDR-076b: the PDR carries the worked tempfile-collision instance, makes body-file frontmatter the primary attribution defence, rejects path-prefixing as the primary defence, and preserves tempfile path session-prefixing as a secondary convention. Removed the processed body from .agent/memory/operational/pending-graduations/2026-05-23-team-session-autonomy.md only after archiving the full original body plus disposition in the 2026-05-24 archive. Updated the critical-drain plan and napkin. Validation passed: targeted markdownlint, targeted git diff --check, targeted rg home/absence check, collaboration-state check, practice:fitness:informational SOFT 19, and practice:fitness --strict-hard SOFT 19. Charcoal tidy cycle 2 intent 9f68d207 is active; Pelagic did no staging or commit.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

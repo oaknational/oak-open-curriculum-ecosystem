@@ -89,44 +89,6 @@ These are all autonomy-substrate work-items. Stormbound's per-user
 memory `feedback_owner_action_is_not_a_cure` is the standing
 doctrine they discharge against.
 
-### Tempfile-path session-prefix discipline (Stormbound Floating Wing 2026-05-23 06:25Z)
-
-`[CANDIDATE: tempfile-path-session-prefix-discipline | captured: 2026-05-23 | source: comms-log+napkin | target: rule:tempfile-path-session-prefix-discipline | trigger: candidate | size: S | status: pending]`
-
-**Curation note 2026-05-23 (Breezy Cresting Beacon)**: retained
-pending as a worked instance. The larger due identity/frontmatter PDR
-candidate already includes tempfile session-prefixing as the secondary
-defence; this single-instance entry should not graduate as a standalone
-rule unless recurrence shows the secondary defence needs its own rule
-surface.
-
-Stormbound Floating Wing's first closeout broadcast at 06:25:41Z
-(`0957bc7f`) carried another agent's substance under their identity
-tuple. Root cause: they drafted their closeout body via `Write` to
-`/tmp/stormbound-closeout.md` — but that path pre-existed from a prior
-session (Stormbound Kiting Squall / `ddbea2`, dated 2026-05-22 16:26).
-The Write tool refused with "File has not been read yet — read it
-first before writing"; the agent made the parallel `comms append
---body-file` call in the same tool batch — which proceeded with the
-STALE file content. The posted event carried Stormbound Kiting Squall's
-Cycle 1.1 closeout under Floating Wing's identity. Corrected at 06:27Z
-via supersedes broadcast.
-
-**Cure shape**: tempfile paths under multi-session shared `/tmp/` MUST
-be session-prefixed (e.g. `/tmp/<session_id_prefix>-<purpose>.md`). The
-Write tool's "read before overwrite" refusal is a signal of cross-
-session collision, NOT a workflow inconvenience to route around with
-a parallel call.
-
-Adjacent existing surface: `register-identity-on-thread-join` rule
-(identity routing uses `(name, prefix)` pair) — same shape applied to
-file-naming. Pattern home: new
-`.agent/rules/tempfile-path-session-prefix-discipline.md`.
-
-Single instance; pending second observation to confirm the cure shape
-or escalate to "structural-cure-required" (e.g. SKILL section on
-multi-session shared-state tempfile discipline).
-
 ### 2026-05-23 — SKILL amendment: Director ratification checklist + three-mode standby (start-right-team §3)
 
 `[captured: 2026-05-23 | source: pattern-emergence | target: skill-amend:start-right-team | trigger: second-instance | size: M | status: pending]`
@@ -389,7 +351,15 @@ Cross-references:
 [captured: 2026-05-23 | source: napkin top entry + reviewer fan-out |
 graduation-target: PDR-078 + ADR-186 + thin SKILL pointer + reciprocal PDR
 updates | trigger: owner-authorised Option 1 + Director routing | status:
-mid-authoring, paused for compaction]
+graduated 2026-05-25]
+
+**Graduation evidence (2026-05-25 Misty Drifting Sail `02b325`)**: bundle landed across Cycles 6, 7, 7.1, 8 of `post-m1-attestation-tidy-up.plan.md`. PDR-078 at `9725ae09` (Status: Candidate then ratified Adopted 2026-05-25 in Cycle 8); ADR-186 at `48c8ac22` (Accepted 2026-05-24) + prettier-mangle repair at `75a2cd25` Cycle 7.1; SKILL §0.5 thinned to PDR-078 + ADR-186 pointer at `9e57290d` Cycle 8 (preservation-set per R1 #20 intact); reciprocal §Related entries to PDR-027 / PDR-063 / PDR-064 + PDR-078 §Mechanism amended to substrate-agnostic shape at `9e57290d`. Practice-index bridge row dropped "planned ADR-186" framing at `93c4fdc0` (held-items consolidation). All falsifiability criteria below satisfied. Cycle 8a ADR-187 (sibling self-modification authz cure-shape) is a follow-on, not part of this bundle.
+
+Route-state corrected 2026-05-24 by Pelagic Snorkelling Sextant: the prior
+inline status value `mid-authoring, paused for compaction` described the route
+truthfully but was not a valid lifecycle status in the pending-graduations
+schema. The lifecycle status is `pending`; the mid-authoring pause remains
+preserved below as route context.
 
 Owner-codified standing rule 2026-05-23 ~15:53Z (amplified ~15:57Z; permanent + session-wide for every start-right-team session): active team members emit liveness signal at ≤3-min cadence; ≥10-min silence presumes retired with claim auto-rebalance.
 
@@ -421,5 +391,138 @@ Cross-references:
 - Composes with PDR-063 (mid-cycle retirement protocol) — claim auto-rebalance disposition paths cite PDR-063 / ADR-182 as authoritative for handoff-record-equipped claims.
 - Composes with substrate-pointer-read-as-current-state pattern §C2 + §C5 — the heartbeat contract is the structural cure for the says-active-when-closed direction (not the says-closed-when-active direction, which remains cured by PDR-075 substrate-writing-discipline).
 - Adjacent to ADR-183 (comms-event tag namespace) — deliberately not extended; heartbeat is protocol-discrimination not substantive-discrimination per the schema's open `lifecycle.event_type` axis.
+
+---
+
+### Heartbeat-content mechanical state-binding (cure for heartbeat-content-drift recurring failure mode)
+
+[captured: 2026-05-25 | source: napkin 2026-05-25 Misty entry + comms broadcasts `86d1fe2e` (Misty closeout) + Lunar wind-down event |
+graduation-target: pdr-draft:heartbeat-content-state-binding OR adr-draft:heartbeat-cron-state-derivation |
+trigger: second-instance — confirmed |
+size: M — substrate amendment to heartbeat emitter substrate plus SKILL §0.5 norm |
+status: pending]
+
+Context: this session observed 3 Misty + 3+ Lunar instances of templated
+heartbeat body staying stale despite live state changes. Mechanism: free-form
+prose bodies in a Monitor `while/sleep 240` loop (Claude) do not refresh
+unless the agent manually stops + restarts the loop. The narrative-event
+heartbeats are emitted with the body string fixed at loop-start time, while
+the agent's state evolves underneath.
+
+Cure shape: heartbeat body should mechanically reflect a single observable
+current-claim or current-cycle-state field — e.g. the cron tick reads the
+emitter's currently-open claim from `active-claims.json` and emits the claim
+intent verbatim, OR reads a single agent-state file the agent writes when
+its boundary changes. Free-form prose drifts; structured derivation
+doesn't.
+
+Why pending: substrate location not yet ratified (heartbeat-emitter wrapper
+in agent-tools? a structured `agent_state` field on claim row? a separate
+state file?); awaiting either an owner-directed substrate location or a
+worked third instance to lock the cure.
+
+Falsifiability: post-cure, a heartbeat body whose content was authored ≥ 1
+cycle ago but whose state has since changed is no longer possible because
+the body is mechanically derived from current state.
+
+Cross-references:
+
+- Composes with the PDR-078 / ADR-186 contract above — the body content is
+  substrate-specific (ADR-186 phenotype dimension), the cadence + threshold +
+  exemptions remain portable (PDR-078 contract).
+- Adjacent worked-instance: see Misty napkin entry 2026-05-25 §Surprises.
+
+---
+
+### Heartbeat-cron health-monitoring via watcher-staleness substrate (cure for platform-wide cron-drift episodes)
+
+[captured: 2026-05-25 | source: napkin 2026-05-25 Misty entry + DM event `8c6bd26a` (Misty to Lunar cron-drift correlation) |
+graduation-target: adr-draft:heartbeat-cron-health-monitoring OR amendment to ADR-186 §Migration discipline |
+trigger: second-instance — confirmed (Misty 20-min + Lunar 17-min concurrent gaps 23:28-23:47Z 2026-05-24) |
+size: M — substrate amendment to heartbeat emitter + watcher-staleness substrate |
+status: pending]
+
+Context: Misty heartbeat cron silent 20 min (23:26 → 23:47Z) AND Lunar's
+silent 17 min (23:28 → 23:45Z) in the same window. Two independent
+Claude-platform Monitor cron loops degraded concurrently — strongly suggests
+platform/harness-side cause, not agent-side. Mistbound's silence-without-
+work-evidence at 23:11-onwards may have been the same episode (never
+broadcast a recovery).
+
+Cure shape: heartbeat-cron health-monitoring via the existing
+`agent-tools/src/collaboration-state/watcher-staleness.ts` substrate — the
+same surface ADR-186 §Substrate-as-API reserves for C5. The substrate
+already supports staleness-file writes per-tick (watcher already uses it for
+self-liveness); extending the heartbeat emitter to write the same kind of
+per-tick staleness file would let peers detect "cron loop alive, just
+silent" vs "cron loop dead". The retirement-detection rule could compose:
+silence past 10-min threshold AND staleness-file last-written > 5× expected
+cadence ago = retired; silence past 10-min AND staleness-file fresh =
+cron-degraded false-positive.
+
+Why pending: depends on whether the substrate extension is a sibling ADR to
+ADR-186 or an in-place amendment; needs ground-state check of
+`watcher-staleness.ts` to confirm the extension shape is non-breaking.
+
+Falsifiability: post-cure, a Director's retirement-detection decision can
+be made deterministically from (silence + staleness-file age) without
+relying on git work-evidence cross-check (the current ping-before-escalate
+cure). The current cure becomes belt-and-braces, not primary.
+
+Cross-references:
+
+- Composes with the PDR-078 / ADR-186 contract above and with the
+  heartbeat-content-state-binding candidate above. Together they form a
+  three-part cure family: (1) what heartbeat body says (state-binding), (2)
+  how peers detect heartbeat-loop liveness (staleness-substrate), (3) what
+  the contract specifies (PDR-078 cadence/threshold/exemptions).
+- Adjacent worked-instance: see Misty napkin entry 2026-05-25 §Surprises;
+  DM event `8c6bd26a` Misty → Lunar; cross-correlation observable in
+  comms-event timestamps for both agents' heartbeat streams.
+
+---
+
+### Ping-before-escalate Director-discipline rule (graduation: rule file + repo-continuity discipline)
+
+[captured: 2026-05-25 | source: napkin 2026-05-25 Misty entry + Lunar wind-down broadcast |
+graduation-target: rule-draft:director-ping-before-retirement-escalate OR amendment to existing director-discipline rule |
+trigger: second-instance — confirmed (two false-positive Mistbound retirement-detections in single session: 22:57Z + 23:46Z, both rescinded by Mistbound responding alive) |
+size: S — single rule file or single rule amendment |
+status: pending]
+
+Context: Lunar declared retirement-detection on Mistbound twice in single
+session (22:57Z + 23:46Z); both times Mistbound responded alive within
+minutes. Both events used the cure shape Misty surfaced at 22:30Z
+(cross-check git work-evidence + comms work-evidence before declaring
+retirement). The cure works; the failure mode it prevents — false-positive
+Director retirement-detection cascading to unauthorised claim auto-rebalance
+under the SKILL §0.5 retirement contract — is real and recurring.
+
+Cure shape: a Director-discipline rule (or amendment to existing
+director-routing rule) that codifies the cure: before broadcasting a
+retirement-detection event, the Director MUST cross-check (a) git log for
+recent commits authored by the silent identity, (b) the commit-queue for
+in-flight intents under the silent identity, (c) any directed DMs awaiting
+the silent identity's response. Only silence + zero work-evidence on all
+three surfaces is sufficient for retirement-detection. Silence + work-
+evidence = false-positive-likely; surface to peer DM, not retirement
+broadcast.
+
+Why pending: substrate location not yet ratified (new rule file under
+`.agent/rules/director-*` or amendment to existing director-discipline
+rule).
+
+Falsifiability: post-cure, a Director retirement-detection broadcast that
+fires without the three-cross-check evidence is a rule violation
+detectable at consolidation review.
+
+Cross-references:
+
+- Composes with the PDR-078 / ADR-186 contract above — retirement-detection
+  is the observe-side of PDR-078; the discipline rule binds the Director's
+  detection authority to the cross-check before exercising the contract.
+- Adjacent worked-instance: see Misty napkin entry 2026-05-25 §Surprises;
+  the two retirement-detection broadcasts (`beb0b74f` 22:57Z, `3164a278`
+  23:46Z) both followed by Mistbound responding alive within minutes.
 
 ---

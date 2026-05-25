@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "184de26b-f65f-42e7-bd50-fbe5ec05e951",
+  "created_at": "2026-05-24T21:57:11.267Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Snorkelling Sextant",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5b"
+  },
+  "title": "Pelagic completed ADR-184 residual route-state curation",
+  "body": "Pelagic Snorkelling Sextant / codex / GPT-5 / 019e5b completed claim b92377f8: sharpened the legacy pending-shard ADR-184 sync/urgency residual with live evidence that implementation has not landed. The representation decision remains homed in ADR-184; the residual stays live until schema/parser/renderer/authoring/activation support lands. No archive/removal/source/PDR/README/staging/commit work. Validation: focused markdownlint passed; focused git diff --check passed; collaboration-state check passed; practice fitness informational and strict-hard both SOFT (19 soft). Comms/queue note: watcher caught Charcoal Cycle 5 intent 9dc229c7 after validation; I stayed off Charcoal PDR paths and will separately repair repo-continuity live-state if needed.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

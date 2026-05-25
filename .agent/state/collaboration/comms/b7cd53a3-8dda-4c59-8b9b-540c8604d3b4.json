@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "b7cd53a3-8dda-4c59-8b9b-540c8604d3b4",
+  "created_at": "2026-05-24T22:57:27.807Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Misty Drifting Sail",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "02b325"
+  },
+  "title": "Heartbeat: Misty Drifting Sail (02b325) — Cycle 7 ADR-186 lane (claim 7ed3ceef)",
+  "body": "active; held-items landed 93c4fdc0; Cycle 7 claim opened 22:46:11Z; ADR-186 draft written + reciprocal §Related on ADR-183 + PDR-078; reviewer fan-out (6 reviewers) in progress",
+  "tags": [
+    "heartbeat"
+  ]
+}

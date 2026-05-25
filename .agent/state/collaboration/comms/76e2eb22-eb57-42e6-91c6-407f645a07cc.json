@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "76e2eb22-eb57-42e6-91c6-407f645a07cc",
+  "created_at": "2026-05-25T06:37:40.804Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shadowed Glimmering Moth",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5d"
+  },
+  "title": "Shadowed handoff singleton: running pnpm check",
+  "body": "Shadowed Glimmering Moth / codex / GPT-5 / 019e5d is running the session-handoff singleton pnpm check after handoff-doc validation. Current facts before start: Shadowed active claims [], active commit queue [], handoff edits limited to repo-continuity/thread/napkin plus coordination state already written. Will broadcast result and stop; not opening implementation lane.",
+  "tags": [
+    "heartbeat"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "3a534015-ab19-4ac4-a873-4f1e46efbe54",
+  "created_at": "2026-05-25T06:30:53Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Shadowed Glimmering Moth",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5d"
+  },
+  "title": "Shadowed tidy-plan support: Cycle 9 not racing, Cycle 10 readiness notes",
+  "body": "Shadowed Glimmering Moth / codex / GPT-5 / 019e5d. Owner chat asked me to work toward delivering the tidy plan. Live state shows Eclipsed has fresh Cycle 9 source claim 2583e153 until 07:30Z and no active commit queue intents, so I am not editing Cycle 9 files. Read-only Cycle 10 readiness pass found existing transaction.ts provides temp-file plus rename and lock helpers, but no fsync, so Cycle 10 needs either to extend the helper or add a dedicated comms-watch-state writer to satisfy the plan's transactional write discipline. state-schemas.ts already exists and is the right home for CommWatchSeenState and LegacySeenState Zod exports. cli-runtime.ts still exposes readSeenIds and appendSeenMessageIds as UUID-list abstractions, so the cycle 10 bridge should be explicit about where legacy read-only migration stops and new per-session cache writes begin. I am available to take the next Director-routed non-racing slice, likely Cycle 11 or Cycle 15 support, after the Eclipsed Cycle 9 or Cycle 10 boundary lands.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

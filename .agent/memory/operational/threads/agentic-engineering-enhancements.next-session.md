@@ -1,5 +1,102 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Spinoff thread (2026-05-24 — owner-directed research vector capture)
+
+A new owner-gated thread `agent-collaboration-research` was opened at the
+post-M1-Safe-Pause-merge boundary by Charcoal Brazing Kiln
+(`claude / claude-opus-4-7 / 7c7327`) under direct owner direction to
+preserve the comms-corpus-as-research-substrate observation for future
+dedicated research sessions. The agent-collaboration work documented in this
+thread's recent sessions (PDR-076, PDR-027, PDR-064, ADR-182, ADR-183,
+PDR-063, PDR-081, the substrate-pointer-pattern v2 worked instances, the
+marshal-seat watcher silent-failure mode, owner-direction-supremacy
+shape-variations, and the multi-agent collaboration arc that produced M1
+Safe Pause) is the **source corpus** for that research.
+
+Record:
+[`agent-collaboration-research.next-session.md`](agent-collaboration-research.next-session.md).
+Status: owner-gated; not currently dispatchable. The thread record carries
+the research hypothesis, owner-named analysis vectors (subject / context /
+theme / connection), a candidate-theme catalogue, a dedicated-session
+profile, possible session shapes, and the first-move discipline for a
+future research-mode agent. Repo-continuity Paused Threads table now lists
+the thread; comms broadcast `b2f6a5fe` carries the substance to the corpus
+itself.
+
+## Session Outcome (2026-05-25 — Shadowed Glimmering Moth / `codex` / GPT-5 / `019e5d`, consolidation closeout + observation-only tidy-plan support)
+
+**Session boundary**: owner first asked Shadowed to re-ground in
+`oak-start-right-team` + `oak-consolidate-docs` and run the consolidation
+pipeline until no critical or hard files remained, then redirected Shadowed to
+work toward delivering the post-M1 tidy-up plan. Owner then requested a full
+`oak-session-handoff` and session end.
+
+**Landed outcome**: the consolidation hard/critical objective completed.
+Shadowed found one hard fitness item in `napkin.md`, reflowed the overlong
+heading without trimming substance, updated the critical-drain plan evidence,
+and validated both `practice:fitness:informational` and `practice:fitness
+--strict-hard` as `SOFT (20 soft)`.
+
+**Tidy-plan support outcome**: no source implementation was taken because
+Eclipsed Watching Secret opened the fresh Cycle 9 source claim first
+(`2583e153`) and Misty routed Wooded Flowering Leaf to stand by for Cycle 10.
+Shadowed stayed observation-only and broadcast two readiness notes:
+
+- Cycle 10 (`3a534015`): existing `transaction.ts` has temp-file + rename and
+  lock helpers but no fsync, so the storage redesign must add a genuinely
+  crash-hardened state writer or extend the helper deliberately.
+- Cycle 11 (`52a220ae`): the current cleanup surface has 98
+  `.agent/state/collaboration/comms-seen/` files and non-test references in
+  the start-right-team SKILL, comms-watch mechanism reference, agent-tools
+  README, continuity-surface rule, and ADR-182. ADR-182 is not in the plan's
+  file scope and needs a deliberate keep/update verdict before zero-reference
+  cleanup is claimed.
+
+**Validation**: `markdownlint` on `napkin.md` passed, `git diff --check` on the
+touched handoff/coordination surfaces passed, and Shadowed's active claims are
+closed. No commit intent was opened.
+
+**Next safe step**: do not take Cycle 9 or 10 away from the routed owners.
+Eclipsed completes Cycle 9 and enqueues through Hushed; Wooded opens Cycle 10
+after Cycle 9 lands. A later Cycle 11 implementer should absorb Shadowed's
+ADR-182 cleanup note before deleting `comms-seen`.
+
+## Session Outcome (2026-05-24 — Hushed Fading Hush / `codex` / GPT-5 / `019e5a`, post-M1 session-handoff rerun)
+
+**Session boundary**: owner asked to rerun `$oak-session-handoff`, then
+explicitly corrected the closeout boundary to skip the aggregate check and
+write the handoff docs only. Treat this as Hushed's final closeout for this
+seat.
+
+**Current live state captured**:
+
+- Branch is now `feat/education-evidence-foundational-graphs`, with local HEAD
+  `bf3a8152` after PR #108 merged via `2462952a`.
+- Seaworthy event `703de8dd` attests M1 Safe Pause achieved and says the repo
+  pivots back to EEF first-feature delivery. Team resume remains
+  owner-directed.
+- Hushed has no active claims; the active commit queue is empty.
+- Existing staged changes include Velvet's PR #108 preview-MCP handoff docs
+  plus `.cursor/mcp.json` and `.sonarcloud.properties`. Hushed added only
+  unstaged handoff updates to `repo-continuity.md`, this thread record, and
+  the active napkin.
+
+**Validation boundary**:
+
+- Focused handoff-doc checks passed before the owner skip instruction:
+  `markdownlint` on `napkin.md` + `repo-continuity.md`, `git diff --check` on
+  those files, and `collaboration-state -- check`.
+- The mandatory aggregate `pnpm check` was started, repaired dependency state,
+  and passed early gates including secrets scan, clean, and many package
+  checks before the owner explicitly instructed Hushed to skip the check. The
+  running process was terminated by `pkill -f "pnpm check"` under that owner
+  direction. Do not report this handoff as aggregate-check green.
+
+**Next safe step**: stop this Hushed session. A future consolidator should run
+the deeper consolidation pass deliberately because M1 Safe Pause / PR #108
+closure fires the "milestone closed" trigger. Start from live git status,
+Seaworthy event `703de8dd`, the EEF thread record, and current plan surfaces.
+
 ## Session Outcome (2026-05-24 — Hushed Fading Hush / `codex` / GPT-5 / `019e5a`, operations-doc consolidation handoff)
 
 **Session boundary**: owner explicitly asked for full `oak-session-handoff` and
@@ -1880,9 +1977,13 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 
 | Platform | Model | Agent name | Role | First-session | Last-session |
 | --- | --- | --- | --- | --- | --- |
-| `codex` | `GPT-5` | Hushed Fading Hush | Consolidator (operations-doc soft-tier split and session handoff) | 2026-05-24 | 2026-05-24 |
+| `codex` | `GPT-5` | Hushed Fading Hush | Consolidator (operations-doc soft-tier split and post-M1 session-handoff rerun) | 2026-05-24 | 2026-05-24 |
 | `codex` | `GPT-5` | Sylvan Sprouting Petal | Knowledge Curator (memory critical-drain continuation; distilled graduations; identity-seed CLI refinement; handoff) | 2026-05-24 | 2026-05-24 |
 | `codex` | `GPT-5` | Shaded Silencing Dusk | Knowledge Curator (active-napkin processing, plan-truth repair, boundary handoff) | 2026-05-24 | 2026-05-24 |
+| `codex` | `GPT-5` | Pelagic Snorkelling Sextant | Knowledge Curator (hard active-napkin pressure pass under start-right-team/consolidate-docs) | 2026-05-24 | 2026-05-24 |
+| `codex` | `GPT-5` | Shadowed Glimmering Moth | Consolidator / observation-only tidy-plan support (`019e5d`; hard/critical consolidation objective closed at `SOFT (20 soft)`, then Cycle 10/11 readiness notes broadcast without racing Eclipsed Cycle 9 or Wooded Cycle 10) | 2026-05-25 | 2026-05-25 |
+| `claude` | `claude-opus-4-7` | Misty Drifting Sail | Implementer / plan-AUTHOR (`02b325`, post-m1-attestation-tidy-up.plan.md Cycles 5+5a re-enqueue + held-items consolidation + 7 + 7.1 + 8 + 8a). Joined fresh under Lunar-Director routing 2026-05-24T22:10Z for commit-subject pre-flight (read-only), re-routed at 22:14Z to plan-AUTHOR under pure-direction split (Lunar = plan-OWNER, Misty = plan-AUTHOR, Mistbound = Commit Marshal). 7 cycles landed via Mistbound: `7c2f85f4` Cycle 5 (PDR-077 + reciprocals); `e8bc6781` Cycle 5a (PDR-079 + rule + hook); `93c4fdc0` held-items consolidation (README + practice-index PDR-077/078/079); `48c8ac22` Cycle 7 (ADR-186 + reciprocal §Related to ADR-183 + PDR-078 + practice-index line-165 fix); `75a2cd25` Cycle 7.1 (ADR-186 prettier-mangle repair); `9e57290d` Cycle 8 (SKILL §0.5 thin + PDR-078 Candidate→Accepted Adopted 2026-05-25 + reciprocal §Related to PDR-027/063/064). Cycle 8a ADR-187 (Claude self-modification authz cure-shape, WS-8 Lanternlit absorption — C2-near-term + C5-long-term + C4-fallback combination; C1/C3 rejected; 10 architectural conditions from Ferny WS-2 reviewer synthesis embedded; **4-reviewer absorption depth** docs-adr APPROVE-AS-IS + assumptions 2 CRITICAL + security 1 RES-CRITICAL + 5 MEDIUM + 1 LOW + wilma 2 RES-CRITICAL + 4 MEDIUM) authored 585 lines and **enqueued under intent `7e965431` / claim `e097d5a1`** awaiting marshal at compaction-prep time. Cycle 8a marshal blocked on Mistbound silence (≥83 min at wind-down; ping-before-escalate cure validated false-positive twice in session; sole-marshal binding means owner-class decision required). Surfaced 3 recurring failure modes for closeout consolidation: **heartbeat-content-drift** (3 Misty + 3+ Lunar instances of stale templated heartbeat body despite live state changes; graduation candidate: mechanical state-binding via structured field); **platform-wide Monitor cron-drift** (Misty 20-min + Lunar 17-min concurrent gaps at 23:28-23:47Z; graduation candidate: heartbeat-cron health-monitoring via existing watcher-staleness substrate); **ping-before-escalate cure validation** (cross-check git work-evidence before retirement-detection; validated twice in single session). Plan-author seat released 2026-05-25T00:35Z per Lunar's structural-stall wind-down at 00:33Z; team-member closeout broadcast `86d1fe2e`. **1 claim retained** for Cycle 8a marshal pickup (`e097d5a1`). | 2026-05-24 | 2026-05-25 |
+| `claude` | `claude-opus-4-7` | Mistbound Hiding Threshold | Sole Commit Marshal (`0e27cc`, post-m1-attestation-tidy-up.plan.md across compaction-5 resume → retirement; duty span ~8h35min 2026-05-24T21:08Z → 2026-05-25T05:47Z). 10 commits landed: `4575044e` Cycle 2 (Charcoal PDR-077 captures); `e8ca6d08` Cycle 3 (PDR-076a Accepted); `b7ac9938` Cycle 4 (PDR-076b Accepted); `7c2f85f4` Cycle 5 (PDR-077 + 063/064 reciprocals); `e8bc6781` Cycle 5a (PDR-079 + rule + hook); `9725ae09` Cycle 6 (PDR-078 Candidate); `93c4fdc0` held-items consolidation; `48c8ac22` Cycle 7 (ADR-186); `75a2cd25` Cycle 7.1 (ADR-186 prettier-mangle repair); `9e57290d` Cycle 8 (SKILL §0.5 + PDR-078 Adopted + reciprocals). Cycle 8a (intent `7e965431`) abandoned 23:26Z on husky format-issues; substantive work preserved as `??`+`M` in working tree for next author. Two false-positive retirement-detections fired (21:57Z Seaworthy + 22:57Z Lunar) — Director cure-discipline `cross-ref git log before escalation` named at 22:58Z + 23:01Z; pattern named for graduation. Branch-fitness-and-push-cadence.plan.md authored (16-cycle revised structure; 11 reviewer-driven revisions applied; uncommitted in tree). Marshal seat handed cleanly to Hushed Stalking Shade (`bc0a07`) via PDR-064 Moment-2 at 05:46Z (handoff record `.agent/state/collaboration/handoffs/2026-05-25-mistbound-to-hushed-stalking-shade-marshal-handoff.md`; Moment-1 broadcast `e2a21c5d`). Retired 2026-05-25T05:47Z. Closeout broadcast 05:47:50Z. | 2026-05-22 | 2026-05-25 |
 | `claude` | `claude-opus-4-7-1m` | Lush Sprouting Thicket | Implementer (codex-helper skill, codex-exec CLI, ADR-180, future plan) | 2026-05-12 | 2026-05-12 |
 | `claude` | `claude-haiku-4-5-20251001` | Prismatic Beaming Twilight | Designer (multi-agent delegation orchestration architecture, strategic brief) | 2026-05-12 | 2026-05-12 |
 | `codex` | `GPT-5` | Coastal Cresting Prow | Implementer (cost-of-collaboration P1 B-11 `comms direct/reply`; landed at `f88d0d67`) | 2026-05-12 | 2026-05-12 |
@@ -6276,6 +6377,12 @@ nl -ba .agent/directives/AGENT.md
 
 ### Owning Plans
 
+- Active delivery plan:
+  [`post-m1-attestation-tidy-up.plan.md`](../../../plans/agentic-engineering-enhancements/current/post-m1-attestation-tidy-up.plan.md)
+  — cycles through 8a have landed or been repaired in the live branch; Cycle 9
+  is currently claimed by Eclipsed Watching Secret, Cycle 10 is pre-routed to
+  Wooded Flowering Leaf after Cycle 9 lands, and Cycles 11-15 remain sequenced
+  implementation work.
 - Primary (active multi-workstream lane):
   [`multi-agent-collaboration-protocol.plan.md`](../../../plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md)
   — WS0 landed `63c66c88`; WS1 landed `a5d33519`; WS2 landed
@@ -6342,6 +6449,14 @@ nl -ba .agent/directives/AGENT.md
   Reviews are blocking later but not required now.
 
 ### Current Objective
+
+**2026-05-25 update (Shadowed Glimmering Moth)**: the current objective is to
+deliver the post-M1 tidy-up plan, not reopen soft consolidation as an
+implementation lane. Shadowed's hard/critical consolidation objective is closed
+at `SOFT (20 soft)` evidence, and this handoff preserves the next safe boundary:
+let Eclipsed finish/enqueue Cycle 9 through Hushed, then let Wooded open Cycle
+10. Shadowed's only tidy-plan contribution was read-only support broadcast in
+comms events `3a534015` and `52a220ae`.
 
 **2026-05-12 update (Torrid Flaring Hearth)**: the owner-requested
 `jc-start-right-thorough` + `jc-consolidate-docs` pass is complete. Active
@@ -6412,6 +6527,15 @@ validation.
 
 ### Current State
 
+- Live tidy-plan state at Shadowed handoff: HEAD is `26f8e7cb`; cycles through
+  8a are represented in the recent commit history; Cycle 9 is actively claimed
+  by Eclipsed on `cli-comms-watch.ts`, `comms-watch-loop.ts`, its unit test,
+  and the tidy-plan body; Wooded is standing by for Cycle 10 after Cycle 9.
+  Hushed remains the commit marshal, and the active commit queue was empty when
+  Shadowed refreshed it for handoff.
+- Shadowed's durable updates are continuity/thread/napkin handoff surfaces
+  only. No source or plan-body implementation claim was opened for Shadowed's
+  tidy-plan support.
 - WS3A RED, claim-history GREEN, decision-thread GREEN, protocol-observability
   refactor, and validation/handoff are complete.
 - WS4A lifecycle integration is complete across start-right,
@@ -6522,6 +6646,13 @@ validation.
 
 ### Blockers / Low-Confidence Areas
 
+- Treat the active Cycle 9 claim as the live write boundary. Do not stage or
+  edit Eclipsed's claimed source surfaces, and do not pre-empt Wooded's Cycle
+  10 route unless the owner or marshal reroutes the team.
+- Shadowed's Cycle 11 readiness note found ADR-182 in the current
+  `comms-seen` reference surface even though ADR-182 is outside the named Cycle
+  11 file scope. The Cycle 11 owner should make a deliberate keep/update verdict
+  before claiming zero-reference cleanup.
 - `pnpm practice:fitness:strict-hard` currently fails on known structural
   debt: `repo-continuity.md` critical, `pending-graduations.md`
   hard/critical, and `practice-bootstrap.md` hard on characters.
@@ -6563,6 +6694,17 @@ validation.
   and `architecture-reviewer-wilma` for deadlock/hidden-coupling risks.
 
 ### Next Safe Step
+
+For the current live lane, continue the post-M1 tidy-up sequence:
+
+1. Eclipsed completes Cycle 9 and enqueues through Hushed.
+2. Wooded opens Cycle 10 after Cycle 9 lands.
+3. A later Cycle 11 implementer absorbs Shadowed's `comms-seen` / ADR-182
+   readiness note before deleting watcher seed state.
+
+Do not restart Shadowed's soft-tier consolidation work as the next active lane;
+the consolidation trigger is captured as due in repo-continuity, but the owner
+closed this session while the tidy-plan implementation sequence was active.
 
 **No WS3A, WS4A, commit-window, WS3B sidebar/escalation, joint-decision,
 deterministic-identity core, Claude Code statusline wiring, or Codex
@@ -6651,6 +6793,11 @@ Choose the lane deliberately:
 
 ### Promotion Watchlist
 
+- Shadowed's handoff re-fired a consolidation trigger: M1/PR108 closure plus
+  the post-M1 tidy-plan session added fresh owner-priority provenance,
+  watcher-seed cleanup, and comms failure-mode evidence. Run a future
+  consolidation pass deliberately after the active tidy-plan cycle window,
+  preserving substance rather than trimming for fitness pressure.
 - If the AGENT implementation reveals a new stable rule for platform
   entrypoints, update the existing pending PDR-014 register item rather
   than creating a duplicate candidate.

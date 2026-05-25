@@ -22,33 +22,33 @@ todos:
     content: >
       Cycle 1: Capture Ferny PDR-076 SPLIT prestage from /tmp to durable
       handoff record. One commit. Tree green at end.
-    status: pending
+    status: completed
   - id: cycle-2-capture-charcoal-pdr077
     content: >
       Cycle 2: Capture Charcoal PDR-077 draft + R3 synthesis from /tmp
       to durable handoff record. One commit. Tree green at end.
-    status: pending
+    status: completed
     depends_on: [cycle-1-capture-ferny-prestage]
   - id: cycle-3-pdr-076a
     content: >
       Cycle 3: Author PDR-076a (identity tuple) from captured Ferny
       prestage; reviewer dispatch (docs-adr-expert); marshal-cycle.
       One commit. Tree green at end.
-    status: pending
+    status: completed
     depends_on: [cycle-2-capture-charcoal-pdr077]
   - id: cycle-4-pdr-076b
     content: >
       Cycle 4: Author PDR-076b (body-file frontmatter) from captured
       Ferny prestage; reviewer dispatch (docs-adr-expert); marshal-cycle.
       One commit. Tree green at end.
-    status: pending
+    status: completed
     depends_on: [cycle-3-pdr-076a]
   - id: cycle-5-pdr-077
     content: >
       Cycle 5: Absorb 7 R3 SHOULD-ABSORB + 1 Director-verdict item;
       author PDR-077 (marshal-as-cycle-discipline) final;
       marshal-cycle. One commit. Tree green at end.
-    status: pending
+    status: completed
     depends_on: [cycle-4-pdr-076b]
   - id: cycle-5a-pdr-079
     content: >
@@ -57,22 +57,23 @@ todos:
       rule scope-update (WS-12 co-cure). Unblocks cycles 6 + 7.
       Reviewer dispatch (docs-adr-expert + architecture-expert-fred +
       assumptions-expert). Marshal-cycle. One commit. Tree green at end.
-    status: pending
+    status: completed
     depends_on: [cycle-5-pdr-077]
   - id: cycle-6-pdr-078
     content: >
       Cycle 6: Author PDR-078 (liveness-heartbeat-contract, portable,
       SHA-free); reviewer dispatch (docs-adr-expert + assumptions-expert);
       marshal-cycle. One commit. Tree green at end.
-    status: pending
+    status: completed
     depends_on: [cycle-5a-pdr-079]
   - id: cycle-7-adr-186
     content: >
       Cycle 7: Author ADR-186 (comms-event-heartbeat-lifecycle-substrate,
       repo-bound, SHAs/UUIDs allowed); reviewer dispatch (docs-adr-expert
       + architecture-expert-fred); marshal-cycle. One commit. Tree green
-      at end.
-    status: pending
+      at end. **Note**: off-plan Cycle 7.1 prettier-mangle fix landed at
+      `75a2cd25` (R4-captured).
+    status: completed
     depends_on: [cycle-6-pdr-078]
   - id: cycle-8-skill-thin-pointer
     content: >
@@ -80,7 +81,7 @@ todos:
       pointer to PDR-078 + reciprocal §Related amendments to PDR-027 /
       PDR-063 / PDR-064; reviewer dispatch (docs-adr-expert +
       onboarding-expert); marshal-cycle. One commit. Tree green at end.
-    status: pending
+    status: completed
     depends_on: [cycle-7-adr-186]
   - id: cycle-8a-ws8-adr
     content: >
@@ -90,7 +91,7 @@ todos:
       per PDR-079. Reviewer dispatch (docs-adr-expert +
       assumptions-expert + security-expert). Marshal-cycle. One commit.
       Tree green at end.
-    status: pending
+    status: completed
     depends_on: [cycle-8-skill-thin-pointer]
   - id: cycle-9-comms-watch-ws1
     content: >

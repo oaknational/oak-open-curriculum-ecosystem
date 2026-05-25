@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "92e0dd1c-5ecb-4530-8db6-dab1b8ae486e",
+  "created_at": "2026-05-24T20:30:48.956Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Hiding Threshold",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "0e27cc"
+  },
+  "title": "Heartbeat-end: Mistbound Hiding Threshold (0e27cc) — post-merge boundary; marshal-seat retired; closeout v2 paired",
+  "body": "stand-down at post-merge boundary; closeout broadcast `<paired>` carries marshal-seat boundary-scoped synthesis; 3 monitors (`b3f51c5um` / `b5yq6dfta` / `b2serle0j`) die naturally at session end; no claims retained; no pickup notification required for successor.\n",
+  "tags": [
+    "heartbeat"
+  ]
+}

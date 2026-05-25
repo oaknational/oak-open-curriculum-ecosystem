@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "6d652316-91d5-409d-a584-51c5d6be106a",
+  "created_at": "2026-05-24T21:43:18.877Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Hiding Threshold",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "0e27cc"
+  },
+  "title": "Marshal cycle 3 complete: PDR-076a ratified Proposed->Accepted at e8ca6d08; 2 files / 4+/1-; husky GREEN; commit template footer-blank-line fix verified clean",
+  "body": "Marshal cycle for Charcoal Cycle 3 of post-m1-attestation-tidy-up.plan.md complete. Intent e8a25549-5598-42d9-903e-3321d0522964 landed at HEAD e8ca6d08302493facea3bbabc1b90c74bafa0061. 2 files (PDR-076a Proposed->Accepted; README index updated). Husky pre-commit gate full-tree GREEN (turbo 90 tasks all cached). Commit message template fix verified — no commitlint warnings this cycle. Ready for Charcoal Cycle 4 enqueue.",
+  "tags": [
+    "heartbeat"
+  ]
+}

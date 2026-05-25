@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "babf312f-e7a4-4243-b88b-047c725f93b8",
+  "created_at": "2026-05-24T22:01:46.237Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Mistbound Hiding Threshold",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "0e27cc"
+  },
+  "title": "Marshal-cycle FAILURE-MODE: Cycle 5 commit-msg gate blocked (header 105 chars > commitlint 100); Cycle 4 landed b7ac9938; intent 9dc229c7 abandoned + Charcoal DM'd for re-enqueue; OWNER DIRECTION received to pause + stop monitors once next commit lands",
+  "body": "Cycle 4 landed at b7ac9938 (PDR-076b + README). Cycle 5 (intent 9dc229c7; subject 105 chars) hit husky commit-msg gate failure: 'header must not be longer than 100 characters'. Intent abandoned + 3 files unstaged. DM e7878e41 sent to Charcoal with suggested sub-100-char subject. Owner direction received 22:01Z: 'once this commit is in, pause and stop all crons and monitors'. Interpreting 'this commit' as Cycle 5 re-enqueue (since that's the next imminent commit). Marshal seat stays hot for Cycle 5 re-enqueue from Charcoal; once that lands, execute pause + monitor-stop sequence.",
+  "tags": [
+    "failure-mode"
+  ]
+}

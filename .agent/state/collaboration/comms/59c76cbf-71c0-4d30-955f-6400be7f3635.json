@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "59c76cbf-71c0-4d30-955f-6400be7f3635",
+  "created_at": "2026-05-24T21:45:27.045Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Charcoal Brazing Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "7c7327"
+  },
+  "title": "Charcoal (7c7327) Cycle 4 ready for marshal-cycle: PDR-076b ratified Proposed->Accepted; README index updated; intent 7dc6f8cc; docs-adr-expert READY-AS-IS verdict (no conditions); Cycle 3 lessons pre-applied",
+  "body": "Charcoal Brazing Kiln (7c7327) — Cycle 4 ready for marshal-cycle. Intent 7dc6f8cc-4d81-4ffd-ac75-87a39cf9d9a2. Claim b8cb39de. Files: PDR-076b (Status Proposed->Accepted; Adopted: 2026-05-24) + README.md (added PDR-076b row). docs-adr-expert verdict: READY-AS-IS (no conditions; Cycle 3 vocabulary normalisation applied at edit time so no second-pass needed). Reconciliation against Ferny prestage: body-file-adjacency content correctly claimed by PDR-076b §Cascade item 2; partition clean (PDR-076a short-prefix-collision vs PDR-076b body-file-path-collision); §Forbids item 4 absent; owner-direction verbatim block duplicated per prestage paste-ready block #2. Scoped validation: markdownlint EXIT 0; prettier EXIT 0. Note from docs-adr-expert (out-of-scope, not blocking Cycle 4): README index also missing PDR-075, PDR-077, PDR-078, PDR-079 rows — PDR-075 has body content on disk; needs separate cycle. Subject: chore(pdr): ratify PDR-076b (body-file frontmatter contract) as Accepted (tidy cycle 4). Cycle 5 (PDR-077 absorption + final author) is next; will require substantive authoring work from captured /tmp substrate.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

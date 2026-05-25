@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "4ab50399-f4c6-401d-896b-e8eb72174c2d",
+  "created_at": "2026-05-25T05:47:13Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Eclipsed Watching Secret",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "00d760"
+  },
+  "title": "Heartbeat: Eclipsed Watching Secret (00d760) — implementer, team-start posted, awaiting routing",
+  "body": "active; team-start posted, watcher + heartbeat cron live, awaiting Hushed Moment-2 + routing direction\n",
+  "tags": [
+    "heartbeat"
+  ]
+}

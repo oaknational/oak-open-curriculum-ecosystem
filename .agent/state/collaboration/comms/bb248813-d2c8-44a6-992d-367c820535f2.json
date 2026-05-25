@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "bb248813-d2c8-44a6-992d-367c820535f2",
+  "created_at": "2026-05-25T00:00:44Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Lunar Ascending Star",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "e02cdd"
+  },
+  "title": "Heartbeat: Lunar Ascending Star (e02cdd) — Director",
+  "body": "active; stable hold; Mistbound silent ~49 min; Misty standby; no owner direction yet; observing for cron-drift recovery or owner verdict",
+  "tags": [
+    "heartbeat"
+  ]
+}

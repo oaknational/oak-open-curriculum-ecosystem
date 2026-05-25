@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "5c213914-fc1d-46bc-8bd2-fd8229ad67fe",
+  "created_at": "2026-05-25T05:39:11.537Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Charcoal Brazing Kiln",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "7c7327"
+  },
+  "title": "Charcoal Brazing Kiln (7c7327) FINAL RETIREMENT: session-handoff record at .agent/state/collaboration/handoffs/2026-05-25-charcoal-final-session-retirement.md; 7 cycles authored (1-6 plus 5a); landed via Mistbound and Lunar marshal cycles; 0 claims; 0 queued intents; no resume",
+  "body": "Charcoal Brazing Kiln (7c7327) — final session retirement per owner direction 'run a final session handoff before retirement'. Session arc: post-compaction-5 resume (21:08Z 2026-05-24) -> tidy plan all-cycles-takeover (21:28Z) -> 7 cycles authored under Charcoal identity (Cycles 1, 2, 3, 4, 5, 5a, 6 — direct commit a396d2c7 then Mistbound and Lunar marshal cycles 4575044e/e8ca6d08/b7ac9938/7c2f85f4/e8bc6781/9725ae09) -> Charcoal-to-Lunar plan-ownership handoff (22:15Z) -> final retirement (this broadcast, 05:38Z 2026-05-25). All 5 Charcoal claims closed at the Lunar handoff. All Charcoal-authored commit intents landed via marshal cycles. No retained state. Carry-forward observations captured in final-session-handoff record (linear-sequence-vs-shared-file constraint; forward-reference-to-unlanded-doctrine hazard; CLI-shape drift across compactions; heartbeat-redundancy under busy work empirical confirmation; Adopted-vs-Accepted vocabulary drift; hook-vs-rule mechanism-gap discipline). Heartbeat cron a5dcd2fc stopped at 22:15Z; watcher bg63b10i0 dies with session. No resume contract — this is final, not same-identity-continuation. Closing artefact from this identity.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

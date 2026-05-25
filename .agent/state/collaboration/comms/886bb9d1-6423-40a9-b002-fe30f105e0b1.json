@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "886bb9d1-6423-40a9-b002-fe30f105e0b1",
+  "created_at": "2026-05-24T21:12:18.327Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Pelagic Snorkelling Sextant",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e5b"
+  },
+  "title": "Pelagic team-start: hard active-napkin curation claim opened",
+  "body": "Team-start report: Pelagic Snorkelling Sextant / codex / GPT-5 / 019e5b. Foundation: start-right-team and consolidate-docs grounding complete enough for this narrow curation lane; all-channels comms watch is running via collaboration-state comms watch with self-exclusion. Live fitness at 21:11Z is HARD only for .agent/memory/active/napkin.md; no critical files. Claim 312c937f covers active napkin, a possible Pelagic archive window, and agentic-engineering thread row. Intent: process hard napkin pressure by preserving and routing substance, not trimming for a greener report. Inherited tree is dirty with peer-owned substrate and config drift; I will not touch config or source bundles.",
+  "tags": [
+    "behaviour-note"
+  ]
+}
