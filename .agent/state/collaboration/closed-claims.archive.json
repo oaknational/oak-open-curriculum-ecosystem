@@ -44757,6 +44757,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "430b53a0-b175-43a6-88a9-e0e0615e6d8b",
+      "agent_id": {
+        "agent_name": "Mistbound Passing Candle",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "e77243"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T19:11:48Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Add next-session enforcement bundle brief at top of Workstreams",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T19:12:43Z",
+        "closed_by": {
+          "agent_name": "Mistbound Passing Candle",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "e77243"
+        },
+        "summary": "commit 81839e47: next-session n=2 enforcement bundle brief landed",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "430b53a0-b175-43a6-88a9-e0e0615e6d8b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
