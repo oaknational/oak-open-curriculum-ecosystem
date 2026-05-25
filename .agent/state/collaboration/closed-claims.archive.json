@@ -44507,6 +44507,89 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "9ec09768-110e-44bc-b108-977e43cbdc05",
+      "agent_id": {
+        "agent_name": "Mistbound Passing Candle",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "e77243"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T17:46:30Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Fitness cure on open-questions and persist §1 lifecycle closure",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T17:47:34Z",
+        "closed_by": {
+          "agent_name": "Mistbound Passing Candle",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "e77243"
+        },
+        "summary": "commit 445bf0e1: docs(state) fitness cure + lifecycle persist",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9ec09768-110e-44bc-b108-977e43cbdc05",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "7836b07c-73a7-4cd0-b9b1-127924ce34ac",
+      "agent_id": {
+        "agent_name": "Mistbound Passing Candle",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "e77243"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T17:47:48Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "WS4 first move: PDR-078 amendment with substrate-category clause (heartbeats-are-infrastructure)",
+      "intent_to_commit": "eed774a3-2bda-4d56-a9e8-c0bab84a58df",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T17:48:11Z",
+        "closed_by": {
+          "agent_name": "Mistbound Passing Candle",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "e77243"
+        },
+        "summary": "closed in same collaboration-state commit (intent eed774a3): PDR-078 WS4 amendment",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7836b07c-73a7-4cd0-b9b1-127924ce34ac",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
