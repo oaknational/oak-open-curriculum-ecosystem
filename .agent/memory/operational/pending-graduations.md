@@ -720,3 +720,75 @@ Falsifiability: a future role-transfer prompt contains wording that could mean
 either temporary transition support or a permanent split of role authority, and
 the agent confirms against the named source or records the interpretation
 without broadcasting the wrong permanent shape.
+
+### Plan-template friction surfaced during human-composer-tui authoring
+
+[captured: 2026-05-25 | source: Hushed Stalking Shade `bc0a07` session writing
+`.agent/plans/agent-tooling/current/human-composer-tui.plan.md` |
+target:plan-templates-or-skill:plan-templates-refresh | trigger: owner aside
+2026-05-25 (`make a note if the plan templates need updating or refactoring`)
+
+- first worked instance | size: M | status: pending]
+
+Authoring the 786-line `human-composer-tui.plan.md` against the SKILL §
+"Executable Plan Requirements" surfaced three template-shape observations
+that may compose into a templates-refresh slice:
+
+1. **Markdownlint MD032 friction** — repeated `**Acceptance**:\n- bullet`
+   shapes hit MD032 (`blanks-around-lists`) on first commit. The
+   `feature-workstream-template.md` body sketch does not include a
+   markdownlint-clean section pattern, so authors hand-roll the spacing
+   and discover the lint error at pre-commit time. A template skeleton
+   with the literal `**Section**:\n\n- bullet` shape (blank line between
+   the header and the list) would remove this floor cost.
+2. **§Assumptions (load-bearing; PDR-026 falsifiability) is reviewer-
+   demanded but template-absent** — the `assumptions-expert` reviewer
+   findings on `comms-watch-storage-redesign.plan.md` (2026-05-25) gave
+   GO WITH CONDITIONS specifically because the original draft omitted
+   the §Assumptions block. The author of the next plan
+   (`human-composer-tui.plan.md`) pre-empted by including the block,
+   but a template-level skeleton section labelled
+   `## Assumptions (load-bearing; PDR-026 falsifiability)` with the
+   "name + falsifiability + held-if-fails" sentence shape would
+   propagate the reviewer-validated pattern without requiring each plan
+   author to reconstruct it from review evidence.
+3. **§Cross-references discoverability gap** — plans need to be
+   discoverable from neighbouring plans, but `feature-workstream-
+   template.md` does not yet include a §Cross-references section with
+   the explicit categories (Read-side companion / Sibling / Downstream
+   consumer / Strategic origin / Schema source / Doctrine landing
+   target). The pattern is now well-formed across two recent plans
+   (`comms-watch-storage-redesign.plan.md`,
+   `human-composer-tui.plan.md`) and could graduate into the template
+   skeleton.
+
+Natural home: refresh `.agent/plans/templates/feature-workstream-
+template.md` to incorporate the markdownlint-clean section pattern, the
+§Assumptions block, and the §Cross-references categories. Alternatively
+ratify these as SKILL-level requirements in
+`.agent/skills/plan/SKILL-CANONICAL.md` §"Executable Plan Requirements"
+(in which case the template inherits structurally).
+
+Falsifiability: a third plan-authoring session in the next consolidation
+cadence either repeats the same three frictions (template-refresh slice
+becomes due) or does not (the friction was author-specific and the
+template is fine as-is).
+
+### Human-composer-tui plan landing (audit-trail entry)
+
+[captured: 2026-05-25 | source: Hushed Stalking Shade `bc0a07` |
+target:audit-trail | trigger: plan-completion landing reference | size: S |
+status: graduated]
+
+`.agent/plans/agent-tooling/current/human-composer-tui.plan.md` authored at
+`97a470dd` (786 insertions), cross-references at `d735fce9` (3 plans:
+`cost-of-collaboration §P8`, `comms-watch-storage-redesign §Cross-references`,
+`agent-coordination-cli-ergonomics §Problem and Intent`), discoverability at
+`5344ab5b` (`agent-tooling/current/README.md` row). Closes gaps G1–G10 from
+the 2026-05-25 review-and-consistency fan-out. WS0 owner-ratification gate is
+the only blocker before WS1+ implementation. PDR-083 proposed as the doctrine
+landing target.
+
+No graduation pending — the plan body is the substance; this entry is the
+audit trail so a future agent can locate the plan from the
+pending-graduations register without first knowing its filename.

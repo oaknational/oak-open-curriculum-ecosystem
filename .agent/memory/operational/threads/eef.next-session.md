@@ -1,6 +1,11 @@
 # Next-Session Record — `eef` thread
 
-**Last refreshed**: 2026-05-23 (Secret Vanishing Wisp / `claude` /
+**Last refreshed**: 2026-05-25 (Stormy Surfing Dock / `claude` /
+claude-opus-4-7 / `2a7b65` — solo session; PR-0 plan-freshness pass landed
+for the 4-PR gate-1a closure sequence in
+`../../../plans/sector-engagement/eef/current/please-do-a-deep-mighty-peach.plan.md`).
+
+**Previous refresh**: 2026-05-23 (Secret Vanishing Wisp / `claude` /
 claude-opus-4-7 / `981cbe` first-out closeout-authored; Sparking Melting
 Magma / `claude` / claude-opus-4-7 / `4cdb53` committed under owner-directed
 overall-closeout-authority handoff at 2026-05-23 06:54Z — first-out
@@ -9,6 +14,93 @@ team session; synthesises **19 commits across 6 active agents over ~10
 hours**; Round 1+2 substrate floor **effectively complete** — WS4.1 landed
 at `3241893d` under Stormbound Spiralling Breeze's owner-directed
 ownership-override).
+
+---
+
+## Session 2026-05-25 — PR-0 plan-freshness pass (Stormy Surfing Dock / `2a7b65`)
+
+**Solo session** (no peer collaboration; bootstrap fast-path: no other
+agents present in active-claims at session open). PR-0 of the 4-PR
+gate-1a closure sequence executed end-to-end and paused for owner
+direction per the explicit scope instruction.
+
+**Substantive output**: drift A–I plus the verified `_meta.attribution`
+canonical-field corrections applied across three plan files:
+
+- `.agent/plans/sector-engagement/eef/current/eef-first-feature.plan.md`
+  — ff1 → completed (skip per 2026-05-23 owner direction); ff3 → completed
+  with PR #114 SHA `77fcf746`; ff4 stays pending but content updated with
+  partial-progress record (5 of 7 full + partial breakdown corrected from
+  prior 8 + 6 framing); ff6 content corrected (`_meta.attribution`,
+  not `_meta.source`); Status/Last-Updated/Branch/Substrate-dep header
+  refreshed (branch ref corrected to
+  `feat/education-evidence-foundational-graphs-take2`); ADR-157 Proposed
+  status caveat added; PR-#108 hard-gate section compressed to one
+  historical block citing merge SHAs `2462952a` and `77fcf746`; broken
+  ADR-175 + ADR-179 link paths corrected (the actual filenames are
+  `175-external-evidence-corpus-freshness-governance.md` and
+  `179-transport-agnostic-graph-substrate.md`); pre-existing substrate-leak
+  in `types.ts:64-219` documented as Drift I with PR-1 healing pointer.
+- `.agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md`
+  — WS4.4 + WS4.5 status: pending → completed with PR #114 SHA in YAML
+  comments (verified by directory listing of substrate workspaces).
+- `.agent/memory/operational/threads/eef.next-session.md` — this entry.
+
+**Critical assessment performed before any plan-file edit**: five
+concurrent specialist verdicts (architecture-expert-betty + -fred +
+-wilma + assumptions-expert + test-expert) reviewed an initial 6-PR
+sketch. Key verdicts I verified by direct ADR + corpus-plan read before
+absorbing:
+
+- Fred CRITICAL #1 (loader belongs in `graph-corpus-sdk`) — CONFIRMED
+  against ADR-173:50.
+- Fred CRITICAL #2 (freshness vitest insufficient) — PARTIALLY CONFIRMED
+  against ADR-175:40-46; the ADR mandates a **plan-promotion gate**, not
+  per-PR/per-release CI. Scope softened to: `pnpm freshness:check`
+  script + extended unit test + plan-promotion-checklist documentation.
+  Scheduled CI workflow is optional excellence, not ADR-mandated.
+- Test-expert `_meta.attribution = EEF_ATTRIBUTION` correction — CONFIRMED
+  against corpus plan line 66. Propagated through every plan reference.
+- Assumptions 3-PR compression argument — REJECTED via direct
+  architectural-identity test; 4-PR shape (PR-0 freshness + PR-1
+  boundary discipline + PR-2 surface + PR-3 closeout) each maps to one
+  identity. PR-0 hygiene argument defended on stale-plan risk grounds.
+- Wilma contract-coherence "single best change" — REVISED placement from
+  PR-3 closeout to PR-2 cross-cutting reviewer (architecture-expert-betty)
+  so mismatch surfaces while PR-2 is still amendable, not after merge.
+
+The full 4-PR delivery sequence with verified ADR citations + critical
+assessment is at
+`../../../plans/sector-engagement/eef/current/please-do-a-deep-mighty-peach.plan.md`.
+
+**Outstanding state (next-session pickup)**:
+
+- **PR-0 landed and paused** — owner direction this session was PR-0
+  only; subsequent PRs trigger on explicit owner extension or new session.
+- **PR-1 (boundary discipline)** is the immediate next executable unit:
+  relocate corpus-substrate types from
+  `oak-curriculum-sdk/src/mcp/evidence-corpus/types.ts:64-219` →
+  `graph-corpus-sdk/src/eef-strands/types.ts`; add t2 Zod loader in
+  `graph-corpus-sdk/src/eef-strands/loader.ts`; add `pnpm freshness:check`
+  script + extend `freshness.unit.test.ts` with invalid-date error
+  path + document plan-promotion checklist in
+  `.agent/plans/sector-engagement/eef/README.md` §Promotion Rule.
+- **PR-2 (MCP feature surface)** sequenced after PR-1:
+  Agent A (t6a tool + tests) → Agent B (wire-up: barrel + register +
+  ADR-123 amendment + t15 TSDoc) → Agent C (E2E shape conditions). Plus
+  the architecture-expert-betty cross-cutting pre-merge contract-coherence
+  check against Inc 3 preconditions per
+  `.agent/plans/graph-combinatorial-arc.plan.md`.
+- **PR-3 (gate-1a closure ceremony)** sequenced after PR-2: ff5 plan
+  answers, ff6 acceptance bundle, plan status syncs, Inc-3 verification
+  record transcribed.
+
+**Identity row for this session** (added per PDR-027 additive-identity
+rule):
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Stormy Surfing Dock` | `claude` | `claude-opus-4-7` | `2a7b65` | `pr-0-plan-freshness-pass-and-4-pr-delivery-sequence-author` | 2026-05-25 | 2026-05-25 |
 
 ---
 
