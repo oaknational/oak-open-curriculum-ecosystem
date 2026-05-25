@@ -131,16 +131,24 @@ todos:
       (10 sites) + watcher-heartbeat.unit.test.ts (4 sites) +
       consistency sweep in adjacent files. Tests remain green pre+post.
       Reviewer dispatch (code-expert + test-expert). Marshal-cycle.
-      One commit. Tree green at end.
-    status: pending
+      One commit. Tree green at end. **R4 absorption (2026-05-25)**:
+      cycle marked completed-redundant — zero S5443 sites in the named
+      files at cycle-open verification (Eclipsed Watching Secret;
+      broadcast `86be55d7`). No commit needed.
+    status: completed
     depends_on: [cycle-11-comms-watch-ws3]
   - id: cycle-13-charcoal-gamma-extraction
     content: >
       Cycle 13: resolveSelfIdentity extraction across CLI bin files
       (dedupe) + **/eslint.config.ts cpd-exclusion. Tests remain green
       pre+post. Reviewer dispatch (code-expert + type-expert).
-      Marshal-cycle. One commit. Tree green at end.
-    status: pending
+      Marshal-cycle. One commit. Tree green at end. **R4 absorption
+      (2026-05-25)**: cycle marked completed-redundant — extraction
+      was already landed pre-R1 (R1 finding #3) and the cpd-exclusion
+      pattern `**/*.config.*` already matches `eslint.config.ts` at
+      every depth via `sonar-project.properties` + `.sonarcloud.properties`
+      (Eclipsed Watching Secret; broadcast `22dc45ff`). No commit needed.
+    status: completed
     depends_on: [cycle-12-charcoal-beta-s5443]
   - id: cycle-14-twilit-cycle-3
     content: >
@@ -171,6 +179,64 @@ isProject: false
 # Post-M1 Attestation Tidy-Up — Linear Sequence
 
 ## Plan Refinement Log
+
+### R4 — 2026-05-25 — Eclipsed Watching Secret — Cycles 12 + 13 dead-scope absorption (completed-redundant)
+
+**Why**: Cycle-open verification of Cycles 12 + 13 against current HEAD
+(post Cycle 9 + 14 + S7780 + role-emission landings) discovered both
+cycles' substance is either zero-surface or already-landed:
+
+- **Cycle 12 (S5443×14 fixture replacement)**: zero `fs.writeFileSync`
+  / `os.tmpdir` occurrences in `watcher-staleness.unit.test.ts` and
+  `watcher-heartbeat.unit.test.ts`. The 14-site count cited at
+  plan-author time did not survive a current-HEAD verification. Either
+  the sites were never present at plan-author time (substrate-pointer
+  drift from a prior plan version) or they were absorbed by intervening
+  test refactors. Surfaced via comms broadcast `86be55d7`
+  (2026-05-25T07:00Z).
+- **Cycle 13 (resolveSelfIdentity extraction + cpd-exclusion)**: R1
+  already absorbed code-expert finding #3 narrowing this cycle to the
+  cpd-exclusion edit only (extraction was already landed). Verification
+  of the cpd-exclusion shows `sonar.cpd.exclusions` in both
+  `sonar-project.properties` (line 115) and `.sonarcloud.properties`
+  (line 11) already includes `**/*.config.*` which matches
+  `eslint.config.ts` at every depth. No additional edit needed.
+  Surfaced via comms broadcast `22dc45ff` (2026-05-25T07:14Z).
+
+**Verification commands captured at cycle-open**:
+
+```bash
+# Cycle 12 surface check
+grep -cE "fs\.writeFileSync|os\.tmpdir" \
+  agent-tools/tests/collaboration-state/watcher-staleness.unit.test.ts \
+  agent-tools/tests/collaboration-state/watcher-heartbeat.unit.test.ts
+# Expected by plan: 14; actual: 0+0=0
+
+# Cycle 13 cpd-exclusion coverage
+grep -nE "sonar.cpd.exclusions" sonar-project.properties .sonarcloud.properties
+# Both files already list `**/*.config.*` which matches eslint.config.ts
+```
+
+**Action**: status flipped `pending` → `completed` on both Cycles 12 +
+13 in the YAML cycle list, with inline R4 absorption notes naming the
+dead-scope cause and the comms-event source-of-record. The plan's
+`depends_on` chain (12 → 13 → 14 → 15) remains valid — Cycle 14
+already landed at `f7183ade`; Cycle 15 (`branch-fitness-drain`,
+`depends_on: cycle-14`) is unblocked.
+
+**Cycle count after R4**: unchanged at 17 (cycles 1, 2, 3, 4, 5, 5a,
+6, 7, 8, 8a, 9, 10, 11, **12 (redundant)**, **13 (redundant)**, 14,
+15). Acceptance criterion 1 ("All 17 cycles reach terminal state
+LANDED") is met for cycles 12 + 13 via this R4 entry (terminal state
+= `completed`; redundant-not-landed disposition documented).
+
+**Doctrine candidate** (surfaced not promoted): the
+plan-author-re-grounding-at-cycle-open discipline this entry expresses
+is a candidate for capture as a Practice pattern — *"verify cycle
+scope against current HEAD at cycle-open; if surface has evaporated
+under intervening landings, mark completed-redundant with R-entry
+evidence rather than burning a no-op commit"*. Buffered as pending
+graduation, not landed in this amendment.
 
 ### R3 — 2026-05-24 — Seaworthy Navigating Beacon — add branch-fitness-drain cycle (owner-directed)
 
