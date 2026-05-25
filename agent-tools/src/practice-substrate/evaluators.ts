@@ -13,3 +13,4 @@ export {
   evaluateParseState,
 } from './structural-evaluators.js';
 export { classifyRepairPreservation, evaluateMergeTopology } from './topology-evaluators.js';
+export { evaluateOpenQuestions } from './open-questions-evaluator.js';

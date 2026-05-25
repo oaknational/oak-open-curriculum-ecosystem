@@ -1,4 +1,5 @@
 import { evaluateLegacyEventsRoot, evaluateOptionalGitTopology } from './live-files.js';
+import { evaluateLiveOpenQuestions } from './live-open-questions.js';
 import { evaluateRetiredPathScan } from './live-retired-paths.js';
 import {
   evaluateCollaborationJsonSurfaces,
@@ -16,7 +17,7 @@ import { finding } from './finding.js';
 import { readOptionalString, readString, type ManifestDocument } from './live-types.js';
 import { type SubstrateFinding } from './types.js';
 
-const EXPECTED_MANIFEST_SURFACES = 21;
+const EXPECTED_MANIFEST_SURFACES = 22;
 
 /**
  * Build the read-only report from live repo state.
@@ -101,6 +102,9 @@ async function evaluateAlwaysLiveFindings(repoRoot: string): Promise<readonly Su
     )),
     ...(await collectLiveFindings('collaboration-shared-comms-log', () =>
       evaluateSharedCommsLog(repoRoot),
+    )),
+    ...(await collectLiveFindings('memory-operational-open-questions', () =>
+      evaluateLiveOpenQuestions(repoRoot),
     )),
   ];
 }

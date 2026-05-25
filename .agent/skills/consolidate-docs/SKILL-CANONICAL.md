@@ -38,6 +38,8 @@ Run `consolidate-docs` when one or more of these is true:
 - napkin, distilled, pattern, or fitness pressure now needs convergence work
 - repeated surprises or corrections suggest a new rule, pattern, ADR, or
   governance change
+- `.agent/memory/operational/open-questions.md` has more than ten open entries
+  or the owner asks for unresolved questions to be drained
 - a repeated pattern spans multiple napkin rotations, the owner requests
   historical synthesis, or prior consolidations keep reporting the same
   family without naming its deeper cause
@@ -365,6 +367,7 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    - `.agent/memory/active/napkin.md` — recent surprises and candidate tags.
    - `.remember/now.md`, `.remember/today-*.md`, `.remember/recent.md` — plugin-managed capture buffers. Read-only for graduation purposes; extract qualifying insight into `distilled.md` or the appropriate permanent home, then leave the buffers to the plugin's own lifecycle.
    - **[`.agent/memory/operational/pending-graduations.md`](../../memory/operational/pending-graduations.md) (the pending-graduations register)** — the structured list of captured candidates with per-item `captured-date`, `source-surface`, `graduation-target`, `trigger-condition`, and `status`. Items with `status: due` or `status: overdue` are the primary graduation candidates for this pass. Items with `status: pending` are reviewed to see whether their trigger condition has fired since last consolidation. The register was split out from `repo-continuity.md § Deep consolidation status` on 2026-04-30; older references to that location route here.
+   - **[`.agent/memory/operational/open-questions.md`](../../memory/operational/open-questions.md) (the open-questions register)** — the structured list of non-urgent unresolved decision-shapes with `Q-NNN` identity, context, deferral reason, suggested resolution path, status, and links. Open entries are not graduation candidates by default; they are consolidation-time questions to answer, surface to owner, withdraw, or leave open with deferral-honesty.
 
    **7a. Scan for ADR-shaped and PDR-shaped doctrine** (do this *before* applying the three outcomes below). Walk every entry in `distilled.md` and every recent napkin surprise and ask two questions:
 
@@ -409,6 +412,25 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    - **Meta-principles about the Practice itself** → `.agent/practice-core/practice-lineage.md` Learned Principles section, OR (when substantial enough) a dedicated PDR in `decision-records/`.
 
    Practice Core structural changes (new sections, reorganisation, new artefact types, new Core directories) are rare but valid — they require user approval and are typically captured as PDRs against the Core contract. This **closes the loop** on the knowledge gained from sessions.
+
+   **7b.1. Drain the open-questions register.** Walk every entry in
+   [`.agent/memory/operational/open-questions.md`](../../memory/operational/open-questions.md)
+   whose `Status` begins with `open`. For each entry, choose one outcome and
+   update the entry in place:
+
+   - **answered-in-place** — a clear answer has emerged from repo evidence,
+     comments, a landed plan, an ADR, a PDR, or another durable artefact; update
+     the status and link the evidence.
+   - **surfaced-to-owner** — the question is genuinely owner-decision-class;
+     update the status and include it in the consolidation closeout report.
+   - **withdrawn** — the question has been overtaken by events or no longer
+     applies; update the status with a one-line reason.
+   - **open** — only when a named constraint still prevents resolution; record
+     deferral-honesty evidence and falsifiability in the entry or closeout.
+
+   Do not convert open questions into pending-graduations entries unless the
+   question has become a candidate doctrine, pattern, ADR, or PDR. When both
+   surfaces are relevant, cross-link rather than duplicate.
 
    **Every new or amended rule in `.agent/rules/`** MUST cite the ADR(s) AND/OR PDR(s) it operationalises at the top of the file. Every new or amended skill in `.agent/skills/`** SHOULD cite its establishing ADR(s) and/or PDR(s). This is the enforce-edge reinforcement: enforcement surfaces that cannot name their source decision cannot evolve with it. Rules operationalising Practice-governance substance (review discipline, planning discipline, etc.) cite the relevant PDR — they do not need to cite a host ADR if the substance lives only as Practice governance.
 

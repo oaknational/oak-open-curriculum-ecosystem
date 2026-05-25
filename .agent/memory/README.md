@@ -39,6 +39,7 @@ start reads).
 **Contents**:
 
 - [`operational/repo-continuity.md`](operational/repo-continuity.md) — canonical continuity contract.
+- [`operational/open-questions.md`](operational/open-questions.md) — non-urgent unresolved decision-shapes for consolidation-time drain.
 - [`operational/threads/<slug>.next-session.md`](operational/threads/) — per-thread identity + next-session landing + lane state (PDR-027).
 - [`operational/tracks/<thread>--<agent>--<branch>.md`](operational/tracks/) — single-writer tactical coordination cards (ephemeral; resolved-or-deleted at session close).
 

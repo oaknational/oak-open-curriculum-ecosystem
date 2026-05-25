@@ -16,6 +16,7 @@ export const LEGACY_COMMS_ROOTS = [
 ] as const;
 export const COMMS_EVENT_SCHEMA_PATH = '.agent/state/collaboration/comms-event.schema.json';
 export const SHARED_COMMS_LOG = '.agent/state/collaboration/shared-comms-log.md';
+export const OPEN_QUESTIONS_PATH = '.agent/memory/operational/open-questions.md';
 export const ACTIVE_CLAIMS_PATH = '.agent/state/collaboration/active-claims.json';
 export const ACTIVE_CLAIMS_SCHEMA_PATH = '.agent/state/collaboration/active-claims.schema.json';
 export const CLOSED_CLAIMS_PATH = '.agent/state/collaboration/closed-claims.archive.json';

@@ -86,6 +86,13 @@ opens/closes `git:index/head` claims before staging or committing,
 `session-handoff` closes the agent's own active state, and
 `consolidate-docs` audits stale or unresolved entries.
 
+Operational questions that are non-urgent, not cheaply answerable, and not
+already owned by a plan, ADR, or PDR route to
+[`memory/operational/open-questions.md`](memory/operational/open-questions.md).
+That register is sibling to pending-graduations: pending-graduations captures
+candidate doctrine or patterns, while open-questions captures unresolved
+decision-shapes for consolidation-time drain or owner surfacing.
+
 PDR-049 keeps the portable merge semantics in Practice Core. This host's
 concrete active-claims registry is
 [`state/collaboration/active-claims.json`](state/collaboration/active-claims.json).

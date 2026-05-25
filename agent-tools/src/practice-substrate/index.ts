@@ -9,6 +9,7 @@ export {
   evaluateLegacyEventRoot,
   evaluateMergeClassDeclarations,
   evaluateMergeTopology,
+  evaluateOpenQuestions,
   evaluateParseState,
   evaluateRetiredPathReferences,
   evaluateStableIdentityCollisions,
