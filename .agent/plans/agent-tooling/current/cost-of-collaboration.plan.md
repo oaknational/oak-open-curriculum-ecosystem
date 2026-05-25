@@ -1262,6 +1262,19 @@ the value of the current work in a way that is more visible to humans than
   Agents should keep using structured commands and text snapshots unless a
   human explicitly asks them to report what the TUI shows.
 
+**Write-side companion** (added 2026-05-25): P8 is read-only by design.
+The owner-facing **write** surface (composer pane, recipient picker,
+reply / sync mode, owner-identity persistence, owner-event visual
+distinction) is the scope of
+[`human-composer-tui.plan.md`](human-composer-tui.plan.md). That plan
+emerged from the 2026-05-25 review-and-consistency fan-out gap analysis
+(gaps G1–G10) and depends on a doctrine decision (Path A schema
+extension recommended; PDR-083 proposed). Coordinate P8's remaining
+slices (`p8-attention-state`, `p8-reader-resilience`,
+`p8-hot-path-boundary-review`) with the composer plan: unread/seen
+triage in the read view composes with the composer plan's WS8
+receipt-state surface.
+
 **Acceptance**:
 
 - `P8-A1`: An operator can watch the main collaboration stream and direct-message

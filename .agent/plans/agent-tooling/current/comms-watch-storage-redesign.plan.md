@@ -463,6 +463,15 @@ met) triggers a closeout pass that:
   `ws-p2-comms-watch` is the original watcher landing; this plan is the
   storage-shape follow-on. Back-pointer added to that plan at
   consolidation archival.
+- **Downstream consumer**:
+  [`human-composer-tui.plan.md`](human-composer-tui.plan.md) WS8
+  (receipt-state) reads from the new storage primitive landed by this
+  plan's WS2 to render "seen by X/Y" indicators next to owner-authored
+  events. WS8 of that plan can fall back to the legacy
+  `.agent/state/collaboration/comms-seen/` location if WS2 here has not
+  landed; the fallback is logged as named technical debt and cleared
+  when WS3 here unblocks (which itself blocks on the comms research
+  plan completion).
 - **Documentation surfaces updated by WS3**:
   `.agent/skills/start-right-team/SKILL-CANONICAL.md` §0;
   `.agent/reference/comms-watch-mechanism.md`.
