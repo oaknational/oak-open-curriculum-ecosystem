@@ -9,7 +9,7 @@ merge_class: append-only-narrative
 
 # Napkin
 
-## 2026-05-25 — Hushed Stalking Shade / claude / claude-opus-4-7 / `bc0a07` (hardening-arc consolidation Phase 1+2)
+## 2026-05-25 — Hushed Stalking Shade / claude / claude-opus-4-7 / `bc0a07` (hardening-arc consolidation Phases 1+2+4+5)
 
 ### What worked
 
@@ -49,6 +49,28 @@ merge_class: append-only-narrative
   premature. Triaged + graduated: 3 clear-fire entries (PDR-077,
   PDR-079, heartbeat-bundle which Misty had already done). Remaining:
   ~83 entries stay pending-or-due awaiting next consolidation cadence.
+- Phase 3 of harmonic-fluttering-bentley plan (comms-event retention
+  pass) NOT completed this session. **Constraint**: same as above
+  (owner pivot). **Falsifiability**: next `consolidate-docs` cadence
+  reads `.agent/state/collaboration/comms/` event dates; events older
+  than 7 days will route through §3a retention discipline at that
+  cadence. The retention rule is unchanged; only its execution this
+  session was deferred.
+
+### What landed (3 commits)
+
+- `4e333441` chore(plans): reconcile hardening + tidy statuses to
+  landed doctrine (Phase 1). 2 files, 24+/26-. WS-2/6/7/8/11/12 +
+  M1/M2 gates flipped completed with SHA evidence; cycle-15 marked
+  removed.
+- `f3f520ce` chore(memory): graduate PDR-077 + PDR-079 pending entries;
+  archive bodies (Phase 2). 3 files, 175+/72-. Register dropped from
+  HARD (783) -> SOFT (722) via archive snapshot move; pre-existing
+  MD049 co-fix.
+- `650afb08` chore(plans): archive tidy + hardening plans; promote
+  comms-watch-storage-redesign (Phase 4+5). 5 files, 473+/23-. New
+  plan + supersession-mapping README + 2 plan moves to
+  archive/completed/ + cost-of-collaboration back-pointer.
 
 ---
 
