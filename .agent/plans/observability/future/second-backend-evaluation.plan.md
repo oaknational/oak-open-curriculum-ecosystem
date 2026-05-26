@@ -89,7 +89,8 @@ without re-opening this brief.
 | Warehouse adapter lands before PostHog adapter | **Settled (hard-blocker, owner-confirmed)** | Not merely sequencing preference. Owner confirmation 2026-04-19: warehouse-first is non-negotiable. The warehouse is the durable analytical-SQL substrate; PostHog interactive analytics layers on top of (or alongside) durable storage that already exists. Promoting PostHog before the warehouse would bypass the durable substrate the org needs for cross-source SQL. |
 | Adoption *timing* for Sink 3 (PostHog) | **Open** | Gated on named question per the promotion trigger below. The vendor decision is settled; only the moment of authoring the adapter is open. |
 | Warehouse vendor (Sink 2) | **Open** | Owned by [Exploration 9 (Data Warehouse Selection)](../../../../docs/explorations/2026-04-19-data-warehouse-selection.md). |
-| Identity envelope per sink | **Open** | Owned by [Exploration 10 (Clerk identity downstream)](../../../../docs/explorations/2026-04-19-redaction-policy-clerk-identity-downstream.md). The ruling may be uniform across sinks or expressed as per-sink projection of the closure rule; the ADR-160 closure principle holds either way. |
+| Identity envelope per sink | **Open** | Owned by [Exploration 10 (Clerk identity downstream)](../../../../docs/explorations/2026-04-19-redaction-policy-clerk-identity-downstream.md). The ruling may be uniform across sinks or expressed as per-sink projection of the closure rule; the ADR-160 closure principle holds either way. **Operating posture pending formal ruling** (per [`docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md`](../../../../docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md) §7.5 / §B4): Clerk ID projects to **PostHog + Sentry only**; warehouse, Elasticsearch, and OpenAPI upstream receive correlation + categorical fields only. |
+| Correlation-join contract | **Settled (operating posture per mcp-analytics exploration)** | Every event in `@oaknational/observability-events` carries `correlation_id` (Oak per-request) + `traceparent` (W3C, from MCP `_meta` when host supplies it; empty until MCP `2026-07-28` GA) + Sentry `trace_id` (per-scope). Roles: `correlation_id` is the within-invocation join (`tool_invoked` ↔ `dependency_call`); `traceparent` is the cross-system join when present; `trace_id` supports engineering drill-down. Each adapter projects per its sink's join model. See [`docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md`](../../../../docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md) §7.7. |
 
 ## Architectural Shape
 
@@ -113,6 +114,15 @@ selection happens at the composition root per ADR-078. The
 [multi-sink vendor-independence conformance test](../current/multi-sink-vendor-independence-conformance.plan.md)
 expands its allowlist + emission-persistence assertions as each new
 sink lands.
+
+**Envelope legend** (per [`docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md`](../../../../docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md) §7.2): every event the vendor-neutral
+schemas emit includes a correlation envelope (`correlation_id` +
+`traceparent`) and an identity envelope (`clerk_user_id` +
+`clerk_client_id`). Each sink adapter projects the envelope per its
+target's join model: Sentry as scope (`user.id` + `trace_id`),
+PostHog as `distinct_id` + properties, warehouse as columns / row
+attributes, stdout as structured fields. Adapter projections honour
+the per-sink identity ruling (see the Decision record above).
 
 ## Domain Boundaries and Non-Goals
 
@@ -368,3 +378,7 @@ Grafana+Loki+Tempo, self-hosted OTel); evaluate; decide.
   — schema input to all adapters.
 - [`current/multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md)
   — conformance scope expands per adapter.
+- [Exploration: MCP analytics identity envelope + event emission (2026-05-26)](../../../../docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md)
+  — names the operating posture for per-sink Clerk identity projection
+  (PostHog + Sentry only) and the correlation envelope contract
+  (`correlation_id` + `traceparent`) that every adapter consumes.

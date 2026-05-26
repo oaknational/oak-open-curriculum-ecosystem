@@ -45,7 +45,7 @@ permitted; an empty cell with no named future home is a defect.
 | Axis | MCP Server (`apps/oak-curriculum-mcp-streamable-http`) | MCP Widget (browser) | Search CLI (`apps/oak-search-cli`) |
 |---|---|---|---|
 | **Engineering** | **✓** Sentry error capture via `wrapMcpServerWithSentry` at `src/app/core-endpoints.ts:98`. Express error handler at `src/index.ts:40-41`. Redaction barrier enforced by `packages/libs/sentry-node/src/runtime-redaction-barrier.unit.test.ts` (18 tests, ADR-160 closure). Source-map upload via `pnpm sourcemaps:upload`. `require-observability-emission` ESLint rule at `warn`; `preserve-caught-error` at `error` (2026-04-19). | **✗** not wired. Owning lane: [`active/sentry-observability-maximisation-mcp.plan.md`](active/sentry-observability-maximisation-mcp.plan.md) §L-12; prereq lane: §L-12-prereq (extract `packages/core/telemetry-redaction-core/`). | **✓** logger + Sentry wired for CLI observability (per `sentry-otel-integration.execution.plan.md` parent foundation closure 2026-04-17). `preserve-caught-error` at `error` (2026-04-19). Source-map upload scope TBD. |
-| **Product** | **✗** no `tool_invoked` emission; no `search_query` structured event. Owning lanes: (schemas) [`current/observability-events-workspace.plan.md`](current/observability-events-workspace.plan.md) Wave 2; (emitter) [`active/sentry-observability-maximisation-mcp.plan.md`](active/sentry-observability-maximisation-mcp.plan.md) §L-3 / §L-9 Wave 3. | **✗** no widget-level product emission. Owning lane: §L-12 Wave 4. | **✗** no `search_query` structured event at CLI boundary. Owning lane: [`current/search-observability.plan.md`](current/search-observability.plan.md) (next-branch). |
+| **Product** | **✗** no `tool_invoked` emission; no `search_query` structured event; **no `dependency_call` event** (per-upstream-IO event proposed in [`docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md`](../../../docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md) §8.2; owning lane gated on plan promotion). Owning lanes: (schemas) [`current/observability-events-workspace.plan.md`](current/observability-events-workspace.plan.md) Wave 2; (emitter) [`active/sentry-observability-maximisation-mcp.plan.md`](active/sentry-observability-maximisation-mcp.plan.md) §L-3 / §L-9 Wave 3. | **✗** no widget-level product emission. Owning lane: §L-12 Wave 4. | **✗** no `search_query` structured event at CLI boundary. Owning lane: [`current/search-observability.plan.md`](current/search-observability.plan.md) (next-branch). |
 | **Usability** | **✗** no `feedback_submitted` tool; no `widget_session_outcome` correlation. Owning lanes: §L-9 (feedback MCP tool — **deferred to public beta 2026-04-20**, no user-facing collection surface in alpha); §L-12 (widget session outcome — **deferred to public beta 2026-04-20**, agentic-client host-compat unverified). | **✗** no session-outcome emission. Owning lane: §L-12 (**deferred to public beta**) + [`current/accessibility-observability.plan.md`](current/accessibility-observability.plan.md) (cross-axis, not deferred). | — not in scope (CLI has no interactive session surface). |
 | **Accessibility** | — not applicable at the server runtime. | **✗** no `a11y_preference_tag` (reduced-motion, high-contrast, prefers-color-scheme); no frustration proxies; no keyboard-only-session tag. Owning lane: [`current/accessibility-observability.plan.md`](current/accessibility-observability.plan.md) Wave 4 (blocked on exploration 3 — already full in Phase 3). | — not in scope. |
 | **Security** | **partial** — rate limiting lands app-layer per ADR-158; structured `auth_failure` + `rate_limit_triggered` emission not yet present. Owning lane: [`current/security-observability.plan.md`](current/security-observability.plan.md) Wave 4. | — not applicable (widget does not own trust-boundary decisions). | — not yet scoped. |
@@ -75,12 +75,26 @@ the planned post-MVP sink set is:
 
 **Identity envelope**: today, Sentry per-request scope receives the
 opaque Clerk user ID via `observability.setUser({ id: userId })` in
-`apps/oak-curriculum-mcp-streamable-http/src/mcp-handler.ts`. Whether
-that identifier flows into Sinks 2 and 3 is a policy ruling
-explicitly deferred to
-[Exploration 10 (redaction policy — Clerk identity downstream)](../../../docs/explorations/2026-04-19-redaction-policy-clerk-identity-downstream.md);
-the ADR-160 closure principle applies uniformly to whatever the
-ruling permits.
+`apps/oak-curriculum-mcp-streamable-http/src/mcp-handler.ts`. The
+formal per-sink projection ruling for Sinks 2 (warehouse) and 3
+(PostHog) is owned by
+[Exploration 10 (redaction policy — Clerk identity downstream)](../../../docs/explorations/2026-04-19-redaction-policy-clerk-identity-downstream.md)
+and remains TBD; the May 2026 owner direction in
+[`docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md`](../../../docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md)
+§7.5 / §B4 names a per-sink projection (Clerk ID flows to PostHog +
+Sentry only; not to warehouse, Elasticsearch, or OpenAPI upstream)
+as the operating posture until the Exploration 10 formal ruling
+lands. The ADR-160 closure principle applies uniformly to whatever
+either ruling permits.
+
+**Correlation envelope** (new, per `mcp-analytics-identity-and-event-emission.md` §7.7): every event in the proposed schemas carries
+`correlation_id` (Oak-generated per HTTP request) plus `traceparent`
+(W3C, from MCP `_meta` when host supplies it; empty until MCP
+`2026-07-28` GA). Roles differ: `correlation_id` is the primary
+within-invocation join key (`tool_invoked` ↔ `dependency_call`);
+`traceparent` is the cross-system join when present. Both are schema
+fields from day 1 of the events workspace, when the schema catalogue
+amendment lands (§15-deferred).
 
 ---
 
@@ -196,6 +210,17 @@ Planned (not yet landed):
     elimination type-safe (P3: `isTelemetryObject` renamed to
     `isJsonObject`; redundant post-redaction guard in express-middleware
     removed; third pre-existing-shape observation deferred).
+
+- **2026-05-26** — MCP analytics design exploration landed at
+  [`docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md`](../../../docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md).
+  0 matrix cells moved (no new code emissions), but this snapshot is
+  refreshed in the Product row to name the `dependency_call` event
+  gap and in the Sinks subsection to record the per-sink Clerk
+  identity projection (PostHog + Sentry only; Exploration 10 formal
+  ruling TBD) plus the dual correlation envelope (`correlation_id` +
+  `traceparent`). Plan promotion for the MCP analytics execution
+  plan and the schema-catalogue addition of `dependency_call` is
+  owner-deferred per exploration §15/§18.
 
 Each future update appends here: date + lane + cells populated +
 gates added.

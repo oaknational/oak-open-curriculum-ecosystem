@@ -22,6 +22,10 @@ Current state: **invite-only alpha** (M1 complete 2026-03-03 — repo
 public, server live at `curriculum-mcp-alpha.oaknational.dev`, v1.0.0
 released, access via Oak emails + explicit Clerk invitations).
 
+Cross-collection coordination for the Curriculum MCP release arc
+(M1 → M2 → M3 → GA) is indexed by the
+[Curriculum MCP Path-to-GA Programme](../plans/curriculum-mcp-path-to-ga/roadmap.md).
+
 ---
 
 ## State Progression

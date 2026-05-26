@@ -1315,6 +1315,16 @@ gap surfaced by the 2026-04-26 gap analysis.
   correlation substrate for `tool_invoked` events; the events
   workspace schema for `tool_invoked` depends on these field names
   remaining stable.
+- [`docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md`](../../../../docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md)
+  §7.5 — Sentry identity-event posture (`observability.setUser({ id: userId })`
+  on the per-request scope; intentional engineering observability PII).
+  The L-3 per-request scope work is the implementation home for that
+  posture; this lane's existing scope-enrichment behaviour already
+  satisfies §7.5's mandatory-and-plan-guarded requirement.
+- [`docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md`](../../../../docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md)
+  §7.2 / §7.7 — correlation envelope (`correlation_id` + `traceparent`)
+  carried by every event-schema payload alongside Sentry's own `trace_id`
+  on the scope.
 
 ### L-4b Primary metrics emission via `Sentry.metrics.*`
 

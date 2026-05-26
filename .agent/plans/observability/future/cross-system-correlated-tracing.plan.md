@@ -111,9 +111,26 @@ propagation scope, allow/deny list, and wiring path.
 - Trust-boundary policy drives which hosts receive propagation
   headers.
 
+**Carrier-to-envelope mapping**: the W3C `traceparent` HTTP header is
+the wire carrier for the `traceparent` event-envelope field defined in
+the proposed event schemas
+([`docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md`](../../../../docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md)
+§7.2 / §7.7). Three correlation identifiers travel together with
+distinct roles: `correlation_id` (Oak-generated per HTTP request;
+within-invocation join), `traceparent` (W3C; cross-system join when
+present), `trace_id` (Sentry-scope; engineering drill-down). MCP
+`2026-07-28` (SEP-414) standardises ingestion of `traceparent` from
+host `_meta` — this plan owns the **outbound** propagation; inbound
+ingestion lands with the MCP spec GA upgrade track.
+
 ## References
 
 - ADR-162 §Five Axes Engineering axis.
 - Session report §2.3 gap item 13.
 - `sentry-observability-maximisation-mcp.plan.md § L-14`.
 - Exploration 5 (trust-boundary trace propagation).
+- [Exploration: MCP analytics identity envelope + event emission (2026-05-26)](../../../../docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md)
+  — `traceparent` event-envelope field; MCP `2026-07-28` `_meta`
+  ingestion (SEP-414).
+- [`.agent/memory/operational/threads/mcp-product-analytics.next-session.md`](../../../memory/operational/threads/mcp-product-analytics.next-session.md)
+  — thread record carrying the standing decisions on correlation envelope and per-sink identity projection.
