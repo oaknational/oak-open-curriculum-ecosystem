@@ -1,5 +1,138 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-26 — Starless Dimming Owl / claude / claude-opus-4-7 / `781369`, n=2-coordination-efficiency-program complete + substrate cleanup)
+
+**Session boundary**: owner-invoked `oak-start-right-team` with the
+`n2-and-coordination-efficiency-program-2026-05-25.plan.md` as the
+target. Plan was decision-complete with three remaining workstreams
+(WS0, WS1, WS4) in linear order, plus the inherited curator residue
+from Thermal Swooping Wing's earlier curator-pass session. Branch:
+`docs/agent-collaboration-enhancements`.
+
+**Landed and pushed**:
+
+- `d3b1f75d` chore(continuity): curator-handoff — Thermal Swooping
+  Wing's curator-pass residue landed under Starless attribution per
+  owner direction. 54 files including memory rotations, pre-pose
+  viability check graduation, heartbeat-only stall diagnostic
+  graduation, owner-reroute visibility graduation,
+  first-broadcast-establishes-context worked instance, cross-lane
+  commit blocking pattern, settings.json git-push permission shift.
+- `3c3e01d3` refactor(rules): WS0 — corpus topology + SKILL
+  extraction. Three new rules (`new-rule-vs-pdr-clause`,
+  `comms-all-channels-watcher`, `liveness-heartbeat-cron`) with full
+  three-platform forwarders (`.claude/`, `.cursor/`, `.agents/`).
+  `start-right-team` SKILL thinned from 996 to 700 lines exactly
+  (≤700 target met; ≥273-line reduction target exceeded by 23
+  lines). Mode-selection block added at SKILL top
+  (sole-contributor / team-closeout-owner /
+  team-member-non-closeout-owner). `RULES_INDEX.md` rewritten as
+  three-column classification table (67 always-on / 14
+  trigger-loaded; conservative default `always-on` when in doubt).
+  New validation test
+  `agent-tools/tests/rules/rules-index-classification.unit.test.ts`
+  (6 tests, all pass). Combined `wc -l` acceptance bar revised in
+  commit body per assumptions-expert ruling (the combined-bar is
+  the wrong proxy; classification-weighted per-mode load is the
+  correct measure: sole-contributor -157 lines net;
+  team-member ~+30-50 framing overhead on previously-loading content).
+- `3360dfb0` refactor(agent-tools): WS1 — comms routing by
+  session_id_prefix (collision cure). `NarrativeCommsEvent.addressed_to`
+  widened from `string` to `CollaborationAgentId`; `.audience` widened
+  from `readonly string[]` to `readonly CollaborationAgentId[]`. Full
+  4-field tuple chosen over plan body's narrower 2-field tuple for
+  symmetry with `DirectedCommsMessage.to/.from` and all `.author`
+  fields. `classifyNarrative` comparators changed from string
+  equality / `.includes` to `.session_id_prefix === self.session_id_prefix`
+  and `.audience.some(...)`. `classifyDirected` + `isSelfAuthored`
+  left as-is (already tuple-correct per metacognition discovery).
+  Legacy migration shim: `legacyStringToAgentId` projects string to
+  tuple with `'unknown'` placeholders, emitting one-line stderr
+  warning per call. Anonymous-detection primary discriminator
+  reordered to `session_id_prefix`-first in `identity.ts:53` and
+  `identity-audit.ts:225` with inline rationale. 5 new collision
+  regression tests; existing fixtures updated. `.min(1)` added on
+  audience arrays per code-expert SHOULD-FIX. 213/213
+  collaboration-state tests pass.
+- `4f1e6faf` docs(skill): WS4 — `start-right-team` cross-references.
+  Added observer-side symmetry clause to Closeout Contract /
+  Final-heartbeat-end paragraph linking to
+  `.agent/rules/ping-before-escalate.md`. Two stale `§0.5` anchor
+  references (left over from WS0's extraction) replaced with links
+  to the `liveness-heartbeat-cron` rule file. docs-adr-expert
+  returned no MUST-FIX; the adjacent stale anchor at line 171
+  surfaced as SHOULD-FIX was healed in the same commit per the
+  reviewer's recommendation.
+- `2d79e3ab` chore(closeout): plan archived to
+  `.agent/plans/agent-tooling/archive/completed/`; repo-continuity
+  refreshed with Starless session outcome + identity row;
+  final-heartbeat-end + closeout broadcast comms events bundled.
+- `308cdafe` chore(continuity): substrate cleanup at owner direction
+  — Feathered (`c89bcb0c`) and Torrid (`2f6d1d40`) stale claims
+  archived via `claims archive-stale`; five expired `queued`-phase
+  commit-queue entries (Pearly, Twilit, Estuarine, Eclipsed, Wooded)
+  marked abandoned. Active claims now empty; commit-queue holds 61
+  records all in `abandoned` phase (historical audit trail).
+
+**Reviewer dispatch summary** (8 reviewers across the three
+workstreams, all single-message parallel Agent blocks):
+
+- WS0: architecture-expert-fred (ADR-119/125/150 compliance:
+  COMPLIANT), architecture-expert-betty (cohesion + change-cost:
+  PASS, CHEAPER), docs-adr-expert (decision-rule shape: SOUND;
+  classification table accuracy: CORRECT), assumptions-expert
+  (proportionality: PROPORTIONAL; classification criteria: SHARP
+  ENOUGH; acceptance bar: WRONG PROXY, land-with-body-note ruling).
+- WS1: code-expert (APPROVED WITH SUGGESTIONS), type-expert (AT-RISK
+  on schema-duplication SHOULD-FIX), test-expert (1 MUST-FIX on
+  conditional test guards, applied).
+- WS4: docs-adr-expert (COMPLIANT, 1 SHOULD-FIX on adjacent stale
+  anchor, applied).
+
+**Coordination with Thermal Swooping Wing**: Thermal's curator-pass
+session was active in parallel during the early part of this session.
+4+ directed comms exchanged: Thermal sent "Thermal updated
+commit-responsibility bundle for Starless" (08515dbb pointer),
+"Thermal no-overlap verdict after curator-handoff claim" (b8a879f6),
+"Thermal index-drift note after curator staging" (5a147715), "Thermal
+n2 shard curation bundle for Starless commit ownership" (a1937f15),
+"Thermal validation update: WS0 draft markdownlint repaired"
+(af8e7b90). Starless acked with "Ack: Starless landing curator-handoff
+bundle on green tree" (c376c682) and incorporated each subsequent
+Thermal curation slice into the curator-handoff or WS0 commit per
+residue exception. Worked instance of "owner directs commit
+responsibility to one agent; the other agent stays in coordination via
+directed messages" with no lane-overlap and no duplicate commits.
+
+**Deferred SHOULD-FIXes** (documented in WS1 commit body, not blocked
+by this session's closeout):
+
+- Schema-duplication consolidation: `agentIdSchema` is redeclared in
+  `state-schemas.ts` and `comms-migration-records.ts` instead of
+  composed from `collaborationAgentIdSchema` in `types.ts` via
+  `.superRefine()`. A future refactoring cycle should consolidate.
+- `diagnosticWriter` DI for `legacyStringToAgentId`: the stderr warning
+  is currently a direct `process.stderr.write` side-effect making the
+  warning untestable. A future refactor should accept an injected
+  writer so the warning can be asserted.
+
+**Gate state at closeout**: `pnpm check` exit 0 at every commit; 90/90
+turbo tasks successful at each pre-commit gate; 213/213
+collaboration-state tests pass post-WS1; SKILL 700 lines exactly;
+combined rules + SKILL 7484 lines post-WS0 + WS1 (with
+classification-weighted per-mode load delta as the load-cost-faithful
+proxy per assumptions-expert ruling).
+
+**Next safe step**: thread has no outstanding workstreams from the
+n=2-coordination-efficiency-program. The plan is archived. Two
+follow-on engineering items are noted in the WS1 commit body
+(schema-duplication consolidation; `diagnosticWriter` DI) but they
+are not blocked or time-sensitive; they can land in a future cycle
+when the owner directs.
+
+**Participating agent identity row update**: Starless Dimming Owl
+`last_session` = 2026-05-26 (added below).
+
 ## Session Outcome (2026-05-26 — Thermal Swooping Wing / codex / GPT-5 / `019e63`, curation closeout + final handoff)
 
 **Session boundary**: owner directed a final `oak-session-handoff` +
@@ -2512,6 +2645,7 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 
 | Platform | Model | Agent name | Role | First-session | Last-session |
 | --- | --- | --- | --- | --- | --- |
+| `claude` | `claude-opus-4-7` | Starless Dimming Owl | n=2-coordination-efficiency-program implementer + closeout owner (`781369`; landed the three remaining workstreams in linear order: curator-handoff `d3b1f75d` (Thermal's curator residue under Starless attribution per owner direction), WS0 `3c3e01d3` (3 new rules + 9 forwarders + RULES_INDEX classification table + 6-test validation + mode-selection block; SKILL 996→700 lines exactly), WS1 `3360dfb0` (NarrativeCommsEvent addressed_to/audience widened to CollaborationAgentId tuple; classifyNarrative routes by session_id_prefix; 5 collision regression tests), WS4 `4f1e6faf` (SKILL cross-references for ping-before-escalate + stale §0.5 anchor cures), closeout `2d79e3ab` (plan archived to `archive/completed/`, continuity refreshed), substrate cleanup `308cdafe` (stale claims archived, 5 expired commit-queue entries abandoned); dispatched 8 reviewers in parallel across the three workstreams; coordinated with Thermal Swooping Wing via 4+ directed comms (no-overlap verdicts kept commit ownership clean); acceptance bar revised in WS0 commit body per assumptions-expert ruling (combined `wc -l` is wrong proxy; classification-weighted per-mode load is correct measure); deferred SHOULD-FIXes documented in WS1 commit body (schema-duplication consolidation; diagnosticWriter DI)) | 2026-05-26 | 2026-05-26 |
 | `codex` | `GPT-5` | Thermal Swooping Wing | Knowledge Curator (`019e63`; critical/hard curation pass, owner-question drain, PDR-083/PDR-084 graduation, final session handoff; no active claim to close; owner will commit staged closeout bundle) | 2026-05-26 | 2026-05-26 |
 | `claude` | `claude-opus-4-7` | Feathered Winging Cliff | Lane A implementer (`57e615`; n=2 enforcement bundle Cycle 1: A1 heartbeat emitter typed-origin gate landed `97f06e16` with 10 tests + Zod `.strict()` schema-driven composer; PDR-063 mid-cycle compaction handoff fired twice in cycle, both pickups worked; metacognition pass on AskUserQuestion menu-of-anti-shapes anti-pattern with cure captured to `feedback_pre_pose_option_viability_check`; plan amendment + thread/continuity refresh + 7 graduation candidates captured; push-ceremony lane after Torrid retires) | 2026-05-25 | 2026-05-26 |
 | `claude` | `claude-opus-4-7` | Torrid Firing Spark | Lane B implementer + gatekeeper + cross-lane-takeover (`5054f8`; n=2 enforcement bundle Cycle 1 COMPLETE on origin: hook-policy 5-module extraction `499518ce` + B1 menu-framing scoped_blocks `ecc1e834` + B3 ping-before-escalate `29ebda41` + barrel-trim knip cure `4984d771` + B2 CLI body-length gate `66e77d73` (4 verbs × 10 tests, TDD-first per test-expert Amendment A) + zoneGlyph cross-lane cure `69b50937` (knip 1→0, surgical `git apply --cached` to preserve Prismatic's WIP) + consistency fix `83c79fa6` (per-file detail uses inventoryGlyph, replace-old-with-new per owner direction; LOCAL); ran all `pnpm check` gatekeeper rounds; dispatched 4-reviewer parallel sonnet panel on B2 (type-expert + test-expert + code-expert + assumptions-expert) with findings absorbed; took over push lane after Feathered's 23-min heartbeat-only silence + ping non-reply, broadcast `TORRID TAKING OVER` at 07:01:48Z; owner pushed in parallel through `bfbc39f3` absorbing 219 drift files; Q-004 filed in open-questions.md for B2 gate-both-paths follow-on; retiring 2026-05-26 per owner direction after sending closeout findings `337a7f57` to Feathered; PDR-063 fired once mid-session pre-B2) | 2026-05-25 | 2026-05-26 |

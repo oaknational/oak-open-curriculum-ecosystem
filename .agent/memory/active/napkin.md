@@ -10,6 +10,70 @@ fitness_content_role: drainable-buffer
 
 # Napkin
 
+## 2026-05-26 — Starless Dimming Owl n=2-program execution / claude / claude-opus-4-7 / `781369`
+
+### Surprises (session-scoped)
+
+- **Acceptance bar was the wrong proxy**. The plan body §WS0
+  required combined `wc -l` (SKILL + all rules) to DECREASE.
+  Post-WS0 combined went UP by ~280 lines because the extracted
+  content moved into rule files with added Trigger / Action /
+  Worked Instance / Why a Rule / Enforcement framing. The
+  combined-wc-l proxy treats every rule line as always-loaded,
+  but the WS0 classification table itself shows 14 rules are
+  trigger-loaded. Assumptions-expert ruled the proxy wrong and
+  named the correct measure (classification-weighted per-mode
+  load: sole-contributor -157 lines net; team-member ~+30-50
+  framing overhead on previously-loading content). Behaviour
+  change: when authoring acceptance bars for load-cost
+  reduction, name the load model first (which surfaces load
+  when?), then choose a proxy that respects it. Routed to
+  pending-graduations 2026-05-26 shard.
+
+- **Skill-extraction left thin-pointer sub-sections AND First
+  Moves pointers in parallel**. After thinning §0 and §0.5
+  paragraphs from the SKILL to one-paragraph stubs, two
+  reviewers (Fred + docs-adr-expert) independently flagged the
+  duplication: First Moves moves 1 and 2 already pointed at the
+  rule files via parenthetical references; the surviving §0 /
+  §0.5 thin-pointer headed sub-sections duplicated the routing.
+  The cure was to delete the sub-sections entirely. Behaviour
+  change: when extracting a SKILL section into a dedicated
+  rule, the SKILL sub-section heading should be DELETED, not
+  preserved as a thin-pointer. The numbered First Moves
+  pointers carry the routing. Routed to pending-graduations
+  2026-05-26 shard.
+
+- **Hook policy blocked specific commit-ID references in
+  permanent rule docs**. I included a `150b5a55` event ID in the
+  `liveness-heartbeat-cron` rule's Worked Instance section. The
+  Write tool blocked it citing the `no-moving-targets-in-
+  permanent-docs` rule. Behaviour change: rule files (permanent
+  doctrine) name dates only, not specific commit/event IDs;
+  the rule's commit-time history is the durable evidence.
+
+### Coordination notes
+
+- Thermal Swooping Wing was active in parallel during the early
+  part of this session. Sent 4+ directed comms with bundle
+  updates as their curator-pass continued. Coordination was
+  clean: Thermal's no-overlap verdict and bundle-update
+  messages kept commit ownership with Starless without lane
+  conflict. Routed to pending-graduations as a "owner-directed
+  commit responsibility with parallel coordination" pattern
+  candidate.
+
+### Substantive work landed
+
+- 6 commits shipped on `docs/agent-collaboration-enhancements`:
+  curator-handoff (`d3b1f75d`), WS0 (`3c3e01d3`), WS1
+  (`3360dfb0`), WS4 (`4f1e6faf`), closeout (`2d79e3ab`),
+  substrate cleanup (`308cdafe`). Plan archived to
+  `.agent/plans/agent-tooling/archive/completed/`.
+- 8 reviewers dispatched in parallel across the three
+  workstreams; all MUST-FIXes applied; SHOULD-FIXes documented
+  in commit bodies with deferred-rationale or fix-in-commit.
+
 ## 2026-05-26 - Thermal Swooping Wing critical curation pass / codex / GPT-5 / `019e63`
 
 ### What Was Done

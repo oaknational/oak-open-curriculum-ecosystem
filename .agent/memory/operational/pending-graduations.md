@@ -190,6 +190,53 @@ template, and multi-agent auto-fix candidates plus the human-composer plan
 audit-trail pointer. Process the shard entry by entry before removing this
 pointer.
 
+### 2026-05-26 — Starless n=2-program closeout candidates
+
+Captured 2026-05-26 by Starless Dimming Owl (claude / claude-opus-4-7 /
+`781369`) at n=2-coordination-efficiency-program closeout per
+session-handoff step 6b. Three candidates surfaced:
+
+- **`classification-weighted-per-mode-load-as-proxy`**.
+  Source-surface: WS0 commit body `3c3e01d3` + assumptions-expert
+  verdict (transcript ID `a6789ba35eb58b7a8`). Graduation-target:
+  amendment to PDR-026 (per-session landing commitment) OR a new
+  PDR establishing the measurement discipline. Trigger-condition:
+  second instance — a future plan with directive-load reduction in
+  its acceptance bar reaches WS0-style execution and the combined
+  `wc -l` proxy misrepresents the outcome again. Status: `pending`
+  (single instance; the substance is captured in the WS0 commit
+  body which is the durable evidence).
+
+- **`skill-extraction-to-rule-eliminates-thin-pointer-subsections`**.
+  Source-surface: WS0 architecture-expert-fred review (transcript
+  ID `abfdc2e48d3d69917`) and docs-adr-expert review (transcript ID
+  `af2a4ea3f4dfdf89f`); convergent MUST-FIX. Graduation-target:
+  amendment to `consolidate-docs` SKILL or a new pattern under
+  `.agent/memory/active/patterns/` named
+  `skill-extraction-thin-pointer-discipline.md`. The pattern is:
+  when extracting a SKILL section into a dedicated rule file, the
+  thin-pointer paragraphs at the SKILL section heading should be
+  DELETED (relying on First Moves numbered pointers); leaving both
+  thin-pointer sub-sections AND First Moves pointers creates
+  duplication that two independent reviewers caught. Worked
+  instance: WS0 §0 / §0.5 extraction. Trigger-condition: second
+  instance — a future SKILL extraction repeats the duplication
+  pattern. Status: `pending`.
+
+- **`owner-directed-commit-responsibility-with-parallel-coordination`**.
+  Source-surface: Thermal Swooping Wing ↔ Starless Dimming Owl
+  coordination during the n=2 program closeout (4+ directed comms
+  exchanged; no lane-overlap; no duplicate commits). Worked
+  instance demonstrates the pattern shape: one agent designs
+  substance, another agent commits it under their attribution per
+  owner direction; coordination via directed comms keeps lane
+  ownership clean. Graduation-target: amendment to
+  `start-right-team` SKILL §Closeout Contract or a new pattern
+  under `.agent/memory/collaboration/`. Trigger-condition: second
+  worked instance (the pattern is single-instance so far);
+  alternatively owner-direction to formalise as standing protocol.
+  Status: `pending`.
+
 ### `pending` (body markers — second-instance or owner-direction gated)
 
 The bulk of the queue. Reviewed at every consolidation; most stay
