@@ -325,7 +325,12 @@ describe('collaboration-state comms integration', () => {
             event_id: 'message-one',
             created_at: '2026-05-11T19:45:35Z',
             from: senderWithId,
-            to: recipient,
+            // Use the id-keyed recipient identity so reply authorisation
+            // (assertSameAgent) can match the current agent's id-keyed
+            // routing key. Cross-kind reply (legacy `to` vs id-keyed actor)
+            // is correctly rejected by PDR-076a; this fixture exercises the
+            // same-kind authorised path.
+            to: recipientWithId,
             subject: 'Please check this',
             body: 'There is useful coordination here.',
           }),

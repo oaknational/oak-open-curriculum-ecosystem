@@ -92,14 +92,16 @@ describe('buildCollaborationTuiSnapshot', () => {
         to: 'Moonlit Transiting Prism / cursor / GPT-5.5 / e86710',
       },
     ]);
+    // PDR-076a §Decision item 2: routing key drops `platform` (not a routing
+    // weight). Legacy identities (no id) render as `agent_name / prefix`.
     expect(snapshot.agents).toMatchObject([
       {
-        routing_key: 'Moonlit Transiting Prism / cursor / e86710',
+        routing_key: 'Moonlit Transiting Prism / e86710',
         visibility_status: 'active',
         queue_count: 1,
       },
       {
-        routing_key: 'Shadowed Dimming Veil / codex / 019e1c',
+        routing_key: 'Shadowed Dimming Veil / 019e1c',
         visibility_status: 'active',
         claim_count: 1,
         queue_count: 1,
@@ -133,7 +135,7 @@ describe('buildCollaborationTuiSnapshot', () => {
 
     expect(snapshot.agents).toStrictEqual([
       {
-        routing_key: 'Hushed Resting Signal / codex / 019e1b',
+        routing_key: 'Hushed Resting Signal / 019e1b',
         visibility_status: 'inactive',
         collision_status: 'clear',
         claim_count: 0,

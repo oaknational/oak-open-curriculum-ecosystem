@@ -1,3 +1,4 @@
+import { sameAgentRoutingKey } from './active-agent-routing.js';
 import {
   type CollaborationAgentId,
   type CommsEvent,
@@ -113,10 +114,11 @@ export async function drainRelevantEvents(input: {
 }
 
 function isSelfAuthored(event: CommsEvent, self: CollaborationAgentId): boolean {
-  const author = authorOf(event);
-  return (
-    author.agent_name === self.agent_name && author.session_id_prefix === self.session_id_prefix
-  );
+  // PDR-076a id-aware self-exclusion. Routes via sameAgentRoutingKey so the
+  // id-keyed branch disambiguates the (same-name + same-prefix + different-id)
+  // collision case the plan was authored to cure; legacy/legacy pairs fall
+  // back to (name, prefix) equality unchanged.
+  return sameAgentRoutingKey(authorOf(event), self);
 }
 
 function authorOf(event: CommsEvent): CollaborationAgentId {
@@ -124,19 +126,15 @@ function authorOf(event: CommsEvent): CollaborationAgentId {
 }
 
 function classifyDirected(event: DirectedCommsMessage, self: CollaborationAgentId): EventView {
-  return event.to.agent_name === self.agent_name &&
-    event.to.session_id_prefix === self.session_id_prefix
-    ? 'directed'
-    : 'observed';
+  return sameAgentRoutingKey(event.to, self) ? 'directed' : 'observed';
 }
 
 function classifyNarrative(event: NarrativeCommsEvent, self: CollaborationAgentId): EventView {
-  const prefix = self.session_id_prefix;
   if (event.addressed_to !== undefined) {
-    return event.addressed_to.session_id_prefix === prefix ? 'directed' : 'observed';
+    return sameAgentRoutingKey(event.addressed_to, self) ? 'directed' : 'observed';
   }
   if (event.audience !== undefined) {
-    return event.audience.some((a) => a.session_id_prefix === prefix) ? 'group' : 'observed';
+    return event.audience.some((a) => sameAgentRoutingKey(a, self)) ? 'group' : 'observed';
   }
   return 'broadcast';
 }

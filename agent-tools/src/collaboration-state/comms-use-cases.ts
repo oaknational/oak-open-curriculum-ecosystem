@@ -1,3 +1,4 @@
+import { sameAgentRoutingKey } from './active-agent-routing.js';
 import { renderSharedCommsLog } from './comms.js';
 import { type CollaborationAgentId, type CommsEvent, type DirectedCommsMessage } from './types.js';
 
@@ -99,11 +100,10 @@ function defaultReplySubject(sourceSubject: string): string {
 }
 
 function assertSameAgent(actual: CollaborationAgentId, expected: CollaborationAgentId): void {
-  if (
-    actual.agent_name !== expected.agent_name ||
-    actual.platform !== expected.platform ||
-    actual.session_id_prefix !== expected.session_id_prefix
-  ) {
+  // PDR-076a id-aware reply authorisation. Two agents with the same name +
+  // prefix but different ids must NOT be able to reply to each other's
+  // messages; sameAgentRoutingKey enforces the cross-id rejection.
+  if (!sameAgentRoutingKey(actual, expected)) {
     throw new Error(
       `current identity ${formatAgent(actual)} cannot reply to message addressed to ${formatAgent(expected)}`,
     );

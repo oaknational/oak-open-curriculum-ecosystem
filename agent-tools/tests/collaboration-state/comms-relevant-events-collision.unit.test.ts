@@ -4,7 +4,9 @@ import { classifyEventForAgent } from '../../src/collaboration-state/comms-use-c
 import { migrateLegacyCommsRecordCollections } from '../../src/collaboration-state/comms-migration-records';
 import {
   type CollaborationAgentId,
+  type DirectedCommsMessage,
   type NarrativeCommsEvent,
+  uuidV5Schema,
 } from '../../src/collaboration-state/types';
 
 /**
@@ -86,6 +88,97 @@ describe('classifyNarrative — session_id_prefix collision disambiguation', () 
 
     expect(classifyEventForAgent({ event, self: aliceSessionOne })).toBe('broadcast');
     expect(classifyEventForAgent({ event, self: aliceSessionTwo })).toBe('broadcast');
+  });
+});
+
+describe('PDR-076a §Falsifiability — same name + same prefix + different id', () => {
+  // The exact failure mode that motivated PDR-076a + this plan: two agents
+  // sharing the same display name AND session_id_prefix word-for-word but
+  // running distinct sessions. Before id-aware routing, every comparator
+  // collapses them into one routing identity and the second agent receives
+  // messages addressed to the first. With id-aware routing, the directed
+  // event reaches only the id-matched agent.
+  const sharedName = 'Mistbound Drifting Vow';
+  const sharedPrefix = 'cccccc';
+  // Parse through the brand schema so the UuidV5 nominal type is satisfied at
+  // compile time. Plain string literals can't be assigned to the brand.
+  const idAlpha = uuidV5Schema.parse('aaaaaaaa-aaaa-5aaa-9aaa-aaaaaaaaaaaa');
+  const idBeta = uuidV5Schema.parse('bbbbbbbb-bbbb-5bbb-9bbb-bbbbbbbbbbbb');
+
+  const agentAlpha: CollaborationAgentId = {
+    agent_name: sharedName,
+    platform: 'claude',
+    model: 'claude-opus-4-7',
+    session_id_prefix: sharedPrefix,
+    id: idAlpha,
+  };
+
+  const agentBeta: CollaborationAgentId = {
+    agent_name: sharedName,
+    platform: 'claude',
+    model: 'claude-opus-4-7',
+    session_id_prefix: sharedPrefix,
+    id: idBeta,
+  };
+
+  function directedTo(recipient: CollaborationAgentId): DirectedCommsMessage {
+    return {
+      schema_version: '2.0.0',
+      event_id: 'directed-to-alpha',
+      created_at: '2026-05-26T18:00:00Z',
+      kind: 'directed',
+      message_kind: 'coordination-request',
+      from: sender,
+      to: recipient,
+      subject: 'PDR-076a falsifiability fixture',
+      body: 'addressed by id',
+    };
+  }
+
+  it('classifyDirected: a directed event addressed to agentAlpha reaches only the id-matched agent', () => {
+    const event = directedTo(agentAlpha);
+
+    expect(classifyEventForAgent({ event, self: agentAlpha })).toBe('directed');
+    // The pre-cure failure mode: routing by (name, prefix) alone would
+    // return 'directed' here and the message would silently land in
+    // Beta's inbox. Id-aware routing must keep it at 'observed'.
+    expect(classifyEventForAgent({ event, self: agentBeta })).toBe('observed');
+  });
+
+  it('classifyNarrative: a narrative addressed_to agentAlpha reaches only the id-matched agent', () => {
+    const event = narrative({ eventId: 'narrative-to-alpha', addressedTo: agentAlpha });
+
+    expect(classifyEventForAgent({ event, self: agentAlpha })).toBe('directed');
+    expect(classifyEventForAgent({ event, self: agentBeta })).toBe('observed');
+  });
+
+  it('classifyNarrative: a group narrative whose audience names agentAlpha excludes agentBeta', () => {
+    const event = narrative({
+      eventId: 'group-includes-alpha',
+      audience: [agentAlpha],
+    });
+
+    expect(classifyEventForAgent({ event, self: agentAlpha })).toBe('group');
+    expect(classifyEventForAgent({ event, self: agentBeta })).toBe('observed');
+  });
+
+  it('isSelfAuthored: an event authored by agentAlpha is self-only-for-Alpha (Beta sees it as not-self)', () => {
+    const event: DirectedCommsMessage = {
+      schema_version: '2.0.0',
+      event_id: 'self-alpha',
+      created_at: '2026-05-26T18:00:00Z',
+      kind: 'directed',
+      message_kind: 'coordination-request',
+      from: agentAlpha,
+      to: agentBeta,
+      subject: 'self-authored by alpha',
+      body: 'alpha to beta',
+    };
+
+    // Alpha sees their own event as self (returns undefined per classifyEventForAgent contract)
+    expect(classifyEventForAgent({ event, self: agentAlpha })).toBeUndefined();
+    // Beta sees it as a directed event to themselves (id-matched recipient)
+    expect(classifyEventForAgent({ event, self: agentBeta })).toBe('directed');
   });
 });
 
