@@ -28,21 +28,46 @@ Earlier archives remain under [`archive/`](archive/).
   ADR-144 records that axis. Targeted tests, type-check, eslint, markdownlint,
   diff checks, and practice-fitness gates passed; full repo-wide check remains
   blocked by active peer-owned hook-policy lint work outside Prismatic's bundle.
-- **Current n=2 enforcement bundle state (2026-05-25T20:44Z)**: active peer
-  claims are Feathered Winging Cliff on the heartbeat/comms CLI lane and
-  Torrid Firing Spark on hook-policy/rule-index work. Prismatic's closeout
-  claim is limited to continuity and napkin surfaces. Do not stage or commit
-  peer-owned hook-policy, RULES_INDEX, or comms heartbeat files as part of the
-  Prismatic bundle.
-- **Next session direction (n=2 ENFORCEMENT BUNDLE)**: the plan body
-  [`n2-and-coordination-efficiency-program-2026-05-25.plan.md`](../../plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md)
-  opens `## Workstreams` with a **"Next session — n=2 ENFORCEMENT BUNDLE
-  (priority brief; read this first)"** section landed at commit
-  `81839e47`. Four structural enforcements split across two lanes;
-  acceptance is all four land as commits pushed green with code or hook
-  tests. WS0 corpus refactor explicitly deferred. **The next n=2
-  session reads that brief first; everything else in this register is
-  context for understanding it.**
+- **n=2 enforcement bundle Cycle 1: COMPLETE (2026-05-26T07:30Z)**: executed by
+  Feathered Winging Cliff (`57e615`) + Torrid Firing Spark (`5054f8`).
+  **8 commits pushed to origin** on `docs/agent-collaboration-enhancements`:
+  A1 `97f06e16` (typed-origin heartbeat gate, Feathered), E1 `499518ce`
+  (hook-policy 5-module extraction, Torrid), B1 `ecc1e834` (menu-framing
+  scoped_blocks, Torrid), B3 `29ebda41` (ping-before-escalate rule, Torrid),
+  E2 `4984d771` (barrel-trim knip cure, Torrid), B2 `66e77d73` (CLI
+  body-length gate ≤1500 chars on `--body` argv across all four comms verbs,
+  Torrid), E3 `69b50937` (zoneGlyph export drop, knip 1→0, Torrid cross-lane
+  takeover), and owner consolidation `bfbc39f3` (`docs: memory refinements`, 219
+  files including Prismatic's stranded practice-fitness WIP, `.agent/*` drift,
+  170-plus session comms events, handoff records, and Q-004). One Torrid
+  consistency-fix commit `83c79fa6` (`fix(practice-fitness): per-file detail
+  uses inventoryGlyph`) is local-only at retirement, awaiting Feathered/owner push.
+  All `pnpm check` rounds green (90/90 turbo); 652/652 tests pass. Knip clean.
+  Active claims at retirement: Feathered `c89bcb0c-da42-4b5e-843a-fc2be11d830d`
+  remains open (cron-driven heartbeats still firing but main loop appears
+  inactive post-resume; diagnostic candidate for graduation); Torrid
+  `2f6d1d40-c3f8-4d78-b604-bfd8bebb7157` closing as part of this handoff.
+- **Plan body amended 2026-05-26 (Feathered)**: Cycle 1 outcome + 7 graduation
+  candidates + Cycle 2 brief landed in
+  [`n2-and-coordination-efficiency-program-2026-05-25.plan.md`](../../plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md).
+  WS1 + WS4 frontmatter todos moved pending → in_progress. Revision history
+  reflects Cycle 1 execution. Bundle expanded from 4 items to 6 commits as
+  Lane B absorbed E1+E2 (structural prerequisites) under reviewer ratification.
+  PDR-063 mid-cycle handoff fired three times in cycle; bundle survived two
+  compactions.
+- **Graduation pipeline candidates surfaced by Cycle 1**: pre-pose AskUserQuestion
+  viability check (extends `present-verdicts-not-menus.md`); cross-lane structural
+  blocking of commits (1st instance, captures for PDR-026 second-instance);
+  bundle scope-discovery as normal; PDR-063 worked under bundle load; A1 cure
+  validates itself by running; B1 self-fires on plan-body content; first-broadcast-establishes-context
+  as deterministic tie-breaker. Routed to `pending-graduations.md` at session
+  close.
+- **Owner-affirmed discipline 2026-05-26**: *"if there are open decisions then
+  you should surface them to me as questions, but only after reflecting on
+  them through the LTAE lens"* + *"No open question survives LTAE [in this case].
+  That is worth remembering."* — every decision shape LTAE-screened first;
+  surface only what survives. Per-decision discipline, not blanket rule. Memory:
+  `feedback_pre_pose_option_viability_check`.
 - **Deep consolidation status (2026-05-25 Mistbound + Quiet)**: completed this
   handoff. Actions: (1) WS4 first move landed at `3ca71a40` — PDR-078 §5
   substrate-category amendment; (2) WS0 directed verdict landed at `04d5cefa`
@@ -206,7 +231,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF first-feature delivery | [record][eef] | Fiery Kindling Brazier / claude / claude-opus-4-7 / 9f4026 / commit-marshal+pr-115-merged / 2026-05-25 |
-| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Prismatic Transiting Star / codex / GPT-5 / `019e60` / distilled-processing + practice-fitness-inventory + content-role-axis + handoff-consolidation / 2026-05-25; Feathered Winging Cliff + Torrid Firing Spark active on n=2 enforcement bundle peer lanes |
+| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Feathered Winging Cliff / claude / claude-opus-4-7 / `57e615` / n=2 enforcement bundle Cycle 1 Lane A: A1 typed-origin heartbeat gate landed `97f06e16` + plan amendment + thread/continuity refresh / 2026-05-26; Torrid Firing Spark / claude / claude-opus-4-7 / `5054f8` / Cycle 1 Lane B complete: extraction `499518ce` + B1 `ecc1e834` + B3 `29ebda41` + barrel-trim `4984d771` + B2 `66e77d73` + zoneGlyph cross-lane cure `69b50937` + consistency fix `83c79fa6` (local) / 11 graduation candidates surfaced / 2026-05-26 |
 
 ## Paused Threads
 
@@ -363,8 +388,21 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
-**due — owner-directed post-PR-115-merge consolidate-docs pass** (Fiery
-Kindling Brazier `9f4026`, 2026-05-25T15:09Z). PR #115 merged at
+**due — owner-directed post-n=2-bundle consolidate-docs pass** (Torrid Firing
+Spark `5054f8`, 2026-05-26T07:30Z). Owner direction at session close:
+*"this session is complete, please communicate all of your findings to
+Feathered, once that is done please run a deep /oak-session-handoff
+followed by a deep /oak-consolidate-docs"*. Triggers: plan milestone closed
+(n=2 enforcement bundle Cycle 1 complete; all 6 substantive commits +
+2 cross-lane cures + owner consolidation landed on origin); 11 graduation
+candidates surfaced through Cycle 1 (7 in the original 2026-05-26T07:25Z
+capture + 4 added by Torrid's retirement-class closeout: peer-agent
+heartbeat-without-progress diagnostic, `git apply --cached` surgical
+staging worked-instance, CLI args inconsistency across comms verbs,
+replace-old-with-new applied to WIP-completion). Consolidate-docs
+invocation follows this handoff directly per owner sequence.
+
+Prior state (Fiery Kindling Brazier `9f4026`, 2026-05-25T15:09Z). PR #115 merged at
 `9fa3a180` on origin/main; owner directed both Fiery and Stormy to run
 a final session handoff and docs consolidation pass. Triggers: plan
 milestone closed (PR-0 of 4-PR gate-1a sequence + hardening-arc

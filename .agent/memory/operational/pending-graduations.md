@@ -367,6 +367,25 @@ decomposition discipline for marshal cycles" and "n=2 coordination efficiency". 
 the shard entry by entry before removing this pointer. Composes with PDR-082 (n=2
 collaboration mode, drafted in parallel by Stormy Surfing Dock on the same substrate).
 
+### 2026-05-26 — n=2 enforcement bundle Cycle 1 candidates
+
+Active shard:
+[`pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md`](pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md).
+
+Route-state: split out by Feathered Winging Cliff on 2026-05-26 at session-close
+capture immediately on surfacing to keep the main register under hard-line-limit
+per buffer back-pressure discipline. The shard carries 7 candidates from Cycle 1
+execution + post-cycle metacognition pass: pre-pose AskUserQuestion viability
+check (`due`, rule:present-verdicts-not-menus.md); cross-lane structural blocking
+of commits (`pending`, second-instance trigger per PDR-026); bundle scope-discovery
+during execution is normal (`candidate`); PDR-063 worked under bundle load
+(`candidate`); A1 cure validates itself by running (`candidate`); B1 self-fires
+on plan-body content (`graduated` inline); first-broadcast-establishes-context
+as deterministic tie-breaker (`candidate`). Companion napkin entry at
+[`napkin.md` 2026-05-26 — Feathered](../active/napkin.md). Plan body authority:
+[`n2-and-coordination-efficiency-program-2026-05-25.plan.md` §"Cycle 1 graduation
+candidates"](../../plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md).
+
 ## 2026-05-24 owner-decision-batch candidates (Lanternlit Listening Dusk / `78683a`)
 
 Route note 2026-05-24 (Shaded Silencing Dusk): the active `distilled.md`

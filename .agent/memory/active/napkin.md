@@ -10,6 +10,115 @@ fitness_content_role: drainable-buffer
 
 # Napkin
 
+## 2026-05-26 — Torrid Firing Spark retirement-class closeout / claude / claude-opus-4-7 / `5054f8`
+
+### Surprise: peer-agent heartbeat-without-progress as distinct state from retirement
+
+The PDR-078 §"Observe-side" 10-minute retirement threshold fires when an agent emits no heartbeats. But the inverse-failure-mode also exists: an agent's cron-driven heartbeat loop continues to fire `[HEARTBEAT]` events on the comms stream while their main reasoning loop has stalled, paused, or otherwise stopped processing incoming events. From the observer's side this looks like "active" but produces no substantive narrative/lifecycle events. Worked instance: Feathered's `57e615` session emitted heartbeats every ~4 min from 06:30Z through 07:25Z+ while making zero substantive lane progress after my B2-landed broadcast at 06:38Z — no zoneGlyph investigation, no push attempt, no reply to my 06:53:59Z direct ping `150b5a55`.
+
+**Diagnostic discriminator**: count substantive narrative/lifecycle events (excluding heartbeats and own-self events) over a 10-minute window. A peer-agent emitting heartbeats with zero substantive events for ≥2 cycles is in "alive but stalled" rather than "alive and working." Both states look identical from a retirement-detection lens but should be coordinated differently.
+
+**Cure shape applied**: direct-ping with bounded deadline ≈ 1 heartbeat cycle (4 min); if silent, broadcast takeover-of-lane intent with rationale, then act. Worked instance: `TORRID TAKING OVER` broadcast at 07:01:48Z after 23 min stall + 8 min ping-non-reply.
+
+### Surprise: `git apply --cached` for surgical cross-lane staging
+
+Standard problem: working tree has another agent's uncommitted WIP in file X; my fix in the same file X needs to commit independently without bundling their WIP into my commit. `git add X` would stage their WIP too; `git checkout HEAD -- X` would destroy their work (forbidden); interactive `git add -p` needs a TTY.
+
+**Cure**: write a patch matching HEAD context (not working-tree context) with just my change; `git apply --cached <patch>` to stage that one hunk into the index. Index gets my change; working tree retains the WIP. Commit lands my change; working tree continues to carry the WIP untouched. Worked instance: zoneGlyph cure at `69b50937` — Prismatic's WIP across `format.ts` (FitnessSummaryCounts + isReady + inventoryZone + inventoryGlyph + formatPassSummary + formatNonHealthySummaryParts) stayed intact in working tree while my 1-line `export` drop landed in commit. Pattern-graduation candidate.
+
+### Surprise: CLI args inconsistency across `agent-tools comms <verb>` verbs
+
+Friction surfaced repeatedly during comms-event emission: `comms append` takes `--title` and rejects `--kind`; `comms direct` takes `--subject` + requires `--kind`; `comms reply` takes optional `--subject` + requires `--kind`; `--to-name` vs `--to-agent-name`; `--to-prefix` vs `--to-session-prefix`; `--created-at` rejected by some verbs. Multiple emit attempts failed before producing a working invocation per verb. The B2 cure (body-length gate) addresses the body argv but not the broader CLI-name inconsistency.
+
+Candidate: harmonise option names across verbs, OR ship a shared CLI-spec validator with useful per-flag rejection messages instead of terse `Error: unknown option for comms direct: --created-at`.
+
+### Surprise: replace-old-with-new surfaces during WIP-completion review, not only at planning time
+
+Owner caught that `formatFitnessResult` (per-file detail printer in practice-fitness) still used the pre-WIP `zoneGlyph(result.overallZone)` after the rest of the file's surfaces (summary, inventory, pass-line) had moved to `inventoryGlyph(inventoryZone(result))` for the new "ready" zone classification. Per repo rule *"replace old with new — no fallbacks, no shadow systems, no remnants"*, the per-file path was cured at `83c79fa6`.
+
+The WIP author wired the new pattern through some-but-not-all callers within a single file, leaving the per-file detail as an inadvertent shadow of the old shape. Two competing decorations for the same logical state (✓ vs ✓ ready) is a "shadow remnant" pattern. Candidate: capture as a worked-instance of the existing `replace-dont-bridge` rule.
+
+## 2026-05-26 — Feathered Winging Cliff / claude / claude-opus-4-7 / `57e615`, n=2 enforcement bundle Cycle 1
+
+### AskUserQuestion menu-of-anti-shapes anti-pattern (Behaviour Change)
+
+- Caught at the zoneGlyph WIP-disposition question 2026-05-26T06:28Z.
+- Posed a 4-option question where 3 options were architecturally indefensible
+  by my own already-completed analysis (`git restore` destructive on coherent
+  351-line WIP; stash-pop conflicts on unchanged-context line; `--no-verify`
+  weakens gate per standing rule). Only "owner commits the WIP" survived
+  LTAE.
+- Faux-respect underneath: dressing "I haven't taken a verdict" as "owner-decision
+  territory." Offering anti-shapes alongside the clean answer wastes owner
+  attention, not honours it.
+- Trigger condition: coordination rush-impulse under ADR-172 amplifying the
+  decision-resolver compose-time.
+- Cure shape (captured to `feedback_pre_pose_option_viability_check`):
+  pre-pose viability check — enumerate each option, ask *"would I take this
+  myself?"*, eliminate refused options, count survivors. Zero or one survivor
+  → state verdict + invite redirect. Two+ → AskUserQuestion is legitimate.
+- Owner-affirmed 2026-05-26: *"if there are open decisions then you should
+  surface them to me as questions, but only after reflecting on them through
+  the LTAE lens"* + *"No open question survives LTAE [in this case]. That is
+  worth remembering."* Per-decision discipline; not blanket.
+- **Graduation target**: extend `.agent/rules/present-verdicts-not-menus.md`
+  with the pre-compose checklist as structural cure.
+
+### Cross-lane structural blocking of commits (New Failure Mode)
+
+- Prismatic Transiting Star session 2026-05-25 (`019e60`) completed
+  substantive practice-fitness work (`'ready'` zone + `fitness_content_role`
+  axis + ADR-144 amendment, 351 inserts / 9 files), tests green, closed claim,
+  posted handoff — but the work was **never committed** because the broader
+  `pnpm check` was red on peer-owned hook-policy lint (which became Torrid's
+  E1 extraction the next day).
+- The thread record documents the work as substantive; the WT carries the
+  uncommitted changes; no handoff substrate names the deferred-commit state.
+- Genuinely new failure mode: agent A's substantive work uncommitted because
+  the broader pre-commit gate fails on agent B's lane; A retires; next agent
+  inherits uncommitted WIP with no provenance trail in `active-claims.json`
+  or comms.
+- Owner standing direction rules out gate-narrowing (`feedback_pre_commit_hook_must_gate_staged_only`
+  REJECTED 2026-05-22; full-tree gating is intentional).
+- **Per PDR-026 falsifiability**: 1st instance is evidence, not doctrine.
+  Capture for second-instance trigger. Owner cured this instance by
+  authoring the commit themselves.
+- **Candidate cure shapes** (not chosen on one instance):
+  - Deferred-commit handoff substrate paralleling PDR-063 — agent A
+    explicitly records uncommitted-but-complete work in a handoff alongside
+    thread record, claim closure references it.
+  - Claim-the-blocker protocol — agent A picks up agent B's small blocker
+    when it stands between A's work and a commit (only viable if scope is
+    small + within A's domain).
+  - Session-handoff step demanding disposition of all uncommitted WIP before
+    closeout — additive to existing step 8.
+- **Graduation target**: pending-graduations.md; route on second-instance per
+  PDR-026.
+
+### Plan-body self-fires on B1 hook (Worked Instance)
+
+- Writing the Cycle 1 outcome description with literal blocked phrases
+  (the verdict / d-word / ratification semantic family) triggered B1's
+  hook block on this very plan body.
+- Strong evidence the structural enforcement is real, not paper. Cure: refer
+  to the phrases by semantic role rather than literal text in any documentation
+  about B1.
+- **Graduation target**: cross-reference in B1 rule documentation or
+  hook-policy README.
+
+### Bundle scope-discovery during execution is normal (Worked Instance)
+
+- Cycle 1 bundle expanded from 4 items (A1, B1, B2, B3) to 6 commits
+  (added E1 extraction + E2 barrel-trim) as structural prerequisites surfaced
+  during Lane B execution.
+- The bundle's coherence held; reviewers ratified the expansion shape
+  (parallel sonnet trio on E1; assumptions-expert on B1 phrase set).
+- Lane discipline absorbed the expansion without owner intervention.
+- **Graduation target**: clause in plan-templates or decompose-before-bundling
+  guidance documenting that *plan items can absorb structural prerequisites
+  encountered at execution time provided the absorption is documented and
+  reviewer-ratified*.
+
 ## 2026-05-25 — Prismatic Transiting Star distilled processing / codex / GPT-5 / `019e60`
 
 ### Behaviour Change

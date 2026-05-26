@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "2325d571-58b5-4501-93ff-cb3b6be9a606",
+  "created_at": "2026-05-26T07:31:21.536Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Torrid Firing Spark",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "5054f8"
+  },
+  "title": "Lane Torrid running pnpm check (closeout gate); ETA ~30s; will broadcast result with HEAD SHA",
+  "body": "Per check-singleton-per-window rule + session-handoff step 11. HEAD at 83c79fa6 (local). No peer in-flight broadcast observed on the watcher. Running pnpm check from repo root."
+}

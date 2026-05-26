@@ -1,5 +1,102 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-25/26 — Feathered Winging Cliff / claude / claude-opus-4-7 / `57e615` + Torrid Firing Spark / claude / claude-opus-4-7 / `5054f8`, n=2 enforcement bundle Cycle 1 execution)
+
+**Session shape**: two-agent (n=2) tactical execution against the Cycle 1 brief in `n2-and-coordination-efficiency-program-2026-05-25.plan.md`. Both agents survived two compaction windows in one session window via PDR-063 mid-cycle retirement handoffs (Feathered ×2, Torrid ×1).
+
+**Bundle status (2026-05-26T07:25Z)**: 5 of 6 commits landed locally on `docs/agent-collaboration-enhancements`:
+
+```text
+4984d771 chore(agent-tools): drop unused barrel re-exports (knip cure)   ← E2 (Torrid)
+29ebda41 feat(rules): add ping-before-escalate retirement-broadcast       ← B3 (Torrid)
+ecc1e834 feat(hooks): add menu-framing scoped_blocks                      ← B1 (Torrid)
+499518ce refactor(agent-tools): extract hook-policy guard to workspace    ← E1 (Torrid)
+97f06e16 feat(agent-tools): heartbeat emitter typed-origin gate (A1)      ← A1 (Feathered)
+87232086 docs(continuity): point next n=2 session at enforcement bundle   ← baseline (pushed)
+```
+
+B2 (CLI body-length gate) in flight at session-end via Torrid. **Push pending** on (a) Prismatic Transiting Star's stranded practice-fitness WIP being committed under owner authority (blocks the zoneGlyph knip cure), then (b) zoneGlyph `export` drop, then (c) B2 completion, then (d) push of the 6-commit chain.
+
+**Coordination shapes that worked under bundle load**:
+
+- PDR-063 mid-cycle handoff substrate operated cleanly through two compactions in one cycle.
+- First-broadcast-establishes-context resolved cycle/boundary assignment without owner intervention.
+- Gatekeeper specialisation: Torrid ran all `pnpm check` rounds; Feathered did not.
+- Lane discipline absorbed scope expansion: E1+E2 (extraction + barrel-trim, 2 commits) joined the original 4-item bundle as structural prerequisites, reviewer-ratified.
+- Parallel sonnet reviewers (type-expert + test-expert + code-expert + assumptions-expert) dispatched at multiple stages; findings applied in same commits.
+
+**Substance learned beyond plan — 7 graduation candidates** (full details in plan body §"Cycle 1 graduation candidates" + `pending-graduations.md`):
+
+1. AskUserQuestion menu-of-anti-shapes anti-pattern; cure: pre-pose viability check (extend `present-verdicts-not-menus.md`).
+2. Cross-lane structural blocking of commits (Prismatic stranded WIP) — new failure mode; capture for second-instance per PDR-026.
+3. Bundle scope-discovery during execution is normal — clause for plan-templates.
+4. PDR-063 worked under bundle load — worked-instance footer to PDR-063.
+5. A1 cure validates itself by running — worked-instance footer to PDR-078.
+6. B1 self-fires on plan-body content — cross-reference in B1 rule.
+7. First-broadcast-establishes-context as deterministic tie-breaker — worked-instance to `start-right-team` SKILL §1.
+
+**Owner-affirmed discipline** (2026-05-26): LTAE-screen every decision shape before any owner-surfacing; surface only what survives. *"No open question survives LTAE [in this case]. That is worth remembering."* Memory: `feedback_pre_pose_option_viability_check`.
+
+**Open at handoff**:
+
+- Feathered's claim `c89bcb0c-da42-4b5e-843a-fc2be11d830d` remains active for the push-ceremony lane (closes after push lands).
+- Torrid's claim `2f6d1d40-c3f8-4d78-b604-bfd8bebb7157` remains active for B2 completion (closes after B2 lands + push).
+- User direction at 07:24Z: *"Torrid will send you some additional findings, then they are winding down for retirement, the rest of the session is yours"* — Feathered absorbs Torrid's findings, takes over remaining lane ceremony.
+- Plan body amended with Cycle 1 outcome + Cycle 2 brief + 7 graduation candidates.
+- `pnpm check` cleanliness gate not run by Feathered; Torrid ran it through Cycle 1 as gatekeeper.
+
+**Evidence**:
+
+- A1 commit `97f06e16` carries 10 tests (5 unit on composeHeartbeatBody + 5 integration on CLI gate); both Feathered and Torrid emitted typed-args heartbeats throughout the session — A1 validated by running.
+- B1 commit `ecc1e834` carries 15 parametrised tests covering 3 phrases; self-validated by blocking plan-body writes during this very thread-record edit.
+- B3 commit `29ebda41` ships rule + portability wrappers + RULES_INDEX entry.
+- E1 commit `499518ce` 5-module extraction reviewed by parallel sonnet trio.
+- E2 commit `4984d771` knip cure, blockers 5→1 (zoneGlyph remaining, pre-existing).
+
+**Next safe step**: owner commits Prismatic's stranded practice-fitness WIP → Feathered drops zoneGlyph `export` → Torrid lands B2 → Torrid runs final `pnpm check` → Feathered pushes the 6-commit chain → both claims close → bundle-landed broadcast → consolidate-docs route the 7 graduation candidates.
+
+### Completion update (2026-05-26T07:30Z — Torrid, retirement-class closeout)
+
+The bundle is **SHIPPED**. Origin/docs/agent-collaboration-enhancements final chain (oldest → newest):
+
+```text
+83c79fa6 fix(practice-fitness): per-file detail uses inventoryGlyph for ready-zone consistency  ← Torrid (LOCAL, awaiting push)
+bfbc39f3 docs: memory refinements                                                                ← owner (219 files; absorbed Prismatic's WIP + .agent/* drift + session comms + handoff records + Q-004)
+69b50937 chore(practice-fitness): drop unused zoneGlyph export (knip cleanliness)                ← Torrid (cross-lane takeover; knip 1→0)
+66e77d73 feat(comms): reject --body argv over 1500 chars on all comms verbs (B2)                ← Torrid
+4984d771 chore(agent-tools): trim 4 unused barrel re-exports from hook-policy orchestrator       ← Torrid (knip 5→1)
+29ebda41 feat(rules): B3 ping-before-escalate                                                   ← Torrid
+ecc1e834 feat(hooks): B1 menu-framing scoped_blocks                                              ← Torrid
+499518ce refactor(agent-tools): hook-policy 5-module extraction                                  ← Torrid
+97f06e16 feat(agent-tools): A1 heartbeat emitter typed-origin gate                               ← Feathered
+```
+
+**Cross-lane takeover at 07:01:48Z**: after ~23 min of Feathered emitting cron-driven heartbeats with no substantive lane progress and no reply to my 06:53:59Z direct ping (`150b5a55`), Torrid broadcast a takeover of the push lane and applied the zoneGlyph cure at `69b50937` via `git apply --cached` surgical staging (kept Prismatic's uncommitted WIP intact in working tree, staged only the 1-line export drop). Owner then pushed everything through `bfbc39f3` while my push attempt was in flight — push attempt rejected as redundant. Owner subsequently identified that `formatFitnessResult` still rendered the pre-WIP `zoneGlyph(overallZone)` while inventory/summary used `inventoryGlyph(inventoryZone)` — replace-old-with-new rule applied, consistency fix landed at `83c79fa6` (local).
+
+**Owner's bfbc39f3 absorbed 219 files** including: Prismatic's full "ready" zone WIP across evaluate.ts/format.ts/model.ts/run.ts + tests; ADR-144 + ADR-181 amendments; all `.agent/memory/*`, `.agent/skills/*`, `.agent/directives/*`, `.agent/rules/*` drift; all session comms events (~170 files); Feathered's two handoff records + Torrid's two handoff records; the `.agents/rules/ping-before-escalate.md` Codex portability wrapper; Q-004 in `open-questions.md` (gate-both-paths architectural follow-on for B2).
+
+**Open at completion**:
+
+- `83c79fa6` is local-only on `docs/agent-collaboration-enhancements`; one push closes the bundle for good.
+- Feathered's claim `c89bcb0c` remains open. Their cron-driven heartbeats fired throughout but no substantive progress events emerged after 06:30Z — main-loop appears not to have processed incoming events post-resume. Diagnostic candidate: peer-agent heartbeat-without-progress as a distinguishable state from retirement.
+- Torrid's claim `2f6d1d40` closing as part of this handoff (CLI `claims close` invocation TBD — first attempt errored on `--closed` flag missing).
+- Q-004 in `open-questions.md` is the only open architectural follow-on from B2.
+
+**Session residue for Feathered to commit** (uncommitted at retirement):
+
+- `M .agent/state/collaboration/comms-seen/torrid-firing-spark.json` (watcher seen-list)
+- `?? .agent/state/collaboration/comms/<post-bfbc39f3 events>.json` (heartbeats + retirement events)
+- The continuity edits in this handoff (this section + repo-continuity + napkin + distilled + n2 plan)
+
+**Additional substance learned (graduation candidates beyond the original 7)**:
+
+8. **Peer-agent heartbeat-without-progress diagnostic**: cron-driven heartbeats can fire without the agent's main loop processing inbound events. Discriminator: heartbeat-only output over multiple cycles, no substantive narrative/lifecycle events. Cure shape: direct-ping with bounded deadline (4 min ≈ one heartbeat cycle); if silent, take over lane after broadcasting intent. Worked instance: 2026-05-26T06:38Z–07:01Z Feathered silence cycle.
+9. **`git apply --cached` for surgical cross-lane staging**: when the working tree has another agent's uncommitted WIP and you need to stage a small fix in the same file without destroying their work, write a patch matching HEAD context and `git apply --cached <patch>`. The index gets your change; the working tree retains the WIP. Worked instance: zoneGlyph cure at `69b50937`.
+10. **CLI args inconsistency between comms verbs**: `comms append --title` vs `comms direct --subject` vs `comms reply --subject`; `comms append` has no `--kind` flag while `comms direct` requires it. Friction surfaced repeatedly during this session's comms-event emission. Candidate for harmonisation pass.
+11. **Replace-old-with-new applied to feature WIP completion**: owner caught that `formatFitnessResult` still used `zoneGlyph(overallZone)` after the rest of practice-fitness moved to `inventoryGlyph(inventoryZone)`. The repo rule "no fallbacks, no shadow systems, no remnants" surfaces during WIP-completion review, not only during planning. Cured at `83c79fa6`.
+
+**Participating agent identity row update**: Torrid Firing Spark `last_session` = 2026-05-26.
+
 ## Session Outcome (2026-05-25 — Prismatic Transiting Star / codex / GPT-5 / `019e60`, distilled processing + practice-fitness inventory)
 
 **Session boundary**: owner first asked whether `distilled.md` was still in
@@ -2370,6 +2467,8 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 
 | Platform | Model | Agent name | Role | First-session | Last-session |
 | --- | --- | --- | --- | --- | --- |
+| `claude` | `claude-opus-4-7` | Feathered Winging Cliff | Lane A implementer (`57e615`; n=2 enforcement bundle Cycle 1: A1 heartbeat emitter typed-origin gate landed `97f06e16` with 10 tests + Zod `.strict()` schema-driven composer; PDR-063 mid-cycle compaction handoff fired twice in cycle, both pickups worked; metacognition pass on AskUserQuestion menu-of-anti-shapes anti-pattern with cure captured to `feedback_pre_pose_option_viability_check`; plan amendment + thread/continuity refresh + 7 graduation candidates captured; push-ceremony lane after Torrid retires) | 2026-05-25 | 2026-05-26 |
+| `claude` | `claude-opus-4-7` | Torrid Firing Spark | Lane B implementer + gatekeeper + cross-lane-takeover (`5054f8`; n=2 enforcement bundle Cycle 1 COMPLETE on origin: hook-policy 5-module extraction `499518ce` + B1 menu-framing scoped_blocks `ecc1e834` + B3 ping-before-escalate `29ebda41` + barrel-trim knip cure `4984d771` + B2 CLI body-length gate `66e77d73` (4 verbs × 10 tests, TDD-first per test-expert Amendment A) + zoneGlyph cross-lane cure `69b50937` (knip 1→0, surgical `git apply --cached` to preserve Prismatic's WIP) + consistency fix `83c79fa6` (per-file detail uses inventoryGlyph, replace-old-with-new per owner direction; LOCAL); ran all `pnpm check` gatekeeper rounds; dispatched 4-reviewer parallel sonnet panel on B2 (type-expert + test-expert + code-expert + assumptions-expert) with findings absorbed; took over push lane after Feathered's 23-min heartbeat-only silence + ping non-reply, broadcast `TORRID TAKING OVER` at 07:01:48Z; owner pushed in parallel through `bfbc39f3` absorbing 219 drift files; Q-004 filed in open-questions.md for B2 gate-both-paths follow-on; retiring 2026-05-26 per owner direction after sending closeout findings `337a7f57` to Feathered; PDR-063 fired once mid-session pre-B2) | 2026-05-25 | 2026-05-26 |
 | `codex` | `GPT-5` | Hushed Fading Hush | Consolidator (operations-doc soft-tier split and post-M1 session-handoff rerun) | 2026-05-24 | 2026-05-24 |
 | `codex` | `GPT-5` | Sylvan Sprouting Petal | Knowledge Curator (memory critical-drain continuation; distilled graduations; identity-seed CLI refinement; handoff) | 2026-05-24 | 2026-05-24 |
 | `codex` | `GPT-5` | Shaded Silencing Dusk | Knowledge Curator (active-napkin processing, plan-truth repair, boundary handoff) | 2026-05-24 | 2026-05-24 |
