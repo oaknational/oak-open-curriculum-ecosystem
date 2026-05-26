@@ -420,6 +420,188 @@ describe('collaboration-state comms --tag flag (ADR-183)', () => {
   });
 });
 
+describe('collaboration-state comms --body length gate (B2 / plan §B2)', () => {
+  const longBody = 'a'.repeat(1501);
+
+  it('rejects `comms append --body` over 1500 chars with a non-zero exit and cure-naming error', async () => {
+    const fake = createFakeCollaborationRuntime();
+
+    const result = await runCollaborationStateCli({
+      argv: [
+        '--',
+        'comms',
+        'append',
+        '--active',
+        'state/active-claims.json',
+        '--comms-dir',
+        'state/comms',
+        '--now',
+        '2026-05-26T07:00:00Z',
+        '--created-at',
+        '2026-05-26T07:00:00Z',
+        '--title',
+        'Append over limit',
+        '--body',
+        longBody,
+        '--event-id',
+        'append-over-limit',
+        '--platform',
+        'claude-code',
+        '--model',
+        sender.model,
+      ],
+      env: {
+        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
+      },
+      io: fake.runtime.io,
+    });
+
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain('1501');
+    expect(result.stderr).toContain('1500');
+    expect(result.stderr).toContain('--body-file');
+  });
+
+  it('rejects `comms send --body` over 1500 chars with a non-zero exit', async () => {
+    const fake = createFakeCollaborationRuntime();
+
+    const result = await runCollaborationStateCli({
+      argv: [
+        '--',
+        'comms',
+        'send',
+        '--active',
+        'state/active-claims.json',
+        '--comms-dir',
+        'state/comms',
+        '--output',
+        'state/shared-log.md',
+        '--now',
+        '2026-05-26T07:00:00Z',
+        '--title',
+        'Send over limit',
+        '--body',
+        longBody,
+        '--event-id',
+        'send-over-limit',
+        '--platform',
+        'claude-code',
+        '--model',
+        sender.model,
+      ],
+      env: {
+        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
+      },
+      io: fake.runtime.io,
+    });
+
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain('1501');
+    expect(result.stderr).toContain('1500');
+  });
+
+  it('rejects `comms direct --body` over 1500 chars with a non-zero exit', async () => {
+    const fake = createFakeCollaborationRuntime();
+
+    const result = await runCollaborationStateCli({
+      argv: [
+        '--',
+        'comms',
+        'direct',
+        '--active',
+        'state/active-claims.json',
+        '--comms-dir',
+        'state/comms',
+        '--to-agent-name',
+        recipient.agent_name,
+        '--to-platform',
+        recipient.platform,
+        '--to-model',
+        recipient.model,
+        '--to-session-prefix',
+        recipient.session_id_prefix,
+        '--kind',
+        'coordination-request',
+        '--subject',
+        'Direct over limit',
+        '--body',
+        longBody,
+        '--event-id',
+        'direct-over-limit',
+        '--now',
+        '2026-05-26T07:00:00Z',
+        '--platform',
+        'claude-code',
+        '--model',
+        sender.model,
+      ],
+      env: {
+        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
+      },
+      io: fake.runtime.io,
+    });
+
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain('1501');
+    expect(result.stderr).toContain('--body-file');
+  });
+
+  it('rejects `comms reply --body` over 1500 chars with a non-zero exit', async () => {
+    const commsDir = 'state/comms';
+    const fake = createFakeCollaborationRuntime({
+      comms: {
+        [commsDir]: [
+          directedMessage({
+            event_id: 'reply-source',
+            created_at: '2026-05-26T06:59:00Z',
+            from: sender,
+            to: recipient,
+            subject: 'Source message',
+            body: 'Short source body.',
+          }),
+        ],
+      },
+    });
+
+    const result = await runCollaborationStateCli({
+      argv: [
+        '--',
+        'comms',
+        'reply',
+        '--active',
+        'state/active-claims.json',
+        '--comms-dir',
+        commsDir,
+        '--to-event-id',
+        'reply-source',
+        '--kind',
+        'coordination-ack',
+        '--body',
+        longBody,
+        '--event-id',
+        'reply-over-limit',
+        '--now',
+        '2026-05-26T07:00:00Z',
+        '--platform',
+        recipient.platform,
+        '--model',
+        recipient.model,
+      ],
+      env: {
+        CODEX_THREAD_ID: '019e1867-a0a8-7c11-aae3-1bc48533a585',
+        OAK_AGENT_IDENTITY_OVERRIDE: recipient.agent_name,
+      },
+      io: fake.runtime.io,
+    });
+
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain('1501');
+  });
+});
+
 function directedMessage(
   message: Omit<
     Extract<CommsEvent, { readonly kind: 'directed' }>,

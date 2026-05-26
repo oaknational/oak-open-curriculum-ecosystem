@@ -16,6 +16,24 @@ const DEFAULT_COMMS_DIR = '.agent/state/collaboration/comms';
 const DEFAULT_SHARED_LOG = '.agent/state/collaboration/shared-comms-log.md';
 
 /**
+ * Maximum length of an inline `--body` argv for comms events (B2 / plan §B2).
+ *
+ * The comms substrate is scannable signal, not durable storage. Long content
+ * belongs in handoff records, plan files, or PDRs; the comms event points to
+ * them. Per the plan's directed shape, `--body-file` is the advertised escape
+ * hatch for content above this limit — the gate fires only on `--body` argv,
+ * not on `--body-file` resolved content. The architectural argument for
+ * gating resolved length regardless of source is logged with the owner as a
+ * follow-on question.
+ *
+ * Counts `string.length` (UTF-16 code units), matching what an agent or
+ * operator types at the shell.
+ *
+ * consolidate-at-third-consumer — stays module-local until a second consumer emerges.
+ */
+const MAX_COMMS_BODY_LENGTH = 1500;
+
+/**
  * Resolve the event body from either `--body` (inline string) or
  * `--body-file <path>` (file contents read literally, no shell interpretation).
  *
@@ -45,6 +63,11 @@ export async function resolveCommsBody(
   }
   if (inline === undefined) {
     throw new Error('missing required option --body (or pass --body-file <path>)');
+  }
+  if (inline.length > MAX_COMMS_BODY_LENGTH) {
+    throw new Error(
+      `--body argv exceeds the ${MAX_COMMS_BODY_LENGTH}-character limit (got ${inline.length} chars). The comms substrate is scannable signal; for longer content use --body-file <path> with content stored in a handoff record, plan file, or PDR.`,
+    );
   }
   return inline;
 }
