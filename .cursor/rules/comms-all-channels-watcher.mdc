@@ -1,0 +1,10 @@
+---
+description: >
+  Before any team-bootstrap step, run a persistent watcher over the full
+  comms event stream with self-exclusion only on the agent's identity
+  tuple. Directed-only or single-view filters miss the broadcast and
+  group events that carry team-bootstrap coordination itself.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/comms-all-channels-watcher.md`.

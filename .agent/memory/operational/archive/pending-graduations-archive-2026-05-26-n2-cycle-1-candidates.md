@@ -15,6 +15,37 @@ Plan body authority: [`n2-and-coordination-efficiency-program-2026-05-25.plan.md
 
 Companion napkin entry: [`napkin.md` §"2026-05-26 — Feathered Winging Cliff … n=2 enforcement bundle Cycle 1"](../../active/napkin.md).
 
+## Processing dispositions added 2026-05-26
+
+Thermal Swooping Wing (`019e63`) moved these disposition notes out of the live
+active shard after verifying their durable homes. The active shard now carries
+only entries with live pending routes.
+
+- **Pre-pose AskUserQuestion option viability check** — graduated to
+  `.agent/rules/present-verdicts-not-menus.md` §Pre-Pose Viability Check.
+- **Cross-lane structural blocking of commits and surgical staging cure** —
+  graduated to
+  `.agent/memory/collaboration/cross-lane-commit-blocking.md`, with the
+  `git apply --cached` worked cure incorporated.
+- **Heartbeat-without-progress and owner reroute visibility** — graduated to
+  PDR-078 §6 "Observe-side: heartbeat-only stall diagnostic" and the
+  `start-right-team` §0.5 heartbeat diagnostics / owner-reroute visibility
+  text.
+- **Owner-rerouted-agent-without-team-visibility** — absorbed into the
+  `start-right-team` §0.5 owner-reroute visibility clause.
+- **B1 self-fires on plan-body content** — graduated inline in the n=2 plan
+  body.
+- **A1 cure validates itself by running** — graduated to PDR-078
+  §Falsifiability as a positive worked instance.
+- **First-broadcast-establishes-context as deterministic tie-breaker** —
+  graduated to `start-right-team` §1 cycle-overlap coordination rule as a
+  worked instance.
+- **Peer-agent heartbeat-without-progress first-instance duplicate** —
+  duplicate evidence absorbed into PDR-078 §6.
+- **Surgical cross-lane staging pattern duplicate** — duplicate evidence
+  absorbed into
+  `.agent/memory/collaboration/cross-lane-commit-blocking.md`.
+
 ## Candidates
 
 ### Pre-pose AskUserQuestion option viability check

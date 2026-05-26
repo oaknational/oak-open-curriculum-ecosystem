@@ -45776,6 +45776,94 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "0936977f-8c66-41b9-9be5-8e33fe20043f",
+      "agent_id": {
+        "agent_name": "Thermal Swooping Wing",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e63"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md",
+            ".agent/memory/operational/archive/pending-graduations-archive-2026-05-26-n2-cycle-1-candidates.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T09:58:49Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Curate n=2 pending-graduations shard by moving processed disposition evidence to archive and leaving only live pending routes",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T09:59:30Z",
+        "closed_by": {
+          "agent_name": "Thermal Swooping Wing",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e63"
+        },
+        "summary": "Moved processed n=2 shard disposition notes into the existing archive and left the active shard with pending routes only. Validation: targeted markdownlint and git diff --check passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0936977f-8c66-41b9-9be5-8e33fe20043f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "534b88e8-23d6-4d09-b5df-d7a39a3caaea",
+      "agent_id": {
+        "agent_name": "Starless Dimming Owl",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "781369"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md",
+            ".agent/rules/new-rule-vs-pdr-clause.md",
+            ".agent/rules/comms-all-channels-watcher.md",
+            ".agent/rules/liveness-heartbeat-cron.md",
+            "RULES_INDEX.md",
+            "agent-tools/tests/rules/rules-index-classification.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T10:16:05Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "WS0 of n2-coordination-efficiency-program: rule corpus extraction + SKILL topology refinement (3 new rules, 9 forwarders, RULES_INDEX classification table, validation test, mode-selection block). Bundles Thermal continuing curator slice + collaboration-state residue per owner direction.",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T10:16:43Z",
+        "closed_by": {
+          "agent_name": "Starless Dimming Owl",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "781369"
+        },
+        "summary": "WS0 of n2-coordination-efficiency-program landed: 3 new rule files extracted from start-right-team SKILL §0 and §0.5 + meta-rule new-rule-vs-pdr-clause + 9 platform forwarders + RULES_INDEX three-column classification table + 6 validation tests passing. SKILL hit ≤700 absolute target exactly. Reviewer findings applied: §0/§0.5 standalone sections deleted (First Moves moves 1 and 2 are sole pointer surface); pattern-class home added to meta-rule classifier; trigger-loaded test assertions added for two extracted rules; SKILL-pointer-is-trigger-mechanism note added to extracted rules. Combined wc -l acceptance bar revised per assumptions-expert ruling in commit body. Bundles Thermal continuing curator slice + collaboration-state residue.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "534b88e8-23d6-4d09-b5df-d7a39a3caaea",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
