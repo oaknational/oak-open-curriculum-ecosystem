@@ -34,6 +34,19 @@ const sylvan = {
   session_id_prefix: 'a53e45',
 } as const;
 
+const WOODLAND_ID_V5 = 'a81f75bf-c3ce-52b2-a356-31b74d70aaf5';
+const SYLVAN_ID_V5 = '5b9f4a49-e58c-59e3-810c-411823aafa66';
+
+const woodlandWithId = {
+  ...woodland,
+  id: WOODLAND_ID_V5,
+} as const;
+
+const sylvanWithId = {
+  ...sylvan,
+  id: SYLVAN_ID_V5,
+} as const;
+
 const canonicalNarrative = {
   schema_version: '2.0.0',
   event_id: '00de9e88-44a5-41c1-a9a5-6488a890ff07',
@@ -289,5 +302,72 @@ describe('parseCommsEvent', () => {
     expect(parseCommsEvent(JSON.stringify(canonicalNarrative)).kind).toBe('narrative');
     expect(parseCommsEvent(JSON.stringify(lifecycle)).kind).toBe('lifecycle');
     expect(parseCommsEvent(JSON.stringify(directedPostMigration)).kind).toBe('directed');
+  });
+});
+
+describe('PDR-076a §Cascade item 3 — agent identity id field round-trip', () => {
+  it('round-trips id on a narrative event author', () => {
+    const event = parseNarrativeCommsEvent(
+      JSON.stringify({ ...canonicalNarrative, author: woodlandWithId }),
+    );
+
+    expect(event.author.id).toBe(WOODLAND_ID_V5);
+    expect(event.author.agent_name).toBe('Woodland Creeping Petal');
+  });
+
+  it('round-trips id on every routing role of a narrative event (author, addressed_to, audience)', () => {
+    const event = parseNarrativeCommsEvent(
+      JSON.stringify({
+        ...narrativeWithAffordances,
+        author: woodlandWithId,
+        addressed_to: sylvanWithId,
+        audience: [sylvanWithId, woodlandWithId],
+      }),
+    );
+
+    expect(event.author.id).toBe(WOODLAND_ID_V5);
+    expect(event.addressed_to?.id).toBe(SYLVAN_ID_V5);
+    expect(event.audience).toEqual([sylvanWithId, woodlandWithId]);
+  });
+
+  it('round-trips id on a lifecycle event author and agent_id', () => {
+    const event = parseLifecycleCommsEvent(
+      JSON.stringify({ ...lifecycle, author: woodlandWithId, agent_id: woodlandWithId }),
+    );
+
+    expect(event.author.id).toBe(WOODLAND_ID_V5);
+    expect(event.agent_id.id).toBe(WOODLAND_ID_V5);
+  });
+
+  it('round-trips id on a directed message from and to', () => {
+    const event = parseDirectedCommsMessage(
+      JSON.stringify({
+        ...directedPostMigration,
+        from: woodlandWithId,
+        to: sylvanWithId,
+      }),
+    );
+
+    expect(event.from.id).toBe(WOODLAND_ID_V5);
+    expect(event.to.id).toBe(SYLVAN_ID_V5);
+  });
+
+  it('still parses legacy identities without an id field (additive migration window)', () => {
+    const event = parseNarrativeCommsEvent(JSON.stringify(canonicalNarrative));
+
+    expect(event.author).toEqual(woodland);
+    expect(event.author.id).toBeUndefined();
+  });
+
+  it('rejects a non-UUID-v5 id on the author (refines on the version nibble)', () => {
+    const v4Id = '00000000-0000-4000-8000-000000000000';
+    expect(() =>
+      parseNarrativeCommsEvent(
+        JSON.stringify({
+          ...canonicalNarrative,
+          author: { ...woodland, id: v4Id },
+        }),
+      ),
+    ).toThrow(/UUID v5|version nibble|invalid/i);
   });
 });

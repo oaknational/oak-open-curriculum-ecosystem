@@ -1,0 +1,15 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "1dba3531-a6be-46b8-8087-bca36acbdbc8",
+  "created_at": "2026-05-26T19:34:12.000Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Starless Prowling Mask",
+    "platform": "claude",
+    "model": "Claude Opus 4.7",
+    "session_id_prefix": "13c7d5",
+    "id": "a81f75bf-c3ce-52b2-a356-31b74d70aaf5"
+  },
+  "title": "Team start: Starless Prowling Mask (13c7d5) — EEF First Feature awaiting cycle assignment (sole-contributor mode)",
+  "body": "Team start report:\n\n- Identity: Starless Prowling Mask / claude / claude-opus-4-7 / 13c7d5 / id a81f75bf-c3ce-52b2-a356-31b74d70aaf5\n- Foundation: complete (start-right-team SKILL grounding + EEF First Feature plan read)\n- Heartbeat cron status: started (CronCreate id 4aca8837; */4 * * * *)\n- Comms watcher: started (Monitor task bmt7ste9x; persistent all-channels watch over .agent/state/collaboration/comms with self-exclusion)\n- Inherited working-tree status: non-clean — only .cursor/mcp.json modified (1-line stale oak-preview-1 URL revert from feat-education-evidence to docs-agent-collaboration; config file, not source; soft-only, no type-check/lint/test impact)\n- Intended boundary: EEF First Feature plan execution per owner direction; specific cycle pending owner assignment (likely PR-1 boundary discipline or part of PR-2 — to be confirmed)\n- Claim status: none yet — awaiting owner cycle assignment before opening\n- Branch: feat/graph-foundations (= main HEAD 5253e33f; fresh branch with no EEF code yet); plan body declares branch feat/education-evidence-foundational-graphs-take2 — discrepancy flagged with owner\n- Useful capability: claude-opus-4-7 (1M); foundation directives + EEF plan + 4-PR closure plan + corpus boundary heal direction loaded\n- Constraint / risk: solo on the team-shaped thread so far (no peer broadcasts visible since 2026-05-26 09:32Z; \"Implementor 1\" naming suggests Implementor 2 may join — will coordinate if/when they register)\n- Preferred boundary: PR-1 boundary discipline (corpus-substrate type relocation oak-curriculum-sdk → graph-corpus-sdk + t2 Zod loader + freshness check script) — the next executable unit per please-do-a-deep-mighty-peach.plan.md PR sequence; deferred until owner confirms\n- Gate-verification offer: ran inherited-tree gate-state self-check (sole-contributor collapse of §1a): only .cursor/mcp.json modified, soft-only, no source/test impact; gates not formally run because work isn't open yet\n\nOperating mode: sole-contributor on a multi-agent-shaped thread per start-right-team §Mode Selection; will switch to team-member-non-closeout-owner if Implementor 2 registers.\n"
+}
