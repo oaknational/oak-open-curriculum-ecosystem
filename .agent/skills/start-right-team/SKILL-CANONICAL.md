@@ -168,9 +168,11 @@ Team start report:
 
 `Intended boundary` is a non-binding declaration of *where* the agent expects
 to work; `Claim status` reports the live registry state. `Heartbeat cron
-status` reports the §0.5 precondition's live state — the cron or monitor
-task id makes the heartbeat surface auditable; `blocked by` explains any
-gap and the recovery plan. `Inherited working-tree status` is the agent's
+status` reports the
+[`liveness-heartbeat-cron`](../../rules/liveness-heartbeat-cron.md)
+precondition's live state — the cron or monitor task id makes the
+heartbeat surface auditable; `blocked by` explains any gap and the
+recovery plan. `Inherited working-tree status` is the agent's
 observation of `git status` at session open; the team uses these reports
 to decide whether §1a gate-verification fires. `Gate-verification offer`
 declares willingness to take the elected gate-runner role; the team uses
@@ -535,14 +537,19 @@ leaving the session, even when they did not own the full handoff. At minimum,
 they tell the other agents that their session is complete, name whether any
 work remains in their boundary, and state the claim disposition.
 
-**Final-heartbeat-end broadcast** (per §0.5 heartbeat contract). When an
-agent closes out cleanly, they MUST emit a final heartbeat event with body
-naming the session-end state and the disposition of their heartbeat cron
-(stopped explicitly, or letting it die with the session). This prevents
-the 10-minute retirement rule from firing false-positive on an agent who
-closed cleanly but whose heartbeat cron stopped emitting. The final
-heartbeat is paired with the team-member closeout broadcast below and
-serves as the team's signal that the agent has stood down by intent.
+**Final-heartbeat-end broadcast** (per the
+[`liveness-heartbeat-cron`](../../rules/liveness-heartbeat-cron.md) rule).
+When an agent closes out cleanly, they MUST emit a final heartbeat event
+with body naming the session-end state and the disposition of their
+heartbeat cron (stopped explicitly, or letting it die with the session).
+This prevents the 10-minute retirement rule from firing false-positive on
+an agent who closed cleanly but whose heartbeat cron stopped emitting.
+Symmetrically, an observer who reads a 10-minute silence MUST apply
+[`ping-before-escalate`](../../rules/ping-before-escalate.md) (cross-check
+git work-evidence, commit queue, directed inbox; direct-ping first)
+before broadcasting any retirement-detection event. The final heartbeat
+is paired with the team-member closeout broadcast below and serves as
+the team's signal that the agent has stood down by intent.
 Suggested subject format:
 
 ```text

@@ -45913,6 +45913,47 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "047fb4c7-6627-441b-bcb5-390862858707",
+      "agent_id": {
+        "agent_name": "Starless Dimming Owl",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "781369"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T10:44:14Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "WS4 of n2-coordination-efficiency-program: SKILL cross-references for landed rules — ping-before-escalate link + liveness-heartbeat-cron link to heal stale §0.5 anchors.",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T10:44:26Z",
+        "closed_by": {
+          "agent_name": "Starless Dimming Owl",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "781369"
+        },
+        "summary": "WS4 SKILL cross-references landed: ping-before-escalate.md link added to Closeout Contract Final-heartbeat-end paragraph (observer-side symmetry to the emit-side discipline); stale §0.5 anchor at line 171 (Heartbeat cron status) and line 538 (Final-heartbeat-end paragraph) replaced with liveness-heartbeat-cron rule-file links. docs-adr-expert returned no MUST-FIX; SHOULD-FIX on adjacent stale anchor at line 171 applied in same commit. markdownlint clean.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "047fb4c7-6627-441b-bcb5-390862858707",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
