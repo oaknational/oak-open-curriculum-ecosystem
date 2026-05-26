@@ -12,6 +12,7 @@ import {
   type CollaborationClaim,
   type CollaborationCommitQueueEntry,
   type CollaborationRegistry,
+  collaborationAgentIdSchema,
   type CommsEvent,
   type DirectedCommsMessage,
   type LifecycleCommsEvent,
@@ -150,16 +151,12 @@ function parseClaim(value: unknown): CollaborationClaim {
 }
 
 function parseAgentId(value: unknown): CollaborationAgentId {
-  if (!isJsonObject(value)) {
-    throw new Error('agent_id must be an object');
-  }
-
-  return {
-    agent_name: requireString(value, 'agent_name'),
-    platform: requireString(value, 'platform'),
-    model: requireString(value, 'model'),
-    session_id_prefix: requireString(value, 'session_id_prefix'),
-  };
+  // Commandment 12: the schema IS the type. The hand-built field-by-field
+  // construction this replaces could not enforce the PDR-076a v5 contract on
+  // the optional `id` field — Zod parsing through `collaborationAgentIdSchema`
+  // validates the legacy required fields AND the v5 brand on `id` when
+  // present, in one boundary check.
+  return collaborationAgentIdSchema.parse(value);
 }
 
 function parseAreas(value: unknown): readonly CollaborationArea[] {
