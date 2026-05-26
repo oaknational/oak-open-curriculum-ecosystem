@@ -17,12 +17,20 @@ export interface JsonObject {
 
 /**
  * Agent identity stored on active claims and commit-queue entries.
+ *
+ * `id` is the canonical PDR-076a UUID v5 disambiguator. New write paths
+ * (createIntent + downstream commit ceremony) MUST emit `id`; the field is
+ * required here so callers cannot silently omit it at compile time. Read
+ * paths over legacy registries with missing-id rows fail loudly at parse,
+ * which is intentional under the PDR-076b enforce-at-consumer doctrine
+ * (no silent legacy passthrough on the commit-queue write surface).
  */
 export interface CommitQueueAgentId extends JsonObject {
   readonly agent_name: string;
   readonly platform: string;
   readonly model: string;
   readonly session_id_prefix: string;
+  readonly id: string;
 }
 
 /**

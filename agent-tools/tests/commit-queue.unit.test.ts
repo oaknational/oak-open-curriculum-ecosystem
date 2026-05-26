@@ -21,6 +21,9 @@ const agentId: CommitQueueAgentId = {
   platform: 'codex',
   model: 'gpt-5.5',
   session_id_prefix: '019dcd',
+  // Deterministic v5 derived from '019dcd' under the collaboration-identity
+  // namespace; used as a stable fixture for write-side identity contracts.
+  id: 'e2e793c7-923e-5baa-97f0-2bedfb9b6b50',
 };
 
 const queuedAt = '2026-04-27T07:20:00Z';

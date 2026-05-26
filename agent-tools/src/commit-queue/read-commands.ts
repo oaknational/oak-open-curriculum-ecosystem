@@ -1,3 +1,5 @@
+import { collaborationAgentIdWriteSchema } from '../collaboration-state/types.js';
+
 import { optionalPhase, optionalQueueStatus, optionString, requireOption } from './args.js';
 import { guardStageFiles } from './guard.js';
 import { writeCommitQueueList, writeCommitQueueShow, writeCommitQueueStatus } from './status.js';
@@ -59,12 +61,13 @@ export function runCommitQueueReadCommand(input: ReadCommandInput): number {
 function writeGuardResult(input: ReadCommandInput): number {
   const result = guardStageFiles({
     registry: input.registry,
-    agentId: {
+    agentId: collaborationAgentIdWriteSchema.parse({
       agent_name: requireOption(input.options, 'agent-name'),
       platform: requireOption(input.options, 'platform'),
       model: requireOption(input.options, 'model'),
       session_id_prefix: requireOption(input.options, 'session-id-prefix'),
-    },
+      id: requireOption(input.options, 'id'),
+    }),
     files: input.options.file,
     nowIso: input.now,
   });
