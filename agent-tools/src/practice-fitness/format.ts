@@ -129,7 +129,7 @@ function formatProseViolationLines(result: FitnessResult): string[] {
 
 export function formatFitnessResult(result: FitnessResult): string {
   return [
-    `  ${result.filename}  ${zoneGlyph(result.overallZone)}`,
+    `  ${result.filename}  ${inventoryGlyph(inventoryZone(result))}`,
     formatLineStatus(result),
     formatTokenStatus(result),
     formatCharStatus(result),
