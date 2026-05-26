@@ -232,8 +232,8 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["agent_name", "platform", "model", "session_id_prefix"],
-      "$comment_provenance": "Observed. Every shared-communication-log entry carried this identity block (agent_name, platform, model, session_id_prefix); reuses the PDR-027 identity schema unchanged.",
-      "description": "Per PDR-027 agent identity schema. Reused unchanged from thread-record identity rows.",
+      "$comment_provenance": "Originally observed: every shared-communication-log entry carried (agent_name, platform, model, session_id_prefix). Amended 2026-05-26 per PDR-076a §Cascade item 1 to add optional UUID v5 id as the canonical routing disambiguator; session_id_prefix retained for readable diagnostic prose.",
+      "description": "Per PDR-027 agent identity schema as amended by PDR-076a. Identity routing key is (agent_name, id); session_id_prefix remains for readable diagnostic prose.",
       "properties": {
         "agent_name": {
           "type": "string",
@@ -253,6 +253,11 @@
         "session_id_prefix": {
           "type": "string",
           "description": "First 6 characters of the harness session ID; 'unknown' if not exposed."
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "description": "PDR-076a §Cascade item 3 deterministic UUID v5 derived from the stable session seed. Optional during the additive migration window; promoted to required when the legacy-fallback diagnostic count reaches zero across one calendar week (PDR-076a §Cascade item 2 sunset)."
         }
       }
     },

@@ -1925,5 +1925,65 @@
       "staged_name_status": "M\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/comms-seen/Fiery-Kindling-Brazier.json\nM\t.agent/state/collaboration/comms-seen/Stormy-Surfing-Dock.json\nA\t.agent/state/collaboration/comms/06cd67d4-0e42-4056-82b6-1075536f2b1a.json\nA\t.agent/state/collaboration/comms/4bf240b9-39e4-42c0-a487-0191a553e264.json\nA\t.agent/state/collaboration/comms/607220f3-cc46-4811-a9ce-8b7e2c0b8897.json\nA\t.agent/state/collaboration/comms/729beb59-6e26-4ae4-a25e-c705fe735276.json\nA\t.agent/state/collaboration/comms/a6058082-f0f3-467a-ba59-7617e5100e8b.json\nA\t.agent/state/collaboration/comms/bb6e4203-3214-40a3-b796-74500188a55f.json\nA\t.agent/state/collaboration/comms/c44a28f8-7936-4b6d-9142-1647dbd35a58.json\n"
     }
   ],
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "8c67b185-007e-49a2-bbd3-ad23905849bd",
+      "agent_id": {
+        "agent_name": "Tempestuous Sweeping Feather",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "a9e5d2"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/identity.ts",
+            "agent-tools/src/collaboration-state/cli-self-identity.ts",
+            "agent-tools/src/collaboration-state/state-parsers.ts",
+            "agent-tools/src/collaboration-state/active-agent-routing.ts",
+            "agent-tools/src/collaboration-state/comms-relevant-events.ts",
+            "agent-tools/src/collaboration-state/comms-use-cases.ts",
+            "agent-tools/src/collaboration-state/claim-reports.ts",
+            "agent-tools/src/collaboration-state/cli-comms-messages.ts",
+            "agent-tools/src/collaboration-state/cli-spec-options.ts",
+            "agent-tools/src/commit-queue/intent.ts",
+            ".agent/state/collaboration/comms-event.schema.json",
+            ".agent/state/collaboration/active-claims.schema.json",
+            "agent-tools/package.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T17:05:17Z",
+      "freshness_seconds": 21600,
+      "sidebar_open": false,
+      "intent": "phase-0b-and-0c-collaboration-identity-implementation"
+    },
+    {
+      "claim_id": "20d6cf6f-e7ec-4131-9617-f57f8b5aa99f",
+      "agent_id": {
+        "agent_name": "Feathered Flying Cloud",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e65"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/repo-continuity.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T17:11:45Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "scan cross-platform memory buffers for repo-import candidates"
+    }
+  ]
 }
