@@ -20,21 +20,11 @@ import {
   type ScopedContentBlock,
 } from './types.js';
 
-export type {
-  ContentChange,
-  PreToolUseDenyResponse,
-  RunPreToolUseContentGuardOptions,
-  ScopedContentBlock,
-} from './types.js';
+export type { PreToolUseDenyResponse, RunPreToolUseContentGuardOptions } from './types.js';
 
 export { PreToolUseDenyResponseSchema } from './types.js';
 
-export {
-  extractContentChange,
-  parseHookInput,
-  readStreamText,
-  resolveContentPair,
-} from './hook-input.js';
+export { extractContentChange, parseHookInput, readStreamText } from './hook-input.js';
 
 export {
   findAddedBlockedContent,
@@ -44,7 +34,6 @@ export {
 } from './matchers.js';
 
 export {
-  loadBlockedContentPatterns,
   loadScopedContentBlocks,
   parseBlockedContentPolicy,
   parseScopedContentBlocks,
