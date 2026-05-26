@@ -189,13 +189,12 @@ function directedEvent(parsed: z.infer<typeof directedCommsMessageSchema>): Dire
 }
 
 function agentId(parsed: z.infer<typeof agentIdSchema>): CollaborationAgentId {
-  return {
-    agent_name: parsed.agent_name,
-    platform: parsed.platform,
-    model: parsed.model,
-    session_id_prefix: parsed.session_id_prefix,
-    ...(parsed.id === undefined ? {} : { id: parsed.id }),
-  };
+  // The parsed object IS the CollaborationAgentId (the schema is the type per
+  // schema-IS-the-type discipline). Field-by-field reconstruction here would
+  // silently drop any future optional field added to collaborationAgentIdSchema
+  // (the exact failure mode the c0942d48 cure landed for the `id` field).
+  // The return-type annotation enforces the contract at compile time.
+  return parsed;
 }
 
 function parseWithHelpfulError<TSchema extends z.ZodType>(input: {

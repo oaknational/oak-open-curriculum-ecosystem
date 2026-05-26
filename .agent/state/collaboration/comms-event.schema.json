@@ -55,13 +55,13 @@
         "body": { "type": "string", "minLength": 1 },
         "audience": {
           "type": "array",
-          "items": { "type": "string", "minLength": 1 },
-          "description": "Optional broadcast routing. Use '*' for all-agents broadcast; specific agent_name strings for targeted broadcast."
+          "items": { "$ref": "#/$defs/agent_id" },
+          "minItems": 1,
+          "description": "Optional group-broadcast routing. Array of full agent_id tuples per PDR-027 (amended PDR-076a). Absence encodes all-channels broadcast (no wildcard sentinel — the renderer encodes broadcast by audience-absence, not by a magic value)."
         },
         "addressed_to": {
-          "type": "string",
-          "minLength": 1,
-          "description": "Optional single-recipient soft routing (advisory; not enforced). Mutually exclusive in practice with audience but not formally."
+          "$ref": "#/$defs/agent_id",
+          "description": "Optional single-recipient soft routing (advisory; not enforced). Full agent_id tuple per PDR-027 (amended PDR-076a). Mutually exclusive in practice with audience but not formally."
         },
         "in_response_to": {
           "type": "string",

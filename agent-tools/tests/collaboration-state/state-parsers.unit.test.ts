@@ -34,17 +34,22 @@ const sylvan = {
   session_id_prefix: 'a53e45',
 } as const;
 
-const WOODLAND_ID_V5 = 'a81f75bf-c3ce-52b2-a356-31b74d70aaf5';
-const SYLVAN_ID_V5 = '5b9f4a49-e58c-59e3-810c-411823aafa66';
+// Purpose-built UUID v5 test vectors. The uuidV5Schema refines on character
+// position 14 = '5' (the v5 version nibble per RFC 4122). Position 19 = '8'
+// keeps the variant nibble RFC-4122-compliant (the 10xx pattern). Visually
+// distinct uniform-hex patterns make test failures grep-able without
+// coupling fixtures to any real agent's derived identity.
+const TEST_AGENT_ALPHA_ID = 'aaaaaaaa-aaaa-5aaa-8aaa-aaaaaaaaaaaa';
+const TEST_AGENT_BETA_ID = 'bbbbbbbb-bbbb-5bbb-8bbb-bbbbbbbbbbbb';
 
 const woodlandWithId = {
   ...woodland,
-  id: WOODLAND_ID_V5,
+  id: TEST_AGENT_ALPHA_ID,
 } as const;
 
 const sylvanWithId = {
   ...sylvan,
-  id: SYLVAN_ID_V5,
+  id: TEST_AGENT_BETA_ID,
 } as const;
 
 const canonicalNarrative = {
@@ -311,7 +316,7 @@ describe('PDR-076a §Cascade item 3 — agent identity id field round-trip', () 
       JSON.stringify({ ...canonicalNarrative, author: woodlandWithId }),
     );
 
-    expect(event.author.id).toBe(WOODLAND_ID_V5);
+    expect(event.author.id).toBe(TEST_AGENT_ALPHA_ID);
     expect(event.author.agent_name).toBe('Woodland Creeping Petal');
   });
 
@@ -325,8 +330,8 @@ describe('PDR-076a §Cascade item 3 — agent identity id field round-trip', () 
       }),
     );
 
-    expect(event.author.id).toBe(WOODLAND_ID_V5);
-    expect(event.addressed_to?.id).toBe(SYLVAN_ID_V5);
+    expect(event.author.id).toBe(TEST_AGENT_ALPHA_ID);
+    expect(event.addressed_to?.id).toBe(TEST_AGENT_BETA_ID);
     expect(event.audience).toEqual([sylvanWithId, woodlandWithId]);
   });
 
@@ -335,8 +340,8 @@ describe('PDR-076a §Cascade item 3 — agent identity id field round-trip', () 
       JSON.stringify({ ...lifecycle, author: woodlandWithId, agent_id: woodlandWithId }),
     );
 
-    expect(event.author.id).toBe(WOODLAND_ID_V5);
-    expect(event.agent_id.id).toBe(WOODLAND_ID_V5);
+    expect(event.author.id).toBe(TEST_AGENT_ALPHA_ID);
+    expect(event.agent_id.id).toBe(TEST_AGENT_ALPHA_ID);
   });
 
   it('round-trips id on a directed message from and to', () => {
@@ -348,8 +353,8 @@ describe('PDR-076a §Cascade item 3 — agent identity id field round-trip', () 
       }),
     );
 
-    expect(event.from.id).toBe(WOODLAND_ID_V5);
-    expect(event.to.id).toBe(SYLVAN_ID_V5);
+    expect(event.from.id).toBe(TEST_AGENT_ALPHA_ID);
+    expect(event.to.id).toBe(TEST_AGENT_BETA_ID);
   });
 
   it('still parses legacy identities without an id field (additive migration window)', () => {
@@ -368,6 +373,6 @@ describe('PDR-076a §Cascade item 3 — agent identity id field round-trip', () 
           author: { ...woodland, id: v4Id },
         }),
       ),
-    ).toThrow(/UUID v5|version nibble|invalid/i);
+    ).toThrow(/UUID v5|version nibble/i);
   });
 });
