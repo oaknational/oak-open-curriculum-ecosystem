@@ -12,7 +12,9 @@ todos:
       schema-table updates. Produce the implementation note committing UUID
       v5 derivation from the stable session seed. PDR-076a §Decision is
       conditional on this amendment landing first.
-    status: pending
+    status: completed
+    completed_at: 2026-05-26
+    completed_in: "7028b0d6 (PDR-027 amendment), 76920493 (plan v3 reviewer integration)"
   - id: phase-0b-identity-id-additive-schema
     content: >
       Phase 0B: Add optional id to CollaborationAgentId + identity-row JSON
@@ -60,7 +62,7 @@ isProject: false
 # Collaboration Identity Doctrine Enforcement Remediation
 
 **Last Updated**: 2026-05-26  
-**Status**: QUEUED  
+**Status**: ACTIVE — Phase 0A complete (2026-05-26, commits 7028b0d6 + 76920493), Phase 0B queued for next session  
 **Lane**: Improving collaboration / agent-tooling current  
 **Parent arc**:
 [`cost-of-collaboration.plan.md`](cost-of-collaboration.plan.md)

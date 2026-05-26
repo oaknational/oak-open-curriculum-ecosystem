@@ -46129,6 +46129,134 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "c3cb42b9-a9dc-4049-a8f8-b898e806e4d5",
+      "agent_id": {
+        "agent_name": "Open Streaming Updraft",
+        "platform": "claude",
+        "model": "opus-4-7",
+        "session_id_prefix": "357948"
+      },
+      "thread": "collaboration-identity-doctrine-enforcement-remediation",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T15:58:18Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit plan v3 amendments — reviewer findings integrated into identity remediation plan",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T16:00:49Z",
+        "closed_by": {
+          "agent_name": "Open Streaming Updraft",
+          "platform": "claude",
+          "model": "opus-4-7",
+          "session_id_prefix": "357948"
+        },
+        "summary": "commit 76920493: docs(plans): integrate pdr-076 reviewer findings into identity remediation plan",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c3cb42b9-a9dc-4049-a8f8-b898e806e4d5",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "411f3d01-4c00-4a7f-a579-ad6d12f24776",
+      "agent_id": {
+        "agent_name": "Open Streaming Updraft",
+        "platform": "claude",
+        "model": "opus-4-7",
+        "session_id_prefix": "357948"
+      },
+      "thread": "collaboration-identity-doctrine-enforcement-remediation",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T16:03:38Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit PDR-027 amendment — Phase 0A doctrinal landing for (agent_name, id) identity key",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T16:05:09Z",
+        "closed_by": {
+          "agent_name": "Open Streaming Updraft",
+          "platform": "claude",
+          "model": "opus-4-7",
+          "session_id_prefix": "357948"
+        },
+        "summary": "commit 7028b0d6: PDR-027 amended — canonical identity key becomes (agent_name, id)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "411f3d01-4c00-4a7f-a579-ad6d12f24776",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1df47b7f-c7e4-4b30-9f9a-c8ec08a95c04",
+      "agent_id": {
+        "agent_name": "Open Streaming Updraft",
+        "platform": "claude",
+        "model": "opus-4-7",
+        "session_id_prefix": "357948"
+      },
+      "thread": "collaboration-identity-doctrine-enforcement-remediation",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/collaboration-identity-doctrine-enforcement-remediation.plan.md",
+            "agent-tools/src/collaboration-state/**",
+            "agent-tools/src/core/agent-identity/**",
+            "agent-tools/src/commit-queue/commit-workflow-runtime.ts",
+            ".agent/state/collaboration/comms-event.schema.json",
+            ".agent/state/collaboration/active-claims.schema.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T15:44:27Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Phase 0 of collaboration-identity-doctrine-enforcement-remediation: plan-body edits, then identity UUID additive schema + routing prefer-id",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T16:05:54Z",
+        "closed_by": {
+          "agent_name": "Open Streaming Updraft",
+          "platform": "claude",
+          "model": "opus-4-7",
+          "session_id_prefix": "357948"
+        },
+        "summary": "Phase 0A complete: PDR-027 amended (7028b0d6), plan v3 with reviewer-locked Phase 0B/0C type-design (76920493). Phase 0B/0C queued for next session.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1df47b7f-c7e4-4b30-9f9a-c8ec08a95c04",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
