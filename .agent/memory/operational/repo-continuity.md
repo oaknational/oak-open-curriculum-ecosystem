@@ -16,10 +16,11 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
-- **Collaboration identity remediation Phase 0 COMPLETE (2026-05-26, Airy
-  Whirling Current / claude / claude-opus-4-7 / `3624a5`)**: two commits on
-  `docs/agent-collaboration-enhancements` closed Phase 0C and the Phase 0
-  proof contract:
+- **Collaboration identity remediation Phase 0 COMPLETE + write-side type
+  cure (2026-05-26, Airy Whirling Current / claude / claude-opus-4-7 /
+  `3624a5`)**: three commits on `docs/agent-collaboration-enhancements`
+  closed Phase 0C, the Phase 0 proof contract, and the write-side type
+  hole:
   - `dee89e09` Cycle 9 — `--to-id` CLI flag wired through write-side schema
     parse at the boundary; REQUIRED, not optional (rejects the named
     failure mode at the earliest point).
@@ -27,16 +28,22 @@ Earlier archives remain under [`archive/`](archive/).
     `[routing-legacy-fallback]` JSON diagnostic when lifting a
     legacy-shape identity; DI seam (`setLegacyFallbackWriter`) allows test
     capture without `process.stderr` mutation.
+  - `597b0945` Cycle 11 — `createDirectedCommsMessage.from/.to` and
+    `replyToDirectedCommsMessage.from` tightened to
+    `CollaborationAgentIdWrite`; compile-time brand propagation from the
+    CLI parse boundary into the stored event is now continuous, and
+    legacy-source replies are rejected at the boundary.
 
-  Tests 698 → 706 (+8). Pre-commit gate (90 turbo tasks) green at every
+  Tests 698 → 707 (+9). Pre-commit gate (90 turbo tasks) green at every
   commit. Phase 0 proof contract closed: ID-0 (`7028b0d6` PDR-027
   amendment), ID-1 (`bed24b57`, `57084c15`, `b977dbab` identity writes
   carry id), ID-2 (`30ef437b` Cycles 6+7+8 routing prefers id), ID-3
   (`6dad98b0` Cycle 10 diagnostic emits). Reviewer dispatch on Sonnet
-  (parallel code-expert + type-expert): both approved; two follow-on
-  architectural improvements queued (tighten `createDirectedCommsMessage`
-  write entry to `CollaborationAgentIdWrite`; DI-seam test hygiene). Per
-  plan §Phase 0 completion claim — all four proofs are now in code.
+  (parallel code-expert + type-expert) returned approval with the
+  type-expert follow-on which was initially deferred then landed as
+  Cycle 11 after owner challenge. One remaining hygiene item (DI-seam
+  test isolation). Per plan §Phase 0 completion claim — all four proofs
+  in code.
 
 - **Prior context (Tempestuous Sweeping Feather, `a9e5d2`)**: five commits
   landed Phase 0B substrate + Phase 0C cycles 6+7+8 bundled (the

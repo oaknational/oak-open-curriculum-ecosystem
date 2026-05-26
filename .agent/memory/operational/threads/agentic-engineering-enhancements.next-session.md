@@ -1,14 +1,17 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-## Session Outcome (2026-05-26 — Airy Whirling Current / claude / claude-opus-4-7 / `3624a5`, Phase 0C cycles 9+10 — Phase 0 complete)
+## Session Outcome (2026-05-26 — Airy Whirling Current / claude / claude-opus-4-7 / `3624a5`, Phase 0C cycles 9+10+11 — Phase 0 complete + write-side type cure)
 
 **Session boundary**: owner directed completion of Phase 0C with the explicit
 constraint "do not be seduced into ceremony — choose long-term architectural
 excellence at each decision point". `/oak-metacognition` was attached to the
 brief. Cycles 9 and 10 were the remaining 0C work after the prior session
-landed Cycles 1-8.
+landed Cycles 1-8. Cycle 11 (write-side type tightening) was added after
+owner challenged the deferral of the type-expert finding — the deferral
+had been authority-deference (reviewer + plan scope) misapplied as scope
+discipline; the cure completes the same routing-cure surface.
 
-**Landed (2 commits on `docs/agent-collaboration-enhancements`)**:
+**Landed (3 commits on `docs/agent-collaboration-enhancements`)**:
 
 - `dee89e09` Phase 0C Cycle 9 — `--to-id` CLI flag wired through
   `cli-spec-options.ts` → `cli-comms-messages.recipientAgent`; the recipient
@@ -29,11 +32,25 @@ landed Cycles 1-8.
   to `process.stderr` so the audit signal is on by default. Six new unit
   tests cover the id-keyed-vs-legacy branches, payload schema, emission
   count, and setter teardown.
+- `597b0945` Phase 0C Cycle 11 — `createDirectedCommsMessage.from/.to`
+  and `replyToDirectedCommsMessage.from` tightened to
+  `CollaborationAgentIdWrite`. Compile-time brand propagation from the
+  CLI parse boundary through the write factory into the stored event is
+  now continuous; a bypass caller cannot construct a legacy-shape
+  directed message with the compiler's blessing. Reply path parses
+  `source.from` through `collaborationAgentIdWriteSchema` — legacy-source
+  replies are rejected at the boundary rather than silently reintroducing
+  the named failure mode. Stored `DirectedCommsMessage` interface keeps
+  loose field shapes so the migration path stays compatible. New
+  rejection test for legacy-source reply; classifier tests migrated to
+  derive Write identities so the routing-key kind is consistent across
+  event endpoints and classifier `self`; migration integration test
+  rewritten to use direct `DirectedCommsMessage` literal.
 
 **Evidence**:
 
-- `pnpm --filter @oaknational/agent-tools test`: 706 passing (was 698 at
-  prior handoff); +8 new tests across the session.
+- `pnpm --filter @oaknational/agent-tools test`: 707 passing (was 698 at
+  prior handoff); +9 new tests across the session.
 - Pre-commit gate (turbo cache, 90 tasks) green at every commit. Cycle 10
   ran FULL TURBO (all cached).
 - Type-check and lint clean across the workspace.
@@ -69,17 +86,17 @@ Phase 0 critical path is closed.
   (comms-migration-records.ts) must keep loose read-side typing — the cure
   is to tighten the WRITE entry point, not the stored shape.
 
-**Follow-on improvements (queued, not blocking Phase 0)**:
+**Follow-on improvements (queued, not blocking Phase 1)**:
 
-1. Tighten `createDirectedCommsMessage` write entry point to
-   `CollaborationAgentIdWrite` for both `from` and `to`. Requires also
-   tightening `replyToDirectedCommsMessage` flow and possibly introducing
-   a `WrittenDirectedCommsMessage` shape distinct from the loose read
-   shape used by the migration path.
+1. ~~Tighten `createDirectedCommsMessage` write entry~~ — **LANDED** at
+   `597b0945` as Cycle 11 after owner challenge on the original deferral.
+   No `WrittenDirectedCommsMessage` distinct shape was introduced; the
+   loose `DirectedCommsMessage` interface stays for the migration path,
+   and the WRITE factory enforces id at the entry point.
 2. Test-isolation hygiene: refactor the DI-seam test in
    `active-agent-routing.unit.test.ts` to make cleanup robust against a
    sixth future test (either consistent shared-slot use or per-test
-   try/finally helpers).
+   try/finally helpers). Still pending.
 3. Phase 1 — body-file frontmatter enforcement (per plan §Phase 1).
    No agent action without owner direction.
 
@@ -91,20 +108,26 @@ Phase 0 critical path is closed.
   earliest point; (ii) module-level DI seam with teardown returned from
   setter rather than parameter-cascade through every classifier — keeps
   the routing comparators clean while still being testable.
-- A scope-temptation deflected: type-expert's tightening recommendation
-  is architecturally correct but expands beyond Phase 0's locked design.
-  Logged as follow-on, not bundled. The plan body authority pattern
-  (Phase 0 proof contract = ID-0..ID-3) gave a clear stop-line.
+- A scope-temptation deflected ON FIRST PASS then RECONSIDERED on owner
+  challenge: type-expert's tightening recommendation was deferred citing
+  "follow-on cycle" + plan-scope-locking. Owner Q2 ("why has anything
+  been deferred?") surfaced that the deferral was authority-deference
+  (reviewer + plan scope) without a first-principles check on whether
+  the deferral served long-term shape. It did not — the change is small,
+  completes the same routing-cure surface, and matches the
+  architectural-excellence directive. Landed as Cycle 11. Lesson: a
+  reviewer's "follow-on cycle" verdict is INFORMATION, not authority;
+  the bar is "does this complete the cure I just landed?".
 - The diagnostic emission noise observed in test runs (legacy lifts in
   inbox/classifier loops emit one line each) is the audit signal working
   as intended. Suppressing in test setup would defeat the Phase 3 sunset
   signal. Preserved as-is.
 
-**Local HEAD at handoff**: `6dad98b0` (ahead of origin by ~18 commits;
+**Local HEAD at handoff**: `597b0945` (ahead of origin by ~20 commits;
 this-session commits unpushed; owner directs push timing).
 
 **Next safe step**: Phase 1 work (body-file frontmatter) per plan §Phase 1.
-Two follow-on architectural improvements queued above.
+One follow-on hygiene item queued above (DI-seam test isolation).
 
 ## Session Outcome (2026-05-26 — Tempestuous Sweeping Feather / claude / claude-opus-4-7 / `a9e5d2`, Phase 0B substrate + Phase 0C routing cure)
 
