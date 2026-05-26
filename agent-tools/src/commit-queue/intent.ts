@@ -1,5 +1,7 @@
 import { randomUUID } from 'node:crypto';
 
+import { collaborationAgentIdWriteSchema } from '../collaboration-state/types.js';
+
 import { nowIso, requireOption } from './args.js';
 import { normalizeRepoPath } from './path-list.js';
 import { type CommitIntent, type CommitQueueCliOptions } from './types.js';
@@ -8,6 +10,13 @@ const DEFAULT_TTL_SECONDS = 900;
 
 /**
  * Create a queued commit intent from validated CLI options.
+ *
+ * The agent_id block is parsed through `collaborationAgentIdWriteSchema`
+ * (Cycle 5 — Commandment 12 fix). This guarantees every commit-queue entry
+ * carries the four legacy identity fields AND a UUID v5 `id` from the
+ * caller's stable session seed. The caller supplies the derived id via
+ * `--id`; createIntent does not re-derive (PDR-076a single-derivation-site
+ * invariant — v5 derivation lives in `collaboration-state/identity.ts`).
  */
 export function createIntent(options: CommitQueueCliOptions): CommitIntent {
   const now = nowIso(options);
@@ -15,15 +24,18 @@ export function createIntent(options: CommitQueueCliOptions): CommitIntent {
     throw new Error('at least one --file entry is required');
   }
 
+  const agentId = collaborationAgentIdWriteSchema.parse({
+    agent_name: requireOption(options, 'agent-name'),
+    platform: requireOption(options, 'platform'),
+    model: requireOption(options, 'model'),
+    session_id_prefix: requireOption(options, 'session-id-prefix'),
+    id: requireOption(options, 'id'),
+  });
+
   return {
     intent_id: optionOrRandomId(options),
     claim_id: requireOption(options, 'claim-id'),
-    agent_id: {
-      agent_name: requireOption(options, 'agent-name'),
-      platform: requireOption(options, 'platform'),
-      model: requireOption(options, 'model'),
-      session_id_prefix: requireOption(options, 'session-id-prefix'),
-    },
+    agent_id: agentId,
     files: options.file.map(normalizeRepoPath),
     commit_subject: requireOption(options, 'commit-subject'),
     queued_at: now,

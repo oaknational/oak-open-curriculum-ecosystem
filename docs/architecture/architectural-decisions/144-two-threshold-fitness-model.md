@@ -15,6 +15,9 @@ trim memory or Practice Core content to make the signal disappear.
 content-only chars/4 estimation, and made target-only token configuration an
 invalid frontmatter shape reported as a separate configuration finding with
 mode-dependent exit semantics. See §Token Threshold Extension below.
+**Amended**: 2026-05-25 — added the `fitness_content_role` frontmatter axis so
+empty-content readiness applies only to drainable buffers, not directives or
+other load-bearing reference surfaces. See §Content Role Extension below.
 **Related**: [ADR-131 (Self-Reinforcing Improvement Loop)](131-self-reinforcing-improvement-loop.md),
 [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md),
 [ADR-127 (Documentation as Foundational Infrastructure)](127-documentation-as-foundational-infrastructure.md),
@@ -37,8 +40,8 @@ the gaming problem but introduced a semantic cliff. In practice the binary
 - Because "blocking" felt disproportionate for moderate overages, the live
   Practice drifted into teaching that fitness is advisory, not a blocking gate.
   `.agent/memory/active/napkin.md` (2026-04-16), `.agent/prompts/session-continuation.prompt.md`,
-  and `.agent/memory/active/distilled.md` §Fitness Management all arrived at "limits
-  are informational, not gates". The ADR said blocking; the Practice said
+  and the active-memory distilled learning loop all arrived at "limits are
+  informational, not gates". The ADR said blocking; the Practice said
   advisory; three incompatible teachings lived in the repo simultaneously.
 - The original framing treated the loop-failure case (content vastly
   exceeding the ceiling) as the same class of event as the routine case
@@ -110,6 +113,28 @@ exit semantics:
 
 This protects the threshold-pair invariant without inventing a target-only
 zone contract.
+
+### Content Role Extension
+
+The fitness model now distinguishes file role from size zone. Size thresholds
+answer "is this content too large for its role?"; content role answers "what
+does emptiness mean here?"
+
+| Field                  | Values                          | Default     | Meaning                                                               |
+| ---------------------- | ------------------------------- | ----------- | --------------------------------------------------------------------- |
+| `fitness_content_role` | `reference`, `drainable-buffer` | `reference` | Declares whether an empty file is pathological or a successful drain. |
+
+`reference` is the default for directives, Practice Core documents, ADRs,
+PDRs, READMEs, and other load-bearing surfaces. Empty reference content is a
+configuration finding, because an empty directive is not "ready"; it is missing
+its contract.
+
+`drainable-buffer` is for knowledge buffers and back-pressure control files
+whose ideal end state can be empty after every item is curated elsewhere:
+`napkin.md`, `distilled.md`, `pending-graduations.md`, active
+pending-graduations shards, `open-questions.md`, `.remember` buffers, and
+MEMORY-style capture queues. Only these files may appear in the `ready (empty)`
+inventory.
 
 ### Exit code semantics
 

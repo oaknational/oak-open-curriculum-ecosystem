@@ -20,6 +20,9 @@ const agentId: CommitQueueAgentId = {
   platform: 'claude',
   model: 'claude-opus-4-7',
   session_id_prefix: '9205b8',
+  // Deterministic v5 derived from '9205b8' under the collaboration-identity
+  // namespace; stable fixture for write-side identity contracts.
+  id: 'a8006464-60ea-5cc5-8e1e-1ed2ebb6f299',
 };
 
 const claimId = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';

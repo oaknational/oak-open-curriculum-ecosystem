@@ -11,7 +11,18 @@ import {
   parseHookInput,
   parseScopedContentBlocks,
   readStreamText,
-} from './check-blocked-content.js';
+} from '../../src/hook-policy/check-blocked-content.js';
+
+const EMPTY_STDIN_CHUNKS: readonly Buffer[] = [];
+
+async function* fakeStdin(): AsyncGenerator<Buffer> {
+  yield Buffer.from('first ');
+  yield Buffer.from('second');
+}
+
+async function* emptyStdin(): AsyncGenerator<Buffer> {
+  yield* EMPTY_STDIN_CHUNKS;
+}
 
 describe('parseHookInput', () => {
   it('parses valid JSON text', () => {
@@ -280,7 +291,7 @@ describe('findAddedScopedBlock', () => {
 describe('findAddedScopedBlock — regex with context-aware exclusions (WS4)', () => {
   const shaBlock = {
     pattern: String.raw`\b[a-f0-9]{7,40}\b`,
-    kind: /** @type {'regex'} */ 'regex',
+    kind: 'regex' as const,
     include_paths: ['docs/architecture/architectural-decisions/', '.agent/practice-core/'],
     exclude_paths: [],
     excludes_inline_code: true,
@@ -525,19 +536,10 @@ describe('parseBlockedContentPolicy', () => {
 
 describe('readStreamText', () => {
   it('reads all text from an async iterable stream', async () => {
-    async function* fakeStdin(): AsyncGenerator<Buffer> {
-      yield Buffer.from('first ');
-      yield Buffer.from('second');
-    }
-
     await expect(readStreamText(fakeStdin())).resolves.toBe('first second');
   });
 
   it('returns empty string for an empty stream', async () => {
-    async function* emptyStdin(): AsyncGenerator<Buffer> {
-      // yields nothing
-    }
-
     await expect(readStreamText(emptyStdin())).resolves.toBe('');
   });
 });

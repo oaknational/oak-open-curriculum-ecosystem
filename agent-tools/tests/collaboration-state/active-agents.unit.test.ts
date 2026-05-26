@@ -46,11 +46,14 @@ describe('activeAgentReports', () => {
       ],
     };
 
+    // Routing key is the PDR-076a discriminated union; legacy-shape identities
+    // (no id) produce {kind: 'legacy', agent_name, session_id_prefix}.
+    // Platform is no longer a routing weight (PDR-076a §Decision item 2).
     expect(activeAgentReports(registry, nowIso)).toMatchObject([
       {
         routing_key: {
+          kind: 'legacy',
           agent_name: 'Moonlit Transiting Prism',
-          platform: 'cursor',
           session_id_prefix: 'e86710',
         },
         collision_status: 'clear',
@@ -59,8 +62,8 @@ describe('activeAgentReports', () => {
       },
       {
         routing_key: {
+          kind: 'legacy',
           agent_name: 'Woodland Creeping Petal',
-          platform: 'codex',
           session_id_prefix: '019dd3',
         },
         collision_status: 'collision',
@@ -73,8 +76,8 @@ describe('activeAgentReports', () => {
       },
       {
         routing_key: {
+          kind: 'legacy',
           agent_name: 'Woodland Creeping Petal',
-          platform: 'codex',
           session_id_prefix: 'stale1',
         },
         collision_status: 'clear',
@@ -109,8 +112,8 @@ describe('activeAgentReports', () => {
     expect(activeAgentReports(registry, nowIso, closedArchive)).toMatchObject([
       {
         routing_key: {
+          kind: 'legacy',
           agent_name: 'Woodland Creeping Petal',
-          platform: 'codex',
           session_id_prefix: '019dd3',
         },
         collision_status: 'clear',
@@ -149,7 +152,7 @@ describe('activeAgentReports', () => {
         surface: 'claims open',
       }),
     ).toThrow(
-      'claims open identity route Woodland Creeping Petal / codex / 019dd3 collides with live identity Woodland Creeping Petal / codex / GPT-5.1 / 019dd3',
+      'claims open identity route Woodland Creeping Petal / 019dd3 collides with live identity Woodland Creeping Petal / codex / GPT-5.1 / 019dd3',
     );
 
     expect(() =>

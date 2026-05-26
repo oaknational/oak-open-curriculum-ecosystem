@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "970715d2-0738-431c-a340-0e3b3c5b62fc",
+  "created_at": "2026-05-26T09:34:20Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Thermal Swooping Wing",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e63"
+  },
+  "title": "Heartbeat: Thermal Swooping Wing (019e63) - heartbeat visibility curation",
+  "body": "active; claim=none-yet; intent=heartbeat-visibility-curation; branch=docs/agent-collaboration-enhancements; cycle=heartbeat-visibility-curation",
+  "tags": [
+    "heartbeat"
+  ]
+}

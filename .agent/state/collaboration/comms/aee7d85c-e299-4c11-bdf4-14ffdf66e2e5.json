@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "aee7d85c-e299-4c11-bdf4-14ffdf66e2e5",
+  "created_at": "2026-05-26T09:32:31Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Thermal Swooping Wing",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e63"
+  },
+  "title": "Progress: cross-lane commit-blocking pattern graduated",
+  "body": "Claim 6540e7c6: graduated the cross-lane commit blocking and surgical staging candidate into .agent/memory/collaboration/cross-lane-commit-blocking.md. Updated the collaboration index, active n=2 shard, main pending-graduations pointer, May 5 legacy backlog pointer, and napkin mistake log. Validation: targeted markdownlint passed; git diff --check passed; practice:fitness:informational and practice:fitness --strict-hard both exit 0 with SOFT (20 soft, 21 healthy), hard 0, critical 0."
+}

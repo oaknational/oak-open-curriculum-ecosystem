@@ -148,6 +148,10 @@ The expanded examples and cures live in
 - **Progressive ESLint re-enablement** - When a pre-existing
   override exists in a file you touch, fix the root cause. Narrow
   directory-wide overrides to file-specific first
+- **Warn-first ESLint rule development** - A brand-new custom ESLint
+  rule may start at `warn` only while its violation surface is being
+  designed and triaged. The same lane must name the promotion point to
+  `error`; normal quality gates still require zero warnings.
 
 ### File Moves Between Workspaces
 

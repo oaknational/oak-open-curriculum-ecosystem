@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { runCollaborationStateCli } from '../../src/collaboration-state';
+import {
+  deriveCollaborationIdentity,
+  runCollaborationStateCli,
+} from '../../src/collaboration-state';
 import { createFakeCollaborationRuntime } from './fake-collaboration-runtime';
 
 const sender = {
@@ -16,6 +19,29 @@ const recipient = {
   model: 'GPT-5',
   session_id_prefix: '019e20',
 } as const;
+
+// Identity emitted by the CLI under the env wiring used in the tests below
+// (PRACTICE_AGENT_SESSION_ID_CLAUDE seed + OAK_AGENT_IDENTITY_OVERRIDE name).
+// Derived via the same path as production so the assertion remains honest
+// without coupling the test to the v5 namespace constant.
+const senderWithId = deriveCollaborationIdentity({
+  platform: sender.platform,
+  model: sender.model,
+  env: {
+    OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+    PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
+  },
+}).agentId;
+
+const recipientCodexThreadId = '019e2067-a0a8-7c11-aae3-1bc48533a585';
+const recipientWithId = deriveCollaborationIdentity({
+  platform: recipient.platform,
+  model: recipient.model,
+  env: {
+    OAK_AGENT_IDENTITY_OVERRIDE: recipient.agent_name,
+    CODEX_THREAD_ID: recipientCodexThreadId,
+  },
+}).agentId;
 
 describe('unified comms format CLI behaviour', () => {
   it('writes, reads, and renders directed messages from the single comms directory', async () => {
@@ -35,13 +61,15 @@ describe('unified comms format CLI behaviour', () => {
         '--comms-dir',
         commsDir,
         '--to-agent-name',
-        recipient.agent_name,
+        recipientWithId.agent_name,
+        '--to-id',
+        recipientWithId.id,
         '--to-platform',
-        recipient.platform,
+        recipientWithId.platform,
         '--to-model',
-        recipient.model,
+        recipientWithId.model,
         '--to-session-prefix',
-        recipient.session_id_prefix,
+        recipientWithId.session_id_prefix,
         '--kind',
         'coordination-request',
         '--subject',
@@ -72,8 +100,8 @@ describe('unified comms format CLI behaviour', () => {
       created_at: '2026-05-13T09:46:00Z',
       kind: 'directed',
       message_kind: 'coordination-request',
-      from: sender,
-      to: recipient,
+      from: senderWithId,
+      to: recipientWithId,
       subject: 'Please check this',
       body: 'There is useful coordination here.',
     });
@@ -123,6 +151,8 @@ describe('unified comms format CLI behaviour', () => {
     const commsDir = 'state/comms';
     const fake = createFakeCollaborationRuntime({
       legacyComms: {
+        // Legacy fixtures pre-date the PDR-076a id field; the migrator must
+        // accept and round-trip these legacy-shape identities verbatim.
         [eventsDir]: [
           {
             event_id: 'narrative-one',

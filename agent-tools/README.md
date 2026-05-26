@@ -120,6 +120,12 @@ help text must be the canonical discovery surface. Owner direction
 2026-05-05 after the 7-agent coordination session. Source: Claude
 per-user memory `feedback_agent_tool_help_on_invalid_flags`.
 
+In resumed, compacted, or multi-agent sessions, read the topic-specific
+`--help` before relying on remembered flag shapes. Flag names can differ even
+inside one topic. When searching or passing literal shell text that contains
+backticks or other shell-active characters, use single quotes so the shell does
+not rewrite the pattern before the CLI or `rg` receives it.
+
 ### Comms body input: `--body` vs `--body-file`
 
 `collaboration-state comms append / send / direct / reply` accept the

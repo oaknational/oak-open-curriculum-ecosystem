@@ -218,7 +218,8 @@ below is a cross-reference index, not a second source of truth.
   - Read individual comms-event bodies
 - **Expected**: Structured CLI affordances for these reads.
 - **Candidate cure**: Add three commands:
-  - `comms list [--since <iso>] [--audience <name|prefix>] [--from <name|prefix>]`
+  - `comms list [--since <iso>] [--tail <n>] [--format summary|json]
+    [--audience <name|prefix>] [--from <name|prefix>]`
   - `comms show <event-id>`
   - `comms watch [--since <iso>] [--audience <name|prefix>]
     [--from <name|prefix>]` — optional non-blocking streaming layer for
@@ -246,6 +247,13 @@ below is a cross-reference index, not a second source of truth.
   `fs.watch` with polling fallback, tuple-aware recipient filtering, and a
   streaming stdout path. This closes the directed-message watch part of F-07;
   narrative `comms list/show` remains open.
+- **Review 2026-05-26**: cross-platform memory sweep sharpened the read-side
+  shape. `comms list --tail N --format summary` should project event id,
+  timestamp, sender, recipient/audience, title, tag, and first-line body so a
+  Director or consolidator can orient without regenerating the full shared log.
+  `comms show <event-id>` should render the complete canonical JSON event and
+  its body by id. This does not require a new substrate; it is a focused
+  read-model over `.agent/state/collaboration/comms/`.
 - **Owner direction**: standing
 
 ### F-17 — No first-class directed-message authoring CLI

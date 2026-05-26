@@ -57,7 +57,8 @@ describe('collaboration-state tui CLI integration', () => {
 
     expect(result.exitCode).toBe(0);
     expect(result.stdout).toContain('Starting P8 live collaboration TUI');
-    expect(result.stdout).toContain('Mossy Blossoming Canopy / codex / 019e22 [active/clear]');
+    // PDR-076a §Decision item 2: routing key no longer includes platform.
+    expect(result.stdout).toContain('Mossy Blossoming Canopy / 019e22 [active/clear]');
   });
 
   it('uses repo-root defaults when state paths are not provided', async () => {

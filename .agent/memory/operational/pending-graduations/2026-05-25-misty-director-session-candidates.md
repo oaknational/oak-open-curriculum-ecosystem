@@ -5,6 +5,7 @@ fitness_char_limit: 18000
 fitness_line_length: 100
 split_strategy: "Graduate ready items to PDRs, ADRs, rules, skills, or permanent docs"
 merge_class: active-register-shard
+fitness_content_role: drainable-buffer
 ---
 
 # 2026-05-25 Misty Director-Session Candidates

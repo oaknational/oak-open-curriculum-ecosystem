@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "3775d29b-d566-4ce8-acd0-42e8c21e6b39",
+  "created_at": "2026-05-25T19:41:11.115Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Torrid Firing Spark",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "5054f8"
+  },
+  "title": "Heartbeat: Torrid Firing Spark (5054f8) - n=2 enforcement bundle",
+  "body": "active; corrupted claimed_at repaired; B1+B3 authoring proceeding",
+  "tags": [
+    "heartbeat"
+  ]
+}

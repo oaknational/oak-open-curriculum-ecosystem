@@ -13,9 +13,37 @@ export interface CollaborationStateEnvironment {
 }
 
 /**
- * Canonical Zod schema for an agent identity tuple (PDR-027). The type
- * `CollaborationAgentId` is `z.infer<typeof collaborationAgentIdSchema>` per
- * schema-first Commandment 12 — the schema IS the type, statically embedded.
+ * Branded UUID v5 schema for the agent identity `id` field (PDR-076a §Cascade
+ * item 3). The schema validates standard UUID format and refines on the
+ * version nibble at position 14 = `5`, which v5 sets per RFC 4122. The brand
+ * marker `'UuidV5'` carries the derivation intent at the type level so a
+ * routing comparator receiving `agent_id.id` cannot accidentally accept a
+ * plain string at compile time.
+ *
+ * The derivation function (`deriveCollaborationIdentity`) produces values
+ * that satisfy this schema; the schema is the boundary check at every
+ * untrusted-input parse site.
+ */
+export const uuidV5Schema = z
+  .uuid()
+  .refine((value) => value.charAt(14) === '5', {
+    message: 'expected UUID v5 (version nibble at position 14 must be 5)',
+  })
+  .brand<'UuidV5'>();
+
+export type UuidV5 = z.infer<typeof uuidV5Schema>;
+
+/**
+ * Canonical read-side Zod schema for an agent identity tuple
+ * (PDR-027 as amended 2026-05-26). The type `CollaborationAgentId` is
+ * `z.infer<typeof collaborationAgentIdSchema>` per schema-first
+ * Commandment 12 — the schema IS the type, statically embedded.
+ *
+ * `id` is OPTIONAL on the read side to accept legacy rows written before the
+ * PDR-076a contract landed. The write-side schema
+ * `collaborationAgentIdWriteSchema` requires `id` so write factories cannot
+ * accidentally emit legacy shape; consumers narrow at the routing boundary
+ * (see `routingKeyFor` in `active-agent-routing.ts`).
  *
  * Any caller that needs to parse an identity from untrusted input (JSON, env,
  * external source) MUST use this schema rather than hand-crafting a
@@ -27,13 +55,27 @@ export const collaborationAgentIdSchema = z
     platform: z.string(),
     model: z.string(),
     session_id_prefix: z.string(),
+    id: uuidV5Schema.optional(),
   })
   .strict();
 
 export type CollaborationAgentId = Readonly<z.infer<typeof collaborationAgentIdSchema>>;
 
+/**
+ * Write-side Zod schema for an agent identity tuple (PDR-076a §Decision).
+ * Every write factory (`deriveCollaborationIdentity`, comms event authoring,
+ * claim opening, escalation, conversation appends) MUST emit identities that
+ * satisfy this schema. `id` is required here so missing-id is caught at
+ * compile time at the write site, not only as a runtime parse failure.
+ */
+export const collaborationAgentIdWriteSchema = collaborationAgentIdSchema.extend({
+  id: uuidV5Schema,
+});
+
+export type CollaborationAgentIdWrite = Readonly<z.infer<typeof collaborationAgentIdWriteSchema>>;
+
 export interface DerivedCollaborationIdentity {
-  readonly agentId: CollaborationAgentId;
+  readonly agentId: CollaborationAgentIdWrite;
   readonly seed_source: string;
 }
 
@@ -139,8 +181,8 @@ export interface NarrativeCommsEvent extends BaseCommsEvent {
   readonly author: CollaborationAgentId;
   readonly title: string;
   readonly body: string;
-  readonly audience?: readonly string[];
-  readonly addressed_to?: string;
+  readonly audience?: readonly CollaborationAgentId[];
+  readonly addressed_to?: CollaborationAgentId;
   readonly in_response_to?: string;
   readonly in_reply_to?: string;
   readonly tags?: readonly string[];

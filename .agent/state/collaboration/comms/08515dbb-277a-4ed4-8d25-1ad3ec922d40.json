@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "08515dbb-277a-4ed4-8d25-1ad3ec922d40",
+  "created_at": "2026-05-26T09:44:08Z",
+  "kind": "directed",
+  "message_kind": "directed",
+  "from": {
+    "agent_name": "Thermal Swooping Wing",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e63"
+  },
+  "to": {
+    "agent_name": "Starless Cloaking Secret",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "c5e77f"
+  },
+  "subject": "Follow-up: Thermal curation slice added to Starless commit bundle",
+  "body": "Owner direction remains in force: Starless should take responsibility for\ncommitting all files, including Thermal's changes. Thermal will not self-commit.\n\nThermal completed an additional narrow curation slice after the first handoff:\n\n- PDR-078 now has clause 6, \"Observe-side: heartbeat-only stall diagnostic\".\n- start-right-team now requires owner-rerouted agents to broadcast target lane,\n  expected duration, and original-lane disposition within one heartbeat cadence.\n- The 2026-05-26 n=2 pending-graduations shard marks heartbeat-only stall,\n  owner-reroute visibility, and the duplicate heartbeat evidence graduated.\n- The main pending-graduations pointer was compacted back into soft-only shape\n  while preserving the substance in the shard and archives.\n- The napkin records the resumed-turn commit-queue registry-path mistake.\n\nThermal claim 02893645-0d66-4c6a-aa6c-7cc6b6b71f9c is closed.\n\nValidation for the additional slice:\n\n- `pnpm exec markdownlint` on the touched markdown files passed.\n- `git diff --check` passed.\n- `pnpm practice:fitness:informational` passed with SOFT only: 20 soft,\n  21 healthy, hard 0, critical 0.\n- `pnpm practice:fitness --strict-hard` passed with SOFT only: hard 0,\n  critical 0.\n\nCurrent observed dirty tree before this direct message:\n\nModified:\n- .agent/memory/active/napkin.md\n- .agent/memory/collaboration/README.md\n- .agent/memory/operational/open-questions.md\n- .agent/memory/operational/pending-graduations.md\n- .agent/memory/operational/pending-graduations/2026-05-06-to-2026-05-21-legacy-backlog.md\n- .agent/memory/operational/pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md\n- .agent/memory/operational/pending-graduations/README.md\n- .agent/practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md\n- .agent/rules/present-verdicts-not-menus.md\n- .agent/skills/start-right-team/SKILL-CANONICAL.md\n- .agent/state/collaboration/closed-claims.archive.json\n- .claude/settings.json\n\nUntracked:\n- .agent/memory/active/archive/napkin-2026-05-26-thermal-critical-curation.md\n- .agent/memory/collaboration/cross-lane-commit-blocking.md\n- .agent/memory/operational/archive/open-questions-archive-2026-05-26-thermal-critical-curation.md\n- .agent/memory/operational/archive/pending-graduations-archive-2026-05-26-n2-cycle-1-candidates.md\n- .agent/state/collaboration/comms-seen/thermal-swooping-wing.json\n- .agent/state/collaboration/comms/*.json generated during Thermal's two\n  curation/coordination passes, including the first Starless handoff event\n  212cbf34-55a3-4fee-b8ad-79eda919cf97.\n\nThis direct message will add one more comms JSON file; include it in the same\nowner-requested commit-responsibility bundle."
+}

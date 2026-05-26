@@ -205,22 +205,36 @@ direct CLI commands for inspection and recovery.
    if a hook failure, formatter, generated artefact, or claim /
    lifecycle write introduces an extra path, abandon the old intent
    and enqueue a widened one before staging or verifying the new set.
+   When the bundle creates or renames a module, run a formatting proof
+   before the final record-staged step (`pnpm agent-tools:repo-check --
+   prettier-staged` or a targeted Prettier command). If formatting mutates a
+   file, re-read the diff, re-stage the exact pathspecs, and record a fresh
+   fingerprint.
 
    ```bash
+   # Resolve the session's UUID v5 id once (PDR-076a):
+   AGENT_ID=$(pnpm -s agent-tools:collaboration-state -- identity preflight \
+     --platform "<platform>" --model "<model>" \
+     | tail -n +2 | jq -r '.agent_id.id')
+
    pnpm agent-tools:commit-queue -- enqueue \
      --claim-id "<claim-id>" \
      --agent-name "<name>" --platform "<platform>" --model "<model>" \
-     --session-id-prefix "<prefix>" \
+     --session-id-prefix "<prefix>" --id "$AGENT_ID" \
      --commit-subject "<draft subject>" \
      --file path/one --file path/two
    pnpm agent-tools:commit-queue -- phase --intent-id "<intent-id>" --phase staging
    pnpm agent-tools:commit-queue -- guard \
      --agent-name "<name>" --platform "<platform>" --model "<model>" \
-     --session-id-prefix "<prefix>" \
+     --session-id-prefix "<prefix>" --id "$AGENT_ID" \
      --file path/one --file path/two
    git add -- path/one path/two
    pnpm agent-tools:commit-queue -- record-staged --intent-id "<intent-id>"
    ```
+
+   `--id` is required on `enqueue` and `guard` as of PDR-076a; the value
+   is the deterministic UUID v5 derived from the session seed. Resolve it
+   once via `identity preflight` and reuse it across the queue ceremony.
 
    If `.agent/state/collaboration/active-claims.json` is in the staged
    bundle, do not re-stage it after `record-staged`. The command

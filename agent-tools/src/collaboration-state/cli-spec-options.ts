@@ -10,6 +10,10 @@ export const commsAppendOptions = [
   'active',
   'event-id',
   'tag',
+  'claim-id',
+  'intent-id',
+  'branch',
+  'current-cycle-label',
 ] as const;
 
 export const commsSendOptions = [
@@ -25,6 +29,10 @@ export const commsSendOptions = [
   'now',
   'event-id',
   'tag',
+  'claim-id',
+  'intent-id',
+  'branch',
+  'current-cycle-label',
 ] as const;
 
 export const commsWatchOptions = [
@@ -54,6 +62,7 @@ export const commsInboxOptions = [
 export const commsDirectOptions = [
   'comms-dir',
   'to-agent-name',
+  'to-id',
   'to-platform',
   'to-model',
   'to-session-prefix',

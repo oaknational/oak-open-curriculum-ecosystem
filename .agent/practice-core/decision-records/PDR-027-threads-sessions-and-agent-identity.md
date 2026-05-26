@@ -31,6 +31,43 @@ discipline binds to this PDR's tuple format).
 
 ## Amendment Log
 
+- **2026-05-26 — canonical identity key becomes `(agent_name, id)`;
+  `session_id_prefix` demoted to chat-readable short form.**
+  Per PDR-076a (Accepted 2026-05-23, Adopted 2026-05-24), the identity
+  routing key is no longer `platform + model + agent_name` with
+  `session_id_prefix` as the disambiguator. Identity is now a two-field
+  canonical pair `(agent_name, id)`, where `id` is a full UUID assigned
+  at session-identity-derivation time and is the unique-by-construction
+  disambiguator. `session_id_prefix` is retained as a chat-readable short
+  form and debugging convenience but is no longer the routing
+  disambiguator. `platform` and `model` remain on the identity row as
+  classification context but are not the routing weight.
+
+  The §Identity schema and §Full identity block tables gain an `id`
+  row. The §The additive-identity rule continuation-matching condition
+  updates from `platform + model + agent_name` to `(agent_name, id)`.
+  The §Rationale subsection "Why the identity key is
+  `platform + model + agent_name`" carries a head-of-section supersession
+  note pointing back to this entry; the section text remains as historical
+  rationale for the three-component classification view.
+
+  **Semantic position**: the additive-identity rule structure is preserved
+  — joining adds a row, same-identity continuation updates `last_session`,
+  the rule remains additive. What changes is the key that determines
+  "same identity": `(agent_name, id)` replaces
+  `platform + model + agent_name`. `id` is derived deterministically from
+  the stable session seed (UUID v5 namespaced on
+  `PRACTICE_AGENT_SESSION_ID_<HOST>`, host-local variant per PDR-076a
+  §Cascade item 3); the same seed produces a stable `id` across processes
+  in the same session without a sidecar.
+
+  Schema and tooling migration tranches are operationalised by the
+  `collaboration-identity-doctrine-enforcement-remediation` plan and
+  follow the additive-first invariant in PDR-076a §Cascade item 2: new
+  writes carry `id`; readers accept legacy rows; routing prefers `id`
+  when present. The legacy-fallback path remains until the sunset
+  criterion in the remediation plan is met.
+
 - **2026-05-05 — session-level resolved-name cache.**
   Platform session-start hooks may derive an agent display name once from the
   session id and store that resolved name in `OAK_AGENT_IDENTITY_OVERRIDE`
@@ -217,27 +254,36 @@ an identity row:
 
 | Field | Meaning | Example |
 | --- | --- | --- |
-| `platform` | Agent harness / host | `claude-code`, `cursor`, `codex`, `gemini` |
-| `model` | Canonical model identifier | `claude-opus-4-7-1m`, `gpt-5-codex`, `gemini-2.5-pro` |
-| `session_id_prefix` | First 6 characters of the harness session id if available; `unknown` otherwise | `f9d5b0`, `unknown` |
-| `agent_name` | Optional persistent name for the agent-on-this-thread | `Samwise`, `Frodo`; or unset |
+| `agent_name` | Primary human-readable identifier; deterministic-from-seed or owner-assigned | `Samwise`, `Frodo`, `Open Streaming Updraft` |
+| `id` | Canonical disambiguator — full UUID assigned at session-identity-derivation time (per 2026-05-26 amendment) | `<UUID v5 derived from session seed>` |
+| `platform` | Agent harness / host (classification context, not routing key) | `claude-code`, `cursor`, `codex`, `gemini` |
+| `model` | Canonical model identifier (classification context, not routing key) | `claude-opus-4-7-1m`, `gpt-5-codex`, `gemini-2.5-pro` |
+| `session_id_prefix` | Chat-readable short form derived from the harness session id (first 6 characters, or `unknown`); no longer the canonical disambiguator (per 2026-05-26 amendment) | `f9d5b0`, `unknown` |
 | `role` | Free-form short label describing the agent's role on this thread | `drafter`, `executor`, `reviewer`, `initiator` |
 | `first_session` | Date this identity first touched the thread | `2026-04-21` |
 | `last_session` | Date this identity most recently touched the thread | `2026-04-21` |
 
-`platform + model + agent_name` forms the **identity key**. Two
-rows with the same key describe the same identity and MUST be
-collapsed into one row with the later `last_session`. Two rows
-with different keys describe different identities and remain as
-separate rows.
+`(agent_name, id)` forms the **identity key** (per 2026-05-26 amendment;
+prior to amendment the key was `platform + model + agent_name`). Two
+rows with the same key describe the same identity and MUST be collapsed
+into one row with the later `last_session`. Two rows with different
+keys describe different identities and remain as separate rows.
+`session_id_prefix`, `platform`, `model`, `role`, `first_session`, and
+`last_session` are descriptive — they annotate the identity but do not
+participate in key matching.
 
 ### The additive-identity rule
 
 > When a session joins a thread, it **adds an identity row** to
 > the thread's identity list. It does **not** overwrite, rename,
-> or collapse existing rows. If the session is the same
-> `platform + model + agent_name` as an existing row, it updates
-> the `last_session` on that row rather than adding a new one.
+> or collapse existing rows. If the session matches an existing row
+> on the canonical key `(agent_name, id)`, it updates the
+> `last_session` on that row rather than adding a new one. (Per
+> 2026-05-26 amendment; the prior continuation-matching condition
+> was `platform + model + agent_name`. Legacy rows without `id`
+> match on `(agent_name, session_id_prefix)` via the additive-first
+> compatibility path defined in the
+> `collaboration-identity-doctrine-enforcement-remediation` plan.)
 
 Three corollaries:
 
@@ -280,10 +326,11 @@ it uses a full identity block, not a display name alone:
 
 | Field | Meaning |
 | --- | --- |
-| `agent_name` | Deterministic or owner-assigned session display identity |
-| `platform` | Agent harness / host |
-| `model` | Canonical model identifier used by the session |
-| `session_id_prefix` | First 6 characters of the harness session id if available; `unknown` otherwise |
+| `agent_name` | Deterministic or owner-assigned session display identity (primary identifier) |
+| `id` | Canonical disambiguator — full UUID derived at session-identity-derivation time (per 2026-05-26 amendment; UUID v5 namespaced on the stable session seed) |
+| `platform` | Agent harness / host (classification context, not routing key per 2026-05-26 amendment) |
+| `model` | Canonical model identifier used by the session (classification context, not routing key per 2026-05-26 amendment) |
+| `session_id_prefix` | Chat-readable short form derived from the harness session id (first 6 characters, or `unknown`); no longer the canonical disambiguator (per 2026-05-26 amendment) |
 | `seed_source` | The source used to derive the session identity seed |
 
 For Codex in a Practice-bearing host repo, the canonical
@@ -369,10 +416,10 @@ Three independent reasons converge:
    contributions; collapsing to a single row loses the audit
    trail.
 2. **Same-identity continuation is cheap to detect.** The
-   identity-key match (`platform + model + agent_name`) makes
-   "is this the same agent as before?" a single comparison.
-   Additive-by-default is the safe default; collapsing occurs
-   only when the key matches.
+   identity-key match (`(agent_name, id)` per 2026-05-26 amendment;
+   formerly `platform + model + agent_name`) makes "is this the same
+   agent as before?" a single comparison. Additive-by-default is the
+   safe default; collapsing occurs only when the key matches.
 3. **Overwrite is lossy and rarely reversible.** A session that
    overwrites a prior identity row destroys information that
    cannot be reconstructed from any other surface. The failure
@@ -381,6 +428,14 @@ Three independent reasons converge:
    nothing and preserve the record.
 
 ### Why the identity key is `platform + model + agent_name`
+
+> **Superseded by the 2026-05-26 Amendment-Log entry.** The canonical
+> identity key is now `(agent_name, id)`. The text below remains as
+> historical rationale for the three-component classification view —
+> `platform`, `model`, and `agent_name` still annotate the identity row
+> as classification context, but they are no longer the routing key.
+> Read the 2026-05-26 Amendment-Log entry at the head of this PDR for
+> the current contract.
 
 Each component carries distinct continuity information:
 

@@ -18,9 +18,14 @@
         "agent_name": { "type": "string", "minLength": 1 },
         "platform": { "type": "string", "minLength": 1 },
         "model": { "type": "string", "minLength": 1 },
-        "session_id_prefix": { "type": "string", "minLength": 1 }
+        "session_id_prefix": { "type": "string", "minLength": 1 },
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "description": "PDR-076a §Cascade item 3 deterministic UUID v5 derived from the stable session seed. Optional during the additive migration window; promoted to required when the legacy-fallback diagnostic count reaches zero across one calendar week (PDR-076a §Cascade item 2 sunset)."
+        }
       },
-      "description": "PDR-027 agent identity block. Reused across all event kinds."
+      "description": "PDR-027 agent identity block (amended 2026-05-26 per PDR-076a). Identity routing key is (agent_name, id); session_id_prefix remains for readable diagnostic prose. Reused across all event kinds."
     },
     "narrative": {
       "type": "object",

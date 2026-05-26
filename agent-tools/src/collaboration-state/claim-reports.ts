@@ -1,3 +1,4 @@
+import { sameAgentRoutingKey } from './active-agent-routing.js';
 import {
   type CollaborationAgentId,
   type CollaborationArea,
@@ -42,9 +43,8 @@ export function claimReport(claim: CollaborationClaim, nowIso: string): ClaimRep
 }
 
 export function sameAgent(left: CollaborationAgentId, right: CollaborationAgentId): boolean {
-  return (
-    left.agent_name === right.agent_name &&
-    left.platform === right.platform &&
-    left.session_id_prefix === right.session_id_prefix
-  );
+  // PDR-076a id-aware claim ownership comparison. Cure for the same-name +
+  // same-prefix + different-id collision; legacy/legacy pairs still match
+  // by (name, prefix) via the discriminated-union fallback in sameAgentRoutingKey.
+  return sameAgentRoutingKey(left, right);
 }

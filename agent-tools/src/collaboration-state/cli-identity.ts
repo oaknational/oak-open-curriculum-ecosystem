@@ -1,10 +1,10 @@
 import { deriveCollaborationIdentity } from './identity.js';
 import { assertIdentityCanWrite } from './identity-write-guard.js';
 import { optional, required, type Options } from './cli-options.js';
-import { type CollaborationAgentId, type CollaborationStateEnvironment } from './types.js';
+import { type CollaborationAgentIdWrite, type CollaborationStateEnvironment } from './types.js';
 
 interface ResolvedCliIdentity {
-  readonly agent_id: CollaborationAgentId;
+  readonly agent_id: CollaborationAgentIdWrite;
   readonly seed_source: string;
 }
 

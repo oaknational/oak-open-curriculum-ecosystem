@@ -50,8 +50,8 @@ const narrativeWithAffordances = {
   created_at: '2026-05-03T09:35:57Z',
   kind: 'narrative',
   author: woodland,
-  audience: ['*'],
-  addressed_to: 'Sylvan Fruiting Glade',
+  audience: [sylvan],
+  addressed_to: sylvan,
   in_response_to: 'earlier-event-id',
   in_reply_to: 'another-earlier-event-id',
   title: 'Narrative with all optional affordances',
@@ -102,13 +102,24 @@ describe('parseNarrativeCommsEvent', () => {
   it('preserves every optional routing and threading affordance on a narrative event', () => {
     const event = parseNarrativeCommsEvent(JSON.stringify(narrativeWithAffordances));
 
-    expect(event.audience).toEqual(['*']);
-    expect(event.addressed_to).toBe('Sylvan Fruiting Glade');
+    expect(event.audience).toEqual([sylvan]);
+    expect(event.addressed_to).toEqual(sylvan);
     expect(event.in_response_to).toBe('earlier-event-id');
     expect(event.in_reply_to).toBe('another-earlier-event-id');
   });
 
-  it('rejects a legacy addressed_to agent reference object', () => {
+  it('rejects a legacy string-form addressed_to (post-WS1 tuple is canonical)', () => {
+    expect(() =>
+      parseNarrativeCommsEvent(
+        JSON.stringify({
+          ...canonicalNarrative,
+          addressed_to: 'Riverine Drifting Lighthouse',
+        }),
+      ),
+    ).toThrow(/addressed_to/);
+  });
+
+  it('rejects a partial 2-field addressed_to tuple missing platform/model', () => {
     expect(() =>
       parseNarrativeCommsEvent(
         JSON.stringify({

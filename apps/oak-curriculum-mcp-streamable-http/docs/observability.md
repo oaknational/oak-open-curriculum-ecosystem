@@ -109,6 +109,37 @@ are logger fields, not Sentry scope values.
 These attributes compose with the per-request span in Sentry's trace view,
 giving per-tool and per-method breakdowns without any custom dashboards.
 
+## Correlation envelope fields
+
+Two correlation identifiers travel with every observability event payload
+emitted by this app (alongside Sentry's own `trace_id` on the scope):
+
+- **`correlation_id`** — Oak-generated per HTTP request in
+  [`src/correlation/index.ts`](../src/correlation/index.ts) (format
+  `req_{timestamp}_{randomHex}`). Primary within-invocation join key so a
+  single `tool_invoked` event can be related to the N upstream
+  `dependency_call` events it triggers. Always present on MCP HTTP
+  requests.
+- **`traceparent`** — W3C Trace Context value, ingested from MCP `_meta`
+  on incoming requests when the host supplies it
+  ([MCP `2026-07-28` Release Candidate](https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/),
+  SEP-414). Optional today; may be empty until the MCP `2026-07-28`
+  specification is GA and adopted. Primary cross-system join when
+  present (host → MCP → downstream).
+
+Sentry already carries its own `trace_id` on the per-request scope; the
+two fields are complementary — `correlation_id` joins Oak-internal
+events, `traceparent` joins cross-system traces. Both are documented as
+event-envelope fields in the proposed schemas
+([`docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md`](../../../docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md)
+§7.2, §7.7); the schema landing itself is owner-deferred per
+exploration §15/§18.
+
+Sentry user identity (`user.id`) is intentional engineering observability
+PII and is set per-request when authenticated; rationale is captured in
+the same exploration §7.5. See the per-request span section above for
+the wiring.
+
 ## Express error handler registration
 
 The Sentry Express error handler is registered at the app composition root,

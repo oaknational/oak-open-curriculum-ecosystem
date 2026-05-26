@@ -36,7 +36,11 @@ todos:
     content: Promote the commit queue from advisory predictor to enforced pre-stage gate. Refuse `git add` (via a commit-queue CLI guard wrapping `git add`, or a stage-time precondition check) when no active intent matches the staged file set. Note Git/Husky have no native `pre-stage` hook lifecycle; the enforcement lives in the agent-tools CLI or a wrapper, not in a hook of that name.
     status: completed
   - id: ws-p4-identity-disambiguation
-    content: Make `(agent_name, platform, session_id_prefix)` the routing key in claim and comms writes; refuse a write whose tuple collides with an existing live identity.
+    content: >
+      Historical P4 identity-disambiguation slice: made `(agent_name,
+      platform, session_id_prefix)` the routing key in claim and comms writes.
+      Superseded by PDR-076a/b doctrine; follow-up debt routes through
+      collaboration-identity-doctrine-enforcement-remediation.plan.md.
     status: completed
   - id: ws-p5-unified-comms-format
     content: Collapse the three-directory split (`comms-events/`, `comms-lifecycle/`, `comms-messages/`) and the three `$defs` into a single shape with a `kind` discriminant. Owner-relayed direction "ONE comms format used everywhere, no legacy lingering." Completion is currently pending DI/no-IO repair because the useful unified-format slice exposed that command/test boundaries still make production IO look like the proof path.
@@ -89,6 +93,10 @@ subsumes:
   [`../pnpm-check-profiling-deep-dive-2026-05-12.md`](../pnpm-check-profiling-deep-dive-2026-05-12.md),
   which supplies the current quality-gate graph, trigger map, and tuning
   recommendations.
+- The PDR-076a/b enforcement-debt remediation plan at
+  [`collaboration-identity-doctrine-enforcement-remediation.plan.md`](collaboration-identity-doctrine-enforcement-remediation.plan.md),
+  which supersedes this plan's historical P4 tuple-routing implementation
+  with UUID identity routing and body-file frontmatter enforcement.
 - Owner live change on 2026-05-12: root `pnpm check` has started moving its
   terminal proof steps to non-mutating commands (`lint`, `markdownlint-check`,
   and `format-check`). Treat that as part of the current baseline to verify,
@@ -1078,6 +1086,14 @@ expectations) from the existing primary plan.
   same-prefix peer graph-lane state by agent name. A later
   `identity preflight --active` smoke also succeeded for this session.
 
+**2026-05-26 doctrine-debt note**: P4's completed implementation is now a
+historical slice, not the final identity contract. PDR-076a and PDR-076b
+ratify the stronger `(agent_name, id)` identity key and body-file
+frontmatter contract. The queued remediation plan
+[`collaboration-identity-doctrine-enforcement-remediation.plan.md`](collaboration-identity-doctrine-enforcement-remediation.plan.md)
+is the discoverable follow-up for bringing schemas, CLI affordances, routing
+consumers, body-file consumers, and help/doctrine surfaces into alignment.
+
 ---
 
 ### P5 — Unified comms format
@@ -1824,6 +1840,27 @@ their execution as empirical rule-drop evidence-gathering. Any
 foundational-rule-drop instance observed during P6/P7/residual
 execution becomes input to P9 sub-WS-A and the honour-rate harness
 scenario library.
+
+**Sequencing amendment (2026-05-25)** — the sibling plan
+[`n2-and-coordination-efficiency-program-2026-05-25.plan.md`](n2-and-coordination-efficiency-program-2026-05-25.plan.md)
+re-evaluated P9's place in the P-order following the 2026-05-25 owner
+direction *"massively tighten coordination efficiency for teams of two
+agents, n=2"* and the four-reviewer dispatch on the resulting candidate
+inventory (assumptions-expert + architecture-experts Betty/Fred/Wilma).
+The reviewer-converged verdict: **P9 is the meta-constraint and must
+land first**, not after P6/P7/residual. The rule corpus (~78) is already
+near the active-skill discovery ceiling (~80 per
+`feedback_skill_load_budget`); SKILL `start-right-team` is at 973 lines
+/ 26 sections (past coherence threshold); the candidate-inventory adds
+6+ new rules + 3 SKILL amendments that would push the corpus past its
+operational limits. The sibling plan accepts Fred's *"block all
+rule/SKILL authoring until P9 lands"* verdict and re-sequences P9 as
+its WS0 (Tier 0). The sibling plan also flags P9 and P6/P7 as
+**coupled at the trigger-design interface but not strictly
+sequenced** — they can run in parallel; the original "P9 after P6/P7"
+sequence is superseded by "P9 lands first, P6/P7 run concurrently."
+This paragraph supersedes the strict P-order above for the
+P9/P6/P7 sub-segment; the rest of the P-order stands.
 
 ## Validation
 

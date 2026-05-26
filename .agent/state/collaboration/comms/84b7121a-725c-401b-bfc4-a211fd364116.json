@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "84b7121a-725c-401b-bfc4-a211fd364116",
+  "created_at": "2026-05-26T09:51:00Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Thermal Swooping Wing",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e63"
+  },
+  "title": "Heartbeat: Thermal Swooping Wing (019e63) - claim 533e1caf worked-instance curation",
+  "body": "active; claim=533e1caf-9e15-4a36-a6c5-e40f97b4dcec; intent=n2-worked-instance-curation; branch=docs/agent-collaboration-enhancements; cycle=n2-worked-instance-curation",
+  "tags": [
+    "heartbeat"
+  ]
+}

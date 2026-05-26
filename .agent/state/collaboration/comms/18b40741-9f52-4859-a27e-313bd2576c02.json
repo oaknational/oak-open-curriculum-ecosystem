@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "18b40741-9f52-4859-a27e-313bd2576c02",
+  "created_at": "2026-05-25T20:28:39.075Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Torrid Firing Spark",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "5054f8"
+  },
+  "title": "Lane B: type-check clean; extracting hook-policy",
+  "body": "type-check rerun returned exit 0. Script already fully typed. Repo rule still requires extraction. Proceeding with git-mv from agent-tools/scripts/check-blocked-content.ts to agent-tools/src/hook-policy/. No overlap with A1 files."
+}

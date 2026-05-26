@@ -1,5 +1,894 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-26 — Airy Whirling Current / claude / claude-opus-4-7 / `3624a5`, Phase 0C cycles 9+10+11 — Phase 0 complete + write-side type cure)
+
+**Session boundary**: owner directed completion of Phase 0C with the explicit
+constraint "do not be seduced into ceremony — choose long-term architectural
+excellence at each decision point". `/oak-metacognition` was attached to the
+brief. Cycles 9 and 10 were the remaining 0C work after the prior session
+landed Cycles 1-8. Cycle 11 (write-side type tightening) was added after
+owner challenged the deferral of the type-expert finding — the deferral
+had been authority-deference (reviewer + plan scope) misapplied as scope
+discipline; the cure completes the same routing-cure surface.
+
+**Landed (3 commits on `docs/agent-collaboration-enhancements`)**:
+
+- `dee89e09` Phase 0C Cycle 9 — `--to-id` CLI flag wired through
+  `cli-spec-options.ts` → `cli-comms-messages.recipientAgent`; the recipient
+  is now parsed via `collaborationAgentIdWriteSchema.parse()` (mirrors
+  Cycle 4 + Cycle 5 schema-parse pattern) so missing or malformed ids are
+  rejected at the CLI boundary, not via downstream type inference. `--to-id`
+  is REQUIRED, not optional — making it optional would reintroduce the named
+  failure mode PDR-076a §Decision item 2 exists to cure. Two new boundary
+  tests prove missing-id and malformed-id rejection; five existing
+  integration tests migrated to derive `recipientWithId` and pass the
+  deterministic v5 id.
+- `6dad98b0` Phase 0C Cycle 10 — `routingKeyFor` emits a structured
+  `[routing-legacy-fallback]` line when lifting a `CollaborationAgentId`
+  without an `id` into a `kind: 'legacy'` routing key. JSON payload carries
+  `agent_name`, `platform`, `model`, `session_id_prefix`. DI seam:
+  `setLegacyFallbackWriter(writer)` returns a teardown function so tests
+  capture without touching `process.stderr` globally; default writer routes
+  to `process.stderr` so the audit signal is on by default. Six new unit
+  tests cover the id-keyed-vs-legacy branches, payload schema, emission
+  count, and setter teardown.
+- `597b0945` Phase 0C Cycle 11 — `createDirectedCommsMessage.from/.to`
+  and `replyToDirectedCommsMessage.from` tightened to
+  `CollaborationAgentIdWrite`. Compile-time brand propagation from the
+  CLI parse boundary through the write factory into the stored event is
+  now continuous; a bypass caller cannot construct a legacy-shape
+  directed message with the compiler's blessing. Reply path parses
+  `source.from` through `collaborationAgentIdWriteSchema` — legacy-source
+  replies are rejected at the boundary rather than silently reintroducing
+  the named failure mode. Stored `DirectedCommsMessage` interface keeps
+  loose field shapes so the migration path stays compatible. New
+  rejection test for legacy-source reply; classifier tests migrated to
+  derive Write identities so the routing-key kind is consistent across
+  event endpoints and classifier `self`; migration integration test
+  rewritten to use direct `DirectedCommsMessage` literal.
+
+**Evidence**:
+
+- `pnpm --filter @oaknational/agent-tools test`: 707 passing (was 698 at
+  prior handoff); +9 new tests across the session.
+- Pre-commit gate (turbo cache, 90 tasks) green at every commit. Cycle 10
+  ran FULL TURBO (all cached).
+- Type-check and lint clean across the workspace.
+
+**Phase 0 completion claim — PROVEN**:
+
+- ID-0: PDR-027 Amendment-Log entry landed (`7028b0d6`).
+- ID-1: identity writes carry id (`bed24b57`, `57084c15`, `b977dbab`).
+- ID-2: routing comparators prefer id (`30ef437b` Cycles 6+7+8).
+- ID-3: legacy-fallback diagnostic emits (`6dad98b0` Cycle 10).
+
+Per the plan §Phase 0 completion claim, all four proofs are now in code.
+Phase 0 critical path is closed.
+
+**Reviewer dispatch (parallel Sonnet)**:
+
+- code-expert: APPROVED. Flagged two informational items:
+  (i) diagnostic emits on every `routingKeyFor` call, not just at write
+  time, so Phase 3 aggregation must dedup by `(agent_name, session_id_prefix)`
+  rather than count raw emissions; matches plan-locked design and
+  preserves the read-side audit surface.
+  (ii) the shared `restoreWriter` slot in the new unit test is a latent
+  trap for a sixth test in the DI-seam describe block — current tests
+  are safe.
+- type-expert: SAFE. Flagged one architectural improvement worth a follow-on
+  cycle: tighten the `to` (and `from`) parameter of `createDirectedCommsMessage`
+  and the `DirectedCommsMessage` field from `CollaborationAgentId` (read shape)
+  to `CollaborationAgentIdWrite` so the brand and required-id constraint
+  propagate continuously from the CLI parse boundary into the stored event.
+  The `to:` widening at the call site silently drops the brand today;
+  current behaviour is structurally safe because id is preserved in JSON,
+  but the compile-time guarantee stops at the parse seam. Migration paths
+  (comms-migration-records.ts) must keep loose read-side typing — the cure
+  is to tighten the WRITE entry point, not the stored shape.
+
+**Follow-on improvements (queued, not blocking Phase 1)**:
+
+1. ~~Tighten `createDirectedCommsMessage` write entry~~ — **LANDED** at
+   `597b0945` as Cycle 11 after owner challenge on the original deferral.
+   No `WrittenDirectedCommsMessage` distinct shape was introduced; the
+   loose `DirectedCommsMessage` interface stays for the migration path,
+   and the WRITE factory enforces id at the entry point.
+2. Test-isolation hygiene: refactor the DI-seam test in
+   `active-agent-routing.unit.test.ts` to make cleanup robust against a
+   sixth future test (either consistent shared-slot use or per-test
+   try/finally helpers). Still pending.
+3. Phase 1 — body-file frontmatter enforcement (per plan §Phase 1).
+   No agent action without owner direction.
+
+**Metacognition observations (session-scoped)**:
+
+- The "architectural excellence not ceremony" directive shaped two
+  concrete decisions: (i) `--to-id` REQUIRED at the CLI boundary rather
+  than optional with downstream check — closes the failure-mode at the
+  earliest point; (ii) module-level DI seam with teardown returned from
+  setter rather than parameter-cascade through every classifier — keeps
+  the routing comparators clean while still being testable.
+- A scope-temptation deflected ON FIRST PASS then RECONSIDERED on owner
+  challenge: type-expert's tightening recommendation was deferred citing
+  "follow-on cycle" + plan-scope-locking. Owner Q2 ("why has anything
+  been deferred?") surfaced that the deferral was authority-deference
+  (reviewer + plan scope) without a first-principles check on whether
+  the deferral served long-term shape. It did not — the change is small,
+  completes the same routing-cure surface, and matches the
+  architectural-excellence directive. Landed as Cycle 11. Lesson: a
+  reviewer's "follow-on cycle" verdict is INFORMATION, not authority;
+  the bar is "does this complete the cure I just landed?".
+- The diagnostic emission noise observed in test runs (legacy lifts in
+  inbox/classifier loops emit one line each) is the audit signal working
+  as intended. Suppressing in test setup would defeat the Phase 3 sunset
+  signal. Preserved as-is.
+
+**Local HEAD at handoff**: `17a839c9` (ahead of origin by ~21 commits;
+this-session commits unpushed; owner directs push timing).
+
+**Next safe step**: NOT Phase 1. Owner direction at session close —
+`collaboration-identity-doctrine-enforcement-remediation` plan is
+PAUSED. Phase 0 delivered its intent (improve inter-agent collaboration
+for the next session). The next session resumes EEF first-feature
+delivery on the
+[`eef` thread](eef.next-session.md). Phase 1+ of this plan remain
+authored but unscheduled; owner directs resumption if/when warranted.
+DI-seam test isolation hygiene item also waits for owner direction —
+not on this thread's critical path.
+
+## Session Outcome (2026-05-26 — Tempestuous Sweeping Feather / claude / claude-opus-4-7 / `a9e5d2`, Phase 0B substrate + Phase 0C routing cure)
+
+**Session boundary**: owner directed implementation of Phase 0B + 0C of the
+collaboration-identity-doctrine-enforcement-remediation plan with the
+standing instruction "keep it tight, always choose long-term architectural
+excellence". Mid-session metacognition pass (owner-triggered) corrected
+against substrate-only landings; cure-landing cycles followed in the same
+session.
+
+**Landed (5 commits on `docs/agent-collaboration-enhancements`)**:
+
+- `bed24b57` Phase 0B Cycle 2 — JSON schemas (`comms-event.schema.json` +
+  `active-claims.schema.json`) accept optional UUID v5 `id` with pattern
+  enforcement at the storage boundary; 8 new ajv tests.
+- `57084c15` Phase 0B Cycle 3 — `deriveCollaborationIdentity` returns
+  `CollaborationAgentIdWrite` with a deterministic v5 id derived from the
+  stable session seed (single derivation site via private
+  `deriveIdFromSeed`); sibling `deriveOverrideCollaborationIdentity` for
+  the admin/test override CLI path. Added `uuid` workspace dep. 6 new
+  tests; 5 integration fixtures updated to compute expected identity via
+  the same derive path the CLI uses.
+- `2a501e97` Phase 0B Cycle 4 — `parseAgentId` swaps the hand-built
+  object construction for `collaborationAgentIdSchema.parse()`
+  (Commandment 12 fix); 5 new tests prove legacy parse, v5 round-trip,
+  malformed rejection, and required-field enforcement.
+- `b977dbab` Phase 0B Cycle 5 — commit-queue `createIntent` parses
+  agent_id through `collaborationAgentIdWriteSchema.parse()` and now
+  requires `--id`; `--id` added to enqueue + guard option allowlists;
+  `CommitQueueAgentId` narrowed to include `readonly id: string`;
+  fixture rows updated; commit SKILL canonical doctrine updated to
+  teach the new ceremony (resolve id once via identity preflight).
+- `30ef437b` **Phase 0C Cycles 6+7+8 bundled — the coordination cure**:
+  `AgentRoutingKey` becomes a discriminated union (`{kind: 'id-keyed',
+  agent_name, id}` | `{kind: 'legacy', agent_name, session_id_prefix}`).
+  `routingKeyFor` switches on id presence at the single construction
+  site; `sameAgentRoutingKey` narrows by kind with exhaustive matching.
+  Consumers route through `sameAgentRoutingKey`: `isSelfAuthored`,
+  `classifyDirected`, `classifyNarrative`, `assertSameAgent`,
+  `claim-reports.sameAgent`. `platform` drops from routing key per
+  PDR-076a §Decision item 2. 4 new PDR-076a §Falsifiability primary
+  signal tests prove same-name + same-prefix + different-id agents
+  no longer collide on directed delivery, narrative addressing,
+  narrative audience, or self-authorship.
+
+**Evidence**:
+
+- `pnpm --filter @oaknational/agent-tools test`: 698 passing (was 671);
+  +27 new tests across the session.
+- Pre-commit gate (turbo cache) green at every commit.
+- Mid-session lint cleanups: zero `as` type assertions; `consistent-return`
+  satisfied via `if/return` over `switch`; max-lines kept under 700.
+
+**Metacognition cures landed mid-session**:
+
+- Substrate-only landings flagged by owner (Cycles 2-5 had built precondition
+  substrate without yet proving the routing cure). Cycle 6+7+8 bundled
+  (per owner direction) and landed the cure within the same session as the
+  correction.
+- Cycle 5 SKILL update flagged as breaking change for unmigrated agents;
+  owner confirmed "keep SKILL in Cycle 5" (recommended path) so doctrine
+  and code stay coherent.
+
+**Next safe step (owner-named FINAL session)**:
+
+1. Cycle 9 — `--to-id` CLI flag wired through `cli-spec-options.ts` →
+   `cli-comms-messages.recipientAgent`; recipient construction routes
+   through `collaborationAgentIdWriteSchema.parse()` (mirrors Cycle 4 +
+   Cycle 5 schema-parse pattern).
+2. Cycle 10 — legacy-fallback diagnostic emission in `routingKeyFor`'s
+   `kind: 'legacy'` branch. Structured JSON to `stderr` with prefix
+   `[routing-legacy-fallback]`; injectable writer (DI seam per the n=2
+   WS1 deferred SHOULD-FIX) so the diagnostic is testable without
+   `process.env` reads.
+3. Phase 0C reviewer dispatch — code-expert + type-expert parallel on
+   Sonnet.
+4. Closeout — plan todos status, thread record refresh, napkin
+   rotation if a behaviour-changing lesson surfaced, `pnpm check` final
+   gate.
+
+**Local HEAD at handoff**: `30ef437b` (ahead of origin by ~16 commits;
+all this-session commits unpushed; owner will direct push timing).
+
+## Previous Session Outcome (2026-05-26 — Feathered Flying Cloud / codex / GPT-5 / `019e65`, hard memory curation + cross-platform memory import)
+
+**Session boundary**: owner first directed a hard memory curation pass with the
+explicit constraint to preserve understanding, treat fitness as a signal only,
+avoid commits, avoid quality gates, prioritise critical then hard, and stop at
+soft. Owner then asked to scan Claude memories, other platform memories, and
+`.remember` files, reminded the session that repo content must not contain local
+file paths outside the repo, and finally asked to bring those candidates into
+the repo.
+
+**Landed**:
+
+- Hard memory curation stopped at SOFT after routing critical/hard pressure
+  without compression. The previous active napkin window was archived; fresh
+  Starless/Open closeout candidates moved to an active pending-graduations
+  shard; verbose repo-continuity current-state prose moved to a dated archive.
+- Cross-platform memory sweep produced curator-pass report
+  [`2026-05-26-feathered-flying-cloud.md`](../curator-passes/2026-05-26-feathered-flying-cloud.md).
+- Five import candidates were brought into durable repo homes:
+  `.agent/plans/agent-tooling/frictions-register.md` F-07 summary/show
+  affordances; ADR-165 plus open question Q-005 for the future memory/state
+  boundary; development-practice plus no-warning-toleration warn-first nuance;
+  start-right-team seat-cost routing; and ADR-125 post-canonicalisation plugin
+  retention.
+- Import curator-pass metadata now points to the durable homes and marks the
+  candidates imported.
+
+**Evidence**:
+
+- Targeted markdownlint passed for the touched markdown files.
+- `git diff --check` passed for the touched markdown and claim files.
+- Diff-level local-path scan found no new raw local external paths in added
+  lines. Full-tree collaboration-state history still contains legacy path
+  residue; that is a separate portability cleanup, not new import content.
+
+**Unlanded / blocker**: full `pnpm check` was not run and is not claimed green.
+At handoff, Tempestuous Sweeping Feather has a fresh active claim over Phase
+0B/0C agent-tools implementation files, and the working tree includes
+peer-owned dirty agent-tools WIP. Falsifiability: after that active claim closes,
+inspect `active-claims.json` plus `git status --short --branch`, then run the
+singleton full gate.
+
+**Next safe step**: commit or marshal the docs/memory import bundle when the
+owner is ready, keeping Tempestuous-owned agent-tools files out of that bundle.
+After the peer lane settles, run full `pnpm check`. Implementation work still
+routes through Phase 0B/0C in
+[`collaboration-identity-doctrine-enforcement-remediation.plan.md`](../../../plans/agent-tooling/current/collaboration-identity-doctrine-enforcement-remediation.plan.md).
+
+## Session Outcome (2026-05-26 — Open Streaming Updraft / claude / claude-opus-4-7 / `357948`, collaboration identity remediation Phase 0A doctrinal landing + Phase 0B Cycle 1)
+
+**Session boundary**: owner asked for analysis of
+[`collaboration-identity-doctrine-enforcement-remediation.plan.md`](../../../plans/agent-tooling/current/collaboration-identity-doctrine-enforcement-remediation.plan.md),
+then directed delivery of Phase 0 using `/oak-metacognition` + `/oak-plan` +
+subagent leverage. Mid-session owner challenged the "Phase 0A/0B/0C each one
+session" assumption; metacognition pass surfaced the file-count-as-sizing
+failure mode and the cycle-decomposition cure landed at `3ca77972`. Owner
+then re-confirmed scope as "0B and 0C" for the next session and directed
+this full handoff + consolidate-docs.
+
+**Landed (5 commits on `docs/agent-collaboration-enhancements`)**:
+
+- `76920493` plan v3 — three reviewers (assumptions-expert, docs-adr-expert,
+  type-expert) + Explore structural map dispatched in parallel; all
+  must-fixes folded into plan body. Material plan changes:
+  PDR-027 amendment moved from Phase 2 to Phase 0A (PDR-076a §Decision was
+  conditional on the PDR-027 Amendment-Log entry landing first); UUID v5
+  deterministic-from-session-seed verdict committed (no longer deferred to
+  implementation time); read-side/write-side schema split, branded
+  `UuidV5` type, `AgentRoutingKey` discriminated union, and
+  `parseAgentId` schema-driven parse all locked in plan body before
+  Phase 0B begins; Phase 1 distinguishes PDR-076b write-side obligation
+  (binding now) from consumer-side enforcement (deferred where no
+  consumer code exists); Phase 3 sunset criterion gains
+  write-timestamp-filtered query requirement; proof contract gains ID-0
+  (PDR-027 amendment landed). Plan grew from 416 to 783 lines.
+- `7028b0d6` PDR-027 amendment — Amendment-Log entry dated 2026-05-26 with
+  semantic-position framing; §Identity schema table gains `id` row;
+  §Full identity block table gains `id` row; §The additive-identity rule
+  body continuation-matching sentence updated to `(agent_name, id)`;
+  §Why the identity key is `platform + model + agent_name` carries a
+  head-of-section supersession note; §Why identities are additive
+  formula updated.
+- `b0faefab` Phase 0A closeout — plan status updated, frontmatter todo
+  marked completed, Phase 0 active claim closed.
+- `3ca77972` metacog cure — owner-directed challenge to the "3-session
+  arc" framing produced a structural correction: file-count-derived
+  sizing replaced with TDD-cycle decomposition (Phase 0B ~4 cycles,
+  Phase 0C ~5 cycles, ~10 total cycles in one focused implementer
+  session). The cure was demonstrated in execution this same session.
+- `c11f698b` Phase 0B Cycle 1 — `uuidV5Schema` (UUID-format + v5 version-
+  nibble refine + `.brand<'UuidV5'>()`); `collaborationAgentIdSchema`
+  read-side extended with optional `id` (legacy parse path);
+  `collaborationAgentIdWriteSchema` write-side with required `id`
+  (compile-time guard against legacy-shape writes); 7 new tests in
+  `agent-id-schema.unit.test.ts`; 664 → 671 tests; full pre-commit gate
+  green at every commit.
+
+**Evidence**:
+
+- `pnpm --filter @oaknational/agent-tools test`: 75 files / 671 tests
+  passing at every commit step.
+- Full `pnpm check` via pre-commit hook chain: 90/90 turbo tasks
+  passing at every commit (cached or fresh).
+- Plan-skill placeholder + commit-recipe self-check on plan body: clean.
+- All session claims closed in their respective commits; closed-claims
+  archive carries five entries from this session (Phase 0 + 4 short-
+  lived `git:index/head` claims for each commit).
+
+**Subagent leverage**: 1 Explore (structural map) + 3 reviewers
+(assumptions-expert, docs-adr-expert, type-expert) dispatched in parallel
+on Sonnet — within Opus team quota envelope. All three reviewers returned
+substantive must-fix findings; all integrated into plan v3.
+
+**Metacognition cure (retrospective mode)**: the "Phase 0A/0B/0C are each
+session-sized" framing — taken from assumptions-expert's first-pass
+finding and baked into the plan body without first-principles
+verification — was wrong. Failure mode: *doctrine-by-analogy* (accepting a
+reviewer estimate as gospel). Cure: explicit cycle-by-cycle enumeration in
+the plan; demonstrated by landing Phase 0A + Phase 0B Cycle 1 in the same
+session. Lesson conserved in distilled.md (see entry to be added under
+consolidate-docs).
+
+**Next safe step**: next session picks up Phase 0B Cycles 2–4 then Phase 0C
+all 5 cycles. Total ~9 cycles remaining for Phase 0. Design fully locked
+in plan body; implementer needs no further deliberation. Recommended
+cycle order:
+
+1. Phase 0B Cycle 2 — `deriveCollaborationIdentity` derives UUID v5 from
+   stable session seed, returns `CollaborationAgentIdWrite` (small change,
+   highest leverage — unlocks the rest of 0B).
+2. Phase 0B Cycle 3 — `parseAgentId` replaces hand-built object with
+   `collaborationAgentIdSchema.parse()` (Commandment 12 fix as bonus).
+3. Phase 0B Cycle 4 — `comms-event.schema.json` + `active-claims.schema.json`
+   add optional `id` to `agent_id` `$def`.
+4. Phase 0C Cycle 1 — `AgentRoutingKey` discriminated union +
+   `routingKeyFor` switches on `id` presence + `sameAgentRoutingKey`
+   exhaustively matches on `kind`. The central routing refactor.
+5. Phase 0C Cycle 2 — `classifyDirected`, `classifyNarrative`,
+   `isSelfAuthored` consume new routing key. **This is where the original
+   failure mode dies.** Existing `comms-relevant-events-collision.unit.test.ts`
+   gets the same-name + same-prefix + different-id case here.
+6. Phase 0C Cycle 3 — `assertSameAgent` consumes new routing key.
+7. Phase 0C Cycle 4 — `--to-id` flag wired through `cli-spec-options` →
+   `cli-comms-messages.recipientAgent`.
+8. Phase 0C Cycle 5 — legacy-fallback diagnostic emission in `routingKeyFor`'s
+   `kind: 'legacy'` branch.
+
+**Participating agent identity row update**: Open Streaming Updraft new row
+added below (this is the first session on this thread for this identity).
+
+## Session Outcome (2026-05-26 — Thermal Swooping Wing / codex / GPT-5 / `019e63`, PR #118 routing + doctrine-debt remediation plan)
+
+**Session boundary**: owner asked whether a PR existed for
+`docs/agent-collaboration-enhancements`, then directed PR creation and
+monitoring. After PR #118 surfaced identity/routing friction, owner asked for
+a scan of agent-tooling places where doctrine was ahead of enforcement and
+then directed a remediation plan in the improving-collaboration lane.
+
+**Working-tree outcome**:
+
+- Draft PR #118 was created for the n=2 collaboration improvements.
+- PR monitoring identified three Sonar findings; those were routed to the
+  current Mistbound identity after correcting an over-broad repeated-word
+  route. Mistbound later pushed `cd1810bc` with the three fixes.
+- New queued plan:
+  [`collaboration-identity-doctrine-enforcement-remediation.plan.md`](../../../plans/agent-tooling/current/collaboration-identity-doctrine-enforcement-remediation.plan.md).
+  It frames PDR-076a/PDR-076b implementation gaps as technical debt in the
+  improving-collaboration lane.
+- Discoverability was wired through
+  [`agent-tooling/current/README.md`](../../../plans/agent-tooling/current/README.md)
+  and the parent
+  [`cost-of-collaboration.plan.md`](../../../plans/agent-tooling/current/cost-of-collaboration.plan.md).
+- Owner then asked that the plan be phased and that the critical path be Phase
+  0. The plan now makes Phase 0 the executable identity/routing path: add UUID
+  ids to new identity writes and make routing prefer `(agent_name, id)` with
+  legacy fallback.
+
+**Evidence**:
+
+- Plan/index markdownlint passed on the touched plan surfaces.
+- `git diff --check` passed on the touched plan surfaces.
+- A search for leftover `WS*` / `Workstreams` wording in the new plan returned
+  no matches after the phase rewrite.
+- Full `pnpm check` passed at session handoff.
+
+**Next safe step**: owner commits the documentation bundle when ready. Future
+implementation should open Phase 0 only and prove ID-1, ID-2, and ID-3 before
+claiming the critical path complete.
+
+**Participating agent identity row update**: Thermal Swooping Wing
+`last_session` = 2026-05-26 (row already present below).
+
+## Session Outcome (2026-05-26 — Starless Dimming Owl / claude / claude-opus-4-7 / `781369`, n=2-coordination-efficiency-program complete + substrate cleanup)
+
+**Session boundary**: owner-invoked `oak-start-right-team` with the
+`n2-and-coordination-efficiency-program-2026-05-25.plan.md` as the
+target. Plan was decision-complete with three remaining workstreams
+(WS0, WS1, WS4) in linear order, plus the inherited curator residue
+from Thermal Swooping Wing's earlier curator-pass session. Branch:
+`docs/agent-collaboration-enhancements`.
+
+**Landed and pushed**:
+
+- `d3b1f75d` chore(continuity): curator-handoff — Thermal Swooping
+  Wing's curator-pass residue landed under Starless attribution per
+  owner direction. 54 files including memory rotations, pre-pose
+  viability check graduation, heartbeat-only stall diagnostic
+  graduation, owner-reroute visibility graduation,
+  first-broadcast-establishes-context worked instance, cross-lane
+  commit blocking pattern, settings.json git-push permission shift.
+- `3c3e01d3` refactor(rules): WS0 — corpus topology + SKILL
+  extraction. Three new rules (`new-rule-vs-pdr-clause`,
+  `comms-all-channels-watcher`, `liveness-heartbeat-cron`) with full
+  three-platform forwarders (`.claude/`, `.cursor/`, `.agents/`).
+  `start-right-team` SKILL thinned from 996 to 700 lines exactly
+  (≤700 target met; ≥273-line reduction target exceeded by 23
+  lines). Mode-selection block added at SKILL top
+  (sole-contributor / team-closeout-owner /
+  team-member-non-closeout-owner). `RULES_INDEX.md` rewritten as
+  three-column classification table (67 always-on / 14
+  trigger-loaded; conservative default `always-on` when in doubt).
+  New validation test
+  `agent-tools/tests/rules/rules-index-classification.unit.test.ts`
+  (6 tests, all pass). Combined `wc -l` acceptance bar revised in
+  commit body per assumptions-expert ruling (the combined-bar is
+  the wrong proxy; classification-weighted per-mode load is the
+  correct measure: sole-contributor -157 lines net;
+  team-member ~+30-50 framing overhead on previously-loading content).
+- `3360dfb0` refactor(agent-tools): WS1 — comms routing by
+  session_id_prefix (collision cure). `NarrativeCommsEvent.addressed_to`
+  widened from `string` to `CollaborationAgentId`; `.audience` widened
+  from `readonly string[]` to `readonly CollaborationAgentId[]`. Full
+  4-field tuple chosen over plan body's narrower 2-field tuple for
+  symmetry with `DirectedCommsMessage.to/.from` and all `.author`
+  fields. `classifyNarrative` comparators changed from string
+  equality / `.includes` to `.session_id_prefix === self.session_id_prefix`
+  and `.audience.some(...)`. `classifyDirected` + `isSelfAuthored`
+  left as-is (already tuple-correct per metacognition discovery).
+  Legacy migration shim: `legacyStringToAgentId` projects string to
+  tuple with `'unknown'` placeholders, emitting one-line stderr
+  warning per call. Anonymous-detection primary discriminator
+  reordered to `session_id_prefix`-first in `identity.ts:53` and
+  `identity-audit.ts:225` with inline rationale. 5 new collision
+  regression tests; existing fixtures updated. `.min(1)` added on
+  audience arrays per code-expert SHOULD-FIX. 213/213
+  collaboration-state tests pass.
+- `4f1e6faf` docs(skill): WS4 — `start-right-team` cross-references.
+  Added observer-side symmetry clause to Closeout Contract /
+  Final-heartbeat-end paragraph linking to
+  `.agent/rules/ping-before-escalate.md`. Two stale `§0.5` anchor
+  references (left over from WS0's extraction) replaced with links
+  to the `liveness-heartbeat-cron` rule file. docs-adr-expert
+  returned no MUST-FIX; the adjacent stale anchor at line 171
+  surfaced as SHOULD-FIX was healed in the same commit per the
+  reviewer's recommendation.
+- `2d79e3ab` chore(closeout): plan archived to
+  `.agent/plans/agent-tooling/archive/completed/`; repo-continuity
+  refreshed with Starless session outcome + identity row;
+  final-heartbeat-end + closeout broadcast comms events bundled.
+- `308cdafe` chore(continuity): substrate cleanup at owner direction
+  — Feathered (`c89bcb0c`) and Torrid (`2f6d1d40`) stale claims
+  archived via `claims archive-stale`; five expired `queued`-phase
+  commit-queue entries (Pearly, Twilit, Estuarine, Eclipsed, Wooded)
+  marked abandoned. Active claims now empty; commit-queue holds 61
+  records all in `abandoned` phase (historical audit trail).
+
+**Reviewer dispatch summary** (8 reviewers across the three
+workstreams, all single-message parallel Agent blocks):
+
+- WS0: architecture-expert-fred (ADR-119/125/150 compliance:
+  COMPLIANT), architecture-expert-betty (cohesion + change-cost:
+  PASS, CHEAPER), docs-adr-expert (decision-rule shape: SOUND;
+  classification table accuracy: CORRECT), assumptions-expert
+  (proportionality: PROPORTIONAL; classification criteria: SHARP
+  ENOUGH; acceptance bar: WRONG PROXY, land-with-body-note ruling).
+- WS1: code-expert (APPROVED WITH SUGGESTIONS), type-expert (AT-RISK
+  on schema-duplication SHOULD-FIX), test-expert (1 MUST-FIX on
+  conditional test guards, applied).
+- WS4: docs-adr-expert (COMPLIANT, 1 SHOULD-FIX on adjacent stale
+  anchor, applied).
+
+**Coordination with Thermal Swooping Wing**: Thermal's curator-pass
+session was active in parallel during the early part of this session.
+4+ directed comms exchanged: Thermal sent "Thermal updated
+commit-responsibility bundle for Starless" (08515dbb pointer),
+"Thermal no-overlap verdict after curator-handoff claim" (b8a879f6),
+"Thermal index-drift note after curator staging" (5a147715), "Thermal
+n2 shard curation bundle for Starless commit ownership" (a1937f15),
+"Thermal validation update: WS0 draft markdownlint repaired"
+(af8e7b90). Starless acked with "Ack: Starless landing curator-handoff
+bundle on green tree" (c376c682) and incorporated each subsequent
+Thermal curation slice into the curator-handoff or WS0 commit per
+residue exception. Worked instance of "owner directs commit
+responsibility to one agent; the other agent stays in coordination via
+directed messages" with no lane-overlap and no duplicate commits.
+
+**Deferred SHOULD-FIXes** (documented in WS1 commit body, not blocked
+by this session's closeout):
+
+- Schema-duplication consolidation: `agentIdSchema` is redeclared in
+  `state-schemas.ts` and `comms-migration-records.ts` instead of
+  composed from `collaborationAgentIdSchema` in `types.ts` via
+  `.superRefine()`. A future refactoring cycle should consolidate.
+- `diagnosticWriter` DI for `legacyStringToAgentId`: the stderr warning
+  is currently a direct `process.stderr.write` side-effect making the
+  warning untestable. A future refactor should accept an injected
+  writer so the warning can be asserted.
+
+**Gate state at closeout**: `pnpm check` exit 0 at every commit; 90/90
+turbo tasks successful at each pre-commit gate; 213/213
+collaboration-state tests pass post-WS1; SKILL 700 lines exactly;
+combined rules + SKILL 7484 lines post-WS0 + WS1 (with
+classification-weighted per-mode load delta as the load-cost-faithful
+proxy per assumptions-expert ruling).
+
+**Next safe step**: thread has no outstanding workstreams from the
+n=2-coordination-efficiency-program. The plan is archived. Two
+follow-on engineering items are noted in the WS1 commit body
+(schema-duplication consolidation; `diagnosticWriter` DI) but they
+are not blocked or time-sensitive; they can land in a future cycle
+when the owner directs.
+
+**Participating agent identity row update**: Starless Dimming Owl
+`last_session` = 2026-05-26 (added below).
+
+## Session Outcome (2026-05-26 — Thermal Swooping Wing / codex / GPT-5 / `019e63`, curation closeout + final handoff)
+
+**Session boundary**: owner directed a final `oak-session-handoff` +
+`oak-consolidate-docs` closeout after the owner approved both open principle
+routes. Branch: `docs/agent-collaboration-enhancements`.
+
+**Landed in working tree**:
+
+- PDR-083 `Director Pure-Direction-Only Boundary` created as accepted
+  Practice-governance doctrine.
+- PDR-084 `Owner Action Is Not a Cure` created as accepted
+  Practice-governance doctrine. It stands alone rather than as a PDR-074
+  amendment because the owner-intervention classification applies beyond
+  Director work.
+- PDR README index and `practice-index.md` updated with PDR-083/PDR-084
+  pointers.
+- `pending-graduations.md` updated: live due body is now 0 entries; the two
+  former due entries are marked graduated 2026-05-26 and kept only as
+  short-lived audit pointers until the next processed-register archive pass.
+- `napkin.md` records the owner approval and graduation disposition.
+
+**Coordination / commit ownership**:
+
+- Owner will commit this bundle. I did not intentionally stage or commit;
+  by final status, the bundle is already staged in the git index for owner
+  commit.
+- Starless was first sent a directed note asking them to include the route
+  approval edits; after the owner redirected commit ownership, I sent a
+  corrective directed note telling Starless not to assume they should commit
+  the new PDR-route bundle unless owner redirects again.
+
+**Evidence**:
+
+- `pnpm exec markdownlint` on touched PDRs, PDR README, practice-index,
+  pending-graduations, and napkin: passed.
+- `git diff --check`: passed.
+- `pnpm practice:fitness --strict-hard`: passed with SOFT status,
+  hard=0, critical=0.
+- Full `pnpm check`: passed green at final handoff.
+- No Thermal active claim exists to close. Remaining active claims are stale
+  Feathered/Torrid code-lane claims from prior work.
+
+**Next safe step**: owner commits the staged closeout bundle. No additional
+Thermal curation action remains unless the owner reopens a specific lane.
+
+## Session Outcome (2026-05-25/26 — Feathered Winging Cliff / claude / claude-opus-4-7 / `57e615` + Torrid Firing Spark / claude / claude-opus-4-7 / `5054f8`, n=2 enforcement bundle Cycle 1 execution)
+
+**Session shape**: two-agent (n=2) tactical execution against the Cycle 1 brief in `n2-and-coordination-efficiency-program-2026-05-25.plan.md`. Both agents survived two compaction windows in one session window via PDR-063 mid-cycle retirement handoffs (Feathered ×2, Torrid ×1).
+
+**Bundle status (2026-05-26T07:25Z)**: 5 of 6 commits landed locally on `docs/agent-collaboration-enhancements`:
+
+```text
+4984d771 chore(agent-tools): drop unused barrel re-exports (knip cure)   ← E2 (Torrid)
+29ebda41 feat(rules): add ping-before-escalate retirement-broadcast       ← B3 (Torrid)
+ecc1e834 feat(hooks): add menu-framing scoped_blocks                      ← B1 (Torrid)
+499518ce refactor(agent-tools): extract hook-policy guard to workspace    ← E1 (Torrid)
+97f06e16 feat(agent-tools): heartbeat emitter typed-origin gate (A1)      ← A1 (Feathered)
+87232086 docs(continuity): point next n=2 session at enforcement bundle   ← baseline (pushed)
+```
+
+B2 (CLI body-length gate) in flight at session-end via Torrid. **Push pending** on (a) Prismatic Transiting Star's stranded practice-fitness WIP being committed under owner authority (blocks the zoneGlyph knip cure), then (b) zoneGlyph `export` drop, then (c) B2 completion, then (d) push of the 6-commit chain.
+
+**Coordination shapes that worked under bundle load**:
+
+- PDR-063 mid-cycle handoff substrate operated cleanly through two compactions in one cycle.
+- First-broadcast-establishes-context resolved cycle/boundary assignment without owner intervention.
+- Gatekeeper specialisation: Torrid ran all `pnpm check` rounds; Feathered did not.
+- Lane discipline absorbed scope expansion: E1+E2 (extraction + barrel-trim, 2 commits) joined the original 4-item bundle as structural prerequisites, reviewer-ratified.
+- Parallel sonnet reviewers (type-expert + test-expert + code-expert + assumptions-expert) dispatched at multiple stages; findings applied in same commits.
+
+**Substance learned beyond plan — 7 graduation candidates** (full details in plan body §"Cycle 1 graduation candidates" + `pending-graduations.md`):
+
+1. AskUserQuestion menu-of-anti-shapes anti-pattern; cure: pre-pose viability check (extend `present-verdicts-not-menus.md`).
+2. Cross-lane structural blocking of commits (Prismatic stranded WIP) — new failure mode; capture for second-instance per PDR-026.
+3. Bundle scope-discovery during execution is normal — clause for plan-templates.
+4. PDR-063 worked under bundle load — worked-instance footer to PDR-063.
+5. A1 cure validates itself by running — worked-instance footer to PDR-078.
+6. B1 self-fires on plan-body content — cross-reference in B1 rule.
+7. First-broadcast-establishes-context as deterministic tie-breaker — worked-instance to `start-right-team` SKILL §1.
+
+**Owner-affirmed discipline** (2026-05-26): LTAE-screen every decision shape before any owner-surfacing; surface only what survives. *"No open question survives LTAE [in this case]. That is worth remembering."* Memory: `feedback_pre_pose_option_viability_check`.
+
+**Open at handoff**:
+
+- Feathered's claim `c89bcb0c-da42-4b5e-843a-fc2be11d830d` remains active for the push-ceremony lane (closes after push lands).
+- Torrid's claim `2f6d1d40-c3f8-4d78-b604-bfd8bebb7157` remains active for B2 completion (closes after B2 lands + push).
+- User direction at 07:24Z: *"Torrid will send you some additional findings, then they are winding down for retirement, the rest of the session is yours"* — Feathered absorbs Torrid's findings, takes over remaining lane ceremony.
+- Plan body amended with Cycle 1 outcome + Cycle 2 brief + 7 graduation candidates.
+- `pnpm check` cleanliness gate not run by Feathered; Torrid ran it through Cycle 1 as gatekeeper.
+
+**Evidence**:
+
+- A1 commit `97f06e16` carries 10 tests (5 unit on composeHeartbeatBody + 5 integration on CLI gate); both Feathered and Torrid emitted typed-args heartbeats throughout the session — A1 validated by running.
+- B1 commit `ecc1e834` carries 15 parametrised tests covering 3 phrases; self-validated by blocking plan-body writes during this very thread-record edit.
+- B3 commit `29ebda41` ships rule + portability wrappers + RULES_INDEX entry.
+- E1 commit `499518ce` 5-module extraction reviewed by parallel sonnet trio.
+- E2 commit `4984d771` knip cure, blockers 5→1 (zoneGlyph remaining, pre-existing).
+
+**Next safe step**: owner commits Prismatic's stranded practice-fitness WIP → Feathered drops zoneGlyph `export` → Torrid lands B2 → Torrid runs final `pnpm check` → Feathered pushes the 6-commit chain → both claims close → bundle-landed broadcast → consolidate-docs route the 7 graduation candidates.
+
+### Completion update (2026-05-26T07:30Z — Torrid, retirement-class closeout)
+
+The bundle is **SHIPPED**. Origin/docs/agent-collaboration-enhancements final chain (oldest → newest):
+
+```text
+83c79fa6 fix(practice-fitness): per-file detail uses inventoryGlyph for ready-zone consistency  ← Torrid (LOCAL, awaiting push)
+bfbc39f3 docs: memory refinements                                                                ← owner (219 files; absorbed Prismatic's WIP + .agent/* drift + session comms + handoff records + Q-004)
+69b50937 chore(practice-fitness): drop unused zoneGlyph export (knip cleanliness)                ← Torrid (cross-lane takeover; knip 1→0)
+66e77d73 feat(comms): reject --body argv over 1500 chars on all comms verbs (B2)                ← Torrid
+4984d771 chore(agent-tools): trim 4 unused barrel re-exports from hook-policy orchestrator       ← Torrid (knip 5→1)
+29ebda41 feat(rules): B3 ping-before-escalate                                                   ← Torrid
+ecc1e834 feat(hooks): B1 menu-framing scoped_blocks                                              ← Torrid
+499518ce refactor(agent-tools): hook-policy 5-module extraction                                  ← Torrid
+97f06e16 feat(agent-tools): A1 heartbeat emitter typed-origin gate                               ← Feathered
+```
+
+**Cross-lane takeover at 07:01:48Z**: after ~23 min of Feathered emitting cron-driven heartbeats with no substantive lane progress and no reply to my 06:53:59Z direct ping (`150b5a55`), Torrid broadcast a takeover of the push lane and applied the zoneGlyph cure at `69b50937` via `git apply --cached` surgical staging (kept Prismatic's uncommitted WIP intact in working tree, staged only the 1-line export drop). Owner then pushed everything through `bfbc39f3` while my push attempt was in flight — push attempt rejected as redundant. Owner subsequently identified that `formatFitnessResult` still rendered the pre-WIP `zoneGlyph(overallZone)` while inventory/summary used `inventoryGlyph(inventoryZone)` — replace-old-with-new rule applied, consistency fix landed at `83c79fa6` (local).
+
+**Owner's bfbc39f3 absorbed 219 files** including: Prismatic's full "ready" zone WIP across evaluate.ts/format.ts/model.ts/run.ts + tests; ADR-144 + ADR-181 amendments; all `.agent/memory/*`, `.agent/skills/*`, `.agent/directives/*`, `.agent/rules/*` drift; all session comms events (~170 files); Feathered's two handoff records + Torrid's two handoff records; the `.agents/rules/ping-before-escalate.md` Codex portability wrapper; Q-004 in `open-questions.md` (gate-both-paths architectural follow-on for B2).
+
+**Open at completion**:
+
+- `83c79fa6` is local-only on `docs/agent-collaboration-enhancements`; one push closes the bundle for good.
+- Feathered's claim `c89bcb0c` remains open. Their cron-driven heartbeats fired throughout but no substantive progress events emerged after 06:30Z — main-loop appears not to have processed incoming events post-resume. Diagnostic candidate: peer-agent heartbeat-without-progress as a distinguishable state from retirement.
+- Torrid's claim `2f6d1d40` closing as part of this handoff (CLI `claims close` invocation TBD — first attempt errored on `--closed` flag missing).
+- Q-004 in `open-questions.md` is the only open architectural follow-on from B2.
+
+**Session residue for Feathered to commit** (uncommitted at retirement):
+
+- `M .agent/state/collaboration/comms-seen/torrid-firing-spark.json` (watcher seen-list)
+- `?? .agent/state/collaboration/comms/<post-bfbc39f3 events>.json` (heartbeats + retirement events)
+- The continuity edits in this handoff (this section + repo-continuity + napkin + distilled + n2 plan)
+
+**Additional substance learned (graduation candidates beyond the original 7)**:
+
+8. **Peer-agent heartbeat-without-progress diagnostic**: cron-driven heartbeats can fire without the agent's main loop processing inbound events. Discriminator: heartbeat-only output over multiple cycles, no substantive narrative/lifecycle events. Cure shape: direct-ping with bounded deadline (4 min ≈ one heartbeat cycle); if silent, take over lane after broadcasting intent. Worked instance: 2026-05-26T06:38Z–07:01Z Feathered silence cycle.
+9. **`git apply --cached` for surgical cross-lane staging**: when the working tree has another agent's uncommitted WIP and you need to stage a small fix in the same file without destroying their work, write a patch matching HEAD context and `git apply --cached <patch>`. The index gets your change; the working tree retains the WIP. Worked instance: zoneGlyph cure at `69b50937`.
+10. **CLI args inconsistency between comms verbs**: `comms append --title` vs `comms direct --subject` vs `comms reply --subject`; `comms append` has no `--kind` flag while `comms direct` requires it. Friction surfaced repeatedly during this session's comms-event emission. Candidate for harmonisation pass.
+11. **Replace-old-with-new applied to feature WIP completion**: owner caught that `formatFitnessResult` still used `zoneGlyph(overallZone)` after the rest of practice-fitness moved to `inventoryGlyph(inventoryZone)`. The repo rule "no fallbacks, no shadow systems, no remnants" surfaces during WIP-completion review, not only during planning. Cured at `83c79fa6`.
+
+**Participating agent identity row update**: Torrid Firing Spark `last_session` = 2026-05-26.
+
+## Session Outcome (2026-05-25 — Prismatic Transiting Star / codex / GPT-5 / `019e60`, distilled processing + practice-fitness inventory)
+
+**Session boundary**: owner first asked whether `distilled.md` was still in
+use, then directed that it be added to the session-handoff flow, included in
+practice-fitness scripts, given appropriate frontmatter, processed according
+to `$oak-consolidate-docs`, and finally that `practice:fitness` and friends
+show ready-empty and healthy cases as well as soft/hard/critical cases. Owner
+closed the session with `$oak-session-handoff` and `$oak-consolidate-docs`.
+Branch: `docs/agent-collaboration-enhancements`.
+
+**Working-tree outcome**:
+
+- `distilled.md` remains active as a curated-learning register in the
+  knowledge-conservation flow. Its frontmatter now declares
+  `merge_class: curated-learning-register`, and the fitness envelope reflects
+  its narrower active-register role.
+- Settled `distilled.md` lessons were graduated or confirmed into durable
+  homes: gates skill and build-system docs for gate-stack layering; commit
+  skill, continuity-practice, AGENT evidence-command guidance, and agent-tools
+  README for the 2026-05-14 operational lessons. The graduation audit log keeps
+  source provenance.
+- `session-handoff` now cites the durable gate/build-system homes instead of
+  relying on removed active distilled prose.
+- `pending-graduations.md` marks the gate-stack item graduated and keeps the
+  skill-text-vs-continuation-record candidate pending until a second
+  corroborating instance or owner direction.
+- `practice:fitness`, `practice:fitness:informational`, and
+  `practice:fitness:strict-hard` now print a five-zone inventory:
+  ready-empty, healthy, soft, hard, and critical.
+- The metacognition correction added `fitness_content_role` as a missing axis:
+  `reference` is the default, while `drainable-buffer` is required before empty
+  content appears as `ready (empty)`. Empty directives/reference surfaces now
+  produce configuration findings rather than being treated as successful drains.
+- Behaviour tests prove the report output, including ready-empty and healthy
+  inventory lines and the drainable-buffer/reference distinction. Owner
+  correction applied: tests prove behaviour, not filename/configuration
+  membership.
+- ADR-144 was amended in place with the content-role extension, so the new
+  frontmatter key has a permanent governance home.
+
+**Evidence**:
+
+- `pnpm --filter @oaknational/agent-tools exec vitest run src/practice-fitness/format.unit.test.ts src/practice-fitness/run.unit.test.ts src/practice-fitness/evaluate.unit.test.ts`
+  passed: 50 tests after the content-role correction.
+- `pnpm --filter @oaknational/agent-tools type-check` passed.
+- Targeted eslint on the touched practice-fitness source and test files passed.
+- Targeted markdownlint and `git diff --check` passed on touched docs.
+- `pnpm practice:fitness:informational`, `pnpm practice:fitness`, and
+  `pnpm practice:fitness:strict-hard` exited 0 and printed the new inventory;
+  latest observed summary: `SOFT (21 soft, 19 healthy)` with
+  `ready (empty) (0): none`.
+
+**Open at handoff**:
+
+- No Prismatic source claim remains after closeout. Active peer claims remain:
+  Feathered Winging Cliff owns the heartbeat/comms CLI lane; Torrid Firing
+  Spark owns hook-policy/rule-index work.
+- Full repo-wide `pnpm check` was not claimed green for this handoff. A broader
+  `agent-tools` lint run is red on peer-owned hook-policy files, so this
+  handoff relies on targeted validation plus the practice-fitness gates.
+- The remaining held `distilled.md` hypothesis-layer routing item is preserved
+  pending validation rather than promoted early.
+- No new ADR/PDR candidate remains unprocessed from this slice: the role-axis
+  issue landed directly as an ADR-144 amendment, and the only older PDR-shaped
+  item remains the skill-text-vs-continuation-record candidate already tracked
+  in `pending-graduations.md`.
+
+## Session Outcome (2026-05-25 — Mistbound Passing Candle / claude / claude-opus-4-7 / `e77243` + Quiet Whispering Veil / codex / GPT-5 / `019e60`, n=2 post-compaction execution + curation)
+
+**Session boundary**: n=2 mode with explicit lane separation per owner direction. Mistbound (post-compaction continuation from the plan-authoring session) executed plan/PDR substantive work; Quiet Whispering Veil joined mid-session as knowledge-curation specialist after owner appointment. Owner directed Mistbound to ignore fitness functions (Quiet's lane). Branch: `docs/agent-collaboration-enhancements`. Five owner-directed metacognition passes during the arc (LTAE on inherited option-set, then NEVER-compress-findings-reactively, then semantic-cause of blocked phrase).
+
+**Landed outcome** (6 commits pushed to `origin/docs/agent-collaboration-enhancements`):
+
+- `4b69aab8` — `docs(n2-plan): land program plan, survey, and integration edits` (the 10-file session-arc commit owner-deferred from prior plan-authoring session; serves as founding worked-instance for WS2 decomposition discipline).
+- `445bf0e1` — `docs(state): cure CRITICAL on open-questions; persist commit-window closure` (reference-style link cure for fitness CRITICAL).
+- `3ca71a40` — `docs(pdr-078): amend with substrate-category clause (ws4 item 1)` — **WS4 first move landed**. Added clause §5 ("Substrate category: heartbeats are liveness infrastructure") inside Decision; two companion entries under Forbids; fourth Falsifiability axis; Revision history. Worked-instance ratification fires opportunistically in a later session.
+- `0d2f0dd8` — `docs(n2-plan): pre-position ws0 skill decomposition options; ws1 re-survey finding` (later superseded for WS0 by `04d5cefa`).
+- `93657434` — `chore(state): drain commit-queue residue from prior intent`.
+- `04d5cefa` — `docs(n2-plan): direct ws0 verdict to (c)+partial(a) via ltae frame test` — **WS0 directed verdict landed**: applied [`re-apply-first-question-at-elaboration-boundaries`](../../rules/re-apply-first-question-at-elaboration-boundaries.md) to the option-set itself. (b) struck as anti-shape (violates WS0 acceptance criterion); (a) standalone as under-engineered; (c)+partial(a) as directed verdict. WS0 substantive work cleared to open.
+
+Reviewer dispatch: Plan agent (in plan mode at session-open) challenged the WS0+WS1+WS4 parallel-open framing; critical analysis kept the structural insight, rejected new-plan-file recommendation, accepted commit-shape and within-workstream sequencing.
+
+**WS1 re-survey finding** (captured in plan body §WS1): items #1 and #2 substantially done already — `--body-file` is implemented across all four comms verbs with mutex against `--body` and empty-file rejection; integration tests cover `comms direct`. Plan body was based on stale state. Worked-instance for the verify-before-applying discipline.
+
+**Evidence**:
+
+- Plan amendments at `agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md` (WS0 directed verdict, WS1 re-survey finding, WS4 amendment-via-PDR pattern).
+- PDR-078 amendment at `.agent/practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md` §5 + Forbids + Falsifiability + Revision history.
+- Quiet's curation: napkin entry homed to `pending-graduations/2026-05-25-mistbound-inherited-frame-and-hook-signal-candidates.md` with full substance preserved + disposition section identifying which items are likely existing-rule worked-instances vs candidate patterns. Napkin replaced with disposition pointer.
+- Plan mode execution plan at `~/.claude/plans/sunny-imagining-wreath.md` captures the design-time framing reasoning (off-repo, won't survive long-term).
+
+**Substantive findings captured for graduation** (in pending-graduations shard):
+
+- **Inherited-frame credulity** — when a prior session's artefact is inherited, default is to work within its boundaries rather than questioning them. The audit-shape inherits authority it doesn't deserve. Cure: re-apply the first question at every elaboration boundary, INCLUDING the boundary at which options are surfaced. Already covered by `re-apply-first-question-at-elaboration-boundaries`; this is a worked-instance, not new doctrine.
+- **Hook-as-diagnostic, not obstacle** — owner-named: when a `policy.json` hook fires, the right response is to ask what the block reveals about the agent's conceptual framing, not to mechanically rewrite the prose to comply. The block existed at the linguistic layer because the rejected category in agent voice is itself the failure mode (PDR-044 innate immunity). Worked-instance of `never-ignore-signals` applied at the hook-policy layer.
+- **NEVER compress findings reactively** (owner-named explicit rule) — buffer-pressure signals (fitness HARD/CRITICAL) call for rotation/homing, never for finding-trimming. Quiet's curation demonstrated the architecturally-correct shape: substance preserved verbatim in a pending-graduations shard, napkin compressed structurally via disposition pointer. Mistbound near-violated this twice (heading compression + considered prose compression); the rule resolved both.
+- **The pattern is fractal** — every "this is mechanical, just work around it" moment is potentially a "this is conceptual, look deeper" layer. Three structural surfaces enforcing one principle: hook-policy (linguistic layer); rule corpus `re-apply-first-question` + `never-ignore-signals` (semantic layer); fitness gate (buffer-management layer). All compensate for inherited self-trust.
+
+**Owner-direction-gates at handoff**:
+
+- WS0 SKILL decomposition shape: RESOLVED to (c)+partial(a). WS0 substantive work cleared to open in a future session.
+- WS3 amendment β shape (silent-API-failure cure: heartbeat retention vs watcher silent-detection event): DEFERRED until WS3 opens (gated by WS0 SKILL shape AND WS10 PDR-082 second-instance). Not surfaced this session.
+
+**Next session's first move — n=2 ENFORCEMENT BUNDLE**:
+
+Owner direction at session-close: *"Doctrine without enforcement is debt."* The next session is **n=2 (two agents)**. The **only** thing it opens is the four-item enforcement bundle landed in the plan body at commit `81839e47`. Read [the plan body §"Next session — n=2 ENFORCEMENT BUNDLE"](../../../plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md#next-session--n2-enforcement-bundle-priority-brief-read-this-first) first; everything else (WS0 corpus refactor, WS2/WS5/WS6/WS7/WS9/WS11) defers.
+
+**Lane split (n=2)**:
+
+- **Lane A (substantive code, one agent)** — A1 heartbeat emitter mechanical state-binding (`agent-tools/src/collaboration-state/watcher-heartbeat.ts`); makes PDR-078 §5 (landed at `3ca71a40`) structurally enforced; ~2-3 hours.
+- **Lane B (hooks + rules + CLI gates, parallel second agent)** — B1 hook policy block on menu framing for architectural decisions (`.agent/hooks/policy.json`); B2 CLI hard-gate rejecting `--body` argv over 1500 chars for comms verbs (`agent-tools/src/collaboration-state/cli-spec-options.ts` + handlers); B3 ping-before-escalate as agent-general rule (new `.agent/rules/ping-before-escalate.md`); totals ~2-3 hours.
+
+**Session acceptance**: all four enforcements land as commits pushed green; each tested in code or hook, not only authored as prose.
+
+**Coordination shape**: apply this session's worked-instance (lane separation; separate intent-scoped commits; gate-runner singleton; homing-to-shard for any curation residue). Both agents post team-start broadcast per `start-right-team` SKILL §1. Run `pnpm check` once per round (gatekeeper-specialisation).
+
+**WS0 substantive work is NOT next** — it dominates lane parallelism. WS0 stays directed (verdict (c)+partial(a) at `04d5cefa`) and opens in a dedicated future session.
+
+**Pending-graduations status changes**:
+
+- New shard authored: `pending-graduations/2026-05-25-mistbound-inherited-frame-and-hook-signal-candidates.md` with 4 candidate dispositions.
+- WS4 item #1 (heartbeats-are-infrastructure) — LANDED at `3ca71a40`; can be marked graduated in any shard that tracked it. The structural enforcement is A1 above; WS4 item #1 is only fully closed when A1 lands.
+
+**Owner directions captured this session**:
+
+- "Quiet Whispering Veil will handle the knowledge curation, you can ignore the fitness functions" — lane separation directive; Mistbound owns plan/PDR; Quiet owns memory/curation/coordination-state.
+- "NEVER compress findings reactively" — explicit rule statement.
+- "reflect on the semantic and conceptual cause of the blocked phrase, not just work around it" — directs deeper metacognitive layer on signal interpretation.
+- **"Doctrine without enforcement is debt"** — closes the session arc with the prioritisation rule that produced the enforcement bundle. Every doctrine landing pairs with a structural enforcement plan; otherwise it adds debt.
+
+**Heartbeat-end broadcast emitted**: Mistbound team-start at `83f75634`; Mistbound handoff at `ee486a2d`; Mistbound closeout at `87329ca8`. Quiet team-start, gate-state, heartbeat-end captured in their respective comms-events.
+
+**Final session commits** (11 total pushed to `origin/docs/agent-collaboration-enhancements`):
+
+- `4b69aab8` `docs(n2-plan): land program plan, survey, and integration edits`
+- `445bf0e1` `docs(state): cure CRITICAL on open-questions; persist commit-window closure`
+- `3ca71a40` `docs(pdr-078): amend with substrate-category clause (ws4 item 1)`
+- `0d2f0dd8` `docs(n2-plan): pre-position ws0 skill decomposition options; ws1 re-survey finding`
+- `93657434` `chore(state): drain commit-queue residue from prior intent`
+- `04d5cefa` `docs(n2-plan): direct ws0 verdict to (c)+partial(a) via ltae frame test`
+- `9e115b6e` `chore(handoff): n=2 closeout — thread, continuity, questions, curation, comms`
+- `4f63df7d` `chore(state): drain closeout commit-queue intent residue`
+- `5b5b7d73` `chore(handoff): commit closeout broadcast event and shared-log update`
+- `81839e47` `docs(n2-plan): add next-session n=2 enforcement bundle brief`
+- `47793199` `chore(state): drain residue from enforcement-bundle commit`
+
+**Retained claims**: none. All session claims explicitly closed.
+
+**Blockers or risks**: none active. Owner standing direction on comms file retention (NO moves or deletes until comms research plan completes) preserved — no comms event files touched this session.
+
+---
+
+## Session Outcome (2026-05-25 — Mistbound Passing Candle / claude / claude-opus-4-7 / `e77243`, n=2/coordination-efficiency survey + plan + integration)
+
+**Session boundary**: Owner-directed multi-step goal — survey collaboration-efficiency substance across napkin/distilled/pending-graduations/plans/recent-comms; reflect via /oak-metacognition at three checkpoints; score candidate actions on user-specified 4 axes; fan out specialist reviewers; create plan; integrate with discovery surfaces. Sole-contributor session on branch `docs/agent-collaboration-enhancements` (created mid-session after PR #116 merged into main).
+
+**Landed outcome**:
+
+- Authored research note `.agent/research/agentic-engineering/agent-coordination-efficiency-survey-2026-05-25.md` — 30-item candidate inventory across napkin, distilled, four pending-graduations shards, eight existing plans, recent comms records.
+- Authored plan `.agent/plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md` — 11 workstreams structured around dependency graph (option (a) ratified by owner); linear ranking as Appendix A; 8 hidden axes documented as Appendix B; sibling to `cost-of-collaboration.plan.md`.
+- Integration: `agent-tooling/current/README.md` lists the new plan; `cost-of-collaboration.plan.md` amended with explicit "Sequencing amendment (2026-05-25)" paragraph making P9 (rule/skill topology refinement) the first move ahead of P6/P7; survey points forward to the plan.
+- Reviewer dispatch: assumptions-expert + architecture-experts Betty/Fred/Wilma in parallel; docs-adr-expert dispatched as a follow-up after final metacognition surfaced under-engineering. Critically analysed each finding before applying; rejected Wilma's "queue bypass" claim and over-coupled-sequencing claim; verified Fred's corpus-count (77 actual vs 78 claimed — principle holds); applied 4 docs-adr cross-reference corrections.
+- Three /oak-metacognition passes during the arc; one final pass on the entire process; ultrathinking applied at every step per owner direction.
+
+**Evidence**:
+
+- Survey at `.agent/research/agentic-engineering/agent-coordination-efficiency-survey-2026-05-25.md` (~9KB).
+- Plan at `.agent/plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md` (~22KB after corrections; frontmatter `todos` block normalised by linter).
+- README cross-reference at `.agent/plans/agent-tooling/current/README.md` line 30.
+- Parent-plan amendment at `.agent/plans/agent-tooling/current/cost-of-collaboration.plan.md` lines 1828–1847.
+- Working tree at handoff: 2 modified + 2 new files on branch `docs/agent-collaboration-enhancements`. No commits yet — owner-deferred execution to next session.
+
+**Owner ratification**: option (a) — dependency-graph-as-spine structure stands. Execution deferred to next session.
+
+**Next session's first move (per the plan's first-move recommendation)**: WS0 + WS1 + WS4 open in parallel.
+
+- **WS0** (Tier 0 meta-constraint): land cost-of-collaboration P9 — rule/skill topology refinement. Two-tier classification (always-on invariants vs trigger-loaded skills); SKILL `start-right-team` decomposition shape (currently 973 lines / 26 sections); rule-vs-clause-in-existing-PDR decision rule. Gates WS3, WS5, WS6, WS7 directly.
+- **WS1** (Tier 1 parallel-able): tooling friction at moment of shipping — `comms direct` flag-discoverability; `--body-file` / `--subject-file` for long content; husky pre-commit hook sweep-into-staged cure; identity routing-tuple disambiguation (two-step).
+- **WS4** (Tier 2 amendments to landed doctrine): owner-attention-budget cures — Heartbeats-are-infrastructure as PDR-078 amendment; heartbeat-content mechanical state-binding; ping-before-escalate as agent-general rule.
+
+**Open at handoff**:
+
+- 2 modified + 2 new files in working tree; no commits made this session. Whether to commit them as a single session-arc commit, or to land them as part of the next session's WS0 opening, is an open question for the owner's first move next session.
+- The new plan defers two owner-direction decisions: WS0's `start-right-team` SKILL decomposition shape (inline vs sibling SKILL); WS3 amendment β shape (heartbeat retention vs watcher silent-detection event). Surfacing these at next-session-open is the right move.
+- No active claims for Mistbound; no commit-queue ownership; no open conversations or escalations.
+
+**Surprise or changed understanding**:
+
+- Single biggest insight: the ~6× friction multiplier observed in the Fiery/Stormy PR-115 cycle (25 min coordination ceremony for 4 min fix work) is not "the n=2 problem" — it is the most legible instance of a general scale-sensitivity gap in the coordination substrate. The plan's design-evaluation track (WS8) preserves this insight for future architecture evolution; the obligation-tier taxonomy is the long-term shape Betty's review surfaced.
+- Doctrine-by-analogy in my own process: I treated plan-shape work like code-shape work (write, then review) when I should have dispatched reviewers at the inventory step, not the ranking step. Captured in the metacognition pass; the cure is to dispatch reviewers at the inventory step for future plan-shape work.
+- Linear-ranking-as-deliverable risk: user asked for "an ordered list of improvements" but the linear E+I+S convolution is structurally blind to 8 hidden axes (leverage, amortisation horizon, cost-direction sign, information value, reframing potential, agent-count variance, failure-mode coverage, dependency depth). The plan's spine is the dependency graph; the ranking is Appendix A. Owner ratified (a).
+
+**Pending-graduations status changes**:
+
+- `pending-graduations/2026-05-25-fiery-collaboration-decomposition-and-n2-efficiency.md` — both `status: due` items (Coordination-as-precondition + n=2 over-coordination) are now ROUTED to the new plan (WS2 + WS3 respectively). Items remain `due` until the plan workstreams land; the plan IS the cure-shape evidence.
+- `pending-graduations/2026-05-23-team-session-autonomy.md` — Director-class items now ROUTED to WS5 bundled doctrine pass.
+- `pending-graduations/2026-05-25-misty-director-session-candidates.md` — items routed to WS4 (heartbeat) and WS5 (Director-seat-on threshold).
+
+**Heartbeat-end broadcast emitted**: N/A — sole-contributor session; no team substrate active.
+
+**Retained claims**: none.
+
+**Blockers or risks**: none active. The plan body §"Risks" section enumerates per-workstream risks for the implementation phase.
+
 ## Session Outcome (2026-05-25 — Breezy Flowing Dock / `codex` / GPT-5 / `019e5f`, critical/hard memory curation + light handoff)
 
 **Session boundary**: owner asked Breezy to re-ground in
@@ -119,7 +1008,7 @@ the Thermal bundle.
 
 ## Session Outcome (2026-05-25 — Briny Fathoming Dock / `claude` / claude-opus-4-7 / `95a27b`, owner-directed role metacognition session, no implementation)
 
-**Session boundary**: Owner-prompted reflection on "How can roles work better in teams?" with explicit observation that "the Director role is only useful when grounded in continually re-verified _fact_, otherwise it becomes a useless, even damaging, expensive ticking clock". /oak-start-right-team + /oak-plan + /oak-metacognition.
+**Session boundary**: Owner-prompted reflection on "How can roles work better in teams?" with explicit observation that "the Director role is only useful when grounded in continually re-verified *fact*, otherwise it becomes a useless, even damaging, expensive ticking clock". /oak-start-right-team + /oak-plan + /oak-metacognition.
 
 **Landed outcome (this session)**: doctrine substrate authoring + pre-execution reviewer pass; **NO implementation** (owner explicit at closeout).
 
@@ -149,7 +1038,7 @@ the Thermal bundle.
 - Live team (Hushed Marshal + Wooded/Eclipsed peers) was mid-cycle on post-M1-attestation-tidy-up at session close; Briny's work is non-colliding with their cycle scope.
 - Briny session work is staged for Hushed Marshal to commit.
 
-**Director ticking-clock observation now has a named structural-cure path**: not new doctrine (PDR-074 §S1 already names the cure shape _conceptually_) but mechanical citation-binding substrate (PDR-082 + ADR-188) that converts the self-discipline checklist into auditable property of every role-emission.
+**Director ticking-clock observation now has a named structural-cure path**: not new doctrine (PDR-074 §S1 already names the cure shape *conceptually*) but mechanical citation-binding substrate (PDR-082 + ADR-188) that converts the self-discipline checklist into auditable property of every role-emission.
 
 ---
 
@@ -648,10 +1537,10 @@ Secret Dimming Shade's stale `git:index/head` claim
 
 ## Session Outcome (2026-05-22 — Shadowed Hiding Shade / `claude` / `claude-opus-4-7[1m]` / `e35155`, deep-graduation pass under owner direction drains owner-direction-gated buffer entries)
 
-**Owner directive**: _"please run a deep graduation of knowledge
+**Owner directive**: *"please run a deep graduation of knowledge
 source materials, the napkin, the comms records, the .remember
 directory, the vendor specific memory locations. Ignore fitness
-metric levels for now."_
+metric levels for now."*
 
 **Landed (single commit `a49e7a21`, 34 files, +1983/-163)**:
 
@@ -717,9 +1606,9 @@ since 2026-05-17 drained through a focused pass.
 vocabulary-gate failure as a decision menu (Tier A/B/C options)
 when it was straight-line SOP. That's the same shape
 `present-verdicts-not-menus` exists to prevent — applied at the
-wrong moment. Owner correction: _"drop all pretence and fix the
+wrong moment. Owner correction: *"drop all pretence and fix the
 problem, there is no optionality here, there is an issue, fix,
-it's not a decision point, it's SOP."_ Captured in this session's
+it's not a decision point, it's SOP."* Captured in this session's
 napkin entry.
 
 **Next safe step for this thread**: thread remains paused per owner
@@ -743,7 +1632,7 @@ Blustery, etc.) from prior sessions — these are not mine to close.
 
 **Aggregate `pnpm check` post-Phase-Final**: GREEN. 104/104 turbo tasks (1m15s); validate-subagents OK (22 Cursor wrappers, 22 Codex adapters, 19 templates); validate-portability OK (18 canonical skills, 69 canonical rules, 22 reviewer adapters, 71 Cursor triggers, 69 Claude rules, 69 .agents rules); skills adapter-generate up to date; knip clean; depcruise no violations (2242 modules, 4881 dependencies); markdownlint OK; prettier OK.
 
-**Metacognition reshape rationale (load-bearing learning)**: I initially treated the inherited three-cycle decomposition as the shape and tried to solve Cycle 1.3's narrowing-cascade within that frame. First pass: narrow only `runGitCommit` dep input (work-avoidance dressed as engineering judgement). Second pass: delete the scaffolding tests within the existing cycle frame. Third pass — owner-prompted metacognition: the cycle decomposition itself is the inherited shape. One system state takes one describing surface; Cycle 1.3 lands that description at the workflow seam. The lesson: when planning multi-cycle structural changes, ask at plan-author time _where the system state will be observable_; intermediate scaffolding tests written for the implementer's confidence do not earn ongoing maintenance cost. Candidate for graduation as a pattern or amendment to testing-strategy.md.
+**Metacognition reshape rationale (load-bearing learning)**: I initially treated the inherited three-cycle decomposition as the shape and tried to solve Cycle 1.3's narrowing-cascade within that frame. First pass: narrow only `runGitCommit` dep input (work-avoidance dressed as engineering judgement). Second pass: delete the scaffolding tests within the existing cycle frame. Third pass — owner-prompted metacognition: the cycle decomposition itself is the inherited shape. One system state takes one describing surface; Cycle 1.3 lands that description at the workflow seam. The lesson: when planning multi-cycle structural changes, ask at plan-author time *where the system state will be observable*; intermediate scaffolding tests written for the implementer's confidence do not earn ongoing maintenance cost. Candidate for graduation as a pattern or amendment to testing-strategy.md.
 
 **Cycle 1.3 closeout broadcast**: event `cf32f2c1-5d83-486b-9e2d-bf52865a20bc`, anchored in `shared-comms-log.md` (retention-safe markdown anchor); names three failure-mode instances (A: Mistbound→Shaded ff2 2026-05-22T14:04Z; B: Wooded distilled.md commit absorbed peer-staged commit-queue.ts edits 2026-05-22T14:56:37Z; C: Stormbound t12 peer-handoff verify-staged rejected on 66 peer-staged files 2026-05-22T15:42Z).
 
@@ -932,8 +1821,8 @@ any future work on this thread will benefit from.
 **All-channels comms CLI landed at `a9d0b8cf`** on `feat/mcp-graph-support-foundation`.
 Owner-directed mid-session pivot from WS2.2 work (in the parallel `connecting-oak-resources`
 thread) to encode the all-channels-matter principle in the canonical `agent-tools`
-comms commands: _the comms event stream is canonical truth; broadcast, group,
-directed, and lifecycle messages are all valid views; all are important._
+comms commands: *the comms event stream is canonical truth; broadcast, group,
+directed, and lifecycle messages are all valid views; all are important.*
 
 ### What landed in this thread
 
@@ -942,7 +1831,7 @@ directed, and lifecycle messages are all valid views; all are important._
   - `comms watch` and `comms inbox` defaults swapped from directed-only to all-channels: emit every event classified relevant for the agent (`broadcast` / `group` / `directed` / `lifecycle`) with self-exclusion only by full identity tuple. Output tagged `[BROADCAST]` / `[GROUP]` / `[DIRECTED]` / `[LIFECYCLE]` on first line.
   - `--only-directed` flag preserves the narrow legacy view.
   - Explicit `--agent-name` + `--session-prefix` override path retained for admin/test use; wildcard `*` agent name works in `--only-directed` mode.
-  - `.agent/skills/start-right-team/SKILL-CANONICAL.md` §0 "Start The All-Channels Comms Monitor (non-negotiable)" added ahead of presence registration as a precondition for team-session participation. Owner-stated 2026-05-21: _"all agents joining or starting a team session should be running the all-channels monitor, the communication is the absolute heart of what we are doing here."_
+  - `.agent/skills/start-right-team/SKILL-CANONICAL.md` §0 "Start The All-Channels Comms Monitor (non-negotiable)" added ahead of presence registration as a precondition for team-session participation. Owner-stated 2026-05-21: *"all agents joining or starting a team session should be running the all-channels monitor, the communication is the absolute heart of what we are doing here."*
   - 14 new unit tests for `classifyEventForAgent` + `drainRelevantEvents`; 2 existing narrow-directed CLI integration tests updated to new identity-tuple shape + `--only-directed`. Full agent-tools suite 433/433 green.
   - README updated to document the new defaults.
   - Pre-commit gates: type-check + lint + 87/87 turbo (fully cached) + repo validators + shell lint + commitlint + prevent-accidental-major-version all green.
@@ -1207,14 +2096,14 @@ after this session: **6 remaining** in Inc.1a.
 **Owner direction (Shaded Passing Candle session)**: graph tooling is the
 priority under a long-term-excellence framing. Apply a broken/accelerator
 lens to all sequenced work — items earn a slot ahead of graph only if they
-are fixing concrete breakage _or_ directly accelerate graph work.
+are fixing concrete breakage *or* directly accelerate graph work.
 Otherwise they defer. Anything sequenced ahead of graph must be
 decision-complete. Multi-vendor (Claude + Codex) confirmed as the graph
 work shape — the most multi-agent yet.
 
 **Token-remediation program advancement rule is superseded** for graph
 priority. Step 2 (singleton-lane) → Step 3 (P8 TUI) → Step 4A
-(cost-of-collab) → Step 4B (graph) is _not_ the active sequence. P8 TUI,
+(cost-of-collab) → Step 4B (graph) is *not* the active sequence. P8 TUI,
 cost-of-collab P6/P7, and the hardening tail waves 2–6 defer past graph.
 
 **Gating set under the lens (all decision-complete 2026-05-19)**:
@@ -1469,8 +2358,8 @@ candidate at
 [`pending-graduations.md`](../pending-graduations.md) (entry
 "Coordinator-role-as-allocator-not-gatekeeper") is held back from promotion.
 Owner direction: the candidate's role-set (`controller`, `marshal`,
-`reviewer`, `implementer`, `scout`, `standby`) is _the first possibly naive
-approach we tried_; an upcoming self-assigned-roles experiment must run
+`reviewer`, `implementer`, `scout`, `standby`) is *the first possibly naive
+approach we tried*; an upcoming self-assigned-roles experiment must run
 further before we entrench these labels in portable Practice doctrine. The
 eventual graduation target is a PDR on agent roles broadly, of which
 coordinator is one role. The "self-assigned-roles experiment" is already
@@ -1777,11 +2666,11 @@ implementation and not a commit. Three sub-passes landed in this session:
    `agent-collaboration.md`, `workflow.md`, `testing-tdd-recipes.md`,
    `plan SKILL-CANONICAL.md`, `ADR-181`, `distilled.md`.
 
-**Owner direction at handoff (2026-05-14)**: _"I feel you have drifted,
+**Owner direction at handoff (2026-05-14)**: *"I feel you have drifted,
 and I feel that we need to move all further knowledge curation work to a
-fresh session."_ Drift acknowledged and captured in
+fresh session."* Drift acknowledged and captured in
 [`napkin.md` § Correction — drift from consolidate-docs into in-session execution](../../active/napkin.md):
-hedge-language _"I think X"_ is a proposal to confirm, not authorisation
+hedge-language *"I think X"* is a proposal to confirm, not authorisation
 to execute; thread-scoped `jc-consolidate-docs` flows should land
 verdict-and-handoff per session, not stack execution-and-handoff in one
 window.
@@ -1808,21 +2697,21 @@ Read `napkin.md` § Verdant Swaying Glade entries first so the drift
 correction propagates. Available work (from the original opener's Route
 C menu, after Route C-iv landed this session):
 
-- _Route B_: ADR-181 status was flipped to Accepted in this session;
+- *Route B*: ADR-181 status was flipped to Accepted in this session;
   Route B is now closed and can be removed from the next opener's menu.
-- _Route C-i_: commit_queue cleanup (37 abandoned intents; in-place
+- *Route C-i*: commit_queue cleanup (37 abandoned intents; in-place
   removal with audit log per opener; available as a bounded operational
   pass).
-- _Route C-ii_: comms/ retention sweep (~108+ events with
+- *Route C-ii*: comms/ retention sweep (~108+ events with
   `created_at < 2026-05-07`; process-before-deletion per consolidate-docs
   step 3a; bounded operational pass).
-- _Route C-iii_: `repo-continuity.md` historical-prose archive sweep
+- *Route C-iii*: `repo-continuity.md` historical-prose archive sweep
   (drain "Same-day update (2026-05-12 ...)" prose to
   `archive/repo-continuity-session-history-2026-05-14.md`; bounded
   operational pass).
-- _Route D_: `practice-bootstrap.md` next-bounded consolidation
+- *Route D*: `practice-bootstrap.md` next-bounded consolidation
   (owner-direction-gated; Core surface; care-and-consult per PDR-003).
-- _Strategic alternative_: read Shadowed Glimmering Night's
+- *Strategic alternative*: read Shadowed Glimmering Night's
   decision-complete `external-skills-substrate-learning.plan.md` and
   surface a routing verdict for owner decision (Shadowed tightened the
   plan to "decision-complete strategic routing" at 10:09Z).
@@ -1835,7 +2724,7 @@ three stale threads (`architectural-budget-system`,
 consolidation target.
 
 **Discipline reminder for the next session**: per the drift correction,
-land _one route per session_ in the consolidate-docs flow. Verdict +
+land *one route per session* in the consolidate-docs flow. Verdict +
 handoff is a complete session. Do not stack graduation pass + ADR-181
 status flip + operational pass + handoff in one window — that
 overwhelms continuity-surface mutation rate and blocks coordinated
@@ -2043,7 +2932,7 @@ procedural breaches in commit `6027e182`:
    `graph-stack.plan.md`, `cost-of-collaboration.plan.md`,
    `shared-comms-log.md`, comms-event `0defddbb`) into my commit citing
    the "include current memory/state when dirty" doctrine. The doctrine
-   refers to _this session's_ memory/state; the broader reading was
+   refers to *this session's* memory/state; the broader reading was
    wrong.
 
 Commit `6027e182` is not being undone (owner direction + standing rule
@@ -2102,8 +2991,8 @@ multi-agent session.
 **Landed outcomes** (two commits):
 
 1. `39b3271d` — `docs(graph): absorb WS1.5 canon pre-implementation
-   review` — landed by this session under owner authorisation _"commit
-   ALL files, regardless of claims"_. Absorbed peer-session work from
+   review` — landed by this session under owner authorisation *"commit
+   ALL files, regardless of claims"*. Absorbed peer-session work from
    Quiet Stalking Mirror (`connecting-oak-resources` thread record +
    graph-stack plan §ws1-canon). Slipped one cohesion boundary: the
    napkin rename was a pre-existing staged entry from `git mv` earlier
@@ -2112,8 +3001,8 @@ multi-agent session.
 2. `c10c75e3` — `chore: learning loop processing` — landed by the
    owner directly during this session's handoff window, capturing the
    three-napkin consolidation outputs (the six files listed below).
-   Owner override of the earlier mid-session redirect _"forget commits,
-   run /jc-session-handoff then stop"_; the consolidation work is now
+   Owner override of the earlier mid-session redirect *"forget commits,
+   run /jc-session-handoff then stop"*; the consolidation work is now
    on HEAD rather than deferred.
 
 Files landed in `c10c75e3`:
@@ -2156,7 +3045,7 @@ direction to commission:
 
 **Next safe step**: another consolidation pass picks up at the deferred
 files above plus the next-touch fitness routing recorded in the
-_Deep Consolidation Status_ section of `repo-continuity.md`. The opening
+*Deep Consolidation Status* section of `repo-continuity.md`. The opening
 statement at
 [`.agent/plans/notes/next-session-opening-2026-05-13.md`](../../plans/notes/next-session-opening-2026-05-13.md)
 carries the resume context (commit-first sequencing, three numbered
@@ -2166,6 +3055,13 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 
 | Platform | Model | Agent name | Role | First-session | Last-session |
 | --- | --- | --- | --- | --- | --- |
+| `claude` | `claude-opus-4-7` | Tempestuous Sweeping Feather | collaboration identity remediation Phase 0B+0C implementer (`a9e5d2`; landed 6 commits on `docs/agent-collaboration-enhancements`: `bed24b57` Cycle 2 JSON schemas accept v5 id, `57084c15` Cycle 3 `deriveCollaborationIdentity` returns Write with v5 id, `2a501e97` Cycle 4 `parseAgentId` schema-driven, `b977dbab` Cycle 5 commit-queue `createIntent` requires `--id` + SKILL doctrine update, `30ef437b` **Phase 0C cycles 6+7+8 bundled — the routing cure**: `AgentRoutingKey` discriminated union; classifiers + `assertSameAgent` + `claim-reports.sameAgent` route via id; PDR-076a §Falsifiability primary collision test green, `628713b8` handoff bundle. Tests 671 → 698 (+27). Mid-session metacognition pass triggered by owner challenge against substrate-only landings; cure cycles 6+7+8 bundled per owner direction landed within the same session as the correction. Cycles 9-10 + Phase 0C reviewer dispatch + final gate queued for FINAL session per owner direction) | 2026-05-26 | 2026-05-26 |
+| `claude` | `claude-opus-4-7` | Open Streaming Updraft | collaboration identity remediation Phase 0A doctrinal landing + Phase 0B Cycle 1 implementer (`357948`; landed 5 commits on `docs/agent-collaboration-enhancements`: `76920493` plan v3 reviewer integration with 3 parallel sub-agent reviewers + Explore structural map, `7028b0d6` PDR-027 amendment with Amendment-Log entry + schema-table updates + rule-body update + supersession note, `b0faefab` Phase 0A closeout, `3ca77972` metacog cure replacing 3-session framing with TDD-cycle decomposition after owner challenge, `c11f698b` Phase 0B Cycle 1 with `UuidV5` branded type + read/write schema split + 7 new tests; demonstrated metacognition cure in execution by landing 0A + 0B Cycle 1 in same session; all session claims closed; design for Phase 0B Cycles 2-4 + Phase 0C fully locked in plan body for next implementer) | 2026-05-26 | 2026-05-26 |
+| `claude` | `claude-opus-4-7` | Starless Dimming Owl | n=2-coordination-efficiency-program implementer + closeout owner (`781369`; landed the three remaining workstreams in linear order: curator-handoff `d3b1f75d` (Thermal's curator residue under Starless attribution per owner direction), WS0 `3c3e01d3` (3 new rules + 9 forwarders + RULES_INDEX classification table + 6-test validation + mode-selection block; SKILL 996→700 lines exactly), WS1 `3360dfb0` (NarrativeCommsEvent addressed_to/audience widened to CollaborationAgentId tuple; classifyNarrative routes by session_id_prefix; 5 collision regression tests), WS4 `4f1e6faf` (SKILL cross-references for ping-before-escalate + stale §0.5 anchor cures), closeout `2d79e3ab` (plan archived to `archive/completed/`, continuity refreshed), substrate cleanup `308cdafe` (stale claims archived, 5 expired commit-queue entries abandoned); dispatched 8 reviewers in parallel across the three workstreams; coordinated with Thermal Swooping Wing via 4+ directed comms (no-overlap verdicts kept commit ownership clean); acceptance bar revised in WS0 commit body per assumptions-expert ruling (combined `wc -l` is wrong proxy; classification-weighted per-mode load is correct measure); deferred SHOULD-FIXes documented in WS1 commit body (schema-duplication consolidation; diagnosticWriter DI)) | 2026-05-26 | 2026-05-26 |
+| `codex` | `GPT-5` | Thermal Swooping Wing | Knowledge Curator + PR/planning closeout (`019e63`; PDR-083/PDR-084 graduation, PR #118 creation/monitoring/routing, collaboration identity doctrine-debt remediation plan queued with Phase 0 critical path; no active claim to close; owner will commit documentation bundle) | 2026-05-26 | 2026-05-26 |
+| `codex` | `GPT-5` | Mistbound Shrouding Silhouette | PR #118 Sonar fix implementer (`019e64`; owner-routed narrow fix for three Sonar issues on `docs/agent-collaboration-enhancements`, coordinated with Thermal monitoring) | 2026-05-26 | 2026-05-26 |
+| `claude` | `claude-opus-4-7` | Feathered Winging Cliff | Lane A implementer (`57e615`; n=2 enforcement bundle Cycle 1: A1 heartbeat emitter typed-origin gate landed `97f06e16` with 10 tests + Zod `.strict()` schema-driven composer; PDR-063 mid-cycle compaction handoff fired twice in cycle, both pickups worked; metacognition pass on AskUserQuestion menu-of-anti-shapes anti-pattern with cure captured to `feedback_pre_pose_option_viability_check`; plan amendment + thread/continuity refresh + 7 graduation candidates captured; push-ceremony lane after Torrid retires) | 2026-05-25 | 2026-05-26 |
+| `claude` | `claude-opus-4-7` | Torrid Firing Spark | Lane B implementer + gatekeeper + cross-lane-takeover (`5054f8`; n=2 enforcement bundle Cycle 1 COMPLETE on origin: hook-policy 5-module extraction `499518ce` + B1 menu-framing scoped_blocks `ecc1e834` + B3 ping-before-escalate `29ebda41` + barrel-trim knip cure `4984d771` + B2 CLI body-length gate `66e77d73` (4 verbs × 10 tests, TDD-first per test-expert Amendment A) + zoneGlyph cross-lane cure `69b50937` (knip 1→0, surgical `git apply --cached` to preserve Prismatic's WIP) + consistency fix `83c79fa6` (per-file detail uses inventoryGlyph, replace-old-with-new per owner direction; LOCAL); ran all `pnpm check` gatekeeper rounds; dispatched 4-reviewer parallel sonnet panel on B2 (type-expert + test-expert + code-expert + assumptions-expert) with findings absorbed; took over push lane after Feathered's 23-min heartbeat-only silence + ping non-reply, broadcast `TORRID TAKING OVER` at 07:01:48Z; owner pushed in parallel through `bfbc39f3` absorbing 219 drift files; Q-004 filed in open-questions.md for B2 gate-both-paths follow-on; retiring 2026-05-26 per owner direction after sending closeout findings `337a7f57` to Feathered; PDR-063 fired once mid-session pre-B2) | 2026-05-25 | 2026-05-26 |
 | `codex` | `GPT-5` | Hushed Fading Hush | Consolidator (operations-doc soft-tier split and post-M1 session-handoff rerun) | 2026-05-24 | 2026-05-24 |
 | `codex` | `GPT-5` | Sylvan Sprouting Petal | Knowledge Curator (memory critical-drain continuation; distilled graduations; identity-seed CLI refinement; handoff) | 2026-05-24 | 2026-05-24 |
 | `codex` | `GPT-5` | Shaded Silencing Dusk | Knowledge Curator (active-napkin processing, plan-truth repair, boundary handoff) | 2026-05-24 | 2026-05-24 |
@@ -2173,6 +3069,8 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 | `codex` | `GPT-5` | Shadowed Glimmering Moth | Consolidator / observation-only tidy-plan support (`019e5d`; hard/critical consolidation objective closed at `SOFT (20 soft)`, then Cycle 10/11 readiness notes broadcast without racing Eclipsed Cycle 9 or Wooded Cycle 10) | 2026-05-25 | 2026-05-25 |
 | `codex` | `GPT-5` | Thermal Buffeting Plume | Knowledge Curator (`019e5f`; role-substrate clarification, hard/critical curation completion, handoff/consolidation closeout) | 2026-05-25 | 2026-05-25 |
 | `codex` | `GPT-5` | Breezy Flowing Dock | Knowledge Curator (`019e5f`; critical/hard memory curation, napkin rotation, pending-graduations active shard, light handoff) | 2026-05-25 | 2026-05-25 |
+| `claude` | `claude-opus-4-7` | Mistbound Passing Candle | Plan author + executor (`e77243`; first session: n=2/coordination-efficiency survey + plan + integration. Second session post-compaction: WS4 first move PDR-078 §5 substrate-category amendment at `3ca71a40`; WS0 directed verdict (c)+partial(a) via LTAE-frame-test at `04d5cefa`; 6 commits pushed; 5 metacognition passes; owner-named NEVER-compress-findings-reactively rule integrated; lane partner with Quiet Whispering Veil for second session) | 2026-05-25 | 2026-05-25 |
+| `codex` | `GPT-5` | Quiet Whispering Veil | Knowledge Curator (`019e60`; second-session arrival; homed Mistbound's dense post-compaction napkin entry into live shard `pending-graduations/2026-05-25-mistbound-inherited-frame-and-hook-signal-candidates.md` with full substance preserved + 4-item disposition section; ran inherited-tree fitness gate as self-elected gate-runner; cured HARD on napkin via rotation not compression; team-member handoff to Mistbound for commits) | 2026-05-25 | 2026-05-25 |
 | `claude` | `claude-opus-4-7` | Misty Drifting Sail | Implementer / plan-AUTHOR (`02b325`, post-m1-attestation-tidy-up.plan.md Cycles 5+5a re-enqueue + held-items consolidation + 7 + 7.1 + 8 + 8a). Joined fresh under Lunar-Director routing 2026-05-24T22:10Z for commit-subject pre-flight (read-only), re-routed at 22:14Z to plan-AUTHOR under pure-direction split (Lunar = plan-OWNER, Misty = plan-AUTHOR, Mistbound = Commit Marshal). 7 cycles landed via Mistbound: `7c2f85f4` Cycle 5 (PDR-077 + reciprocals); `e8bc6781` Cycle 5a (PDR-079 + rule + hook); `93c4fdc0` held-items consolidation (README + practice-index PDR-077/078/079); `48c8ac22` Cycle 7 (ADR-186 + reciprocal §Related to ADR-183 + PDR-078 + practice-index line-165 fix); `75a2cd25` Cycle 7.1 (ADR-186 prettier-mangle repair); `9e57290d` Cycle 8 (SKILL §0.5 thin + PDR-078 Candidate→Accepted Adopted 2026-05-25 + reciprocal §Related to PDR-027/063/064). Cycle 8a ADR-187 (Claude self-modification authz cure-shape, WS-8 Lanternlit absorption — C2-near-term + C5-long-term + C4-fallback combination; C1/C3 rejected; 10 architectural conditions from Ferny WS-2 reviewer synthesis embedded; **4-reviewer absorption depth** docs-adr APPROVE-AS-IS + assumptions 2 CRITICAL + security 1 RES-CRITICAL + 5 MEDIUM + 1 LOW + wilma 2 RES-CRITICAL + 4 MEDIUM) authored 585 lines and **enqueued under intent `7e965431` / claim `e097d5a1`** awaiting marshal at compaction-prep time. Cycle 8a marshal blocked on Mistbound silence (≥83 min at wind-down; ping-before-escalate cure validated false-positive twice in session; sole-marshal binding means owner-class decision required). Surfaced 3 recurring failure modes for closeout consolidation: **heartbeat-content-drift** (3 Misty + 3+ Lunar instances of stale templated heartbeat body despite live state changes; graduation candidate: mechanical state-binding via structured field); **platform-wide Monitor cron-drift** (Misty 20-min + Lunar 17-min concurrent gaps at 23:28-23:47Z; graduation candidate: heartbeat-cron health-monitoring via existing watcher-staleness substrate); **ping-before-escalate cure validation** (cross-check git work-evidence before retirement-detection; validated twice in single session). Plan-author seat released 2026-05-25T00:35Z per Lunar's structural-stall wind-down at 00:33Z; team-member closeout broadcast `86d1fe2e`. **1 claim retained** for Cycle 8a marshal pickup (`e097d5a1`). | 2026-05-24 | 2026-05-25 |
 | `claude` | `claude-opus-4-7` | Mistbound Hiding Threshold | Sole Commit Marshal (`0e27cc`, post-m1-attestation-tidy-up.plan.md across compaction-5 resume → retirement; duty span ~8h35min 2026-05-24T21:08Z → 2026-05-25T05:47Z). 10 commits landed: `4575044e` Cycle 2 (Charcoal PDR-077 captures); `e8ca6d08` Cycle 3 (PDR-076a Accepted); `b7ac9938` Cycle 4 (PDR-076b Accepted); `7c2f85f4` Cycle 5 (PDR-077 + 063/064 reciprocals); `e8bc6781` Cycle 5a (PDR-079 + rule + hook); `9725ae09` Cycle 6 (PDR-078 Candidate); `93c4fdc0` held-items consolidation; `48c8ac22` Cycle 7 (ADR-186); `75a2cd25` Cycle 7.1 (ADR-186 prettier-mangle repair); `9e57290d` Cycle 8 (SKILL §0.5 + PDR-078 Adopted + reciprocals). Cycle 8a (intent `7e965431`) abandoned 23:26Z on husky format-issues; substantive work preserved as `??`+`M` in working tree for next author. Two false-positive retirement-detections fired (21:57Z Seaworthy + 22:57Z Lunar) — Director cure-discipline `cross-ref git log before escalation` named at 22:58Z + 23:01Z; pattern named for graduation. Branch-fitness-and-push-cadence.plan.md authored (16-cycle revised structure; 11 reviewer-driven revisions applied; uncommitted in tree). Marshal seat handed cleanly to Hushed Stalking Shade (`bc0a07`) via PDR-064 Moment-2 at 05:46Z (handoff record `.agent/state/collaboration/handoffs/2026-05-25-mistbound-to-hushed-stalking-shade-marshal-handoff.md`; Moment-1 broadcast `e2a21c5d`). Retired 2026-05-25T05:47Z. Closeout broadcast 05:47:50Z. | 2026-05-22 | 2026-05-25 |
 | `claude` | `claude-opus-4-7-1m` | Lush Sprouting Thicket | Implementer (codex-helper skill, codex-exec CLI, ADR-180, future plan) | 2026-05-12 | 2026-05-12 |
@@ -2955,7 +3853,7 @@ new bug rows added (B-02 queue CLI build-prelude coupling under
 parallel peer broken-build conditions; B-03 record-staged /
 verify-staged divergence after intervening rebuild). Workstream 4
 gains a new §Architectural seam subsection naming the cure as
-_decouple the queue CLI from agent-tools build health_, plus a
+*decouple the queue CLI from agent-tools build health*, plus a
 §Third-direction peer-commit absorption subsection that records the
 third direction (peer non-pathspec staging) alongside PDR-054
 (pre-hook) and PDR-059 (post-hook husky-chain) as the named third-
@@ -3664,16 +4562,16 @@ options to owner. Options were framed in optimisation vocabulary
 ("contractions", bulleted line-and-char savings, sizing as lead
 metric), which PDR-003 §Decision-2 explicitly forbids ("consolidation
 is curation, not optimisation"). Owner ended the thread before any
-practice.md mutation: _"you are talking about contractions instead of
+practice.md mutation: *"you are talking about contractions instead of
 careful curation of highly valuable knowledge, I am ending this now
-before any damage is done. This thread is over."_
+before any damage is done. This thread is over."*
 
 **Unlanded case** (PDR-026 deferral-honesty discipline):
 
-- _Attempted_: surface candidate shapes for owner direction on
+- *Attempted*: surface candidate shapes for owner direction on
   practice.md HARD-char pressure (31,870 / 30,500), opening the
   examination lane named in the prior session's Next Safe Step.
-- _Prevented_: agent's own framing failure — read PDR-003 then
+- *Prevented*: agent's own framing failure — read PDR-003 then
   violated its §Decision-2 by framing analysis in line-savings
   vocabulary. The failure was visible to the owner via the word
   "contractions" plus bulleted save-counts. An earlier in-session
@@ -3681,7 +4579,7 @@ before any damage is done. This thread is over."_
   context to do a good job") was acted on for the self-containment
   dimension (no Core → ADR pointers) but not for the
   curation-vs-optimisation dimension.
-- _Falsifiability_: a future session has re-attempted this
+- *Falsifiability*: a future session has re-attempted this
   examination correctly IFF (a) it reads the trinity +
   `practice-verification.md` at session-open before any analysis,
   (b) it leads any surfacing with role-questions per section
@@ -3721,7 +4619,7 @@ before any damage is done. This thread is over."_
   — not touched.
 
 **Owner direction captured**: the framing failure was visible
-_because of vocabulary_, not because of substance. The cure is at
+*because of vocabulary*, not because of substance. The cure is at
 the vocabulary layer first, posture layer second, governance-knowledge
 layer third (governance was already in hand). PDR-003 §Decision-2
 already names this exactly; no new doctrine to author. The diagnosis
@@ -4300,9 +5198,9 @@ claude-code / claude-opus-4-7-1m / `58a9ad`).
 **Session arc continuation**: same session as the dedicated drain
 arc below. After surfacing Phase 3's "HARD persists" residual
 shape for owner direction, the owner reframed the diagnosis: the
-HARD limit was _arbitrarily calibrated_ against a frame that
+HARD limit was *arbitrarily calibrated* against a frame that
 doesn't fit this register's lifecycle. `principles.md` is loaded
-every session by every agent — small _is_ the quality signal.
+every session by every agent — small *is* the quality signal.
 `pending-graduations.md` is accessed at consolidation passes only
 and grows with cross-session-wait substance — its limits should
 reflect a queue lifecycle, not a permanent-doc shape. The
@@ -4676,16 +5574,16 @@ wrong-file landing in a subsequent graduation, per plan §6 lifecycle.
   (`2026-05-06-collaboration-state-lifecycle-deep-exploration-opener.md`)
   marked `status: superseded` with frontmatter pointer; preserved as
   historical context, will archive at next consolidation.
-- Napkin entry capturing the recurring pattern: _graduation-flow
+- Napkin entry capturing the recurring pattern: *graduation-flow
   inertia produces wrong-file landings; the cure is a placement
-  contract authored before the next graduation, not after._
+  contract authored before the next graduation, not after.*
 - Comms-event posted as discovery seed (no overlap at session open;
   active claims empty).
 
 **Decision shape**: deep-exploration step folded into a contract
 because the substance-led read converged on one repeating pattern
-across N findings. Owner direction at decision point: _contract +
-plan + surface updates, no reflection report._
+across N findings. Owner direction at decision point: *contract +
+plan + surface updates, no reflection report.*
 
 **Next safe step (post-Phase-2 update)**: process the napkin and
 pending-graduations register without limiting destination-file fitness.
@@ -5312,10 +6210,10 @@ deferred to next pass)**:
    to PDR-046 as the orchestration rule the per-write rule composes
    with. Status `due` in pending-graduations; not bundled with this
    commit.
-2. _PDR shape forces rationale to surface_ — single-instance
+2. *PDR shape forces rationale to surface* — single-instance
    observation from PDR-046 drafting; PDR-014 amendment or new
    pattern; trigger: second instance OR owner direction.
-3. _Cross-Core PDR↔PDR connective tissue is load-bearing_ —
+3. *Cross-Core PDR↔PDR connective tissue is load-bearing* —
    single-instance observation from PDR-046 drafting; PDR-007
    amendment or decision-records README extension; trigger: second
    instance OR owner direction.
@@ -5338,11 +6236,11 @@ limits (well within target 1000 / limit 1400). All gates green.
 
 **Last refreshed**: 2026-05-04 (Fronded Flowering Thicket /
 claude-code / claude-opus-4-7-1m / `7c8381`). Owner articulated a
-layered-processing methodology mid-pass: _pick a layer, fully
+layered-processing methodology mid-pass: *pick a layer, fully
 process it without worry about the fitness functions in the targets,
 then move up a layer and process the next layer without worry about
 the fitness in the targets, and so on, until all knowledge is
-preserved first and the fitness constraints are met second._
+preserved first and the fitness constraints are met second.*
 
 **Layer-1 (napkin → distilled) complete this session.** Napkin
 rotated 785→105 lines; previous active napkin archived to
@@ -5440,9 +6338,9 @@ directives (`validation-strategy.md` umbrella, `testing-strategy.md` slimmed,
 of the deepened doctrine. Session deliverables S1–S4 land in the same
 session as the index. Future plans P1–P6 are sequenced in the index
 with explicit `depends_on` edges. Foundational reframing (load-bearing
-for the entire arc): _a test does not verify code; a test describes a
+for the entire arc): *a test does not verify code; a test describes a
 system state, and product code is the path that guides the system into
-that state. Test and product code are two halves of one act of design._
+that state. Test and product code are two halves of one act of design.*
 
 ---
 
@@ -5470,22 +6368,22 @@ excellence direction):
    plan-body promotion-readiness review, dependency refresh, and
    active-plans index update.
 
-**Owner correction load-bearing for next session:** _"we never take
+**Owner correction load-bearing for next session:** *"we never take
 the fast path we ONLY take the path that maximises long-term
 architectural excellence; we never undertake opportunistic trimming,
 we ONLY apply thoughtful holistic analysis to knowledge preservation
-and discoverability."_ I performed the rush failure mode mid-
-consolidation — named _bootstrap fast-path should not pay full
-coordination cost_ as a graduation candidate, framing real CLI-
-ergonomics evidence under a _conditional-discipline shape_ (skip
+and discoverability."* I performed the rush failure mode mid-
+consolidation — named *bootstrap fast-path should not pay full
+coordination cost* as a graduation candidate, framing real CLI-
+ergonomics evidence under a *conditional-discipline shape* (skip
 queue when registry empty). The candidate produces three entropy
 products: per-turn evaluation cost, silent condition decay under
-rush, wrong-corrective-shape (right move is _fix the ergonomics_,
-not _make the discipline contingent_). Withdrawn from
+rush, wrong-corrective-shape (right move is *fix the ergonomics*,
+not *make the discipline contingent*). Withdrawn from
 [`pending-graduations.md`](../pending-graduations.md) with
 rationale; genuine substance routes to the CLI ergonomics plan
 above. Same rush impulse appeared in framing napkin CRITICAL
-fitness as _"informational, not actioned in this light pass"_ —
+fitness as *"informational, not actioned in this light pass"* —
 collapsed an ADR-144 loop-health alarm into a defer-shape with no
 named constraint.
 
@@ -5496,8 +6394,8 @@ each rush move treats itself as one-time cost while every move has
 maintenance externalities; fence accumulation without generator-
 naming is microstate proliferation around an unchanged macrostate.
 Three structural cues forward: (1) vocabulary trip-list at output
-time — _fast path_, _quick fix_, _for later_, _informational not
-actioned_, _defer_, _light pass exempts_ are the impulse making
+time — *fast path*, *quick fix*, *for later*, *informational not
+actioned*, *defer*, *light pass exempts* are the impulse making
 itself visible; (2) conditional-discipline check — does the proposed
 candidate introduce a "case where the rule doesn't apply"? if yes,
 re-frame under long-term excellence; (3) first-principles framing
@@ -5516,10 +6414,10 @@ this thread record and `repo-continuity.md` after the handoff
 landed but before the changes were staged. Both files were re-
 applied from session memory under owner direction. The napkin,
 pending-graduations register, experience file, and `~/.claude.json`
-MCP swap survived the revert intact. Per owner direction _"any
-prevention or additional signal would be very welcome"_ the
-friction was captured at depth in napkin (_markdown shared-state
-writes have no collision safety_) with a five-prevention-shape
+MCP swap survived the revert intact. Per owner direction *"any
+prevention or additional signal would be very welcome"* the
+friction was captured at depth in napkin (*markdown shared-state
+writes have no collision safety*) with a five-prevention-shape
 analysis, and a new pending-graduations candidate was added that
 routes to this thread's existing future-plan home
 [`collaboration-state-domain-model-and-comms-reliability.plan.md`](../../../plans/agent-tooling/future/collaboration-state-domain-model-and-comms-reliability.plan.md).
@@ -5951,13 +6849,15 @@ and
 - **Thread purpose**: Practice and documentation-structure improvements,
   especially knowledge-flow roles, directive fitness pressure, and durable
   homing of agent-entrypoint content.
-- **Branch**: `fix/sonar-fixes-20260506` (current memory/state substrate
-  closure and doctor-preflight lane)
+- **Branch**: `docs/agent-collaboration-enhancements`
 
 ## Participating Agent Identities
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Airy Whirling Current` | `claude` | `claude-opus-4-7` | `3624a5` | `phase-0c-cycles-9-10-11-implementer; landed-to-id-required-cli-flag-dee89e09; landed-legacy-fallback-diagnostic-with-DI-seam-6dad98b0; landed-write-side-type-cure-after-owner-challenge-on-deferral-597b0945; reviewer-dispatch-code-expert-plus-type-expert-on-sonnet-both-approved; metacognition-correction-reviewer-verdicts-are-information-not-authority-captured-in-distilled; phase-0-proof-contract-id-0-through-id-3-all-in-code; tests-698-to-707-plus-9-across-cycles-9-10-11` | 2026-05-26 | 2026-05-26 |
+| `Feathered Flying Cloud` | `codex` | `GPT-5` | `019e65` | `hard-memory-curation-pass-plus-cross-platform-memory-import; routed critical-hard memory pressure without compression; imported Claude-Codex-Cursor-remember candidates into durable repo homes; targeted-markdownlint-git-diff-check-and-diff-local-path-scan-pass; full-pnpm-check-deferred-behind-active-peer-owned-agent-tools-WIP` | 2026-05-26 | 2026-05-26 |
+| `Prismatic Transiting Star` | `codex` | `GPT-5` | `019e60` | `distilled-processing-and-practice-fitness-inventory; kept-distilled-as-curated-learning-register-with-frontmatter; graduated-settled-lessons-to-gates-build-system-commit-continuity-practice-AGENT-and-agent-tools-README; added-ready-empty-and-healthy-zone-reporting-plus-drainable-buffer-content-role-axis-plus-behaviour-tests; ADR-144-content-role-amendment; closeout-handoff-and-consolidation-targeted-validation` | 2026-05-25 | 2026-05-25 |
 | `Ferny Fruiting Root` | `claude` | `claude-opus-4-7` | `ee16a4` | `implementer-this-Scorched-Director-window-2026-05-23; investigated-pnpm-check-RED-classification-D-Playwright-browser-missing-local-cache-event-a7b00c3d-cured-via-pnpm-exec-playwright-install-with-deps-chromium-as-agent-action-not-owner-action; orphan-absorption-x4-Class-B-sha-prefix-activation-Cycle-1-cc3039eb-Pearly-S7735-Cycle-2-845a3e90-ADR-185-v2-Cycle-4-5320d6b0-PDR-076-v2-Cycle-9-db4d8b3a; pattern-author-substrate-pointer-read-as-current-state-md-v1-plus-v2-absorbing-5-Wilma-amendments-from-Charcoal-dispatch-self-attestation-surfaced-Charcoal-ship-verdict-pending; PDR-076-v2-dual-reviewer-dispatch-assumptions-expert-CONCERNS-architecture-expert-fred-ISSUES-FOUND-v2-absorbed-5-scope-areas-CRITICAL-1-PDR-027-sequencing-conditionality-CRITICAL-2-phantom-additive-then-strict-precedent-struck-Cascade-trim-PDR-064-added-to-Related-PDR-073-vocabulary-fixed-PDR-029-amendment-added; plan-Wilma-dispatched-on-FM-2-P2-session-open-env-freshness-check-verdict-SAFE-WITH-CONDITIONS-4-conditions-plus-2-UNSAFE-findings-subagent-a2e16a2e367255e07-routing-disposition-pending-Scorched; three-substrate-broadcasts-9c240ce5-FM-1-FM-2-BN-1-bundle-a4204904-Director-routing-failure-mode-owner-action-not-cure-correction-worked-instance-755-empirical-Playwright-install-policy-test; named-by-owner-and-Scorched-as-five-substantive-deliveries-this-Director-window` | 2026-05-23 | 2026-05-23 |
 | `Shadowed Hiding Shade` | `claude` | `claude-opus-4-7[1m]` | `e35155` | `deep-graduation-pass-under-owner-direction-drains-owner-direction-gated-buffer-entries; 8-tier-a-doctrine-landings-5-new-rules-2-pdrs-proposed-1-pattern-plus-tdd-as-design-amendment-1-directive-amendment-session-handoff-skill-amendments; 9-tier-b-captures-6-patterns-2-pdrs-draft-1-skill-amendment; 5-tier-c-per-user-memory-marker-updates; commit-a49e7a21-34-files-1983-163; worked-instance-of-pdr-068-consumer-cadence-cure; surfaced-vocabulary-gate-as-menu-when-it-was-sop-owner-correction-captured` | 2026-05-22 | 2026-05-22 |
 | `Shaded Creeping Cloak` | `claude` | `claude-opus-4-7-1m` | `4ef359` | `disposed-5-under-disposed-ws1-5-ws0-reviewer-findings-all-absorb-d1-typed-term-reconstruction-error-with-sibling-file-extraction-d2-exhaustive-switches-with-default-never-n1-utf8-arg-dropped-n2-ambient-algorithm-narrowing-reverted-n3-class-b-exec-memory-line-refs-produced-ten-rows; landed-continuity-corrections-from-prior-session-handoff-with-closure-pressure-research-and-exploration-plan-artefacts; presented-ws0-ledger-for-owner-review-no-partial-ws0-remainders; ran-consolidation-pass-with-over-correction-during-absorption-candidate-captured; surfaced-and-captured-review-as-re-decision-failure-mode-after-owner-correction; eight-commits-e0e9ad0d-2d38cb27-ccfe8948-db5b8bc0-21579675-45e54736-c3627b69-340bdbda` | 2026-05-20 | 2026-05-20 |
@@ -6021,15 +6921,15 @@ and
 | `Mossy Creeping Branch` | `codex` | `GPT-5` | `019dd3` | `codex-session-identity-plumbing-current-slice-and-doctrine-propagation` | 2026-04-28 | 2026-04-28 |
 | `Verdant Flowering Blossom` | `codex` | `GPT-5` | `019dd3` | `hook-test-io-remediation-and-shared-state-sweep-policy-closeout` | 2026-04-28 | 2026-04-28 |
 | `Woodland Creeping Petal` | `codex` | `GPT-5` | `019dd3` | `collaboration-state-write-safety-current-plan-implementation` | 2026-04-28 | 2026-04-28 |
-| `Pelagic Drifting Sail` | `codex` | `GPT-5` | _`unknown`_ | `agent-work-ownership-and-workspace-layer-doctrine-handoff-consolidation-commit-closeout` | 2026-04-28 | 2026-04-28 |
-| `Codex` | `codex` | `GPT-5` | _`unknown`_ | `practice-docs-consolidation; markdown-code-block-rule; collab-terminology-handoff; WS5-evidence-harvest-review; WS3-plan-split; session-handoff; WS3A-RED-fixtures; WS3A-claim-history-GREEN; WS3A-handoff; WS3A-decision-thread-GREEN; WS3A-observability-and-close; WS3A-handoff-consolidation; next-session-start-statement; final-session-handoff; WS4A-lifecycle-integration; WS4A-plan-state-cleanup; reviewer-norm-correction; consolidate-docs-closeout; learning-before-fitness-correction; commit-window-protocol; lock-wait-nuance; commit-bundle-evidence-taxonomy; ws3b-joint-decision-status-reconciliation; same-branch-friction-metacognition; session-handoff-under-active-commit-claim; deterministic-agent-identity-implementation; identity-session-handoff-consolidation; practice-tool-feedback-and-collaboration-state-domain-model-preservation` | 2026-04-24 | 2026-04-28 |
-| `Codex` | `cursor` | `GPT-5.5` | _`unknown`_ | `grouped-commit-closeout; openapi-pipeline-api-boundary; ooc-issues-1-threads; bug-report-2026-03-07-stale-callout; session-handoff` | 2026-04-24 | 2026-04-26 |
-| `Composer` | `cursor` | `Composer` | _`unknown`_ | `mcp-apps-widget-metadata; user-search-query-no-widget-uri; testing-strategy-integration-tests; session-handoff; cursor-sessionstart-hook-identity-mirror-docs-tests` | 2026-04-26 | 2026-04-27 |
-| `Jazzy` | `claude-code` | `claude-sonnet-4-6` | _`unknown`_ | `multi-agent-collaboration-protocol-plan-author-wilma-review-absorbed` | 2026-04-25 | 2026-04-25 |
-| `Jiggly Pebble` | `claude-code` | `claude-opus-4-7-1m` | _`unknown`_ | `multi-agent-collaboration-protocol-WS0-foundation-landed-as-63c66c88` | 2026-04-25 | 2026-04-25 |
-| `Fresh Prince` | `claude-code` | `claude-opus-4-7-1m` | _`unknown`_ | `multi-agent-collaboration-protocol-WS1-landed-as-a5d33519; pending-graduations promotion pass landed as f1f28e85 (PDR-029 v2 + PDR-015 + PDR-018 + register hygiene + validator extension)` | 2026-04-25 | 2026-04-25 |
-| `Sturdy Otter` | `claude-code` | `claude-opus-4-7-1m` | _`unknown`_ | `ws3a-ws4a-backlog-cleanup-13-commits-under-3-agent-contention (382ba258..36364988); learning-before-fitness-application; intent-to-commit-and-session-counter-future-plan (9af63a84, d9c65f04); joint-agent-decision-protocol-future-plan-and-WS3B-promotion-gate-satisfied (6769a1f9); phase-transition-evidence-recorded; clash-taxonomy-A-substitution-B-disappearance-C-accretion-named` | 2026-04-26 | 2026-04-26 |
-| `Frolicking Toast` | `claude-code` | `claude-opus-4-7-1m` | _`unknown`_ | `chunked-commit-stewardship-under-active-claim-4535f2ff; commit-window-protocol-self-application; consolidation-graduation-pass-7be10d3b-7-doctrine-entries-graduated-cb358e8d-local-push-deferred-on-parallel-track-lint-coupling` | 2026-04-26 | 2026-04-26 |
+| `Pelagic Drifting Sail` | `codex` | `GPT-5` | *`unknown`* | `agent-work-ownership-and-workspace-layer-doctrine-handoff-consolidation-commit-closeout` | 2026-04-28 | 2026-04-28 |
+| `Codex` | `codex` | `GPT-5` | *`unknown`* | `practice-docs-consolidation; markdown-code-block-rule; collab-terminology-handoff; WS5-evidence-harvest-review; WS3-plan-split; session-handoff; WS3A-RED-fixtures; WS3A-claim-history-GREEN; WS3A-handoff; WS3A-decision-thread-GREEN; WS3A-observability-and-close; WS3A-handoff-consolidation; next-session-start-statement; final-session-handoff; WS4A-lifecycle-integration; WS4A-plan-state-cleanup; reviewer-norm-correction; consolidate-docs-closeout; learning-before-fitness-correction; commit-window-protocol; lock-wait-nuance; commit-bundle-evidence-taxonomy; ws3b-joint-decision-status-reconciliation; same-branch-friction-metacognition; session-handoff-under-active-commit-claim; deterministic-agent-identity-implementation; identity-session-handoff-consolidation; practice-tool-feedback-and-collaboration-state-domain-model-preservation` | 2026-04-24 | 2026-04-28 |
+| `Codex` | `cursor` | `GPT-5.5` | *`unknown`* | `grouped-commit-closeout; openapi-pipeline-api-boundary; ooc-issues-1-threads; bug-report-2026-03-07-stale-callout; session-handoff` | 2026-04-24 | 2026-04-26 |
+| `Composer` | `cursor` | `Composer` | *`unknown`* | `mcp-apps-widget-metadata; user-search-query-no-widget-uri; testing-strategy-integration-tests; session-handoff; cursor-sessionstart-hook-identity-mirror-docs-tests` | 2026-04-26 | 2026-04-27 |
+| `Jazzy` | `claude-code` | `claude-sonnet-4-6` | *`unknown`* | `multi-agent-collaboration-protocol-plan-author-wilma-review-absorbed` | 2026-04-25 | 2026-04-25 |
+| `Jiggly Pebble` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `multi-agent-collaboration-protocol-WS0-foundation-landed-as-63c66c88` | 2026-04-25 | 2026-04-25 |
+| `Fresh Prince` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `multi-agent-collaboration-protocol-WS1-landed-as-a5d33519; pending-graduations promotion pass landed as f1f28e85 (PDR-029 v2 + PDR-015 + PDR-018 + register hygiene + validator extension)` | 2026-04-25 | 2026-04-25 |
+| `Sturdy Otter` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `ws3a-ws4a-backlog-cleanup-13-commits-under-3-agent-contention (382ba258..36364988); learning-before-fitness-application; intent-to-commit-and-session-counter-future-plan (9af63a84, d9c65f04); joint-agent-decision-protocol-future-plan-and-WS3B-promotion-gate-satisfied (6769a1f9); phase-transition-evidence-recorded; clash-taxonomy-A-substitution-B-disappearance-C-accretion-named` | 2026-04-26 | 2026-04-26 |
+| `Frolicking Toast` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `chunked-commit-stewardship-under-active-claim-4535f2ff; commit-window-protocol-self-application; consolidation-graduation-pass-7be10d3b-7-doctrine-entries-graduated-cb358e8d-local-push-deferred-on-parallel-track-lint-coupling` | 2026-04-26 | 2026-04-26 |
 | `Riverine Navigating Hull` | `claude-code` | `claude-opus-4-7-1m` | `c32a7d1d` | `agent-identity-derivation-phase-8-claude-code-platform-alignment-review-and-statusline-wiring` | 2026-04-27 | 2026-04-27 |
 | `Celestial Waxing Eclipse` | `codex` | `GPT-5` | `019dcd` | `codex-thread-id-discovery-and-agent-identity-seed-wiring; codex-title-statusline-display-surface-investigation` | 2026-04-27 | 2026-04-27 |
 | `Pelagic Washing Sail` | `codex` | `gpt-5` | `019dca9c` | `collaboration-fitness-vocabulary-cross-vendor-note-commit-queue-handoff-and-closeout` | 2026-04-27 | 2026-04-27 |

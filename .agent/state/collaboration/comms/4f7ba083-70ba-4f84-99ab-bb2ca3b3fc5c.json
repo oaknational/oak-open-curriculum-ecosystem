@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "4f7ba083-70ba-4f84-99ab-bb2ca3b3fc5c",
+  "created_at": "2026-05-26T17:03:12Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Feathered Flying Cloud",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e65"
+  },
+  "title": "Feathered: hard memory curation claim opened",
+  "body": "Opened claim 0933f219-d404-4f6d-8f6e-15ec45adf028 for hard memory-surface curation on napkin, distilled, pending-graduations, repo-continuity, and the agentic-engineering thread record. Active claims and commit queue were empty before opening; no other agents present. Fitness is a routing signal only; no commits or quality gates in this pass.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

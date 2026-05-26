@@ -1,3 +1,4 @@
+import { sameAgentRoutingKey } from './active-agent-routing.js';
 import {
   type CollaborationAgentId,
   type CommsEvent,
@@ -21,11 +22,9 @@ import {
  *   another agent, or narratives whose `audience` is set but excludes the
  *   agent. **Incidental visibility, not a change to the agent's work
  *   contract**: observed events do not impose action on the agent. They
- *   exist so the broad-awareness contract
- *   ([`start-right-team` SKILL §0](../../../.agent/skills/start-right-team/SKILL-CANONICAL.md))
- *   holds — the comms event stream is canonical truth, and an agent
- *   watching it sees every non-self event, applying relevance triage in
- *   their own reasoning rather than at the watcher boundary.
+ *   exist so the broad-awareness contract per
+ *   `.agent/rules/comms-all-channels-watcher.md` holds — agents apply
+ *   relevance triage in their own reasoning, not at the watcher boundary.
  * - `lifecycle`: structured lifecycle moment (session, claim, consolidation).
  *
  * Sync-urgent messages are not a separate kind today: they are carried by
@@ -115,10 +114,11 @@ export async function drainRelevantEvents(input: {
 }
 
 function isSelfAuthored(event: CommsEvent, self: CollaborationAgentId): boolean {
-  const author = authorOf(event);
-  return (
-    author.agent_name === self.agent_name && author.session_id_prefix === self.session_id_prefix
-  );
+  // PDR-076a id-aware self-exclusion. Routes via sameAgentRoutingKey so the
+  // id-keyed branch disambiguates the (same-name + same-prefix + different-id)
+  // collision case the plan was authored to cure; legacy/legacy pairs fall
+  // back to (name, prefix) equality unchanged.
+  return sameAgentRoutingKey(authorOf(event), self);
 }
 
 function authorOf(event: CommsEvent): CollaborationAgentId {
@@ -126,18 +126,15 @@ function authorOf(event: CommsEvent): CollaborationAgentId {
 }
 
 function classifyDirected(event: DirectedCommsMessage, self: CollaborationAgentId): EventView {
-  return event.to.agent_name === self.agent_name &&
-    event.to.session_id_prefix === self.session_id_prefix
-    ? 'directed'
-    : 'observed';
+  return sameAgentRoutingKey(event.to, self) ? 'directed' : 'observed';
 }
 
 function classifyNarrative(event: NarrativeCommsEvent, self: CollaborationAgentId): EventView {
   if (event.addressed_to !== undefined) {
-    return event.addressed_to === self.agent_name ? 'directed' : 'observed';
+    return sameAgentRoutingKey(event.addressed_to, self) ? 'directed' : 'observed';
   }
   if (event.audience !== undefined) {
-    return event.audience.includes(self.agent_name) ? 'group' : 'observed';
+    return event.audience.some((a) => sameAgentRoutingKey(a, self)) ? 'group' : 'observed';
   }
   return 'broadcast';
 }
@@ -241,8 +238,10 @@ function formatIdentity(agent: CollaborationAgentId): string {
 }
 
 function formatNarrativeAddressee(event: NarrativeCommsEvent): string {
-  return (
-    event.addressed_to ??
-    (event.audience === undefined ? 'BROADCAST' : `GROUP(${event.audience.join(', ')})`)
-  );
+  if (event.addressed_to !== undefined) {
+    return formatIdentity(event.addressed_to);
+  }
+  return event.audience === undefined
+    ? 'BROADCAST'
+    : `GROUP(${event.audience.map(formatIdentity).join(', ')})`;
 }

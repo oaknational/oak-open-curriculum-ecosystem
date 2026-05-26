@@ -18,7 +18,7 @@ const legacyNarrativeSchema = z.strictObject({
   author: agentIdSchema,
   title: nonEmptyString,
   body: nonEmptyString,
-  audience: z.array(nonEmptyString).optional(),
+  audience: z.array(nonEmptyString).min(1).optional(),
   addressed_to: nonEmptyString.optional(),
   in_response_to: nonEmptyString.optional(),
   in_reply_to: nonEmptyString.optional(),
@@ -62,6 +62,18 @@ export function migrateLegacyCommsRecordCollections(input: {
   ].toSorted((left, right) => left.event_id.localeCompare(right.event_id));
 }
 
+function legacyStringToAgentId(name: string): CollaborationAgentId {
+  process.stderr.write(
+    `[comms-migration] legacy string-form addressed_to/audience entry "${name}" migrated with unknown platform/model/session_id_prefix; new writes use tuple form per PDR-027\n`,
+  );
+  return {
+    agent_name: name,
+    platform: 'unknown',
+    model: 'unknown',
+    session_id_prefix: 'unknown',
+  };
+}
+
 function toNarrativeEvent(value: z.output<typeof legacyNarrativeSchema>): CommsEvent {
   return {
     schema_version: '2.0.0',
@@ -71,8 +83,12 @@ function toNarrativeEvent(value: z.output<typeof legacyNarrativeSchema>): CommsE
     author: agentId(value.author),
     title: value.title,
     body: value.body,
-    ...(value.audience === undefined ? {} : { audience: value.audience }),
-    ...(value.addressed_to === undefined ? {} : { addressed_to: value.addressed_to }),
+    ...(value.audience === undefined
+      ? {}
+      : { audience: value.audience.map(legacyStringToAgentId) }),
+    ...(value.addressed_to === undefined
+      ? {}
+      : { addressed_to: legacyStringToAgentId(value.addressed_to) }),
     ...(value.in_response_to === undefined ? {} : { in_response_to: value.in_response_to }),
     ...(value.in_reply_to === undefined ? {} : { in_reply_to: value.in_reply_to }),
   };

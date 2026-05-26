@@ -361,9 +361,81 @@
             "(historical reference)"
           ],
           "citation": "Moving targets do not belong in permanent docs (PDR-079 portable surfaces only — ADRs are repo-bound and out of scope)"
+        },
+        {
+          "pattern": "for owner verdict",
+          "kind": "literal",
+          "include_paths": [
+            ".agent/practice-core/",
+            ".agent/plans/",
+            "docs/architecture/",
+            "docs/governance/",
+            "**/*.plan.md"
+          ],
+          "exclude_paths": [
+            "principles.md",
+            "distilled.md",
+            "PDR-043",
+            "PDR-044",
+            "PDR-047",
+            "archive/",
+            "fixtures/",
+            "/tests/",
+            ".test.ts",
+            "re-apply-first-question-at-elaboration-boundaries.md"
+          ],
+          "citation": "re-apply-first-question-at-elaboration-boundaries.md; principles.md §Architectural Excellence Over Expediency"
+        },
+        {
+          "pattern": "for owner decision",
+          "kind": "literal",
+          "include_paths": [
+            ".agent/practice-core/",
+            ".agent/plans/",
+            "docs/architecture/",
+            "docs/governance/",
+            "**/*.plan.md"
+          ],
+          "exclude_paths": [
+            "principles.md",
+            "distilled.md",
+            "PDR-043",
+            "PDR-044",
+            "PDR-047",
+            "archive/",
+            "fixtures/",
+            "/tests/",
+            ".test.ts",
+            "re-apply-first-question-at-elaboration-boundaries.md"
+          ],
+          "citation": "re-apply-first-question-at-elaboration-boundaries.md; principles.md §Architectural Excellence Over Expediency"
+        },
+        {
+          "pattern": "for owner ratification",
+          "kind": "literal",
+          "include_paths": [
+            ".agent/practice-core/",
+            ".agent/plans/",
+            "docs/architecture/",
+            "docs/governance/",
+            "**/*.plan.md"
+          ],
+          "exclude_paths": [
+            "principles.md",
+            "distilled.md",
+            "PDR-043",
+            "PDR-044",
+            "PDR-047",
+            "archive/",
+            "fixtures/",
+            "/tests/",
+            ".test.ts",
+            "re-apply-first-question-at-elaboration-boundaries.md"
+          ],
+          "citation": "re-apply-first-question-at-elaboration-boundaries.md; principles.md §Architectural Excellence Over Expediency"
         }
       ],
-      "description": "Block agents from writing user-approved markers into file content (only the project owner can approve eslint-disable approvals with the JC: prefix). The path-scoped scoped_blocks are write-time fingerprints per PDR-044 §Innate immunity. Two kinds: (literal) the hedging-vocabulary trip-list — language that means 'I know the rule applies, but this situation is special' rejected on doctrine surfaces (PDRs, plans, ADRs, governance), with doctrine-defining surfaces excluded so principles.md, distilled.md, PDR-043 and PDR-044 may catalogue the words they forbid; (regex) the SHA-in-permanent-doc fingerprint — 7- to 40-character hex tokens with at least one a-f character on portable-permanent-doc paths (practice-core, rules, memory/active/patterns, principles.md, testing-strategy.md; ADRs are repo-bound and out of scope per PDR-079), with fenced code blocks, inline-code spans, and `(historical reference)` marker lines excluded so the discipline 'moving targets do not belong in permanent docs' (distilled.md) is enforced at write-time without tripping intentional code-block examples or explicit historical citations. PDR-044 names false positives as a design property of the innate layer."
+      "description": "Block agents from writing user-approved markers into file content (only the project owner can approve eslint-disable approvals with the JC: prefix). The path-scoped scoped_blocks are write-time fingerprints per PDR-044 §Innate immunity. Three kinds: (literal) the hedging-vocabulary trip-list — language that means 'I know the rule applies, but this situation is special' rejected on doctrine surfaces (PDRs, plans, ADRs, governance), with doctrine-defining surfaces excluded so principles.md, distilled.md, PDR-043 and PDR-044 may catalogue the words they forbid; (regex) the SHA-in-permanent-doc fingerprint — 7- to 40-character hex tokens with at least one a-f character on portable-permanent-doc paths (practice-core, rules, memory/active/patterns, principles.md, testing-strategy.md; ADRs are repo-bound and out of scope per PDR-079), with fenced code blocks, inline-code spans, and `(historical reference)` marker lines excluded so the discipline 'moving targets do not belong in permanent docs' (distilled.md) is enforced at write-time without tripping intentional code-block examples or explicit historical citations; (literal) the menu-framing trip-list — owner-decision phrasings ('for owner verdict' / 'for owner decision' / 'for owner ratification') rejected on architectural surfaces ('for owner approval' was considered and rejected at design time — too high false-positive rate in legitimate governance prose) (plans, PDRs, ADRs, governance) so menu-shaped option-sets do not slip past the re-apply-first-question-at-elaboration-boundaries discipline; the rule file itself is excluded so it may catalogue the phrases it forbids. PDR-044 names false positives as a design property of the innate layer."
     },
     "sessionStart": {
       "grounding_reminder": "Read .agent/directives/AGENT.md and .agent/memory/active/distilled.md before starting work.",

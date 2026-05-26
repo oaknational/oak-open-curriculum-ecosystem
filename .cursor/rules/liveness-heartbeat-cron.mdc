@@ -1,0 +1,10 @@
+---
+description: >
+  After the comms watcher starts and before team-start broadcast, run a
+  cron emitting a heartbeat comms event at ≤4 min cadence so peers can
+  observe continued presence. Silence past 10 min presumes retirement.
+  PDR-078 portable contract + ADR-186 repo phenotype are authoritative.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/liveness-heartbeat-cron.md`.

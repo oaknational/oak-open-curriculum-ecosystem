@@ -6,6 +6,25 @@ description: Apply repository start-right grounding plus team bootstrapping for 
 
 # Start Right (Team)
 
+## Mode Selection
+
+This SKILL is mode-aware. Read the section that matches your role; the rest
+remains background.
+
+- **sole-contributor**: solo session on a multi-agent-shaped thread. Run
+  §"Non-Negotiable Foundation" and §"First Moves" (collapsing §1 peer-wait
+  and §1a gate-runner election to a single self-run pass), skip §3
+  temporary-responsibility coordination, and close out per §Closeout
+  Contract "natural-boundary closeout".
+- **team-closeout-owner**: the agent named to own the full session
+  handoff. Run every section end-to-end including §Closeout Contract
+  natural-boundary closeout AND the consolidator role inside §3.
+- **team-member-non-closeout-owner**: participating agent not owning the
+  closeout. Run §"Non-Negotiable Foundation" and §"First Moves" in full,
+  participate in §3 temporary-responsibility coordination, and close out
+  per §Closeout Contract "Team member closeout" (the boundary-scoped
+  synthesis, not the full handoff workflow).
+
 ## Goal
 
 Run the same shared repository foundation as `start-right-quick`, then add the
@@ -64,12 +83,15 @@ contract. Keep it lightweight and revisable.
 Every participating agent in every team session executes these moves in
 order, before any non-planning source edit:
 
-1. **Start the all-channels comms monitor** (§0 — required precondition
-   for incoming visibility; the agent sees every event the team emits).
-2. **Start the liveness heartbeat cron** (§0.5 — required precondition
-   for outgoing visibility; the team sees every active agent's
-   continued presence at ≤4 min cadence, distinguishing live agents
-   from retired ones).
+1. **Start the all-channels comms monitor** (see
+   [`.agent/rules/comms-all-channels-watcher.md`](../../rules/comms-all-channels-watcher.md)
+   — required precondition for incoming visibility; the agent sees every
+   event the team emits).
+2. **Start the liveness heartbeat cron** (see
+   [`.agent/rules/liveness-heartbeat-cron.md`](../../rules/liveness-heartbeat-cron.md)
+   — required precondition for outgoing visibility; the team sees every
+   active agent's continued presence at ≤4 min cadence, distinguishing
+   live agents from retired ones).
 3. **Post a team-start report** broadcast (§1 — §1 is the umbrella
    "Register Presence" section that owns the broadcast format AND the
    coordination rules; the broadcast declares identity, foundation
@@ -122,310 +144,8 @@ coordination rule in §1 and the cycle-overlap coordination rule below.
 Source-work starting BEFORE the inherited-tree gate-state is verified
 is the second failure mode this order exists to prevent — see §1a.
 Silent agent retirement going undetected by the team is the third
-failure mode this order exists to prevent — see §0.5.
-
-### 0. Start The All-Channels Comms Monitor (non-negotiable)
-
-**Communication is the absolute heart of multi-agent work.** Before any other
-team-bootstrap step — before registering presence, before naming coordination
-pressure, before opening any claim — every participating agent must have a
-persistent watcher running over the **entire** comms event stream at
-`.agent/state/collaboration/comms/`.
-
-The comms event stream is the canonical truth. Public (broadcast), group
-(narrative with `audience` including the agent), direct (`directed` kind, and
-narrative with `addressed_to` matching the agent), observed (cross-traffic
-and audience-mismatch events the agent witnesses but is not responsible for),
-and lifecycle messages are all valid views onto the same stream, and **all
-are important**. A watcher that filters to a single view (e.g. directed-only
-filters, manual `ls -t` polling of the shared dir) discards the others and
-will miss vital coordination.
-
-The required shape is **one event-driven watcher** over the full directory,
-emitting one notification per new event, with **self-exclusion only** —
-filter out events authored by the agent's own
-`(agent_name, platform, session_id_prefix)` identity tuple (per
-[`.agent/reference/comms-watch-mechanism.md`](../../reference/comms-watch-mechanism.md)
-§"Identity discipline") and emit everything else. The agent applies any
-relevance triage in their own reasoning, not at the watcher boundary.
-
-**Canonical invocation — the `agent-tools` CLI** (preferred when available;
-default behaviour is all-channels):
-
-```bash
-# Replace <agent-codename> with the codename emitted by identity preflight.
-pnpm agent-tools:collaboration-state -- comms watch \
-  --comms-dir .agent/state/collaboration/comms \
-  --seen-file .agent/state/collaboration/comms-seen/<agent-codename>.json \
-  --platform <claude|codex|cursor> \
-  --model <model-id>
-```
-
-The CLI emits every relevant event with self-exclusion only against the
-identity tuple it derives from the platform-specific session-id env var
-(`PRACTICE_AGENT_SESSION_ID_CLAUDE`, `PRACTICE_AGENT_SESSION_ID_CURSOR`,
-`PRACTICE_AGENT_SESSION_ID_CODEX`, or `CODEX_THREAD_ID`) — **one of these
-MUST be set in the shell**, or the CLI exits with `missing collaboration
-identity seed`. Each event is tagged `[BROADCAST]` / `[GROUP]` /
-`[DIRECTED]` / `[OBSERVED]` / `[LIFECYCLE]` on its first line so the agent
-knows the channel at a glance. `[OBSERVED]` means incidental visibility of
-cross-traffic, not a new work contract for the watching agent (event shape:
-`.agent/state/collaboration/comms-event.schema.json`).
-`--only-directed` opts into the legacy narrow view. Run the command via
-the platform's persistent background-task mechanism (Claude Code: the
-`Monitor` tool; other platforms: their equivalent watch primitive).
-
-The `<agent-codename>.json` seen-file lives in
-`.agent/state/collaboration/comms-seen/` (committed directory). On a fresh
-clone or in a worktree where the directory has not yet been created,
-`mkdir -p .agent/state/collaboration/comms-seen` first — the CLI does not
-auto-create the seen-file's parent directory and `appendFile` will fail
-silently if it is missing, causing the watcher to re-emit every event on
-every poll. The codename matches the agent_name derived by
-`pnpm agent-tools:collaboration-state -- identity preflight --platform <p>
---model <m>`; pre-existing seen-files in the directory model the
-convention.
-
-See also: the all-channels-as-canonical-truth principle has a graduation
-candidate in
-[`.agent/memory/operational/pending-graduations.md`](../../memory/operational/pending-graduations.md)
-under "Comms event stream as canonical truth (PDR candidate)" awaiting a
-second instance of contestation or extension before ratification as
-Practice governance.
-
-**Fallback shape — portable script** (use when the `agent-tools` CLI is
-not yet built locally, or on a platform without the CLI):
-
-```bash
-SEEN=/tmp/<agent>-comms-seen.txt
-ls .agent/state/collaboration/comms | sort > "$SEEN"
-while true; do
-  ls .agent/state/collaboration/comms | sort > /tmp/now.txt
-  for f in $(comm -13 "$SEEN" /tmp/now.txt); do
-    jq -r --arg self "$SELF_SESSION_PREFIX" '
-      if (.author.session_id_prefix // .from.session_id_prefix // "") == $self
-      then empty
-      else "[" + .created_at + "] "
-           + ((.author.agent_name // .from.agent_name // "?") + "/"
-              + (.author.session_id_prefix // .from.session_id_prefix // "?"))
-           + " -> " + (
-               if (.to // null) != null
-               then (.to.agent_name // "?") + "/" + (.to.session_id_prefix // "?")
-               elif (.addressed_to // null) != null then .addressed_to
-               elif (.audience // null) != null
-               then "GROUP(" + (.audience | join(",")) + ")"
-               else "BROADCAST"
-               end
-             )
-           + " :: " + (.title // .subject // "?")
-      end' ".agent/state/collaboration/comms/$f"
-  done
-  mv /tmp/now.txt "$SEEN"
-  sleep 5
-done
-```
-
-An agent on a platform with no persistent background-task primitive must
-declare the gap in their team-start post and adopt a polling cadence that
-sweeps the full directory at the team-cadence interval (§5), never a
-single-view filter — because the directed-only view misses the broadcast
-and group events that carry the team-bootstrap coordination itself.
-
-#### Real-time failure-mode capture on the comms stream
-
-Under any team session running under the all-channels watcher
-discipline above, the comms event stream is also the **real-time
-channel for failure-mode capture** per
-[PDR-066](../../practice-core/decision-records/PDR-066-comms-events-as-failure-mode-channel.md).
-Failure modes worth surfacing to peers during their session — verdict
-walk-backs, shell-quoting hazards, premature-optimisation reflex saves,
-audit-shaped test catches, reviewer-dispatch surprises,
-coordination-protocol gaps — are posted as comms-events as they occur,
-not held back to session close.
-
-The substrate-implementation phenotype is
-[ADR-183](../../../docs/architecture/architectural-decisions/183-comms-event-tag-namespace-substrate.md):
-an optional `tags` array on the `narrative`, `lifecycle`, and `directed`
-event kinds, with the namespace exactly `"failure-mode"` (substantive
-failure modes) and `"behaviour-note"` (softer behaviour patterns worth
-peers' attention but not yet failure modes).
-
-The failure-mode event body follows a four-section convention —
-**Observation / Diagnosis / Cure / Pointer** — kept short enough that a
-watcher reading the event inline absorbs the substance in one read pass.
-The convention is not schema-enforced (the body field stays free-form
-prose by design); it is the SKILL-level discipline that makes the
-channel scannable.
-
-**Activation live as of 2026-05-23.** ADR-183's required substrate has
-landed: the optional `tags` field is on `comms-event.schema.json`, and
-watcher rendering with tests for `[FAILURE-MODE]` / `[BEHAVIOUR-NOTE]`
-tokens composed with the existing channel tokens is active. Agents MAY
-now write `tags: ["failure-mode"]` or
-`tags: ["behaviour-note"]` on the `narrative`, `lifecycle`, and `directed`
-event kinds when the event's substance matches the namespace above.
-
-The comms-event channel is now the primary first-capture vehicle for
-real-time team-session failure modes and behaviour notes. The consolidation
-surfaces remain the absorption destination: session closeout reads the
-session's tagged events forward into napkin / `distilled.md` / graduation
-surfaces as appropriate.
-
-### 0.5. Start The Liveness Heartbeat Cron (non-negotiable)
-
-**Liveness is observable, or it is not.** Where §0 ensures *incoming*
-visibility — every event the team emits reaches every agent — §0.5
-ensures *outgoing* visibility — every agent's continued presence reaches
-the team. Both are non-negotiable preconditions; both must be running
-before any team-bootstrap step that follows.
-
-The portable contract — cadence, threshold, redundancy rule, exemption
-set, and the structural cure they compose — is authoritatively
-specified by
-[PDR-078](../../practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md)
-(liveness-heartbeat contract; Adopted 2026-05-25). The repo-bound
-phenotype substrate that operationalises the contract in this
-repository — the comms-event substrate shape, the canonical event
-kind / discriminator field, the watcher render token — is recorded in
-[ADR-186](../../../docs/architecture/architectural-decisions/186-comms-event-heartbeat-lifecycle-substrate.md)
-(comms-event heartbeat lifecycle substrate; Accepted 2026-05-24).
-This SKILL section is the operational adoption point: it cites the
-contract + phenotype pair as authoritative and prescribes the
-team-cadence-shaped operational discipline that every participating
-agent runs.
-
-**Operational summary** (binding norms preserved here for fast read;
-PDR-078 + ADR-186 are the authoritative source of substance):
-
-- Every active team member emits a heartbeat event at cadence ≤ 4
-  minutes (PDR-078 §Emit-side).
-- Silence past the 10-minute threshold presumes retirement and fires
-  claim auto-rebalance (PDR-078 §Observe-side).
-- The current repo phenotype (per ADR-186) emits heartbeats as
-  comms events with `tags: ["heartbeat"]` per
-  [ADR-183](../../../docs/architecture/architectural-decisions/183-comms-event-tag-namespace-substrate.md)'s
-  namespace substrate, rendering as a `[HEARTBEAT]` channel token.
-  ADR-186 names `lifecycle + event_type='heartbeat'` as the canonical
-  shape going forward; both shapes are operationally valid during the
-  migration window (per ADR-186 §Migration discipline). The
-  identity-tuple subject-line format:
-
-```text
-Heartbeat: <agent_name> (<session_id_prefix>) — <current lane>
-```
-
-  Body is a single short sentence: `active; <one-line current focus>`.
-  Heartbeats are coordination signal, not narrative content; substrate
-  weight should be low so the comms stream stays scannable.
-
-**Canonical invocation — the platform's persistent background-task
-primitive:**
-
-Run a 4-minute-cadence loop that emits a heartbeat event each cycle.
-Platform-specific shapes:
-
-- **Claude Code**: the `Monitor` tool with `persistent: true` and a
-  `while/sleep 240` loop emitting heartbeats; alternatively
-  `CronCreate` with `*/4 * * * *` if the cron primitive is preferred.
-- **Cursor**: the equivalent watch / background-task primitive per
-  platform docs.
-- **Codex**: the equivalent background-task mechanism.
-
-The loop SHOULD swallow stdout on success (failures emit so the agent
-can react). The loop dies when the session ends, which correctly
-satisfies the retirement-on-silence rule for natural session-end.
-
-**Owner-input precedence on every scheduled tick:** a cron, scheduled
-wakeup, or persistent monitor prompt is itself substrate. Before it
-emits a heartbeat or resumes prior work, it MUST read the latest owner
-turn. If the owner has issued a direction that supersedes task
-continuation — pause, stop, wait, hold, standby, paused-until-X, or an
-equivalent direction — do not resume the previous task. Instead emit
-the final-heartbeat-end / pause-standby signal that matches the new
-owner direction, stop the scheduled loop if the direction requires it,
-and wait for the next real owner turn. Only when no superseding owner
-direction has landed should the tick emit a heartbeat and return to
-the in-flight task.
-
-**State thresholds:**
-
-| Time since last heartbeat | State | Director action |
-|---|---|---|
-| < 4 min | Active | None |
-| 4–10 min | Offline (transient) | None; assume resume imminent |
-| ≥ 10 min | Retired | Claim auto-rebalance fires |
-
-**Claim auto-rebalance protocol on retirement:**
-
-When an agent crosses the 10-minute threshold without heartbeat:
-
-1. **Director surfaces a retirement-detection event** (broadcast;
-   tagged `failure-mode` if the retirement is unexpected, tagged
-   `behaviour-note` if it is a normal session-end without explicit
-   closeout broadcast).
-2. **Per-claim disposition**:
-   - **Claims with `handoff_record_path` field set**: read the named
-     handoff record (PDR-063 / ADR-182); surface to the natural-next
-     agent named in the record or Director-route to a suitable agent.
-   - **Claims without a handoff record**: surface as orphan-class;
-     Director routes through dialogue to a natural-next-agent based
-     on the claim's intent and the team's current shape.
-   - **Claims explicitly retained for handoff** (named in the retiring
-     agent's closeout): wait until the named successor arrives or the
-     retention TTL expires, whichever fires first.
-
-**Exemptions:**
-
-The retirement-on-silence rule does NOT fire for the following
-operational windows — silence is expected during these states and is
-not a retirement signal:
-
-- **Coordinator-transfer 30-minute grace window** (PDR-064
-  §"Coordinator Handoff (Two Moments)"). Between Moment 1
-  pre-positioning and Moment 2 active-acknowledgement, the incoming
-  coordinator may be compacting, bootstrapping, or running their own
-  start-right discipline; the outgoing coordinator continues
-  heartbeats until Moment 2 lands and authority transfers cleanly.
-- **Marshal-cycle contiguous-execution exemption**: while a marshal is
-  inside a cycle (husky gate-chain in flight, staging window open,
-  commit window open), cycle-boundary broadcasts (stage-complete,
-  gate-green, commit-landed, tree-green) satisfy heartbeat semantics
-  during the contiguous window. The marshal MUST emit an explicit
-  heartbeat-tagged event during idle windows between cycles.
-- **Sub-agent dispatch verdict-synthesis exemption**: while the
-  dispatching agent is awaiting reviewer transcripts, verdict-synthesis
-  broadcasts (with subagent transcript ids) satisfy heartbeat
-  semantics. The dispatching agent MUST emit an explicit heartbeat-
-  tagged event if the dispatch window exceeds 8 minutes (one full
-  silence-to-offline transition).
-
-**Cross-references:**
-
-- [PDR-078](../../practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md)
-  — the portable liveness-heartbeat contract this SKILL section
-  adopts as authoritative; cadence, threshold, redundancy rule,
-  exemption set, and the structural cure live there.
-- [ADR-186](../../../docs/architecture/architectural-decisions/186-comms-event-heartbeat-lifecycle-substrate.md)
-  — the repo-bound phenotype substrate that operationalises PDR-078
-  here: `lifecycle + event_type='heartbeat'` as canonical event
-  shape (`narrative + tags: ["heartbeat"]` valid during migration),
-  `[HEARTBEAT]` watcher token, at-most-once render guarantee,
-  consumer dual-filter contract during migration. See ADR-186
-  §Migration discipline for the migration-window exit criterion.
-- [ADR-183](../../../docs/architecture/architectural-decisions/183-comms-event-tag-namespace-substrate.md)
-  — the tag-namespace substrate ADR-186 composes through for the
-  `[HEARTBEAT]` render token during the migration window; the
-  `["heartbeat"]` tag is registered under that namespace and
-  `narrative`, `lifecycle`, and `directed` event kinds may carry it.
-- [PDR-027](../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md)
-  — identity tuple format in the heartbeat subject line.
-- [PDR-064](../../practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md)
-  — grace-window exemption for coordinator transitions.
-- [`.agent/memory/active/patterns/substrate-pointer-read-as-current-state.md`](../../memory/active/patterns/substrate-pointer-read-as-current-state.md)
-  §C2 (active per-agent check-in cadence) and §C5 (terminal-state-
-  assumption broadcast with short default deadline) — the heartbeat
-  contract is the structural cure these substrate-pointer cures were
-  reaching for.
+failure mode this order exists to prevent — see
+[`.agent/rules/liveness-heartbeat-cron.md`](../../rules/liveness-heartbeat-cron.md).
 
 ### 1. Register Presence
 
@@ -448,9 +168,11 @@ Team start report:
 
 `Intended boundary` is a non-binding declaration of *where* the agent expects
 to work; `Claim status` reports the live registry state. `Heartbeat cron
-status` reports the §0.5 precondition's live state — the cron or monitor
-task id makes the heartbeat surface auditable; `blocked by` explains any
-gap and the recovery plan. `Inherited working-tree status` is the agent's
+status` reports the
+[`liveness-heartbeat-cron`](../../rules/liveness-heartbeat-cron.md)
+precondition's live state — the cron or monitor task id makes the
+heartbeat surface auditable; `blocked by` explains any gap and the
+recovery plan. `Inherited working-tree status` is the agent's
 observation of `git status` at session open; the team uses these reports
 to decide whether §1a gate-verification fires. `Gate-verification offer`
 declares willingness to take the elected gate-runner role; the team uses
@@ -522,6 +244,13 @@ communication**, not a contest with winners and losers:
   first-broadcast-establishes-context resolves the boundary assignment
   cleanly so the team can proceed; the substantive design conversation
   can continue inside the chosen cycle's reviewer cadence.
+
+Worked instance: in the 2026-05-25/26 n=2 enforcement bundle,
+Torrid Firing Spark's Lane B team-start broadcast at
+2026-05-25T21:52Z established the cycle context before Feathered
+Winging Cliff's A1 broadcast. The agents used that ordering to
+settle complementary boundaries through dialogue without owner
+mediation.
 
 This rule covers the parallel-pair case (multiple cycles available,
 shared interest in who takes which). The singleton-lane coordination
@@ -683,6 +412,15 @@ Useful responsibility labels include `controller`, `implementer`, `reviewer`,
 `marshal`, `scout`, `standby`, `consolidator`, and `curator`, but they are
 examples rather than a required ontology.
 
+When adding a top-level responsibility or keeping an existing one alive, name
+the seat cost as part of the route. Expensive top-level model seats should be
+reserved for work that needs their judgement or continuity; review passes,
+spec fetches, and bounded exploration should use cheaper sub-agent or
+lower-cost routes when those routes preserve quality. Treat high seat count as
+a fold-check signal, not as speed pressure: the cure is to consolidate,
+delegate, or end responsibilities whose coordination pressure has cleared, not
+to skip review or weaken gates.
+
 The `curator` label names the substrate-care lane defined by PDR-081
 (`curator-role-and-substrate-care-lane`). `Knowledge Curator` is the
 owner-facing session label for the same responsibility. Curator is
@@ -808,14 +546,19 @@ leaving the session, even when they did not own the full handoff. At minimum,
 they tell the other agents that their session is complete, name whether any
 work remains in their boundary, and state the claim disposition.
 
-**Final-heartbeat-end broadcast** (per §0.5 heartbeat contract). When an
-agent closes out cleanly, they MUST emit a final heartbeat event with body
-naming the session-end state and the disposition of their heartbeat cron
-(stopped explicitly, or letting it die with the session). This prevents
-the 10-minute retirement rule from firing false-positive on an agent who
-closed cleanly but whose heartbeat cron stopped emitting. The final
-heartbeat is paired with the team-member closeout broadcast below and
-serves as the team's signal that the agent has stood down by intent.
+**Final-heartbeat-end broadcast** (per the
+[`liveness-heartbeat-cron`](../../rules/liveness-heartbeat-cron.md) rule).
+When an agent closes out cleanly, they MUST emit a final heartbeat event
+with body naming the session-end state and the disposition of their
+heartbeat cron (stopped explicitly, or letting it die with the session).
+This prevents the 10-minute retirement rule from firing false-positive on
+an agent who closed cleanly but whose heartbeat cron stopped emitting.
+Symmetrically, an observer who reads a 10-minute silence MUST apply
+[`ping-before-escalate`](../../rules/ping-before-escalate.md) (cross-check
+git work-evidence, commit queue, directed inbox; direct-ping first)
+before broadcasting any retirement-detection event. The final heartbeat
+is paired with the team-member closeout broadcast below and serves as
+the team's signal that the agent has stood down by intent.
 Suggested subject format:
 
 ```text

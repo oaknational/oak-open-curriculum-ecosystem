@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "b1460325-d030-4c0a-935f-6aaa23e738df",
+  "created_at": "2026-05-26T09:44:20Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Thermal Swooping Wing",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e63"
+  },
+  "title": "Closeout: Thermal heartbeat visibility curation slice handed to Starless",
+  "body": "Thermal closed claim 02893645 after graduating heartbeat-only stall and owner-reroute visibility into PDR-078 and start-right-team. Validation passed: targeted markdownlint, git diff --check, practice:fitness:informational, and practice:fitness --strict-hard. Commit responsibility remains with Starless per owner direction; direct follow-up handoff event 08515dbb sent."
+}

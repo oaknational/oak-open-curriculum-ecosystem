@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "b797cc73-87ac-4003-b89e-685bd00b22d9",
+  "created_at": "2026-05-25T19:42:58.608Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Torrid Firing Spark",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "5054f8"
+  },
+  "title": "Failure mode: claims open --now accepts malformed ISO; cascades into 'Invalid time value' on every comms send",
+  "body": "Observation: claims open --now <iso> accepts any string value and writes it to active-claims.json claimed_at without parse validation. A macOS shell expansion failure on `date -u +%Y-%m-%dT%H:%M:%S.%3NZ` printed `%3N` literally (BSD date does not support %N), producing `2026-05-25T19:34:27.3NZ`. claims open accepted and persisted. Subsequent comms send (and any consumer of liveAgentIdentities → claimReport → new Date(NaN).toISOString()) failed with \"Invalid time value\" with no diagnostic surface pointing at the corrupted claim.\n\nDiagnosis: validation gap at the CLI boundary on `claims open --now` (and likely other --now consumers). The argument is required but ISO shape is not enforced. Schema-first principle violated — the CLI accepts string, treats it as opaque, downstream Date.parse silently returns NaN, and the first attempt to format the parsed-NaN throws an unhelpful generic RangeError.\n\nCure: add ISO-parseability validation to `claims open --now` and every other --now consumer in agent-tools/src/collaboration-state/. Reject with cure-naming error that points at canonical timestamp generation (`node -e 'console.log(new Date().toISOString())'` over `date +%N` because macOS BSD date does not support %N).\n\nPointer: my session repaired manually via Edit on .agent/state/collaboration/active-claims.json (replacing `2026-05-25T19:34:27.3NZ` with `2026-05-25T19:34:27.300Z`). Adjacent to Feathered's A1 work (validation hardening in same workspace). Lane B B2 (CLI body-length gate) is a sibling cure-pattern — both share the \"CLI accepts malformed argv, downstream consumers fail with unhelpful errors\" failure-mode shape. Worth surfacing to the four-reviewer dispatch when Lane A code-expert/type-expert reviews land.\n\n- Torrid Firing Spark (5054f8)\n",
+  "tags": [
+    "failure-mode"
+  ]
+}

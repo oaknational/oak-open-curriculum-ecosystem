@@ -67,8 +67,9 @@ describe('collaboration TUI E2E', () => {
     expect(result.stderr).toBe('');
     expect(result.stdout).toContain('Collaboration TUI Snapshot');
     expect(result.stdout).toContain('P8 live collaboration TUI is observable');
-    expect(result.stdout).toContain('Mossy Blossoming Canopy / codex / 019e22 [active/clear]');
-    expect(result.stdout).toContain('Luminous Quiet Harbor / claude / 019e20 [inactive/clear]');
+    // PDR-076a §Decision item 2: routing key drops `platform` (not a routing weight).
+    expect(result.stdout).toContain('Mossy Blossoming Canopy / 019e22 [active/clear]');
+    expect(result.stdout).toContain('Luminous Quiet Harbor / 019e20 [inactive/clear]');
     expect(result.stdout).toContain('p8-live-tui [active/queued] feat(agent-tools): add live TUI');
   });
 });

@@ -3,7 +3,10 @@ import { join as pathJoin } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import { runCollaborationStateCli } from '../../src/collaboration-state';
+import {
+  deriveCollaborationIdentity,
+  runCollaborationStateCli,
+} from '../../src/collaboration-state';
 import { type CommsEvent } from '../../src/collaboration-state/types';
 import { createFakeCollaborationRuntime } from './fake-collaboration-runtime';
 
@@ -30,6 +33,29 @@ const sender = {
   session_id_prefix: '5c8f3c',
 } as const;
 
+// Identities emitted by the CLI under the env wiring used in the tests below.
+// Derived via the same path as production so strict-equal assertions remain
+// honest without coupling the test to the v5 namespace constant.
+const senderWithId = deriveCollaborationIdentity({
+  platform: sender.platform,
+  model: sender.model,
+  env: {
+    OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+    PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
+  },
+}).agentId;
+
+const replyRecipientCodexThreadId = '019e1867-a0a8-7c11-aae3-1bc48533a585';
+
+const recipientWithId = deriveCollaborationIdentity({
+  platform: recipient.platform,
+  model: recipient.model,
+  env: {
+    OAK_AGENT_IDENTITY_OVERRIDE: recipient.agent_name,
+    CODEX_THREAD_ID: replyRecipientCodexThreadId,
+  },
+}).agentId;
+
 describe('collaboration-state comms integration', () => {
   it('writes a directed message from the current identity', async () => {
     const commsDir = 'state/comms';
@@ -45,13 +71,15 @@ describe('collaboration-state comms integration', () => {
         '--comms-dir',
         commsDir,
         '--to-agent-name',
-        recipient.agent_name,
+        recipientWithId.agent_name,
+        '--to-id',
+        recipientWithId.id,
         '--to-platform',
-        recipient.platform,
+        recipientWithId.platform,
         '--to-model',
-        recipient.model,
+        recipientWithId.model,
         '--to-session-prefix',
-        recipient.session_id_prefix,
+        recipientWithId.session_id_prefix,
         '--kind',
         'coordination-request',
         '--subject',
@@ -80,8 +108,8 @@ describe('collaboration-state comms integration', () => {
       directedMessage({
         event_id: 'message-one',
         created_at: '2026-05-11T19:45:35Z',
-        from: sender,
-        to: recipient,
+        from: senderWithId,
+        to: recipientWithId,
         subject: 'Please check this',
         body: 'There is useful coordination here.',
       }),
@@ -106,13 +134,15 @@ describe('collaboration-state comms integration', () => {
         '--comms-dir',
         commsDir,
         '--to-agent-name',
-        recipient.agent_name,
+        recipientWithId.agent_name,
+        '--to-id',
+        recipientWithId.id,
         '--to-platform',
-        recipient.platform,
+        recipientWithId.platform,
         '--to-model',
-        recipient.model,
+        recipientWithId.model,
         '--to-session-prefix',
-        recipient.session_id_prefix,
+        recipientWithId.session_id_prefix,
         '--kind',
         'coordination-request',
         '--subject',
@@ -140,8 +170,8 @@ describe('collaboration-state comms integration', () => {
       directedMessage({
         event_id: 'message-bf',
         created_at: '2026-05-22T10:00:00Z',
-        from: sender,
-        to: recipient,
+        from: senderWithId,
+        to: recipientWithId,
         subject: 'Body file path',
         body: bodyText,
       }),
@@ -163,13 +193,15 @@ describe('collaboration-state comms integration', () => {
         '--comms-dir',
         'state/comms',
         '--to-agent-name',
-        recipient.agent_name,
+        recipientWithId.agent_name,
+        '--to-id',
+        recipientWithId.id,
         '--to-platform',
-        recipient.platform,
+        recipientWithId.platform,
         '--to-model',
-        recipient.model,
+        recipientWithId.model,
         '--to-session-prefix',
-        recipient.session_id_prefix,
+        recipientWithId.session_id_prefix,
         '--kind',
         'coordination-request',
         '--subject',
@@ -211,13 +243,15 @@ describe('collaboration-state comms integration', () => {
         '--comms-dir',
         'state/comms',
         '--to-agent-name',
-        recipient.agent_name,
+        recipientWithId.agent_name,
+        '--to-id',
+        recipientWithId.id,
         '--to-platform',
-        recipient.platform,
+        recipientWithId.platform,
         '--to-model',
-        recipient.model,
+        recipientWithId.model,
         '--to-session-prefix',
-        recipient.session_id_prefix,
+        recipientWithId.session_id_prefix,
         '--kind',
         'coordination-request',
         '--subject',
@@ -257,13 +291,15 @@ describe('collaboration-state comms integration', () => {
         '--comms-dir',
         'state/comms',
         '--to-agent-name',
-        recipient.agent_name,
+        recipientWithId.agent_name,
+        '--to-id',
+        recipientWithId.id,
         '--to-platform',
-        recipient.platform,
+        recipientWithId.platform,
         '--to-model',
-        recipient.model,
+        recipientWithId.model,
         '--to-session-prefix',
-        recipient.session_id_prefix,
+        recipientWithId.session_id_prefix,
         '--kind',
         'coordination-request',
         '--subject',
@@ -290,6 +326,100 @@ describe('collaboration-state comms integration', () => {
     expect(result.stderr).toContain('must not be empty');
   });
 
+  it('rejects missing --to-id as missing required option (PDR-076a §Cascade item 3)', async () => {
+    const fake = createFakeCollaborationRuntime();
+
+    const result = await runCollaborationStateCli({
+      argv: [
+        '--',
+        'comms',
+        'direct',
+        '--active',
+        'state/active-claims.json',
+        '--comms-dir',
+        'state/comms',
+        '--to-agent-name',
+        recipientWithId.agent_name,
+        '--to-platform',
+        recipientWithId.platform,
+        '--to-model',
+        recipientWithId.model,
+        '--to-session-prefix',
+        recipientWithId.session_id_prefix,
+        '--kind',
+        'coordination-request',
+        '--subject',
+        'No id supplied',
+        '--body',
+        'No --to-id supplied',
+        '--event-id',
+        'message-no-to-id',
+        '--now',
+        '2026-05-26T19:45:35Z',
+        '--platform',
+        'claude-code',
+        '--model',
+        sender.model,
+      ],
+      env: {
+        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
+      },
+      io: fake.runtime.io,
+    });
+
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain('--to-id');
+  });
+
+  it('rejects --to-id that is not a valid UUID v5 (write-schema parse boundary)', async () => {
+    const fake = createFakeCollaborationRuntime();
+
+    const result = await runCollaborationStateCli({
+      argv: [
+        '--',
+        'comms',
+        'direct',
+        '--active',
+        'state/active-claims.json',
+        '--comms-dir',
+        'state/comms',
+        '--to-agent-name',
+        recipientWithId.agent_name,
+        '--to-id',
+        'not-a-uuid',
+        '--to-platform',
+        recipientWithId.platform,
+        '--to-model',
+        recipientWithId.model,
+        '--to-session-prefix',
+        recipientWithId.session_id_prefix,
+        '--kind',
+        'coordination-request',
+        '--subject',
+        'Bad id',
+        '--body',
+        'Malformed --to-id should be rejected at the write boundary',
+        '--event-id',
+        'message-bad-to-id',
+        '--now',
+        '2026-05-26T19:45:35Z',
+        '--platform',
+        'claude-code',
+        '--model',
+        sender.model,
+      ],
+      env: {
+        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
+      },
+      io: fake.runtime.io,
+    });
+
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr.toLowerCase()).toContain('uuid');
+  });
+
   it('replies to a directed message by swapping sender and recipient', async () => {
     const commsDir = 'state/comms';
     const fake = createFakeCollaborationRuntime({
@@ -298,8 +428,13 @@ describe('collaboration-state comms integration', () => {
           directedMessage({
             event_id: 'message-one',
             created_at: '2026-05-11T19:45:35Z',
-            from: sender,
-            to: recipient,
+            from: senderWithId,
+            // Use the id-keyed recipient identity so reply authorisation
+            // (assertSameAgent) can match the current agent's id-keyed
+            // routing key. Cross-kind reply (legacy `to` vs id-keyed actor)
+            // is correctly rejected by PDR-076a; this fixture exercises the
+            // same-kind authorised path.
+            to: recipientWithId,
             subject: 'Please check this',
             body: 'There is useful coordination here.',
           }),
@@ -332,7 +467,7 @@ describe('collaboration-state comms integration', () => {
         recipient.model,
       ],
       env: {
-        CODEX_THREAD_ID: '019e1867-a0a8-7c11-aae3-1bc48533a585',
+        CODEX_THREAD_ID: replyRecipientCodexThreadId,
         OAK_AGENT_IDENTITY_OVERRIDE: recipient.agent_name,
       },
       io: fake.runtime.io,
@@ -345,8 +480,8 @@ describe('collaboration-state comms integration', () => {
         event_id: 'message-two',
         created_at: '2026-05-11T19:46:35Z',
         message_kind: 'coordination-ack',
-        from: recipient,
-        to: sender,
+        from: recipientWithId,
+        to: senderWithId,
         subject: 're: Please check this',
         body: 'Looks good.',
       }),
@@ -376,7 +511,7 @@ describe('collaboration-state comms integration', () => {
           directedMessage({
             event_id: 'message-one',
             created_at: '2026-05-11T19:46:35Z',
-            from: sender,
+            from: senderWithId,
             to: recipient,
             subject: 'Please check this',
             body: 'There is useful coordination here.',
@@ -449,7 +584,7 @@ describe('collaboration-state comms integration', () => {
           directedMessage({
             event_id: 'message-one',
             created_at: '2026-05-11T19:46:35Z',
-            from: sender,
+            from: senderWithId,
             to: recipient,
             subject: 'Please check this',
             body: 'There is useful coordination here.',

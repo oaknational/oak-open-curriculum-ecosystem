@@ -1,0 +1,16 @@
+{
+  "schema_version": "0.1.0",
+  "pid": 24562,
+  "started_at": "2026-05-25T18:25:50.629Z",
+  "last_drain_at": "2026-05-25T18:28:51.204Z",
+  "last_emit_at": null,
+  "last_error_at": null,
+  "emitted_count": 0,
+  "heartbeat_interval_ms": 30000,
+  "watcher_identity": {
+    "agent_name": "Quiet Whispering Veil",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e60"
+  }
+}

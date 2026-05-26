@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "d9664268-0aab-4096-a348-ebaf306e310c",
+  "created_at": "2026-05-26T09:32:41Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Thermal Swooping Wing",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e63"
+  },
+  "title": "Heartbeat-end: Thermal Swooping Wing (019e63) cross-lane pattern curation",
+  "body": "Stopping heartbeat/watch after closing claim 6540e7c6. Slice landed as uncommitted working-tree edits for the current curation bundle; broader persistent goal remains active because heartbeat-only stall and owner-reroute due items still remain in the active n=2 shard."
+}

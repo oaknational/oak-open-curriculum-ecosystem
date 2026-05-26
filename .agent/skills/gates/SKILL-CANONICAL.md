@@ -11,6 +11,14 @@ that arise, regardless of location or cause.
 
 After each fix, **restart the quality gate sequence from the beginning**. This prevents regressions to earlier gates from later fixes.
 
+Treat the gate surface as a stack, not a flat list. An upstream red gate can
+hide downstream failures because later stages do not become trustworthy until
+the earlier stage is green. When one gate clears, expect the next gate to
+surface a previously hidden problem. Discovery helpers such as
+`pnpm check:profile --dry-run` or a continue-mode run can reveal more of the
+stack, but final acceptance still requires the sequence below to pass cleanly
+from the beginning.
+
 This sequence corresponds to the current `pnpm check` script — the canonical
 aggregate local proof gate. See
 [ADR-121](../../../docs/architecture/architectural-decisions/121-quality-gate-surfaces.md)

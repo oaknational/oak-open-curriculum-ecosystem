@@ -44420,6 +44420,2325 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "531342fd-54f5-4ace-a35c-9c7f35f0995d",
+      "agent_id": {
+        "agent_name": "Stormy Surfing Dock",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "2a7b65"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-082-n2-collaboration-mode.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T15:06:20Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "First-draft PDR-082: n=2 collaboration mode (lightweight protocol for two-agent teams)",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "stale",
+        "closed_at": "2026-05-25T17:30:00Z",
+        "closed_by": {
+          "agent_name": "Mistbound Passing Candle",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "e77243"
+        },
+        "summary": "Stale claim archived by Mistbound during /oak-consolidate-docs step 7e. Stormy Surfing Dock retired via closeout broadcast at 15:49:49Z without explicit-closing this claim. The PDR-082 first-draft was authored to the working tree and remains uncommitted. Staleness: freshness_threshold 15:36:20Z exceeded by ~2 hours at consolidation time.",
+        "evidence": [
+          {
+            "kind": "comms_event",
+            "ref": "75eb893f-232b-4d8f-b90d-4736e3559dfc",
+            "summary": "Stormy team-member closeout broadcast at 15:49:49Z naming PDR-082 first-draft as uncommitted-in-working-tree with no claim retention."
+          },
+          {
+            "kind": "comms_event",
+            "ref": "46dbd615-25a4-4c1b-a6c8-54baaf230d98",
+            "summary": "Stormy heartbeat-end broadcast at 15:49:13Z — Stormy retired."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "907b02b6-4470-4fa4-ac02-2317dbb3307d",
+      "agent_id": {
+        "agent_name": "Mistbound Passing Candle",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "e77243"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T17:35:41Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit session-arc bundle: n=2 program plan + survey + integration + consolidation edits",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T17:38:04Z",
+        "closed_by": {
+          "agent_name": "Mistbound Passing Candle",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "e77243"
+        },
+        "summary": "commit 4b69aab8: docs(n2-plan): land program plan, survey, and integration edits",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "907b02b6-4470-4fa4-ac02-2317dbb3307d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "9ec09768-110e-44bc-b108-977e43cbdc05",
+      "agent_id": {
+        "agent_name": "Mistbound Passing Candle",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "e77243"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T17:46:30Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Fitness cure on open-questions and persist §1 lifecycle closure",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T17:47:34Z",
+        "closed_by": {
+          "agent_name": "Mistbound Passing Candle",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "e77243"
+        },
+        "summary": "commit 445bf0e1: docs(state) fitness cure + lifecycle persist",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9ec09768-110e-44bc-b108-977e43cbdc05",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "7836b07c-73a7-4cd0-b9b1-127924ce34ac",
+      "agent_id": {
+        "agent_name": "Mistbound Passing Candle",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "e77243"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T17:47:48Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "WS4 first move: PDR-078 amendment with substrate-category clause (heartbeats-are-infrastructure)",
+      "intent_to_commit": "eed774a3-2bda-4d56-a9e8-c0bab84a58df",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T17:48:11Z",
+        "closed_by": {
+          "agent_name": "Mistbound Passing Candle",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "e77243"
+        },
+        "summary": "closed in same collaboration-state commit (intent eed774a3): PDR-078 WS4 amendment",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7836b07c-73a7-4cd0-b9b1-127924ce34ac",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c5760da6-988b-46d8-80fc-63ebfbd3d225",
+      "agent_id": {
+        "agent_name": "Mistbound Passing Candle",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "e77243"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T17:55:54Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "WS0 pre-position: SKILL decomposition option-table + WS1 re-survey finding",
+      "intent_to_commit": "33dc2e38-fc11-4619-9633-4637e553f2b9",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T17:56:11Z",
+        "closed_by": {
+          "agent_name": "Mistbound Passing Candle",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "e77243"
+        },
+        "summary": "closed in same collaboration-state commit (intent 33dc2e38-fc11-4619-9633-4637e553f2b9): WS0 pre-position",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c5760da6-988b-46d8-80fc-63ebfbd3d225",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "beb33a72-6e46-40b3-8552-2b89ca8ed779",
+      "agent_id": {
+        "agent_name": "Quiet Whispering Veil",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/pending-graduations/2026-05-25-mistbound-inherited-frame-and-hook-signal-candidates.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T18:26:54Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Route hard napkin learning into live knowledge shard without trimming substance.",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T18:28:24Z",
+        "closed_by": {
+          "agent_name": "Quiet Whispering Veil",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Routed hard napkin learning into live pending-graduations shard; verified soft-only fitness and stopped.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "beb33a72-6e46-40b3-8552-2b89ca8ed779",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "85dbfc9f-9f65-4bdd-9008-e24da4ab9198",
+      "agent_id": {
+        "agent_name": "Mistbound Passing Candle",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "e77243"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T18:30:56Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "WS0 directed-verdict amendment: strike menu framing, direct (c)+partial(a)",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T18:32:01Z",
+        "closed_by": {
+          "agent_name": "Mistbound Passing Candle",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "e77243"
+        },
+        "summary": "commit 04d5cefa: WS0 directed verdict landed (plan-only intent; napkin curation owned by Quiet Whispering Veil)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "85dbfc9f-9f65-4bdd-9008-e24da4ab9198",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "bdb47da9-f9d0-4b1e-9426-76d1c26c0185",
+      "agent_id": {
+        "agent_name": "Mistbound Passing Candle",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "e77243"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T18:44:48Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Session-handoff + consolidate-docs closeout bundle: thread record + repo-continuity + open-questions drain + Quiet curation + comms",
+      "intent_to_commit": "91b039a6-5923-4c4d-955a-3ecb681ebfea",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T18:45:27Z",
+        "closed_by": {
+          "agent_name": "Mistbound Passing Candle",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "e77243"
+        },
+        "summary": "closed in same collaboration-state commit (intent 91b039a6-5923-4c4d-955a-3ecb681ebfea): closeout bundle",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "bdb47da9-f9d0-4b1e-9426-76d1c26c0185",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "430b53a0-b175-43a6-88a9-e0e0615e6d8b",
+      "agent_id": {
+        "agent_name": "Mistbound Passing Candle",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "e77243"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T19:11:48Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Add next-session enforcement bundle brief at top of Workstreams",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T19:12:43Z",
+        "closed_by": {
+          "agent_name": "Mistbound Passing Candle",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "e77243"
+        },
+        "summary": "commit 81839e47: next-session n=2 enforcement bundle brief landed",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "430b53a0-b175-43a6-88a9-e0e0615e6d8b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "07918b89-cd29-48c5-b57a-3f8ea47f2f6e",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/directives/continuity-practice.md",
+            ".agent/HUMANS.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:20:30Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Extend distilled.md knowledge-conservation wording to continuity and human-facing memory references",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:32:05Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Updated continuity and human-facing memory references for distilled.md knowledge-conservation role.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "07918b89-cd29-48c5-b57a-3f8ea47f2f6e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "35ae2329-a7e1-4d0d-b1b8-57146f502c3e",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/session-handoff/SKILL-CANONICAL.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/README.md",
+            ".agent/practice-index.md",
+            ".agent/directives/AGENT.md",
+            ".agent/skills/start-right-quick/shared/start-right.md",
+            ".agent/skills/start-right-thorough/shared/start-right-thorough.md",
+            ".agent/skills/napkin/SKILL-CANONICAL.md",
+            "docs/foundation/agentic-engineering-system.md",
+            "agent-tools/src/practice-fitness/paths.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:18:02Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Tidy distilled.md role references, add session-handoff conservation routing, and pin fitness discovery coverage",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:32:00Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Updated distilled.md role references and session-handoff conservation routing; verified distilled fitness discovery via practice:fitness.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "35ae2329-a7e1-4d0d-b1b8-57146f502c3e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0aa72e5b-4aa8-416f-b6d9-90895ee36a72",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/rules/stage-by-explicit-pathspec.md",
+            ".agent/rules/no-hedging-vocabulary.md",
+            "docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md",
+            "docs/architecture/architectural-decisions/181-agent-team-start-and-action-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:24:00Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Retarget stale distilled.md section citations to current permanent or archive homes",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:32:10Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Retargeted live stale distilled.md section references outside Torrid-owned hook policy/tests to current permanent or archive homes.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0aa72e5b-4aa8-416f-b6d9-90895ee36a72",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "724775a5-ae88-48f6-bd91-0d4b37be4726",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:35:00Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Capture testing-strategy correction from distilled.md handoff/fitness tidy",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:36:00Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Captured owner correction that tests must prove behaviour, not configuration, from the distilled.md fitness tidy.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "724775a5-ae88-48f6-bd91-0d4b37be4726",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6bef2d6e-d4a1-4b3c-bdc2-018d8669e85e",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/archive/distilled-graduations-log-2026-05-14.md",
+            ".agent/skills/gates/SKILL-CANONICAL.md",
+            "docs/engineering/build-system.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:25:13Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Process distilled.md through consolidate-docs: graduate settled gate-stack learning, record disposition, and leave unresolved entries with explicit evidence",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:30:14Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Processed distilled.md gate-stack entry through consolidate-docs: graduated to gates skill and build-system docs, archived disposition, and lowered distilled fitness envelope after processing.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6bef2d6e-d4a1-4b3c-bdc2-018d8669e85e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2807cfcf-8279-4feb-9ee7-0e99f4558f5c",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/session-handoff/SKILL-CANONICAL.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:26:07Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Retarget session-handoff gate-stack citation while processing distilled.md graduation",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:30:14Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Retargeted session-handoff gate citation to gates skill and build-system docs, and added closeout-bundle perturbation guidance.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2807cfcf-8279-4feb-9ee7-0e99f4558f5c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "4d32f3f2-d86e-4c58-ba9a-312350d41d01",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/commit/SKILL-CANONICAL.md",
+            ".agent/directives/continuity-practice.md",
+            ".agent/directives/AGENT.md",
+            "agent-tools/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:27:03Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Graduate remaining stable distilled lessons into their behavioural homes during consolidate-docs pass",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:30:14Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Graduated stable 2026-05-14 distilled lessons into commit, continuity, AGENT, and agent-tools behavioural homes.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4d32f3f2-d86e-4c58-ba9a-312350d41d01",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "017b6040-99a1-497b-97e9-bf8f9900606b",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:28:09Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Mark graduated gate-stack pending-graduation after distilled.md processing",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:30:38Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Updated pending-graduations to mark gate-stack item graduated and retarget pending continuation-record candidate to its behaviour home plus archive.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "017b6040-99a1-497b-97e9-bf8f9900606b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2dbf8e61-6dcd-4f0d-b70b-9b41e688a767",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:29:18Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Capture distilled.md processing lesson in napkin",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:30:38Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Captured owner correction: stable distilled learning with no real home is a documentation-architecture gap, not a trim candidate.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2dbf8e61-6dcd-4f0d-b70b-9b41e688a767",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "53a75fdd-6fb8-4028-8076-c0122247c4c0",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/practice-fitness/run.ts",
+            "agent-tools/src/practice-fitness/format.ts",
+            "agent-tools/src/practice-fitness/format.unit.test.ts",
+            "agent-tools/src/practice-fitness/run.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:31:04Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Add healthy and ready inventory output to practice fitness reporter with behaviour tests",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:34:00Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Added complete practice-fitness zone inventory: ready empty, healthy, soft, hard, and critical groups. Added behaviour tests for formatter/report output and verified practice:fitness variants.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "53a75fdd-6fb8-4028-8076-c0122247c4c0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f6003e40-395c-4246-ba35-726fb26c6dc1",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:36:36Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "session handoff and consolidate-docs closeout for Prismatic distilled/practice-fitness slice",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:37:48Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "session handoff and consolidate-docs closeout recorded for Prismatic distilled/practice-fitness slice; validations captured; peer hook-policy lint blocker surfaced",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f6003e40-395c-4246-ba35-726fb26c6dc1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "76693936-76e9-44f7-8ff4-4540e78aa1ac",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:41:40Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "document practice-fitness content-role axis in ADR-144",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:42:14Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "ADR-144 amended with content-role extension for drainable buffers vs reference surfaces",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "76693936-76e9-44f7-8ff4-4540e78aa1ac",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2ec9cc22-ea17-43a0-89fa-5600857d3403",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/practice-fitness/evaluate.ts",
+            "agent-tools/src/practice-fitness/format.ts",
+            "agent-tools/src/practice-fitness/markdown.ts",
+            "agent-tools/src/practice-fitness/model.ts",
+            "agent-tools/src/practice-fitness/evaluate.unit.test.ts",
+            "agent-tools/src/practice-fitness/format.unit.test.ts",
+            "agent-tools/src/practice-fitness/run.unit.test.ts",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/open-questions.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/pending-graduations/2026-05-25-mistbound-inherited-frame-and-hook-signal-candidates.md",
+            ".agent/memory/operational/pending-graduations/2026-05-25-misty-director-session-candidates.md",
+            ".agent/memory/operational/pending-graduations/2026-05-25-planning-and-autofix-candidates.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:39:57Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "practice-fitness content-role axis after metacognition correction",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:42:14Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "metacognition correction implemented: fitness_content_role axis, ready-empty limited to drainable buffers, tests/frontmatter updated",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2ec9cc22-ea17-43a0-89fa-5600857d3403",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "15645cab-2504-4bce-9889-d1d41bf36fbe",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:44:04Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "final session handoff and docs consolidation closeout after content-role correction",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:45:43Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Prismatic handoff and docs consolidation complete; evidence: repo-continuity.md, agentic-engineering thread record, napkin.md; validation: practice-fitness strict-hard soft-only.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "15645cab-2504-4bce-9889-d1d41bf36fbe",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "12b4a250-13bc-4ff2-8e6a-ae69457a72ba",
+      "agent_id": {
+        "agent_name": "Thermal Swooping Wing",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e63"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/pending-graduations/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T09:22:03.000Z",
+      "freshness_seconds": 10800,
+      "sidebar_open": false,
+      "intent": "supporting index correction for critical curation shard pointer",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T09:24:36Z",
+        "closed_by": {
+          "agent_name": "Thermal Swooping Wing",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e63"
+        },
+        "summary": "Updated pending-graduations main pointer and active-shards README to match the compact 2026-05-26 n2 route map and current shard inventory.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "12b4a250-13bc-4ff2-8e6a-ae69457a72ba",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e79d6e36-b7d3-4325-ac9c-65ab1d4b4738",
+      "agent_id": {
+        "agent_name": "Thermal Swooping Wing",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e63"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/open-questions.md",
+            ".agent/memory/operational/pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T09:20:09.000Z",
+      "freshness_seconds": 10800,
+      "sidebar_open": false,
+      "intent": "critical knowledge curation: process current critical napkin/open-questions/n2 pending shard without trimming substance",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T09:24:35Z",
+        "closed_by": {
+          "agent_name": "Thermal Swooping Wing",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e63"
+        },
+        "summary": "Processed critical curation surfaces into archived source windows plus compact live routes; strict-hard validation is SOFT only with hard 0 critical 0.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e79d6e36-b7d3-4325-ac9c-65ab1d4b4738",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2ed79f62-885d-4352-9333-b035ffdc577c",
+      "agent_id": {
+        "agent_name": "Thermal Swooping Wing",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e63"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/rules/present-verdicts-not-menus.md",
+            ".agent/memory/operational/pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T09:27:00Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "soft drainable-buffer graduation: pre-pose AskUserQuestion option viability check into present-verdicts-not-menus rule",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T09:27:35Z",
+        "closed_by": {
+          "agent_name": "Thermal Swooping Wing",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e63"
+        },
+        "summary": "Graduated pre-pose AskUserQuestion option viability check to present-verdicts-not-menus; updated n2 shard and main pointer; validation remained SOFT only with hard 0 critical 0.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2ed79f62-885d-4352-9333-b035ffdc577c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6540e7c6-04e3-4e85-bcea-68ff623dbbdf",
+      "agent_id": {
+        "agent_name": "Thermal Swooping Wing",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e63"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/collaboration/cross-lane-commit-blocking.md",
+            ".agent/memory/collaboration/README.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md",
+            ".agent/memory/operational/pending-graduations/2026-05-06-to-2026-05-21-legacy-backlog.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T09:30:42Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "soft drainable-buffer graduation: cross-lane commit blocking and surgical staging pattern",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T09:32:36Z",
+        "closed_by": {
+          "agent_name": "Thermal Swooping Wing",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e63"
+        },
+        "summary": "Graduated cross-lane commit-blocking and surgical staging candidate into .agent/memory/collaboration/cross-lane-commit-blocking.md; updated active/main/legacy pending-graduations pointers and napkin mistake log; validation green for targeted markdownlint, git diff --check, practice:fitness:informational, and strict-hard.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6540e7c6-04e3-4e85-bcea-68ff623dbbdf",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "53e77ed8-dc78-4bae-b963-9c84ac1bc3bd",
+      "agent_id": {
+        "agent_name": "Thermal Swooping Wing",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e63"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md",
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T09:34:44Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "soft drainable-buffer graduation: heartbeat-without-progress and owner-reroute visibility",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T09:37:01Z",
+        "closed_by": {
+          "agent_name": "Thermal Swooping Wing",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e63"
+        },
+        "summary": "Owner rerouted commit responsibility to Starless; Thermal is stopping self-commit path and handing off all dirty files, including Thermal curation changes. No heartbeat-visibility PDR/start-right edits were landed under this claim after it opened.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "53e77ed8-dc78-4bae-b963-9c84ac1bc3bd",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "02893645-0d66-4c6a-aa6c-7cc6b6b71f9c",
+      "agent_id": {
+        "agent_name": "Thermal Swooping Wing",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e63"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md",
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T09:40:59Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "soft drainable-buffer graduation: heartbeat-only stall and owner-reroute visibility",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T09:43:58Z",
+        "closed_by": {
+          "agent_name": "Thermal Swooping Wing",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e63"
+        },
+        "summary": "Graduated heartbeat-only stall and owner-reroute visibility from the 2026-05-26 drainable pending-graduations shard into PDR-078 §6 and start-right-team §0.5; marked source entries graduated and restored main pending-graduations to soft-only. Validation: targeted markdownlint passed; git diff --check passed; practice:fitness:informational and practice:fitness --strict-hard both soft-only, hard 0 critical 0. Commit responsibility remains owner-assigned to Starless.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "02893645-0d66-4c6a-aa6c-7cc6b6b71f9c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "533e1caf-9e15-4a36-a6c5-e40f97b4dcec",
+      "agent_id": {
+        "agent_name": "Thermal Swooping Wing",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e63"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md",
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T09:46:35Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "soft drainable-buffer graduation: A1 running worked instance and first-broadcast tie-breaker",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T09:50:33Z",
+        "closed_by": {
+          "agent_name": "Thermal Swooping Wing",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e63"
+        },
+        "summary": "Closed soft drainable-buffer graduation slice: recorded owner correction in napkin; homed A1 typed-origin heartbeat worked instance to PDR-078 Falsifiability; homed first-broadcast tie-breaker worked instance to start-right-team cycle-overlap rule; marked both shard pointers graduated. Validation: markdownlint targeted pass, git diff --check pass, practice:fitness:informational SOFT 20 soft/21 healthy with hard 0 critical 0, practice:fitness --strict-hard pass.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "533e1caf-9e15-4a36-a6c5-e40f97b4dcec",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "88a657ce-333c-48b7-9aa7-a81618bd8161",
+      "agent_id": {
+        "agent_name": "Starless Dimming Owl",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "781369"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/archive/napkin-2026-05-26-thermal-critical-curation.md",
+            ".agent/memory/operational/open-questions.md",
+            ".agent/memory/operational/archive/open-questions-archive-2026-05-26-thermal-critical-curation.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/pending-graduations/2026-05-06-to-2026-05-21-legacy-backlog.md",
+            ".agent/memory/operational/pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md",
+            ".agent/memory/operational/pending-graduations/README.md",
+            ".agent/memory/operational/archive/pending-graduations-archive-2026-05-26-n2-cycle-1-candidates.md",
+            ".agent/memory/collaboration/README.md",
+            ".agent/memory/collaboration/cross-lane-commit-blocking.md",
+            ".agent/practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md",
+            ".agent/rules/present-verdicts-not-menus.md",
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md",
+            ".claude/settings.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T09:52:01Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Curator-handoff commit landing Thermal Swooping Wing's curator-pass residue under Starless attribution per owner direction",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T09:53:36Z",
+        "closed_by": {
+          "agent_name": "Starless Dimming Owl",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "781369"
+        },
+        "summary": "Curator-handoff commit landed Thermal Swooping Wing's curator-pass residue under Starless attribution per owner direction. 15 substantive files + collaboration-state residue exception. Single commit pushed to origin/docs/agent-collaboration-enhancements.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "88a657ce-333c-48b7-9aa7-a81618bd8161",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0936977f-8c66-41b9-9be5-8e33fe20043f",
+      "agent_id": {
+        "agent_name": "Thermal Swooping Wing",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e63"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md",
+            ".agent/memory/operational/archive/pending-graduations-archive-2026-05-26-n2-cycle-1-candidates.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T09:58:49Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Curate n=2 pending-graduations shard by moving processed disposition evidence to archive and leaving only live pending routes",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T09:59:30Z",
+        "closed_by": {
+          "agent_name": "Thermal Swooping Wing",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e63"
+        },
+        "summary": "Moved processed n=2 shard disposition notes into the existing archive and left the active shard with pending routes only. Validation: targeted markdownlint and git diff --check passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0936977f-8c66-41b9-9be5-8e33fe20043f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "534b88e8-23d6-4d09-b5df-d7a39a3caaea",
+      "agent_id": {
+        "agent_name": "Starless Dimming Owl",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "781369"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md",
+            ".agent/rules/new-rule-vs-pdr-clause.md",
+            ".agent/rules/comms-all-channels-watcher.md",
+            ".agent/rules/liveness-heartbeat-cron.md",
+            "RULES_INDEX.md",
+            "agent-tools/tests/rules/rules-index-classification.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T10:16:05Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "WS0 of n2-coordination-efficiency-program: rule corpus extraction + SKILL topology refinement (3 new rules, 9 forwarders, RULES_INDEX classification table, validation test, mode-selection block). Bundles Thermal continuing curator slice + collaboration-state residue per owner direction.",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T10:16:43Z",
+        "closed_by": {
+          "agent_name": "Starless Dimming Owl",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "781369"
+        },
+        "summary": "WS0 of n2-coordination-efficiency-program landed: 3 new rule files extracted from start-right-team SKILL §0 and §0.5 + meta-rule new-rule-vs-pdr-clause + 9 platform forwarders + RULES_INDEX three-column classification table + 6 validation tests passing. SKILL hit ≤700 absolute target exactly. Reviewer findings applied: §0/§0.5 standalone sections deleted (First Moves moves 1 and 2 are sole pointer surface); pattern-class home added to meta-rule classifier; trigger-loaded test assertions added for two extracted rules; SKILL-pointer-is-trigger-mechanism note added to extracted rules. Combined wc -l acceptance bar revised per assumptions-expert ruling in commit body. Bundles Thermal continuing curator slice + collaboration-state residue.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "534b88e8-23d6-4d09-b5df-d7a39a3caaea",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1586d3ea-f424-4fbf-801c-a7253ae84c29",
+      "agent_id": {
+        "agent_name": "Starless Dimming Owl",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "781369"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/types.ts",
+            "agent-tools/src/collaboration-state/state-schemas.ts",
+            "agent-tools/src/collaboration-state/comms-relevant-events.ts",
+            "agent-tools/src/collaboration-state/comms-migration-records.ts",
+            "agent-tools/src/collaboration-state/identity.ts",
+            "agent-tools/src/collaboration-state/identity-audit.ts",
+            "agent-tools/tests/collaboration-state/comms-relevant-events-collision.unit.test.ts",
+            "agent-tools/tests/collaboration-state/comms-relevant-events.unit.test.ts",
+            "agent-tools/tests/collaboration-state/state-parsers.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T10:37:28Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "WS1 of n2-coordination-efficiency-program: widen NarrativeCommsEvent addressed_to/audience to CollaborationAgentId tuple; classifyNarrative routes by session_id_prefix; legacy compat shim with stderr warning; anonymous-detection primary discriminator; collision regression test.",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T10:37:42Z",
+        "closed_by": {
+          "agent_name": "Starless Dimming Owl",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "781369"
+        },
+        "summary": "WS1 schema-widening: NarrativeCommsEvent addressed_to/audience tuple-shaped; classifyNarrative routes by session_id_prefix; legacy migration shim emits stderr warning; anonymous-detection session_id_prefix as primary discriminator. 5 new collision regression tests + existing fixture updates. 213/213 tests pass; lint clean; type-check clean. Reviewer findings applied: conditional test guards removed via toMatchObject; .min(1) on audience arrays; plan-name reference replaced with PDR-027.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1586d3ea-f424-4fbf-801c-a7253ae84c29",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "047fb4c7-6627-441b-bcb5-390862858707",
+      "agent_id": {
+        "agent_name": "Starless Dimming Owl",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "781369"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T10:44:14Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "WS4 of n2-coordination-efficiency-program: SKILL cross-references for landed rules — ping-before-escalate link + liveness-heartbeat-cron link to heal stale §0.5 anchors.",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T10:44:26Z",
+        "closed_by": {
+          "agent_name": "Starless Dimming Owl",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "781369"
+        },
+        "summary": "WS4 SKILL cross-references landed: ping-before-escalate.md link added to Closeout Contract Final-heartbeat-end paragraph (observer-side symmetry to the emit-side discipline); stale §0.5 anchor at line 171 (Heartbeat cron status) and line 538 (Final-heartbeat-end paragraph) replaced with liveness-heartbeat-cron rule-file links. docs-adr-expert returned no MUST-FIX; SHOULD-FIX on adjacent stale anchor at line 171 applied in same commit. markdownlint clean.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "047fb4c7-6627-441b-bcb5-390862858707",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c89bcb0c-da42-4b5e-843a-fc2be11d830d",
+      "agent_id": {
+        "agent_name": "Feathered Winging Cliff",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "57e615"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/cli-comms-commands.ts",
+            "agent-tools/src/collaboration-state/cli-spec-options.ts",
+            "agent-tools/src/collaboration-state/comms-heartbeat-body.ts",
+            "agent-tools/tests/collaboration-state/comms-tags.integration.test.ts",
+            "agent-tools/tests/collaboration-state/comms-heartbeat-body.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T19:34:16Z",
+      "freshness_seconds": 10800,
+      "sidebar_open": false,
+      "intent": "Lane A (A1) — heartbeat emitter mechanical state-binding; enforce PDR-078 §5 by requiring typed state args and rejecting --body for --tag heartbeat",
+      "handoff_record_path": ".agent/state/collaboration/handoffs/2026-05-26-feathered-a1-push-handoff.md",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "stale",
+        "closed_at": "2026-05-26T13:14:39Z",
+        "closed_by": {
+          "agent_name": "Starless Dimming Owl",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "781369"
+        },
+        "summary": "Archived stale/orphaned claim after its freshness TTL expired.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c89bcb0c-da42-4b5e-843a-fc2be11d830d",
+            "summary": "Claim exceeded its type-specific freshness TTL."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2f6d1d40-c3f8-4d78-b604-bfd8bebb7157",
+      "agent_id": {
+        "agent_name": "Torrid Firing Spark",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "5054f8"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/cli-comms-commands.ts",
+            "agent-tools/src/collaboration-state/cli-comms-messages.ts",
+            "agent-tools/src/collaboration-state/cli-spec-options.ts",
+            "agent-tools/tests/collaboration-state/"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T19:34:27.300Z",
+      "freshness_seconds": 10800,
+      "sidebar_open": false,
+      "intent": "n=2 Lane B B2: CLI body-length gate (<=1500 chars) on --body argv for all comms verbs (append/send/direct/reply); regression tests per verb. B1+B3 landed at 499518ce + ecc1e834 + 29ebda41. Feathered's A1 already in main at 97f06e16. Post-compaction resume per handoff record.",
+      "handoff_record_path": ".agent/state/collaboration/handoffs/torrid-firing-spark-2026-05-26-lane-b-b2.md",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "stale",
+        "closed_at": "2026-05-26T13:14:39Z",
+        "closed_by": {
+          "agent_name": "Starless Dimming Owl",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "781369"
+        },
+        "summary": "Archived stale/orphaned claim after its freshness TTL expired.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2f6d1d40-c3f8-4d78-b604-bfd8bebb7157",
+            "summary": "Claim exceeded its type-specific freshness TTL."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f572951c-13fd-4e3f-9158-e130591a4e80",
+      "agent_id": {
+        "agent_name": "Mistbound Shrouding Silhouette",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e64"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T13:55:17Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit PR #118 Sonar fixes.",
+      "intent_to_commit": "b45cff24-7e48-4564-af1c-44c9eede4675",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T13:55:46Z",
+        "closed_by": {
+          "agent_name": "Mistbound Shrouding Silhouette",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e64"
+        },
+        "summary": "commit window closed in same collaboration-state commit for PR #118 Sonar fixes.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f572951c-13fd-4e3f-9158-e130591a4e80",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "204a6076-789a-4543-9443-e29a1dccf90d",
+      "agent_id": {
+        "agent_name": "Mistbound Shrouding Silhouette",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e64"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/comms-heartbeat-cli.ts",
+            "agent-tools/tests/hook-policy/check-blocked-content.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T13:52:45Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Fix PR #118 Sonar issues in heartbeat CLI and hook-policy tests only.",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T13:55:46Z",
+        "closed_by": {
+          "agent_name": "Mistbound Shrouding Silhouette",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e64"
+        },
+        "summary": "PR #118 Sonar fixes implemented and validated; committing in this bundle.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "204a6076-789a-4543-9443-e29a1dccf90d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c3cb42b9-a9dc-4049-a8f8-b898e806e4d5",
+      "agent_id": {
+        "agent_name": "Open Streaming Updraft",
+        "platform": "claude",
+        "model": "opus-4-7",
+        "session_id_prefix": "357948"
+      },
+      "thread": "collaboration-identity-doctrine-enforcement-remediation",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T15:58:18Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit plan v3 amendments — reviewer findings integrated into identity remediation plan",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T16:00:49Z",
+        "closed_by": {
+          "agent_name": "Open Streaming Updraft",
+          "platform": "claude",
+          "model": "opus-4-7",
+          "session_id_prefix": "357948"
+        },
+        "summary": "commit 76920493: docs(plans): integrate pdr-076 reviewer findings into identity remediation plan",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c3cb42b9-a9dc-4049-a8f8-b898e806e4d5",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "411f3d01-4c00-4a7f-a579-ad6d12f24776",
+      "agent_id": {
+        "agent_name": "Open Streaming Updraft",
+        "platform": "claude",
+        "model": "opus-4-7",
+        "session_id_prefix": "357948"
+      },
+      "thread": "collaboration-identity-doctrine-enforcement-remediation",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T16:03:38Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit PDR-027 amendment — Phase 0A doctrinal landing for (agent_name, id) identity key",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T16:05:09Z",
+        "closed_by": {
+          "agent_name": "Open Streaming Updraft",
+          "platform": "claude",
+          "model": "opus-4-7",
+          "session_id_prefix": "357948"
+        },
+        "summary": "commit 7028b0d6: PDR-027 amended — canonical identity key becomes (agent_name, id)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "411f3d01-4c00-4a7f-a579-ad6d12f24776",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1df47b7f-c7e4-4b30-9f9a-c8ec08a95c04",
+      "agent_id": {
+        "agent_name": "Open Streaming Updraft",
+        "platform": "claude",
+        "model": "opus-4-7",
+        "session_id_prefix": "357948"
+      },
+      "thread": "collaboration-identity-doctrine-enforcement-remediation",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/collaboration-identity-doctrine-enforcement-remediation.plan.md",
+            "agent-tools/src/collaboration-state/**",
+            "agent-tools/src/core/agent-identity/**",
+            "agent-tools/src/commit-queue/commit-workflow-runtime.ts",
+            ".agent/state/collaboration/comms-event.schema.json",
+            ".agent/state/collaboration/active-claims.schema.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T15:44:27Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Phase 0 of collaboration-identity-doctrine-enforcement-remediation: plan-body edits, then identity UUID additive schema + routing prefer-id",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T16:05:54Z",
+        "closed_by": {
+          "agent_name": "Open Streaming Updraft",
+          "platform": "claude",
+          "model": "opus-4-7",
+          "session_id_prefix": "357948"
+        },
+        "summary": "Phase 0A complete: PDR-027 amended (7028b0d6), plan v3 with reviewer-locked Phase 0B/0C type-design (76920493). Phase 0B/0C queued for next session.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1df47b7f-c7e4-4b30-9f9a-c8ec08a95c04",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "40c1c7d2-e977-4a8a-94db-f8a008c7f5c5",
+      "agent_id": {
+        "agent_name": "Open Streaming Updraft",
+        "platform": "claude",
+        "model": "opus-4-7",
+        "session_id_prefix": "357948"
+      },
+      "thread": "collaboration-identity-doctrine-enforcement-remediation",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T16:06:02Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Phase 0A session-closeout: plan status update + active-claims/closed-claims lifecycle persistence",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T16:07:28Z",
+        "closed_by": {
+          "agent_name": "Open Streaming Updraft",
+          "platform": "claude",
+          "model": "opus-4-7",
+          "session_id_prefix": "357948"
+        },
+        "summary": "commit b0faefab: phase 0a closeout — plan status + claim lifecycle persisted",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "40c1c7d2-e977-4a8a-94db-f8a008c7f5c5",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "389cb4e0-0cdf-474f-958f-7a02edf7ef27",
+      "agent_id": {
+        "agent_name": "Open Streaming Updraft",
+        "platform": "claude",
+        "model": "opus-4-7",
+        "session_id_prefix": "357948"
+      },
+      "thread": "collaboration-identity-doctrine-enforcement-remediation",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T16:15:29Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit plan-body metacognition correction: 3-session framing replaced with TDD-cycle decomposition",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T16:16:33Z",
+        "closed_by": {
+          "agent_name": "Open Streaming Updraft",
+          "platform": "claude",
+          "model": "opus-4-7",
+          "session_id_prefix": "357948"
+        },
+        "summary": "commit 3ca77972: plan-body metacog correction — 3-session framing replaced with TDD-cycle decomposition",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "389cb4e0-0cdf-474f-958f-7a02edf7ef27",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "4c0b3f50-f58a-4928-ae5b-695c3aa86199",
+      "agent_id": {
+        "agent_name": "Open Streaming Updraft",
+        "platform": "claude",
+        "model": "opus-4-7",
+        "session_id_prefix": "357948"
+      },
+      "thread": "collaboration-identity-doctrine-enforcement-remediation",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T16:20:16Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Phase 0B Cycle 1: UuidV5 brand + read/write schema split",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T16:21:48Z",
+        "closed_by": {
+          "agent_name": "Open Streaming Updraft",
+          "platform": "claude",
+          "model": "opus-4-7",
+          "session_id_prefix": "357948"
+        },
+        "summary": "commit c11f698b: Phase 0B Cycle 1 — UuidV5 brand + read/write schema split",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4c0b3f50-f58a-4928-ae5b-695c3aa86199",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "276893dd-b487-4102-ae60-4db78262ee63",
+      "agent_id": {
+        "agent_name": "Open Streaming Updraft",
+        "platform": "claude",
+        "model": "opus-4-7",
+        "session_id_prefix": "357948"
+      },
+      "thread": "collaboration-identity-doctrine-enforcement-remediation",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/collaboration-identity-doctrine-enforcement-remediation.plan.md",
+            "agent-tools/src/collaboration-state/**",
+            "agent-tools/src/core/agent-identity/**",
+            ".agent/state/collaboration/comms-event.schema.json",
+            ".agent/state/collaboration/active-claims.schema.json",
+            "agent-tools/tests/collaboration-state/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T16:15:21Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Phase 0B implementation: schema split, UuidV5, derive UUID v5, parseAgentId schema.parse(), JSON schema additive id",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T16:30:15Z",
+        "closed_by": {
+          "agent_name": "Open Streaming Updraft",
+          "platform": "claude",
+          "model": "opus-4-7",
+          "session_id_prefix": "357948"
+        },
+        "summary": "Phase 0B Cycle 1 landed (c11f698b); Cycles 2-4 + Phase 0C queued for next session with design fully locked in plan v3 (76920493) + metacog cycle-decomposition (3ca77972)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "276893dd-b487-4102-ae60-4db78262ee63",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0933f219-d404-4f6d-8f6e-15ec45adf028",
+      "agent_id": {
+        "agent_name": "Feathered Flying Cloud",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e65"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T17:03:12Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "curate hard memory fitness surfaces without compression",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T17:07:59Z",
+        "closed_by": {
+          "agent_name": "Feathered Flying Cloud",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e65"
+        },
+        "summary": "Curated hard memory fitness surfaces to soft-only boundary without compression; archived napkin/repo-continuity source windows and split pending-graduations candidates into active shard.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0933f219-d404-4f6d-8f6e-15ec45adf028",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "20d6cf6f-e7ec-4131-9617-f57f8b5aa99f",
+      "agent_id": {
+        "agent_name": "Feathered Flying Cloud",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e65"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/repo-continuity.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T17:11:45Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "scan cross-platform memory buffers for repo-import candidates",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T17:15:57Z",
+        "closed_by": {
+          "agent_name": "Feathered Flying Cloud",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e65"
+        },
+        "summary": "Cross-platform memory sweep complete: Claude, Codex, Cursor, and .remember buffers scanned; candidate imports recorded in curator-pass report; new authored report/napkin additions checked for no external local paths.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "20d6cf6f-e7ec-4131-9617-f57f8b5aa99f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "735a7178-3d21-449e-8ed8-d66cae5334d0",
+      "agent_id": {
+        "agent_name": "Feathered Flying Cloud",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e65"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/curator-passes/README.md",
+            ".agent/memory/operational/curator-passes/2026-05-26-feathered-flying-cloud.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T17:13:22Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "record cross-platform memory sweep curator-pass audit",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T17:15:57Z",
+        "closed_by": {
+          "agent_name": "Feathered Flying Cloud",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e65"
+        },
+        "summary": "Curator-pass audit record complete: report added under curator-passes for cross-platform memory import candidates; README did not need an edit; no external local paths added by this report.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "735a7178-3d21-449e-8ed8-d66cae5334d0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "923e79a6-60cb-44f5-aa9b-ca3e08483d74",
+      "agent_id": {
+        "agent_name": "Feathered Flying Cloud",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e65"
+      },
+      "thread": "cross-platform-memory-path-invariant-note",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/curator-passes/2026-05-26-feathered-flying-cloud.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T17:16:48Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "record path-invariant note on cross-platform memory sweep report",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T17:16:48Z",
+        "closed_by": {
+          "agent_name": "Feathered Flying Cloud",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e65"
+        },
+        "summary": "Post-closure bookkeeping repair: path-invariant check note added to the curator-pass report after owner reminder; report remains free of external local path references.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "923e79a6-60cb-44f5-aa9b-ca3e08483d74",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6a80de31-412c-4fdc-b521-6be66e652213",
+      "agent_id": {
+        "agent_name": "Feathered Flying Cloud",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e65"
+      },
+      "thread": "cross-platform-memory-import",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agent-tooling/frictions-register.md",
+            ".agent/memory/operational/open-questions.md",
+            "docs/governance/development-practice.md",
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md",
+            "docs/architecture/architectural-decisions/125-agent-artefact-portability.md",
+            ".agent/memory/operational/curator-passes/2026-05-26-feathered-flying-cloud.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T17:27:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "import cross-platform memory candidates into durable repo docs",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T17:38:32Z",
+        "closed_by": {
+          "agent_name": "Feathered Flying Cloud",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e65"
+        },
+        "summary": "Imported all cross-platform memory candidates into durable repo homes: F-07 comms list/show, ADR-165/open-question memory-state boundary, development/no-warning ESLint nuance, start-right-team seat-cost routing, ADR-125 plugin retention, plus curator-pass and napkin updates. Targeted markdownlint, git diff --check, and local-path scans passed for touched files.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6a80de31-412c-4fdc-b521-6be66e652213",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f2a5e7db-9a38-40e4-92bd-55428ed05393",
+      "agent_id": {
+        "agent_name": "Feathered Flying Cloud",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e65"
+      },
+      "thread": "cross-platform-memory-import",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/rules/no-warning-toleration.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T17:30:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "import ESLint warn-first memory candidate into no-warning doctrine",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T17:38:32Z",
+        "closed_by": {
+          "agent_name": "Feathered Flying Cloud",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e65"
+        },
+        "summary": "Closed companion claim for no-warning-toleration edit: ESLint warn-first nuance imported as a bounded authoring-state rule, not a warning-toleration exception.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f2a5e7db-9a38-40e4-92bd-55428ed05393",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8c67b185-007e-49a2-bbd3-ad23905849bd",
+      "agent_id": {
+        "agent_name": "Tempestuous Sweeping Feather",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "a9e5d2"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/identity.ts",
+            "agent-tools/src/collaboration-state/cli-self-identity.ts",
+            "agent-tools/src/collaboration-state/state-parsers.ts",
+            "agent-tools/src/collaboration-state/active-agent-routing.ts",
+            "agent-tools/src/collaboration-state/comms-relevant-events.ts",
+            "agent-tools/src/collaboration-state/comms-use-cases.ts",
+            "agent-tools/src/collaboration-state/claim-reports.ts",
+            "agent-tools/src/collaboration-state/cli-comms-messages.ts",
+            "agent-tools/src/collaboration-state/cli-spec-options.ts",
+            "agent-tools/src/commit-queue/intent.ts",
+            ".agent/state/collaboration/comms-event.schema.json",
+            ".agent/state/collaboration/active-claims.schema.json",
+            "agent-tools/package.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T17:05:17Z",
+      "freshness_seconds": 21600,
+      "sidebar_open": false,
+      "intent": "phase-0b-and-0c-collaboration-identity-implementation",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T18:02:05Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Sweeping Feather",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "a9e5d2"
+        },
+        "summary": "Phase 0B complete (4 cycles substrate) + Phase 0C cycles 6+7+8 (routing cure) landed across 5 commits: bed24b57, 57084c15, 2a501e97, b977dbab, 30ef437b. Cycles 9-10 + closeout queued for final session.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8c67b185-007e-49a2-bbd3-ad23905849bd",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

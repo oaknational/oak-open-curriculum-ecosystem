@@ -46,7 +46,7 @@ workstream from the [full ADR index](../../../../docs/architecture/architectural
 
 ### 3. Learning-loop surfaces (active memory)
 
-- @.agent/memory/active/distilled.md — hard-won rules
+- @.agent/memory/active/distilled.md — refined cross-session lessons
 - @.agent/memory/active/napkin.md — current session observations
 - @.agent/memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md —
   constraint at tripwire-design time (passive guidance needs an active

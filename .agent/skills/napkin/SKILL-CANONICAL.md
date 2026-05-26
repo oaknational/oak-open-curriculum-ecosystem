@@ -21,8 +21,8 @@ update it continuously as you work.
 
 First thing, every session — read both files before doing anything:
 
-1. **`.agent/memory/active/distilled.md`** — Curated rules, patterns,
-   and troubleshooting. This is the high-signal reference.
+1. **`.agent/memory/active/distilled.md`** — Refined cross-session
+   lessons, patterns, and troubleshooting. This is the high-signal reference.
    Internalise and apply silently.
 2. **`.agent/memory/active/napkin.md`** — Recent session log. Scan for
    context from the most recent sessions.

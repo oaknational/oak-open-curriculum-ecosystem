@@ -28,6 +28,15 @@ appended_passes:
     sections_added:
       - 'Backfill rotation 2026-05-24 — verified distilled homes'
     reason: 'Phase 3 continuation moved the Sonar hotspot audit-trail verification lesson into the SonarQube MCP rule before removing the duplicate distilled entry.'
+  - appended_at: 2026-05-25
+    appended_by: Prismatic Transiting Star / codex / GPT-5 / 019e60
+    sections_added:
+      - 'Backfill rotation 2026-05-25 — distilled processing pass'
+    reason: >-
+      Owner-requested distilled.md processing through consolidate-docs. The
+      gate-stack, coordination, commit-window, CLI, evidence, and continuation
+      lessons had real behavioural homes; entries were removed from
+      distilled.md only after those homes were updated or verified.
 ---
 
 # Distilled — Graduations-Log Archive (2026-05-06 → 2026-05-14)
@@ -468,3 +477,52 @@ Verified homes:
   → [start-right-team/SKILL-CANONICAL.md](../../../skills/start-right-team/SKILL-CANONICAL.md)
   § Singleton-lane coordination rule, which now treats first registry/comms
   checks as provisional and requires final reconciliation before completion.
+
+## Backfill rotation 2026-05-25 — distilled processing pass
+
+Processed the 2026-05-17 Solar Orbiting Asteroid entry and 2026-05-14 Sylvan
+Budding Forest deep-dive consolidation entries from
+[`../distilled.md`](../distilled.md) during an owner-requested
+`oak-consolidate-docs` pass. Dispositions:
+
+- *Gates hide gates — failure surface is a stack, not a list*
+  → [gates/SKILL-CANONICAL.md](../../../skills/gates/SKILL-CANONICAL.md)
+  § Quality Gates and
+  [build-system.md](../../../../docs/engineering/build-system.md)
+  § `pnpm check` - Canonical full gate.
+- *Roles emerge from live pressure; every role carries handoff proof; scout
+  responses are input, not permission*
+  → [start-right-team/SKILL-CANONICAL.md](../../../skills/start-right-team/SKILL-CANONICAL.md)
+  § Continuation Pointer Contract, § 5, and § 6, plus
+  [ADR-181](../../../../docs/architecture/architectural-decisions/181-agent-team-start-and-action-log.md)
+  § Route by live pressure and temporary responsibility.
+- *Pre-closeout sweep and closeout-bundle perturbation*
+  → [session-handoff/SKILL-CANONICAL.md](../../../skills/session-handoff/SKILL-CANONICAL.md)
+  § Team Closeout Owner and § Verify the `pnpm check` cleanliness gate.
+- *`git:index/head` claim syntax and commit-window workflow*
+  → [commit/SKILL-CANONICAL.md](../../../skills/commit/SKILL-CANONICAL.md)
+  § Four operational moves and
+  [respect-active-agent-claims.md](../../../rules/respect-active-agent-claims.md)
+  § Fresh `git:index/head` Claim.
+- *CLI flag-shape drift and shell quoting hazards*
+  → [agent-tools README](../../../../agent-tools/README.md) § CLI Norms.
+- *Evidence outputs must stay readable*
+  → [AGENT.md](../../../directives/AGENT.md) § Commands.
+- *Formatting proof before commit hooks for new modules*
+  → [commit/SKILL-CANONICAL.md](../../../skills/commit/SKILL-CANONICAL.md)
+  § Stage the bundle.
+- *Skill text carries durable routing; continuation records carry volatile
+  facts; stale "ready to land" is a defect*
+  → [continuity-practice.md](../../../directives/continuity-practice.md)
+  § Continuation Records and
+  [start-right-team/SKILL-CANONICAL.md](../../../skills/start-right-team/SKILL-CANONICAL.md)
+  § Continuation Pointer Contract.
+- *Entry and exit routing surfaces are co-load-bearing with skill changes*
+  → [session-handoff/SKILL-CANONICAL.md](../../../skills/session-handoff/SKILL-CANONICAL.md)
+  § Session Shape Check and step 6d entry-point sweep.
+
+The source distilled entries were removed after the permanent homes were
+updated or verified. The gate wording was adjusted for current executable
+truth: `pnpm check` now uses Turbo `--continue` within the Turbo stage, while
+root shell-stage boundaries still hide downstream stages until upstream stages
+pass.

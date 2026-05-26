@@ -1,0 +1,6 @@
+---
+description: When authoring new doctrine substance, classify it as new rule, PDR clause amendment, or new PDR before writing the first line. Prefer the lowest-cost route in order: existing PDR clause > new rule > new PDR.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/new-rule-vs-pdr-clause.md`.

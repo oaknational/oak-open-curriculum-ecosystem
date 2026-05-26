@@ -80,6 +80,15 @@ Milestone 3: Public Beta                         📋 PLANNED
 | Open public alpha (M2) | Public | **Open public alpha** | Dev Clerk | ES re-index, MCP Apps, KG alignment, Sentry+OTel foundation |
 | Public beta (M3) | Public | **Public beta** | **Prod Clerk** | Cloudflare MCP security gate, Prod Clerk, alerting/ops hardening, KG alignment, exemplar UI |
 
+### MCP Path-to-GA coordination
+
+Cross-collection coordination for the Curriculum MCP HTTP server release arc (M1 → M2 → M3 → GA) lives at
+[curriculum-mcp-path-to-ga/roadmap.md](curriculum-mcp-path-to-ga/roadmap.md).
+It is a thin strategic index — owns no execution; sequences sub-plans across
+`observability/`, `security-and-privacy/`, `sdk-and-mcp-enhancements/`,
+`compliance/`, and `architecture-and-infrastructure/` against the milestone
+gates above.
+
 ---
 
 ## Cross-cutting Threads

@@ -1333,9 +1333,9 @@
       ],
       "commit_subject": "test(agent-tools): clear commit-workflow Sonar S7735",
       "queued_at": "2026-05-23T13:06:23.519Z",
-      "updated_at": "2026-05-23T13:06:23.519Z",
+      "updated_at": "2026-05-26T13:15:28.441Z",
       "expires_at": "2026-05-23T13:21:23.519Z",
-      "phase": "queued"
+      "phase": "abandoned"
     },
     {
       "intent_id": "c24cbd11-1c22-491e-a047-7e61e4ba166b",
@@ -1351,9 +1351,9 @@
       ],
       "commit_subject": "docs(practice-core): propose PDR-075 director substrate-writing discipline",
       "queued_at": "2026-05-23T13:28:28.530Z",
-      "updated_at": "2026-05-23T13:28:28.530Z",
+      "updated_at": "2026-05-26T13:15:29.322Z",
       "expires_at": "2026-05-23T13:43:28.530Z",
-      "phase": "queued"
+      "phase": "abandoned"
     },
     {
       "intent_id": "ee3f018a-c8aa-4faa-959a-f1e1d1e36be6",
@@ -1624,9 +1624,9 @@
       ],
       "commit_subject": "fix(sdk-codegen): apply useful Sonar remediation hunks",
       "queued_at": "2026-05-24T12:38:36.969Z",
-      "updated_at": "2026-05-24T12:38:36.969Z",
+      "updated_at": "2026-05-26T13:15:30.192Z",
       "expires_at": "2026-05-24T12:53:36.969Z",
-      "phase": "queued"
+      "phase": "abandoned"
     },
     {
       "intent_id": "7dc6f8cc-4d81-4ffd-ac75-87a39cf9d9a2",
@@ -1749,9 +1749,9 @@
       ],
       "commit_subject": "refactor(agent-tools): remove 2 audit-shaped commit-workflow tests (tidy cycle 14)",
       "queued_at": "2026-05-25T07:12:58.974Z",
-      "updated_at": "2026-05-25T07:12:58.974Z",
+      "updated_at": "2026-05-26T13:15:31.064Z",
       "expires_at": "2026-05-25T07:27:58.974Z",
-      "phase": "queued"
+      "phase": "abandoned"
     },
     {
       "intent_id": "e270d2f2-d4ab-4306-a26c-8607eb8925ab",
@@ -1774,9 +1774,9 @@
       ],
       "commit_subject": "feat(agent-tools): comms-watch auto-seed + --seed-from-now/--no-auto-seed flags (tidy cycle 9)",
       "queued_at": "2026-05-25T07:20:17.211Z",
-      "updated_at": "2026-05-25T07:20:17.211Z",
+      "updated_at": "2026-05-26T13:15:31.934Z",
       "expires_at": "2026-05-25T07:35:17.211Z",
-      "phase": "queued"
+      "phase": "abandoned"
     },
     {
       "intent_id": "ddd9dd11-a74e-4903-bbd1-e4fa03629847",
@@ -1925,28 +1925,5 @@
       "staged_name_status": "M\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/comms-seen/Fiery-Kindling-Brazier.json\nM\t.agent/state/collaboration/comms-seen/Stormy-Surfing-Dock.json\nA\t.agent/state/collaboration/comms/06cd67d4-0e42-4056-82b6-1075536f2b1a.json\nA\t.agent/state/collaboration/comms/4bf240b9-39e4-42c0-a487-0191a553e264.json\nA\t.agent/state/collaboration/comms/607220f3-cc46-4811-a9ce-8b7e2c0b8897.json\nA\t.agent/state/collaboration/comms/729beb59-6e26-4ae4-a25e-c705fe735276.json\nA\t.agent/state/collaboration/comms/a6058082-f0f3-467a-ba59-7617e5100e8b.json\nA\t.agent/state/collaboration/comms/bb6e4203-3214-40a3-b796-74500188a55f.json\nA\t.agent/state/collaboration/comms/c44a28f8-7936-4b6d-9142-1647dbd35a58.json\n"
     }
   ],
-  "claims": [
-    {
-      "claim_id": "531342fd-54f5-4ace-a35c-9c7f35f0995d",
-      "agent_id": {
-        "agent_name": "Stormy Surfing Dock",
-        "platform": "claude",
-        "model": "claude-opus-4-7",
-        "session_id_prefix": "2a7b65"
-      },
-      "thread": "agentic-engineering-enhancements",
-      "areas": [
-        {
-          "kind": "files",
-          "patterns": [
-            ".agent/practice-core/decision-records/PDR-082-n2-collaboration-mode.md"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-25T15:06:20Z",
-      "freshness_seconds": 1800,
-      "sidebar_open": false,
-      "intent": "First-draft PDR-082: n=2 collaboration mode (lightweight protocol for two-agent teams)"
-    }
-  ]
+  "claims": []
 }

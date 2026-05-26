@@ -22,6 +22,7 @@ fitness_rationale: >-
   should reflect that lifecycle. Recalibration is the substance-led structural
   fix per the substance > destination boundary.
 merge_class: mostly-append-register
+fitness_content_role: drainable-buffer
 ---
 
 # Pending-Graduations Register
@@ -131,12 +132,11 @@ Regenerated 2026-05-24 by Sylvan Sprouting Petal after routing the
 after the PDR-075 status review drain. Updated 2026-05-25 by Hushed Stalking
 Shade after the hardening-arc consolidation Phase 2 graduation pass.
 
-The live body now contains **2** due entries:
+The live body now contains **0** due entries.
 
-1. `director-pure-direction-only` — owner-decision packet item 2:
-   principle-class PDR route needs owner approval.
-2. `owner-action-is-not-a-cure` — owner-decision packet item 3:
-   principle-class PDR route needs owner approval.
+The former owner-decision packet items 2 and 3 graduated on 2026-05-26:
+`director-pure-direction-only` landed as PDR-083, and
+`owner-action-is-not-a-cure` landed as PDR-084.
 
 (`marshal-as-cycle-discipline` graduated 2026-05-25 — PDR-077 landed at
 `7c2f85f4`; owner-decision packet item 5 resolved.)
@@ -153,6 +153,12 @@ verification. Pointer text compacted from this index is preserved in
 [`archive/pending-graduations-archive-2026-05-24.md`](archive/pending-graduations-archive-2026-05-24.md)
 § "Processed pointer notes compacted 2026-05-24". Live unresolved entries
 remain below or in the active queue shards.
+
+Processed graduated bodies moved 2026-05-26 by Feathered Flying Cloud are
+preserved in
+[`archive/pending-graduations-archive-2026-05-26-feathered-hard-curation.md`](archive/pending-graduations-archive-2026-05-26-feathered-hard-curation.md):
+Gates hide gates, PDR-079, Director pure-direction-only, Owner action is not a
+cure, and Marshal-as-cycle-discipline.
 
 ### `partially-graduated`
 
@@ -188,6 +194,17 @@ Route-state: split out by Breezy Flowing Dock on 2026-05-25 as live queue
 substance, not archive. The shard carries Briny/Hushed planning, role-emission,
 template, and multi-agent auto-fix candidates plus the human-composer plan
 audit-trail pointer. Process the shard entry by entry before removing this
+pointer.
+
+### 2026-05-26 — Starless + Open closeout candidates
+
+Active shard:
+[`pending-graduations/2026-05-26-starless-open-closeout-candidates.md`](pending-graduations/2026-05-26-starless-open-closeout-candidates.md).
+
+Route-state: split out by Feathered Flying Cloud on 2026-05-26 as live queue
+substance, not archive. The shard carries Starless n=2 closeout candidates,
+Open's reviewer-sizing candidate, and Open closeout-stretch candidates from the
+archived active napkin. Process the shard entry by entry before removing this
 pointer.
 
 ### `pending` (body markers — second-instance or owner-direction gated)
@@ -263,25 +280,6 @@ measures the load and authors the criteria is the success.
 
 **Lifecycle note**: this entry is **first-instance recovery from .remember buffer drainage**; if a second instance of the rule-topology fragmentation signal appears in a future session, that strengthens the PDR case from candidate → ratification-ready.
 
-### 2026-05-17 — Gates hide gates — failure surface is a stack
-
-`[captured: 2026-05-17 | source: distilled.md §"Recently Distilled — 2026-05-17 Solar Orbiting Asteroid gate-green cascade" §"Gates hide gates" | target: pattern:gates-hide-gates | trigger: second-instance | size: S | status: pending]`
-
-Substance: `pnpm check`'s serial chain (each gate's `&&` means
-downstream gates do not run while an upstream gate is red) shields
-each failed gate from the next. The shielding holds at test-level
-too. **Diagnostic discipline**: when a gate clears, expect the next
-downstream gate to surface a previously hidden problem. Treat each
-green gate as a magnifying glass aimed at the next. Worked instance
-2026-05-17 (Solar Orbiting Asteroid): knip clearing surfaced a
-parallel-load MCP e2e flake; the e2e deletions surfaced a missing
-Playwright binary; installing the binary surfaced two pre-existing
-circular type imports in depcruise that had been latent for weeks.
-Falsifiability: a `pnpm check --continue` mode would reveal the
-full latent stack at once. Second-instance trigger: any future
-consolidation observing the same cascade-on-clear shape graduates
-this to a pattern in `.agent/memory/active/patterns/`.
-
 ### 2026-05-14 — Cross-thread program artefact shape (first-instance trigger captured)
 
 `[captured: 2026-05-14 | source: napkin.md §"2026-05-14 — Cross-thread program artefact shape (first observed instance)" | target: pdr-or-rule-on-cross-thread-program-artefact-shape | trigger: second-cross-thread-program-emergence | size: M | status: pending]`
@@ -317,17 +315,24 @@ the failure shape directly and forces the function-test framing.
 
 ### 2026-05-14 — Skill text vs continuation record distinction (single-instance, PDR-shape candidate)
 
-`[captured: 2026-05-14 | source: distilled.md §"Continuation surfaces" first bullet (Sylvan distillation) | target: pdr:skill-text-vs-continuation-record | trigger: second-instance-stability | size: S | status: pending]`
+`[captured: 2026-05-14 | source: continuity-practice.md §"Continuation Records" + distilled-graduations-log-2026-05-14.md §"Backfill rotation 2026-05-25" | target: pdr:skill-text-vs-continuation-record | trigger: second-instance-stability | size: S | status: pending]`
 
 Substance: skill text carries durable routing behaviour; continuation
 records carry volatile facts. Branch, plan, next-step, commit ids,
 team expectation — every fact that changes between sessions belongs
 in the thread record, not in the skill body. The skill's job is to
 fire the routing on arrival; the record's job is to provide the
-current state for that routing to act on. Function-test verdict:
-PDR-shape (Practice-meta design distinction). Currently single-
-instance evidence (Sylvan's distillation 2026-05-14). Holds until a
-second session corroborates or contradicts the distinction.
+current state for that routing to act on.
+
+**Behaviour home added 2026-05-25**:
+[`continuity-practice.md`](../../directives/continuity-practice.md)
+§ Continuation Records and
+[`start-right-team/SKILL-CANONICAL.md`](../../skills/start-right-team/SKILL-CANONICAL.md)
+§ Continuation Pointer Contract. Function-test verdict remains
+PDR-shaped (Practice-meta design distinction). PDR promotion is still
+pending because the portable governance claim has single-instance evidence;
+promote only after a second session corroborates or contradicts the
+distinction, or after owner direction.
 
 ### Active queue shards created 2026-05-24
 
@@ -345,42 +350,26 @@ surfaces and must be processed before any archive move:
 
 ## Active queue shard pointers
 
-The shard bodies listed in the index remain live queue substance, not archives.
-Process entries there before removing their pointers from this register.
+### 2026-05-25 — Fiery collaboration decomposition + n=2 efficiency
 
-### 2026-05-25 — Fiery collaboration decomposition + n=2 efficiency candidates
-
-Active shard:
 [`pending-graduations/2026-05-25-fiery-collaboration-decomposition-and-n2-efficiency.md`](pending-graduations/2026-05-25-fiery-collaboration-decomposition-and-n2-efficiency.md).
+Route-state: live shard with two due PR #115 retrospective owner-direction candidates.
 
-Route-state: split out by Fiery Kindling Brazier on 2026-05-25 immediately on capture
-to keep the main register under hard-line-limit per buffer back-pressure discipline.
-The shard carries two `status: due` owner-direction-triggered candidates from the
-PR #115 marshal cycle retrospective metacognition pass: "Collaboration ceremony —
-decomposition discipline for marshal cycles" and "n=2 coordination efficiency". Process
-the shard entry by entry before removing this pointer. Composes with PDR-082 (n=2
-collaboration mode, drafted in parallel by Stormy Surfing Dock on the same substrate).
+### 2026-05-26 — n=2 enforcement bundle Cycle 1 candidates
+
+[`pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md`](pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md).
+
+Route-state: live shard; source is archived at
+[`archive/pending-graduations-archive-2026-05-26-n2-cycle-1-candidates.md`](archive/pending-graduations-archive-2026-05-26-n2-cycle-1-candidates.md)
+and active napkin context at
+[`../active/archive/napkin-2026-05-26-thermal-critical-curation.md`](../active/archive/napkin-2026-05-26-thermal-critical-curation.md).
+Cross-lane commit blocking, pre-pose viability, B1 self-fires, heartbeat-only
+stall, and owner-reroute visibility are graduated.
 
 ## 2026-05-24 owner-decision-batch candidates (Lanternlit Listening Dusk / `78683a`)
 
-Route note 2026-05-24 (Shaded Silencing Dusk): the active `distilled.md`
-summaries for PDR-vs-ADR classification, M1/M2 milestone asymmetry,
-owner-reframe-as-misframe, and marshal queue discipline were removed after
-verifying this register carries their live status. These entries remain live
-queue substance, not archived or graduated content.
-
-### PDR-079 PDR-vs-ADR portability distinction (owner-articulated; codified)
-
-[captured: 2026-05-24 | target: PDR-079 + no-moving-targets scope amendment | status: graduated 2026-05-25]
-
-**Graduated 2026-05-25**: PDR-079 LANDED at `e8bc6781` via
-post-m1-attestation-tidy-up.plan.md cycle 5a, with the co-cure
-`.agent/rules/no-moving-targets-in-permanent-docs.md` scope-amendment
-in the same commit. Hardening program WS-12 completed at `4e333441`
-2026-05-25. Full body archived at
-[`archive/pending-graduations-archive-2026-05-25-hardening-arc-graduations.md`](archive/pending-graduations-archive-2026-05-25-hardening-arc-graduations.md).
-
----
+Route note 2026-05-24 (Shaded Silencing Dusk): active `distilled.md` summaries
+were removed after verifying this register carries their live status.
 
 ### Reviewer-pass + critical-analysis loop as cure for trust-without-reverification
 
@@ -510,72 +499,6 @@ Cross-references: composes with `present-verdicts-not-menus` rule (when only one
 ---
 
 ## 2026-05-24 active-napkin rotation updates (Shaded Silencing Dusk / `019e59`)
-
-### Director pure-direction-only as broad/focused cognition split
-
-[captured: 2026-05-24 | source: active-napkin rotation +
-curator handoff survey §2.2 | target:
-pdr:director-pure-direction-only | trigger: owner-direction | size: L |
-status: due]
-
-Owner-stated doctrine says the Director role exists to keep broad
-awareness and focused implementation co-existing: the Director's
-awareness is broad, implementers' awareness is focused, and the
-Director-only boundary is the load-bearing mechanism enabling both.
-This is Practice-governance shaped, not repo product architecture.
-
-Natural home: new PDR, related to PDR-074 (Director value), PDR-075
-(Director substrate-writing), PDR-064 (role transition), and PDR-072
-(autonomic learning). The entry is due because the trigger is explicit
-owner direction and the concept has already been consumed by sibling
-memory surfaces.
-
-Owner-decision pointer: keep this entry in the live due set until the
-Memory Surface Critical Drain owner-decision packet item 2 approves the
-principle-class PDR route.
-
-Falsifiability: PDR exists with a decision section naming the
-broad-awareness / focused-awareness split and a consequence section
-specifying which work the Director must not absorb.
-
-### Owner action is not a cure
-
-[captured: 2026-05-24 | source: active-napkin rotation +
-curator handoff survey §2.4 | target:pdr:owner-action-is-not-a-cure |
-trigger: owner-direction+N>=3 worked instances | size: L | status: due]
-
-Repeated windows show the same structural rule: when an owner action
-unblocks a team, the durable learning is the missing autonomy
-primitive, not "ask the owner next time". Worked evidence in this
-napkin includes Playwright install permission routing, broad
-Director-routing blockages, and owner-wide sweep intervention over
-ceremony-heavy bundle coordination.
-
-Natural home: a PDR or PDR amendment in the PDR-074 autonomy-primitives
-cluster. This should name the diagnostic distinction: owner
-intervention is evidence of a substrate gap unless the decision is
-genuinely owner-only.
-
-Owner-decision pointer: keep this entry in the live due set until the
-Memory Surface Critical Drain owner-decision packet item 3 approves the
-principle-class PDR route.
-
-Falsifiability: future notes about owner interventions classify each
-case into owner-only decision vs missing autonomy primitive, and route
-the latter into protocol/tooling substrate.
-
-### Marshal-as-cycle-discipline throughput substrate
-
-[captured: 2026-05-24 | target: PDR-077 | status: graduated 2026-05-25]
-
-**Graduated 2026-05-25**: PDR-077 LANDED at `7c2f85f4` via
-post-m1-attestation-tidy-up.plan.md cycle 5; Practice-Core index entry
-added at `93c4fdc0`; draft + R1/R3 syntheses captured at `4575044e`
-(cycle 2); PDR-063 + PDR-064 §Related cross-references added. Owner-
-decision packet item 5 resolved: portable Practice-governance route
-(evidence base spans cross-platform marshal cycles). Full body archived
-at
-[`archive/pending-graduations-archive-2026-05-25-hardening-arc-graduations.md`](archive/pending-graduations-archive-2026-05-25-hardening-arc-graduations.md).
 
 ### Structured field for agent state
 

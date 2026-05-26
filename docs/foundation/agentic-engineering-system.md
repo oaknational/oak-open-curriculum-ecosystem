@@ -73,15 +73,22 @@ The system improves over time through the [Knowledge Flow](../../.agent/practice
 
 **Capture** → **Refine** → **Graduate** → **Enforce** → **Work** → repeat.
 
-Each stage serves a broader audience: the napkin serves the current session, distilled learnings serve future agents, permanent docs (ADRs, governance, READMEs) serve everyone. Each transition raises the bar for what passes through. The [`/jc-consolidate-docs`](../../.agent/skills/consolidate-docs/SKILL-CANONICAL.md) skill drives graduation and is where the intra-repo loop, inter-repo integration, and fitness regulation all converge ([ADR-131 §Consolidate-Docs](../architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md)).
+Each stage serves a broader audience: the napkin serves the current session,
+distilled learnings serve future agents, permanent docs (ADRs, governance,
+READMEs) serve everyone. Session handoff may conserve a sharp cross-session
+lesson directly in `distilled.md`; [`/jc-consolidate-docs`](../../.agent/skills/consolidate-docs/SKILL-CANONICAL.md)
+remains the deeper graduation pass where the intra-repo loop, inter-repo
+integration, and fitness regulation converge
+([ADR-131 §Consolidate-Docs](../architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md)).
 
 **Fitness functions** prevent unbounded growth at every stage. The napkin
-triggers distillation at ~500 lines. Distilled targets <200 lines. Permanent
-docs carry YAML frontmatter thresholds (ADR-144): `fitness_line_target` (soft),
-`fitness_line_limit` (hard), `fitness_char_limit` (hard), and
-`fitness_line_length` (hard), with a `split_strategy` to describe what
-happens when a ceiling is exceeded. Without these governors,
-the learning loop simply moves accumulation downstream.
+triggers distillation at its frontmatter threshold. Distilled carries its own
+fitness frontmatter because its useful size changes as recent lessons ripen or
+graduate. Permanent docs carry YAML frontmatter thresholds (ADR-144):
+`fitness_line_target` (soft), `fitness_line_limit` (hard),
+`fitness_char_limit` (hard), and `fitness_line_length` (hard), with a
+`split_strategy` to describe what happens when a ceiling is exceeded. Without
+these governors, the learning loop simply moves accumulation downstream.
 
 The loop is **self-referential**: rules about rule creation, patterns about distillation quality, and insights about consolidation all flow through the same cycle. If any link breaks — if the napkin stops capturing meta-mistakes, or consolidation never graduates insights about consolidation — the loop is degrading. [ADR-131 §The Self-Referential Property](../architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md) provides the diagnostic signals.
 
@@ -92,7 +99,7 @@ Different mechanisms serve different time horizons:
 | Mechanism                                                 | Time horizon    | Purpose                                             |
 | --------------------------------------------------------- | --------------- | --------------------------------------------------- |
 | [Napkin](../../.agent/memory/active/napkin.md)            | Current session | Raw capture of mistakes, discoveries, corrections   |
-| [Distilled](../../.agent/memory/active/distilled.md)      | Cross-session   | Curated patterns, read at session start             |
+| [Distilled](../../.agent/memory/active/distilled.md)      | Cross-session   | Refined lessons, read at session start              |
 | [Session prompts](../../.agent/prompts/)                  | Domain-scoped   | Reusable playbooks carrying operational context     |
 | [Execution plans](../../.agent/plans/)                    | Weeks to months | Phased work with acceptance criteria and evidence   |
 | [ADRs](../architecture/architectural-decisions/)          | Permanent       | Architectural decisions and their rationale         |

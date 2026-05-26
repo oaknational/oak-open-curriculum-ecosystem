@@ -1,13 +1,19 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  PreToolUseDenyResponseSchema,
   buildPreToolUseDenyResponse,
   loadScopedContentBlocks,
   runPreToolUseContentGuard,
-} from './check-blocked-content.js';
+  type PreToolUseDenyResponse,
+} from '../../src/hook-policy/check-blocked-content.js';
 
 async function* stdinFromJson(payload: unknown): AsyncGenerator<Buffer> {
   yield Buffer.from(JSON.stringify(payload));
+}
+
+function parseDenyPayloadFromStdout(stdoutChunks: readonly string[]): PreToolUseDenyResponse {
+  return PreToolUseDenyResponseSchema.parse(JSON.parse(stdoutChunks.join('')));
 }
 
 async function* stdinFromText(text: string): AsyncGenerator<Buffer> {
@@ -110,7 +116,7 @@ describe('runPreToolUseContentGuard', () => {
 
     const result = await runPreToolUseContentGuard({
       stdin: stdinFromText('not valid json {{{'),
-      stdout: { write: () => {} },
+      stdout: { write: () => undefined },
       stderr: {
         write: (text: string) => {
           stderrChunks.push(text);
@@ -182,7 +188,7 @@ describe('runPreToolUseContentGuard', () => {
           stdoutChunks.push(text);
         },
       },
-      stderr: { write: () => {} },
+      stderr: { write: () => undefined },
       blockedPatterns: [],
       scopedBlocks: [
         {
@@ -203,27 +209,28 @@ describe('canonical policy: hedging-vocabulary trip-list (WS3)', () => {
 
   it('the canonical policy registers a hedging-vocabulary trip-list scoped to doctrine surfaces', async () => {
     const blocks = await loadScopedContentBlocks();
-    const literalBlocks = blocks.filter((block) => (block.kind ?? 'literal') === 'literal');
-
-    const patterns = literalBlocks.map((block) => block.pattern);
-    expect(patterns).toEqual(
-      expect.arrayContaining([
-        'carve out',
-        'carve-out',
-        'carve around',
-        'an exception to',
-        'with the exception of',
-        'for these arcs',
-        'honest framing for',
-        'permitted variant',
-        'land it then iterate',
-        'cheap cure',
-        'good enough',
-        'quick fix',
-      ]),
+    const hedgingPatterns = new Set([
+      'carve out',
+      'carve-out',
+      'carve around',
+      'an exception to',
+      'with the exception of',
+      'for these arcs',
+      'honest framing for',
+      'permitted variant',
+      'land it then iterate',
+      'cheap cure',
+      'good enough',
+      'quick fix',
+    ]);
+    const hedgingBlocks = blocks.filter(
+      (block) => (block.kind ?? 'literal') === 'literal' && hedgingPatterns.has(block.pattern),
     );
 
-    for (const block of literalBlocks) {
+    const patterns = hedgingBlocks.map((block) => block.pattern);
+    expect(patterns).toEqual(expect.arrayContaining([...hedgingPatterns]));
+
+    for (const block of hedgingBlocks) {
       expect(block.citation).toBe(expectedCitation);
       expect(block.include_paths.length).toBeGreaterThan(0);
     }
@@ -243,10 +250,7 @@ describe('canonical policy: SHA-in-permanent-doc regex (WS4)', () => {
       expect.arrayContaining(['(historical reference)']),
     );
     expect(shaBlock?.include_paths).toEqual(
-      expect.arrayContaining([
-        'docs/architecture/architectural-decisions/',
-        '.agent/practice-core/',
-      ]),
+      expect.arrayContaining(['.agent/practice-core/', '.agent/rules/']),
     );
     expect(shaBlock?.citation).toContain('Moving targets');
   });
@@ -260,7 +264,7 @@ describe('canonical policy: SHA-in-permanent-doc regex (WS4)', () => {
         tool_input: {
           new_string: 'See commit abc1234 for context.',
           old_string: 'See an unspecified commit for context.',
-          file_path: '/repo/docs/architecture/architectural-decisions/ADR-200-example.md',
+          file_path: '/repo/.agent/practice-core/decision-records/PDR-XXX-example.md',
         },
       }),
       stdout: {
@@ -278,7 +282,7 @@ describe('canonical policy: SHA-in-permanent-doc regex (WS4)', () => {
 
     expect(result).toStrictEqual({ exitCode: 0 });
     expect(stderrChunks).toStrictEqual([]);
-    const denyPayload = JSON.parse(stdoutChunks.join(''));
+    const denyPayload = parseDenyPayloadFromStdout(stdoutChunks);
     expect(denyPayload.hookSpecificOutput.permissionDecision).toBe('deny');
     expect(denyPayload.hookSpecificOutput.permissionDecisionReason).toContain('Citation:');
     expect(denyPayload.hookSpecificOutput.permissionDecisionReason).toContain('Moving targets');
@@ -292,7 +296,7 @@ describe('canonical policy: SHA-in-permanent-doc regex (WS4)', () => {
         tool_input: {
           new_string: 'The metric reading was 1765098000000 last quarter.',
           old_string: 'The metric reading was unspecified last quarter.',
-          file_path: '/repo/docs/architecture/architectural-decisions/ADR-200-example.md',
+          file_path: '/repo/.agent/practice-core/decision-records/PDR-XXX-example.md',
         },
       }),
       stdout: {
@@ -300,7 +304,7 @@ describe('canonical policy: SHA-in-permanent-doc regex (WS4)', () => {
           stdoutChunks.push(text);
         },
       },
-      stderr: { write: () => {} },
+      stderr: { write: () => undefined },
       blockedPatterns: [],
     });
 
@@ -308,15 +312,15 @@ describe('canonical policy: SHA-in-permanent-doc regex (WS4)', () => {
     expect(stdoutChunks).toStrictEqual([]);
   });
 
-  it('the wired-up guard does NOT deny a SHA wrapped in inline code on a permanent-doc path', async () => {
+  it('the wired-up guard does NOT deny a SHA in inline code on a data-shaped line (excludes_inline_code applies to data-shaped context)', async () => {
     const stdoutChunks: string[] = [];
 
     const result = await runPreToolUseContentGuard({
       stdin: stdinFromJson({
         tool_input: {
-          new_string: 'See commit `abc1234` for context.',
-          old_string: 'See an unspecified commit for context.',
-          file_path: '/repo/docs/architecture/architectural-decisions/ADR-200-example.md',
+          new_string: '  commit_sha: `abc1234`',
+          old_string: '  commit_sha: `older000`',
+          file_path: '/repo/.agent/practice-core/decision-records/PDR-XXX-example.md',
         },
       }),
       stdout: {
@@ -324,7 +328,7 @@ describe('canonical policy: SHA-in-permanent-doc regex (WS4)', () => {
           stdoutChunks.push(text);
         },
       },
-      stderr: { write: () => {} },
+      stderr: { write: () => undefined },
       blockedPatterns: [],
     });
 

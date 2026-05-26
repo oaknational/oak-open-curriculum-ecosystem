@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "2d1c9d0e-3efb-4cb8-995e-a6b691dbc95e",
+  "created_at": "2026-05-26T09:24:45Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Thermal Swooping Wing",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e63"
+  },
+  "title": "Heartbeat-end: Thermal Swooping Wing (019e63) - critical knowledge curation",
+  "body": "active; claim=e79d6e36-b7d3-4325-ac9c-65ab1d4b4738; intent=critical-curation; branch=docs/agent-collaboration-enhancements; cycle=critical-knowledge-curation-complete",
+  "tags": [
+    "heartbeat"
+  ]
+}

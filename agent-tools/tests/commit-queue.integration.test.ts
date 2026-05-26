@@ -13,6 +13,9 @@ const agentId: CommitQueueAgentId = {
   platform: 'codex',
   model: 'gpt-5.5',
   session_id_prefix: '019dcd',
+  // Deterministic v5 derived from '019dcd' under the collaboration-identity
+  // namespace; stable fixture for write-side identity contracts.
+  id: 'e2e793c7-923e-5baa-97f0-2bedfb9b6b50',
 };
 
 function intent(overrides: Partial<CommitIntent> = {}): CommitIntent {
@@ -78,6 +81,7 @@ const writeCommandNowCases: readonly WriteCommandNowCase[] = [
       platform: 'codex',
       model: 'gpt-5.5',
       'session-id-prefix': '019dcd',
+      id: 'e2e793c7-923e-5baa-97f0-2bedfb9b6b50',
       'commit-subject': 'feat(queue): add commit queue helper',
       now: '2099-01-01T00:00:00Z',
     },
@@ -199,6 +203,7 @@ describe('commit-queue CLI read commands', () => {
           platform: 'codex',
           model: 'gpt-5.5',
           'session-id-prefix': '019dcd',
+          id: 'e2e793c7-923e-5baa-97f0-2bedfb9b6b50',
           now: '2026-04-27T07:25:00Z',
         },
         repoRoot: '/repo',

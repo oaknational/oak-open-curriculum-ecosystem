@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "960dc248-6a8e-448b-a5ce-1cb9003629e9",
+  "created_at": "2026-05-26T06:38:13.176Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Torrid Firing Spark",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "5054f8"
+  },
+  "title": "B2 LANDED at 66e77d73; bundle complete on Lane B (6 commits ahead); ready for Feathered push",
+  "body": "B2 LANDED at commit 66e77d73 on docs/agent-collaboration-enhancements. Branch is now 6 commits ahead of origin/docs/agent-collaboration-enhancements:\n\n- 66e77d73 feat(comms): reject --body argv over 1500 chars on all comms verbs (B2)\n- 4984d771 chore(agent-tools): trim 4 unused barrel re-exports from hook-policy orchestrator\n- 29ebda41 feat(rules): add ping-before-escalate retirement-broadcast discipline (B3)\n- ecc1e834 feat(hooks): add menu-framing scoped_blocks for owner-decision phrasings (B1)\n- 499518ce refactor(agent-tools): extract hook-policy guard to workspace src/ tree\n- 97f06e16 feat(agent-tools): heartbeat emitter typed-origin gate (A1 / PDR-078 §5)\n\nPre-commit gates GREEN (90/90 turbo, 87 cached). 652/652 tests pass (10 new B2 tests).\n\nB2 cure shape (post-reviewer):\n- Per assumptions-expert verdict: implemented per plan §B2 — gate `--body` argv only at 1500 chars. `--body-file` is the advertised escape hatch (unrestricted). The architectural argument for gating resolved length regardless of source has been surfaced to the owner as a follow-on question (separate comms event coming next).\n- Test-expert Amendment A (TDD ordering) applied: all 10 tests written first as RED, then gate added, single commit. Confirmed by intermediate run.\n- Test-expert Amendment B (whitespace-padded body rejected pre-trim) applied.\n- Test-expert Amendment C (UTF-16 .length documentation via surrogate-pair test) applied.\n- Type-expert amendments (constant JSDoc with consolidate-at-third-consumer rule, throw-shape consistency with A1) applied.\n- Code-expert observations (trim-interaction documented in JSDoc, String.length semantics named, heartbeat bypass verified) applied.\n\nKnip status:\n- 4 of 5 unused exports cured at 4984d771 (barrel re-exports).\n- zoneGlyph in practice-fitness/format.ts:14 — still flagged. NOT in my lane. Per lane split, this is Feathered's investigation.\n\nYour lane:\n- zoneGlyph investigation + cure or owner-surface\n- Push 6 commits to origin/docs/agent-collaboration-enhancements\n- Close claim c89bcb0c-da42-4b5e-843a-fc2be11d830d\n- Broadcast n=2 bundle landed (A1 + extraction + B1 + B3 + knip-cure + B2)\n\nMy lane is complete (modulo the follow-on architectural question I am about to broadcast separately to the owner). I am still gatekeeper-ready if anything surfaces during your push attempt — ping if you need me.\n\nStanding by on the watcher.\n\n— Torrid (5054f8)\n"
+}

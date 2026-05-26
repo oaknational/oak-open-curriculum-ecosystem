@@ -34,9 +34,11 @@ consolidation gate.
 [`consolidate-docs`](../consolidate-docs/SKILL-CANONICAL.md) are one
 knowledge-flow pair with different cadences. Handoff runs at ordinary
 session close and captures the session's landed outcome, live state, and
-surprises. Consolidation runs only when its trigger checklist fires and
-decides what graduates out of temporary surfaces. Do not inline the
-consolidation inventory here; use this file for the session-close edge and
+surprises. When a session produces a behaviour-changing lesson that is already
+cross-session guidance, handoff may conserve it directly in `distilled.md`
+using step 6a.1. Consolidation runs only when its trigger checklist fires and
+decides what graduates out of temporary or refinement surfaces. Do not inline
+the consolidation inventory here; use this file for the session-close edge and
 defer cross-session inventories to `consolidate-docs`.
 
 Use this skill for ordinary session closeout. It replaces `wrap-up`.
@@ -81,6 +83,12 @@ editing canonical continuity surfaces, collect or reread:
 
 Synthesis is your responsibility. Preserve useful nuance from participant
 notes, but do not paste every note into canonical continuity surfaces.
+
+Once the final closeout bundle has been staged or its evidence has been
+recorded, treat additional comms, claim, queue, or lifecycle writes as state
+changes. Emit only required final-heartbeat or blocker-correction events; if a
+new event changes the closeout truth, rerun the relevant bundle and state
+checks or leave the resulting residue explicit in the handoff.
 
 ### Team Member, Not Closeout Owner
 
@@ -203,6 +211,24 @@ there unless the owner or closeout owner gives a further assignment.
    session in `.agent/memory/active/napkin.md`. Use the structured
    surprise format from the napkin skill.
 
+   **6a.1. Conserve cross-session lessons in `distilled.md`.** Ask
+   whether this session produced a behaviour-changing lesson that a
+   future agent should read at session start. If the lesson is still raw,
+   local to the session, or needs more evidence, leave it in `napkin.md`.
+   If the lesson is already sharp enough to guide future sessions but has
+   no stable permanent home yet, add or refine a compact entry in
+   [`.agent/memory/active/distilled.md`](../../memory/active/distilled.md)
+   with its source session and routing/disposition. If the lesson is
+   stable and naturally belongs in an ADR, PDR, rule, governance doc, or
+   pattern, route it through step 6b / 7a instead of parking it in
+   `distilled.md`.
+
+   This is a conservation edge, not a mini-consolidation pass: do not
+   sweep old distilled entries, rotate the napkin, or inventory the whole
+   learning loop here. Preserve the new insight at full weight; if the
+   write pushes `distilled.md` into a fitness zone, record the pressure
+   and route the structural follow-up rather than trimming the lesson.
+
    **Auxiliary input: plugin-managed capture buffers.** The remember
    plugin maintains `.remember/now.md`, `.remember/today-*.md`, and
    sibling buffers as a separate ephemeral capture surface. Scan
@@ -293,7 +319,7 @@ there unless the owner or closeout owner gives a further assignment.
    work was like, not what was done.** Texture, shifts, surprises,
    what went differently from expectation, what emerged that was
    not planned. Applied technical patterns and settled doctrine
-   belong elsewhere: distilled entries in `distilled.md`, pattern
+   belong elsewhere: cross-session lessons in `distilled.md`, pattern
    candidates in `.agent/memory/active/patterns/`, PDR/ADR
    candidates surfaced under step 6b above, permanent docs in
    `docs/` or workspace READMEs. If a session produces both
@@ -535,11 +561,13 @@ there unless the owner or closeout owner gives a further assignment.
       cure it in this session, or surface the blocker to the owner with
       evidence and stop. Do not bundle handoff over a red gate.
 
-    Owner-stated standing 2026-05-14 (carry-forward in
-    `distilled.md` §"Recently Distilled — 2026-05-17"): session-handoff is
-    not complete in the individual-contributor or handoff-owner sense unless
-    `pnpm check` completes with no errors or warnings. This step makes that
-    standing direction structurally enforced rather than agent-recalled.
+    Owner-stated standing 2026-05-14 (carried by
+    [`gates/SKILL-CANONICAL.md`](../gates/SKILL-CANONICAL.md) and
+    [`build-system.md`](../../../docs/engineering/build-system.md)
+    § `pnpm check` - Canonical full gate): session-handoff is not complete
+    in the individual-contributor or handoff-owner sense unless `pnpm check`
+    completes with no errors or warnings. This step makes that standing
+    direction structurally enforced rather than agent-recalled.
 
     **Singleton in multi-agent windows.** When two or more agents are
     closing concurrently, only **one** of them runs the whole-repo

@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "3140e9a3-0130-4273-a48d-ecccf5614b4e",
+  "created_at": "2026-05-26T09:52:55.556Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Starless Dimming Owl",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "781369"
+  },
+  "title": "Heartbeat: Starless Dimming Owl (781369) — curator-handoff staging",
+  "body": "active; claim=88a657ce-333c-48b7-9aa7-a81618bd8161; intent=curator-handoff; branch=docs/agent-collaboration-enhancements; cycle=curator-handoff-staging",
+  "tags": [
+    "heartbeat"
+  ]
+}

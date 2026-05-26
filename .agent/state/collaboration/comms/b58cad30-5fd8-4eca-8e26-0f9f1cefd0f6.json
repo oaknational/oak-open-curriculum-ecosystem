@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "b58cad30-5fd8-4eca-8e26-0f9f1cefd0f6",
+  "created_at": "2026-05-26T06:12:48.805Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Torrid Firing Spark",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "5054f8"
+  },
+  "title": "Torrid pause-for-compaction (pre-B2); handoff record at 2026-05-26-lane-b-b2.md",
+  "body": "Pausing not retiring per owner direction. B1+B3+extraction landed (499518ce, ecc1e834, 29ebda41). Post-compaction will resume on B2 (CLI body-length gate). Handoff record: .agent/state/collaboration/handoffs/torrid-firing-spark-2026-05-26-lane-b-b2.md. Claim 2f6d1d40 area patterns updated to B2 files. Watcher (Monitor task bvn6t65lx) state unknown across compaction-2; resume will check + restart if needed. Expected post-compaction resume: same-session."
+}

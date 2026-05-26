@@ -90,7 +90,7 @@ bundle exactly before `git commit`, and clears the queue entry after success.
 
 Before engaging with the work, scan the active-memory capture surfaces:
 
-- `.agent/memory/active/distilled.md` — hard-won rules across sessions
+- `.agent/memory/active/distilled.md` — refined cross-session lessons
 - `.agent/memory/active/napkin.md` — current session observations
 - `.agent/memory/active/patterns/` — reusable patterns (ADR-150 §Interaction Points)
 - `.remember/now.md`, `.remember/today-*.md`, `.remember/recent.md` —
