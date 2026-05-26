@@ -46426,6 +46426,319 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "0933f219-d404-4f6d-8f6e-15ec45adf028",
+      "agent_id": {
+        "agent_name": "Feathered Flying Cloud",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e65"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T17:03:12Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "curate hard memory fitness surfaces without compression",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T17:07:59Z",
+        "closed_by": {
+          "agent_name": "Feathered Flying Cloud",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e65"
+        },
+        "summary": "Curated hard memory fitness surfaces to soft-only boundary without compression; archived napkin/repo-continuity source windows and split pending-graduations candidates into active shard.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0933f219-d404-4f6d-8f6e-15ec45adf028",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "20d6cf6f-e7ec-4131-9617-f57f8b5aa99f",
+      "agent_id": {
+        "agent_name": "Feathered Flying Cloud",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e65"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/repo-continuity.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T17:11:45Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "scan cross-platform memory buffers for repo-import candidates",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T17:15:57Z",
+        "closed_by": {
+          "agent_name": "Feathered Flying Cloud",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e65"
+        },
+        "summary": "Cross-platform memory sweep complete: Claude, Codex, Cursor, and .remember buffers scanned; candidate imports recorded in curator-pass report; new authored report/napkin additions checked for no external local paths.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "20d6cf6f-e7ec-4131-9617-f57f8b5aa99f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "735a7178-3d21-449e-8ed8-d66cae5334d0",
+      "agent_id": {
+        "agent_name": "Feathered Flying Cloud",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e65"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/curator-passes/README.md",
+            ".agent/memory/operational/curator-passes/2026-05-26-feathered-flying-cloud.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T17:13:22Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "record cross-platform memory sweep curator-pass audit",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T17:15:57Z",
+        "closed_by": {
+          "agent_name": "Feathered Flying Cloud",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e65"
+        },
+        "summary": "Curator-pass audit record complete: report added under curator-passes for cross-platform memory import candidates; README did not need an edit; no external local paths added by this report.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "735a7178-3d21-449e-8ed8-d66cae5334d0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "923e79a6-60cb-44f5-aa9b-ca3e08483d74",
+      "agent_id": {
+        "agent_name": "Feathered Flying Cloud",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e65"
+      },
+      "thread": "cross-platform-memory-path-invariant-note",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/curator-passes/2026-05-26-feathered-flying-cloud.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T17:16:48Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "record path-invariant note on cross-platform memory sweep report",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T17:16:48Z",
+        "closed_by": {
+          "agent_name": "Feathered Flying Cloud",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e65"
+        },
+        "summary": "Post-closure bookkeeping repair: path-invariant check note added to the curator-pass report after owner reminder; report remains free of external local path references.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "923e79a6-60cb-44f5-aa9b-ca3e08483d74",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6a80de31-412c-4fdc-b521-6be66e652213",
+      "agent_id": {
+        "agent_name": "Feathered Flying Cloud",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e65"
+      },
+      "thread": "cross-platform-memory-import",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agent-tooling/frictions-register.md",
+            ".agent/memory/operational/open-questions.md",
+            "docs/governance/development-practice.md",
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md",
+            "docs/architecture/architectural-decisions/125-agent-artefact-portability.md",
+            ".agent/memory/operational/curator-passes/2026-05-26-feathered-flying-cloud.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T17:27:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "import cross-platform memory candidates into durable repo docs",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T17:38:32Z",
+        "closed_by": {
+          "agent_name": "Feathered Flying Cloud",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e65"
+        },
+        "summary": "Imported all cross-platform memory candidates into durable repo homes: F-07 comms list/show, ADR-165/open-question memory-state boundary, development/no-warning ESLint nuance, start-right-team seat-cost routing, ADR-125 plugin retention, plus curator-pass and napkin updates. Targeted markdownlint, git diff --check, and local-path scans passed for touched files.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6a80de31-412c-4fdc-b521-6be66e652213",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f2a5e7db-9a38-40e4-92bd-55428ed05393",
+      "agent_id": {
+        "agent_name": "Feathered Flying Cloud",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e65"
+      },
+      "thread": "cross-platform-memory-import",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/rules/no-warning-toleration.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T17:30:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "import ESLint warn-first memory candidate into no-warning doctrine",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T17:38:32Z",
+        "closed_by": {
+          "agent_name": "Feathered Flying Cloud",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e65"
+        },
+        "summary": "Closed companion claim for no-warning-toleration edit: ESLint warn-first nuance imported as a bounded authoring-state rule, not a warning-toleration exception.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f2a5e7db-9a38-40e4-92bd-55428ed05393",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "8c67b185-007e-49a2-bbd3-ad23905849bd",
+      "agent_id": {
+        "agent_name": "Tempestuous Sweeping Feather",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "a9e5d2"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/identity.ts",
+            "agent-tools/src/collaboration-state/cli-self-identity.ts",
+            "agent-tools/src/collaboration-state/state-parsers.ts",
+            "agent-tools/src/collaboration-state/active-agent-routing.ts",
+            "agent-tools/src/collaboration-state/comms-relevant-events.ts",
+            "agent-tools/src/collaboration-state/comms-use-cases.ts",
+            "agent-tools/src/collaboration-state/claim-reports.ts",
+            "agent-tools/src/collaboration-state/cli-comms-messages.ts",
+            "agent-tools/src/collaboration-state/cli-spec-options.ts",
+            "agent-tools/src/commit-queue/intent.ts",
+            ".agent/state/collaboration/comms-event.schema.json",
+            ".agent/state/collaboration/active-claims.schema.json",
+            "agent-tools/package.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T17:05:17Z",
+      "freshness_seconds": 21600,
+      "sidebar_open": false,
+      "intent": "phase-0b-and-0c-collaboration-identity-implementation",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T18:02:05Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Sweeping Feather",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "a9e5d2"
+        },
+        "summary": "Phase 0B complete (4 cycles substrate) + Phase 0C cycles 6+7+8 (routing cure) landed across 5 commits: bed24b57, 57084c15, 2a501e97, b977dbab, 30ef437b. Cycles 9-10 + closeout queued for final session.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "8c67b185-007e-49a2-bbd3-ad23905849bd",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

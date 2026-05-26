@@ -23,7 +23,13 @@ todos:
       escalation open, conversation append, commit-queue entries) to emit
       id; extend legacyStringToAgentId / parseAgentId so legacy rows
       continue to parse.
-    status: pending
+    status: completed
+    completed_at: 2026-05-26
+    completed_in: >
+      bed24b57 (Cycle 2: JSON schemas accept optional id),
+      57084c15 (Cycle 3: deriveCollaborationIdentity v5),
+      2a501e97 (Cycle 4: parseAgentId schema-driven),
+      b977dbab (Cycle 5: commit-queue createIntent schema-driven)
     depends_on: [phase-0a-pdr-027-amendment-and-grounding]
   - id: phase-0c-routing-prefers-id
     content: >
@@ -31,7 +37,15 @@ todos:
       classifyNarrative, isSelfAuthored, assertSameAgent, and active-agent
       dedup to prefer (agent_name, id) with legacy fallback + diagnostic;
       land regression tests for the same-name same-prefix different-id case.
-    status: pending
+    status: in_progress
+    progress_at: 2026-05-26
+    progress_summary: >
+      Cycles 6+7+8 landed at 30ef437b (AgentRoutingKey discriminated union;
+      classifiers + assertSameAgent + claim-reports.sameAgent route via
+      sameAgentRoutingKey; PDR-076a §Falsifiability primary collision
+      signal green). Cycle 9 (--to-id CLI flag wiring) and Cycle 10
+      (legacy-fallback diagnostic emission with DI writer) remain for the
+      next/final session.
     depends_on: [phase-0b-identity-id-additive-schema]
   - id: phase-1-body-file-frontmatter
     content: >
@@ -62,11 +76,36 @@ isProject: false
 # Collaboration Identity Doctrine Enforcement Remediation
 
 **Last Updated**: 2026-05-26  
-**Status**: ACTIVE — Phase 0A complete (2026-05-26, commits 7028b0d6 + 76920493), Phase 0B queued for next session  
+**Status**: ACTIVE — Phase 0A + 0B + 0C cycles 6-8 complete (2026-05-26); Phase 0C cycles 9-10 + closeout queued for final session  
 **Lane**: Improving collaboration / agent-tooling current  
 **Parent arc**:
 [`cost-of-collaboration.plan.md`](cost-of-collaboration.plan.md)
 P4 identity routing + P5 unified comms substrate follow-up
+
+## Landing Index (2026-05-26 session — 8 commits)
+
+| Commit | Phase / Cycle | What landed |
+| --- | --- | --- |
+| `7028b0d6` | 0A | PDR-027 Amendment-Log entry — identity key `(agent_name, id)` |
+| `76920493` | 0A | Plan v3 with reviewer integration + design verdict locks |
+| `b0faefab` | 0A | Phase 0A closeout |
+| `3ca77972` | 0A | Metacognition cure — 3-session framing → TDD-cycle decomposition |
+| `c11f698b` | 0B-1 | `UuidV5` brand + read/write schema split |
+| `ae36440c` | 0B-1 | Schema-test type consumption fix |
+| `bed24b57` | **0B-2** | JSON schemas accept optional v5 `id` (8 new ajv tests) |
+| `57084c15` | **0B-3** | `deriveCollaborationIdentity` returns Write with v5 id derived from session seed (6 new tests) |
+| `2a501e97` | **0B-4** | `parseAgentId` → `collaborationAgentIdSchema.parse()` (5 new tests) |
+| `b977dbab` | **0B-5** | commit-queue `createIntent` requires `--id`; SKILL teaches new ceremony (4 new tests) |
+| `30ef437b` | **0C-6+7+8** | **Routing cure**: `AgentRoutingKey` discriminated union; classifiers + `assertSameAgent` + `claim-reports.sameAgent` route via id; PDR-076a §Falsifiability primary collision test green (4 new tests) |
+
+**Test count**: 671 → 698 (+27 across the session).
+
+**Remaining for final session**:
+
+- Cycle 9: `--to-id` CLI flag in `cli-spec-options.ts` + `cli-comms-messages.recipientAgent`.
+- Cycle 10: legacy-fallback diagnostic emission (`[routing-legacy-fallback]` structured JSON to injectable writer).
+- Phase 0C reviewer dispatch (code-expert + type-expert).
+- Plan + thread + napkin closeout.
 
 ## Metacognition Pass
 

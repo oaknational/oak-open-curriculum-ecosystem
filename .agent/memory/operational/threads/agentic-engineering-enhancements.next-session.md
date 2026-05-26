@@ -1,5 +1,135 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-26 — Tempestuous Sweeping Feather / claude / claude-opus-4-7 / `a9e5d2`, Phase 0B substrate + Phase 0C routing cure)
+
+**Session boundary**: owner directed implementation of Phase 0B + 0C of the
+collaboration-identity-doctrine-enforcement-remediation plan with the
+standing instruction "keep it tight, always choose long-term architectural
+excellence". Mid-session metacognition pass (owner-triggered) corrected
+against substrate-only landings; cure-landing cycles followed in the same
+session.
+
+**Landed (5 commits on `docs/agent-collaboration-enhancements`)**:
+
+- `bed24b57` Phase 0B Cycle 2 — JSON schemas (`comms-event.schema.json` +
+  `active-claims.schema.json`) accept optional UUID v5 `id` with pattern
+  enforcement at the storage boundary; 8 new ajv tests.
+- `57084c15` Phase 0B Cycle 3 — `deriveCollaborationIdentity` returns
+  `CollaborationAgentIdWrite` with a deterministic v5 id derived from the
+  stable session seed (single derivation site via private
+  `deriveIdFromSeed`); sibling `deriveOverrideCollaborationIdentity` for
+  the admin/test override CLI path. Added `uuid` workspace dep. 6 new
+  tests; 5 integration fixtures updated to compute expected identity via
+  the same derive path the CLI uses.
+- `2a501e97` Phase 0B Cycle 4 — `parseAgentId` swaps the hand-built
+  object construction for `collaborationAgentIdSchema.parse()`
+  (Commandment 12 fix); 5 new tests prove legacy parse, v5 round-trip,
+  malformed rejection, and required-field enforcement.
+- `b977dbab` Phase 0B Cycle 5 — commit-queue `createIntent` parses
+  agent_id through `collaborationAgentIdWriteSchema.parse()` and now
+  requires `--id`; `--id` added to enqueue + guard option allowlists;
+  `CommitQueueAgentId` narrowed to include `readonly id: string`;
+  fixture rows updated; commit SKILL canonical doctrine updated to
+  teach the new ceremony (resolve id once via identity preflight).
+- `30ef437b` **Phase 0C Cycles 6+7+8 bundled — the coordination cure**:
+  `AgentRoutingKey` becomes a discriminated union (`{kind: 'id-keyed',
+  agent_name, id}` | `{kind: 'legacy', agent_name, session_id_prefix}`).
+  `routingKeyFor` switches on id presence at the single construction
+  site; `sameAgentRoutingKey` narrows by kind with exhaustive matching.
+  Consumers route through `sameAgentRoutingKey`: `isSelfAuthored`,
+  `classifyDirected`, `classifyNarrative`, `assertSameAgent`,
+  `claim-reports.sameAgent`. `platform` drops from routing key per
+  PDR-076a §Decision item 2. 4 new PDR-076a §Falsifiability primary
+  signal tests prove same-name + same-prefix + different-id agents
+  no longer collide on directed delivery, narrative addressing,
+  narrative audience, or self-authorship.
+
+**Evidence**:
+
+- `pnpm --filter @oaknational/agent-tools test`: 698 passing (was 671);
+  +27 new tests across the session.
+- Pre-commit gate (turbo cache) green at every commit.
+- Mid-session lint cleanups: zero `as` type assertions; `consistent-return`
+  satisfied via `if/return` over `switch`; max-lines kept under 700.
+
+**Metacognition cures landed mid-session**:
+
+- Substrate-only landings flagged by owner (Cycles 2-5 had built precondition
+  substrate without yet proving the routing cure). Cycle 6+7+8 bundled
+  (per owner direction) and landed the cure within the same session as the
+  correction.
+- Cycle 5 SKILL update flagged as breaking change for unmigrated agents;
+  owner confirmed "keep SKILL in Cycle 5" (recommended path) so doctrine
+  and code stay coherent.
+
+**Next safe step (owner-named FINAL session)**:
+
+1. Cycle 9 — `--to-id` CLI flag wired through `cli-spec-options.ts` →
+   `cli-comms-messages.recipientAgent`; recipient construction routes
+   through `collaborationAgentIdWriteSchema.parse()` (mirrors Cycle 4 +
+   Cycle 5 schema-parse pattern).
+2. Cycle 10 — legacy-fallback diagnostic emission in `routingKeyFor`'s
+   `kind: 'legacy'` branch. Structured JSON to `stderr` with prefix
+   `[routing-legacy-fallback]`; injectable writer (DI seam per the n=2
+   WS1 deferred SHOULD-FIX) so the diagnostic is testable without
+   `process.env` reads.
+3. Phase 0C reviewer dispatch — code-expert + type-expert parallel on
+   Sonnet.
+4. Closeout — plan todos status, thread record refresh, napkin
+   rotation if a behaviour-changing lesson surfaced, `pnpm check` final
+   gate.
+
+**Local HEAD at handoff**: `30ef437b` (ahead of origin by ~16 commits;
+all this-session commits unpushed; owner will direct push timing).
+
+## Previous Session Outcome (2026-05-26 — Feathered Flying Cloud / codex / GPT-5 / `019e65`, hard memory curation + cross-platform memory import)
+
+**Session boundary**: owner first directed a hard memory curation pass with the
+explicit constraint to preserve understanding, treat fitness as a signal only,
+avoid commits, avoid quality gates, prioritise critical then hard, and stop at
+soft. Owner then asked to scan Claude memories, other platform memories, and
+`.remember` files, reminded the session that repo content must not contain local
+file paths outside the repo, and finally asked to bring those candidates into
+the repo.
+
+**Landed**:
+
+- Hard memory curation stopped at SOFT after routing critical/hard pressure
+  without compression. The previous active napkin window was archived; fresh
+  Starless/Open closeout candidates moved to an active pending-graduations
+  shard; verbose repo-continuity current-state prose moved to a dated archive.
+- Cross-platform memory sweep produced curator-pass report
+  [`2026-05-26-feathered-flying-cloud.md`](../curator-passes/2026-05-26-feathered-flying-cloud.md).
+- Five import candidates were brought into durable repo homes:
+  `.agent/plans/agent-tooling/frictions-register.md` F-07 summary/show
+  affordances; ADR-165 plus open question Q-005 for the future memory/state
+  boundary; development-practice plus no-warning-toleration warn-first nuance;
+  start-right-team seat-cost routing; and ADR-125 post-canonicalisation plugin
+  retention.
+- Import curator-pass metadata now points to the durable homes and marks the
+  candidates imported.
+
+**Evidence**:
+
+- Targeted markdownlint passed for the touched markdown files.
+- `git diff --check` passed for the touched markdown and claim files.
+- Diff-level local-path scan found no new raw local external paths in added
+  lines. Full-tree collaboration-state history still contains legacy path
+  residue; that is a separate portability cleanup, not new import content.
+
+**Unlanded / blocker**: full `pnpm check` was not run and is not claimed green.
+At handoff, Tempestuous Sweeping Feather has a fresh active claim over Phase
+0B/0C agent-tools implementation files, and the working tree includes
+peer-owned dirty agent-tools WIP. Falsifiability: after that active claim closes,
+inspect `active-claims.json` plus `git status --short --branch`, then run the
+singleton full gate.
+
+**Next safe step**: commit or marshal the docs/memory import bundle when the
+owner is ready, keeping Tempestuous-owned agent-tools files out of that bundle.
+After the peer lane settles, run full `pnpm check`. Implementation work still
+routes through Phase 0B/0C in
+[`collaboration-identity-doctrine-enforcement-remediation.plan.md`](../../../plans/agent-tooling/current/collaboration-identity-doctrine-enforcement-remediation.plan.md).
+
 ## Session Outcome (2026-05-26 — Open Streaming Updraft / claude / claude-opus-4-7 / `357948`, collaboration identity remediation Phase 0A doctrinal landing + Phase 0B Cycle 1)
 
 **Session boundary**: owner asked for analysis of
@@ -6588,6 +6718,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Feathered Flying Cloud` | `codex` | `GPT-5` | `019e65` | `hard-memory-curation-pass-plus-cross-platform-memory-import; routed critical-hard memory pressure without compression; imported Claude-Codex-Cursor-remember candidates into durable repo homes; targeted-markdownlint-git-diff-check-and-diff-local-path-scan-pass; full-pnpm-check-deferred-behind-active-peer-owned-agent-tools-WIP` | 2026-05-26 | 2026-05-26 |
 | `Prismatic Transiting Star` | `codex` | `GPT-5` | `019e60` | `distilled-processing-and-practice-fitness-inventory; kept-distilled-as-curated-learning-register-with-frontmatter; graduated-settled-lessons-to-gates-build-system-commit-continuity-practice-AGENT-and-agent-tools-README; added-ready-empty-and-healthy-zone-reporting-plus-drainable-buffer-content-role-axis-plus-behaviour-tests; ADR-144-content-role-amendment; closeout-handoff-and-consolidation-targeted-validation` | 2026-05-25 | 2026-05-25 |
 | `Ferny Fruiting Root` | `claude` | `claude-opus-4-7` | `ee16a4` | `implementer-this-Scorched-Director-window-2026-05-23; investigated-pnpm-check-RED-classification-D-Playwright-browser-missing-local-cache-event-a7b00c3d-cured-via-pnpm-exec-playwright-install-with-deps-chromium-as-agent-action-not-owner-action; orphan-absorption-x4-Class-B-sha-prefix-activation-Cycle-1-cc3039eb-Pearly-S7735-Cycle-2-845a3e90-ADR-185-v2-Cycle-4-5320d6b0-PDR-076-v2-Cycle-9-db4d8b3a; pattern-author-substrate-pointer-read-as-current-state-md-v1-plus-v2-absorbing-5-Wilma-amendments-from-Charcoal-dispatch-self-attestation-surfaced-Charcoal-ship-verdict-pending; PDR-076-v2-dual-reviewer-dispatch-assumptions-expert-CONCERNS-architecture-expert-fred-ISSUES-FOUND-v2-absorbed-5-scope-areas-CRITICAL-1-PDR-027-sequencing-conditionality-CRITICAL-2-phantom-additive-then-strict-precedent-struck-Cascade-trim-PDR-064-added-to-Related-PDR-073-vocabulary-fixed-PDR-029-amendment-added; plan-Wilma-dispatched-on-FM-2-P2-session-open-env-freshness-check-verdict-SAFE-WITH-CONDITIONS-4-conditions-plus-2-UNSAFE-findings-subagent-a2e16a2e367255e07-routing-disposition-pending-Scorched; three-substrate-broadcasts-9c240ce5-FM-1-FM-2-BN-1-bundle-a4204904-Director-routing-failure-mode-owner-action-not-cure-correction-worked-instance-755-empirical-Playwright-install-policy-test; named-by-owner-and-Scorched-as-five-substantive-deliveries-this-Director-window` | 2026-05-23 | 2026-05-23 |
 | `Shadowed Hiding Shade` | `claude` | `claude-opus-4-7[1m]` | `e35155` | `deep-graduation-pass-under-owner-direction-drains-owner-direction-gated-buffer-entries; 8-tier-a-doctrine-landings-5-new-rules-2-pdrs-proposed-1-pattern-plus-tdd-as-design-amendment-1-directive-amendment-session-handoff-skill-amendments; 9-tier-b-captures-6-patterns-2-pdrs-draft-1-skill-amendment; 5-tier-c-per-user-memory-marker-updates; commit-a49e7a21-34-files-1983-163; worked-instance-of-pdr-068-consumer-cadence-cure; surfaced-vocabulary-gate-as-menu-when-it-was-sop-owner-correction-captured` | 2026-05-22 | 2026-05-22 |
