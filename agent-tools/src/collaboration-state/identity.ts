@@ -47,10 +47,14 @@ export function validateSharedStateAgentId(input: {
   readonly agentId: CollaborationAgentId;
   readonly env: CollaborationStateEnvironment;
 }): { readonly ok: true } | { readonly ok: false; readonly reason: string } {
+  // Primary discriminator is session_id_prefix (the unique tuple field per
+  // WS1 / PDR-027); agent_name remains a secondary fallback because legacy
+  // anonymous Codex writes can carry `Codex` as the display name with no
+  // prefix yet derived. See ADR-186 + memory feedback_identity_routing_uses_name_and_prefix_pair.
   if (
     input.agentId.platform === 'codex' &&
     nonEmptyValue(input.env.CODEX_THREAD_ID) !== undefined &&
-    (input.agentId.agent_name === 'Codex' || input.agentId.session_id_prefix === 'unknown')
+    (input.agentId.session_id_prefix === 'unknown' || input.agentId.agent_name === 'Codex')
   ) {
     return {
       ok: false,

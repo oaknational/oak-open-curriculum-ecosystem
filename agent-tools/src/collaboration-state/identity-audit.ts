@@ -220,9 +220,12 @@ function auditSharedLog(text: string): readonly CodexIdentityAuditFinding[] {
 }
 
 function isAnonymousCodexAgent(agentId: CollaborationAgentId): boolean {
+  // Primary discriminator is session_id_prefix per WS1 / PDR-027; agent_name
+  // remains a secondary fallback for legacy anonymous Codex writes that carry
+  // `Codex` as the display name with no prefix yet derived.
   return (
     agentId.platform === 'codex' &&
-    (agentId.agent_name === 'Codex' || agentId.session_id_prefix === 'unknown')
+    (agentId.session_id_prefix === 'unknown' || agentId.agent_name === 'Codex')
   );
 }
 

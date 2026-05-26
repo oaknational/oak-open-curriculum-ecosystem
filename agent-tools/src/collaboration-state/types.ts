@@ -139,8 +139,8 @@ export interface NarrativeCommsEvent extends BaseCommsEvent {
   readonly author: CollaborationAgentId;
   readonly title: string;
   readonly body: string;
-  readonly audience?: readonly string[];
-  readonly addressed_to?: string;
+  readonly audience?: readonly CollaborationAgentId[];
+  readonly addressed_to?: CollaborationAgentId;
   readonly in_response_to?: string;
   readonly in_reply_to?: string;
   readonly tags?: readonly string[];

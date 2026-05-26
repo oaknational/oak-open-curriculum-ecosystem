@@ -21,11 +21,9 @@ import {
  *   another agent, or narratives whose `audience` is set but excludes the
  *   agent. **Incidental visibility, not a change to the agent's work
  *   contract**: observed events do not impose action on the agent. They
- *   exist so the broad-awareness contract
- *   ([`start-right-team` SKILL §0](../../../.agent/skills/start-right-team/SKILL-CANONICAL.md))
- *   holds — the comms event stream is canonical truth, and an agent
- *   watching it sees every non-self event, applying relevance triage in
- *   their own reasoning rather than at the watcher boundary.
+ *   exist so the broad-awareness contract per
+ *   `.agent/rules/comms-all-channels-watcher.md` holds — agents apply
+ *   relevance triage in their own reasoning, not at the watcher boundary.
  * - `lifecycle`: structured lifecycle moment (session, claim, consolidation).
  *
  * Sync-urgent messages are not a separate kind today: they are carried by
@@ -133,11 +131,12 @@ function classifyDirected(event: DirectedCommsMessage, self: CollaborationAgentI
 }
 
 function classifyNarrative(event: NarrativeCommsEvent, self: CollaborationAgentId): EventView {
+  const prefix = self.session_id_prefix;
   if (event.addressed_to !== undefined) {
-    return event.addressed_to === self.agent_name ? 'directed' : 'observed';
+    return event.addressed_to.session_id_prefix === prefix ? 'directed' : 'observed';
   }
   if (event.audience !== undefined) {
-    return event.audience.includes(self.agent_name) ? 'group' : 'observed';
+    return event.audience.some((a) => a.session_id_prefix === prefix) ? 'group' : 'observed';
   }
   return 'broadcast';
 }
@@ -241,8 +240,10 @@ function formatIdentity(agent: CollaborationAgentId): string {
 }
 
 function formatNarrativeAddressee(event: NarrativeCommsEvent): string {
-  return (
-    event.addressed_to ??
-    (event.audience === undefined ? 'BROADCAST' : `GROUP(${event.audience.join(', ')})`)
-  );
+  if (event.addressed_to !== undefined) {
+    return formatIdentity(event.addressed_to);
+  }
+  return event.audience === undefined
+    ? 'BROADCAST'
+    : `GROUP(${event.audience.map(formatIdentity).join(', ')})`;
 }

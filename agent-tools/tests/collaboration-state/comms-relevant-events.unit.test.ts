@@ -39,8 +39,8 @@ function narrative(input: {
   readonly title: string;
   readonly body?: string;
   readonly createdAt?: string;
-  readonly audience?: readonly string[];
-  readonly addressedTo?: string;
+  readonly audience?: readonly CollaborationAgentId[];
+  readonly addressedTo?: CollaborationAgentId;
 }): NarrativeCommsEvent {
   return {
     schema_version: '2.0.0',
@@ -99,7 +99,7 @@ describe('classifyEventForAgent — view classification per the all-channels-mat
           eventId: 'group-one',
           author: peer,
           title: 'Sync needed',
-          audience: [self.agent_name, stranger.agent_name],
+          audience: [self, stranger],
         }),
         self,
       }),
@@ -113,7 +113,7 @@ describe('classifyEventForAgent — view classification per the all-channels-mat
           eventId: 'narrative-direct-one',
           author: peer,
           title: 'Just for you',
-          addressedTo: self.agent_name,
+          addressedTo: self,
         }),
         self,
       }),
@@ -195,7 +195,7 @@ describe('classifyEventForAgent — view classification per the all-channels-mat
       eventId: 'narrative-to-stranger',
       author: peer,
       title: 'For stranger',
-      addressedTo: stranger.agent_name,
+      addressedTo: stranger,
     });
 
     expect(classifyEventForAgent({ event: narrativeToStranger, self })).toBe('observed');
@@ -206,7 +206,7 @@ describe('classifyEventForAgent — view classification per the all-channels-mat
       eventId: 'narrative-excludes-self',
       author: peer,
       title: 'For others',
-      audience: [stranger.agent_name],
+      audience: [stranger],
     });
 
     expect(classifyEventForAgent({ event: narrativeExcludingSelf, self })).toBe('observed');
@@ -229,7 +229,7 @@ describe('drainRelevantEvents — full event stream surfacing with self-exclusio
         title: 'Group title',
         createdAt: '2026-05-21T08:01:00Z',
         body: 'Group body.',
-        audience: [self.agent_name, stranger.agent_name],
+        audience: [self, stranger],
       }),
       narrative({
         eventId: 'narrative-direct-one',
@@ -237,7 +237,7 @@ describe('drainRelevantEvents — full event stream surfacing with self-exclusio
         title: 'Narrative-direct title',
         createdAt: '2026-05-21T08:02:00Z',
         body: 'Narrative-direct body.',
-        addressedTo: self.agent_name,
+        addressedTo: self,
       }),
       createDirectedCommsMessage({
         eventId: 'directed-one',
@@ -307,7 +307,7 @@ describe('drainRelevantEvents — full event stream surfacing with self-exclusio
       eventId: 'narrative-to-stranger',
       author: peer,
       title: 'Cross-traffic narrative',
-      addressedTo: stranger.agent_name,
+      addressedTo: stranger,
       createdAt: '2026-05-21T08:00:00Z',
     });
     const drained = await drainRelevantEvents({
@@ -327,7 +327,7 @@ describe('drainRelevantEvents — full event stream surfacing with self-exclusio
       eventId: 'narrative-excludes-self',
       author: peer,
       title: 'Group narrative for others',
-      audience: [stranger.agent_name],
+      audience: [stranger],
       createdAt: '2026-05-21T08:00:00Z',
     });
     const drained = await drainRelevantEvents({

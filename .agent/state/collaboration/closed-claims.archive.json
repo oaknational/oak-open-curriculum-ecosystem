@@ -45864,6 +45864,55 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "1586d3ea-f424-4fbf-801c-a7253ae84c29",
+      "agent_id": {
+        "agent_name": "Starless Dimming Owl",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "781369"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/types.ts",
+            "agent-tools/src/collaboration-state/state-schemas.ts",
+            "agent-tools/src/collaboration-state/comms-relevant-events.ts",
+            "agent-tools/src/collaboration-state/comms-migration-records.ts",
+            "agent-tools/src/collaboration-state/identity.ts",
+            "agent-tools/src/collaboration-state/identity-audit.ts",
+            "agent-tools/tests/collaboration-state/comms-relevant-events-collision.unit.test.ts",
+            "agent-tools/tests/collaboration-state/comms-relevant-events.unit.test.ts",
+            "agent-tools/tests/collaboration-state/state-parsers.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T10:37:28Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "WS1 of n2-coordination-efficiency-program: widen NarrativeCommsEvent addressed_to/audience to CollaborationAgentId tuple; classifyNarrative routes by session_id_prefix; legacy compat shim with stderr warning; anonymous-detection primary discriminator; collision regression test.",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T10:37:42Z",
+        "closed_by": {
+          "agent_name": "Starless Dimming Owl",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "781369"
+        },
+        "summary": "WS1 schema-widening: NarrativeCommsEvent addressed_to/audience tuple-shaped; classifyNarrative routes by session_id_prefix; legacy migration shim emits stderr warning; anonymous-detection session_id_prefix as primary discriminator. 5 new collision regression tests + existing fixture updates. 213/213 tests pass; lint clean; type-check clean. Reviewer findings applied: conditional test guards removed via toMatchObject; .min(1) on audience arrays; plan-name reference replaced with PDR-027.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1586d3ea-f424-4fbf-801c-a7253ae84c29",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
