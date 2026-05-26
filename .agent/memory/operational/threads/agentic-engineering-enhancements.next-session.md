@@ -1,5 +1,111 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-26 — Airy Whirling Current / claude / claude-opus-4-7 / `3624a5`, Phase 0C cycles 9+10 — Phase 0 complete)
+
+**Session boundary**: owner directed completion of Phase 0C with the explicit
+constraint "do not be seduced into ceremony — choose long-term architectural
+excellence at each decision point". `/oak-metacognition` was attached to the
+brief. Cycles 9 and 10 were the remaining 0C work after the prior session
+landed Cycles 1-8.
+
+**Landed (2 commits on `docs/agent-collaboration-enhancements`)**:
+
+- `dee89e09` Phase 0C Cycle 9 — `--to-id` CLI flag wired through
+  `cli-spec-options.ts` → `cli-comms-messages.recipientAgent`; the recipient
+  is now parsed via `collaborationAgentIdWriteSchema.parse()` (mirrors
+  Cycle 4 + Cycle 5 schema-parse pattern) so missing or malformed ids are
+  rejected at the CLI boundary, not via downstream type inference. `--to-id`
+  is REQUIRED, not optional — making it optional would reintroduce the named
+  failure mode PDR-076a §Decision item 2 exists to cure. Two new boundary
+  tests prove missing-id and malformed-id rejection; five existing
+  integration tests migrated to derive `recipientWithId` and pass the
+  deterministic v5 id.
+- `6dad98b0` Phase 0C Cycle 10 — `routingKeyFor` emits a structured
+  `[routing-legacy-fallback]` line when lifting a `CollaborationAgentId`
+  without an `id` into a `kind: 'legacy'` routing key. JSON payload carries
+  `agent_name`, `platform`, `model`, `session_id_prefix`. DI seam:
+  `setLegacyFallbackWriter(writer)` returns a teardown function so tests
+  capture without touching `process.stderr` globally; default writer routes
+  to `process.stderr` so the audit signal is on by default. Six new unit
+  tests cover the id-keyed-vs-legacy branches, payload schema, emission
+  count, and setter teardown.
+
+**Evidence**:
+
+- `pnpm --filter @oaknational/agent-tools test`: 706 passing (was 698 at
+  prior handoff); +8 new tests across the session.
+- Pre-commit gate (turbo cache, 90 tasks) green at every commit. Cycle 10
+  ran FULL TURBO (all cached).
+- Type-check and lint clean across the workspace.
+
+**Phase 0 completion claim — PROVEN**:
+
+- ID-0: PDR-027 Amendment-Log entry landed (`7028b0d6`).
+- ID-1: identity writes carry id (`bed24b57`, `57084c15`, `b977dbab`).
+- ID-2: routing comparators prefer id (`30ef437b` Cycles 6+7+8).
+- ID-3: legacy-fallback diagnostic emits (`6dad98b0` Cycle 10).
+
+Per the plan §Phase 0 completion claim, all four proofs are now in code.
+Phase 0 critical path is closed.
+
+**Reviewer dispatch (parallel Sonnet)**:
+
+- code-expert: APPROVED. Flagged two informational items:
+  (i) diagnostic emits on every `routingKeyFor` call, not just at write
+  time, so Phase 3 aggregation must dedup by `(agent_name, session_id_prefix)`
+  rather than count raw emissions; matches plan-locked design and
+  preserves the read-side audit surface.
+  (ii) the shared `restoreWriter` slot in the new unit test is a latent
+  trap for a sixth test in the DI-seam describe block — current tests
+  are safe.
+- type-expert: SAFE. Flagged one architectural improvement worth a follow-on
+  cycle: tighten the `to` (and `from`) parameter of `createDirectedCommsMessage`
+  and the `DirectedCommsMessage` field from `CollaborationAgentId` (read shape)
+  to `CollaborationAgentIdWrite` so the brand and required-id constraint
+  propagate continuously from the CLI parse boundary into the stored event.
+  The `to:` widening at the call site silently drops the brand today;
+  current behaviour is structurally safe because id is preserved in JSON,
+  but the compile-time guarantee stops at the parse seam. Migration paths
+  (comms-migration-records.ts) must keep loose read-side typing — the cure
+  is to tighten the WRITE entry point, not the stored shape.
+
+**Follow-on improvements (queued, not blocking Phase 0)**:
+
+1. Tighten `createDirectedCommsMessage` write entry point to
+   `CollaborationAgentIdWrite` for both `from` and `to`. Requires also
+   tightening `replyToDirectedCommsMessage` flow and possibly introducing
+   a `WrittenDirectedCommsMessage` shape distinct from the loose read
+   shape used by the migration path.
+2. Test-isolation hygiene: refactor the DI-seam test in
+   `active-agent-routing.unit.test.ts` to make cleanup robust against a
+   sixth future test (either consistent shared-slot use or per-test
+   try/finally helpers).
+3. Phase 1 — body-file frontmatter enforcement (per plan §Phase 1).
+   No agent action without owner direction.
+
+**Metacognition observations (session-scoped)**:
+
+- The "architectural excellence not ceremony" directive shaped two
+  concrete decisions: (i) `--to-id` REQUIRED at the CLI boundary rather
+  than optional with downstream check — closes the failure-mode at the
+  earliest point; (ii) module-level DI seam with teardown returned from
+  setter rather than parameter-cascade through every classifier — keeps
+  the routing comparators clean while still being testable.
+- A scope-temptation deflected: type-expert's tightening recommendation
+  is architecturally correct but expands beyond Phase 0's locked design.
+  Logged as follow-on, not bundled. The plan body authority pattern
+  (Phase 0 proof contract = ID-0..ID-3) gave a clear stop-line.
+- The diagnostic emission noise observed in test runs (legacy lifts in
+  inbox/classifier loops emit one line each) is the audit signal working
+  as intended. Suppressing in test setup would defeat the Phase 3 sunset
+  signal. Preserved as-is.
+
+**Local HEAD at handoff**: `6dad98b0` (ahead of origin by ~18 commits;
+this-session commits unpushed; owner directs push timing).
+
+**Next safe step**: Phase 1 work (body-file frontmatter) per plan §Phase 1.
+Two follow-on architectural improvements queued above.
+
 ## Session Outcome (2026-05-26 — Tempestuous Sweeping Feather / claude / claude-opus-4-7 / `a9e5d2`, Phase 0B substrate + Phase 0C routing cure)
 
 **Session boundary**: owner directed implementation of Phase 0B + 0C of the
@@ -2919,6 +3025,7 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 
 | Platform | Model | Agent name | Role | First-session | Last-session |
 | --- | --- | --- | --- | --- | --- |
+| `claude` | `claude-opus-4-7` | Tempestuous Sweeping Feather | collaboration identity remediation Phase 0B+0C implementer (`a9e5d2`; landed 6 commits on `docs/agent-collaboration-enhancements`: `bed24b57` Cycle 2 JSON schemas accept v5 id, `57084c15` Cycle 3 `deriveCollaborationIdentity` returns Write with v5 id, `2a501e97` Cycle 4 `parseAgentId` schema-driven, `b977dbab` Cycle 5 commit-queue `createIntent` requires `--id` + SKILL doctrine update, `30ef437b` **Phase 0C cycles 6+7+8 bundled — the routing cure**: `AgentRoutingKey` discriminated union; classifiers + `assertSameAgent` + `claim-reports.sameAgent` route via id; PDR-076a §Falsifiability primary collision test green, `628713b8` handoff bundle. Tests 671 → 698 (+27). Mid-session metacognition pass triggered by owner challenge against substrate-only landings; cure cycles 6+7+8 bundled per owner direction landed within the same session as the correction. Cycles 9-10 + Phase 0C reviewer dispatch + final gate queued for FINAL session per owner direction) | 2026-05-26 | 2026-05-26 |
 | `claude` | `claude-opus-4-7` | Open Streaming Updraft | collaboration identity remediation Phase 0A doctrinal landing + Phase 0B Cycle 1 implementer (`357948`; landed 5 commits on `docs/agent-collaboration-enhancements`: `76920493` plan v3 reviewer integration with 3 parallel sub-agent reviewers + Explore structural map, `7028b0d6` PDR-027 amendment with Amendment-Log entry + schema-table updates + rule-body update + supersession note, `b0faefab` Phase 0A closeout, `3ca77972` metacog cure replacing 3-session framing with TDD-cycle decomposition after owner challenge, `c11f698b` Phase 0B Cycle 1 with `UuidV5` branded type + read/write schema split + 7 new tests; demonstrated metacognition cure in execution by landing 0A + 0B Cycle 1 in same session; all session claims closed; design for Phase 0B Cycles 2-4 + Phase 0C fully locked in plan body for next implementer) | 2026-05-26 | 2026-05-26 |
 | `claude` | `claude-opus-4-7` | Starless Dimming Owl | n=2-coordination-efficiency-program implementer + closeout owner (`781369`; landed the three remaining workstreams in linear order: curator-handoff `d3b1f75d` (Thermal's curator residue under Starless attribution per owner direction), WS0 `3c3e01d3` (3 new rules + 9 forwarders + RULES_INDEX classification table + 6-test validation + mode-selection block; SKILL 996→700 lines exactly), WS1 `3360dfb0` (NarrativeCommsEvent addressed_to/audience widened to CollaborationAgentId tuple; classifyNarrative routes by session_id_prefix; 5 collision regression tests), WS4 `4f1e6faf` (SKILL cross-references for ping-before-escalate + stale §0.5 anchor cures), closeout `2d79e3ab` (plan archived to `archive/completed/`, continuity refreshed), substrate cleanup `308cdafe` (stale claims archived, 5 expired commit-queue entries abandoned); dispatched 8 reviewers in parallel across the three workstreams; coordinated with Thermal Swooping Wing via 4+ directed comms (no-overlap verdicts kept commit ownership clean); acceptance bar revised in WS0 commit body per assumptions-expert ruling (combined `wc -l` is wrong proxy; classification-weighted per-mode load is correct measure); deferred SHOULD-FIXes documented in WS1 commit body (schema-duplication consolidation; diagnosticWriter DI)) | 2026-05-26 | 2026-05-26 |
 | `codex` | `GPT-5` | Thermal Swooping Wing | Knowledge Curator + PR/planning closeout (`019e63`; PDR-083/PDR-084 graduation, PR #118 creation/monitoring/routing, collaboration identity doctrine-debt remediation plan queued with Phase 0 critical path; no active claim to close; owner will commit documentation bundle) | 2026-05-26 | 2026-05-26 |

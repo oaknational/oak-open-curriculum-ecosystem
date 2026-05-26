@@ -37,15 +37,22 @@ todos:
       classifyNarrative, isSelfAuthored, assertSameAgent, and active-agent
       dedup to prefer (agent_name, id) with legacy fallback + diagnostic;
       land regression tests for the same-name same-prefix different-id case.
-    status: in_progress
-    progress_at: 2026-05-26
-    progress_summary: >
-      Cycles 6+7+8 landed at 30ef437b (AgentRoutingKey discriminated union;
+    status: completed
+    completed_at: 2026-05-26
+    completed_in: >
+      30ef437b (Cycles 6+7+8: AgentRoutingKey discriminated union;
       classifiers + assertSameAgent + claim-reports.sameAgent route via
       sameAgentRoutingKey; PDR-076a §Falsifiability primary collision
-      signal green). Cycle 9 (--to-id CLI flag wiring) and Cycle 10
-      (legacy-fallback diagnostic emission with DI writer) remain for the
-      next/final session.
+      signal green),
+      dee89e09 (Cycle 9: --to-id CLI flag wired through
+      collaborationAgentIdWriteSchema.parse at the recipient boundary;
+      required-not-optional rejects the failure mode at the earliest
+      point),
+      6dad98b0 (Cycle 10: routingKeyFor emits structured
+      [routing-legacy-fallback] JSON diagnostic via DI seam
+      setLegacyFallbackWriter; default writer routes to process.stderr).
+      Phase 0 proof contract closed: ID-0..ID-3 all in code. Tests
+      671 → 706 (+35) across the Phase 0 arc.
     depends_on: [phase-0b-identity-id-additive-schema]
   - id: phase-1-body-file-frontmatter
     content: >
@@ -76,13 +83,13 @@ isProject: false
 # Collaboration Identity Doctrine Enforcement Remediation
 
 **Last Updated**: 2026-05-26  
-**Status**: ACTIVE — Phase 0A + 0B + 0C cycles 6-8 complete (2026-05-26); Phase 0C cycles 9-10 + closeout queued for final session  
+**Status**: ACTIVE — Phase 0 COMPLETE (2026-05-26); Phase 1 (body-file frontmatter) queued for owner direction  
 **Lane**: Improving collaboration / agent-tooling current  
 **Parent arc**:
 [`cost-of-collaboration.plan.md`](cost-of-collaboration.plan.md)
 P4 identity routing + P5 unified comms substrate follow-up
 
-## Landing Index (2026-05-26 session — 8 commits)
+## Landing Index (2026-05-26 — Phase 0 COMPLETE, 10 commits)
 
 | Commit | Phase / Cycle | What landed |
 | --- | --- | --- |
@@ -97,15 +104,31 @@ P4 identity routing + P5 unified comms substrate follow-up
 | `2a501e97` | **0B-4** | `parseAgentId` → `collaborationAgentIdSchema.parse()` (5 new tests) |
 | `b977dbab` | **0B-5** | commit-queue `createIntent` requires `--id`; SKILL teaches new ceremony (4 new tests) |
 | `30ef437b` | **0C-6+7+8** | **Routing cure**: `AgentRoutingKey` discriminated union; classifiers + `assertSameAgent` + `claim-reports.sameAgent` route via id; PDR-076a §Falsifiability primary collision test green (4 new tests) |
+| `dee89e09` | **0C-9** | `--to-id` CLI flag REQUIRED on `comms direct`; recipient parsed via `collaborationAgentIdWriteSchema.parse()` (2 new tests + 5 migrated) |
+| `6dad98b0` | **0C-10** | Legacy-fallback diagnostic emission — `routingKeyFor` emits `[routing-legacy-fallback]` JSON via `setLegacyFallbackWriter` DI seam; default routes to `process.stderr` (6 new tests) |
 
-**Test count**: 671 → 698 (+27 across the session).
+**Test count**: 671 → 706 (+35 across the Phase 0 arc).
 
-**Remaining for final session**:
+**Phase 0 proof contract — all four proofs in code**:
 
-- Cycle 9: `--to-id` CLI flag in `cli-spec-options.ts` + `cli-comms-messages.recipientAgent`.
-- Cycle 10: legacy-fallback diagnostic emission (`[routing-legacy-fallback]` structured JSON to injectable writer).
-- Phase 0C reviewer dispatch (code-expert + type-expert).
-- Plan + thread + napkin closeout.
+- ID-0 (PDR-027 amendment): `7028b0d6`
+- ID-1 (identity writes carry id): `bed24b57`, `57084c15`, `b977dbab`
+- ID-2 (routing comparators prefer id): `30ef437b`, `dee89e09`
+- ID-3 (legacy-fallback diagnostic emits): `6dad98b0`
+
+**Follow-on architectural improvements (queued, not blocking Phase 1)**:
+
+- Tighten `createDirectedCommsMessage` write entry to
+  `CollaborationAgentIdWrite` for both `from` and `to` so the brand and
+  required-id constraint propagate continuously from CLI parse into the
+  stored event. Migration paths keep loose read-side typing — the cure
+  is at the WRITE entry point, not the stored shape.
+- DI-seam test hygiene in `active-agent-routing.unit.test.ts`: the shared
+  `restoreWriter` slot pattern works for current tests but is a latent
+  trap for a sixth test in the DI-seam describe block; refactor to
+  per-test `try/finally` or `beforeEach` reset.
+
+**Next phase**: Phase 1 (body-file frontmatter) — owner-gated.
 
 ## Metacognition Pass
 

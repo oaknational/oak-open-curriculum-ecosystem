@@ -16,29 +16,32 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
-- **Collaboration identity remediation Phase 0B complete + Phase 0C routing
-  cure landed (2026-05-26, Tempestuous Sweeping Feather / claude /
-  claude-opus-4-7 / `a9e5d2`)**: five commits on
-  `docs/agent-collaboration-enhancements` delivered the substantive
-  coordination cure named by
-  [`collaboration-identity-doctrine-enforcement-remediation.plan.md`](../../plans/agent-tooling/current/collaboration-identity-doctrine-enforcement-remediation.plan.md):
-  `bed24b57` (0B-2 JSON schemas accept v5 id), `57084c15`
-  (0B-3 `deriveCollaborationIdentity` returns Write with v5 id),
-  `2a501e97` (0B-4 `parseAgentId` schema-driven), `b977dbab`
-  (0B-5 commit-queue `createIntent` requires `--id` + SKILL doctrine
-  update), and `30ef437b` (**Phase 0C cycles 6+7+8 bundled**:
-  `AgentRoutingKey` discriminated union; classifiers, `assertSameAgent`,
-  and `claim-reports.sameAgent` route via id; PDR-076a §Falsifiability
-  primary collision test green). Tests 671 → 698 (+27); pre-commit gate
-  green every commit. **The named coordination cure is live**: a
-  directed event addressed to `(name, id_A)` no longer reaches a
-  `(name, id_B)` collision partner. Mid-session metacognition (owner
-  course-correction against substrate-only landings) surfaced that
-  Cycles 2-5 were precondition substrate; Cycles 6-10 deliver the cure.
-  Cycles 6+7+8 landed within the same session as the correction.
-  **Next safe step (owner-named FINAL session)**: Cycle 9 (`--to-id`
-  CLI flag wiring) + Cycle 10 (legacy-fallback diagnostic emission with
-  DI writer) + Phase 0C reviewer dispatch + closeout.
+- **Collaboration identity remediation Phase 0 COMPLETE (2026-05-26, Airy
+  Whirling Current / claude / claude-opus-4-7 / `3624a5`)**: two commits on
+  `docs/agent-collaboration-enhancements` closed Phase 0C and the Phase 0
+  proof contract:
+  - `dee89e09` Cycle 9 — `--to-id` CLI flag wired through write-side schema
+    parse at the boundary; REQUIRED, not optional (rejects the named
+    failure mode at the earliest point).
+  - `6dad98b0` Cycle 10 — `routingKeyFor` emits structured
+    `[routing-legacy-fallback]` JSON diagnostic when lifting a
+    legacy-shape identity; DI seam (`setLegacyFallbackWriter`) allows test
+    capture without `process.stderr` mutation.
+
+  Tests 698 → 706 (+8). Pre-commit gate (90 turbo tasks) green at every
+  commit. Phase 0 proof contract closed: ID-0 (`7028b0d6` PDR-027
+  amendment), ID-1 (`bed24b57`, `57084c15`, `b977dbab` identity writes
+  carry id), ID-2 (`30ef437b` Cycles 6+7+8 routing prefers id), ID-3
+  (`6dad98b0` Cycle 10 diagnostic emits). Reviewer dispatch on Sonnet
+  (parallel code-expert + type-expert): both approved; two follow-on
+  architectural improvements queued (tighten `createDirectedCommsMessage`
+  write entry to `CollaborationAgentIdWrite`; DI-seam test hygiene). Per
+  plan §Phase 0 completion claim — all four proofs are now in code.
+
+- **Prior context (Tempestuous Sweeping Feather, `a9e5d2`)**: five commits
+  landed Phase 0B substrate + Phase 0C cycles 6+7+8 bundled (the
+  coordination cure). Tests 671 → 698 (+27). See
+  [agentic thread record][agentic] for full landing history.
 - **Cross-platform memory import completed (2026-05-26, Feathered Flying Cloud
   / codex / GPT-5 / `019e65`)**: Claude, Codex, Cursor, and `.remember`
   surfaces were swept; the owner then asked to bring the candidates into the
@@ -95,7 +98,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF first-feature delivery | [record][eef] | Fiery Kindling Brazier / claude / claude-opus-4-7 / 9f4026 / commit-marshal+pr-115-merged / 2026-05-25 |
-| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Feathered Flying Cloud / codex / GPT-5 / `019e65` / cross-platform memory import completed; full singleton gate deferred behind active peer-owned agent-tools WIP / 2026-05-26 |
+| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Airy Whirling Current / claude / claude-opus-4-7 / `3624a5` / Phase 0 COMPLETE — Cycles 9+10 landed (`dee89e09`, `6dad98b0`); proof contract ID-0..ID-3 closed; reviewer dispatch green / 2026-05-26 |
 
 ## Paused Threads
 
@@ -301,6 +304,30 @@ Current branch non-goals:
   acceptance work.
 
 ## Deep Consolidation Status
+
+**not due — Phase 0 closeout commit only** (Airy Whirling Current `3624a5`,
+2026-05-26). Phase 0 critical path closed with cycles 9+10 landing the
+consumer-visible cure surface plus the audit-signal diagnostic. No
+ADR/PDR graduation candidates surfaced — the work executed the locked
+plan body; lessons captured in this thread's Session Outcome block.
+Reviewer dispatch (code-expert + type-expert on Sonnet) returned approval
+plus two architectural follow-ons logged in the thread record. No napkin
+rotation pressure; the metacognition observations are session-scoped.
+Falsifiability for the next consolidator: `git log --oneline -3` shows
+the two Cycle 9+10 commits at HEAD plus this continuity update; the
+plan §Phase 0 completion claim items (ID-0..ID-3) all map to landed
+commits.
+
+**not due — mid-arc handoff in active plan** (Tempestuous Sweeping Feather
+`a9e5d2`, 2026-05-26). Owner directed a brief session handoff with the
+final-session work explicitly carried forward (Cycles 9-10 + closeout). No
+consolidation triggers fired: the active plan is in-progress not closed, no
+napkin rotation pressure, no ADR/PDR graduation candidates surfaced this
+session (the routing-cure work executed locked design; lessons captured as
+session-scoped surprises in napkin.md). Falsifiability: the next session
+runs against an unchanged Active threads table, the same active plan, and
+this same `not due` marker; if any trigger fires mid-final-session, the
+consolidation gate at session close handles it then.
 
 **completed — owner-directed cross-platform memory import slice** (Feathered
 Flying Cloud `019e65`, 2026-05-26). Owner asked to scan Claude memories, other
