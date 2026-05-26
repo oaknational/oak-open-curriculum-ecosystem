@@ -204,24 +204,59 @@ the system still routes through repeated words, repeated display names, and
 six-character prefixes. That is the live failure mode that triggered this
 plan.
 
-**Sub-phase sizing.** Phase 0A, 0B, and 0C are each session-sized
-deliverables on their own:
+**Sub-phase sizing — TDD-cycle decomposed, not file-counted.** A first-pass
+estimate framed 0A, 0B, and 0C as three separate sessions. That count was
+derived from owned-surface file counts (13+4+2 for 0B, 7+ for 0C) and was
+overcautious — the substantive work is fewer cycles than touch points
+because the design verdicts below are locked at plan time and most touch
+points are mechanical translations of a small number of structural moves.
 
-- **Phase 0A** — PDR-027 amendment (Amendment-Log entry + §Identity schema
-  table + §Full identity block table + §The additive-identity rule body +
-  §Rationale supersession) plus the implementation note with the write-path
-  enumeration. This is a doctrine-landing session.
-- **Phase 0B** — additive schema + UUID v5 derivation + emit `id` from
-  every write path (13 source files + 4 test files + 2 JSON schemas in
-  owned surfaces). This is one implementation session.
-- **Phase 0C** — routing prefer-id + `--to-id` + collision regression
-  tests (7 source files + new test surface). This is one implementation
-  session.
+**Phase 0A** — doctrinal arc. One session-sized deliverable: PDR-027
+amendment (Amendment-Log entry + identity-block schema tables + additive-
+identity rule body + Rationale supersession) plus the implementation note
+with the write-path enumeration. (Landed 2026-05-26 in commits 7028b0d6 +
+76920493.)
 
-The atomicity invariant in §Phase 0C governs 0B+0C: they MUST land
-together-or-immediately-sequential. It does NOT compress 0A+0B+0C into one
-session. Closing Phase 0 requires all three sub-phases proven (ID-0/1/2/3
-in the proof contract).
+**Phase 0B + 0C** — implementation arc paired by the atomicity invariant
+below. Approximately **10 TDD cycles total**, achievable in one focused
+implementer session with the design verdicts pre-locked. Cycles:
+
+Phase 0B (~5 cycles):
+
+1. `UuidV5` branded type + `uuidV5Schema` in `types.ts`.
+2. Schema split — `collaborationAgentIdSchema` (optional `id`) +
+   `collaborationAgentIdWriteSchema` (required `id`).
+3. `deriveCollaborationIdentity` derives UUID v5 from the stable session
+   seed and returns `CollaborationAgentIdWrite`.
+4. `parseAgentId` replaces the hand-built object construction with
+   `collaborationAgentIdSchema.parse()` (Commandment 12 fix).
+5. `comms-event.schema.json` + `active-claims.schema.json` accept
+   optional `id` in their `agent_id` `$def` (additive).
+
+Phase 0C (~5 cycles):
+
+1. `AgentRoutingKey` becomes a discriminated union + `routingKeyFor`
+   switches on `id` presence + `sameAgentRoutingKey` exhaustively matches
+   on `kind`.
+2. `isSelfAuthored`, `classifyDirected`, `classifyNarrative` consume the
+   new routing key.
+3. `assertSameAgent` consumes the new routing key.
+4. `--to-id` flag wired through `cli-spec-options` →
+   `cli-comms-messages.recipientAgent`.
+5. Legacy-fallback diagnostic emission in `routingKeyFor`'s
+   `kind: 'legacy'` branch.
+
+**Cycle-count caveat.** A cycle may surface ripple beyond its primary
+target (the schema split in particular will surface every identity-
+construction site as a compile error). The structural map in commit
+76920493 enumerates those sites; ripple is bounded by enumeration, not
+emergent. Real-world cycle count may drift by ±2 but stays in one
+focused session.
+
+**Atomicity invariant.** Phase 0B+0C MUST land in the same session, or 0C
+MUST be the next session's first work. Phase 0B alone (new writes carry
+`id` but no consumer reads it) is a regression. Closing Phase 0 requires
+ID-0/1/2/3 in the proof contract all proven.
 
 #### Phase 0A: Grounding, PDR-027 Amendment, And Contract Freeze
 
