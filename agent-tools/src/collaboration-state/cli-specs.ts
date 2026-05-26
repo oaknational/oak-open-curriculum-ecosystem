@@ -123,8 +123,8 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
   }),
   'comms:direct': commandSpec({
     help:
-      'comms direct --comms-dir <dir> --to-agent-name <name> --to-platform <platform> ' +
-      '--to-model <model> --to-session-prefix <prefix> --kind <kind> ' +
+      'comms direct --comms-dir <dir> --to-agent-name <name> --to-id <uuid-v5> ' +
+      '--to-platform <platform> --to-model <model> --to-session-prefix <prefix> --kind <kind> ' +
       '--subject <subject> (--body <body> | --body-file <path>) ' +
       '--platform <platform> --model <model> ' +
       '--active <path> [--event-id <id>] [--now <iso>] [--tag <tag>...] ' +

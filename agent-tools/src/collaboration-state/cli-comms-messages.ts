@@ -15,6 +15,8 @@ import { assertIdentityCanWrite } from './identity-write-guard.js';
 import { validateSharedStateAgentId } from './identity.js';
 import {
   type CollaborationAgentId,
+  type CollaborationAgentIdWrite,
+  collaborationAgentIdWriteSchema,
   type CollaborationStateEnvironment,
   type DirectedCommsMessage,
 } from './types.js';
@@ -135,13 +137,14 @@ async function currentAgent(
   return identity.agent_id;
 }
 
-function recipientAgent(options: Options): CollaborationAgentId {
-  return {
+function recipientAgent(options: Options): CollaborationAgentIdWrite {
+  return collaborationAgentIdWriteSchema.parse({
     agent_name: nonEmptyRequired(options, 'to-agent-name'),
     platform: nonEmptyRequired(options, 'to-platform'),
     model: nonEmptyRequired(options, 'to-model'),
     session_id_prefix: nonEmptyRequired(options, 'to-session-prefix'),
-  };
+    id: nonEmptyRequired(options, 'to-id'),
+  });
 }
 
 function nonEmptyRequired(options: Options, key: string): string {

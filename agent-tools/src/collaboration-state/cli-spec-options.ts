@@ -62,6 +62,7 @@ export const commsInboxOptions = [
 export const commsDirectOptions = [
   'comms-dir',
   'to-agent-name',
+  'to-id',
   'to-platform',
   'to-model',
   'to-session-prefix',

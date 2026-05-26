@@ -63,6 +63,7 @@ const KNOWN_OPTION_KEYS = new Set([
   'title',
   'to-agent-name',
   'to-event-id',
+  'to-id',
   'to-model',
   'to-platform',
   'to-session-prefix',

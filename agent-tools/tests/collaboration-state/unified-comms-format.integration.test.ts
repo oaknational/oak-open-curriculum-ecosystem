@@ -33,6 +33,16 @@ const senderWithId = deriveCollaborationIdentity({
   },
 }).agentId;
 
+const recipientCodexThreadId = '019e2067-a0a8-7c11-aae3-1bc48533a585';
+const recipientWithId = deriveCollaborationIdentity({
+  platform: recipient.platform,
+  model: recipient.model,
+  env: {
+    OAK_AGENT_IDENTITY_OVERRIDE: recipient.agent_name,
+    CODEX_THREAD_ID: recipientCodexThreadId,
+  },
+}).agentId;
+
 describe('unified comms format CLI behaviour', () => {
   it('writes, reads, and renders directed messages from the single comms directory', async () => {
     const activePath = 'state/active-claims.json';
@@ -51,13 +61,15 @@ describe('unified comms format CLI behaviour', () => {
         '--comms-dir',
         commsDir,
         '--to-agent-name',
-        recipient.agent_name,
+        recipientWithId.agent_name,
+        '--to-id',
+        recipientWithId.id,
         '--to-platform',
-        recipient.platform,
+        recipientWithId.platform,
         '--to-model',
-        recipient.model,
+        recipientWithId.model,
         '--to-session-prefix',
-        recipient.session_id_prefix,
+        recipientWithId.session_id_prefix,
         '--kind',
         'coordination-request',
         '--subject',
@@ -89,7 +101,7 @@ describe('unified comms format CLI behaviour', () => {
       kind: 'directed',
       message_kind: 'coordination-request',
       from: senderWithId,
-      to: recipient,
+      to: recipientWithId,
       subject: 'Please check this',
       body: 'There is useful coordination here.',
     });
