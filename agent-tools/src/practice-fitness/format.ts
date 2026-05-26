@@ -8,7 +8,7 @@ export interface FitnessSummaryCounts {
   readonly critical: number;
 }
 
-export function zoneGlyph(zone: FitnessZone | null): string {
+function zoneGlyph(zone: FitnessZone | null): string {
   switch (zone) {
     case 'healthy':
       return '\x1b[32m✓\x1b[0m';
