@@ -1,3 +1,31 @@
+# [1.14.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.13.0...v1.14.0) (2026-05-26)
+
+
+### Bug Fixes
+
+* **agent-tools:** consume UuidV5 + CollaborationAgentIdWrite types in schema ([ae36440](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ae36440cb7c0cb5bb4ad053fa65c118eca8abcfd))
+* **agent-tools:** resolve PR 118 sonar findings ([cd1810b](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/cd1810bc45376f5656e6d7f01adf1803f3e2dd98))
+* **practice-fitness:** per-file detail uses inventoryGlyph for ready-zone consistency ([83c79fa](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/83c79fa6dd78a9c2308547f7ea302fb36394a57a))
+
+
+### Features
+
+* **agent-tools:** --to-id flag wired for comms direct (phase 0c cycle 9) ([dee89e0](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/dee89e09c91d91e731ca1d6665b188878ea66d48))
+* **agent-tools:** add UuidV5 brand + read/write schema split for agent identity (phase 0b cycle 1) ([c11f698](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/c11f698b73e37f68453e16527afb950ab63ffb72))
+* **agent-tools:** commit-queue createIntent requires UUID v5 id (phase 0b cycle 5) ([b977dba](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/b977dbabc56bd3259f8f129b0dacded6618c3ef2))
+* **agent-tools:** derive UUID v5 id from session seed (phase 0b cycle 3) ([57084c1](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/57084c15e5acd842eeff01c3eef80afa44a365aa))
+* **agent-tools:** heartbeat emitter typed-origin gate (A1 / PDR-078 §5) ([97f06e1](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/97f06e1618c387b9b3fedc71f3cb5387b9ee8c2b))
+* **agent-tools:** json schemas accept optional UUID v5 id (phase 0b cycle 2) ([bed24b5](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/bed24b57b81a4522fe539e51fe43c108c0ef5314))
+* **agent-tools:** legacy-fallback diagnostic emission (phase 0c cycle 10) ([6dad98b](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/6dad98b0f6d0589f09181c98994b4a3ee530cffa))
+* **agent-tools:** parseAgentId via schema.parse (phase 0b cycle 4) ([2a501e9](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/2a501e9717b2cb8a8e884693adbc4b11c08b9d7c))
+* **agent-tools:** routing prefers id (phase 0c cycles 6+7+8 bundled) ([30ef437](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/30ef437b79f98fdca36c53dca50d7517f10c9f2b))
+* **agent-tools:** tighten createDirectedCommsMessage write entry (phase 0c cycle 11) ([597b094](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/597b094587a8f100299d755370099508f88ff142))
+* collaboration enhancement refinement ([ed28e0d](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ed28e0dfe6a2e3633e84663511b84f53394d94ee))
+* **comms:** reject --body argv over 1500 chars on all comms verbs (B2) ([66e77d7](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/66e77d7360ef5a39c8c7718f68e5a2f3d7b9ad51))
+* **hooks:** add menu-framing scoped_blocks for owner-decision phrasings ([ecc1e83](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ecc1e834a164871b831da387122eaec42580c8a4))
+* **plans:** add MCP analytics exploration and Path-to-GA Programme ([09eda6f](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/09eda6f43282d5288d06ed31046723ce5deb73a6)), closes [hi#level-observability](https://github.com/hi/issues/level-observability)
+* **rules:** add ping-before-escalate retirement-broadcast discipline ([29ebda4](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/29ebda41b8b93104568958aab1574e4e003d6307))
+
 # [1.13.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.12.0...v1.13.0) (2026-05-25)
 
 
