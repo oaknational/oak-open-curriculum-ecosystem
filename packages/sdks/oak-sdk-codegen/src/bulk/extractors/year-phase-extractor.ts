@@ -42,9 +42,9 @@ export interface ExtractedYearInfo {
  * Derives key stage slug from year number.
  */
 function deriveKeyStage(year: number | string): string {
-  const yearNum = typeof year === 'string' ? parseInt(year, 10) : year;
+  const yearNum = typeof year === 'string' ? Number.parseInt(year, 10) : year;
 
-  if (isNaN(yearNum)) {
+  if (Number.isNaN(yearNum)) {
     return 'unknown';
   }
 
@@ -64,9 +64,9 @@ function deriveKeyStage(year: number | string): string {
  * Derives phase from year number.
  */
 function derivePhase(year: number | string): string {
-  const yearNum = typeof year === 'string' ? parseInt(year, 10) : year;
+  const yearNum = typeof year === 'string' ? Number.parseInt(year, 10) : year;
 
-  if (isNaN(yearNum)) {
+  if (Number.isNaN(yearNum)) {
     return 'unknown';
   }
 
