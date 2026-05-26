@@ -38,3 +38,6 @@ route, record the disposition, and keep an audit pointer in the main register.
 - [`2026-05-26-feathered-torrid-n2-cycle-1-candidates.md`](2026-05-26-feathered-torrid-n2-cycle-1-candidates.md)
   — n=2 enforcement-bundle route map; full source window archived under
   `../archive/`.
+- [`2026-05-26-starless-open-closeout-candidates.md`](2026-05-26-starless-open-closeout-candidates.md)
+  — Starless n=2 closeout candidates plus Open reviewer-sizing and closeout
+  stretch candidates; source napkin archived under `../../active/archive/`.

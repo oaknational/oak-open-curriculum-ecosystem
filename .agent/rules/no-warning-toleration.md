@@ -155,6 +155,16 @@ permitted response is:
 
 This is the only legitimate shape; "I'll get to it" is not.
 
+There is one bounded rule-authoring nuance for custom ESLint rules:
+a newly authored rule may begin at `warn` while the rule's matching
+logic, false-positive profile, autofix behaviour, and existing
+violation surface are still being designed. That warning state is not
+a toleration state. The authoring lane must name the promotion point
+to `error`, and the rule must not be used to claim green quality gates
+until either all warnings are fixed or the rule has become an error
+with a blocking migration plan. Once the rule is part of the normal
+gate surface, this rule's zero-warning requirement applies unchanged.
+
 ## Reviewer cadence
 
 - `code-expert` enforces the rule on every PR that touches

@@ -123,11 +123,18 @@ Phase 0 critical path is closed.
   as intended. Suppressing in test setup would defeat the Phase 3 sunset
   signal. Preserved as-is.
 
-**Local HEAD at handoff**: `597b0945` (ahead of origin by ~20 commits;
+**Local HEAD at handoff**: `17a839c9` (ahead of origin by ~21 commits;
 this-session commits unpushed; owner directs push timing).
 
-**Next safe step**: Phase 1 work (body-file frontmatter) per plan §Phase 1.
-One follow-on hygiene item queued above (DI-seam test isolation).
+**Next safe step**: NOT Phase 1. Owner direction at session close —
+`collaboration-identity-doctrine-enforcement-remediation` plan is
+PAUSED. Phase 0 delivered its intent (improve inter-agent collaboration
+for the next session). The next session resumes EEF first-feature
+delivery on the
+[`eef` thread](eef.next-session.md). Phase 1+ of this plan remain
+authored but unscheduled; owner directs resumption if/when warranted.
+DI-seam test isolation hygiene item also waits for owner direction —
+not on this thread's critical path.
 
 ## Session Outcome (2026-05-26 — Tempestuous Sweeping Feather / claude / claude-opus-4-7 / `a9e5d2`, Phase 0B substrate + Phase 0C routing cure)
 

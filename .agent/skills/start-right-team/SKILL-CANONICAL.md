@@ -412,6 +412,15 @@ Useful responsibility labels include `controller`, `implementer`, `reviewer`,
 `marshal`, `scout`, `standby`, `consolidator`, and `curator`, but they are
 examples rather than a required ontology.
 
+When adding a top-level responsibility or keeping an existing one alive, name
+the seat cost as part of the route. Expensive top-level model seats should be
+reserved for work that needs their judgement or continuity; review passes,
+spec fetches, and bounded exploration should use cheaper sub-agent or
+lower-cost routes when those routes preserve quality. Treat high seat count as
+a fold-check signal, not as speed pressure: the cure is to consolidate,
+delegate, or end responsibilities whose coordination pressure has cleared, not
+to skip review or weaken gates.
+
 The `curator` label names the substrate-care lane defined by PDR-081
 (`curator-role-and-substrate-care-lane`). `Knowledge Curator` is the
 owner-facing session label for the same responsibility. Curator is

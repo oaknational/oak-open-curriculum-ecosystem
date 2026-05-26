@@ -16,11 +16,19 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
-- **Collaboration identity remediation Phase 0 COMPLETE + write-side type
-  cure (2026-05-26, Airy Whirling Current / claude / claude-opus-4-7 /
-  `3624a5`)**: three commits on `docs/agent-collaboration-enhancements`
-  closed Phase 0C, the Phase 0 proof contract, and the write-side type
-  hole:
+- **Active thread switches back to `eef` first-feature delivery
+  (2026-05-26)**: Owner direction at session close —
+  `collaboration-identity-doctrine-enforcement-remediation` plan is
+  PAUSED with Phase 0 delivering its intent (collaboration improvement
+  for the next session). Next session resumes EEF first-feature work
+  per the [`eef` thread record][eef]; `agentic-engineering-enhancements`
+  returns to a Practice-continuity tactical lane, not an active
+  delivery arc.
+- **Collaboration identity remediation Phase 0 DELIVERED + write-side
+  type cure (2026-05-26, Airy Whirling Current / claude /
+  claude-opus-4-7 / `3624a5`)**: three commits on
+  `docs/agent-collaboration-enhancements` closed Phase 0C, the Phase 0
+  proof contract, and the write-side type hole:
   - `dee89e09` Cycle 9 — `--to-id` CLI flag wired through write-side schema
     parse at the boundary; REQUIRED, not optional (rejects the named
     failure mode at the earliest point).
@@ -44,6 +52,11 @@ Earlier archives remain under [`archive/`](archive/).
   Cycle 11 after owner challenge. One remaining hygiene item (DI-seam
   test isolation). Per plan §Phase 0 completion claim — all four proofs
   in code.
+
+  **Plan now PAUSED** (owner direction 2026-05-26 session close):
+  Phase 0 delivered its intent — improving inter-agent collaboration
+  for the next session. Phase 1+ remain authored but unscheduled;
+  owner directs resumption if/when warranted.
 
 - **Prior context (Tempestuous Sweeping Feather, `a9e5d2`)**: five commits
   landed Phase 0B substrate + Phase 0C cycles 6+7+8 bundled (the
@@ -80,10 +93,13 @@ Earlier archives remain under [`archive/`](archive/).
   [`2026-05-26-starless-open-closeout-candidates.md`](pending-graduations/2026-05-26-starless-open-closeout-candidates.md);
   outgoing detailed Current State prose archived at
   [`repo-continuity-current-state-2026-05-26-feathered-hard-curation.md`](archive/repo-continuity-current-state-2026-05-26-feathered-hard-curation.md).
-- **Next implementation route for agentic-engineering** remains Phase 0B
-  Cycles 2-4 then Phase 0C of
-  [`collaboration-identity-doctrine-enforcement-remediation.plan.md`](../../plans/agent-tooling/current/collaboration-identity-doctrine-enforcement-remediation.plan.md),
-  per the thread record. This curation pass does not reactivate product work.
+- **Next implementation route returns to EEF first-feature delivery**
+  per owner direction 2026-05-26. The
+  [`collaboration-identity-doctrine-enforcement-remediation.plan.md`](../../plans/agent-tooling/current/collaboration-identity-doctrine-enforcement-remediation.plan.md)
+  plan is PAUSED with Phase 0 delivering its intent (collaboration
+  improvement for the next session). Earlier stale routing notes that
+  framed Phase 0B Cycles 2-4 / Phase 0C as the next route are
+  superseded by this entry.
 - **MCP product analytics** remains paused and owner-gated after the Path-to-GA
   Programme landed at `09eda6f4`; details live in the
   [`mcp-product-analytics`](threads/mcp-product-analytics.next-session.md)
@@ -105,7 +121,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF first-feature delivery | [record][eef] | Fiery Kindling Brazier / claude / claude-opus-4-7 / 9f4026 / commit-marshal+pr-115-merged / 2026-05-25 |
-| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Airy Whirling Current / claude / claude-opus-4-7 / `3624a5` / Phase 0 COMPLETE + write-side type cure — Cycles 9+10+11 landed (`dee89e09`, `6dad98b0`, `597b0945`); proof contract ID-0..ID-3 closed; reviewer dispatch green / 2026-05-26 |
+| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | Airy Whirling Current / claude / claude-opus-4-7 / `3624a5` / Phase 0 DELIVERED + plan PAUSED — Cycles 9+10+11 landed (`dee89e09`, `6dad98b0`, `597b0945`); next session returns to eef / 2026-05-26 |
 
 ## Paused Threads
 
@@ -331,12 +347,13 @@ the two new distilled entries are knowledge-preservation-valid at full
 weight per `knowledge-preservation-over-fitness-warnings`; trimming
 them to satisfy the soft-limit signal would defeat their purpose. They
 need a second worked instance before graduation to a rule/PDR. The plan
-remains active (Phase 1 owner-gated). No napkin rotation pressure
-(273/300, healthy zone). No ADR/PDR candidates surfaced. Falsifiability
-for the next consolidator: distilled.md grew by the two named entries
-this session; if a second worked instance of either appears in a future
-napkin, graduate from distilled to permanent home rather than letting
-the soft pressure dictate trimming.
+itself is now PAUSED (owner direction 2026-05-26 — Phase 0 delivered
+its collaboration-improvement intent; next session returns to eef). No
+napkin rotation pressure (273/300, healthy zone). No ADR/PDR candidates
+surfaced. Falsifiability for the next consolidator: distilled.md grew
+by the two named entries this session; if a second worked instance of
+either appears in a future napkin, graduate from distilled to permanent
+home rather than letting the soft pressure dictate trimming.
 
 **not due — Phase 0 closeout commit only** (Airy Whirling Current `3624a5`,
 2026-05-26, FIRST handoff this session — superseded by the entry above

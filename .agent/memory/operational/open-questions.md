@@ -63,6 +63,26 @@ Each active entry should stay compact:
 - Linked: archived source Q-003, `start-right-team` sections 0, 0.5, and 1,
   PDR-082, and the n=2 coordination-efficiency program plan.
 
+### Q-005: When should live collaboration state leave version control?
+
+- Raised by: Feathered Flying Cloud (`019e65`) @ 2026-05-26T17:47Z.
+- Context: cross-platform memory sweep recovered the owner-stated future
+  direction that `.agent/memory/` remains shared/versioned while `.agent/state/`
+  may become local-only or externally backed when contributor count grows.
+  ADR-165 now records the planned pressure; PDR-050 names the portable substrate
+  contract every state/memory surface must retain.
+- Why still open: the architectural direction is known, but the migration
+  trigger and replacement read-model contract are not yet chosen. The
+  falsifiability check is the first sustained contributor window where
+  collaboration-state churn creates merge pressure that semantic union cannot
+  keep cheap.
+- Suggested resolution path: when that trigger fires, amend ADR-165 with the
+  selected host instance, keep durable evidence flowing into `.agent/memory/`,
+  and ensure the local/external state surface still satisfies PDR-050.
+- Status: open.
+- Linked: ADR-165, PDR-050, and curator pass
+  `2026-05-26-feathered-flying-cloud.md`.
+
 ## Surfaced To Owner
 
 ### Q-004: Should the B2 body-length gate apply to resolved body-file content?

@@ -287,7 +287,7 @@ and overrides.
 
 **Local settings contain:**
 
-- Absolute filesystem paths (`/Users/...`, `/tmp/...`)
+- Machine-local filesystem paths (`<home>/...`, `<tmp>/...`)
 - One-off command permissions accumulated during sessions
 - User-specific MCP server selection
 - Output style preferences
@@ -382,6 +382,14 @@ is canonicalised immediately into `.agent/skills/<name>/`, recorded in
 wrapper. Validation treats full content in adapter directories as drift, not
 as an exclusion.
 
+After canonicalisation, retaining the vendor-installed source plugin is a
+separate operational decision. The default is to remove or disable any plugin
+whose only remaining purpose is to duplicate the now-canonical skill content.
+Keep the plugin only when it still supplies a distinct runtime capability,
+update mechanism, or source-of-truth refresh path; record that reason beside
+the artefact inventory or lock entry. Canonical content in `.agent/` remains
+the source agents read during repository work.
+
 ## Amendments
 
 ### 2026-04-17 — Thin-wrapper scope clarification
@@ -406,6 +414,14 @@ wrappers, and made `.agents/rules/` a first-class thin-wrapper rule
 surface. `pnpm portability:check` now validates forward coverage,
 reverse adapter links, wrapper form, `skills-lock.json`, symlink-free
 skill adapters, and Claude tracked permission parity.
+
+### 2026-05-26 — Post-canonicalisation plugin retention
+
+Cross-platform memory import clarified the post-canonicalisation policy: a
+vendor source plugin is not kept merely because it was the origin of a skill.
+Once content is canonical, retention needs a current capability or refresh
+reason; otherwise the plugin becomes a duplicate activation and load-budget
+surface.
 
 ### 2026-04-28 — Agent-work capability ownership boundary
 

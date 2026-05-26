@@ -59,6 +59,14 @@ When an agent-work behaviour changes, route the change by substance:
 3. Plans and live state may preserve evidence while work is underway,
    but they must not remain the only home for settled doctrine.
 
+Current versioned collaboration state is an implementation choice, not a
+permanent portability requirement. As the number of regular contributors grows,
+the expected host boundary is: durable memory remains versioned under
+`.agent/memory/`, while truth-of-now collaboration state under `.agent/state/`
+may move to a local-only or external state instance. That move must preserve
+PDR-050's surface-contract obligations and must keep durable evidence flowing
+back into versioned memory through consolidation.
+
 Codex session identity plumbing is a worked example of this boundary. The
 Practice owns the identity, thread-registration, audit, claim, and shared-state
 semantics through PDR-027, PDR-029, PDR-035, and canonical rules. This repo's

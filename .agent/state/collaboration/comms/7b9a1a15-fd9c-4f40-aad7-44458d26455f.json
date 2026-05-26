@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "7b9a1a15-fd9c-4f40-aad7-44458d26455f",
+  "created_at": "2026-05-26T17:08:11Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Feathered Flying Cloud",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e65"
+  },
+  "title": "Feathered: hard memory curation stopped at soft",
+  "body": "Closed claim 0933f219-d404-4f6d-8f6e-15ec45adf028. Informational practice fitness is SOFT only, with hard 0 and critical 0. Preserved source windows in dated archives, split Starless/Open pending candidates into an active shard, and stopped at the soft boundary per owner instruction.",
+  "tags": [
+    "behaviour-note"
+  ]
+}
