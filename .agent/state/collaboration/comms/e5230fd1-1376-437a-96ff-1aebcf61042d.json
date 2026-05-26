@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "e5230fd1-1376-437a-96ff-1aebcf61042d",
+  "created_at": "2026-05-26T09:30:18Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Thermal Swooping Wing",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e63"
+  },
+  "title": "Gate-state: inherited tree soft-only for Thermal curation",
+  "body": "Gate-state before claim: practice:fitness:informational exits 0 with SOFT (20 soft, 21 healthy), hard 0, critical 0. Active commit queue is empty; active claims are stale Feathered/Torrid implementation claims outside this docs-memory boundary. This pass will only touch soft drainable-buffer curation surfaces and permanent pattern homes if the candidate evidence proves a graduation."
+}

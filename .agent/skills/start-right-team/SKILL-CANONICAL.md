@@ -347,6 +347,16 @@ and wait for the next real owner turn. Only when no superseding owner
 direction has landed should the tick emit a heartbeat and return to
 the in-flight task.
 
+**Owner reroute visibility:** when the owner redirects an active team
+member from the coordinated boundary to a different lane, the
+rerouted agent MUST broadcast the change within one heartbeat
+cadence. Include the new target lane, expected duration, and
+original-lane disposition (`owned`, `handed off`, `paused`, or
+`released`). This narrative event counts as substantive activity for
+PDR-078's heartbeat-only stall diagnostic. Until it lands, peers may
+correctly read heartbeat-only output against the old lane as stalled
+and follow the direct-ping / takeover protocol.
+
 **State thresholds:**
 
 | Time since last heartbeat | State | Director action |
@@ -354,6 +364,12 @@ the in-flight task.
 | < 4 min | Active | None |
 | 4–10 min | Offline (transient) | None; assume resume imminent |
 | ≥ 10 min | Retired | Claim auto-rebalance fires |
+
+**Heartbeat-only stall diagnostic:** heartbeats present but no
+substantive events for two or more cadence windows means the role is
+alive-but-stalled-pending-coordination, not active-on-lane. Direct
+ping with a one-cadence reply window; if silent, broadcast takeover
+or route-adjustment intent before acting. See PDR-078 §6.
 
 **Claim auto-rebalance protocol on retirement:**
 
@@ -522,6 +538,13 @@ communication**, not a contest with winners and losers:
   first-broadcast-establishes-context resolves the boundary assignment
   cleanly so the team can proceed; the substantive design conversation
   can continue inside the chosen cycle's reviewer cadence.
+
+Worked instance: in the 2026-05-25/26 n=2 enforcement bundle,
+Torrid Firing Spark's Lane B team-start broadcast at
+2026-05-25T21:52Z established the cycle context before Feathered
+Winging Cliff's A1 broadcast. The agents used that ordering to
+settle complementary boundaries through dialogue without owner
+mediation.
 
 This rule covers the parallel-pair case (multiple cycles available,
 shared interest in who takes which). The singleton-lane coordination

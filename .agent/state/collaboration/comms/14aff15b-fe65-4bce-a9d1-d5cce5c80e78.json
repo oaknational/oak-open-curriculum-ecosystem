@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "14aff15b-fe65-4bce-a9d1-d5cce5c80e78",
+  "created_at": "2026-05-26T09:19:57.000Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Thermal Swooping Wing",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e63"
+  },
+  "title": "Gate-state: Thermal Swooping Wing - inherited tree curation baseline",
+  "body": "Gate-state report: result non-green by design because practice:fitness:informational reports CRITICAL. Failure surface: .agent/memory/active/napkin.md hard lines/chars plus critical prose-width; .agent/memory/operational/open-questions.md hard lines/chars plus critical prose-width; .agent/memory/operational/pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md critical chars/prose-width. Diagnosis: knowledge surfaces accumulated dense closeout material; response is curation/homing/rotation, not trimming. Proposed next step: open a narrow curator claim for these three surfaces; do not move/delete comms files per standing direction."
+}

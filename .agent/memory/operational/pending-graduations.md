@@ -351,48 +351,26 @@ surfaces and must be processed before any archive move:
 
 ## Active queue shard pointers
 
-The shard bodies listed in the index remain live queue substance, not archives.
-Process entries there before removing their pointers from this register.
+### 2026-05-25 — Fiery collaboration decomposition + n=2 efficiency
 
-### 2026-05-25 — Fiery collaboration decomposition + n=2 efficiency candidates
-
-Active shard:
 [`pending-graduations/2026-05-25-fiery-collaboration-decomposition-and-n2-efficiency.md`](pending-graduations/2026-05-25-fiery-collaboration-decomposition-and-n2-efficiency.md).
-
-Route-state: split out by Fiery Kindling Brazier on 2026-05-25 immediately on capture
-to keep the main register under hard-line-limit per buffer back-pressure discipline.
-The shard carries two `status: due` owner-direction-triggered candidates from the
-PR #115 marshal cycle retrospective metacognition pass: "Collaboration ceremony —
-decomposition discipline for marshal cycles" and "n=2 coordination efficiency". Process
-the shard entry by entry before removing this pointer. Composes with PDR-082 (n=2
-collaboration mode, drafted in parallel by Stormy Surfing Dock on the same substrate).
+Route-state: live shard with two due PR #115 retrospective owner-direction candidates.
 
 ### 2026-05-26 — n=2 enforcement bundle Cycle 1 candidates
 
-Active shard:
 [`pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md`](pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md).
 
-Route-state: split out by Feathered Winging Cliff on 2026-05-26 at session-close
-capture immediately on surfacing to keep the main register under hard-line-limit
-per buffer back-pressure discipline. The shard carries 7 candidates from Cycle 1
-execution + post-cycle metacognition pass: pre-pose AskUserQuestion viability
-check (`due`, rule:present-verdicts-not-menus.md); cross-lane structural blocking
-of commits (`pending`, second-instance trigger per PDR-026); bundle scope-discovery
-during execution is normal (`candidate`); PDR-063 worked under bundle load
-(`candidate`); A1 cure validates itself by running (`candidate`); B1 self-fires
-on plan-body content (`graduated` inline); first-broadcast-establishes-context
-as deterministic tie-breaker (`candidate`). Companion napkin entry at
-[`napkin.md` 2026-05-26 — Feathered](../active/napkin.md). Plan body authority:
-[`n2-and-coordination-efficiency-program-2026-05-25.plan.md` §"Cycle 1 graduation
-candidates"](../../plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md).
+Route-state: live shard; source is archived at
+[`archive/pending-graduations-archive-2026-05-26-n2-cycle-1-candidates.md`](archive/pending-graduations-archive-2026-05-26-n2-cycle-1-candidates.md)
+and active napkin context at
+[`../active/archive/napkin-2026-05-26-thermal-critical-curation.md`](../active/archive/napkin-2026-05-26-thermal-critical-curation.md).
+Cross-lane commit blocking, pre-pose viability, B1 self-fires, heartbeat-only
+stall, and owner-reroute visibility are graduated.
 
 ## 2026-05-24 owner-decision-batch candidates (Lanternlit Listening Dusk / `78683a`)
 
-Route note 2026-05-24 (Shaded Silencing Dusk): the active `distilled.md`
-summaries for PDR-vs-ADR classification, M1/M2 milestone asymmetry,
-owner-reframe-as-misframe, and marshal queue discipline were removed after
-verifying this register carries their live status. These entries remain live
-queue substance, not archived or graduated content.
+Route note 2026-05-24 (Shaded Silencing Dusk): active `distilled.md` summaries
+were removed after verifying this register carries their live status.
 
 ### PDR-079 PDR-vs-ADR portability distinction (owner-articulated; codified)
 

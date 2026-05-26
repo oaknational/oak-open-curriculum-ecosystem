@@ -45411,6 +45411,371 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "12b4a250-13bc-4ff2-8e6a-ae69457a72ba",
+      "agent_id": {
+        "agent_name": "Thermal Swooping Wing",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e63"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/pending-graduations/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T09:22:03.000Z",
+      "freshness_seconds": 10800,
+      "sidebar_open": false,
+      "intent": "supporting index correction for critical curation shard pointer",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T09:24:36Z",
+        "closed_by": {
+          "agent_name": "Thermal Swooping Wing",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e63"
+        },
+        "summary": "Updated pending-graduations main pointer and active-shards README to match the compact 2026-05-26 n2 route map and current shard inventory.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "12b4a250-13bc-4ff2-8e6a-ae69457a72ba",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e79d6e36-b7d3-4325-ac9c-65ab1d4b4738",
+      "agent_id": {
+        "agent_name": "Thermal Swooping Wing",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e63"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/open-questions.md",
+            ".agent/memory/operational/pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T09:20:09.000Z",
+      "freshness_seconds": 10800,
+      "sidebar_open": false,
+      "intent": "critical knowledge curation: process current critical napkin/open-questions/n2 pending shard without trimming substance",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T09:24:35Z",
+        "closed_by": {
+          "agent_name": "Thermal Swooping Wing",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e63"
+        },
+        "summary": "Processed critical curation surfaces into archived source windows plus compact live routes; strict-hard validation is SOFT only with hard 0 critical 0.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e79d6e36-b7d3-4325-ac9c-65ab1d4b4738",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2ed79f62-885d-4352-9333-b035ffdc577c",
+      "agent_id": {
+        "agent_name": "Thermal Swooping Wing",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e63"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/rules/present-verdicts-not-menus.md",
+            ".agent/memory/operational/pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T09:27:00Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "soft drainable-buffer graduation: pre-pose AskUserQuestion option viability check into present-verdicts-not-menus rule",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T09:27:35Z",
+        "closed_by": {
+          "agent_name": "Thermal Swooping Wing",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e63"
+        },
+        "summary": "Graduated pre-pose AskUserQuestion option viability check to present-verdicts-not-menus; updated n2 shard and main pointer; validation remained SOFT only with hard 0 critical 0.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2ed79f62-885d-4352-9333-b035ffdc577c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6540e7c6-04e3-4e85-bcea-68ff623dbbdf",
+      "agent_id": {
+        "agent_name": "Thermal Swooping Wing",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e63"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/collaboration/cross-lane-commit-blocking.md",
+            ".agent/memory/collaboration/README.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md",
+            ".agent/memory/operational/pending-graduations/2026-05-06-to-2026-05-21-legacy-backlog.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T09:30:42Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "soft drainable-buffer graduation: cross-lane commit blocking and surgical staging pattern",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T09:32:36Z",
+        "closed_by": {
+          "agent_name": "Thermal Swooping Wing",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e63"
+        },
+        "summary": "Graduated cross-lane commit-blocking and surgical staging candidate into .agent/memory/collaboration/cross-lane-commit-blocking.md; updated active/main/legacy pending-graduations pointers and napkin mistake log; validation green for targeted markdownlint, git diff --check, practice:fitness:informational, and strict-hard.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6540e7c6-04e3-4e85-bcea-68ff623dbbdf",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "53e77ed8-dc78-4bae-b963-9c84ac1bc3bd",
+      "agent_id": {
+        "agent_name": "Thermal Swooping Wing",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e63"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md",
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T09:34:44Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "soft drainable-buffer graduation: heartbeat-without-progress and owner-reroute visibility",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T09:37:01Z",
+        "closed_by": {
+          "agent_name": "Thermal Swooping Wing",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e63"
+        },
+        "summary": "Owner rerouted commit responsibility to Starless; Thermal is stopping self-commit path and handing off all dirty files, including Thermal curation changes. No heartbeat-visibility PDR/start-right edits were landed under this claim after it opened.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "53e77ed8-dc78-4bae-b963-9c84ac1bc3bd",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "02893645-0d66-4c6a-aa6c-7cc6b6b71f9c",
+      "agent_id": {
+        "agent_name": "Thermal Swooping Wing",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e63"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md",
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T09:40:59Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "soft drainable-buffer graduation: heartbeat-only stall and owner-reroute visibility",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T09:43:58Z",
+        "closed_by": {
+          "agent_name": "Thermal Swooping Wing",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e63"
+        },
+        "summary": "Graduated heartbeat-only stall and owner-reroute visibility from the 2026-05-26 drainable pending-graduations shard into PDR-078 §6 and start-right-team §0.5; marked source entries graduated and restored main pending-graduations to soft-only. Validation: targeted markdownlint passed; git diff --check passed; practice:fitness:informational and practice:fitness --strict-hard both soft-only, hard 0 critical 0. Commit responsibility remains owner-assigned to Starless.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "02893645-0d66-4c6a-aa6c-7cc6b6b71f9c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "533e1caf-9e15-4a36-a6c5-e40f97b4dcec",
+      "agent_id": {
+        "agent_name": "Thermal Swooping Wing",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e63"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md",
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T09:46:35Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "soft drainable-buffer graduation: A1 running worked instance and first-broadcast tie-breaker",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T09:50:33Z",
+        "closed_by": {
+          "agent_name": "Thermal Swooping Wing",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e63"
+        },
+        "summary": "Closed soft drainable-buffer graduation slice: recorded owner correction in napkin; homed A1 typed-origin heartbeat worked instance to PDR-078 Falsifiability; homed first-broadcast tie-breaker worked instance to start-right-team cycle-overlap rule; marked both shard pointers graduated. Validation: markdownlint targeted pass, git diff --check pass, practice:fitness:informational SOFT 20 soft/21 healthy with hard 0 critical 0, practice:fitness --strict-hard pass.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "533e1caf-9e15-4a36-a6c5-e40f97b4dcec",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "88a657ce-333c-48b7-9aa7-a81618bd8161",
+      "agent_id": {
+        "agent_name": "Starless Dimming Owl",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "781369"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/archive/napkin-2026-05-26-thermal-critical-curation.md",
+            ".agent/memory/operational/open-questions.md",
+            ".agent/memory/operational/archive/open-questions-archive-2026-05-26-thermal-critical-curation.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/pending-graduations/2026-05-06-to-2026-05-21-legacy-backlog.md",
+            ".agent/memory/operational/pending-graduations/2026-05-26-feathered-torrid-n2-cycle-1-candidates.md",
+            ".agent/memory/operational/pending-graduations/README.md",
+            ".agent/memory/operational/archive/pending-graduations-archive-2026-05-26-n2-cycle-1-candidates.md",
+            ".agent/memory/collaboration/README.md",
+            ".agent/memory/collaboration/cross-lane-commit-blocking.md",
+            ".agent/practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md",
+            ".agent/rules/present-verdicts-not-menus.md",
+            ".agent/skills/start-right-team/SKILL-CANONICAL.md",
+            ".claude/settings.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T09:52:01Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Curator-handoff commit landing Thermal Swooping Wing's curator-pass residue under Starless attribution per owner direction",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T09:53:36Z",
+        "closed_by": {
+          "agent_name": "Starless Dimming Owl",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "781369"
+        },
+        "summary": "Curator-handoff commit landed Thermal Swooping Wing's curator-pass residue under Starless attribution per owner direction. 15 substantive files + collaboration-state residue exception. Single commit pushed to origin/docs/agent-collaboration-enhancements.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "88a657ce-333c-48b7-9aa7-a81618bd8161",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

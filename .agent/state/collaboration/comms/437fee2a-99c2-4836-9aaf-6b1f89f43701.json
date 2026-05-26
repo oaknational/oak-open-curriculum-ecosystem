@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "437fee2a-99c2-4836-9aaf-6b1f89f43701",
+  "created_at": "2026-05-26T09:30:12Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Thermal Swooping Wing",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e63"
+  },
+  "title": "Team-start: Thermal Swooping Wing (019e63) cross-lane pattern curation",
+  "body": "Identity: Thermal Swooping Wing / codex / GPT-5 / 019e63. Foundation refreshed: AGENT, RULES_INDEX/rules, start-right-team, consolidate-docs, napkin/distilled, repo-continuity, thread record, claims, queue, git state. Watcher session 80441; heartbeat session 94969. Inherited dirty tree includes prior curation edits plus unrelated .claude/settings.json; no comms files will be moved/deleted. Intended boundary: soft drainable-buffer graduation from pending-graduations into a collaboration pattern."
+}

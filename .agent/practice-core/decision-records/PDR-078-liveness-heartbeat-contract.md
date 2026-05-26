@@ -70,8 +70,8 @@ Two distinct failure modes shaped the contract:
 
 ## Decision
 
-The Liveness-Heartbeat Contract has five named clauses. Clause 5 was
-added by the 2026-05-25 amendment; see §Revision history.
+The Liveness-Heartbeat Contract has six named clauses. Clauses 5
+and 6 were added by later amendments; see §Revision history.
 
 ### 1. Emit-side: cadence
 
@@ -186,6 +186,27 @@ applies the same invariant on its own comms-event substrate,
 independent of the canonical heartbeat tag-token the
 repo-bound phenotype ADR chooses.
 
+### 6. Observe-side: heartbeat-only stall diagnostic
+
+A role that continues emitting heartbeat events but emits no
+substantive event for two consecutive cadence windows is not
+retired-pending-confirmation; it is
+alive-but-stalled-pending-coordination. Heartbeats prove the
+scheduler/liveness loop, not main-loop attention or lane progress.
+
+The observer move is:
+
+- send a direct ping naming the missing substantive progress and
+  expected reply window, defaulting to one heartbeat cadence;
+- if no reply lands, broadcast takeover or route-adjustment intent
+  with rationale;
+- only then act on lane takeover or reroute, respecting owner
+  direction and active claims.
+
+An owner-reroute broadcast or other narrative event resets this
+diagnostic because it proves main-loop attention and changes the
+peer's interpretation of silence.
+
 ## Mechanism
 
 The contract operates on the existing comms-event substrate
@@ -299,6 +320,11 @@ classes.
   to current state; substantive content emits via the
   appropriate event class and the cron-redundancy rule
   suppresses the redundant heartbeat.
+- Treating heartbeat presence alone as proof that the role is
+  actively processing its coordinated lane when no substantive
+  event has landed for two or more cadence windows. Per §6, that
+  state is alive-but-stalled-pending-coordination and needs a
+  direct ping before takeover or route adjustment.
 
 ### Accepted Costs
 
@@ -311,7 +337,7 @@ classes.
 
 ## Falsifiability
 
-This contract is falsifiable on four axes:
+This contract is falsifiable on five axes:
 
 - A role observed actively working (substantive events firing
   at less than the threshold interval) that is nevertheless
@@ -330,11 +356,24 @@ This contract is falsifiable on four axes:
   or substantive events repeatedly tagged as heartbeats —
   direct evidence the substrate-category invariant (§5) is
   not holding.
+- A role emitting heartbeat-only output for two or more cadence
+  windows while peers wait indefinitely or continue treating the
+  original lane as actively owned — direct evidence the
+  heartbeat-only stall diagnostic (§6) is missing or not being
+  applied.
 
 The contract succeeds when liveness is structurally observable
 without owner intervention, exemption classes apply cleanly to
 the work shapes they were named for, and heartbeat volume stays
 secondary to substantive event volume in normal operation.
+
+Positive worked instance: after the A1 typed-origin heartbeat
+gate landed in the 2026-05-26 n=2 enforcement bundle, both
+Feathered Winging Cliff and Torrid Firing Spark emitted typed
+state-argument heartbeats through the repo phenotype during the
+session. The operating cure confirms the portable boundary this
+contract names: heartbeat posture is mechanically derived state,
+not free-form content.
 
 ## Owner direction (source-of-record)
 
@@ -358,8 +397,24 @@ the 2026-05-25 amendment) codifies the category invariant the
 critique surfaced: the cure is structural separation of
 substrate categories, not a per-instance reminder discipline.
 
+The 2026-05-26 n=2 enforcement-bundle closeout surfaced the
+inverse failure mode: Feathered Winging Cliff continued emitting
+heartbeats while no substantive event landed on the coordinated
+lane, no reply landed to Torrid Firing Spark's direct ping, and
+Torrid took over after broadcasting the rationale. §6 codifies
+the discriminator and peer move: heartbeat-only output means the
+role is observed-live, but may still be stalled or invisibly
+rerouted.
+
 ## Revision history
 
+- 2026-05-26 — Added clause §6 ("Observe-side:
+  heartbeat-only stall diagnostic"), one corresponding entry
+  under §Consequences §Forbids, a fifth falsifiability axis, and
+  a §Owner direction paragraph recording the Feathered/Torrid
+  worked instance. The amendment distinguishes scheduler
+  liveness from main-loop attention without weakening the
+  retirement threshold in §3.
 - 2026-05-25 — Added clause §5 ("Substrate category: heartbeats
   are liveness infrastructure") inside §Decision, two
   corresponding entries under §Consequences §Forbids, a

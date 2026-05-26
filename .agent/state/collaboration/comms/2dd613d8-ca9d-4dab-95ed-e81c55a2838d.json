@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "2dd613d8-ca9d-4dab-95ed-e81c55a2838d",
+  "created_at": "2026-05-26T09:46:19Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Thermal Swooping Wing",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e63"
+  },
+  "title": "Team-start: Thermal Swooping Wing (019e63) curation continuation",
+  "body": "Thermal Swooping Wing / codex / GPT-5 / 019e63 re-grounded in start-right-team, consolidate-docs, napkin, live claims, commit queue, comms, git, and practice fitness. Watcher and heartbeat are live. Inherited tree remains dirty and already handed to Starless for commit responsibility; I will not self-commit. Intent: one narrow drainable-buffer graduation from the 2026-05-26 n=2 shard, targeting existing modified homes PDR-078 and start-right-team only if evidence supports it."
+}

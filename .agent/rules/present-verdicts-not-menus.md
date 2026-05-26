@@ -61,6 +61,23 @@ The reliable tell: *could the agent rank these options by evidence
 already in context?* If yes, the quiz is evasion. Either commit to the
 verdict, or do the missing analysis until ranking is possible.
 
+## Pre-Pose Viability Check
+
+Before presenting any `AskUserQuestion` options, run the option list through
+the same judgement you would apply if no owner were present:
+
+1. Name the evidence and doctrine that supports each option.
+2. Ask whether you would actually take that option yourself.
+3. Remove every option you would refuse to take.
+4. Count the survivors:
+   - **Zero**: keep analysing; you do not yet have a viable action.
+   - **One**: state the verdict and invite correction, not selection.
+   - **Two or three**: `AskUserQuestion` is legitimate if the choice still
+     belongs to the owner under the legitimate-use criteria above.
+
+Options that fail this screen are not respectful alternatives. They are
+anti-shapes offered as owner work.
+
 ## What to Do Instead
 
 1. **State the verdict** in the first sentence. Sound / concern /
@@ -99,3 +116,10 @@ multiple-choice form rather than presenting verdicts. Owner called the
 pattern out; both feedback memories were in context but did not nudge
 the surface in time. This rule lands the doctrine in the
 always-applied tier so the nudge fires earlier next time.
+
+2026-05-26 n=2 enforcement-bundle closeout: an agent offered several
+architecturally indefensible WIP-disposition options alongside the one route
+that survived its own analysis. Owner clarified the per-decision discipline:
+surface open decisions only after reflecting through the long-term
+architectural excellence lens; in that worked instance, no open question
+survived that lens. This added the pre-pose viability check above.

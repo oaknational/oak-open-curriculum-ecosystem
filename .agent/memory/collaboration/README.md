@@ -61,6 +61,10 @@ related_rule: <optional path to .agent/rules/ entry>
 
 ## Current entries
 
+- [`cross-lane-commit-blocking.md`](cross-lane-commit-blocking.md) —
+  ownership-preserving cures when a parallel lane blocks commit or staging:
+  leave foreign repairs unstaged, or use `git apply --cached` for a surgical
+  authorised hunk.
 - [`parallel-track-pre-commit-gate-coupling.md`](parallel-track-pre-commit-gate-coupling.md)
   — founding pattern (2026-04-25, graduated from the napkin's pending-
   graduations register; founding instances 2026-04-24 and 2026-04-25).

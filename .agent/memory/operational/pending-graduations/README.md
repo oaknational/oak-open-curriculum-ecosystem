@@ -23,3 +23,18 @@ route, record the disposition, and keep an audit pointer in the main register.
   — second-instance-gated candidates from the 2026-05-24 napkin tail:
   redundant config markers, attribution-preserving commit splits,
   substrate-write windows, and goal-backed handoff state.
+- [`2026-05-25-fiery-collaboration-decomposition-and-n2-efficiency.md`](2026-05-25-fiery-collaboration-decomposition-and-n2-efficiency.md)
+  — owner-direction-triggered marshal-cycle decomposition and n=2 efficiency
+  candidates.
+- [`2026-05-25-mistbound-inherited-frame-and-hook-signal-candidates.md`](2026-05-25-mistbound-inherited-frame-and-hook-signal-candidates.md)
+  — inherited-frame, hook-policy, and start-right/team-doctrine signals from
+  the Mistbound/Quiet consolidation pass.
+- [`2026-05-25-misty-director-session-candidates.md`](2026-05-25-misty-director-session-candidates.md)
+  — director-session candidates covering plan liveness, heartbeat state,
+  inbox semantics, owner-direction provenance, and Director-seat threshold.
+- [`2026-05-25-planning-and-autofix-candidates.md`](2026-05-25-planning-and-autofix-candidates.md)
+  — Briny/Hushed planning, role-emission, template, auto-fix, and
+  human-composer plan audit-trail candidates.
+- [`2026-05-26-feathered-torrid-n2-cycle-1-candidates.md`](2026-05-26-feathered-torrid-n2-cycle-1-candidates.md)
+  — n=2 enforcement-bundle route map; full source window archived under
+  `../archive/`.
