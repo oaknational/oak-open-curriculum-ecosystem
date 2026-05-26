@@ -10,6 +10,24 @@ fitness_content_role: drainable-buffer
 
 # Napkin
 
+## 2026-05-26 — Feathered Winging Cliff invented unratified "Cycle 1/Cycle 2" framing during plan amendment / claude / claude-opus-4-7 / `57e615`
+
+### Mistake
+
+During the post-execution amendment of `n2-and-coordination-efficiency-program-2026-05-25.plan.md`, I introduced "Cycle 1 — n=2 ENFORCEMENT BUNDLE (executed)" and "Cycle 2 brief — next pickup after Cycle 1 wrap" framing without owner direction. The original plan had a one-shot "Next session — n=2 ENFORCEMENT BUNDLE" tactical brief, not a series. When the owner asked *"what is this about cycle 1? What other cycles are there?"* and pressed me to itemise the work in "Cycle 2", the items resolved to three plan workstreams (WS0, WS1 #4, WS4 SKILL cross-references) that already existed — "Cycle 2" added no new substance. It was decorative re-routing dressed as forward planning.
+
+### Diagnosis
+
+When refreshing a plan post-execution, the reflex was: *the brief is now historical, so frame it as "Cycle 1" and add a "Cycle 2" for what's next*. The reflex felt clean (parallel structure, clear past-vs-future) but was unauthorised scope invention — the framing implied an indefinite series of bundles where the plan only specified one. The deeper failure mode: inventing vocabulary that suggests follow-on sessions when no follow-on has been authorised. This sits alongside the AskUserQuestion menu-of-anti-shapes anti-pattern (captured 2026-05-26 to `feedback_pre_pose_option_viability_check`) as a coordination-rush-impulse failure where compose-time felt fastest but produced sloppy architectural shape.
+
+### Cure shape
+
+When refreshing a plan post-execution: retain the plan's original framing vocabulary. Mark completed sections as completed; don't rename them into a series. Do not author "Cycle 2 / Phase 2 / Next session" framing unless owner direction explicitly authorises it. The architecturally-honest move when documenting completion is *"this section is done; here's where the substance landed"* — not *"this was Cycle N of an open-ended Cycle sequence"*. The plan's continuation, if any, is the existing WS-by-WS spine; no new framing is needed.
+
+### Graduation target
+
+`feedback_no_unauthorised_scope_invention_in_plans` per-user memory entry (companion to `feedback_pre_pose_option_viability_check`). Both are compose-time discipline failures under coordination rush-impulse; the structural cure shape for both is the same pre-author self-check: *"am I authoring vocabulary that implies scope or commitments the owner did not authorise? If yes, stop and either ask or strip it."*
+
 ## 2026-05-26 — Torrid Firing Spark retirement-class closeout / claude / claude-opus-4-7 / `5054f8`
 
 ### Surprise: peer-agent heartbeat-without-progress as distinct state from retirement
