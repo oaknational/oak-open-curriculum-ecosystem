@@ -75,7 +75,7 @@ export const collaborationAgentIdWriteSchema = collaborationAgentIdSchema.extend
 export type CollaborationAgentIdWrite = Readonly<z.infer<typeof collaborationAgentIdWriteSchema>>;
 
 export interface DerivedCollaborationIdentity {
-  readonly agentId: CollaborationAgentId;
+  readonly agentId: CollaborationAgentIdWrite;
   readonly seed_source: string;
 }
 

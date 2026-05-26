@@ -3,7 +3,10 @@ import { join as pathJoin } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import { runCollaborationStateCli } from '../../src/collaboration-state';
+import {
+  deriveCollaborationIdentity,
+  runCollaborationStateCli,
+} from '../../src/collaboration-state';
 import { type CommsEvent } from '../../src/collaboration-state/types';
 import { createFakeCollaborationRuntime } from './fake-collaboration-runtime';
 
@@ -29,6 +32,29 @@ const sender = {
   model: 'claude-opus-4-7-1m',
   session_id_prefix: '5c8f3c',
 } as const;
+
+// Identities emitted by the CLI under the env wiring used in the tests below.
+// Derived via the same path as production so strict-equal assertions remain
+// honest without coupling the test to the v5 namespace constant.
+const senderWithId = deriveCollaborationIdentity({
+  platform: sender.platform,
+  model: sender.model,
+  env: {
+    OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+    PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
+  },
+}).agentId;
+
+const replyRecipientCodexThreadId = '019e1867-a0a8-7c11-aae3-1bc48533a585';
+
+const recipientWithId = deriveCollaborationIdentity({
+  platform: recipient.platform,
+  model: recipient.model,
+  env: {
+    OAK_AGENT_IDENTITY_OVERRIDE: recipient.agent_name,
+    CODEX_THREAD_ID: replyRecipientCodexThreadId,
+  },
+}).agentId;
 
 describe('collaboration-state comms integration', () => {
   it('writes a directed message from the current identity', async () => {
@@ -80,7 +106,7 @@ describe('collaboration-state comms integration', () => {
       directedMessage({
         event_id: 'message-one',
         created_at: '2026-05-11T19:45:35Z',
-        from: sender,
+        from: senderWithId,
         to: recipient,
         subject: 'Please check this',
         body: 'There is useful coordination here.',
@@ -140,7 +166,7 @@ describe('collaboration-state comms integration', () => {
       directedMessage({
         event_id: 'message-bf',
         created_at: '2026-05-22T10:00:00Z',
-        from: sender,
+        from: senderWithId,
         to: recipient,
         subject: 'Body file path',
         body: bodyText,
@@ -298,7 +324,7 @@ describe('collaboration-state comms integration', () => {
           directedMessage({
             event_id: 'message-one',
             created_at: '2026-05-11T19:45:35Z',
-            from: sender,
+            from: senderWithId,
             to: recipient,
             subject: 'Please check this',
             body: 'There is useful coordination here.',
@@ -332,7 +358,7 @@ describe('collaboration-state comms integration', () => {
         recipient.model,
       ],
       env: {
-        CODEX_THREAD_ID: '019e1867-a0a8-7c11-aae3-1bc48533a585',
+        CODEX_THREAD_ID: replyRecipientCodexThreadId,
         OAK_AGENT_IDENTITY_OVERRIDE: recipient.agent_name,
       },
       io: fake.runtime.io,
@@ -345,8 +371,8 @@ describe('collaboration-state comms integration', () => {
         event_id: 'message-two',
         created_at: '2026-05-11T19:46:35Z',
         message_kind: 'coordination-ack',
-        from: recipient,
-        to: sender,
+        from: recipientWithId,
+        to: senderWithId,
         subject: 're: Please check this',
         body: 'Looks good.',
       }),
@@ -376,7 +402,7 @@ describe('collaboration-state comms integration', () => {
           directedMessage({
             event_id: 'message-one',
             created_at: '2026-05-11T19:46:35Z',
-            from: sender,
+            from: senderWithId,
             to: recipient,
             subject: 'Please check this',
             body: 'There is useful coordination here.',
@@ -449,7 +475,7 @@ describe('collaboration-state comms integration', () => {
           directedMessage({
             event_id: 'message-one',
             created_at: '2026-05-11T19:46:35Z',
-            from: sender,
+            from: senderWithId,
             to: recipient,
             subject: 'Please check this',
             body: 'There is useful coordination here.',

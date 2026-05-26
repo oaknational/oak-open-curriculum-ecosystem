@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { runCollaborationStateCli } from '../../src/collaboration-state';
+import {
+  deriveCollaborationIdentity,
+  runCollaborationStateCli,
+} from '../../src/collaboration-state';
 import { type CommsEvent } from '../../src/collaboration-state/types';
 import { createFakeCollaborationRuntime } from './fake-collaboration-runtime';
 
@@ -17,6 +20,19 @@ const sender = {
   model: 'claude-opus-4-7-1m',
   session_id_prefix: '5c8f3c',
 } as const;
+
+// Identity emitted by the CLI under the env wiring used in the tests below
+// (PRACTICE_AGENT_SESSION_ID_CLAUDE seed + OAK_AGENT_IDENTITY_OVERRIDE name).
+// Deriving via the same code path the CLI uses keeps the strict-equal
+// assertion honest without coupling the test to the v5 namespace constant.
+const senderWithId = deriveCollaborationIdentity({
+  platform: sender.platform,
+  model: sender.model,
+  env: {
+    OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+    PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
+  },
+}).agentId;
 
 describe('collaboration-state comms --tag flag (ADR-183)', () => {
   it('attaches ADR-183 tags to a directed event via repeated --tag flags', async () => {
@@ -69,7 +85,7 @@ describe('collaboration-state comms --tag flag (ADR-183)', () => {
       directedMessage({
         event_id: 'message-tagged',
         created_at: '2026-05-24T10:18:00Z',
-        from: sender,
+        from: senderWithId,
         to: recipient,
         subject: 'Tag bearing message',
         body: 'Important behaviour-note attached.',
@@ -299,7 +315,7 @@ describe('collaboration-state comms --tag flag (ADR-183)', () => {
         event_id: 'message-heartbeat-composed',
         created_at: '2026-05-24T10:18:00Z',
         kind: 'narrative',
-        author: sender,
+        author: senderWithId,
         title: 'Heartbeat: Test Agent — Test lane',
         body: 'active; claim=claim-7c3f; intent=lane-test; branch=docs/test-branch; cycle=test-cycle',
         tags: ['heartbeat'],
@@ -358,7 +374,7 @@ describe('collaboration-state comms --tag flag (ADR-183)', () => {
         event_id: 'message-heartbeat-send',
         created_at: '2026-05-24T10:18:00Z',
         kind: 'narrative',
-        author: sender,
+        author: senderWithId,
         title: 'Heartbeat: Test Agent — Test lane',
         body: 'active; claim=claim-send; intent=lane-send; branch=docs/send-branch; cycle=send-cycle',
         tags: ['heartbeat'],
@@ -411,7 +427,7 @@ describe('collaboration-state comms --tag flag (ADR-183)', () => {
         event_id: 'message-failure',
         created_at: '2026-05-24T10:18:00Z',
         kind: 'narrative',
-        author: sender,
+        author: senderWithId,
         title: 'Failure mode observed',
         body: 'Concrete failure-mode narrative body.',
         tags: ['failure-mode'],
@@ -557,7 +573,7 @@ describe('collaboration-state comms --body length gate (B2 / plan §B2)', () => 
           directedMessage({
             event_id: 'reply-source',
             created_at: '2026-05-26T06:59:00Z',
-            from: sender,
+            from: senderWithId,
             to: recipient,
             subject: 'Source message',
             body: 'Short source body.',

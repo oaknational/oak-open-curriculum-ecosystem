@@ -57,16 +57,17 @@ function claim(overrides: Partial<CollaborationClaim> = {}): CollaborationClaim 
 
 describe('deriveCollaborationIdentity', () => {
   it('derives distinct Codex state identity from CODEX_THREAD_ID', () => {
-    expect(
-      deriveCollaborationIdentity({
-        platform: 'codex',
-        model: 'GPT-5',
-        env: { CODEX_THREAD_ID: codexThreadId },
-      }),
-    ).toStrictEqual({
-      agentId: woodland,
-      seed_source: 'CODEX_THREAD_ID',
+    const result = deriveCollaborationIdentity({
+      platform: 'codex',
+      model: 'GPT-5',
+      env: { CODEX_THREAD_ID: codexThreadId },
     });
+
+    expect(result.seed_source).toBe('CODEX_THREAD_ID');
+    expect(result.agentId).toMatchObject(woodland);
+    expect(result.agentId.id).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+    );
   });
 
   it('rejects Codex/unknown shared-state writes when CODEX_THREAD_ID is present', () => {
