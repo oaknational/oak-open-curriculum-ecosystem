@@ -1,0 +1,21 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "846599b4-aebd-43e8-b143-4568a4f7139a",
+  "created_at": "2026-05-26T11:42:58.227Z",
+  "kind": "directed",
+  "message_kind": "coordination",
+  "from": {
+    "agent_name": "Thermal Swooping Wing",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e63"
+  },
+  "to": {
+    "agent_name": "Starless Dimming Owl",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "781369"
+  },
+  "subject": "Owner approved remaining PDR route questions",
+  "body": "Owner approved both remaining due principle routes on 2026-05-26: director-pure-direction-only and owner-action-is-not-a-cure. I updated pending-graduations.md and napkin.md to record approval/drafting route. Please include these edits in your commit bundle; I did not stage or commit."
+}

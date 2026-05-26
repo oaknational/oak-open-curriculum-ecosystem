@@ -1,5 +1,50 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-26 — Thermal Swooping Wing / codex / GPT-5 / `019e63`, curation closeout + final handoff)
+
+**Session boundary**: owner directed a final `oak-session-handoff` +
+`oak-consolidate-docs` closeout after the owner approved both open principle
+routes. Branch: `docs/agent-collaboration-enhancements`.
+
+**Landed in working tree**:
+
+- PDR-083 `Director Pure-Direction-Only Boundary` created as accepted
+  Practice-governance doctrine.
+- PDR-084 `Owner Action Is Not a Cure` created as accepted
+  Practice-governance doctrine. It stands alone rather than as a PDR-074
+  amendment because the owner-intervention classification applies beyond
+  Director work.
+- PDR README index and `practice-index.md` updated with PDR-083/PDR-084
+  pointers.
+- `pending-graduations.md` updated: live due body is now 0 entries; the two
+  former due entries are marked graduated 2026-05-26 and kept only as
+  short-lived audit pointers until the next processed-register archive pass.
+- `napkin.md` records the owner approval and graduation disposition.
+
+**Coordination / commit ownership**:
+
+- Owner will commit this bundle. I did not intentionally stage or commit;
+  by final status, the bundle is already staged in the git index for owner
+  commit.
+- Starless was first sent a directed note asking them to include the route
+  approval edits; after the owner redirected commit ownership, I sent a
+  corrective directed note telling Starless not to assume they should commit
+  the new PDR-route bundle unless owner redirects again.
+
+**Evidence**:
+
+- `pnpm exec markdownlint` on touched PDRs, PDR README, practice-index,
+  pending-graduations, and napkin: passed.
+- `git diff --check`: passed.
+- `pnpm practice:fitness --strict-hard`: passed with SOFT status,
+  hard=0, critical=0.
+- Full `pnpm check`: passed green at final handoff.
+- No Thermal active claim exists to close. Remaining active claims are stale
+  Feathered/Torrid code-lane claims from prior work.
+
+**Next safe step**: owner commits the staged closeout bundle. No additional
+Thermal curation action remains unless the owner reopens a specific lane.
+
 ## Session Outcome (2026-05-25/26 — Feathered Winging Cliff / claude / claude-opus-4-7 / `57e615` + Torrid Firing Spark / claude / claude-opus-4-7 / `5054f8`, n=2 enforcement bundle Cycle 1 execution)
 
 **Session shape**: two-agent (n=2) tactical execution against the Cycle 1 brief in `n2-and-coordination-efficiency-program-2026-05-25.plan.md`. Both agents survived two compaction windows in one session window via PDR-063 mid-cycle retirement handoffs (Feathered ×2, Torrid ×1).
@@ -2467,6 +2512,7 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 
 | Platform | Model | Agent name | Role | First-session | Last-session |
 | --- | --- | --- | --- | --- | --- |
+| `codex` | `GPT-5` | Thermal Swooping Wing | Knowledge Curator (`019e63`; critical/hard curation pass, owner-question drain, PDR-083/PDR-084 graduation, final session handoff; no active claim to close; owner will commit staged closeout bundle) | 2026-05-26 | 2026-05-26 |
 | `claude` | `claude-opus-4-7` | Feathered Winging Cliff | Lane A implementer (`57e615`; n=2 enforcement bundle Cycle 1: A1 heartbeat emitter typed-origin gate landed `97f06e16` with 10 tests + Zod `.strict()` schema-driven composer; PDR-063 mid-cycle compaction handoff fired twice in cycle, both pickups worked; metacognition pass on AskUserQuestion menu-of-anti-shapes anti-pattern with cure captured to `feedback_pre_pose_option_viability_check`; plan amendment + thread/continuity refresh + 7 graduation candidates captured; push-ceremony lane after Torrid retires) | 2026-05-25 | 2026-05-26 |
 | `claude` | `claude-opus-4-7` | Torrid Firing Spark | Lane B implementer + gatekeeper + cross-lane-takeover (`5054f8`; n=2 enforcement bundle Cycle 1 COMPLETE on origin: hook-policy 5-module extraction `499518ce` + B1 menu-framing scoped_blocks `ecc1e834` + B3 ping-before-escalate `29ebda41` + barrel-trim knip cure `4984d771` + B2 CLI body-length gate `66e77d73` (4 verbs × 10 tests, TDD-first per test-expert Amendment A) + zoneGlyph cross-lane cure `69b50937` (knip 1→0, surgical `git apply --cached` to preserve Prismatic's WIP) + consistency fix `83c79fa6` (per-file detail uses inventoryGlyph, replace-old-with-new per owner direction; LOCAL); ran all `pnpm check` gatekeeper rounds; dispatched 4-reviewer parallel sonnet panel on B2 (type-expert + test-expert + code-expert + assumptions-expert) with findings absorbed; took over push lane after Feathered's 23-min heartbeat-only silence + ping non-reply, broadcast `TORRID TAKING OVER` at 07:01:48Z; owner pushed in parallel through `bfbc39f3` absorbing 219 drift files; Q-004 filed in open-questions.md for B2 gate-both-paths follow-on; retiring 2026-05-26 per owner direction after sending closeout findings `337a7f57` to Feathered; PDR-063 fired once mid-session pre-B2) | 2026-05-25 | 2026-05-26 |
 | `codex` | `GPT-5` | Hushed Fading Hush | Consolidator (operations-doc soft-tier split and post-M1 session-handoff rerun) | 2026-05-24 | 2026-05-24 |

@@ -132,12 +132,11 @@ Regenerated 2026-05-24 by Sylvan Sprouting Petal after routing the
 after the PDR-075 status review drain. Updated 2026-05-25 by Hushed Stalking
 Shade after the hardening-arc consolidation Phase 2 graduation pass.
 
-The live body now contains **2** due entries:
+The live body now contains **0** due entries.
 
-1. `director-pure-direction-only` — owner-decision packet item 2:
-   principle-class PDR route needs owner approval.
-2. `owner-action-is-not-a-cure` — owner-decision packet item 3:
-   principle-class PDR route needs owner approval.
+The former owner-decision packet items 2 and 3 graduated on 2026-05-26:
+`director-pure-direction-only` landed as PDR-083, and
+`owner-action-is-not-a-cure` landed as PDR-084.
 
 (`marshal-as-cycle-discipline` graduated 2026-05-25 — PDR-077 landed at
 `7c2f85f4`; owner-decision packet item 5 resolved.)
@@ -519,7 +518,7 @@ Cross-references: composes with `present-verdicts-not-menus` rule (when only one
 [captured: 2026-05-24 | source: active-napkin rotation +
 curator handoff survey §2.2 | target:
 pdr:director-pure-direction-only | trigger: owner-direction | size: L |
-status: due]
+status: graduated 2026-05-26]
 
 Owner-stated doctrine says the Director role exists to keep broad
 awareness and focused implementation co-existing: the Director's
@@ -533,9 +532,10 @@ Natural home: new PDR, related to PDR-074 (Director value), PDR-075
 owner direction and the concept has already been consumed by sibling
 memory surfaces.
 
-Owner-decision pointer: keep this entry in the live due set until the
-Memory Surface Critical Drain owner-decision packet item 2 approves the
-principle-class PDR route.
+Graduated 2026-05-26: PDR-083
+`director-pure-direction-only-boundary` landed as the durable principle
+home. Keep this pointer only as short-lived graduated audit history until
+the next processed-register archive pass.
 
 Falsifiability: PDR exists with a decision section naming the
 broad-awareness / focused-awareness split and a consequence section
@@ -545,7 +545,8 @@ specifying which work the Director must not absorb.
 
 [captured: 2026-05-24 | source: active-napkin rotation +
 curator handoff survey §2.4 | target:pdr:owner-action-is-not-a-cure |
-trigger: owner-direction+N>=3 worked instances | size: L | status: due]
+trigger: owner-direction+N>=3 worked instances | size: L |
+status: graduated 2026-05-26]
 
 Repeated windows show the same structural rule: when an owner action
 unblocks a team, the durable learning is the missing autonomy
@@ -559,9 +560,11 @@ cluster. This should name the diagnostic distinction: owner
 intervention is evidence of a substrate gap unless the decision is
 genuinely owner-only.
 
-Owner-decision pointer: keep this entry in the live due set until the
-Memory Surface Critical Drain owner-decision packet item 3 approves the
-principle-class PDR route.
+Graduated 2026-05-26: PDR-084 `owner-action-is-not-a-cure` landed as the
+durable principle home. It relates to the PDR-074 autonomy cluster but lives
+standalone because the classification applies beyond Director work. Keep this
+pointer only as short-lived graduated audit history until the next
+processed-register archive pass.
 
 Falsifiability: future notes about owner interventions classify each
 case into owner-only decision vs missing autonomy primitive, and route

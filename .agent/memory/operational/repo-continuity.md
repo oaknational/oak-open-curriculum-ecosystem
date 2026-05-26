@@ -16,6 +16,26 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
+- **Thermal Swooping Wing curation closeout COMPLETE (2026-05-26)**:
+  owner approved both remaining live due principle routes, and they
+  graduated through `oak-consolidate-docs` into accepted PDR homes:
+  [PDR-083](../../practice-core/decision-records/PDR-083-director-pure-direction-only-boundary.md)
+  (`Director Pure-Direction-Only Boundary`) and
+  [PDR-084](../../practice-core/decision-records/PDR-084-owner-action-is-not-a-cure.md)
+  (`Owner Action Is Not a Cure`). Updated the PDR README index,
+  [`practice-index.md`](../../practice-index.md), the active
+  pending-graduations register, and napkin disposition. The live due
+  body in `pending-graduations.md` is now 0 entries; the two graduated
+  pointers remain only as short-lived audit history until the next
+  processed-register archive pass. Validation: targeted markdownlint
+  on touched docs, `git diff --check`, and `pnpm practice:fitness
+  --strict-hard` passed; fitness remains SOFT with hard=0 and
+  critical=0. Final `pnpm check` passed green at handoff closeout.
+  No Thermal active claim exists to close.
+  Commit ownership changed during closeout: Starless was first notified
+  to include the route approval edits, then owner directed that they
+  will commit; a corrective directed event was sent to Starless. Current
+  PDR-route bundle is staged in the git index for owner commit.
 - **n=2-coordination-efficiency-program COMPLETE (2026-05-26)**: executed by
   Starless Dimming Owl (claude / `781369`) on
   `docs/agent-collaboration-enhancements`. Four commits pushed:
@@ -268,7 +288,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF first-feature delivery | [record][eef] | Fiery Kindling Brazier / claude / claude-opus-4-7 / 9f4026 / commit-marshal+pr-115-merged / 2026-05-25 |
-| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Starless Dimming Owl / claude / claude-opus-4-7 / `781369` / n=2-coordination-efficiency-program COMPLETE: curator-handoff `d3b1f75d` + WS0 `3c3e01d3` + WS1 `3360dfb0` + WS4 `4f1e6faf`; plan archived to `archive/completed/`; eight reviewers dispatched across three workstreams; SKILL hit ≤700 target / 2026-05-26 |
+| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Thermal Swooping Wing / codex / GPT-5 / `019e63` / curation-closeout: owner-approved `director-pure-direction-only` + `owner-action-is-not-a-cure` graduated to PDR-083 + PDR-084; due register now 0; owner will commit staged bundle / 2026-05-26 |
 
 ## Paused Threads
 
@@ -338,6 +358,11 @@ cycles 10 + 11 (comms-watch storage redesign WS2 + WS3) were superseded into
 per the archive supersession mapping. The earlier consolidation hard/critical
 objective remains complete (`SOFT (20 soft)`). Owner has pivoted back to
 graph work; deeper soft-tier consolidation is not the active delivery lane.
+
+2026-05-26 handoff update: the remaining owner-decision-gated due
+principles have now graduated to PDR-083 and PDR-084. Next safe step
+for this thread is owner commit of the staged closeout bundle, then no
+further Thermal action unless the owner reopens a specific curation lane.
 
 ### Connecting-Oak-Resources / PR #108 Routing
 

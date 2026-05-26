@@ -31,6 +31,11 @@ fitness_content_role: drainable-buffer
 - Open decision residue is routed through `open-questions.md`; the full source
   window is archived at
   `../operational/archive/open-questions-archive-2026-05-26-thermal-critical-curation.md`.
+- Owner approved both remaining due principle routes on 2026-05-26:
+  `director-pure-direction-only` and `owner-action-is-not-a-cure`.
+  They graduated to PDR-083 and PDR-084 respectively. PDR-084 lives
+  standalone rather than as a PDR-074 amendment because the owner-action
+  classification applies beyond Director work.
 
 ### Mistakes Made
 

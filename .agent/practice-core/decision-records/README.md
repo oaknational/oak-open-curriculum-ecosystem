@@ -205,3 +205,7 @@ Practice-Core portability ratifies both — see the bridge index
 | [PDR-078](PDR-078-liveness-heartbeat-contract.md) | Liveness-Heartbeat Contract | Candidate |
 | [PDR-079](PDR-079-pdr-vs-adr-portability-distinction.md) | PDR-vs-ADR Portability Distinction | Accepted |
 | [PDR-080](PDR-080-coordination-event-absorption-is-signal-driven.md) | Coordination-Event Absorption Is Signal-Driven | Accepted |
+| [PDR-081](PDR-081-curator-role-and-substrate-care-lane.md) | Curator Role and Substrate-Care Lane | Proposed |
+| [PDR-082](PDR-082-n2-collaboration-mode.md) | n=2 Collaboration Mode | Proposed |
+| [PDR-083](PDR-083-director-pure-direction-only-boundary.md) | Director Pure-Direction-Only Boundary | Accepted |
+| [PDR-084](PDR-084-owner-action-is-not-a-cure.md) | Owner Action Is Not a Cure | Accepted |
