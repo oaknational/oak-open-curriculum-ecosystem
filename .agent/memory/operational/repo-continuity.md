@@ -16,6 +16,83 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
+- **MCP analytics Path-to-GA Programme + substance amendments LANDED
+  (2026-05-26)**: Stellar Glowing Satellite (claude / claude-opus-4-7 /
+  `9a2967`) on `docs/agent-collaboration-enhancements`. One commit
+  `09eda6f4` (`feat(plans): add MCP analytics exploration and Path-to-GA
+  Programme`, 10 files, +1804/−8). Authored a new thin strategic-index plan
+  collection at
+  [`.agent/plans/curriculum-mcp-path-to-ga/roadmap.md`](../../plans/curriculum-mcp-path-to-ga/roadmap.md)
+  sequencing M1 → M2 → M3 → GA across observability, security-and-privacy,
+  sdk-and-mcp-enhancements, compliance, and architecture-and-infrastructure;
+  §6 backlog enumerates five owner-direction-gated paperwork items
+  (MCP analytics emission plan promotion; privacy gate plan; MCP `2026-07-28`
+  upgrade plan; M4/GA milestone definition; Exploration 10 formal ruling
+  backfill). Inbound links added at
+  [`high-level-plan.md`](../../plans/high-level-plan.md) §"MCP Path-to-GA
+  coordination" and [`milestones/README.md`](../../milestones/README.md).
+  Committed the previously-untracked exploration
+  [`2026-05-26-mcp-analytics-identity-and-event-emission.md`](../../../docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md).
+  Five substance amendments landed under exploration §15's narrow deferral
+  scope (events-workspace schema catalogue, high-level-observability
+  Product-axis row, and `informs:` frontmatter remain untouched):
+  what-the-system-emits-today (Product dependency_call gap + Sinks
+  identity-envelope per-sink posture + correlation-envelope paragraph + Update
+  Log), app observability.md (Correlation envelope fields subsection),
+  three-sink brief (Correlation-join contract Decision row + envelope legend),
+  cross-system-tracing (Carrier-to-envelope mapping in Implementation Sketch),
+  sentry-max-mcp L-3 (cross-refs to exploration §7.5 + §7.2/§7.7). One plan
+  deviation: L-7 amendment dropped (L-7 is about release/commit/deploy
+  registration, not trace propagation). All pre-commit gates green (turbo
+  90/90 full cache hit). Thread record at
+  [`mcp-product-analytics`](threads/mcp-product-analytics.next-session.md)
+  refreshed with Stellar identity row + landed-outcome summary; thread
+  remains paused (sub-plan substance landed but A1–A5 backlog stays
+  owner-gated).
+- **Collaboration identity remediation Phase 0A + Phase 0B Cycle 1 LANDED
+  (2026-05-26)**: Open Streaming Updraft (claude / claude-opus-4-7 / `357948`)
+  delivered the doctrinal arc and the foundational schema cycle of the
+  [`collaboration-identity-doctrine-enforcement-remediation.plan.md`](../../plans/agent-tooling/current/collaboration-identity-doctrine-enforcement-remediation.plan.md).
+  Five commits on `docs/agent-collaboration-enhancements`:
+  `76920493` plan v3 (3 reviewers + structural-map integrated; PDR-027
+  amendment moved from Phase 2 to Phase 0A per PDR-076a §Decision
+  conditional clause; UUID v5 derivation verdict committed; read/write
+  schema split locked; `AgentRoutingKey` discriminated union locked),
+  `7028b0d6` PDR-027 amendment (Amendment-Log entry + §Identity schema
+  table + §Full identity block table + §The additive-identity rule body +
+  §Why the identity key supersession note),
+  `b0faefab` Phase 0A closeout,
+  `3ca77972` metacog cure — owner-directed challenge to the 3-session
+  framing produced a structural correction: replaced file-count framing
+  with TDD-cycle decomposition (Phase 0B ~4 cycles, Phase 0C ~5 cycles,
+  one focused implementer session for both), and
+  `c11f698b` Phase 0B Cycle 1 (`UuidV5` branded type with v5 version-
+  nibble refine; `collaborationAgentIdSchema` read-side with optional
+  `id`; `collaborationAgentIdWriteSchema` write-side with required `id`;
+  7 new tests, 671/671 green). Phase 0A + Phase 0B Cycle 1 demonstrated
+  the metacog cure in the same session (corrected framing → executed
+  inside the corrected framing). **Next safe step**: next session picks
+  up Phase 0B Cycles 2–4 (`deriveCollaborationIdentity` returns
+  `CollaborationAgentIdWrite` with derived UUID v5;
+  `parseAgentId` → `collaborationAgentIdSchema.parse()`; JSON schemas
+  accept optional `id` in `agent_id` `$def`), then Phase 0C all 5 cycles
+  (`AgentRoutingKey` discriminated union; classifiers + `assertSameAgent`
+  prefer id; `--to-id`; legacy-fallback diagnostic). Design fully locked
+  in plan body — implementer needs no further deliberation.
+- **MCP product analytics design session COMPLETE (2026-05-26)**: Glassy
+  Flowing Stern (cursor / composer / `de55d6`) closed a sole-contributor
+  exploration lane. Authoritative record:
+  [`docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md`](../../docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md).
+  Confirmed no host conversation session ID in Oak MCP code; mapped Clerk
+  identity, per-sink projection, Stage 1 eight-event catalogue, and M2/M3
+  milestone placement. Owner decisions in exploration §1.1; execution plan
+  **deferred** until Jim requests promotion. New paused thread:
+  [`mcp-product-analytics`](threads/mcp-product-analytics.next-session.md).
+  Exploration file remains **untracked** at handoff — owner to commit when
+  ready. Consolidation gate for this session: **not due** (no plan closed;
+  napkin under rotation threshold; open-questions register below ten); owner
+  requested lightweight consolidate-docs pass documented under Deep
+  Consolidation Status.
 - **Thermal Swooping Wing curation closeout COMPLETE (2026-05-26)**:
   owner approved both remaining live due principle routes, and they
   graduated through `oak-consolidate-docs` into accepted PDR homes:
@@ -288,7 +365,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF first-feature delivery | [record][eef] | Fiery Kindling Brazier / claude / claude-opus-4-7 / 9f4026 / commit-marshal+pr-115-merged / 2026-05-25 |
-| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Thermal Swooping Wing / codex / GPT-5 / `019e63` / curation-closeout: owner-approved `director-pure-direction-only` + `owner-action-is-not-a-cure` graduated to PDR-083 + PDR-084; due register now 0; owner will commit staged bundle / 2026-05-26 |
+| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Open Streaming Updraft / claude / claude-opus-4-7 / `357948` / Phase 0A doctrinal landing + Phase 0B Cycle 1 (`UuidV5` brand + read/write schema split); next session picks up Phase 0B Cycles 2–4 + Phase 0C / 2026-05-26 |
 
 ## Paused Threads
 
@@ -299,6 +376,7 @@ not the current session-priority lane. Reactivation is owner-directed.
 | --- | --- | --- | --- |
 | `connecting-oak-resources` | Oak resource graph substrate for EEF | [record][connecting] | Riverine Navigating Rudder / cursor / Composer / 27d9af / oak-preview-1 full manual UAT PASS / 2026-05-25 |
 | `branch-fitness-and-push-cadence` | Small-PR, push-often, branch-fitness, PR/Sonar monitoring protocol substrate | [record][branch-fitness] | Pelagic Snorkelling Sextant / codex / GPT-5 / 019e5b / Cycle 1 substrate capture from active napkin / 2026-05-24 |
+| `mcp-product-analytics` | MCP product analytics design + Path-to-GA Programme (plan promotion still gated) | [record][mcp-analytics] | Stellar Glowing Satellite / claude / claude-opus-4-7 / 9a2967 / Programme landed + 5 amendments (commit `09eda6f4`) / 2026-05-26 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night / claude-code / opus-4.7 / 188baa / 2026-05-10 |
 | `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / claude-code / unknown / 228bc5 / 2026-05-06 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / claude-code / unknown / e18e2c / 2026-05-01 |
@@ -313,6 +391,7 @@ identity. Full per-thread identity history and per-session context live in each
 thread's next-session record.
 
 [main-critical]: threads/main-critical-sonar-remediation.next-session.md
+[mcp-analytics]: threads/mcp-product-analytics.next-session.md
 [observability]: threads/observability-sentry-otel.next-session.md
 [agentic]: threads/agentic-engineering-enhancements.next-session.md
 [connecting]: threads/connecting-oak-resources.next-session.md
@@ -364,6 +443,43 @@ principles have now graduated to PDR-083 and PDR-084. Next safe step
 for this thread is owner commit of the staged closeout bundle, then no
 further Thermal action unless the owner reopens a specific curation lane.
 
+2026-05-26 doctrine-debt handoff update: PR #118 was created for the n=2
+collaboration improvements, the Sonar remediation was routed to Mistbound and
+landed at `cd1810bc`, and the follow-up doctrine/enforcement debt is now queued
+as
+[`collaboration-identity-doctrine-enforcement-remediation.plan.md`](../../plans/agent-tooling/current/collaboration-identity-doctrine-enforcement-remediation.plan.md).
+The immediate future implementation route is Phase 0 only: add UUID ids to new
+identity writes and make routing prefer `(agent_name, id)` with legacy fallback.
+
+**2026-05-26 follow-on handoff (Open Streaming Updraft)**: Phase 0A delivered
+in five commits on `docs/agent-collaboration-enhancements` (`76920493` plan v3
+
+- `7028b0d6` PDR-027 amendment + `b0faefab` Phase 0A closeout + `3ca77972`
+metacog cure replacing 3-session framing with TDD-cycle decomposition +
+`c11f698b` Phase 0B Cycle 1 with `UuidV5` brand + read/write schema split).
+Phase 0B Cycle 1 also landed in the same session (671/671 tests green; full
+pre-commit gate green). **Next safe step**: next session picks up Phase 0B
+Cycles 2–4 (deriveCollaborationIdentity returns CollaborationAgentIdWrite +
+UUID v5 derivation; parseAgentId → schema.parse(); JSON schemas accept
+optional id) then Phase 0C all 5 cycles (`AgentRoutingKey` discriminated
+union; classifiers + assertSameAgent prefer id; `--to-id`; legacy-fallback
+diagnostic). Design is fully locked in plan v3 body — implementer needs no
+further deliberation. Plan §Sub-phase sizing now states cycle-by-cycle
+decomposition (was: incorrect "three-session arc" framing from reviewer
+file-count framing; corrected at `3ca77972` after owner challenge).
+
+### MCP Product Analytics (paused — design complete, plan deferred)
+
+Thread record:
+[`mcp-product-analytics.next-session.md`](threads/mcp-product-analytics.next-session.md).
+Design record:
+[`2026-05-26-mcp-analytics-identity-and-event-emission.md`](../../docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md).
+
+**Next safe step**: owner-gated — promote execution plan (§14.5) or authorise
+implementation; no agent action until then. Open items at plan/legal gates live
+in exploration §17 (not duplicated in `open-questions.md`; LTAE-screened at
+closeout — defer to plan author time except production legal gates B5–B7).
+
 ### Connecting-Oak-Resources / PR #108 Routing
 
 `connecting-oak-resources` is paused as a thread but remains the graph-substrate
@@ -404,6 +520,12 @@ archived prose.
 4. Cost-of-collaboration P0, P-Foundation, P1, P2, P3, P4, and P5 are
    complete; P1 landed at `f88d0d67`, P2 at `0d3af914`, P3 at `c083a1ab`, P4
    at `1bb369a5`, and the P5 DI/no-IO repair at `07ffee1d`.
+5. **MCP product analytics (Jim, plan owner)**: execution plan promotion is
+   deferred. Before identified **production** PostHog capture, resolve §11.7
+   privacy review and legal notices (B5–B7) in
+   [`2026-05-26-mcp-analytics-identity-and-event-emission.md`](../../docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md).
+   Warehouse posture (owner lean Option C) and remaining §17 items resolve at
+   plan author time unless Jim directs earlier.
 
 ## Repo-Wide Invariants / Non-Goals
 
@@ -449,6 +571,49 @@ Current branch non-goals:
   acceptance work.
 
 ## Deep Consolidation Status
+
+**not run — owner-directed skip mid-handoff** (Stellar Glowing Satellite
+`9a2967`, 2026-05-26). Owner initially directed *"run a full session
+handoff and document consolidation"* at close; mid-handoff (after steps
+1–8 completed) owner amended: *"forget the consolidation pass and check"*.
+Triggers had fired: plan-arc milestone closed (Path-to-GA Programme +
+5 substance amendments landed at `09eda6f4`); new plan collection
+scaffold introduced (`.agent/plans/curriculum-mcp-path-to-ga/`);
+exploration moved from untracked to committed. No new ADR/PDR candidates
+surfaced (paperwork session; design substance is the exploration itself).
+**Both `pnpm check` (step 11) and `oak-consolidate-docs` (step 10) skipped
+per owner direction**, not silently bypassed. Next consolidation pass to
+inherit the queued substance; falsifiability for the next consolidator:
+re-check `git log -1` for `09eda6f4`, the new programme path, and Stellar's
+napkin + experience entries.
+
+**due — owner-directed at session close** (Open Streaming Updraft `357948`,
+2026-05-26). Owner direction at session close: *"this session is complete,
+please run a full handoff /oak-session-handoff /oak-consolidate-docs , then
+next session will pick up the remaining Phase 0 work"*. Triggers fired:
+plan-arc milestone closed (Phase 0A doctrinal landing + Phase 0B Cycle 1
+landed; remediation plan now ACTIVE not QUEUED); behaviour-changing lesson
+to conserve (metacog cure on reviewer-derived sizing — see distilled.md
+entry to be authored under consolidate-docs); a structural correction
+landed mid-session (`3ca77972`). Consolidation pass to run after handoff.
+
+**not due — session handoff only for Thermal doctrine-debt planning slice**
+(Thermal Swooping Wing `019e63`, 2026-05-26). No plan or milestone closed; the
+new remediation plan remains `QUEUED`; no new ADR/PDR candidate was surfaced
+outside that plan; open-questions count remains below the drain trigger. This
+handoff records the queued Phase 0 critical path and leaves implementation for
+an owner-directed future session.
+
+**not due — owner-requested lightweight pass only** (Glassy Flowing Stern
+`de55d6`, 2026-05-26). Owner closed MCP analytics exploration session with
+`/oak-session-handoff` + `/oak-consolidate-docs`. Trigger checklist: no plan
+milestone closed; no napkin rotation threshold; four open questions in register;
+no new PDR/ADR graduation candidates from this lane (design record is the
+permanent home). Actions taken: thread record created; repo-continuity and
+napkin updated; §17 open items LTAE-screened — retained in exploration doc
+only; no inbound plan-index edits per outbound-only linking policy. Deferred:
+Exploration 10 formal per-sink projection doc sync until plan promotion;
+Stage 2 event catalogue until after Stage 1 emitters.
 
 **due — owner-directed post-n=2-bundle consolidate-docs pass** (Torrid Firing
 Spark `5054f8`, 2026-05-26T07:30Z). Owner direction at session close:

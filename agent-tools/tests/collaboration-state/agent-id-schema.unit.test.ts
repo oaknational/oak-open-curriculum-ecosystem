@@ -1,14 +1,17 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  type CollaborationAgentId,
+  type CollaborationAgentIdWrite,
   collaborationAgentIdSchema,
   collaborationAgentIdWriteSchema,
+  type UuidV5,
   uuidV5Schema,
 } from '../../src/collaboration-state/types.js';
 
 describe('uuidV5Schema (PDR-076a §Cascade item 3; deterministic UUID v5 brand)', () => {
   it('parses a UUID v5 string and yields a UuidV5-branded value', () => {
-    const parsed = uuidV5Schema.parse('886313e1-3b8a-5372-9b90-0c9aee199e5d');
+    const parsed: UuidV5 = uuidV5Schema.parse('886313e1-3b8a-5372-9b90-0c9aee199e5d');
     expect(parsed).toBe('886313e1-3b8a-5372-9b90-0c9aee199e5d');
   });
 
@@ -23,7 +26,7 @@ describe('uuidV5Schema (PDR-076a §Cascade item 3; deterministic UUID v5 brand)'
 
 describe('collaborationAgentIdSchema (read-side; optional id, accepts legacy rows)', () => {
   it('parses an identity tuple WITH id (canonical post-2026-05-26 shape)', () => {
-    const parsed = collaborationAgentIdSchema.parse({
+    const parsed: CollaborationAgentId = collaborationAgentIdSchema.parse({
       agent_name: 'Open Streaming Updraft',
       platform: 'claude',
       model: 'opus-4-7',
@@ -34,7 +37,7 @@ describe('collaborationAgentIdSchema (read-side; optional id, accepts legacy row
   });
 
   it('parses an identity tuple WITHOUT id (legacy compatibility path)', () => {
-    const parsed = collaborationAgentIdSchema.parse({
+    const parsed: CollaborationAgentId = collaborationAgentIdSchema.parse({
       agent_name: 'Legacy Agent',
       platform: 'claude',
       model: 'opus-4-7',
@@ -56,8 +59,8 @@ describe('collaborationAgentIdWriteSchema (write-side; required id, blocks legac
     ).toThrow();
   });
 
-  it('parses an identity tuple with id', () => {
-    const parsed = collaborationAgentIdWriteSchema.parse({
+  it('parses an identity tuple with id and yields a CollaborationAgentIdWrite-typed value', () => {
+    const parsed: CollaborationAgentIdWrite = collaborationAgentIdWriteSchema.parse({
       agent_name: 'Open Streaming Updraft',
       platform: 'claude',
       model: 'opus-4-7',

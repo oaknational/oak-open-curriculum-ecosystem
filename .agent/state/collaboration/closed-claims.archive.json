@@ -46257,6 +46257,175 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "40c1c7d2-e977-4a8a-94db-f8a008c7f5c5",
+      "agent_id": {
+        "agent_name": "Open Streaming Updraft",
+        "platform": "claude",
+        "model": "opus-4-7",
+        "session_id_prefix": "357948"
+      },
+      "thread": "collaboration-identity-doctrine-enforcement-remediation",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T16:06:02Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Phase 0A session-closeout: plan status update + active-claims/closed-claims lifecycle persistence",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T16:07:28Z",
+        "closed_by": {
+          "agent_name": "Open Streaming Updraft",
+          "platform": "claude",
+          "model": "opus-4-7",
+          "session_id_prefix": "357948"
+        },
+        "summary": "commit b0faefab: phase 0a closeout — plan status + claim lifecycle persisted",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "40c1c7d2-e977-4a8a-94db-f8a008c7f5c5",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "389cb4e0-0cdf-474f-958f-7a02edf7ef27",
+      "agent_id": {
+        "agent_name": "Open Streaming Updraft",
+        "platform": "claude",
+        "model": "opus-4-7",
+        "session_id_prefix": "357948"
+      },
+      "thread": "collaboration-identity-doctrine-enforcement-remediation",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T16:15:29Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Commit plan-body metacognition correction: 3-session framing replaced with TDD-cycle decomposition",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T16:16:33Z",
+        "closed_by": {
+          "agent_name": "Open Streaming Updraft",
+          "platform": "claude",
+          "model": "opus-4-7",
+          "session_id_prefix": "357948"
+        },
+        "summary": "commit 3ca77972: plan-body metacog correction — 3-session framing replaced with TDD-cycle decomposition",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "389cb4e0-0cdf-474f-958f-7a02edf7ef27",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "4c0b3f50-f58a-4928-ae5b-695c3aa86199",
+      "agent_id": {
+        "agent_name": "Open Streaming Updraft",
+        "platform": "claude",
+        "model": "opus-4-7",
+        "session_id_prefix": "357948"
+      },
+      "thread": "collaboration-identity-doctrine-enforcement-remediation",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T16:20:16Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Phase 0B Cycle 1: UuidV5 brand + read/write schema split",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T16:21:48Z",
+        "closed_by": {
+          "agent_name": "Open Streaming Updraft",
+          "platform": "claude",
+          "model": "opus-4-7",
+          "session_id_prefix": "357948"
+        },
+        "summary": "commit c11f698b: Phase 0B Cycle 1 — UuidV5 brand + read/write schema split",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4c0b3f50-f58a-4928-ae5b-695c3aa86199",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "276893dd-b487-4102-ae60-4db78262ee63",
+      "agent_id": {
+        "agent_name": "Open Streaming Updraft",
+        "platform": "claude",
+        "model": "opus-4-7",
+        "session_id_prefix": "357948"
+      },
+      "thread": "collaboration-identity-doctrine-enforcement-remediation",
+      "areas": [
+        {
+          "kind": "plan",
+          "patterns": [
+            ".agent/plans/agent-tooling/current/collaboration-identity-doctrine-enforcement-remediation.plan.md",
+            "agent-tools/src/collaboration-state/**",
+            "agent-tools/src/core/agent-identity/**",
+            ".agent/state/collaboration/comms-event.schema.json",
+            ".agent/state/collaboration/active-claims.schema.json",
+            "agent-tools/tests/collaboration-state/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T16:15:21Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Phase 0B implementation: schema split, UuidV5, derive UUID v5, parseAgentId schema.parse(), JSON schema additive id",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T16:30:15Z",
+        "closed_by": {
+          "agent_name": "Open Streaming Updraft",
+          "platform": "claude",
+          "model": "opus-4-7",
+          "session_id_prefix": "357948"
+        },
+        "summary": "Phase 0B Cycle 1 landed (c11f698b); Cycles 2-4 + Phase 0C queued for next session with design fully locked in plan v3 (76920493) + metacog cycle-decomposition (3ca77972)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "276893dd-b487-4102-ae60-4db78262ee63",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

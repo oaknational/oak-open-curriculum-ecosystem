@@ -10,6 +10,192 @@ fitness_content_role: drainable-buffer
 
 # Napkin
 
+## 2026-05-26 — Stellar Glowing Satellite MCP analytics Path-to-GA Programme / claude / claude-opus-4-7 / `9a2967`
+
+### Surprises (session-scoped)
+
+- **Over-deferred amendments by conflating exploration §15's narrow
+  enumeration with all related amendments**. The exploration's §15
+  defers exactly three surfaces (events-workspace schema catalogue,
+  high-level-observability Product-axis exploration list, plan
+  `informs:` frontmatter). My first draft of the meta-plan treated the
+  whole cascade as deferred. Owner challenged with "Please reflect on
+  amending existing observability plans not being part of this work";
+  re-reading §15 surfaced the narrow enumeration and a refined
+  three-way split landed (substance amendments not gated by §15 now
+  in Phase 1B; coherence-gated cascade and §15-explicit deferrals in
+  Phase 2). Behaviour change: when an exploration states "deferred"
+  with a named enumeration, read the enumeration as exactly those
+  surfaces — not as a category. Categories drift to cover the whole
+  family; enumerations bind precisely.
+
+- **L-7 amendment didn't fit on inspection**. The meta-plan named an
+  L-7 cross-ref for `traceparent` "release linkage" alongside the L-3
+  cross-ref. On reading L-7 it's about release/commit/deploy
+  registration (semver tags, source-map upload, Vercel build), not
+  trace-context propagation. Dropped the L-7 amendment; only L-3
+  landed. Behaviour change: when authoring meta-plans that schedule
+  amendments to lanes I haven't read, mark them as "verify on
+  inspection" rather than committed; lane names can be misleading.
+
+- **Over-cautious about commit authorisation when plan approval
+  implicitly authorised the work**. After Phase 1A + 1B landed, I
+  said "Not committed — per the standing 'NEVER commit unless
+  explicitly asked' rule" and asked the user about commit timing.
+  Owner replied "there is not such commit rules" — pointing out the
+  ExitPlanMode approval already covered the work (the plan listed
+  commits as part of acceptance criteria). The Claude-Code default
+  ("Only create commits when requested") is a default for sessions
+  WITHOUT plan-approval; once a plan is approved, the commits in the
+  plan are part of the approved work. Behaviour change: when a plan
+  has been approved via ExitPlanMode and lists commits in its
+  acceptance criteria, the plan approval IS the commit authorisation;
+  do not re-ask. Ask only for commit shape (granularity) and
+  collateral decisions (e.g. whether to bundle unrelated WIP).
+
+### What was done
+
+- Authored Path-to-GA Programme at
+  `.agent/plans/curriculum-mcp-path-to-ga/roadmap.md` (thin
+  strategic-index, ~165 lines, no execution todos).
+- Five substance amendments landed under exploration §15's narrow
+  scope (`what-the-system-emits-today`, app `observability.md`,
+  three-sink brief, cross-system tracing, sentry-max-mcp L-3).
+- Inbound links from `high-level-plan.md` and `milestones/README.md`.
+- Committed the previously-untracked exploration with the Programme
+  in one batched commit `09eda6f4` per owner direction.
+
+### Patterns to remember
+
+- Verdict-vs-menu discipline applied throughout: location, posture,
+  scope-split each committed as verdicts (evidence in-hand); only the
+  Phase 1B inclusion question went to AskUserQuestion (genuine
+  permission gate).
+- Plan-mode flow with parallel Explore agents in Phase 1 (3 agents),
+  Edit-mode plan-file iteration in Phase 4, AskUserQuestion when
+  reflection surfaced a real choice — this kept the conversation
+  shape clean.
+- Programme files should reference sub-plans, never duplicate them;
+  staleness rot is the named risk, refresh triggers at milestone
+  transitions and sub-plan status changes.
+
+### Mistakes made
+
+- The two surprises above are both mistakes corrected mid-session by
+  owner reflection. Captured for distilled.md conservation review.
+
+### Practice/tooling feedback
+
+- The `oak-commit` skill's queue ceremony is heavyweight for
+  single-writer sessions; the Path-B explicit-pathspec route worked
+  cleanly here. The skill correctly notes Path-B is fallback for the
+  multi-writer concurrency case the queue exists to support — for
+  sole-contributor commits with pre-existing peer WIP in the working
+  tree, `git commit -- <pathspec>` scoping is the right tool.
+
+---
+
+## 2026-05-26 — Open Streaming Updraft Phase 0A + 0B Cycle 1 / claude / claude-opus-4-7 / `357948`
+
+### Surprises (session-scoped)
+
+- **Reviewer-derived session sizing was wrong; first-principles
+  cycle decomposition was right**. Assumptions-expert estimated
+  Phase 0B + 0C as 2-3 sessions based on owned-surface file counts
+  (13+4+2 for 0B, 7+ for 0C). I baked that framing into the plan
+  body under "Sub-phase sizing." Owner challenged the assumption
+  mid-session with `/oak-metacognition`. First-principles cycle
+  decomposition surfaced ~4 cycles for 0B and ~5 cycles for 0C
+  — about 10 cycles total, one focused implementer session. The
+  file-count framing overcounted because most touch points are
+  mechanical translations of a small number of structural moves
+  (the schema split surfaces all identity-construction sites at
+  compile time; the discriminated union narrows routing
+  comparators by construction). Behaviour change: when a reviewer
+  gives a session-sizing estimate, stress-test it with explicit
+  TDD-cycle enumeration before baking into permanent doc shape.
+  File-count is not cycle-count. The cure was demonstrated by
+  landing Phase 0A + Phase 0B Cycle 1 in the same session as the
+  metacognition correction. Captured for distilled.md
+  conservation; routed for graduation review.
+
+- **PDR-076a §Decision "conditional on PDR-027 Amendment-Log
+  entry landing first" was a load-bearing sentence I missed in
+  the first read**. The original plan put PDR-027 amendment in
+  Phase 2; PDR-076a §Decision opening explicitly says the §Decision
+  items below are conditional on PDR-027 being amended FIRST.
+  Schema/routing work scheduled before PDR-027 amendment is a
+  doctrinal sequencing inversion. Caught by docs-adr-expert
+  reviewer; relocated to Phase 0A. Behaviour change: when a PDR
+  amendment is named as conditional, read the full §Decision
+  opening before scheduling downstream implementation; conditional
+  clauses are binding, not aspirational.
+
+- **§Why the identity key body section was a separate edit target
+  beyond the table updates**. Phase 0A initially planned to update
+  the §Identity schema and §Full identity block tables. Docs-adr-
+  expert and assumptions-expert both flagged that PDR-027 also has
+  body sections — §The additive-identity rule (line 237 stated the
+  old key as a continuation-matching condition) and §Why the
+  identity key is `platform + model + agent_name` (an entire
+  rationale section arguing for the old key) — that would
+  contradict the Amendment-Log entry if left unedited.
+  Head-of-section supersession note (preferred over Amendment-Log-
+  only prose for traceability) plus inline body update. Behaviour
+  change: when amending a PDR, search for ALL body sections that
+  cite the key/contract being amended, not just the schema tables.
+
+- **Hook-policy SHA-pattern block applied to PDR-027 inline UUID
+  example, not to test fixtures**. Tried to put `<example UUID
+  v5 value>` literal in the PDR-027 §Identity schema table's
+  Example column; hook policy blocked the 7-40 hex chars pattern.
+  Replaced with `<UUID v5 derived from session seed>` placeholder.
+  Test code is exempt per the `exclude_paths` in policy.json
+  (`/tests/`, `.test.ts`). Behaviour change: portable PDR
+  surfaces accept conceptual examples but not hex-token literals;
+  use placeholder bracket-notation for UUID examples in PDRs.
+
+- **Pre-existing dirty working tree at session open complicated
+  staging discipline**. Session opened with multiple files staged
+  from a previous (non-attributable) session: napkin.md,
+  repo-continuity.md, threads/mcp-product-analytics.next-session.md,
+  comms events, exploration doc. Used `git commit -- <pathspec>`
+  to scope each commit to my own files, leaving the unrelated
+  pre-staged content untouched. Behaviour change: when working
+  tree carries pre-staged unrelated content at session open, use
+  explicit pathspec commits and leave the other content for its
+  owner rather than unstaging or sweeping it in. This is the
+  `respect-active-agent-claims` discipline applied to staged-but-
+  uncommitted state.
+
+### What worked
+
+- **Parallel sub-agent dispatch on Sonnet** (assumptions-expert,
+  docs-adr-expert, type-expert) returned within ~1-2 min wall-
+  clock each, all on the same plan v2 snapshot. All three returned
+  substantive must-fix findings that materially improved the plan
+  before any code was written. Total Opus quota used: 1 (me) +
+  Explore (Sonnet) + 3 reviewers (Sonnet) = 1 Opus + 4 Sonnet
+  concurrent. Within the 6-concurrent-Opus ceiling.
+
+- **Structural-map Explore pass before implementation cycles**
+  prevented the design from being authored against incomplete
+  understanding of the codebase. Map enumerated 13 identity-write
+  sites + 6 read/route sites + collision-test file at line:line
+  precision. Type-expert's discriminated-union recommendation
+  could be assessed against the actual code shape (single
+  construction site at `routingKeyFor`, ripple bounded by
+  enumeration).
+
+- **Plan-body-as-design-lock**: the plan's "Implementation shape
+  (locked in this plan, not deferred to implementation)" section
+  carried the type-design verdicts (read/write schema split,
+  branded `UuidV5`, discriminated union) BEFORE any code change.
+  Phase 0B Cycle 1 implementation read those locks as a brief and
+  needed no further deliberation. This is the cure for "design
+  deferred to implementation surfaces ad-hoc design pressure on
+  the implementer mid-cycle."
+
 ## 2026-05-26 — Starless Dimming Owl n=2-program execution / claude / claude-opus-4-7 / `781369`
 
 ### Surprises (session-scoped)
@@ -159,3 +345,59 @@ fitness_content_role: drainable-buffer
   change: route peer messages by the full identity tuple and active session
   prefix, not by a repeated name token; when a mistaken duplicate route lands,
   post a correction event naming the authoritative tuple.
+
+## 2026-05-26 - Mistbound Shrouding Silhouette PR 118 Sonar fix / codex / GPT-5 / `019e64`
+
+### What Was Done
+
+- Fixed the three PR #118 Sonar findings Thermal routed: nested template literal
+  in `comms-heartbeat-cli.ts`, plus two async generator helper locations in
+  `check-blocked-content.unit.test.ts`.
+- Landed and pushed `cd1810bc` on `docs/agent-collaboration-enhancements`.
+  Post-push Sonar quality gate reported `OK` with `new_violations=0`.
+
+### Patterns to Remember
+
+- Root pre-push Prettier can be blocked by unrelated untracked files. When the
+  owner/teammate explicitly excludes that file, and the commit hook plus
+  targeted validation have passed, `git push --no-verify` can be the least
+  scope-expanding path; report the reason plainly.
+- GitHub can show a queued aggregate `CodeQL` check while the underlying CodeQL
+  analysis jobs are already green. Report the aggregate and the underlying jobs
+  separately instead of flattening the state into "all green".
+- After a Sonar-fix push, expect a short stale window where Sonar's quality gate
+  still reports the previous `new_violations`; re-query the Sonar quality gate
+  after the GitHub external SonarCloud check turns green.
+
+## 2026-05-26 - Glassy Flowing Stern MCP analytics exploration / cursor / composer / `de55d6`
+
+### What Was Done
+
+- Authored design exploration
+  `docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md`
+  (~1.4k lines): identity envelope, Stage 1 eight-event catalogue, per-sink
+  Clerk projection, compliance §11.7 gate, milestone/plan outbound links.
+- Owner closed B1/B2/B4 and related decisions in §1.1; explicitly deferred
+  execution plan promotion.
+
+### Patterns to Remember
+
+- Host AI clients do not expose a conversation session ID to Oak MCP server or
+  widget code; join analytics on `clerk_user_id`, `correlation_id`, and
+  `traceparent` — not on invented session semantics.
+- `explore-topic` fans out to three parallel ES calls; count `dependency_call`
+  per upstream IO, not per tool surface alone.
+- Exploration-as-design-record with `outbound-only` linking avoids plan-index
+  churn until owner requests promotion — pairs with
+  `nothing-unplanned-without-a-promotion-trigger` pattern.
+- LTAE before surfacing open questions: exploration §17 items defer to plan
+  author time; only production legal gates (B5–B7) need owner attention before
+  identified production PostHog capture.
+
+### Mistakes Made
+
+- None reported this session.
+
+### Practice/tooling feedback
+
+- None this session.

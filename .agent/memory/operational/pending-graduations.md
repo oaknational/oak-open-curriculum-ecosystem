@@ -249,6 +249,44 @@ Fresh 2026-05-24 napkin-tail candidates live in the
 [`pending-graduations/2026-05-24-napkin-tail-candidates.md`](pending-graduations/2026-05-24-napkin-tail-candidates.md)
 active shard.
 
+### 2026-05-26 — Reviewer-derived session sizing is not session sizing
+
+`[captured: 2026-05-26 | source: napkin/open-streaming-updraft-phase-0a + distilled-entry | target: rule:reviewer-sizing-must-be-stress-tested OR pdr-amendment:planning-discipline | trigger: second-instance | size: S | status: pending]`
+
+**Substance**: when a reviewer estimates the session-shape of remaining
+work, that estimate is typically derived from owned-surface file counts
+or touch-point counts. File-count is not cycle-count. Most touch points
+are mechanical translations of a small number of structural moves.
+Before baking a reviewer's session estimate into permanent plan-body
+doctrine, stress-test it with explicit TDD-cycle enumeration. The
+realistic count is often substantially smaller than the file-touch count
+suggests.
+
+**Worked instance (this one)**: 2026-05-26 Open Streaming Updraft session
+on `collaboration-identity-doctrine-enforcement-remediation` —
+assumptions-expert's "Phase 0A/0B/0C are each session-sized" framing
+(derived from 13+4+2 owned-surface files for Phase 0B and 7+ for Phase
+0C) was baked into the plan body. Owner challenged via
+`/oak-metacognition`. First-principles decomposition showed ~4 cycles
+for 0B and ~5 cycles for 0C — about 10 cycles total, one focused
+implementer session. Plan corrected at `3ca77972`; cure demonstrated by
+landing Phase 0A + Phase 0B Cycle 1 in the same session as the
+correction.
+
+**Trigger to graduate**: a second worked-instance — another session where
+a reviewer estimate of session-sizing was baked into doctrine without
+cycle-decomposition stress-test, and the cycle-count proved
+substantially smaller than the file-count framing implied.
+
+**Graduation target**: a rule under `.agent/rules/` (e.g.
+`stress-test-reviewer-sizing-estimates`) OR an amendment to the
+planning-discipline PDR (PDR-018) naming the proxy choice discipline.
+Single-instance for now; not graduating until trigger fires.
+
+**Cross-references**: distilled.md §"Reviewer-derived session sizing is
+not session sizing"; napkin.md 2026-05-26 entry under Open Streaming
+Updraft.
+
 ### 2026-05-23 — Agent identity UUID + body-file frontmatter residuals
 
 `[captured: 2026-05-23 | source: stormbound-floating-wing/tempfile-collision-incident-and-owner-direction | target: PDR-076a+PDR-076b operationalisation | trigger: owner direction | size: S | status: partially-graduated]`

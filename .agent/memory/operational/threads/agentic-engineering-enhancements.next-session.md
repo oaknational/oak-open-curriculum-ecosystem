@@ -1,5 +1,149 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-26 — Open Streaming Updraft / claude / claude-opus-4-7 / `357948`, collaboration identity remediation Phase 0A doctrinal landing + Phase 0B Cycle 1)
+
+**Session boundary**: owner asked for analysis of
+[`collaboration-identity-doctrine-enforcement-remediation.plan.md`](../../../plans/agent-tooling/current/collaboration-identity-doctrine-enforcement-remediation.plan.md),
+then directed delivery of Phase 0 using `/oak-metacognition` + `/oak-plan` +
+subagent leverage. Mid-session owner challenged the "Phase 0A/0B/0C each one
+session" assumption; metacognition pass surfaced the file-count-as-sizing
+failure mode and the cycle-decomposition cure landed at `3ca77972`. Owner
+then re-confirmed scope as "0B and 0C" for the next session and directed
+this full handoff + consolidate-docs.
+
+**Landed (5 commits on `docs/agent-collaboration-enhancements`)**:
+
+- `76920493` plan v3 — three reviewers (assumptions-expert, docs-adr-expert,
+  type-expert) + Explore structural map dispatched in parallel; all
+  must-fixes folded into plan body. Material plan changes:
+  PDR-027 amendment moved from Phase 2 to Phase 0A (PDR-076a §Decision was
+  conditional on the PDR-027 Amendment-Log entry landing first); UUID v5
+  deterministic-from-session-seed verdict committed (no longer deferred to
+  implementation time); read-side/write-side schema split, branded
+  `UuidV5` type, `AgentRoutingKey` discriminated union, and
+  `parseAgentId` schema-driven parse all locked in plan body before
+  Phase 0B begins; Phase 1 distinguishes PDR-076b write-side obligation
+  (binding now) from consumer-side enforcement (deferred where no
+  consumer code exists); Phase 3 sunset criterion gains
+  write-timestamp-filtered query requirement; proof contract gains ID-0
+  (PDR-027 amendment landed). Plan grew from 416 to 783 lines.
+- `7028b0d6` PDR-027 amendment — Amendment-Log entry dated 2026-05-26 with
+  semantic-position framing; §Identity schema table gains `id` row;
+  §Full identity block table gains `id` row; §The additive-identity rule
+  body continuation-matching sentence updated to `(agent_name, id)`;
+  §Why the identity key is `platform + model + agent_name` carries a
+  head-of-section supersession note; §Why identities are additive
+  formula updated.
+- `b0faefab` Phase 0A closeout — plan status updated, frontmatter todo
+  marked completed, Phase 0 active claim closed.
+- `3ca77972` metacog cure — owner-directed challenge to the "3-session
+  arc" framing produced a structural correction: file-count-derived
+  sizing replaced with TDD-cycle decomposition (Phase 0B ~4 cycles,
+  Phase 0C ~5 cycles, ~10 total cycles in one focused implementer
+  session). The cure was demonstrated in execution this same session.
+- `c11f698b` Phase 0B Cycle 1 — `uuidV5Schema` (UUID-format + v5 version-
+  nibble refine + `.brand<'UuidV5'>()`); `collaborationAgentIdSchema`
+  read-side extended with optional `id` (legacy parse path);
+  `collaborationAgentIdWriteSchema` write-side with required `id`
+  (compile-time guard against legacy-shape writes); 7 new tests in
+  `agent-id-schema.unit.test.ts`; 664 → 671 tests; full pre-commit gate
+  green at every commit.
+
+**Evidence**:
+
+- `pnpm --filter @oaknational/agent-tools test`: 75 files / 671 tests
+  passing at every commit step.
+- Full `pnpm check` via pre-commit hook chain: 90/90 turbo tasks
+  passing at every commit (cached or fresh).
+- Plan-skill placeholder + commit-recipe self-check on plan body: clean.
+- All session claims closed in their respective commits; closed-claims
+  archive carries five entries from this session (Phase 0 + 4 short-
+  lived `git:index/head` claims for each commit).
+
+**Subagent leverage**: 1 Explore (structural map) + 3 reviewers
+(assumptions-expert, docs-adr-expert, type-expert) dispatched in parallel
+on Sonnet — within Opus team quota envelope. All three reviewers returned
+substantive must-fix findings; all integrated into plan v3.
+
+**Metacognition cure (retrospective mode)**: the "Phase 0A/0B/0C are each
+session-sized" framing — taken from assumptions-expert's first-pass
+finding and baked into the plan body without first-principles
+verification — was wrong. Failure mode: *doctrine-by-analogy* (accepting a
+reviewer estimate as gospel). Cure: explicit cycle-by-cycle enumeration in
+the plan; demonstrated by landing Phase 0A + Phase 0B Cycle 1 in the same
+session. Lesson conserved in distilled.md (see entry to be added under
+consolidate-docs).
+
+**Next safe step**: next session picks up Phase 0B Cycles 2–4 then Phase 0C
+all 5 cycles. Total ~9 cycles remaining for Phase 0. Design fully locked
+in plan body; implementer needs no further deliberation. Recommended
+cycle order:
+
+1. Phase 0B Cycle 2 — `deriveCollaborationIdentity` derives UUID v5 from
+   stable session seed, returns `CollaborationAgentIdWrite` (small change,
+   highest leverage — unlocks the rest of 0B).
+2. Phase 0B Cycle 3 — `parseAgentId` replaces hand-built object with
+   `collaborationAgentIdSchema.parse()` (Commandment 12 fix as bonus).
+3. Phase 0B Cycle 4 — `comms-event.schema.json` + `active-claims.schema.json`
+   add optional `id` to `agent_id` `$def`.
+4. Phase 0C Cycle 1 — `AgentRoutingKey` discriminated union +
+   `routingKeyFor` switches on `id` presence + `sameAgentRoutingKey`
+   exhaustively matches on `kind`. The central routing refactor.
+5. Phase 0C Cycle 2 — `classifyDirected`, `classifyNarrative`,
+   `isSelfAuthored` consume new routing key. **This is where the original
+   failure mode dies.** Existing `comms-relevant-events-collision.unit.test.ts`
+   gets the same-name + same-prefix + different-id case here.
+6. Phase 0C Cycle 3 — `assertSameAgent` consumes new routing key.
+7. Phase 0C Cycle 4 — `--to-id` flag wired through `cli-spec-options` →
+   `cli-comms-messages.recipientAgent`.
+8. Phase 0C Cycle 5 — legacy-fallback diagnostic emission in `routingKeyFor`'s
+   `kind: 'legacy'` branch.
+
+**Participating agent identity row update**: Open Streaming Updraft new row
+added below (this is the first session on this thread for this identity).
+
+## Session Outcome (2026-05-26 — Thermal Swooping Wing / codex / GPT-5 / `019e63`, PR #118 routing + doctrine-debt remediation plan)
+
+**Session boundary**: owner asked whether a PR existed for
+`docs/agent-collaboration-enhancements`, then directed PR creation and
+monitoring. After PR #118 surfaced identity/routing friction, owner asked for
+a scan of agent-tooling places where doctrine was ahead of enforcement and
+then directed a remediation plan in the improving-collaboration lane.
+
+**Working-tree outcome**:
+
+- Draft PR #118 was created for the n=2 collaboration improvements.
+- PR monitoring identified three Sonar findings; those were routed to the
+  current Mistbound identity after correcting an over-broad repeated-word
+  route. Mistbound later pushed `cd1810bc` with the three fixes.
+- New queued plan:
+  [`collaboration-identity-doctrine-enforcement-remediation.plan.md`](../../../plans/agent-tooling/current/collaboration-identity-doctrine-enforcement-remediation.plan.md).
+  It frames PDR-076a/PDR-076b implementation gaps as technical debt in the
+  improving-collaboration lane.
+- Discoverability was wired through
+  [`agent-tooling/current/README.md`](../../../plans/agent-tooling/current/README.md)
+  and the parent
+  [`cost-of-collaboration.plan.md`](../../../plans/agent-tooling/current/cost-of-collaboration.plan.md).
+- Owner then asked that the plan be phased and that the critical path be Phase
+  0. The plan now makes Phase 0 the executable identity/routing path: add UUID
+  ids to new identity writes and make routing prefer `(agent_name, id)` with
+  legacy fallback.
+
+**Evidence**:
+
+- Plan/index markdownlint passed on the touched plan surfaces.
+- `git diff --check` passed on the touched plan surfaces.
+- A search for leftover `WS*` / `Workstreams` wording in the new plan returned
+  no matches after the phase rewrite.
+- Full `pnpm check` passed at session handoff.
+
+**Next safe step**: owner commits the documentation bundle when ready. Future
+implementation should open Phase 0 only and prove ID-1, ID-2, and ID-3 before
+claiming the critical path complete.
+
+**Participating agent identity row update**: Thermal Swooping Wing
+`last_session` = 2026-05-26 (row already present below).
+
 ## Session Outcome (2026-05-26 — Starless Dimming Owl / claude / claude-opus-4-7 / `781369`, n=2-coordination-efficiency-program complete + substrate cleanup)
 
 **Session boundary**: owner-invoked `oak-start-right-team` with the
@@ -2645,8 +2789,9 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 
 | Platform | Model | Agent name | Role | First-session | Last-session |
 | --- | --- | --- | --- | --- | --- |
+| `claude` | `claude-opus-4-7` | Open Streaming Updraft | collaboration identity remediation Phase 0A doctrinal landing + Phase 0B Cycle 1 implementer (`357948`; landed 5 commits on `docs/agent-collaboration-enhancements`: `76920493` plan v3 reviewer integration with 3 parallel sub-agent reviewers + Explore structural map, `7028b0d6` PDR-027 amendment with Amendment-Log entry + schema-table updates + rule-body update + supersession note, `b0faefab` Phase 0A closeout, `3ca77972` metacog cure replacing 3-session framing with TDD-cycle decomposition after owner challenge, `c11f698b` Phase 0B Cycle 1 with `UuidV5` branded type + read/write schema split + 7 new tests; demonstrated metacognition cure in execution by landing 0A + 0B Cycle 1 in same session; all session claims closed; design for Phase 0B Cycles 2-4 + Phase 0C fully locked in plan body for next implementer) | 2026-05-26 | 2026-05-26 |
 | `claude` | `claude-opus-4-7` | Starless Dimming Owl | n=2-coordination-efficiency-program implementer + closeout owner (`781369`; landed the three remaining workstreams in linear order: curator-handoff `d3b1f75d` (Thermal's curator residue under Starless attribution per owner direction), WS0 `3c3e01d3` (3 new rules + 9 forwarders + RULES_INDEX classification table + 6-test validation + mode-selection block; SKILL 996→700 lines exactly), WS1 `3360dfb0` (NarrativeCommsEvent addressed_to/audience widened to CollaborationAgentId tuple; classifyNarrative routes by session_id_prefix; 5 collision regression tests), WS4 `4f1e6faf` (SKILL cross-references for ping-before-escalate + stale §0.5 anchor cures), closeout `2d79e3ab` (plan archived to `archive/completed/`, continuity refreshed), substrate cleanup `308cdafe` (stale claims archived, 5 expired commit-queue entries abandoned); dispatched 8 reviewers in parallel across the three workstreams; coordinated with Thermal Swooping Wing via 4+ directed comms (no-overlap verdicts kept commit ownership clean); acceptance bar revised in WS0 commit body per assumptions-expert ruling (combined `wc -l` is wrong proxy; classification-weighted per-mode load is correct measure); deferred SHOULD-FIXes documented in WS1 commit body (schema-duplication consolidation; diagnosticWriter DI)) | 2026-05-26 | 2026-05-26 |
-| `codex` | `GPT-5` | Thermal Swooping Wing | Knowledge Curator (`019e63`; critical/hard curation pass, owner-question drain, PDR-083/PDR-084 graduation, final session handoff; no active claim to close; owner will commit staged closeout bundle) | 2026-05-26 | 2026-05-26 |
+| `codex` | `GPT-5` | Thermal Swooping Wing | Knowledge Curator + PR/planning closeout (`019e63`; PDR-083/PDR-084 graduation, PR #118 creation/monitoring/routing, collaboration identity doctrine-debt remediation plan queued with Phase 0 critical path; no active claim to close; owner will commit documentation bundle) | 2026-05-26 | 2026-05-26 |
 | `codex` | `GPT-5` | Mistbound Shrouding Silhouette | PR #118 Sonar fix implementer (`019e64`; owner-routed narrow fix for three Sonar issues on `docs/agent-collaboration-enhancements`, coordinated with Thermal monitoring) | 2026-05-26 | 2026-05-26 |
 | `claude` | `claude-opus-4-7` | Feathered Winging Cliff | Lane A implementer (`57e615`; n=2 enforcement bundle Cycle 1: A1 heartbeat emitter typed-origin gate landed `97f06e16` with 10 tests + Zod `.strict()` schema-driven composer; PDR-063 mid-cycle compaction handoff fired twice in cycle, both pickups worked; metacognition pass on AskUserQuestion menu-of-anti-shapes anti-pattern with cure captured to `feedback_pre_pose_option_viability_check`; plan amendment + thread/continuity refresh + 7 graduation candidates captured; push-ceremony lane after Torrid retires) | 2026-05-25 | 2026-05-26 |
 | `claude` | `claude-opus-4-7` | Torrid Firing Spark | Lane B implementer + gatekeeper + cross-lane-takeover (`5054f8`; n=2 enforcement bundle Cycle 1 COMPLETE on origin: hook-policy 5-module extraction `499518ce` + B1 menu-framing scoped_blocks `ecc1e834` + B3 ping-before-escalate `29ebda41` + barrel-trim knip cure `4984d771` + B2 CLI body-length gate `66e77d73` (4 verbs × 10 tests, TDD-first per test-expert Amendment A) + zoneGlyph cross-lane cure `69b50937` (knip 1→0, surgical `git apply --cached` to preserve Prismatic's WIP) + consistency fix `83c79fa6` (per-file detail uses inventoryGlyph, replace-old-with-new per owner direction; LOCAL); ran all `pnpm check` gatekeeper rounds; dispatched 4-reviewer parallel sonnet panel on B2 (type-expert + test-expert + code-expert + assumptions-expert) with findings absorbed; took over push lane after Feathered's 23-min heartbeat-only silence + ping non-reply, broadcast `TORRID TAKING OVER` at 07:01:48Z; owner pushed in parallel through `bfbc39f3` absorbing 219 drift files; Q-004 filed in open-questions.md for B2 gate-both-paths follow-on; retiring 2026-05-26 per owner direction after sending closeout findings `337a7f57` to Feathered; PDR-063 fired once mid-session pre-B2) | 2026-05-25 | 2026-05-26 |

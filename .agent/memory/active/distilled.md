@@ -80,6 +80,44 @@ Audit trail lives in
 
 ---
 
+## Reviewer-derived session sizing is not session sizing
+
+**Captured 2026-05-26** — Open Streaming Updraft Phase 0A + 0B Cycle 1 session.
+
+When a reviewer estimates the session-shape of remaining work, that estimate
+is typically derived from owned-surface file counts or touch-point counts.
+File-count is not cycle-count. Most touch points are mechanical translations
+of a small number of structural moves (a single schema split surfaces all
+identity-construction sites at compile time; a single discriminated union
+narrows all routing comparators by construction).
+
+Before baking a reviewer's session estimate into permanent plan-body
+doctrine, stress-test it with explicit TDD-cycle enumeration: list each
+red→green pair, count the substantive product changes, distinguish
+mechanical follow-on from substantive cycle. The realistic count is often
+substantially smaller than the file-touch count suggests.
+
+**Failure mode**: accepting reviewer estimates as gospel produces conservative
+session-partitioning that paying gate-and-context-warmup tax across more
+sessions than the work shape requires.
+
+**Worked instance**: 2026-05-26, the
+`collaboration-identity-doctrine-enforcement-remediation` plan accepted
+assumptions-expert's "Phase 0A/0B/0C are each session-sized" framing,
+derived from 13+4+2 owned-surface files for Phase 0B and 7+ for Phase 0C.
+Owner challenged the assumption mid-session via `/oak-metacognition`.
+First-principles decomposition showed ~4 cycles for 0B and ~5 cycles for
+0C (~10 cycles total, one focused implementer session for both). Plan body
+was corrected at `3ca77972`; Phase 0A + Phase 0B Cycle 1 landed in the same
+session as the metacognition correction. Doctrine: cycle-decomposition is
+the authoritative sizing proxy; file-counts are at best a ceiling.
+
+**Routing**: if a second worked-instance occurs, graduate to a rule or PDR
+amendment under planning-discipline. Until then, this lesson lives here as
+session-readable cross-session guidance.
+
+---
+
 ## Held Pending Validation
 
 ### Hypothesis-Layer Routing for Multi-Agent Cures → `hypothesis.md` family
