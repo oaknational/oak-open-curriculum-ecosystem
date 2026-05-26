@@ -46045,6 +46045,90 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "f572951c-13fd-4e3f-9158-e130591a4e80",
+      "agent_id": {
+        "agent_name": "Mistbound Shrouding Silhouette",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e64"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T13:55:17Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit PR #118 Sonar fixes.",
+      "intent_to_commit": "b45cff24-7e48-4564-af1c-44c9eede4675",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T13:55:46Z",
+        "closed_by": {
+          "agent_name": "Mistbound Shrouding Silhouette",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e64"
+        },
+        "summary": "commit window closed in same collaboration-state commit for PR #118 Sonar fixes.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f572951c-13fd-4e3f-9158-e130591a4e80",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "204a6076-789a-4543-9443-e29a1dccf90d",
+      "agent_id": {
+        "agent_name": "Mistbound Shrouding Silhouette",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e64"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/comms-heartbeat-cli.ts",
+            "agent-tools/tests/hook-policy/check-blocked-content.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-26T13:52:45Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Fix PR #118 Sonar issues in heartbeat CLI and hook-policy tests only.",
+      "archived_at": "2026-05-26",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-26T13:55:46Z",
+        "closed_by": {
+          "agent_name": "Mistbound Shrouding Silhouette",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e64"
+        },
+        "summary": "PR #118 Sonar fixes implemented and validated; committing in this bundle.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "204a6076-789a-4543-9443-e29a1dccf90d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

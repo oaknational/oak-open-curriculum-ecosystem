@@ -18,7 +18,14 @@ const HEARTBEAT_STATE_ARG_KEYS = [
   'branch',
   'current-cycle-label',
 ] as const;
-const HEARTBEAT_STATE_ARG_HINT = `Pass ${HEARTBEAT_STATE_ARG_KEYS.map((k) => `--${k}`).join(', ')}.`;
+type HeartbeatStateArgKey = (typeof HEARTBEAT_STATE_ARG_KEYS)[number];
+
+function formatCliFlag(key: HeartbeatStateArgKey): string {
+  return `--${key}`;
+}
+
+const HEARTBEAT_STATE_ARG_FLAGS = HEARTBEAT_STATE_ARG_KEYS.map(formatCliFlag).join(', ');
+const HEARTBEAT_STATE_ARG_HINT = `Pass ${HEARTBEAT_STATE_ARG_FLAGS}.`;
 
 /**
  * Heartbeat-tag CLI gate enforcing PDR-078 §5 "Substrate category:
@@ -41,7 +48,7 @@ export function composeHeartbeatBodyFromOptions(options: Options): string {
   }
   const missing = HEARTBEAT_STATE_ARG_KEYS.filter((key) => optional(options, key) === undefined);
   if (missing.length > 0) {
-    const missingFlags = missing.map((key) => `--${key}`).join(', ');
+    const missingFlags = missing.map(formatCliFlag).join(', ');
     throw new Error(
       `heartbeat-tagged events require typed state args; missing: ${missingFlags}. ${HEARTBEAT_STATE_ARG_HINT}`,
     );

@@ -13,6 +13,17 @@ import {
   readStreamText,
 } from '../../src/hook-policy/check-blocked-content.js';
 
+const EMPTY_STDIN_CHUNKS: readonly Buffer[] = [];
+
+async function* fakeStdin(): AsyncGenerator<Buffer> {
+  yield Buffer.from('first ');
+  yield Buffer.from('second');
+}
+
+async function* emptyStdin(): AsyncGenerator<Buffer> {
+  yield* EMPTY_STDIN_CHUNKS;
+}
+
 describe('parseHookInput', () => {
   it('parses valid JSON text', () => {
     expect(parseHookInput('{"tool_name":"Write"}')).toStrictEqual({ tool_name: 'Write' });
@@ -525,19 +536,10 @@ describe('parseBlockedContentPolicy', () => {
 
 describe('readStreamText', () => {
   it('reads all text from an async iterable stream', async () => {
-    async function* fakeStdin(): AsyncGenerator<Buffer> {
-      yield Buffer.from('first ');
-      yield Buffer.from('second');
-    }
-
     await expect(readStreamText(fakeStdin())).resolves.toBe('first second');
   });
 
   it('returns empty string for an empty stream', async () => {
-    async function* emptyStdin(): AsyncGenerator<Buffer> {
-      // yields nothing
-    }
-
     await expect(readStreamText(emptyStdin())).resolves.toBe('');
   });
 });

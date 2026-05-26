@@ -146,3 +146,16 @@ fitness_content_role: drainable-buffer
   rejection.
 - **Behaviour change / candidate follow-up**: update help text to name the
   heartbeat typed-args special case, or provide a heartbeat-specific help line.
+
+## 2026-05-26 - Thermal Swooping Wing PR handoff routing / codex / GPT-5 / `019e63`
+
+### Mistakes Made
+
+- I overmatched a team-member routing request on the repeated identity word
+  "Mistbound" and copied a PR-fix request to an older Mistbound tuple
+  (`Mistbound Passing Candle` / `e77243`) before noticing the live teammate was
+  a new identity (`Mistbound Shrouding Silhouette` / `019e64`). Owner corrected
+  that individual words in identity triples repeat relatively often. Behaviour
+  change: route peer messages by the full identity tuple and active session
+  prefix, not by a repeated name token; when a mistaken duplicate route lands,
+  post a correction event naming the authoritative tuple.
