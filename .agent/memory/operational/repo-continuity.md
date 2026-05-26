@@ -105,7 +105,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF first-feature delivery | [record][eef] | Fiery Kindling Brazier / claude / claude-opus-4-7 / 9f4026 / commit-marshal+pr-115-merged / 2026-05-25 |
-| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Airy Whirling Current / claude / claude-opus-4-7 / `3624a5` / Phase 0 COMPLETE — Cycles 9+10 landed (`dee89e09`, `6dad98b0`); proof contract ID-0..ID-3 closed; reviewer dispatch green / 2026-05-26 |
+| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Airy Whirling Current / claude / claude-opus-4-7 / `3624a5` / Phase 0 COMPLETE + write-side type cure — Cycles 9+10+11 landed (`dee89e09`, `6dad98b0`, `597b0945`); proof contract ID-0..ID-3 closed; reviewer dispatch green / 2026-05-26 |
 
 ## Paused Threads
 
@@ -312,18 +312,38 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
+**due — Phase 0 milestone closed + distilled.md fitness convergence
+pending** (Airy Whirling Current `3624a5`, 2026-05-26, second handoff
+this session after Cycle 11 landed). Triggers fired:
+
+1. Plan-arc milestone closed: Phase 0 of
+   `collaboration-identity-doctrine-enforcement-remediation.plan.md`
+   complete (ID-0..ID-3 all in code). Plan itself remains ACTIVE for
+   Phase 1+.
+2. `distilled.md` at 221 lines (soft limit 180, target 120) after this
+   session added two cross-session lessons: reviewer-verdict authority
+   discipline (worked instance: Cycle 11 landing after owner challenge)
+   and structural-vs-operational-evidence distinction (worked instance:
+   Phase 0 completion framing).
+
+Not escalating to `oak-consolidate-docs` from this closeout because:
+the two new distilled entries are knowledge-preservation-valid at full
+weight per `knowledge-preservation-over-fitness-warnings`; trimming
+them to satisfy the soft-limit signal would defeat their purpose. They
+need a second worked instance before graduation to a rule/PDR. The plan
+remains active (Phase 1 owner-gated). No napkin rotation pressure
+(273/300, healthy zone). No ADR/PDR candidates surfaced. Falsifiability
+for the next consolidator: distilled.md grew by the two named entries
+this session; if a second worked instance of either appears in a future
+napkin, graduate from distilled to permanent home rather than letting
+the soft pressure dictate trimming.
+
 **not due — Phase 0 closeout commit only** (Airy Whirling Current `3624a5`,
-2026-05-26). Phase 0 critical path closed with cycles 9+10 landing the
-consumer-visible cure surface plus the audit-signal diagnostic. No
-ADR/PDR graduation candidates surfaced — the work executed the locked
-plan body; lessons captured in this thread's Session Outcome block.
-Reviewer dispatch (code-expert + type-expert on Sonnet) returned approval
-plus two architectural follow-ons logged in the thread record. No napkin
-rotation pressure; the metacognition observations are session-scoped.
-Falsifiability for the next consolidator: `git log --oneline -3` shows
-the two Cycle 9+10 commits at HEAD plus this continuity update; the
-plan §Phase 0 completion claim items (ID-0..ID-3) all map to landed
-commits.
+2026-05-26, FIRST handoff this session — superseded by the entry above
+after Cycle 11 landed). Original entry preserved for audit trail: Phase 0
+critical path closed with cycles 9+10 landing the consumer-visible cure
+surface plus the audit-signal diagnostic. Status revised after Cycle 11
+landed in the same session, which added the two distilled entries.
 
 **not due — mid-arc handoff in active plan** (Tempestuous Sweeping Feather
 `a9e5d2`, 2026-05-26). Owner directed a brief session handoff with the

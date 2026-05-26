@@ -118,6 +118,88 @@ session-readable cross-session guidance.
 
 ---
 
+## Reviewer "follow-on cycle" verdicts are information, not authority
+
+**Captured 2026-05-26** — Airy Whirling Current Phase 0C Cycles 9+10+11
+session.
+
+When a code-expert or type-expert review returns a finding marked
+"follow-on cycle" or "not blocking, queue for later", that verdict is
+INFORMATION about the reviewer's scope assumptions, not AUTHORITY over
+the implementer's landing decision. Reviewers see the diff in isolation;
+the implementer sees the cure surface in full.
+
+Before deferring a "follow-on" finding, apply this test: **"Does landing
+this finding NOW complete the same cure I am claiming to deliver in this
+session?"** If yes, land it as part of the same arc — the reviewer's
+verdict is shaping by what they were asked to look at, not by what
+architectural completeness requires.
+
+**Failure mode**: authority-deference. Accepting reviewer-deferral
+verdicts without first-principles check leaves type-safety holes, brand
+drops, or invariant gaps inside the claimed cure. The next session
+inherits a "completed" surface that still has the failure mode the cure
+was supposed to close.
+
+**Worked instance**: 2026-05-26, the Phase 0C cycle 9+10 reviewer
+dispatch returned type-expert flagging the brand-drop at
+`createDirectedCommsMessage` with verdict "follow-on cycle". Deferred
+citing reviewer guidance + plan-scope locking. Owner Q2 ("why has
+anything been deferred?") surfaced the authority-deference. The change
+was small, completed the same routing-cure surface, and matched the
+architectural-excellence directive. Landed as Cycle 11 (`597b0945`)
+within the same session.
+
+**Routing**: if a second worked-instance occurs, graduate to a rule
+under reviewer-dispatch discipline (e.g. `reviewer-verdicts-are-information-not-authority`).
+Until then, this lesson lives here as session-readable cross-session
+guidance. Related but distinct from `no-analysis-responsibility-passback`
+and `reviewer-briefs-respect-decided-scope` user-memory entries — both
+deal with what reviewers should NOT be asked to do; this lesson deals
+with how to absorb what reviewers DO return.
+
+---
+
+## Structural cure delivered ≠ operationally exercised cure
+
+**Captured 2026-05-26** — Airy Whirling Current Phase 0C Cycles 9+10+11
+session.
+
+When claiming "measurable value delivered" for a behavioural-cure
+landing, distinguish STRUCTURAL evidence from OPERATIONAL evidence.
+Tests + types proving the cure at the code boundary are STRUCTURAL.
+The cure actually preventing the named failure mode in real production
+use is OPERATIONAL. The first does not imply the second.
+
+For inter-agent or multi-system cures, operational evidence often
+requires an arranged scenario (two-same-name peers running concurrently;
+two services with overlapping configuration; etc.) that the
+implementer alone cannot manufacture — it requires owner orchestration
+or a real-world incident.
+
+**Failure mode**: framing structural completion as operational success.
+Subsequent agents inherit the impression that "the failure mode is
+gone" when it has only been "made unreachable in code"; the first
+operational test may surface adjacent gaps (e.g. legacy data on disk
+still cross-kind-fails; the cure protects new writes but not stored
+state).
+
+**Worked instance**: 2026-05-26, Owner Q1 ("is the measurable value of
+Phase 0 delivered?") forced honest separation: 707 tests prove the
+PDR-076a cure structurally; no inter-agent comms event was sent through
+the new `--to-id` path in the same session that landed it. The
+operational proof is pending. The honest framing surfaced an adjacent
+gap: legacy events already on disk still classify as `observed` rather
+than `directed` post-cure (not a regression — those events were never
+routable by id — but the cure does not retroactively rescue them).
+
+**Routing**: this is closeout-framing discipline, not architectural
+doctrine. Lives here until a recurring pattern of "claimed
+operationally / proven structurally only" gaps surfaces in continuity
+audits.
+
+---
+
 ## Held Pending Validation
 
 ### Hypothesis-Layer Routing for Multi-Agent Cures → `hypothesis.md` family
