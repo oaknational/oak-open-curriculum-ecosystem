@@ -14,7 +14,6 @@ import { validateCommsEventTags } from './comms-tag-namespace.js';
 import { assertIdentityCanWrite } from './identity-write-guard.js';
 import { validateSharedStateAgentId } from './identity.js';
 import {
-  type CollaborationAgentId,
   type CollaborationAgentIdWrite,
   collaborationAgentIdWriteSchema,
   type CollaborationStateEnvironment,
@@ -120,7 +119,7 @@ async function currentAgent(
   surface: string,
   io: CollaborationStateCliIo,
   nowIso: string,
-): Promise<CollaborationAgentId> {
+): Promise<CollaborationAgentIdWrite> {
   const identity = resolveIdentity(options, env);
   const validation = validateSharedStateAgentId({ agentId: identity.agent_id, env });
   if (!validation.ok) {

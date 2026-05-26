@@ -1,6 +1,12 @@
 import { sameAgentRoutingKey } from './active-agent-routing.js';
 import { renderSharedCommsLog } from './comms.js';
-import { type CollaborationAgentId, type CommsEvent, type DirectedCommsMessage } from './types.js';
+import {
+  type CollaborationAgentId,
+  type CollaborationAgentIdWrite,
+  collaborationAgentIdWriteSchema,
+  type CommsEvent,
+  type DirectedCommsMessage,
+} from './types.js';
 
 export { migrateLegacyCommsRecordCollections } from './comms-migration-records.js';
 export { classifyEventForAgent, drainRelevantEvents } from './comms-relevant-events.js';
@@ -17,12 +23,30 @@ export interface CommsTextOutput {
   readonly writeText: (text: string) => Promise<void>;
 }
 
+/**
+ * Construct a directed comms message at the write boundary.
+ *
+ * `from` and `to` are typed as `CollaborationAgentIdWrite` (PDR-076a
+ * Phase 0C Cycle 11): every directed message written after Phase 0 MUST
+ * carry an id on both endpoints so the routing comparators can
+ * distinguish same-name + same-prefix + different-id agents at the
+ * receive side. The compile-time write-shape requirement closes the
+ * type-safety hole at the factory entry point — callers cannot
+ * accidentally bypass `recipientAgent`/identity derivation and construct
+ * a legacy-shape directed message.
+ *
+ * The stored `DirectedCommsMessage` interface keeps the loose
+ * `CollaborationAgentId` field shape so the migration path
+ * (`comms-migration-records.ts`) can still produce legacy-shape directed
+ * events from pre-Phase-0 data on disk. The cure is at the WRITE
+ * factory, not the stored schema.
+ */
 export function createDirectedCommsMessage(input: {
   readonly eventId: string;
   readonly createdAt: string;
   readonly messageKind: string;
-  readonly from: CollaborationAgentId;
-  readonly to: CollaborationAgentId;
+  readonly from: CollaborationAgentIdWrite;
+  readonly to: CollaborationAgentIdWrite;
   readonly subject: string;
   readonly body: string;
   readonly tags?: readonly string[];
@@ -55,10 +79,24 @@ export async function writeCommsEventWithReadback(input: {
   return input.event;
 }
 
+/**
+ * Build a reply to a previously written directed message.
+ *
+ * `from` is typed as `CollaborationAgentIdWrite` because every Phase 0+
+ * write must carry an id. The source message's `from` field is loose on
+ * the read side (legacy events on disk may lack ids), so this function
+ * parses `source.from` through `collaborationAgentIdWriteSchema` before
+ * passing it as the reply's `to`. A legacy source (whose `from` lacks
+ * an id) cannot be replied to via the id-keyed write path — the parse
+ * throws with a Zod error naming the missing id. That is the correct
+ * architectural behaviour: replying to a legacy-shape source would
+ * silently reintroduce the named failure mode if the reply's `to` were
+ * permitted to lack an id.
+ */
 export function replyToDirectedCommsMessage(input: {
   readonly sourceMessages: readonly DirectedCommsMessage[];
   readonly sourceEventId: string;
-  readonly from: CollaborationAgentId;
+  readonly from: CollaborationAgentIdWrite;
   readonly eventId: string;
   readonly createdAt: string;
   readonly messageKind: string;
@@ -76,7 +114,7 @@ export function replyToDirectedCommsMessage(input: {
     createdAt: input.createdAt,
     messageKind: input.messageKind,
     from: input.from,
-    to: source.from,
+    to: collaborationAgentIdWriteSchema.parse(source.from),
     subject: input.subject ?? defaultReplySubject(source.subject),
     body: input.body,
   });
