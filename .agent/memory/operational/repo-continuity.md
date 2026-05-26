@@ -47,14 +47,19 @@ Earlier archives remain under [`archive/`](archive/).
   remains open (cron-driven heartbeats still firing but main loop appears
   inactive post-resume; diagnostic candidate for graduation); Torrid
   `2f6d1d40-c3f8-4d78-b604-bfd8bebb7157` closing as part of this handoff.
-- **Plan body amended 2026-05-26 (Feathered)**: Cycle 1 outcome + 7 graduation
-  candidates + Cycle 2 brief landed in
-  [`n2-and-coordination-efficiency-program-2026-05-25.plan.md`](../../plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md).
-  WS1 + WS4 frontmatter todos moved pending → in_progress. Revision history
-  reflects Cycle 1 execution. Bundle expanded from 4 items to 6 commits as
-  Lane B absorbed E1+E2 (structural prerequisites) under reviewer ratification.
-  PDR-063 mid-cycle handoff fired three times in cycle; bundle survived two
-  compactions.
+- **Plan body rewritten 2026-05-26 (Feathered, fd951164)**: scoped down to
+  three remaining items only — WS0 (rule corpus + SKILL topology
+  refinement), WS1 #4 (identity routing-tuple disambiguation by
+  session_id_prefix), WS4 (SKILL cross-references for landed rules). Linear
+  order; decision-complete; no follow-on session invention. Owner audit
+  triggered the rewrite: prior amendment introduced unratified "Cycle 1 /
+  Cycle 2" framing (Cycle 2 was three already-existing workstreams with no
+  new substance) and accumulated retrospective content already routed to
+  other surfaces. New plan at
+  [`n2-and-coordination-efficiency-program-2026-05-25.plan.md`](../../plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md)
+  (209 lines, down from 700+). Cycle-2 invention mistake captured in
+  `.agent/memory/active/napkin.md` and per-user memory
+  `feedback_no_unauthorised_scope_invention_in_plans`.
 - **Graduation pipeline candidates surfaced by Cycle 1**: pre-pose AskUserQuestion
   viability check (extends `present-verdicts-not-menus.md`); cross-lane structural
   blocking of commits (1st instance, captures for PDR-026 second-instance);
