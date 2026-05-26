@@ -1,5 +1,72 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-25 — Prismatic Transiting Star / codex / GPT-5 / `019e60`, distilled processing + practice-fitness inventory)
+
+**Session boundary**: owner first asked whether `distilled.md` was still in
+use, then directed that it be added to the session-handoff flow, included in
+practice-fitness scripts, given appropriate frontmatter, processed according
+to `$oak-consolidate-docs`, and finally that `practice:fitness` and friends
+show ready-empty and healthy cases as well as soft/hard/critical cases. Owner
+closed the session with `$oak-session-handoff` and `$oak-consolidate-docs`.
+Branch: `docs/agent-collaboration-enhancements`.
+
+**Working-tree outcome**:
+
+- `distilled.md` remains active as a curated-learning register in the
+  knowledge-conservation flow. Its frontmatter now declares
+  `merge_class: curated-learning-register`, and the fitness envelope reflects
+  its narrower active-register role.
+- Settled `distilled.md` lessons were graduated or confirmed into durable
+  homes: gates skill and build-system docs for gate-stack layering; commit
+  skill, continuity-practice, AGENT evidence-command guidance, and agent-tools
+  README for the 2026-05-14 operational lessons. The graduation audit log keeps
+  source provenance.
+- `session-handoff` now cites the durable gate/build-system homes instead of
+  relying on removed active distilled prose.
+- `pending-graduations.md` marks the gate-stack item graduated and keeps the
+  skill-text-vs-continuation-record candidate pending until a second
+  corroborating instance or owner direction.
+- `practice:fitness`, `practice:fitness:informational`, and
+  `practice:fitness:strict-hard` now print a five-zone inventory:
+  ready-empty, healthy, soft, hard, and critical.
+- The metacognition correction added `fitness_content_role` as a missing axis:
+  `reference` is the default, while `drainable-buffer` is required before empty
+  content appears as `ready (empty)`. Empty directives/reference surfaces now
+  produce configuration findings rather than being treated as successful drains.
+- Behaviour tests prove the report output, including ready-empty and healthy
+  inventory lines and the drainable-buffer/reference distinction. Owner
+  correction applied: tests prove behaviour, not filename/configuration
+  membership.
+- ADR-144 was amended in place with the content-role extension, so the new
+  frontmatter key has a permanent governance home.
+
+**Evidence**:
+
+- `pnpm --filter @oaknational/agent-tools exec vitest run src/practice-fitness/format.unit.test.ts src/practice-fitness/run.unit.test.ts src/practice-fitness/evaluate.unit.test.ts`
+  passed: 50 tests after the content-role correction.
+- `pnpm --filter @oaknational/agent-tools type-check` passed.
+- Targeted eslint on the touched practice-fitness source and test files passed.
+- Targeted markdownlint and `git diff --check` passed on touched docs.
+- `pnpm practice:fitness:informational`, `pnpm practice:fitness`, and
+  `pnpm practice:fitness:strict-hard` exited 0 and printed the new inventory;
+  latest observed summary: `SOFT (21 soft, 19 healthy)` with
+  `ready (empty) (0): none`.
+
+**Open at handoff**:
+
+- No Prismatic source claim remains after closeout. Active peer claims remain:
+  Feathered Winging Cliff owns the heartbeat/comms CLI lane; Torrid Firing
+  Spark owns hook-policy/rule-index work.
+- Full repo-wide `pnpm check` was not claimed green for this handoff. A broader
+  `agent-tools` lint run is red on peer-owned hook-policy files, so this
+  handoff relies on targeted validation plus the practice-fitness gates.
+- The remaining held `distilled.md` hypothesis-layer routing item is preserved
+  pending validation rather than promoted early.
+- No new ADR/PDR candidate remains unprocessed from this slice: the role-axis
+  issue landed directly as an ADR-144 amendment, and the only older PDR-shaped
+  item remains the skill-text-vs-continuation-record candidate already tracked
+  in `pending-graduations.md`.
+
 ## Session Outcome (2026-05-25 — Mistbound Passing Candle / claude / claude-opus-4-7 / `e77243` + Quiet Whispering Veil / codex / GPT-5 / `019e60`, n=2 post-compaction execution + curation)
 
 **Session boundary**: n=2 mode with explicit lane separation per owner direction. Mistbound (post-compaction continuation from the plan-authoring session) executed plan/PDR substantive work; Quiet Whispering Veil joined mid-session as knowledge-curation specialist after owner appointment. Owner directed Mistbound to ignore fitness functions (Quiet's lane). Branch: `docs/agent-collaboration-enhancements`. Five owner-directed metacognition passes during the arc (LTAE on inherited option-set, then NEVER-compress-findings-reactively, then semantic-cause of blocked phrase).
@@ -6090,13 +6157,13 @@ and
 - **Thread purpose**: Practice and documentation-structure improvements,
   especially knowledge-flow roles, directive fitness pressure, and durable
   homing of agent-entrypoint content.
-- **Branch**: `fix/sonar-fixes-20260506` (current memory/state substrate
-  closure and doctor-preflight lane)
+- **Branch**: `docs/agent-collaboration-enhancements`
 
 ## Participating Agent Identities
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Prismatic Transiting Star` | `codex` | `GPT-5` | `019e60` | `distilled-processing-and-practice-fitness-inventory; kept-distilled-as-curated-learning-register-with-frontmatter; graduated-settled-lessons-to-gates-build-system-commit-continuity-practice-AGENT-and-agent-tools-README; added-ready-empty-and-healthy-zone-reporting-plus-drainable-buffer-content-role-axis-plus-behaviour-tests; ADR-144-content-role-amendment; closeout-handoff-and-consolidation-targeted-validation` | 2026-05-25 | 2026-05-25 |
 | `Ferny Fruiting Root` | `claude` | `claude-opus-4-7` | `ee16a4` | `implementer-this-Scorched-Director-window-2026-05-23; investigated-pnpm-check-RED-classification-D-Playwright-browser-missing-local-cache-event-a7b00c3d-cured-via-pnpm-exec-playwright-install-with-deps-chromium-as-agent-action-not-owner-action; orphan-absorption-x4-Class-B-sha-prefix-activation-Cycle-1-cc3039eb-Pearly-S7735-Cycle-2-845a3e90-ADR-185-v2-Cycle-4-5320d6b0-PDR-076-v2-Cycle-9-db4d8b3a; pattern-author-substrate-pointer-read-as-current-state-md-v1-plus-v2-absorbing-5-Wilma-amendments-from-Charcoal-dispatch-self-attestation-surfaced-Charcoal-ship-verdict-pending; PDR-076-v2-dual-reviewer-dispatch-assumptions-expert-CONCERNS-architecture-expert-fred-ISSUES-FOUND-v2-absorbed-5-scope-areas-CRITICAL-1-PDR-027-sequencing-conditionality-CRITICAL-2-phantom-additive-then-strict-precedent-struck-Cascade-trim-PDR-064-added-to-Related-PDR-073-vocabulary-fixed-PDR-029-amendment-added; plan-Wilma-dispatched-on-FM-2-P2-session-open-env-freshness-check-verdict-SAFE-WITH-CONDITIONS-4-conditions-plus-2-UNSAFE-findings-subagent-a2e16a2e367255e07-routing-disposition-pending-Scorched; three-substrate-broadcasts-9c240ce5-FM-1-FM-2-BN-1-bundle-a4204904-Director-routing-failure-mode-owner-action-not-cure-correction-worked-instance-755-empirical-Playwright-install-policy-test; named-by-owner-and-Scorched-as-five-substantive-deliveries-this-Director-window` | 2026-05-23 | 2026-05-23 |
 | `Shadowed Hiding Shade` | `claude` | `claude-opus-4-7[1m]` | `e35155` | `deep-graduation-pass-under-owner-direction-drains-owner-direction-gated-buffer-entries; 8-tier-a-doctrine-landings-5-new-rules-2-pdrs-proposed-1-pattern-plus-tdd-as-design-amendment-1-directive-amendment-session-handoff-skill-amendments; 9-tier-b-captures-6-patterns-2-pdrs-draft-1-skill-amendment; 5-tier-c-per-user-memory-marker-updates; commit-a49e7a21-34-files-1983-163; worked-instance-of-pdr-068-consumer-cadence-cure; surfaced-vocabulary-gate-as-menu-when-it-was-sop-owner-correction-captured` | 2026-05-22 | 2026-05-22 |
 | `Shaded Creeping Cloak` | `claude` | `claude-opus-4-7-1m` | `4ef359` | `disposed-5-under-disposed-ws1-5-ws0-reviewer-findings-all-absorb-d1-typed-term-reconstruction-error-with-sibling-file-extraction-d2-exhaustive-switches-with-default-never-n1-utf8-arg-dropped-n2-ambient-algorithm-narrowing-reverted-n3-class-b-exec-memory-line-refs-produced-ten-rows; landed-continuity-corrections-from-prior-session-handoff-with-closure-pressure-research-and-exploration-plan-artefacts; presented-ws0-ledger-for-owner-review-no-partial-ws0-remainders; ran-consolidation-pass-with-over-correction-during-absorption-candidate-captured; surfaced-and-captured-review-as-re-decision-failure-mode-after-owner-correction; eight-commits-e0e9ad0d-2d38cb27-ccfe8948-db5b8bc0-21579675-45e54736-c3627b69-340bdbda` | 2026-05-20 | 2026-05-20 |

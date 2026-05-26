@@ -2,11 +2,14 @@ import type { FitnessResult } from './evaluate.js';
 import { FITNESS_MODE_INFORMATIONAL, type FitnessMode, type FitnessZone } from './model.js';
 
 export interface FitnessSummaryCounts {
+  readonly ready: number;
   readonly healthy: number;
   readonly soft: number;
   readonly hard: number;
   readonly critical: number;
 }
+
+type FitnessInventoryZone = 'ready' | FitnessZone;
 
 function zoneGlyph(zone: FitnessZone | null): string {
   switch (zone) {
@@ -21,6 +24,26 @@ function zoneGlyph(zone: FitnessZone | null): string {
     default:
       return '';
   }
+}
+
+function isReady(result: FitnessResult): boolean {
+  return (
+    result.contentRole === 'drainable-buffer' &&
+    result.overallZone === 'healthy' &&
+    result.contentText.trim().length === 0
+  );
+}
+
+function inventoryZone(result: FitnessResult): FitnessInventoryZone {
+  return isReady(result) ? 'ready' : result.overallZone;
+}
+
+function inventoryGlyph(zone: FitnessInventoryZone): string {
+  if (zone === 'ready') {
+    return '\x1b[32m✓ ready\x1b[0m';
+  }
+
+  return zoneGlyph(zone);
 }
 
 function formatLineStatus(result: FitnessResult): string {
@@ -117,9 +140,9 @@ export function formatFitnessResult(result: FitnessResult): string {
 }
 
 export function summariseResults(results: readonly FitnessResult[]): FitnessSummaryCounts {
-  const counts = { healthy: 0, soft: 0, hard: 0, critical: 0 };
+  const counts = { ready: 0, healthy: 0, soft: 0, hard: 0, critical: 0 };
   for (const result of results) {
-    counts[result.overallZone] += 1;
+    counts[inventoryZone(result)] += 1;
   }
   return counts;
 }
@@ -134,20 +157,75 @@ function pickResultLabel(counts: FitnessSummaryCounts): string {
   return '\x1b[33mResult: SOFT';
 }
 
+function formatPassSummary(counts: FitnessSummaryCounts): string {
+  const readyPart = counts.ready > 0 ? `; ${counts.ready} ready empty` : '';
+  return `\x1b[32mResult: PASS — all files healthy${readyPart}\x1b[0m\n`;
+}
+
+function formatNonHealthySummaryParts(counts: FitnessSummaryCounts): string[] {
+  const parts: readonly (readonly [string, number])[] = [
+    ['critical', counts.critical],
+    ['hard', counts.hard],
+    ['soft', counts.soft],
+    ['healthy', counts.healthy],
+    ['ready empty', counts.ready],
+  ];
+  return parts.flatMap(([label, count]) => (count > 0 ? [`${count} ${label}`] : []));
+}
+
 export function formatSummary(mode: FitnessMode, counts: FitnessSummaryCounts): string {
   const nonHealthy = counts.soft + counts.hard + counts.critical;
   if (nonHealthy === 0) {
-    return '\x1b[32mResult: PASS — all files healthy\x1b[0m\n';
+    return formatPassSummary(counts);
   }
 
   const suffix = mode === FITNESS_MODE_INFORMATIONAL ? ' — informational mode' : '';
   const label = pickResultLabel(counts);
-  const parts = [
-    ...(counts.critical > 0 ? [`${counts.critical} critical`] : []),
-    ...(counts.hard > 0 ? [`${counts.hard} hard`] : []),
-    ...(counts.soft > 0 ? [`${counts.soft} soft`] : []),
-  ];
+  const parts = formatNonHealthySummaryParts(counts);
   return `${label} (${parts.join(', ')})${suffix}\x1b[0m\n`;
+}
+
+function inventoryLabel(zone: FitnessInventoryZone): string {
+  return zone === 'ready' ? 'ready (empty)' : zone;
+}
+
+function formatInventoryLine(result: FitnessResult, zone: FitnessInventoryZone): string[] {
+  if (zone === 'ready') {
+    return [`    ${inventoryGlyph(zone)} ${result.filename}: no content after frontmatter`];
+  }
+
+  if (zone === 'healthy') {
+    return [`    ${inventoryGlyph(zone)} ${result.filename}: within thresholds`];
+  }
+
+  if (result.zoneMessages.length === 0) {
+    return [`    ${inventoryGlyph(zone)} ${result.filename}: ${zone}`];
+  }
+
+  return result.zoneMessages.map(
+    (message) => `    ${zoneGlyph(message.zone)} ${result.filename}: ${message.text}`,
+  );
+}
+
+export function formatFitnessInventory(results: readonly FitnessResult[]): string {
+  const zones: readonly FitnessInventoryZone[] = ['ready', 'healthy', 'soft', 'hard', 'critical'];
+  const lines = ['\x1b[36mFitness zone inventory:\x1b[0m'];
+
+  for (const zone of zones) {
+    const matchingResults = results.filter((result) => inventoryZone(result) === zone);
+    const label = inventoryLabel(zone);
+    if (matchingResults.length === 0) {
+      lines.push(`  ${label} (0): none`);
+      continue;
+    }
+
+    lines.push(`  ${label} (${matchingResults.length}):`);
+    for (const result of matchingResults) {
+      lines.push(...formatInventoryLine(result, zone));
+    }
+  }
+
+  return lines.join('\n');
 }
 
 export function formatFitnessResponseDiscipline(): string {

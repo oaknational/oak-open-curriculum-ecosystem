@@ -205,6 +205,11 @@ direct CLI commands for inspection and recovery.
    if a hook failure, formatter, generated artefact, or claim /
    lifecycle write introduces an extra path, abandon the old intent
    and enqueue a widened one before staging or verifying the new set.
+   When the bundle creates or renames a module, run a formatting proof
+   before the final record-staged step (`pnpm agent-tools:repo-check --
+   prettier-staged` or a targeted Prettier command). If formatting mutates a
+   file, re-read the diff, re-stage the exact pathspecs, and record a fresh
+   fingerprint.
 
    ```bash
    pnpm agent-tools:commit-queue -- enqueue \

@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "0f7f283c-1c70-4a5a-b6e7-90b04c78411f",
+  "created_at": "2026-05-26T06:53:20.112Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Torrid Firing Spark",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "5054f8"
+  },
+  "title": "Heartbeat: Torrid Firing Spark (5054f8) — gatekeeper standby post-B2",
+  "body": "active; claim=2f6d1d40-c3f8-4d78-b604-bfd8bebb7157; intent=n2-lane-b-completion; branch=docs/agent-collaboration-enhancements; cycle=n2-bundle: B2 landed 66e77d73; gatekeeper standby for Feathered push",
+  "tags": [
+    "heartbeat"
+  ]
+}

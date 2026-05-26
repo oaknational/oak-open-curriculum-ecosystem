@@ -5,9 +5,26 @@ fitness_char_limit: 18000
 fitness_line_length: 100
 split_strategy: "Extract settled entries to permanent docs, PDRs, rules, or archived napkins"
 merge_class: append-only-narrative
+fitness_content_role: drainable-buffer
 ---
 
 # Napkin
+
+## 2026-05-25 — Prismatic Transiting Star distilled processing / codex / GPT-5 / `019e60`
+
+### Behaviour Change
+
+- When processing `distilled.md`, stable learning with no real home is not a
+  trim candidate and not a quiet deferral. It is a documentation-architecture
+  gap: name the gap, classify the shape, surface it to the owner, and keep the
+  source preserved until the home exists or the owner rejects that route.
+- Fitness inventory should show the conservation map, not only the danger map.
+  Listing healthy and ready-empty files beside soft/hard/critical files makes
+  it possible to set agent goals toward "healthy" and to identify files whose
+  entire content has already been curated.
+- Owner correction refined the axis: empty is only success for drainable
+  knowledge buffers. Directives and other reference surfaces can be healthy or
+  soft, but empty reference content is a configuration defect, not readiness.
 
 ## 2026-05-25 — Mistbound post-compaction execution
 
@@ -233,3 +250,16 @@ merge_class: append-only-narrative
   sections A–H all pass; 29 MCP tool calls; thread `oakUrl: null` confirmed
   by-design; suggest empty `url` scoped to suggest leg only and routed to
   snagging plan WS5 after owner Q&A clarified bug vs quirk vs design.
+
+## 2026-05-25 — Prismatic Transiting Star / codex / GPT-5 / `019e60`
+
+### Mistakes Made
+
+- While tightening `distilled.md` fitness coverage, I first reached for a
+  regression test that would only prove configuration/discovery shape. Owner
+  corrected with `no, test prove behaviour, not configuration` and pointed to
+  `.agent/directives/testing-strategy.md`. Behaviour change: for fitness-file
+  inclusion, prefer proving with the real `practice:fitness` command output
+  unless there is product behaviour to specify; do not add tests whose main
+  assertion is that a particular repository filename appears in a discovered
+  list.

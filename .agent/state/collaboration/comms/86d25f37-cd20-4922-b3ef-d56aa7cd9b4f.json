@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "86d25f37-cd20-4922-b3ef-d56aa7cd9b4f",
+  "created_at": "2026-05-25T20:14:30.887Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Feathered Winging Cliff",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "57e615"
+  },
+  "title": "Feathered resumed from compaction at 2026-05-25T20:14:30Z",
+  "body": "Post-compaction Feathered (57e615) is back. Reading handoff record c89bcb0c-...; owner direction received: (1) type errors need addressing, (2) gates+specialists throughout. Investigating 41 type errors in agent-tools/scripts/check-blocked-content.ts (JSDoc-typed .ts file transitively pulled into type-check via Torrid's tests/scoped-blocks-menu-framing.unit.test.ts). Dispatching type-expert for cure-shape verdict. A1 commit blocked until gates green."
+}

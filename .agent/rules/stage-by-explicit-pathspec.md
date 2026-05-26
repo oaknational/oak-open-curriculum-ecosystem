@@ -25,9 +25,9 @@ git add --all
 git add .
 ```
 
-The deny payload surfaces the citation
-*"distilled.md §Stage by explicit pathspec"* so the doctrinal anchor
-travels with the refusal.
+The deny payload surfaces the current rule citation so the doctrinal
+anchor travels with the refusal. This rule is the permanent home for
+the older distilled lesson.
 
 ## Why
 
@@ -86,9 +86,9 @@ entries intact.
 
 2026-04-30: a continuity-deferral commit accidentally bundled 372
 lines of parallel Practice-thread plan work plus an unrelated plugin
-enable. Owner correction graduated *Stage by explicit pathspec* to
-distilled.md. The hook block landed 2026-05-04 as WS6 of the
-doctrine-enforcement-quick-wins plan.
+enable. Owner correction first graduated *Stage by explicit pathspec*
+into `distilled.md`; this rule is the later permanent home. The hook
+block landed 2026-05-04 as WS6 of the doctrine-enforcement-quick-wins plan.
 
 ## Cure Asymmetry — One-Sided Application Does Not Prevent Absorption
 
@@ -151,6 +151,6 @@ discipline).
 
 ## Doctrinal Anchors
 
-- distilled.md §Stage by explicit pathspec
+- This rule: stage by explicit pathspec
 - PDR-038 §2026-05-04 amendment (stated principles require structural enforcement)
 - PDR-044 §Innate immunity (write-time fingerprints)

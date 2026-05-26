@@ -150,7 +150,7 @@ adoption from the Core concept name.
 | Pin to maintainer-Latest, not highest tag (PDR-040) | [ADR-169](../docs/architecture/architectural-decisions/169-pin-github-actions-to-maintainer-latest-sha.md) |
 | Rush-impulse three structural cues (PDR-043) | [ADR-172](../docs/architecture/architectural-decisions/172-rush-impulse-three-structural-cues-adoption.md) (three-cues paragraph in `principles.md` § Architectural Excellence Over Expediency) |
 | Agent-work Practice phenotype boundary (PDR-035 + Practice/repo split) | [ADR-165](../docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md) |
-| Practice-Core portability is by construction (`decision-records/README.md` Portability Constraint) | [`memory/active/distilled.md` § Practice-Core portability is by construction](memory/active/distilled.md#practice-core-portability-is-by-construction) (host-side scope statement for the constraint); structural-enforcement scanner per PDR-038 is the next follow-on |
+| Practice-Core portability is by construction | [`decision-records/README.md` § Portability Constraint](practice-core/decision-records/README.md#portability-constraint) is the Core rule; [`practice-core-portability-strict-enforcement.plan.md`](plans/agentic-engineering-enhancements/current/practice-core-portability-strict-enforcement.plan.md) owns the host enforcement follow-on |
 | State and memory substrate contracts (PDR-050) | PDR-050 carries the transferable specification; [`memory-state-substrate-contracts.md`](memory/executive/memory-state-substrate-contracts.md) is the human-facing host-local instance; [`memory-state-substrate-contracts.manifest.json`](memory/executive/memory-state-substrate-contracts.manifest.json) and [`memory-state-substrate-contracts.schema.json`](memory/executive/memory-state-substrate-contracts.schema.json) are the strict local data contract; [`memory-state-substrate-portable-contracts.plan.md`](plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md) adopts the portable contract locally; [`memory-state-contract-doctor.plan.md`](plans/agent-tooling/archive/completed/memory-state-contract-doctor.plan.md) owns deterministic host enforcement |
 
 ### Decision Record ↔ Substrate ADR Bridge
@@ -268,7 +268,7 @@ reusable knowledge:
 
 | Artefact | Location | Purpose |
 | --- | --- | --- |
-| Distilled learnings | [`memory/active/distilled.md`](memory/active/distilled.md) | Hard-won rules — read before every session |
+| Distilled learnings | [`memory/active/distilled.md`](memory/active/distilled.md) | Refined cross-session lessons — read before every session |
 | Collaboration channels | [`memory/executive/agent-collaboration-channels.md`](memory/executive/agent-collaboration-channels.md) | Register of communication options and when to use each |
 | Pattern library | [`memory/active/patterns/`](memory/active/patterns/README.md) | Abstract solutions to recurring design problems (live count surfaces in the directory listing) |
 | Session napkin | [`memory/active/napkin.md`](memory/active/napkin.md) | Current session observations, written continuously |

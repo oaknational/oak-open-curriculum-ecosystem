@@ -59,8 +59,8 @@ The most readable parts of `.agent/` for humans:
 
 - [memory/active/patterns/](memory/active/patterns/README.md) — 77 reusable solutions
   to recurring design problems, with anti-patterns and evidence
-- [memory/active/distilled.md](memory/active/distilled.md) — hard-won rules from
-  accumulated session experience
+- [memory/active/distilled.md](memory/active/distilled.md) — refined
+  cross-session lessons from accumulated session experience
 - [directives/principles.md](directives/principles.md) — the code
   quality and architecture rules that govern all work
 

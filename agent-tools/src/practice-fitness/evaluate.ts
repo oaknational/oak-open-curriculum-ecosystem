@@ -2,7 +2,10 @@ import {
   classifyFitnessCeilingZone,
   classifyFitnessZone,
   estimateTokensFromContentChars,
+  isKnownFitnessContentRole,
+  parseFitnessContentRole,
   worstZone,
+  type FitnessContentRole,
   type FitnessCeilingZone,
   type FitnessConfigurationFinding,
   type FitnessZone,
@@ -12,6 +15,7 @@ import {
   classifyLines,
   extractFrontmatter,
   getFrontmatterNumber,
+  getFrontmatterString,
   type ClassifiedLine,
 } from './markdown.js';
 import { buildAllZoneMessages } from './messages.js';
@@ -32,6 +36,7 @@ export interface FitnessResult {
   readonly maxProseLineWidth: number | null;
   readonly targetTokens: number | null;
   readonly limitTokens: number | null;
+  readonly contentRole: FitnessContentRole;
   readonly lineZone: FitnessZone | null;
   readonly charZone: FitnessCeilingZone | null;
   readonly proseZone: FitnessCeilingZone | null;
@@ -48,6 +53,8 @@ interface FitnessThresholds {
   readonly maxProseLineWidth: number | null;
   readonly targetTokens: number | null;
   readonly limitTokens: number | null;
+  readonly contentRole: FitnessContentRole;
+  readonly rawContentRole: string | null;
 }
 
 interface ProseMeasurement {
@@ -58,6 +65,7 @@ interface ProseMeasurement {
 
 function readThresholds(content: string): FitnessThresholds {
   const frontmatter = extractFrontmatter(content);
+  const rawContentRole = getFrontmatterString(frontmatter, 'fitness_content_role');
   return {
     targetLines: getFrontmatterNumber(frontmatter, 'fitness_line_target'),
     limitLines: getFrontmatterNumber(frontmatter, 'fitness_line_limit'),
@@ -65,15 +73,35 @@ function readThresholds(content: string): FitnessThresholds {
     maxProseLineWidth: getFrontmatterNumber(frontmatter, 'fitness_line_length'),
     targetTokens: getFrontmatterNumber(frontmatter, 'fitness_token_target'),
     limitTokens: getFrontmatterNumber(frontmatter, 'fitness_token_limit'),
+    contentRole: parseFitnessContentRole(rawContentRole),
+    rawContentRole,
   };
 }
 
-function buildConfigurationFindings(thresholds: FitnessThresholds): FitnessConfigurationFinding[] {
+function buildConfigurationFindings(
+  thresholds: FitnessThresholds,
+  measurement: ContentMeasurement,
+): FitnessConfigurationFinding[] {
   const findings: FitnessConfigurationFinding[] = [];
   if (thresholds.targetTokens != null && thresholds.limitTokens == null) {
     findings.push({
       metric: 'tokens',
       text: 'fitness_token_target declared without fitness_token_limit — declare both or neither',
+    });
+  }
+  if (!isKnownFitnessContentRole(thresholds.rawContentRole)) {
+    findings.push({
+      metric: 'content-role',
+      text: `fitness_content_role must be reference or drainable-buffer, got ${thresholds.rawContentRole}`,
+    });
+  }
+  if (
+    measurement.contentText.trim().length === 0 &&
+    thresholds.contentRole !== 'drainable-buffer'
+  ) {
+    findings.push({
+      metric: 'content-role',
+      text: 'empty content is only ready for fitness_content_role: drainable-buffer — add content or declare the drainable role',
     });
   }
   return findings;
@@ -185,6 +213,7 @@ function evaluateClassifiedFitnessFile(
     maxProseLineWidth: thresholds.maxProseLineWidth,
     targetTokens: thresholds.targetTokens,
     limitTokens: thresholds.limitTokens,
+    contentRole: thresholds.contentRole,
     ...zones,
     zoneMessages: buildAllZoneMessages(thresholds, {
       ...zones,
@@ -195,7 +224,7 @@ function evaluateClassifiedFitnessFile(
       maxProseLineNum: prose.maxProseLineNum,
       proseViolationCount,
     }),
-    configurationFindings: buildConfigurationFindings(thresholds),
+    configurationFindings: buildConfigurationFindings(thresholds, measurement),
   };
 }
 

@@ -27,7 +27,9 @@ export type FitnessZone = 'healthy' | 'soft' | 'hard' | 'critical';
 
 export type FitnessCeilingZone = Exclude<FitnessZone, 'soft'>;
 
-type FitnessMetric = 'lines' | 'chars' | 'prose' | 'tokens';
+type FitnessMetric = 'lines' | 'chars' | 'prose' | 'tokens' | 'content-role';
+
+export type FitnessContentRole = 'reference' | 'drainable-buffer';
 
 export interface ZoneMessage {
   readonly zone: Exclude<FitnessZone, 'healthy'>;
@@ -38,6 +40,14 @@ export interface ZoneMessage {
 export interface FitnessConfigurationFinding {
   readonly metric: FitnessMetric;
   readonly text: string;
+}
+
+export function parseFitnessContentRole(rawRole: string | null): FitnessContentRole {
+  return rawRole === 'drainable-buffer' ? 'drainable-buffer' : 'reference';
+}
+
+export function isKnownFitnessContentRole(rawRole: string | null): boolean {
+  return rawRole == null || rawRole === 'reference' || rawRole === 'drainable-buffer';
 }
 
 export function estimateTokensFromContentChars(contentChars: number): number {

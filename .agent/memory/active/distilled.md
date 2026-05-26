@@ -1,26 +1,39 @@
 ---
-fitness_line_target: 350
-fitness_line_limit: 500
-fitness_char_limit: 28000
+fitness_line_target: 120
+fitness_line_limit: 180
+fitness_char_limit: 12000
 fitness_line_length: 100
 split_strategy: "Extract settled entries to permanent docs (ADRs, PDRs, governance, READMEs)"
-fitness_rationale: "Raised 2026-05-17 (Swift Winging Gust) per owner direction after the structural pass: the 2026-05-14 multi-agent deep-dive and 2026-05-17 gate-green cascade landed durable substance that, after archiving the graduations-log and back-cite blocks, leaves ~455 lines of high-signal cross-session learning. Previous limits (target 200 / limit 275 / chars 16500) were calibrated when distilled content volume was lower; substance growth is legitimate and preservation outranks fitness pressure. The new envelope keeps refinement pressure on without forcing premature graduation of recent (still-ripening) entries. Falsifiability: if substance later compresses naturally below the previous envelope, the limits should be lowered again at the next consolidation."
+merge_class: curated-learning-register
+fitness_content_role: drainable-buffer
+fitness_rationale: >-
+  Lowered 2026-05-25 after owner-requested `distilled.md` processing through
+  `oak-consolidate-docs`: the 2026-05-14 multi-agent deep-dive and 2026-05-17
+  gate-stack entries graduated to permanent behavioural homes. The active file
+  now carries only the conservation role, graduation pointers, and held
+  validation entries; the larger 2026-05-17 envelope has served its purpose.
+  Falsifiability: if future napkin rotations add high-signal learning that has
+  no stable permanent home, preserve it first and revise the envelope by
+  substance rather than trimming the lesson.
 ---
 
 # Distilled Learnings
 
-Hard-won rules extracted from napkin sessions. Read this before
-every session. Every entry earned its place by changing behaviour.
+Refined cross-session learning extracted from session capture. Read this
+before every session. Every entry earned its place by changing behaviour and
+has not yet reached, or no longer needs, a more permanent home.
 
 **Source**: Distilled from archived napkins
 `napkin-2026-02-16.md` through `napkin-2026-05-10.md`
 (sessions 2026-02-10 to 2026-05-10).
 
-**Permanent documentation**: Entries graduate to permanent docs
-when stable and a natural home exists. Always graduate useful
-understanding — fitness management handles the consequences. What
-remains here is repo/domain-specific context with no natural
-permanent home, plus entries explicitly held pending validation.
+**Knowledge-conservation role**: `napkin.md` captures session observations;
+this file conserves behaviour-changing lessons across sessions while they
+ripen; permanent docs, ADRs, PDRs, rules, and patterns take over when the
+lesson is stable and has a natural enforcement or reference home. Always
+graduate useful understanding — fitness management handles the consequences.
+What remains here is repo/domain-specific context with no natural permanent
+home, plus entries explicitly held pending validation.
 
 **Earlier graduations audit-trail archived (2026-05-22)**: the
 2026-05-06, 2026-05-09 (Woodland Sheltering Glade), 2026-05-10
@@ -56,137 +69,14 @@ verified first. Audit trail lives in
 [`archive/distilled-graduations-log-2026-05-14.md`](archive/distilled-graduations-log-2026-05-14.md)
 § "Backfill rotation 2026-05-24 — verified distilled homes".
 
----
-
-## Recently Distilled — 2026-05-17 Solar Orbiting Asteroid gate-green cascade
-
-### Gates hide gates — failure surface is a stack, not a list
-
-`pnpm check`'s serial chain (each gate's `&&` means downstream gates do
-not run while an upstream gate is red) shields each failed gate from
-the next. The shielding holds at test-level too: a flaky test prevents
-the test below it from being trusted. **Diagnostic discipline**: when
-a gate clears, *expect* the next downstream gate to surface a previously
-hidden problem; treat each green gate as a magnifying glass aimed at
-the next. Worked instance 2026-05-17: knip clearing surfaced a
-parallel-load MCP e2e flake; the e2e deletions surfaced a missing
-Playwright binary; installing the binary surfaced two pre-existing
-circular type imports in depcruise that had been latent for weeks.
-Falsifiability: a `pnpm check --continue` mode would reveal the full
-latent stack at once; periodic continue-mode runs catch this earlier.
-Routing: pending-graduations entry pending second-instance trigger.
-
-## Recently Distilled — 2026-05-14 Sylvan Budding Forest deep-dive consolidation
-
-Behaviour-changing entries distilled from the 2026-05-14 napkin rotation
-(archived at [`napkin-2026-05-14.md`](archive/napkin-2026-05-14.md)). The
-rotation covers eight sessions across two threads — the multi-agent P8 team
-(Pearly Drifting Jetty controller plus Nebulous, Arboreal, Torrid, Fronded,
-Embered) and three Cursor / Codex closeouts (Luminous Glowing Moon plan
-promotion; continuation-pointer clarification; agent onboarding flow patch).
-The full session-by-session capture lives in the archived napkin; the
-durable doctrine below is what changes behaviour next session, regardless
-of who picks the work up.
-
-### Coordination role discipline (multi-agent evidence)
-
-- **Roles emerge from live pressure, not from a fixed menu.** The useful
-  multi-agent topology in the P8 window (controller, marshal, reviewer,
-  implementer, scout, standby) was selected from the scarce resource at
-  the time — git/index/queue contention drove marshal value; bounded
-  GO/BLOCK challenge drove reviewer value; an exact file bundle drove
-  implementer ownership. Static role menus are useful as *prompts* for
-  what shape might fit, but treating them as canonical topology risks
-  premature structure and silent over-coordination. Naming a role
-  costs nothing; naming the obligation plus the handoff proof is what
-  actually pays off.
-- **Every role description must carry its handoff proof.** "Marshal"
-  worked because it meant *watching exact staged pathspecs and queue
-  state*. "Reviewer" worked because it meant *GO/BLOCK on a bounded
-  slice plus focused-test evidence*. "Controller" worked when it meant
-  *allocator and sequencer*; it would become harmful if it slid into
-  *central permission for every judgement*. When a role appears in a
-  team plan, the next sentence should name what artefact proves the
-  handoff.
-- **Treat scout responses as input, not as permission.** Read-only
-  scouts after a source commit are valuable when they preserve
-  momentum into the next slice. They are *not* implicit licence to
-  open a new implementation claim during closeout; the next slice
-  needs fresh live grounding and an explicit route.
-- **Pre-closeout sweep ritual is now a controller invariant.** Before
-  hardening any "final status" sentence, sweep all six surfaces in
-  this order: active claims, active commit queue, staged files,
-  `git status --short`, shared comms, directed inbox (plus late
-  scout/reviewer replies arriving after the last source commit).
-  Discrepancies between these surfaces are status-worthy even when
-  the session has no implementation assignment. "Empty claims and
-  queue" is never the whole state during a closeout window.
-- **Closeout comms can perturb the closeout bundle.** During a
-  closeout commit window: one explicit marshal verification event is
-  fine; further verification should be local-only unless a blocker
-  appears. New comms events written after record-staged force the
-  closeout bundle owner to re-enqueue or accept residue.
-
-### Commit-window operational sharpening
-
-- **`git:index/head` commit-queue claim pattern syntax**: when opening a
-  commit-window claim, use `--area-kind git --area-pattern "index/head"`
-  (bare, no `git:` prefix). The `git:` prefix is the symbolic name of
-  the resource; the stored pattern is the bare path. The guard
-  (`claimCoversGitIndexHead`) does exact-element match on the
-  normalized list, so `["git:index/head"].includes("index/head")` is
-  false. Mistake source: Luminous Glowing Moon 2026-05-14; behaviour
-  change recorded so the next agent does not repeat it.
-- **CLI flag-shape drift under coordination pressure**: the
-  collaboration-state surface has moved. `comms inbox` currently takes
-  `--comms-dir`, `--seen-file`, `--platform`, `--model`, and optional
-  `--session-prefix`; it rejects older `--thread`, `--agent-codename`,
-  and `--since-file` shapes. `commit-queue` is a top-level
-  `agent-tools` topic (`pnpm agent-tools:commit-queue --
-  list --queue-status active`), not a `collaboration-state` topic.
-  `comms send` is shared-log; directed routing belongs to
-  `comms direct` with `--to-agent-name`, `--to-platform`,
-  `--to-model`, `--to-session-prefix`. Check topic-specific help in
-  every resumed or compacted session before relying on muscle memory.
-  The shape can differ even inside one topic: `claims list` rejects
-  `--platform` / `--model`, while claim mutations such as `claims open`
-  and `claims close` require identity flags. For literal search patterns
-  containing backticks, use single quotes; double-quoted `rg` patterns
-  let zsh attempt command substitution before `rg` runs.
-- **Keep evidence outputs readable.** Do not collapse independent
-  validation or evidence-gathering commands behind `&&` just to move faster.
-  Run them as separate commands, or use the parallel tool wrapper for
-  independent checks, so each output remains attributable and readable during
-  review. A shell dependency is fine only when the dependency is the thing
-  being tested.
-- **Run formatting proof before the commit hook for new modules.** The
-  Slice A landing burned a shared git/index window because Prettier
-  fired inside the hook on a new module. The cheap cure is
-  `pnpm agent-tools:repo-check -- prettier-staged` (or targeted
-  Prettier) immediately before `git commit` when the bundle creates a
-  new file. Re-record the queue fingerprint after the format, then
-  retry the commit.
-
-### Continuation surfaces
-
-- **Skill text carries durable routing behaviour; continuation
-  records carry volatile facts.** Branch, plan, next-step, commit ids,
-  team expectation — every fact that changes between sessions belongs
-  in the thread record, not in the skill body. The skill's job is to
-  fire the routing on arrival; the record's job is to provide the
-  current state for that routing to act on.
-- **"Ready to land" is dangerous in continuation records after a
-  commit window.** Use it only when the work is genuinely uncommitted
-  and pending. Once the work lands, replace the phrase with commit
-  evidence (`bfa26e01`, `498edcc2`, etc.). Stale "ready to land"
-  wording in a continuation record is an actionable defect, not a
-  wrapper.
-- **When a collaboration skill changes session entry or exit
-  behaviour, audit root README and platform onboarding adapters in
-  the same closeout.** The specialised skill text is correct only
-  half the story; a new agent can enter through README, a teammate
-  prompt, or a Cursor/Codex rule and miss the new routing entirely.
-  Routing surfaces are co-load-bearing with the skill body.
+**Verified distilled homes archived (2026-05-25)**: the gate-stack
+diagnostic lesson and 2026-05-14 coordination / commit / continuation
+lessons graduated to
+[`gates/SKILL-CANONICAL.md`](../../skills/gates/SKILL-CANONICAL.md)
+and related team, commit, CLI, continuity, and agent-entry surfaces.
+Audit trail lives in
+[`archive/distilled-graduations-log-2026-05-14.md`](archive/distilled-graduations-log-2026-05-14.md)
+§ "Backfill rotation 2026-05-25 — distilled processing pass".
 
 ---
 

@@ -16,6 +16,24 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
+- **Prismatic closeout (2026-05-25)**: owner-requested `distilled.md`
+  processing, session-handoff, and consolidate-docs pass completed in the
+  working tree. `distilled.md` is now a curated-learning register with a
+  durable graduation audit; settled lessons were moved to the gates skill,
+  build-system docs, commit skill, continuity-practice, AGENT evidence-command
+  guidance, and agent-tools README. `practice:fitness` and friends now print
+  ready-empty, healthy, soft, hard, and critical inventories; the later
+  metacognition correction added `fitness_content_role`, so ready-empty applies
+  only to drainable buffers, not directives or other reference surfaces.
+  ADR-144 records that axis. Targeted tests, type-check, eslint, markdownlint,
+  diff checks, and practice-fitness gates passed; full repo-wide check remains
+  blocked by active peer-owned hook-policy lint work outside Prismatic's bundle.
+- **Current n=2 enforcement bundle state (2026-05-25T20:44Z)**: active peer
+  claims are Feathered Winging Cliff on the heartbeat/comms CLI lane and
+  Torrid Firing Spark on hook-policy/rule-index work. Prismatic's closeout
+  claim is limited to continuity and napkin surfaces. Do not stage or commit
+  peer-owned hook-policy, RULES_INDEX, or comms heartbeat files as part of the
+  Prismatic bundle.
 - **Next session direction (n=2 ENFORCEMENT BUNDLE)**: the plan body
   [`n2-and-coordination-efficiency-program-2026-05-25.plan.md`](../../plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md)
   opens `## Workstreams` with a **"Next session — n=2 ENFORCEMENT BUNDLE
@@ -188,7 +206,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF first-feature delivery | [record][eef] | Fiery Kindling Brazier / claude / claude-opus-4-7 / 9f4026 / commit-marshal+pr-115-merged / 2026-05-25 |
-| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Mistbound Passing Candle / claude / claude-opus-4-7 / `e77243` / WS4-item-1 + WS0-directed-verdict + n=2-enforcement-bundle-brief / 2026-05-25, Quiet Whispering Veil / codex / GPT-5 / `019e60` / knowledge-curation lane / 2026-05-25 |
+| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Prismatic Transiting Star / codex / GPT-5 / `019e60` / distilled-processing + practice-fitness-inventory + content-role-axis + handoff-consolidation / 2026-05-25; Feathered Winging Cliff + Torrid Firing Spark active on n=2 enforcement bundle peer lanes |
 
 ## Paused Threads
 

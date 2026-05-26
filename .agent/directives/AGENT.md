@@ -120,8 +120,8 @@ message via `scripts/check-commit-message.sh` before `git commit`.
 
 Institutional memory lives in `.agent/memory/`:
 
-- [distilled.md](../memory/active/distilled.md) — hard-won rules extracted from
-  session napkins
+- [distilled.md](../memory/active/distilled.md) — refined cross-session
+  lessons conserved between capture and graduation
 - [napkin.md](../memory/active/napkin.md) — current session observations
 - [patterns/](../memory/active/patterns/README.md) — reusable solutions and
   failure modes
@@ -179,6 +179,11 @@ From the repo root. Run gates one at a time while iterating; use `pnpm check`
 for canonical aggregate verification. The command source of truth is
 [Build System](../../docs/engineering/build-system.md) plus root
 `package.json`.
+
+When collecting evidence, keep independent command outputs attributable. Run
+independent checks separately or through the parallel tool wrapper; use shell
+chaining only when the dependency between commands is the behaviour being
+tested.
 
 Common entrypoints:
 

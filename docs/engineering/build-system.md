@@ -209,6 +209,12 @@ process.
 - Package-local green is navigation, not acceptance. It helps locate a
   problem, but it does not replace the last full repo-root gate when
   making a repo-wide claim.
+- Aggregate gates expose failures in layers. Root shell-stage boundaries
+  still mean an upstream red stage can hide downstream stages until it is
+  fixed. Turbo's `--continue` reveals multiple failures within the Turbo
+  stage, but it does not prove the later root-only stages would pass. After
+  clearing one failure, expect the next downstream stage to reveal another
+  latent problem until `pnpm check` itself is green.
 
 ### `pnpm test:all` - All test suites
 

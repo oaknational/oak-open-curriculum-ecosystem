@@ -11,10 +11,10 @@ import {
 } from './model.js';
 import {
   formatFitnessResponseDiscipline,
+  formatFitnessInventory,
   formatFitnessResult,
   formatSummary,
   summariseResults,
-  zoneGlyph,
 } from './format.js';
 import { discoverFitnessFiles } from './paths.js';
 
@@ -64,14 +64,8 @@ function writeSummary(
   }
 }
 
-function writeZoneMessages(io: PracticeFitnessIo, results: readonly FitnessResult[]): void {
-  for (const result of results) {
-    if (result.overallZone !== 'healthy') {
-      for (const message of result.zoneMessages) {
-        io.log(`  ${zoneGlyph(message.zone)} ${result.filename}: ${message.text}`);
-      }
-    }
-  }
+function writeZoneInventory(io: PracticeFitnessIo, results: readonly FitnessResult[]): void {
+  io.log(formatFitnessInventory(results));
 }
 
 function writeConfigurationFindings(
@@ -110,6 +104,21 @@ function writeCriticalPostMortemPrompt(
   io.log('  3. Is the file a symptom of a missing graduation (ADR, governance doc, README)?');
 }
 
+export function writePracticeFitnessReport(
+  io: PracticeFitnessIo,
+  mode: FitnessMode,
+  results: readonly FitnessResult[],
+): void {
+  io.log('\nPractice Fitness Check (ADR-144 three-zone model)');
+  io.log('══════════════════════════════════════════════════\n');
+  writeFileResults(io, results);
+  writeSummary(io, mode, results);
+  writeZoneInventory(io, results);
+  writeConfigurationFindings(io, results);
+  writeCriticalPostMortemPrompt(io, results);
+  io.log();
+}
+
 export async function runPracticeFitnessCheck(
   args: readonly string[] = process.argv.slice(2),
   repoRoot = process.cwd(),
@@ -119,14 +128,7 @@ export async function runPracticeFitnessCheck(
   const fitnessFiles = await discoverFitnessFiles(repoRoot);
   const results = await readFitnessResults(repoRoot, fitnessFiles);
 
-  io.log('\nPractice Fitness Check (ADR-144 three-zone model)');
-  io.log('══════════════════════════════════════════════════\n');
-  writeFileResults(io, results);
-  writeSummary(io, mode, results);
-  writeZoneMessages(io, results);
-  writeConfigurationFindings(io, results);
-  writeCriticalPostMortemPrompt(io, results);
-  io.log();
+  writePracticeFitnessReport(io, mode, results);
 
   return getExitCode(
     mode,

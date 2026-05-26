@@ -97,7 +97,7 @@ When the impulse to hedge surfaces:
 
 - PDR-044 §Carve-out vocabulary; §Innate immunity
 - principles.md §Architectural Excellence Over Expediency
-- distilled.md §"The rule applies, always — no hedging, no carve-outs, no exceptions"
+- This rule: no hedging vocabulary on doctrine surfaces
 - PDR-038 §2026-05-04 amendment (stated principles require structural enforcement)
 
 ## Source Landing

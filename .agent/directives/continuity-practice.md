@@ -31,7 +31,7 @@ and historical explanation collapse into one file.
 | `.agent/memory/operational/threads/<slug>.next-session.md` | Per-thread identity, landing target, and lane state |
 | `.agent/memory/operational/tracks/*.md` | Short-lived tactical coordination cards |
 | `.agent/memory/active/napkin.md` | Session observations, surprises, and corrections |
-| `.agent/memory/active/distilled.md` | Refined cross-session learning awaiting graduation |
+| `.agent/memory/active/distilled.md` | Refined cross-session lessons conserved between capture and graduation |
 | Permanent docs, ADRs, PDRs, rules | Graduated doctrine and enforcement |
 
 The rule of thumb: if a claim should remain true across many sessions,
@@ -119,6 +119,19 @@ plans, or thread records.
 
 The retired `workstreams/<slug>.md` surface is historical. Lane state
 now folds into `threads/<slug>.next-session.md` per PDR-027.
+
+## Continuation Records
+
+Permanent skills and directives carry routing behaviour. Thread records,
+tactical tracks, and handoff records carry volatile facts: branch, controlling
+plan, next safe step, active team expectation, validation state, and commit
+evidence.
+
+Write continuation records as current-state pointers, not as skill bodies.
+After a commit window lands, replace phrases such as "ready to land" with the
+actual commit evidence or an explicit unlanded state. A stale "ready to land"
+phrase after the work has committed is a continuity defect because the next
+session cannot tell whether it should stage work, verify a commit, or move on.
 
 ## GO
 

@@ -380,6 +380,55 @@ describe('content-only token measurement', () => {
     expect(result.overallZone).toBe('healthy');
   });
 
+  it('treats empty content as ready only for drainable buffers', () => {
+    const drainable = evaluateFitnessFile(
+      '.agent/memory/active/distilled.md',
+      [
+        '---',
+        'fitness_line_target: 1',
+        'fitness_line_limit: 2',
+        'fitness_content_role: drainable-buffer',
+        '---',
+      ].join('\n'),
+    );
+    const reference = evaluateFitnessFile(
+      '.agent/directives/AGENT.md',
+      ['---', 'fitness_line_target: 1', 'fitness_line_limit: 2', '---'].join('\n'),
+    );
+
+    expect(drainable.contentRole).toBe('drainable-buffer');
+    expect(drainable.configurationFindings).toStrictEqual([]);
+    expect(reference.contentRole).toBe('reference');
+    expect(reference.configurationFindings).toStrictEqual([
+      {
+        metric: 'content-role',
+        text: 'empty content is only ready for fitness_content_role: drainable-buffer — add content or declare the drainable role',
+      },
+    ]);
+  });
+
+  it('reports unknown content roles as configuration findings', () => {
+    const result = evaluateFitnessFile(
+      'unknown-role.md',
+      [
+        '---',
+        'fitness_line_target: 1',
+        'fitness_line_limit: 2',
+        'fitness_content_role: queue',
+        '---',
+        'body',
+      ].join('\n'),
+    );
+
+    expect(result.contentRole).toBe('reference');
+    expect(result.configurationFindings).toStrictEqual([
+      {
+        metric: 'content-role',
+        text: 'fitness_content_role must be reference or drainable-buffer, got queue',
+      },
+    ]);
+  });
+
   it('differs from context-cost raw-file estimates when frontmatter is present', () => {
     const raw = [
       '---',

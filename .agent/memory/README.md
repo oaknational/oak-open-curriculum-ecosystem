@@ -20,7 +20,8 @@ rotation.
 **Contents**:
 
 - [`active/napkin.md`](active/napkin.md) — ephemeral capture; ~500-line rotation threshold.
-- [`active/distilled.md`](active/distilled.md) — refined rules; ~200-line target.
+- [`active/distilled.md`](active/distilled.md) — refined cross-session
+  lessons; fitness targets live in the file frontmatter.
 - [`active/patterns/`](active/patterns/) — ecosystem-grounded pattern instances.
 - [`active/archive/`](active/archive/) — napkin rotations and historical capture material.
 

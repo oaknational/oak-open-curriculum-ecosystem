@@ -22,6 +22,7 @@ fitness_rationale: >-
   should reflect that lifecycle. Recalibration is the substance-led structural
   fix per the substance > destination boundary.
 merge_class: mostly-append-register
+fitness_content_role: drainable-buffer
 ---
 
 # Pending-Graduations Register
@@ -265,22 +266,20 @@ measures the load and authors the criteria is the success.
 
 ### 2026-05-17 — Gates hide gates — failure surface is a stack
 
-`[captured: 2026-05-17 | source: distilled.md §"Recently Distilled — 2026-05-17 Solar Orbiting Asteroid gate-green cascade" §"Gates hide gates" | target: pattern:gates-hide-gates | trigger: second-instance | size: S | status: pending]`
+`[captured: 2026-05-17 | source: distilled-graduations-log-2026-05-14.md §"Backfill rotation 2026-05-25" | target: gates-skill + build-system | trigger: owner-requested-distilled-processing | size: S | status: graduated 2026-05-25]`
 
-Substance: `pnpm check`'s serial chain (each gate's `&&` means
-downstream gates do not run while an upstream gate is red) shields
-each failed gate from the next. The shielding holds at test-level
-too. **Diagnostic discipline**: when a gate clears, expect the next
-downstream gate to surface a previously hidden problem. Treat each
-green gate as a magnifying glass aimed at the next. Worked instance
-2026-05-17 (Solar Orbiting Asteroid): knip clearing surfaced a
-parallel-load MCP e2e flake; the e2e deletions surfaced a missing
-Playwright binary; installing the binary surfaced two pre-existing
-circular type imports in depcruise that had been latent for weeks.
-Falsifiability: a `pnpm check --continue` mode would reveal the
-full latent stack at once. Second-instance trigger: any future
-consolidation observing the same cascade-on-clear shape graduates
-this to a pattern in `.agent/memory/active/patterns/`.
+**Graduated 2026-05-25** during an owner-requested `oak-consolidate-docs`
+processing pass over `distilled.md`. Durable homes:
+[`gates/SKILL-CANONICAL.md`](../../skills/gates/SKILL-CANONICAL.md)
+§ Quality Gates and
+[`build-system.md`](../../../docs/engineering/build-system.md)
+§ `pnpm check` - Canonical full gate. Audit trail:
+[`distilled-graduations-log-2026-05-14.md`](../active/archive/distilled-graduations-log-2026-05-14.md)
+§ Backfill rotation 2026-05-25.
+
+Current executable nuance: `pnpm check` now uses Turbo `--continue` within the
+Turbo stage, but root shell-stage boundaries still hide downstream stages
+until upstream stages pass. Final proof remains a clean full `pnpm check`.
 
 ### 2026-05-14 — Cross-thread program artefact shape (first-instance trigger captured)
 
@@ -317,17 +316,24 @@ the failure shape directly and forces the function-test framing.
 
 ### 2026-05-14 — Skill text vs continuation record distinction (single-instance, PDR-shape candidate)
 
-`[captured: 2026-05-14 | source: distilled.md §"Continuation surfaces" first bullet (Sylvan distillation) | target: pdr:skill-text-vs-continuation-record | trigger: second-instance-stability | size: S | status: pending]`
+`[captured: 2026-05-14 | source: continuity-practice.md §"Continuation Records" + distilled-graduations-log-2026-05-14.md §"Backfill rotation 2026-05-25" | target: pdr:skill-text-vs-continuation-record | trigger: second-instance-stability | size: S | status: pending]`
 
 Substance: skill text carries durable routing behaviour; continuation
 records carry volatile facts. Branch, plan, next-step, commit ids,
 team expectation — every fact that changes between sessions belongs
 in the thread record, not in the skill body. The skill's job is to
 fire the routing on arrival; the record's job is to provide the
-current state for that routing to act on. Function-test verdict:
-PDR-shape (Practice-meta design distinction). Currently single-
-instance evidence (Sylvan's distillation 2026-05-14). Holds until a
-second session corroborates or contradicts the distinction.
+current state for that routing to act on.
+
+**Behaviour home added 2026-05-25**:
+[`continuity-practice.md`](../../directives/continuity-practice.md)
+§ Continuation Records and
+[`start-right-team/SKILL-CANONICAL.md`](../../skills/start-right-team/SKILL-CANONICAL.md)
+§ Continuation Pointer Contract. Function-test verdict remains
+PDR-shaped (Practice-meta design distinction). PDR promotion is still
+pending because the portable governance claim has single-instance evidence;
+promote only after a second session corroborates or contradicts the
+distinction, or after owner direction.
 
 ### Active queue shards created 2026-05-24
 

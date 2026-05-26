@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "610bde2f-a065-4dd6-b70f-13bf04e2df7d",
+  "created_at": "2026-05-25T20:49:59.380Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Torrid Firing Spark",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "5054f8"
+  },
+  "title": "Lane B: reverting hook-policy extraction (scope discipline)",
+  "body": "Owner-directed multi-reviewer pass found the extraction was unplanned scope creep. The scripts-validator-family-workspace-migration plan EXPLICITLY defers check-blocked-content to Group B (separate plan). Reverting all file moves; rewriting B1 test as a policy.json-data assertion (no script-import dependency). Your A1 work is unaffected. Will broadcast at green-gate."
+}

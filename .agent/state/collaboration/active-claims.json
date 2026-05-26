@@ -1925,5 +1925,59 @@
       "staged_name_status": "M\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/comms-seen/Fiery-Kindling-Brazier.json\nM\t.agent/state/collaboration/comms-seen/Stormy-Surfing-Dock.json\nA\t.agent/state/collaboration/comms/06cd67d4-0e42-4056-82b6-1075536f2b1a.json\nA\t.agent/state/collaboration/comms/4bf240b9-39e4-42c0-a487-0191a553e264.json\nA\t.agent/state/collaboration/comms/607220f3-cc46-4811-a9ce-8b7e2c0b8897.json\nA\t.agent/state/collaboration/comms/729beb59-6e26-4ae4-a25e-c705fe735276.json\nA\t.agent/state/collaboration/comms/a6058082-f0f3-467a-ba59-7617e5100e8b.json\nA\t.agent/state/collaboration/comms/bb6e4203-3214-40a3-b796-74500188a55f.json\nA\t.agent/state/collaboration/comms/c44a28f8-7936-4b6d-9142-1647dbd35a58.json\n"
     }
   ],
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "c89bcb0c-da42-4b5e-843a-fc2be11d830d",
+      "agent_id": {
+        "agent_name": "Feathered Winging Cliff",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "57e615"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/cli-comms-commands.ts",
+            "agent-tools/src/collaboration-state/cli-spec-options.ts",
+            "agent-tools/src/collaboration-state/comms-heartbeat-body.ts",
+            "agent-tools/tests/collaboration-state/comms-tags.integration.test.ts",
+            "agent-tools/tests/collaboration-state/comms-heartbeat-body.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T19:34:16Z",
+      "freshness_seconds": 10800,
+      "sidebar_open": false,
+      "intent": "Lane A (A1) — heartbeat emitter mechanical state-binding; enforce PDR-078 §5 by requiring typed state args and rejecting --body for --tag heartbeat",
+      "handoff_record_path": ".agent/state/collaboration/handoffs/2026-05-26-feathered-a1-push-handoff.md"
+    },
+    {
+      "claim_id": "2f6d1d40-c3f8-4d78-b604-bfd8bebb7157",
+      "agent_id": {
+        "agent_name": "Torrid Firing Spark",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "5054f8"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/cli-comms-commands.ts",
+            "agent-tools/src/collaboration-state/cli-comms-messages.ts",
+            "agent-tools/src/collaboration-state/cli-spec-options.ts",
+            "agent-tools/tests/collaboration-state/"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T19:34:27.300Z",
+      "freshness_seconds": 10800,
+      "sidebar_open": false,
+      "intent": "n=2 Lane B B2: CLI body-length gate (<=1500 chars) on --body argv for all comms verbs (append/send/direct/reply); regression tests per verb. B1+B3 landed at 499518ce + ecc1e834 + 29ebda41. Feathered's A1 already in main at 97f06e16. Post-compaction resume per handoff record.",
+      "handoff_record_path": ".agent/state/collaboration/handoffs/torrid-firing-spark-2026-05-26-lane-b-b2.md"
+    }
+  ]
 }

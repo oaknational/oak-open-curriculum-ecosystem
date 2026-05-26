@@ -44798,6 +44798,619 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "07918b89-cd29-48c5-b57a-3f8ea47f2f6e",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/directives/continuity-practice.md",
+            ".agent/HUMANS.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:20:30Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Extend distilled.md knowledge-conservation wording to continuity and human-facing memory references",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:32:05Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Updated continuity and human-facing memory references for distilled.md knowledge-conservation role.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "07918b89-cd29-48c5-b57a-3f8ea47f2f6e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "35ae2329-a7e1-4d0d-b1b8-57146f502c3e",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/session-handoff/SKILL-CANONICAL.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/README.md",
+            ".agent/practice-index.md",
+            ".agent/directives/AGENT.md",
+            ".agent/skills/start-right-quick/shared/start-right.md",
+            ".agent/skills/start-right-thorough/shared/start-right-thorough.md",
+            ".agent/skills/napkin/SKILL-CANONICAL.md",
+            "docs/foundation/agentic-engineering-system.md",
+            "agent-tools/src/practice-fitness/paths.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:18:02Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Tidy distilled.md role references, add session-handoff conservation routing, and pin fitness discovery coverage",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:32:00Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Updated distilled.md role references and session-handoff conservation routing; verified distilled fitness discovery via practice:fitness.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "35ae2329-a7e1-4d0d-b1b8-57146f502c3e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0aa72e5b-4aa8-416f-b6d9-90895ee36a72",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/rules/stage-by-explicit-pathspec.md",
+            ".agent/rules/no-hedging-vocabulary.md",
+            "docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md",
+            "docs/architecture/architectural-decisions/181-agent-team-start-and-action-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:24:00Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Retarget stale distilled.md section citations to current permanent or archive homes",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:32:10Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Retargeted live stale distilled.md section references outside Torrid-owned hook policy/tests to current permanent or archive homes.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0aa72e5b-4aa8-416f-b6d9-90895ee36a72",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "724775a5-ae88-48f6-bd91-0d4b37be4726",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:35:00Z",
+      "freshness_seconds": 1800,
+      "sidebar_open": false,
+      "intent": "Capture testing-strategy correction from distilled.md handoff/fitness tidy",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:36:00Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Captured owner correction that tests must prove behaviour, not configuration, from the distilled.md fitness tidy.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "724775a5-ae88-48f6-bd91-0d4b37be4726",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6bef2d6e-d4a1-4b3c-bdc2-018d8669e85e",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/archive/distilled-graduations-log-2026-05-14.md",
+            ".agent/skills/gates/SKILL-CANONICAL.md",
+            "docs/engineering/build-system.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:25:13Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Process distilled.md through consolidate-docs: graduate settled gate-stack learning, record disposition, and leave unresolved entries with explicit evidence",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:30:14Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Processed distilled.md gate-stack entry through consolidate-docs: graduated to gates skill and build-system docs, archived disposition, and lowered distilled fitness envelope after processing.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6bef2d6e-d4a1-4b3c-bdc2-018d8669e85e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2807cfcf-8279-4feb-9ee7-0e99f4558f5c",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/session-handoff/SKILL-CANONICAL.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:26:07Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Retarget session-handoff gate-stack citation while processing distilled.md graduation",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:30:14Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Retargeted session-handoff gate citation to gates skill and build-system docs, and added closeout-bundle perturbation guidance.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2807cfcf-8279-4feb-9ee7-0e99f4558f5c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "4d32f3f2-d86e-4c58-ba9a-312350d41d01",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/commit/SKILL-CANONICAL.md",
+            ".agent/directives/continuity-practice.md",
+            ".agent/directives/AGENT.md",
+            "agent-tools/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:27:03Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Graduate remaining stable distilled lessons into their behavioural homes during consolidate-docs pass",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:30:14Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Graduated stable 2026-05-14 distilled lessons into commit, continuity, AGENT, and agent-tools behavioural homes.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4d32f3f2-d86e-4c58-ba9a-312350d41d01",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "017b6040-99a1-497b-97e9-bf8f9900606b",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:28:09Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Mark graduated gate-stack pending-graduation after distilled.md processing",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:30:38Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Updated pending-graduations to mark gate-stack item graduated and retarget pending continuation-record candidate to its behaviour home plus archive.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "017b6040-99a1-497b-97e9-bf8f9900606b",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2dbf8e61-6dcd-4f0d-b70b-9b41e688a767",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:29:18Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Capture distilled.md processing lesson in napkin",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:30:38Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Captured owner correction: stable distilled learning with no real home is a documentation-architecture gap, not a trim candidate.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2dbf8e61-6dcd-4f0d-b70b-9b41e688a767",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "53a75fdd-6fb8-4028-8076-c0122247c4c0",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/practice-fitness/run.ts",
+            "agent-tools/src/practice-fitness/format.ts",
+            "agent-tools/src/practice-fitness/format.unit.test.ts",
+            "agent-tools/src/practice-fitness/run.unit.test.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:31:04Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "Add healthy and ready inventory output to practice fitness reporter with behaviour tests",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:34:00Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Added complete practice-fitness zone inventory: ready empty, healthy, soft, hard, and critical groups. Added behaviour tests for formatter/report output and verified practice:fitness variants.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "53a75fdd-6fb8-4028-8076-c0122247c4c0",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f6003e40-395c-4246-ba35-726fb26c6dc1",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:36:36Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "session handoff and consolidate-docs closeout for Prismatic distilled/practice-fitness slice",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:37:48Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "session handoff and consolidate-docs closeout recorded for Prismatic distilled/practice-fitness slice; validations captured; peer hook-policy lint blocker surfaced",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f6003e40-395c-4246-ba35-726fb26c6dc1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "76693936-76e9-44f7-8ff4-4540e78aa1ac",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:41:40Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "document practice-fitness content-role axis in ADR-144",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:42:14Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "ADR-144 amended with content-role extension for drainable buffers vs reference surfaces",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "76693936-76e9-44f7-8ff4-4540e78aa1ac",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2ec9cc22-ea17-43a0-89fa-5600857d3403",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/practice-fitness/evaluate.ts",
+            "agent-tools/src/practice-fitness/format.ts",
+            "agent-tools/src/practice-fitness/markdown.ts",
+            "agent-tools/src/practice-fitness/model.ts",
+            "agent-tools/src/practice-fitness/evaluate.unit.test.ts",
+            "agent-tools/src/practice-fitness/format.unit.test.ts",
+            "agent-tools/src/practice-fitness/run.unit.test.ts",
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/open-questions.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/pending-graduations/2026-05-25-mistbound-inherited-frame-and-hook-signal-candidates.md",
+            ".agent/memory/operational/pending-graduations/2026-05-25-misty-director-session-candidates.md",
+            ".agent/memory/operational/pending-graduations/2026-05-25-planning-and-autofix-candidates.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:39:57Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "practice-fitness content-role axis after metacognition correction",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:42:14Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "metacognition correction implemented: fitness_content_role axis, ready-empty limited to drainable buffers, tests/frontmatter updated",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2ec9cc22-ea17-43a0-89fa-5600857d3403",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "15645cab-2504-4bce-9889-d1d41bf36fbe",
+      "agent_id": {
+        "agent_name": "Prismatic Transiting Star",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e60"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-25T20:44:04Z",
+      "freshness_seconds": 3600,
+      "sidebar_open": false,
+      "intent": "final session handoff and docs consolidation closeout after content-role correction",
+      "archived_at": "2026-05-25",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-25T20:45:43Z",
+        "closed_by": {
+          "agent_name": "Prismatic Transiting Star",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e60"
+        },
+        "summary": "Prismatic handoff and docs consolidation complete; evidence: repo-continuity.md, agentic-engineering thread record, napkin.md; validation: practice-fitness strict-hard soft-only.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "15645cab-2504-4bce-9889-d1d41bf36fbe",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

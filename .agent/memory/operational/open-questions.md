@@ -7,6 +7,7 @@ split_strategy: >-
   Surface owner-decision items during consolidate-docs; move answered or
   withdrawn entries to an archive when the register needs rotation.
 merge_class: mostly-append-register
+fitness_content_role: drainable-buffer
 ---
 
 # Open Questions — Substrate
@@ -228,3 +229,51 @@ question; cross-link rather than duplicate.
 
 [n2-plan]:
   ../../plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md
+
+### Q-004: Should the comms-event body-length gate fire on resolved content regardless of source (`--body` argv AND `--body-file` content), or only on `--body` argv as the plan directs?
+
+- Raised by: Torrid Firing Spark (5054f8) @ 2026-05-26T06:38Z
+- Context: B2 of the n=2 enforcement bundle landed at commit `66e77d73`
+  implementing plan §B2's named cure: `--body` argv exceeding 1500 chars
+  is rejected with a cure-naming error; `--body-file` is the advertised
+  escape hatch. The architectural counter-argument is that the substrate
+  is scannable signal regardless of source: a 5000-char body via
+  `--body-file` pollutes the comms stream exactly as much as a 5000-char
+  body via `--body` argv. `--body-file`'s documented purpose
+  (`agent-tools/src/collaboration-state/cli-comms-commands.ts:21-23`) is
+  *"the cure for shell-quoting hazards on inline bodies that contain
+  backticks, dollar-signs, or other shell-special characters"* — not
+  "license for unbounded body length." Treating `--body-file` as the
+  long-body escape hatch potentially defeats the substrate-protection
+  purpose B2 was designed to serve.
+- Why deferred: the plan was owner-blessed (Mistbound's 2026-05-25
+  authorship) and the directed shape gates `--body` argv only. Per the
+  assumptions-expert verdict on the B2 proposal (2026-05-26): *"The
+  proposal's invocation of `re-apply-first-question-at-elaboration-boundaries`
+  and `principles.md §Architectural Excellence Over Expediency` to
+  override an owner-blessed plan choice is not fully legitimate here.
+  The rule's §Carry-On vs Adopt failure mode applies when doctrine
+  sharpens mid-execution — no doctrine sharpened here. Torrid's
+  architectural argument is a competing design judgment, not a
+  doctrine-sharpening event."* The cure landed per plan; this question
+  surfaces the architectural argument for owner adjudication rather than
+  self-authorising a deviation.
+- Suggested resolution path: owner decides whether the substrate-protection
+  intent of §B2 covers `--body-file` content or only `--body` argv. If
+  the former, extend the gate to fire on `resolveCommsBody`'s return
+  value regardless of source. If the latter, leave the cure as landed
+  and update the constant's JSDoc to make the argv-only scope explicit.
+  Evidence that would tip the scale: a single concrete case where a
+  legitimate >1500-char body genuinely has no better home as a file
+  reference (handoff record, plan file, PDR) suggests `--body-file` as
+  escape hatch is load-bearing; the absence of such a case suggests the
+  gate should extend to the resolved body.
+- Status: open
+- Linked: commit `66e77d73` (B2 implementation); plan
+  `.agent/plans/agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md` §B2 lines 138-143;
+  `agent-tools/src/collaboration-state/cli-comms-commands.ts:30-65`
+  (resolveCommsBody, the gate point);
+  `agent-tools/tests/collaboration-state/cli-comms-commands.unit.test.ts`
+  (the test `accepts a --body-file resolving to 5000 chars (escape
+  hatch per plan §B2)` is the test that would invert if the resolution
+  is gate-both-paths).

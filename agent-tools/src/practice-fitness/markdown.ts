@@ -28,6 +28,13 @@ export function getFrontmatterNumber(frontmatter: string | null, key: string): n
   return Number.isNaN(num) ? null : num;
 }
 
+export function getFrontmatterString(frontmatter: string | null, key: string): string | null {
+  const escapedKey = key.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
+  const regex = new RegExp(String.raw`^${escapedKey}:\s*(.+)$`, 'm');
+  const match = frontmatter?.match(regex);
+  return match?.[1]?.trim() ?? null;
+}
+
 function classifyContentLine(
   text: string,
   lineNumber: number,
