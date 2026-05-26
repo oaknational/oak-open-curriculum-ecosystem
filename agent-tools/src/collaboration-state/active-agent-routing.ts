@@ -28,11 +28,49 @@ export type AgentRoutingKey =
     };
 
 /**
+ * Writer for [routing-legacy-fallback] diagnostic lines emitted when
+ * `routingKeyFor` constructs a legacy-kind routing key (PDR-076a Phase 0C
+ * Cycle 10). The default routes to `process.stderr` so Phase 3 audit can
+ * aggregate; tests swap via `setLegacyFallbackWriter` to capture without
+ * touching the global stderr stream.
+ */
+export type LegacyFallbackWriter = (line: string) => void;
+
+const defaultLegacyFallbackWriter: LegacyFallbackWriter = (line) => {
+  process.stderr.write(`${line}\n`);
+};
+
+let legacyFallbackWriter: LegacyFallbackWriter = defaultLegacyFallbackWriter;
+
+/**
+ * Swap the legacy-fallback diagnostic writer. Returns a restore function
+ * the caller MUST invoke (typically in `afterEach` or a try/finally) to
+ * revert module-level state.
+ *
+ * The DI seam fulfils the n=2 WS1 SHOULD-FIX deferred from earlier
+ * routing work: the diagnostic is testable without `process.env`
+ * reads or `process.stderr` global mutation, and production code can
+ * route the audit stream to a structured logger in Phase 3 by swapping
+ * the writer once at startup.
+ */
+export function setLegacyFallbackWriter(writer: LegacyFallbackWriter): () => void {
+  const previous = legacyFallbackWriter;
+  legacyFallbackWriter = writer;
+  return () => {
+    legacyFallbackWriter = previous;
+  };
+}
+
+/**
  * Lift a CollaborationAgentId into its routing key. Single construction
  * site that two-phase narrows on `id` presence: id-keyed when the
  * identity carries the PDR-076a UUID, legacy when it doesn't (historical
  * rows pre-amendment, or rows written by external tools that have not
  * yet migrated).
+ *
+ * Legacy lifts emit a structured `[routing-legacy-fallback]` diagnostic
+ * (PDR-076a Phase 3 audit signal) so Phase 3 sunset criteria can be
+ * proven from the audit stream.
  */
 export function routingKeyFor(agentId: CollaborationAgentId): AgentRoutingKey {
   if (agentId.id !== undefined) {
@@ -42,11 +80,23 @@ export function routingKeyFor(agentId: CollaborationAgentId): AgentRoutingKey {
       id: agentId.id,
     };
   }
+  emitLegacyFallback(agentId);
   return {
     kind: 'legacy',
     agent_name: agentId.agent_name,
     session_id_prefix: agentId.session_id_prefix,
   };
+}
+
+function emitLegacyFallback(agentId: CollaborationAgentId): void {
+  const payload = {
+    event: 'routing-legacy-fallback',
+    agent_name: agentId.agent_name,
+    platform: agentId.platform,
+    model: agentId.model,
+    session_id_prefix: agentId.session_id_prefix,
+  };
+  legacyFallbackWriter(`[routing-legacy-fallback] ${JSON.stringify(payload)}`);
 }
 
 /**
