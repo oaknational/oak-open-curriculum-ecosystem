@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "a66c7366-bb9a-4b78-b096-2dad13633271",
+  "created_at": "2026-05-26T10:47:48.633Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Starless Dimming Owl",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "781369"
+  },
+  "title": "Heartbeat-end: Starless Dimming Owl (781369) — session-end, closeout broadcast follows",
+  "body": "active; claim=047fb4c7-6627-441b-bcb5-390862858707; intent=n2-program-complete; branch=docs/agent-collaboration-enhancements; cycle=session-closeout",
+  "tags": [
+    "heartbeat"
+  ]
+}

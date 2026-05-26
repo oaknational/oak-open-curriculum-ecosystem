@@ -16,6 +16,38 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
+- **n=2-coordination-efficiency-program COMPLETE (2026-05-26)**: executed by
+  Starless Dimming Owl (claude / `781369`) on
+  `docs/agent-collaboration-enhancements`. Four commits pushed:
+  curator-handoff `d3b1f75d` (landed Thermal Swooping Wing's
+  uncommitted curator-pass residue under Starless attribution per
+  owner direction), WS0 `3c3e01d3` (three new rules:
+  `new-rule-vs-pdr-clause`, `comms-all-channels-watcher`,
+  `liveness-heartbeat-cron`; 9 platform forwarders; SKILL §0/§0.5
+  thinned to First Moves pointer-only; mode-selection block added at
+  SKILL top; RULES_INDEX three-column classification table; 6-test
+  validation suite), WS1 `3360dfb0` (NarrativeCommsEvent
+  addressed_to/audience widened to CollaborationAgentId tuple;
+  classifyNarrative routes by session_id_prefix; legacy migration
+  shim with stderr warning; anonymous-detection primary discriminator
+  reordered; 5 collision regression tests), WS4 `4f1e6faf` (SKILL
+  cross-references: ping-before-escalate.md observer-side symmetry
+  clause + two stale §0.5 anchor cures via heartbeat-cron rule
+  links). Plan archived to `archive/completed/` in the closeout
+  commit. Eight reviewers dispatched across the three workstreams
+  (Fred + Betty + docs-adr + assumptions for WS0; code-expert +
+  type-expert + test-expert for WS1; docs-adr for WS4); all MUST-FIXes
+  applied; deferred SHOULD-FIXes documented in WS1 commit body
+  (schema-duplication consolidation; diagnosticWriter DI for legacy
+  migration warning). SKILL hit ≤700 absolute target exactly. The
+  combined `wc -l` acceptance bar was ruled wrong-proxy by
+  assumptions-expert per plan §Risks delegation; corrected
+  per-mode load delta documented in WS0 commit body
+  (sole-contributor: −157 lines net; team-member: ~+30–50 framing
+  overhead on previously-loading content). `pnpm check` green at
+  every commit; 213/213 collaboration-state tests pass post-WS1.
+  Active claims at retirement: clean (all four session claims
+  closed in their respective commits per residue exception).
 - **Prismatic closeout (2026-05-25)**: owner-requested `distilled.md`
   processing, session-handoff, and consolidate-docs pass completed in the
   working tree. `distilled.md` is now a curated-learning register with a
@@ -236,7 +268,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF first-feature delivery | [record][eef] | Fiery Kindling Brazier / claude / claude-opus-4-7 / 9f4026 / commit-marshal+pr-115-merged / 2026-05-25 |
-| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Feathered Winging Cliff / claude / claude-opus-4-7 / `57e615` / n=2 enforcement bundle Cycle 1 Lane A: A1 typed-origin heartbeat gate landed `97f06e16` + plan amendment + thread/continuity refresh / 2026-05-26; Torrid Firing Spark / claude / claude-opus-4-7 / `5054f8` / Cycle 1 Lane B complete: extraction `499518ce` + B1 `ecc1e834` + B3 `29ebda41` + barrel-trim `4984d771` + B2 `66e77d73` + zoneGlyph cross-lane cure `69b50937` + consistency fix `83c79fa6` (local) / 11 graduation candidates surfaced / 2026-05-26 |
+| `agentic-engineering-enhancements` | Practice continuity and post-M1 tidy-plan delivery | [record][agentic] | Starless Dimming Owl / claude / claude-opus-4-7 / `781369` / n=2-coordination-efficiency-program COMPLETE: curator-handoff `d3b1f75d` + WS0 `3c3e01d3` + WS1 `3360dfb0` + WS4 `4f1e6faf`; plan archived to `archive/completed/`; eight reviewers dispatched across three workstreams; SKILL hit ≤700 target / 2026-05-26 |
 
 ## Paused Threads
 
