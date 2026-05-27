@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "e653db8f-cc9f-4cae-85f5-ba6b6f87e921",
+  "created_at": "2026-05-27T09:19:40Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Kilned Burning Hearth",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e68",
+    "id": "b21c4bf9-a1df-532d-b38f-c5a9cf56bd2d"
+  },
+  "title": "Kilned Burning Hearth dedicated curation closeout",
+  "body": "Dedicated knowledge curation pass complete. Graduated ship-independent-coordinate-dependent into rule, platform adapters, RULES_INDEX, and start-right-team. Left n=2 coordination-efficiency owner-gated because PDR-082 remains Proposed. Proof: practice fitness strict-hard pass with SOFT only and 0 hard or critical, markdownlint root pass, git diff check pass, local path hygiene scan pass.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

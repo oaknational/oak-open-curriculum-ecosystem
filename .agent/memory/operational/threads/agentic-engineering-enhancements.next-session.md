@@ -1,5 +1,42 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-27 — Kilned Burning Hearth / codex / GPT-5 / `019e68`, dedicated knowledge curation proof pass + handoff commit)
+
+**Session boundary**: owner first asked for an evaluation of
+`oak-consolidate-docs`, then directed the dedicated knowledge-curation pass
+after the mode-contract commit landed. This was a proper
+`dedicated-knowledge-curation` pass, not a session-completion sweep.
+
+**Landed in the working tree**:
+
+- Curator-pass proof report:
+  [`2026-05-27-kilned-burning-hearth.md`](../curator-passes/2026-05-27-kilned-burning-hearth.md).
+- Graduated the due "ship independent before coordination-dependent bundle"
+  candidate into `.agent/rules/ship-independent-coordinate-dependent.md`, the
+  `.agents/`, `.claude/`, and `.cursor/` adapters, `RULES_INDEX.md`, and a
+  `start-right-team` pointer.
+- Updated the active pending-graduations shard with an item-level disposition
+  ledger: one item graduated; the n=2 coordination-efficiency item remains
+  owner-gated because PDR-082 is still `Status: Proposed`.
+- Captured the session lesson in `napkin.md`: split pending-graduation shards
+  can hold drainable work even when top-level registers are ready-empty.
+
+**Evidence**:
+
+- `pnpm practice:fitness --strict-hard` passed with SOFT only, `0 hard`,
+  `0 critical`.
+- `pnpm markdownlint-check:root` passed.
+- `git diff --check` passed.
+- Machine-local path scan over touched durable docs found no matches.
+- Collaboration lifecycle closed: active claims count `0`; closeout comms
+  event rendered in `shared-comms-log.md`.
+- Full `pnpm check` was run during this handoff before commit.
+
+**Next safe step**: after this all-files handoff commit, owner directs push or
+PR timing. Do not reopen the n=2 coordination-efficiency item until PDR-082 is
+ratified or a second-instance validation path fires; it remains live and
+owner-gated in the shard.
+
 ## Session Outcome (2026-05-27 — Veiled Dimming Threshold / codex / GPT-5 / `019e68`, consolidate-docs skill contract implementation + handoff commit)
 
 **Session boundary**: owner directed implementation of the queued
@@ -6979,6 +7016,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Kilned Burning Hearth` | `codex` | `GPT-5` | `019e68` | `dedicated-knowledge-curation-proof-pass; graduated-ship-independent-coordinate-dependent-rule-and-platform-adapters; pending-graduations-ledger-one-graduated-one-owner-gated-on-PDR-082; strict-hard-fitness-soft-only-markdownlint-diff-check-local-path-scan-green; claim-closed-active-count-zero; handoff-and-all-files-commit` | 2026-05-27 | 2026-05-27 |
 | `Veiled Dimming Threshold` | `codex` | `GPT-5` | `019e68` | `consolidate-docs-two-mode-contract-implementer; session-completion-vs-dedicated-knowledge-curation-defaults; buffer-disposition-ledger-and-archive-before-processing-checklist-failure; closeout-proof-separates-fitness-from-completion; handoff-and-all-files-commit` | 2026-05-27 | 2026-05-27 |
 | `Hidden Dimming Threshold` | `codex` | `GPT-5` | `019e68` | `consolidate-docs-skill-contract-plan-author; two-mode-session-completion-vs-dedicated-curation-opener; buffer-disposition-ledger-and-archive-before-processing-anti-example-routed-to-current-plan` | 2026-05-27 | 2026-05-27 |
 | `Foamy Lapping Harbour` | `codex` | `GPT-5` | `019e68` | `statusline-rendering-implementer; eef-value-pr-coordination-committer; hidden-curation-closeout-committer; origin-main-v1-14-1-merge-into-feat-graph-foundations; agent-tools-typecheck-lint-test-green-after-merge` | 2026-05-27 | 2026-05-27 |

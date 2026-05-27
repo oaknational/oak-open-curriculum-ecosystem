@@ -94,3 +94,24 @@ fitness_content_role: drainable-buffer
 - The commit-queue CLI currently has required `--id` fields that are not fully
   reflected in the short help text. When using it cold, expect to supply an
   explicit v5-shaped id for enqueue/guard instead of trusting the usage line.
+
+## Session: 2026-05-27 — dedicated knowledge curation proof pass
+
+### What Was Done
+
+- Ran a dedicated `oak-consolidate-docs` curation pass after the mode-contract
+  update and treated fitness as routing evidence rather than the objective.
+- Graduated the due "ship independent before coordination-dependent bundle"
+  candidate into `.agent/rules/ship-independent-coordinate-dependent.md`, the
+  platform adapters, `RULES_INDEX.md`, and `start-right-team`.
+- Left the n=2 coordination-efficiency candidate owner-gated because PDR-082 is
+  still `Status: Proposed`; the shard now records that blocker explicitly.
+
+### Patterns to Remember
+
+- A ready-empty top-level register can still have drainable work in split
+  pending-graduation shards; check the shard directory before declaring the
+  curation lane empty.
+- A fresh comms-seen file can replay a lot of legacy routing-fallback noise.
+  For bounded curation, prefer a targeted inbox/tail read or seed the seen
+  surface intentionally before treating old broadcast volume as new work.

@@ -16,6 +16,19 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
+- **Kilned Burning Hearth closeout (codex / GPT-5 / `019e68`)**:
+  dedicated knowledge-curation pass completed after the `oak-consolidate-docs`
+  mode-contract commit. The due ship-independent-before-coordinate-dependent
+  candidate graduated to
+  [`ship-independent-coordinate-dependent`](../../rules/ship-independent-coordinate-dependent.md)
+  plus platform adapters, `RULES_INDEX.md`, and `start-right-team`; the n=2
+  coordination-efficiency candidate remains live and owner-gated on PDR-082
+  ratification / second-instance validation. Curator-pass proof:
+  [`2026-05-27-kilned-burning-hearth.md`](curator-passes/2026-05-27-kilned-burning-hearth.md).
+  Validation: strict-hard fitness SOFT-only with `0 hard` and `0 critical`,
+  markdownlint, `git diff --check`, local-path hygiene scan, collaboration
+  lifecycle closeout, and full `pnpm check` at handoff. Next safe step after
+  commit is owner-directed push/PR timing.
 - **Veiled Dimming Threshold closeout (codex / GPT-5 / `019e68`)**:
   `oak-consolidate-docs` now has the two-mode contract requested by the owner:
   `session-completion` for bounded closeout and `dedicated-knowledge-curation`
@@ -141,7 +154,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF first-feature delivery | [record][eef] | codex / GPT-5 / Foamy Lapping Harbour / value-pr-coordination-state-committer / 2026-05-27 |
-| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | codex / GPT-5 / Veiled Dimming Threshold / consolidate-docs-two-mode-contract-implementer-and-commit-closeout / 2026-05-27 |
+| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | codex / GPT-5 / Kilned Burning Hearth / dedicated-knowledge-curation-proof-pass-and-commit-closeout / 2026-05-27 |
 
 ## Paused Threads
 
@@ -347,6 +360,16 @@ Current branch non-goals:
   acceptance work.
 
 ## Deep Consolidation Status
+
+**not due — dedicated knowledge-curation pass completed this session**
+(Kilned Burning Hearth `019e68`, 2026-05-27). The session was itself the
+curation pass: selected buffer items were dispositioned with a ledger, the due
+candidate graduated into a rule/adapters/start-right-team pointer, and the n=2
+candidate remains live with an owner-gated blocker named. No additional
+session-close consolidation trigger is left unserved: no new ADR/PDR candidate
+or non-urgent open question surfaced beyond the already-routed PDR-082 gate.
+Falsifiability: inspect the curator-pass proof report and the pending shard's
+2026-05-27 disposition ledger.
 
 **not due — session-completion handoff after skill-contract implementation**
 (Veiled Dimming Threshold `019e68`, 2026-05-27). This session implemented the

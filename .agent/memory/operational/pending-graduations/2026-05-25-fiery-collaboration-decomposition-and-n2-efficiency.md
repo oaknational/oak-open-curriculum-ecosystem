@@ -4,14 +4,23 @@ Active shard (split from main pending-graduations register by Fiery Kindling Bra
 / `9f4026` at 2026-05-25T15:16Z, immediately on capture). Two owner-direction-
 triggered candidates from the PR #115 marshal cycle retrospective metacognition pass.
 
-Status: both `status: due` (owner-direction trigger fired). Process via the standard
-graduation pipeline (capture → distil → graduate → enforce).
+Status: item 1 graduated 2026-05-27; item 2 remains owner-gated pending
+PDR-082 ratification / second-instance validation. Process any remaining live
+item via the standard graduation pipeline (capture → distil → graduate →
+enforce).
+
+## 2026-05-27 disposition ledger — Kilned Burning Hearth
+
+| Item | Disposition | Evidence |
+| --- | --- | --- |
+| Collaboration ceremony — decomposition discipline for marshal cycles | `graduated` | Rule authored at `.agent/rules/ship-independent-coordinate-dependent.md`, adapters added under `.agents/`, `.claude/`, `.cursor/`, `RULES_INDEX.md` updated, and `start-right-team` now points to the rule before bundling work. |
+| n=2 coordination efficiency | `owner-gated` | First-stage durable home exists at `.agent/practice-core/decision-records/PDR-082-n2-collaboration-mode.md` with `Status: Proposed`; this shard itself gates the `start-right-team` amendment on PDR-082 ratification / second n=2 session validation. Live holding location remains this shard. |
 
 ## Collaboration ceremony — decomposition discipline for marshal cycles
 
 [captured: 2026-05-25 | source: owner-direction+napkin | target:
 rule:ship-independent-coordinate-dependent + skill-amendment:start-right-team-§1 |
-trigger: owner-direction | size: M | status: due]
+trigger: owner-direction | size: M | status: graduated 2026-05-27]
 
 **Substance**. 3 PR-115 review comments (2 trivial Copilot + 1 substantive Bugbot) sat
 unaddressed on origin for ~30 min during the Fiery commit-marshal cycle. Root cause:
@@ -45,7 +54,7 @@ substantive-work coordination state.
 
 [captured: 2026-05-25 | source: owner-direction | target:
 multi:pdr:PDR-082-n2-collaboration-mode+skill-amendment:start-right-team-§1 |
-trigger: owner-direction | size: M | status: partially-graduated]
+trigger: owner-direction | size: M | status: owner-gated]
 
 **Partial graduation 2026-05-25** (Stormy Surfing Dock `2a7b65`,
 post-handoff consolidation pass): first-stage durable home authored at

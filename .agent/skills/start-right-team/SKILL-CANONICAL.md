@@ -147,6 +147,12 @@ Silent agent retirement going undetected by the team is the third
 failure mode this order exists to prevent — see
 [`.agent/rules/liveness-heartbeat-cron.md`](../../rules/liveness-heartbeat-cron.md).
 
+Before bundling work into one queue intent, commit, or push window, apply
+[`ship-independent-coordinate-dependent`](../../rules/ship-independent-coordinate-dependent.md):
+independently shippable fixes should land and expose their impact artefact
+before coordination-dependent substance, unless the owner explicitly asks to
+optimise for a combined push.
+
 ### 1. Register Presence
 
 Each agent posts a short team-start report **before any source claim** and

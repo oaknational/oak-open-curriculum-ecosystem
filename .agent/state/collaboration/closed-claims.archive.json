@@ -47237,6 +47237,98 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "a316b89a-352e-442a-80f2-4a490eceeacb",
+      "agent_id": {
+        "agent_name": "Kilned Burning Hearth",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e68",
+        "id": "b21c4bf9-a1df-532d-b38f-c5a9cf56bd2d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/curator-passes/2026-05-27-kilned-burning-hearth.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/comms-seen/kilned-burning-hearth.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T09:15:33Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "dedicated-knowledge-curation-proof",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T09:19:32Z",
+        "closed_by": {
+          "agent_name": "Kilned Burning Hearth",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e68",
+          "id": "b21c4bf9-a1df-532d-b38f-c5a9cf56bd2d"
+        },
+        "summary": "Dedicated knowledge curation pass complete: graduated ship-independent-coordinate-dependent rule; n=2 candidate remains owner-gated on PDR-082; proof checks passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "a316b89a-352e-442a-80f2-4a490eceeacb",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "845b76bf-f79f-415e-b273-be0165222269",
+      "agent_id": {
+        "agent_name": "Kilned Burning Hearth",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e68",
+        "id": "b21c4bf9-a1df-532d-b38f-c5a9cf56bd2d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T10:47:02Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit dedicated curation handoff bundle.",
+      "intent_to_commit": "22996e15-f73d-473f-82d4-39a60a8fd50a",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T10:48:50Z",
+        "closed_by": {
+          "agent_name": "Kilned Burning Hearth",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e68",
+          "id": "b21c4bf9-a1df-532d-b38f-c5a9cf56bd2d"
+        },
+        "summary": "closed in same commit: docs(agentic): land dedicated curation handoff",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "845b76bf-f79f-415e-b273-be0165222269",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
