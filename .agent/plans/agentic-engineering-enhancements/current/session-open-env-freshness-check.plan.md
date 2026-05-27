@@ -218,10 +218,10 @@ Run `pnpm env-freshness:check-advisories` before substantive work. The
 advisory CLI runs the registered detectors; each prints a banner-bearing
 classification on stdout.
 
-This is an **advisory** surface, not a blocking gate (ADR-176). Stale
-verdicts surface a cure command for owner action (or auto-cure on
-explicit cure_class promotion). The advisory does not block any git
-operation.
+This is an **advisory** surface (ADR-176): a reporting surface, not an
+enforcing one. Stale verdicts surface a cure command for owner action (or
+auto-cure on explicit cure_class promotion). The advisory does not block any
+git operation.
 
 Skipping the advisory is allowed but is the failure mode this primitive
 exists to prevent — the worked instance the advisory addresses lost

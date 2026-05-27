@@ -85,17 +85,21 @@ merge #121 as-is; reshape it into F.
 4. PDR-085 → Accepted (recommended) or keep Proposed pending first exercise?
 5. Release timing (H) vs gate-1a closure (G) — LANDED-only is a valid resting state.
 
-## Pre-existing gate debt (NOT introduced this session; none commit-blocking; none blind-fixable)
+## Gate debt (status after this session)
 
-- `practice:substrate:check` blocking: `active-claims.json` +
-  `closed-claims.archive.json` schema-incoherence — 2049-line backlog of stale
-  `abandoned` claims from 2026-05-22; degraded **multi-writer state**, repair
-  classified `manual-with-provenance`. Needs a careful claim-lifecycle cleanup,
-  not a blind edit. Route to a dedicated collaboration-state cleanup.
-- `practice:vocabulary` fail: `session-open-env-freshness-check.plan.md:221`
-  — "not a blocking gate" flagged by the ADR-144 three-zone gate, but the
-  sentence is a legitimate **ADR-176 advisory-vs-blocking polarity** statement.
-  Cross-ADR boundary question; do not silence by forcing fitness-zone words.
+- `practice:substrate:check` `active-claims.json`: **FIXED** — the 65 stale
+  `abandoned` commit_queue entries (expired 2026-05-22) were cleared; the file
+  is now schema-valid.
+- `practice:vocabulary` `session-open-env-freshness-check.plan.md`: **FIXED** —
+  the retired fitness phrasing reworded to the ADR-176 advisory-vs-enforcing
+  polarity; gate green.
+- `practice:substrate:check` `closed-claims.archive.json`: **OPEN — needs a
+  decision, not a blind fix.** ~1090 archived claims carry `closure.evidence`
+  that predates the tightened `evidence_ref` shape (free-form `kind`, no
+  per-evidence `summary`). Two honest options: a tolerant archive evidence
+  shape in `closed-claims.schema.json` (substrate-schema change), or a
+  deliberate bulk migration. Do NOT fabricate 1090 `summary` fields. This is an
+  owner / substrate-architecture decision.
 - `practice:fitness` 1 hard: `repo-continuity.md` 543 > 525 lines — wants
   thoughtful promotion (knowledge-preservation), its own consolidation piece.
 
