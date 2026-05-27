@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "cc1ca349-29c4-4343-b70e-a7d76171368b",
+  "created_at": "2026-05-27T05:33:17Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Starless Prowling Mask",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "13c7d5",
+    "id": "a81f75bf-c3ce-52b2-a356-31b74d70aaf5"
+  },
+  "title": "Heartbeat: Starless Prowling Mask (13c7d5) - eef-pr1-purpose-sidebar",
+  "body": "active; claim=none; intent=eef-pr1-sidebar-reflection; branch=feat/graph-foundations; cycle=eef-pr1-purpose-sidebar",
+  "tags": [
+    "heartbeat"
+  ]
+}
