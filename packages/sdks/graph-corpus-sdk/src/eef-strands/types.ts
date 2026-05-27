@@ -25,13 +25,13 @@
  * `graph-core` (ADR-041) — corpus concerns never leak into the graph
  * substrate.
  *
- * **EefStrand skeleton** (per type-expert Option C verdict): the
- * concrete `EefStrand` interface here is a structural minimum
- * sufficient for the corpus generics. The authoritative `EefStrand`
- * type at gate-1a's data layer flows from the `t2-zod-loader` Zod
- * schema (`z.infer`) when that cycle lands. T2 will REPLACE this
- * skeleton (not bridge) per `principles.md` §"NEVER create
- * compatibility layers".
+ * **EefStrand source**: the authoritative `EefStrand` type flows from
+ * the Zod schema in `./strand-schema.ts` via `z.infer` (the gate-1a
+ * skeleton was replaced here, not bridged, when the loader landed). This
+ * module imports it for the corpus generics (`ExplainOptions`,
+ * `NodeProjection<EefStrand>`); the `RankOptions.context.phase` union is
+ * the canonical `EefPhase` (`early_years | primary | secondary`) from the
+ * same schema.
  *
  * **Gate-1a stub returns**: at gate-1a `WS4.5` (the `EefStrandsGraphView`
  * adapter) authors an `EvidenceCorpus` implementation directly whose
@@ -52,6 +52,8 @@ import type {
   NodeProjection,
   NodeNotFoundError,
 } from '@oaknational/graph-core/graph-view';
+
+import type { EefStrand, EefPhase } from './strand-schema.js';
 
 /**
  * Corpus-layer not-implemented marker.
@@ -79,27 +81,6 @@ export type ComparisonDimension =
   | 'evidence_strength'
   | 'school_context'
   | 'implementation_requirements';
-
-/**
- * Minimum-viable `EefStrand` skeleton for t1's generics.
- *
- * The fields here are the universal identifier surface of an EEF
- * strand as observed in `eef-toolkit.json` — sufficient for t1's
- * `NodeProjection<EefStrand>` / `NodeFilter<EefStrand>` generics.
- * The full strand shape (`headline.impact_months`,
- * `effectiveness.summary`, `tags`, etc.) lands at t2 via `z.infer`
- * over the Zod schema.
- *
- * @see The `t2-zod-loader` cycle replaces this skeleton with the
- *   `z.infer` of the Zod schema landed alongside the SDK data file.
- *   At that point this declaration is removed (not bridged) per
- *   `principles.md` §"NEVER create compatibility layers".
- */
-export interface EefStrand {
-  readonly id: string;
-  readonly name: string;
-  readonly slug: string;
-}
 
 /**
  * Identify a strand for an `explain` request. `TNode`-independent: a
@@ -150,7 +131,7 @@ export interface CompareOptions {
 export interface RankOptions<TNode> {
   readonly filter?: NodeFilter<TNode>;
   readonly context: {
-    readonly phase: 'primary' | 'secondary';
+    readonly phase: EefPhase;
     readonly subject?: string;
     readonly focus?:
       | 'closing_disadvantage_gap'

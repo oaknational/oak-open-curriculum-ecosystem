@@ -35,6 +35,10 @@ import { SEARCH_TOOL_DEF, SEARCH_INPUT_SCHEMA } from '../aggregated-search/index
 import { BROWSE_TOOL_DEF, BROWSE_INPUT_SCHEMA } from '../aggregated-browse/index.js';
 import { EXPLORE_TOOL_DEF, EXPLORE_INPUT_SCHEMA } from '../aggregated-explore/index.js';
 import {
+  EEF_EXPLORE_TOOL_DEF,
+  EEF_EXPLORE_INPUT_SCHEMA,
+} from '../evidence-corpus/tools/eef-explore-evidence-for-context/index.js';
+import {
   DOWNLOAD_ASSET_TOOL_DEF,
   DOWNLOAD_ASSET_INPUT_SCHEMA,
 } from '../aggregated-asset-download/index.js';
@@ -133,6 +137,10 @@ export const AGGREGATED_TOOL_DEFS = {
   'explore-topic': {
     ...EXPLORE_TOOL_DEF,
     inputSchema: EXPLORE_INPUT_SCHEMA,
+  },
+  'eef-explore-evidence-for-context': {
+    ...EEF_EXPLORE_TOOL_DEF,
+    inputSchema: EEF_EXPLORE_INPUT_SCHEMA,
   },
   'download-asset': {
     ...DOWNLOAD_ASSET_TOOL_DEF,

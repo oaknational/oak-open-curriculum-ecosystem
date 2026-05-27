@@ -82,6 +82,7 @@ export type AggregatedToolName =
   | 'get-misconception-graph'
   | 'browse-curriculum'
   | 'explore-topic'
+  | 'eef-explore-evidence-for-context'
   | 'download-asset'
   | 'user-search'
   | 'user-search-query';

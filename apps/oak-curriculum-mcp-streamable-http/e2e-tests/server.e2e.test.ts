@@ -125,6 +125,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     const aggregatedTools = [
       'browse-curriculum',
       'download-asset',
+      'eef-explore-evidence-for-context',
       'explore-topic',
       'fetch',
       'get-curriculum-model',
