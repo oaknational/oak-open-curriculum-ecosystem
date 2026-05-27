@@ -129,8 +129,8 @@ export function extractYearPhaseInfo(units: readonly Unit[]): readonly Extracted
 
   // Sort by year number
   results.sort((a, b) => {
-    const aNum = typeof a.year === 'string' ? parseInt(a.year, 10) : a.year;
-    const bNum = typeof b.year === 'string' ? parseInt(b.year, 10) : b.year;
+    const aNum = typeof a.year === 'string' ? Number.parseInt(a.year, 10) : a.year;
+    const bNum = typeof b.year === 'string' ? Number.parseInt(b.year, 10) : b.year;
     return aNum - bNum;
   });
 
