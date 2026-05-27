@@ -28,6 +28,7 @@ For the Practice Core files and their roles, see [practice-core/index.md](practi
 | [schema-first-execution.md](directives/schema-first-execution.md) | Types flow from the OpenAPI schema                        |
 | [metacognition.md](directives/metacognition.md)                   | Reflective thinking before planning                       |
 | [orientation.md](directives/orientation.md)                       | Layering contract: directives / memory / reference / practice-core; authority order |
+| [definition-of-delivery.md](directives/definition-of-delivery.md) | What counts as delivered — value received by a named beneficiary; LANDED vs RELEASED |
 
 (The reviewer invocation matrix previously listed here has moved to
 [`memory/executive/invoke-code-experts.md`](memory/executive/invoke-code-experts.md)
