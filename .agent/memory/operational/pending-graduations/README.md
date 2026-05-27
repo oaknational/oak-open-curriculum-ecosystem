@@ -5,10 +5,12 @@ graduations lane retired split-buffer handling. These files are still live
 queue substance and remain part of the pending-graduations buffer until their
 items are processed.
 
-Do not create new files here as a fitness response. Before moving any existing
-recovery file to an archive, process every entry: verify the durable home or
-unresolved route, record the disposition, and keep an audit pointer in the main
-register.
+Do not create new files here. New pending-graduation capture belongs in the
+canonical register at `../pending-graduations.md`; creating another dated,
+windowed, backlog, split, or shard-like file only hides the buffer depth. Before
+moving any existing recovery file to an archive, process every entry: verify the
+durable home or unresolved route, record the disposition, and keep an audit
+pointer in the main register.
 
 ## Legacy Recovery Files
 

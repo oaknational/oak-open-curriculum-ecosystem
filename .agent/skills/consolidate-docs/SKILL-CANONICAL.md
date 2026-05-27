@@ -193,6 +193,13 @@ same buffer inventory until their items are dispositioned. Do not exclude a file
 from the buffer count merely because it was moved under a directory, given a
 smaller date range, or labelled as a shard.
 
+Do not create new drainable-buffer child files as a capture, overflow,
+decomposition, or fitness-management strategy. New pending-graduation capture
+belongs in the canonical register, and existing child files are legacy recovery
+debt to inventory and drain in place. If a source item is too large to process
+in one sitting, record item-level disposition progress in a ledger; do not make
+another buffer file to stand in for that work.
+
 For each buffer item, read the source, understand the substance, route it, and
 record exactly one disposition in a ledger before any archive move:
 
