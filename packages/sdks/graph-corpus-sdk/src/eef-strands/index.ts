@@ -8,11 +8,19 @@
  * graph substrate owns corpus types; the MCP surface consumes them) and
  * ADR-173 (the EEF adapter and its Zod loader live in `graph-corpus-sdk`).
  *
- * The `EefStrandsGraphView` adapter (WS4.5) and the Zod loader land in
- * sibling modules under this subpath. The loader's `z.infer` will REPLACE
- * the `EefStrand` skeleton (not bridge) per `principles.md` §"NEVER create
- * compatibility layers".
+ * The `EefStrandsGraphView` adapter (WS4.5) lives in `./graph-view.ts`;
+ * the Zod loader lands in a sibling module under this subpath. The
+ * loader's `z.infer` will REPLACE the `EefStrand` skeleton (not bridge)
+ * per `principles.md` §"NEVER create compatibility layers".
  */
+
+export {
+  EefStrandsGraphView,
+  type EefStrandEdgeType,
+  type EefStrandsManifestMeta,
+  type EefStrandsGraphViewInput,
+  type EefStrandsGraphViewConstructionError,
+} from './graph-view.js';
 
 export type {
   CompareError,

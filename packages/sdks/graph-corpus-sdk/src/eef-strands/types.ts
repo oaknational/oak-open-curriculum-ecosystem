@@ -81,24 +81,35 @@ export type ComparisonDimension =
   | 'implementation_requirements';
 
 /**
- * Minimum-viable `EefStrand` skeleton for t1's generics.
+ * Minimum-viable `EefStrand` skeleton for the corpus generics and the
+ * gate-1a `EefStrandsGraphView` adapter.
  *
- * The fields here are the universal identifier surface of an EEF
- * strand as observed in `eef-toolkit.json` — sufficient for t1's
- * `NodeProjection<EefStrand>` / `NodeFilter<EefStrand>` generics.
- * The full strand shape (`headline.impact_months`,
- * `effectiveness.summary`, `tags`, etc.) lands at t2 via `z.infer`
- * over the Zod schema.
+ * The fields here are the identifier surface of an EEF strand plus the
+ * single relational field the adapter's `subgraph`/`manifest`
+ * operations consume (`related_strands`). All are observed in
+ * `eef-toolkit.json` and are sufficient for the `NodeProjection<EefStrand>`
+ * / `NodeFilter<EefStrand>` generics and for strand-to-strand edge
+ * derivation. The full strand shape (`headline.impact_months`,
+ * `effectiveness.summary`, `tags`, etc.) lands at t2 via `z.infer` over
+ * the Zod schema.
+ *
+ * **`related_strands` is optional**: 13 of the 30 corpus strands omit
+ * the field entirely (not an empty array). The adapter treats an absent
+ * field as "no outgoing edges" and surfaces those nodes through
+ * `GraphManifest.sparseRelationsByNodeId`.
  *
  * @see The `t2-zod-loader` cycle replaces this skeleton with the
  *   `z.infer` of the Zod schema landed alongside the SDK data file.
- *   At that point this declaration is removed (not bridged) per
- *   `principles.md` §"NEVER create compatibility layers".
+ *   The schema's inferred type is a superset of this skeleton, so the
+ *   adapter keeps compiling across the replacement (review-register
+ *   item J). At that point this declaration is removed (not bridged)
+ *   per `principles.md` §"NEVER create compatibility layers".
  */
 export interface EefStrand {
   readonly id: string;
   readonly name: string;
   readonly slug: string;
+  readonly related_strands?: readonly string[];
 }
 
 /**

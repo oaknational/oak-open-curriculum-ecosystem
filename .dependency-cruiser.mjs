@@ -137,6 +137,18 @@ export default {
         path: '^apps/',
       },
     },
+    {
+      name: 'no-graph-corpus-sdk-to-curriculum-sdk',
+      severity: 'error',
+      comment:
+        'graph-corpus-sdk is consumer-agnostic graph substrate (ADR-179): the dependency direction is oak-curriculum-sdk → graph-corpus-sdk, never the reverse. The corpus substrate must not import from the MCP-surfacing curriculum SDK; surfacing concerns belong above the substrate, not inside it.',
+      from: {
+        path: '^packages/sdks/graph-corpus-sdk/',
+      },
+      to: {
+        path: '^packages/sdks/oak-curriculum-sdk/',
+      },
+    },
     /* Cross-package src/ imports are already enforced by the ESLint
        boundary rules in @oaknational/eslint-plugin-standards. Depcruise
        regex does not support backreferences needed for same-package
