@@ -15,9 +15,10 @@ import {
 const ACCEPT = 'application/json, text/event-stream';
 const SHARED_ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
 
-async function createBypassedApp() {
+async function createBypassedApp(eefEnabled = false) {
   const runtimeConfig = createMockRuntimeConfig({
     dangerouslyDisableAuth: true,
+    eefEnabled,
     env: { ALLOWED_HOSTS: SHARED_ALLOWED_HOSTS },
   });
   const observability = createMockObservability(runtimeConfig);
@@ -122,10 +123,12 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     const containsMethodField = toolListResult.tools.some((t) => 'method' in t);
     expect(containsMethodField).toBe(false);
     const baseToolNames = [...toolNames];
+    // The EEF tool is co-gated behind OAK_CURRICULUM_MCP_EEF_ENABLED (default
+    // OFF), so it is intentionally absent from the served set here. Its
+    // flag-ON presence is asserted in the dedicated test below.
     const aggregatedTools = [
       'browse-curriculum',
       'download-asset',
-      'eef-explore-evidence-for-context',
       'explore-topic',
       'fetch',
       'get-curriculum-model',
@@ -140,6 +143,22 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     expect(names.toSorted((a, b) => a.localeCompare(b))).toEqual(
       expectedToolNames.toSorted((a, b) => a.localeCompare(b)),
     );
+    // Default OFF: the EEF tool is not served.
+    expect(names).not.toContain('eef-explore-evidence-for-context');
+  });
+
+  it('serves the EEF tool over HTTP only when the EEF flag is enabled', async () => {
+    const app = await createBypassedApp(true);
+    const res = await request(app)
+      .post('/mcp')
+      .set('Accept', ACCEPT)
+      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
+    expect(res.status).toBe(200);
+
+    const envelope = parseSseEnvelope(res.text);
+    const toolListResult = ToolListResultSchema.parse(envelope.result);
+    const names = toolListResult.tools.map((t) => t.name);
+    expect(names).toContain('eef-explore-evidence-for-context');
   });
 
   it('rejects missing Accept header with 406', async () => {

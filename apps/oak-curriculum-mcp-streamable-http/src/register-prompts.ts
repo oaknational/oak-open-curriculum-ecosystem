@@ -25,7 +25,23 @@ import {
   lessonPlanningArgsSchema,
   exploreCurriculumArgsSchema,
   learningProgressionArgsSchema,
+  eefEvidenceGroundedLessonPlanArgsSchema,
 } from './prompt-schemas.js';
+
+/**
+ * The EEF prompt registration — co-gated with the
+ * `eef-explore-evidence-for-context` tool behind `OAK_CURRICULUM_MCP_EEF_ENABLED`.
+ * Added to the served set only when the flag is enabled; the two surfaces are
+ * one delivery unit (Definition of Delivery, criterion 4).
+ */
+const EEF_PROMPT_REGISTRATION = {
+  name: 'eef-evidence-grounded-lesson-plan',
+  title: 'EEF Evidence-Grounded Lesson Plan',
+  description:
+    'Design a lesson plan grounded in EEF Toolkit evidence: combines 2-3 evidence-backed approaches drawn from a typed subgraph of EEF strands, with caveats and implementation guidance, into a structured pedagogical sequence.',
+  argsSchema: eefEvidenceGroundedLessonPlanArgsSchema,
+} as const;
+
 const PROMPT_REGISTRATIONS = [
   {
     name: 'find-lessons',
@@ -85,22 +101,30 @@ interface PromptRegistrar {
 /**
  * Registers MCP prompts for common curriculum workflows.
  *
- * Each prompt is registered with:
- * - An `argsSchema` for type-safe argument validation
- * - A callback that receives validated arguments directly
- * - Message generation delegated to the SDK's `getPromptMessages()`
+ * The four base prompts are always registered. The EEF prompt is registered
+ * only when `eefEnabled` is true — co-gated with the
+ * `eef-explore-evidence-for-context` tool so the prompt+tool unit surfaces
+ * together or not at all (Definition of Delivery, criterion 4).
  *
- * @param server - MCP server instance
- * @param observability - Observability for prompt handler tracing
+ * Each prompt is registered with an `argsSchema` for type-safe argument
+ * validation, a callback that receives validated arguments directly, and
+ * message generation delegated to the SDK's `getPromptMessages()`.
+ *
+ * @param server - MCP server instance (only `registerPrompt` is used)
+ * @param eefEnabled - when true, also register the co-gated EEF prompt
  *
  * @example
  * ```typescript
  * const server = new McpServer({ name: 'curriculum', version: '1.0.0' });
- * registerPrompts(server, observability);
+ * registerPrompts(server, runtimeConfig.eefEnabled);
  * ```
  */
-export function registerPrompts(server: PromptRegistrar): void {
-  for (const prompt of PROMPT_REGISTRATIONS) {
+export function registerPrompts(server: PromptRegistrar, eefEnabled: boolean): void {
+  const registrations = eefEnabled
+    ? [...PROMPT_REGISTRATIONS, EEF_PROMPT_REGISTRATION]
+    : PROMPT_REGISTRATIONS;
+
+  for (const prompt of registrations) {
     const handler = (args: Readonly<Record<string, string | undefined>>) =>
       formatPromptResponse(prompt.name, args);
 

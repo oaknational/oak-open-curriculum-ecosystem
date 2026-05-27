@@ -11,6 +11,7 @@ export interface AuthEnabledRuntimeConfig {
   readonly env: AuthEnabledEnv;
   readonly dangerouslyDisableAuth: false;
   readonly useStubTools: boolean;
+  readonly eefEnabled: boolean;
   readonly version: string;
   readonly versionSource: ApplicationVersionSource;
   readonly gitSha?: string;
@@ -28,6 +29,7 @@ export interface AuthDisabledRuntimeConfig {
   readonly env: AuthDisabledEnv;
   readonly dangerouslyDisableAuth: true;
   readonly useStubTools: boolean;
+  readonly eefEnabled: boolean;
   readonly version: string;
   readonly versionSource: ApplicationVersionSource;
   readonly gitSha?: string;
@@ -65,6 +67,7 @@ export interface LoadRuntimeConfigOptions {
 
 export interface SharedRuntimeFields {
   readonly useStubTools: boolean;
+  readonly eefEnabled: boolean;
   readonly version: string;
   readonly versionSource: ApplicationVersionSource;
   readonly gitSha?: string;

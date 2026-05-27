@@ -112,6 +112,14 @@ export const MCP_PROMPTS: readonly McpPrompt[] = [
       requiredArgument('subject', 'The subject area (e.g., "maths", "science", "english")'),
     ],
   },
+  // Co-gated delivery unit. This prompt drives the `eef-explore-evidence-for-context`
+  // tool; the two form ONE unit and must surface together or not at all (Definition
+  // of Delivery, criterion 4 — whole for its unit). The HTTP app registers this
+  // prompt only when `OAK_CURRICULUM_MCP_EEF_ENABLED` is set (see the consuming
+  // app's register-prompts wiring); registering it while the tool is gated OFF would
+  // create an orphaned surface (a prompt whose tool is absent). Defining it here in
+  // the SDK is substrate, not delivery — the prompt is latent until the flag co-gates
+  // it with the tool.
   {
     name: 'eef-evidence-grounded-lesson-plan',
     description:
