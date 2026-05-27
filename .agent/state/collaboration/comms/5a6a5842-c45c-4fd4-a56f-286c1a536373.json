@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "5a6a5842-c45c-4fd4-a56f-286c1a536373",
+  "created_at": "2026-05-27T03:09:46Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Starless Prowling Mask",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "13c7d5",
+    "id": "a81f75bf-c3ce-52b2-a356-31b74d70aaf5"
+  },
+  "title": "Heartbeat: Starless Prowling Mask (13c7d5) - eef-pr1-lane-a",
+  "body": "active; claim=none; intent=eef-pr1-lane-a; branch=feat/education-evidence-foundational-graphs-take2; cycle=pr1-boundary-discipline",
+  "tags": [
+    "heartbeat"
+  ]
+}

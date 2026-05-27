@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import {
+  collaborationAgentIdSchema,
   type CollaborationAgentId,
   type CommsEvent,
   type DirectedCommsMessage,
@@ -12,16 +13,19 @@ import {
  * Strict Zod schemas for collaboration-state boundary parsing. These schemas
  * reject unknown fields so legacy comms-event shapes fail before they reach
  * the typed renderer, TUI, or watcher surfaces.
+ *
+ * `agentIdSchema` is the canonical PDR-027 agent identity schema (amended
+ * 2026-05-26 per PDR-076a §Cascade item 3). It accepts the optional UUID v5
+ * `id` field so identities written by the post-cascade derivation function
+ * (`deriveCollaborationIdentity`) parse cleanly through every read site —
+ * watcher drain, comms append validation, TUI, renderer. The canonical home
+ * is `./types.ts`; this module re-uses it so the read-side and write-side
+ * cannot drift.
  */
 const nonEmptyString = z.string().min(1);
 const possiblyEmptyString = z.string();
 
-const agentIdSchema = z.strictObject({
-  agent_name: nonEmptyString,
-  platform: nonEmptyString,
-  model: nonEmptyString,
-  session_id_prefix: nonEmptyString,
-});
+const agentIdSchema = collaborationAgentIdSchema;
 
 const narrativeCommsEventSchema = z.strictObject({
   schema_version: z.literal('2.0.0'),
@@ -185,12 +189,12 @@ function directedEvent(parsed: z.infer<typeof directedCommsMessageSchema>): Dire
 }
 
 function agentId(parsed: z.infer<typeof agentIdSchema>): CollaborationAgentId {
-  return {
-    agent_name: parsed.agent_name,
-    platform: parsed.platform,
-    model: parsed.model,
-    session_id_prefix: parsed.session_id_prefix,
-  };
+  // The parsed object IS the CollaborationAgentId (the schema is the type per
+  // schema-IS-the-type discipline). Field-by-field reconstruction here would
+  // silently drop any future optional field added to collaborationAgentIdSchema
+  // (the exact failure mode the c0942d48 cure landed for the `id` field).
+  // The return-type annotation enforces the contract at compile time.
+  return parsed;
 }
 
 function parseWithHelpfulError<TSchema extends z.ZodType>(input: {

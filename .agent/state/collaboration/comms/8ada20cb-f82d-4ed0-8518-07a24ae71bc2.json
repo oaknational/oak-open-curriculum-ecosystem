@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "8ada20cb-f82d-4ed0-8518-07a24ae71bc2",
+  "created_at": "2026-05-27T05:54:43Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Starless Prowling Mask",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "13c7d5",
+    "id": "a81f75bf-c3ce-52b2-a356-31b74d70aaf5"
+  },
+  "title": "Heartbeat-end: Starless Prowling Mask (13c7d5) — session-end by owner-directed compaction; handoff + rec landed, tree untouched",
+  "body": "active; claim=none; intent=session-end-compaction; branch=feat/graph-foundations; cycle=pre-compaction-end",
+  "tags": [
+    "heartbeat"
+  ]
+}

@@ -1923,6 +1923,39 @@
       "phase": "abandoned",
       "staged_bundle_fingerprint": "5cd13c8b58c60db5a7927f71efafb2f2c75c2e8904e5bebcf01e96b8140bafcb",
       "staged_name_status": "M\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/comms-seen/Fiery-Kindling-Brazier.json\nM\t.agent/state/collaboration/comms-seen/Stormy-Surfing-Dock.json\nA\t.agent/state/collaboration/comms/06cd67d4-0e42-4056-82b6-1075536f2b1a.json\nA\t.agent/state/collaboration/comms/4bf240b9-39e4-42c0-a487-0191a553e264.json\nA\t.agent/state/collaboration/comms/607220f3-cc46-4811-a9ce-8b7e2c0b8897.json\nA\t.agent/state/collaboration/comms/729beb59-6e26-4ae4-a25e-c705fe735276.json\nA\t.agent/state/collaboration/comms/a6058082-f0f3-467a-ba59-7617e5100e8b.json\nA\t.agent/state/collaboration/comms/bb6e4203-3214-40a3-b796-74500188a55f.json\nA\t.agent/state/collaboration/comms/c44a28f8-7936-4b6d-9142-1647dbd35a58.json\n"
+    },
+    {
+      "intent_id": "fe9113e4-b9cc-44c1-87aa-592be1c88b11",
+      "claim_id": "68cfc22f-f54b-4e43-a0e7-8af4641b30e7",
+      "agent_id": {
+        "agent_name": "Galactic Dancing Constellation",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "7efeec",
+        "id": "5b9f4a49-e58c-59e3-810c-411823aafa66"
+      },
+      "files": [
+        "agent-tools/src/collaboration-state/state-schemas.ts",
+        "agent-tools/tests/collaboration-state/state-parsers.unit.test.ts",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/comms-seen/galactic-dancing-constellation.json",
+        ".agent/state/collaboration/comms-seen/starless-prowling-mask.json",
+        ".agent/state/collaboration/comms/0210cc3c-61fa-4bb8-8417-9794e9bff71f.json",
+        ".agent/state/collaboration/comms/1dba3531-a6be-46b8-8087-bca36acbdbc8.json",
+        ".agent/state/collaboration/comms/2a83a7e7-5d87-41ec-8556-9cfab6b9a51b.json",
+        ".agent/state/collaboration/comms/39d4f2e5-a758-4f67-81a7-d212a62b7adb.json",
+        ".agent/state/collaboration/comms/45ad3a40-e52e-445a-8569-04d944ef7e65.json",
+        ".agent/state/collaboration/comms/56248a02-615a-453a-b6d9-aa3469b8842a.json",
+        ".agent/state/collaboration/comms/7319f884-794c-45b3-b0b5-0c8db6d5c587.json",
+        ".agent/state/collaboration/comms/74e6ad6e-74ce-4e4c-8032-674152823675.json",
+        ".agent/state/collaboration/comms/b979664f-03da-45c1-8769-632cebae42ad.json",
+        ".agent/state/collaboration/comms/c419f5e8-a64e-481c-9c47-c80e3d5b0de1.json"
+      ],
+      "commit_subject": "fix(agent-tools): state-schemas accepts optional UUID v5 id on agent identity",
+      "queued_at": "2026-05-26T19:51:52.827Z",
+      "updated_at": "2026-05-26T19:52:39.759Z",
+      "expires_at": "2026-05-26T20:06:52.827Z",
+      "phase": "abandoned"
     }
   ],
   "claims": []

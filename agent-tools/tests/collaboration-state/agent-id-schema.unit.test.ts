@@ -45,6 +45,21 @@ describe('collaborationAgentIdSchema (read-side; optional id, accepts legacy row
     });
     expect(parsed.id).toBeUndefined();
   });
+
+  it.each(['agent_name', 'platform', 'model', 'session_id_prefix'] as const)(
+    'rejects an identity whose %s is an empty string (JSON-schema minLength:1 alignment)',
+    (field) => {
+      expect(() =>
+        collaborationAgentIdSchema.parse({
+          agent_name: 'Open Streaming Updraft',
+          platform: 'claude',
+          model: 'opus-4-7',
+          session_id_prefix: '357948',
+          [field]: '',
+        }),
+      ).toThrow(/Too small/);
+    },
+  );
 });
 
 describe('collaborationAgentIdWriteSchema (write-side; required id, blocks legacy emission)', () => {

@@ -39,6 +39,12 @@ export type UuidV5 = z.infer<typeof uuidV5Schema>;
  * `z.infer<typeof collaborationAgentIdSchema>` per schema-first
  * Commandment 12 — the schema IS the type, statically embedded.
  *
+ * All four identity string fields (`agent_name`, `platform`, `model`,
+ * `session_id_prefix`) are non-empty (`.min(1)`), matching the canonical JSON
+ * schema (`comms-event.schema.json` `minLength: 1`). An empty component is a
+ * meaningless identity and is rejected at the parse boundary — do not relax
+ * these to bare `z.string()`.
+ *
  * `id` is OPTIONAL on the read side to accept legacy rows written before the
  * PDR-076a contract landed. The write-side schema
  * `collaborationAgentIdWriteSchema` requires `id` so write factories cannot
@@ -51,10 +57,10 @@ export type UuidV5 = z.infer<typeof uuidV5Schema>;
  */
 export const collaborationAgentIdSchema = z
   .object({
-    agent_name: z.string(),
-    platform: z.string(),
-    model: z.string(),
-    session_id_prefix: z.string(),
+    agent_name: z.string().min(1),
+    platform: z.string().min(1),
+    model: z.string().min(1),
+    session_id_prefix: z.string().min(1),
     id: uuidV5Schema.optional(),
   })
   .strict();
