@@ -43,14 +43,35 @@ todos:
 
 # EEF First Feature — Owning Plan
 
-**Status**: CURRENT — promotes to ACTIVE when the partnership-conversation
+> **⚠️ GATE-1A CONTRACT SUPERSEDED (2026-05-27).** The gate-1a delivery
+> contract is now owned by
+> [`eef-delivery-restructure.plan.md`](./eef-delivery-restructure.plan.md),
+> rebuilt around the [Definition of Delivery directive](../../../../directives/definition-of-delivery.md).
+> **The following claims in this plan are RETRACTED as false-delivery claims:**
+>
+> - **"sequencing change, not a scope reduction"** (Architectural commitments
+>   §) — FALSE. Sub-graph SELECTION for large graphs was always a requirement;
+>   its 2026-05-21 removal was never ratified. Selection is restored to gate-1a.
+> - **ff4 "t10 ✓ landed"** — FALSE. The `eef-evidence-grounded-lesson-plan`
+>   prompt is latent dead code (SDK-defined, not app-registered, calls a tool
+>   that does not exist). A registered-but-orphaned surface is not delivery.
+> - **substrate-dependency header "WS4.5 LANDED"** — FALSE. The
+>   `EefStrandsGraphView` adapter is an `export {}` stub on main; it lives only
+>   on PR #121.
+>
+> The ff1–ff6 todo IDs and provenance below are preserved for history. The live
+> gate-1a contract, selection/projection requirements, the 10k output budget,
+> the feature-flag co-gating, and the LANDED/RELEASED acceptance are in the
+> meta-plan. Do not execute gate-1a from this body.
+
+**Status**: SUPERSEDED for gate-1a contract (see banner) — promotes to ACTIVE when the partnership-conversation
 opener disposition is recorded in `ATTRIBUTION.md` (per the 2026-05-23
 owner direction "skip; EEF already aware") and the remaining gate-1a corpus
 work lands. The substrate floor is already landed.
 **Last Updated**: 2026-05-25 (Stormy Surfing Dock session — PR-0
 plan-freshness pass: status syncs to landed substrate + broken-link fixes
 
-+ ADR-157 status caveat + branch reference correction + `_meta.attribution`
+- ADR-157 status caveat + branch reference correction + `_meta.attribution`
 canonical-field correction. See
 `./please-do-a-deep-mighty-peach.plan.md` for the 4-PR
 delivery sequence this freshness pass enables).
@@ -70,22 +91,22 @@ criteria.
 
 This plan owns the gate-1a delivery contract end-to-end:
 
-+ **1 tool**: `eef-explore-evidence-for-context` (subgraph-shaped response over
+- **1 tool**: `eef-explore-evidence-for-context` (subgraph-shaped response over
   EEF strands matching a teacher's seed context — subject + key_stage + optional
   focus — wrapped in the structural citation/caveat/freshness envelope).
-+ **1 prompt**: `eef-evidence-grounded-lesson-plan` (projects the subgraph
+- **1 prompt**: `eef-evidence-grounded-lesson-plan` (projects the subgraph
   result into a teacher-readable narrative with structurally-preserved
   citations).
-+ **The corpus envelope**: structural citation discipline, caveat-presence,
+- **The corpus envelope**: structural citation discipline, caveat-presence,
   freshness metadata, `_meta.attribution = EEF_ATTRIBUTION` source
   attribution (per corpus plan line 66 — verified canonical; supporting
   ADRs 175 + 157).
-+ **The freshness CI gate**: ADR-175 binding active at gate-1a (180-day
+- **The freshness CI gate**: ADR-175 binding active at gate-1a (180-day
   threshold).
-+ **The Sentry telemetry seam**: pattern shipped, one tool instrumented.
-+ **The partnership-conversation opener**: EEF contact named, first-contact
+- **The Sentry telemetry seam**: pattern shipped, one tool instrumented.
+- **The partnership-conversation opener**: EEF contact named, first-contact
   recorded.
-+ **The AI-client adoption-tracking owner naming**: D-1 resolved.
+- **The AI-client adoption-tracking owner naming**: D-1 resolved.
 
 Ownership is **by reference**, not by duplication: this plan points at canonical
 todo IDs in the substrate plan (`graph-stack.plan.md`) and the corpus plan
@@ -94,15 +115,15 @@ delivery contract is observed here.
 
 ## What this plan does NOT own
 
-+ **Substrate work** (graph-stack Inc.1d WS4.4 + WS4.5) — authored and tracked
+- **Substrate work** (graph-stack Inc.1d WS4.4 + WS4.5) — authored and tracked
   in `connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md`.
-+ **Corpus work** (t1, t2, t6a, t9, t10, t12, t13, t20 + partials) — authored
+- **Corpus work** (t1, t2, t6a, t9, t10, t12, t13, t20 + partials) — authored
   and tracked in `./eef-evidence-corpus.plan.md`.
-+ **Gate-1b** (slice-1 completion: recommend/explain/compare tools + second
+- **Gate-1b** (slice-1 completion: recommend/explain/compare tools + second
   prompt + full telemetry/registration/E2E) — that is the residual corpus
   surface, owned by `./eef-evidence-corpus.plan.md` after this plan's gate-1a
   scope lands.
-+ **Cross-corpus journeys** — owned by `graph-combinatorial-arc.plan.md`.
+- **Cross-corpus journeys** — owned by `graph-combinatorial-arc.plan.md`.
 
 ## Architectural commitments at gate-1a
 
@@ -219,32 +240,32 @@ Inc.1a closure cycles `WS2.2` (graph-ingest jsonld-compatible + Turtle/SKOS pars
 Each round = the maximum file-disjoint cohort whose dependencies are
 satisfied by the prior round.
 
-+ **Round 0** (owner authorisation only — no source code):
-  + `WS4.4` test-partition amendment (split `T7a` `DeepKeyPath`
+- **Round 0** (owner authorisation only — no source code):
+  - `WS4.4` test-partition amendment (split `T7a` `DeepKeyPath`
     compile-time smoke-test by ownership-of-invariant — fixture-based
     in graph-core with `WS4.4`, `EefStrand`-instantiation in
     `graph-corpus-sdk` with `WS4.5`).
-  + Four rotating-cast coordination protocol additions captured as
+  - Four rotating-cast coordination protocol additions captured as
     pending-graduations entries (mid-cycle retirement, coordinator
     handoff two-distinct-moments, grounding-cost amortisation,
     comms-event stream as failure-mode capture channel).
-+ **Round 1** (eight parallel cycles, all file-disjoint):
+- **Round 1** (eight parallel cycles, all file-disjoint):
   `WS4.1`, `WS4.4`, `t9-guidance-constant`, `t12-citation-shape`,
   `t13-freshness-gate` (gate-1a *partial* only — refresh script
   defers to gate-1b, depends on `t2-zod-loader`), `t20-credits`,
   `ff1-partnership-opener`, `ff2-adoption-tracking-owner`. Plus
   `WS2.2`, `WS2.3` (Inc.1a closure, cross-workspace parallel —
   separate tree).
-+ **Round 2** (three parallel cycles): `WS4.5`, `t1-corpus-shape`,
+- **Round 2** (three parallel cycles): `WS4.5`, `t1-corpus-shape`,
   `t14-telemetry` (pattern only; instrumentation in `t6a`).
-+ **Round 3**: `t2-zod-loader` (depends on `t1` + `WS4.5`).
-+ **Round 4**: `t6a-explore-tool` (depends on `t2` + `WS4.5` + `t12` +
+- **Round 3**: `t2-zod-loader` (depends on `t1` + `WS4.5`).
+- **Round 4**: `t6a-explore-tool` (depends on `t2` + `WS4.5` + `t12` +
   `t14`-pattern) + `ff5-shape-understanding-evidence` (parallel —
   different surface; plan-file edit).
-+ **Round 5**: `t10-lesson-plan-prompt` (depends on `t6a` + `t9`) +
+- **Round 5**: `t10-lesson-plan-prompt` (depends on `t6a` + `t9`) +
   `t15`/`t16`/`t17`/`t18`/`t19` partial extensions (parallel — each
   edits a different file home per corpus plan workstream overlay).
-+ **Round 6** (terminal): `ff6-acceptance-bundle` (acceptance gate;
+- **Round 6** (terminal): `ff6-acceptance-bundle` (acceptance gate;
   the closeout, not a cycle).
 
 The critical path is the longest sequential chain:
@@ -298,30 +319,30 @@ reads:
 The acceptance bundle (`ff6`) is the gate-1a closure trigger. The
 substantive user-facing scenarios behind each gate-1a precondition:
 
-+ **`ff1` (partnership opener)** — EEF contact named in
+- **`ff1` (partnership opener)** — EEF contact named in
   `ATTRIBUTION.md`; first-contact action recorded with date and outcome
   in this plan body. Acceptance test = manual review by owner.
-+ **`ff2` (adoption-tracking owner)** — owner named for AI-client
+- **`ff2` (adoption-tracking owner)** — owner named for AI-client
   adoption tracking; tracking mechanism documented in a named location
   (resolves `D-1`). Acceptance test = manual review by owner.
-+ **`ff3` (substrate floor)** — `WS4.4` + `WS4.5` commits visible in
+- **`ff3` (substrate floor)** — `WS4.4` + `WS4.5` commits visible in
   `graph-stack.plan.md` status with both todos at `status: completed`;
   `GraphView<TNode, TEdgeType>` importable from
   `@oaknational/graph-core/graph-view`; `EefStrandsGraphView`
   importable from `@oaknational/graph-corpus-sdk/eef-strands`.
   Acceptance test = plan-status cross-check + import smoke-test in
   consumer workspace.
-+ **`ff4` (corpus floor)** — the 8 full + 6 partial gate-1a corpus
+- **`ff4` (corpus floor)** — the 8 full + 6 partial gate-1a corpus
   todos enumerated in `eef-evidence-corpus.plan.md` §Gate grouping
   table at `status: completed`; `t6a-explore-tool` callable
   end-to-end against EEF data. Acceptance test = the MCP-tool
   round-trip integration test already specified in corpus-plan `t19`
   partial.
-+ **`ff5` (shape-understanding evidence)** — the five-question
+- **`ff5` (shape-understanding evidence)** — the five-question
   template from `graph-mvp-arc.plan.md` §Shape-Understanding Evidence
   Template answered in this plan body for gate-1a. Acceptance test =
   manual review by owner.
-+ **`ff6` (acceptance bundle)** — teacher launches an MCP client,
+- **`ff6` (acceptance bundle)** — teacher launches an MCP client,
   invokes `eef-explore-evidence-for-context` with a real KS-bound
   seed context (e.g., KS2 maths + "feedback" focus), receives a
   typed subgraph of EEF strands wrapped in the corpus envelope:
@@ -338,13 +359,13 @@ substantive user-facing scenarios behind each gate-1a precondition:
 These have no natural home in the substrate plan or the corpus plan; they live
 here because they gate `gate-1a` promotion to active:
 
-+ **`ff1-partnership-opener`**: EEF contact named, first-contact action
+- **`ff1-partnership-opener`**: EEF contact named, first-contact action
   recorded with date + outcome. The EEF source-authority status (the
   repository-held `eef-toolkit.json` snapshot is the canonical implementation
   source until EEF clarifies refresh mechanics) means the partnership
   conversation is the load-bearing channel for resolving long-term provenance
   questions.
-+ **`ff2-adoption-tracking-owner`**: name the owner of AI-client adoption
+- **`ff2-adoption-tracking-owner`**: name the owner of AI-client adoption
   tracking and the tracking mechanism. This resolves D-1 (which was the
   load-bearing decision shipping into the void without a tracking surface).
   The previous home in `graph-mvp-arc.plan.md::name-ai-client-adoption-owner`
@@ -363,35 +384,35 @@ here because they gate `gate-1a` promotion to active:
 
 Gate-1a closes when all of:
 
-+ Substrate floor landed (graph-stack Inc.1d WS4.4 + WS4.5 commits visible in
+- Substrate floor landed (graph-stack Inc.1d WS4.4 + WS4.5 commits visible in
   active/graph-stack.plan.md).
-+ Gate-1a corpus todos landed (the 8 full + 6 partial todos enumerated in
+- Gate-1a corpus todos landed (the 8 full + 6 partial todos enumerated in
   `eef-evidence-corpus.plan.md` §Gate grouping table).
-+ `ff1-partnership-opener` executed.
-+ `ff2-adoption-tracking-owner` named.
-+ `ff5-shape-understanding-evidence` answered (five-question template
+- `ff1-partnership-opener` executed.
+- `ff2-adoption-tracking-owner` named.
+- `ff5-shape-understanding-evidence` answered (five-question template
   completed for the gate-1a feature).
-+ `_meta.attribution = EEF_ATTRIBUTION` preserved on the response envelope
+- `_meta.attribution = EEF_ATTRIBUTION` preserved on the response envelope
   (NOT `_meta.source` — verified canonical per corpus plan line 66),
   `eef-*` prefix applied, freshness CI binding active via
   `pnpm freshness:check`, structural citation envelope verified,
   Sentry telemetry seam instrumented.
-+ MCP tool registered in the existing `oak-curriculum-sdk` MCP module per
+- MCP tool registered in the existing `oak-curriculum-sdk` MCP module per
   ADR-179 §Surfacing discipline (substrate workspaces ship no MCP code).
 
 ## Cross-plan references
 
-+ **Substrate plan**: [`graph-stack.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md) (active; owns
+- **Substrate plan**: [`graph-stack.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md) (active; owns
   WS4.4 + WS4.5).
-+ **Corpus plan**: [`./eef-evidence-corpus.plan.md`](./eef-evidence-corpus.plan.md)
+- **Corpus plan**: [`./eef-evidence-corpus.plan.md`](./eef-evidence-corpus.plan.md)
   (current; owns t1, t2, t6a, t9, t10, t12, t13, t20 and the residual gate-1b
   surface).
-+ **MVP-arc spine**: [`../../../graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md)
+- **MVP-arc spine**: [`../../../graph-mvp-arc.plan.md`](../../../graph-mvp-arc.plan.md)
   (owns gate-1a's milestone-level acceptance; this plan executes the gate-1a
   thread).
-+ **Query-layer plan**: [`../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md)
+- **Query-layer plan**: [`../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/current/graph-query-layer.plan.md)
   (current; owns T2 interface specification, which is what WS4.4 implements).
-+ **Authoritative ADRs**: [ADR-123](../../../../docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md)
+- **Authoritative ADRs**: [ADR-123](../../../../docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md)
   (MCP primitives strategy), [ADR-157](../../../../docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md)
   (namespace + `_meta`; **Proposed, not Accepted** per 2026-04-30 status
   amendment — direction not constraint), [ADR-173](../../../../docs/architecture/architectural-decisions/173-graph-stack-topology.md)
@@ -406,10 +427,10 @@ Gate-1a closes when all of:
 
 Every item described here exists in one of:
 
-+ `graph-stack.plan.md` (substrate todos: WS4.1, WS3.3, WS4.4, WS4.5)
-+ `eef-evidence-corpus.plan.md` (corpus todos: t1, t2, t6a, t9, t10, t12, t13,
+- `graph-stack.plan.md` (substrate todos: WS4.1, WS3.3, WS4.4, WS4.5)
+- `eef-evidence-corpus.plan.md` (corpus todos: t1, t2, t6a, t9, t10, t12, t13,
   t20 + partials)
-+ `graph-mvp-arc.plan.md` (gate-1a milestone definition: gate-0a, gate-1a)
+- `graph-mvp-arc.plan.md` (gate-1a milestone definition: gate-0a, gate-1a)
 
 This plan does not duplicate. It coordinates. The conservation map
 [`../reference/conservation-map.md`](../reference/conservation-map.md) records
