@@ -28,7 +28,7 @@ export const RELATED_STRAND: EefStrandEdgeType = 'related_strand';
  * connected component; this limit guards against pathological requests
  * rather than reflecting a data-driven ceiling.
  */
-export const MAX_SUBGRAPH_DEPTH = 10;
+const MAX_SUBGRAPH_DEPTH = 10;
 
 /**
  * Construction failure variants. Both are graph-level invariants the
