@@ -526,3 +526,35 @@ updated or verified. The gate wording was adjusted for current executable
 truth: `pnpm check` now uses Turbo `--continue` within the Turbo stage, while
 root shell-stage boundaries still hide downstream stages until upstream stages
 pass.
+
+## Backfill rotation 2026-05-27 — distilled hard-drain pass
+
+Processed the remaining active entries from [`../distilled.md`](../distilled.md)
+during the owner-directed `oak-consolidate-docs` drain. Dispositions:
+
+- *Reviewer-derived session sizing is not session sizing*
+  → active pending-graduations shard
+  [`2026-05-26-starless-open-closeout-candidates.md`](../../operational/pending-graduations/2026-05-26-starless-open-closeout-candidates.md)
+  § "Open Streaming Updraft reviewer-sizing candidate".
+- *Reviewer "follow-on cycle" verdicts are information, not authority*
+  → active pending-graduations shard
+  [`2026-05-27-distilled-hard-drain-candidates.md`](../../operational/pending-graduations/2026-05-27-distilled-hard-drain-candidates.md)
+  § "Reviewer follow-on verdicts are information, not authority".
+- *Structural cure delivered is not operationally exercised cure*
+  → active pending-graduations shard
+  [`2026-05-27-distilled-hard-drain-candidates.md`](../../operational/pending-graduations/2026-05-27-distilled-hard-drain-candidates.md)
+  § "Structural evidence is not operational evidence".
+- *Hypothesis-layer routing for multi-agent cures*
+  → already homed in
+  [`hypothesis.md`](../../../prompts/agentic-engineering/collaboration/hypothesis.md),
+  [`falsification-criteria.md`](../../../prompts/agentic-engineering/collaboration/falsification-criteria.md),
+  and [`experiments/README.md`](../../../prompts/agentic-engineering/collaboration/experiments/README.md).
+- The older standing source, role, and prior-graduation audit notes were
+  already preserved in this archive log's 2026-05-22, 2026-05-24, and
+  2026-05-25 sections, with the fitness-as-trim meta-observation covered by
+  the fitness-validator discipline and pending-graduations history.
+
+After this pass `distilled.md` intentionally contains frontmatter only. That is
+the correct ready-empty state for a `fitness_content_role: drainable-buffer`
+surface: new high-signal learning should still be written there when needed,
+then drained again through this archive-and-routing pattern.

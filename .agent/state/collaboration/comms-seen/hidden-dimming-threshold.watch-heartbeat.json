@@ -1,0 +1,17 @@
+{
+  "schema_version": "0.1.0",
+  "pid": 72785,
+  "started_at": "2026-05-27T07:32:16.225Z",
+  "last_drain_at": "2026-05-27T07:32:46.457Z",
+  "last_emit_at": null,
+  "last_error_at": null,
+  "emitted_count": 0,
+  "heartbeat_interval_ms": 30000,
+  "watcher_identity": {
+    "agent_name": "Hidden Dimming Threshold",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e68",
+    "id": "73739b07-1d4a-5a00-9f1c-e624fc0be061"
+  }
+}

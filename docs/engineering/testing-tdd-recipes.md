@@ -28,6 +28,7 @@ unit, integration, and E2E levels.
   - [E2E Test TDD](#e2e-test-tdd)
 - [Rule Summary](#rule-summary)
 - [Red Specs And File Naming](#red-specs-and-file-naming)
+  - [Validate Test Discovery](#validate-test-discovery)
 - [Common Violations And Fixes](#common-violations-and-fixes)
   - [Writing Code Before Tests](#writing-code-before-tests)
   - [Updating E2E Tests After Implementation](#updating-e2e-tests-after-implementation)
@@ -165,6 +166,18 @@ type-check, lint, and the `test` task, so red in-process specs block commits
 until they go green. E2E specs are outside pre-commit, but pre-push and CI run
 `test:e2e`; they must be green before push/merge unless the owner explicitly
 authorises staged WIP.
+
+### Validate Test Discovery
+
+A passing focused test command is only evidence if it actually discovered the
+intended spec file. When adding or renaming tests, read the command output as
+well as the exit code. If a workspace can exit 0 with no discovered tests, add
+`--passWithNoTests=false` to the focused Vitest command or use the workspace's
+checked test script.
+
+For agent-tools tests, prefer the discovered suffixes in the workspace config:
+`*.test.ts` and `*.spec.ts`. A file named only `*.unit.test.ts` is not evidence
+unless the include pattern names that suffix explicitly.
 
 ## Common Violations And Fixes
 

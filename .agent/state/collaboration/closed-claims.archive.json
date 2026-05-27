@@ -47003,6 +47003,97 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "675daaf4-8836-4af9-8d1a-08e60b0033ba",
+      "agent_id": {
+        "agent_name": "Hidden Dimming Threshold",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e68",
+        "id": "73739b07-1d4a-5a00-9f1c-e624fc0be061"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/distilled.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/active/napkin.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/shared-comms-log.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T07:33:33Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "curate distilled drainable buffer until hard pressure is removed, preserving substance and routing entries to permanent or still-processable homes",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T07:42:04Z",
+        "closed_by": {
+          "agent_name": "Hidden Dimming Threshold",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e68",
+          "id": "73739b07-1d4a-5a00-9f1c-e624fc0be061"
+        },
+        "summary": "Completed drainable-buffer curation: fitness is soft-only, ten live drainable buffers are ready-empty, source windows archived, and fresh testing/tooling signals routed to durable homes.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "675daaf4-8836-4af9-8d1a-08e60b0033ba",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1d7970d6-e03a-42ec-a192-2aef25b8f176",
+      "agent_id": {
+        "agent_name": "Foamy Lapping Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e68",
+        "id": "f414c6b3-7754-50bc-8440-e32a15a7e5d0"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T07:43:11Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit Hidden Dimming Threshold curation closeout before merging main.",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T07:45:24Z",
+        "closed_by": {
+          "agent_name": "Foamy Lapping Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e68",
+          "id": "f414c6b3-7754-50bc-8440-e32a15a7e5d0"
+        },
+        "summary": "closed in same collaboration-state commit: docs(continuity): land hidden curation closeout",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1d7970d6-e03a-42ec-a192-2aef25b8f176",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
