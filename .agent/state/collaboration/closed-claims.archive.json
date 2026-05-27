@@ -46917,6 +46917,92 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "db1bd288-4d43-4942-9992-7a1dcd348c0f",
+      "agent_id": {
+        "agent_name": "Foamy Lapping Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e68",
+        "id": "f414c6b3-7754-50bc-8440-e32a15a7e5d0"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T07:26:48Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit Claude statusline rendering.",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T07:30:05Z",
+        "closed_by": {
+          "agent_name": "Foamy Lapping Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e68",
+          "id": "f414c6b3-7754-50bc-8440-e32a15a7e5d0"
+        },
+        "summary": "commit 8f3a91351e77007c22a3553cbb1469d8e9e7983d: feat(agent-tools): expand Claude statusline rendering",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "db1bd288-4d43-4942-9992-7a1dcd348c0f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0d4ca108-b114-4f7c-9fb3-fa0f4cd220c9",
+      "agent_id": {
+        "agent_name": "Foamy Lapping Harbour",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e68",
+        "id": "f414c6b3-7754-50bc-8440-e32a15a7e5d0"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T07:30:36Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit EEF coordination state.",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T07:31:38Z",
+        "closed_by": {
+          "agent_name": "Foamy Lapping Harbour",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e68",
+          "id": "f414c6b3-7754-50bc-8440-e32a15a7e5d0"
+        },
+        "summary": "closed in same collaboration-state commit: docs(eef): record value-pr coordination state",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0d4ca108-b114-4f7c-9fb3-fa0f4cd220c9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

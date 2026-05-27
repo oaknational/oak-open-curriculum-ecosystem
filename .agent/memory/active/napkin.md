@@ -10,7 +10,21 @@ fitness_content_role: drainable-buffer
 
 # Napkin
 
-## 2026-05-26 — Airy Whirling Current Phase 0C cycles 9+10+11 + write-side cure / claude / claude-opus-4-7 / `3624a5`
+## 2026-05-27 - Paused-Claude commit recovery / codex / GPT-5 / `019e68`
+
+### Surprises
+
+- The touched Claude statusline tests used `.unit.test.ts`, but the
+  `agent-tools` Vitest include pattern only runs `tests/**/*.test.ts` and
+  `tests/**/*.spec.ts`. My first focused Vitest command reported "No test files
+  found" while exiting 0 because `passWithNoTests` is true. Behaviour change:
+  when adding or editing tests in this workspace, verify discovery from the
+  command output, not just exit code; use `.test.ts` for touched tests unless the
+  workspace config has been deliberately widened.
+
+## 2026-05-26 — Airy Whirling Current Phase 0C cycles 9+10+11
+
+Context: write-side cure / claude / claude-opus-4-7 / `3624a5`
 
 ### Surprises (session-scoped)
 
@@ -68,7 +82,9 @@ fitness_content_role: drainable-buffer
   test is "is this deferral preserving long-term shape OR avoiding
   the harder work of completing the cure?".
 
-## 2026-05-26 — Tempestuous Sweeping Feather Phase 0B+0C collaboration-identity / claude / claude-opus-4-7 / `a9e5d2`
+## 2026-05-26 — Tempestuous Sweeping Feather Phase 0B+0C collaboration-identity
+
+Context: claude / claude-opus-4-7 / `a9e5d2`
 
 ### Surprises (session-scoped)
 
