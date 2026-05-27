@@ -1,11 +1,14 @@
 /**
  * Execution for `eef-explore-evidence-for-context` (gate-1a t6a).
  *
- * Loads the freshness-gated EEF corpus, runs a whole-graph `subgraph`
- * traversal (seeded from every strand id — the gate-1a `GraphView` exposes
- * `manifest()` + `subgraph()` only, so relevance narrowing is deferred to
- * the gate-1b ranking engine and the model selects contextual fit from the
- * returned topology), and builds the structural citation envelope.
+ * Loads the freshness-gated EEF corpus, selects the strands relevant to the
+ * teacher's lesson context (`selectEefSeedIds`), runs a `subgraph` traversal
+ * from those seeds, builds the structural citation envelope from the full
+ * strands, and emits the topology as tight projected nodes. Selection narrows
+ * for relevance and projection caps raw size, so the whole `CallToolResult`
+ * stays within the MCP-client output budget. Relevance *ordering* among the
+ * selected strands remains a gate-1b ranking concern; the model selects
+ * contextual fit from the returned topology.
  *
  * Telemetry: an {@link EvidenceCorpusSpanConfig} is constructed inline and
  * handed to the optional `recordSpan` sink. Per `../../telemetry.ts`, the
@@ -18,6 +21,7 @@ import type { Logger } from '@oaknational/logger';
 import type { SubgraphResult } from '@oaknational/graph-core/graph-view';
 import {
   loadEefCorpus,
+  selectEefSeedIds,
   type EefStrand,
   type LoadEefCorpusError,
 } from '@oaknational/graph-corpus-sdk/eef-strands';
@@ -34,6 +38,8 @@ import type { EvidenceCorpusSpanConfig, ExploreSpanAttrs } from '../../telemetry
 import { type EefExploreArgs } from './tool-definition.js';
 import { validateEefExploreArgs } from './validation.js';
 import { buildCitations } from './citations.js';
+import { projectExploreNode, type ProjectedEefStrand } from './projection.js';
+import { capForBudget, MAX_RESPONSE_STRANDS } from './response-budget.js';
 
 /** Runtime dependencies for the explore tool. */
 export interface EefExploreToolDeps {
@@ -52,8 +58,9 @@ export interface EefExploreToolDeps {
  * Map a free-text key stage to the canonical telemetry phase. EYFS →
  * early_years; KS1/KS2 → primary; KS3/KS4/KS5 (and anything unrecognised) →
  * secondary, matching the prompt's KS-to-phase table (EEF coverage is
- * primarily up to age 16). Selection is whole-graph, so this only shapes the
- * recorded span, never the response.
+ * primarily up to age 16). This shapes the recorded telemetry phase; seed
+ * selection matches the key stage separately against each strand's
+ * `most_relevant_key_stages`.
  */
 function keyStageToPhase(keyStage: string): ExploreSpanAttrs['phase'] {
   const normalised = keyStage.toLowerCase().replace(/\s+/g, '');
@@ -95,16 +102,28 @@ function buildExploreSpan(
   };
 }
 
-/** Format the success envelope: subgraph topology + structural citations. */
+/** The one-line response summary, disclosing a budget cap when one applied. */
+function buildSummary(args: EefExploreArgs, shown: number, totalMatched: number): string {
+  const context = `${args.subject} ${args.keyStage}: "${args.topic}"`;
+  const caveatNote = 'Each carries evidence-strength and implementation caveats to preserve.';
+  if (totalMatched > shown) {
+    return `Found ${String(totalMatched)} EEF Toolkit strands for ${context}; showing the first ${String(shown)} (output-budget bounded). ${caveatNote}`;
+  }
+  return `Found ${String(shown)} EEF Toolkit strands for ${context}. ${caveatNote}`;
+}
+
+/** Format the success envelope: projected topology + structural citations. */
 function formatExploreResponse(
   args: EefExploreArgs,
-  subgraph: SubgraphResult<EefStrand>,
+  nodes: readonly ProjectedEefStrand[],
+  edges: SubgraphResult<EefStrand>['edges'],
   citations: Citations,
+  totalMatched: number,
   dataVersion: string,
   lastUpdated: string,
 ): CallToolResult {
   return formatToolResponse({
-    summary: `Found ${String(subgraph.nodes.length)} EEF Toolkit strands for ${args.subject} ${args.keyStage}: "${args.topic}". Each carries evidence-strength and implementation caveats to preserve.`,
+    summary: buildSummary(args, nodes.length, totalMatched),
     data: {
       // Source attribution once per response (not per citation), per the
       // citation-shape contract. Surfaced in `data` (model-visible) rather
@@ -114,8 +133,12 @@ function formatExploreResponse(
       // `_meta.attribution` carries it at registration/listing time.
       attribution: EEF_ATTRIBUTION,
       citations,
-      nodes: subgraph.nodes,
-      edges: subgraph.edges,
+      nodes,
+      edges,
+      // Structured truncation signal: `nodes.length` strands are shown out of
+      // `total_matched` selected — lets a consumer detect the output-budget cap
+      // without parsing the summary prose.
+      total_matched: totalMatched,
       data_version: dataVersion,
       last_updated: lastUpdated,
     },
@@ -144,13 +167,23 @@ export function runEefExploreTool(args: EefExploreArgs, deps: EefExploreToolDeps
   }
 
   const manifest = corpus.value.view.manifest();
-  const subgraph = corpus.value.view.subgraph({ rootIds: corpus.value.strandIds, depth: 1 });
+  // `EefExploreArgs` is a valid `EefSeedSelectionContext` — its fields are the
+  // selection inputs (subject, keyStage, topic, optional focus).
+  const seedIds = selectEefSeedIds(corpus.value.strands, args);
+  const subgraph = corpus.value.view.subgraph({ rootIds: seedIds, depth: 1 });
   if (!subgraph.ok) {
+    logger.debug('mcp-tool.eef-explore-evidence-for-context.subgraph-failed', {
+      kind: subgraph.error.kind,
+    });
     return formatError(`EEF subgraph traversal failed (${subgraph.error.kind}).`);
   }
 
+  const capped = capForBudget(subgraph.value, MAX_RESPONSE_STRANDS);
+
+  // Citations are built from the FULL (capped) strands — each caveat reads the
+  // strand's full headline; the emitted nodes are projected to the tight shape.
   const validated = CitationsSchema.safeParse(
-    buildCitations(subgraph.value.nodes, manifest.version, manifest.lastUpdated),
+    buildCitations(capped.nodes, manifest.version, manifest.lastUpdated),
   );
   if (!validated.success) {
     // The non-empty-tuple contract: a response with no citable strand is an
@@ -158,11 +191,14 @@ export function runEefExploreTool(args: EefExploreArgs, deps: EefExploreToolDeps
     return formatError('No EEF evidence strands matched the requested context.');
   }
 
-  deps.recordSpan?.(buildExploreSpan(args, subgraph.value.nodes.length, Date.now() - startedAt));
+  const projectedNodes = capped.nodes.map(projectExploreNode);
+  deps.recordSpan?.(buildExploreSpan(args, projectedNodes.length, Date.now() - startedAt));
   return formatExploreResponse(
     args,
-    subgraph.value,
+    projectedNodes,
+    capped.edges,
     validated.data,
+    capped.totalMatched,
     manifest.version,
     manifest.lastUpdated,
   );

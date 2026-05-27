@@ -21,27 +21,22 @@
 
 import { z } from 'zod';
 
+import { EEF_PRIORITIES, type EefPriority } from '@oaknational/graph-corpus-sdk/eef-strands';
+
 import { SCOPES_SUPPORTED } from '../../../scopes-supported.js';
 import { EEF_ATTRIBUTION } from '../../../source-attribution.js';
 import { AGGREGATED_EEF_EVIDENCE_GUIDANCE } from '../../eef-evidence-guidance.js';
 
 /**
- * Pedagogical focus a teacher may pass. Matches `RankOptions.context.focus`
- * in `@oaknational/graph-corpus-sdk` (the gate-1b ranking context); at
- * gate-1a it is recorded on telemetry but does not narrow the response —
- * see the tool docstring.
+ * Pedagogical focus a teacher may pass — an EEF priority drawn from the
+ * corpus's own controlled vocabulary ({@link EEF_PRIORITIES}, the snapshot's
+ * `school_context_schema.priorities.enum`). Schema-first and data-derived: the
+ * value space is the data's, not an invented enum. At gate-1a the focus drives
+ * seed selection (it narrows the subgraph to strands whose
+ * `most_relevant_priorities` include it); the same value space is the gate-1b
+ * `RankOptions.context.focus`.
  */
-export const EEF_EXPLORE_FOCUSES = [
-  'closing_disadvantage_gap',
-  'metacognition',
-  'literacy',
-  'numeracy',
-  'behaviour',
-  'feedback',
-] as const;
-
-/** A pedagogical focus value. */
-export type EefExploreFocus = (typeof EEF_EXPLORE_FOCUSES)[number];
+export type EefExploreFocus = EefPriority;
 
 /** Validated arguments for the explore tool. */
 export interface EefExploreArgs {
@@ -105,8 +100,16 @@ export const EEF_EXPLORE_INPUT_SCHEMA: z.ZodRawShape = {
     .describe('The lesson topic or learning objective, in natural language.')
     .meta({ examples: ['photosynthesis', 'fractions', 'the Romans'] }),
   focus: z
-    .enum([...EEF_EXPLORE_FOCUSES])
+    .enum([...EEF_PRIORITIES])
     .optional()
-    .describe('Optional pedagogical focus to record alongside the request.')
-    .meta({ examples: ['metacognition', 'closing_disadvantage_gap', 'feedback'] }),
+    .describe(
+      'Optional EEF priority to focus on; narrows the evidence to strands most relevant to it.',
+    )
+    .meta({
+      examples: [
+        'improving_maths',
+        'metacognition_and_self_regulation',
+        'closing_disadvantage_gap',
+      ],
+    }),
 };

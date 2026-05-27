@@ -18,7 +18,6 @@
 export {
   EEF_EXPLORE_TOOL_DEF,
   EEF_EXPLORE_INPUT_SCHEMA,
-  EEF_EXPLORE_FOCUSES,
   type EefExploreArgs,
   type EefExploreFocus,
 } from './tool-definition.js';

@@ -136,7 +136,7 @@ export const MCP_PROMPTS: readonly McpPrompt[] = [
       ),
       optionalArgument(
         'focus',
-        'Optional pedagogical focus, one of: closing_disadvantage_gap, metacognition, literacy, numeracy, behaviour, feedback',
+        'Optional EEF priority to focus on, e.g. improving_maths, improving_reading, metacognition_and_self_regulation, or closing_disadvantage_gap',
       ),
     ],
   },

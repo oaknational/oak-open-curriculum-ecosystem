@@ -8,7 +8,7 @@ describe('validateEefExploreArgs', () => {
       subject: 'science',
       key_stage: 'KS3',
       topic: 'photosynthesis',
-      focus: 'metacognition',
+      focus: 'metacognition_and_self_regulation',
     });
     expect(result).toEqual({
       ok: true,
@@ -16,7 +16,7 @@ describe('validateEefExploreArgs', () => {
         subject: 'science',
         keyStage: 'KS3',
         topic: 'photosynthesis',
-        focus: 'metacognition',
+        focus: 'metacognition_and_self_regulation',
       },
     });
   });

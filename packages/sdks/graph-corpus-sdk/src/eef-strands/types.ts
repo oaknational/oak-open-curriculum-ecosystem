@@ -54,7 +54,7 @@ import type {
 } from '@oaknational/graph-core/graph-view';
 
 import type { EefStrand } from './strand-schema.js';
-import type { EefPhase } from './school-context.js';
+import type { EefPhase, EefPriority } from './school-context.js';
 
 /**
  * Corpus-layer not-implemented marker.
@@ -134,13 +134,7 @@ export interface RankOptions<TNode> {
   readonly context: {
     readonly phase: EefPhase;
     readonly subject?: string;
-    readonly focus?:
-      | 'closing_disadvantage_gap'
-      | 'metacognition'
-      | 'literacy'
-      | 'numeracy'
-      | 'behaviour'
-      | 'feedback';
+    readonly focus?: EefPriority;
     readonly pp_percentage?: number;
     readonly max_cost?: 1 | 2 | 3 | 4 | 5;
     readonly min_evidence?: 1 | 2 | 3 | 4 | 5;

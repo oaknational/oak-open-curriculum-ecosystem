@@ -3,14 +3,16 @@
  *
  * The teacher context arrives across a trust boundary (model-supplied tool
  * input). This is the strict-validation gate: required non-empty `subject`,
- * `key_stage`, and `topic`; an optional `focus` constrained to the closed
- * {@link EEF_EXPLORE_FOCUSES} enum. Unknown keys are rejected (`.strict()`)
+ * `key_stage`, and `topic`; an optional `focus` constrained to the data-derived
+ * {@link EEF_PRIORITIES} vocabulary. Unknown keys are rejected (`.strict()`)
  * so a malformed call fails here rather than reaching the corpus loader.
  */
 
 import { z } from 'zod';
 
-import { EEF_EXPLORE_FOCUSES, type EefExploreArgs } from './tool-definition.js';
+import { EEF_PRIORITIES } from '@oaknational/graph-corpus-sdk/eef-strands';
+
+import { type EefExploreArgs } from './tool-definition.js';
 
 const EefExploreObjectSchema = z
   .object({
@@ -26,7 +28,7 @@ const EefExploreObjectSchema = z
       .string({ error: 'eef-explore-evidence-for-context requires a non-empty topic' })
       .trim()
       .min(1, { message: 'eef-explore-evidence-for-context requires a non-empty topic' }),
-    focus: z.enum([...EEF_EXPLORE_FOCUSES]).optional(),
+    focus: z.enum([...EEF_PRIORITIES]).optional(),
   })
   .strict();
 
