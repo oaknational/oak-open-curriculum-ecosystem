@@ -1,9 +1,42 @@
 # Next-Session Record — `eef` thread
 
-**Last refreshed**: 2026-05-27 (Foamy Lapping Harbour / `codex` / GPT-5 /
-`019e68` — value-PR coordination state committed on `feat/graph-foundations`;
-the immediate source implementation still lives in the paired EEF worktree
-lane, while this shared-tree record preserves coordination evidence).
+**Last refreshed**: 2026-05-27 (Galactic Dancing Constellation / `claude` /
+claude-opus-4-7 / `7efeec` — EEF value-PR reviewed end-to-end; **PR #121 OPEN**
+to main; gate-1a whole-graph semantics flagged for owner discussion).
+
+## Session 2026-05-27 — value-PR review + PR #121 open (Galactic Dancing Constellation / `7efeec`)
+
+**Role**: reviewer (peer to Starless Prowling Mask / `13c7d5`, who drove
+`oak-wt-eef`). n=2 worktree-per-agent, ARC AnGels coordination channel.
+
+**Landed**: the EEF gate-1a value-PR is **OPEN as PR #121**
+(`feat/eef-explore-evidence` → main, 7 commits): type relocation → adapter →
+loader/freshness → substrate hardening → `eef-explore-evidence-for-context`
+tool + universal-tools wire-up + ADR-123. Each commit reviewed in-cycle; a full
+PR-boundary panel (mcp-expert + security-expert + type-expert + test-expert) on
+commit 4 returned **SOUND**, all findings verified against the real repo before
+relaying (one betty false-positive rejected: `by_phase.impact_months` is
+preserved in the open `school_context_relevance` record). Register ledger lives
+in the PR #121 body.
+
+**Key design decision (peer-settled, owner-flagged)**: gate-1a returns the
+**whole connected EEF graph**; the model selects contextual fit; server-side
+narrowing is deferred to the gate-1b t5 ranking engine. Grounded against the
+corpus: focus-enum→tag mapping is mostly empty and only 16/30 strands carry a
+phase tag, so phase-narrowing would suppress ~14 phase-general strands. Seed
+ids exposed via `loadEefCorpus → { view, strandIds }` as removable gate-1a
+scaffolding (swaps to `enumerateNodes()` when Inc.3 un-stubs it). Open for owner
+discussion — see [`open-questions.md` Q-001](../open-questions.md).
+
+**Next safe step**: owner-gated — (1) the whole-graph semantics discussion
+(Q-001); (2) merge PR #121 to main. Named follow-ons in the PR body: F3
+`schemaHash`=schema_version (gate-1b refresh-script), telemetry app-wiring.
+
+**Evidence**: PR #121; commits on `feat/eef-explore-evidence`
+(`a6e8efc7`..`49317312`); `pnpm check` green (exit 0) at handoff. Adjacent: the
+`feat/graph-foundations` rebase-without-force-push divergence was diagnosed and
+resolved (owner force-with-lease; trees were byte-identical); `oak-wt-cure`
+worktree + merged branch removed; stray `/tmp` worktree pruned.
 
 ## Session 2026-05-27 — value-PR coordination state (Foamy Lapping Harbour / `019e68`)
 
@@ -338,6 +371,19 @@ my session ran with the cascade already resolved. Graph
 implementation work is no longer cascade-blocked. This session's
 amendments are planning-only and do not touch SDK codegen output.
 
+> **RETRACTION ANNOTATION (2026-05-27):** The framing above treated the removal of
+> sub-graph SELECTION from gate-1a as "sequencing only, not a scope reduction". That
+> framing was an UNRATIFIED scope reduction. Per owner direction 2026-05-27,
+> sub-graph selection for large graphs (the EEF graph is large) was ALWAYS a
+> gate-1a requirement and is RESTORED to gate-1a. The gate-1a contract is now
+> owned by `.agent/plans/sector-engagement/eef/current/eef-delivery-restructure.plan.md`,
+> rebuilt around the Definition of Delivery directive
+> (`.agent/directives/definition-of-delivery.md`). Scope boundary: the
+> SCORING/ranking engine and the recommend/explain/compare tools remain gate-1b;
+> only the explore tool's seed-SELECTION + projection are restored to gate-1a.
+> Current resume state: handoff
+> `.agent/state/collaboration/handoffs/2026-05-27-starless-eef-restructure-handoff.md`.
+
 **Prior refresh**: 2026-05-10 (Fragrant Regrowing Root / codex / GPT-5 /
 `019e12` — EEF source-authority clarification. The repository-held
 `eef-toolkit.json` snapshot is now treated as the canonical implementation
@@ -406,6 +452,7 @@ under the ≥2-of-3 rule (`neighbours × misconception`,
 | `Stormy Surfing Dock` | `claude` | `claude-opus-4-7` | `2a7b65` | `pr-0-plan-freshness-author+pr-115-watcher+adr-184-amendment` | 2026-05-25 | 2026-05-25 |
 | `Fiery Kindling Brazier` | `claude` | `claude-opus-4-7` | `9f4026` | `commit-marshal+pr-115-stewardship+merge-landed` | 2026-05-25 | 2026-05-25 |
 | `Foamy Lapping Harbour` | `codex` | `GPT-5` | `019e68` | `value-pr-coordination-state-committer; review-register-and-value-path-reflection-preserved; shared-tree-main-merge-verifier` | 2026-05-27 | 2026-05-27 |
+| `Galactic Dancing Constellation` | `claude` | `claude-opus-4-7` | `7efeec` | `eef-value-pr-reviewer (commits 2-4 + hardening; full PR-boundary panel); whole-graph-design-peer; graph-foundations-divergence-diagnosis; worktree-cleanup` | 2026-05-27 | 2026-05-27 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):

@@ -104,6 +104,21 @@ todos:
 
 # EEF Evidence Corpus Surface
 
+> **⚠️ GATE-1A SCOPE CORRECTED (2026-05-27).** Per the
+> [Definition of Delivery directive](../../../../directives/definition-of-delivery.md)
+> and the owning
+> [`eef-delivery-restructure.plan.md`](./eef-delivery-restructure.plan.md), the
+> 2026-05-21 amendment's **"sequencing only — no scope reduction"** claim (below)
+> is RETRACTED. Sub-graph SELECTION (seed selection + projection in the `t6a`
+> explore tool) was always a gate-1a requirement; its removal was never ratified
+> and is now restored. **Scope boundary (unchanged):** `t5-scoring-engine` and
+> the `t6`/`t7`/`t8` recommend/explain/compare tools remain correctly
+> **gate-1b** — the gate-grouping table's gate-1b rows stand. Only `t6a`'s
+> internal scope changes: it must return a SELECTED, PROJECTED sub-graph within a
+> 10k output budget, not the whole graph. Also: `t10` `status: completed` is
+> FALSE — the prompt is a registered-but-orphaned surface (not delivery). Do not
+> execute gate-1a scope from this body's 2026-05-21 framing.
+
 **Status**: CURRENT — replaces the previous `eef-evidence-mcp-surface.plan.md`.
 The predecessor was preserved byte-identically in `originals/` during
 the restructure for an independent verification pass; after that pass
