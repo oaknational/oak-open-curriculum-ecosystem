@@ -17,11 +17,24 @@ describe('loadEefCorpus (real EEF corpus)', () => {
     expect(result.ok).toBe(true);
   });
 
+  it('exposes every strand id in corpus order alongside the view (gate-1a seed scaffolding)', () => {
+    const result = loadEefCorpus({ now: FRESH_NOW });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      // The id set must match the manifest node count exactly — the t6a tool
+      // seeds a whole-graph subgraph from these, so a missing id silently
+      // drops a strand from every explore response.
+      expect(result.value.strandIds).toHaveLength(result.value.view.manifest().nodeCount);
+      expect(new Set(result.value.strandIds).size).toBe(result.value.strandIds.length);
+      expect(result.value.strandIds[0]).toBe('eef-tl-arts-participation');
+    }
+  });
+
   it('reports the real corpus shape in the manifest (30 strands, 37 edges, 13 sparse)', () => {
     const result = loadEefCorpus({ now: FRESH_NOW });
     expect(result.ok).toBe(true);
     if (result.ok) {
-      const manifest = result.value.manifest();
+      const manifest = result.value.view.manifest();
       expect(manifest.nodeCount).toBe(30);
       expect(manifest.edgeCount).toBe(37);
       expect(manifest.edgeTypes).toEqual(['related_strand']);
@@ -35,7 +48,7 @@ describe('loadEefCorpus (real EEF corpus)', () => {
     const result = loadEefCorpus({ now: FRESH_NOW });
     expect(result.ok).toBe(true);
     if (result.ok) {
-      const subgraph = result.value.subgraph({
+      const subgraph = result.value.view.subgraph({
         rootIds: ['eef-tl-arts-participation'],
         depth: 1,
       });

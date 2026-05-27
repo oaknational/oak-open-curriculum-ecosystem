@@ -23,6 +23,7 @@ import { runMisconceptionGraphTool } from '../aggregated-misconception-graph.js'
 import { validateSearchSdkArgs, runSearchSdkTool } from '../aggregated-search/index.js';
 import { validateBrowseArgs, runBrowseTool } from '../aggregated-browse/index.js';
 import { validateExploreArgs, runExploreTool } from '../aggregated-explore/index.js';
+import { handleEefExploreTool } from '../evidence-corpus/tools/eef-explore-evidence-for-context/index.js';
 import {
   validateDownloadAssetArgs,
   runDownloadAssetTool,
@@ -170,6 +171,7 @@ const AGGREGATED_HANDLERS: Readonly<Record<AggregatedToolName, AggregatedHandler
   fetch: handleFetchTool,
   'browse-curriculum': handleBrowseTool,
   'explore-topic': handleExploreTool,
+  'eef-explore-evidence-for-context': handleEefExploreTool,
   'download-asset': handleDownloadAssetTool,
   'user-search': handleUserSearchExecution,
   'user-search-query': handleUserSearchExecution,

@@ -1089,6 +1089,9 @@ importers:
       '@oaknational/graph-core':
         specifier: workspace:*
         version: link:../../core/graph-core
+      '@oaknational/graph-corpus-sdk':
+        specifier: workspace:*
+        version: link:../graph-corpus-sdk
       '@oaknational/logger':
         specifier: workspace:*
         version: link:../../libs/logger

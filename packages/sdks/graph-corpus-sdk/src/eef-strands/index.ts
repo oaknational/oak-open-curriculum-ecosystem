@@ -32,7 +32,12 @@ export {
   type EefToolkitMeta,
 } from './strand-schema.js';
 
-export { loadEefCorpus, type LoadEefCorpusError, type LoadEefCorpusOptions } from './loader.js';
+export {
+  loadEefCorpus,
+  type LoadedEefCorpus,
+  type LoadEefCorpusError,
+  type LoadEefCorpusOptions,
+} from './loader.js';
 
 export {
   checkFreshness,

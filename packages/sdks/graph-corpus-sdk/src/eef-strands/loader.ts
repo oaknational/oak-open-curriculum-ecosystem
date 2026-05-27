@@ -22,7 +22,7 @@
  * the polymorphic contract (ADR-179), never the concrete adapter.
  */
 
-import { err, type Result } from '@oaknational/result';
+import { ok, err, type Result } from '@oaknational/result';
 import type { z } from 'zod';
 import type { GraphView } from '@oaknational/graph-core/graph-view';
 
@@ -46,6 +46,25 @@ export type LoadEefCorpusError =
   | FreshnessError
   | EefStrandsGraphViewConstructionError;
 
+/**
+ * Success payload of {@link loadEefCorpus}: the ready `GraphView` plus the
+ * canonical strand ids in corpus order.
+ *
+ * `strandIds` is **gate-1a seed scaffolding**. The gate-1a EEF `GraphView`
+ * ships only `manifest()` + `subgraph()` live; `enumerateNodes` — the real
+ * home for "every node id" — is deferred to Inc.3, and `manifest()`
+ * deliberately surfaces ids only for the sparse-relation strands. The t6a
+ * explore tool needs the full id set to seed a whole-graph `subgraph`, so the
+ * loader (which holds the validated strands at parse time) exposes them here.
+ * When `enumerateNodes` un-stubs at Inc.3 the tool swaps to
+ * `view.enumerateNodes()` and this field is removed — it is intentionally not
+ * permanent contract.
+ */
+export interface LoadedEefCorpus {
+  readonly view: GraphView<EefStrand, EefStrandEdgeType>;
+  readonly strandIds: readonly string[];
+}
+
 /** Options for {@link loadEefCorpus}. */
 export interface LoadEefCorpusOptions {
   /** Reference time for the freshness gate. Inject for deterministic tests. */
@@ -59,13 +78,13 @@ export interface LoadEefCorpusOptions {
 
 /**
  * Load, validate, freshness-gate, and graph-validate the EEF corpus,
- * returning a ready `GraphView` over the strands.
+ * returning a ready `GraphView` over the strands plus their canonical ids.
  *
  * @param options - The reference time and optional freshness threshold.
  */
 export function loadEefCorpus(
   options: LoadEefCorpusOptions,
-): Result<GraphView<EefStrand, EefStrandEdgeType>, LoadEefCorpusError> {
+): Result<LoadedEefCorpus, LoadEefCorpusError> {
   const parsed = EefToolkitSchema.safeParse(EEF_TOOLKIT_RAW);
   if (!parsed.success) {
     return err({ kind: 'invalid-corpus-data', issues: parsed.error.issues });
@@ -83,12 +102,20 @@ export function loadEefCorpus(
   // `schemaHash` carries the corpus `schema_version` as the schema identity
   // at gate-1a; a content hash is a future refinement (the field is a string
   // identifier, and the version uniquely identifies the schema shape today).
-  return EefStrandsGraphView.create({
+  const view = EefStrandsGraphView.create({
     strands: parsed.data.strands,
     meta: {
       version: parsed.data.meta.data_version,
       lastUpdated: parsed.data.meta.last_updated,
       schemaHash: parsed.data.meta.schema_version,
     },
+  });
+  if (!view.ok) {
+    return view;
+  }
+
+  return ok({
+    view: view.value,
+    strandIds: parsed.data.strands.map((strand) => strand.id),
   });
 }
