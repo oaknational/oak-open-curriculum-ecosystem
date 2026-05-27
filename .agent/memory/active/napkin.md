@@ -115,3 +115,48 @@ fitness_content_role: drainable-buffer
 - A fresh comms-seen file can replay a lot of legacy routing-fallback noise.
   For bounded curation, prefer a targeted inbox/tail read or seed the seen
   surface intentionally before treating old broadcast volume as new work.
+
+## Session: 2026-05-27 — external skills plan audit
+
+### What Was Done
+
+- Audited the external-skills substrate and skill-ingestion plan lineage while
+  evaluating a new candidate source, `scientific-agent-skills`.
+- Found a concrete reachability defect: the current successor plan
+  `agent-artefact-lifecycle-cli.plan.md` was not listed in the agent-tooling
+  current index, while the superseded `canonical-first-skill-pack-ingestion`
+  plan still appeared as an ordinary future plan.
+- Fixed the index-only mismatch by adding the successor to
+  `agent-tooling/current/README.md` and marking the predecessor as
+  superseded-pending-archive in `agent-tooling/future/README.md`.
+- Updated the agentic-engineering roadmap adjacent-plan pointer so it now
+  names the lifecycle CLI successor rather than the superseded CSPI lane.
+
+### Patterns to Remember
+
+- When a plan says "supersedes X but archive happens later", discoverability
+  needs two live facts at once: the successor must be indexed as current, and
+  the predecessor must remain reachable but visibly non-promotable until its
+  archive phase executes.
+
+## Session: 2026-05-27 — EEF PR-open reviewer + graph-foundations divergence diagnosis
+
+### Practice/tooling feedback
+
+- **Surface**: `Monitor` (host harness; persistent `tail -n 0 -F <file> | grep --line-buffered` over the ARC channel)
+- **Signal**: friction
+- **Observation**: The watcher re-delivered the ENTIRE matched history (turns 23–43, ~11 headers) as one batch on repeated events, not just newly-appended lines, despite `-n 0`. Several replays landed across the session — a real context-budget tax. Restarting the monitor and stopping the pre-resume monitor did not stop it; the live monitor itself re-emits the backlog.
+- **Behaviour change / candidate follow-up**: A raw grep over `tail -F` of an append-only coordination file is noisy under repeated triggers. Prefer a since-cursor read keyed to "turn number > last-seen" (or a single-shot Bash `run_in_background` poll on that predicate) over a persistent grep-tail, so each new turn notifies exactly once. If this recurs, treat it as a strong signal not an annoyance.
+- **Source plane**: `operational`
+
+- **Surface**: `agent-tools:comms` (ARC-channel reads generally)
+- **Signal**: friction (second occurrence of a known gap)
+- **Observation**: Locating/reading a specific ARC turn still needs raw `awk`/`tail`/`gh` fallbacks — no `comms list --tail N` summary projection or `show <turn>` body fetch. Recurred throughout this reviewer session.
+- **Behaviour change / candidate follow-up**: Reinforces the already-logged comms-CLI grounding gap; substance now confirmed by a second session of friction — the `--tail`/`show` projection is worth graduating from wishlist to a tooling work-item.
+
+### Patterns to Remember
+
+- Rebase-without-force-push divergence reads as "ahead N / behind M+1" where the
+  +1 is a dropped merge commit; confirm it is benign with `git diff HEAD
+  origin/<branch>` (empty tree = identical content, divergence is purely
+  structural SHA-rewrite) before recommending `--force-with-lease`.

@@ -16,6 +16,21 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
+- **Gnarled Flowering Pollen closeout (codex / GPT-5 / `019e69`)**:
+  external agent-skills source audit completed as a bounded tactical lane on
+  `feat/graph-foundations`. The existing source-neutral
+  [`external-skills-substrate-learning.plan.md`](../../plans/agentic-engineering-enhancements/future/external-skills-substrate-learning.plan.md)
+  remains the strategic evaluation route; the executable tooling successor is
+  now clearly indexed as
+  [`agent-artefact-lifecycle-cli.plan.md`](../../plans/agent-tooling/current/agent-artefact-lifecycle-cli.plan.md),
+  with the older canonical-first ingestion plan marked superseded pending
+  archive. Added `K-Dense-AI/scientific-agent-skills` as a high-value but
+  high-risk candidate: evaluate selectively through the candidate-register /
+  source-neutral-study route, do not bulk install or vendored-ingest.
+  Validation: targeted `markdownlint` and `git diff --check` passed for touched
+  files. Full `pnpm check` was run at handoff and reached repo-wide
+  `markdownlint --dot .`, where it failed on pre-existing/unrelated dirty EEF
+  collaboration handoff/sidebar files under `.agent/state/collaboration/`.
 - **Kilned Burning Hearth closeout (codex / GPT-5 / `019e68`)**:
   dedicated knowledge-curation pass completed after the `oak-consolidate-docs`
   mode-contract commit. The due ship-independent-before-coordinate-dependent
@@ -154,7 +169,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF first-feature delivery | [record][eef] | codex / GPT-5 / Foamy Lapping Harbour / value-pr-coordination-state-committer / 2026-05-27 |
-| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | codex / GPT-5 / Kilned Burning Hearth / dedicated-knowledge-curation-proof-pass-and-commit-closeout / 2026-05-27 |
+| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | codex / GPT-5 / Gnarled Flowering Pollen / external-skills-plan-audit-and-successor-index-correction / 2026-05-27 |
 
 ## Paused Threads
 
@@ -360,6 +375,19 @@ Current branch non-goals:
   acceptance work.
 
 ## Deep Consolidation Status
+
+**not due — session handoff after external-skills plan audit** (Gnarled
+Flowering Pollen `019e69`, 2026-05-27). This session evaluated the plan
+topology for external agent-skills sources, assessed
+`K-Dense-AI/scientific-agent-skills` as a selective-evaluation candidate, and
+fixed discoverability drift between the superseded future ingestion plan and
+the current lifecycle CLI successor. No plan or milestone closed, no repeated
+pattern reached a graduation threshold, and no new ADR/PDR/open-question entry
+is required: the actionable route already lives in the source-neutral future
+plan plus the current tooling successor. Falsifiability: inspect the touched
+plan indexes/roadmap, the napkin entry, the agentic thread handoff, and the
+handoff `pnpm check` output showing failure only in unrelated dirty
+collaboration markdown.
 
 **not due — dedicated knowledge-curation pass completed this session**
 (Kilned Burning Hearth `019e68`, 2026-05-27). The session was itself the

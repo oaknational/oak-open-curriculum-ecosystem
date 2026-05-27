@@ -1,5 +1,55 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-27 — Gnarled Flowering Pollen / codex / GPT-5 / `019e69`, external skills plan audit + successor-index correction)
+
+**Session boundary**: owner asked to find the repo plans for analysing and
+possibly integrating external agent-skills resources, then added
+`K-Dense-AI/scientific-agent-skills` as a candidate source and asked whether
+the plans were consistent, organised, structured, and discoverable. This was a
+bounded planning/discoverability audit, not implementation or ingestion.
+
+**Landed in the working tree**:
+
+- Indexed
+  [`agent-artefact-lifecycle-cli.plan.md`](../../../plans/agent-tooling/current/agent-artefact-lifecycle-cli.plan.md)
+  in the current agent-tooling README.
+- Marked
+  [`canonical-first-skill-pack-ingestion-tooling.plan.md`](../../../plans/agent-tooling/future/canonical-first-skill-pack-ingestion-tooling.plan.md)
+  as superseded pending archive in the future agent-tooling README.
+- Updated the agentic-engineering roadmap pointer from the superseded
+  canonical-first ingestion plan to the current lifecycle CLI successor.
+- Captured the session lesson in `napkin.md`: successor plans must carry a
+  same-collection index row and old rows must say "superseded", otherwise plan
+  discovery routes agents to the wrong execution surface.
+
+**Candidate-source verdict**:
+`K-Dense-AI/scientific-agent-skills` is worth selective evaluation through the
+source-neutral candidate-register / study path. Do not bulk install or ingest:
+the source is domain-heavy, has its own scanner/dependency surface, and the
+security report advertises critical/high findings. The first safe move is to
+sample specific skills against local canonical skill requirements, not to treat
+the repository as an installable bundle.
+
+**Evidence**:
+
+- Targeted `markdownlint` passed for the edited plan indexes, roadmap, and
+  napkin.
+- Targeted `git diff --check` passed for the same files.
+- Full `pnpm check` was run at handoff and passed through the code/test matrix
+  before failing at repo-wide `markdownlint --dot .` on pre-existing/unrelated
+  dirty EEF collaboration handoff/sidebar files under
+  `.agent/state/collaboration/`.
+- Entry-point sweep found no drift in `AGENTS.md`, `CLAUDE.md`, or
+  `GEMINI.md`; all still point to `.agent/directives/AGENT.md`.
+- Active-claims scan found no active claim for this identity; no claim closure
+  was needed.
+
+**Next safe step**: if the owner wants to continue, add the K-Dense source to
+the external-skills candidate register and run a selective sample review
+against the source-neutral evaluation plan. Keep
+`agent-artefact-lifecycle-cli.plan.md` as the execution/tooling successor; do
+not promote the superseded future ingestion plan.
+
 ## Session Outcome (2026-05-27 — Kilned Burning Hearth / codex / GPT-5 / `019e68`, dedicated knowledge curation proof pass + handoff commit)
 
 **Session boundary**: owner first asked for an evaluation of
@@ -7102,6 +7152,7 @@ and
 | `Prismatic Waxing Constellation` | `codex` | `gpt-5.5` | `019dcd` | `owner-directed-intent-to-commit-queue-implementation` | 2026-04-27 | 2026-04-27 |
 | `Coastal Washing Rudder` | `codex` | `gpt-5.5` | `019dcf` | `owner-directed-queue-governance-graduation-pdr-029-and-plan-archive` | 2026-04-27 | 2026-04-27 |
 | `Ethereal Threading Supernova` | `codex` | `GPT-5` | `019dd2` | `codex-hooks-correction-session-close-claims-ttl-comms-archive-handoff` | 2026-04-28 | 2026-04-28 |
+| `Gnarled Flowering Pollen` | `codex` | `GPT-5` | `019e69` | `external-skills-plan-audit-and-successor-index-correction` | 2026-05-27 | 2026-05-27 |
 | `Dewy Budding Sapling` | `claude-code` | `claude-opus-4-7-1m` | `7e8db7` | `cloudflare-plugin-investigation-and-canonical-first-skill-pack-ingestion-future-plan-drafting-and-discovery-surface-wiring` | 2026-04-30 | 2026-04-30 |
 | `Deep Navigating Stern` | `claude-code` | `claude-opus-4-7-1m` | `c18f0a` | `light-consolidate-docs-pass-with-owner-authorised-promotions-held-for-fresh-session-and-rush-impulse-metacognition-captured` | 2026-05-01 | 2026-05-01 |
 | `Vining Whispering Root` | `claude-code` | `claude-opus-4-7-1m` | `696765` | `quarantine-of-apply-dont-ask-doctrine-after-destructive-checkout-incident; structural-cures-landed-settings-deny-and-ask-undo-change-skill-read-before-asking-rule; hook-layer-safety-net-idea-recorded` | 2026-05-01 | 2026-05-01 |
@@ -8083,12 +8134,13 @@ Choose the lane deliberately:
   more ad hoc PR instructions to existing skills. The skill must preserve
   gate-honest quality improvement and reviewer-facing communication as its
   first principles.
-- If a second instance of manual external-skill-pack canonicalisation friction
-  occurs, OR an external pack with general value is requested for canonical
-  inclusion and the manual flow blocks Cursor/Codex uptake, OR drift is
-  detected in a vendored canonical skill that the current validator does not
-  catch, OR a fourth Layer-2 surface is introduced — promote
-  [`canonical-first-skill-pack-ingestion-tooling.plan.md`](../../../plans/agent-tooling/future/canonical-first-skill-pack-ingestion-tooling.plan.md).
-  Promotion remains gated on PASS from assumptions-reviewer +
-  architecture-reviewer-fred|betty|barney|wilma. The plan body must not
-  acquire any vendor-keyed conditional (PDR-009 vendor-agnostic rule).
+- If external-skill-pack evaluation or integration friction recurs, use
+  [`external-skills-substrate-learning.plan.md`](../../../plans/agentic-engineering-enhancements/future/external-skills-substrate-learning.plan.md)
+  for source-neutral evaluation and
+  [`agent-artefact-lifecycle-cli.plan.md`](../../../plans/agent-tooling/current/agent-artefact-lifecycle-cli.plan.md)
+  for executable tooling. The older
+  [`canonical-first-skill-pack-ingestion-tooling.plan.md`](../../../plans/agent-tooling/future/canonical-first-skill-pack-ingestion-tooling.plan.md)
+  is superseded pending archive; do not promote it. If
+  `K-Dense-AI/scientific-agent-skills` is revisited, sample specific skills and
+  record findings in the candidate register before any install or ingestion
+  work.
