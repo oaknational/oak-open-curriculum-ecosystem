@@ -1,3 +1,11 @@
+## [1.14.2](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.14.1...v1.14.2) (2026-05-27)
+
+
+### Bug Fixes
+
+* Address 5 SonarQube issues ([02f4eb2](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/02f4eb24ac9af3756d0099a7153512dafa7ba6b7))
+* Address 5 SonarQube issues ([98a3147](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/98a3147fd63720f89ac17b44be3df43d5a4f12a0))
+
 ## [1.14.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.14.0...v1.14.1) (2026-05-27)
 
 
