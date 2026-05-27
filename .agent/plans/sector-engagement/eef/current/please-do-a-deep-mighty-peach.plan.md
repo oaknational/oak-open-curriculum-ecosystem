@@ -13,11 +13,11 @@ todos:
     status: completed
     depends_on: []
   - id: pr1-boundary-discipline
-    content: "PR-1 boundary discipline: relocate corpus-substrate types from oak-curriculum-sdk/src/mcp/evidence-corpus/types.ts:64-219 → graph-corpus-sdk/src/eef-strands/types.ts (replace-don't-bridge); add t2 Zod loader in graph-corpus-sdk/src/eef-strands/loader.ts; add pnpm freshness:check script + extend freshness.unit.test.ts with invalid-date error path + document plan-promotion checklist in eef/README.md §Promotion Rule. Heals pre-existing substrate-leak per ADR-173:50 + ADR-179:54-57; honours minimum ADR-175 §Implementation Notes binding. Two file-disjoint agents + 4 in-cycle reviewers + 1 cross-cutting pre-merge."
+    content: "**SUPERSEDED 2026-05-27 → collapsed into the single EEF value-PR (see reshape banner).** PR-1 boundary discipline: relocate corpus-substrate types from oak-curriculum-sdk/src/mcp/evidence-corpus/types.ts:64-226 → graph-corpus-sdk/src/eef-strands/types.ts (replace-don't-bridge); add t2 Zod loader in graph-corpus-sdk/src/eef-strands/loader.ts; add pnpm freshness:check script + extend freshness.unit.test.ts with invalid-date error path + document plan-promotion checklist in eef/README.md §Promotion Rule. Heals pre-existing substrate-leak per ADR-173:50 + ADR-179:54-57; honours minimum ADR-175 §Implementation Notes binding. Now commit 1 (relocation) + commit 3 (loader+freshness) of the collapsed 4-commit value-PR (WS4.5 adapter is commit 2); Starless drives in worktree."
     status: pending
     depends_on: [pr0-plan-freshness]
   - id: pr2-mcp-feature-surface
-    content: "PR-2 MCP feature surface: 3-sequenced-agent delivery. Agent A — eef-explore-evidence-for-context tool + tests at oak-curriculum-sdk/src/mcp/evidence-corpus/tools/, asserting _meta.attribution = EEF_ATTRIBUTION (NOT _meta.source per corpus plan line 66). Agent B — wire-up after Agent A interface stable: SDK barrel export + register t10 prompt in MCP registry + amend ADR-123 Tools + Prompts tables + t15 negative-space TSDoc on projection types (Betty: co-located, not README). Agent C — E2E shape conditions after Agent B registration in tree. architecture-expert-betty cross-cutting pre-merge includes Inc-3 contract-coherence checklist against graph-combinatorial-arc.plan.md preconditions."
+    content: "**SUPERSEDED 2026-05-27 → collapsed into the single EEF value-PR (see reshape banner).** PR-2 MCP feature surface. Agent A — eef-explore-evidence-for-context tool + tests at oak-curriculum-sdk/src/mcp/evidence-corpus/tools/, asserting _meta.attribution = EEF_ATTRIBUTION (NOT _meta.source per corpus plan line 66). Agent B — wire-up: SDK barrel export + register t10 prompt in MCP registry + amend ADR-123 Tools + Prompts tables + t15 negative-space TSDoc on projection types (Betty: co-located, not README). Agent C — E2E shape conditions. architecture-expert-betty cross-cutting pre-merge includes Inc-3 contract-coherence checklist. Now commit 3 (tool + wire-up + tests) of the collapsed value-PR; Starless drives solo in worktree (the multi-agent A/B/C split is retired — one owner per worktree)."
     status: pending
     depends_on: [pr1-boundary-discipline]
   - id: pr3-gate-1a-closure
@@ -27,6 +27,55 @@ todos:
 ---
 
 # Deep Mighty Peach — EEF First Feature: 4-PR delivery sequence
+
+> ## ⚠️ 2026-05-27 RESHAPE — owner-approved (supersedes the 4-PR partitioning below)
+>
+> The 4-PR sequence in the todos/Phases below is **superseded** by an owner-approved
+> reshape (2026-05-27; Galactic Dancing Constellation + Starless Prowling Mask joint
+> recommendation; owner go on **shape + who**, then owner-directed **worktree mechanic**).
+>
+> **SHAPE — collapse to ONE teacher-value PR.** Merge `pr1-boundary-discipline` +
+> `pr2-mcp-feature-surface` into a single PR whose identity is *"a teacher can explore
+> EEF evidence for their teaching context."* Scope = type relocation (boundary heal) +
+> the `EefStrandsGraphView` adapter (`WS4.5` — see drift note below; it does NOT yet exist) +
+> `t2` Zod loader + **freshness gate** (`pnpm freshness:check` + invalid-date test path —
+> ADR-175:40-46 binds freshness before any user-facing EEF surface ships, so it **cannot**
+> be deferred out) + the `eef-explore-evidence-for-context` tool (`t6a`) + wire-up
+> (`t15`–`t19`) + tests. Structure as **4 sequential commits** for reviewability
+> (owner decided 2026-05-27 to FOLD the WS4.5 adapter in rather than ship it as a separate
+> substrate-first PR — a separate plumbing-first PR would re-introduce the no-teacher-value
+> front-loading this reshape removed, and extract a single-consumer abstraction ahead of its
+> consumer): (1) type relocation [NARROW `public/evidence-corpus.ts` to telemetry-only, NO
+> cross-SDK dep yet]; (2) `EefStrandsGraphView` adapter in `graph-corpus-sdk`; (3) loader +
+> freshness; (4) tool + wire-up + tests [the `oak-curriculum-sdk → graph-corpus-sdk` dep is
+> added HERE]. Rationale: the plumbing (old PR-1) exists only to serve the tool; the 4-PR
+> split front-loaded two zero-teacher-value PRs before any teacher value.
+> `pr3-gate-1a-closure` remains a **separate closeout step** after the value-PR lands.
+>
+> **MECHANIC — worktree-per-agent (owner-directed 2026-05-27).** Each concern is built in
+> its own `git worktree` off `origin/main` (`037d0f7e`); each agent is **FULLY responsible
+> for all functions in their worktree**. The primary checkout (`feat/graph-foundations`) is
+> the shared **local integration branch** and the home of coordination substrate (plans,
+> comms, claims). Worktree drivers **verify `HEAD = 037d0f7e` before any work** (practice
+> memory: worktree base-divergence surprises). Concerns reach `main` via **separate PRs**
+> (or integrate back into `feat/graph-foundations` locally).
+>
+> **WHO.** Starless Prowling Mask drives the EEF value-PR solo in its worktree. Galactic
+> Dancing Constellation drives the **separate** agent-tools comms-schema cure-PR (NOT part
+> of this EEF plan — `agent-tools/src/collaboration-state`) in its own worktree, and reviews
+> the EEF value-PR in-cycle (architecture-expert-fred boundary, type-expert, test-expert,
+> mcp-expert).
+>
+> **RELEASE SAFETY (verified 2026-05-27).** `.github/workflows/release.yml` already
+> serialises releases — `concurrency: { group: release, cancel-in-progress: false }`.
+> Near-simultaneous PR merges queue their release runs one-at-a-time, so semantic-release
+> computes each version against the prior release's committed state. No change needed.
+>
+> **COORDINATION CONTRACT.** Worktrees isolate **code**; the shared primary tree still holds
+> coordination docs (this plan, comms, claims). Single-committer discipline on the shared
+> tree (one agent commits at a time; pause churn-producing watchers/heartbeats during any
+> git op — this is the deadlock lesson from the pre-reshape session). ALL agents keep this
+> plan and [`eef-first-feature.plan.md`](./eef-first-feature.plan.md) current as work proceeds.
 
 ## Context
 
@@ -58,11 +107,11 @@ PR #114 (`feat/education-evidence-foundational-graphs`, merged at
 
 - `WS4.1` `graph-corpus-sdk` workspace scaffold (pnpm + knip + depcruise registered)
 - `WS4.4` `packages/core/graph-core/src/graph-view/` — `GraphView<TNode, TEdgeType>` interface + supporting types + barrel + compile-time smoke-test
-- `WS4.5` `packages/sdks/graph-corpus-sdk/src/eef-strands/` — `EefStrandsGraphView` adapter implementing `subgraph` + `manifest`; 5 remaining ops as typed `NotImplementedYet` Result stubs
+- `WS4.5` `packages/sdks/graph-corpus-sdk/src/eef-strands/` — **placeholder only** (an `export {}` surface stub; PR #114 added only a NOSONAR comment). **CORRECTION 2026-05-27 (verified by directory listing): the `EefStrandsGraphView` adapter does NOT exist and did NOT land via PR #114** — the prior "adapter implementing subgraph + manifest" wording was drift. The adapter is genuinely remaining (see table below) and is now commit 2 of the value-PR.
 
 **Corpus** (`packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/` — verified by directory listing)
 
-- `t1-corpus-shape` — completed (types in `types.ts`, exports including `EvidenceCorpus<TNode, TEdgeType>`, `EefStrand`, `RankOptions`, `CompareOptions`, `ExplainOptions`, `NotImplementedYet`, `ComparisonDimension`, `RankedItem`, `RankedResults`, `NodeExplanation`, `ComparisonResult`, `RankError`, `CompareError`, `ExplainError`)
+- `t1-corpus-shape` — completed (types in `types.ts`, exports including `EvidenceCorpus<TNode, TEdgeType>`, `EefStrand`, `RankOptions`, `CompareOptions`, `ExplainOptions`, `NotImplementedYet`, `ComparisonDimension`, `RankedItem`, `RankedResults`, `NodeExplanation`, `ComparisonResult`, `RankError`, `CompareError`)
 - `t9-guidance-constant` — completed (`eef-evidence-guidance.ts`)
 - `t10-lesson-plan-prompt` — completed (`eef-evidence-grounded-lesson-plan-messages.ts` + test)
 - `t12-citation-shape` — completed (`citation-shape.ts` + test; landed 2026-05-22)
@@ -79,7 +128,8 @@ PR #114 (`feat/education-evidence-foundational-graphs`, merged at
 
 | Item | Surface and notes |
 |---|---|
-| Substrate-boundary heal | Relocate `EvidenceCorpus`, `EefStrand`, and the other corpus types (verified at `oak-curriculum-sdk/src/mcp/evidence-corpus/types.ts:64-219`) to `graph-corpus-sdk/src/eef-strands/`. Fred verdict verified against ADR-179:54-57 + ADR-173:50 |
+| Substrate-boundary heal | Relocate `EvidenceCorpus`, `EefStrand`, and the other corpus types (verified at `oak-curriculum-sdk/src/mcp/evidence-corpus/types.ts:64-226`) to `graph-corpus-sdk/src/eef-strands/`. Fred verdict verified against ADR-179:54-57 + ADR-173:50 |
+| `WS4.5` `EefStrandsGraphView` adapter | **NOT landed (drift corrected 2026-05-27)** — only a placeholder exists. Build the `GraphView` adapter over EEF strands in `graph-corpus-sdk/src/eef-strands/` (implement `subgraph` + `manifest`; remaining ops as typed `NotImplementedYet` Result stubs). Commit 3's tool consumes it. Folded into the value-PR as commit 2 (owner decision 2026-05-27). |
 | `t2-zod-loader` | Add to `graph-corpus-sdk/src/eef-strands/` (NOT MCP module) per ADR-173:50 — "corpus-local Zod loader **inside `graph-corpus-sdk`**" |
 | Freshness CI binding | `pnpm freshness:check` script + extend `freshness.unit.test.ts` with invalid-date path + plan-promotion-checklist note (NOT mandated GitHub Actions workflow — see Critical Assessment) |
 | `t6a-explore-tool` | `oak-curriculum-sdk/src/mcp/evidence-corpus/tools/eef-explore-evidence-for-context.ts` — depends on relocated loader + types |
@@ -101,7 +151,7 @@ PR #114 (`feat/education-evidence-foundational-graphs`, merged at
 | F | `eef-first-feature.plan.md` ADR-157 citation | ADR-157 is `Proposed`; cite **ADR-175** (Accepted) as binding for `eef-*` prefix + `_meta.attribution` |
 | G | `graph-stack.plan.md` WS4.4 + WS4.5 | `status: pending` despite landed via PR #114; set to `completed` with SHA `77fcf746` |
 | H | `eef.next-session.md` | Refresh to 2026-05-25 |
-| I | `eef-first-feature.plan.md` | Note pre-existing substrate-leak in `types.ts:64-219` PR-1 heals |
+| I | `eef-first-feature.plan.md` | Note pre-existing substrate-leak in `types.ts:64-226` PR-1 heals |
 
 ---
 
@@ -116,7 +166,7 @@ was then verified by direct ADR + corpus-plan read before being absorbed.
 
 > Line 50: "EEF strands via a corpus-local Zod loader **inside `graph-corpus-sdk`** with no `graph-ingest` participation."
 
-Also verified ADR-179:54-57 names `graph-corpus-sdk` as substrate; substrate ships no MCP code. The corpus types currently at `oak-curriculum-sdk/src/mcp/evidence-corpus/types.ts:64-219` (`EvidenceCorpus`, `EefStrand`, etc.) are substrate-shaped types misplaced in the MCP module. PR-1 must heal this. **Cost is real** (every consumer import updates) but it's a one-time relocation that prevents leak compounding.
+Also verified ADR-179:54-57 names `graph-corpus-sdk` as substrate; substrate ships no MCP code. The corpus types currently at `oak-curriculum-sdk/src/mcp/evidence-corpus/types.ts:64-226` (`EvidenceCorpus`, `EefStrand`, etc.) are substrate-shaped types misplaced in the MCP module. PR-1 must heal this. **Cost is real** (every consumer import updates) but it's a one-time relocation that prevents leak compounding.
 
 **Critical #2 (freshness vitest insufficient)** — PARTIALLY CONFIRMED, scope softened:
 
@@ -132,7 +182,7 @@ ADR-175's binding mandate is a **plan-promotion gate**, not a per-PR release gat
 
 A scheduled CI workflow IS additional excellence but is NOT ADR-mandated. Owner can opt in; not forced.
 
-**HIGH WARNING (pre-existing types.ts leak)** — CONFIRMED. Verified types at `types.ts:64-219` are substrate-shaped. Heal absorbed into PR-1.
+**HIGH WARNING (pre-existing types.ts leak)** — CONFIRMED. Verified types at `types.ts:64-226` are substrate-shaped. Heal absorbed into PR-1.
 
 ### Wilma — REVISED placement of "single best change"
 
@@ -237,7 +287,7 @@ PR-3 (gate-1a closure ceremony)
 
 **Agent A — Substrate boundary heal + loader** (`packages/sdks/graph-corpus-sdk/src/eef-strands/`)
 
-- **Relocate**: `EvidenceCorpus`, `EefStrand`, `RankOptions`, `CompareOptions`, `ExplainOptions`, `NotImplementedYet`, `ComparisonDimension`, `RankedItem`, `RankedResults`, `NodeExplanation`, `ComparisonResult`, `RankError`, `CompareError`, `ExplainError` from `oak-curriculum-sdk/src/mcp/evidence-corpus/types.ts:64-219` to `graph-corpus-sdk/src/eef-strands/types.ts`. **Replace, don't bridge** — delete old file; update all consumer imports to the substrate path. Per ADR-179:54-57 + ADR-173:50
+- **Relocate**: `EvidenceCorpus`, `EefStrand`, `RankOptions`, `CompareOptions`, `ExplainOptions`, `NotImplementedYet`, `ComparisonDimension`, `RankedItem`, `RankedResults`, `NodeExplanation`, `ComparisonResult`, `RankError`, `CompareError` from `oak-curriculum-sdk/src/mcp/evidence-corpus/types.ts:64-226` to `graph-corpus-sdk/src/eef-strands/types.ts`. **Replace, don't bridge** — delete old file; update all consumer imports to the substrate path. Per ADR-179:54-57 + ADR-173:50
 - **Add loader**: `loader.ts` (Zod schema + parse function returning `Result<EvidenceCorpus, LoaderError>`)
 - **Add bundled snapshot**: `eef-toolkit.json` (canonical source: confirm at execution whether to move from `.agent/plans/sector-engagement/eef/reference/` or duplicate with attribution)
 - **Tests**: `loader.unit.test.ts` — `Result.ok` on valid fixture, `Result.err` on invalid (test-expert-verified shape); **NO count assertions** on bundled data. Plus `loader.integration.test.ts` that asserts `Result.ok` against bundled snapshot
