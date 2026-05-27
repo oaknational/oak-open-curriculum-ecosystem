@@ -27,15 +27,15 @@ todos:
       27956bb6 on feat/graph-foundations** (directive .agent/directives/
       definition-of-delivery.md, PDR-085, practice-index Directives row,
       decision-records README, AGENT.md Essential Links). PDR-085 Status:
-      Proposed — elevate to Accepted on owner nod.
+      Accepted (owner-elevated 2026-05-27).
     status: completed
     depends_on: []
   - id: inc-b-prompt-disposition
     content: >-
       EEF prompt latent-dead-code disposition — TSDoc note in mcp-prompts.ts
       naming the co-gating requirement; keep generator+test as substrate.
-      Beneficiary: dev. State: LANDED. Branch: feat/eef-explore-evidence
-      (worktree oak-wt-eef).
+      Beneficiary: dev. State: LANDED. Branch: feat/graph-foundations
+      (post-consolidation).
     status: pending
     depends_on: []
   - id: inc-c-chatgpt-spike
@@ -62,18 +62,22 @@ todos:
       logic (useStubTools only gates the executor path). New co-gating
       integration test + fix the broken every-universal-tool-registered
       assertion. Beneficiary: dev. State: LANDED. Branch:
-      feat/eef-explore-evidence (worktree).
+      feat/graph-foundations (post-consolidation).
     status: pending
     depends_on: []
   - id: inc-f-selection-tool
     content: >-
-      EEF substrate + tool with selection + projection (the value PR) —
-      loader-level seed selection via strict SchoolContextSchema (t2
-      prerequisite or inline schema F owns); implement the NodeProjection
-      applier (currently a no-op); tool returns a relevant projected
+      EEF substrate + tool with selection + projection (the value PR) — model
+      school_context_schema (stop stripping) + derive EEF_PRIORITIES; REPLACE
+      the invented `focus` enum with EEF_PRIORITIES (schema-first, no
+      crosswalk); loader-level seed selection (most_relevant_priorities /
+      most_relevant_key_stages where present, graceful subject/topic/tags
+      fallback for the 13 universal strands); implement the NodeProjection
+      applier (no-op today — verify); tool returns a relevant projected
       sub-graph measured <10k across the FULL CallToolResult incl content[1].
-      Beneficiary: dev + dev-agent. State: LANDED (flag OFF). Depends on
-      inc-e + owner decisions 1–3. Branch: feat/eef-explore-evidence.
+      Beneficiary: dev + dev-agent. State: LANDED (flag OFF). Ex-"open
+      questions" resolved (Part 3). Depends on inc-e. Branch:
+      feat/graph-foundations (post-consolidation).
     status: pending
     depends_on: [inc-e-feature-flag]
   - id: inc-g-closure-restructure
@@ -144,12 +148,18 @@ Three corrections drive the restructure:
   handles raw budget; citations + dual-emission add weight that
   selection+projection keep under 10k. **The `NodeProjection` applier is
   accepted-but-not-applied today — implementing it is in F's scope.**
-- Seed-data gaps: `school_context_relevance` is an untyped open record
-  (`z.record(z.string(), z.unknown())`), present on 17/30 strands. `focus`
-  maps unevenly: `closing_disadvantage_gap`/`metacognition`/`behaviour` map
-  cleanly via `most_relevant_priorities`; `literacy` via tag/priority
-  crosswalk; `feedback` via slug only; **`numeracy` maps to nothing** (rename
-  to `mathematics` or crosswalk to `improving_maths`).
+- Seed-data: `school_context_relevance` is preserved as an untyped open record
+  today (`z.record(z.string(), z.unknown())`), present on 17/30 strands. Its
+  structure is **self-described** by the snapshot's top-level
+  `school_context_schema` block (stripped by Zod today). The authoritative
+  `focus` vocabulary is that block's `priorities.enum` (15 values: e.g.
+  `improving_maths`, `improving_reading`, `improving_behaviour`,
+  `metacognition_and_self_regulation`, …) — **NOT** the invented gate-1a
+  `focus` enum (`numeracy`/`literacy`/`feedback`/…). F models
+  `school_context_schema`, derives `EEF_PRIORITIES`, and replaces the invented
+  enum (Part 3 correction). The earlier "numeracy maps to nothing / rename to
+  mathematics / crosswalk" framing was an artefact of not reading the data's
+  self-description.
 
 ## Part 1 — Definition of Delivery doctrine (Increment A — LANDED 27956bb6)
 
@@ -164,7 +174,8 @@ registered-but-orphaned surface are NOT delivery).
 
 Homes: `.agent/directives/definition-of-delivery.md` (repo-bound) + PDR-085
 (portable mirror) + practice-index Directives row + decision-records README +
-AGENT.md anchor. PDR-085 Status: **Proposed** — elevate to Accepted on owner nod.
+AGENT.md anchor. PDR-085 Status: **Accepted** (owner-elevated 2026-05-27, after
+the first application exercised the doctrine on this EEF gate-1a delivery plan).
 
 ## Part 2 — Delivery-increment decomposition
 
@@ -177,18 +188,58 @@ and B are parallel with the value path.
 
 ## Part 3 — Seed selection (the restored requirement)
 
-Loader-level seed selection by the strand `school_context_relevance` fields
-(`most_relevant_key_stages` and `most_relevant_priorities`), traverse
-`subgraph(seeds, depth)`, then apply a tight `NodeProjection`. Feasible without un-stubbing `enumerateNodes`
-(`loadEefCorpus` exposes `strandIds`). Two in-F-scope prerequisites: (1) a
-strict Zod sub-schema for the untyped `school_context_relevance` record (adopt
-t2's `SchoolContextSchema`, making t2 a prerequisite, or an inline schema F
-owns); (2) implement the `NodeProjection` applier (a no-op today).
+Loader-level seed selection over the corpus `strands` (`loadEefCorpus` returns
+the full `strands` array — verified `loader.ts:106,119`), then
+`subgraph(seeds, depth)`, then a tight `NodeProjection`. **`enumerateNodes`
+stays stubbed** — loader-level filtering is sufficient (YAGNI).
 
-**Owner product decisions required:** (1) `focus` enum gaps — `numeracy`→
-`mathematics`/crosswalk; accept literacy/feedback fallbacks? (2) include or
-exclude the 13 strands with no `school_context_relevance`? (3) un-stub
-`enumerateNodes` at gate-1a or accept loader-level filtering?
+**Focus vocabulary — derived from the data, not invented (correction
+2026-05-27).** The EEF snapshot self-describes its controlled vocabulary in the
+top-level `school_context_schema` block (currently stripped by Zod). Its
+`priorities.enum` is the authoritative 15-value vocabulary:
+`closing_disadvantage_gap`, `improving_reading`, `improving_writing`,
+`improving_maths`, `improving_oracy`, `improving_behaviour`,
+`improving_attendance`, `improving_send_provision`, `teacher_retention`,
+`curriculum_development`, `metacognition_and_self_regulation`,
+`effective_use_of_tas`, `parental_engagement`, `transition_support`,
+`post_covid_recovery`. The tool's `focus` parameter and the strand
+`most_relevant_priorities` field both draw their value space from this enum
+(`EEF_PRIORITIES`) — schema-first, **no crosswalk, no invented values**. The
+gate-1a tool ships an invented `focus` enum
+(`numeracy`/`literacy`/`feedback`/`behaviour`/`metacognition`) that is a defect
+to **replace** (replace-don't-bridge), not bridge.
+
+F-scope prerequisites (both grounded in the data's self-description):
+
+1. Model `school_context_schema` in the strand schema instead of stripping it;
+   derive `EEF_PRIORITIES` (and validate `key_stage` against the data's
+   `key_stage.enum`). This *is* the "strict `SchoolContextSchema`" the plan
+   referenced — the data describes itself, so the schema is derived, not
+   hand-invented.
+2. Implement the `NodeProjection` applier (a no-op today — verify at F).
+
+**Selection over the full corpus (graceful degradation).** Seed-select by
+`most_relevant_priorities` (vs `focus`) and `most_relevant_key_stages` (vs
+`keyStage`) where `school_context_relevance` is present (17/30 strands —
+verified); for the 13 strands without it, fall back to `subject`/`topic`/`tags`
+matching. No strand is silently unreachable because an OPTIONAL field is
+absent. Relevance *ordering* among selected strands is gate-1b ranking's
+concern, not gate-1a selection's.
+
+### Ex-"open questions" — resolved by LTAE + verification (not owner menus)
+
+1. **`focus` enum** — RESOLVED: derive from data (`EEF_PRIORITIES`), replace
+   the invented enum. Schema-first + replace-don't-bridge force this; the
+   "numeracy maps to nothing" framing was an artefact of not reading
+   `school_context_schema`.
+2. **13 universal strands** — RESOLVED: include with fallback seeding; never
+   make data unreachable due to an absent optional field.
+3. **`enumerateNodes`** — RESOLVED: loader-level filtering; do not un-stub
+   (YAGNI; `loadEefCorpus` exposes `strands`).
+4. **PDR-085** — RESOLVED: Accepted (owner-elevated 2026-05-27).
+5. **Release timing (H)** — RESOLVED default: LANDED-only is the honest resting
+   state; the production flag-flip is the one genuine owner lever, surfaced at
+   H.
 
 ## Part 4 — Basic feature-flag implementation
 
@@ -265,13 +316,22 @@ before delivery is forbidden by the doctrine.
 - **G:** docs-adr-expert confirms no surviving false-delivery claim; ADR-123
   enumerates the EEF tool+prompt.
 
-## Open owner decisions
+## Owner decisions — RESOLVED (2026-05-27, LTAE + verification)
 
-1. `focus` enum data gaps (numeracy→mathematics/crosswalk; literacy/feedback fallbacks).
-2. Include or exclude the 13 universal strands.
-3. Un-stub `enumerateNodes` at gate-1a or loader-level filtering.
-4. PDR-085 → Accepted (recommended) or keep Proposed pending first exercise.
-5. Release timing (H) relative to gate-1a closure (G) — LANDED-only is valid.
+All five "open questions" were run through the long-term-architectural-
+excellence lens and verified against the data/code; four were never open
+questions — they were forced by doctrine once the premise was verified. See
+Part 3 §"Ex-open questions" for the full record. Summary:
+
+1. `focus` enum — **derive from data** (`EEF_PRIORITIES` from
+   `school_context_schema.priorities.enum`); replace the invented enum. No
+   crosswalk (schema-first + replace-don't-bridge).
+2. The 13 universal strands — **include** with graceful subject/topic/tags
+   fallback seeding.
+3. `enumerateNodes` — **loader-level** filtering; do not un-stub (YAGNI).
+4. PDR-085 — **Accepted** (owner-elevated 2026-05-27).
+5. Release timing (H) — **LANDED-only is the resting state**; the production
+   flag-flip is the one genuine owner lever, surfaced at H.
 
 ## Reviewer pass (code-expert + docs-adr-expert + assumptions-expert)
 
@@ -313,6 +373,11 @@ decision (Part 2 C/D). Preserved so increments C/E/F do not re-derive it.
 
 Authored from the owner-approved Claude meta-plan (codename
 `prancy-shimmying-crystal`). Brought into the repo 2026-05-27 so the roadmap
-survives compaction. Branch coordination: Increment A + the plan restructure
-land in the primary checkout on `feat/graph-foundations`; Increments B/E/F land
-in the `oak-wt-eef` worktree on `feat/eef-explore-evidence`.
+survives compaction. Branch coordination (updated 2026-05-27, Deep Fathoming
+Harbour): Increment A + the plan restructure landed in the primary checkout on
+`feat/graph-foundations`. Per owner direction the `feat/eef-explore-evidence`
+worktree branch is merged back into `feat/graph-foundations`, PR #121 is closed,
+and a single new PR is opened for `feat/graph-foundations`; all subsequent
+increments (B–H) land on `feat/graph-foundations` in the primary checkout. The
+focus-vocabulary correction (Part 3) supersedes the earlier "focus enum gaps /
+crosswalk" framing.

@@ -4,8 +4,9 @@ pdr_kind: governance
 
 # PDR-085: Definition of Delivery
 
-**Status**: Proposed
-**Date**: 2026-05-27
+**Status**: Accepted
+**Date**: 2026-05-27 (Proposed); 2026-05-27 (Accepted — owner-elevated after
+the first application exercised the doctrine on the EEF gate-1a delivery plan)
 **Related**:
 [PDR-026](PDR-026-per-session-landing-commitment.md)
 (per-session landing — the session-scoped instance of this doctrine; its
