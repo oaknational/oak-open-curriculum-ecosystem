@@ -51,6 +51,12 @@ const ToolListResultSchema = z.object({
   tools: z.array(ToolListItemSchema),
 });
 
+const PromptListItemSchema = z.looseObject({ name: z.string() });
+
+const PromptListResultSchema = z.object({
+  prompts: z.array(PromptListItemSchema),
+});
+
 const InitCapabilitiesResultSchema = z.object({
   capabilities: z.object({
     tools: z.object({ listChanged: z.boolean() }),
@@ -159,6 +165,22 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     const toolListResult = ToolListResultSchema.parse(envelope.result);
     const names = toolListResult.tools.map((t) => t.name);
     expect(names).toContain('eef-explore-evidence-for-context');
+  });
+
+  it('serves the EEF prompt over HTTP only when the EEF flag is enabled', async () => {
+    const listPromptNames = async (eefEnabled: boolean) => {
+      const app = await createBypassedApp(eefEnabled);
+      const res = await request(app)
+        .post('/mcp')
+        .set('Accept', ACCEPT)
+        .send({ jsonrpc: '2.0', id: '1', method: 'prompts/list' });
+      expect(res.status).toBe(200);
+      const promptListResult = PromptListResultSchema.parse(parseSseEnvelope(res.text).result);
+      return promptListResult.prompts.map((p) => p.name);
+    };
+
+    expect(await listPromptNames(false)).not.toContain('eef-evidence-grounded-lesson-plan');
+    expect(await listPromptNames(true)).toContain('eef-evidence-grounded-lesson-plan');
   });
 
   it('rejects missing Accept header with 406', async () => {
