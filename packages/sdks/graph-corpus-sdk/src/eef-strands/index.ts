@@ -25,12 +25,19 @@ export {
 export {
   EefStrandSchema,
   EefToolkitSchema,
-  EEF_PHASES,
   type EefStrand,
-  type EefPhase,
   type EefToolkit,
   type EefToolkitMeta,
 } from './strand-schema.js';
+
+export {
+  EEF_PHASES,
+  EEF_PRIORITIES,
+  EEF_KEY_STAGES,
+  type EefPhase,
+  type EefPriority,
+  type EefKeyStage,
+} from './school-context.js';
 
 export {
   loadEefCorpus,
@@ -38,6 +45,8 @@ export {
   type LoadEefCorpusError,
   type LoadEefCorpusOptions,
 } from './loader.js';
+
+export { selectEefSeedIds, type EefSeedSelectionContext } from './selection.js';
 
 export {
   checkFreshness,

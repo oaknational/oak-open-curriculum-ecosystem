@@ -19,9 +19,13 @@
  *   corpus phase vocabulary (review-register item C). `early_years` is a
  *   real EEF phase; the gate-1a `RankOptions.context.phase` union is widened
  *   to match in `./types.ts`.
- * - `school_context_relevance` is a structured but variable block not
- *   consumed at gate-1a; it is preserved as an open map rather than modelled
- *   field-by-field, so EEF refresh additions never reject a valid snapshot.
+ * - `school_context_relevance` is modelled precisely (gate-1a seed selection
+ *   consumes its `most_relevant_priorities` / `most_relevant_key_stages`); the
+ *   two selection-critical vocabularies are validated against the snapshot's
+ *   own `school_context_schema` block. The vocabularies, the relevance schema,
+ *   and the drift guard live in `./school-context.ts`; this module composes
+ *   {@link SchoolContextRelevanceSchema} into the strand and
+ *   {@link SchoolContextSchemaBlock} into the toolkit.
  *
  * All object and array schemas are `.readonly()` so the inferred `EefStrand`
  * keeps the skeleton's immutability contract (note 1 from the commit-2 type
@@ -30,15 +34,7 @@
 
 import { z } from 'zod';
 
-/**
- * The canonical EEF phase vocabulary, grounded in the corpus `by_phase`
- * keys. `early_years` is a genuine EEF phase (review-register item C); the
- * gate-1a `primary | secondary` union was incomplete.
- */
-export const EEF_PHASES = ['early_years', 'primary', 'secondary'] as const;
-
-/** A phase a teacher (or a strand breakdown) may reference. */
-export type EefPhase = (typeof EEF_PHASES)[number];
+import { SchoolContextRelevanceSchema, SchoolContextSchemaBlock } from './school-context.js';
 
 const PhaseNotesSchema = z
   .object({
@@ -156,14 +152,11 @@ export const EefStrandSchema = z
       .optional(),
     related_guidance_reports: z.array(RelatedGuidanceReportSchema).readonly().optional(),
     update_history: z.array(UpdateHistoryEntrySchema).readonly().optional(),
-    // Deliberately an open record rather than a modelled object: the block is
-    // structured but highly variable (10 sparse keys, nested
-    // `implementation_requirements`) and is NOT consumed at gate-1a. Preserving
-    // it as `unknown`-valued keeps a valid snapshot from being rejected when an
-    // EEF refresh adds fields. When a surface first consumes it, model the
-    // sub-fields precisely (review-register follow-on) — the structure is
-    // knowable from the snapshot's `school_context_schema` block.
-    school_context_relevance: z.record(z.string(), z.unknown()).readonly().optional(),
+    // Modelled precisely (gate-1a seed selection consumes it). See
+    // {@link SchoolContextRelevanceSchema}: selection-critical priority and
+    // key-stage vocabularies are validated against the data's self-description;
+    // the rest is modelled by value shape. Present on 17 of 30 strands.
+    school_context_relevance: SchoolContextRelevanceSchema.optional(),
   })
   .readonly();
 
@@ -210,15 +203,18 @@ const EefToolkitMetaSchema = z
 export type EefToolkitMeta = z.infer<typeof EefToolkitMetaSchema>;
 
 /**
- * The whole toolkit snapshot. Only `meta` and `strands` are consumed at
- * gate-1a; the snapshot's other top-level blocks (`methodology`,
- * `school_context_schema`, `uk_context`) are stripped by Zod's default
- * unknown-key handling.
+ * The whole toolkit snapshot. `meta` and `strands` carry the corpus; the
+ * `school_context_schema` block is modelled (no longer stripped) so its
+ * controlled vocabularies are validated against {@link EEF_PRIORITIES} and
+ * {@link EEF_KEY_STAGES} at load time. The remaining top-level blocks
+ * (`methodology`, `uk_context`) are not consumed and are stripped by Zod's
+ * default unknown-key handling.
  */
 export const EefToolkitSchema = z
   .object({
     meta: EefToolkitMetaSchema,
     strands: z.array(EefStrandSchema).readonly(),
+    school_context_schema: SchoolContextSchemaBlock,
   })
   .readonly();
 

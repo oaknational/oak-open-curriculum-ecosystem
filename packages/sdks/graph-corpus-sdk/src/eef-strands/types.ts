@@ -53,7 +53,8 @@ import type {
   NodeNotFoundError,
 } from '@oaknational/graph-core/graph-view';
 
-import type { EefStrand, EefPhase } from './strand-schema.js';
+import type { EefStrand } from './strand-schema.js';
+import type { EefPhase } from './school-context.js';
 
 /**
  * Corpus-layer not-implemented marker.

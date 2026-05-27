@@ -47,21 +47,25 @@ export type LoadEefCorpusError =
   | EefStrandsGraphViewConstructionError;
 
 /**
- * Success payload of {@link loadEefCorpus}: the ready `GraphView` plus the
- * canonical strand ids in corpus order.
+ * Success payload of {@link loadEefCorpus}: the ready `GraphView`, the
+ * validated strands, and the canonical strand ids in corpus order.
  *
- * `strandIds` is **gate-1a seed scaffolding**. The gate-1a EEF `GraphView`
- * ships only `manifest()` + `subgraph()` live; `enumerateNodes` — the real
- * home for "every node id" — is deferred to Inc.3, and `manifest()`
- * deliberately surfaces ids only for the sparse-relation strands. The t6a
- * explore tool needs the full id set to seed a whole-graph `subgraph`, so the
- * loader (which holds the validated strands at parse time) exposes them here.
- * When `enumerateNodes` un-stubs at Inc.3 the tool swaps to
- * `view.enumerateNodes()` and this field is removed — it is intentionally not
- * permanent contract.
+ * `strands` is the validated corpus the explore tool feeds to seed selection
+ * (`selectEefSeedIds`), which reads each strand's `school_context_relevance`
+ * and `tags`. `strandIds` is the corpus-order id projection of `strands` (the
+ * degenerate whole-graph seed and an id-integrity convenience).
+ *
+ * Both are **gate-1a seed scaffolding**. The gate-1a EEF `GraphView` ships
+ * only `manifest()` + `subgraph()` live; `enumerateNodes` / `findByTag` — the
+ * real home for "every node" and "nodes matching a predicate" — are deferred
+ * to Inc.3. The loader holds the validated strands at parse time, so it
+ * exposes them here. When those operations un-stub at Inc.3 the tool swaps to
+ * the `GraphView` query surface and these fields are removed — they are
+ * intentionally not permanent contract.
  */
 export interface LoadedEefCorpus {
   readonly view: GraphView<EefStrand, EefStrandEdgeType>;
+  readonly strands: readonly EefStrand[];
   readonly strandIds: readonly string[];
 }
 
@@ -116,6 +120,7 @@ export function loadEefCorpus(
 
   return ok({
     view: view.value,
+    strands: parsed.data.strands,
     strandIds: parsed.data.strands.map((strand) => strand.id),
   });
 }
