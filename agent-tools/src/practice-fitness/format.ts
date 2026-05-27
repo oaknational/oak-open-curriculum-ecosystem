@@ -233,8 +233,10 @@ export function formatFitnessResponseDiscipline(): string {
     '\x1b[36mFitness response discipline:\x1b[0m',
     '  - Preserve substance first. Do not delete, trim, compress, or weaken memory',
     '    or Practice Core content to make this report greener.',
-    '  - Treat fitness as a routing signal: home, graduate, split, refine real',
-    '    redundancy, review the limit, or open an explicit remediation lane.',
+    '  - Treat fitness as a routing signal: home, graduate, drain buffer items,',
+    '    refine real redundancy, apply planned structural splits only to',
+    '    reference surfaces, review the limit, or open an explicit remediation',
+    '    lane.',
     '  - If editing the flagged file, record the structural response; do not make',
     '    reactive budget-shaped prose edits.',
   ].join('\n');

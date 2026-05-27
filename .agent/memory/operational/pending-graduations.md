@@ -9,7 +9,7 @@ lifecycle_model: >-
 access_pattern: >-
   consolidation-pass-only — read at consolidations and drain sessions; not
   loaded every session by every agent
-split_strategy: >-
+drain_strategy: >-
   Graduate items to PDRs/ADRs/rules/permanent docs; archive resolved items to
   dated archive snapshots; keep pending and recently-graduated items here
 fitness_rationale: >-

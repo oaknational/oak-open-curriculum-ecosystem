@@ -2,7 +2,6 @@ import {
   classifyFitnessCeilingZone,
   classifyFitnessZone,
   estimateTokensFromContentChars,
-  isKnownFitnessContentRole,
   parseFitnessContentRole,
   worstZone,
   type FitnessContentRole,
@@ -11,6 +10,10 @@ import {
   type FitnessZone,
   type ZoneMessage,
 } from './model.js';
+import {
+  buildConfigurationFindings,
+  type FitnessConfigurationThresholds,
+} from './configuration-findings.js';
 import {
   classifyLines,
   extractFrontmatter,
@@ -46,15 +49,13 @@ export interface FitnessResult {
   readonly configurationFindings: readonly FitnessConfigurationFinding[];
 }
 
-interface FitnessThresholds {
+interface FitnessThresholds extends FitnessConfigurationThresholds {
   readonly targetLines: number | null;
   readonly limitLines: number | null;
   readonly limitChars: number | null;
   readonly maxProseLineWidth: number | null;
   readonly targetTokens: number | null;
   readonly limitTokens: number | null;
-  readonly contentRole: FitnessContentRole;
-  readonly rawContentRole: string | null;
 }
 
 interface ProseMeasurement {
@@ -75,36 +76,10 @@ function readThresholds(content: string): FitnessThresholds {
     limitTokens: getFrontmatterNumber(frontmatter, 'fitness_token_limit'),
     contentRole: parseFitnessContentRole(rawContentRole),
     rawContentRole,
+    rawSplitStrategy: getFrontmatterString(frontmatter, 'split_strategy'),
+    rawSurfaceKind: getFrontmatterString(frontmatter, 'surface_kind'),
+    rawMergeClass: getFrontmatterString(frontmatter, 'merge_class'),
   };
-}
-
-function buildConfigurationFindings(
-  thresholds: FitnessThresholds,
-  measurement: ContentMeasurement,
-): FitnessConfigurationFinding[] {
-  const findings: FitnessConfigurationFinding[] = [];
-  if (thresholds.targetTokens != null && thresholds.limitTokens == null) {
-    findings.push({
-      metric: 'tokens',
-      text: 'fitness_token_target declared without fitness_token_limit — declare both or neither',
-    });
-  }
-  if (!isKnownFitnessContentRole(thresholds.rawContentRole)) {
-    findings.push({
-      metric: 'content-role',
-      text: `fitness_content_role must be reference or drainable-buffer, got ${thresholds.rawContentRole}`,
-    });
-  }
-  if (
-    measurement.contentText.trim().length === 0 &&
-    thresholds.contentRole !== 'drainable-buffer'
-  ) {
-    findings.push({
-      metric: 'content-role',
-      text: 'empty content is only ready for fitness_content_role: drainable-buffer — add content or declare the drainable role',
-    });
-  }
-  return findings;
 }
 
 function measureProse(
@@ -224,7 +199,7 @@ function evaluateClassifiedFitnessFile(
       maxProseLineNum: prose.maxProseLineNum,
       proseViolationCount,
     }),
-    configurationFindings: buildConfigurationFindings(thresholds, measurement),
+    configurationFindings: buildConfigurationFindings(thresholds, measurement.contentText),
   };
 }
 

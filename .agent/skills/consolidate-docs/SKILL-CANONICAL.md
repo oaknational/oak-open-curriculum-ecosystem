@@ -184,7 +184,14 @@ not full of substance to remove, it is full of substance to graduate.
 Drainable buffers are flow-control surfaces. In
 `dedicated-knowledge-curation`, "empty" means every item in the selected buffer
 has a recorded disposition. It does not mean the content was moved into an
-archive, made smaller, or hidden from the live surface.
+archive, made smaller, split into another buffer, renamed, or hidden from the
+live surface.
+
+Buffer identity follows the role, not the filename. Split, child, adjacent,
+dated, windowed, backlog, or so-called shard files still count as part of the
+same buffer inventory until their items are dispositioned. Do not exclude a file
+from the buffer count merely because it was moved under a directory, given a
+smaller date range, or labelled as a shard.
 
 For each buffer item, read the source, understand the substance, route it, and
 record exactly one disposition in a ledger before any archive move:
@@ -195,17 +202,24 @@ record exactly one disposition in a ledger before any archive move:
   live holding location.
 - `stale-withdrawn` - no longer valid, with reason.
 - `carried-forward` - still valid but not drainable in this pass, with trigger
-  and next action.
+  and next action. This is valid for honest mid-pass handoff or
+  `session-completion`; it is not a final completion state for an owner goal
+  that asks to continue until buffers are empty or explicitly owner-gated.
 
-The ledger may live in the touched buffer, an adjacent shard, a plan closeout
-section, or a curation report. It must be durable enough for the next agent to
-verify the item count and each route without rereading the whole source
-history.
+The ledger may live in the touched buffer, an adjacent disposition note, a plan
+closeout section, or a curation report. It must be durable enough for the next
+agent to verify the item count and each route without rereading the whole
+source history.
 
 **Checklist failure / anti-example**: archiving a buffer or source file before
 read/extract/route/disposition evidence exists is not curation. An
 archive-only "drain" leaves the buffer live for completion purposes, even if
 the fitness report becomes softer afterward.
+
+**Fitness anti-pattern**: split, shard, archive, rename, or delete operations
+performed primarily to change the fitness category are self-delusion, not
+curation. They may appear in a correct pass only after the item ledger proves
+what happened to the knowledge.
 
 ## Plan supersession discipline
 
@@ -649,16 +663,16 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    **Fitness warnings must be analysed and routed to the proper structural
    response, not answered by opportunistic trimming and never used to
    suppress learning.** A SOFT, HARD, or CRITICAL warning is a signal —
-   sometimes the file has accumulated low-value entries (refine), sometimes
-   the file has outgrown its split strategy (split), sometimes the limit was
-   set before the substance grew legitimately (extend target or limit), and
-   sometimes the file simply received important knowledge before the
-   structure caught up. Reaching for "delete some lines" first is the
+   sometimes the file has accumulated low-value entries (refine), sometimes a
+   reference surface needs an intended long-term structure, sometimes the limit
+   was set before the substance grew legitimately (extend target or limit), and
+   sometimes the file simply received important knowledge before the structure
+   caught up. Reaching for "delete some lines" first is the
    failure mode this discipline forbids. Refusing to write or distil useful
    learning in order to keep fitness green is the companion failure. Run
    `pnpm practice:fitness` (or `pnpm practice:fitness:informational` for a
    non-blocking report). The validator discovers every live markdown file
-   that declares `fitness_line_target` in YAML frontmatter, excluding
+   that declares fitness or lifecycle metadata in YAML frontmatter, excluding
    archives, backups, and incoming practice boxes. Every declared metric
    lands in one of four zones:
 
@@ -678,13 +692,16 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
 
    a. **Analyse** — is the content appropriately dense, or has it accumulated low-value entries?
    b. **Refine** — compress, deduplicate, remove entries covered elsewhere.
-   c. **Split** — follow the file's `split_strategy` frontmatter.
+   c. **Restructure reference surfaces** — follow `split_strategy` only for
+      reference or documentation surfaces where the change is the right
+      long-term structure for already-understood substance. Drainable buffers
+      use `drain_strategy` and item dispositions instead.
    d. **Extend target** — agents may raise `fitness_line_target` modestly with rationale.
    e. **Extend limit** — only the user may raise `fitness_line_limit`, `fitness_char_limit`, or `fitness_line_length`.
 
    For any file in `critical`, also run the short three-question post-mortem from ADR-144 §Loop Health: why the earlier zones did not fire, whether the hard limit is set correctly for the file's role, and whether the file is a symptom of a missing graduation (ADR, governance doc, README) elsewhere. Record the answers in the consolidation output.
 
-   At consolidation closure, run `pnpm practice:fitness --strict-hard` to
+   At consolidation closure, run `pnpm practice:fitness:strict-hard` to
    expose unresolved hard or critical pressure. If the command fails because
    knowledge was preserved correctly, do not undo the knowledge. Closure
    still needs a concrete disposition: remediate now, open an explicit

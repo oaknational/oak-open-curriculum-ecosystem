@@ -16,6 +16,19 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
+- **Solar Illuminating Dawn closeout (codex / GPT-5 / `019e6a`)**:
+  bounded collaboration temp/state-file curation completed on
+  `feat/graph-foundations`, live HEAD `ebd679f6`. The tracked accidental
+  `.agent/state/collaboration/_tmp-*` files were scanned, dispositioned in
+  [`2026-05-27-solar-illuminating-dawn.md`](curator-passes/2026-05-27-solar-illuminating-dawn.md),
+  and removed; the two tracked SDK `.bak` strays were scanned and removed as
+  stale MCP tool-generation examples. `comms-seen` investigation found the
+  temp-looking codenames are legitimate historical seen ledgers; watcher
+  heartbeat JSONs are runtime state currently preserved for the owner-gated
+  comms/coordination research window. Doctrine captured: state files are
+  potential knowledge sources, not long-term storage. Validation: root
+  markdownlint, diff-check, and `.bak` scan passed; full `pnpm check` was red
+  only on peer-owned practice-fitness complexity (`9 > 8`).
 - **Gnarled Flowering Pollen closeout (codex / GPT-5 / `019e69`)**:
   external agent-skills source audit completed as a bounded tactical lane on
   `feat/graph-foundations`. The existing source-neutral
@@ -152,9 +165,12 @@ Earlier archives remain under [`archive/`](archive/).
   Programme landed at `09eda6f4`; details live in the
   [`mcp-product-analytics`](threads/mcp-product-analytics.next-session.md)
   thread record and the archived Current State prose.
-- **Comms retention standing direction remains binding**: do not move or delete
-  `.agent/state/collaboration/comms/` files while the
-  `agent-collaboration-research` thread remains owner-gated.
+- **Collaboration-state retention standing direction remains binding**: do not
+  move or delete `.agent/state/collaboration/` research-substrate state while
+  the `agent-collaboration-research` thread remains owner-gated. This is a
+  temporary research preservation exception, not long-term storage doctrine:
+  after owner-authorised processing, state files should be dispositioned as
+  potential knowledge sources, routed to durable homes if useful, and deleted.
 
 ## Active Threads
 
@@ -169,7 +185,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF first-feature delivery | [record][eef] | codex / GPT-5 / Foamy Lapping Harbour / value-pr-coordination-state-committer / 2026-05-27 |
-| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | codex / GPT-5 / Gnarled Flowering Pollen / external-skills-plan-audit-and-successor-index-correction / 2026-05-27 |
+| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | codex / GPT-5 / Solar Illuminating Dawn / collaboration-temp-state-file-curation-and-handoff / 2026-05-27 |
 
 ## Paused Threads
 
@@ -187,7 +203,7 @@ not the current session-priority lane. Reactivation is owner-directed.
 | `sector-engagement` | External adoption | [record][sector] | Squally / cursor / unknown / unknown / 2026-04-30 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / codex / unknown / unknown / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / codex / unknown / unknown / 2026-04-28 |
-| `agent-collaboration-research` | Comms-corpus pattern research (owner-gated buffer) | [record][collab-research] | Charcoal Brazing Kiln / claude / claude-opus-4-7 / 7c7327 / thread-record-author-post-m1-merge / 2026-05-24 |
+| `agent-collaboration-research` | Comms-corpus pattern research (owner-gated buffer) | [record][collab-research] | codex / GPT-5 / Solar Illuminating Dawn / state-file-lifecycle-boundary-clarification / 2026-05-27 |
 
 Compact identity rule (per [PDR-027](../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md)
 and the 2026-05-17 structural refactor): this table carries only the latest
@@ -376,94 +392,27 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
-**not due — session handoff after external-skills plan audit** (Gnarled
-Flowering Pollen `019e69`, 2026-05-27). This session evaluated the plan
-topology for external agent-skills sources, assessed
-`K-Dense-AI/scientific-agent-skills` as a selective-evaluation candidate, and
-fixed discoverability drift between the superseded future ingestion plan and
-the current lifecycle CLI successor. No plan or milestone closed, no repeated
-pattern reached a graduation threshold, and no new ADR/PDR/open-question entry
-is required: the actionable route already lives in the source-neutral future
-plan plus the current tooling successor. Falsifiability: inspect the touched
-plan indexes/roadmap, the napkin entry, the agentic thread handoff, and the
-handoff `pnpm check` output showing failure only in unrelated dirty
-collaboration markdown.
+**not due — 2026-05-27 Solar handoff**: this session already ran the requested
+bounded temp/state-file curation pass and captured the new state-file lifecycle
+doctrine in napkin, distilled, the curation ledger, and the research thread.
+The remaining collaboration-state corpus is intentionally preserved for the
+owner-gated `agent-collaboration-research` thread, so deeper deletion/rotation
+would violate the current preservation boundary.
 
-**not due — dedicated knowledge-curation pass completed this session**
-(Kilned Burning Hearth `019e68`, 2026-05-27). The session was itself the
-curation pass: selected buffer items were dispositioned with a ledger, the due
-candidate graduated into a rule/adapters/start-right-team pointer, and the n=2
-candidate remains live with an owner-gated blocker named. No additional
-session-close consolidation trigger is left unserved: no new ADR/PDR candidate
-or non-urgent open question surfaced beyond the already-routed PDR-082 gate.
-Falsifiability: inspect the curator-pass proof report and the pending shard's
-2026-05-27 disposition ledger.
+**recent 2026-05-27 consolidation status**: detailed closeout prose for
+Gnarled, Kilned, Veiled, and Foamy now lives in the
+[`agentic-engineering-enhancements` thread record][agentic], the
+[`eef` thread record][eef], and the Kilned curator-pass proof. The remaining
+live curation item from those sessions is the n=2 coordination-efficiency
+candidate, explicitly owner-gated in
+[`2026-05-25-fiery-collaboration-decomposition-and-n2-efficiency.md`](pending-graduations/2026-05-25-fiery-collaboration-decomposition-and-n2-efficiency.md).
 
-**not due — session-completion handoff after skill-contract implementation**
-(Veiled Dimming Threshold `019e68`, 2026-05-27). This session implemented the
-`oak-consolidate-docs` two-mode contract and committed the full handoff bundle.
-It was not a dedicated knowledge-curation pass. No new ADR/PDR candidate or
-open question needs a separate register entry because the actionable doctrine
-now lives in the skill and plan diff. Falsifiability: inspect the skill,
-plan, and commit; the remaining action is owner-directed push/PR timing, not a
-current-buffer drain.
-
-**not due — session handoff after commit-and-merge closeout** (Foamy Lapping
-Harbour `019e68`, 2026-05-27). This session landed bounded code/docs/continuity
-commits and merged `origin/main` into `feat/graph-foundations`; no new ADR/PDR
-candidate, open-question entry, repeated-surprise rule candidate, napkin
-rotation pressure, or settled doctrine stranded in ephemeral-only form surfaced
-during handoff. Hidden Dimming Threshold's curation pass already drained the
-active napkin/distilled/open-question/pending-graduation buffers to ready-empty
-state before this closeout. Falsifiability: inspect commits `8f3a9135`,
-`544b2f4e`, `f6a9bb2a`, `3c136e9d`, then rerun the handoff trigger checklist;
-the remaining next action is branch push/PR by owner direction, not a
-consolidation pass.
-
-**due — Phase 0 milestone closed + distilled.md fitness convergence
-pending** (Airy Whirling Current `3624a5`, 2026-05-26, second handoff
-this session after Cycle 11 landed). Triggers fired:
-
-1. Plan-arc milestone closed: Phase 0 of
-   `collaboration-identity-doctrine-enforcement-remediation.plan.md`
-   complete (ID-0..ID-3 all in code). Plan itself remains ACTIVE for
-   Phase 1+.
-2. `distilled.md` at 221 lines (soft limit 180, target 120) after this
-   session added two cross-session lessons: reviewer-verdict authority
-   discipline (worked instance: Cycle 11 landing after owner challenge)
-   and structural-vs-operational-evidence distinction (worked instance:
-   Phase 0 completion framing).
-
-Not escalating to `oak-consolidate-docs` from this closeout because:
-the two new distilled entries are knowledge-preservation-valid at full
-weight per `knowledge-preservation-over-fitness-warnings`; trimming
-them to satisfy the soft-limit signal would defeat their purpose. They
-need a second worked instance before graduation to a rule/PDR. The plan
-itself is now PAUSED (owner direction 2026-05-26 — Phase 0 delivered
-its collaboration-improvement intent; next session returns to eef). No
-napkin rotation pressure (273/300, healthy zone). No ADR/PDR candidates
-surfaced. Falsifiability for the next consolidator: distilled.md grew
-by the two named entries this session; if a second worked instance of
-either appears in a future napkin, graduate from distilled to permanent
-home rather than letting the soft pressure dictate trimming.
-
-**not due — Phase 0 closeout commit only** (Airy Whirling Current `3624a5`,
-2026-05-26, FIRST handoff this session — superseded by the entry above
-after Cycle 11 landed). Original entry preserved for audit trail: Phase 0
-critical path closed with cycles 9+10 landing the consumer-visible cure
-surface plus the audit-signal diagnostic. Status revised after Cycle 11
-landed in the same session, which added the two distilled entries.
-
-**not due — mid-arc handoff in active plan** (Tempestuous Sweeping Feather
-`a9e5d2`, 2026-05-26). Owner directed a brief session handoff with the
-final-session work explicitly carried forward (Cycles 9-10 + closeout). No
-consolidation triggers fired: the active plan is in-progress not closed, no
-napkin rotation pressure, no ADR/PDR graduation candidates surfaced this
-session (the routing-cure work executed locked design; lessons captured as
-session-scoped surprises in napkin.md). Falsifiability: the next session
-runs against an unchanged Active threads table, the same active plan, and
-this same `not due` marker; if any trigger fires mid-final-session, the
-consolidation gate at session close handles it then.
+**Phase 0 identity-remediation status**: the old closeout/due markers for
+Airy Whirling Current and Tempestuous Sweeping Feather are no longer live
+routing. Phase 0 completion, the PAUSED owner direction, and the remaining
+DI-seam hygiene follow-up are durable in the agentic thread record and the
+current remediation plan. `distilled.md` is now ready-empty; no separate
+distilled hard-pressure route remains live.
 
 **completed — owner-directed cross-platform memory import slice** (Feathered
 Flying Cloud `019e65`, 2026-05-26). Owner asked to scan Claude memories, other

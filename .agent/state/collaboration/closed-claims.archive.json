@@ -47329,6 +47329,581 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "c07f7ab9-fe00-4127-b37f-4739d5f98860",
+      "agent_id": {
+        "agent_name": "Airy Vaulting Squall",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e6a",
+        "id": "4670dd77-e692-581a-907f-94465e86704d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/**",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/archive/**",
+            ".agent/memory/operational/curator-passes/**",
+            ".agent/memory/operational/pending-graduations/**",
+            ".agent/state/collaboration/**",
+            ".remember/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T16:05:34Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Dedicated knowledge-curation pass: reduce hard/critical fitness to soft-or-better and disposition drainable buffers to empty or owner-gated.",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T16:12:00Z",
+        "closed_by": {
+          "agent_name": "Airy Vaulting Squall",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e6a",
+          "id": "4670dd77-e692-581a-907f-94465e86704d"
+        },
+        "summary": "Closed after owner metacognition correction: proposed archive/split response was the prohibited fitness-level anti-pattern, not valid knowledge curation. No curation edits landed beyond bootstrap comms/claim state.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c07f7ab9-fe00-4127-b37f-4739d5f98860",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "0302b659-b439-4f5a-99af-4c497d4eedde",
+      "agent_id": {
+        "agent_name": "Solar Illuminating Dawn",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e6a",
+        "id": "a2be871a-f5e6-5fd7-8654-cd0cca0aafc0"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/state/collaboration/_tmp-*",
+            ".agent/memory/operational/curator-passes/2026-05-27-solar-illuminating-dawn.md",
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T16:07:37Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Dedicated curation of tracked accidental collaboration temp files: scan every _tmp file, route useful knowledge, write a disposition ledger, then remove processed temp files.",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T16:10:23Z",
+        "closed_by": {
+          "agent_name": "Solar Illuminating Dawn",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e6a",
+          "id": "a2be871a-f5e6-5fd7-8654-cd0cca0aafc0"
+        },
+        "summary": "Processed tracked .agent/state/collaboration/_tmp-* buffer: scanned 26 files, wrote disposition ledger, preserved duplicate/durable knowledge pointers, deleted processed temp files.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "0302b659-b439-4f5a-99af-4c497d4eedde",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "6c314680-3690-4062-912a-022896905b60",
+      "agent_id": {
+        "agent_name": "Airy Vaulting Squall",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e6a",
+        "id": "4670dd77-e692-581a-907f-94465e86704d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/consolidate-until-done/**",
+            ".agents/skills/oak-consolidate-until-done/**",
+            ".claude/skills/oak-consolidate-until-done/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T16:13:52Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Add a consolidate-until-done wrapper skill that makes real buffer disposition and no-worse-than-soft proof explicit; no archive/split/shard-as-fitness anti-patterns.",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T16:36:20Z",
+        "closed_by": {
+          "agent_name": "Airy Vaulting Squall",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e6a",
+          "id": "4670dd77-e692-581a-907f-94465e86704d"
+        },
+        "summary": "Added consolidate-until-done canonical skill and generated oak adapters with official skills-adapter-generate tooling; skills:check passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "6c314680-3690-4062-912a-022896905b60",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "27d89953-2ea7-45ba-b8ef-7059053b3ea7",
+      "agent_id": {
+        "agent_name": "Airy Vaulting Squall",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e6a",
+        "id": "4670dd77-e692-581a-907f-94465e86704d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/consolidate-docs/SKILL-CANONICAL.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T16:19:40Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Harden consolidate-docs canonical so all platforms inherit no-archive/split/shard-as-fitness and done-means-disposition language.",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T16:36:35Z",
+        "closed_by": {
+          "agent_name": "Airy Vaulting Squall",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e6a",
+          "id": "4670dd77-e692-581a-907f-94465e86704d"
+        },
+        "summary": "Hardened consolidate-docs canonical so buffer identity follows role, split/shard/archive/rename-only moves do not count as disposition, and strict-hard script name is correct.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "27d89953-2ea7-45ba-b8ef-7059053b3ea7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d93b4dc6-1f97-4972-8b67-14b632c3b3ba",
+      "agent_id": {
+        "agent_name": "Airy Vaulting Squall",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e6a",
+        "id": "4670dd77-e692-581a-907f-94465e86704d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".claude/settings.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T16:22:15Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Allow the new oak-consolidate-until-done skill in Claude project settings per repo skill standards.",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T16:36:50Z",
+        "closed_by": {
+          "agent_name": "Airy Vaulting Squall",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e6a",
+          "id": "4670dd77-e692-581a-907f-94465e86704d"
+        },
+        "summary": "Added oak-consolidate-until-done and wildcard permission entries to Claude project settings.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d93b4dc6-1f97-4972-8b67-14b632c3b3ba",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "573b841b-5527-4960-8692-51e8ea9650c3",
+      "agent_id": {
+        "agent_name": "Airy Vaulting Squall",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e6a",
+        "id": "4670dd77-e692-581a-907f-94465e86704d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T16:30:20Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Log correction that platform skill adapters must be generated, not hand-written.",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T16:37:05Z",
+        "closed_by": {
+          "agent_name": "Airy Vaulting Squall",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e6a",
+          "id": "4670dd77-e692-581a-907f-94465e86704d"
+        },
+        "summary": "Logged owner correction that skill adapters must be generated, not hand-written stubs.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "573b841b-5527-4960-8692-51e8ea9650c3",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "bc366611-626e-48e3-82dd-465ffb4cbb6f",
+      "agent_id": {
+        "agent_name": "Airy Vaulting Squall",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e6a",
+        "id": "4670dd77-e692-581a-907f-94465e86704d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/curator-passes/2026-05-27-airy-vaulting-squall.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T16:09:34Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Curate repo-continuity hard pressure by removing only duplicate/stale live-index content with durable-home evidence; no archive-as-fitness cure.",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T16:37:20Z",
+        "closed_by": {
+          "agent_name": "Airy Vaulting Squall",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e6a",
+          "id": "4670dd77-e692-581a-907f-94465e86704d"
+        },
+        "summary": "Completed narrow repo-continuity duplicate/stale live-index cleanup and added item-level disposition ledger; not a full curation-goal completion claim.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "bc366611-626e-48e3-82dd-465ffb4cbb6f",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f80bc332-b97f-4a1b-9db3-20c0475501b7",
+      "agent_id": {
+        "agent_name": "Airy Vaulting Squall",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e6a",
+        "id": "4670dd77-e692-581a-907f-94465e86704d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T16:19:15Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Reflow napkin overlong prose lines preserving substance so the only critical fitness item becomes soft-or-better.",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T16:24:30Z",
+        "closed_by": {
+          "agent_name": "Airy Vaulting Squall",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e6a",
+          "id": "4670dd77-e692-581a-907f-94465e86704d"
+        },
+        "summary": "Reflowed napkin overlong prose lines preserving substance; practice:fitness:strict-hard now reports SOFT with 0 hard and 0 critical.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f80bc332-b97f-4a1b-9db3-20c0475501b7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2b11fb52-4477-4f4e-908f-5983aa16d3c1",
+      "agent_id": {
+        "agent_name": "Airy Vaulting Squall",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e6a",
+        "id": "4670dd77-e692-581a-907f-94465e86704d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/consolidate-docs/SKILL-CANONICAL.md",
+            ".agent/skills/consolidate-until-done/SKILL-CANONICAL.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T16:24:17Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Remove split/shard affordance wording from consolidation skills while preserving buffer-drain semantics.",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T16:28:47Z",
+        "closed_by": {
+          "agent_name": "Airy Vaulting Squall",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e6a",
+          "id": "4670dd77-e692-581a-907f-94465e86704d"
+        },
+        "summary": "Removed split/shard affordance wording from consolidation skills and regenerated generated platform adapters with the repo tooling. Evidence: pnpm skills:check and pnpm portability:check passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2b11fb52-4477-4f4e-908f-5983aa16d3c1",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "5bf718d7-efe8-408d-8b7f-e61242d4cbf2",
+      "agent_id": {
+        "agent_name": "Airy Vaulting Squall",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e6a",
+        "id": "4670dd77-e692-581a-907f-94465e86704d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/practice-fitness/**",
+            "agent-tools/tests/practice-fitness/**",
+            ".agent/memory/active/*.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/pending-graduations/*.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T16:21:30Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Add executable guardrails preventing drainable buffers from declaring split_strategy, and convert existing buffer frontmatter to drain_strategy.",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T16:28:47Z",
+        "closed_by": {
+          "agent_name": "Airy Vaulting Squall",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e6a",
+          "id": "4670dd77-e692-581a-907f-94465e86704d"
+        },
+        "summary": "Resolved future guardrail slice: practice-fitness now discovers lifecycle metadata, rejects split_strategy on drainable buffers, rejects shard lifecycle aliases, and live drainable buffer metadata now uses drain_strategy without item draining. Evidence: targeted vitest, agent-tools lint, markdownlint, skills:check, portability:check, practice:fitness:strict-hard.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "5bf718d7-efe8-408d-8b7f-e61242d4cbf2",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "123d06fc-08af-405e-8052-d367abed4295",
+      "agent_id": {
+        "agent_name": "Airy Vaulting Squall",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e6a",
+        "id": "4670dd77-e692-581a-907f-94465e86704d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "docs/engineering/workflow.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T16:26:09Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Clarify growth-axis metadata so split_strategy applies to reference surfaces, not drainable buffers.",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T16:28:47Z",
+        "closed_by": {
+          "agent_name": "Airy Vaulting Squall",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e6a",
+          "id": "4670dd77-e692-581a-907f-94465e86704d"
+        },
+        "summary": "Clarified docs engineering workflow: split_strategy is for reference/documentation growth axes; drainable buffers use drain_strategy and item dispositions. Evidence: markdownlint and portability/skills checks passed.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "123d06fc-08af-405e-8052-d367abed4295",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "4a9a8caa-a9b7-4580-a35d-bb42f532cd3e",
+      "agent_id": {
+        "agent_name": "Airy Vaulting Squall",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e6a",
+        "id": "4670dd77-e692-581a-907f-94465e86704d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T16:29:33Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit all current files at owner request.",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T16:29:59Z",
+        "closed_by": {
+          "agent_name": "Airy Vaulting Squall",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e6a",
+          "id": "4670dd77-e692-581a-907f-94465e86704d"
+        },
+        "summary": "closed in same all-files lifecycle commit: fix(agent-tools): prevent buffer split lifecycle escape",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "4a9a8caa-a9b7-4580-a35d-bb42f532cd3e",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2613137b-4dd9-45df-9e74-b40a8a412881",
+      "agent_id": {
+        "agent_name": "Airy Vaulting Squall",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e6a",
+        "id": "4670dd77-e692-581a-907f-94465e86704d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T16:30:29Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Restage formatted files and retry all-files commit.",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T16:30:39Z",
+        "closed_by": {
+          "agent_name": "Airy Vaulting Squall",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e6a",
+          "id": "4670dd77-e692-581a-907f-94465e86704d"
+        },
+        "summary": "closed in same retry commit after prettier formatting: fix(agent-tools): prevent buffer split lifecycle escape",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2613137b-4dd9-45df-9e74-b40a8a412881",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

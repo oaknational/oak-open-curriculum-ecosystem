@@ -3,7 +3,7 @@ fitness_line_target: 220
 fitness_line_limit: 300
 fitness_char_limit: 18000
 fitness_line_length: 100
-split_strategy: "Extract settled entries to permanent docs, PDRs, rules, or archived napkins"
+drain_strategy: "Extract settled entries to permanent docs, PDRs, rules, or archived napkins"
 merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
@@ -105,12 +105,13 @@ fitness_content_role: drainable-buffer
   candidate into `.agent/rules/ship-independent-coordinate-dependent.md`, the
   platform adapters, `RULES_INDEX.md`, and `start-right-team`.
 - Left the n=2 coordination-efficiency candidate owner-gated because PDR-082 is
-  still `Status: Proposed`; the shard now records that blocker explicitly.
+  still `Status: Proposed`; the recovery file now records that blocker
+  explicitly.
 
 ### Patterns to Remember
 
-- A ready-empty top-level register can still have drainable work in split
-  pending-graduation shards; check the shard directory before declaring the
+- A ready-empty top-level register can still have drainable work in legacy
+  pending-graduation recovery files; check that directory before declaring the
   curation lane empty.
 - A fresh comms-seen file can replay a lot of legacy routing-fallback noise.
   For bounded curation, prefer a targeted inbox/tail read or seed the seen
@@ -143,16 +144,32 @@ fitness_content_role: drainable-buffer
 
 ### Practice/tooling feedback
 
-- **Surface**: `Monitor` (host harness; persistent `tail -n 0 -F <file> | grep --line-buffered` over the ARC channel)
+- **Surface**: `Monitor` (host harness; persistent
+  `tail -n 0 -F <file> | grep --line-buffered` over the ARC channel)
 - **Signal**: friction
-- **Observation**: The watcher re-delivered the ENTIRE matched history (turns 23–43, ~11 headers) as one batch on repeated events, not just newly-appended lines, despite `-n 0`. Several replays landed across the session — a real context-budget tax. Restarting the monitor and stopping the pre-resume monitor did not stop it; the live monitor itself re-emits the backlog.
-- **Behaviour change / candidate follow-up**: A raw grep over `tail -F` of an append-only coordination file is noisy under repeated triggers. Prefer a since-cursor read keyed to "turn number > last-seen" (or a single-shot Bash `run_in_background` poll on that predicate) over a persistent grep-tail, so each new turn notifies exactly once. If this recurs, treat it as a strong signal not an annoyance.
+- **Observation**: The watcher re-delivered the ENTIRE matched history
+  (turns 23–43, ~11 headers) as one batch on repeated events, not just
+  newly-appended lines, despite `-n 0`. Several replays landed across the
+  session — a real context-budget tax. Restarting the monitor and stopping the
+  pre-resume monitor did not stop it; the live monitor itself re-emits the
+  backlog.
+- **Behaviour change / candidate follow-up**: A raw grep over `tail -F` of an
+  append-only coordination file is noisy under repeated triggers. Prefer a
+  since-cursor read keyed to "turn number > last-seen" (or a single-shot Bash
+  `run_in_background` poll on that predicate) over a persistent grep-tail, so
+  each new turn notifies exactly once. If this recurs, treat it as a strong
+  signal not an annoyance.
 - **Source plane**: `operational`
 
 - **Surface**: `agent-tools:comms` (ARC-channel reads generally)
 - **Signal**: friction (second occurrence of a known gap)
-- **Observation**: Locating/reading a specific ARC turn still needs raw `awk`/`tail`/`gh` fallbacks — no `comms list --tail N` summary projection or `show <turn>` body fetch. Recurred throughout this reviewer session.
-- **Behaviour change / candidate follow-up**: Reinforces the already-logged comms-CLI grounding gap; substance now confirmed by a second session of friction — the `--tail`/`show` projection is worth graduating from wishlist to a tooling work-item.
+- **Observation**: Locating/reading a specific ARC turn still needs raw
+  `awk`/`tail`/`gh` fallbacks — no `comms list --tail N` summary projection or
+  `show <turn>` body fetch. Recurred throughout this reviewer session.
+- **Behaviour change / candidate follow-up**: Reinforces the already-logged
+  comms-CLI grounding gap; substance now confirmed by a second session of
+  friction — the `--tail`/`show` projection is worth graduating from wishlist
+  to a tooling work-item.
 
 ### Patterns to Remember
 
@@ -160,3 +177,43 @@ fitness_content_role: drainable-buffer
   +1 is a dropped merge commit; confirm it is benign with `git diff HEAD
   origin/<branch>` (empty tree = identical content, divergence is purely
   structural SHA-rewrite) before recommending `--force-with-lease`.
+
+## Session: 2026-05-27 — collaboration temp-file curation
+
+### What Was Done
+
+- Scanned the tracked accidental `.agent/state/collaboration/_tmp-*` files
+  before removal and wrote an item-level disposition ledger at
+  `.agent/memory/operational/curator-passes/2026-05-27-solar-illuminating-dawn.md`.
+- Found useful substance was already durable in commits, comms events, handoff
+  records, archived napkin material, or plan/thread history; the remaining
+  one-line heartbeat files were stale liveness ticks.
+
+### Patterns to Remember
+
+- Repo-local compose buffers are safer than `/tmp` for shell/body-file hazards,
+  but they still must be consumed and deleted immediately. If they survive into
+  git, treat them as a drainable buffer: read every file, prove each useful
+  item has a durable home, write the disposition ledger, then remove them.
+- Collaboration/state files are not long-term storage. If they are preserved
+  for a bounded comms/coordination research plan, treat that as an explicit
+  temporary exception; the general lifecycle is still: process as potential
+  knowledge source, route useful substance to memory/docs/plans, then delete
+  the state files.
+
+## Session: 2026-05-27 — skill-adapter generation correction
+
+### What Was Done
+
+- While adding `consolidate-until-done`, I initially hand-wrote platform
+  adapter stubs after the generator hit a sandbox permission error.
+- Owner corrected the move: platform-specific skill adapters are not written
+  manually, and manual stubs mask the toolchain issue.
+- Re-ran the official `skills-adapter-generate` tool with the permissions it
+  needed; `pnpm skills:check` then passed.
+
+### Patterns to Remember
+
+- For repo skills, canonical content lives in `.agent/skills/`; `.agents/` and
+  `.claude/` skill files are generated adapters. If generation fails, fix the
+  generator invocation or permissions, then rerun it. Do not hand-create stubs.

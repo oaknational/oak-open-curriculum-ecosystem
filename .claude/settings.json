@@ -23,6 +23,8 @@
       "Skill(oak-start-right-team:*)",
       "Skill(oak-consolidate-docs)",
       "Skill(oak-consolidate-docs:*)",
+      "Skill(oak-consolidate-until-done)",
+      "Skill(oak-consolidate-until-done:*)",
       "Skill(oak-session-handoff)",
       "Skill(oak-session-handoff:*)",
       "Skill(oak-go)",

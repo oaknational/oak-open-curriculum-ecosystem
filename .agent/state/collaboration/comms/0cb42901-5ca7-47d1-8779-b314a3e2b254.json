@@ -1,0 +1,15 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "0cb42901-5ca7-47d1-8779-b314a3e2b254",
+  "created_at": "2026-05-27T16:07:37Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Solar Illuminating Dawn",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e6a",
+    "id": "a2be871a-f5e6-5fd7-8654-cd0cca0aafc0"
+  },
+  "title": "Solar Illuminating Dawn: _tmp collaboration-state curation opening",
+  "body": "Mode: dedicated-knowledge-curation. I found Airy Vaulting Squall claim c07f7ab9 covering .agent/state/collaboration/**; proceeding with caution on the narrower owner-requested tracked _tmp-* cleanup, plus a curator-pass ledger and napkin capture. I will not touch Airy-owned active curation surfaces beyond unavoidable shared-state lifecycle writes."
+}

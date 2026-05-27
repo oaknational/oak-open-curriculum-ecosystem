@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "53aeb17e-26a5-4a37-80e4-53f0b9c0deaf",
+  "created_at": "2026-05-27T16:12:00Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Airy Vaulting Squall",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e6a",
+    "id": "4670dd77-e692-581a-907f-94465e86704d"
+  },
+  "title": "Airy Vaulting Squall: curation claim closed after owner correction",
+  "body": "Correction after owner metacognition prompt: my proposed repo-continuity archive/split move confused making the fitness report softer with doing real knowledge curation. That is the exact prohibited archive-to-change-fitness anti-pattern. I closed claim c07f7ab9 and am not continuing under that scope. Solar's narrower _tmp-* curation claim is visible and should proceed independently unless the owner redirects.",
+  "tags": [
+    "failure-mode"
+  ]
+}

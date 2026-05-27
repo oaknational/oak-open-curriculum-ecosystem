@@ -429,6 +429,54 @@ describe('content-only token measurement', () => {
     ]);
   });
 
+  it('rejects split_strategy on drainable buffers', () => {
+    const result = evaluateFitnessFile(
+      '.agent/memory/operational/pending-graduations.md',
+      [
+        '---',
+        'fitness_line_target: 10',
+        'fitness_line_limit: 20',
+        'fitness_content_role: drainable-buffer',
+        'split_strategy: "move overflow to a child queue"',
+        '---',
+        'body',
+      ].join('\n'),
+    );
+
+    expect(result.configurationFindings).toContainEqual({
+      metric: 'lifecycle',
+      text: 'drainable buffers must not declare split_strategy — use drain_strategy and process items in place',
+    });
+  });
+
+  it('rejects active-pending-graduations-shard as a lifecycle state', () => {
+    const result = evaluateFitnessFile(
+      '.agent/memory/operational/pending-graduations/legacy.md',
+      ['---', 'surface_kind: active-pending-graduations-shard', '---', 'body'].join('\n'),
+    );
+
+    expect(result.configurationFindings).toStrictEqual([
+      {
+        metric: 'lifecycle',
+        text: 'active-pending-graduations-shard is not a valid lifecycle state — mark legacy files as pending-graduations-recovery-file while draining them',
+      },
+    ]);
+  });
+
+  it('rejects shard lifecycle aliases in merge_class metadata', () => {
+    const result = evaluateFitnessFile(
+      '.agent/memory/operational/pending-graduations/legacy.md',
+      ['---', 'merge_class: active-register-shard', '---', 'body'].join('\n'),
+    );
+
+    expect(result.configurationFindings).toStrictEqual([
+      {
+        metric: 'lifecycle',
+        text: 'merge_class must not label live buffers as shards — use drain_strategy and process items in place',
+      },
+    ]);
+  });
+
   it('differs from context-cost raw-file estimates when frontmatter is present', () => {
     const raw = [
       '---',

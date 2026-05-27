@@ -1,15 +1,16 @@
 ---
-surface_kind: active-pending-graduations-shard
+surface_kind: pending-graduations-recovery-file
 created_on: 2026-05-24
 source_register: ../pending-graduations.md
 source_window: 2026-05-23 first-out closeout and autonomy primitives
 status: active
 archive_status: not-archived
+recovery_status: active
 ---
 
 # 2026-05-23 Team-Session Autonomy Pending Queue
 
-This active shard carries unprocessed pending-graduations entries relocated
+This legacy recovery file carries unprocessed pending-graduations entries relocated
 from the main register on 2026-05-24. The move is a split, not an archive:
 every entry below remains live queue substance until its target home lands or
 its trigger is explicitly withdrawn.

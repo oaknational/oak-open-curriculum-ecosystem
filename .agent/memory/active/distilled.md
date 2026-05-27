@@ -3,7 +3,7 @@ fitness_line_target: 120
 fitness_line_limit: 180
 fitness_char_limit: 12000
 fitness_line_length: 100
-split_strategy: "Extract settled entries to permanent docs (ADRs, PDRs, governance, READMEs)"
+drain_strategy: "Extract settled entries to permanent docs (ADRs, PDRs, governance, READMEs)"
 merge_class: curated-learning-register
 fitness_content_role: drainable-buffer
 fitness_rationale: >-
@@ -16,3 +16,12 @@ fitness_rationale: >-
   no stable permanent home, preserve it first and revise the envelope by
   substance rather than trimming the lesson.
 ---
+
+## 2026-05-27 — collaboration state is source, not storage
+
+Collaboration state files may be temporarily preserved for the bounded
+comms/coordination research plan, but state files are not long-term knowledge
+storage. Outside an explicit preservation window, process them as potential
+knowledge sources, route useful substance into memory/docs/plans, then delete
+the state files. Source session: Solar Illuminating Dawn temp/state-file
+curation.

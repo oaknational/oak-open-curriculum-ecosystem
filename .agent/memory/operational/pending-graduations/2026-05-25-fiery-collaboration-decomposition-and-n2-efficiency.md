@@ -1,8 +1,9 @@
 # 2026-05-25 — Fiery collaboration decomposition + n=2 efficiency candidates
 
-Active shard (split from main pending-graduations register by Fiery Kindling Brazier
-/ `9f4026` at 2026-05-25T15:16Z, immediately on capture). Two owner-direction-
-triggered candidates from the PR #115 marshal cycle retrospective metacognition pass.
+Legacy recovery file (created from the main pending-graduations register by
+Fiery Kindling Brazier / `9f4026` at 2026-05-25T15:16Z, immediately on
+capture). Two owner-direction-triggered candidates from the PR #115 marshal
+cycle retrospective metacognition pass.
 
 Status: item 1 graduated 2026-05-27; item 2 remains owner-gated pending
 PDR-082 ratification / second-instance validation. Process any remaining live
@@ -14,7 +15,7 @@ enforce).
 | Item | Disposition | Evidence |
 | --- | --- | --- |
 | Collaboration ceremony — decomposition discipline for marshal cycles | `graduated` | Rule authored at `.agent/rules/ship-independent-coordinate-dependent.md`, adapters added under `.agents/`, `.claude/`, `.cursor/`, `RULES_INDEX.md` updated, and `start-right-team` now points to the rule before bundling work. |
-| n=2 coordination efficiency | `owner-gated` | First-stage durable home exists at `.agent/practice-core/decision-records/PDR-082-n2-collaboration-mode.md` with `Status: Proposed`; this shard itself gates the `start-right-team` amendment on PDR-082 ratification / second n=2 session validation. Live holding location remains this shard. |
+| n=2 coordination efficiency | `owner-gated` | First-stage durable home exists at `.agent/practice-core/decision-records/PDR-082-n2-collaboration-mode.md` with `Status: Proposed`; this recovery file gates the `start-right-team` amendment on PDR-082 ratification / second n=2 session validation. Live holding location remains this file. |
 
 ## Collaboration ceremony — decomposition discipline for marshal cycles
 

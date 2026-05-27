@@ -1,5 +1,56 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-27 — Solar Illuminating Dawn / codex / GPT-5 / `019e6a`, collaboration temp/state-file curation + handoff)
+
+**Session boundary**: owner requested `$oak-start-right-quick`, a bounded
+`$oak-consolidate-docs` pass over accidental tracked collaboration temp files,
+then asked for a stray-temp scan and clarified state-file lifecycle doctrine.
+This was a dedicated knowledge-curation / state-hygiene slice, not a broad
+collaboration-state cleanup.
+
+**Landed in the working tree**:
+
+- Scanned all tracked `.agent/state/collaboration/_tmp-*` files before
+  deletion and wrote the item-level disposition ledger:
+  [`2026-05-27-solar-illuminating-dawn.md`](../curator-passes/2026-05-27-solar-illuminating-dawn.md).
+- Removed the 26 processed `_tmp-*` compose-buffer files from the working tree
+  after confirming useful substance was already durable in commits, comms
+  events, handoffs, archived napkin material, or plan/thread history.
+- Removed the two confirmed tracked SDK `.bak` strays under
+  `packages/sdks/oak-curriculum-sdk/src/types/` after scanning their stale MCP
+  tool-generation example contents.
+- Investigated suspect `comms-seen` files. The temp-looking
+  `scorched-tempering-kiln.json` and `tempestuous-spiralling-thermal.json`
+  were legitimate historical per-agent seen ledgers; watcher heartbeat JSONs
+  under `comms-seen/` are runtime state, not seen ledgers, but are currently
+  preserved for the owner-gated comms/coordination research plan.
+- Captured the doctrine in `napkin.md`, `distilled.md`, this thread record, and
+  the `agent-collaboration-research` thread: collaboration state files are
+  potential knowledge sources, not long-term storage; after explicit temporary
+  preservation windows, useful substance routes to durable memory/docs/plans
+  and the state files are deleted.
+
+**Evidence**:
+
+- `pnpm markdownlint-check:root` passed after the curation and doctrine writes.
+- `git diff --check` passed after the curation and doctrine writes.
+- `find packages/sdks/oak-curriculum-sdk/src/types -name '*.bak' -print`
+  returned no files after the `.bak` deletions.
+- Full `pnpm check` ran at handoff: 107/108 tasks succeeded; the remaining
+  failure was `@oaknational/agent-tools#lint` on the peer-owned
+  `agent-tools/src/practice-fitness/evaluate.ts` complexity finding
+  (`buildConfigurationFindings`, `9 > 8`).
+- Collaboration lifecycle check found no active claim or commit-queue item for
+  Solar Illuminating Dawn; the `_tmp-*` claim is closed in
+  `closed-claims.archive.json` as `0302b659-b439-4f5a-99af-4c497d4eedde`.
+
+**Next safe step**: commit or marshal this curation/handoff bundle when the
+owner is ready, keeping peer-owned Airy Vaulting Squall changes distinct. Do
+not delete collaboration state files while the owner-gated
+`agent-collaboration-research` preservation window is active; when the owner
+opens cleanup, process them with item-level disposition and durable routing
+before deletion.
+
 ## Session Outcome (2026-05-27 — Gnarled Flowering Pollen / codex / GPT-5 / `019e69`, external skills plan audit + successor-index correction)
 
 **Session boundary**: owner asked to find the repo plans for analysing and
@@ -7066,6 +7117,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Solar Illuminating Dawn` | `codex` | `GPT-5` | `019e6a` | `collaboration-temp-state-file-curation; _tmp-buffer-disposition-ledger-and-deletion; sdk-bak-stray-scan-and-deletion; state-file-lifecycle-doctrine-captured; session-handoff` | 2026-05-27 | 2026-05-27 |
 | `Kilned Burning Hearth` | `codex` | `GPT-5` | `019e68` | `dedicated-knowledge-curation-proof-pass; graduated-ship-independent-coordinate-dependent-rule-and-platform-adapters; pending-graduations-ledger-one-graduated-one-owner-gated-on-PDR-082; strict-hard-fitness-soft-only-markdownlint-diff-check-local-path-scan-green; claim-closed-active-count-zero; handoff-and-all-files-commit` | 2026-05-27 | 2026-05-27 |
 | `Veiled Dimming Threshold` | `codex` | `GPT-5` | `019e68` | `consolidate-docs-two-mode-contract-implementer; session-completion-vs-dedicated-knowledge-curation-defaults; buffer-disposition-ledger-and-archive-before-processing-checklist-failure; closeout-proof-separates-fitness-from-completion; handoff-and-all-files-commit` | 2026-05-27 | 2026-05-27 |
 | `Hidden Dimming Threshold` | `codex` | `GPT-5` | `019e68` | `consolidate-docs-skill-contract-plan-author; two-mode-session-completion-vs-dedicated-curation-opener; buffer-disposition-ledger-and-archive-before-processing-anti-example-routed-to-current-plan` | 2026-05-27 | 2026-05-27 |

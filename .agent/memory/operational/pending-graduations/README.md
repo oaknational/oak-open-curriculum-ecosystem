@@ -1,15 +1,16 @@
-# Pending-Graduations Active Shards
+# Pending-Graduations Legacy Recovery Files
 
-This directory holds active queue shards split out of
-[`../pending-graduations.md`](../pending-graduations.md) when a coherent
-cluster is too large for the main register but is not yet processed enough to
-archive.
+This directory holds legacy recovery files created before the pending-
+graduations lane retired split-buffer handling. These files are still live
+queue substance and remain part of the pending-graduations buffer until their
+items are processed.
 
-A shard is live queue substance. Do not treat it as an archive. Before moving a
-shard to an archive, process every entry: verify the durable home or unresolved
-route, record the disposition, and keep an audit pointer in the main register.
+Do not create new files here as a fitness response. Before moving any existing
+recovery file to an archive, process every entry: verify the durable home or
+unresolved route, record the disposition, and keep an audit pointer in the main
+register.
 
-## Shards
+## Legacy Recovery Files
 
 - [`2026-05-06-to-2026-05-21-legacy-backlog.md`](2026-05-06-to-2026-05-21-legacy-backlog.md)
   — legacy live backlog covering early-May collaboration, agent-tooling,

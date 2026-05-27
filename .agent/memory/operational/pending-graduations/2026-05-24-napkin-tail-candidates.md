@@ -1,20 +1,21 @@
 ---
-surface_kind: active-pending-graduations-shard
+surface_kind: pending-graduations-recovery-file
 created_on: 2026-05-24
 source_register: ../pending-graduations.md
 source_window: 2026-05-24 active napkin tail
 status: active
 archive_status: not-archived
+recovery_status: active
 processing_status: routed
 processing_claim_id: a6098196-5f85-4d60-8c93-0168c251fcf8
 ---
 
 # 2026-05-24 Napkin Tail Candidates
 
-This active shard carries fresh second-instance-gated candidates processed from
-the 2026-05-24 active napkin tail. This is a split, not an archive. The entries
-below were verified and routed on 2026-05-24; they remain live because their
-promotion triggers have not fired.
+This legacy recovery file carries fresh second-instance-gated candidates processed from
+the 2026-05-24 active napkin tail. This is live buffer debt, not an archive.
+The entries below were verified and routed on 2026-05-24; they remain live
+because their promotion triggers have not fired.
 
 ## Entries
 
@@ -31,8 +32,8 @@ was already covered.
 
 Natural home: repo-local pattern if a second owner-authorised redundant config
 marker appears. The exact 2026-05-24 Sonar instance already lives in
-`docs/governance/sonar-disposition-policy.md` Block 2; this shard entry tracks
-the broader repeatable shape only.
+`docs/governance/sonar-disposition-policy.md` Block 2; this recovery-file
+entry tracks the broader repeatable shape only.
 
 Falsifiability: a second owner-authorised config change intentionally keeps a
 functionally redundant marker for audit-trail visibility, and the landing
@@ -42,7 +43,7 @@ Processing disposition: verified 2026-05-24 under Shaded claim
 `a6098196-5f85-4d60-8c93-0168c251fcf8`. The exact Sonar instance has its
 durable home in `docs/governance/sonar-disposition-policy.md` Block 2, including
 the explicit statement that the narrower glob is mechanically redundant and
-owner-ratified as an audit-trail marker. This shard keeps only the repeatable
+owner-ratified as an audit-trail marker. This recovery file keeps only the repeatable
 pattern watch. Do not promote until a second owner-authorised redundant config
 marker appears.
 
@@ -70,7 +71,7 @@ commit.
 Processing disposition: verified 2026-05-24 under Shaded claim
 `a6098196-5f85-4d60-8c93-0168c251fcf8`. Current repo search found no existing
 repo-local pattern carrying this exact split-by-attribution shape outside the
-active napkin, main-register pointer, and this shard. Keep pending until a
+active napkin, main-register pointer, and this file. Keep pending until a
 second mixed owner-"commit all" window is resolved by attribution-preserving
 split. Do not generalise one emergency split into doctrine.
 
