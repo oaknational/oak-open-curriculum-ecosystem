@@ -283,6 +283,32 @@ full-CallToolResult budget. Rejected/resolved: "C-spike silently invalidates F"
 in-cycle: type-expert (RuntimeConfig + school_context schema) and test-expert
 (registration assertion + co-gating test) at E and F.
 
+## Reference — MCP client output limits (researched 2026-05-27)
+
+Grounds the 10k budget (Part 1/criterion 2) and the dual-emit-vs-structured-only
+decision (Part 2 C/D). Preserved so increments C/E/F do not re-derive it.
+
+- **Claude Code (verified from `code.claude.com/docs/en/mcp`):** warns when MCP
+  tool output exceeds **10,000 tokens**; **25,000-token** default hard cap
+  (`MAX_MCP_OUTPUT_TOKENS` raises it); over the cap, output is **persisted to
+  disk and replaced with a file reference** (so the model never sees the data).
+  Per-tool override: `_meta["anthropic/maxResultSizeChars"]` up to **500,000
+  chars** (text only). → The 10k budget sits at/under the *warning* threshold so
+  a graph tool never even warns.
+- **ChatGPT (OpenAI Apps SDK docs, via mcp-expert — not personally re-verified):**
+  the model sees **both** `content` and `structuredContent`; OpenAI says "trim
+  `structuredContent` to what the model truly needs"; the connector path
+  documents returning `structuredContent` AND a JSON-string `content` mirror
+  "for compatibility" → **structured-content-only is a documented RISK for
+  ChatGPT**. This is exactly what increment C must verify before D adopts it.
+- **Claude Code dropping `content[]` when `structuredContent` is present
+  (v2.0.21+):** GitHub-issue-sourced (issues #55677, #15412), closed-not-planned
+  — **UNVERIFIED**; do not treat as settled.
+- **Decision grounding:** dual-emit (keep `content[]`) is the *safe,
+  maximally-compatible* gate-1a path — both clients receive usable data;
+  structured-content-only is a gate-1b *optimization* gated by C. F's budget
+  check must measure the FULL `CallToolResult` (both representations).
+
 ## Provenance
 
 Authored from the owner-approved Claude meta-plan (codename

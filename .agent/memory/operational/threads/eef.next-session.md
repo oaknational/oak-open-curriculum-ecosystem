@@ -1,8 +1,32 @@
 # Next-Session Record — `eef` thread
 
-**Last refreshed**: 2026-05-27 (Galactic Dancing Constellation / `claude` /
-claude-opus-4-7 / `7efeec` — EEF value-PR reviewed end-to-end; **PR #121 OPEN**
-to main; gate-1a whole-graph semantics flagged for owner discussion).
+**Last refreshed**: 2026-05-27 (Starless Prowling Mask / `claude` /
+claude-opus-4-7 / `13c7d5` — Definition of Delivery doctrine + EEF
+delivery-restructure LANDED; the gate-1a whole-graph approach was RETRACTED and
+selection restored; next = increments B–H per the meta-plan).
+
+## Session 2026-05-27 (late) — Definition of Delivery + restructure (Starless Prowling Mask / `13c7d5`)
+
+**Landed (`feat/graph-foundations`):** Increment A — Definition of Delivery
+doctrine (`27956bb6`: directive `definition-of-delivery.md` + PDR-085 +
+indexes); meta-plan into repo + `eef-first-feature` gate-1a contract superseded
+(`a60b51ce`); forward restructure retracting false-delivery claims across the
+EEF plan estate (`cc3fad3c`); handoff (`8217082a`, refreshed `89ea5ce0`).
+
+**The frame changed:** the gate-1a "whole-graph" approach (flagged below by
+Galactic for owner discussion) was RETRACTED. Sub-graph SELECTION (seed
+selection + projection in the explore tool, under a 10k output budget) was
+always a gate-1a requirement and is restored; the scoring engine + recommend/
+explain/compare tools stay gate-1b. PR #121 as-is (whole-graph, no flag, no
+co-registered prompt) is NOT mergeable — it is the basis for increment F.
+
+**Resume here (fresh session):** read the handoff
+`.agent/state/collaboration/handoffs/2026-05-27-starless-eef-restructure-handoff.md`,
+then the owning meta-plan
+`.agent/plans/sector-engagement/eef/current/eef-delivery-restructure.plan.md`.
+Next = increments B → C → D → E → F → G → H. Branch coordination: doctrine +
+plans on `feat/graph-foundations`; EEF code in the `oak-wt-eef` worktree
+(`feat/eef-explore-evidence`).
 
 ## Session 2026-05-27 — value-PR review + PR #121 open (Galactic Dancing Constellation / `7efeec`)
 
