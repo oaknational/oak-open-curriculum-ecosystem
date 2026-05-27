@@ -64,9 +64,9 @@ function deriveKeyStage(year: number | string): string {
  * Derives phase from year number.
  */
 function derivePhase(year: number | string): string {
-  const yearNum = typeof year === 'string' ? parseInt(year, 10) : year;
+  const yearNum = typeof year === 'string' ? Number.parseInt(year, 10) : year;
 
-  if (isNaN(yearNum)) {
+  if (Number.isNaN(yearNum)) {
     return 'unknown';
   }
 
@@ -129,8 +129,8 @@ export function extractYearPhaseInfo(units: readonly Unit[]): readonly Extracted
 
   // Sort by year number
   results.sort((a, b) => {
-    const aNum = typeof a.year === 'string' ? parseInt(a.year, 10) : a.year;
-    const bNum = typeof b.year === 'string' ? parseInt(b.year, 10) : b.year;
+    const aNum = typeof a.year === 'string' ? Number.parseInt(a.year, 10) : a.year;
+    const bNum = typeof b.year === 'string' ? Number.parseInt(b.year, 10) : b.year;
     return aNum - bNum;
   });
 
