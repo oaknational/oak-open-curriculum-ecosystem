@@ -61,7 +61,7 @@ import type {
   FindByTagError,
 } from '@oaknational/graph-core/graph-view';
 
-import type { EefStrand } from './types.js';
+import type { EefStrand } from './strand-schema.js';
 import {
   buildGraphIndex,
   traverseSubgraph,

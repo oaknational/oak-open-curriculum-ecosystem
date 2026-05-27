@@ -1,17 +1,17 @@
 /**
  * `@oaknational/graph-corpus-sdk/eef-strands` — EEF strands corpus surface.
  *
- * Home of the EEF corpus-layer type substrate: the `EvidenceCorpus`
- * composition wrapper, its `rank` / `explain` / `compare` operation,
- * result, and error types, and the `EefStrand` node skeleton. Relocated
- * here from `oak-curriculum-sdk` per ADR-179 §Substrate discipline (the
- * graph substrate owns corpus types; the MCP surface consumes them) and
- * ADR-173 (the EEF adapter and its Zod loader live in `graph-corpus-sdk`).
+ * Home of the EEF corpus substrate per ADR-179 (the graph substrate owns
+ * corpus types; the MCP surface consumes them) and ADR-173 (the EEF
+ * adapter, its Zod loader, and the corpus snapshot live here):
  *
- * The `EefStrandsGraphView` adapter (WS4.5) lives in `./graph-view.ts`;
- * the Zod loader lands in a sibling module under this subpath. The
- * loader's `z.infer` will REPLACE the `EefStrand` skeleton (not bridge)
- * per `principles.md` §"NEVER create compatibility layers".
+ * - the corpus-layer composition types (`EvidenceCorpus` and its
+ *   `rank` / `explain` / `compare` operation, result, and error types);
+ * - the `EefStrandsGraphView` adapter (`./graph-view.ts`) over the strands;
+ * - the Zod schema (`./strand-schema.ts`) the `EefStrand` type flows from;
+ * - the loader (`./loader.ts`) that validates + freshness-gates the
+ *   snapshot (`./eef-toolkit.ts`) and constructs the adapter;
+ * - the ADR-175 freshness gate (`./freshness.ts`).
  */
 
 export {
@@ -22,12 +22,30 @@ export {
   type EefStrandsGraphViewConstructionError,
 } from './graph-view.js';
 
+export {
+  EefStrandSchema,
+  EefToolkitSchema,
+  EEF_PHASES,
+  type EefStrand,
+  type EefPhase,
+  type EefToolkit,
+  type EefToolkitMeta,
+} from './strand-schema.js';
+
+export { loadEefCorpus, type LoadEefCorpusError, type LoadEefCorpusOptions } from './loader.js';
+
+export {
+  checkFreshness,
+  DEFAULT_THRESHOLD_DAYS,
+  type FreshnessError,
+  type FreshnessOk,
+} from './freshness.js';
+
 export type {
   CompareError,
   CompareOptions,
   ComparisonDimension,
   ComparisonResult,
-  EefStrand,
   EvidenceCorpus,
   ExplainOptions,
   NodeExplanation,

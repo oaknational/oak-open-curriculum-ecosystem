@@ -7,7 +7,7 @@ import {
   type EefStrandsGraphViewInput,
   type EefStrandsManifestMeta,
 } from './graph-view.js';
-import type { EefStrand } from './types.js';
+import type { EefStrand } from './strand-schema.js';
 
 const META: EefStrandsManifestMeta = {
   version: '0.2.0',
@@ -16,17 +16,45 @@ const META: EefStrandsManifestMeta = {
 };
 
 /**
+ * Build a full `EefStrand` from minimal input. The adapter consumes only
+ * `id` and `related_strands`; the remaining required fields are filled with
+ * realistic defaults so the fixture satisfies the full schema-derived type
+ * while the traversal tests stay focused on identity and edges. Omitting
+ * `related` produces a sparse strand (no outgoing edges).
+ */
+function makeStrand(id: string, related?: readonly string[]): EefStrand {
+  return {
+    id,
+    name: `Strand ${id}`,
+    slug: id,
+    eef_url: `https://educationendowmentfoundation.org.uk/${id}`,
+    headline: {
+      impact_months: 3,
+      cost_rating: 2,
+      cost_label: 'Low',
+      evidence_strength_rating: 3,
+      evidence_strength_label: 'Moderate',
+      headline_summary: `Headline for ${id}`,
+    },
+    definition: { short: `short ${id}`, full: `full ${id}` },
+    key_findings: [`finding for ${id}`],
+    tags: ['fixture'],
+    ...(related === undefined ? {} : { related_strands: related }),
+  };
+}
+
+/**
  * Fixture graph (insertion order s1..s5):
  *   s1 → s2, s3      s2 → s3      s3 → (none)
  *   s4 → s1          s5 → (none)
  * 4 edges; s3 and s5 are sparse (omit `related_strands`).
  */
 const STRANDS: readonly EefStrand[] = [
-  { id: 's1', name: 'Strand One', slug: 'strand-one', related_strands: ['s2', 's3'] },
-  { id: 's2', name: 'Strand Two', slug: 'strand-two', related_strands: ['s3'] },
-  { id: 's3', name: 'Strand Three', slug: 'strand-three' },
-  { id: 's4', name: 'Strand Four', slug: 'strand-four', related_strands: ['s1'] },
-  { id: 's5', name: 'Strand Five', slug: 'strand-five' },
+  makeStrand('s1', ['s2', 's3']),
+  makeStrand('s2', ['s3']),
+  makeStrand('s3'),
+  makeStrand('s4', ['s1']),
+  makeStrand('s5'),
 ];
 
 function build(
@@ -47,10 +75,7 @@ describe('EefStrandsGraphView.create', () => {
 
   it('rejects a corpus with a duplicate strand id', () => {
     const result = EefStrandsGraphView.create({
-      strands: [
-        { id: 's1', name: 'One', slug: 'one' },
-        { id: 's1', name: 'One Again', slug: 'one-again' },
-      ],
+      strands: [makeStrand('s1'), makeStrand('s1')],
       meta: META,
     });
     expect(result.ok).toBe(false);
@@ -61,7 +86,7 @@ describe('EefStrandsGraphView.create', () => {
 
   it('rejects a related_strand edge that targets a non-existent node', () => {
     const result = EefStrandsGraphView.create({
-      strands: [{ id: 's1', name: 'One', slug: 'one', related_strands: ['ghost'] }],
+      strands: [makeStrand('s1', ['ghost'])],
       meta: META,
     });
     expect(result.ok).toBe(false);
@@ -92,7 +117,7 @@ describe('EefStrandsGraphView.manifest', () => {
 
   it('reports an empty edge-type vocabulary when no edges exist', () => {
     const manifest = build({
-      strands: [{ id: 'only', name: 'Only', slug: 'only' }],
+      strands: [makeStrand('only')],
       meta: META,
     }).manifest();
     expect(manifest.edgeCount).toBe(0);

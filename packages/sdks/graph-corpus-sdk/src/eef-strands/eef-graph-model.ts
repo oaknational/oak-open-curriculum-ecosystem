@@ -12,7 +12,7 @@
 import { ok, err, type Result } from '@oaknational/result';
 import type { SubgraphError, SubgraphResult } from '@oaknational/graph-core/graph-view';
 
-import type { EefStrand } from './types.js';
+import type { EefStrand } from './strand-schema.js';
 
 /**
  * The EEF strand graph's single edge-type discriminant: strand-to-strand
