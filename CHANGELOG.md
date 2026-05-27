@@ -1,3 +1,12 @@
+## [1.14.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.14.0...v1.14.1) (2026-05-27)
+
+
+### Bug Fixes
+
+* **agent-tools:** absorb reviewer findings on comms-event schema and identity converter ([cdff0fe](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/cdff0fefdacd9711ad92edc2cc3a740905916afa))
+* **agent-tools:** reject empty identity strings in agent-id schema ([9226606](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/922660611f44e78f650fa64d67e4a04b52a39acc))
+* **agent-tools:** state-schemas accepts optional UUID v5 id on agent identity ([c0942d4](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/c0942d488652ea3906dbd22672922b73c0f554bb))
+
 # [1.14.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.13.0...v1.14.0) (2026-05-26)
 
 
