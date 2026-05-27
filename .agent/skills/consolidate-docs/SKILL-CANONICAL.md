@@ -1,7 +1,9 @@
 ---
 name: consolidate-docs
 classification: active
-description: Consolidate documentation, extract patterns, verify plan hygiene, and check fitness functions.
+description: >-
+  Declare and run session-completion or dedicated-knowledge-curation
+  consolidation, including buffer disposition and closeout proof.
 ---
 
 # Consolidate Docs
@@ -50,6 +52,29 @@ Run `consolidate-docs` when one or more of these is true:
 
 This workflow preserves the full deep-convergence role: graduation, pattern
 extraction, napkin rotation, fitness management, and practice exchange.
+
+## Mode Contract
+
+Start every invocation by declaring one mode. The mode fixes the default scope,
+completion criteria, and closeout evidence for the pass.
+
+- **`session-completion`** - bounded closeout. This is the default when the
+  owner invokes `consolidate-docs` as part of winding down a session or when no
+  dedicated curation objective is named. Capture fresh learning, route obvious
+  substance to durable homes, and leave unresolved buffers live with honest
+  next actions. A truthful `partial slice landed` verdict is valid here.
+- **`dedicated-knowledge-curation`** - proper curation pass. This is the
+  default when the owner sets a curation goal, mentions buffers, asks for a
+  curation pass, or names fitness pressure as work to process. Route
+  documentation/reference surfaces toward healthy-to-soft by preserving and
+  homing substance; process drainable buffers item by item until empty unless a
+  specific item is owner-gated and remains live with its blocker recorded.
+
+Fitness output is routing evidence in both modes. It is never completion
+evidence by itself. `session-completion` must not imply that all curation
+buffers were drained. `dedicated-knowledge-curation` may claim `complete` only
+when the closeout proof shows both documentation fitness at the agreed
+healthy-to-soft target and every drainable buffer item dispositioned.
 
 ## Cardinal Rule: Plans, Memory, and Entry Points Are Not Documentation
 
@@ -153,6 +178,34 @@ target-revision becomes the appropriate response **only** when no
 substance remains ready to graduate. This is the structural cure for
 "the destination is full" reasoning at consolidation: the layer is
 not full of substance to remove, it is full of substance to graduate.
+
+## Drainable Buffer Protocol
+
+Drainable buffers are flow-control surfaces. In
+`dedicated-knowledge-curation`, "empty" means every item in the selected buffer
+has a recorded disposition. It does not mean the content was moved into an
+archive, made smaller, or hidden from the live surface.
+
+For each buffer item, read the source, understand the substance, route it, and
+record exactly one disposition in a ledger before any archive move:
+
+- `graduated` - durable home created or updated, with path evidence.
+- `duplicate` - already represented in a durable home, with path evidence.
+- `owner-gated` - cannot proceed without owner decision, with the question and
+  live holding location.
+- `stale-withdrawn` - no longer valid, with reason.
+- `carried-forward` - still valid but not drainable in this pass, with trigger
+  and next action.
+
+The ledger may live in the touched buffer, an adjacent shard, a plan closeout
+section, or a curation report. It must be durable enough for the next agent to
+verify the item count and each route without rereading the whole source
+history.
+
+**Checklist failure / anti-example**: archiving a buffer or source file before
+read/extract/route/disposition evidence exists is not curation. An
+archive-only "drain" leaves the buffer live for completion purposes, even if
+the fitness report becomes softer afterward.
 
 ## Plan supersession discipline
 
@@ -303,9 +356,11 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
    **Process before archive**: archiving is the final preservation move for an
    already-processed source, not a parking place for unfinished curation. Do
    not archive unprocessed napkin content. Steps (a) through (c) must leave each
-   behaviour-changing item with a disposition — merged, refined, explicitly
+   behaviour-changing item with a disposition - merged, refined, explicitly
    skipped as duplicate, routed to pending graduation, or investigated as a
-   contradiction — before step (d) moves the outgoing source.
+   contradiction - before step (d) moves the outgoing source. If the pass is
+   `dedicated-knowledge-curation`, this disposition evidence must satisfy the
+   drainable-buffer ledger protocol above.
 
    a. **Extract** — read every "Patterns to Remember", "Mistakes Made", "Key Insight", and "Lessons" section from the outgoing napkin. Collect all entries that would change behaviour if read next session.
    b. **Merge** — compare extracted entries against existing `distilled.md`. For each entry: new insight → add it to the appropriate section; duplicate → skip; refinement of existing rule → update with the sharper formulation; contradiction → investigate (the more recent finding usually wins, but verify before overwriting).
@@ -651,3 +706,25 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
     At consolidation, any `outgoing/` file whose substance exists nowhere else is a **defect** (per PDR-007): it must promote to one of the three durable homes or be deleted as a staging artefact that never graduated. New insights from completed work route to the appropriate home by substance shape, not by legacy "put it in outgoing" habit.
 
     Practice Core structural changes (new Core directories, changes to the contract) are proposed as PDRs against the Core contract, with user approval.
+
+## Closeout Proof
+
+Close every `consolidate-docs` invocation with proof that matches the declared
+mode. The closeout must report:
+
+- mode used;
+- fitness before and after, as routing evidence only;
+- buffer item count before and after for every selected drainable buffer;
+- disposition ledger pointer when any buffer was drained;
+- durable homes changed;
+- unresolved live items and blockers;
+- explicit verdict: `complete`, `partial slice landed`, or `pending`.
+
+For `session-completion`, `partial slice landed` is acceptable when fresh
+learning was captured and obvious substance was routed while larger curation
+buffers remain live. Name those live buffers and next actions honestly.
+
+For `dedicated-knowledge-curation`, `complete` requires two evidence classes:
+documentation/reference surfaces are at the agreed healthy-to-soft target, and
+drainable buffers selected for the pass are empty by ledger evidence. A softer
+fitness report without item-level dispositions is not completion evidence.

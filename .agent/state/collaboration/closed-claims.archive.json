@@ -47094,6 +47094,149 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "38651cdc-8eae-4288-b3fc-57e4166240cc",
+      "agent_id": {
+        "agent_name": "Veiled Dimming Threshold",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e68",
+        "id": "9964cbb9-548a-54a6-a4db-49408c9c8777"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/consolidate-docs/SKILL-CANONICAL.md",
+            ".agents/skills/oak-consolidate-docs/SKILL.md",
+            ".agent/plans/agentic-engineering-enhancements/current/consolidate-docs-mode-contract-and-buffer-drain.plan.md",
+            ".agent/plans/agentic-engineering-enhancements/current/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T08:27:25Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "implement consolidate-docs two-mode contract",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T08:30:04Z",
+        "closed_by": {
+          "agent_name": "Veiled Dimming Threshold",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e68",
+          "id": "9964cbb9-548a-54a6-a4db-49408c9c8777"
+        },
+        "summary": "Implemented consolidate-docs two-mode skill contract; validation passed with markdownlint, fitness informational, diff whitespace, and manual failure-mode grep.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "38651cdc-8eae-4288-b3fc-57e4166240cc",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "f446bacb-186c-4f35-a010-3beac9d8162a",
+      "agent_id": {
+        "agent_name": "Veiled Dimming Threshold",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e68",
+        "id": "9964cbb9-548a-54a6-a4db-49408c9c8777"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+            ".agent/memory/operational/threads/eef.next-session.md",
+            ".agent/plans/agentic-engineering-enhancements/current/README.md",
+            ".agent/plans/agentic-engineering-enhancements/current/consolidate-docs-mode-contract-and-buffer-drain.plan.md",
+            ".agent/skills/consolidate-docs/SKILL-CANONICAL.md",
+            ".agents/skills/oak-consolidate-docs/SKILL.md",
+            ".agent/state/collaboration/active-claims.json",
+            ".agent/state/collaboration/closed-claims.archive.json",
+            ".agent/state/collaboration/comms/bad6af96-4733-480a-a0e7-0af2c61a88f5.json"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T08:49:17Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "session handoff and commit all current files",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T09:03:32Z",
+        "closed_by": {
+          "agent_name": "Veiled Dimming Threshold",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e68",
+          "id": "9964cbb9-548a-54a6-a4db-49408c9c8777"
+        },
+        "summary": "Session handoff complete; consolidate-docs mode contract implemented; validation passed; included in all-files commit.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "f446bacb-186c-4f35-a010-3beac9d8162a",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "7b7c3c99-8c67-47d4-8f72-f467a2c2d287",
+      "agent_id": {
+        "agent_name": "Veiled Dimming Threshold",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e68",
+        "id": "9964cbb9-548a-54a6-a4db-49408c9c8777"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T09:02:19Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "stage and commit consolidate-docs mode contract handoff",
+      "intent_to_commit": "b66dbc51-d64a-4c8f-a5d6-05f029b9ac4c",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T09:03:32Z",
+        "closed_by": {
+          "agent_name": "Veiled Dimming Threshold",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e68",
+          "id": "9964cbb9-548a-54a6-a4db-49408c9c8777"
+        },
+        "summary": "Commit window closed under collaboration-state lifecycle exception; queue record abandoned after staged verification; committing immediately.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "7b7c3c99-8c67-47d4-8f72-f467a2c2d287",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

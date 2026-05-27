@@ -16,6 +16,26 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
+- **Veiled Dimming Threshold closeout (codex / GPT-5 / `019e68`)**:
+  `oak-consolidate-docs` now has the two-mode contract requested by the owner:
+  `session-completion` for bounded closeout and `dedicated-knowledge-curation`
+  for ledger-backed curation. Plan:
+  [`consolidate-docs-mode-contract-and-buffer-drain.plan.md`](../../plans/agentic-engineering-enhancements/current/consolidate-docs-mode-contract-and-buffer-drain.plan.md).
+  Validation: markdownlint, practice fitness informational, `git diff --check`,
+  collaboration JSON parse, and full `pnpm check` at handoff. No live buffers
+  were drained; next safe step after commit is owner-directed push/PR timing.
+- **Current branch (2026-05-27 handoff)**:
+  `feat/graph-foundations`, local HEAD `3c136e9d` (merge of
+  `origin/main` at `a6e669db` / `v1.14.1`), ahead of
+  `origin/feat/graph-foundations` by 9 at handoff. Working tree was clean
+  before session-handoff continuity edits; active claims and active commit
+  queue were empty.
+- **Foamy Lapping Harbour closeout (codex / GPT-5 / `019e68`)**:
+  `8f3a9135` landed repo-owned Claude statusline rendering; `544b2f4e`
+  landed EEF value-PR coordination state; `f6a9bb2a` landed Hidden Dimming
+  Threshold's completed curation closeout before the main merge; `3c136e9d`
+  merged main. Agent-tools focused type-check, lint, and tests were green
+  after the merge.
 - **Active thread switches back to `eef` first-feature delivery
   (2026-05-26)**: Owner direction at session close —
   `collaboration-identity-doctrine-enforcement-remediation` plan is
@@ -120,8 +140,8 @@ paused implementation program.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF first-feature delivery | [record][eef] | Fiery Kindling Brazier / claude / claude-opus-4-7 / 9f4026 / commit-marshal+pr-115-merged / 2026-05-25 |
-| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | Airy Whirling Current / claude / claude-opus-4-7 / `3624a5` / Phase 0 DELIVERED + plan PAUSED — Cycles 9+10+11 landed (`dee89e09`, `6dad98b0`, `597b0945`); next session returns to eef / 2026-05-26 |
+| `eef` | EEF first-feature delivery | [record][eef] | codex / GPT-5 / Foamy Lapping Harbour / value-pr-coordination-state-committer / 2026-05-27 |
+| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | codex / GPT-5 / Veiled Dimming Threshold / consolidate-docs-two-mode-contract-implementer-and-commit-closeout / 2026-05-27 |
 
 ## Paused Threads
 
@@ -327,6 +347,27 @@ Current branch non-goals:
   acceptance work.
 
 ## Deep Consolidation Status
+
+**not due — session-completion handoff after skill-contract implementation**
+(Veiled Dimming Threshold `019e68`, 2026-05-27). This session implemented the
+`oak-consolidate-docs` two-mode contract and committed the full handoff bundle.
+It was not a dedicated knowledge-curation pass. No new ADR/PDR candidate or
+open question needs a separate register entry because the actionable doctrine
+now lives in the skill and plan diff. Falsifiability: inspect the skill,
+plan, and commit; the remaining action is owner-directed push/PR timing, not a
+current-buffer drain.
+
+**not due — session handoff after commit-and-merge closeout** (Foamy Lapping
+Harbour `019e68`, 2026-05-27). This session landed bounded code/docs/continuity
+commits and merged `origin/main` into `feat/graph-foundations`; no new ADR/PDR
+candidate, open-question entry, repeated-surprise rule candidate, napkin
+rotation pressure, or settled doctrine stranded in ephemeral-only form surfaced
+during handoff. Hidden Dimming Threshold's curation pass already drained the
+active napkin/distilled/open-question/pending-graduation buffers to ready-empty
+state before this closeout. Falsifiability: inspect commits `8f3a9135`,
+`544b2f4e`, `f6a9bb2a`, `3c136e9d`, then rerun the handoff trigger checklist;
+the remaining next action is branch push/PR by owner direction, not a
+consolidation pass.
 
 **due — Phase 0 milestone closed + distilled.md fitness convergence
 pending** (Airy Whirling Current `3624a5`, 2026-05-26, second handoff

@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "bad6af96-4733-480a-a0e7-0af2c61a88f5",
+  "created_at": "2026-05-27T08:27:25Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Veiled Dimming Threshold",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e68",
+    "id": "9964cbb9-548a-54a6-a4db-49408c9c8777"
+  },
+  "title": "Veiled Dimming Threshold: opening narrow consolidate-docs skill-contract slice",
+  "body": "No other active claims or active commit intents were present at open. I am editing only the consolidate-docs canonical skill contract, thin oak wrapper, and the queued plan/index surfaces for the two-mode contract; I will not drain live buffers in this slice.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

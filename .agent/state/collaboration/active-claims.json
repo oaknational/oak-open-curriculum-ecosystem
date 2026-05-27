@@ -2010,6 +2010,38 @@
       "staged_bundle_fingerprint": "31c3e1bbb7616149952db3c4126258a719cb07c2b68779f8aa22750c4561fe1b",
       "staged_name_status": "M\tagent-tools/src/claude/statusline-identity-input.ts\nM\tagent-tools/src/claude/statusline-identity.ts\nA\tagent-tools/src/claude/statusline-render.ts\nA\tagent-tools/tests/claude/statusline-identity-input.test.ts\nD\tagent-tools/tests/claude/statusline-identity-input.unit.test.ts\nA\tagent-tools/tests/claude/statusline-render.test.ts\n",
       "notes": "commit-workflow git-commit failure: git commit exited with code 1: 🔍 Running pre-commit checks...\n📝 Checking formatting on staged files...\n$ pnpm --filter @oaknational/agent-tools repo-check prettier-staged\n$ cd .. && pnpm exec tsx agent-tools/scripts/repo-check.ts prettier-staged\nChecking formatting...\n[warn] agent-tools/src/claude/statusline-identity.ts\n[warn] agent-tools/tests/claude/statusline-identity-input.test.ts\n[warn] agent-tools/tests/claude/statusline-render.test.ts\n[warn] Code style issues found in 3 files. Run Prettier with --write to fix.\n/Users/jim/code/oak/oak-open-curriculum-ecosystem/agent-tools:\n[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @oaknational/agent-tools@0.1.0 repo-check: `cd .. && pnpm exec tsx agent-tools/scripts/repo-check.ts prettier-staged`\nExit status 1\n[ELIFECYCLE] Command failed with exit code 1.\n❌ Formatting issues found!\n💡 Run 'pnpm format:root' to fix formatting issues, then stage the changes\nhusky - pre-commit script failed (code 1)"
+    },
+    {
+      "intent_id": "b66dbc51-d64a-4c8f-a5d6-05f029b9ac4c",
+      "claim_id": "7b7c3c99-8c67-47d4-8f72-f467a2c2d287",
+      "agent_id": {
+        "agent_name": "Veiled Dimming Threshold",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e68",
+        "id": "5b69b8af-37de-5fc3-a43c-96ed27d12252"
+      },
+      "files": [
+        ".agent/memory/active/napkin.md",
+        ".agent/memory/operational/repo-continuity.md",
+        ".agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md",
+        ".agent/memory/operational/threads/eef.next-session.md",
+        ".agent/plans/agentic-engineering-enhancements/current/README.md",
+        ".agent/plans/agentic-engineering-enhancements/current/consolidate-docs-mode-contract-and-buffer-drain.plan.md",
+        ".agent/skills/consolidate-docs/SKILL-CANONICAL.md",
+        ".agent/state/collaboration/active-claims.json",
+        ".agent/state/collaboration/closed-claims.archive.json",
+        ".agent/state/collaboration/comms/bad6af96-4733-480a-a0e7-0af2c61a88f5.json",
+        ".agents/skills/oak-consolidate-docs/SKILL.md",
+        ".claude/skills/oak-consolidate-docs/SKILL.md"
+      ],
+      "commit_subject": "docs(agentic): land consolidate-docs mode contract",
+      "queued_at": "2026-05-27T09:02:45.733Z",
+      "updated_at": "2026-05-27T09:03:38.489Z",
+      "expires_at": "2026-05-27T09:17:45.733Z",
+      "phase": "abandoned",
+      "staged_bundle_fingerprint": "3e5ff1256be630215da8d1e853106b5f1816f5a0d2c83dd7f042751c508a6f91",
+      "staged_name_status": "M\t.agent/memory/active/napkin.md\nM\t.agent/memory/operational/repo-continuity.md\nM\t.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md\nM\t.agent/memory/operational/threads/eef.next-session.md\nM\t.agent/plans/agentic-engineering-enhancements/current/README.md\nA\t.agent/plans/agentic-engineering-enhancements/current/consolidate-docs-mode-contract-and-buffer-drain.plan.md\nM\t.agent/skills/consolidate-docs/SKILL-CANONICAL.md\nM\t.agent/state/collaboration/active-claims.json\nM\t.agent/state/collaboration/closed-claims.archive.json\nA\t.agent/state/collaboration/comms/bad6af96-4733-480a-a0e7-0af2c61a88f5.json\nM\t.agents/skills/oak-consolidate-docs/SKILL.md\nM\t.claude/skills/oak-consolidate-docs/SKILL.md\n"
     }
   ],
   "claims": []

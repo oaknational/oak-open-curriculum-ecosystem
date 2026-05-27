@@ -1,5 +1,129 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-27 — Veiled Dimming Threshold / codex / GPT-5 / `019e68`, consolidate-docs skill contract implementation + handoff commit)
+
+**Session boundary**: owner directed implementation of the queued
+`oak-consolidate-docs` mode-contract plan, then requested
+`oak-session-handoff` and a commit of all files. This was a skill-contract
+update and session-completion handoff, not a dedicated knowledge-curation pass.
+
+**Landed in the working tree**:
+
+- `.agent/skills/consolidate-docs/SKILL-CANONICAL.md` now requires a declared
+  mode: `session-completion` or `dedicated-knowledge-curation`.
+- Dedicated curation defaults now distinguish healthy-to-soft documentation
+  routing from item-by-item buffer drain.
+- Drainable buffers now require ledger-backed item dispositions; archive-only
+  movement before read/extract/route/disposition evidence is an explicit
+  checklist failure.
+- Closeout proof now separates fitness output from curation-completion
+  evidence.
+- `.agents/skills/oak-consolidate-docs/SKILL.md` remains a thin adapter with
+  the updated contract summary.
+- The current-plan index and
+  `consolidate-docs-mode-contract-and-buffer-drain.plan.md` mark the work
+  implemented.
+
+**Evidence**:
+
+- Requirement audit against the owner objective passed item by item.
+- `pnpm markdownlint-check:root` passed.
+- `pnpm practice:fitness:informational` returned soft-only fitness with
+  `0 hard` and `0 critical`.
+- `git diff --check` passed.
+- Collaboration JSON parse passed.
+- Full `pnpm check` was run during handoff before commit.
+
+**Next safe step**: after this all-files handoff commit, owner directs push or
+PR timing. Do not drain current live buffers unless the owner explicitly widens
+scope; the requested skill-update objective is complete.
+
+## Session Outcome (2026-05-27 — Hidden Dimming Threshold / codex / GPT-5 / `019e68`, consolidate-docs skill contract plan)
+
+**Session boundary**: owner asked for a short repo plan and next-session opener
+to improve `oak-consolidate-docs` after the buffer/archive failure mode. This
+handoff stayed bounded to planning and continuity; a separate active slice then
+implemented the skill contract in the working tree. Neither slice ran a
+dedicated knowledge-curation pass.
+
+**Landed in the working tree**:
+
+- Added
+  [`consolidate-docs-mode-contract-and-buffer-drain.plan.md`](../../../plans/agentic-engineering-enhancements/current/consolidate-docs-mode-contract-and-buffer-drain.plan.md).
+- Indexed that plan in
+  [`current/README.md`](../../../plans/agentic-engineering-enhancements/current/README.md).
+- Wrote a next-session opener in chat for implementing the skill update.
+- During handoff, `Veiled Dimming Threshold` opened an active claim and updated
+  `.agent/skills/consolidate-docs/SKILL-CANONICAL.md` plus the thin
+  `.agents/skills/oak-consolidate-docs/SKILL.md` wrapper.
+
+**Plan intent**: make `oak-consolidate-docs` declare two modes:
+`session-completion` and `dedicated-knowledge-curation`. Dedicated curation
+should route documentation toward healthy-to-soft by preserving and homing
+substance, while buffers are only empty when every item has a recorded
+disposition. Archive-only closure is an anti-example, not success.
+
+**Evidence**:
+
+- `pnpm practice:fitness:informational` passed with soft-only repo fitness.
+- `pnpm markdownlint-check:root` passed.
+
+**Next safe step**: review and close/commit the uncommitted skill-contract
+bundle, including the active `Veiled Dimming Threshold` claim/comms residue. Do
+not drain current live buffers unless the owner explicitly widens scope; the
+skill update is the work.
+
+## Session Outcome (2026-05-27 — Foamy Lapping Harbour / codex / GPT-5 / `019e68`, statusline rendering + coordination closeout + main merge)
+
+**Session boundary**: owner asked first to commit the paused Claude-agent
+bundles, then to merge updates from `origin/main` into the current
+`feat/graph-foundations` branch. Work stayed bounded to the already-authored
+statusline/coordination bundle, a completed Hidden Dimming Threshold curation
+bundle needed to unblock the merge, and the main merge.
+
+**Landed**:
+
+- `8f3a9135` — `feat(agent-tools): expand Claude statusline rendering`.
+  Adds the repo-owned TypeScript statusline renderer, worktree display support,
+  and focused statusline/identity-input tests. The user's global bash
+  statusline script was left decoupled.
+- `544b2f4e` — `docs(eef): record value-pr coordination state`. Captures the
+  EEF value-PR review register, value-path reflection, comms-method comparison,
+  sidebar backup, and related collaboration-state closeout.
+- `f6a9bb2a` — `docs(continuity): land hidden curation closeout`. Persists
+  Hidden Dimming Threshold's completed curation closeout before merging main,
+  including the same-commit collaboration-state lifecycle closure.
+- `3c136e9d` — merge commit bringing `origin/main` at `a6e669db` /
+  `v1.14.1` into `feat/graph-foundations`.
+
+**Evidence**:
+
+- For `8f3a9135`: focused statusline tests passed (17 tests), and
+  `pnpm --filter @oaknational/agent-tools type-check`, `lint`, and `test`
+  passed before commit.
+- For `544b2f4e`: full pre-commit hook passed 90/90 turbo tasks.
+- For `f6a9bb2a`: full pre-commit hook passed 90/90 turbo tasks.
+- After merge `3c136e9d`: `pnpm --filter @oaknational/agent-tools type-check`,
+  `pnpm --filter @oaknational/agent-tools lint`, and
+  `pnpm --filter @oaknational/agent-tools test` passed (80 files, 726 tests).
+- Final pre-handoff state before continuity edits: working tree clean, active
+  claims empty, active commit queue empty, branch ahead of origin by 9.
+
+**Coordination notes**:
+
+- Hidden Dimming Threshold's active curation claim overlapped files touched by
+  the main merge. I sent a directed comms request, waited for Hidden's closeout,
+  then committed their completed bundle under the collaboration-state residue
+  exception before merging.
+- The merge prediction based on `HEAD..origin/main` looked conflict-heavy
+  because branch-local additions appeared as deletes from main's perspective;
+  once local work was durable, `git merge origin/main` landed cleanly.
+
+**Next safe step**: push or PR the branch when the owner is ready. The current
+local branch is `feat/graph-foundations`, HEAD `3c136e9d`, ahead of
+`origin/feat/graph-foundations` by 9. Do not reopen Hidden's curation lane or
+the EEF value-PR coordination bundle unless the owner requests follow-up.
+
 ## Session Outcome (2026-05-26 — Airy Whirling Current / claude / claude-opus-4-7 / `3624a5`, Phase 0C cycles 9+10+11 — Phase 0 complete + write-side type cure)
 
 **Session boundary**: owner directed completion of Phase 0C with the explicit
@@ -6849,12 +6973,15 @@ and
 - **Thread purpose**: Practice and documentation-structure improvements,
   especially knowledge-flow roles, directive fitness pressure, and durable
   homing of agent-entrypoint content.
-- **Branch**: `docs/agent-collaboration-enhancements`
+- **Branch**: `feat/graph-foundations`
 
 ## Participating Agent Identities
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Veiled Dimming Threshold` | `codex` | `GPT-5` | `019e68` | `consolidate-docs-two-mode-contract-implementer; session-completion-vs-dedicated-knowledge-curation-defaults; buffer-disposition-ledger-and-archive-before-processing-checklist-failure; closeout-proof-separates-fitness-from-completion; handoff-and-all-files-commit` | 2026-05-27 | 2026-05-27 |
+| `Hidden Dimming Threshold` | `codex` | `GPT-5` | `019e68` | `consolidate-docs-skill-contract-plan-author; two-mode-session-completion-vs-dedicated-curation-opener; buffer-disposition-ledger-and-archive-before-processing-anti-example-routed-to-current-plan` | 2026-05-27 | 2026-05-27 |
+| `Foamy Lapping Harbour` | `codex` | `GPT-5` | `019e68` | `statusline-rendering-implementer; eef-value-pr-coordination-committer; hidden-curation-closeout-committer; origin-main-v1-14-1-merge-into-feat-graph-foundations; agent-tools-typecheck-lint-test-green-after-merge` | 2026-05-27 | 2026-05-27 |
 | `Airy Whirling Current` | `claude` | `claude-opus-4-7` | `3624a5` | `phase-0c-cycles-9-10-11-implementer; landed-to-id-required-cli-flag-dee89e09; landed-legacy-fallback-diagnostic-with-DI-seam-6dad98b0; landed-write-side-type-cure-after-owner-challenge-on-deferral-597b0945; reviewer-dispatch-code-expert-plus-type-expert-on-sonnet-both-approved; metacognition-correction-reviewer-verdicts-are-information-not-authority-captured-in-distilled; phase-0-proof-contract-id-0-through-id-3-all-in-code; tests-698-to-707-plus-9-across-cycles-9-10-11` | 2026-05-26 | 2026-05-26 |
 | `Feathered Flying Cloud` | `codex` | `GPT-5` | `019e65` | `hard-memory-curation-pass-plus-cross-platform-memory-import; routed critical-hard memory pressure without compression; imported Claude-Codex-Cursor-remember candidates into durable repo homes; targeted-markdownlint-git-diff-check-and-diff-local-path-scan-pass; full-pnpm-check-deferred-behind-active-peer-owned-agent-tools-WIP` | 2026-05-26 | 2026-05-26 |
 | `Prismatic Transiting Star` | `codex` | `GPT-5` | `019e60` | `distilled-processing-and-practice-fitness-inventory; kept-distilled-as-curated-learning-register-with-frontmatter; graduated-settled-lessons-to-gates-build-system-commit-continuity-practice-AGENT-and-agent-tools-README; added-ready-empty-and-healthy-zone-reporting-plus-drainable-buffer-content-role-axis-plus-behaviour-tests; ADR-144-content-role-amendment; closeout-handoff-and-consolidation-targeted-validation` | 2026-05-25 | 2026-05-25 |

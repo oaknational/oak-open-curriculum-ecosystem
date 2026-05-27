@@ -1,9 +1,42 @@
 # Next-Session Record — `eef` thread
 
-**Last refreshed**: 2026-05-25 (Stormy Surfing Dock / `claude` /
-claude-opus-4-7 / `2a7b65` — solo session; PR-0 plan-freshness pass landed
-for the 4-PR gate-1a closure sequence in
-`../../../plans/sector-engagement/eef/current/please-do-a-deep-mighty-peach.plan.md`).
+**Last refreshed**: 2026-05-27 (Foamy Lapping Harbour / `codex` / GPT-5 /
+`019e68` — value-PR coordination state committed on `feat/graph-foundations`;
+the immediate source implementation still lives in the paired EEF worktree
+lane, while this shared-tree record preserves coordination evidence).
+
+## Session 2026-05-27 — value-PR coordination state (Foamy Lapping Harbour / `019e68`)
+
+**Session boundary**: owner asked to commit paused agent files and then merge
+main. The EEF contribution in this shared tree was documentation and
+coordination-state only; source implementation for the value PR remained in
+the separate EEF worktree lane.
+
+**Landed**:
+
+- `544b2f4e` — `docs(eef): record value-pr coordination state`.
+- Captured value-PR coordination artefacts:
+  - `eef-value-pr-review-register.md`
+  - `eef-value-path-reflection-2026-05-27.md`
+  - `please-do-a-deep-mighty-peach.plan.md` corrections
+  - comms-method comparison report and README update
+  - EEF PR1 sidebar backup and collaboration-state claim closure.
+
+**Evidence**:
+
+- Full pre-commit hook passed 90/90 turbo tasks for the commit.
+- Later same-session merge of `origin/main` landed at `3c136e9d`; focused
+  agent-tools type-check, lint, and tests stayed green after the merge.
+
+**Current state**: EEF remains the active product thread. The value-PR shape is
+the owner-approved teacher-value slice: boundary/type relocation, WS4.5
+adapter, loader/freshness, and EEF explore tool, with the coordination register
+recording review findings and ownership.
+
+**Next safe step**: continue the actual EEF value-PR implementation in the
+dedicated EEF worktree/branch lane; use the review register and corrected
+`please-do-a-deep-mighty-peach.plan.md` as coordination evidence rather than
+reconstructing the plan from older stale 4-PR prose.
 
 **Previous refresh**: 2026-05-23 (Secret Vanishing Wisp / `claude` /
 claude-opus-4-7 / `981cbe` first-out closeout-authored; Sparking Melting
@@ -372,6 +405,7 @@ under the ≥2-of-3 rule (`neighbours × misconception`,
 | `Mistbound Slipping Night` | `claude` | `claude-opus-4-7` | `a1cb64` | `t12-citation-shape-cycle-author-with-stormbound-commit-handoff` | 2026-05-22 | 2026-05-22 |
 | `Stormy Surfing Dock` | `claude` | `claude-opus-4-7` | `2a7b65` | `pr-0-plan-freshness-author+pr-115-watcher+adr-184-amendment` | 2026-05-25 | 2026-05-25 |
 | `Fiery Kindling Brazier` | `claude` | `claude-opus-4-7` | `9f4026` | `commit-marshal+pr-115-stewardship+merge-landed` | 2026-05-25 | 2026-05-25 |
+| `Foamy Lapping Harbour` | `codex` | `GPT-5` | `019e68` | `value-pr-coordination-state-committer; review-register-and-value-path-reflection-preserved; shared-tree-main-merge-verifier` | 2026-05-27 | 2026-05-27 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
