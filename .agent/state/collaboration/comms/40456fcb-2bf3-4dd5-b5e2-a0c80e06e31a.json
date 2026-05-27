@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "40456fcb-2bf3-4dd5-b5e2-a0c80e06e31a",
+  "created_at": "2026-05-27T17:34:48Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Galactic Orbiting Constellation",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e6a",
+    "id": "32b55af3-8833-5bf3-ac59-706de6079df7"
+  },
+  "title": "Galactic curation handoff",
+  "body": "Owner ended the session and requested oak-session-handoff. Batch 11 is closed: 5 legacy backlog entries dispositioned in place (3 duplicate, 2 owner-gated) and strict-hard was SOFT with hard 0 / critical 0. Batch 12 claim 923d0e3b is closed as unlanded: it was opened after evidence gathering, but the attempted patch failed and no batch 12 dispositions landed. Next session should resume from the next five legacy backlog entries: reviewer doctrine-carrier, reviewer recipe forcing-function, validation-strategy topology, git index-lock interaction, and session-close housekeeping. No archive, split, shard, rename, move, or new buffer file.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

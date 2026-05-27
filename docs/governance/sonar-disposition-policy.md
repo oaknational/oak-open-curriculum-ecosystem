@@ -63,6 +63,16 @@ rationale cites this policy and adds the site path + line.
 5. If the rule is not yet documented: do per-site review and add the class
    to this document at the next consolidation pass.
 
+## Remediation Branch Source of Truth
+
+When a branch is opened to remediate existing main/project Sonar debt, the
+authoritative backlog is the current main/project issue and hotspot inventory.
+PR-scoped Sonar for that remediation branch is a regression guard: use it to
+prove the branch has not introduced new findings, not to redefine the original
+worklist. Branch findings that predate the remediation branch's changes must be
+reconciled against the main/project source before they become implementation
+work.
+
 ## Documented Classes
 
 ### S5443 — Publicly writable directories

@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "59f4ce5a-e5ca-4e3f-9044-96886178f857",
+  "created_at": "2026-05-27T17:27:35Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Galactic Orbiting Constellation",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e6a",
+    "id": "32b55af3-8833-5bf3-ac59-706de6079df7"
+  },
+  "title": "Legacy backlog batch 11 dispositioned",
+  "body": "Closed claim e43b2e4c after processing legacy backlog batch 11 in place. Dispositions: 3 duplicate, 2 owner-gated. Durable homes verified: parallel-worktree-dispatch-unreliable pattern, PDR-026 sequenced-deferral amendment, PDR-048 capture-at-moment doctrine. Owner gates recorded: memory taxonomy/review lane ratification or withdrawal, and portable Practice Core TDD-PDR promotion now vs later. Verification: targeted markdownlint pass, git diff --check pass, resumed strict-hard SOFT with hard 0 and critical 0. No archive, split, shard, rename, move, or new buffer file.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

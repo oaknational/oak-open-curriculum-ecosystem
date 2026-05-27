@@ -218,6 +218,15 @@ fitness_content_role: drainable-buffer
   `.claude/` skill files are generated adapters. If generation fails, fix the
   generator invocation or permissions, then rerun it. Do not hand-create stubs.
 
+## Session: 2026-05-27 — pending-graduations batch 14
+
+### Patterns to Remember
+
+- Treat opener fitness as stale until rerun. This batch inherited a SOFT-only
+  claim, but live strict-hard was HARD because another slice had pushed
+  `definition-of-delivery.md` over prose width and `repo-continuity.md` over
+  line count. The right cure was narrow structural routing, not score-chasing.
+
 ## Session: 2026-05-27 — napkin-tail owner-gate drain
 
 ### What Was Done
@@ -231,3 +240,69 @@ fitness_content_role: drainable-buffer
 - A second-instance watch is not complete just because its trigger has not
   fired. Under a buffer-drain goal, either graduate it, withdraw it with
   evidence, or name the concrete owner decision that keeps it live.
+
+## Session: 2026-05-27 — legacy backlog batch 13 drain
+
+### Mistakes Made
+
+- I opened the active claim before edits, but I added the thread identity row
+  after the first substantive patch. For future thread work, claim and identity
+  registration both need to happen before the buffer or doctrine edits begin.
+
+## Session: 2026-05-27 — Galactic legacy backlog handoff
+
+### What Was Done
+
+- Closed legacy backlog batch 11 after processing 5 items in place.
+- Opened batch 12, gathered evidence, then stopped on owner direction before
+  any batch 12 disposition landed.
+- Closed the unlanded batch 12 claim during session handoff so the next
+  curator gets a clean claim slate.
+
+### Mistakes Made
+
+- Accidentally launched `pnpm practice:fitness:strict-hard` twice during
+  re-grounding. Both runs returned the same SOFT-only result, but future
+  handoffs should avoid duplicate whole-repo validators unless comparing
+  changed state.
+- Tried to append a comms event with tag `handoff`; ADR-183 comms tags are the
+  constrained namespace `failure-mode`, `behaviour-note`, and `heartbeat`.
+  Retried with `behaviour-note`.
+
+### Patterns to Remember
+
+- For interrupted curation, close the active item claim as unlanded with the
+  exact next source entries. That is cleaner than leaving a live stale claim
+  or pretending the half-open batch was carried.
+
+## Session: 2026-05-27 — Arboreal legacy backlog batch 12
+
+### What Was Done
+
+- Verified the inherited batch-12 claim was already closed unlanded, opened a
+  fresh narrow claim, and processed the five named batch-12 entries in place.
+- Batch 12 disposition ledger: 1 duplicate and 4 owner-gated; strict-hard
+  stayed SOFT-only with 0 hard and 0 critical.
+
+### Patterns to Remember
+
+- When an item has conflicting durable homes, such as no autonomous lock-wait
+  loops versus the commit skill's bounded physical wait, do not silently pick a
+  doctrine winner during buffer drain. Mark it owner-gated with the exact
+  conflict so the next pass cannot hide the decision.
+
+## Session: 2026-05-27 — owner-gated register migration
+
+- First migration pass missed the n=2 section because it used a `##` heading
+  while the extractor only scanned `###` headings. Always verify migrations by
+  searching the old surfaces for the moved status marker, not just by trusting
+  section-shape assumptions.
+
+## Session: 2026-05-27 — Ferny legacy backlog batch 21
+
+### Patterns to Remember
+
+- A pre-candidate idea can be duplicate once the guardrail lands in rule,
+  policy, and hook surfaces; preserve the route, not the stale queue shape.
+- `claims list` has no `--format json`; use plain output or `jq` on
+  `active-claims.json`.

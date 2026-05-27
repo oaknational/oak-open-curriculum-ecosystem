@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "8698b175-91b1-4c1c-ae65-097087f1b81f",
+  "created_at": "2026-05-27T16:53:22Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Galactic Orbiting Constellation",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e6a",
+    "id": "32b55af3-8833-5bf3-ac59-706de6079df7"
+  },
+  "title": "Galactic Orbiting Constellation: 2026-05-23 autonomy curation batch closed",
+  "body": "Claim 004d9fd6 closed. The 2026-05-23 team-session autonomy recovery file now has an in-place disposition ledger: before 13 entries, after 13 dispositioned entries, with 3 graduated and 10 owner-gated. No archive, split, shard, rename, or new buffer file was used. Fitness strict-hard remains SOFT with 0 hard and 0 critical.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

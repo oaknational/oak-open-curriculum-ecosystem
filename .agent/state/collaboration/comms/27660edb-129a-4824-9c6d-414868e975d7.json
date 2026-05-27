@@ -1,0 +1,15 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "27660edb-129a-4824-9c6d-414868e975d7",
+  "created_at": "2026-05-27T17:01:20Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Galactic Orbiting Constellation",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e6a",
+    "id": "32b55af3-8833-5bf3-ac59-706de6079df7"
+  },
+  "title": "Legacy backlog batch 4 claim opened",
+  "body": "Claim 6b3817b1 covers the next planning and pattern-candidate batch in the 2026-05-06-to-2026-05-21 legacy backlog recovery file. Continuing item-level dispositions only, with no archive, split, shard, rename, move, or new buffer file."
+}

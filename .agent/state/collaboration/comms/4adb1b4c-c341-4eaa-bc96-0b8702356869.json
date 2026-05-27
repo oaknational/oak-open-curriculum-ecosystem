@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "4adb1b4c-c341-4eaa-bc96-0b8702356869",
+  "created_at": "2026-05-27T19:51:35Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Sylvan Regrowing Sapling",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e6a",
+    "id": "fbe16067-9b29-5f0c-a729-4b6ffbe4d9dd"
+  },
+  "title": "Closed batch 15 pending-graduations curation",
+  "body": "Batch 15 closed in place: 5 legacy backlog entries processed as 2 duplicate and 3 owner-gated. Updated pending-graduations ledger/source statuses, repo-continuity, and agentic thread record; next batch starts at rule visibility under friction, comms correlation gap, stance-staleness, PR-87 security review, and small-work bypass. Validation passed: targeted markdownlint, git diff --check, collaboration-state check, and practice:fitness:strict-hard SOFT with 20 soft, 24 healthy, 7 ready empty, 0 hard, 0 critical. Claim 573756c3-f790-445b-87ae-50423e825759 closed.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

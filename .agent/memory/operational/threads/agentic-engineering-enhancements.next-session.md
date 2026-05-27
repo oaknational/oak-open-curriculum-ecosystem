@@ -1,5 +1,306 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-27 — Ferny Spreading Blossom / codex / GPT-5 / `019e6b`, pending-graduations pseudo-shard collapse)
+
+**Session boundary**: owner directed that owner-gated files be moved back into
+the canonical pending-graduations register, remaining knowledge extracted from
+other sidecar files, and pseudo files deleted.
+
+**Landed in the working tree**:
+
+- Collapsed the owner-gated register and recovery-file disposition evidence
+  into [`pending-graduations.md`](../pending-graduations.md).
+- Deleted the old `pending-graduations/` sidecar files after extraction; the
+  directory now has no files left.
+- Updated live navigation and doctrine references in operational README,
+  repo-continuity, this thread record, and the ship-independent rule to point
+  at the canonical register.
+- Validation passed: targeted markdownlint, `git diff --check`,
+  collaboration-state check, strict-hard fitness (`0 hard`, `0 critical`), and
+  full `pnpm check`.
+
+**Next safe step**: commit or marshal the cleanup bundle when owner-directed.
+The unresolved decision work is owner direction on the 66 gated items in
+`pending-graduations.md`; do not create new pending-graduations sidecar files.
+
+## Session Outcome (2026-05-27 — Ferny Spreading Blossom / codex / GPT-5 / `019e6b`, dedicated pending-graduations legacy drain)
+
+**Session boundary**: owner resumed the persistent dedicated knowledge-curation
+goal. This is a bounded curation slice toward the full goal, not a completion
+claim for every live buffer.
+
+**Landed in the working tree**:
+
+- Opened claim `610b98fb-e411-487a-93cb-f87cb0d7720a` after live state showed
+  `0` active claims and `0` active commit intents.
+- Processed legacy backlog batch 16 in place in
+  [`pending-graduations.md`](../pending-graduations.md):
+  5 items dispositioned, `4 duplicate` and `1 owner-gated`.
+- Added the PR-87 pre-phase adversarial security-review pattern decision to
+  [`pending-graduations.md`](../pending-graduations.md), bringing the live
+  owner-gated register to 38 items.
+- Opened claim `41d62cf6-aea6-4525-9f37-2272f66f5a51` and processed legacy
+  backlog batch 17 in place: 5 items dispositioned, `4 duplicate` and
+  `1 owner-gated`.
+- Added the agent-infrastructure hook-failure visibility Practice Core
+  promotion decision to
+  [`pending-graduations.md`](../pending-graduations.md), bringing the live
+  owner-gated register to 39 items.
+- Opened claim `1a6ae876-3b72-487b-b559-e6603a3d45a6` and processed legacy
+  backlog batch 18 in place: 5 items dispositioned, `4 duplicate` and
+  `1 owner-gated`.
+- Added the open-up-the-value-early PDR decision to
+  [`pending-graduations.md`](../pending-graduations.md), bringing the live
+  owner-gated register to 40 items.
+- Opened claim `5c371349-df9b-4e65-9667-7b431da37531` and processed legacy
+  backlog batch 19 in place: 5 items dispositioned, `2 duplicate` and
+  `3 owner-gated`.
+- Added design optionality, graduation-trigger criteria refinement, and
+  trinity Active Principles / bootstrap structural extensions decisions to
+  [`pending-graduations.md`](../pending-graduations.md), bringing the live
+  owner-gated register to 43 items.
+- Opened claim `d76458be-37f8-4381-80b1-b8262ef14c85` and processed legacy
+  backlog batch 20 in place: 5 items dispositioned, `2 duplicate` and
+  `3 owner-gated`.
+- Added outcome optionality, do-not-shoehorn-value-claims, and retired
+  thread-record hygiene decisions to
+  [`pending-graduations.md`](../pending-graduations.md), bringing the live
+  owner-gated register to 46 items.
+- Opened claim `88e64575-f98e-40fa-be92-a73a4f8311d0` and processed legacy
+  backlog batch 21 in place: 5 items dispositioned, `2 duplicate` and
+  `3 owner-gated`.
+- Added fat-baton handoff inline diagnostics, in-flight consolidation
+  workflow-gap patching, and cross-thread git-history coordination-signal
+  decisions to
+  [`pending-graduations.md`](../pending-graduations.md), bringing the live
+  owner-gated register to 49 items.
+- Opened claim `44f71fe4-4109-460d-bd42-df73e5970cac` and processed legacy
+  backlog batch 22 in place: 5 items dispositioned, `1 duplicate` and
+  `4 owner-gated`.
+- Added owner affirmation phrase corpus, memory/skills key-terms glossary,
+  owner reply preferences/default reply shape, and recurrence-rank weighting
+  decisions to
+  [`pending-graduations.md`](../pending-graduations.md), bringing the live
+  owner-gated register to 53 items.
+- Opened claim `fec3d209-5c3b-4e4a-8aaf-84e3e37998d4` and processed legacy
+  backlog batch 23 in place: 5 items dispositioned, `1 duplicate` and
+  `4 owner-gated`.
+- Added generated insight artefact discipline, pre-commit skills/portability
+  gate coverage, `getSkillPermissionIssues` live-path tests, and
+  `evaluateParityChecks` unit-coverage decisions to
+  [`pending-graduations.md`](../pending-graduations.md), bringing the live
+  owner-gated register to 57 items.
+- Opened claim `ff59c7ef-23ef-4e78-8cf1-11e01125c64b` and processed legacy
+  backlog batch 24 in place: 5 items dispositioned, `3 duplicate` and
+  `2 owner-gated`.
+- Added pre-flight fingerprint scan and owner re-decision on
+  evidence-refuted-premise decisions to
+  [`pending-graduations.md`](../pending-graduations.md), bringing the live
+  owner-gated register to 59 items.
+- Opened claim `bd6a0005-f3ec-4e36-b43d-25ebb384b55a` and processed legacy
+  backlog batch 25 in place: 5 items dispositioned, `3 duplicate` and
+  `2 owner-gated`.
+- Added agent-tools CLI architectural decision extraction plus E-1/E-2
+  advisory-hooks / `agent-tools git` passthrough scoping decisions to
+  [`pending-graduations.md`](../pending-graduations.md), bringing the live
+  owner-gated register to 61 items.
+- Opened claim `f53b9c56-47dc-4d1d-b2c6-a3db08bfd15c` and processed legacy
+  backlog batch 26 in place: 5 items dispositioned, `2 duplicate` and
+  `3 owner-gated`.
+- Added re-plan-after-second-cycle, deferral-with-retrospective-tripwire, and
+  portable-reference-without-plan-slot decisions to
+  [`pending-graduations.md`](../pending-graduations.md), bringing the live
+  owner-gated register to 64 items.
+- Opened claim `b373f567-86df-4232-b1d5-c40398caa256` and processed legacy
+  backlog batch 27 in place: 2 items dispositioned, `0 duplicate` and
+  `2 owner-gated`.
+- Added intent-notes abandonment coordination and more-restrictive-Practice-rule
+  reviewer-conflict decisions to
+  [`pending-graduations.md`](../pending-graduations.md), bringing the live
+  owner-gated register to 66 items. The legacy backlog file now has processing
+  dispositions for every retained item in this drain window.
+
+**Next safe step**: no retained legacy-backlog curation claim remains. The
+owner-gated register now carries the unresolved decision items; future work is
+owner-direction on those gates or an owner-routed commit/marshal window. Do not
+create a new buffer file.
+
+## Session Outcome (2026-05-27 — Sylvan Regrowing Sapling / codex / GPT-5 / `019e6a`, dedicated pending-graduations legacy drain)
+
+**Session boundary**: owner resumed the dedicated knowledge-curation lane from
+the Woodland handoff, then asked the same session to continue. This is a
+bounded curation run, not a completion claim for the full legacy backlog
+buffer.
+
+**Landed in the working tree**:
+
+- Opened claim `7d011543-5e4b-46f6-89b5-4f1473ad3fa3` after live state showed
+  `0` active claims and `0` active commit intents; later opened continuation
+  claim `573756c3-f790-445b-87ae-50423e825759` for batch 15 after the same
+  live-state refresh pattern. Opened migration claim
+  `1bd88d4f-0a21-4b91-b95a-f765781ff75e` when the owner directed a single
+  owner-gated register.
+- Processed legacy backlog batches 14 and 15 in place in
+  [`pending-graduations.md`](../pending-graduations.md):
+  10 items dispositioned total. Batch 14 closed as `3 duplicate` and
+  `2 owner-gated`; batch 15 closed as `2 duplicate` and `3 owner-gated`.
+- Created
+  [`pending-graduations.md`](../pending-graduations.md) as the single live
+  register for processed owner-gated pending graduations. It now carries 37
+  items; the old processed buffers no longer carry `owner-gated` status
+  markers.
+- Routed the live hard-fitness drift: `definition-of-delivery.md` prose width
+  is healthy, and repo-continuity is back under hard limit by replacing stale
+  implementation detail with a thread-record pointer.
+- Latest verified strict-hard during the session: SOFT, `20 soft`,
+  `24 healthy`, `7 ready empty`, `0 hard`, `0 critical`.
+
+**Next safe step**: resume `dedicated-knowledge-curation`, refresh live state,
+then process legacy backlog batch 16 from the next pending entries:
+`rule visibility under friction is uneven`; `cross-thread comms event
+request/response correlation gap`; `stance-staleness within a single
+conversation`; `PR-87 Phase 2 pre-phase security review`; `small-work bypass of
+coordination surfaces`. Do not create a new buffer file; process in place only.
+
+**Owner-gated register state**:
+
+- All processed owner-gated items from the legacy backlog, team-session
+  autonomy shard, napkin-tail shard, and n=2 collaboration shard now live in
+  [`pending-graduations.md`](../pending-graduations.md).
+- The remaining unprocessed queue still starts at legacy backlog batch 16.
+
+## Session Outcome (2026-05-27 — Woodland Blossoming Grove / codex / GPT-5 / `019e6a`, dedicated pending-graduations legacy drain)
+
+**Session boundary**: owner resumed the dedicated knowledge-curation lane from
+the Arboreal handoff. This was another bounded curation slice, not a completion
+claim for the full legacy backlog buffer.
+
+**Landed in the working tree**:
+
+- Opened claim `8d2c0b7e-f4a0-45a1-80d7-e5f6c984234b` after live state showed
+  `0` active claims and `0` active commit intents.
+- Processed legacy backlog batch 13 in place in
+  [`pending-graduations.md`](../pending-graduations.md):
+  5 items dispositioned, `1 graduated`, `2 duplicate`, and `2 owner-gated`.
+- Graduated the PDR-043 cue 2 sharpening into
+  [`PDR-043`](../../practice-core/decision-records/PDR-043-rush-impulse-three-structural-cues.md)
+  and [`principles.md`](../../directives/principles.md): cue 2 now reads
+  structural intent, not only trip-list vocabulary.
+- Latest verified strict-hard during the session: SOFT, `20 soft`,
+  `22 healthy`, `8 ready empty`, `0 hard`, `0 critical`.
+
+**Next safe step**: resume `dedicated-knowledge-curation`, refresh live state,
+then process legacy backlog batch 14 from the next pending entries: `Vercel
+build warning classes`; `PR lifecycle skill note`; `PDR-011 amendment for
+plugin-managed ephemeral capture surfaces`; `ADR-163 release/version boundary
+and vendor passthrough audit`; `session-handoff entrypoint sweep`. Do not
+create a new buffer file; process in place only.
+
+**Explicit owner-gated pending graduations added this session**:
+
+- Legacy backlog: directory-survey-before-plan-stub rule promotion/watch/
+  withdrawal decision; portable atomic-independent-cycles PDR promotion after
+  host-local adoption.
+
+## Session Outcome (2026-05-27 — Arboreal Ripening Grove / codex / GPT-5 / `019e6a`, dedicated pending-graduations legacy drain)
+
+**Session boundary**: owner resumed the dedicated knowledge-curation lane from
+the Galactic handoff. This was another bounded curation slice, not a completion
+claim for the full legacy backlog buffer.
+
+**Landed in the working tree**:
+
+- Verified prior batch-12 claim `923d0e3b-78cb-49c2-ad69-ee66c4d8ce7d` was
+  already closed as unlanded in `closed-claims.archive.json`.
+- Opened claim `a53d0d6e-6c47-46f9-9a47-9c4e69d7dc3b` and processed legacy
+  backlog batch 12 in place in
+  [`pending-graduations.md`](../pending-graduations.md):
+  5 items dispositioned, `1 duplicate` and `4 owner-gated`.
+- Latest verified strict-hard during the session: SOFT, `20 soft`,
+  `22 healthy`, `8 ready empty`, `0 hard`, `0 critical`.
+
+**Next safe step**: resume `dedicated-knowledge-curation`, refresh live state,
+then process legacy backlog batch 13 from the next pending entries:
+`observability multi-sink + fixtures plan WS0 near-miss`; `PDR-043 cue 2
+sharpening: vocabulary is not the trigger, intent is`; `atomic, independent
+cycles for optional parallel-agent dispatch`; `scripts/validate-* family
+structural drift`; `testing-strategy external-resource validator
+misclassification`. Do not create a new buffer file; process in place only.
+
+**Explicit owner-gated pending graduations at handoff**:
+
+- Legacy backlog: sync-kind / urgency flag in comms schema; two-participant
+  invariant write-side validator; coordinator role-label ontology residual;
+  commit-boundary peer-pair governance refinements; collaboration tooling
+  operator UX backlog; skill and documentation surface audit follow-ups;
+  Practice-adopting repos have elevated skill-listing budget floor;
+  sequence-or-admit-not-doing doctrine; fitness limits encode access-rhythm
+  theory; memory classifications and systems review; tests describe the
+  system to itself; reviewers carry doctrine, not just audit it; forcing-
+  function reviewer read path; autonomous `.git/index.lock` interaction /
+  lock-wait-loop conflict; session-close housekeeping ownership.
+- Team-session autonomy: first-out closeout owner self-election protocol;
+  Director ratification checklist plus three-mode standby;
+  director-ratification-checklist rule pointer; pre-positioned routing;
+  owner-decision elision via substrate; standing-direction graduation plus
+  slice-routing self-selection; P5 director self-selection; three-mode standby
+  model; P6 director routing blockage detection; heartbeat cron health
+  monitoring.
+- Napkin tail: owner-authorised redundant config marker; heterogeneous
+  working-tree owner direction splits by attribution; substrate-write commit
+  window under high team cadence; goal-backed handoff state must be explicit.
+- Fiery collaboration: n=2 coordination efficiency, gated on PDR-082
+  ratification or second n=2 session validation.
+
+## Session Outcome (2026-05-27 — Galactic Orbiting Constellation / codex / GPT-5 / `019e6a`, dedicated pending-graduations legacy drain)
+
+**Session boundary**: owner resumed the persistent knowledge-curation goal,
+then explicitly stopped the session and requested `oak-session-handoff`. This
+was a dedicated knowledge-curation slice, not a completion claim for the full
+buffer-drain objective.
+
+**Landed in the working tree**:
+
+- Closed legacy backlog batch 11 in place in
+  [`pending-graduations.md`](../pending-graduations.md):
+  5 items dispositioned, `3 duplicate` and `2 owner-gated`.
+- Closed claim `923d0e3b-78cb-49c2-ad69-ee66c4d8ce7d` as unlanded after the
+  owner stopped the session: evidence was gathered for batch 12, but the
+  attempted patch failed and no batch 12 dispositions landed.
+- Latest verified strict-hard during the session: SOFT, `20 soft`,
+  `22 healthy`, `8 ready empty`, `0 hard`, `0 critical`.
+
+**Next safe step**: resume `dedicated-knowledge-curation`, refresh live state,
+then reattempt legacy backlog batch 12 from the next five entries:
+`reviewers carry doctrine, not just audit it`; `forcing-function read path:
+reviewer carries the recipes the doctrine cites`; `validation strategy as
+umbrella; testing strategy as one leaf`; `autonomous .git/index.lock
+interaction is forbidden, including wait loops`; `session-close housekeeping
+ownership`. Do not create a new buffer file; process in place only.
+
+**Explicit owner-gated pending graduations at handoff**:
+
+- Legacy backlog: sync-kind / urgency flag in comms schema; two-participant
+  invariant write-side validator; coordinator role-label ontology residual;
+  commit-boundary peer-pair governance refinements; collaboration tooling
+  operator UX backlog; skill and documentation surface audit follow-ups;
+  Practice-adopting repos have elevated skill-listing budget floor;
+  sequence-or-admit-not-doing doctrine; fitness limits encode access-rhythm
+  theory; memory classifications and systems review; tests describe the
+  system to itself.
+- Team-session autonomy: first-out closeout owner self-election protocol;
+  Director ratification checklist plus three-mode standby;
+  director-ratification-checklist rule pointer; pre-positioned routing;
+  owner-decision elision via substrate; standing-direction graduation plus
+  slice-routing self-selection; P5 director self-selection; three-mode standby
+  model; P6 director routing blockage detection; heartbeat cron health
+  monitoring.
+- Napkin tail: owner-authorised redundant config marker; heterogeneous
+  working-tree owner direction splits by attribution; substrate-write commit
+  window under high team cadence; goal-backed handoff state must be explicit.
+- Fiery collaboration: n=2 coordination efficiency, gated on PDR-082
+  ratification or second n=2 session validation.
+
 ## Session Outcome (2026-05-27 — Solar Illuminating Dawn / codex / GPT-5 / `019e6a`, collaboration temp/state-file curation + handoff)
 
 **Session boundary**: owner requested `$oak-start-right-quick`, a bounded
@@ -1035,7 +1336,7 @@ Reviewer dispatch: Plan agent (in plan mode at session-open) challenged the WS0+
 
 - Plan amendments at `agent-tooling/current/n2-and-coordination-efficiency-program-2026-05-25.plan.md` (WS0 directed verdict, WS1 re-survey finding, WS4 amendment-via-PDR pattern).
 - PDR-078 amendment at `.agent/practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md` §5 + Forbids + Falsifiability + Revision history.
-- Quiet's curation: napkin entry homed to `pending-graduations/2026-05-25-mistbound-inherited-frame-and-hook-signal-candidates.md` with full substance preserved + disposition section identifying which items are likely existing-rule worked-instances vs candidate patterns. Napkin replaced with disposition pointer.
+- Quiet's curation: napkin entry homed to `pending-graduations.md` with full substance preserved + disposition section identifying which items are likely existing-rule worked-instances vs candidate patterns. Napkin replaced with disposition pointer.
 - Plan mode execution plan at `~/.claude/plans/sunny-imagining-wreath.md` captures the design-time framing reasoning (off-repo, won't survive long-term).
 
 **Substantive findings captured for graduation** (in pending-graduations shard):
@@ -1067,7 +1368,7 @@ Owner direction at session-close: *"Doctrine without enforcement is debt."* The 
 
 **Pending-graduations status changes**:
 
-- New shard authored: `pending-graduations/2026-05-25-mistbound-inherited-frame-and-hook-signal-candidates.md` with 4 candidate dispositions.
+- New shard authored: `pending-graduations.md` with 4 candidate dispositions.
 - WS4 item #1 (heartbeats-are-infrastructure) — LANDED at `3ca71a40`; can be marked graduated in any shard that tracked it. The structural enforcement is A1 above; WS4 item #1 is only fully closed when A1 lands.
 
 **Owner directions captured this session**:
@@ -1141,9 +1442,9 @@ Owner direction at session-close: *"Doctrine without enforcement is debt."* The 
 
 **Pending-graduations status changes**:
 
-- `pending-graduations/2026-05-25-fiery-collaboration-decomposition-and-n2-efficiency.md` — both `status: due` items (Coordination-as-precondition + n=2 over-coordination) are now ROUTED to the new plan (WS2 + WS3 respectively). Items remain `due` until the plan workstreams land; the plan IS the cure-shape evidence.
-- `pending-graduations/2026-05-23-team-session-autonomy.md` — Director-class items now ROUTED to WS5 bundled doctrine pass.
-- `pending-graduations/2026-05-25-misty-director-session-candidates.md` — items routed to WS4 (heartbeat) and WS5 (Director-seat-on threshold).
+- `pending-graduations.md` — both `status: due` items (Coordination-as-precondition + n=2 over-coordination) are now ROUTED to the new plan (WS2 + WS3 respectively). Items remain `due` until the plan workstreams land; the plan IS the cure-shape evidence.
+- `pending-graduations.md` — Director-class items now ROUTED to WS5 bundled doctrine pass.
+- `pending-graduations.md` — items routed to WS4 (heartbeat) and WS5 (Director-seat-on threshold).
 
 **Heartbeat-end broadcast emitted**: N/A — sole-contributor session; no team substrate active.
 
@@ -1171,7 +1472,7 @@ claim.
   mistake recorded.
 - Split fresh Briny/Hushed planning, role-emission, template, and multi-agent
   auto-fix candidates into active shard
-  `pending-graduations/2026-05-25-planning-and-autofix-candidates.md`; the
+  `pending-graduations.md`; the
   main register now carries a pointer instead of duplicating the full bodies.
 - Updated the controlling
   `memory-surface-critical-drain-2026-05-24.plan.md` with the 2026-05-25
@@ -1499,7 +1800,7 @@ hard/critical objective without archiving unprocessed content.
   `pending-graduations.md` is soft at 723 lines / 37,960 chars / max prose
   line 260.
 - The final active-napkin tail route created
-  `pending-graduations/2026-05-24-napkin-tail-candidates.md` as a live active
+  `pending-graduations.md` as a live active
   shard, not an archive.
 - Shaded owns no active claims at handoff.
 
@@ -1547,9 +1848,9 @@ durable-home tooling note.
 
 **Active-shard routing**:
 
-- `pending-graduations/2026-05-06-to-2026-05-21-legacy-backlog.md` carries the
+- `pending-graduations.md` carries the
   unresolved early-May live backlog.
-- `pending-graduations/2026-05-23-team-session-autonomy.md` carries the
+- `pending-graduations.md` carries the
   first-out closeout, commit-queue ceremony, autonomy, and heartbeat bundle.
 
 **Next safe curator step**: stop this Sylvan session here. A future curator can
@@ -3317,6 +3618,9 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 
 | Platform | Model | Agent name | Role | First-session | Last-session |
 | --- | --- | --- | --- | --- | --- |
+| `codex` | `GPT-5` | Ferny Spreading Blossom | Knowledge Curator (`019e6b`; dedicated legacy pending-graduations drain batches 16-27, then owner-directed pseudo-shard collapse back into canonical `pending-graduations.md`; deleted sidecar files after extraction; strict-hard `0 hard` / `0 critical`) | 2026-05-27 | 2026-05-27 |
+| `codex` | `GPT-5` | Sylvan Regrowing Sapling | Knowledge Curator (`019e6a`; dedicated legacy pending-graduations drain on `feat/graph-foundations`; processed batches 14-15 in place, then created single owner-gated register with 37 processed decision-gated items; strict-hard SOFT with hard 0 / critical 0 before migration validation) | 2026-05-27 | 2026-05-27 |
+| `codex` | `GPT-5` | Galactic Orbiting Constellation | Knowledge Curator (`019e6a`; dedicated legacy pending-graduations drain on `feat/graph-foundations`; processed 2026-05-23 autonomy file and legacy backlog batches 1-11 in place, with batch 11 closing 5 items as 3 duplicate / 2 owner-gated; opened and closed batch 12 claim `923d0e3b` as unlanded after owner stop; strict-hard SOFT with hard 0 / critical 0) | 2026-05-27 | 2026-05-27 |
 | `claude` | `claude-opus-4-7` | Tempestuous Sweeping Feather | collaboration identity remediation Phase 0B+0C implementer (`a9e5d2`; landed 6 commits on `docs/agent-collaboration-enhancements`: `bed24b57` Cycle 2 JSON schemas accept v5 id, `57084c15` Cycle 3 `deriveCollaborationIdentity` returns Write with v5 id, `2a501e97` Cycle 4 `parseAgentId` schema-driven, `b977dbab` Cycle 5 commit-queue `createIntent` requires `--id` + SKILL doctrine update, `30ef437b` **Phase 0C cycles 6+7+8 bundled — the routing cure**: `AgentRoutingKey` discriminated union; classifiers + `assertSameAgent` + `claim-reports.sameAgent` route via id; PDR-076a §Falsifiability primary collision test green, `628713b8` handoff bundle. Tests 671 → 698 (+27). Mid-session metacognition pass triggered by owner challenge against substrate-only landings; cure cycles 6+7+8 bundled per owner direction landed within the same session as the correction. Cycles 9-10 + Phase 0C reviewer dispatch + final gate queued for FINAL session per owner direction) | 2026-05-26 | 2026-05-26 |
 | `claude` | `claude-opus-4-7` | Open Streaming Updraft | collaboration identity remediation Phase 0A doctrinal landing + Phase 0B Cycle 1 implementer (`357948`; landed 5 commits on `docs/agent-collaboration-enhancements`: `76920493` plan v3 reviewer integration with 3 parallel sub-agent reviewers + Explore structural map, `7028b0d6` PDR-027 amendment with Amendment-Log entry + schema-table updates + rule-body update + supersession note, `b0faefab` Phase 0A closeout, `3ca77972` metacog cure replacing 3-session framing with TDD-cycle decomposition after owner challenge, `c11f698b` Phase 0B Cycle 1 with `UuidV5` branded type + read/write schema split + 7 new tests; demonstrated metacognition cure in execution by landing 0A + 0B Cycle 1 in same session; all session claims closed; design for Phase 0B Cycles 2-4 + Phase 0C fully locked in plan body for next implementer) | 2026-05-26 | 2026-05-26 |
 | `claude` | `claude-opus-4-7` | Starless Dimming Owl | n=2-coordination-efficiency-program implementer + closeout owner (`781369`; landed the three remaining workstreams in linear order: curator-handoff `d3b1f75d` (Thermal's curator residue under Starless attribution per owner direction), WS0 `3c3e01d3` (3 new rules + 9 forwarders + RULES_INDEX classification table + 6-test validation + mode-selection block; SKILL 996→700 lines exactly), WS1 `3360dfb0` (NarrativeCommsEvent addressed_to/audience widened to CollaborationAgentId tuple; classifyNarrative routes by session_id_prefix; 5 collision regression tests), WS4 `4f1e6faf` (SKILL cross-references for ping-before-escalate + stale §0.5 anchor cures), closeout `2d79e3ab` (plan archived to `archive/completed/`, continuity refreshed), substrate cleanup `308cdafe` (stale claims archived, 5 expired commit-queue entries abandoned); dispatched 8 reviewers in parallel across the three workstreams; coordinated with Thermal Swooping Wing via 4+ directed comms (no-overlap verdicts kept commit ownership clean); acceptance bar revised in WS0 commit body per assumptions-expert ruling (combined `wc -l` is wrong proxy; classification-weighted per-mode load is correct measure); deferred SHOULD-FIXes documented in WS1 commit body (schema-duplication consolidation; diagnosticWriter DI)) | 2026-05-26 | 2026-05-26 |
@@ -3332,7 +3636,7 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 | `codex` | `GPT-5` | Thermal Buffeting Plume | Knowledge Curator (`019e5f`; role-substrate clarification, hard/critical curation completion, handoff/consolidation closeout) | 2026-05-25 | 2026-05-25 |
 | `codex` | `GPT-5` | Breezy Flowing Dock | Knowledge Curator (`019e5f`; critical/hard memory curation, napkin rotation, pending-graduations active shard, light handoff) | 2026-05-25 | 2026-05-25 |
 | `claude` | `claude-opus-4-7` | Mistbound Passing Candle | Plan author + executor (`e77243`; first session: n=2/coordination-efficiency survey + plan + integration. Second session post-compaction: WS4 first move PDR-078 §5 substrate-category amendment at `3ca71a40`; WS0 directed verdict (c)+partial(a) via LTAE-frame-test at `04d5cefa`; 6 commits pushed; 5 metacognition passes; owner-named NEVER-compress-findings-reactively rule integrated; lane partner with Quiet Whispering Veil for second session) | 2026-05-25 | 2026-05-25 |
-| `codex` | `GPT-5` | Quiet Whispering Veil | Knowledge Curator (`019e60`; second-session arrival; homed Mistbound's dense post-compaction napkin entry into live shard `pending-graduations/2026-05-25-mistbound-inherited-frame-and-hook-signal-candidates.md` with full substance preserved + 4-item disposition section; ran inherited-tree fitness gate as self-elected gate-runner; cured HARD on napkin via rotation not compression; team-member handoff to Mistbound for commits) | 2026-05-25 | 2026-05-25 |
+| `codex` | `GPT-5` | Quiet Whispering Veil | Knowledge Curator (`019e60`; second-session arrival; homed Mistbound's dense post-compaction napkin entry into live shard `pending-graduations.md` with full substance preserved + 4-item disposition section; ran inherited-tree fitness gate as self-elected gate-runner; cured HARD on napkin via rotation not compression; team-member handoff to Mistbound for commits) | 2026-05-25 | 2026-05-25 |
 | `claude` | `claude-opus-4-7` | Misty Drifting Sail | Implementer / plan-AUTHOR (`02b325`, post-m1-attestation-tidy-up.plan.md Cycles 5+5a re-enqueue + held-items consolidation + 7 + 7.1 + 8 + 8a). Joined fresh under Lunar-Director routing 2026-05-24T22:10Z for commit-subject pre-flight (read-only), re-routed at 22:14Z to plan-AUTHOR under pure-direction split (Lunar = plan-OWNER, Misty = plan-AUTHOR, Mistbound = Commit Marshal). 7 cycles landed via Mistbound: `7c2f85f4` Cycle 5 (PDR-077 + reciprocals); `e8bc6781` Cycle 5a (PDR-079 + rule + hook); `93c4fdc0` held-items consolidation (README + practice-index PDR-077/078/079); `48c8ac22` Cycle 7 (ADR-186 + reciprocal §Related to ADR-183 + PDR-078 + practice-index line-165 fix); `75a2cd25` Cycle 7.1 (ADR-186 prettier-mangle repair); `9e57290d` Cycle 8 (SKILL §0.5 thin + PDR-078 Candidate→Accepted Adopted 2026-05-25 + reciprocal §Related to PDR-027/063/064). Cycle 8a ADR-187 (Claude self-modification authz cure-shape, WS-8 Lanternlit absorption — C2-near-term + C5-long-term + C4-fallback combination; C1/C3 rejected; 10 architectural conditions from Ferny WS-2 reviewer synthesis embedded; **4-reviewer absorption depth** docs-adr APPROVE-AS-IS + assumptions 2 CRITICAL + security 1 RES-CRITICAL + 5 MEDIUM + 1 LOW + wilma 2 RES-CRITICAL + 4 MEDIUM) authored 585 lines and **enqueued under intent `7e965431` / claim `e097d5a1`** awaiting marshal at compaction-prep time. Cycle 8a marshal blocked on Mistbound silence (≥83 min at wind-down; ping-before-escalate cure validated false-positive twice in session; sole-marshal binding means owner-class decision required). Surfaced 3 recurring failure modes for closeout consolidation: **heartbeat-content-drift** (3 Misty + 3+ Lunar instances of stale templated heartbeat body despite live state changes; graduation candidate: mechanical state-binding via structured field); **platform-wide Monitor cron-drift** (Misty 20-min + Lunar 17-min concurrent gaps at 23:28-23:47Z; graduation candidate: heartbeat-cron health-monitoring via existing watcher-staleness substrate); **ping-before-escalate cure validation** (cross-check git work-evidence before retirement-detection; validated twice in single session). Plan-author seat released 2026-05-25T00:35Z per Lunar's structural-stall wind-down at 00:33Z; team-member closeout broadcast `86d1fe2e`. **1 claim retained** for Cycle 8a marshal pickup (`e097d5a1`). | 2026-05-24 | 2026-05-25 |
 | `claude` | `claude-opus-4-7` | Mistbound Hiding Threshold | Sole Commit Marshal (`0e27cc`, post-m1-attestation-tidy-up.plan.md across compaction-5 resume → retirement; duty span ~8h35min 2026-05-24T21:08Z → 2026-05-25T05:47Z). 10 commits landed: `4575044e` Cycle 2 (Charcoal PDR-077 captures); `e8ca6d08` Cycle 3 (PDR-076a Accepted); `b7ac9938` Cycle 4 (PDR-076b Accepted); `7c2f85f4` Cycle 5 (PDR-077 + 063/064 reciprocals); `e8bc6781` Cycle 5a (PDR-079 + rule + hook); `9725ae09` Cycle 6 (PDR-078 Candidate); `93c4fdc0` held-items consolidation; `48c8ac22` Cycle 7 (ADR-186); `75a2cd25` Cycle 7.1 (ADR-186 prettier-mangle repair); `9e57290d` Cycle 8 (SKILL §0.5 + PDR-078 Adopted + reciprocals). Cycle 8a (intent `7e965431`) abandoned 23:26Z on husky format-issues; substantive work preserved as `??`+`M` in working tree for next author. Two false-positive retirement-detections fired (21:57Z Seaworthy + 22:57Z Lunar) — Director cure-discipline `cross-ref git log before escalation` named at 22:58Z + 23:01Z; pattern named for graduation. Branch-fitness-and-push-cadence.plan.md authored (16-cycle revised structure; 11 reviewer-driven revisions applied; uncommitted in tree). Marshal seat handed cleanly to Hushed Stalking Shade (`bc0a07`) via PDR-064 Moment-2 at 05:46Z (handoff record `.agent/state/collaboration/handoffs/2026-05-25-mistbound-to-hushed-stalking-shade-marshal-handoff.md`; Moment-1 broadcast `e2a21c5d`). Retired 2026-05-25T05:47Z. Closeout broadcast 05:47:50Z. | 2026-05-22 | 2026-05-25 |
 | `claude` | `claude-opus-4-7-1m` | Lush Sprouting Thicket | Implementer (codex-helper skill, codex-exec CLI, ADR-180, future plan) | 2026-05-12 | 2026-05-12 |
@@ -7117,6 +7421,8 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Sylvan Regrowing Sapling` | `codex` | `GPT-5` | `019e6a` | `dedicated-legacy-pending-graduations-batch-14-drain; claim-7d011543; in-place-disposition-ledger; hard-fitness-routing-for-definition-of-delivery-and-repo-continuity` | 2026-05-27 | 2026-05-27 |
+| `Woodland Blossoming Grove` | `codex` | `GPT-5` | `019e6a` | `dedicated-legacy-pending-graduations-batch-13-drain; pdr-043-cue-2-intent-not-vocabulary-graduation; batch-13-in-place-disposition-ledger; strict-hard-soft-only-verification` | 2026-05-27 | 2026-05-27 |
 | `Solar Illuminating Dawn` | `codex` | `GPT-5` | `019e6a` | `collaboration-temp-state-file-curation; _tmp-buffer-disposition-ledger-and-deletion; sdk-bak-stray-scan-and-deletion; state-file-lifecycle-doctrine-captured; session-handoff` | 2026-05-27 | 2026-05-27 |
 | `Kilned Burning Hearth` | `codex` | `GPT-5` | `019e68` | `dedicated-knowledge-curation-proof-pass; graduated-ship-independent-coordinate-dependent-rule-and-platform-adapters; pending-graduations-ledger-one-graduated-one-owner-gated-on-PDR-082; strict-hard-fitness-soft-only-markdownlint-diff-check-local-path-scan-green; claim-closed-active-count-zero; handoff-and-all-files-commit` | 2026-05-27 | 2026-05-27 |
 | `Veiled Dimming Threshold` | `codex` | `GPT-5` | `019e68` | `consolidate-docs-two-mode-contract-implementer; session-completion-vs-dedicated-knowledge-curation-defaults; buffer-disposition-ledger-and-archive-before-processing-checklist-failure; closeout-proof-separates-fitness-from-completion; handoff-and-all-files-commit` | 2026-05-27 | 2026-05-27 |

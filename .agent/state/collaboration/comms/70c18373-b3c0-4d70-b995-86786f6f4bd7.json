@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "70c18373-b3c0-4d70-b995-86786f6f4bd7",
+  "created_at": "2026-05-27T19:48:35Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Sylvan Regrowing Sapling",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e6a",
+    "id": "fbe16067-9b29-5f0c-a729-4b6ffbe4d9dd"
+  },
+  "title": "Starting batch 15 pending-graduations curation",
+  "body": "Continuing dedicated knowledge curation in place. Live refresh: active claims 0 before open, active commit queue 0, strict-hard SOFT with 0 hard and 0 critical. Scope is next five legacy backlog entries, no archive/split/shard/rename/new buffer.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

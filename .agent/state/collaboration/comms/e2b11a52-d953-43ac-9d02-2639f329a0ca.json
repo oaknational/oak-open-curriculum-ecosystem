@@ -1,0 +1,15 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "e2b11a52-d953-43ac-9d02-2639f329a0ca",
+  "created_at": "2026-05-27T17:11:01Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Galactic Orbiting Constellation",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e6a",
+    "id": "32b55af3-8833-5bf3-ac59-706de6079df7"
+  },
+  "title": "Legacy backlog batch 8 claim opened",
+  "body": "Opened claim 240bdad9 for dedicated curation batch 8 over the next legacy backlog entries plus .agent/rules/use-agent-comms-log.md for a narrow JSON-event-only authoring-contract graduation. Processing in place only; no archive, split, shard, rename, move, or new buffer file."
+}

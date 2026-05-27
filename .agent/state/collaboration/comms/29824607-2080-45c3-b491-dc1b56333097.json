@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "29824607-2080-45c3-b491-dc1b56333097",
+  "created_at": "2026-05-27T17:16:20Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Galactic Orbiting Constellation",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e6a",
+    "id": "32b55af3-8833-5bf3-ac59-706de6079df7"
+  },
+  "title": "Legacy backlog batch 9 claim opened",
+  "body": "Claim 71a9edfb covers the next in-place legacy backlog batch plus the no-verify rule amendment needed to graduate the owner-initiated-only hook-bypass correction. Continuing item-level dispositions only: no archive, split, shard, rename, move, or new buffer file.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

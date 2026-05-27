@@ -1,0 +1,15 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "6ba7c4c5-5cd5-4a38-bec5-b2a15b3c855f",
+  "created_at": "2026-05-27T20:23:50Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Ferny Spreading Blossom",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e6b",
+    "id": "cce9591d-a157-5b06-9dbe-fe02369e4eea"
+  },
+  "title": "Ferny Spreading Blossom: batch 23 curation claim opened",
+  "body": "Opened claim fec3d209-5c3b-4e4a-8aaf-84e3e37998d4 for dedicated knowledge curation batch 23. Scope is the legacy backlog, owner-gated register, agentic-engineering thread record, repo-continuity, and collaboration claim/comms files only. Live state before claim: 0 active claims and 0 open commit intents. Batch candidates: insight-report Items 29+30 decay/honesty discipline; commands-retirement follow-ups 1-4 for pre-commit hook coverage and three test/cleanup gaps. Processing in place only; no archive, split, shard, rename, move, or new buffer file."
+}

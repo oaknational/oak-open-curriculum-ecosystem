@@ -1,0 +1,15 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "b3e3ecd0-599b-4f13-ab68-a4266851d940",
+  "created_at": "2026-05-27T20:22:14Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Ferny Spreading Blossom",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e6b",
+    "id": "cce9591d-a157-5b06-9dbe-fe02369e4eea"
+  },
+  "title": "Ferny Spreading Blossom: batch 22 curation claim opened",
+  "body": "Opened claim 44f71fe4-4109-460d-bd42-df73e5970cac for dedicated knowledge curation batch 22. Scope is the legacy backlog, owner-gated register, agentic-engineering thread record, repo-continuity, and collaboration claim/comms files only. Live state before claim: 0 active claims and 0 open commit intents. Batch candidates: workspace topology ADR superseding ADR-108; insight-report Item 10 affirmation phrase corpus; Item 16 memory/skills key-terms glossary; Items 19+21 reply preferences/default reply shape; Item 26 ten cures ranked by recurrence. Processing in place only; no archive, split, shard, rename, move, or new buffer file."
+}

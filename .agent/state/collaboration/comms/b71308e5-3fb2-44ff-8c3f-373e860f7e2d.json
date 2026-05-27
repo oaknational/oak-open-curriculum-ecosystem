@@ -1,0 +1,15 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "b71308e5-3fb2-44ff-8c3f-373e860f7e2d",
+  "created_at": "2026-05-27T16:59:52Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Galactic Orbiting Constellation",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e6a",
+    "id": "32b55af3-8833-5bf3-ac59-706de6079df7"
+  },
+  "title": "Legacy backlog batch 3 claim opened",
+  "body": "Claim 834c34a5 covers the next small in-place batch in the 2026-05-06-to-2026-05-21 legacy backlog recovery file. Continuing item-level dispositions only, with no archive, split, shard, rename, move, or new buffer file."
+}

@@ -16,16 +16,17 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
-- **Ferny Spreading Blossom / Sylvan Regrowing Sapling closeout (codex / GPT-5)**:
-  dedicated pending-graduations curation remains partial, not complete. Legacy
-  backlog batches 14-24 closed in place with 55 dispositions total
-  (`28 duplicate`, `27 owner-gated`). The owner-directed register migration
-  centralised processed owner-gated pending-graduations into
-  [`owner-gated.md`](pending-graduations/owner-gated.md), now 59 items, and
-  removed those status blocks from old buffers. Latest strict-hard evidence
-  remains SOFT-only (`20 soft`, `24 healthy`, `7 ready empty`, `0 hard`,
-  `0 critical`). Next safe step is batch 25 from the agentic thread record;
-  do not create a new buffer file.
+- **Ferny Spreading Blossom closeout (codex / GPT-5 / `019e6b`)**:
+  owner-directed pending-graduations cleanup landed in the working tree.
+  Processed owner-gated decisions and remaining extracted knowledge now live in
+  canonical [`pending-graduations.md`](pending-graduations.md); the old
+  pseudo-shard files under `pending-graduations/` were deleted and that
+  directory has no files left. Legacy batches 14-27 totalled 67 dispositions
+  (`33 duplicate`, `34 owner-gated`), with 66 live owner-gated items retained
+  in the canonical register. Targeted markdownlint, `git diff --check`,
+  collaboration-state check, strict-hard fitness (`0 hard`, `0 critical`),
+  and full `pnpm check` passed. No active curation claim remains; next step is
+  owner-directed commit/marshal timing or owner decisions on the gated items.
 - **Gnarled Flowering Pollen closeout (codex / GPT-5 / `019e69`)**:
   external agent-skills source audit completed as a bounded tactical lane on
   `feat/graph-foundations`. The existing source-neutral
@@ -128,8 +129,8 @@ Earlier archives remain under [`archive/`](archive/).
 - **Processed hard surfaces**: previous active napkin source archived verbatim
   at
   [`napkin-2026-05-26-feathered-hard-curation.md`](../active/archive/napkin-2026-05-26-feathered-hard-curation.md);
-  fresh Starless/Open candidates moved to active shard
-  [`2026-05-26-starless-open-closeout-candidates.md`](pending-graduations/2026-05-26-starless-open-closeout-candidates.md);
+  fresh Starless/Open candidates have since been dispositioned through the
+  canonical [`pending-graduations.md`](pending-graduations.md) register;
   outgoing detailed Current State prose archived at
   [`repo-continuity-current-state-2026-05-26-feathered-hard-curation.md`](archive/repo-continuity-current-state-2026-05-26-feathered-hard-curation.md).
 - **Next implementation route returns to EEF first-feature delivery**
@@ -163,7 +164,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF first-feature delivery | [record][eef] | claude / claude-opus-4-7 / Galactic Dancing Constellation / eef-value-pr-reviewer (PR #121 open) / 2026-05-27 |
-| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | codex / GPT-5 / Sylvan Regrowing Sapling / pending-graduations-batches-14-15-plus-owner-gated-register / 2026-05-27 |
+| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | codex / GPT-5 / Ferny Spreading Blossom / pending-graduations-pseudo-shard-collapse / 2026-05-27 |
 
 ## Paused Threads
 
@@ -392,18 +393,19 @@ rotation threshold reached; one open question captured (Q-001) and one tooling
 friction note. `pnpm check` green (exit 0) at handoff. The standing
 dedicated-curation backlog below remains the live consolidation route.
 
-**due — dedicated curation backlog (standing)**: the persistent dedicated
-curation goal is still open. Strict-hard is SOFT-only, but the legacy
-pending-graduations backlog still has unprocessed `status: pending` entries
-after batch 15. The next curation session resumes batch 16 from the
-thread-record continuation point.
+**not due — pending-graduations pseudo-shards collapsed (2026-05-27)**: the
+owner-directed cleanup moved live owner-gated decisions and extracted knowledge
+back into canonical `pending-graduations.md`, deleted the sidecar files, and
+left strict-hard at `0 hard` / `0 critical`. The remaining work is not a
+consolidation sweep; it is owner direction on the gated decisions or
+commit/marshal timing.
 
 **recent 2026-05-27 consolidation status**: detailed closeout prose for
 Gnarled, Kilned, Veiled, and Foamy now lives in the
 [`agentic-engineering-enhancements` thread record][agentic], the
 [`eef` thread record][eef], and the Kilned curator-pass proof. The remaining
 live processed decision queue from those sessions is centralised in
-[`owner-gated.md`](pending-graduations/owner-gated.md).
+[`pending-graduations.md`](pending-graduations.md).
 
 **Phase 0 identity-remediation status**: the old closeout/due markers for
 Airy Whirling Current and Tempestuous Sweeping Feather are no longer live

@@ -4,7 +4,7 @@ Operationalises
 [PDR-077 (Marshal as Cycle Discipline)](../practice-core/decision-records/PDR-077-marshal-as-cycle-discipline.md)
 and the owner-directed 2026-05-25 PR #115 marshal-cycle retrospective
 captured in
-[pending graduations](../memory/operational/pending-graduations/2026-05-25-fiery-collaboration-decomposition-and-n2-efficiency.md).
+[pending graduations](../memory/operational/pending-graduations.md).
 
 ## Rule
 

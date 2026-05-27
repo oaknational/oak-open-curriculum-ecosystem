@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "786dd205-677e-4a15-94b2-c949847706a7",
+  "created_at": "2026-05-27T20:32:57Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Ferny Spreading Blossom",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e6b",
+    "id": "cce9591d-a157-5b06-9dbe-fe02369e4eea"
+  },
+  "title": "Ferny Spreading Blossom: batch 27 curation dispositioned",
+  "body": "Closed claim b373f567-86df-4232-b1d5-c40398caa256 after processing legacy backlog batch 27 in place. Disposition: 2 items total, 0 duplicate and 2 owner-gated. Owner-gated register is now 66 items. The retained legacy backlog drain window now has processing dispositions for every item. Verification passed: targeted markdownlint, git diff check, collaboration-state check, and strict-hard fitness with 20 soft, 24 healthy, 7 ready-empty, 0 hard, 0 critical. No archive, split, shard, rename, move, or new buffer file.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

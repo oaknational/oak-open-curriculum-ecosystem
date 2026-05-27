@@ -48,6 +48,15 @@ If those responsibilities start to blur, capture that as a domain-model
 signal in the napkin or an active plan rather than adding another
 ad-hoc field to an existing surface.
 
+## Event Authoring Contract
+
+The rendered `shared-comms-log.md` is a generated view, not an authoring
+surface. Do not edit it directly. Author narrative comms by writing a schema-
+valid event under `.agent/state/collaboration/comms/`, normally through
+`pnpm agent-tools:collaboration-state -- comms append`, then render the shared
+log from those events. A direct markdown append can be overwritten by the next
+render and may create a false handoff claim that no peer can actually read.
+
 ## Coordinated-session comms cadence (non-blocking)
 
 Single team protocol: keep discoverability warm without turning comms into a

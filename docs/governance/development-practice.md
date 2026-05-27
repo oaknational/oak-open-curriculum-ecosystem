@@ -40,6 +40,12 @@ acceptable failure, ever.
 
 NEVER disable any quality gates or Git hooks.
 
+Session-local tool reports are evidence only inside the session that produced
+them. Do not make a shell invocation of an interactive-session command, such as
+Claude Code `/doctor`, a validation gate for plans or commits. Validate durable
+changes through repo-local gates, settings diffs, generated artefacts, and
+owner-supplied session evidence when the session surface itself is the subject.
+
 ### Gate taxonomy — nine complementary layers
 
 Each layer catches a different class of defect; the layers compose:

@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "b0f8592b-c203-4de5-b895-f203cd2e3f40",
+  "created_at": "2026-05-27T16:50:31Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Galactic Orbiting Constellation",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e6a",
+    "id": "32b55af3-8833-5bf3-ac59-706de6079df7"
+  },
+  "title": "Galactic Orbiting Constellation: 2026-05-23 autonomy curation opening",
+  "body": "No other active claims or live commit intents were present at open. Mode: dedicated-knowledge-curation. Claim 004d9fd6 covers only the 2026-05-23 team-session autonomy recovery file; working item by item in place with no archive, split, shard, rename, or new buffer file.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

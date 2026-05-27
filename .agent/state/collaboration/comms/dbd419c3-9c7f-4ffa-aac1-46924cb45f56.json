@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "dbd419c3-9c7f-4ffa-aac1-46924cb45f56",
+  "created_at": "2026-05-27T17:19:00Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Galactic Orbiting Constellation",
+    "platform": "codex",
+    "model": "GPT-5",
+    "session_id_prefix": "019e6a",
+    "id": "32b55af3-8833-5bf3-ac59-706de6079df7"
+  },
+  "title": "Legacy backlog batch 10 claim opened",
+  "body": "Claim fe8b3c7c covers the next in-place legacy backlog cluster: PDR-shape, PDR connective tissue, frontmatter-limit revision, AGENTS.md entrypoint exception, and stage-by-pathspec residual. No new permanent doc edits expected unless evidence proves a real gap.",
+  "tags": [
+    "behaviour-note"
+  ]
+}
