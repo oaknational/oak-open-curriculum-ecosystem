@@ -69,6 +69,33 @@ describe('EefStrandSchema', () => {
     });
     expect(result.success).toBe(false);
   });
+
+  it('preserves implementation.common_pitfalls and digital_technology_application', () => {
+    const result = EefStrandSchema.safeParse({
+      ...VALID_STRAND,
+      implementation: {
+        key_considerations: ['teach it explicitly'],
+        common_pitfalls: ['treating it as generic study skills'],
+        digital_technology_application: 'tools can support structured prompts',
+      },
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.implementation).toEqual({
+        key_considerations: ['teach it explicitly'],
+        common_pitfalls: ['treating it as generic study skills'],
+        digital_technology_application: 'tools can support structured prompts',
+      });
+    }
+  });
+
+  it('rejects a strand whose related_strands contains duplicate ids', () => {
+    const result = EefStrandSchema.safeParse({
+      ...VALID_STRAND,
+      related_strands: ['eef-tl-feedback', 'eef-tl-feedback'],
+    });
+    expect(result.success).toBe(false);
+  });
 });
 
 describe('EEF_PHASES', () => {

@@ -58,6 +58,17 @@ describe('checkFreshness', () => {
     });
   });
 
+  it('returns err future-dated when the snapshot is dated after now (fails closed)', () => {
+    const lastUpdated = new Date('2026-06-21T00:00:00.000Z').toISOString();
+
+    const result = checkFreshness(lastUpdated, now, 180);
+
+    expect(result).toEqual({
+      ok: false,
+      error: { kind: 'future-dated', input: lastUpdated, ageDays: -30 },
+    });
+  });
+
   it('honours a caller-supplied threshold different from the default', () => {
     const lastUpdated = new Date('2025-11-23T00:00:00.000Z').toISOString();
 

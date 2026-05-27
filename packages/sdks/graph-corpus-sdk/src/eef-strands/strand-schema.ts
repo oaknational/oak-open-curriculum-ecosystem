@@ -134,10 +134,26 @@ export const EefStrandSchema = z
     implementation: z
       .object({
         key_considerations: z.array(z.string()).readonly(),
+        // Real corpus strands carry these inside `implementation` alongside
+        // `key_considerations`; a closed object silently strips unmodelled
+        // keys, so model them explicitly to keep the snapshot faithful
+        // (review-register A3). Optional — present on a minority of strands.
+        common_pitfalls: z.array(z.string()).readonly().optional(),
+        digital_technology_application: z.string().optional(),
       })
       .readonly()
       .optional(),
-    related_strands: z.array(z.string()).readonly().optional(),
+    // `related_strands` ids must be unique within a strand: a duplicate would
+    // emit a duplicate `related_strand` edge in the graph adapter
+    // (review-register F2). The current corpus is clean; this fails a future
+    // snapshot closed rather than silently doubling an edge.
+    related_strands: z
+      .array(z.string())
+      .refine((ids) => new Set(ids).size === ids.length, {
+        message: 'related_strands must not contain duplicate strand ids',
+      })
+      .readonly()
+      .optional(),
     related_guidance_reports: z.array(RelatedGuidanceReportSchema).readonly().optional(),
     update_history: z.array(UpdateHistoryEntrySchema).readonly().optional(),
     // Deliberately an open record rather than a modelled object: the block is
