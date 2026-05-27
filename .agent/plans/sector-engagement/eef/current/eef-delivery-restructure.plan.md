@@ -34,9 +34,9 @@ todos:
     content: >-
       EEF prompt latent-dead-code disposition — TSDoc note in mcp-prompts.ts
       naming the co-gating requirement; keep generator+test as substrate.
-      Beneficiary: dev. State: LANDED. Branch: feat/graph-foundations
-      (post-consolidation).
-    status: pending
+      Beneficiary: dev. State: LANDED (committed 9554ffbc with E). Branch:
+      feat/graph-foundations.
+    status: completed
     depends_on: []
   - id: inc-c-chatgpt-spike
     content: >-
@@ -61,9 +61,11 @@ todos:
       register-prompts PROMPT_REGISTRATIONS); registration-gating is NEW
       logic (useStubTools only gates the executor path). New co-gating
       integration test + fix the broken every-universal-tool-registered
-      assertion. Beneficiary: dev. State: LANDED. Branch:
-      feat/graph-foundations (post-consolidation).
-    status: pending
+      assertion. Beneficiary: dev. State: LANDED (committed 9554ffbc). Added an
+      e2e assertion that the EEF tool surfaces over HTTP only when the flag is
+      on; default list_tools parity drops the gated tool. Branch:
+      feat/graph-foundations.
+    status: completed
     depends_on: []
   - id: inc-f-selection-tool
     content: >-
