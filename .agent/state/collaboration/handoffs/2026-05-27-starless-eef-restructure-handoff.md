@@ -31,29 +31,27 @@ trigger: owner-requested compaction after EEF delivery-restructure
   EEF README; `eef-first-feature.plan.md` gate-1a contract SUPERSEDED via banner
   that retracts three false-delivery claims (sequencing-not-scope-reduction,
   ff4 "t10 landed" orphaned prompt, "WS4.5 LANDED" stub).
+- **Forward plan-restructure: `cc3fad3c`.** Retraction banners on
+  `eef-evidence-corpus.plan.md` + `graph-mvp-arc.plan.md`; `feat-mcp-meta`
+  freshened; `eef.next-session.md` 2026-05-21 entry annotated. **Step 1 below is
+  now COMPLETE this session** (was originally deferred; finished before compaction).
 
 ## POST-COMPACTION NEXT STEP (do in this order)
 
-### Step 1 — Finish the forward plan-restructure (the remainder of "all related plans")
+### Step 1 — Finish the forward plan-restructure — ✅ DONE (`cc3fad3c`, this session)
 
-Budget ran short this session; only `eef-first-feature.plan.md` got its banner.
-Apply the SAME forward-restructure (retract false claims; repoint to the
-meta-plan + Definition of Delivery) to the rest, per meta-plan §Part 5
-**do-now forward subset only**:
+COMPLETE. Retraction banners landed on `eef-first-feature.plan.md` (`a60b51ce`),
+`eef-evidence-corpus.plan.md`, and `graph-mvp-arc.plan.md`; `feat-mcp-meta`
+freshened; `eef.next-session.md` 2026-05-21 entry annotated. The forward
+restructure carried the correct selection-vs-ranking boundary (selection restored
+to gate-1a; scoring engine + recommend/explain/compare stay gate-1b). Nothing
+remains here — proceed to Step 2.
 
-- `eef-evidence-corpus.plan.md` — gate-grouping table wrongly defers selection
-  (t5/t6/t7/t8) to gate-1b; `t10` `status: completed` is false (orphaned prompt).
-- `graph-mvp-arc.plan.md` — gate-1a scope omits selection; "no scope reduction".
-- `feat-mcp-graph-support-foundation-meta.md` — stale (missing this meta-plan +
-  please-do-a-deep-mighty-peach in related_plans; last_updated 2026-05-22).
-- `eef.next-session.md` — annotate the 2026-05-21 entry as the **unratified**
-  selection-removal.
+**Still held for inc-g (after F ships):** the ADR-123 inventory amendment and the
+gate-1a-closed marking — adding delivery claims before delivery violates the
+Definition of Delivery.
 
-**Do NOT** apply the F-dependent items now (ADR-123 inventory amendment;
-gate-1a-closed marking) — those are inc-g, after F ships. Adding delivery
-claims before delivery violates the Definition of Delivery.
-
-### Step 2 — Apply increments B → C → D → E → F → G → H per the meta-plan
+### Step 2 (now the FIRST post-compaction action) — Apply increments B → C → D → E → F → G → H per the meta-plan
 
 Critical value path: **E → F → G → H**. First value increment: F at LANDED.
 B and A-adjacent doc work parallel. C→D is gate-1b, non-blocking for gate-1a.
