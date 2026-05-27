@@ -1,37 +1,20 @@
 /**
- * Public API surface for the EEF evidence corpus type substrate.
+ * Public API surface for EEF evidence-corpus MCP telemetry types.
  *
- * Re-exports the corpus-layer types defined in
- * `../mcp/evidence-corpus/types.ts` so external consumers
- * (downstream MCP apps, future adapter implementors) can depend on a
- * stable subpath without reaching into the SDK's `mcp/` internals.
+ * The corpus-layer type substrate — `EvidenceCorpus<TNode, TEdgeType>`,
+ * `EefStrand`, and the rank / explain / compare options, results, and
+ * errors — now lives in `@oaknational/graph-corpus-sdk/eef-strands` per
+ * ADR-179 §Substrate discipline (the graph substrate owns corpus types;
+ * the MCP surface consumes them). Consumers implementing or consuming the
+ * corpus import those types from `graph-corpus-sdk` directly.
  *
- * `EvidenceCorpus<TNode, TEdgeType>` is the wrapping composition type
- * that adapters consume to implement the corpus-layer
- * rank / explain / compare operations on top of a `GraphView`. See
- * the source module's `@packageDocumentation` for the architectural
- * rationale (composition not inheritance, corpus-local
- * `NotImplementedYet` discriminator scoping, two-phase Zod-inferred
- * `EefStrand` replacement at the downstream loader cycle).
+ * This subpath re-exports only the MCP-surface telemetry configuration
+ * types, which correctly remain in `oak-curriculum-sdk`'s MCP module —
+ * span configuration is a transport-side instrumentation concern, not a
+ * substrate concern (ADR-179 §Surfacing).
  *
  * @packageDocumentation
  */
-
-export type {
-  CompareError,
-  CompareOptions,
-  ComparisonDimension,
-  ComparisonResult,
-  EefStrand,
-  EvidenceCorpus,
-  ExplainOptions,
-  NodeExplanation,
-  NotImplementedYet,
-  RankError,
-  RankOptions,
-  RankedItem,
-  RankedResults,
-} from '../mcp/evidence-corpus/types.js';
 
 export type {
   EvidenceCorpusSpanConfig,
