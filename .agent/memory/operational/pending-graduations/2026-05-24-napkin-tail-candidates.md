@@ -6,8 +6,9 @@ source_window: 2026-05-24 active napkin tail
 status: active
 archive_status: not-archived
 recovery_status: active
-processing_status: routed
+processing_status: owner-gated-only
 processing_claim_id: a6098196-5f85-4d60-8c93-0168c251fcf8
+latest_disposition_ledger: ../curator-passes/2026-05-27-airy-napkin-tail-owner-gates.md
 ---
 
 # 2026-05-24 Napkin Tail Candidates
@@ -15,13 +16,16 @@ processing_claim_id: a6098196-5f85-4d60-8c93-0168c251fcf8
 This legacy recovery file carries fresh second-instance-gated candidates processed from
 the 2026-05-24 active napkin tail. This is live buffer debt, not an archive.
 The entries below were verified and routed on 2026-05-24; they remain live
-because their promotion triggers have not fired.
+because their promotion triggers have not fired. As of 2026-05-27, the
+remaining entries are explicitly owner-gated: they are not complete, but each
+now names the user decision needed before the item can either stay live,
+graduate, or be withdrawn.
 
 ## Entries
 
 ### Owner-authorised redundant config marker preserves architectural truth
 
-`[captured: 2026-05-24 | source: active-napkin Charcoal owner-authz Sonar capture | target: pattern:owner-authorised-redundant-config-marker | trigger: second owner-authorised redundant-config marker | size: M | status: pending]`
+`[captured: 2026-05-24 | source: active-napkin Charcoal owner-authz Sonar capture | target: pattern:owner-authorised-redundant-config-marker | trigger: second owner-authorised redundant-config marker | size: M | status: owner-gated]`
 
 Charcoal captured a Sonar `sonar.cpd.exclusions` case where owner direction
 authorised adding a narrow generated-code path even though a broader existing
@@ -47,9 +51,14 @@ owner-ratified as an audit-trail marker. This recovery file keeps only the repea
 pattern watch. Do not promote until a second owner-authorised redundant config
 marker appears.
 
+Owner gate: decide whether this one-instance repeatable-shape watch should
+remain as a live owner-gated watch despite the persistent buffer-drain goal, or
+be withdrawn because the exact Sonar instance is already homed in
+`docs/governance/sonar-disposition-policy.md`.
+
 ### Heterogeneous working-tree owner direction splits by attribution
 
-`[captured: 2026-05-24 | source: active-napkin Mistbound Capture E | target: pattern:heterogeneous-working-tree-split-by-attribution | trigger: second commit-all split-by-attribution instance | size: M | status: pending]`
+`[captured: 2026-05-24 | source: active-napkin Mistbound Capture E | target: pattern:heterogeneous-working-tree-split-by-attribution | trigger: second commit-all split-by-attribution instance | size: M | status: owner-gated]`
 
 Mistbound captured an owner direction to "commit all files" against a
 heterogeneous dirty tree: an in-flight Twilit CLI bootstrap refactor, an
@@ -75,9 +84,13 @@ active napkin, main-register pointer, and this file. Keep pending until a
 second mixed owner-"commit all" window is resolved by attribution-preserving
 split. Do not generalise one emergency split into doctrine.
 
+Owner gate: decide whether this one-instance mixed-tree / attribution-preserving
+commit watch should remain live until a second worked instance appears, or be
+withdrawn as insufficiently proven for the current buffer-drain goal.
+
 ### Substrate-write commit window under high team cadence
 
-`[captured: 2026-05-24 | source: active-napkin Mistbound Capture F | target: pattern:substrate-write-window-coordination | trigger: second multi-writer shared-state staging race | size: M | status: pending]`
+`[captured: 2026-05-24 | source: active-napkin Mistbound Capture F | target: pattern:substrate-write-window-coordination | trigger: second multi-writer shared-state staging race | size: M | status: owner-gated]`
 
 Mistbound captured a staging-window race while landing substrate hygiene:
 shared-state writers modified `.agent/memory/` and
@@ -106,9 +119,14 @@ cure is a short broadcast window, an explicit residue policy, or no new pattern.
 Any future cure must preserve the rule that shared-state knowledge writes remain
 writable and commit-includable.
 
+Owner gate: decide whether this one-instance substrate-write staging-race watch
+should remain live until a second race clarifies the durable cure, or be
+withdrawn because current commit-window and claim rules already cover the known
+portion.
+
 ### Goal-backed handoff state must be explicit
 
-`[captured: 2026-05-24 | source: active-napkin Sylvan persistent-goal handoff capture | target: session-handoff-or-platform-pattern:goal-backed-session-close | trigger: second goal-backed stop/wind-down conflict or owner-direction to codify handoff step | size: S | status: pending]`
+`[captured: 2026-05-24 | source: active-napkin Sylvan persistent-goal handoff capture | target: session-handoff-or-platform-pattern:goal-backed-session-close | trigger: second goal-backed stop/wind-down conflict or owner-direction to codify handoff step | size: S | status: owner-gated]`
 
 Sylvan captured a handoff failure mode where the owner repeatedly asked to wind
 down or stop, but a persistent goal wrapper kept reactivating the Knowledge
@@ -132,3 +150,8 @@ Processing disposition: verified 2026-05-24 under Shaded claim
 crosses repo workflow and platform goal-runner behaviour. Do not promote until
 the trigger clarifies whether the durable cure belongs in `session-handoff`,
 platform memory, or the goal wrapper itself.
+
+Owner gate: decide the durable home for goal-backed closeout state: repo
+`session-handoff`, platform goal-runner behaviour, or the already-landed
+`consolidate-until-done` wrapper. Until that boundary is owner-ratified, this
+entry stays live as an explicit user-decision item.

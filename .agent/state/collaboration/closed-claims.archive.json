@@ -47904,6 +47904,96 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "63e83a1d-6924-477d-99bd-db6cf4687b6c",
+      "agent_id": {
+        "agent_name": "Airy Vaulting Squall",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e6a",
+        "id": "4670dd77-e692-581a-907f-94465e86704d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations/2026-05-24-napkin-tail-candidates.md",
+            ".agent/memory/active/patterns/**",
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/operational/curator-passes/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T16:35:00Z",
+      "freshness_seconds": 7200,
+      "sidebar_open": false,
+      "intent": "Drain the 2026-05-24 napkin-tail recovery file item by item into durable homes or explicit owner-gated dispositions.",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T16:35:24Z",
+        "closed_by": {
+          "agent_name": "Airy Vaulting Squall",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e6a",
+          "id": "4670dd77-e692-581a-907f-94465e86704d"
+        },
+        "summary": "Drained the 2026-05-24 napkin-tail recovery file into four explicit owner-gated dispositions with ledger .agent/memory/operational/curator-passes/2026-05-27-airy-napkin-tail-owner-gates.md; no archive/split/rename fitness cure used.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "63e83a1d-6924-477d-99bd-db6cf4687b6c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "e01a6c51-7a72-4792-ae71-dafe45e1b782",
+      "agent_id": {
+        "agent_name": "Airy Vaulting Squall",
+        "platform": "codex",
+        "model": "GPT-5",
+        "session_id_prefix": "019e6a",
+        "id": "4670dd77-e692-581a-907f-94465e86704d"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-27T16:35:40Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage and commit the May 24 napkin-tail owner-gate curation slice.",
+      "intent_to_commit": "3e10311a-2d9a-4ca8-9cc0-9fcd779012cc",
+      "archived_at": "2026-05-27",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-27T16:36:10Z",
+        "closed_by": {
+          "agent_name": "Airy Vaulting Squall",
+          "platform": "codex",
+          "model": "GPT-5",
+          "session_id_prefix": "019e6a",
+          "id": "4670dd77-e692-581a-907f-94465e86704d"
+        },
+        "summary": "closed in same collaboration-state commit for docs(memory): mark napkin tail candidates owner-gated",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "e01a6c51-7a72-4792-ae71-dafe45e1b782",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

@@ -217,3 +217,17 @@ fitness_content_role: drainable-buffer
 - For repo skills, canonical content lives in `.agent/skills/`; `.agents/` and
   `.claude/` skill files are generated adapters. If generation fails, fix the
   generator invocation or permissions, then rerun it. Do not hand-create stubs.
+
+## Session: 2026-05-27 — napkin-tail owner-gate drain
+
+### What Was Done
+
+- Drained the May 24 napkin-tail recovery file item by item into an explicit
+  owner-gated state, with a disposition ledger for the four remaining
+  one-instance watches.
+
+### Patterns to Remember
+
+- A second-instance watch is not complete just because its trigger has not
+  fired. Under a buffer-drain goal, either graduate it, withdraw it with
+  evidence, or name the concrete owner decision that keeps it live.
