@@ -1,5 +1,46 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-28 — Sunlit Waxing Moon / claude / claude-opus-4-7 / `b34d76`, pending-graduations drain continuation after Leafy crash)
+
+**Session boundary**: continued the owner-directed dedicated `pending-graduations.md`
+drain (LTAE per-item disposition) after Leafy Regrowing Sapling (`3c02b9`) crashed
+on the Opus extended-thinking compaction bug before recording an outcome.
+
+**Landed (commit `f7d19c7a`)**:
+
+- Crash-recovery coordination reconciled: superseded Leafy's dead-but-metric-fresh
+  claim, logged the crash (comms `aefaa645`), opened own claim.
+- **Complete per-item verified verdict ledger for the whole register (~70 items)**:
+  [`curator-passes/2026-05-28-sunlit-waxing-moon.md`](../curator-passes/2026-05-28-sunlit-waxing-moon.md).
+  Every item carries a disposition and sharp verdict; a grouped owner-decision
+  packet and crash-safe continuation are in that ledger.
+- Leafy's verification report committed + preserved.
+
+**Load-bearing findings**:
+
+1. The verification report Leafy left is **unreliable** — ~3 of 6 spot-checks were
+   wrong/misleading (false-negatives on items 2 and 33; mischaracterisation on 1).
+   The *register text itself* is largely honest. So mass-disposition on the report
+   base is unsafe; the ~30 lower-stakes "withdraw/watch" verdicts are
+   recommendations owed item-level re-verification before any removal.
+2. Concrete integrity bug: `reciprocal-cross-agent-reviewer-dispatch.md:248` cites
+   `more-restrictive-practice-rule-wins-on-reviewer-conflict` by name — a home that
+   does not exist (it is register item 2). Dangling reference.
+
+**Deliberately NOT done**: no register entries removed; no rules/PDRs authored.
+Owner reserved these decisions; budget (no new always-on rules) + Practice-Core
+sanctity gate the ready graduations. All surfaced in the ledger's decision packet.
+
+**Validation**: pre-commit green (turbo 91/91 full-cache); all claimed-scope files
+GREEN on fitness. Sole repo HARD is `napkin.md` — the crash-investigator (Kilned)
+session's live file, out of scope, excluded from the commit.
+
+**Next safe step**: owner ratifies the ledger's decision packet by group; a
+follow-up pass executes ratified withdrawals (after confirming each "covered by X"
+home), authors ratified graduations to chosen homes, and resolves fork E (esp. the
+item-43 `.git/index.lock` safety-conflict and the item-2 dangling reference). Each
+group is an independent committable sub-batch.
+
 ## Session Outcome (2026-05-28 — Thermal Spiralling Airstream / claude / claude-opus-4-7 / `40e32e`, Cursor statusline Lane B + comms-substrate diagnosis)
 
 **Session boundary**: Lane B of the owner-approved Cursor-statusline plan (retire
