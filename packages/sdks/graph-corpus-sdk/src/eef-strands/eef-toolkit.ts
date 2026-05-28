@@ -1916,8 +1916,8 @@ export const EEF_TOOLKIT_RAW: unknown = {
       service_children: 335,
     },
     national_averages: {
-      pp_percentage: 27.0,
-      send_support_percentage: 13.0,
+      pp_percentage: 27,
+      send_support_percentage: 13,
       ehcp_percentage: 4.3,
       primary_avg_size: 281,
       secondary_avg_size: 993,
