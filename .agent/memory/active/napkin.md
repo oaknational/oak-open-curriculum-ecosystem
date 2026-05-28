@@ -10,20 +10,6 @@ fitness_content_role: drainable-buffer
 
 ## Session: 2026-05-27 — statusline, EEF coordination, main merge closeout
 
-### What Was Done
-
-- Landed `8f3a9135` for the repo-owned Claude statusline renderer and tests,
-  keeping the repo TypeScript statusline path decoupled from the user's global
-  bash statusline script.
-- Landed `544b2f4e` for the EEF value-PR coordination surfaces: review
-  register, value-path reflection, comms-method comparison report, sidebar
-  backup, and session coordination state.
-- Landed `f6a9bb2a` for Hidden Dimming Threshold's completed curation bundle
-  before merging `origin/main`, preserving the curation closeout and its own
-  collaboration-state lifecycle closure in one durable commit.
-- Merged `origin/main` at `a6e669db` / `v1.14.1` into
-  `feat/graph-foundations` as `3c136e9d`.
-
 ### Surprise
 
 - **Expected**: The `origin/main` merge would likely conflict because main
@@ -249,15 +235,15 @@ fitness_content_role: drainable-buffer
   after the first substantive patch. For future thread work, claim and identity
   registration both need to happen before the buffer or doctrine edits begin.
 
+## Session: 2026-05-27 — closed-claims archive curation
+
+### Patterns to Remember
+
+- After curation, a collaboration-state archive can rest as an empty live sink:
+  future helpers need a writable file, but stale historical entries do not need
+  to remain in state once their knowledge has been homed.
+
 ## Session: 2026-05-27 — Galactic legacy backlog handoff
-
-### What Was Done
-
-- Closed legacy backlog batch 11 after processing 5 items in place.
-- Opened batch 12, gathered evidence, then stopped on owner direction before
-  any batch 12 disposition landed.
-- Closed the unlanded batch 12 claim during session handoff so the next
-  curator gets a clean claim slate.
 
 ### Mistakes Made
 

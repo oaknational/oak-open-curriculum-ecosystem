@@ -16,140 +16,29 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
-- **Ferny Spreading Blossom closeout (codex / GPT-5 / `019e6b`)**:
-  owner-directed pending-graduations cleanup landed in the working tree.
-  Processed owner-gated decisions and remaining extracted knowledge now live in
-  canonical [`pending-graduations.md`](pending-graduations.md); the old
-  pseudo-shard files under `pending-graduations/` were deleted and that
-  directory has no files left. Legacy batches 14-27 totalled 67 dispositions
-  (`33 duplicate`, `34 owner-gated`), with 66 live owner-gated items retained
-  in the canonical register. Targeted markdownlint, `git diff --check`,
-  collaboration-state check, strict-hard fitness (`0 hard`, `0 critical`),
-  and full `pnpm check` passed. No active curation claim remains; next step is
-  owner-directed commit/marshal timing or owner decisions on the gated items.
-- **Gnarled Flowering Pollen closeout (codex / GPT-5 / `019e69`)**:
-  external agent-skills source audit completed as a bounded tactical lane on
-  `feat/graph-foundations`. The existing source-neutral
-  [`external-skills-substrate-learning.plan.md`](../../plans/agentic-engineering-enhancements/future/external-skills-substrate-learning.plan.md)
-  remains the strategic evaluation route; the executable tooling successor is
-  now clearly indexed as
-  [`agent-artefact-lifecycle-cli.plan.md`](../../plans/agent-tooling/current/agent-artefact-lifecycle-cli.plan.md),
-  with the older canonical-first ingestion plan marked superseded pending
-  archive. Added `K-Dense-AI/scientific-agent-skills` as a high-value but
-  high-risk candidate: evaluate selectively through the candidate-register /
-  source-neutral-study route, do not bulk install or vendored-ingest.
-  Validation: targeted `markdownlint` and `git diff --check` passed for touched
-  files. Full `pnpm check` was run at handoff and reached repo-wide
-  `markdownlint --dot .`, where it failed on pre-existing/unrelated dirty EEF
-  collaboration handoff/sidebar files under `.agent/state/collaboration/`.
-- **Kilned Burning Hearth closeout (codex / GPT-5 / `019e68`)**:
-  dedicated knowledge-curation pass completed after the `oak-consolidate-docs`
-  mode-contract commit. The due ship-independent-before-coordinate-dependent
-  candidate graduated to
-  [`ship-independent-coordinate-dependent`](../../rules/ship-independent-coordinate-dependent.md)
-  plus platform adapters, `RULES_INDEX.md`, and `start-right-team`; the n=2
-  coordination-efficiency candidate remains live and owner-gated on PDR-082
-  ratification / second-instance validation. Curator-pass proof:
-  [`2026-05-27-kilned-burning-hearth.md`](curator-passes/2026-05-27-kilned-burning-hearth.md).
-  Validation: strict-hard fitness SOFT-only with `0 hard` and `0 critical`,
-  markdownlint, `git diff --check`, local-path hygiene scan, collaboration
-  lifecycle closeout, and full `pnpm check` at handoff. Next safe step after
-  commit is owner-directed push/PR timing.
-- **Veiled Dimming Threshold closeout (codex / GPT-5 / `019e68`)**:
-  `oak-consolidate-docs` now has the two-mode contract requested by the owner:
-  `session-completion` for bounded closeout and `dedicated-knowledge-curation`
-  for ledger-backed curation. Plan:
-  [`consolidate-docs-mode-contract-and-buffer-drain.plan.md`](../../plans/agentic-engineering-enhancements/current/consolidate-docs-mode-contract-and-buffer-drain.plan.md).
-  Validation: markdownlint, practice fitness informational, `git diff --check`,
-  collaboration JSON parse, and full `pnpm check` at handoff. No live buffers
-  were drained; next safe step after commit is owner-directed push/PR timing.
-- **Galactic Dancing Constellation closeout (claude / claude-opus-4-7 /
-  `7efeec`, 2026-05-27)**: EEF value-PR reviewer across the full arc (commits
-  2–4 + substrate hardening). Outcomes:
-  - **EEF value-PR is OPEN as PR #121** (`feat/eef-explore-evidence` → main,
-    7 commits): type relocation → adapter → loader/freshness → substrate
-    hardening → `eef-explore-evidence-for-context` tool + wire-up. Full
-    PR-boundary panel (mcp + security + type + test) verified SOUND; register
-    ledger + named follow-ons (F3 schemaHash, telemetry app-wiring) in the PR
-    body. Driven by Starless Prowling Mask (`13c7d5`).
-  - **`feat/graph-foundations` divergence resolved**: a local rebase had never
-    been force-pushed (origin retained a stale merge commit). Trees were
-    byte-identical (nothing lost); owner ran `git push --force-with-lease` +
-    a further `ebd679f6 docs: post-pr-open documentation`. Branch now in sync
-    (0/0) with a clean linear history.
-  - **Worktrees cleaned**: `oak-wt-cure` removed (PR #119 merged) + branch
-    `fix/agent-tools-comms-schema` deleted; stray `/tmp` worktree pruned. Live
-    worktrees: primary (`feat/graph-foundations`) + `oak-wt-eef` (PR #121).
-  - No active claims held; tooling friction captured in the napkin
-    (Monitor backlog-replay; comms-CLI read gap, 2nd occurrence).
-- **Foamy Lapping Harbour closeout (codex / GPT-5 / `019e68`)**:
-  `8f3a9135` landed repo-owned Claude statusline rendering; `544b2f4e`
-  landed EEF value-PR coordination state; `f6a9bb2a` landed Hidden Dimming
-  Threshold's completed curation closeout before the main merge; `3c136e9d`
-  merged main. Agent-tools focused type-check, lint, and tests were green
-  after the merge.
-- **Active thread switches back to `eef` first-feature delivery
-  (2026-05-26)**: Owner direction at session close —
-  `collaboration-identity-doctrine-enforcement-remediation` plan is
-  PAUSED with Phase 0 delivering its intent (collaboration improvement
-  for the next session). Next session resumes EEF first-feature work
-  per the [`eef` thread record][eef]; `agentic-engineering-enhancements`
-  returns to a Practice-continuity tactical lane, not an active
-  delivery arc.
-- **Collaboration identity remediation Phase 0 delivered, now paused
-  (2026-05-26)**: Airy Whirling Current closed Phase 0C cycles 9-11 and the
-  write-side type cure; Tempestuous Sweeping Feather previously landed Phase
-  0B plus Phase 0C cycles 6-8. Full proof ledger, commits, reviewer notes, and
-  test counts live in the [agentic thread record][agentic]. Owner direction
-  paused Phase 1+; EEF delivery is the active product focus.
-- **Cross-platform memory import completed (2026-05-26, Feathered Flying Cloud
-  / codex / GPT-5 / `019e65`)**: Claude, Codex, Cursor, and `.remember`
-  surfaces were swept; the owner then asked to bring the candidates into the
-  repo. Five candidates landed in durable homes: F-07 comms summary/show
-  affordances, ADR-165 plus Q-005 for the future memory/state boundary,
-  warn-first ESLint-rule nuance, start-right-team seat-cost routing, and
-  ADR-125 post-canonicalisation plugin retention. Curator-pass report:
-  [`2026-05-26-feathered-flying-cloud.md`](curator-passes/2026-05-26-feathered-flying-cloud.md).
-  Targeted markdownlint, `git diff --check`, and diff-level local-path scan
-  passed. Full `pnpm check` was not run because Tempestuous Sweeping Feather has
-  a fresh active agent-tools claim and dirty peer-owned agent-tools WIP; run the
-  singleton full gate after that lane settles.
-- **Hard memory curation stopped at soft (2026-05-26, Feathered Flying Cloud /
-  codex / GPT-5 / `019e65`)**: claim
-  `0933f219-d404-4f6d-8f6e-15ec45adf028` was closed after the hard memory
-  surfaces were routed without compression. Owner direction was followed:
-  preserve understanding, treat fitness as signal only, do not commit, do not
-  run quality gates, prioritise critical then hard, and stop at soft. Final
-  informational fitness signal for this pass: SOFT, with 0 hard and 0 critical
-  files.
-- **Current branch**: `docs/agent-collaboration-enhancements`, local HEAD
-  `b977dbab` (ahead of origin by 11 at handoff). Active claim at handoff:
-  Tempestuous Sweeping Feather owns Phase 0B/0C agent-tools implementation
-  files; do not fold those dirty files into this memory-import bundle.
-- **Processed hard surfaces**: previous active napkin source archived verbatim
-  at
-  [`napkin-2026-05-26-feathered-hard-curation.md`](../active/archive/napkin-2026-05-26-feathered-hard-curation.md);
-  fresh Starless/Open candidates have since been dispositioned through the
-  canonical [`pending-graduations.md`](pending-graduations.md) register;
-  outgoing detailed Current State prose archived at
-  [`repo-continuity-current-state-2026-05-26-feathered-hard-curation.md`](archive/repo-continuity-current-state-2026-05-26-feathered-hard-curation.md).
-- **Next implementation route returns to EEF first-feature delivery**
-  per owner direction 2026-05-26. The
-  [`collaboration-identity-doctrine-enforcement-remediation.plan.md`](../../plans/agent-tooling/current/collaboration-identity-doctrine-enforcement-remediation.plan.md)
-  plan is PAUSED with Phase 0 delivering its intent (collaboration
-  improvement for the next session). Earlier stale routing notes that
-  framed Phase 0B Cycles 2-4 / Phase 0C as the next route are
-  superseded by this entry.
-- **MCP product analytics** remains paused and owner-gated after the Path-to-GA
-  Programme landed at `09eda6f4`; details live in the
-  [`mcp-product-analytics`](threads/mcp-product-analytics.next-session.md)
-  thread record and the archived Current State prose.
-- **Collaboration-state retention standing direction remains binding**: do not
-  move or delete `.agent/state/collaboration/` research-substrate state while
-  the `agent-collaboration-research` thread remains owner-gated. This is a
-  temporary research preservation exception, not long-term storage doctrine:
-  after owner-authorised processing, state files should be dispositioned as
-  potential knowledge sources, routed to durable homes if useful, and deleted.
+- **Current branch**: `feat/graph-foundations`, local HEAD `66f59872`.
+- **Active delivery focus**: `eef` first-feature delivery remains the only
+  active product lane. Use the `eef` thread record and the EEF section below
+  for live pickup.
+- **Agentic-engineering tactical lane**: not an active product delivery arc.
+  The recent pending-graduations cleanup collapsed sidecar files back into
+  canonical [`pending-graduations.md`](pending-graduations.md), where the 66
+  owner-gated decisions remain live for owner direction.
+- **Closed-claims archive curation (Nebulous Threading Prism / codex /
+  `019e6b`)**: the 1091-entry closed-claims archive was processed as a
+  knowledge source. Durable knowledge was already homed in thread records,
+  plans, ADRs/PDRs, rules, commits, `pending-graduations.md`, and curator
+  reports; the processed archive content was cleared to an empty schema-valid
+  sink. Proof:
+  [`2026-05-27-nebulous-threading-prism-closed-claims.md`](curator-passes/2026-05-27-nebulous-threading-prism-closed-claims.md).
+- **Collaboration-state lifecycle**: `.agent/state/` files are live signal
+  sources, not long-term documentation. Outside explicit owner-gated research
+  preservation windows, process them for durable knowledge, route useful
+  substance, and clear the stale state.
+- Detailed recent closeout history for Gnarled, Kilned, Veiled, Foamy, the EEF
+  PR review/divergence work, Phase 0 identity-remediation, and cross-platform
+  memory import lives in the relevant thread records and curator reports rather
+  than in this repo-wide entry point.
 
 ## Active Threads
 
@@ -164,7 +53,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF first-feature delivery | [record][eef] | claude / claude-opus-4-7 / Galactic Dancing Constellation / eef-value-pr-reviewer (PR #121 open) / 2026-05-27 |
-| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | codex / GPT-5 / Ferny Spreading Blossom / pending-graduations-pseudo-shard-collapse / 2026-05-27 |
+| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | codex / GPT-5 / Nebulous Threading Prism / closed-claims archive curation + repo-continuity consolidation / 2026-05-27 |
 
 ## Paused Threads
 
@@ -385,136 +274,26 @@ Current branch non-goals:
 
 ## Deep Consolidation Status
 
-**not due — 2026-05-27 Galactic reviewer/divergence session** (claude /
-claude-opus-4-7 / `7efeec`): this session was EEF value-PR review + the
-`feat/graph-foundations` divergence resolution + worktree cleanup. No plan
-milestone closed by this session (PR #121 was opened by Starless), no napkin
-rotation threshold reached; one open question captured (Q-001) and one tooling
-friction note. `pnpm check` green (exit 0) at handoff. The standing
-dedicated-curation backlog below remains the live consolidation route.
+**current**: the closed-claims archive curation pass processed all 1091 archived
+claims, routed the only durable lifecycle lesson to the curation report and this
+resume pointer, and cleared the archive content. Proof:
+[`2026-05-27-nebulous-threading-prism-closed-claims.md`](curator-passes/2026-05-27-nebulous-threading-prism-closed-claims.md).
 
-**not due — pending-graduations pseudo-shards collapsed (2026-05-27)**: the
-owner-directed cleanup moved live owner-gated decisions and extracted knowledge
-back into canonical `pending-graduations.md`, deleted the sidecar files, and
-left strict-hard at `0 hard` / `0 critical`. The remaining work is not a
-consolidation sweep; it is owner direction on the gated decisions or
-commit/marshal timing.
+**current**: the pending-graduations pseudo-shard collapse is complete. The live
+decision work is owner direction on the 66 gated entries in
+[`pending-graduations.md`](pending-graduations.md), not another sidecar drain.
 
-**recent 2026-05-27 consolidation status**: detailed closeout prose for
-Gnarled, Kilned, Veiled, and Foamy now lives in the
-[`agentic-engineering-enhancements` thread record][agentic], the
-[`eef` thread record][eef], and the Kilned curator-pass proof. The remaining
-live processed decision queue from those sessions is centralised in
-[`pending-graduations.md`](pending-graduations.md).
+**routing**: detailed consolidation, handoff, and session-close history now
+lives in thread records, curator reports, completed plans, and prior continuity
+archives. This file should stay an operational index and should not regain
+per-session closeout prose.
 
-**Phase 0 identity-remediation status**: the old closeout/due markers for
-Airy Whirling Current and Tempestuous Sweeping Feather are no longer live
-routing. Phase 0 completion, the PAUSED owner direction, and the remaining
-DI-seam hygiene follow-up are durable in the agentic thread record and the
-current remediation plan. `distilled.md` is now ready-empty; no separate
-distilled hard-pressure route remains live.
+**handoff gate (2026-05-27)**: not due — the requested dedicated curation pass
+completed in this session, no fresh ADR/PDR/open-question candidate surfaced
+from the closeout sweep, and the next action is owner or marshal commit of the
+curation bundle.
 
-**completed — owner-directed cross-platform memory import slice** (Feathered
-Flying Cloud `019e65`, 2026-05-26). Owner asked to scan Claude memories, other
-platform memories, and `.remember` files, then asked to bring the candidates
-into the repo while keeping repo content free of local external paths. Import
-landed five durable updates: F-07 summary/show affordances, ADR-165 plus Q-005,
-ESLint warn-first nuance, start-right-team seat-cost routing, and ADR-125
-plugin-retention amendment. Targeted markdownlint, `git diff --check`, and
-diff-level local-path scan passed. Full `pnpm check` is intentionally not
-claimed green: at handoff a fresh Tempestuous Sweeping Feather claim owns
-agent-tools implementation files and the working tree includes peer-owned
-agent-tools WIP. Falsifiability for the next marshal: after that active claim
-closes, inspect `git status --short --branch` and rerun the singleton full gate.
-
-**not run — owner-directed skip mid-handoff** (Stellar Glowing Satellite
-`9a2967`, 2026-05-26). Owner initially directed *"run a full session
-handoff and document consolidation"* at close; mid-handoff (after steps
-1–8 completed) owner amended: *"forget the consolidation pass and check"*.
-Triggers had fired: plan-arc milestone closed (Path-to-GA Programme +
-5 substance amendments landed at `09eda6f4`); new plan collection
-scaffold introduced (`.agent/plans/curriculum-mcp-path-to-ga/`);
-exploration moved from untracked to committed. No new ADR/PDR candidates
-surfaced (paperwork session; design substance is the exploration itself).
-**Both `pnpm check` (step 11) and `oak-consolidate-docs` (step 10) skipped
-per owner direction**, not silently bypassed. Next consolidation pass to
-inherit the queued substance; falsifiability for the next consolidator:
-re-check `git log -1` for `09eda6f4`, the new programme path, and Stellar's
-napkin + experience entries.
-
-**due — owner-directed at session close** (Open Streaming Updraft `357948`,
-2026-05-26). Owner direction at session close: *"this session is complete,
-please run a full handoff /oak-session-handoff /oak-consolidate-docs , then
-next session will pick up the remaining Phase 0 work"*. Triggers fired:
-plan-arc milestone closed (Phase 0A doctrinal landing + Phase 0B Cycle 1
-landed; remediation plan now ACTIVE not QUEUED); behaviour-changing lesson
-to conserve (metacog cure on reviewer-derived sizing — see distilled.md
-entry to be authored under consolidate-docs); a structural correction
-landed mid-session (`3ca77972`). Consolidation pass to run after handoff.
-
-**not due — session handoff only for Thermal doctrine-debt planning slice**
-(Thermal Swooping Wing `019e63`, 2026-05-26). No plan or milestone closed; the
-new remediation plan remains `QUEUED`; no new ADR/PDR candidate was surfaced
-outside that plan; open-questions count remains below the drain trigger. This
-handoff records the queued Phase 0 critical path and leaves implementation for
-an owner-directed future session.
-
-**not due — owner-requested lightweight pass only** (Glassy Flowing Stern
-`de55d6`, 2026-05-26). Owner closed MCP analytics exploration session with
-`/oak-session-handoff` + `/oak-consolidate-docs`. Trigger checklist: no plan
-milestone closed; no napkin rotation threshold; four open questions in register;
-no new PDR/ADR graduation candidates from this lane (design record is the
-permanent home). Actions taken: thread record created; repo-continuity and
-napkin updated; §17 open items LTAE-screened — retained in exploration doc
-only; no inbound plan-index edits per outbound-only linking policy. Deferred:
-Exploration 10 formal per-sink projection doc sync until plan promotion;
-Stage 2 event catalogue until after Stage 1 emitters.
-
-**due — owner-directed post-n=2-bundle consolidate-docs pass** (Torrid Firing
-Spark `5054f8`, 2026-05-26T07:30Z). Owner direction at session close:
-*"this session is complete, please communicate all of your findings to
-Feathered, once that is done please run a deep /oak-session-handoff
-followed by a deep /oak-consolidate-docs"*. Triggers: plan milestone closed
-(n=2 enforcement bundle Cycle 1 complete; all 6 substantive commits +
-2 cross-lane cures + owner consolidation landed on origin); 11 graduation
-candidates surfaced through Cycle 1 (7 in the original 2026-05-26T07:25Z
-capture + 4 added by Torrid's retirement-class closeout: peer-agent
-heartbeat-without-progress diagnostic, `git apply --cached` surgical
-staging worked-instance, CLI args inconsistency across comms verbs,
-replace-old-with-new applied to WIP-completion). Consolidate-docs
-invocation follows this handoff directly per owner sequence.
-
-Prior state (Fiery Kindling Brazier `9f4026`, 2026-05-25T15:09Z). PR #115 merged at
-`9fa3a180` on origin/main; owner directed both Fiery and Stormy to run
-a final session handoff and docs consolidation pass. Triggers: plan
-milestone closed (PR-0 of 4-PR gate-1a sequence + hardening-arc
-closeout); new graduation candidates captured (Collaboration ceremony
-decomposition discipline + n=2 coordination efficiency, both
-`status: due`, owner-direction-triggered); ADR-184 amendment landed
-into main; Stormy actively drafting PDR-082 (n=2 collaboration mode)
-on the cure substrate Fiery captured. Consolidate-docs invocation
-follows this handoff.
-
-Prior state (Riverine Navigating Rudder, 2026-05-25): read-only MCP
-UAT + plan WS5 capture + continuity handoff only; no plan milestone
-closed at that close.
-
-Prior state (Breezy Flowing Dock bounded critical/hard curation, 2026-05-25):
-the active napkin, pending-graduations shards, thread records, and
-memory-surface-critical-drain plan remain the live consolidation ledger.
-Broader Phase 2/3 soft-file work remains trigger/owner-gated. Falsifiability for
-the next consolidator: re-check `git log --oneline -5`, `git status --short`,
-active claims, active queue, and
-[`memory-surface-critical-drain-2026-05-24.plan.md`](../../plans/agentic-engineering-enhancements/current/memory-surface-critical-drain-2026-05-24.plan.md)
-before starting.
-
-Historical deep-consolidation status prose from 2026-05-22 and 2026-05-23 has
-been processed into the current plan, thread records, archives, and live
-pending routes. It is preserved verbatim at
-[`archive/repo-continuity-session-history-2026-05-24.md`](archive/repo-continuity-session-history-2026-05-24.md)
-§ "Historical Deep Consolidation Status Archived 2026-05-24".
-
-Previous deep-consolidation and session-close prose lives in:
+Previous deep-consolidation and session-close prose:
 
 - [`archive/repo-continuity-session-history-2026-05-24.md`](archive/repo-continuity-session-history-2026-05-24.md)
 - [`archive/repo-continuity-session-history-2026-05-22.md`](archive/repo-continuity-session-history-2026-05-22.md)

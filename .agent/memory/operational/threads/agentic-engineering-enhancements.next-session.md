@@ -1,5 +1,32 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-27 — Nebulous Threading Prism / codex / GPT-5 / `019e6b`, closed-claims archive curation)
+
+**Session boundary**: owner directed a rapid dedicated knowledge-curation pass
+over `closed-claims.archive.json`; the goal was to mine the archive for durable
+knowledge, not repair legacy evidence shape through fabricated summaries.
+
+**Landed in the working tree**:
+
+- Processed the 1091-entry closed-claims archive as a corpus and wrote the
+  disposition ledger at
+  [`2026-05-27-nebulous-threading-prism-closed-claims.md`](../curator-passes/2026-05-27-nebulous-threading-prism-closed-claims.md).
+- Cleared `.agent/state/collaboration/closed-claims.archive.json` to an empty,
+  schema-valid `claims: []` sink so the processed archive content no longer
+  creates substrate pressure.
+- Consolidated [`repo-continuity.md`](../repo-continuity.md) back below its
+  line target by replacing duplicated recent closeout prose with live pointers.
+
+**Session-close validation**: closed archive `claims: []`, `0` active claims,
+`0` commit intents; `collaboration-state -- check`, `git diff --check`,
+targeted `markdownlint`, `practice:substrate:check`, and
+`practice:fitness:strict-hard` all passed, with strict-hard reporting `0 hard`
+and `0 critical`. Full `pnpm check` also passed at handoff.
+
+**Next safe step**: owner/marshal can commit this curation bundle when ready.
+Keep comms ceremony minimal unless a concrete overlap with Deep Fathoming
+Harbour appears.
+
 ## Session Outcome (2026-05-27 — Ferny Spreading Blossom / codex / GPT-5 / `019e6b`, pending-graduations pseudo-shard collapse)
 
 **Session boundary**: owner directed that owner-gated files be moved back into
@@ -3618,6 +3645,7 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 
 | Platform | Model | Agent name | Role | First-session | Last-session |
 | --- | --- | --- | --- | --- | --- |
+| `codex` | `GPT-5` | Nebulous Threading Prism | Knowledge Curator (`019e6b`; closed-claims archive knowledge curation and repo-continuity consolidation; claim `a4c7184a`) | 2026-05-27 | 2026-05-27 |
 | `codex` | `GPT-5` | Ferny Spreading Blossom | Knowledge Curator (`019e6b`; dedicated legacy pending-graduations drain batches 16-27, then owner-directed pseudo-shard collapse back into canonical `pending-graduations.md`; deleted sidecar files after extraction; strict-hard `0 hard` / `0 critical`) | 2026-05-27 | 2026-05-27 |
 | `codex` | `GPT-5` | Sylvan Regrowing Sapling | Knowledge Curator (`019e6a`; dedicated legacy pending-graduations drain on `feat/graph-foundations`; processed batches 14-15 in place, then created single owner-gated register with 37 processed decision-gated items; strict-hard SOFT with hard 0 / critical 0 before migration validation) | 2026-05-27 | 2026-05-27 |
 | `codex` | `GPT-5` | Galactic Orbiting Constellation | Knowledge Curator (`019e6a`; dedicated legacy pending-graduations drain on `feat/graph-foundations`; processed 2026-05-23 autonomy file and legacy backlog batches 1-11 in place, with batch 11 closing 5 items as 3 duplicate / 2 owner-gated; opened and closed batch 12 claim `923d0e3b` as unlanded after owner stop; strict-hard SOFT with hard 0 / critical 0) | 2026-05-27 | 2026-05-27 |
