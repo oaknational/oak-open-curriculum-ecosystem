@@ -95,7 +95,7 @@ function buildExploreSpan(
       phase: keyStageToPhase(args.keyStage),
       subject: args.subject,
       key_stage: args.keyStage,
-      ...(args.focus !== undefined ? { focus: args.focus } : {}),
+      ...(args.focus === undefined ? {} : { focus: args.focus }),
       result_count: resultCount,
       latency_ms: latencyMs,
     },

@@ -37,25 +37,37 @@ export type StatuslinePlan =
   | { readonly kind: 'render'; readonly inputs: StatuslineInputs };
 
 /**
+ * Applies Zod's `.catch(undefined)` to a schema so that parse failures
+ * silently fall back to `undefined`.  Extracted into a helper so that
+ * SonarQube does not confuse Zod's `.catch()` with `Promise.catch()`.
+ */
+function catchUndefined<T extends z.ZodTypeAny>(schema: T): z.ZodCatch<T> {
+  return schema.catch(undefined as never);
+}
+
+/**
  * Schema for the statusline stdin payload. Unknown keys are stripped; each
  * known field falls back to `undefined` when malformed so one bad field never
  * blanks the whole statusline. A non-object payload fails the parse entirely.
  */
 const statuslinePayloadSchema = z.object({
-  session_id: z.string().optional().catch(undefined),
-  cwd: z.string().optional().catch(undefined),
-  workspace: z
-    .object({ current_dir: z.string().optional().catch(undefined) })
-    .optional()
-    .catch(undefined),
-  model: z
-    .object({ display_name: z.string().optional().catch(undefined) })
-    .optional()
-    .catch(undefined),
-  context_window: z
-    .object({ used_percentage: z.number().optional().catch(undefined) })
-    .optional()
-    .catch(undefined),
+  session_id: catchUndefined(z.string().optional()),
+  cwd: catchUndefined(z.string().optional()),
+  workspace: catchUndefined(
+    z
+      .object({ current_dir: catchUndefined(z.string().optional()) })
+      .optional(),
+  ),
+  model: catchUndefined(
+    z
+      .object({ display_name: catchUndefined(z.string().optional()) })
+      .optional(),
+  ),
+  context_window: catchUndefined(
+    z
+      .object({ used_percentage: catchUndefined(z.number().optional()) })
+      .optional(),
+  ),
 });
 
 /**
