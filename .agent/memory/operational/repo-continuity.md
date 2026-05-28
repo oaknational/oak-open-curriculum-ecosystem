@@ -16,8 +16,8 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
-- **Current branch**: `feat/graph-foundations`, local HEAD `2f1d100e` (ahead 2
-  of `origin`).
+- **Current branch**: `feat/graph-foundations`, local HEAD `59d50265` (ahead 11
+  of `origin`; includes Cursor statusline Lane A `59d50265`).
 - **Active delivery focus**: `eef` **graph-tooling rebuild** is the only active
   product lane. The EEF explore tool + the gate-1a/1b split were diagnosed as
   the wrong foundation and discarded; the rebuild is built on the foundation
@@ -25,6 +25,9 @@ Earlier archives remain under [`archive/`](archive/).
   CURRENT-TRUTH banner) for live pickup.
 - **Solo session (2026-05-28)**: Nebulous Threading Prism stood down; its
   handed-over curation pass was committed (`2f1d100e`). No open claims or queues.
+- **Cursor statusline (2026-05-28)**: Stratospheric Hovering Gale landed Lane A
+  at `59d50265`; owner confirmed live status line shows PDR-027 name. Thermal
+  Spiralling Airstream owns Lane B cleanup on comms handoff.
 - **Agentic-engineering tactical lane**: not an active product delivery arc.
   The recent pending-graduations cleanup collapsed sidecar files back into
   canonical [`pending-graduations.md`](pending-graduations.md), where the 66
@@ -58,7 +61,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-7 / Deep Fathoming Harbour / graph-tooling rebuild foundation + plan (D0 next) / 2026-05-28 |
-| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | codex / GPT-5 / Nebulous Threading Prism / closed-claims archive curation + repo-continuity consolidation / 2026-05-27 |
+| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | cursor / composer-2.5 / Stratospheric Hovering Gale / Cursor statusline Lane A landed `59d50265`; Thermal Lane B pending / 2026-05-28 |
 
 ## Paused Threads
 
@@ -289,12 +292,12 @@ lives in thread records, curator reports, completed plans, and prior continuity
 archives. This file should stay an operational index and should not regain
 per-session closeout prose.
 
-**handoff gate (2026-05-28)**: completed this handoff — Deep Fathoming Harbour
-ran the requested deep session-handoff + consolidate-docs after diagnosing the
-EEF explore tool as the wrong foundation and establishing the graph-tooling
-rebuild. Graph-delivery doctrine, the self-correcting-deliverables planning
-methodology, the Definition-of-Delivery refinement question, and a 'working with
-graphs' skill are surfaced as graduation candidates in
+**handoff gate (2026-05-28)**: Stratospheric Hovering Gale session-handoff —
+Cursor statusline Lane A complete; consolidate-docs not due (no trigger fired).
+
+**prior (2026-05-28)**: Deep Fathoming Harbour ran deep session-handoff +
+consolidate-docs after the EEF explore-tool diagnosis and graph-tooling rebuild
+foundation. Graduation candidates remain in
 [`pending-graduations.md`](pending-graduations.md).
 
 Previous deep-consolidation and session-close prose:

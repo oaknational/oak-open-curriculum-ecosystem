@@ -23,6 +23,7 @@ import {
 } from './responses.sequences.js';
 import {
   SearchMultiScopeResponseSchema,
+  type SearchMultiScopeBucket,
   type SearchMultiScopeResponse,
 } from './responses.multi.js';
 
@@ -151,7 +152,6 @@ export type {
   SearchUnitsResponse,
   SearchSequenceResult,
   SearchSequencesResponse,
+  SearchMultiScopeBucket,
   SearchMultiScopeResponse,
 };
-
-export type { SearchMultiScopeBucket } from './responses.multi.js';

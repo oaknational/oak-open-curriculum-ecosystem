@@ -8,6 +8,61 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## Session: 2026-05-28 — comms-watch routing-legacy-fallback runaway (Thermal Spiralling Airstream)
+
+### Practice/tooling feedback
+
+- **Surface**: `agent-tools:collaboration-state -- comms watch` (all-channels
+  watcher), armed via Monitor.
+- **Signal**: failure-mode, confirmed live.
+- **Observation (the bug)**: the watcher emits `[routing-legacy-fallback] {…}`
+  diagnostics — one per historical agent identity — repeated every poll cycle,
+  flooding notifications until the harness auto-killed the Monitor. Recurrence
+  of the documented watcher-noise friction, now with a named source.
+- **Root cause — the bug is a SYMPTOM**: the fundamental breach is that a
+  `routing-legacy-fallback` path EXISTS. We don't do legacy systems and we
+  don't do fallbacks — `principles.md` §Strict and Complete ("don't add
+  fallback options"), §Code Design ("NEVER create compatibility layers"; "No
+  shims, no hacks, no workarounds — Replace the old code"), and
+  `replace-dont-bridge`. A fallback routing branch for legacy identities IS a
+  compatibility layer; its existence is the defect. The runaway is just how the
+  breach surfaced.
+- **Cure (fundamental, not cosmetic)**: remove the `routing-legacy-fallback`
+  branch; migrate legacy comms events + identity rows to the current routing
+  contract so routing is strict and total with one path. Do NOT filter the
+  noise, fix the loop, or add a suppress-flag — each bridges the breach.
+- **Wider structural read**: the legacy-fallback is one confession of an
+  accretive, bridge-not-replace evolution method across the whole collaboration
+  substrate (see session reflection — substrate violates the principles it
+  exists to uphold).
+- **Source plane**: `operational` (watcher unusable; on one-shot reads) +
+  `doctrine` (the breach is the real work-item).
+
+## Session: 2026-05-28 — Cursor statusline Lane A + Thermal agent comms
+
+### Surprise
+
+- **Expected**: Owner would relay Thermal's coordination messages into chat.
+- **Actual**: Thermal's traffic is agent↔agent on the comms substrate; the owner
+  only approves scope. Watcher + `comms direct` with full PDR-027 routing tuple
+  is the right loop.
+- **Why expectation failed**: Framed "monitoring" as owner-visible relay instead
+  of session identity receiving peer events.
+- **Behaviour change**: On team routes, post to Thermal on comms at milestones;
+  treat `[BROADCAST]` events aimed at "the Cursor agent" as addressed to this
+  session even without `addressed_to`.
+- **Source plane**: `operational`
+
+### Surprise again
+
+- **Expected**: Cursor statusline would need the slim cursor-only adapter through
+  Lane A.
+- **Actual**: Claude `statusline-identity-input.ts` already accepts Cursor stdin
+  (`session_id`, `cwd`, `workspace.current_dir`); delegating the shim was enough.
+- **Behaviour change**: Prefer delegate-to-Claude-adapter for Cursor statusline;
+  let Lane B delete cursor TS only after smoke proof.
+- **Source plane**: `operational`
+
 ## Session: 2026-05-27 — statusline, EEF coordination, main merge closeout
 
 ### Surprise

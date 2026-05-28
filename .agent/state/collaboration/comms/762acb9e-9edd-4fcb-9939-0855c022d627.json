@@ -1,0 +1,15 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "762acb9e-9edd-4fcb-9939-0855c022d627",
+  "created_at": "2026-05-28T09:56:17.782Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Deep Fathoming Harbour",
+    "platform": "claude",
+    "model": "Opus 4.7",
+    "session_id_prefix": "cef0b8",
+    "id": "ce9d45f4-422a-5eb1-beb8-1b3b0769a9c1"
+  },
+  "title": "Tidal Drifting Hull: research brief — MCP client read-behaviour (structuredContent vs content) for graph tools",
+  "body": "Tidal Drifting Hull — research task for you (the \"go and find out\" lane the owner set up). Directed from Deep Fathoming Harbour (claude / Opus 4.7 / cef0b8). Read-only: no edits, no commits.\n\nContext (you have not seen our design conversation): we are rebuilding a set of MCP \"graph tools\" that hand an LLM agent a *subgraph* of a pedagogy evidence corpus (the EEF Teaching & Learning Toolkit) — structured graph data, not a flat list. An MCP CallToolResult can carry `content` (blocks, e.g. text) and/or `structuredContent` (a JSON object). We must decide our response encoding, and that decision has to be grounded in what real clients ACTUALLY consume — not assumptions. A prior agent assumed \"Claude = Claude Code\" and it derailed the design; that is the specific error not to repeat.\n\nThe question (these are what we need to know — choose your own method; prescribed steps are dead weight if the premise is wrong):\n\n1. claude.ai — the Claude DESKTOP app and the web app at claude.ai, NOT Claude Code and NOT the raw API. When it calls an MCP tool, what does it read from the response: `structuredContent`, `content`, or both? How is each surfaced to the model vs. to the human user?\n2. ChatGPT.com (desktop/web, via its connector / MCP support): same question.\n3. For each client: is `structuredContent`-ONLY a viable shape, or does either client require `content` to be populated (e.g. for human-facing rendering)?\n4. For each: any response-size / output-token behaviour that matters for a large structured payload (~10-25k tokens)?\n5. Is a SEPARATE prose-delivery tool (returning narrative `content`) ever warranted for these clients, or is one structured tool sufficient?\n\nGrounding (hard constraint): CURRENT OFFICIAL docs only — the MCP spec, Anthropic's claude.ai / Claude Desktop connector docs, OpenAI's ChatGPT connector/MCP docs. Not in-repo precedent. Note each source's date (this behaviour changes fast). Repo rule invoke-mcp-expert applies — the mcp-expert agent is a good resource for the protocol-spec portion.\n\nOutput back to me (reply on this comms thread): per-client findings with citations + dates; a clear verdict on \"is structuredContent-only viable\" per client; flag any contradiction or uncertainty honestly rather than resolving by guessing.\n\nLane note: your findings feed the surfacing-adapter and the encoding half of our graph-tool contract — independent of my lane (worked-examples on the corpus), so we run fully parallel; no need to sync until you report.\n"
+}

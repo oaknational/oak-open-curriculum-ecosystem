@@ -3,17 +3,17 @@
  *
  * @remarks
  * The Claude Code harness invokes the configured statusline command with a
- * JSON object on stdin. This parser validates that boundary with a Zod schema
- * and extracts the fields the statusline renders (session id for the
+ * JSON object on stdin. This parser validates that boundary with explicit type
+ * guards and extracts the fields the statusline renders (session id for the
  * agent-identity seed, working directory for git queries, model name, and
- * context-window usage). The statusline is a soft surface: empty, unparseable,
- * or non-object input short-circuits to a no-op; individual malformed fields
- * are tolerated and simply render as absent segments.
+ * context-window usage). The statusline is a soft surface: empty input, invalid
+ * JSON, or a non-object payload short-circuits to a no-op; individual malformed
+ * fields are tolerated and simply render as absent segments.
  *
  * @packageDocumentation
  */
 
-import { z } from 'zod';
+import { isPlainObject, nonBlankString } from '../core/json-narrowing.js';
 
 /**
  * Fields extracted from the statusline stdin payload.
@@ -36,46 +36,30 @@ export type StatuslinePlan =
   | { readonly kind: 'noop' }
   | { readonly kind: 'render'; readonly inputs: StatuslineInputs };
 
-/**
- * Applies Zod's `.catch(undefined)` to a schema so that parse failures
- * silently fall back to `undefined`.  Extracted into a helper so that
- * SonarQube does not confuse Zod's `.catch()` with `Promise.catch()`.
- */
-function catchUndefined<T extends z.ZodTypeAny>(schema: T): z.ZodCatch<T> {
-  return schema.catch(undefined as never);
+/** Expected top-level shape of the statusline stdin payload. */
+interface StatuslinePayload {
+  readonly session_id?: unknown;
+  readonly cwd?: unknown;
+  readonly workspace?: unknown;
+  readonly model?: unknown;
+  readonly context_window?: unknown;
 }
 
-/**
- * Schema for the statusline stdin payload. Unknown keys are stripped; each
- * known field falls back to `undefined` when malformed so one bad field never
- * blanks the whole statusline. A non-object payload fails the parse entirely.
- */
-const statuslinePayloadSchema = z.object({
-  session_id: catchUndefined(z.string().optional()),
-  cwd: catchUndefined(z.string().optional()),
-  workspace: catchUndefined(
-    z
-      .object({ current_dir: catchUndefined(z.string().optional()) })
-      .optional(),
-  ),
-  model: catchUndefined(
-    z
-      .object({ display_name: catchUndefined(z.string().optional()) })
-      .optional(),
-  ),
-  context_window: catchUndefined(
-    z
-      .object({ used_percentage: catchUndefined(z.number().optional()) })
-      .optional(),
-  ),
-});
+/** Expected shape of a nested object field (`workspace`, `model`, `context_window`). */
+interface NestedField {
+  readonly current_dir?: unknown;
+  readonly display_name?: unknown;
+  readonly used_percentage?: unknown;
+}
 
 /**
  * Translate Claude Code statusline stdin JSON into an execution plan.
  *
  * @param rawJson - The raw JSON text Claude Code passes on stdin.
- * @returns `noop` when the payload is empty, unparseable, or not a JSON object;
- *   otherwise `render` with whatever fields could be extracted.
+ * @returns `noop` when the payload is empty, invalid JSON, or not a JSON
+ *   object; otherwise `render` with whatever fields could be extracted. Each
+ *   field is narrowed from `unknown` through an explicit guard, so a malformed
+ *   field renders as absent rather than failing the whole parse.
  *
  * @example
  * ```ts
@@ -90,34 +74,56 @@ export function planStatuslineExecution(rawJson: string): StatuslinePlan {
     return { kind: 'noop' };
   }
 
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(rawJson);
-  } catch {
+  const payload = parsePayload(rawJson);
+  if (payload === undefined) {
     return { kind: 'noop' };
   }
 
-  const result = statuslinePayloadSchema.safeParse(parsed);
-  if (!result.success) {
-    return { kind: 'noop' };
-  }
-
-  const payload = result.data;
   return {
     kind: 'render',
     inputs: {
-      seed: normaliseString(payload.session_id),
-      cwd: normaliseString(payload.workspace?.current_dir) ?? normaliseString(payload.cwd),
-      model: normaliseString(payload.model?.display_name),
-      usedPercentage: payload.context_window?.used_percentage,
+      seed: nonBlankString(payload.session_id),
+      cwd: workspaceDir(payload.workspace) ?? nonBlankString(payload.cwd),
+      model: modelName(payload.model),
+      usedPercentage: contextUsage(payload.context_window),
     },
   };
 }
 
-function normaliseString(value: string | undefined): string | undefined {
-  if (value === undefined) {
+/** Parse stdin JSON to the expected payload shape, or `undefined` if unusable. */
+function parsePayload(rawJson: string): StatuslinePayload | undefined {
+  try {
+    const parsed: unknown = JSON.parse(rawJson);
+    return isStatuslinePayload(parsed) ? parsed : undefined;
+  } catch {
     return undefined;
   }
-  const trimmed = value.trim();
-  return trimmed.length === 0 ? undefined : trimmed;
+}
+
+/** Extract the working directory from the nested `workspace` object. */
+function workspaceDir(value: unknown): string | undefined {
+  return isNestedField(value) ? nonBlankString(value.current_dir) : undefined;
+}
+
+/** Extract the display name from the nested `model` object. */
+function modelName(value: unknown): string | undefined {
+  return isNestedField(value) ? nonBlankString(value.display_name) : undefined;
+}
+
+/** Extract the context-window usage from the nested `context_window` object. */
+function contextUsage(value: unknown): number | undefined {
+  return isNestedField(value) ? finiteNumber(value.used_percentage) : undefined;
+}
+
+function isStatuslinePayload(value: unknown): value is StatuslinePayload {
+  return isPlainObject(value);
+}
+
+function isNestedField(value: unknown): value is NestedField {
+  return isPlainObject(value);
+}
+
+/** Narrow an unknown value to a finite number, or `undefined`. */
+function finiteNumber(value: unknown): number | undefined {
+  return typeof value === 'number' && Number.isFinite(value) ? value : undefined;
 }

@@ -1,5 +1,28 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-28 — Stratospheric Hovering Gale / cursor / composer-2.5 / `ad279f`, Cursor statusline Lane A + Thermal team coordination)
+
+**Session boundary**: owner-approved plan to show PDR-027 agent display name and git branch on
+the Cursor status line via repo-owned wiring; serial team execution with Thermal Spiralling
+Airstream (Lane B: retire cursor statusline TS after handoff).
+
+**Landed**:
+
+- Commit `59d50265` — `.cursor/scripts/statusline-identity.mjs` delegates to
+  `agent-tools/dist/src/claude/statusline-identity.js`; install helper
+  `pnpm agent-tools:install-cursor-statusline`; docs in `agent-tools/docs/agent-identity.md`.
+- Owner verified status line shows agent name in live Cursor session.
+- Agent↔agent comms with Thermal: team-start, ack of `json-narrowing` foundation, directed
+  handoff event `c80a8c29-…` with SHA and smoke sample.
+
+**Validation**: smoke stdout includes identity + `git:(feat/graph-foundations)` + dirty + ctx%;
+pre-commit on `59d50265` ran full agent-tools test suite (730 passed).
+
+**Next safe step (Thermal, Lane B)**: after handoff observed — delete
+`agent-tools/src/cursor/statusline*`, cursor tests, knip entry; run agent-tools test/build.
+**Next safe step (this identity)**: none unless owner reopens Cursor platform work; do not edit
+Lane B paths without coordination.
+
 ## Session Outcome (2026-05-27 — Nebulous Threading Prism / codex / GPT-5 / `019e6b`, closed-claims archive curation)
 
 **Session boundary**: owner directed a rapid dedicated knowledge-curation pass
@@ -7449,6 +7472,7 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Stratospheric Hovering Gale` | `cursor` | `composer-2.5` | `ad279f` | `cursor-statusline-lane-a-implementer-closeout-owner; shim-delegate-to-claude-adapter; install-cursor-statusline; team-coord-with-thermal-spiralling-airstream; handoff-59d50265; owner-verified-statusline` | 2026-05-28 | 2026-05-28 |
 | `Sylvan Regrowing Sapling` | `codex` | `GPT-5` | `019e6a` | `dedicated-legacy-pending-graduations-batch-14-drain; claim-7d011543; in-place-disposition-ledger; hard-fitness-routing-for-definition-of-delivery-and-repo-continuity` | 2026-05-27 | 2026-05-27 |
 | `Woodland Blossoming Grove` | `codex` | `GPT-5` | `019e6a` | `dedicated-legacy-pending-graduations-batch-13-drain; pdr-043-cue-2-intent-not-vocabulary-graduation; batch-13-in-place-disposition-ledger; strict-hard-soft-only-verification` | 2026-05-27 | 2026-05-27 |
 | `Solar Illuminating Dawn` | `codex` | `GPT-5` | `019e6a` | `collaboration-temp-state-file-curation; _tmp-buffer-disposition-ledger-and-deletion; sdk-bak-stray-scan-and-deletion; state-file-lifecycle-doctrine-captured; session-handoff` | 2026-05-27 | 2026-05-27 |

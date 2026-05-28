@@ -17,6 +17,17 @@ fitness_rationale: >-
   substance rather than trimming the lesson.
 ---
 
+## 2026-05-28 — Cursor statusline: delegate shim to Claude adapter
+
+For Cursor CLI statusline, the repo shim can target
+`agent-tools/dist/src/claude/statusline-identity.js` — the Claude stdin parser
+already accepts `session_id`, `cwd`, and `workspace.current_dir`. Lane A is
+wiring + install helper + docs; retire `agent-tools/src/cursor/statusline*` in a
+follow-on lane only after smoke proof. Activation stays global
+(`pnpm agent-tools:install-cursor-statusline` → `~/.cursor/cli-config.json`).
+
+Source: Stratospheric Hovering Gale session 2026-05-28, commit `59d50265`.
+
 ## 2026-05-28 — the EEF wrong-shape episode (graph≠list; hold-open; build-don't-stub)
 
 The EEF explore tool was built, three-reviewer-approved, and committed — and was
