@@ -8,6 +8,24 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## Session: 2026-05-28 (closeout) — worked examples dissolve abstract design forks (Woodland Swaying Pollen)
+
+### Patterns to Remember
+
+- **When a design fork stalls in the abstract, pull the concrete numbers — don't
+  argue harder.** The EEF "one axis or two" question (membership-only full nodes
+  vs graded disclosure) circled in trade-off reasoning until one measured FACT
+  ended it: the whole 30-strand corpus is ~21k tokens, under the ~25k agent
+  ceiling, so full nodes always fit and graded disclosure earns nothing here.
+  The abstract debate collapsed the instant the real corpus + a token count were
+  in front of me. This is exactly the owner's "resolve by worked examples on the
+  real corpus, not the rule in the abstract." Reusable: a stalled design fork is
+  a signal to get the real data, not to deliberate harder.
+- **Closeout note**: the escape-hatch generative screen now lives in
+  `distilled.md` (always-loaded) as a pre-output filter, not a retrospective
+  catalogue. `distilled.md` went SOFT (122/120 lines) — correct
+  knowledge-preservation, routed to the next dedicated curation, never trimmed.
+
 ## Session: 2026-05-28 (later) — escape-hatch process re-enacts F (Woodland Swaying Pollen)
 
 ### Correction absorbed (retrospective metacognition)

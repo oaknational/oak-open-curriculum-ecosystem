@@ -16,8 +16,9 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
-- **Current branch**: `feat/graph-foundations`, local HEAD `227b5415` (ahead 13
-  of `origin`; includes Cursor statusline Lane A `59d50265`).
+- **Current branch**: `feat/graph-foundations`, local HEAD `63c7c1be` (EEF
+  Goal-1 design + D0 prerequisite). `63c7c1be` is local (1 ahead of `origin`);
+  earlier Goal-1 commits `4e443f15` + `a37f4075` were pushed by the owner.
 - **Active delivery focus**: `eef` **graph-tooling rebuild** is the only active
   product lane. The EEF explore tool + the gate-1a/1b split were diagnosed as
   the wrong foundation and discarded; the rebuild is built on the foundation
@@ -67,7 +68,7 @@ paused implementation program.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-7 / Deep Fathoming Harbour / graph-tooling rebuild foundation + plan (D0 next) / 2026-05-28 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-7 / Woodland Swaying Pollen / Goal 1 design settled + plan SPECIFIED (Goal 2 / D0 prerequisite next) / 2026-05-28 |
 | `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | claude / Opus 4.7 / Thermal Spiralling Airstream / Cursor statusline Lane B complete (Cursor TS retired); routing-legacy-fallback-sunset plan created; comms-plan consolidation handed to next session / 2026-05-28 |
 
 ## Paused Threads
@@ -129,15 +130,20 @@ Single source of truth for the rebuild:
   graphs' skills + methodology graduation, D6 explore the value path, DX
   estate-wide reference reconciliation).
 
-**Next safe step:** GOAL 1 — fix the plan (design only, no implementation). The
-next session resolves the one open design question (the **selection / scoping
-strategy**) via worked examples on the real corpus, folds in the 2026-05-28
-settled outcomes (encoding = `structuredContent`-only; scope = agent-facing, no
-UI/widget), and upgrades the plan skeleton to a fully-specified, owner-ratified
-spec. Then GOAL 2 — implement (D0 merge-safety → D6 + DX), each with its
-measurable gate. Bounded: must not drift into endless follow-on sessions (plan
-§"End goal + bounded goals"). The F explore tool (`2214f0b2`) is LANDED behind the
-flag but is the wrong shape pending rebuild.
+**Next safe step:** GOAL 1 (fix the plan) is **DONE — owner-ratified 2026-05-28**:
+the selection/scoping strategy resolved to **full-node membership (one axis)**;
+the plan is upgraded skeleton → **SPECIFIED** (D0–D6 + DX, each with measurable
+acceptance / consumes / how-the-gate-breaks). **Next = GOAL 2 (implement); its
+FIRST step is the D0 prerequisite (owner-directed 2026-05-28): fix ALL open
+PR #122 quality signals before merge** — the 2 Sonar `S7763` via the
+`@oaknational/sdk-codegen` generator (NOT a Sonar exclusion; generator-first),
+the `statusline-identity.ts` PATH hotspot, the 3.9% new-code duplication, and the
+valid review comments — then merge (flag OFF in every deployed env, ON only
+local), then D1 contract ADR → D2 query surface → D3 thin tool → D4 round-trip →
+D5 doctrine + methodology graduation → D6 explore value → DX estate reconcile.
+Bounded: terminates at D6, no deferral gates (plan §"End goal + bounded goals").
+The F explore tool (`2214f0b2`) is LANDED behind the flag, the wrong shape pending
+the D3 rebuild.
 
 Historical EEF substrate-floor work (the 2026-05-22→23 multi-agent gate-1a
 session, the WS4.x critical path) and PR #108 graph-substrate details are
@@ -302,6 +308,18 @@ decision work is owner direction on the 66 gated entries in
 lives in thread records, curator reports, completed plans, and prior continuity
 archives. This file should stay an operational index and should not regain
 per-session closeout prose.
+
+**handoff gate (2026-05-28, Woodland Swaying Pollen)**: session-handoff +
+consolidate-docs at owner request. EEF Goal 1 (design-settling) DONE +
+owner-ratified — plan SPECIFIED, foundation §10 resolved, new
+`extending-graph-support-tooling` plan, D0 gains the deployed-env flag posture +
+a "fix-ALL-open-quality-signals" prerequisite (3 commits `4e443f15` / `a37f4075`
+/ `63c7c1be`, last local). PR #122 CI green except the SonarCloud QG (2 `S7763`
+in generated SDK code, 1 PATH hotspot, 3.9% new-dup — all branch-wide, none from
+this session); captured as the D0 prerequisite with COMPLETE cures (generator
+fix, never Sonar-exclusion). Metacognition: the escape-hatch reflex
+(defer/menu/list-op/suppress-the-signal) was owner-caught 4× → generative
+pre-output screen added to `distilled.md`. `pnpm check` NOT run (owner direction).
 
 **handoff gate (2026-05-28)**: Sylvan Whispering Fern ran
 `/oak-consolidate-until-done` (dedicated-knowledge-curation). strict-hard GREEN
