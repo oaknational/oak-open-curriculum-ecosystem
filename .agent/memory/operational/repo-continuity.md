@@ -16,7 +16,7 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
-- **Current branch**: `feat/graph-foundations`, local HEAD `59d50265` (ahead 11
+- **Current branch**: `feat/graph-foundations`, local HEAD `227b5415` (ahead 13
   of `origin`; includes Cursor statusline Lane A `59d50265`).
 - **Active delivery focus**: `eef` **graph-tooling rebuild** is the only active
   product lane. The EEF explore tool + the gate-1a/1b split were diagnosed as
@@ -26,8 +26,15 @@ Earlier archives remain under [`archive/`](archive/).
 - **Solo session (2026-05-28)**: Nebulous Threading Prism stood down; its
   handed-over curation pass was committed (`2f1d100e`). No open claims or queues.
 - **Cursor statusline (2026-05-28)**: Stratospheric Hovering Gale landed Lane A
-  at `59d50265`; owner confirmed live status line shows PDR-027 name. Thermal
-  Spiralling Airstream owns Lane B cleanup on comms handoff.
+  at `59d50265` (Cursor delegates to the Claude statusline pipeline). Thermal
+  Spiralling Airstream completed Lane B — bespoke Cursor TS statusline retired
+  (adapter + parser + tests deleted), Claude parser refactored off Zod `.catch()`
+  onto explicit type guards, shared `core/json-narrowing.ts` extracted;
+  agent-tools gates green. The 2026-05-28 comms-watch runaway exposed an
+  un-sunset PDR-076a `routing-legacy-fallback`; captured as the
+  `routing-legacy-fallback-sunset` future plan. Lane B + the sweep + codegen +
+  continuity landed by the owner in `ae4e09cb` (code + dep sweep + codegen) and
+  `227b5415` (memory).
 - **Agentic-engineering tactical lane**: not an active product delivery arc.
   The recent pending-graduations cleanup collapsed sidecar files back into
   canonical [`pending-graduations.md`](pending-graduations.md), where the 66
@@ -61,7 +68,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-7 / Deep Fathoming Harbour / graph-tooling rebuild foundation + plan (D0 next) / 2026-05-28 |
-| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | cursor / composer-2.5 / Stratospheric Hovering Gale / Cursor statusline Lane A landed `59d50265`; Thermal Lane B pending / 2026-05-28 |
+| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | claude / Opus 4.7 / Thermal Spiralling Airstream / Cursor statusline Lane B complete (Cursor TS retired); routing-legacy-fallback-sunset plan created; comms-plan consolidation handed to next session / 2026-05-28 |
 
 ## Paused Threads
 
@@ -122,11 +129,15 @@ Single source of truth for the rebuild:
   graphs' skills + methodology graduation, D6 explore the value path, DX
   estate-wide reference reconciliation).
 
-**Next safe step:** D0 — get PR #122 mergeable, ensure all user-facing EEF
-surfaces are behind `OAK_CURRICULUM_MCP_EEF_ENABLED` (default OFF), and merge
-(quarantining the wrong-shaped F tool behind the flag). Then D1 firms the rest.
-The F explore tool (`2214f0b2`) is LANDED behind the flag but is the wrong shape
-pending rebuild.
+**Next safe step:** GOAL 1 — fix the plan (design only, no implementation). The
+next session resolves the one open design question (the **selection / scoping
+strategy**) via worked examples on the real corpus, folds in the 2026-05-28
+settled outcomes (encoding = `structuredContent`-only; scope = agent-facing, no
+UI/widget), and upgrades the plan skeleton to a fully-specified, owner-ratified
+spec. Then GOAL 2 — implement (D0 merge-safety → D6 + DX), each with its
+measurable gate. Bounded: must not drift into endless follow-on sessions (plan
+§"End goal + bounded goals"). The F explore tool (`2214f0b2`) is LANDED behind the
+flag but is the wrong shape pending rebuild.
 
 Historical EEF substrate-floor work (the 2026-05-22→23 multi-agent gate-1a
 session, the WS4.x critical path) and PR #108 graph-substrate details are
@@ -291,6 +302,14 @@ decision work is owner direction on the 66 gated entries in
 lives in thread records, curator reports, completed plans, and prior continuity
 archives. This file should stay an operational index and should not regain
 per-session closeout prose.
+
+**handoff gate (2026-05-28)**: Thermal Spiralling Airstream session-handoff —
+Cursor statusline Lane B complete (Cursor TS retired, agent-tools gates green);
+`routing-legacy-fallback-sunset` future plan created; comms-plan consolidation
+handed to a separate agent via a consolidation brief; `pnpm check` NOT run
+(owner direction); consolidate-docs not due (focused session, no trigger fired).
+Session work landed by the owner in `ae4e09cb` (statusline code + dep sweep +
+codegen) + `227b5415` (memory); this handoff's continuity edits remain staged.
 
 **handoff gate (2026-05-28)**: Stratospheric Hovering Gale session-handoff —
 Cursor statusline Lane A complete; consolidate-docs not due (no trigger fired).

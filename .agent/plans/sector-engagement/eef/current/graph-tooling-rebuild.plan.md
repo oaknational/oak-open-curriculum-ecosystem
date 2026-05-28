@@ -26,6 +26,52 @@ beneficiary of this work is *us-able-to-explore*. Success at each step is
 The gate-1a / gate-1b split is **removed**. This plan replaces it with an
 end-goal plus a self-correcting deliverable sequence.
 
+## End goal + bounded goals (no endless follow-ons)
+
+**End goal (terminal):** a reusable graph-delivery capability — proven once on
+the EEF corpus — that hands LLM agents complete, navigable subgraphs, with the
+"working with graphs" doctrine extracted. The arc COMPLETES at D6; it does not
+spawn further design sessions.
+
+The work runs as two bounded goals. Go slow, carefully, thoughtfully at every
+step — but do **not** let it drift into endless "follow-on" sessions.
+
+### Goal 1 — Fix the plan (the next session; design only, no implementation)
+
+Settle the remaining design and turn this skeleton into a fully-specified,
+owner-ratified plan. **Done when ALL hold:**
+
+1. The one genuinely-open design question — the **selection / scoping strategy**
+   (which nodes/edges belong; and the open sub-doubt: is that one axis or two —
+   relevance vs per-hop disclosure depth) — is resolved to a written,
+   owner-ratified definition of "intelligently scoped, complete-within-itself
+   subgraph", via worked examples on the real corpus
+   (`packages/sdks/graph-corpus-sdk/src/eef-strands/eef-toolkit.ts`, 30 strands).
+2. The outcomes already settled this session are folded in: **encoding —
+   `structuredContent`-only** (validated; foundation principle 8); **scope
+   boundary — agent-facing tool, no UI/widget** (foundation §9).
+3. D0–D6 + DX are upgraded from skeleton to fully specified — each with concrete
+   (a) measurable acceptance, (b) what it consumes, (c) how its gate breaks if
+   the predecessor drifted.
+4. The owner ratifies the fixed plan.
+
+This completes the design content that D1 (below) represents.
+
+**Anti-drift bound:** Goal 1 is ONE design-settling session. If the worked
+examples reveal the selection question needs more, raise it as a bounded
+escalation to the owner — do NOT silently spawn a third design session.
+
+### Goal 2 — Implement the plan (after Goal 1)
+
+Execute the deliverables. **Done when D0–D6 + DX each pass their measurable gate**
+(defined per-deliverable below).
+
+**Anti-drift bound:** the self-correcting chain TERMINATES at D6. Every
+"follow-on" must be folded into a deliverable's gate, explicitly closed, or
+parked with an owner-acknowledged trigger — never left as ambient future
+sessions. D6's output identifies the *next* value-work, which is a fresh owner
+decision, not a continuation of this arc.
+
 ## Planning method — self-correcting deliverables (firm; foundation §5)
 
 Deliverables are sequenced by **consumption**: D(n+1) builds on / exercises
@@ -70,9 +116,11 @@ graduate the methodology *from* it (D5).
 - **(c) Self-correction:** this is the spec D2–D4 build to; if it is vague, D2's
   "build to the contract" gate cannot be met cleanly — the vagueness surfaces at
   D2 immediately.
-- **GAPS (foundation §10):** the graph-tool invariants, "intelligently scoped",
-  the client research, and the end-goal restatement are all resolved HERE. This
-  deliverable is where we stop not-knowing.
+- **GAPS (foundation §10):** the **client research is RESOLVED** (2026-05-28 —
+  `structuredContent`-only; foundation principle 8 + §10). The remaining open
+  content resolved HERE is the **selection / scoping strategy** ("intelligently
+  scoped, complete-within-itself") and the graph-tool category invariants. This
+  is Goal 1 above — where we stop not-knowing.
 
 ## D2 — Build the graph query surface (no stubs)
 

@@ -115,7 +115,8 @@ routing total over id-bearing identities. Strictness at the boundary
 In scope: `active-agent-routing.ts` and the identity-writing surfaces
 that feed it; PDR-076a sunset.
 
-Non-goals (explicit — these are the symptom-patches this plan refuses):
+Non-goals (explicit — these are the symptom-patches this plan refuses
+because they are known-wrong, not because they are unknown):
 
 - Do NOT silence, filter, downgrade, or add a verbosity flag for the
   `[routing-legacy-fallback]` diagnostic. Removing the path removes the
@@ -123,11 +124,70 @@ Non-goals (explicit — these are the symptom-patches this plan refuses):
 - Do NOT keep the legacy arm "just in case" or behind a config gate.
 - Do NOT mutate or backfill historical comms events to fake `id`s; they
   are immutable — exclude them from routing scope instead.
-- Do NOT reground the whole multi-agent collaboration substrate here.
-  This plan sunsets one calcified scaffold. The wider observation — that
-  the substrate evolved by bridging/accretion and breaches the principles
-  it exists to uphold — is recorded in the 2026-05-28 napkin reflection
-  and is a separate, larger strategic question for the owner.
+
+## Open problems we don't yet know how to handle
+
+This plan sunsets one calcified scaffold. It does NOT solve the wider
+problems the 2026-05-28 incident exposed — and it does NOT exclude them
+either. They are real and unsolved. They are surfaced here, named as
+unknowns rather than shelved as non-goals, for the plan-collection
+consolidation and refinement pass (the cross-link map below is the
+starting point for that pass).
+
+- **The collaboration substrate has grown by accretion.** Each incident
+  spawned a new rule / PDR / protocol layer (gate-runner election,
+  cycle-overlap coordination, coordinator-handoff-two-moments,
+  heartbeat-stall diagnostic, this legacy-fallback, …) — fences
+  accumulating while the generator stayed unchanged, the exact
+  failure-mode shape `principles.md` §Architectural Excellence names. We
+  do not yet know the simplified first-principles design that would
+  replace the accreted layers.
+- **The watcher + heartbeat ceremony is heavier than the operating
+  context.** The all-channels watcher and typed-state heartbeat are
+  prescribed as "non-negotiable preconditions", yet the owner routes
+  around them (minimal-ceremony preference) and the watcher itself
+  runaway-failed this session. This is evidence the substrate is built
+  for large unattended agent teams rather than the actual
+  1–3-agent, owner-present context. We do not yet know the right minimal
+  coordination design.
+- **The substrate evolved by bridging, not replacing.** This legacy
+  fallback is one instance; "bridge a migration with a fallback, then
+  never sunset it" may be a recurring pattern. We do not yet have a
+  settled discipline for when to replace vs migrate, or for forcing a
+  scaffold's sunset to completion, beyond the principle statements.
+
+Whether the wider reground is one new plan or a refactor of the existing
+cluster below is itself one of the unknowns — the consolidation pass owns
+that decision.
+
+## Related plans (cross-links for the consolidation pass)
+
+This plan has NOT been reconciled against the plans below for overlap;
+that reconciliation is part of the consolidation and refinement pass.
+Scopes are as-named — verify before promoting any.
+
+Routing and identity (upstream of this sunset — the `id` migration it
+depends on):
+
+- [codex-session-identity-plumbing.plan.md](codex-session-identity-plumbing.plan.md)
+- [collaboration-identity-doctrine-enforcement-remediation.plan.md](../current/collaboration-identity-doctrine-enforcement-remediation.plan.md)
+- [team-handoff-routing-and-action-log-exploration.plan.md](../../agentic-engineering-enhancements/future/team-handoff-routing-and-action-log-exploration.plan.md)
+
+Watcher and comms reliability (the surface where the runaway manifested):
+
+- [comms-watch-storage-redesign.plan.md](../current/comms-watch-storage-redesign.plan.md)
+- [comms-watch-liveness-floor.plan.md](comms-watch-liveness-floor.plan.md)
+- [coordination-watcher-canonicalisation.plan.md](coordination-watcher-canonicalisation.plan.md)
+- [collaboration-state-domain-model-and-comms-reliability.plan.md](collaboration-state-domain-model-and-comms-reliability.plan.md)
+- [agent-coordination-cli-ergonomics-and-request-correlation.plan.md](agent-coordination-cli-ergonomics-and-request-correlation.plan.md)
+- [pdr-080-comms-log-care-phenotype.plan.md](../current/pdr-080-comms-log-care-phenotype.plan.md)
+
+Wider substrate cost and shape (the open problems above):
+
+- [cost-of-collaboration.plan.md](../current/cost-of-collaboration.plan.md)
+- [multi-agent-collaboration-protocol.plan.md](../current/multi-agent-collaboration-protocol.plan.md)
+- [n-agent-collaboration-experiments.plan.md](../current/n-agent-collaboration-experiments.plan.md)
+- [collaboration-state-surface-restructure.plan.md](../../agentic-engineering-enhancements/current/collaboration-state-surface-restructure.plan.md)
 
 ## Dependencies and sequencing
 

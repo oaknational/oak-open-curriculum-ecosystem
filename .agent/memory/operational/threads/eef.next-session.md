@@ -15,10 +15,16 @@
 > 2. `.agent/plans/sector-engagement/eef/current/graph-tooling-rebuild.plan.md`
 >    — the new plan (skeleton; self-correcting deliverables).
 >
-> **First deliverable (D0):** get PR #122 mergeable, ensure all user-facing EEF
-> surfaces are behind `OAK_CURRICULUM_MCP_EEF_ENABLED` (default OFF), and merge —
-> quarantining the wrong-shaped tool behind the flag. Then D1 (restate the
-> end-goal + define the graph-tool contract + fresh client research) firms the rest.
+> **Next session = GOAL 1: fix the plan (design only, no implementation).**
+> Resolve the one open design question — the **selection / scoping strategy** —
+> via worked examples on the real corpus
+> (`packages/sdks/graph-corpus-sdk/src/eef-strands/eef-toolkit.ts`, 30 strands);
+> fold in the outcomes settled 2026-05-28 (encoding = `structuredContent`-only;
+> scope boundary = agent-facing, NO UI/widget); upgrade the plan skeleton to a
+> fully-specified, owner-ratified spec. Then **GOAL 2: implement** (D0 merge-safety
+> → D2 query surface → D3 subgraph tool → D4 round-trip → D5 skills+methodology →
+> D6 explore value → DX reconciliation). Bounded — must NOT drift into endless
+> follow-on sessions; see the plan's "End goal + bounded goals" section.
 >
 > Do NOT resume the increments B–H / gate-1a/1b framing below. Detailed prior
 > session history remains in git. A full clean rewrite of this surface is tracked
@@ -32,7 +38,19 @@ a graph domain (selection/projection/cap hand-rolled around a stubbed graph quer
 surface). Established the graph-tooling rebuild on a new foundation. Landed on
 `feat/graph-foundations`: foundation doc + new plan skeleton + archived old
 estate (`d8ce706a`); Nebulous Threading Prism's handed-over curation pass
-(`2f1d100e`). Resume via the CURRENT-TRUTH banner above → foundation → plan → D0.
+(`2f1d100e`). Resume via the CURRENT-TRUTH banner above → foundation → plan → Goal 1.
+
+**Continuation pass (2026-05-28, same session):** a strict + LTAE lens pass over
+the foundation's six open questions narrowed the open *design* surface to one
+seam — the **selection / scoping strategy** (one axis or two: relevance vs
+per-hop disclosure depth) — to be resolved by worked examples on the real corpus.
+Q4 (client read-behaviour) was RESOLVED via Tidal Drifting Hull's research
+(`.agent/research/mcp-client-tool-result-consumption-2026-05-28.md`):
+`structuredContent`-only is correct in our standard-MCP-App regime; drop
+`oakContextHint`. A "human-via-widget second audience" reframe was raised and
+**owner-retracted as invented optionality** — the tool is agent-facing, no UI.
+Work is now bounded as Goal 1 (fix the plan) → Goal 2 (implement); see the plan's
+"End goal + bounded goals" section.
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |

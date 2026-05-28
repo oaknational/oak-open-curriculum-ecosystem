@@ -113,8 +113,14 @@ catches that, and it was under-applied.
    always the requirement; the thick-tool/thin-graph shape was an unapproved dead
    end, never a stepping stone.
 8. **Graph tools return `structuredContent` only, and no context hint**
-   (owner-directed). To be *validated* by the client research (§10), which also
-   informs whether a separate prose-delivery tool is ever wanted.
+   (owner-directed; VALIDATED 2026-05-28). In our regime — a standard MCP App
+   (`io.modelcontextprotocol/ui`); targets claude.ai + ChatGPT.com — the model
+   reads `structuredContent`, and an empty `content` breaks nothing on these
+   targets (the spec backwards-compat SHOULD and the VS Code `TypeError` apply
+   only to non-target clients we don't serve). If model-facing guidance is
+   wanted, its home is the tool *description*, never `_meta` (model-invisible).
+   No prose-delivery tool; no widget. Research:
+   `.agent/research/mcp-client-tool-result-consumption-2026-05-28.md`.
 9. **No soft stubs.** Build the operation, or throw a not-implemented error
    (honest). Never `Result.err(NotImplementedYet)` that masks a hole as a handled
    case.
@@ -237,15 +243,30 @@ genuinely mergeable — not assume it.
 - Do not over-anchor on any single feedback pass (including this doc).
 - Do not let "deliver value now" pressure reintroduce shortcuts — this is
   discovery work; the budget is a design signal, not a deadline.
+- No invented optionality. This tool surfaces graphs/subgraphs to **agents**; it
+  lives in an MCP app but needs **no UI/widget**. Do not reintroduce a
+  human-widget audience, an `_meta`-render-to-human split, or a prose-delivery
+  tool — none were requested. A possibility the tech merely affords is a one-line
+  flag at most, never a design fork (lived failure, 2026-05-28).
+- No drift into endless follow-on sessions. The deliverable chain terminates at
+  D6; Goal 1 is one design-settling session. Go slow and careful, but bound the
+  work — a "follow-on" must fold into a gate, be closed, or be owner-parked with
+  a trigger, never left ambient (plan §"End goal + bounded goals").
 
 ## 10. Open questions / gaps a fresh session must resolve (FIRM that they are OPEN)
 
-- **Client research (gates §2.8 / structuredContent-only).** What
-  *claude.ai* (the Claude **desktop/web app — NOT Claude Code**) and
-  *ChatGPT.com* (desktop/web) actually read from MCP tool responses
-  (`structuredContent` vs `content`), and the audience for each output type.
-  Current understanding is incomplete, outdated, and self-contradictory; the
-  prior "Claude = Claude Code" premise was wrong. Fresh research required.
+> **Narrowed 2026-05-28 (strict + LTAE lens pass + Q4 resolution).** Most of the
+> questions below are now forced or settled; the one genuinely-open *design*
+> question is the **selection / scoping strategy** — which nodes/edges belong,
+> and whether that is one axis or two (relevance vs per-hop disclosure depth).
+> That is Goal 1's worked-examples target (plan §"End goal + bounded goals").
+> Q4 (client research) is RESOLVED, below.
+
+- **Client research — RESOLVED 2026-05-28.** In our standard-MCP-App regime the
+  model reads `structuredContent` on both claude.ai and ChatGPT.com →
+  `structuredContent`-only is correct (principle 8); `oakContextHint` → tool
+  description. No human-widget audience (the tool is agent-facing; see §9).
+  Source: `.agent/research/mcp-client-tool-result-consumption-2026-05-28.md`.
 - The precise **graph-tool category** definition + invariants, DRY against the
   base tool contract.
 - What makes a subgraph **"intelligently scoped"** — how scope, sparsity, and the

@@ -374,3 +374,35 @@ fitness_content_role: drainable-buffer
   tool surfaces graphs to agents; no widget, no second audience.
 - **Pattern**: deliver the operative finding; do not bolt on hedges or options the
   request never asked for (the repo's recurring "stop inventing optionality" anti-pattern).
+
+## Session: 2026-05-28 — proportionate exploration (Deep Fathoming Harbour)
+
+### Correction absorbed
+
+- **Owner cut**: "it's always fine to raise a question, the problem was the amount
+  of time, effort, tokens and distraction spent on it." The failure was NOT raising
+  the widget/second-audience possibility or the spec-SHOULD content question — it
+  was inflating each into multi-section analysis, handing one back as a product
+  decision, reopening a settled owner directive (`structuredContent`-only), and
+  propagating it to a peer before it was weighed.
+- **Behaviour change**: flag a question in a sentence or two with a default, then
+  move on; calibrate spend to the question's actual weight. Be especially light when
+  the thing is already decided or merely *possible* in the tech.
+- **The costume**: "holding the design space open" and "robustness" can dress
+  disproportionate exploration as virtue — that camouflage is exactly why it got
+  past me. Inventing optionality is the dual of premature crystallisation.
+- **Source plane**: `doctrine` (agent practice). Full version in per-user memory
+  (`proportionate-exploration`).
+
+## Session: 2026-05-28 — consolidation finding: principle existed, violated under costume (Deep Fathoming Harbour)
+
+### Key insight
+
+- The "don't invent optionality" doctrine is ALREADY codified (`principles.md`
+  §"Keep it strict"; `present-verdicts-not-menus`). This session violated it
+  anyway — under the "holding-open / robustness" costume. So the enforce-edge gap
+  is **application/awareness, not a missing rule**: codifying more wouldn't have
+  caught it; recognising the costume would have. The proportionate-exploration
+  candidate (pending-graduations) is the application-layer refinement, not a new
+  prohibition.
+- **Source plane**: `doctrine` (agent practice).

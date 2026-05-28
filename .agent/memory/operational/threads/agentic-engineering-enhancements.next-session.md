@@ -1,5 +1,42 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-28 — Thermal Spiralling Airstream / claude / claude-opus-4-7 / `40e32e`, Cursor statusline Lane B + comms-substrate diagnosis)
+
+**Session boundary**: Lane B of the owner-approved Cursor-statusline plan (retire
+the bespoke Cursor TS statusline after SHG's Lane A handoff), plus a refactor of
+the Claude statusline parser and a comms-substrate diagnosis surfaced by a
+watcher failure.
+
+**Landed (working tree; bundled into one owner-directed consolidation commit)**:
+
+- Claude statusline parser (`agent-tools/src/claude/statusline-identity-input.ts`)
+  refactored off a broken Zod `.catch()` helper (it forced a forbidden type
+  assertion) onto explicit type guards; shared `isPlainObject` + `nonBlankString`
+  extracted to new `agent-tools/src/core/json-narrowing.ts` (canonical owner for
+  the repo-wide object-guard duplication).
+- Lane B: deleted `agent-tools/src/cursor/statusline-identity.ts`,
+  `statusline-identity-input.ts`, and the parser test; fixed the build chmod.
+  agent-tools gates green (type-check, lint, test 722, build, knip). Reviewed
+  SHG's Lane A (`59d50265`) — sound.
+- Diagnosis: arming the all-channels comms watcher hit a `routing-legacy-fallback`
+  runaway (auto-killed). Root cause: an un-sunset PDR-076a legacy routing-key
+  fallback in `agent-tools/src/collaboration-state/active-agent-routing.ts` — a
+  calcified migration scaffold (breach of no-legacy / no-fallback). Captured as
+  `.agent/plans/agent-tooling/future/routing-legacy-fallback-sunset.plan.md`
+  (indexed), which cross-links the comms-plan cluster and names the wider
+  substrate problems as open unknowns.
+
+**Validation**: agent-tools gates green; `pnpm check` NOT run (owner direction
+this handoff).
+
+**Next safe step**: a separate agent consolidates and refines the
+comms/coordination plan cluster (consolidation brief produced for the owner;
+routing-legacy-fallback-sunset is the concrete first thread). No further Thermal
+action on Lane B; do not reopen the Cursor TS paths.
+
+**Commit**: landed by the owner in `ae4e09cb` (statusline code + dep-bump sweep +
+codegen) + `227b5415` (memory). This handoff's continuity edits remain staged.
+
 ## Session Outcome (2026-05-28 — Stratospheric Hovering Gale / cursor / composer-2.5 / `ad279f`, Cursor statusline Lane A + Thermal team coordination)
 
 **Session boundary**: owner-approved plan to show PDR-027 agent display name and git branch on
@@ -3668,6 +3705,7 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 
 | Platform | Model | Agent name | Role | First-session | Last-session |
 | --- | --- | --- | --- | --- | --- |
+| `claude` | `claude-opus-4-7` | Thermal Spiralling Airstream | Cursor statusline Lane B + comms diagnosis (`40e32e`; Claude statusline parser refactor off Zod `.catch()` → type guards + new `core/json-narrowing.ts`; retired bespoke Cursor TS statusline + test; created `routing-legacy-fallback-sunset` future plan + comms-plan cross-link map; no claim opened — minimal-ceremony solo post-handoff) | 2026-05-28 | 2026-05-28 |
 | `codex` | `GPT-5` | Nebulous Threading Prism | Knowledge Curator (`019e6b`; closed-claims archive knowledge curation and repo-continuity consolidation; claim `a4c7184a`) | 2026-05-27 | 2026-05-27 |
 | `codex` | `GPT-5` | Ferny Spreading Blossom | Knowledge Curator (`019e6b`; dedicated legacy pending-graduations drain batches 16-27, then owner-directed pseudo-shard collapse back into canonical `pending-graduations.md`; deleted sidecar files after extraction; strict-hard `0 hard` / `0 critical`) | 2026-05-27 | 2026-05-27 |
 | `codex` | `GPT-5` | Sylvan Regrowing Sapling | Knowledge Curator (`019e6a`; dedicated legacy pending-graduations drain on `feat/graph-foundations`; processed batches 14-15 in place, then created single owner-gated register with 37 processed decision-gated items; strict-hard SOFT with hard 0 / critical 0 before migration validation) | 2026-05-27 | 2026-05-27 |

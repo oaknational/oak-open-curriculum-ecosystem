@@ -92,6 +92,19 @@ wrong-shape diagnosis + rebuild. Full context:
     continuity; capture is not a nice-to-have
   - trigger-condition: due now (owner stated directly); next continuity-doctrine pass
   - status: due
+- **Proportionate exploration — raising a question is fine; the expenditure is the failure.**
+  - captured-date: 2026-05-28
+  - source-surface: owner correction 2026-05-28 — "it's always fine to raise a
+    question, the problem was the amount of time, effort, tokens and distraction
+    spent on it" (per-user memory `proportionate-exploration`; napkin 2026-05-28)
+  - graduation-target: amend `principles.md` §"Keep it strict" or a rule sibling
+    to `present-verdicts-not-menus` — the existing "don't invent optionality"
+    principle was VIOLATED this session under the "holding-open / robustness"
+    costume; the refinement is proportionality of exploratory questioning (flag in
+    a sentence with a default, then move on) + costume-awareness
+  - trigger-condition: second instance or owner-direction (one-session lesson;
+    needs stability before graduating)
+  - status: pending
 
 ## Extracted Recovery-File Disposition Ledger
 
