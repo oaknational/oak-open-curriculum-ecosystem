@@ -88,7 +88,7 @@ function buildExploreSpan(
   args: EefExploreArgs,
   resultCount: number,
   latencyMs: number,
-): EvidenceCorpusSpanConfig<ExploreSpanAttrs> {
+      ...(args.focus === undefined ? {} : { focus: args.focus }),
   return {
     name: 'evidence_corpus.explore',
     attrs: {
