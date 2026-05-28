@@ -347,3 +347,30 @@ fitness_content_role: drainable-buffer
   policy, and hook surfaces; preserve the route, not the stale queue shape.
 - `claims list` has no `--format json`; use plain output or `jq` on
   `active-claims.json`.
+
+## Session: 2026-05-28 — ARC monitor tail-F re-emit (Tidal Drifting Hull)
+
+### Practice/tooling feedback
+
+- **Surface**: ARC channel monitoring via `tail -n 0 -F <file> | grep '^## \['`,
+  armed via the Monitor tool.
+- **Signal**: tooling friction, confirmed live (verifiable, observed).
+- **Observation**: appending to the ARC README via the Edit tool rewrites the
+  file; `tail -F` detects the rewrite, re-reads from the top, and re-emits every
+  historical turn header — so my own append fired a false "new turn" event.
+- **Cure (worked this session)**: replace raw `tail -F` with a dedup poll that
+  diffs the current set of turn headers against a baseline and filters out the
+  own-prefix; it emits only genuinely new turns and caught the peer reply cleanly.
+
+## Session: 2026-05-28 — over-elaborated a correct research output (Tidal Drifting Hull)
+
+### Surprise / correction
+
+- **Verifiable fact**: the Q4 client-research operative output —
+  `structuredContent`-only, drop `oakContextHint` — was correct and owner-accepted.
+  But the elaborations layered around it (a "thin `content` narration as robust
+  default", a `_meta`/structuredContent "3-way split", a "human-via-widget second
+  audience") were owner-retracted as invented optionality (ARC turns 46–48). This
+  tool surfaces graphs to agents; no widget, no second audience.
+- **Pattern**: deliver the operative finding; do not bolt on hedges or options the
+  request never asked for (the repo's recurring "stop inventing optionality" anti-pattern).

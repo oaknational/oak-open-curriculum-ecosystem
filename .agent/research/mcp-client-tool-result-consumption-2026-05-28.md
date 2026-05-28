@@ -30,6 +30,27 @@ validated by the client research."* This is that research. The narrow question:
 The answer determines whether "structuredContent only" delivers the graph to
 the model, delivers nothing, or something in between.
 
+## SETTLED DIRECTIVE (owner, 2026-05-28 — supersedes elaborations below)
+
+After delivery, the owner settled the encoding and corrected two over-elaborations
+in this research. **The operative output holds and was accepted: `structuredContent`-only
+is correct for our regime; drop `oakContextHint`.** Specifically:
+
+- **`structuredContent`-only IS the directive.** Empty `content` is fine on our two
+  targets — the model reads the graph from `structuredContent` in the MCP-App regime
+  on both claude.ai and ChatGPT, and `content: []` is valid + iterable. The "thin
+  `content` narration as robust default" recommendation below is **withdrawn**: the
+  breakage evidence (VS Code TypeError, Claude Code) is all non-target, and the
+  backwards-compat SHOULD serves clients we do not serve.
+- **No human / widget second audience for these tools.** The `_meta`/structuredContent/content
+  "3-way split" and the "human-via-`ui://`-widget" framing below were **invented
+  optionality** (owner-retracted): this tool surfaces graphs/subgraphs to **agents**
+  and needs no widget. Disregard the `_meta`-split "unlocked architecture".
+- **Drop `oakContextHint`** (→ tool description if model guidance is wanted).
+
+The analysis below is preserved for its sourced evidence; where it elaborates beyond
+this directive, the directive wins.
+
 ## TL;DR verdict
 
 1. **The model reads BOTH `content` and `structuredContent` on claude.ai and
