@@ -41,22 +41,26 @@ export type StatuslinePlan =
  * known field falls back to `undefined` when malformed so one bad field never
  * blanks the whole statusline. A non-object payload fails the parse entirely.
  */
-const statuslinePayloadSchema = z.object({
-  session_id: z.string().optional().catch(undefined),
-  cwd: z.string().optional().catch(undefined),
-  workspace: z
-    .object({ current_dir: z.string().optional().catch(undefined) })
-    .optional()
-    .catch(undefined),
-  model: z
-    .object({ display_name: z.string().optional().catch(undefined) })
-    .optional()
-    .catch(undefined),
-  context_window: z
-    .object({ used_percentage: z.number().optional().catch(undefined) })
-    .optional()
-    .catch(undefined),
-});
+function buildStatuslinePayloadSchema() {
+  return z.object({
+    session_id: z.string().optional().catch(undefined),
+    cwd: z.string().optional().catch(undefined),
+    workspace: z
+      .object({ current_dir: z.string().optional().catch(undefined) })
+      .optional()
+      .catch(undefined),
+    model: z
+      .object({ display_name: z.string().optional().catch(undefined) })
+      .optional()
+      .catch(undefined),
+    context_window: z
+      .object({ used_percentage: z.number().optional().catch(undefined) })
+      .optional()
+      .catch(undefined),
+  });
+}
+
+const statuslinePayloadSchema = buildStatuslinePayloadSchema();
 
 /**
  * Translate Claude Code statusline stdin JSON into an execution plan.
