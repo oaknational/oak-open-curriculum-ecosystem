@@ -149,17 +149,29 @@ Land the sound foundation on `main` with the wrong-shaped tool quarantined.
 - **Outcome:** PR #122 (`feat/graph-foundations`) merged to `main`, with both
   user-facing EEF surfaces (`eef-explore-evidence-for-context` tool AND
   `eef-evidence-grounded-lesson-plan` prompt) co-gated behind
-  `OAK_CURRICULUM_MCP_EEF_ENABLED`, default OFF. No live orphan-prompt.
-- **(a) Measurable:** PR merged; CI green; an integration test proves **flag OFF
-  → neither surface registered**, **flag ON → both**. (PR #122 is `MERGEABLE`
-  but `mergeStateStatus: BLOCKED` on required review/checks — D0 clears those,
-  it does not bypass them.)
+  `OAK_CURRICULUM_MCP_EEF_ENABLED` — default OFF in code, **OFF in every deployed
+  environment (preview + production), enabled only in local development**. No
+  live orphan-prompt.
+- **(a) Measurable — all three conditions hold before merge:**
+  1. **PR is safe** — CI green; required reviews/checks cleared (PR #122 is
+     `MERGEABLE` but `mergeStateStatus: BLOCKED` on required review/checks — D0
+     *clears* those, it does not bypass them); the wrong-shaped tool stays
+     quarantined; no live orphan-prompt.
+  2. **Flag is proven** — an integration test proves **flag OFF → neither
+     surface registered**, **flag ON → both**.
+  3. **Flag is OFF everywhere except local development** — confirmed unset/false
+     in every deployed environment, ON only locally. This is a **checked**
+     condition, not an assumed one: the code default OFF (`env.ts:48`) is
+     necessary but a deployed env-var could override it, so verify the actual
+     deployed env config (via the project Vercel MCP, not the CLI) shows the flag
+     unset/false in preview and production.
 - **(b) Consumes:** the current branch.
 - **(c) Self-correction:** verify-don't-trust — co-gating is *already* present
   (`apps/oak-curriculum-mcp-streamable-http/src/handlers.ts:168`;
   `.../register-prompts.ts:123`; default OFF at `.../env.ts:48`). The gate FAILS
-  if co-gating is incomplete, the proving test is absent, or the PR is not
-  actually mergeable. Standalone precondition; the rebuild chain begins at D1.
+  if co-gating is incomplete, the proving test is absent, the PR is not actually
+  mergeable, **or the flag is set ON in any deployed environment**. Standalone
+  precondition; the rebuild chain begins at D1.
 
 ## D1 — Author the graph-tool contract (ADR)
 

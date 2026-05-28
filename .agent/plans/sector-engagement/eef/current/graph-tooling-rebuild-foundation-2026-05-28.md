@@ -228,7 +228,10 @@ deliverable next session is a sub-plan to:
 1. get PR #122 (`feat/graph-foundations`) into mergeable shape;
 2. ensure **all** user-facing EEF surfaces — the `eef-explore-evidence-for-context`
    tool AND the `eef-evidence-grounded-lesson-plan` prompt — are behind
-   `OAK_CURRICULUM_MCP_EEF_ENABLED`, default OFF;
+   `OAK_CURRICULUM_MCP_EEF_ENABLED`: default OFF in code AND OFF in every deployed
+   environment (enabled only in local development). The deployed-env posture is a
+   **checked** condition — a deployed env-var can override the code default — so
+   verify it, do not assume it;
 3. merge the PR.
 
 This lands the sound foundational work on `main` and quarantines the
