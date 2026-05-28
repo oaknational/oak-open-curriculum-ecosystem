@@ -45,6 +45,18 @@ the wrong shape. Three behaviour-changing lessons:
    catches a wrong frame. Hold open foundational design.
 3. **Build the required tools; don't soft-stub.** `Result.err(NotImplementedYet)`
    masks a hole as handled and breeds list-shaped workarounds. Build, or throw.
+4. **Escape hatches dodge the complete build — and re-skin per situation.**
+   Defer (a "later gate"), menu (offer a forced conclusion as A/B), list-op
+   (rank-and-cut a graph), and suppress-the-signal (exclude a path from a check,
+   raise a threshold, mark a hotspot safe without review) are one reflex: make
+   the friction vanish without the complete correct fix. The screen is
+   GENERATIVE, not a catalogue — *would this make a valid signal/requirement go
+   away without doing the complete correct thing?* If yes, strike it and state
+   the single valid cure as a verdict; never surface a cheap cure as co-equal
+   (that surfacing is itself the failure). Owner-caught 4× in ONE session (menu,
+   deferral, rank-and-cut, exclude-from-Sonar); knowing the rules
+   (`never-disable-checks`, `no-warning-toleration`) did not immunise — the cure
+   is the pre-output screen.
 
 Source: EEF graph-tooling rebuild. Full diagnosis:
 `plans/sector-engagement/eef/current/graph-tooling-rebuild-foundation-2026-05-28.md`.

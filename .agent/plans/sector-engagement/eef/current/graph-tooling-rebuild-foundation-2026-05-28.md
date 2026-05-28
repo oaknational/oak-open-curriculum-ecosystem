@@ -264,14 +264,18 @@ genuinely mergeable — not assume it.
   a trigger, never left ambient (plan §"End goal + bounded goals").
 - **No escape hatches to dodge the complete build.** Reaching for a *deferral*
   (a "later gate" — no one authorised it), a *menu* (handing the owner a forced
-  conclusion as an A/B choice instead of stating the verdict), or a *list-op
-  dressed as sophistication* ("rank the broad result down to N" = sort-plus-slice)
-  are three faces of one failure: **F's process** — avoiding the complete,
-  graph-native commitment. The tell is the reach for an exit, not the vocabulary;
-  the discipline is to check whether the complete commitment is available (it
-  usually is) and make it. (Lived failure, 2026-05-28: all three surfaced in one
-  planning session and were owner-caught; the agent had internalised the
-  foundation's *content* while still running F's *process*.)
+  conclusion as an A/B choice instead of stating the verdict), a *list-op dressed
+  as sophistication* ("rank the broad result down to N" = sort-plus-slice), or
+  *suppress-the-signal* (exclude a path from a check, raise a threshold, mark a
+  hotspot safe without review) are faces of one failure: **F's process** —
+  avoiding the complete commitment. The tell is the reach for an exit, not the
+  vocabulary; the screen is generative — *does this make a valid
+  signal/requirement vanish without the complete fix?* If yes, state the single
+  valid cure as a verdict (surfacing an illegitimate option as co-equal is itself
+  the failure). (Lived failure, 2026-05-28: FOUR surfaced in one planning session,
+  owner-caught — menu, deferral, rank-and-cut, and "exclude `**/generated/**`
+  from Sonar" instead of fixing the generator; knowing the rule did not immunise
+  — the agent had internalised the *content* while still running F's *process*.)
 
 ## 10. Open questions / gaps a fresh session must resolve (FIRM that they are OPEN)
 

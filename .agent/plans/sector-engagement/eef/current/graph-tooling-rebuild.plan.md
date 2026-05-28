@@ -152,6 +152,32 @@ Land the sound foundation on `main` with the wrong-shaped tool quarantined.
   `OAK_CURRICULUM_MCP_EEF_ENABLED` — default OFF in code, **OFF in every deployed
   environment (preview + production), enabled only in local development**. No
   live orphan-prompt.
+- **Prerequisite — fix ALL open quality signals first (owner-directed
+  2026-05-28; the next session's first step).** The PR must be genuinely clean
+  before merge; every cure is the COMPLETE fix, never suppression. From the
+  2026-05-28 Sonar/review pass (verify the live set at execution time):
+  1. **2 Sonar `new_violations`** (`typescript:S7763`, "use `export…from`") in
+     `oak-sdk-codegen/src/types/generated/search/{fixtures.ts:155,
+     index-documents.ts:10}` — these are GENERATED files: **fix the
+     `@oaknational/sdk-codegen` generator** to emit the re-export form, then
+     regenerate. Do NOT exclude `**/generated/**` from Sonar and do NOT hand-edit
+     generated output (generator-first; the exclusion is a suppress-the-signal
+     escape hatch — foundation §9).
+  2. **1 Sonar security hotspot** at
+     `agent-tools/src/claude/statusline-identity.ts:112` (PATH) — assess and
+     remediate (fix if unsafe; a genuine documented review per
+     `docs/governance/sonar-disposition-policy.md` only if genuinely safe).
+  3. **3.9% `new_duplicated_lines_density`** (>3%) — pinpoint via the duplications
+     API and de-duplicate (extract shared code). Do NOT raise the threshold or
+     exclude paths.
+  4. **Valid review comments** — PDR-085 README status (`Proposed` → `Accepted`,
+     verified against the PDR header); `.agent/state/collaboration/.gitignore`
+     pattern (`_temp-*` → `_tmp-*`); `prompt-schemas.ts:81` focus docstring
+     (soften — the tool enforces `EEF_PRIORITIES`; MCP prompt args are
+     string-typed). The `execution.ts:84` `error.kind` leak is on the EEF tool D3
+     rebuilds — fix it in whichever lands first; do not drop it.
+  Merge proceeds only once the SonarCloud QG is green (0 new violations, hotspot
+  reviewed, duplication ≤3%) and the valid comments are resolved.
 - **(a) Measurable — all three conditions hold before merge:**
   1. **PR is safe** — CI green; required reviews/checks cleared (PR #122 is
      `MERGEABLE` but `mergeStateStatus: BLOCKED` on required review/checks — D0
