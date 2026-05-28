@@ -2,10 +2,10 @@
 /**
  * Cursor CLI status-line shim.
  *
- * Delegates to the built Cursor status-line adapter inside agent-tools at
- * `agent-tools/dist/src/cursor/statusline-identity.js`. The adapter parses
- * Cursor CLI's stdin JSON, extracts `session_id`, and prints the deterministic
- * agent-identity display name.
+ * Delegates to the built Claude status-line adapter inside agent-tools at
+ * `agent-tools/dist/src/claude/statusline-identity.js` (identity + git branch
+ * + dirty/worktree + context % + model). Cursor stdin uses the same JSON
+ * fields the Claude parser accepts (`session_id`, `cwd`, `workspace`, etc.).
  *
  * Soft surface: any failure (missing build artefact, spawn error, non-zero
  * child exit) results in exit 0 with no stdout, so the status line never
@@ -21,7 +21,7 @@ import { fileURLToPath } from 'node:url';
 // this repo-owned shim location.
 const repoRoot =
   process.env.CURSOR_PROJECT_DIR ?? resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
-const adapterPath = resolve(repoRoot, 'agent-tools/dist/src/cursor/statusline-identity.js');
+const adapterPath = resolve(repoRoot, 'agent-tools/dist/src/claude/statusline-identity.js');
 
 if (!existsSync(adapterPath)) {
   process.exit(0);

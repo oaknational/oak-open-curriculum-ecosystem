@@ -1,0 +1,7 @@
+{
+  "statusLine": {
+    "type": "command",
+    "command": "node .cursor/scripts/statusline-identity.mjs",
+    "padding": 2
+  }
+}
