@@ -19,16 +19,15 @@ import type { Tool } from '@modelcontextprotocol/sdk/types.js';
 import type { ZodType, core } from 'zod';
 import type {
   SecurityScheme,
-  SourceAttribution,
   ToolAnnotations,
   ToolMeta,
   StatusDiscriminant,
   InvokeResult,
 } from '../../../../mcp-protocol-types.js';
-import { DOCUMENTED_ERROR_PREFIX } from '../../../../mcp-protocol-types.js';
 
-export { DOCUMENTED_ERROR_PREFIX };
-export type { SecurityScheme, SourceAttribution, ToolAnnotations, ToolMeta, StatusDiscriminant, InvokeResult };
+export { DOCUMENTED_ERROR_PREFIX } from '../../../../mcp-protocol-types.js';
+export type { SourceAttribution } from '../../../../mcp-protocol-types.js';
+export type { SecurityScheme, ToolAnnotations, ToolMeta, StatusDiscriminant, InvokeResult };
 
 export interface ToolDescriptor<
   TName extends string,
