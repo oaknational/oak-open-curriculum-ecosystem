@@ -24,6 +24,22 @@
 > session history remains in git. A full clean rewrite of this surface is tracked
 > as plan deliverable DX (estate-wide reference reconciliation).
 
+## Session 2026-05-28 — EEF wrong-shape diagnosis + graph-tooling rebuild (Deep Fathoming Harbour / `cef0b8`)
+
+The EEF explore tool (increment F) was completed, three-reviewer-approved, and
+committed — then diagnosed (with the owner) as the WRONG SHAPE: list-thinking in
+a graph domain (selection/projection/cap hand-rolled around a stubbed graph query
+surface). Established the graph-tooling rebuild on a new foundation. Landed on
+`feat/graph-foundations`: foundation doc + new plan skeleton + archived old
+estate (`d8ce706a`); Nebulous Threading Prism's handed-over curation pass
+(`2f1d100e`). Resume via the CURRENT-TRUTH banner above → foundation → plan → D0.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Deep Fathoming Harbour` | `claude` | `claude-opus-4-7` | `cef0b8` | `eef-graph-tooling-rebuild-foundation-author` | 2026-05-28 | 2026-05-28 |
+
+---
+
 **Last refreshed**: 2026-05-27 (Starless Prowling Mask / `claude` /
 claude-opus-4-7 / `13c7d5` — Definition of Delivery doctrine + EEF
 delivery-restructure LANDED; the gate-1a whole-graph approach was RETRACTED and

@@ -17,6 +17,30 @@ fitness_rationale: >-
   substance rather than trimming the lesson.
 ---
 
+## 2026-05-28 — the EEF wrong-shape episode (graph≠list; hold-open; build-don't-stub)
+
+The EEF explore tool was built, three-reviewer-approved, and committed — and was
+the wrong shape. Three behaviour-changing lessons:
+
+1. **A graph is not a list.** Slice/cap/truncate/field-project are list-ops,
+   categorically wrong for graphs. Reduce by a COMPLETE subgraph (contiguous or
+   sparse): relationships always represented, no evidence without its
+   uncertainty, referenced-but-absent nodes reachable. Budget is a DESIGN signal
+   (scope the subgraph), never a runtime cap.
+2. **Premature crystallisation.** Architectural warning-signals (bypassing a
+   contract param, working around a stub, adding a cap, dropping data for budget)
+   are a VERDICT that the shape is wrong, not patches. Specialist review
+   validates correctness WITHIN a frame; only "is this the right thing at all"
+   catches a wrong frame. Hold open foundational design.
+3. **Build the required tools; don't soft-stub.** `Result.err(NotImplementedYet)`
+   masks a hole as handled and breeds list-shaped workarounds. Build, or throw.
+
+Source: EEF graph-tooling rebuild. Full diagnosis:
+`plans/sector-engagement/eef/current/graph-tooling-rebuild-foundation-2026-05-28.md`.
+Graduation candidates: graph-tool-category ADR/PDR, self-correcting-deliverables
+planning methodology (PDR + oak-plan), Definition-of-Delivery refinement
+(PDR-085), 'working with graphs' skill — all in `pending-graduations.md`.
+
 ## 2026-05-27 — collaboration state is source, not storage
 
 Collaboration state files may be temporarily preserved for the bounded

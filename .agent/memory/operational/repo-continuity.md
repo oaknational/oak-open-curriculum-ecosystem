@@ -16,10 +16,15 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
-- **Current branch**: `feat/graph-foundations`, local HEAD `66f59872`.
-- **Active delivery focus**: `eef` first-feature delivery remains the only
-  active product lane. Use the `eef` thread record and the EEF section below
-  for live pickup.
+- **Current branch**: `feat/graph-foundations`, local HEAD `2f1d100e` (ahead 2
+  of `origin`).
+- **Active delivery focus**: `eef` **graph-tooling rebuild** is the only active
+  product lane. The EEF explore tool + the gate-1a/1b split were diagnosed as
+  the wrong foundation and discarded; the rebuild is built on the foundation
+  doc. See the EEF section below and the `eef` thread record (which opens with a
+  CURRENT-TRUTH banner) for live pickup.
+- **Solo session (2026-05-28)**: Nebulous Threading Prism stood down; its
+  handed-over curation pass was committed (`2f1d100e`). No open claims or queues.
 - **Agentic-engineering tactical lane**: not an active product delivery arc.
   The recent pending-graduations cleanup collapsed sidecar files back into
   canonical [`pending-graduations.md`](pending-graduations.md), where the 66
@@ -52,7 +57,7 @@ paused implementation program.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF first-feature delivery | [record][eef] | claude / claude-opus-4-7 / Galactic Dancing Constellation / eef-value-pr-reviewer (PR #121 open) / 2026-05-27 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-7 / Deep Fathoming Harbour / graph-tooling rebuild foundation + plan (D0 next) / 2026-05-28 |
 | `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | codex / GPT-5 / Nebulous Threading Prism / closed-claims archive curation + repo-continuity consolidation / 2026-05-27 |
 
 ## Paused Threads
@@ -93,41 +98,37 @@ thread's next-session record.
 
 ## Next Safe Steps
 
-### EEF First-Feature Delivery (active — sole current focus)
+### EEF Graph-Tooling Rebuild (active — sole current product focus)
 
-**Live (2026-05-27 Starless — RESTRUCTURED):** the gate-1a "whole-graph"
-approach was RETRACTED. The **Definition of Delivery** doctrine landed
-(`27956bb6`: `definition-of-delivery.md` + PDR-085) and the EEF gate-1a feature
-was rebuilt around it: sub-graph SELECTION (seed selection + projection, under a
-10k output budget) restored to gate-1a; scoring engine + recommend/explain/
-compare tools stay gate-1b. Owning plan:
-[`eef-delivery-restructure.plan.md`](../../plans/sector-engagement/eef/current/eef-delivery-restructure.plan.md)
-(increments A–H; A landed). **Next safe step:** read the handoff
-[`2026-05-27-starless-eef-restructure-handoff.md`](../../state/collaboration/handoffs/2026-05-27-starless-eef-restructure-handoff.md),
-then apply increments B → H. PR #121 as-is is NOT mergeable (whole-graph, no
-flag, no co-registered prompt) — it becomes the basis for increment F. Branch
-coordination: doctrine + plans on `feat/graph-foundations`; EEF code in the
-`oak-wt-eef` worktree.
+**Live (2026-05-28 — REBUILT FROM FOUNDATIONS).** The EEF explore tool and the
+gate-1a/1b split were diagnosed as the **wrong foundation** (list-thinking in a
+graph domain; the graph query surface stubbed and then worked around). The old
+EEF plan estate is archived at `.agent/plans/sector-engagement/eef/archive/`.
+Single source of truth for the rebuild:
 
-The 2026-05-22 → 2026-05-23 multi-agent gate-1a substrate-floor session is
-closed out in the [`eef` thread record][eef]. Repo-level status, verified
-2026-05-24 against that record:
+- foundation:
+  [`graph-tooling-rebuild-foundation-2026-05-28.md`](../../plans/sector-engagement/eef/current/graph-tooling-rebuild-foundation-2026-05-28.md)
+  (diagnosis; principles — graph != list, completeness-as-integrity-not-maximalism,
+  build-the-query-surface, budget-as-design-signal, no soft stubs,
+  structuredContent-only; discovery framing; open questions).
+- plan (skeleton):
+  [`graph-tooling-rebuild.plan.md`](../../plans/sector-engagement/eef/current/graph-tooling-rebuild.plan.md)
+  (self-correcting deliverables; D0 merge-safety, D1 restate end-goal +
+  graph-tool contract + fresh client research, D2 build the query surface,
+  D3 complete navigable subgraph tool, D4 agent round-trip, D5 'working with
+  graphs' skills + methodology graduation, D6 explore the value path, DX
+  estate-wide reference reconciliation).
 
-- Round 1+2 substrate floor is effectively complete; WS4.1 landed at
-  `3241893d` under Stormbound Spiralling Breeze's owner-directed
-  ownership-override, so older repo-continuity notes treating Lunar's WS4.1
-  as outstanding are stale.
-- Remaining pickup state and the full cycle ledger live in the thread record,
-  including the Sparking parser-integration follow-on, WS4.5/t2/t6a/ff3-ff6
-  critical path, reciprocal-review evidence, and coordination-pattern
-  surfacings routed to `pending-graduations.md`.
-- This repo-level index should be treated as the routing pointer only; do not
-  reconstruct the EEF lane from old duplicated prose here.
+**Next safe step:** D0 — get PR #122 mergeable, ensure all user-facing EEF
+surfaces are behind `OAK_CURRICULUM_MCP_EEF_ENABLED` (default OFF), and merge
+(quarantining the wrong-shaped F tool behind the flag). Then D1 firms the rest.
+The F explore tool (`2214f0b2`) is LANDED behind the flag but is the wrong shape
+pending rebuild.
 
-PR #108 / graph-substrate details live in the connecting-oak-resources thread
-record and snagging plan. Historical long-form routing that previously lived
-in this file is preserved in
-[`repo-continuity-soft-tier-pre-dusky-2026-05-24.md`](archive/repo-continuity-soft-tier-pre-dusky-2026-05-24.md).
+Historical EEF substrate-floor work (the 2026-05-22→23 multi-agent gate-1a
+session, the WS4.x critical path) and PR #108 graph-substrate details are
+superseded by the rebuild and retained for history only in the
+[`eef` thread record][eef] and [`connecting-oak-resources` thread record][connecting].
 
 ### Agentic-Engineering Tidy-Plan Lane (closed 2026-05-25)
 
@@ -288,10 +289,13 @@ lives in thread records, curator reports, completed plans, and prior continuity
 archives. This file should stay an operational index and should not regain
 per-session closeout prose.
 
-**handoff gate (2026-05-27)**: not due — the requested dedicated curation pass
-completed in this session, no fresh ADR/PDR/open-question candidate surfaced
-from the closeout sweep, and the next action is owner or marshal commit of the
-curation bundle.
+**handoff gate (2026-05-28)**: completed this handoff — Deep Fathoming Harbour
+ran the requested deep session-handoff + consolidate-docs after diagnosing the
+EEF explore tool as the wrong foundation and establishing the graph-tooling
+rebuild. Graph-delivery doctrine, the self-correcting-deliverables planning
+methodology, the Definition-of-Delivery refinement question, and a 'working with
+graphs' skill are surfaced as graduation candidates in
+[`pending-graduations.md`](pending-graduations.md).
 
 Previous deep-consolidation and session-close prose:
 

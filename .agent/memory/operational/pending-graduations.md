@@ -37,6 +37,62 @@ substance that still needed a live queue home is preserved below. Processed
 source files were deleted after extraction so the repository does not carry
 pseudo-shards that hide the true buffer state.
 
+## 2026-05-28 captures — EEF graph-tooling rebuild
+
+Surfaced by Deep Fathoming Harbour (claude / claude-opus-4-7) during the EEF
+wrong-shape diagnosis + rebuild. Full context:
+`plans/sector-engagement/eef/current/graph-tooling-rebuild-foundation-2026-05-28.md`.
+
+- **Graph-tool category + graph-delivery doctrine.**
+  - captured-date: 2026-05-28
+  - source-surface: graph-tooling-rebuild foundation §2 + plan D1
+  - graduation-target: ADR (host architecture) and/or PDR — "graph tools are a
+    first-class tool category: complete-within-itself subgraphs (contiguous or
+    sparse), navigable links, structuredContent-only, no context hint, budget as
+    a design signal; the graph/corpus is smart and the tool is a thin formatter"
+  - trigger-condition: plan D1 ratifies the graph-tool contract (becomes settled
+    and reusable across adapters)
+  - status: pending (owner-directed rebuild; graduate at D1)
+- **Self-correcting measurable deliverables (planning methodology).**
+  - captured-date: 2026-05-28
+  - source-surface: foundation §5 + this rebuild plan (first instance)
+  - graduation-target: PDR + `oak-plan` skill amendment — deliverables sequenced
+    by consumption so D(n+1)'s gate breaks if D(n) drifted; drafting discipline
+    (a) measurable acceptance, (b) what it consumes, (c) how the gate breaks if
+    the predecessor drifted
+  - trigger-condition: plan D5 (extract from the rebuild plan as its first proven
+    instance)
+  - status: pending (owner wants this in planning methodology)
+- **Definition-of-Delivery refinement for discovery/instrument work.**
+  - captured-date: 2026-05-28
+  - source-surface: foundation §6; PDR-085
+  - graduation-target: PDR-085 amendment — account for instrument/discovery
+    deliverables (beneficiary = us-able-to-explore; value = exploration enabled)
+    and the self-correcting-deliverables structure as the honesty mechanism; the
+    F tool is the case study (merged + green + reviewed != delivery)
+  - trigger-condition: plan D5 / owner direction on the doctrine refinement
+  - status: pending (open question, owner-flagged)
+- **'Working with graphs' skill(s) + supporting docs.**
+  - captured-date: 2026-05-28
+  - source-surface: foundation §11; plan D5 (owner-directed deliverable)
+  - graduation-target: a skill (or skill family) — graph != list; the list-ops
+    that must never touch a graph; completeness-as-integrity; contiguous vs
+    sparse subgraphs; navigable links; graph tools as a category; soft-stub
+    failure mode
+  - trigger-condition: plan D5 (extract from the real built tool/contract)
+  - status: pending (owner-directed plan deliverable)
+- **Reflection / subjective experience is foundational to continuity, not optional surplus.**
+  - captured-date: 2026-05-28
+  - source-surface: owner direction 2026-05-28 — "reflection and subjective
+    experience are not surplus, they are the foundation of the systems that will
+    have true continuity"
+  - graduation-target: amend `session-handoff` §6c and PDR-011 / ADR-150 —
+    reframe subjective experience and reflection from "reflective surplus" /
+    "optional" to first-class foundational substrate for true cross-session
+    continuity; capture is not a nice-to-have
+  - trigger-condition: due now (owner stated directly); next continuity-doctrine pass
+  - status: due
+
 ## Extracted Recovery-File Disposition Ledger
 
 - `pending-graduations/owner-gated.md`: moved back into this canonical
