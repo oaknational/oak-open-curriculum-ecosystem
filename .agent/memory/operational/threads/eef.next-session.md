@@ -1,5 +1,29 @@
 # Next-Session Record — `eef` thread
 
+> **CURRENT TRUTH — RESUME HERE (2026-05-28). Everything below this banner is
+> SUPERSEDED HISTORY — do not resume it.**
+>
+> The EEF explore tool and the gate-1a / gate-1b split were diagnosed as the
+> **wrong foundation** (list-thinking in a graph domain; a query surface that
+> was stubbed and then worked around). They are discarded. The old EEF plans are
+> archived at `.agent/plans/sector-engagement/eef/archive/`.
+>
+> **Read, in order:**
+>
+> 1. `.agent/plans/sector-engagement/eef/current/graph-tooling-rebuild-foundation-2026-05-28.md`
+>    — the single source of truth (diagnosis, principles, intent, open questions).
+> 2. `.agent/plans/sector-engagement/eef/current/graph-tooling-rebuild.plan.md`
+>    — the new plan (skeleton; self-correcting deliverables).
+>
+> **First deliverable (D0):** get PR #122 mergeable, ensure all user-facing EEF
+> surfaces are behind `OAK_CURRICULUM_MCP_EEF_ENABLED` (default OFF), and merge —
+> quarantining the wrong-shaped tool behind the flag. Then D1 (restate the
+> end-goal + define the graph-tool contract + fresh client research) firms the rest.
+>
+> Do NOT resume the increments B–H / gate-1a/1b framing below. Detailed prior
+> session history remains in git. A full clean rewrite of this surface is tracked
+> as plan deliverable DX (estate-wide reference reconciliation).
+
 **Last refreshed**: 2026-05-27 (Starless Prowling Mask / `claude` /
 claude-opus-4-7 / `13c7d5` — Definition of Delivery doctrine + EEF
 delivery-restructure LANDED; the gate-1a whole-graph approach was RETRACTED and
