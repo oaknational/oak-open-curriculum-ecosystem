@@ -69,7 +69,7 @@ paused implementation program.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-7 / Woodland Swaying Pollen / Goal 1 design settled + plan SPECIFIED (Goal 2 / D0 prerequisite next) / 2026-05-28 |
-| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | claude / Opus 4.7 / Thermal Spiralling Airstream / Cursor statusline Lane B complete (Cursor TS retired); routing-legacy-fallback-sunset plan created; comms-plan consolidation handed to next session / 2026-05-28 |
+| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | claude / Opus 4.7 / Sunlit Waxing Moon / pending-graduations register fully dispositioned (per-item verified verdict ledger, commits `f7d19c7a`+`86748491`); verification report found unreliable; no removals — owner ratification of the decision packet pending / 2026-05-28, + claude / claude-opus-4-7[1m] / Kilned Brazing Bellows / agent-tooling substrate recording (claim-liveness + substrate-rightsizing future plans, compaction bug report) / 2026-05-28 |
 
 ## Paused Threads
 
@@ -191,6 +191,19 @@ further deliberation. Plan §Sub-phase sizing now states cycle-by-cycle
 decomposition (was: incorrect "three-session arc" framing from reviewer
 file-count framing; corrected at `3ca77972` after owner challenge).
 
+### Pending-Graduations Register (dispositioned 2026-05-28 — owner ratification pending)
+
+The full `pending-graduations.md` register (~70 items) has a verified per-item
+verdict in
+[`curator-passes/2026-05-28-sunlit-waxing-moon.md`](curator-passes/2026-05-28-sunlit-waxing-moon.md)
+(commits `f7d19c7a` + `86748491`). Load-bearing finding: the verification report
+Leafy left is unreliable (~3 of 6 spot-checks wrong), so no items were removed and
+no rules/PDRs authored. **Next safe step**: owner ratifies the ledger's grouped
+decision packet (graduate / route / withdraw / keep-watch / forks); a follow-up
+pass then executes ratified actions after confirming each "covered by X" home.
+The register is GREEN on fitness; this is a disposition-correctness lane, not a
+fitness drain.
+
 ### MCP Product Analytics (paused — design complete, plan deferred)
 
 Thread record:
@@ -300,14 +313,35 @@ claims, routed the only durable lifecycle lesson to the curation report and this
 resume pointer, and cleared the archive content. Proof:
 [`2026-05-27-nebulous-threading-prism-closed-claims.md`](curator-passes/2026-05-27-nebulous-threading-prism-closed-claims.md).
 
-**current**: the pending-graduations pseudo-shard collapse is complete. The live
-decision work is owner direction on the 66 gated entries in
-[`pending-graduations.md`](pending-graduations.md), not another sidecar drain.
+**current (2026-05-28, Sunlit Waxing Moon)**: superseding the prior "not another
+sidecar drain" stance — the owner commissioned a dedicated drain, so the full
+register (~70 items) now carries a verified per-item verdict in
+[`curator-passes/2026-05-28-sunlit-waxing-moon.md`](curator-passes/2026-05-28-sunlit-waxing-moon.md).
+The live decision work is owner ratification of that ledger's grouped decision
+packet. Key finding: the verification report Leafy left is unreliable, so no items
+were removed and no rules/PDRs authored. Deep consolidation this handoff: owner-directed
+`consolidate-docs` run (graduating this session's process insights).
 
 **routing**: detailed consolidation, handoff, and session-close history now
 lives in thread records, curator reports, completed plans, and prior continuity
 archives. This file should stay an operational index and should not regain
 per-session closeout prose.
+
+**handoff gate (2026-05-28, Kilned Brazing Bellows)**: root-cause investigation
+of Leafy's `/compact` crash → agent-tooling substrate recording. Landed (working
+tree; explicit-pathspec commit, disjoint from Sunlit's drain): compaction bug
+report (`reports/claude-code-compaction-thinking-block-bug-2026-05-28.md`),
+`claim-liveness-crash-reconciliation-and-session-forensics` +
+`collaboration-substrate-coordination-rightsizing` future plans, relink of
+`comms-watch-liveness-floor` non-goal #3, bidirectional cross-link from
+`routing-legacy-fallback-sunset` §Open-problems. A 62-item deferral/non-goal audit
+of the collaboration-substrate cluster found one genuine orphan (substrate
+over-accretion), now homed in the rightsizing brief; the rest were healthy
+boundaries-with-homes, ratified principles (doc-consolidation signal), or
+correctly-gated deferrals — no plan-proliferation. consolidate-docs run this
+handoff (process insights). `pnpm check` NOT run (owner direction;
+check-singleton — Sunlit closing concurrently). napkin is co-mingled with
+Sunlit's concurrent entries; left unstaged for the gatekeeper.
 
 **handoff gate (2026-05-28, Woodland Swaying Pollen)**: session-handoff +
 consolidate-docs at owner request. EEF Goal 1 (design-settling) DONE +

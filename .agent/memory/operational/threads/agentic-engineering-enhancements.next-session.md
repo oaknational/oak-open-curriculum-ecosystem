@@ -1,5 +1,54 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-28 — Kilned Brazing Bellows / claude / claude-opus-4-7[1m] / `a24c5f`, Leafy compaction-crash root-cause investigation → agent-tooling substrate recording)
+
+**Session boundary**: root-cause investigation of the `/compact` crash that killed
+Leafy Regrowing Sapling (`3c02b9`), pivoting into recording the agent-tooling
+substrate insights it exposed. Ran disjoint from Sunlit Waxing Moon's
+pending-graduations drain (no file overlap; their claim covers
+pending-graduations / open-questions / curator-passes / rules — none of which I
+touched).
+
+**Landed (working tree; committed by explicit pathspec, disjoint from Sunlit's)**:
+
+- Bug report
+  [`.agent/reports/claude-code-compaction-thinking-block-bug-2026-05-28.md`](../../../reports/claude-code-compaction-thinking-block-bug-2026-05-28.md)
+  — CC#12311 long tail on 2.1.153; root cause (persisted thinking text stripped +
+  signature retained, replayed in latest-assistant-message position); Sonnet-compact
+  workaround; paste-ready `/feedback` text. Indexed in `reports/README.md`.
+- Future plan
+  [`claim-liveness-crash-reconciliation-and-session-forensics.plan.md`](../../../plans/agent-tooling/future/claim-liveness-crash-reconciliation-and-session-forensics.plan.md)
+  — claim liveness is heartbeat-bound but the heartbeat writer is MANUAL, so a
+  crashed agent's claim stays fresh up to its full TTL (Leafy: ~2.5h). Coordinates
+  liveness-floor + domain-model + cli-ergonomics; relinked `comms-watch-liveness-floor`
+  non-goal #3 to it.
+- Future exploration brief
+  [`collaboration-substrate-coordination-rightsizing.plan.md`](../../../plans/agent-tooling/future/collaboration-substrate-coordination-rightsizing.plan.md)
+  — the home for `routing-legacy-fallback-sunset` §Open-problems #18/#19/#20
+  (substrate over-accretion; ceremony heavier than the real 1-3-agent owner-present
+  context; no replace-vs-migrate discipline). Bidirectional cross-link added. Both
+  plans indexed in `future/README.md`.
+
+**Load-bearing findings**:
+
+1. The compaction crash is a deterministic, recurring CC bug for long
+   extended-thinking sessions — not data corruption. On-disk transcripts are
+   healthy; the malformed block is assembled in memory at compaction time.
+2. A deferral/non-goal audit of the collaboration-substrate cluster (62 items, 11
+   plans) found **one** genuine orphan thread — substrate over-accretion — now
+   homed in the rightsizing brief. The rest are healthy boundaries-with-homes,
+   ratified design principles (restated across plans → a doc-consolidation signal,
+   not a plan), or correctly-gated deferrals. No plan-proliferation.
+
+**Deliberately NOT done**: no code; no edits to Sunlit's claimed surfaces
+(`pending-graduations.md`, `open-questions.md`); ADR/PDR candidates homed as future
+plans, not in `pending-graduations.md`. `pnpm check` owner-waived this session.
+
+**Next safe step**: both new future plans await their promotion triggers. The
+rightsizing brief is the vessel for the routing plan's parked "one new plan vs
+cluster refactor" question (its M4 resolves it). No active lane left open by this
+session.
+
 ## Session Outcome (2026-05-28 — Sunlit Waxing Moon / claude / claude-opus-4-7 / `b34d76`, pending-graduations drain continuation after Leafy crash)
 
 **Session boundary**: continued the owner-directed dedicated `pending-graduations.md`
@@ -7551,6 +7600,8 @@ and
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Kilned Brazing Bellows` | `claude` | `claude-opus-4-7[1m]` | `a24c5f` | `leafy-compaction-crash-root-cause-investigation-then-agent-tooling-substrate-recording; diagnosed-CC-12311-extended-thinking-compaction-bug-long-tail-on-2.1.153-authored-bug-report-with-feedback-text; claim-liveness-heartbeat-bound-but-manual-writer-crashed-agent-fresh-up-to-full-TTL-authored-claim-liveness-crash-reconciliation-and-session-forensics-future-plan-relinked-liveness-floor-nongoal-3; deferral-nongoal-audit-62-items-11-plans-one-genuine-orphan-substrate-over-accretion-homed-in-collaboration-substrate-coordination-rightsizing-exploration-brief-rest-healthy-or-doc-consolidation-no-proliferation; ran-disjoint-from-sunlit-waxing-moon-pending-graduations-drain; commit-explicit-pathspec; pnpm-check-owner-waived` | 2026-05-28 | 2026-05-28 |
+| `Sunlit Waxing Moon` | `claude` | `claude-opus-4-7` | `b34d76` | `pending-graduations-drain-continuation-after-leafy-crash; reconciled-coordination-superseded-dead-but-metric-fresh-claim; per-item-verified-verdict-ledger-for-whole-register-70-items; finding-verification-report-unreliable-3-of-6-spotchecks-wrong-false-negatives-items-2-and-33; dangling-reference-in-reciprocal-dispatch-pattern-item-2; no-removals-no-rules-authored-owner-ratification-of-decision-packet-pending; commits-f7d19c7a-86748491` | 2026-05-28 | 2026-05-28 |
 | `Stratospheric Hovering Gale` | `cursor` | `composer-2.5` | `ad279f` | `cursor-statusline-lane-a-implementer-closeout-owner; shim-delegate-to-claude-adapter; install-cursor-statusline; team-coord-with-thermal-spiralling-airstream; handoff-59d50265; owner-verified-statusline` | 2026-05-28 | 2026-05-28 |
 | `Sylvan Regrowing Sapling` | `codex` | `GPT-5` | `019e6a` | `dedicated-legacy-pending-graduations-batch-14-drain; claim-7d011543; in-place-disposition-ledger; hard-fitness-routing-for-definition-of-delivery-and-repo-continuity` | 2026-05-27 | 2026-05-27 |
 | `Woodland Blossoming Grove` | `codex` | `GPT-5` | `019e6a` | `dedicated-legacy-pending-graduations-batch-13-drain; pdr-043-cue-2-intent-not-vocabulary-graduation; batch-13-in-place-disposition-ledger; strict-hard-soft-only-verification` | 2026-05-27 | 2026-05-27 |

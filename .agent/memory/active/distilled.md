@@ -17,6 +17,40 @@ fitness_rationale: >-
   substance rather than trimming the lesson.
 ---
 
+## 2026-05-28 — a forced conclusion is executed, not offered; deference can be a hedge
+
+When your own analysis forces a conclusion (the remaining options are expedient
+anti-shapes), executing it IS the answer — offering to execute it, or asking
+permission to act on a determination you were asked to make, is
+responsibility-passback, not diligence. The subtle trap: dressing the deferral as
+deference by misapplying a real owner-decision principle (e.g.
+`feedback_feature_shaping_is_owner_decision`) as cover for not finishing. That
+principle governs product/feature forks; authoring an internal artefact you just
+proved is needed is task completion, not a fork. Owner corrected this twice in one
+session ("just author it"). Reserve questions for genuine owner-only forks,
+irreversible/risky actions, and evidence-undecidable choices. Extends
+`present-verdicts-not-menus`, `feedback_no_responsibility_passback`, PDR-058
+(stop-inventing-optionality), and the escape-hatch 'menu' reflex below.
+
+Source: 2026-05-28 deferral/non-goal audit + closeout (Kilned Brazing Bellows).
+
+## 2026-05-28 — a verification/audit artefact is itself a claim; verify the auditor
+
+A read-only verification sub-agent, commissioned to check "is X already covered?"
+across ~51 register items, produced a report with a ~50% false-negative rate in
+spot-checks: it searched the wrong file or a different phrasing and reported "not
+found" over substance that existed (a clause present at `agent-collaboration.md`
+line 196; a doctrine named in a pattern the report never opened). Never mass-act
+on a verification sub-agent's findings; re-verify against the repo before any
+irreversible disposition. This extends `feedback_validate_specialist_findings_before_acting`
+(specialists over-escalate severity) to the distinct failure of factual
+false-negatives in a search/verification report. Curation corollary: "drain an
+owner-gated register" means evaluate each item on substance and attach a verdict,
+not empty the buffer — removal is owner ratification.
+
+Source: 2026-05-28 pending-graduations drain (Sunlit Waxing Moon); ledger
+`curator-passes/2026-05-28-sunlit-waxing-moon.md`.
+
 ## 2026-05-28 — Cursor statusline: delegate shim to Claude adapter
 
 For Cursor CLI statusline, the repo shim can target

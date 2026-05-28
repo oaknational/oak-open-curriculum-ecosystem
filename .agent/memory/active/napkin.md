@@ -8,6 +8,143 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## Session: 2026-05-28 — pending-graduations drain after a crash (Sunlit Waxing Moon)
+
+### Process insights (reusable — for future drain / consolidation sessions)
+
+- **A read-only verification sub-agent's report can be substantially unreliable.**
+  Leafy left a 51-item "is X already covered?" report as my evidence base. In 6
+  direct spot-checks, ~3 verdicts were wrong: false-negatives on items 2 and 33
+  (the sub-agent searched the wrong file / a different phrasing and reported "not
+  found" when the substance existed), plus a mischaracterisation on item 1. This
+  is distinct from the known "specialists over-escalate severity" failure
+  (`feedback_validate_specialist_findings_before_acting`): it is *factual
+  false-negatives in a search/verification report*. Lesson: never mass-act on a
+  verification sub-agent's findings; for any irreversible disposition, re-verify
+  against the repo yourself. Verify the auditor, not just the audited.
+- **Draining an owner-gated register does NOT mean emptying it.** When the items
+  are owner-reserved forks ("promote / merge / watch / withdraw"), "drain" means
+  evaluate each on substance, attach a sharp verdict, and correct integrity
+  issues; the removal itself is owner ratification. Producing verdicts is the
+  deliverable; mass-removing on a flawed base would be the error. Contrast the
+  prior Sylvan pass, which declared this same register "complete, preserve-all"
+  without per-item substance eval — the owner overrode that. The cure is
+  substance-eval, neither emptying nor blanket-preserving.
+- **The register text was honest; the report auditing it was wrong.** My initial
+  premise (inherited from the report) that the register asserted ~15 false
+  "already covered" claims was itself false — the register entries are hedged
+  candidates and targets. The integrity defect lived in the report, plus one
+  dangling reference in a pattern (`reciprocal-cross-agent-reviewer-dispatch.md`
+  line 248 cites a non-existent home).
+- **Crash-safe execution under the compaction-bug risk.** The per-item verdict
+  ledger (a durable on-disk artefact) is the real deliverable and survives a
+  crash regardless of commit; commit in small batches. Files on disk survive a
+  session-context crash — committing is for sharing/history, not file-survival —
+  so a handoff loses nothing while the continuity substrate is the source of
+  truth.
+- **Operational tic.** markdownlint MD004 fires when prose containing a spaced
+  plus-sign wraps so a line *starts* with "plus-space" (read as a list marker).
+  Hit it twice this session. Reword to "and", or keep plus-signs off line-starts
+  in wrapped prose.
+
+### Coordination note
+
+Leafy Regrowing Sapling (3c02b9) crashed ~14:00Z with its claim still reading
+"fresh" by the freshness metric — a dead-but-metric-fresh claim that freshness
+alone would not surface. Superseded it actively (close plus comms event), not via
+archive-stale. The crash-investigator session (Kilned Brazing Bellows) is
+generalising exactly this gap into a `claim-liveness-crash-reconciliation`
+plan under `plans/agent-tooling/future/` (uncommitted, Kilned's) — the right
+substrate response.
+
+## Session: 2026-05-28 — diagnosing a peer's stuck `/compact` (Kilned Brazing Bellows)
+
+### What works / what bit me
+
+- **Forensic technique for a stuck Claude Code session**: locate the peer's
+  session by `session_id_prefix` in `active-claims.json` → its `.jsonl` under
+  `~/.claude/projects/<project>/`; reconstruct the *role-merged* logical message
+  array (the API view) with jq, since each assistant content block is persisted
+  as its own JSONL line and merged only at request-assembly time. Sub-agent
+  transcripts live in `<session>/subagents/agent-*.jsonl` (+ `.meta.json`).
+- **Tooling mistake (false alarm)**: `echo "$rest" | jq` inside a `while read`
+  loop mangled JSON escapes and produced phantom "control character / invalid
+  JSON" errors. The file was clean. Use `printf '%s'` or feed jq the file
+  directly; never `echo "$var" | jq` for transcript records.
+- **Root cause of "thinking blocks in the latest assistant message cannot be
+  modified" during compaction**: known CC bug (canonical issue
+  anthropics/claude-code#12311, "Auto-compact fails with Opus extended thinking
+  blocks"). CC persists thinking blocks with empty text + retained signature
+  (normal — confirmed identical in healthy sessions); the compaction request
+  replays them in the latest-assistant-message position and the API rejects the
+  mismatch. The on-disk transcript is NOT corrupt — `messages.N.content.M` indexes
+  a runtime-assembled array, not any persisted record. Partially fixed in 2.0.67;
+  long tail remains (owner hit it on 2.1.153, heavy extended-thinking agent runs).
+- **Workaround (official)**: `/model` → Sonnet, then `/compact`, then `/model`
+  back to Opus. Run BEFORE the session crashes. Robust alternative: don't rely on
+  `/compact` for long thinking-heavy sessions — use handoff + fresh session
+  (repo continuity substrate is the source of truth, so no work is lost).
+
+### Correction I had to absorb (verify-dont-trust applies to CAUSATION too)
+
+- I told the owner the crashed sub-agent writing its report to disk *validated*
+  the durable-artefact doctrine working autonomously. WRONG: the owner had gone
+  into the sub-agent's session and explicitly asked it to write the report. So it
+  was **another owner-action-is-not-a-cure instance**, not the system self-saving.
+  Lesson: when a good outcome appears, verify *whether it was autonomous or
+  owner-induced* before crediting the system — mis-attributing causation is a
+  verify-dont-trust failure, not just mis-stating a fact. Links
+  [[feedback_owner_action_is_not_a_cure]], [[feedback_validate_specialist_findings_before_acting]].
+- The good idea that survives the correction (owner: "seems like a good idea in
+  general"): sub-agents should write durable intermediate artefacts to disk *as
+  they go, autonomously* — a sub-agent returns only a summary to its parent, so
+  its working context is the most crash-fragile in the system. Captured as a
+  candidate in the new agent-tooling plan (see below), not as existing doctrine.
+
+### Verified mechanism refinement (claim liveness)
+
+- Claims DO carry optional `heartbeat_at`; `isClaimStale` = `(heartbeat_at ??
+  claimed_at) + freshness_seconds < now`. The gap is not "TTL-only" but "the
+  heartbeat writer is manual — nothing auto-heartbeats a live agent and nothing
+  detects a dead one," so a crashed agent looks alive for up to its full TTL
+  (default 14400s). `comms-watch-liveness-floor.plan.md` names this conflation
+  and defers the claim side as an explicit non-goal.
+- Insights recorded durably in
+  `.agent/plans/agent-tooling/future/claim-liveness-crash-reconciliation-and-session-forensics.plan.md`;
+  compaction bug report in `.agent/reports/`.
+
+### Closeout insights (concurrent-agent tree + a commit-message gotcha)
+
+- **Two overlapping sole-contributor sessions are NOT a team.** Sunlit Waxing
+  Moon ran a dedicated pending-graduations drain concurrently in the same working
+  tree. session-handoff is explicit: a peer's mere presence does not make it a
+  team. The discipline that worked: collision-read `active-claims` (disjoint areas
+  confirmed); every edit to a SHARED continuity surface (napkin, distilled,
+  repo-continuity, thread record) was ADDITIVE — new identity row, new
+  session-outcome entry, appended summary cell — so it never clobbered the peer's
+  concurrent writes (which raced my napkin Edit once, exactly as predicted);
+  committed ONLY my disjoint files by explicit pathspec; left the co-mingled
+  shared surfaces + the peer's experience file UNSTAGED for the gatekeeper.
+  ADR/PDR-candidate capture went into plans, not the peer's claimed
+  `pending-graduations.md` / `open-questions.md`.
+- **The repo pre-commit hook is NOT `pnpm check`.** It runs prettier/markdownlint
+  on STAGED files only, plus repo-validators, shell-lint, and turbo
+  type-check/lint/test (cached). So "commit but don't run pnpm check" is satisfied
+  by a normal commit — no `--no-verify` needed (and none was used). The separate
+  `pnpm check` aggregate (e2e/a11y/widget/fitness) is the closeout gate that was
+  waived.
+- **Commit-message gotcha**: `@commitlint/config-conventional` parses `#NNN`
+  tokens in the body (`claude-code#12311`, `non-goal #3`, `#18/#19/#20`) as
+  issue-reference footers, which trips `footer-leading-blank` when a real trailer
+  (`Co-Authored-By`) follows. Cure: keep `#NNN` out of the commit body ("issue
+  12311", "non-goal 3"). Caught pre-commit by
+  `pnpm agent-tools:check-commit-message -F`; honoured no-warning-toleration.
+- **The hedging correction (owner, twice this session)** is graduated to
+  `distilled.md` — "a forced conclusion is executed, not offered; deference can be
+  a hedge." A determination I was asked to make, then offered to act on, is
+  responsibility-passback; misusing `feedback_feature_shaping_is_owner_decision`
+  as cover for not finishing is the specific trap.
+
 ## Session: 2026-05-28 (closeout) — worked examples dissolve abstract design forks (Woodland Swaying Pollen)
 
 ### Patterns to Remember
