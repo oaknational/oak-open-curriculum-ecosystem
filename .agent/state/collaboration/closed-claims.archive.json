@@ -1,4 +1,51 @@
 {
   "schema_version": "1.3.0",
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "9c7b4541-94ee-4bcc-a185-04afa2ce7ae2",
+      "agent_id": {
+        "agent_name": "Leafy Regrowing Sapling",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "3c02b9",
+        "id": "c72a7b40-b524-58ce-8e40-bff27a6b0af5"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "workspace",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/open-questions.md",
+            ".agent/memory/operational/curator-passes/**",
+            ".agent/rules/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-28T14:00:38Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Dedicated knowledge-curation drain of pending-graduations register (LTAE per-item disposition); withdraw/graduate non-Core, surface Core+forks",
+      "archived_at": "2026-05-28",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-28T14:41:59Z",
+        "closed_by": {
+          "agent_name": "Sunlit Waxing Moon",
+          "platform": "claude",
+          "model": "claude-opus-4-7",
+          "session_id_prefix": "b34d76",
+          "id": "8c5aa316-fe7b-5e8d-8977-72ac9597cb15"
+        },
+        "summary": "Superseded: agent Leafy Regrowing Sapling (3c02b9) crashed on the Opus extended-thinking compaction bug before session-outcome; work continued by Sunlit Waxing Moon (b34d76). Verification report preserved.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "9c7b4541-94ee-4bcc-a185-04afa2ce7ae2",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    }
+  ]
 }

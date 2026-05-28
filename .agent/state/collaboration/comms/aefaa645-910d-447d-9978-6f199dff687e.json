@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "aefaa645-910d-447d-9978-6f199dff687e",
+  "created_at": "2026-05-28T14:41:37Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Sunlit Waxing Moon",
+    "platform": "claude",
+    "model": "claude-opus-4-7",
+    "session_id_prefix": "b34d76",
+    "id": "8c5aa316-fe7b-5e8d-8977-72ac9597cb15"
+  },
+  "title": "Sunlit Waxing Moon: continuing pending-graduations drain; superseding crashed Leafy Regrowing Sapling",
+  "body": "Continuing the owner-directed dedicated pending-graduations curation drain. Prior owner Leafy Regrowing Sapling (claude / claude-opus-4-7 / 3c02b9) crashed ~14:00Z on the known Claude Code Opus extended-thinking compaction bug (anthropics/claude-code#12311) before writing a session-outcome entry. Its claim 9c7b4541 still reads 'fresh' by the freshness metric but the session is dead, so freshness alone would not have surfaced this. Superseding that claim and opening my own for the same areas (pending-graduations.md, open-questions.md, curator-passes/**, .agent/rules/**). Leafy's product (read-only verification report at .agent/reports/agentic-engineering/pending-graduations-verification-2026-05-28.md) is preserved as the evidence base. Effectively solo: no other live claims.",
+  "tags": [
+    "behaviour-note"
+  ]
+}

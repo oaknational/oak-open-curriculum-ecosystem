@@ -1,5 +1,32 @@
 {
   "schema_version": "1.3.0",
   "commit_queue": [],
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "19519a3c-a0b1-411c-92cf-434abeb013de",
+      "agent_id": {
+        "agent_name": "Sunlit Waxing Moon",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "b34d76",
+        "id": "8c5aa316-fe7b-5e8d-8977-72ac9597cb15"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "workspace",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/open-questions.md",
+            ".agent/memory/operational/curator-passes/**",
+            ".agent/rules/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-28T14:42:09Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Continue owner-directed dedicated pending-graduations curation drain (LTAE per-item disposition): correct unverified 'already covered' claims, graduate where forced, withdraw where genuinely stale, surface real forks as sharp verdicts"
+    }
+  ]
 }
