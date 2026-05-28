@@ -187,7 +187,7 @@ Delivery need to account for instrument deliverables, and is the
 self-correcting-deliverables structure (§5) the honesty mechanism that keeps
 "delivered" truthful? Flag for discussion — do not resolve here.
 
-## 7. Salvageable atomic blocks vs wrong assembly (FIRST-CUT — not final)
+## 7. Salvageable atomic blocks vs wrong assembly (finalised at Goal 1, 2026-05-28)
 
 "We don't have to throw away much, but it needs deep restructuring; some pieces
 survive as atomic building blocks reassembled into something fundamentally new."
@@ -201,17 +201,24 @@ Likely-sound primitives (reassemble, don't discard):
 - BFS traversal primitive (`eef-graph-model.ts`: `buildGraphIndex`,
   `traverseSubgraph`)
 - the context-matching *logic* (`selectEefSeedIds`) — but it **relocates into the
-  graph/corpus query layer** (a filter/rank), not the tool
+  graph query layer as a `NodeFilter` consumed by `enumerateNodes`** (foundation
+  §1), not the tool. No ranking: selection decides membership only.
 - the caveat/uncertainty construction (`citations.ts`) — reframed as part of node
-  completeness, not a bolted-on envelope
+  completeness; with full nodes the integrity floor (`impact + evidence + cost`)
+  travels inherently, and corpus caveats attach once at the envelope.
 
 Likely-wrong assembly (discard / rebuild):
 
 - tool-as-brain; `projectExploreNode` (field-mask-for-budget);
   `capForBudget` (runtime cap); the soft `NotImplementedYet` stubs;
   dual-emit + context-hint by default for graph tools; the gate-1a/1b split.
+- the **type-only** `EvidenceCorpus.rank / explain / compare` interface +
+  `RankError`/`CompareError` aliases (`types.ts`; no runtime implementor) —
+  **removed** (no soft stubs); the analytical-tool ideas are homed as candidates
+  in the new `extending-graph-support-tooling` plan, not deferred to a gate.
 
-*This discernment is to be done carefully at design time, not finalised here.*
+*Discernment finalised at Goal 1 (2026-05-28); see the plan's deliverables D2/D3
+for the salvage/rebuild split in executable form.*
 
 ## 8. First next-session deliverable — merge-safety sub-plan (INTENT, FIRM)
 
@@ -252,39 +259,62 @@ genuinely mergeable — not assume it.
   D6; Goal 1 is one design-settling session. Go slow and careful, but bound the
   work — a "follow-on" must fold into a gate, be closed, or be owner-parked with
   a trigger, never left ambient (plan §"End goal + bounded goals").
+- **No escape hatches to dodge the complete build.** Reaching for a *deferral*
+  (a "later gate" — no one authorised it), a *menu* (handing the owner a forced
+  conclusion as an A/B choice instead of stating the verdict), or a *list-op
+  dressed as sophistication* ("rank the broad result down to N" = sort-plus-slice)
+  are three faces of one failure: **F's process** — avoiding the complete,
+  graph-native commitment. The tell is the reach for an exit, not the vocabulary;
+  the discipline is to check whether the complete commitment is available (it
+  usually is) and make it. (Lived failure, 2026-05-28: all three surfaced in one
+  planning session and were owner-caught; the agent had internalised the
+  foundation's *content* while still running F's *process*.)
 
 ## 10. Open questions / gaps a fresh session must resolve (FIRM that they are OPEN)
 
-> **Narrowed 2026-05-28 (strict + LTAE lens pass + Q4 resolution).** Most of the
-> questions below are now forced or settled; the one genuinely-open *design*
-> question is the **selection / scoping strategy** — which nodes/edges belong,
-> and whether that is one axis or two (relevance vs per-hop disclosure depth).
-> That is Goal 1's worked-examples target (plan §"End goal + bounded goals").
-> Q4 (client research) is RESOLVED, below.
+> **RESOLVED 2026-05-28 (Goal 1, owner-ratified).** The one genuinely-open
+> *design* question — the **selection / scoping strategy** — is resolved:
+> **membership, full nodes (effectively one axis).** A subgraph = context-matched
+> seeds ∪ their bounded traversal neighbourhood + all `related_strand` edges
+> among members; every node full; the out-of-subgraph frontier reachable via the
+> query surface. Graded "per-hop disclosure" (the candidate second axis) was
+> considered and is **not a helpful lever** for this corpus — the whole 30-strand
+> corpus is ~21k tokens, under the ~25k agent ceiling, so full nodes always fit;
+> graded disclosure solves no budget problem and hands the agent strictly *less*.
+> See the plan's §"Resolved design" for the verdict, the worked-example
+> evidence, and the budget reasoning.
 
-- **Client research — RESOLVED 2026-05-28.** In our standard-MCP-App regime the
-  model reads `structuredContent` on both claude.ai and ChatGPT.com →
-  `structuredContent`-only is correct (principle 8); `oakContextHint` → tool
-  description. No human-widget audience (the tool is agent-facing; see §9).
-  Source: `.agent/research/mcp-client-tool-result-consumption-2026-05-28.md`.
-- The precise **graph-tool category** definition + invariants, DRY against the
-  base tool contract.
-- What makes a subgraph **"intelligently scoped"** — how scope, sparsity, and the
-  navigable boundary-links are chosen. This is the real intelligence to build.
-- The restated **end-goal** once the gate-1a/1b split is removed, and a sensible
-  implementation sequence (§5 structure).
-- How we **measure "exploration enabled"** at each deliverable.
-- The Definition-of-Delivery refinement question (§6).
-- The **first rebuild deliverable** — probably "the real graph query surface
-  exists and is consumed", but this depends on the restated end-goal; held open.
+The remaining items below are resolved or homed as follows:
+
+- **Client research — RESOLVED 2026-05-28.** `structuredContent`-only on both
+  claude.ai and ChatGPT.com (principle 8); `oakContextHint` → tool description;
+  no human-widget audience (agent-facing; §9). Source:
+  `.agent/research/mcp-client-tool-result-consumption-2026-05-28.md`.
+- **Graph-tool category definition + invariants — RESOLVED** (plan §"Resolved
+  design"); crystallised into a permanent ADR at plan deliverable D1.
+- **"Intelligently scoped" — RESOLVED**: the intelligence is *membership*
+  (relevance-matched seeds + bounded traversal) plus the *navigable frontier* —
+  not per-node thinning, not ordering.
+- **Restated end-goal + sequence — RESOLVED**: plan §"End goal" + the
+  self-correcting chain D0–D6 + DX.
+- **Measuring "exploration enabled" — RESOLVED**: per-deliverable `(a)` gates;
+  D6 is the explicit exploration deliverable.
+- **Definition-of-Delivery refinement (§6) — OPEN, homed at D5** (addressed when
+  the methodology graduates from the real built instrument).
+- **First rebuild deliverable — RESOLVED**: D2 (the real graph query surface),
+  after D0 (merge-safety) and D1 (the contract ADR).
 
 ## 11. Notes toward a "working with graphs" skill (SEED — to graduate)
 
 Capture toward a future skill (or skill family): graph ≠ list; the list-ops that
-must never touch a graph; completeness-as-integrity; contiguous vs sparse
-subgraphs; navigable boundary-links as the budget/completeness reconciliation;
-the soft-stub failure mode; graph tools as a category. Extract properly during
-consolidation — not rushed here.
+must never touch a graph (slice / cap / field-mask-for-budget / **rank-and-cut**);
+completeness-as-integrity (the integrity floor `impact + evidence + cost`);
+contiguous vs sparse subgraphs; **full-node delivery + the navigable frontier as
+the graph value** (the agent traverses — not a budget patch); graded disclosure
+as a *general* option that a sub-ceiling corpus does not trigger; the soft-stub
+failure mode; the **escape-hatch process failure** (defer / menu / rank-and-cut
+as F's process re-enacted); graph tools as a category. Extract properly at D5 —
+not rushed here.
 
 ## 12. Status of the old plan
 

@@ -8,27 +8,59 @@
 > was stubbed and then worked around). They are discarded. The old EEF plans are
 > archived at `.agent/plans/sector-engagement/eef/archive/`.
 >
+> **GOAL 1 (fix the plan) is DONE — owner-ratified 2026-05-28.** The one open
+> design question (selection / scoping) is resolved: **membership, full nodes
+> (one axis)** — context-matched seeds ∪ their bounded traversal neighbourhood +
+> all `related_strand` edges among members; every node full; the out-of-subgraph
+> frontier reachable via the query surface. Graded "per-hop disclosure" is *not*
+> a helpful lever here (whole corpus ~21k tokens < ~25k agent ceiling, so full
+> nodes always fit). Settled outcomes folded in: encoding = `structuredContent`
+> only; agent-facing, no UI; capability boundary = graph **delivery** (analytical
+> ops rank/explain/compare → the new `extending-graph-support-tooling` plan).
+>
 > **Read, in order:**
 >
 > 1. `.agent/plans/sector-engagement/eef/current/graph-tooling-rebuild-foundation-2026-05-28.md`
->    — the single source of truth (diagnosis, principles, intent, open questions).
+>    — the single source of truth (diagnosis, principles, intent; §10 now resolved).
 > 2. `.agent/plans/sector-engagement/eef/current/graph-tooling-rebuild.plan.md`
->    — the new plan (skeleton; self-correcting deliverables).
+>    — the SPECIFIED plan (resolved design + self-correcting D0–D6 + DX).
 >
-> **Next session = GOAL 1: fix the plan (design only, no implementation).**
-> Resolve the one open design question — the **selection / scoping strategy** —
-> via worked examples on the real corpus
-> (`packages/sdks/graph-corpus-sdk/src/eef-strands/eef-toolkit.ts`, 30 strands);
-> fold in the outcomes settled 2026-05-28 (encoding = `structuredContent`-only;
-> scope boundary = agent-facing, NO UI/widget); upgrade the plan skeleton to a
-> fully-specified, owner-ratified spec. Then **GOAL 2: implement** (D0 merge-safety
-> → D2 query surface → D3 subgraph tool → D4 round-trip → D5 skills+methodology →
-> D6 explore value → DX reconciliation). Bounded — must NOT drift into endless
-> follow-on sessions; see the plan's "End goal + bounded goals" section.
+> **Next session = GOAL 2: implement.** D0 merge-safety (PR #122) → D1 contract
+> ADR → D2 query surface (un-stub the GraphView ops; selection → `enumerateNodes`
+> filter) → D3 thin delivery tool (full-node subgraph, `structuredContent`-only) →
+> D4 navigation round-trip → D5 skills + methodology graduation → D6 explore
+> value → DX estate reconciliation. Bounded — terminates at D6; no deferral
+> gates, no endless follow-ons (plan §"End goal + bounded goals").
 >
 > Do NOT resume the increments B–H / gate-1a/1b framing below. Detailed prior
-> session history remains in git. A full clean rewrite of this surface is tracked
-> as plan deliverable DX (estate-wide reference reconciliation).
+> session history remains in git. The full clean rewrite of this surface is plan
+> deliverable DX (estate-wide reference reconciliation).
+
+## Session 2026-05-28 (later) — Goal 1 design settled + plan specified (Woodland Swaying Pollen / `073489`)
+
+Goal 1 (fix the plan) completed and owner-ratified. The selection/scoping
+strategy is resolved to **membership, full nodes (one axis)** via worked examples
+on the real 30-strand corpus — the decisive fact being that the whole corpus
+(~21k tokens) sits under the ~25k agent ceiling, so full nodes always fit and
+graded "per-hop disclosure" is not a helpful lever. Two owner corrections
+reshaped the resolution mid-session: (1) a forced conclusion must be *stated*,
+not posed as an A/B menu; (2) the explicit goal is to *remove* the 1a/1b
+deferral framing — zero deferral decisions had been made. Both, plus a near-miss
+"rank-and-cut" (a list-op), were diagnosed as one root: F's *process* (escape
+hatches that dodge the complete build) re-enacted at the design layer — captured
+in foundation §9 and the napkin.
+
+Folded in: `graph-tooling-rebuild.plan.md` → SPECIFIED (D0–D6 + DX, each with
+(a)/(b)/(c)); foundation §10 resolved, §7 finalised, §9 escape-hatch
+anti-pattern added, §11 seed aligned; new
+`extending-graph-support-tooling.plan.md` homes rank/explain/compare + future
+candidates (indexed in the KG-integration README). assumptions-expert reviewed
+the plan (no residual escape hatch; verified fixes folded). Next = Goal 2
+(D0 → DX).
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Woodland Swaying Pollen` | `claude` | `claude-opus-4-7` | `073489` | `goal-1-design-settling-plan-author` | 2026-05-28 | 2026-05-28 |
 
 ## Session 2026-05-28 — EEF wrong-shape diagnosis + graph-tooling rebuild (Deep Fathoming Harbour / `cef0b8`)
 

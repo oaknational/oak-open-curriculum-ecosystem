@@ -1,18 +1,19 @@
 ---
-title: Graph-tooling rebuild — plan (SKELETON)
-status: skeleton (deliverable spine drafted; content firms at D1 — do NOT treat as fully specified)
+title: Graph-tooling rebuild — plan (SPECIFIED)
+status: specified (Goal 1 design settled + owner-ratified 2026-05-28; ready for Goal 2)
 date: 2026-05-28
 foundation: ./graph-tooling-rebuild-foundation-2026-05-28.md (single source of truth — read first)
 supersedes: ../archive/* (the gate-1a/1b EEF plan estate)
 ---
 
-# Graph-tooling rebuild — plan (SKELETON)
+# Graph-tooling rebuild — plan (SPECIFIED)
 
 **Read the foundation first:**
 [`graph-tooling-rebuild-foundation-2026-05-28.md`](./graph-tooling-rebuild-foundation-2026-05-28.md).
-This plan is built on it and inherits its firm/open registers. It is a
-**skeleton**: the deliverable *spine* is drafted; most deliverable *content* is
-deliberately open and firms at **D1**. Do not over-anchor on it.
+This plan is built on it. Goal 1 (settle the design) is **done and
+owner-ratified (2026-05-28)**: the one open question — the selection / scoping
+strategy — is resolved below, and the deliverable spine D0–D6 + DX is fully
+specified. What remains is Goal 2 (implement).
 
 ## Purpose (discovery framing)
 
@@ -20,203 +21,287 @@ Build tools that **surface graphs (subgraphs) to LLM agents** — that traverse,
 select, query, and understand graph data and deliver complete, navigable
 subgraphs in a form suitable for agents — **as instruments to explore** how best
 to deliver value to teachers. Teacher value is the north star; the immediate
-beneficiary of this work is *us-able-to-explore*. Success at each step is
-"the next exploration is now possible", not "a teacher used a feature".
+beneficiary of this work is *us-able-to-explore*. Success at each step is "the
+next exploration is now possible", not "a teacher used a feature".
 
-The gate-1a / gate-1b split is **removed**. This plan replaces it with an
-end-goal plus a self-correcting deliverable sequence.
+The gate-1a / gate-1b split is **removed**. There is no "later gate": the
+deliverable chain D0–D6 + DX is the **complete** capability and it terminates at
+D6. Capability that is genuinely out of scope is *removed* (no soft stubs) and,
+where worth keeping, homed as a candidate in the new
+[`extending-graph-support-tooling`](../../../connecting-oak-resources/knowledge-graph-integration/future/extending-graph-support-tooling.plan.md)
+plan — not deferred to a gate.
+
+## Resolved design (Goal 1 — owner-ratified 2026-05-28)
+
+**Selection / scoping strategy: membership, full nodes — effectively one axis.**
+
+A delivered subgraph for a lesson context =
+
+- **Membership** — context-matched **seeds** (relevance match on
+  `school_context_relevance`; free-text fallback for the 13 relevance-less
+  strands) **∪** their **bounded traversal neighbourhood** (`subgraph`, depth
+  default 1) — plus **all `related_strand` edges among the included nodes**.
+  Sparse (edge-less) seeds are legitimate members; a subgraph may be contiguous
+  or sparse.
+- **Full nodes** — every included node carries its full detail. No
+  field-mask-for-budget, no runtime cap, no per-node thinning.
+- **Navigable frontier** — a node's `related_strands` pointing outside the
+  subgraph are **reachable** via the graph query surface (`getNode` /
+  `subgraph` from that id). The agent traverses; this is the graph value, not a
+  budget patch.
+
+**Why full nodes, not graded progressive disclosure.** Graded disclosure is not
+a helpful lever for this corpus. The whole 30-strand corpus is **~21k tokens,
+under the ~25k agent ceiling** — full nodes *always fit under the ceiling*, so
+graded disclosure solves no budget problem while handing the agent strictly
+*less*. The 10k *preferred* target is a **design signal**, never a runtime cap:
+a broad context (e.g. KS2 + `improving_reading` → 14 strands ≈ 12–14k) exceeds
+the preferred target, and that is **honest breadth, surfaced — never truncated**.
+(Foundation principle 5's role-graded disclosure stays a *general* graph-tool
+option for corpora that genuinely cannot fit; EEF does not trigger it.)
+
+**Why no ranking-to-top-N.** Rank-then-cut is sort-plus-slice — a **list-op**,
+the exact anti-pattern. The value of delivering a *graph* is that the agent
+reasons across the complete scoped subgraph. Relevance *ordering* is a candidate
+enhancement, not part of graph delivery.
+
+**Settled outcomes folded in:**
+
+- **Encoding** — `structuredContent` only; drop the dual `content[]` block and
+  any context hint (`oakContextHint`). (Foundation principle 8.)
+- **Scope boundary** — agent-facing MCP tool; **no UI/widget, no second
+  audience**. (Foundation §9.)
+- **Completeness = integrity + traceability** (not maximalism) — every shown
+  node carries the inseparable **integrity floor** `{impact_months,
+  evidence_strength_rating + label, cost}`; full nodes satisfy it trivially. The
+  data makes it non-negotiable: `homework` is `+5mo / Very Limited`,
+  `repeating-a-year` `−2mo`, `learning-styles` `null / Insufficient`, vs
+  `metacognition` `+8 / Extensive`. Impact without its uncertainty is dangerous.
+
+**Capability boundary.** This arc's complete capability is graph **delivery** —
+the graph query surface + the thin delivery tool + the proven navigation loop.
+The corpus-analytical operations `EvidenceCorpus.rank / explain / compare` (the
+old gate-1b inventory) are **out**: they are **type-only** today
+(`interface EvidenceCorpus` + `RankError` / `CompareError` aliases in
+`types.ts`; no runtime implementor), so removal is a type deletion, and the
+capability ideas are preserved as candidates in the enhancements plan. This is
+scope, not deferral.
+
+### Worked examples (the evidence)
+
+Real corpus:
+[`packages/sdks/graph-corpus-sdk/src/eef-strands/eef-toolkit.ts`](../../../../../packages/sdks/graph-corpus-sdk/src/eef-strands/eef-toolkit.ts)
+(30 strands; 17 carry `related_strands` edges, 17 carry
+`school_context_relevance`; `improving_reading` is the most common priority — in
+10 of 17 relevance-bearing strands).
+
+- **A — KS2, focus `improving_reading` (broad):** seeds = 10 (feedback,
+  metacognition, one-to-one, oral-language, reading-comprehension, small-group,
+  extending-school-time\*, homework\*, parental-engagement\*, peer-tutoring;
+  \* = relevant but edge-less → legitimate sparse region). `subgraph(depth=1)`
+  adds mastery-learning, collaborative-learning, **phonics** (connected though
+  EYFS/KS1, so never a seed here), teaching-assistant → **14 full strands ≈
+  12–14k tokens** (over the 10k target, under the 25k ceiling — honest breadth,
+  surfaced not cut). The neighbourhood spans strong (`feedback +6/Extensive`)
+  and weak (`homework +5/Very Limited`) evidence — full nodes keep that visible.
+- **B — KS3, focus `metacognition_and_self_regulation` (tight):** seeds = 2
+  (metacognition, collaborative-learning); `depth=1` adds feedback, oral-language,
+  reading-comprehension, peer-tutoring → **6 full strands ≈ 5–6k** — comfortably
+  under target.
+- **C — no focus (e.g. KS2 only):** key-stage barely filters (most strands span
+  KS2–KS4) → very broad selection. An honest *finding* the instrument surfaces
+  (should `focus` be required? is ordering wanted?) → feeds the enhancements plan
+  at D6. Not cured by truncation.
 
 ## End goal + bounded goals (no endless follow-ons)
 
 **End goal (terminal):** a reusable graph-delivery capability — proven once on
 the EEF corpus — that hands LLM agents complete, navigable subgraphs, with the
-"working with graphs" doctrine extracted. The arc COMPLETES at D6; it does not
-spawn further design sessions.
+"working with graphs" doctrine extracted. The arc COMPLETES at D6.
 
-The work runs as two bounded goals. Go slow, carefully, thoughtfully at every
-step — but do **not** let it drift into endless "follow-on" sessions.
+### Goal 1 — Fix the plan (DONE, owner-ratified 2026-05-28)
 
-### Goal 1 — Fix the plan (the next session; design only, no implementation)
+Selection/scoping resolved (above) via worked examples on the real corpus;
+settled outcomes folded in; D0–D6 + DX fully specified; owner ratified.
 
-Settle the remaining design and turn this skeleton into a fully-specified,
-owner-ratified plan. **Done when ALL hold:**
+### Goal 2 — Implement the plan
 
-1. The one genuinely-open design question — the **selection / scoping strategy**
-   (which nodes/edges belong; and the open sub-doubt: is that one axis or two —
-   relevance vs per-hop disclosure depth) — is resolved to a written,
-   owner-ratified definition of "intelligently scoped, complete-within-itself
-   subgraph", via worked examples on the real corpus
-   (`packages/sdks/graph-corpus-sdk/src/eef-strands/eef-toolkit.ts`, 30 strands).
-2. The outcomes already settled this session are folded in: **encoding —
-   `structuredContent`-only** (validated; foundation principle 8); **scope
-   boundary — agent-facing tool, no UI/widget** (foundation §9).
-3. D0–D6 + DX are upgraded from skeleton to fully specified — each with concrete
-   (a) measurable acceptance, (b) what it consumes, (c) how its gate breaks if
-   the predecessor drifted.
-4. The owner ratifies the fixed plan.
+Execute the deliverables. **Done when D0–D6 + DX each pass their measurable
+gate** (below). The self-correcting chain TERMINATES at D6. Every "follow-on"
+folds into a deliverable's gate, is explicitly closed, or is homed in the
+enhancements plan — never left as ambient future sessions. D6's output names the
+*next* value-work as a fresh owner decision, not a continuation of this arc.
 
-This completes the design content that D1 (below) represents.
+## Planning method — self-correcting deliverables (foundation §5)
 
-**Anti-drift bound:** Goal 1 is ONE design-settling session. If the worked
-examples reveal the selection question needs more, raise it as a bounded
-escalation to the owner — do NOT silently spawn a third design session.
-
-### Goal 2 — Implement the plan (after Goal 1)
-
-Execute the deliverables. **Done when D0–D6 + DX each pass their measurable gate**
-(defined per-deliverable below).
-
-**Anti-drift bound:** the self-correcting chain TERMINATES at D6. Every
-"follow-on" must be folded into a deliverable's gate, explicitly closed, or
-parked with an owner-acknowledged trigger — never left as ambient future
-sessions. D6's output identifies the *next* value-work, which is a fresh owner
-decision, not a continuation of this arc.
-
-## Planning method — self-correcting deliverables (firm; foundation §5)
-
-Deliverables are sequenced by **consumption**: D(n+1) builds on / exercises
-D(n), so a drifted, stubbed, or sliced D(n) makes D(n+1)'s measurable gate
+Deliverables are sequenced by **consumption**: `D(n+1)` builds on / exercises
+`D(n)`, so a drifted, stubbed, or sliced `D(n)` makes `D(n+1)`'s measurable gate
 **fail**. For each deliverable: **(a)** measurable acceptance, **(b)** what it
-consumes, **(c)** how its gate breaks if the predecessor drifted. If (c) cannot
-be stated, the link is not self-correcting and the plan has drifted — fix the
-plan, not the gate. This plan is the first instance of this methodology;
-graduate the methodology *from* it (D5).
+consumes, **(c)** how its gate breaks if the predecessor drifted. This plan is
+the first instance of the methodology; graduate it *from* this plan at D5.
 
 ---
 
-## D0 — Merge-safety (precondition; owner-directed first next-session deliverable)
+## D0 — Merge-safety (precondition)
 
-- **Outcome:** PR #122 (`feat/graph-foundations`) merged to `main`, with all
-  user-facing EEF surfaces (the `eef-explore-evidence-for-context` tool AND the
-  `eef-evidence-grounded-lesson-plan` prompt) behind `OAK_CURRICULUM_MCP_EEF_ENABLED`,
-  default OFF. The wrong-shaped tool is quarantined behind the flag pending
-  rebuild; no live orphan-prompt.
-- **(a) Measurable:** PR merged; CI green; a test/inspection proves that with the
-  flag OFF neither EEF surface is served, and with it ON both are (co-gating
-  holds).
+Land the sound foundation on `main` with the wrong-shaped tool quarantined.
+
+- **Outcome:** PR #122 (`feat/graph-foundations`) merged to `main`, with both
+  user-facing EEF surfaces (`eef-explore-evidence-for-context` tool AND
+  `eef-evidence-grounded-lesson-plan` prompt) co-gated behind
+  `OAK_CURRICULUM_MCP_EEF_ENABLED`, default OFF. No live orphan-prompt.
+- **(a) Measurable:** PR merged; CI green; an integration test proves **flag OFF
+  → neither surface registered**, **flag ON → both**. (PR #122 is `MERGEABLE`
+  but `mergeStateStatus: BLOCKED` on required review/checks — D0 clears those,
+  it does not bypass them.)
 - **(b) Consumes:** the current branch.
-- **(c) Self-correction:** verify-don't-trust — increment E (`9554ffbc`) likely
-  already co-gated both; the gate FAILS if that co-gating is incomplete or the
-  PR is not actually mergeable. (Standalone precondition; the rebuild chain
-  begins at D1.)
+- **(c) Self-correction:** verify-don't-trust — co-gating is *already* present
+  (`apps/oak-curriculum-mcp-streamable-http/src/handlers.ts:168`;
+  `.../register-prompts.ts:123`; default OFF at `.../env.ts:48`). The gate FAILS
+  if co-gating is incomplete, the proving test is absent, or the PR is not
+  actually mergeable. Standalone precondition; the rebuild chain begins at D1.
 
-## D1 — Restate the end-goal + define the graph-tool contract (DESIGN; resolves the open questions)
+## D1 — Author the graph-tool contract (ADR)
 
-- **Outcome:** an owner-ratified written definition of what we are building.
-- **(a) Measurable:** a document (likely a PDR / ADR + an `oak-plan`-conformant
-  spec) that states: the **graph-tool category** and its invariants (inherits
-  base-tool constraints; `structuredContent` only; no context hint;
-  complete-within-itself subgraph payload; navigable links to connecting
-  subgraphs; budget as design signal not cap); a precise definition of
-  **"complete within itself"** and **"intelligently scoped subgraph"** (contiguous
-  or sparse; when a subset of node values is legitimate); and the **client
-  research findings** (what claude.ai — the desktop/web app, NOT Claude Code —
-  and ChatGPT.com actually read from MCP responses). Owner ratifies.
-- **(b) Consumes:** the foundation doc + fresh client research.
-- **(c) Self-correction:** this is the spec D2–D4 build to; if it is vague, D2's
-  "build to the contract" gate cannot be met cleanly — the vagueness surfaces at
-  D2 immediately.
-- **GAPS (foundation §10):** the **client research is RESOLVED** (2026-05-28 —
-  `structuredContent`-only; foundation principle 8 + §10). The remaining open
-  content resolved HERE is the **selection / scoping strategy** ("intelligently
-  scoped, complete-within-itself") and the graph-tool category invariants. This
-  is Goal 1 above — where we stop not-knowing.
+Crystallise this session's ratified design into the permanent contract D2–D4
+build to (plans are ephemeral; ADRs are permanent).
+
+- **(a) Measurable:** an ADR states the **graph-tool category** invariants —
+  `structuredContent` only; no context hint; **full-node, membership-scoped,
+  complete-within-itself** subgraph; integrity floor; navigable frontier via the
+  query surface; **budget is a design signal, never a runtime cap**; **no
+  list-ops** (no slice / cap / field-mask-for-budget / rank-and-cut) — plus the
+  EEF selection/scoping definition, **precise enough that D3's worked-example
+  acceptance tests (contexts A/B/C) are derivable from it**. Owner ratifies.
+- **(b) Consumes:** this plan's resolved design + the foundation.
+- **(c) Self-correction:** D1 is what D2/D3 build to. It is the **relatively
+  softest link** — a vague ADR (prose) will not mechanically fail a code gate
+  the way a stubbed op does. Mitigation: D1 is not "done" until the contract can
+  *generate* D3's worked-example test assertions; residual vagueness then
+  surfaces at D3 as acceptance that cannot be specified.
 
 ## D2 — Build the graph query surface (no stubs)
 
-- **Outcome:** the real graph query operations exist over the real corpus.
-- **(a) Measurable:** `enumerateNodes(filter, projection, page)`, `findByTag`,
-  `neighbours`, `getNode` (and corpus `rank`/`explain` if D1 requires them) are
-  BUILT, returning real results, with integration tests on real data. The soft
-  `Result.err(NotImplementedYet)` stubs are removed — built, or throwing (honest).
+Un-stub the GraphView ops so the surface the foundation says was *never built*
+exists over the real corpus.
+
+- **(a) Measurable:** `enumerateNodes(filter)`, `findByTag`, `neighbours`,
+  `getNode`, `summary` are **built** (joining `subgraph` + `manifest`, already
+  live), return real results, with integration tests on the 30-strand corpus.
+  **Selection relocates into `enumerateNodes(filter)`** (foundation §1: the
+  hand-rolled selection *was* `enumerateNodes`) — the `selectEefSeedIds` matching
+  logic becomes a `NodeFilter`. The five live `Result.err(NotImplementedYet)`
+  stubs in `graph-view.ts:171–196` are gone (built). The **type-only**
+  `EvidenceCorpus.rank/explain/compare` interface + `RankError`/`CompareError`
+  aliases (`types.ts`; no runtime implementor) are **removed**; their ideas land
+  in the enhancements plan. **Reconcile the `gate-1a/1b`/`Inc.3` docstrings in
+  every source file D2 rewrites.**
 - **(b) Consumes:** D1's contract.
-- **(c) Self-correction:** D3 must be built on these ops; if any is stubbed/fake,
-  D3 cannot be built (the throw makes the hole loud). **This is the exact link
-  that was missing in F** — nothing consumed the stubbed ops with a measurable
-  gate, so the hole hid.
-- **Reuses (salvage):** loader, schema, data-derived vocabulary, BFS traversal
-  primitive; the context-matching *logic* relocates here as a filter/rank.
+- **(c) Self-correction:** **THE link missing in F** — D3 must build the complete
+  subgraph on these ops; if any is stubbed/missing the tool cannot assemble it
+  (the absence/throw is loud).
+- **Reuse (salvage):** `eef-graph-model.ts` (`buildGraphIndex`,
+  `traverseSubgraph`), `selection.ts` (→ filter), `loader.ts`, `freshness.ts`,
+  `strand-schema.ts`, `school-context.ts`.
 
-## D3 — Build the graph tool(s): deliver complete, navigable subgraphs
+## D3 — Build the graph-delivery tool (thin formatter)
 
-- **Outcome:** a graph tool returns an intelligently-scoped, complete-within-itself,
-  navigable subgraph for a real context.
-- **(a) Measurable:** for a real lesson context, the tool returns a subgraph that
-  is complete in the foundation §2.3 sense (relationships represented;
-  evidence+uncertainty intact; referenced-but-absent nodes reachable via links),
-  as `structuredContent` only, within budget **by design** (not by cap), on real
-  data. Citations/caveats are part of node completeness.
+Rebuild `eef-explore-evidence-for-context` as a thin formatter over D2.
+
+- **(a) Measurable:** for the worked-example contexts (A: KS2+reading → 14 full
+  strands; B: KS3+metacognition → 6; C: a no-focus broad case), the tool returns
+  the complete **full-node** subgraph + **all edges among members** + envelope
+  (corpus caveats + EEF attribution once), as **`structuredContent` only** (no
+  `content[]`, no context hint), on real data — with out-of-subgraph references
+  carrying enough id to be fetched via D2. `projectExploreNode` (field-mask,
+  `.../projection.ts`) and `capForBudget` (cap, `.../response-budget.ts`) are
+  **removed**. The tool holds **no scoping brain** beyond calling
+  `enumerateNodes(filter)` then `subgraph`. **Reconcile the `gate-1a/1b`
+  docstrings in every tool file D3 rewrites.**
 - **(b) Consumes:** D2's query surface + D1's contract.
-- **(c) Self-correction:** if D2 drifted (incomplete query surface), the tool
-  cannot assemble a complete subgraph; if D1's contract was vague, the tool's
-  shape is wrong — both surface here.
-- **GAP:** the exact scoping intelligence (how the region/sparsity/links are
-  chosen) is open until D1.
+- **(c) Self-correction:** if a D2 op is missing/stubbed → cannot assemble
+  (loud); if D1's contract was vague → wrong shape surfaces here.
 
 ## D4 — Prove an agent can consume and traverse
 
-- **Outcome:** the navigation loop works end to end.
-- **(a) Measurable:** a real MCP-client round-trip where an agent receives a
-  subgraph and successfully requests a **connecting** subgraph via the navigable
-  links (progressive disclosure by navigation, not field-masking); ≥1 telemetry
-  span.
+The navigation loop works end to end.
+
+- **(a) Measurable:** a real MCP-client round-trip where the agent receives a
+  subgraph, then follows a `related_strand` reference pointing **outside** the
+  returned subgraph by calling `getNode`/`subgraph` and receives the connecting
+  node/subgraph (progressive disclosure **by navigation**, not field-mask); ≥1
+  telemetry span recorded.
 - **(b) Consumes:** D3.
-- **(c) Self-correction:** if D3's subgraph was not actually navigable (links
-  missing/broken/incomplete), D4 fails — exposing D3 drift.
-- **GAP:** which client(s) we prove against depends on D1's research.
+- **(c) Self-correction:** if D3's subgraph did not expose navigable
+  out-of-subgraph references (missing ids, broken edges), D4 fails — exposing
+  D3/D2 drift.
 
-## D5 — 'Working with graphs' skills + supporting docs; graduate the methodology (owner-directed)
+## D5 — 'Working with graphs' doctrine + graduate the methodology
 
-- **Outcome:** initial reusable doctrine, grounded in what D1–D4 actually built.
-- **(a) Measurable:** initial 'working with graphs' skill(s) + supporting
-  documentation authored (graph≠list; the list-ops that must never touch a
-  graph; completeness-as-integrity; contiguous vs sparse subgraphs; navigable
-  links; graph tools as a category; the soft-stub failure mode) — extracted from
-  the real built tool/contract, not abstract. ALSO graduate the
-  self-correcting-deliverables planning methodology (foundation §5) and address
-  the Definition-of-Delivery refinement question (foundation §6).
-- **(b) Consumes:** D1–D4 (the real instances + lived doctrine).
-- **(c) Self-correction:** if the skills cannot be grounded in a real built
-  tool/contract, that signals D1–D4 did not establish the doctrine concretely.
+- **(a) Measurable:** initial 'working with graphs' skill(s) authored, grounded
+  in the real built tool — graph≠list; the list-ops that must never touch a
+  graph (slice / cap / field-mask-for-budget / **rank-and-cut**); completeness =
+  integrity + traceability; **full-node delivery + navigable frontier** (and
+  *why* graded disclosure was considered and not needed for a corpus under the
+  ceiling); contiguous vs sparse subgraphs; the soft-stub failure mode. ALSO
+  graduate the **self-correcting-deliverables** methodology (foundation §5) and
+  address the **Definition-of-Delivery instrument-deliverable** refinement
+  (foundation §6).
+- **(b) Consumes:** D1–D4 (real instances + lived doctrine).
+- **(c) Self-correction:** if the doctrine cannot be grounded in the real built
+  tool/contract, that signals D1–D4 did not establish it concretely.
 
 ## D6 — Use the instrument: explore the value path
 
-- **Outcome:** with graph-delivery tools in hand, explore what additional tools
-  or other things best help deliver value to teachers (the actual discovery
-  purpose) and identify the next value-delivery work.
-- **(a) Measurable:** documented findings from exercising the instrument that
-  identify the next concrete value-delivery step (possibly: a prose-delivery
-  tool, additional corpora, ranking — unknown yet, that is the point).
+With graph-delivery tools in hand, explore what best helps teachers and identify
+the next value-work.
+
+- **(a) Measurable:** documented findings from exercising the instrument; the
+  enhancements plan is populated with discovered candidates (rank/explain/compare,
+  relevance-ordering, whether `focus` should be required, additional corpora,
+  cross-corpus, prose-delivery — each tagged build-now or add-to-plan per owner
+  decision); the next concrete value step is named (a fresh owner decision, the
+  arc's terminus — not a continuation).
 - **(b) Consumes:** D3/D4 (the working instrument).
 - **(c) Self-correction:** if agents cannot meaningfully work with the delivered
   graphs, that surfaces here as "exploration not actually enabled".
 
-## DX — Estate-wide reference reconciliation (cross-cutting; do NOT rush as a sweep)
+## DX — Estate-wide reference reconciliation (after D1; not a pre-D1 sweep)
 
-- **Outcome:** the discarded gate-1a/1b framing and the archived EEF plans no
-  longer mislead any LIVE surface.
-- **(a) Measurable:** live references reconciled to the new foundation/plan
-  across the plan estate — at least `high-level-plan.md`,
-  `graph-portfolio-index.md`, the `connecting-oak-resources/knowledge-graph-integration/`
-  plan area (which also encodes gate-1a/1b), the relevant thread next-session
-  records, and `repo-continuity.md` (Nebulous-owned — coordinate, do not edit
-  unilaterally).
-- **(b) Consumes:** D1 (you cannot reconcile until you know what to reconcile TO).
+- **(a) Measurable:** live `gate-1a/1b` references reconciled to the new framing
+  across the ~30 live surfaces the inventory found — highest density:
+  `eef.next-session.md` (~34), `graph-portfolio-index.md` (~10),
+  `oak-misconceptions-eef-cross-corpus-surface.plan.md` (~12),
+  `graph-stack.plan.md` (~6), `graph-query-layer.plan.md` (~5),
+  `high-level-plan.md`, the `knowledge-graph-integration/` plan area,
+  `repo-continuity.md` (Nebulous-owned — coordinate, do not edit unilaterally).
+  **Plus the SDK *source* docstrings not rewritten by D2/D3** — ~16 files under
+  `graph-corpus-sdk/src/eef-strands/` and
+  `oak-curriculum-sdk/src/mcp/evidence-corpus/` carry stale `gate-1a/1b`/`Inc.3`
+  prose (e.g. `eef-toolkit.ts`, `school-context.ts`, `loader.ts`,
+  `strand-schema.ts`, `freshness.ts`, `eef-evidence-guidance.ts`) that the
+  `.agent/`-estate inventory missed. Archived plans under `eef/archive/` are left
+  alone.
+- **(b) Consumes:** D1 (cannot reconcile until you know what to reconcile TO).
 - **(c) Self-correction:** stale references surfacing during D2–D6 indicate
   incomplete reconciliation.
-- **NOTE:** the damaging concepts are woven across ~30 surfaces; this is real
-  realignment work, sequenced AFTER D1, never a hasty pre-D1 sweep.
 
 ---
 
-## Open questions (consolidated; foundation §10 is canonical)
+## Verification
 
-Resolved at D1: graph-tool invariants; "intelligently scoped" / "complete within
-itself"; the client research (claude.ai + ChatGPT.com read behaviour); the
-restated end-goal; how we measure "exploration enabled". Held open until then.
+**Goal 1 (this session) — done when ALL hold:**
 
-## How to use this skeleton
+- The selection/scoping strategy is resolved to a written, owner-ratified
+  definition of "intelligently scoped, complete-within-itself subgraph"
+  (full-node membership), grounded in the worked examples. ✓
+- Settled outcomes folded in (encoding = `structuredContent`-only; scope =
+  agent-facing, no UI; capability boundary = graph delivery; analytics → new
+  plan). ✓
+- D0–D6 + DX upgraded skeleton → fully specified, each with concrete
+  (a)/(b)/(c). ✓
+- Owner ratifies. ✓ (2026-05-28)
 
-D0 is the immediate next-session deliverable. D1 is the design/research gate that
-turns this skeleton into a fully specified plan — it is where the open content
-firms. Re-ratify the spine at D1; it is a hypothesis, not a fixed sequence.
+**Goal 2 (implementation)** — per-deliverable: each `(a)` is the measurable
+gate, and the chain is self-correcting (a drifted `D(n)` breaks `D(n+1)`'s gate,
+strongest at D2→D3→D4).

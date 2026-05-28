@@ -8,6 +8,32 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## Session: 2026-05-28 (later) — escape-hatch process re-enacts F (Woodland Swaying Pollen)
+
+### Correction absorbed (retrospective metacognition)
+
+- **Owner caught two moves in one planning session**: (1) I posed a *forced*
+  conclusion (full nodes — my own worked examples showed graded disclosure isn't
+  a helpful lever, whole corpus < ceiling) as a balanced A/B menu instead of
+  stating the verdict; (2) I re-imported deferral ("gate-1b later", "D6-gated
+  fast-follow", "consolidate-at-third-consumer defers it") when the explicit goal
+  was to *remove* the 1a/1b deferral framing — the owner had made ZERO deferral
+  decisions.
+- **The pattern (the durable bit)**: both — plus a near-miss "rank the broad
+  result down to N" (sort-plus-slice, a list-op) — share one root: **F's
+  *process***. F shipped stubs + lateral workarounds + the gate-split, all ways
+  to dodge the complete build. I had internalised the foundation's *content*
+  (graph≠list, no stubs) while still running F's *process* (dodge the complete
+  commitment via an escape hatch). Knowing the anti-pattern did not immunise me
+  from re-enacting its shape.
+- **Behaviour change**: the tell is **the reach for an exit** — "defer", "let the
+  owner pick", "rank it down" — not the vocabulary. When I reach for one, treat
+  it as a flag that a complete commitment is available and I'm flinching. Check,
+  then make it. Deferral is an owner decision, never my silent default; a forced
+  conclusion is stated, not offered as a menu.
+- **Source plane**: `doctrine` (agent practice). Also landed in the graph-tooling
+  foundation §9 as a named anti-pattern.
+
 ## Session: 2026-05-28 — napkin rotation (Sylvan Whispering Fern)
 
 Rotated the 2026-05-27/28 napkin (was HARD: 408 lines / 19558 chars) during a
