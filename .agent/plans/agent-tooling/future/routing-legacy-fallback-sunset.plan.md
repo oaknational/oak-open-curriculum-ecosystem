@@ -157,8 +157,11 @@ starting point for that pass).
   scaffold's sunset to completion, beyond the principle statements.
 
 Whether the wider reground is one new plan or a refactor of the existing
-cluster below is itself one of the unknowns — the consolidation pass owns
-that decision.
+cluster below is itself one of the unknowns. These three open problems now
+have a home:
+[`collaboration-substrate-coordination-rightsizing.plan.md`](collaboration-substrate-coordination-rightsizing.plan.md),
+a first-principles exploration brief whose M4 resolves the "one new plan vs
+cluster refactor" question via a concrete supersession list.
 
 ## Related plans (cross-links for the consolidation pass)
 
