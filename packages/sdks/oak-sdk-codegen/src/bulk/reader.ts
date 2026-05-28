@@ -18,8 +18,8 @@
  * ```
 
  */
-import { readdir, readFile } from 'fs/promises';
-import { join } from 'path';
+import { readdir, readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
 import type { Logger } from '@oaknational/logger';
 import { bulkDownloadFileSchema, type BulkDownloadFile } from '../types/generated/bulk/index.js';
