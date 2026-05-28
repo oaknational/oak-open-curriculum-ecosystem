@@ -57,8 +57,10 @@ const STRANDS: readonly EefStrand[] = [
   makeStrand('s5'),
 ];
 
+const DEFAULT_INPUT: EefStrandsGraphViewInput = { strands: STRANDS, meta: META };
+
 function build(
-  input: EefStrandsGraphViewInput = { strands: STRANDS, meta: META },
+  input: EefStrandsGraphViewInput = DEFAULT_INPUT,
 ): GraphView<EefStrand, EefStrandEdgeType> {
   const result = EefStrandsGraphView.create(input);
   if (!result.ok) {
