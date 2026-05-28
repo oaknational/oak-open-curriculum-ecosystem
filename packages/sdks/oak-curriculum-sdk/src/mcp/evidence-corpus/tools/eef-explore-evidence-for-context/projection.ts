@@ -71,6 +71,6 @@ export function projectExploreNode(strand: EefStrand): ProjectedEefStrand {
     },
     definition_short: strand.definition.short,
     tags: strand.tags,
-    ...(priorities !== undefined ? { most_relevant_priorities: priorities } : {}),
+    ...(priorities === undefined ? {} : { most_relevant_priorities: priorities }),
   };
 }
