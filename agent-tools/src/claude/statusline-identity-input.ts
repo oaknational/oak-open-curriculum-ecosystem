@@ -42,7 +42,7 @@ export type StatuslinePlan =
  * SonarQube does not confuse Zod's `.catch()` with `Promise.catch()`.
  */
 function catchUndefined<T extends z.ZodTypeAny>(schema: T): z.ZodCatch<T> {
-  return schema.catch(undefined as never);
+  return schema.catch(undefined);
 }
 
 /**
