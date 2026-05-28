@@ -26,4 +26,13 @@ fitness_content_role: drainable-buffer
 - **Owning artefact / discussion home**: PR #121 top section (Starless flagged
   for owner discussion). Does not block the current cycle — PR #121 is
   mergeable as whole-graph.
-- **Status**: open — owner discussion pending.
+- **Status**: withdrawn 2026-05-28 (Sylvan Whispering Fern) — framing superseded.
+- **Disposition (2026-05-28)**: the gate-1a/1b split and the
+  `eef-explore-evidence-for-context` whole-graph tool this question assumes were
+  diagnosed as the wrong foundation and discarded; the EEF work was rebuilt from
+  foundations. The underlying substance — the selection / scoping strategy for a
+  graph-shaped tool — is preserved and is now the central open design question
+  (GOAL 1) of the rebuild, owned by
+  `plans/sector-engagement/eef/current/graph-tooling-rebuild-foundation-2026-05-28.md`
+  and its plan. No substance lost; this entry is retired to avoid a stale second
+  home in dead gate-1a/1b vocabulary.

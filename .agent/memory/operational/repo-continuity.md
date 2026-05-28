@@ -303,6 +303,21 @@ lives in thread records, curator reports, completed plans, and prior continuity
 archives. This file should stay an operational index and should not regain
 per-session closeout prose.
 
+**handoff gate (2026-05-28)**: Sylvan Whispering Fern ran
+`/oak-consolidate-until-done` (dedicated-knowledge-curation). strict-hard GREEN
+(was 1 HARD: `napkin.md`); napkin rotated 408→36 lines (archived verbatim), 4
+lessons graduated to `distilled.md`; open-questions Q-001 withdrawn (gate-1a/1b
+framing superseded by the graph rebuild); pending-graduations and the 2765-event
+comms corpus confirmed owner-gated (preserved by design). Ledger:
+[`curator-passes/2026-05-28-sylvan-whispering-fern.md`](curator-passes/2026-05-28-sylvan-whispering-fern.md).
+The working tree carries the curation bundle, the 2-file PDR-082→086 renumber
+(D4, owner-aware), and these handoff edits — ALL INTENDED; do not classify as
+orphan. The stale `.git/index.lock` has since cleared and Cursor staged the
+curation + renumber (7 files) externally; the 2 handoff edits (this entry + the
+napkin session note) remain unstaged. Commits OWNER-HELD by direction — land as
+two commits (A: renumber, message validated; B: curation) after staging the
+handoff edits.
+
 **handoff gate (2026-05-28)**: Thermal Spiralling Airstream session-handoff —
 Cursor statusline Lane B complete (Cursor TS retired, agent-tools gates green);
 `routing-legacy-fallback-sunset` future plan created; comms-plan consolidation

@@ -52,6 +52,42 @@ Graduation candidates: graph-tool-category ADR/PDR, self-correcting-deliverables
 planning methodology (PDR + oak-plan), Definition-of-Delivery refinement
 (PDR-085), 'working with graphs' skill — all in `pending-graduations.md`.
 
+## 2026-05-28 — a `tail -F | grep` watcher re-emits its whole history on rewrite
+
+A raw `tail -n 0 -F <file> | grep` over an append-only coordination file
+re-emits *every* matched historical line whenever the file is rewritten — and an
+Edit-tool append rewrites the file, so your own append fires a false "new" batch.
+Cure: a dedup poll that diffs the current matched-line set against a baseline and
+filters your own prefix, emitting only genuinely new lines. Two instances
+(2026-05-27, 2026-05-28). Distinct from `use-monitor-for-event-driven-wake`,
+which is about Monitor vs Bash-background, not this re-emit.
+
+## 2026-05-27 — read git merge/divergence risk from content, not raw name-status
+
+Never predict merge risk from a raw `HEAD..origin` name-status diff: it counts
+branch-local additions as "deletes from the other side" and overstates the
+conflict set. Make the local bundle durable first, then let the merge algorithm
+prove the real conflicts. A rebase-without-force-push reads as "ahead N /
+behind M+1" where the +1 is a dropped merge commit; confirm it is benign with
+`git diff HEAD origin/<branch>` (empty tree = identical content; the divergence
+is a pure structural SHA rewrite).
+
+## 2026-05-27 — generated adapters are never hand-written (owner-corrected)
+
+Platform skill/agent adapter files (`.claude/`, `.cursor/`, `.codex/`) are
+generated from the `.agent/` canonical by the codegen tools. If generation fails
+(e.g. a sandbox permission error), fix the generator invocation/permissions and
+rerun it — never hand-create adapter stubs. Stubs mask the toolchain fault and
+drift from canonical. This is the action corollary of "the generator is the
+source of truth".
+
+## 2026-05-27 — treat session-opener fitness as stale until you rerun it
+
+The fitness report read at session open is stale: a parallel slice, or a later
+edit this session, may have pushed a file over a limit since. Rerun the validator
+before trusting it, and cure a freshly-HARD file by narrow structural routing of
+its substance to a durable home — not by score-chasing trims.
+
 ## 2026-05-27 — collaboration state is source, not storage
 
 Collaboration state files may be temporarily preserved for the bounded

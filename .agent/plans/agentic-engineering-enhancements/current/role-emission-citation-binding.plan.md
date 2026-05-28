@@ -1,6 +1,6 @@
 ---
 name: "Role-Emission Citation-Binding (substrate cure for the ticking-clock failure mode)"
-overview: "Convert PDR-074 S1 from a self-discipline checklist question into a substrate-enforced citation-binding contract via a new PDR-082 (portable; Director + Heartbeat-emitter required scope v1; other roles Reserved) + paired ADR-188 (repo-bound phenotype; lands at Proposed), with a falsifiable freshness audit from comms alone."
+overview: "Convert PDR-074 S1 from a self-discipline checklist question into a substrate-enforced citation-binding contract via a new PDR-086 (portable; Director + Heartbeat-emitter required scope v1; other roles Reserved) + paired ADR-188 (repo-bound phenotype; lands at Proposed), with a falsifiable freshness audit from comms alone."
 todos:
   - id: phase-0-foundation
     content: >
@@ -9,19 +9,19 @@ todos:
     status: pending
   - id: cycle-1-1-pdr-082-draft
     content: >
-      Cycle 1.1: Draft PDR-082 (emission citation-binding contract) body — portable doctrine,
+      Cycle 1.1: Draft PDR-086 (emission citation-binding contract) body — portable doctrine,
       multi-role scope, falsifiability criterion, alternatives considered. Doctrine-only;
       no schema change.
     status: pending
   - id: cycle-1-2-pdr-082-reviewer-absorption
     content: >
-      Cycle 1.2: Reviewer absorption on PDR-082 draft — docs-adr-expert + assumptions-expert +
+      Cycle 1.2: Reviewer absorption on PDR-086 draft — docs-adr-expert + assumptions-expert +
       architecture-expert-betty + architecture-expert-barney (simplification challenge).
       Absorb findings into draft; record disposition ledger.
     status: pending
   - id: cycle-1-3-pdr-082-land
     content: >
-      Cycle 1.3: Land PDR-082 at Candidate status (one commit: PDR body + practice-index.md
+      Cycle 1.3: Land PDR-086 at Candidate status (one commit: PDR body + practice-index.md
       entry + README.md entry).
     status: pending
   - id: cycle-2-1-adr-188-draft
@@ -45,13 +45,13 @@ todos:
   - id: task-3-1-pattern-memory
     content: >
       Task 3.1: Author .agent/memory/active/patterns/ground-truth-dependency-of-role-emission.md
-      with cross-links to PDR-082, ADR-188, validators-must-recompute-not-just-record rule,
+      with cross-links to PDR-086, ADR-188, validators-must-recompute-not-just-record rule,
       and substrate-pointer-read-as-current-state pattern.
     status: pending
   - id: task-3-2-pending-graduations
     content: >
       Task 3.2: Register a pending-graduations entry consolidating the heartbeat-content-drift
-      candidate (Misty napkin 2026-05-25, 6+ worked instances) with the new PDR-082 cure shape,
+      candidate (Misty napkin 2026-05-25, 6+ worked instances) with the new PDR-086 cure shape,
       enabling formal graduation when the schema substrate lands.
     status: pending
   - id: phase-4-deferred-substrate-implementation
@@ -63,16 +63,24 @@ todos:
   - id: phase-5-deferred-skill-and-directive-amendments
     content: >
       Phase 5 (deferred): SKILL start-right-team §3 + agent-collaboration.md amendments to point
-      at PDR-082 and the cited_event_id binding. Deferred until PDR-082 graduates from Candidate
+      at PDR-086 and the cited_event_id binding. Deferred until PDR-086 graduates from Candidate
       to Proposed via worked-instance accumulation.
     status: deferred
 ---
 
 # Role-Emission Citation-Binding (substrate cure for the ticking-clock failure mode)
 
-**Last Updated**: 2026-05-25 (post-reviewer-absorption)
+**Last Updated**: 2026-05-28 (PDR number renumbered 082→086 — see note below)
 **Status**: 🟡 PLANNING (consensus absorbed; ready for execution start on owner direction)
-**Scope**: Convert PDR-074 S1 from self-discipline to substrate-enforced citation-binding via PDR-082 (portable contract; Director + Heartbeat-emitter required scope v1) + paired ADR-188 (repo-bound phenotype; Proposed status).
+
+> **Renumber note (2026-05-28)**: this plan originally reserved PDR-082 for
+> the emission-citation-binding contract, but PDR-082 was concurrently
+> assigned to the n=2 collaboration mode
+> (`PDR-082-n2-collaboration-mode.md`, since ratified). To resolve the
+> number collision, this plan's not-yet-authored PDR is renumbered to
+> **PDR-086** (next free slot after 080–085). No PDR file had been
+> authored, so the renumber is a reference-only change.
+**Scope**: Convert PDR-074 S1 from self-discipline to substrate-enforced citation-binding via PDR-086 (portable contract; Director + Heartbeat-emitter required scope v1) + paired ADR-188 (repo-bound phenotype; Proposed status).
 **Authoring session**: Briny Fathoming Dock (`95a27b`) / claude / claude-opus-4-7
 **Source reflection**: `/Users/jim/.claude/plans/your-role-is-fundamentally-playful-russell.md` (session-local plan; the reflection that triggered this repo-plan promotion).
 **Pre-execution reviewer pass**: 6 reviewers (assumptions, docs-adr, betty, barney, fred, wilma) — all PASS-WITH-CONDITIONS; consensus absorbed into plan body per §"Reviewer Absorption Log" below.
@@ -167,15 +175,15 @@ Quality gates for this plan are doctrine-layer, not product-code:
 
 ```bash
 # 1. Markdown lint clean
-pnpm markdownlint-check:root .agent/practice-core/decision-records/PDR-082-emission-citation-binding-contract.md
+pnpm markdownlint-check:root .agent/practice-core/decision-records/PDR-086-emission-citation-binding-contract.md
 # Expected: exit 0
 
 pnpm markdownlint-check:root docs/architecture/architectural-decisions/188-emission-citation-binding-substrate.md
 # Expected: exit 0
 
 # 2. Cross-link validity (rg-based)
-rg -n "PDR-082" .agent/practice-core/ docs/architecture/
-# Expected: hits in PDR-082 self-reference, ADR-188 §Related, practice-index.md entry
+rg -n "PDR-086" .agent/practice-core/ docs/architecture/
+# Expected: hits in PDR-086 self-reference, ADR-188 §Related, practice-index.md entry
 
 # 3. Fitness check on touched files
 pnpm agent-tools:fitness-validator --strict-hard
@@ -230,7 +238,7 @@ emission, observable by any peer.
 **This exemplifies the First Question**: "Could it be simpler?"
 
 Answer: YES — the simplest defensible shape is a single optional
-schema field (`cited_event_id`) plus a doctrinal contract (PDR-082)
+schema field (`cited_event_id`) plus a doctrinal contract (PDR-086)
 specifying when the field is required. The substrate is one field;
 the doctrine is one PDR; the phenotype is one ADR. The generalisation
 to multi-role works through the same field with different
@@ -240,7 +248,7 @@ substrate-snapshot identifier conventions per role.
 
 Three artefacts in two layers:
 
-1. **Doctrine layer (portable PDR-082)** — names the
+1. **Doctrine layer (portable PDR-086)** — names the
    emission-citation-binding contract independent of any specific
    substrate phenotype. Specifies: every role-emission cites the
    substrate-snapshot it was authored against; peers may audit;
@@ -263,7 +271,7 @@ Three artefacts in two layers:
   amending Candidate doctrine before maturity is doctrinally
   questionable; (b) per PDR-079 (PDR-vs-ADR portability distinction),
   the portable contract belongs in a new PDR; substrate phenotype
-  belongs in an ADR. PDR-074 S1 can later cite PDR-082 as the
+  belongs in an ADR. PDR-074 S1 can later cite PDR-086 as the
   mechanical-enforcement substrate without losing its structural-property
   framing.
 - ❌ Schema implementation in this plan. The
@@ -271,7 +279,7 @@ Three artefacts in two layers:
   live team is actively writing to. Schema changes are a follow-on
   plan with explicit team coordination.
 - ❌ SKILL or directive amendments in this plan. Those graduate after
-  PDR-082 matures from Candidate to Proposed via worked-instance
+  PDR-086 matures from Candidate to Proposed via worked-instance
   accumulation (per the Candidate-PDR evolution route).
 - ✅ Doctrine + phenotype authoring + pattern memory + pending-graduations.
   Substrate phenotype-decision lands here; substrate
@@ -301,7 +309,7 @@ the absorbed direction changes again before Cycle 1.1 starts.
 assumptions F3 + barney F5 consensus on reviewer-count proportionality;
 6 dispatches across the two execution cycles instead of the original 8):
 
-- **Cycle 1.2 (PDR-082 absorption)**: `docs-adr-expert` (PDR quality
+- **Cycle 1.2 (PDR-086 absorption)**: `docs-adr-expert` (PDR quality
   and cross-link integrity), `assumptions-expert` (any residual overreach
   after the v1 narrowing absorbed), `architecture-expert-barney`
   (simplification re-check on the narrowed shape).
@@ -311,7 +319,7 @@ assumptions F3 + barney F5 consensus on reviewer-count proportionality;
   (failure-mode probe on the fully-drafted ADR-188 against the
   absorbed Migration discipline rules).
 
-**Post (after both PDR-082 + ADR-188 land)**:
+**Post (after both PDR-086 + ADR-188 land)**:
 
 - `docs-adr-expert` — final propagation check (README, index, related
   PDR/ADR §Related sections, CHANGELOG, practice-core/index.md).
@@ -354,7 +362,7 @@ Before the first non-planning edit:
 2. **Start-right check**: active-claims.json has zero entries; live
    team operating via comms/queue; cycles 9-15 of post-M1-attestation-tidy-up
    are in parallel execution.
-3. **Active areas registration**: open a claim on the PDR-082 +
+3. **Active areas registration**: open a claim on the PDR-086 +
    ADR-188 + plan file scope before authoring; close at session close.
 4. **Apply** `lifecycle-triggers.md` for each phase boundary.
 
@@ -364,23 +372,23 @@ Before the first non-planning edit:
 
 Before marking each phase complete:
 
-1. Update `.agent/practice-index.md` (PDR-082 entry; canonical
+1. Update `.agent/practice-index.md` (PDR-086 entry; canonical
    bridge per PDR-079).
 2. Update `docs/architecture/architectural-decisions/README.md`
    (ADR-188 entry).
 3. Update `.agent/practice-core/decision-records/README.md` if
-   PDR-082's classification requires it.
+   PDR-086's classification requires it.
 4. Verify (sample against recently-landed PDR-076a/b/077/078/079/080/081):
    - `.agent/practice-core/CHANGELOG.md` — confirm whether PDR
      landings have historically updated this file; if yes, add
-     PDR-082 entry (absorbs docs-adr propagation finding).
+     PDR-086 entry (absorbs docs-adr propagation finding).
    - `.agent/practice-core/index.md` — confirm whether new PDRs
-     require an entry; if yes, add PDR-082 entry.
-5. Cross-link PDR-082 ↔ ADR-188 ↔ PDR-074/075/078/080 ↔
+     require an entry; if yes, add PDR-086 entry.
+5. Cross-link PDR-086 ↔ ADR-188 ↔ PDR-074/075/078/080 ↔
    ADR-183/186 (PDR-080 added per docs-adr F4). PDR↔ADR refs
    route through the practice-index bridge per PDR-079
-   (PDR-082 cites ADR-188 by identifier; ADR-188 markdown-links
-   to PDR-082).
+   (PDR-086 cites ADR-188 by identifier; ADR-188 markdown-links
+   to PDR-086).
 6. Track deferred back-cites (PDR-074 §S1 + PDR-075 §Cadence +
    PDR-078 + PDR-080) in a single pending-graduations entry per
    docs-adr F4 absorption; the back-cites land in each PDR's next
@@ -487,9 +495,9 @@ structural cure is in flight.
 
 ---
 
-#### Task 0.2: Verify the doctrine-shape decision (new PDR-082 vs. PDR-074 amendment)
+#### Task 0.2: Verify the doctrine-shape decision (new PDR-086 vs. PDR-074 amendment)
 
-**Current Assumption**: a new PDR-082 is the correct shape, not a
+**Current Assumption**: a new PDR-086 is the correct shape, not a
 PDR-074 amendment, because (a) PDR-074 is Candidate and amending
 Candidate doctrine before maturity is questionable, and (b) PDR-079
 names the portability distinction PDR vs. ADR — the portable
@@ -508,7 +516,7 @@ repo-bound substrate phenotype is ADR-shaped.
 
 1. ✅ PDR-079 §Decision names PDR-shape = portable contract, ADR-shape = repo-bound phenotype.
 2. ✅ PDR-074 status reads "Candidate" as of read-time.
-3. ✅ A new PDR-082 can refer to PDR-074 §S1 by citation without restating S1's checklist substance.
+3. ✅ A new PDR-086 can refer to PDR-074 §S1 by citation without restating S1's checklist substance.
 
 **Deterministic Validation**:
 
@@ -529,14 +537,14 @@ rg -n "portable\|portability\|repo-bound" .agent/practice-core/decision-records/
 **Current Assumption**: the live team (Hushed Stalking Shade as
 Marshal; Misty Drifting Sail as Director; Eclipsed/Twilit/Wooded as
 implementers) is mid-cycle on post-M1-attestation-tidy-up cycles 9-15;
-new PDR-082 + ADR-188 files do not collide with their cycle scope; no
+new PDR-086 + ADR-188 files do not collide with their cycle scope; no
 shared substrate (schema, active-claims.json, pending-graduations.md)
 is touched in this plan.
 
 **Validation Required**:
 
 - Verify active-claims.json shows zero current claims that overlap
-  PDR-082 / ADR-188 / new plan-file paths.
+  PDR-086 / ADR-188 / new plan-file paths.
 - Verify the post-M1-attestation-tidy-up plan's cycles 9-15 do not
   touch the same PDR/ADR slots.
 - Verify the comms event stream shows no in-flight coordinator
@@ -544,8 +552,8 @@ is touched in this plan.
 
 **Acceptance Criteria**:
 
-1. ✅ `active-claims.json` shows zero active claims overlapping with `PDR-082-_` or `ADR-188-_` paths.
-2. ✅ The post-M1-attestation-tidy-up plan does not name PDR-082 or ADR-188 in its cycles.
+1. ✅ `active-claims.json` shows zero active claims overlapping with `PDR-086-_` or `ADR-188-_` paths.
+2. ✅ The post-M1-attestation-tidy-up plan does not name PDR-086 or ADR-188 in its cycles.
 3. ✅ No directed comms event from the team's Director addresses this plan or its scope.
 
 **Deterministic Validation**:
@@ -554,7 +562,7 @@ is touched in this plan.
 jq '.active_claims | length' .agent/state/collaboration/active-claims.json
 # Expected: 0 (or all non-overlapping)
 
-rg -n "PDR-082\|ADR-188" .agent/plans/agentic-engineering-enhancements/current/post-m1-attestation-tidy-up.plan.md
+rg -n "PDR-086\|ADR-188" .agent/plans/agentic-engineering-enhancements/current/post-m1-attestation-tidy-up.plan.md
 # Expected: zero hits
 ```
 
@@ -563,17 +571,17 @@ to proceed.
 
 ---
 
-### Phase 1: Author PDR-082 — Emission Citation-Binding Contract (≤2 hours)
+### Phase 1: Author PDR-086 — Emission Citation-Binding Contract (≤2 hours)
 
 **Foundation Check-In**: Re-read PDR-074 §C + §S1, PDR-075 §"What
 Must Be Emitted", PDR-079 §Decision, `agent-collaboration.md` Director
 section, `metacognition.md` §"Cure Shape — Structural, Not Doc-Patch".
 
-**Key Principle**: PDR-082 is doctrine-only; the substrate phenotype
-lives in ADR-188. PDR-082 must read losslessly without reference to
+**Key Principle**: PDR-086 is doctrine-only; the substrate phenotype
+lives in ADR-188. PDR-086 must read losslessly without reference to
 any specific event-schema field name.
 
-#### Cycle 1.1: Draft PDR-082 body
+#### Cycle 1.1: Draft PDR-086 body
 
 **Parallel-safety**: sequential (Cycle 1.1 → 1.2 → 1.3).
 
@@ -581,11 +589,11 @@ any specific event-schema field name.
 
 **File scope**:
 
-- `.agent/practice-core/decision-records/PDR-082-emission-citation-binding-contract.md` (new)
+- `.agent/practice-core/decision-records/PDR-086-emission-citation-binding-contract.md` (new)
 
 **Doctrine increment**:
 
-PDR-082 sections (canonical shape per PDR-079 §"PDR Body Shape"):
+PDR-086 sections (canonical shape per PDR-079 §"PDR Body Shape"):
 
 1. **Context** — the doctrine-by-analogy failure of PDR-074 S1 under
    load; the heartbeat-content-drift generalisation; the
@@ -613,7 +621,7 @@ PDR-082 sections (canonical shape per PDR-079 §"PDR Body Shape"):
      binding (in ADR-188).
 
    **Reserved** (convention TBD on worked-instance accumulation;
-   PDR-082 amendment trigger = ≥ 2 worked instances of the role's
+   PDR-086 amendment trigger = ≥ 2 worked instances of the role's
    degenerate-mode emission in a distinct session):
 
    - Marshal — abstract type: _queue-and-tree state composite_.
@@ -623,21 +631,21 @@ PDR-082 sections (canonical shape per PDR-079 §"PDR Body Shape"):
 
    The Reserved roles' abstract types are sketched as portable hints
    only; their concrete bindings and the requirement-or-not are
-   deferred to PDR-082 amendments triggered by their own worked
-   instances. PDR-082 v1 does NOT mandate citation for Reserved
+   deferred to PDR-086 amendments triggered by their own worked
+   instances. PDR-086 v1 does NOT mandate citation for Reserved
    roles' emissions.
 4. **Falsifiability criterion** — a role-emission with a citation
    older than the role's threshold, OR a role-emission without any
    citation where one is required, is the failure phenotype.
    Post-hoc audit is mechanical.
 5. **Composition with existing doctrine**:
-   - PDR-074 §S1 — PDR-082 makes S1 mechanically enforced; PDR-074
-     §S1 can later cite PDR-082 as the structural cure.
-   - PDR-075 — PDR-082's citation-binding requirement applies to
+   - PDR-074 §S1 — PDR-086 makes S1 mechanically enforced; PDR-074
+     §S1 can later cite PDR-086 as the structural cure.
+   - PDR-075 — PDR-086's citation-binding requirement applies to
      PDR-075's mandated emissions.
-   - PDR-078 — heartbeat emissions are one class under PDR-082.
+   - PDR-078 — heartbeat emissions are one class under PDR-086.
    - PDR-080 — coordination-event absorption is the consumer side;
-     PDR-082 is the producer side; they compose.
+     PDR-086 is the producer side; they compose.
    - PDR-079 — the portable contract lives in this PDR; the
      repo-bound phenotype lives in ADR-188.
 6. **Alternatives considered**:
@@ -664,11 +672,11 @@ PDR-082 sections (canonical shape per PDR-079 §"PDR Body Shape"):
 8. **Falsifiability** (Popper test): a future session in which
    Director emissions carry no `cited_event_id` field, AND in which
    peer agents do not surface the missing-citation as a defect, would
-   falsify PDR-082's enforcement claim.
+   falsify PDR-086's enforcement claim.
 
 **Acceptance Criteria**:
 
-1. ✅ PDR-082 body is ≤ 500 lines.
+1. ✅ PDR-086 body is ≤ 500 lines.
 2. ✅ All §Related cross-links point at extant PDRs/ADRs (no `[[broken]]`).
 3. ✅ §Falsifiability section names a specific, observable failure phenotype.
 4. ✅ §Alternatives considered names ≥4 alternatives with rejection rationale.
@@ -678,14 +686,14 @@ PDR-082 sections (canonical shape per PDR-079 §"PDR Body Shape"):
 **Deterministic Validation**:
 
 ```bash
-wc -l .agent/practice-core/decision-records/PDR-082-emission-citation-binding-contract.md
+wc -l .agent/practice-core/decision-records/PDR-086-emission-citation-binding-contract.md
 # Expected: ≤ 500
 
-pnpm markdownlint-check:root .agent/practice-core/decision-records/PDR-082-emission-citation-binding-contract.md
+pnpm markdownlint-check:root .agent/practice-core/decision-records/PDR-086-emission-citation-binding-contract.md
 # Expected: exit 0
 
 rg -n "PDR-074\|PDR-075\|PDR-078\|PDR-079\|PDR-080\|ADR-188" \
-  .agent/practice-core/decision-records/PDR-082-emission-citation-binding-contract.md
+  .agent/practice-core/decision-records/PDR-086-emission-citation-binding-contract.md
 # Expected: 6 reference categories present
 ```
 
@@ -694,25 +702,25 @@ validation passes.
 
 ---
 
-#### Cycle 1.2: Reviewer absorption on PDR-082 draft
+#### Cycle 1.2: Reviewer absorption on PDR-086 draft
 
 **Parallel-safety**: parallel reviewer dispatch in one message;
 absorption is sequential after all reviewers return.
 
-**Starting state**: PDR-082 draft exists (Cycle 1.1 complete).
+**Starting state**: PDR-086 draft exists (Cycle 1.1 complete).
 
 **File scope**:
 
-- `.agent/practice-core/decision-records/PDR-082-emission-citation-binding-contract.md` (edit per reviewer findings)
+- `.agent/practice-core/decision-records/PDR-086-emission-citation-binding-contract.md` (edit per reviewer findings)
 - Disposition ledger in the plan's §"Reviewer Absorption Log" (added to this plan body)
 
 **Reviewer dispatch — 3 reviewers per consensus narrowing** (parallel, Sonnet default):
 
 | Reviewer | Lens | Focused question |
 |---|---|---|
-| `docs-adr-expert` | PDR quality + cross-link integrity | Is PDR-082 v1 correctly composed against PDR-074/075/079/080/078? Are §Related cross-links bidirectional via practice-index? Is `Status: Candidate` justified? Are the abstract substrate-snapshot types (Director, Heartbeat) cleanly portable per PDR-079? |
-| `assumptions-expert` | residual overreach after v1 narrowing | Now that PDR-082 v1 is narrowed to Director + Heartbeat with the other roles Reserved, is any residual overreach present? Does the falsifiability criterion remain observable? |
-| `architecture-expert-barney` | simplification re-check on narrowed shape | With the multi-role overreach absorbed and the layer split sharpened, is the narrowed PDR-082 still simpler-than-not-doing-it, or has the absorption collapsed the simpler-shape margin? |
+| `docs-adr-expert` | PDR quality + cross-link integrity | Is PDR-086 v1 correctly composed against PDR-074/075/079/080/078? Are §Related cross-links bidirectional via practice-index? Is `Status: Candidate` justified? Are the abstract substrate-snapshot types (Director, Heartbeat) cleanly portable per PDR-079? |
+| `assumptions-expert` | residual overreach after v1 narrowing | Now that PDR-086 v1 is narrowed to Director + Heartbeat with the other roles Reserved, is any residual overreach present? Does the falsifiability criterion remain observable? |
+| `architecture-expert-barney` | simplification re-check on narrowed shape | With the multi-role overreach absorbed and the layer split sharpened, is the narrowed PDR-086 still simpler-than-not-doing-it, or has the absorption collapsed the simpler-shape margin? |
 
 **Absorption discipline**: record verdict + evidence + disposition
 per reviewer in §"Reviewer Absorption Log" (the per-cycle subsection).
@@ -723,7 +731,7 @@ are acknowledged in the log without edit.
 
 1. ✅ 3 reviewer transcripts captured.
 2. ✅ Reviewer absorption log records verdict + disposition per reviewer.
-3. ✅ Substantive findings are absorbed into PDR-082 body or explicitly recorded as "rejected with rationale".
+3. ✅ Substantive findings are absorbed into PDR-086 body or explicitly recorded as "rejected with rationale".
 4. ✅ Post-absorption draft re-passes Cycle 1.1's deterministic validation.
 
 **Deterministic Validation**:
@@ -734,7 +742,7 @@ rg -n "Reviewer Absorption Log" .agent/plans/agentic-engineering-enhancements/cu
 # Expected: hit on the log section
 
 # Draft still valid
-pnpm markdownlint-check:root .agent/practice-core/decision-records/PDR-082-emission-citation-binding-contract.md
+pnpm markdownlint-check:root .agent/practice-core/decision-records/PDR-086-emission-citation-binding-contract.md
 # Expected: exit 0
 ```
 
@@ -743,28 +751,28 @@ either absorbed or surfaced to owner for direction.
 
 ---
 
-#### Cycle 1.3: Land PDR-082 at Candidate status
+#### Cycle 1.3: Land PDR-086 at Candidate status
 
 **Parallel-safety**: sequential after Cycle 1.2.
 
-**Starting state**: post-absorption PDR-082 draft.
+**Starting state**: post-absorption PDR-086 draft.
 
 **File scope**:
 
-- `.agent/practice-core/decision-records/PDR-082-emission-citation-binding-contract.md`
+- `.agent/practice-core/decision-records/PDR-086-emission-citation-binding-contract.md`
 - `.agent/practice-index.md` (entry added)
 - `.agent/practice-core/decision-records/README.md` (entry added if README enumerates PDRs)
 
-**Doctrine increment**: one commit landing PDR-082 + index entries.
+**Doctrine increment**: one commit landing PDR-086 + index entries.
 
 **Acceptance Criteria**:
 
 1. ✅ Commit subject ≤ 100 chars, conventional-commits format.
-2. ✅ Commit body cites PDR-082 + reviewer absorption disposition.
+2. ✅ Commit body cites PDR-086 + reviewer absorption disposition.
 3. ✅ Commit lands cleanly through husky gate chain.
 4. ✅ `practice-index.md` entry present.
 5. ✅ `decision-records/README.md` entry present (if README enumerates).
-6. ✅ Cross-links from PDR-074 / PDR-075 / PDR-078 / PDR-080 to PDR-082
+6. ✅ Cross-links from PDR-074 / PDR-075 / PDR-078 / PDR-080 to PDR-086
    are queued for the next maturity cycle of each (NOT landed here;
    recorded as deferred to the relevant PDR's next amendment).
 
@@ -777,7 +785,7 @@ git log -1 --format="%s" | wc -c
 pnpm agent-tools:check-commit-message
 # Expected: exit 0
 
-rg -n "PDR-082" .agent/practice-index.md
+rg -n "PDR-086" .agent/practice-index.md
 # Expected: ≥ 1 hit
 ```
 
@@ -792,7 +800,7 @@ lands.
 pnpm check
 ```
 
-**Success Criteria**: gate chain green; PDR-082 in repo at Candidate
+**Success Criteria**: gate chain green; PDR-086 in repo at Candidate
 status; reviewer absorption log preserved in this plan body.
 
 ---
@@ -813,7 +821,7 @@ deferred for live-team coordination).
 
 **Parallel-safety**: sequential (Cycle 2.1 → 2.2 → 2.3).
 
-**Starting state**: PDR-082 lands at Candidate (Phase 1 complete).
+**Starting state**: PDR-086 lands at Candidate (Phase 1 complete).
 
 **File scope**:
 
@@ -823,12 +831,12 @@ deferred for live-team coordination).
 
 ADR-188 sections (post-reviewer-absorption shape):
 
-1. **Status** — `Proposed` (lands while paired PDR-082 is Candidate;
+1. **Status** — `Proposed` (lands while paired PDR-086 is Candidate;
    moves to Accepted on first worked-instance of implemented
    substrate per the consensus absorption from betty F4 + barney F4 +
    docs-adr F5; this differs from ADR-183/184/185/186 which all
    landed Accepted alongside their substrate landing).
-2. **Context** — PDR-082 names the portable contract; ADR-188 lands
+2. **Context** — PDR-086 names the portable contract; ADR-188 lands
    the repo-bound shape.
 3. **Decision** — extend `comms-event.schema.json` with an optional
    `cited_event_id` field on **all three** event kinds: `narrative`,
@@ -837,7 +845,7 @@ ADR-188 sections (post-reviewer-absorption shape):
    make heartbeat citation structurally unreachable). Watcher renders
    `[CITED:<event-id-prefix>]` schema-field token. **Concrete
    per-role substrate-snapshot identifier bindings** (the
-   repo-bound bindings; PDR-082 carries only the abstract types per
+   repo-bound bindings; PDR-086 carries only the abstract types per
    the PDR-079 layer split):
    - Director: most recent comms-event id the seat read forward to.
    - Heartbeat-emitter: `active-claims.json` revision identifier
@@ -884,7 +892,7 @@ ADR-188 sections (post-reviewer-absorption shape):
      the cited event's age exceeds the role's freshness threshold.
      Computation surface: watcher compares cited-event timestamp
      against now() and looks up the role's freshness threshold
-     (threshold values held in PDR-082 as abstract; concrete numeric
+     (threshold values held in PDR-086 as abstract; concrete numeric
      values in ADR-188 §"Freshness thresholds").
    - **Forbidden**: agents MUST NOT author `[STALE]` in event titles
      or bodies; it is a derived token only.
@@ -925,7 +933,7 @@ ADR-188 sections (post-reviewer-absorption shape):
 3. ✅ `Status: Proposed` (not Accepted).
 4. ✅ §Migration discipline names the migration-window exit criterion AND consumer-first pattern AND cited-event retention AND citation validity AND additionalProperties:false constraint AND migration-window closure signal.
 5. ✅ §Implementation status explicitly defers landing to the follow-on plan.
-6. ✅ Cross-references PDR-082 + ADR-183/184/185/186 present.
+6. ✅ Cross-references PDR-086 + ADR-183/184/185/186 present.
 7. ✅ §Decision item 3 specifies `narrative`, `directed`, AND `lifecycle` event kinds.
 8. ✅ §Watcher behaviour distinguishes schema-field render from consumer-derived audit token.
 9. ✅ §Decision item 6 (CLI surface) describes outcome shape, not specific flag name.
@@ -939,7 +947,7 @@ wc -l docs/architecture/architectural-decisions/188-emission-citation-binding-su
 pnpm markdownlint-check:root docs/architecture/architectural-decisions/188-emission-citation-binding-substrate.md
 # Expected: exit 0
 
-rg -n "PDR-082\|ADR-183\|ADR-184\|ADR-185\|ADR-186" \
+rg -n "PDR-086\|ADR-183\|ADR-184\|ADR-185\|ADR-186" \
   docs/architecture/architectural-decisions/188-emission-citation-binding-substrate.md
 # Expected: 5 reference categories present
 ```
@@ -964,7 +972,7 @@ rg -n "PDR-082\|ADR-183\|ADR-184\|ADR-185\|ADR-186" \
 | Reviewer | Lens | Focused question |
 |---|---|---|
 | `docs-adr-expert` | ADR quality + cluster placement | Is ADR-188 correctly placed in the comms-event substrate cluster (ADR-183/184/185/186 + 188)? Is the lifecycle-kind inclusion clean? Is the migration-window exit criterion observable? |
-| `architecture-expert-fred` | cluster compliance + migration discipline verification | Does the absorbed Migration discipline (consumer-first, cited-event retention, citation validity, additionalProperties:false constraint) match the ADR-186 precedent? Is the PDR-079 layer split correctly preserved (abstract types in PDR-082, concrete bindings in ADR-188)? |
+| `architecture-expert-fred` | cluster compliance + migration discipline verification | Does the absorbed Migration discipline (consumer-first, cited-event retention, citation validity, additionalProperties:false constraint) match the ADR-186 precedent? Is the PDR-079 layer split correctly preserved (abstract types in PDR-086, concrete bindings in ADR-188)? |
 | `architecture-expert-wilma` | failure-mode probe against the absorbed Migration rules | Do the absorbed Migration rules close the rotation-race, retraction, multi-writer, and self-citation failure modes from the pre-execution pass? Any new failure modes opened by the absorbed shape? |
 
 **Acceptance Criteria**:
@@ -996,7 +1004,7 @@ pnpm markdownlint-check:root docs/architecture/architectural-decisions/188-emiss
 
 - `docs/architecture/architectural-decisions/188-emission-citation-binding-substrate.md`
 - `docs/architecture/architectural-decisions/README.md` (entry added)
-- `.agent/practice-index.md` (ADR-188 entry, if PDR-082 entry needs the back-cite updated)
+- `.agent/practice-index.md` (ADR-188 entry, if PDR-086 entry needs the back-cite updated)
 
 **Acceptance Criteria**:
 
@@ -1022,7 +1030,7 @@ rg -n "ADR-188" docs/architecture/architectural-decisions/README.md
 pnpm check
 ```
 
-**Success Criteria**: gate chain green; both PDR-082 + ADR-188 in
+**Success Criteria**: gate chain green; both PDR-086 + ADR-188 in
 repo; all cross-links resolved.
 
 ---
@@ -1034,7 +1042,7 @@ PDR-067 (surface classification), the existing pending-graduations entries.
 
 #### Task 3.1: Author pattern memory entry
 
-**Starting state**: PDR-082 + ADR-188 lands.
+**Starting state**: PDR-086 + ADR-188 lands.
 
 **File scope**:
 
@@ -1056,7 +1064,7 @@ Pattern body sections:
    - Platform Monitor-cron-drift (Misty 23:26→23:47Z silent; Lunar
      23:28→23:45Z silent).
 4. **Cross-links**:
-   - PDR-082 (the structural cure).
+   - PDR-086 (the structural cure).
    - ADR-188 (the substrate phenotype).
    - `.agent/rules/validators-must-recompute-not-just-record.md`
      (the same structural shape one layer deeper).
@@ -1068,7 +1076,7 @@ Pattern body sections:
 
 1. ✅ Pattern file follows the `.agent/memory/active/patterns/` template shape.
 2. ✅ ≥3 worked instances recorded with timestamps + author identity.
-3. ✅ Cross-links to PDR-082, ADR-188, validators-must-recompute-not-just-record rule, substrate-pointer-read-as-current-state pattern, PDR-074 §S1 present.
+3. ✅ Cross-links to PDR-086, ADR-188, validators-must-recompute-not-just-record rule, substrate-pointer-read-as-current-state pattern, PDR-074 §S1 present.
 
 **Deterministic Validation**:
 
@@ -1076,7 +1084,7 @@ Pattern body sections:
 ls .agent/memory/active/patterns/ground-truth-dependency-of-role-emission.md
 # Expected: file exists
 
-rg -n "PDR-082\|ADR-188\|validators-must-recompute\|substrate-pointer-read" \
+rg -n "PDR-086\|ADR-188\|validators-must-recompute\|substrate-pointer-read" \
   .agent/memory/active/patterns/ground-truth-dependency-of-role-emission.md
 # Expected: 4 reference categories present
 ```
@@ -1093,14 +1101,14 @@ rg -n "PDR-082\|ADR-188\|validators-must-recompute\|substrate-pointer-read" \
   NOT editing existing buffer files that the live team may be touching)
 
 **Substance increment**: dated entry naming the cure shape, the
-landed substrate (PDR-082, ADR-188, pattern memory), the graduation
+landed substrate (PDR-086, ADR-188, pattern memory), the graduation
 triggers (dual paths per assumptions F4 absorption), and the
 back-pressure / blocking classification.
 
 **Acceptance Criteria**:
 
 1. ✅ Entry file follows pending-graduations dated-entry shape.
-2. ✅ Cure shape names PDR-082 + ADR-188 + Phase 4 substrate-implementation as the staged cure.
+2. ✅ Cure shape names PDR-086 + ADR-188 + Phase 4 substrate-implementation as the staged cure.
 3. ✅ Graduation trigger names **two paths** (per assumptions F4):
    - **Path A (post-substrate)**: third-instance worked validation
      of `cited_event_id` field emissions in a distinct session
@@ -1111,8 +1119,8 @@ back-pressure / blocking classification.
      subsequently catches a stale-direction or stale-heartbeat
      failure — also counts toward graduation evidence.
 4. ✅ PDR-074 §S1 back-cite is named as a deferred graduation trigger
-   (absorbs docs-adr F2): once PDR-082 graduates to Proposed,
-   PDR-074's next amendment cycle adds the §S1 → PDR-082 back-cite.
+   (absorbs docs-adr F2): once PDR-086 graduates to Proposed,
+   PDR-074's next amendment cycle adds the §S1 → PDR-086 back-cite.
 5. ✅ Back-pressure classification: `blocking-on-substrate-tranche`
    (absorbs assumptions F2; reclassified from `informational`).
 
@@ -1122,7 +1130,7 @@ back-pressure / blocking classification.
 ls .agent/memory/operational/pending-graduations/ | grep emission-citation-binding
 # Expected: at least one dated entry
 
-rg -n "PDR-082\|ADR-188" .agent/memory/operational/pending-graduations/_emission-citation-binding_.md
+rg -n "PDR-086\|ADR-188" .agent/memory/operational/pending-graduations/_emission-citation-binding_.md
 # Expected: ≥ 2 references
 ```
 
@@ -1142,7 +1150,7 @@ pnpm agent-tools:fitness-validator --strict-hard
 
 **Reclassified** (absorbs assumptions F2): formerly `informational
 deferral`; corrected to `blocking-on-substrate-tranche`. Without
-Phase 4, PDR-082 lands as inert doctrine that no agent can act on
+Phase 4, PDR-086 lands as inert doctrine that no agent can act on
 (emissions cannot carry `cited_event_id` without the schema). The
 falsifiability criterion ("citation older than threshold OR absent
 when required") is mechanically auditable only after Phase 4.
@@ -1150,7 +1158,7 @@ when required") is mechanically auditable only after Phase 4.
 **Concrete schedule trigger**: the follow-on plan is authored when
 ALL of the following land:
 
-1. PDR-082 + ADR-188 land (Phase 1 + Phase 2 complete on this plan).
+1. PDR-086 + ADR-188 land (Phase 1 + Phase 2 complete on this plan).
 2. Owner-ratified team-coordination on schema landing (the live team's
    gate-runner agrees on a tree-green window for the schema migration).
 3. The consumer-first migration shape (per ADR-186 precedent absorbed
@@ -1182,19 +1190,19 @@ follow-on substrate-implementation plan):
 
 ### Phase 5 (deferred): SKILL + Directive Amendments
 
-**Why deferred**: PDR-082 lands at Candidate. PDR-075's evolution
+**Why deferred**: PDR-086 lands at Candidate. PDR-075's evolution
 path (Candidate → Proposed → Accepted via worked-instance accumulation)
-applies. SKILL + directive amendments graduate from PDR-082 once it
+applies. SKILL + directive amendments graduate from PDR-086 once it
 matures to Proposed (third-instance worked validation post-substrate).
 Premature SKILL amendment would couple SKILL stability to a still-Candidate
 PDR.
 
 **Out-of-scope items**:
 
-- `start-right-team` SKILL §3 amendment pointing at PDR-082 +
+- `start-right-team` SKILL §3 amendment pointing at PDR-086 +
   ADR-188.
 - `agent-collaboration.md` Director section amendment pointing at
-  PDR-082 as the mechanical-enforcement substrate for §S1.
+  PDR-086 as the mechanical-enforcement substrate for §S1.
 
 ---
 
@@ -1212,22 +1220,22 @@ on 2026-05-25. Absorbed findings recorded below; plan body edited to reflect.
 
 | Finding | Source | Disposition | Plan edit |
 |---|---|---|---|
-| Multi-role generalisation overreaches evidence (only Director ≥2 FMs + Heartbeat-emitter ≥6 drift instances have worked instances; Marshal/Reviewer/Curator/Scout are extrapolated) | assumptions F1, betty F2, fred F2, barney F1 | **Absorb** — narrow PDR-082 v1 required scope to Director + Heartbeat-emitter; mark other four roles as "Reserved: convention TBD on worked-instance accumulation" | Phase 1 Cycle 1.1 §"Per-role substrate-snapshot conventions" narrowed; Risk Assessment updated |
+| Multi-role generalisation overreaches evidence (only Director ≥2 FMs + Heartbeat-emitter ≥6 drift instances have worked instances; Marshal/Reviewer/Curator/Scout are extrapolated) | assumptions F1, betty F2, fred F2, barney F1 | **Absorb** — narrow PDR-086 v1 required scope to Director + Heartbeat-emitter; mark other four roles as "Reserved: convention TBD on worked-instance accumulation" | Phase 1 Cycle 1.1 §"Per-role substrate-snapshot conventions" narrowed; Risk Assessment updated |
 | Path defect: `.agent/practice-core/practice-index.md` → `.agent/practice-index.md` | docs-adr F1 (CRITICAL) | **Absorbed mechanically** (perl sweep complete) | All references throughout plan body |
 | ADR-188 must extend to `lifecycle` event kind (heartbeat-emitter is named worked instance; ADR-186 binds heartbeats to lifecycle; cluster precedent ADR-183/184/185 cover all three kinds) | fred F1 (BLOCKING), docs-adr F3 | **Absorb** — Cycle 2.1 §Decision extends optional field to `narrative`, `directed`, AND `lifecycle` kinds | Phase 2 Cycle 2.1 §Decision updated |
-| PDR-079 layer split leakage: repo-bound substrate names (`active-claims.json`, `tree-state-hash`, `queue-head`) appear in PDR-082's portable contract | fred F2 (BLOCKING), betty F2 | **Absorb** — PDR-082 carries only abstract substrate-snapshot type names (e.g. "claim-state revision identifier"); ADR-188 carries the concrete repo-bound bindings | Phase 1 Cycle 1.1 §3 and Phase 2 Cycle 2.1 §3 split sharpened |
-| ADR-188 Accepted while PDR-082 Candidate is a maturity inversion | betty F4 (CONDITION), barney F4, docs-adr F5 | **Absorb** — ADR-188 lands at `Status: Proposed`, not Accepted; moves to Accepted on first worked-instance of implemented substrate | Phase 2 Cycle 2.1 §"Status" amended; Cycle 2.3 acceptance criteria amended |
+| PDR-079 layer split leakage: repo-bound substrate names (`active-claims.json`, `tree-state-hash`, `queue-head`) appear in PDR-086's portable contract | fred F2 (BLOCKING), betty F2 | **Absorb** — PDR-086 carries only abstract substrate-snapshot type names (e.g. "claim-state revision identifier"); ADR-188 carries the concrete repo-bound bindings | Phase 1 Cycle 1.1 §3 and Phase 2 Cycle 2.1 §3 split sharpened |
+| ADR-188 Accepted while PDR-086 Candidate is a maturity inversion | betty F4 (CONDITION), barney F4, docs-adr F5 | **Absorb** — ADR-188 lands at `Status: Proposed`, not Accepted; moves to Accepted on first worked-instance of implemented substrate | Phase 2 Cycle 2.1 §"Status" amended; Cycle 2.3 acceptance criteria amended |
 | Citation-of-rotated-event race (PDR-080 absorption rotation may delete cited event) | wilma F1 (HIGH) | **Absorb** — ADR-188 §Migration discipline gains "cited-event retention" rule: absorption pass verifies no active citation points to an event before rotating it; broken citations render `[UNRESOLVED]` token | Phase 2 Cycle 2.1 §Migration discipline expanded |
 | Citation validity semantics undefined (retracted events) | wilma F2 (HIGH) | **Absorb** — ADR-188 names a `validity` field convention; citing a retracted event is DEFECTIVE; retraction triggers active-citation sweep | Phase 2 Cycle 2.1 §Migration discipline expanded |
 | Multi-writer schema migration coordination missing | wilma F4 (HIGH), betty F5 | **Absorb** — ADR-188 adopts ADR-186's consumer-first migration pattern: consumers handle field-present + field-absent before any emitter lands; emitter follow-on at next natural cycle; named migration-window closure signal | Phase 2 Cycle 2.1 §Migration discipline expanded |
 | Self-citation + tautological chains undefined | wilma F3 (MEDIUM) | **Absorb** — ADR-188 §Falsifiability: citation MUST NOT equal own event_id; cycle detection in audit | Phase 2 Cycle 2.1 §Falsifiability expanded |
 | Heartbeat cron-loop revision-drift under high churn | wilma F5 (MEDIUM) | **Absorb** — ADR-188 §"Per-role conventions" heartbeat binding: audit checks cited-revision recency AND additive-only churn since cite | Phase 2 Cycle 2.1 §3 (Heartbeat row) expanded |
 | Schema `additionalProperties: false` blocks silent additive extension | betty F5 (informational), fred F3 | **Absorb** — ADR-188 §Migration discipline names this hard constraint explicitly | Phase 2 Cycle 2.1 §Migration discipline expanded |
-| PDR-074 §S1 will read as superseded substance once PDR-082 lands; back-cite deferred | docs-adr F2 | **Absorb** — pending-graduations entry (Task 3.2) explicitly tracks PDR-074 §S1 back-cite as a graduation trigger | Task 3.2 acceptance criteria amended |
+| PDR-074 §S1 will read as superseded substance once PDR-086 lands; back-cite deferred | docs-adr F2 | **Absorb** — pending-graduations entry (Task 3.2) explicitly tracks PDR-074 §S1 back-cite as a graduation trigger | Task 3.2 acceptance criteria amended |
 | PDR-080 missing from bidirectional cross-link list | docs-adr F4 | **Absorb** — §Documentation Propagation Commitment includes PDR-080 back-cite (deferred to PDR-080 next amendment) | §"Documentation Propagation Commitment" updated |
 | ADR-188 CLI surface names specific flag `--cited-event-id` (HOW, not WHAT) | docs-adr (WHAT-vs-HOW) | **Absorb** — Cycle 2.1 §"CLI surface" narrowed to outcome shape ("agent-facing CLI MUST expose per-emission citation argument"); flag name deferred to follow-on implementation plan | Phase 2 Cycle 2.1 §"CLI surface" amended |
 | `[STALE]` watcher token needs ADR-185-style derived-token discipline | fred F5 | **Absorb** — Cycle 2.1 §"Watcher behaviour" distinguishes schema-field render `[CITED:<prefix>]` from consumer-derived audit token `[STALE]`; computation surface named | Phase 2 Cycle 2.1 §"Watcher behaviour" amended |
-| Phase 4 deferral classified `informational` but is a soft blocker (PDR-082 lands as inert doctrine without substrate) | assumptions F2 | **Absorb** — Phase 4 reclassified `blocking-on-substrate-tranche`; concrete trigger named: "next tree-green window after PDR-082 lands AND owner-ratified team-coordination on schema landing" | Phase 4 reclassified; pending-graduations entry updated |
+| Phase 4 deferral classified `informational` but is a soft blocker (PDR-086 lands as inert doctrine without substrate) | assumptions F2 | **Absorb** — Phase 4 reclassified `blocking-on-substrate-tranche`; concrete trigger named: "next tree-green window after PDR-086 lands AND owner-ratified team-coordination on schema landing" | Phase 4 reclassified; pending-graduations entry updated |
 | Phase 3 graduation trigger circular on Phase 4 evidence | assumptions F4 | **Absorb** — pending-graduations entry names two graduation-trigger paths: (a) third-instance worked validation post-substrate; (b) prose-body citation evidence in narrative events pre-substrate (also counts) | Task 3.2 acceptance criteria amended |
 | Reviewer fan-out disproportionate (4 per cycle × 2 = 8 dispatches) | assumptions F3, barney F5 | **Absorb** — Cycle 1.2 narrowed to 3 reviewers (docs-adr + assumptions + barney); Cycle 2.2 narrowed to 3 reviewers (docs-adr + fred + wilma); 6 total instead of 8 | §"Reviewer Scheduling" updated; Cycles 1.2 + 2.2 acceptance criteria amended |
 | Phase 0 Task 0.1 grep pattern uses literal pipes (shell-parsing risk) | assumptions F5 | **Absorb** — single-quote all rg patterns containing pipe chars; standardise across deterministic-validation commands | Phase 0 + later cycles' validation blocks |
@@ -1237,11 +1245,11 @@ on 2026-05-25. Absorbed findings recorded below; plan body edited to reflect.
 | Finding | Source | Rationale for non-absorption |
 |---|---|---|
 | Defer entire PDR + ADR pair until second-session evidence (Phase 3 only this session) | barney F3 (strongest single recommendation) | **Owner-ratified rejection 2026-05-25**: path B (Narrowed v1) chosen; barney's path A explicitly considered and not selected. The narrowed v1 absorbs F1 + F4 + F5 (overreach, premature-Accepted, reviewer over-dispatch) without requiring full deferral. |
-| Amend PDR-074 directly rather than authoring new PDR-082 | barney F2 (clarify) | **Considered and rejected**: PDR-079 §"Worked-instance pair" pattern favours new PDR for portable contract paired with new ADR for repo-bound phenotype. Amending Candidate PDR-074 in-place couples PDR-082's scope (which spans heartbeat-emitter, a separate role) artificially to PDR-074's Director-only framing. |
+| Amend PDR-074 directly rather than authoring new PDR-086 | barney F2 (clarify) | **Considered and rejected**: PDR-079 §"Worked-instance pair" pattern favours new PDR for portable contract paired with new ADR for repo-bound phenotype. Amending Candidate PDR-074 in-place couples PDR-086's scope (which spans heartbeat-emitter, a separate role) artificially to PDR-074's Director-only framing. |
 | Adversarial peer integrity (signatures / crypto verification) | wilma F6 (LOW) | **Acknowledged, no absorption**: per wilma's own disposition — observability is symmetric not enforceable; the Director-as-substrate-observer-of-record per PDR-074 §F is the cure path; cryptographic integrity is out-of-scope for this plan and not raised by tonight's evidence. |
 | Add CHANGELOG.md + `.agent/practice-core/index.md` to propagation surfaces | docs-adr (suggestion) | **Partially absorbed**: §"Documentation Propagation Commitment" now names both surfaces explicitly with verification rather than assumption; the deterministic-validation cycle confirms whether the existing PDR landings have updated these surfaces (sampling PDR-076a/b/077/078/079/080/081 lands). |
 
-### Phase 1 (PDR-082) reviewer absorption — per-cycle log
+### Phase 1 (PDR-086) reviewer absorption — per-cycle log
 
 _(populated during Cycle 1.2 — the 3-reviewer pass per consensus narrowing)_
 
@@ -1255,10 +1263,10 @@ _(populated during Cycle 2.2 — the 3-reviewer pass per consensus narrowing)_
 
 | Risk | Likelihood | Impact | Mitigation |
 |---|---|---|---|
-| Doctrine-by-analogy: PDR-082 adds shape PDR-074/075 already partially cover | Low | Medium | Pre-execution barney probe surfaced this; absorbed by sharpening PDR-079 layer split (PDR-082 abstract, ADR-188 concrete) and narrowing scope to evidenced roles |
-| Phase 4 substrate-deferral leaves PDR-082 inert | High | High | **Reclassified to BLOCKING-ON-SUBSTRATE-TRANCHE** per assumptions F2; concrete schedule trigger named in §Phase 4; pending-graduations entry's Path B (prose-body citation evidence) lets graduation begin pre-substrate |
-| Multi-role generalisation overreaches evidence | (was Medium) | (was Medium) | **ABSORBED** — PDR-082 v1 narrowed to Director + Heartbeat-emitter; other four roles marked Reserved |
-| Plan collides with live team's mid-cycle work | Low | Medium | Cycle 0.3 verifies zero claim/comms overlap; new PDR-082/ADR-188/plan files have unique paths; no shared substrate edited |
+| Doctrine-by-analogy: PDR-086 adds shape PDR-074/075 already partially cover | Low | Medium | Pre-execution barney probe surfaced this; absorbed by sharpening PDR-079 layer split (PDR-086 abstract, ADR-188 concrete) and narrowing scope to evidenced roles |
+| Phase 4 substrate-deferral leaves PDR-086 inert | High | High | **Reclassified to BLOCKING-ON-SUBSTRATE-TRANCHE** per assumptions F2; concrete schedule trigger named in §Phase 4; pending-graduations entry's Path B (prose-body citation evidence) lets graduation begin pre-substrate |
+| Multi-role generalisation overreaches evidence | (was Medium) | (was Medium) | **ABSORBED** — PDR-086 v1 narrowed to Director + Heartbeat-emitter; other four roles marked Reserved |
+| Plan collides with live team's mid-cycle work | Low | Medium | Cycle 0.3 verifies zero claim/comms overlap; new PDR-086/ADR-188/plan files have unique paths; no shared substrate edited |
 | Reviewer fan-out exceeds quota envelope | Low | Low | Sonnet default per reviewer (memoried "Opus-team quota ceiling"); 4 reviewers per cycle, sequential phases |
 | `cited_event_id` field design proves unsuitable post-landing | Low | High | ADR-188 names migration discipline; field is optional from landing; ADR can amend before implementation lands |
 
@@ -1273,10 +1281,10 @@ Per `.agent/rules/plan-body-first-principles-check.md`:
    assertion. The acceptance criteria check observable doctrine
    properties (cross-link integrity, falsifiability section presence,
    migration discipline), not vendor behaviour.
-2. **Landing-path clause**: PDR-082 and ADR-188 file paths are
+2. **Landing-path clause**: PDR-086 and ADR-188 file paths are
    constrained by `.agent/practice-core/decision-records/README.md`
    and `docs/architecture/architectural-decisions/README.md`. The
-   numbered-PDR / numbered-ADR convention is in effect; PDR-082 +
+   numbered-PDR / numbered-ADR convention is in effect; PDR-086 +
    ADR-188 are the next available slots. The pattern memory file
    and pending-graduations file paths follow established conventions
    verified in Phase 0.
@@ -1292,9 +1300,9 @@ Per `.agent/rules/plan-body-first-principles-check.md`:
 - [ ] **principles.md - First Question**: Verified the simpler shape (single field + single PDR + single ADR) cannot be further simplified without losing the structural cure.
 - [ ] **principles.md - No Type Shortcuts**: N/A (doctrine plan; no product types added).
 - [ ] **principles.md - Quality Gates**: All gates pass per Phase 1/2/3 validation commands.
-- [ ] **agent-collaboration.md - Director section**: Verified PDR-082 composes with §S1 without doctrinal duplication.
+- [ ] **agent-collaboration.md - Director section**: Verified PDR-086 composes with §S1 without doctrinal duplication.
 - [ ] **metacognition.md - Cure Shape**: Verified the cure is structural (substrate citation-binding), not doc-patch (a new prose instruction to Directors).
-- [ ] **PDR-079 - PDR-vs-ADR portability**: Verified PDR-082 is portable contract; ADR-188 is repo-bound phenotype.
+- [ ] **PDR-079 - PDR-vs-ADR portability**: Verified PDR-086 is portable contract; ADR-188 is repo-bound phenotype.
 
 ---
 
@@ -1321,7 +1329,7 @@ Per `.agent/rules/plan-body-first-principles-check.md`:
 
 **Minimum shippable shape without beneficial prerequisites**:
 
-- PDR-082 + pattern memory entry + pending-graduations registration.
+- PDR-086 + pattern memory entry + pending-graduations registration.
   ADR-188 can defer to next session if reviewer fan-out surfaces a
   blocker.
 
@@ -1335,9 +1343,9 @@ Per `.agent/rules/plan-body-first-principles-check.md`:
 - ✅ New-PDR shape verified against PDR-074-amendment alternative.
 - ✅ Live-team coordination safety verified.
 
-### Phase 1 (PDR-082)
+### Phase 1 (PDR-086)
 
-- ✅ PDR-082 lands at Candidate status.
+- ✅ PDR-086 lands at Candidate status.
 - ✅ Reviewer absorption log preserved.
 - ✅ Cross-links bidirectional with PDR-074/075/078/079/080.
 
@@ -1357,7 +1365,7 @@ Per `.agent/rules/plan-body-first-principles-check.md`:
 - ✅ The ticking-clock failure mode (PDR-074 §S1 under load) has a
   named structural cure with falsifiable enforcement criterion.
 - ✅ The multi-role generalisation is captured at the portable
-  contract layer (PDR-082) without overreaching evidence for
+  contract layer (PDR-086) without overreaching evidence for
   individual roles at the substrate layer (ADR-188 acknowledges
   per-role evidence variance).
 - ✅ Live team's mid-cycle work was not perturbed.
@@ -1463,7 +1471,7 @@ property into substrate-emitted observable.
 
 1. **Phase 0**: verify the doctrine landscape (the cure is not
    already in flight) and team coordination safety.
-2. **Phase 1**: land PDR-082 doctrine (portable contract).
+2. **Phase 1**: land PDR-086 doctrine (portable contract).
 3. **Phase 2**: land ADR-188 phenotype (repo-bound substrate
    shape).
 4. **Phase 3**: land pattern memory + pending-graduations route.
@@ -1477,7 +1485,7 @@ property into substrate-emitted observable.
 - No product code lands.
 - No shared substrate (schema, active-claims.json, pending-graduations buffer files
   the live team is touching) is edited.
-- All new files (PDR-082, ADR-188, pattern memory, pending-graduations
+- All new files (PDR-086, ADR-188, pattern memory, pending-graduations
   dated entry) are unique paths; no collision with live team's
   cycle scope.
 - Reviewer fan-out at Sonnet default keeps Opus quota envelope safe.
@@ -1489,7 +1497,7 @@ property into substrate-emitted observable.
 ## Future Enhancements (Out of Scope)
 
 - Substrate implementation (Phase 4) — separate plan.
-- SKILL / directive amendments (Phase 5) — graduate from PDR-082
+- SKILL / directive amendments (Phase 5) — graduate from PDR-086
   Proposed.
 - Per-role substrate-snapshot identifier helpers in `agent-tools`
   (e.g. `pnpm agent-tools:collaboration-state -- cite-event-id`).
@@ -1498,4 +1506,4 @@ property into substrate-emitted observable.
   defects.
 - ADR-186 amendment: heartbeat-body binding to active-claims
   revision (the heartbeat-content-drift cure shape, deferred until
-  PDR-082 substrate lands).
+  PDR-086 substrate lands).
