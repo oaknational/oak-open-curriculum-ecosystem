@@ -8,14 +8,17 @@ import {
   type NarrativeCommsEvent,
 } from '../../src/collaboration-state';
 import { type CliRuntime } from '../../src/collaboration-state/cli-runtime';
+import { deriveOverrideCollaborationIdentity } from '../../src/collaboration-state/identity';
 import { createFakeCollaborationRuntime } from './fake-collaboration-runtime';
 
-const codexAgent: CollaborationAgentId = {
+// Id-bearing per PDR-076a strict id-keyed routing (the 2026-05-29 sunset): the
+// routing key renders as `agent_name / id:<uuid>`.
+const codexAgent: CollaborationAgentId = deriveOverrideCollaborationIdentity({
   agent_name: 'Mossy Blossoming Canopy',
   platform: 'codex',
   model: 'GPT-5',
   session_id_prefix: '019e22',
-};
+});
 
 describe('collaboration-state tui CLI integration', () => {
   it('renders text mode from injected collaboration-state IO', async () => {
@@ -57,8 +60,8 @@ describe('collaboration-state tui CLI integration', () => {
 
     expect(result.exitCode).toBe(0);
     expect(result.stdout).toContain('Starting P8 live collaboration TUI');
-    // PDR-076a §Decision item 2: routing key no longer includes platform.
-    expect(result.stdout).toContain('Mossy Blossoming Canopy / 019e22 [active/clear]');
+    // PDR-076a strict id-keyed routing: the routing key is `agent_name / id:<uuid>`.
+    expect(result.stdout).toContain(`Mossy Blossoming Canopy / id:${codexAgent.id} [active/clear]`);
   });
 
   it('uses repo-root defaults when state paths are not provided', async () => {

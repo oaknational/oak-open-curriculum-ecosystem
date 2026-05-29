@@ -13,48 +13,30 @@ import {
   type NarrativeCommsEvent,
 } from '../../src/collaboration-state/types';
 
-const self: CollaborationAgentId = {
+// All identities are id-bearing (PDR-076a): override-mode derivation
+// produces a deterministic v5 id from `name|prefix`, so distinct agents
+// get distinct ids. The PDR-076a Phase 3 sunset (2026-05-29) made `id` the
+// sole routing weight — an id-less identity is never a valid routing target
+// — so every fixture the routing comparators touch must carry one.
+const self = deriveOverrideCollaborationIdentity({
   agent_name: 'Wooded Spreading Thicket',
   platform: 'claude-code',
   model: 'claude-opus-4-7-1m',
   session_id_prefix: '5c8f3c',
-};
+});
 
-const peer: CollaborationAgentId = {
+const peer = deriveOverrideCollaborationIdentity({
   agent_name: 'Uplifted Wheeling Sky',
   platform: 'codex',
   model: 'GPT-5',
   session_id_prefix: '019e20',
-};
+});
 
-const stranger: CollaborationAgentId = {
+const stranger = deriveOverrideCollaborationIdentity({
   agent_name: 'Foamy Charting Fjord',
   platform: 'claude',
   model: 'claude-opus-4-7-1m',
   session_id_prefix: '86dbd1',
-};
-
-// Id-keyed write-shape mirrors of the same agents — used at the
-// createDirectedCommsMessage factory boundary which now requires
-// CollaborationAgentIdWrite per PDR-076a Cycle 11. The override-mode
-// derivation produces a deterministic v5 id from name|prefix.
-const selfWrite = deriveOverrideCollaborationIdentity({
-  agent_name: self.agent_name,
-  platform: self.platform,
-  model: self.model,
-  session_id_prefix: self.session_id_prefix,
-});
-const peerWrite = deriveOverrideCollaborationIdentity({
-  agent_name: peer.agent_name,
-  platform: peer.platform,
-  model: peer.model,
-  session_id_prefix: peer.session_id_prefix,
-});
-const strangerWrite = deriveOverrideCollaborationIdentity({
-  agent_name: stranger.agent_name,
-  platform: stranger.platform,
-  model: stranger.model,
-  session_id_prefix: stranger.session_id_prefix,
 });
 
 function narrative(input: {
@@ -145,22 +127,21 @@ describe('classifyEventForAgent — view classification per the all-channels-mat
   });
 
   it('classifies a directed-kind message addressed to the agent as a directed view', () => {
-    // Classifier `self` must be the id-keyed write identity so the
-    // event.to (id-keyed via createDirectedCommsMessage) matches via the
-    // same routing-key kind. A loose `self` against an id-keyed event.to
-    // is the cross-kind rejection PDR-076a §Decision item 2 enforces.
+    // Directed routing matches by id: `event.to` is the id-bearing `self`
+    // and the classifier `self` carries the same id, so sameAgentRoutingKey
+    // returns true → 'directed' (PDR-076a §Decision item 2).
     expect(
       classifyEventForAgent({
         event: createDirectedCommsMessage({
           eventId: 'directed-one',
           createdAt: '2026-05-21T08:00:00Z',
           messageKind: 'coordination-request',
-          from: peerWrite,
-          to: selfWrite,
+          from: peer,
+          to: self,
           subject: 'Please check this',
           body: 'Body.',
         }),
-        self: selfWrite,
+        self,
       }),
     ).toBe('directed');
   });
@@ -188,8 +169,8 @@ describe('classifyEventForAgent — view classification per the all-channels-mat
       eventId: 'self-directed',
       createdAt: '2026-05-21T08:00:00Z',
       messageKind: 'coordination-request',
-      from: selfWrite,
-      to: peerWrite,
+      from: self,
+      to: peer,
       subject: 'I sent this',
       body: 'Body.',
     });
@@ -199,13 +180,11 @@ describe('classifyEventForAgent — view classification per the all-channels-mat
       title: 'My own lifecycle',
     });
 
-    // selfNarrative and selfLifecycle use loose `author: self`; classifier
-    // self is loose → same-kind legacy match → undefined (self-excluded).
-    // selfDirected uses `from: selfWrite`; classifier needs selfWrite so
-    // the id-keyed self-exclusion match holds. The cross-kind rejection
-    // is exactly what PDR-076a §Decision item 2 enforces.
+    // Every event is authored by the id-bearing `self`; the classifier
+    // `self` carries the same id, so id-keyed self-exclusion fires on
+    // every kind → undefined.
     expect(classifyEventForAgent({ event: selfNarrative, self })).toBeUndefined();
-    expect(classifyEventForAgent({ event: selfDirected, self: selfWrite })).toBeUndefined();
+    expect(classifyEventForAgent({ event: selfDirected, self })).toBeUndefined();
     expect(classifyEventForAgent({ event: selfLifecycle, self })).toBeUndefined();
   });
 
@@ -214,8 +193,8 @@ describe('classifyEventForAgent — view classification per the all-channels-mat
       eventId: 'directed-to-stranger',
       createdAt: '2026-05-21T08:00:00Z',
       messageKind: 'coordination-request',
-      from: peerWrite,
-      to: strangerWrite,
+      from: peer,
+      to: stranger,
       subject: 'For stranger',
       body: 'Body.',
     });
@@ -276,8 +255,8 @@ describe('drainRelevantEvents — full event stream surfacing with self-exclusio
         eventId: 'directed-one',
         createdAt: '2026-05-21T08:03:00Z',
         messageKind: 'coordination-request',
-        from: peerWrite,
-        to: selfWrite,
+        from: peer,
+        to: self,
         subject: 'Directed subject',
         body: 'Directed body.',
       }),
@@ -318,8 +297,8 @@ describe('drainRelevantEvents — full event stream surfacing with self-exclusio
       eventId: 'directed-to-stranger',
       createdAt: '2026-05-21T08:00:00Z',
       messageKind: 'coordination-request',
-      from: peerWrite,
-      to: strangerWrite,
+      from: peer,
+      to: stranger,
       subject: 'Cross-traffic to stranger',
       body: 'Cross-traffic body.',
     });
@@ -376,34 +355,34 @@ describe('drainRelevantEvents — full event stream surfacing with self-exclusio
   });
 
   it('excludes self-authored events across every kind', async () => {
-    // All events use the id-keyed write identity so the routing-key kind
-    // is consistent across the three event shapes; the classifier `self`
-    // must match the kind for self-exclusion to fire on every event.
+    // All three event shapes are authored by the id-bearing `self`; the
+    // classifier `self` carries the same id, so self-exclusion fires on
+    // every event.
     const events: readonly CommsEvent[] = [
       narrative({
         eventId: 'self-narrative',
-        author: selfWrite,
+        author: self,
         title: 'I broadcast this',
       }),
       createDirectedCommsMessage({
         eventId: 'self-directed',
         createdAt: '2026-05-21T08:00:00Z',
         messageKind: 'coordination-request',
-        from: selfWrite,
-        to: peerWrite,
+        from: self,
+        to: peer,
         subject: 'I sent this',
         body: 'Body.',
       }),
       lifecycle({
         eventId: 'self-lifecycle',
-        author: selfWrite,
+        author: self,
         title: 'My own lifecycle',
       }),
     ];
     const drained = await drainRelevantEvents({
       messages: events,
       seenIds: new Set(),
-      self: selfWrite,
+      self,
     });
 
     expect(drained.eventCount).toBe(0);

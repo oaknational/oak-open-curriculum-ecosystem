@@ -144,25 +144,39 @@ Per PDR-027 and
 Derived identity is a helper for choosing `agent_name`; it does not change
 the additive-identity rule, the identity key, or historical rows.
 
-## Identity Routing Uses (name, prefix) As A Pair
+## Identity Routing Uses (name, id); (name, prefix) Is The Register Coordinate
 
+**Canonical routing key.** Per
+[PDR-076a](../practice-core/decision-records/PDR-076a-agent-identity-tuple-name-and-uuid.md)
+— whose Phase 3 sunset executed 2026-05-29 — the canonical routing
+disambiguator is the pair `(agent_name, id)`, where `id` is the
+session-stable UUID. An identity without an `id` is **not** a valid live
+routing target: the legacy `(agent_name, session_id_prefix)` routing
+fallback has been removed, routing-key construction fails fast on an
+id-less identity, and the same-agent comparison treats it as never the
+same live agent. `session_id_prefix` is no longer a live routing
+coordinate.
+
+**`session_id_prefix` remains the durable register / audit coordinate.**
 `agent_name` can change within a session (wordlist refactors, CLI seed
 remapping) and can persist across sessions; `session_id_prefix` is stable
-within a session and is the durable coordinate. Routing logic should use
-the **pair** `(agent_name, session_id_prefix)` rather than either coordinate
-alone. Mismatches between the two carry information: same prefix /
-different name signals tooling drift mid-session (attribution-by-name is
-suspect, substance is from the prefix's session); same name / different
-prefix signals a returning agent adopting prior identity (additive row
-update on `last_session`); different both signals a genuinely new identity
-(standard new-row case). Treat any single-coordinate mismatch as a
-**request-further-information** signal — name the divergence in any reply
-or coordination decision rather than rounding it off — and when archiving
-or closing claims for a "gone" identity, cite the **prefix** (stable) over
-the name (which may have wiped) so audit trails remain durable. Source:
-Claude per-user memory `feedback_identity_routing_uses_name_and_prefix_pair`
-(owner stated 2026-05-05 after the Twilit→Ashen drift and Asteroid
-identity-wipe).
+within a session and is the durable human-readable coordinate in the
+thread register and chat surfaces. For thread-register and continuity
+decisions (not live routing), mismatches between name and prefix still
+carry information: same prefix / different name signals tooling drift
+mid-session (attribution-by-name is suspect, substance is from the
+prefix's session); same name / different prefix signals a returning agent
+adopting prior identity (additive row update on `last_session`); different
+both signals a genuinely new identity (standard new-row case). Treat any
+single-coordinate mismatch as a **request-further-information** signal —
+name the divergence in any reply or coordination decision rather than
+rounding it off — and when archiving or closing claims for a "gone"
+identity whose `id` is unavailable (a historical id-less row), cite the
+**prefix** (stable) over the name (which may have wiped) so audit trails
+remain durable. Source: Claude per-user memory
+`feedback_identity_routing_uses_name_and_prefix_pair` (owner stated
+2026-05-05 after the Twilit→Ashen drift and Asteroid identity-wipe);
+reconciled to PDR-076a `(name, id)` routing 2026-05-29.
 
 ## Self-application
 
@@ -179,8 +193,8 @@ is applicable at install time, not merely documented.
 - [PDR-076 Agent Identity Tuple and Body File Frontmatter](../practice-core/decision-records/PDR-076-agent-identity-tuple-and-body-file-frontmatter.md)
   — parent identity-tuple decision.
 - [PDR-076a Agent Identity Tuple — Name and UUID](../practice-core/decision-records/PDR-076a-agent-identity-tuple-name-and-uuid.md)
-  — canonical (name, UUID, session_id_prefix) tuple that the routing-pair
-  section above ratifies.
+  — canonical `(agent_name, id)` routing tuple that the routing section
+  above adopts (Phase 3 sunset executed 2026-05-29).
 - [PDR-076b Body File Frontmatter Contract](../practice-core/decision-records/PDR-076b-body-file-frontmatter-contract.md)
   — frontmatter shape carrying agent identity in temporary coordination
   files.

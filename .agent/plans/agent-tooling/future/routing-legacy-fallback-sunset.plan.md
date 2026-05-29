@@ -1,6 +1,6 @@
 ---
 title: Routing legacy-fallback sunset
-status: strategic
+status: active-in-progress
 lane: future
 collection: agent-tooling
 created: 2026-05-28
@@ -254,3 +254,102 @@ re-verify that deletion (not suppression) is the move and that every live
 writer emits `id` (else the "delete the legacy arm" step would break
 routing — a landing-path check). The vendor-literal clause does not apply
 (no vendor surface).
+
+## Session 1 (2026-05-29, Leafy Regrowing Petal) — partial landing + continuation
+
+Owner directed mid-session: *"get rid of the legacy system that is causing
+bugs. Tighten it up… make sure the legacy system is utterly removed."* The
+audit (means steps 1–3) is **complete and confirmed**: every live writer emits
+`id` (the write schema `collaborationAgentIdWriteSchema` requires it, and
+`deriveCollaborationIdentity`/`deriveOverrideCollaborationIdentity` always set
+it); closed-claims archive has **0 id-less rows**; the **2,520 of 2,784**
+historical comms events that are id-less are immutable and out of routing scope.
+So the migration step is a no-op and the deletion is safe.
+
+### Done (committed-ready, green)
+
+- **`agent-tools/src/collaboration-state/active-agent-routing.ts`** — legacy
+  **utterly removed**. `AgentRoutingKey` collapsed to a single `{agent_name,
+  id}` shape (no discriminated union, no `kind`). Deleted: the `legacy` arm,
+  `LegacyFallbackWriter`, `defaultLegacyFallbackWriter`, the module-level
+  `legacyFallbackWriter`, `setLegacyFallbackWriter`, `emitLegacyFallback`,
+  `sameRoutingKey`. `routingKeyFor` now **fails fast** on an id-less identity;
+  `sameAgentRoutingKey` short-circuits to `false` if either side lacks `id`
+  (so the historical backlog never reaches `routingKeyFor` — the runaway cure).
+- **3 test files migrated green**:
+  `tests/collaboration-state/active-agent-routing.unit.test.ts` (full rewrite to
+  the strict state; the global-state `setLegacyFallbackWriter` afterEach dance
+  is gone), `active-agents.unit.test.ts` (id-keyed fixtures + collision/stale
+  semantics), `tui-cli.integration.test.ts` (id-bearing fixture, id-keyed
+  assertion).
+- **`.agent/rules/use-agent-comms-log.md`** — hardcoded coordinator name
+  ("Wooded Spreading Thicket") stripped; coordinator now discovered from the
+  live stream, introduction conditional on an active coordinator role.
+
+### RED — BLOCKING PRIORITY for the next session (10 failing tests)
+
+**`pnpm --filter @oaknational/agent-tools test` → 10 failed | 758 passed (3
+files).** The full-tree pre-commit hook (`turbo run type-check lint test`) will
+block every commit until these are green. The next session's first move is to
+clear these — they are the only thing standing between the current tree and a
+clean sunset landing. Exact failing tests:
+
+```text
+comms-relevant-events-collision.unit.test.ts
+  > classifyNarrative — session_id_prefix collision disambiguation
+    > routes a directed narrative to the session_id_prefix recipient, not the agent_name
+    > routes a group narrative by session_id_prefix membership
+comms-relevant-events.unit.test.ts
+  > classifyEventForAgent — view classification per the all-channels-matter principle
+    > classifies a narrative whose addressed_to names the agent as a directed view
+    > classifies a narrative whose audience includes the agent as a group view
+    > returns undefined for events authored by the agent (self-exclusion is non-negotiable)
+  > drainRelevantEvents — full event stream surfacing with self-exclusion only
+    > emits one entry per relevant event covering broadcast, group, directed-narrative, directed-kind, and lifecycle
+tui-snapshot.unit.test.ts > buildCollaborationTuiSnapshot
+    > keeps closed-only inactive agents visible in the operator surface
+    > pluralises needs-attention summaries for human-readable text output
+    > projects collaboration state into stable panes for the TUI
+    > summarises live operator-value signals without reading raw state
+```
+
+All ten fail for one reason: id-less object-literal fixtures now hit either the
+`routingKeyFor` fail-fast (via `reportGroup`) or the `sameAgentRoutingKey`
+id-less short-circuit. They assert the deleted legacy behaviour. The mechanical
+pattern to fix them is uniform: replace id-less object-literal
+fixtures with `deriveOverrideCollaborationIdentity({agent_name, platform, model,
+session_id_prefix})` (id seeds from `name|prefix`, so distinct pairs → distinct
+ids), and update assertions — `formatRoutingKey` renders `name / id:<uuid>` (not
+`name / prefix`); `formatAgent` appends a space-separated `id:<uuid>` suffix.
+
+1. **`comms-relevant-events.unit.test.ts`** — unify the `self`/`peer`/`stranger`
+   fixtures to id-bearing (via `deriveOverrideCollaborationIdentity`) and delete
+   the now-redundant `selfWrite`/`peerWrite`/`strangerWrite` mirrors (replace
+   their usages with `self`/`peer`/`stranger`). The loose-vs-write split existed
+   only to test the deleted discriminated-union cross-kind path. ~4 failing
+   tests (group, directed-narrative, self-exclusion, drain).
+2. **`comms-relevant-events-collision.unit.test.ts`** — **delete** the first
+   describe block ("classifyNarrative — session_id_prefix collision
+   disambiguation") and the now-unused `aliceSessionOne`/`aliceSessionTwo`
+   fixtures: it tested prefix-disambiguation, which the sunset removes
+   (disambiguation is by `id`). The second block ("PDR-076a §Falsifiability —
+   same name + same prefix + different id") is the correct id-keyed coverage and
+   already passes; the migration block is unrelated and passes. Update the file
+   header comment (drop the "disambiguate by session_id_prefix" premise).
+3. **`tui-snapshot.unit.test.ts`** — make all identity fixtures id-bearing.
+   Tests 3 & 4 (`operator_value` counts/summaries) need only that. Tests 1 & 2
+   additionally need the id-keyed assertion strings: `routing_key:
+   \`<name> / id:${fixture.id}\`` (was `<name> / <prefix>`) and the directed
+   `from`/`to` formatAgent strings gain ` / id:${fixture.id}`.
+
+### Remaining to "utterly remove" (doctrine)
+
+- **PDR-076a** — add a sunset-executed note (Phase 3 done 2026-05-29); the PDR
+  never documented explicit sunset criteria, so record them.
+- **`.agent/rules/register-identity-on-thread-join.md`** §"Identity Routing Uses
+  (name, prefix) As A Pair" — reconcile to PDR-076a `(name, id)`, keeping the
+  prefix only as the legacy-fallback *coordinate name*, not a live routing path.
+- **Verification gate**: `grep -rn "routing-legacy-fallback\|legacyFallback\|legacy-keyed\|setLegacyFallbackWriter\|kind: 'legacy'" agent-tools/src agent-tools/tests`
+  must return nothing; then full gates (`pnpm type-check lint test build knip`)
+  green. The strategic acceptance criteria at the top of this plan are the
+  done-definition.

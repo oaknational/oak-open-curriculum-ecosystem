@@ -72,16 +72,19 @@ a fixed wall-clock loop. Any continuous wall-clock polling cadence (e.g. a
 monitor process running under the coordinator's identity; in-IDE agents
 must not block their own work on such a timer.
 
-When a session joins a coordinated team with an identified coordinator, its
-first comms-log write MUST be a concise introduction addressed to that
-coordinator before non-trivial work begins. This introduction requirement
+When a session joins a coordinated team that has an **active coordinator
+role**, its first comms-log write MUST be a concise introduction addressed to
+that coordinator before non-trivial work begins. This introduction requirement
 applies identically to in-IDE Cursor agents (foreground and any in-IDE
 worker subagents); each in-IDE agent's first non-trivial comms write must
-be its own introduction. For the current coordinated team, address the
-introduction to **Wooded Spreading Thicket** and include: agent
-identity/name; role or scope; claimed paths, or `none` if no claim is held;
-expected update cadence; and how the agent will respond to coordinator
-messages.
+be its own introduction. **Discover the active coordinator from the comms
+stream and `active-claims.json`** — no coordinator identity is fixed in this
+rule, because the current coordinator is per-session team state, not durable
+doctrine. The introduction includes: agent identity/name; role or scope;
+claimed paths, or `none` if no claim is held; expected update cadence; and how
+the agent will respond to coordinator messages. When no coordinator role is
+active — the default at low agent counts — no introduction is required;
+announce intent per the write-minimum in item 3 below.
 
 1. **Three checkpoints only** — run one **comms pass** (read sequence below)
    capped at **90 seconds**: **(a)** after identity rows are current per

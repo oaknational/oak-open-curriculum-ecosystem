@@ -43,8 +43,9 @@ export function claimReport(claim: CollaborationClaim, nowIso: string): ClaimRep
 }
 
 export function sameAgent(left: CollaborationAgentId, right: CollaborationAgentId): boolean {
-  // PDR-076a id-aware claim ownership comparison. Cure for the same-name +
-  // same-prefix + different-id collision; legacy/legacy pairs still match
-  // by (name, prefix) via the discriminated-union fallback in sameAgentRoutingKey.
+  // PDR-076a id-aware claim ownership comparison (Phase 3 sunset, 2026-05-29).
+  // Ownership matches by id — the cure for the same-name + same-prefix +
+  // different-id collision. An id-less identity is never the same agent: there
+  // is no legacy (name, prefix) fallback, so claim ownership is single-path.
   return sameAgentRoutingKey(left, right);
 }

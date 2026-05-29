@@ -256,6 +256,38 @@ Each downstream amendment is a separate landing cycle. This
 PDR is the principle layer; the schema amendments, tooling
 work, and ceremony updates are operationalisation.
 
+## Sunset execution — routing-key consumer (Cascade item 2 terminal state)
+
+**2026-05-29.** The routing-key consumer named in Cascade item 2 has
+reached its strict terminal state. The legacy
+`(agent_name, session_id_prefix)` routing fallback is **removed**; routing
+is single-path on `id`. An identity without an `id` is no longer a valid
+live routing target — routing-key construction fails fast on it, and the
+same-agent comparison treats an id-less identity as never the same live
+agent, so the immutable id-less historical backlog never reaches
+routing-key construction. This is the structural cure for the
+short-prefix-collision failure class §Falsifiability names, and for the
+runaway diagnostic the removed fallback emitted per id-less historical
+identity on every routing comparison.
+
+This PDR did not previously record explicit sunset criteria. The
+conditions under which the fallback was safely removable — confirmed
+before removal — are:
+
+- Every live identity-writing path emits `id` by construction (the write
+  shape requires it; both the env-seeded and the override derivation
+  always set it).
+- The closed-claims archive carries no id-less identity rows.
+- Historical comms events with id-less identities are immutable audit
+  records, out of routing scope (routing serves current coordination, not
+  historical replay), so excluding them changes no live routing
+  behaviour.
+
+This completes the additive → consumer-migration → strict-require tranche
+of Cascade item 2 for the routing-key consumer. The §Falsifiability check
+now applies to a substrate with no fallback path that could mask an
+`id`-recoverable routing error.
+
 ## Consequences
 
 **Enables**:
