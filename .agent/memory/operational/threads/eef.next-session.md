@@ -25,25 +25,82 @@
 > 2. `.agent/plans/sector-engagement/eef/current/graph-tooling-rebuild.plan.md`
 >    — the SPECIFIED plan (resolved design + self-correcting D0–D6 + DX).
 >
-> **Next session = continue GOAL 2 / D0.** D0 merge-safety (PR #122) is now
-> mostly committed: Lanes A/C/D + plan + PDR README at `c67af4e6`; Lane C4
-> (the `validate-external-data-files` repo-validator) at `0d45cf07` + knip
-> follow-up `fc14463d`; **gateway review done + Lane C4 validator hardened at
-> `e76b9b7c`.** **Remaining — ALL OWNER-GATED: (1) push the 7 commits
-> [pre-authorised; held for wind-down]; (2) Lane B Sonar SAFE write [needs
-> EXPLICIT per-action owner auth — auto-mode-classifier-blocked]; (3) Vercel
-> deployed-env flag check; (4) merge PR #122.** See the **2026-05-29 (cont. II)
-> entry below** (Tempestuous Gliding Thermal) for exact state and the ordered
-> remaining steps. After D0: D1 contract ADR → D2 query
-> surface (un-stub the GraphView ops; selection → `enumerateNodes` filter) →
-> D3 thin delivery tool (full-node subgraph, `structuredContent`-only) →
-> D4 navigation round-trip → D5 skills + methodology graduation → D6 explore
-> value → DX estate reconciliation. Bounded — terminates at D6 (plan §"End
-> goal + bounded goals").
+> **GOAL 2 / D0 (merge-safety) is COMPLETE — PR #122 MERGED to `main` at
+> `29fc29e4` (2026-05-29, Quiet Hiding Hush).** The EEF graph foundation ships
+> **dark** behind `OAK_CURRICULUM_MCP_EEF_ENABLED` (proven OFF in every deployed
+> environment). All D0 acceptance conditions met: PR safe; flag co-gating proven;
+> flag OFF in preview & production; QG green. See the **2026-05-29 (cont. III)
+> entry below** (Quiet Hiding Hush) for the full close.
+>
+> **Next session = GOAL 2 / D1 — author the graph-tool contract ADR.**
+> Crystallise the ratified design as the permanent contract D2–D4 build to:
+> `structuredContent`-only; full-node, membership-scoped, complete-within-itself
+> subgraph; integrity floor; navigable frontier via the query surface;
+> budget-as-design-signal (never a runtime cap); no list-ops — precise enough
+> that D3's worked-example acceptance tests (contexts A/B/C) are derivable from
+> it. Then D2 query surface (un-stub the GraphView ops; selection →
+> `enumerateNodes` filter) → D3 thin delivery tool (full-node subgraph,
+> `structuredContent`-only) → D4 navigation round-trip → D5 skills + methodology
+> graduation → D6 explore value → DX estate reconciliation. Bounded — terminates
+> at D6 (plan §"End goal + bounded goals").
 >
 > Do NOT resume the increments B–H / gate-1a/1b framing below. Detailed prior
 > session history remains in git. The full clean rewrite of this surface is plan
 > deliverable DX (estate-wide reference reconciliation).
+
+## Session 2026-05-29 (cont. III) — Goal 2 / D0 COMPLETE: PR #122 merged (Quiet Hiding Hush / `457189`)
+
+**D0 (merge-safety) is done. PR #122 (`feat/graph-foundations` → `main`) MERGED at
+`29fc29e4`.** Now on `feat/graph-tooling-tidyup`. This session took D0 from
+"committed but unpushed, all owner-gated" to merged, with a full functional proof
+the owner explicitly raised the bar to require.
+
+**Landed this session:**
+
+- **Pushed the D0 bundle** (was 8 ahead of origin — the 7 from cont. II plus the
+  handoff commit). Note: the branch had also advanced under the session with the
+  parallel routing-sunset commits (`d9225d5b`/`9317cdcd`/`d1525f55`), so the push
+  published 11 commits — benign (peer-committed, gate-green).
+- **Fixed the remaining Sonar `new_violation`** — `typescript:S4624` nested
+  template literal in `external-data-contract.ts:240` (the validator hardened last
+  session). Extracted a `lineSuffix` local; `90714ea5`. → `new_violations` 0.
+- **Lane B hotspot SAFE write** (owner-authorised, explicit per-action): hotspot
+  `AZ5rZYbMCv0_1Y1L8PE3` → REVIEWED/SAFE per `sonar-disposition-policy` §S4036.
+  → `new_security_hotspots_reviewed` 100% → **SonarCloud QG GREEN**.
+- **Full functional proof (owner-raised bar — necessary, not just QG-green):**
+  - *Local, real server* via `prod:harness` (exercises the real
+    `env→toBooleanFlag→runtimeConfig` path, not the injected-config e2e path),
+    **both flag states**: OFF → 35 tools / 4 prompts, EEF tool+prompt absent, base
+    tool executes; ON → 36 / 5, EEF present and the **EEF tool executes** (returns
+    a real `structuredContent` subgraph). Plus the e2e suite (133) green.
+  - *Preview deployment* (`oak-preview` authed MCP + unauth probes): EEF tool
+    absent from the authed tool set, `get-key-stages` executes (200); `/healthz`
+    200, OAuth PRM 200, unauth `/mcp` 401, landing page 35/4 no-EEF.
+- **Found + fixed a flag-gating leak the review surfaced** — the public landing
+  page (`/`) listed the EEF tool+prompt names+descriptions **even when the flag
+  was OFF** (`renderToolsSection`/`renderPromptsSection` iterated the full SDK set
+  unconditionally). Fixed via a single-source-of-truth `eef-surface.ts`
+  (`EEF_TOOL_NAME`/`EEF_PROMPT_NAME`) consumed by BOTH the MCP registration AND
+  the landing page, with `eefEnabled` threaded from `runtimeConfig`. `28bb7ace`;
+  in-cycle reviewed (code-expert APPROVED, type-expert SAFE → added `as const`);
+  verified live local + deployed preview (OFF 35/4 no-EEF, ON 36/5 EEF shown).
+- **Merge-readiness review** (5-lens workflow → adversarial verify →
+  release-readiness synthesis): **GO_WITH_CONDITIONS, zero confirmed blockers**;
+  flag-gating provably sealed on the MCP protocol surface. The landing-page leak
+  was its one real finding (now fixed); conditions all met.
+- **Deployed-flag confirmation**: owner confirmed `OAK_CURRICULUM_MCP_EEF_ENABLED`
+  must be literal `'true'` to enable and is **not set anywhere in Vercel** →
+  fail-safe OFF in preview + production.
+
+**Tooling note:** the Vercel MCP plugin has **no env-var tool** (`get_project`
+returns no env data) — re-auth does not add one; env-var confirmation is a
+dashboard/CLI action, owner-side when the CLI session lacks the team scope.
+
+**Next session = D1** (graph-tool contract ADR) per the banner + plan.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Quiet Hiding Hush` | `claude` | `claude-opus-4-8` | `457189` | `goal-2-d0-completion-functional-proof-landing-gate-fix-and-merge-handoff` | 2026-05-29 | 2026-05-29 |
 
 ## Session 2026-05-29 (cont. II) — Goal 2 / D0 gateway review + validator hardening landed (Tempestuous Gliding Thermal / `3e5d88`)
 

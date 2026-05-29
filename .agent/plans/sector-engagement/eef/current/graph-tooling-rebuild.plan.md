@@ -144,6 +144,18 @@ the first instance of the methodology; graduate it *from* this plan at D5.
 
 ## D0 — Merge-safety (precondition)
 
+> **STATUS: DONE — PR #122 (`feat/graph-foundations` → `main`) MERGED at
+> `29fc29e4` (2026-05-29, Quiet Hiding Hush).** All three acceptance conditions
+> met: (#1) PR safe — CI green, `CLEAN`/`MERGEABLE`; (#2) flag co-gating proven —
+> local both flag states via the real `prod:harness` env path (EEF tool executes
+> when ON) + e2e + preview authed `oak-preview`; (#3) flag OFF in preview +
+> production (owner-confirmed unset in Vercel; must be literal `'true'` to
+> enable). SonarCloud QG green (S4624 fixed `90714ea5`; S4036 hotspot SAFE). A
+> landing-page flag-gating leak (EEF names shown on `/` when OFF) was found by the
+> merge-readiness review and fixed at `28bb7ace` (single-source-of-truth
+> `eef-surface.ts` consumed by both registration and the landing page). The
+> rebuild chain begins at **D1**.
+
 Land the sound foundation on `main` with the wrong-shaped tool quarantined.
 
 - **Outcome:** PR #122 (`feat/graph-foundations`) merged to `main`, with both

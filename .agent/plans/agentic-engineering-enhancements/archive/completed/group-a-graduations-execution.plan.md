@@ -6,7 +6,7 @@ overview: >-
   shared-index convergence step. Each lane is a self-contained delegation brief
   carrying the home-grounding done by Tempestuous Vaulting Falcon on 2026-05-29,
   so the executing agent verifies rather than rediscovers.
-status: current
+status: done
 thread: agentic-engineering-enhancements
 todos:
   - id: ws-readiness
@@ -34,8 +34,8 @@ todos:
     status: done
     depends_on: [ws-readiness]
   - id: ws-z-shared-index-convergence
-    content: "Lane Z (convergence, single writer): batch the shared-index edits — PDR decision-records README rows (087/088 + PDR-058 status), practice-index 087/088 phenotype-bridge rows, RULES_INDEX additions (= 0; Lane E minted no rules), pending-graduations register removals of the 6 graduated items (#21, reflection, #40/087, #41/088, #37, #22+23) with provenance, repo-continuity Next Safe Steps. Run final aggregate gates + learning-loop. PARKED FOR NEXT SESSION 2026-05-29 (owner-directed) — gated ONLY on Lane E owner-approved report-back. Commit window = WS-Z owner this round (Highland commits napkin/distilled/synthesis AFTER, by pathspec; Lane E folds into WS-Z commit). Napkin OFF critical path (converge with it HARD = Highland-remediation-in-progress). Re-check active-claims at WS-Z time (Shaded's claim closed at handoff; shared-index files unclaimed)."
-    status: pending
+    content: "Lane Z (convergence, single writer): DONE 2026-05-29 (Eclipsed Creeping Secret). Shared-index edits applied — PDR README rows (PDR-087/088; PDR-058 row unchanged, its title/status did not change), practice-index phenotype-bridge rows (087/088), RULES_INDEX 0 rows (Lane E minted no rule files), pending-graduations 6 graduated entries removed CLEANLY (no provenance pointers — owner-directed; substance verified live in each home first), repo-continuity refreshed. Gatekeeper gates green (markdownlint/portability/vocabulary/repo-validators/agent-tools type-check+lint+test). fitness:strict-hard RED on napkin+distilled recorded as deferred-to-the-fitness-session (owner-directed; not rotated/trimmed). Six-dimension adversarial pre-commit review: all CLEAN. WS-Z content landed in the owner's whole-tree sweep 9317cdcd; plan archived to archive/completed/."
+    status: done
     depends_on: [ws-a-thread-hygiene, ws-b-reflection-foundational, ws-c-tdd-as-design-pdr, ws-d-reviewers-carry-doctrine-pdr, ws-e-pdr058-optionality-family]
 ---
 

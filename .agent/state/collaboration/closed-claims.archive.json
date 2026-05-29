@@ -607,6 +607,105 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "14b484d6-1f0e-44da-ad36-787066a53a52",
+      "agent_id": {
+        "agent_name": "Leafy Regrowing Petal",
+        "platform": "claude",
+        "model": "claude-opus-4-8",
+        "session_id_prefix": "f9d588",
+        "id": "1f104be3-b0aa-5253-9cb4-7907c830e27e"
+      },
+      "thread": "agent-collaboration-research",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/collaboration-state/active-agent-routing.ts",
+            "agent-tools/src/collaboration-state/active-agents.ts",
+            "agent-tools/tests/collaboration-state/active-agent-routing.unit.test.ts",
+            "agent-tools/tests/collaboration-state/active-agents.unit.test.ts",
+            ".agent/practice-core/decision-records/PDR-076a-agent-identity-tuple-name-and-uuid.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-29T10:23:41Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Routing-legacy-fallback sunset (owner-directed). Strict single-path id-keyed routing; cures the 2026-05-28 watcher runaway.",
+      "archived_at": "2026-05-29T12:06:42Z",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-29T12:06:42Z",
+        "closed_by": {
+          "agent_name": "Twilit Orbiting Satellite",
+          "platform": "claude",
+          "model": "claude-opus-4-8",
+          "session_id_prefix": "263042",
+          "id": "782cb4b3-1355-5995-9379-dedcf7960a17"
+        },
+        "summary": "Picked up Leafy's retained handoff claim and completed the routing-legacy-fallback sunset: greened the 10 RED unit tests plus a previously-unlisted e2e failure, finished the doctrine removal (PDR-076a sunset note, register-identity reconciled to (name,id), coordinator-name strip, claim-reports comment), verification grep clean, full pnpm check green.",
+        "evidence": [
+          {
+            "kind": "commit",
+            "ref": "d9225d5b",
+            "summary": "Sunset: strict id-keyed routing; legacy arm + fallback writer + diagnostic deleted; fail-fast on id-less; tests green; doctrine removal."
+          },
+          {
+            "kind": "commit",
+            "ref": "d1525f55",
+            "summary": "Plan-hygiene: sunset plan marked complete/landed; comms-coordination cluster cross-linked + overlap map; rightsizing activation record reconciled."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c7a0c3bb-9021-4f1a-9c77-3cfe846c7f56",
+      "agent_id": {
+        "agent_name": "Eclipsed Creeping Secret",
+        "platform": "claude",
+        "model": "claude-opus-4-8",
+        "session_id_prefix": "1d950c",
+        "id": "40ba7729-65f6-5def-a6df-eec9a3e1cebf"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/README.md",
+            ".agent/practice-index.md",
+            "RULES_INDEX.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/repo-continuity.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-29T10:26:24Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "WS-Z single-writer shared-index convergence + gatekeeper commit for the owner-approved Group A graduations (Lanes A/B/C/D/E). Writes: PDR README rows (087/088 + PDR-058 status), practice-index phenotype-bridge rows, 0 RULES_INDEX rows, remove 6 graduated register entries with provenance, refresh repo-continuity Next Safe Steps. Holds the commit window this round (gatekeeper-specialisation). Disjoint from Leafy (rightsizing plan, M1).",
+      "archived_at": "2026-05-29",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-29T12:22:09Z",
+        "closed_by": {
+          "agent_name": "Eclipsed Creeping Secret",
+          "platform": "claude",
+          "model": "claude-opus-4-8",
+          "session_id_prefix": "1d950c",
+          "id": "40ba7729-65f6-5def-a6df-eec9a3e1cebf"
+        },
+        "summary": "WS-Z Group A convergence complete. Content committed (in owner sweep 9317cdcd); shared indices + register removals + repo-continuity refreshed; 6-dim review CLEAN; plan archived to archive/completed/. Finish bookkeeping left uncommitted per owner (no commit this session).",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c7a0c3bb-9021-4f1a-9c77-3cfe846c7f56",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

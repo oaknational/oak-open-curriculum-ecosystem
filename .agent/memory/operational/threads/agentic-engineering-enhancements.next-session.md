@@ -1,5 +1,36 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-29 — Eclipsed Creeping Secret / claude / claude-opus-4-8 / `1d950c`, Group A WS-Z convergence — DONE; content committed, finish bookkeeping uncommitted)
+
+**WS-Z (shared-index convergence) complete.** The six owner-approved Group A
+graduations are landed and the convergence is committed — folded into the owner's
+whole-tree sweep `9317cdcd` ("docs: planning") rather than a dedicated WS-Z commit.
+
+- **Shared indices**: PDR README rows for PDR-087 + PDR-088; practice-index
+  phenotype-bridge rows for 087/088; RULES_INDEX 0 new rows (Lane E minted no rule
+  files); PDR-058 README row unchanged (title/status did not change).
+- **Register**: the six graduated entries removed **cleanly** — no provenance
+  pointers/tombstones (owner-directed); substance verified live in each home first
+  (knowledge-preservation screen passed). Owner-gated count 63 → 56.
+- **Review**: a six-dimension adversarial pre-commit review returned all CLEAN
+  (index rows; clean removal + no pointers; knowledge-preservation; the #42-fold
+  judgment; repo-continuity; PDR-087/088 portability). Two repo-continuity findings
+  (premature "archived" assertion + a fragile plan path-link) fixed.
+- **Gates** green where they matter (markdownlint / portability / vocabulary /
+  repo-validators / agent-tools type-check+lint+test). `fitness:strict-hard` RED on
+  napkin (CRITICAL) + distilled (HARD) recorded as **deferred to the fitness
+  session** (owner-directed; not rotated or trimmed).
+
+**Uncommitted finish-bookkeeping (left for the owner's orchestration; owner
+directed "no commit this session"):** this plan archived to `archive/completed/`
+(plan `status: done`, ws-z todo done); my WS-Z claim relinquished; this block + the
+repo-continuity fixes. agent-tools is GREEN (Twilit Orbiting Satellite greened the
+routing-sunset tests in `d9225d5b`).
+
+**Next safe step for this thread: none queued.** Groups B/D/E forks + claim-liveness
+promotion remain owner-surfaced; napkin + distilled strict-hard remediation is the
+fitness session's.
+
 ## Session Outcome (2026-05-29 — Highland Rising Squall / claude / claude-opus-4-8 / `71b264`, raw-input extraction curation pass — COMPLETE for scope, UNCOMMITTED)
 
 **Owner-directed `consolidate-until-done` scoped to raw-input extraction** (disjoint

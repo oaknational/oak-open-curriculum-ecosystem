@@ -145,6 +145,22 @@ What kind of agent should do this research?
 |---|---|---|---|---|---|---|
 | Charcoal Brazing Kiln | claude | claude-opus-4-7 | 7c7327 | 2026-05-24 | 2026-05-24 | thread-record-author-post-m1-merge |
 | Solar Illuminating Dawn | codex | GPT-5 | 019e6a | 2026-05-27 | 2026-05-27 | state-file-lifecycle-boundary-clarification |
+| Twilit Orbiting Satellite | claude | claude-opus-4-8 | 263042 | 2026-05-29 | 2026-05-29 | routing-legacy-fallback-sunset execution (Leafy claim `14b484d6` pickup) |
+
+## 2026-05-29 — execution work touched this thread via a claim (not research)
+
+The owner-gated research vector above remains untouched and undispatched. This
+thread was *touched* only because Leafy Regrowing Petal filed the
+routing-legacy-fallback-sunset claim (`14b484d6`) against it, and Twilit
+Orbiting Satellite picked that claim up and completed the sunset on 2026-05-29
+(commits `d9225d5b` + `d1525f55`; claim closed in the archive). That work is
+**collaboration-substrate implementation**, not comms-corpus research — its
+home is the agent-tooling plan cluster
+([`future/README.md` §Comms / coordination cluster](../../plans/agent-tooling/future/README.md#comms--coordination-cluster)),
+keystoned by the
+[`collaboration-substrate-coordination-rightsizing`](../../plans/agent-tooling/future/collaboration-substrate-coordination-rightsizing.plan.md)
+brief. Recorded here only for identity-row honesty; the research buffer's
+dispatch contract is unchanged.
 
 ## Cross-References
 

@@ -16,14 +16,18 @@ Earlier archives remain under [`archive/`](archive/).
 
 ## Current State
 
-- **Current branch**: `feat/graph-foundations`, local HEAD `63c7c1be` (EEF
-  Goal-1 design + D0 prerequisite). `63c7c1be` is local (1 ahead of `origin`);
-  earlier Goal-1 commits `4e443f15` + `a37f4075` were pushed by the owner.
+- **Current branch**: `feat/graph-tooling-tidyup` (post-merge tidyup branch).
+  **EEF Goal 2 / D0 is COMPLETE — PR #122 (`feat/graph-foundations` → `main`)
+  MERGED at `29fc29e4` (2026-05-29, Quiet Hiding Hush).** The EEF graph
+  foundation now ships **dark** behind `OAK_CURRICULUM_MCP_EEF_ENABLED` (proven
+  OFF in every deployed environment). Next EEF step: **D1 — graph-tool contract
+  ADR**.
 - **Active delivery focus**: `eef` **graph-tooling rebuild** is the only active
   product lane. The EEF explore tool + the gate-1a/1b split were diagnosed as
   the wrong foundation and discarded; the rebuild is built on the foundation
-  doc. See the EEF section below and the `eef` thread record (which opens with a
-  CURRENT-TRUTH banner) for live pickup.
+  doc. D0 (merge-safety) is done; the rebuild chain begins at D1. See the EEF
+  section below and the `eef` thread record (which opens with a CURRENT-TRUTH
+  banner) for live pickup.
 - **Solo session (2026-05-28)**: Nebulous Threading Prism stood down; its
   handed-over curation pass was committed (`2f1d100e`). No open claims or queues.
 - **Cursor statusline (2026-05-28)**: Stratospheric Hovering Gale landed Lane A
@@ -36,9 +40,21 @@ Earlier archives remain under [`archive/`](archive/).
   `routing-legacy-fallback-sunset` future plan. Lane B + the sweep + codegen +
   continuity landed by the owner in `ae4e09cb` (code + dep sweep + codegen) and
   `227b5415` (memory).
+- **Routing-legacy-fallback sunset (2026-05-29)**: **executed and landed**
+  (`d9225d5b`) by Twilit Orbiting Satellite, picking up Leafy's retained claim
+  `14b484d6`. Strict single-path id-keyed routing — legacy arm, fallback writer,
+  and diagnostic deleted, fail-fast on an id-less identity; 10 RED unit tests and
+  a previously-unlisted e2e greened; doctrine removal finished (PDR-076a sunset
+  note; `register-identity-on-thread-join` reconciled to `(name, id)`;
+  hardcoded coordinator-name strip in `use-agent-comms-log`). The
+  comms-coordination plan cluster was then cross-linked and overlap-mapped
+  (`d1525f55`) — see [`agent-tooling/future/README.md` §Comms / coordination
+  cluster](../../plans/agent-tooling/future/README.md#comms--coordination-cluster),
+  keystoned by the `collaboration-substrate-coordination-rightsizing` brief (M1
+  inventory done; M2 owner-gated). Full `pnpm check` green. Claim closed.
 - **Agentic-engineering tactical lane**: not an active product delivery arc.
   The recent pending-graduations cleanup collapsed sidecar files back into
-  canonical [`pending-graduations.md`](pending-graduations.md), where the 66
+  canonical [`pending-graduations.md`](pending-graduations.md), where the 56
   owner-gated decisions remain live for owner direction.
 - **Closed-claims archive curation (Nebulous Threading Prism / codex /
   `019e6b`)**: the 1091-entry closed-claims archive was processed as a
@@ -68,7 +84,7 @@ paused implementation program.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-8 / Tempestuous Gliding Thermal / Goal 2 / D0 — gateway review done + Lane C4 validator hardened to a file-wide no-logic invariant (`e76b9b7c`); 7 ahead of origin, NOT pushed; remaining ALL owner-gated: push → Lane B Sonar SAFE write (classifier-blocked, needs explicit auth) → Vercel flag check → merge PR #122 / 2026-05-29 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-8 / Quiet Hiding Hush / **Goal 2 / D0 COMPLETE — PR #122 MERGED to main (`29fc29e4`)**: S4624 fixed (`90714ea5`) + hotspot S4036 SAFE → QG green; full functional proof (local both flag states incl. EEF tool execution + preview authed `oak-preview`); landing-page flag-gating leak found+fixed (`28bb7ace`, `eef-surface.ts` SSOT); merge-readiness review GO. Next = D1 (graph-tool contract ADR) / 2026-05-29 |
 | `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | claude / claude-opus-4-8 / Eclipsed Creeping Secret / Group A graduations LANDED — WS-Z converged + committed: all six graduations (Lane A retired-thread hygiene; Lane B PDR-011/ADR-150/§6c; Lane C PDR-087; Lane D PDR-088; Lane E PDR-058 S3/S4 + PDR-029 note), PDR README + practice-index rows for 087/088, RULES_INDEX 0 new rows, six register entries removed (substance verified live first), execution plan archived. Next: none queued for this thread; Groups B/D/E forks + claim-liveness owner-surfaced; napkin+distilled strict-hard owned by the fitness session / 2026-05-29 |
 
 ## Paused Threads
@@ -87,7 +103,7 @@ not the current session-priority lane. Reactivation is owner-directed.
 | `sector-engagement` | External adoption | [record][sector] | Squally / cursor / unknown / unknown / 2026-04-30 |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / codex / unknown / unknown / 2026-04-29 |
 | `cloudflare-mcp-security-and-token-economy-plans` | Cloudflare MCP | [record][cloudflare] | Glassy / codex / unknown / unknown / 2026-04-28 |
-| `agent-collaboration-research` | Comms-corpus pattern research (owner-gated buffer) | [record][collab-research] | codex / GPT-5 / Solar Illuminating Dawn / state-file-lifecycle-boundary-clarification / 2026-05-27 |
+| `agent-collaboration-research` | Comms-corpus pattern research (owner-gated buffer) | [record][collab-research] | claude / claude-opus-4-8 / Twilit Orbiting Satellite / routing-sunset execution (claim 14b484d6) landed `d9225d5b`+`d1525f55` — research vector still owner-gated / 2026-05-29 |
 
 Compact identity rule (per [PDR-027](../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md)
 and the 2026-05-17 structural refactor): this table carries only the latest
@@ -131,26 +147,22 @@ Single source of truth for the rebuild:
   estate-wide reference reconciliation).
 
 **Next safe step:** GOAL 1 is DONE (owner-ratified 2026-05-28). **GOAL 2 / D0
-(merge-safety) — Lanes A/C/D + Lane C4 validator COMMITTED (2026-05-29; Deciduous
-Climbing Root → Wooded Creeping Thicket).** Committed: `c67af4e6` (Lane A S7763
-generator-first + Lane D 4 comments + Lane C external-data convention rename /
-cpd-exclusion / `sonar-disposition-policy.md` §Duplications) and `0d45cf07` +
-`fc14463d` (Lane C4 `validate-external-data-files` repo-validator in
-`agent-tools/src/`, gate-clean incl. knip + depcruise). **The gateway review is
-done** (type-expert SOUND on Lane A; code-expert + security-expert on Lane C4)
-**and the bypass class it surfaced is fixed at `e76b9b7c`** (validator hardened
-to a file-wide no-runtime-logic invariant; Lane B disposition VERIFIED SAFE;
-Lane E co-gating test PASS). Branch is 7 ahead of origin, NOT pushed. Remaining —
-ALL owner-gated, in order: (1) push the 7 commits [pre-authorised] → SonarCloud
-re-scan clears `new_violations` + `new_dup` → (2) Lane B Sonar SAFE write on
-hotspot `AZ5rZYbMCv0_1Y1L8PE3` [needs EXPLICIT per-action owner auth —
-auto-mode-classifier-blocked] → QG green → (3) Vercel deployed-env flag check
-(MCP `get_project` does not expose env values; dashboard verify) → (4)
-**owner-gated merge** of PR #122. Exact state and the ordered remaining steps
-live in the **[`eef` thread record][eef] § 2026-05-29 (cont. II) entry**
-(Tempestuous Gliding Thermal). Bounded: terminates at D6 (plan §"End goal + bounded goals"). The F
-explore tool (`2214f0b2`) is LANDED behind the flag, the wrong shape pending the
-D3 rebuild.
+(merge-safety) is COMPLETE — PR #122 (`feat/graph-foundations` → `main`) MERGED at
+`29fc29e4` (2026-05-29, Quiet Hiding Hush).** All D0 acceptance conditions met:
+PR safe (CI green); flag co-gating proven (local both flag states incl. EEF tool
+execution via the real `prod:harness` env path + preview authed `oak-preview`);
+flag OFF in preview + production (owner-confirmed unset in Vercel — must be literal
+`'true'` to enable); SonarCloud QG green (S4624 fixed `90714ea5`; hotspot S4036
+SAFE). A flag-gating leak on the public landing page (EEF names shown even when
+OFF) was found by the merge-readiness review and fixed at `28bb7ace` via a
+single-source-of-truth `eef-surface.ts` consumed by both registration and the
+landing page. **Next = GOAL 2 / D1 — author the graph-tool contract ADR**
+(crystallise the ratified design; precise enough that D3's worked-example tests
+A/B/C derive from it), then D2 (query surface, no stubs) → D3 (delivery tool) →
+D4 → D5 → D6 → DX. Full close in the **[`eef` thread record][eef] § 2026-05-29
+(cont. III) entry** (Quiet Hiding Hush). Bounded: terminates at D6 (plan §"End
+goal + bounded goals"). The F explore tool (`2214f0b2`) is LANDED behind the
+flag, the wrong shape pending the D3 rebuild.
 
 Historical EEF substrate-floor work (the 2026-05-22→23 multi-agent gate-1a
 session, the WS4.x critical path) and PR #108 graph-substrate details are
@@ -223,11 +235,11 @@ Progress this session (Tempestuous Vaulting Falcon):
   kept, 3 withdrawn** (recurrence-rank weighting; napkin+`.remember/` PDR-011
   amendment; redundant-config marker). Per-item verdicts:
   [`curator-passes/2026-05-29-tempestuous-vaulting-falcon.md`](curator-passes/2026-05-29-tempestuous-vaulting-falcon.md).
-- **Group A planned (not executed this session).** The six graduations are
-  queued as a parallel-lane execution plan:
-  [`group-a-graduations-execution.plan.md`](../../plans/agentic-engineering-enhancements/current/group-a-graduations-execution.plan.md)
-  (5 lanes + 1 serialized convergence; two ledger home-recommendations corrected —
-  #37 → PDR-058 sequencing-optionality, #22+23 → PDR-058 Surface 3 rule).
+- **Group A — DONE (2026-05-29).** All six graduations landed and the WS-Z
+  convergence committed (in the owner's whole-tree sweep `9317cdcd`); the
+  execution plan `group-a-graduations-execution.plan.md` is archived to
+  `archive/completed/`. Two ledger home-recommendations were corrected at
+  execution — #37 → PDR-058 sequencing-optionality, #22+23 → PDR-058 Surface 3.
 
 **Group A graduations — DONE (2026-05-29, WS-Z committed by Eclipsed Creeping
 Secret).** All six landed and committed; the six register entries removed
@@ -344,6 +356,31 @@ Current branch non-goals:
   acceptance work.
 
 ## Deep Consolidation Status
+
+**handoff gate (2026-05-29, Quiet Hiding Hush — EEF D0 COMPLETE + merged)**:
+`completed this handoff — owner-requested deep session-handoff + consolidate-docs
+after PR #122 merged`. EEF Goal 2 / D0 is done and **PR #122 is MERGED to `main`
+(`29fc29e4`)**; now on `feat/graph-tooling-tidyup`. This session: pushed the D0
+bundle; fixed S4624 (`90714ea5`); wrote the owner-authorised S4036 hotspot SAFE
+disposition → QG green; proved the MCP server fully functional locally (real
+`prod:harness`, both flag states, EEF tool executes when ON) and in the Vercel
+preview (authed `oak-preview` + unauth surfaces); found+fixed a landing-page
+flag-gating leak via a single-source-of-truth `eef-surface.ts` (`28bb7ace`,
+in-cycle reviewed); ran a merge-readiness review workflow (GO, zero blockers).
+No claim opened this session (nothing to close). `pnpm check` run at handoff (see
+cleanliness gate). The `feat/graph-tooling-tidyup` tree carries the accumulated
+multi-thread continuity/state (Leafy + Eclipsed WS-Z/routing-sunset WIP + this
+session's continuity) which the owner directed be landed in a tidyup commit.
+
+**handoff gate (2026-05-29, Twilit Orbiting Satellite — routing-sunset closeout)**:
+`not due — focused session-completion consolidation ran this handoff`. The
+routing-legacy-fallback sunset landed (`d9225d5b`) and the comms-coordination plan
+cluster was cross-linked and overlap-mapped (`d1525f55`); continuity refreshed and
+claim `14b484d6` closed (archived). No cross-session graduation was triggered by
+this lane. The napkin (CRITICAL) and distilled (HARD) rotation and the
+pending-graduations drain remain owned by the separate fitness session, unchanged
+by this closeout — the napkin gained one full-weight session entry per
+learning-preservation-over-fitness, routing the pressure there rather than trimming.
 
 **handoff gate (2026-05-29, Eclipsed Creeping Secret — WS-Z DONE)**: Group A WS-Z
 convergence is committed. All six graduations landed; the six register entries

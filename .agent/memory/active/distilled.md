@@ -251,3 +251,19 @@ Landing an ADR `Accepted` when the paired PDR is still `Candidate` AND
 implementation is explicitly deferred is a maturity mismatch: future agents read
 `Accepted` as decided-and-validated. Correct status is `Proposed` when either
 holds. Two reviewers surfaced this simultaneously. Source: synthesis 2026-05-29 (D3).
+
+## 2026-05-29 — a flag-gated feature must be proven dark on EVERY surface, via the real env path
+
+Two coupled lessons from EEF D0 (PR #122 shipping the EEF feature dark behind
+`OAK_CURRICULUM_MCP_EEF_ENABLED`). (1) **Gate every surface that names the feature,
+not just the invokable one.** The MCP `tools/list`/`prompts/list` correctly omitted
+EEF when OFF, but the public landing page advertised it unconditionally —
+"flag-gated" silently meant "on the surface I checked." Enumerate ALL surfaces that
+enumerate the feature (protocol, HTML/landing, docs, discovery) and gate them from a
+single source of truth so they cannot drift. (2) **Prove the real `env → config`
+path, not the injected-config test.** Integration/e2e suites that inject
+`runtimeConfig` bypass the `env → toBooleanFlag → runtimeConfig` resolution that
+actually ships; boot the real server with the real env var in both states. A green
+QG and a passing review are necessary but not sufficient for a dark-shipped feature
+— prove it runs. Source: EEF D0 (Quiet Hiding Hush), `28bb7ace`; `candidate:`
+flag-gating-covers-all-surfaces.

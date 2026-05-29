@@ -8,6 +8,48 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## Session: 2026-05-29 — routing-legacy-fallback sunset completion (Twilit Orbiting Satellite)
+
+### Find the falsifying fact before doing surgery — a confident self-narrative is cheap
+
+The e2e failure (`collaboration-tui.e2e.test.ts`, exit 2) handed me a clean,
+self-critical frame: *"my unit-test fixes masked a regression — the display
+layer now crashes on real id-less data."* It felt like rigour (self-accusation
+wears diligence's costume), and I was already drafting product surgery: a
+tolerant display key plus a second identity-equality fn across `active-agents.ts`
+— a compatibility layer the owner's standing steer explicitly forbids. **One
+fact from Leafy's audit collapsed the whole frame**: the closed-claims archive
+has *zero* id-less rows and active claims/queue are id-bearing by write-schema,
+and `activeAgentReports` reads only those (the id-less comms backlog flows
+through a different, already-tolerant surface). So the failing input — an id-less
+*claim* identity — does not occur in valid state; the e2e fixture was simply the
+stale pre-sunset shape. Correct fix was *smaller*: modernise the fixture, leave
+the strict fail-fast. Lesson: the suspicious feeling is not "this sounds
+self-critical" — it is "I have a confident narrative and have not yet found the
+fact that would falsify it." Reusable diagnostic for a strict refactor's
+downstream test failure: **does the failing input shape occur in valid current
+state? If no → stale fixture (modernise it). If yes → real regression (fix
+product).** Extends verify-dont-trust to your own frame, not just others' claims.
+
+### Plan narrative sections drift from their own working artefacts
+
+The rightsizing plan's Activation record said *"routing code is untouched —
+deletion derived from the model"* while its own M1 inventory §0 said *"the legacy
+routing system is deleted, not folded… this work executes that removal."* One
+agent's artefacts, authored at different moments, contradicting each other — and
+the activation record was the stale half. When marking work landed, reconcile
+BOTH the plan's prose sections and its working-artefact sections; a plan can lie
+to itself. (Same family as supersession-must-refresh-the-continuity-chain.)
+
+### Read-only survey agents report plan-body state as current
+
+The Explore agent surveying the comms plans reported the routing sunset's "10
+failing tests BLOCKING" as remaining work — it read the plan's pre-completion
+§Session-1 RED block as live truth. Snapshot-read-as-current-state recurs for
+sub-agents reading plan bodies; verify any "remaining work" claim against the
+live tree/commits before relaying. (Already-homed pattern; noted as a fresh
+instance, not a new lesson.)
+
 ## Session: 2026-05-29 (cont. II) — eef / D0 validator hardening (Tempestuous Gliding Thermal)
 
 ### Validate-before-acting applies to your OWN verdict, especially mid-action — candidate
@@ -588,3 +630,45 @@ graduation handoff to Shaded. Ledger:
   stage important state in temp dirs (`important-state-not-in-temp-files`); write it to a
   durable in-repo home immediately or it is a loss waiting to happen. Worked instance, not a
   new rule — reinforces the three existing surfaces above.
+
+## Quiet Hiding Hush closeout (2026-05-29) — EEF D0 complete + PR #122 merged; NAPKIN STILL CRITICAL (632 lines) → fitness session must rotate, not trim
+
++ **A feature flag must gate EVERY surface that enumerates the feature, not just
+  the invokable one.** EEF was co-gated behind `OAK_CURRICULUM_MCP_EEF_ENABLED` and
+  I'd "proven" it: MCP `tools/list`/`prompts/list` correctly omit EEF when OFF. But
+  the public landing page (`/`) listed the EEF tool+prompt names+descriptions
+  unconditionally — the renderers iterated the full SDK set with no flag awareness.
+  The MCP surface was sealed; the *advertising* surface leaked the dormant feature.
+  "Flag-gated" silently meant "flag-gated on the surface I checked." Cure that holds:
+  a single source of truth for the gated-surface names (`eef-surface.ts`) consumed by
+  BOTH registration and the landing page, so they cannot drift. Next time I gate a
+  feature: enumerate ALL surfaces that name it (protocol, HTML/landing, docs,
+  discovery) and gate them from one source. (`candidate:` flag-gating-covers-all-surfaces.)
++ **Registration/integration-level proof is NOT runtime-env-resolution proof.** The
+  e2e suite proves co-gating by *injecting* `runtimeConfig.eefEnabled` — it bypasses
+  the real `env → toBooleanFlag(OAK_CURRICULUM_MCP_EEF_ENABLED) → runtimeConfig` path
+  that actually ships. The owner raised the bar: "QG green + review is necessary but
+  not sufficient — prove the server is fully functional, with and without the flag."
+  The faithful proof was booting the REAL server (`prod:harness`, which runs
+  `loadRuntimeConfig({processEnv})`) in both flag states and probing live. For a
+  feature that ships dark behind an env flag, prove the real env path, not just the
+  injected-config test.
++ **On a shared branch, the local HEAD can move between `git status` and `git push`.**
+  I grounded HEAD, then pushed "8 commits" — the push reported 11. Parallel agents had
+  committed their WIP in the interval. Benign here (peer-committed, gate-green), but
+  the lesson is verify-don't-trust *at the push moment*: the pushed range is the
+  authority, not the HEAD you grounded earlier. Re-read HEAD immediately before push on
+  a shared branch and reconcile the range.
++ **The Vercel MCP plugin has no env-var tool — re-auth does not add one.** `get_project`
+  returns project/domain/deployment metadata but no env data, and the plugin's whole
+  toolset is project/deployment/logs/toolbar/docs. When asked to confirm a production
+  env var I burned a cycle re-checking after a re-auth; the gap is a missing *capability*,
+  not missing auth. Env-var confirmation is owner-side (dashboard) unless the CLI session
+  has the owning team scope (mine had only a personal team). Don't re-auth to summon a
+  tool that isn't in the plugin.
++ **Specialist agentTypes + a forced `schema` in a Workflow fail to emit StructuredOutput.**
+  My first merge-readiness workflow failed: type/test/architecture/code-expert produced
+  full narrative reviews but never called the forced StructuredOutput tool (they're tuned
+  for prose). Cure that worked: a two-step pipeline — specialist agentType (narrative, no
+  schema) → a cheap generic extractor agent (schema) that structures the narrative. Use
+  the two-step whenever combining a narrative-tuned specialist with structured output.
