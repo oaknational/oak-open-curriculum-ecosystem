@@ -235,9 +235,9 @@ export function findExternalDataViolations(
 /** Render violations as an indented, one-per-line report block. */
 export function formatExternalDataViolations(violations: readonly ExternalDataViolation[]): string {
   return violations
-    .map(
-      (violation) =>
-        `  ${violation.path}${violation.line === undefined ? '' : `:${violation.line}`}  [${violation.rule}] ${violation.detail}`,
-    )
+    .map((violation) => {
+      const lineSuffix = violation.line === undefined ? '' : `:${violation.line}`;
+      return `  ${violation.path}${lineSuffix}  [${violation.rule}] ${violation.detail}`;
+    })
     .join('\n');
 }
