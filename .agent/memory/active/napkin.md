@@ -40,6 +40,34 @@ fitness_content_role: drainable-buffer
   `import * as`), `readonly T[]` not `ReadonlyArray<T>`, type-guard not `as`,
   complexity ≤8 / max-lines ≤250.
 
+### Commit + handoff-phase insights (added at session close)
+
+- **For a file near `max-lines`, run prettier FIRST, then measure.** I trimmed
+  `external-data-contract.ts` to exactly 250, then prettier's wrapping pushed it
+  back to 258 — prettier ADDS lines by wrapping long expressions, so trimming
+  against the pre-prettier count measures the wrong number. Order: prettier → wc
+  → trim → prettier → wc. Cost a full failed-commit cycle.
+- **The spaced-"+" MD004 trap is a whole-file landmine, and the existing napkin
+  warning did not save me.** I wrote a spaced plus as a conjunction in prose
+  ("contract (...) (plus) DI-injected discovery"); it wrapped so a line began
+  with the plus-marker, markdownlint read it as the file's FIRST unordered-list
+  bullet, flipped the file's expected `ul-style` to plus, and 94 legitimate
+  historical dash bullets then failed MD004. One stray plus-at-line-start → 94
+  errors across the file's history. Knowing the documented trap (Sunlit's entry
+  below) did NOT immunise me — same shape as "knowing the anti-pattern doesn't
+  prevent re-enacting it" (Woodland). Durable cure: **never use a spaced plus as
+  a conjunction in authored markdown** — write "and"/"plus" the word. The
+  keep-it-off-line-starts advice is too weak: wrap position is non-deterministic
+  across edits.
+- **Owner doctrine clarification (supersedes the prior gatekeeper discipline):**
+  memory/state files (napkin, repo-continuity, active-claims, closed-claims,
+  thread records) are touched by all sessions and will ALWAYS be mingled — so
+  **anyone can commit them at any time, to avoid logjams.** This relaxes Kilned's
+  earlier "leave co-mingled shared surfaces UNSTAGED for the gatekeeper" note:
+  don't leave them dirty waiting for coordination; commit additively. Substantive
+  in-progress PDR/ADR/SKILL edits are NOT in this class — those still land as the
+  authoring session's coherent unit.
+
 ## Session: 2026-05-29 — pending-graduations decision-packet execution (Tempestuous Vaulting Falcon)
 
 ### Insight (generative metacognition) — verification bias must be asymmetric
