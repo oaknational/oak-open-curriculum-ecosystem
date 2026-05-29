@@ -8,6 +8,38 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## Session: 2026-05-29 — D0 Lane C4 external-data validator (Wooded Creeping Thicket)
+
+- **`scripts/` is the deliberate no-checks zone (owner directive).** Confirmed:
+  `agent-tools/scripts/**` is excluded from tsconfig include, eslint (`ignores`),
+  AND vitest include — so its `*.unit.test.ts` files never type-check, lint, or
+  run. Owner's principle: code important enough to warrant checks BY DEFINITION
+  belongs in a permanent home (`src/`), not `scripts/`. I had started to extend
+  the vitest include to cover `scripts/` (wrong — that imposes checks on the
+  no-check zone); the cure was to put the validator in `src/` instead. → memory
+  [[feedback_scripts_dir_is_no_checks_zone]]; distilled/PDR candidate.
+- **Latent finding (flag, not fix here):** the existing `scripts/` validators
+  (`validate-no-stale-script-invocations`, `validate-portability`,
+  `validate-subagents`, `validate-fitness-vocabulary`) ship `*.unit.test.ts`
+  helper tests that NEVER run (scripts/ excluded from vitest). By the owner's
+  principle they are mis-placed — a separate cleanup (move logic to `src/`).
+- **typescript as a runtime LIBRARY ≠ devtool.** A module that imports + *calls*
+  the TS compiler API at runtime (the AST contract checker) needs `typescript`
+  in `dependencies`, not `devDependencies` — categorically different from
+  typescript-as-compiler (the monorepo-wide devDep convention). Moved it +
+  `pnpm install --lockfile-only` (clean 3/3 diff).
+- **test-expert over-escalation rejected (worked instance).** It flagged the
+  DI-fake fs-walk discovery test as needing `.integration.test.ts`. Grounded
+  against doctrine (`testing-strategy.md:41` + immediate-fail #20 key on
+  *touching real IO*) + the committed precedent `paths.unit.test.ts` (identical
+  in-memory-fake fs-walk, named `.unit.test.ts`). Injected in-memory fake = no
+  real IO = unit. Kept `.unit.test.ts`. [[feedback_validate_specialist_findings_before_acting]]
+- **Idiom wins:** bin entries follow `codex-reviewer-resolve.ts` (`repoRoot()`,
+  `writeLine`/`writeErrorLine`, `isDirectExecution` guard); testable discovery
+  follows `paths.ts` (DI-injected fs). Lint standards: named TS imports (no
+  `import * as`), `readonly T[]` not `ReadonlyArray<T>`, type-guard not `as`,
+  complexity ≤8 / max-lines ≤250.
+
 ## Session: 2026-05-29 — pending-graduations decision-packet execution (Tempestuous Vaulting Falcon)
 
 ### Insight (generative metacognition) — verification bias must be asymmetric

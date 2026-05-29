@@ -25,19 +25,78 @@
 > 2. `.agent/plans/sector-engagement/eef/current/graph-tooling-rebuild.plan.md`
 >    — the SPECIFIED plan (resolved design + self-correcting D0–D6 + DX).
 >
-> **Next session = continue GOAL 2 / D0 (IN PROGRESS, 2026-05-29).** D0
-> merge-safety (PR #122) is part-built locally and **uncommitted** — see the
-> **2026-05-29 session entry below** for exact state, the explicit-pathspec
-> commit set, and the remaining steps. After D0: D1 contract ADR → D2 query
+> **Next session = continue GOAL 2 / D0.** D0 merge-safety (PR #122) is now
+> mostly committed: Lanes A/C/D + plan + PDR README at `c67af4e6`; Lane C4
+> (the `validate-external-data-files` repo-validator) at `0d45cf07` + knip
+> follow-up `fc14463d`. **Remaining — all owner-gated or owner-surface: Lane B
+> (PATH hotspot SAFE), Lane E (flag co-gating test + Vercel deployed-env check),
+> full `pnpm check`, the gateway review, and the hard owner-gated merge.** See
+> the **2026-05-29 (cont.) entry below** (Wooded Creeping Thicket) for exact
+> state and the ordered remaining steps. After D0: D1 contract ADR → D2 query
 > surface (un-stub the GraphView ops; selection → `enumerateNodes` filter) →
 > D3 thin delivery tool (full-node subgraph, `structuredContent`-only) →
 > D4 navigation round-trip → D5 skills + methodology graduation → D6 explore
-> value → DX estate reconciliation. Bounded — terminates at D6; no deferral
-> gates, no endless follow-ons (plan §"End goal + bounded goals").
+> value → DX estate reconciliation. Bounded — terminates at D6 (plan §"End
+> goal + bounded goals").
 >
 > Do NOT resume the increments B–H / gate-1a/1b framing below. Detailed prior
 > session history remains in git. The full clean rewrite of this surface is plan
 > deliverable DX (estate-wide reference reconciliation).
+
+## Session 2026-05-29 (cont.) — Goal 2 / D0 Lane C4 validator landed (Wooded Creeping Thicket / `d7d671`)
+
+**Continued Deciduous's D0.** The owner committed the parked D0 bundle (Lanes
+A/C/D + plan + PDR README + this thread record) at `c67af4e6`. This session built
+and landed the remaining **Lane C4 — the `validate-external-data-files`
+repo-validator** (the anti-abuse contract that makes the `*.external-data.ts`
+cpd-exclusion safe — it would otherwise be a gate-dodge hole). Committed at
+`0d45cf07`, knip follow-up `fc14463d`.
+
+**Architecture (owner-directed placement).** `scripts/` is the deliberate
+no-checks zone (excluded from tsconfig/eslint/vitest), so the validator lives in
+`agent-tools/src/` — pure AST contract (`external-data/external-data-contract.ts`)
+with DI-injected fs discovery (`external-data/external-data-discovery.ts`), both
+unit-tested under the standard gate; thin import-safe runner at
+`src/bin/validate-external-data-files.ts`; wired into root `repo-validators:check`.
+`typescript` moved devDeps→deps (it is a runtime library here, not a build-time
+devtool). Contract enforced: a `*.external-data.ts` file MUST export `: unknown`
+data, MUST carry a provenance docstring, MUST NOT export logic
+(function/class/enum/arrow-const). **Gate-clean:** type-check, lint, 29 tests,
+prettier, markdownlint, repo-validators (incl. the new one), knip, depcruise.
+In-cycle code-expert + test-expert review absorbed (5 fixes; 2 over-escalations
+rejected with grounding — incl. the `.unit`→`.integration` rename, refuted by the
+committed `paths.unit.test.ts` precedent + the touches-real-IO doctrine).
+
+**Latent finding (flagged, not fixed):** the existing `scripts/` validators
+(`validate-no-stale-script-invocations`, `validate-portability`,
+`validate-subagents`, `validate-fitness-vocabulary`) ship `*.unit.test.ts` helper
+tests that NEVER run (`scripts/` is excluded from vitest) — mis-placed by the
+owner's principle; a separate cleanup (move logic to `src/`).
+
+**Remaining D0 (next session, ordered — all owner-gated or owner-surface):**
+
+1. **Lane B** — PATH hotspot SAFE disposition at
+   `agent-tools/src/claude/statusline-identity.ts:112` per `sonar-disposition-policy`
+   §S4036 (documented class: agent-tooling + `git` + dev-workstation; NOT a code
+   fix — `no-machine-local-paths` forbids absolute-pathing git). Surface to owner
+   BEFORE the Sonar `change_security_hotspot_status` REVIEWED/SAFE write.
+2. **Lane E** — run the already-existing co-gating integration test
+   (`apps/oak-curriculum-mcp-streamable-http/src/handlers-tool-registration.integration.test.ts`
+   describe `'EEF feature-flag co-gating'`: OFF→neither, ON→both), THEN verify
+   `OAK_CURRICULUM_MCP_EEF_ENABLED` unset/false in preview + production via the
+   project Vercel MCP (NOT the CLI). D0 acceptance #2 + #3.
+3. **Full gates** (`pnpm check`) — deferred this session (see Deep Consolidation
+   note: concurrent uncommitted WIP in the shared tree); my C4 commits are
+   gate-clean via the full pre-commit hook + knip + depcruise.
+4. **Gateway review** — type-expert on the Lane A S7763 generator change + a final
+   code-expert pass over the whole D0 bundle (the C4 validator is already
+   in-cycle-reviewed).
+5. **Merge PR #122 — HARD OWNER-GATE** — only after the SonarCloud QG is green,
+   reviews resolved, and the flag is proven OFF in every deployed environment.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Wooded Creeping Thicket` | `claude` | `claude-opus-4-8` | `d7d671` | `goal-2-d0-lane-c4-validator-implementer` | 2026-05-29 | 2026-05-29 |
 
 ## Session 2026-05-29 — Goal 2 / D0 in progress: PR #122 signals + external-data convention (Deciduous Climbing Root / `42226f`)
 

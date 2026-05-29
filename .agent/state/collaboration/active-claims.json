@@ -1,40 +1,5 @@
 {
   "schema_version": "1.3.0",
   "commit_queue": [],
-  "claims": [
-    {
-      "claim_id": "b32498ec-656c-4da4-be9b-375800175b18",
-      "agent_id": {
-        "agent_name": "Wooded Creeping Thicket",
-        "platform": "claude",
-        "model": "claude-opus-4-8",
-        "session_id_prefix": "d7d671",
-        "id": "5d51e65e-8703-5908-8d42-71d004377a8c"
-      },
-      "thread": "eef",
-      "areas": [
-        {
-          "kind": "workspace",
-          "patterns": [
-            "agent-tools/scripts/validate-external-data-files*",
-            "agent-tools/package.json",
-            "package.json",
-            "packages/sdks/graph-corpus-sdk/src/eef-strands/**",
-            "packages/sdks/oak-sdk-codegen/**",
-            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/**",
-            "apps/oak-curriculum-mcp-streamable-http/src/prompt-schemas.ts",
-            "sonar-project.properties",
-            ".sonarcloud.properties",
-            "docs/governance/sonar-disposition-policy.md",
-            ".agent/practice-core/decision-records/README.md",
-            ".agent/plans/sector-engagement/eef/**"
-          ]
-        }
-      ],
-      "claimed_at": "2026-05-29T06:07:34Z",
-      "freshness_seconds": 14400,
-      "sidebar_open": false,
-      "intent": "EEF Goal 2 / D0 continuation (Wooded Creeping Thicket, picks up from Deciduous Climbing Root). Active: Lane C4 validate-external-data-files repo-validator + wiring. Then owner-gated B (PATH hotspot SAFE), E (flag test + Vercel env check), full gates, gateway review, owner-gated merge of PR #122. Disjoint from Tempestuous; PDR README index deferred to me."
-    }
-  ]
+  "claims": []
 }

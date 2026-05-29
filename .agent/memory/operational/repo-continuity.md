@@ -68,7 +68,7 @@ paused implementation program.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-8 / Deciduous Climbing Root / Goal 2 / D0 IN PROGRESS — PR #122 signals part-fixed locally (Lane A S7763 generator-first + Lane D 4 comments + Lane C external-data convention done; validator + hotspot SAFE + flag/Vercel + gates + gateway + owner-gated merge remaining); type-check + lint green / 2026-05-29 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-8 / Wooded Creeping Thicket / Goal 2 / D0 — Lanes A/C/D committed (`c67af4e6`), Lane C4 `validate-external-data-files` validator committed + gate-clean (`0d45cf07`+`fc14463d`); remaining owner-gated: Lane B hotspot SAFE, Lane E flag/Vercel, full gates, gateway, merge / 2026-05-29 |
 | `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | claude / claude-opus-4-8 / Tempestuous Vaulting Falcon / decision-packet owner-ratified; Group C re-verified (15 keep, 3 withdraw); Group A graduation plan queued; stale-claim 4th-instance recorded / 2026-05-29 |
 
 ## Paused Threads
@@ -131,21 +131,21 @@ Single source of truth for the rebuild:
   estate-wide reference reconciliation).
 
 **Next safe step:** GOAL 1 is DONE (owner-ratified 2026-05-28). **GOAL 2 / D0
-(merge-safety) is IN PROGRESS — 2026-05-29 (Deciduous Climbing Root); local
-uncommitted bundle; type-check + lint GREEN.** Done: Lane A (S7763 fixed
-generator-first + regenerated), Lane D (4 review comments), Lane C (the
-duplication cure became the owner-decided **external-data file convention** —
-`eef-toolkit.ts` → `eef-toolkit.external-data.ts`; `**/*.external-data.ts`
-cpd-exclusion pattern in both properties files; `sonar-disposition-policy.md`
-§Duplications amended). Remaining, in order: Lane C4 validator
-(`validate-external-data-files`, ships in D0) → Lane B PATH hotspot SAFE
-(`sonar-disposition-policy` §S4036 documented class) → Lane E run the (already
-existing) flag co-gating test + Vercel deployed-env check → full gates → gateway
-review → **owner-gated merge** (flag OFF in every deployed env). Exact state,
-commit-pathspec set, and the concurrent-agent note live in the
-**[`eef` thread record][eef] § 2026-05-29 entry**. Bounded: terminates at D6
-(plan §"End goal + bounded goals"). The F explore tool (`2214f0b2`) is LANDED
-behind the flag, the wrong shape pending the D3 rebuild.
+(merge-safety) — Lanes A/C/D + Lane C4 validator COMMITTED (2026-05-29; Deciduous
+Climbing Root → Wooded Creeping Thicket).** Committed: `c67af4e6` (Lane A S7763
+generator-first + Lane D 4 comments + Lane C external-data convention rename /
+cpd-exclusion / `sonar-disposition-policy.md` §Duplications) and `0d45cf07` +
+`fc14463d` (Lane C4 `validate-external-data-files` repo-validator in
+`agent-tools/src/`, gate-clean incl. knip + depcruise). Remaining — all
+owner-gated or owner-surface: Lane B PATH hotspot SAFE
+(`sonar-disposition-policy` §S4036; surface before the Sonar write) → Lane E run
+the existing flag co-gating test + Vercel deployed-env check → full `pnpm check`
+→ gateway review (type-expert on the generator) → **owner-gated merge** (flag OFF
+in every deployed env). Exact state and the ordered remaining steps live in the
+**[`eef` thread record][eef] § 2026-05-29 (cont.) entry** (Wooded Creeping
+Thicket). Bounded: terminates at D6 (plan §"End goal + bounded goals"). The F
+explore tool (`2214f0b2`) is LANDED behind the flag, the wrong shape pending the
+D3 rebuild.
 
 Historical EEF substrate-floor work (the 2026-05-22→23 multi-agent gate-1a
 session, the WS4.x critical path) and PR #108 graph-substrate details are
@@ -318,6 +318,20 @@ Current branch non-goals:
   acceptance work.
 
 ## Deep Consolidation Status
+
+**handoff gate (2026-05-29, Wooded Creeping Thicket)**: EEF Goal 2 / D0 Lane C4
+landed (`validate-external-data-files` repo-validator; `0d45cf07` + knip fix
+`fc14463d`). My C4 commits are gate-clean (full pre-commit hook + knip + depcruise
+verified). **Full `pnpm check` NOT run** — named constraint: the shared tree
+carries a concurrent agent's uncommitted substantive WIP (PDR-011, ADR-150,
+consolidate-docs + session-handoff SKILLs, PDR-087, group-a plan), which a full
+`pnpm check` would validate but is not mine to land; plus the heavy e2e/widget/a11y
+suites are unrelated to a repo-validator change. Falsifiable: next session runs
+`pnpm check` green on a settled tree before the owner-gated merge. Deep
+consolidation **not newly due** by this session; two PDR/pattern candidates
+captured in the napkin (external-data file convention; scripts/-is-no-checks-zone)
+for the next register refresh — they fold into the Group A execution session that
+Tempestuous already queued. My claim closed; see below.
 
 **handoff gate (2026-05-29, Tempestuous Vaulting Falcon)**: pending-graduations
 decision-packet execution. Group C re-verified (15 keep, 3 withdraw; ledger
