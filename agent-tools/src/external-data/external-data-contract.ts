@@ -1,35 +1,42 @@
 import {
   canHaveModifiers,
   createSourceFile,
+  forEachChild,
   getModifiers,
-  isArrowFunction,
-  isClassDeclaration,
-  isClassExpression,
-  isEnumDeclaration,
-  isExportAssignment,
-  isFunctionDeclaration,
-  isFunctionExpression,
   isIdentifier,
   isVariableStatement,
   ScriptKind,
   ScriptTarget,
   SyntaxKind,
   type BindingName,
-  type Expression,
   type Node,
   type SourceFile,
-  type Statement,
   type TypeNode,
   type VariableStatement,
 } from 'typescript';
 
+import { classifyLogicNode, containsLogicNode, type LogicKind } from './external-data-logic.js';
+
 /**
  * Contract enforcement for the `*.external-data.ts` file convention (pure AST).
  *
- * The suffix excludes a file from Sonar's duplication detector (see
- * `docs/governance/sonar-disposition-policy.md` §Duplications); this module is
- * the anti-abuse contract: a snapshot MUST export its data typed `unknown`, MUST
- * carry a provenance docstring, and MUST NOT export logic (function/class/enum).
+ * The suffix excludes the **whole file** from Sonar's duplication detector (see
+ * `docs/governance/sonar-disposition-policy.md` §Duplications) and from ESLint
+ * code-quality rules. This module is the anti-abuse contract that keeps that
+ * exclusion safe: a snapshot MUST export its data typed `unknown`, MUST carry a
+ * provenance docstring, and MUST contain **no runtime logic anywhere** — no
+ * function, class, enum, namespace/module, accessor, `import = require`,
+ * `export default` / `export =`, or value re-export, whether exported or not,
+ * top-level or nested inside the data literal (see `./external-data-logic.ts`).
+ *
+ * The invariant is deliberately **file-wide**, not export-scoped: because the
+ * exclusion is file-level, any runtime logic in the file — including a
+ * non-exported helper or a function-valued property nested in the data object —
+ * ships its (duplicable) body past the gate. A faithful external snapshot is
+ * serialisable data and carries no logic, so the file-wide rule has no
+ * false-positive cost on a genuine snapshot. It is a tripwire against the common
+ * mistake, not a guarantee against a committer who also edits this validator or
+ * the Sonar config; that adversary cannot be stopped by any in-repo check.
  *
  * @packageDocumentation
  */
@@ -78,8 +85,13 @@ function isUnknownType(typeNode: TypeNode | undefined): boolean {
   return typeNode !== undefined && typeNode.kind === SyntaxKind.UnknownKeyword;
 }
 
-function isFunctionLike(node: Expression): boolean {
-  return isArrowFunction(node) || isFunctionExpression(node) || isClassExpression(node);
+function hasDeclareModifier(node: Node): boolean {
+  if (!canHaveModifiers(node)) {
+    return false;
+  }
+  return (
+    getModifiers(node)?.some((modifier) => modifier.kind === SyntaxKind.DeclareKeyword) ?? false
+  );
 }
 
 function lineOf(source: SourceFile, node: Node): number {
@@ -90,53 +102,52 @@ function declarationName(name: BindingName, source: SourceFile): string {
   return isIdentifier(name) ? name.text : name.getText(source);
 }
 
-interface ExportedLogic {
-  readonly kind: string;
-  readonly name?: string;
-  readonly node: Node;
-}
-
-function exportedDeclarationLogic(statement: Statement): ExportedLogic | undefined {
-  if (!isExported(statement)) {
-    return undefined;
-  }
-  if (isFunctionDeclaration(statement)) {
-    return { kind: 'function', name: statement.name?.text, node: statement };
-  }
-  if (isClassDeclaration(statement)) {
-    return { kind: 'class', name: statement.name?.text, node: statement };
-  }
-  if (isEnumDeclaration(statement)) {
-    return { kind: 'enum', name: statement.name.text, node: statement };
-  }
-  return undefined;
-}
-
-function exportedLogic(statement: Statement): ExportedLogic | undefined {
-  const declaration = exportedDeclarationLogic(statement);
-  if (declaration !== undefined) {
-    return declaration;
-  }
-  if (isExportAssignment(statement) && isFunctionLike(statement.expression)) {
-    return { kind: 'default', node: statement };
-  }
-  return undefined;
-}
-
 function logicViolation(
   filePath: string,
   source: SourceFile,
-  logic: ExportedLogic,
+  node: Node,
+  kind: LogicKind,
 ): ExternalDataViolation {
-  const named = logic.name === undefined ? '' : ` \`${logic.name}\``;
+  const named = kind.name === undefined ? '' : ` \`${kind.name}\``;
   return {
     path: filePath,
     rule: 'logic-export-forbidden',
-    detail: `Exported ${logic.kind}${named} is logic. An external-data file must export only data; move executable logic to a normal, checked source module.`,
-    line: lineOf(source, logic.node),
+    detail: `Runtime logic (${kind.label})${named} is forbidden in a \`*.external-data.ts\` file. The whole file is excluded from duplication and code-quality gates, so it must contain only data — move executable logic to a normal, checked source module.`,
+    line: lineOf(source, node),
   };
 }
 
+/**
+ * Walk the whole file and report every forbidden runtime-logic construct,
+ * anywhere — top-level or nested, exported or not. Flagged nodes are not
+ * descended into, so a class or namespace yields one violation, not one per
+ * member.
+ */
+function collectLogicViolations(filePath: string, source: SourceFile): ExternalDataViolation[] {
+  const violations: ExternalDataViolation[] = [];
+  const visit = (node: Node): void => {
+    // Ambient (`declare …`) constructs carry no runtime — they erase at emit and
+    // cannot bypass the duplication gate — so skip the whole ambient subtree.
+    if (hasDeclareModifier(node)) {
+      return;
+    }
+    const kind = classifyLogicNode(node);
+    if (kind !== undefined) {
+      violations.push(logicViolation(filePath, source, node, kind));
+      return;
+    }
+    forEachChild(node, visit);
+  };
+  forEachChild(source, visit);
+  return violations;
+}
+
+/**
+ * Validate an exported `const` statement's data bindings, returning whether a
+ * compliant `: unknown` data export was seen. Logic-bearing initialisers are
+ * left to {@link collectLogicViolations}; they are not data and are skipped here
+ * to avoid double-reporting.
+ */
 function inspectVariableStatement(
   filePath: string,
   source: SourceFile,
@@ -146,14 +157,7 @@ function inspectVariableStatement(
   let dataExportSeen = false;
   for (const declaration of statement.declarationList.declarations) {
     const initializer = declaration.initializer;
-    if (initializer !== undefined && isFunctionLike(initializer)) {
-      violations.push(
-        logicViolation(filePath, source, {
-          kind: 'function',
-          name: declarationName(declaration.name, source),
-          node: declaration,
-        }),
-      );
+    if (initializer !== undefined && containsLogicNode(initializer)) {
       continue;
     }
     dataExportSeen = true;
@@ -172,23 +176,6 @@ function inspectVariableStatement(
     });
   }
   return dataExportSeen;
-}
-
-function inspectStatement(
-  filePath: string,
-  source: SourceFile,
-  statement: Statement,
-  violations: ExternalDataViolation[],
-): boolean {
-  const logic = exportedLogic(statement);
-  if (logic !== undefined) {
-    violations.push(logicViolation(filePath, source, logic));
-    return false;
-  }
-  if (isVariableStatement(statement) && isExported(statement)) {
-    return inspectVariableStatement(filePath, source, statement, violations);
-  }
-  return false;
 }
 
 function inspectFile(file: ScannedFile): ExternalDataViolation[] {
@@ -210,10 +197,16 @@ function inspectFile(file: ScannedFile): ExternalDataViolation[] {
     });
   }
 
+  for (const violation of collectLogicViolations(file.path, source)) {
+    violations.push(violation);
+  }
+
   let dataExportSeen = false;
   for (const statement of source.statements) {
-    if (inspectStatement(file.path, source, statement, violations)) {
-      dataExportSeen = true;
+    if (isVariableStatement(statement) && isExported(statement)) {
+      if (inspectVariableStatement(file.path, source, statement, violations)) {
+        dataExportSeen = true;
+      }
     }
   }
 

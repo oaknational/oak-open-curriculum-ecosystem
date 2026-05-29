@@ -35,7 +35,8 @@ const config = defineConfigArray(
       // prettier still apply. Matched by pattern (not path) so it survives file
       // moves; see the external-data convention in
       // docs/governance/sonar-disposition-policy.md §Duplications.
-      'src/**/*.external-data.ts',
+      // Aligned to the sonar.cpd.exclusions glob exactly so the two never drift.
+      '**/*.external-data.ts',
     ],
   },
 
