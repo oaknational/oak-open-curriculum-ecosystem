@@ -44,6 +44,22 @@
 > graduation → D6 explore value → DX estate reconciliation. Bounded — terminates
 > at D6 (plan §"End goal + bounded goals").
 >
+> **Owner-directed next-session scope (2026-05-29), three items:**
+>
+> 1. **Write the ADR** (D1 — the graph-tool contract, as above).
+> 2. **Review the user-facing impact of the tools we built** — boot a local MCP
+>    server with the new EEF features ON (`OAK_CURRICULUM_MCP_EEF_ENABLED=true`;
+>    e.g. `prod:harness` or `dev`, or the `oak-local-dev`/`oak-preview` MCP
+>    connection) and evaluate the EEF tool + prompt's usefulness **in relation to
+>    the other curriculum tools** (search, browse-curriculum, explore-topic,
+>    the graph tools). This is the foundation's "us-able-to-explore" discovery
+>    lens (connects to D6 explore-value) — does the wrong-shape explore tool earn
+>    its place, or does the evaluation sharpen what D3 should rebuild?
+> 3. **Review the plan estate** — the EEF plans (`sector-engagement/eef/`:
+>    foundation, `graph-tooling-rebuild.plan.md`, `extending-graph-support-tooling`)
+>    and the graph plans (`connecting-oak-resources/knowledge-graph-integration/`),
+>    for coherence, drift, and sequencing against the post-D0 reality.
+>
 > Do NOT resume the increments B–H / gate-1a/1b framing below. Detailed prior
 > session history remains in git. The full clean rewrite of this surface is plan
 > deliverable DX (estate-wide reference reconciliation).

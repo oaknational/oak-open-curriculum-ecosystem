@@ -160,9 +160,14 @@ landing page. **Next = GOAL 2 / D1 — author the graph-tool contract ADR**
 (crystallise the ratified design; precise enough that D3's worked-example tests
 A/B/C derive from it), then D2 (query surface, no stubs) → D3 (delivery tool) →
 D4 → D5 → D6 → DX. Full close in the **[`eef` thread record][eef] § 2026-05-29
-(cont. III) entry** (Quiet Hiding Hush). Bounded: terminates at D6 (plan §"End
-goal + bounded goals"). The F explore tool (`2214f0b2`) is LANDED behind the
-flag, the wrong shape pending the D3 rebuild.
+(cont. III) entry** (Quiet Hiding Hush). **Owner-directed next-session scope
+(2026-05-29), three items:** (1) write the D1 ADR; (2) boot a local MCP with EEF
+ON and evaluate the EEF tool/prompt's usefulness in relation to the other
+curriculum tools (the foundation's discovery lens; connects to D6); (3) review
+the EEF plan estate (`sector-engagement/eef/`) and the graph plan estate
+(`connecting-oak-resources/knowledge-graph-integration/`) for coherence + drift.
+Bounded: terminates at D6 (plan §"End goal + bounded goals"). The F explore tool
+(`2214f0b2`) is LANDED behind the flag, the wrong shape pending the D3 rebuild.
 
 Historical EEF substrate-floor work (the 2026-05-22→23 multi-agent gate-1a
 session, the WS4.x critical path) and PR #108 graph-substrate details are
