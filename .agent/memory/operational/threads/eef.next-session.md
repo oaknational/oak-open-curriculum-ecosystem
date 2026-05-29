@@ -28,11 +28,13 @@
 > **Next session = continue GOAL 2 / D0.** D0 merge-safety (PR #122) is now
 > mostly committed: Lanes A/C/D + plan + PDR README at `c67af4e6`; Lane C4
 > (the `validate-external-data-files` repo-validator) at `0d45cf07` + knip
-> follow-up `fc14463d`. **Remaining — all owner-gated or owner-surface: Lane B
-> (PATH hotspot SAFE), Lane E (flag co-gating test + Vercel deployed-env check),
-> full `pnpm check`, the gateway review, and the hard owner-gated merge.** See
-> the **2026-05-29 (cont.) entry below** (Wooded Creeping Thicket) for exact
-> state and the ordered remaining steps. After D0: D1 contract ADR → D2 query
+> follow-up `fc14463d`; **gateway review done + Lane C4 validator hardened at
+> `e76b9b7c`.** **Remaining — ALL OWNER-GATED: (1) push the 7 commits
+> [pre-authorised; held for wind-down]; (2) Lane B Sonar SAFE write [needs
+> EXPLICIT per-action owner auth — auto-mode-classifier-blocked]; (3) Vercel
+> deployed-env flag check; (4) merge PR #122.** See the **2026-05-29 (cont. II)
+> entry below** (Tempestuous Gliding Thermal) for exact state and the ordered
+> remaining steps. After D0: D1 contract ADR → D2 query
 > surface (un-stub the GraphView ops; selection → `enumerateNodes` filter) →
 > D3 thin delivery tool (full-node subgraph, `structuredContent`-only) →
 > D4 navigation round-trip → D5 skills + methodology graduation → D6 explore
@@ -42,6 +44,101 @@
 > Do NOT resume the increments B–H / gate-1a/1b framing below. Detailed prior
 > session history remains in git. The full clean rewrite of this surface is plan
 > deliverable DX (estate-wide reference reconciliation).
+
+## Session 2026-05-29 (cont. II) — Goal 2 / D0 gateway review + validator hardening landed (Tempestuous Gliding Thermal / `3e5d88`)
+
+**RESUME HERE for D0.** The D0 gateway review (the last remaining D0 *work*
+step) is complete and the one defect it surfaced is fixed and committed.
+Everything else remaining is owner-gated.
+
+**Landed this session:**
+
+- **Gateway review** (via a background workflow + sub-agents): type-expert
+  **SOUND** on the Lane A S7763 generator fix; code-expert + security-expert on
+  the Lane C4 `*.external-data.ts` validator surfaced a real logic-smuggling
+  bypass class.
+- **Lane B (S4036) disposition VERIFIED SAFE** — matches `sonar-disposition-policy`
+  §S4036 (all three criteria: agent-tooling site / project-required `git`
+  toolchain / dev-CI trust boundary; the second `spawnSync` uses `process.execPath`
+  and does not trigger S4036). Hotspot key `AZ5rZYbMCv0_1Y1L8PE3`; ready-to-write
+  REVIEWED/SAFE comment text is in the session log. The Sonar write is owner-gated
+  AND was **BLOCKED by the auto-mode classifier** ("yes to all" judged too vague
+  for a specific external security-disposition write) — needs EXPLICIT per-action
+  owner authorisation (or a settings permission rule).
+- **Lane E co-gating integration test PASS** (8/8: OFF→neither tool nor prompt,
+  ON→both, base prompts always). Flag is fail-safe — `toBooleanFlag = value ===
+  'true'`, so unset/malformed → OFF.
+- **SonarCloud QG** maps 1:1 to the three D0 lanes: `new_violations`=2 (Lane A
+  S7763 — `fixtures.ts:155` + `index-documents.ts:10`; fixed → awaits push),
+  `new_duplicated_lines_density`=3.9% (Lane C — cpd-excluded → awaits push),
+  `new_security_hotspots_reviewed`=0% (Lane B — awaits the SAFE write). The PR's
+  SonarCloud check is STALE (scans origin, 7 commits behind). The 4 Copilot
+  comments are advisory (`COMMENTED`); each maps to a Lane D fix in the bundle.
+- **Commit `e76b9b7c`** — hardened the `*.external-data.ts` validator from
+  "no *exported* logic" to a **file-wide "no runtime logic anywhere"** invariant.
+  The cpd-exclusion is file-level, so a namespace, a function nested in the data
+  literal, a non-exported helper, a value re-export, an `import = require`, or an
+  `export default` could ship duplicable logic past the gate. Now caught by a
+  recursive whole-file scan (ambient `declare` blocks excluded — they erase at
+  emit). AST classification split into `external-data-logic.ts`; the
+  graph-corpus-sdk eslint ignore glob aligned to the sonar cpd glob
+  (`**/*.external-data.ts`). Gate-clean (type-check, lint, 766 tests, knip,
+  depcruise, real-repo validator OK) + in-cycle reviewed (test-expert
+  `toStrictEqual` tightening + code-expert ambient-`declare` exclusion both
+  absorbed; the reviewers' `new`/call-expression "gap" was REJECTED with
+  grounding — an imported call has no in-file duplicable body, a local one is
+  already caught, and catching bare calls would false-positive on
+  `Object.freeze({...})`). **Owner-directed strictness**: this deliberately
+  REVERSED the validator author's tested *"does not over-reach: nested function
+  in data is allowed"* decision — a faithful snapshot is serialisable data, so
+  the stricter rule has no false-positive cost on a genuine corpus file (the one
+  real `*.external-data.ts` file still passes).
+
+**Branch state:** `feat/graph-foundations` is **7 ahead of origin, NOT pushed.**
+
+**Remaining D0 — fresh session, ALL owner-gated, in order:**
+
+1. **Push the 7 commits** — PRE-AUTHORISED by owner ("yes to all"); held this
+   session so the SonarCloud re-scan is watched in a live session. `git push`
+   (no force) → re-scan clears `new_violations` (S7763 fixed) +
+   `new_duplicated_lines_density` (cpd-exclusion).
+2. **Lane B Sonar SAFE write** — needs EXPLICIT per-action owner auth (the
+   auto-mode classifier blocks it). `change_security_hotspot_status`
+   REVIEWED/SAFE on `AZ5rZYbMCv0_1Y1L8PE3` with the §S4036 comment. Clears
+   `new_security_hotspots_reviewed` → **QG green.**
+3. **Vercel deployed-env check** — the project Vercel MCP `get_project` does NOT
+   expose env-var values; verify `OAK_CURRICULUM_MCP_EEF_ENABLED` unset/`false`
+   in preview + production via the Vercel dashboard (or an env-listing path the
+   MCP does not currently expose). Strong evidence it is OFF: fail-safe default +
+   nothing in-repo sets it `true` + plan documents OFF (`true` is a documented
+   FUTURE release step).
+4. **Merge PR #122** — HARD owner-gate, only after QG green + flag proven OFF +
+   Copilot comments confirmed resolved on push.
+
+Then D1 → … → DX per `graph-tooling-rebuild.plan.md` (bounded; ends D6+DX).
+
+**Full `pnpm check` on a settled tree** remains the standing deferred D0 item —
+it cannot run clean while the shared tree carries concurrent agents' uncommitted
+WIP, and the mutating gate would touch their files. Commit `e76b9b7c` passed the
+full pre-commit hook (91 turbo tasks green), so the D0 source is verified clean.
+
+**Tooling note:** the `comms watch` CLI has a known `routing-legacy-fallback`
+runaway defect (floods on legacy-identity events that never dedupe into the
+seen-file). Leafy Regrowing Petal owns the permanent fix. Workaround used this
+session: a raw-file watcher reading `.agent/state/collaboration/comms/*.json`
+directly (`/tmp/tempestuous-comms-watch.sh`).
+
+**Tree note:** concurrent `agentic-engineering-enhancements` agents (Highland
+Rising Squall, Shaded Prowling Threshold, Furnace Melting Bellows, coordinator
+Prismatic Twinkling Nebula) all closed out clean this session; their
+PDR/ADR/skill/memory WIP in the tree is headed for a separate WS-Z gatekeeper
+commit — NOT this thread's to land. My continuity writes (this entry, the
+experience file) are committed; `repo-continuity.md` + `napkin.md` touches are
+left additively in the mingled working tree for that gatekeeper commit.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Tempestuous Gliding Thermal` | `claude` | `claude-opus-4-8` | `3e5d88` | `goal-2-d0-gateway-review-and-validator-hardening` | 2026-05-29 | 2026-05-29 |
 
 ## Session 2026-05-29 (cont.) — Goal 2 / D0 Lane C4 validator landed (Wooded Creeping Thicket / `d7d671`)
 
