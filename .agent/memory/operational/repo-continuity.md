@@ -20,8 +20,11 @@ Earlier archives remain under [`archive/`](archive/).
   **EEF Goal 2 / D0 is COMPLETE — PR #122 (`feat/graph-foundations` → `main`)
   MERGED at `29fc29e4` (2026-05-29, Quiet Hiding Hush).** The EEF graph
   foundation now ships **dark** behind `OAK_CURRICULUM_MCP_EEF_ENABLED` (proven
-  OFF in every deployed environment). Next EEF step: **D1 — graph-tool contract
-  ADR**.
+  OFF in every deployed environment). Next EEF step: **execute the finishing
+  plan to close the tool** — `eef-graph-tool-completion.plan.md` (S1 contract
+  ADR → S2 query surface → S3 thin formatter → S4 navigation), then merge. The
+  plan-estate consolidation + value-evaluation are a post-merge **team session**
+  (planned 2026-05-29, Pelagic Sailing Sextant).
 - **Active delivery focus**: `eef` **graph-tooling rebuild** is the only active
   product lane. The EEF explore tool + the gate-1a/1b split were diagnosed as
   the wrong foundation and discarded; the rebuild is built on the foundation
@@ -84,7 +87,7 @@ paused implementation program.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-8 / Quiet Hiding Hush / **Goal 2 / D0 COMPLETE — PR #122 MERGED to main (`29fc29e4`)**: S4624 fixed (`90714ea5`) + hotspot S4036 SAFE → QG green; full functional proof (local both flag states incl. EEF tool execution + preview authed `oak-preview`); landing-page flag-gating leak found+fixed (`28bb7ace`, `eef-surface.ts` SSOT); merge-readiness review GO. Next = D1 (graph-tool contract ADR) / 2026-05-29 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-8 / Pelagic Sailing Sextant / **planning session: authored + committed (`4380bc9e`) the simple/linear finishing plan `eef-graph-tool-completion.plan.md` (S1 ADR → S2 query surface → S3 thin formatter → S4 navigation; supersedes rebuild D1–D6+DX) + the `graph-estate-consolidation.plan.md` fresh-session brief**. D0 done/merged (`29fc29e4`, v1.15.0, dark). State verified vs code+git (6-agent workflow; 5/7 GraphView ops stubbed; tool real but F-shape). Next = execute the finishing plan to close EEF → merge → team session for tool-in-context eval + estate consolidation / 2026-05-29 |
 | `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | claude / claude-opus-4-8 / Eclipsed Creeping Secret / Group A graduations LANDED — WS-Z converged + committed: all six graduations (Lane A retired-thread hygiene; Lane B PDR-011/ADR-150/§6c; Lane C PDR-087; Lane D PDR-088; Lane E PDR-058 S3/S4 + PDR-029 note), PDR README + practice-index rows for 087/088, RULES_INDEX 0 new rows, six register entries removed (substance verified live first), execution plan archived. Next: none queued for this thread; Groups B/D/E forks + claim-liveness owner-surfaced; napkin+distilled strict-hard owned by the fitness session / 2026-05-29 |
 
 ## Paused Threads
@@ -156,18 +159,26 @@ flag OFF in preview + production (owner-confirmed unset in Vercel — must be li
 SAFE). A flag-gating leak on the public landing page (EEF names shown even when
 OFF) was found by the merge-readiness review and fixed at `28bb7ace` via a
 single-source-of-truth `eef-surface.ts` consumed by both registration and the
-landing page. **Next = GOAL 2 / D1 — author the graph-tool contract ADR**
-(crystallise the ratified design; precise enough that D3's worked-example tests
-A/B/C derive from it), then D2 (query surface, no stubs) → D3 (delivery tool) →
-D4 → D5 → D6 → DX. Full close in the **[`eef` thread record][eef] § 2026-05-29
-(cont. III) entry** (Quiet Hiding Hush). **Owner-directed next-session scope
-(2026-05-29), three items:** (1) write the D1 ADR; (2) boot a local MCP with EEF
-ON and evaluate the EEF tool/prompt's usefulness in relation to the other
-curriculum tools (the foundation's discovery lens; connects to D6); (3) review
-the EEF plan estate (`sector-engagement/eef/`) and the graph plan estate
-(`connecting-oak-resources/knowledge-graph-integration/`) for coherence + drift.
-Bounded: terminates at D6 (plan §"End goal + bounded goals"). The F explore tool
-(`2214f0b2`) is LANDED behind the flag, the wrong shape pending the D3 rebuild.
+landing page. **Next = execute the simple, linear finishing plan
+[`eef-graph-tool-completion.plan.md`](../../plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md)
+to CLOSE the EEF work**: S1 contract ADR → S2 query surface (un-stub the 5
+`NotImplementedYet` GraphView ops; `selectEefSeedIds` → an `enumerateNodes`
+`NodeFilter`; remove the type-only rank/explain/compare) → S3 thin formatter
+(remove `capForBudget` + `projectExploreNode`; full-node `structuredContent`-only
+subgraph) → S4 navigation round-trip. That plan **supersedes** the
+`graph-tooling-rebuild.plan.md` D1–D6 + DX spine (the foundation + resolved design
+are preserved and cited). **Forward sequence (owner-directed 2026-05-29, Pelagic
+Sailing Sextant planning session):** next session executes the finishing plan →
+merge → a **team session** for (a) tool-in-context evaluation (usefulness vs the
+other curriculum tools) and (b) the graph + EEF plan-estate consolidation, briefed
+by
+[`graph-estate-consolidation.plan.md`](../../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-estate-consolidation.plan.md)
+(which also authors the value-evaluation plan, superseding
+`eef-outcome-evaluation-infrastructure.plan.md`). The earlier "three items"
+next-session scope is superseded by this planning session. The estate is mostly
+superseded gate-1a/1b / five-increment framing — the consolidation brief carries
+the verified disposition map so that session starts grounded. The F explore tool
+(`2214f0b2`) is LANDED behind the flag, the wrong shape pending the S3 rebuild.
 
 Historical EEF substrate-floor work (the 2026-05-22→23 multi-agent gate-1a
 session, the WS4.x critical path) and PR #108 graph-substrate details are
@@ -361,6 +372,20 @@ Current branch non-goals:
   acceptance work.
 
 ## Deep Consolidation Status
+
+**handoff gate (2026-05-29, Pelagic Sailing Sextant — EEF completion + consolidation PLANS authored)**:
+`not due — planning-only session; the owner deferred the graph-estate
+consolidation to a fresh post-merge team session.` Briefed by
+`graph-estate-consolidation.plan.md`.
+Verified true state against code + git via a 6-agent workflow (D0 merged/dark at
+`29fc29e4`/v1.15.0; D1–D6+DX not started; 5/7 GraphView ops `NotImplementedYet`;
+the tool is real but F-shape — `capForBudget` + `projectExploreNode` + dual emit).
+Authored + committed (`4380bc9e`) the simple/linear finishing plan
+`eef-graph-tool-completion.plan.md` (S1–S4; supersedes rebuild D1–D6+DX) and the
+`graph-estate-consolidation.plan.md` fresh-session brief; refreshed the `eef`
+thread record + these continuity surfaces. assumptions-expert reviewed both plans
+(scope proportionate; supersession sound; 3 unclassified files added to the
+brief's verify-first). No claim opened (solo). `pnpm check` green at handoff.
 
 **handoff gate (2026-05-29, Quiet Hiding Hush — EEF D0 COMPLETE + merged)**:
 `completed this handoff — owner-requested deep session-handoff + consolidate-docs

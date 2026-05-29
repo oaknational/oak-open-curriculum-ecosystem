@@ -8,6 +8,37 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## Session: 2026-05-29 — EEF completion + consolidation planning (Pelagic Sailing Sextant)
+
+### An inherited verdict contaminates a "fresh" evaluation
+
+Asked to evaluate the EEF tool's usefulness, I opened by relaying the continuity
+records' conclusion — "wrong-shape F tool pending rebuild" — as established fact,
+inside the very evaluation meant to TEST it. The owner stopped me cold ("wtf are
+you talking about rebuilds?"). The records' diagnosis is a *claim to test*, not a
+frame to adopt; pre-loading the verdict defeats the evaluation. Extends
+"verify the auditor" / verify-don't-trust to: when the task is to assess X, do not
+carry the recorded verdict about X — assess from live behaviour. → distilled.
+
+### "It ships live" answers existence, not role or intent
+
+I argued "graph work is not blocked on EEF" because five graph tools ship live.
+The owner corrected: those are the *naive first-pass* tools; EEF is the
+*pathfinder* meant to replace them, and the wider graph work is *undefined* until
+EEF finishes. Verifying what exists (code/git) is necessary but never establishes
+a thing's role, intended shape, or whether downstream work is unblocked — that is
+intent, and it lives with the owner, not the tree.
+
+### Disposition maps must enumerate the full live-lane set, structurally
+
+My consolidation disposition map curated the "notable" plan files and silently
+dropped three that sit in live lanes (`oak-kg-threads-surface`,
+`oak-misconceptions-subgraph-mcp-surface`, `open-education-knowledge-surfaces`).
+assumptions-expert caught two; a cross-check caught the third. For any
+archive/park estate map, `ls` the live lanes and account for every file —
+curating from memory leaves orphans the "verify clean" gate would miss. (Echoes
+enumerate-from-the-structural-source.)
+
 ## Session: 2026-05-29 — routing-legacy-fallback sunset completion (Twilit Orbiting Satellite)
 
 ### Find the falsifying fact before doing surgery — a confident self-narrative is cheap

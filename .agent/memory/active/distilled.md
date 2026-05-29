@@ -17,6 +17,22 @@ fitness_rationale: >-
   substance rather than trimming the lesson.
 ---
 
+## 2026-05-29 — a recorded verdict is a claim to test, not a frame to adopt
+
+When the task is to *evaluate* or *re-assess* X, the continuity records' recorded
+conclusion about X (a diagnosis, a "wrong-shape" verdict, a "done/blocked" status)
+is an input to test — never the frame to reason inside. Carrying it in pre-decides
+the very question. Two coupled forms, both owner-caught in one session: (1) relaying
+a recorded *diagnosis* as fact inside the evaluation meant to test it (owner: "wtf
+are you talking about rebuilds?"); (2) treating "X ships live in the tree" as proof
+of X's *role/intent* ("graph work isn't blocked on EEF" — wrong: the live tools are
+the naive first-pass ones the EEF pathfinder is meant to replace; the wider graph
+work is undefined until EEF finishes). Verify *existence* against code+git; verify
+*meaning, role, and verdict* against the owner. Extends "verify the auditor" and
+verify-don't-trust-your-own-claims from artefacts to the evaluation frame itself.
+
+Source: 2026-05-29 EEF completion-planning session (Pelagic Sailing Sextant).
+
 ## 2026-05-28 — a forced conclusion is executed, not offered; deference can be a hedge
 
 When your own analysis forces a conclusion (the remaining options are expedient
