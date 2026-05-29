@@ -310,10 +310,22 @@ there unless the owner or closeout owner gives a further assignment.
    candidates stay under step 6b and pending-graduations; cross-link only when
    a candidate is blocked on an unresolved question.
 
-   **6c. Record subjective experience (optional).** If the session
-   produced a reflective surplus, capture it in
+   **6c. Record subjective experience (foundational standing).**
+   Subjective experience and reflection are foundational continuity
+   substrate, not reflective surplus — the substrate the three continuity
+   types rest on (PDR-011 §"Subjective experience is foundational
+   substrate, not optional surplus"; ADR-150). Foundational standing
+   attaches to the *signal*, not to a quota: the obligation is never to
+   discard a genuine subjective shift as surplus, not to manufacture one
+   because a session ended. When the session carried a felt shift —
+   texture, friction, something that went differently from expectation —
+   capture it in
    `.agent/experience/<date>-<slug>.md` per the
-   [`.agent/experience/` convention](../../experience/README.md).
+   [`.agent/experience/` convention](../../experience/README.md). A
+   reflection performed to fill this edge is not a smaller contribution —
+   it is noise that pollutes the subjective register; a session with no
+   genuine shift writes nothing here, and that is the correct outcome of an
+   event-anchored capture edge, not an evasion.
 
    **The experience file is for *subjective experience* — what the
    work was like, not what was done.** Texture, shifts, surprises,

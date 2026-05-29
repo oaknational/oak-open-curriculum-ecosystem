@@ -50,6 +50,39 @@ learning and surprises, not for live ownership or decision requests.
 At handoff, summarise only open/stale decision threads that change the
 thread's next safe step; ordinary closed threads remain evidence by path.
 
+## Retirement-banner convention
+
+A thread record's lifecycle has three states, indexed in
+[`../repo-continuity.md`](../repo-continuity.md): **active** (current
+session-priority lane, `§ Active Threads`), **paused** (record and
+identity history retained, reactivation owner-directed, `§ Paused
+Threads`), and **retired/completed** (the work has concluded — e.g. a
+single-PR closure thread whose PR merged, or a thread superseded by
+another).
+
+When a thread retires or completes, its next-session record stays on
+disk as continuity history — it is not deleted (`never-use-git-to-remove-work`;
+the identity trail and session context remain evidence). But a record
+that simply drops out of both repo-continuity indexes reads as *live* to
+the next agent who opens it, who must then cross-reference repo-continuity
+to discover it is dead. The cure is a **retirement banner**: a leading
+blockquote at the very top of the record (before the `# Next-Session
+Record` heading) stating the retired/completed state, the conclusion
+date, and where the work concluded. Shape:
+
+```markdown
+> **RETIRED — <thread completed | thread superseded> <YYYY-MM-DD>.**
+> <one line on how the work concluded — merged PR, superseding thread,
+> owner closure>. Retained as continuity history; not a live lane.
+> Not listed in `repo-continuity.md` Active or Paused threads.
+```
+
+The banner is enforced at consolidation by
+[`consolidate-docs` step 7c check 7](../../skills/consolidate-docs/SKILL-CANONICAL.md#thread-register-freshness)
+(retired-record banner hygiene), which flags any on-disk record absent
+from both indexes whose top lacks a banner and applies the missing
+banner as a follow-on diff.
+
 ## Identity schema
 
 Each thread's next-session file carries a structured identity block

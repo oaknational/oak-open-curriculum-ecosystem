@@ -1,3 +1,9 @@
+> **RETIRED — thread completed 2026-04-29.** PR #90 (`fix/build_issues` →
+> `main`) landed as part of the TS6/Sentry migration (PRs #90–92);
+> agent-completable closure work finished (Phases 0–5, five commits) per the
+> Last refreshed block below. Retained as continuity history; not a live lane.
+> Not listed in `repo-continuity.md` Active or Paused threads.
+
 # Next-Session Record — `pr-90-build-fix-landing` thread
 
 **Last refreshed**: 2026-04-29 (Solar Threading Star / claude-code /

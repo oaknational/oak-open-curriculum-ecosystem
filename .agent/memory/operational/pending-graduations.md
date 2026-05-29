@@ -81,17 +81,6 @@ wrong-shape diagnosis + rebuild. Full context:
     failure mode
   - trigger-condition: plan D5 (extract from the real built tool/contract)
   - status: pending (owner-directed plan deliverable)
-- **Reflection / subjective experience is foundational to continuity, not optional surplus.**
-  - captured-date: 2026-05-28
-  - source-surface: owner direction 2026-05-28 — "reflection and subjective
-    experience are not surplus, they are the foundation of the systems that will
-    have true continuity"
-  - graduation-target: amend `session-handoff` §6c and PDR-011 / ADR-150 —
-    reframe subjective experience and reflection from "reflective surplus" /
-    "optional" to first-class foundational substrate for true cross-session
-    continuity; capture is not a nice-to-have
-  - trigger-condition: due now (owner stated directly); next continuity-doctrine pass
-  - status: due
 - **Proportionate exploration — raising a question is fine; the expenditure is the failure.**
   - captured-date: 2026-05-28
   - source-surface: owner correction 2026-05-28 — "it's always fine to raise a
@@ -152,7 +141,7 @@ Per-item verdicts and evidence:
 [`curator-passes/2026-05-29-tempestuous-vaulting-falcon.md`](curator-passes/2026-05-29-tempestuous-vaulting-falcon.md).
 The Group C dispositions in the Sunlit ledger are superseded by that pass.
 
-Total live owner-gated items: 63 (3 withdrawn 2026-05-29; re-verification ledger above).
+Total live owner-gated items: 56.
 
 ## Legacy Backlog Gates
 
@@ -287,31 +276,6 @@ Total live owner-gated items: 63 (3 withdrawn 2026-05-29; re-verification ledger
   The remaining decision is whether to graduate the pattern now, keep watching
   for a second named-receiver diagnostic handoff, or withdraw because PDR-048
   and PDR-046 already carry enough capture-at-the-moment guidance.
-- 2026-05-01; **Retired thread-record hygiene signal**.
-  `[captured: 2026-05-01 | source: legacy-backlog | target: pdr-027-amendment+consolidate-docs-thread-hygiene | trigger: owner-direction | size: M | status: owner-gated]`
-  Retired thread records can still look active when the file itself lacks a
-  retirement banner. The remaining decision is whether to land a PDR-027
-  amendment plus a consolidate-docs thread-hygiene check now, keep watching
-  the single PR-90 instance, or withdraw because repo-continuity prose is
-  enough. If landed, the work also needs a retroactive banner on the currently
-  retired PR-90 thread record.
-- 2026-04-30; **Do not shoehorn value-claims into absent
-  infrastructure**.
-  `[captured: 2026-04-30 | source: legacy-backlog+pdr-058-surface-3 | target: rule:do-not-shoehorn-value-claims | trigger: owner-direction-or-second-instance | size: S | status: owner-gated]`
-  The pattern says plans should not invent brittle tests or fantasy
-  operational protocols when the infrastructure for knowing the claimed value
-  does not exist. PDR-058 names this as the adjacent sibling to outcome
-  optionality, but explicitly leaves open whether the two rule siblings merge.
-  The owner decision is merge with outcome optionality, keep as a separate
-  rule candidate, keep watching, or withdraw.
-- 2026-05-10; **Outcome optionality standalone rule sibling**.
-  `[captured: 2026-05-10 | source: legacy-backlog+pdr-058-surface-3 | target: rule:outcome-optionality-falsifiability | trigger: owner-direction-or-second-named-instance-with-cure-draft | size: S | status: owner-gated]`
-  PDR-058 Surface 3 names the outcome-optionality failure mode and cure: the
-  outcome must name a single observable signal, and absent observing
-  infrastructure must be stated honestly rather than simulated. PDR-058 does
-  not pre-graduate the standalone rule. The owner decision is whether to
-  graduate the rule now, merge it with the value-claim sibling, keep watching,
-  or withdraw because PDR-058 is sufficient.
 - 2026-05-10; **Design optionality standalone rule sibling**.
   `[captured: 2026-05-10 | source: legacy-backlog+pdr-058-surface-2 | target: rule:closed-shape-design-optionality | trigger: owner-direction-or-second-named-instance-with-cure-draft | size: S | status: owner-gated]`
   PDR-058 Surface 2 names the design-optionality failure mode and cure:
@@ -494,34 +458,6 @@ collaboration-state" not found` despite the script being present and
   Trigger: a second platform exhibits the same need (Cursor / Codex
   equivalent budget hits), OR owner direction to land the practice.md /
   PDR-051 amendment.
-- 2026-05-07; **sequence-or-admit-not-doing doctrine — never use
-  "deferred" as a bare status; sequence (gate-relative or tripwire-
-  based) or admit not-doing** (Windward Darting Horizon, owner
-  correction during MVP-arc spine authoring).
-  `[captured: 2026-05-07 | source: owner-direction | target: rule:never-use-bare-deferred-status OR directive-amend:principles.md | trigger: second-instance OR owner-direction | size: S | status: owner-gated]`
-  Owner direction: *"we never mark anything as deferred, we sequence
-  things properly or we admit we are not going to do them. Sequencing
-  can include 'when these specific tripwires fire'."* I had added an
-  unsequenced `mvp_arc_status: deferred` YAML annotation. Existing
-  `sentry-observability-maximisation-mcp.plan.md` correctly uses the
-  word "deferred" only as a modifier on a stated reopen tripwire (e.g.
-  *"Deferred to public beta 2026-04-20; reopen when X"*); the doctrine
-  is: bare-status `*: deferred` is the violation, not the word itself.
-  Source-surface: napkin
-  [`napkin.md § 2026-05-07 Doctrine — sequence-or-admit-not-doing`](../../active/napkin.md).
-  Graduation-target: (a) new rule
-  `.agent/rules/never-use-bare-deferred-status.md` with canonical-plus-
-  adapters triple; (b) extend `no-moving-targets-in-permanent-docs.md`
-  with a deferred-as-bare-status clause; (c) directive amendment to
-  `.agent/directives/principles.md`. Trigger: second-instance
-  observed OR owner direction at promotion. **Status (2026-05-09):
-  three corpus-window instances confirmed via historical-napkin-synthesis
-  (Windward spine 2026-05-07; Briny vaporware-cited deferral 2026-05-06;
-  PDR-051 plan §Out-of-scope 2026-05-09); promotion is now owner-gated**
-  per [`historical-napkin-synthesis-2026-05-09.md`](../../../../research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-09.md)
-  §F11. Originally captured to honour the moment per PDR-048.
-  Disposition 2026-05-27: owner-gated; do not create the rule
-  opportunistically until the owner chooses the exact rule/directive home.
 - 2026-05-07; **fitness limits encode an implicit access-rhythm
   theory; recalibration must name the lifecycle, not just bump
   numbers** (Pelagic Rolling Harbour, owner-direction reframe of
@@ -602,71 +538,6 @@ collaboration-state" not found` despite the script being present and
   and the memory-feedback plans carry the seam-review lane; owner
   decision needed to ratify/restart that lane or withdraw this older
   broad review watch.
-- 2026-05-04; **tests describe the system to itself** (Dewy Shedding
-  Glade, owner-led doctrinal arc): foundational reframing of TDD
-  landed in `tdd-as-design.md`. *A test does not verify code; a test
-  describes a system state, and product code is the path that guides
-  the system into that state. Test and product code are two halves
-  of one act of design. Writing them separately, in either order, is
-  a category error.* Adopter scope: every Practice-bearing repo —
-  this is a Practice-governance decision about the role of tests, not
-  a host-repo architectural choice. Source-surface: napkin
-  2026-05-04 entry; current home: `tdd-as-design.md` directive.
-  Graduation-target: PDR in `practice-core/decision-records/`
-  capturing the load-bearing definition + the atomic-landing
-  invariant + the describe-vs-audit blade as portable Practice
-  governance. The host directive `tdd-as-design.md` already operates
-  the host-local consequence; the PDR records the decision so it
-  travels with the Core. Trigger-condition: second instance OR
-  owner direction (owner-led arc this session is the first instance;
-  the framing is stable and load-bearing for the entire
-  validation-and-tdd-doctrine-restructure arc). Status: owner-gated
-  — host-local doctrine is live in `tdd-as-design.md`; owner decision
-  needed to promote it into a portable Practice Core PDR now or wait
-  for another Practice-bearing repo instance.
-- 2026-05-04; **reviewers carry doctrine, not just audit it** (Dewy
-  Shedding Glade, owner direction §6 of the arc): the test-reviewer
-  refresh elevated the reviewer from structural auditor to doctrinal
-  carrier with mandatory recipe/pattern read path and citation
-  requirement on every suggestion. The shift is measurable: the
-  reviewer's *first question* is now "does this test describe an
-  interface or audit one?" rather than "does it pass". Source-surface:
-  `.agent/sub-agents/templates/test-reviewer.md` rewrite; companion
-  surfaces `.claude/agents/test-reviewer.md`,
-  `.cursor/agents/test-reviewer.md`, `.codex/agents/test-reviewer.toml`.
-  Graduation-target: PDR in `practice-core/decision-records/`
-  capturing reviewer-as-doctrine-carrier as a general
-  reviewer-authority discipline (sibling to PDR-007 reviewer
-  lineage). Trigger-condition: second instance — when one further
-  reviewer (architecture-reviewer-fred is already shaped this way;
-  candidates are type-reviewer, security-reviewer, sentry-reviewer)
-  is similarly upgraded to the doctrine-carrier shape. Status:
-  owner-gated — test, type, and architecture reviewers carry mandatory
-  doctrine read paths, but portable PDR promotion still needs owner decision
-  on whether the evidence is sufficient now or should wait for a sharper
-  second reviewer-doctrine instance.
-- 2026-05-04; **forcing-function read path: reviewer carries the
-  recipes the doctrine cites** (Dewy Shedding Glade, derived from §5
-  of the arc): the test-reviewer's mandatory read path now includes
-  `docs/engineering/testing-tdd-recipes.md` and
-  `docs/engineering/testing-patterns.md`, with a citation requirement
-  on every suggestion (cite recipe/pattern by section heading).
-  The general shape: when a doctrine references companion recipes
-  or patterns, the reviewer that operationalises the doctrine becomes
-  the forcing function that keeps the recipes load-bearing. Without
-  this forcing function, recipes drift from doctrine because no one
-  reads them. Source-surface: test-reviewer template Reading
-  Requirements + Step 7 (suggestion mode); companion surface: the
-  recipe and pattern files themselves. Graduation-target: pattern in
-  `.agent/memory/active/patterns/` capturing the
-  reviewer-as-forcing-function shape; promote to general
-  Practice-Core PDR with `pdr_kind: pattern` once a second
-  reviewer-recipe pairing follows in another domain. Trigger-condition:
-  second instance — security-reviewer citing security-review-recipes,
-  type-reviewer citing type-flow-patterns, etc. Status: owner-gated —
-  `test-expert` carries the recipe/pattern citation forcing function, but no
-  second domain reviewer-recipe pairing was found in the current templates;
-  owner decision needed to promote now or keep waiting.
 - 2026-05-03; **autonomous .git/index.lock interaction is forbidden,
   including wait loops** (Prismatic Illuminating Eclipse, owner
   intervention mid-A1-commit): the existing 2026-04-30 distilled.md

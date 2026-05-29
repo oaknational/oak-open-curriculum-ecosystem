@@ -31,6 +31,20 @@ discipline binds to this PDR's tuple format).
 
 ## Amendment Log
 
+- **2026-05-29 — retired/completed thread records carry a retirement
+  banner.** The 2026-04-21 Session 5 entry established that a retired
+  *surface* records its retirement rationale in the retired-surface README.
+  This extends the same hygiene to the *thread-record* level: when a thread
+  retires or completes, its next-session record stays on disk as continuity
+  history but carries a leading retirement banner (retired/completed state +
+  conclusion date + where the work concluded), so a record that has dropped
+  out of both `repo-continuity.md` thread indexes does not read as live to
+  the next agent who opens it. The convention shape lives in
+  `threads/README.md` §"Retirement-banner convention"; enforcement is the
+  `consolidate-docs` §7c check-7 (retired-record banner hygiene) operational
+  layer. No change to the §Decision body or the additive-identity rule — this
+  is record-lifecycle hygiene, not an identity-schema change.
+
 - **2026-05-26 — canonical identity key becomes `(agent_name, id)`;
   `session_id_prefix` demoted to chat-readable short form.**
   Per PDR-076a (Accepted 2026-05-23, Adopted 2026-05-24), the identity

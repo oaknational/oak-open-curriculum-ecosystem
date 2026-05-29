@@ -1,7 +1,9 @@
 # ADR-168: TypeScript 6 Baseline and Workspace-Script Architectural Rules
 
 **Status**: Accepted; amended 2026-05-10 to separate the current base config
-from stricter compiler options that remain deferred.
+from stricter compiler options that remain deferred; amended 2026-05-29 to add
+the test/unit-check-surface boundary rule (§5 — scripts are outside the
+unit-test surface; complexity requiring unit tests forces promotion to `src/`).
 **Date**: 2026-04-29
 **Related**:
 [ADR-150](150-continuity-surfaces-session-handoff-and-surprise-pipeline.md) —
@@ -193,6 +195,38 @@ with relaxed structural rules (matching the existing
 constraint forces inlined vendored helpers and direct `process.env`
 access.
 
+### 5. Scripts are outside the unit-test surface — complexity requiring unit tests forces promotion to `src/`
+
+Rule 3 gives workspace scripts _type-check_ coverage, but scripts are
+deliberately **outside the unit-test surface**: the vitest include globs cover
+`src/**` and `tests/**`, never `scripts/**` (nor `build-scripts/**` /
+`runtime-only-scripts/**`). This is strategy, not a gap.
+
+The exclusion is a **forcing function**. A script is thin glue — orchestration
+over already-checked library code. If a script grows complex enough to warrant
+unit tests, that complexity _is_ the signal that its logic belongs in `src/` as
+a properly-constrained module (typed, unit-tested, lint-covered, importable by
+name), with the script reduced to a thin caller. The cure for "this script
+needs tests" is **promote the logic into `src/`**, never "extend the test
+surface into `scripts/`."
+
+Consequences:
+
+- A `*.test.ts` / `*.spec.ts` file appearing under a `scripts/` or
+  `build-scripts/` directory is itself a promote-to-`src/` signal, **not** a
+  vitest-include wiring bug. Such a test does not run by design; it must not be
+  "fixed" by widening the include globs.
+- The vitest include globs are not widened to cover `scripts/**`. Widening them
+  would defeat the forcing function and pull thin glue into the checked surface
+  where it does not belong.
+- Behaviour a script depends on is verified by the `src/` modules it calls
+  (unit-tested there) or by the end-to-end gate that exercises the script (e.g.
+  a validator script is covered by running its gate) — not by unit-testing the
+  script in place.
+- Existing `*.test.ts` files under `scripts/` are pre-existing promote-to-`src/`
+  debt, addressed when the script is next touched substantively — not a reason
+  to widen the include.
+
 ### Pre-existing exception: Husky entry points
 
 Husky's hook entry points (`.husky/{pre-commit,commit-msg,pre-push}`)
@@ -256,6 +290,12 @@ tsconfig.build.json` pattern. The choice of `tsup` for JS emit
 3. Consider linting the `node ../../scripts/` pattern via a
    workspace-aware ESLint rule (today the rule is enforced by
    review; a mechanical check would close the gap on rare misses).
+4. Consider a mechanical check (lint rule or repo-validator) that flags a
+   `*.test.ts` / `*.spec.ts` file appearing under `scripts/` (or
+   `build-scripts/`) as a promote-to-`src/` signal. Today Rule 5 is enforced by
+   review and the `vitest.config.base.ts` pointer comment; a mechanical check
+   would fire at the moment of authorship, where two agents in one session each
+   misread the deliberate exclusion as a wiring gap.
 
 ## History
 
@@ -282,3 +322,13 @@ tsconfig.build.json` pattern. The choice of `tsup` for JS emit
   complete and durable doctrine now lives in this ADR.
 
 [ts6-plan]: ../../../.agent/plans/architecture-and-infrastructure/archive/completed/typescript-6-migration-and-workspace-script-rules.plan.md
+
+- **2026-05-29** — added Rule 5 (the test/unit-check-surface boundary). Two
+  agents in one team session independently misread the deliberate exclusion of
+  `scripts/**` from the vitest include globs as a "dead-test gap" and moved to
+  widen the globs / run checks on scripts. The exclusion is a forcing function
+  (a script complex enough to need tests is the signal to promote its logic into
+  `src/`), not a gap. Rule 5 records the doctrine; a pointer comment on the
+  `vitest.config.base.ts` include line makes it discoverable at the point of
+  confusion; Future Work #4 notes a possible mechanical check. Captured per
+  ADR-150's surprise pipeline on two-instance recurrence.

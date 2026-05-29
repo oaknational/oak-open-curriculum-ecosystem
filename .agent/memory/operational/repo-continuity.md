@@ -68,8 +68,8 @@ paused implementation program.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-8 / Wooded Creeping Thicket / Goal 2 / D0 — Lanes A/C/D committed (`c67af4e6`), Lane C4 `validate-external-data-files` validator committed + gate-clean (`0d45cf07`+`fc14463d`); remaining owner-gated: Lane B hotspot SAFE, Lane E flag/Vercel, full gates, gateway, merge / 2026-05-29 |
-| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | claude / claude-opus-4-8 / Tempestuous Vaulting Falcon / decision-packet owner-ratified; Group C re-verified (15 keep, 3 withdraw); Group A graduation plan queued; stale-claim 4th-instance recorded / 2026-05-29 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-8 / Tempestuous Gliding Thermal / Goal 2 / D0 — gateway review done + Lane C4 validator hardened to a file-wide no-logic invariant (`e76b9b7c`); 7 ahead of origin, NOT pushed; remaining ALL owner-gated: push → Lane B Sonar SAFE write (classifier-blocked, needs explicit auth) → Vercel flag check → merge PR #122 / 2026-05-29 |
+| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | claude / claude-opus-4-8 / Eclipsed Creeping Secret / Group A graduations LANDED — WS-Z converged + committed: all six graduations (Lane A retired-thread hygiene; Lane B PDR-011/ADR-150/§6c; Lane C PDR-087; Lane D PDR-088; Lane E PDR-058 S3/S4 + PDR-029 note), PDR README + practice-index rows for 087/088, RULES_INDEX 0 new rows, six register entries removed (substance verified live first), execution plan archived. Next: none queued for this thread; Groups B/D/E forks + claim-liveness owner-surfaced; napkin+distilled strict-hard owned by the fitness session / 2026-05-29 |
 
 ## Paused Threads
 
@@ -136,14 +136,19 @@ Climbing Root → Wooded Creeping Thicket).** Committed: `c67af4e6` (Lane A S776
 generator-first + Lane D 4 comments + Lane C external-data convention rename /
 cpd-exclusion / `sonar-disposition-policy.md` §Duplications) and `0d45cf07` +
 `fc14463d` (Lane C4 `validate-external-data-files` repo-validator in
-`agent-tools/src/`, gate-clean incl. knip + depcruise). Remaining — all
-owner-gated or owner-surface: Lane B PATH hotspot SAFE
-(`sonar-disposition-policy` §S4036; surface before the Sonar write) → Lane E run
-the existing flag co-gating test + Vercel deployed-env check → full `pnpm check`
-→ gateway review (type-expert on the generator) → **owner-gated merge** (flag OFF
-in every deployed env). Exact state and the ordered remaining steps live in the
-**[`eef` thread record][eef] § 2026-05-29 (cont.) entry** (Wooded Creeping
-Thicket). Bounded: terminates at D6 (plan §"End goal + bounded goals"). The F
+`agent-tools/src/`, gate-clean incl. knip + depcruise). **The gateway review is
+done** (type-expert SOUND on Lane A; code-expert + security-expert on Lane C4)
+**and the bypass class it surfaced is fixed at `e76b9b7c`** (validator hardened
+to a file-wide no-runtime-logic invariant; Lane B disposition VERIFIED SAFE;
+Lane E co-gating test PASS). Branch is 7 ahead of origin, NOT pushed. Remaining —
+ALL owner-gated, in order: (1) push the 7 commits [pre-authorised] → SonarCloud
+re-scan clears `new_violations` + `new_dup` → (2) Lane B Sonar SAFE write on
+hotspot `AZ5rZYbMCv0_1Y1L8PE3` [needs EXPLICIT per-action owner auth —
+auto-mode-classifier-blocked] → QG green → (3) Vercel deployed-env flag check
+(MCP `get_project` does not expose env values; dashboard verify) → (4)
+**owner-gated merge** of PR #122. Exact state and the ordered remaining steps
+live in the **[`eef` thread record][eef] § 2026-05-29 (cont. II) entry**
+(Tempestuous Gliding Thermal). Bounded: terminates at D6 (plan §"End goal + bounded goals"). The F
 explore tool (`2214f0b2`) is LANDED behind the flag, the wrong shape pending the
 D3 rebuild.
 
@@ -162,6 +167,20 @@ cycles 10 + 11 (comms-watch storage redesign WS2 + WS3) were superseded into
 per the archive supersession mapping. The earlier consolidation hard/critical
 objective remains complete (`SOFT (20 soft)`). Owner has pivoted back to
 graph work; deeper soft-tier consolidation is not the active delivery lane.
+
+**2026-05-29 Group A graduations — LANDED (WS-Z converged + committed by Eclipsed
+Creeping Secret).** All six owner-ratified graduations are committed: Lane A
+(retired-thread-record hygiene), Lane B (PDR-011 / ADR-150 / session-handoff §6c
+reflection-as-foundational), Lane C (PDR-087 TDD-as-design), Lane D (PDR-088
+reviewers-carry-doctrine), Lane E (PDR-058 Surface 3 + Surface 4 optionality, plus
+the scope-adjacent PDR-029 Amendment-Log note). WS-Z shared-index convergence done:
+PDR README rows for 087/088, practice-index phenotype-bridge rows for 087/088,
+RULES_INDEX 0 new rows (Lane E minted no rule files), the six register entries
+removed (substance verified live in each home first), this file refreshed.
+Execution plan archived to `archive/completed/`. **Next safe step for this thread:
+none queued** — Groups B/D/E forks + claim-liveness promotion remain
+owner-surfaced/unactioned; napkin + distilled strict-hard remediation is owned by
+the separate fitness session.
 
 2026-05-26 handoff update: the remaining owner-decision-gated due
 principles have now graduated to PDR-083 and PDR-084. Next safe step
@@ -210,10 +229,17 @@ Progress this session (Tempestuous Vaulting Falcon):
   (5 lanes + 1 serialized convergence; two ledger home-recommendations corrected —
   #37 → PDR-058 sequencing-optionality, #22+23 → PDR-058 Surface 3 rule).
 
-**Next safe step**: execute the Group A plan in a future session (readiness gate
-→ parallel lanes → convergence). Groups B (route-to-implementation) and E (forks:
-item-2 dangling reference, item-43 `.git/index.lock` safety conflict, item-26
-Core-trinity audit) remain owner-surfaced, unactioned. The register is GREEN.
+**Group A graduations — DONE (2026-05-29, WS-Z committed by Eclipsed Creeping
+Secret).** All six landed and committed; the six register entries removed
+(substance verified live in each graduated home before removal — no breadcrumbs
+left, the commit and the homes are the record); PDR README + practice-index rows
+added for PDR-087/088; RULES_INDEX unchanged (Lane E minted no rule files);
+execution plan archived to `archive/completed/`. Lane D naming-fix was DROPPED
+("Test Reviewer" is the consistent cross-template H1 convention, not drift). The
+register is GREEN. napkin (CRITICAL) + distilled (HARD) strict-hard remediation is
+owned by the separate fitness session — NOT rotated or trimmed at WS-Z
+(owner-directed deferral). Groups B / D / E forks + claim-liveness promotion remain
+owner-surfaced, unactioned.
 
 ### MCP Product Analytics (paused — design complete, plan deferred)
 
@@ -318,6 +344,54 @@ Current branch non-goals:
   acceptance work.
 
 ## Deep Consolidation Status
+
+**handoff gate (2026-05-29, Eclipsed Creeping Secret — WS-Z DONE)**: Group A WS-Z
+convergence is committed. All six graduations landed; the six register entries
+removed (substance verified live in each home first — no breadcrumbs, the commit
+and the homes are the record); PDR README + practice-index rows added for
+PDR-087/088; RULES_INDEX unchanged (Lane E minted no rule files); execution plan
+archived to `archive/completed/`. The bounded deep-consolidation work named in the
+entries below is now COMPLETE — Group A is drained. Remaining deep-consolidation
+pressure is owned by the separate fitness session: napkin (CRITICAL, 555 lines) +
+distilled (HARD, 236) strict-hard remediation, NOT rotated/trimmed at WS-Z
+(owner-directed deferral). Gatekeeper gates run on the settled WS-Z tree before
+commit. Inbound for a live pending-graduations triage session: ~14–22 net-new
+graduation candidates from Highland (reconcile count first; do not duplicate
+existing register entries).
+
+**handoff gate (2026-05-29, Shaded Prowling Threshold; updated at closeout as events
+landed)**: `due — not this closeout`. Lane A landed owner-approved (uncommitted); **Lane E
+now OWNER-APPROVED** (Furnace Melting Bellows; 3 files incl. scope-adjacent PDR-029). The
+bounded deep-consolidation work is Group A **WS-Z convergence** (index rows + the 6 register
+removals + single-gatekeeper commit), parked for the **next session** and now **fully
+unblocked** (Lane E sign-off cleared). **Napkin is NOT being rotated** — owner pulled fitness
+from Highland's scope to a separate fitness session, so `napkin.md` stays **CRITICAL** (508 lines,
+hard 300 / critical 450 — past critical, a loop-failure signal per ADR-144); WS-Z records
+`strict-hard` RED on it as **remediation-deferred-to-the-fitness-session**, an owner-approved
+deferral, not a WS-Z defect. `pnpm check` deferred to WS-Z's single gatekeeper
+commit per `check-singleton-per-window`. Shaded's + Furnace's claims closed; the Group A +
+Lane E files are unclaimed for the next session. Separately inbound: ~14 net-new graduation
+candidates from Highland for next-session pending-graduations triage.
+
+**handoff gate (2026-05-29, Veiled Stealing Candle)**: Group A execution
+(agentic-engineering-enhancements). Landed UNCOMMITTED + gated-green:
+ws-readiness gate (7-agent workflow — 2 plan reviewers + 5 adversarial
+home-verifiers; all 5 lanes confirmed home-correct/non-duplicate/evidence-holds);
+Lane B (PDR-011 reflection-as-foundational reframe — including a Vector-B
+observable-guard added to consolidate-docs §4 after adversarial verification —
+plus ADR-150 mirror + session-handoff §6c); Lane C (PDR-087 TDD-as-design,
+governance); Lane D (PDR-088 reviewers-carry-doctrine, governance). PDR numbers
+087/088 deconflicted from the role-emission PDR-086 reservation. ALSO landed:
+ADR-168 §5 — graduates the `scripts/`-is-no-checks-zone doctrine that Wooded
+captured in the napkin AND I misread (two-instance owner-directed cure: doctrine
+in ADR-168, discoverable pointer in `vitest.config.base.ts`, optional mechanical
+check noted; docs-adr-expert reviewed → sound-with-suggestions, suggestions
+folded); plus `.remember/` added to the vocab-validator exclusion (mirrors
+`.agent/experience/`; vocab gate GREEN). Deep consolidation NOT separately due —
+the Group A WS-Z convergence (next session) IS the bounded convergence + commit +
+napkin rotation (napkin HARD 320/300). Owner-directed session-end before lanes
+A/E/WS-Z. No retained claim (registry empty). Minimal-ceremony session per owner
+direction (no comms broadcasts/monitors/heartbeat cron).
 
 **handoff gate (2026-05-29, Wooded Creeping Thicket)**: EEF Goal 2 / D0 Lane C4
 landed (`validate-external-data-files` repo-validator; `0d45cf07` + knip fix

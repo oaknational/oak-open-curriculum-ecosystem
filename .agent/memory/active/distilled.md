@@ -171,3 +171,83 @@ plant a NEW false claim at a boundary it doesn't grasp (selection-vs-ranking:
 the scoring engine + recommend/explain/compare tools are correctly gate-1b;
 only seed-selection moves to gate-1a). Brief delegated edits with the exact
 boundary, and keep the boundary-sensitive ones yourself.
+
+## 2026-05-14..28 — declarative capture ≠ procedural inhibition (rule-traction gap)
+
+An agent can hold a rule in working memory — *having just written it* — and walk
+straight into the named failure mode seconds later. Four independent instances
+across four sessions (Brazen gate-verify; Riverine cheap-cure; Mistbound
+portability in 3/4 PDRs; Woodland escape-hatch tripped 4× same session). The cure
+is NOT "know the rule harder" — it is a **structural interrupt at the moment of
+action**: a generative pre-output screen, a mandatory pre-action pause, a
+per-decision checklist. A rule with no enforcement mechanism at the moment of
+action has no traction on in-flight reflexes. Same mechanism as the
+`feedback_metacognition_impact_test` pre-action ratification of the action→impact
+bridge — treat them as one discipline. Source: cross-corpus synthesis
+2026-05-29 (`historical-napkin-synthesis-2026-05-29.md` A1).
+
+## 2026-05-25..26 — substrate encodes outcome; prose cannot override it
+
+Agent behaviour follows what the substrate structurally encodes, not what
+doctrine says. Four Opus agents shipped zero merged deliverables for 90 min
+because heartbeat + Done-When measured coordination-liveness, not delivery-to-live
+(Misty); curator agents chased fitness-score reduction because the SKILL named it
+as the success signal (Thermal/Feathered). The owner's one-line reframe shifted
+behaviour *immediately* — substrate alignment is the real lever. When you catch a
+doubt or a signal, route it **inward and downward into the substrate** (the
+Done-When field, the heartbeat template, the SKILL success criterion, the rule
+that fires at action-time), not outward to a chat message — "the artefact has
+gravity; a conversation does not." Source: synthesis 2026-05-29 (A2);
+`experience/2026-05-29-substrate-not-surface`.
+
+## 2026-05-22..25 — `.git/COMMIT_EDITMSG` is single-writer (multi-agent commit hazard)
+
+`.git/COMMIT_EDITMSG` is one shared file; concurrent `cp <draft> COMMIT_EDITMSG`
+across agents produces *wrong-attribution commits*. 4 instances May 2026; the
+emergent cure is intent-scoped message files (`.git/.commit-queue/<intent>.msg`),
+not yet built into the commit-queue CLI as the default. Related live P0:
+commit-queue `record-staged` fingerprints the FULL git index, not `intent.files`,
+so peer-staged content rides into your commit (cure plan:
+`commit-queue-intent-scope-discipline.plan.md`). Until the CLI cures it: use
+explicit per-intent paths and verify no peer rewrote `COMMIT_EDITMSG` between your
+`cp` and `git commit`. Source: synthesis 2026-05-29 (B1/B2).
+
+## 2026-05-25 — repo-wide auto-fix is a multi-agent sweep footgun
+
+`pnpm markdownlint:root` / `pnpm format:root` (any repo-wide auto-fix) in a
+multi-agent dirty tree makes husky pre-commit promote auto-fix output into the
+staged set, sweeping peer-owned files into your commit. Single-agent: correct.
+Multi-agent: an incident (Hushed swept 4 Stormy-owned files). Before any
+repo-wide auto-fix in a multi-agent window: `git status --short`, enumerate
+peer-owned dirty files, confirm before fixing. Source: synthesis 2026-05-29 (B3).
+
+## 2026-05-26 — `git apply --cached` for surgical cross-lane staging
+
+In a multi-agent tree, stage only your hunk without disturbing peer WIP:
+`git diff HEAD -- <file> > f.patch` then `git apply --cached f.patch`. Index gets
+your change; working tree keeps peer WIP. Worked: Torrid committed a 3-line cure
+while 351 lines of peer WIP stayed untouched. Source: synthesis 2026-05-29 (B4).
+
+## 2026-05-27 (Codex) — re-run `git status` after long gate runs
+
+A `pnpm check` (>~30s) can widen the diff surface while it runs (parallel agents,
+formatter side-effects, generated files). Cleanliness/handoff claims from a
+pre-gate status are a recurring false-clean assertion. Re-run `git status --short`
+after any long gate before claiming tree-clean or filing a handoff. Source: Codex
+MEMORY.md §Failures 2026-05-27 (cross-platform); synthesis 2026-05-29 (B5).
+
+## 2026-05-27 (Codex) — closeout verdicts require live plan-acceptance evidence
+
+Documentation closeout, handoff wording, or "a useful slice was delivered" is NOT
+proof a workstream is complete. Use explicit verdicts: `complete` (live plan
+acceptance matches), `partial slice landed` (named slice in named lane only), or
+`pending` (blocked/deferred/no progress). The anti-pattern is homed
+(`feel-state-of-completion-preceding-evidence-of-completion.md`); this is the
+positive prescription. Source: Codex MEMORY.md 2026-05-27; synthesis 2026-05-29 (D2).
+
+## 2026-05-25 — ADR Status must match implementation maturity
+
+Landing an ADR `Accepted` when the paired PDR is still `Candidate` AND
+implementation is explicitly deferred is a maturity mismatch: future agents read
+`Accepted` as decided-and-validated. Correct status is `Proposed` when either
+holds. Two reviewers surfaced this simultaneously. Source: synthesis 2026-05-29 (D3).

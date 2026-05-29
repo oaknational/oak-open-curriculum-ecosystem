@@ -1,5 +1,239 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-29 — Highland Rising Squall / claude / claude-opus-4-8 / `71b264`, raw-input extraction curation pass — COMPLETE for scope, UNCOMMITTED)
+
+**Owner-directed `consolidate-until-done` scoped to raw-input extraction** (disjoint
+from Shaded's pending-graduations lane and Furnace's Lane E). Boundaries: comms
+preserved (not rotated); fitness owned by a separate session (owner redirect
+mid-pass — so the napkin's mechanical rotation is deferred, NOT done here).
+
+**Landed (UNCOMMITTED, disjoint, additive):**
+
+- **`historical-napkin-synthesis-2026-05-29.md`** (research/…/continuity-memory-
+  and-knowledge-flow/) — cross-corpus synthesis of all platform memories
+  (.remember 29 dailies, Codex, Cursor), N=17 rotated napkins (≥05-14, the
+  since-05-13-marker window), and 21 recent experience files. 30 emergent findings,
+  evidence arcs, verification addendum, rejected near-patterns, corpus health.
+  Marker advanced to **2026-05-28**.
+- **`distilled.md` +8 verified-novel entries** (A1 rule-traction gap, A2
+  substrate-encodes-outcome, B1 COMMIT_EDITMSG single-writer, B3 auto-fix footgun,
+  B4 git-apply-cached, B5 rerun-git-status, D2 closeout-verdicts, D3 ADR-status).
+- **Ledger** `curator-passes/2026-05-29-highland-rising-squall.md` (disposition
+  table + before/after counts).
+- Method: 8-agent workflow (6 Sonnet extractors → synthesis → critic); critic
+  caught 5 already-homed false positives, all grep-verified before acting
+  (verify-the-auditor passed).
+
+**Handed to Shaded** (directed events 7a68190e/48b3cf06/52ce7a9a): ~22 graduation
+candidates (PDR/ADR/rule/pattern) + 3 verified-already-homed (don't re-graduate:
+PDR-014 framing, PDR-085 Done-When, PDR-038 enforcement) + 1 already-shipped
+(comms `--body-file`) + the /tmp/ferny-pattern-v3 recovery need. Asked Shaded to
+**fold my 2 NEW files into the WS-Z gatekeeper commit** (gatekeeper-specialisation;
+I did not run a competing gate pass).
+
+**Next safe step for this lane:** none required — the raw-input backlog is
+processed. Open follow-ons owned elsewhere: (1) the ~22 graduation candidates are
+Shaded's to triage; (2) fitness/strict-hard remediation incl. napkin rotation is
+the fitness session's; (3) thinning-subjective-register flagged as a loop-health
+signal for owner attention; (4) recover `/tmp/ferny-pattern-v3-outline.md` from
+`napkin-2026-05-24-shaded-silencing-dusk` before the substrate-pointer PDR.
+**Through-line worth carrying:** *behaviour follows the artefact, not the
+intention — route resolution inward to the substrate.*
+
+## Session Outcome (2026-05-29 — Furnace Melting Bellows / claude / claude-opus-4-8 / `972a22`, Group A Lane E PDR-058 optionality graduation — OWNER-APPROVED, ready for WS-Z fold)
+
+**Lane E (#37 + #22+23 PDR-058 optionality family) — LANDED, OWNER-APPROVED, UNCOMMITTED.**
+Supersedes the "NOT yet owner-approved" status in Shaded's outcome below. Owner signed off
+all files under SANCTITY review (2026-05-29). Reviewer pass run (docs-adr-expert +
+assumptions-expert, review-only; every finding grounded before acting).
+
+**Three files for the WS-Z gatekeeper commit** (all gate-green: markdownlint ✓, portability
+✓ 82/82 parity, fitness:informational ✓ healthy):
+
+1. `PDR-058-three-tier-optionality-decomposition.md` — Surface 4 (sequencing optionality)
+   named (definition/impact/shapes/diagnostic/cure + falsifiable-tripwire-vs-vague-conditional
+   distinction, incl. the named-but-unobservable edge case); Surface 3 outcome-optionality
+   cure graduated with **#22 don't-shoehorn merged in as the infra-absent special case** (one
+   discipline); Amendment Log + Falsifiability axis; §Decision lead / §Scope / §Rationale /
+   §Consequences updated for four-surface consistency.
+2. `.agent/rules/plan-body-first-principles-check.md` — 4th **optionality-surface clause**
+   (the active firing layer); preamble firing-scope broadened to plan/acceptance/status
+   authoring; Related-Surfaces entry naming PDR-058 as clause-4's source. **No new rule file
+   → still ZERO RULES_INDEX rows for WS-Z.**
+3. ⚠️ **`PDR-029-perturbation-mechanism-bundle.md`** — NEW vs Shaded's outcome (Shaded did not
+   know I'd touch it). Adding clause 4 made PDR-029's hard-coded "three-clause A.1 spec"
+   stale; I added a minimal **Amendment-Log note + inline pointer** (A.1's three-clause
+   coverage preserved as historically accurate; clause 4 recorded as PDR-058's firing layer,
+   not an A.1 extension). Owner-approved. **No new PDR README row** (PDR-029 already indexed).
+   **WS-Z must include this file in the gatekeeper commit.**
+
+**Register-removal substance confirmed (knowledge-preservation screen):** #37 → live in
+PDR-058 Surface 4; **#22 + #23 → live in PDR-058 Surface 3 Graduation paragraph, MERGED into
+one cure** (record provenance as one merged discipline, not two).
+
+**Claim disposition**: Furnace's claims (`30c0565f` PDR-058 + plan-body rule; `1a452ec7`
+PDR-029) **closed at handoff** → all three Lane E files left **unclaimed** for the WS-Z
+session's own claim. No retained claim (owner directed relinquish-all). The 3 files are
+owner-approved final content; the next WS-Z owner folds them into the gatekeeper commit by
+explicit pathspec.
+
+**pnpm check**: deferred to WS-Z's single gatekeeper run (`check-singleton-per-window`;
+live multi-agent window; doc-only markdown changes don't affect type-check/lint/test). Lane
+E's relevant gates (markdownlint / portability / fitness) verified green this session.
+
+## Session Outcome (2026-05-29 — Shaded Prowling Threshold / claude / claude-opus-4-8 / `e526d7`, Group A graduations: Lane A landed + Lane E handed to Furnace + WS-Z parked for next session)
+
+**Session shape**: opened solo on the Group A graduations continuation; became a
+3-agent team mid-session via owner direction. Live cast: **Furnace Melting Bellows**
+(picked up Lane E), **Highland Rising Squall** (raw-input-extraction / napkin-rotation
+lane, claim `c2bb65a8`), **Prismatic Twinkling Nebula** (acting coordinator),
+**Tempestuous Gliding Thermal** (eef/D0 merge-readiness). Shaded owned Lane A + WS-Z.
+
+**Landed (UNCOMMITTED, in the working-tree bundle; owner-approved):**
+
+- **Lane A (#21 retired-thread-record hygiene)** — owner-approved. 4 edits:
+  `consolidate-docs` §7c **check-7** (retired-record banner hygiene; six→seven checks);
+  `threads/README.md` §"Retirement-banner convention" (3-state lifecycle active/paused/
+  retired + banner shape); PDR-027 Amendment-Log one-liner (record-lifecycle hygiene;
+  §Decision body unchanged); retroactive retirement banner on the orphaned
+  `pr-90-build-fix-landing` record (the banner-less retired thread the new check's first
+  run flags). Gates: markdownlint ✓, portability ✓, four touched files healthy fitness.
+
+**Updated after this block was first written (events landed during closeout):**
+
+- **Lane E — now OWNER-APPROVED.** See Furnace Melting Bellows' superseding Session Outcome
+  block at the TOP of this record (authoritative): 3 files (PDR-058 + plan-body rule +
+  **PDR-029** scope-adjacent), all owner-approved + gate-green; Furnace's claims **closed**
+  → all 3 Lane E files **unclaimed** for the WS-Z session; register removals confirmed
+  (#37 → PDR-058 S4; #22+#23 → PDR-058 S3 merged). **WS-Z's single content blocker is now
+  CLEARED.**
+- **Napkin — NOT being rotated; stays HARD.** Owner pulled fitness from Highland's scope
+  ("another session will use the fitness signals"). Highland is **not** rotating
+  `napkin.md` (403/300, HARD). WS-Z converges with the napkin HARD and records `strict-hard`
+  RED on it as **remediation-deferred-to-the-fitness-session** (NOT Highland-in-progress;
+  do not wait on Highland). Highland's lane now writes only the synthesis report +
+  distilled.md (file-disjoint; commits after WS-Z or folds in).
+- **Inbound for next-session pending-graduations triage (NOT the Group A six):** Highland's
+  cross-corpus synthesis produced **~14 graduation candidates** (PDR/ADR/rule/pattern-shaped)
+  - 3 already-homed confirmations + 1 already-shipped, arriving as a directed event. Net-new;
+  triage separately from WS-Z's 6 removals.
+
+**Lanes B/C/D** (prior session, Veiled Stealing Candle; owner-approved; uncommitted in the
+same bundle): PDR-011 reflection-foundational + ADR-150 + session-handoff §6c; PDR-087
+TDD-as-design; PDR-088 reviewers-carry-doctrine; ADR-168 §5; `.remember/` vocab exclusion.
+
+**Next safe step — WS-Z convergence (NEXT SESSION owns it; now FULLY UNBLOCKED).** Lane E is
+owner-approved, so no content blocker remains — run WS-Z immediately. Single-writer
+shared-index convergence: PDR README rows (PDR-087, PDR-088, + PDR-058 status — **no row for
+PDR-029**, already indexed); practice-index rows (087/088, phenotype-bridge form);
+**RULES_INDEX = 0 new rows**; remove the **6** graduated pending-graduations entries (#21,
+reflection, #40/PDR-087, #41/PDR-088, #37, #22+23) with provenance (#22+#23 graduate as ONE
+merged cure); refresh repo-continuity Next Safe Steps; then **ONE gatekeeper pass** of full
+`pnpm check` + `practice:fitness:strict-hard` (**napkin stays HARD — record as
+remediation-deferred-to-the-fitness-session**, an owner-approved deferral, NOT a WS-Z defect),
+then `repo-validators:check`; commit the WHOLE bundle by explicit pathspec — Lanes A/B/C/D + the
+**3 Lane E files** (PDR-058, plan-body-first-principles-check.md, **PDR-029**); run
+`oak-consolidate-docs` learning loop. **Commit window = WS-Z owner this round**; Highland
+commits the (rotation-free) extraction lane AFTER, or folds it in. Re-check `active-claims.json`
+first — Shaded's, Furnace's claims closed; the Lane E + Group A files are unclaimed.
+
+**Coordination state**: Shaded's claim closed at handoff → Lane A + WS-Z shared-index files
+are **unclaimed** (next session opens its own claim). Highland's + Furnace's claims remain
+live and disjoint. Re-check `active-claims.json` at WS-Z time.
+
+**Session lessons (captured on the comms failure-mode channel, event `d9ab3ec7`):** the
+`comms watch` CLI floods a Monitor armed per the watcher-rule's documented `grep -E '^\['`
+reference shape (matches per-cycle `[routing-legacy-fallback]` diagnostics). Cure:
+`2>/dev/null` + narrow grep to channel tokens. Second-order finding: the watcher advances
+the seen-file for events its downstream grep drops, so a filter mismatch **silently and
+permanently loses events**. Highland hit the identical flood; the emitter-side
+`routing-legacy-fallback` sunset is owner-assigned to a separate agent (leave emitter
+alone). Future-lane: narrow the watcher-rule reference grep; CLI should emit the diagnostic
+once / stderr-only / behind a flag.
+
+**pnpm check**: deferred to WS-Z's single gatekeeper commit (next session) per the plan +
+`check-singleton-per-window` (live 3-agent window; doc-only markdown changes don't affect
+type-check/lint/test). Lane A's relevant gates (markdownlint / portability / fitness) green.
+
+**Closeout addendum (post-analysis of Highland's draft opener — corrected facts, all
+verified on disk at closeout):**
+
+- **No commit landed this session.** HEAD still `d8226855`, branch 6 ahead / 0 behind.
+  There is NO "WS-Z gatekeeper commit" — WS-Z was parked. The whole Group A bundle +
+  Highland's extraction-lane files are all uncommitted. The next session must verify
+  `git log`, not assume any fold-in.
+- **Highland's raw-input extraction lane is complete; its 2 output files are UNCOMMITTED
+  (untracked `??`)**: `…/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-29.md`
+  - `curator-passes/2026-05-29-highland-rising-squall.md`. These are **NOT** in WS-Z's
+  Group A bundle — they are Highland's own disjoint commit (commit by explicit pathspec;
+  whoever picks up confirms with Highland).
+- **Napkin is CRITICAL: 508 lines** (hard 300 / critical 450) — a loop-failure signal, not
+  "~470 HARD". Owned by the separate fitness session (rotate, don't trim). WS-Z records
+  `strict-hard` RED on it as remediation-deferred-to-fitness-session.
+- **A substrate-pointer-PDR-elevation outline that lived only in ephemeral temp storage is
+  now LOST** (checked: gone — temp files vanish by nature). Treat as gone; if the PDR
+  elevation needs it, reconstruct from a durable source. Worked instance of the boundary
+  rules (`no-machine-local-paths`, `important-state-not-in-temp-files`,
+  `practice-core-portability`); no external/temp path recorded here, per those rules.
+- **Graduation-candidate count drifted 14 → 22** across Highland's messages; reconcile
+  before triage. They are for a **LIVE next session**, not "Shaded" (retired) — assigning
+  live work to a closed identity stalls it.
+- **Owner-attention signal**: thinning subjective register (PDR-011/ADR-150 capture-edge
+  degradation; the Lane B `consolidate-docs` §4 corpus-thinning guard is the home for it).
+
+## Session Outcome (2026-05-29 — Veiled Stealing Candle / claude / claude-opus-4-8 / `ca8177`, Group A graduations execution — lanes B/C/D + ws-readiness + ADR-168 §5 doctrine fix)
+
+**Landed (UNCOMMITTED, gated-green; SANCTITY lanes owner-approved):**
+
+- **ws-readiness gate** cleared via a 7-agent workflow (assumptions-expert +
+  docs-adr-expert plan review + 5 adversarial per-lane home-verifiers). All 5
+  content lanes confirmed home-correct, non-duplicate, evidence-holds — unlike
+  Group C (83% wrong), Group A's homes survived adversarial verification.
+  **PDR numbers: Lane C = PDR-087, Lane D = PDR-088**, deconflicted from the
+  `role-emission-citation-binding` PDR-086 reservation.
+- **Lane B (reflection-as-foundational, `due`)**: PDR-011 §Decision subsection +
+  Amendment Log (subjective experience = foundational continuity substrate, **not
+  a fourth type**; foundational standing attaches to the *signal* not a quota —
+  never manufacture hollow reflection) + ADR-150 Amendment-Log mirror +
+  session-handoff §6c reframe (optional → foundational standing). Adversarial
+  verification caught a Vector-B leak (lazy-null relapse guarded only normatively);
+  closed with an observable-guard in consolidate-docs §4 (flag a thinning corpus
+  as a loop-health signal).
+- **Lane C**: PDR-087 TDD-as-design (`governance`; portable; phenotype = host
+  `tdd-as-design` directive, no standalone ADR).
+- **Lane D**: PDR-088 reviewers-carry-doctrine (`governance`; #42
+  forcing-function read-path folded in as the *mechanism*; evidence honestly
+  scoped — read-path is the ≥2-instance floor, cite-by-section is test-expert's
+  stronger variant). Naming-fix DROPPED: "Test Reviewer" H1 is the consistent
+  cross-template convention, not drift.
+- **ADR-168 §5** (owner-directed, two-instance recurrence): graduates the
+  scripts-are-outside-the-unit-test-surface doctrine (a script complex enough to
+  need unit tests → promote its logic to `src/`), with a discoverable pointer
+  comment in `vitest.config.base.ts` and an optional mechanical-check Future-Work
+  item. Wooded captured this in the napkin; I misread it as a "dead-test gap" —
+  hence the cure. docs-adr-expert: sound-with-suggestions (folded).
+- **`.remember/` vocab-validator exclusion** (mirrors `.agent/experience/`;
+  `practice:vocabulary` GREEN).
+
+**Gates**: markdownlint + portability + practice:vocabulary GREEN; touched Core
+files healthy fitness. Full `pnpm check` (e2e/widget/a11y) NOT run — deferred to
+WS-Z on a settled tree (named constraint: heavy suites unrelated to
+doc-graduation; owner-directed session-end before convergence). napkin HARD
+(320/300) — rotate at WS-Z, do not trim.
+
+**Next safe step**: continue Group A — **Lane A** (#21 retired-thread-record
+hygiene: consolidate-docs thread-hygiene check + PDR-027 Amendment-Log one-liner +
+threads/README retirement-banner convention; the PDR-027 touch is
+owner-reviewable) + **Lane E** (#37 + #22+23 PDR-058 optionality family: PDR-058
+amendment naming Surface 4 sequencing-optionality + confirming Surface 3
+outcome-optionality; rule-vs-PDR-clause decided at author time per
+`new-rule-vs-pdr-clause`, default lean to PDR-058 clauses), then **WS-Z
+convergence** (single writer: PDR README rows + practice-index rows for 087/088 +
+RULES_INDEX + remove the six graduated register entries with provenance +
+repo-continuity refresh + `pnpm check` + `practice:fitness:strict-hard` + commit).
+The 10 uncommitted files (8 modified + PDR-087 + PDR-088) are the in-progress
+bundle — `git status` enumerates them; nothing committed this session.
+
 ## Session Outcome (2026-05-29 — Tempestuous Vaulting Falcon / claude / claude-opus-4-8 / `441c78`, pending-graduations decision-packet execution: Group C re-verified + Group A planned)
 
 **Session boundary**: owner asked to surface pending graduations awaiting input,
@@ -3841,6 +4075,8 @@ verdicts, next-touch pending-graduations items, do-not-do list).
 
 | Platform | Model | Agent name | Role | First-session | Last-session |
 | --- | --- | --- | --- | --- | --- |
+| `claude` | `claude-opus-4-8` | Furnace Melting Bellows | Group A graduations — Lane E implementer (`972a22`; picked up Lane E PDR-058 optionality family [#37 + #22+23] from Shaded Prowling Threshold's verified grounding brief; independently re-derived then accepted the LTAE-forced enforcement shape; authored PDR-058 Surface 4 sequencing-optionality + Surface 3 merged outcome-optionality graduation + the optionality-surface 4th clause in `plan-body-first-principles-check.md` + a scope-adjacent PDR-029 Amendment-Log consistency note; reviewer pass docs-adr-expert + assumptions-expert, findings grounded; gates green; OWNER-APPROVED, uncommitted, folds into WS-Z; claims `30c0565f` + `1a452ec7` closed at handoff) | 2026-05-29 | 2026-05-29 |
+| `claude` | `claude-opus-4-8` | Shaded Prowling Threshold | Group A graduations — Lane A implementer + WS-Z convergence owner (`e526d7`; landed Lane A #21 retired-thread-record hygiene owner-approved [consolidate-docs §7c check-7 + threads/README retirement-banner convention + PDR-027 Amendment-Log + pr-90 retroactive banner], gates green, UNCOMMITTED in bundle; handed Lane E verified grounding + LTAE-forced enforcement verdict to Furnace Melting Bellows; held WS-Z but parked it for the next session per owner direction; coordinated commit-window + napkin-off-critical-path with Highland Rising Squall; captured comms-watch-flood failure-mode `d9ab3ec7`; claim closed at handoff) | 2026-05-29 | 2026-05-29 |
 | `claude` | `claude-opus-4-7` | Thermal Spiralling Airstream | Cursor statusline Lane B + comms diagnosis (`40e32e`; Claude statusline parser refactor off Zod `.catch()` → type guards + new `core/json-narrowing.ts`; retired bespoke Cursor TS statusline + test; created `routing-legacy-fallback-sunset` future plan + comms-plan cross-link map; no claim opened — minimal-ceremony solo post-handoff) | 2026-05-28 | 2026-05-28 |
 | `codex` | `GPT-5` | Nebulous Threading Prism | Knowledge Curator (`019e6b`; closed-claims archive knowledge curation and repo-continuity consolidation; claim `a4c7184a`) | 2026-05-27 | 2026-05-27 |
 | `codex` | `GPT-5` | Ferny Spreading Blossom | Knowledge Curator (`019e6b`; dedicated legacy pending-graduations drain batches 16-27, then owner-directed pseudo-shard collapse back into canonical `pending-graduations.md`; deleted sidecar files after extraction; strict-hard `0 hard` / `0 critical`) | 2026-05-27 | 2026-05-27 |

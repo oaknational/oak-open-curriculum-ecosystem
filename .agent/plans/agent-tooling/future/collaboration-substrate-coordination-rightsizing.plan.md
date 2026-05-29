@@ -1,7 +1,7 @@
 ---
 name: "Collaboration Substrate Coordination Right-Sizing (First-Principles Re-Ground)"
 overview: "Re-derive the minimal coordination substrate the real operating context needs — 1-3 agents, owner present, advisory not mechanical — and produce the supersession/deletion list for the accreted layers that exceed it. An exploration brief: its deliverable is a ratified design and a cull list, not new coordination machinery. This is the home for the wider re-ground that routing-legacy-fallback-sunset surfaced and deliberately parked."
-status: future-strategic-exploration
+status: active-strategic-exploration
 todos:
   - id: m1-characterise-context-and-inventory
     content: "M1: Characterise the actual operating context (concurrency, owner-presence, failure modes seen) and inventory every accreted coordination layer with the incident that spawned it."
@@ -19,11 +19,13 @@ todos:
 
 # Collaboration Substrate Coordination Right-Sizing (First-Principles Re-Ground)
 
-**Last Updated**: 2026-05-28
-**Status**: 🔵 FUTURE — strategic **exploration** brief. Its deliverable is a
-ratified design and a cull list. It is **not** a build plan; it adds no
-coordination machinery. Build, refactor, and deletion plans are authored only
-after M2 ratifies the target design.
+**Last Updated**: 2026-05-29
+**Status**: 🟢 ACTIVE — M1 in progress (owner dispatched the re-ground track
+2026-05-29). Strategic **exploration** brief: its deliverable is a ratified
+design and a cull list. It is **not** a build plan; it adds no coordination
+machinery. Build, refactor, and deletion plans are authored only after M2
+ratifies the target design. M1 working artefact:
+[`collaboration-substrate-coordination-rightsizing.m1-inventory.md`](collaboration-substrate-coordination-rightsizing.m1-inventory.md).
 **Activation trigger**: owner prioritises the substrate re-ground, OR a third
 accretion incident lands (a new coordination layer spawned by a new failure),
 OR [`routing-legacy-fallback-sunset`](routing-legacy-fallback-sunset.plan.md)
@@ -163,3 +165,19 @@ finalised at promotion to `current/`. Promote on the activation trigger; record
 the trigger evidence and the readiness verdict. The first executable output is
 the ratified design document (M2), from which build, refactor, and deletion plans
 are authored — never the reverse.
+
+### Activation record
+
+- **2026-05-29 — M1 dispatched.** Owner chose the "re-ground first (wider M1)"
+  track in preference to executing the routing-legacy-fallback sunset directly
+  (the sunset's promotion-readiness was the activation trigger named above).
+  Readiness verdict: GO — the operating context is well-evidenced (the
+  2026-05-25 coordination-efficiency survey + PDR-082's partial per-layer
+  derivation supply the inventory base; the four ratified invariants are
+  already recorded in `agent-collaboration.md`). M1 runs as a single
+  exploration session driven by Leafy Regrowing Petal (claude / claude-opus-4-8
+  / `f9d588`), with a parallel doctrine-inventory fan-out and an owner-facing
+  M2 ratification gate. The lane move to `current/` is deferred to M2 (the
+  first executable-output boundary); M1 investigation lives here next to the
+  brief. Routing code is untouched — the sunset becomes a deletion derived
+  from the ratified model.

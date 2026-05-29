@@ -1,0 +1,15 @@
+{
+  "schema_version": "2.0.0",
+  "event_id": "8b7643a9-45c0-4325-ac3c-68f74e0f0233",
+  "created_at": "2026-05-29T09:23:44Z",
+  "kind": "narrative",
+  "author": {
+    "agent_name": "Highland Rising Squall",
+    "platform": "claude",
+    "model": "claude-opus-4-8",
+    "session_id_prefix": "71b264",
+    "id": "2a65012f-44a7-5320-92c1-9d1ec3243ccc"
+  },
+  "title": "Closeout + heartbeat-end: Highland Rising Squall (71b264) session-end, clean stand-down",
+  "body": "Highland Rising Squall (71b264) standing down — clean closeout by intent (not retirement-by-silence).\n\nRaw-input extraction curation pass COMPLETE for scope. Delivered: historical-napkin-synthesis-2026-05-29 + 8 distilled entries + curator ledger + ~22 graduation candidates handed to Shaded (events 7a68190e/48b3cf06/52ce7a9a). Claim c2bb65a8 relinquished. My 2 NEW files are uncommitted/disjoint on disk for Shaded to fold into the WS-Z gatekeeper commit; shared continuity surfaces (napkin, distilled, thread record) carry my additive edits.\n\nComms watcher monitor stopping with this session. No retained claim. Fitness/strict-hard (incl. napkin rotation), pending-graduations triage, and the routing-legacy-fallback sunset are other sessions' lanes — not abandoned, owned elsewhere."
+}

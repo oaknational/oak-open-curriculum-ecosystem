@@ -38,6 +38,23 @@ accumulation signal).
 
 ## Amendment Log
 
+- **2026-05-29 — fourth clause added to the A.1 rule (Furnace Melting Bellows
+  / claude / claude-opus-4-8; Lane E PDR-058 optionality graduation,
+  owner-reviewed).** The `plan-body-first-principles-check` rule has gained a
+  fourth clause — the **optionality-surface clause** — sourced from
+  [PDR-058](PDR-058-three-tier-optionality-decomposition.md) when its Surface 3
+  (outcome optionality) and Surface 4 (sequencing optionality) cures graduated.
+  This clause is **PDR-058's active firing layer**, not an extension of Class
+  A.1 coverage: A.1's coverage target remains the
+  `inherited-framing-without-first-principles-check` failure mode served by the
+  three-clause check below (shape / landing-path / vendor-literal), which is
+  unchanged. The fourth clause rides the same authoring-moment trigger because
+  optionality is a sibling authoring-shape check; folding it into the existing
+  rule rather than minting a new always-applied rule file follows the
+  rule-vs-clause routing discipline and the always-loaded directive budget. The
+  "three-clause check" references in this PDR describe A.1's installed coverage
+  and stay accurate as such.
+
 - **2026-04-28 v4 amendment — identity preflight, hook context, and audit
   coverage.** Class A.2 now treats a canonical identity preflight command as
   the preferred way to obtain the full PDR-027 identity block for
@@ -436,6 +453,10 @@ spec, or inherited artefact.
    3. **Vendor-literal clause.** Does any literal token from
       the plan body match the current upstream surface, or is
       it a doc-level word the plan borrowed?
+
+   (A fourth, **optionality-surface clause** was added to this rule on
+   2026-05-29 as PDR-058's active firing layer — see the Amendment Log.
+   It is not part of A.1's three-clause inherited-framing coverage.)
 
 **Acknowledged exception to the two-complementary-layers
 default.** Class A.1 installs a single tripwire layer. The

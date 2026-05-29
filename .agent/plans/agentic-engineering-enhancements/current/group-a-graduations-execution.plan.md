@@ -10,31 +10,31 @@ status: current
 thread: agentic-engineering-enhancements
 todos:
   - id: ws-readiness
-    content: "Readiness gate: assumptions-expert (proportionality) + docs-adr-expert (Practice-doc shape) review the plan; re-derive next-free PDR numbers; confirm active-claims for shared-index files. Blocks lane dispatch."
-    status: pending
+    content: "Readiness gate: assumptions-expert (proportionality) + docs-adr-expert (Practice-doc shape) review the plan; re-derive next-free PDR numbers; confirm active-claims for shared-index files. Blocks lane dispatch. DONE 2026-05-29 (Veiled Stealing Candle) — cleared ready-with-conditions; see '## ws-readiness Outcome'. PDR-087=C, PDR-088=D; both pdr_kind: governance; sequential order B→C→D→A→E."
+    status: done
     depends_on: []
   - id: ws-a-thread-hygiene
-    content: "Lane A (#21): retired-thread-record hygiene — consolidate-docs thread-hygiene check + one-line PDR-027 note + threads/README retirement-banner convention."
-    status: pending
+    content: "Lane A (#21): retired-thread-record hygiene — consolidate-docs thread-hygiene check + one-line PDR-027 note + threads/README retirement-banner convention. DONE 2026-05-29 (Shaded Prowling Threshold) — owner-approved; 4 edits (consolidate-docs §7c check-7; threads/README §Retirement-banner convention; PDR-027 Amendment-Log; pr-90 retroactive banner); markdownlint+portability green, 4 touched files healthy fitness. UNCOMMITTED (lands in WS-Z bundle)."
+    status: done
     depends_on: [ws-readiness]
   - id: ws-b-reflection-foundational
-    content: "Lane B (reflection, `due`): reframe subjective experience/reflection from 'surplus/optional' to foundational continuity substrate — PDR-011 amendment + ADR-150 mirror + session-handoff §6c. SANCTITY: agent-authored, owner-reviewed."
-    status: pending
+    content: "Lane B (reflection, `due`): reframe subjective experience/reflection from 'surplus/optional' to foundational continuity substrate — PDR-011 amendment + ADR-150 mirror + session-handoff §6c. SANCTITY: agent-authored, owner-reviewed. DONE 2026-05-29 (Veiled Stealing Candle) — owner-approved substance; doubt-resolution (foundational attaches to signal not quota) + Vector-B observable-guard (consolidate-docs corpus-thinning detection) landed; markdownlint+portability green, touched files healthy fitness. Adversarial verification: A/C hold, B-leak closed."
+    status: done
     depends_on: [ws-readiness]
   - id: ws-c-tdd-as-design-pdr
-    content: "Lane C (#40): graduate TDD-as-design to a portable Practice-Core PDR (number assigned at ws-readiness). SANCTITY: agent-authored, owner-reviewed."
-    status: pending
+    content: "Lane C (#40): graduate TDD-as-design to a portable Practice-Core PDR (number assigned at ws-readiness). SANCTITY: agent-authored, owner-reviewed. DONE 2026-05-29 — PDR-087 (governance), owner-approved; markdownlint+portability+vocabulary green, healthy fitness. Phenotype = host tdd-as-design directive (no standalone ADR); practice-index row at WS-Z."
+    status: done
     depends_on: [ws-readiness]
   - id: ws-d-reviewers-carry-doctrine-pdr
-    content: "Lane D (#41 + #42): graduate reviewers-carry-doctrine to a Practice-Core PDR (number assigned at ws-readiness), fold #42 (forcing-function read-path) in, fix test-reviewer→test-expert naming drift. SANCTITY: agent-authored, owner-reviewed."
-    status: pending
+    content: "Lane D (#41 + #42): graduate reviewers-carry-doctrine to a Practice-Core PDR (number assigned at ws-readiness), fold #42 (forcing-function read-path) in, fix test-reviewer→test-expert naming drift. SANCTITY: agent-authored, owner-reviewed. DONE 2026-05-29 — PDR-088 (governance), owner-approved; #42 folded in as the mechanism; markdownlint+portability+vocabulary green. NAMING-FIX DROPPED: 'Test Reviewer' H1 is the consistent cross-template convention (Type Reviewer / Architecture Reviewer Template all use it; filenames use -expert) — fixing only test-expert would CREATE inconsistency. practice-index row at WS-Z."
+    status: done
     depends_on: [ws-readiness]
   - id: ws-e-pdr058-optionality-family
-    content: "Lane E (#37 + #22+23): PDR-058 amendment naming Surface 4 (sequencing optionality) + confirming Surface 3 (outcome optionality) graduation, plus the two rule siblings (rule-vs-PDR-amendment decided at author time). SANCTITY: agent-authored, owner-reviewed."
-    status: pending
+    content: "Lane E (#37 + #22+23): PDR-058 amendment naming Surface 4 (sequencing optionality) + confirming Surface 3 (outcome optionality) graduation. SANCTITY: agent-authored, owner-reviewed. DONE + OWNER-APPROVED 2026-05-29 (Furnace Melting Bellows). PDR-058 Surface 3 cure graduated with don't-shoehorn merged (ONE discipline); Surface 4 named (diagnostic+cure+falsifiable-tripwire-vs-vague-conditional); active layer = optionality-surface clause in plan-body-first-principles-check.md (LTAE-forced: PDR-058 clauses + plan-body rule clause, NO new rule files → 0 RULES_INDEX rows). THREE files for WS-Z commit: PDR-058 + plan-body-first-principles-check.md + scope-adjacent PDR-029 (Amendment-Log note, already indexed → no README row). Register-removal grounding done: #37→PDR-058 S4; #22+#23→PDR-058 S3 merged. Reviewer pass run (docs-adr + assumptions, review-only). UNCOMMITTED (lands in WS-Z bundle); Furnace's claims closed → files unclaimed."
+    status: done
     depends_on: [ws-readiness]
   - id: ws-z-shared-index-convergence
-    content: "Lane Z (convergence, single writer): batch the shared-index edits — PDR decision-records README rows, RULES_INDEX additions, pending-graduations register removals (with provenance), repo-continuity Next Safe Steps. Run final aggregate gates + learning-loop."
+    content: "Lane Z (convergence, single writer): batch the shared-index edits — PDR decision-records README rows (087/088 + PDR-058 status), practice-index 087/088 phenotype-bridge rows, RULES_INDEX additions (= 0; Lane E minted no rules), pending-graduations register removals of the 6 graduated items (#21, reflection, #40/087, #41/088, #37, #22+23) with provenance, repo-continuity Next Safe Steps. Run final aggregate gates + learning-loop. PARKED FOR NEXT SESSION 2026-05-29 (owner-directed) — gated ONLY on Lane E owner-approved report-back. Commit window = WS-Z owner this round (Highland commits napkin/distilled/synthesis AFTER, by pathspec; Lane E folds into WS-Z commit). Napkin OFF critical path (converge with it HARD = Highland-remediation-in-progress). Re-check active-claims at WS-Z time (Shaded's claim closed at handoff; shared-index files unclaimed)."
     status: pending
     depends_on: [ws-a-thread-hygiene, ws-b-reflection-foundational, ws-c-tdd-as-design-pdr, ws-d-reviewers-carry-doctrine-pdr, ws-e-pdr058-optionality-family]
 ---
@@ -90,6 +90,54 @@ prior session touched PDR-086 in a renumber. `ws-readiness` re-derives the
 next-free Practice-Core PDR numbers at execution time and assigns them to Lanes C
 and D, avoiding any number reserved by another live plan; WS-Z confirms the final
 numbers before writing index rows.
+
+## ws-readiness Outcome (2026-05-29 — Veiled Stealing Candle)
+
+Gate **CLEARED → ready-with-conditions**. assumptions-expert + docs-adr-expert
+reviewed the plan; five adversarial home-verifiers re-confirmed each lane's home
+against the live repo (the Group-C-83%-wrong guard). **All five lanes verified:
+home correct, substance not already present, evidence holds.** Decisions
+(reviewer findings were re-grounded against the live repo before acceptance —
+two were rejected as over-escalations):
+
+- **PDR numbers (deconflicted against live-plan reservations).** Files are
+  contiguous to PDR-085; PDR-086 is reserved by
+  `role-emission-citation-binding.plan.md`. **Lane C (TDD-as-design) = PDR-087;
+  Lane D (reviewers-carry-doctrine) = PDR-088.**
+- **`pdr_kind: governance` for BOTH new PDRs.** Verified against the taxonomy
+  (PDR-007 amendment: `pattern` is for universal patterns synthesised from ≥2
+  instances; `governance` is the default for Practice-governance decisions) and
+  the nearest neighbours (PDR-020/021/034 testing-discipline and PDR-015
+  reviewer-authority are all `governance`). The reviewer's "consider `pattern`"
+  steer is **rejected** as inconsistent with the corpus.
+- **No new phenotype ADRs (reviewer escalation rejected; real kernel kept).**
+  PDR-079 §Notes describes pairs materialising only when new repo-bound
+  *substrate* exists — it mandates nothing. PDR-087's repo-bound expression
+  already exists as `tdd-as-design.md`; PDR-088's as the sub-agent templates.
+  Precedent (PDR-077/079/083/084) records "No standalone phenotype ADR.
+  Substrate is X" rows in `practice-index.md`. **WS-Z therefore adds two
+  `practice-index.md` rows** in that form (the canonical PDR↔phenotype bridge) —
+  this surface was missing from WS-Z scope and is added below.
+- **Lane D evidence framing (adjustment — accepted).** `test-expert.md` carries
+  the full carrier shape (label + MANDATORY read-path + cite-by-section).
+  `type-expert.md` / `architecture-expert.md` share only the
+  mandatory-doctrine-**read-path**, not cite-by-section or the carrier label.
+  PDR-088 frames the read-path as the ≥2-instance pattern and cite-by-section as
+  test-expert's stronger variant — it must NOT claim all three are equivalent.
+- **Solo sequential order: B → C → D → A → E.** B is the most substantive Core
+  amendment (PDR-011 / ADR-150 / session-handoff bundle); C/D are the new PDRs;
+  A/E are lighter. Owner-review touchpoints sequence in that order.
+- **Lane A owner-review.** Lane A's one-line PDR-027 amendment is a Core touch;
+  treat it as owner-reviewable (same gate as the SANCTITY lanes) even though it
+  sits below the full-amendment threshold.
+- **Authoring-discipline conditions (per docs-adr-expert, accepted):** every
+  amendment lands in the target's **Amendment Log** (not §Decision/§Consequences
+  body) — PDR-011, PDR-027, and ADR-150 §Decision bodies stay unchanged; any
+  reference to an ADR inside a PDR body uses **identifier-only** form (`ADR-150`),
+  never a markdown path link (PDR-079); the new PDRs import **no** host-path
+  cross-references from their source directives.
+- **If any home-confirmation had failed:** abort that lane and surface to owner
+  (none failed; recorded for completeness per the assumptions-expert gap note).
 
 ## Parallel-execution structure
 
@@ -347,8 +395,12 @@ so concurrent lanes never race the indices.
 **Owned file scope (the shared indices)**:
 
 - `.agent/practice-core/decision-records/README.md` — add the two new PDR rows
-  (Lanes C, D, with their `ws-readiness`-assigned numbers); update PDR-058
-  status/title if the amendment changed it.
+  (PDR-087 Lane C, PDR-088 Lane D); update PDR-058 status/title if the amendment
+  changed it.
+- `.agent/practice-index.md` — add two rows (PDR-087, PDR-088) in the
+  "No standalone phenotype ADR. Substrate is …" form (per the ws-readiness
+  Outcome; this is the canonical PDR↔phenotype bridge, omitted from the original
+  WS-Z scope).
 - `RULES_INDEX.md` — add any new rule entries WS-E authored.
 - `.agent/memory/operational/pending-graduations.md` — remove the six graduated
   entries (#21, #37, #22+23, #40, #41, reflection) with a one-line provenance
@@ -356,17 +408,21 @@ so concurrent lanes never race the indices.
 - `.agent/memory/operational/repo-continuity.md` — refresh §Next Safe Steps
   (Group A drained; Groups B/D/E + claim-liveness remain).
 
-**Coordination.** This is the only multi-writer-risk surface. Before editing,
-read `active-claims.json` for any concurrent claim on the PDR README / register
-(the 2026-05-29 Deciduous claim on the PDR README will be long expired by the
-execution session). Hold a short commit-window claim per
+**Coordination.** This is the only multi-writer-risk surface. As of the
+2026-05-29 ws-readiness gate the PDR README is held by a **live** claim
+(Wooded Creeping Thicket, `eef` thread, claimed 06:07Z — NOT expired, and NOT
+the Deciduous claim an earlier draft of this paragraph named). Re-read
+`active-claims.json` at WS-Z time: that registry is the authoritative
+coordination signal, not this prose. If the claim is still live, coordinate or
+wait before writing the PDR README; the content lanes (A–E) are disjoint from it
+and proceed regardless. Hold a short commit-window claim per
 `register-active-areas-at-session-open` §Commit-window claims.
 
 **Acceptance (proof: non-code)**:
 
 - All six register entries removed with provenance; substance confirmed live in
   its graduated home for each.
-- PDR README + RULES_INDEX rows added; reachability intact.
+- PDR README + practice-index + RULES_INDEX rows added; reachability intact.
 - repo-continuity Next Safe Steps refreshed.
 - Final aggregate gate green; learning-loop run.
 

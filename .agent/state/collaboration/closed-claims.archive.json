@@ -247,6 +247,366 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "60147de3-84c1-4f80-bbe2-b93d13878dc6",
+      "agent_id": {
+        "agent_name": "Shaded Prowling Threshold",
+        "platform": "claude",
+        "model": "claude-opus-4-8",
+        "session_id_prefix": "e526d7",
+        "id": "34601342-996c-5228-a296-c849769f2723"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/skills/consolidate-docs/SKILL-CANONICAL.md",
+            ".agent/memory/operational/threads/README.md",
+            ".agent/practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md",
+            ".agent/memory/operational/threads/pr-90-build-fix-landing.next-session.md",
+            ".agent/practice-core/decision-records/README.md",
+            ".agent/practice-index.md",
+            "RULES_INDEX.md",
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/plans/agentic-engineering-enhancements/current/group-a-graduations-execution.plan.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-29T08:43:32Z",
+      "freshness_seconds": 28800,
+      "sidebar_open": false,
+      "intent": "Group A graduations: Lane A (#21 retired-thread-record hygiene) authored + gated-green (pending owner review); WS-Z shared-index convergence (single writer). Disjoint from Highland (napkin/distilled) and Furnace MB (Lane E PDR-058). Napkin rotation belongs to Highland, not WS-Z.",
+      "archived_at": "2026-05-29",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-29T09:15:43Z",
+        "closed_by": {
+          "agent_name": "Shaded Prowling Threshold",
+          "platform": "claude",
+          "model": "claude-opus-4-8",
+          "session_id_prefix": "e526d7",
+          "id": "34601342-996c-5228-a296-c849769f2723"
+        },
+        "summary": "Session handoff: Lane A landed owner-approved (uncommitted, in WS-Z bundle); WS-Z convergence parked for next session per owner direction. Shared-index files left unclaimed for next session's own claim. Evidence: agentic-engineering-enhancements thread record top Session Outcome (Shaded Prowling Threshold 2026-05-29).",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "60147de3-84c1-4f80-bbe2-b93d13878dc6",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "30c0565f-66ee-4689-8a3c-0e4e0d7a8ece",
+      "agent_id": {
+        "agent_name": "Furnace Melting Bellows",
+        "platform": "claude",
+        "model": "claude-opus-4-8",
+        "session_id_prefix": "972a22",
+        "id": "8d10534c-37ab-5a5e-91bb-ac9bbc6a32a7"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-058-three-tier-optionality-decomposition.md",
+            ".agent/rules/plan-body-first-principles-check.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-29T08:46:02Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Lane E (WS-E) Group A graduation: amend PDR-058 — confirm Surface 3 (outcome optionality) rule-graduation/merge (#22+23), name Surface 4 (sequencing optionality, #37) with diagnostic+cure. Author-time new-rule-vs-pdr-clause decision; lean = PDR-058 clauses + thin optionality-surface pointer in plan-body-first-principles-check.md (no new rule file). SANCTITY: agent-authored, owner-reviewed. May add .agent/rules/*.md to this claim only if budget decision mints one. Disjoint from Shaded (WS-Z indices) + Highland (napkin/distilled).",
+      "archived_at": "2026-05-29",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-29T09:19:37Z",
+        "closed_by": {
+          "agent_name": "Furnace Melting Bellows",
+          "platform": "claude",
+          "model": "claude-opus-4-8",
+          "session_id_prefix": "972a22",
+          "id": "8d10534c-37ab-5a5e-91bb-ac9bbc6a32a7"
+        },
+        "summary": "Lane E PDR-058 optionality graduation: content owner-approved + gate-green, handed to next WS-Z session (folds into gatekeeper commit). Owner directed relinquish-all at session close. Evidence: thread record top Session Outcome (Furnace Melting Bellows 2026-05-29) + comms report-back to Shaded.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "30c0565f-66ee-4689-8a3c-0e4e0d7a8ece",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1a452ec7-d2c4-43f4-835f-840095dc7ea9",
+      "agent_id": {
+        "agent_name": "Furnace Melting Bellows",
+        "platform": "claude",
+        "model": "claude-opus-4-8",
+        "session_id_prefix": "972a22",
+        "id": "8d10534c-37ab-5a5e-91bb-ac9bbc6a32a7"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-29T09:05:49Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Lane E scope-adjacent consistency fix: clause 4 added to plan-body-first-principles-check (per PDR-058 graduation) makes PDR-029's three-clause A.1 spec stale. Minimal Amendment-Log note + inline pointer ONLY (no doctrine change; three-clause A.1 coverage preserved as historically accurate). Owner-reviewed alongside Lane E. PDR-029 was unclaimed.",
+      "archived_at": "2026-05-29",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-29T09:19:37Z",
+        "closed_by": {
+          "agent_name": "Furnace Melting Bellows",
+          "platform": "claude",
+          "model": "claude-opus-4-8",
+          "session_id_prefix": "972a22",
+          "id": "8d10534c-37ab-5a5e-91bb-ac9bbc6a32a7"
+        },
+        "summary": "Lane E PDR-058 optionality graduation: content owner-approved + gate-green, handed to next WS-Z session (folds into gatekeeper commit). Owner directed relinquish-all at session close. Evidence: thread record top Session Outcome (Furnace Melting Bellows 2026-05-29) + comms report-back to Shaded.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1a452ec7-d2c4-43f4-835f-840095dc7ea9",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "c2bb65a8-b1f5-4964-a73b-1ec8e7170be7",
+      "agent_id": {
+        "agent_name": "Highland Rising Squall",
+        "platform": "claude",
+        "model": "claude-opus-4-8",
+        "session_id_prefix": "71b264",
+        "id": "2a65012f-44a7-5320-92c1-9d1ec3243ccc"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/memory/active/napkin.md",
+            ".agent/memory/active/distilled.md",
+            ".agent/research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-05-29.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-29T08:39:24Z",
+      "freshness_seconds": 28800,
+      "sidebar_open": false,
+      "intent": "Raw-input extraction lane (owner goal): mine all platform memories (Claude/Codex/Cursor/.remember), N=17 rotated napkins (>=2026-05-14), recent experience corpus, read-only comms; route understanding to distilled.md + historical-napkin-synthesis report; rotate the HARD current napkin. Shaded owns pending-graduations (disjoint). Comms NOT rotated (research preservation).",
+      "archived_at": "2026-05-29",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-29T09:22:52Z",
+        "closed_by": {
+          "agent_name": "Highland Rising Squall",
+          "platform": "claude",
+          "model": "claude-opus-4-8",
+          "session_id_prefix": "71b264",
+          "id": "2a65012f-44a7-5320-92c1-9d1ec3243ccc"
+        },
+        "summary": "Raw-input extraction pass complete: synthesis report + 8 distilled entries + ledger; ~22 grad candidates handed to Shaded; 2 NEW files for WS-Z fold. Clean closeout.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "c2bb65a8-b1f5-4964-a73b-1ec8e7170be7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "905e7825-9f2c-400f-bd3b-a7dd8b4489f8",
+      "agent_id": {
+        "agent_name": "Tempestuous Gliding Thermal",
+        "platform": "claude",
+        "model": "claude-opus-4-8",
+        "session_id_prefix": "3e5d88",
+        "id": "262bccad-d884-59fe-8170-e5c0665f1cfb"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-29T09:29:58Z",
+      "freshness_seconds": 900,
+      "sidebar_open": false,
+      "intent": "Stage+commit eef external-data validator hardening (4 files, disjoint).",
+      "archived_at": "2026-05-29",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-29T09:31:16Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Gliding Thermal",
+          "platform": "claude",
+          "model": "claude-opus-4-8",
+          "session_id_prefix": "3e5d88",
+          "id": "262bccad-d884-59fe-8170-e5c0665f1cfb"
+        },
+        "summary": "commit e76b9b7c: external-data validator file-wide no-logic hardening (gate-clean, in-cycle reviewed)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "905e7825-9f2c-400f-bd3b-a7dd8b4489f8",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "1f9e9dea-d44e-4608-a145-79d2ed5204a7",
+      "agent_id": {
+        "agent_name": "Tempestuous Gliding Thermal",
+        "platform": "claude",
+        "model": "claude-opus-4-8",
+        "session_id_prefix": "3e5d88",
+        "id": "262bccad-d884-59fe-8170-e5c0665f1cfb"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "agent-tools/src/external-data/external-data-contract.ts",
+            "agent-tools/src/external-data/external-data-contract.unit.test.ts",
+            "packages/sdks/graph-corpus-sdk/eslint.config.ts"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-29T09:01:41Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "EEF D0 gateway-review absorption: harden the *.external-data.ts contract validator to a file-wide no-runtime-logic invariant (namespace/nested-in-data/re-export/import-equals/export-default vectors) per owner strictness direction; + align eslint glob to sonar. Disjoint from agentic-engineering thread WIP.",
+      "archived_at": "2026-05-29",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-29T09:31:17Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Gliding Thermal",
+          "platform": "claude",
+          "model": "claude-opus-4-8",
+          "session_id_prefix": "3e5d88",
+          "id": "262bccad-d884-59fe-8170-e5c0665f1cfb"
+        },
+        "summary": "commit e76b9b7c: external-data validator file-wide no-logic hardening (gate-clean, in-cycle reviewed)",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "1f9e9dea-d44e-4608-a145-79d2ed5204a7",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "2a7be023-0646-4760-95e3-4294d70b0284",
+      "agent_id": {
+        "agent_name": "Tempestuous Gliding Thermal",
+        "platform": "claude",
+        "model": "claude-opus-4-8",
+        "session_id_prefix": "3e5d88",
+        "id": "262bccad-d884-59fe-8170-e5c0665f1cfb"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "git",
+          "patterns": [
+            "index/head"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-29T09:39:51Z",
+      "freshness_seconds": 600,
+      "sidebar_open": false,
+      "intent": "Commit eef session-handoff resume surface + experience file.",
+      "archived_at": "2026-05-29",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-29T09:41:06Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Gliding Thermal",
+          "platform": "claude",
+          "model": "claude-opus-4-8",
+          "session_id_prefix": "3e5d88",
+          "id": "262bccad-d884-59fe-8170-e5c0665f1cfb"
+        },
+        "summary": "commit 3808077b: eef session-handoff resume surface + experience file",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "2a7be023-0646-4760-95e3-4294d70b0284",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "48c4545f-b0cd-4593-a2c0-42b2f5b244a6",
+      "agent_id": {
+        "agent_name": "Leafy Regrowing Petal",
+        "platform": "claude",
+        "model": "claude-opus-4-8",
+        "session_id_prefix": "f9d588",
+        "id": "1f104be3-b0aa-5253-9cb4-7907c830e27e"
+      },
+      "thread": "agent-collaboration-research",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            ".agent/plans/agent-tooling/future/collaboration-substrate-coordination-rightsizing.plan.md",
+            ".agent/plans/agent-tooling/current/collaboration-substrate-coordination-rightsizing.plan.md",
+            ".agent/plans/agent-tooling/current/collaboration-substrate-coordination-rightsizing.m1-inventory.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-29T09:09:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "M1 of collaboration-substrate-coordination-rightsizing (owner-dispatched re-ground track): promote plan future->current, author M1 context-yardstick + layer inventory with keep/fold/delete verdicts. Read-only on all doctrine; writes scoped to the rightsizing plan + its M1 companion artefact. Disjoint from Highland (napkin/distilled), Shaded (Group A/WS-Z), Furnace MB (PDR-058).",
+      "archived_at": "2026-05-29",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-29T10:44:28Z",
+        "closed_by": {
+          "agent_name": "Leafy Regrowing Petal",
+          "platform": "claude",
+          "model": "claude-opus-4-8",
+          "session_id_prefix": "f9d588",
+          "id": "1f104be3-b0aa-5253-9cb4-7907c830e27e"
+        },
+        "summary": "M1 landed: context yardstick + 86-layer inventory + re-based predicates (owner steer: assume no owner presence, build toward autonomy). Artefact: collaboration-substrate-coordination-rightsizing.m1-inventory.md. Routing-sunset (claim 14b484d6) remains open for next session.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "48c4545f-b0cd-4593-a2c0-42b2f5b244a6",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }
