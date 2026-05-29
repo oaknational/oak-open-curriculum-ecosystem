@@ -19,7 +19,7 @@
  * gate against the validated snapshot's `meta.last_updated` before
  * constructing the adapter. The gate-1b refresh script (a separate cycle)
  * consumes the same check function to validate any reviewed replacement
- * before regenerating `./eef-toolkit.ts`.
+ * before regenerating `./eef-toolkit.external-data.ts`.
  *
  * @packageDocumentation
  */

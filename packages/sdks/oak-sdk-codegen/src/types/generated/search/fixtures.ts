@@ -10,22 +10,10 @@ import {
   SearchSuggestionItemSchema,
   SearchSuggestionResponseSchema,
 } from './suggestions.js';
-import {
-  SearchLessonsResponseSchema,
-  type SearchLessonResult,
-  type SearchLessonsResponse,
-} from './responses.lessons.js';
-import { SearchUnitsResponseSchema, type SearchUnitResult, type SearchUnitsResponse } from './responses.units.js';
-import {
-  SearchSequencesResponseSchema,
-  type SearchSequenceResult,
-  type SearchSequencesResponse,
-} from './responses.sequences.js';
-import {
-  SearchMultiScopeResponseSchema,
-  type SearchMultiScopeBucket,
-  type SearchMultiScopeResponse,
-} from './responses.multi.js';
+import { SearchLessonsResponseSchema, type SearchLessonsResponse } from './responses.lessons.js';
+import { SearchUnitsResponseSchema, type SearchUnitsResponse } from './responses.units.js';
+import { SearchSequencesResponseSchema, type SearchSequencesResponse } from './responses.sequences.js';
+import { SearchMultiScopeResponseSchema, type SearchMultiScopeResponse } from './responses.multi.js';
 
 function assertValid<T>(schema: { parse: (value: unknown) => T }, value: unknown, label: string): T {
   try {
@@ -145,13 +133,14 @@ export function createSearchMultiScopeResponse(
   return assertValid(SearchMultiScopeResponseSchema, candidate, 'SearchMultiScopeResponse');
 }
 
+export type { SearchLessonResult } from './responses.lessons.js';
+export type { SearchUnitResult } from './responses.units.js';
+export type { SearchSequenceResult } from './responses.sequences.js';
+export type { SearchMultiScopeBucket } from './responses.multi.js';
+
 export type {
-  SearchLessonResult,
   SearchLessonsResponse,
-  SearchUnitResult,
   SearchUnitsResponse,
-  SearchSequenceResult,
   SearchSequencesResponse,
-  SearchMultiScopeBucket,
   SearchMultiScopeResponse,
 };

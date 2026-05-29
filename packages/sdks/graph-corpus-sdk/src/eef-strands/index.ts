@@ -10,7 +10,7 @@
  * - the `EefStrandsGraphView` adapter (`./graph-view.ts`) over the strands;
  * - the Zod schema (`./strand-schema.ts`) the `EefStrand` type flows from;
  * - the loader (`./loader.ts`) that validates + freshness-gates the
- *   snapshot (`./eef-toolkit.ts`) and constructs the adapter;
+ *   snapshot (`./eef-toolkit.external-data.ts`) and constructs the adapter;
  * - the ADR-175 freshness gate (`./freshness.ts`).
  */
 

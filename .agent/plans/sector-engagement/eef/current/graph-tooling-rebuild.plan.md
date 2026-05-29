@@ -167,9 +167,16 @@ Land the sound foundation on `main` with the wrong-shaped tool quarantined.
      `agent-tools/src/claude/statusline-identity.ts:112` (PATH) — assess and
      remediate (fix if unsafe; a genuine documented review per
      `docs/governance/sonar-disposition-policy.md` only if genuinely safe).
-  3. **3.9% `new_duplicated_lines_density`** (>3%) — pinpoint via the duplications
-     API and de-duplicate (extract shared code). Do NOT raise the threshold or
-     exclude paths.
+  3. **3.9% `new_duplicated_lines_density`** (>3%) — RESOLVED via the
+     owner-decided **external-data file convention** (2026-05-29). The duplication
+     is entirely the EEF corpus *data* file (an external EEF snapshot), so DRY
+     would distort fidelity to the source. Cure: rename →
+     `eef-toolkit.external-data.ts`; a `**/*.external-data.ts` cpd-exclusion
+     **pattern** in both `sonar-project.properties` + `.sonarcloud.properties`;
+     a new `sonar-disposition-policy.md` §Duplications class; and an enforcing
+     `validate-external-data-files` repo-validator (the anti-abuse contract).
+     NOT a code de-duplication, NOT a path-only exclusion. (Pattern, not path,
+     so it survives file moves.)
   4. **Valid review comments** — PDR-085 README status (`Proposed` → `Accepted`,
      verified against the PDR header); `.agent/state/collaboration/.gitignore`
      pattern (`_temp-*` → `_tmp-*`); `prompt-schemas.ts:81` focus docstring

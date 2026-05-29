@@ -80,7 +80,7 @@ function formatLoadError(error: LoadEefCorpusError): CallToolResult {
       `The EEF evidence corpus is out of date (last updated ${String(error.ageDays)} days ago) and has been withheld to avoid surfacing stale evidence.`,
     );
   }
-  return formatError(`The EEF evidence corpus could not be loaded (${error.kind}).`);
+  return formatError('The EEF evidence corpus could not be loaded.');
 }
 
 /** Build the typed telemetry span for one explore call. */

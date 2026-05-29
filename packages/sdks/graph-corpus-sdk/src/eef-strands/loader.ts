@@ -2,7 +2,7 @@
  * EEF corpus loader (gate-1a, t2) — the validation + freshness boundary.
  *
  * `loadEefCorpus` is the single entry point that turns the repository-held
- * snapshot (`./eef-toolkit.ts`, typed `unknown`) into a live
+ * snapshot (`./eef-toolkit.external-data.ts`, typed `unknown`) into a live
  * `EefStrandsGraphView`. It enforces three boundaries in order, failing
  * fast with a discriminated error:
  *
@@ -26,7 +26,7 @@ import { ok, err, type Result } from '@oaknational/result';
 import type { z } from 'zod';
 import type { GraphView } from '@oaknational/graph-core/graph-view';
 
-import { EEF_TOOLKIT_RAW } from './eef-toolkit.js';
+import { EEF_TOOLKIT_RAW } from './eef-toolkit.external-data.js';
 import { EefToolkitSchema, type EefStrand } from './strand-schema.js';
 import { checkFreshness, DEFAULT_THRESHOLD_DAYS, type FreshnessError } from './freshness.js';
 import {

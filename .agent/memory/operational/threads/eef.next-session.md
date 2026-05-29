@@ -1,6 +1,6 @@
 # Next-Session Record — `eef` thread
 
-> **CURRENT TRUTH — RESUME HERE (2026-05-28). Everything below this banner is
+> **CURRENT TRUTH — RESUME HERE (2026-05-29). Everything below this banner is
 > SUPERSEDED HISTORY — do not resume it.**
 >
 > The EEF explore tool and the gate-1a / gate-1b split were diagnosed as the
@@ -25,9 +25,12 @@
 > 2. `.agent/plans/sector-engagement/eef/current/graph-tooling-rebuild.plan.md`
 >    — the SPECIFIED plan (resolved design + self-correcting D0–D6 + DX).
 >
-> **Next session = GOAL 2: implement.** D0 merge-safety (PR #122) → D1 contract
-> ADR → D2 query surface (un-stub the GraphView ops; selection → `enumerateNodes`
-> filter) → D3 thin delivery tool (full-node subgraph, `structuredContent`-only) →
+> **Next session = continue GOAL 2 / D0 (IN PROGRESS, 2026-05-29).** D0
+> merge-safety (PR #122) is part-built locally and **uncommitted** — see the
+> **2026-05-29 session entry below** for exact state, the explicit-pathspec
+> commit set, and the remaining steps. After D0: D1 contract ADR → D2 query
+> surface (un-stub the GraphView ops; selection → `enumerateNodes` filter) →
+> D3 thin delivery tool (full-node subgraph, `structuredContent`-only) →
 > D4 navigation round-trip → D5 skills + methodology graduation → D6 explore
 > value → DX estate reconciliation. Bounded — terminates at D6; no deferral
 > gates, no endless follow-ons (plan §"End goal + bounded goals").
@@ -35,6 +38,88 @@
 > Do NOT resume the increments B–H / gate-1a/1b framing below. Detailed prior
 > session history remains in git. The full clean rewrite of this surface is plan
 > deliverable DX (estate-wide reference reconciliation).
+
+## Session 2026-05-29 — Goal 2 / D0 in progress: PR #122 signals + external-data convention (Deciduous Climbing Root / `42226f`)
+
+**Goal 2 / D0 (merge-safety) — PARTIALLY LANDED, uncommitted in the working
+tree.** All work is local (nothing pushed/committed); the merge is owner-gated.
+Verified the live PR #122 signal set against SonarCloud + GitHub at session open
+(matched the plan exactly: 2× S7763, 1 PATH hotspot, 3.9% new-dup, 4 Copilot
+comments). **type-check + lint GREEN on the bundle.**
+
+DONE:
+
+- **Lane A — S7763 (generator-first).** Fixed both emitters:
+  `oak-sdk-codegen/code-generation/typegen/search/generate-search-index-docs.ts`
+  (IMPORTS template: `AllSubjectSlug` → `export type … from`; kept the
+  `ALL_SUBJECTS` value import) and `…/generate-search-fixtures.ts` (the four
+  pure re-export types `Search{Lesson,Unit,Sequence}Result` + `SearchMultiScopeBucket`
+  → `export type … from`; `*Response` types stay imported+re-exported, used
+  in-file). Ran `pnpm sdk-codegen` → regenerated `generated/search/{fixtures,index-documents}.ts`
+  verified. No test broken. Sonar confirms post-push.
+- **Lane D — 4 review comments.** `.gitignore` `_temp-*`→`_tmp-*`; PDR-085 README
+  `Proposed`→`Accepted` (PDR header verified Accepted); `execution.ts:83` dropped
+  `${error.kind}` from the user string (kind still logged at the call site);
+  `prompt-schemas.ts` docstring softened (focus is a free-text MCP arg; the tool
+  enforces EEF_PRIORITIES).
+- **Lane C (duplication) — reshaped to the EXTERNAL-DATA FILE CONVENTION
+  (owner-decided).** The 3.9% dup is entirely in the EEF corpus data file, an
+  EXTERNAL EEF snapshot — DRY would destroy source fidelity. Owner authorised a
+  filename convention `*.external-data.ts` matched by a cpd-exclusion **pattern**
+  (robust to file moves). Done: renamed `eef-toolkit.ts` →
+  `eef-toolkit.external-data.ts` + all 6 refs (import; eslint ignore path→pattern
+  `src/**/*.external-data.ts`; 4 docstrings; left `types.ts:75` conceptual
+  `eef-toolkit.json` ref); added `**/*.external-data.ts` to `sonar.cpd.exclusions`
+  in BOTH `sonar-project.properties` + `.sonarcloud.properties`; amended
+  `docs/governance/sonar-disposition-policy.md` §Duplications (new class +
+  contract).
+
+REMAINING (next session, in order):
+
+1. **Lane C4 — the enforcing validator (ships in D0, owner-decided).** Build
+   `agent-tools/scripts/validate-external-data-files.ts` (+ `-helpers.ts` +
+   `-helpers.unit.test.ts`), wire into the `repo-validators:check` root script.
+   Contract: a `*.external-data.ts` file MUST export `: unknown` data, MUST carry
+   a provenance docstring, MUST NOT export logic (function/class/enum). Copy the
+   idiom from `agent-tools/scripts/validate-no-stale-script-invocations.ts`.
+   Without it the suffix is a gate-dodge hole.
+2. **Lane B — PATH hotspot.** Dispose SAFE per `sonar-disposition-policy` §S4036
+   (agent-tools + `git` + dev-workstation — exact documented-class match; NOT a
+   code fix — `no-machine-local-paths` forbids absolute-pathing git). Apply via
+   Sonar `change_security_hotspot_status` REVIEWED/SAFE; comment: "SAFE per Sonar
+   Disposition Policy §S4036: agent-tools/src/claude/statusline-identity.ts:112 —
+   dev/CI tooling; standard developer toolchain binary; host owns PATH integrity;
+   not a production-server runtime." Surface to owner before the Sonar write.
+3. **Lane E — flag.** The co-gating test ALREADY EXISTS + is correct
+   (`apps/oak-curriculum-mcp-streamable-http/src/handlers-tool-registration.integration.test.ts`
+   describe('EEF feature-flag co-gating'): OFF→neither, ON→both, base prompts
+   still register). Just run it. THEN verify `OAK_CURRICULUM_MCP_EEF_ENABLED`
+   unset/false in preview + production via the project Vercel MCP (NOT the CLI) —
+   D0 acceptance #3.
+4. **Full gates** — only type-check + lint were run this session. Run build, test,
+   markdownlint, format, repo-validators, sdk-codegen (or `pnpm check`).
+5. **Gateway review** (code-expert architectural + type-expert on the generator
+   change + test-expert on the validator) before merge — task tracked.
+6. **Merge PR #122 — OWNER-GATED.** Only after the SonarCloud QG is green (push
+   triggers re-scan), reviews resolved, flag proven OFF in every deployed env.
+   Merging is the sole hard owner-gate.
+
+**Commit hygiene (concurrent agent in the tree):** `Tempestuous Vaulting Falcon`
+(`441c78`, claude-opus-4-8) is concurrently executing the pending-graduations
+packet on `agentic-engineering-enhancements` — DISJOINT areas; it explicitly
+defers the PDR README index to me. At commit, stage ONLY the D0 files by explicit
+pathspec (the two generators + two generated search files; `execution.ts`;
+`prompt-schemas.ts`; `.gitignore`; `decision-records/README.md`;
+`sonar-disposition-policy.md`; `sonar-project.properties`; `.sonarcloud.properties`;
+the renamed `eef-toolkit.external-data.ts` + its 4 importer files + `eslint.config.ts`;
+and — when built — the validator + root `package.json` wiring). Do NOT stage
+Tempestuous's `claim-liveness-…plan.md`; the shared state
+(active-claims/closed-claims/napkin) carries both sessions' writes — handle
+additively.
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| `Deciduous Climbing Root` | `claude` | `claude-opus-4-8` | `42226f` | `goal-2-d0-implementer` | 2026-05-29 | 2026-05-29 |
 
 ## Session 2026-05-28 (later) — Goal 1 design settled + plan specified (Woodland Swaying Pollen / `073489`)
 

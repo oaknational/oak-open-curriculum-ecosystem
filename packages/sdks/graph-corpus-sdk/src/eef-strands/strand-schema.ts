@@ -4,7 +4,7 @@
  * Schema-first execution: the strand type flows from this schema via
  * `z.infer`, replacing the gate-1a `EefStrand` skeleton (review-register
  * items F + J). The schema is the strict validation boundary for the
- * external snapshot in `./eef-toolkit.ts`; the loader (`./loader.ts`)
+ * external snapshot in `./eef-toolkit.external-data.ts`; the loader (`./loader.ts`)
  * parses `unknown` through it before any consumer sees a strand.
  *
  * Modelling fidelity is grounded in the real 30-strand corpus:
