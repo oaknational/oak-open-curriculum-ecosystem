@@ -181,3 +181,15 @@ are authored — never the reverse.
   first executable-output boundary); M1 investigation lives here next to the
   brief. Routing code is untouched — the sunset becomes a deletion derived
   from the ratified model.
+- **2026-05-29 — routing sunset executed (supersedes the "untouched" framing
+  above).** The owner subsequently directed the sunset's direct execution
+  ("get rid of the legacy system… make sure the legacy system is utterly
+  removed"). It landed in `d9225d5b`: id-keyed-only routing, fail-fast on an
+  id-less identity, legacy arm + fallback writer + diagnostic removed, all
+  gates green. This matches M1 §0 ("the legacy routing system is deleted, not
+  folded") and the two §4.5-item-3 corrections (coordinator-name strip;
+  `(name, prefix)` → `(name, id)` reconciliation), which landed in the same
+  commit. Routing is therefore no longer a *pending* deletion derived from the
+  model — it is a **landed worked instance** of the replace-vs-migrate
+  discipline M3 generalises, and an input to M1's inventory rather than an
+  output of M2. M4's cluster supersession list inherits this as settled.

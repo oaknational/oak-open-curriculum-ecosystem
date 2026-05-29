@@ -36,4 +36,6 @@ next-session cleanup pass before merge.
 - Collection root: [../README.md](../README.md)
 - Frictions register: [../frictions-register.md](../frictions-register.md)
 - Future backlog: [../future/README.md](../future/README.md)
+- **Comms / coordination cluster map** (overlap + supersession analysis across
+  current + future): [../future/README.md#comms--coordination-cluster](../future/README.md#comms--coordination-cluster)
 - Companion governance/doctrine collection: [../../agentic-engineering-enhancements/current/README.md](../../agentic-engineering-enhancements/current/README.md)

@@ -394,7 +394,9 @@ M2 (owner-facing) ratifies the minimal model. The concrete decision M1 surfaces:
 3. **Two immediate corrections that stand regardless of M2** (live defects, not
    design questions): strip the hardcoded coordinator name from
    `use-agent-comms-log.md`; reconcile the `(name, prefix)` routing-pair rule to
-   PDR-076a. These are doctrine-drift fixes the inventory exposed.
+   PDR-076a. These are doctrine-drift fixes the inventory exposed. **✅ Both
+   landed 2026-05-29 in `d9225d5b`** alongside the routing sunset (§0); no longer
+   pending for M2.
 4. **M4 supersession preview**: most of the `fold` set's cluster plans
    (`cost-of-collaboration`, the n2 work, sidebar/escalation, joint-decision,
    coordination-watcher-canonicalisation) are superseded-or-folded once the

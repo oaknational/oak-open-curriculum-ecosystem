@@ -1,6 +1,7 @@
 ---
 title: Routing legacy-fallback sunset
-status: active-in-progress
+status: complete
+landed: 2026-05-29 (commit d9225d5b)
 lane: future
 collection: agent-tooling
 created: 2026-05-28
@@ -286,7 +287,12 @@ So the migration step is a no-op and the deletion is safe.
   ("Wooded Spreading Thicket") stripped; coordinator now discovered from the
   live stream, introduction conditional on an active coordinator role.
 
-### RED — BLOCKING PRIORITY for the next session (10 failing tests)
+### RED — BLOCKING PRIORITY for the next session (10 failing tests) — ✅ RESOLVED 2026-05-29 (commit d9225d5b)
+
+> **Resolved.** All ten tests are green, plus a previously-unlisted e2e
+> failure (`collaboration-tui.e2e.test.ts`). Full `pnpm check` passes. See
+> §Session 2 below for the landing record. The text below is retained as the
+> historical RED state Session 2 cleared.
 
 **`pnpm --filter @oaknational/agent-tools test` → 10 failed | 758 passed (3
 files).** The full-tree pre-commit hook (`turbo run type-check lint test`) will
@@ -353,3 +359,39 @@ ids), and update assertions — `formatRoutingKey` renders `name / id:<uuid>` (n
   must return nothing; then full gates (`pnpm type-check lint test build knip`)
   green. The strategic acceptance criteria at the top of this plan are the
   done-definition.
+
+## Session 2 (2026-05-29, Twilit Orbiting Satellite) — sunset executed and landed
+
+The sunset is **complete and committed** (`d9225d5b`). All strategic acceptance
+criteria are met.
+
+### What landed
+
+- **Tests greened (the blocking RED above).** The 10 failing unit tests plus a
+  previously-unlisted e2e failure (`collaboration-tui.e2e.test.ts`) are green.
+  Fixtures unified to id-bearing identities via
+  `deriveOverrideCollaborationIdentity`; the superseded `session_id_prefix`
+  disambiguation block deleted; TUI snapshot + e2e fixtures modernised to the
+  id-keyed shape; one test added for the id-less-audience short-circuit
+  (un-migrated identities are never group members). A test-expert review passed.
+- **Doctrine removal finished.** PDR-076a carries a §Sunset-execution note with
+  the (previously unrecorded) sunset criteria; `register-identity-on-thread-join.md`
+  reconciled from `(name, prefix)` to `(name, id)`; the hardcoded coordinator
+  name stripped from `use-agent-comms-log.md` so the coordinator is discovered
+  from live state (M1 inventory §4.5 item 3 — "stands regardless of M2"); a
+  stale `claim-reports.ts` comment fixed.
+- **Verification gate clean.** The legacy-ref grep over `agent-tools/src` +
+  `tests` returns nothing. Full `pnpm check` passes (turbo 108/108 + all tail
+  gates).
+
+### Disposition
+
+This file is **retained in `future/` in place**, not archived, because it is a
+live cross-link hub: the
+[`collaboration-substrate-coordination-rightsizing`](collaboration-substrate-coordination-rightsizing.plan.md)
+brief names this plan's §Open-problems as its M1 inventory base, and several
+cluster plans back-link here. Final archival disposition is deferred to that
+brief's **M4 supersession list**, which owns the cluster's lifecycle decisions.
+The routing layer's verdict is already settled — **deleted, strict id-keyed,
+no fallback** — a worked instance of the replace-vs-migrate discipline M3 will
+generalise.
