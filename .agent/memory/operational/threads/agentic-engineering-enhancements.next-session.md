@@ -1,5 +1,51 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
+## Session Outcome (2026-05-29 — Tempestuous Vaulting Falcon / claude / claude-opus-4-8 / `441c78`, pending-graduations decision-packet execution: Group C re-verified + Group A planned)
+
+**Session boundary**: owner asked to surface pending graduations awaiting input,
+then ratified the Sunlit decision packet ("do all of it"). Ran disjoint from
+Deciduous Climbing Root's active EEF/D0 code work (co-mingled tree; my changes
+doc-only).
+
+**Landed**:
+
+- **Group C executed** — adversarial re-verification (18-agent workflow, Sonnet,
+  refute-biased) found the Sunlit ledger's "recommend withdraw" verdicts **~83%
+  wrong**: 15 of 18 named coverage homes did NOT contain the substance. **15 kept,
+  3 withdrawn** (recurrence-rank weighting #14; napkin+`.remember/` PDR-011
+  amendment #47; redundant-config marker). Ledger:
+  [`curator-passes/2026-05-29-tempestuous-vaulting-falcon.md`](../curator-passes/2026-05-29-tempestuous-vaulting-falcon.md).
+  Register header refreshed; 3 entries removed with provenance.
+- **Group A planned** — six graduations queued as a parallel-lane execution plan:
+  [`group-a-graduations-execution.plan.md`](../../plans/agentic-engineering-enhancements/current/group-a-graduations-execution.plan.md)
+  (5 independent authoring lanes + 1 serialized shared-index convergence). Two
+  ledger home-recommendations corrected during independent re-grounding: #37 →
+  PDR-058 sequencing-optionality (was: no-moving-targets — category error);
+  #22+23 → PDR-058 Surface 3 rule (PDR-058 pre-architected it).
+- **Stale-claim 4th-instance** recorded as activation evidence on
+  [`claim-liveness-crash-reconciliation-and-session-forensics.plan.md`](../../plans/agent-tooling/future/claim-liveness-crash-reconciliation-and-session-forensics.plan.md):
+  the only reap point is consolidation-gated (no session-open reap), so expired
+  claims linger; archived Sunlit's 14h-expired claim this session.
+
+**Load-bearing findings**:
+
+1. **"Verify the auditor" recurses.** The Sunlit ledger that caught its
+   predecessor's ~50% error repeated the same false-negative failure (~83% wrong
+   on Group C). A withdraw recommendation is the highest-stakes curation claim;
+   re-verify adversarially before removal, default-keep. Distilled candidate.
+2. **Stale-claim reaping is a missing autonomy primitive** (4th owner-observed
+   instance) — owner-action-is-not-a-cure; the cure is liveness-bound reaping,
+   not a checklist step (which is what keeps failing).
+
+**Deliberately NOT done**: Group A graduations (planned for a future session, not
+executed — sanctity-gated Core PDRs need owner review); Groups B (route) and E
+(forks); full `pnpm check` (parallel-track coupling with Deciduous's uncommitted,
+test-unverified D0 bundle — `check-singleton`).
+
+**Next safe step**: execute `group-a-graduations-execution.plan.md` (readiness
+gate → 5 parallel lanes → convergence). Groups B/E + claim-liveness promotion
+remain owner-surfaced.
+
 ## Session Outcome (2026-05-28 — Kilned Brazing Bellows / claude / claude-opus-4-7[1m] / `a24c5f`, Leafy compaction-crash root-cause investigation → agent-tooling substrate recording)
 
 **Session boundary**: root-cause investigation of the `/compact` crash that killed

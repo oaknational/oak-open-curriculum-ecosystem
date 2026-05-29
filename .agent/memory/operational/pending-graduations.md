@@ -142,7 +142,17 @@ Processed items in this file already received a curation disposition. The
 remaining action is a user decision: graduate now, keep the watch live,
 withdraw, or route to an explicitly named implementation lane.
 
-Total live owner-gated items: 66.
+**Re-verification status (2026-05-29, Tempestuous Vaulting Falcon).** The Sunlit
+ledger's Group C "recommend withdraw" verdicts were re-verified adversarially
+against the live repo. 15 of 18 were wrong (the named coverage home did not
+contain the substance) and are **kept**; 3 were confirmed genuinely covered /
+thin-no-signal-lost and **withdrawn** (recurrence-rank weighting; napkin +
+`.remember/` PDR-011 amendment; owner-authorised redundant-config marker).
+Per-item verdicts and evidence:
+[`curator-passes/2026-05-29-tempestuous-vaulting-falcon.md`](curator-passes/2026-05-29-tempestuous-vaulting-falcon.md).
+The Group C dispositions in the Sunlit ledger are superseded by that pass.
+
+Total live owner-gated items: 63 (3 withdrawn 2026-05-29; re-verification ledger above).
 
 ## Legacy Backlog Gates
 
@@ -235,12 +245,6 @@ Total live owner-gated items: 66.
   whether to graduate that method now, keep watching for a second generated
   artefact, or withdraw because existing no-moving-targets and honest
   documentation doctrine is enough.
-- 2026-05-10; **Recurrence-rank as graduation weighting**.
-  `[captured: 2026-05-10 | source: insight-report-2026-05-10 | target: pending-graduations-or-distilled-weighting | trigger: owner-direction-or-second-stable-regeneration | size: M | status: owner-gated]`
-  A generated insight report ranked "ten cures" by observed recurrence; the
-  remaining decision is whether recurrence-rank should influence graduation
-  readiness, keep watching for a second stable regeneration, or withdraw the
-  ranking as too observational to govern curation.
 - 2026-05-10; **Owner reply preferences and default reply shape**.
   `[captured: 2026-05-10 | source: insight-report-2026-05-10 | target: user-collaboration-or-pattern:owner-reply-shape | trigger: owner-direction-or-second-regeneration | size: S | status: owner-gated]`
   The insight report proposed compact reply preferences plus a default shape
@@ -765,12 +769,6 @@ done && echo "lock cleared"`). Even though the loop only OBSERVED
   adoption is already live in the plan-template surfaces; portable
   Practice-Core promotion still needs owner direction or a second
   Practice-bearing repo adoption instance.
-- 2026-04-24; napkin + `.remember/` wiring commits; PDR-011 amendment for
-  plugin-managed ephemeral capture surfaces; trigger: second
-  plugin-managed in-repo capture surface or owner direction; status:
-  owner-gated. Owner decision needed to amend PDR-011 now, or leave the
-  current session-handoff / consolidate-docs skill operationalisation as
-  sufficient until another plugin-managed in-repo capture surface appears.
 - 2026-04-23; session-handoff entrypoint sweep; PDR-014 amendment for
   platform-specific entry points as homing substance; trigger: second
   drift instance and owner request; status: owner-gated. Owner decision
@@ -1168,39 +1166,6 @@ Cross-references:
 ---
 
 ## Napkin Tail Gates
-
-### Owner-authorised redundant config marker preserves architectural truth
-
-`[captured: 2026-05-24 | source: active-napkin Charcoal owner-authz Sonar capture | target: pattern:owner-authorised-redundant-config-marker | trigger: second owner-authorised redundant-config marker | size: M | status: owner-gated]`
-
-Charcoal captured a Sonar `sonar.cpd.exclusions` case where owner direction
-authorised adding a narrow generated-code path even though a broader existing
-glob already covered it. The action was still useful because the narrow entry
-made the owner-ratified boundary visible in mechanical config, while the policy
-and inline comment preserved the architectural truth that the analyser scope
-was already covered.
-
-Natural home: repo-local pattern if a second owner-authorised redundant config
-marker appears. The exact 2026-05-24 Sonar instance already lives in
-`docs/governance/sonar-disposition-policy.md` Block 2; this recovery-file
-entry tracks the broader repeatable shape only.
-
-Falsifiability: a second owner-authorised config change intentionally keeps a
-functionally redundant marker for audit-trail visibility, and the landing
-records both facts: owner-ratified boundary and actual mechanical redundancy.
-
-Processing disposition: verified 2026-05-24 under Shaded claim
-`a6098196-5f85-4d60-8c93-0168c251fcf8`. The exact Sonar instance has its
-durable home in `docs/governance/sonar-disposition-policy.md` Block 2, including
-the explicit statement that the narrower glob is mechanically redundant and
-owner-ratified as an audit-trail marker. This recovery file keeps only the repeatable
-pattern watch. Do not promote until a second owner-authorised redundant config
-marker appears.
-
-Owner gate: decide whether this one-instance repeatable-shape watch should
-remain as a live owner-gated watch despite the persistent buffer-drain goal, or
-be withdrawn because the exact Sonar instance is already homed in
-`docs/governance/sonar-disposition-policy.md`.
 
 ### Heterogeneous working-tree owner direction splits by attribution
 

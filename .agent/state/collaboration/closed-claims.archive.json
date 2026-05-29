@@ -46,6 +46,153 @@
           }
         ]
       }
+    },
+    {
+      "claim_id": "19519a3c-a0b1-411c-92cf-434abeb013de",
+      "agent_id": {
+        "agent_name": "Sunlit Waxing Moon",
+        "platform": "claude",
+        "model": "claude-opus-4-7",
+        "session_id_prefix": "b34d76",
+        "id": "8c5aa316-fe7b-5e8d-8977-72ac9597cb15"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "workspace",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/open-questions.md",
+            ".agent/memory/operational/curator-passes/**",
+            ".agent/rules/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-28T14:42:09Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Continue owner-directed dedicated pending-graduations curation drain (LTAE per-item disposition): correct unverified 'already covered' claims, graduate where forced, withdraw where genuinely stale, surface real forks as sharp verdicts",
+      "archived_at": "2026-05-29",
+      "closure": {
+        "kind": "stale",
+        "closed_at": "2026-05-29T05:16:31Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Vaulting Falcon",
+          "platform": "claude",
+          "model": "claude-opus-4-8",
+          "session_id_prefix": "441c78",
+          "id": "a7b3a5e8-d71a-5189-8e8f-9ac275581e68"
+        },
+        "summary": "Archived stale/orphaned claim after its freshness TTL expired.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "19519a3c-a0b1-411c-92cf-434abeb013de",
+            "summary": "Claim exceeded its type-specific freshness TTL."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d037943d-b341-40ae-9c7d-55c3407a766d",
+      "agent_id": {
+        "agent_name": "Deciduous Climbing Root",
+        "platform": "claude",
+        "model": "claude-opus-4-8",
+        "session_id_prefix": "42226f",
+        "id": "f49740f8-f8ac-506e-a59b-f25cc41254f8"
+      },
+      "thread": "eef",
+      "areas": [
+        {
+          "kind": "files",
+          "patterns": [
+            "packages/sdks/oak-sdk-codegen/src/types/generated/search/**",
+            "packages/sdks/oak-sdk-codegen/src/**",
+            "packages/sdks/graph-corpus-sdk/src/eef-strands/eef-toolkit.ts",
+            "packages/sdks/oak-curriculum-sdk/src/mcp/evidence-corpus/**",
+            "apps/oak-curriculum-mcp-streamable-http/src/**",
+            "agent-tools/src/claude/statusline-identity.ts",
+            ".agent/state/collaboration/.gitignore",
+            ".agent/practice-core/decision-records/README.md"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-29T05:04:00Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "D0 graph-tooling rebuild: fix all open PR #122 quality signals (S7763 generator fix, PATH hotspot, eef-toolkit duplication, 4 review comments, flag-cogating proof) then owner-gated merge",
+      "archived_at": "2026-05-29",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-29T05:45:39Z",
+        "closed_by": {
+          "agent_name": "Deciduous Climbing Root",
+          "platform": "claude",
+          "model": "claude-opus-4-8",
+          "session_id_prefix": "42226f",
+          "id": "f49740f8-f8ac-506e-a59b-f25cc41254f8"
+        },
+        "summary": "D0 partially landed (Lane A S7763 generator-first + Lane D 4 comments + Lane C external-data convention rename/policy/config done; validator+hotspot-SAFE+flag/Vercel+gates+gateway+owner-gated-merge remaining). type-check+lint green; uncommitted bundle. Continuation: eef thread record 2026-05-29 entry.",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d037943d-b341-40ae-9c7d-55c3407a766d",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
+    },
+    {
+      "claim_id": "d0ceef06-8998-4eca-8fe1-dcb1cd70829c",
+      "agent_id": {
+        "agent_name": "Tempestuous Vaulting Falcon",
+        "platform": "claude",
+        "model": "claude-opus-4-8",
+        "session_id_prefix": "441c78",
+        "id": "a7b3a5e8-d71a-5189-8e8f-9ac275581e68"
+      },
+      "thread": "agentic-engineering-enhancements",
+      "areas": [
+        {
+          "kind": "workspace",
+          "patterns": [
+            ".agent/memory/operational/pending-graduations.md",
+            ".agent/memory/operational/curator-passes/**",
+            ".agent/memory/operational/repo-continuity.md",
+            ".agent/rules/**",
+            ".agent/practice-core/decision-records/PDR-086*",
+            ".agent/practice-core/decision-records/PDR-087*",
+            ".agent/practice-core/decision-records/PDR-011*",
+            "docs/architecture/architectural-decisions/150*",
+            ".agent/skills/session-handoff/**"
+          ]
+        }
+      ],
+      "claimed_at": "2026-05-29T05:16:31Z",
+      "freshness_seconds": 14400,
+      "sidebar_open": false,
+      "intent": "Execute owner-ratified pending-graduations decision packet (Group A graduations + due reflection item; Group C withdrawals after adversarial home re-verification). Knowledge-preservation-first; Practice-Core PDRs main-agent-drafted for owner sanctity review. NOT touching PDR README index (Deciduous holds it) — defer index entry + register removal of #40/#41 to post-owner-review.",
+      "archived_at": "2026-05-29",
+      "closure": {
+        "kind": "explicit",
+        "closed_at": "2026-05-29T05:45:00Z",
+        "closed_by": {
+          "agent_name": "Tempestuous Vaulting Falcon",
+          "platform": "claude",
+          "model": "claude-opus-4-8",
+          "session_id_prefix": "441c78",
+          "id": "a7b3a5e8-d71a-5189-8e8f-9ac275581e68"
+        },
+        "summary": "Group C re-verified (15 keep, 3 withdraw; ledger 2026-05-29-tempestuous-vaulting-falcon.md); Group A queued as group-a-graduations-execution.plan.md; stale-claim 4th-instance recorded on claim-liveness plan. No Core authored this session (planned).",
+        "evidence": [
+          {
+            "kind": "claim",
+            "ref": "d0ceef06-8998-4eca-8fe1-dcb1cd70829c",
+            "summary": "Claim explicitly closed by owning session."
+          }
+        ]
+      }
     }
   ]
 }

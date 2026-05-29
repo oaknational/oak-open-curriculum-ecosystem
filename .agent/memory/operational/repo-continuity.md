@@ -68,8 +68,8 @@ paused implementation program.
 
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
-| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-7 / Woodland Swaying Pollen / Goal 1 design settled + plan SPECIFIED (Goal 2 / D0 prerequisite next) / 2026-05-28 |
-| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | claude / Opus 4.7 / Sunlit Waxing Moon / pending-graduations register fully dispositioned (per-item verified verdict ledger, commits `f7d19c7a`+`86748491`); verification report found unreliable; no removals — owner ratification of the decision packet pending / 2026-05-28, + claude / claude-opus-4-7[1m] / Kilned Brazing Bellows / agent-tooling substrate recording (claim-liveness + substrate-rightsizing future plans, compaction bug report) / 2026-05-28 |
+| `eef` | EEF graph-tooling rebuild | [record][eef] | claude / claude-opus-4-8 / Deciduous Climbing Root / Goal 2 / D0 IN PROGRESS — PR #122 signals part-fixed locally (Lane A S7763 generator-first + Lane D 4 comments + Lane C external-data convention done; validator + hotspot SAFE + flag/Vercel + gates + gateway + owner-gated merge remaining); type-check + lint green / 2026-05-29 |
+| `agentic-engineering-enhancements` | Practice continuity (tactical lane; not the active delivery focus) | [record][agentic] | claude / claude-opus-4-8 / Tempestuous Vaulting Falcon / decision-packet owner-ratified; Group C re-verified (15 keep, 3 withdraw); Group A graduation plan queued; stale-claim 4th-instance recorded / 2026-05-29 |
 
 ## Paused Threads
 
@@ -130,20 +130,22 @@ Single source of truth for the rebuild:
   graphs' skills + methodology graduation, D6 explore the value path, DX
   estate-wide reference reconciliation).
 
-**Next safe step:** GOAL 1 (fix the plan) is **DONE — owner-ratified 2026-05-28**:
-the selection/scoping strategy resolved to **full-node membership (one axis)**;
-the plan is upgraded skeleton → **SPECIFIED** (D0–D6 + DX, each with measurable
-acceptance / consumes / how-the-gate-breaks). **Next = GOAL 2 (implement); its
-FIRST step is the D0 prerequisite (owner-directed 2026-05-28): fix ALL open
-PR #122 quality signals before merge** — the 2 Sonar `S7763` via the
-`@oaknational/sdk-codegen` generator (NOT a Sonar exclusion; generator-first),
-the `statusline-identity.ts` PATH hotspot, the 3.9% new-code duplication, and the
-valid review comments — then merge (flag OFF in every deployed env, ON only
-local), then D1 contract ADR → D2 query surface → D3 thin tool → D4 round-trip →
-D5 doctrine + methodology graduation → D6 explore value → DX estate reconcile.
-Bounded: terminates at D6, no deferral gates (plan §"End goal + bounded goals").
-The F explore tool (`2214f0b2`) is LANDED behind the flag, the wrong shape pending
-the D3 rebuild.
+**Next safe step:** GOAL 1 is DONE (owner-ratified 2026-05-28). **GOAL 2 / D0
+(merge-safety) is IN PROGRESS — 2026-05-29 (Deciduous Climbing Root); local
+uncommitted bundle; type-check + lint GREEN.** Done: Lane A (S7763 fixed
+generator-first + regenerated), Lane D (4 review comments), Lane C (the
+duplication cure became the owner-decided **external-data file convention** —
+`eef-toolkit.ts` → `eef-toolkit.external-data.ts`; `**/*.external-data.ts`
+cpd-exclusion pattern in both properties files; `sonar-disposition-policy.md`
+§Duplications amended). Remaining, in order: Lane C4 validator
+(`validate-external-data-files`, ships in D0) → Lane B PATH hotspot SAFE
+(`sonar-disposition-policy` §S4036 documented class) → Lane E run the (already
+existing) flag co-gating test + Vercel deployed-env check → full gates → gateway
+review → **owner-gated merge** (flag OFF in every deployed env). Exact state,
+commit-pathspec set, and the concurrent-agent note live in the
+**[`eef` thread record][eef] § 2026-05-29 entry**. Bounded: terminates at D6
+(plan §"End goal + bounded goals"). The F explore tool (`2214f0b2`) is LANDED
+behind the flag, the wrong shape pending the D3 rebuild.
 
 Historical EEF substrate-floor work (the 2026-05-22→23 multi-agent gate-1a
 session, the WS4.x critical path) and PR #108 graph-substrate details are
@@ -191,18 +193,27 @@ further deliberation. Plan §Sub-phase sizing now states cycle-by-cycle
 decomposition (was: incorrect "three-session arc" framing from reviewer
 file-count framing; corrected at `3ca77972` after owner challenge).
 
-### Pending-Graduations Register (dispositioned 2026-05-28 — owner ratification pending)
+### Pending-Graduations Register (decision packet owner-ratified 2026-05-29; Group C done, Group A planned)
 
-The full `pending-graduations.md` register (~70 items) has a verified per-item
-verdict in
-[`curator-passes/2026-05-28-sunlit-waxing-moon.md`](curator-passes/2026-05-28-sunlit-waxing-moon.md)
-(commits `f7d19c7a` + `86748491`). Load-bearing finding: the verification report
-Leafy left is unreliable (~3 of 6 spot-checks wrong), so no items were removed and
-no rules/PDRs authored. **Next safe step**: owner ratifies the ledger's grouped
-decision packet (graduate / route / withdraw / keep-watch / forks); a follow-up
-pass then executes ratified actions after confirming each "covered by X" home.
-The register is GREEN on fitness; this is a disposition-correctness lane, not a
-fitness drain.
+The owner ratified the Sunlit decision packet on 2026-05-29 ("do all of it").
+Progress this session (Tempestuous Vaulting Falcon):
+
+- **Group C executed.** Adversarial re-verification (18 agents) found the Sunlit
+  ledger's "recommend withdraw" verdicts **~83% wrong** (15 of 18 homes did not
+  contain the substance — "verify the auditor" recursed one level deeper). **15
+  kept, 3 withdrawn** (recurrence-rank weighting; napkin+`.remember/` PDR-011
+  amendment; redundant-config marker). Per-item verdicts:
+  [`curator-passes/2026-05-29-tempestuous-vaulting-falcon.md`](curator-passes/2026-05-29-tempestuous-vaulting-falcon.md).
+- **Group A planned (not executed this session).** The six graduations are
+  queued as a parallel-lane execution plan:
+  [`group-a-graduations-execution.plan.md`](../../plans/agentic-engineering-enhancements/current/group-a-graduations-execution.plan.md)
+  (5 lanes + 1 serialized convergence; two ledger home-recommendations corrected —
+  #37 → PDR-058 sequencing-optionality, #22+23 → PDR-058 Surface 3 rule).
+
+**Next safe step**: execute the Group A plan in a future session (readiness gate
+→ parallel lanes → convergence). Groups B (route-to-implementation) and E (forks:
+item-2 dangling reference, item-43 `.git/index.lock` safety conflict, item-26
+Core-trinity audit) remain owner-surfaced, unactioned. The register is GREEN.
 
 ### MCP Product Analytics (paused — design complete, plan deferred)
 
@@ -307,6 +318,31 @@ Current branch non-goals:
   acceptance work.
 
 ## Deep Consolidation Status
+
+**handoff gate (2026-05-29, Tempestuous Vaulting Falcon)**: pending-graduations
+decision-packet execution. Group C re-verified (15 keep, 3 withdraw; ledger
+`curator-passes/2026-05-29-tempestuous-vaulting-falcon.md`); Group A queued as
+`group-a-graduations-execution.plan.md` (parallel lanes), NOT executed — the
+sanctity Core PDRs need owner review and the owner directed plan-now / execute-
+next-session. Deep consolidation is **due — Group A graduations + the
+verify-the-auditor-recursion distilled candidate** but DEFERRED to the Group A
+execution session (that plan IS the bounded convergence). Stale-claim 4th-instance
+recorded on the claim-liveness future plan. `pnpm check` NOT run this session —
+Deciduous left an uncommitted, test-unverified D0 bundle in the shared tree and
+deferred full gates; my commit is doc-only by explicit pathspec. Both Deciduous
+and I closed our claims; the active registry is empty.
+
+**handoff gate (2026-05-29, Deciduous Climbing Root)**: Goal 2 / D0 IN PROGRESS,
+local uncommitted bundle (Lane A S7763 generator-first + Lane D 4 comments + Lane C
+external-data convention rename/policy/config; validator + hotspot SAFE +
+flag/Vercel + gates + gateway + owner-gated merge remaining). type-check + lint
+GREEN; full `pnpm check` NOT run — deliberate deferral: mid-D0 (validator pending,
+not a landing), nothing pushed, and a concurrent agent (`Tempestuous Vaulting
+Falcon`, `441c78`) shares the tree so `check-singleton` + `format:root`-collision
+risk applies — the next session runs full gates before the owner-gated merge. Deep
+consolidation **not due** — no thread completed; the external-data-convention
+PDR/pattern candidate is captured in the napkin for the next register refresh.
+Continuation: [`eef` thread record][eef] § 2026-05-29 entry.
 
 **current**: the closed-claims archive curation pass processed all 1091 archived
 claims, routed the only durable lifecycle lesson to the curation report and this

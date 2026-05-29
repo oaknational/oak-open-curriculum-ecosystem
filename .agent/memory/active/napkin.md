@@ -8,6 +8,106 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
+## Session: 2026-05-29 — pending-graduations decision-packet execution (Tempestuous Vaulting Falcon)
+
+### Insight (generative metacognition) — verification bias must be asymmetric
+
+"Verify the auditor" is now **3-deep**: Leafy's report (~50% wrong) → Sunlit's
+ledger caught Leafy yet was **~83% wrong on its OWN Group C "withdraw" verdicts**
+(15 of 18 named homes did not contain the substance) → my re-verification caught
+Sunlit. The structural cure is NOT "verify harder each time" — it is **asymmetric
+bias**: coverage-claims recur as false-positives at every audit layer, so the
+*irreversible* action (withdrawal = permanent signal loss) must carry
+proof-of-coverage, while the *reversible* action (keep = costs only buffer space)
+is the safe default. The prior ledgers failed because they treated *withdrawal*
+as the disposition to justify rather than *keeping*. Graduation candidate (3
+instances). Verdicts: [[curator-passes/2026-05-29-tempestuous-vaulting-falcon]].
+
+### Session facts + corrections
+
+- Group C re-verified by an 18-agent adversarial workflow (Sonnet, refute-biased,
+  default-keep): **15 keep, 3 withdraw**. Group A queued as a parallel-lane plan;
+  two ledger home-recs corrected during independent re-grounding (#37 → PDR-058
+  sequencing-optionality, not `no-moving-targets` — a category error; #22+23 →
+  PDR-058 Surface 3, which PDR-058 pre-architected).
+- **stale-claim 4th instance = missing autonomy primitive.** Owner-flagged; the
+  only reap point is consolidation-gated (no session-open reap), so expired claims
+  linger. Recorded on the claim-liveness plan. The cure is liveness-bound reaping,
+  NOT a checklist step (the checklist is what keeps failing).
+  [[feedback_owner_action_is_not_a_cure]]
+- **self-correction:** I over-circled the commit/parallel-track decision after the
+  rules already forced it (stage-by-pathspec; no bypass; surface-if-gate-fails).
+  Reach rule-determined verdicts faster.
+- **buffer pressure:** this napkin is at/over its line limit — route to rotation at
+  the next consolidation (the Group A execution session), do not trim.
+
+## Session: 2026-05-29 — D0 quality-signal grounding (Deciduous Climbing Root)
+
+### Correction absorbed (owner; retrospective metacognition)
+
+- **The "never exclude a path" escape-hatch screen has a real, documented
+  exception I over-generalised past.** I had classed the PR #122 duplication
+  (all 3.9% in `graph-corpus-sdk/src/eef-strands/eef-toolkit.ts`) as "must
+  de-duplicate; a Sonar exclusion is suppress-the-signal — forbidden." Owner
+  corrected: that file is an **external-source data snapshot** (EEF Teaching &
+  Learning Toolkit — the module docstring confirms: "repository-held canonical
+  snapshot", typed `unknown` as external input, regenerated from a reviewed
+  replacement). For faithful external/generated DATA, de-duplicating destroys
+  1:1 fidelity to the source (which IS the value), so **accepting the
+  duplication via a targeted, documented `sonar.cpd.exclusions` glob is the
+  correct disposition — and it is owner-gated, not mine to enact.**
+- **The discriminator (the durable bit):** the escape-hatch screen governs
+  *our hand-maintained code* (→ fix it). For *faithful external/generated
+  data*, copy-paste detection is semantically mis-applied; the repo's own
+  `docs/governance/sonar-disposition-policy.md` §Duplications already documents
+  this class (cpd.exclusions for `**/src/types/generated/**`, tests, config)
+  with a three-step Expansion Discipline: **policy amendment → owner
+  authorisation → properties update**. Precedent: an owner-authorised
+  `api-schema/**` exception (2026-05-24), recorded "this is not typically
+  allowed, this is a specific user intervention."
+- **My process gap:** I did not establish *provenance* before classifying the
+  cure space. Check "is this our code, or external/generated data?" FIRST — it
+  decides whether the signal is a defect (fix) or a mis-applied metric
+  (owner-gated disposition). distilled.md candidate: add this discriminator to
+  the escape-hatch screen entry.
+
+### Right-sizing win
+
+- Grounding before orchestrating collapsed the judgment-load. I was about to
+  fan out a 6-agent pre-execution review workflow over the D0 signals. Once
+  grounded: Lane B (PATH hotspot) is a documented-class SAFE per policy §S4036
+  (agent-tooling + `git` + dev-workstation — exact match, no expert needed);
+  Lane C (duplication) is an owner-gated cpd-exclusion proposal (no code
+  change); only Lane A (generator S7763) is a real edit. Net: no fan-out
+  warranted, a gateway review at the end suffices. Proportionality beat the
+  ultracode "always workflow" default *because the work was already
+  verified/trivial post-grounding*.
+
+### Candidate + session surprises
+
+- **candidate (PDR/pattern):** the **external-data file convention**
+  (`*.external-data.ts` + a cpd-exclusion glob pattern + the workspace ESLint
+  code-quality ignore + an enforced contract via a repo-validator) is a portable
+  Practice-governance shape worth a PDR (`pdr_kind: pattern`/`governance`).
+  Captured here for the next pending-graduations register refresh — NOT written
+  to the register directly, `Tempestuous Vaulting Falcon` holds it this window.
+  Source: this session + `docs/governance/sonar-disposition-policy.md`
+  §Duplications.
+- **distilled candidate:** refine the escape-hatch-screen entry in `distilled.md`
+  with the discriminator above (our code → fix; faithful external/generated data
+  → owner-gated documented disposition). Deferred to consolidation.
+- **surprise — concurrent same-tree agent, mutually coordinated.**
+  `Tempestuous Vaulting Falcon` (`441c78`) registered on
+  `agentic-engineering-enhancements` mid-session and `archive-stale`-reaped the
+  dead Sunlit claim; its claim intent explicitly defers the PDR README index to
+  me. Two sole-contributor sessions in one tree, disjoint areas, additive
+  shared-surface edits — not a team (session-handoff is explicit on this). Owner
+  flagged the lingering Sunlit claim as the 4th `owner-action-is-not-a-cure`
+  instance (session-open claim reaping is the missing primitive).
+- **operational tic (recurring this session ~3×):** `rg -rn` / `rg -rln` — `-r`
+  is `--replace`, which corrupts grep *display* by substituting matched text
+  (the file is fine). Use `rg -n` WITHOUT `-r`.
+
 ## Session: 2026-05-28 — pending-graduations drain after a crash (Sunlit Waxing Moon)
 
 ### Process insights (reusable — for future drain / consolidation sessions)

@@ -60,6 +60,37 @@ primitive. By the doctrine that owner intervention is a stopgap, not a target
 cure (`feedback_owner_action_is_not_a_cure`), the current recovery path is a
 missing-autonomy symptom, not a process to keep.
 
+## Activation Evidence (recurrence log)
+
+This plan's activation trigger ("a second crashed-agent / orphaned-claim
+incident … OR owner-direct promotion") is met by an owner-observed recurrence:
+
+- **2026-05-29 — 4th owner-observed instance** (Tempestuous Vaulting Falcon,
+  `441c78`). The owner flagged that stale claims lingering in `active-claims.json`
+  for the owner to notice is now the *fourth* such instance, and reaffirmed
+  `feedback_owner_action_is_not_a_cure`. Concretely: Sunlit Waxing Moon's claim
+  was ~14h past its 4h TTL yet still present in the active registry at this
+  session's open; it was archived only because this session ran `archive-stale`
+  by hand. Root mechanism: the **only** designed reap point is consolidation-gated
+  (`register-active-areas-at-session-open.md` §"At session close" routes unclosed
+  claims to the *consolidate-docs* stale-claim audit) — there is **no session-open
+  reap**, so TTL-expired claims persist between consolidation passes until the
+  owner notices.
+- **Recurrence evidence is itself being erased.** `closed-claims.archive.json`
+  was reset to an empty sink on 2026-05-27 (Nebulous closed-claims curation), so
+  prior stale closures are not retained — each consolidation wipes the very
+  history that would make the recurrence count self-evident. Any cure should
+  preserve a durable stale-closure record (or this plan's recurrence log) rather
+  than clearing it.
+
+**Cure-altitude note (avoid the naive fix).** A bare session-open
+`archive-stale` bolted into a SessionStart hook is *not* the honest cure: TTL
+expiry ≠ death (nothing auto-heartbeats a live agent, M1's premise), so a dumb
+TTL-reap would false-positive-orphan a live-but-non-heartbeating peer — the exact
+risk named in §"Risks and Unknowns". The correct shape is M1 (bind staleness to a
+real liveness signal) with the session-open reap scoped to *confirmed-dead*
+claims above a liveness floor.
+
 ## End Goal, Mechanism, Means
 
 **End goal**: A crashed agent's claim is detectably orphaned within a short
